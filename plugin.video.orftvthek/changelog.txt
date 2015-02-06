@@ -1,3 +1,6 @@
+0.3.2
+- fixed "Bundesland Heute" listing
+
 0.3.1
 - fixed 404 on list icon
 - changed fanart 

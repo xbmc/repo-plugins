@@ -12,7 +12,7 @@ except:
 socket.setdefaulttimeout(30) 
 cache = StorageServer.StorageServer("plugin.video.orftvthek", 999999)
 
-version = "0.3.1"
+version = "0.3.2"
 plugin = "ORF-TVthek-" + version
 author = "sofaking"
 
@@ -25,7 +25,6 @@ translation = settings.getLocalizedString
 
 current_skin = xbmc.getSkinDir();
 
-print current_skin
 if 'confluence' in current_skin:
    defaultViewMode = 'Container.SetViewMode(503)'
 else:
@@ -131,13 +130,16 @@ def getVideoUrl(sources):
 def getLinks(url,banner):
     playlist.clear()
     videoUrls = []
-    url = urllib.unquote(url)
     
+    url = str(urllib.unquote(url))
+
     if banner != None:
         banner = urllib.unquote(banner)
-        
+    
+ 
     html = common.fetchPage({'link': url})
     data = common.parseDOM(html.get("content"),name='div',attrs={'class': "jsb_ jsb_VideoPlaylist"},ret='data-jsb')
+    
     data = data[0]
     data = common.replaceHTMLCodes(data)
     data = json.loads(data)
@@ -306,12 +308,12 @@ def getCategoryList(category,banner):
             time = common.parseDOM(item,name='span',attrs={'class': 'meta.meta_time'})
             title = "%s - %s" % (showname,date)
             title = "%s - %s" % (showname,date)
-            link = common.parseDOM(item,name='a',ret="href")
+            link = common.parseDOM(item,name='a',ret="href");
             try:
                 desc = (translation(30009)).encode("utf-8")+" %s - %s\n"+(translation(30011)).encode("utf-8")+": %s" % (date,time,duration)
             except:
                 desc = "";
-            addDirectory(title,banner,desc,link,"openSeries")
+            addDirectory(title,banner,desc,link[0],"openSeries")
     listCallback(False)
 
 def getLiveStreams():
@@ -459,6 +461,47 @@ def getThemen():
         addDirectory(title,image,description,link,"openTopicPosts")
     listCallback(True)
 
+def getZIB(baseimage):
+    url = 'http://tvthek.orf.at/programs/genre/ZIB/1';
+    html = common.fetchPage({'link': url})
+    html_content = html.get("content")
+    
+    content = common.parseDOM(html_content,name='div',attrs={'class':'base_list_wrapper mod_results_list'})
+    items = common.parseDOM( content ,name='li',attrs={'class':'base_list_item jsb_ jsb_ToggleButton results_item'})
+    
+    for item in items:
+        title = common.parseDOM(item,name='h4')
+        if len(title) > 0:
+            title = title[0].encode('UTF-8')
+            item_href = common.parseDOM(item,name='a',attrs={'class':'base_list_item_inner.*?'},ret="href")
+            image_container = common.parseDOM(item,name='figure',attrs={'class':'episode_image'},ret="href")
+            image = common.parseDOM(item,name='img',attrs={},ret="src")
+            if len(image) > 0:
+                image = common.replaceHTMLCodes(image[0]).encode('UTF-8').replace("height=180","height=265").replace("width=320","width=500")
+            else:
+                image = baseimage
+            link = common.replaceHTMLCodes(item_href[0]).encode('UTF-8')
+            addDirectory(title,image,"",link,"openCategoryList")
+        
+ 
+def getBundeslandHeute(url,image):
+    html = common.fetchPage({'link': url})
+    html_content = html.get("content")
+    
+    content = common.parseDOM(html_content,name='div',attrs={'class':'base_list_wrapper mod_link_list'})
+    items = common.parseDOM(content,name='li',attrs={'class':'base_list_item'})
+    items_href = common.parseDOM(items,name='a',attrs={},ret="href")
+    items_title = common.parseDOM(items,name='h4')
+    
+    i = 0
+    for item in items:
+        link = common.replaceHTMLCodes(items_href[i]).encode('UTF-8')        
+        title = items_title[i].encode('UTF-8')
+        desc = '  '
+        addDirectory(title,image,desc,link,"openCategoryList")
+        i = i + 1
+    
+    
 def getCategories():
     html = common.fetchPage({'link': base_url})
     html_content = html.get("content")
@@ -471,12 +514,20 @@ def getCategories():
         link = common.replaceHTMLCodes(items_href[i]).encode('UTF-8')
         i = i + 1
         title = programUrlTitle(link).encode('UTF-8')
-        
-        image = common.parseDOM(item,name='img',ret="src")
-        image = common.replaceHTMLCodes(image[0]).replace("height=56","height=280").replace("width=100","width=500").encode('UTF-8')
+        if title.lower().strip() == "bundesland heute":
+            image = common.parseDOM(item,name='img',ret="src")
+            image = common.replaceHTMLCodes(image[0]).replace("height=56","height=280").replace("width=100","width=500").encode('UTF-8')
+            getBundeslandHeute(link,image)
+        if title.lower().strip() == "zib":
+            image = common.parseDOM(item,name='img',ret="src")
+            image = common.replaceHTMLCodes(image[0]).replace("height=56","height=280").replace("width=100","width=500").encode('UTF-8')
+            getZIB(image)
+        else:
+            image = common.parseDOM(item,name='img',ret="src")
+            image = common.replaceHTMLCodes(image[0]).replace("height=56","height=280").replace("width=100","width=500").encode('UTF-8')
 
-        desc = '  '
-        addDirectory(title,image,desc,link,"openCategoryList")
+            desc = '  '
+            addDirectory(title,image,desc,link,"openCategoryList")
     listCallback(True,thumbViewMode)
 
 def programUrlTitle(url):

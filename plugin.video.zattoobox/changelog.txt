@@ -1,3 +1,6 @@
+[B]0.5.1[/B]
+- Fixed dependencies
+
 [B]0.5.0[/B]
 - Fixed cache storage path
 - Added zappylib integration

@@ -1,0 +1,15 @@
+[B]2.2.0[/B] - Watson 2.2.0 release, LiveTV fixed, movies shortcut added, download fixed, tested to work on Kodi
+[B]2.1.2[/B] - Watson 2.1.2 release, plugin fixed to work with recent updates.
+[B]2.0.1[/B] - Watson 2.0 release, plugin fixed to work with new Watson.
+[B]1.1.1[/B] - Download function improved, will now download to single file, some minor updates. New icon.
+[B]1.1.0[/B] - Beta, programs can now be removed from recordings / favourites.
+[B]1.0.9[/B] - Beta, Context menu to save program to recordings / favourites added, tmp dirs now selectable from settings
+[B]1.0.8[/B] - Beta, Search for recordings added
+[B]1.0.7[/B] - Beta, Download and Plot context menus added
+[B]1.0.6[/B] - Beta, Minor fixes
+[B]1.0.5[/B] - Beta, LiveTV added
+[B]1.0.4[/B] - Pre-Alpha2, Video stop now fixed, started to code "LiveTV" option
+[B]1.0.3[/B] - Pre-Alpha2, tmpfile location check (os-check)
+[B]1.0.2[/B] - Pre-Alpha2, minor modifications
+[B]1.0.1[/B] - Pre-Alpha2, modified menu structure
+[B]1.0.0[/B] - Initial version for XBMC

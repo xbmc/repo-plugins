@@ -2,11 +2,24 @@
 <strings>
        <string id="30000">Video Resolution</string>
        <string id="30001">480x268</string>
-       <string id="30002">640x360</string>
-       <string id="30003">960x540</string>
-       <string id="30004">1280x720</string>
-       <string id="30005">1920x1080</string>
+       <string id="30002">Audio Only</string>
+       <string id="30003">640x360</string>
+       <string id="30004">640x480</string>
+       <string id="30005">960x540</string>
+       <string id="30006">1280x720</string>
+       <string id="30007">1920x1080</string>
        <string id="30010">Smithsonian Channel</string>
        <string id="30011">No Videos Found</string>
+
+
+       <string id="30030">Proxy</string>
+       <string id="30040">Proxy IP</string>
+       <string id="30041">Port</string>
+       <string id="30042">Enable Proxy</string>
+       <string id="30043">User Name</string>
+       <string id="30044">Password</string>
+       <string id="30050">Sub-Titles</string>
+       <string id="30051">Enable Sub-Titles</string>
+
 </strings>
 

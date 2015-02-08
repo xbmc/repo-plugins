@@ -40,10 +40,33 @@ def demunge(munge):
             pass
         return munge
 
-def getRequest(url):
+USER_AGENT    = 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.93 Safari/537.36'
+defaultHeaders = {'User-Agent':USER_AGENT, 
+                 'Accept':"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", 
+                 'Accept-Encoding':'gzip,deflate,sdch',
+                 'Accept-Language':'en-US,en;q=0.8'} 
+
+def getRequest(url, user_data=None, headers = defaultHeaders , alert=True, deleteCR=True):
+
               log("getRequest URL:"+str(url))
-              headers = {'User-Agent':USER_AGENT, 'Accept':"text/html", 'Accept-Encoding':'gzip,deflate,sdch', 'Accept-Language':'en-US,en;q=0.8'} 
-              req = urllib2.Request(url.encode(UTF8), None, headers)
+              if addon.getSetting('us_proxy_enable') == 'true':
+                  us_proxy = 'http://%s:%s' % (addon.getSetting('us_proxy'), addon.getSetting('us_proxy_port'))
+                  proxy_handler = urllib2.ProxyHandler({'http':us_proxy})
+                  if addon.getSetting('us_proxy_pass') <> '' and addon.getSetting('us_proxy_user') <> '':
+                      log('Using authenticated proxy: ' + us_proxy)
+                      password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+                      password_mgr.add_password(None, us_proxy, addon.getSetting('us_proxy_user'), addon.getSetting('us_proxy_pass'))
+                      proxy_auth_handler = urllib2.ProxyBasicAuthHandler(password_mgr)
+                      opener = urllib2.build_opener(proxy_handler, proxy_auth_handler)
+                  else:
+                      log('Using proxy: ' + us_proxy)
+                      opener = urllib2.build_opener(proxy_handler)
+              else:   
+                  opener = urllib2.build_opener()
+              urllib2.install_opener(opener)
+
+              log("getRequest URL:"+str(url))
+              req = urllib2.Request(url.encode(UTF8), user_data, headers)
 
               try:
                  response = urllib2.urlopen(req)
@@ -54,11 +77,17 @@ def getRequest(url):
                     link1 = f.read()
                  else:
                     link1=response.read()
-              except:
+
+              except urllib2.URLError, e:
+                 if alert:
+                     xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( __addonname__, e , 10000) )
                  link1 = ""
 
-              link1 = str(link1).replace('\n','')
+              if not (str(url).endswith('.zip')):
+                if (deleteCR):
+                 link1 = str(link1).replace('\n','')
               return(link1)
+
 
 
 def getSources(fanart):
@@ -71,14 +100,32 @@ def getSources(fanart):
 
 def getShow(cat_url):
               pg = getRequest('http://www.smithsonianchannel.com'+urllib.unquote_plus(cat_url))
-              vidID = re.compile('data-bcid="(.+?)"').search(pg).group(1)
+              (suburl, vidID) = re.compile('data-vttfile="(.+?)".+?data-bcid="(.+?)"').search(pg).groups()
               pg = getRequest('http://c.brightcove.com/services/mobile/streaming/index/master.m3u8?videoId=%s&pubId=1466806621001' % (vidID))
               pg = str(pg)+'#'
               urls = re.compile('http(.+?)#').findall(pg)
               i = int(addon.getSetting('vid_res'))
-              url = 'http'+urls[i]
+              try:
+                url = 'http'+urls[i]
+              except:
+                url = 'http'+urls[len(urls)-1]
               url = url.strip()
               xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = url))
+
+              if (suburl != "") and (addon.getSetting('sub_enable') == "true"):
+                 profile = addon.getAddonInfo('profile').decode(UTF8)
+                 subfile = xbmc.translatePath(os.path.join(profile, 'SCSubtitles.srt'))
+                 prodir  = xbmc.translatePath(os.path.join(profile))
+                 if not os.path.isdir(prodir):
+                    os.makedirs(prodir)
+
+                 cc = getRequest('http://www.smithsonianchannel.com'+suburl, deleteCR=False, alert=False)
+                 if cc != "":
+                   ofile = open(subfile, 'w+')
+                   ofile.write(cc)
+                   ofile.close()
+                   xbmc.sleep(5000)
+                   xbmc.Player().setSubtitles(subfile)
 
 
 def play_playlist(name, list):

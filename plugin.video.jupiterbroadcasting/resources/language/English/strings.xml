@@ -74,8 +74,13 @@
   <string id="30103">Low</string>
   <string id="30104">Episodes per Page</string>
   <string id="30105">Audio</string>
+  <string id="30106">Live Stream Type</string>
 
   <!-- Misc -->
   <string id="30300">Older episodes</string>
+  <string id="30301">RTSP</string>
+  <string id="30302">RTMP</string>
+  <string id="30303">HLS</string>
+  <string id="30304">Audio</string>
 
 </strings>

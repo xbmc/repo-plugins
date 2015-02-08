@@ -1,9 +1,12 @@
+[B]Version 3.2.1 February 7th, 2015[/B]
+- Add ability to change Live Stream type
+
 [B]Version 3.2.0 November 19th, 2014[/B]
 - New Show: Women's Tech Radio
 
 [B]Version 3.1.1 June 24th, 2014[/B]
 - Updated artwork for active shows: Linux Action Show and Linux Unplugged
-- Updated artwork work archived shows: Torked and In Depth Look 
+- Updated artwork work archived shows: Torked and In Depth Look
 - Updated artwork for addon main icon with new color logo
 - Improved the assets filename structure
 - Renamed Live Show item JBLive.TV

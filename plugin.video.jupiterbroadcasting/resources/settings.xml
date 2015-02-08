@@ -16,5 +16,12 @@
                         default="25"
                         range="5,5,100"
                         option="int" />
+
+                <!-- Live Stream Type -->
+                <setting id="live_stream"
+                        type="enum"
+                        label="30106"
+                        lvalues="30301|30302|30303|30304"
+                        default="0" />
         </category>
 </settings>

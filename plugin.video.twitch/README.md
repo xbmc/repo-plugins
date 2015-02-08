@@ -32,4 +32,4 @@ Thanks to all the people who contributed to this project:
 
 ccaspers, CDehning, Giacom, grocal, KlingOne, kokarn, Kr0nZ, Liquex, MrSprigster, stuross, ingwinlu, mCzolko, ha107642, G4RL1N, spiffomatic64
 
-This addon utilizes python-twitch [https://github.com/ingwinlu/python-twitch] (a project which derived from an early version of this addon and has grown to deserve recognition of its own). Thanks to ingwinlu for his continued work on the project.
+This addon utilizes python-twitch https://github.com/ingwinlu/python-twitch (a project which derived from an early version of this addon and has grown to deserve recognition of its own). Thanks to ingwinlu for his continued work on the project.

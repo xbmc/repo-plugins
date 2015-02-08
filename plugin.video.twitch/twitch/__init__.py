@@ -102,8 +102,7 @@ class M3UPlaylist(object):
             for newMatch in range(bestMatch, -1, -1):
                 if(isInPlaylist(newMatch)):
                     bestMatch = newMatch
-                else:
-                    break
+
             return self.playlist[Keys.QUALITY_LIST_STREAM[bestMatch]]
 
     def __str__(self):

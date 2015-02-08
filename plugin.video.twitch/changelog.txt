@@ -86,3 +86,5 @@
 - fixed bug: removed error in code which prevented falling back to best available quality when preferred quality was not available
 1.3.0
 - added ability to play new type twitch VODs + major code refactoring/optimisation and bug fixes (now utilising python-twitch [0.3.8] by ingwinlu). - ingwinlu
+1.3.1
+- fixed bug: addon would not play non-transcoded streams if requested quality was lower than source

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30000">
+        <setting label="30008" type="bool" id="filefilter" default="true"/>
+        <setting label="30007" type="lsep"/>
+        <setting label="30007" type="folder" id="cachepath" source="auto" option="writeable" default=""/>
+        <setting label="30036" type="bool" id="streammedia" default="false"/>
+        <setting label="30012" type="text" id="passcode" visible="false" default=""/>
+        <setting label="30012" type="action" action="RunScript(plugin.dbmc, action=change_passcode)" default="" visible="false"/>
+        <setting label="30015" type="slider" id="passcodetimeout" enable="!eq(-2,)" range="1,120" option="int" default="30" visible="false"/>
+        <setting label="30006" type="text" id="access_token" enable="false" default="" option="hidden" visible="false"/>
+        <setting label="30006" type="text" id="session_id" enable="false" default="" option="hidden" visible="false"/>
+    </category>
+    <category label="30100">
+        <setting label="30115" type="lsep"/>
+        <setting label="30101" type="bool" id="synchronisation" default="false" visible="false"/>
+        <setting label="30105" type="slider" id="syncfreq" enable="eq(-1,true)" range="5,5,1440" option="int" default="5" visible="false"/>
+        <setting label="30102" type="folder" id="syncpath" source="auto" option="writeable" default="" visible="false"/>
+        <setting label="30109" type="action" id="remotepath" option="close" action="RunScript(plugin.dbmc, action=set_remote_sync_path)" default="" visible="false"/>
+        <setting label="30108" type="number" id="notify_server_port" visible="false" default="0"/>
+    </category>
+</settings>

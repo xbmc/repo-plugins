@@ -1,0 +1,291 @@
+# XBMC Media Center language file
+# Addon Name: Dbmc
+# Addon id: plugin.dbmc
+msgid ""
+msgstr ""
+
+msgctxt "#30000"
+msgid "General"
+msgstr "Algemeen"
+
+msgctxt "#30001"
+msgid "Follow the instructions and enter PIN: "
+msgstr "Volg de instructies en voer deze PIN in: "
+
+msgctxt "#30002"
+msgid "Dropbox authorization required."
+msgstr "Dropbox autorisatie vereist."
+
+msgctxt "#30003"
+msgid "Go to: http://xbmc-dropbox.sourceforge.net"
+msgstr "Ga naar: http://xbmc-dropbox.sourceforge.net"
+
+msgctxt "#30004"
+msgid "Authorization finished. Account added:"
+msgstr "Autorisatie beeindigd. Account toegevoegd:"
+
+msgctxt "#30005"
+msgid "Clear Dropbox authorization code"
+msgstr "Dropbox toegangs code verwijderen"
+
+msgctxt "#30006"
+msgid "Dropbox authorization code"
+msgstr "Dropbox toegangs code"
+
+msgctxt "#30007"
+msgid "Location for cached files"
+msgstr "Locatie voor cache bestanden"
+
+msgctxt "#30008"
+msgid "View relevant files only"
+msgstr "Toon alleen relevante bestanden"
+
+msgctxt "#30009"
+msgid "30009"
+msgstr "30009"
+
+msgctxt "#30010"
+msgid "Show me more..."
+msgstr "Toon me meer..."
+
+msgctxt "#30011"
+msgid "Use passcode lock for account"
+msgstr "Gebruik passcode lock voor account"
+
+msgctxt "#30012"
+msgid "Change passcode..."
+msgstr "Wijzig passcode..."
+
+msgctxt "#30013"
+msgid "Enter your passcode"
+msgstr "Voer uw passcode in"
+
+msgctxt "#30014"
+msgid "Wrong passcode!"
+msgstr "Foute passcode!"
+
+msgctxt "#30015"
+msgid "Passcode timeout (minutes)"
+msgstr "Passcode verloop (minuten)"
+
+msgctxt "#30016"
+msgid "Browse Dropbox"
+msgstr "Blader in Dropbox"
+
+msgctxt "#30017"
+msgid "Search Dropbox"
+msgstr "Zoek in Dropbox"
+
+msgctxt "#30018"
+msgid "Enter the search text"
+msgstr "Voer de zoek tekst in"
+
+msgctxt "#30019"
+msgid "Search text has to be atleast 3 characters"
+msgstr "Zoek tekst moet minimaal 3 karakters zijn!"
+
+msgctxt "#30020"
+msgid "Searching in Dropbox for:"
+msgstr "Zoeken in Dropbox naar:"
+
+msgctxt "#30021"
+msgid "Nothing found!"
+msgstr "Niets gevonden!"
+
+msgctxt "#30022"
+msgid "Delete from Dropbox"
+msgstr "Verwijder uit Dropbox"
+
+msgctxt "#30023"
+msgid "Do you want to delete this from Dropbox:"
+msgstr "Wilt U dit verwijderen uit Dropbox:"
+
+msgctxt "#30024"
+msgid "Copy in Dropbox"
+msgstr "Kopieer in Dropbox"
+
+msgctxt "#30025"
+msgid "Select the folder to "
+msgstr "Selecteer de map om naar te "
+
+msgctxt "#30026"
+msgid "copy to"
+msgstr "kopieren"
+
+msgctxt "#30027"
+msgid "Move in Dropbox"
+msgstr "Verplaats in Dropbox"
+
+msgctxt "#30028"
+msgid "move to"
+msgstr "verplaatsen"
+
+msgctxt "#30029"
+msgid "Create new folder in Dropbox"
+msgstr "Maak een nieuwe map in Dropbox"
+
+msgctxt "#30030"
+msgid "Enter the name of new folder"
+msgstr "Voer de nieuwe map naam in"
+
+msgctxt "#30031"
+msgid "Upload to Dropbox"
+msgstr "Upload naar Dropbox"
+
+msgctxt "#30032"
+msgid "Select the file to upload"
+msgstr "Selecteer het bestand om te uploaden"
+
+msgctxt "#30033"
+msgid "Uploading file to Dropbox"
+msgstr "Bestand aan het uploaden naar Dropbox"
+
+msgctxt "#30034"
+msgid "Enter your new passcode"
+msgstr "Voer uw nieuwe passcode in"
+
+msgctxt "#30035"
+msgid "Caching media files in background..."
+msgstr "Media bestand opslaan op de achtergrond..."
+
+msgctxt "#30036"
+msgid "Stream video and music media (don't cache)"
+msgstr "Stream video en muziek media (niet cachen)"
+
+msgctxt "#30037"
+msgid "Download from Dropbox"
+msgstr "Download van Dropbox"
+
+msgctxt "#30038"
+msgid "download to"
+msgstr "downloaden"
+
+msgctxt "#30039"
+msgid "Downloading file(s) from Dropbox"
+msgstr "Bestand(en) aan het downloaden van Dropbox"
+
+msgctxt "#30040"
+msgid "Finished downloading file(s) to:"
+msgstr "Bestand(en) gedownload naar:"
+
+msgctxt "#30041"
+msgid "Downloading file:"
+msgstr "Download bestand:"
+
+msgctxt "#30042"
+msgid "Add an account..."
+msgstr "Voeg een account toe..."
+
+msgctxt "#30043"
+msgid "Finish adding account..."
+msgstr "Afmaken toevoegen account..."
+
+msgctxt "#30044"
+msgid "Remove account"
+msgstr "Verwijder account"
+
+msgctxt "#30045"
+msgid "Do you want to remove this account from Dbmc?"
+msgstr "Wilt u het volgende account verwijderen uit Dbmc?"
+
+msgctxt "#30100"
+msgid "Change synchronization..."
+msgstr "Wijzig synchronisatie..."
+
+msgctxt "#30101"
+msgid "Enable synchronization"
+msgstr "Synchronisatie activeren"
+
+msgctxt "#30102"
+msgid "Select the local folder"
+msgstr "Selecteer de lokale map"
+
+msgctxt "#30103"
+msgid "Dbmc: Moved files/folders to new synchronization location:"
+msgstr "Dbmc: Bestanden/mappen verplaatst naar nieuwe synchronisatie lokatie:"
+
+msgctxt "#30104"
+msgid "New synchronization location is not empty!"
+msgstr "Nieuwe synchronisatie lokatie is niet leeg!"
+
+msgctxt "#30105"
+msgid "Synchronization interval (minutes)"
+msgstr "Synchronisatie interval (minuten)"
+
+msgctxt "#30106"
+msgid "Dbmc: Synchronization finished."
+msgstr "Dbmc: Synchronisatie gereed."
+
+msgctxt "#30107"
+msgid "Number of items synchronized: "
+msgstr "Aantal items gesynchroniseerd: "
+
+msgctxt "#30108"
+msgid "Synchronization locations"
+msgstr "Synchronisatie lokaties"
+
+msgctxt "#30109"
+msgid "Select the Dropbox folder to synchronize with"
+msgstr "Selecteer de Dropbox map om mee te synchroniseren"
+
+msgctxt "#30110"
+msgid "Can't change settings while synchronizing!"
+msgstr "Kan de instellingen niet wijzigen tijdens het synchroniseren"
+
+msgctxt "#30111"
+msgid "Can't enable synchronization:\nFirst set synchronization locations!"
+msgstr "Kan synchronisatie niet aan zetten:\nPas eerst de synchronisatie lokaties aan!"
+
+msgctxt "#30112"
+msgid "Synchronize now"
+msgstr "Synchroniseer nu"
+
+msgctxt "#30113"
+msgid "Stop Synchronizing now?"
+msgstr "Synchroniseren nu stoppen?"
+
+msgctxt "#30114"
+msgid "Dbmc: Synchronizing files..."
+msgstr "Dbmc: Synchroniseren van bestanden..."
+
+msgctxt "#30115"
+msgid "Synchronization settings can't be changed here anymore!"
+msgstr "Synchronisatie instellingen kunnen hier niet meer gewijzigd worden!"
+
+
+#error messages
+msgctxt "#30200"
+msgid "Problem getting the access code!"
+msgstr "Probleem met het verkrijgen van de toegangs code!"
+
+msgctxt "#30201"
+msgid "Authorization failed!"
+msgstr "Autorisatie gefaalt!"
+
+msgctxt "#30202"
+msgid "Did you copy the complete code?"
+msgstr "Heeft u de code volledig gekopieerd?"
+
+msgctxt "#30203"
+msgid "Action cannot be executed"
+msgstr "Actie kan niet worden uitgevoerd"
+
+msgctxt "#30204"
+msgid "30204"
+msgstr "30204"
+
+msgctxt "#30205"
+msgid "Dropbox authorization code failure!"
+msgstr "Dropbox toegangs code fout!"
+
+msgctxt "#30206"
+msgid "Dropbox error occured!"
+msgstr "Dropbox error!"
+
+msgctxt "#30207"
+msgid "Please enter a valid passcode timeout (1 to 120 minutes)"
+msgstr "Voer een geldige passcode verloop in (1 tot 120 minuten)"
+
+msgctxt "#30208"
+msgid "Please enter a valid synchronization interval (5 to 1440 minutes)"
+msgstr "Voer een geldige synchronizatie interval in (5 tot 1440 minuten)"

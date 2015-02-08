@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.deejayIt.reloaded" name="DeeJay reloaded" version="1.2.0" provider-name="Filippo Carra">
+<addon id="plugin.audio.deejayIt.reloaded" name="DeeJay reloaded" version="1.4.0" provider-name="Filippo Carra">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.module.beautifulsoup" version="3.2.1"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>audio</provides>
@@ -12,8 +13,7 @@
         </description>
         <disclaimer lang="en">Unofficial, I'm just a fan.</disclaimer>
         <summary lang="it">Deejay RELOADED</summary>
-        <description lang="it">Da Deejay Chiama Italia a Tropical Pizza, da Asganaway al Deejay Time, i programmi di
-            Radio Deejay da riascoltare quando e dove vuoi.
+        <description lang="it">Da Deejay Chiama Italia a Tropical Pizza, da Asganaway al Deejay Time, i programmi di Radio Deejay da riascoltare quando e dove vuoi.
         </description>
         <disclaimer lang="it">Non ufficiale, sono solo un fan.</disclaimer>
         <language>it</language>

@@ -3,6 +3,7 @@ plugin.video.thinktv
 
 XBMC Addon for Think TV PBS Video website
 
+Version 1.0.11 Website changes
 Version 1.0.10 Improved subtitle handling
 Version 1.0.9 Improved subtitle handling
 Version 1.0.8 Subtitle support added

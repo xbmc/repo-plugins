@@ -166,7 +166,7 @@ def getCats(gcurl, catname):
               else:
                 chsplit = '?'
               pg = getRequest('http://video.pbs.org/%s' % (gcurl))
-              epis = re.compile('<li class="videoItem".+?data-videoid="(.+?)".+?data-title="(.+?)".+?src="(.+?)".+?class="description">(.+?)<(.+?)</li>').findall(pg)
+              epis = re.compile('data-videoid="(.+?)".+?data-title="(.+?)".+?src="(.+?)".+?class="description">(.+?)<(.+?)</li>').findall(pg)
               for url,name,img,desc,dur in epis:
                      if 'class="duration"' in dur:
                         dur = re.compile('<p class="duration">(.+?)</p>').search(dur).group(1)

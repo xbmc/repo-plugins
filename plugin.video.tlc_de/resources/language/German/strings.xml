@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<!-- Global strings -->
+	<string id="30000">Mediathek</string>
+	<string id="30001">Highlights</string>
+	<string id="30002">Zu Addon Favs hinzufügen</string>
+	<string id="30003">Entfernen</string>
+	<string id="30004">Favoriten</string>
+	
+	<!-- Settings -->
+	<string id="30500">Fanart anzeigen</string>
+	<string id="30501">Videoqualität</string>
+	<string id="30502">SD</string>
+	<string id="30503">HD (720p)</string>
+	
+	<!-- Error messages -->
+	<string id="30999">Konnte keinen Video-Stream öffnen</string>
+</strings>

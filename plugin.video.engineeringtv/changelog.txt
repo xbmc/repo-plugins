@@ -1,0 +1,17 @@
+[B]Version 1.0.2[/B] 2014-06-30
+- Update Strings to strings.po
+- Added UnitTests
+- Added Most Recent video catagory
+- Minor speed improvements by reducing the number of redirects
+- And a lot more small improvements
+
+[B]Version 1.0.1[/B]
+- Fixed Video Url Scraper After Site Changed, Now Has Better Video Quality
+- Added a Fallback Video Scraper if main Scraper Failes
+- Added Search with Save Searches Support
+- Added Support for Related Videos
+- Added Full Unicode Support
+- Changed print with xbmc.log
+
+[B]Version 1.0.0[/B]
+- Initial Version

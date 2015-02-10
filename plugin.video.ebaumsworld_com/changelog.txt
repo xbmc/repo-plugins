@@ -1,0 +1,8 @@
+1.0.0
+- First Try
+1.0.1
+- Added option for forcing the view mode
+1.0.2
+- Fixed site changes
+1.0.3
+- Fixed video title & thumbnail

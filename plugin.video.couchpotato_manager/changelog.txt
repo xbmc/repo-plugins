@@ -1,0 +1,41 @@
+0.0.8 (29.08.2014)
+- fixed addon (adopt recent CP API changes)
+- simplify addon
+
+0.0.7 (11.08.2013)
+- fixed error when search result item has no year
+- updated translations
+
+0.0.6 (23.06.2013)
+- added "advanced"-cateogory to settings
+- added possibility to use HTTP-Basic-Auth
+- added possibility to see/change CP API-Key in settings
+- fixed potential unicode-decoding error
+- updated translations
+
+0.0.5 (08.04.2013)
+- fixed "force full search"
+- added two methods for external plugins to add movies by imdb-id
+- fixed add-on with system python <2.7
+- added translations
+
+0.0.4 (24.03.2013)
+- implemented "base url" setting (needed for mod_proxy)
+
+0.0.3 (18.03.2013)
+- new root menu logic
+- added "full forced search" to wanted-movies root menu context
+- added possibility to select a default profile in add-on settings
+- hide api key in settings
+- fixed issues when no movie metadata is available
+- improved debugging on URLERROR-Exceptions
+
+0.0.2 (17.03.2013)
+- added "Search Trailer on YouTube" in movie context menu
+- added sort methods
+- improved some strings
+- fixed some small issues
+- code cosmetics
+
+0.0.1 (14.03.2013)
+- initial release

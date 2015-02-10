@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Dutch language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/nl/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- General entries -->
+    <string id="30000">Pagina</string>
+    <string id="30001">Zoeken</string>
+    <string id="30002">[B]Mijn favorieten[/B]</string>
+    <string id="30003">Geen scaper gevonden</string>
+    <string id="30004">[B]Voeg toe aan mijn favorieten [/B]</string>
+    <string id="30005">[b]Verwijder uit mijn favorieten[/B]</string>
+    <string id="30006">Geen favorieten</string>
+    <string id="30007">U moet het context menu gebruiken</string>
+    <string id="30008">toe te voegen bestanden of folders</string>
+
+    <!-- Settings -->
+    <string id="30010">Forceer afspeelmodus naar Thumbnail</string>
+    <string id="30011">Container bijwerken bij wisselen van pagina.</string>
+    <string id="30012">Downloadlocatie</string>
+    <string id="30013">Repareer TV serie titel</string>
+
+    <!-- Context Menu entries -->
+    <string id="30020">Download video</string>
+
+    <!-- dialog entries -->
+    <string id="30030">Geen downloadlocatie!</string>
+    <string id="30031">Wilt u de locatie nu instellen?</string>
+    <string id="30032">HLS niet ondersteund</string>
+</strings>

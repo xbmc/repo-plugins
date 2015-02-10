@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Swedish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/sv/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- General entries -->
+    <string id="30000">Sida</string>
+    <string id="30001">Sök</string>
+    <string id="30002">[B]Mina favoriter[/B]</string>
+    <string id="30003">Inga skrapor hittades</string>
+    <string id="30004">[B]Lägg till i mina favoriter[/B]</string>
+    <string id="30005">[B]Ta bort från mina favoriter[/B]</string>
+    <string id="30006">Inga favoriter</string>
+    <string id="30007">Du måste använda undermenyn</string>
+    <string id="30008">för att lägga till objekt eller mappar.</string>
+
+    <!-- Settings -->
+    <string id="30010">Tvinga visningsläge till miniatyrer</string>
+    <string id="30011">Uppdatera behållaren vid sidbyte</string>
+    <string id="30012">Nerladdningsmapp</string>
+    <string id="30013">Ordna TVserie titeln</string>
+
+    <!-- Context Menu entries -->
+    <string id="30020">Ladda ner filmer</string>
+
+    <!-- dialog entries -->
+    <string id="30030">Ingen nerladdningsmapp!</string>
+    <string id="30031">Vill du ange sökvägen nu?</string>
+    <string id="30032">HLS stöds inte</string>
+</strings>

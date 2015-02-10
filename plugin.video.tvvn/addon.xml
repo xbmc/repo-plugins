@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon
+	id="plugin.video.tvvn"
+	version="0.9.4"
+	name="TV Viet Nam"
+	provider-name="Binh Nguyen">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="tvvn.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<language>en vi</language>
+		<website>http://zecoj.com</website>
+		<source>https://github.com/zecoj/xbmc-tvvn</source>
+		<summary lang="en">TV Viet Nam</summary>
+		<summary lang="vi">TV Việt Nam</summary>
+		<description lang="en">This plugin allows you to watch live TV channels or listen to radio stations in Viet Nam or from oversea providers straight from the XBMC interface, thus eliminates the needs for using browsers and flashplayer, etc. Bug report at: zecoj.com. If you enjoy using the plugin, consider donate via PayPal to b [AT] zecoj [DOT] com</description>
+		<description lang="vi">Xem trực tiếp các kênh truyền hình và các đài phát thanh từ Việt Nam và hải ngoại. If you enjoy using the plugin, consider donate via PayPal to b [AT] zecoj [DOT] com</description>
+		<disclaimer lang="en">All live streams are pulled from online providers and in no way represent my views or opinions. I also hold no control over the quality of the streams nor that of your internet connection :)</disclaimer>
+		<disclaimer lang="vi">Tất cả live streams được tải về từ các nhà cung cấp dịch vụ. Tác giả phần mềm này không chịu trách nhiệm về nội dung của chúng.</disclaimer>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+	</extension>
+</addon>

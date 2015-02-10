@@ -1,0 +1,30 @@
+0.1.1
+- Fixed malformed ampersands in XML files
+
+0.1.0
+- Added channels from RTL group
+- Added several HD channels
+- Added settings for filtering channels
+
+0.0.5
+- Fixed wrong language tag (Closes #6)
+- Added 3sat, HR and MDR channel art
+
+0.0.4
+- Added BR channel art
+- Reduced size by changing art format to jpg
+- Made all strings localizable
+- Added support for italian language
+
+0.0.3
+- Added more channel logos
+- Added support for posters as channel logos (Closes #5)
+
+0.0.2
+- Fixed wrong repository structure (Closes #1)
+- Fixed invalid XML in settings.xml (Closes #2)
+- Added missing tags to addon.xml (Closes #3)
+- Improved addon path detection (Closes #4)
+
+0.0.1
+- Initial version

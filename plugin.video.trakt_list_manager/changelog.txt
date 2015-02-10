@@ -1,0 +1,37 @@
+0.1.4 (08.01.2014)
+ - fix adding or deleting of movies with only tmdb_id or imdb_id
+ - fix urlencoding bug (e.g. on movies with colon in title
+
+0.1.3 (23.06.2013)
+ - Added "Add to CouchPotato"-Feature
+ - Fix Delete Movie from List
+ - Updated translations
+
+0.1.2 (12.05.2013)
+ - fixed error if movie from watchlist or customlist is present in xbmc
+   database and movie file contains unicode character
+ - added translations
+
+0.1.1 (29.04.2013)
+ - added feature to play movies from trakt.tv lists if they are present in 
+   the xbmc database. Present movies are bold.
+
+0.1.0 (07.03.2013)
+ - added full watchlist list (add/delete movies)
+ - added possibility to set the watchlist or any custom list as default list
+ - added possibility to add a movie to the watchlist by external add-ons
+ - changed interface for external add-ons
+ - added "Show Movie Info" to context menu
+ - added setting "Use HTTPS" (default enabled)
+ - fixed script errors
+ - code improvements
+ - string improvements
+
+0.0.2 (02.03.2013)
+ - added possibility to set a default list
+ - added watchlist (read) support
+ - new icon
+
+0.0.1 (30.03.2013)
+ - initial release
+ 

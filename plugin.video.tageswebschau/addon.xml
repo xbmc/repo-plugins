@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.tageswebschau" name="WochenWEBschau" version="2.0.7" provider-name="AddonScriptorDE">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="plugin.video.youtube" version="1.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="de">Die neuesten Web-Nachrichten</summary>
+        <summary lang="en">Latest Web-News</summary>
+        <language>de</language>
+        <description lang="de">Die neuesten Web-Nachrichten</description>
+        <description lang="en">Latest Web-News</description>
+        <website>http://wochenwebschau.de</website>
+        <source>https://github.com/AddonScriptorDE/plugin.video.tageswebschau</source>
+        <forum>http://forum.xbmc.org/showthread.php?tid=132563</forum>
+        <email>AddonScriptorDE at yahoo dot de</email>
+    </extension>
+</addon>

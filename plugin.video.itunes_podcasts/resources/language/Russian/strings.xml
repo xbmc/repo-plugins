@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Russian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ru/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30002">Просмотр по стилю</string>
+    <string id="30004">Поиск</string>
+    <string id="30105">Показать подстили</string>
+
+    <!-- Messages -->
+    <string id="30200">Ошибка сети</string>
+</strings>

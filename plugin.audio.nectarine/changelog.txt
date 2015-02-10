@@ -1,0 +1,20 @@
++ New feature
+* Fixed/improved feature
+- Removed feature
+
+2014-05-01 v1.0.2
+=================
+
++ Added thumbnail to elements to improve experience in favorites and plugin.
+  Thanks to robho (https://github.com/robho)
+
+2014-04-23 v1.0.1
+=================
+
+* Fixed user agent string as per request from service provider.
+
+2014-04-17 v1.0.0
+=================
+
++ Initial release
+

@@ -1,0 +1,18 @@
+Version 1.9.4
+* Fix strings.xml
+
+Version 1.9.3
+* Fix live URL
+* Bump new version for Frodo
+
+Version 0.9.2
+* Add language tag to addon.xml
+
+Version 0.9.1
+* Use youtube addon for playback
+
+Version 0.9.0
+* Updated required versions of xbmcswift and python for Eden.
+
+Version 0.8.1
+* Updated xbmcswift version

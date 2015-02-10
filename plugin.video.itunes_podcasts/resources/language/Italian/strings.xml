@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Italian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/it/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Tutti i generi</string>
+    <string id="30002">Sfoglia per genere</string>
+    <string id="30003">I miei Podcast</string>
+    <string id="30004">Cerca</string>
+    <string id="30005">Podcast Video</string>
+    <string id="30006">Podcast Augio</string>
+    <string id="30007">Nessun Video/Musica trovato!</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Aggiungi a </string>
+    <string id="30011">Rimuovi da "I miei Podcast"</string>
+
+    <!-- Settings -->
+    <string id="30100">Podcast: Forza la visualizzazione ad anteprima</string>
+    <string id="30101">Elementi-Podcast: Forza la visualizzazione ad anteprima</string>
+    <string id="30102">Nazione e Linguaggio di Itunes</string>
+    <string id="30103">Podcast da mostrare (max 300)</string>
+    <string id="30104">Podcast da mostrare nella ricerca (max 200)</string>
+    <string id="30105">Mostra Sottogeneri</string>
+
+    <!-- Messages -->
+    <string id="30200">Errore di rete</string>
+</strings>

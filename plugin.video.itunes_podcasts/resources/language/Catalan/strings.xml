@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Catalan language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ca/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Tots els gèneres</string>
+    <string id="30002">Buscar per gènere</string>
+    <string id="30003">Els meus Podcasts</string>
+    <string id="30004">Cerca</string>
+    <string id="30005">Podcasts de vídeos</string>
+    <string id="30006">Podcasts d'àudio</string>
+    <string id="30007">No s'ha trobat ni vídeos ni música!</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Afegir a "Els meus Podcasts"</string>
+    <string id="30011">Eliminar de "Els meus Podcast"</string>
+
+    <!-- Settings -->
+    <string id="30100">Podcasts: Força el mode de vista "Thumbnail"</string>
+    <string id="30101">Podcast-Items: Força el mode de vista "Thumbnail"</string>
+    <string id="30102">Idioma i país d'Itunes</string>
+    <string id="30103">Podcast a mostrar en la llista (màxim 300)</string>
+    <string id="30104">Podcast a mostrar en la cerca (màxim 200)</string>
+    <string id="30105">Mostrar els subgèneres</string>
+
+    <!-- Messages -->
+    <string id="30200">Error de xarxa</string>
+</strings>

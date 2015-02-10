@@ -1,0 +1,89 @@
+# XBMC Media Center language file
+# Addon Name: iPhoto
+# Addon id: plugin.image.iphoto
+# Addon Provider: jingai
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Russian (http://www.transifex.com/projects/p/xbmc-addons/language/ru/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgctxt "#30021"
+msgid "None"
+msgstr "Нет"
+
+msgctxt "#30023"
+msgid "Label"
+msgstr "Студия"
+
+msgctxt "#30024"
+msgid "Size"
+msgstr "Размер"
+
+msgctxt "#30060"
+msgid "View mode in Confluence"
+msgstr "Вид в Confluence"
+
+msgctxt "#30061"
+msgid "Default"
+msgstr "По-умолчанию"
+
+msgctxt "#30062"
+msgid "Pic Thumbs"
+msgstr "эскизы фото"
+
+msgctxt "#30063"
+msgid "Image Wrap"
+msgstr "карусель изображений"
+
+msgctxt "#30067"
+msgid "Default"
+msgstr "По-умолчанию"
+
+msgctxt "#30068"
+msgid "Picture Grid"
+msgstr "GRID"
+
+msgctxt "#30081"
+msgid "Ascending"
+msgstr "По возрастанию"
+
+msgctxt "#30082"
+msgid "Descending"
+msgstr "По убыванию"
+
+msgctxt "#30090"
+msgid "General"
+msgstr "Выкл."
+
+msgctxt "#30091"
+msgid "View"
+msgstr "Просмотр"
+
+msgctxt "#30092"
+msgid "Skin"
+msgstr "Обложка"
+
+msgctxt "#30099"
+msgid "Advanced"
+msgstr "Дополнительные"
+
+msgctxt "#30101"
+msgid "Albums"
+msgstr "Альбомы"
+
+msgctxt "#30104"
+msgid "Keywords"
+msgstr "Ключевые слова"
+
+msgctxt "#30213"
+msgid "Update library"
+msgstr "Обновить медиатеку"

@@ -1,0 +1,35 @@
+2.0.1
+- Updated translations
+
+2.0.0
+- Rewrite
+- THUMBNAILS!!! :)
+- use api instead scraping html
+- New Icon
+- Thubmnail View
+
+1.0.1
+- Fix video-listing (website changes)
+
+1.0.0
+- Code-rewrite by sphere
+- Changed: Now using XBMC-InfoLabel for date
+- Added: Random Video
+- Added: Search for Videos by title
+- Added: German Translation
+
+0.5
+- Fixed: XBMC Compilance change: No longer using os.getcwd()
+
+0.4
+- Added: Supporting dump.com links now :)
+- Changed: Main Icon to look a bit better.
+
+0.3
+- Added: Settings to choose which stream to use (Flash or Mobile)
+
+0.2
+- Changed default stream from Mobile stream to Flash Stream
+
+0.1
+- Created Initial Version

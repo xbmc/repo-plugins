@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Belarusian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/be/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- General entries -->
+    <string id="30000">Page</string>
+    <string id="30001">Search</string>
+    <string id="30002">[B]My Favorites[/B]</string>
+    <string id="30003">No Scaper Found</string>
+    <string id="30004">[B]Add to My Favorites[/B]</string>
+    <string id="30005">[B]Del from My Favorites[/B]</string>
+    <string id="30006">No Favorites</string>
+    <string id="30007">You need to use the context menu</string>
+    <string id="30008">to add items or folders.</string>
+
+    <!-- Settings -->
+    <string id="30010">Force ViewMode to Thumbnail</string>
+    <string id="30011">Update container on page switch</string>
+    <string id="30012">Download Path</string>
+    <string id="30013">Fix TV Show title</string>
+
+    <!-- Context Menu entries -->
+    <string id="30020">Download Video</string>
+
+    <!-- dialog entries -->
+    <string id="30030">No Download path!</string>
+    <string id="30031">Do you want to set the path now?</string>
+    <string id="30032">HLS not supported</string>
+</strings>

@@ -1,0 +1,28 @@
+1.0.0
+- Updated version number for official repo bump.
+0.0.9
+- Added forum thread to addon and README files.
+- Added support for "Une Bien Belge Histoire" program menu.
+- Improved Dailymotion parser to support some of "Les 1M" LQ videos.
+- Added support for "Vox Pop" videos from Arte.tv (credits: AddonScriptorDE).
+- Added Travis-CI integration support for scraper API testing.
+0.0.8
+- Cleaned up code and documentation.
+- prepared everything for first bump into git repo.
+0.0.7
+- Added Search option for videos.
+0.0.6
+- Improved info tags presentation into video lists.
+- Improved main index generation.
+0.0.5
+- Added support for Documentals.
+0.0.4
+- Added support for Emissions, Chroniques and Series.
+0.0.3
+- Improved video list parser function.
+- Added suport for info tags in videos.
+0.0.2
+- Added multilevel menu options for All the Videos and Reportages.
+- Added internationalization support.
+0.0.1
+- First Try.

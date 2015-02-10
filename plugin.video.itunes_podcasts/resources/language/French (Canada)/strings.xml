@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- French (Canada) language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/fr_CA/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Tous les genres</string>
+    <string id="30002">Parcourir par genre</string>
+    <string id="30003">Mes balados</string>
+    <string id="30004">Rechercher</string>
+    <string id="30005">Balados vidéo</string>
+    <string id="30006">Balados audio</string>
+    <string id="30007">Aucune vidéo/musique trouvée!</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Ajouter à « Mes balados »</string>
+    <string id="30011">Enlever de « Mes balados »</string>
+
+    <!-- Settings -->
+    <string id="30100">Balados : forcer le mode de visualisation en imagette</string>
+    <string id="30101">Éléments de balados : forcer le mode de visualisation en imagette</string>
+    <string id="30102">Pays et langue pour iTunes</string>
+    <string id="30103">Nombre de balados à afficher dans la liste (300 max)</string>
+    <string id="30104">Nombre de balados à afficher dans une recherche (200 max)</string>
+    <string id="30105">Afficher les sous-genres</string>
+
+    <!-- Messages -->
+    <string id="30200">Erreur de réseau</string>
+</strings>

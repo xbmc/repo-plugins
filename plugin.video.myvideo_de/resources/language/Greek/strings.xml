@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Greek language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/el/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- General entries -->
+    <string id="30000">Σελίδα</string>
+    <string id="30001">Αναζήτηση</string>
+    <string id="30002">[B]Τα Αγαπημένα Μου[/B]</string>
+    <string id="30003">Δε Βρέθηκε Scraper</string>
+    <string id="30004">[B]Προσθήκη στα Αγαπημένα Μου[/B]</string>
+    <string id="30005">[B]Αφαίρεση από τα Αγαπημένα Μου[/B]</string>
+    <string id="30006">Κανένα Αγαπημένο</string>
+    <string id="30007">Πρέπει να χρησιμοποιήσετε το μενού επιλογών</string>
+    <string id="30008">για να προσθέσετε αντικείμενα ή φακέλους.</string>
+
+    <!-- Settings -->
+    <string id="30010">Οι 'Μικρογραφίες' σαν Τύπος Προβολής</string>
+    <string id="30011">Ενημέρωση κατά την αλλαγή σελίδας</string>
+    <string id="30012">Διαδρομή Λήψεων</string>
+    <string id="30013">Διόρθωση τίτλου Τηλ. Σειράς</string>
+
+    <!-- Context Menu entries -->
+    <string id="30020">Λήψη Βίντεο</string>
+
+    <!-- dialog entries -->
+    <string id="30030">Καμία διαδρομή Λήψεων!</string>
+    <string id="30031">Επιθυμείτε να ορίσετε τη διαδρομή τώρα;</string>
+    <string id="30032">Δεν υποστηρίζονται ζωντανές ροές (HLS)</string>
+</strings>

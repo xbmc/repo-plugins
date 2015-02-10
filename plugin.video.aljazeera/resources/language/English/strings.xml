@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!-- Plugin name -->
+  <!--<string id="30000">Al Jazeera</string>-->
+  <!-- List item titles and dialog progress strings -->
+  <string id="30100">Watch Live</string>
+  <string id="30101">News Clips</string>
+  <string id="30102">Programs</string>
+  <string id="30200">Newer Videos</string>
+  <string id="30201">Older Videos</string>
+
+  <string id="30300">Add to Now Playing Queue</string>
+</strings>

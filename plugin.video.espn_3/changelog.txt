@@ -1,0 +1,22 @@
+--------------------------------
+version 1.0.4 (November 2014)
+--------------------------------
+- fixed Duration label reporting wrong times in replay section
+- added more useful information to the Info Labels
+
+--------------------------------
+version 1.0.3 (November 2014)
+--------------------------------
+- continued work on Replay All function. Replay All function tries to go back 1 year.
+- Updated the View information in the Live Feeds to have Time displayed first.
+- Ability to color code the feeds that are actually Live (See Settings for more info).
+
+--------------------------------
+version 1.0.2                 
+--------------------------------
+- Updated and fixed the replay function to include feeds from the same day
+
+--------------------------------
+version 1.0.0                      
+--------------------------------
+- Initial commit

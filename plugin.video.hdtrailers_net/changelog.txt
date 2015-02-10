@@ -1,0 +1,37 @@
+1.2.2 (16.03.2014)
+- updated translations
+
+1.2.1 (15.04.2013)
+- Trakt.tv Integration via Trakt.tv List Manager
+- updated translations
+
+1.2.0 (29.03.2013)
+- CouchPotato Integration via CouchPotato Manager
+  You can now add movies to CouchPotato via the context-menu
+- Updated translations
+
+1.1.1 (08.03.2013)
+ - fix downloading on yahoo-redir, apple, yahoo
+
+1.1.0 (07.03.2013)
+ - added possibility to download trailers
+ - play already downloaded trailers from local path
+ - indicate if trailer is already downloaded or download still in progress
+ - changed to xbmcswift2 v2.4.0
+
+1.0.2 (09.02.2013)
+ - fixed playback of yahoo trailers (some shown with source "hd-trailers.net")
+
+1.0.1 (18.01.2013)
+ - fixed coming-soon
+ - updated translations
+
+1.0.0 (27.12.2012)
+ - new icon
+ - added ability to override content-type in movie-view
+ - Fixed Cover in FullScreenVideo OSD
+ - Added images for next- and previous-page
+ - catch and show notify on network error
+
+0.0.1 (14.12.2012)
+ - initial release

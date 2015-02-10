@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <!-- General -->
+  <category label="32001">
+    <setting id="safe" type="enum" label="32002" lvalues="32101|32103" default="1"/>
+    <setting id="image_size" type="enum" label="32003" lvalues="32111|32112|32114|32115" default="0"/>
+    <setting id="greyscale" type="enum" label="32004" lvalues="32111|32122|32123|32124" default="0"/>
+    <setting id="color" type="enum" label="32005" lvalues="32111|32131|32132|32133|32134|32135|32136|32137|32138|32139|32140|32141|32142" default="0"/>
+	<setting id="type" type="enum" label="32006" lvalues="32111|32152|32153|32154|32155" default="0"/>
+	<setting id="filetype" type="enum" label="32007" lvalues="32111|32162|32163|32164|32165" default="0"/>
+	<setting id="rights" type="enum" label="32008" lvalues="32111|32172|32173|32174|32175" default="0"/>
+  </category>
+  <category label="32000">
+    <setting id="save_path" type="folder"  source="local" label="32009" />
+    <setting id="max_history" type="enum" label="32011" values="None|10|20|30|50|100|200|500" default="1"/>
+  </category>
+</settings>

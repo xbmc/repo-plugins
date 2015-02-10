@@ -1,0 +1,41 @@
+# XBMC Media Center language file
+# Addon Name: Greenpeace videos
+# Addon id: plugin.video.greenpeace
+# Addon Provider: Jose Antonio Montes (jamontes)
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Hungarian (http://www.transifex.com/projects/p/xbmc-addons/language/hu/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: hu\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30010"
+msgid "Next Page"
+msgstr "Következő Oldal"
+
+msgctxt "#30011"
+msgid "Video type not supported"
+msgstr "Videó formátum nem támogatott"
+
+msgctxt "#30012"
+msgid "Couldn't locate video url"
+msgstr "Nem találtam meg a videó URL-t"
+
+msgctxt "#30101"
+msgid "Location/Language (for videos)"
+msgstr "Hely/Nyelv (videókhoz)"
+
+msgctxt "#30102"
+msgid "Debug (enable logs)"
+msgstr "Hibakeresés (napló engedélyezése)"
+
+msgctxt "#30103"
+msgid "Show thumbnails as fanart"
+msgstr "Miniképek mutatása fanart-ként"

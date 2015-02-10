@@ -1,0 +1,17 @@
+created by celadoor.
+Version 0.0.9 -Added All Videos option, made main menu more compact, tidied up titles..
+
+Version 0.0.6 -re-enabled some of the audio options, updated icon.
+
+Version 0.0.5 -Update due to website url changes.
+
+Version 0.0.4 -Cosmetic UI improvements
+
+Version 0.0.3 -Tidy up strings ready for official repo.
+
+Version 0.0.2 -Made changes ready for official repo.
+
+Version 0.0.1 -Initial Release. Plays all the latest Corbett Report Video
+podcasts.
+
+

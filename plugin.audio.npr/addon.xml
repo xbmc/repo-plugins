@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.npr"
+       name="NPR (National Public Radio)"
+       version="2.1.1"
+       provider-name="Stieg, Fisslefink">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary lang="en">NPR (National Public Radio)</summary>
+    <description lang="en">All available NPR streams and most podcasts.</description>
+  </extension>
+</addon>

@@ -1,0 +1,19 @@
+<addon id="plugin.video.classiccinema" name="Classic Cinema" provider-name="Jonathan Beluch (jbel)" version="2.1.2">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0" />
+    <import addon="plugin.video.youtube" version="3.3.0" />
+    <import addon="script.module.beautifulsoup" version="3.2.0" />
+    <import addon="script.module.xbmcswift2" version="1.3.1" />
+    <import addon="script.module.requests" version="0.13.2" />
+  </requires>
+  <extension library="addon.py" point="xbmc.python.pluginsource">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <language />
+    <summary>Classic Cinema Video Addon</summary>
+    <description>Watch online video movies found at http://www.classiccinemaonline.com.  The site aggregates old movies and tv shows found on google video and archive.org.</description>
+    <disclaimer />
+  </extension>
+</addon>

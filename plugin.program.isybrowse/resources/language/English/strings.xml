@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30000">ISY Browser</string>
+    
+    <!-- SETTINGS -->
+    <string id="30100">ISY Settings</string>
+    <string id="30101">Username</string>
+    <string id="30102">Password</string>
+    <string id="30103">Host Name</string>
+    <string id="30104">Port</string>
+    <string id="30105">Use HTTPS</string>
+    
+    <!-- CONTEXT MENUS -->
+    <string id="30201">On</string>
+    <string id="30202">Off</string>
+    <string id="30203">Toggle</string>
+    <string id="30204">Fast On</string>
+    <string id="30205">Fast Off</string>
+    <string id="30206">Bright</string>
+    <string id="30207">Dim</string>
+    <string id="30208">On To 25%</string>
+    <string id="30209">On To 50%</string>
+    <string id="30210">On To 75%</string>
+    <string id="30211">On To 100%</string>
+    <string id="30212">Show Info</string>
+    <string id="30213">Run</string>
+    <string id="30214">Run Then</string>
+    <string id="30215">Run Else</string>
+    <string id="30216">Show Info</string>
+    
+    <!-- DIALOG WINDOWS -->
+    <string id="30301">Node Details</string>
+    <string id="30302">Address</string>
+    
+    <!-- ROOT MENU ITEMS -->
+    <string id="30401">Browse Nodes</string>
+    <string id="30402">Browse Programs</string>
+    <string id="30403">Configure Events</string>
+    
+    <!-- ERROR MESSAGES -->
+    <string id="30501">ISY Connection Issue</string>
+    <string id="30502">Could not connect to ISY. Check Settings. Using dummy ISY results.</string>
+</strings>

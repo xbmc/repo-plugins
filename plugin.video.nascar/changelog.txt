@@ -1,0 +1,21 @@
+Version 2.0.3
+fix website changes
+
+Version 2.0.2
+fix website changes
+
+Version 2.0.1
+fix website changes
+
+Version 2.0.0
+major version bump for frodo
+major update, the old video feed isn't updated anymore, now scrapping the website
+added quality settings up to 720p
+added some filter settings
+
+Version 1.0.0
+initial for eden-pre
+
+Version 1.2
+fix - video url's changed
+removed the directorys as they were not needed

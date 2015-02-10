@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Galician language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/gl/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Tódolos subxéneros</string>
+    <string id="30001">Mellores 500 Emisoras</string>
+    <string id="30002">Buscar por xénero</string>
+    <string id="30003">As miñas Emisoras</string>
+    <string id="30004">Buscar Emisora por nome</string>
+    <string id="30005">Buscar emisora da pista en reprodución actual</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Engadir a "As miñas Emisoras"</string>
+    <string id="30011">Eliminar de "As miñas Emisoras"</string>
+
+    <!-- Settings -->
+    <string id="30100">Amosar subxéneros</string>
+    <string id="30101">Núm. de emisoras na listaxe</string>
+    <string id="30102">Amosar a Taxa de bits no Título</string>
+    <string id="30103">Seleccionar un servidor ó chou (Non preguntar)</string>
+
+    <!-- Messages -->
+    <string id="30200">Erro de rede</string>
+</strings>

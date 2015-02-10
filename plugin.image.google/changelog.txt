@@ -1,0 +1,49 @@
+googleImages Changelog
+
+Current Version : 0.9.8
+
+*** 0.9.8 ***
+
+Now sorts page images by best match in URL
+History no longer saves duplicate queries
+Converted strings.xml to strings.po
+
+*** 0.9.7 ***
+
+Fix for changes from google
+Updated addon.xml python import
+Added license, forum and source tags to addon.xml
+
+*** 0.9.6 ***
+
+Fix for encoding errors
+Remove actual simplejson import statement
+
+*** 0.9.5 ***
+
+Removed simplejson dependency
+Added Beutifulsoup dependency
+
+*** 0.9.4 ***
+
+Moved from deprecated Google API to scraping method
+Added keyword highlighting
+Added pagination
+
+*** 0.9.3 ***
+
+Fix for bug with default save path
+Improved handling of some search errors
+
+*** 0.9.2 ***
+
+Changes for Eden
+
+*** 0.9.1 ***
+
+Small changes for dev in Eclipse
+Changes for Boxee compatability
+
+*** 0.9.0 ***
+
+Initial release

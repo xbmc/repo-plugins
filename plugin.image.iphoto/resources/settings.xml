@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>   
+    <!-- General -->
+    <category label="30090">
+	<setting id="albumdata_xml_path" type="folder" source="" label="30000" default=""/>
+	<setting id="managed_lib_enable" type="bool" label="30027" default="true"/>
+	<setting id="masters_path" type="text" label="30028" default="/Volumes/Pictures/" enable="eq(-1,false)"/>
+	<setting id="masters_real_path" type="folder" source="" label="30029" default="" enable="eq(-2,false)"/>
+	<setting id="places_enable" type="bool" label="30015" default="true"/>
+	<setting id="places_enable_maps" type="bool" label="30025" default="true" enable="eq(-1,true)"/>
+	<setting id="auto_update_lib" type="bool" label="30003" default="false"/>
+    </category>
+
+    <!-- View -->
+    <category label="30091">
+	<setting id="places_labels" type="enum" label="30016" lvalues="30017|30018" default="0"/>
+	<setting id="places_show_fanart" type="bool" label="30026" default="true"/>
+	<setting type="sep"/>
+	<setting id="album_ignore_empty" type="bool" label="30005" default="true"/>
+	<setting id="album_ignore_published" type="bool" label="30001" default="true"/>
+	<setting id="album_ignore_flagged" type="bool" label="30002" default="true"/>
+	<setting type="sep"/>
+	<setting id="hidden_keywords" type="text" label="30006" default=""/>
+    </category>
+
+    <!-- Skin -->
+    <category label="30092">
+	<setting id="default_sort_method" type="enum" label="30020" lvalues="30021|30022|30023|30024" default="0"/>
+	<setting id="default_sort_dir" type="enum" label="30080" lvalues="30021|30081|30082" default="0"/>
+	<setting id="confluence_view_default" type="enum" label="30060" lvalues="30061|30062|30063" default="0"/>
+	<setting id="confluence_view_events" type="text" visible="false"/>
+	<setting id="confluence_view_albums" type="text" visible="false"/>
+	<setting id="confluence_view_faces" type="text" visible="false"/>
+	<setting id="confluence_view_places" type="text" visible="false"/>
+	<setting id="confluence_view_keywords" type="text" visible="false"/>
+	<setting id="confluence_view_ratings" type="text" visible="false"/>
+	<setting id="metropolis_view_default" type="enum" label="30066" lvalues="30067|30068|30069" default="0"/>
+	<setting id="metropolis_view_events" type="text" visible="false"/>
+	<setting id="metropolis_view_albums" type="text" visible="false"/>
+	<setting id="metropolis_view_faces" type="text" visible="false"/>
+	<setting id="metropolis_view_places" type="text" visible="false"/>
+	<setting id="metropolis_view_keywords" type="text" visible="false"/>
+	<setting id="metropolis_view_ratings" type="text" visible="false"/>
+    </category>
+
+    <!-- Advanced -->
+    <category label="30099">
+	<setting id="hide_import_lib" type="bool" label="30004" default="false"/>
+	<setting id="hide_view_readme" type="bool" label="30030" default="false"/>
+    </category>
+</settings>

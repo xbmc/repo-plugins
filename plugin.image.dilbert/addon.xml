@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.image.dilbert" name="Dilbert" version="1.1.1" provider-name="RPiola">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>image</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <disclaimer>Tested on raspbmc final only, but it should work on any xbmc; it is a completely UNOFFICIAL plugin, not endorsed by the author of the Dilbert character</disclaimer>
+        <summary lang="en">Display daily Dilbert comic strip</summary>
+        <description lang="en">Dilbert xmbc plugin displays the daily Dilbert comic strip by Scott Adams. All credits to www.dilbert.com</description>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <language/>
+        <website>http://pi.ilpiola.it/dilbert</website>
+        <email>roberto@ilpiola.it</email>
+    </extension>
+</addon>

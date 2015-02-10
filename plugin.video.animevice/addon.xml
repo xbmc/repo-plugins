@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.animevice"
+       name="Anime Vice"
+       version="2.1.1"
+       provider-name="Whiskey Media">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.simplejson" version="2.0.10"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary>Anime Vice video plugin</summary>
+    <description>Anime Vice is the place to go for your anime fix. Watch trailers, reviews, and original anime-related content.</description>
+    <source>https://github.com/WhiskeyMedia/xbmc</source>
+  </extension>
+</addon>

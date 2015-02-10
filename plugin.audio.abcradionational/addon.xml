@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.abcradionational" name="ABC Radio National" version="1.0.1" provider-name="Damon Toumbourou">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.xbmcswift2" version="2.4.0"/>
+    <import addon="script.module.beautifulsoup" version="3.0.8"/>
+    <import addon="script.module.requests" version="1.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <language></language>
+    <summary lang="en">Listen to podcasts from the ABC Radio National network.
+    </summary>
+    <description lang="en">Radio National's vision and purpose is to nurture the intellectual and cultural life of this country, and to be a vital element of the contemporary Australian conversation. Radio National's vision and purpose is to nurture the intellectual and cultural life of this country, and to be a vital element of the contemporary Australian conversation.
+    </description>
+    <license>The MIT License (MIT)</license>
+    <forum>http://forum.xbmc.org/showthread.php?tid=184904</forum>
+    <email>dtoumbourou@gmail.com</email>
+    <source>https://github.com/DamonToumbourou/plugin.audio.abcradionational.git</source>
+    <website></website>
+  </extension>
+</addon>

@@ -1,0 +1,276 @@
+# XBMC Media Center language file
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2013-12-05 01:05+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "#32000"
+msgid "Settings"
+msgstr ""
+
+msgctxt "#32001"
+msgid "Advanced Search"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Safe"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Size"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Color"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Specific Color"
+msgstr ""
+
+msgctxt "#32006"
+msgid "Type"
+msgstr ""
+
+msgctxt "#32007"
+msgid "File Type"
+msgstr ""
+
+msgctxt "#32008"
+msgid "Rights"
+msgstr ""
+
+msgctxt "#32009"
+msgid "Save Path"
+msgstr ""
+
+msgctxt "#32010"
+msgid "Save Image"
+msgstr ""
+
+msgctxt "#32011"
+msgid "Max History"
+msgstr ""
+
+msgctxt "#32012"
+msgid "Saved"
+msgstr ""
+
+msgctxt "#32013"
+msgid "Saved as: @REPLACE@"
+msgstr ""
+
+msgctxt "#32014"
+msgid "In: @REPLACE@"
+msgstr ""
+
+msgctxt "#32015"
+msgid "Saving"
+msgstr ""
+
+msgctxt "#32016"
+msgid "Saving..."
+msgstr ""
+
+msgctxt "#32017"
+msgid "Invalid Path"
+msgstr ""
+
+msgctxt "#32018"
+msgid "Please set save path in settings"
+msgstr ""
+
+msgctxt "#32019"
+msgid "Fail"
+msgstr ""
+
+msgctxt "#32020"
+msgid "Failed to save image."
+msgstr ""
+
+#empty strings from id 32021 to 32100
+
+msgctxt "#32101"
+msgid "Off"
+msgstr ""
+
+#empty string with id 32102
+
+msgctxt "#32103"
+msgid "Active"
+msgstr ""
+
+#empty strings from id 32104 to 32110
+
+msgctxt "#32111"
+msgid "Any"
+msgstr ""
+
+msgctxt "#32112"
+msgid "Icon"
+msgstr ""
+
+#empty string with id 32113
+
+msgctxt "#32114"
+msgid "Medium"
+msgstr ""
+
+msgctxt "#32115"
+msgid "Large"
+msgstr ""
+
+#empty strings from id 32116 to 32120
+
+msgctxt "#32121"
+msgid "Any"
+msgstr ""
+
+msgctxt "#32122"
+msgid "Grayscale"
+msgstr ""
+
+msgctxt "#32123"
+msgid "Color"
+msgstr ""
+
+msgctxt "#32124"
+msgid "Transparent"
+msgstr ""
+
+#empty strings from id 32125 to 32130
+
+msgctxt "#32131"
+msgid "Black"
+msgstr ""
+
+msgctxt "#32132"
+msgid "Blue"
+msgstr ""
+
+msgctxt "#32133"
+msgid "Brown"
+msgstr ""
+
+msgctxt "#32134"
+msgid "Gray"
+msgstr ""
+
+msgctxt "#32135"
+msgid "Green"
+msgstr ""
+
+msgctxt "#32136"
+msgid "Orange"
+msgstr ""
+
+msgctxt "#32137"
+msgid "Pink"
+msgstr ""
+
+msgctxt "#32138"
+msgid "Purple"
+msgstr ""
+
+msgctxt "#32139"
+msgid "Red"
+msgstr ""
+
+msgctxt "#32140"
+msgid "Teal"
+msgstr ""
+
+msgctxt "#32141"
+msgid "White"
+msgstr ""
+
+msgctxt "#32142"
+msgid "Yellow"
+msgstr ""
+
+#empty strings from id 32143 to 32151
+
+msgctxt "#32152"
+msgid "Face"
+msgstr ""
+
+msgctxt "#32153"
+msgid "Photo"
+msgstr ""
+
+msgctxt "#32154"
+msgid "Clip Art"
+msgstr ""
+
+msgctxt "#32155"
+msgid "Line Art"
+msgstr ""
+
+#empty strings from id 32156 to 32161
+
+msgctxt "#32162"
+msgid ".jpg"
+msgstr ""
+
+msgctxt "#32163"
+msgid ".png"
+msgstr ""
+
+msgctxt "#32164"
+msgid ".gif"
+msgstr ""
+
+msgctxt "#32165"
+msgid ".bmp"
+msgstr ""
+
+#empty strings from id 32166 to 32171
+
+msgctxt "#32172"
+msgid "Labeled For Commercial Reuse With Modification"
+msgstr ""
+
+msgctxt "#32173"
+msgid "Labeled For Reuse With Modification"
+msgstr ""
+
+msgctxt "#32174"
+msgid "Labeled For Commercial Reuse"
+msgstr ""
+
+msgctxt "#32175"
+msgid "Labeled For Reuse"
+msgstr ""
+
+#empty strings from id 32176 to 32199
+
+msgctxt "#32200"
+msgid "Search"
+msgstr ""
+
+msgctxt "#32201"
+msgid "Advanced Search"
+msgstr ""
+
+msgctxt "#32202"
+msgid "History"
+msgstr ""
+
+msgctxt "#32203"
+msgid "Saves"
+msgstr ""
+
+#empty strings from id 32204 to 32299
+
+msgctxt "#32300"
+msgid "Enter search terms:"
+msgstr ""

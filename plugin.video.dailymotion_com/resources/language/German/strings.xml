@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30001">Nächste Seite</string>
+  <string id="30101">Land</string>
+  <string id="30023">Hinzugefuegt</string>
+  <string id="30028">User zu Favoriten hinzufügen</string>
+  <string id="30029">Aus Favoriten entfernen</string>
+  <string id="30030">User zu Favoriten hinzugefuegt</string>
+  <string id="30033">User hinzufügen</string>
+  <string id="30043">In Abspielliste einreihen</string>
+  <string id="30044">Video downloaden</string>
+  <string id="30102">View erzwingen</string>
+  <string id="30105">Maximale Aufösung</string>
+  <string id="30107">Einträge pro Seite</string>
+  <string id="30108">Downloadverzeichnis</string>
+  <string id="30109">Datei existiert bereits</string>
+  <string id="30110">Downloadverzeichnis wählen</string>
+</strings>

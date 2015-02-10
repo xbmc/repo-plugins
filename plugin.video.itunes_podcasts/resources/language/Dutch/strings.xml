@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Dutch language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/nl/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Alle genres</string>
+    <string id="30002">Blader op genre</string>
+    <string id="30003">Mijn Podcasts</string>
+    <string id="30004">Zoeken</string>
+    <string id="30005">Video podcasts</string>
+    <string id="30006">Audio Podcasts</string>
+    <string id="30007">Geen video/muziek gevonden!</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Voeg toe aan "Mijn Podcasts"</string>
+    <string id="30011">Verwijder uit "Mijn Podcasts"</string>
+
+    <!-- Settings -->
+    <string id="30100">Podcasts: Forceer afspeelmodus naar miniatuur</string>
+    <string id="30101">Podcast-bestanden: Forceer afspeelmodus naar miniatuur</string>
+    <string id="30102">Itunes land en Taal</string>
+    <string id="30103">het aantal Podcasts te weergeven in lijst (max 300)</string>
+    <string id="30104">het aantal Podcasts te weergeven in zoeken (max 200)</string>
+    <string id="30105">toon subgenres</string>
+
+    <!-- Messages -->
+    <string id="30200">Netwerk Fout</string>
+</strings>

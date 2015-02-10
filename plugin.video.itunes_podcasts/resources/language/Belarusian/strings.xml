@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Belarusian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/be/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">All genres</string>
+    <string id="30002">Browse by genre</string>
+    <string id="30003">My Podcasts</string>
+    <string id="30004">Search</string>
+    <string id="30005">Video Podcasts</string>
+    <string id="30006">Audio Podcasts</string>
+    <string id="30007">No Video/Music found!</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Add to "My Podcasts"</string>
+    <string id="30011">Remove from "My Podcasts"</string>
+
+    <!-- Settings -->
+    <string id="30100">Podcasts: Force ViewMode to Thumbnail</string>
+    <string id="30101">Podcast-Items: Force ViewMode to Thumbnail</string>
+    <string id="30102">Itunes Country and Language</string>
+    <string id="30103">Podcasts to show in list (max 300)</string>
+    <string id="30104">Podcasts to show in search (max 200)</string>
+    <string id="30105">Show Subgenres</string>
+
+    <!-- Messages -->
+    <string id="30200">Network Error</string>
+</strings>

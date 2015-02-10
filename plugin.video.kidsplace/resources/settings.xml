@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="50000">
+        <setting type="sep"/>	
+		<setting id="proxy_address" type="text" label="50004" default="" value=""/>
+		<setting id="proxy_port" type="text" label="50005" default="" value=""/>
+	</category>
+</settings>

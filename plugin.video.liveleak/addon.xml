@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.liveleak"
+       name="LiveLeak"
+       version="0.0.2"
+       provider-name="oneadvent">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Watch LiveLeak.com Videos</summary>
+    <language>en</language>
+    <description lang="en">Redefining The Media</description>
+     <platform>all</platform>
+  </extension>
+</addon>

@@ -1,0 +1,3 @@
+BeautifulSoup
+requests>=1.0.4
+xbmcswift2

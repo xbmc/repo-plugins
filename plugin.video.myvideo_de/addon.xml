@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.myvideo_de" name="MyVideo.de" version="0.9.6" provider-name="Tristan Fischer (sphere@dersphere.de)">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.module.xbmcswift2" version="2.4.0"/>
+        <import addon="script.module.beautifulsoup" version="3.0.8"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <language>de</language>
+        <website>http://www.myvideo.de</website>
+        <source>https://github.com/dersphere/plugin.video.myvideo_de</source>
+        <forum>http://forum.xbmc.org/showthread.php?tid=127105</forum>
+        <email>sphere@dersphere.de</email>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <summary lang="be">video plugin for MyVideo.de</summary>
+        <summary lang="bg">видео добавка за MyVideo.de</summary>
+        <summary lang="ca">complement de vídeo per MyVideo.de</summary>
+        <summary lang="da">Videoplugin til MyVidio.de</summary>
+        <summary lang="de">Video plugin für MyVideo.de</summary>
+        <summary lang="el">Plugin βίντεο για το MyVideo.de</summary>
+        <summary lang="en">video plugin for MyVideo.de</summary>
+        <summary lang="en_NZ">video plugin for MyVideo.de</summary>
+        <summary lang="es">Plugin de video para MyVideo.de</summary>
+        <summary lang="fr">Extension vidéo pour MyVideo.de</summary>
+        <summary lang="fr_CA">Module d'extension vidéo pour MyVideo.de</summary>
+        <summary lang="gl">Engadido de vídeo de MyVideo.de</summary>
+        <summary lang="he">הרחבת וידאו עבור MyVideo.de</summary>
+        <summary lang="hr">video dodatak za MyVideo.de</summary>
+        <summary lang="hu">Beépülő modul a MyVideo.de számára</summary>
+        <summary lang="it">Plugin video per MyVideo.de</summary>
+        <summary lang="ko">MyVideo.de 비디오 플러그인</summary>
+        <summary lang="lt">vaizdo įskiepiai iš MyVideo.de</summary>
+        <summary lang="nl">video plugin voor MyVideo.de</summary>
+        <summary lang="pl">Wtyczka wideo dla  MyVideo.de</summary>
+        <summary lang="pt">plugin vídeo para MyVideo.de</summary>
+        <summary lang="pt_BR">Plugin de vídeo para MyVideo.de</summary>
+        <summary lang="ro">plugin video pentru MyVideo.de</summary>
+        <summary lang="ru">видео плагин для MyVideo.de</summary>
+        <summary lang="sk">Video doplnok pre MyVideo.de</summary>
+        <summary lang="sv">videotillägg för MyVideo.de</summary>
+        <summary lang="zh">MyVideo.de的视频插件</summary>
+        <description lang="be">This plugin provides access to all videos from the german video portal MyVideo.de</description>
+        <description lang="bg">Добавката предоставя достъп до всички клипове от немският видео портал MyVideo.de</description>
+        <description lang="ca">Aquest complement dóna accés a tots els vídeos del portal alemany MyVideo.de</description>
+        <description lang="da">Dette plugin giver adgang til alle videoer fra den tyske videoportal MyVideo.de</description>
+        <description lang="de">Dieses plugin bietet Zugriff auf alle Videos des deutschen Video-Portals MyVideo.de</description>
+        <description lang="el">Αυτό το plugin παρέχει πρόσβαση σε όλα τα βίντεο από το γερμανικό portal MyVideo.de</description>
+        <description lang="en">This plugin provides access to all videos from the german video portal MyVideo.de</description>
+        <description lang="en_NZ">This plugin provides access to all videos from the german video portal MyVideo.de</description>
+        <description lang="es">Este plugin provee acceso a todos los videos del portal de video aleman MyVideo.de</description>
+        <description lang="fr">Cette extension donne accès aux vidéos du portail allemand MyVideo.de</description>
+        <description lang="fr_CA">Ce plugiciel donne accès à toutes les vidéos du portail de vidéos allemand Myvideo.de</description>
+        <description lang="gl">Este engadido fornece de acceso a todos os vídeos do portal alemán MyVideo.de</description>
+        <description lang="he">הרחבה זו מאפשרת לגשת לכל הסרטונים מפורטל הוידאו הגרמני MyVideo.de</description>
+        <description lang="hr">Ovaj dodatak omogućuje vam pristup svim video snimkama na njemačkom video portalu MyVideo.de</description>
+        <description lang="hu">Ez a modul elérhetővé teszi a MyVideo.de német videófeltöltő oldal összes videóját.</description>
+        <description lang="it">Questo plugin garantisce l'accesso a tutti i video del portale tedesco MyVideo.de</description>
+        <description lang="ko">독일 비디오 포털 MyVideo.de의 모든 비디오를 이용할 수 있습니다.</description>
+        <description lang="lt">Šis papildinys suteikia prieigą prie visų video iš Vokietijos video portalo MyVideo.de</description>
+        <description lang="nl">Deze plugin geeft toegang tot alle videos van de duitse video portal MyVideo.de</description>
+        <description lang="pl">Wtyczka ta umożliwia dostęp do wszystkich filmów z niemieckiego portalu wideo MyVideo.de</description>
+        <description lang="pt">Este plugin fornece acesso a todos os vídeos do portal alemão de vídeos MyVideo.de</description>
+        <description lang="pt_BR">Este plugin fornece acesso para todos os vídeos do portal de vídeos alemão MyVideo.de</description>
+        <description lang="ro">Acest plugin oferă acces la toate videoclipurile de pe portalul video MyVideo.de</description>
+        <description lang="ru">Плагин предоставляет доступ ко всему видео с немецкого видео-портала MyVideo.de</description>
+        <description lang="sk">Tento doplnok poskytuje prístup ku všetkým videám nemeckého video portálu MyVideo.de</description>
+        <description lang="sv">Detta tillägg ger åtkomst till alla videor från den tyska videoportalen MyVideo.de</description>
+        <description lang="zh">此插件提供对德国视频门户MyVideo.de的全部视频的访问</description>
+        <disclaimer lang="af">Sommige dele van hierdie byvoegsel mag dalk nie wettig wees in jou land van verblyf nie - gaan die plaaslike wette na voor installering.</disclaimer>
+        <disclaimer lang="be">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+        <disclaimer lang="bg">Някои части от добавката може да са незаконни в държавата, в която се намирате - моля, проверете местните закони, преди да я инсталирате.</disclaimer>
+        <disclaimer lang="ca">Algunes parts d'aquest complement poden ser il·legals al vostre país de residència - si us plau, comprova les vostres lleis locals abans d'instal·lar-lo</disclaimer>
+        <disclaimer lang="cs">Některé části tohoto doplňku nemusí být legální ve vašem státě - prosím ověřte vaše zákony před instalací.</disclaimer>
+        <disclaimer lang="cy">Mae'n bosib fod rhai rhannau o'r ategyn hwn yn anghyfreithlon yn eich gwlad chi - gwiriwch eich cyfreithiau lleol cyn ei osod.</disclaimer>
+        <disclaimer lang="da">Nogle dele af dette addon er muligvis ikke lovligt i dit hjemland - Kontroller venligst dette ved de lokale myndigheder inden du installerer.</disclaimer>
+        <disclaimer lang="de">Einige Teile dieses Addons könnten in deinem Land verboten sein - bitte stelle vor der installation sicher, dass du keine Gesetze verletzt.</disclaimer>
+        <disclaimer lang="el">Κάποια τμήματα αυτού του πρόσθετου ενδέχεται να μην είναι νόμιμα στη χώρα σας - ελέγξτε τη νομοθεσία πριν την εγκατάσταση.</disclaimer>
+        <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+        <disclaimer lang="en_NZ">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+        <disclaimer lang="es">Algunas partes de este addon pueden no ser legales en tu país de residencia - verifica tus leyes locales antes de instalar.</disclaimer>
+        <disclaimer lang="es_AR">Algunas partes de este add-on pueden no ser legales en tu país de residencia - verifica tus leyes locales antes de instalar.</disclaimer>
+        <disclaimer lang="es_MX">Algunas partes de este addon pueden no ser legales en tu país de residencia - por favor consulta tus leyes locales antes de instalar</disclaimer>
+        <disclaimer lang="et">Mõned osad sellest lisast ei pruugi olla sinu asukohamaal seaduslikud - palun uuri enne paigaldust kohalikke seadusi.</disclaimer>
+        <disclaimer lang="fi">Jotkin tämän lisäosan osat eivät ehkä ole laillisia maassasi - tarkista paikalliset lait ennen asentamista.</disclaimer>
+        <disclaimer lang="fr">Certaines options de cette extension ne sont peut-être pas autorisées dans votre pays - Merci de le vérifier avant son installation.</disclaimer>
+        <disclaimer lang="fr_CA">Certaines parties de cet addiciel pourraient ne pas être légales dans votre pays de résidence - veuillez vérifier avec vos lois locales avant d’installer.</disclaimer>
+        <disclaimer lang="gl">Algunhas partes deste engadido poden non ser legais no teu país - por favor verifica as leis locais antes de instalalo.</disclaimer>
+        <disclaimer lang="he">רכיבים מסוימים בהרחבה זו עלולים להיות לא חוקיים במקום מגוריך-אנא בדוק את החוקים המקומיים במקום מושבך לפני התקנת ההרחבה.</disclaimer>
+        <disclaimer lang="hr">Neki dijelovi ovog dodatka možda nisu legalni u vašoj zemlji ili prebivalištu - provjerite vaše lokalne zakone prije instaliranja.</disclaimer>
+        <disclaimer lang="hu">A kiegészítő egyes részei lehet, hogy nem legálisak az Ön hazájában - kérjük ellenőrizze a helyi törvényeket a telepítés elött. </disclaimer>
+        <disclaimer lang="it">Alcune parti di questo addon potrebbero non essere legali nel tuo paese di residenza - Ti preghiamo di controllare la tua normativa locale prima di installarlo.</disclaimer>
+        <disclaimer lang="ja">本アドオンの一部は、お住まいの国によっては違法となる可能性があります。インストール前にお住まいの国の法律をご確認ください。</disclaimer>
+        <disclaimer lang="ko">이 추가기능의 일부분은 사용자의 국가나 거주지역에 따라 합법적이지 않을 수도 있습니다 - 설치하기 전에 관련 법률을 확인하세요.</disclaimer>
+        <disclaimer lang="lt">Kai kurios šio priedo dalys gali būti Nerodomos/Nepaleidžiamos jūsų Šalyje - prašome patikrinti savo vietinius įstatymus prieš įdiegiant priedą.</disclaimer>
+        <disclaimer lang="lv">Dažas pielikuma daļas var būt nelegālas valstī, kurā pašlaik atrodaties - lūdzu, pārskatiet vietējos likumus pirms uzstādīšanas.</disclaimer>
+        <disclaimer lang="mk">Некои делови од дополнувањето може да не се легални во вашата држава - провери пред да инсталираш.</disclaimer>
+        <disclaimer lang="ms">Sesetengah bahagian tambahan ini mungkin tidak diizinkan dalam negara anda - sila semak undang-undang setempat anda sebelum memasang.</disclaimer>
+        <disclaimer lang="nl">Sommige onderdelen van deze plugin kunnen illegaal zijn in uw land.&#10;Raadpleeg de lokale wetgeving voordat u deze plugin installeert.</disclaimer>
+        <disclaimer lang="no">Noen deler av dette tillegget kan hende ikke er lovlig i landet du bor i - vennligst sjekk med dine lokale lover før du installerer.</disclaimer>
+        <disclaimer lang="pl">Niektóre części tego dodatku mogą być nielegalne w twoim kraju - przed instalacją sprawdź zgodność ze swoim lokalnym prawem.</disclaimer>
+        <disclaimer lang="pt">Algumas partes deste addon podem nao ser legais no seu país de residencia - por favor confira as suas leis locais antes de instalar.</disclaimer>
+        <disclaimer lang="pt_BR">Algumas partes deste addon podem não ser legais em seu país de residência - por favor, verifique as leis locais antes de instalar.</disclaimer>
+        <disclaimer lang="ro">Unele părți ale acestui addon ar putea fi ilegale în țara ta - verifică legislația locală înainte de a-l instala.</disclaimer>
+        <disclaimer lang="ru">Некоторые элементы этого дополнения могут являться незаконными в вашей стране проживания. Перед установкой ознакомьтесь с местным законодательством.</disclaimer>
+        <disclaimer lang="sk">Niektoré časti tohto doplnku nemusia byť vo vašej krajine legálne - pred inštaláciou si prosím overte, či je to v súlade s vašim lokálnym právom.</disclaimer>
+        <disclaimer lang="sl">Deli tega dodatka mogoče niso legalni v kraju vašega bivanja - preverite pred namestitvijo.</disclaimer>
+        <disclaimer lang="sv">Någon del av detta tillägg kanske är olagligt i ditt land - kontrollera dina lokala lagar innan installation.</disclaimer>
+        <disclaimer lang="ta_IN">இந்த துனைபயனின் சில பாகங்கள் நீங்கள் வசிக்கும் நாட்டின் சட்டத்திருக்கு உட்படாமல் இருக்கலாம், நிறுவும் முன் உங்கள் உள்ளூர் சட்டங்களுக்கு சரிபார்க்கவும்.</disclaimer>
+        <disclaimer lang="th">บางส่วนจากส่วนขยายนี้อาจไม่ถูกต้องตามกฏหมายในประเทศของคุณ กรุณาตรวจสอบกฏหมายในประเทศของคุณก่อนทำการติดตั้ง</disclaimer>
+        <disclaimer lang="uk">Деякі частини цього додатку можуть бути нелегальні у Вашій країні проживання - перевірте закони перед встановленням.</disclaimer>
+        <disclaimer lang="vi">Một số phần trong addon này có thể coi là pham pháp ở đất nước bạn đang sinh sống - xin hãy kiểm tra lại các đạo luật trước khi cài đặt.</disclaimer>
+        <disclaimer lang="zh">这个插件的某些内容可能不符合你所在国家的法律规定 - 请在在安装前确认符合当地法律。</disclaimer>
+        <disclaimer lang="zh_TW">這個附加元件的某些部分在您的居住國家可能不符合法規 - 在安裝之前，請檢查您當地的法律規範。</disclaimer>
+    </extension>
+</addon>

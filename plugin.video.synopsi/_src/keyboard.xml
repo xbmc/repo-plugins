@@ -1,0 +1,23 @@
+<keymap>
+	<global>
+		<keyboard>	  
+			<one mod="ctrl">RunScript(plugin.video.synopsi, 0, ?mode=971)</one>
+			<two mod="ctrl">RunScript(plugin.video.synopsi, 0, ?mode=972)</two>
+			<three mod="ctrl">RunScript(plugin.video.synopsi, 0, ?mode=973)</three>
+
+			<four mod="ctrl">RunScript(/home/smid/projects/plugin.video.synopsi.frodo/tests/utilities.unittest.py)</four>
+			<five mod="ctrl">RunScript(plugin.video.synopsi, 0, ?mode=975)</five>
+			<six mod="ctrl">RunScript(/home/smid/projects/scraper.synopsi.tv/tests/remote/control.py,com_add_movies.txt)</six>
+				
+			<seven mod="ctrl">CleanLibrary(video)</seven>
+			<eight mod="ctrl">UpdateLibrary(video)</eight>
+			<nine mod="ctrl">ActivateWindow(videolibrary)</nine>
+			
+			<f5>ReloadSkin()</f5>
+			<q mod="ctrl">Quit</q>
+			<r mod="ctrl">RestartApp</r>
+			<d mod="ctrl">toggledebug</d>
+		</keyboard>
+	</global>
+</keymap>
+  

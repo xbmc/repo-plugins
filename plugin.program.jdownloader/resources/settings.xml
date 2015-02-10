@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <!-- General -->
+  <category>
+    <setting id="auto_refresh" type="bool" label="30012" default="true"/>
+    <setting id="refresh_interval" type="number" label="30013" default="3" enable="eq(-1,true)" />
+  </category>
+  <!-- Connection -->
+  <category label="30000">
+    <setting id="use_hostname" type="bool" label="30008" default="false" />
+    <setting id="hostname" type="text" label="30009" default="" visible="eq(-1,true)" />
+    <setting id="ip_adress" type="ipaddress" label="30001" default="127.0.0.1" visible="eq(-2,false)" />
+    <setting id="ip_port" type="number" label="30002" default="10025"/>
+    
+    <setting label="30010" type="lsep" />
+    <setting id="use_conn2" type="bool" label="30011" default="false" />
+    <setting id="use_hostname2" type="bool" label="30008" default="false"  enable="eq(-1,true)" />
+    <setting id="hostname2" type="text" label="30009" default="" visible="eq(-1,true)"  enable="eq(-2,true)" />
+    <setting id="ip_adress2" type="ipaddress" label="30001" default="127.0.0.1" visible="eq(-2,false)" enable="eq(-3,true)" />
+    <setting id="ip_port2" type="number" label="30002" default="10025" enable="eq(-4,true)" />
+  </category>
+  <!-- Interface -->
+  <category label="30007">
+    <setting id="add_use_grabber" type="enum" label="30003" lvalues="30005|30004" default="0"/>
+    <setting id="add_start" type="enum" label="30006" lvalues="30004|30005" default="1"/>
+  </category>
+  <!-- Files -->
+  <category label="30020">
+    <setting id="def_file_path" type="folder" label="30021" default="" source="files" />
+    <setting id="def_txt_file" type="file" label="30022" default="" source="files" mask="*.txt" />
+    <setting id="def_dlc_file" type="file" label="30023" default="" source="files" mask="*.dlc" />
+  </category>
+  
+  <!-- Advanced -->
+  <category label="30030">
+    <setting id="list_view" type="bool" label="30032" default="true" />
+    <setting id="debug" type="bool" label="30031" default="false" />
+  </category>
+  
+</settings> 

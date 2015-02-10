@@ -1,0 +1,23 @@
+Version 0.0.3 Initial release
+
+Version 0.1.0 added strings.xml, required fields in addon.xml
+
+version 1.2.0 added content-encoding == gzip support
+
+version 1.5.0 added support for Kaltura videoes (Larry King Live & Politicking)
+
+version 1.7.1 issue with addons.xml
+
+version 1.8.0 added rt live global, america, documentary, espanol, arabic
+
+version 1.8.2 added autoplay of RT Global
+
+version 1.8.4 minor change to addon.xml
+
+version 1.9.0 minor change to fix icons images
+
+version 1.9.1 added xml header to settings.xml and changed language sub-dir to "English"
+
+version 1.9.2 updated live stream urls, added auto speed
+
+version 1.9.4 added RT UK feed and cleaned up language strings

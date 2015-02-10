@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.mozart"
+       name="Mozart's Musical Dice Game"
+       version="11.0.1"
+       provider-name="Assen Totin">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary lang="en">Mozart's Musical Dice Game</summary>
+    <description lang="en">Compose and play a random one-minute waltz using Mozart's Musical Dice Game (Musikalisches Würfelspiel)</description>
+  </extension>
+</addon>

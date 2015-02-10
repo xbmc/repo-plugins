@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.dmax" name="DMAX Videotheke" version="0.0.4" provider-name="dethfeet">
+  <requires>
+	<import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.pyamf" version="0.6.1"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+  	<language>de</language>
+    <summary lang="en">DMAX (german television)</summary>
+	<summary lang="de">DMAX Videotheke</summary>
+    <description lang="en">DMAX (german television)</description>
+	<description lang="de">DMAX Videotheke</description>
+    <platform>all</platform>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+	<forum>http://www.xbmcnerds.com/index.php?page=Thread&amp;threadID=11119</forum>
+	<website>https://github.com/dethfeet/plugin.video.dmax</website>
+	<source>https://github.com/dethfeet/plugin.video.dmax</source>
+	<email>dethfeet@qip.ru</email>
+  </extension>
+</addon>

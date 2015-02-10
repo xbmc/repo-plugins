@@ -1,0 +1,32 @@
+Changes
+
+0.11.0
+
+  * fix up m3u stream urls
+
+0.10.1
+
+  * do not specify player - not needed now that reLive uses audio/mpeg content type
+
+0.10.0
+
+  * 3 part version number
+  * Cleanups
+  * XBMC / Python API compatibility changes
+
+0.8
+
+  * eden version
+
+0.7
+
+  * localise strings
+
+0.6
+
+  * xbmc dharma addon support added
+  * new icon from freezy3k (thanks!)
+
+0.5
+
+  * earlier releases history on http://code.google.com/p/xbmc-addons

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Danish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/da/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root menu entries -->
+    <string id="30100">Redaktørerne Anbefaler</string>
+    <string id="30101">Top 100 Stationer</string>
+    <string id="30102">Gennemse efter genre</string>
+    <string id="30103">Gennemse efter tema</string>
+    <string id="30104">Gennemse efter land</string>
+    <string id="30105">Gennemse efter by</string>
+    <string id="30106">Gennemse efter sprog</string>
+    <string id="30107">Lokale Stationer</string>
+    <string id="30108">Mine Stationer</string>
+
+    <!-- Search -->
+    <string id="30200">Søg efter station</string>
+    <string id="30201">Indtast navn, land eller sprog</string>
+
+    <!-- Settings -->
+    <string id="30300">Sprog</string>
+    <string id="30301">Engelsk</string>
+    <string id="30302">Tysk</string>
+    <string id="30303">Fransk</string>
+    <string id="30310">Tving Miniaturebillede-visning</string>
+
+    <!-- Context Menu -->
+    <string id="30400">Føj til "Mine Stationer"</string>
+    <string id="30401">Fjern fra "Mine Stationer"</string>
+    <string id="30402">Rediger brugerdefineret Station</string>
+
+    <!-- Custom Station -->
+    <string id="30500">Indtast venligst %s</string> <!--%s will be filled by 30501, 30502 or 30503 -->
+    <string id="30501">titel</string>
+    <string id="30502">webadresse eller sti til miniaturebillede</string>
+    <string id="30503">webadresse til stream</string>
+    <string id="30504">Tilføj brugerdefineret Station</string>
+
+    <!-- Error Message -->
+    <string id="30600">Netværksfejl</string>
+</strings>

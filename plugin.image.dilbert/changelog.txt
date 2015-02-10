@@ -1,0 +1,4 @@
+0.X.Y initial development versions
+1.0.0 first release
+1.1.0 added link cache
+1.1.1 bug fixing

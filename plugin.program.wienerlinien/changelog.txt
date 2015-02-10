@@ -1,0 +1,11 @@
+0.1.1
+
+* fixed Translation Error (German) 
+
+0.1.0
+
+* Access Live data from open.wien.at
+* List Stations
+* Search by Stations
+* Favourites
+* Show Failures

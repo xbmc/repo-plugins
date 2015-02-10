@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Lithuanian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/lt/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Visi posistemės žanrai</string>
+    <string id="30001">Top 500 radijo stotys</string>
+    <string id="30002">Naršyti pagal žanrą</string>
+    <string id="30003">Mano radijo stotys</string>
+    <string id="30004">Radijo stoties paieška pagal pavadinimą</string>
+    <string id="30005">Sekti dabar grojančią radijo stotį</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Pridėti į "Mano radijo stotys"</string>
+    <string id="30011">Pašalinti iš "Mano radijo stotys"</string>
+
+    <!-- Settings -->
+    <string id="30100">Rodyti posistemės žanrai</string>
+    <string id="30101">Stočių sąrašo skaičius</string>
+    <string id="30102">Rodyti garso kokybę antraštėje</string>
+    <string id="30103">Pasirinkite atsitiktinių serverį (Neklauskite)</string>
+
+    <!-- Messages -->
+    <string id="30200">Tinklo klaida</string>
+</strings>

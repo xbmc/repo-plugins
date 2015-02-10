@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Galician language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/gl/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- General entries -->
+    <string id="30000">Páxina</string>
+    <string id="30001">Búsqueda</string>
+    <string id="30002">[B]Os Meus Favoritos[/B]</string>
+    <string id="30003">Non se atopou o Scraper</string>
+    <string id="30004">[B]Engadir aos meus Favoritos[/B]</string>
+    <string id="30005">[B]Eliminar dos Meus Favoritos[/B]</string>
+    <string id="30006">Sen Favoritos</string>
+    <string id="30007">Debe usar o menú contextual</string>
+    <string id="30008">para engadir elementos ou cartafoles.</string>
+
+    <!-- Settings -->
+    <string id="30010">Forzar o Modo de Vista a miniatura</string>
+    <string id="30011">Actualizar contedor ao trocar de páxina</string>
+    <string id="30012">Camiño da descarga</string>
+    <string id="30013">Corrixir o título da Serie de TV</string>
+
+    <!-- Context Menu entries -->
+    <string id="30020">Descargar vídeo</string>
+
+    <!-- dialog entries -->
+    <string id="30030">Sen camiño de descarga!</string>
+    <string id="30031">Quere estabelecer o camiño agora?</string>
+    <string id="30032">HLS non soportado.</string>
+</strings>

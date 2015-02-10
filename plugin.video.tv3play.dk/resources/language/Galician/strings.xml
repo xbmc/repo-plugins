@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Galician language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/gl/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30100">Publicidade</string>
+    <string id="30101">Xeral</string>
+    <string id="30102">Rexión</string>
+    <string id="30103">Clips</string>
+    <string id="30150">Seleccionar rexión</string>
+    <string id="30200">Produciuse un erro na comunicación con TV3 Play.</string>
+    <string id="30201">A mensaxe do erro é:</string>
+    <string id="30202">Non se puido atopar o URL de reprodución</string>
+    <string id="30203">Sen tempadas dispoñíbeis</string>
+    <string id="30204">Non se puido obter a listaxe de programas</string>
+    <string id="30301">Últimos vídeos</string>
+    <string id="30302">Os máis vistos</string>
+    <string id="30303">Os máis ligados</string>
+    <string id="30304">Clips Recentes</string>
+</strings>

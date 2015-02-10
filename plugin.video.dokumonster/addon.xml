@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.dokumonster" name="dokumonster.de" version="0.1.2" provider-name="Tristan Fischer (sphere@dersphere.de)">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.module.simplejson" version="2.0.10"/>
+        <import addon="script.module.xbmcswift2" version="1.2.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <language>en de</language>
+        <platform>all</platform>
+        <website>http://dokumonster.de/</website>
+        <source>https://github.com/dersphere/plugin.video.dokumonster</source>
+        <forum></forum>
+        <email>sphere@dersphere.de</email>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <summary lang="de">Deutsche Dokus</summary>
+        <summary lang="en">German documentaries</summary>
+        <description lang="de">Dein Online Doku Stream Archiv. Die besten deutschen Dokumentationen einfach online anschauen. Tägliche Updates!</description>
+        <description lang="en">German online documentary stream archive. The best german documentaries online. Daily updates!</description>
+    </extension>
+</addon>

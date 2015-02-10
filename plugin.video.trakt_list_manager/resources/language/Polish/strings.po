@@ -1,0 +1,145 @@
+# XBMC Media Center language file
+# Addon Name: Trakt.tv List Manager
+# Addon id: plugin.video.trakt_list_manager
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Polish (http://www.transifex.com/projects/p/xbmc-addons/language/pl/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pl\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgctxt "#30000"
+msgid "[B]Add new Custom List[/B]"
+msgstr "[B]Dodaj nową własną listę[/B]"
+
+msgctxt "#30001"
+msgid "[B]Add new Movie[/B]"
+msgstr "[B]Dodaj nowy film[/B]"
+
+msgctxt "#30002"
+msgid "Show Watchlist"
+msgstr "Pokaż listę obserwowanych"
+
+msgctxt "#30003"
+msgid "Show Custom Lists"
+msgstr "Pokaż własne listy"
+
+msgctxt "#30100"
+msgid "Add-on Settings"
+msgstr "Ustawienia wtyczki"
+
+msgctxt "#30101"
+msgid "Delete List"
+msgstr "Usuń listę"
+
+msgctxt "#30102"
+msgid "Delete Movie"
+msgstr "Usuń film"
+
+msgctxt "#30103"
+msgid "Show Movie Info"
+msgstr "Pokaż Informacje o filmie"
+
+msgctxt "#30110"
+msgid "Please enter Movie title"
+msgstr "Proszę wpisać tytuł filmu"
+
+msgctxt "#30111"
+msgid "Please select the correct Movie"
+msgstr "Proszę wybrać właściwy film"
+
+msgctxt "#30112"
+msgid "Please select the List"
+msgstr "Proszę wybrać listę"
+
+msgctxt "#30113"
+msgid "Delete Movie"
+msgstr "Usuń film"
+
+msgctxt "#30114"
+msgid "Are you sure to delete?"
+msgstr "Na pewno chcesz usunąć?"
+
+msgctxt "#30115"
+msgid "Delete List"
+msgstr "Usuń listę"
+
+msgctxt "#30116"
+msgid "Are you sure to delete?"
+msgstr "Na pewno chcesz usunąć?"
+
+msgctxt "#30117"
+msgid "My Watchlist"
+msgstr "Moja lista obserwowanych"
+
+msgctxt "#30120"
+msgid "Connection error"
+msgstr "Błąd połączenia"
+
+msgctxt "#30121"
+msgid "Wrong User-Credentials"
+msgstr "Błędne uwierzytelnienie użytkownika"
+
+msgctxt "#30122"
+msgid "Do you want to change them now?"
+msgstr "Chcesz je teraz zmienić?"
+
+msgctxt "#30130"
+msgid "No Movie found"
+msgstr "Nie znaleziono filmu"
+
+msgctxt "#30131"
+msgid "Success"
+msgstr "Sukces"
+
+msgctxt "#30140"
+msgid "Please use context menu"
+msgstr "Proszę użyć menu podręcznego"
+
+msgctxt "#30141"
+msgid "You need to open the context-menu"
+msgstr "Musisz otworzyć menu podręczne"
+
+msgctxt "#30142"
+msgid "to choose the action you want"
+msgstr "by wybrać akcję, którą chcesz"
+
+msgctxt "#30300"
+msgid "Username"
+msgstr "Nazwa użytkownika"
+
+msgctxt "#30301"
+msgid "Password"
+msgstr "Hasło"
+
+msgctxt "#30302"
+msgid "Default List"
+msgstr "Lista domyślna"
+
+msgctxt "#30303"
+msgid "Use HTTPS"
+msgstr "Użyj HTTPS"
+
+msgctxt "#30310"
+msgid "Default Privacy for new Lists"
+msgstr "Domyślna prywatność dla nowych list"
+
+msgctxt "#30311"
+msgid "Private"
+msgstr "Prywatne"
+
+msgctxt "#30312"
+msgid "Friends"
+msgstr "Przyjaciele"
+
+msgctxt "#30313"
+msgid "Public"
+msgstr "Publiczne"

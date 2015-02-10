@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.entertain"
+	name="Telekom Entertain"
+	version="0.1.1"
+	provider-name="Leo Moll">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="addon.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="de">Telekom Entertain</summary>
+		<summary lang="en">Telekom Entertain</summary>
+		<summary lang="it">Telekom Entertain</summary>
+		<description lang="de">Zugriff auf alle öffentlich rechtlichen Sender über Entertain Anschlüsse der Deutschen Telekom.</description>
+		<description lang="en">Access to all public TV channels available on Deutsche Telekom's triple play connections.</description>
+		<description lang="it">Accesso a tutti i canali IPTV pubblici disponibili su linie DSL/VDSL della Deutsche Telekom con contratto Entertain</description>
+		<platform>all</platform>
+		<language>de</language>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<forum>http://forum.xbmc.org/showthread.php?tid=183456</forum>
+		<website></website>
+		<source>https://github.com/tuxpoldo/entertain-xbmc.git</source>
+		<email></email>
+	</extension>
+</addon>

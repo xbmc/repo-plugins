@@ -1,0 +1,153 @@
+# XBMC Media Center language file
+# Addon Name: ListenLiveEU
+# Addon id: plugin.audio.listenliveeu
+# Addon Provider: bootsy, xycl
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Polish (http://www.transifex.com/projects/p/xbmc-addons/language/pl/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pl\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgctxt "#30000"
+msgid "New additions"
+msgstr "Nowości"
+
+msgctxt "#30001"
+msgid "Browse by country"
+msgstr "Przeglądaj według kraju"
+
+msgctxt "#30002"
+msgid "Browse by genre"
+msgstr "Przeglądaj według gatunku"
+
+msgctxt "#30003"
+msgid "Browse by bookmarks"
+msgstr "Przeglądaj według zakładek"
+
+msgctxt "#30004"
+msgid "Add bookmark"
+msgstr "Dodaj zakładkę"
+
+msgctxt "#30005"
+msgid "Delete bookmark"
+msgstr "Usuń zakładkę"
+
+msgctxt "#30006"
+msgid "Delete all bookmarks"
+msgstr "Usuń wszystkie zakładki"
+
+msgctxt "#30007"
+msgid "Bookmark added!"
+msgstr "Dodano zakładkę!"
+
+msgctxt "#30008"
+msgid "Bookmark NOT added!"
+msgstr "Zakładka NIE została dodana!"
+
+msgctxt "#30009"
+msgid "Delete bookmark?"
+msgstr "Usunąć zakładkę?"
+
+msgctxt "#30010"
+msgid "Bookmark deleted!"
+msgstr "Usunięto zakładkę!"
+
+msgctxt "#30011"
+msgid "Bookmark NOT deleted!"
+msgstr "Zakładka NIE została usunięta!"
+
+msgctxt "#30012"
+msgid "Delete all bookmarks?"
+msgstr "Usunąć wszystkie zakładki?"
+
+msgctxt "#30013"
+msgid "All bookmarks deleted!"
+msgstr "Usunięto wszystkie zakładki!"
+
+msgctxt "#30014"
+msgid "Bookmarks NOT deleted!"
+msgstr "Zakładki NIE zostały usunięte!"
+
+msgctxt "#30015"
+msgid "Bookmark already exists."
+msgstr "Zakładka już istnieje."
+
+msgctxt "#30016"
+msgid "No other bookmarks available."
+msgstr "Brak innych zakładek."
+
+msgctxt "#30017"
+msgid "No bookmarks available."
+msgstr "Brak zakładek."
+
+msgctxt "#30020"
+msgid "Show location"
+msgstr "Pokaż lokalizację"
+
+msgctxt "#30021"
+msgid "Show genre / comment"
+msgstr "Pokaż gatunek/komentarz"
+
+msgctxt "#30022"
+msgid "Show stream rate"
+msgstr "Pokaż ocenę strumienia"
+
+msgctxt "#30023"
+msgid "Minimum quality (Kbps)"
+msgstr "Minimalna jakość (Kb/s)"
+
+msgctxt "#30024"
+msgid "16"
+msgstr "16"
+
+msgctxt "#30025"
+msgid "24"
+msgstr "24"
+
+msgctxt "#30026"
+msgid "32"
+msgstr "32"
+
+msgctxt "#30027"
+msgid "48"
+msgstr "48"
+
+msgctxt "#30028"
+msgid "56"
+msgstr "56"
+
+msgctxt "#30029"
+msgid "64"
+msgstr "64"
+
+msgctxt "#30030"
+msgid "96"
+msgstr "96"
+
+msgctxt "#30031"
+msgid "112"
+msgstr "112"
+
+msgctxt "#30032"
+msgid "128"
+msgstr "128"
+
+msgctxt "#30033"
+msgid "160"
+msgstr "160"
+
+msgctxt "#30034"
+msgid "196"
+msgstr "196"
+
+msgctxt "#30035"
+msgid "256"
+msgstr "256"

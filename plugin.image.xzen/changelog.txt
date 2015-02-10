@@ -1,0 +1,5 @@
+0.0.8 Incoporate b808 common code for better logging (v0.0.8)
+
+0.0.7 Initial pull request to XBMC master repo
+      Support for user galleries, categories, recent and popular.
+      

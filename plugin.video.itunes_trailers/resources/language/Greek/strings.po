@@ -1,0 +1,117 @@
+# XBMC Media Center language file
+# Addon Name: Apple iTunes Trailers
+# Addon id: plugin.video.itunes_trailers
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Greek (http://www.transifex.com/projects/p/xbmc-addons/language/el/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: el\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30001"
+msgid "Download Trailer"
+msgstr "Λήψη Διαφημιστικού"
+
+msgctxt "#30002"
+msgid "[B]DOWNLOADED[/B]"
+msgstr "[B]ΕΛΗΦΘΗ[/B]"
+
+msgctxt "#30003"
+msgid "Add to CouchPotato"
+msgstr "Προσθήκη στο CouchPotato"
+
+msgctxt "#30004"
+msgid "[B]download in progress[/B]"
+msgstr "[B]λήψη σε εξέλιξη[/B]"
+
+msgctxt "#30005"
+msgid "Add to Trakt.tv"
+msgstr "Προσθήκη στο Trakt.tv"
+
+msgctxt "#30010"
+msgid "Source"
+msgstr "Πηγή"
+
+msgctxt "#30011"
+msgid "All"
+msgstr "Όλα"
+
+msgctxt "#30012"
+msgid "Most Recent"
+msgstr "Πιο Πρόσφατα"
+
+msgctxt "#30013"
+msgid "Most Popular"
+msgstr "Δημοφιλέστερα"
+
+msgctxt "#30014"
+msgid "Exclusive"
+msgstr "Αποκλειστικά"
+
+msgctxt "#30020"
+msgid "Movie Limit"
+msgstr "Όριο Ταινιών"
+
+msgctxt "#30021"
+msgid "No Limit"
+msgstr "Κανένα Όριο"
+
+msgctxt "#30022"
+msgid "First 50"
+msgstr "Πρώτα 50"
+
+msgctxt "#30023"
+msgid "First 100"
+msgstr "Πρώτα 100"
+
+msgctxt "#30030"
+msgid "Trailer quality (Stream)"
+msgstr "Ποιότητα διαφημιστικού (Ροή)"
+
+msgctxt "#30031"
+msgid "HD480p"
+msgstr "HD480p"
+
+msgctxt "#30032"
+msgid "HD720p"
+msgstr "HD720p"
+
+msgctxt "#30033"
+msgid "HD1080p"
+msgstr "HD1080p"
+
+msgctxt "#30040"
+msgid "Trailer quality (Download)"
+msgstr "Ποιότητα διαφημιστικού (Λήψη)"
+
+msgctxt "#30041"
+msgid "Same as Stream"
+msgstr "Ίδια με της Ροής"
+
+msgctxt "#30050"
+msgid "Trailer download path"
+msgstr "Διαδρομή λήψης διαφημιστικών"
+
+msgctxt "#30051"
+msgid "Force Trailers ViewMode to Thumbnail"
+msgstr "Οι 'Μικρογραφίες' σαν Τύπος Προβολής Διαφημιστικών"
+
+msgctxt "#30100"
+msgid "Network Error"
+msgstr "Σφάλμα Δικτύου"
+
+msgctxt "#30101"
+msgid "No download path"
+msgstr "Καμία διαδρομή λήψεων"
+
+msgctxt "#30102"
+msgid "Do you want to you set it now?"
+msgstr "Επιθυμείτε να το ορίσετε τώρα;"

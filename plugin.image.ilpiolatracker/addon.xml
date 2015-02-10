@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.image.ilpiolatracker" name="Ilpiola mobile device tracker" version="1.0.1" provider-name="RPiola">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>image</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <disclaimer>The official xbmc plugin for ilpiola mobile device tracker</disclaimer>
+        <summary lang="en">Display the position of a device registered on http://m.ilpiola.it/tracker</summary>
+        <description lang="en">Please visit http://m.ilpiola.it/tracker for informations, obtaining a key and downloading the mobile app for your mobile device; once done, you or somebody you left at home can see your position</description>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <language/>
+        <website>http://pi.ilpiola.it/ilpiolatracker</website>
+        <email>roberto@ilpiola.it</email>
+    </extension>
+</addon>

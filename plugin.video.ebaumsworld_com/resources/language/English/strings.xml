@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30001">Newest: All</string>
+  <string id="30002">Newest: Featured</string>
+  <string id="30003">Popular: Week</string>
+  <string id="30004">Popular: Month</string>
+  <string id="30005">Popular: All Time</string>
+  <string id="30006">Search</string>
+  <string id="30007">Next Page</string>
+  <string id="30008">BestOfTheMonth</string>
+  <string id="30101">Force ViewMode</string>
+  <string id="30102">ViewMode</string>
+</strings>

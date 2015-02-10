@@ -1,0 +1,29 @@
+<sources>
+    <programs>
+        <default pathversion="1"></default>
+    </programs>
+    <video>
+        <default pathversion="1"></default>
+        <source>
+            <name>TVShows</name>
+            <path pathversion="1">/home/smid/Videos/_testset/TVShows/</path>
+        </source>
+        <source>
+            <name>TVShows xxx</name>
+            <path pathversion="1">/home/smid/Videos/_testset/TVShows/xxx/</path>
+        </source>
+        <source>
+            <name>Movies</name>
+            <path pathversion="1">/home/smid/Videos/Movies/</path>
+        </source>
+    </video>
+    <music>
+        <default pathversion="1"></default>
+    </music>
+    <pictures>
+        <default pathversion="1"></default>
+    </pictures>
+    <files>
+        <default pathversion="1"></default>
+    </files>
+</sources>

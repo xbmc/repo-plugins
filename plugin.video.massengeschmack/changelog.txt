@@ -1,0 +1,46 @@
+1.2.0
+ - Add support for Massengeschmack Direkt
+
+1.1.0
+ - Add support for Hoaxilla-TV and Tonangeber
+ - Use thumbnail URL from feed entry description instead of guessing
+ - Strip HTML tags from episode description
+
+1.0.2
+ - Fix GUID parsing issue for new interviews
+
+1.0.1
+ - Fix minor convention issues causing rejection from XBMC add-on repository
+
+1.0.0
+ - First stable release, addition to official XBMC add-on repository
+
+0.4.0beta
+ - Implement live stream support
+ - Add fix for XBMC4Xbox
+
+0.3.2
+ - Fix thumbnails for Presseschlau and PaschTV
+ - Update banner and fanart for Netzprediger
+
+0.3.1
+ - Add support for Asynchron
+ - Add show individual thumbnails for newer episodes of Postecke
+ - Fix episode list not showing up after date format change
+ - Fix thumbnails for newer episodes of PTV and Netzprediger, as well as MGTV
+ - Fix thumbnail URLs for newer FKTV episodes and interviews
+ - Fix thumbnails for newer episodes of Sendeschluss not showing up
+
+0.2.1
+ - Fixed thumbnail not showing up for Pasch-TV episode 2
+ - Reordered main listing (moved Massengeschmack-TV to the end)
+
+0.2.0
+ - Add support for Pasch-TV
+ - Add support for Netzprediger
+
+0.1.1
+ - Fix date parsing issue occurring on some platforms
+
+0.1.0
+ - First testing release

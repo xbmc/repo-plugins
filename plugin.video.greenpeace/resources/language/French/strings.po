@@ -1,0 +1,41 @@
+# XBMC Media Center language file
+# Addon Name: Greenpeace videos
+# Addon id: plugin.video.greenpeace
+# Addon Provider: Jose Antonio Montes (jamontes)
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: French (http://www.transifex.com/projects/p/xbmc-addons/language/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgctxt "#30010"
+msgid "Next Page"
+msgstr "Page suivante"
+
+msgctxt "#30011"
+msgid "Video type not supported"
+msgstr "Ce type vidéo n'est pas pris en charge"
+
+msgctxt "#30012"
+msgid "Couldn't locate video url"
+msgstr "Impossible de trouver le lien URL de la vidéo"
+
+msgctxt "#30101"
+msgid "Location/Language (for videos)"
+msgstr "Lieu/langue (pour les vidéos)"
+
+msgctxt "#30102"
+msgid "Debug (enable logs)"
+msgstr "Débogage (activer la journalisation)"
+
+msgctxt "#30103"
+msgid "Show thumbnails as fanart"
+msgstr "Afficher les imagettes en tant que fanart"

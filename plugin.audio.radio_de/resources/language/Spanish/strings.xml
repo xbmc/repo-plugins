@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Spanish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/es/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root menu entries -->
+    <string id="30100">Emisoras sugeridas por los editores</string>
+    <string id="30101">Las 100 mejores emisoras</string>
+    <string id="30102">Buscar por género</string>
+    <string id="30103">Buscar por tema</string>
+    <string id="30104">Buscar por país</string>
+    <string id="30105">Buscar por ciudad</string>
+    <string id="30106">Buscar por idioma</string>
+    <string id="30107">Emisoras cercanas</string>
+    <string id="30108">Mis emisoras</string>
+
+    <!-- Search -->
+    <string id="30200">Buscar emisora</string>
+    <string id="30201">Escriba el nombre, país y/o idioma</string>
+
+    <!-- Settings -->
+    <string id="30300">Idioma</string>
+    <string id="30301">Inglés</string>
+    <string id="30302">Alemán</string>
+    <string id="30303">Francés</string>
+    <string id="30310">Forzar al modo de vista miniatura</string>
+
+    <!-- Context Menu -->
+    <string id="30400">Añadir a "Mis emisoras"</string>
+    <string id="30401">Quitar de "Mis emisoras"</string>
+    <string id="30402">Editar emisora personalizada</string>
+
+    <!-- Custom Station -->
+    <string id="30500">Escriba %s</string> <!--%s will be filled by 30501, 30502 or 30503 -->
+    <string id="30501">el nombre</string>
+    <string id="30502">la URL o ruta del icono</string>
+    <string id="30503">la URL del flujo</string>
+    <string id="30504">Añadir una emisora personalizada...</string>
+
+    <!-- Error Message -->
+    <string id="30600">Error de conexión</string>
+</strings>

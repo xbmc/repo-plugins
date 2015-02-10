@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- German language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/de/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- General entries -->
+    <string id="30000">Seite</string>
+    <string id="30001">Suche</string>
+    <string id="30002">[B]Meine Favoriten[/B]</string>
+    <string id="30003">No Scaper Found</string>
+    <string id="30004">[B]Zu Meinen Favoriten[/B]</string>
+    <string id="30005">[B]Aus Meinen Favoriten entfernen[/B]</string>
+    <string id="30006">Keine Favoriten hinzugefügt</string>
+    <string id="30007">Bitte benutze das Kontext-Menu um</string>
+    <string id="30008">Videos oder Ordner hinzuzufügen.</string>
+
+    <!-- Settings -->
+    <string id="30010">ViewMode auf Thumbnail setzen</string>
+    <string id="30011">Container updaten beim Seitenwechsel</string>
+    <string id="30012">Download Verzeichnis</string>
+    <string id="30013">TV-Serien Titel korrigieren (Zu: "Serie S1E1 - Titel")</string>
+
+    <!-- Context Menu entries -->
+    <string id="30020">Video herunterladen</string>
+
+    <!-- dialog entries -->
+    <string id="30030">Kein Download Verzeichnis!</string>
+    <string id="30031">Möchtest du es jetzt einstellen?</string>
+    <string id="30032">HLS nicht unterstützt</string>
+</strings>

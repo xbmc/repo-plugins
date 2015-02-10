@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.bild_de" name="Bild.de" version="2.0.3" provider-name="AddonScriptorDE">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="de">News, Politik, Unterhaltung, Sport, Auto und Lifestye</summary>
+        <summary lang="en">News, Politics, Entertainment, Sports, Cars and Lifestye</summary>
+        <language>de</language>
+        <description lang="de">News, Politik, Unterhaltung, Sport, Auto und Lifestye</description>
+        <description lang="en">News, Politics, Entertainment, Sports, Cars and Lifestye</description>
+        <website>http://www.bild.de</website>
+        <source>https://github.com/AddonScriptorDE/plugin.video.bild_de</source>
+        <forum>http://forum.xbmc.org/showthread.php?tid=132563</forum>
+        <email>AddonScriptorDE at yahoo dot de</email>
+    </extension>
+</addon>

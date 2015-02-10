@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30000">OPML-Datei</string>
+    <string id="30010">Alles als gelesen markieren</string>
+    <string id="30011">Alles ungelesene abspielen</string>
+    <string id="30020">Als gelesen markieren</string>
+    <string id="30030">Aktualisierung erzwingen</string>
+    <string id="30040">OPML Datei nicht lesbar</string>
+    <string id="30041">Die OPML Datei kann nicht gefunden werden.</string>
+</strings>
+

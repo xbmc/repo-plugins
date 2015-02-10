@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.cherrymusic" name="CherryMusic" version="0.0.5" provider-name="Sets">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="cherrymusic.py">
+		<provides>audio</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">CherryMusic player</summary>
+		<description lang="en">CherryMusic player</description>
+		<language></language>
+		<platform>all</platform>
+		<forum></forum>
+		<source></source>
+	</extension>
+</addon>

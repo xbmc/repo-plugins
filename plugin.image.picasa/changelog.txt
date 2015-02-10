@@ -1,0 +1,95 @@
+picasaPhotos Changelog
+	
+Current Version : 1.0.2
+
+*** 1.0.2 ***
+
+Fix issue where images were not displaying
+
+*** 1.0.1 ***
+
+Fix for errors trying to view next page of images
+
+*** 1.0.0 ***
+
+Changes to addon.xml for Gotham
+Convert language strings.xml files to strings.po
+
+*** 0.9.7 ***
+
+Added Crypto library to hopefully fix errors
+
+*** 0.9.6 ***
+
+Change some error handling for better diagnostics
+
+*** 0.9.5 ***
+
+Now removes newlines from image titles
+Fix bug caused by deprecated md5/sha imports in the google APIs (again)
+
+*** 0.9.4 ***
+
+Fix bug caused by deprecated md5/sha imports in the google APIs
+
+*** 0.9.3 ***
+
+Changed 'Search Picasa' to 'Search PicasaWeb'
+Fix error when searching PicasWeb caused by missing thumbnails
+
+*** 0.9.2 ***
+
+Added the ability to download photos to defined writable file locations. Use 'Download' from photo context menu
+
+*** 0.9.1 ***
+
+Use image description when available
+Show maximum number of images when called from Plugin Slideshow Screensaver
+Changed name to PicasaWeb
+
+*** 0.9.0 ***
+
+Fix for photos with width greater than 2048
+
+*** 0.8.9 ***
+
+Maps now at 720p
+
+*** 0.8.8 ***
+
+Enable display in hi-res when viewing photos
+
+*** 0.8.7 ***
+
+Handle videos
+Fix a bug where some private images would not show even when privacy filter allowed private
+
+*** 0.8.6 ***
+
+Changes for Eden
+Fixed captcha bug
+
+*** 0.8.5 ***
+
+Added 'Use Login' setting to enable/disable logins (Allows just browsing public photos and works around Windows SSL bug)
+
+*** 0.8.4 ***
+
+Added the ability to set view defaults from context menu
+
+*** 0.8.3 ***
+
+Added ability to filter by privacy level
+
+*** 0.8.2 ***
+
+Fixed bug when fetching contacts images
+Added Dutch language strings thaks to Michel de Bokx
+
+*** 0.8.1 ***
+
+Bug Fix: Added elementtree import to addon.xml
+
+*** 0.8.0 ***
+
+Initial release

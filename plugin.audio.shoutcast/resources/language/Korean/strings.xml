@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Korean language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ko/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">모든 하위 장르</string>
+    <string id="30001">Top 500 방송국</string>
+    <string id="30002">장르로 탐색</string>
+    <string id="30003">내 방송국</string>
+    <string id="30004">이름으로 방송국 검색</string>
+    <string id="30005">다음 트랙을 지금 방송중인 방송국 검색</string>
+
+    <!-- Context Menu -->
+    <string id="30010">"내 방송국"에 추가</string>
+    <string id="30011">"내 방송국"에서 제거</string>
+
+    <!-- Settings -->
+    <string id="30100">하위 장르 보기</string>
+    <string id="30101">목록에 표시할 방송국 수</string>
+    <string id="30102">방송국명에 비트레이트 보기</string>
+    <string id="30103">무작위 서버 선택 (묻지 않음)</string>
+
+    <!-- Messages -->
+    <string id="30200">네트워크 에러</string>
+</strings>

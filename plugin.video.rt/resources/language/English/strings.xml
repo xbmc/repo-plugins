@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<strings>
+    <string id="30000">Russia Today News</string>
+    <string id="30001">No Playable Video Found</string>
+    <string id="30005">RT Global Live </string>
+    <string id="30006">RT America Live </string>
+    <string id="30007">RT Documentary Live </string>
+    <string id="30008">RT UK Live </string>
+    <string id="30009">RT Espanol Live </string>
+    <string id="30010">RT Arabic Live </string>
+    <string id="30020">Settings</string>
+    <string id="30021">Live Stream Quality</string>
+    <string id="30022">Auto Play RT Live</string>
+    <string id="30023">Auto</string>
+    <string id="30024">720p</string>
+    <string id="30025">480p</string>
+    <string id="30026">320p</string>
+    <string id="30027">240p</string>
+</strings>

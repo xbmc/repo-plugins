@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<strings>
+  <!-- strings 32000 thru 32999 reserved for scripts -->
+  <!--SETTINGS STRINGS -->
+  <string id="30001">ip de JDownloader:</string>
+  <string id="30002">Port:</string>
+  <string id="30003"></string>
+  <string id="30004"></string>
+  <string id="30005"></string>
+  <string id="30006"></string>
+  <string id="30007"></string>
+  
+  <!--GENERAL STRINGS -->
+  <string id="30050">Afficher la liste des Téléchargements</string>
+  <string id="30051">Status</string>
+  <string id="30052">Vitesse</string>
+  <string id="30053">DL en cours</string>
+  <string id="30054">choisir action</string>
+  <string id="30055">Saissisez la limite</string>
+  <string id="30056">Afficher les paquets terminés</string>
+  <string id="30057">redémarrer après la mise à jour ?</string>
+  <string id="30058"></string>
+  <string id="30059"></string>
+  <string id="30060"></string>
+  <string id="30061"></string>
+  <string id="30062"></string>
+  <string id="30063"></string>
+  <string id="30064"></string>
+  <string id="30065"></string>
+</strings>

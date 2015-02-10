@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.videobash_com" name="videobash" version="0.0.3" provider-name="Tristan Fischer (sphere@dersphere.de)">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.beautifulsoup" version="3.0.8"/>
+    <import addon="script.module.xbmcswift2" version="2.3.2" />
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <language />
+    <platform>all</platform>
+    <summary lang="en">funny videos</summary>
+    <description lang="en">Videobash.com is the ultimate source for funny, shocking, and mind-blowing videoclips from around the world!</description>
+  </extension>
+</addon>

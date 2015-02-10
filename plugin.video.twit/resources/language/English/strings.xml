@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30000">Latest Episodes</string>
+  <string id="30001">TWiT Live</string>
+  <string id="30002">Available Streams</string>
+  <string id="30003">Bitgravity (hls high)</string>
+  <string id="30004">Bitgravity (hls low)</string>
+  <string id="30005">Bitgravity (http 1 mbps)</string>
+  <string id="30006">Bitgravity (http 400 kbps)</string>
+  <string id="30007">Ustream (multibitrate hls)</string>
+  <string id="30008">JustinTV (multibitrate hls)</string>
+  <string id="30009">Flosoft.biz (multibitrate hls)</string>
+  <string id="30010">Flosoft.biz (hls 720x1280)</string>
+  <string id="30011">Flosoft.biz (hls 540x960)</string>
+  <string id="30012">Flosoft.biz (hls 360x640)</string>
+  <string id="30013">Audio TWiT.am/listen</string>
+  <string id="30014">Playback Type</string>
+  <string id="30015">Video (HD) 1280x720 Bitrate 2500</string>
+  <string id="30016">Video (SD) 864x480 Bitrate 500</string>
+  <string id="30017">Video (low/mobile) 640x368 Bitrate 256</string>
+  <string id="30018">Audio</string>
+  <string id="30019">Next Page</string>
+  <string id="30020">Run IrcChat when TWiT Live is started</string>
+  <string id="30021">Chat Nickname</string>
+  <string id="30022">Chat User Name</string>
+  <string id="30023">Password</string>
+  <string id="30024">Nickname and User Name are required</string>
+  <string id="30025">Set View Mode For Episodes</string>
+  <string id="30026">Default</string>
+  <string id="30027">List</string>
+  <string id="30028">Big List</string>
+  <string id="30029">Thumbnail</string>
+  <string id="30030">Poster Wrap</string>
+  <string id="30031">Fanart</string>
+  <string id="30032">Media Info</string>
+  <string id="30033">Media Info 2</string>
+  <string id="30034">Media Info 3</string>
+  <string id="30035">Use show art as fanart</string>
+  <string id="30036">Retired Shows</string>
+</strings>

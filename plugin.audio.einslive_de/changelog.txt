@@ -1,0 +1,5 @@
+1.0.0
+- First Try
+1.0.1
+- Fixed O-Ton-Charts Top100 site changes
+- Added setting to force view mode

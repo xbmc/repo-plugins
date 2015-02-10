@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Portuguese (Brazil) language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/pt_BR/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Menu entries -->
+    <string id="30000">Página</string>
+    <string id="30001">Navegar por Site</string>
+    <string id="30002">Randomizar por Categorias</string>
+    <string id="30003">Pegar novos randômicamente</string>
+
+    <!-- Settings -->
+    <string id="30100">Imagens por site</string>
+    <string id="30101">Forçar Visualização Miniatura</string>
+</strings>

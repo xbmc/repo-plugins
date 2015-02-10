@@ -1,0 +1,52 @@
+1.0.5
+- Updated Course Catalog to use api instead of page scraping
+- Sort Course Catalog
+- Sort My Courses
+- Fixed bug causing plugin to fail when there's no answer video after quiz
+- Separate tests into Unit and Integration tests
+- Removed code supporting filtering courses by difficulty
+
+1.0.4
+- Use strings.xml for buttons in quizzes
+- Display Loading... after submitting quiz
+
+1.0.3
+- Added BeautifulSoup dependancy
+- No longer fail when certain steps are missing (fixing some broken lessons)
+- Hide My Courses when user not authenticated
+- Changed strings to better match Udacity's interface
+- Update Udacity's servers when quizzes are submitted
+
+1.0.2
+- Corrected string ID range
+- Removed fake user-agent
+- Refactoring of Controls class
+
+1.0.1
+- Better description and summary
+- Better icon, plus it's now 256x256
+- Menus are translatable
+- Use getAddonInfo('path') instead of python std lib
+- dos2unix strings.xml
+- Removed loose print statements
+- Additional tags added to addon.xml
+- Better README
+
+1.0.0
+- First public release
+
+0.5.1
+- Radio button fixed on newer quizzes
+- Added fanart and icon
+
+0.4.1
+- Added tests
+- Basic refactor
+
+0.3.1
+- Display warning on Programming Quiz
+
+0.2.1
+- Send activity updates back to Udacity
+- Support saved states of some quizzes
+- Improved look of lessons

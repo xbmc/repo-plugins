@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Slovak language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/sk/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30100">Reklama</string>
+    <string id="30101">Všeobecné</string>
+    <string id="30102">Región</string>
+    <string id="30103">Klipy</string>
+    <string id="30150">Zvoliť región</string>
+    <string id="30200">Počas komunikácie s TV3 Play sa vyskytla chyba.</string>
+    <string id="30201">Chybová hláška je:</string>
+    <string id="30202">Nemožno nájsť prehrávané URL</string>
+    <string id="30203">Nenašli sa žiadne (filmové) série</string>
+    <string id="30204">Nemožno načítať zoznam programov</string>
+    <string id="30301">Najnovšie videá</string>
+    <string id="30302">Najviac videné</string>
+    <string id="30303">Najobľúbenejšie</string>
+    <string id="30304">Najnovšie klipy</string>
+</strings>

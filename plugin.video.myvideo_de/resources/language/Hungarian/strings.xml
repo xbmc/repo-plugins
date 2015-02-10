@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Hungarian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/hu/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- General entries -->
+    <string id="30000">Oldal</string>
+    <string id="30001">Keresés</string>
+    <string id="30002">[B]Kedvenceim[/B]</string>
+    <string id="30003">Scaper nem található</string>
+    <string id="30004">[B]Hozzáadás a Kedvencekhez[/B]</string>
+    <string id="30005">[B]Törlés a Kedvencekből[/B]</string>
+    <string id="30006">Nincsenek Kedvencek</string>
+    <string id="30007">Az almenüt kell használni</string>
+    <string id="30008">elemek könyvtárhoz adásához</string>
+
+    <!-- Settings -->
+    <string id="30010">Kis képek nézet kényszerítése</string>
+    <string id="30011">Lapváltáskor a keret frissítése</string>
+    <string id="30012">Útvonal letöltése</string>
+    <string id="30013">Sorozatcím javítása</string>
+
+    <!-- Context Menu entries -->
+    <string id="30020">Videó letöltése</string>
+
+    <!-- dialog entries -->
+    <string id="30030">Nincs letöltési útvonal!</string>
+    <string id="30031">Beállítja az útvonalat most?</string>
+    <string id="30032">HLS nem támogatott</string>
+</strings>

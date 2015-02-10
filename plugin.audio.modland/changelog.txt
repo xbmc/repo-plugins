@@ -1,0 +1,44 @@
+Changes
+
+0.15.0
+
+  * Cleanups
+  * XBMC / Python API compatibility changes
+
+0.13.1
+
+  * use 3 part version number
+  * fix path issue with eden
+
+0.13
+
+  * Eden version
+
+0.12
+
+  * allow editing of saved searches
+  * use safer download filenames
+  * only ask for download location once if left unconfigured/cancelled
+
+0.11
+
+  * added support for downloading a tune before playback
+  * removed old compatibilty code that was breaking new git xbmc builds
+
+0.10
+
+  * localise strings
+
+0.9
+
+  * changes to plugin save path for addon system
+
+0.8
+
+  * xbmc dharma addon support added
+  * set mime type to avoid libcurl scans of every item
+  * new icon from freezy3k (thanks!)
+
+0.7
+
+  * earlier releases history on http://code.google.com/p/xbmc-addons

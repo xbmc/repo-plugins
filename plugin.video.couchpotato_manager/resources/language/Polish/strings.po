@@ -1,0 +1,197 @@
+# XBMC Media Center language file
+# Addon Name: CouchPotato Manager
+# Addon id: plugin.video.couchpotato_manager
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Polish (http://www.transifex.com/projects/p/xbmc-addons/language/pl/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pl\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgctxt "#30000"
+msgid "All Movies"
+msgstr "Wszystkie filmy"
+
+msgctxt "#30001"
+msgid "Add new Movie to Wanted-list"
+msgstr "Dodaj nowy film do listy poszukiwanych"
+
+msgctxt "#30002"
+msgid "Wanted Movies"
+msgstr "Poszukiwane filmy"
+
+msgctxt "#30003"
+msgid "Done Movies"
+msgstr "Zrobione filmy"
+
+msgctxt "#30004"
+msgid "Status List"
+msgstr "Lista statusu"
+
+msgctxt "#30100"
+msgid "Add-on Settings"
+msgstr "Ustawienia wtyczki"
+
+msgctxt "#30101"
+msgid "Refresh Releases"
+msgstr "Odśwież wydania"
+
+msgctxt "#30102"
+msgid "Delete Movie"
+msgstr "Usuń film"
+
+msgctxt "#30103"
+msgid "Delete Release"
+msgstr "Usuń wydanie"
+
+msgctxt "#30104"
+msgid "Download Release"
+msgstr "Pobierz wydanie"
+
+msgctxt "#30105"
+msgid "Ignore Release"
+msgstr "Ignoruj wydanie"
+
+msgctxt "#30106"
+msgid "Search Trailer on YouTube"
+msgstr "Wyszukaj zwiastun na YouTube"
+
+msgctxt "#30107"
+msgid "Force full search"
+msgstr "Wymuś pełne wyszukiwanie"
+
+msgctxt "#30110"
+msgid "Please enter movie title"
+msgstr "Wpisz tytuł filmu"
+
+msgctxt "#30111"
+msgid "Please select the correct Movie"
+msgstr "Proszę wybrać właściwy film"
+
+msgctxt "#30112"
+msgid "Please select the profile"
+msgstr "Proszę wybrać profil"
+
+msgctxt "#30113"
+msgid "Delete Movie"
+msgstr "Usuń film"
+
+msgctxt "#30114"
+msgid "Are you sure to delete?"
+msgstr "Na pewno chcesz usunąć?"
+
+msgctxt "#30115"
+msgid "Please select your default profile"
+msgstr "Proszę wybrać domyślny profil"
+
+msgctxt "#30120"
+msgid "Connection error"
+msgstr "Błąd połączenia"
+
+msgctxt "#30121"
+msgid "Wrong User-Credentials or Api Key"
+msgstr "Błędne uwierzytelnienie użytkownika lub błędny klucz API"
+
+msgctxt "#30122"
+msgid "Wrong Network Settings or CP not running."
+msgstr "Błędne ustawienia sieci lub serwer CP nie jest uruchomiony."
+
+msgctxt "#30123"
+msgid "Do you want to change them now?"
+msgstr "Chcesz je teraz zmienić?"
+
+msgctxt "#30130"
+msgid "Movie added"
+msgstr "Dodano film"
+
+msgctxt "#30131"
+msgid "No Movie found"
+msgstr "Nie znaleziono filmu"
+
+msgctxt "#30132"
+msgid "Success"
+msgstr "Sukces"
+
+msgctxt "#30140"
+msgid "Please use context menu"
+msgstr "Proszę użyć menu podręcznego"
+
+msgctxt "#30141"
+msgid "You need to open the context-menu"
+msgstr "Musisz otworzyć menu podręczne"
+
+msgctxt "#30142"
+msgid "to choose the action you want"
+msgstr "by wybrać akcję, którą chcesz"
+
+msgctxt "#30150"
+msgid "Type"
+msgstr "Typ"
+
+msgctxt "#30151"
+msgid "Provider"
+msgstr "Dostawca danych"
+
+msgctxt "#30152"
+msgid "Provider-Extra"
+msgstr "Dostawca danych-dodatkowo"
+
+msgctxt "#30153"
+msgid "Age"
+msgstr "Wiek"
+
+msgctxt "#30154"
+msgid "Seeder/Leecher"
+msgstr "Udostępniający/pobierający"
+
+msgctxt "#30155"
+msgid "Size (MB)"
+msgstr "Rozmiar (MB)"
+
+msgctxt "#30156"
+msgid "Description"
+msgstr "Opis"
+
+msgctxt "#30300"
+msgid "Username"
+msgstr "Nazwa użytkownika"
+
+msgctxt "#30301"
+msgid "Password"
+msgstr "Hasło"
+
+msgctxt "#30302"
+msgid "Use HTTPS"
+msgstr "Użyj HTTPS"
+
+msgctxt "#30303"
+msgid "Hostname"
+msgstr "Nazwa hosta"
+
+msgctxt "#30304"
+msgid "Port"
+msgstr "Port"
+
+msgctxt "#30305"
+msgid "Api Key"
+msgstr "Klucz API"
+
+msgctxt "#30306"
+msgid "Set default profile"
+msgstr "Ustaw domyślny profil"
+
+msgctxt "#30307"
+msgid "Url Base (for use with mod_proxy)"
+msgstr "URL (przy używaniu mod_proxy)"
+
+msgctxt "#30310"
+msgid "You only need username/password OR Api Key!"
+msgstr "Potrzebne są użytkownik/hasło ALBO klucz API!"

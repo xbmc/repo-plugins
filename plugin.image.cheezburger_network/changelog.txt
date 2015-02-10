@@ -1,0 +1,12 @@
+1.0.0 (09.03.2013)
+ - fixed browsing by site
+ - migrated to xbmcswift2 v2.4.0
+ - updated translations
+ - cosmetics
+
+0.0.2 (25.11.2012)
+ - fixed Plugin (add clientID)
+ - updated translations
+
+0.0.1 (11.11.2012)
+ - Initial Release

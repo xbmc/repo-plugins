@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Spanish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/es/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- General entries -->
+    <string id="30000">Página</string>
+    <string id="30001">Buscar</string>
+    <string id="30002">[B]Mis Favoritos[/B]</string>
+    <string id="30003">No se ha encontrado Scaper</string>
+    <string id="30004">[B]Añadir a mis favoritos[/B]</string>
+    <string id="30005">[B]Eliminar de mis favoritos[/B]</string>
+    <string id="30006">No hay favoritos</string>
+    <string id="30007">Tienes que usar el menú contextual</string>
+    <string id="30008">para añadir elementos</string>
+
+    <!-- Settings -->
+    <string id="30010">Forzar al modo de vista miniatura</string>
+    <string id="30011">Actualizar contenedor en el cambio de página</string>
+    <string id="30012">Ruta de Descargas</string>
+    <string id="30013">Fijar nombre de programa</string>
+
+    <!-- Context Menu entries -->
+    <string id="30020">Descargar Video</string>
+
+    <!-- dialog entries -->
+    <string id="30030">No hay ruta de descarga!</string>
+    <string id="30031">¿Desea establecer la ruta ahora?</string>
+    <string id="30032">HLS no soportado</string>
+</strings>

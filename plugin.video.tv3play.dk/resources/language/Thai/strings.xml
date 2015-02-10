@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Thai language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/th/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30101">ทั่วไป</string>
+    <string id="30102">ภูมิภาค</string>
+    <string id="30103">คลิป</string>
+</strings>

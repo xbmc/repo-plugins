@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.couchpotato_manager" name="CouchPotato Manager" version="0.0.8" provider-name="Tristan Fischer (sphere@dersphere.de)">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.module.xbmcswift2" version="2.4.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>executable video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <language></language>
+        <platform>all</platform>
+        <website>https://couchpota.to/</website>
+        <source>https://github.com/dersphere/XBMC-CouchPotato-Manager</source>
+        <forum>http://forum.xbmc.org/showthread.php?tid=159274</forum>
+        <email>sphere@dersphere.de</email>
+        <summary lang="be">Control CP Server from XBMC</summary>
+        <summary lang="de">Steuere CP Server aus XBMC</summary>
+        <summary lang="el">Έλεγχος του Διακομιστή CP από το XBMC</summary>
+        <summary lang="en">Control CP Server from XBMC</summary>
+        <summary lang="es">Controla un servido de CouchPotato desde XBMC</summary>
+        <summary lang="fr">Contrôler le Serveur CP depuis XBMC</summary>
+        <summary lang="gl">Controle o Servidor CP dende o XBMC</summary>
+        <summary lang="hr">Upravljajte CP poslužiteljem sa XBMC-a</summary>
+        <summary lang="it">Controlla Server CP da XBMC</summary>
+        <summary lang="pl">Kontroluj serwer CP przez XBMC</summary>
+        <summary lang="pt">Controle o Servidor CP a partir do XBMC</summary>
+        <summary lang="pt_BR">Controlar Servidor CP do XBMC</summary>
+        <summary lang="sv">Kontrollera CP-server från XBMC</summary>
+        <description lang="be">With CouchPotato Manager you can manage your CouchPotato Server from within XBMC.[CR]Features:[CR]- List your movies (with metadata)[CR]- Search Trailers for wanted movies[CR]- Add new movies to your wanted list[CR]- Choose releases[CR]- Start downloads</description>
+        <description lang="de">Mit dem CouchPotato Manager kannst du deinen CouchPotato Server innerhalb von XBMC steuern.[CR]Features:[CR]- Filme auflisten (inkl. Metadaten)[CR]- Trailer suche[CR]-Neue Filme auf die Wanted-Liste setzen[CR]- Releases wählen[CR]- Downloads starten</description>
+        <description lang="el">Με το CouchPotato Manager μπορείτε να διαχειριστείτε το διακομιστή του CouchPotato μέσα από το XBMC.[CR]Λειτουργίες:[CR]- Λίστα των ταινιών σας (με μεταδεδομένα)[CR]- Αναζήτηση Διαφημιστικών για τις ζητούμενες ταινίες σας[CR]- Προσθήκη νέων ταινιών στη λίστα ζητουμένων σας[CR]- Επιλογή εκδόσεων[CR]- Εκκίνηση λήψεων</description>
+        <description lang="en">With CouchPotato Manager you can manage your CouchPotato Server from within XBMC.[CR]Features:[CR]- List your movies (with metadata)[CR]- Search Trailers for wanted movies[CR]- Add new movies to your wanted list[CR]- Choose releases[CR]- Start downloads</description>
+        <description lang="es">Con el Administrador de CouchPotato podrás controlar tu servidor de CouchPotato desde XBMC.[CR]Características:[CR]- Enumera tus películas (con metadatos)[CR]- Busca trailers de películas[CR]- Añade películas a tu lista de deseos[CR]- Elige estrenos[CR]- Comienza descargas</description>
+        <description lang="fr">Avec le Gestionnaire CouchPotato vous pouvez gérer votre Serveur CouchPotato depuis XBMC.[CR]Fonctionnalités:[CR]- Lister vos films (avec métadonnées)[CR]- Rechercher des Bande-annonces des films les plus demandés[CR]- Ajouter de nouveaux films à votre liste de demande[CR]- Choisir les sorties[CR]- Démarrer les téléchargements</description>
+        <description lang="gl">Co xestor de CouchPotato pode xestionar o seu Servidor dende o propio XBMC.[CR]Características :[CR]- Listar os seus filmes (cos metadatos)[CR]- Buscar avances dos filmes desexados[CR]- Engadir novos filmes á listaxe de busca[CR]- Escoller versións[CR]- Iniciar descargas</description>
+        <description lang="hr">Sa CouchPotato upraviteljem možete upravljati vašim CouchPotato poslužiteljem iz XBMC-a.[CR]Značajke:[CR]- Popis vaših filmova (sa meta podacima)[CR]- Pretražite najave za određene filmove[CR]- Dodajte nove filmove na vaš traženi popis[CR]- Odaberite izdanja[CR]- Pokrenite preuzimanja</description>
+        <description lang="it">Col gestore CouchPotato puoi gestire i tuo Server CouchPotato dall'interno di XBMC. [CR]Caratteristiche:[CR]- Fai una lista dei tuoi film (con i metadata)[CR]- Cerca i Trailer[CR]- Aggiungi nuovi film alla tua lista dei desideri[CR]- Scegli i rilasci[CR]- Inizia i download</description>
+        <description lang="pl">Z Menedżerem CouchPotato można zarządzać serwerem CouchPotato z poziomu XBMC..[CR]Możliwości:[CR]- Wyświetlanie listy filmów (z metadanymi)[CR]- Wyszukiwanie zwiastunów dla poszukiwanych filmów[CR]- Dodawanie nowych filmów do listy poszukiwanych[CR]- Wybór wydania[CR]- Uruchamianie pobierania</description>
+        <description lang="pt">Com o CouchPotato Manager, pode gerir o seu servidor Couchpotato a partir do XBMC.[CR]Funcionalidades:[CR]- Listar os seus filmes (com metadata)[CR]- Obter trailers para filmes procurados[CR]- Adicionar novos filmes à lista de procurados[CR]- Escolher lançamentos[CR]- Iniciar transferências</description>
+        <description lang="pt_BR">Com Administrador CouchPotato você pode administrar seu servidor CouchPotato de dentro do XBMC,[CR]Recursos:[CR]- Liste seus filmes (com metadados)[CR]- Procure Trailers do filmes desejados[CR]- Adicione novos filmespara lista dos a procurar[CR]-Escolha releases[CR]-Inicie Downloads</description>
+        <description lang="sv">Med CouchPotato hanteraren kan du hantera din CouchPotato-server från XBMC.[CR]Funktioner:[CR] Lista dina filmer (med metadata)[CR]- Söka trailers för önskade filmer[CR]- Lägga till nya filmer till din önskelista[CR]- Välja utgåvor[CR]- Starta nedladdningar</description>
+    </extension>
+</addon>

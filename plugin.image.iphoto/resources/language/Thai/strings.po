@@ -1,0 +1,77 @@
+# XBMC Media Center language file
+# Addon Name: iPhoto
+# Addon id: plugin.image.iphoto
+# Addon Provider: jingai
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Thai (http://www.transifex.com/projects/p/xbmc-addons/language/th/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: th\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "#30021"
+msgid "None"
+msgstr "ไม่มี"
+
+msgctxt "#30023"
+msgid "Label"
+msgstr "ป้ายชื่อ"
+
+msgctxt "#30024"
+msgid "Size"
+msgstr "ขนาด"
+
+msgctxt "#30061"
+msgid "Default"
+msgstr "ค่าเริ่มต้น"
+
+msgctxt "#30062"
+msgid "Pic Thumbs"
+msgstr "รูปย่อ"
+
+msgctxt "#30063"
+msgid "Image Wrap"
+msgstr "เลื่อนภาพ"
+
+msgctxt "#30067"
+msgid "Default"
+msgstr "ค่าเริ่มต้น"
+
+msgctxt "#30081"
+msgid "Ascending"
+msgstr "น้อยไปมาก"
+
+msgctxt "#30082"
+msgid "Descending"
+msgstr "มากไปน้อย"
+
+msgctxt "#30090"
+msgid "General"
+msgstr "ทั่วไป"
+
+msgctxt "#30091"
+msgid "View"
+msgstr "มุมมอง"
+
+msgctxt "#30092"
+msgid "Skin"
+msgstr "หน้าตา"
+
+msgctxt "#30101"
+msgid "Albums"
+msgstr "อัลบั้ม"
+
+msgctxt "#30104"
+msgid "Keywords"
+msgstr "คำสำคัญ"
+
+msgctxt "#30213"
+msgid "Update library"
+msgstr "อัพเดทคลังข้อมูล"

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>	
+	<!--General-->
+	<string id="30090">List all stations</string>
+	<string id="30091">Search for station</string>
+        <string id="30092">Enter station name</string>
+        <string id="30093">Updating local cache...</string>
+        <string id="30094">Downloading...</string>
+	<string id="30095">Settings</string>
+	<string id="30096">Enable</string>
+	<string id="30097">Disable</string>
+	<string id="30098">Favourites</string>
+	<string id="30099">Add to favourites</string>
+	<string id="30100">Remove from favourites</string>
+	<string id="30101">Play</string>
+	<string id="30102">Done</string>
+	<string id="30104">Recently listened stations</string>
+	<string id="30105">To enable adding favourites, go to the Settings</string>
+	<string id="30106">To add a favourite, go to the station and chose Add</string>
+</strings>

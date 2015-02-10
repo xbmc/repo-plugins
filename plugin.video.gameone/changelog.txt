@@ -1,0 +1,52 @@
+2.0.7 (12.10.2014)
+- Fixed some episodes not being scraped porperly
+
+2.0.6 (22.08.2014)
+- Fixed crashes caused by the last update
+
+2.0.5 (21.08.2014)
+- Removed Playtube category for now
+- Fixed blog category thumbnails
+- Fixed blog videos not playing
+- Improved playback for some videos
+
+2.0.4 (19.08.2014)
+- Fixed TV category again
+
+2.0.3 (15.08.2014)
+- Fixed selection of a wrong resolution in some cases
+
+2.0.2 (07.08.2014)
+- Fixed TV category not showing anything (thanks to fluse)
+
+2.0.1 (31.03.2014)
+- Several bugfixes
+
+2.0.0 (29.03.2014)
+- Fixed playback for Windows
+- Added preferred video quality selection in settings
+- Further code rewrite
+
+1.1.0 (15.02.2014)
+- Fixed browsing for blog posts with multiple pages
+- Added basic logging
+
+1.0.0 (14.02.2014)
+- Code cleanup
+- Browse TV episodes by year
+- Fixed blog entries (now only posts with videos will be shown)
+
+# Fork by liquex
+
+
+1.1
+- Code entfernt, der mit Frodo überflüssig wurde
+- Fix für Windows User
+
+1.0
+- Doppeltes Abspielen der Folgen gefixt
+- Fix für Playtube, Blog
+- Blog umgearbeitet
+- Fanart überall
+
+# Initial release by membrane

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Polish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/pl/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- General entries -->
+    <string id="30000">Strona</string>
+    <string id="30001">Szukaj</string>
+    <string id="30002">[B]Ulubione[/B]</string>
+    <string id="30003">Nie znaleziono żadnego czytnika</string>
+    <string id="30004">[B]Dodaj do Ulubionych[/B]</string>
+    <string id="30005">[B]Usuń z Ulubionych[/B]</string>
+    <string id="30006">Brak Ulubionych</string>
+    <string id="30007">Musisz użyć menu podręcznego</string>
+    <string id="30008">by dodać pozycje lub katalogi</string>
+
+    <!-- Settings -->
+    <string id="30010">Wymuś wygląd miniaturek</string>
+    <string id="30011">Aktualizuj kontener podczas przełączania strony</string>
+    <string id="30012">Ścieżka pobierania</string>
+    <string id="30013">Popraw tytuł Seriali</string>
+
+    <!-- Context Menu entries -->
+    <string id="30020">Pobierz Vidoe</string>
+
+    <!-- dialog entries -->
+    <string id="30030">Brak ścieśki pobierania!</string>
+    <string id="30031">Chcesz teraz ustawić ścieżkę?</string>
+    <string id="30032">HLS nie jest obsługiwane</string>
+</strings>

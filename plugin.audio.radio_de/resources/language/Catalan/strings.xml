@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Catalan language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ca/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root menu entries -->
+    <string id="30100">Recomanacions de l'editorial</string>
+    <string id="30101">Top 100 de Emissores</string>
+    <string id="30102">Buscar per Genere</string>
+    <string id="30103">Buscar per Tema</string>
+    <string id="30104">Cerca per país</string>
+    <string id="30105">buscar per ciutat</string>
+    <string id="30106">Buscar per Idioma</string>
+    <string id="30107">Emissores Locals</string>
+    <string id="30108">Les meves emissores</string>
+
+    <!-- Search -->
+    <string id="30200">Cerca per Emissora</string>
+    <string id="30201">Introduïu el nom, país o idioma</string>
+
+    <!-- Settings -->
+    <string id="30300">Idioma</string>
+    <string id="30301">Anglès</string>
+    <string id="30302">Alemany</string>
+    <string id="30303">Francès</string>
+    <string id="30310">Força la vista a Miniatura</string>
+
+    <!-- Context Menu -->
+    <string id="30400">afageix a "Les meves Emissores"</string>
+    <string id="30401">Elimina de "Les meves Emissores"</string>
+    <string id="30402">Edita una emisora Personalitzada</string>
+
+    <!-- Custom Station -->
+    <string id="30500">siusplau entra %s</string> <!--%s will be filled by 30501, 30502 or 30503 -->
+    <string id="30501">titol</string>
+    <string id="30502">ruta de la miniatura</string>
+    <string id="30503">Url de l'Stream</string>
+    <string id="30504">Afageix una emissora personalitzada</string>
+
+    <!-- Error Message -->
+    <string id="30600">Error de xarxa</string>
+</strings>

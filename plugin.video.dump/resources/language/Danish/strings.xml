@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Danish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/da/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Aktuelle Videoer</string>
+    <string id="30002">Arkiv</string>
+    <string id="30003">Søg</string>
+
+    <!-- Settings -->
+    <string id="30010">Tving Visning til Miniaturebilleder</string>
+
+    <!-- Messages -->
+    <string id="30020">Netværksfejl</string>
+</strings>

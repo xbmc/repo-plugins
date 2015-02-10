@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<setting id="videoQuality" type="enum" label="30501" lvalues="30502|30503" default="1" />
+	<setting id="showFanart" type="bool" label="30500" default="true"/>
+</settings>

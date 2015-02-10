@@ -1,0 +1,197 @@
+# XBMC Media Center language file
+# Addon Name: CouchPotato Manager
+# Addon id: plugin.video.couchpotato_manager
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Portuguese (http://www.transifex.com/projects/p/xbmc-addons/language/pt/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "All Movies"
+msgstr "Todos os Filmes"
+
+msgctxt "#30001"
+msgid "Add new Movie to Wanted-list"
+msgstr "Adicionar novo Filme à Lista de Procura"
+
+msgctxt "#30002"
+msgid "Wanted Movies"
+msgstr "Filmes Desejados"
+
+msgctxt "#30003"
+msgid "Done Movies"
+msgstr "Filmes Concluídos"
+
+msgctxt "#30004"
+msgid "Status List"
+msgstr "Lista de Estados"
+
+msgctxt "#30100"
+msgid "Add-on Settings"
+msgstr "Definições do Add-on"
+
+msgctxt "#30101"
+msgid "Refresh Releases"
+msgstr "Actualizar Lançamentos"
+
+msgctxt "#30102"
+msgid "Delete Movie"
+msgstr "Apagar Filme"
+
+msgctxt "#30103"
+msgid "Delete Release"
+msgstr "Apagar Lançamento"
+
+msgctxt "#30104"
+msgid "Download Release"
+msgstr "Transferir Lançamento"
+
+msgctxt "#30105"
+msgid "Ignore Release"
+msgstr "Ignorar Lançamento"
+
+msgctxt "#30106"
+msgid "Search Trailer on YouTube"
+msgstr "Procurar Trailer no Youtube"
+
+msgctxt "#30107"
+msgid "Force full search"
+msgstr "Forçar busca completa"
+
+msgctxt "#30110"
+msgid "Please enter movie title"
+msgstr "Por favor, introduza o título do filme"
+
+msgctxt "#30111"
+msgid "Please select the correct Movie"
+msgstr "Por favor, seleccione o Filme correcto"
+
+msgctxt "#30112"
+msgid "Please select the profile"
+msgstr "Por favor, seleccione o perfil"
+
+msgctxt "#30113"
+msgid "Delete Movie"
+msgstr "Apagar Filme"
+
+msgctxt "#30114"
+msgid "Are you sure to delete?"
+msgstr "Quer mesmo apagar?"
+
+msgctxt "#30115"
+msgid "Please select your default profile"
+msgstr "Por favor, seleccione o seu perfil padrão"
+
+msgctxt "#30120"
+msgid "Connection error"
+msgstr "Erro de ligação"
+
+msgctxt "#30121"
+msgid "Wrong User-Credentials or Api Key"
+msgstr "Erro nos Dados de Utilizador ou na Chave Api"
+
+msgctxt "#30122"
+msgid "Wrong Network Settings or CP not running."
+msgstr "Erro nas Definições de Rede ou o CP não está activo"
+
+msgctxt "#30123"
+msgid "Do you want to change them now?"
+msgstr "Quer alterar agora?"
+
+msgctxt "#30130"
+msgid "Movie added"
+msgstr "Filme adicionado"
+
+msgctxt "#30131"
+msgid "No Movie found"
+msgstr "Nenhum Filme encontrado"
+
+msgctxt "#30132"
+msgid "Success"
+msgstr "Sucesso"
+
+msgctxt "#30140"
+msgid "Please use context menu"
+msgstr "Por favor, use o menu de contexto"
+
+msgctxt "#30141"
+msgid "You need to open the context-menu"
+msgstr "É necessário abrir o menu de contexto"
+
+msgctxt "#30142"
+msgid "to choose the action you want"
+msgstr "para escolher a acção que pretende"
+
+msgctxt "#30150"
+msgid "Type"
+msgstr "Tipo"
+
+msgctxt "#30151"
+msgid "Provider"
+msgstr "Fornecedor"
+
+msgctxt "#30152"
+msgid "Provider-Extra"
+msgstr "Fornecedor-Extra"
+
+msgctxt "#30153"
+msgid "Age"
+msgstr "Idade"
+
+msgctxt "#30154"
+msgid "Seeder/Leecher"
+msgstr "Seeder/Leecher"
+
+msgctxt "#30155"
+msgid "Size (MB)"
+msgstr "Tamanho (MB)"
+
+msgctxt "#30156"
+msgid "Description"
+msgstr "Descrição"
+
+msgctxt "#30300"
+msgid "Username"
+msgstr "Nome de Utilizador"
+
+msgctxt "#30301"
+msgid "Password"
+msgstr "Palavra-passe"
+
+msgctxt "#30302"
+msgid "Use HTTPS"
+msgstr "Usar HTTPS"
+
+msgctxt "#30303"
+msgid "Hostname"
+msgstr "Nome do Servidor"
+
+msgctxt "#30304"
+msgid "Port"
+msgstr "Porta"
+
+msgctxt "#30305"
+msgid "Api Key"
+msgstr "Chave Api"
+
+msgctxt "#30306"
+msgid "Set default profile"
+msgstr "Definir perfil padrão"
+
+msgctxt "#30307"
+msgid "Url Base (for use with mod_proxy)"
+msgstr "Base Url (para usar com mod_proxy)"
+
+msgctxt "#30310"
+msgid "You only need username/password OR Api Key!"
+msgstr "Precisa apenas de nome de utilizador/palavra-passe OU Chave Api!"

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Catalan language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ca/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- General entries -->
+    <string id="30000">Pàgina</string>
+    <string id="30001">Cerca</string>
+    <string id="30002">[B]Els Meus Preferits[/B]</string>
+    <string id="30003">No s'ha trobat el Scaper</string>
+    <string id="30004">[B]Afegeix a Els Meus Preferits[/B]</string>
+    <string id="30005">[B]Elimina de Els Meus Preferits[/B]</string>
+    <string id="30006">Sense Preferits</string>
+    <string id="30007">Necessita utilitzar el menú contextual</string>
+    <string id="30008">per afegir elements o carpetes</string>
+
+    <!-- Settings -->
+    <string id="30010">Força el mode de vista "Thumbnail"</string>
+    <string id="30011">Actualitza el contenidor en canviar la pàgina</string>
+    <string id="30012">Ruta de Descarrega</string>
+    <string id="30013">Arreglar títol de la sèrie de TV</string>
+
+    <!-- Context Menu entries -->
+    <string id="30020">Baixa el Vídeo</string>
+
+    <!-- dialog entries -->
+    <string id="30030">No hi ha ruta de descarrega!</string>
+    <string id="30031">Vol configurar la ruta de descarrega ara?</string>
+    <string id="30032">HLS no és compatible</string>
+</strings>

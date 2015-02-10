@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Vietnamese language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/vi/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30110">Tìm Kiếm</string>
+    <string id="30116">Xóa</string>
+    <string id="30119">Thu âm</string>
+</strings>

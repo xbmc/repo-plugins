@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Korean language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ko/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- General entries -->
+    <string id="30000">페이지</string>
+    <string id="30001">찾기</string>
+
+    <!-- Settings -->
+    <string id="30010">썸네일 보기모드</string>
+    <string id="30011">페이지 전환시 컨테이너 업데이트</string>
+    <string id="30012">다운로드 경로</string>
+
+    <!-- Context Menu entries -->
+    <string id="30020">비디오 다운로드</string>
+
+    <!-- dialog entries -->
+    <string id="30030">다운로드 경로 없음!</string>
+    <string id="30031">경로를 지금 설정하겠습니까?</string>
+</strings>

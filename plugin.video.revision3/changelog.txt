@@ -1,0 +1,128 @@
+[B]Version 3.0.14[/B]
+
+- Added option to hide Daily/Extra shows (Enabled by default)
+- Added "Play All" option to play all episodes on the current page
+- Added progress bar when loading directories
+- Switch to Revision3 API for media urls
+- Fixed UnicodeEncodeError when loading Networks subdirectories
+- Fixed ValueError error when loading addon
+- Fixed Https/SSL errors
+
+[B]Version 3.0.13[/B]
+
+- Updated addon to support recent Revision3 changes
+- Switch to Revision3 v0.1 API
+- Removed broken search function
+- Added Networks and Featured directory
+- Added new icons (Credits to calincio)
+- Added optional information to addon.xml
+
+[B]Version 3.0.12[/B]
+
+- Version bump for frodo
+- Fixed video settings issue
+- Fixed fanart issue
+- Fixed 'access_voilation' errors
+- Fixed 'TypeError' in get_video
+- Fixed ascii errors during search
+- Fixed missing 'Next Page' folder
+
+[B]Version 2.0.11[/B]
+
+- Fixed index error caused by getParameters
+- Updated open_url and retry functions
+
+[B]Version 2.0.10[/B]
+
+- Added better support for HTTP Errors
+- Fixed reported 'UnicodeDecodeError' errors
+- Fixed reported 'IndexError' errors
+
+[B]Version 2.0.9[/B]
+
+- Fixed error when loading shows
+
+[B]Version 2.0.8[/B]
+
+- Added support for connection timeout errors
+- Fixed loop when switching between download settings
+- Fixed 'img' referenced before assignment error
+- Fixed error when a "Unknown File Type" is played
+
+[B]Version 2.0.7[/B]
+
+- Fixed infoLabels for "Other Episodes"
+
+[B]Version 2.0.6[/B]
+
+- Added default view for Confluence skin
+- Fixed playlist error when download is enabled
+- Added fanart
+- Other minor changes
+
+[B]Version 2.0.5[/B]
+
+- Switched from DVDPLAYER to setResolvedUrl/IsPlayable method for video playback
+- Added Buggalo Exception Collector
+- Other minor changes
+
+[B]Version 2.0.4[/B]
+
+- Updated addon to support recent website changes.
+
+[B]Version 2.0.3[/B]
+
+- Fixed error when trying to play new shows
+- Restored downloading feature
+
+[B]Version 2.0.2[/B]
+
+- Fixed error on start up
+- Disabled Simple Downloader dependency until it's stable
+- Removed unneeded Common Cache dependency
+- Fixed fanart bug in "Recently Released"
+- Added English strings
+
+[B]Version 2.0.0[/B]
+
+- Initial commit to Eden add-on system
+- Scaping content from Revision3.com instead of RSS feeds
+- Added option to download videos
+- Added directory for recently released, archived shows, and search
+- Added sort methods for date, episode number, show, and duration
+- Other minor changes
+
+[B]Version 1.0.6[/B]
+
+- Updated Video formats
+
+[B]Version 1.0.5[/B]
+
+- Cleaned up info labels
+
+[B]Version 1.0.4[/B]
+
+- Fixed settings error
+
+[B]Version 1.0.3[/B]
+
+- Changed the default video quality to Quicktime HD
+- Cleaned up code and settings
+
+[B]Version 1.0.2[/B]
+
+- Updated icon
+- Changed video info labels
+
+[B]Version 1.0.1[/B]
+
+- Added Hungarian translation
+
+[B]Version 1.0.0[/B]
+
+- Converted plugin to the new add-on system
+- Cleaned up code
+- Updated Swedish and Finnish strings
+- Added check for updates setting
+- Cleaned up title and info labels
+- Added a notification dialog when no episodes are available in a certain quality/format.

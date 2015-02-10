@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<setting id="force_viewmode_podcasts" type="bool" label="30100" default="true"/>
+	<setting id="force_viewmode_items" type="bool" label="30101" default="true"/>
+	<setting id="show_subgenres" type="bool" label="30105" default="true"/>
+	<setting id="num_podcasts_list" type="number" label="30103" default="100"/>
+	<setting id="num_podcasts_search" type="number" label="30104" default="100"/>
+	<setting id="country" type="labelenum" label="30102" values="AU|BE|BG|BR|CA|CH|CL|CN|DE|DK|ES|FI|FR|GB|GR|IT|JP|KR|LU|MX|NL|NO|PL|PT|RO|RU|SE|TR|US" default="US" />
+</settings>

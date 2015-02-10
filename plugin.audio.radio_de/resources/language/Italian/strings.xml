@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Italian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/it/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root menu entries -->
+    <string id="30100">Consigli dagli editori</string>
+    <string id="30101">Stazioni top 100</string>
+    <string id="30102">Sfoglia per genere</string>
+    <string id="30103">Sfoglia per argomento</string>
+    <string id="30104">Sfoglia per paese</string>
+    <string id="30105">Sfoglia per città</string>
+    <string id="30106">Sfoglia per lingua</string>
+    <string id="30107">Stazioni locali</string>
+    <string id="30108">Le mie stazioni</string>
+
+    <!-- Search -->
+    <string id="30200">Cerca una stazione</string>
+    <string id="30201">Inserisci il nome, il paese o la lingua</string>
+
+    <!-- Settings -->
+    <string id="30300">Lingua</string>
+    <string id="30301">Inglese</string>
+    <string id="30302">Tedesco</string>
+    <string id="30303">Francese</string>
+    <string id="30310">Forza visuale in visualizzazione Anteprime</string>
+
+    <!-- Context Menu -->
+    <string id="30400">Aggiungi alle mie stazioni</string>
+    <string id="30401">Rimuovi dalle mie stazioni</string>
+    <string id="30402">Modica la stazione personalizzata</string>
+
+    <!-- Custom Station -->
+    <string id="30500">Inserisci %s</string> <!--%s will be filled by 30501, 30502 or 30503 -->
+    <string id="30501">titolo</string>
+    <string id="30502">url o percorso dell'anteprima</string>
+    <string id="30503">url per lo streaming</string>
+    <string id="30504">Inserisci una stazione personalizzata...</string>
+
+    <!-- Error Message -->
+    <string id="30600">Errore di rete</string>
+</strings>

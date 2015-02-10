@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!-- Plugin name -->
+  <string id="30000">Rtlxl</string>
+  <string id="32001">Settings</string>
+  <string id="32002">mp4 lower resolution (for slow connection)</string>  
+</strings>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Danish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/da/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- General entries -->
+    <string id="30000">Side</string>
+    <string id="30001">Søg</string>
+    <string id="30002">[B]Mine Faovritter[/B]</string>
+    <string id="30003">Der er ikke fundet en Scarper</string>
+    <string id="30004">[B]Tilføj mine favoritter[/B]</string>
+    <string id="30005">[B]Slet fra mine favoritter[/B]</string>
+    <string id="30006">Ingen favoritter</string>
+    <string id="30007">Du skal bruge kontekstmenuen</string>
+    <string id="30008">for at tilføje elementer eller mapper.</string>
+
+    <!-- Settings -->
+    <string id="30010">Tving Visning til Miniaturer</string>
+    <string id="30011">Opdater beholder ved sideskift</string>
+    <string id="30012">Downloadmappe</string>
+    <string id="30013">Reparer serietitel</string>
+
+    <!-- Context Menu entries -->
+    <string id="30020">Hent Video</string>
+
+    <!-- dialog entries -->
+    <string id="30030">Ingen Downloadmappe!</string>
+    <string id="30031">Vil du vælge en mappe nu?</string>
+    <string id="30032">HLS er ikke understøttet</string>
+</strings>

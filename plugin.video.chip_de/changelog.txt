@@ -1,0 +1,12 @@
+1.0.0
+- First Try
+1.0.1
+- Added string localization
+1.0.2
+- Changed Timeout
+1.0.3
+- Various fixes and optical optimizations
+1.0.4
+- Fixed video title
+1.0.5
+- Fixed site changes for video playback

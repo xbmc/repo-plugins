@@ -1,0 +1,27 @@
+﻿Version 1.1.0
+Refactor the code.
+
+﻿﻿﻿﻿﻿﻿﻿﻿Version 1.0.11
+* mp4 lower resolution (for slow connection) option
+
+Version 1.0.9
+* little fixxen for official repo requirements
+
+Version 1.0.8
+* little fix
+
+﻿Version 1.0.7
+* name plugin is now oke.
+
+﻿Version 1.0.6
+* XBMC 13 support
+
+﻿Version 1.0.5
+* Date sorting
+
+﻿Version 1.0.4
+* Rename to rtlxl
+* Upload to https://bitbucket.org/Opvolger/xbmc.addon.rtlxl
+
+Version 1.0
+* Initial version

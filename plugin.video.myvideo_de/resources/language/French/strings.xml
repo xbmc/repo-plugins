@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- French language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/fr/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- General entries -->
+    <string id="30000">Page</string>
+    <string id="30001">Recherche</string>
+    <string id="30002">[B]Mes favoris[/B]</string>
+    <string id="30003">Aucun Scaper trouvé</string>
+    <string id="30004">[B]Ajouter à mes favoris[/B]</string>
+    <string id="30005">[B]Suppr. de mes favoris[/B]</string>
+    <string id="30006">Aucun favoris</string>
+    <string id="30007">Vous devez utiliser le menu contextuel</string>
+    <string id="30008">pour ajouter des éléments ou des dossiers.</string>
+
+    <!-- Settings -->
+    <string id="30010">Forcer la vue Vignette</string>
+    <string id="30011">Mettre à jour le contenu au changement de page</string>
+    <string id="30012">Chemin de téléchargement</string>
+    <string id="30013">Réparer le titre de l'épisode</string>
+
+    <!-- Context Menu entries -->
+    <string id="30020">Télécharger la vidéo</string>
+
+    <!-- dialog entries -->
+    <string id="30030">Chemin de téléchargement non défini</string>
+    <string id="30031">Voulez vous définir le chemin maintenant ?</string>
+    <string id="30032">HLS non supporté</string>
+</strings>

@@ -1,0 +1,10 @@
+To run the plugin a user-related opml.xml is needed to be placed in <XBMC-Home>/userdata/addon_data/plugin.audio.PodCatcher/. Use your default rss-reader to generate this file, this saves time;) 
+This Plugin supports following OPML - Outline attributes:
+  * xmlUrl = the kink to the feed
+  * type = feed-type
+  * text = userdefined feed-title
+  * fetchInterval = time in minutes between two refreshes. alternative: hourly,daily,weekly,monthly
+  * maxArticleAge = number of days how old a article maximal can be
+  * maxArticleNumber = maximal amount of articles
+
+the last both attributes don't affect the amount of bytes loaded or parsed. They affect how much is displayed an localy cached. Keep this files small and all runs fast ;)

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Swedish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/sv/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Alla undergenrer</string>
+    <string id="30001">Topp 500 stationer</string>
+    <string id="30002">Bläddra efter genre</string>
+    <string id="30003">Mina stationer</string>
+    <string id="30004">Sök station efter namn</string>
+    <string id="30005">Sök station som spelar låt</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Lägg till i "Mina stationer"</string>
+    <string id="30011">Ta bort från "Mina stationer"</string>
+
+    <!-- Settings -->
+    <string id="30100">Visa undergenrer</string>
+    <string id="30101">Antal stationer i lista</string>
+    <string id="30102">Visa bitrate i titel</string>
+    <string id="30103">Välj en slumpmässig server (fråga inte)</string>
+
+    <!-- Messages -->
+    <string id="30200">Nätverksfel</string>
+</strings>

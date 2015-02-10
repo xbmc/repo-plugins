@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<addon 
+  id="plugin.video.corbettreport" 
+  name="CorbettReport.com Video Podcasts" 
+  provider-name="celadoor" 
+  version="0.0.9">
+  <requires>
+    <import  addon="xbmc.python"                      version="2.1.0" />
+    <import  addon="script.common.plugin.cache"       version="1.5.1" />
+    <import  addon="script.module.parsedom"           version="1.5.1" />
+    <import  addon="script.module.simple.downloader"  version="0.9.4" />
+  </requires>
+  <extension library="default.py"                     point="xbmc.python.pluginsource">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">CorbettReport.com video plugin</summary>
+    <description lang="en">The Corbett Report is an independent, listener-supported alternative news source. It operates on the principle of open source intelligence and provides podcasts, interviews, articles and videos about breaking news and important issues from 9/11 Truth and false flag terror to the Big Brother police state, eugenics, geopolitics, the central banking fraud and more..</description>
+    <language>en</language>
+    <platform>all</platform>
+	<license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+	<forum>http://forum.xbmc.org/showthread.php?tid=177772</forum>
+	<website>http://www.corbettreport.com/support/</website>
+	<email></email>
+	<source>http://celadoor.github.io/plugin.video.corbettreport.zip</source>
+  </extension>
+</addon>

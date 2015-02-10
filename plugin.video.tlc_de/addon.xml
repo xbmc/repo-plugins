@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.tlc_de" name="TLC.de" version="1.0.2" provider-name="bromix">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">TLC.de media library</summary>
+		<summary lang="de">Mediathek für TLC.de</summary>
+		<description lang="en">TLC.de you'll find a wide range of series such as Cake Boss, Breaking Amish or Honey Boo Boo.</description>
+		<description lang="de">Unter TLC.de findest du ein großes Angebot von Serien wie Cake Boss, Breaking Amish oder Honey Boo Boo.</description>
+		<disclaimer lang="en"></disclaimer>
+		<language>de</language>
+		<platform>all</platform>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<forum>http://forum.xbmc.org/showthread.php?tid=198780</forum>
+		<website>www.dmax.de</website>
+		<email>bromix at gmx dot net</email>
+		<source>https://github.com/bromix/plugin.video.dmax_de</source>
+	</extension>
+</addon>

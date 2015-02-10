@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.photocasts" name="Photography podcasts" version="0.3.1" provider-name="Petr Kovář">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.elementtree" version="1.2.7"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="Default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary>
+        Watch photography podcasts from the internet.
+    </summary>
+    <description>
+Camera Position (http://www.cameraposition.com/),
+The Candid Frame (http://www.thecandidframe.com/),
+Digital Photo Experience (http://dpexperience.com/),
+Martin Bailey Photography (http://www.martinbaileyphotography.com/podcasts.php),
+Meet the Gimp (http://blog.meetthegimp.org/),
+Photo Walkthrough (http://www.photowalkthrough.com/),
+Thoughts on Photography (http://www.thoughtsonphotography.com/),
+Tips From The Top Floor (http://www.tipsfromthetopfloor.com/)
+    </description>
+    <email>pejuko@gmail.com</email>
+  </extension>
+</addon>

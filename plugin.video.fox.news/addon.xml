@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.fox.news"
+       name="Fox News"
+       version="4.0.3"
+       provider-name="t1m,divingmule">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.module.beautifulsoup4" version="4.3.1"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary>Fox News</summary>
+        <description>
+            Watch videos from video.foxnews.com &amp; video.foxbusiness.com.
+        </description>
+        <platform>all</platform>
+        <language>en</language>
+        <forum>http://forum.xbmc.org/showthread.php?tid=57175</forum>
+        <email></email>
+        <source>https://github.com/learningit/plugin.video.fox.news</source>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <website>http://video.foxnews.com</website>
+    </extension>
+</addon>

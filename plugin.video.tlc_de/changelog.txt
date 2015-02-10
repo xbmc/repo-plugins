@@ -1,0 +1,8 @@
+1.0.2
+- added implementation of Fusion of discovery channel
+- added support for HD (720p) and SD via settings
+- Updated to Bromixbmc 1.0.2
+- FIX: crash while adding series with non-ascii characters in the title
+
+1.0.1
+- initial release

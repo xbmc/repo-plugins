@@ -1,0 +1,39 @@
+1.0.0
+- First Try
+1.0.1
+- Added user favourites
+- Fixed site changes
+- Fixed max video resolution bug
+1.0.2
+- Fixed site changes / video playback
+1.0.3 / 2.0.3
+- Added context menu for adding user of the selected video
+- Added context menu for adding user manually
+- Added category "Popular"
+- Some other changes
+1.0.4 / 2.0.4
+- Added message for toggling the family filter
+1.0.5 / 2.0.5
+- Removed family filter setting
+1.0.6 / 2.0.6
+- Now using the Dailymotion API
+- Added personal stuff
+1.0.7 / 2.0.7
+- Added more personal stuff
+- Fixed encoding problems
+1.0.8 / 2.0.8
+- Fixed site changes / video playback
+1.0.9 / 2.0.9
+- Added context menu "Add to queue"
+1.1.0 / 2.1.0
+- Fixed HD video playback
+- Fixed livestream playback
+- Fixed family filter
+1.1.1 / 2.1.1
+- Bugfix with context menu
+- Some other small improvements
+1.1.2 / 2.1.2
+- Changed default view
+- Fixed encoding problem
+- Added download function
+- Added user-playlist browsing

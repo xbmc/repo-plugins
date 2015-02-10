@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.nectarine"
+       name="Nectarine Demoscene Radio"
+       version="1.0.2"
+       provider-name="Vidar Waagbo">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>audio</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<language>en</language>
+		<license>MIT</license>
+    		<website>https://github.com/vidarw/xbmc.plugin.audio.nectarine</website>
+		<source>https://github.com/vidarw/xbmc.plugin.audio.nectarine.git</source>
+   		<summary lang="en">Nectarine Demoscene Radio</summary>
+		<description lang="en">
+			Stream the best of demoscene music from Nectarine Demoscene Radio (www.scenemusic.net) directly from XBMC using this fan-made plugin.
+		</description>
+	</extension>
+</addon>

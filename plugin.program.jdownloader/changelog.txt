@@ -1,0 +1,46 @@
+[B]Version 1.3.1 - 20.12.2013[/B]
+    * bug - XBMC 12.2 FRODO: fixed broken dependence
+    * improvement - pkg_list: display "No Package!" if there are no packages at all
+    * improvement - general: point out that the JD application cannot be reached in case of connection problems. "server" was not clear
+
+[B]Version 1.3.0 - 18.06.2012[/B]
+    * bug - jdnightly: fixed problems with nightly version of JDownloader
+    * bug - pkg_list: fixed empty list in 'finished packages' sub menu
+    * bug - add_links: fixed problem with automatic start of downloads: 'Start downloading after adding new links' feature did not work, when the dl list was completely empty
+    * improvement - pkg_list: rearranged package information in package list view (<percentage> (- <eta>) | <title> | <size>)
+    * improvement - pkg_list: automatic generated packages names (e.g. "Added 234204920") get replaced by filename, if possible
+    * feature - general: added auto refresh feature (new settings: enabled & interval) 
+    * feature - file_list: show all files and their status by clicking on a package in the pkg list
+
+[B]Version 1.2.5[/B]
+    * Added new actions to user interface: 'Enable/Disable reconnect', 'Enable/Disable premium'
+    * Added new action to plugin interface: 'Reconnect'
+
+[B]Version 1.2.4[/B]
+    * Initial release for eden-pre
+
+[B]Version 1.0.4[/B]
+    * Added new features: use hostname, use fall back connection
+    * Fixed quoting problem
+
+[B]Version 1.0.3[/B]
+    * Fixed problem with adding unquoted urls
+
+[B]Version 1.0.2[/B]
+    * Added spanish translation (thanks to yowill)
+    * Added new actions: 'Add links from textfile', 'Add link container', 'Reconnect router'
+
+[B]Version 1.0.1[/B]
+    * Changed license to GPL v3
+    * Uses notifications instead of dialogs for messages
+    * Improved interface for other addons
+
+[B]Version 1.0.0[/B]
+    * Added German translation
+    * Handle 'failed connection' error
+
+[B]Version 0.1.1[/B]
+    * Fixed Bug: Only the first package was listed
+
+[B]Version 0.1.0[/B]
+    * Initial release

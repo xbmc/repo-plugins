@@ -1,0 +1,10 @@
+v0.0.3
+- Bump version number, add license tag in addon.xml
+
+v0.0.2
+- Added required addon.xml elements
+- Refactor code to adhere more to xbmc standards
+
+v0.0.1
+- Initial version
+

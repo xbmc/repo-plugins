@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.wimp" name="Wimp.com" version="2.0.1" provider-name="Tristan Fischer (sphere@dersphere.de)">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.module.simplejson" version="2.0.10"/>
+        <import addon="script.module.xbmcswift2" version="2.4.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <language>en</language>
+        <platform>all</platform>
+        <summary lang="be">Wimp.com - Family Friendly Videos</summary>
+        <summary lang="bg">Wimp.com - ззабавни и семейни клипчета</summary>
+        <summary lang="da">Wimp.com - Familievenlige Videoer</summary>
+        <summary lang="de">Wimp.com - Familienfreundliche Videos</summary>
+        <summary lang="el">Wimp.com - Βίντεο για όλη την Οικογένεια</summary>
+        <summary lang="en">Wimp.com - Family Friendly Videos</summary>
+        <summary lang="es">Wimp.com - Vídeos Adecuados para la Familiares</summary>
+        <summary lang="fr">Wimp.com - Vidéos pour toute la famille</summary>
+        <summary lang="gl">Wimp.com - Vídeos para tódolos públicos</summary>
+        <summary lang="he">Wimp.com - וידאו לכל המשפחה</summary>
+        <summary lang="hu">Wimp.com - Családbarát videók</summary>
+        <summary lang="it">Wimp.com - Video Per La Famiglia</summary>
+        <summary lang="ko">Wimp.com - 패밀리 비디오</summary>
+        <summary lang="lt">Wimp.com - Draugiškas šeimos video</summary>
+        <summary lang="pl">Wimp.com - Rodzinne filmy</summary>
+        <summary lang="pt">Wimp.com - Vídeos Para Toda A Família</summary>
+        <summary lang="pt_BR">Wimp.com - Vídeos amigáveis para a família</summary>
+        <summary lang="sk">Wimp.com - Rodinné videá</summary>
+        <summary lang="sv">Wimp.com - Familjevänliga videor</summary>
+        <description lang="be">A collection of the best online videos. Our editors make sure clips added are family friendly.</description>
+        <description lang="bg">Колекция от най-доброто онлайн видео. Добавените клипчета са семейно ориентирани.</description>
+        <description lang="da">En samling af nogle af de bedste online videoer. Vore redaktører sørger for, at alle klippene er familievenlige.</description>
+        <description lang="de">Eine Sammlung der besten online Videos. Unsere Redakteure stellen sicher, dass alle hinzugefügten Videos familienfreundlich sind.</description>
+        <description lang="el">Μία συλλογή των καλύτερων διαδικτυακών βίντεο. Οι συντάκτες μας επιβεβαιώνουν ότι τα κλιπ που προστίθενται είναι κατάλληλα για όλη την οικογένεια.</description>
+        <description lang="en">A collection of the best online videos. Our editors make sure clips added are family friendly.</description>
+        <description lang="es">Una colección de los mejores vídeos en linea. Nuestro editores se aseguran que los clips agregados sean adecuados para la familia.</description>
+        <description lang="fr">Une collection des meilleures vidéos d'internet. Nos éditeurs s'assurent que les clips ajoutés sont visionnables par tous</description>
+        <description lang="gl">Unha colección dos mellores vídeos en liña. Os nosos editores só engaden vídeos para tódolos públicos.</description>
+        <description lang="he">אוסף של מבחר סרטי הווידאו ברשת. העורכים שלנו דואגים שכל הסרטונים יתאימו לכל המשפחה.</description>
+        <description lang="hu">Online videók legjobbjainak gyűjteménye. Szerkesztőink munkájának hála, minden klip családbarát.</description>
+        <description lang="it">Una raccolta dei migliori video on-line. I nostri redattori verificano che i video siano per la famiglia</description>
+        <description lang="ko">최고의 온라인 비디오 모음. 우리의 편집자들은 가족 친화적인 영상만 취급합니다.</description>
+        <description lang="lt">Surinkta iš geriausių internetinių vaizdo įrašų. Mūsų redaktorių dedami tikri klipai visai šeimai.</description>
+        <description lang="pl">Kolekcje najlepszych filmików w sieci. Nasi moderatorzy dbają o to by dodane materiały były przyjazne rodzinie.</description>
+        <description lang="pt">Uma colecção dos melhores vídeos online. Os nossos editores certificam-se de que todos os vídeos adicionados são próprios para todas as idades.</description>
+        <description lang="pt_BR">Uma coleção dos melhores vídeos online. Nossos editores verificam os clips para ter certeza que os adicionados são amigáveis.</description>
+        <description lang="sk">Zbierka najlepších online videí. Naši redaktori kontrolujú aby pridané klipy boli vhodné pre rodiny.</description>
+        <description lang="sv">En samling av dom bästa online-videorna. Våra redaktörer säkerställer att klippen som läggs till är familjevänliga.</description>
+    </extension>
+</addon>

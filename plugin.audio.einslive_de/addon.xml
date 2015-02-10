@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.audio.einslive_de" name="1LIVE.de" version="1.0.2" provider-name="AddonScriptorDE">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="de">O-Ton-Charts, Comedy, Reportagen, Talks, Klubbing, letzte Sendungen und Livestream</summary>
+        <summary lang="en">O-Ton-Charts, Comedy, reports, talks, clubbing, last shows and livestream</summary>
+        <language>de</language>
+        <description lang="de">O-Ton-Charts, Comedy, Reportagen, Talks, Klubbing, letzte Sendungen und Livestream</description>
+        <description lang="en">O-Ton-Charts, Comedy, reports, talks, clubbing, last shows and livestream</description>
+        <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <source>https://github.com/AddonScriptorDE/plugin.video.einslive_de</source>
+        <forum>http://forum.xbmc.org/showthread.php?tid=132769</forum>
+        <email>AddonScriptorDE at yahoo dot de</email>
+        <website>http://www.einslive.de</website>
+    </extension>
+</addon>

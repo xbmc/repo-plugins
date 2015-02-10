@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="fix_show_title" type="bool" label="30013" default="true"/>
+    <setting id="force_viewmode" type="bool" label="30010" default="true"/>
+    <setting id="update_on_pageswitch" type="bool" label="30011" default="true"/>
+</settings>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="30000">
+		<setting id="descriptions" type="bool" label="30001" default="true"/>
+		<setting id="descriptions_on_right" type="bool" label="30002" default="true"/>
+		<setting type="sep"/>
+		<setting id="json_url_auto_update" type="bool" label="30003" default="true"/>
+		<setting id="json_url" type="text" label="30004" default='http://zecoj.com/xbmc/data.json.gz' />
+	</category>
+	<!--category label="30100">
+		<setting id="tv24_http" type="bool" label="30101" default="false"/>
+	</category-->
+</settings>

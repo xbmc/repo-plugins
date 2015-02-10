@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30000">Enigma-TV : Settings</string>
+    <string id="30001">IP/DNS Server</string>
+    <string id="30002">Web Port</string>
+    <string id="30003">Stream Port</string>
+    <string id="30004">Password</string>
+    <string id="30005">Video Bitrate</string>
+    <string id="30006">Video Scale</string>
+    <string id="30007">Audio Bitrate</string>
+    <string id="30008">Audio Channels</string>
+    <string id="30009">Error connecting to the Server</string>
+    <string id="30010">Please check the settings :</string>
+    <string id="30011">- Do a Right-Click on the Plugin name</string>
+    <string id="30012">- Click the Add-on Settings menu. Fill in the needed data</string>
+    <string id="30013">Error playing the Stream in XBMC</string>
+    <string id="30014">Try to select another channel ...</string>
+    <string id="30015">Error connecting to the Stream</string>
+    <string id="30016">Please check the settings (Stream Port)</string>
+    <string id="30017">Error sending SETTV command to the server</string>
+    <string id="30018">Please check the settings or Internet connection ...</string>
+</strings>

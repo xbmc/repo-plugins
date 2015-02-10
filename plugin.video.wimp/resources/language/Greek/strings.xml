@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Greek language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/el/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Τρέχοντα Βίντεο</string>
+    <string id="30002">Αρχείο</string>
+    <string id="30003">Αναζήτηση</string>
+
+    <!-- Settings -->
+    <string id="30010">Οι 'Μικρογραφίες' σαν Τύπος Προβολής</string>
+
+    <!-- Messages -->
+    <string id="30020">Σφάλμα Δικτύου</string>
+</strings>

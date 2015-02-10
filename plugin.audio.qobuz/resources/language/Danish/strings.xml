@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Danish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/da/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="3101">Handling</string>
+    <string id="3102">Afslut</string>
+    <string id="3120">Demotekst</string>
+    <string id="29000">Qobuz Afspilningsliste</string>
+    <string id="29001">Ingen aktuel afspilningsliste</string>
+    <string id="30002">Grænse for nummersøgning</string>
+    <string id="30003">Grænse for albumsøgning</string>
+    <string id="30004">Grænse for kunstnersøgning</string>
+    <string id="30007">Ingen Qobuz service</string>
+    <string id="30008">Qobuz XBMC</string>
+    <string id="30009">Kan ikke forbinde til Qobuz.</string>
+    <string id="30010">Prøv venligst igen senere</string>
+    <string id="30011">Ny...</string>
+    <string id="30012">Fuldført</string>
+    <string id="30013">Søg efter sange...</string>
+    <string id="30014">Søg efter albummer...</string>
+    <string id="30015">Søg efter kunstnere...</string>
+    <string id="30019">Vis afspilningslister</string>
+    <string id="30026">Brugernavn</string>
+    <string id="30068">Ingen lignende kunstnere</string>
+    <string id="30069">Kunne ikke logge ind.</string>
+    <string id="30079">Vis Favoritter</string>
+    <string id="31006">Cache</string>
+    <string id="37001">Adgangskode</string>
+    <string id="38001">Stream</string>
+    <string id="39001">Alle albummer</string>
+    <string id="39003">Skan</string>
+    <string id="39009">Omdøb</string>
+    <string id="39010">Fjern</string>
+
+    <!-- Progress bar -->
+    <string id="40000">Starter</string>
+    <string id="40003">Færdig</string>
+</strings>

@@ -1,0 +1,3 @@
+<settings>
+    <setting id="debug" type="bool" label="30101" default="false"/>
+</settings>

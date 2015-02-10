@@ -1,0 +1,4 @@
+0.X.Y initial development versions
+1.0.1 first release
+1.1.0 adjusted for some different resolutions
+1.1.1 fixed addon.xml

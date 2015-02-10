@@ -1,0 +1,77 @@
+# XBMC Media Center language file
+# Addon Name: CouchPotato Manager
+# Addon id: plugin.video.couchpotato_manager
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Hebrew (http://www.transifex.com/projects/p/xbmc-addons/language/he/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: he\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "All Movies"
+msgstr "כל הסרטים"
+
+msgctxt "#30001"
+msgid "Add new Movie to Wanted-list"
+msgstr "הוסף סרט חדש לרשימת הסרטים המבוקשים"
+
+msgctxt "#30002"
+msgid "Wanted Movies"
+msgstr "סרטים מבוקשים"
+
+msgctxt "#30100"
+msgid "Add-on Settings"
+msgstr "הגדרות תוסף"
+
+msgctxt "#30102"
+msgid "Delete Movie"
+msgstr "מחק סרט"
+
+msgctxt "#30106"
+msgid "Search Trailer on YouTube"
+msgstr "חפש טריילר בYouTube"
+
+msgctxt "#30113"
+msgid "Delete Movie"
+msgstr "מחק סרט"
+
+msgctxt "#30150"
+msgid "Type"
+msgstr "סוג"
+
+msgctxt "#30155"
+msgid "Size (MB)"
+msgstr "גודל (MB)"
+
+msgctxt "#30156"
+msgid "Description"
+msgstr "תיאור"
+
+msgctxt "#30300"
+msgid "Username"
+msgstr "שם משתמש"
+
+msgctxt "#30301"
+msgid "Password"
+msgstr "סיסמא"
+
+msgctxt "#30302"
+msgid "Use HTTPS"
+msgstr "השתמש בHTTPS"
+
+msgctxt "#30303"
+msgid "Hostname"
+msgstr "שם מארח"
+
+msgctxt "#30304"
+msgid "Port"
+msgstr "פורט"

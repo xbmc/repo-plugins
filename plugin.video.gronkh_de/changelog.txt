@@ -1,0 +1,7 @@
+1.0.0
+- First Try
+1.0.1
+- Fixed site changes for "Latest videos"
+- Added xbox fix (thx@skatulskijean)
+1.0.2
+- Added option for forcing the view mode

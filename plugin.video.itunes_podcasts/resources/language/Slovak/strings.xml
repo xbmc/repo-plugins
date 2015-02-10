@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Slovak language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/sk/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Všetky žánre</string>
+    <string id="30002">Prehliadať podľa žánra</string>
+    <string id="30003">Moje Podcast-y</string>
+    <string id="30004">Hľadať</string>
+    <string id="30005">Video Podcast-y</string>
+    <string id="30006">Audio Podcast-y</string>
+    <string id="30007">Žiadne Video/Hudba nebola nájdená!</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Pridať do "Moje Podcast-y"</string>
+    <string id="30011">Odstrániť z "Moje Podcast-y"</string>
+
+    <!-- Settings -->
+    <string id="30100">Podcast-y: Vynútiť zobrazenie náhľadov</string>
+    <string id="30101">Podcast položky: Vynútiť zobrazenie náhľadov</string>
+    <string id="30102">Krajina a jazyk iTunes</string>
+    <string id="30103">Počet Podcast-ov zobrazených v zozname (max. 300)</string>
+    <string id="30104">Počet Podcast-ov zobrazených vo vyhľadávaní (max 200)</string>
+    <string id="30105">Ukáž pod-žánre</string>
+
+    <!-- Messages -->
+    <string id="30200">Sieťová chyba</string>
+</strings>

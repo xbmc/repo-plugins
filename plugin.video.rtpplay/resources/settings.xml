@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+   <category label="30036">
+      <setting id="tipostr" type="enum" values="Automatico|RTMP|SMIL PL" label="30037" default="0"/>
+   </category>
+   <category label="30038">
+   	 <setting id="icon_plot" type="bool" label="30039" default="true"/>
+   	 <setting label="30040" type="lsep" />
+   	 <setting id="show-view" type="enum" label="30041" values="List|Biglist|Thumbs|Posters|Fanart|Media Info 1|Media Info 2|Media Info 3" default="7"/>
+   	 <setting id="episodes-view" type="enum" label="30042" values="List|Biglist|Thumbs|Posters|Fanart|Media Info 1|Media Info 2|Media Info 3" default="5"/>
+   </category>
+</settings>

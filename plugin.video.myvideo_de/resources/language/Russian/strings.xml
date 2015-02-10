@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Russian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ru/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- General entries -->
+    <string id="30000">Страница</string>
+    <string id="30001">Поиск</string>
+    <string id="30002">[B]Избранное[/B]</string>
+    <string id="30003">Скрэпер не найден</string>
+    <string id="30004">[B]Добавить в Избранное[/B]</string>
+    <string id="30005">[B]Удалить из Избранного[/B]</string>
+    <string id="30006">Нет Избранного</string>
+    <string id="30007">Используйте контекстное меню</string>
+    <string id="30008">для добавления объектов или папок</string>
+
+    <!-- Settings -->
+    <string id="30010">Перевести режим просмотра к иконкам</string>
+    <string id="30011">Обновлять контейнер при переключении страниц</string>
+    <string id="30012">Путь для загрузки</string>
+    <string id="30013">Исправить название Сериала</string>
+
+    <!-- Context Menu entries -->
+    <string id="30020">Скачать видео</string>
+
+    <!-- dialog entries -->
+    <string id="30030">Не указан путь для загрузки!</string>
+    <string id="30031">Вы хотите указать путь для загрузки?</string>
+    <string id="30032">Потоковое воспроизведение не поддерживается</string>
+</strings>

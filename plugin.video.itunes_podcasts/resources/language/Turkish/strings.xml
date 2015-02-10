@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Turkish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/tr/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Bütün tarzlar</string>
+    <string id="30002">Tarza göre gözat</string>
+    <string id="30003">Pod Yayınlarım</string>
+    <string id="30004">Ara</string>
+    <string id="30005">Video Pod Yayınları</string>
+    <string id="30006">Sesli Pod Yayınları</string>
+    <string id="30007">Video/Müzik bulunamadı!</string>
+
+    <!-- Context Menu -->
+    <string id="30010">"Pod Yayınlarım"'a Ekle</string>
+    <string id="30011">"Pod Yayınlarım"'dan Kaldır</string>
+
+    <!-- Settings -->
+    <string id="30100">Pod Yayınları: Küçük resim görünümüne zorla</string>
+    <string id="30101">Pod Yayınları-öğeleri: Küçük resim görünümüne zorla</string>
+    <string id="30102">Itunes Ülke ve Dili</string>
+    <string id="30103">Listede gösterilecek Pod Yayınları (en fazla 300)</string>
+    <string id="30104">Aramada gösterilecek Pod Yayınları (en fazla 200)</string>
+    <string id="30105">Alt tarzları göster</string>
+
+    <!-- Messages -->
+    <string id="30200">Ağ Hatası</string>
+</strings>

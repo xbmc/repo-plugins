@@ -1,0 +1,8 @@
+Version 2.0.2 (09 Apr 2014)
+- Add missing BeautifulSoup dependency
+
+Version 2.0.1 (25 Mar 2014)
+- Resurrected
+
+Version 2.0.0 (13 Mar 2013)
+- Initial version

@@ -1,0 +1,54 @@
+version 2.1.0
+ * Added subtitle support
+ * Added HD streams
+
+version 2.0.3
+ * Fixed: RTSP stream no longer available
+
+version 2.0.1
+ * Fixed: InfoLabels were not correctly casted to str/unicode
+ * Renamed the plugin to "Tagesschau" again (instead of "tagesschau")
+
+version 2.0.0
+ * Content is now retrieved via the JSON API of tagesschau.de
+ * Added fanart
+ * Added more categories: dossiers, livestream, archive, current
+   videos
+
+version 1.3.2
+ * Fixed default settings
+
+version 1.3.1
+ * Added language tag
+
+version 1.3.0
+ * Added a "preferred quality" setting
+ * Added "tagesWEBschau" podcast
+ * Added descriptions to the videos
+
+version 1.2.0
+ * release for eden-pre
+
+version 0.2.0
+ * this release fixes the broken scraper
+ * using rss-feeds again (high quality version now available)
+ * Added support for many many many other media on tagesschau.de
+
+version 0.1.4
+ * added support for 'tagesthemen' (thanks to Max)
+
+version 0.1.3:
+ * fixed bug (html on tagesschau.de changed slightly)
+
+version 0.1.2:
+ * added encoding to python-file (thanks to Anssi)
+ * using high-quality video sources now 
+
+version 0.1.1:
+ * added icon.png (thanks to freezy)
+ * cosmetic changes (thanks to Arne)
+
+version 0.1.0:
+ * initial version
+ * includes only most recent Tagesschau, Tagesschau in 100 Sekunden
+   in low quality (fetched from podcast-RSS-feed of tagesschau.de)

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30000">OPML-File</string>
+    <string id="30010">Mark all as read</string>
+    <string id="30011">Play all unreaded</string>
+    <string id="30020">Mark as read</string>
+    <string id="30030">Force refresh</string>
+    <string id="30040">OPML-file unreadable</string>
+    <string id="30041">Unable to read the OPML-File</string>
+</strings>

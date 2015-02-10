@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30000">ilpiola tracker</string>
+    <string id="30005">Please configure a read key via the settings page</string>
+    <string id="30010">ilpiola tracker settings</string>
+    <string id="30011">read key for your device</string>
+    <string id="30012">please visit http://m.ilpiola.it/tracker to get a key</string>
+</strings>

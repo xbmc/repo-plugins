@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- French language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/fr/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root menu entries -->
+    <string id="30100">Recommandations éditoriales</string>
+    <string id="30101">Top 100 stations</string>
+    <string id="30102">Parcourir par Genre</string>
+    <string id="30103">Parcourir par Thème</string>
+    <string id="30104">Parcourir par Pays</string>
+    <string id="30105">Parcourir par Ville</string>
+    <string id="30106">Parcourir par Langue</string>
+    <string id="30107">Radios dans votre région</string>
+    <string id="30108">Mes stations</string>
+
+    <!-- Search -->
+    <string id="30200">Rechercher</string>
+    <string id="30201">genre, thème, pays, ville, langue</string>
+
+    <!-- Settings -->
+    <string id="30300">Langue</string>
+    <string id="30301">Anglais</string>
+    <string id="30302">Allemand</string>
+    <string id="30303">Français</string>
+    <string id="30310">Forcer la vue Vignette</string>
+
+    <!-- Context Menu -->
+    <string id="30400">Ajouter à "Mes stations"</string>
+    <string id="30401">Supprimer de "Mes stations"</string>
+    <string id="30402">Modifier la station personnalisée</string>
+
+    <!-- Custom Station -->
+    <string id="30500">Veuillez entrer %s</string> <!--%s will be filled by 30501, 30502 or 30503 -->
+    <string id="30501">le titre</string>
+    <string id="30502">l'url de la vignette ou le chemin</string>
+    <string id="30503">l'url du flux</string>
+    <string id="30504">Ajouter une station personnalisée...</string>
+
+    <!-- Error Message -->
+    <string id="30600">Erreur réseau</string>
+</strings>

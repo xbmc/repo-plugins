@@ -1,0 +1,197 @@
+# XBMC Media Center language file
+# Addon Name: CouchPotato Manager
+# Addon id: plugin.video.couchpotato_manager
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Belarusian (http://www.transifex.com/projects/p/xbmc-addons/language/be/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: be\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgctxt "#30000"
+msgid "All Movies"
+msgstr "All Movies"
+
+msgctxt "#30001"
+msgid "Add new Movie to Wanted-list"
+msgstr "Add new Movie to Wanted-list"
+
+msgctxt "#30002"
+msgid "Wanted Movies"
+msgstr "Wanted Movies"
+
+msgctxt "#30003"
+msgid "Done Movies"
+msgstr "Done Movies"
+
+msgctxt "#30004"
+msgid "Status List"
+msgstr "Status List"
+
+msgctxt "#30100"
+msgid "Add-on Settings"
+msgstr "Add-on Settings"
+
+msgctxt "#30101"
+msgid "Refresh Releases"
+msgstr "Refresh Releases"
+
+msgctxt "#30102"
+msgid "Delete Movie"
+msgstr "Delete Movie"
+
+msgctxt "#30103"
+msgid "Delete Release"
+msgstr "Delete Release"
+
+msgctxt "#30104"
+msgid "Download Release"
+msgstr "Download Release"
+
+msgctxt "#30105"
+msgid "Ignore Release"
+msgstr "Ignore Release"
+
+msgctxt "#30106"
+msgid "Search Trailer on YouTube"
+msgstr "Search Trailer on YouTube"
+
+msgctxt "#30107"
+msgid "Force full search"
+msgstr "Force full search"
+
+msgctxt "#30110"
+msgid "Please enter movie title"
+msgstr "Please enter movie title"
+
+msgctxt "#30111"
+msgid "Please select the correct Movie"
+msgstr "Please select the correct Movie"
+
+msgctxt "#30112"
+msgid "Please select the profile"
+msgstr "Please select the profile"
+
+msgctxt "#30113"
+msgid "Delete Movie"
+msgstr "Delete Movie"
+
+msgctxt "#30114"
+msgid "Are you sure to delete?"
+msgstr "Are you sure to delete?"
+
+msgctxt "#30115"
+msgid "Please select your default profile"
+msgstr "Please select your default profile"
+
+msgctxt "#30120"
+msgid "Connection error"
+msgstr "Connection error"
+
+msgctxt "#30121"
+msgid "Wrong User-Credentials or Api Key"
+msgstr "Wrong User-Credentials or Api Key"
+
+msgctxt "#30122"
+msgid "Wrong Network Settings or CP not running."
+msgstr "Wrong Network Settings or CP not running."
+
+msgctxt "#30123"
+msgid "Do you want to change them now?"
+msgstr "Do you want to change them now?"
+
+msgctxt "#30130"
+msgid "Movie added"
+msgstr "Movie added"
+
+msgctxt "#30131"
+msgid "No Movie found"
+msgstr "No Movie found"
+
+msgctxt "#30132"
+msgid "Success"
+msgstr "Success"
+
+msgctxt "#30140"
+msgid "Please use context menu"
+msgstr "Please use context menu"
+
+msgctxt "#30141"
+msgid "You need to open the context-menu"
+msgstr "You need to open the context-menu"
+
+msgctxt "#30142"
+msgid "to choose the action you want"
+msgstr "to choose the action you want"
+
+msgctxt "#30150"
+msgid "Type"
+msgstr "Type"
+
+msgctxt "#30151"
+msgid "Provider"
+msgstr "Provider"
+
+msgctxt "#30152"
+msgid "Provider-Extra"
+msgstr "Provider-Extra"
+
+msgctxt "#30153"
+msgid "Age"
+msgstr "Age"
+
+msgctxt "#30154"
+msgid "Seeder/Leecher"
+msgstr "Seeder/Leecher"
+
+msgctxt "#30155"
+msgid "Size (MB)"
+msgstr "Size (MB)"
+
+msgctxt "#30156"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "#30300"
+msgid "Username"
+msgstr "Username"
+
+msgctxt "#30301"
+msgid "Password"
+msgstr "Password"
+
+msgctxt "#30302"
+msgid "Use HTTPS"
+msgstr "Use HTTPS"
+
+msgctxt "#30303"
+msgid "Hostname"
+msgstr "Hostname"
+
+msgctxt "#30304"
+msgid "Port"
+msgstr "Port"
+
+msgctxt "#30305"
+msgid "Api Key"
+msgstr "Api Key"
+
+msgctxt "#30306"
+msgid "Set default profile"
+msgstr "Set default profile"
+
+msgctxt "#30307"
+msgid "Url Base (for use with mod_proxy)"
+msgstr "Url Base (for use with mod_proxy)"
+
+msgctxt "#30310"
+msgid "You only need username/password OR Api Key!"
+msgstr "You only need username/password OR Api Key!"

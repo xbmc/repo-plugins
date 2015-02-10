@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.kidsplace"
+       name="Kids Place"
+       version="0.0.4"
+       provider-name="dfeet">
+  <requires>
+   <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.pyamf" version="0.6.1"/>
+    <import addon="plugin.video.youtube" version="2.9.1"/>
+   </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <language>en</language>
+    <platform>all</platform>
+    <summary lang="en">stream kids videos</summary>
+    <description lang="en">stream kids videos. Including: www.hubworld.com, www.kidmango.com, www.nickjr.com, www.zui.com, www.storylineonline.net</description>
+    <disclaimer>Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+  </extension>
+</addon>

@@ -1,0 +1,27 @@
+v1.1.0 (Friday, 14 November 2014) :
+- added category Gamekings Extra (mad props to Amelandbor!)
+- retired category Pc because of lack of updates
+- changed fanart.jpg
+
+v1.0.4 (Sunday, 11 May 2014) :
+- support vimeo files
+
+v1.0.3 (Saturday, 7 July 2013) :
+- added beautiful soup as dependency
+- added dutch strings
+
+v1.0.2 (Wednesday, 29 may 2013) :
+- sometimes the video-url in the content-tag is not (!) correct, in that case trying with added '/large' in the video-url
+
+v1.0.1 (Wednesday, 10 april 2013) :
+- fixed thumbnails for pc category
+- removed repeating episodes in afleveringen category
+- added popup if media file cannnot be played or is not found
+- filled in optional fields in addon.xml
+- used title attribute more if possible
+
+v1.0.0 (Sunday, 2 april 2013) :
+- initial version
+- filled in optional fields in addon.xml
+- added a display of an httperror
+- published it on github 

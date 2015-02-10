@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Croatian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/hr/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root menu entries -->
+    <string id="30100">Preporuke uredništva</string>
+    <string id="30101">Top 100 stanica</string>
+    <string id="30102">Pregled po žanru</string>
+    <string id="30103">Pregledaj po temi</string>
+    <string id="30104">Pregled po državi</string>
+    <string id="30105">Pregledaj po gradu</string>
+    <string id="30106">Pregledaj po jeziku</string>
+    <string id="30107">Lokalne stanice</string>
+    <string id="30108">Moje stanice</string>
+
+    <!-- Search -->
+    <string id="30200">Pretraži stanice</string>
+    <string id="30201">Upišite naziv, zemlju ili jezik</string>
+
+    <!-- Settings -->
+    <string id="30300">Jezik</string>
+    <string id="30301">Engleski</string>
+    <string id="30302">Njemački</string>
+    <string id="30303">Francuski</string>
+    <string id="30310">Prisili način prikaza u "Minijature"</string>
+
+    <!-- Context Menu -->
+    <string id="30400">Dodaj u "Moje stanice"</string>
+    <string id="30401">Ukloni iz "Moje stanice"</string>
+    <string id="30402">Uredi prilagođenu stanicu</string>
+
+    <!-- Custom Station -->
+    <string id="30500">Upišite %s</string> <!--%s will be filled by 30501, 30502 or 30503 -->
+    <string id="30501">naslov</string>
+    <string id="30502">URL minijature ili putanju</string>
+    <string id="30503">URL streama</string>
+    <string id="30504">Dodaj prilagođenu stanicu...</string>
+
+    <!-- Error Message -->
+    <string id="30600">Greška mreže</string>
+</strings>

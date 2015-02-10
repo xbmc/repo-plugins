@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Bulgarian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/bg/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- General entries -->
+    <string id="30000">Страница</string>
+    <string id="30001">Търси</string>
+    <string id="30002">[B]Любими[/B]</string>
+    <string id="30003">Scaper не е намерен</string>
+    <string id="30004">[B]Добави в Любими[/B]</string>
+    <string id="30005">[B]Изтрий от Любими[/B]</string>
+    <string id="30006">Няма Любими</string>
+    <string id="30007">Използвайте контекстното меню</string>
+    <string id="30008">за добавяне на обекти или папки</string>
+
+    <!-- Settings -->
+    <string id="30010">Наложи изгледа "Миниатюри"</string>
+    <string id="30011">Актуализирай контейнера при превключване на страниците</string>
+    <string id="30012">Сваляне в:</string>
+    <string id="30013">Поправи името на Сериала</string>
+
+    <!-- Context Menu entries -->
+    <string id="30020">Свали видеото</string>
+
+    <!-- dialog entries -->
+    <string id="30030">Не е заден път за свалените файлове!</string>
+    <string id="30031">Искате ли да зададете път за сваляне?</string>
+    <string id="30032">Не се поддържа потоково възпроизвеждане</string>
+</strings>

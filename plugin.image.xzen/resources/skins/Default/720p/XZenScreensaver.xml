@@ -1,0 +1,23 @@
+﻿<window>
+    <controls>
+        <control type="image">
+            <description>Black Background</description>
+            <posx>0</posx>
+            <posy>0</posy>
+            <width>1280</width>
+            <height>720</height>
+            <texture>black.png</texture>
+        </control>
+        <control type="label">
+            <description>Label</description>
+            <posx>0</posx>
+            <posy>0</posy>
+            <width>1280</width>
+            <height>720</height>
+            <textcolor>FFFFFFFF</textcolor>
+            <label>I am a Python xbmcgui.WindowXMLDialog Screensaver</label>
+            <align>center</align>
+            <aligny>center</aligny>
+        </control>
+    </controls>
+</window>

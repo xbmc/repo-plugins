@@ -1,0 +1,30 @@
+3.0.1 (2014/08)
+- update due to website changes
+- paging support
+
+3.0.0 (2013/08)
+- update due to website changes
+- list videos in categories
+- support of free and exclusive videos
+- new options (video quality etc.)
+
+2.0.1 (2013/07):
+- another encoding fix
+
+2.0.0 (2012/12):
+- url encoding fixed
+
+1.0.1 (2012/11):
+- update due to website changes
+
+1.0.0 (2012/02):
+- Eden version bump
+
+0.4.1 (2011/09):
+- add logo to video items
+- bugfix: title can be None
+
+0.4 (2011/09):
+- initial version
+
+  

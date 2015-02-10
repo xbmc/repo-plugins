@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon
+  id="plugin.audio.modland"
+  version="0.15.0"
+  name="Modland"
+  provider-name="BuZz">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+     <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary lang="en">Stream music from computer games and demos</summary>
+    <description lang="en">
+      Search, stream and download computer game and demoscene music from a variety of platforms. There are more than 200,000 tunes to listen to, all rendered and streamed in realtime. The collection is managed by Coma [coma@modland.com]. See http://www.modland.com for more information.
+    </description>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <email>buzz at exotica org uk</email>
+    <website>https://github.com/exobuzz/plugin.audio.modland</website>
+    <source>https://github.com/exobuzz/plugin.audio.modland</source>
+  </extension>
+</addon>

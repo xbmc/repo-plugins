@@ -1,0 +1,7 @@
+__Version 0.0.2__
+1. Initial working version
+
+__Version 1.0.1__
+1. Include live audio stream
+2. Fix some minor bugs in abcradionational.py
+

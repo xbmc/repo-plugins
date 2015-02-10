@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Polish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/pl/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Aktualne filmy</string>
+    <string id="30002">Archiwum</string>
+    <string id="30003">Szukaj</string>
+
+    <!-- Settings -->
+    <string id="30010">Zmień wygląd na Miniaturki</string>
+
+    <!-- Messages -->
+    <string id="30020">Błąd sieci</string>
+</strings>

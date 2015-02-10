@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="General">
+		<setting id="username" type="text" label="30000" default="" />
+		<setting id="password" type="text" option="hidden" label="30001" enable="!eq(-1,)" default="" />
+		<setting id="hidefreeexclflag" type="bool" label="30006" default="false" />
+		<setting id="hideexclusivevideos" type="bool" label="30007" default="false" />
+		<setting id="hidedate" type="bool" label="30009" default="false" />
+		<setting id="videoquality" label="30008" type="labelenum" values="low|mid|high|hd" default="high"/>
+	</category>
+</settings>

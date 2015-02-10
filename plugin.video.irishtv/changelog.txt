@@ -1,0 +1,73 @@
+Version 2.0.14 [23 Mar 2014]
+- Added resume support
+- AerTV is going subscription only and so will only be available to AerTV Plus and Platinum subscribers. Specify your login details in the plugin settings.
+
+Version 2.0.13 [09 Mar 2014]
+- Minor internal changes, use internal json instead of simplejson
+
+Version 2.0.12 [05 Mar 2014]
+- RTE: Fix not working, change of swfurl
+- AerTV: Fix not working over SmartDNS
+- AerTV: Added "Show EPG" option. May speed up channel listing when turned off, On by default.
+
+Version 2.0.11 [05 Oct 2013]
+- RTE: Fix bug caused by website lying about the number of episodes available for a programme
+- RTE: Most Popular fails to load if a list show is no longer available
+- TG4: Remove duplicate news category
+- TG4: Correctly play multipart programmes
+- AerTV: Fix bugs caused by website changes and removal of RTE2 HD
+
+Version 2.0.10
+- Fix root menu error in AerTV - due to changes in AerTV's API
+
+Version 2.0.9
+- Fix Now and Next times in AerTV. There is now a local time offset option in the plugin settings for people in foreign timezones.
+- Fix: TV3 RTMP streams now require verification
+- Fix: After a successful download sometimes a download error message appears
+- Close progress dialog on download start
+
+Version 2.0.8
+- Improve progress dialog
+
+Version 2.0.7
+- Moved repository
+
+Version 2.0.6
+- Fix for people who get unusual URLs from RTE, e.g. "/player/6c..." instead of "/player/ie..."
+
+Version 2.0.4
+- Bug fix: Not starting for anyone who doesn't have mercurial.wireproto package
+
+Version 2.0.3
+- Bug fix: RTE2 HD not working in AerTV
+
+Version 2.0.2
+- Added TG4
+- Added option to use proxy setting for RTMP streams (SOCKS4/SOCKS5 proxies only)
+- Added bit rate setting for AerTV and TG4 (higher bit rate = better quality)
+- Added 'Test Forwarded IP' context menu item
+- Added 'Clear HTTP Cache' context menu item
+- Moved socksipy into a separate module
+
+Version 1.0.1
+- [TV3] Fixed listing of shows with no description in "All Shows A - Z"
+- [TV3] Fixed truncated exception logging
+- [TV3] Fixed age checking
+
+
+Version 1.0.0
+- Added AerTV (RTE, TV3, TG4, etc) with "Now" and "Next" for each channel
+- Fixed cache management to delete older cached pages
+
+Version 0.99.1
+- Added Live RTE
+- TV3
+- [RTE] Added default thumbnails for high level categories
+- [RTE] Added option to not get programme details for every episode in listings (slows down episode listing). On by default.
+- [RTE] Added thumbnails to search results
+- Various fixes, more error handling, more comprehensive debug logging
+
+Version 0.99.0
+- Pre-release
+- RTE only
+

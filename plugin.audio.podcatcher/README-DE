@@ -1,0 +1,9 @@
+Um das PodCatcher-Plugin auszuführen braucht es im Userbezogene Pluginverzeichniss (<XBMC-Home>/userdata/addon_data/plugin.audio.PodCatcher/) eine Datei namens opml.xml. Diese sollte am besten mittels eines Feedreaders erstellt werden. Das sparrt arbeit! Das Podcatcher Addon unterstützt folgende OPML - Outline Attribute:
+  * xmlUrl = link zum Feed
+  * type = art des Feeds
+  * text = (userdefinierter) Title des Feeds
+  * fetchInterval = Angabe der Zeit in Minuten die zwischen 2 Aktualisierungen vergehen muss. Alternativangaben: hourly,daily,weekly,monthly
+  * maxArticleAge = maximales Alter eines Artikel in tagen
+  * maxArticleNumber = maximale Anzahl an Topics in einem Feed
+
+Die letzten beiden Angaben beinflussen nicht die Menge an Daten die "geladen" und geparsed wird. Sie beinflusst aber die Menge an Daten die lokal gespeichert werden. Hällt man diese Dateien klein, reagiert das Plugin sehr flott.

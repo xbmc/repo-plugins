@@ -1,0 +1,117 @@
+# XBMC Media Center language file
+# Addon Name: Apple iTunes Trailers
+# Addon id: plugin.video.itunes_trailers
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Croatian (http://www.transifex.com/projects/p/xbmc-addons/language/hr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: hr\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+msgctxt "#30001"
+msgid "Download Trailer"
+msgstr "Preuzmi najavu"
+
+msgctxt "#30002"
+msgid "[B]DOWNLOADED[/B]"
+msgstr "[B]PREUZETO[/B]"
+
+msgctxt "#30003"
+msgid "Add to CouchPotato"
+msgstr "Dodaj na CouchPotato"
+
+msgctxt "#30004"
+msgid "[B]download in progress[/B]"
+msgstr "[B]preuzimanje u tijeku[/B]"
+
+msgctxt "#30005"
+msgid "Add to Trakt.tv"
+msgstr "Dodaj u Trakt.tv"
+
+msgctxt "#30010"
+msgid "Source"
+msgstr "Izvor"
+
+msgctxt "#30011"
+msgid "All"
+msgstr "Sve"
+
+msgctxt "#30012"
+msgid "Most Recent"
+msgstr "Najnovije"
+
+msgctxt "#30013"
+msgid "Most Popular"
+msgstr "Najpopularnije"
+
+msgctxt "#30014"
+msgid "Exclusive"
+msgstr "Ekskluzivno"
+
+msgctxt "#30020"
+msgid "Movie Limit"
+msgstr "Ograničenje filma"
+
+msgctxt "#30021"
+msgid "No Limit"
+msgstr "Bez ograničenja"
+
+msgctxt "#30022"
+msgid "First 50"
+msgstr "Prvih 50"
+
+msgctxt "#30023"
+msgid "First 100"
+msgstr "Prvih 100"
+
+msgctxt "#30030"
+msgid "Trailer quality (Stream)"
+msgstr "Kvaliteta najave (Stream)"
+
+msgctxt "#30031"
+msgid "HD480p"
+msgstr "HD480p"
+
+msgctxt "#30032"
+msgid "HD720p"
+msgstr "HD720p"
+
+msgctxt "#30033"
+msgid "HD1080p"
+msgstr "HD1080p"
+
+msgctxt "#30040"
+msgid "Trailer quality (Download)"
+msgstr "Kvaliteta najave (Preuzimanje)"
+
+msgctxt "#30041"
+msgid "Same as Stream"
+msgstr "Ista kao i stream"
+
+msgctxt "#30050"
+msgid "Trailer download path"
+msgstr "Putanja preuzimanja najave"
+
+msgctxt "#30051"
+msgid "Force Trailers ViewMode to Thumbnail"
+msgstr "Prisili način prikaza najava u \"Minijature\""
+
+msgctxt "#30100"
+msgid "Network Error"
+msgstr "Greška mreže"
+
+msgctxt "#30101"
+msgid "No download path"
+msgstr "Nema putanje preuzimanja"
+
+msgctxt "#30102"
+msgid "Do you want to you set it now?"
+msgstr "Želite li odmah postaviti?"

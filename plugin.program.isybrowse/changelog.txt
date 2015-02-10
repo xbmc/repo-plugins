@@ -1,0 +1,9 @@
+1.0.0 - Rebranding and PEP8
+0.2.1 - Implemented fix for Issue 2 to fix crashing when browsing nodes that some users experienced
+0.2.0 - Fixed crash while showing program information (Issue 1), Fixed instabilities while toggling nodes (Issue 3)
+0.1.1 - Fixed bug regarding missing strings
+0.1.0 - First Release to XBMC Repository
+0.0.1 - Alpha Release
+
+Images Courtesy Of http://openclipart.org
+               And warszawianka

@@ -1,0 +1,19 @@
+<addon id="plugin.video.aljazeera" name="Al Jazeera" provider-name="Jonathan Beluch (jbel)" version="1.9.4">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0" />
+    <import addon="script.module.beautifulsoup" version="3.2.0" />
+    <import addon="script.module.simplejson" version="2.0.10" />
+    <import addon="script.module.xbmcswift" version="0.2.0" />
+    <import addon="plugin.video.youtube" version="4.4.4" />
+  </requires>
+  <extension library="addon.py" point="xbmc.python.pluginsource">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <language>en</language>
+    <platform>all</platform>
+    <summary lang="en">Watch videos and the live stream from Al Jazeera English.</summary>
+    <description lang="en">"Drawing on the legacy of the groundbreaking Al Jazeera Arabic channel, Al Jazeera English was launched on November 15, 2006 to more than 80 million households worldwide.[CR][CR] The 24-hour news and current affairs channel is the first international English-language news channel to broadcast across the globe from the Middle East.[CR][CR] Al Jazeera's global footprint continues to grow and now broadcasts to more than 220 million households on six continents in more than 100 countries.[CR][CR] Our channel is broadcast from four strategic broadcast centres: Doha, Kuala Lumpur, London, and Washington DC. Unlike other international channels, we broadcast from our different centres, as the world turns, providing the most comprehensive and contextual news coverage.[CR][CR] Our mission is to provide independent, impartial news for an international audience and to offer a voice to a diversity of perspectives from under-reported regions.[CR][CR] In addition, the channel aims to balance the information flow between the South and the North.[CR][CR] The channel of reference for the Middle East and Africa, Al Jazeera has unique access to some of the world’s most troubled and controversial locations. Our determination and ability to accurately reflect the truth on the ground in regions torn by conflict and poverty has set our content apart."[CR][CR] Source: Al Jazeera
+    </description>
+  </extension>
+</addon>

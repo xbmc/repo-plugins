@@ -1,0 +1,5 @@
+0.0.3
+ - fix playback
+
+0.0.2
+ - Initial Release

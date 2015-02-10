@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Catalan language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ca/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30100">Comercial</string>
+    <string id="30101">General</string>
+    <string id="30102">Regió</string>
+    <string id="30103">Clips</string>
+    <string id="30150">Seleccioneu una regió</string>
+    <string id="30200">S'ha produït un error en comunicar-se amb TV3 Play.</string>
+    <string id="30201">El missatge d'error és:</string>
+    <string id="30202">No s'ha pogut trobar l'URL de reproducció</string>
+    <string id="30203">No hi ha temporades disponibles</string>
+    <string id="30204">No es pot recuperar la llista de programes</string>
+    <string id="30301">Últims vídeos</string>
+    <string id="30302">Més vistos</string>
+    <string id="30303">Més valorats</string>
+    <string id="30304">Últims clips</string>
+</strings>

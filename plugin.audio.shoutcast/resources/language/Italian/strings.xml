@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Italian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/it/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Tutti i sottogeneri</string>
+    <string id="30001">Migliori 500 Stazioni</string>
+    <string id="30002">Sfoglia per genere</string>
+    <string id="30003">Le mie stazioni</string>
+    <string id="30004">Cerca la Stazione per nome</string>
+    <string id="30005">Cerca la Stazione per la traccia in esecuzione</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Aggiungi alle mie stazioni</string>
+    <string id="30011">Rimuovi dalle mie stazioni</string>
+
+    <!-- Settings -->
+    <string id="30100">Mostra Sottogeneri</string>
+    <string id="30101">Numera le stazioni in liste</string>
+    <string id="30102">Mostra il bitrate nel Titolo</string>
+    <string id="30103">Scegli un server a caso (Non Chiedere)</string>
+
+    <!-- Messages -->
+    <string id="30200">Errore di rete</string>
+</strings>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.hdtrailers_net" name="HD-Trailers.net" version="1.2.2" provider-name="Tristan Fischer (sphere@dersphere.de)">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.xbmcswift2" version="2.4.0"/>
+    <import addon="script.module.beautifulsoup" version="3.0.8"/>
+    <import addon="script.module.simple.downloader" version="1.9.4"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <language></language>
+    <platform>all</platform>
+    <website>http://www.hd-trailers.net</website>
+    <source>https://github.com/dersphere/plugin.video.hdtrailers_net</source>
+    <forum>http://forum.xbmc.org/showthread.php?tid=148400</forum>
+    <email>sphere@dersphere.de</email>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <summary lang="ar">مقاطع مرئيه من مصادر مختلفه بجوده عاليه الوضوح</summary>
+    <summary lang="be">Trailer and Clips from several sources in HD</summary>
+    <summary lang="bg">Трейлъри и клипове от няколко източника в HD качество</summary>
+    <summary lang="ca">Tràiler i Fragments de Vídeo des de diferents fonts en HD</summary>
+    <summary lang="da">Trailer og klip fra adskillige kilder i HD</summary>
+    <summary lang="de">Trailer und Clips aus verschiedenen Quellen in HD</summary>
+    <summary lang="el">Διαφημιστικά και Αποσπάσματα από διάφορες πηγές σε υψηλή ποιότητα (HD)</summary>
+    <summary lang="en">Trailer and Clips from several sources in HD</summary>
+    <summary lang="es">Trailer y Clips de varias fuentes en HD</summary>
+    <summary lang="fr">Bandes annonces et Clips provenant de plusieurs sources en HD</summary>
+    <summary lang="fr_CA">Bandes-annonce et clips vidéos de diverse sources en haute définition</summary>
+    <summary lang="gl">Trailers e Clips de diferentes fontes en HD</summary>
+    <summary lang="he">קדימונים וסרטונים ממספר מקורות באיכות HD</summary>
+    <summary lang="hr">Najave i video inserti iz nekoliko HD izvora</summary>
+    <summary lang="hu">Ajánlók és videóklipek számos forrásból HD minőségben</summary>
+    <summary lang="it">Trailer e Filmati da svariate fonti in HD</summary>
+    <summary lang="ko">다양한 출처의 HD 예고편과 비디오 클립</summary>
+    <summary lang="nl">Trailers en Clips van verschillende bronnen in HD</summary>
+    <summary lang="no">Trailere og snutter fra flere kilder i HD</summary>
+    <summary lang="pl">Zwiastuny i klipy z kilku źródeł w HD</summary>
+    <summary lang="pt">Trailers e clipes de várias fontes em HD</summary>
+    <summary lang="pt_BR">Trailers e Clipes de várias fontes em HD</summary>
+    <summary lang="sk">Ukážky a klipy z rôznych zdrojov v HD kvalite</summary>
+    <summary lang="sv">Trailers och klipp från flera olika källor i HD</summary>
+    <summary lang="zh">多个来源的高清预告片和电影剪辑</summary>
+    <description lang="ar">هذا الملحق يوفر بلوغاً سهلاً للأفلام القصيره ومقاطع اﻷفلام. وبالتحديد يمكنك بلوغها من خلال :[CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]اغلب اﻷفلام القصيره متوفره بجوده 480 و 720 و 1080</description>
+    <description lang="be">This Plugin provides access to Movie Trailers and Clips. You can download trailers and add movies to CouchPotato. It provides access to Trailers from:[CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]Most of them are available in 480p, 720p and 1080p</description>
+    <description lang="bg">Добавката предоставя достъп до трейлъри и клипове на филми. Можете да сваляте трейлъри и да добавяте филми в CouchPotato. Предоставя достъп до трейлърите от: [CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]Повечето са налични в резолюция 480p, 720p и 1080p</description>
+    <description lang="ca">Aquest complement permet l'accés a tràilers de pel·lícules i fragments de vídeo. Podeu descarregar tràilers i afegir pel·lícules a CouchPotato. Proporciona accés a Tràilers de:[CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]La majoria d'ells estan disponibles a 480p, 720p i 1080p</description>
+    <description lang="da">Denne Addon giver adgang til filmtrailere og klip fra de følgende kilder:[CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]De fleste af dem er tilgængelige i 480p, 720p og 1080p</description>
+    <description lang="de">Dieses Plugin bietet Zugriff auf verschiedene Film Trailer und Clips der folgenden Quellen:[CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]Die meisten sind verfügbar in 480p, 720p und 1080p</description>
+    <description lang="el">Αυτό το Plugin σας παρέχει πρόσβαση σε Διαφημιστικά και Αποσπάσματα Ταινιών από τις ακόλουθες πηγές:[CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]Τα περισσότερα από αυτά είναι διαθέσιμα σε ανάλυση 480p, 720p και 1080p</description>
+    <description lang="en">This Plugin provides access to Movie Trailers and Clips. You can download trailers and add movies to CouchPotato. It provides access to Trailers from:[CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]Most of them are available in 480p, 720p and 1080p</description>
+    <description lang="es">Este Plugin proporciona acceso a Trailers y Clips de películas. Puede descargar trailers y añadir películas a CouchPotato. Proporciona acceso a Trailer de: [CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]La mayoría de ellos están disponibles en 480p, 720p y 1080p</description>
+    <description lang="fr">Ce plugin donne accès aux Bande-annonces et Clips. Vous pouvez télécharger les bande-annonces et ajouter les films à CouchPotato. Cela donne accès aux Bande-annonces de :[CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]La plupart sont disponibles en 480p, 720p and 1080p</description>
+    <description lang="fr_CA">Ce plugiciel permet d'accéder à des bandes-annonces et des clips. Vous pouvez télécharger des bandes-annonces et ajouter des films à Couchpotato. Il donne accès à des bandes-annonces provenant de : [CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]La plupart sont disponibles en 480p, 720p et 1080p.</description>
+    <description lang="gl">Este Engadido fornece de acceso a Trailers e Clips de filmes. Pode baixar trailers e engadir filmes a CouchPotato. Este fornece de acceso a Trailers de:[CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]Moitos deles dispoñíbeis a 480p, 720p e 1080p</description>
+    <description lang="he">הרחבה זו מספקת גישה לקדימוני סרטים וסרטונים. ביכולתך להוריד קדימונים ולהוסיף סרטים אל CouchPotato. הרחבה זו מאפשרת גישה לקדימונים מ:[CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]רובם זמינים באיכויות 480p, 720p ו-1080p</description>
+    <description lang="hr">Ovaj dodatak omogućuje pristup filmskim najavama i insertima. Možete preuzeti najave i dodati filmove na CouchPotato. Omogućuje pristup najavama iz:[CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]Većina ih je dostupna u 480p, 720p i 1080p kvaliteti.</description>
+    <description lang="hu">Ez a modul hozzáférést biztosít filmajánlókhoz és videóklipekhez a következő weboldalakról:[CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]Legtöbbjük elérhető 480p, 720p és 1080p felbontásban is</description>
+    <description lang="it">This Plugin fornisce accesso a Trailer di Film e Filmati dalle seguenti fonti::[CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]la maggior parte di questi sono disponibili a 480p, 720p e 1080p</description>
+    <description lang="ko">이 플러그인은 영화 예고편과 클립을 제공합니다. 예고편을 다운로드할 수 있고 CoachPotato에 영화를 추가할 수 있습니다. 아래 사이트의 예고편에 접속할 수 있습니다:[CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]대부분의 영상은 480p, 720p, 1080p 포맷을 지원합니다.</description>
+    <description lang="nl">Deze Plugin bied toegang tot Film trailers en Clips. U kunt trailers downloaden en films aan CouchPotato toevoegen. Het bied toegang tot Trailers van:[CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]De meeste zijn beschikbaar in 480p, 720p en 1080p kwaliteit.</description>
+    <description lang="no">Dette tillegget gir tilgang til filmtrailere og -snutter. Du kan laste ned trailere og legge filmer til CouchPotato. Den gir tilgang til trailere fra:[CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]]De fleste er tilgjengelig i 480p, 720p and 1080p</description>
+    <description lang="pl">Ten Plugin daje dostęp do zwiastunów filmowych i klipów z następujących źródeł:[CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]Większość z nich jest dostępna w 480p, 720p i 1080p</description>
+    <description lang="pt">Este plugin permite-lhe ver trailers e clipes de filmes a partir das seguintes fontes:[CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]A maior parte deles está disponível em 480p, 720p and 1080p</description>
+    <description lang="pt_BR">Este plugin fornece acesso a trailers de filmes e clipes das seguintes fontes:[CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]A maioria deles está disponível em 480p, 720p e 1080p</description>
+    <description lang="sk">Tento doplnok poskytuje prístup k ukážkam filmov a ku klipom z týchto zdrojov:&#10; - apple.com&#10; - yahoo.com&#10; - youtube.com&#10; - moviefone.com&#10; - ign.com&#10; - hd-trailers.net&#10; - aol.com&#10;Väčšina z nich je dostupná v rozlíšení 480p, 720p a 1080p.</description>
+    <description lang="sv">Detta plugin tillhandahåller trailers hämtade från följande källor:[CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]De flesta är tillgängliga i 480p, 720p and 1080p</description>
+    <description lang="zh">本插件提供访问预告片和电影剪辑。你可以下载预告片和将电影加入到CouchPotato。支持访问以下来源的预告片：[CR]- apple.com[CR]- yahoo.com[CR]- youtube.com[CR]- moviefone.com[CR]- ign.com[CR]- hd-trailers.net[CR]- aol.com[CR]大多为480p、720p和1080p</description>
+  </extension>
+</addon>

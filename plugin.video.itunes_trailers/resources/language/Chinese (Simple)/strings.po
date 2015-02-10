@@ -1,0 +1,117 @@
+# XBMC Media Center language file
+# Addon Name: Apple iTunes Trailers
+# Addon id: plugin.video.itunes_trailers
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Chinese (Simple) (http://www.transifex.com/projects/p/xbmc-addons/language/zh/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "#30001"
+msgid "Download Trailer"
+msgstr "下载预告片"
+
+msgctxt "#30002"
+msgid "[B]DOWNLOADED[/B]"
+msgstr "[B]已下载[/B]"
+
+msgctxt "#30003"
+msgid "Add to CouchPotato"
+msgstr "加入到CouchPotato"
+
+msgctxt "#30004"
+msgid "[B]download in progress[/B]"
+msgstr "[B]正在下载[/B]"
+
+msgctxt "#30005"
+msgid "Add to Trakt.tv"
+msgstr "加入到Trakt.tv"
+
+msgctxt "#30010"
+msgid "Source"
+msgstr "来源"
+
+msgctxt "#30011"
+msgid "All"
+msgstr "全部"
+
+msgctxt "#30012"
+msgid "Most Recent"
+msgstr "最新"
+
+msgctxt "#30013"
+msgid "Most Popular"
+msgstr "最热门"
+
+msgctxt "#30014"
+msgid "Exclusive"
+msgstr "独家"
+
+msgctxt "#30020"
+msgid "Movie Limit"
+msgstr "电影限制"
+
+msgctxt "#30021"
+msgid "No Limit"
+msgstr "无限制"
+
+msgctxt "#30022"
+msgid "First 50"
+msgstr "前50"
+
+msgctxt "#30023"
+msgid "First 100"
+msgstr "前100"
+
+msgctxt "#30030"
+msgid "Trailer quality (Stream)"
+msgstr "预告片画质（媒体流）"
+
+msgctxt "#30031"
+msgid "HD480p"
+msgstr "HD480p"
+
+msgctxt "#30032"
+msgid "HD720p"
+msgstr "HD720p"
+
+msgctxt "#30033"
+msgid "HD1080p"
+msgstr "HD1080p"
+
+msgctxt "#30040"
+msgid "Trailer quality (Download)"
+msgstr "预告片画质（下载）"
+
+msgctxt "#30041"
+msgid "Same as Stream"
+msgstr "同媒体流"
+
+msgctxt "#30050"
+msgid "Trailer download path"
+msgstr "预告片下载目录"
+
+msgctxt "#30051"
+msgid "Force Trailers ViewMode to Thumbnail"
+msgstr "预告片视图模式强制为“缩略图”"
+
+msgctxt "#30100"
+msgid "Network Error"
+msgstr "网络错误"
+
+msgctxt "#30101"
+msgid "No download path"
+msgstr "无下载目录"
+
+msgctxt "#30102"
+msgid "Do you want to you set it now?"
+msgstr "你要现在设置吗？"

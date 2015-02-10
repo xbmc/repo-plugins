@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Swedish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/sv/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Menu entries -->
+    <string id="30000">Sida</string>
+    <string id="30001">Bläddra efter sajt</string>
+    <string id="30002">Slumpmässig efter kategori</string>
+    <string id="30003">Hämta ny slumpmässig</string>
+
+    <!-- Settings -->
+    <string id="30100">Bilder per sajt</string>
+    <string id="30101">Tvinga miniatyrvisning</string>
+</strings>

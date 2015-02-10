@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Chinese (Simple) language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/zh/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">所有类型</string>
+    <string id="30002">按类别浏览</string>
+    <string id="30003">我的播客</string>
+    <string id="30004">查找</string>
+    <string id="30005">视频播客</string>
+    <string id="30006">音频播客</string>
+    <string id="30007">未找到视频/音乐！</string>
+
+    <!-- Context Menu -->
+    <string id="30010">回放“我的播客”</string>
+    <string id="30011">从“我的播客”删除</string>
+
+    <!-- Settings -->
+    <string id="30100">播客：视图模式强制为“缩略图”</string>
+    <string id="30101">播客项：视图模式强制为“缩略图”</string>
+    <string id="30102">Itunes国家和语言</string>
+    <string id="30103">列表显示播客（最多300）</string>
+    <string id="30104">搜索显示播放（最多200）</string>
+    <string id="30105">显示子类</string>
+
+    <!-- Messages -->
+    <string id="30200">网络错误</string>
+</strings>

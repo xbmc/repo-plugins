@@ -1,0 +1,27 @@
+0.1.2 (03.04.2014)
+- fixed error with external python (e.g. on Linux)
+
+0.1.1 (16.03.2014)
+- fixed order of pagination items
+- improve performance on slow machines unsing python >= 2.7
+
+0.1.0
+- fixed newlines in documentary plot
+- added browsing by tags
+- added sort methods (date and playlist order)
+- fixed only show available documentaries
+- skip playlists until they fix the youtube plugin
+
+0.0.2
+- added fire (in red) to the docu title
+- added docu description (info-dialog)
+- added vimeo playback code
+- added setting for list view or thumbnail view
+- added date
+- added language, views, comments (info-dialog)
+- added pagination
+- added search
+- fixed api changes
+
+0.0.1
+- initial version

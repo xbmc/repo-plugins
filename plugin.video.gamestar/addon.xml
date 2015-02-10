@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon
+  id="plugin.video.gamestar"
+  version="0.1.5"
+  name="GamestarVideo"
+  provider-name="Raptor 2101">
+  <requires>
+   <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension 
+    point="xbmc.python.pluginsource"
+    library="default.py">
+   <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Downloads/view videos from gamestar.de and gamepro.de</summary>
+    <summary lang="de">Alle Videos von Gamestar.de und Gamepro.de and Gamepro.de durchsuchen und anschauen.</summary>
+    <description lang="en">This plugin gives access to the Videos from gamestar.de and gamepro.de.
+    If there are problems while playing the videos (stoping - caching - playing) this plugin offer some caching options:
+    Don't Chache - don't cache at all.
+    Cache if Needed - if you start a video who isn't cached, it will be cached and then be played.
+    Cache - all files of the given category will be cached.
+    Forced caching - all files of the given category will be cached plus, if some file isn't cached it will be downloaded before playing.
+    
+    The last two modes need a background-skript setuped by Taskmanager or (ana)cron. The script is locatet in the addon-dir: fetchOfflineData.py linktotheconfig.xml BandwithLimit(in kbs)
+    </description>
+    <description lang="de">Mit diesem Plugin kann man alle Videos auf Gamestar.de und Gamepro.de anschauen.
+    SOllte es beim abspielen der Videos zu problemen kommen (precaching mittein im Video) bietet das Plugin die möglichkeit zum lokalen cachen der Videos:
+    Kein Cache - nichts wird gecached.
+    Cachen bei Bedarf - das Video wird vor dem Abspielen lokal gecached
+    Cachen - alle Videos eine Kategorie werden lokal gespeichert.
+    Cachen erzwingen - alle Videos einer Kategorie werden lokal gespiechert. Sollte eine Video noch nicht gecached sein, wird es vor dem abspielen gecached.
+
+    Die beiden letzten Optionen brauchen ein Background-Script das vom Taskplanner oder (ana)cron angestoßen wird. Es ist im Addon-Verzeichniss zu finden: fetchOfflineData.py Pfad-Zur-Config.xml BandbreitenBegrenzung(in kbs)
+    </description>
+    <platform>all</platform>
+    <language>de</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+    <forum>https://github.com/raptor2101/Gamestar/issues</forum>
+    <website>https://github.com/raptor2101/Gamestar</website>
+    <source>https://github.com/raptor2101/Gamestar</source>
+    <email>raptor2101@gmx.de</email>
+  </extension>
+</addon>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<addon id="plugin.video.massengeschmack" name="Massengeschmack" version="1.2.0" provider-name="Manko10">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <language>en de</language>
+        <license>GPLv3</license>
+        
+        <website>https://github.com/Manko10/massengeschmack-xbmc/</website>
+        <forum>http://forum.fernsehkritik.tv/showthread.php?13175-Massengeschmack-tv-XBMC-Add-On/</forum>
+        <source>https://github.com/Manko10/massengeschmack-xbmc/</source>
+        <email></email>
+        
+        <summary lang="en">Massengeschmack video portal</summary>
+        <summary lang="de">Massengeschmack-Video-Portal</summary>
+        
+        <description lang="en">Massengeschmack is a German online video network producing magazines like Fernsehkritik-TV, Pantoffel-TV and Pressesch(l)au.</description>
+        <description lang="de">Massengeschmack ist ein deutsches Online-Video-Netzwerk, das Magazine wie Fernsehkritik-TV, Pantoffel-TV und Pressesch(l)au produziert.</description>
+        
+        <disclaimer lang="en">This is not an official add-on and in no way affiliated with Massengeschmack</disclaimer>
+        <disclaimer lang="de">Dies ist kein offizielles Add-on und in keiner Weise an Massengeschmack angegliedert.</disclaimer>
+    </extension>
+</addon>

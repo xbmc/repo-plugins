@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30000">TVkaista Käyttäjätunnus</string>
+    <string id="30001">TVkaista Salasana</string>
+    <string id="30003">Videomuoto</string>
+    <string id="30004">Haku</string>
+    <string id="30005">Suosikit</string>
+    <string id="30006">Aseta välimuistipalvelin www-sivustolta</string>
+    <string id="30007">www.tvkaista.com/speedtest.html</string>
+
+	<string id="30101">Asetukset</string>
+	<string id="30102">Kanavat - tänään</string>
+	<string id="30103">Sarjat</string>
+	<string id="30104">Lista</string>
+	<string id="30105">Elokuvat</string>
+	<string id="30106">Haku</string>
+	<string id="30107">Maanantai,Tiistai,Keskiviikko,Torstai,Perjantai,Lauantai,Sunnuntai</string>
+
+	<string id="30108">Lisää Listalle</string>
+	<string id="30109">Poista Listalta</string>
+	<string id="30110">Lisää Sarjoihin</string>
+	<string id="30111">Poista Sarjoista</string>
+	<string id="30112">Ohjelma lisätty listalle.</string>
+	<string id="30113">Ohjelma poistettu listalta.</string>
+	<string id="30114">Ohjelma lisätty sarjoihin.</string>
+	<string id="30115">Ohjelma poistettu sarjoista.</string>
+	<string id="30116">Ohjelman tiedot</string>
+	<string id="30117">Etsi samannimisiä</string>
+	<string id="30118">Uusi haku</string>
+	<string id="30119">Poista viimeiset haut</string>
+	<string id="30120">Poistetaanko viimeiset haut?</string>
+	<string id="30121">Viimeiset haut poistettu.</string>
+
+
+
+	<string id="30201">Asetuksia ei määritelty tai niissa on ongelma. Tarkista asetukset.</string>
+	<string id="30202">virheellinen käyttäjätunnus tai salasana</string>
+	<string id="30203">www-pyyntö ei onnistunut</string>
+	<string id="30204">-TALLENNE PUUTTUU-</string>
+	<string id="30205">Ohjelmavirhe!</string>
+	<string id="30206">Toiminto ei onnistunut!</string>
+
+
+</strings>
+
+
+

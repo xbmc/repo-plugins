@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Chinese (Simple) language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/zh/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- General entries -->
+    <string id="30000">页</string>
+    <string id="30001">查找</string>
+    <string id="30002">[B]我的收藏[/B]</string>
+    <string id="30003">未找到刮削器</string>
+    <string id="30004">[B]加入我的收藏[/B]</string>
+    <string id="30005">[B]从我的收藏删除[/B]</string>
+    <string id="30006">无收藏</string>
+    <string id="30007">你需要使用上下文菜单</string>
+    <string id="30008">增加项目或文件夹。</string>
+
+    <!-- Settings -->
+    <string id="30010">视图模式强制为“缩略图”</string>
+    <string id="30011">切换页时更新窗口</string>
+    <string id="30012">下载目录</string>
+    <string id="30013">修正剧集标题</string>
+
+    <!-- Context Menu entries -->
+    <string id="30020">下载视频</string>
+
+    <!-- dialog entries -->
+    <string id="30030">无下载目录！</string>
+    <string id="30031">你要现在设置目录吗？</string>
+    <string id="30032">不支持HLS</string>
+</strings>

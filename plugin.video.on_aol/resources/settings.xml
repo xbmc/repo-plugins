@@ -1,0 +1,7 @@
+<settings>
+  <category label="General">
+    <setting id="quality" type="enum" label="30009" lvalues="30010|30011|30012|30013" default="2"/>
+    <setting id="save_search" type="bool" label="30014" default="false"/>
+    <setting id="debug" type="bool" label="30008" default="false"/>
+  </category>
+</settings>

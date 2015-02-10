@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30000">Settings</string>
+  <string id="30001">Username</string>
+  <string id="30002">Password</string>
+  <string id="30003">Login failed!</string>
+  <string id="30004">Check settings.</string>
+  <string id="30006">Sun</string>
+  <string id="30007">Mon</string>
+  <string id="30008">Tue</string>
+  <string id="30009">Wed</string>
+  <string id="30010">Thu</string>
+  <string id="30011">Fri</string>
+  <string id="30012">Sat</string>
+  <string id="30013">Today</string>
+  <string id="30014">Yesterday</string>  
+  <string id="30015">Watch</string>
+  <string id="30016">Length</string>
+  <string id="30017">Search..</string>
+</strings>

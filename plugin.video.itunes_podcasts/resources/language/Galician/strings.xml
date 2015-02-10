@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Galician language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/gl/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Tódolos xéneros</string>
+    <string id="30002">Buscar por xénero</string>
+    <string id="30003">Os meus Podcasts</string>
+    <string id="30004">Búsqueda</string>
+    <string id="30005">Vídeo Podcasts</string>
+    <string id="30006">Podcasts de Son</string>
+    <string id="30007">Non se atopou Vídeo/Música!</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Engadir aos "Meus Podcasts"</string>
+    <string id="30011">Eliminar dos "Meus Podcasts"</string>
+
+    <!-- Settings -->
+    <string id="30100">Podcasts: Forzar o Modo de Vista a miniatura</string>
+    <string id="30101">Elementos do Podcast: Forzar o Modo de Vista a miniatura</string>
+    <string id="30102">País e Idioma de iTunes</string>
+    <string id="30103">Podcasts a amosar na listaxe (máx. 300)</string>
+    <string id="30104">Podcasts a amosar na busca (máx. 200)</string>
+    <string id="30105">Amosar subxéneros</string>
+
+    <!-- Messages -->
+    <string id="30200">Erro de rede</string>
+</strings>

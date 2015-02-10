@@ -1,0 +1,197 @@
+# XBMC Media Center language file
+# Addon Name: CouchPotato Manager
+# Addon id: plugin.video.couchpotato_manager
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Swedish (http://www.transifex.com/projects/p/xbmc-addons/language/sv/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sv\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "All Movies"
+msgstr "Alla filmer"
+
+msgctxt "#30001"
+msgid "Add new Movie to Wanted-list"
+msgstr "Lägg till en ny film i önskelistan"
+
+msgctxt "#30002"
+msgid "Wanted Movies"
+msgstr "Önskade filmer"
+
+msgctxt "#30003"
+msgid "Done Movies"
+msgstr "Färdiga filmer"
+
+msgctxt "#30004"
+msgid "Status List"
+msgstr "Statuslista"
+
+msgctxt "#30100"
+msgid "Add-on Settings"
+msgstr "Tilläggsinställningar"
+
+msgctxt "#30101"
+msgid "Refresh Releases"
+msgstr "Uppdatera utgåvor"
+
+msgctxt "#30102"
+msgid "Delete Movie"
+msgstr "Ta bort film"
+
+msgctxt "#30103"
+msgid "Delete Release"
+msgstr "Ta bort utgåva"
+
+msgctxt "#30104"
+msgid "Download Release"
+msgstr "Ladda ner utgåva"
+
+msgctxt "#30105"
+msgid "Ignore Release"
+msgstr "Ignorera utgåva"
+
+msgctxt "#30106"
+msgid "Search Trailer on YouTube"
+msgstr "Sök trailer på YouTube"
+
+msgctxt "#30107"
+msgid "Force full search"
+msgstr "Tvinga full sökning"
+
+msgctxt "#30110"
+msgid "Please enter movie title"
+msgstr "Ange en filmtitel"
+
+msgctxt "#30111"
+msgid "Please select the correct Movie"
+msgstr "Välj korrekt film"
+
+msgctxt "#30112"
+msgid "Please select the profile"
+msgstr "Välj profil"
+
+msgctxt "#30113"
+msgid "Delete Movie"
+msgstr "Ta bort film"
+
+msgctxt "#30114"
+msgid "Are you sure to delete?"
+msgstr "Är du säker att du vill ta bort?"
+
+msgctxt "#30115"
+msgid "Please select your default profile"
+msgstr "Välj din standardprofil"
+
+msgctxt "#30120"
+msgid "Connection error"
+msgstr "Anslutningsfel"
+
+msgctxt "#30121"
+msgid "Wrong User-Credentials or Api Key"
+msgstr "Felaktiga användaruppgifter eller Api-nyckel"
+
+msgctxt "#30122"
+msgid "Wrong Network Settings or CP not running."
+msgstr "Falaktiga nätverksinställningar eller CP körs inte."
+
+msgctxt "#30123"
+msgid "Do you want to change them now?"
+msgstr "Vill du ändra dom nu?"
+
+msgctxt "#30130"
+msgid "Movie added"
+msgstr "Film tillagd"
+
+msgctxt "#30131"
+msgid "No Movie found"
+msgstr "Ingen film hittad"
+
+msgctxt "#30132"
+msgid "Success"
+msgstr "Lyckades"
+
+msgctxt "#30140"
+msgid "Please use context menu"
+msgstr "Använd innehållsmeny"
+
+msgctxt "#30141"
+msgid "You need to open the context-menu"
+msgstr "Du måste öppna innehållsmenyn"
+
+msgctxt "#30142"
+msgid "to choose the action you want"
+msgstr "för att välja händelsen du vill ha"
+
+msgctxt "#30150"
+msgid "Type"
+msgstr "Typ"
+
+msgctxt "#30151"
+msgid "Provider"
+msgstr "Leverantör"
+
+msgctxt "#30152"
+msgid "Provider-Extra"
+msgstr "Leverantör-Extra"
+
+msgctxt "#30153"
+msgid "Age"
+msgstr "Ålder"
+
+msgctxt "#30154"
+msgid "Seeder/Leecher"
+msgstr "Seeder/Leecher"
+
+msgctxt "#30155"
+msgid "Size (MB)"
+msgstr "Storlek (MB)"
+
+msgctxt "#30156"
+msgid "Description"
+msgstr "Beskrivning"
+
+msgctxt "#30300"
+msgid "Username"
+msgstr "Användarnamn"
+
+msgctxt "#30301"
+msgid "Password"
+msgstr "Lösenord"
+
+msgctxt "#30302"
+msgid "Use HTTPS"
+msgstr "Använd HTTPS"
+
+msgctxt "#30303"
+msgid "Hostname"
+msgstr "Värdnamn"
+
+msgctxt "#30304"
+msgid "Port"
+msgstr "Port"
+
+msgctxt "#30305"
+msgid "Api Key"
+msgstr "Api-nyckel"
+
+msgctxt "#30306"
+msgid "Set default profile"
+msgstr "Ange standardprofil"
+
+msgctxt "#30307"
+msgid "Url Base (for use with mod_proxy)"
+msgstr "Url-bas (för användning med mod_proxy)"
+
+msgctxt "#30310"
+msgid "You only need username/password OR Api Key!"
+msgstr "Du behöver endast användarnamn/lösenord ELLER Api-nyckel"

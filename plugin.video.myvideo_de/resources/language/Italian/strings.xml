@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Italian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/it/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- General entries -->
+    <string id="30000">Pagina</string>
+    <string id="30001">Cerca</string>
+    <string id="30002">[B]I Miei Preferiti[/B]</string>
+    <string id="30003">Nessuno Scraper Trovato</string>
+    <string id="30004">[B]Aggiungi ai miei preferiti[/B]</string>
+    <string id="30005">[B]Elimina dai miei preferiti[/B]</string>
+    <string id="30006">Nessun Preferito</string>
+    <string id="30007">Devi usare il menù contestuale</string>
+    <string id="30008">per aggiungere elementi o cartelle</string>
+
+    <!-- Settings -->
+    <string id="30010">Forza visuale nella visualizzazione Anteprime</string>
+    <string id="30011">Aggiorna Contenuto al cambio pagina</string>
+    <string id="30012">Percorso di download</string>
+    <string id="30013">Sistema i titoli dei programmi TV</string>
+
+    <!-- Context Menu entries -->
+    <string id="30020">Scarica video</string>
+
+    <!-- dialog entries -->
+    <string id="30030">Nessun percorso di download settato!</string>
+    <string id="30031">Vuoi impostare ora il percorso?</string>
+    <string id="30032">HLS non supportato</string>
+</strings>

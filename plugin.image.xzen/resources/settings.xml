@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="label1"  type="lsep" label="30100" default="" />
+    <setting id="username"  type="text" label="30101" default="" />
+	<setting id="password"  type="text" option="hidden" label="30102" default=""  />
+	<setting type="sep" />
+    <setting id="label2"  type="lsep" label="30103" default="" />
+    <setting id="label3"  type="lsep" label="30104" default="" />
+	<setting id="passwordOriginals"  type="text" option="hidden" label="30105" default=""  />
+    <setting id="label4"  type="lsep" label="30106" default="" />
+    <setting id="TLSworkaround" type="bool" label="30107" default="false"/>
+</settings>

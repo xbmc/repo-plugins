@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Portuguese (Brazil) language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/pt_BR/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- General entries -->
+    <string id="30000">Página</string>
+    <string id="30001">Pesquisar</string>
+    <string id="30002">[B]Meus Favoritos[/B]</string>
+    <string id="30003">Nenhum scraper encontrado</string>
+    <string id="30004">[B]Adicionar aos Meus Favoritos[/B]</string>
+    <string id="30005">[B]Remover de Meus Favoritos[/B]</string>
+    <string id="30006">Nenhum favorito</string>
+    <string id="30007">Você precisa usar o menu de contexto</string>
+    <string id="30008">para adicionar itens ou pastas.</string>
+
+    <!-- Settings -->
+    <string id="30010">Forçar modo de visualização para Miniatura</string>
+    <string id="30011">Atualizar container ao trocar de página</string>
+    <string id="30012">Diretório de download</string>
+    <string id="30013">Fixar título Seriado</string>
+
+    <!-- Context Menu entries -->
+    <string id="30020">Baixar vídeo</string>
+
+    <!-- dialog entries -->
+    <string id="30030">Nenhum diretório de download!</string>
+    <string id="30031">Você deseja definir o diretório agora?</string>
+    <string id="30032">HLS não suportado</string>
+</strings>

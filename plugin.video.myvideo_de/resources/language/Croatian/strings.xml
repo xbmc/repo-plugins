@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Croatian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/hr/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- General entries -->
+    <string id="30000">Stranica</string>
+    <string id="30001">Pretraži</string>
+    <string id="30002">[B]Moje omiljeno[/B]</string>
+    <string id="30003">Sakupljač nije pronađen</string>
+    <string id="30004">[B]Dodaj u Moje omiljeno[/B]</string>
+    <string id="30005">[B]Obriši iz Moje omiljeno[/B]</string>
+    <string id="30006">Nema omiljenih</string>
+    <string id="30007">Morate koristiti kontekstualni izbornik</string>
+    <string id="30008">za dodavanje mapa ili stavki.</string>
+
+    <!-- Settings -->
+    <string id="30010">Prisili način prikaza u "Minijature"</string>
+    <string id="30011">Ažuriraj spremnik pri promjeni stranice</string>
+    <string id="30012">Putanja preuzimanja</string>
+    <string id="30013">Popravi naslov TV serija</string>
+
+    <!-- Context Menu entries -->
+    <string id="30020">Preuzimanje videa</string>
+
+    <!-- dialog entries -->
+    <string id="30030">Nema putanje preuzimanja</string>
+    <string id="30031">Želite li odmah postaviti putanju?</string>
+    <string id="30032">HLS nije podržan</string>
+</strings>

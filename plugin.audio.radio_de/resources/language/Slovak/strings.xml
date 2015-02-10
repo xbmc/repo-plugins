@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Slovak language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/sk/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root menu entries -->
+    <string id="30100">Redakcia odporúča</string>
+    <string id="30101">Top 100 staníc</string>
+    <string id="30102">Prehliadať podľa žánra</string>
+    <string id="30103">Prehliadať podľa témy</string>
+    <string id="30104">Prehliadať podľa krajiny</string>
+    <string id="30105">Prehliadať podľa mesta</string>
+    <string id="30106">Prehliadať podľa jazyka</string>
+    <string id="30107">Lokálne stanice</string>
+    <string id="30108">Moje stanice</string>
+
+    <!-- Search -->
+    <string id="30200">Hľadať stanice</string>
+    <string id="30201">Zadajte meno, krajinu alebo jazyk</string>
+
+    <!-- Settings -->
+    <string id="30300">Jazyk</string>
+    <string id="30301">Angličtina</string>
+    <string id="30302">Nemčina</string>
+    <string id="30303">Francúzština</string>
+    <string id="30310">Vynútiť zobrazenie náhľadov</string>
+
+    <!-- Context Menu -->
+    <string id="30400">Pridať do "Moje stanice"</string>
+    <string id="30401">Odstrániť z "Moje stanice"</string>
+    <string id="30402">Upraviť vlastné stanice</string>
+
+    <!-- Custom Station -->
+    <string id="30500">Prosím zadajte %s</string> <!--%s will be filled by 30501, 30502 or 30503 -->
+    <string id="30501">Titul</string>
+    <string id="30502">URL alebo cesta k náhľadu</string>
+    <string id="30503">URL streamu</string>
+    <string id="30504">Pridať vlastné stanice...</string>
+
+    <!-- Error Message -->
+    <string id="30600">Sieťová chyba</string>
+</strings>

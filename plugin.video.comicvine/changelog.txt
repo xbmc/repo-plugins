@@ -1,0 +1,8 @@
+[B]2.1[/B]
+- Version bump and minor compatibility changes for Eden branch
+
+[B]1.1[/B]
+- Added option to choose video quality
+
+[B]1.0[/B]
+- Initial release

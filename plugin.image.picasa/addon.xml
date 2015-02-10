@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.image.picasa"
+       name="PicasaWeb"
+       version="1.0.2"
+       provider-name="Rick Phillips (ruuk)">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.elementtree" version="1.2.7"/>
+  </requires>
+
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>image</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Plugin to browse PicasaWeb albums and photos/videos</summary>
+    <summary lang="nl">Blader door uw PicasaWeb albums en afbeeldingen van u zelf of uw vrienden.</summary>
+
+    <description lang="en">Browse your PicasaWeb albums and tags. Browse your favorite user's albums, tags, and their favorite users. Search your photos/videos, your contact's photos/videos, and search PicasaWeb. View maps of photos with geo location data.</description>
+    <description lang="nl">Blader door uw PicasaWeb albums en afbeeldingen van u zelf of uw vrienden.</description>
+    <language></language>
+    <platform>all</platform>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum>http://forum.xbmc.org/showthread.php?tid=83499</forum>
+    <source>http://github.com/ruuk/plugin.image.picasa</source>
+  </extension>
+</addon>

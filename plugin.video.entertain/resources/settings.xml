@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="30001">
+		<setting id="quality"		type="enum"	label="30010"	lvalues="30011|30012|30013"	default="2" />
+		<setting id="channelimage"	type="enum"	label="30020"	lvalues="30021|30022"		default="0" />
+		<setting id="categories"	type="enum"	label="30030"	lvalues="30031|30032|30033"	default="2" />
+	</category>
+	<category label="30002">
+		<setting id="cat_general"	type="bool"	label="30080"	default="true" />
+		<setting id="cat_regional"	type="bool"	label="30081"	default="true" />
+		<setting id="cat_cultural"	type="bool"	label="30082"	default="true" />
+		<setting id="cat_special"	type="bool"	label="30083"	default="true" />
+		<setting id="cat_news"		type="bool"	label="30084"	default="true" />
+	</category>
+</settings>

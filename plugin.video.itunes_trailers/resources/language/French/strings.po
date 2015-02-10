@@ -1,0 +1,109 @@
+# XBMC Media Center language file
+# Addon Name: Apple iTunes Trailers
+# Addon id: plugin.video.itunes_trailers
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: French (http://www.transifex.com/projects/p/xbmc-addons/language/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgctxt "#30001"
+msgid "Download Trailer"
+msgstr "Télécharger la Bande-annonce"
+
+msgctxt "#30002"
+msgid "[B]DOWNLOADED[/B]"
+msgstr "[B] TÉLÉCHARGÉ[/B]"
+
+msgctxt "#30003"
+msgid "Add to CouchPotato"
+msgstr "Ajouter à CouchPotato"
+
+msgctxt "#30004"
+msgid "[B]download in progress[/B]"
+msgstr "[B]téléchargement en cours[/B]"
+
+msgctxt "#30005"
+msgid "Add to Trakt.tv"
+msgstr "Ajouter à Trakt.tv"
+
+msgctxt "#30010"
+msgid "Source"
+msgstr "Source"
+
+msgctxt "#30011"
+msgid "All"
+msgstr "Toutes"
+
+msgctxt "#30012"
+msgid "Most Recent"
+msgstr "Le plus récent"
+
+msgctxt "#30013"
+msgid "Most Popular"
+msgstr "Plus populaire"
+
+msgctxt "#30014"
+msgid "Exclusive"
+msgstr "Exclusif"
+
+msgctxt "#30021"
+msgid "No Limit"
+msgstr "Sans limite"
+
+msgctxt "#30022"
+msgid "First 50"
+msgstr "50 Premiers"
+
+msgctxt "#30023"
+msgid "First 100"
+msgstr "100 premiers"
+
+msgctxt "#30030"
+msgid "Trailer quality (Stream)"
+msgstr "Qualité de la bande annonce (Streaming)"
+
+msgctxt "#30031"
+msgid "HD480p"
+msgstr "HD480p"
+
+msgctxt "#30032"
+msgid "HD720p"
+msgstr "HD720p"
+
+msgctxt "#30033"
+msgid "HD1080p"
+msgstr "HD1080p"
+
+msgctxt "#30040"
+msgid "Trailer quality (Download)"
+msgstr "Qualité de la bande annonce (Téléchargement)"
+
+msgctxt "#30050"
+msgid "Trailer download path"
+msgstr "Chemin de téléchargement de la Bande-annonce"
+
+msgctxt "#30051"
+msgid "Force Trailers ViewMode to Thumbnail"
+msgstr "Forcer le mode d'affichage des bande-annonces en vignettes"
+
+msgctxt "#30100"
+msgid "Network Error"
+msgstr "Erreur réseau"
+
+msgctxt "#30101"
+msgid "No download path"
+msgstr "Chemin de téléchargement non défini"
+
+msgctxt "#30102"
+msgid "Do you want to you set it now?"
+msgstr "Voulez vous le définir maintenant ?"

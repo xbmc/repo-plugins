@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.s04tv" name="S04tv" version="3.0.1" provider-name="malte">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.module.mechanize" version="0.2.5"/>
+        <import addon="script.module.beautifulsoup" version="3.2.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <language>de</language>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <forum>http://forum.xbmc.org/showthread.php?tid=109692</forum>
+        <website>https://code.google.com/p/xbmc-s04tv/</website>
+        <source>https://xbmc-s04tv.googlecode.com/svn/trunk/</source>
+        <summary lang="de">Videos von S04.tv ansehen</summary>
+        <summary lang="en">Watch videos from S04.tv</summary>
+        <description lang="de">Online Video Portal des FC Schalke 04. Alle Spiele in re-Live (15 Minuten nach Abfiff), News, Interviews, exklusive Berichte und Specials. Viele freie Videos, die meisten Videos setzen allerdings einen S04.tv Benutzer Account voraus (39,95 EUR/Jahr). Mehr Details auf http://www.s04.tv.</description>
+        <description lang="en">FC Schalke 04 online video portal. Watch all videos from S04tv.de including all matches in re-Live (15 minutes after the match has ended), news, interviews and specials. Lot of free videos, but most videos require an S04.tv user account (e.g. 39,95 EUR/year). See http://www.s04.tv for details.</description>
+    </extension>
+</addon>

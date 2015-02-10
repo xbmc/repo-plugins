@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Malay language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ms/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Settings -->
+    <string id="30300">Bahasa</string>
+    <string id="30301">Inggeris</string>
+    <string id="30302">Jerman</string>
+    <string id="30303">Perancis</string>
+</strings>

@@ -1,0 +1,41 @@
+# XBMC Media Center language file
+# Addon Name: CouchPotato Manager
+# Addon id: plugin.video.couchpotato_manager
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Macedonian (http://www.transifex.com/projects/p/xbmc-addons/language/mk/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: mk\n"
+"Plural-Forms: nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;\n"
+
+msgctxt "#30150"
+msgid "Type"
+msgstr "Тип"
+
+msgctxt "#30156"
+msgid "Description"
+msgstr "Опис"
+
+msgctxt "#30300"
+msgid "Username"
+msgstr "Корисничко име"
+
+msgctxt "#30301"
+msgid "Password"
+msgstr "Лозинка"
+
+msgctxt "#30303"
+msgid "Hostname"
+msgstr "Име на хост"
+
+msgctxt "#30304"
+msgid "Port"
+msgstr "Приклучок"

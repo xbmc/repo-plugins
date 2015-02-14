@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: Trakt.tv List Manager
 # Addon id: plugin.video.trakt_list_manager
 # Addon Provider: Tristan Fischer (sphere@dersphere.de)
@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Hebrew (http://www.transifex.com/projects/p/xbmc-addons/language/he/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,10 +16,134 @@ msgstr ""
 "Language: he\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30000"
+msgid "[B]Add new Custom List[/B]"
+msgstr "[B]הוסף רשימה מותאמת[/B]"
+
+msgctxt "#30001"
+msgid "[B]Add new Movie[/B]"
+msgstr "[B]הוסף סרט חדש[/B]"
+
+msgctxt "#30002"
+msgid "Show Watchlist"
+msgstr "הצג רשימת מעקב"
+
+msgctxt "#30003"
+msgid "Show Custom Lists"
+msgstr "הצג רשימות מותאמות"
+
+msgctxt "#30100"
+msgid "Add-on Settings"
+msgstr "הגדרות הרחבה"
+
+msgctxt "#30101"
+msgid "Delete List"
+msgstr "מחק רשימה"
+
+msgctxt "#30102"
+msgid "Delete Movie"
+msgstr "מחק סרט"
+
+msgctxt "#30103"
+msgid "Show Movie Info"
+msgstr "הצג פרטי סרט"
+
+msgctxt "#30104"
+msgid "Add Movie to CouchPotato"
+msgstr "הוסף סרט ל-CouchPotato"
+
+msgctxt "#30110"
+msgid "Please enter Movie title"
+msgstr "אנא הזן כותרת סרט"
+
+msgctxt "#30111"
+msgid "Please select the correct Movie"
+msgstr "אנא בחר את הסרט המתאים"
+
+msgctxt "#30112"
+msgid "Please select the List"
+msgstr "אנא בחר את הרשימה"
+
+msgctxt "#30113"
+msgid "Delete Movie"
+msgstr "מחק סרט"
+
+msgctxt "#30114"
+msgid "Are you sure to delete?"
+msgstr "האם אתה בטוח שברצונך למחוק?"
+
+msgctxt "#30115"
+msgid "Delete List"
+msgstr "מחק רשימה"
+
+msgctxt "#30116"
+msgid "Are you sure to delete?"
+msgstr "האם אתה בטוח שברצונך למחוק?"
+
+msgctxt "#30117"
+msgid "My Watchlist"
+msgstr "רשימת המעקב שלי"
+
+msgctxt "#30120"
+msgid "Connection error"
+msgstr "שגיאת חיבור"
+
+msgctxt "#30121"
+msgid "Wrong User-Credentials"
+msgstr "אישורי משתמש שגוים"
+
+msgctxt "#30122"
+msgid "Do you want to change them now?"
+msgstr "האם ברצונך לשנותם כעת?"
+
+msgctxt "#30130"
+msgid "No Movie found"
+msgstr "לא נמצא סרט"
+
+msgctxt "#30131"
+msgid "Success"
+msgstr "הצליח"
+
+msgctxt "#30140"
+msgid "Please use context menu"
+msgstr "אנא השתמש בתפריט Context"
+
+msgctxt "#30141"
+msgid "You need to open the context-menu"
+msgstr "אתה צריך לפתוח את תפריט Context"
+
+msgctxt "#30142"
+msgid "to choose the action you want"
+msgstr "לבחירת הפעולה בה אתה חפץ"
+
 msgctxt "#30300"
 msgid "Username"
 msgstr "שם משתמש"
 
 msgctxt "#30301"
 msgid "Password"
-msgstr "סיסמא"
+msgstr "סיסמה"
+
+msgctxt "#30302"
+msgid "Default List"
+msgstr "רשימת ברירת מחדל"
+
+msgctxt "#30303"
+msgid "Use HTTPS"
+msgstr "השתמש ב-HTTPS"
+
+msgctxt "#30310"
+msgid "Default Privacy for new Lists"
+msgstr "ברירת מחדל לפרטיות עבור רשימות חדשות"
+
+msgctxt "#30311"
+msgid "Private"
+msgstr "פרטי"
+
+msgctxt "#30312"
+msgid "Friends"
+msgstr "חברים"
+
+msgctxt "#30313"
+msgid "Public"
+msgstr "ציבורי"

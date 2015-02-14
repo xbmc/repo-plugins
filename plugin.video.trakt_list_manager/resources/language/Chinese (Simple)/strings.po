@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: Trakt.tv List Manager
 # Addon id: plugin.video.trakt_list_manager
 # Addon Provider: Tristan Fischer (sphere@dersphere.de)
@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Chinese (Simple) (http://www.transifex.com/projects/p/xbmc-addons/language/zh/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,9 +16,101 @@ msgstr ""
 "Language: zh\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+msgctxt "#30000"
+msgid "[B]Add new Custom List[/B]"
+msgstr "[B]增加新的自定义列表[/B]"
+
+msgctxt "#30001"
+msgid "[B]Add new Movie[/B]"
+msgstr "[B]增加新电影[/B]"
+
+msgctxt "#30002"
+msgid "Show Watchlist"
+msgstr "显示观看列表"
+
+msgctxt "#30003"
+msgid "Show Custom Lists"
+msgstr "显示自定义列表"
+
+msgctxt "#30100"
+msgid "Add-on Settings"
+msgstr "扩展功能设置"
+
+msgctxt "#30101"
+msgid "Delete List"
+msgstr "删除列表"
+
+msgctxt "#30102"
+msgid "Delete Movie"
+msgstr "删除电影"
+
 msgctxt "#30103"
 msgid "Show Movie Info"
 msgstr "显示电影信息"
+
+msgctxt "#30104"
+msgid "Add Movie to CouchPotato"
+msgstr "增加电影到CouchPotato"
+
+msgctxt "#30110"
+msgid "Please enter Movie title"
+msgstr "请输入电影标题"
+
+msgctxt "#30111"
+msgid "Please select the correct Movie"
+msgstr "请选择正确的电影"
+
+msgctxt "#30112"
+msgid "Please select the List"
+msgstr "请选择列表"
+
+msgctxt "#30113"
+msgid "Delete Movie"
+msgstr "删除电影"
+
+msgctxt "#30114"
+msgid "Are you sure to delete?"
+msgstr "你确定要删除吗？"
+
+msgctxt "#30115"
+msgid "Delete List"
+msgstr "删除列表"
+
+msgctxt "#30116"
+msgid "Are you sure to delete?"
+msgstr "你确定要删除吗？"
+
+msgctxt "#30117"
+msgid "My Watchlist"
+msgstr "我的观看列表"
+
+msgctxt "#30120"
+msgid "Connection error"
+msgstr "连接错误"
+
+msgctxt "#30122"
+msgid "Do you want to change them now?"
+msgstr "你想要现在就改变他们吗？"
+
+msgctxt "#30130"
+msgid "No Movie found"
+msgstr "未能找到电影"
+
+msgctxt "#30131"
+msgid "Success"
+msgstr "成功"
+
+msgctxt "#30140"
+msgid "Please use context menu"
+msgstr "请使用上下文菜单"
+
+msgctxt "#30141"
+msgid "You need to open the context-menu"
+msgstr "你需要打开上下文菜单"
+
+msgctxt "#30142"
+msgid "to choose the action you want"
+msgstr "选择你想要的动作"
 
 msgctxt "#30300"
 msgid "Username"
@@ -28,6 +120,26 @@ msgctxt "#30301"
 msgid "Password"
 msgstr "密码"
 
+msgctxt "#30302"
+msgid "Default List"
+msgstr "默认列表"
+
 msgctxt "#30303"
 msgid "Use HTTPS"
 msgstr "使用HTTPS"
+
+msgctxt "#30310"
+msgid "Default Privacy for new Lists"
+msgstr "新的列表默认为私有"
+
+msgctxt "#30311"
+msgid "Private"
+msgstr "私有"
+
+msgctxt "#30312"
+msgid "Friends"
+msgstr "朋友"
+
+msgctxt "#30313"
+msgid "Public"
+msgstr "公共"

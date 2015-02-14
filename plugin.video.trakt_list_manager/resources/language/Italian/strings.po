@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: Trakt.tv List Manager
 # Addon id: plugin.video.trakt_list_manager
 # Addon Provider: Tristan Fischer (sphere@dersphere.de)
@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/xbmc-addons/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,9 +16,29 @@ msgstr ""
 "Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30000"
+msgid "[B]Add new Custom List[/B]"
+msgstr "[B]Aggiungi una nuova lista personalizzata[/B]"
+
+msgctxt "#30001"
+msgid "[B]Add new Movie[/B]"
+msgstr "[B]Aggiungi un film[/B]"
+
+msgctxt "#30002"
+msgid "Show Watchlist"
+msgstr "Mostra lista di riproduzione"
+
+msgctxt "#30003"
+msgid "Show Custom Lists"
+msgstr "Mostra liste personalizzate"
+
 msgctxt "#30100"
 msgid "Add-on Settings"
 msgstr "Impostazioni Add-on"
+
+msgctxt "#30101"
+msgid "Delete List"
+msgstr "Cancella lista"
 
 msgctxt "#30102"
 msgid "Delete Movie"
@@ -28,9 +48,21 @@ msgctxt "#30103"
 msgid "Show Movie Info"
 msgstr "Mostra le informazioni sul film"
 
+msgctxt "#30104"
+msgid "Add Movie to CouchPotato"
+msgstr "Aggiungi film a CouchPotato"
+
+msgctxt "#30110"
+msgid "Please enter Movie title"
+msgstr "Si prega di inserire il titolo del film"
+
 msgctxt "#30111"
 msgid "Please select the correct Movie"
 msgstr "Seleziona il Film esatto"
+
+msgctxt "#30112"
+msgid "Please select the List"
+msgstr "Si prega di selezionare la lista"
 
 msgctxt "#30113"
 msgid "Delete Movie"
@@ -40,17 +72,37 @@ msgctxt "#30114"
 msgid "Are you sure to delete?"
 msgstr "Sei sicuro di voler cancellare?"
 
+msgctxt "#30115"
+msgid "Delete List"
+msgstr "Cancella la lista"
+
 msgctxt "#30116"
 msgid "Are you sure to delete?"
 msgstr "Sei sicuro di voler cancellare?"
+
+msgctxt "#30117"
+msgid "My Watchlist"
+msgstr "Le mie liste di riproduzione"
 
 msgctxt "#30120"
 msgid "Connection error"
 msgstr "Errore di connessione"
 
+msgctxt "#30121"
+msgid "Wrong User-Credentials"
+msgstr "Credenziali utente errate"
+
 msgctxt "#30122"
 msgid "Do you want to change them now?"
 msgstr "Vuoi cambiarle ora?"
+
+msgctxt "#30130"
+msgid "No Movie found"
+msgstr "Nessun film trovato"
+
+msgctxt "#30131"
+msgid "Success"
+msgstr "Eseguito con successo"
 
 msgctxt "#30140"
 msgid "Please use context menu"
@@ -72,10 +124,26 @@ msgctxt "#30301"
 msgid "Password"
 msgstr "Password"
 
+msgctxt "#30302"
+msgid "Default List"
+msgstr "Lista predefinita"
+
 msgctxt "#30303"
 msgid "Use HTTPS"
 msgstr "Usa HTTPS"
 
+msgctxt "#30310"
+msgid "Default Privacy for new Lists"
+msgstr "Privacy predefinita per le nuove liste"
+
+msgctxt "#30311"
+msgid "Private"
+msgstr "Privata"
+
 msgctxt "#30312"
 msgid "Friends"
-msgstr "Amici"
+msgstr "Visibile agli amici"
+
+msgctxt "#30313"
+msgid "Public"
+msgstr "Publica"

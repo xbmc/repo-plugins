@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: Trakt.tv List Manager
 # Addon id: plugin.video.trakt_list_manager
 # Addon Provider: Tristan Fischer (sphere@dersphere.de)
@@ -8,13 +8,113 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Dutch (http://www.transifex.com/projects/p/xbmc-addons/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "[B]Add new Custom List[/B]"
+msgstr "[B]Nieuwe Aangepaste lijst toevoegen[/B]"
+
+msgctxt "#30001"
+msgid "[B]Add new Movie[/B]"
+msgstr "[B]Nieuwe Film Toevoegen[/B]"
+
+msgctxt "#30002"
+msgid "Show Watchlist"
+msgstr "Toon Watchlist"
+
+msgctxt "#30003"
+msgid "Show Custom Lists"
+msgstr "Toon Aangepaste Lijst"
+
+msgctxt "#30100"
+msgid "Add-on Settings"
+msgstr "Add-on Instellingen"
+
+msgctxt "#30101"
+msgid "Delete List"
+msgstr "Verwijder Lijst"
+
+msgctxt "#30102"
+msgid "Delete Movie"
+msgstr "Verwijder Film"
+
+msgctxt "#30103"
+msgid "Show Movie Info"
+msgstr "Toon Film Informatie"
+
+msgctxt "#30104"
+msgid "Add Movie to CouchPotato"
+msgstr "Voeg Film toe aan CouchPotato"
+
+msgctxt "#30110"
+msgid "Please enter Movie title"
+msgstr "Geef Film titel op a.u.b."
+
+msgctxt "#30111"
+msgid "Please select the correct Movie"
+msgstr "Selecteer de juiste Film a.u.b."
+
+msgctxt "#30112"
+msgid "Please select the List"
+msgstr "Selecteer de Lijst a.u.b."
+
+msgctxt "#30113"
+msgid "Delete Movie"
+msgstr "Verwijder Film"
+
+msgctxt "#30114"
+msgid "Are you sure to delete?"
+msgstr "Weet u zeker dat u wilt verwijderen?"
+
+msgctxt "#30115"
+msgid "Delete List"
+msgstr "Verwijder Lijst"
+
+msgctxt "#30116"
+msgid "Are you sure to delete?"
+msgstr "Weet u zeker dat u wilt verwijderen?"
+
+msgctxt "#30117"
+msgid "My Watchlist"
+msgstr "Mijn Watchlist"
+
+msgctxt "#30120"
+msgid "Connection error"
+msgstr "Verbindingsfout"
+
+msgctxt "#30121"
+msgid "Wrong User-Credentials"
+msgstr "Verkeerde Inlog Gegevens"
+
+msgctxt "#30122"
+msgid "Do you want to change them now?"
+msgstr "Wilt u ze nu aanpassen?"
+
+msgctxt "#30130"
+msgid "No Movie found"
+msgstr "Geen Film gevonden"
+
+msgctxt "#30131"
+msgid "Success"
+msgstr "Succes"
+
+msgctxt "#30140"
+msgid "Please use context menu"
+msgstr "Gebruik het context menu a.u.b."
+
+msgctxt "#30141"
+msgid "You need to open the context-menu"
+msgstr "U moet het context menu openen"
+
+msgctxt "#30142"
+msgid "to choose the action you want"
+msgstr "om de actie te kiezen die u wilt"
 
 msgctxt "#30300"
 msgid "Username"
@@ -23,3 +123,27 @@ msgstr "Gebruikersnaam"
 msgctxt "#30301"
 msgid "Password"
 msgstr "Wachtwoord"
+
+msgctxt "#30302"
+msgid "Default List"
+msgstr "Standaard Lijst"
+
+msgctxt "#30303"
+msgid "Use HTTPS"
+msgstr "Gebruik HTTPS"
+
+msgctxt "#30310"
+msgid "Default Privacy for new Lists"
+msgstr "Standaard Privacy voor nieuwe Lijsten"
+
+msgctxt "#30311"
+msgid "Private"
+msgstr "Privé"
+
+msgctxt "#30312"
+msgid "Friends"
+msgstr "Vrienden"
+
+msgctxt "#30313"
+msgid "Public"
+msgstr "Publiek"

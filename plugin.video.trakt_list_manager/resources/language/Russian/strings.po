@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: Trakt.tv List Manager
 # Addon id: plugin.video.trakt_list_manager
 # Addon Provider: Tristan Fischer (sphere@dersphere.de)
@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/xbmc-addons/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,6 +20,46 @@ msgctxt "#30002"
 msgid "Show Watchlist"
 msgstr "Показать плейлист"
 
+msgctxt "#30100"
+msgid "Add-on Settings"
+msgstr "Настройки дополнения"
+
+msgctxt "#30102"
+msgid "Delete Movie"
+msgstr "Удалить фильм"
+
+msgctxt "#30103"
+msgid "Show Movie Info"
+msgstr "Показать информацию о фильме"
+
+msgctxt "#30113"
+msgid "Delete Movie"
+msgstr "Удалить фильм"
+
+msgctxt "#30114"
+msgid "Are you sure to delete?"
+msgstr "Вы уверены, что хотите удалить?"
+
+msgctxt "#30116"
+msgid "Are you sure to delete?"
+msgstr "Вы уверены, что хотите удалить?"
+
+msgctxt "#30120"
+msgid "Connection error"
+msgstr "Ошибка соединения"
+
+msgctxt "#30122"
+msgid "Do you want to change them now?"
+msgstr "Хотите изменить их сейчас?"
+
+msgctxt "#30130"
+msgid "No Movie found"
+msgstr "Фильм не найден"
+
+msgctxt "#30131"
+msgid "Success"
+msgstr "Успешно"
+
 msgctxt "#30300"
 msgid "Username"
 msgstr "Пользователь"
@@ -27,3 +67,7 @@ msgstr "Пользователь"
 msgctxt "#30301"
 msgid "Password"
 msgstr "Пароль"
+
+msgctxt "#30303"
+msgid "Use HTTPS"
+msgstr "Использовать HTTPS"

@@ -5,4 +5,5 @@
     <setting id="use_https" type="bool" label="30303" default="true" />
     <setting id="default_privacy" type="enum" label="30310" default="0" lvalues="30311|30312|30313"/>
     <setting id="default_list" type="action" label="30302" action="RunPlugin(plugin://plugin.video.trakt_list_manager/settings/default_list)"/>
+    <setting id="trakt_token" type="text" visible="false"/>
 </settings>

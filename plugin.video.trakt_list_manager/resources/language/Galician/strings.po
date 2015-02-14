@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: Trakt.tv List Manager
 # Addon id: plugin.video.trakt_list_manager
 # Addon Provider: Tristan Fischer (sphere@dersphere.de)
@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Galician (http://www.transifex.com/projects/p/xbmc-addons/language/gl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -47,6 +47,10 @@ msgstr "Eliminar Filme"
 msgctxt "#30103"
 msgid "Show Movie Info"
 msgstr "Amosar Info. do Filme"
+
+msgctxt "#30104"
+msgid "Add Movie to CouchPotato"
+msgstr "Engadir Filme a CouchPotato"
 
 msgctxt "#30110"
 msgid "Please enter Movie title"

@@ -1,3 +1,6 @@
+0.1.6 (14.02.2015)
+- Migrate trakt api to V2 (thx to tknorris)
+
 0.1.4 (08.01.2014)
  - fix adding or deleting of movies with only tmdb_id or imdb_id
  - fix urlencoding bug (e.g. on movies with colon in title

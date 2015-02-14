@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: Trakt.tv List Manager
 # Addon id: plugin.video.trakt_list_manager
 # Addon Provider: Tristan Fischer (sphere@dersphere.de)
@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/xbmc-addons/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,7 +18,7 @@ msgstr ""
 
 msgctxt "#30000"
 msgid "[B]Add new Custom List[/B]"
-msgstr "[B]Dodaj nową własną listę[/B]"
+msgstr "[B]Dodaj niestandardową listę[/B]"
 
 msgctxt "#30001"
 msgid "[B]Add new Movie[/B]"
@@ -30,7 +30,7 @@ msgstr "Pokaż listę obserwowanych"
 
 msgctxt "#30003"
 msgid "Show Custom Lists"
-msgstr "Pokaż własne listy"
+msgstr "Pokazuj niestandardowe listy"
 
 msgctxt "#30100"
 msgid "Add-on Settings"
@@ -47,6 +47,10 @@ msgstr "Usuń film"
 msgctxt "#30103"
 msgid "Show Movie Info"
 msgstr "Pokaż Informacje o filmie"
+
+msgctxt "#30104"
+msgid "Add Movie to CouchPotato"
+msgstr "Dodaj film do CouchPotato "
 
 msgctxt "#30110"
 msgid "Please enter Movie title"
@@ -110,7 +114,7 @@ msgstr "Musisz otworzyć menu podręczne"
 
 msgctxt "#30142"
 msgid "to choose the action you want"
-msgstr "by wybrać akcję, którą chcesz"
+msgstr "by wybrać operację, którą chcesz"
 
 msgctxt "#30300"
 msgid "Username"

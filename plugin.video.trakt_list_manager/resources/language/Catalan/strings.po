@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: Trakt.tv List Manager
 # Addon id: plugin.video.trakt_list_manager
 # Addon Provider: Tristan Fischer (sphere@dersphere.de)
@@ -8,13 +8,113 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Catalan (http://www.transifex.com/projects/p/xbmc-addons/language/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "[B]Add new Custom List[/B]"
+msgstr "[B]Afegir nova Llista Personalitzada[/B]"
+
+msgctxt "#30001"
+msgid "[B]Add new Movie[/B]"
+msgstr "[B]Afegir nova Pel·lícula[/B]"
+
+msgctxt "#30002"
+msgid "Show Watchlist"
+msgstr "Mostrar Watchlist"
+
+msgctxt "#30003"
+msgid "Show Custom Lists"
+msgstr "Mostrar les Llistes Personalitzades"
+
+msgctxt "#30100"
+msgid "Add-on Settings"
+msgstr "Configuració del Complement"
+
+msgctxt "#30101"
+msgid "Delete List"
+msgstr "Eliminar Llista"
+
+msgctxt "#30102"
+msgid "Delete Movie"
+msgstr "Eliminar Pel·lícula"
+
+msgctxt "#30103"
+msgid "Show Movie Info"
+msgstr "Mostrar Informació de la Pel·lícula"
+
+msgctxt "#30104"
+msgid "Add Movie to CouchPotato"
+msgstr "Afegir pel·lícula a CouchPotato"
+
+msgctxt "#30110"
+msgid "Please enter Movie title"
+msgstr "Si us plau, introdueix el títol de la Pel·lícula"
+
+msgctxt "#30111"
+msgid "Please select the correct Movie"
+msgstr "Si us plau, selecciona la Pel·lícula correcta"
+
+msgctxt "#30112"
+msgid "Please select the List"
+msgstr "Si us plau, selecciona la Llista"
+
+msgctxt "#30113"
+msgid "Delete Movie"
+msgstr "Eliminar Pel·lícula"
+
+msgctxt "#30114"
+msgid "Are you sure to delete?"
+msgstr "Esteu segur que voleu eliminar-la?"
+
+msgctxt "#30115"
+msgid "Delete List"
+msgstr "Eliminar Llista"
+
+msgctxt "#30116"
+msgid "Are you sure to delete?"
+msgstr "Esteu segur que voleu suprimir-la?"
+
+msgctxt "#30117"
+msgid "My Watchlist"
+msgstr "La meva Watchlist"
+
+msgctxt "#30120"
+msgid "Connection error"
+msgstr "Error de connexió"
+
+msgctxt "#30121"
+msgid "Wrong User-Credentials"
+msgstr "Credencials d'Usuari Incorrectes"
+
+msgctxt "#30122"
+msgid "Do you want to change them now?"
+msgstr "Voleu canviar-les ara?"
+
+msgctxt "#30130"
+msgid "No Movie found"
+msgstr "No s'ha trobat la Pel·lícula"
+
+msgctxt "#30131"
+msgid "Success"
+msgstr "Èxit"
+
+msgctxt "#30140"
+msgid "Please use context menu"
+msgstr "Si us plau, utilitza el menú contextual"
+
+msgctxt "#30141"
+msgid "You need to open the context-menu"
+msgstr "Necessita obrir el menú contextual"
+
+msgctxt "#30142"
+msgid "to choose the action you want"
+msgstr "per elegir la acció que vol dur a terme"
 
 msgctxt "#30300"
 msgid "Username"
@@ -23,3 +123,27 @@ msgstr "Nom d'usuari"
 msgctxt "#30301"
 msgid "Password"
 msgstr "Contrasenya"
+
+msgctxt "#30302"
+msgid "Default List"
+msgstr "Llista per defecte"
+
+msgctxt "#30303"
+msgid "Use HTTPS"
+msgstr "Utilitzar HTTPS"
+
+msgctxt "#30310"
+msgid "Default Privacy for new Lists"
+msgstr "Privacitat per defecte per les noves Llistes"
+
+msgctxt "#30311"
+msgid "Private"
+msgstr "Privat"
+
+msgctxt "#30312"
+msgid "Friends"
+msgstr "Amics"
+
+msgctxt "#30313"
+msgid "Public"
+msgstr "Públic"

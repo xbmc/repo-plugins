@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: Trakt.tv List Manager
 # Addon id: plugin.video.trakt_list_manager
 # Addon Provider: Tristan Fischer (sphere@dersphere.de)
@@ -8,13 +8,25 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Indonesian (http://www.transifex.com/projects/p/xbmc-addons/language/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: id\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "#30102"
+msgid "Delete Movie"
+msgstr "Hapus Film"
+
+msgctxt "#30103"
+msgid "Show Movie Info"
+msgstr "Tampilkan Informasi Film"
+
+msgctxt "#30113"
+msgid "Delete Movie"
+msgstr "Hapus Film"
 
 msgctxt "#30300"
 msgid "Username"

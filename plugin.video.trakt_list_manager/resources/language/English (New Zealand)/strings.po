@@ -1,0 +1,149 @@
+# Kodi Media Center language file
+# Addon Name: Trakt.tv List Manager
+# Addon id: plugin.video.trakt_list_manager
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (New Zealand) (http://www.transifex.com/projects/p/xbmc-addons/language/en_NZ/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_NZ\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "[B]Add new Custom List[/B]"
+msgstr "[B]Add new Custom List[/B]"
+
+msgctxt "#30001"
+msgid "[B]Add new Movie[/B]"
+msgstr "[B]Add new Movie[/B]"
+
+msgctxt "#30002"
+msgid "Show Watchlist"
+msgstr "Show Watchlist"
+
+msgctxt "#30003"
+msgid "Show Custom Lists"
+msgstr "Show Custom Lists"
+
+msgctxt "#30100"
+msgid "Add-on Settings"
+msgstr "Add-on Settings"
+
+msgctxt "#30101"
+msgid "Delete List"
+msgstr "Delete List"
+
+msgctxt "#30102"
+msgid "Delete Movie"
+msgstr "Delete Movie"
+
+msgctxt "#30103"
+msgid "Show Movie Info"
+msgstr "Show Movie Info"
+
+msgctxt "#30104"
+msgid "Add Movie to CouchPotato"
+msgstr "Add Movie to CouchPotato"
+
+msgctxt "#30110"
+msgid "Please enter Movie title"
+msgstr "Please enter Movie title"
+
+msgctxt "#30111"
+msgid "Please select the correct Movie"
+msgstr "Please select the correct Movie"
+
+msgctxt "#30112"
+msgid "Please select the List"
+msgstr "Please select the List"
+
+msgctxt "#30113"
+msgid "Delete Movie"
+msgstr "Delete Movie"
+
+msgctxt "#30114"
+msgid "Are you sure to delete?"
+msgstr "Are you sure to delete?"
+
+msgctxt "#30115"
+msgid "Delete List"
+msgstr "Delete List"
+
+msgctxt "#30116"
+msgid "Are you sure to delete?"
+msgstr "Are you sure to delete?"
+
+msgctxt "#30117"
+msgid "My Watchlist"
+msgstr "My Watchlist"
+
+msgctxt "#30120"
+msgid "Connection error"
+msgstr "Connection error"
+
+msgctxt "#30121"
+msgid "Wrong User-Credentials"
+msgstr "Wrong User-Credentials"
+
+msgctxt "#30122"
+msgid "Do you want to change them now?"
+msgstr "Do you want to change them now?"
+
+msgctxt "#30130"
+msgid "No Movie found"
+msgstr "No Movie found"
+
+msgctxt "#30131"
+msgid "Success"
+msgstr "Success"
+
+msgctxt "#30140"
+msgid "Please use context menu"
+msgstr "Please use context menu"
+
+msgctxt "#30141"
+msgid "You need to open the context-menu"
+msgstr "You need to open the context-menu"
+
+msgctxt "#30142"
+msgid "to choose the action you want"
+msgstr "to choose the action you want"
+
+msgctxt "#30300"
+msgid "Username"
+msgstr "Username"
+
+msgctxt "#30301"
+msgid "Password"
+msgstr "Password"
+
+msgctxt "#30302"
+msgid "Default List"
+msgstr "Default List"
+
+msgctxt "#30303"
+msgid "Use HTTPS"
+msgstr "Use HTTPS"
+
+msgctxt "#30310"
+msgid "Default Privacy for new Lists"
+msgstr "Default Privacy for new Lists"
+
+msgctxt "#30311"
+msgid "Private"
+msgstr "Private"
+
+msgctxt "#30312"
+msgid "Friends"
+msgstr "Friends"
+
+msgctxt "#30313"
+msgid "Public"
+msgstr "Public"

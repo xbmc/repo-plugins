@@ -18,14 +18,13 @@
 #
 
 import json
-from urllib import quote_plus as quote, urlencode
+from urllib import urlencode
 from urllib2 import urlopen, Request, HTTPError, URLError
-from hashlib import sha1
 
-
-API_URL = 'api.trakt.tv/'
+API_URL = 'api-v2launch.trakt.tv'
 USER_AGENT = 'XBMC Add-on Trakt.tv List Manager'
 NONE = 'NONE'
+PAGE_LIMIT = 30
 
 LIST_PRIVACY_IDS = (
     'private',
@@ -33,58 +32,57 @@ LIST_PRIVACY_IDS = (
     'public'
 )
 
-
 class AuthenticationError(Exception):
     pass
-
 
 class ConnectionError(Exception):
     pass
 
-
 class TraktListApi():
-
     def __init__(self, *args, **kwargs):
         self._reset_connection()
         if args or kwargs:
             self.connect(*args, **kwargs)
 
     def _reset_connection(self):
-        self.connected = False
         self._username = None
         self._password = None
+        self._token = ''
         self._api_key = None
         self._use_https = True
 
-    def connect(self, username=None, password=None, api_key=None,
+    def connect(self, username=None, password=None, token='', api_key=None,
                 use_https=True):
         self._username = username
-        self._password = sha1(password).hexdigest()
+        self._password = password
         self._api_key = api_key
         self._use_https = use_https
-        self.connected = self._test_credentials()
-        if not self.connected:
-            self._reset_connection()
-        return self.connected
+        if not token:
+            self._token = self.login()
+            if not self._token:
+                self._reset_connection()
+        else:
+            self._token = token
+        return self._token
 
     def get_watchlist(self):
-        path = 'user/watchlist/movies.json/{api_key}/{username}'
+        path = '/users/me/watchlist/movies?extended=full,images'
         return self._api_call(path, auth=True)
 
     def get_lists(self):
-        path = 'user/lists.json/{api_key}/{username}'
+        path = '/users/me/lists'
         return self._api_call(path, auth=True)
 
     def search_movie(self, query):
-        path = 'search/movies.json/{api_key}/?' + urlencode({'query': query})
+        path = '/search?' + urlencode({'type': 'movie', 'query': query, 'limit': PAGE_LIMIT})
         return self._api_call(path)
 
     def get_list(self, list_slug):
-        path = 'user/list.json/{api_key}/{username}/' + quote(list_slug)
+        path = '/users/me/lists/%s/items?extended=full,images' % (list_slug)
         return self._api_call(path, auth=True)
 
     def add_list(self, name, privacy_id=None, description=None):
-        path = 'lists/add/{api_key}'
+        path = '/users/me/lists'
         post = {
             'name': name,
             'description': description or '',
@@ -93,36 +91,32 @@ class TraktListApi():
         return self._api_call(path, post=post, auth=True)
 
     def del_list(self, list_slug):
-        path = 'lists/delete/{api_key}'
-        post = {
-            'slug': list_slug
-        }
-        return self._api_call(path, post=post, auth=True)
+        path = '/users/me/lists/%s' % (list_slug)
+        return self._api_call(path, delete=True, auth=True)
 
     def add_movie_to_list(self, list_slug, imdb_id=None, tmdb_id=None):
         if not tmdb_id and not imdb_id:
             raise AttributeError('Need one of tmdb_id, imdb_id')
-        item = {'type': 'movie'}
+        item = {'ids': {}}
         if tmdb_id and tmdb_id != NONE:
-            item['tmdb_id'] = tmdb_id
+            item['ids']['tmdb'] = tmdb_id
         if imdb_id and imdb_id != NONE:
-            item['imdb_id'] = imdb_id
-        path = 'lists/items/add/{api_key}'
+            item['ids']['imdb'] = imdb_id
+        path = '/users/me/lists/%s/items' % (list_slug)
         post = {
-            'slug': list_slug,
-            'items': [item],
+            'movies': [item],
         }
         return self._api_call(path, post=post, auth=True)
 
     def add_movie_to_watchlist(self, imdb_id=None, tmdb_id=None):
         if not tmdb_id and not imdb_id:
             raise AttributeError('Need one of tmdb_id, imdb_id')
-        item = {'type': 'movie'}
+        item = {'ids': {}}
         if tmdb_id and tmdb_id != NONE:
-            item['tmdb_id'] = tmdb_id
+            item['ids']['tmdb'] = tmdb_id
         if imdb_id and imdb_id != NONE:
-            item['imdb_id'] = imdb_id
-        path = 'movie/watchlist/{api_key}'
+            item['ids']['imdb'] = imdb_id
+        path = '/sync/watchlist'
         post = {
             'movies': [item],
         }
@@ -131,65 +125,92 @@ class TraktListApi():
     def del_movie_from_list(self, list_slug, imdb_id=None, tmdb_id=None):
         if not tmdb_id and not imdb_id:
             raise AttributeError('Need one of tmdb_id, imdb_id')
-        item = {'type': 'movie'}
+        item = {'ids': {}}
         if tmdb_id and tmdb_id != NONE:
-            item['tmdb_id'] = tmdb_id
+            item['ids']['tmdb'] = tmdb_id
         if imdb_id and imdb_id != NONE:
-            item['imdb_id'] = imdb_id
-        path = 'lists/items/delete/{api_key}'
+            item['ids']['imdb'] = imdb_id
+        path = '/users/me/lists/%s/items/remove' % (list_slug)
         post = {
-            'slug': list_slug,
-            'items': [item],
+            'movies': [item],
         }
         return self._api_call(path, post=post, auth=True)
 
     def del_movie_from_watchlist(self, imdb_id=None, tmdb_id=None):
         if not tmdb_id and not imdb_id:
             raise AttributeError('Need one of tmdb_id, imdb_id')
-        item = {'type': 'movie'}
+        item = {'ids': {}}
         if tmdb_id and tmdb_id != NONE:
-            item['tmdb_id'] = tmdb_id
+            item['ids']['tmdb'] = tmdb_id
         if imdb_id and imdb_id != NONE:
-            item['imdb_id'] = imdb_id
-        path = 'movie/unwatchlist/{api_key}'
+            item['ids']['imdb'] = imdb_id
+        path = '/sync/watchlist/remove'
         post = {
             'movies': [item],
         }
         return self._api_call(path, post=post, auth=True)
 
-    def _test_credentials(self):
-        path = 'account/test/{api_key}'
-        return self._api_call(path, auth=True).get('status') == 'success'
-
-    def _api_call(self, path, post={}, auth=False):
-        url = self._api_url + path.format(
-            api_key=self._api_key,
-            username=self._username,
-        )
-        self.log('_api_call using url: %s' % url)
-        if auth:
-            post.update({
-                'username': self._username,
-                'password': self._password
-            })
-        if post:
-            request = Request(url, json.dumps(post))
+    def login(self):
+        path = '/auth/login'
+        post = {
+                'login': self._username,
+                'password': self._password}
+        result = self._api_call(path, post = post)
+        if 'token' in result:
+            self._token = result['token']
+            return result['token']
         else:
-            request = Request(url)
-        request.add_header('User-Agent', USER_AGENT)
-        request.add_header('content-type', 'application/json')
-        try:
-            response = urlopen(request)
-            json_data = json.loads(response.read())
-        except HTTPError, error:
-            self.log('HTTPError: %s' % error)
-            if error.code == 401:
-                raise AuthenticationError(error)
+            return '' 
+
+    def _api_call(self, path, delete= False, post=None, auth=False):
+        if post is None: post = {}
+        url = self._api_url + path
+        headers = {
+                   'User-Agent': USER_AGENT,
+                   'Content-Type': 'application/json', 
+                   'trakt-api-key': self._api_key,
+                   'trakt-api-version': 2}
+        
+        auth_retry = False
+        while True:
+            if auth:
+                if not self._token:
+                    self.login()
+                headers.update({
+                    'trakt-user-login': self._username,
+                    'trakt-user-token': self._token})
+    
+            self.log('_api_call using url: |%s| headers: |%s| post: |%s|' % (url, headers, post))
+            if post:
+                request = Request(url, json.dumps(post), headers=headers)
             else:
-                raise HTTPError(error)
-        except URLError, error:
-            self.log('URLError: %s' % error)
-            raise ConnectionError(error)
+                request = Request(url, headers=headers)
+            
+            if delete:
+                request.get_method = lambda: 'DELETE'
+            
+            try:
+                response = urlopen(request)
+                data = response.read()
+                if data:
+                    json_data = json.loads(data)
+                else:
+                    json_data = {}
+                break
+                    
+            except HTTPError as error:
+                self.log('HTTPError: %s' % error)
+                if error.code == 401:
+                    if not auth or auth_retry:
+                        raise AuthenticationError(error)
+                    else:
+                        auth_retry = True
+                        self._token = ''
+                else:
+                    raise
+            except URLError as error:
+                self.log('URLError: %s' % error)
+                raise ConnectionError(error)
         self.log('_api_call response: %s' % repr(json_data))
         return json_data
 

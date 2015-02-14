@@ -16,6 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
+import re
 import sys
 
 if sys.version_info >= (2, 7):
@@ -75,8 +76,11 @@ class Scraper:
 
     def get_video_url(self, video_id):
         url = MAIN_URL + 'videos/config/xxx/%s.js' % video_id
-        data = self.__get_json(url)
-        return data['playlist'][1]['url']
+        data = self.__get_url(url)
+        match = re.search(r"'(http://.*\.(flv|mp4|webm))'", data)
+        if match:
+            return match.group(1)
+
 
     @staticmethod
     def __secs_from_duration(d):
@@ -88,12 +92,6 @@ class Scraper:
     @staticmethod
     def __img(url):
         return url.replace('135x76', '').split('?')[0]
-
-    def __get_json(self, url):
-        response = self.__get_url(url)
-        if not '"' in response:
-            response = response.replace('\'', '"')
-        return json.loads(response)
 
     def __get_tree(self, url):
         html = self.__get_url(url)

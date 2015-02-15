@@ -6,6 +6,13 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">Página</string>
+
+    <!-- Root menu entries -->
+    <string id="30100">Canales en directo</string>
     <string id="30101">Videos</string>
+    <string id="30103">Vodcasts</string>
+
+    <!-- Search -->
+    <string id="30200">Buscar vídeos</string>
     <string id="30201">Título</string>
 </strings>

@@ -6,6 +6,13 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">Страница</string>
+
+    <!-- Root menu entries -->
+    <string id="30100">Онлайн потоци</string>
     <string id="30101">Видео</string>
+    <string id="30103">Подкасти</string>
+
+    <!-- Search -->
+    <string id="30200">Търси видео</string>
     <string id="30201">Заглавие</string>
 </strings>

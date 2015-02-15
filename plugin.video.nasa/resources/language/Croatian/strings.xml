@@ -6,6 +6,13 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">Stranica</string>
-    <string id="30101">Video</string>
-    <string id="30201">Naslovu</string>
+
+    <!-- Root menu entries -->
+    <string id="30100">Stremanje uživo</string>
+    <string id="30101">Video snimke</string>
+    <string id="30103">Web video zapisi</string>
+
+    <!-- Search -->
+    <string id="30200">Pretraži video snimke</string>
+    <string id="30201">Naslov</string>
 </strings>

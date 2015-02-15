@@ -6,6 +6,13 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">עמוד</string>
-    <string id="30101">וידאו</string>
+
+    <!-- Root menu entries -->
+    <string id="30100">הזרמות חיות</string>
+    <string id="30101">סרטונים</string>
+    <string id="30103">פודקאסט וידאו</string>
+
+    <!-- Search -->
+    <string id="30200">חיפוש סרטונים</string>
     <string id="30201">כותרת</string>
 </strings>

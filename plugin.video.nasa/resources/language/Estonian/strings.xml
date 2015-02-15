@@ -6,6 +6,13 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">Leht</string>
+
+    <!-- Root menu entries -->
+    <string id="30100">Otseülekanded</string>
     <string id="30101">Videod</string>
+    <string id="30103">Vodcast'id</string>
+
+    <!-- Search -->
+    <string id="30200">Videote otsimine</string>
     <string id="30201">Pealkiri</string>
 </strings>

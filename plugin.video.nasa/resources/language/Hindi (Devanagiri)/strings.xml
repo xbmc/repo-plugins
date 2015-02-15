@@ -4,6 +4,8 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
+    <!-- Default strings -->
+    <string id="30001">पृष्ठ</string>
     <string id="30101">विडियो</string>
     <string id="30201">शीर्षक</string>
 </strings>

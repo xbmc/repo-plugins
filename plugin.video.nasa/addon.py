@@ -17,7 +17,7 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-from xbmcswift2 import Plugin, xbmc
+from xbmcswift2 import Plugin
 
 
 STRINGS = {
@@ -57,30 +57,32 @@ YOUTUBE_CHANNELS = (
     {
         'name': 'NASA Main',
         'logo': 'nasa.jpg',
+        'channel_id': 'UCLA_DiR1FfKNvjuUpBHmylQ',
         'user': 'NASAtelevision',
     }, {
         'name': 'NASA Goddard',
         'logo': 'goddard.jpg',
+        'channel_id': 'UCAY-SMFNfynqz1bdoaV8BeQ',
         'user': 'NASAexplorer',
     }, {
         'name': 'NASA Jet Propulsion Laboratory',
         'logo': 'jpl.jpg',
+        'channel_id': 'UCryGec9PdUCLjpJW2mgCuLw',
         'user': 'JPLnews',
     }, {
         'name': 'NASA Kennedy Space Center',
         'logo': 'nasa.jpg',
+        'channel_id': 'UCjJtr2fFcUp6yljzJOzpHUg',
         'user': 'NASAKennedy',
     }, {
         'name': 'Hubble Space Telescope',
         'logo': 'hubble.jpg',
+        'channel_id': 'UCqvjEkH_41m4DYaoNQwk4Bw',
         'user': 'HubbleSiteChannel',
     },
 )
 
-YOUTUBE_URL = (
-    'plugin://plugin.video.youtube/?'
-    'path=/root&feed=uploads&channel=%s'
-)
+YOUTUBE_URL ='plugin://plugin.video.youtube/channel/%s/?page=1'
 
 plugin = Plugin()
 
@@ -112,7 +114,7 @@ def show_channels():
     items = [{
         'label': channel['name'],
         'thumbnail': get_logo(channel['logo']),
-        'path': YOUTUBE_URL % channel['user'],
+        'path': YOUTUBE_URL % channel['channel_id'],
     } for channel in YOUTUBE_CHANNELS]
     return plugin.finish(items)
 

@@ -28,7 +28,7 @@
 
     <!-- Context Menu -->
     <string id="30400">Lägg till i "Mina stationer"</string>
-    <string id="30401">Ta bort från "Mina stationer"</string>
+    <string id="30401">Radera från "Mina stationer"</string>
     <string id="30402">Redigera anpassad station</string>
 
     <!-- Custom Station -->

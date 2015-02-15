@@ -6,4 +6,10 @@
 <strings>
     <!-- Settings -->
     <string id="30300">Valoda</string>
+    <string id="30301">angļu</string>
+    <string id="30302">vācu</string>
+    <string id="30303">franču</string>
+
+    <!-- Error Message -->
+    <string id="30600">Tīkla kļūda</string>
 </strings>

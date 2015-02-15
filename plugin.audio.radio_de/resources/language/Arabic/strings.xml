@@ -4,9 +4,19 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
+    <string id="30102">الاستعراض حسب النوع</string>
+    <string id="30108">المحطات الخاصة بي </string>
+
     <!-- Settings -->
     <string id="30300">اللغة</string>
     <string id="30301">الإنجليزية</string>
     <string id="30302">الجرمانية</string>
     <string id="30303">الفرنسية</string>
+
+    <!-- Context Menu -->
+    <string id="30400">الاضافة الى "محطاتي المفضلة" </string>
+    <string id="30401">الازالة من قائمة محطاتي المفضلة   </string>
+
+    <!-- Error Message -->
+    <string id="30600">خطاء بالشبكة </string>
 </strings>

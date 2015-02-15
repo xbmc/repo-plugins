@@ -34,7 +34,7 @@
     <!-- Custom Station -->
     <string id="30500">Por favor introduza %s</string> <!--%s will be filled by 30501, 30502 or 30503 -->
     <string id="30501">título</string>
-    <string id="30502">url ou camiño da miniatura</string>
+    <string id="30502">url ou ruta da miniatura</string>
     <string id="30503">url do fluxo</string>
     <string id="30504">Engadir Emisora personalizada...</string>
 

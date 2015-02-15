@@ -4,11 +4,20 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
+    <string id="30102">Vis etter sjanger</string>
+    <string id="30104">Vis etter land</string>
+    <string id="30108">Mine stasjoner</string>
+
     <!-- Settings -->
     <string id="30300">Språk</string>
     <string id="30301">Engelsk</string>
     <string id="30302">Tysk</string>
     <string id="30303">Fransk</string>
+    <string id="30310">Tving visningsmodus til "Miniatyrbilder"</string>
+
+    <!-- Context Menu -->
+    <string id="30400">Legg til i "Mine stasjoner"</string>
+    <string id="30401">Fjern fra "Mine stasjoner"</string>
 
     <!-- Error Message -->
     <string id="30600">Nettverksfeil</string>

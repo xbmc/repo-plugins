@@ -2,6 +2,12 @@
 * Fixed/improved feature
 - Removed feature
 
+
+15. February 2015 v3.0.7
++ Added login via https for getting the frontpage HTML for premium users
+  Thanks to thloe-1 for pointing that out
+
+
 15. February 2015 v3.0.6
 * Updated plugin to support new website design for scraping
 * Replaced 256k streams with 320k (256k streams has been discontinued by DI.fm)

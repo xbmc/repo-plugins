@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Norwegian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/no/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Alle undersjangere</string>
+    <string id="30001">Topp 500 stasjoner</string>
+    <string id="30002">Vis etter sjanger</string>
+    <string id="30003">Mine stasjoner</string>
+    <string id="30004">Søk etter stasjon med navn</string>
+    <string id="30005">Søk etter stasjon som spiller sang</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Legg til i "Mine stasjoner"</string>
+    <string id="30011">Fjern fra "Mine stasjoner"</string>
+
+    <!-- Settings -->
+    <string id="30100">Vis undersjangere</string>
+    <string id="30101">Antall stasjoner i listen</string>
+    <string id="30102">Vis kvalitet i tittel</string>
+    <string id="30103">Velg en tilgeldig server (Ikke spør)</string>
+    <string id="30104">Filtrer stasjoner etter minimum kvalitet</string>
+    <string id="30110">Minimum kvalitet</string>
+    <string id="30111">96 kbit/s</string>
+    <string id="30112">128 kbit/s</string>
+    <string id="30113">160 kbit/s</string>
+    <string id="30114">192 kbit/s</string>
+
+    <!-- Messages -->
+    <string id="30200">Nettverksfeil</string>
+</strings>

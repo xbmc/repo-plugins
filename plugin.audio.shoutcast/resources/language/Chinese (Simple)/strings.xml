@@ -21,6 +21,12 @@
     <string id="30101">列表中电台数</string>
     <string id="30102">标题显示比特率</string>
     <string id="30103">选择一个随机服务器（不提问）</string>
+    <string id="30104">按最小比特率筛选电台</string>
+    <string id="30110">最小比特率</string>
+    <string id="30111">96 kbit/s</string>
+    <string id="30112">128 kbit/s</string>
+    <string id="30113">160 kbit/s</string>
+    <string id="30114">192 kbit/s</string>
 
     <!-- Messages -->
     <string id="30200">网络错误</string>

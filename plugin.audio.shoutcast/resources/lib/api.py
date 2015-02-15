@@ -24,7 +24,7 @@ import simplejson as json
 import xmltodict
 
 API_URL = 'http://api.shoutcast.com/'
-PLAY_URL = 'http://yp.shoutcast.com/sbin/tunein-station.pls?id=%d'
+PLAYLIST_URL = 'http://yp.shoutcast.com/sbin/tunein-station.m3u?id={station_id}'
 
 
 class NetworkError(Exception):
@@ -33,7 +33,12 @@ class NetworkError(Exception):
 
 class ShoutcastApi():
 
-    USER_AGENT = 'XBMC ShoutcastApi'
+    # Thanks for blocking XBMC, eat this.
+    USER_AGENT = (
+        'Mozilla/5.0 (Windows NT 6.1; WOW64) '
+        'AppleWebKit/537.36 (KHTML, like Gecko) '
+        'Chrome/40.0.2214.111 Safari/537.36'
+    )
 
     def __init__(self, api_key, limit=500):
         self.api_key = api_key
@@ -106,7 +111,6 @@ class ShoutcastApi():
         return [{
             'id': int(station['@id']),
             'name': __clean(station.get('@name', '')),
-            'playlist_url': PLAY_URL % int(station['@id']),
             'bitrate': int(station.get('@br', 0)),
             'listeners': int(station.get('@lc', 0)),
             'current_track': station.get('@ct', ''),
@@ -123,13 +127,12 @@ class ShoutcastApi():
             'has_parent': int(genre.get('parentid', 0)) != 0
         } for genre in genres.get('genre', [])]
 
-    def resolve_playlist(self, playlist_url):
-        response = self.__urlopen(playlist_url)
-        stream_urls = []
-        for line in response.splitlines():
-            if line.strip().startswith('File'):
-                stream_urls.append(line.split('=')[1])
-        print 'Found Stream URLS: %s' % repr(stream_urls)
+    def resolve(self, station_id):
+        response = self.__urlopen(PLAYLIST_URL.format(station_id=station_id))
+        stream_urls = [
+            l for l in response.splitlines()
+            if l.strip() and not l.strip().startswith('#')
+        ]
         if stream_urls:
             return random.choice(stream_urls)
 

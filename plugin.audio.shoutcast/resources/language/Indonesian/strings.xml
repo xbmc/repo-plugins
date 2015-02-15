@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Indonesian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/id/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Semua subtema</string>
+    <string id="30001">500 Stasiun Teratas</string>
+    <string id="30002">Jelajah menurut tema</string>
+    <string id="30003">Stasiun Saya</string>
+    <string id="30004">Cari Stasiun menurut nama</string>
+    <string id="30005">Cari Stasiun yang memutar Trek Ini</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Tambah ke "Stasiun Saya"</string>
+    <string id="30011">Hapus dari "Stasiun Saya"</string>
+
+    <!-- Settings -->
+    <string id="30100">Tampilkan subtema</string>
+    <string id="30101">Jumlah stasiun di daftar</string>
+    <string id="30102">Tampilkan Bitrate pada Judul</string>
+    <string id="30103">Pilih server acak (Jangan tanya)</string>
+    <string id="30104">Filter stasiun berdasarkan bitrate minimum</string>
+    <string id="30110">Bitrate minimum</string>
+    <string id="30111">96 kbit/s</string>
+    <string id="30112">128 kbit/s</string>
+    <string id="30113">160 kbit/s</string>
+    <string id="30114">192 kbit/s</string>
+
+    <!-- Messages -->
+    <string id="30200">Kesalahan Jaringan</string>
+</strings>

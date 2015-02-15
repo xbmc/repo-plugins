@@ -21,6 +21,12 @@
     <string id="30101">Anzahl Podcasts</string>
     <string id="30102">Bitrate in Title einfügen</string>
     <string id="30103">Wähle zufälligen Server (nicht fragen)</string>
+    <string id="30104">Sender nach Bitrate filtern</string>
+    <string id="30110">Mindest-Bitrate</string>
+    <string id="30111">96 kbit/s</string>
+    <string id="30112">128 kbit/s</string>
+    <string id="30113">160 kbit/s</string>
+    <string id="30114">192 kbit/s</string>
 
     <!-- Messages -->
     <string id="30200">Netzwerkfehler</string>

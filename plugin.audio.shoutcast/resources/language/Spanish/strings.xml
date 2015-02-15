@@ -21,6 +21,12 @@
     <string id="30101">Número de emisoras en directorios</string>
     <string id="30102">Mostrar bitrate junto al nombre</string>
     <string id="30103">Elegir un servidor aleatorio (No preguntar)</string>
+    <string id="30104">Filtrar emisoras por Bitrate</string>
+    <string id="30110">Bitrate mínimo</string>
+    <string id="30111">96 kbit/s</string>
+    <string id="30112">128 kbit/s</string>
+    <string id="30113">160 kbit/s</string>
+    <string id="30114">192 kbit/s</string>
 
     <!-- Messages -->
     <string id="30200">Error en la conexión</string>

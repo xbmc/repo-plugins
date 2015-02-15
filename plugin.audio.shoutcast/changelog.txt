@@ -1,3 +1,7 @@
+2.3.0 (15.02.2015)
+ - fixed playback of some station (all should work now again)
+ - updated translations
+
 2.2.0 (23.04.2013)
  - fixed unicode related error (Top 500 was broken)
  - added bitrate filter

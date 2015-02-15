@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
-<!-- Belarusian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/be/ -->
+<!-- English (US) language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/en_US/ -->
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
@@ -21,7 +21,7 @@
     <string id="30101">Num stations in list</string>
     <string id="30102">Show Bitrate in Title</string>
     <string id="30103">Choose a random server (Don't ask)</string>
-    <string id="30104">Filter stations by minium Bitrate</string>
+    <string id="30104">Filter stations by minimum Bitrate</string>
     <string id="30110">Minimum Bitrate</string>
     <string id="30111">96 kbit/s</string>
     <string id="30112">128 kbit/s</string>

@@ -21,6 +21,12 @@
     <string id="30101">Állomásszám a listában</string>
     <string id="30102">Bitarány mutatása a címben</string>
     <string id="30103">Véletlenszerű kiszolgálóválasztás (kérdezés nélkül)</string>
+    <string id="30104">Adók szűrése minimális Bitráta alapján</string>
+    <string id="30110">Minimális Bitráta</string>
+    <string id="30111">96 kbit/s</string>
+    <string id="30112">128 kbit/s</string>
+    <string id="30113">160 kbit/s</string>
+    <string id="30114">192 kbit/s</string>
 
     <!-- Messages -->
     <string id="30200">Hálózati hiba</string>

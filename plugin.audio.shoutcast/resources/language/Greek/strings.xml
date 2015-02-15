@@ -21,6 +21,12 @@
     <string id="30101">Αριθμός σταθμών στη λίστα</string>
     <string id="30102">Προβολή Bitrate στον Τίτλο</string>
     <string id="30103">Επιλογή τυχαίου διακομιστή (Χωρίς ερώτηση)</string>
+    <string id="30104">Φιλτράρισμα σταθμών κατά ελάχιστο Bitrate</string>
+    <string id="30110">Ελάχιστο Bitrate</string>
+    <string id="30111">96 kbit/s</string>
+    <string id="30112">128 kbit/s</string>
+    <string id="30113">160 kbit/s</string>
+    <string id="30114">192 kbit/s</string>
 
     <!-- Messages -->
     <string id="30200">Σφάλμα Δικτύου</string>

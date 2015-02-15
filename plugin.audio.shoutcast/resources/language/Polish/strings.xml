@@ -21,6 +21,12 @@
     <string id="30101">Numer stacji na liście</string>
     <string id="30102">Pokazuj bitrate w tytule</string>
     <string id="30103">Wybierz przypadkowy serwer (nie pytaj)</string>
+    <string id="30104">Sortuj stacje minimalnym Bitrate</string>
+    <string id="30110">MInimalny Bitrate</string>
+    <string id="30111">96 kbit/s</string>
+    <string id="30112">128 kbit/s</string>
+    <string id="30113">160 kbit/s</string>
+    <string id="30114">192 kbit/s</string>
 
     <!-- Messages -->
     <string id="30200">Błąd sieci</string>

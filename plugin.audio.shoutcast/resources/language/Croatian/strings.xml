@@ -4,5 +4,30 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
+    <!-- Root Menu -->
+    <string id="30000">Svi podžanrovi</string>
+    <string id="30001">Top 500 stanica</string>
     <string id="30002">Pregled po žanru</string>
+    <string id="30003">Moje stanice</string>
+    <string id="30004">Pretraži stanice po nazivu</string>
+    <string id="30005">Pretraži radio stanice za trenutno reproduciranu pjesmu</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Dodaj u "Moje stanice"</string>
+    <string id="30011">Ukloni iz "Moje stanice"</string>
+
+    <!-- Settings -->
+    <string id="30100">Prikaži podkategorije</string>
+    <string id="30101">Broj stanica u popisu</string>
+    <string id="30102">Prikaži brzinu prijenosa u naslovu</string>
+    <string id="30103">Odaberi naizmjenice poslužitelja (ne pitaj)</string>
+    <string id="30104">Filtriraj stanice po minimalnoj brzini prijenosa</string>
+    <string id="30110">Minimalna brzina prijenosa</string>
+    <string id="30111">96 kbit/s</string>
+    <string id="30112">128 kbit/s</string>
+    <string id="30113">160 kbit/s</string>
+    <string id="30114">192 kbit/s</string>
+
+    <!-- Messages -->
+    <string id="30200">Greška mreže</string>
 </strings>

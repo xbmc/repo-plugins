@@ -17,7 +17,7 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-from xbmcswift2 import Plugin, xbmc
+from xbmcswift2 import Plugin
 from resources.lib.api import ShoutcastApi, NetworkError
 
 plugin = Plugin()
@@ -96,13 +96,11 @@ def show_stations(genre_id):
     return __add_stations(items)
 
 
-@plugin.route('/resolve_playlist/<playlist_url>')
-def resolve_playlist(playlist_url):
-    stream_url = api.resolve_playlist(playlist_url)
+@plugin.route('/resolve/<station_id>')
+def resolve_play_url(station_id):
+    stream_url = api.resolve(station_id)
     if stream_url:
         plugin.set_resolved_url(stream_url)
-    else:
-        plugin.set_resolved_url(playlist_url)
 
 
 @plugin.route('/search/station/')
@@ -165,7 +163,6 @@ def __add_stations(stations):
     my_stations_ids = my_stations.keys()
     items = []
     show_bitrate = plugin.get_setting('show_bitrate_in_title', bool)
-    choose_random = plugin.get_setting('choose_random_server', bool)
     if plugin.get_setting('bitrate_filter_enabled', bool):
         bitrates = (96, 128, 160, 192)
         min_bitrate = plugin.get_setting('bitrate_filter', choices=bitrates)
@@ -211,18 +208,10 @@ def __add_stations(stations):
             'context_menu': context_menu,
             'is_playable': True,
             'path': plugin.url_for(
-                endpoint='resolve_playlist',
-                playlist_url=station['playlist_url']
+                endpoint='resolve_play_url',
+                station_id=station['id'],
             )
         }
-        if choose_random:
-            item['path'] = plugin.url_for(
-                endpoint='resolve_playlist',
-                playlist_url=station['playlist_url']
-            )
-        else:
-            item['path'] = station['playlist_url']
-            item['properties'] = [('mimetype', 'audio/x-scpls'), ]
         items.append(item)
     finish_kwargs = {
         'sort_methods': [

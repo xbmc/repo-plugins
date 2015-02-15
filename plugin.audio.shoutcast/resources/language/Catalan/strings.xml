@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Catalan language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ca/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">tots els subgèneres</string>
+    <string id="30001">Top 500 de Emissores</string>
+    <string id="30002">Buscar per Genere</string>
+    <string id="30003">Les meves emissores</string>
+    <string id="30004">Cerca emissora per Nom</string>
+    <string id="30005">Cerca de pista actual de la emissora en reproducció</string>
+
+    <!-- Context Menu -->
+    <string id="30010">afageix a "Les meves Emissores"</string>
+    <string id="30011">Elimina de "Les meves Emissores"</string>
+
+    <!-- Settings -->
+    <string id="30100">Mostrar els subgèneres</string>
+    <string id="30101">Num de Emissores a la llista</string>
+    <string id="30102">Mostra el Bitrate en el titol</string>
+    <string id="30103">Tria un servidor aleatori (sense preguntar)</string>
+    <string id="30104">Filtrar les Emissores per minim de Bitrate</string>
+    <string id="30110">Minim de Bitrate</string>
+    <string id="30111">96 kbit/s</string>
+    <string id="30112">128 kbit/s</string>
+    <string id="30113">160 kbit/s</string>
+    <string id="30114">192 kbit/s</string>
+
+    <!-- Messages -->
+    <string id="30200">Error de xarxa</string>
+</strings>

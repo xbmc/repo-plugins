@@ -4,6 +4,30 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
+    <!-- Root Menu -->
+    <string id="30000">Всички поджанрове</string>
+    <string id="30001">Топ 500 станции</string>
+    <string id="30002">Търси по жанр</string>
+    <string id="30003">Моите станции</string>
+    <string id="30004">Търси станция по име</string>
+    <string id="30005">Търси станция по текущо слушаната песен</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Добави в "Моите станции"</string>
+    <string id="30011">Премахни от "Моите станции"</string>
+
+    <!-- Settings -->
+    <string id="30100">Покажи поджанрове</string>
+    <string id="30101">Брой станции в списъка</string>
+    <string id="30102">Покажи битрейта в заглавието</string>
+    <string id="30103">Избери случаен сървър (Не питай)</string>
+    <string id="30104">Филтрирай станциите по минимален битрейт</string>
+    <string id="30110">Минимален битрейт</string>
+    <string id="30111">96 кбит/с</string>
+    <string id="30112">128 кбит/с</string>
+    <string id="30113">160 кбит/с</string>
+    <string id="30114">192 кбит/с</string>
+
     <!-- Messages -->
     <string id="30200">Мрежова грешка</string>
 </strings>

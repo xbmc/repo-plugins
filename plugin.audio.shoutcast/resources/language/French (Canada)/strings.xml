@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- French (Canada) language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/fr_CA/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Tous les sous-genres</string>
+    <string id="30001">Les 500 1res stations</string>
+    <string id="30002">Parcourir par genre</string>
+    <string id="30003">Mes stations</string>
+    <string id="30004">Rechercher les stations par nom</string>
+    <string id="30005">Rechercher les stations par piste jouant actuellement</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Ajouter à « Mes stations »</string>
+    <string id="30011">Enlever de « Mes stations »</string>
+
+    <!-- Settings -->
+    <string id="30100">Afficher les sous-genres</string>
+    <string id="30101">Numéros des stations dans la liste</string>
+    <string id="30102">Afficher le débit binaire dans le titre</string>
+    <string id="30103">Choisir un serveur aléatoire (ne pas demander)</string>
+    <string id="30104">Filtrer les stations par débit binaire minimum</string>
+    <string id="30110">Débit binaire minimum</string>
+    <string id="30111">96 kbit/s</string>
+    <string id="30112">128 kbits/s</string>
+    <string id="30113">160 kbit/s</string>
+    <string id="30114">192 kbit/s</string>
+
+    <!-- Messages -->
+    <string id="30200">Erreur de réseau</string>
+</strings>

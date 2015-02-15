@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-	<setting id="choose_random_server" type="bool" label="30103" default="true"/>
 	<setting id="show_subgenres" type="bool" label="30100" default="false"/>
 	<setting id="show_bitrate_in_title" type="bool" label="30102" default="false"/>
 	<setting id="bitrate_filter_enabled" type="bool" label="30104" default="false"/>

@@ -6,22 +6,28 @@
 <strings>
     <!-- Root Menu -->
     <string id="30000">Todos os subgêneros</string>
-    <string id="30001">500 Top Estações</string>
-    <string id="30002">Procurar por Gênero</string>
-    <string id="30003">Minhas Estações</string>
-    <string id="30004">Procurar Estação pelo nome</string>
-    <string id="30005">Procurar faixa atual que está reproduzindo na Estação</string>
+    <string id="30001">As 500 melhores estações</string>
+    <string id="30002">Procurar por gênero</string>
+    <string id="30003">Minhas estações</string>
+    <string id="30004">Pesquisar estação por nome</string>
+    <string id="30005">Pesquisar estação por faixa sendo reproduzida</string>
 
     <!-- Context Menu -->
-    <string id="30010">Adicionar para "Minhas Estações"</string>
+    <string id="30010">Adicionar a "Minhas Estações"</string>
     <string id="30011">Remover de "Minhas Estações"</string>
 
     <!-- Settings -->
-    <string id="30100">Mostrar Subgêneros</string>
-    <string id="30101">Número Estações na lista</string>
-    <string id="30102">Mostrar Bitrate no título</string>
-    <string id="30103">Escolher um servidor randômico (Não Perguntar)</string>
+    <string id="30100">Mostrar subgêneros</string>
+    <string id="30101">Numerar estações na lista</string>
+    <string id="30102">Mostrar bitrate no título</string>
+    <string id="30103">Escolher um servidor aleatório (Não perguntar)</string>
+    <string id="30104">Filtrar estações por bitrate mínimo</string>
+    <string id="30110">Bitrate mínimo</string>
+    <string id="30111">96 kbit/s</string>
+    <string id="30112">128 kbit/s</string>
+    <string id="30113">160 kbit/s</string>
+    <string id="30114">192 kbit/s</string>
 
     <!-- Messages -->
-    <string id="30200">Erro na Rede</string>
+    <string id="30200">Erro na rede</string>
 </strings>

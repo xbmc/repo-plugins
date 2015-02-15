@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Tamil (India) language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ta_IN/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">அனைத்து துணைவகைகள்</string>
+    <string id="30001">உச்சி 500 நிலையங்கள்</string>
+    <string id="30002">வகைபடி உலாவு</string>
+    <string id="30003">என்னுடைய நிலையங்கள்</string>
+    <string id="30004">பெயர்படி நிலையத்தனி தேடுக</string>
+    <string id="30005">தற்போது வாசிக்கப்படும் பாடலின் நிலையத்தனி தேடுக</string>
+
+    <!-- Context Menu -->
+    <string id="30010">"என்னுடைய நிலையங்கள்" பட்டியலில் சேர்க்கவும்</string>
+    <string id="30011">"என்னுடைய நிலையங்கள்" பட்டியலில் இருந்து நீக்கவும்</string>
+
+    <!-- Settings -->
+    <string id="30100">துணை வகைகளை காண்பிக்கவும்</string>
+    <string id="30101">பட்டியலில் நிலையங்கள் எண்ணை காண்பி</string>
+    <string id="30102">தலைப்பில் பிட்டு விகிதத்தை காண்பி</string>
+    <string id="30103">எதாவது சேவையகத்தை தேர்வுசெய் (கேள்வி தேவையில்லை)</string>
+    <string id="30104">குறைந்தபட்ச பிட்டு விகிதப்படி நிலையங்களை வடிகட்டவும்</string>
+    <string id="30110">குறைந்தபட்ச பிட்டு விகிதம்</string>
+    <string id="30111">96 kbit/s</string>
+    <string id="30112">128 kbit/s</string>
+    <string id="30113">160 kbit/s</string>
+    <string id="30114">192 kbit/s</string>
+
+    <!-- Messages -->
+    <string id="30200">பிணைய பிழை</string>
+</strings>

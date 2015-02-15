@@ -21,6 +21,12 @@
     <string id="30101">Num. rádios na lista</string>
     <string id="30102">Exibir bitrate no Título</string>
     <string id="30103">Escolher um servidor ao acaso (não perguntar)</string>
+    <string id="30104">Filtrar estações por bitrate mínimo</string>
+    <string id="30110">Bitrate Mínimo</string>
+    <string id="30111">96 kbit/s</string>
+    <string id="30112">128 kbit/s</string>
+    <string id="30113">160 kbit/s</string>
+    <string id="30114">192 kbit/s</string>
 
     <!-- Messages -->
     <string id="30200">Erro de Rede</string>

@@ -21,6 +21,12 @@
     <string id="30101">목록에 표시할 방송국 수</string>
     <string id="30102">방송국명에 비트레이트 보기</string>
     <string id="30103">무작위 서버 선택 (묻지 않음)</string>
+    <string id="30104">최저 비트레이트로 방송국 필터링</string>
+    <string id="30110">최저 비트레이트</string>
+    <string id="30111">96 kbit/s</string>
+    <string id="30112">128 kbit/s</string>
+    <string id="30113">160 kbit/s</string>
+    <string id="30114">192 kbit/s</string>
 
     <!-- Messages -->
     <string id="30200">네트워크 에러</string>

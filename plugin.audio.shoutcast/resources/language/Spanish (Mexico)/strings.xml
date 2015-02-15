@@ -4,6 +4,30 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
+    <!-- Root Menu -->
+    <string id="30000">Todos los subgeneros</string>
+    <string id="30001">Las mejores 500 Estaciones</string>
+    <string id="30002">Navegar por genero</string>
+    <string id="30003">Mis Estaciones</string>
+    <string id="30004">Busqueda de Estaciones por nombre</string>
+    <string id="30005">Busqueda de la Pista Actual Reproducia en la Estacion</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Agregar a "Mis Estaciones"</string>
+    <string id="30011">Remover de "Mis Estaciones"</string>
+
+    <!-- Settings -->
+    <string id="30100">Mostrar Subgeneros</string>
+    <string id="30101">Numero de Estaciones en la lista</string>
+    <string id="30102">Mostrar la Tasa de Bits en el Titulo</string>
+    <string id="30103">Elejir un servidor al azar (Sin preguntar)</string>
+    <string id="30104">Filtro de estaciones por Tasa de Bits minima</string>
+    <string id="30110">Tasa de Bits MInima</string>
+    <string id="30111">96 kbit/s</string>
+    <string id="30112">128 kbit/s</string>
+    <string id="30113">160 kbit/s</string>
+    <string id="30114">192 kbit/s</string>
+
     <!-- Messages -->
     <string id="30200">Error de red</string>
 </strings>

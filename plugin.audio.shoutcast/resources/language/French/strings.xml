@@ -21,6 +21,12 @@
     <string id="30101">Nombre de stations dans la liste</string>
     <string id="30102">Afficher le bitrate dans le titre</string>
     <string id="30103">Choisir un serveur aléatoirement (Ne pas demander)</string>
+    <string id="30104">Filtrer les stations par échantillonage minimum</string>
+    <string id="30110">Échantillonage minimum</string>
+    <string id="30111">96 kbit/s</string>
+    <string id="30112">128 kbit/s</string>
+    <string id="30113">160 kbit/s</string>
+    <string id="30114">192 kbit/s</string>
 
     <!-- Messages -->
     <string id="30200">Erreur réseau</string>

@@ -21,6 +21,12 @@
     <string id="30101">Núm. de emisoras na listaxe</string>
     <string id="30102">Amosar a Taxa de bits no Título</string>
     <string id="30103">Seleccionar un servidor ó chou (Non preguntar)</string>
+    <string id="30104">Filtrar as estacións pola taxa de bits mínima</string>
+    <string id="30110">Taxa de bits mínima</string>
+    <string id="30111">96 kbit/s</string>
+    <string id="30112">128 kbit/s</string>
+    <string id="30113">160 kbit/s</string>
+    <string id="30114">192 kbit/s</string>
 
     <!-- Messages -->
     <string id="30200">Erro de rede</string>

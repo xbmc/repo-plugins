@@ -4,6 +4,30 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
+    <!-- Root Menu -->
+    <string id="30000">כל תת הסגנונות</string>
+    <string id="30001">500 התחנות הגדולות</string>
+    <string id="30002">עיון לפי סגנון</string>
+    <string id="30003">התחנות שלי</string>
+    <string id="30004">חיפוש תחנה לפי שם</string>
+    <string id="30005">חיפוש תחנה המנגנת רצועה נוכחית</string>
+
+    <!-- Context Menu -->
+    <string id="30010">הוספה לתחנות שלי</string>
+    <string id="30011">הסרה מהתחנות שלי</string>
+
+    <!-- Settings -->
+    <string id="30100">הצג תת סגנונות</string>
+    <string id="30101">מס' תחנות ברשימה</string>
+    <string id="30102">הצג קצב נתונים בכותרת</string>
+    <string id="30103">בחר שרת אקראי (ללא התערבות משתמש)</string>
+    <string id="30104">סנן תחנות לפי קצב נתונים מינימלי</string>
+    <string id="30110">קצב נתונים מינימלי</string>
+    <string id="30111">96 kbit/s</string>
+    <string id="30112">128 kbit/s</string>
+    <string id="30113">160 kbit/s</string>
+    <string id="30114">192 kbit/s</string>
+
     <!-- Messages -->
     <string id="30200">שגיאת רשת</string>
 </strings>

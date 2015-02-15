@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Slovenian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/sl/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Vse podzvrsti</string>
+    <string id="30001">500 naj postaj</string>
+    <string id="30002">Prebrskaj glede na zvrst</string>
+    <string id="30003">Moje postaje</string>
+    <string id="30004">Išči postajo po imenu</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Dodaj med »Moje postaje«</string>
+    <string id="30011">Odstrani iz »Mojih postaj«</string>
+
+    <!-- Settings -->
+    <string id="30100">Pokaži podzvrsti</string>
+    <string id="30111">96 kbit/s</string>
+    <string id="30112">128 kbit/s</string>
+    <string id="30113">160 kbit/s</string>
+    <string id="30114">192 kbit/s</string>
+
+    <!-- Messages -->
+    <string id="30200">Omrežna napaka</string>
+</strings>

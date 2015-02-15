@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Turkish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/tr/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Tüm Alt Türler</string>
+    <string id="30001">En İyi 500 İstasyon</string>
+    <string id="30002">Tarza göre gözat</string>
+    <string id="30003">Benim İstasyonlarım</string>
+    <string id="30004">Isme Göre Istasyon Ara</string>
+    <string id="30005">Geçerli Parçayı Çalan Istasyonu Ara</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Benim İstasyonlarım'a Ekle</string>
+    <string id="30011">Benim İstasyonlarım'dan Kaldır</string>
+
+    <!-- Settings -->
+    <string id="30100">Alt tarzları göster</string>
+    <string id="30101">İstasyonları listede numaralandır</string>
+    <string id="30102">Başlıkta Bit Oranını Göster</string>
+    <string id="30103">Rastgele Bir Sunucu Seç (Bir Daha Sorma)</string>
+    <string id="30104">İstasyonları En Düşük Bit Oranına Göre Filtrele</string>
+    <string id="30110">En Düşük Bit Oranı</string>
+    <string id="30111">96 kbit/s</string>
+    <string id="30112">128 kbit/s</string>
+    <string id="30113">160 kbit/s</string>
+    <string id="30114">192 kbit/s</string>
+
+    <!-- Messages -->
+    <string id="30200">Ağ Hatası</string>
+</strings>

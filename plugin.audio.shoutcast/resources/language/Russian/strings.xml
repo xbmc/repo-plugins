@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Russian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ru/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Все подстили</string>
+    <string id="30001">ТОП 500 станций</string>
+    <string id="30002">Просмотр по стилю</string>
+    <string id="30003">Мои станции</string>
+    <string id="30004">Поиск станции по названию</string>
+    <string id="30005">Искать станции, воспроизводящие текущую дорожку</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Добавить в "Мои станции"</string>
+    <string id="30011">Убрать из "Моих станций"</string>
+
+    <!-- Settings -->
+    <string id="30100">Показать подстили</string>
+    <string id="30101">Количество станций в списке</string>
+    <string id="30102">Показывать битрейт в заголовке</string>
+    <string id="30103">Выбирать случайный сервер (Не спрашивать)</string>
+    <string id="30104">Фильтр станций по минимальному битрейту</string>
+    <string id="30110">Минимальный битрейт</string>
+    <string id="30111">96 кбит/с</string>
+    <string id="30112">128 кбит/с</string>
+    <string id="30113">160 кбит/с</string>
+    <string id="30114">192 кбит/с</string>
+
+    <!-- Messages -->
+    <string id="30200">Ошибка сети</string>
+</strings>

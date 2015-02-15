@@ -7,10 +7,11 @@
         <setting id="forceupdate" type="bool" label="30010" default="false" />
 		<setting id="getpremium" type="lsep" label="30015" />
 	</category>
+
 	<category label="30002">
 		<setting id="username" type="text" label="30003" />
 		<setting id="password" type="text" option="hidden" label="30004" />
-		<setting id="bitrate" type="enum" label="30013" values="40|64|128|256" default="4" />
+		<setting id="bitrate" type="enum" label="30013" values="40|64|128|320" default="4" />
 		<setting id="usefavorites" type="bool" label="30005" default="false" />
 		<setting id="forceupdate" type="bool" label="30010" default="false" />
 		<setting id="getpremium" type="lsep" label="30015" />

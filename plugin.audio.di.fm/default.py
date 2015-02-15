@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 ########################################
 #  Digitally Imported XBMC plugin
@@ -97,8 +97,7 @@ class musicAddonXbmc:
     # regex used to find all streams in a .pls
     re_playlistStreams = re.compile("File\d=([^\n]+)\s*Title\d=([^\n]+)", re.M | re.I)
 
-    #dictBitrate = {1: 40, 2: 64, 3: 128, 4: 256}
-    dictBitrate = [40, 64, 128, 256]
+    dictBitrate = [40, 64, 128, 320]
 
     # list of channels used when caching and retrieving from cache
     channelsList = []
@@ -134,10 +133,10 @@ class musicAddonXbmc:
         threads = []
 
         # check if cache has expired
-        if not ADDON.getSetting("forceupdate") == "true"\
-            and not int(ADDON.getSetting("cacheexpire_days")) == 0\
-            and self.checkFileTime(pluginConfig.get('cache', 'cacheChannels'),
-                                   ADDON.getSetting("cacheexpire_days")):
+        if not ADDON.getSetting("forceupdate") == "true" \
+                and not int(ADDON.getSetting("cacheexpire_days")) == 0 \
+                and self.checkFileTime(pluginConfig.get('cache', 'cacheChannels'),
+                                       ADDON.getSetting("cacheexpire_days")):
             ADDON.setSetting(id="forceupdate", value="true")
 
         if ADDON.getSetting("forceupdate") == "true":
@@ -163,6 +162,7 @@ class musicAddonXbmc:
                     return True
 
                 channels = json.loads(self.curler.request(pluginConfig.get('streams', 'premium%sk' % self.dictBitrate[int(ADDON.getSetting('bitrate'))]), 'get'))
+                channelMeta = self.getChannelMetadata(html)
 
                 premiumConfig = self.getPremiumConfig()
 
@@ -177,7 +177,9 @@ class musicAddonXbmc:
 
                 # if we should get the favorites or all channels
                 if ADDON.getSetting("usefavorites") == 'true':
-                    channels = self.getFavoriteChannels(html, channels)
+                    favplaylist = self.curler.request(pluginConfig.get('streams', 'favorites%sk' % self.dictBitrate[int(ADDON.getSetting('bitrate'))]) + '?' + premiumConfig['listenKey'], 'get')
+
+                    channels = self.getFavoriteChannels(channels, favplaylist)
                     if len(channels) == 0:
                         xbmcgui.Dialog().ok(ADDON.getLocalizedString(30180),
                                             ADDON.getLocalizedString(30181),
@@ -203,12 +205,10 @@ class musicAddonXbmc:
                     xbmcplugin.endOfDirectory(HANDLE, succeeded=True)
                     return True
 
+                # put each playlist in a worker queue for threading
                 channels = json.loads(self.curler.request(pluginConfig.get('streams', 'public'), 'get'))
+                channelMeta = self.getChannelMetadata(html)
 
-            re_channelData = re.compile("NS\('AudioAddict'\).Channels\s*=\s*([^;]+);", re.M | re.I)
-            channelMeta = json.loads(re_channelData.findall(html)[0])
-
-            # put each playlist in a worker queue for threading
             for channel in channels:
                 self.workQueue.put(channel)
 
@@ -216,10 +216,10 @@ class musicAddonXbmc:
             while not self.workQueue.empty():
                 xbmc.log('Worker queue size is %s' % (str(self.workQueue.qsize())), xbmc.LOGNOTICE)
 
-                if threading.activeCount() < self.threadMax and not self.workQueue.empty():
+                if threading.activeCount() < self.threadMax and not self.workQueue.empty(): # checks if max threads are started
                     threads.append(scraperThread(self, self.workQueue.get(), channelMeta, len(channels)))
                     threads[-1].start()
-                else:
+                else: # else wait for 0.1 second
                     time.sleep(0.1)
 
             # wait for all threads to finish before continuing
@@ -231,6 +231,14 @@ class musicAddonXbmc:
                 pickle.dump(self.channelsList, open(os.path.join(self.addonProfilePath, pluginConfig.get('cache', 'cacheChannels')), "w"), protocol=0)
                 ADDON.setSetting(id="forceupdate", value="false")
 
+            if self.newChannels > 0:
+                xbmcgui.Dialog().ok(ADDON.getLocalizedString(30130),
+                                    ADDON.getLocalizedString(30131) + str(self.newChannels) + ADDON.getLocalizedString(30132),
+                                    ADDON.getLocalizedString(30133),
+                                    ADDON.getLocalizedString(30134))
+
+
+
         # else load channels from cache file
         else:
             self.channelsList = pickle.load(open(os.path.join(self.addonProfilePath, pluginConfig.get('cache', 'cacheChannels')), "r"))
@@ -238,11 +246,12 @@ class musicAddonXbmc:
             for channel in self.channelsList:
                 self.addItem(channel['name'],
                              channel['streamUrl'],
-                             channel['name'],
+                             channel['description'],
                              channel['bitrate'],
                              channel['asset'],
                              channel['isNew'],
                              len(self.channelsList))
+
 
         # Should channels be sorted A-Z?
         if ADDON.getSetting('sortaz') == "true":
@@ -251,13 +260,27 @@ class musicAddonXbmc:
         # tell XMBC there are no more items to list
         xbmcplugin.endOfDirectory(HANDLE, succeeded=True)
 
-        if self.newChannels > 0:
-            xbmcgui.Dialog().ok(ADDON.getLocalizedString(30130),
-                                ADDON.getLocalizedString(30131) + str(self.newChannels) + ADDON.getLocalizedString(30132),
-                                ADDON.getLocalizedString(30133),
-                                ADDON.getLocalizedString(30134))
-
         return True
+
+    """
+    Gets channel metadata from site html and cleans it up
+    """
+    def getChannelMetadata(self, html):
+
+        # Will get JSON with all channel metadata
+        re_channelMeta = re.compile(r"di.app.start\(({\"channels\":\s*[^\)]+)\);", re.M | re.I)
+        channelMeta = re_channelMeta.findall(html)[0]
+
+        # removes those pesky \u2019 and what not
+        channelMeta = re.sub(r'\\u[\d\w]{4}','', channelMeta)
+        # TODO proper handling of \uxxxx characters - en-/decoding issue
+
+        channelMeta = json.loads(channelMeta) # parse the json
+        channelMeta_sorted = {}
+        for cMeta in channelMeta['channels']: # loop through meta data, using each channel ID as key instead
+            channelMeta_sorted[cMeta['key']] = cMeta
+
+        return channelMeta_sorted
 
 
     """
@@ -267,17 +290,16 @@ class musicAddonXbmc:
         # set to true if new channelart is downloaded
         isNew = 0
 
-        if not os.path.exists(self.addonProfilePath + str(channel['id']) + '.png'):
+        # if channel asset does not exist, download it
+        if not os.path.exists(self.addonProfilePath + str(channel['key']) + '.png'):
             isNew = 1
             self.newChannels += 1
-            self.getChannelAsset(str(channel['id']), "http:" + channelMeta[str(channel['id'])]['asset_url'])
+            self.getChannelAsset(str(channel['key']), "http:" + channelMeta[channel['key']]['asset_url'])
 
+        # gets a random stream from the channels playlist if set in config (is on by default)
         if ADDON.getSetting('randomstream') == "true":
             playlist = self.curler.request(channel['playlist'] + self.listenKey, 'get')
-
             playlistStreams = self.re_playlistStreams.findall(playlist)
-
-            # gets a random stream from the channels playlist
             streamUrl = playlistStreams[randrange(len(playlistStreams))][0]
         else:
             streamUrl = channel['playlist'] + self.listenKey
@@ -290,17 +312,17 @@ class musicAddonXbmc:
         # stores channel in list to be cached later
         co = {'name': channel['name'],
               'streamUrl': streamUrl,
-              'description': channel['name'],
+              'description': channelMeta[channel['key']]['description'],
               'bitrate': bitrate,
-              'asset': self.addonProfilePath + str(channel['id']) + '.png',
+              'asset': self.addonProfilePath + str(channel['key']) + '.png',
               'isNew': isNew}
         self.channelsList.append(dict(co))
 
         self.addItem(channel['name'],
                      streamUrl,
-                     channel['name'],
+                     channelMeta[channel['key']]['description'],
                      bitrate,
-                     self.addonProfilePath + str(channel['id']) + '.png',
+                     self.addonProfilePath + str(channel['key']) + '.png',
                      isNew,
                      channelCount)
 
@@ -316,8 +338,8 @@ class musicAddonXbmc:
         else:
             li = xbmcgui.ListItem(label=channelTitle, thumbnailImage=icon)
 
-        # 256kb/sec is MP3
-        if bitrate == 256 and ADDON.getSetting('username') != "":
+        # 320kb/sec is MP3
+        if bitrate == 320 and ADDON.getSetting('username') != "":
             li.setProperty("mimetype", 'audio/mpeg')
         else:
             li.setProperty("mimetype", 'audio/aac')
@@ -355,24 +377,20 @@ class musicAddonXbmc:
     """ Return a list containing a dictonary
      Filters out all channels that are not in the favorites list
     """
-    def getFavoriteChannels(self, html, allChannels):
+    def getFavoriteChannels(self, allchannels, favplaylist):
         channels = []
-        re_favoriteData = re.compile("NS\('AudioAddict.API.Config.member'\).Favorites\s*=\s*([^;]+);", re.M | re.I)
-        m = re_favoriteData.findall(html)
+        re_favchannels = re.compile(r"File\d+=http:\/\/.+\/([\w\d]+)\?", re.M | re.I)
+        favchannelkeys = re_favchannels.findall(favplaylist)
 
         # if favorites list is empty, return empty list
-        if m[0] == '[]':
+        if int(len(favchannelkeys)) == 0:
             return channels
-        else:
-            favorites = json.loads(re_favoriteData.findall(html)[0])
 
-        # sort favorites after user selected positions
-        favorites = sorted(favorites, key=lambda k: k['position'])
-
-        for fav in favorites:
-            for channel in allChannels:
-                if fav['channel_id'] == channel['id']:
+        for fav in favchannelkeys:
+            for channel in allchannels:
+                if fav == channel['key']:
                     channels.append(dict(channel))
+                    break
 
         return channels
 

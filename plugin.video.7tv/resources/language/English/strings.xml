@@ -6,10 +6,14 @@
     <string id="30002">Password</string>
 
     <string id="30010">Video Quality</string>
-    <string id="30011">SD</string>
-	<string id="30012">HD</string>
-	<string id="30013">Full HD</string>
-    <string id="30014">Ultra HD</string>
+    <string id="30011">480p</string>
+	<string id="30012">720p (HD)</string>
+	<string id="30013">1080p (HD)</string>
+    <string id="30014">2160p (4k)</string>
+    <string id="30015">4320p (8k)</string>
+    <string id="30016">240p</string>
+    <string id="30017">360p</string>
+
     <string id="30020">Allow 3D</string>
     <string id="30021">Show Fanart</string>
     <string id="30022">Items per page</string>
@@ -18,9 +22,15 @@
     <string id="30025">Enable setup-wizard</string>
     <string id="30026">Override View</string>
     <string id="30027">View: Default</string>
-    <string id="30028">View: Videos</string>
-    <string id="30029">Execute</string>
-    <string id="30030">Setup-wizard</string>
+    <string id="30028">View: Episodes</string>
+    <string id="30029">View: Movies</string>
+    <string id="30030">Execute setup-wizard?</string>
+    <string id="30031">Advanced</string>
+    <string id="30032">View: TV Shows</string>
+    <string id="30033">View: Songs</string>
+    <string id="30034">View: Artists</string>
+    <string id="30035">View: Albums</string>
+    <string id="30036">Support alternative player</string>
 
     <!-- Kodion Common -->
     <string id="30100">Favorites</string>
@@ -36,6 +46,14 @@
     <string id="30110">New Search</string>
     <string id="30111">Sign In</string>
     <string id="30112">Sign Out</string>
+    <string id="30113">Rename</string>
+    <string id="30114">Confirm delete</string>
+    <string id="30115">Confirm remove</string>
+    <string id="30116">Delete "%s"?</string>
+    <string id="30117">Remove "%s"?</string>
+    <string id="30118">Delete</string>
+    <string id="30119">Please wait...</string>
+    <string id="30120">Clear</string>
 
     <!-- 7TV -->
     <string id="30500">Popular Shows</string>

@@ -302,8 +302,7 @@ class Provider(kodion.AbstractProvider):
             result.extend(video_list)
 
             if next_page:
-                next_page_item = kodion.items.create_next_page_item(context, page)
-                next_page_item.set_fanart(fanart)
+                next_page_item = kodion.items.NextPageItem(context, page, fanart=fanart)
                 result.append(next_page_item)
                 pass
             pass

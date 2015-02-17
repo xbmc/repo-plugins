@@ -69,7 +69,7 @@
     <string id="30510">Meine Abos</string>
     <string id="30511">Queue Video</string>
     <string id="30512">Kanäle finden</string>
-    <string id="30513">Empfohlene Videos</string>
+    <string id="30513">Jetzt gerade beliebt</string>
     <string id="30514">Ähnliche Videos</string>
     <string id="30515">Auto-Entfernen für "Später ansehen"</string>
     <string id="30516">Verzeichnisse</string>
@@ -97,4 +97,6 @@
     <string id="30538">Disliked Videos</string>
     <string id="30539">Live</string>
     <string id="30540">Abspielen mit...</string>
+    <string id="30541">Kanalnamen in der Beschreibung anzeigen</string>
+    <string id="30542">rtmpe streams werden leider nicht unterstützt</string>
 </strings>

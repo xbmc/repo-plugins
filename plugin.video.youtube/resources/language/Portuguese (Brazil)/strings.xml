@@ -13,7 +13,7 @@
     <string id="30015">4320p (8k)</string>
     <string id="30016">240p</string>
     <string id="30017">360p</string>
-
+	
     <string id="30020">Permitir 3D</string>
     <string id="30021">Mostrar Fanart</string>
     <string id="30022">Itens por página</string>
@@ -25,6 +25,11 @@
     <string id="30028">Vista: Videos</string>
 	<string id="30030">Executar assistente de configuração</string>
     <string id="30031">Avançado</string>
+	<string id="30032">Visualização: Seriados</string>
+    <string id="30033">Visualização: Músicas</string>
+    <string id="30034">Visualiação: Artistas</string>
+    <string id="30035">Visualização: Álbuns</string>
+    <string id="30036">Suportar player alternativo</string>
 
     <!-- Kodimon Common -->
     <string id="30100">Favoritos</string>
@@ -41,11 +46,13 @@
     <string id="30111">Logar</string>
     <string id="30112">Deslogar</string>
     <string id="30113">Renomear</string>
-    <string id="30114">Confirmar remoção completa</string>
-    <string id="30115">Confirmar remoção</string>
+    <string id="30114">Confirmar Apagar</string>
+    <string id="30115">Confirmar remover</string>
     <string id="30116">Apagar "%s"?</string>
     <string id="30117">Remover "%s"?</string>
-    <string id="30118">Apagar</string>
+    <string id="30118">Deletar</string>
+	<string id="30119">Por favor aguarde...</string>
+	<string id="30120">Limpar</string>
 
     <!-- YouTube -->
     <string id="30500">Canais</string>
@@ -71,12 +78,23 @@
     <string id="30520">Adicionar para...</string>
     <string id="30521">Selecionar playlist</string>
     <string id="30522">Nova playlist...</string>
-	<string id="30523">Língua</string>
-    <string id="30524">Selecionar língua</string>
+	<string id="30523">Idioma</string>
+    <string id="30524">Selecionar idioma</string>
     <string id="30525">Selecionar região</string>
     <string id="30526">Ajustar</string>
-    <string id="30527">Língua e região?</string>
+    <string id="30527">Idioma e região?</string>
     <string id="30528">Classificar...</string>
     <string id="30529">Gosto</string>
     <string id="30530">Não gosto</string>
+	<string id="30531">Reproduzir todos</string>
+    <string id="30532">Padrão</string>
+    <string id="30533">Reverso</string>
+    <string id="30534">Aleatório</string>
+    <string id="30535">Selecionar a ordem da playlist</string>
+    <string id="30536">Atualizando Playlist...</string>
+    <string id="30537">Reproduzir daqui</string>
+    <string id="30538">Vídeos Não Curtidos</string>
+	<string id="30539">Ao Vivo</string>
+    <string id="30540">Reproduzir com...</string>
+    <string id="30541">Mostrar nome do canal na descrição</string>
 </strings>

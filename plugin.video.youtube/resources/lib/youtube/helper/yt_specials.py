@@ -19,7 +19,7 @@ def _process_related_videos(provider, context, re_match):
     return result
 
 
-def _process_what_to_watch(provider, context, re_match):
+def _process_popular_right_now(provider, context, re_match):
     provider.set_content_type(context, kodion.constants.content_type.EPISODES)
 
     result = []
@@ -94,8 +94,8 @@ def process(category, provider, context, re_match):
     if category == 'related_videos':
         result.extend(_process_related_videos(provider, context, re_match))
         pass
-    elif category == 'what_to_watch':
-        result.extend(_process_what_to_watch(provider, context, re_match))
+    elif category == 'popular_right_now':
+        result.extend(_process_popular_right_now(provider, context, re_match))
         pass
     elif category == 'browse_channels':
         result.extend(_process_browse_channels(provider, context, re_match))

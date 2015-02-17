@@ -40,8 +40,8 @@ class AbstractProvider(object):
 
         for method_name in dir(self):
             method = getattr(self, method_name)
-            if hasattr(method, 'kodimon_re_path'):
-                self.register_path(method.kodimon_re_path, method_name)
+            if hasattr(method, 'kodion_re_path'):
+                self.register_path(method.kodion_re_path, method_name)
                 pass
             pass
 

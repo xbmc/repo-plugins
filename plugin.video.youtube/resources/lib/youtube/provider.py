@@ -26,7 +26,7 @@ class Provider(kodion.AbstractProvider):
                  'youtube.remove': 30108,
                  'youtube.delete': 30118,
                  'youtube.browse_channels': 30512,
-                 'youtube.what_to_watch': 30513,
+                 'youtube.popular_right_now': 30513,
                  'youtube.related_videos': 30514,
                  'youtube.setting.auto_remove_watch_later': 30515,
                  'youtube.subscribe_to': 30517,
@@ -57,7 +57,8 @@ class Provider(kodion.AbstractProvider):
                  'youtube.video.rate.dislike': 30530,
                  'youtube.video.rate.none': 30108,
                  'youtube.video.play_with': 30540,
-                 'youtube.live': 30539}
+                 'youtube.live': 30539,
+                 'youtube.error.rtmpe_not_supported': 30542}
 
     def __init__(self):
         kodion.AbstractProvider.__init__(self)
@@ -412,11 +413,11 @@ class Provider(kodion.AbstractProvider):
             pass
 
         # what to watch
-        if settings.get_bool('youtube.folder.what_to_watch.show', True):
+        if settings.get_bool('youtube.folder.popular_right_now.show', True):
             what_to_watch_item = DirectoryItem(
-                '[B]' + context.localize(self.LOCAL_MAP['youtube.what_to_watch']) + '[/B]',
-                context.create_uri(['special', 'what_to_watch']),
-                context.create_resource_path('media', 'what_to_watch.png'))
+                context.localize(self.LOCAL_MAP['youtube.popular_right_now']),
+                context.create_uri(['special', 'popular_right_now']),
+                context.create_resource_path('media', 'popular.png'))
             what_to_watch_item.set_fanart(self.get_fanart(context))
             result.append(what_to_watch_item)
             pass

@@ -69,7 +69,7 @@
     <string id="30510">My Subscriptions</string>
     <string id="30511">Queue video</string>
     <string id="30512">Browse Channels</string>
-    <string id="30513">What to watch</string>
+    <string id="30513">Popular right now</string>
     <string id="30514">Related Videos</string>
     <string id="30515">Auto-Remove from 'Watch Later'</string>
     <string id="30516">Folders</string>
@@ -97,4 +97,6 @@
     <string id="30538">Disliked Videos</string>
     <string id="30539">Live</string>
     <string id="30540">Play with...</string>
+    <string id="30541">Show channel name in description</string>
+    <string id="30542">rtmpe streams are not supported</string>
 </strings>

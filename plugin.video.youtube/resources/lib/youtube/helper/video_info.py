@@ -10,46 +10,250 @@ from .signature.cipher import Cipher
 
 
 class VideoInfo(object):
-    DEFAULT_ITAG_MAP = {'5': {'format': 'FLV', 'width': 320, 'height': 240},
-                        '17': {'format': '3GP', 'width': 176, 'height': 144},
-                        '18': {'format': 'MP4', 'width': 480, 'height': 360},
-                        '22': {'format': 'MP4', 'width': 1280, 'height': 720},
-                        '34': {'format': 'FLV', 'width': 480, 'height': 360},
-                        '35': {'format': 'FLV', 'width': 640, 'height': 480},
-                        '36': {'format': '3GP', 'width': 320, 'height': 240},
-                        '37': {'format': 'MP4', 'width': 1920, 'height': 1080},
-                        '38': {'format': 'MP4', 'width': 2048, 'height': 1080},
-                        '43': {'format': 'WEB', 'width': 480, 'height': 360},
-                        '44': {'format': 'WEB', 'width': 640, 'height': 480},
-                        '45': {'format': 'WEB', 'width': 1280, 'height': 720},
-                        '46': {'format': 'WEB', 'width': 1920, 'height': 1080},
-                        '82': {'format': 'MP4', 'width': 480, 'height': 360, '3D': True},
-                        '83': {'format': 'MP4', 'width': 640, 'height': 480, '3D': True},
-                        '84': {'format': 'MP4', 'width': 1280, 'height': 720, '3D': True},
-                        '85': {'format': 'MP4', 'width': 1920, 'height': 1080, '3D': True},
-                        '100': {'format': 'WEB', 'width': 480, 'height': 360, '3D': True},
-                        '101': {'format': 'WEB', 'width': 640, 'height': 480, '3D': True},
-                        '102': {'format': 'WEB', 'width': 1280, 'height': 720, '3D': True},
-                        '133': {'format': 'MP4', 'width': 320, 'height': 240, 'VO': True},
-                        '134': {'format': 'MP4', 'width': 480, 'height': 360, 'VO': True},
-                        '135': {'format': 'MP4', 'width': 640, 'height': 480, 'VO': True},
-                        '136': {'format': 'MP4', 'width': 1280, 'height': 720, 'VO': True},
-                        '137': {'format': 'MP4', 'width': 1920, 'height': 1080, 'fps': 30},
-                        '140': {'format': 'audio/mp4'},
-                        '160': {'format': 'MP4', 'width': 256, 'height': 144, 'VO': True},
-                        '171': {'format': 'audio/webm'},
-                        '242': {'format': 'WEB', 'width': 320, 'height': 240, 'VOX': True},
-                        '243': {'format': 'WEB', 'width': 480, 'height': 360, 'VOX': True},
-                        '244': {'format': 'WEB', 'width': 640, 'height': 480, 'VOX': True},
-                        '245': {'format': 'WEB', 'width': 640, 'height': 480, 'VOX': True},
-                        '246': {'format': 'WEB', 'width': 640, 'height': 480, 'VOX': True},
-                        '247': {'format': 'WEB', 'width': 1280, 'height': 720, 'VOX': True},
-                        '248': {'format': 'WEB', 'width': 1920, 'height': 1080, 'VOX': True},
-                        '264': {'format': 'MP4', 'width': 1920, 'height': 1080, 'VOX': True},
-                        '298': {'format': 'video/mp4; codecs="avc1.4d4020', 'width': 1280, 'height': 720, 'fps': 60},
-                        '299': {'format': 'video/mp4; codecs="avc1.64002a', 'width': 1920, 'height': 1080, 'fps': 60},
-                        '302': {'format': 'video/webm; codecs="vp9', 'width': 1280, 'height': 720, 'fps': 60},
-                        '303': {'format': 'video/webm; codecs="vp9', 'width': 1920, 'height': 1080, 'fps': 60}}
+    FORMAT = {
+        # === Non-DASH ===
+        '5': {'container': 'flv',
+              'video': {'resolution': 240, 'encoding': 'h.263'},
+              'audio': {'bitrate': 64, 'encoding': 'mp3'}},
+        '6': {'container': 'flv',  # Discontinued
+              'video': {'resolution': 270, 'encoding': 'h.263'},
+              'audio': {'bitrate': 64, 'encoding': 'mp3'}},
+        '13': {'container': '3gp',  # Discontinued
+               'video': {'encoding': 'mpeg-4'},
+               'audio': {'encoding': 'aac'}},
+        '17': {'container': '3gp',
+               'video': {'resolution': 144, 'encoding': 'mpeg-4'},
+               'audio': {'bitrate': 24, 'encoding': 'aac'}},
+        '18': {'container': 'mp4',
+               'video': {'resolution': 360, 'encoding': 'h.264'},
+               'audio': {'bitrate': 96, 'encoding': 'aac'}},
+        '22': {'container': 'mp4',
+               'video': {'resolution': 720, 'encoding': 'h.264'},
+               'audio': {'bitrate': 192, 'encoding': 'aac'}},
+        '34': {'container': 'flv',  # Discontinued
+               'video': {'resolution': 360, 'encoding': 'h.264'},
+               'audio': {'bitrate': 128, 'encoding': 'aac'}},
+        '35': {'container': 'flv',  # Discontinued
+               'video': {'resolution': 480, 'encoding': 'h.264'},
+               'audio': {'bitrate': 128, 'encoding': 'aac'}},
+        '36': {'container': '3gp',
+               'video': {'resolution': 240, 'encoding': 'mpeg-4'},
+               'audio': {'bitrate': 32, 'encoding': 'aac'}},
+        '37': {'container': 'mp4',
+               'video': {'resolution': 1080, 'encoding': 'h.264'},
+               'audio': {'bitrate': 192, 'encoding': 'aac'}},
+        '38': {'container': 'mp4',
+               'video': {'resolution': 3072, 'encoding': 'h.264'},
+               'audio': {'bitrate': 192, 'encoding': 'aac'}},
+        '43': {'container': 'webm',
+               'video': {'resolution': 360, 'encoding': 'vp8'},
+               'audio': {'bitrate': 128, 'encoding': 'vorbis'}},
+        '44': {'container': 'webm',  # Discontinued
+               'video': {'resolution': 480, 'encoding': 'vp8'},
+               'audio': {'bitrate': 128, 'encoding': 'vorbis'}},
+        '45': {'container': 'webm',  # Discontinued
+               'video': {'resolution': 720, 'encoding': 'vp8'},
+               'audio': {'bitrate': 192, 'encoding': 'vorbis'}},
+        '46': {'container': 'webm',  # Discontinued
+               'video': {'resolution': 1080, 'encoding': 'vp8'},
+               'audio': {'bitrate': 192, 'encoding': 'vorbis'}},
+        '59': {'container': 'mp4',
+               'video': {'resolution': 480, 'encoding': 'h.264'},
+               'audio': {'bitrate': 96, 'encoding': 'aac'}},
+        '78': {'container': 'mp4',
+               'video': {'resolution': 360, 'encoding': 'h.264'},
+               'audio': {'bitrate': 96, 'encoding': 'aac'}},
+        # === 3D ===
+        '82': {'container': 'mp4',
+               '3D': True,
+               'video': {'resolution': 360, 'encoding': 'h.264'},
+               'audio': {'bitrate': 96, 'encoding': 'aac'}},
+        '83': {'container': 'mp4',
+               '3D': True,
+               'video': {'resolution': 240, 'encoding': 'h.264'},
+               'audio': {'bitrate': 96, 'encoding': 'aac'}},
+        '84': {'container': 'mp4',
+               '3D': True,
+               'video': {'resolution': 720, 'encoding': 'h.264'},
+               'audio': {'bitrate': 192, 'encoding': 'aac'}},
+        '85': {'container': 'mp4',
+               '3D': True,
+               'video': {'resolution': 1080, 'encoding': 'h.264'},
+               'audio': {'bitrate': 192, 'encoding': 'aac'}},
+        '100': {'container': 'webm',
+                '3D': True,
+                'video': {'resolution': 360, 'encoding': 'vp8'},
+                'audio': {'bitrate': 128, 'encoding': 'vorbis'}},
+        '101': {'container': 'webm',  # Discontinued
+                '3D': True,
+                'video': {'resolution': 360, 'encoding': 'vp8'},
+                'audio': {'bitrate': 192, 'encoding': 'vorbis'}},
+        '102': {'container': 'webm',  # Discontinued
+                '3D': True,
+                'video': {'resolution': 720, 'encoding': 'vp8'},
+                'audio': {'bitrate': 192, 'encoding': 'vorbis'}},
+        # === Live Streams ===
+        '92': {'container': 'ts',
+               'Live': True,
+               'video': {'resolution': 240, 'encoding': 'h.264'},
+               'audio': {'bitrate': 48, 'encoding': 'aac'}},
+        '93': {'container': 'ts',
+               'Live': True,
+               'video': {'resolution': 360, 'encoding': 'h.264'},
+               'audio': {'bitrate': 128, 'encoding': 'aac'}},
+        '94': {'container': 'ts',
+               'Live': True,
+               'video': {'resolution': 480, 'encoding': 'h.264'},
+               'audio': {'bitrate': 128, 'encoding': 'aac'}},
+        '95': {'container': 'ts',
+               'Live': True,
+               'video': {'resolution': 720, 'encoding': 'h.264'},
+               'audio': {'bitrate': 256, 'encoding': 'aac'}},
+        '96': {'container': 'ts',
+               'Live': True,
+               'video': {'resolution': 1080, 'encoding': 'h.264'},
+               'audio': {'bitrate': 256, 'encoding': 'aac'}},
+        '120': {'container': 'flv',  # Discontinued
+                'Live': True,
+                'video': {'resolution': 720, 'encoding': 'h.264'},
+                'audio': {'bitrate': 128, 'encoding': 'aac'}},
+        '127': {'container': 'ts',
+                'Live': True,
+                'audio': {'bitrate': 96, 'encoding': 'aac'}},
+        '128': {'container': 'ts',
+                'Live': True,
+                'audio': {'bitrate': 96, 'encoding': 'aac'}},
+        '132': {'container': 'ts',
+                'Live': True,
+                'video': {'resolution': 240, 'encoding': 'h.264'},
+                'audio': {'bitrate': 48, 'encoding': 'aac'}},
+        '151': {'container': 'ts',
+                'Live': True,
+                'video': {'resolution': 72, 'encoding': 'h.264'},
+                'audio': {'bitrate': 24, 'encoding': 'aac'}},
+        # === DASH (video only)
+        '133': {'container': 'mp4',
+                'dash/video': True,
+                'video': {'resolution': 240, 'encoding': 'h.264'}},
+        '134': {'container': 'mp4',
+                'dash/video': True,
+                'video': {'resolution': 360, 'encoding': 'h.264'}},
+        '135': {'container': 'mp4',
+                'dash/video': True,
+                'video': {'resolution': 480, 'encoding': 'h.264'}},
+        '136': {'container': 'mp4',
+                'dash/video': True,
+                'video': {'resolution': 720, 'encoding': 'h.264'}},
+        '137': {'container': 'mp4',
+                'dash/video': True,
+                'video': {'resolution': 1080, 'encoding': 'h.264'}},
+        '138': {'container': 'mp4',  # Discontinued
+                'dash/video': True,
+                'video': {'resolution': 2160, 'encoding': 'h.264'}},
+        '160': {'container': 'mp4',
+                'dash/video': True,
+                'video': {'resolution': 144, 'encoding': 'h.264'}},
+        '167': {'container': 'webm',
+                'dash/video': True,
+                'video': {'resolution': 360, 'encoding': 'vp8'}},
+        '168': {'container': 'webm',
+                'dash/video': True,
+                'video': {'resolution': 480, 'encoding': 'vp8'}},
+        '169': {'container': 'webm',
+                'dash/video': True,
+                'video': {'resolution': 720, 'encoding': 'vp8'}},
+        '170': {'container': 'webm',
+                'dash/video': True,
+                'video': {'resolution': 1080, 'encoding': 'vp8'}},
+        '218': {'container': 'webm',
+                'dash/video': True,
+                'video': {'resolution': 480, 'encoding': 'vp8'}},
+        '219': {'container': 'webm',
+                'dash/video': True,
+                'video': {'resolution': 480, 'encoding': 'vp8'}},
+        '242': {'container': 'webm',
+                'dash/video': True,
+                'video': {'resolution': 240, 'encoding': 'vp9'}},
+        '243': {'container': 'webm',
+                'dash/video': True,
+                'video': {'resolution': 360, 'encoding': 'vp9'}},
+        '244': {'container': 'webm',
+                'dash/video': True,
+                'video': {'resolution': 480, 'encoding': 'vp9'}},
+        '247': {'container': 'webm',
+                'dash/video': True,
+                'video': {'resolution': 720, 'encoding': 'vp9'}},
+        '248': {'container': 'webm',
+                'dash/video': True,
+                'video': {'resolution': 1080, 'encoding': 'vp9'}},
+        '264': {'container': 'mp4',
+                'dash/video': True,
+                'video': {'resolution': 1440, 'encoding': 'h.264'}},
+        '266': {'container': 'mp4',
+                'dash/video': True,
+                'video': {'resolution': 2160, 'encoding': 'h.264'}},
+        '271': {'container': 'webm',
+                'dash/video': True,
+                'video': {'resolution': 1440, 'encoding': 'vp9'}},
+        '272': {'container': 'webm',
+                'dash/video': True,
+                'video': {'resolution': 2160, 'encoding': 'vp9'}},
+        '278': {'container': 'webm',
+                'dash/video': True,
+                'video': {'resolution': 144, 'encoding': 'vp9'}},
+        '298': {'container': 'mp4',
+                'dash/video': True,
+                'fps': 60,
+                'video': {'resolution': 720, 'encoding': 'h.264'}},
+        '299': {'container': 'mp4',
+                'dash/video': True,
+                'fps': 60,
+                'video': {'resolution': 1080, 'encoding': 'h.264'}},
+        '302': {'container': 'webm',
+                'dash/video': True,
+                'fps': 60,
+                'video': {'resolution': 720, 'encoding': 'vp9'}},
+        '303': {'container': 'webm',
+                'dash/video': True,
+                'fps': 60,
+                'video': {'resolution': 1080, 'encoding': 'vp9'}},
+        '308': {'container': 'webm',
+                'dash/video': True,
+                'fps': 60,
+                'video': {'resolution': 1440, 'encoding': 'vp9'}},
+        '313': {'container': 'webm',
+                'dash/video': True,
+                'video': {'resolution': 2160, 'encoding': 'vp9'}},
+        '315': {'container': 'webm',
+                'dash/video': True,
+                'fps': 60,
+                'video': {'resolution': 2160, 'encoding': 'vp9'}},
+        # === Dash (audio only)
+        '139': {'container': 'mp4',
+                'dash/audio': True,
+                'audio': {'bitrate': 48, 'encoding': 'aac'}},
+        '140': {'container': 'mp4',
+                'dash/audio': True,
+                'audio': {'bitrate': 128, 'encoding': 'aac'}},
+        '141': {'container': 'mp4',
+                'dash/audio': True,
+                'audio': {'bitrate': 256, 'encoding': 'aac'}},
+        '171': {'container': 'webm',
+                'dash/audio': True,
+                'audio': {'bitrate': 128, 'encoding': 'vorbis'}},
+        '172': {'container': 'webm',
+                'dash/audio': True,
+                'audio': {'bitrate': 192, 'encoding': 'vorbis'}},
+        '249': {'container': 'webm',
+                'dash/audio': True,
+                'audio': {'bitrate': 50, 'encoding': 'opus'}},
+        '250': {'container': 'webm',
+                'dash/audio': True,
+                'audio': {'bitrate': 70, 'encoding': 'opus'}},
+        '251': {'container': 'webm',
+                'dash/audio': True,
+                'audio': {'bitrate': 160, 'encoding': 'opus'}},
+    }
 
     def __init__(self, context, access_token='', language='en-US'):
         self._context = context
@@ -93,6 +297,7 @@ class VideoInfo(object):
                 pass
             pass
 
+        """
         itag_map = {}
         itag_map.update(self.DEFAULT_ITAG_MAP)
         re_match = re.match('.+\"fmt_list\": \"(?P<fmt_list>.+?)\".+', html)
@@ -113,16 +318,23 @@ class VideoInfo(object):
                     pass
                 pass
             pass
+        """
 
-        re_match = re.search(r'\"js\"[^:]*:[^"]*\"(?P<js>.+?)\"', html)
+        re_match_js = re.search(r'\"js\"[^:]*:[^"]*\"(?P<js>.+?)\"', html)
         js = ''
         cipher = None
-        if re_match:
-            js = re_match.group('js').replace('\\', '').strip('//')
+        if re_match_js:
+            js = re_match_js.group('js').replace('\\', '').strip('//')
             cipher = Cipher(self._context, java_script_url=js)
             pass
 
-        re_match = re.search(r'\"url_encoded_fmt_stream_map\"[^:]*:[^"]*\"(?P<url_encoded_fmt_stream_map>[^"]*\")', html)
+        re_match_hlsvp = re.search(r'\"hlsvp\"[^:]*:[^"]*\"(?P<hlsvp>[^"]*\")', html)
+        if re_match_hlsvp:
+            hlsvp = urllib.unquote(re_match_hlsvp.group('hlsvp')).replace('\/', '/')
+            return self._load_manifest(hlsvp, video_id)
+
+        re_match = re.search(r'\"url_encoded_fmt_stream_map\"[^:]*:[^"]*\"(?P<url_encoded_fmt_stream_map>[^"]*\")',
+                             html)
         if re_match:
             url_encoded_fmt_stream_map = re_match.group('url_encoded_fmt_stream_map')
             url_encoded_fmt_stream_map = url_encoded_fmt_stream_map.split(',')
@@ -132,26 +344,46 @@ class VideoInfo(object):
                 attr = dict(urlparse.parse_qsl(value))
 
                 try:
-                    url = urllib.unquote(attr['url'])
+                    url = attr.get('url', None)
+                    conn = attr.get('conn', None)
+                    if url:
+                        url = urllib.unquote(attr['url'])
 
-                    signature = ''
-                    if attr.get('s', ''):
-                        signature = cipher.get_signature(attr['s'])
+                        signature = ''
+                        if attr.get('s', ''):
+                            signature = cipher.get_signature(attr['s'])
+                            pass
+                        elif attr.get('sig', ''):
+                            signature = attr.get('sig', '')
+                            pass
+
+                        if signature:
+                            url += '&signature=%s' % signature
+                            pass
+
+                        itag = attr['itag']
+                        format = self.FORMAT.get(itag, None)
+                        if not format:
+                            raise Exception('unknown format for itag "%s"' % itag)
+                        video_stream = {'url': url,
+                                        'format': format}
+
+                        stream_list.append(video_stream)
                         pass
-                    elif attr.get('sig', ''):
-                        signature = attr.get('sig', '')
+                    elif conn:  # rtmpe
+                        url = '%s?%s' % (conn, urllib.unquote(attr['stream']))
+                        itag = attr['itag']
+                        format = self.FORMAT.get(itag, None)
+                        format['rtmpe'] = True
+                        if not format:
+                            raise Exception('unknown format for itag "%s"' % itag)
+                        video_stream = {'url': url,
+                                        'format': format}
+
+                        stream_list.append(video_stream)
                         pass
-
-                    if signature:
-                        url += '&signature=%s' % signature
-                        pass
-
-                    video_stream = {'url': url,
-                                    'format': itag_map[attr['itag']]}
-
-                    stream_list.append(video_stream)
                 except Exception, ex:
-                    x=0
+                    x = 0
                     pass
                 pass
             pass
@@ -174,15 +406,26 @@ class VideoInfo(object):
         result = requests.get(url, headers=headers, verify=False, allow_redirects=True)
         lines = result.text.splitlines()
         streams = []
+        re_line = re.compile(r'RESOLUTION=(?P<width>\d+)x(?P<height>\d+)')
+        re_itag = re.compile(r'/itag/(?P<itag>\d+)')
         for i in range(len(lines)):
-            re_match = re.search(r'RESOLUTION=(?P<width>\d+)x(?P<height>\d+)', lines[i])
+            re_match = re.search(re_line, lines[i])
             if re_match:
-                line = lines[i+1]
-                width = int(re_match.group('width'))
-                height = int(re_match.group('height'))
-                video_stream = {'url': line,
-                                'format': {'width': width, 'height': height}}
-                streams.append(video_stream)
+                line = lines[i + 1]
+
+                re_itag_match = re.search(re_itag, line)
+                if re_itag_match:
+                    itag = re_itag_match.group('itag')
+                    format = self.FORMAT.get(itag, None)
+                    if not format:
+                        raise Exception('unknown format for itag "%s"' % itag)
+
+                    width = int(re_match.group('width'))
+                    height = int(re_match.group('height'))
+                    video_stream = {'url': line,
+                                    'format': format}
+                    streams.append(video_stream)
+                    pass
                 pass
             pass
         return streams
@@ -220,21 +463,16 @@ class VideoInfo(object):
                 return self._load_manifest(url, video_id)
             pass
 
-        itag_map = {}
-        itag_map.update(self.DEFAULT_ITAG_MAP)
-
-        # update itag map
+        """
         fmt_list = params.get('fmt_list', '')
         if fmt_list:
             fmt_list = fmt_list.split(',')
             for item in fmt_list:
                 data = item.split('/')
-
                 size = data[1].split('x')
-                itag_map[data[0]] = {'width': int(size[0]),
-                                     'height': int(size[1])}
                 pass
             pass
+        """
 
         # read adaptive_fmts
         """
@@ -258,17 +496,36 @@ class VideoInfo(object):
             for item in url_encoded_fmt_stream_map:
                 stream_map = dict(urlparse.parse_qsl(item))
 
-                url = stream_map['url']
-                if 'sig' in stream_map:
-                    url += '&signature=%s' % stream_map['sig']
-                elif 's' in stream_map:
-                    # fuck!!! in this case we must call the web page
-                    return self._method_watch(video_id)
+                url = stream_map.get('url', None)
+                conn = stream_map.get('conn', None)
+                if url:
+                    if 'sig' in stream_map:
+                        url += '&signature=%s' % stream_map['sig']
+                    elif 's' in stream_map:
+                        # fuck!!! in this case we must call the web page
+                        return self._method_watch(video_id)
 
-                video_stream = {'url': url,
-                                'format': itag_map[stream_map['itag']]}
+                    itag = stream_map['itag']
+                    format = self.FORMAT.get(itag, None)
+                    if not format:
+                        raise Exception('unknown format for itag "%s"' % itag)
 
-                stream_list.append(video_stream)
+                    video_stream = {'url': url,
+                                    'format': format}
+                    stream_list.append(video_stream)
+                    pass
+                elif conn:
+                    url = '%s?%s' % (conn, urllib.unquote(stream_map['stream']))
+                    itag = stream_map['itag']
+                    format = self.FORMAT.get(itag, None)
+                    format['rtmpe'] = True
+                    if not format:
+                        raise Exception('unknown format for itag "%s"' % itag)
+                    video_stream = {'url': url,
+                                    'format': format}
+
+                    stream_list.append(video_stream)
+                    pass
                 pass
             pass
 

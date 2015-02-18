@@ -61,11 +61,20 @@ class TestClient(unittest.TestCase):
         json_data = client.get_video_categories()
         pass
 
-    def test_video_category(self):
-        client = YouTube(language='de-DE')
+    def test_channel_sections(self):
+        client = YouTube(language='en-US')
+        json_data = client.get_channel_sections(channel_id='UCEgdi0XIXXZ-qJOFPf4JSKw')
+        pass
 
-        # 10 Music
-        json_data = client.get_video_category(10)
+    def test_video_category(self):
+        client = YouTube(language='en-US')
+
+        json_data = client.get_video_category(17)
+        pass
+
+    def test_guide_categories(self):
+        client = YouTube(language='en-US')
+        json_data = client.get_guide_categories()
         pass
 
     """
@@ -96,14 +105,6 @@ class TestClient(unittest.TestCase):
 
         # Best of YouTube
         json_data = client.get_guide_category('GCQmVzdCBvZiBZb3VUdWJl')
-        pass
-
-    def test_guide_categories(self):
-        client = YouTube(language='de-DE')
-
-        token, expires = client.authenticate(self.USERNAME, self.PASSWORD)
-        client = YouTube(access_token=token)
-        json_data = client.get_guide_categories()
         pass
 
     def test_authenticate(self):
@@ -137,13 +138,20 @@ class TestClient(unittest.TestCase):
 
         # VEVO
         streams = client.get_video_streams(context, 'nfWlot6h_JM')
+        self.assertGreater(len(streams), 0)
 
         # VEVO (Restricted)
-        #streams = client.get_video_streams(context, 'O-zpOMYRi0w')
-        #streams = client.get_video_streams(context, 'NmugSMBh_iI')
+        streams = client.get_video_streams(context, 'O-zpOMYRi0w')
+        self.assertGreater(len(streams), 0)
+
+        streams = client.get_video_streams(context, 'NmugSMBh_iI')
+        self.assertGreater(len(streams), 0)
 
         # VEVO Gema
+        # blocked (gema)
         #streams = client.get_video_streams(context, 'XbiH6pQI7pU')
+        #self.assertGreater(len(streams), 0)
+
         pass
 
     def test_get_streams_live_streams(self):
@@ -151,29 +159,64 @@ class TestClient(unittest.TestCase):
 
         context = kodion.Context()
 
+        # working with old addon
+        streams = client.get_video_streams(context, 'Hrc4rwZ29y4')
+
         #Live
+        # blocked
         #streams = client.get_video_streams(context, 'y1knc30OqKQ')
+        #self.assertGreater(len(streams), 0)
+
+        # blocked
         #streams = client.get_video_streams(context, '7UFbGKo21lc')
+        #self.assertGreater(len(streams), 0)
+
+        # private
         #streams = client.get_video_streams(context, 'RqbyYOCAFJU')
+        #self.assertGreater(len(streams), 0)
+
+        #streams = client.get_video_streams(context, 'P8-yDTXnXAI')
+        #self.assertGreater(len(streams), 0)
+
         #streams = client.get_video_streams(context, 'pvEWZY3Eqsg')
+        #self.assertGreater(len(streams), 0)
+        pass
+
+    def test_get_video_streams_rtmpe(self):
+        client = YouTube()
+
+        context = kodion.Context()
+        # #190 - viewster video
+        streams = client.get_video_streams(context, 'xq2aaB_Awno')
+        self.assertGreater(len(streams), 0)
+
+        streams = client.get_video_streams(context, 'ZCBlKMZLxZA')
+        self.assertGreater(len(streams), 0)
         pass
 
     def test_get_video_streams_mixed(self):
         client = YouTube()
 
         context = kodion.Context()
+
         # some videos
-        #streams = client.get_video_streams(context, 'vUMv3cRacrI')
-        #streams = client.get_video_streams(context, 'niBvN80Jqkg')
+        streams = client.get_video_streams(context, 'OSUy2uA6fbw')
+        self.assertGreater(len(streams), 0)
+
+        streams = client.get_video_streams(context, 'niBvN80Jqkg')
+        self.assertGreater(len(streams), 0)
 
         # 60fps
-        # streams = client.get_video_streams(context, '_zPm3SSj6W8')
+        streams = client.get_video_streams(context, '_zPm3SSj6W8')
+        self.assertGreater(len(streams), 0)
 
         # 1080p ?!?
-        # streams = client.get_video_streams(context, 'qfPUVz_Hpqo')
+        streams = client.get_video_streams(context, 'qfPUVz_Hpqo')
+        self.assertGreater(len(streams), 0)
 
         # Restricted?
-        #streams = client.get_video_streams(context, 'U4DbJWA9JEw')
+        streams = client.get_video_streams(context, 'U4DbJWA9JEw')
+        self.assertGreater(len(streams), 0)
         pass
 
     def test_get_playlists(self):

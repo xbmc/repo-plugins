@@ -49,8 +49,20 @@ class YouTube(LoginClient):
         pass
 
     def get_video_streams(self, context, video_id):
+        def _sort(x):
+            index = {'mp4': 0,
+                     'ts': 0,
+                     'webm': -1,
+                     'flv': -10,
+                     '3gb': -20}
+            container = x.get('format', {}).get('container', '')
+            return index.get(container, -100)
+
         video_info = VideoInfo(context, access_token=self._access_token, language=self._language)
-        return video_info.load_stream_infos(video_id)
+
+        video_streams = video_info.load_stream_infos(video_id)
+        video_streams = sorted(video_streams, key=_sort, reverse=True)
+        return video_streams
 
     def get_uploaded_videos_of_subscriptions(self, start_index=0):
         params = {'max-results': str(self._max_results),
@@ -242,6 +254,18 @@ class YouTube(LoginClient):
             pass
 
         return self._perform_v3_request(method='GET', path='activities', params=params)
+
+    def get_channel_sections(self, channel_id):
+        params = {'part': 'snippet,contentDetails',
+                  'regionCode': self._country,
+                  'hl': self._language}
+        if channel_id == 'mine':
+            params['mine'] = 'true'
+            pass
+        else:
+            params['channelId'] = channel_id
+            pass
+        return self._perform_v3_request(method='GET', path='channelSections', params=params)
 
     def get_playlists(self, channel_id, page_token=''):
         params = {'part': 'snippet,contentDetails',

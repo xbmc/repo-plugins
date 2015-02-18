@@ -13,13 +13,18 @@ from resources.lib.youtube.helper import utils, v3
 def play_video(provider, context, re_match):
     def _compare(item):
         vq = context.get_settings().get_video_quality()
-        return vq - item['format']['height']
+        return vq - item['format'].get('video', {}).get('resolution', 0)
 
     try:
         video_id = context.get_param('video_id')
         client = provider.get_client(context)
         video_streams = client.get_video_streams(context, video_id)
         video_stream = kodion.utils.find_best_fit(video_streams, _compare)
+
+        if video_stream['format'].get('rtmpe', False):
+            message = context.localize(provider.LOCAL_MAP['youtube.error.rtmpe_not_supported'])
+            context.get_ui().show_notification(message, time_milliseconds=5000)
+            return False
 
         video_item = VideoItem(video_id, video_stream['url'])
         video_id_dict = {video_id: video_item}

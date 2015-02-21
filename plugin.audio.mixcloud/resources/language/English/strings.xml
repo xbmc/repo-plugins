@@ -4,18 +4,28 @@
 	<string id="30000">Mixcloud</string>
 	<string id="30001">More...</string>
 	<string id="30002">Failed resolving url. Use different resolver?</string>
+	<string id="30003">No (valid) access token found.</string>
+	<string id="30004">Please provide your authentication code.</string>
 	<!-- main menu -->
 	<string id="30100">Hot</string>
-	<string id="30101">New</string>
-	<string id="30102">Popular</string>
+	<string id="30101">Your Favorites</string>
+	<string id="30102">Your Followings</string>
 	<string id="30103">Categories</string>
 	<string id="30104">Search</string>
 	<string id="30105">History</string>
 	<string id="30106">jackyNIX's cloudcasts (shameless plug :p)</string>
+	<string id="30107">Feed</string>
+	<string id="30108">Your Followers</string>
+	<string id="30109">Your Listens</string>
 	<!-- search menu -->
 	<string id="30110">Cloudcasts...</string>
 	<string id="30111">Users...</string>
 	<string id="30112">History...</string>
+	<!-- context menu -->
+	<string id="30120">Favorite cloudcast</string>
+	<string id="30121">Unfavorite cloudcast</string>
+	<string id="30122">Follow user</string>
+	<string id="30123">Unfollow user</string>
 	<!-- general settings -->
 	<string id="30200">General</string>
 	<string id="30201">Maximum cloudcasts on page</string>
@@ -26,4 +36,9 @@
 	<string id="30220">History</string>
 	<string id="30221">Maximum played cloudcasts</string>
 	<string id="30222">Maximum searches</string>
+	<!-- account settings -->
+	<string id="30230">Account (beta)</string>
+	<string id="30231">Use Mixcloud account</string>
+	<string id="30232">Authentication code</string>
+	<string id="30233">Authentication access token</string>
 </strings>

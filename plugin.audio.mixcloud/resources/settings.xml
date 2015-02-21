@@ -10,11 +10,17 @@
     <setting id="debug" type="bool" label="30203" default="false" />
   </category>
 
+  <!-- Account -->
+  <category label="30230">
+    <setting id="use_account" type="bool" label="30231" />
+    <setting id="oath_code" type="text" label="30232" />
+    <setting id="access_token" type="text" label="30233" enable="true"/>
+  </category>
+
   <!-- History -->
   <category label="30220">
     <setting id="play_history_max" type="enum" label="30221" values="10|20|30|40|50" default="0"/>
     <setting id="search_history_max" type="enum" label="30222" values="10|20|30|40|50" default="0" enable="false"/>
-    <setting type="sep" />
   </category>
 
 </settings>

@@ -1,3 +1,14 @@
+2.0.0
+- Added user authentication (tnx to Bochi)
+- Added followings
+- Added followers
+- Added favorites
+- Added listens
+- Added (un)favoriting cloucasts
+- Added (un)following users
+- Added thumbnails to main menu
+- Fixed Unknown Music Info Key "thumbnail"
+
 1.1.5
 - Fixed local resolver
 - Added shameless plug for jackyNIX's own cloudcasts 

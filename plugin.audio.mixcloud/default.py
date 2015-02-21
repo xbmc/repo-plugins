@@ -3,7 +3,7 @@
 '''
 @author: jackyNIX
 
-Copyright (C) 2011-2014 jackyNIX
+Copyright (C) 2011-2015 jackyNIX
 
 This file is part of XBMC MixCloud Plugin.
 
@@ -30,50 +30,71 @@ import base64
 import simplejson as json
 import re
 import sys
+import os
 from itertools import cycle, izip
 
 
 
-URL_PLUGIN=    'plugin://music/MixCloud/'
-URL_MIXCLOUD=  'http://www.mixcloud.com/'
-URL_API=       'http://api.mixcloud.com/'
-URL_CATEGORIES='http://api.mixcloud.com/categories/'
-URL_HOT=       'http://api.mixcloud.com/popular/hot/'
-URL_NEW=       'http://api.mixcloud.com/new/'
-URL_POPULAR=   'http://api.mixcloud.com/popular/'
-URL_SEARCH=    'http://api.mixcloud.com/search/'
-URL_JACKYNIX=  'http://api.mixcloud.com/jackyNIX/'
-URL_STREAM=    'http://www.mixcloud.com/api/1/cloudcast/{0}.json?embed_type=cloudcast'
+URL_PLUGIN=      'plugin://music/MixCloud/'
+URL_MIXCLOUD=    'http://www.mixcloud.com/'
+URL_API=         'http://api.mixcloud.com/'
+URL_CATEGORIES=  'http://api.mixcloud.com/categories/'
+URL_HOT=         'http://api.mixcloud.com/popular/hot/'
+URL_SEARCH=      'http://api.mixcloud.com/search/'
+URL_FEED=        'https://api.mixcloud.com/me/feed/'
+URL_FAVORITES=   'https://api.mixcloud.com/me/favorites/'
+URL_FOLLOWINGS=  'https://api.mixcloud.com/me/following/'
+URL_FOLLOWERS=   'https://api.mixcloud.com/me/followers/'
+URL_LISTENS=     'https://api.mixcloud.com/me/listens/'
+URL_JACKYNIX=    'http://api.mixcloud.com/jackyNIX/'
+URL_STREAM=      'http://www.mixcloud.com/api/1/cloudcast/{0}.json?embed_type=cloudcast'
+URL_FAVORITE=    'https://api.mixcloud.com{0}/favorite/'
+URL_FOLLOW=      'https://api.mixcloud.com{0}/follow/'
+URL_TOKEN=       'https://www.mixcloud.com/oauth/access_token?client_id=Vef7HWkSjCzEFvdhet&redirect_uri=http://www.mixcloud.com&client_secret=VK7hwemnZWBexDbnVZqXLapVbPK3FFYT&code='
 
 
 
-MODE_HOME=       0
-MODE_HOT=       10
-MODE_NEW=       11
-MODE_POPULAR=   12
-MODE_HISTORY=   13
-MODE_JACKYNIX=  14
-MODE_CATEGORIES=20
-MODE_USERS=     21
-MODE_SEARCH=    30
-MODE_PLAY=      40
+MODE_HOME=         0
+MODE_FEED=        10
+MODE_FAVORITES=   11
+MODE_FOLLOWINGS=  12
+MODE_HOT=         13
+MODE_HISTORY=     14
+MODE_JACKYNIX=    15
+MODE_FOLLOWERS=   16
+MODE_LISTENS=     17
+MODE_CATEGORIES=  20
+MODE_USERS=       21
+MODE_SEARCH=      30
+MODE_PLAY=        40
+MODE_ADDFAVORITE= 50
+MODE_DELFAVORITE= 51
+MODE_ADDFOLLOWING=52
+MODE_DELFOLLOWING=53
 
 
 
+STR_ACCESS_TOKEN=u'access_token'
 STR_ARTIST=      u'artist'
 STR_AUDIOFORMATS=u'audio_formats'
 STR_AUDIOLENGTH= u'audio_length'
+STR_CLIENTID=    u'Vef7HWkSjCzEFvdhet'
+STR_CLIENTSECRET=u'VK7hwemnZWBexDbnVZqXLapVbPK3FFYT'
 STR_CLOUDCAST=   u'cloudcast'
 STR_COUNT=       u'count'
+STR_COMMENT=     u'comment'
 STR_CREATEDTIME= u'created_time'
 STR_DATA=        u'data'
 STR_DATE=        u'date'
 STR_DURATION=    u'duration'
+STR_GENRE=       u'genre'
 STR_HISTORY=     u'history'
 STR_ID=          u'id'
+STR_IMAGE=       u'image'
 STR_FORMAT=      u'format'
 STR_KEY=         u'key'
 STR_LIMIT=       u'limit'
+STR_MESSAGE=     u'message'
 STR_MODE=        u'mode'
 STR_MP3=         u'mp3'
 STR_NAME=        u'name'
@@ -82,17 +103,18 @@ STR_PAGELIMIT=   u'page_limit'
 STR_PICTURES=    u'pictures'
 STR_Q=           u'q'
 STR_QUERY=       u'query'
+STR_RESULT=      u'result'
+STR_STREAMURL=   u'stream_url'
+STR_SUCCESS=     u'success'
 STR_TAG=         u'tag'
 STR_TAGS=        u'tags'
+STR_THUMBNAIL=   u'thumbnail'
 STR_TITLE=       u'title'
 STR_TRACK=       u'track'
 STR_TRACKNUMBER= u'tracknumber'
 STR_TYPE=        u'type'
 STR_USER=        u'user'
 STR_YEAR=        u'year'
-STR_IMAGE=       u'image'
-STR_THUMBNAIL=   u'thumbnail'
-STR_STREAMURL=   u'stream_url'
 
 STR_THUMB_SIZES= {0:u'small',1:u'thumbnail',2:u'medium',3:u'large',4:u'extra_large'}
 
@@ -107,27 +129,40 @@ class Resolver:
 plugin_handle=int(sys.argv[1])
 __addon__ =xbmcaddon.Addon('plugin.audio.mixcloud')
 
+__ICON__ = os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'icon.png')
 
 
 debugenabled=(__addon__.getSetting('debug')=='true')
 limit=       (1+int(__addon__.getSetting('page_limit')))*10
 thumb_size=  STR_THUMB_SIZES[int(__addon__.getSetting('thumb_size'))]
 resolverid=  int(__addon__.getSetting('resolver'))
+oath_code=   __addon__.getSetting('oath_code')
+access_token=__addon__.getSetting('access_token')
+useaccount=  (__addon__.getSetting('use_account')=='true')
 
 
 
-STRLOC_COMMON_MORE=          __addon__.getLocalizedString(30001)
-STRLOC_COMMON_RESOLVER_ERROR=__addon__.getLocalizedString(30002)
-STRLOC_MAINMENU_HOT=         __addon__.getLocalizedString(30100)
-STRLOC_MAINMENU_NEW=         __addon__.getLocalizedString(30101)
-STRLOC_MAINMENU_POPULAR=     __addon__.getLocalizedString(30102)
-STRLOC_MAINMENU_CATEGORIES=  __addon__.getLocalizedString(30103)
-STRLOC_MAINMENU_SEARCH=      __addon__.getLocalizedString(30104)
-STRLOC_MAINMENU_HISTORY=     __addon__.getLocalizedString(30105)
-STRLOC_MAINMENU_JACKYNIX=    __addon__.getLocalizedString(30106)
-STRLOC_SEARCHMENU_CLOUDCASTS=__addon__.getLocalizedString(30110)
-STRLOC_SEARCHMENU_USERS=     __addon__.getLocalizedString(30111)
-STRLOC_SEARCHMENU_HISTORY=   __addon__.getLocalizedString(30112)
+STRLOC_COMMON_MORE=             __addon__.getLocalizedString(30001)
+STRLOC_COMMON_RESOLVER_ERROR=   __addon__.getLocalizedString(30002)
+STRLOC_COMMON_TOKEN_ERROR=      __addon__.getLocalizedString(30003)
+STRLOC_COMMON_AUTH_CODE=        __addon__.getLocalizedString(30004)
+STRLOC_MAINMENU_HOT=            __addon__.getLocalizedString(30100)
+STRLOC_MAINMENU_FAVORITES=      __addon__.getLocalizedString(30101)
+STRLOC_MAINMENU_FOLLOWINGS=     __addon__.getLocalizedString(30102)
+STRLOC_MAINMENU_CATEGORIES=     __addon__.getLocalizedString(30103)
+STRLOC_MAINMENU_SEARCH=         __addon__.getLocalizedString(30104)
+STRLOC_MAINMENU_HISTORY=        __addon__.getLocalizedString(30105)
+STRLOC_MAINMENU_JACKYNIX=       __addon__.getLocalizedString(30106)
+STRLOC_MAINMENU_FEED=           __addon__.getLocalizedString(30107)
+STRLOC_MAINMENU_FOLLOWERS=      __addon__.getLocalizedString(30108)
+STRLOC_MAINMENU_LISTENS=        __addon__.getLocalizedString(30109)
+STRLOC_SEARCHMENU_CLOUDCASTS=   __addon__.getLocalizedString(30110)
+STRLOC_SEARCHMENU_USERS=        __addon__.getLocalizedString(30111)
+STRLOC_SEARCHMENU_HISTORY=      __addon__.getLocalizedString(30112)
+STRLOC_CONTEXTMENU_ADDFAVORITE= __addon__.getLocalizedString(30120)
+STRLOC_CONTEXTMENU_DELFAVORITE= __addon__.getLocalizedString(30121)
+STRLOC_CONTEXTMENU_ADDFOLLOWING=__addon__.getLocalizedString(30122)
+STRLOC_CONTEXTMENU_DELFOLLOWING=__addon__.getLocalizedString(30123)
 
 
 
@@ -136,6 +171,13 @@ def add_audio_item(infolabels,parameters={},img='',total=0):
     listitem.setInfo('Music',infolabels)
     listitem.setProperty('IsPlayable','true')
     url=sys.argv[0]+'?'+urllib.urlencode(parameters)
+    commands=[]
+    if mode==MODE_FAVORITES:
+        commands.append((STRLOC_CONTEXTMENU_DELFAVORITE,"XBMC.RunPlugin(%s?mode=%d&key=%s)"%(sys.argv[0],MODE_DELFAVORITE,parameters.get(STR_KEY,""))))
+    else:
+        commands.append((STRLOC_CONTEXTMENU_ADDFAVORITE,"XBMC.RunPlugin(%s?mode=%d&key=%s)"%(sys.argv[0],MODE_ADDFAVORITE,parameters.get(STR_KEY,""))))
+    commands.append((STRLOC_CONTEXTMENU_ADDFOLLOWING,"XBMC.RunPlugin(%s?mode=%d&key=%s)"%(sys.argv[0],MODE_ADDFOLLOWING,parameters.get(STR_USER,""))))
+    listitem.addContextMenuItems(commands)       
     xbmcplugin.addDirectoryItem(plugin_handle,url,listitem,isFolder=False,totalItems=total)
 
 
@@ -143,21 +185,54 @@ def add_audio_item(infolabels,parameters={},img='',total=0):
 def add_folder_item(name,infolabels={},parameters={},img=''):
     if not infolabels:
         infolabels={STR_TITLE:name}
-    listitem=xbmcgui.ListItem(name,iconImage=img,thumbnailImage=img)
+    listitem=xbmcgui.ListItem(name,name,iconImage=img,thumbnailImage=img)
     listitem.setInfo('Music',infolabels)
     url=sys.argv[0]+'?'+urllib.urlencode(parameters)
-    return xbmcplugin.addDirectoryItem(handle=plugin_handle,url=url,listitem=listitem,isFolder=True)
+    commands=[]
+    if mode==MODE_FOLLOWINGS:
+        commands.append((STRLOC_CONTEXTMENU_DELFOLLOWING,"XBMC.RunPlugin(%s?mode=%d&key=%s)"%(sys.argv[0],MODE_DELFOLLOWING,parameters.get(STR_KEY,""))))
+    elif (mode==MODE_FOLLOWERS) or (mode==MODE_USERS):
+        commands.append((STRLOC_CONTEXTMENU_ADDFOLLOWING,"XBMC.RunPlugin(%s?mode=%d&key=%s)"%(sys.argv[0],MODE_ADDFOLLOWING,parameters.get(STR_KEY,""))))
+    listitem.addContextMenuItems(commands)       
+    return xbmcplugin.addDirectoryItem(plugin_handle,url,listitem,isFolder=True)
 
 
 
 def show_home_menu():
-    add_folder_item(name=STRLOC_MAINMENU_HOT,parameters={STR_MODE:MODE_HOT,STR_OFFSET:0})
-    add_folder_item(name=STRLOC_MAINMENU_NEW,parameters={STR_MODE:MODE_NEW,STR_OFFSET:0})
-    add_folder_item(name=STRLOC_MAINMENU_POPULAR,parameters={STR_MODE:MODE_POPULAR,STR_OFFSET:0})
-    add_folder_item(name=STRLOC_MAINMENU_CATEGORIES,parameters={STR_MODE:MODE_CATEGORIES,STR_OFFSET:0})
-    add_folder_item(name=STRLOC_MAINMENU_SEARCH,parameters={STR_MODE:MODE_SEARCH})
-    add_folder_item(name=STRLOC_MAINMENU_HISTORY,parameters={STR_MODE:MODE_HISTORY})
-    add_folder_item(name=STRLOC_MAINMENU_JACKYNIX,parameters={STR_MODE:MODE_JACKYNIX})
+    if useaccount:
+#        add_folder_item(name=STRLOC_MAINMENU_FEED,parameters={STR_MODE:MODE_FEED})
+        add_folder_item(name=STRLOC_MAINMENU_FOLLOWINGS,parameters={STR_MODE:MODE_FOLLOWINGS},img=get_icon('yourfollowings.png'))
+        add_folder_item(name=STRLOC_MAINMENU_FOLLOWERS,parameters={STR_MODE:MODE_FOLLOWERS},img=get_icon('yourfollowers.png'))
+        add_folder_item(name=STRLOC_MAINMENU_FAVORITES,parameters={STR_MODE:MODE_FAVORITES},img=get_icon('yourfavorites.png'))
+        add_folder_item(name=STRLOC_MAINMENU_LISTENS,parameters={STR_MODE:MODE_LISTENS},img=get_icon('yourlistens.png'))
+    add_folder_item(name=STRLOC_MAINMENU_HOT,parameters={STR_MODE:MODE_HOT,STR_OFFSET:0},img=get_icon('hot.png'))
+    add_folder_item(name=STRLOC_MAINMENU_CATEGORIES,parameters={STR_MODE:MODE_CATEGORIES,STR_OFFSET:0},img=get_icon('categories.png'))
+    add_folder_item(name=STRLOC_MAINMENU_SEARCH,parameters={STR_MODE:MODE_SEARCH},img=get_icon('search.png'))
+    add_folder_item(name=STRLOC_MAINMENU_HISTORY,parameters={STR_MODE:MODE_HISTORY},img=get_icon('history.png'))
+    add_folder_item(name=STRLOC_MAINMENU_JACKYNIX,parameters={STR_MODE:MODE_JACKYNIX},img=get_icon('jackynix.png'))
+    xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
+
+
+
+def show_feed_menu(offset):
+    xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
+
+
+
+def show_favorites_menu(offset):
+    if check_profile_state():
+        found=get_cloudcasts(URL_FAVORITES,{STR_ACCESS_TOKEN:access_token,STR_LIMIT:limit,STR_OFFSET:offset})
+        if found==limit:
+            add_folder_item(name=STRLOC_COMMON_MORE,parameters={STR_MODE:MODE_FAVORITES,STR_OFFSET:offset+limit})
+    xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
+
+
+
+def show_followings_menu(offset):
+    if check_profile_state():
+        found=get_users(URL_FOLLOWINGS,{STR_ACCESS_TOKEN:access_token,STR_LIMIT:limit,STR_OFFSET:offset})
+        if found==limit:
+            add_folder_item(name=STRLOC_COMMON_MORE,parameters={STR_MODE:MODE_FOLLOWINGS,STR_KEY:key,STR_OFFSET:offset+limit})
     xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
 
 
@@ -170,22 +245,6 @@ def show_hot_menu(offset):
 
 
 
-def show_new_menu(offset):
-    found=get_cloudcasts(URL_NEW,{STR_LIMIT:limit,STR_OFFSET:offset})
-    if found==limit:
-        add_folder_item(name=STRLOC_COMMON_MORE,parameters={STR_MODE:MODE_NEW,STR_OFFSET:offset+limit})
-    xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
-
-
-
-def show_popular_menu(offset):
-    found=get_cloudcasts(URL_POPULAR,{STR_LIMIT:limit,STR_OFFSET:offset})
-    if found==limit:
-        add_folder_item(name=STRLOC_COMMON_MORE,parameters={STR_MODE:MODE_POPULAR,STR_OFFSET:offset+limit})
-    xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)    
-
-
-
 def show_categories_menu(key,offset):
     if key=='':
         get_categories(URL_CATEGORIES)
@@ -193,6 +252,24 @@ def show_categories_menu(key,offset):
         found=get_cloudcasts(URL_API+key[1:len(key)-1]+'/cloudcasts/',{STR_LIMIT:limit,STR_OFFSET:offset})
         if found==limit:
             add_folder_item(name=STRLOC_COMMON_MORE,parameters={STR_MODE:MODE_CATEGORIES,STR_KEY:key,STR_OFFSET:offset+limit})
+    xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
+
+
+
+def show_followers_menu(offset):
+    if check_profile_state():
+        found=get_users(URL_FOLLOWERS,{STR_ACCESS_TOKEN:access_token,STR_LIMIT:limit,STR_OFFSET:offset})
+        if found==limit:
+            add_folder_item(name=STRLOC_COMMON_MORE,parameters={STR_MODE:MODE_FOLLOWERS,STR_KEY:key,STR_OFFSET:offset+limit})
+    xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
+
+
+
+def show_listens_menu(offset):
+    if check_profile_state():
+        found=get_cloudcasts(URL_LISTENS,{STR_ACCESS_TOKEN:access_token,STR_LIMIT:limit,STR_OFFSET:offset})
+        if found==limit:
+            add_folder_item(name=STRLOC_COMMON_MORE,parameters={STR_MODE:MODE_LISTENS,STR_OFFSET:offset+limit})
     xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
 
 
@@ -248,6 +325,47 @@ def show_history_menu(offset):
 
 
 
+def check_profile_state():
+    global oath_code
+    global access_token
+
+    # ask for code if no token provided yet
+    if not access_token:
+        if debugenabled:
+            print('MIXCLOUD No access_token found')
+        ask=True
+        while ask:
+            ask=xbmcgui.Dialog().ok('Mixcloud',STRLOC_COMMON_TOKEN_ERROR,STRLOC_COMMON_AUTH_CODE)
+            if ask:
+#                __addon__.openSettings()
+#                oath_code=__addon__.getSetting('oath_code')
+
+                oath_code=get_query(oath_code)
+                __addon__.setSetting('oath_code',oath_code)
+                __addon__.setSetting('access_token','')
+                if oath_code<>'':
+                    try:
+                        h=urllib2.urlopen(URL_TOKEN+oath_code)
+                        content=h.read()
+                        json_content=json.loads(content)
+                        if STR_ACCESS_TOKEN in json_content and json_content[STR_ACCESS_TOKEN] :
+                            if debugenabled:
+                                print('MIXCLOUD Access_token received')
+                            access_token=json_content[STR_ACCESS_TOKEN]
+                            __addon__.setSetting('access_token',access_token)
+                        else:
+                            if debugenabled:
+                                print('MIXCLOUD No access_token received')
+                                print json_content
+                    except:
+                        print('MIXCLOUD oath_code failed')
+
+                ask=(access_token=='')
+
+    return access_token<>''
+
+
+
 def show_jackynix_menu(offset):
     show_users_menu('/jackyNIX/',0)
 
@@ -282,8 +400,7 @@ def play_cloudcast(key):
     else:
         if debugenabled:
             print('MIXCLOUD '+'stop player')
-        xbmc.Player().stop()
-#        xbmcplugin.setResolvedUrl(handle=plugin_handle,succeeded=False,listitem=xbmcgui.ListItem())
+        xbmcplugin.setResolvedUrl(handle=plugin_handle,succeeded=False,listitem=xbmcgui.ListItem())
 
 
 
@@ -332,8 +449,11 @@ def add_cloudcast(index,json_cloudcast,total,forinfo=False):
         json_year=0
         json_date=''
         json_length=0
+        json_userkey=''
         json_username=''
         json_image=''
+        json_comment=''
+        json_genre=''
         if STR_KEY in json_cloudcast and json_cloudcast[STR_KEY]:
             json_key=json_cloudcast[STR_KEY]
         if STR_CREATEDTIME in json_cloudcast and json_cloudcast[STR_CREATEDTIME]:
@@ -345,17 +465,27 @@ def add_cloudcast(index,json_cloudcast,total,forinfo=False):
             json_length=json_cloudcast[STR_AUDIOLENGTH]
         if STR_USER in json_cloudcast and json_cloudcast[STR_USER]:
             json_user=json_cloudcast[STR_USER]
+            if STR_KEY in json_user and json_user[STR_KEY]:
+                json_userkey=json_user[STR_KEY]
             if STR_NAME in json_user and json_user[STR_NAME]:
                 json_username=json_user[STR_NAME]
         if STR_PICTURES in json_cloudcast and json_cloudcast[STR_PICTURES]:
             json_pictures=json_cloudcast[STR_PICTURES]
             if thumb_size in json_pictures and json_pictures[thumb_size]:
                 json_image=json_pictures[thumb_size]
-        infolabels = {STR_COUNT:index,STR_TRACKNUMBER:index,STR_TITLE:json_name,STR_ARTIST:json_username,STR_DURATION:json_length,STR_YEAR:json_year,STR_DATE:json_date,STR_THUMBNAIL:json_image}
+        if STR_TAGS in json_cloudcast and json_cloudcast[STR_TAGS]:
+            json_tags=json_cloudcast[STR_TAGS]
+            for json_tag in json_tags:
+                if STR_NAME in json_tag and json_tag[STR_NAME]:
+                    json_comment=json_tag[STR_NAME]+'\n'
+                    if json_genre<>'':
+                        json_genre=json_genre+', '
+                    json_genre=json_genre+json_tag[STR_NAME]
+        infolabels = {STR_COUNT:index,STR_TRACKNUMBER:index,STR_TITLE:json_name,STR_ARTIST:json_username,STR_DURATION:json_length,STR_YEAR:json_year,STR_DATE:json_date,STR_COMMENT:json_comment,STR_GENRE:json_genre}
         if not forinfo:
             add_audio_item(infolabels,
-                           {STR_MODE:MODE_PLAY,STR_KEY:json_key},
-                           infolabels[STR_THUMBNAIL],
+                           {STR_MODE:MODE_PLAY,STR_KEY:json_key,STR_USER:json_userkey},
+                           json_image,
                            total)
 
         return infolabels
@@ -510,6 +640,32 @@ def get_users(url,parameters):
 
 
 
+def favoritefollow(urltmp,key,action):
+    url=urltmp.replace('{0}',key)+"?"+urllib.urlencode({STR_ACCESS_TOKEN:access_token})
+    if debugenabled:
+        print action + ': ' + url
+    opener = urllib2.build_opener(urllib2.HTTPHandler)
+    request = urllib2.Request(url, data='none')
+    request.get_method = lambda: action
+    response = urllib2.urlopen(request)
+    data = response.read()
+    json_data=json.loads(data)
+    json_info=''
+    if STR_RESULT in json_data and json_data[STR_RESULT]:
+        json_result=json_data[STR_RESULT]
+        if STR_MESSAGE in json_result and json_result[STR_MESSAGE]:
+            json_info=json_result[STR_MESSAGE]
+            if not((STR_SUCCESS in json_result) and (json_result[STR_SUCCESS]==True)):
+                json_info=json_info+'\nFAILED!'
+    if json_info=='':
+        json_info='Unknown error occured.'
+        if debugenabled:
+            print data
+    xbmcgui.Dialog().ok('Mixcloud',json_info)
+    return ''
+
+
+
 def get_query(query=''):
     keyboard=xbmc.Keyboard(query)
     keyboard.doModal()
@@ -519,6 +675,11 @@ def get_query(query=''):
         query=''
     return query;
     
+
+
+def get_icon(iconname):
+    return xbmc.translatePath( os.path.join( __addon__.getAddonInfo('path').decode("utf-8"), 'resources', 'icons', iconname ).encode("utf-8") ).decode("utf-8")
+
 
 
 def parameters_string_to_dict(parameters):
@@ -560,15 +721,21 @@ if debugenabled:
     print('MIXCLOUD '+"Key: %s" % key)
     print('MIXCLOUD '+"Query: %s" % query)
     print('MIXCLOUD '+"##########################################################")
-
+	
 if not sys.argv[2] or mode==MODE_HOME:
     ok=show_home_menu()
+elif mode==MODE_FEED:
+    ok=show_feed_menu(offset)
+elif mode==MODE_FAVORITES:
+    ok=show_favorites_menu(offset)
+elif mode==MODE_FOLLOWINGS:
+    ok=show_followings_menu(offset)
+elif mode==MODE_FOLLOWERS:
+    ok=show_followers_menu(offset)
+elif mode==MODE_LISTENS:
+    ok=show_listens_menu(offset)
 elif mode==MODE_HOT:
     ok=show_hot_menu(offset)
-elif mode==MODE_NEW:
-    ok=show_new_menu(offset)
-elif mode==MODE_POPULAR:
-    ok=show_popular_menu(offset)
 elif mode==MODE_CATEGORIES:
     ok=show_categories_menu(key,offset)
 elif mode==MODE_USERS:
@@ -581,3 +748,13 @@ elif mode==MODE_JACKYNIX:
     ok=show_jackynix_menu(offset)
 elif mode==MODE_PLAY:
     ok=play_cloudcast(key)
+elif mode==MODE_ADDFAVORITE:
+    ok=favoritefollow(URL_FAVORITE,key,'POST')
+elif mode==MODE_DELFAVORITE:
+    ok=favoritefollow(URL_FAVORITE,key,'DELETE')
+    xbmc.executebuiltin("Container.Refresh")
+elif mode==MODE_ADDFOLLOWING:
+    ok=favoritefollow(URL_FOLLOW,key,'POST')
+elif mode==MODE_DELFOLLOWING:
+    ok=favoritefollow(URL_FOLLOW,key,'DELETE')
+    xbmc.executebuiltin("Container.Refresh")

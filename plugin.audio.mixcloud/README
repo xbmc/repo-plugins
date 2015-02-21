@@ -8,14 +8,20 @@ Contributors:
 	-	jackyNIX
 	-	Bochi
 	-	SilentException
+	-	fleshgolem
 
 ============================================
 
-Current version: 1.1.5 gotham - frodo
+Current version: 2.0.0 gotham - frodo
 
 ============================================
 
 Features:
+  - Account
+    - Followings
+    - Followers
+    - Favorites
+    - Listens
   - Browse
     - New
     - Hot

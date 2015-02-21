@@ -1,3 +1,10 @@
+v1.0.5
+-add year to default movie sort, add season and episode to tv listings
+-misc fixes and improvements
+
+v1.0.4
+-fix object key error for playback on certain feature movies
+
 v1.0.3
 -update debug messages
 

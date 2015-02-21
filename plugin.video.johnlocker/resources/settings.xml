@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<settings>
+	<category>
+		<!-- Video -->
+		<setting id="quality" type="labelenum" label="$LOCALIZE[622]" values="720p|480p" default="720p" />
+		<!-- ViewModes -->
+		<setting type="sep" />
+		<setting label="$ADDON[script.module.xbmcutil 32921]" type="action" action="RunScript(plugin.video.johnlocker, setViewMode, folder)"/>
+		<setting label="$ADDON[script.module.xbmcutil 32922]" type="action" action="RunScript(plugin.video.johnlocker, setViewMode, video)"/>
+	</category>
+</settings>

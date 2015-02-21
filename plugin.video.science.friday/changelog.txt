@@ -1,0 +1,15 @@
+[B]Version 2.0.0[/B] 2015-02-20
+- Fixed bug with no images showing
+- Fixed some small encoding issue
+- Added option to view alternative list from other list
+- Change to return a generator instead of a list
+- Changed settings.xml to use new methods for setting view mode
+- Removed xbmcutil.cleanup try finally catch
+- Removed unneeded set_sort_methods
+- Removed download support
+- Removed set_content call
+- Switch to using with steatment
+- Some small method renames
+
+[B]Version 1.0.0[/B] 2014-06-30
+- Initial Version

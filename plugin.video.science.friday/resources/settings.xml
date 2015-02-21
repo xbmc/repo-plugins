@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<settings>
+	<category>
+		<setting id="defaultview" type="enum" label="30001" lvalues="291|292" default="0"/>
+		<!-- ViewModes -->
+		<setting type="sep" />
+		<setting label="$ADDON[script.module.xbmcutil 32921]" type="action" action="RunScript(plugin.video.science.friday, setViewMode, folder)"/>
+		<setting label="$ADDON[script.module.xbmcutil 32922]" type="action" action="RunScript(plugin.video.science.friday, setViewMode, video)"/>
+	</category>
+</settings>

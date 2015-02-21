@@ -1,0 +1,32 @@
+[B]Version 2.0.0[/B] 2015-02-20
+- Removed set_content call
+- Removed download support
+- Removed unneeded set_sort_methods
+- Removed xbmcutil.cleanup try finally catch
+- Change to return a generator instead of a list
+- Changed settings.xml to use new methods for setting view mode
+- Switch to using with statement
+- Some small method renames
+
+[B]Version 1.1.4[/B] 2014-08-7
+- Fix addon after site changes
+
+[B]Version 1.1.3[/B] 2014-06-30
+- Update Strings to strings.po
+- Added UnitTests
+- Added option to list show by categories via context menu
+- Change isHD Flag to be more accurate
+- Fix Addon after site changes
+- And a lot more small improvements
+
+[B]Version 1.1.2[/B]
+- Added Full Unicode Support
+
+[B]Version 1.1.1[/B]
+- Changed icon.png (Thanks goes to moneymaker for the new image)
+
+[B]Version 1.1.0[/B]
+- Rebuild content scraper after site totally changed
+
+[B]Version 1.0.0[/B]
+- Initial Version

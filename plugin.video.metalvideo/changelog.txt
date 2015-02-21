@@ -1,0 +1,34 @@
+[B]Version 2.0.0[/B] 2015-02-20
+- Added video of the day item
+- Added Videos being watched right now item
+- Removed set_content call
+- Removed download support
+- Removed unneeded set_sort_methods
+- Removed xbmcutil.cleanup try finally catch
+- Change to return a generator instead of a list
+- Changed settings.xml to use new methods for setting view mode
+- Some small method renames
+
+[B]Version 1.0.4[/B] 2014-06-30
+- Update Strings to strings.po
+- Added UnitTests
+- And a lot more small improvements
+
+[B]Version 1.0.3[/B]
+- Changed the Video Context menu to not replace items
+- Fixed bug with non english language sometimes crashing the addon
+- Changed random play to continuously play the next random video (Party Mode)
+- General unicode fixes
+
+[B]Version 1.0.2[/B]
+- Fixed next page now showing bug. Unicode mistake
+- Small Change to prepare for Unit Tests
+
+[B]Version 1.0.1[/B]
+- Fixed artist needing to be a list of artists in Gotham
+- Changed Addon to show under Music Addons as well as Video Addons
+- Added Ability to save searches
+- Added full unicode support
+
+[B]Version 1.0.0[/B]
+- Initial Version

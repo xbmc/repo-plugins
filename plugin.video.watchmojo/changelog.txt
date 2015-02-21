@@ -1,0 +1,22 @@
+[B]Version 2.0.0[/B] 2015-02-20
+- Removed set_content call
+- Removed unneeded set_sort_methods
+- Removed xbmcutil.cleanup try finally catch
+- Removed results.append from Next_Page (Not needed anymore)
+- Removed download support
+- Change to return a generator instead of a list
+- Changed settings.xml to use new methods for setting view mode
+- Some small method renames
+- Switch to using with statement
+
+[B]Version 1.0.2[/B] 2014-06-30
+- Update Strings to strings.po
+- Added UnitTests
+- Added opton to hide sub categorys via context menu
+- And a lot more small improvements
+
+[B]Version 1.0.1[/B]
+- Added full unicode support
+
+[B]Version 1.0.0[/B]
+- Initial Version

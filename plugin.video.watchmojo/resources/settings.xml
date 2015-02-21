@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<settings>
+	<category>
+		<setting id="extracat" type="bool" label="30001" default="false"/>
+		<!-- ViewModes -->
+		<setting type="sep" />
+		<setting label="$ADDON[script.module.xbmcutil 32921]" type="action" action="RunScript(plugin.video.watchmojo, setViewMode, folder)"/>
+		<setting label="$ADDON[script.module.xbmcutil 32922]" type="action" action="RunScript(plugin.video.watchmojo, setViewMode, video)"/>
+	</category>
+</settings>

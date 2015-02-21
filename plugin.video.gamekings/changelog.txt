@@ -1,3 +1,6 @@
+v1.1.1 (Saturday, 14 February 2014) :
+- small fix for category Gamekings Extra
+
 v1.1.0 (Friday, 14 November 2014) :
 - added category Gamekings Extra (mad props to Amelandbor!)
 - retired category Pc because of lack of updates

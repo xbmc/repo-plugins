@@ -108,21 +108,26 @@ class Main:
 			if self.plugin_category == __language__(30002):
 				video_urls_dec = str(base64.b64decode(video_urls[0]))
 				video_urls_dict = video_urls_dec.split(',')
-				video_url = "http://stream.gamekings.tv/large/" + str(video_urls_dict[0])
+				video_url = str(video_urls_dict[0])
 			else:
 				video_url = str(video_urls[0]['content'])
+				
 			if (self.DEBUG) == 'true':
 				xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "video_url", str(video_url) ), xbmc.LOGNOTICE )
 
 			# Check if it's a vimeo file
 			if video_url.count("vimeo") > 0:
+				#the vimeo video_url looks like this: http://stream.gamekings.tv/http://player.vimeo.com/external/118907131.hd.mp4?s=486e834bab4dc380743d814653c52050
+				#therefore the stream stuff got to be removed
+				video_url = video_url.replace("http://stream.gamekings.tv/large", "")
 				video_url = video_url.replace("http://stream.gamekings.tv/", "")
 				have_valid_url = True
 			else:
+				video_url = "http://stream.gamekings.tv/large/" + video_url
 				if httpCommunicator.exists( video_url ):
 					have_valid_url = True
 				else:
-					video_url = video_url.replace("http://stream.gamekings.tv/", "http://stream.gamekings.tv/large/")
+					video_url = video_url.replace("http://stream.gamekings.tv/large", "http://stream.gamekings.tv/")
 					if httpCommunicator.exists( video_url ):
 						have_valid_url = True
 					else:

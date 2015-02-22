@@ -98,12 +98,11 @@ class FetchJob(workerpool.Job):
                         
 			myheaders = {'Cookie' : self.cookies, 'User-Agent' : 'XBMC', 'Referer' : 'http://www.glwiz.com/homepage.aspx', 'X-hello-data' : xhellodata}
                         r = self.http.request('GET', itemurl, headers=myheaders)
-                        link = r.data
+                        itemurl = urllib.unquote(r.data)
 
-			if urllib.unquote(link).find('&c=') != -1:
-				link = urllib.unquote(link).split('&c=')[1]
+			if itemurl.find('&c=') != -1:
+				itemurl = itemurl.split('&c=')[1]
 
-			itemurl = link.replace('http://','mms://')
 			addLink(itemurl,name,thumbnail)
 
 		except:

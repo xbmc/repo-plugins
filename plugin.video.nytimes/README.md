@@ -1,0 +1,30 @@
+KODI Addon For New York Times Minute
+
+THINGS TODO:
+-----------------------
+1) Streamline Code to be faster and more pythonic. [ I.E. store data from runtime ]
+2) parse JSON to always get HD video with a SD fall back video link
+3) Find a way to display Byline and Summary Information for each video
+4) Sort the VIDEOS by date published.
+5) Recieve Bitcoin to eat.
+
+Version 1.0.0 
+* Gussied it up with PNG's and put it up to test on Kodi Forum!
+* then we kicked back and relaxed and caught up with the best news site in the world:
+* The Old Grey Lady watching videos on World events while
+* Drinking wine and wearing monocoles with feet on an ottoman whilst
+* we use said videos to facilitate the discussion of the outcomes of international events
+* in a vain attempt to think that the future is knowable in anyway shape form or fashion.
+
+Version 0.9 Beta
+* Speed Enhancements. Thanks JSON.
+
+Verions 0.5 Alpha
+* Working 100%: Conformed Addon Structure to KODI exacting standards
+
+Version 0.1 Alpha
+* Init Tangle of Web Data and API
+
+Version 0.0.1 Alpha
+* initial framework setup
+

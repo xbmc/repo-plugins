@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.nytimes" name="New York Times Video" version="1.0.0" provider-name="netw1z">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.beautifulsoup" version="3.2.1"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Watch video from the New York Times</summary>
+    <description lang="en">News and opinion video from the The New York Times. Breaking News, investigative reporting , national and international coverage. Style, art, science and more.</description>
+    <disclaimer lang="en"></disclaimer>
+    <language></language>
+    <platform>all</platform>
+    <forum></forum>
+    <website>https://github.com/netw1z/kodi-nytimes</website>
+    <email>johnthreat@gmail.com</email>
+  </extension>
+</addon>

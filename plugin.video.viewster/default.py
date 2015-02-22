@@ -78,10 +78,10 @@ def getSources(fanart):
     cats = json.loads(html)
     x = cats['Genres']
     for list in x:
-      sname = list['name']
+      sname = list['name'].encode(UTF8)
       sid = list['id']
       img  =   'http://divaag.vo.llnwd.net/o42/http_rtmpe/shared/Viewster_Artwork/internal_artwork/g%s_1280x720.jpg' % sid
-      sid = sid.encode(UTF8)+('#').encode(UTF8)+sname.encode(UTF8)
+      sid = sid.encode(UTF8)+('#').encode(UTF8)+sname
       addDir(sname, sid, 'GC', img, addonfanart, sname, '', '')      
     addDir("[COLOR red]%s[/COLOR]" % __language__(30001),"/search/Movies#%s" % __language__(30001),'DS','',fanart,__language__(30001),"","",False)
     addDir("[COLOR red]%s[/COLOR]" % __language__(30002),"/search/TvShow#%s" % __language__(30002),'DS','',fanart,__language__(30002),"","",False)

@@ -67,9 +67,9 @@ class drundoo:
                 link = url
                 temp = self.open_site(link)
 
-                if temp.find('"playlistUrl": "') > -1:
-                    start1 = temp.find('"playlistUrl": "') + '"playlistUrl": "'.__len__()
-                    end1 = temp.find('","showVideoInfoOverlayOnStartUp":')
+                if temp.find('$.getJSON("') > -1:
+                    start1 = temp.find('$.getJSON("') + '$.getJSON("'.__len__()
+                    end1 = temp.find('", function (data)')
 
                 else:
                     start1 = temp.find('url: "') + 'url: "'.__len__()

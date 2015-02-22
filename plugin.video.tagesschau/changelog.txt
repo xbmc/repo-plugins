@@ -1,3 +1,6 @@
+version 2.1.1
+ * Fixed handling to 'Tagesschau in 100 Sekunden' streams
+
 version 2.1.0
  * Added subtitle support
  * Added HD streams

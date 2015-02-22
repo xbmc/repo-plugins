@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
     id="plugin.video.tagesschau"
-    version="2.1.0"
+    version="2.1.1"
     name="Tagesschau"
     provider-name="Jörn Schumacher, Henning Saul">
   <requires>

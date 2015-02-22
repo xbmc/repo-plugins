@@ -168,6 +168,29 @@ class VideoContentParser(object):
             duration = None    
         return VideoContent(tsid, title, timestamp, videourls, imageurls, duration)    
 
+    def parse_ts_100_sek(self, jsonvideo):
+        """Parses the video JSON into a VideoContent object."""
+        tsid = "none"
+        title = jsonvideo["headline"]
+        timestamp = self._parse_date(jsonvideo["broadcastDate"])
+        if(timestamp):
+#            print '-'*20
+#            print timestamp
+            title = title + timestamp.strftime(' vom %d.%m.%Y %H:%M')
+        imageurls = {}
+        if(len(jsonvideo["images"]) > 0):
+            imageurls = self._parse_image_urls(jsonvideo["images"][0]["variants"])
+        videourls = self.parse_video_urls(jsonvideo["mediadata"])
+        print videourls
+        # calculate duration using outMilli and inMilli, duration is not set in JSON
+        if("inMilli" in jsonvideo and "outMilli" in jsonvideo):
+            duration = (jsonvideo["outMilli"] - jsonvideo["inMilli"]) / 1000
+        else:
+            duration = None
+        #print title
+        return VideoContent(tsid, title, timestamp, videourls, imageurls, duration)    
+
+
     def parse_broadcast(self, jsonbroadcast):
         """Parses the broadcast JSON into a LazyVideoContent object."""
         tsid = jsonbroadcast["sophoraId"]
@@ -263,8 +286,20 @@ class VideoContentProvider(object):
             video = self._parser.parse_video(jsonvideo)
             videos.append(video) 
     
+        videos.append(self.tagesschau_in_100_sek())
+
         self._logger.info("found " + str(len(videos)) + " videos")
         return videos
+
+    def tagesschau_in_100_sek(self):
+        self._logger.info("retrieving videos")
+        data = self._jsonsource.latest_videos()
+        if("multimedia" in data):
+            multimedia = data["multimedia"]
+            if("tsInHundredSeconds" in multimedia[1]):  
+                #print multimedia[1]
+                video = self._parser.parse_ts_100_sek(multimedia[1]["tsInHundredSeconds"])
+        return video
 
     def dossiers(self):
         """Retrieves the latest dossier videos.
@@ -293,6 +328,9 @@ class VideoContentProvider(object):
         for jsonbroadcast in data["latestBroadcastsPerType"]:
             video = self._parser.parse_broadcast(jsonbroadcast)
             videos.append(video)
+
+        videos.append(self.tagesschau_in_100_sek())
+
         self._logger.info("found " + str(len(videos)) + " videos")              
         return videos
 
@@ -348,6 +386,11 @@ if __name__ == "__main__":
     print "Livestreams:"     
     for video in videos:
         print video
+    video = provider.tagesschau_in_100_sek()
+    print "100 Sek Videos"     
+    print video
+    #if True:
+    #    sys.exit(0)
     videos = provider.latest_videos()
     print "Aktuelle Videos"     
     for video in videos:

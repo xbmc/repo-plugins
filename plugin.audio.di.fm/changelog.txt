@@ -3,10 +3,15 @@
 - Removed feature
 
 
+21. February 2015 v3.0.8
+* Updated regex getting channel metadata from HTML
+
+
 15. February 2015 v3.0.7
 + Added login via https for getting the frontpage HTML for premium users
   Thanks to thloe-1 for pointing that out
-
++ Added Polish translation
+  Thanks to struart
 
 15. February 2015 v3.0.6
 * Updated plugin to support new website design for scraping

@@ -11,8 +11,7 @@ The currently supported browsing options are:
 * Newest talks
 * Search
 * Speakers
-* Themes
-* Favorites (if you provide your TED credentials)
+* Topics
 
 Settings
 ========

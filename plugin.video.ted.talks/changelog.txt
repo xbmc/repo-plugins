@@ -1,3 +1,7 @@
+[B]Version 4.2.5[/B]
+Added topics browsing (pull#52 thanks to Tibo-lg)
+Removed themes category which has been replaced by topics (issue#53)
+
 [B]Version 4.2.4[/B]
 Fix issue attempting to show subtitles when there aren't any (issue#50 issue#51)
 

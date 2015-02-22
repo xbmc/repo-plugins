@@ -6,9 +6,9 @@ import settings
 from model.fetcher import Fetcher
 from model.rss_scraper import NewTalksRss
 from model.speakers_scraper import Speakers
-from model.themes_scraper import Themes
 from model.util import resizeImage
 from model.search_scraper import Search
+from model.topics_scraper import Topics
 import menu_util
 import os
 import time
@@ -100,8 +100,8 @@ class UI:
     def showCategories(self):
         self.addItem(plugin.getLS(30001), 'newTalksRss', video_info={'Plot':plugin.getLS(30031)})
         self.addItem(plugin.getLS(30002), 'speakers', video_info={'Plot':plugin.getLS(30032)})
-        self.addItem(plugin.getLS(30003), 'themes', video_info={'Plot':plugin.getLS(30033)})
         self.addItem(plugin.getLS(30004) + "...", 'search', video_info={'Plot':plugin.getLS(30034)})
+        self.addItem(plugin.getLS(30007), 'topics', video_info={'Plot':plugin.getLS(30033)})
         self.endofdirectory()
 
     def newTalksRss(self):
@@ -110,23 +110,9 @@ class UI:
             self.addItem(title=talk['title'], mode='playVideo', url=talk['link'], img=talk['thumb'], video_info=talk, isFolder=False)
         self.endofdirectory(sortMethod='date')
 
-
     def speakerVids(self, url):
         talks_generator = Speakers(self.get_HTML).get_talks_for_speaker(url)
         for title, link, img in talks_generator:
-            self.addItem(title, 'playVideo', link, img, isFolder=False)
-        self.endofdirectory()
-
-    def themes(self):
-        themes = Themes(self.get_HTML)
-        for title, link, img, count in themes.get_themes():
-            # Need to associate count with the item so that we can use it when that one selected.
-            self.addItem(title, 'themeVids', link, img, isFolder=True)
-        self.endofdirectory()
-
-    def themeVids(self, url):
-        themes = Themes(self.get_HTML)
-        for title, link, img in themes.get_talks(url):
             self.addItem(title, 'playVideo', link, img, isFolder=False)
         self.endofdirectory()
 
@@ -136,10 +122,11 @@ class Action(object):
     Some action that can be executed by the user.
     '''
 
-    def __init__(self, mode, required_args, logger=None, *args, **kwargs):
+    def __init__(self, mode, required_args, logger=None, get_HTML=None, *args, **kwargs):
         self.mode = mode
         self.required_args = set(required_args)
         self.logger = logger
+        self.get_HTML = get_HTML
 
     def run(self, args):
         good = self.required_args.issubset(args.keys())
@@ -227,32 +214,37 @@ class SpeakerVideosAction(Action):
         self.ui.speakerVids(args['url'])
 
 
-class ThemesAction(Action):
+class TopicsAction(Action):
 
     def __init__(self, ui, *args, **kwargs):
-        super(ThemesAction, self).__init__('themes', [], *args, **kwargs)
+        super(TopicsAction, self).__init__('topics', [], *args, **kwargs)
         self.ui = ui
 
     def run_internal(self, args):
-        self.ui.themes()
+        topics = Topics(self.get_HTML, self.logger)
+        for title, topic in topics.get_topics():
+            self.ui.addItem(title, 'topicVids', args={ 'topic': topic }, isFolder=True)
+        self.ui.endofdirectory()
 
 
-class ThemeVideosAction(Action):
+class TopicVideosAction(Action):
 
     def __init__(self, ui, *args, **kwargs):
-        super(ThemeVideosAction, self).__init__('themeVids', ['url'], *args, **kwargs)
+        super(TopicVideosAction, self).__init__('topicVids', ['topic'], *args, **kwargs)
         self.ui = ui
 
     def run_internal(self, args):
-        self.ui.themeVids(args['url'])
+        topics = Topics(self.get_HTML, self.logger)
+        for title, link, img, speaker in topics.get_talks(args['topic']):
+            self.ui.addItem(title, 'playVideo', link, img, isFolder=False, video_info={ 'author': speaker })
+        self.ui.endofdirectory()
 
 
 class SearchActionBase(Action):
 
-    def __init__(self, ui, get_HTML, *args, **kwargs):
+    def __init__(self, ui, *args, **kwargs):
         super(SearchActionBase, self).__init__(*args, **kwargs)
         self.ui = ui
-        self.get_HTML = get_HTML
 
     def __add_items__(self, search_term, page, current_items, update_listing):
         talks_generator = Search(self.get_HTML).get_talks_for_search(search_term, page)
@@ -310,15 +302,15 @@ class Main:
             ui.showCategories()
         else:
             modes = [
-                PlayVideoAction(ui, logger=plugin.report),
-                NewTalksAction(ui, logger=plugin.report),
-                SearchAction(ui, self.get_HTML, logger=plugin.report),
-                SearchMoreAction(ui, self.get_HTML, logger=plugin.report),
-                SpeakersAction(ui, self.get_HTML, logger=plugin.report),
-                SpeakerGroupAction(ui, self.get_HTML, logger=plugin.report),
-                SpeakerVideosAction(ui, logger=plugin.report),
-                ThemesAction(ui, logger=plugin.report),
-                ThemeVideosAction(ui, logger=plugin.report)
+                PlayVideoAction(ui, logger=plugin.report, get_HTML=self.get_HTML),
+                NewTalksAction(ui, logger=plugin.report, get_HTML=self.get_HTML),
+                SearchAction(ui, logger=plugin.report, get_HTML=self.get_HTML),
+                SearchMoreAction(ui, logger=plugin.report, get_HTML=self.get_HTML),
+                SpeakersAction(ui, logger=plugin.report, get_HTML=self.get_HTML),
+                SpeakerGroupAction(ui, logger=plugin.report, get_HTML=self.get_HTML),
+                SpeakerVideosAction(ui, logger=plugin.report, get_HTML=self.get_HTML),
+                TopicsAction(ui, logger=plugin.report, get_HTML=self.get_HTML),
+                TopicVideosAction(ui, logger=plugin.report, get_HTML=self.get_HTML)
             ]
             modes = dict([(m.mode, m) for m in modes])
             mode = self.args_map['mode']

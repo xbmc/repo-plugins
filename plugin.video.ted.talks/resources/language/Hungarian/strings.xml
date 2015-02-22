@@ -5,9 +5,9 @@
     <!--Categories-->
     <string id="30001">Legújabb Beszélgetések</string>
     <string id="30002">Felszólalók</string>
-    <string id="30003">Témák</string>
     <string id="30004">Keresés</string>
     <string id="30005">Kedvencek</string>
+    <string id="30007">Téma</string>
     
     <!--NavItems-->
     <string id="30020"> Következő</string>
@@ -18,8 +18,6 @@
     <string id="30031">TED egy kicsi non-profit szervezet aminek célpontjában az Ötlet áll amit érdemes megosztani. A webhely kezdete 1984-re nyúlik vissza egy konferenciára ami 3 külön világot hozott össze: Technológia, Szórakozás, Tervezés. Azóta a kör csak bővült. Az éves TED konferenciával együtt Long Beach, Californiában és a globális konferenciával Oxfordban, a TED magába foglalja a díjnyertes TEDTalks videóoldalt is, valamint a nyílt fordítási programot, az új TEDx közösségi programot, az ezévi TEDIndia konferenciát és az éves TED díjat.</string>
     <!--Speakers-->
     <string id="30032">Az előadók választéka a TED-nél kibővült tudósokkal, filozófusokkal, zenészekkel, vallási vezetőkkel, filantrópokkal és még sokan másokkal. Az évek folyamán a TED felszólalók között volt Bill Gates, Frank Gehry, Jane Goodall, Al Gore, Billy Graham, Peter Gabriel, Quincy Jones, Bono.</string>
-    <!--Themes-->
-    <string id="30033">Öt, tíz év múlva több rák lesz megelőzhető, vakcina segítségével. A műlábakkal rendelkezők úgy fognak falra mászni mint pókember. A robotoknak emberi érzelmeket kifejezni képes arcmimikájuk lesz. Ez csak példa, hogy milyen témák bukkannak fel majd a TED-en a jövőben.</string>
     <!--Search-->
     <string id="30034">Beszédek keresése a TED.com-on</string>
     <!--Favorites-->

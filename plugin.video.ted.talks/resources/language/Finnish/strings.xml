@@ -5,9 +5,9 @@
     <!--Categories-->
     <string id="30001">Uusimmat keskustelut</string>
     <string id="30002">Puhujat</string>
-    <string id="30003">Teemat</string>
     <string id="30004">Haku</string>
     <string id="30005">Suosikit</string>
+    <string id="30007">Aiheet</string>
     
     <!--NavItems-->
     <string id="30020"> Seuraava</string>

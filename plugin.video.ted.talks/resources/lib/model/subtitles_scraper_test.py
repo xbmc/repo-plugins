@@ -33,8 +33,9 @@ World
 
     def test_get_languages(self):
         talk_json = self.__get_talk_json__('http://www.ted.com/talks/richard_wilkinson.html')
-        expected = set(['sq', 'ar', 'hy', 'bg', 'ca', 'zh-cn', 'zh-tw', 'hr', 'cs', 'da', 'nl', 'en', 'fr', 'ka', 'de', 'el', 'he', 'hu', 'id', 'it', 'ja', 'ko', 'fa', 'mk', 'pl', 'pt', 'pt-br', 'ro', 'ru', 'sr', 'sk', 'es', 'th', 'tr', 'uk', 'vi', 'eu', 'sv', 'nb'])
-        self.assertEqual(expected, set(subtitles_scraper.__get_languages__(talk_json)), msg="New translations are likely to appear; please update the test if so :)")
+        expected = set(['ar', 'bg', 'ca', 'cs', 'da', 'de', 'el', 'en', 'es', 'eu', 'fa', 'fr', 'gl', 'he', 'hr', 'hu', 'hy', 'id', 'it', 'ja', 'ka', 'ko', 'mk', 'nb', 'nl', 'pl', 'pt', 'pt-br', 'ro', 'ru', 'sk', 'sq', 'sr', 'sv', 'th', 'tr', 'uk', 'vi', 'zh-cn', 'zh-tw'])
+        result = set(subtitles_scraper.__get_languages__(talk_json))
+        self.assertEqual(expected, result, msg="New translations are likely to appear; please update the test if so :)\n%s" % (sorted(result)))
 
     def test_get_subtitles_for_talk(self):
         talk_json = self.__get_talk_json__('http://www.ted.com/talks/richard_wilkinson.html')

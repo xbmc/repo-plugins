@@ -77,9 +77,9 @@ class Scraper:
     def get_video_url(self, video_id):
         url = MAIN_URL + 'videos/config/xxx/%s.js' % video_id
         data = self.__get_url(url)
-        match = re.search(r"'(http://.*\.(flv|mp4|webm))'", data)
+        match = re.search(r"'(https?://.*\.(flv|mp4|webm))'", data)
         if match:
-            return match.group(1)
+            return match.group(1).replace('http://', 'https://')
 
 
     @staticmethod

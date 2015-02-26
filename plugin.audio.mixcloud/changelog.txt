@@ -1,3 +1,6 @@
+2.0.1
+- Fixed bug in authentication code landing page
+
 2.0.0
 - Added user authentication (tnx to Bochi)
 - Added followings
@@ -7,6 +10,7 @@
 - Added (un)favoriting cloucasts
 - Added (un)following users
 - Added thumbnails to main menu
+- Added extended cloudcast info (comment)
 - Fixed Unknown Music Info Key "thumbnail"
 
 1.1.5

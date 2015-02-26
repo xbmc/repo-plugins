@@ -50,7 +50,7 @@ URL_JACKYNIX=    'http://api.mixcloud.com/jackyNIX/'
 URL_STREAM=      'http://www.mixcloud.com/api/1/cloudcast/{0}.json?embed_type=cloudcast'
 URL_FAVORITE=    'https://api.mixcloud.com{0}/favorite/'
 URL_FOLLOW=      'https://api.mixcloud.com{0}/follow/'
-URL_TOKEN=       'https://www.mixcloud.com/oauth/access_token?client_id=Vef7HWkSjCzEFvdhet&redirect_uri=http://www.mixcloud.com&client_secret=VK7hwemnZWBexDbnVZqXLapVbPK3FFYT&code='
+URL_TOKEN=       'https://www.mixcloud.com/oauth/access_token?client_id=Vef7HWkSjCzEFvdhet&redirect_uri=http://forum.kodi.tv/showthread.php?tid=116386&client_secret=VK7hwemnZWBexDbnVZqXLapVbPK3FFYT&code='
 
 
 
@@ -86,6 +86,7 @@ STR_COMMENT=     u'comment'
 STR_CREATEDTIME= u'created_time'
 STR_DATA=        u'data'
 STR_DATE=        u'date'
+STR_DESCRIPTION= u'description'
 STR_DURATION=    u'duration'
 STR_GENRE=       u'genre'
 STR_HISTORY=     u'history'
@@ -139,6 +140,7 @@ resolverid=  int(__addon__.getSetting('resolver'))
 oath_code=   __addon__.getSetting('oath_code')
 access_token=__addon__.getSetting('access_token')
 useaccount=  (__addon__.getSetting('use_account')=='true')
+ext_info=    (__addon__.getSetting('ext_info')=='true')
 
 
 
@@ -345,6 +347,8 @@ def check_profile_state():
                 __addon__.setSetting('access_token','')
                 if oath_code<>'':
                     try:
+                        if debugenabled:
+                            print('MIXCLOUD getting access token ' + URL_TOKEN+oath_code)
                         h=urllib2.urlopen(URL_TOKEN+oath_code)
                         content=h.read()
                         json_content=json.loads(content)
@@ -358,7 +362,7 @@ def check_profile_state():
                                 print('MIXCLOUD No access_token received')
                                 print json_content
                     except:
-                        print('MIXCLOUD oath_code failed')
+                        print('MIXCLOUD oath_code failed error=%s' % (sys.exc_info()[1]))
 
                 ask=(access_token=='')
 
@@ -390,10 +394,10 @@ def show_history_search_menu(offset):
 def play_cloudcast(key):
     url=get_stream(key)
     if url:
-        infolabels=get_cloudcast(URL_API[:-1]+key,{},True)
-        listitem=xbmcgui.ListItem(label=infolabels[STR_TITLE],label2=infolabels[STR_ARTIST],iconImage=infolabels[STR_THUMBNAIL],thumbnailImage=infolabels[STR_THUMBNAIL],path=url)
-        listitem.setInfo(type='Music',infoLabels=infolabels)
-        xbmcplugin.setResolvedUrl(handle=plugin_handle,succeeded=True,listitem=listitem)
+        _infolabels=get_cloudcast(URL_API[:-1]+key,{},True)
+        _listitem=xbmcgui.ListItem(label=_infolabels[STR_TITLE],label2=_infolabels[STR_ARTIST],path=url)
+        _listitem.setInfo(type='Music',infoLabels=_infolabels)
+        xbmcplugin.setResolvedUrl(handle=plugin_handle,succeeded=True,listitem=_listitem)
         add_to_settinglist('play_history_list',key,'play_history_max')
         if debugenabled:
             print('MIXCLOUD playing '+url)
@@ -423,7 +427,10 @@ def get_cloudcasts(url,parameters):
             json_tracknumber=0
         for json_cloudcast in json_data:
             json_tracknumber=json_tracknumber+1
-            infolabels = add_cloudcast(json_tracknumber,json_cloudcast,total);
+            if ext_info:
+                infolabels = get_cloudcast(URL_API[:-1]+json_cloudcast[STR_KEY],{},json_tracknumber,total)
+            else:
+                infolabels = add_cloudcast(json_tracknumber,json_cloudcast,total)
             if len(infolabels)>0:
                 found=found+1
     return found
@@ -473,11 +480,12 @@ def add_cloudcast(index,json_cloudcast,total,forinfo=False):
             json_pictures=json_cloudcast[STR_PICTURES]
             if thumb_size in json_pictures and json_pictures[thumb_size]:
                 json_image=json_pictures[thumb_size]
+        if STR_DESCRIPTION in json_cloudcast and json_cloudcast[STR_DESCRIPTION]:
+            json_comment=json_cloudcast[STR_DESCRIPTION].encode('ascii', 'ignore')
         if STR_TAGS in json_cloudcast and json_cloudcast[STR_TAGS]:
             json_tags=json_cloudcast[STR_TAGS]
             for json_tag in json_tags:
                 if STR_NAME in json_tag and json_tag[STR_NAME]:
-                    json_comment=json_tag[STR_NAME]+'\n'
                     if json_genre<>'':
                         json_genre=json_genre+', '
                     json_genre=json_genre+json_tag[STR_NAME]
@@ -706,7 +714,7 @@ def add_to_settinglist(name,value,maxname):
         settinglist.pop()
     __addon__.setSetting(name,', '.join(settinglist))
 
-
+    
 
 params=parameters_string_to_dict(urllib.unquote(sys.argv[2]))
 mode=int(params.get(STR_MODE,"0"))
@@ -752,9 +760,9 @@ elif mode==MODE_ADDFAVORITE:
     ok=favoritefollow(URL_FAVORITE,key,'POST')
 elif mode==MODE_DELFAVORITE:
     ok=favoritefollow(URL_FAVORITE,key,'DELETE')
-    xbmc.executebuiltin("Container.Refresh")
+    xbmc.executebuiltin("Container.Update")
 elif mode==MODE_ADDFOLLOWING:
     ok=favoritefollow(URL_FOLLOW,key,'POST')
 elif mode==MODE_DELFOLLOWING:
     ok=favoritefollow(URL_FOLLOW,key,'DELETE')
-    xbmc.executebuiltin("Container.Refresh")
+    xbmc.executebuiltin("Container.Update")

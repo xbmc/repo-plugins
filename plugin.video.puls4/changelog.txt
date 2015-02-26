@@ -1,0 +1,13 @@
+0.2.0
+* Fixed the Addon
+* All Shows
+* H264 Stream (HD/SD)
+* Top Videos
+* Highlights
+* Fast & Light (JSON Datasource);)
+
+0.1.0
+* All Shows
+* Search
+* H264 Stream
+* Top Shows and Most Popular

@@ -2,8 +2,8 @@
 <addon 
 	id="plugin.video.tweakers" 
 	name="Tweakers" 
-	version="1.0.2" 
-	provider-name="Skipmode A1">
+	version="1.0.3" 
+	provider-name="Skipmode A1,Amelandbor">
   <requires>
     <import addon="xbmc.python"                 version="2.1.0"/>
     <import addon="xbmc.addon"                  version="12.0.0"/>
@@ -13,7 +13,7 @@
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-	<platform>all</platform>
+  	<platform>all</platform>
 	<summary lang="en">Watch tech videos from Tweakers.net (dutch)</summary>
 	<description lang="en">Watch tech videos from Tweakers.net (dutch)</description>
 	<disclaimer lang="en">For bugs, requests or general questions visit the tweakers.net thread on the XBMC forum.</disclaimer>
@@ -22,8 +22,8 @@
 	<disclaimer lang="nl">Bugs of andere feedback op deze plugin kan geplaatst worden in de Tweakers.net thread op het XBMC forum.</disclaimer>
     <language>nl</language>
     <platform>all</platform>
-    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-    <forum></forum>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+    <forum>http://forum.xbmc.org/showthread.php?tid=167812</forum>
     <website>http://www.tweakers.net</website>
     <email></email>
     <source>git://github.com/skipmodea1/plugin.video.tweakers.git</source>

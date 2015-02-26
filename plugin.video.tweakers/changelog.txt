@@ -1,9 +1,12 @@
-v1.0.0 (Sunday, 23 June 2013) :
- - initial version
- 
+v1.0.3 (Wednesday, 25 February 2015) :
+- play the highest video quality that's available (kudos to Amelandbor!)
+
+v1.0.2 (Saturday, 3 August 2013) :
+- fixed title bug
+
 v1.0.1 (Saturday, 7 July 2013) :
 - added beautiful soup as dependency
 - added dutch strings
 
-v1.0.2 (Saturday, 3 August 2013) :
-- fixed title bug
+v1.0.0 (Sunday, 23 June 2013) :
+ - initial version

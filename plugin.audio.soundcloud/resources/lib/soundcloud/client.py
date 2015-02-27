@@ -22,10 +22,11 @@ class Client(object):
     CLIENT_ID = '40ccfee680a844780a41fbe23ea89934'
     CLIENT_SECRET = '26a5240f7ee0ee2d4fa9956ed80616c2'
 
-    def __init__(self, username='', password='', access_token='', client_id='', client_secret=''):
+    def __init__(self, username='', password='', access_token='', client_id='', client_secret='', items_per_page=50):
         self._username = username
         self._password = password
         self._access_token = access_token
+        self._items_per_page = items_per_page
 
         # set client id with fallback
         self._client_id = self.CLIENT_ID
@@ -58,9 +59,9 @@ class Client(object):
                                      headers={'Accept': 'application/json'},
                                      params=params)
 
-    def get_trending(self, category='music', page=1, per_page=50):
+    def get_trending(self, category='music', page=1):
         page = int(page)
-        per_page = int(per_page)
+        per_page = int(self._items_per_page)
 
         path = 'app/mobileapps/suggestions/tracks/popular/%s' % category
         params = {'limit': str(per_page)}
@@ -71,9 +72,9 @@ class Client(object):
                                      headers={'Accept': 'application/json'},
                                      params=params)
 
-    def get_genre(self, genre, page=1, per_page=50):
+    def get_genre(self, genre, page=1):
         page = int(page)
-        per_page = int(per_page)
+        per_page = int(self._items_per_page)
 
         path = 'app/mobileapps/suggestions/tracks/categories/%s' % genre
         params = {'limit': str(per_page)}
@@ -93,7 +94,7 @@ class Client(object):
                                      headers={'Accept': 'application/json'},
                                      allow_redirects=False)
 
-    def search(self, search_text, category='sounds', page=1, per_page=30):
+    def search(self, search_text, category='sounds', page=1):
         """
 
         :param search_text:
@@ -103,7 +104,7 @@ class Client(object):
         :return:
         """
         page = int(page)
-        per_page = int(per_page)
+        per_page = int(self._items_per_page)
 
         params = {'limit': str(per_page),
                   'q': search_text}
@@ -116,8 +117,8 @@ class Client(object):
                                      headers=headers,
                                      params=params)
 
-    def get_stream(self, page_cursor=None, limit=50):
-        params = {'limit': unicode(limit)}
+    def get_stream(self, page_cursor=None):
+        params = {'limit': unicode(self._items_per_page)}
         if page_cursor is not None:
             params['cursor'] = page_cursor
 
@@ -145,9 +146,9 @@ class Client(object):
                                      path='e1/me/playlist_likes/%s' % unicode(playlist_id),
                                      headers={'Accept': 'application/json'})
 
-    def get_favorites(self, me_or_user_id, page=1, per_page=50):
+    def get_favorites(self, me_or_user_id, page=1):
         page = int(page)
-        per_page = int(per_page)
+        per_page = int(self._items_per_page)
 
         params = {'limit': str(per_page),
                   'linked_partitioning': '1'}
@@ -160,9 +161,9 @@ class Client(object):
                                      headers={'Accept': 'application/json'},
                                      params=params)
 
-    def get_likes(self, user_id, page=1, per_page=50):
+    def get_likes(self, user_id, page=1):
         page = int(page)
-        per_page = int(per_page)
+        per_page = int(self._items_per_page)
 
         params = {'limit': str(per_page),
                   'linked_partitioning': '1'}
@@ -190,9 +191,9 @@ class Client(object):
         return self._perform_request(path='playlists/%s' % unicode(playlist_id),
                                      headers={'Accept': 'application/json'})
 
-    def get_playlists(self, me_or_user_id, page=1, per_page=50):
+    def get_playlists(self, me_or_user_id, page=1):
         page = int(page)
-        per_page = int(per_page)
+        per_page = int(self._items_per_page)
 
         params = {'limit': str(per_page),
                   'linked_partitioning': '1'}
@@ -205,9 +206,9 @@ class Client(object):
                                      headers={'Accept': 'application/json'},
                                      params=params)
 
-    def get_follower(self, me_or_user_id, page=1, per_page=50):
+    def get_follower(self, me_or_user_id, page=1):
         page = int(page)
-        per_page = int(per_page)
+        per_page = int(self._items_per_page)
 
         params = {'limit': str(per_page),
                   'linked_partitioning': '1'}
@@ -220,9 +221,9 @@ class Client(object):
                                      headers={'Accept': 'application/json'},
                                      params=params)
 
-    def get_following(self, me_or_user_id, page=1, per_page=50):
+    def get_following(self, me_or_user_id, page=1):
         page = int(page)
-        per_page = int(per_page)
+        per_page = int(self._items_per_page)
 
         params = {'limit': str(per_page),
                   'linked_partitioning': '1'}
@@ -235,14 +236,29 @@ class Client(object):
                                      headers={'Accept': 'application/json'},
                                      params=params)
 
+    def get_recommended_for_track(self, track_id, page=1):
+        path = 'tracks/%s/related' % str(track_id)
+        page = int(page)
+        per_page = int(self._items_per_page)
+
+        params = {'limit': str(per_page),
+                  'linked_partitioning': '1'}
+        if page > 1:
+            params['offset'] = str((page - 1) * per_page)
+            pass
+
+        return self._perform_request(path=path,
+                                     headers={'Accept': 'application/json'},
+                                     params=params)
+
     def get_track(self, track_id):
         path = 'tracks/%s' % str(track_id)
         return self._perform_request(path=path,
                                      headers={'Accept': 'application/json'})
 
-    def get_tracks(self, me_or_user_id, page=1, per_page=50):
+    def get_tracks(self, me_or_user_id, page=1):
         page = int(page)
-        per_page = int(per_page)
+        per_page = int(self._items_per_page)
 
         params = {'limit': str(per_page),
                   'linked_partitioning': '1'}

@@ -1,3 +1,8 @@
+1.1.2 (2015-02-27)
+ADD: Recommended Tracks (via context menu of a track)
+ADD: setting for items per page
+FIX: encoding trouble
+
 1.1.1 (2015-01-25)
 UPD: dropped dependency of 'requests'-module because of performance issues
 

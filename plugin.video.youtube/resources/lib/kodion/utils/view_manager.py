@@ -4,7 +4,7 @@ from .. import constants
 
 
 class ViewManager(object):
-    SUPPORTED_VIEWS = ['default', 'movies', 'episodes', 'musicvideos', 'songs', 'albums', 'artists']
+    SUPPORTED_VIEWS = ['default', 'movies', 'tvshows', 'episodes', 'musicvideos', 'songs', 'albums', 'artists']
     SKIN_DATA = {
         'skin.confluence': {
             'default': [
@@ -25,6 +25,15 @@ class ViewManager(object):
                 {'name': 'Thumbnail', 'id': 500},
                 {'name': 'Media info', 'id': 504},
                 {'name': 'Media info 2', 'id': 503}
+            ],
+            'tvshows': [
+                {'name': 'List', 'id': 50},
+                {'name': 'Big List', 'id': 51},
+                {'name': 'Thumbnail', 'id': 500},
+                {'name': 'Poster', 'id': 500},
+                {'name': 'Media info', 'id': 504},
+                {'name': 'Media info 2', 'id': 503},
+                {'name': 'Fanart', 'id': 508}
             ],
             'musicvideos': [
                 {'name': 'List', 'id': 50},
@@ -68,24 +77,32 @@ class ViewManager(object):
         'skin.1080xf': {
             'default': [
                 {'name': 'List', 'id': 50},
+                {'name': 'Thumbnail', 'id': 500},
+            ],
+            'episodes': [
+                {'name': 'List', 'id': 50},
                 {'name': 'Info list', 'id': 52},
-                {'name': 'Panel', 'id': 53},
+                {'name': 'Fanart', 'id': 502},
                 {'name': 'Landscape', 'id': 54},
                 {'name': 'Poster', 'id': 55},
                 {'name': 'Thumbnail', 'id': 500},
                 {'name': 'Banner', 'id': 60}
-            ]
+            ],
         },
         'skin.xperience1080': {
             'default': [
                 {'name': 'List', 'id': 50},
+                {'name': 'Thumbnail', 'id': 500},
+            ],
+            'episodes': [
+                {'name': 'List', 'id': 50},
                 {'name': 'Info list', 'id': 52},
-                {'name': 'Panel', 'id': 53},
+                {'name': 'Fanart', 'id': 502},
                 {'name': 'Landscape', 'id': 54},
                 {'name': 'Poster', 'id': 55},
                 {'name': 'Thumbnail', 'id': 500},
                 {'name': 'Banner', 'id': 60}
-            ]
+            ],
         }
     }
 

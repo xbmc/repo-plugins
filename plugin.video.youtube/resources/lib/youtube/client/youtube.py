@@ -21,6 +21,9 @@ class YouTube(LoginClient):
     def get_language(self):
         return self._language
 
+    def get_country(self):
+        return self._country
+
     def update_watch_history(self, video_id):
         headers = {'Host': 'www.youtube.com',
                    'Connection': 'keep-alive',

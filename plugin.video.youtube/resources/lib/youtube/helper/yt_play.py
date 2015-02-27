@@ -40,7 +40,7 @@ def play_video(provider, context, re_match):
     except YouTubeException, ex:
         message = ex.get_message()
         message = kodion.utils.strip_html_from_text(message)
-        context.get_ui().show_notification(message, time_milliseconds=30000)
+        context.get_ui().show_notification(message, time_milliseconds=15000)
         pass
 
     pass

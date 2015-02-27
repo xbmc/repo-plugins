@@ -90,6 +90,11 @@ def append_related_videos(context_menu, provider, context, video_id):
     pass
 
 
+def append_refresh(context_menu, provider, context):
+    context_menu.append((context.localize(provider.LOCAL_MAP['youtube.refresh']), 'Container.Refresh'))
+    pass
+
+
 def append_subscribe_to_channel(context_menu, provider, context, channel_id, channel_name=u''):
     text = u''
     if channel_name:

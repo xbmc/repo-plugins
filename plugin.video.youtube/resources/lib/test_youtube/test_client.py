@@ -19,19 +19,47 @@ class TestClient(unittest.TestCase):
     def test_get_channel_by_username(self):
         client = YouTube()
 
-        json_data = client.get_channel_by_username(username='ScreenCrush')
+        json_data = client.get_channel_by_username(username='HGTVShows')
         pass
 
     def test_get_channels(self):
         client = YouTube()
 
         #json_data = client.get_channels('mine')
-        json_data = client.get_channels(['UCDbAn9LEzqONk__uXA6a9jQ', 'UC8i4HhaJSZhm-fu84Bl72TA'])
+        #json_data = client.get_channels(['UCDbAn9LEzqONk__uXA6a9jQ', 'UC8i4HhaJSZhm-fu84Bl72TA'])
+        json_data = client.get_channels(['UCZBxCJSGxNVsWpHP3R5YThg'])
+        pass
+
+    def test_get_playlist_items(self):
+        client = YouTube()
+
+        json_data = client.get_playlist_items(playlist_id='UUZBxCJSGxNVsWpHP3R5YThg')
+        pass
+
+    def test_false_language_id(self):
+        # empty => 'en-US'
+        client = YouTube(language='')
+        self.assertEquals('en_US', client.get_language())
+        self.assertEquals('US', client.get_country())
+
+        # 'en','de' => 'en-US'
+        client = YouTube(language='de')
+        self.assertEquals('en_US', client.get_language())
+        self.assertEquals('US', client.get_country())
+
+        # 'de-DE-UTF8' => 'en-US'
+        client = YouTube(language='de-DE-UTF8')
+        self.assertEquals('en_US', client.get_language())
+        self.assertEquals('US', client.get_country())
+
+        # 'de-DE' => 'de-DE'
+        client = YouTube(language='de-DE')
+        self.assertEquals('de_DE', client.get_language())
+        self.assertEquals('DE', client.get_country())
         pass
 
     def test_playlist_item_id_of_video_id(self):
         client = YouTube(language='de-DE')
-
         json_data = client.get_playlist_item_id_of_video_id(playlist_id='PL3tRBEVW0hiBMoF9ihuu-x_aQVXvFYHIH', video_id='KpjgZ8xAeLI')
         pass
 
@@ -69,7 +97,7 @@ class TestClient(unittest.TestCase):
     def test_video_category(self):
         client = YouTube(language='en-US')
 
-        json_data = client.get_video_category(17)
+        json_data = client.get_video_category('17')
         pass
 
     def test_guide_categories(self):
@@ -119,15 +147,6 @@ class TestClient(unittest.TestCase):
         client = YouTube(access_token=token)
 
         playlist_item_id = client.get_playlist_item_id_of_video_id(u'WL', '-Zotg42zEEA')
-        pass
-
-    def test_get_playlist_items(self):
-        client = YouTube()
-
-        token, expires = client.authenticate(self.USERNAME, self.PASSWORD)
-        client = YouTube(access_token=token)
-
-        json_data = client.get_playlist_items(u'WL', video_id='-Zotg42zEEA')
         pass
     """
 
@@ -200,6 +219,12 @@ class TestClient(unittest.TestCase):
         context = kodion.Context()
 
         # some videos
+        streams = client.get_video_streams(context, 'Hp0gI8KJw20')
+        self.assertGreater(len(streams), 0)
+
+        streams = client.get_video_streams(context, 'ZDX8SoYMizA')
+        self.assertGreater(len(streams), 0)
+
         streams = client.get_video_streams(context, 'OSUy2uA6fbw')
         self.assertGreater(len(streams), 0)
 

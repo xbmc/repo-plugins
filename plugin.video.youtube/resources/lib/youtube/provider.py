@@ -21,6 +21,7 @@ class Provider(kodion.AbstractProvider):
                  'youtube.subscribe': 30506,
                  'youtube.my_channel': 30507,
                  'youtube.watch_later': 30107,
+                 'youtube.refresh': 30543,
                  'youtube.history': 30509,
                  'youtube.my_subscriptions': 30510,
                  'youtube.remove': 30108,

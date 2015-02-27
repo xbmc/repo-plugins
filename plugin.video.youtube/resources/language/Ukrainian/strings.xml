@@ -12,7 +12,7 @@
 	<string id="30015">4320p (8k)</string>
 	<string id="30016">240p</string>
 	<string id="30017">360p</string>
-	<string id="30020">Дозволити 3d</string>
+	<string id="30020">Дозволити 3D</string>
 	<string id="30021">Показувати фанарт</string>
 	<string id="30022">Кількість елементів на сторінці</string>
 	<string id="30023">Кількість збережених пошукових запитів</string>
@@ -28,8 +28,8 @@
 	<string id="30033">Вид: Композиції</string>
 	<string id="30034">Вид: Виконавці</string>
 	<string id="30035">Вид: Альбоми</string>
-	<string id="30036">Підтримка альтернат. програвача</string>
-	
+	<string id="30036">Підтримка альтернативного програвача</string>
+
 	<!-- Kodion Common -->
 	<string id="30100">Обране</string>
 	<string id="30101">Додати в обране доповнення</string>
@@ -37,7 +37,7 @@
 	<string id="30103">Бібліотека</string>
 	<string id="30104">Рекомендоване</string>
 	<string id="30105">Архів</string>
-	<string id="30106">Наступна сторінка (</string>
+	<string id="30106">Наступна сторінка (%d)</string>
 	<string id="30107">Відкладений перегляд</string>
 	<string id="30108">Видалити</string>
 	<string id="30109">Новітнє відео</string>
@@ -47,32 +47,32 @@
 	<string id="30113">Перейменувати</string>
 	<string id="30114">Підтвердити видалення</string>
 	<string id="30115">Підтвердити видалення</string>
-	<string id="30116">Видалити "?</string>
-	<string id="30117">Видалити "?</string>
+	<string id="30116">Видалити "%s"?</string>
+	<string id="30117">Видалити "%s"?</string>
 	<string id="30118">Видалення</string>
 	<string id="30119">Будь ласка, почекайте...</string>
 	<string id="30120">Очистити</string>
-	
+
 	<!-- YouTube -->
 	<string id="30500">Канали</string>
-	<string id="30501">Плейлисты</string>
-	<string id="30502">Перейти до /string>
-	<string id="30503">Показувати фанарты каналів</string>
+	<string id="30501">Плейлисти</string>
+	<string id="30502">Перейти до %s</string>
+	<string id="30503">Показувати фанарти каналів</string>
 	<string id="30504">Підписки</string>
 	<string id="30505">Відмінити підписку</string>
-	<string id="30506">Підписатися</string>
+	<string id="30506">Підписатися %s</string>
 	<string id="30507">Мої канали</string>
 	<string id="30508">Вподобане відео</string>
 	<string id="30509">Історія</string>
 	<string id="30510">Мої підписки</string>
 	<string id="30511">Додати в чергу</string>
 	<string id="30512">Перегляд каналів</string>
-	<string id="30513">Зараз переглядають</string>
+	<string id="30513">Популярне зараз</string>
 	<string id="30514">Схоже відео</string>
-	<string id="30515">Автомат. видал. з "Відкладеного перегляду"</string>
+	<string id="30515">Автоматичне видалення з "Відкладеного перегляду"</string>
 	<string id="30516">Елементи меню</string>
-	<string id="30517">Підписатися /string>
-	<string id="30518">Перейдіть по посиланню '</string>
+	<string id="30517">Підписатися </string>
+	<string id="30518">Перейдіть по посиланню '%s'</string>
 	<string id="30519">і введіть наступний код:</string>
 	<string id="30520">Додати в...</string>
 	<string id="30521">Вибрати плейлист</string>
@@ -81,7 +81,7 @@
 	<string id="30524">Виберіть мову</string>
 	<string id="30525">Виберіть регіон</string>
 	<string id="30526">Регіональні налаштування</string>
-	<string id="30527">Запустити налаштування мови і регіону?</string>
+	<string id="30527">Налаштувати мову та регіон?</string>
 	<string id="30528">Оцінити...</string>
 	<string id="30529">Мені сподобалося</string>
 	<string id="30530">Мені не сподобалося</string>
@@ -92,8 +92,9 @@
 	<string id="30535">Порядок відтворення</string>
 	<string id="30536">Оновлення плейлиста...</string>
 	<string id="30537">Програти з цього місця</string>
-	<string id="30538">Відео, яке не подобається</string>
+	<string id="30538">Відео, яке не сподобалось</string>
 	<string id="30539">Прямий ефір</string>
-	<string id="30540">Відтворити з допомогою...</string>
+	<string id="30540">Відтворити за допомогою...</string>
 	<string id="30541">Показувати назву каналу в описі</string>
+	<string id="30542">потоки rtmpe не підтримуються</string>
 </strings>

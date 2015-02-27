@@ -1,3 +1,13 @@
+5.0.7 (2015-02-27)
+ADD: 'Refresh' in 'My Subscriptions' and all my playlists
+ADD: rename search history item
+UPD: French (thx 2 Trilip)
+UPD: Ukrainian (thx 2 posledov)
+UPD: Spanish (thx 2 PatOso)
+FIX: possible crash on not well formed language ids
+FIX: optimized logging
+FIX: unicode trouble
+
 5.0.6 (2015-02-17)
 ADD: setting for hiding the channel name in the description
 ADD: Ukrainian (thx 2 posledov)

@@ -65,6 +65,8 @@ def _request(method, url,
         headers = {}
         pass
 
+    url = urllib.quote(url, safe="%/:=&?~#+!$,;'@()*[]")
+
     handlers = []
 
     import sys
@@ -88,7 +90,11 @@ def _request(method, url,
     query = ''
     if params:
         for key in params:
-            params[key] = str(unicode(params[key]).encode('utf-8'))
+            value = params[key]
+            if isinstance(value, str):
+                value = value.decode('utf-8')
+                pass
+            params[key] = value.encode('utf-8')
             pass
         query = urllib.urlencode(params)
         pass

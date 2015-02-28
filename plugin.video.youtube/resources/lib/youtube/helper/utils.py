@@ -105,6 +105,12 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
         context_menu = []
         replace_context_menu = False
 
+        # Refresh ('My Subscriptions', all my playlists)
+        if context.get_path() == '/special/new_uploaded_videos/' or context.get_path().startswith(
+                '/channel/mine/playlist/'):
+            yt_context_menu.append_refresh(context_menu, provider, context)
+            pass
+
         # Queue Video
         yt_context_menu.append_queue_video(context_menu, provider, context)
 

@@ -2,13 +2,13 @@
 <strings>
     <!-- Kodion Settings -->
     <string id="30000">Géneral</string>
-    <string id="30001">Login</string>
+    <string id="30001">Mail</string>
     <string id="30002">Mot de passe</string>
 
-    <string id="30010">Qualitié de vidéo</string>
+    <string id="30010">Qualité des vidéos</string>
     <string id="30011">480p</string>
-	<string id="30012">720p (HD)</string>
-	<string id="30013">1080p (HD)</string>
+    <string id="30012">720p (HD)</string>
+    <string id="30013">1080p (HD)</string>
     <string id="30014">2160p (4k)</string>
     <string id="30015">4320p (8k)</string>
     <string id="30016">240p</string>
@@ -19,6 +19,18 @@
     <string id="30022">Nombre d'items par page</string>
     <string id="30023">Taille de l'historique de recherche</string>
     <string id="30024">Taille du cache (Mo)</string>
+    <string id="30025">Activer l'assistant de configuration</string>
+    <string id="30026">Remplacer la Vue</string>
+    <string id="30027">Vue: Par défaut</string>
+    <string id="30028">Vue: Episodes</string>
+    <string id="30029">Vue: Films</string>
+    <string id="30030">Exécuter l'Assistant de configuration?</string>
+    <string id="30031">Avancé</string>
+    <string id="30032">Vue: Séries TV</string>
+    <string id="30033">Vue: Musiques</string>
+    <string id="30034">Vue: Artistes</string>
+    <string id="30035">Vue: Albums</string>
+    <string id="30036">Utiliser le lecteur alternatif</string>    
 
     <!-- Kodion Common -->
     <string id="30100">Favoris</string>
@@ -31,11 +43,20 @@
     <string id="30107">À regarder plus tard</string>
     <string id="30108">Supprimer</string>
     <string id="30109">Dernières vidéos</string>
-    <string id="30110">Nouvelle recherche</string>
+    <string id="30110">Nouvelle rercherche</string>
+    <string id="30111">Se Connecter</string>
+    <string id="30112">Se Déconnecter</string>
+    <string id="30113">Renommer</string>
+    <string id="30114">Confirmez l'effacement</string>
+    <string id="30115">confirmer la suppression</string>
+    <string id="30116">Effacer "%s"?</string>
+    <string id="30117">Supprimer "%s"?</string>
+    <string id="30118">Effacer</string>
+    <string id="30119">Patienter s'il vous plaît...</string>
 
     <!-- YouTube -->
     <string id="30500">Chaînes</string>
-    <string id="30501">Playlists</string>
+    <string id="30501">Liste de Lecture</string>
     <string id="30502">Aller à %s</string>
     <string id="30503">Afficher le fanart de la chaîne</string>
     <string id="30504">Mes abonnements</string>
@@ -43,13 +64,36 @@
     <string id="30506">S'abonner</string>
     <string id="30507">Ma chaîne</string>
     <string id="30508">Vidéos favorites</string>
-    <string id="30509">History</string>
+    <string id="30509">Historique</string>
     <string id="30510">Mes abonnements</string>
     <string id="30511">j'aime</string>
     <string id="30512">Parcourir les chaines</string>
     <string id="30513">Suggestions de vidéos</string>
     <string id="30514">Vidéos similaires</string>
     <string id="30515">Auto suppresion de 'À regarder plus tard'</string>
-    <string id="30516">Folders</string>
-    <string id="30517">Subscribe to %s</string>
+    <string id="30516">Dossiers</string>
+    <string id="30517">Abonnez-vous à %s</string>
+    <string id="30518">Allez à '%s'</string>
+    <string id="30519">et entrez le code suivant:</string>
+    <string id="30520">Ajouter à...</string>
+    <string id="30521">Sélectionnez une liste de lecture</string>
+    <string id="30522">Nouvelle liste de lecture...</string>
+    <string id="30523">Langue</string>
+    <string id="30524">Sélectionner la langue</string>
+    <string id="30525">Sélectionner la région</string>
+    <string id="30526">Ajuster</string>
+    <string id="30527">Langue et région?</string>
+    <string id="30528">Notes...</string>
+    <string id="30529">J'aime</string>
+    <string id="30530">Je n'aime pas</string>
+    <string id="30531">Tous Lire</string>
+    <string id="30532">Par défaut</string>
+    <string id="30533">Inverser</string>
+    <string id="30534">Aléatoire</string>
+    <string id="30535">Sélectionnez l'ordre de la liste de lecture</string>
+    <string id="30536">Mise à jour de liste de lecture ...</string>
+    <string id="30537">Lire à partir d'ici</string>
+    <string id="30538">Je n'aime pas cette Vidéos</string>
+    <string id="30539">En Direct</string>
+    <string id="30540">Lire avec...</string>
 </strings>

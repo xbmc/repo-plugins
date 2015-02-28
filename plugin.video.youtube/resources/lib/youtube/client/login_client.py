@@ -21,8 +21,19 @@ class LoginClient(object):
             self._key = key
             pass
 
-        self._language = language.replace('-', '_')
-        self._country = language.split('-')[1]
+        # the default language is always en_US (like YouTube on the WEB)
+        if not language:
+            language = 'en_US'
+            pass
+
+        language = language.replace('-', '_')
+        language_components = language.split('_')
+        if len(language_components) != 2:
+            language = 'en_US'
+            pass
+
+        self._language = language
+        self._country = language.split('_')[1]
         self._access_token = access_token
         self._log_error_callback = None
         pass

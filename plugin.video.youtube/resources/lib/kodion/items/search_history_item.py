@@ -21,6 +21,8 @@ class SearchHistoryItem(DirectoryItem):
 
         context_menu = [(context.localize(constants.localize.SEARCH_REMOVE),
                          'RunPlugin(%s)' % context.create_uri([constants.paths.SEARCH, 'remove'], params={'q': query})),
+                        (context.localize(constants.localize.SEARCH_RENAME),
+                         'RunPlugin(%s)' % context.create_uri([constants.paths.SEARCH, 'rename'], params={'q': query})),
                         (context.localize(constants.localize.SEARCH_CLEAR),
                          'RunPlugin(%s)' % context.create_uri([constants.paths.SEARCH, 'clear']))]
         self.set_context_menu(context_menu)

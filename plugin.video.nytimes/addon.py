@@ -25,14 +25,17 @@ def fetch_video_data(video_id):
         summary = data["summary"]
         byline = data["byline"]
         category = data["section"]["content"]
-        video_link = data["renditions"][3]["url"]
-        try:
+        count = len(data["renditions"])
+	videos = []
+	for x in range(0,count):
+        	videos.append((data["renditions"][x]["fileSize"],data["renditions"][x]["type"],data["renditions"][x]["url"]))
+	video_list = sorted(videos, reverse=True)
+	video_link = video_list[0][2]
+	try:
                 thumbnail = "http://www.nytimes.com/" + data["images"][5]["url"]
         except:
                 thumbnail = "http://www.nytimes.com/" + data["images"][0]["url"]
         date = data["publication_date"]
-
-        video_link = data["renditions"][3]["url"]
         video_data = ( category , video_link , thumbnail , headline , summary , byline, date )
         return video_data
 

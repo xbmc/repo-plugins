@@ -34,7 +34,8 @@ class Provider(kodion.AbstractProvider):
              'soundcloud.unfollow': 30513,
              'soundcloud.unlike': 30514,
              'soundcloud.people': 30515,
-             'soundcloud.user.go_to': 30516}
+             'soundcloud.user.go_to': 30516,
+             'soundcloud.recommended': 30517}
         )
         pass
 
@@ -50,21 +51,24 @@ class Provider(kodion.AbstractProvider):
             pass
 
         if not self._client:
+            items_per_page = context.get_settings().get_items_per_page()
             if access_manager.has_login_credentials():
                 username, password = access_manager.get_login_credentials()
                 access_token = access_manager.get_access_token()
 
                 # create a new access_token
                 if not access_token:
-                    self._client = Client(username=username, password=password, access_token='')
+                    self._client = Client(username=username, password=password, access_token='',
+                                          items_per_page=items_per_page)
                     access_token = self._client.update_access_token()
                     access_manager.update_access_token(access_token)
                     pass
 
                 self._is_logged_in = access_token != ''
-                self._client = Client(username=username, password=password, access_token=access_token)
+                self._client = Client(username=username, password=password, access_token=access_token,
+                                      items_per_page=items_per_page)
             else:
-                self._client = Client()
+                self._client = Client(items_per_page=items_per_page)
                 pass
             pass
 
@@ -163,16 +167,29 @@ class Provider(kodion.AbstractProvider):
                 result.append(track_item)
             pass
 
-        """
-        Test for a next page. But we support only the first 2 pages. After that their is nothing
-        """
         page = int(params.get('page', 1))
         next_href = json_data.get('_links', {}).get('next', {}).get('href', '')
-        if next_href and len(result) > 0 and page <= 1:
+        if next_href and len(result) > 0:
             next_page_item = kodion.items.NextPageItem(context, page)
             next_page_item.set_fanart(self.get_fanart(context))
             result.append(next_page_item)
             pass
+
+        return result
+
+    @kodion.RegisterProviderPath('^\/explore/recommended\/tracks\/(?P<track_id>.+)/$')
+    def _on_explore_recommended_tracks(self, context, re_match):
+        result = []
+
+        track_id = re_match.group('track_id')
+        params = context.get_params()
+        page = int(params.get('page', 1))
+
+        json_data = context.get_function_cache().get(FunctionCache.ONE_HOUR,
+                                                     self.get_client(context).get_recommended_for_track,
+                                                     track_id=track_id, page=page)
+        path = context.get_path()
+        result = self._do_collection(context, json_data, path, params)
 
         return result
 
@@ -522,7 +539,7 @@ class Provider(kodion.AbstractProvider):
         return result
 
     def _get_hires_image(self, url):
-        return re.sub('(.*)(-large.jpg\.*)(\?.*)?', r'\1-t500x500.jpg', url)
+        return re.sub('(.*)(-large.jpg\.*)(\?.*)?', r'\1-t300x300.jpg', url)
 
     def _do_item(self, context, json_item, path, process_playlist=False):
         def _get_track_year(collection_item_json):
@@ -559,7 +576,6 @@ class Provider(kodion.AbstractProvider):
                 image_url = json_data.get('user', {}).get('avatar_url', '')
                 pass
 
-            # try to convert the image to 500x500 pixel
             return self._get_hires_image(image_url)
 
         kind = json_item.get('kind', '')
@@ -646,6 +662,11 @@ class Provider(kodion.AbstractProvider):
             track_item.set_year(_get_track_year(json_item))
 
             context_menu = []
+            # recommended tracks
+            context_menu.append((context.localize(self._local_map['soundcloud.recommended']),
+                                 'Container.Update(%s)' % context.create_uri(
+                                     ['explore', 'recommended', 'tracks', unicode(json_item['id'])])))
+
             # like/unlike a track
             if path == '/user/favorites/me/':
                 context_menu.append((context.localize(self._local_map['soundcloud.unlike']),

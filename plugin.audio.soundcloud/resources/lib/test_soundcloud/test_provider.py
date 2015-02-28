@@ -32,6 +32,15 @@ class TestProvider(unittest.TestCase):
         print_items(items)
         pass
 
+    def test_get_recommended_for_track(self):
+        provider = Provider()
+        context = self._create_context('/explore/recommended/tracks/193347852/')
+        context.set_localization(30516, 'TEST %s')
+        result = provider.navigate(context)
+        items = result[0]
+        print_items(items)
+        pass
+
     def test_get_follower(self):
         provider = Provider()
 
@@ -174,13 +183,13 @@ class TestProvider(unittest.TestCase):
         provider = Provider()
 
         result = provider._get_hires_image(u'https://i1.sndcdn.com/avatars-000069503963-bk852l-large.jpg')
-        self.assertEqual(u'https://i1.sndcdn.com/avatars-000069503963-bk852l-t500x500.jpg', result)
+        self.assertEqual(u'https://i1.sndcdn.com/avatars-000069503963-bk852l-t300x300.jpg', result)
 
         result = provider._get_hires_image('https://i1.sndcdn.com/avatars-000069503963-bk852l-large.jpg?86347b7')
-        self.assertEqual('https://i1.sndcdn.com/avatars-000069503963-bk852l-t500x500.jpg', result)
+        self.assertEqual('https://i1.sndcdn.com/avatars-000069503963-bk852l-t300x300.jpg', result)
 
         result = provider._get_hires_image('https://i1.sndcdn.com/artworks-000044733261-1obt8a-large.jpg?86347b7')
-        self.assertEqual('https://i1.sndcdn.com/artworks-000044733261-1obt8a-t500x500.jpg', result)
+        self.assertEqual('https://i1.sndcdn.com/artworks-000044733261-1obt8a-t300x300.jpg', result)
         pass
 
     pass

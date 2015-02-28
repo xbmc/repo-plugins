@@ -71,6 +71,11 @@ class TestClient(unittest.TestCase):
         json_data = client.search('bäume', category='sounds')
         pass
 
+    def test_get_recommended_for_track(self):
+        client = Client(access_token=self.TOKEN)
+        json_data = client.get_recommended_for_track(193347852, page=1)
+        pass
+
     def test_get_stream(self):
         client = Client(access_token=self.TOKEN)
         json_data = client.get_stream()

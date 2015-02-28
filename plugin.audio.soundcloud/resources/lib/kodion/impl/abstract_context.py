@@ -37,14 +37,14 @@ class AbstractContext(object):
 
     def _get_cache_path(self):
         if not self._cache_path:
-            self._cache_path = os.path.join(self.get_data_path(), u'kodion')
+            self._cache_path = os.path.join(self.get_data_path(), 'kodion')
             pass
         return self._cache_path
 
     def get_function_cache(self):
         if not self._function_cache:
             max_cache_size_mb = self.get_settings().get_int(constants.setting.CACHE_SIZE, 5)
-            self._function_cache = FunctionCache(os.path.join(self._get_cache_path(), u'cache'),
+            self._function_cache = FunctionCache(os.path.join(self._get_cache_path(), 'cache'),
                                                  max_file_size_kb=max_cache_size_mb * 1024)
             pass
         return self._function_cache
@@ -53,20 +53,20 @@ class AbstractContext(object):
         if not self._search_history:
             max_search_history_items = self.get_settings().get_int(constants.setting.SEARCH_SIZE, 50,
                                                                             lambda x: x * 10)
-            self._search_history = SearchHistory(os.path.join(self._get_cache_path(), u'search'),
+            self._search_history = SearchHistory(os.path.join(self._get_cache_path(), 'search'),
                                                  max_search_history_items)
             pass
         return self._search_history
 
     def get_favorite_list(self):
         if not self._favorite_list:
-            self._favorite_list = FavoriteList(os.path.join(self._get_cache_path(), u'favorites'))
+            self._favorite_list = FavoriteList(os.path.join(self._get_cache_path(), 'favorites'))
             pass
         return self._favorite_list
 
     def get_watch_later_list(self):
         if not self._watch_later_list:
-            self._watch_later_list = WatchLaterList(os.path.join(self._get_cache_path(), u'watch_later'))
+            self._watch_later_list = WatchLaterList(os.path.join(self._get_cache_path(), 'watch_later'))
             pass
         return self._watch_later_list
 

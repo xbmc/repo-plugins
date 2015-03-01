@@ -19,20 +19,51 @@ from __future__ import unicode_literals
 import json
 import logging
 import requests
+from collections import namedtuple
 from .compat import urljoin
-from .models import Artist, Album, Track, Playlist, SearchResult
+from .models import Artist, Album, Track, Playlist, SearchResult, Category
 
 log = logging.getLogger(__name__)
 
+Api = namedtuple('API', ['location', 'token'])
+
+WIMP_API = Api(
+    location='https://play.wimpmusic.com/v1/',
+    token='oIaGpqT_vQPnTr0Q',
+)
+
+TIDAL_API = Api(
+    location='https://listen.tidalhifi.com/v1/',
+    token='P5Xbeo5LFvESeDy6',
+)
+
+
+class Quality(object):
+    lossless = 'LOSSLESS'
+    high = 'HIGH'
+    low = 'LOW'
+
+
+class Config(object):
+    api = WIMP_API
+    country_code = 'NO'
+    quality = Quality.high
+    session_id = None
+    user_id = None
+
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+
 
 class Session(object):
-    api_location = 'https://play.wimpmusic.com/v1/'
-    api_token = 'rQtt0XAsYjXYIlml'
 
-    def __init__(self, session_id='', country_code='NO', user_id=None):
-        self.session_id = session_id
-        self.country_code = country_code
-        self.user = User(self, id=user_id) if user_id else None
+    def __init__(self, config):
+        self.session_id = config.session_id
+        self.country_code = config.country_code
+        self.api_location = config.api.location
+        self.api_token = config.api.token
+        self._config = config  # TODO: clean up config and attributes
+        self.user = User(self, id=config.user_id) if config.user_id else None
 
     def login(self, username, password):
         url = urljoin(self.api_location, 'login/username')
@@ -116,6 +147,28 @@ class Session(object):
     def get_artist_radio(self, artist_id):
         return self._map_request('artists/%s/radio' % artist_id, params={'limit': 100}, ret='tracks')
 
+    def get_featured(self):
+        items = self.request('GET', 'promotions').json()['items']
+        return [_parse_featured_playlist(item) for item in items if item['type'] == 'PLAYLIST']
+
+    def get_featured_items(self, content_type, group):
+        return self._map_request('/'.join(['featured', group, content_type]), ret=content_type)
+
+    def get_moods(self):
+        return map(_parse_moods, self.request('GET', 'moods').json())
+
+    def get_mood_playlists(self, mood_id):
+        return self._map_request('/'.join(['moods', mood_id, 'playlists']), ret='playlists')
+
+    def get_genres(self):
+        return map(_parse_genres, self.request('GET', 'genres').json())
+
+    def get_genre_items(self, genre_id, content_type):
+        return self._map_request('/'.join(['genres', genre_id, content_type]), ret=content_type)
+
+    def get_track_radio(self, track_id):
+        return self._map_request('tracks/%s/radio' % track_id, params={'limit': 100}, ret='tracks')
+
     def _map_request(self, url, params=None, ret=None):
         json_obj = self.request('GET', url, params).json()
         parse = None
@@ -139,7 +192,7 @@ class Session(object):
             return list(map(parse, items))
 
     def get_media_url(self, track_id):
-        params = {'soundQuality': 'HIGH'}
+        params = {'soundQuality': self._config.quality}
         r = self.request('GET', 'tracks/%s/streamUrl' % track_id, params)
         return r.json()['url']
 
@@ -174,6 +227,15 @@ def _parse_album(json_obj, artist=None):
     return Album(**kwargs)
 
 
+def _parse_featured_playlist(json_obj):
+    kwargs = {
+        'id': json_obj['artifactId'],
+        'name': json_obj['header'],
+        'description': json_obj['text'],
+    }
+    return Playlist(**kwargs)
+
+
 def _parse_playlist(json_obj):
     kwargs = {
         'id': json_obj['uuid'],
@@ -202,6 +264,18 @@ def _parse_track(json_obj):
         'available': bool(json_obj['streamReady']),
     }
     return Track(**kwargs)
+
+
+def _parse_genres(json_obj):
+    image = "http://resources.wimpmusic.com/images/%s/460x306.jpg" \
+            % json_obj['image'].replace('-', '/')
+    return Category(id=json_obj['path'], name=json_obj['name'], image=image)
+
+
+def _parse_moods(json_obj):
+    image = "http://resources.wimpmusic.com/images/%s/342x342.jpg" \
+            % json_obj['image'].replace('-', '/')
+    return Category(id=json_obj['path'], name=json_obj['name'], image=image)
 
 
 class Favorites(object):

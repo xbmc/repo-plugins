@@ -17,19 +17,28 @@
 
 from __future__ import unicode_literals
 
-import xbmc, xbmcgui, xbmcaddon, xbmcplugin
+import xbmcgui
+import xbmcaddon
+import xbmcplugin
 from xbmcgui import ListItem
+from requests import HTTPError
 from lib import wimpy
 from lib.wimpy.models import Album, Artist
+from lib.wimpy import Quality
 from routing import Plugin
 
 plugin = Plugin()
 addon = xbmcaddon.Addon()
-wimp = wimpy.Session(
+
+quality = [Quality.lossless, Quality.high, Quality.low][int('0'+addon.getSetting('quality'))]
+config = wimpy.Config(
     session_id=addon.getSetting('session_id'),
     country_code=addon.getSetting('country_code'),
-    user_id=addon.getSetting('user_id')
+    user_id=addon.getSetting('user_id'),
+    api=wimpy.TIDAL_API if addon.getSetting('site') == '1' else wimpy.WIMP_API,
+    quality=quality,
 )
+wimp = wimpy.Session(config)
 
 
 def view(data_items, urls, end=True):
@@ -42,7 +51,8 @@ def view(data_items, urls, end=True):
         elif isinstance(item, Artist):
             info.update({'artist': item.name})
         li.setInfo('music', info)
-        li.setThumbnailImage(item.image)
+        if getattr(item, 'image', None):
+            li.setThumbnailImage(item.image)
         list_items.append((url, li, True))
     xbmcplugin.addDirectoryItems(plugin.handle, list_items)
     if end:
@@ -66,14 +76,18 @@ def track_list(tracks):
             'album': track.album.name})
         if track.album:
             li.setThumbnailImage(track.album.image)
+        radio_url = plugin.url_for(track_radio, track_id=track.id)
+        li.addContextMenuItems(
+            [('Track Radio', 'XBMC.Container.Update(%s)' % radio_url,)])
         list_items.append((url, li, False))
     xbmcplugin.addDirectoryItems(plugin.handle, list_items)
     xbmcplugin.endOfDirectory(plugin.handle)
 
 
-def add_directory(title, view_func):
-    xbmcplugin.addDirectoryItem(
-        plugin.handle, plugin.url_for(view_func), ListItem(title), True)
+def add_directory(title, endpoint,):
+    if callable(endpoint):
+        endpoint = plugin.url_for(endpoint)
+    xbmcplugin.addDirectoryItem(plugin.handle, endpoint, ListItem(title), True)
 
 
 def urls_from_id(view_func, items):
@@ -83,10 +97,96 @@ def urls_from_id(view_func, items):
 @plugin.route('/')
 def root():
     add_directory('My music', my_music)
+    add_directory('Featured Playlists', featured_playlists)
+    add_directory("What's New", whats_new)
+    add_directory('Genres', genres)
+    add_directory('Moods', moods)
     add_directory('Search', search)
     add_directory('Login', login)
     add_directory('Logout', logout)
     xbmcplugin.endOfDirectory(plugin.handle)
+
+
+@plugin.route('/track_radio/<track_id>')
+def track_radio(track_id):
+    track_list(wimp.get_track_radio(track_id))
+
+
+@plugin.route('/moods')
+def moods():
+    items = wimp.get_moods()
+    view(items, urls_from_id(moods_playlists, items))
+
+
+@plugin.route('/moods/<mood>')
+def moods_playlists(mood):
+    items = wimp.get_mood_playlists(mood)
+    view(items, urls_from_id(playlist_view, items))
+
+
+@plugin.route('/genres')
+def genres():
+    items = wimp.get_genres()
+    view(items, urls_from_id(genre_view, items))
+
+
+@plugin.route('/genre/<genre_id>')
+def genre_view(genre_id):
+    add_directory('Playlists', plugin.url_for(genre_playlists, genre_id=genre_id))
+    add_directory('Albums', plugin.url_for(genre_albums, genre_id=genre_id))
+    add_directory('Tracks', plugin.url_for(genre_tracks, genre_id=genre_id))
+    xbmcplugin.endOfDirectory(plugin.handle)
+
+
+@plugin.route('/genre/<genre_id>/playlists')
+def genre_playlists(genre_id):
+    items = wimp.get_genre_items(genre_id, 'playlists')
+    view(items, urls_from_id(playlist_view, items))
+
+
+@plugin.route('/genre/<genre_id>/albums')
+def genre_albums(genre_id):
+    items = wimp.get_genre_items(genre_id, 'albums')
+    view(items, urls_from_id(album_view, items))
+
+
+@plugin.route('/genre/<genre_id>/tracks')
+def genre_tracks(genre_id):
+    items = wimp.get_genre_items(genre_id, 'tracks')
+    track_list(items)
+
+
+@plugin.route('/featured_playlists')
+def featured_playlists():
+    items = wimp.get_featured()
+    view(items, urls_from_id(playlist_view, items))
+
+
+@plugin.route('/whats_new')
+def whats_new():
+    add_directory('Recommended Playlists', plugin.url_for(featured, group='recommended', content_type='playlists'))
+    add_directory('Recommended Albums', plugin.url_for(featured, group='recommended', content_type='albums'))
+    add_directory('Recommended Tracks', plugin.url_for(featured, group='recommended', content_type='tracks'))
+    add_directory('New Playlists', plugin.url_for(featured, group='new', content_type='playlists'))
+    add_directory('New Albums', plugin.url_for(featured, group='new', content_type='albums'))
+    add_directory('New Tracks', plugin.url_for(featured, group='new', content_type='tracks'))
+    add_directory('Top Albums', plugin.url_for(featured, group='top', content_type='albums'))
+    add_directory('Top Tracks', plugin.url_for(featured, group='top', content_type='tracks'))
+    add_directory('Local Playlists', plugin.url_for(featured, group='local', content_type='playlists'))
+    add_directory('Local Albums', plugin.url_for(featured, group='local', content_type='albums'))
+    add_directory('Local Tracks', plugin.url_for(featured, group='local', content_type='tracks'))
+    xbmcplugin.endOfDirectory(plugin.handle)
+
+
+@plugin.route('/featured/<group>/<content_type>')
+def featured(group=None, content_type=None):
+    items = wimp.get_featured_items(content_type, group)
+    if content_type == 'tracks':
+        track_list(items)
+    elif content_type == 'albums':
+        view(items, urls_from_id(album_view, items))
+    elif content_type == 'playlists':
+        view(items, urls_from_id(playlist_view, items))
 
 
 @plugin.route('/my_music')
@@ -97,11 +197,6 @@ def my_music():
     add_directory('Favourite Albums', favourite_albums)
     add_directory('Favourite Tracks', favourite_tracks)
     xbmcplugin.endOfDirectory(plugin.handle)
-
-
-@plugin.route('/not_implemented')
-def not_implemented():
-    raise NotImplementedError()
 
 
 @plugin.route('/album/<album_id>')
@@ -203,17 +298,23 @@ def search():
 
 @plugin.route('/login')
 def login():
-    dialog = xbmcgui.Dialog()
-    username = dialog.input('Username')
-    if username:
-        password = dialog.input('Password')
-        if password:
-            if wimp.login(username, password):
-                addon.setSetting('session_id', wimp.session_id)
-                addon.setSetting('country_code', wimp.country_code)
-                addon.setSetting('user_id', unicode(wimp.user.id))
-                return
-    raise Exception('failed to login')
+    username = addon.getSetting('username')
+    password = addon.getSetting('password')
+
+    if not username or not password:
+        # Ask for username/password
+        dialog = xbmcgui.Dialog()
+        username = dialog.input('Username')
+        if not username:
+            return
+        password = dialog.input('Password', option=xbmcgui.ALPHANUM_HIDE_INPUT)
+        if not password:
+            return
+
+    if wimp.login(username, password):
+        addon.setSetting('session_id', wimp.session_id)
+        addon.setSetting('country_code', wimp.country_code)
+        addon.setSetting('user_id', unicode(wimp.user.id))
 
 
 @plugin.route('/logout')
@@ -226,11 +327,24 @@ def logout():
 @plugin.route('/play/<track_id>')
 def play(track_id):
     media_url = wimp.get_media_url(track_id)
-    host, app, playpath = media_url.split('/', 3)
-    rtmp_url = 'rtmp://%s app=%s playpath=%s' % (host, app, playpath)
-    li = ListItem(path=rtmp_url)
+    if not media_url.startswith('http://') and not media_url.startswith('https://'):
+        host, app, playpath = media_url.split('/', 3)
+        media_url = 'rtmp://%s app=%s playpath=%s' % (host, app, playpath)
+    li = ListItem(path=media_url)
+    mimetype = 'audio/flac' if quality == Quality.lossless else 'audio/mpeg'
+    li.setProperty('mimetype', mimetype)
     xbmcplugin.setResolvedUrl(plugin.handle, True, li)
 
 
+def handle_errors(f):
+    try:
+        f()
+    except HTTPError as e:
+        if e.response.status_code in [401, 403]:
+            dialog = xbmcgui.Dialog()
+            dialog.notification(addon.getAddonInfo('name'), "Unauthorized", xbmcgui.NOTIFICATION_ERROR)
+        else:
+            raise e
+
 if __name__ == '__main__':
-    plugin.run()
+    handle_errors(plugin.run)

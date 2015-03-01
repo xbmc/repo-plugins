@@ -1,0 +1,5 @@
+[B]1.1.0[/B]
+- Added TIDAL support
+- Added Lossless support
+- Added "What's New", "Moods" and genre browsing
+- Added options for saving username/password in settings

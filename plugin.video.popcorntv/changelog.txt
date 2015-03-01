@@ -1,3 +1,7 @@
+[B]1.0.10[/B]
+- Updated page parsing because of upstream HTML changes.
+- Don't sort items in root folder.
+
 [B]1.0.9[/B]
 - Updated page parsing because of upstream HTML changes.
 - Minor fixes.

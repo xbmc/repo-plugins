@@ -41,7 +41,6 @@ def show_root_folder():
     for item in items:
         liStyle=xbmcgui.ListItem(item["title"])
         addDirectoryItem({"mode": "folder", "url": item["url"]}, liStyle)
-    xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_LABEL)
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
 def show_category_folder(url):

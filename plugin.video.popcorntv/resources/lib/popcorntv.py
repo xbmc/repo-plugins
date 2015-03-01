@@ -15,11 +15,11 @@ class PopcornTV:
         urllib2.install_opener(opener)
 
     def getCategories(self):
-        pageUrl = "http://home.popcorntv.it/"
+        pageUrl = "http://popcorntv.it/"
         data = urllib2.urlopen(pageUrl).read()
         tree = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
         categories = []
-        list = tree.findAll("div", "container-mega")
+        list = tree.findAll("div", "megamenu")
         for item in list:
             link = item.parent.find("a")
             category = {}
@@ -56,11 +56,12 @@ class PopcornTV:
         
         videoList = []
         
-        if pageUrl.startswith("http://ladychannel.popcorntv.it/"):
-            # LadyChannel: show video only in "Tutti gli episodi"
-            items = htmlTree.findAll("div", "serie-gridview")[1].findAll("a")
+        if pageUrl.startswith("http://cinema.popcorntv.it"):
+            # Show video in "Altri fim"
+            items = htmlTree.find(text="Altri film").parent.findNextSiblings("a")
         else:
-            items = htmlTree.find("h1", "headings-episodi").parent.findAll("a")
+            # Show video in "Tutti gli episodi"
+            items = htmlTree.find(text="Tutti gli episodi").parent.findNextSibling("div").findAll("a")
         
         for item in items:
             video = {}

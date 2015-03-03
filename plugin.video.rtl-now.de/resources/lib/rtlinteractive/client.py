@@ -13,10 +13,37 @@ class UnsupportedStreamException(KodionException):
     def __init__(self):
         KodionException.__init__(self, 'DRM Protected stream not supported')
         pass
+
     pass
 
 
 class Client(object):
+    CONFIG_NTV_NOW = {'salt_phone': 'ba647945-6989-477b-9767-870790fcf552',
+                      'salt_tablet': 'ba647945-6989-477b-9767-870790fcf552',
+                      'key_phone': '46f63897-89aa-44f9-8f70-f0052050fe59',
+                      'key_tablet': '56f63897-89aa-44f9-8f70-f0052050fe59',
+                      'url': 'https://www.n-tvnow.de/',
+                      'id': '49',
+                      'rtmpe': 'rtmpe://fms-fra%d.rtl.de/ntvnow/',
+                      'supports': [
+                          'library',
+                          # 'new',
+                          'tips',
+                          # 'top10',
+                          'search'
+                      ],
+                      'images': {
+                          'episode-thumbnail-url': 'http://autoimg.rtl.de/ntvnow/%PIC_ID%/660x660/formatimage.jpg',
+                          'format-thumbnail-url': 'http://autoimg.rtl.de/ntvnow/%FORMAT_ID%-default_image_169_logo/500x281/8b6ba.jpg',
+                          'format-fanart-url': 'http://autoimg.rtl.de/ntvnow/%FORMAT_ID%-default_image_169_format/768x432/8b6ba.jpg'
+                      },
+                      'http-header': {'X-App-Name': 'N-TV NOW App',
+                                      'X-Device-Type': 'ntvnow_android',
+                                      'X-App-Version': '1.3.1',
+                                      # 'X-Device-Checksum': 'ed0226e4e613e4cd81c6257bced1cb1b',
+                                      'Host': 'www.n-tvnow.de',
+                                      'User-Agent': 'Mozilla/5.0 (Linux; Android 4.4.2; GT-I9505 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/30.0.0.0 Mobile Safari/537.36'}}
+
     CONFIG_RTL_NOW = {'salt_phone': 'ba647945-6989-477b-9767-870790fcf552',
                       'salt_tablet': 'ba647945-6989-477b-9767-870790fcf552',
                       'key_phone': '46f63897-89aa-44f9-8f70-f0052050fe59',
@@ -24,7 +51,18 @@ class Client(object):
                       'url': 'https://rtl-now.rtl.de/',
                       'id': '9',
                       'rtmpe': 'rtmpe://fms-fra%d.rtl.de/rtlnow/',
-                      'episode-thumbnail-url': 'http://autoimg.rtl.de/rtlnow/%PIC_ID%/660x660/formatimage.jpg',
+                      'supports': [
+                          'library',
+                          'new',
+                          'tips',
+                          'top10',
+                          'search'
+                      ],
+                      'images': {
+                          'episode-thumbnail-url': 'http://autoimg.rtl.de/ntvnow/%PIC_ID%/660x660/formatimage.jpg',
+                          'format-thumbnail-url': 'http://autoimg.rtl.de/ntvnow/%FORMAT_ID%-default_image_169_logo/500x281/8b6ba.jpg',
+                          'format-fanart-url': 'http://autoimg.rtl.de/ntvnow/%FORMAT_ID%-default_image_169_format/768x432/8b6ba.jpg'
+                      },
                       'http-header': {'X-App-Name': 'RTL NOW App',
                                       'X-Device-Type': 'rtlnow_android',
                                       'X-App-Version': '1.3.1',
@@ -39,7 +77,18 @@ class Client(object):
                        'url': 'https://rtl2now.rtl2.de/',
                        'id': '37',
                        'rtmpe': 'rtmpe://fms-fra%d.rtl.de/rtl2now/',
-                       'episode-thumbnail-url': 'http://autoimg.rtl.de/rtl2now/%PIC_ID%/660x660/formatimage.jpg',
+                       'supports': [
+                           'library',
+                           'new',
+                           'tips',
+                           'top10',
+                           'search'
+                       ],
+                       'images': {
+                           'episode-thumbnail-url': 'http://autoimg.rtl.de/rtl2now/%PIC_ID%/660x660/formatimage.jpg',
+                           'format-thumbnail-url': 'http://autoimg.rtl.de/rtl2now/%FORMAT_ID%-default_image_169_logo/500x281/659c3.jpg',
+                           'format-fanart-url': 'http://autoimg.rtl.de/rtl2now/%FORMAT_ID%-default_image_169_format/768x432/659c3.jpg'
+                       },
                        'http-header': {'X-App-Name': 'RTL II NOW App',
                                        'X-Device-Type': 'rtl2now_android',
                                        'X-App-Version': '1.3.1',
@@ -54,7 +103,18 @@ class Client(object):
                       'url': 'https://www.voxnow.de/',
                       'id': '41',
                       'rtmpe': 'rtmpe://fms-fra%d.rtl.de/voxnow/',
-                      'episode-thumbnail-url': 'http://autoimg.rtl.de/voxnow/%PIC_ID%/660x660/formatimage.jpg',
+                      'supports': [
+                          'library',
+                          'new',
+                          'tips',
+                          'top10',
+                          'search'
+                      ],
+                      'images': {
+                          'episode-thumbnail-url': 'http://autoimg.rtl.de/voxnow/%PIC_ID%/660x660/formatimage.jpg',
+                          'format-thumbnail-url': 'http://autoimg.rtl.de/voxnow/%FORMAT_ID%-default_image_169_logo/500x281/d9f9a.jpg',
+                          'format-fanart-url': 'http://autoimg.rtl.de/voxnow/%FORMAT_ID%-default_image_169_format/768x432/d9f9a.jpg'
+                      },
                       'http-header': {'X-App-Name': 'VOX NOW App',
                                       'X-Device-Type': 'voxnow_android',
                                       'X-App-Version': '1.3.1',
@@ -123,12 +183,18 @@ class Client(object):
         def _get_data_from_html(_video_url):
             html = _browse(_video_url)
             pos = html.find('PlayerWatchdog.ini')
-            if pos:
+            if pos and pos >= 0:
                 html = html[pos:]
                 pos = html.find('PlayerWatchdog.setTimer')
                 if pos:
                     html = html[:pos]
                     pass
+                pass
+            else:
+                player_url = re.search(r"var playerUrl = baseURL \+ \'(?P<url>.+)\'", html)
+                if player_url:
+                    url = self._config['url']+player_url.group('url')
+                    return _get_data_from_html(url)
                 pass
 
             player_data_url = re.search(r"'playerdata': '(?P<playerdata_url>[^']+)'", html)

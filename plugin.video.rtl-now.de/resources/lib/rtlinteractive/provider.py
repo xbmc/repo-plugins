@@ -50,7 +50,7 @@ class Provider(kodion.AbstractProvider):
         content = json_data.get('result', {}).get('content', {})
         max_page = int(content.get('maxpage', 1))
         page = int(content.get('page', 1))
-        film_list = content['filmlist']
+        film_list = content.get('filmlist', {})
 
         result_films = []
         add_next_page_item = True
@@ -71,22 +71,22 @@ class Provider(kodion.AbstractProvider):
                 title = format_title + ' - ' + title
                 pass
 
-            film_item = VideoItem(title,
-                                  context.create_uri(['play'], {'video_id': film['id']}))
+            film_item = VideoItem(title, context.create_uri(['play'], {'video_id': film['id']}))
 
+            format_id = film['formatid']
             # set image
-            image = film['biggalerieimg']
-            image = re.sub(r'(.+/)(\d+)x(\d+)(/.+)', r'\g<1>500x281\g<4>', image)
+            image = self.get_client(context).get_config()['images']['format-thumbnail-url'].replace('%FORMAT_ID%',
+                                                                                                    format_id)
             pictures = film.get('pictures', [])
             if pictures and isinstance(pictures, dict):
                 image = film['pictures']['pic_0']
-                image = self.get_client(context).get_config()['episode-thumbnail-url'].replace('%PIC_ID%', image)
+                image = self.get_client(context).get_config()['images']['episode-thumbnail-url'].replace('%PIC_ID%',
+                                                                                                         image)
                 pass
             film_item.set_image(image)
 
             # set fanart
-            fanart = film['bigaufmacherimg']
-            fanart = re.sub(r'(.+/)(\d+)x(\d+)(/.+)', r'\g<1>768x432\g<4>', fanart)
+            fanart = self.get_client(context).get_config()['images']['format-fanart-url'].replace('%FORMAT_ID%', format_id)
             film_item.set_fanart(fanart)
 
             # season and episode
@@ -194,13 +194,13 @@ class Provider(kodion.AbstractProvider):
                                             context.create_uri(['format', format_id]))
 
                 # set image
-                image = now_format['biggalerieimg']
-                image = re.sub(r'(.+/)(\d+)x(\d+)(/.+)', r'\g<1>500x281\g<4>', image)
+                image = self.get_client(context).get_config()['images']['format-thumbnail-url'].replace('%FORMAT_ID%',
+                                                                                                        format_id)
                 format_item.set_image(image)
 
                 # set fanart
-                fanart = now_format['bigaufmacherimg']
-                fanart = re.sub(r'(.+/)(\d+)x(\d+)(/.+)', r'\g<1>768x432\g<4>', fanart)
+                fanart = self.get_client(context).get_config()['images']['format-fanart-url'].replace('%FORMAT_ID%',
+                                                                                                         format_id)
                 format_item.set_fanart(fanart)
 
                 context_menu = [(context.localize(self._local_map['now.add_to_favs']),
@@ -246,37 +246,49 @@ class Provider(kodion.AbstractProvider):
             result.append(watch_later_item)
             pass
 
+        client = self.get_client(context)
+
         # shows (A-Z)
-        library_item = DirectoryItem(context.localize(self._local_map['now.library']),
-                                     context.create_uri(['library']),
-                                     image=context.create_resource_path('media', 'library.png'))
-        library_item.set_fanart(self.get_fanart(context))
-        result.append(library_item)
+        if 'library' in client.get_config()['supports']:
+            library_item = DirectoryItem(context.localize(self._local_map['now.library']),
+                                         context.create_uri(['library']),
+                                         image=context.create_resource_path('media', 'library.png'))
+            library_item.set_fanart(self.get_fanart(context))
+            result.append(library_item)
+            pass
 
         # newest
-        newest_item = DirectoryItem(context.localize(self._local_map['now.newest']),
-                                    context.create_uri(['newest']),
-                                    image=context.create_resource_path('media', 'newest.png'))
-        newest_item.set_fanart(self.get_fanart(context))
-        result.append(newest_item)
+        if 'new' in client.get_config()['supports']:
+            newest_item = DirectoryItem(context.localize(self._local_map['now.newest']),
+                                        context.create_uri(['newest']),
+                                        image=context.create_resource_path('media', 'newest.png'))
+            newest_item.set_fanart(self.get_fanart(context))
+            result.append(newest_item)
+            pass
 
         # tips
-        tips_item = DirectoryItem(context.localize(self._local_map['now.tips']),
-                                  context.create_uri(['tips']),
-                                  image=context.create_resource_path('media', 'tips.png'))
-        tips_item.set_fanart(self.get_fanart(context))
-        result.append(tips_item)
+        if 'tips' in client.get_config()['supports']:
+            tips_item = DirectoryItem(context.localize(self._local_map['now.tips']),
+                                      context.create_uri(['tips']),
+                                      image=context.create_resource_path('media', 'tips.png'))
+            tips_item.set_fanart(self.get_fanart(context))
+            result.append(tips_item)
+            pass
 
         # top 10
-        top10_item = DirectoryItem(context.localize(self._local_map['now.top10']),
-                                   context.create_uri(['top10']),
-                                   image=context.create_resource_path('media', 'top10.png'))
-        top10_item.set_fanart(self.get_fanart(context))
-        result.append(top10_item)
+        if 'top10' in client.get_config()['supports']:
+            top10_item = DirectoryItem(context.localize(self._local_map['now.top10']),
+                                       context.create_uri(['top10']),
+                                       image=context.create_resource_path('media', 'top10.png'))
+            top10_item.set_fanart(self.get_fanart(context))
+            result.append(top10_item)
+            pass
 
         # search
-        search_item = kodion.items.SearchItem(context, fanart=self.get_fanart(context))
-        result.append(search_item)
+        if 'search' in client.get_config()['supports']:
+            search_item = kodion.items.SearchItem(context, fanart=self.get_fanart(context))
+            result.append(search_item)
+            pass
 
         return result
 

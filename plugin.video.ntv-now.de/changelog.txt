@@ -1,3 +1,6 @@
+2.1.2 (2015-03-03)
+FIX: playback based on web-page changes
+
 2.1.1 (2015-02-25)
 ADD: support for N-TV
 UPD: new client informations

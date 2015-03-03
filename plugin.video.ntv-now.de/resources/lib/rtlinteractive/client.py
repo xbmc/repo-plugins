@@ -183,12 +183,18 @@ class Client(object):
         def _get_data_from_html(_video_url):
             html = _browse(_video_url)
             pos = html.find('PlayerWatchdog.ini')
-            if pos:
+            if pos and pos >= 0:
                 html = html[pos:]
                 pos = html.find('PlayerWatchdog.setTimer')
                 if pos:
                     html = html[:pos]
                     pass
+                pass
+            else:
+                player_url = re.search(r"var playerUrl = baseURL \+ \'(?P<url>.+)\'", html)
+                if player_url:
+                    url = self._config['url']+player_url.group('url')
+                    return _get_data_from_html(url)
                 pass
 
             player_data_url = re.search(r"'playerdata': '(?P<playerdata_url>[^']+)'", html)

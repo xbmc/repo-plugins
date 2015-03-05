@@ -213,6 +213,14 @@ class TestClient(unittest.TestCase):
         self.assertGreater(len(streams), 0)
         pass
 
+    def test_get_video_streams_restricted(self):
+        client = YouTube()
+
+        context = kodion.Context()
+
+        streams = client.get_video_streams(context, 'oRSijEW_cDM')
+        self.assertGreater(len(streams), 0)
+
     def test_get_video_streams_mixed(self):
         client = YouTube()
 

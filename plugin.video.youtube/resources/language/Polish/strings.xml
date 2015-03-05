@@ -14,30 +14,30 @@
     <string id="30016">240p</string>
     <string id="30017">360p</string>
 
-    <string id="30020">Zezwalaj 3D</string>
-    <string id="30021">Pokaż Fanart</string>
-    <string id="30022">Elementy na stronę</string>
-    <string id="30023">Ilość elementów wyszukiwanych</string>
-    <string id="30024">Pamięć podręczna (MB)</string>
-    <string id="30025">Włącz przewodnik instalacji</string>
-    <string id="30026">Wymuś widok</string>
-    <string id="30027">Widok: Ogólny</string>
-    <string id="30028">Widok: Wideo</string>
-
-    <string id="30030">Uruchomić przewodnik instalacji?</string>
+    <string id="30020">Dopuszczaj materiały 3D</string>
+    <string id="30021">Pokazuj fototapetę</string>
+    <string id="30022">Pozycji na stronę</string>
+    <string id="30023">Pozycji w historii</string>
+    <string id="30024">Wielkość bufora (MB)</string>
+    <string id="30025">Uruchamiaj kreatora konfiguracji</string>
+    <string id="30026">Wymuszaj widok</string>
+    <string id="30027">Widok: Domyślny</string>
+    <string id="30028">Widok: Odcinki</string>
+    <string id="30029">Widok: Filmy</string>
+    <string id="30030">Uruchomić kreatora konfiguracji?</string>
     <string id="30031">Zaawansowane</string>
     <string id="30032">Widok: Seriale</string>
     <string id="30033">Widok: Utwory</string>
-    <string id="30034">Widok: Artyści</string>
+    <string id="30034">Widok: Wykonawcy</string>
     <string id="30035">Widok: Albumy</string>
-    <string id="30036">Wspieraj alternatywny odtwarzacz</string>
+    <string id="30036">Uruchom obsługę alternatywnego odtwarzacza</string>
 
     <!-- Kodion Common -->
     <string id="30100">Ulubione</string>
     <string id="30101">Dodaj do ulubionych</string>
     <string id="30102">Szukaj</string>
     <string id="30103">Biblioteka</string>
-    <string id="30104">Polecane</string>
+    <string id="30104">Na topie</string>
     <string id="30105">Archiwum</string>
     <string id="30106">Następna strona (%d)</string>
     <string id="30107">Do obejrzenia</string>
@@ -46,7 +46,7 @@
     <string id="30110">Nowe wyszukiwanie</string>
     <string id="30111">Zaloguj</string>
     <string id="30112">Wyloguj</string>
-    <string id="30113">Zmień nazwę</string>
+    <string id="30113">Przemianuj</string>
     <string id="30114">Potwierdź usunięcie</string>
     <string id="30115">Potwierdź przeniesienie</string>
     <string id="30116">Usunąć "%s"?</string>
@@ -56,27 +56,27 @@
 
     <!-- YouTube -->
     <string id="30500">Kanały</string>
-    <string id="30501">Playlisty</string>
-    <string id="30502">Idź do %s</string>
-    <string id="30503">Pokazuj fanart kanału</string>
-    <string id="30504">Subskrybcje</string>
-    <string id="30505">Anuluj subskrybcję</string>
+    <string id="30501">Listy odtwarzania</string>
+    <string id="30502">Przejdź do %s</string>
+    <string id="30503">Pokazuj fototapetę kanału</string>
+    <string id="30504">Subskrypcje</string>
+    <string id="30505">Anuluj subskrypcję</string>
     <string id="30506">Subskrybuj</string>
-    <string id="30507">Mój Kanał</string>
+    <string id="30507">Mój kanał</string>
     <string id="30508">Polubione</string>
     <string id="30509">Historia</string>
-    <string id="30510">Moje subskrybcje</string>
+    <string id="30510">Moje subskrypcje</string>
     <string id="30511">Dodaj do kolejki</string>
     <string id="30512">Przeglądaj kanały</string>
-    <string id="30513">Co obejrzeć</string>
+    <string id="30513">Popularne</string>
     <string id="30514">Podobne filmy</string>
-    <string id="30515">Automatycznie usuwaj 'Do obejrzenia'</string>
+    <string id="30515">Usuwaj automatycznie pozycje do obejrzenia</string>
     <string id="30516">Foldery</string>
     <string id="30517">Subskrybuj %s</string>
-    <string id="30518">Idź do '%s'</string>
+    <string id="30518">Przejdź do '%s'</string>
     <string id="30519">i wpisz następujący kod:</string>
     <string id="30520">Dodaj do...</string>
-    <string id="30521">Wybierz playlistę</string>
+    <string id="30521">Wybierz listę odtwarzania</string>
     <string id="30522">Nowa ...</string>
     <string id="30523">Język</string>
     <string id="30524">Wybierz język</string>
@@ -87,13 +87,16 @@
     <string id="30529">To mi się podoba</string>
     <string id="30530">To mi się nie podoba</string>
     <string id="30531">Odtwarzaj wszystko</string>
-    <string id="30532">Domyślne</string>
-    <string id="30533">Odwrócone</string>
-    <string id="30534">Mieszane</string>
+    <string id="30532">Domyślna</string>
+    <string id="30533">Odwrócona</string>
+    <string id="30534">Losowa</string>
     <string id="30535">Wybierz kolejność</string>
-    <string id="30536">Aktualizacja playlisty...</string>
+    <string id="30536">Aktualizacja listy odtwarzania...</string>
     <string id="30537">Odtwórz z tego miejsca</string>
-    <string id="30538">Nielubiane wideo</string>
+    <string id="30538">Nielubiane</string>
     <string id="30539">Na żywo</string>
-    <string id="30540">Odtwarzaj z...</string>
+    <string id="30540">Odtwarzaj używając...</string>
+    <string id="30541">Pokazuj nazwę kanału w opisie</string>
+    <string id="30542">Strumienie RTMPE nie są obsługiwane</string>
+    <string id="30543">Odśwież</string>
 </strings>

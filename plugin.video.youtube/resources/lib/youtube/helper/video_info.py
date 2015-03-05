@@ -440,7 +440,19 @@ class VideoInfo(object):
                    'Accept-Encoding': 'gzip, deflate',
                    'Accept-Language': 'en-US,en;q=0.8,de;q=0.6'}
         params = {'video_id': video_id,
-                  'hl': self._language}
+                  'hl': self._language,
+                  'ps': 'leanback',
+                  'el': 'leanback',
+                  'width': '1920',
+                  'height': '1080',
+                  'ssl_stream': '1',
+                  'c': 'TVHTML5',
+                  'cver': '4',
+                  'cplayer': 'UNIPLAYER',
+                  'cbr': 'Chrome',
+                  'cbrver': '40.0.2214.115',
+                  'cos': 'Windows',
+                  'cosver': '6.1'}
         if self._access_token:
             params['access_token'] = self._access_token
             pass

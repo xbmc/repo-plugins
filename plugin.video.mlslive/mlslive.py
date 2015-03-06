@@ -12,10 +12,11 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 '''
 
-import urllib, urllib2, xml.dom.minidom, json, cookielib, time, datetime, unicodedata
+import urllib, urllib2, xml.dom.minidom, cookielib, time, datetime
+import _strptime
+
 
 class MLSLive:
 
@@ -23,27 +24,41 @@ class MLSLive:
         """
         Initialize the MLSLive class.
         """
-        self.CED_CONFIG = 'http://e2.cdnl3.neulion.com/mls/ced/2013/ced_config.xml'
+
+        self.CED_CONFIG = 'http://static.mlsdigital.net/mobile/v20/config.json'
         self.PUBLISH_POINT = 'http://live.mlssoccer.com/mlsmdl/servlets/publishpoint'
         self.LOGIN_PAGE = 'https://live.mlssoccer.com/mlsmdl/secure/login'
         self.GAMES_PAGE_PREFIX = 'http://mobile.cdn.mlssoccer.com/iphone/v5/prod/games_for_week_'
-        self.GAMES_PAGE_SUFFIX = '.js'
 
-        # Video channel information 
-        self.CHANNELS_PAGE = 'http://mobile.cdn.mlssoccer.com/iphone/v5/prod/channels.js'
-        self.CHANNEL_PREFIX = 'http://mobile.cdn.mlssoccer.com/iphone/v5/prod/channel_'
-        self.CHANNEL_SUFFIX = '.js'
-
-        # Odd, but the year is still 2011 -- I expect this will change in the future
-        self.GAME_PREFIX = 'http://mls.cdnak.neulion.com/mobile/feeds/game/2011/'
-        self.GAME_SUFFIX = '_ced.xml'
-
-        self.TEAM_PAGE = 'http://mobile.cdn.mlssoccer.com/iphone/v5/prod/teams_2013.js'
+        self.GAME_PREFIX = 'http://live.mlssoccer.com/mlsmdl/schedule?'
 
         # resolution for images
         self.RES = '560x320'
+        self.timeOffset = None
 
 
+    def getCookieFile(self):
+        import os
+        try:
+            import xbmc, xbmcaddon
+            base = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile'))
+        except:
+            base = os.getcwd()
+        return os.path.join(base, 'cookies.lwp')
+
+
+    def createCookieJar(self):
+        cookie_file = self.getCookieFile()
+        return cookielib.LWPCookieJar(cookie_file)
+
+
+    def loadCookieJar(self):
+        jar = cookielib.LWPCookieJar()
+        cookie_file = self.getCookieFile()
+        jar.load(cookie_file,ignore_discard=True)
+        return jar
+
+    
     def login(self, username, password):
         """
         Login to the MLS Live streaming service.
@@ -57,171 +72,116 @@ class MLSLive:
         values = { 'username' : username,
                    'password' : password }
 
-        self.jar = cookielib.CookieJar()
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.jar))
+        jar = self.createCookieJar()
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))#,
+        #urllib2.HTTPSHandler(debuglevel=1))
         try:
             resp = opener.open(self.LOGIN_PAGE, urllib.urlencode(values))
         except:
             print "Unable to login"
             return False
+        jar.save(ignore_discard=True)
 
         resp_xml = resp.read()
         dom = xml.dom.minidom.parseString(resp_xml)
-        
+
         result_node = dom.getElementsByTagName('result')[0]
         code_node = result_node.getElementsByTagName('code')[0]
         
         if code_node.firstChild.nodeValue == 'loginsuccess':
             return True
-        
+
         return False
 
 
-    def getTimeOffset(self):
-        
-        req = urllib2.Request(self.CED_CONFIG)
+    def getTimeOffset(self, games_xml):
+
+        # there are no games in the first month, but it still returns the time
+        now = datetime.datetime.now()
+
+        # parse the xml for the server time
+        dom = xml.dom.minidom.parseString(games_xml)
+        result_node = dom.getElementsByTagName('result')[0]
+        cur_date_node = result_node.getElementsByTagName('currentDate')[0]
+        cur_date = cur_date_node.firstChild.nodeValue
 
         try:
-            resp = urllib2.urlopen(req)
-        except:
+            t = time.strptime(cur_date, '%a %b %d %H:%M:%S EST %Y')
+            server = datetime.datetime.fromtimestamp(time.mktime(t))
+        except ValueError:
+            print "ERROR: Unable to get server time"
             return None
 
-        cfg_xml = resp.read()
-        
+        # calculate the time delta between the server and the local time zone
+        # accommodating for network delay
+        td = server - now
+        seconds = td.seconds
+        modsecs = seconds % 100
+        if modsecs < 100:
+            seconds += (100 - modsecs)
+        self.timeOffset = datetime.timedelta(days = td.days, seconds = seconds)
+
+        return None
+
+
+    def getGamesXML(self, month, year = '2015'):
+
+        values = {'format' : 'xml',
+                  'year' : year,
+                  'month' : month,
+                  'checksubscription' : 'true' }
+
+        jar = self.loadCookieJar()
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
         try:
-            dom = xml.dom.minidom.parseString(cfg_xml)
+            resp = opener.open(self.GAME_PREFIX, urllib.urlencode(values))
         except:
+            print "Unable get games xml"
             return None
+        jar.save(filename=self.getCookieFile(), ignore_discard=True)
 
-        result_node = dom.getElementsByTagName('result')[0]
-        auth_node = result_node.getElementsByTagName('estOffset')[0]
+        xml_data = resp.read()
 
-        return int(auth_node.firstChild.nodeValue)
-
-
-    def getCurrentWeekURI(self):
-        """
-        Get the URI for the current games for the current week.
-
-        @return a string containing the uri or None on error
-        """
-
-        # first get UTC time
-        mls_dt = datetime.datetime.utcnow()
-
-        # get the offset from UTC of the MLS listings. Default to zero if
-        # something goes wrong
-        hr_offset = -self.getTimeOffset() 
-        if hr_offset == None:
-            hr_offset = 0
-
-        # add the listing offset to UTC time to get the current league time
-        td = datetime.timedelta(hours=hr_offset)
-        mls_dt += td
-
-        # move back to the start of the game week
-        week = mls_dt + datetime.timedelta(days=-mls_dt.weekday())
-        return  self.GAMES_PAGE_PREFIX + week.strftime("%Y-%m-%d") + self.GAMES_PAGE_SUFFIX
+        return xml_data
 
 
-    def getWeeks(self):
-        weeks = {}
-
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.jar))
-        try:
-            resp = opener.open(self.CED_CONFIG)
-        except:
-            print "Unable to get configuration"
-            return False
-
-        resp_xml = resp.read()
-        dom = xml.dom.minidom.parseString(resp_xml)
-
-        result_node = dom.getElementsByTagName('result')[0]
-        first_day = result_node.getElementsByTagName('firstDayOfCurSeason')[0].firstChild.nodeValue.split('T')[0]
-        last_day = result_node.getElementsByTagName('lastDayOfCurSeason')[0].firstChild.nodeValue.split('T')[0]
-
-        # get first day of the season. use the time becasuse datetime.datetime
-        # doesn't work reliably without crashing
-        time_t = time.strptime(first_day, "%Y-%m-%d")
-        date_d = datetime.datetime.fromtimestamp(time.mktime(time_t))
-
-        # get the last day of the season
-        time_t = time.strptime(last_day, "%Y-%m-%d")
-        last_d = datetime.datetime.fromtimestamp(time.mktime(time_t))
-
-        while date_d < datetime.datetime.today() and date_d <= last_d:
-            week_str = self.GAMES_PAGE_PREFIX + date_d.strftime("%Y-%m-%d") + self.GAMES_PAGE_SUFFIX
-            weeks[week_str] = date_d.strftime("%B %d, %Y")
-            date_d = date_d + datetime.timedelta(weeks=1)
-
-        # return the weeks
-        return weeks
-
-
-    def getGames(self, games_url):
+    def getGames(self, month):
         """
         Get the list of games.
         
         @param games_url the url of the weeks games
         @return json game data
-
-        The list returned will contain dictionaries, each of which containing
-        game details. The details are as follows:
-        - homeTeamScore
-        - visitorTeamScore
-        - gameID
-        - siteName (eg: "PPL Park", the nicest park in the league IMO)
-        - television (eg: "MLS LIVE", "NBCSN", "ESPN2"
-        - visitorTeamID
-        - homeTeamID
-        - gameDateTime (eg: "20130302T210000+0000")
-        - competitionID (not sure what that does)
-        - homeTeamName (pretty home team name)
-        - gameStatus ("FINAL","UPCOMING", "LIVE - 50'"
-        - visitorTeamName (pretty vistor team name)
         """
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.jar))
-        try:
-            resp = opener.open(games_url)
-        except:
-            print "Unable to load game list."
+
+        games_xml = self.getGamesXML(month)
+        if games_xml == None:
             return None
 
-        json_data = resp.read()
+        self.getTimeOffset(games_xml)
 
-        games = json.loads(json_data)['games']
+        dom = xml.dom.minidom.parseString(games_xml)
+
+        result_node = dom.getElementsByTagName('result')[0]
+        games_node = result_node.getElementsByTagName('games')[0]
+
+        games = []
+        for game_node in games_node.getElementsByTagName('game'):
+            game = {}
+
+            # parse each element we'll need
+            for str in ['gid', 'type', 'id', 'gameTimeGMT', 'awayTeam',
+                        'homeTeam', 'awayTeamName', 'homeTeamName', 'programId',
+                        'gs']:
+                game[str] = game_node.getElementsByTagName(str)[0].firstChild.nodeValue
+
+            # see if there is a result in the game
+            result_nodes = game_node.getElementsByTagName('result')
+            if len(result_nodes) > 0:
+                game['result'] = result_nodes[0].firstChild.nodeValue
+
+            games.append(game)
 
         return games
-
-
-    def getTeams(self):
-        """
-        Get the list of teams from the web-service
-        @return json team data
-        """
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.jar))
-        try:
-            resp = opener.open(self.TEAM_PAGE)
-        except:
-            print "Unable to load game list."
-            return None
-
-        json_data = resp.read()
-
-        return json.loads(json_data)['teams']
-
-
-    def getTeamAbbr(self, teams, id):
-        """
-        Get the team abbreviation for a particular ID.
-        @return the team abbreviation
-        """
-        for team in teams:
-            if str(team['teamID']) == str(id):
-                return team['abbr']
-        return  None
-
 
     def getGameDateTimeStr(self, game_date_time):
         """
@@ -230,54 +190,19 @@ class MLSLive:
         @return a string containing the local game date and time.
         """
 
-        game_t = time.strptime(game_date_time[:15], "%Y%m%dT%H%M%S")
-        game_dt = datetime.datetime.fromtimestamp(time.mktime(game_t))
+        try:
+            game_t = time.strptime(game_date_time, "%Y-%m-%d %H:%M:%S.%f")
+        except ValueError:
+            return None
 
-        # get the different between now and utc
-        td = datetime.datetime.utcnow() - datetime.datetime.now()
+        game = datetime.datetime.fromtimestamp(time.mktime(game_t))
 
-        # get the offset the game time is listed in
-        game_offset = datetime.timedelta(hours = int(game_date_time[16:18]),
-                                         minutes = int(game_date_time[18:20]))
-
-        # subtract that difference from the game time (to put it into local gime)
-        game_dt = game_dt - td - game_offset
+        # attempt to calculate the local time
+        if not self.timeOffset == None:
+            game -= self.timeOffset
 
         # return a nice string
-        return game_dt.strftime("%m/%d %H:%M")
-
-
-    def isGameLive(self, game):
-        """
-        Determine if a game is live.
-        @param game the game data dictionary
-        @return true if the game is live, otherwise, false
-        """
-        if (game['gameStatus'][:4] == 'LIVE') or (game['gameStatus'][:4] == 'HALF'):
-            return True
-        return False
-
-
-    def isGameUpcoming(self, game):
-        """
-        Determine if a game is upcoming
-        @return true if the game is still upcoming, otherwise, false
-        """
-        if game['gameStatus'][:8] == 'UPCOMING':
-            return True
-        return False
-
-
-    def adjustArchiveString(self, title, archive_type):
-        """
-        For archived games the title needs some adjustment to point out what the
-        archive is (eg: highlights, condensed, full replay)
-        @param title the match title
-        @param archive_type the type of archive.
-        @return the adjusted title
-        """
-        new_title = title.split('(')[0]
-        return new_title + '(' + archive_type.title().replace('_', ' ') + ')';
+        return game.strftime("%m/%d %H:%M")
 
 
     def getGameString(self, game, separator):
@@ -288,34 +213,23 @@ class MLSLive:
                          away side (eg "at")
         @return the game title
         """
-        game_str = game['visitorTeamName'] + " " + separator + " " + \
+
+        # create the base string
+        game_str = game['awayTeamName'] + ' ' + separator + ' ' + \
                    game['homeTeamName']
 
-        if game['gameStatus'] == 'FINAL' or game['gameStatus'][:4] == 'LIVE' or \
-           game['gameStatus'] == 'HALF':
-            game_str += ' (' + game['gameStatus'].title() + ')'
-        else:
-            game_str += ' (' + self.getGameDateTimeStr(game['gameDateTime']) + ')'
+        # add the result
+        if 'result' in game.keys():
+            if game['result'] == 'F':
+                game_str += ' ([B]Final[/B])'
+                return game_str.encode('utf-8').strip()
+
+        # if we can get the date/time of the game add it
+        dt = self.getGameDateTimeStr(game['gameTimeGMT'])
+        if not dt == None:
+            game_str += ' ([B]' + dt + '[/B])'
 
         return game_str.encode('utf-8').strip()
-
-
-    def getGameXML(self, game_id):
-        """
-        Fetch the game XML configuration
-        @param game_id the game id
-        @return a string containing the game XML data
-        """
-        game_xml_url = self.GAME_PREFIX + game_id + self.GAME_SUFFIX
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.jar))
-        try:
-            resp = opener.open(game_xml_url)
-        except:
-            print "Unable to get game XML configuration"
-            return ""
-
-        game_xml = resp.read()
-        return game_xml
 
 
     def getFinalStreams(self, game_id):
@@ -349,8 +263,12 @@ class MLSLive:
 
         return games
 
+    def getStream(self, adaptive):
 
-    def getGameLiveStream(self, game_id):
+        return None
+
+
+    def getGameLiveStream(self, game_id, condensed = False):
         """
         Get the game streams. This method will parse the game XML for the
         HLS playlist, and then parse that playlist for the different bitrate
@@ -360,19 +278,24 @@ class MLSLive:
         @return the live stream
         """
         values = { 'type' : 'game',
-                   'gt' : 'live',
-                   'id' : game_id }
+                   'gt' : 'condensed' if condensed else 'live',
+                   'id' : game_id,
+                   'nt' : '1'}
 
         uri = self.PUBLISH_POINT + '?' + urllib.urlencode(values)
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.jar))
+        jar = self.loadCookieJar()
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
+
+        opener.addheaders = [('User-Agent', urllib.quote('PS3Application libhttp/4.5.5-000 (CellOS)'))]
+
         # set the user agent to get the HLS stream
         opener.addheaders = [('User-agent', 'Sony')]
-        try:
-            resp = opener.open(uri)
-        except:
-            print "Unable to get live game XML configuration"
-            return ""
-
+        #try:
+        resp = opener.open(uri)
+        #except:
+        #    print "Unable to get live game XML configuration"
+        #    return ""
+        jar.save(filename=self.getCookieFile(), ignore_discard=True)
         game_xml = resp.read()
 
         try:
@@ -386,42 +309,3 @@ class MLSLive:
         stream_url = path_node.firstChild.nodeValue
 
         return stream_url
-
-
-    def getVideoChannels(self):
-        """
-        Get the list of video channels
-        """
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.jar))
-        try:
-            resp = opener.open(self.CHANNELS_PAGE)
-        except:
-            print "Unable to load channels list."
-            return None
-
-        json_data = resp.read()
-
-        return json.loads(json_data)['channels']
-
-    def getChannelImage(self, channel):
-        """
-        Get the channel image URL
-        """
-        return channel['tile'].replace('[res]', self.RES)
-
-
-    def getChannelVideos(self, channel_id):
-        """
-        Get the list of videos for the channel
-        """
-        url = self.CHANNEL_PREFIX + channel_id + self.CHANNEL_SUFFIX
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.jar))
-        try:
-            resp = opener.open(url)
-        except:
-            print "Unable to load channel video list."
-            return None
-
-        json_data = resp.read()
-
-        return json.loads(json_data)['items']

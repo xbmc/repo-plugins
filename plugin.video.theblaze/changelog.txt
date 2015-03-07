@@ -1,0 +1,26 @@
+Version 0.1.3
+bug fix
+
+Version 0.1.2
+fix for website changes
+
+Version 0.1.1
+fix for invalid cookies
+
+Version 0.1.0
+testing/beta release
+code overhaul mostly rewritten
+
+Version 0.0.4
+fix save login cookies, only need to login when cookies expire
+added add-on debug setting plus more debug logging
+other minor bug fixes and code improvements
+
+Version 0.0.3
+fix KeyError
+
+Version 0.0.2
+initial release
+
+Version 0.0.1
+initial test

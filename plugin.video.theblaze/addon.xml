@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.theblaze"
+       name="TheBlaze TV"
+       version="0.1.3"
+       provider-name="divingmule">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.common.plugin.cache" version="2.5.5"/>
+    <import addon="script.module.beautifulsoup" version="3.2.1"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary>www.video.theblaze.com</summary>
+    <description>TheBlaze TV features The Glenn Beck Program, plus a full slate of original programming including a nightly news show, documentaries, reality TV, programming for your kids and specials covering a myriad of entertaining and enlightening topics. All programming is broadcast in HD and is available live or On Demand.</description>
+    <platform>all</platform>
+    <language>en</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <source>https://github.com/divingmule/plugin.video.theblaze</source>
+    <forum></forum>
+    <website>http://www.video.theblaze.com</website>
+  </extension>
+</addon>

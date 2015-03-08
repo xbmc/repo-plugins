@@ -1,0 +1,5 @@
+[B]Version 1.0.1 - 2015-03-08[/B]
+- Fixed video playback and switched to 720p HD stream
+
+[B]Version 1.0.0 - 2014-02-08[/B]
+- Initial release

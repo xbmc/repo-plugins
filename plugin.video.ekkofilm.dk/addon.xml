@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.ekkofilm.dk" version="1.0.1" name="Filmmagasinet Ekko" provider-name="twinther">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.module.buggalo" version="1.1.5"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Ekko Shortlist - the best danish short films right now</summary>
+        <summary lang="da">Ekko Shortlist - de bedste danske kortfilm lige nu</summary>
+        <description lang="en">Echo Shortlist advocates short film art and talent in Denmark. It is for people who want to be up to date with future star instructors or who want to be surprised by stories in the short format, where Denmark once again established itself internationally.[CR][CR]If you have comments or suggestions for this addon, please feel free to participate in the debate on my blog at http://tommy.winther.nu</description>
+        <description lang="da">Ekko Shortlist slår et slag for kortfilmkunst og talentmassen i Danmark. Den er for dig, der gerne vil være up to date med fremtidens stjerneinstruktører, eller som vil overraskes af fortællinger i det korte format, hvor Danmark gang på gang markerer sig internationalt.[CR][CR]Har du kommentarer, ris eller ros til denne addon er du velkommen til at deltage i debatten på min blog på http://tommy.winther.nu</description>
+        <license>GPL 2.0</license>
+        <platform>all</platform>
+        <language>da</language>
+        <email>tommy@winther.nu</email>
+        <website>http://tommy.winther.nu</website>
+        <forum></forum>
+        <source>https://github.com/xbmc-danish-addons/plugin.video.ekkofilm.dk</source>
+    </extension>
+</addon>

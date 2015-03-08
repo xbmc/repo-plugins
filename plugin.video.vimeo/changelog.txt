@@ -1,0 +1,9 @@
+4.0.1 (2015-03-08)
+ADD: Go to <user>
+ADD: likes, follower, channels, albums, groups
+ADD: full watch later support
+ADD: full like support
+UPD: icons (thx 2 freeman212)
+
+4.0.1~alpha1 (2015-03-05)
+- initial version for tests

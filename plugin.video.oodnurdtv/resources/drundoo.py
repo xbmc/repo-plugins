@@ -77,10 +77,9 @@ class drundoo:
                 
                 link = 'http://www.drundoo.com' + temp[start1:end1]
 
-                temp = self.open_json(link)[0]
-                temp = self.open_json('http://www.drundoo.com/lb/index.php?sOrgURL=' + temp.get('smil_url').replace('manifest.f4m?DVR','playlist.m3u8'))
+                temp = self.open_json(link).get('smil_url')
 
-                play_link = temp.get('sNewURL')
+                play_link = temp
 
                 return play_link
 

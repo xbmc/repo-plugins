@@ -16,8 +16,8 @@ JSON_SUFFIX = "?output=json"
 SECTION_POPULAR = "popular-videos"
 SECTION_LATEST_VIDEOS = "latest-videos"
 SECTION_LAST_CHANCE = "last-chance-videos"
-SECTION_LATEST_CLIPS = "playJs-more-clips"
-SECTION_EPISODES = "playJs-more-episodes"
+SECTION_LATEST_CLIPS = "play_js-tabpanel-more-clips"
+SECTION_EPISODES = "play_js-tabpanel-more-episodes"
 SECTION_LIVE_PROGRAMS = "live-channels"
 
 SEARCH_LIST_TITLES = "[^\"']*playJs-search-titles[^\"']*"
@@ -287,13 +287,13 @@ def getEpisodes(url):
   """
   Returns the episodes for a program URL.
   """
-  return getArticles(SECTION_EPISODES, url)
+  return getProgramItems(SECTION_EPISODES, url)
 
 def getClips(url):
   """
   Returns the clips for a program URL.
   """
-  return getArticles(SECTION_LATEST_CLIPS, url)
+  return getProgramItems(SECTION_LATEST_CLIPS, url)
 
 def getArticles(section_name, url=None):
   """
@@ -354,6 +354,71 @@ def getArticles(section_name, url=None):
     info["title"] = title
     info["plot"] = plot
     info["aired"] = helper.convertDate(aired)
+    info["duration"] = helper.convertDuration(duration)
+    info["fanart"] = helper.prepareFanart(thumbnail, baseUrl=BASE_URL)
+    new_article["info"] = info
+    new_articles.append(new_article)
+
+  return new_articles
+
+def getProgramItems(section_name, url=None):
+  """
+  Returns a list of program items for a show.
+  Program items have 'title', 'thumbnail', 'url' and 'info' keys.
+  """
+  if not url:
+    url = "/"
+  html = getPage(url)
+
+  video_list_class = "[^\"']*play_videolist[^\"']*"
+
+  container = common.parseDOM(html, "div", attrs = { "id" : section_name })
+  if not container:
+    helper.errorMsg("No container found for section "+section_name+"!")
+    return None
+  container = container[0]
+
+  item_class = "[^\"']*play_vertical-list__item[^\"']*"
+  items = common.parseDOM(container, "li", attrs = { "class" : item_class })
+  if not items:
+    helper.errorMsg("No items found in container \""+section_name+"\"")
+    return None
+  new_articles = []
+
+
+  for index, item in enumerate(items):
+    live_item = False
+    if "play_live-countdown" in item:
+      live_item = True
+      helper.infoMsg("Skipping live item!")
+      continue
+    info = {}
+    new_article = {}
+    title = common.parseDOM(item, "a",
+                            attrs = { "class" : "[^\"']*play_vertical-list__header-link[^\"']*" })[0]
+    plot = common.parseDOM(item, "p",
+                            attrs = { "class" : "[^\"']*play_vertical-list__description-text[^\"']*" })[0]
+    new_article["url"] = common.parseDOM(item, "a",
+                            attrs = { "class": "[^\"']*play_vertical-list__header-link[^\"']*" },
+                            ret = "href")[0]
+    thumbnail = common.parseDOM(item,
+                                "img",
+                                attrs = { "class": "[^\"']*play_vertical-list__image[^\"']*" },
+                                ret = "src")[0]
+    new_article["thumbnail"] = helper.prepareThumb(thumbnail, baseUrl=BASE_URL)
+    duration = common.parseDOM(item, "time", attrs = {}, )[0]
+    aired = common.parseDOM(item, "p", attrs = { "class" : "[^\"']*play_vertical-list__meta-info[^\"']*" })
+    if aired:
+      aired = aired[0].replace("Publicerades ", "")
+    else:
+      # Some items does not contain this meta data
+      aired = ""
+
+    plot = common.replaceHTMLCodes(plot)
+    new_article["title"] = title
+    info["title"] = title
+    info["plot"] = plot
+    info["aired"] = helper.convertDate(aired) 
     info["duration"] = helper.convertDuration(duration)
     info["fanart"] = helper.prepareFanart(thumbnail, baseUrl=BASE_URL)
     new_article["info"] = info

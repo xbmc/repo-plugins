@@ -3,6 +3,10 @@
 - Removed feature
 
 
+8. March 2015 v3.0.9
+* Updated regex getting channel metadata from HTML
+
+
 21. February 2015 v3.0.8
 * Updated regex getting channel metadata from HTML
 

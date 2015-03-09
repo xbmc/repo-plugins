@@ -268,7 +268,7 @@ class musicAddonXbmc:
     def getChannelMetadata(self, html):
 
         # Will get JSON with all channel metadata
-        re_channelMeta = re.compile(r"di.app.start\(({\"channels\":\s*.+(?!\}\)))\)", re.M | re.I)
+        re_channelMeta = re.compile(r"di.app.start\(({.+(?!\}\)))\)", re.M | re.I)
         
         channelMeta = re_channelMeta.findall(html)[0]
 

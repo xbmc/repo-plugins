@@ -149,7 +149,7 @@ def main_list(params):
 
     # Check for featured video in search result as first video in list.
     for featured_video, featured_title in lutil.find_multiple(buffer_web, pattern_featured):
-        title = featured_title.replace('&quot;', '"').replace('&#039;', '´').replace('&amp;', '&')  # Cleanup the title.
+        title = featured_title.replace('&quot;', '"').replace('&#039;', '´').replace('&amp;', '&').strip()  # Cleanup the title.
         url = featured_video
         lutil.log('Featured video in search result: URL: "%s" Title: "%s"' % (url, title))
         lutil.addLink(action="play_video", title=title, url=url)
@@ -159,7 +159,7 @@ def main_list(params):
     videolist = lutil.find_multiple(buffer_web,pattern_videos)
 
     for url, title, thumbnail in videolist:
-        title = title.replace('&quot;', '"').replace('&#039;', '´').replace('&amp;', '&')  # Cleanup the title.
+        title = title.replace('&quot;', '"').replace('&#039;', '´').replace('&amp;', '&').strip()  # Cleanup the title.
         lutil.log('Videolist: URL: "%s" Title: "%s" Thumbnail: "%s"' % (url, title, thumbnail))
         
         plot = title # The description only appears when we load the link, so a this point we copy the description with the title content.
@@ -201,8 +201,8 @@ def play_video(params):
 
 # This function try to get a Youtube playable URL from the weblink and returns it ready to call the Youtube plugin.
 def get_playable_youtube_url(html):
-    pattern_youtube1 = '<param name="movie" value="[htp:]*?//www.youtube.com/v/([0-9A-Za-z_-]{11})[^>]+>'
-    pattern_youtube2 = ' src="[htp:]*?//www.youtube.com/embed/([0-9A-Za-z_-]{11})"'
+    pattern_youtube1 = '<param name="movie" value="[htps:]*?//www.youtube.com/v/([0-9A-Za-z_-]{11})[^>]+>'
+    pattern_youtube2 = ' src="[htps:]*?//www.youtube.com/embed/([0-9A-Za-z_-]{11})"'
 
     video_id = lutil.find_first(html, pattern_youtube1)
     if video_id:
@@ -223,9 +223,9 @@ def get_playable_youtube_url(html):
 def get_playable_vimeo_url(html):
     video_pattern_sd     = '"sd":{.*?,"url":"([^"]*?)"'
     vimeo_video_patterns = (
-        (' value="[htp:]*?//vimeo.com/moogaloop.swf\?clip_id=([0-9]+)', 'vimeo1'),
-        ('<a href="[htp:]*?//vimeo.com/([0-9]+)">',                     'vimeo2'),
-        (' src="[htps:]*?//player.vimeo.com/video/([0-9]+)',            'vimeo3'),
+        (' value="[htps:]*?//vimeo.com/moogaloop.swf\?clip_id=([0-9]+)', 'vimeo1'),
+        ('<a href="[htps:]*?//vimeo.com/([0-9]+)">',                     'vimeo2'),
+        (' src="[htps:]*?//player.vimeo.com/video/([0-9]+)',             'vimeo3'),
         )
 
     for video_pattern, pattern_name in vimeo_video_patterns:

@@ -1,3 +1,5 @@
+1.1.0
+- Quick fix to recover preferred language support on videos.  
 1.0.9
 - Quick fix due to website internal changes.
 1.0.8
@@ -42,7 +44,7 @@
 0.0.4
 - Added Euronews and Earth from Space categories to main index.
 0.0.3
-- Added support for prefrerred video language if available.
+- Added support for preferred video language if available.
 0.0.2
 - Added main index menu with order selection.
 0.0.1

@@ -13,7 +13,8 @@ def parse(datetime_string):
         return int(value)
 
     # match time only '00:45:10'
-    time_only_match = re.match('^(?P<hour>[0-9]{2})([:]?(?P<minute>[0-9]{2})([:]?(?P<second>[0-9]{2}))?)?$', datetime_string)
+    time_only_match = re.match('^(?P<hour>[0-9]{2})([:]?(?P<minute>[0-9]{2})([:]?(?P<second>[0-9]{2}))?)?$',
+                               datetime_string)
     if time_only_match:
         return time(hour=_to_int(time_only_match.group('hour')),
                     minute=_to_int(time_only_match.group('minute')),
@@ -46,5 +47,20 @@ def parse(datetime_string):
         return timedelta(hours=_to_int(period_match.group('hours')),
                          minutes=_to_int(period_match.group('minutes')),
                          seconds=_to_int(period_match.group('seconds')))
+
+    # abbreviated match
+    abbreviated_match = re.match(
+        r"(\w+), (?P<day>\d+) (?P<month>\w+) (?P<year>\d+) (?P<hour>\d+)\:(?P<minute>\d+)\:(?P<second>\d+)",
+        datetime_string)
+    if abbreviated_match:
+        month = {'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'June': 6, 'Jun': 6, 'July': 7, 'Jul': 7, 'Aug': 8,
+                 'Sept': 9, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12}
+        return datetime(year=_to_int(abbreviated_match.group('year')),
+                        month=month[abbreviated_match.group('month')],
+                        day=_to_int(abbreviated_match.group('day')),
+                        hour=_to_int(abbreviated_match.group('hour')),
+                        minute=_to_int(abbreviated_match.group('minute')),
+                        second=_to_int(abbreviated_match.group('second')))
+        pass
 
     raise KodionException("Could not parse iso 8601 timestamp '%s'" % datetime_string)

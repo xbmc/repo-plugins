@@ -1,9 +1,28 @@
 __author__ = 'bromix'
 
-__all__ = ['create_path', 'create_uri_path', 'strip_html_from_text', 'print_items', 'find_best_fit']
+__all__ = ['create_path', 'create_uri_path', 'strip_html_from_text', 'print_items', 'find_best_fit', 'to_utf8',
+           'to_unicode']
 
 import urllib
 import re
+
+
+def to_utf8(text):
+    result = text
+    if isinstance(text, unicode):
+        result = text.encode('utf-8')
+        pass
+
+    return result
+
+
+def to_unicode(text):
+    result = text
+    if isinstance(text, str):
+        result = text.decode('utf-8')
+        pass
+
+    return result
 
 
 def find_best_fit(data, compare_method=None):

@@ -7,6 +7,7 @@ from ..abstract_context_ui import AbstractContextUI
 from .xbmc_progress_dialog import XbmcProgressDialog
 from .xbmc_progress_dialog_bg import XbmcProgressDialogBG
 from ... import constants
+from ... import utils
 
 
 class XbmcContextUI(AbstractContextUI):
@@ -46,14 +47,7 @@ class XbmcContextUI(AbstractContextUI):
         keyboard = xbmc.Keyboard(default, title, hidden)
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText():
-            text = keyboard.getText()
-            """
-            It seams kodi returns utf-8 encoded strings. We need unicode (multibyte) strings. We check if the
-            text is str and call decode to create afterwards an unicode string.
-            """
-            if isinstance(text, str):
-                text = unicode(text.decode('utf-8'))
-                pass
+            text = utils.to_unicode(keyboard.getText())
             return True, text
 
         return False, u''
@@ -104,14 +98,19 @@ class XbmcContextUI(AbstractContextUI):
         if not _header:
             _header = self._context.get_name()
             pass
+        _header = utils.to_utf8(_header)
 
         _image = image_uri
         if not _image:
             _image = self._context.get_icon()
             pass
 
+        _message = utils.to_unicode(message)
+        _message = _message.replace(',', ' ')
+        _message = utils.to_utf8(_message)
+
         xbmc.executebuiltin(
-            "Notification(%s, %s, %d, %s)" % (_header, message.replace(',', ' '), time_milliseconds, _image))
+            "Notification(%s, %s, %d, %s)" % (_header, _message, time_milliseconds, _image))
         pass
 
     def open_settings(self):

@@ -1,104 +1,201 @@
 #!/usr/bin/env python
 # encoding: UTF-8
 
-
+import json
 import sarpur
-import sarpur.scraper as scraper
+import requests
+from sarpur import scraper, logger
 import util.player as player
 from util.gui import GUI
-
+from datetime import datetime, timedelta
 
 INTERFACE = GUI(sarpur.ADDON_HANDLE, sarpur.BASE_URL)
 
+
 def index():
     """
-    .. py:function:: index()
-
     The front page (i.e. the first one the user sees when opening the plugin)
     """
 
-    INTERFACE.addItem('Bein útsending RÚV', 'play_live', 'ruv')
-    INTERFACE.addItem('Bein útsending RÁS 1', 'play_live', 'ras1')
-    INTERFACE.addItem('Bein útsending RÁS 2', 'play_live', 'ras2')
-    INTERFACE.addItem('Bein útsending Rondó', 'play_live', 'rondo')
-    INTERFACE.addDir('Nýtt', 'view_group', '/')
-    INTERFACE.addDir('Fréttir', 'view_group', '/flokkar/frettir')
-    INTERFACE.addDir('Íþróttir', 'view_group', '/flokkar/ithrottir')
-    INTERFACE.addDir('Barnaefni', 'view_group', '/flokkar/born')
-    INTERFACE.addDir('Rás 1', 'view_group', '/ras1')
-    INTERFACE.addDir('Rás 2', 'view_group', '/ras2')
-    INTERFACE.addDir('Sjónvarpsefni', 'view_group', '/flokkar/1')
-    INTERFACE.addDir('Íþróttarás', 'view_group', '/flokkar/10')
-    INTERFACE.addDir('Hlaðvarp', 'view_podcast_index', '')
+    INTERFACE.add_dir(u'RÚV', 'view_category', '1')
+    INTERFACE.add_dir(u'RÚV Íþróttir', 'view_category', '10')
+    INTERFACE.add_dir(u'RÁS 1', 'view_category', '2')
+    INTERFACE.add_dir(u'RÁS 2', 'view_category', '3')
+    INTERFACE.add_dir(u'Rondó', 'view_category', 'rondo')
+    INTERFACE.add_dir(u'Krakkasarpurinn', 'view_category', 'born')
+    INTERFACE.add_dir(u'Hlaðvarp', 'view_podcast_index', '')
+    INTERFACE.add_dir(u'Leita', 'search', '')
 
-def play_video(url, name):
+
+def play_url(url, name):
     """
-    .. py:function:: play_video(url, name)
-
-    Plays videos (and audio) other than live streams and podcasts.
+    Play media on page (scrapes it to find it)
 
     :param url: The page url
-    :param name: The name of the item to play
+    :param name: Text to display in media player
     """
-    (playpath, rtmp_url, swfplayer) = scraper.get_stream_info(url)
-    player.play_stream(playpath, swfplayer, rtmp_url, url, name)
+    video_url = scraper.get_media_url(url)
+    if video_url == -1:
+        GUI.info_box(u"Vesen", u"Fann ekki upptöku")
+    else:
+        player.play(video_url, name)
 
-def play_podcast(url):
+
+def play_video(file, name):
     """
-    .. py:function:: play_podcast(url)
+    Play video give only the filename
 
-    Plays podcast
+    :param file: Media filename
+    :param name: Text to display in media player
+    :return:
+    """
+    url = u"http://smooth.ruv.cache.is/opid/{0}".format(file)
+    r = requests.head(url)
 
-    :param url: The file url (this can be any file that xbmc can play)
+    if r.status_code != 200:
+        url = u"http://smooth.ruv.cache.is/lokad/{0}".format(file)
+
+    player.play(url, name)
+
+
+def play_podcast(url, name):
+    """
+    Plays podcast (or any media really
+
+    :param url: Direct url to the media
+    :param name: Text to display in media player
     """
 
-    player.play(url)
+    player.play(url, name)
 
-def play_live_stream(name):
+
+def play_live_stream(category_id, name):
     """
-    .. py:function:: play_live_stream(name)
-
     Play one of the live streams.
 
-    :param name: The name of the stream (defined in LIVE_URLS in __init__.py)
+    :param category_id: The channel/radio station id (see index())
+    :param name: Text to display in media player
     """
-    url = sarpur.LIVE_URLS.get(name)
-    player.play(url)
+    url = sarpur.LIVE_URLS.get(category_id)
+    player.play(url, name)
 
-def view_group(rel_url):
+
+def view_category(category_id, date_string):
     """
-    .. py:function:: view_group(rel_url)
+    Display the available media in category
 
-    List items on one of the groups (flokkur tab) on sarpurinn.
-
-    :param rel_url: Relative url to the flokkur
-
+    :param category_id: The channel/radio station id (see index())
+    :param date_string: Display media at this date. Format is %Y%m%d
     """
-    full_url =  'http://www.ruv.is/sarpurinn{0}'.format(rel_url)
-    for video in scraper.get_videos(full_url):
-        name, url = video
-        INTERFACE.addItem(name.encode('utf-8'), 'play', url.encode('utf-8'))
+
+    if date_string.startswith('<<'):
+        format = "<< %d.%m.%Y"
+    elif date_string.endswith('>>'):
+        format = "%d.%m.%Y >>"
+    else:
+        format = None
+        date = datetime.today()
+
+    if format:
+        date = scraper.strptime(date_string, format)
+
+    url = "http://www.ruv.is/sarpur/app/json/{0}/{1}".format(category_id, date.strftime("%Y%m%d"))
+    shows = json.loads(requests.get(url).content)
+
+    day_before = date + timedelta(days=-1)
+    next_day = date + timedelta(days=1)
+    INTERFACE.add_dir(u"<< {0}".format(day_before.strftime("%d.%m.%Y")),
+                      'view_category',
+                      category_id)
+    INTERFACE.add_dir("{0} >>".format((next_day.strftime("%d.%m.%Y"))),
+                      'view_category',
+                      category_id)
+
+    for show in shows['events']:
+        ev = show['event']
+        showtime = datetime.fromtimestamp(float(ev['start_time']))
+        end_time = datetime.fromtimestamp(float(ev['end_time']))
+        in_progress = showtime < datetime.now() < end_time
+        duration = (end_time - showtime).seconds / 60
+
+        title = u"{1} - {0}".format(
+            ev['title'],
+            in_progress and u"[COLOR blue]Í GANGI[/COLOR]" or showtime.strftime("%H:%M"))
+        original_title = ev.get('orginal_title')
+        description = ev.get('description', '').strip()
+        if original_title and description:
+            plot = u"{0} - {1}".format(original_title, description)
+        elif description:
+            plot = description
+        elif original_title:
+            plot = original_title
+        else:
+            plot = u""
+
+        meta = {
+            'TVShowTitle': title,
+            'Episode': ev['episode_number'],
+            'Premiered': showtime.strftime("%d.%m.%Y"),
+            'TotalEpisodes': ev['number_of_episodes'],
+            'Plot': plot,
+            'Duration': duration,
+            'fanart_image': ev.get('picture')
+        }
+
+        if in_progress:
+            INTERFACE.add_item(title,
+                               'play_live',
+                               category_id,
+                               image=ev.get('picture'),
+                               extra_info=meta)
+
+        elif ev.get('media'):
+            INTERFACE.add_item(title,
+                               'play_file',
+                               ev.get('media'),
+                               image=ev.get('picture'),
+                               extra_info=meta)
+        else:
+            INTERFACE.add_item(title,
+                               'play_url',
+                               ev.get('url'),
+                               image=ev.get('picture'),
+                               extra_info=meta)
+
 
 def podcast_index():
     """
-    .. py:function:: podcast_index()
-
     List all the podcasts.
     """
     for show in scraper.get_podcast_shows(sarpur.PODCAST_URL):
-        name, url = show
-        INTERFACE.addDir(name.encode('utf-8'), 'view_podcast_show', url)
+        INTERFACE.add_dir(show['name'],
+                          'view_podcast_show',
+                          show['url'],
+                          image=show['img'])
+
 
 def podcast_show(url, name):
     """
-    .. py:function:: podcast_show(url, name)
+    List all the recordings in a podcast.
 
-    List all the recordings for a podcast show.
-
-    :param url: The podcast url (xml file)
+    :param url: The podcast url (xml/rss file)
     :param name: The name of the show
     """
     for recording in scraper.get_podcast_episodes(url):
-        date, url = recording
-        title = "{0} - {1}".format(name, date.encode('utf-8'))
-        INTERFACE.addItem(title, 'play_podcast', url.encode('utf-8'))
+        INTERFACE.add_item(recording['title'],
+                           'play_podcast',
+                           recording['url'],
+                           extra_info=recording)
+
+
+def search():
+    query = INTERFACE.keyboard(u"Leita að efni")
+    if not query:
+        index()
+    else:
+        for show in scraper.search(query):
+            INTERFACE.add_item(show['name'],
+                               'play_url',
+                               show['url'],
+                               image=show['img'],
+                               extra_info=show)

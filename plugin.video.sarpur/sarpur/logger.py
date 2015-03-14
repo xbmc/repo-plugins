@@ -4,11 +4,10 @@
 import xbmc
 import sarpur
 
+
 def log(message):
     """
-    .. py:function:: log(message)
-
-    This is the preferred way to log things in XBMC (rahter than using print)
+    This is the preferred way to log things in Kodi (rather than using print)
 
     :param message to log
     """

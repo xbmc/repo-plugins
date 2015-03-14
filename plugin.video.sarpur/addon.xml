@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.sarpur"
        name="Sarpur"
-       version="3.2.0"
+       version="4.0.0"
        provider-name="Dagur Páll Ammendrup">
-  <requires>
-    <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.beautifulsoup4" version="4.3.2"/>
-    <import addon="script.module.simplejson" version="2.0.10"/>
-    <import addon="script.module.requests" version="2.3.0"/>
-  </requires>
-  <extension point="xbmc.python.pluginsource"
-            library="default.py">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+        <import addon="script.module.simplejson" version="2.0.10"/>
+        <import addon="script.module.requests" version="2.3.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource"
+               library="default.py">
         <provides>audio video</provides>
-  </extension>
-  <extension point="xbmc.addon.metadata">
-    <summary lang="en">Play media off the Icelandic Public Radio's website</summary>
-    <description lang="en">An Icelandic IP-Address is required to use this because of geoblocking</description>
-    <platform>all</platform>
-    <language>is</language>
-    <license>MIT</license>
-    <forum>http://spjall.vaktin.is/viewtopic.php?p=538688</forum>
-    <website>https://github.com/Dagur/sarpur-xbmc</website>
-    <source>https://github.com/Dagur/sarpur-xbmc.git</source>
-    <email></email>
-  </extension>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Play media off the Icelandic Public Radio's website</summary>
+        <description lang="en">An Icelandic IP-Address is required to use this because of geoblocking</description>
+        <platform>all</platform>
+        <language>is</language>
+        <license>MIT</license>
+        <forum>http://spjall.vaktin.is/viewtopic.php?p=538688</forum>
+        <website>https://github.com/Dagur/sarpur-xbmc</website>
+        <source>https://github.com/Dagur/sarpur-xbmc.git</source>
+        <email></email>
+    </extension>
 </addon>

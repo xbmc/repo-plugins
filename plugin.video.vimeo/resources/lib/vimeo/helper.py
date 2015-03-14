@@ -1,3 +1,5 @@
+import re
+from resources.lib import kodion
 from resources.lib.kodion.items import VideoItem, NextPageItem
 from resources.lib.kodion.items.directory_item import DirectoryItem
 
@@ -14,7 +16,7 @@ def do_xml_to_video_stream(context, provider, xml):
     root = ET.fromstring(xml)
     video = root.find('video')
     if video is not None:
-        for video_file in video.iter('file'):
+        for video_file in video:
             height = int(video_file.get('height'))
             url = video_file.get('url')
             mime_type = video_file.get('mime_type')
@@ -32,9 +34,9 @@ def do_xml_to_video_stream(context, provider, xml):
 
 def _do_next_page(result, xml_element, context, provider):
     if len(result) > 0:
-        current_page = int(xml_element.get('page', '1'))
-        items_per_page = int(xml_element.get('perpage', '1'))
-        total_items = int(xml_element.get('total', '1'))
+        current_page = int(xml_element.get('page'))
+        items_per_page = int(xml_element.get('perpage'))
+        total_items = int(xml_element.get('total'))
         if items_per_page * current_page < total_items:
             next_page_item = NextPageItem(context, current_page)
             next_page_item.set_fanart(provider.get_fanart(context))
@@ -58,9 +60,9 @@ def do_xml_error(context, provider, root_element):
             explanation = error_item.get('expl')
             message = '%s - %s' % (message, explanation)
             context.get_ui().show_notification(message, time_milliseconds=15000)
-            pass
+            return False
         pass
-    pass
+    return True
 
 
 def do_xml_video_response(context, provider, video_xml):
@@ -78,7 +80,7 @@ def do_xml_video_response(context, provider, video_xml):
     channel_name = ''
     owner = video_xml.find('owner')
     if owner is not None:
-        channel_name = owner.get('username', '')
+        channel_name = owner.get('username')
         pass
     video_item.set_studio(channel_name)
     video_item.add_artist(channel_name)
@@ -114,7 +116,7 @@ def do_xml_video_response(context, provider, video_xml):
     video_item.set_plot(plot)
 
     # duration
-    duration = int(video_xml.find('duration', '0').text)
+    duration = int(video_xml.find('duration').text)
     if duration is not None:
         video_item.set_duration_from_seconds(duration)
         pass
@@ -122,8 +124,8 @@ def do_xml_video_response(context, provider, video_xml):
     # thumbs
     thumbnails = video_xml.find('thumbnails')
     if thumbnails is not None:
-        for thumbnail in video_xml.iter('thumbnail'):
-            height = int(thumbnail.get('height', '0'))
+        for thumbnail in thumbnails:
+            height = int(thumbnail.get('height'))
             if height >= 360:
                 video_item.set_image(thumbnail.text)
                 break
@@ -135,7 +137,7 @@ def do_xml_video_response(context, provider, video_xml):
     context_menu = []
     if provider.is_logged_in():
         # like/unlike
-        is_like = video_xml.get('is_like', '0') == '1'
+        is_like = video_xml.get('is_like') == '1'
         if is_like:
             like_text = context.localize(provider._local_map['vimeo.unlike'])
             context_menu.append(
@@ -147,18 +149,26 @@ def do_xml_video_response(context, provider, video_xml):
             pass
 
         # watch later
-        is_watch_later = video_xml.get('is_watchlater', '0') == '1'
+        is_watch_later = video_xml.get('is_watchlater') == '1'
         if is_watch_later:
             watch_later_text = context.localize(provider._local_map['vimeo.watch-later.remove'])
             context_menu.append(
                 (watch_later_text,
-                 'RunPlugin(%s)' % context.create_uri(['video', video_id, 'watch-later'], {'later': '0'})))
+                 'RunPlugin(%s)' % context.create_uri(['video', 'watch-later', 'remove'], {'video_id': video_id})))
         else:
             watch_later_text = context.localize(provider._local_map['vimeo.watch-later.add'])
             context_menu.append(
                 (watch_later_text,
-                 'RunPlugin(%s)' % context.create_uri(['video', video_id, 'watch-later'], {'later': '1'})))
+                 'RunPlugin(%s)' % context.create_uri(['video', 'watch-later', 'add'], {'video_id': video_id})))
             pass
+
+        # add to * (album, channel or group)
+        context_menu.append((context.localize(provider._local_map['vimeo.video.add-to']),
+                             'RunPlugin(%s)' % context.create_uri(['video', 'add-to'], {'video_id': video_id})))
+
+        # remove from * (album, channel or group)
+        context_menu.append((context.localize(provider._local_map['vimeo.video.remove-from']),
+                             'RunPlugin(%s)' % context.create_uri(['video', 'remove-from'], {'video_id': video_id})))
         pass
 
     # Go to user
@@ -166,8 +176,8 @@ def do_xml_video_response(context, provider, video_xml):
     if owner is not None:
         owner_name = owner.get('display_name')
         owner_id = owner.get('id')
-        context_menu.append((context.localize(provider._local_map['vimeo.user.go-to']) % '[B]'+owner_name+'[/B]',
-                            'Container.Update(%s)' % context.create_uri(['user', owner_id])))
+        context_menu.append((context.localize(provider._local_map['vimeo.user.go-to']) % '[B]' + owner_name + '[/B]',
+                             'Container.Update(%s)' % context.create_uri(['user', owner_id])))
         pass
 
     video_item.set_context_menu(context_menu)
@@ -181,7 +191,7 @@ def do_xml_videos_response(context, provider, xml):
 
     videos = root.find('videos')
     if videos is not None:
-        for video in videos.iter('video'):
+        for video in videos:
             result.append(do_xml_video_response(context, provider, video))
             pass
 
@@ -189,7 +199,7 @@ def do_xml_videos_response(context, provider, xml):
     return result
 
 
-def do_xml_channel_response(context, provider, channel):
+def do_xml_channel_response(user_id, context, provider, channel):
     if isinstance(channel, basestring):
         channel = ET.fromstring(channel)
         do_xml_error(context, provider, channel)
@@ -198,7 +208,7 @@ def do_xml_channel_response(context, provider, channel):
 
     channel_id = channel.get('id')
     channel_name = channel.find('name').text
-    is_subscribed = channel.get('is_subscribed', '0') == '1'
+    is_subscribed = channel.get('is_subscribed') == '1'
     if provider.is_logged_in() and not is_subscribed:
         channel_name = '[I]%s[/I]' % channel_name
         pass
@@ -214,7 +224,8 @@ def do_xml_channel_response(context, provider, channel):
             pass
         pass
 
-    channel_item = DirectoryItem(channel_name, context.create_uri(['channel', channel_id]), image=image)
+    channel_item = DirectoryItem(channel_name, context.create_uri(['user', user_id, 'channel', channel_id]),
+                                 image=image)
 
     # context menu
     context_menu = []
@@ -235,15 +246,15 @@ def do_xml_channel_response(context, provider, channel):
     return channel_item
 
 
-def do_xml_channels_response(context, provider, xml):
+def do_xml_channels_response(user_id, context, provider, xml):
     result = []
     root = ET.fromstring(xml)
     do_xml_error(context, provider, root)
 
     channels = root.find('channels')
     if channels is not None:
-        for channel in channels.iter('channel'):
-            result.append(do_xml_channel_response(context, provider, channel))
+        for channel in channels:
+            result.append(do_xml_channel_response(user_id, context, provider, channel))
             pass
 
         _do_next_page(result, channels, context, provider)
@@ -266,8 +277,8 @@ def do_xml_album_response(user_id, context, provider, album):
     if thumbnail_video is not None:
         thumbnails = thumbnail_video.find('thumbnails')
         if thumbnails is not None:
-            for thumbnail in thumbnails.iter('thumbnail'):
-                height = int(thumbnail.get('height', '0'))
+            for thumbnail in thumbnails:
+                height = int(thumbnail.get('height'))
                 if height >= 360:
                     album_item.set_image(thumbnail.text)
                     break
@@ -284,7 +295,7 @@ def do_xml_albums_response(user_id, context, provider, xml):
 
     albums = root.find('albums')
     if albums is not None:
-        for album in albums.iter('album'):
+        for album in albums:
             result.append(do_xml_album_response(user_id, context, provider, album))
             pass
 
@@ -292,7 +303,7 @@ def do_xml_albums_response(user_id, context, provider, xml):
     return result
 
 
-def do_xml_group_response(context, provider, group):
+def do_xml_group_response(user_id, context, provider, group):
     if isinstance(group, basestring):
         group = ET.fromstring(group)
         do_xml_error(context, provider, group)
@@ -301,7 +312,7 @@ def do_xml_group_response(context, provider, group):
 
     group_id = group.get('id')
     group_name = group.find('name').text
-    has_joined = group.get('has_joined', '0') == '1'
+    has_joined = group.get('has_joined') == '1'
     if provider.is_logged_in() and not has_joined:
         group_name = '[I]%s[/I]' % group_name
         pass
@@ -317,7 +328,7 @@ def do_xml_group_response(context, provider, group):
             pass
         pass
 
-    group_item = DirectoryItem(group_name, context.create_uri(['group', group_id]), image=image)
+    group_item = DirectoryItem(group_name, context.create_uri(['user', user_id, 'group', group_id]), image=image)
 
     # context menu
     context_menu = []
@@ -338,15 +349,15 @@ def do_xml_group_response(context, provider, group):
     return group_item
 
 
-def do_xml_groups_response(context, provider, xml):
+def do_xml_groups_response(user_id, context, provider, xml):
     result = []
     root = ET.fromstring(xml)
     do_xml_error(context, provider, root)
 
     groups = root.find('groups')
     if groups is not None:
-        for group in groups.iter('group'):
-            result.append(do_xml_group_response(context, provider, group))
+        for group in groups:
+            result.append(do_xml_group_response(user_id, context, provider, group))
             pass
 
         _do_next_page(result, groups, context, provider)
@@ -360,7 +371,7 @@ def do_xml_user_response(context, provider, xml):
 
     contacts = root.find('contacts')
     if contacts is not None:
-        for contact in contacts.iter('contact'):
+        for contact in contacts:
             user_id = contact.get('id')
             username = contact.get('username')
             display_name = contact.get('display_name')
@@ -370,8 +381,8 @@ def do_xml_user_response(context, provider, xml):
             # portraits
             portraits = contact.find('portraits')
             if portraits is not None:
-                for portrait in portraits.iter('portrait'):
-                    height = int(portrait.get('height', '0'))
+                for portrait in portraits:
+                    height = int(portrait.get('height'))
                     if height >= 256:
                         contact_item.set_image(portrait.text)
                         break
@@ -386,4 +397,171 @@ def do_xml_user_response(context, provider, xml):
         _do_next_page(result, contacts, context, provider)
         pass
 
+    return result
+
+
+def do_manage_video_for_x(video_id, category, provider, context, add):
+    id_filter = []
+    if category in ['album', 'group', 'channel']:
+        client = provider.get_client(context)
+        root = ET.fromstring(client.get_collections(video_id=video_id))
+        do_xml_error(context, provider, root)
+        collections = root.find('collections')
+        if collections is not None:
+            for collection in collections:
+                if collection.get('type') == category:
+                    id_filter.append(collection.get('id'))
+                    pass
+                pass
+            pass
+        pass
+
+    if category == 'album':
+        do_manage_video_for_album(video_id, provider, context, id_filter=id_filter, add=add)
+        pass
+    elif category == 'group':
+        do_manage_video_for_group(video_id, provider, context, id_filter=id_filter, add=add)
+        pass
+    elif category == 'channel':
+        do_manage_video_for_channel(video_id, provider, context, id_filter=id_filter, add=add)
+        pass
+    return True
+
+
+def do_manage_video_for_album(video_id, provider, context, id_filter, add):
+    client = provider.get_client(context)
+
+    items = []
+    root = ET.fromstring(client.get_albums(page=1))
+    do_xml_error(context, provider, root)
+    albums = root.find('albums')
+    if albums is not None:
+        for album in albums:
+            album_id = album.get('id')
+            if (add and album_id not in id_filter) or (not add and album_id in id_filter):
+                album_name = album.find('title').text
+                items.append((album_name, album_id))
+                pass
+            pass
+        pass
+    if not items:
+        if add:
+            context.get_ui().show_notification(context.localize(provider._local_map['vimeo.adding.no-album']), time_milliseconds=5000)
+        else:
+            context.get_ui().show_notification(context.localize(provider._local_map['vimeo.removing.no-album']), time_milliseconds=5000)
+            pass
+        return False
+
+    result = context.get_ui().on_select(context.localize(provider._local_map['vimeo.select']), items)
+    if result != -1:
+        root = ''
+        if add:
+            root = ET.fromstring(client.add_video_to_album(video_id, result))
+        else:
+            root = ET.fromstring(client.remove_video_from_album(video_id, result))
+            pass
+        return do_xml_error(context, provider, root)
+
+    return True
+
+
+def do_manage_video_for_group(video_id, provider, context, id_filter, add):
+    client = provider.get_client(context)
+
+    items = []
+    root = ET.fromstring(client.get_groups(page=1))
+    if not do_xml_error(context, provider, root):
+        return False
+
+    groups = root.find('groups')
+    if groups is not None:
+        for group in groups:
+            group_id = group.get('id')
+            if (add and group_id not in id_filter) or (not add and group_id in id_filter):
+                group_name = group.find('name').text
+                items.append((group_name, group_id))
+                pass
+            pass
+        pass
+    if not items:
+        if add:
+            context.get_ui().show_notification(context.localize(provider._local_map['vimeo.adding.no-group']), time_milliseconds=5000)
+        else:
+            context.get_ui().show_notification(context.localize(provider._local_map['vimeo.removing.no-group']), time_milliseconds=5000)
+            pass
+        return False
+
+    result = context.get_ui().on_select(context.localize(provider._local_map['vimeo.select']), items)
+    if result != -1:
+        root = ''
+        if add:
+            root = ET.fromstring(client.add_video_to_group(video_id, result))
+        else:
+            root = ET.fromstring(client.remove_video_from_group(video_id, result))
+            pass
+        return do_xml_error(context, provider, root)
+
+    return True
+
+
+def do_manage_video_for_channel(video_id, provider, context, id_filter, add):
+    client = provider.get_client(context)
+
+    items = []
+    root = ET.fromstring(client.get_channels_moderated(page=1))
+    if not do_xml_error(context, provider, root):
+        return False
+
+    channels = root.find('channels')
+    if channels is not None:
+        for channel in channels:
+            channel_id = channel.get('id')
+            if (add and channel_id not in id_filter) or (not add and channel_id in id_filter):
+                channel_name = channel.find('name').text
+                items.append((channel_name, channel_id))
+                pass
+            pass
+        pass
+    if not items:
+        if add:
+            context.get_ui().show_notification(context.localize(provider._local_map['vimeo.adding.no-channel']), time_milliseconds=5000)
+        else:
+            context.get_ui().show_notification(context.localize(provider._local_map['vimeo.removing.no-channel']), time_milliseconds=5000)
+            pass
+        return False
+
+    result = context.get_ui().on_select(context.localize(provider._local_map['vimeo.select']), items)
+    if result != -1:
+        root = ''
+        if add:
+            root = ET.fromstring(client.add_video_to_channel(video_id, result))
+        else:
+            root = ET.fromstring(client.remove_video_from_channel(video_id, result))
+            pass
+        return do_xml_error(context, provider, root)
+
+    return True
+
+
+def do_xml_featured_response(context, provider, xml):
+    root = ET.fromstring(xml)
+    if not do_xml_error(context, provider, root):
+        return []
+
+    result = []
+    for item in root:
+        item_type = item.find('type').text
+        if item_type == 'channel':
+            channel_id = item.find('id').text
+            channel_name = item.find('title').text
+            channel_image = item.find('header_url').text
+
+            channel_item = DirectoryItem(channel_name, context.create_uri(['channel', channel_id]),
+                                         image=channel_image)
+            channel_item.set_fanart(provider.get_fanart(context))
+            result.append(channel_item)
+            pass
+        else:
+            raise kodion.KodionException('Unknown type "%s" for featured' % item_type)
+        pass
     return result

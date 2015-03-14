@@ -29,6 +29,11 @@ class TestClient(unittest.TestCase):
                                              params=params)
         pass
 
+    def test_get_video_streams(self):
+        client = Client()
+        streams = client.get_video_streams(video_id='121124509')
+        pass
+
     def test_search(self):
         client = self.get_client()
         xml_data = client.search(query='daredevil')

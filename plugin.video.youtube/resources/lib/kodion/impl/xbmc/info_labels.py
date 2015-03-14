@@ -49,16 +49,20 @@ def _process_video_dateadded(info_labels, param):
     pass
 
 
-def _process_video_duration(info_labels, param):
+def _process_video_duration(context, info_labels, param):
     if param is not None:
+        # Starting with KODI 15.0 (Isengard) we can use seconds
+        if context.get_system_version().get_version() >= (15, 0):
+            info_labels['duration'] = int(param)
+            return
+
+        # fallback for all system before KODI 15.0 (Isengard)
         if int(param) < 60:
             param = 60
             pass
 
         minutes = int(param) / 60
         seconds = int(param) % 60
-        #info_labels['duration'] = '%02d:%02d' % (minutes, seconds)
-        #TODO: based on the API version we have to call this differently in the future
         info_labels['duration'] = '%d' % minutes
         pass
     pass
@@ -94,7 +98,7 @@ def _process_list_value(info_labels, name, param):
     pass
 
 
-def create_from_item(base_item):
+def create_from_item(context, base_item):
     info_labels = {}
 
     # 'date' = '09.03.1982'
@@ -137,7 +141,7 @@ def create_from_item(base_item):
 
         # TODO: starting with Helix this could be seconds
         # 'duration' = '3:18' (string)
-        _process_video_duration(info_labels, base_item.get_duration())
+        _process_video_duration(context, info_labels, base_item.get_duration())
 
         # 'rating' = 4.5 (float)
         _process_video_rating(info_labels, base_item.get_rating())

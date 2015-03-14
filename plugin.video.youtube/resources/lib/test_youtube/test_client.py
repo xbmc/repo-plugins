@@ -205,6 +205,9 @@ class TestClient(unittest.TestCase):
         client = YouTube()
 
         context = kodion.Context()
+        #streams = client.get_video_streams(context, 'vIi57zhDl78')
+        #self.assertGreater(len(streams), 0)
+
         # #190 - viewster video
         streams = client.get_video_streams(context, 'xq2aaB_Awno')
         self.assertGreater(len(streams), 0)

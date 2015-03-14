@@ -122,12 +122,23 @@ class Provider(kodion.AbstractProvider):
                     pass
 
                 self._is_logged_in = access_token != ''
+
+                # in debug log the login status
+                if self._is_logged_in:
+                    context.log_debug('User is logged in')
+                else:
+                    context.log_debug('User is not logged in')
+                    pass
+
                 self._client = YouTube(items_per_page=items_per_page, access_token=access_token,
                                        language=language)
                 self._client.set_log_error(context.log_error)
             else:
                 self._client = YouTube(items_per_page=items_per_page, language=language)
                 self._client.set_log_error(context.log_error)
+
+                # in debug log the login status
+                context.log_debug('User is not logged in')
                 pass
             pass
 
@@ -141,6 +152,23 @@ class Provider(kodion.AbstractProvider):
 
     def get_fanart(self, context):
         return context.create_resource_path('media', 'fanart.jpg')
+
+    @kodion.RegisterProviderPath('^/playlist/(?P<playlist_id>.*)/$')
+    def _on_playlist(self, context, re_match):
+        self.set_content_type(context, kodion.constants.content_type.EPISODES)
+
+        result = []
+
+        playlist_id = re_match.group('playlist_id')
+        page_token = context.get_param('page_token', '')
+
+        # no caching
+        json_data = self.get_client(context).get_playlist_items(playlist_id=playlist_id, page_token=page_token)
+        if not v3.handle_error(self, context, json_data):
+            return False
+        result.extend(v3.response_to_items(self, context, json_data))
+
+        return result
 
     """
     Lists the videos of a playlist.

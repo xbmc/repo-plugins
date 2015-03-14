@@ -86,7 +86,7 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
 
         # try to find a better resolution for the image
         thumbnails = snippet.get('thumbnails', {})
-        thumbnail_sizes = ['high', 'medium']
+        thumbnail_sizes = ['high', 'medium', 'default']
         for thumbnail_size in thumbnail_sizes:
             image = thumbnails.get(thumbnail_size, {}).get('url', '')
             if image:

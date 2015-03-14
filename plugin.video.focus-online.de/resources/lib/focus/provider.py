@@ -11,7 +11,8 @@ __author__ = 'bromix'
 class Provider(kodion.AbstractProvider):
     def __init__(self):
         kodion.AbstractProvider.__init__(self)
-        self._local_map.update({'focus.related': 30500})
+        self._local_map.update({'focus.related': 30500,
+                                'focus.all-videos': 30501})
         self._client = None
         pass
 
@@ -40,7 +41,7 @@ class Provider(kodion.AbstractProvider):
         url = context.get_param('url')
 
         client = self.get_client(context)
-        json_data = context.get_function_cache().get(FunctionCache.ONE_MINUTE*15, client.get_url_data, url)
+        json_data = context.get_function_cache().get(FunctionCache.ONE_MINUTE * 15, client.get_url_data, url)
         video_streams = client.get_video_streams_from_data(json_data)
         video_stream = kodion.utils.find_best_fit(video_streams, _compare)
         return UriItem(video_stream['url'])
@@ -75,14 +76,21 @@ class Provider(kodion.AbstractProvider):
         context.set_content_type(kodion.constants.content_type.EPISODES)
         url = context.get_param('url')
         client = self.get_client(context)
-        json_data = context.get_function_cache().get(FunctionCache.ONE_MINUTE*15, client.get_url_data, url)
+        json_data = context.get_function_cache().get(FunctionCache.ONE_MINUTE * 15, client.get_url_data, url)
         json_data = client.get_related_from_data(json_data)
         return self._do_videos(context, json_data)
         pass
 
+    @kodion.RegisterProviderPath('^/all-videos/$')
+    def _on_all_videos(self, context, re_match):
+        context.set_content_type(kodion.constants.content_type.EPISODES)
+        client = self.get_client(context)
+        json_data = context.get_function_cache().get(FunctionCache.ONE_HOUR, client.get_root_data)
+        json_data = client.get_all_videos(json_data)
+        return self._do_videos(context=context, json_data=json_data)
+
     @kodion.RegisterProviderPath('^/category/(?P<category>.+)/$')
     def _on_category(self, context, re_match):
-        context.set_content_type(kodion.constants.content_type.EPISODES)
         category = re_match.group('category')
         client = self.get_client(context)
         json_data = context.get_function_cache().get(FunctionCache.ONE_HOUR, client.get_root_data)
@@ -91,6 +99,13 @@ class Provider(kodion.AbstractProvider):
 
     def on_root(self, context, re_match):
         result = []
+
+        # all videos
+        all_videos_item = DirectoryItem('[B]' + context.localize(self._local_map['focus.all-videos']) + '[/B]',
+                                        context.create_uri(['all-videos']))
+        all_videos_item.set_image(context.create_resource_path('media', 'category.png'))
+        all_videos_item.set_fanart(self.get_fanart(context))
+        result.append(all_videos_item)
 
         # categories
         client = self.get_client(context)

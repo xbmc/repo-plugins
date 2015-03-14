@@ -26,7 +26,7 @@ class XbmcContext(AbstractContext):
             self._addon = xbmcaddon.Addon()
             pass
 
-        self._system_version = XbmcSystemVersion()
+        self._system_version = None
 
         """
         I don't know what xbmc/kodi is doing with a simple uri, but we have to extract the information from the
@@ -91,6 +91,10 @@ class XbmcContext(AbstractContext):
             return 'en-US'
 
     def get_system_version(self):
+        if not self._system_version:
+            self._system_version = XbmcSystemVersion()
+            pass
+
         return self._system_version
 
     def get_video_playlist(self):

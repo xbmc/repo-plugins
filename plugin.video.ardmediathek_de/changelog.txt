@@ -1,0 +1,37 @@
+3.0.0
+- Initial release for new website layout
+3.0.1
+- Fixed stream/quality selection for some videos
+3.0.2
+- Fixed search
+- Fixed "Das Erste" live stream
+3.0.3
+- Fixed show listing
+3.0.4
+- Fixed category listing
+3.0.5
+- MDR can deliver 720p streams now (disabled by default)
+- Added a quality selection
+- Now prefers http streams instead of rtmp
+- Rewrote the playback selection - it should be stable now
+3.0.6
+- Fixed "next page"
+- Added support for a new kind of subtitles
+3.0.7
+- Fixed a bug with new subtitles
+- Added color support for old subtitles
+- Some refactoring of the code
+3.1.0
+- Initial support for f4m streams (buggy)
+- Removed livestreams (use the IPTV Simple Add-on instead)
+- Switched to RSS/XML
+- Added video description
+- 50 entries per page now possible
+- Added "next page" button
+- Improved subtitle support
+- Podcasts will be ignored
+4.0.0
+- Redone menu structure
+- Show thumbnails will be cached at the highest available quality
+- Rewrote subtitle support
+- Misc fixes

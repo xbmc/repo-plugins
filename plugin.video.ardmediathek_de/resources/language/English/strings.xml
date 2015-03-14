@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30001">New</string>
+  <string id="30002">Most Viewed</string>
+  <string id="30003">Documentaries</string>
+  <string id="30004">Movie Highlights</string>
+  <string id="30005">Shows A-Z</string>
+  <string id="30006">Categories</string>
+  <string id="30007">Dossiers</string>
+  <string id="30008">Search</string>
+  <string id="30009">Next Page</string>
+  <string id="30010">Best Rated</string>
+  <string id="30011">Favorites</string>
+  <string id="30012">Add to queue</string>
+  <string id="30013">Live</string>
+  <string id="30014">EinsLike</string>
+  <string id="30015">Music</string>
+  <string id="30016">Life</string>
+  <string id="30017">Net &amp; Tech</string>
+  <string id="30018">Info</string>
+  <string id="30019">Fun &amp; Fiction</string>
+  <string id="30020">Channels</string>
+  <string id="30028">Add to addon favs</string>
+  <string id="30029">Remove from addon favs</string>
+  <string id="30030">Play alternative Stream-URL</string>
+  <string id="30031">Kids & Family</string>
+  <string id="30032">Culture</string>
+  <string id="30033">Satire & Entertainment</string>
+  <string id="30034">Knowledge</string>
+  <string id="30035">Series & Soaps</string>
+  
+  <string id="30100">General</string>
+  <string id="30101">Force View</string>
+  <string id="30102">ViewID (Videos)</string>
+  <string id="30103">Use thumb as fanart</string>
+  <string id="30104">Activate subtitles (if available)</string>
+  <string id="30105">Show date in title</string>
+  <string id="30106">ViewID (Shows)</string>
+  <string id="30107">Colored subtitles</string>
+  <string id="30108">Show livestreams (unsupported)</string>
+  
+  <string id="30150">Video</string>
+  <string id="30151">Video quality</string>
+  <string id="30152">Low</string>
+  <string id="30153">Medium</string>
+  <string id="30154">High</string>
+  <string id="30155">HD</string>
+  <string id="30156">MDR HD (beta)</string>
+</strings>

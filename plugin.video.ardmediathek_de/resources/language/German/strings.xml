@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30001">Neu</string>
+  <string id="30002">Meistgesehen</string>
+  <string id="30003">Reportagen & Dokus</string>
+  <string id="30004">Film Highlights</string>
+  <string id="30005">Sendungen A-Z</string>
+  <string id="30006">Kategorien</string>
+  <string id="30007">Dossiers</string>
+  <string id="30008">Suche</string>
+  <string id="30009">Nächste Seite</string>
+  <string id="30010">Bestbewertet</string>
+  <string id="30011">Favoriten</string>
+  <string id="30012">Zu Wiedergabeliste hinzufügen</string>
+  <string id="30013">Live</string>
+  <string id="30014">EinsLike</string>
+  <string id="30015">Musik</string>
+  <string id="30016">Leben</string>
+  <string id="30017">Netz & Tech</string>
+  <string id="30018">Info</string>
+  <string id="30019">Spaß & Fiktion</string>
+  <string id="30020">Sendung verpasst?</string>
+  <string id="30028">Zu Addon Favs hinzufügen</string>
+  <string id="30029">Aus Addon Favs entfernen</string>
+  <string id="30030">Alternative Stream-Url abspielen</string>
+  <string id="30031">Kinder & Familie</string>
+  <string id="30032">Kultur</string>
+  <string id="30033">Satire & Unterhaltung</string>
+  <string id="30034">Wissen</string>
+  <string id="30035">Serien & Soaps</string>
+  
+  <string id="30100">Allgemein</string>
+  <string id="30101">View erzwingen</string>
+  <string id="30103">Thumb als Fanart nutzen</string>
+  <string id="30104">Untertitel aktivieren (falls verfügbar)</string>
+  <string id="30105">Datum im Titel anzeigen</string>
+  <string id="30106">ViewID (Sendungen)</string>
+  <string id="30107">Farbige Untertitel</string>
+  <string id="30108">Livestreams anzeigen (ohne Support)</string>
+  
+  <string id="30150">Video</string>
+  <string id="30151">Videoqualität</string>
+  <string id="30152">Niedrig</string>
+  <string id="30153">Mittel</string>
+  <string id="30154">Hoch</string>
+  <string id="30155">HD</string>
+  <string id="30156">MDR HD aktivieren (experimentell)</string>
+</strings>

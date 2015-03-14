@@ -1,0 +1,18 @@
+<settings>
+  <category label="30100">
+    <setting id="showSubtitles" type="bool" label="30104" default="false"/>
+    <setting id="coloredSubtitles" type="bool" label="30107" default="true" enable="eq(-1,true)"/>
+    <setting type="sep"/>
+    <!--<setting id="showDateInTitle" type="bool" label="30105" default="true"/>-->
+    <setting id="useThumbAsFanart" type="bool" label="30103" default="true"/>
+    <setting id="forceViewMode" type="bool" label="30101" default="true"/>
+    <setting id="viewIDShows" type="number" label="30106" default="500"/>
+    <setting id="viewIDVideos" type="number" label="30102" default="51"/>
+    <setting type="sep"/>
+    <setting id="listLive" type="bool" label="30108" default="false"/>
+  </category>
+  <category label="30150">
+    <setting id="videoQuality" type="enum" lvalues="30152|30153|30154|30155" label="30151" default="3"/>
+    <!--<setting id="mdrHd" type="bool" label="30156" default="false"/>-->
+  </category>
+</settings>

@@ -481,6 +481,7 @@ class YouTube(LoginClient):
             pass
         _headers = {'Host': 'www.googleapis.com',
                     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.36 Safari/537.36',
+                    'Accept-Encoding': 'gzip, deflate',
                     'X-JavaScript-User-Agent': 'Google APIs Explorer'}
         if self._access_token:
             _headers['Authorization'] = 'Bearer %s' % self._access_token
@@ -533,6 +534,7 @@ class YouTube(LoginClient):
         _headers = {'Host': 'gdata.youtube.com',
                     'X-GData-Key': 'key=%s' % self._key,
                     'GData-Version': '2.1',
+                    'Accept-Encoding': 'gzip, deflate',
                     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.36 Safari/537.36'}
         if self._access_token:
             _headers['Authorization'] = 'Bearer %s' % self._access_token

@@ -530,9 +530,9 @@ class VideoInfo(object):
                     url = '%s?%s' % (conn, urllib.unquote(stream_map['stream']))
                     itag = stream_map['itag']
                     format = self.FORMAT.get(itag, None)
-                    format['rtmpe'] = True
                     if not format:
                         raise Exception('unknown format for itag "%s"' % itag)
+                    format['rtmpe'] = True
                     video_stream = {'url': url,
                                     'format': format}
 

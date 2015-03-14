@@ -1,3 +1,8 @@
+5.0.9 (2015-03-14)
+ADD: 'duration' optimized for KODI 15.X (Isengard)
+ADD: EndPoint for listing the videos of a playlist: "plugin://plugin.video.youtube/playlist/<PLAYLIST_ID>/"
+UPD: optimized client-/server transfer (use gzip)
+
 5.0.8 (2015-03-05)
 UPD: Polish (thx 2 Etharr)
 UPD: Russian (thx 2 BytEvil)

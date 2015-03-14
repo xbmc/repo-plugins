@@ -14,7 +14,11 @@ GadgetReactor
 =================
 Changelog
 =================
-V1.5.1
+
+V1.5.5 - 2015-03-11
+Updated regular expressions to cope with website changes
+
+V1.5.1 - 2014-11-17
 Updated revision numbering
 Updated Addon.xml 
 Updated icon

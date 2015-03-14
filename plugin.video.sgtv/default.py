@@ -15,7 +15,7 @@ def openUrl(url):
 	retries = 0
 	while retries < 2:
 		try:
-			req = urllib2.Request(url, None, {'User-Agent':'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.124 Safari/537.36'})
+			req = urllib2.Request(url.encode('utf-8'), None, {'User-Agent':'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.124 Safari/537.36'})
 			content = urllib2.urlopen(req)
 			if content.info().getheader('Content-Encoding') == 'gzip':
 				buf = StringIO( content.read())
@@ -78,11 +78,11 @@ def addXBMCItem(name, thumbnail, action_url, isFolder, Fanart_Image=None, infoLa
 
 def channelShows(channel):
 	data=openUrl("http://xin.msn.com/en-sg/video/catchup/")		
-	showlist  = re.compile('<div class="list"  data-module-id="homepage\|%s\|Tab\|(.*?)\|.+?:&quot;(.+?)&quot' % (channel)).findall(data)
+	showlist  = re.compile('<div data-tabkey="tab-(\d+)".*?homepage\|%s\|tab\|(.*?)\|.+?:&quot;(.+?)&quot' % (channel)).findall(data)
 
-	for show, thumb in showlist:
+	for tab, show, thumb in showlist:
 		image = 'http:'+ thumb.replace('&amp;','&')
-		addXBMCItem (htmlParse(show), image, "?mode=getEpisodes&channel="+urllib.quote_plus(channel)+"&show="+urllib.quote_plus(show), True)
+		addXBMCItem (htmlParse(show), image, "?mode=getEpisodes&channel="+channel+"&show="+show+"&tab=tab-"+tab, True)
 
 	xbmc.executebuiltin("Container.SetViewMode(500)")
 
@@ -150,15 +150,15 @@ def channelViddsee(page, type):
 	page = str(int(page)+1)
 	addXBMCItem (__language__(31000), os.path.join(__thumbpath__, "viddsee.png"), "?mode=loadViddsee&page="+page+"&type="+type, True)	
 	
-def getEpisodes(channel, show):
+def getEpisodes(channel, show, tab):
 	data=openUrl("http://xin.msn.com/en-sg/video/catchup/")
 
 	if "new" in channel:
 		episodelist = re.compile('<li.+?href="(.+?)".+?:&quot;(.+?)&quot.+?<h4>(.+?)</h4>.+?"duration">(.+?)<.+?</li>').findall(data)	
 
 	else:
-		episodechunk  = re.compile('<div class="list"  data-module-id="homepage\|%s\|Tab\|%s(.+?)(<div data-tabkey|</main>)' % (channel, show)).search(data).group(1)
-		episodelist = re.compile('<li.+?href="(.+?)".+?:&quot;(.+?)&quot.+?<h4>(.+?)</h4>.+?"duration">(.+?)<.+?</li>').findall(episodechunk)	
+		episodechunk  = re.compile('class="section tabsection horizontal".+?data-section-id="%s".+?<div data-tabkey="%s"(.+?)</ul>' % (channel, tab)).search(data).group(1)
+		episodelist = re.compile('<li.+?href="(.+?)".+?:&quot;(.+?)&quot.+?<h4>(.+?)</h4>.+?"duration">(.+?)<.+?</li>').findall(episodechunk)
 
 	for episode_url, thumb, title, time in episodelist:
 		episode_url = "http://xin.msn.com" + episode_url
@@ -235,7 +235,8 @@ elif mode[0]=='loadViddsee':
 elif mode[0]=='getEpisodes':
 	channel = args['channel'][0]
 	show = args['show'][0]
-	getEpisodes(channel, show)	
+	tab = args['tab'][0]
+	getEpisodes(channel, show, tab)	
 elif mode[0]=='resolveMSN':
 	url = args['url'][0]
 	resolveMSN(url)

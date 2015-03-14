@@ -63,7 +63,10 @@
     <string id="30504">Gruppen</string>
     <string id="30505">Alben</string>
     <string id="30506">Videos</string>
-
+    <string id="30507">Keine Gruppe zum Hinzufügen vorhanden</string>
+    <string id="30508">Kein Album zum Hinzufügen vorhanden</string>
+    <string id="30509">Bitte auswählen</string>
+    <string id="30510">Hinzufügen zu...</string>
     <string id="30511">Gehe zu %s</string>
     <string id="30512">Folgen</string>
     <string id="30513">Nicht mehr folgen</string>
@@ -74,4 +77,10 @@
     <string id="30518">Like</string>
     <string id="30519">Unlike</string>
     <string id="30520">Kanalnamen in der Beschreibung anzeigen</string>
+    <string id="30521">Kein Kanal zum Hinzufügen vorhanden</string>
+    <string id="30522">Entfernen von...</string>
+    <string id="30523">Keine Gruppe zum Entfernen vorhanden</string>
+    <string id="30524">Kein Kanal zum Entfernen vorhanden</string>
+    <string id="30525">Kein Album zum Entfernen vorhanden</string>
+    <string id="30526">Featured</string>
 </strings>

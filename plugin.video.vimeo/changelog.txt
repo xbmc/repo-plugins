@@ -1,3 +1,11 @@
+4.0.2 (2015-03-14)
+ADD: 'duration' optimized for KODI 15.X (Isengard)
+ADD: 'Featured' to explore some basic channels
+UPD: optimized code
+ADD: managing (add/remove) video for a group, a channel or an album
+FIX: optimized for python 2.6.5 (mostly Android)
+FIX: Typo resulting in a crash
+
 4.0.1 (2015-03-08)
 ADD: Go to <user>
 ADD: likes, follower, channels, albums, groups

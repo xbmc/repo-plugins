@@ -78,6 +78,7 @@ class TestProvider(unittest.TestCase):
 
         path = kodion.utils.create_path(kodion.constants.paths.SEARCH, 'query')
         context = kodion.Context(path=path, params={'q': 'batman'})
+        context.set_localization(30511, 'Go to %s')
         result = provider.navigate(context)
         items = result[0]
         self.assertGreater(len(items), 0)

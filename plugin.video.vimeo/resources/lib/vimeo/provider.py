@@ -28,7 +28,18 @@ class Provider(kodion.AbstractProvider):
                                 'vimeo.channel.unfollow': 30513,
                                 'vimeo.albums': 30505,
                                 'vimeo.videos': 30506,
-                                'vimeo.user.go-to': 30511})
+                                'vimeo.user.go-to': 30511,
+                                'vimeo.video.add-to': 30510,
+                                'vimeo.select': 30509,
+                                'vimeo.adding.no-group': 30507,
+                                'vimeo.adding.no-channel': 30521,
+                                'vimeo.adding.no-album': 30508,
+                                'vimeo.removing.no-group': 30523,
+                                'vimeo.removing.no-channel': 30524,
+                                'vimeo.removing.no-album': 30525,
+                                'vimeo.remove': 30108,
+                                'vimeo.featured': 30526,
+                                'vimeo.video.remove-from': 30522})
 
         self._client = None
         self._is_logged_in = False
@@ -108,7 +119,17 @@ class Provider(kodion.AbstractProvider):
         return result
 
     # LIST: VIDEO OF A CHANNEL
-    @kodion.RegisterProviderPath('^/channel/(?P<channel_id>\d+)/$')
+    @kodion.RegisterProviderPath('^\/user\/(?P<user_id>me|\d+)\/channel\/(?P<channel_id>\d+)/$')
+    def _on_user_channel(self, context, re_match):
+        self.set_content_type(context, kodion.constants.content_type.EPISODES)
+
+        page = int(context.get_param('page', '1'))
+        channel_id = re_match.group('channel_id')
+        client = self.get_client(context)
+        return helper.do_xml_videos_response(context, self, client.get_channel_videos(channel_id=channel_id, page=page))
+
+    # LIST: VIDEO OF A CHANNEL
+    @kodion.RegisterProviderPath('^\/channel\/(?P<channel_id>.+)/$')
     def _on_channel(self, context, re_match):
         self.set_content_type(context, kodion.constants.content_type.EPISODES)
 
@@ -118,8 +139,8 @@ class Provider(kodion.AbstractProvider):
         return helper.do_xml_videos_response(context, self, client.get_channel_videos(channel_id=channel_id, page=page))
 
     # LIST: VIDEO OF A GROUP
-    @kodion.RegisterProviderPath('^/group/(?P<group_id>\d+)/$')
-    def _on_group(self, context, re_match):
+    @kodion.RegisterProviderPath('^\/user\/(?P<user_id>me|\d+)\/group\/(?P<group_id>\d+)/$')
+    def _on_user_group(self, context, re_match):
         self.set_content_type(context, kodion.constants.content_type.EPISODES)
 
         page = int(context.get_param('page', '1'))
@@ -129,12 +150,13 @@ class Provider(kodion.AbstractProvider):
 
     # LIST: MY FEEDs
     @kodion.RegisterProviderPath('^/user/me/feed/$')
-    def _on_me_feed(self, context, re_match):
+    def _on_my_feed(self, context, re_match):
         self.set_content_type(context, kodion.constants.content_type.EPISODES)
 
         page = int(context.get_param('page', '1'))
         client = self.get_client(context)
-        return helper.do_xml_videos_response(context, self, client.get_my_feed(page=page))
+        xml = client.get_my_feed(page=page)
+        return helper.do_xml_videos_response(context, self, xml)
 
     # LIST: WATCH LATER
     @kodion.RegisterProviderPath('^/user/me/watch-later/$')
@@ -197,24 +219,16 @@ class Provider(kodion.AbstractProvider):
     def _on_user_groups(self, context, re_match):
         page = int(context.get_param('page', '1'))
         user_id = re_match.group('user_id')
-        if user_id == 'me':
-            user_id = None
-            pass
-
         client = self.get_client(context)
-        return helper.do_xml_groups_response(context, self, client.get_groups(user_id=user_id, page=page))
+        return helper.do_xml_groups_response(user_id, context, self, client.get_groups(user_id=user_id, page=page))
 
     # LIST: CHANNELS
     @kodion.RegisterProviderPath('^\/user\/(?P<user_id>me|\d+)\/channels\/$')
     def _on_user_channels(self, context, re_match):
         page = int(context.get_param('page', '1'))
         user_id = re_match.group('user_id')
-        if user_id == 'me':
-            user_id = None
-            pass
-
         client = self.get_client(context)
-        return helper.do_xml_channels_response(context, self, client.get_channels(user_id=user_id, page=page))
+        return helper.do_xml_channels_response(user_id, context, self, client.get_channels_all(user_id=user_id, page=page))
 
     # LIST: LIKES
     @kodion.RegisterProviderPath('^/user/(?P<user_id>me|\d+)/likes/$')
@@ -289,13 +303,43 @@ class Provider(kodion.AbstractProvider):
         context.get_ui().refresh_container()
         return True
 
-    @kodion.RegisterProviderPath('^/video/(?P<video_id>.+)/watch-later/$')
+    @kodion.RegisterProviderPath('^/video/add-to/$')
+    def _on_video_add_to(self, context, re_match):
+        items = [
+            (context.localize(self._local_map['vimeo.groups']), 'group'),
+            (context.localize(self._local_map['vimeo.channels']), 'channel'),
+            (context.localize(self._local_map['vimeo.albums']), 'album')]
+        result = context.get_ui().on_select(context.localize(self._local_map['vimeo.video.add-to']), items)
+        if result != -1:
+            video_id = context.get_param('video_id')
+            helper.do_manage_video_for_x(video_id=video_id, category=result, provider=self, context=context, add=True)
+            pass
+        pass
+
+    @kodion.RegisterProviderPath('^/video/remove-from/$')
+    def _on_video_remove_from(self, context, re_match):
+        items = [
+            (context.localize(self._local_map['vimeo.groups']), 'group'),
+            (context.localize(self._local_map['vimeo.channels']), 'channel'),
+            (context.localize(self._local_map['vimeo.albums']), 'album')]
+        result = context.get_ui().on_select(context.localize(self._local_map['vimeo.video.remove-from']), items)
+        if result != -1:
+            video_id = context.get_param('video_id')
+            helper.do_manage_video_for_x(video_id=video_id, category=result, provider=self, context=context, add=False)
+            pass
+        pass
+
+    @kodion.RegisterProviderPath('^/video/watch-later/(?P<method>add|remove)/$')
     def _on_video_watch_later(self, context, re_match):
-        video_id = re_match.group('video_id')
-        later = context.get_param('later', '0') == '1'
+        video_id = context.get_param('video_id')
+        method = re_match.group('method')
 
         client = self.get_client(context)
-        helper.do_xml_error(context, self, client.watch_video_later(video_id=video_id, later=later))
+        if method == 'add':
+            helper.do_xml_error(context, self, client.add_video_to_watch_later(video_id=video_id))
+        elif method=='remove':
+            helper.do_xml_error(context, self, client.remove_video_from_watch_later(video_id=video_id))
+            pass
 
         context.get_ui().refresh_container()
         return True
@@ -361,10 +405,21 @@ class Provider(kodion.AbstractProvider):
 
         return result
 
+    @kodion.RegisterProviderPath('^/featured/$')
+    def _on_featured(self, context, re_match):
+        return helper.do_xml_featured_response(context, self, self.get_client(context).get_featured())
+
     def on_root(self, context, re_match):
         result = []
 
         client = self.get_client(context)
+
+        # featured
+        featured_item = DirectoryItem(context.localize(self._local_map['vimeo.featured']),
+                                      context.create_uri(['featured']),
+                                      image=context.create_resource_path('media', 'featured.png'))
+        featured_item.set_fanart(self.get_fanart(context))
+        result.append(featured_item)
 
         if self._is_logged_in:
             # my feed

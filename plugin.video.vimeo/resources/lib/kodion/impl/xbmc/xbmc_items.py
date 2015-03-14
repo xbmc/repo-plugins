@@ -23,7 +23,7 @@ def to_video_item(context, video_item):
 
     item.setProperty(u'IsPlayable', u'true')
 
-    item.setInfo(type=u'video', infoLabels=info_labels.create_from_item(video_item))
+    item.setInfo(type=u'video', infoLabels=info_labels.create_from_item(context, video_item))
     return item
 
 
@@ -44,7 +44,7 @@ def to_audio_item(context, audio_item):
 
     item.setProperty(u'IsPlayable', u'true')
 
-    item.setInfo(type=u'music', infoLabels=info_labels.create_from_item(audio_item))
+    item.setInfo(type=u'music', infoLabels=info_labels.create_from_item(context, audio_item))
     return item
 
 

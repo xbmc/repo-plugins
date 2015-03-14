@@ -39,6 +39,15 @@ class Client():
         data = dict(urlparse.parse_qsl(data))
         return data
 
+    def get_collections(self, video_id):
+        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+        post_data = {'method': 'vimeo.videos.getCollections',
+                     'video_id': video_id}
+        return self._perform_v2_request(url='http://vimeo.com/api/rest/v2',
+                                        method='POST',
+                                        headers=headers,
+                                        post_data=post_data)
+
     def search(self, query, page=1):
         if not page:
             page = 1
@@ -73,7 +82,27 @@ class Client():
                                         headers=headers,
                                         post_data=post_data)
 
-    def get_groups(self, user_id, page=1):
+    def remove_video_from_group(self, video_id, group_id):
+        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+        post_data = {'method': 'vimeo.groups.removeVideo',
+                     'video_id': video_id,
+                     'group_id': group_id}
+        return self._perform_v2_request(url='http://vimeo.com/api/rest/v2',
+                                        method='POST',
+                                        headers=headers,
+                                        post_data=post_data)
+
+    def add_video_to_group(self, video_id, group_id):
+        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+        post_data = {'method': 'vimeo.groups.addVideo',
+                     'video_id': video_id,
+                     'group_id': group_id}
+        return self._perform_v2_request(url='http://vimeo.com/api/rest/v2',
+                                        method='POST',
+                                        headers=headers,
+                                        post_data=post_data)
+
+    def get_groups(self, user_id=None, page=1):
         if not page:
             page = 1
             pass
@@ -82,7 +111,7 @@ class Client():
         post_data = {'method': 'vimeo.groups.getAddable',
                      'sort': 'newest',  # 'oldest', 'most_played', 'most_commented', 'most_liked'
                      'page': str(page)}
-        if user_id:
+        if user_id and user_id != 'me':
             post_data['user_id'] = user_id
             pass
 
@@ -168,7 +197,7 @@ class Client():
                                         headers=headers,
                                         post_data=post_data)
 
-    def get_channels(self, user_id=None, page=1):
+    def get_channels_all(self, user_id=None, page=1):
         if not page:
             page = 1
             pass
@@ -177,10 +206,48 @@ class Client():
         post_data = {'method': 'vimeo.channels.getAll',
                      'page': str(page),
                      'sort': 'alphabetical'}  # 'newest', 'oldest', 'alphabetical', 'most_videos', 'most_subscribed', 'most_recently_updated'
-        if user_id:
+        if user_id and user_id != 'me':
             post_data['user_id'] = user_id
             pass
 
+        return self._perform_v2_request(url='http://vimeo.com/api/rest/v2',
+                                        method='POST',
+                                        headers=headers,
+                                        post_data=post_data)
+
+    def get_channels_moderated(self, user_id=None, page=1):
+        if not page:
+            page = 1
+            pass
+
+        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+        post_data = {'method': 'vimeo.channels.getModerated',
+                     'page': str(page),
+                     'sort': 'alphabetical'}  # 'newest', 'oldest', 'alphabetical', 'most_videos', 'most_subscribed', 'most_recently_updated'
+        if user_id and user_id != 'me':
+            post_data['user_id'] = user_id
+            pass
+
+        return self._perform_v2_request(url='http://vimeo.com/api/rest/v2',
+                                        method='POST',
+                                        headers=headers,
+                                        post_data=post_data)
+
+    def remove_video_from_channel(self, video_id, channel_id):
+        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+        post_data = {'method': 'vimeo.channels.removeVideo',
+                     'video_id': video_id,
+                     'channel_id': channel_id}
+        return self._perform_v2_request(url='http://vimeo.com/api/rest/v2',
+                                        method='POST',
+                                        headers=headers,
+                                        post_data=post_data)
+
+    def add_video_to_channel(self, video_id, channel_id):
+        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+        post_data = {'method': 'vimeo.channels.addVideo',
+                     'video_id': video_id,
+                     'channel_id': channel_id}
         return self._perform_v2_request(url='http://vimeo.com/api/rest/v2',
                                         method='POST',
                                         headers=headers,
@@ -223,15 +290,19 @@ class Client():
                                         headers=headers,
                                         post_data=post_data)
 
-    def watch_video_later(self, video_id, later=True):
+    def add_video_to_watch_later(self, video_id):
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-        post_data = {'video_id': video_id}
-        if later:
-            post_data['method'] = 'vimeo.albums.addToWatchLater'
-        else:
-            post_data['method'] = 'vimeo.albums.removeFromWatchLater'
-            pass
+        post_data = {'video_id': video_id,
+                     'method': 'vimeo.albums.addToWatchLater'}
+        return self._perform_v2_request(url='http://vimeo.com/api/rest/v2',
+                                        method='POST',
+                                        headers=headers,
+                                        post_data=post_data)
 
+    def remove_video_from_watch_later(self, video_id):
+        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+        post_data = {'video_id': video_id,
+                     'method': 'vimeo.albums.removeFromWatchLater'}
         return self._perform_v2_request(url='http://vimeo.com/api/rest/v2',
                                         method='POST',
                                         headers=headers,
@@ -286,6 +357,26 @@ class Client():
             post_data['user_id'] = user_id
             pass
 
+        return self._perform_v2_request(url='http://vimeo.com/api/rest/v2',
+                                        method='POST',
+                                        headers=headers,
+                                        post_data=post_data)
+
+    def remove_video_from_album(self, video_id, album_id):
+        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+        post_data = {'method': 'vimeo.albums.removeVideo',
+                     'video_id': video_id,
+                     'album_id': album_id}
+        return self._perform_v2_request(url='http://vimeo.com/api/rest/v2',
+                                        method='POST',
+                                        headers=headers,
+                                        post_data=post_data)
+
+    def add_video_to_album(self, video_id, album_id):
+        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+        post_data = {'method': 'vimeo.albums.addVideo',
+                     'video_id': video_id,
+                     'album_id': album_id}
         return self._perform_v2_request(url='http://vimeo.com/api/rest/v2',
                                         method='POST',
                                         headers=headers,

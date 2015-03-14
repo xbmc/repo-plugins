@@ -21,4 +21,19 @@
     <string id="30018">Sendung verpasst?</string>
     <string id="30019">Livestream läuft bereits</string>
     <string id="30020">Livestream läuft noch nicht</string>
+    <string id="30021">Ansicht erzwingen</string>
+    <string id="30022">Videoqualität</string>
+    <string id="30023">Niedrig</string>
+    <string id="30024">Mittel</string>
+    <string id="30025">Hoch</string>
+    <string id="30026">ServiceAPI verwenden (mad props to @Rechi)</string>
+    <string id="30027">TV-Vorschau</string>
+    <string id="30028">Videos automatisch starten</string>
+    <string id="30029">Untertitel verwenden</string>
+    <string id="30030">Livestream noch nicht gestartet</string>
+    <string id="30031">Der Livestream startet erst um</string>
+    <string id="30032">Soll der Livesteam automatisch starten?</string>
+    <string id="30033">Warte auf Sendungsbeginn</string>
+    <string id="30034">Zeit bis zum Start:</string>
+    <string id="30035">Den Livestream Starten?</string>
 </strings>

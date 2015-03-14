@@ -22,7 +22,7 @@ object_cnt = 0
 movies_map = ''
 tv_map = ''
 
-crackler_version = '1.0.5'
+crackler_version = '1.0.6'
 
 base_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
@@ -96,7 +96,7 @@ def add_video_item(title, image_url, file_url, m_index, map_typ, video_typ):
             li.setInfo('video', {'year': int(temp_ryear[-4:])})
             date_spl = temp_ryear.split("/")
             li.setInfo('video', {'aired': str(datetime.date(int(date_spl[2]), int(date_spl[0]), int(date_spl[1])).strftime('%Y-%m-%d'))})
-        if len(temp_duration) > 0:
+        if len(temp_duration) > 0 and temp_duration != "None":
             li.addStreamInfo('video', { 'duration': int(temp_duration)})
         if len(temp_title) > 0:
             li.setInfo('video', {'title': temp_title})
@@ -164,7 +164,8 @@ elif mode[0] == 'movies_folder':
         if object_cnt > 0:
             i = 0
             while i < object_cnt:
-                add_video_item((movies_map['Entries'][i]['Name']).encode('utf-8'), movies_map['Entries'][i]['OneSheetImage_800_1200'], sys.argv[0]+'?mode=play_video&v_id='+str(movies_map['Entries'][i]['ID']), i, movies_map, 0)
+                if str(movies_map['Entries'][i]['DurationInSeconds']) != "None" and str(movies_map['Entries'][i]['UserRating']) != "None":
+                    add_video_item((movies_map['Entries'][i]['Name']).encode('utf-8'), movies_map['Entries'][i]['OneSheetImage_800_1200'], sys.argv[0]+'?mode=play_video&v_id='+str(movies_map['Entries'][i]['ID']), i, movies_map, 0)
                 i += 1
 
     xbmcplugin.endOfDirectory(addon_handle)

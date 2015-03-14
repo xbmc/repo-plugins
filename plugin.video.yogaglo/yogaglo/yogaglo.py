@@ -20,7 +20,7 @@ class YogaGlo:
 
     """
     plugin_name = "plugin.video.yogaglo"
-    yoga_glo_base_url = "http://www.yogaglo.com"
+    yoga_glo_base_url = "http://classic.yogaglo.com"
 
     def __init__(self, plugin, handle, plugin_params):
         log("YogaGlo -- args are %s, %s, %s" %

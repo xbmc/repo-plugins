@@ -11,9 +11,9 @@ otherwise performs another logon.
 
 """
 yg_cookie = "yogaglo-cookie.lwp"
-yg_login_url = "http://www.yogaglo.com/eventcontroler.php"
-yg_signin_url = "http://www.yogaglo.com/signin.php"
-yg_my_account_url = "http://www.yogaglo.com/myaccounttoday.php"
+yg_login_url = "http://classic.yogaglo.com/eventcontroler.php"
+yg_signin_url = "http://classic.yogaglo.com/signin.php"
+yg_my_account_url = "http://classic.yogaglo.com/myaccounttoday.php"
 yg_cookie_path = ""
 
 def yg_authenticate(addon):

@@ -32,7 +32,7 @@ except:
 	xhellodata = ''
 
 def login():
-	resp = opener.open('http://www.glwiz.com/')
+	resp = opener.open('http://www.glwiz.com/homepage.aspx')
 	html_data = resp.read()
 	soup = BeautifulSoup(html_data)
 	eventVal = soup.find('input',id='__EVENTVALIDATION',type='hidden')

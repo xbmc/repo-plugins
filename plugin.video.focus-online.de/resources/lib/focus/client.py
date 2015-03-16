@@ -9,6 +9,19 @@ class Client():
     def get_root_data(self):
         return self._perform_request()
 
+    def get_all_videos(self, json_data):
+        def _sort(x):
+            return x.get('timestamp', 0)
+
+        videos = []
+        categories = self.get_categories_from_data(json_data)
+        for category in categories:
+            videos.extend(self.get_videos_from_data(json_data, category))
+            pass
+
+        videos = sorted(videos, key=_sort, reverse=True)
+        return videos
+
     def get_categories_from_data(self, json_data):
         items = json_data.get('items', [])
         result = []

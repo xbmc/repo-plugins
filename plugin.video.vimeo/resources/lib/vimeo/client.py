@@ -439,7 +439,7 @@ class Client():
 
     def _create_authorization(self, url, method, params=None):
         def _percent_encode(s):
-            result = urllib.quote_plus(s).replace("+", "%20").replace("*", "%2A").replace("%7E", "~")
+            result = urllib.quote_plus(s).replace('+', '%20').replace('*', '%2A').replace('%7E', '~')
             # the implementation of the app has a bug. someone double escaped the '@' so we have to correct this
             # on our end.
             result = result.replace('%40', '%2540')
@@ -455,7 +455,12 @@ class Client():
             list_of_params = []
             for key in sorted_keys:
                 value = _params[key]
-                list_of_params.append('%s=%s' % (key, value))
+                if url == 'https://secure.vimeo.com/oauth/access_token':
+                    list_of_params.append('%s=%s' % (key, value))
+                    pass
+                else:
+                    list_of_params.append('%s=%s' % (key, _percent_encode(value)))
+                    pass
                 pass
             return '&'.join(list_of_params)
 

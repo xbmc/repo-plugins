@@ -10,6 +10,16 @@ class TestClient(unittest.TestCase):
         categories = client.get_categories()
         pass
 
+    def test_get_all_videos(self):
+        client = Client()
+        json_data = client.get_root_data()
+        vidoes = client.get_all_videos(json_data)
+        pass
+
+    def test_get_root_data(self):
+        json_data = Client().get_root_data()
+        pass
+
     def test_get_videos(self):
         client = Client()
         json_data = client.get_videos(category='Panorama')

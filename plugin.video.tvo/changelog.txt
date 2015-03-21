@@ -1,0 +1,3 @@
+Version 1.0.1 Initial release
+Version 1.0.2 Subtitle support added
+Version 1.0.3 Added retry and increased timeout for http requests

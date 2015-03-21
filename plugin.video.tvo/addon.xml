@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.tvo"
+       name="TV Ontario"
+       version="1.0.3"
+       provider-name="t1m">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">TV Ontario Videos</summary>
+    <description lang="en">TVO is Ontario's public educational media organization and a trusted source of interactive educational content that informs, inspires, and stimulates curiosity.</description>
+    <disclaimer lang="en">Feel free to use this script. For information visit the wiki.</disclaimer>
+    <platform>all</platform>
+    <language>en</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum></forum>
+    <website>tvo.org</website>
+    <email></email>
+    <source>https://github.com/learningit/plugin.video.tvo/</source>
+  </extension>
+</addon>

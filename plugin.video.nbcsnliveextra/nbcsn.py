@@ -53,7 +53,7 @@ def GET_ALL_SPORTS():
 
     #req = urllib2.Request(ROOT_URL+'configuration-2013.json')
     req = urllib2.Request(ROOT_URL+'configuration-2014-RSN-Sections.json')
-    req.add_header('User-Agent', 'NBCSports/742 CFNetwork/672.0.8 Darwin/14.0.0')
+    #req.add_header('User-Agent', 'NBCSports/742 CFNetwork/672.0.8 Darwin/14.0.0')
     response = urllib2.urlopen(req)   
     json_source = json.load(response)                       
     response.close()    
@@ -73,13 +73,13 @@ def FEATURED(url):
     addDir('Spotlight',url,4,ICON,FANART,"spotlight") 
 
 
-def SCRAPE_VIDEOS(url,scrape_type=None):            
+def SCRAPE_VIDEOS(url,scrape_type=None):
     req = urllib2.Request(url)
-    req.add_header('User-Agent', 'NBCSports/742 CFNetwork/672.0.8 Darwin/14.0.0')
-    response = urllib2.urlopen(req)   
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36')
+    response = urllib2.urlopen(req)
     json_source = json.load(response)                           
     response.close()                
-
+	
     if scrape_type == None:
         #LIVE
         #try:       
@@ -130,15 +130,15 @@ def BUILD_VIDEO_LINK(item):
     ##################################################################
     # Inject login cookie - NOT USED CURRENTLY
     ##################################################################
-    header = { 'Referer' : 'http://stream.golfchannel.com/?pid=15607',
-               'Accept-Encoding' : 'gzip,deflate,sdch',
-               'Accept-Language' : 'en-US,en;q=0.8',
-               'Cookie' : 'hdntl=exp=1410035727~acl=%2f*~hmac=b3d9c10715e1c34dda7d12ab97b4258388369f094093ef21098a82ba47c92e56'}
+    #header = { 'Referer' : 'http://stream.golfchannel.com/?pid=15607',
+    #           'Accept-Encoding' : 'gzip,deflate,sdch',
+    #           'Accept-Language' : 'en-US,en;q=0.8',
+    #           'Cookie' : 'hdntl=exp=1410035727~acl=%2f*~hmac=b3d9c10715e1c34dda7d12ab97b4258388369f094093ef21098a82ba47c92e56'}
     #header_encoded = urllib.urlencode(header)
     #url =  urllib.quote_plus(url+'|')       
     #full_url = url + '|' + header_encoded 
     ##################################################################
-
+    
     
     #Set quality level based on user settings
     if QUALITY == 0:
@@ -171,7 +171,7 @@ def BUILD_VIDEO_LINK(item):
     url = url.replace('manifest(format=m3u8-aapl,filtername=vodcut)','QualityLevels('+q_lvl+')/Manifest(video,format=m3u8-aapl,filtername=vodcut)')
     url = url.replace('manifest(format=m3u8-aapl-v3,filtername=vodcut)','QualityLevels('+q_lvl+')/Manifest(video,format=m3u8-aapl-v3,audiotrack=audio_en_0,filtername=vodcut)')                       
     #url = url.replace('golfx/master.m3u8','golfx/'+q_lvl_golf+'/prog.m3u8')       
-
+    url = url + "|User-Agent=Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36"
     
     menu_name = item['title']
     name = menu_name                
@@ -217,7 +217,7 @@ def utc_to_local(utc_dt):
 
 def LOGIN():
     req = urllib2.Request(url)
-    req.add_header('User-Agent', 'NBCSports/742 CFNetwork/672.0.8 Darwin/14.0.0')
+   # req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36')
     response = urllib2.urlopen(req)   
     json_source = json.load(response)                       
     response.close()  

@@ -1,0 +1,36 @@
+<settings>
+  <!-- General -->
+  <category label="300100">
+    <setting id="progcount" label="30110" type="bool" default="true" />
+    <setting id="thumbnail_size" label="30120" type="enum" values="Biggest|Large|Small|Smallest|None" default="1" />
+    <setting id="subtitles_control" label="30130"  type="enum" values="None|Download and Play|Download to File" default="0" />
+    <setting id="start_section" label="30140" type="enum" values="Auto|TV|Radio|Both" default="0" />
+  </category>
+  <!-- Streams -->
+  <category label="30200">
+    <setting id="mediaselector" label="30205" type="enum" values="5|4" default="0" />
+    <setting id="video_stream" label="30210" type="enum" values="Auto|H.264 (480Kb)|H.264 (800kb)|H.264 (1500kb)|H.264 (2800kb)" default="0" />
+    <setting id="video_stream_live" label="30211" type="enum" values="Auto|H.264 (345Kb)|H.264 (501kb)|H.264 (923kb)|H.264 (1470kb)|H.264 (2128kb)|H.264 (3628kb)" default="0" />
+    <setting id="audio_stream" label="30220" type="enum" values="Auto|AAC (320Kb)|AAC (128Kb)|WMA (96Kb)|AAC (48Kb or 32Kb)" default="0" />
+    <setting id="provider" label="30230" type="enum" values="Any|Akamai|Limelight|Level3" default="0" />
+    <setting id="protocol" label="30240" type="enum" values="rtmp (port 1935)|rtmpt (port 80)" default="0" />
+  </category>
+  <!-- Proxy -->
+  <category label="30300">
+    <setting id="proxy_use" label="30310" type="bool" default="false" />
+    <setting id="proxy_type" label="30315" type="enum" values="HTTP|HTTP (Tunneled)|SOCKS4|SOCKS5" enable="eq(-1,true)" default="0" />
+    <setting id="proxy_server" label="30320" type="text" default="" enable="eq(-2,true)" />
+    <setting id="proxy_port" label="30330" type="number" default="" enable="eq(-3,true)" />
+    <setting id="proxy_user" label="30340" type="text" enable="eq(-4,true)"  />
+    <setting id="proxy_pass" label="30350" type="text" option="hidden" enable="!eq(-4,2) + eq(-5,true)" />
+  </category>
+  <!-- Advanced -->
+  <category label="30400">
+    <setting id="listings_cache_disable" label="30401" type="bool" default="false" />
+    <setting id="http_cache_disable" label="30405" type="bool" default="false" />
+    <setting id="socket_timeout" label="30410" type="number" default="60" />
+    <setting id="stream_timeout" label="30420" type="number" default="60" />
+    <setting id="enhanceddebug" label="30440" type="bool" default="false" />
+  </category>
+
+</settings>

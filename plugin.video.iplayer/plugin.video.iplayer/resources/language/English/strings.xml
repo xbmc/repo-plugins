@@ -1,0 +1,31 @@
+<strings>
+  <string id="30100">General</string>
+  <string id="30110">Include programme count in Series and Category listings</string>
+  <string id="30120">Thumbnail size (smaller = faster to load)</string>
+  <string id="30130">Subtitles</string>
+  <string id="30140">Start section</string>
+
+  <string id="30200">Streams</string>
+  <string id="30205">Mediaselector version</string>
+  <string id="30210">Video stream to use (On Demand)</string>
+  <string id="30211">Video stream to use (Live)</string>
+  <string id="30220">Radio stream to use</string>
+  <string id="30230">Stream source preference</string>
+  <string id="30240">Protocol (try rtmpt if firewalled)</string>
+
+  <string id="30300">Proxy</string>
+  <string id="30310">Use Proxy</string>
+  <string id="30315">Proxy Type</string>
+  <string id="30320">Proxy Server/IP</string>
+  <string id="30330">Proxy Port</string>
+  <string id="30340">Proxy Username</string>
+  <string id="30350">Proxy Password</string>
+  <!-- <string id="30360">Resolve host on Proxy</string> -->
+
+  <string id="30400">Advanced</string>
+  <string id="30401">Disable Listings Cache</string>
+  <string id="30405">Disable HTTP Cache</string>
+  <string id="30410">Socket timeout (seconds) [0=disabled]</string>
+  <string id="30420">Stream timeout (seconds)</string>
+  <string id="30440">Enhanced Debug output</string>
+</strings>

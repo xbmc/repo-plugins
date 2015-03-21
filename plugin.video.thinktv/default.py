@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 # ThinkTV PBS XBMC Addon
+#
+# To do: add featured, popular programs to all and a to z.
 
 import sys
 import httplib
@@ -19,11 +21,18 @@ __language__  = addon.getLocalizedString
 
 
 home          = addon.getAddonInfo('path').decode(UTF8)
+media         = xbmc.translatePath(os.path.join(home, 'resources', 'media'))
 icon          = xbmc.translatePath(os.path.join(home, 'icon.png'))
-pkicon        = xbmc.translatePath(os.path.join(home, 'PBS_Kids_ICON.png'))
 addonfanart   = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
 
-
+icon_featured = xbmc.translatePath(os.path.join(media, 'featured.png'))
+icon_popular  = xbmc.translatePath(os.path.join(media, 'popular.png'))
+icon_a_to_z   = xbmc.translatePath(os.path.join(media, 'a_to_z.png'))
+icon_all_prog = xbmc.translatePath(os.path.join(media, 'all_programs.png'))
+icon_search   = xbmc.translatePath(os.path.join(media, 'search.png'))
+icon_next     = xbmc.translatePath(os.path.join(media, 'next.png'))
+pkicon        = xbmc.translatePath(os.path.join(media, 'PBS_Kids_ICON.png'))
+pkfanart      = xbmc.translatePath(os.path.join(media, 'PBS_Kids_Fanart.jpg'))
 
 qp  = urllib.quote_plus
 uqp = urllib.unquote_plus
@@ -93,7 +102,9 @@ def getRequest(url, user_data=None, headers = defaultHeaders , alert=True):
 
 def getSources(fanart):
               url = '0ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-              dolist = [('GA', 30012, icon), ('GZ', 30013, icon), ('GQ', 30014, icon), ('GKS', 30015, pkicon)]
+              dolist = [('GF', 30017, icon_featured),('GP', 30016, icon_popular),('GA', 30012, icon_all_prog), 
+                        ('GZ', 30013, icon_a_to_z), ('GQ', 30014, icon_search), ('GKS', 30015, pkicon)]
+
               for mode, gstr, img in dolist:
                   name = __language__(gstr)
                   liz  = xbmcgui.ListItem(name,'',img,img)
@@ -107,6 +118,53 @@ def getQuery(cat_url):
               qurl = qp('/search/?q=%s' % (keyb.getText()))
               getCats(qurl, '')
 
+def getFeatured(gzurl):
+              ilist = []
+              pg = getRequest('http://video.pbs.org/programs/')
+              a = re.compile('\("#programsCarousel"\)\.programCarousel\(.+?\:(.+?)\);',re.DOTALL).search(pg).group(1)
+              a = '{"data":'+a
+              b = json.loads(a)
+              b = b['data']
+              a = re.compile('<ul id="carouselProgramList"(.+?)</ul>', re.DOTALL).search(pg).group(1)
+              c = re.compile('<li.+?href="(.+?)".+?src="(.+?)".+?alt="(.+?)".+?</li>', re.DOTALL).findall(a)
+              i = 0
+              for url, img, name in c:
+                     name = cleanname(name).encode(UTF8)
+                     plot = b[i]['description']
+                     plot = cleanname(plot).encode(UTF8)
+                     fanart = b[i]['background']
+                     i += 1
+                     mode = 'GV'
+                     u = '%s?url=%s&name=%s&mode=%s&imageicon=%s&desc=%s' % (sys.argv[0],qp(url), qp(name), mode, qp(img), qp(plot))
+                     liz=xbmcgui.ListItem(name, '','DefaultFolder.png', img)
+                     liz.setInfo( 'Video', { "Title": name, "Plot": plot })
+                     liz.setProperty( "Fanart_Image", fanart )
+                     ilist.append((u, liz, True))
+              xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+                
+
+def getPopular(gzurl):
+              ilist = []
+              azheaders = defaultHeaders
+              azheaders['X-Requested-With'] = 'XMLHttpRequest'
+              pg = getRequest('http://video.pbs.org/programs/more',None, azheaders)
+              a = json.loads(pg)
+              b = a['programs_data']
+              a = a['template']
+              c = re.compile('<li.+?href="(.+?)".+?src="(.+?)".+?alt="(.+?)".+?</li>', re.DOTALL).findall(a)
+              i = 0
+              for url, img, name in c:
+                     name = cleanname(name).encode(UTF8)
+                     plot = b[i]['description']
+                     plot = cleanname(plot).encode(UTF8)
+                     i += 1
+                     mode = 'GV'
+                     u = '%s?url=%s&name=%s&mode=%s&imageicon=%s&desc=%s' % (sys.argv[0],qp(url), qp(name), mode, qp(img), qp(plot))
+                     liz=xbmcgui.ListItem(name, '','DefaultFolder.png', img)
+                     liz.setInfo( 'Video', { "Title": name, "Plot": plot })
+                     ilist.append((u, liz, True))
+              xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+                
 def showAtoZ(azurl):
         ilist = []
         for a in azurl:
@@ -144,7 +202,11 @@ def getAtoZ(gzurl):
                   pass
               xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
 
-def getVids(gvurl,catname):
+def getVids(gvurl,catname, img=None, plot=None):
+              if img  == None:
+                 img = icon
+              else:
+                 img = uqp(img)
               gvurl = uqp(gvurl)
               pg = getRequest('http://video.pbs.org/%s' % (gvurl))
               dolist = [('episodes','<h2>Full Episodes',30020), ('shorts','<h2>Clips', 30021), ('previews', '<h2>Previews', 30022)]
@@ -152,9 +214,14 @@ def getVids(gvurl,catname):
                 if gfind in pg:
                   url = '%s/%s/' % (gvurl, gtype)
                   name = __language__(gindex)
+                  if plot == None:
+                     plot = name
+                  else:
+                     plot = uqp(plot)
+
                   mode = 'GC'
-                  liz  = xbmcgui.ListItem(name,'',icon,icon)
-                  liz.setInfo( 'Video', { "Title": catname, "Plot": name })
+                  liz  = xbmcgui.ListItem(name,'',img,img)
+                  liz.setInfo( 'Video', { "Title": catname, "Plot": plot })
                   xbmcplugin.addDirectoryItem(int(sys.argv[1]), '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), catname, mode), liz, True)
 
 
@@ -199,7 +266,7 @@ def getCats(gcurl, catname):
                      plot = name
                      mode = 'GC'
                      u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
-                     liz=xbmcgui.ListItem(name, '','DefaultFolder.png', icon)
+                     liz=xbmcgui.ListItem(name, '','DefaultFolder.png', icon_next)
                      liz.setInfo( 'Video', { "Title": name, "Plot": plot })
                      ilist.append((u, liz, True))
               except:
@@ -308,6 +375,11 @@ def getPBSKidsVids(kvurl,kvname):
 def playPBSKidsVid(purl, captions):
         html = getRequest('%s?format=json' % uqp(purl))
         url = json.loads(html)['url']
+        try:
+             url = 'http://kids.video.cdn.pbs.org/videos/%s' % url.split(':videos/',1)[1]
+        except:
+             pass
+
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = url))
         if (captions != "") and (addon.getSetting('sub_enable') == "true"):
             xbmc.sleep(5000)
@@ -335,12 +407,14 @@ mode = p('mode',None)
 
 if mode==  None:  getSources(p('fanart'))
 elif mode=='SR':  xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=p('url')))
+elif mode=='GF':  getFeatured(p('url'))
+elif mode=='GP':  getPopular(p('url'))
 elif mode=='GA':  getAtoZ(p('url'))
 elif mode=='GQ':  getQuery(p('url'))
 elif mode=='GZ':  showAtoZ(p('url'))
 elif mode=='GS':  getShow(p('url'))
 elif mode=='GC':  getCats(p('url'),p('name'))
-elif mode=='GV':  getVids(p('url'),p('name'))
+elif mode=='GV':  getVids(p('url'),p('name'),p('imageicon',None),p('desc',None))
 elif mode=='GKS': getPBSKidsShows()
 elif mode=='GKC': getPBSKidsCats(p('url'),p('name'),p('img'))
 elif mode=='GKV': getPBSKidsVids(p('url'),p('name'))

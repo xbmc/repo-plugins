@@ -48,13 +48,13 @@ class SyncAccount(object):
         self.account_name = account_name
         self._access_token = ''
         self._enabled = False
-        self._syncPath = ''
+        self._syncPath = u''
         self._syncFreq = 0 #minutes
         self._newSyncTime = 0
         self._client = None
         self._clientCursor = None
         self.root = None
-        self._remoteSyncPath = '' #DROPBOX_SEP
+        self._remoteSyncPath = u'' #DROPBOX_SEP
         self.syncSemaphore = threading.Semaphore()
         self._storageFile = None
         self._sync_requests = []
@@ -109,7 +109,7 @@ class SyncAccount(object):
     def remove_sync_data(self):
         # remove all sync data
         self.clearSyncData()
-        if xbmcvfs.exists( self._syncPath ):
+        if xbmcvfs.exists( self._syncPath.encode("utf-8") ):
             shutil.rmtree(self._syncPath)
 
     def _start_sync(self):
@@ -120,7 +120,7 @@ class SyncAccount(object):
 
     def _get_settings( self ):
         account = AccountSettings(self.account_name)
-        self._storageFile = os.path.normpath(account.account_dir + '/sync_data.pik')
+        self._storageFile = os.path.normpath(account.account_dir + u'/sync_data.pik')
         gotSemaphore = True
         enable = account.synchronisation
         tempPath = account.syncpath
@@ -156,13 +156,13 @@ class SyncAccount(object):
             dialog = xbmcgui.Dialog()
             dialog.ok(ADDON_NAME, LANGUAGE_STRING(30111))
         self._enabled = enable
-        if self._syncPath == '':
+        if self._syncPath == u'':
             #get initial location
             self._syncPath = tempPath
         #Sync path changed?
         if self._syncPath != tempPath:
             if len(os.listdir(tempPath)) == 0:
-                if xbmcvfs.exists(self._syncPath):
+                if xbmcvfs.exists(self._syncPath.encode("utf-8")):
                     #move the old sync path to the new one
                     log('Moving sync location for %s from %s to %s'%(self.account_name, self._syncPath, tempPath))
                     names = os.listdir(self._syncPath)
@@ -191,7 +191,7 @@ class SyncAccount(object):
             if self.root:
                 #restart the synchronization 
                 #remove all the files in current syncPath
-                if xbmcvfs.exists(self._syncPath) and len(os.listdir(self._syncPath)) > 0:
+                if xbmcvfs.exists(self._syncPath.encode("utf-8")) and len(os.listdir(self._syncPath)) > 0:
                     shutil.rmtree(self._syncPath)
                 #reset the complete data on client side
                 self.clearSyncData()
@@ -260,6 +260,9 @@ class SyncAccount(object):
             cursor, remoteData = self.getSyncData()
             if remoteData:
                 for path, meta in remoteData.iteritems():
+                    if isinstance(path, str):
+                        #perviously stored as str iso. unicode... So make it unicode now.
+                        path = path.decode("utf-8")
                     if path.find(self.root.path) == 0:
                         self.root.setItemInfo(path, meta)
                 self.root.updateLocalRootPath(self._syncPath)

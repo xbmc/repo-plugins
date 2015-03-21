@@ -74,6 +74,7 @@ class SynchronizeThread(threading.Thread):
                 if path.find(self._sync_account.root.path) == 0:
                     self._sync_account.root.updateRemoteInfo(path, meta)
             if len(items) > 0:
+                print repr(self._sync_account._syncPath)
                 self._sync_account.root.updateLocalRootPath(self._sync_account._syncPath)
             #store new cursor + data
             self._sync_account.storeSyncData(clientCursor)
@@ -104,14 +105,16 @@ class SynchronizeThread(threading.Thread):
     def updateProgress(self, handled, total):
         now = time.time()
         if (self._lastProgressUpdate + self.PROGRESS_TIMEOUT) < now:
-            progress_text = '%s/%s (%s)' % (str(handled), str(total), self._sync_account.account_name)
+            progress_text = u'%s/%s (%s)' % (str(handled), str(total), self._sync_account.account_name)
             log('Synchronizing number of items: ' + progress_text )
-            xbmc.executebuiltin('Notification(%s,%s,%d,%s)' % (LANGUAGE_STRING(30114), progress_text, 7000, ICON))
+            buildin = u'Notification(%s,%s,%d,%s)' % (LANGUAGE_STRING(30114).decode("utf-8"), progress_text, 7000, ICON.decode("utf-8"))
+            xbmc.executebuiltin(buildin.encode("utf-8"))
             self._lastProgressUpdate = now
             #Also store the new data (frequently)
             self._sync_account.storeSyncData()
 
     def updateProgressFinished(self, handled, total):
-        progress_text = '%s (%s)' % (str(handled), self._sync_account.account_name)
+        progress_text = u'%s (%s)' % (str(handled), self._sync_account.account_name)
         log('Number of items synchronized: ' + progress_text )
-        xbmc.executebuiltin('Notification(%s,%s%s,%d,%s)' % (LANGUAGE_STRING(30106), LANGUAGE_STRING(30107), progress_text, 10000, ICON))
+        buildin = u'Notification(%s,%s%s,%d,%s)' % (LANGUAGE_STRING(30106).decode("utf-8"), LANGUAGE_STRING(30107).decode("utf-8"), progress_text, 10000, ICON.decode("utf-8"))
+        xbmc.executebuiltin(buildin.encode("utf-8"))

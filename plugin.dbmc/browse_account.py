@@ -40,22 +40,23 @@ class AccountBrowser(object):
     ''' 
 
     def __init__( self, params ):
-        self._content_type = params.get('content_type', 'other')
+        self._content_type = params.get('content_type', 'executable')
         #check if the accounts directory is present, create otherwise
-        dataPath = xbmc.translatePath( ADDON.getAddonInfo('profile') )
-        self._accounts_dir = dataPath + '/accounts/'
-        if not xbmcvfs.exists( self._accounts_dir ):
-            xbmcvfs.mkdirs( self._accounts_dir )
+        # keep dataPath "utf-8" encoded
+        dataPath = xbmc.translatePath( ADDON.getAddonInfo('profile') ).decode("utf-8")
+        self._accounts_dir = dataPath + u'/accounts/'
+        if not xbmcvfs.exists( self._accounts_dir.encode("utf-8") ):
+            xbmcvfs.mkdirs( self._accounts_dir.encode("utf-8") )
         #Check if we need to get previous account settings from old addon settings
-        if ADDON.getSetting('access_token').decode("utf-8") != '':
+        if ADDON.getSetting('access_token').decode("utf-8") != u'':
             #Old access_token present so convert old settings!
             log('Converting old account settings and saving it')
-            account_name = 'Account1'
+            account_name = u'Account1'
             access_token = ADDON.getSetting('access_token').decode("utf-8")
             client = XBMCDropBoxClient(access_token=access_token)
             account_info = client.getAccountInfo()
             if 'display_name' in account_info:
-                account_name = string_path(account_info['display_name'])
+                account_name = path_from(account_info['display_name'])
             new_account = AccountSettings(account_name)
             new_account.access_token = ADDON.getSetting('access_token').decode("utf-8")
             new_account.passcode = ADDON.getSetting('passcode')
@@ -67,8 +68,8 @@ class AccountBrowser(object):
             syncfreq = ADDON.getSetting('syncfreq')
             if syncfreq != '':
                 new_account.syncfreq = int( syncfreq )
-            new_account.syncpath = ADDON.getSetting('syncpath')
-            new_account.remotepath = ADDON.getSetting('remotepath')
+            new_account.syncpath = ADDON.getSetting('syncpath').decode("utf-8")
+            new_account.remotepath = ADDON.getSetting('remotepath').decode("utf-8")
             new_account.save()
             #Now clear all old settings
             ADDON.setSetting('access_token', '')
@@ -78,24 +79,25 @@ class AccountBrowser(object):
             ADDON.setSetting('syncpath', '')
             ADDON.setSetting('remotepath', '')
             #cleanup old cache and shadow dirs
-            cache_path = ADDON.getSetting('cachepath').decode("utf-8")
+            #keep cache_path "utf-8" encoded
+            cache_path = ADDON.getSetting('cachepath')
             #Use user defined location?
             if cache_path == '' or os.path.normpath(cache_path) == '':
                 #get the default path 
                 cache_path = xbmc.translatePath( ADDON.getAddonInfo('profile') )
             shadowPath = os.path.normpath(cache_path + '/shadow/')
             thumbPath = os.path.normpath(cache_path + '/thumb/')
-            if xbmcvfs.exists(shadowPath):
+            if xbmcvfs.exists(shadowPath.encode("utf-8")):
                 shutil.rmtree(shadowPath)
-            if xbmcvfs.exists(thumbPath):
+            if xbmcvfs.exists(thumbPath.encode("utf-8")):
                 shutil.rmtree(thumbPath)
             #Notify the DropboxSynchronizer of the new account
             NotifySyncClient().account_added_removed()
 
 
     def buildList(self):
-        #get the present accounts
-        names = os.listdir(self._accounts_dir)
+        #get the present accounts (in unicode!)
+        names = os.listdir(self._accounts_dir.decode("utf-8"))
         for name in names:
             self.add_account(name)
         #add the account action items
@@ -118,12 +120,12 @@ class AccountBrowser(object):
             iconImage = 'DefaultAddonVideo.png'
         elif self._content_type == 'image':
             iconImage = 'DefaultAddonPicture.png'
-        listItem = xbmcgui.ListItem(name, iconImage=iconImage, thumbnailImage=iconImage)
+        listItem = xbmcgui.ListItem(name.encode("utf-8"), iconImage=iconImage, thumbnailImage=iconImage)
         #Create the url
         url = sys.argv[0]
         url += '?content_type=' + self._content_type
         url += "&module=" + 'browse_folder'
-        url +="&account=" + urllib.quote(name)
+        url +="&account=" + urllib.quote(name.encode("utf-8"))
         #Add a context menu item
         contextMenuItems = []
         contextMenuItems.append( (LANGUAGE_STRING(30044), self.getContextUrl('remove', name) ) )
@@ -148,7 +150,7 @@ class AccountBrowser(object):
         url = 'XBMC.RunPlugin(plugin://plugin.dbmc/?'
         url += 'action=%s' %( action )
         url += "&module=" + 'browse_account'
-        url += '&account=' + urllib.quote(account_name)
+        url += '&account=' + urllib.quote(account_name.encode("utf-8"))
         url += ')'
         return url
 
@@ -209,8 +211,9 @@ def change_synchronization(account_settings):
         dialog = xbmcgui.Dialog()
         # 3= ShowAndGetWriteableDirectory, 
         selected_folder = dialog.browse(3, LANGUAGE_STRING(30102), 'files', mask='', treatAsFolder=True, defaultt=account_settings.syncpath)
+        selected_folder = selected_folder.decode("utf-8")
         log_debug('Selected local folder: %s' % (selected_folder) )
-        if selected_folder != '':
+        if selected_folder != u'':
             account_settings.syncpath = selected_folder
             from resources.lib.dropboxfilebrowser import DropboxFileBrowser
             #select the remote folder
@@ -263,7 +266,7 @@ def run(params): # This is the entrypoint
             client = XBMCDropBoxClient(access_token=access_token)
             account_info = client.getAccountInfo()
             if 'display_name' in account_info:
-                account_name = string_path(account_info['display_name'])
+                account_name = path_from(account_info['display_name'])
             new_account = AccountSettings(account_name)
             new_account.access_token = access_token
             new_account.save()

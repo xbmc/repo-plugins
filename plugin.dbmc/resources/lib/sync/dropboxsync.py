@@ -97,11 +97,13 @@ class DropboxSynchronizer:
         Get available accounts and create/delete them
         '''
         new_accounts = []
-        dataPath = xbmc.translatePath( ADDON.getAddonInfo('profile') )
-        accounts_dir = dataPath + '/accounts/'
-        if xbmcvfs.exists( accounts_dir ):
+        dataPath = xbmc.translatePath( ADDON.getAddonInfo('profile') ).decode("utf-8")
+        accounts_dir = dataPath + u'/accounts/'
+        if xbmcvfs.exists( accounts_dir.encode("utf-8") ):
             #get the present accounts
-            new_accounts = os.listdir(accounts_dir)
+            tmp_accounts = os.listdir(accounts_dir)
+            for name in tmp_accounts:
+                new_accounts.append(name)
         # remove/add accounts
         removed_accounts = []
         existing_accounts = []

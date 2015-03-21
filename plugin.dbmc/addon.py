@@ -21,7 +21,6 @@
 
 import xbmcplugin
 import xbmcgui
-import xbmcvfs
 
 import time
 
@@ -52,11 +51,11 @@ if ( __name__ == "__main__" ):
                 current_module = sys.modules[module]
                 current_module.run(params)
             elif 'action' in params and params['action'] == 'play':
-                account_name = urllib.unquote( params.get('account', '') )
+                account_name = urllib.unquote( params.get('account', '') ).decode("utf-8")
                 account_settings = login.get_account(account_name) 
                 if account_settings:
                     client = XBMCDropBoxClient(access_token=account_settings.access_token)
-                    item = urllib.unquote( urllib.unquote( params['path'] ) )
+                    item = urllib.unquote( urllib.unquote( params['path'] ) ).decode("utf-8")
                     url = client.getMediaUrl(item)
                     log_debug('MediaUrl: %s'%url)
                     listItem = xbmcgui.ListItem(item)
@@ -74,7 +73,7 @@ if ( __name__ == "__main__" ):
                 current_module = sys.modules[module]
                 current_module.run(params)
     else: # run as script
-        account_name = urllib.unquote( params.get('account', '') )
+        account_name = urllib.unquote( params.get('account', '') ).decode("utf-8")
         account_settings = login.get_account(account_name) 
         if account_settings:
             #All actions below require an XBMCDropBoxClient
@@ -82,7 +81,7 @@ if ( __name__ == "__main__" ):
             action = params.get('action', '')
             if action == 'delete':
                 if 'path' in params:
-                    path = urllib.unquote( params['path'] )
+                    path = urllib.unquote( params['path'] ).decode("utf-8")
                     dialog = xbmcgui.Dialog()
                     if dialog.yesno(ADDON_NAME, LANGUAGE_STRING(30023), path ) == True:
                         success = client.delete(path)
@@ -94,7 +93,7 @@ if ( __name__ == "__main__" ):
                         xbmc.executebuiltin('container.Refresh()')
             elif action == 'copy':
                 if 'path' in params:
-                    path = urllib.unquote( params['path'] )
+                    path = urllib.unquote( params['path'] ).decode("utf-8")
                     dialog = DropboxFileBrowser("FileBrowser.xml", ADDON_PATH)
                     dialog.setDBClient(client)
                     dialog.setHeading(LANGUAGE_STRING(30025) + LANGUAGE_STRING(30026))
@@ -113,7 +112,7 @@ if ( __name__ == "__main__" ):
                     del dialog
             elif action == 'move':
                 if 'path' in params:
-                    path = urllib.unquote( params['path'] )
+                    path = urllib.unquote( params['path'] ).decode("utf-8")
                     dialog = DropboxFileBrowser("FileBrowser.xml", ADDON_PATH)
                     dialog.setDBClient(client)
                     dialog.setHeading(LANGUAGE_STRING(30025) + LANGUAGE_STRING(30028))
@@ -134,7 +133,6 @@ if ( __name__ == "__main__" ):
                     del dialog
             elif action == 'create_folder':
                 if 'path' in params:
-                    xbmcplugin.endOfDirectory(int(sys.argv[1]), succeeded=False)
                     path = urllib.unquote( params['path'] ).decode("utf-8")
                     keyboard = xbmc.Keyboard('', LANGUAGE_STRING(30030))
                     keyboard.doModal()
@@ -151,7 +149,7 @@ if ( __name__ == "__main__" ):
                             log_error('Creating new folder Failed: %s' % newFolder)
             elif action == 'upload':
                 if 'to_path' in params:
-                    toPath = urllib.unquote( params['to_path'] )
+                    toPath = urllib.unquote( params['to_path'] ).decode("utf-8")
                     dialog = xbmcgui.Dialog()
                     fileName = dialog.browse(1, LANGUAGE_STRING(30032), 'files')
                     if fileName:
@@ -164,7 +162,7 @@ if ( __name__ == "__main__" ):
                             log_error('File uploading Failed: %s to %s' % (fileName, toPath))
             elif action == 'download':
                 if 'path' in params:
-                    path = urllib.unquote( params['path'] )
+                    path = urllib.unquote( params['path'] ).decode("utf-8")
                     isDir = ('true' == params['isDir'].lower())
                     dialog = xbmcgui.Dialog()
                     location = dialog.browse(3, LANGUAGE_STRING(30025) + LANGUAGE_STRING(30038), 'files')
@@ -185,7 +183,7 @@ if ( __name__ == "__main__" ):
                             dialog = xbmcgui.Dialog()
                             dialog.ok(ADDON_NAME, LANGUAGE_STRING(30040), location)
             elif action == 'sync_now':
-                path = urllib.unquote( params['path'] )
+                path = urllib.unquote( params['path'] ).decode("utf-8")
                 NotifySyncClient().sync_path(account_settings, path)
             else:
                 log_error('Unknown action received: %s' % (action))

@@ -59,8 +59,8 @@ class DropboxViewer(object):
         #form default url
         self._nrOfMediaItems = int( params.get('media_items', '%s'%MAX_MEDIA_ITEMS_TO_LOAD_ONCE) )
         self._module = params.get('module', '')
-        self._contentType = params.get('content_type', 'other')
-        self._current_path = urllib.unquote( params.get('path', DROPBOX_SEP) )
+        self._contentType = params.get('content_type', 'executable')
+        self._current_path = urllib.unquote( params.get('path', DROPBOX_SEP) ).decode("utf-8")
         #Add sorting options
         xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_TITLE)
         xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
@@ -80,7 +80,7 @@ class DropboxViewer(object):
         folderItems = 0
         for f in contents:
             if f['is_dir']:
-                name = os.path.basename( string_path(f['path']) )
+                name = os.path.basename( path_from(f['path']) )
                 # the metadata 'path' is sometimes case incorrect! So use the _current_path (case-sensitive) path.
                 if self._current_path == DROPBOX_SEP:
                     fpath = self._current_path + name 
@@ -93,7 +93,7 @@ class DropboxViewer(object):
         #Now add the maximum(define) number of files
         for fileMeta in contents:
             if not fileMeta['is_dir']:
-                name = os.path.basename( string_path(fileMeta['path']) )
+                name = os.path.basename( path_from(fileMeta['path']) )
                 # the metadata 'path' is sometimes case incorrect! So use the _current_path (case-sensitive) path.
                 if self._current_path == DROPBOX_SEP:
                     fpath = self._current_path + name
@@ -151,6 +151,15 @@ class DropboxViewer(object):
         if self._contentType == 'executable' or not self._filterFiles:
             mediatype = 'other'
             iconImage = 'DefaultFile.png'
+            if 'image' in meta['mime_type']:
+                mediatype = 'pictures'
+                iconImage = 'DefaultImage.png'
+            elif 'video' in meta['mime_type']:
+                mediatype = 'video'
+                iconImage = 'DefaultVideo.png'
+            elif 'audio' in meta['mime_type']:
+                mediatype = 'music'
+                iconImage = 'DefaultAudio.png'
         if (self._contentType == 'image'):
             if 'image' in meta['mime_type']:
                 mediatype = 'pictures'
@@ -178,8 +187,8 @@ class DropboxViewer(object):
                 if self._useStreamingURLs and mediatype in ['video','music']:
                     #this doesn't work for pictures...
                     listItem.setProperty("IsPlayable", "true")
-                    url = sys.argv[0] + '?action=play' + '&path=' + urllib.quote(path)
-                    url += '&account=' + urllib.quote(self._account_settings.account_name)
+                    url = sys.argv[0] + '?action=play' + '&path=' + urllib.quote(path.encode("utf-8"))
+                    url += '&account=' + urllib.quote(self._account_settings.account_name.encode("utf-8"))
                 else:
                     url = self._loader.getFile(path)
                     #url = self.getMediaUrl(path)
@@ -227,8 +236,8 @@ class DropboxViewer(object):
             url += '&module=' + module
         else:
             url += '&module=' + self._module
-        url += '&account=' + urllib.quote(self._account_settings.account_name)
-        url += '&path=' + urllib.quote(path)
+        url += '&account=' + urllib.quote(self._account_settings.account_name.encode("utf-8"))
+        url += '&path=' + urllib.quote(path.encode("utf-8"))
         if media_items != 0:
             url += '&media_items=' + str(media_items)
         return url
@@ -236,11 +245,11 @@ class DropboxViewer(object):
     def getContextUrl(self, path, action, extra = None):
         url = 'XBMC.RunScript(plugin.dbmc, '
         url += 'action=%s' %( action )
-        url += '&account=' + urllib.quote(self._account_settings.account_name)
+        url += '&account=' + urllib.quote(self._account_settings.account_name.encode("utf-8"))
         if action == 'upload':
-            url += '&to_path=%s' %( urllib.quote(path) )
+            url += '&to_path=%s' %( urllib.quote(path.encode("utf-8")) )
         else:
-            url += '&path=%s' %( urllib.quote(path) )
+            url += '&path=%s' %( urllib.quote(path.encode("utf-8")) )
         if extra:
             url += '&' + extra
         url += ')'
@@ -266,7 +275,7 @@ class DropboxViewer(object):
             mediatype = 'pictures' #fake to get more info on the item...
         if mediatype == 'pictures':
             info['size'] = str(metadata['bytes'])
-            info['title'] = string_path(metadata['path'])
+            info['title'] = path_from(metadata['path'])
         # For video and music, nothing interesting...
         # elif mediatype == 'video':
         # elif mediatype == 'music':
@@ -286,15 +295,15 @@ class DropboxViewer(object):
         tumbLocation = os.path.normpath(tumbLocation)
         folderItems = []
         fileItems = []
-        if xbmcvfs.exists(cachedLocation) or xbmcvfs.exists(tumbLocation):
+        if xbmcvfs.exists(cachedLocation.encode("utf-8")) or xbmcvfs.exists(tumbLocation.encode("utf-8")):
             #folderItems = (os.path.basename(item['path']) for item in metadata['contents'] if item['is_dir']) if folder not in folderitems of generator expression does not work...
             for item in metadata['contents']:
                 if item['is_dir']:
-                    folderItems.append(os.path.basename(string_path(item['path'])))
+                    folderItems.append(os.path.basename(path_from(item['path'])))
                 else:
-                    fileItems.append(os.path.basename(string_path(item['path'])))
+                    fileItems.append(os.path.basename(path_from(item['path'])))
         #remove shadow files/folders
-        if xbmcvfs.exists(cachedLocation):
+        if xbmcvfs.exists(cachedLocation.encode("utf-8")):
             for f in os.listdir(cachedLocation):
                 #check if folders/files needs to be removed
                 fName = os.path.join(cachedLocation, f)
@@ -307,7 +316,7 @@ class DropboxViewer(object):
                         log_debug('Removing cached file: %s' % (fName))
                         os.remove(fName)
         #remove tumb files/folders
-        if xbmcvfs.exists(tumbLocation):
+        if xbmcvfs.exists(tumbLocation.encode("utf-8")):
             #first replace the tumb file extention
             for i, f in enumerate(fileItems):
                 fileItems[i] = replaceFileExtension(f, 'jpg')
@@ -359,7 +368,7 @@ class FileLoader(threading.Thread):
                 location = self._getThumbLocation(thumb2Retrieve)
                 #Check if thumb already exists
                 # TODO: use database checking for this!
-                if not xbmcvfs.exists(location):
+                if not xbmcvfs.exists(location.encode("utf-8")):
                     #Doesn't exist so download it.
                     self._getThumbnail(thumb2Retrieve)
                 else:
@@ -369,7 +378,7 @@ class FileLoader(threading.Thread):
                 location = self._getShadowLocation(file2Retrieve)
                 #Check if thumb already exists
                 #TODO: use database checking for this!
-                if not xbmcvfs.exists(location):
+                if not xbmcvfs.exists(location.encode("utf-8")):
                     #Doesn't exist so download it.
                     self._getFile(file2Retrieve)
                 else:

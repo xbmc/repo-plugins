@@ -40,7 +40,7 @@ class SyncFile(SyncObject):
             return self.OBJECT_IN_SYNC #fake object in sync...
         localPresent = False
         if self._localPath:
-            localPresent = xbmcvfs.exists(self._localPath)
+            localPresent = xbmcvfs.exists(self._localPath.encode("utf-8"))
         elif self._remotePresent:
             log_error("Has no localPath! %s"%self.path)
         localTimeStamp = 0

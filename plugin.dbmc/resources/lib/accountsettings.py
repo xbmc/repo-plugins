@@ -33,19 +33,22 @@ class AccountSettings(object):
     '''
     
     def __init__(self, account_name):
-        self.account_name = account_name
-        self.access_token = ''
+        if isinstance (account_name,str):
+            self.account_name = account_name.decode("utf-8")
+        else:
+            self.account_name = account_name
+        self.access_token = u''
         self.passcode = ''
         self.passcodetimeout = 30
         self.session_id = ''
         self.synchronisation = False
         self.syncfreq = 5
-        self.syncpath = ''
-        self.remotepath = ''
-        dataPath = xbmc.translatePath( ADDON.getAddonInfo('profile') )
+        self.syncpath = u''
+        self.remotepath = u''
+        dataPath = xbmc.translatePath( ADDON.getAddonInfo('profile') ).decode("utf-8")
         self.account_dir = os.path.normpath(dataPath + '/accounts/' + self.account_name) + os.sep #add os seperator because it is a dir
         #read from location if present
-        if xbmcvfs.exists( self.account_dir ):
+        if xbmcvfs.exists( self.account_dir.encode("utf-8") ):
             self.load()
             #Don't use the stored account_dir 
             self.account_dir = os.path.normpath(dataPath + '/accounts/' + self.account_name) + os.sep #add os seperator because it is a dir
@@ -62,26 +65,21 @@ class AccountSettings(object):
             log_error('Failed to load the settings: %s' % (str(exc)) )
         else:
             self.__dict__.update(tmp_dict)
-        #correct the account_name and account_dir (previously stored as unicode...)
-        # can be removed after some releases
-        changed = False
-        if isinstance (self.account_name,unicode):
-            changed = True
-            self.account_name = self.account_name.encode("utf-8")
-        if isinstance (self.account_dir,unicode):
-            changed = True
-            self.account_dir = self.account_dir.encode("utf-8")
-        if changed:
-            #save it again with the correct settings
-            self.save() 
+        #correct the items; make sure that they are unicode...)
+        if isinstance (self.account_name,str):
+            self.account_name = self.account_name.decode("utf-8")
+        if isinstance (self.syncpath,str):
+            self.syncpath = self.syncpath.decode("utf-8")
+        if isinstance (self.remotepath,str):
+            self.remotepath = self.remotepath.decode("utf-8")
         
     def save(self):
         log_debug('Save account settings: %s' % (self.account_name) )
         #check if the account directory is present, create otherwise
-        if not xbmcvfs.exists( self.account_dir ):
-            xbmcvfs.mkdirs( self.account_dir )
+        if not xbmcvfs.exists( self.account_dir.encode("utf-8") ):
+            xbmcvfs.mkdirs( self.account_dir.encode("utf-8") )
         #Save...
-        settings_file = os.path.normpath(self.account_dir + 'settings')
+        settings_file = os.path.normpath(self.account_dir + u'settings')
         try:
             with open(settings_file, 'wb') as file_obj:
                 pickle.dump(self.__dict__, file_obj)
@@ -94,23 +92,3 @@ class AccountSettings(object):
         #remove cache folder
         shutil.rmtree( get_cache_path(self.account_name) )
         #remove synced data is done in the DropboxSynchronizer!
-
-    @property
-    def syncpath(self):
-        return self.__syncpath
-    @syncpath.setter
-    def syncpath(self, syncpath):
-        #make sure the syncpath is not unicode
-        if isinstance (syncpath,unicode):
-            syncpath = syncpath.encode("utf-8")
-        self.__syncpath = syncpath
-
-    @property
-    def remotepath(self):
-        return self.__remotepath
-    @remotepath.setter
-    def remotepath(self, remotepath):
-        #make sure the syncpath is not unicode
-        if isinstance (remotepath,unicode):
-            remotepath = remotepath.encode("utf-8")
-        self.__remotepath = remotepath

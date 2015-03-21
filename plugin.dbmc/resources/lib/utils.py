@@ -7,7 +7,7 @@ ADDON_NAME      = xbmcaddon.Addon().getAddonInfo('id')
 ADDON_PATH      = xbmcaddon.Addon().getAddonInfo('path')
 ICON            = xbmcaddon.Addon().getAddonInfo('icon')
 DATAPATH        = xbmc.translatePath( xbmcaddon.Addon().getAddonInfo('profile') )
-DROPBOX_SEP     = '/'
+DROPBOX_SEP     = u'/'
 
 def log(txt):
     if isinstance (txt,str):

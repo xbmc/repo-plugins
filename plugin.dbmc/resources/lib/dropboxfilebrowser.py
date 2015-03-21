@@ -77,7 +77,11 @@ class DropboxFileBrowser(xbmcgui.WindowXMLDialog):
 
     def showFolders(self, path):
         log_debug('Selecting path: %s'%path)
-        self.getControl(self.PATH_LABEL).setLabel(path)
+        #Some skins don't have the following items in the FileBrowser!
+        try:
+            self.getControl(self.PATH_LABEL).setLabel(path)
+        except Exception as e:
+            log_debug("DropboxFileBrowser Exception: %s" %(repr(e)) )
         listView = self.getControl(self.DIRECTORY_LIST)
         if self._thumbView:
             thumbView = self.getControl(self.THUMB_LIST)
@@ -93,7 +97,7 @@ class DropboxFileBrowser(xbmcgui.WindowXMLDialog):
             listItems.append(listItem)
         for item in items:
             if item['is_dir'] == True:
-                listItem = xbmcgui.ListItem(label=os.path.basename(string_path(item['path'])), label2=string_path(item['path']), iconImage="DefaultFolder.png", thumbnailImage='DefaultFolder.png')
+                listItem = xbmcgui.ListItem(label=os.path.basename(path_from(item['path'])), label2=path_from(item['path']), iconImage="DefaultFolder.png", thumbnailImage='DefaultFolder.png')
                 listItems.append(listItem)
         listView.addItems(listItems)
         if self._thumbView:
@@ -106,7 +110,7 @@ class DropboxFileBrowser(xbmcgui.WindowXMLDialog):
             newPath = self.getControl(controlId).getSelectedItem().getLabel2()
             self.showFolders(newPath)
         elif controlId == self.OK_BUTTON:
-            self.selectedFolder = string_path(self._currentPath)
+            self.selectedFolder = path_from(self._currentPath)
             self.close()
         elif controlId == self.CANCEL_BUTTON:
             self.close()

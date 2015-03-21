@@ -52,7 +52,7 @@ class SyncObject(object):
     def setItemInfo(self, meta):
         log_debug('Set stored metaData: %s'%self.path)
         if meta:
-            if self.path != string_path(meta['path']):
+            if self.path != path_from(meta['path']):
                 log_error('Stored metaData path(%s) not equal to path %s'%(meta['path'], self.path) )
             if 'present' in meta:
                 self._remotePresent = meta['present']
@@ -64,10 +64,10 @@ class SyncObject(object):
             if 'client_mtime' in meta:
                 self._remoteClientModifiedTime = meta['client_mtime']
             if 'name' in meta:
-                self._name = string_path(meta['name'])
+                self._name = path_from(meta['name'])
             elif 'Path' in meta:
                 #for backwards compatibility (v0.6.2)
-                self._name = os.path.basename((string_path(meta['Path'])))
+                self._name = os.path.basename((path_from(meta['Path'])))
         else:
             self._remotePresent = False
         
@@ -85,7 +85,7 @@ class SyncObject(object):
     def updateRemoteInfo(self, meta):
         log_debug('Update remote metaData: %s'%self.path)
         if meta:
-            self._name = os.path.basename((string_path(meta['path']))) # get the case-sensitive name!
+            self._name = os.path.basename((path_from(meta['path']))) # get the case-sensitive name!
             #convert to local time 'Thu, 28 Jun 2012 17:55:59 +0000',
             time_struct = time.strptime(meta['modified'], '%a, %d %b %Y %H:%M:%S +0000')
             self._newRemoteTimeStamp = utc2local( time.mktime(time_struct) )
@@ -115,7 +115,5 @@ class SyncObject(object):
     def updateLocalPath(self, parentSyncPath):
         #Note: self.path should be the case-sensitive path by now!
         if self._name:
-            #decode the _localPath to 'utf-8'
-            # in windows os.stat() only works with unicode...
-            self._localPath = os.path.normpath(parentSyncPath + os.sep + self._name).decode("utf-8")
+            self._localPath = os.path.normpath(parentSyncPath + os.sep + self._name)
 

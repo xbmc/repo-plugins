@@ -39,7 +39,7 @@ def unlock(account_settings):
     win = xbmcgui.Window(xbmcgui.getCurrentWindowId())
     if (account_settings.passcode != ''):
         #create windows property name
-        win_prop_name = urllib.quote(account_settings.account_name + 'Unlocked')
+        win_prop_name = urllib.quote(account_settings.account_name.encode("utf-8") + 'Unlocked')
         unlockTimeout = account_settings.passcodetimeout * 60 # to minutes
         #get last unlocked time
         try:
@@ -65,7 +65,7 @@ def unlock(account_settings):
     return unlocked
 
 def clear_unlock(account_settings):
-    win_prop_name = urllib.quote(account_settings.account_name + 'Unlocked')
+    win_prop_name = urllib.quote(account_settings.account_name.encode("utf-8") + 'Unlocked')
     win = xbmcgui.Window(xbmcgui.getCurrentWindowId())
     win.clearProperty(win_prop_name)
 

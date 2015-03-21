@@ -59,17 +59,27 @@ def command():
         return wrapper
     return decorate
 
-def string_path(path):
+def path_to(path):
     '''
-    Dropbox API uses "utf-8" coding.
-    This functions converts the path to string (if unicode)
+    Dropbox API uses "utf-8" coding!
+    This functions makes sure that it is utf-8.
     '''
     if isinstance (path, unicode):
         path = path.encode("utf-8")
     return path
 
+def path_from(path):
+    '''
+    Dropbox API uses "utf-8" coding, but the dropbox-API returns unicode!
+    This functions makes sure that it is unicode.
+    '''
+    if isinstance (path, str):
+        log_error("Dropbox path is not unicode! %s"%(path))
+        path = path.decode("utf-8")
+    return path
+
 def getLocalSyncPath(localSyncPath, remoteSyncPath, itemPath):
-    itemPath = itemPath.replace(remoteSyncPath, '', 1)
+    itemPath = itemPath.replace(remoteSyncPath, u'', 1)
     localPath = os.path.normpath(localSyncPath + DROPBOX_SEP + itemPath)
     return localPath
 
@@ -141,7 +151,7 @@ class XBMCDropBoxClient(object):
         #Make the cache_name unique to the account (using the access_token).
         # To prevents that different accounts, which have the same directories, don't
         # use the same cache 
-        cache_name = self._access_token + dirname.decode("utf-8")
+        cache_name = self._access_token + dirname
         #check if a hash is available
         stored = self._cache.get(cache_name)
         if stored != '':
@@ -153,7 +163,7 @@ class XBMCDropBoxClient(object):
         if self.DropboxAPI != None:
             if directory or stored == '':
                 try:
-                    resp = self.DropboxAPI.metadata(path=dirname, hash=hashstr)
+                    resp = self.DropboxAPI.metadata(path=path_to(dirname), hash=hashstr)
                 except rest.ErrorResponse, e:
                     msg = e.user_error_msg or str(e)
                     if '304' in msg:
@@ -179,7 +189,7 @@ class XBMCDropBoxClient(object):
                 items = resp['contents']
                 resp = None
                 for item in items:
-                    if string_path(item['path']).lower() == path.lower():
+                    if path_from(item['path']).lower() == path.lower():
                         resp = item
                         break;
         return resp, changed
@@ -194,7 +204,7 @@ class XBMCDropBoxClient(object):
         margin = 20*60 #20 mins
         resp = None
         #check if stored link is still valid
-        stored = self._cache.get(u"mediaUrl:"+path.decode("utf-8"))
+        stored = self._cache.get(u"mediaUrl:"+path)
         if stored != '':
             stored = eval(stored)
             if 'expires' in stored:
@@ -210,10 +220,10 @@ class XBMCDropBoxClient(object):
                 else:
                     log_debug("MediaUrl expired. End time was: %s"%stored['expires'])
         if not cachedonly and resp == None and self.DropboxAPI != None:
-            resp = self.DropboxAPI.media(path)
+            resp = self.DropboxAPI.media( path_to(path) )
             #store the link
             log_debug("MediaUrl storing url.")
-            self._cache.set(u"mediaUrl:"+path.decode("utf-8"), repr(resp))
+            self._cache.set(u"mediaUrl:"+path, repr(resp))
         if resp:
             return resp['url']
         else:
@@ -221,13 +231,13 @@ class XBMCDropBoxClient(object):
     
     @command()
     def search(self, searchText, path):
-        searchResult = self.DropboxAPI.search(path, searchText)
+        searchResult = self.DropboxAPI.search( path_to(path), searchText)
         return searchResult
     
     @command()
     def delete(self, path):
         succes = False
-        resp = self.DropboxAPI.file_delete(path)
+        resp = self.DropboxAPI.file_delete( path_to(path) )
         if resp and 'is_deleted' in resp:
             succes = resp['is_deleted']
         return succes
@@ -235,25 +245,25 @@ class XBMCDropBoxClient(object):
     @command()
     def copy(self, path, toPath):
         succes = False
-        resp = self.DropboxAPI.file_copy(path, toPath)
+        resp = self.DropboxAPI.file_copy(path_to(path), path_to(toPath))
         if resp and 'path' in resp:
-            succes = ( string_path(resp['path']).lower() == toPath.lower())
+            succes = ( path_from(resp['path']).lower() == toPath.lower())
         return succes
 
     @command()
     def move(self, path, toPath):
         succes = False
-        resp = self.DropboxAPI.file_move(path, toPath)
+        resp = self.DropboxAPI.file_move(path_to(path), path_to(toPath))
         if resp and 'path' in resp:
-            succes = ( string_path(resp['path']).lower() == toPath.lower())
+            succes = ( path_from(resp['path']).lower() == toPath.lower())
         return succes
 
     @command()
     def createFolder(self, path):
         succes = False
-        resp = self.DropboxAPI.file_create_folder(path)
+        resp = self.DropboxAPI.file_create_folder( path_to(path) )
         if resp and 'path' in resp:
-            succes = ( string_path(resp['path']).lower() == path.lower())
+            succes = ( path_from(resp['path']).lower() == path.lower())
         return succes
 
     @command()
@@ -278,7 +288,7 @@ class XBMCDropBoxClient(object):
                 path = toPath + DROPBOX_SEP + os.path.basename(fileName) 
                 resp = uploader.finish(path)
                 if resp and 'path' in resp:
-                    succes = ( string_path(resp['path']).lower() == path.lower())
+                    succes = ( path_from(resp['path']).lower() == path.lower())
         else:
             log_error('File size of Upload file <= 0!')
         return succes
@@ -287,13 +297,13 @@ class XBMCDropBoxClient(object):
         succes = False
         dirName = os.path.dirname(location) + os.sep #add os seperator because it is a dir
         # create the data dir if needed
-        if not xbmcvfs.exists( dirName ):
-            xbmcvfs.mkdirs( dirName )
+        if not xbmcvfs.exists( dirName.encode("utf-8") ):
+            xbmcvfs.mkdirs( dirName.encode("utf-8") )
         try:
             cacheFile = open(location, 'wb') # 'b' option required for windows!
             #download the file
             #jpeg (default) or png. For images that are photos, jpeg should be preferred, while png is better for screenshots and digital art.
-            tumbFile = self.DropboxAPI.thumbnail(path, size='large', format='JPEG')
+            tumbFile = self.DropboxAPI.thumbnail( path_to(path), size='large', format='JPEG')
             shutil.copyfileobj(tumbFile, cacheFile)
             cacheFile.close()
             log_debug("Downloaded file to: %s"%location)
@@ -310,12 +320,12 @@ class XBMCDropBoxClient(object):
         succes = False
         dirName = os.path.dirname(location) + os.sep #add os seperator because it is a dir 
         # create the data dir if needed
-        if not xbmcvfs.exists( dirName ):
-            xbmcvfs.mkdirs( dirName )
+        if not xbmcvfs.exists( dirName.encode("utf-8") ):
+            xbmcvfs.mkdirs( dirName.encode("utf-8") )
         try:
             cacheFile = open(location, 'wb') # 'b' option required for windows!
             #download the file
-            orgFile = self.DropboxAPI.get_file(path)
+            orgFile = self.DropboxAPI.get_file( path_to(path) )
             shutil.copyfileobj(orgFile, cacheFile)
             cacheFile.close()
             log_debug("Downloaded file to: %s"%location)
@@ -337,10 +347,10 @@ class XBMCDropBoxClient(object):
         items = {}
         for item in data:
             meta = item[1]
-            path = string_path(item[0]) #case-insensitive!
+            path = path_from(item[0]) #case-insensitive!
             # But cannot use the meta['path'] because it is not 
             # there when the item is removed!
-            #path = string_path( meta['path'] )
+            #path = path_from( meta['path'] )
             items[path] = meta
         cursor = response['cursor']
         reset = response['reset']
@@ -388,7 +398,7 @@ class Downloader(threading.Thread):
     def __init__( self, client, path, location, isDir):
         super(Downloader, self).__init__()
         self.path = path
-        self.remoteBasePath = os.path.dirname( string_path(path) )
+        self.remoteBasePath = os.path.dirname( path_from(path) )
         self.location = location
         self.isDir = isDir
         self._client = client
@@ -414,19 +424,19 @@ class Downloader(threading.Thread):
             #Download the list of files/dirs
             item2Retrieve = self._fileList.get()
             if item2Retrieve:
-                self._progress.update( (self._itemsHandled *100) / self._itemsTotal, LANGUAGE_STRING(30041), string_path(item2Retrieve['path']) )
-                basePath = string_path(item2Retrieve['path'])
+                self._progress.update( (self._itemsHandled *100) / self._itemsTotal, LANGUAGE_STRING(30041), path_from(item2Retrieve['path']) )
+                basePath = path_from(item2Retrieve['path'])
                 basePath = basePath.replace(self.remoteBasePath, '', 1) # remove the remote base path
                 location = self.location + basePath
                 location = os.path.normpath(location)
                 if item2Retrieve['is_dir']:
                     location += os.sep #add os seperator because it is a dir
                     #create dir if not present yet
-                    if not xbmcvfs.exists( location ):
-                        xbmcvfs.mkdirs( location )
+                    if not xbmcvfs.exists( location.encode("utf-8") ):
+                        xbmcvfs.mkdirs( location.encode("utf-8") )
                 else:
                     if not self._client.saveFile(item2Retrieve['path'], location):
-                        log_error("Downloader failed for: %s"%( string_path(item2Retrieve['path']) ) )
+                        log_error("Downloader failed for: %s"%( path_from(item2Retrieve['path']) ) )
                 self._itemsHandled += 1
             time.sleep(0.100)
         if self._progress.iscanceled():
@@ -443,4 +453,4 @@ class Downloader(threading.Thread):
         for item in items:
             self._fileList.put(item)
             if item['is_dir']:
-                self.getFileItems( string_path(item['path']) )
+                self.getFileItems( path_from(item['path']) )

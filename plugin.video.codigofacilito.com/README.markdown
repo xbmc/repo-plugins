@@ -14,4 +14,4 @@ Puedes instalar con el [zip](http://www.ezequielescobar.com/servicios/codigofaci
 
 Version XBMC
 ============
-Frodo / Gotham
+Gotham / Helix

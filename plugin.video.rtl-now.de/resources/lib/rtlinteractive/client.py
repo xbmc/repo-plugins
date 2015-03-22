@@ -231,6 +231,10 @@ class Client(object):
                 if metadaten and headerdaten:
                     raise UnsupportedStreamException
 
+                # No support for HDS MANIFEST
+                if (re.search(r'http://.+/hds/.+/\d+/manifest-hds.f4m', filename.text)):
+                    raise UnsupportedStreamException
+
                 rtmpe_match = re.search(r'(?P<url>rtmpe://(?:[^/]+/){2})(?P<play_path>.+)', filename.text)
                 hds_match = re.search(r'http://hds.+/(?P<play_path>\d+/.+)', filename.text)
                 if rtmpe_match:

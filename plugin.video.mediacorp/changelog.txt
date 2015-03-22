@@ -6,3 +6,4 @@ Version 1.0.2 rewrite for web site changes
 Version 1.0.3 cleanup of folder name and settings xml
 Version 1.1.4 significant website change
 Version 1.1.5 Added Brightcove support
+Version 1.3.0 Added proxy support for Channel 8, bug fixes

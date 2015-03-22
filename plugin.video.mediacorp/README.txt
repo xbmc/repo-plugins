@@ -1,6 +1,8 @@
 plugin.video.mediacorp
 ================
 
+Version 1.3.0 Added proxy support for Channel 8, bug fixes
+
 v0.1.0
 XBMC Addon for Mediacorp TV Singapore
 

@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<setting id="hyperspinexe" type="file" source="files" label="30000" default=""/>
+	<setting id="hyperspinfolder" type="folder" source="files" label="30001"  option="writeable" default=""/>
+</settings>

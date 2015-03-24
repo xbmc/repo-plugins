@@ -314,7 +314,15 @@ elif mode==200:
 
 elif mode==201:    
     supercross = supercross()
-    supercross.ARCHIVE()    
+    supercross.SUPERCROSS_YOUTUBE_CHANNEL()    
+
+elif mode==202:    
+    supercross = supercross()
+    supercross.RACE_DAY_LIVE()
+
+elif mode==203:    
+    supercross = supercross()
+    supercross.RACE_DAY_ARCHIVE()
 
 ####################
 #ENDUROCROSS MODES

@@ -1,3 +1,6 @@
+Version 2.3.0 (22/03/2015)
+-Fix rtmp streams (swfVfy parameter)
+
 Version 2.2.0 (9/12/2014)
 -Fix script error on live channels listing
 

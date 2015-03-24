@@ -81,7 +81,7 @@ def grab_live_stream_url(url):
 					return url2
 				else:
 					match=re.compile('"file": "(.+?)",.+?\n.+?"application": "(.+?)",.+?\n.+?"streamer": "(.+?)",').findall(page_source)
-        				url2 = 'rtmp://' + match[0][2] +'/' + match[0][1] + '/' + match[0][0] + ' swfUrl=' + player + linkpart
+        				url2 = 'rtmp://' + match[0][2] +'/' + match[0][1] + '/' + match[0][0] + ' swfVfy=1 swfUrl=' + player + linkpart
         				return url2
         		else:
         			match = re.compile('"stream_wma" : "(.+?)"').findall(page_source)

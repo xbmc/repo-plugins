@@ -380,7 +380,7 @@ class musicAddonXbmc:
     """
     def getFavoriteChannels(self, allchannels, favplaylist):
         channels = []
-        re_favchannels = re.compile(r"File\d+=http:\/\/.+\/([\w\d]+)\?", re.M | re.I)
+        re_favchannels = re.compile(r"File\d+=.+/([a-zA-Z0-9]+)", re.M | re.I)
         favchannelkeys = re_favchannels.findall(favplaylist)
 
         # if favorites list is empty, return empty list

@@ -3,6 +3,11 @@
 - Removed feature
 
 
+25. March 2015 v3.1.0
++ Got a baby daughter - Ella :D
+* Updated regex getting favorite channels for premium members, fixing issued with 40/64/320k - 128k worked
+
+
 8. March 2015 v3.0.9
 * Updated regex getting channel metadata from HTML
 

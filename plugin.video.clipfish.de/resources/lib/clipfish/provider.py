@@ -1,5 +1,4 @@
-from resources.lib.kodion import iso8601
-from resources.lib.kodion.utils import FunctionCache
+from resources.lib.kodion.utils import FunctionCache, datetime_parser
 
 __author__ = 'bromix'
 
@@ -51,10 +50,10 @@ class Provider(kodion.AbstractProvider):
             video_item.set_fanart(self.get_fanart(context))
             video_item.set_plot(video['description'])
             video_item.set_duration_from_seconds(int(video['media_length']))
-            date = iso8601.parse(video['pubDate'])
-            video_item.set_year(date.year)
-            video_item.set_aired(date.year, date.month, date.day)
-            video_item.set_date(date.year, date.month, date.day, date.hour, date.minute, date.second)
+            date = datetime_parser.parse(video['pubDate'])
+            video_item.set_year_from_datetime(date)
+            video_item.set_aired_from_datetime(date)
+            video_item.set_date_from_datetime(date)
             video_item.set_studio('clipfish.de')
             video_item.add_artist('clipfish.de')
             result.append(video_item)

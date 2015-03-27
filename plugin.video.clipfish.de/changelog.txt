@@ -1,2 +1,6 @@
+1.1.0 (2015-03-127)
+UPD: improved support for Gotham, Helix and Isengard
+FIX: show seconds (Gotham)
+
 1.0.1 (2015-03-14)
 ADD: initial

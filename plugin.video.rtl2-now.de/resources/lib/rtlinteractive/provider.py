@@ -1,11 +1,9 @@
-import re
-from resources.lib.kodion.utils import FunctionCache
-
 __author__ = 'bromix'
 
+from resources.lib.kodion.utils import FunctionCache
 from resources.lib import kodion
 from resources.lib.kodion.items import DirectoryItem, VideoItem, UriItem
-from resources.lib.kodion import iso8601
+from resources.lib.kodion.utils import datetime_parser
 from .client import Client, UnsupportedStreamException
 
 
@@ -94,13 +92,13 @@ class Provider(kodion.AbstractProvider):
             film_item.set_episode(film.get('episode', '1'))
 
             # aired
-            aired = iso8601.parse(film['sendestart'])
-            film_item.set_aired(aired.year, aired.month, aired.day)
-            film_item.set_date(aired.year, aired.month, aired.day, aired.hour, aired.minute, aired.second)
-            film_item.set_year(aired.year)
+            aired = datetime_parser.parse(film['sendestart'])
+            film_item.set_aired_from_datetime(aired)
+            film_item.set_date_from_datetime(aired)
+            film_item.set_year_from_datetime(aired)
 
             # duration
-            duration = iso8601.parse(film['duration'])
+            duration = datetime_parser.parse(film['duration'])
             film_item.set_duration(duration.hour, duration.minute, duration.second)
 
             # plot

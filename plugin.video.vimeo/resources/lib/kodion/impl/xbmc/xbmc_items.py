@@ -23,7 +23,16 @@ def to_video_item(context, video_item):
 
     item.setProperty(u'IsPlayable', u'true')
 
-    item.setInfo(type=u'video', infoLabels=info_labels.create_from_item(context, video_item))
+    _info_labels = info_labels.create_from_item(context, video_item)
+
+    # This should work for all versions of XBMC/KODI.
+    if 'duration' in _info_labels:
+        duration = _info_labels['duration']
+        del _info_labels['duration']
+        item.addStreamInfo('video', {'duration': duration})
+        pass
+
+    item.setInfo(type=u'video', infoLabels=_info_labels)
     return item
 
 
@@ -58,7 +67,7 @@ def to_uri_item(context, base_item):
 def to_item(context, base_item):
     if isinstance(base_item, UriItem):
         return to_uri_item(context, base_item)
-    
+
     if isinstance(base_item, VideoItem):
         return to_video_item(context, base_item)
 

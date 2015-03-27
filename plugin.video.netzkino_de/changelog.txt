@@ -1,3 +1,6 @@
+2.1.0 (2015-03-27)
+UPD: improved support for Gotham, Helix and Isengard
+
 2.0.5 (2015-01-25)
 UPD: dropped dependency of 'requests'-module because of performance issues
 

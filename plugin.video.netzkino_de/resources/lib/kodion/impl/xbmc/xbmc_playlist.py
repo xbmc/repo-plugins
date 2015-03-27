@@ -31,4 +31,8 @@ class XbmcPlaylist(AbstractPlaylist):
         self._playlist.shuffle()
         pass
 
+    def unshuffle(self):
+        self._playlist.unshuffle()
+        pass
+
     pass

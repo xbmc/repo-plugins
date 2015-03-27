@@ -67,7 +67,7 @@ class Scraper:
                 duration = ''
             videos.append({
                 'id': video_id,
-                'thumbnail': self.__img(li.find('img')['src']),
+                'thumbnail': self.__img(li.find('img')['data-src']),
                 'path': path,
                 'title': title,
                 'duration': self.__secs_from_duration(duration)

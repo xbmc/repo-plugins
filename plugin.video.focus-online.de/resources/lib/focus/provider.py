@@ -1,11 +1,11 @@
+__author__ = 'bromix'
+
 import datetime
 from resources.lib import kodion
 from resources.lib.focus.client import Client
 from resources.lib.kodion.items import VideoItem, UriItem
 from resources.lib.kodion.items.directory_item import DirectoryItem
 from resources.lib.kodion.utils import FunctionCache
-
-__author__ = 'bromix'
 
 
 class Provider(kodion.AbstractProvider):
@@ -79,7 +79,6 @@ class Provider(kodion.AbstractProvider):
         json_data = context.get_function_cache().get(FunctionCache.ONE_MINUTE * 15, client.get_url_data, url)
         json_data = client.get_related_from_data(json_data)
         return self._do_videos(context, json_data)
-        pass
 
     @kodion.RegisterProviderPath('^/all-videos/$')
     def _on_all_videos(self, context, re_match):

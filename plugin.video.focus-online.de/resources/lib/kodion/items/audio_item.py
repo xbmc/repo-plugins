@@ -55,6 +55,10 @@ class AudioItem(BaseItem):
         self._year = int(year)
         pass
 
+    def set_year_from_datetime(self, date_time):
+        self.set_year(date_time.year)
+        pass
+
     def get_year(self):
         return self._year
 

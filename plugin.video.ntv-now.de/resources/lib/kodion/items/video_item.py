@@ -1,7 +1,9 @@
 import re
+import datetime
 
 from .base_item import BaseItem
-import datetime
+
+__RE_IMDB__ = re.compile(r'(http(s)?://)?www.imdb.(com|de)/title/(?P<imdbid>[t0-9]+)(/)?')
 
 
 class VideoItem(BaseItem):
@@ -59,7 +61,7 @@ class VideoItem(BaseItem):
         return self._title
 
     def set_track_number(self, track_number):
-        self._track_number = track_number
+        self._track_number = int(track_number)
         pass
 
     def get_track_number(self):
@@ -69,12 +71,20 @@ class VideoItem(BaseItem):
         self._year = int(year)
         pass
 
+    def set_year_from_datetime(self, date_time):
+        self.set_year(date_time.year)
+        pass
+
     def get_year(self):
         return self._year
 
     def set_premiered(self, year, month, day):
         date = datetime.date(year, month, day)
-        self._premiered =date.isoformat()
+        self._premiered = date.isoformat()
+        pass
+
+    def set_premiered_from_datetime(self, date_time):
+        self.set_premiered(year=date_time.year, month=date_time.month, day=date_time.day)
         pass
 
     def get_premiered(self):
@@ -112,7 +122,7 @@ class VideoItem(BaseItem):
         return self._cast
 
     def set_imdb_id(self, url_or_id):
-        re_match = re.match('(http\:\/\/)?www.imdb.(com|de)\/title\/(?P<imdbid>[t0-9]+)(\/)?', url_or_id)
+        re_match = __RE_IMDB__.match(url_or_id)
         if re_match:
             self._imdb_id = re_match.group('imdbid')
         else:
@@ -157,6 +167,10 @@ class VideoItem(BaseItem):
     def set_aired(self, year, month, day):
         date = datetime.date(year, month, day)
         self._aired = date.isoformat()
+        pass
+
+    def set_aired_from_datetime(self, date_time):
+        self.set_aired(year=date_time.year, month=date_time.month, day=date_time.day)
         pass
 
     def get_aired(self):

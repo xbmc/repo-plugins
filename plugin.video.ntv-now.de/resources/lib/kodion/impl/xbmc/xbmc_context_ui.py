@@ -108,6 +108,7 @@ class XbmcContextUI(AbstractContextUI):
         _message = utils.to_unicode(message)
         _message = _message.replace(',', ' ')
         _message = utils.to_utf8(_message)
+        _message = _message.replace('\n', ' ')
 
         xbmc.executebuiltin(
             "Notification(%s, %s, %d, %s)" % (_header, _message, time_milliseconds, _image))

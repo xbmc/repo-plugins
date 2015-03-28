@@ -59,7 +59,7 @@ class AbstractSettings(object):
     def get_items_per_page(self):
         return self.get_int(constants.setting.ITEMS_PER_PAGE, 50, lambda x: (x + 1) * 5)
 
-    def get_video_quality(self):
+    def get_video_quality(self, quality_map_override=None):
         vq_dict = {0: 240,
                    1: 360,
                    2: 480,  # 576 seems not to work well
@@ -67,6 +67,11 @@ class AbstractSettings(object):
                    4: 1080,
                    5: 2160,
                    6: 4320}
+
+        if quality_map_override is not None:
+            vq_dict = quality_map_override
+            pass
+
         vq = self.get_int(constants.setting.VIDEO_QUALITY, 1)
         return vq_dict[vq]
 

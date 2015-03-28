@@ -1,3 +1,7 @@
+1.1.0 (2015-03-27)
+UPD: improved support for Gotham, Helix and Isengard
+FIX: show seconds (Gotham)
+
 1.0.4 (2015-03-16)
 FIX: Set content type to 'EPISODES' so that the automatic VIEW-OVERRIDE works
 

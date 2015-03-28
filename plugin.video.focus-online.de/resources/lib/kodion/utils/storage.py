@@ -1,7 +1,6 @@
-import datetime
-
 __author__ = 'bromix'
 
+import datetime
 import os
 import sqlite3
 import time

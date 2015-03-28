@@ -2,6 +2,7 @@ import hashlib
 
 from storage import Storage
 
+
 class SearchHistory(Storage):
     def __init__(self, filename, max_items=10):
         Storage.__init__(self, filename, max_item_count=max_items)
@@ -29,6 +30,11 @@ class SearchHistory(Storage):
         m = hashlib.md5()
         m.update(search_text.encode('utf-8'))
         return m.hexdigest()
+
+    def rename(self, old_search_text, new_search_text):
+        self.remove(old_search_text)
+        self.update(new_search_text)
+        pass
 
     def remove(self, search_text):
         self._remove(self._make_id(search_text))

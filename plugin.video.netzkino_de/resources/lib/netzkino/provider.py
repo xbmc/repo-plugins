@@ -3,8 +3,8 @@ from resources.lib.kodion.items import DirectoryItem, VideoItem, UriItem
 __author__ = 'bromix'
 
 from resources.lib import kodion
-from resources.lib.kodion import constants, iso8601
-from resources.lib.kodion.utils import FunctionCache
+from resources.lib.kodion import constants
+from resources.lib.kodion.utils import FunctionCache, datetime_parser
 
 
 class Provider(kodion.AbstractProvider):
@@ -76,8 +76,8 @@ class Provider(kodion.AbstractProvider):
         movie_item.set_plot(plot)
 
         # date added - in this case date modified (why?!?!)
-        date = iso8601.parse(post['modified'])
-        movie_item.set_date(date.year, date.month, date.day)
+        date = datetime_parser.parse(post['modified'])
+        movie_item.set_date_from_datetime(date)
 
         # context menu
         ctx_menu = [(context.localize(constants.localize.WATCH_LATER_ADD),

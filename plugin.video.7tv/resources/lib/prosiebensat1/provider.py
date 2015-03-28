@@ -2,9 +2,8 @@ import re
 
 from client import Client
 from resources.lib import kodion
-from resources.lib.kodion import iso8601
 from resources.lib.kodion.items import VideoItem, DirectoryItem, UriItem
-from resources.lib.kodion.utils import FunctionCache
+from resources.lib.kodion.utils import FunctionCache, datetime_parser
 
 
 def try_set_season_and_episode(video_item):
@@ -32,7 +31,8 @@ class Provider(kodion.AbstractProvider):
                                 '7tv.current_entire_episodes': 30501,
                                 '7tv.newest_clips': 30502,
                                 '7tv.clips': 30503,
-                                '7tv.backstage': 30504})
+                                '7tv.backstage': 30504,
+                                '7tv.exception.drm_not_supported': 30505})
 
         self._client = None
 
@@ -54,7 +54,7 @@ class Provider(kodion.AbstractProvider):
             self._client = Client()
 
             # this should work for US-series
-            if context.get_system_version().get_name() == 'Helix':
+            if context.get_system_version().get_version() >= (14, 0):
                 self._get_client(context).set_video_method(4)
                 pass
             pass
@@ -182,8 +182,13 @@ class Provider(kodion.AbstractProvider):
 
         json_data = self._get_client(context).get_video_url(video_id)
         video_url = json_data.get('VideoURL', '')
-        if video_url == '':
+        if not video_url:
             raise kodion.KodimonException("Could not resolve url for video '%s'" % video_id)
+
+        re_drm_match = re.search(r'no_flash_de|drm_update_app_de', video_url)
+        if re_drm_match:
+            context.get_ui().show_notification(context.localize(self._local_map['7tv.exception.drm_not_supported']))
+            return False
 
         return UriItem(video_url)
 
@@ -476,10 +481,10 @@ class Provider(kodion.AbstractProvider):
             video_item.set_fanart(fanart)
             video_item.set_duration_from_seconds(int(screen_object.get('duration', '60')))
 
-            date_time = iso8601.parse(screen_object.get('start', '0000-00-00'))
-            video_item.set_aired(date_time.year, date_time.month, date_time.day)
-            video_item.set_premiered(date_time.year, date_time.month, date_time.day)
-            video_item.set_year(date_time.year)
+            date_time = datetime_parser.parse(screen_object.get('start', '0000-00-00'))
+            video_item.set_aired_from_datetime(date_time)
+            video_item.set_premiered_from_datetime(date_time)
+            video_item.set_year_from_datetime(date_time)
             try_set_season_and_episode(video_item)
 
             context_menu = [(context.localize(kodion.constants.localize.WATCH_LATER),

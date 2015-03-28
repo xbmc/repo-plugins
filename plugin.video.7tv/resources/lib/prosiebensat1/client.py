@@ -1,4 +1,4 @@
-from resources.lib.kodion import simple_requests as requests
+from resources.lib.kodion import simple_requests as requests, KodionException
 
 
 class Client(object):

@@ -31,6 +31,7 @@ class ViewManager(object):
                 {'name': 'Big List', 'id': 51},
                 {'name': 'Thumbnail', 'id': 500},
                 {'name': 'Poster', 'id': 500},
+                {'name': 'Wide', 'id': 505},
                 {'name': 'Media info', 'id': 504},
                 {'name': 'Media info 2', 'id': 503},
                 {'name': 'Fanart', 'id': 508}

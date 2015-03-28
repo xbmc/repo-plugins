@@ -1,12 +1,12 @@
 __author__ = 'bromix'
 
-from ... import iso8601
+from ... import utils
 from ...items import *
 
 
 def _process_date(info_labels, param):
     if param is not None and param:
-        datetime = iso8601.parse(param)
+        datetime = utils.datetime_parser.parse(param)
         datetime = '%02d.%02d.%04d' % (datetime.day, datetime.month, datetime.year)
         info_labels['date'] = datetime
         pass
@@ -51,19 +51,7 @@ def _process_video_dateadded(info_labels, param):
 
 def _process_video_duration(context, info_labels, param):
     if param is not None:
-        # Starting with KODI 15.0 (Isengard) we can use seconds
-        if context.get_system_version().get_version() >= (15, 0):
-            info_labels['duration'] = int(param)
-            return
-
-        # fallback for all system before KODI 15.0 (Isengard)
-        if int(param) < 60:
-            param = 60
-            pass
-
-        minutes = int(param) / 60
-        seconds = int(param) % 60
-        info_labels['duration'] = '%d' % minutes
+        info_labels['duration'] = '%d' % param
         pass
     pass
 
@@ -84,7 +72,7 @@ def _process_video_rating(info_labels, param):
 
 def _process_date_value(info_labels, name, param):
     if param is not None:
-        date = iso8601.parse(param)
+        date = utils.datetime_parser.parse(param)
         date = '%04d-%02d-%02d' % (date.year, date.month, date.day)
         info_labels[name] = date
         pass

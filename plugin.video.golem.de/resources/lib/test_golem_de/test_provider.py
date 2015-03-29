@@ -43,4 +43,22 @@ class TestProvider(unittest.TestCase):
         items = result[0]
         pass
 
+    def test_on_trailer(self):
+        provider = Provider()
+
+        path = kodion.utils.create_path('browse', 'by-query', 'trailer', '2015', '3')
+        context = kodion.Context(path=path)
+        result = provider.navigate(context)
+        items = result[0]
+        pass
+
+    def test_on_week_in_review(self):
+        provider = Provider()
+
+        path = kodion.utils.create_path('browse', 'by-query', 'wochenrueckblick', '2015')
+        context = kodion.Context(path=path, params={'skip-month': '1'})
+        result = provider.navigate(context)
+        items = result[0]
+        pass
+
     pass

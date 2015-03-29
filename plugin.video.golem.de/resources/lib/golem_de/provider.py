@@ -3,9 +3,8 @@
 __author__ = 'bromix'
 
 import re
-from resources.lib.kodion import iso8601
 from resources.lib.kodion.items import VideoItem, UriItem, DirectoryItem
-from resources.lib.kodion.utils import FunctionCache
+from resources.lib.kodion.utils import FunctionCache, datetime_parser
 
 from resources.lib import kodion
 from resources.lib.golem_de.client import Client
@@ -19,7 +18,10 @@ class Provider(kodion.AbstractProvider):
         kodion.AbstractProvider.__init__(self)
         self._local_map.update({'golem.all-videos': 30500,
                                 'golem.watch-later': 30107,
-                                'golem.newest-videos': 30513})
+                                'golem.newest-videos': 30513,
+                                'golem.stream_not_found': 30514,
+                                'golem.trailer': 30515,
+                                'golem.week-review': 30516})
         self._client = None
         pass
 
@@ -29,7 +31,7 @@ class Provider(kodion.AbstractProvider):
         rss_stream = BytesIO(rss)
         for event, item in ET.iterparse(rss_stream):
             if item.tag == 'item':
-                datetime = iso8601.parse(kodion.utils.to_unicode(item.find('pubDate').text))
+                datetime = datetime_parser.parse(kodion.utils.to_unicode(item.find('pubDate').text))
                 if not datetime.year in result:
                     result.append(datetime.year)
                     pass
@@ -45,7 +47,7 @@ class Provider(kodion.AbstractProvider):
         rss_stream = BytesIO(rss)
         for event, item in ET.iterparse(rss_stream):
             if item.tag == 'item':
-                datetime = iso8601.parse(kodion.utils.to_unicode(item.find('pubDate').text))
+                datetime = datetime_parser.parse(kodion.utils.to_unicode(item.find('pubDate').text))
                 if datetime.year == year:
                     if not datetime.month in result:
                         result.append(datetime.month)
@@ -106,19 +108,18 @@ class Provider(kodion.AbstractProvider):
                 video_item.set_uri(uri)
                 pass
 
-                datetime = iso8601.parse(kodion.utils.to_unicode(item.find('pubDate').text))
+                datetime = datetime_parser.parse(kodion.utils.to_unicode(item.find('pubDate').text))
 
-                #validate the date
+                # validate the date
                 if year and month:
                     if datetime.year != year or datetime.month != month:
                         item.clear()
                         continue
                     pass
 
-                video_item.set_aired(datetime.year, datetime.month, datetime.day)
-                video_item.set_premiered(datetime.year, datetime.month, datetime.day)
-                video_item.set_date(datetime.year, datetime.month, datetime.day, datetime.hour, datetime.minute,
-                                    datetime.second)
+                video_item.set_aired_from_datetime(datetime)
+                video_item.set_premiered_from_datetime(datetime)
+                video_item.set_date_from_datetime(datetime)
 
                 video_item.set_studio('golem.de')
                 video_item.add_artist('golem.de')
@@ -154,7 +155,10 @@ class Provider(kodion.AbstractProvider):
             client = self.get_client(context)
             video_url = client.get_video_stream(video_id.group('video_id'), url, quality=video_quality)
 
-            return UriItem(video_url)
+            if video_url:
+                return UriItem(video_url)
+
+            context.get_ui().show_notification(context.localize(self._local_map['golem.stream_not_found']))
         return False
 
     def get_wizard_supported_views(self):
@@ -205,7 +209,7 @@ class Provider(kodion.AbstractProvider):
 
         result = []
         for month in months:
-            month_text = context.localize(30500+month)
+            month_text = context.localize(30500 + month)
             year = kodion.utils.to_unicode(year)
             month_item = DirectoryItem(month_text, context.create_uri(['browse', year, str(month)]))
             month_item.set_fanart(self.get_fanart(context))
@@ -213,6 +217,48 @@ class Provider(kodion.AbstractProvider):
             result.append(month_item)
             pass
         return result
+
+    @kodion.RegisterProviderPath('^/browse/by-query/(?P<query>.+)/$')
+    def _on_filter_by_query_show_years(self, context, re_match):
+        result = []
+
+        query = re_match.group('query')
+        years = self._get_years(context)
+        for year in years:
+            year = kodion.utils.to_unicode(str(year))
+            year_item = DirectoryItem(year,
+                                      context.create_uri(['browse', 'by-query', query, year]))
+            year_item.set_fanart(self.get_fanart(context))
+            year_item.set_image(context.create_resource_path('media', 'calendar.png'))
+            result.append(year_item)
+            pass
+
+        return result
+
+    @kodion.RegisterProviderPath('^/browse/by-query/(?P<query>.+)/(?P<year>\d+)/$')
+    def _on_filter_by_query_show_month(self, context, re_match):
+        year = re_match.group('year')
+        query = re_match.group('query')
+
+        months = self._get_month(context, int(year))
+        result = []
+        for month in months:
+            month_text = context.localize(30500 + month)
+            year = kodion.utils.to_unicode(year)
+            month_item = DirectoryItem(month_text, context.create_uri(['browse', 'by-query', query, year, str(month)]))
+            month_item.set_fanart(self.get_fanart(context))
+            month_item.set_image(context.create_resource_path('media', 'calendar.png'))
+            result.append(month_item)
+            pass
+        return result
+
+    @kodion.RegisterProviderPath('^/browse/by-query/(?P<query>.+)/(?P<year>\d+)/(?P<month>\d+)/$')
+    def _on_filter_by_query_show_result(self, context, re_match):
+        context.set_content_type(kodion.constants.content_type.EPISODES)
+        year = int(re_match.group('year'))
+        month = int(re_match.group('month'))
+        query = re_match.group('query')
+        return self._get_videos(context, query=query, year=year, month=month)
 
     @kodion.RegisterProviderPath('^/browse/newest/$')
     def _on_browse_newest(self, context, re_match):
@@ -237,6 +283,21 @@ class Provider(kodion.AbstractProvider):
         newset_videos.set_fanart(self.get_fanart(context))
         newset_videos.set_image(context.create_resource_path('media', 'videos.png'))
         result.append(newset_videos)
+
+        # Wochenrueckblick
+        week_review_item = DirectoryItem(context.localize(self._local_map['golem.week-review']),
+                                         context.create_uri([kodion.constants.paths.SEARCH, 'query'],
+                                                            {'q': 'wochenrueckblick'}))
+        week_review_item.set_fanart(self.get_fanart(context))
+        week_review_item.set_image(context.create_resource_path('media', 'calendar.png'))
+        result.append(week_review_item)
+
+        # trailer
+        trailer_item = DirectoryItem(context.localize(self._local_map['golem.trailer']),
+                                     context.create_uri(['browse', 'by-query', 'trailer']))
+        trailer_item.set_fanart(self.get_fanart(context))
+        trailer_item.set_image(context.create_resource_path('media', 'videos.png'))
+        result.append(trailer_item)
 
         # watch later
         if len(context.get_watch_later_list().list()) > 0:

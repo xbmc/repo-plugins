@@ -1,6 +1,9 @@
+import re
+
 __author__ = 'bromix'
 
 from resources.lib.kodion import simple_requests as requests
+
 
 class Client():
     def __init__(self):
@@ -50,10 +53,32 @@ class Client():
         return self._perform_request(url=url, headers=headers)
 
     def get_video_streams_from_data(self, json_data):
+        def _sort(x):
+            return x['q']
+
         content = json_data.get('content', [{}])[0]
 
-        result = [{'q': 480, 'url': content['videoSDUrl']},
-                  {'q': 720, 'url': content['mp4Url']}]
+        regex_list = [re.compile(r'\d+x(?P<resolution>\d+)'),
+                      re.compile(r'MP4(1920|1280|768)(?P<resolution>1080|720|432)')]
+
+        result = []
+        url_fields = ['videoHDUrl', 'mp4Url', 'videoSDUrl', 'flvUrl']
+        for url_field in url_fields:
+            url = content.get(url_field, '')
+            if url:
+                resolution = 480
+                for regex in regex_list:
+                    re_match = regex.search(url)
+                    if re_match:
+                        resolution = int(re_match.group('resolution'))
+                        break
+                    pass
+
+                result.append({'q': resolution, 'url': url})
+                pass
+            pass
+
+        result = sorted(result, key=_sort, reverse=True)
         return result
 
     def _perform_request(self, url='http://json.focus.de/videos', headers=None):

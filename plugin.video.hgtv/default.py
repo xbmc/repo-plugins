@@ -21,6 +21,8 @@ addon         = xbmcaddon.Addon('plugin.video.hgtv')
 __addonname__ = addon.getAddonInfo('name')
 __language__  = addon.getLocalizedString
 
+qp  = urllib.quote_plus
+uqp = urllib.unquote_plus
 
 home          = addon.getAddonInfo('path').decode(UTF8)
 icon          = xbmc.translatePath(os.path.join(home, 'icon.png'))
@@ -63,32 +65,47 @@ def getRequest(url):
 
 
 def getSources(fanart):
+              ilist = []
               urlbase   = HGTVBASE % ('/shows/full-episodes')
               pg = getRequest(urlbase)
-              cats = re.compile('<li class="block">.+?src="(.+?)".+?href="(.+?)">(.+?)<.+?</li>').findall(pg)
-              for catimg, caturl, catname in cats:
-                  catname = cleanname(catname)
-                  addDir(catname,caturl,'GC',catimg,addonfanart,catname,GENRE_TV,'',False)
+              blob = re.compile('<div class="video-player-embedded">(.+?)<section class="text-promo module">').search(pg).group(1)
+              cats = re.compile('<li class="block">.+?src="(.+?)".+?href="(.+?)">(.+?)<.+?</li>').findall(blob)
+              for img, url, name in cats:
+                  name = cleanname(name).strip()
+                  plot = name
+                  u = '%s?mode=GC&name=%s&url=%s' %(sys.argv[0], qp(name), qp(url))
+                  liz=xbmcgui.ListItem(name, '','DefaultFolder.png', img)
+                  liz.setInfo( 'Video', { "Title": name, "Plot": plot })
+                  liz.setProperty('fanart_image', addonfanart)
+                  ilist.append((u, liz, True))
+              xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
 
-def getCats(cat_url):
-              pg = getRequest(cat_url)
+def getCats(caturl, catname):
+              pg = getRequest(uqp(caturl))
               try:
+                ilist = []
                 shows = re.compile("data-video-prop='(.+?)'").search(pg).group(1)
                 s = json.loads(shows)
                 s = s["channels"][0]["videos"]
                 for v in s:
-                   showname = cleanname(v["title"])
-                   showdesc = cleanname(v["description"])
-                   showimg  = HGTVBASE % (v["thumbnailUrl"])
-                   showurl = '%s?mode=GS&url=%s' %(sys.argv[0], urllib.quote_plus(v["releaseUrl"]))
-                   addLink(showurl.encode(UTF8),showname,showimg,addonfanart,showdesc,GENRE_TV,'')
+                   name = cleanname(v["title"]).strip()
+                   plot = cleanname(v["description"]).strip()
+                   img  = HGTVBASE % (v["thumbnailUrl"])
+                   u = '%s?mode=GS&url=%s' %(sys.argv[0], qp(v["releaseUrl"]))
+                   liz=xbmcgui.ListItem(name, '','DefaultFolder.png', img)
+                   liz.setInfo( 'Video', { "Title": name, "Studio":catname, "Plot": plot })
+                   liz.setProperty('fanart_image', addonfanart)
+                   liz.setProperty('IsPlayable', 'true')
+                   ilist.append((u, liz, False))
+                xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+
               except:
                 dialog = xbmcgui.Dialog()
                 dialog.ok(__language__(30010), '',__language__(30011))
 
 
 def getShow(showurl):
-            showurl = urllib.unquote_plus(showurl)
+            showurl = uqp(showurl)
             pg = getRequest(showurl)
             i = int(addon.getSetting('vid_res'))
             i = i+1
@@ -98,50 +115,6 @@ def getShow(showurl):
             except:
               url = 'http://link.theplatform.com/s/errorFiles/Unavailable.mp4'
             xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = url))
-
-
-def play_playlist(name, list):
-        playlist = xbmc.PlayList(1)
-        playlist.clear()
-        item = 0
-        for i in list:
-            item += 1
-            info = xbmcgui.ListItem('%s) %s' %(str(item),name))
-            playlist.add(i, info)
-        xbmc.executebuiltin('playlist.playoffset(video,0)')
-
-
-def addDir(name,url,mode,iconimage,fanart,description,genre,date,showcontext=True,playlist=None,autoplay=False):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+mode
-        dir_playable = False
-        cm = []
-
-        if mode != 'SR':
-            u += "&name="+urllib.quote_plus(name)
-            if (fanart is None) or fanart == '': fanart = addonfanart
-            u += "&fanart="+urllib.quote_plus(fanart)
-            dir_image = "DefaultFolder.png"
-            dir_folder = True
-        else:
-            dir_image = "DefaultVideo.png"
-            dir_folder = False
-            dir_playable = True
-
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage=dir_image, thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": description, "Genre": genre, "Year": date } )
-        liz.setProperty( "Fanart_Image", fanart )
-
-        if dir_playable == True:
-         liz.setProperty('IsPlayable', 'true')
-        if not playlist is None:
-            playlist_name = name.split(') ')[1]
-            cm.append(('Play '+playlist_name+' PlayList','XBMC.RunPlugin(%s?mode=PP&name=%s&playlist=%s)' %(sys.argv[0], playlist_name, urllib.quote_plus(str(playlist).replace(',','|')))))
-        liz.addContextMenuItems(cm)
-        return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=dir_folder)
-
-def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,playlist=None, autoplay=False):
-        return addDir(name,url,'SR',iconimage,fanart,description,genre,date,showcontext,playlist,autoplay)
 
 
 
@@ -165,9 +138,7 @@ except:
     mode = None
 
 if mode==  None:  getSources(p('fanart'))
-elif mode=='SR':  xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=p('url')))
-elif mode=='PP':  play_playlist(p('name'), p('playlist'))
-elif mode=='GC':  getCats(p('url'))
+elif mode=='GC':  getCats(p('url'),p('name'))
 elif mode=='GS':  getShow(p('url'))
 
 

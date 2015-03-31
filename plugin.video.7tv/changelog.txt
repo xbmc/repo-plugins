@@ -1,3 +1,6 @@
+2.2.1 (2015-03-31)
+FIX: improve playback on ARM systems
+
 2.2.0 (2015-03-27)
 ADD: skip DRM protected videos
 UPD: improved support for Gotham, Helix and Isengard

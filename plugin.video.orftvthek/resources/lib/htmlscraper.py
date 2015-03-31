@@ -272,7 +272,8 @@ class htmlScraper:
             backdrop = self.defaultbackdrop
         if description == '':
             description = (self.translation(30008)).encode("utf-8")
-            
+        if not self.useSubtitles:
+            subtitles = None;
         liz = createListItem(title,banner,description,duration,date,channel,videourl,playable,folder,self.translation,backdrop,self.pluginhandle,subtitles)    
         return liz
     
@@ -345,10 +346,13 @@ class htmlScraper:
             current_desc = data.get("selected_video")["description"].encode('UTF-8')
             current_duration = data.get("selected_video")["duration"]
             current_preview_img = data.get("selected_video")["preview_image_url"]
-            if "subtitles" in data.get("selected_video"):
-                current_subtitles = []
-                for sub in data.get("selected_video")["subtitles"]:
-                    current_subtitles.append(sub.get(u'src'))
+            if self.useSubtitles:
+                if "subtitles" in data.get("selected_video"):
+                    current_subtitles = []
+                    for sub in data.get("selected_video")["subtitles"]:
+                        current_subtitles.append(sub.get(u'src'))
+                else:
+                    current_subtitles = None
             else:
                 current_subtitles = None
             current_id = data.get("selected_video")["id"]
@@ -370,10 +374,13 @@ class htmlScraper:
                     preview_img = video_item["preview_image_url"]
                     id = video_item["id"]
                     sources = video_item["sources"]
-                    if "subtitles" in video_item:
-                        subtitles = []
-                        for sub in video_item["subtitles"]:
-                            subtitles.append(sub.get(u'src'))
+                    if self.useSubtitles:
+                        if "subtitles" in video_item:
+                            subtitles = []
+                            for sub in video_item["subtitles"]:
+                                subtitles.append(sub.get(u'src'))
+                        else:
+                            subtitles = None
                     else:
                         subtitles = None
                     videourl = self.getVideoUrl(sources);

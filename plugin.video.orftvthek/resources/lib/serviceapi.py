@@ -104,7 +104,7 @@ class serviceAPI:
         description  = self.JSONDescription(JSONSegment.get('descriptions'))
         duration     = JSONSegment.get('duration')
         streamingURL = self.JSONStreamingURL(JSONSegment.get('videos'))
-        if JSONSegment.get('subtitlesSrtFileUrl'):
+        if JSONSegment.get('subtitlesSrtFileUrl') and self.useSubtitles:
             subtitles = [JSONSegment.get('subtitlesSrtFileUrl')]
         else:
             subtitles = None
@@ -259,7 +259,7 @@ class serviceAPI:
             for segment in result.get('segments'):
                 image        = self.JSONImage(segment.get('images'))
                 streamingURL = self.JSONStreamingURL(segment.get('videos'))
-                if segment.get('subtitlesSrtFileUrl'):
+                if segment.get('subtitlesSrtFileUrl') and self.useSubtitles:
                     subtitles = [segment.get('subtitlesSrtFileUrl')]
                 else:
                     subtitles = None

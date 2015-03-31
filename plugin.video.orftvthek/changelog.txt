@@ -1,3 +1,9 @@
+0.4.2
+- fixed htmlentities in subtitles - vtt file is now used
+
+0.4.1
+- fixed subtitle force
+
 0.4.0
 - new Structure
 - add JSON Scraper(ServiceAPI)(thx @Rechi)

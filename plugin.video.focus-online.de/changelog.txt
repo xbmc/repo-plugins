@@ -1,3 +1,7 @@
+1.1.1 (2015-03-31)
+ADD: support for 1080p (default 720p)
+UPD: improved video stream support
+
 1.1.0 (2015-03-27)
 UPD: improved support for Gotham, Helix and Isengard
 FIX: show seconds (Gotham)

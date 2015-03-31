@@ -35,12 +35,16 @@ class Provider(kodion.AbstractProvider):
     @kodion.RegisterProviderPath('^/play/$')
     def _on_play(self, context, re_match):
         def _compare(item):
-            vq = context.get_settings().get_video_quality(quality_map_override={0: 480, 1: 720})
+            vq = context.get_settings().get_video_quality(quality_map_override={0: 480, 1: 720, 2: 1080})
             return vq - item['q']
 
         url = context.get_param('url')
 
         client = self.get_client(context)
+
+        from resources.lib.kodion import debug
+        debug.debug_here()
+
         json_data = context.get_function_cache().get(FunctionCache.ONE_MINUTE * 15, client.get_url_data, url)
         video_streams = client.get_video_streams_from_data(json_data)
         video_stream = kodion.utils.find_best_fit(video_streams, _compare)

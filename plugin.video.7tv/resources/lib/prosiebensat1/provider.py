@@ -52,11 +52,6 @@ class Provider(kodion.AbstractProvider):
     def _get_client(self, context):
         if not self._client:
             self._client = Client()
-
-            # this should work for US-series
-            if context.get_system_version().get_version() >= (14, 0):
-                self._get_client(context).set_video_method(4)
-                pass
             pass
 
         return self._client

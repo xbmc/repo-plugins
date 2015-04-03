@@ -1,3 +1,7 @@
+2.2.1 (2015-04-03)
+UPD: new icons
+FIX: playback (based on DRM protection)
+
 2.2.0 (2015-03-27)
 UPD: improved support for Gotham, Helix and Isengard
 FIX: show seconds (Gotham)

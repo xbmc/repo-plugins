@@ -1,3 +1,6 @@
+[B]1.1.0[/B]
+- Upstream site changed. Now we use Android streams.
+
 [B]1.0.3[/B]
 - updated required python API version to 2.1.0. This addon should now work with both XBMC 12 (Frodo) and XBMC 13 (Gotham).
 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.3bmeteo"
+       name="3B Meteo"
+       version="1.0.0"
+       provider-name="Nightflyer">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.beautifulsoup" version="3.0.8"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <language>it</language>
+    <platform>all</platform>
+    <summary lang="it">Previsioni del tempo in Italia</summary>
+    <description lang="it">Da sempre le più affidabili previsioni del tempo che puoi trovare in Italia.</description>
+    <summary lang="en">Weather forecast in Italy</summary>
+    <description lang="en">The most reliable weather forecasts you can find in Italy.</description>
+    <license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>
+    <forum></forum>
+    <website>https://github.com/nightflyer73/plugin.video.3bmeteo</website>
+    <email></email>
+    <source>https://github.com/nightflyer73/plugin.video.3bmeteo</source>
+  </extension>
+</addon>

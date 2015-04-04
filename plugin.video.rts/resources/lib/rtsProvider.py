@@ -6,6 +6,7 @@ import httplib
 from urlparse import urlparse
 from xml.dom.minidom import parse
 from bs4 import BeautifulSoup
+import bs4
 import re
 
 
@@ -45,9 +46,12 @@ class tvShow:
                 '',
                 item.getElementsByTagName('itunes:summary')[0].childNodes[0].data
             )
-            epImage = BeautifulSoup(
+            bsImg = BeautifulSoup(
                 item.getElementsByTagName('description')[0].childNodes[0].nodeValue
-            ).img[u'src'].replace('w=80&h=57','w=260&h=227')
+            ).img
+            ebImage = ''
+            if type(bsImg) is bs4.element.Tag:
+                epImage = bsImg[u'src'].replace('w=80&h=57','w=260&h=227')
             epPubDate = item.getElementsByTagName('pubDate')[0].childNodes[0].data
             epVidUrl = item.getElementsByTagName('enclosure')[0].attributes['url'].childNodes[0].data
             self.listOfEpisodes.append(

@@ -13,16 +13,17 @@ import time
 addon_handle = int(sys.argv[1])
 ROOTDIR = xbmcaddon.Addon(id='plugin.video.nbcsnliveextra').getAddonInfo('path')
 
-#Settings
+#Settings file location
 settings = xbmcaddon.Addon(id='plugin.video.nbcsnliveextra')
 
 FANART = ROOTDIR+"/fanart.jpg"
 ICON = ROOTDIR+"/icon.png"
 ROOT_URL = 'http://stream.nbcsports.com/data/mobile/'
 
-
 #Main settings
 QUALITY = int(settings.getSetting(id="quality"))
+USER_AGENT = str(settings.getSetting(id="user-agent"))
+CDN = str(settings.getSetting(id="cdn"))
 
 
 def CATEGORIES():                
@@ -31,16 +32,9 @@ def CATEGORIES():
     #addDir('On NBC Sports','/replays',3,ICON,FANART)
 
 def LIVE():      
-    #REFRESH
-    #addDir('Refresh List','',0,ICON,FANART,None,False)   
-    #Add Refresh List Link
-
-    #LIVE    
-    #SCRAPE_VIDEOS(ROOT_URL+'live.json')
+    #LIVE        
     SCRAPE_VIDEOS(ROOT_URL+'mcms/prod/nbc-live.json')
     #UPCOMING
-    #SCRAPE_VIDEOS(ROOT_URL+'upcoming.json')
-    #http://stream.nbcsports.com/data/mobile/mcms/prod/nbc-upcoming.json
     SCRAPE_VIDEOS(ROOT_URL+'mcms/prod/nbc-upcoming.json')
 
 
@@ -50,10 +44,8 @@ def GET_ALL_SPORTS():
     #http://link.theplatform.com/s/BxmELC/JYis41t0VJTO?mbr=true&manifest=m3u&feed=Mobile%20App%20-%20NBC%20Sports%20Live%20Extra
     #To get This
     #http://allisports-vh.akamaihd.net/i/HD/video_sports/NBCU_Sports_Group_-_AlliSports/118/775/DT_BK_Skate_Streetstyle_Recap_YT_1411364680363_,140,345,220,90,60,40,20,0k.mp4.csmil/index_1_av.m3u8?null=
-
     #req = urllib2.Request(ROOT_URL+'configuration-2013.json')
-    req = urllib2.Request(ROOT_URL+'configuration-2014-RSN-Sections.json')
-    #req.add_header('User-Agent', 'NBCSports/742 CFNetwork/672.0.8 Darwin/14.0.0')
+    req = urllib2.Request(ROOT_URL+'configuration-2014-RSN-Sections.json')    
     response = urllib2.urlopen(req)   
     json_source = json.load(response)                       
     response.close()    
@@ -79,7 +71,7 @@ def SCRAPE_VIDEOS(url,scrape_type=None):
     response = urllib2.urlopen(req)
     json_source = json.load(response)                           
     response.close()                
-	
+    
     if scrape_type == None:
         #LIVE
         #try:       
@@ -121,24 +113,13 @@ def SCRAPE_VIDEOS(url,scrape_type=None):
 
 
 def BUILD_VIDEO_LINK(item):
-    url = ''
-    try:
+    url = ''    
+    try:        
         url = item['iosStreamUrl']  
+        if CDN == 1 and item['backupUrl'] != '':
+            url = item['backupUrl']
     except:
         pass
-    
-    ##################################################################
-    # Inject login cookie - NOT USED CURRENTLY
-    ##################################################################
-    #header = { 'Referer' : 'http://stream.golfchannel.com/?pid=15607',
-    #           'Accept-Encoding' : 'gzip,deflate,sdch',
-    #           'Accept-Language' : 'en-US,en;q=0.8',
-    #           'Cookie' : 'hdntl=exp=1410035727~acl=%2f*~hmac=b3d9c10715e1c34dda7d12ab97b4258388369f094093ef21098a82ba47c92e56'}
-    #header_encoded = urllib.urlencode(header)
-    #url =  urllib.quote_plus(url+'|')       
-    #full_url = url + '|' + header_encoded 
-    ##################################################################
-    
     
     #Set quality level based on user settings
     if QUALITY == 0:
@@ -164,23 +145,18 @@ def BUILD_VIDEO_LINK(item):
         #q_lvl = "4296000"
         q_lvl_golf = "4296k"
     
-    #http://tvenbcsn-i.Akamaihd.net/hls/live/218235/nbcsnx/master.m3u8
-    #http://tvenbcsn-i.Akamaihd.net/hls/live/218235/nbcsnx/4296k/prog.m3u8
+    
     url = url.replace('master.m3u8',q_lvl_golf+'/prog.m3u8')       
     url = url.replace('manifest(format=m3u8-aapl-v3)','QualityLevels('+q_lvl+')/Manifest(video,format=m3u8-aapl-v3,audiotrack=audio_en_0)')       
     url = url.replace('manifest(format=m3u8-aapl,filtername=vodcut)','QualityLevels('+q_lvl+')/Manifest(video,format=m3u8-aapl,filtername=vodcut)')
     url = url.replace('manifest(format=m3u8-aapl-v3,filtername=vodcut)','QualityLevels('+q_lvl+')/Manifest(video,format=m3u8-aapl-v3,audiotrack=audio_en_0,filtername=vodcut)')                       
-    #url = url.replace('golfx/master.m3u8','golfx/'+q_lvl_golf+'/prog.m3u8')       
-    url = url + "|User-Agent=Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36"
+    
     
     menu_name = item['title']
     name = menu_name                
     info = item['info']     
     # Highlight active streams   
     start_time = item['start']
-    #utc_dt = datetime.strptime(utc_dt, "%Y%m%d-%H%M")
-   
-
     current_time =  datetime.utcnow().strftime('%Y%m%d-%H%M')   
 
     length = 0
@@ -195,7 +171,8 @@ def BUILD_VIDEO_LINK(item):
     
     imgurl = "http://hdliveextra-pmd.edgesuite.net/HD/image_sports/mobile/"+item['image']+"_m50.jpg"    
    
-    if url != '' and my_time >= event_start and my_time <= event_end:
+    if url != '' and my_time >= event_start and my_time <= event_end:           
+        url = url + "|User-Agent=" + USER_AGENT
         menu_name = '[COLOR=FF00B7EB]'+menu_name+'[/COLOR]'
         addLink(menu_name,url,name,imgurl,FANART) 
     else:
@@ -215,12 +192,6 @@ def utc_to_local(utc_dt):
     assert utc_dt.resolution >= timedelta(microseconds=1)
     return local_dt.replace(microsecond=utc_dt.microsecond)
 
-def LOGIN():
-    req = urllib2.Request(url)
-   # req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36')
-    response = urllib2.urlopen(req)   
-    json_source = json.load(response)                       
-    response.close()  
 
 def addLink(name,url,title,iconimage,fanart):
     ok=True
@@ -232,6 +203,7 @@ def addLink(name,url,title,iconimage,fanart):
     liz.setInfo( type="Video", infoLabels={ "plotoutline": "TEST 123" } )
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
     return ok
+
 
 def addDir(name,url,mode,iconimage,fanart=None,scrape_type=None,isFolder=True): 
     params = get_params()      

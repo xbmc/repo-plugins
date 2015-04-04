@@ -455,7 +455,8 @@ class Client():
             list_of_params = []
             for key in sorted_keys:
                 value = _params[key]
-                if url == 'https://secure.vimeo.com/oauth/access_token':
+                # who wrote the android app should burn in hell! No clue of correct encoding - make up your mind
+                if url == 'https://secure.vimeo.com/oauth/access_token' and key != 'x_auth_password':
                     list_of_params.append('%s=%s' % (key, value))
                     pass
                 else:

@@ -17,6 +17,8 @@
 
 from __future__ import unicode_literals
 
+import traceback
+import xbmc
 import xbmcgui
 import xbmcaddon
 import xbmcplugin
@@ -27,18 +29,29 @@ from lib.wimpy.models import Album, Artist
 from lib.wimpy import Quality
 from routing import Plugin
 
-plugin = Plugin()
 addon = xbmcaddon.Addon()
+plugin = Plugin()
+plugin.name = addon.getAddonInfo('name')
 
-quality = [Quality.lossless, Quality.high, Quality.low][int('0'+addon.getSetting('quality'))]
+_addon_id = addon.getAddonInfo('id')
+
 config = wimpy.Config(
-    session_id=addon.getSetting('session_id'),
-    country_code=addon.getSetting('country_code'),
-    user_id=addon.getSetting('user_id'),
     api=wimpy.TIDAL_API if addon.getSetting('site') == '1' else wimpy.WIMP_API,
-    quality=quality,
-)
-wimp = wimpy.Session(config)
+    quality=[Quality.lossless, Quality.high, Quality.low][int('0' + addon.getSetting('quality'))])
+
+wimp = wimpy.Session(config=config)
+
+is_logged_in = False
+_session_id = addon.getSetting('session_id')
+_country_code = addon.getSetting('country_code')
+_user_id = addon.getSetting('user_id')
+if _session_id and _country_code and _user_id:
+    wimp.load_session(session_id=_session_id, country_code=_country_code, user_id=_user_id)
+    is_logged_in = True
+
+
+def log(msg):
+    xbmc.log(("[%s] %s" % (_addon_id, msg)).encode('utf-8'), level=xbmc.LOGDEBUG)
 
 
 def view(data_items, urls, end=True):
@@ -96,14 +109,16 @@ def urls_from_id(view_func, items):
 
 @plugin.route('/')
 def root():
-    add_directory('My music', my_music)
-    add_directory('Featured Playlists', featured_playlists)
-    add_directory("What's New", whats_new)
-    add_directory('Genres', genres)
-    add_directory('Moods', moods)
-    add_directory('Search', search)
-    add_directory('Login', login)
-    add_directory('Logout', logout)
+    if is_logged_in:
+        add_directory('My Music', my_music)
+        add_directory('Featured Playlists', featured_playlists)
+        add_directory("What's New", whats_new)
+        add_directory('Genres', genres)
+        add_directory('Moods', moods)
+        add_directory('Search', search)
+        add_directory('Logout', logout)
+    else:
+        add_directory('Login', login)
     xbmcplugin.endOfDirectory(plugin.handle)
 
 
@@ -172,9 +187,10 @@ def whats_new():
     add_directory('New Tracks', plugin.url_for(featured, group='new', content_type='tracks'))
     add_directory('Top Albums', plugin.url_for(featured, group='top', content_type='albums'))
     add_directory('Top Tracks', plugin.url_for(featured, group='top', content_type='tracks'))
-    add_directory('Local Playlists', plugin.url_for(featured, group='local', content_type='playlists'))
-    add_directory('Local Albums', plugin.url_for(featured, group='local', content_type='albums'))
-    add_directory('Local Tracks', plugin.url_for(featured, group='local', content_type='tracks'))
+    if config.api is wimpy.WIMP_API:
+        add_directory('Local Playlists', plugin.url_for(featured, group='local', content_type='playlists'))
+        add_directory('Local Albums', plugin.url_for(featured, group='local', content_type='albums'))
+        add_directory('Local Tracks', plugin.url_for(featured, group='local', content_type='tracks'))
     xbmcplugin.endOfDirectory(plugin.handle)
 
 
@@ -281,19 +297,25 @@ def favourite_tracks():
 
 @plugin.route('/search')
 def search():
-    dialog = xbmcgui.Dialog()
-    fields = ['artist', 'album', 'playlist', 'track']
-    names = ['Artists', 'Albums', 'Playlists', 'Tracks']
-    idx = dialog.select('Search for', names)
-    if idx != -1:
-        field = fields[idx]
-        query = dialog.input('Search')
-        if query:
-            res = wimp.search(field, query)
-            view(res.artists, urls_from_id(artist_view, res.artists), end=False)
-            view(res.albums, urls_from_id(album_view, res.albums), end=False)
-            view(res.playlists, urls_from_id(playlist_view, res.playlists), end=False)
-            track_list(res.tracks)
+    add_directory('Artist', plugin.url_for(search_type, field='artist'))
+    add_directory('Album', plugin.url_for(search_type, field='album'))
+    add_directory('Playlist', plugin.url_for(search_type, field='playlist'))
+    add_directory('Track', plugin.url_for(search_type, field='track'))
+    xbmcplugin.endOfDirectory(plugin.handle)
+
+
+@plugin.route('/search_type/<field>')
+def search_type(field):
+    keyboard = xbmc.Keyboard('', 'Search')
+    keyboard.doModal()
+    if keyboard.isConfirmed():
+        keyboardinput = keyboard.getText()
+        if keyboardinput:
+            searchresults = wimp.search(field, keyboardinput)
+            view(searchresults.artists, urls_from_id(artist_view, searchresults.artists), end=False)
+            view(searchresults.albums, urls_from_id(album_view, searchresults.albums), end=False)
+            view(searchresults.playlists, urls_from_id(playlist_view, searchresults.playlists), end=False)
+            track_list(searchresults.tracks)
 
 
 @plugin.route('/login')
@@ -316,6 +338,12 @@ def login():
         addon.setSetting('country_code', wimp.country_code)
         addon.setSetting('user_id', unicode(wimp.user.id))
 
+        if not addon.getSetting('username') or not addon.getSetting('password'):
+            # Ask about remembering username/password
+            dialog = xbmcgui.Dialog()
+            if dialog.yesno(plugin.name, 'Remember login details?'):
+                addon.setSetting('username', username)
+                addon.setSetting('password', password)
 
 @plugin.route('/logout')
 def logout():
@@ -328,23 +356,21 @@ def logout():
 def play(track_id):
     media_url = wimp.get_media_url(track_id)
     if not media_url.startswith('http://') and not media_url.startswith('https://'):
-        host, app, playpath = media_url.split('/', 3)
-        media_url = 'rtmp://%s app=%s playpath=%s' % (host, app, playpath)
+        log("media url: %s" % media_url)
+        host, tail = media_url.split('/', 1)
+        app, playpath = tail.split('/mp4:', 1)
+        media_url = 'rtmp://%s app=%s playpath=mp4:%s' % (host, app, playpath)
     li = ListItem(path=media_url)
-    mimetype = 'audio/flac' if quality == Quality.lossless else 'audio/mpeg'
+    mimetype = 'audio/flac' if config.quality == Quality.lossless else 'audio/mpeg'
     li.setProperty('mimetype', mimetype)
     xbmcplugin.setResolvedUrl(plugin.handle, True, li)
 
 
-def handle_errors(f):
+if __name__ == '__main__':
     try:
-        f()
+        plugin.run()
     except HTTPError as e:
         if e.response.status_code in [401, 403]:
             dialog = xbmcgui.Dialog()
-            dialog.notification(addon.getAddonInfo('name'), "Unauthorized", xbmcgui.NOTIFICATION_ERROR)
-        else:
-            raise e
-
-if __name__ == '__main__':
-    handle_errors(plugin.run)
+            dialog.notification(plugin.name, "Authorization problem", xbmcgui.NOTIFICATION_ERROR)
+        traceback.print_exc()

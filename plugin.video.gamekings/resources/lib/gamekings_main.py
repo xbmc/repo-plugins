@@ -40,11 +40,20 @@ class Main:
         #
         # Gamekings Extra
         #
-        parameters = {"action" : "list", "plugin_category" : __language__(30002), "url" : "http://www.gamekings.tv/tag/Gamekings-Extra/page/001/", "next_page_possible": "True"}
+        parameters = {"action" : "list", "plugin_category" : __language__(30002), "url" : "http://www.gamekings.tv/category/nieuws/page/001/", "next_page_possible": "True"}
         url = sys.argv[0] + '?' + urllib.urlencode(parameters)
         listitem = xbmcgui.ListItem( __language__(30002), iconImage="DefaultFolder.png" )
         folder = True
         xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
+        
+        #
+        # Trailers
+        #
+        parameters = {"action" : "list", "plugin_category" : __language__(30003), "url" : "http://www.gamekings.tv/tag/Trailer/page/001/", "next_page_possible": "True"}
+        url = sys.argv[0] + '?' + urllib.urlencode(parameters)
+        listitem = xbmcgui.ListItem( __language__(30003), iconImage="DefaultFolder.png" )
+        folder = True
+        xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)        
 
 #Retired for now (14/11/2014)
 #         #

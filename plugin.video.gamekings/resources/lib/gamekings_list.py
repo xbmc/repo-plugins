@@ -89,11 +89,19 @@ class Main:
 		# Get the titles and video page urls
 		#<a href="http://www.gamekings.tv/videos/lars-gustavsson-over-battlefield-4/" title="Lars Gustavsson over Battlefield 4">
 		#skip this: <a href='http://www.gamekings.tv/videos/lars-gustavsson-over-battlefield-4/#disqus_thread'>
-		if self.plugin_category == __language__(30002):
+		
+		#this is Videos	
+		if self.plugin_category == __language__(30000):
+			video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.tv/")})
+		#this is Afleveringen	
+		elif self.plugin_category == __language__(30001):
+			video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.tv/")})
 		#this is Gamekings Extra	
+		elif self.plugin_category == __language__(30002):
 			video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.tv/nieuws/")})
-		else:
-			video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.tv/videos/")})
+		#this is Trailers
+		elif self.plugin_category == __language__(30003):
+			video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.tv/nieuws/")})
 		
 		if (self.DEBUG) == 'true':
 			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "len(video_page_urls_and_titles)", str(len(video_page_urls_and_titles)) ), xbmc.LOGNOTICE )
@@ -108,7 +116,19 @@ class Main:
 					xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "skipped video_page_url not ending on '/'", str(video_page_url) ), xbmc.LOGNOTICE )
 				continue
 
-			#don't skip aflevering if catagory is 'afleveringen'			
+			#this is category Videos		
+			if self.plugin_category == __language__(30000):
+			    if video_page_url.find('videos') >= 0:
+			    	pass
+			    elif video_page_url.find('uncategorized') >= 0:
+			    	pass
+			    else:
+					#skip url
+					if (self.DEBUG) == 'true':
+						xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "skipped video_page_url aflevering in video category", str(video_page_url) ), xbmc.LOGNOTICE )
+					continue
+
+			#don't skip aflevering if category is 'afleveringen'			
 			if self.plugin_category == __language__(30001):
 				pass
 			#if 'aflevering' found in video page url, skip the video page url
@@ -125,13 +145,12 @@ class Main:
 				title = str(video_page_url)
 				title = title[31:]
 				title = title.capitalize()
-			#for other category use the title attribute	
+			#for other categories use the title attribute	
 			else:
 				title = video_page_url_and_title['title']
 				#convert from unicode to encoded text (don't use str() to do this)
 				title = title.encode('utf-8')
 			
-			title = title.replace('Gamekings Extra: ','')
 			title = title.replace('-',' ')
 			title = title.replace('/',' ')
 			title = title.replace(' i ',' I ')
@@ -167,7 +186,25 @@ class Main:
 						
 			if (self.DEBUG) == 'true':
 				xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "title", str(title) ), xbmc.LOGNOTICE )
-
+			
+			title_lowercase = str(title.lower())
+			
+			#this is category Gamekings Extra
+			if self.plugin_category == __language__(30002):
+				if title_lowercase.find('gamekings extra') >= 0:
+					pass
+				else:
+					#skip url
+					if (self.DEBUG) == 'true':
+						xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "skipped video_page_url in gamekings extra category", str(video_page_url) ), xbmc.LOGNOTICE )
+					#skip the thumbnail too			
+					thumbnail_urls_index = thumbnail_urls_index + 1
+					continue
+	
+			#this is category Gamekings Extra
+			if self.plugin_category == __language__(30002):
+				title = title.replace('Gamekings Extra: ','')
+				
 			if thumbnail_urls_index >= len(thumbnail_urls):
 				thumbnail_url = ''
 			else:

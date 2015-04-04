@@ -1,4 +1,9 @@
-v1.1.1 (Saturday, 14 February 2014) :
+v1.1.2 (Wednesday, 1 april 2015 (no joke!)) :
+- changes in video category due to website changes
+- changed category Gamekings Extra due to due to website changes
+- added category Trailers
+
+v1.1.1 (Saturday, 14 February 2015) :
 - small fix for category Gamekings Extra
 
 v1.1.0 (Friday, 14 November 2014) :

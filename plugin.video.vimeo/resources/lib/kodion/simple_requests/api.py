@@ -189,3 +189,7 @@ def put(url, data=None, json=None, **kwargs):
 
 def delete(url, **kwargs):
     return _request('DELETE', url, **kwargs)
+
+
+def head(url, **kwargs):
+    return _request('HEAD', url, **kwargs)

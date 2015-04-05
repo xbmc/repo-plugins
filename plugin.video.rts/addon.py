@@ -7,7 +7,7 @@ import xbmcgui
 import urllib, urllib2
 from resources.lib import rtsProvider
 
-__addon__       = xbmcaddon.Addon(id='plugin.video.rts-video')
+__addon__       = xbmcaddon.Addon(id='plugin.video.rts')
 __addonname__   = __addon__.getAddonInfo('name')
 __icon__        = __addon__.getAddonInfo('icon')
  

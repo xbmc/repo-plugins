@@ -368,7 +368,7 @@ def getProgramItems(section_name, url=None):
   """
   if not url:
     url = "/"
-  html = getPage(url)
+  html = getPage(url + "?sida=2")
 
   video_list_class = "[^\"']*play_videolist[^\"']*"
 

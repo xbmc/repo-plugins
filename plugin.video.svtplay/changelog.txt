@@ -1,3 +1,7 @@
+Version 4.0.15
+-------------
+- Fix broken listing of "more episodes/clips"
+
 Version 4.0.14
 -------------
 - Fix broken listing due to site changes

@@ -8,6 +8,8 @@ import xbmcaddon
 import urllib
 import urllib2
 import urlparse
+import hashlib
+from datetime import datetime
 from xml.dom import minidom
 
 # plugin constants
@@ -32,7 +34,11 @@ def addLinkItem(url, li):
 # UI builder functions
 def show_root_menu():
     ''' Show the plugin root menu '''
-    url = "http://iphone.ilmeteo.it/android-app.php?method=listVideos&x=b5669358fa0b426a773d88041e6ae63b&v=2.98"
+    # Generate MD5 hash
+    day = datetime.now().day
+    hash = hashlib.md5("listVideos#AndroidApp#%02d" % day).hexdigest()
+
+    url = "http://iphone.ilmeteo.it/android-app.php?method=listVideos&x=%s&v=2.98" % hash
     xmldata = urllib2.urlopen(url).read()
     dom = minidom.parseString(xmldata)
     

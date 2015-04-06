@@ -1,3 +1,6 @@
+[B]1.1.1[/B]
+- Added MD5 hash generation.
+
 [B]1.1.0[/B]
 - Upstream site changed. Now we use Android streams.
 

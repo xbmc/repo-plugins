@@ -47,10 +47,10 @@ def get_live_stream(ch):
 
 
 def get_categories():
-    titles = ["Barn", "Dokumentar og fakta", "Filmer og serier", "Helse, forbruker og livsstil",
-              "Kultur og underholdning", "Nyheter", "Samisk", "Sport", "Tegnspråk"]
-    ids = ["barn", "dokumentar-og-fakta", "filmer-og-serier", "helse-forbruker-og-livsstil",
-           "kultur-og-underholdning", "nyheter", "samisk", "sport", "tegnspraak"]
+    titles = ["Barn", "Dokumentar", "Drama og serier", "Film", "Humor", "Kultur", "Livsstil",
+              "Natur", "Nyheter", "Samisk", "Sport", "Sysnstolk", "Tegnspråk", "Underholdning", "Vitenskap"]
+    ids = ["barn", "dokumentar", "drama-serier", "film", "humor", "kultur", "livsstil",
+           "natur", "nyheter", "samisk", "sport", "synstolk", "tegnspraak", "underholdning", "vitenskap"]
     return titles, ids
 
 
@@ -116,16 +116,16 @@ def _json_list(url):
 def get_search_results(query, page=0):
     url = "http://tv.nrk.no/sokmaxresults?q=%s&page=%s" % (query, page)
     html = session.get(url).text
-    lis = parseDOM(html, 'li')
+    lis = parseDOM(html, 'div', attrs= {'class': 'air'})
 
-    titles = [parseDOM(li, 'img', ret='alt')[0] for li in lis]
-    titles = map(html_decode, titles)
+    titles = [parseDOM(li, 'h3')[0] for li in lis]
+    titles = [html_decode(common.stripTags(_).replace('\n', ' ')) for _ in titles]
 
     urls = [parseDOM(li, 'a', ret='href')[0] for li in lis]
     urls = [url.replace('http://tv.nrk.no', '') for url in urls]
 
-    descr = [parseDOM(li, 'h3')[0] for li in lis]
-    descr = [html_decode(common.stripTags(_)) for _ in descr]
+    descr = [parseDOM(li, 'p')[0] for li in lis]
+    descr = [html_decode(common.stripTags(_).replace('&hellip;', '')) for _ in descr]
 
     thumbs = [parseDOM(li, 'img', ret='src')[0] for li in lis]
     fanart = [_fanart_url(url) for url in urls]

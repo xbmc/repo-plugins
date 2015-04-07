@@ -56,6 +56,11 @@ def live():
         li.addStreamInfo('audio', {'codec': 'aac', 'channels': 2})
         addDirectoryItem(plugin.handle, ch.media_url, li, False)
 
+    url = "https://nrktegnsprak-lh.akamaihd.net/i/nrktegnsprak_0@111177/master.m3u8"
+    li = ListItem("Tegnspråk", thumbnailImage="http://gfx.nrk.no/R4LFuTHBHWPMmv1dkqvPGQY4-ZZTKdNKAFPg_LHhoEFA")
+    li.setProperty('isplayable', 'true')
+    addDirectoryItem(plugin.handle, url, li, False)
+
     add_radio_channels()
     endOfDirectory(plugin.handle)
 

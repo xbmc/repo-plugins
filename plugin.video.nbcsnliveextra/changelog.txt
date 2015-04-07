@@ -1,3 +1,5 @@
+v1.0.1
+- Fixed bug with CDN selection
 v1.0.0
 - Added ability to select CDN server location (if applicable)
 - Added ability to set the user-agent in the addon settings

@@ -23,7 +23,7 @@ ROOT_URL = 'http://stream.nbcsports.com/data/mobile/'
 #Main settings
 QUALITY = int(settings.getSetting(id="quality"))
 USER_AGENT = str(settings.getSetting(id="user-agent"))
-CDN = str(settings.getSetting(id="cdn"))
+CDN = int(settings.getSetting(id="cdn"))
 
 
 def CATEGORIES():                

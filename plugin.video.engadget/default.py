@@ -21,8 +21,8 @@ addon = xbmcaddon.Addon()
 addon_profile = xbmc.translatePath(addon.getAddonInfo('profile'))
 addon_version = addon.getAddonInfo('version')
 addon_id = addon.getAddonInfo('id')
-addon_dir = xbmc.translatePath( addon.getAddonInfo('path') )
-sys.path.append(os.path.join( addon_dir, 'resources', 'lib' ) )
+addon_dir = xbmc.translatePath(addon.getAddonInfo('path'))
+sys.path.append(os.path.join(addon_dir, 'resources', 'lib'))
 
 # Do extra imports including html5lib from local addon dir
 import html5lib
@@ -39,28 +39,28 @@ def addon_log(string):
         log_message = string.encode('utf-8', 'ignore')
     except:
         log_message = 'addonException: addon_log'
-    xbmc.log("[%s-%s]: %s" %(addon_id, addon_version, log_message),level=xbmc.LOGDEBUG)
+    xbmc.log("[%s-%s]: %s" % (addon_id, addon_version, log_message), level=xbmc.LOGDEBUG)
 
 
 def make_request(url):
-    addon_log('Request URL: %s' %url)
+    addon_log('Request URL: %s' % url)
     headers = {
         'User-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0',
         'Referer': base_url
         }
     try:
-        req = urllib2.Request(url,None,headers)
+        req = urllib2.Request(url, None, headers)
         response = urllib2.urlopen(req)
         data = response.read()
         response.close()
         return data
     except urllib2.URLError, e:
-        addon_log( 'We failed to open "%s".' % url)
+        addon_log('We failed to open "%s".' % url)
         if hasattr(e, 'reason'):
             addon_log('We failed to reach a server.')
-            addon_log('Reason: %s' %e.reason)
+            addon_log('Reason: %s' % e.reason)
         if hasattr(e, 'code'):
-            addon_log('We failed with error code - %s.' %e.code)
+            addon_log('We failed with error code - %s.' % e.code)
 
 
 def cache_categories():
@@ -80,11 +80,11 @@ def display_category(url):
     page_url = base_url + url
     html = make_request(page_url)
     soup = BeautifulSoup(html, 'html5lib')
-    items =  soup('div', {'class' : 'video-listing'})[0]('div', {'class':'video'})
+    items = soup('div', {'class': 'video-listing'})[0]('div', {'class': 'video'})
     for i in items:
-        title = i('a', {'class':'video-link'})[1].h3.string.encode('utf-8')
-        link = i('a', {'class':'video-link'})[1]['href']
-        img = i('a', {'class':'video-link'})[0].img['src']
+        title = i('a', {'class': 'video-link'})[1].h3.string.encode('utf-8')
+        link = i('a', {'class': 'video-link'})[1]['href']
+        img = i('a', {'class': 'video-link'})[0].img['src']
         add_dir(title, link, img, 'resolve_url', False)
     try:
         next_page = soup.find('li', class_='older').a['href']
@@ -103,46 +103,44 @@ def resolve_url(url):
         }
     preferred = int(addon.getSetting('preferred'))
     video_id = url.split('/')[-1]
-    item = None
+
     try:
         link_cache = eval(cache.get('link_cache'))
-        item = [(i[video_id]['url'], i[video_id]['ren']) for
-            i in link_cache if i.has_key(video_id)][0]
+        item = [(i[video_id]['url'], i[video_id]['ren']) for i in link_cache if video_id in i][0]
         addon_log('return item from cache')
     except:
-        addon_log('addonException: %s' %format_exc())
+        addon_log('addonException: %s' % format_exc())
         item = cache_playlist(video_id)
     if item:
         extension_format = '_%s.%s?cat=Tech&subcat=Web'
         stream_url = urllib.unquote(item[0]).split('.mp4')[0]
-        addon_log('preferred setting: %s' %settings[preferred])
-        # for i in item[1]:
-            # addon_log('%s: %s' %(i['ID'], i['RenditionType']))
+        addon_log('preferred setting: %s' % settings[preferred])
         resolved_url = None
         while (preferred >= 0) and not resolved_url:
             try:
                 ren_id, ren_type = [
-                    (i['ID'], i['RenditionType']) for
-                        i in item[1] if i['ID'] in settings[preferred]][0]
-                resolved_url = stream_url + extension_format %(ren_id, ren_type)
-                addon_log('Resolved: %s' %resolved_url)
+                    (i['ID'], i['RenditionType']) for i in item[1] if i['ID'] in settings[preferred]][0]
+                resolved_url = stream_url + extension_format % (ren_id, ren_type)
+                addon_log('Resolved: %s' % resolved_url)
             except:
-                addon_log('addonException: %s' %format_exc())
-                addon_log('Setting unavailabel: %s' %settings[preferred])
+                addon_log('addonException: %s' % format_exc())
+                addon_log('Setting unavailabel: %s' % settings[preferred])
                 preferred -= 1
         return resolved_url
 
 
 def cache_playlist(video_id):
     url = 'http://syn.5min.com/handlers/SenseHandler.ashx?'
-    script_url = 'http://www.engadget.com/embed-5min/?playList=%s&autoStart=true' %video_id
+    script_url = 'http://www.engadget.com/embed-5min/?playList=%s&autoStart=true' % video_id
     script_html = make_request(script_url)
     # workaround: soup dies on the script tag
-    script_html2 = script_html.replace('</scr" + "ipt>"',"")
+    script_html2 = script_html.replace('</scr" + "ipt>"', "")
     script_soup = BeautifulSoup(script_html2, 'html.parser')
     script = script_soup.script.get_text()
-    #FIXME: There is a security risk in eval() because the originating text stems from the server <>
-    script_params = eval((script[5:].replace('\r\n', '').split('+')[0]+'}'))
+    # FIXME: There is a security risk in eval() because the originating text stems from the server
+    # Why the original author ever wanted to include a javascript snippet, which happens to be valid
+    # python syntax, is beyond me
+    script_params = eval((script[5:].replace('\r\n', '').split(';')[0]))
     params = {
         'ExposureType': 'PlayerSeed',
         'autoStart': script_params['autoStart'],
@@ -169,7 +167,7 @@ def cache_playlist(video_id):
         if len(link_cache) > 300:
             del link_cache[:100]
     except:
-        addon_log('addonException: %s' %format_exc())
+        addon_log('addonException: %s' % format_exc())
         link_cache = []
     for i in items:
         match = pattern.findall(i['EmbededURL'])
@@ -178,19 +176,18 @@ def cache_playlist(video_id):
                                         'ren': i['Renditions']}}
             link_cache.append(item_dict)
         except:
-            addon_log('addonException: %s' %format_exc())
+            addon_log('addonException: %s' % format_exc())
     cache.set('link_cache', repr(link_cache))
-    addon_log('link_cache items %s' %len(link_cache))
+    addon_log('link_cache items %s' % len(link_cache))
     try:
-        return [(i[video_id]['url'], i[video_id]['ren']) for
-            i in link_cache if i.has_key(video_id)][0]
+        return [(i[video_id]['url'], i[video_id]['ren']) for i in link_cache if video_id in i][0]
     except:
-        addon_log('addonException: %s' %format_exc())
+        addon_log('addonException: %s' % format_exc())
 
 
 def add_dir(name, url, iconimage, mode, isfolder=True):
     params = {'name': name, 'url': url, 'mode': mode}
-    url = '%s?%s' %(sys.argv[0], urllib.urlencode(params))
+    url = '%s?%s' % (sys.argv[0], urllib.urlencode(params))
     listitem = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
     if not isfolder:
         listitem.setProperty('IsPlayable', 'true')
@@ -213,7 +210,7 @@ try:
 except:
     mode = None
 
-if mode == None:
+if mode is None:
     display_categories()
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 

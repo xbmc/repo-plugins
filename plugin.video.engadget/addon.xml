@@ -2,7 +2,7 @@
 <!-- Original author: divingmule-->
 <addon id="plugin.video.engadget"
        name="Engadget"
-       version="1.0.7"
+       version="1.0.8"
        provider-name="hbogert">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>

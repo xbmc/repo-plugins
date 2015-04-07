@@ -1,3 +1,6 @@
+Version 1.0.8
+Changed scraping, because engadget's CDN changed something slightly. 
+
 Version 1.0.7
 Changed author, divingmule did not respond to pull requests
 

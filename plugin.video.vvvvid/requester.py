@@ -1,4 +1,5 @@
 import urllib2
+from cookielib import CookieJar
 import urlparse
 import json
 from Channel import *
@@ -55,8 +56,8 @@ def getSingleChannelPath(type):
          return SHOW_SINGLE_CHANNEL_PATH
 
 def get_section_channels(modeType):
-    channelUrl = getChannelsPath(modeType)
-    response = urllib2.urlopen(VVVVID_BASE_URL+channelUrl)
+    channelUrl = VVVVID_BASE_URL + getChannelsPath(modeType) 
+    response = getJsonDataFromUrl(channelUrl)    
     data = json.loads(response.read().decode(response.info().getparam('charset') or 'utf-8'))
     channels = data['data']
     listChannels = []
@@ -85,7 +86,7 @@ def get_elements_from_channel(idChannel,type,idFilter = '',idCategory = ''):
     elif(idCategory != ''):
         urlPostFix += '/?category=' + idCategory
     urlToLoad = VVVVID_BASE_URL+middlePath + str(idChannel) + urlPostFix
-    response = urllib2.urlopen(urlToLoad)
+    response = getJsonDataFromUrl(urlToLoad)
     data = json.loads(response.read().decode(response.info().getparam('charset') or 'utf-8'))
     elements = data['data']
     listElements = []
@@ -96,7 +97,7 @@ def get_elements_from_channel(idChannel,type,idFilter = '',idCategory = ''):
 
 def get_item_playable(idItem):
     urlToLoad = VVVVID_BASE_URL+idItem + '/info'
-    response = urllib2.urlopen(urlToLoad)
+    response = getJsonDataFromUrl(urlToLoad)
     data = json.loads(response.read().decode(response.info().getparam('charset') or 'utf-8'))
     info = data['data']
     itemPlayable = ItemPlayableChannel()
@@ -111,7 +112,7 @@ def get_item_playable(idItem):
     
 def get_seasons_for_item(itemPlayable):
     urlToLoad = VVVVID_BASE_URL+str(itemPlayable.show_id) + '/seasons'
-    response = urllib2.urlopen(urlToLoad)
+    response = getJsonDataFromUrl(urlToLoad)
     data = json.loads(response.read().decode(response.info().getparam('charset') or 'utf-8'))
     result = data['data']
     itemPlayable.seasons = []
@@ -125,7 +126,7 @@ def get_seasons_for_item(itemPlayable):
         else:
             season.title = itemPlayable.title
         urlToLoadSeason = VVVVID_BASE_URL+str(itemPlayable.show_id) + '/season/' + str(season.season_id)
-        responseSeason = urllib2.urlopen(urlToLoadSeason)
+        responseSeason = getJsonDataFromUrl(urlToLoadSeason)
         dataSeason = json.loads(responseSeason.read().decode(responseSeason.info().getparam('charset') or 'utf-8'))
         resultSeason = dataSeason['data']
         listEpisode = []
@@ -146,6 +147,18 @@ def get_seasons_for_item(itemPlayable):
         season.episodes = listEpisode
         itemPlayable.seasons.append(season)
     return itemPlayable
+
+def getJsonDataFromUrl(customUrl):
+    req = urllib2.Request(customUrl)
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14')
+    page = urllib2.urlopen(req);response=page.read();page.close()
+    cookie=page.info()['Set-Cookie']
+    req = urllib2.Request(customUrl)#send the new url with the cookie.
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14')
+    req.add_header('Cookie',cookie)
+    response = urllib2.urlopen(req)
+    return response
+    
         
 
         

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# Food Network XBMC Addon
+# Food Network Kodi Addon
 
 import sys
-import httplib
+import httplib, socket
 
 import urllib, urllib2, cookielib, datetime, time, re, os, string
 import xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs, xbmc
@@ -11,12 +11,7 @@ from StringIO import StringIO
 import json
 
 
-USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25'
-GENRE_TV  = "TV"
 UTF8          = 'utf-8'
-MAX_PER_PAGE  = 25
-FNTVBASE = 'http://www.foodnetwork.com%s'
-XMLBASE  = 'http://www.foodnetwork.com/%s.xml'
 
 addon         = xbmcaddon.Addon('plugin.video.foodnetwork')
 __addonname__ = addon.getAddonInfo('name')
@@ -28,9 +23,15 @@ icon          = xbmc.translatePath(os.path.join(home, 'icon.png'))
 addonfanart   = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
 
 
+qp  = urllib.quote_plus
+uqp = urllib.unquote_plus
+
 def log(txt):
     message = '%s: %s' % (__addonname__, txt.encode('ascii', 'ignore'))
     xbmc.log(msg=message, level=xbmc.LOGDEBUG)
+
+def cleanname(name):
+    return name.replace('&apos;',"'").replace('&#8217;',"'").replace('&amp;','&').replace('&#39;',"'").replace('&quot;','"').replace('&#039;',"'")
 
 def demunge(munge):
         try:
@@ -39,13 +40,40 @@ def demunge(munge):
             pass
         return munge
 
-def getRequest(url):
+
+USER_AGENT    = 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.93 Safari/537.36'
+defaultHeaders = {'User-Agent':USER_AGENT, 
+                 'Accept':"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", 
+                 'Accept-Encoding':'gzip,deflate,sdch',
+                 'Accept-Language':'en-US,en;q=0.8'} 
+
+def getRequest(url, user_data=None, headers = defaultHeaders , alert=True):
+
               log("getRequest URL:"+str(url))
-              headers = {'User-Agent':USER_AGENT, 'Accept':"text/html", 'Accept-Encoding':'gzip,deflate,sdch', 'Accept-Language':'en-US,en;q=0.8'} 
-              req = urllib2.Request(url.encode(UTF8), None, headers)
+              if addon.getSetting('us_proxy_enable') == 'true':
+                  us_proxy = 'http://%s:%s' % (addon.getSetting('us_proxy'), addon.getSetting('us_proxy_port'))
+                  proxy_handler = urllib2.ProxyHandler({'http':us_proxy})
+                  if addon.getSetting('us_proxy_pass') <> '' and addon.getSetting('us_proxy_user') <> '':
+                      log('Using authenticated proxy: ' + us_proxy)
+                      password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+                      password_mgr.add_password(None, us_proxy, addon.getSetting('us_proxy_user'), addon.getSetting('us_proxy_pass'))
+                      proxy_auth_handler = urllib2.ProxyBasicAuthHandler(password_mgr)
+                      opener = urllib2.build_opener(proxy_handler, proxy_auth_handler)
+                  else:
+                      log('Using proxy: ' + us_proxy)
+                      opener = urllib2.build_opener(proxy_handler)
+              else:   
+                  opener = urllib2.build_opener()
+              urllib2.install_opener(opener)
+
+              log("getRequest URL:"+str(url))
+              req = urllib2.Request(url.encode(UTF8), user_data, headers)
+
+           
 
               try:
-                 response = urllib2.urlopen(req)
+                 response = urllib2.urlopen(req, timeout=30)
+
                  if response.info().getheader('Content-Encoding') == 'gzip':
                     log("Content Encoding == gzip")
                     buf = StringIO( response.read())
@@ -53,89 +81,61 @@ def getRequest(url):
                     link1 = f.read()
                  else:
                     link1=response.read()
-              except:
+
+              except urllib2.URLError, e:
+                 if alert:
+                     xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( __addonname__, e , 5000) )
                  link1 = ""
 
-              link1 = str(link1).replace('\n','')
+              if not (str(url).endswith('.zip')):
+                 link1 = str(link1).replace('\n','')
               return(link1)
 
 
 def getSources(fanart):
-              urlbase   = FNTVBASE % ('/videos/players/food-network-full-episodes.html')
-              pg = getRequest(urlbase)
-              cats = re.compile('<h6 class="channel-heading">.+?href="(.+?)".+?data-max="85">(.+?)<.+?src="(.+?)".+?</div>').findall(pg) 
-              for caturl, catname, catimg in cats:
-                  catname = catname.strip()
-                  addDir(catname,caturl,'GC',catimg ,addonfanart,catname,GENRE_TV,'',False)
-
-def getCats(cat_url):
-             pg = getRequest(FNTVBASE % cat_url)
-             jblob = re.compile('frameId: "nextEndframe-player-player" } },(.+?){"extras":').search(pg).group(1).rstrip(' ,')
-             a = json.loads(jblob)
-             a = a['channels'][0]['videos']
-             for vid in a:
-                showurl = "%s?url=%s&name=%s&mode=GS" %(sys.argv[0], urllib.quote_plus(vid['releaseUrl']), urllib.quote_plus(vid['title']))
-                addLink(showurl.encode(UTF8),vid['title'],vid['thumbnailUrl'],addonfanart,vid['description'],GENRE_TV,'')
-
-
-def getShow(show_url, show_name):
-            pg = getRequest(show_url)
-            i = int(addon.getSetting('vid_res'))
-            i = i+1
-            try:
-              url = re.compile('<video src="(.+?)_6.mp4"').search(pg).group(1)
-              url = url+'_%s.mp4' % str(i)
-            except:
-              try:
-                url = re.compile('<video src="(.+?)"').search(pg).group(1)
-              except:
-                url = 'http://link.theplatform.com/s/errorFiles/Unavailable.mp4'
-            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = url))
-
-
-def play_playlist(name, list):
-        playlist = xbmc.PlayList(1)
-        playlist.clear()
-        item = 0
-        for i in list:
-            item += 1
-            info = xbmcgui.ListItem('%s) %s' %(str(item),name))
-            playlist.add(i, info)
-        xbmc.executebuiltin('playlist.playoffset(video,0)')
+        ilist = []
+        url  = 'http://www.foodnetwork.com/videos/players/food-network-full-episodes.vc.html'
+        html = getRequest(url)
+        a = re.compile('<option.+?"(.+?)">(.+?)</option').findall(html)
+        for url, name in a:
+              mode = 'GC'
+              name=name.strip()
+              plot = name
+              u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
+              liz=xbmcgui.ListItem(name, '','DefaultFolder.png', icon)
+              liz.setInfo( 'Video', { "Title": name, "Plot": plot })
+              liz.setProperty('fanart_image', addonfanart)
+              ilist.append((u, liz, True))
+        xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+           
+def getCats(gsurl,catname):
+        ilist = []
+        html  = getRequest('http://www.foodnetwork.com%s' % uqp(gsurl))
+        html  = re.compile('"channels": \[(.+?)\]\},').search(html).group(1)
+        html  = '{"channels": ['+html+']}'
+        a = json.loads(html)
+        a = a['channels'][0]['videos']
+        for b in a:
+              name = cleanname(b['title'])
+              plot = cleanname(b['description'])
+              url  = b['releaseUrl']
+              img  = b['thumbnailUrl']
+              mode = 'GL'
+              u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
+              liz=xbmcgui.ListItem(name, '','DefaultFolder.png', img)
+              liz.setInfo( 'Video', { "Title": name, "Studio":catname, "Plot": plot })
+              liz.setProperty('fanart_image', addonfanart)
+              liz.setProperty('IsPlayable', 'true')
+              ilist.append((u, liz, False))
+        if len(ilist) != 0:
+          xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
 
 
-def addDir(name,url,mode,iconimage,fanart,description,genre,date,showcontext=True,playlist=None,autoplay=False):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+mode
-        dir_playable = False
-        cm = []
-
-        if mode != 'SR':
-            u += "&name="+urllib.quote_plus(name)
-            if (fanart is None) or fanart == '': fanart = addonfanart
-            u += "&fanart="+urllib.quote_plus(fanart)
-            dir_image = "DefaultFolder.png"
-            dir_folder = True
-        else:
-            dir_image = "DefaultVideo.png"
-            dir_folder = False
-            dir_playable = True
-
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage=dir_image, thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": description, "Genre": genre, "Year": date } )
-        liz.setProperty( "Fanart_Image", fanart )
-
-        if dir_playable == True:
-         liz.setProperty('IsPlayable', 'true')
-        if not playlist is None:
-            playlist_name = name.split(') ')[1]
-            cm.append(('Play '+playlist_name+' PlayList','XBMC.RunPlugin(%s?mode=PP&name=%s&playlist=%s)' %(sys.argv[0], playlist_name, urllib.quote_plus(str(playlist).replace(',','|')))))
-        liz.addContextMenuItems(cm)
-        return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=dir_folder)
-
-def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,playlist=None, autoplay=False):
-        return addDir(name,url,'SR',iconimage,fanart,description,genre,date,showcontext,playlist,autoplay)
-
+def getLink(url,vidname):
+        html  = getRequest(uqp(url))
+        url   = re.compile('<video src="(.+?)"').search(html).group(1)
+        if int(addon.getSetting('vid_res')) == 0: url = url.replace('_6.','_3.')
+        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=url))
 
 
 # MAIN EVENT PROCESSING STARTS HERE
@@ -152,14 +152,12 @@ except:
 
 p = parms.get
 
-mode = p('mode', None)
+mode = p('mode',None)
 
 if mode==  None:  getSources(p('fanart'))
-elif mode=='SR':  xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=p('url')))
-elif mode=='PP':  play_playlist(p('name'), p('playlist'))
-elif mode=='GC':  getCats(p('url'))
-elif mode=='GS':  getShow(p('url'), p('name'))
-
+elif mode=='GQ':  getQuery(p('url'))
+elif mode=='GC':  getCats(p('url'),p('name'))
+elif mode=='GL':  getLink(p('url'),p('name'))
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
 

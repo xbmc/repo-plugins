@@ -1,0 +1,10 @@
++ New feature
+* Fixed/improved feature
+- Removed feature
+
+8. April 2015 v3.0.0
++ First release
+* Reworked Digitally Imported addon to ROCKRADIO.com addon - thank you to i-tek (Jonas) for doing this
++ German translation - thanks to i-tek (Jonas)
++ New icon
+* Starting version at v3.0.0 to represent the codebase it's based on and shares with the Digitally Imported and Radiotunes addons

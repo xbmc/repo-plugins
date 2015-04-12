@@ -401,7 +401,7 @@ class htmlScraper:
         liveurls = {}
         liveurls['ORF1'] = "http://apasfiisl.apa.at/ipad/orf1_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8";
         liveurls['ORF2'] = "http://apasfiisl.apa.at/ipad/orf2_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8";
-        liveurls['ORF3'] = "http://apasfiisl.apa.at/ipad/orf2e_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8";
+        liveurls['ORF3'] = "http://apasfiisl.apa.at/ipad/orf3_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8";
         liveurls['ORFS'] = "http://apasfiisl.apa.at/ipad/orfs_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8";
 
         html = common.fetchPage({'link': self.live_url})

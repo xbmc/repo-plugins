@@ -129,13 +129,8 @@ class Client(object):
 
     @staticmethod
     def get_server_id():
-        """
-        For HDS streams we need a valid server id ('fms-fraXX'). We use the show 'n-tv Dokumentation' of
-        http://www.n-tvnow.de/ for all other NOW services (because the use all the same server).
-        :return:
-        """
-        client = Client(Client.CONFIG_NTV_NOW)
-        json_data = client.get_films(2033)
+        client = Client(Client.CONFIG_RTL_NOW)
+        json_data = client.get_films(2)
         film_list = json_data.get('result', {}).get('content', {}).get('filmlist', {})
         film_id = None
         for key in film_list:

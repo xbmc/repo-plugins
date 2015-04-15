@@ -1,3 +1,8 @@
+1.2.0 (2015-04-15)
+ADD: Category 'Hersteller-Videos' (en: 'Manufacturer videos')
+UPD: improved performance
+FIX: search wasn't working
+
 1.1.0 (2015-03-29)
 ADD: Category 'Wochenrückblick' (en: 'Week in Review')
 ADD: Category 'Trailer'

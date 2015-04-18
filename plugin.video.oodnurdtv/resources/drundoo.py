@@ -78,6 +78,47 @@ class drundoo:
                 link = 'http://www.drundoo.com' + temp[start1:end1]
 
                 temp = self.open_json(link).get('smil_url')
+                
+                x1 = temp.find('.m3u8')
+                x2 = temp.find('auth')
+                x3 = temp.find('&live')
+                x4 = temp.find('-')+1
+                
+                myTV = temp[x4:x1]
+                myStat = {'bTVHD':'3',
+                            'bTV':'1',
+                            'NOVA':'6',
+                            'BNT1_HD':'1',
+                            'BNT1':'1',
+                            'TV7_2':'6',
+                            'bTVComedy':'1',
+                            'bTVAction':'1',
+                            'bTVCinema':'1',
+                            'KinoNova':'6',
+                            'Diema':'6',
+                            'DiemaFamily':'6',
+                            'FOXCrime':'1',
+                            'FOX':'1',
+                            'EurosportHD':'3',
+                            'NOVAsport':'6',
+                            'RINGBG':'1',
+                            'Super7_1':'6',
+                            'CN':'6',
+                            'DiscoveryCha':'6',
+                            'NationalGeog_2':'6',
+                            'NGWILD':'1',
+                            'ViasatExplor_1':'6',
+                            'Mezzo':'1',
+                            'PlanetaTV':'1',
+                            'PlanetaFolk':'1',
+                            'Balkanika':'1',
+                            'FolklorTV':'1',
+                            'FANTV':'1',
+                            'CityTV_2':'6',
+                            '24Kitchen_2':'1',
+                            'bbt_1':'6',
+                            'TheVoice':'6'}
+                temp = temp[0:x1]+'='+myStat[myTV]+temp[x1:x2]+'&live&'+temp[x2:x3]
 
                 play_link = temp
 

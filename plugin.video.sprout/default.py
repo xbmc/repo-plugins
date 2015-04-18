@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Sprout for Kids XBMC Addon
+# Sprout for Kids XBMC Addon !!!!!!!!!!!!!!!!!! still need to add subtitles !!!!!
 
 import sys
 import httplib
@@ -8,6 +8,7 @@ import urllib, urllib2, cookielib, datetime, time, re, os, string
 import xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs, xbmc
 import cgi, gzip
 from StringIO import StringIO
+import json
 
 
 USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25'
@@ -20,6 +21,8 @@ addon         = xbmcaddon.Addon('plugin.video.sprout')
 __addonname__ = addon.getAddonInfo('name')
 __language__  = addon.getLocalizedString
 
+qp  = urllib.quote_plus
+uqp = urllib.unquote_plus
 
 home          = addon.getAddonInfo('path').decode(UTF8)
 icon          = xbmc.translatePath(os.path.join(home, 'icon.png'))
@@ -29,10 +32,6 @@ addonfanart   = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
 def log(txt):
     message = '%s: %s' % (__addonname__, txt.encode('ascii', 'ignore'))
     xbmc.log(msg=message, level=xbmc.LOGDEBUG)
-
-def cleanfilename(name):    
-    valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
-    return ''.join(c for c in name if c in valid_chars)
 
 def demunge(munge):
         try:
@@ -69,99 +68,73 @@ def getRequest(url):
 
 
 def getSources(fanart):
-              urlbase   = SPROUTBASE % ('/videos/shows/')
-              pg = getRequest(urlbase)
-              blob = re.compile('<div class="sprout-heading">(.+?)<div id="main-postscript"').findall(pg)[0]
-              cats = re.compile('<article.+?href="(.+?)".+?src="(.+?)".+?alt=(.+?)/').findall(blob)
-              for caturl, catimg, catname in cats:
-                  if 'title=' in catname:
-                    catname = re.compile('title="(.+?)"').findall(catname)[0]
-                  else:
-                    catname = caturl.split('/')[2]
-                  catname = deuni(catname.strip())
-                  caturl = SPROUTBASE % (caturl)
-                  addDir(catname,caturl.encode(UTF8),'GC',catimg,addonfanart,catname,GENRE_TV,'',False)
+              ilist=[]
+              urlbase   = 'http://www.sproutonline.com/now/'
+              html = getRequest(urlbase)
+              blob = re.compile('<div id="tve-widget-original-series"(.+?)<div class="ws">').search(html).group(1)
+              cats = re.compile('<div.+?href="(.+?)".+?title="(.+?)".+?src="(.+?)".+?</div').findall(blob)
+              for url, name, img in cats:
+                  name = name.strip()
+                  plot = name
+                  url = SPROUTBASE % (url)
+                  mode = 'GC'
+                  u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
+                  liz=xbmcgui.ListItem(name, '',img, img)
+                  liz.setInfo( 'Video', { "Title": name, "Plot": plot })
+                  liz.setProperty('fanart_image', addonfanart)
+                  ilist.append((u, liz, True))
+              xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+
 
 def getCats(cat_url):
-              pg = getRequest(cat_url)
-              shows = re.compile('<article id=.+?href="(.+?)".+?src="(.+?)" width="157".+?title">(.+?)<.+?even">(.+?)<.+?</article>').findall(pg)
-              for showurl, showimg, showname, showdesc in shows:
-                 showurl = SPROUTBASE % (showurl)
-                 showurl = "%s?url=%s&name=%s&mode=GS" %(sys.argv[0], urllib.quote_plus(showurl), urllib.quote_plus(showname))
-                 addLink(showurl.encode(UTF8),deuni(showname),showimg,addonfanart,deuni(showdesc),GENRE_TV,'')
-              try:
-                 nextlink = re.compile('<a title="Go to next page" href="(.+?)"').findall(pg)[0]
-                 if nextlink != '&nbsp;':
-                    caturl  = SPROUTBASE % (nextlink)
-                    catname = '[COLOR red]Goto Next Page[/COLOR]'
-                    addDir(catname,caturl.encode(UTF8),'GC','',addonfanart,catname,GENRE_TV,'',False)
-              except:
-                 pass
+              ilist=[]        
+              html = getRequest(cat_url)
+              try:    fanart = re.compile('<img class="showBaner" src="(.+?)"').search(html).group(1)
+              except: fanart = addonfanart
+              html = re.compile("Drupal\.settings, (.+?)\);<").search(html).group(1)
+              a = json.loads(html)
+              a = a["tve_widgets"]["related_videos"]["assets1"]
+              for b in a:
+                 name = b["episode_title"]
+                 img  = b["episode_thumbnail"]["url"]
+                 plot = b["synopsis"]
+                 studio = b["show_title"]
+                 url = b["link"]
+                 mode = 'GS'
+                 u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
+                 liz=xbmcgui.ListItem(name, '',img, img)
+                 liz.setInfo( 'Video', { "Studio": studio, "Title": name, "Plot": plot })
+                 liz.setProperty('fanart_image', fanart)
+                 liz.setProperty('IsPlayable', 'true')
+                 ilist.append((u, liz, False))
+              xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+                 
 
+def getShow(url, show_name):
+            url = SPROUTBASE % uqp(url)
+            html = getRequest(url)
+            purl = re.compile('data-release-url="(.+?)"').search(html).group(1)
+            purl = 'http:'+purl+'&player=Sprout%20VOD%20Player%20%28Phase%203%29&format=Script&height=576&width=1024'
+            html = getRequest(purl)
+            a = json.loads(html)
+            url = a["captions"][0]["src"]
+            url = url.split('/caption/',1)[1]
+            url = url.split('.',1)[0]
 
-def getShow(show_url, show_name):
-            pg = getRequest(show_url)
-            show_url = re.compile('id="player" src="(.+?)"').search(pg).group(1)
-            show_url = show_url.split('%3D')[1]
-            show_url = 'https://feed.theplatform.com/f/O6OKIC/H72hsdMX9k98?form=rss&byGuid=%s' % show_url
-            pg = getRequest(show_url)
-#            showurl = re.compile('<link rel="alternate" href="(.+?)"').search(pg).group(1)
-#            pg = getRequest(showurl)
-            showurl = re.compile('type="video/mp4".+?url="(.+?)"').search(pg).group(1)
-            pg = getRequest(showurl)
-            finalurl = re.compile('<video src="(.+?)"').search(pg).group(1)
-            finalurl = finalurl.replace('http://sproutonline-vh.akamaihd.net/z','http://sproutonline-pmd.edgesuite.net')
-            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = finalurl))
+            td = (datetime.datetime.utcnow()- datetime.datetime(1970,1,1))
+            unow = int((td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6)
 
+            u   = 'https://tvesprout-vh.akamaihd.net/i/prod/video/%s_,40,25,18,12,7,4,2,00.mp4.csmil/master.m3u8?b=&__b__=1000&hdnea=st=%s~exp=%s' % (url, str(unow), str(unow+60))
+            html = getRequest(u)
+            if html == '':
+               u   = 'https://tvesprout-vh.akamaihd.net/i/prod/video/%s_,1696,1296,896,696,496,240,306,.mp4.csmil/master.m3u8?b=&__b__=1000&hdnea=st=%s~exp=%s' % (url, str(unow), str(unow+60))
 
-def play_playlist(name, list):
-        playlist = xbmc.PlayList(1)
-        playlist.clear()
-        item = 0
-        for i in list:
-            item += 1
-            info = xbmcgui.ListItem('%s) %s' %(str(item),name))
-            playlist.add(i, info)
-        xbmc.executebuiltin('playlist.playoffset(video,0)')
-
-
-def addDir(name,url,mode,iconimage,fanart,description,genre,date,showcontext=True,playlist=None,autoplay=False):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+mode
-        dir_playable = False
-        cm = []
-
-        if mode != 'SR':
-            u += "&name="+urllib.quote_plus(name)
-            if (fanart is None) or fanart == '': fanart = addonfanart
-            u += "&fanart="+urllib.quote_plus(fanart)
-            dir_image = "DefaultFolder.png"
-            dir_folder = True
-        else:
-            dir_image = "DefaultVideo.png"
-            dir_folder = False
-            dir_playable = True
-
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage=dir_image, thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": description, "Genre": genre, "Year": date } )
-        liz.setProperty( "Fanart_Image", fanart )
-
-        if dir_playable == True:
-         liz.setProperty('IsPlayable', 'true')
-        if not playlist is None:
-            playlist_name = name.split(') ')[1]
-            cm.append(('Play '+playlist_name+' PlayList','XBMC.RunPlugin(%s?mode=PP&name=%s&playlist=%s)' %(sys.argv[0], playlist_name, urllib.quote_plus(str(playlist).replace(',','|')))))
-        liz.addContextMenuItems(cm)
-        return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=dir_folder)
-
-def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,playlist=None, autoplay=False):
-        return addDir(name,url,'SR',iconimage,fanart,description,genre,date,showcontext,playlist,autoplay)
-
+            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = u))
 
 
 # MAIN EVENT PROCESSING STARTS HERE
 
-xbmcplugin.setContent(int(sys.argv[1]), 'movies')
+xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
 
 parms = {}
 try:
@@ -176,8 +149,6 @@ p = parms.get
 mode = p('mode',None)
 
 if mode==  None:  getSources(p('fanart'))
-elif mode=='SR':  xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=p('url')))
-elif mode=='PP':  play_playlist(p('name'), p('playlist'))
 elif mode=='GC':  getCats(p('url'))
 elif mode=='GS':  getShow(p('url'), p('name'))
 

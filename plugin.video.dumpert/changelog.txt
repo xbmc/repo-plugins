@@ -1,8 +1,11 @@
- v1.0.4 (Thursday, 06 June 2014) :
-- adjustments to changes in the website: changed get-method
+v1.0.5 (Friday, 17 april 2015) :
+- adjustments due to changes in the website: videos can be youtube vids now
+
+v1.0.4 (Thursday, 06 June 2014) :
+- adjustments due to changes in the website: changed get-method
  
- v1.0.3 (Monday, 14 April 2014) :
-- adjustments to changes in the website. Thanks to TheGroove for helping out with the base64 stuff
+v1.0.3 (Monday, 14 April 2014) :
+- adjustments due to changes in the website. Thanks to TheGroove for helping out with the base64 stuff
 - video quality can be set in the settings now
 
 v1.0.2 (Saturday, 7 July 2013) :

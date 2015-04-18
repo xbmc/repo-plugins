@@ -52,6 +52,7 @@ class Main:
 		no_url_found = False
 		unplayable_media_file = False
 		have_valid_url = False
+		embed_found = False
 		
 		#
 		# Get current list item details...
@@ -91,6 +92,8 @@ class Main:
 			#base64 decode
 			video_url_dec = str(base64.b64decode(video_url_enc))
 			#{"flv":"http:\/\/media.dumpert.nl\/flv\/5770e490_Jumbo_KOOP_DAN__Remix.avi.flv","tablet":"http:\/\/media.dumpert.nl\/tablet\/5770e490_Jumbo_KOOP_DAN__Remix.avi.mp4","mobile":"http:\/\/media.dumpert.nl\/mobile\/5770e490_Jumbo_KOOP_DAN__Remix.avi.mp4","720p":"http:\/\/media.dumpert.nl\/720p\/5770e490_Jumbo_KOOP_DAN__Remix.avi.mp4","still":"http:\/\/static.dumpert.nl\/stills\/6593503_5770e490.jpg"}
+			# or
+			#{"embed":"youtube:U89fl5fZETE","still":"http:\/\/static.dumpert.nl\/stills\/6650228_24eed546.jpg"}
 			
 			if (self.DEBUG) == 'true':
 				xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "video_url_dec", str(video_url_dec) ), xbmc.LOGNOTICE )
@@ -98,40 +101,58 @@ class Main:
 			#convert string to dictionary
 			video_url_dec_dict = ast.literal_eval(video_url_dec)
 			
-			#matching the desired and available quality
-			if self.VIDEO == '0':
-				try:
-					video_url = str(video_url_dec_dict['mobile'])
-				except KeyError:
-					no_url_found = True
-			elif self.VIDEO == '1':
- 				try:
-				 	video_url =  str(video_url_dec_dict['tablet'])
- 				except KeyError:
- 					try: 
- 					 	video_url = str(video_url_dec_dict['mobile'])
- 					except KeyError:
- 						no_url_found = True
- 			elif self.VIDEO == '2':
- 				try:
-				 	video_url = str(video_url_dec_dict['720p'])
- 			 	except KeyError:
- 			 		try:
- 			 		 	video_url =  str(video_url_dec_dict['tablet'])
- 			 		except KeyError:	
- 			 			try:
- 			 			 	video_url =  str(video_url_dec_dict['mobile'])			 	
- 			 			except KeyError:
- 			 			 	no_url_found = True
- 			 			 	
- 			video_url = video_url.replace('\/','/')
-			if (self.DEBUG) == 'true':
-				xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "video_url", str(video_url) ), xbmc.LOGNOTICE )
-
-			if httpCommunicator.exists( video_url ):
+			try:
+				video_url_embed = str(video_url_dec_dict['embed'])
+				embed_found = True
+			except KeyError:
+				embed_found = False
+			
+			if embed_found:
+				#make youtube plugin url
+				youtubeID = video_url_embed.replace("youtube:", "")
+				youtube_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtubeID
+				video_url = youtube_url
 				have_valid_url = True
-			else:
-				unplayable_media_file = True
+				if (self.DEBUG) == 'true':
+					xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "video_url1", str(video_url) ), xbmc.LOGNOTICE )
+			else:	
+				#matching the desired and available quality
+				if self.VIDEO == '0':
+					try:
+						video_url = str(video_url_dec_dict['mobile'])
+					except KeyError:
+						no_url_found = True
+				elif self.VIDEO == '1':
+	 				try:
+					 	video_url =  str(video_url_dec_dict['tablet'])
+	 				except KeyError:
+	 					try: 
+	 					 	video_url = str(video_url_dec_dict['mobile'])
+	 					except KeyError:
+	 						no_url_found = True
+	 			elif self.VIDEO == '2':
+	 				try:
+					 	video_url = str(video_url_dec_dict['720p'])
+	 			 	except KeyError:
+	 			 		try:
+	 			 		 	video_url =  str(video_url_dec_dict['tablet'])
+	 			 		except KeyError:	
+	 			 			try:
+	 			 			 	video_url =  str(video_url_dec_dict['mobile'])			 	
+	 			 			except KeyError:
+	 			 			 	no_url_found = True
+	 			
+	 			if no_url_found:
+	 				pass
+	 			else:
+		 			video_url = video_url.replace('\/','/')
+					if (self.DEBUG) == 'true':
+						xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "video_url2", str(video_url) ), xbmc.LOGNOTICE )
+		
+					if httpCommunicator.exists( video_url ):
+						have_valid_url = True
+					else:
+						unplayable_media_file = True
 		
 		# Play video...
 		if have_valid_url:

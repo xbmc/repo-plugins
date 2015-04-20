@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import sys, urlparse, urllib, json, datetime, os, hashlib, sqlite3
+import sys, urlparse, urllib, json, datetime, os, hashlib, sqlite3, time
 
 import xbmcaddon, xbmcplugin, xbmcgui, xbmcvfs
 
@@ -30,6 +30,9 @@ setting 		= addon.getSetting
 params 			= urlparse.parse_qs(sys.argv[2][1:])
 
 baseurl			= 'http://gronkh.1750studios.com/api/'
+twitchStreamInfo= 'https://api.twitch.tv/kraken/streams/'
+
+twitchnames		= ['gronkh']
 
 ##### Helpers
 def makeUrl(params):
@@ -82,6 +85,14 @@ def getCachedJson(url):
 
 	return j
 
+def makeTimeString(s):
+	m, s = divmod(s, 60)
+	h, m = divmod(m, 60)
+	if h is not 0:
+		return "%d:%02d:%02d" % (h, m, s)
+	else:
+		return "%02d:%02d" % (m, s)
+
 ##### Functions
 def index(author=None):
 	if author:
@@ -99,6 +110,13 @@ def index(author=None):
 		params = {'mode' : 'LTs', 'author' : author}
 		xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params), listitem=li, isFolder=True)
 	else:
+		li = xbmcgui.ListItem(loc(30007))
+		li.setIconImage(icondir + 'live.png')
+		li.setThumbnailImage(icondir + 'live.png')
+		li.setArt({'fanart' : fanart})
+		params = {'mode' : 'live'}
+		xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params), listitem=li, isFolder=True)
+
 		li = xbmcgui.ListItem(loc(30001))
 		li.setIconImage(icondir + 'games.png')
 		li.setThumbnailImage(icondir + 'games.png')
@@ -128,7 +146,7 @@ def showAuthors():
 		li = xbmcgui.ListItem(author['name'])
 		li.setIconImage(author['avatar'])
 		li.setThumbnailImage(author['avatar'])
-		li.setArt({'fanart' : fanart})
+		li.setArt({'fanart' : author['fanart']})
 		params = {'author' : author['name']}
 		xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params),
 			listitem=li, isFolder=True)
@@ -149,12 +167,17 @@ def showTests(author=None):
 									'episode': 1,
 									'season': 1,
 									'director': game['author'],
-									'plot': game['description']
+									'plot': game['description'],
+									'rating': game['rating'],
+									'duration': makeTimeString(game['duration']),
+									'votes': str(game['votes']) + ' ' + loc(30008),
+									'premiered': game['aired']
 								})
 			li.setArt({'thumb': game['thumb'],
 						'poster': game['poster'],
-						'fanart': fanart})
+						'fanart': game['thumb']})
 			li.setProperty('isPlayable','true')
+			li.addStreamInfo('video', {'duration': game['duration']})
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params),
 				listitem=li)
 			xbmcplugin.addSortMethod(addon_handle,
@@ -172,12 +195,17 @@ def showTests(author=None):
 									'episode': 1,
 									'season': 1,
 									'director': game['author'],
-									'plot': game['description']
+									'plot': game['description'],
+									'rating': game['rating'],
+									'duration': makeTimeString(game['duration']),
+									'votes': str(game['votes']) + ' ' + loc(30008),
+									'premiered': game['aired']
 								})
 			li.setArt({'thumb': game['thumb'],
 						'poster': game['poster'],
-						'fanart': fanart})
+						'fanart': game['thumb']})
 			li.setProperty('isPlayable','true')
+			li.addStreamInfo('video', {'duration': game['duration']})
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params),
 				listitem=li)
 			xbmcplugin.addSortMethod(addon_handle,
@@ -226,12 +254,17 @@ def ShowEpisodes(game):
 								'episode': episode['episode'],
 								'season': 1,
 								'director': gamej['author'],
-								'plot': episode['description']
+								'plot': episode['description'],
+								'rating': episode['rating'],
+								'duration': makeTimeString(episode['duration']),
+								'votes': str(episode['votes']) + ' ' + loc(30008),
+								'premiered': episode['aired']
 							})
 		li.setArt({'thumb': episode['thumb'],
 					'poster': gamej['posterbig'],
-					'fanart': fanart})
+					'fanart': episode['thumb']})
 		li.setProperty('isPlayable','true')
+		li.addStreamInfo('video', {'duration': episode['duration']})
 		xbmcplugin.setContent(addon_handle, 'episodes')
 		xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params),
 			listitem=li)
@@ -250,12 +283,17 @@ def startVideo(g, e=None):
 								'episode': 1,
 								'season': 1,
 								'director': game['author'],
-								'plot': game['description']
+								'plot': game['description'],
+								'rating': game['rating'],
+								'duration': makeTimeString(game['duration']),
+								'votes': str(game['votes']) + ' ' + loc(30008),
+								'premiered': game['aired']
 							})
 		li.setArt({'thumb': game['thumb'],
 					'poster': game['poster'],
-					'fanart': fanart})
+					'fanart': game['thumb']})
 		li.setProperty('isPlayable','true')
+		li.addStreamInfo('video', {'duration': game['duration']})
 		xbmcplugin.setResolvedUrl(handle=addon_handle, succeeded=True, listitem=li)
 	else:
 		episode = json.loads(e)
@@ -269,11 +307,112 @@ def startVideo(g, e=None):
 								'season': 1,
 								'director': game['author'],
 								'plot': episode['description'],
-								'tracknumber': episode['episode']
+								'tracknumber': episode['episode'],
+								'rating': episode['rating'],
+								'duration': makeTimeString(episode['duration']),
+								'votes': str(episode['votes']) + ' ' + loc(30008),
+								'premiered': episode['aired']
 							})
 		li.setArt({'thumb': episode['thumb'],
 					'poster': game['posterbig'],
-					'fanart': fanart})
+					'fanart': episode['thumb']})
+		li.setProperty('isPlayable','true')
+		li.addStreamInfo('video', {'duration': episode['duration']})
+		xbmcplugin.setResolvedUrl(handle=addon_handle, succeeded=True, listitem=li)
+
+def showLiveStreams():
+	for name in twitchnames:
+		r = requests.get(twitchStreamInfo + name, headers={'Accept': 'application/vnd.twitchtv.v3+json'})
+		stream = json.loads(r.content)['stream']
+		if stream:
+			if 'bio' in stream['channel']:
+				r = requests.get(twitchStreamInfo + name, headers={'Accept': 'application/vnd.twitchtv.v3+json'})
+				stream = json.loads(r.content)['stream']
+				#if 'bio' in stream['channel']:
+				#	raise Exception
+		if stream:
+			li = None
+			if stream['game']:
+				li = xbmcgui.ListItem(stream['channel']['display_name'] + ' - ' + loc(30006) + ': ' + stream['game'])
+			else:
+				li = xbmcgui.ListItem(stream['channel']['display_name'] + ' - ' + stream['channel']['status'])
+			li.setIconImage(stream['channel']['logo'] + '?' + unicode(time.time()))
+			li.setThumbnailImage(stream['preview']['large'] + '?' + unicode(time.time()))
+			li.setArt({	'fanart' : stream['channel']['profile_banner'],
+						'clearlogo' : stream['channel']['logo'],
+						'banner' : stream['channel']['banner']})
+			li.setInfo('video', {
+									'director': stream['channel']['display_name'],
+									'plotoutline': stream['channel']['status']
+								})
+			li.setProperty('isPlayable','true')
+			params = {'mode' : 'start_livestream', 'stream' : json.dumps(stream), 'name': name}
+			xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params),
+				listitem=li)
+		else:
+			li = xbmcgui.ListItem(u'[' + name + u'] – ' + loc(30005))
+			li.setArt({	'fanart' : fanart})
+			li.setInfo('video', {
+									'title' : u'[' + name + u'] – ' + loc(30005),
+									'episode': 1,
+									'season': 1,
+									'director': name
+								})
+			li.setProperty('isPlayable','true')
+			params = {'mode' : 'start_livestream', 'stream' : json.dumps(stream), 'name': name}
+			xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params),
+				listitem=li)
+	xbmcplugin.addSortMethod(addon_handle, sortMethod=xbmcplugin.SORT_METHOD_LABEL)
+	xbmcplugin.endOfDirectory(addon_handle)
+
+def startLiveStream(stream, name):
+	r = requests.get('https://api.twitch.tv/api/channels/' + name + '/access_token')
+	j = json.loads(r.content)
+
+	token 	= j['token']
+	sig 	= j['sig']
+
+	if stream:
+			li = None
+			if stream['game']:
+				li = xbmcgui.ListItem(stream['channel']['display_name'] + ' - ' + loc(30006) + ': ' + stream['game'],
+					path='http://usher.twitch.tv/api/channel/hls/' +
+					name + '.m3u8?player=twitchweb&token=' +
+					token + '&sig=' +
+					sig + '&allow_audio_only=true&allow_source=true&type=any&p=666')
+			else:
+				li = xbmcgui.ListItem(stream['channel']['display_name'] + ' - ' + stream['channel']['status'],
+					path='http://usher.twitch.tv/api/channel/hls/' +
+					name + '.m3u8?player=twitchweb&token=' +
+					token + '&sig=' +
+					sig + '&allow_audio_only=true&allow_source=true&type=any&p=666')
+			li.setIconImage(stream['channel']['logo'])
+			li.setThumbnailImage(stream['preview']['large'] + '?' + unicode(time.time()))
+			li.setArt({	'fanart' : stream['channel']['profile_banner'],
+						'clearlogo' : stream['channel']['logo'],
+						'banner' : stream['channel']['banner']})
+			li.setInfo('video', {
+									'director': stream['channel']['display_name'],
+									'plotoutline': stream['channel']['status']
+								})
+			li.setProperty('isPlayable','true')
+			xbmcplugin.setResolvedUrl(handle=addon_handle, succeeded=True, listitem=li)
+	else:
+		li = xbmcgui.ListItem(u'[' + name + u'] – ' + loc(30005),
+			path='http://usher.twitch.tv/api/channel/hls/' +
+			name + '.m3u8?player=twitchweb&token=' +
+			token + '&sig=' +
+			sig + '&allow_audio_only=true&allow_source=true&type=any&p=666')
+		if stream:
+			li.setIconImage(stream['preview']['medium'])
+			li.setThumbnailImage(stream['preview']['large'])
+		li.setArt({	'fanart' : fanart})
+		li.setInfo('video', {
+								'title' : u'[' + name + u'] – ' + loc(30005),
+								'episode': 1,
+								'season': 1,
+								'director': name
+							})
 		li.setProperty('isPlayable','true')
 		xbmcplugin.setResolvedUrl(handle=addon_handle, succeeded=True, listitem=li)
 
@@ -297,6 +436,10 @@ if 'mode' in params:
 			startVideo(params['game'][0], params['episode'][0])
 		else:
 			startVideo(params['game'][0])
+	elif params['mode'][0] == 'live':
+		showLiveStreams()
+	elif params['mode'][0] == 'start_livestream':
+		startLiveStream(json.loads(params['stream'][0]), params['name'][0])
 else:
 	if 'author' in params:
 		index(params['author'][0])

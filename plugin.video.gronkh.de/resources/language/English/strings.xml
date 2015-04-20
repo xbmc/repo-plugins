@@ -4,6 +4,10 @@
   <string id="30002">Let's Tests</string>
   <string id="30003">Authors</string>
   <string id="30004">Cache cleared</string>
+  <string id="30005">Offline</string>
+  <string id="30006">plays</string>
+  <string id="30007">Live</string>
+  <string id="30008">votes</string>
 
   <string id="30010">Clear cache</string>
 </strings>

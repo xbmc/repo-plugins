@@ -1,2 +1,7 @@
+Version 1.0.1
+	Adding live streams
+	Using new API functions, based on the YouTube Data API
+	Changing and adding various thumbnails and fanarts
+
 Version 1.0.0
 	First working version, ready to be pushed to the repo

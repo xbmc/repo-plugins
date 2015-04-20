@@ -26,7 +26,8 @@ plugin.video.tehnik/resources/language/Romanian/strings.xml: not
 well-formed (invalid token): line 5, column 27
 
 v2.0.2
-- Removed en from the language tag from <language>en ro</language> to <language>ro</language> 
+- Removed en from the language tag from <language>en ro</language> 
+to <language>ro</language> 
 
 v2.0.3
 Changes:
@@ -36,5 +37,10 @@ Changes:
 IT: removed Lab501, Now Tech Ro, added Unboxarena.
 Mobiles: added Voievozii, Gadget.ro and Lab501.
 Brands: added Asus, Bit Defenter, HP Romania, Nokia, Schrack Technik and Sony.
-Games: added CreativeMonkeyzArmy, GamaGanda, Gamextv, GamingHD, PGLtv, Tiranianu Gaming and War Arena Gaming.
+Games: added CreativeMonkeyzArmy, GamaGanda, Gamextv, GamingHD, PGLtv, 
+Tiranianu Gaming and War Arena Gaming.
+
+v2.0.4
+- Fixing a parse error and adding identities in order to access the Kodi's youtube plugin.
+- Content changes.
 

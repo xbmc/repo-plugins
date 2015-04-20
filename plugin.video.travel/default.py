@@ -102,7 +102,8 @@ def getRequest(url, user_data=None, headers = defaultHeaders , alert=True):
 def getSources(fanart):
         ilist = []
         html = getRequest('http://www.travelchannel.com/shows/whats-new-on-travel-channel/articles/full-episodes')
-        a = re.compile('<section class="topn-wrapper">.+?<a href="(.+?)".+?blank">(.+?)<.+?src="(.+?)".+?<p>(.+?)<').findall(html)
+        blob = re.compile('<article(.+?)</article').search(html).group(1)
+        a = re.compile('<section class="topn-wrapper">.+?<a href="(.+?)".+?blank">(.+?)<.+?src="(.+?)".+?<p>(.+?)<.+?</section>').findall(blob)
         a[(len(a)-1)] = ('/video/p/1?wcmmode=disabled',__language__(30021),icon,__language__(30021))
         for url,name,img,plot in a:
               mode = 'GS'

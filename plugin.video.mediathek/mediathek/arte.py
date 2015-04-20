@@ -74,18 +74,18 @@ class ARTEMediathek(Mediathek):
         TreeNode("1.20",u"Zu Tisch In ...",self.rootLink+"/guide/de/sendungen/CUI/zu-tisch-in",True),
       )),
       TreeNode("2","Themen","",False,(
-        TreeNode("2.0",u"Aktuelles"               ,self.rootLink+"/guide/de/plus7/par_themes?name=Aktuelles&value=ACT&regions=ALL%2Cdefault%2CDE_FR%2CSAT%2CEUR_DE_FR",True),
-        TreeNode("2.1",u"Dokumentationen"         ,self.rootLink+"/guide/de/plus7/par_themes?name=Dokumentationen&value=DOC&regions=ALL%2Cdefault%2CDE_FR%2CSAT%2CEUR_DE_FR",True),
-        TreeNode("2.2",u"Entdeckung"              ,self.rootLink+"/guide/de/plus7/par_themes?name=Entdeckung&value=DEC&regions=ALL%2Cdefault%2CDE_FR%2CSAT%2CEUR_DE_FR",True),
-        TreeNode("2.3",u"Europa"                  ,self.rootLink+"/guide/de/plus7/par_themes?name=Europa&value=EUR&regions=ALL%2Cdefault%2CDE_FR%2CSAT%2CEUR_DE_FR",True),
-        TreeNode("2.4",u"Geopolitik & Geschichte" ,self.rootLink+"/guide/de/plus7/par_themes?name=Geopolitik+%26+Geschichte&value=GEO&regions=ALL%2Cdefault%2CDE_FR%2CSAT%2CEUR_DE_FR",True),
-        TreeNode("2.5",u"Gesellschaft"            ,self.rootLink+"/guide/de/plus7/par_themes?name=Gesellschaft&value=SOC&regions=ALL%2Cdefault%2CDE_FR%2CSAT%2CEUR_DE_FR",True),
-        TreeNode("2.6",u"Junior"                  ,self.rootLink+"/guide/de/plus7/par_themes?name=Junior&value=JUN&regions=ALL%2Cdefault%2CDE_FR%2CSAT%2CEUR_DE_FR",True),
-        TreeNode("2.7",u"Kino & Serien"           ,self.rootLink+"/guide/de/plus7/par_themes?name=Kino+%26+Serien&value=CIN&regions=ALL%2Cdefault%2CDE_FR%2CSAT%2CEUR_DE_FR",True),
-        TreeNode("2.8",u"Kunst & Kultur"          ,self.rootLink+"/guide/de/plus7/par_themes?name=Kunst+%26+Kultur&value=ART&regions=ALL%2Cdefault%2CDE_FR%2CSAT%2CEUR_DE_FR",True),
-        TreeNode("2.9",u"Popkultur & Musik"       ,self.rootLink+"/guide/de/plus7/par_themes?name=Popkultur+%26+Musik&value=CUL&regions=ALL%2Cdefault%2CDE_FR%2CSAT%2CEUR_DE_FR",True),
-        TreeNode("2.10",u"Umwelt & Wissenschaft"  ,self.rootLink+"/guide/de/plus7/par_themes?name=Umwelt+%26+Wissenschaft&value=ENV&regions=ALL%2Cdefault%2CDE_FR%2CSAT%2CEUR_DE_FR",True),
-        TreeNode("2.11",u"Andere"                 ,self.rootLink+"/guide/de/plus7/par_themes?name=Junior&value=JUN&regions=ALL%2Cdefault%2CDE_FR%2CSAT%2CEUR_DE_FR",True),
+        TreeNode("2.0",u"Aktuelles"               ,self.rootLink+"/guide/de/plus7/par_themes?name=Aktuelles&value=ACT&regions=EUR_DE_FR%2CDE_FR%2CSAT%2CALL",True),
+        TreeNode("2.1",u"Dokumentationen"         ,self.rootLink+"/guide/de/plus7/par_themes?name=Dokumentationen&value=DOC&regions=EUR_DE_FR%2CDE_FR%2CSAT%2CALL",True),
+        TreeNode("2.2",u"Entdeckung"              ,self.rootLink+"/guide/de/plus7/par_themes?name=Entdeckung&value=DEC&regions=EUR_DE_FR%2CDE_FR%2CSAT%2CALL",True),
+        TreeNode("2.3",u"Europa"                  ,self.rootLink+"/guide/de/plus7/par_themes?name=Europa&value=EUR&regions=EUR_DE_FR%2CDE_FR%2CSAT%2CALL",True),
+        TreeNode("2.4",u"Geopolitik & Geschichte" ,self.rootLink+"/guide/de/plus7/par_themes?name=Geopolitik+%26+Geschichte&value=GEO&regions=EUR_DE_FR%2CDE_FR%2CSAT%2CALL",True),
+        TreeNode("2.5",u"Gesellschaft"            ,self.rootLink+"/guide/de/plus7/par_themes?name=Gesellschaft&value=SOC&regions=EUR_DE_FR%2CDE_FR%2CSAT%2CALL",True),
+        TreeNode("2.6",u"Junior"                  ,self.rootLink+"/guide/de/plus7/par_themes?name=Junior&value=JUN&regions=EUR_DE_FR%2CDE_FR%2CSAT%2CALL",True),
+        TreeNode("2.7",u"Kino & Serien"           ,self.rootLink+"/guide/de/plus7/par_themes?name=Kino+%26+Serien&value=CIN&regions=EUR_DE_FR%2CDE_FR%2CSAT%2CALL",True),
+        TreeNode("2.8",u"Kunst & Kultur"          ,self.rootLink+"/guide/de/plus7/par_themes?name=Kunst+%26+Kultur&value=ART&regions=EUR_DE_FR%2CDE_FR%2CSAT%2CALL",True),
+        TreeNode("2.9",u"Popkultur & Musik"       ,self.rootLink+"/guide/de/plus7/par_themes?name=Popkultur+%26+Musik&value=CUL&regions=EUR_DE_FR%2CDE_FR%2CSAT%2CALL",True),
+        TreeNode("2.10",u"Umwelt & Wissenschaft"  ,self.rootLink+"/guide/de/plus7/par_themes?name=Umwelt+%26+Wissenschaft&value=ENV&regions=EUR_DE_FR%2CDE_FR%2CSAT%2CALL",True),
+        TreeNode("2.11",u"Andere"                 ,self.rootLink+"/guide/de/plus7/par_themes?name=Junior&value=JUN&regions=EUR_DE_FR%2CDE_FR%2CSAT%2CALL",True),
       )),
     );
     
@@ -95,7 +95,7 @@ class ARTEMediathek(Mediathek):
     
     
     self.regex_JSONPageLink = re.compile("http://arte.tv/papi/tvguide/videos/stream/player/D/\d{6}-\d{3}.+?/ALL/ALL.json");
-    self.regex_JSON_VideoLink = re.compile("\"HTTP_MP4_.+?\":{.*?\"bitrate\":(\d+),.*?\"url\":\"(http://.*?.mp4)\".*?}");
+    self.regex_JSON_VideoLink = re.compile("\"HTTP_MP4_.+?\":{.*?\"bitrate\":(\d+),.*?\"url\":\"(http://.*?.mp4)\".*?\"versionShortLibelle\":\"([a-zA-Z]{2})\".*?}");
     self.regex_JSON_ImageLink = re.compile("\"original\":\"(http://www.arte.tv/papi/tvguide/images/.*?.jpg)\"");
     self.regex_JSON_Detail = re.compile("\"VDE\":\"(.*?)\"");
     self.regex_JSON_Titel = re.compile("\"VTI\":\"(.*?)\"");
@@ -115,6 +115,7 @@ class ARTEMediathek(Mediathek):
     
   def extractVideoLinks(self, htmlPage, initCount):
     links = set();
+    jsonLinks = set();
     for videoPageLink in self.regex_VideoPageLinksHTML.finditer(htmlPage):
       link = videoPageLink.group(1);
       
@@ -125,34 +126,45 @@ class ARTEMediathek(Mediathek):
       link = videoPageLink.group(1).replace("\\/","/");
       if(link not in links):
         links.add(link);
-    self.gui.log("Found %s unique links"%len(links));
+    
+    for link in self.regex_JSONPageLink.finditer(htmlPage):
+      jsonLinks.add(link.group(0));
+    
     linkCount = initCount + len(links);
     for link in links:
       videoPage = self.loadPage(self.rootLink+link);
       match = self.regex_JSONPageLink.search(videoPage);
       if(match is not None):
-        link = match.group(0);
-        
-        jsonPage = self.loadPage(link).decode('utf-8');
-        videoLinks = {}
-        for match in self.regex_JSON_VideoLink.finditer(jsonPage):
-          bitrate = match.group(1);
-          url = match.group(2);
-          if(bitrate < 800):
-            videoLinks[0] = SimpleLink(url,0);
-          if(bitrate >= 800 and bitrate < 1500):
-            videoLinks[1] = SimpleLink(url,0);
-          if(bitrate >= 1500 and bitrate <= 2200):
-            videoLinks[1] = SimpleLink(url,0);
-          if(bitrate >= 2200):
-            videoLinks[3] = SimpleLink(url,0);
-        if(len(videoLinks) == 0):
+        jsonLinks.add(match.group(0));
+    
+    
+    self.gui.log("Found %s unique links"%len(jsonLinks));
+    for link in jsonLinks:
+      self.gui.log("Link: %s"%link); 
+      jsonPage = self.loadPage(link).decode('utf-8');
+      videoLinks = {}
+      for match in self.regex_JSON_VideoLink.finditer(jsonPage):
+        bitrate = match.group(1);
+        url = match.group(2);
+        lang = match.group(3);
+        if lang.lower() != 'de':
           continue;
-        picture = self.regex_JSON_ImageLink.search(jsonPage).group(1);
-        title = self.regex_JSON_Titel.search(jsonPage).group(1);
-        detail =  self.regex_JSON_Detail.search(jsonPage).group(1);
-        
-        self.gui.buildVideoLink(DisplayObject(title,"",picture,detail,videoLinks,True, None),self,linkCount);
+
+        if(bitrate < 800):
+          videoLinks[0] = SimpleLink(url,0);
+        if(bitrate >= 800 and bitrate < 1500):
+          videoLinks[1] = SimpleLink(url,0);
+        if(bitrate >= 1500 and bitrate < 2200):
+          videoLinks[2] = SimpleLink(url,0);
+        if(bitrate >= 2200):
+          videoLinks[3] = SimpleLink(url,0);
+      if(len(videoLinks) == 0):
+        continue;
+      picture = self.regex_JSON_ImageLink.search(jsonPage).group(1);
+      title = self.regex_JSON_Titel.search(jsonPage).group(1);
+      detail =  self.regex_JSON_Detail.search(jsonPage).group(1);
+      
+      self.gui.buildVideoLink(DisplayObject(title,"",picture,detail,videoLinks,True, None),self,linkCount);
 	
    
     

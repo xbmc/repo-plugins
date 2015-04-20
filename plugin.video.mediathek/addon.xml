@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="plugin.video.mediathek"
-  version="0.6.4"
+  version="0.6.6"
   name="Mediathek"
   provider-name="Raptor 2101">
   <requires>

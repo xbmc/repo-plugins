@@ -142,11 +142,12 @@ class ARDMediathek(Mediathek):
       quality = int(match.group(1));
       link = SimpleLink(match.group(2),0);
       
-	
       if(quality > 0):
-	quality -= 1
-	
+       quality -= 1
       videoLinks[quality] = link
-    picture = self.rootLink+self.regex_pictureLink.search(videoPage).group(1);
+    match = self.regex_pictureLink.search(videoPage)  
+    picture = None
+    if(match is not None):
+      picture = self.rootLink+match.group(1);
     if(len(videoLinks)>0):
       self.gui.buildVideoLink(DisplayObject(title, subTitle,picture,"",videoLinks,True,None,0),self,nodeCount);

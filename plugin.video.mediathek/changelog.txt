@@ -1,4 +1,6 @@
-0.6.3 - FIX: ARTE and NDR
+0.6.6 - FIX: Minor Fixes for ARTE and ARD
+0.6.5 - FIX: Minor Fixes for ARTE and NDR
+0.6.4 - FIX: ARTE and NDR
 0.6.3 - FIX: extend ARD plugin
 0.6.2 - FIX: adopt ARD infrastructure change
 0.6.1 - FIX: adopt NDR infrastructure change

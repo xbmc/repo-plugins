@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.audio.rne" name="RNE Podcasts" version="1.0.0" provider-name="Jose Antonio Montes (jamontes)">
+    <requires>
+        <import addon="xbmc.python" version="2.19.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">Listen to all the podcast from RNE.</summary>
+        <description lang="en">This add-on allows you to listen to all the podcast of the emission programmes from the spanish national radio RNE website.[CR]From the add-on settings menu, it can be configured to navigate through all the programmes, or just currently on emission (default).</description>
+        <summary lang="es">Escucha todos los podcasts de RNE.</summary>
+        <description lang="es">Este add-on te permite escuchar todos los podcasts de las emisiones de los programas de RNE mostrados en su página web.[CR]Desde el menú de ajustes del add-on, se puede elegir entre la opción de mostrar todos los programas, o sólo aquellos actualmente en emisión (valor por defecto).</description>
+        <summary lang="de">Hören sie alle podcast von RNE.</summary>
+        <description lang="de">Dieses add-on ermöglicht es ihnen alle podcast von der spanischen nationalen radio RNE website erneut zu hören.[CR]Im add-on einstellungs-menü, kann man verschiedene sendungen auswählen oder sich das aktuelle live streaming anhören (default).</description>
+	<summary lang="fr">Ecoute tous les podcasts de RNE.</summary>
+	<description lang="fr">Cette add-on permet d'écouter tous les podcasts de les émissions des programmes de la Radio National Espagnole RNE présents sur sa page web.[CR]Depuis le menu de préférences du add-on, on peut choisir entre l´option de montrer tous les programmes ou seulement ceux en émission (valeur par défault).</description>
+        <language>es</language>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+        <forum>http://forum.xbmc.org/showthread.php?tid=224126</forum>
+        <source>https://github.com/jamontes/plugin.audio.rne</source>
+        <website>http://www.rtve.es/radio/podcast/</website>
+        <mail></mail>
+    </extension>
+</addon>

@@ -1,0 +1,26 @@
+1.0.0
+- Updated version number for official repo bump.
+- Updated french translations (credits: Emil). 
+0.0.9
+- Added forum thread to addon and README files.
+- Added Travis-CI integration support for scraper API testing.
+0.0.8
+- Cleaned up code and documentation.
+- prepared everything for first bump into git repo.
+0.0.7
+- Added Search option for audios.
+0.0.6
+- Improved info tags presentation into audios lists.
+- Improved main index generation.
+0.0.5
+- Added support for direct emissions.
+0.0.4
+- Added filter option for All The Programmes or Only On Emission from settings menu, 
+0.0.3
+- Improved audio list parser function.
+- Added suport for info tags in audios and programs.
+0.0.2
+- Added multilevel menu options for "Podcast por cadena" and "Podcast por género".
+- Added internationalization support.
+0.0.1
+- First Try.

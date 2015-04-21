@@ -21,6 +21,7 @@ class Provider(kodion.AbstractProvider):
                                 'golem.newest-videos': 30513,
                                 'golem.stream_not_found': 30514,
                                 'golem.trailer': 30515,
+                                'golem.manufacturer-videos': 30517,
                                 'golem.week-review': 30516})
         self._client = None
         pass
@@ -178,22 +179,27 @@ class Provider(kodion.AbstractProvider):
         return context.create_resource_path('media', 'fanart.jpg')
 
     def _get_videos(self, context, query=None, year=None, month=None):
-        rss = context.get_function_cache().get(FunctionCache.ONE_MINUTE * 10, self.get_client(context).get_videos)
+        function_cache = context.get_function_cache()
+        rss = function_cache.get(FunctionCache.ONE_HOUR/2, self.get_client(context).get_videos)
         result = self._rss_to_items(context, rss, query=query, year=year, month=month)
         return result
 
     def _get_videos_newest(self, context, count=50):
-        rss = context.get_function_cache().get(FunctionCache.ONE_MINUTE * 10, self.get_client(context).get_videos)
+        rss = context.get_function_cache().get(FunctionCache.ONE_HOUR/2, self.get_client(context).get_videos)
         result = self._rss_to_items(context, rss, count=50)
         return result
 
     def _get_years(self, context):
-        rss = context.get_function_cache().get(FunctionCache.ONE_MINUTE * 10, self.get_client(context).get_videos)
-        return self._get_years_from_rss(rss)
+        function_cache = context.get_function_cache()
+        rss = function_cache.get(FunctionCache.ONE_HOUR/2, self.get_client(context).get_videos)
+        result = function_cache.get(FunctionCache.ONE_HOUR, self._get_years_from_rss, rss)
+        return result
 
     def _get_month(self, context, year):
-        rss = context.get_function_cache().get(FunctionCache.ONE_MINUTE * 10, self.get_client(context).get_videos)
-        return self._get_month_from_rss(rss, year)
+        function_cache = context.get_function_cache()
+        rss = function_cache.get(FunctionCache.ONE_HOUR/2, self.get_client(context).get_videos)
+        result = function_cache.get(FunctionCache.ONE_HOUR, self._get_month_from_rss, rss, year)
+        return result
 
     @kodion.RegisterProviderPath('^/browse/(?P<year>\d+)/(?P<month>\d+)/$')
     def _on_browse_year_month(self, context, re_match):
@@ -291,6 +297,13 @@ class Provider(kodion.AbstractProvider):
         week_review_item.set_fanart(self.get_fanart(context))
         week_review_item.set_image(context.create_resource_path('media', 'calendar.png'))
         result.append(week_review_item)
+
+        # Herstellervideos
+        trailer_item = DirectoryItem(context.localize(self._local_map['golem.manufacturer-videos']),
+                                     context.create_uri(['browse', 'by-query', 'herstellervideo']))
+        trailer_item.set_fanart(self.get_fanart(context))
+        trailer_item.set_image(context.create_resource_path('media', 'videos.png'))
+        result.append(trailer_item)
 
         # trailer
         trailer_item = DirectoryItem(context.localize(self._local_map['golem.trailer']),

@@ -30,5 +30,6 @@ def run(provider, context=None):
     context.log_debug('Path: "%s' % context.get_path())
     context.log_debug('Params: "%s"' % unicode(context.get_params()))
     __RUNNER__.run(provider, context)
+    provider.tear_down(context)
     context.log_debug('Shutdown of Kodion')
     pass

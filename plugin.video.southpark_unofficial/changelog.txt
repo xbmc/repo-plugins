@@ -1,0 +1,8 @@
+0.1.0
+- Initial release
+0.1.3
+- added langs and fixed geolocation
+0.2.1
+- added support to southpark.de
+0.2.2
+- fixed bug on 'de' lang (season 18 is in english)

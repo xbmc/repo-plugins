@@ -1,0 +1,12 @@
+<strings>
+    <string id="30000">Audio Language</string>
+	<string id="30001">Geo Location</string>
+	<string id="30002">You seem to be geoblocked. I'll ignore it but be aware of it</string>
+	<string id="30003">Loading Random Episode</string>
+	<string id="30004">Cannot open the stream. Bad internet connection?</string>
+	<string id="30005">Featured</string>
+	<string id="30006">Random Episode</string>
+	<string id="30007">Season</string>
+	<string id="30009">Loading</string>
+	<string id="30010">Check your internet connection!</string>
+</strings>

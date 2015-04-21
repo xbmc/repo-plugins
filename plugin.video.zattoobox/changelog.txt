@@ -1,3 +1,8 @@
+[B]1.0.0[/B]
+- Improved integration with Kodi features
+  (bookmarks, media infos, favorites, playlists, ...)
+- Redesigned for extensibility
+
 [B]0.5.1[/B]
 - Fixed dependencies
 

@@ -1,10 +1,11 @@
 # coding=utf-8
 
 ##################################
-# Zappylib V0.5.0
+# Zappylib V0.5.2
 # ZapiSession
 # (c) 2014 Pascal Nançoz
 ##################################
+
 import os, re, base64
 import urllib, urllib2
 import json
@@ -12,7 +13,8 @@ import json
 class ZapiSession:
 	ZAPI_AUTH_URL = 'https://zattoo.com'
 	ZAPI_URL = 'http://zattoo.com'
-	DATA_FOLDER = None
+	CACHE_ENABLED = False
+	CACHE_FOLDER = None
 	COOKIE_FILE = None
 	ACCOUNT_FILE = None
 	HttpHandler = None
@@ -20,17 +22,19 @@ class ZapiSession:
 	Password = None
 	AccountData = None
 
-	def __init__(self, dataFolder):
-		self.DATA_FOLDER = dataFolder
-		self.COOKIE_FILE = os.path.join(dataFolder, 'session.cache')
-		self.ACCOUNT_FILE = os.path.join(dataFolder, 'account.cache')
+	def __init__(self, cacheFolder):
+		if cacheFolder is not None:
+			self.CACHE_ENABLED = True
+			self.CACHE_FOLDER = cacheFolder
+			self.COOKIE_FILE = os.path.join(cacheFolder, 'session.cache')
+			self.ACCOUNT_FILE = os.path.join(cacheFolder, 'account.cache')
 		self.HttpHandler = urllib2.build_opener()
 		self.HttpHandler.addheaders = [('Content-type', 'application/x-www-form-urlencoded'),('Accept', 'application/json')]
 
 	def init_session(self, username, password):
 		self.Username = username
 		self.Password = password
-		return self.restore_session() or self.renew_session()
+		return (self.CACHE_ENABLED and self.restore_session()) or self.renew_session()
 
 	def restore_session(self):
 		if os.path.isfile(self.COOKIE_FILE) and os.path.isfile(self.ACCOUNT_FILE):
@@ -66,7 +70,8 @@ class ZapiSession:
 				sessionId = self.extract_sessionId(response.info().getheader('Set-Cookie'))
 				if sessionId is not None:
 					self.set_cookie(sessionId)
-					self.persist_sessionId(sessionId)
+					if self.CACHE_ENABLED:
+						self.persist_sessionId(sessionId)
 				return response.read()
 		except Exception:
 			pass
@@ -107,7 +112,8 @@ class ZapiSession:
 		accountData = self.exec_zapiCall(api, params, 'session')
 		if accountData is not None:
 			self.AccountData = accountData
-			self.persist_accountData(accountData)
+			if self.CACHE_ENABLED:
+				self.persist_accountData(accountData)
 			return True
 		return False		
 

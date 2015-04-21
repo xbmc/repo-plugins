@@ -1,2 +1,0 @@
-[B]0.3.0[/B]
-- first release

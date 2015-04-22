@@ -475,6 +475,25 @@ class VideoInfo(object):
                 return self._load_manifest(url, video_id)
             pass
 
+        meta_info = {'video': {},
+                     'channel': {},
+                     'images': {}}
+        meta_info['video']['id'] = params.get('vid', params.get('video_id', ''))
+        meta_info['video']['title'] = params.get('title', '').decode('utf-8')
+        meta_info['channel']['author'] = params.get('author', '').decode('utf-8')
+        meta_info['channel']['id'] = 'UC%s' % params.get('uid', '')
+        image_data_list = [
+            {'from': 'iurlhq', 'to': 'high'},
+            {'from': 'iurlmq', 'to': 'medium'},
+            {'from': 'iurlsd', 'to': 'standard'},
+            {'from': 'thumbnail_url', 'to': 'default'}]
+        for image_data in image_data_list:
+            image_url = params.get(image_data['from'], '')
+            if image_url:
+                meta_info['images'][image_data['to']] = image_url
+                pass
+            pass
+
         """
         fmt_list = params.get('fmt_list', '')
         if fmt_list:
@@ -523,7 +542,8 @@ class VideoInfo(object):
                         raise Exception('unknown format for itag "%s"' % itag)
 
                     video_stream = {'url': url,
-                                    'format': format}
+                                    'format': format,
+                                    'meta': meta_info}
                     stream_list.append(video_stream)
                     pass
                 elif conn:
@@ -534,7 +554,8 @@ class VideoInfo(object):
                         raise Exception('unknown format for itag "%s"' % itag)
                     format['rtmpe'] = True
                     video_stream = {'url': url,
-                                    'format': format}
+                                    'format': format,
+                                    'meta': meta_info}
 
                     stream_list.append(video_stream)
                     pass

@@ -7,6 +7,16 @@ import unittest
 
 
 class TestProvider(unittest.TestCase):
+    def test_description_links(self):
+        provider = Provider()
+
+        path = kodion.utils.create_path('special', 'description_links')
+        context = kodion.Context(path=path, params={'video_id': 'QEwEWKbWnaQ'})
+        context.set_localization(30502, 'Go to %s')
+        result = provider.navigate(context)
+        items = result[0]
+        pass
+
     def test_playlist(self):
         provider = Provider()
 

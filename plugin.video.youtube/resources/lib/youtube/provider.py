@@ -35,6 +35,8 @@ class Provider(kodion.AbstractProvider):
                  'youtube.sign.out': 30112,
                  'youtube.sign.go_to': 30518,
                  'youtube.sign.enter_code': 30519,
+                 'youtube.sign.twice.title': 30546,
+                 'youtube.sign.twice.text': 30547,
                  'youtube.playlist.select': 30521,
                  'youtube.playlist.play.all': 30531,
                  'youtube.playlist.play.default': 30532,
@@ -51,6 +53,8 @@ class Provider(kodion.AbstractProvider):
                  'youtube.setup_wizard.adjust.language_and_region': 30527,
                  'youtube.video.add_to_playlist': 30520,
                  'youtube.video.liked': 30508,
+                 'youtube.video.description.links': 30544,
+                 'youtube.video.description.links.not_found': 30545,
                  'youtube.video.disliked': 30538,
                  'youtube.video.queue': 30511,
                  'youtube.video.rate': 30528,
@@ -63,6 +67,7 @@ class Provider(kodion.AbstractProvider):
 
     def __init__(self):
         kodion.AbstractProvider.__init__(self)
+        self._resource_manager = None
 
         self._client = None
         self._is_logged_in = False
@@ -86,8 +91,9 @@ class Provider(kodion.AbstractProvider):
         items_per_page = context.get_settings().get_items_per_page()
 
         access_manager = context.get_access_manager()
-        access_token = access_manager.get_access_token()
-        if access_manager.is_new_login_credential() or not access_token or access_manager.is_access_token_expired():
+        access_tokens = access_manager.get_access_token().split('|')
+        if access_manager.is_new_login_credential() or len(
+                access_tokens) != 2 or access_manager.is_access_token_expired():
             # reset access_token
             access_manager.update_access_token('')
             # we clear the cache, so none cached data of an old account will be displayed.
@@ -105,9 +111,16 @@ class Provider(kodion.AbstractProvider):
                 pass
 
             if access_manager.has_login_credentials() or access_manager.has_refresh_token():
-                username, password = access_manager.get_login_credentials()
-                access_token = access_manager.get_access_token()
-                refresh_token = access_manager.get_refresh_token()
+                # username, password = access_manager.get_login_credentials()
+                access_tokens = access_manager.get_access_token()
+                if access_tokens:
+                    access_tokens = access_tokens.split('|')
+                    pass
+
+                refresh_tokens = access_manager.get_refresh_token()
+                if refresh_tokens:
+                    refresh_tokens = refresh_tokens.split('|')
+                    pass
 
                 # create a new access_token
                 """
@@ -116,22 +129,39 @@ class Provider(kodion.AbstractProvider):
                     access_manager.update_access_token(access_token, expires)
                     pass
                 """
-                if not access_token and refresh_token:
-                    access_token, expires = YouTube(language=language).refresh_token(refresh_token)
-                    access_manager.update_access_token(access_token, expires)
+                if len(access_tokens) != 2 and len(refresh_tokens) == 2:
+                    try:
+                        access_token_tv, expires_in_tv = YouTube(language=language).refresh_token_tv(refresh_tokens[0])
+                        access_token_kodi, expires_in_kodi = YouTube(language=language).refresh_token(refresh_tokens[1])
+                        access_tokens = [access_token_tv, access_token_kodi]
+
+                        access_token = '%s|%s' % (access_token_tv, access_token_kodi)
+                        expires_in = min(expires_in_tv, expires_in_kodi)
+
+                        access_manager.update_access_token(access_token, expires_in)
+                    except LoginException, ex:
+                        access_tokens = ['', '']
+                        # reset access_token
+                        access_manager.update_access_token('')
+                        # we clear the cache, so none cached data of an old account will be displayed.
+                        context.get_function_cache().clear()
+                        pass
                     pass
 
-                self._is_logged_in = access_token != ''
-
                 # in debug log the login status
+                self._is_logged_in = len(access_tokens) == 2
                 if self._is_logged_in:
                     context.log_debug('User is logged in')
                 else:
                     context.log_debug('User is not logged in')
                     pass
 
-                self._client = YouTube(items_per_page=items_per_page, access_token=access_token,
-                                       language=language)
+                if len(access_tokens) == 0:
+                    access_tokens = ['', '']
+                    pass
+
+                self._client = YouTube(language=language, items_per_page=items_per_page, access_token=access_tokens[1],
+                                       access_token_tv=access_tokens[0])
                 self._client.set_log_error(context.log_error)
             else:
                 self._client = YouTube(items_per_page=items_per_page, language=language)
@@ -145,7 +175,11 @@ class Provider(kodion.AbstractProvider):
         return self._client
 
     def get_resource_manager(self, context):
-        return ResourceManager(weakref.proxy(context), weakref.proxy(self.get_client(context)))
+        if not self._resource_manager:
+            # self._resource_manager = ResourceManager(weakref.proxy(context), weakref.proxy(self.get_client(context)))
+            self._resource_manager = ResourceManager(context, self.get_client(context))
+            pass
+        return self._resource_manager
 
     def get_alternative_fanart(self, context):
         return self.get_fanart(context)
@@ -202,15 +236,13 @@ class Provider(kodion.AbstractProvider):
 
     @kodion.RegisterProviderPath('^/channel/(?P<channel_id>.*)/playlists/$')
     def _on_channel_playlists(self, context, re_match):
-        self.set_content_type(context, kodion.constants.content_type.EPISODES)
-
         result = []
 
         channel_id = re_match.group('channel_id')
         page_token = context.get_param('page_token', '')
 
         # no caching
-        json_data = self.get_client(context).get_playlists(channel_id, page_token)
+        json_data = self.get_client(context).get_playlists_of_channel(channel_id, page_token)
         if not v3.handle_error(self, context, json_data):
             return False
         result.extend(v3.response_to_items(self, context, json_data))
@@ -227,7 +259,7 @@ class Provider(kodion.AbstractProvider):
     def _on_channel(self, context, re_match):
         self.set_content_type(context, kodion.constants.content_type.EPISODES)
 
-        resource_manager = ResourceManager(context, self.get_client(context))
+        resource_manager = self.get_resource_manager(context)
 
         result = []
 
@@ -241,8 +273,7 @@ class Provider(kodion.AbstractProvider):
         if method == 'user':
             context.log_debug('Trying to get channel id for user "%s"' % channel_id)
 
-            # the data should be valid for at least a week
-            json_data = context.get_function_cache().get(FunctionCache.ONE_WEEK,
+            json_data = context.get_function_cache().get(FunctionCache.ONE_DAY,
                                                          self.get_client(context).get_channel_by_username, channel_id)
             if not v3.handle_error(self, context, json_data):
                 return False
@@ -320,11 +351,8 @@ class Provider(kodion.AbstractProvider):
 
     @kodion.RegisterProviderPath('^/special/(?P<category>.*)/$')
     def _on_yt_specials(self, context, re_match):
-        result = []
-
         category = re_match.group('category')
-        result.extend(yt_specials.process(category, self, context, re_match))
-        return result
+        return yt_specials.process(category, self, context, re_match)
 
     @kodion.RegisterProviderPath('^/events/post_play/$')
     def _on_post_play(self, context, re_match):
@@ -435,10 +463,22 @@ class Provider(kodion.AbstractProvider):
             # my subscription
             my_subscriptions_item = DirectoryItem(
                 '[B]' + context.localize(self.LOCAL_MAP['youtube.my_subscriptions']) + '[/B]',
+                context.create_uri(['special', 'new_uploaded_videos_tv']),
+                context.create_resource_path('media', 'new_uploads.png'))
+            my_subscriptions_item.set_fanart(self.get_fanart(context))
+            result.append(my_subscriptions_item)
+
+            # my subscription
+            """"
+            Deprecated v2 implementation
+
+            my_subscriptions_item = DirectoryItem(
+                '[B]' + context.localize(self.LOCAL_MAP['youtube.my_subscriptions']) + ' (OLD)[/B]',
                 context.create_uri(['special', 'new_uploaded_videos']),
                 context.create_resource_path('media', 'new_uploads.png'))
             my_subscriptions_item.set_fanart(self.get_fanart(context))
             result.append(my_subscriptions_item)
+            """
             pass
 
         # what to watch

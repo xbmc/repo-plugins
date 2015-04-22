@@ -1,5 +1,6 @@
 from resources.lib import kodion
 from resources.lib.youtube.client import YouTube
+from resources.lib.youtube.helper.video_info import VideoInfo
 
 __author__ = 'bromix'
 
@@ -7,8 +8,12 @@ import unittest
 
 
 class TestClient(unittest.TestCase):
-    USERNAME = ''
-    PASSWORD = ''
+    TEST_ACCESS_TOKEN = ''
+
+    def test_my_subscriptions_tv(self):
+        client = YouTube(access_token_tv=self.TEST_ACCESS_TOKEN)
+        json_data = client.get_my_subscriptions(page_token=None)
+        pass
 
     def test_get_live_events(self):
         client = YouTube()
@@ -224,6 +229,15 @@ class TestClient(unittest.TestCase):
         streams = client.get_video_streams(context, 'oRSijEW_cDM')
         self.assertGreater(len(streams), 0)
 
+    def test_extract_meta_info(self):
+        client = YouTube()
+        context = kodion.Context()
+
+        # some via 'get_video_info'
+        video_info = VideoInfo(context)
+        video_streams = video_info._method_get_video_info('d5i0ZMMbkZY')
+        pass
+
     def test_get_video_streams_mixed(self):
         client = YouTube()
 
@@ -231,9 +245,6 @@ class TestClient(unittest.TestCase):
 
         # some videos
         streams = client.get_video_streams(context, 'Hp0gI8KJw20')
-        self.assertGreater(len(streams), 0)
-
-        streams = client.get_video_streams(context, 'ZDX8SoYMizA')
         self.assertGreater(len(streams), 0)
 
         streams = client.get_video_streams(context, 'OSUy2uA6fbw')
@@ -258,13 +269,13 @@ class TestClient(unittest.TestCase):
     def test_get_playlists(self):
         client = YouTube()
 
-        json_data = client.get_playlists('UCDbAn9LEzqONk__uXA6a9jQ')
+        json_data = client.get_playlists_of_channel(channel_id='UCDbAn9LEzqONk__uXA6a9jQ')
         pass
 
     def test_get_videos(self):
         client = YouTube()
 
-        json_data = client.get_videos(['vyD70Huufco', 'AFdezM3_m-c'])
+        json_data = client.get_videos(['uhTYbtZH3Nk'])
         pass
 
     def test_get_related_videos(self):

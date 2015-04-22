@@ -9,8 +9,9 @@ from ..helper.video_info import VideoInfo
 
 
 class YouTube(LoginClient):
-    def __init__(self, key='', language='en-US', items_per_page=50, access_token=''):
-        LoginClient.__init__(self, key=key, language=language, access_token=access_token)
+    def __init__(self, config={}, language='en-US', items_per_page=50, access_token='', access_token_tv=''):
+        LoginClient.__init__(self, config=config, language=language, access_token=access_token,
+                             access_token_tv=access_token_tv)
 
         self._max_results = items_per_page
         pass
@@ -167,7 +168,7 @@ class YouTube(LoginClient):
         :param page_token:
         :return:
         """
-        params = {'part': 'snippet,contentDetails',
+        params = {'part': 'snippet',
                   'maxResults': str(self._max_results),
                   'order': order}
         if channel_id == 'mine':
@@ -205,7 +206,7 @@ class YouTube(LoginClient):
         return self._perform_v3_request(method='GET', path='guideCategories', params=params)
 
     def get_popular_videos(self, page_token=''):
-        params = {'part': 'snippet,contentDetails',
+        params = {'part': 'snippet',
                   'maxResults': str(self._max_results),
                   'regionCode': self._country,
                   'hl': self._language,
@@ -270,8 +271,8 @@ class YouTube(LoginClient):
             pass
         return self._perform_v3_request(method='GET', path='channelSections', params=params)
 
-    def get_playlists(self, channel_id, page_token=''):
-        params = {'part': 'snippet,contentDetails',
+    def get_playlists_of_channel(self, channel_id, page_token=''):
+        params = {'part': 'snippet',
                   'maxResults': str(self._max_results)}
         if channel_id != 'mine':
             params['channelId'] = channel_id
@@ -354,7 +355,7 @@ class YouTube(LoginClient):
             pass
 
         # prepare params
-        params = {'part': 'snippet,contentDetails',
+        params = {'part': 'snippet',
                   'myRating': 'dislike',
                   'maxResults': str(self._max_results)}
         if page_token:
@@ -376,6 +377,15 @@ class YouTube(LoginClient):
         params = {'part': 'snippet,contentDetails',
                   'id': video_id}
         return self._perform_v3_request(method='GET', path='videos', params=params)
+
+    def get_playlists(self, playlist_id):
+        if isinstance(playlist_id, list):
+            playlist_id = ','.join(playlist_id)
+            pass
+
+        params = {'part': 'snippet,contentDetails',
+                  'id': playlist_id}
+        return self._perform_v3_request(method='GET', path='playlists', params=params)
 
     def get_live_events(self, event_type='live', order='relevance', page_token=''):
         """
@@ -466,13 +476,63 @@ class YouTube(LoginClient):
 
         return self._perform_v3_request(method='GET', path='search', params=params)
 
+    def get_my_subscriptions(self, page_token, _result=None):
+        post_data = {
+            'context': {
+                'client': {
+                    'clientName': 'TVHTML5',
+                    'clientVersion': '5.20150304',
+                    'theme': 'CLASSIC',
+                    'acceptRegion': '%s' % self._country,
+                    'acceptLanguage': '%s' % self._language.replace('_', '-')
+                },
+                'user': {
+                    'enableSafetyMode': False
+                }
+            },
+            'browseId': 'FEsubscriptions'
+        }
+        if page_token:
+            post_data['continuation'] = page_token
+            pass
+
+        json_data = self._perform_v1_tv_request(method='POST', path='browse', post_data=post_data)
+        data = json_data.get('contents', {}).get('sectionListRenderer', {}).get('contents', [{}])[0].get('shelfRenderer', {}).get('content', {}).get('horizontalListRenderer', {})
+        if not data:
+            data = json_data.get('continuationContents', {}).get('horizontalListContinuation', {})
+            pass
+        continuations = data.get('continuations', [{}])[0].get('nextContinuationData', {}).get('continuation', '')
+        items = data.get('items', [])
+        if not _result:
+            _result = {'items': []}
+            pass
+        for item in items:
+            item = item.get('gridVideoRenderer', {})
+            if item:
+                video_item = {'id': item['videoId'],
+                              'title': item.get('title', {}).get('runs', [{}])[0].get('text', '')}
+                _result['items'].append(video_item)
+                pass
+            pass
+        if continuations:
+            _result['continuations'] = continuations
+
+            if len(_result['items'])+16 <= self._max_results:
+                self.get_my_subscriptions(page_token=continuations, _result=_result)
+                pass
+            pass
+        else:
+            _result['continuations'] = ''
+            pass
+        return _result
+
     def _perform_v3_request(self, method='GET', headers=None, path=None, post_data=None, params=None,
                             allow_redirects=True):
         # params
         if not params:
             params = {}
             pass
-        _params = {'key': self._key}
+        _params = {'key': self._config['key']}
         _params.update(params)
 
         # headers
@@ -481,8 +541,7 @@ class YouTube(LoginClient):
             pass
         _headers = {'Host': 'www.googleapis.com',
                     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.36 Safari/537.36',
-                    'Accept-Encoding': 'gzip, deflate',
-                    'X-JavaScript-User-Agent': 'Google APIs Explorer'}
+                    'Accept-Encoding': 'gzip, deflate'}
         if self._access_token:
             _headers['Authorization'] = 'Bearer %s' % self._access_token
             pass
@@ -524,7 +583,7 @@ class YouTube(LoginClient):
         if not params:
             params = {}
             pass
-        _params = {'key': self._key}
+        _params = {'key': self._config['key']}
         _params.update(params)
 
         # headers
@@ -532,7 +591,7 @@ class YouTube(LoginClient):
             headers = {}
             pass
         _headers = {'Host': 'gdata.youtube.com',
-                    'X-GData-Key': 'key=%s' % self._key,
+                    'X-GData-Key': 'key=%s' % self._config['key'],
                     'GData-Version': '2.1',
                     'Accept-Encoding': 'gzip, deflate',
                     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.36 Safari/537.36'}
@@ -553,6 +612,63 @@ class YouTube(LoginClient):
             return {}
 
         if method != 'DELETE' and result.text:
+            return result.json()
+        pass
+
+    def _perform_v1_tv_request(self, method='GET', headers=None, path=None, post_data=None, params=None,
+                               allow_redirects=True):
+        # params
+        if not params:
+            params = {}
+            pass
+        _params = {'key': self._config_tv['key']}
+        _params.update(params)
+
+        # headers
+        if not headers:
+            headers = {}
+            pass
+        _headers = {'Host': 'www.googleapis.com',
+                    'Connection': 'keep-alive',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36',
+                    'Origin': 'https://www.youtube.com',
+                    'Accept': '*/*',
+                    'DNT': '1',
+                    'Referer': 'https://www.youtube.com/tv',
+                    'Accept-Encoding': 'gzip',
+                    'Accept-Language': 'en-US,en;q=0.8,de;q=0.6'}
+        if self._access_token_tv:
+            _headers['Authorization'] = 'Bearer %s' % self._access_token_tv
+            pass
+        _headers.update(headers)
+
+        # url
+        _url = 'https://www.googleapis.com/youtubei/v1/%s' % path.strip('/')
+
+        result = None
+
+        if method == 'GET':
+            result = requests.get(_url, params=_params, headers=_headers, verify=False, allow_redirects=allow_redirects)
+            pass
+        elif method == 'POST':
+            _headers['content-type'] = 'application/json'
+            result = requests.post(_url, json=post_data, params=_params, headers=_headers, verify=False,
+                                   allow_redirects=allow_redirects)
+            pass
+        elif method == 'PUT':
+            _headers['content-type'] = 'application/json'
+            result = requests.put(_url, json=post_data, params=_params, headers=_headers, verify=False,
+                                  allow_redirects=allow_redirects)
+            pass
+        elif method == 'DELETE':
+            result = requests.delete(_url, params=_params, headers=_headers, verify=False,
+                                     allow_redirects=allow_redirects)
+            pass
+
+        if result is None:
+            return {}
+
+        if result.headers.get('content-type', '').startswith('application/json'):
             return result.json()
         pass
 

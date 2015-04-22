@@ -37,7 +37,7 @@ def response_to_items(provider, context, json_data):
             pass
 
         utils.update_video_infos(provider, context, video_id_dict)
-        utils.update_channel_infos(provider, context, channel_item_dict)
+        utils.update_fanarts(provider, context, channel_item_dict)
 
         page = int(context.get_param('page', 1))
         items_per_page = int(feed.get('openSearch$itemsPerPage', {}).get('$t', 0))

@@ -66,7 +66,7 @@ def _process_remove_playlist(provider, context, re_match):
 
 def _process_select_playlist(provider, context, re_match):
     json_data = context.get_function_cache().get(FunctionCache.ONE_MINUTE / 3,
-                                                 provider.get_client(context).get_playlists,
+                                                 provider.get_client(context).get_playlists_of_channel,
                                                  channel_id='mine')
     playlists = json_data.get('items', [])
 

@@ -70,6 +70,10 @@ class FunctionCache(Storage):
         return None
 
     def get(self, seconds, func, *args, **keywords):
+        def _seconds_difference(_first, _last):
+            _delta = _last - _first
+            return 24*60*60*_delta.days + _delta.seconds + _delta.microseconds/1000000.
+
         """
         Returns the cached data of the given function.
         :param partial_func: function to cache
@@ -92,12 +96,10 @@ class FunctionCache(Storage):
             cached_time = data[1]
             pass
 
-        diff = -1
         now = datetime.datetime.now()
         if cached_time is not None:
-            delta = now-cached_time
             # this is so stupid, but we have the function 'total_seconds' only starting with python 2.7
-            diff_seconds = (delta.microseconds + (delta.seconds + delta.days * 24 * 3600) * 10**6) / 10**6
+            diff_seconds = _seconds_difference(cached_time, now)
             pass
 
         if cached_data is None or diff_seconds > seconds:

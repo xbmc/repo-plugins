@@ -3,6 +3,13 @@ __author__ = 'bromix'
 from resources.lib import kodion
 
 
+def append_content_from_description(context_menu, provider, context, video_id):
+    context_menu.append((context.localize(provider.LOCAL_MAP['youtube.video.description.links']),
+                         'Container.Update(%s)' % context.create_uri(['special', 'description_links'],
+                                                                     {'video_id': video_id})))
+    pass
+
+
 def append_play_with(context_menu, provider, context):
     context_menu.append((context.localize(provider.LOCAL_MAP['youtube.video.play_with']), 'Action(SwitchPlayer)'))
     pass

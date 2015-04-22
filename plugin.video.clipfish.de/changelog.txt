@@ -1,4 +1,7 @@
-1.1.0 (2015-03-127)
+1.1.1 (2015-04-22)
+UPD: improved playback. Working with the id of the video, so videos stay watched
+
+1.1.0 (2015-03-27)
 UPD: improved support for Gotham, Helix and Isengard
 FIX: show seconds (Gotham)
 

@@ -10,5 +10,10 @@ class TestClient(unittest.TestCase):
         client = Client()
         json_data = client.get_categories()
         pass
+
+    def test_get_video_url(self):
+        client = Client()
+        json_data = client.get_video_url(4197270)
+        pass
     pass
 

@@ -3,7 +3,7 @@ from resources.lib.kodion.utils import FunctionCache, datetime_parser
 __author__ = 'bromix'
 
 from resources.lib.clipfish.client import Client
-from resources.lib.kodion.items import DirectoryItem, VideoItem
+from resources.lib.kodion.items import DirectoryItem, VideoItem, UriItem
 from resources.lib import kodion
 
 
@@ -41,7 +41,8 @@ class Provider(kodion.AbstractProvider):
 
         videos = json_data.get('videos', [])
         for video in videos:
-            video_item = VideoItem(video['title'], video['video_url_wifi_quality'])
+            #video_item = VideoItem(video['title'], video['video_url_wifi_quality'])
+            video_item = VideoItem(video['title'], context.create_uri(['play'], {'video_id': video['video_id']}))
             image = video.get('media_content_thumbnail_large', '')
             if content_type == 'movies':
                 image = video.get('poster', '')
@@ -265,6 +266,17 @@ class Provider(kodion.AbstractProvider):
     def _internal_favorite(self, context, re_match):
         context.set_content_type(kodion.constants.content_type.TV_SHOWS)
         return kodion.AbstractProvider._internal_favorite(self, context, re_match)
+
+    @kodion.RegisterProviderPath('^/play/$')
+    def on_play(self, context, re_match):
+        video_id = context.get_param('video_id', '')
+        video_url = self.get_client(context).get_video_url(video_id)
+        if video_url:
+            uri_item = UriItem(video_url)
+            return uri_item
+            pass
+
+        return False
 
     def on_root(self, context, re_match):
         result = []

@@ -8,6 +8,10 @@ class Client():
         self._items_per_page = 16
         pass
 
+    def get_video_url(self, video_id):
+        json_data = self._perform_request(url='http://www.clipfish.de/devmobileapp/video/%s/' % str(video_id))
+        return json_data.get('video_url_wifi_quality', '')
+
     def get_categories(self):
         return self._perform_request(url='http://www.clipfish.de/devmobileapp/metachannels')
 

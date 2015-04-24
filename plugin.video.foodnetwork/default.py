@@ -96,7 +96,8 @@ def getSources(fanart):
         ilist = []
         url  = 'http://www.foodnetwork.com/videos/players/food-network-full-episodes.vc.html'
         html = getRequest(url)
-        a = re.compile('<option.+?"(.+?)">(.+?)</option').findall(html)
+        blob = re.compile('<ul>(.+?)</ul>').search(html).group(1)
+        a = re.compile('a href="(.+?)".+?data-max="35">(.+?)<.+?</div').findall(blob)
         for url, name in a:
               mode = 'GC'
               name=name.strip()
@@ -134,7 +135,15 @@ def getCats(gsurl,catname):
 def getLink(url,vidname):
         html  = getRequest(uqp(url))
         url   = re.compile('<video src="(.+?)"').search(html).group(1)
-        if int(addon.getSetting('vid_res')) == 0: url = url.replace('_6.','_3.')
+        if int(addon.getSetting('vid_res')) == 0: 
+           url = url.replace('_6.','_3.')
+        else: 
+           url = url.replace('_3.','_6.')
+           req = urllib2.Request(url.encode(UTF8), None, defaultHeaders)
+           try:
+             response = urllib2.urlopen(req, timeout=20)
+           except:
+             url = url.replace('_6.','_5.')
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=url))
 
 

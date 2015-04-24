@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.break_com" name="Break Videos" version="3.0.0" provider-name="bromix">
+<addon id="plugin.video.break_com" name="Break Videos" version="3.1.0" provider-name="bromix">
 	<requires>
 		<import addon="xbmc.python" version="2.14.0"/>
         <import addon="plugin.video.youtube" version="5.0.0" />
@@ -17,7 +17,7 @@
 		<platform>all</platform>
 		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 		<forum></forum>
-		<website>http://www.break.com/</website>
+		<website>http://www.break.com</website>
 		<email>bromix at gmx dot net</email>
 		<source>https://github.com/bromix/plugin.video.break_com</source>
 	</extension>

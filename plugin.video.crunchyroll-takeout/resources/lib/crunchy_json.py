@@ -26,15 +26,19 @@ import random
 import shelve
 import socket
 import string
-import urllib
-import httplib
-import urllib2
 import datetime
 import StringIO
 import cookielib
 
+import ssl
+import urllib
+import urllib2
+import httplib
+import urllib2_ssl
+
 import xbmc
 import xbmcgui
+import xbmcaddon
 import xbmcplugin
 
 import dateutil.tz
@@ -98,16 +102,16 @@ def load_shelf(args):
             log("CR: New device_id created. New device ID: "
                 + str(device_id))
 
-        user_data['API_HEADERS'] = [('User-Agent',      "Mozilla/5.0 (PLAYSTATION 3; 4.46)"),
+        user_data['API_HEADERS'] = [('User-Agent',      "Mozilla/5.0 (iPhone; iPhone OS 8.3.0; en_US)"),
                                     ('Host',            "api.crunchyroll.com"),
                                     ('Accept-Encoding', "gzip, deflate"),
                                     ('Accept',          "*/*"),
                                     ('Content-Type',    "application/x-www-form-urlencoded")]
 
         user_data['API_URL']          = "https://api.crunchyroll.com"
-        user_data['API_VERSION']      = "1.0.1"
-        user_data['API_ACCESS_TOKEN'] = "S7zg3vKx6tRZ0Sf"
-        user_data['API_DEVICE_TYPE']  = "com.crunchyroll.ps3"
+        user_data['API_VERSION']      = "2313.8"
+        user_data['API_ACCESS_TOKEN'] = "QWjz212GspMHH9h"
+        user_data['API_DEVICE_TYPE']  = "com.crunchyroll.iphone"
 
         user_data.setdefault('premium_type', 'UNKNOWN')
         user_data.setdefault('lastreported', (current_datetime -
@@ -695,11 +699,6 @@ def list_media_items(args, request, series_name, season, mode, fanart):
         # Set the name for upcoming episode
         name = soon if media['available'] is False else name
 
-        # There is a bug which prevents Season 0 from displaying correctly
-        # in PMC. This is to help fix that. Will break if a series has
-        # both season 0 and 1.
-        #season = '1' if season == '0' else season
-
         # Not all shows have thumbnails
         thumb = ("http://static.ak.crunchyroll.com/i/no_image_beta_full.jpg"
                      if media['screenshot_image'] is None
@@ -905,7 +904,8 @@ def queue(args):
                                  queued=True)
 
                     log("CR: Queue: series = '%s' queued"
-                        % series['name'.encode('utf8')], xbmc.LOGDEBUG)
+                        % series['name'].encode('latin-1', 'ignore'), xbmc.LOGDEBUG)
+
                 else:
                     log("CR: Queue: series not queued!", xbmc.LOGDEBUG)
 
@@ -1010,16 +1010,8 @@ def start_playback(args):
         log("CR: start_playback: Connection failed, aborting..")
         return
 
-    if args._addon.getSetting("playback_resume") == 'true':
-        playback_resume = True
-    else:
-        playback_resume = False
-
-    if playback_resume is not True:
-        resumetime = "0"
-    else:
-        resumetime = str(request['data']['playhead'])
-
+    resumetime = str(request['data']['playhead'])
+    
     if int(resumetime) > 0:
         playcount = 0
     else:
@@ -1068,12 +1060,23 @@ def start_playback(args):
 
             playlist_position = playlist.getposition()
 
-            if int(resumetime) <= 60:
+            if int(resumetime) <= 90:
                 playback_resume = False
+            else:
+                playback_resume = True
+                xbmc.Player().pause()
+                resmin = int(resumetime) / 60
+                ressec = int(resumetime) % 60
+                dialog = xbmcgui.Dialog()
+                if dialog.yesno("message", "Do you want to Resume Playback at "+str(int(resmin))+":"+str(ressec).zfill(2)+"?"):
+                    playback_resume = True
+                else:
+                    resumetime = 0
 
             try:
                 if playback_resume is True:
                     player.seekTime(float(resumetime))
+                    xbmc.Player().pause()
 
                 while playlist_position == playlist.getposition():
                     timeplayed = str(int(player.getTime()))
@@ -1108,7 +1111,7 @@ def pretty(d, indent=1):
                 pretty(value, indent + 1)
             else:
                 if isinstance(value, unicode):
-                    value = value.encode('utf8')
+                    value = value.encode('latin-1', 'ignore')
                 else:
                     value = str(value)
                 log(' ' * 2 * (indent + 1) + value, xbmc.LOGDEBUG)
@@ -1121,6 +1124,10 @@ def makeAPIRequest(args, method, options):
     if args.user_data['premium_type'] in 'anime|drama|manga|UNKNOWN':
         log("CR: makeAPIRequest: get JSON")
 
+        path = args._addon.getAddonInfo('path')
+        path = os.path.join(path, 'cacert.pem')
+        # TODO: Update cert master file on EVERY UPDATE!
+        
         values = {'version': args.user_data['API_VERSION'],
                   'locale':  args.user_data['API_LOCALE']}
 
@@ -1130,7 +1137,7 @@ def makeAPIRequest(args, method, options):
         values.update(options)
         options = urllib.urlencode(values)
 
-        opener = urllib2.build_opener()
+        opener = urllib2.build_opener(urllib2_ssl.HTTPSHandler(ca_certs=path))
         opener.addheaders = args.user_data['API_HEADERS']
         urllib2.install_opener(opener)
 

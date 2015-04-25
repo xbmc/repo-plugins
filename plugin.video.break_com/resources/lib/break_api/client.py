@@ -26,7 +26,7 @@ class Client(object):
                 height = int(media_file['height'])
                 bit_rate = str(media_file['bitRate'])
 
-                #url = '%s%s_kbps.mp4.m3u8?%s' % (hls_uri, bit_rate, token)
+                # url = '%s%s_kbps.mp4.m3u8?%s' % (hls_uri, bit_rate, token)
                 streams.append({'height': height,
                                 'url': media_file['uri']})
                 pass
@@ -45,13 +45,15 @@ class Client(object):
                   'appName': 'Android Phones',
                   'siteId': '1'}
         json_data = {'id': int(video_id)}
-        return self._perform_request(method='POST', path='/content/video/get', params=params, json=json_data, headers=headers)
+        return self._perform_request(method='POST', path='/content/video/get', params=params, json=json_data,
+                                     headers=headers)
+
 
     def get_feed(self, feed_id, page=1):
         api_request_json = {
             'requestedProperties': ["title", "description", "contentType", "contentSubType", "thumbnails", "viewCount",
                                     "mediaFiles", "contentPartnerName", "prerollAllowed"],
-            'id': feed_id,'pageSize': self._page_size, 'pageNumber': page}
+            'id': feed_id, 'pageSize': self._page_size, 'pageNumber': page}
         params = {'apiRequestJson': json.dumps(api_request_json)}
         return self._perform_request(path='/content/contentfeed/get', params=params)
 
@@ -59,6 +61,37 @@ class Client(object):
         api_request_json = {'id': 12}
         params = {'apiRequestJson': json.dumps(api_request_json)}
         return self._perform_request(path='/content/FeedQuery/GetFeedCollection', params=params)
+
+    def search(self, query, page=None):
+        if not page:
+            page = 1
+            pass
+
+        # params
+        params = {
+            'format': 'xml',
+            'safeSearch': 'true',
+            'isMobile': 'true',
+            'q': query,
+            'pageSize': str(self._page_size),
+            'page': str(page),
+            'youtube': 'true'
+        }
+
+        # headers
+        headers = {'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.0.1; GT-I9505 Build/LRX22C)',
+                   'Connection': 'Keep-Alive',
+                   'Accept-Encoding': 'gzip'}
+
+        # url
+        _url = 'http://www.break.com/content/find'
+
+        result = requests.get(_url, params=params, headers=headers, verify=False)
+
+        if result is None:
+            return ''
+
+        return result.text
 
     def _perform_request(self, method='GET', headers=None, path=None, post_data=None, params=None,
                          allow_redirects=True, json=None):
@@ -99,6 +132,13 @@ class Client(object):
         if result is None:
             return {}
 
-        return result.json()
+        headers = result.headers
+        if 'content-type' in headers:
+            content_type = headers['content-type']
+            if content_type.lower().startswith('application/json'):
+                return result.json()
+            pass
+
+        return result.text
 
     pass

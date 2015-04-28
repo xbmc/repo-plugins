@@ -1,3 +1,7 @@
+2.2.1 (2015-04-28)
+UPD: name update
+UPD: changed server for content
+
 2.2.0 (2015-04-23)
 ADD: dependency for YouTube 5.0.0
 ADD: support for DZANGO.TV

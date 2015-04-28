@@ -1,3 +1,10 @@
+v0.0.3
+- List shows by Date (specific,today,yesterday)
+- Display currently playing show name in main view
+- Added SoundStore to list specific mixes
+- Fixes for hungarian translation
+- Show artist, title and year, thumbnail in Now Playing view
+
 v0.0.2
 - Ability to list shows by type (talk vs music)
 

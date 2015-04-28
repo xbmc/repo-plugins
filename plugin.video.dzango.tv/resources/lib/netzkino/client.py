@@ -9,6 +9,7 @@ class Client(object):
         'url': 'http://api.netzkino.de.simplecache.net/capi-2.0a/%s',
         'parent': 0,
         'category_image_url': 'http://dyn.netzkino.de/wp-content/themes/netzkino/imgs/categories/%s.png',
+        'streaming_url': 'http://netzkino_and-vh.akamaihd.net/i/%s.mp4/master.m3u8',
         'new': {
             'title': 'Neu bei Netzkino',
             'id': 81
@@ -19,12 +20,31 @@ class Client(object):
         }
     }
 
+    CONFIG_DZANGO_DE = {
+        'url': 'http://api.amogo.de.simplecache.net/capi-2.0a/%s',
+        'parent': 271,
+        'category_image_url': 'http://pmd.love-bilder.loveisawonder.com/bilder/dzango-categories/%s.png',
+        'streaming_url': 'http://pmd.dzango-seite.dzango.de/%s.mp4',
+        'new': {
+            'title': 'Neu bei DZANGO',
+            'id': 531
+        },
+        'header': {
+            'Origin': 'http://www.dzango.de',
+            'Referer': 'http://www.dzango.de/'
+        },
+        'param': {
+            'p': 'dzango'
+        }
+    }
+
     CONFIG_DZANGO_TV = {
         'url': 'http://hapi.dzango.tv/capi-2.0a/%s',
         'parent': 271,
         'category_image_url': '',
+        'streaming_url': 'http://netzkino_and-vh.akamaihd.net/i/%s.mp4/master.m3u8',
         'new': {
-            'title': 'Neu bei DZANGO.TV',
+            'title': 'Neu bei DZANGO',
             'id': 311
         },
         'header': {
@@ -50,6 +70,7 @@ class Client(object):
             'd': 'wwww',
             'l': 'de-DE'
         }
+        _params.update(self._config.get('param', {}))
         _params.update(params)
 
         # headers
@@ -128,8 +149,8 @@ class Client(object):
             pass
         streaming = custom_fields.get('Streaming', [''])[0]
         if streaming:
-            streamer_url = 'http://netzkino_and-vh.akamaihd.net/i/'
-            result['streaming'] = streamer_url + urllib.quote(streaming.encode('utf-8')) + '.mp4/master.m3u8'
+            streamer_url = self._config['streaming_url']
+            result['streaming'] = streamer_url % urllib.quote(streaming.encode('utf-8'))
             pass
         return result
 

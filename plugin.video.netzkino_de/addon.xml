@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.netzkino_de" name="Netzkino.de" version="2.2.0" provider-name="bromix">
+<addon id="plugin.video.netzkino_de" name="Netzkino" version="2.2.1" provider-name="bromix">
 	<requires>
 		<import addon="xbmc.python" version="2.14.0"/>
         <import addon="plugin.video.youtube" version="5.0.0" />
@@ -8,10 +8,10 @@
 		<provides>video</provides>
 	</extension>
 	<extension point="xbmc.addon.metadata">
-		<summary lang="en">Netzkino.de movies</summary>
-		<summary lang="de">Filme von Netzkino.de</summary>
-		<description lang="en">With Netzkino.de you can watch movies free and legal.</description>
-		<description lang="de">Mit Netzkino.de kannst du kostenlos und legal Spielfilme schauen.</description>
+		<summary lang="en">Netzkino movies</summary>
+		<summary lang="de">Filme von Netzkino</summary>
+		<description lang="en">With Netzkino you can watch movies free and legal.</description>
+		<description lang="de">Mit Netzkino kannst du kostenlos und legal Spielfilme schauen.</description>
 		<disclaimer lang="en"></disclaimer>
 		<language>de</language>
 		<platform>all</platform>

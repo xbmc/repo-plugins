@@ -167,7 +167,7 @@ class Provider(kodion.AbstractProvider):
         search_item.set_fanart(self.get_fanart(context))
         result.append(search_item)
 
-        # "Neu bei Netzkino/DZANGO.TV"
+        # "Neu bei Netzkino/DZANGO"
         config = self._client.get_config()
         category_id = str(config['new']['id'])
         category_item = DirectoryItem(u'[B]%s[/B]' % config['new']['title'],

@@ -26,10 +26,13 @@ msgid "Status"
 msgstr ""
 
 msgctxt "#32103"
-msgid "All Shows"
+msgid "Shows"
 msgstr ""
 
 msgctxt "#32104"
 msgid "Extras"
 msgstr ""
 
+msgctxt "#32105"
+msgid "Vlogs"
+msgstr ""

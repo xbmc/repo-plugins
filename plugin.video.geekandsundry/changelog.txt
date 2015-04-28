@@ -1,6 +1,25 @@
 Geek & Sundry Changelog
 
-Current Version : 0.1.1
+*** 0.1.5 ***
+
+Added icons and fanart for shows
+Internal improvements
+
+*** 0.1.4 ***
+
+Fixes for all sorts of issues do to site changes
+
+*** 0.1.3 ***
+
+Fix for videos with hulu sources not playing. Now finds the youtube video instead
+Fix for Vlogs not displaying
+Fix for vlog video lists not displaying
+
+*** 0.1.2 ***
+
+Fixed a bug where playing some episodes caused an error
+Now using xbmcswift2 framework (added dependency to addon.xml)
+Vlogs are now sorted alphabetically
 
 *** 0.1.1 ***
 
@@ -75,7 +94,7 @@ Fixed a bug with episodes with no thumbnail not displaying
 Added fanart.jpg
 Added fanart generation for shows
 Added episode number when possible
-Added descriptions for shows 
+Added descriptions for shows
 
 *** 0.0.2 ***
 

@@ -96,8 +96,8 @@ def getSources(fanart):
         ilist = []
         url  = 'http://www.foodnetwork.com/videos/players/food-network-full-episodes.vc.html'
         html = getRequest(url)
-        blob = re.compile('<ul>(.+?)</ul>').search(html).group(1)
-        a = re.compile('a href="(.+?)".+?data-max="35">(.+?)<.+?</div').findall(blob)
+        blob = re.compile('<select(.+?)</select>').search(html).group(1)
+        a = re.compile('value="(.+?)">(.+?)<').findall(blob)
         for url, name in a:
               mode = 'GC'
               name=name.strip()

@@ -92,44 +92,52 @@ def getCats(sname, catname):
               blob = re.compile('<div class="show id.+?<h3>'+sname+'</h3>(.+?)<div class="show id').search(blob).group(1)
               cats = re.compile('episode-info">.+?<span>(.+?)<.+?href="(.+?)".+?src="(.+?)".+?</div').findall(blob)
               for name, url, img in cats:
-                 plot = name
                  mode = 'GS'
+                 url = SYFYBASE % url
+                 html = getRequest(url)
+                 purl = re.compile('data-src="(.+?)"').search(html).group(1)
+                 purl = 'http:'+purl.replace('&amp;','&')
+                 html = getRequest(purl)
+                 purl = re.compile('<link rel="alternate" href="(.+?)"').findall(html)
+                 purl = purl[1]+'&format=Script&height=576&width=1024'
+                 html = getRequest(purl)
+                 a = json.loads(html)
+                 try:    plot = a["description"]
+                 except: plot = a["abstract"]
+                 url = purl
                  u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
                  liz=xbmcgui.ListItem(name, '',icon, icon)
-                 liz.setInfo( 'Video', { "Title": catname, "Plot": name })
+                 liz.setInfo( 'Video', { "Studio" : catname, "Title": name, "Plot": plot })
                  liz.setProperty('fanart_image', img)
                  liz.setProperty('IsPlayable', 'true')
                  ilist.append((u, liz, False))
               xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
-                 
+               
 
 def getShow(url, show_name):
-            url = uqp(url)
-            url = SYFYBASE % uqp(url)
-            html = getRequest(url)
-            purl = re.compile('data-src="(.+?)"').search(html).group(1)
-            purl = 'http:'+purl.replace('&amp;','&')
-            html = getRequest(purl)
-            purl = re.compile('<link rel="alternate" href="(.+?)"').findall(html)
-            purl = purl[1]+'&format=Script&height=576&width=1024'
-            html = getRequest(purl)
-            a = json.loads(html)
-            url = a["captions"][0]["src"]
-            url = url.split('/caption/',1)[1]
-            url = url.split('.',1)[0]
+                 url = uqp(url)
+                 url = url.replace(' ','%20')
+                 html = getRequest(url)
+                 a = json.loads(html)
+                 try:
+                    url = a["captions"][0]["src"]
+                    url = url.split('/caption/',1)[1]
+                    url = url.split('.',1)[0]
+                    td = (datetime.datetime.utcnow()- datetime.datetime(1970,1,1))
+                    unow = int((td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6)
 
+                    u   = 'https://tvesyfy-vh.akamaihd.net/i/prod/video/%s_,25,40,18,12,7,4,2,00.mp4.csmil/master.m3u8?__b__=1000&hdnea=st=%s~exp=%s' % (url, str(unow), str(unow+60))
+                    html = getRequest(u)
+                    if html == '':
+                       u   = 'https://tvesyfy-vh.akamaihd.net/i/prod/video/%s_,1696,1296,896,696,496,240,306,.mp4.csmil/master.m3u8?__b__=1000&hdnea=st=%s~exp=%s' % (url, str(unow), str(unow+60))
 
+                 except:
+                    url = a['mediaPid']
+                    url = 'http://link.theplatform.com/s/HNK2IC/media/'+url+'?player=Syfy.com%20Player&policy=2713542&manifest=m3u&formats=flv,m3u,mpeg4&format=SMIL&embedded=true&tracking=true'
+                    html = getRequest(url)
+                    u  = re.compile('<video src="(.+?)"').search(html).group(1)
 
-            td = (datetime.datetime.utcnow()- datetime.datetime(1970,1,1))
-            unow = int((td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6)
-
-            u   = 'https://tvesyfy-vh.akamaihd.net/i/prod/video/%s_,25,40,18,12,7,4,2,00.mp4.csmil/master.m3u8?__b__=1000&hdnea=st=%s~exp=%s' % (url, str(unow), str(unow+60))
-            html = getRequest(u)
-            if html == '':
-               u   = 'https://tvesyfy-vh.akamaihd.net/i/prod/video/%s_,1696,1296,896,696,496,240,306,.mp4.csmil/master.m3u8?__b__=1000&hdnea=st=%s~exp=%s' % (url, str(unow), str(unow+60))
-
-
-            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = u))
+                 xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = u))
 
 
 # MAIN EVENT PROCESSING STARTS HERE

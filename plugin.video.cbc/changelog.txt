@@ -1,3 +1,4 @@
 Version 1.0.1 Initial release
 Version 1.0.2 Add disable subtitles function
 Version 1.0.3 Fix More Shows bug
+Version 1.0.4 Add Next page function

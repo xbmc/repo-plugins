@@ -1,3 +1,4 @@
+import locale
 import sys
 import urllib
 import urlparse
@@ -7,6 +8,7 @@ import xbmc
 import xbmcaddon
 import xbmcplugin
 import xbmcvfs
+import datetime
 from ..abstract_context import AbstractContext
 from .xbmc_plugin_settings import XbmcPluginSettings
 from .xbmc_context_ui import XbmcContextUI
@@ -76,6 +78,24 @@ class XbmcContext(AbstractContext):
             xbmcvfs.mkdir(self._data_path)
             pass
         pass
+
+    def format_date_short(self, date_obj):
+        date_format = xbmc.getRegion('dateshort')
+        _date_obj = date_obj
+        if isinstance(_date_obj, datetime.date):
+            _date_obj = datetime.datetime(_date_obj.year, _date_obj.month, _date_obj.day)
+            pass
+
+        return _date_obj.strftime(date_format)
+
+    def format_time(self, time_obj):
+        time_format = xbmc.getRegion('time')
+        _time_obj = time_obj
+        if isinstance(_time_obj, datetime.time):
+            _time_obj = datetime.time(_time_obj.hour, _time_obj.minute, _time_obj.second)
+            pass
+
+        return _time_obj.strftime(time_format)
 
     def get_language(self):
         if self.get_system_version().get_name() == 'Frodo':

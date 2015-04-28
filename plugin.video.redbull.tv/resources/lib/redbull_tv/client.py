@@ -17,7 +17,30 @@ class Client():
 
         path = 'videos/%s' % str(video_id)
         json_data = self._perform_v1_request(path=path)
-        uri = json_data.get('videos', {}).get('master', {}).get('uri', '')
+        #uri = json_data.get('videos', {}).get('live', {}).get('uri', '')
+        stream = json_data.get('stream', {})
+        if stream is None:
+            stream = {}
+            pass
+        if stream.get('status', '') in ['pre-event', 'soon']:
+            format = {'width': 0,
+                      'height': 0,
+                      'bandwidth': 0}
+            video_stream = {'url': '',
+                            'format': format,
+                            'upcoming': True}
+            streams.append(video_stream)
+            return streams
+
+        videos = json_data.get('videos', {})
+        uri = ''
+        for key in ['master', 'live']:
+            if key in videos:
+                uri = videos.get(key, {}).get('uri', '')
+                if uri:
+                    break
+                pass
+            pass
         if uri:
             headers = {'Connection': 'keep-alive',
                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -28,14 +51,16 @@ class Client():
                        'Accept-Language': 'en-US,en;q=0.8,de;q=0.6'}
             manifest_result = requests.get(uri, headers=headers, verify=False, allow_redirects=True)
             lines = manifest_result.text.splitlines()
-            re_line = re.compile(r'BANDWIDTH=(?P<bandwidth>\d+),RESOLUTION=(?P<width>\d+)x(?P<height>\d+)')
+            re_bandwidth = re.compile(r'BANDWIDTH=(?P<bandwidth>\d+)')
+            re_resolution = re.compile(r'RESOLUTION=(?P<width>\d+)x(?P<height>\d+)')
             for i in range(len(lines)):
-                re_match = re.search(re_line, lines[i])
-                if re_match:
+                re_match_bandwidth = re.search(re_bandwidth, lines[i])
+                re_match_resolution = re.search(re_resolution, lines[i])
+                if re_match_bandwidth and re_match_resolution:
                     line = lines[i + 1]
-                    format = {'width': int(re_match.group('width')),
-                              'height': int(re_match.group('height')),
-                              'bandwidth': int(re_match.group('bandwidth'))}
+                    format = {'width': int(re_match_resolution.group('width')),
+                              'height': int(re_match_resolution.group('height')),
+                              'bandwidth': int(re_match_bandwidth.group('bandwidth'))}
                     video_stream = {'url': line,
                                     'format': format}
                     streams.append(video_stream)

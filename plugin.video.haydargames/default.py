@@ -14,7 +14,7 @@ import xbmcgui
 import xbmcaddon
 import xbmcplugin
 
-BASE_URL = 'http://www.husham.com/?p=11081'
+BASE_URL = 'http://iwaztv.com/?p=20'
 PLAY_VIDEO_PATH = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s'
 PLAYLIST_PATH = 'plugin://plugin.video.youtube/user/stampylonghead/'
 PLAYLIST_PATH2 = 'plugin://plugin.video.youtube/user/stampylongnose/'

@@ -6,3 +6,5 @@
 - added support to southpark.de
 0.2.2
 - fixed bug on 'de' lang (season 18 is in english)
+0.2.3
+- added CC and Added warning on Banned Episodes (ep 200/201 - season 14)

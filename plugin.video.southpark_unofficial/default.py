@@ -37,6 +37,18 @@ geolocation = ["US","UK","ES","DE","IT"]
 geolocation = geolocation[geolocation_pos]
 viewMode = str("504")
 
+class SpPlayer(xbmc.Player):
+	__cc = []
+	__index = 0
+	def __init__(self, *args):
+		xbmc.Player.__init__(self)
+	def setStream(cc):
+		__cc = cc
+	def onPlayBackStarted(self):
+		xbmc.Player.setSubtitles(__cc[__index])
+		xbmc.Player.showSubtitles(False)
+		__index += 1
+
 def index():
     xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_LABEL)
     content = ""
@@ -57,7 +69,10 @@ def listVideos(url):
         jsonrsp = getUrl(getCarousel())
         promojson = _json.loads(jsonrsp)
         for episode in promojson['results']:
-            addLink(episode['title'], episode['itemId'], 'playVideo', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+			if episode['_availability'] == "banned":
+				addLink(episode['title'], "banned", 'playVideo', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+			else:
+				addLink(episode['title'], episode['itemId'], 'playVideo', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
     elif url == "Random":
 		notifyText(translation(30003), 2000)
 		rand = getUrl("http://"+mainweb_geo[audio_pos]+fullep_geo[audio_pos]+"random")
@@ -70,19 +85,30 @@ def listVideos(url):
 		seasonjson = _json.loads(jsonrsp)
 		ep = int(rand[1])-1
 		episode = seasonjson['results'][ep]
-		addLink(episode['title'], episode['itemId'], 'playVideo', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+		if episode['_availability'] == "banned":
+			addLink(episode['title'], "banned", 'playVideo', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+		else:
+			addLink(episode['title'], episode['itemId'], 'playVideo', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
     else:
         xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_EPISODE)
         jsonrsp = getUrl("http://southpark.cc.com/feeds/carousel/video/57baee9c-b611-4260-958b-05315479a7fc/30/1/json/!airdate/"+url)
         seasonjson = _json.loads(jsonrsp)
         for episode in seasonjson['results']:
-            addLink(episode['title'], episode['itemId'], 'playVideo', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+            if episode['_availability'] == "banned":
+				addLink(episode['title'], "banned", 'playVideo', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+            else:
+				addLink(episode['title'], episode['itemId'], 'playVideo', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
     xbmcplugin.endOfDirectory(pluginhandle)
     xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def playTest(url, title, thumbnail):
-	notifyText(translation(30009)+" " + title, 3000)
+	if url == "banned":
+		notifyText(translation(30011), 7000)
+		return
 	mediagen = getMediagen(url)
+	if len(mediagen) == 0:
+		notifyText(translation(30011), 7000)
+		return
 	swfVfy = "http://media.mtvnservices.com/player/prime/mediaplayerprime.2.7.11.swf" 
 	flashVer = "WIN 12,0,0,70"
 	conn = "B:0"
@@ -93,11 +119,13 @@ def playTest(url, title, thumbnail):
 	pageUrl += "&CONFIG_URL=http://media.mtvnservices.com/pmt/e1/players/mgid:arc:episode:"+pageurl_geo[audio_pos]+":/context3/config.xml?"
 	pageUrl += "uri=mgid:arc:episode:"+pageurl_geo[audio_pos]+":"+url+"&type=network&ref="+pageurl_geo[audio_pos]+"&geo="+ geolocation +"&group=entertainment&network=None&device=Other"
 	i = 0
-	pl=xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
-	pl.clear()
 	parts = str(len(mediagen))
+	player = xbmc.Player()
 	for media in mediagen:
-		rtmpe = getRTMPE(media)
+		data = getVideoData(media)
+		rtmpe = data[0]
+		duration = data[1]
+		cc = data[2]
 		best = len(rtmpe)-1
 		rtmpgeo = audio_pos
 		if audio == "de" and "viacomccstrm" in rtmpe[best]:
@@ -117,32 +145,34 @@ def playTest(url, title, thumbnail):
 		li.setProperty('pageUrl', pageUrl)
 		li.setProperty('SWFPlayer', swfVfy)
 		li.setProperty("SWFVerify", "true")
-		pl.add(url=rtmp, listitem=li, index=i)
 		i += 1
-	player = xbmc.Player()
-	player.play(pl)
-	for s in xrange(1):
-		if player.isPlaying():
-			break
-		time.sleep(1)
-	if not player.isPlaying():
-		notifyText(translation(30004), 4000)
-		player.stop()
-		pl.clear()
-	while player.isPlaying():
-		time.sleep(2)
+		notifyText(translation(30009)+" " + videoname, 3000)
+		player.play(rtmp, listitem=li)
+		for s in xrange(1):
+			if player.isPlaying():
+				break
+			time.sleep(1)
+		if not player.isPlaying():
+			notifyText(translation(30004), 4000)
+			player.stop()
+		if len(cc) >= 3:
+			player.setSubtitles(cc[2])
+			player.showSubtitles(False)
+		secs = 0
+		while player.isPlaying():
+			secs = player.getTime()
+			time.sleep(1)
+		if secs < (duration[best] - 3):
+			return
 	player.stop()
-	pl.clear()
 	return
 
 def translation(id):
     return addon.getLocalizedString(id).encode('utf-8')
 	
 def notifyText(text, time=5000):
-	__addon__       = xbmcaddon.Addon(id=addonID)
-	__addonname__   = __addon__.getAddonInfo('name')
-	__icon__        = __addon__.getAddonInfo('icon')
-	xbmc.executebuiltin('Notification(%s, %s, %d, %s)'%(__addonname__, text, time, __icon__))
+	addonname   = addon.getAddonInfo('name')
+	xbmc.executebuiltin('Notification(%s, %s, %d, %s)'%(addonname, text, time, icon))
 
 def getUrl(url):
 	link = ""
@@ -200,21 +230,24 @@ def getMediagen(id):
 			mediagen.append(item.text)
 	return mediagen
 
-def getRTMPE(mediagen):
+def getVideoData(mediagen):
 	xml = ""
 	xml = getUrl("http://"+mainweb_geo[audio_pos]+"/feeds/video-player/mediagen?uri="+mediagen+mediagenopts_geo[audio_pos]+audio+"&acceptMethods=fms,hdn1,hds")
 	parser = ET.XMLParser(encoding="utf-8")
 	root = ET.fromstring(xml, parser=parser)
 	rtmpe = []
-	if audio == "de":
-		for item in root.iter('src'):
-			if item.text != None:
-				rtmpe.append(item.text)
-	else:
-		for item in root.iter('src'):
-			if item.text != None:
-				rtmpe.append(item.text)
-	return rtmpe
+	duration = []
+	captions = []
+	for item in root.iter('src'):
+		if item.text != None:
+			rtmpe.append(item.text)
+	for item in root.iter('rendition'):
+		if item.attrib['duration'] != None:
+			duration.append(int(item.attrib['duration']))
+	for item in root.iter('typographic'):
+		if item.attrib['src'] != None:
+			captions.append(item.attrib['src'])
+	return [rtmpe,duration,captions]
 	
 def parameters_string_to_dict(parameters):
     paramDict = {}

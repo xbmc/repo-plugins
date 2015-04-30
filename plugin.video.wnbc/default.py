@@ -48,9 +48,10 @@ defaultHeaders = {'User-Agent':USER_AGENT,
                  'Accept-Encoding':'gzip,deflate,sdch',
                  'Accept-Language':'en-US,en;q=0.8'} 
 
-def getRequest(url, user_data=None, headers = defaultHeaders , alert=True):
+def getRequest(url, user_data=None, headers = defaultHeaders , alert=True, donotuseproxy=False):
+
               log("getRequest URL:"+str(url))
-              if addon.getSetting('us_proxy_enable') == 'true':
+              if (donotuseproxy==False) and (addon.getSetting('us_proxy_enable') == 'true'):
                   us_proxy = 'http://%s:%s' % (addon.getSetting('us_proxy'), addon.getSetting('us_proxy_port'))
                   proxy_handler = urllib2.ProxyHandler({'http':us_proxy})
                   if addon.getSetting('us_proxy_pass') <> '' and addon.getSetting('us_proxy_user') <> '':
@@ -71,29 +72,28 @@ def getRequest(url, user_data=None, headers = defaultHeaders , alert=True):
 
               try:
                  response = urllib2.urlopen(req)
-              except urllib2.HTTPError, e:
-                 if e.code == 404:
-                    response = e
-                 else:
-                    link1 = ""
-
-              if response.info().getheader('Content-Encoding') == 'gzip':
+                 if response.info().getheader('Content-Encoding') == 'gzip':
                     log("Content Encoding == gzip")
                     buf = StringIO( response.read())
                     f = gzip.GzipFile(fileobj=buf)
                     link1 = f.read()
-              else:
+                 else:
                     link1=response.read()
-             
+
+              except urllib2.URLError, e:
+                 if alert:
+                     xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( __addonname__, e , 10000) )
+                 link1 = ""
 
               if not (str(url).endswith('.zip')):
                  link1 = str(link1).replace('\n','')
               return(link1)
 
 
+
 def getSources(fanart):
         ilist=[]
-        html = getRequest('http://www.nbc.com/ajax/dropdowns-global/America-New_York')
+        html = getRequest('http://www.nbc.com/ajax/dropdowns-global/America-New_York', donotuseproxy=True)
         a    = json.loads(html)['menu_html']
         a = a.encode('utf-8')
         a = re.compile('title">Current Episodes</div>(.+?)<div class="more-link">',re.DOTALL).search(a).group(1)
@@ -113,12 +113,12 @@ def getSources(fanart):
 
 def getCats(gcurl, catname):
         ilist=[]
-        html = getRequest('http://www.nbc.com%s' % gcurl)
+        html = getRequest(('http://www.nbc.com%s' % gcurl), donotuseproxy=True)
         if 'the-tonight-show' in gcurl:
              startep = re.compile('<a href="/the-tonight-show/episodes/(.+?)"').search(html).group(1)
              for i in range(int(startep)-5,int(startep)):
                      url  = 'http://www.nbc.com/the-tonight-show/episodes/%s' % str(i)
-                     pg = getRequest(url)
+                     pg = getRequest(url, donotuseproxy=True)
                      dataid = re.compile('data-video-id="(.+?)"').search(pg).group(1)
                      img    = re.compile('<img class="visuallyHidden" src="(.+?)"').search(pg).group(1)
                      name   = cleanname(re.compile('itemprop="title">(.+?)<').search(pg).group(1))
@@ -155,7 +155,7 @@ def getCats(gcurl, catname):
 
 def getShow(gsurl, catname):
               ilist=[]
-              pg = getRequest('http://www.nbc.com%s?range=1-29' % uqp(gsurl))
+              pg = getRequest(('http://www.nbc.com%s?range=1-29' % uqp(gsurl)), donotuseproxy=True)
               a  =  json.loads(pg)['entries']
               for e in a:
 
@@ -174,6 +174,7 @@ def getShow(gsurl, catname):
 
 
 def getVideo(surl):
+            if surl.startswith('//') : surl = 'http:'+surl
             if not ('http://link.theplatform.com' in surl):
                 html = getRequest(surl)
                 surl = re.compile('<meta name="tp:EnableExternalController".+?href="(.+?)"').search(html).group(1)
@@ -183,7 +184,7 @@ def getVideo(surl):
              html = getRequest(surl)
              finalurl  = re.compile('<video src="(.+?)"').search(html).group(1)
              if 'nbcvodenc-i.akamaihd.net' in finalurl:
-               html = getRequest(finalurl)
+               html = getRequest(finalurl, donotuseproxy=True)
                html += '#'
                choices = re.compile('BANDWIDTH=([0-9]*).+?http(.+?)#').findall(html)
                bw = 0
@@ -204,7 +205,7 @@ def getVideo(surl):
                  if not os.path.isdir(prodir):
                     os.makedirs(prodir)
 
-                 pg = getRequest(suburl)
+                 pg = getRequest(suburl, donotuseproxy=True)
                  if pg != "":
                    ofile = open(subfile, 'w+')
                    captions = re.compile('<p begin="(.+?)" end="(.+?)">(.+?)</p>').findall(pg)

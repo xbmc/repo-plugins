@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30000">Arte +7</string>
+
+    <!-- menu items -->
+    <string id="30001">All the videos</string>
+    <string id="30002">Selection</string>
+    <string id="30003">Most viewed</string>
+    <string id="30004">Last chance</string>
+    <string id="30005">Themes</string>
+    <string id="30006">Live</string>
+
+    <!-- context menu -->
+    <string id="30020">Add to queue</string>
+    <string id="30021">Download video</string>
+
+    <!-- options -->
+    <string id="30050">Language (Videos)</string>
+    <string id="30051">Preferred video quality</string>
+    <string id="30052">Streaming protocol</string>
+    <string id="30053">Download directory</string>
+
+    <!-- themes -->
+    <string id="3000501">News</string>
+    <string id="3000502">Documentary</string>
+    <string id="3000503">Discovery</string>
+    <string id="3000504">Europe</string>
+    <string id="3000505">Geopolitics &amp; History</string>
+    <string id="3000506">Society</string>
+    <string id="3000507">Junior</string>
+    <string id="3000508">Other</string>
+    <string id="3000509">Movie &amp; Fiction</string>
+    <string id="3000510">Art,Culture &amp; Spectacle</string>
+    <string id="3000511">Pop Culture &amp; Alternative</string>
+    <string id="3000512">Environment &amp; Science</string>
+</strings>

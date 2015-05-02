@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30000">Arte +7</string>
+
+    <!-- menu items -->
+    <string id="30001">Toutes les vidéos</string>
+    <string id="30002">Sélection</string>
+    <string id="30003">Les plus vues</string>
+    <string id="30004">Dernière chance</string>
+    <string id="30005">Thèmes</string>
+    <string id="30006">Direct</string>
+
+    <!-- context menu -->
+    <string id="30020">Add to queue</string>
+    <string id="30021">Télécharger la vidéo</string>
+
+    <!-- options -->
+    <string id="30050">Langage (Vidéos)</string>
+    <string id="30051">Qualité vidéo préferée</string>
+    <string id="30052">Protocole de streaming</string>
+    <string id="30053">Répertoire de téléchargement</string>
+
+    <!-- themes -->
+    <string id="3000501">Actualités</string>
+    <string id="3000502">Documentaire</string>
+    <string id="3000503">Découverte</string>
+    <string id="3000504">Europe</string>
+    <string id="3000505">Géopolitique &amp; Histoire</string>
+    <string id="3000506">Société</string>
+    <string id="3000507">Junior</string>
+    <string id="3000508">Autre</string>
+    <string id="3000509">Cinéma &amp; Fiction</string>
+    <string id="3000510">Art, Culture &amp; Spectacle</string>
+    <string id="3000511">Culture Pop &amp; Alternative</string>
+    <string id="3000512">Environnement &amp; Science</string>
+</strings>

@@ -1,0 +1,4 @@
+<settings>
+   <setting id="forceView" type="bool" label="30101" default="true"/>
+   <setting id="viewIDShows" type="number" label="30106" default="504"/>  
+</settings>

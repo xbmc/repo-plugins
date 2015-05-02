@@ -1,6 +1,13 @@
-v1.0.0
+[B]v1.1.0[/B]
+- Added Force View
+- Added better fanart and logo
+- Some Refactorings
+
+[B]v1.0.0[/B]
 - Clean up for first release
-v0.9.2
+
+[B]v0.9.2[/B]
 - Improved media info for episodes
-v0.9.1
+
+[B]v0.9.1[/B]
 - Initial version

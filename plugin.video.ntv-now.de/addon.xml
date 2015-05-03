@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.ntv-now.de" name="N-TV NOW" version="2.2.2" provider-name="bromix">
+<addon id="plugin.video.ntv-now.de" name="N-TV NOW" version="2.2.3" provider-name="bromix">
 	<requires>
 		<import addon="xbmc.python" version="2.14.0"/>
 	</requires>
@@ -7,8 +7,7 @@
 		<provides>video</provides>
 	</extension>
 	<extension point="xbmc.addon.metadata">
-        <broken>discontinued because of DRM protection</broken>
-		<summary lang="en">N-TV NOW media library</summary>
+        <summary lang="en">N-TV NOW media library</summary>
 		<summary lang="de">Mediathek für N-TV NOW</summary>
 		<description lang="en">With N-TV NOW many series, shows, documentaries and magazines can be seen from the program of N-TV.</description>
 		<description lang="de">Mit N-TV NOW können viele Serien, Shows, Dokumentationen und Magazine aus dem Programm von N-TV geschaut werden.</description>

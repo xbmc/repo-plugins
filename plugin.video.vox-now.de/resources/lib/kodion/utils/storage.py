@@ -134,7 +134,7 @@ class Storage(object):
 
     def _optimize_item_count(self):
         self._open()
-        query = 'SELECT key FROM %s ORDER BY time LIMIT -1 OFFSET %d' % (self._table_name, self._max_item_count)
+        query = 'SELECT key FROM %s ORDER BY time DESC LIMIT -1 OFFSET %d' % (self._table_name, self._max_item_count)
         result = self._execute(False, query)
         if result is not None:
             for item in result:

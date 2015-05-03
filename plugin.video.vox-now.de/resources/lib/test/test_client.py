@@ -12,8 +12,8 @@ class TestClient(unittest.TestCase):
         pass
 
     def test_get_film_streams(self):
-        client = rtlinteractive.Client(rtlinteractive.Client.CONFIG_RTL_NOW)
-        streams = client.get_film_streams(190925)
+        client = rtlinteractive.Client(rtlinteractive.Client.CONFIG_VOX_NOW)
+        streams = client.get_film_streams(200307)
 
         try:
             streams = client.get_film_streams(189735)

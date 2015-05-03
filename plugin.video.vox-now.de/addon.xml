@@ -7,8 +7,7 @@
 		<provides>video</provides>
 	</extension>
 	<extension point="xbmc.addon.metadata">
-        <broken>discontinued because of DRM protection</broken>
-		<summary lang="en">VOX NOW media library</summary>
+        <summary lang="en">VOX NOW media library</summary>
 		<summary lang="de">Mediathek für VOX NOW</summary>
 		<description lang="en">With VOX NOW many series, shows, documentaries and magazines can be seen from the program of VOX.</description>
 		<description lang="de">Mit VOX NOW können viele Serien, Shows, Dokumentationen und Magazine aus dem Programm von VOX geschaut werden.</description>

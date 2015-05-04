@@ -77,10 +77,9 @@ def getRequest(url, user_data=None, headers = {'User-Agent':USER_AGENT, 'Accept'
               break
 
 def getSources(fanart):
-              url = 'ABC'
-              dolist = [('GM', 30002, icon),('GS', 30003, icon),('GH', 30015, icon)]
+              dolist = [('http://www.snagfilms.com/categories/','GM', 30002, icon),('http://www.snagfilms.com/shows/','GM', 30003, icon),('ABC','GH', 30015, icon)]
 
-              for mode, gstr, img in dolist:
+              for url, mode, gstr, img in dolist:
                   name = __language__(gstr)
                   liz  = xbmcgui.ListItem(name,'',img,img)
                   liz.setProperty('fanart_image', addonfanart)
@@ -107,9 +106,10 @@ def getShows(fanart):
 
 
 
-def getMovies(fanart):
+def getMovies(murl):
     ilist=[]
-    html = getRequest('http://www.snagfilms.com/categories/')
+    murl = uqp(murl)
+    html = getRequest(murl)
     html = re.compile('Snag.page.data = (.+?)];').search(html).group(1)
     html = html + ']'
     a = json.loads(html)
@@ -121,7 +121,8 @@ def getMovies(fanart):
        try:    plot = item['description']
        except: plot =''
        gurl = url+'#'+img
-       mode = 'GT'
+       if 'shows' in murl: mode ='GC'
+       else: mode = 'GT'
        u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(gurl), qp(name), mode)
        liz=xbmcgui.ListItem(name, '','DefaultFolder.png', img)
        liz.setInfo( 'Video', { "Title": name, "Plot": plot })
@@ -247,7 +248,9 @@ def getSearch(sid):
 
 
 def getCats(c_url, sort_type='popular'):
-    cat_url = 'http://www.snagfilms.com%s' % (c_url)
+    c_url = uqp(c_url)
+    cat_url = c_url.split('#',1)[0]
+    if not (cat_url.startswith('http')): cat_url = 'http://www.snagfilms.com%s' % cat_url
     cj = cookielib.CookieJar()
     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
     urllib2.install_opener(opener)

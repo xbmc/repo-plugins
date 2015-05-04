@@ -3,7 +3,7 @@
 #
 from BeautifulSoup import BeautifulSoup
 from dumpert_const import __addon__, __settings__, __language__, __images_path__, __date__, __version__
-from dumpert_utils import HTTPCommunicator
+import requests
 import os
 import re
 import sys
@@ -67,7 +67,7 @@ class Main:
 		# 
 		# Get HTML page...
 		#
-		html_source = HTTPCommunicator().get( self.video_list_page_url )
+ 		html_source = requests.get(self.video_list_page_url).text
 
 		# Parse response...
 		soup = BeautifulSoup( html_source )

@@ -1,3 +1,6 @@
+v1.0.6 (Sunday, 03 may 2015) :
+- adjustments due to more changes in the website: cookiefirewall circumvented by using different http-getter (requests)
+
 v1.0.5 (Friday, 17 april 2015) :
 - adjustments due to changes in the website: videos can be youtube vids now
 

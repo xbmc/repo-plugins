@@ -3,7 +3,7 @@
 #
 from BeautifulSoup import BeautifulSoup
 from dumpert_const import __addon__, __settings__, __language__, __images_path__, __date__, __version__
-from dumpert_utils import HTTPCommunicator
+import requests
 import os
 import re
 import base64
@@ -69,10 +69,9 @@ class Main:
 		dialogWait = xbmcgui.DialogProgress()
 		dialogWait.create( __language__(30504), title )
 		
-		httpCommunicator = HTTPCommunicator()
-		
 		try:
-			html_data = httpCommunicator.get ( self.video_page_url )
+			response = requests.get(self.video_page_url) 
+	 		html_source = response.text
 		except urllib2.HTTPError, error:
 			if (self.DEBUG) == 'true':
 				xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "HTTPError", str(error) ), xbmc.LOGNOTICE )
@@ -81,7 +80,7 @@ class Main:
 			xbmcgui.Dialog().ok( __language__(30000), __language__(30507) % (str(error) ))
 			exit(1)
 
-		soup = BeautifulSoup(html_data)
+		soup = BeautifulSoup(html_source)
 
 		#<div class="videoplayer" id="video1" data-files="eyJmbHYiOiJodHRwOlwvXC9tZWRpYS5kdW1wZXJ0Lm5sXC9mbHZcLzI4OTE2NWRhXzEwMjU1NzUyXzYzODMxODA4OTU1NDc2MV84MTk0MzU3MDVfbi5tcDQuZmx2IiwidGFibGV0IjoiaHR0cDpcL1wvbWVkaWEuZHVtcGVydC5ubFwvdGFibGV0XC8yODkxNjVkYV8xMDI1NTc1Ml82MzgzMTgwODk1NTQ3NjFfODE5NDM1NzA1X24ubXA0Lm1wNCIsIm1vYmlsZSI6Imh0dHA6XC9cL21lZGlhLmR1bXBlcnQubmxcL21vYmlsZVwvMjg5MTY1ZGFfMTAyNTU3NTJfNjM4MzE4MDg5NTU0NzYxXzgxOTQzNTcwNV9uLm1wNC5tcDQiLCJzdGlsbCI6Imh0dHA6XC9cL3N0YXRpYy5kdW1wZXJ0Lm5sXC9zdGlsbHNcLzY1OTM1MjRfMjg5MTY1ZGEuanBnIn0="></div></div>	
 		video_urls = soup.findAll('div', attrs={'class': re.compile("video")}, limit=1)
@@ -149,7 +148,8 @@ class Main:
 					if (self.DEBUG) == 'true':
 						xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "video_url2", str(video_url) ), xbmc.LOGNOTICE )
 		
-					if httpCommunicator.exists( video_url ):
+					response = requests.get('http://google.com')
+					if response.status_code < 400:
 						have_valid_url = True
 					else:
 						unplayable_media_file = True

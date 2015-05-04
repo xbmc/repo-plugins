@@ -137,9 +137,13 @@ def getCats(gsurl,catname):
 
 
 def getLink(url,vidname):
-        html  = getRequest(uqp(url))
-        url   = re.compile('<video src="(.+?)"').search(html).group(1)
-        if int(addon.getSetting('vid_res')) == 0: url = url.replace('_6.','_3.')
+        html  = getRequest(uqp(url)) 
+        try:
+          url   = re.compile('<video src="(.+?)"').search(html).group(1)
+          if int(addon.getSetting('vid_res')) == 0: url = url.replace('_6.','_3.')
+        except:
+          url, msg   = re.compile('<ref src="(.+?)".+?abstract="(.+?)"').search(html).groups()
+          xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( __addonname__, msg , 5000) )
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=url))
 
 

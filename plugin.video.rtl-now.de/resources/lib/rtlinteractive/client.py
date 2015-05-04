@@ -210,11 +210,42 @@ class Client(object):
 
             return player_data_url, player_url
 
+        def _process_manifest(_url):
+            headers = {'Connection': 'keep-alive',
+                       'Cache-Control': 'max-age=0',
+                       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                       'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.38 Safari/537.36',
+                       'DNT': '1',
+                       'Accept-Encoding': 'gzip, deflate, sdch',
+                       'Accept-Language': 'en-US,en;q=0.8,de;q=0.6'}
+
+            _result = requests.get(_url, headers=headers, verify=False)
+            try:
+                _xml = ElementTree.fromstring(_result.text)
+                _url = ''
+                _last_bitrate = 0
+                for _media in _xml:
+                    _bitrate = int(_media.get('bitrate'))
+                    if _bitrate > _last_bitrate:
+                        _url = _media.get('href')
+                        _last_bitrate = _bitrate
+                        pass
+                    pass
+                if _url:
+                    _url = _url.replace('hds', 'hls').replace('f4m', 'm3u8')
+                    return _url
+            except:
+                raise UnsupportedStreamException
+            pass
+
         json_data = self.get_film_details(film_id)
         film = json_data.get('result', {}).get('content', {}).get('film', {})
         video_url = str(film.get('videourl', ''))
         if video_url:
             player_data_url, player_url = _get_data_from_html(video_url)
+            if not player_data_url or not player_url:
+                raise UnsupportedStreamException
+
             player_url = player_url.replace('.liveab.swf', '.swf')
 
             xml = _get_xml(player_data_url)
@@ -228,7 +259,11 @@ class Client(object):
 
                 # No support for HDS MANIFEST
                 if (re.search(r'http://.+/hds/.+/\d+/manifest-hds.f4m', filename.text)):
-                    raise UnsupportedStreamException
+                    url = _process_manifest(filename.text)
+                    if url:
+                        result.append(url)
+                        pass
+                    return result
 
                 rtmpe_match = re.search(r'(?P<url>rtmpe://(?:[^/]+/){2})(?P<play_path>.+)', filename.text)
                 hds_match = re.search(r'http://hds.+/(?P<play_path>\d+/.+)', filename.text)

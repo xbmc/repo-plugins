@@ -64,6 +64,10 @@ class XbmcContextUI(AbstractContextUI):
         dialog = xbmcgui.Dialog()
         return dialog.yesno(title, text)
 
+    def on_ok(self, title, text):
+        dialog = xbmcgui.Dialog()
+        return dialog.ok(title, text)
+
     def on_remove_content(self, content_name):
         text = self._context.localize(constants.localize.REMOVE_CONTENT) % content_name
         return self.on_yes_no_input(self._context.localize(constants.localize.CONFIRM_REMOVE), text)

@@ -1,3 +1,6 @@
+2.2.3 (2015-05-03)
+FIX: playback
+
 2.2.2 (2015-04-14)
 FIX: playback (based on DRM protection)
 

@@ -79,13 +79,15 @@ class Main:
 		
 		soup = BeautifulSoup(html_data)
 		
+		youtube_url = ""
+
  	    #Parse video file url
-        #<iframe width="967" height="544" src="http://www.youtube.com/embed/WXjoMy2Vpfs?feature=oembed" frameborder="0" allowfullscreen>
-		video_urls = soup.findAll('iframe', attrs={'src': re.compile("^http://www.youtube.com/embed")}, limit=1)
-		for video_url in video_urls :
-			if len(video_urls) == 0:
-				no_url_found = True
-			else:
+		#<iframe width="967" height="544" src="https://www.youtube.com/embed/-XpoD7OgLFM?feature=oembed" frameborder="0" allowfullscreen>
+		video_urls = soup.findAll('iframe', attrs={'src': re.compile("^https://www.youtube.com/embed")}, limit=1)
+		if len(video_urls) == 0:
+			no_url_found = True
+		else:
+			for video_url in video_urls :
 				video_url = video_urls[0]['src']
 				if (self.DEBUG) == 'true':
 					xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "video_url", str(video_url) ), xbmc.LOGNOTICE )
@@ -95,12 +97,14 @@ class Main:
 					pos_of_last_question_mark = video_url.rfind("?")
 					video_url = video_url[ 0 : pos_of_last_question_mark ] 
 					video_url_len = len(video_url)
-					youtubeID = video_url[len("http://www.youtube.com/embed/"):video_url_len]
+					youtubeID = video_url[len("https://www.youtube.com/embed/"):video_url_len]
 					youtube_url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % youtubeID
 				else:
 					unplayable_media_file = True
 	
 		if (self.DEBUG) == 'true':
+			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "no_url_found", str(have_valid_url) ), xbmc.LOGNOTICE )
+			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "unplayable_media_file", str(have_valid_url) ), xbmc.LOGNOTICE )
 			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "have_valid_url", str(have_valid_url) ), xbmc.LOGNOTICE )
 			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "youtube_url", str(youtube_url) ), xbmc.LOGNOTICE )
 	

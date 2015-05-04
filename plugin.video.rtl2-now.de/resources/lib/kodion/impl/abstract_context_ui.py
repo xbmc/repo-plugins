@@ -26,6 +26,9 @@ class AbstractContextUI(object):
     def on_yes_no_input(self, title, text):
         raise NotImplementedError()
 
+    def on_ok(self, title, text):
+        raise NotImplementedError()
+
     def on_remove_content(self, content_name):
         raise NotImplementedError()
 

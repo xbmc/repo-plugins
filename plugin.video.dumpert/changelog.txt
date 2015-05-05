@@ -1,3 +1,6 @@
+v1.0.7 (Tuesday, 05 may 2015) :
+- fixing 1.0.6: added requests to requirements
+
 v1.0.6 (Sunday, 03 may 2015) :
 - adjustments due to more changes in the website: cookiefirewall circumvented by using different http-getter (requests)
 

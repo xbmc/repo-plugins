@@ -1,3 +1,7 @@
+v0.3.0 (4 May 2015)
+- Adapt for new page layouts of site
+- Improved error handling
+
 v0.2.1 (6 Apr 2015)
 - More extensive description of channel
 - Made icon.png 256x256 size and added fanart.jpg picture

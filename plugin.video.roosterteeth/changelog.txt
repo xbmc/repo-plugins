@@ -1,3 +1,13 @@
+Version 1.0.0 (5 may 2015)
+The password is stored in keyring now (thanks to JBu92 for the suggestion)
+If there's a password in settings.xml, it will be converted to the password in keyring (the password in settings.xml will be blanked).
+If the user wants to view a sponsored video and the username/password doesn't work, the user will be asked to type in the correct password. If the userid/password works, the password will be stored in keyring.
+Added a button in settings to force the removal of the password from keyring
+Switched from LWPCookieJar to MozillaCookieJar due to bug which caused sponsored vids not working
+Always delete cookie file
+Small changes in logging
+Sponsor Early Screening videos are NOT working
+
 Version 0.1.1
 Changes due to website changes
 
@@ -21,7 +31,7 @@ Thanks to AikenDrum for the patch.
 
 Version 0.0.7
 Because divingmule seems off the grid for a bit, i've patched this version and put it in my repo. 
-I'll push it to the xbmc repo, so it will automaticly update for everybody. 
+I'll push it to the xbmc repo, so it will automatically update for everybody. 
 Thanks to Frenzy for the patch.
 
 Version 0.0.6

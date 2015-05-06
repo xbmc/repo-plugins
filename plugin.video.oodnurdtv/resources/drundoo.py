@@ -82,7 +82,11 @@ class drundoo:
                 x1 = temp.find('.m3u8')
                 x2 = temp.find('auth')
                 x3 = temp.find('&live')
-                x4 = temp.find('-')+1
+                
+                if temp.find('-VOD-') > -1:
+                    x4 = temp.find('-VOD-') + '-VOD-'.__len__()
+                else:
+                    x4 = temp.find('-')+1
                 
                 myTV = temp[x4:x1]
                 myStat = {'bTVHD':'3',

@@ -41,9 +41,9 @@ class nocoApi():
                                   'password': password,
                                   'login': '1'})
         requestHandler = build_opener()
-        page = requestHandler.open(mainURL+"OAuth2/authorize.php?response_type=code&client_id="+client_id+"&state=STATE", loginrequest)
+        r = requests.post(mainURL+"OAuth2/authorize.php?response_type=code&client_id="+client_id+"&state=STATE", allow_redirects=False, data = {'username': user,'password': password,'login': '1'})
         ts = time.time()
-        code = parse_qs(urlparse(page.geturl()).query)['code'][0]
+        code = parse_qs(urlparse(r.headers['location']).query)['code'][0]
         apirequest = urlencode({'grant_type': 'authorization_code',
                                 'code': code})
         requestHandler = build_opener()

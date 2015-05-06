@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.vox-now.de" name="VOX NOW" version="3.0.1" provider-name="bromix">
+	<requires>
+		<import addon="xbmc.python" version="2.19.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+        <summary lang="en">VOX NOW media library</summary>
+		<summary lang="de">Mediathek für VOX NOW</summary>
+		<description lang="en">With VOX NOW many series, shows, documentaries and magazines can be seen from the program of VOX.</description>
+		<description lang="de">Mit VOX NOW können viele Serien, Shows, Dokumentationen und Magazine aus dem Programm von VOX geschaut werden.</description>
+		<disclaimer lang="en"></disclaimer>
+		<language>de</language>
+		<platform>all</platform>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<forum></forum>
+		<website>http://www.voxnow.de/</website>
+		<email>bromix at gmx dot net</email>
+		<source>https://github.com/bromix/plugin.video.vox-now.de</source>
+	</extension>
+</addon>

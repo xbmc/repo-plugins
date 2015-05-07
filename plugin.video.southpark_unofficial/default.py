@@ -30,6 +30,7 @@ audio = audio[audio_pos]
 mainweb_geo = ["southpark.cc.com","southpark.cc.com","www.southpark.de"]
 fullep_geo = ["/full-episodes/","/episodios-en-espanol/","/alle-episoden/"]
 pageurl_geo = ["southpark.cc.com","southpark.cc.com","southpark.de"]
+mediagen_geo = ["player","player","video-player"]
 rtmp_geo = ["rtmpe://viacommtvstrmfs.fplive.net:1935/viacommtvstrm","rtmpe://viacommtvstrmfs.fplive.net:1935/viacommtvstrm","rtmpe://cp75298.edgefcs.net/ondemand"]
 mediagenopts_geo = ["&suppressRegisterBeacon=true&lang=","&suppressRegisterBeacon=true&lang=","&device=Other&aspectRatio=16:9&lang="]
 geolocation_pos = int(addon.getSetting('geolocation'))
@@ -232,7 +233,7 @@ def getMediagen(id):
 
 def getVideoData(mediagen):
 	xml = ""
-	xml = getUrl("http://"+mainweb_geo[audio_pos]+"/feeds/video-player/mediagen?uri="+mediagen+mediagenopts_geo[audio_pos]+audio+"&acceptMethods=fms,hdn1,hds")
+	xml = getUrl("http://"+mainweb_geo[audio_pos]+"/feeds/"+mediagen_geo[audio_pos]+"/mediagen?uri="+mediagen+mediagenopts_geo[audio_pos]+audio+"&acceptMethods=fms,hdn1,hds")
 	parser = ET.XMLParser(encoding="utf-8")
 	root = ET.fromstring(xml, parser=parser)
 	rtmpe = []

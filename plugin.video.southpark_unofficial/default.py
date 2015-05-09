@@ -122,6 +122,9 @@ def playTest(url, title, thumbnail):
 	i = 0
 	parts = str(len(mediagen))
 	player = xbmc.Player()
+	lis = []
+	ccs = []
+	durations = []
 	for media in mediagen:
 		data = getVideoData(media)
 		rtmpe = data[0]
@@ -147,8 +150,15 @@ def playTest(url, title, thumbnail):
 		li.setProperty('SWFPlayer', swfVfy)
 		li.setProperty("SWFVerify", "true")
 		i += 1
+		lis.append(li)
+		durations.append(duration[best])
+		if len(cc) >= 3:
+			ccs.append(cc[2])
+	i = 0
+	for li in lis:
+		videoname = title + " (" + str(i+1) + " of " + parts +")"
 		notifyText(translation(30009)+" " + videoname, 3000)
-		player.play(rtmp, listitem=li)
+		player.play(rtmp, listitem=lis[i])
 		for s in xrange(1):
 			if player.isPlaying():
 				break
@@ -156,15 +166,16 @@ def playTest(url, title, thumbnail):
 		if not player.isPlaying():
 			notifyText(translation(30004), 4000)
 			player.stop()
-		if len(cc) >= 3:
-			player.setSubtitles(cc[2])
+		if len(ccs) >= 3:
+			player.setSubtitles(ccs[i])
 			player.showSubtitles(False)
 		secs = 0
 		while player.isPlaying():
 			secs = player.getTime()
 			time.sleep(1)
-		if secs < (duration[best] - 3):
+		if secs < (durations[i] - 3):
 			return
+		i += 1
 	player.stop()
 	return
 

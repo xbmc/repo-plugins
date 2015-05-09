@@ -10,3 +10,5 @@
 - added CC and Added warning on Banned Episodes (ep 200/201 - season 14)
 0.2.4
 - fixed new mediagen url
+0.2.5
+- better loading time.

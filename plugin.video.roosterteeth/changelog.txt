@@ -1,3 +1,6 @@
+Version 1.0.1 (6 may 2015)
+Removed password storage as a dependency
+
 Version 1.0.0 (5 may 2015)
 The password is stored in keyring now (thanks to JBu92 for the suggestion)
 If there's a password in settings.xml, it will be converted to the password in keyring (the password in settings.xml will be blanked).

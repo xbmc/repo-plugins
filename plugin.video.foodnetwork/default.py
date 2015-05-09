@@ -110,9 +110,10 @@ def getSources(fanart):
         xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
            
 def getCats(gsurl,catname):
+        xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
         ilist = []
         html  = getRequest('http://www.foodnetwork.com%s' % uqp(gsurl))
-        html  = re.compile('"channels": \[(.+?)\]\},').search(html).group(1)
+        html  = re.compile('"channels":\[(.+?)\]\},').search(html).group(1)
         html  = '{"channels": ['+html+']}'
         a = json.loads(html)
         a = a['channels'][0]['videos']

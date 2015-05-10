@@ -57,7 +57,7 @@
 
     <!-- YouTube -->
     <string id="30500">Kanäle</string>
-    <string id="30501">Playlisten</string>
+    <string id="30501">Wiedergabelisten</string>
     <string id="30502">Zu %s</string>
     <string id="30503">Kanal-Fanart anzeigen</string>
     <string id="30504">Abos</string>
@@ -77,8 +77,8 @@
     <string id="30518">Gehen Sie auf '%s'</string>
     <string id="30519">und geben Sie folgenden code ein:</string>
     <string id="30520">Hinzufügen zu...</string>
-    <string id="30521">Wählen Sie die Playliste</string>
-    <string id="30522">Neue Playliste...</string>
+    <string id="30521">Wählen Sie eine Wiedergabeliste</string>
+    <string id="30522">Neue Wiedergabeliste...</string>
     <string id="30523">Sprache</string>
     <string id="30524">Sprache wählen</string>
     <string id="30525">Region auswählen</string>
@@ -91,8 +91,8 @@
     <string id="30532">Default</string>
     <string id="30533">Rückwärts</string>
     <string id="30534">Zufall</string>
-    <string id="30535">Wählen Sie die Reihenfolge der Playliste</string>
-    <string id="30536">Aktualisiere Playliste...</string>
+    <string id="30535">Wählen Sie die Reihenfolge der Wiedergabeliste</string>
+    <string id="30536">Aktualisiere Wiedergabeliste...</string>
     <string id="30537">Ab hier abspielen</string>
     <string id="30538">Disliked Videos</string>
     <string id="30539">Live</string>
@@ -104,4 +104,6 @@
     <string id="30545">Keine weiteren Links gefunden.</string>
     <string id="30546">Bitte loggen Sie sich zweimal ein!</string>
     <string id="30547">Sie müssen zwei Anwendungen aktivieren, damit YouTube ordentlich funktioniert.</string>
+    <string id="30548">Mehr...</string>
+    <string id="30549">Keine Video-Streams gefunden</string>
 </strings>

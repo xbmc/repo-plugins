@@ -1,3 +1,18 @@
+5.1.1 (2015-05-10)
+ADD: 'More...' in context menu to provide more items
+ADD: show deprecation warning of old plugin calls starting with Isengard
+ADD: EndPoint: 'plugin://plugin.video.youtube/search/?q=[URL_ENC_TEXT]'
+ADD: API Key for each major version of KODI
+UPD: Ukrainian (thx 2 Dukobpa3)
+UPD: Russian (thx 2 BytEvil)
+UPD: new second fanart
+UPD: reorganized context menu
+UPD: improved logging (debug only)
+UPD: Improved error handling
+FIX: refresh after rating a video (own playlist only)
+FIX: add 'refresh' again for 'My subscriptions'
+DEL: removed old v2 API
+
 5.1.0 (2015-04-22)
 ADD: Double login to support 'My subscriptions' via YouTube TV API
 ADD: 'More Links from the description' - extracts further links from the description

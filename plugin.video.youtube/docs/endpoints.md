@@ -37,3 +37,7 @@ plugin://plugin.video.youtube/channel/[CID]/
 ```
 plugin://plugin.video.youtube/user/[NAME]/
 ```
+## Search
+```
+plugin://plugin.video.youtube/search/?q=[URL_ENCODED_TEXT]
+```

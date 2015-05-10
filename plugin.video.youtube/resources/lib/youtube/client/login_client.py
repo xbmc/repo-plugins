@@ -10,20 +10,46 @@ from resources.lib.youtube.youtube_exceptions import LoginException
 class LoginClient(object):
     CONFIGS = {
         'youtube-tv': {
+            'system': 'All',
             'key': 'AIzaSyAd-YEOqZz9nXVzGtn3KWzYLbLaajhqIDA',
             'id': '861556708454-d6dlm3lh05idd8npek18k6be8ba3oc68.apps.googleusercontent.com',
             'secret': 'SboVhoG9s0rNafixCSGGKXAT'
         },
-        'youtube-for-kodi-access': {
+        'youtube-for-kodi-fallback': {
+            'system': 'Fallback!',
+            'key': 'AIzaSyD8q0h3GWdMQp4yGTeF07udY8weR25Bw54',
+            'id': '360604876433-t7hqkh8ma2oem13ftat6at6oodrg17mq.apps.googleusercontent.com',
+            'secret': 'ULXZaeSKIjBnxq42WeiZeNky'
+        },
+        'youtube-for-kodi-12': {
+            'system': 'Frodo',
+            'key': 'AIzaSyCE2-kHR9zjtqEkA2QPNYmLap063A6Dr98',
+            'id': '530038341143-et4ksm2fjqj5p3vpdpjglemetlqqmd0r.apps.googleusercontent.com',
+            'secret': 'wdAtNLPOz-Tn2WjtCLIva9Vw'
+        },
+        'youtube-for-kodi-13': {
+            'system': 'Gotham',
+            'key': 'AIzaSyC9MT7g2aqkrsKQraHR2H0V7ozC6dpfBCk',
+            'id': '548159037694-qpi2u8ic4ubm8jukcnluercra0n4gu12.apps.googleusercontent.com',
+            'secret': 'iRq-c2O8K5qiysMGyAlDH5sJ'
+        },
+        'youtube-for-kodi-14': {
+            'system': 'Helix',
             'key': 'AIzaSyBCwBLShUEzXiOceNuliClY0icE6M4AddU',
             'id': '308268426735-ph3ukr2flbaila2jt73b329724mpar0g.apps.googleusercontent.com',
             'secret': '3m2krCjOT16wxgwErsAglOaS'
+        },
+        'youtube-for-kodi-15': {
+            'system': 'Isengard',
+            'key': 'AIzaSyAFm5cTVZFF0xjR8EJVTHEB15YbAVITgeM',
+            'id': '1032651798584-usob8et5hntg1qsp939qn2aqjhhop88h.apps.googleusercontent.com',
+            'secret': 'MIHwphxCpPC0Nqb73SYLBQsA'
         }
     }
 
     def __init__(self, config={}, language='en-US', access_token='', access_token_tv=''):
         if not config:
-            config = self.CONFIGS['youtube-for-kodi-access']
+            config = self.CONFIGS['youtube-for-kodi-helix']
             pass
 
         self._config = config

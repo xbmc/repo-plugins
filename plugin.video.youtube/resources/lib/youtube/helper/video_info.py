@@ -289,7 +289,7 @@ class VideoInfo(object):
 
         """
         pos = html.find('ytplayer.config')
-        if pos:
+        if pos >= 0:
             html2 = html[pos:]
             pos = html2.find('</script>')
             if pos:
@@ -385,6 +385,14 @@ class VideoInfo(object):
                 except Exception, ex:
                     x = 0
                     pass
+                pass
+            pass
+
+        # try to find the reason of this page if we've only got 'UNKNOWN'
+        if len(stream_list) == 0 and reason.lower() == 'unknown':
+            reason_match = re.search(r'<h1[^>]*>(?P<reason>[^<]+)', html)
+            if reason_match:
+                reason = reason_match.group('reason').strip()
                 pass
             pass
 

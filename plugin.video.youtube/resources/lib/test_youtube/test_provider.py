@@ -92,6 +92,18 @@ class TestProvider(unittest.TestCase):
         kodion.utils.print_items(items)
         pass
 
+    def test_on_search(self):
+        provider = Provider()
+
+        path = kodion.utils.create_path('search')
+        context = kodion.Context(path=path, params={'q': 'lgr'})
+        context.set_localization(30502, 'Go to %s')
+        result = provider.navigate(context)
+        items = result[0]
+        self.assertGreater(len(items), 0)
+        kodion.utils.print_items(items)
+        pass
+
     def test_on_search_video(self):
         provider = Provider()
 

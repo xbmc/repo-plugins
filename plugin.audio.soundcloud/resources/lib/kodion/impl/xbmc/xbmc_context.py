@@ -1,3 +1,4 @@
+import locale
 import sys
 import urllib
 import urlparse
@@ -7,6 +8,7 @@ import xbmc
 import xbmcaddon
 import xbmcplugin
 import xbmcvfs
+import datetime
 from ..abstract_context import AbstractContext
 from .xbmc_plugin_settings import XbmcPluginSettings
 from .xbmc_context_ui import XbmcContextUI
@@ -26,7 +28,7 @@ class XbmcContext(AbstractContext):
             self._addon = xbmcaddon.Addon()
             pass
 
-        self._system_version = XbmcSystemVersion()
+        self._system_version = None
 
         """
         I don't know what xbmc/kodi is doing with a simple uri, but we have to extract the information from the
@@ -77,6 +79,24 @@ class XbmcContext(AbstractContext):
             pass
         pass
 
+    def format_date_short(self, date_obj):
+        date_format = xbmc.getRegion('dateshort')
+        _date_obj = date_obj
+        if isinstance(_date_obj, datetime.date):
+            _date_obj = datetime.datetime(_date_obj.year, _date_obj.month, _date_obj.day)
+            pass
+
+        return _date_obj.strftime(date_format)
+
+    def format_time(self, time_obj):
+        time_format = xbmc.getRegion('time')
+        _time_obj = time_obj
+        if isinstance(_time_obj, datetime.time):
+            _time_obj = datetime.time(_time_obj.hour, _time_obj.minute, _time_obj.second)
+            pass
+
+        return _time_obj.strftime(time_format)
+
     def get_language(self):
         if self.get_system_version().get_name() == 'Frodo':
             return 'en-US'
@@ -91,6 +111,10 @@ class XbmcContext(AbstractContext):
             return 'en-US'
 
     def get_system_version(self):
+        if not self._system_version:
+            self._system_version = XbmcSystemVersion()
+            pass
+
         return self._system_version
 
     def get_video_playlist(self):

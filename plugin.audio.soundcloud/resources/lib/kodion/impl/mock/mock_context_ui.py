@@ -2,6 +2,7 @@ __author__ = 'bromix'
 
 from ..abstract_context_ui import AbstractContextUI
 from ...logging import *
+from .mock_progress_dialog import MockProgressDialog
 
 
 class MockContextUI(AbstractContextUI):
@@ -13,6 +14,9 @@ class MockContextUI(AbstractContextUI):
     def set_view_mode(self, view_mode):
         self._view_mode = view_mode
         pass
+
+    def create_progress_dialog(self, heading, text=None, background=False):
+        return MockProgressDialog(heading, text)
 
     def get_view_mode(self):
         return self._view_mode

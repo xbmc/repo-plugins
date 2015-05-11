@@ -3,10 +3,7 @@
 import sys
 import re
 import os
-if sys.version_info >=  (2, 7):
-    import json as _json
-else:
-    import simplejson as _json 
+import json as _json
 import time
 import socket
 import urllib
@@ -36,19 +33,8 @@ mediagenopts_geo = ["&suppressRegisterBeacon=true&lang=","&suppressRegisterBeaco
 geolocation_pos = int(addon.getSetting('geolocation'))
 geolocation = ["US","UK","ES","DE","IT"]
 geolocation = geolocation[geolocation_pos]
+cc_settings = addon.getSetting('cc') == "true"
 viewMode = str("504")
-
-class SpPlayer(xbmc.Player):
-	__cc = []
-	__index = 0
-	def __init__(self, *args):
-		xbmc.Player.__init__(self)
-	def setStream(cc):
-		__cc = cc
-	def onPlayBackStarted(self):
-		xbmc.Player.setSubtitles(__cc[__index])
-		xbmc.Player.showSubtitles(False)
-		__index += 1
 
 def index():
     xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_LABEL)
@@ -110,6 +96,7 @@ def playTest(url, title, thumbnail):
 	if len(mediagen) == 0:
 		notifyText(translation(30011), 7000)
 		return
+	notifyText(translation(30009)+" " + title, 3000)
 	swfVfy = "http://media.mtvnservices.com/player/prime/mediaplayerprime.2.7.11.swf" 
 	flashVer = "WIN 12,0,0,70"
 	conn = "B:0"
@@ -122,13 +109,12 @@ def playTest(url, title, thumbnail):
 	i = 0
 	parts = str(len(mediagen))
 	player = xbmc.Player()
-	lis = []
 	ccs = []
-	durations = []
+	playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+	playlist.clear()
 	for media in mediagen:
 		data = getVideoData(media)
 		rtmpe = data[0]
-		duration = data[1]
 		cc = data[2]
 		best = len(rtmpe)-1
 		rtmpgeo = audio_pos
@@ -149,34 +135,32 @@ def playTest(url, title, thumbnail):
 		li.setProperty('pageUrl', pageUrl)
 		li.setProperty('SWFPlayer', swfVfy)
 		li.setProperty("SWFVerify", "true")
-		i += 1
-		lis.append(li)
-		durations.append(duration[best])
 		if len(cc) >= 3:
 			ccs.append(cc[2])
-	i = 0
-	for li in lis:
-		videoname = title + " (" + str(i+1) + " of " + parts +")"
-		notifyText(translation(30009)+" " + videoname, 3000)
-		player.play(rtmp, listitem=lis[i])
-		for s in xrange(1):
-			if player.isPlaying():
-				break
-			time.sleep(1)
-		if not player.isPlaying():
-			notifyText(translation(30004), 4000)
-			player.stop()
-		if len(ccs) >= 3:
-			player.setSubtitles(ccs[i])
-			player.showSubtitles(False)
-		secs = 0
-		while player.isPlaying():
-			secs = player.getTime()
-			time.sleep(1)
-		if secs < (durations[i] - 3):
-			return
+		playlist.add(url=rtmp, listitem=li, index=i)
 		i += 1
+	player.play(playlist)
+	i = 0
+	for s in xrange(1):
+		if player.isPlaying():
+			break
+		time.sleep(1)
+	if not player.isPlaying():
+		notifyText(translation(30004), 4000)
+		player.stop()
+	pos = playlist.getposition()
+	if len(ccs) >= 3:
+		player.setSubtitles(ccs[pos])
+		player.showSubtitles(cc_settings)
+	while player.isPlaying():
+		if pos != playlist.getposition():
+			pos = playlist.getposition()
+			if len(ccs) >= playlist.size():
+				player.setSubtitles(ccs[pos])
+				player.showSubtitles(cc_settings)
+		time.sleep(1)
 	player.stop()
+	playlist.clear()
 	return
 
 def translation(id):
@@ -237,28 +221,44 @@ def getMediagen(id):
 	feed = getUrl("http://"+mainweb_geo[audio_pos]+"/feeds/video-player/mrss/mgid:arc:episode:"+pageurl_geo[audio_pos]+":"+id+"?lang="+audio)
 	root = ET.fromstring(feed)
 	mediagen = []
-	for item in root.iter('guid'):
-		if item.text != None and item.text != "bumper":
-			mediagen.append(item.text)
+	if sys.version_info >=  (2, 7):
+		for item in root.iter('guid'):
+			if item.text != None and item.text != "bumper":
+				mediagen.append(item.text)
+	else:
+		for item in root.getiterator('guid'):
+			if item.text != None and item.text != "bumper":
+				mediagen.append(item.text)
 	return mediagen
 
 def getVideoData(mediagen):
 	xml = ""
 	xml = getUrl("http://"+mainweb_geo[audio_pos]+"/feeds/"+mediagen_geo[audio_pos]+"/mediagen?uri="+mediagen+mediagenopts_geo[audio_pos]+audio+"&acceptMethods=fms,hdn1,hds")
-	parser = ET.XMLParser(encoding="utf-8")
-	root = ET.fromstring(xml, parser=parser)
+	root = ET.fromstring(xml)
 	rtmpe = []
 	duration = []
 	captions = []
-	for item in root.iter('src'):
-		if item.text != None:
-			rtmpe.append(item.text)
-	for item in root.iter('rendition'):
-		if item.attrib['duration'] != None:
-			duration.append(int(item.attrib['duration']))
-	for item in root.iter('typographic'):
-		if item.attrib['src'] != None:
-			captions.append(item.attrib['src'])
+	if sys.version_info >=  (2, 7):
+		for item in root.iter('src'):
+			if item.text != None:
+				rtmpe.append(item.text)
+		for item in root.iter('rendition'):
+			if item.attrib['duration'] != None:
+				duration.append(int(item.attrib['duration']))
+		for item in root.iter('typographic'):
+			if item.attrib['src'] != None:
+				captions.append(item.attrib['src'])
+	else:
+		for item in root.getiterator('src'):
+			if item.text != None:
+				rtmpe.append(item.text)
+		for item in root.getiterator('rendition'):
+			if item.attrib['duration'] != None:
+				duration.append(int(item.attrib['duration']))
+		for item in root.getiterator('typographic'):
+			if item.attrib['src'] != None:
+				captions.append(item.attrib['src'])
+
 	return [rtmpe,duration,captions]
 	
 def parameters_string_to_dict(parameters):

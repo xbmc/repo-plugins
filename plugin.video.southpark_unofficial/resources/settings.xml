@@ -2,4 +2,5 @@
 <settings>
    <setting id="audio_lang" type="enum" label="30000" values="EN|ES|DE" default="0" />
    <setting id="geolocation" type="enum" label="30001" values="US|UK|ES|DE|IT" default="0" />
+   <setting id="cc" type="bool" label="30012" default="false"/>
 </settings>

@@ -12,3 +12,9 @@
 - fixed new mediagen url
 0.2.5
 - better loading time.
+0.2.6
+- re-added playlist. now works with SUBS! next/back now works and perma cc can be enabled via options.
+0.2.7
+- FireTV fix
+0.3.0
+- adding pre Python 2.7 support.

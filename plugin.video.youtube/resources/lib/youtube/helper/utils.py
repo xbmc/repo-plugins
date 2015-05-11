@@ -82,13 +82,25 @@ def make_video_item_from_json_data(context, provider, json_data, playlist_item_i
     replace_context_menu = False
 
     # Refresh ('My Subscriptions', all my playlists)
-    if context.get_path() == '/special/new_uploaded_videos/' or context.get_path().startswith(
+    if context.get_path() == '/special/new_uploaded_videos_tv/' or context.get_path().startswith(
             '/channel/mine/playlist/'):
         yt_context_menu.append_refresh(context_menu, provider, context)
         pass
 
     # Queue Video
     yt_context_menu.append_queue_video(context_menu, provider, context)
+
+    my_playlists = {}
+    if provider.is_logged_in():
+        resource_manager = provider.get_resource_manager(context)
+        my_playlists = resource_manager.get_related_playlists(channel_id='mine')
+        pass
+
+    if provider.is_logged_in():
+        # add 'Watch Later' only if we are not in my 'Watch Later' list
+        watch_later_playlist_id = my_playlists.get('watchLater', '')
+        yt_context_menu.append_watch_later(context_menu, provider, context, watch_later_playlist_id, video_id)
+        pass
 
     # play all videos of the playlist
     some_playlist_match = re.match('^/channel/(.+)/playlist/(?P<playlist_id>.*)/$', context.get_path())
@@ -105,18 +117,6 @@ def make_video_item_from_json_data(context, provider, json_data, playlist_item_i
         yt_context_menu.append_play_with(context_menu, provider, context)
         pass
 
-    my_playlists = {}
-    if provider.is_logged_in():
-        resource_manager = provider.get_resource_manager(context)
-        my_playlists = resource_manager.get_related_playlists(channel_id='mine')
-        pass
-
-    if provider.is_logged_in():
-        # add 'Watch Later' only if we are not in my 'Watch Later' list
-        watch_later_playlist_id = my_playlists.get('watchLater', '')
-        yt_context_menu.append_watch_later(context_menu, provider, context, watch_later_playlist_id, video_id)
-        pass
-
     channel_id = json_data.get('channel-id', '')
 
     # got to [CHANNEL]
@@ -127,21 +127,7 @@ def make_video_item_from_json_data(context, provider, json_data, playlist_item_i
             pass
         pass
 
-    # description links
-    yt_context_menu.append_content_from_description(context_menu, provider, context, video_id)
-
-    # find related videos
-    yt_context_menu.append_related_videos(context_menu, provider, context, video_id)
-
     if provider.is_logged_in():
-        # add 'Like Video' only if we are not in my 'Liked Videos' list
-        refresh_container = context.get_path().startswith(
-            '/channel/mine/playlist/LL') or context.get_path() == '/special/disliked_videos/'
-        yt_context_menu.append_rate_video(context_menu, provider, context, video_id, refresh_container)
-
-        # add video to a selected playlist
-        yt_context_menu.append_add_video_to_playlist(context_menu, provider, context, video_id)
-
         # provide 'remove' for videos in my playlists
         if video_id in playlist_item_id_dict:
             playlist_match = re.match('^/channel/mine/playlist/(?P<playlist_id>.*)/$', context.get_path())
@@ -162,6 +148,13 @@ def make_video_item_from_json_data(context, provider, json_data, playlist_item_i
         # subscribe to the channel of the video
         yt_context_menu.append_subscribe_to_channel(context_menu, provider, context, channel_id, channel_name)
         pass
+
+    # more...
+    refresh_container = context.get_path().startswith(
+        '/channel/mine/playlist/LL') or context.get_path() == '/special/disliked_videos/'
+    yt_context_menu.append_more_for_video(context_menu, provider, context, video_id,
+                                          is_logged_in=provider.is_logged_in(),
+                                          refresh_container=refresh_container)
 
     if len(context_menu) > 0:
         video_item.set_context_menu(context_menu, replace=replace_context_menu)
@@ -379,8 +372,8 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
         context_menu = []
         replace_context_menu = False
 
-        # Refresh ('My Subscriptions', all my playlists)
-        if context.get_path() == '/special/new_uploaded_videos/' or context.get_path().startswith(
+        # Refresh ('My Subscriptions')
+        if context.get_path() == '/special/new_uploaded_videos_tv/' or context.get_path().startswith(
                 '/channel/mine/playlist/'):
             yt_context_menu.append_refresh(context_menu, provider, context)
             pass
@@ -407,30 +400,6 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
             # add 'Watch Later' only if we are not in my 'Watch Later' list
             watch_later_playlist_id = my_playlists.get('watchLater', '')
             yt_context_menu.append_watch_later(context_menu, provider, context, watch_later_playlist_id, video_id)
-            pass
-
-        # got to [CHANNEL]
-        if channel_id and channel_name:
-            # only if we are not directly in the channel provide a jump to the channel
-            if kodion.utils.create_path('channel', channel_id) != context.get_path():
-                yt_context_menu.append_go_to_channel(context_menu, provider, context, channel_id, channel_name)
-                pass
-            pass
-
-        # description links
-        yt_context_menu.append_content_from_description(context_menu, provider, context, video_id)
-
-        # find related videos
-        yt_context_menu.append_related_videos(context_menu, provider, context, video_id)
-
-        if provider.is_logged_in():
-            # add 'Like Video' only if we are not in my 'Liked Videos' list
-            refresh_container = context.get_path().startswith(
-                '/channel/mine/playlist/LL') or context.get_path() == '/special/disliked_videos/'
-            yt_context_menu.append_rate_video(context_menu, provider, context, video_id, refresh_container)
-
-            # add video to a selected playlist
-            yt_context_menu.append_add_video_to_playlist(context_menu, provider, context, video_id)
 
             # provide 'remove' for videos in my playlists
             if video_id in playlist_item_id_dict:
@@ -448,10 +417,27 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
                         pass
                     pass
                 pass
+            pass
 
+        # got to [CHANNEL]
+        if channel_id and channel_name:
+            # only if we are not directly in the channel provide a jump to the channel
+            if kodion.utils.create_path('channel', channel_id) != context.get_path():
+                yt_context_menu.append_go_to_channel(context_menu, provider, context, channel_id, channel_name)
+                pass
+            pass
+
+        if provider.is_logged_in():
             # subscribe to the channel of the video
             yt_context_menu.append_subscribe_to_channel(context_menu, provider, context, channel_id, channel_name)
             pass
+
+        # more...
+        refresh_container = context.get_path().startswith(
+            '/channel/mine/playlist/LL') or context.get_path() == '/special/disliked_videos/'
+        yt_context_menu.append_more_for_video(context_menu, provider, context, video_id,
+                                              is_logged_in=provider.is_logged_in(),
+                                              refresh_container=refresh_container)
 
         if len(context_menu) > 0:
             video_item.set_context_menu(context_menu, replace=replace_context_menu)

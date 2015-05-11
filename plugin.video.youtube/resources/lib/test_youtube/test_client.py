@@ -243,6 +243,10 @@ class TestClient(unittest.TestCase):
 
         context = kodion.Context()
 
+        # Couch Tomato videos won't play
+        streams = client.get_video_streams(context, 'xtPPggoKZjU')
+        self.assertGreater(len(streams), 0)
+
         # some videos
         streams = client.get_video_streams(context, 'Hp0gI8KJw20')
         self.assertGreater(len(streams), 0)

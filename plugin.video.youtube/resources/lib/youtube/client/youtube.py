@@ -68,15 +68,6 @@ class YouTube(LoginClient):
         video_streams = sorted(video_streams, key=_sort, reverse=True)
         return video_streams
 
-    def get_uploaded_videos_of_subscriptions(self, start_index=0):
-        params = {'max-results': str(self._max_results),
-                  'alt': 'json'}
-        if start_index > 0:
-            params['start-index'] = str(start_index)
-            pass
-        return self._perform_v2_request(method='GET', path='feeds/api/users/default/newsubscriptionvideos',
-                                        params=params)
-
     def remove_playlist(self, playlist_id):
         params = {'id': playlist_id,
                   'mine': 'true'}
@@ -574,44 +565,6 @@ class YouTube(LoginClient):
             return {}
 
         if result.headers.get('content-type', '').startswith('application/json'):
-            return result.json()
-        pass
-
-    def _perform_v2_request(self, method='GET', headers=None, path=None, post_data=None, params=None,
-                            allow_redirects=True):
-        # params
-        if not params:
-            params = {}
-            pass
-        _params = {'key': self._config['key']}
-        _params.update(params)
-
-        # headers
-        if not headers:
-            headers = {}
-            pass
-        _headers = {'Host': 'gdata.youtube.com',
-                    'X-GData-Key': 'key=%s' % self._config['key'],
-                    'GData-Version': '2.1',
-                    'Accept-Encoding': 'gzip, deflate',
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.36 Safari/537.36'}
-        if self._access_token:
-            _headers['Authorization'] = 'Bearer %s' % self._access_token
-            pass
-        _headers.update(headers)
-
-        # url
-        url = 'https://gdata.youtube.com/%s/' % path.strip('/')
-
-        result = None
-        if method == 'GET':
-            result = requests.get(url, params=_params, headers=_headers, verify=False, allow_redirects=allow_redirects)
-            pass
-
-        if result is None:
-            return {}
-
-        if method != 'DELETE' and result.text:
             return result.json()
         pass
 

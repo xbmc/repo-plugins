@@ -1,6 +1,6 @@
-from resources.lib import kodion
-
 __author__ = 'bromix'
+
+from resources.lib import kodion
 
 
 def _process_play_video(provider, context, re_match):
@@ -44,6 +44,11 @@ def _process_play_all(provider, context, re_match):
 
 
 def process_old_action(provider, context, re_match):
+    if context.get_system_version().get_version() >= (15, 0):
+        message = u"You're using old YouTube-Plugin calls - please review the log for updated end points starting with Isengard"
+        context.get_ui().show_notification(message, time_milliseconds=15000)
+        pass
+
     action = context.get_param('action', '')
     if action == 'play_video':
         return _process_play_video(provider, context, re_match)

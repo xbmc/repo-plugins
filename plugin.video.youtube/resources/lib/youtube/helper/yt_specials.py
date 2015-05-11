@@ -2,8 +2,9 @@ __author__ = 'bromix'
 
 from resources.lib import kodion
 from resources.lib.kodion.items import DirectoryItem
-from resources.lib.youtube.helper import v2, v3, tv, extract_urls, UrlResolver, UrlToItemConverter
+from resources.lib.youtube.helper import v3, tv, extract_urls, UrlResolver, UrlToItemConverter
 from . import utils
+
 
 def _process_related_videos(provider, context, re_match):
     result = []
@@ -45,17 +46,6 @@ def _process_browse_channels(provider, context, re_match):
         json_data = provider.get_client(context).get_guide_categories()
         result.extend(v3.response_to_items(provider, context, json_data))
         pass
-
-    return result
-
-
-def _process_new_uploaded_videos(provider, context, re_match):
-    provider.set_content_type(context, kodion.constants.content_type.EPISODES)
-
-    result = []
-    start_index = int(context.get_param('start-index', 0))
-    json_data = provider.get_client(context).get_uploaded_videos_of_subscriptions(start_index)
-    result.extend(v2.response_to_items(provider, context, json_data))
 
     return result
 
@@ -112,8 +102,17 @@ def _process_description_links(provider, context, re_match):
         url_resolver = UrlResolver(context)
         res_urls = []
         for url in urls:
+            context.log_debug('Resolving url "%s"' % url)
             progress_dialog.update(steps=1, text=url)
-            res_urls.append(url_resolver.resolve(url))
+            resolved_url = url_resolver.resolve(url)
+            context.log_debug('Resoled url "%s"' % resolved_url)
+            res_urls.append(resolved_url)
+
+            if progress_dialog.is_aborted():
+                context.log_debug('Resolving urls aborted')
+                break
+
+            context.sleep(50)
             pass
 
         url_to_item_converter = UrlToItemConverter()
@@ -126,7 +125,8 @@ def _process_description_links(provider, context, re_match):
         if len(result) == 0:
             progress_dialog.close()
             context.get_ui().on_ok(title=context.localize(provider.LOCAL_MAP['youtube.video.description.links']),
-                                   text=context.localize(provider.LOCAL_MAP['youtube.video.description.links.not_found']))
+                                   text=context.localize(
+                                       provider.LOCAL_MAP['youtube.video.description.links.not_found']))
             return False
 
         return result
@@ -219,8 +219,6 @@ def process(category, provider, context, re_match):
         return _process_popular_right_now(provider, context, re_match)
     elif category == 'browse_channels':
         return _process_browse_channels(provider, context, re_match)
-    elif category == 'new_uploaded_videos':
-        return _process_new_uploaded_videos(provider, context, re_match)
     elif category == 'new_uploaded_videos_tv':
         return _process_new_uploaded_videos_tv(provider, context, re_match)
     elif category == 'disliked_videos':

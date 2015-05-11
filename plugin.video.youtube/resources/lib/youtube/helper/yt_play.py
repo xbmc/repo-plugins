@@ -19,6 +19,11 @@ def play_video(provider, context, re_match):
         video_id = context.get_param('video_id')
         client = provider.get_client(context)
         video_streams = client.get_video_streams(context, video_id)
+        if len(video_streams) == 0:
+            message = context.localize(provider.LOCAL_MAP['youtube.error.no_video_streams_found'])
+            context.get_ui().show_notification(message, time_milliseconds=5000)
+            return False
+
         video_stream = kodion.utils.find_best_fit(video_streams, _compare)
 
         if video_stream['format'].get('rtmpe', False):

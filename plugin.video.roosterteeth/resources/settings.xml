@@ -4,9 +4,8 @@
     <setting id="quality" 		type="enum" label="30009" lvalues="30010|30011|30012|30013" 					default="1"/>
     <setting id="view_mode" 	type="enum" label="30017" lvalues="30018|30019|30020|30021|30022|30023|30024" 	default="4"/>
     <setting id="is_sponsor" 	type="bool" label="30014" 														default="false"/>
-    <setting id="username" 		type="text" label="30015" 														default=""/>
+    <setting id="username" 		type="text" label="30015" 														default="" 							enable="eq(-1,true)"/>
+    <setting id="password" 		type="text" label="30016" 														default="" 			option="hidden" enable="eq(-2,true)"/>
 	<setting id="debug" 		type="bool" label="30028"   													default="false"/>
-    <!-- the option="close" forces kodi to rewrite the settings.xml (in addon data). All values get updated with the current values. -->
-	<setting id="delete_password_action"    label="30029" type="action" option="close"                          action="RunScript(plugin.video.roosterteeth,delete_password)" />
   </category>
 </settings>

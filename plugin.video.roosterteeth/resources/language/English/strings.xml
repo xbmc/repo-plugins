@@ -29,10 +29,5 @@
   <string id="30026">Comedy and Gaming</string>
   <string id="30027">Latest Achievement Hunter Episodes</string>
   <string id="30028">Debug</string>
-  <string id="30029">Delete password from keyring</string>
-  <string id="30030">The stored Password has been deleted</string>
-  <string id="30031">The stored Password has NOT been deleted</string>  
-  <string id="30032">The Password was not correct.</string>  
-  <string id="30033">Please click on the link again and enter the correct Password</string>  
-  <string id="30034">No Password entered.</string>  
+  <string id="30029"></string>
 </strings>

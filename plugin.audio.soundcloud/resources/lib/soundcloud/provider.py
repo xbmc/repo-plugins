@@ -89,10 +89,8 @@ class Provider(kodion.AbstractProvider):
         return self.get_fanart(context)
 
     def get_fanart(self, context):
-        """
-            This will return a darker and (with blur) fanart
-            :return:
-            """
+        if context.get_settings().get_bool('soundcloud.fanart_dark.show', True):
+            return context.create_resource_path('media', 'fanart_dark.jpg')
         return context.create_resource_path('media', 'fanart.jpg')
 
     @kodion.RegisterProviderPath('^/play/$')
@@ -524,9 +522,11 @@ class Provider(kodion.AbstractProvider):
 
         # test for next page
         next_href = json_data.get('next_href', '')
-        re_match = re.match('.*cursor\=(?P<cursor>[a-z0-9-]+).*', next_href)
-        if re_match:
-            params['cursor'] = re_match.group('cursor')
+        if next_href:
+            re_match = re.match(r'.*cursor=(?P<cursor>[a-z0-9-]+).*', next_href)
+            if re_match:
+                params['cursor'] = re_match.group('cursor')
+                pass
             pass
 
         page = int(params.get('page', 1))

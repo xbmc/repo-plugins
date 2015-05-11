@@ -64,6 +64,10 @@ class XbmcContextUI(AbstractContextUI):
         dialog = xbmcgui.Dialog()
         return dialog.yesno(title, text)
 
+    def on_ok(self, title, text):
+        dialog = xbmcgui.Dialog()
+        return dialog.ok(title, text)
+
     def on_remove_content(self, content_name):
         text = self._context.localize(constants.localize.REMOVE_CONTENT) % content_name
         return self.on_yes_no_input(self._context.localize(constants.localize.CONFIRM_REMOVE), text)
@@ -108,6 +112,7 @@ class XbmcContextUI(AbstractContextUI):
         _message = utils.to_unicode(message)
         _message = _message.replace(',', ' ')
         _message = utils.to_utf8(_message)
+        _message = _message.replace('\n', ' ')
 
         xbmc.executebuiltin(
             "Notification(%s, %s, %d, %s)" % (_header, _message, time_milliseconds, _image))

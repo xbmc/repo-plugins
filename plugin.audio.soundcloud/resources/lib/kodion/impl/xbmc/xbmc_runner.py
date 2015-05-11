@@ -131,7 +131,7 @@ class XbmcRunner(AbstractProviderRunner):
             item.addContextMenuItems(image_item.get_context_menu(), replaceItems=image_item.replace_context_menu())
             pass
 
-        item.setInfo(type=u'picture', infoLabels=info_labels.create_from_item(image_item))
+        item.setInfo(type=u'picture', infoLabels=info_labels.create_from_item(context, image_item))
 
         xbmcplugin.addDirectoryItem(handle=context.get_handle(),
                                     url=image_item.get_uri(),

@@ -1,3 +1,9 @@
+Version 4.0.16
+-------------
+- Fix broken program listing (nybogard)
+- Fix localized string (nybogard)
+- Fix thumbnails
+
 Version 4.0.15
 -------------
 - Fix broken listing of "more episodes/clips"

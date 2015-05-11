@@ -150,23 +150,29 @@ def elementExists(html, etype, attrs):
   return len(htmlelement) > 0
 
 
-def prepareThumb(thumbnail, baseUrl):
+def prepareImgUrl(url, baseUrl):
+  if url.startswith("//www.svt.se"):
+    url = url.lstrip("//")
+    url = "http://" + url
+  elif not url.startswith("http://") and baseUrl:
+    url = baseUrl + url
+  return url
+
+def prepareThumb(thumbUrl, baseUrl):
   """
   Returns a thumbnail with size THUMB_SIZE
   """
-  if not thumbnail.startswith("http://") and baseUrl:
-    thumbnail = baseUrl + thumbnail
-  thumbnail = re.sub(r"small|medium|large|extralarge", THUMB_SIZE, thumbnail)
-  return thumbnail
+  thumbUrl = prepareImgUrl(thumbUrl, baseUrl)
+  thumbUrl = re.sub(r"small|medium|large|extralarge", THUMB_SIZE, thumbUrl)
+  return thumbUrl
 
-def prepareFanart(url, baseUrl):
+def prepareFanart(fanartUrl, baseUrl):
   """
   Returns a fanart image URL.
   """
-  if not url.startswith("http://") and baseUrl:
-    url = baseUrl + url
-  new_url = re.sub(r"small|medium|large|extralarge", "extralarge_imax", url)
-  return new_url
+  fanartUrl = prepareImgUrl(fanartUrl, baseUrl)
+  fanartUrl = re.sub(r"small|medium|large|extralarge", "extralarge_imax", fanartUrl)
+  return fanartUrl
 
 
 def mp4Handler(jsonObj):

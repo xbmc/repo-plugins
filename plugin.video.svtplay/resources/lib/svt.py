@@ -31,7 +31,7 @@ def getAtoO():
   """
   html = getPage(URL_A_TO_O)
 
-  link_class = "[^\"']*play_alphabetic-list__video-link[^\"']*"
+  link_class = "[^\"']*play_link-list__link[^\"']*"
   texts = common.parseDOM(html, "a" , attrs = { "class": link_class })
   hrefs = common.parseDOM(html, "a" , attrs = { "class": link_class }, ret = "href")
 
@@ -251,10 +251,10 @@ def getChannels():
     plot = common.parseDOM(box, "span", attrs = {"class" : "[^\"']*play_zapper__menu-item-title[^\"']*"})[0]
     thumbnail = BASE_URL + common.parseDOM(box, "a", attrs = {"class" : anchor_class}, ret = "data-thumbnail")[0]
     channels.append({
-      "title" : title,
+      "title" : title.title(),
       "url" : url,
       "thumbnail" : thumbnail,
-      "info" : { "title" : plot, "plot" : plot}
+      "info" : { "title" : common.replaceHTMLCodes(plot), "plot" : common.replaceHTMLCodes(plot)}
     })
 
   return channels

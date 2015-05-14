@@ -102,7 +102,7 @@ def getRequest(url, user_data=None, headers = defaultHeaders , alert=True, strip
 def getSources(fanart):
         ilist = []
         html  = getRequest('http://tubitv.com')
-        c     = re.compile('<li class="category-list-item.+?href="(.+?)">(.+?)<').findall(html)
+        c     = re.compile('<li.+?class=".+?href="(.+?)">(.+?)<').findall(html)
         for url, name in c:
               mode = 'GS'
               u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)

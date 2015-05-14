@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#     Copyright (C) 2013, 2014 CHF (chrifri@gmx.de)
+#     Copyright (C) 2013-2015 CHF (chrifri@gmx.de)
 #     
 #     This file is part of the XBMC Add-on: plugin.video.schaetzederwelt
 #     
@@ -52,23 +52,35 @@ kontinente_und_anderes = ['Europa', 'Afrika', 'Amerika', 'Australien', 'Asien', 
      
 def build_menuitems(url_for, endpoint, localizer):
     
-    #log_info("Oeffne Showseite ...")
-    page = get_content_from_url(MAIN_URL)
+    # Anzahl Seiten ermitteln über die erste Seite, changelog, Versionswechsel, push, mail
+    #log_info("Oeffne Seite ... 0")
+    page = get_content_from_url(MAIN_URL + '&pc=0')
+
+    #Ermittle Seitengesamtanzahl
+    pattern = re.compile('<a title=\"letzte Seite\" href=\"/tvshow.htm\?show=945f9950-cc74-11df-9bbb-0026b975f2e6\&pc=(?P<maxPages>.*)\">\&gt;\&gt;</a>')
+    m = pattern.search(page)
+    maxPages = int(m.group('maxPages')) + 1
+    log_info("Seitengesamtanzahl: " + str(maxPages))
     
+
     #log_info("Hole alle Ids der einzelnen Sendungen ...")
     pattern = regex_pattern_for_items()
-    
     items = []
-    for match in pattern.finditer(page):
-        item = {'label' : enrich_title(match.group('title').decode('utf-8')).strip(),
-                'thumbnail' : BASE_URL + match.group('img'),
-                'icon' : BASE_URL + match.group('img'),
-                'path' : url_for(endpoint, ekey=match.group('ekey')),
-                'context_menu' : [(localizer('toggle_watched'), 'XBMC.Action(ToggleWatched)')],
-                'is_playable' : True
-                }
-        items.append(item)
-    
+         
+    for pc in range (0, maxPages):
+        log_info("Oeffne Seite ..." + str(pc))
+        page = get_content_from_url(MAIN_URL + '&pc=' + str(pc))
+             
+        for match in pattern.finditer(page):
+            item = {'label' : enrich_title(match.group('title').decode('utf-8')).strip(),
+                    'thumbnail' : BASE_URL + match.group('img'),
+                    'icon' : BASE_URL + match.group('img'),
+                    'path' : url_for(endpoint, ekey=match.group('ekey')),
+                    'context_menu' : [(localizer('toggle_watched'), 'XBMC.Action(ToggleWatched)')],
+                    'is_playable' : True
+                    }
+            items.append(item)
+     
     items.sort(key=lambda video: video['label'])
     log_info("Anzahl Videos: " + str(len(items)))
     #log_info("Videos: " + str(items))
@@ -76,7 +88,7 @@ def build_menuitems(url_for, endpoint, localizer):
 
 
 def regex_pattern_for_items():
-    return re.compile('<a href=\"/player.htm\?show=(?P<ekey>[a-z0-9-]*)\">[\n\t]*<img src=\"(?P<img>.*)\"[\n\t ]*alt=\".*\"[\n\t ]*title=\"(?P<title>.*)\"[\n\t ]*/>')
+    return re.compile('<a href=\"/player.htm\?show=(?P<ekey>[a-z0-9-]*)\" >[\n\t]*<img src=\"(?P<img>.*)\" class=\"img\" title=\"(?P<title>.*)\" alt=\".*\"/>')
 
 
 def enrich_title(title):

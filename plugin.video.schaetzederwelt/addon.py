@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#     Copyright (C) 2013, 2014 CHF (chrifri@gmx.de)
+#     Copyright (C) 2013-2015 CHF (chrifri@gmx.de)
 #     
 #     This file is part of the XBMC Add-on: plugin.video.schaetzederwelt
 #     

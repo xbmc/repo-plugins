@@ -320,6 +320,8 @@ class F4MDownloader():
         try:
             post=None
             print 'url',url
+            url = urllib.quote(url, safe=":/&=?")
+            print 'urlafter',url
             
             openner = urllib2.build_opener(urllib2.HTTPHandler, urllib2.HTTPSHandler)
             #cookie_handler = urllib2.HTTPCookieProcessor(self.cookieJar)

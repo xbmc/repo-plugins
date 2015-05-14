@@ -197,7 +197,7 @@ def showTvSingleChannel(idChannel,filter = '',category = ''):
         items.append(item)
     return items
 
-@plugin.route('/anime/channel/<idChannel>/filters',name="showTvChannelFilters")
+@plugin.route('/tv/channel/<idChannel>/filters',name="showTvChannelFilters")
 def showTvChannelFilters(idChannel):
     items = []
     channels = get_section_channels(MODE_SHOWS)
@@ -255,7 +255,7 @@ def showSingleTvItem(idItem):
     return items
 
 @plugin.route('/tv/item/<seasonId>/<idItem>',name='showSingleTvItemSeason')
-def showSingleAnimeItemSeason(seasonId,idItem):
+def showSingleTvItemSeason(seasonId,idItem):
     items = []
     itemPlayable = get_item_playable(idItem)
     xbmcplugin.setContent(handleAddon, 'tvshows')

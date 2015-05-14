@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.rtpplay" name="RTP Play" version="2.2.0" provider-name="enen92">
+<addon id="plugin.video.rtpplay" name="RTP Play" version="2.2.1" provider-name="enen92">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
@@ -19,5 +19,6 @@
     <source>https://github.com/enen92/plugin.video.RTPPlay-XBMC</source>
     <website>http://www.rtp.pt/play</website>
     <platform>all</platform>
+<broken>Support has ended for XBMC 12.x add-ons. Please upgrade to continue using these.</broken>
   </extension>
 </addon>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.disclose_tv" name="Disclose.tv" version="0.0.4" provider-name="Tristan Fischer (sphere@dersphere.de)">
+<addon id="plugin.video.disclose_tv" name="Disclose.tv" version="0.0.5" provider-name="Tristan Fischer (sphere@dersphere.de)">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.xbmcswift2" version="1.3.0"/>
@@ -70,5 +70,6 @@
     <description lang="sk">Najväčšie centrum multimédií a alternatívnych správ o UFO videách, starovekých mystériách, konšpiračných teóriách, prísne tajnom, Novom svetovom poriadku a inom!</description>
     <description lang="sv">Största mediahubben och alternativa nyhetssidan om UFO´n, gamla mysterier, konspirationsteorier, topphemligheter, N.W.O. plus mycket mera! </description>
     <description lang="zh">最大的多媒体中心和另类新闻网站，包括UFO视频、历史之谜、阴谋论、最高机密、N.W.O. 和更多内容！</description>
+    <broken>Support has ended for XBMC 12.x add-ons. Please upgrade to continue using these.</broken>
   </extension>
 </addon>

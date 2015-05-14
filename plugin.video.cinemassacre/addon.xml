@@ -1,22 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.cinemassacre" name="cinemassacre" version="1.1.1" provider-name="dethfeet, Kr0nZ">
-  <requires>
-    <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.parsedom" version="2.5.2" />
-    <import addon="plugin.video.youtube" version="4.4.6" />
-  </requires>
-  <extension point="xbmc.python.pluginsource" library="default.py">
-    <provides>video</provides>
-  </extension>
-  <extension point="xbmc.addon.metadata">
-    <summary lang="en">cinemassacre.com</summary>
-    <description lang="en">Home of the Angry Video Game Nerd, Monster Madness, movie reviews, top 10's, and commentary, retro and classic videos</description>
-    <platform>all</platform>
-    <language>en</language>
-    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-    <forum>http://forum.xbmc.org/showthread.php?tid=147672</forum>
-    <website>http://cinemassacre.com/</website>
-    <source>https://github.com/Kr0nZ/plugin.video.cinemassacre</source>
-    <email>matthyo@gmail.com</email>
-  </extension>
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.cinemassacre" name="cinemassacre" version="1.1.2" provider-name="cdwertmann">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.common.plugin.cache" version="0.9.1"/>
+        <import addon="script.module.xmltodict" version="0.9.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">Cinemassacre Videos</summary>
+        <description lang="en">Videos from cinemassacre.com</description>
+        <website>https://github.com/cdwertmann/plugin.video.cinemassacre</website>
+        <source>git://github.com/cdwertmann/plugin.video.cinemassacre.git</source>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+        <broken>Support has ended for XBMC 12.x add-ons. Please upgrade to continue using these.</broken>
+    </extension>
 </addon>

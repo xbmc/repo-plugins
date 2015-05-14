@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.soundcloud" name="SoundCloud" version="1.0.2" provider-name="bromix">
+<addon id="plugin.audio.soundcloud" name="SoundCloud" version="1.0.3" provider-name="bromix">
 	<requires>
-		<import addon="xbmc.python" version="2.1.0"/>
-        <import addon="script.module.requests" version="2.3.0"/>
+		<import addon="xbmc.python" version="2.14.0"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="default.py">
 		<provides>audio</provides>
@@ -20,5 +19,6 @@
 		<website>http://www.soundcloud.com/</website>
 		<email>bromix at gmx dot net</email>
 		<source>https://github.com/bromix/plugin.audio.soundcloud</source>
+    <broken>Support has ended for XBMC 12.x add-ons. Please upgrade to continue using these.</broken>
 	</extension>
 </addon>

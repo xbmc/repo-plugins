@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.tehnik" name="TehniK.ro" version="2.0.3" provider-name="Rujinschi Remus (deltha@gmail.com)">
+<addon id="plugin.video.tehnik" name="TehniK.ro" version="2.0.4" provider-name="Rujinschi Remus (deltha@gmail.com)">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.xbmcswift2" version="2.4.0"/>
@@ -17,5 +17,6 @@
     <source>https://github.com/deltha/plugin.video.tehnik</source>
     <email>deltha@gmail.com</email>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <broken>Support has ended for XBMC 12.x add-ons. Please upgrade to continue using these.</broken>
   </extension>
 </addon>

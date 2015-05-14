@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="plugin.video.mediathek"
-  version="0.6.4"
+  version="0.6.5"
   name="Mediathek"
   provider-name="Raptor 2101">
   <requires>
@@ -30,5 +30,6 @@ Currently implemented:
     <website>https://github.com/raptor2101/Mediathek</website>
     <source>https://github.com/raptor2101/Mediathek</source>
     <email>raptor2101@gmx.de</email>
+    <broken>Support has ended for XBMC 12.x add-ons. Please upgrade to continue using these.</broken>
   </extension>
 </addon>

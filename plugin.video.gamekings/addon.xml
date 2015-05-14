@@ -2,7 +2,7 @@
 <addon 
 	id="plugin.video.gamekings" 
 	name="GameKings" 
-	version="1.1.0" 
+	version="1.1.1" 
 	provider-name="Skipmode A1, Amelandbor">
   <requires>
     <import addon="xbmc.python"                 version="2.1.0"/>
@@ -27,5 +27,6 @@
     <website>http://www.gamekings.tv</website>
     <email></email>
     <source>git://github.com/skipmodea1/plugin.video.gamekings.git</source>
+<broken>Support has ended for XBMC 12.x add-ons. Please upgrade to continue using these.</broken>
   </extension>
 </addon>

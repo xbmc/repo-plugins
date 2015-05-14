@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mlslive" name="MLS Live" version="1.0.10" provider-name="Micah Galizia">
+<addon id="plugin.video.mlslive" name="MLS Live" version="1.0.11" provider-name="Micah Galizia">
   <requires>
     <import addon="xbmc.python"   version="2.1.0"/>
   </requires>
@@ -16,5 +16,6 @@
     <forum>http://forum.xbmc.org/showthread.php?tid=158142</forum>
     <website>http://wiki.xbmc.org/index.php?title=Add-on:MLS_Live</website>
     <source>https://github.com/micahg/plugin.video.mlslive</source>
+    <broken>Support has ended for XBMC 12.x add-ons. Please upgrade to continue using these.</broken>
   </extension>
 </addon>

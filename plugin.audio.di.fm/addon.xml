@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.audio.di.fm"
        name="Digitally Imported"
-       version="3.0.5"
+       version="3.0.6"
        provider-name="qualisoft.dk - Tim C. Steinmetz">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
@@ -20,5 +20,6 @@
 		<description lang="en">
 			Digitally Imported streams the world's most addictive electronic music. Our radio channels feature world renowned artists, DJs, and the hottest exclusive shows. Discover the community and the wide variety of electronic music covering Trance, House, Dance, Techno, Chillout, Breaks, Downtempo and so much more.
 		</description>
+		<broken>Support has ended for XBMC 12.x add-ons. Please upgrade to continue using these.</broken>
 	</extension>
 </addon>

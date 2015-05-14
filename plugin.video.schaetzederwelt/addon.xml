@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.schaetzederwelt" name="Schaetze-der-Welt.de" version="2.0.0" provider-name="CHF">
+<addon id="plugin.video.schaetzederwelt" name="Schaetze-der-Welt.de" version="2.0.1" provider-name="CHF">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.xbmcswift2" version="2.4.0"/>
@@ -21,5 +21,6 @@
     <description lang="en">Cultural sites and natural landscapes on planet earth, that UNESCO has declared part of the "Heritage of Mankind".</description>
     <disclaimer lang="de">Einige Teile dieses Addons könnten in deinem Land verboten sein - bitte stelle vor der installation sicher, dass du keine Gesetze verletzt.</disclaimer>
     <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+    <broken>Support has ended for XBMC 12.x add-ons. Please upgrade to continue using these.</broken>
   </extension>
 </addon>

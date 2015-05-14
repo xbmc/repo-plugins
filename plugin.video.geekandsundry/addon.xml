@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.geekandsundry" name="Geek &amp; Sundry" version="0.1.1" provider-name="Rick Phillips (ruuk)">
+<addon id="plugin.video.geekandsundry" name="Geek &amp; Sundry" version="0.1.2" provider-name="Rick Phillips (ruuk)">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />
+		<import addon="script.module.xbmcswift2" version="1.1.1" />
+        <import addon="script.module.requests" version="2.3.0"/>
 		<import addon="plugin.video.youtube" version="4.4.6" />
 		<import addon="script.module.beautifulsoup4" version="4.3.1" />
 	</requires>
@@ -16,5 +18,6 @@
 		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 		<forum>http://forum.xbmc.org/showthread.php?tid=180283</forum>
 		<source>http://github.com/ruuk/plugin.video.geekandsundry</source>
+    <broken>Support has ended for XBMC 12.x add-ons. Please upgrade to continue using these.</broken>
 	</extension>
 </addon>

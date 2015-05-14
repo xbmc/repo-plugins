@@ -59,7 +59,7 @@ def make_request(url, locate=False):
 
 
 def shows_cache():
-    ''' this function updates the shows cache '''
+    ''' this function checks for new or retired shows and updates the "shows_cache" '''
     shows = eval(cache.get('shows'))
     url = base_url + '/shows'
     soup = BeautifulSoup(make_request(url), 'html.parser')
@@ -85,10 +85,10 @@ def shows_cache():
                     location = make_request(base_url + i('a')[-1]['href'], True)
                     # the location url points to an episode, we want the full list
                     show_url = None
-                    episode == location.rsplit('/', 1)[1]
+                    episode = location.rsplit('/', 1)[1]
                     # sometimes the episode is seperated with a dash instead of a slash
                     if '-' in episode:
-                        episode == location.rsplit('-', 1)[1]
+                        episode = location.rsplit('-', 1)[1]
                         try:
                             int(episode)
                             show_url = location.rsplit('-', 1)[0]
@@ -114,10 +114,10 @@ def shows_cache():
                     thumb = addon_icon
                     if thumb_tag and thumb_tag.find('img'):
                         thumb = thumb_tag.img['src']
-                    shows[show_type][name] = {'show_url': url, 'thumb': thumb, 'description': desc}
+                    shows[show_type][name] = {'show_url': show_url, 'thumb': thumb, 'description': desc}
                     addon_log('Cached new show: %s' %name)
                 except:
-                    addon_log('addonException cache new show: %s' %format_exc)
+                    addon_log('addonException cache new show: %s' %format_exc())
             if shows['active'].has_key(name) and show_type == 'retired':
                 del shows['active'][name]
     cache.set('shows', repr(shows))
@@ -128,12 +128,13 @@ def display_shows():
     ''' display the main directory '''
     # update the show cache at the set cacheFunction interval
     cache_shows = eval(cache.cacheFunction(shows_cache))
-    live_icon = 'http://twit-xbmc.googlecode.com/svn/images/live_icon.png'
+    live_icon = os.path.join(addon_path, 'resources', 'live.png')
     add_dir(language(30000), 'latest_episodes', addon_icon, 'latest_episodes')
     add_dir(language(30001), 'twit_live', live_icon, 'twit_live')
     shows = eval(cache.get('shows'))
     items = sorted(shows['active'].keys(), key=str.lower)
     for i in items:
+        addon_log(i)
         item = shows['active'][i]
         add_dir(i, item['show_url'], item['thumb'],
                 'episodes', {'plot': item['description']})
@@ -286,7 +287,6 @@ def twit_live():
         'http://bglive-a.bitgravity.com/twit/live/high?noprefix',
         'http://bglive-a.bitgravity.com/twit/live/low?noprefix',
         'http://iphone-streaming.ustream.tv/ustreamVideo/1524/streams/live/playlist.m3u8',
-        'justintv',
         'http://hls.cdn.flosoft.biz/flosoft/smil:twitStreamAll.smil/playlist.m3u8',
         'http://hls.cdn.flosoft.biz/flosoft/mp4:twitStream_720/playlist.m3u8',
         'http://hls.cdn.flosoft.biz/flosoft/mp4:twitStream_540/playlist.m3u8',
@@ -297,8 +297,6 @@ def twit_live():
         resolved_url = live_urls[-1]
     else:
         resolved_url = live_urls[int(addon.getSetting('twit_live'))]
-        if resolved_url == 'justintv':
-            resolved_url = get_jtv()
     return resolved_url
 
 
@@ -310,21 +308,6 @@ def set_resolved_url(resolved_url):
         resolved_url = ''
     item = xbmcgui.ListItem(path=resolved_url)
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), success, item)
-
-
-def get_jtv():
-    token_url = 'https://api.twitch.tv/api/channels/twit/access_token?as3=t'
-    data = json.loads(make_request(token_url))
-    url_params = [
-        'nauthsig=%s' %data['sig'],
-        'player=jtvweb',
-        'private_code=null',
-        'type=any',
-        'nauth=%s' %urllib2.quote(data['token']),
-        'allow_source=true',
-            ]
-    resolved_url = 'http://usher.twitch.tv/select/twit.json?' + '&'.join(url_params)
-    return resolved_url
 
 
 def add_dir(name, url, iconimage, mode, info={}):
@@ -359,7 +342,7 @@ def run_ircchat():
     username = addon.getSetting('username')
     if not nickname or not username:
         xbmc.executebuiltin('XBMC.Notification(%s, %s,10000,%s)'
-            %('IrcChat', language(30024), icon))
+            %('IrcChat', language(30024), addon_icon))
         addon.openSettings()
         nickname = addon.getSetting('nickname')
         username = addon.getSetting('username')

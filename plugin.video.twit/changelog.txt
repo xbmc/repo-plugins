@@ -1,3 +1,8 @@
+Version 2.0.8
+fix new shows not being added
+fix launching ircchat addon
+update the shows list
+
 Version 2.0.7
 fix new shows being cached with a bad urls
 fix remove retired shows from the active show cache

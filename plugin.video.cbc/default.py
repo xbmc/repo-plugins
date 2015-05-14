@@ -108,7 +108,10 @@ def getSources(fanart):
         a = re.compile('<div class="menugroup"><ul><li .+?a href="(.+?)".+?>(.+?)<.+?</div').findall(html)
         b = re.compile('<div class="menugroup"><ul class.+?a href="(.+?)".+?>(.+?)<.+?</div').findall(html)
         a.extend(b)
-#        a.append(('/sports-content/video/','Sports'))
+        a.append(('/player/News/',__language__(30019)))
+        a.append(('/player/Sports/',__language__(30020)))
+        a.append(('/player/Digital+Archives/',__language__(30021)))
+
         for url,name in a:
               if name.startswith('</') : name = __language__(30015)
               name = cleanname(name)
@@ -126,7 +129,9 @@ def getCats(gcurl):
         ilist = []
         url = taburl % (gcurl.replace(' ','+'))
         html = getRequest(url)
-        html = re.compile('<div id="catnav">.+?<ul>(.+?)</ul>').search(html).group(1)
+#        html = re.compile('<div id="catnav">.+?<ul>(.+?)</ul>').search(html).group(1)
+
+        html = re.compile('<div id="catnav">(.+?)<div id=').search(html).group(1)
         a = re.compile('a href="(.+?)">(.+?)<').findall(html)
         for url,name in a:
               name = cleanname(name)
@@ -177,10 +182,16 @@ def getQuery(cat_url):
 
 
 def getShows(gsurl,catname):
+        xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
         ilist = []
         url = taburl % (gsurl.replace(' ','+'))
         html = getRequest(url)
-        html  = re.compile('<div class="clips">(.+?)<div class="spinner">').search(html).group(1)
+        try:
+           html  = re.compile('<div class="clips">(.+?)<div class="spinner">').search(html).group(1)
+        except:
+           xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( __addonname__, __language__(30011) , 5000) )
+           return
+
         if 'class="desc">' in html:
           cats  = re.compile('><a href="(.+?)"><img src="(.+?)" alt="(.+?)".+?class="desc">(.+?)<').findall(html)
         else:
@@ -223,14 +234,27 @@ def getLink(vid,vidname):
             url = 'http://feed.theplatform.com/f/h9dtGB/r3VD0FujBumK?form=json&fields=id%2Ctitle%2Cdescription%2CpubDate%2CdefaultThumbnailUrl%2Ckeywords%2Capproved%2C%3AadSite%2C%3AbackgroundImage%2C%3Ashow%2C%3ArelatedURL1%2C%3ArelatedURL2%2C%3ArelatedURL3%2C%3Asport%2C%3AseasonNumber%2C%3Atype%2C%3Asegment%2C%3Aevent%2C%3AadCategory%2C%3AliveOnDemand%2C%3AaudioVideo%2C%3AepisodeNumber%2C%3ArelatedClips%2C%3Agenre%2C%3AcommentsEnabled%2C%3AmetaDataURL%2C%3AisPLS%2C%3AradioLargeImage%2C%3AcontentArea%2C%3AsubEvent%2C%3AfeatureImage%2Cmedia%3Acontent%2Cmedia%3Akeywords&byContent=byReleases%3DbyId%253D'+vid+'&byApproved=true'
             html = getRequest(url)
             a = json.loads(html)
-            print "a="+str(a)
             u = a["entries"][0]["media$content"][0]["plfile$downloadUrl"]
+            if u=='':
+              u = a["entries"][0]["media$content"][0]["plfile$releases"][0]["plrelease$url"]
+              u += '?mbr=true&manifest=m3u'
+              html = getRequest(u)
+              u = re.compile('<video src="(.+?)"').search(html).group(1)
+
+            if u.endswith('.mp4'): 
+               if '640x360_900kbps' in u:    u=u.replace('640x360_900kbps','960x540_2500kbps')
+               elif '640x360_1200kbps' in u: u=u.replace('640x360_1200kbps','960x540_2500kbps')
+               elif '852x480_1800kbps' in u: u=u.replace('852x480_1800kbps','960x540_2500kbps')
+               else:
+                  if u.endswith('kbps.mp4'): 
+                    cbr = re.compile('_([0-9]*)kbps\.mp4').search(u).group(1)
+                    u = u.replace('_%skbps' % cbr, '_2500kbps')
             xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=u))
 
             if (addon.getSetting('sub_enable') == "false"):
                xbmc.sleep(5000)
-               xbmc.Player().disableSubtitles()
-
+#               xbmc.Player().disableSubtitles()
+               xbmc.Player().showSubtitles(False)
 
 
 # MAIN EVENT PROCESSING STARTS HERE

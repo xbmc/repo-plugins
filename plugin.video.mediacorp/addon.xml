@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.mediacorp"
-       name="Mediacorp TV Singapore"
-       version="1.3.0"
+       name="Mediacorp Singapore"
+       version="1.4.3"
        provider-name="t1m">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -11,14 +11,14 @@
         <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en">Mediacorp TV Singapore</summary>
-    <description lang="en">Plays TV Catch-up for Mediacorp channels 5,8,Channel U,Suria,Okto and Vasantham. See addon settings for proxy. To display Chinese correctly, choose Arial Font under Settings-Appearance-Skin-Font</description>
+    <summary lang="en">Mediacorp Singapore</summary>
+    <description lang="en">Mediacorp Singapore - Toggle.sg version. To display Chinese correctly, choose Arial Font under Settings-Appearance-Skin-Font</description>
     <disclaimer lang="en">Feel free to use this script. For information visit the wiki.</disclaimer>
     <platform>all</platform>
     <language>en</language>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
     <forum>http://forum.xbmc.org/showthread.php?tid=173754</forum>
-    <website>http://xin.msn.com/en-sg/video/catchup/</website>
+    <website>www.toggle.sg</website>
     <email></email>
     <source>https://github.com/learningit/plugin.video.mediacorp</source>
   </extension>

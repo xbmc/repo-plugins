@@ -1,9 +1,4 @@
-Version 0.1.0 inital release
-Version 0.1.1 cleaned up sort views, set mimetype in addurl - supposed to speed things up
-version 0.2.0 added required fields in addon.xml, translatable strings separated
-v0.2.2 minor change to addon.xml
-Version 1.0.2 rewrite for web site changes
-Version 1.0.3 cleanup of folder name and settings xml
-Version 1.1.4 significant website change
-Version 1.1.5 Added Brightcove support
-Version 1.3.0 Added proxy support for Channel 8, bug fixes
+Version 1.4.1 Initial toggle.sg release
+Version 1.4.2 Fix for Telemovies
+Version 1.4.3 Added all channels tv-catchup
+

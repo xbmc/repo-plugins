@@ -2,7 +2,9 @@
 import datetime
 import urlparse
 from xml.dom.minidom import _append_child
+from resources.lib.kodion.exceptions import KodionException
 from resources.lib.kodion.items import DirectoryItem, VideoItem, NextPageItem, UriItem
+from resources.lib.kodion.utils import FunctionCache
 
 __author__ = 'bromix'
 
@@ -47,316 +49,320 @@ class Provider(kodion.AbstractProvider):
         limit = context.get_param('limit', None)
 
         client = self.get_client(context)
-        return self._response_to_items(context, client.do_raw(path=path, offset=offset, limit=limit))
+        response = context.get_function_cache().get(FunctionCache.ONE_MINUTE * 5, client.do_raw, path=path,
+                                                    offset=offset, limit=limit)
+        return self._response_to_items(context, response)
 
-    def _response_to_items(self, context, response):
-        client = self.get_client(context)
+    def _get_path_from_url(self, context, item, name):
+        url = item.get('meta', {}).get('links', {}).get(name, '')
+        path = self.get_client(context).url_to_path(url)
+        if not path or path == '/':
+            return ''
 
-        def _get_image(_item, _name, _width=None, _height=None, fallback=''):
-            _image = _item.get('images', {}).get(_name, {}).get('uri', '')
-            if _image:
-                if _width and _height:
-                    _image = '%s/width=%d,height=%d' % (_image, _width, _height)
-                    pass
-                elif _width:
-                    _image = '%s/width=%d' % (_image, _width)
-                    pass
-                elif _height:
-                    _image = '%s/height=%d' % (_image, _height)
-                    pass
+        path = 'redbull/%s' % path
+        return path.replace('//', '/')
+
+    def _get_image(self, item, name, width=None, height=None, fallback=''):
+        image = item.get('images', {}).get(name, {}).get('uri', '')
+        if image:
+            if width and height:
+                image = '%s/width=%d,height=%d' % (image, width, height)
                 pass
-            elif fallback:
-                return fallback
-
-            return _image
-
-        def _get_path_from_url(_item, _name):
-            url = _item.get('meta', {}).get('links', {}).get(_name, '')
-            path = client.url_to_path(url)
-            if not path or path == '/':
-                return ''
-
-            path = 'redbull/%s' % path
-            return path.replace('//', '/')
-
-        def _do_channel_item(_item):
-            _title = _item['title']
-
-            # change main => 'Red Bull TV'
-            _channel_id = _item['id']
-            if _channel_id == 'main':
-                _title = u'Red Bull TV'
+            elif width:
+                image = '%s/width=%d' % (image, width)
                 pass
-            _image = _get_image(_item, 'portrait', _width=440)
-            _fanart = _get_image(_item, 'background', _width=1280, _height=720, fallback=self.get_fanart(context))
-
-            _path = _get_path_from_url(_item, 'self')
-            _channel_item = DirectoryItem(_title, uri=context.create_uri([_path], params={'channel_id': _channel_id}),
-                                          image=_image, fanart=_fanart)
-            return _channel_item
-
-        def _do_channel_content(_item):
-            _result = []
-
-            _show_sub_channels = context.get_param('sub-channels', '1') == '1'
-            _make_bold = False
-            _sub_channels = _item.get('sub_channels', [])
-            if not _show_sub_channels:
-                _sub_channels = []
+            elif height:
+                image = '%s/height=%d' % (image, height)
                 pass
-            if len(_sub_channels) > 0:
-                _make_bold = True
+            pass
+        elif fallback:
+            return fallback
+
+        return image
+
+    def _do_channel_item(self, context, item):
+        title = item['title']
+
+        # change main => 'Red Bull TV'
+        channel_id = item['id']
+        if channel_id == 'main':
+            title = u'Red Bull TV'
+            pass
+        image = self._get_image(item, 'portrait', width=440)
+        fanart = self._get_image(item, 'background', width=1280, height=720, fallback=self.get_fanart(context))
+
+        path = self._get_path_from_url(context, item, 'self')
+        channel_item = DirectoryItem(title, uri=context.create_uri([path]),
+                                     image=image, fanart=fanart)
+        return channel_item
+
+    def _do_channel_content(self, context, item):
+        result = []
+
+        # Map for sub menus of each channel
+        # main is an exception: will always be empty and filled up manually
+        sub_categories = ['shows', 'films', 'videos', 'clips']
+
+        # for 'main' (Red Bull TV) we create our own content
+        if context.get_path() == '/redbull/channels/main/':
+            sub_categories = []
+            pass
+
+        # for 'sports' we tweak the result
+        show_all_sports = context.get_param('all', '0') == '1'
+        if context.get_path() == '/redbull/channels/sports/' and not show_all_sports:
+            sub_categories = []
+            pass
+
+        # for 'live' we only use the 'featured' categorie
+        if context.get_path() == '/redbull/channels/live/':
+            sub_categories = ['featured']
+            pass
+
+        for sub_category in sub_categories:
+            sub_category_path = self._get_path_from_url(context, item, sub_category)
+            if sub_category_path:
+                title = context.localize(self._local_map['redbull.%s' % sub_category]);
+                sub_category_item = DirectoryItem(title, uri=context.create_uri([sub_category_path]))
+                sub_category_item.set_fanart(self.get_fanart(context))
+                result.append(sub_category_item)
                 pass
+            pass
 
-            # Map for sub menus of each channel
-            # main is an exception: will always be empty and filled up manually
-            _channel_sub_category_dict = {'main': [],
-                                          'live': ['featured']}
-            _channel_id = context.get_param('channel_id', '')
-            if _channel_id == 'sports' and _show_sub_channels:
-                _channel_sub_category_dict['sports'] = []
-                pass
+        # Red Bull TV needs some different sub menus
+        if context.get_path() == '/redbull/channels/main/':
+            # Featured
+            featured_shows_item = DirectoryItem('Featured', context.create_uri(['redbull', 'featured']))
+            featured_shows_item.set_fanart(self.get_fanart(context))
+            result.append(featured_shows_item)
 
-            _sub_categories = _channel_sub_category_dict.get(_channel_id, ['shows', 'films', 'videos', 'clips'])
-            for _sub_category in _sub_categories:
-                _sub_category_path = _get_path_from_url(_item, _sub_category)
-                if _sub_category_path:
-                    _title = context.localize(self._local_map['redbull.%s' % _sub_category]);
-                    if _make_bold:
-                        _title = '[B]%s[/B]' % _title
-                        pass
-                    _sub_category_item = DirectoryItem(_title, uri=context.create_uri([_sub_category_path]))
-                    _sub_category_item.set_fanart(self.get_fanart(context))
-                    _result.append(_sub_category_item)
-                    pass
-                pass
+            # Upcoming Live Events
+            upcoming_live_events_item = DirectoryItem('Upcoming Live Events',
+                                                      context.create_uri(['redbull', 'videos', 'event_streams'],
+                                                                         {'limit': '100',
+                                                                          'event_type': 'upcoming',
+                                                                          'next_page_allowed': '0'}))
+            upcoming_live_events_item.set_fanart(self.get_fanart(context))
+            result.append(upcoming_live_events_item)
 
-            # Live
-            if _channel_id == 'live':
-                # Upcoming
-                _upcoming_item = DirectoryItem('Upcoming', context.create_uri(['redbull', 'videos', 'event_streams'],
-                                                                              {'limit': '100',
-                                                                               'event_type': 'upcoming',
-                                                                               'next_page_allowed': '0'}))
-                _upcoming_item.set_fanart(self.get_fanart(context))
-                _result.append(_upcoming_item)
+            # Featured Shows
+            featured_shows_item = DirectoryItem('Featured Shows', context.create_uri(['redbull', 'shows']))
+            featured_shows_item.set_fanart(self.get_fanart(context))
+            result.append(featured_shows_item)
 
-                # Replays
-                _replays_item = DirectoryItem('Replays', context.create_uri(['redbull', 'videos', 'event_streams'],
-                                                                            {'limit': '100',
-                                                                             'event_type': 'replay',
-                                                                             'next_page_allowed': '0'}))
-                _replays_item.set_fanart(self.get_fanart(context))
-                _result.append(_replays_item)
+            # Latest Films
+            latest_films_item = DirectoryItem('Latest Films',
+                                              context.create_uri(['redbull', 'channels', 'sports', 'films']))
+            latest_films_item.set_fanart(self.get_fanart(context))
+            result.append(latest_films_item)
 
-                # try to find a live stream
-                _new_params = {}
-                _new_params.update(context.get_params())
-                _new_params['event_type'] = 'live'
-                _new_params['next_page_allowed'] = '0'
-                _new_path = '/channels/live/'
-                _new_context = context.clone(new_path=_new_path, new_params=_new_params)
-                _live_result = self._response_to_items(_new_context,
-                                                       client.do_raw(path='videos/event_streams', limit=100))
-                if len(_live_result) > 0:
-                    for _item in _live_result:
-                        _result.append(_item)
-                        pass
-                    pass
-                pass
+            # Recently Added
+            recently_added_item = DirectoryItem('Recently Added', context.create_uri(['redbull', 'videos']))
+            recently_added_item.set_fanart(self.get_fanart(context))
+            result.append(recently_added_item)
 
-            # Red Bull TV needs some different sub menus
-            if _channel_id == 'main':
-                # Featured
-                _featured_shows_item = DirectoryItem('Featured', context.create_uri(['redbull', 'featured']))
-                _featured_shows_item.set_fanart(self.get_fanart(context))
-                _result.append(_featured_shows_item)
+            # Past Live Events
+            past_live_events_item = DirectoryItem('Past Live Events',
+                                                  context.create_uri(['redbull', 'videos', 'event_streams'],
+                                                                     {'limit': '100',
+                                                                      'event_type': 'replay',
+                                                                      'next_page_allowed': '0'}))
+            past_live_events_item.set_fanart(self.get_fanart(context))
+            result.append(past_live_events_item)
+            pass
 
-                # Upcoming Live Events
-                _upcoming_live_events_item = DirectoryItem('Upcoming Live Events',
-                                                           context.create_uri(['redbull', 'videos', 'event_streams'],
-                                                                              {'limit': '100',
-                                                                               'event_type': 'upcoming',
-                                                                               'next_page_allowed': '0'}))
-                _upcoming_live_events_item.set_fanart(self.get_fanart(context))
-                _result.append(_upcoming_live_events_item)
+        # Live
+        if context.get_path() == '/redbull/channels/live/':
+            # Upcoming
+            upcoming_item = DirectoryItem('Upcoming', context.create_uri(['redbull', 'videos', 'event_streams'],
+                                                                         {'limit': '100',
+                                                                          'event_type': 'upcoming',
+                                                                          'next_page_allowed': '0'}))
+            upcoming_item.set_fanart(self.get_fanart(context))
+            result.append(upcoming_item)
 
-                # Featured Shows
-                _featured_shows_item = DirectoryItem('Featured Shows', context.create_uri(['redbull', 'shows']))
-                _featured_shows_item.set_fanart(self.get_fanart(context))
-                _result.append(_featured_shows_item)
+            # Replays
+            replays_item = DirectoryItem('Replays', context.create_uri(['redbull', 'videos', 'event_streams'],
+                                                                       {'limit': '100',
+                                                                        'event_type': 'replay',
+                                                                        'next_page_allowed': '0'}))
+            replays_item.set_fanart(self.get_fanart(context))
+            result.append(replays_item)
 
-                # Latest Films
-                _latest_films_item = DirectoryItem('Latest Films',
-                                                   context.create_uri(['redbull', 'channels', 'sports', 'films']))
-                _latest_films_item.set_fanart(self.get_fanart(context))
-                _result.append(_latest_films_item)
-
-                # Recently Added
-                _recently_added_item = DirectoryItem('Recently Added', context.create_uri(['redbull', 'videos']))
-                _recently_added_item.set_fanart(self.get_fanart(context))
-                _result.append(_recently_added_item)
-
-                # Past Live Events
-                _past_live_events_item = DirectoryItem('Past Live Events',
-                                                       context.create_uri(['redbull', 'videos', 'event_streams'],
-                                                                          {'limit': '100',
-                                                                           'event_type': 'replay',
-                                                                           'next_page_allowed': '0'}))
-                _past_live_events_item.set_fanart(self.get_fanart(context))
-                _result.append(_past_live_events_item)
-                pass
-
-            # in case of sport we show 'All Sports' like the web page
-            if _channel_id == 'sports' and _show_sub_channels:
-                new_params = {}
-                new_params.update(context.get_params())
-                new_params['sub-channels'] = '0'
-                new_context = context.clone(new_params=new_params)
-                _all_sports_items = DirectoryItem('All Sports', uri=new_context.get_uri())
-                _all_sports_items.set_fanart(self.get_fanart(context))
-                _result.append(_all_sports_items)
-                pass
-
-            # sub channels
-            for _sub_channel in _sub_channels:
-                _channel_item = _do_channel_item(_sub_channel)
-                _result.append(_channel_item)
-                pass
-            return _result
-
-        def _do_show_item(_item, make_bold=False):
-            _title = _item['title']
-            if make_bold:
-                _title = '[B]%s[/B]' % _title
-                pass
-            _image = _get_image(_item, 'portrait', _width=440)
-            _fanart = _get_image(_item, 'background', _width=1280, _height=720, fallback=self.get_fanart(context))
-
-            _path = _get_path_from_url(_item, 'episodes')
-            # in the case of the main channel, we sometime get no correct uri for the episodes of the show
-            # we try to compensate the problem here
-            if not _path or _path == '/':
-                _show_id = _item['id']
-                _path = 'redbull/shows/%s/episodes' % _show_id
-                pass
-            _show_item = DirectoryItem(_title, uri=context.create_uri([_path]), image=_image, fanart=_fanart)
-            return _show_item
-
-        def _do_video_item(_item):
-            _title = _item['title']
-            _subtitle = _item.get('subtitle', '')
-            if _subtitle:
-                _title = '%s - %s' % (_title, _subtitle)
-                pass
-            _image = _get_image(_item, 'landscape', _width=440)
-
-            # we try to get a nice background based on the show
-            _show = _item.get('show', {})
-            if not _show or _show is None:
-                _show = {}
-                pass
-            _fanart = _get_image(_show, 'background', _width=1280, _height=720, fallback=self.get_fanart(context))
-
-            _path = _get_path_from_url(_item, 'self')
-            _video_id = _item['id']
-            _video_item = VideoItem(_title, uri=context.create_uri(['play'], {'video_id': _video_id}), image=_image,
-                                    fanart=_fanart)
-
-            _plot = _item.get('long_description', _item.get('short_description', ''))
-            _video_item.set_plot(_plot)
-
-            _duration = _item.get('duration', '')
-            if _duration:
-                try:
-                    _duration = kodion.utils.datetime_parser.parse(_duration)
-                    _seconds = _duration.second
-                    _seconds += _duration.minute * 60
-                    _seconds += _duration.hour * 60 * 60
-                    _video_item.set_duration_from_seconds(_seconds)
-                except:
-                    _duration = ''
+            # try to find a live stream
+            new_params = {}
+            new_params.update(context.get_params())
+            new_params['event_type'] = 'live'
+            new_params['next_page_allowed'] = '0'
+            new_path = 'redbull/channels/live/'
+            new_context = context.clone(new_path=new_path, new_params=new_params)
+            client = self.get_client(context)
+            response = context.get_function_cache().get(FunctionCache.ONE_MINUTE * 5, client.do_raw,
+                                                        path='channels/live/featured', limit=100)
+            live_result = self._response_to_items(new_context, response)
+            if len(live_result) > 0:
+                for item in live_result:
+                    result.append(item)
                     pass
                 pass
+            pass
 
-            # update events based on their status
-            _stream = _item.get('stream', {})
-            if _stream is None:
-                _stream = {}
+        # add 'All Sports'
+        if context.get_path() == '/redbull/channels/sports/' and not show_all_sports:
+            new_params = {}
+            new_params.update(context.get_params())
+            new_params['all'] = '1'
+            new_context = context.clone(new_params=new_params)
+            all_sports_items = DirectoryItem('All Sports', uri=new_context.get_uri())
+            all_sports_items.set_fanart(self.get_fanart(context))
+            result.append(all_sports_items)
+
+            sub_channels = item.get('sub_channels', [])
+            for sub_channel in sub_channels:
+                channel_item = self._do_channel_item(context, sub_channel)
+                result.append(channel_item)
                 pass
-            _status = _stream.get('status', '')
-            if _status in ['replay', 'complete']:
-                # _video_item.set_title('[B][Replay][/B] %s' % _video_item.get_title())
+            pass
+        return result
+
+    def _do_show_item(self, context, item, make_bold=False):
+        title = item['title']
+        if make_bold:
+            title = '[B]%s[/B]' % title
+            pass
+        image = self._get_image(item, 'portrait', width=440)
+        fanart = self._get_image(item, 'background', width=1280, height=720,
+                                 fallback=self.get_fanart(context))
+
+        path = self._get_path_from_url(context, item, 'episodes')
+        # in the case of the main channel, we sometime get no correct uri for the episodes of the show
+        # we try to compensate the problem here
+        if not path or path == '/':
+            show_id = item['id']
+            path = 'redbull/shows/%s/episodes' % show_id
+            pass
+        show_item = DirectoryItem(title, uri=context.create_uri([path]), image=image, fanart=fanart)
+        return show_item
+
+    def _do_video_item(self, context, item):
+        title = item['title']
+        subtitle = item.get('subtitle', '')
+        if subtitle:
+            title = '%s - %s' % (title, subtitle)
+            pass
+        image = self._get_image(item, 'landscape', width=440)
+
+        # we try to get a nice background based on the show
+        show = item.get('show', {})
+        if not show or show is None:
+            show = {}
+            pass
+        fanart = self._get_image(show, 'background', width=1280, height=720,
+                                 fallback=self.get_fanart(context))
+
+        path = self._get_path_from_url(context, item, 'self')
+        video_id = item['id']
+        video_item = VideoItem(title, uri=context.create_uri(['play'], {'video_id': video_id}), image=image,
+                               fanart=fanart)
+
+        _plot = item.get('long_description', item.get('short_description', ''))
+        video_item.set_plot(_plot)
+
+        duration = item.get('duration', '')
+        if duration:
+            try:
+                duration = kodion.utils.datetime_parser.parse(duration)
+                seconds = duration.second
+                seconds += duration.minute * 60
+                seconds += duration.hour * 60 * 60
+                video_item.set_duration_from_seconds(seconds)
+            except:
+                duration = ''
+                pass
+            pass
+
+        # update events based on their status
+        stream = item.get('stream', {})
+        if stream is None:
+            stream = {}
+            pass
+        status = stream.get('status', '')
+        if status in ['replay', 'complete']:
+            # video_item.set_title('[B][Replay][/B] %s' % video_item.get_title())
+            # do nothing
+            pass
+        elif status in ['live']:
+            video_item.set_title('[B][Live][/B] %s' % video_item.get_title())
+            pass
+        elif status in ['pre-event', 'soon']:
+            try:
+                starts_at = stream.get('starts_at', '')
+                start_time = published = kodion.utils.datetime_parser.parse(starts_at)
+                date_str = context.format_date_short(start_time)
+                time_str = context.format_time(start_time)
+                video_item.set_title('[B]%s %s (GMT)[/B] %s' % (date_str, time_str, video_item.get_title()))
+            except:
+                video_item.set_title('[B][Upcoming][/B] %s' % video_item.get_title())
+                pass
+            pass
+
+        # Fallback: we try to calculate a duration based on the event
+        if not duration:
+            try:
+                starts_at = stream.get('starts_at', '')
+                ends_at = stream.get('ends_at', '')
+                if starts_at and ends_at:
+                    start_time = published = kodion.utils.datetime_parser.parse(starts_at)
+                    end_time = published = kodion.utils.datetime_parser.parse(ends_at)
+                    duration = end_time - start_time
+                    video_item.set_duration_from_seconds(duration.seconds)
+                    pass
+            except:
                 # do nothing
                 pass
-            elif _status in ['live']:
-                _video_item.set_title('[B][Live][/B] %s' % _video_item.get_title())
-                pass
-            elif _status in ['pre-event', 'soon']:
-                try:
-                    _starts_at = _stream.get('starts_at', '')
-                    start_time = _published = kodion.utils.datetime_parser.parse(_starts_at)
-                    date_str = context.format_date_short(start_time)
-                    time_str = context.format_time(start_time)
-                    _video_item.set_title('[B]%s %s (GMT)[/B] %s' % (date_str, time_str, _video_item.get_title()))
-                except:
-                    _video_item.set_title('[B][Upcoming][/B] %s' % _video_item.get_title())
-                    pass
-                pass
+            pass
 
-            # Fallback: we try to calculate a duration based on the event
-            if not _duration:
-                try:
-                    _starts_at = _stream.get('starts_at', '')
-                    _ends_at = _stream.get('ends_at', '')
-                    if _starts_at and _ends_at:
-                        start_time = _published = kodion.utils.datetime_parser.parse(_starts_at)
-                        end_time = _published = kodion.utils.datetime_parser.parse(_ends_at)
-                        _duration = end_time - start_time
-                        _video_item.set_duration_from_seconds(_duration.seconds)
-                        pass
-                except:
-                    # do nothing
-                    pass
+        published = item.get('published_on', '')
+        if published:
+            published = kodion.utils.datetime_parser.parse(published)
+            if isinstance(published, datetime.date):
+                published = datetime.datetime(published.year, published.month, published.day, 0, 0, 0, 0)
                 pass
+            video_item.set_aired_from_datetime(published)
+            video_item.set_date_from_datetime(published)
+            video_item.set_year(published.year)
+            video_item.set_premiered_from_datetime(published)
+            pass
 
-            _published = _item.get('published_on', '')
-            if _published:
-                _published = kodion.utils.datetime_parser.parse(_published)
-                if isinstance(_published, datetime.date):
-                    _published = datetime.datetime(_published.year, _published.month, _published.day, 0, 0, 0, 0)
-                    pass
-                _video_item.set_aired_from_datetime(_published)
-                _video_item.set_date_from_datetime(_published)
-                _video_item.set_year(_published.year)
-                _video_item.set_premiered_from_datetime(_published)
-                pass
+        season = item.get('season_number', 1)
+        if season and season is not None:
+            video_item.set_season(int(season))
+            pass
 
-            _season = _item.get('season_number', 1)
-            if _season and _season is not None:
-                _video_item.set_season(int(_season))
-                pass
+        episode = item.get('episode_number', 1)
+        if episode and episode is not None:
+            video_item.set_episode(int(episode))
+            pass
+        return video_item
 
-            _episode = _item.get('episode_number', 1)
-            if _episode and _episode is not None:
-                _video_item.set_episode(int(_episode))
-                pass
-            return _video_item
-
+    def _response_to_items(self, context, response):
         result = []
 
         response_type = response.get('type', '')
         # channel
         if response_type:
             if response_type == 'channel':
-                result.extend(_do_channel_content(response))
+                result.extend(self._do_channel_content(context, response))
+                pass
+            else:
+                raise KodionException('Unknown response type "%s"' % response_type)
             return result
 
         # channels
         channels = []
         response_channels = response.get('channels', [])
         for response_channel in response_channels:
-            channel_item = _do_channel_item(response_channel)
+            channel_item = self._do_channel_item(context, response_channel)
             channels.append(channel_item)
             pass
         result.extend(channels)
@@ -365,7 +371,7 @@ class Provider(kodion.AbstractProvider):
         shows = []
         response_shows = response.get('shows', [])
         for response_show in response_shows:
-            show_item = _do_show_item(response_show)
+            show_item = self._do_show_item(context, response_show)
             shows.append(show_item)
             pass
 
@@ -374,25 +380,20 @@ class Provider(kodion.AbstractProvider):
         response_videos = response.get('videos', [])
         event_type = context.get_param('event_type', '')
         for response_video in response_videos:
-            if not event_type:
-                video_item = _do_video_item(response_video)
+            # try to filter the video on an event type
+            stream = response_video.get('stream', {})
+            if stream is None:
+                stream = {}
+                pass
+            status = stream.get('status', '')
+            if not event_type or (event_type == 'replay' and status in ['replay', 'complete']) or (
+                            event_type == 'upcoming' and status in ['pre-event', 'soon']) or (
+                            event_type == 'live' and status in ['live']):
+                video_item = self._do_video_item(context, response_video)
                 videos.append(video_item)
                 pass
-            else:
-                # filter based on an event type
-                stream = response_video.get('stream', {})
-                if stream is None:
-                    stream = {}
-                    pass
-                status = stream.get('status', '')
-                if (event_type == 'replay' and status in ['replay', 'complete']) or (
-                                event_type == 'upcoming' and status in ['pre-event', 'soon']) or (
-                                event_type == 'live' and status in ['live']):
-                    video_item = _do_video_item(response_video)
-                    videos.append(video_item)
-                    pass
-                pass
             pass
+
         # in case of upcoming videos we reverse the order
         if event_type == 'upcoming':
             videos = videos[::-1]
@@ -402,11 +403,21 @@ class Provider(kodion.AbstractProvider):
         for featured_item in featured_items:
             feature_type = featured_item.get('type', '')
             if feature_type == 'clip' or feature_type == 'episode' or feature_type == 'film' or feature_type == 'event_stream':
-                video_item = _do_video_item(featured_item)
-                videos.append(video_item)
+                # try to filter the video on an event type
+                stream = featured_item.get('stream', {})
+                if stream is None:
+                    stream = {}
+                    pass
+                status = stream.get('status', '')
+                if not event_type or (event_type == 'replay' and status in ['replay', 'complete']) or (
+                                event_type == 'upcoming' and status in ['pre-event', 'soon']) or (
+                                event_type == 'live' and status in ['live']):
+                    video_item = self._do_video_item(context, featured_item)
+                    videos.append(video_item)
+                    pass
                 pass
             elif feature_type == 'series':
-                show_item = _do_show_item(featured_item)
+                show_item = self._do_show_item(context, featured_item)
                 shows.append(show_item)
                 pass
             else:
@@ -417,31 +428,32 @@ class Provider(kodion.AbstractProvider):
         for search_result in search_results:
             search_result_type = search_result.get('type', '')
             if search_result_type == 'clip' or search_result_type == 'episode' or search_result_type == 'film':
-                video_item = _do_video_item(search_result)
+                video_item = self._do_video_item(context, search_result)
                 videos.append(video_item)
                 pass
             elif search_result_type == 'series':
-                show_item = _do_show_item(search_result, make_bold=True)
+                show_item = self._do_show_item(context, search_result, make_bold=True)
                 shows.append(show_item)
                 pass
             else:
                 raise kodion.KodionException('Unknown search result type "%s"' % search_result_type)
             pass
 
+        # we combine both results because of a possible search. A search will return shows and videos.
         result.extend(shows)
         result.extend(videos)
 
+        # let content type EPISODES win
         if len(shows) > 0:
             context.set_content_type(kodion.constants.content_type.TV_SHOWS)
             pass
-
         if len(videos) > 0:
             context.set_content_type(kodion.constants.content_type.EPISODES)
             pass
 
         # meta (next page)
         next_page_allowed = context.get_param('next_page_allowed', '1') == '1'
-        next_page = _get_path_from_url(response, 'next_page')
+        next_page = self._get_path_from_url(context, response, 'next_page')
         if next_page_allowed and next_page:
             next_page_url = response.get('meta', {}).get('links', {}).get('next_page', '')
             next_page_url = next_page_url.split('?')
@@ -462,21 +474,21 @@ class Provider(kodion.AbstractProvider):
 
     @kodion.RegisterProviderPath('^/play/$')
     def on_play(self, context, re_match):
-        def _compare(item):
-            vq = context.get_settings().get_video_quality()
-            return vq - item['format'].get('height', 0)
-
         video_id = context.get_param('video_id', '')
         if not video_id:
             return False
 
         client = self.get_client(context)
-        streams = client.get_streams(video_id, bandwidth=1)  # middle
-        stream = kodion.utils.find_best_fit(streams, _compare)
+        streams = client.get_streams(video_id)
 
-        if stream.get('upcoming', False):
+        if len(streams) > 0 and streams[0].get('upcoming', False):
             context.get_ui().show_notification(context.localize(self._local_map['redbull.event.upcoming']),
                                                time_milliseconds=5000)
+            return False
+
+        stream = kodion.utils.select_stream(context, streams)
+
+        if stream is None:
             return False
 
         uri_item = UriItem(stream['url'])
@@ -494,7 +506,8 @@ class Provider(kodion.AbstractProvider):
         client = self.get_client(context)
 
         # channels
-        result.extend(self._response_to_items(context, client.get_channels()))
+        channel_response = context.get_function_cache().get(FunctionCache.ONE_HOUR, client.get_channels)
+        result.extend(self._response_to_items(context, channel_response))
 
         # search
         search_item = kodion.items.SearchItem(context, image=context.create_resource_path('media', 'search.png'),
@@ -502,5 +515,6 @@ class Provider(kodion.AbstractProvider):
         result.append(search_item)
 
         return result
+
 
     pass

@@ -1,3 +1,10 @@
+5.1.2 (2015-05-15)
+ADD: ask for video quality (optional)
+UPD: code cleaning
+UPD: Russian (thx 2 BytEvil)
+UPD: kodion
+FIX: add 'Play all' for playlist (again)
+
 5.1.1 (2015-05-10)
 ADD: 'More...' in context menu to provide more items
 ADD: show deprecation warning of old plugin calls starting with Isengard

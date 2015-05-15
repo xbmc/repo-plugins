@@ -18,151 +18,6 @@ __RE_SEASON_EPISODE_MATCHES__ = [re.compile(r'Part (?P<episode>\d+)'),
                                  re.compile(r'Episode (?P<episode>\d+)')]
 
 
-def make_video_item_from_json_data(context, provider, json_data, playlist_item_id_dict={}):
-    video_id = json_data['id']
-    video_item = VideoItem(json_data['title'],
-                           uri=context.create_uri(['play'], {'video_id': video_id}))
-
-    video_item.set_image(json_data.get('image', ''))
-
-    """
-    This is experimental. We try to get the most information out of the title of a video.
-    This is not based on any language. In some cases this won't work at all.
-    TODO: via language and settings provide the regex for matching episode and season.
-    """
-    video_item.set_season(1)
-    video_item.set_episode(1)
-    for regex in __RE_SEASON_EPISODE_MATCHES__:
-        re_match = regex.search(video_item.get_name())
-        if re_match:
-            if 'season' in re_match.groupdict():
-                video_item.set_season(int(re_match.group('season')))
-                pass
-
-            if 'episode' in re_match.groupdict():
-                video_item.set_episode(int(re_match.group('episode')))
-                pass
-            break
-        pass
-
-    settings = context.get_settings()
-
-    # plot
-    channel_name = json_data.get('channel-title', '')
-    description = kodion.utils.strip_html_from_text(json_data.get('description', ''))
-    if channel_name and settings.get_bool('youtube.view.description.show_channel_name', True):
-        description = '[UPPERCASE][B]%s[/B][/UPPERCASE][CR][CR]%s' % (channel_name, description)
-        pass
-    video_item.set_studio(channel_name)
-    # video_item.add_cast(channel_name)
-    video_item.add_artist(channel_name)
-    video_item.set_plot(description)
-
-    # date time
-    date_str = json_data.get('date', '')
-    if date_str:
-        datetime = utils.datetime_parser.parse()
-        video_item.set_year_from_datetime(datetime)
-        video_item.set_aired_from_datetime(datetime)
-        video_item.set_premiered_from_datetime(datetime)
-        pass
-
-    # duration
-    duration = json_data.get('duration', '')
-    if duration:
-        duration = utils.datetime_parser.parse(duration)
-        # we subtract 1 seconds because YouTube returns +1 second to much
-        video_item.set_duration_from_seconds(duration.seconds - 1)
-        pass
-
-    # set fanart
-    video_item.set_fanart(provider.get_fanart(context))
-
-    context_menu = []
-    replace_context_menu = False
-
-    # Refresh ('My Subscriptions', all my playlists)
-    if context.get_path() == '/special/new_uploaded_videos_tv/' or context.get_path().startswith(
-            '/channel/mine/playlist/'):
-        yt_context_menu.append_refresh(context_menu, provider, context)
-        pass
-
-    # Queue Video
-    yt_context_menu.append_queue_video(context_menu, provider, context)
-
-    my_playlists = {}
-    if provider.is_logged_in():
-        resource_manager = provider.get_resource_manager(context)
-        my_playlists = resource_manager.get_related_playlists(channel_id='mine')
-        pass
-
-    if provider.is_logged_in():
-        # add 'Watch Later' only if we are not in my 'Watch Later' list
-        watch_later_playlist_id = my_playlists.get('watchLater', '')
-        yt_context_menu.append_watch_later(context_menu, provider, context, watch_later_playlist_id, video_id)
-        pass
-
-    # play all videos of the playlist
-    some_playlist_match = re.match('^/channel/(.+)/playlist/(?P<playlist_id>.*)/$', context.get_path())
-    if some_playlist_match:
-        replace_context_menu = True
-        playlist_id = some_playlist_match.group('playlist_id')
-
-        yt_context_menu.append_play_all_from_playlist(context_menu, provider, context, playlist_id, video_id)
-        yt_context_menu.append_play_all_from_playlist(context_menu, provider, context, playlist_id)
-        pass
-
-    # 'play with...' (external player)
-    if context.get_settings().is_support_alternative_player_enabled():
-        yt_context_menu.append_play_with(context_menu, provider, context)
-        pass
-
-    channel_id = json_data.get('channel-id', '')
-
-    # got to [CHANNEL]
-    if channel_id and channel_name:
-        # only if we are not directly in the channel provide a jump to the channel
-        if kodion.utils.create_path('channel', channel_id) != context.get_path():
-            yt_context_menu.append_go_to_channel(context_menu, provider, context, channel_id, channel_name)
-            pass
-        pass
-
-    if provider.is_logged_in():
-        # provide 'remove' for videos in my playlists
-        if video_id in playlist_item_id_dict:
-            playlist_match = re.match('^/channel/mine/playlist/(?P<playlist_id>.*)/$', context.get_path())
-            if playlist_match:
-                playlist_id = playlist_match.group('playlist_id')
-                # we support all playlist except 'Watch History'
-                if not playlist_id.startswith('HL'):
-                    playlist_item_id = playlist_item_id_dict[video_id]
-                    context_menu.append((context.localize(provider.LOCAL_MAP['youtube.remove']),
-                                         'RunPlugin(%s)' % context.create_uri(
-                                             ['playlist', 'remove', 'video'],
-                                             {'playlist_id': playlist_id, 'video_id': playlist_item_id,
-                                              'video_name': video_item.get_name()})))
-                    pass
-                pass
-            pass
-
-        # subscribe to the channel of the video
-        yt_context_menu.append_subscribe_to_channel(context_menu, provider, context, channel_id, channel_name)
-        pass
-
-    # more...
-    refresh_container = context.get_path().startswith(
-        '/channel/mine/playlist/LL') or context.get_path() == '/special/disliked_videos/'
-    yt_context_menu.append_more_for_video(context_menu, provider, context, video_id,
-                                          is_logged_in=provider.is_logged_in(),
-                                          refresh_container=refresh_container)
-
-    if len(context_menu) > 0:
-        video_item.set_context_menu(context_menu, replace=replace_context_menu)
-        pass
-
-    return video_item
-
-
 def extract_urls(text):
     result = []
 
@@ -381,8 +236,13 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
         # Queue Video
         yt_context_menu.append_queue_video(context_menu, provider, context)
 
-        # play all videos of the playlist
-        some_playlist_match = re.match('^/channel/(.+)/playlist/(?P<playlist_id>.*)/$', context.get_path())
+        """
+        Play all videos of the playlist.
+
+        /channel/[CHANNEL_ID]/playlist/[PLAYLIST_ID]/
+        /playlist/[PLAYLIST_ID]/
+        """
+        some_playlist_match = re.match(r'^(/channel/(.+))?/playlist/(?P<playlist_id>.*)/$', context.get_path())
         if some_playlist_match:
             replace_context_menu = True
             playlist_id = some_playlist_match.group('playlist_id')

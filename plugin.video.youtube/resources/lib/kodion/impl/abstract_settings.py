@@ -75,6 +75,9 @@ class AbstractSettings(object):
         vq = self.get_int(constants.setting.VIDEO_QUALITY, 1)
         return vq_dict[vq]
 
+    def ask_for_video_quality(self):
+        return self.get_bool(constants.setting.VIDEO_QUALITY_ASK, False)
+
     def show_fanart(self):
         return self.get_bool(constants.setting.SHOW_FANART, True)
 

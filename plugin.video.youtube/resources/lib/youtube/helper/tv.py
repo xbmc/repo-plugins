@@ -2,6 +2,7 @@ __author__ = 'bromix'
 
 from resources.lib import kodion
 from resources.lib.youtube.helper import utils
+from resources.lib.kodion.items.video_item import VideoItem
 
 
 def my_subscriptions_to_items(provider, context, json_data):
@@ -11,7 +12,8 @@ def my_subscriptions_to_items(provider, context, json_data):
     items = json_data.get('items', [])
     for item in items:
         video_id = item['id']
-        video_item = utils.make_video_item_from_json_data(context, provider, item)
+        video_item = VideoItem(item['title'],
+                               uri=context.create_uri(['play'], {'video_id': video_id}))
         result.append(video_item)
 
         video_id_dict[video_id] = video_item

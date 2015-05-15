@@ -53,19 +53,17 @@ class YouTube(LoginClient):
         pass
 
     def get_video_streams(self, context, video_id):
-        def _sort(x):
-            index = {'mp4': 0,
-                     'ts': 0,
-                     'webm': -1,
-                     'flv': -10,
-                     '3gb': -20}
-            container = x.get('format', {}).get('container', '')
-            return index.get(container, -100)
-
         video_info = VideoInfo(context, access_token=self._access_token, language=self._language)
 
         video_streams = video_info.load_stream_infos(video_id)
-        video_streams = sorted(video_streams, key=_sort, reverse=True)
+
+        # update title
+        for video_stream in video_streams:
+            title = '[B]%s[/B] (%s;%s / %s@%d)' % (
+                video_stream['title'], video_stream['container'], video_stream['video']['encoding'],
+                video_stream['audio']['encoding'], video_stream['audio']['bitrate'])
+            video_stream['title'] = title
+            pass
         return video_streams
 
     def remove_playlist(self, playlist_id):
@@ -488,7 +486,8 @@ class YouTube(LoginClient):
             pass
 
         json_data = self._perform_v1_tv_request(method='POST', path='browse', post_data=post_data)
-        data = json_data.get('contents', {}).get('sectionListRenderer', {}).get('contents', [{}])[0].get('shelfRenderer', {}).get('content', {}).get('horizontalListRenderer', {})
+        data = json_data.get('contents', {}).get('sectionListRenderer', {}).get('contents', [{}])[0].get(
+            'shelfRenderer', {}).get('content', {}).get('horizontalListRenderer', {})
         if not data:
             data = json_data.get('continuationContents', {}).get('horizontalListContinuation', {})
             pass
@@ -508,7 +507,7 @@ class YouTube(LoginClient):
         if continuations:
             _result['continuations'] = continuations
 
-            if len(_result['items'])+16 <= self._max_results:
+            if len(_result['items']) + 16 <= self._max_results:
                 self.get_my_subscriptions(page_token=continuations, _result=_result)
                 pass
             pass

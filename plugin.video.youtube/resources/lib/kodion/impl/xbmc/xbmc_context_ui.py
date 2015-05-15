@@ -44,10 +44,11 @@ class XbmcContextUI(AbstractContextUI):
         return xbmc.getSkinDir()
 
     def on_keyboard_input(self, title, default='', hidden=False):
-        keyboard = xbmc.Keyboard(default, title, hidden)
-        keyboard.doModal()
-        if keyboard.isConfirmed() and keyboard.getText():
-            text = utils.to_unicode(keyboard.getText())
+        dialog = xbmcgui.Dialog()
+        result = dialog.input(title, str(default), type=xbmcgui.INPUT_ALPHANUM )
+
+        if result:
+            text = utils.to_unicode(result)
             return True, text
 
         return False, u''

@@ -5,6 +5,7 @@
     <string id="30001">Username</string>
     <string id="30002">Password</string>
 
+    <string id="30009">Always ask for the video quality</string>
     <string id="30010">Video Quality</string>
     <string id="30011">480p</string>
 	<string id="30012">720p (HD)</string>

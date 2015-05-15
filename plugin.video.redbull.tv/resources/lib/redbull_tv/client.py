@@ -12,23 +12,23 @@ class Client():
         self._limit = limit
         pass
 
-    def get_streams(self, video_id, bandwidth=None):
+    def get_streams(self, video_id):
         streams = []
 
         path = 'videos/%s' % str(video_id)
         json_data = self._perform_v1_request(path=path)
-        #uri = json_data.get('videos', {}).get('live', {}).get('uri', '')
         stream = json_data.get('stream', {})
         if stream is None:
             stream = {}
             pass
         if stream.get('status', '') in ['pre-event', 'soon']:
-            format = {'width': 0,
-                      'height': 0,
-                      'bandwidth': 0}
-            video_stream = {'url': '',
-                            'format': format,
-                            'upcoming': True}
+            video_stream = {
+                'title': '%dp@%d' % (0, 0),
+                'sort': [0, 0],
+                'url': '',
+                'upcoming': True,
+                'video': {'height': 0, 'width': 0, 'bandwidth': 0}
+            }
             streams.append(video_stream)
             return streams
 
@@ -57,45 +57,26 @@ class Client():
                 re_match_bandwidth = re.search(re_bandwidth, lines[i])
                 re_match_resolution = re.search(re_resolution, lines[i])
                 if re_match_bandwidth and re_match_resolution:
-                    line = lines[i + 1]
-                    format = {'width': int(re_match_resolution.group('width')),
-                              'height': int(re_match_resolution.group('height')),
-                              'bandwidth': int(re_match_bandwidth.group('bandwidth'))}
-                    video_stream = {'url': line,
-                                    'format': format}
+                    width = int(re_match_resolution.group('width'))
+                    height = int(re_match_resolution.group('height'))
+                    bandwidth = int(re_match_bandwidth.group('bandwidth'))
+                    display_bandwidth = '%.0f kbps' % (bandwidth / 1024)
+                    url = lines[i + 1]
+                    title = '[B]%dx%d[/B] (%s)' % (width, height, display_bandwidth)
+                    if height in [1080, 720, 540, 480, 360, 240]:
+                        title = '[B]%dp[/B] (%s)' % (height, display_bandwidth)
+                        pass
+                    video_stream = {
+                        'title': title,
+                        'sort': [height, bandwidth],
+                        'url': url,
+                        'video': {'height': height, 'width': width, 'bandwidth': bandwidth}
+                    }
                     streams.append(video_stream)
                     pass
                 pass
             pass
 
-        def _sort(x):
-            return x['format']['height'],x['format']['bandwidth']
-
-        streams = sorted(streams, key=_sort, reverse=True)
-
-        # filter the bandwidth
-        if bandwidth is not None:
-            bandwidth_dict = {}
-            for stream in streams:
-                quality = stream['format']['height']
-                data = bandwidth_dict.get(quality, [])
-                data.append(stream)
-                bandwidth_dict[quality] = data
-                pass
-
-            streams = []
-            for quality in bandwidth_dict:
-                quality_list = bandwidth_dict[quality]
-                index = bandwidth
-                if index > len(quality_list)-1:
-                    index = len(quality_list)-1
-                    pass
-
-                streams.append(quality_list[index])
-                pass
-            pass
-
-        streams = sorted(streams, key=_sort, reverse=True)
         return streams
 
     def url_to_path(self, url):

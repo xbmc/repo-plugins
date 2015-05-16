@@ -1,3 +1,7 @@
+5.1.3 (2015-05-16)
+UPD: code cleaning
+FIX: minor fixes
+
 5.1.2 (2015-05-15)
 ADD: ask for video quality (optional)
 UPD: code cleaning

@@ -32,7 +32,7 @@ def _process_play_all(provider, context, re_match):
     video_id = context.get_param('videoid', '')
     if video_id:
         context.log_warning(
-            'USE INSTEAD "plugin://%s/play/?playlist_id=%s&video_id"' % (context.get_id(), playlist_id, video_id))
+            'USE INSTEAD "plugin://%s/play/?playlist_id=%s&video_id=%s"' % (context.get_id(), playlist_id, video_id))
         pass
     else:
         context.log_warning('USE INSTEAD "plugin://%s/play/?playlist_id=%s"' % (context.get_id(), playlist_id))

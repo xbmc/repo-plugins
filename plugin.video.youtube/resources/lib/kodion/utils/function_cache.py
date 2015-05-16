@@ -96,6 +96,7 @@ class FunctionCache(Storage):
             cached_time = data[1]
             pass
 
+        diff_seconds = 0
         now = datetime.datetime.now()
         if cached_time is not None:
             # this is so stupid, but we have the function 'total_seconds' only starting with python 2.7

@@ -410,23 +410,23 @@ class VideoInfo(object):
                             pass
 
                         itag = attr['itag']
-                        format = self.FORMAT.get(itag, None)
-                        if not format:
-                            raise Exception('unknown format for itag "%s"' % itag)
+                        yt_format = self.FORMAT.get(itag, None)
+                        if not yt_format:
+                            raise Exception('unknown yt_format for itag "%s"' % itag)
                         video_stream = {'url': url}
-                        video_stream.update(format)
+                        video_stream.update(yt_format)
 
                         stream_list.append(video_stream)
                         pass
                     elif conn:  # rtmpe
                         url = '%s?%s' % (conn, urllib.unquote(attr['stream']))
                         itag = attr['itag']
-                        format = self.FORMAT.get(itag, None)
-                        format['rtmpe'] = True
-                        if not format:
-                            raise Exception('unknown format for itag "%s"' % itag)
+                        yt_format = self.FORMAT.get(itag, None)
+                        yt_format['rtmpe'] = True
+                        if not yt_format:
+                            raise Exception('unknown yt_format for itag "%s"' % itag)
                         video_stream = {'url': url}
-                        video_stream.update(format())
+                        video_stream.update(yt_format)
 
                         stream_list.append(video_stream)
                         pass
@@ -472,14 +472,14 @@ class VideoInfo(object):
                 re_itag_match = re.search(re_itag, line)
                 if re_itag_match:
                     itag = re_itag_match.group('itag')
-                    format = self.FORMAT.get(itag, None)
-                    if not format:
-                        raise Exception('unknown format for itag "%s"' % itag)
+                    yt_format = self.FORMAT.get(itag, None)
+                    if not yt_format:
+                        raise Exception('unknown yt_format for itag "%s"' % itag)
 
                     width = int(re_match.group('width'))
                     height = int(re_match.group('height'))
-                    video_stream = {'url': line,
-                                    'format': format}
+                    video_stream = {'url': line}
+                    video_stream.update(yt_format)
                     streams.append(video_stream)
                     pass
                 pass
@@ -570,7 +570,7 @@ class VideoInfo(object):
 
             if stream_map['itag'] != '140' and stream_map['itag'] != '171':
                 video_stream = {'url': stream_map['url'],
-                                'format': itag_map[stream_map['itag']]}
+                                'yt_format': itag_map[stream_map['itag']]}
                 stream_list.append(video_stream)
                 pass
             pass
@@ -593,25 +593,25 @@ class VideoInfo(object):
                         return self._method_watch(video_id)
 
                     itag = stream_map['itag']
-                    format = self.FORMAT.get(itag, None)
-                    if not format:
-                        raise Exception('unknown format for itag "%s"' % itag)
+                    yt_format = self.FORMAT.get(itag, None)
+                    if not yt_format:
+                        raise Exception('unknown yt_format for itag "%s"' % itag)
 
                     video_stream = {'url': url,
                                     'meta': meta_info}
-                    video_stream.update(format)
+                    video_stream.update(yt_format)
                     stream_list.append(video_stream)
                     pass
                 elif conn:
                     url = '%s?%s' % (conn, urllib.unquote(stream_map['stream']))
                     itag = stream_map['itag']
-                    format = self.FORMAT.get(itag, None)
-                    if not format:
-                        raise Exception('unknown format for itag "%s"' % itag)
-                    format['rtmpe'] = True
+                    yt_format = self.FORMAT.get(itag, None)
+                    if not yt_format:
+                        raise Exception('unknown yt_format for itag "%s"' % itag)
+                    yt_format['rtmpe'] = True
                     video_stream = {'url': url,
                                     'meta': meta_info}
-                    video_stream.update(format)
+                    video_stream.update(yt_format)
                     stream_list.append(video_stream)
                     pass
                 pass

@@ -45,7 +45,7 @@ class XbmcContextUI(AbstractContextUI):
 
     def on_keyboard_input(self, title, default='', hidden=False):
         dialog = xbmcgui.Dialog()
-        result = dialog.input(title, str(default), type=xbmcgui.INPUT_ALPHANUM )
+        result = dialog.input(title, str(default), type=xbmcgui.INPUT_ALPHANUM)
 
         if result:
             text = utils.to_unicode(result)

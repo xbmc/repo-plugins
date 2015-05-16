@@ -8,6 +8,7 @@ def _process_language(provider, context):
         return
 
     client = provider.get_client(context)
+
     kodi_language = context.get_language()
     json_data = client.get_supported_languages(kodi_language)
     items = json_data['items']

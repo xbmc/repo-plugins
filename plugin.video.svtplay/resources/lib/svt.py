@@ -77,7 +77,7 @@ def getCategories():
       continue
 
     category["title"] = common.replaceHTMLCodes(title)
-    category["thumbnail"] = BASE_URL + thumbs[index]
+    category["thumbnail"] = helper.prepareThumb(thumbs[index], baseUrl=BASE_URL)
     categories.append(category)
 
   return categories
@@ -107,9 +107,8 @@ def getProgramsForCategory(url):
     title = common.parseDOM(article, "span", attrs= { "class" : "play_videolist-element__title-text" })[0]
     title = common.replaceHTMLCodes(title)
     thumbnail = common.parseDOM(article, "img", ret="src")[0]
-    program = { "title": title, "url": url, "thumbnail": thumbnail}
+    program = { "title": title, "url": url, "thumbnail": helper.prepareThumb(thumbnail, baseUrl=BASE_URL)}
     programs.append(program)
-
   return programs
 
 
@@ -249,11 +248,11 @@ def getChannels():
     title = common.parseDOM(box, "a", attrs = {"class" : anchor_class}, ret = "data-channel")[0]
     url = common.parseDOM(box, "a", attrs = {"class" : anchor_class}, ret = "href")[0]
     plot = common.parseDOM(box, "span", attrs = {"class" : "[^\"']*play_zapper__menu-item-title[^\"']*"})[0]
-    thumbnail = BASE_URL + common.parseDOM(box, "a", attrs = {"class" : anchor_class}, ret = "data-thumbnail")[0]
+    thumbnail = common.parseDOM(box, "a", attrs = {"class" : anchor_class}, ret = "data-thumbnail")[0]
     channels.append({
       "title" : title.title(),
       "url" : url,
-      "thumbnail" : thumbnail,
+      "thumbnail" : helper.prepareThumb(thumbnail, baseUrl=BASE_URL),
       "info" : { "title" : common.replaceHTMLCodes(plot), "plot" : common.replaceHTMLCodes(plot)}
     })
 

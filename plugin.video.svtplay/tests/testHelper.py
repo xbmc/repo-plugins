@@ -104,3 +104,15 @@ class TestHelperModule(unittest.TestCase):
     expected = "http://apa/extralarge/"
     result = helper.prepareThumb(url, "www.base.org")
     self.assertEqual(expected, result)
+
+  def test_prepareThumbLeadingSlashes(self):
+    url = "//www.svt.se/apa/medium/"
+    expected = "http://www.svt.se/apa/extralarge/"
+    result = helper.prepareThumb(url, "www.base.org")
+    self.assertEqual(expected, result)
+
+  def test_prepareThumbMissingHttp(self):
+    url = "/apa/medium/"
+    expected = "http://svtplay.se/apa/extralarge/"
+    result = helper.prepareThumb(url, "http://svtplay.se")
+    self.assertEqual(expected, result)

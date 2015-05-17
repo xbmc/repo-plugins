@@ -7,7 +7,7 @@ import xbmcplugin
 from ..abstract_provider_runner import AbstractProviderRunner
 from ...exceptions import KodionException
 from ...items import *
-from ... import constants, AbstractProvider
+from ... import AbstractProvider
 from . import info_labels
 from . import xbmc_items
 

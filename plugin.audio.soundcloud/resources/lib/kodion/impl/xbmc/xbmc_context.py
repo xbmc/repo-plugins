@@ -1,14 +1,14 @@
-import locale
 import sys
 import urllib
 import urlparse
 import weakref
+import datetime
 
 import xbmc
 import xbmcaddon
+
 import xbmcplugin
 import xbmcvfs
-import datetime
 from ..abstract_context import AbstractContext
 from .xbmc_plugin_settings import XbmcPluginSettings
 from .xbmc_context_ui import XbmcContextUI
@@ -98,6 +98,12 @@ class XbmcContext(AbstractContext):
         return _time_obj.strftime(time_format)
 
     def get_language(self):
+        """
+        The xbmc.getLanguage() method is fucked up!!! We always return 'en-US' for now
+        """
+        return 'en-US'
+
+        """
         if self.get_system_version().get_name() == 'Frodo':
             return 'en-US'
 
@@ -109,10 +115,12 @@ class XbmcContext(AbstractContext):
         except Exception, ex:
             self.log_error('Failed to get system language (%s)', ex.__str__())
             return 'en-US'
+        pass
+        """
 
     def get_system_version(self):
         if not self._system_version:
-            self._system_version = XbmcSystemVersion()
+            self._system_version = XbmcSystemVersion(version='', name='')
             pass
 
         return self._system_version

@@ -9,6 +9,7 @@ try:
     import cPickle as pickle
 except ImportError:
     import pickle
+
     pass
 
 
@@ -54,7 +55,7 @@ class Storage(object):
             self._file.isolation_level = None
             self._cursor = self._file.cursor()
             self._cursor.execute('PRAGMA journal_mode=MEMORY')
-            #self._cursor.execute('PRAGMA synchronous=OFF')
+            # self._cursor.execute('PRAGMA synchronous=OFF')
             self._create_table()
         pass
 
@@ -161,7 +162,7 @@ class Storage(object):
 
     def _get_ids(self, oldest_first=True):
         self._open()
-        #self.sync()
+        # self.sync()
         query = 'SELECT key FROM %s' % self._table_name
         if oldest_first:
             query = '%s ORDER BY time ASC' % query

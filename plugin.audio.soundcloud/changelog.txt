@@ -1,3 +1,7 @@
+1.2.1 (2015-05-17)
+UPD: resized fanart for better support of visualization
+UPD: kodion
+
 1.2.0 (2015-05-09)
 ADD: dark fanart to work better with visualizations
 UPD: kodion

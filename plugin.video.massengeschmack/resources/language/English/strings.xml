@@ -60,8 +60,13 @@
     <string id="30265">Music</string>
     <string id="30266">Germany</string>
     <string id="30267">In Tonangeber Nils reviews new music album releases and live concert DVDs. He also invites musicians as guests into the studio and talks with them about their music and performances. Featuring Klaus Kauker.</string>
-
-    <string id="30400">Hoaxilla-TV</string>
+	
+	<string id="30290">Sakura</string>
+    <string id="30291">Anime, Manga</string>
+    <string id="30292">Germany</string>
+    <string id="30293">Sakura is a magazine about Anime and Manga</string>
+    
+	<string id="30400">Hoaxilla-TV</string>
     <string id="30401">Information, Education, Scepticism Conspiracy Theories, Urban Legends</string>
     <string id="30402">Germany</string>
     <string id="30403">Hoaxilla-TV is a video series by the moderators of Hoaxilla, a sceptic podcast about myths, urban legends, conspiracy theories, culture and science.</string>
@@ -103,6 +108,9 @@
     <string id="30367">-> Massengeschmack Direkt</string>
     <string id="30368">Postecke has been replaced by “Massengeschmack Direkt”. Click on this link to go to the new “Massengeschmack Direkt” category. You can also find it in the main category „Massengeschmack-TV“</string>
     
+	<string id="30370">All Sakura epsisodes und interviews</string>
+    <string id="30371">regular Sakura episodes</string>
+	
     <!-- General runtime error messages -->
     <string id="30901">Invalid internal command![CR]This is probably a bug. You should report it if it happens more often.</string>
     <string id="30902">Request failed!</string>

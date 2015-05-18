@@ -61,6 +61,11 @@
     <string id="30266">Deutschland</string>
     <string id="30267">In Tonangeber rezensiert Nils Releases neuer Musik-Alben und Live-Konzert-DVDs. Außerdem lädt er Musiker als Gäste ins Studio ein und spricht mit ihnen über ihre Musik und Konzerte. Featuring Klaus Kauker.</string>
 
+	<string id="30290">Sakura</string>
+    <string id="30291">Anime, Manga</string>
+    <string id="30292">Deutschland</string>
+    <string id="30293">Sakura beschäftigt sich mit der Manga- und Anime-Szene sowie japanischem Lifestyle</string>
+	
     <string id="30400">Hoaxilla-TV</string>
     <string id="30401">Information, Education, Scepticism Conspiracy Theories, Urban Legends</string>
     <string id="30402">Deutschland</string>
@@ -101,6 +106,9 @@
     <string id="30367">-> Massengeschmack Direkt</string>
     <string id="30368">Postecke wurde durch „Massengeschmack Direkt“ ersetzt. Klicken Sie auf den Link, um zur neuen „Massengeschmack Direkt“-Kategorie zu gelangen. Sie können diese auch in der Hauptkategorie „Massengeschmack-TV“ finden.</string>
     
+	<string id="30370">Alle Sakura-Folgen und Interviews</string>
+    <string id="30371">Reguläre Sakura-Folgen</string>
+	
     <!-- General runtime error messages -->
     <string id="30901">Ungültiges internes Kommando![CR]Dies ist möglicherweise ein Bug und Sie sollten ihn melden, wenn er häufiger auftritt.</string>
     <string id="30902">Request fehlgeschlagen!</string>

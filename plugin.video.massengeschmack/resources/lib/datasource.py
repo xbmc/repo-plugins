@@ -127,6 +127,15 @@ class DataSource(object):
                 ADDON_BASE_PATH + '/resources/media/fanart-' + MGTVDataSource.module + '.jpg',
                 MGTVDataSource.showMetaData
             ),
+			# Sakura
+            ListItem(
+                SakuraDataSource.id,
+                ADDON.getLocalizedString(30290),
+                resources.lib.assembleListURL(SakuraDataSource.module),
+                ADDON_BASE_PATH + '/resources/media/banner-' + SakuraDataSource.module + '.png',
+                ADDON_BASE_PATH + '/resources/media/fanart-' + SakuraDataSource.module + '.jpg',
+                SakuraDataSource.showMetaData
+            ),
             # Live
             ListItem(
                 LiveDataSource.id,
@@ -1276,6 +1285,140 @@ class HoaxillaTVDataSource(DataSource):
     def __getThumbnailURL(self, guid):
         return 'http://dl.massengeschmack.tv/img/mag/' + guid + '.jpg'
 
+class SakuraDataSource(DataSource):
+    id           = 9
+    module       = 'sakura'
+    showMetaData = {
+        'Title'    : ADDON.getLocalizedString(30290),
+        'Director' :'Volker Robrahn, Maria Timonina',
+        'Genre'    : ADDON.getLocalizedString(30291),
+        'Premiered':'21.04.2015',
+        'Country'  : ADDON.getLocalizedString(30292),
+        'Plot'     : ADDON.getLocalizedString(30293)
+    }
+    
+    def __init__(self):
+        self.__urls = {
+            'hd' : {
+                'all'          : DataSource._buildFeedURL(self, [1, 2], 'hd'),
+                'episodes'     : DataSource._buildFeedURL(self, [1], 'hd'),
+                'interviews'     : DataSource._buildFeedURL(self, [2], 'hd')
+            },
+            'mobile' : {
+                'all'          : DataSource._buildFeedURL(self, [1, 2], 'mobile'),
+                'episodes'     : DataSource._buildFeedURL(self, [1], 'mobile'),
+                'interviews'     : DataSource._buildFeedURL(self, [2], 'mobile')
+            },
+            'audio' : {
+                'all'          : DataSource._buildFeedURL(self, [1, 2], 'audio'),
+                'episodes'     : DataSource._buildFeedURL(self, [1], 'audio'),
+                'interviews'     : DataSource._buildFeedURL(self, [2], 'audio')
+            }
+        }
+    
+    def getListItems(self):
+        audioOnly = ADDON.getSetting('content.audioOnly')
+        
+        quality = None
+        if 'true' == audioOnly:
+            quality = 'audio'
+        else:
+            if 0 == int(ADDON.getSetting('content.quality')):
+                quality = 'hd'
+            else:
+                quality = 'mobile'
+        
+        submodule = None
+        if 'submodule' in ADDON_ARGS and ADDON_ARGS['submodule'] in self.__urls[quality]:
+            submodule = ADDON_ARGS['submodule']
+        
+        if None == submodule:
+            return self.__getBaseList()
+        
+        data      = resources.lib.parseRSSFeed(self.__urls[quality][submodule], True)
+        listItems = []
+                
+        for i in data:
+            iconimage = i["thumbUrl"]
+            date      = resources.lib.parseUTCDateString(i['pubdate']).strftime('%d.%m.%Y')
+            metaData  = {
+                'Title'     : i['title'],
+                'Genre'     : ADDON.getLocalizedString(30291),
+                'Date'      : date,
+                'Premiered' : date,
+                'Country'   : ADDON.getLocalizedString(30292),
+                'Plot'      : i['description'],
+                'Duration'  : int(i['duration']) / 60
+            }
+            streamInfo = {
+                'duration' : i['duration']
+            }
+            
+            listItems.append(
+                ListItem(
+                    self.id,
+                    i['title'],
+                    resources.lib.assemblePlayURL(i['url'], i['title'], iconimage, metaData, streamInfo),
+                    iconimage,
+                    ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
+                    metaData,
+                    streamInfo,
+                    False
+                )
+            )
+        
+        return listItems
+    
+    def getContentMode(self):
+        if 'submodule' in ADDON_ARGS:
+            return 'episodes'
+        
+        return 'tvshows'
+    
+    def __getThumbnailURL(self, guid):
+        return 'http://dl.massengeschmack.tv/img/mag/' + guid + '.jpg'
+    
+    def __getBaseList(self):
+        return [
+            # All
+            ListItem(
+                self.id,
+                ADDON.getLocalizedString(30300),
+                resources.lib.assembleListURL(self.module, 'all'),
+                ADDON_BASE_PATH + '/resources/media/banner-' + self.module + '.png',
+                ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
+                {
+                    'Title': ADDON.getLocalizedString(30300),
+                    'Plot': ADDON.getLocalizedString(30370)
+                }
+            ),
+            # Episodes
+            ListItem(
+                self.id,
+                ADDON.getLocalizedString(30301),
+                resources.lib.assembleListURL(self.module, 'episodes'),
+                ADDON_BASE_PATH + '/resources/media/banner-' + self.module + '.png',
+                ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
+                {
+                    'Title': ADDON.getLocalizedString(30301),
+                    'Plot': ADDON.getLocalizedString(30371)
+                }
+            ),
+            # Interviews
+            ListItem(
+                self.id,
+                ADDON.getLocalizedString(30302),
+                resources.lib.assembleListURL(self.module, 'interviews'),
+                ADDON_BASE_PATH + '/resources/media/banner-' + self.module + '.png',
+                ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
+                {
+                    'Title': ADDON.getLocalizedString(30302),
+                    'Plot': ADDON.getLocalizedString(30354)
+                }
+            )
+        ]
+		
+		
 def createDataSource(module=''):
     """
     Create a data source object based on the magazine name.
@@ -1305,5 +1448,7 @@ def createDataSource(module=''):
         return TonangeberDataSource()
     elif 'hoaxillatv' == module:
         return HoaxillaTVDataSource()
+    elif 'sakura' == module:
+        return SakuraDataSource()
     else:
         return DataSource()

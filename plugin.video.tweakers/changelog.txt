@@ -1,3 +1,6 @@
+v1.0.4 (Monday, 18 may 2015) :
+- adjustments due to changes in the website: cookiewall circumvented by adding a cookie to the header (thanks bas lichtjaar)
+
 v1.0.3 (Wednesday, 25 February 2015) :
 - play the highest video quality that's available (kudos to Amelandbor!)
 

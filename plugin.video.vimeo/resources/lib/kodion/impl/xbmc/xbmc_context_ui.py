@@ -44,10 +44,11 @@ class XbmcContextUI(AbstractContextUI):
         return xbmc.getSkinDir()
 
     def on_keyboard_input(self, title, default='', hidden=False):
-        keyboard = xbmc.Keyboard(default, title, hidden)
-        keyboard.doModal()
-        if keyboard.isConfirmed() and keyboard.getText():
-            text = utils.to_unicode(keyboard.getText())
+        dialog = xbmcgui.Dialog()
+        result = dialog.input(title, str(default), type=xbmcgui.INPUT_ALPHANUM)
+
+        if result:
+            text = utils.to_unicode(result)
             return True, text
 
         return False, u''
@@ -63,6 +64,10 @@ class XbmcContextUI(AbstractContextUI):
     def on_yes_no_input(self, title, text):
         dialog = xbmcgui.Dialog()
         return dialog.yesno(title, text)
+
+    def on_ok(self, title, text):
+        dialog = xbmcgui.Dialog()
+        return dialog.ok(title, text)
 
     def on_remove_content(self, content_name):
         text = self._context.localize(constants.localize.REMOVE_CONTENT) % content_name

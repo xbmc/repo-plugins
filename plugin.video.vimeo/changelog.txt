@@ -1,3 +1,8 @@
+4.1.2 (2015-05-19)
+UPD: proper video selection
+UPD: framework
+FIX: forum link in addon.xml
+
 4.1.1 (2015-04-04)
 FIX: login (encoding issues)
 FIX: updating search history

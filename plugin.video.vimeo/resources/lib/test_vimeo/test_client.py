@@ -1,9 +1,8 @@
 __author__ = 'bromix'
 
-from resources.lib import kodion
-from resources.lib.vimeo.client import Client
-
 import unittest
+
+from resources.lib.vimeo.client import Client
 
 
 class TestClient(unittest.TestCase):
@@ -19,7 +18,7 @@ class TestClient(unittest.TestCase):
     def test_create_authorization(self):
         client = Client()
         params = {'x_auth_password': 'ENTER YOU PW HERE ^^',
-                  'x_auth_username': 'bromix@gmx.net',
+                  'x_auth_username': 'YOUR@MAIL.COM',
                   'x_auth_permission': 'delete',
                   'x_auth_mode': 'client_auth',
                   'oauth_timestamp': '1428164862',
@@ -31,7 +30,7 @@ class TestClient(unittest.TestCase):
 
     def test_get_video_streams(self):
         client = Client()
-        streams = client.get_video_streams(video_id='68375962')
+        streams = client.get_video_streams(video_id='128267976')
         pass
 
     def test_search(self):

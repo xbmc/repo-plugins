@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.vimeo" name="Vimeo" version="4.1.1" provider-name="bromix">
+<addon id="plugin.video.vimeo" name="Vimeo" version="4.1.2" provider-name="bromix">
 	<requires>
 		<import addon="xbmc.python" version="2.14.0"/>
 	</requires>
@@ -15,8 +15,8 @@
 		<language></language>
 		<platform>all</platform>
 		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-		<forum>http://forum.kodi.tv/showthread.php?tid=200735</forum>
-		<website>www.vimeo.com/</website>
+		<forum>http://forum.kodi.tv/showthread.php?tid=220437</forum>
+		<website>www.vimeo.com</website>
 		<email>bromix at gmx dot net</email>
 		<source>https://github.com/bromix/plugin.video.vimeo</source>
 	</extension>

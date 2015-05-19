@@ -1,34 +1,36 @@
-import re
+__author__ = 'bromix'
+
 from resources.lib import kodion
 from resources.lib.kodion.items import VideoItem, NextPageItem
 from resources.lib.kodion.items.directory_item import DirectoryItem
-
-__author__ = 'bromix'
 
 import xml.etree.ElementTree as ET
 
 
 def do_xml_to_video_stream(context, provider, xml):
-    def _sort(x):
-        return x['resolution']
-
     result = []
     root = ET.fromstring(xml)
     video = root.find('video')
     if video is not None:
         for video_file in video:
             height = int(video_file.get('height'))
+            width = int(video_file.get('width'))
             url = video_file.get('url')
             mime_type = video_file.get('mime_type')
 
-            video_info = {'url': url,
-                          'resolution': height,
-                          'format': mime_type}
+            title = '[B]%dx%d[/B] (%s)' % (width, height, mime_type)
+            if height in [1080, 720, 480, 360, 240]:
+                title = '[B]%dp[/B] (%s)' % (height, mime_type)
+                pass
+            video_info = {'title': title,
+                          'url': url,
+                          'sort': [width],
+                          'video': {'height': height, 'format': mime_type}
+            }
             result.append(video_info)
             pass
         pass
 
-    result = sorted(result, key=_sort, reverse=False)
     return result
 
 

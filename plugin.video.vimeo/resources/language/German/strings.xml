@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <!-- Kodion Settings -->
-    <string id="30000">Allgemein</string>
-    <string id="30001">Benutzername</string>
-    <string id="30002">Passwort</string>
+    <string id="30000">General</string>
+    <string id="30001">Username</string>
+    <string id="30002">Password</string>
 
-    <string id="30010">Video Qualität</string>
+    <string id="30009">Immer nach der Videoqualität fragen</string>
+    <string id="30010">Video Quality</string>
     <string id="30011">480p</string>
 	<string id="30012">720p (HD)</string>
 	<string id="30013">1080p (HD)</string>
@@ -15,45 +16,45 @@
     <string id="30017">360p</string>
 
     <string id="30020">Allow 3D</string>
-    <string id="30021">Fanart anzeigen</string>
-    <string id="30022">Einträge pro Seite</string>
-    <string id="30023">Größe der Suchhistorie</string>
-    <string id="30024">Cache-Größe (MB)</string>
-    <string id="30025">Setup-Assistenten aktivieren</string>
-    <string id="30026">Ansicht überschreiben</string>
-    <string id="30027">Ansicht: Default</string>
-    <string id="30028">Ansicht: Episoden</string>
-    <string id="30029">Ansicht: Filme</string>
-    <string id="30030">Setup-Assistenten ausführen?</string>
-    <string id="30031">Fortgeschritten</string>
-    <string id="30032">Ansicht: TV Shows</string>
-    <string id="30033">Ansicht: Songs</string>
-    <string id="30034">Ansicht: Interpreten</string>
-    <string id="30035">Ansicht: Alben</string>
-    <string id="30036">Alternativen Player unterstützen</string>
+    <string id="30021">Show Fanart</string>
+    <string id="30022">Items per page</string>
+    <string id="30023">Search History Size</string>
+    <string id="30024">Cache Size (MB)</string>
+    <string id="30025">Enable setup-wizard</string>
+    <string id="30026">Override View</string>
+    <string id="30027">View: Default</string>
+    <string id="30028">View: Episodes</string>
+    <string id="30029">View: Movies</string>
+    <string id="30030">Execute setup-wizard?</string>
+    <string id="30031">Advanced</string>
+    <string id="30032">View: TV Shows</string>
+    <string id="30033">View: Songs</string>
+    <string id="30034">View: Artists</string>
+    <string id="30035">View: Albums</string>
+    <string id="30036">Support alternative player</string>
 
     <!-- Kodion Common -->
-    <string id="30100">Favoriten</string>
-    <string id="30101">Zu Addon Favs hinzufügen</string>
-    <string id="30102">Suche</string>
-    <string id="30103">Mediathek</string>
+    <string id="30100">Favorites</string>
+    <string id="30101">Add to addon favs</string>
+    <string id="30102">Search</string>
+    <string id="30103">Library</string>
     <string id="30104">Highlights</string>
-    <string id="30105">Archiv</string>
-    <string id="30106">Nächste Seite (%d)</string>
-    <string id="30107">Später ansehen</string>
-    <string id="30108">Entfernen</string>
-    <string id="30109">Neueste Videos</string>
-    <string id="30110">Neue Suche</string>
-    <string id="30111">Anmelden</string>
-    <string id="30112">Abmelden</string>
-    <string id="30113">Umbenennen</string>
-    <string id="30114">Löschung bestätigen</string>
-    <string id="30115">Entfernung bestätigen</string>
-    <string id="30116">Soll "%s" gelöscht werden?</string>
-    <string id="30117">Soll "%s" entfernt werden?</string>
-    <string id="30118">Löschen</string>
-    <string id="30119">Bitte warten...</string>
-    <string id="30120">Leeren</string>
+    <string id="30105">Archive</string>
+    <string id="30106">Next Page (%d)</string>
+    <string id="30107">Watch Later</string>
+    <string id="30108">Remove</string>
+    <string id="30109">Latest Videos</string>
+    <string id="30110">New Search</string>
+    <string id="30111">Sign In</string>
+    <string id="30112">Sign Out</string>
+    <string id="30113">Rename</string>
+    <string id="30114">Confirm delete</string>
+    <string id="30115">Confirm remove</string>
+    <string id="30116">Delete "%s"?</string>
+    <string id="30117">Remove "%s"?</string>
+    <string id="30118">Delete</string>
+    <string id="30119">Please wait...</string>
+    <string id="30120">Clear</string>
 
     <!-- Vimeo -->
     <string id="30500">Mein Feed</string>

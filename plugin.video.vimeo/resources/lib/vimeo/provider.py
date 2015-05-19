@@ -1,5 +1,6 @@
 from resources.lib.kodion.items import DirectoryItem, UriItem
 from resources.lib.vimeo.client import Client
+from resources.lib.vimeo.helper import do_xml_error
 
 __author__ = 'bromix'
 
@@ -255,8 +256,11 @@ class Provider(kodion.AbstractProvider):
         video_item = helper.do_xml_video_response(context, self, client.get_video_info(video_id))
         xml = self.get_client(context).get_video_streams(video_id=video_id)
 
+        if not do_xml_error(context, self, xml):
+            return False
+
         video_streams = helper.do_xml_to_video_stream(context, self, xml)
-        video_stream = kodion.utils.find_best_fit(video_streams, _compare)
+        video_stream = kodion.utils.select_stream(context, video_streams)
 
         video_item.set_uri(video_stream['url'])
         return video_item

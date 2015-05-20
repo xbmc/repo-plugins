@@ -35,10 +35,7 @@ plugin.name = addon.getAddonInfo('name')
 
 _addon_id = addon.getAddonInfo('id')
 
-config = wimpy.Config(
-    api=wimpy.TIDAL_API if addon.getSetting('site') == '1' else wimpy.WIMP_API,
-    quality=[Quality.lossless, Quality.high, Quality.low][int('0' + addon.getSetting('quality'))])
-
+config = wimpy.Config(quality=[Quality.lossless, Quality.high, Quality.low][int('0' + addon.getSetting('quality'))])
 wimp = wimpy.Session(config=config)
 
 is_logged_in = False
@@ -61,6 +58,8 @@ def view(data_items, urls, end=True):
         info = {'title': item.name}
         if isinstance(item, Album):
             info.update({'album': item.name, 'artist': item.artist.name})
+            if item.release_date:
+                info['year'] = item.release_date.year
         elif isinstance(item, Artist):
             info.update({'artist': item.name})
         li.setInfo('music', info)
@@ -86,7 +85,9 @@ def track_list(tracks):
             'tracknumber': track.track_num,
             'discnumber': track.disc_num,
             'artist': track.artist.name,
-            'album': track.album.name})
+            'album': track.album.name,
+            'year': track.album.release_date.year if track.album.release_date else None,
+        })
         if track.album:
             li.setThumbnailImage(track.album.image)
         radio_url = plugin.url_for(track_radio, track_id=track.id)
@@ -161,6 +162,7 @@ def genre_playlists(genre_id):
 
 @plugin.route('/genre/<genre_id>/albums')
 def genre_albums(genre_id):
+    xbmcplugin.setContent(plugin.handle, 'albums')
     items = wimp.get_genre_items(genre_id, 'albums')
     view(items, urls_from_id(album_view, items))
 
@@ -187,7 +189,7 @@ def whats_new():
     add_directory('New Tracks', plugin.url_for(featured, group='new', content_type='tracks'))
     add_directory('Top Albums', plugin.url_for(featured, group='top', content_type='albums'))
     add_directory('Top Tracks', plugin.url_for(featured, group='top', content_type='tracks'))
-    if config.api is wimpy.WIMP_API:
+    if wimp.country_code != 'US':
         add_directory('Local Playlists', plugin.url_for(featured, group='local', content_type='playlists'))
         add_directory('Local Albums', plugin.url_for(featured, group='local', content_type='albums'))
         add_directory('Local Tracks', plugin.url_for(featured, group='local', content_type='tracks'))
@@ -200,6 +202,7 @@ def featured(group=None, content_type=None):
     if content_type == 'tracks':
         track_list(items)
     elif content_type == 'albums':
+        xbmcplugin.setContent(plugin.handle, 'albums')
         view(items, urls_from_id(album_view, items))
     elif content_type == 'playlists':
         view(items, urls_from_id(playlist_view, items))

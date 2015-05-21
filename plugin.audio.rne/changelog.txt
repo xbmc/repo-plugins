@@ -1,3 +1,5 @@
+1.0.1
+- Quick fix for direct channels play detected in some platforms.
 1.0.0
 - Updated version number for official repo bump.
 - Updated french translations (credits: Emil). 

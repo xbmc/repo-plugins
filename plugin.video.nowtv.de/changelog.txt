@@ -1,0 +1,6 @@
+1.0.0 (2015-05-22)
+ADD: support 'add to addon fav'
+ADD: show thumbs for episodes
+ADD: playback of f4v streams (thx 2 Jin)
+ADD: initial version for tests
+UPD: finalized images

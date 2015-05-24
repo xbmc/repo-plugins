@@ -1,16 +1,17 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import sys, urlparse, urllib, json, datetime, os, hashlib, sqlite3, time
+import sys, urlparse, urllib, json, datetime, os, hashlib, sqlite3, time, uuid, platform
 
 import xbmcaddon, xbmcplugin, xbmcgui, xbmcvfs
 
 from bs4 import BeautifulSoup
 import requests
 
-addon 			= xbmcaddon.Addon(id='plugin.video.gronkh.de')
+addonname		= 'plugin.video.gronkh.de'
+addon 			= xbmcaddon.Addon(id=addonname)
 loc 			= addon.getLocalizedString
-cachedir		= 'special://home/addon_data/plugin.video.gronkh.de/caches/'
+cachedir		= 'special://userdata/addon_data/plugin.video.gronkh.de/caches/'
 
 if sys.argv[1] == 'clearcache':
 	dirs, files = xbmcvfs.listdir(cachedir)
@@ -29,16 +30,40 @@ fanart			= 'special://home/addons/plugin.video.gronkh.de/fanart.jpg'
 setting 		= addon.getSetting
 params 			= urlparse.parse_qs(sys.argv[2][1:])
 
-baseurl			= 'http://gronkh.1750studios.com/api/'
+baseurl			= 'http://gronkh.1750studios.com/api/v1/'
+
 twitchStreamInfo= 'https://api.twitch.tv/kraken/streams/'
 
 twitchnames		= ['gronkh']
+
+if not setting('user-id'):
+	addon.setSetting('user-id', uuid.uuid4().hex[:16])
 
 ##### Helpers
 def makeUrl(params):
 	return sys.argv[0] + '?' + urllib.urlencode(params)
 
+def getUserAgent():
+	if setting('user-agent'):
+		return setting('user-agent') + addon.getAddonInfo('version')
+	kodiversion = xbmc.getInfoLabel('System.BuildVersionShort')
+	addonversion = addon.getAddonInfo('version')
+	busytext = xbmc.getLocalizedString(503)
+	os = xbmc.getInfoLabel('System.OsVersionInfo')
+	# This has to be done, since Kodi sometimes returns "Busy", what is wrong … and then even localized…
+	while os == busytext.encode('utf-8'):
+		os = xbmc.getInfoLabel('System.OsVersionInfo')
+	useragent = 'Kodi/' + kodiversion + ' (' + os + ') ' + addonname + '/'
+	addon.setSetting('user-agent', useragent)
+	return useragent + addonversion
+
 def getCachedJson(url):
+	headers = {
+		"DNT": 1 if (setting('donottrack') == True) else 0,
+		"X-UID": setting('user-id'),
+		"User-Agent": getUserAgent(),
+		"X-Resolution": xbmc.getInfoLabel('System.ScreenResolution').split('@')[0]
+	}
 	if not xbmcvfs.exists(cachedir):
 		xbmcvfs.mkdirs(cachedir)
 
@@ -52,7 +77,7 @@ def getCachedJson(url):
 	etagsf.close()
 
 	if url not in etags:
-		r = requests.get(baseurl + url + '/')
+		r = requests.get(baseurl + url + '/', headers=headers)
 		etags[url] = {}
 		etags[url]['path'] = cachedir + hashlib.md5(url).hexdigest() + '.json'
 		etags[url]['etag'] = r.headers['Etag']
@@ -64,7 +89,9 @@ def getCachedJson(url):
 		j = json.loads(r.content)
 		
 	else:
-		r = requests.get(baseurl + url + '/', headers={'If-None-Match': etags[url]['etag']})
+		headers['If-None-Match'] = etags[url]['etag']
+		print headers
+		r = requests.get(baseurl + url + '/', headers=headers)
 		if r.status_code == 304:
 			etagsf = xbmcvfs.File(etags[url]['path'], 'r')
 			j = json.loads(etagsf.read())
@@ -110,6 +137,13 @@ def index(author=None):
 		params = {'mode' : 'LTs', 'author' : author}
 		xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params), listitem=li, isFolder=True)
 	else:
+		li = xbmcgui.ListItem(loc(30010))
+		li.setIconImage(icondir + 'recent.png')
+		li.setThumbnailImage(icondir + 'recent.png')
+		li.setArt({'fanart' : fanart})
+		params = {'mode' : 'recent'}
+		xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params), listitem=li, isFolder=True)
+
 		li = xbmcgui.ListItem(loc(30007))
 		li.setIconImage(icondir + 'live.png')
 		li.setThumbnailImage(icondir + 'live.png')
@@ -240,7 +274,7 @@ def showLPs(author=None):
 				sortMethod=xbmcplugin.SORT_METHOD_LABEL)
 		xbmcplugin.endOfDirectory(addon_handle)
 
-def ShowEpisodes(game):
+def showEpisodes(game):
 	gamej = json.loads(game)
 	episodes = getCachedJson('episodes/' + gamej['slug'])
 	for episode in episodes['episodes']:
@@ -270,6 +304,38 @@ def ShowEpisodes(game):
 			listitem=li)
 		xbmcplugin.addSortMethod(addon_handle,
 			sortMethod=xbmcplugin.SORT_METHOD_EPISODE)
+	xbmcplugin.endOfDirectory(addon_handle)
+
+def showRecentEpisodes():
+	episodes = getCachedJson('recent')
+	for episode in episodes['episodes']:
+		gamej = episode['game']
+		li = xbmcgui.ListItem(episode['episodename'].split(': ')[-1])
+		li.setIconImage(episode['thumb'])
+		li.setThumbnailImage(episode['thumb'])
+		params = {'mode' : 'play_video', 'game' : json.dumps(gamej), 'episode': json.dumps(episode)}
+		li.setInfo('video', {
+								'title' : episode['episodename'].split(': ')[-1],
+								'originaltitle': gamej['gamename'],
+								'episode': episode['episode'],
+								'season': 1,
+								'director': gamej['author'],
+								'plot': episode['description'],
+								'rating': episode['rating'],
+								'duration': makeTimeString(episode['duration']),
+								'votes': str(episode['votes']) + ' ' + loc(30008),
+								'premiered': episode['aired']
+							})
+		li.setArt({'thumb': episode['thumb'],
+					'poster': gamej['posterbig'],
+					'fanart': episode['thumb']})
+		li.setProperty('isPlayable','true')
+		li.addStreamInfo('video', {'duration': episode['duration']})
+		xbmcplugin.setContent(addon_handle, 'episodes')
+		xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params),
+			listitem=li)
+		xbmcplugin.addSortMethod(addon_handle,
+			sortMethod=xbmcplugin.SORT_METHOD_NONE)
 	xbmcplugin.endOfDirectory(addon_handle)
 
 def startVideo(g, e=None):
@@ -324,12 +390,16 @@ def showLiveStreams():
 	for name in twitchnames:
 		r = requests.get(twitchStreamInfo + name, headers={'Accept': 'application/vnd.twitchtv.v3+json'})
 		stream = json.loads(r.content)['stream']
+		z = 0
 		if stream:
-			if 'bio' in stream['channel']:
+			while 'bio' in stream['channel']:
 				r = requests.get(twitchStreamInfo + name, headers={'Accept': 'application/vnd.twitchtv.v3+json'})
 				stream = json.loads(r.content)['stream']
-				#if 'bio' in stream['channel']:
-				#	raise Exception
+				z = z + 1
+				if z > 5:
+					dialog = xbmcgui.Dialog()
+					dialog.notification('gronkh.DE', loc(30009), xbmcgui.NOTIFICATION_ERROR, 10000)
+					quit()
 		if stream:
 			li = None
 			if stream['game']:
@@ -430,7 +500,7 @@ if 'mode' in params:
 		else:
 			showLPs()
 	elif params['mode'][0] == 'show_episodes':
-		ShowEpisodes(params['game'][0])
+		showEpisodes(params['game'][0])
 	elif params['mode'][0] == 'play_video':
 		if 'episode' in params:
 			startVideo(params['game'][0], params['episode'][0])
@@ -440,6 +510,8 @@ if 'mode' in params:
 		showLiveStreams()
 	elif params['mode'][0] == 'start_livestream':
 		startLiveStream(json.loads(params['stream'][0]), params['name'][0])
+	elif params['mode'][0] == 'recent':
+		showRecentEpisodes()
 else:
 	if 'author' in params:
 		index(params['author'][0])

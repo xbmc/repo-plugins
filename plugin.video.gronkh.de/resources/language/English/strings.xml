@@ -8,6 +8,9 @@
   <string id="30006">plays</string>
   <string id="30007">Live</string>
   <string id="30008">votes</string>
+  <string id="30009">An error with the Twitch API occured, try again later.</string>
+  <string id="30010">Recent</string>
 
-  <string id="30010">Clear cache</string>
+  <string id="30100">Clear cache</string>
+  <string id="30101">Do Not Track</string>
 </strings>

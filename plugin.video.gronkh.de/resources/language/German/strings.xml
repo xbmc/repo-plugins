@@ -8,6 +8,9 @@
   <string id="30006">spielt</string>
   <string id="30007">Live</string>
   <string id="30008">Stimmen</string>
+  <string id="30009">Ein Fehler mit der Twitch API trat auf, versuche es später nochmal.</string>
+  <string id="30010">Aktuell</string>
 
-  <string id="30010">Cache löschen</string>
+  <string id="30100">Cache löschen</string>
+  <string id="30101">Do Not Track</string>
 </strings>

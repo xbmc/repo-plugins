@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.gronkh.de" name="Gronkh.DE" version="1.0.1" provider-name="1750 Studios">
+<addon id="plugin.video.gronkh.de" name="Gronkh.DE" version="1.0.2" provider-name="1750 Studios">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.beautifulsoup4" version="4.0.0"/>

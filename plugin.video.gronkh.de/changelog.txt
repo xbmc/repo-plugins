@@ -1,3 +1,11 @@
+Version 1.0.2
+    Adding error fallback for broken Twitch API
+    Changing the API enpoints to enable easier versioning
+    Adding Do Not Track option to disable tracking
+    Adding various headers for tracking
+    Adding recent episodes
+    New icons, which should look better
+
 Version 1.0.1
 	Adding live streams
 	Using new API functions, based on the YouTube Data API

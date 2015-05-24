@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.dbmc" name="Dbmc (Dropbox add-on)" version="0.9.3"
+	provider-name="Joost Kop">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0" />
+		<import addon="script.common.plugin.cache" version="0.9.1" />
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="addon.py">
+		<provides>audio image video executable</provides>
+	</extension>
+	<extension point="xbmc.service" library="sync_dropbox.py" start="run"/>
+	<extension point="xbmc.addon.metadata">
+		<language>en</language>
+		<summary lang="en">View files from your Dropbox account</summary>
+		<summary lang="nl">Bekijk bestanden van je Dropbox account</summary>
+		<summary lang="it">Vedi i file del tuo account Dropbox</summary>
+		<description lang="en">
+			View files from your Dropbox account. This addon can access to all files and folders in your Dropbox account. Dbmc is not affiliated with or otherwise sponsored by Dropbox, Inc.
+		</description>
+		<description lang="nl">
+			Bekijk bestanden van je Dropbox account. Deze addon heeft toegang tot alle bestanden en mappen in uw Dropbox account. Dbmc is niet aangesloten bij of anderszins gesponsord door Dropbox, Inc.
+		</description>
+		<description lang="it">
+			Vedi i file del tuo account Dropbox. Questo addons può accedere a tutti i file e cartelle nel proprio account Dropbox. Dbmc non è in alcun modo affiliato o in qualche modo sponsorizzato da Dropbox, Inc.
+		</description>
+		<platform>all</platform>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<forum>http://forum.xbmc.org/showthread.php?tid=172902</forum>
+		<website>https://sourceforge.net/projects/xbmc-dropbox/</website>
+		<source>https://sourceforge.net/p/xbmc-dropbox/code/ci/master/tree/</source>
+		<email />
+	</extension>
+</addon>

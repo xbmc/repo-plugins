@@ -1,0 +1,120 @@
+[B]0.9.3:[/B]
+- Fix caching photo's problem on OSMC (OSCM skin not complete)
+
+[B]0.9.2:[/B]
+- Improve synchronization
+- Fix unicode issue with uploading and downloading files
+
+[B]0.9.1:[/B]
+- Fix synchronization issue with delete folders
+
+[B]0.9.0:[/B]
+- Fixes unicode problems (in Dropbox user names)
+- Fix crash when trying to upload a file
+- Fix crashing the 'dropbox file browser' on some (incomplete) skins
+
+[B]0.8.0:[/B]
+- Fixes for Kodi Helix
+
+[B]0.7.7:[/B]
+- Fix unicode problem (files/directories with special characters were not handled properly)
+
+[B]0.7.6:[/B]
+- Fix bug when starting the addon from the Programs menu
+
+[B]0.7.5:[/B]
+- Fix bugs in converting old to new account
+- Fix refreshing the account view when account added/removed
+
+[B]0.7.4:[/B]
+- This is a test version for multiple account support
+- Added multiple account support (for both browsing and synchronizing)
+
+[B]0.7.3:[/B]
+- Fixed crash in FileBrowser dialog for browsing in dropbox folders (XBMC skins related)
+- Possible fix for XBMC lock up, when navigating 'back' too fast
+
+[B]0.7.2:[/B]
+- Changed login (Authorization) procedure. The old one failed everytime Dropbox changed thier site.
+
+[B]0.7.1:[/B]
+- Fixed synchronization crash when a syncing a file fails
+- Fixed not able to upload files 
+- Add (Dropbox addon) to the name (Make it come up in 'dropbox' searches)
+- Add Dbmc icon to the sync notifications
+
+[B]0.7.0:[/B]
+- Changes for getting addon into XBMC official repository
+- Fixed login (step 8)
+- Improved synchronization handling when no token (access code) present
+
+[B]0.6.3:[/B]
+- Improve addon behavior with sync service
+- Fix some synchronization bugs
+- Added Italian language (Thanks to Giovanni Bortolozzo!)
+
+[B]0.6.2:[/B]
+- Storing sync data in the userdata of the addon (sync data was previously 
+  removed after a reboot on raspbmc)
+- Added notifications to see the synchronization progress 
+
+[B]0.6.1:[/B]
+- Added one way (from dropbox to local system) synchronization option
+
+[B]0.5.4:[/B]
+- Added File/Folder download context menu item
+
+[B]0.5.3:[/B]
+- Fix showing unicoded-string directory
+- Fix creating new folder on file-item
+- Set Background cache dialog timeout to 7 secs
+
+[B]0.5.2:[/B]
+- Added option to stream music and video i.s.o. caching them. Note: picture 
+  cannot be streamed, they are still cached
+- Added renaming the old (plugin.dropbox) to the new name (plugin.dbmc)
+- Addon has now the Dropbox production status!
+
+[B]0.5.1:[/B]
+- Removed fanart image. Contained dropbox logo which is not allowed
+- Changed Dbmc icon (created by Sjoerd Verschure, many thanks!)
+
+[B]0.5.0:[/B]
+- Changed plugin name from plugin.dropbox to plugin.dbmc
+  As needed for requesting production status at Dropbox
+- Fixed unicode string problem
+- Show (some kind of) background progress dialog for caching media files
+  in the background
+
+[B]0.4.0:[/B]
+- Add context menu items for:
+  - searching for dropbox files/folders
+  - deleting files/folders from Dropbox
+  - copying files/folders in Dropbox
+  - move files/folders in Dropbox
+  - create folders in Dropbox
+  - upload files to Dropbox
+- Added passcode lock functionality
+- Add the addon to the Programs menu
+- Added fanart image
+- Remove cached files/folders/thumbnails when items are no longer 
+  present in dropbox folders
+
+[B]0.2.1b:[/B]
+Added the Official xbmc-dropbox.sourceforge.net Add-on Repository to the
+addon.xml
+
+[B]0.2.0b:[/B]
+- Added the addon to the video and music(audio) menu's
+- For media files:
+   Using thumbnails from dropbox and cache them to disk.
+   Also cache the original files to disk.
+   This is all done in the background, keeping the addon responsive!
+- Added a limit to loading media items (getting the media_urls take
+  long...) and showing a "Show me more..." item to show/load more items in
+  the current folder
+
+[B]0.1.0b:[/B]
+Initial version
+- Browse you dropbox files and folders
+- View pictures (with slideshow of XBMC)

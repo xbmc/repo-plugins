@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Plugin name -->
+    <!--<string id="30000">nrwision</string>-->
+    <!-- List item titles and dialog progress strings -->
+    <string id="30001">tips of the week</string>
+    <string id="30002">video charts</string>
+    <string id="30003">topics</string>
+    <string id="30004">places</string>
+    <string id="30005">search</string>
+    <string id="30006">weekly program</string>
+
+    <string id="30010">today</string>
+    <string id="30011">last 7 days</string>
+    <string id="30012">this month</string>
+    <string id="30013">this year</string>
+
+    <string id="30100">more results</string>
+
+    <string id="30110">error</string>
+    <string id="30111">error while downloading data</string>
+    <string id="30111">couldn't find any shows</string>
+
+
+</strings>

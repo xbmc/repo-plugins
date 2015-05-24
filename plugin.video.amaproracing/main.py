@@ -192,6 +192,7 @@ url=None
 name=None
 mode=None
 year=None
+img_url=None
 
 try:
     url=urllib.unquote_plus(params["url"])
@@ -207,6 +208,10 @@ except:
     pass
 try:
     year=urllib.unquote_plus(params["year"])
+except:
+    pass
+try:
+    img_url=urllib.unquote_plus(params["img_url"])
 except:
     pass
 
@@ -234,7 +239,8 @@ elif mode==2:
 elif mode==100:
 		#print "GET_YEAR MODE!"
         motocross = motocross()
-        motocross.GET_YEAR()
+        #motocross.GET_YEAR()
+        motocross.FULL_MOTOS_ON_DEMAND()
 
 elif mode==101:
         motocross = motocross()
@@ -242,7 +248,7 @@ elif mode==101:
 
 elif mode==102:        
         motocross = motocross()
-        motocross.PLAY_LIVE()
+        motocross.PLAY_LIVE(url)
 
 elif mode==103:
         motocross = motocross()
@@ -250,7 +256,9 @@ elif mode==103:
 
 elif mode==104:       
         motocross = motocross()
-        motocross.GET_RACES(url,name)
+        #motocross.GET_RACES(url,name)
+        motocross.CHECK_FOR_NBC_VIDEO(url,name,img_url)  
+
 elif mode==105:        
         motocross = motocross()
         motocross.GET_RACE_DAY_VIDEOS(url,name,year)

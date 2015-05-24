@@ -1,7 +1,10 @@
+v1.0.1
+- Fixes for upstream changes to the Motocross section
+
 v1.0.0
 - Added Race Day Live to Supercross
 - Added Youtube channel to Supercross
-- Fixed error in Motorcross
+- Fixed error in Motocross
 
 v0.0.5
 - Bug fix for httplib2

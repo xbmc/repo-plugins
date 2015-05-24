@@ -43,7 +43,10 @@ class Listing:
         """
         Show the listing after it has been generated.
         """
-        self.setViewMode(503)
+        if 'true' == ADDON.getSetting('advanced.viewmodeFix'):
+            self.setViewMode(510)
+        else:
+            self.setViewMode(503)
         xbmcplugin.endOfDirectory(ADDON_HANDLE)
     
     def setViewMode(self, id):

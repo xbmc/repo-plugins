@@ -12,6 +12,9 @@
     <string id="30053">Mobil (MP4)</string>
     <string id="30054">Verwende Audio-Version (möglicherweise nicht für alle Inhalte verfügbar)</string>
     
+    <string id="30060">Erweiterte Einstellungen</string>
+    <string id="30061">ViewMode-Fix für AeonNox 5 anwenden</string>
+    
     <!-- Application start up -->
     <string id="30100">Keine Login-Daten gefunden!</string>
     <string id="30101">Sie müssen zuerst Ihre Login-Daten angeben,[CR]bevor Sie dieses Add-on verwenden können.</string>

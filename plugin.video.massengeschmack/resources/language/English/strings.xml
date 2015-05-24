@@ -12,6 +12,9 @@
     <string id="30053">Mobile (MP4)</string>
     <string id="30054">Use audio version (may not be available for all contents)</string>
     
+    <string id="30060">Advanced Settings</string>
+    <string id="30061">Apply ViewMode fix for AeonNox 5</string>
+    
     <!-- Application start up -->
     <string id="30100">No login data found!</string>
     <string id="30101">You need to configure your login credentials[CR]before you can use this add-on.</string>

@@ -1,3 +1,6 @@
+1.3.1
+ - Add ViewMode fix setting for AeonNox 5
+
 1.3.0
  - Add support for Sakura (thanks Sebastian)
 

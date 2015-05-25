@@ -1,3 +1,7 @@
+0.4.4
+- fixed Error on "Sendungen" caused by empty show entries
+- fixed showing " - " instead of "no results found"
+
 0.4.2
 - fixed htmlentities in subtitles - vtt file is now used
 

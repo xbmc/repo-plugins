@@ -1,11 +1,11 @@
-ORF TVthek XBMC Addon
+ORF TVthek KODI Addon
 =======
 ORF TVthek is an addon that gives you access to the ORF TVthek Video Platform.
 
 
 Requirements
 ------------
-Tested on XBMC Eden/Frodo/Gotham
+Tested on XBMC Frodo/Gotham and KODI 14.2
 
 
 Supported platforms
@@ -21,10 +21,6 @@ Current Features
 * HTTP Stream H264 (Stable)
 * Search Function
 * Missed Shows
-
-Missing Features
-----------------
-* Download Function
 
 
 Known Issues

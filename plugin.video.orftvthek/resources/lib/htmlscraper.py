@@ -201,14 +201,17 @@ class htmlScraper:
                 
             current_time = common.parseDOM(bcast_info,name='span',attrs={'class': 'meta meta_time'})
             current_link = url
-            current_title = "%s - %s" % (showname,current_date)       
-            try:
-                current_desc = (self.translation(30009)).encode("utf-8")+' %s - %s\n'+(self.translation(30011)).encode("utf-8")+': %s' % (current_date,current_time,current_duration)
-            except:
-                current_desc = self.translation(30008).encode('UTF-8');
-            parameters = {"link" :  current_link,"title" :current_title,"banner" : banner,"backdrop" : "", "mode" : "openSeries"}
-            url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-            liz = self.html2ListItem(current_title,banner,"",current_desc,"","","",url,None,True,'false');
+            if len(showname) > 0:
+                current_title = "%s - %s" % (showname,current_date)       
+                try:
+                    current_desc = (self.translation(30009)).encode("utf-8")+' %s - %s\n'+(self.translation(30011)).encode("utf-8")+': %s' % (current_date,current_time,current_duration)
+                except:
+                    current_desc = self.translation(30008).encode('UTF-8');
+                parameters = {"link" :  current_link,"title" :current_title,"banner" : banner,"backdrop" : "", "mode" : "openSeries"}
+                url = sys.argv[0] + '?' + urllib.urlencode(parameters)
+                liz = self.html2ListItem(current_title,banner,"",current_desc,"","","",url,None,True,'false');
+            else:
+                liz = self.html2ListItem((self.translation(30014)).encode('UTF-8'),self.defaultbanner,"","","","","","",None,True,'false');
         except:
             liz = self.html2ListItem((self.translation(30014)).encode('UTF-8'),self.defaultbanner,"","","","","","",None,True,'false');
         
@@ -290,19 +293,22 @@ class htmlScraper:
             title = common.parseDOM(item,name='h4')
             if len(title) > 0:
                 title = title[0].encode('UTF-8')
+                print title
                 item_href = common.parseDOM(item,name='a',attrs={'class':'base_list_item_inner.*?'},ret="href")
                 image_container = common.parseDOM(item,name='figure',attrs={'class':'episode_image'},ret="href")
                 desc = self.translation(30008).encode('UTF-8')
                 image = common.parseDOM(item,name='img',attrs={},ret="src")
+                print len(image)
                 if len(image) > 0:
                     image = common.replaceHTMLCodes(image[0]).encode('UTF-8').replace("height=180","height=265").replace("width=320","width=500")
                 else:
                     image = baseimage
-                link = common.replaceHTMLCodes(item_href[0]).encode('UTF-8')
-                
-                parameters = {"link" : link,"title" : title,"banner" : image,"backdrop" : "", "mode" : "getSendungenDetail"}
-                url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-                liz = self.html2ListItem(title,image,"",desc,"","","",url,None,True,'false');
+                    
+                if len(item_href) > 0:
+                    link = common.replaceHTMLCodes(item_href[0]).encode('UTF-8')
+                    parameters = {"link" : link,"title" : title,"banner" : image,"backdrop" : "", "mode" : "getSendungenDetail"}
+                    url = sys.argv[0] + '?' + urllib.urlencode(parameters)
+                    liz = self.html2ListItem(title,image,"",desc,"","","",url,None,True,'false');
             
     # Parses all "Bundesland Heute" Shows 
     def getBundeslandHeute(self,url,image):

@@ -3,6 +3,7 @@
   <string id="30010">Next Page</string>
   <string id="30011">Video type not supported</string>
   <string id="30012">Couldn't locate video url</string>
+  <string id="30101">Order by ranking</string>
   <string id="30102">Debug (enable logs)</string>
   <string id="30103">Quality for videos</string>
   <string id="30104">Search</string>

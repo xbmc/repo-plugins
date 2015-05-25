@@ -1,3 +1,8 @@
+1.0.3
+- Fixes for Hubble videos due to Spacetelescope wesite changes.
+- Recover thumbnails images due to ESO website changes.
+- Added filter to order videos by date or by ranking from add-on settings menu.
+- Code refactring and cleaning to fit both websites into the same add-on code.
 1.0.2
 - Quick fix due to website changes.
 1.0.1

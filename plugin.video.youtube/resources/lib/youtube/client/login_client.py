@@ -33,11 +33,18 @@ class LoginClient(object):
             'id': '548159037694-qpi2u8ic4ubm8jukcnluercra0n4gu12.apps.googleusercontent.com',
             'secret': 'iRq-c2O8K5qiysMGyAlDH5sJ'
         },
+        # OLD API KEY - THANKS TO THE JERK FOR HIJACKING THE KEY AND DRAINING THE QUOTA!
+        # 'youtube-for-kodi-14': {
+        #   'system': 'Helix',
+        #  'key': 'AIzaSyBCwBLShUEzXiOceNuliClY0icE6M4AddU',
+        # 'id': '308268426735-ph3ukr2flbaila2jt73b329724mpar0g.apps.googleusercontent.com',
+        #'secret': '3m2krCjOT16wxgwErsAglOaS'
+        #},
         'youtube-for-kodi-14': {
             'system': 'Helix',
-            'key': 'AIzaSyBCwBLShUEzXiOceNuliClY0icE6M4AddU',
-            'id': '308268426735-ph3ukr2flbaila2jt73b329724mpar0g.apps.googleusercontent.com',
-            'secret': '3m2krCjOT16wxgwErsAglOaS'
+            'key': 'AIzaSyDXWo8-scFY-Ugcn2A0vGo8023hpcWtXto',
+            'id': '971418421398-vtbkp9m1tl3dsk7hnfl1taj8hbs6ljsm.apps.googleusercontent.com',
+            'secret': 'w7LXzE14np-CmhNT1JYUtUTe'
         },
         'youtube-for-kodi-15': {
             'system': 'Isengard',
@@ -112,7 +119,8 @@ class LoginClient(object):
     def refresh_token_tv(self, refresh_token, grant_type=''):
         client_id = self.CONFIGS['youtube-tv']['id']
         client_secret = self.CONFIGS['youtube-tv']['secret']
-        return self.refresh_token(refresh_token, client_id=client_id, client_secret=client_secret, grant_type=grant_type)
+        return self.refresh_token(refresh_token, client_id=client_id, client_secret=client_secret,
+                                  grant_type=grant_type)
 
     def refresh_token(self, refresh_token, client_id='', client_secret='', grant_type=''):
         headers = {'Host': 'www.youtube.com',
@@ -217,7 +225,7 @@ class LoginClient(object):
             _client_id = self._config['id']
         post_data = {'client_id': _client_id,
                      'scope': 'https://www.googleapis.com/auth/youtube'}
-                     #'scope': 'http://gdata.youtube.com https://www.googleapis.com/auth/youtube-paid-content'}
+        # 'scope': 'http://gdata.youtube.com https://www.googleapis.com/auth/youtube-paid-content'}
 
         # url
         url = 'https://www.youtube.com/o/oauth2/device/code'

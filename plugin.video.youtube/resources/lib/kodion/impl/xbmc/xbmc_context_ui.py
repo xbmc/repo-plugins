@@ -44,9 +44,20 @@ class XbmcContextUI(AbstractContextUI):
         return xbmc.getSkinDir()
 
     def on_keyboard_input(self, title, default='', hidden=False):
+        # fallback for Frodo
+        if self._context.get_system_version().get_version() <= (12, 3):
+            keyboard = xbmc.Keyboard(default, title, hidden)
+            keyboard.doModal()
+            if keyboard.isConfirmed() and keyboard.getText():
+                text = utils.to_unicode(keyboard.getText())
+                return True, text
+            else:
+                return False, u''
+            pass
+
+        # Starting with Gotham (13.X > ...)
         dialog = xbmcgui.Dialog()
         result = dialog.input(title, str(default), type=xbmcgui.INPUT_ALPHANUM)
-
         if result:
             text = utils.to_unicode(result)
             return True, text

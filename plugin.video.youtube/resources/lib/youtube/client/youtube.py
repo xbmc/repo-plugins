@@ -1,8 +1,5 @@
 __author__ = 'bromix'
 
-import json
-
-from resources.lib import kodion
 from resources.lib.kodion import simple_requests as requests
 from .login_client import LoginClient
 from ..helper.video_info import VideoInfo

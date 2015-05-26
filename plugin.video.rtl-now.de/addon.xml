@@ -7,6 +7,8 @@
 		<provides>video</provides>
 	</extension>
 	<extension point="xbmc.addon.metadata">
+        <broken lang="en">Development discontinued - Please use the successor NOW TV</broken>
+        <broken lang="de">Entwicklung eingestellt - Bitte nutzt den Nachfolger NOW TV</broken>
 		<summary lang="en">RTL NOW media library</summary>
 		<summary lang="de">Mediathek für RTL NOW</summary>
 		<description lang="en">With RTL NOW many series, shows, documentaries and magazines can be seen from the program of RTL.</description>

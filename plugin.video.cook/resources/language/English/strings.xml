@@ -3,7 +3,7 @@
        <string id="30000">Video Resolution</string>
        <string id="30001">SD</string>
        <string id="30002">HD</string>
-       <string id="30010">Cooking Channel</string>
+       <string id="30010">The Cooking Channel</string>
        <string id="30011">No Videos Found</string>
        <string id="30012">Next</string>
 
@@ -19,8 +19,12 @@
        <string id="30044">Password</string>
        <string id="30050">Sub-Titles</string>
        <string id="30051">Enable Sub-Titles</string>
-       <string id="30052">Streaming</string>
+       <string id="30052">Streaming Quality</string>
 
+       <string id="30070">Enable Views</string>
+       <string id="30071">Default View</string>
+       <string id="30072">Episode View</string>
+       <string id="30073">View</string>
 
 </strings>
 

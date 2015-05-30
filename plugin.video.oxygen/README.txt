@@ -1,8 +1,9 @@
-plugin.video.bravo
+plugin.video.oxygen
 ================
 
+Kodi Addon for Oxygen Channel website
 
-Kodi Addon for Bravo website
-
+Version 1.0.3 Added user select views
+Version 1.0.2 Added subtitles, metadata, fixed views
 Version 1.0.1 initial release
 

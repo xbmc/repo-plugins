@@ -1,143 +1,120 @@
 # -*- coding: utf-8 -*-
-# CBS News Live
+# CBSN News Live Video Addon
 
-import sys
-import httplib
-
+import sys,httplib
 import urllib, urllib2, cookielib, datetime, time, re, os, string
 import xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs, xbmc
-import cgi, gzip
-from StringIO import StringIO
-import json
+import zlib,json,HTMLParser
+h = HTMLParser.HTMLParser()
+qp  = urllib.quote_plus
+uqp = urllib.unquote_plus
 
-
-#USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
-USER_AGENT = 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_2 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8H7 Safari/6533.18.5'
-GENRE_TV  = "News"
-UTF8          = 'utf-8'
-MAX_PER_PAGE  = 25
+UTF8     = 'utf-8'
 
 addon         = xbmcaddon.Addon('plugin.video.cbsn')
 __addonname__ = addon.getAddonInfo('name')
 __language__  = addon.getLocalizedString
 
-
 home          = addon.getAddonInfo('path').decode(UTF8)
 icon          = xbmc.translatePath(os.path.join(home, 'icon.png'))
-fanart        = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
+addonfanart   = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
 
 
 def log(txt):
     message = '%s: %s' % (__addonname__, txt.encode('ascii', 'ignore'))
     xbmc.log(msg=message, level=xbmc.LOGDEBUG)
 
-def demunge(munge):
-        try:
-            munge = urllib.unquote_plus(munge).decode(UTF8)
-        except:
-            pass
-        return munge
+USER_AGENT = 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_2 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8H7 Safari/6533.18.5'
+defaultHeaders = {'User-Agent':USER_AGENT, 'Accept':"text/html", 'Accept-Encoding':'gzip,deflate,sdch', 'Accept-Language':'en-US,en;q=0.8'} 
+
+def getRequest(url, headers = defaultHeaders):
+   log("getRequest URL:"+str(url))
+   req = urllib2.Request(url.encode(UTF8), None, headers)
+   try:
+      response = urllib2.urlopen(req)
+      page = response.read()
+      if response.info().getheader('Content-Encoding') == 'gzip':
+         log("Content Encoding == gzip")
+         page = zlib.decompress(page, zlib.MAX_WBITS + 16)
+   except:
+      page = ""
+   return(page)
 
 
-def getRequest(url):
-              log("getRequest URL:"+str(url))
-              headers = {'User-Agent':USER_AGENT, 'Accept':"text/html", 'Accept-Encoding':'gzip,deflate,sdch', 'Accept-Language':'en-US,en;q=0.8'} 
-              req = urllib2.Request(url.encode(UTF8), None, headers)
+def getEpisodes():
+   xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+   ilist=[]
+   bselect = int(addon.getSetting('bselect'))
+   bwidth = ['120','360','700','1200','1800','2200','4000']
+   bw = 'index_%s' % (bwidth[bselect])
+   c = [{'type':'dvr',
+        'url' :'http://cbsnewshd-lh.akamaihd.net/i/CBSN_2@199302/%s_av-b.m3u8?sd=10&rebase=on' % bw,
+        'startDate' : str(datetime.date.today()),
+        'segmentDur'  : '59:59',
+        'headline'  : 'LIVE',
+        'headlineshort' : 'LIVE',
+        'thumbnail_url_hd' : icon.replace('\\','/')}]
 
-              try:
-                 response = urllib2.urlopen(req)
-                 if response.info().getheader('Content-Encoding') == 'gzip':
-                    log("Content Encoding == gzip")
-                    buf = StringIO( response.read())
-                    f = gzip.GzipFile(fileobj=buf)
-                    link1 = f.read()
-                 else:
-                    link1=response.read()
-              except:
-                 link1 = ""
+   html = getRequest('http://cbsn.cbsnews.com/rundown/?device=desktop')
+   a = json.loads(html)
+   a = a["navigation"]["data"]
+   c.extend(a)
+   mode = 'GV'
+   for b in c:
+    if b['type'] == 'dvr':
+      url = b["url"].replace('index_700',bw)
+      url = url.encode(UTF8)
+      infoList = {}
+      infoList['Date']        = b['startDate'].split(' ',1)[0]
+      infoList['Aired']       = infoList['Date']
+      dur = b['segmentDur'].split(':')
+      infoList['Duration']    = str(int(dur[0])*60+int(dur[1]))
+      infoList['MPAA']        = ''
+      infoList['TVShowTitle'] = 'CBSN News Live'
+      infoList['Title']       = b['headlineshort']
+      infoList['Studio']      = 'CBSN'
+      infoList['Genre']       = 'News'
+      infoList['Season']      = None
+      infoList['Episode']     = -1
+      infoList['Year']        = int(infoList['Aired'].split('-',1)[0])
+      infoList['Plot']        = '%s UTC\n%s' % (b['startDate'], b['headline'])
+      thumb = b['thumbnail_url_hd'].replace('\\','')
+      name  = b['headlineshort']
+      u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
+      liz=xbmcgui.ListItem(name, '',None, thumb)
+      liz.setInfo( 'Video', infoList)
+      liz.addStreamInfo('video', { 'codec': 'h264', 
+                                   'width' : 1920, 
+                                   'height' : 1080, 
+                                   'aspect' : 1.78 })
+      liz.addStreamInfo('audio', { 'codec': 'aac', 'language' : 'en'})
+      liz.addStreamInfo('subtitle', { 'language' : 'en'})
+      liz.setProperty('fanart_image', addonfanart)
+      liz.setProperty('IsPlayable', 'true')
+      ilist.append((u, liz, False))
+   xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+   xbmcplugin.endOfDirectory(int(sys.argv[1]),cacheToDisc=False)
 
-              link1 = str(link1).replace('\n','')
-              return(link1)
 
-
-
-def play_playlist(name, list):
-        playlist = xbmc.PlayList(1)
-        playlist.clear()
-        item = 0
-        for i in list:
-            item += 1
-            info = xbmcgui.ListItem('%s) %s' %(str(item),name))
-            playlist.add(i, info)
-        xbmc.executebuiltin('playlist.playoffset(video,0)')
-
-
-def addDir(name,url,mode,iconimage,fanart,description,genre,date,showcontext=True,playlist=None,autoplay=False):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+mode
-        dir_playable = False
-        cm = []
-
-        if mode != 'SR':
-            u += "&name="+urllib.quote_plus(name)
-            if (fanart is None) or fanart == '': fanart = addonfanart
-            u += "&fanart="+urllib.quote_plus(fanart)
-            dir_image = "DefaultFolder.png"
-            dir_folder = True
-        else:
-            dir_image = "DefaultVideo.png"
-            dir_folder = False
-            dir_playable = True
-
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage=dir_image, thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": description, "Genre": genre, "Year": date } )
-        liz.setProperty( "Fanart_Image", fanart )
-
-        if dir_playable == True:
-         liz.setProperty('IsPlayable', 'true')
-        return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=dir_folder)
-
-def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,playlist=None, autoplay=False):
-        return addDir(name,url,'SR',iconimage,fanart,description,genre,date,showcontext,playlist,autoplay)
-
+def getVideo(url, show_name):
+    u = uqp(url)
+    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = u))
 
 
 # MAIN EVENT PROCESSING STARTS HERE
-
-xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
 
 parms = {}
 try:
     parms = dict( arg.split( "=" ) for arg in ((sys.argv[2][1:]).split( "&" )) )
     for key in parms:
-       parms[key] = demunge(parms[key])
+      try:    parms[key] = urllib.unquote_plus(parms[key]).decode(UTF8)
+      except: pass
 except:
     parms = {}
 
 p = parms.get
 
-try:
-    mode = p('mode')
-except:
-    mode = None
+mode = p('mode',None)
 
-if mode==  None:
-        bselect = int(addon.getSetting('bselect'))
-        bwidth = ['120','360','700','1200','1800','2200','4000']
-        b = 'index_%s' % (bwidth[bselect])
-        addLink('http://cbsnewshd-lh.akamaihd.net/i/CBSNDC_4@199302/%s_av-b.m3u8?sd=10&rebase=on' % b,'LIVE',icon,fanart,'LIVE','Live News','')
-        pg = getRequest('http://cbsn.cbsnews.com/rundown/?device=desktop')
-        a = json.loads(pg)
-        a = a["navigation"]
-        for r in a["data"]:
-           if r['type'] == 'dvr':
-              showurl = r["url"]
-              showurl = showurl.replace('index_700',b)
-              desc = '%s UTC\n%s' % (r['startDate'], r['headline'])
-              addLink(showurl.encode(UTF8),r["headlineshort"],r["thumbnail_url_hd"].replace('\\',''),fanart,desc,GENRE_TV,'')
-
-elif mode=='SR':  xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=p('url')))
-
-xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=False)
-
-
+if mode==  None:  getEpisodes()
+elif mode=='GV':  getVideo(p('url'), p('name'))

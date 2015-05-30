@@ -36,28 +36,9 @@ def addLinkItem(parameters, li):
         listitem=li, isFolder=False)
 
 # UI builder functions
-def show_root_folder():
-    options = [{"name": "Latest video", "mode": "latest"},
-        {"name": "More video", "mode": "categories"},
-        {"name": "Video series", "mode": "series"},
-        ]
-    for option in options:
-        liStyle=xbmcgui.ListItem(option["name"])
-        addDirectoryItem({"mode": option["mode"]}, liStyle)
-    xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
-    
 def show_categories():
     gtv = GuardianTV()
     items = gtv.getChannels()
-
-    for item in items:
-        liStyle=xbmcgui.ListItem(item["title"])
-        addDirectoryItem({"mode": "video_files", "url": item["url"]}, liStyle)
-    xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
-    
-def show_series():
-    gtv = GuardianTV()
-    items = gtv.getSeries()
 
     for item in items:
         liStyle=xbmcgui.ListItem(item["title"])
@@ -69,7 +50,7 @@ def show_video_files(url):
     items = gtv.getVideoByChannel(url)
     for item in items:
         title = item["title"] + " (" + time.strftime("%d/%m/%Y %H:%M", item["date"]) + ")"
-        liStyle=xbmcgui.ListItem(title, thumbnailImage=item["thumb"])
+        liStyle=xbmcgui.ListItem(title)
         addLinkItem({"mode": "play", "url": item["pageUrl"]}, liStyle)
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
@@ -92,14 +73,7 @@ mode = str(params.get("mode", ""))
 url = str(params.get("url", ""))
 
 if mode == "" and url == "":
-    show_root_folder()
-elif mode == "latest":
-    gtv = GuardianTV()
-    show_video_files(gtv.getLatestVideoURL())
-elif mode == "categories":
     show_categories()
-elif mode == "series":
-    show_series()    
 elif mode == "video_files":
     show_video_files(url)
 else:

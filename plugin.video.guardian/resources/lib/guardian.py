@@ -5,52 +5,29 @@ import datetime
 from email.utils import parsedate_tz
 from email.utils import mktime_tz
 from BeautifulSoup import BeautifulSoup
-import xbmc
 
 class GuardianTV:
-    __USERAGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0"
+    __USERAGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0"
     
     def __init__(self):
         opener = urllib2.build_opener()
         # Use Firefox User-Agent
         opener.addheaders = [('User-Agent', self.__USERAGENT)]
         urllib2.install_opener(opener)
-        
-    def getLatestVideoURL(self):
-        return "http://www.theguardian.com/video/rss"
 
     def getChannels(self):
         pageUrl = "http://www.theguardian.com/video"
         data = urllib2.urlopen(pageUrl).read()
         tree = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
         
-        links = tree.find("div", {"id": "editor-zone-1"}).findAll("a")
+        links = tree.findAll("section")
         channels = []
         for link in links:
-            channel = {}
-            channel["title"] = link.text
-            # Katine RSS is missing
-            if channel["title"] == "Katine":
-                continue
-            channel["url"] = link["href"]
-            channel["url"] = channel["url"] + "/rss"
-            channels.append(channel)
-        
-        return channels
-        
-    def getSeries(self):
-        pageUrl = "http://www.theguardian.com/video"
-        data = urllib2.urlopen(pageUrl).read()
-        tree = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
-        
-        links = tree.find("div", {"id": "editor-zone-2"}).find("ul", {"class": "tri trail trailblock"}).findAll("a")
-        channels = []
-        for link in links:
-            channel = {}
-            channel["title"] = link.text
-            channel["url"] = link["href"]
-            channel["url"] = channel["url"] + "/rss"
-            channels.append(channel)
+            if link.has_key("data-id"):
+                channel = {}
+                channel["title"] = link["data-link-name"][link["data-link-name"].find("|") + 2 : ]
+                channel["url"] = "http://www.theguardian.com/collection/%s/rss" % link["data-id"]
+                channels.append(channel)
         
         return channels
         

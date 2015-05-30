@@ -4,7 +4,7 @@
 import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64,socket,datetime,time,os,os.path,urlparse,json
 import CommonFunctions as common
 
-version = "0.2.0"
+version = "0.2.1"
 plugin = "Puls 4 -" + version
 author = "sofaking"
 
@@ -37,7 +37,7 @@ video_url = "http://m.puls4.com/api/video/"
 
 #paths
 logopath = os.path.join(media_path,"logos")
-defaultlogo = os.path.join(logopath,"Default.png")
+defaultlogo = defaultbanner = os.path.join(logopath,"Default.png")
 defaultbackdrop = "http://goo.gl/XWnTc"
 
 #urlib init
@@ -106,7 +106,10 @@ def getJSONSendungen(url):
     html = common.fetchPage({'link': url})
     data = json.loads(html.get("content"))   
     for show in data:
-        image = show["logo"]["orig"].encode('UTF-8')
+        try:
+            image = show["logo"]["orig"].encode('UTF-8')
+        except:
+            image = ""
         id = show["id"]
         title = cleanText(show["name"].encode('UTF-8'))
         addDirectory(title,image,"",id,"getShowByID")

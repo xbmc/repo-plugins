@@ -36,7 +36,7 @@ PLUGIN_NAME = 'nrwision'
 PLUGIN_ID = 'plugin.video.nrwision'
 BASE_URL = 'http://wwwocf.nrwision.de'
 ART_BASE_URL = BASE_URL + '/fileadmin/kodi/images'
-BACKGROUND = '/fileadmin/kodi/kodi_hintergrund.png'
+BACKGROUND = ART_BASE_URL + '/kodi_hintergrund.png'
 USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.30 (KHTML, like Gecko) Ubuntu/11.04 Chromium/12.0.742.112 Chrome/12.0.742.112 Safari/534.30 Kodi"
 
 plugin = Plugin(PLUGIN_NAME, PLUGIN_ID, __file__)
@@ -133,14 +133,14 @@ def view():
 def addMenuEntry(destination, title, icon, background):
     url = plugin.url_for(destination)
     li = xbmcgui.ListItem(title, iconImage=ART_BASE_URL + icon)
-    li.setProperty('fanart_image', BASE_URL + background)
+    li.setProperty('fanart_image', background)
     xbmcplugin.addDirectoryItem(handle=addonHandle, url=url, listitem=li, isFolder=True)
     return []
 
 def addSubmenuEntry(destination, arguments, title, icon, background):
     url = plugin.url_for(destination, url=arguments)
     li = xbmcgui.ListItem(title, iconImage=ART_BASE_URL + icon)
-    li.setProperty('fanart_image', BASE_URL + background)
+    li.setProperty('fanart_image', background)
     xbmcplugin.addDirectoryItem(handle=addonHandle, url=url, listitem=li, isFolder=True)
     return []
 
@@ -161,7 +161,7 @@ def buildList(sourceUrl):
                 type="Video",
                 infoLabels={
                     'title': show['title'],
-                    'duration': show['dauer']/60,
+                    'duration': float(show['dauer'])/60,
                     'plot': show['longDesc'],
                     'genre': show['category'].strip(),
                     'year': show['premiered'][:4],
@@ -193,7 +193,7 @@ def buildListFromSearch(sourceUrl):
             li.setInfo(
                 type="Video", infoLabels={
                     'title': show['title'],
-                    'duration': show['dauer']/60,
+                    'duration': float(show['dauer'])/60,
                     'plot': show['longDesc'],
                     'genre': show['tv_kategorie'].strip(),
                     'year': show['premiered'][:4],

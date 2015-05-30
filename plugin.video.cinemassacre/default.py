@@ -13,6 +13,7 @@ import os
 import binascii
 import time
 import xmltodict
+import re
 from datetime import datetime, date
 from types import *
 
@@ -30,26 +31,16 @@ except:
 cache = StorageServer.StorageServer(PLUGIN_NAME, 1)
 
 def video_id(value):
-    """
-    Examples:
-    - http://youtu.be/SA2iWivDJiE
-    - http://www.youtube.com/watch?v=_oPAwA_Udwc&feature=feedu
-    - http://www.youtube.com/embed/SA2iWivDJiE
-    - http://www.youtube.com/v/SA2iWivDJiE?version=3&amp;hl=en_US
-    """
-    query = urlparse.urlparse(value)
-    if query.hostname == 'youtu.be':
-        return query.path[1:]
-    if query.hostname in ('www.youtube.com', 'youtube.com'):
-        if query.path == '/watch':
-            p = urlparse.parse_qs(query.query)
-            return p['v'][0]
-        if query.path[:7] == '/embed/':
-            return query.path.split('/')[2]
-        if query.path[:3] == '/v/':
-            return query.path.split('/')[2]
-    # fail?
-    return None
+    youtube_regex = (
+        r'(https?://)?(www\.)?'
+        '(youtube|youtu|youtube-nocookie)\.(com|be)/'
+        '(watch\?.*?(?=v=)v=|embed/|v/|.+\?v=)?([^&=%\?]{11})')
+
+    youtube_regex_match = re.match(youtube_regex, value)
+    if youtube_regex_match:
+        return youtube_regex_match.group(6)
+
+    return youtube_regex_match
 
 def get_signature(key, msg):
     return base64.b64encode(hmac.new(key, msg, hashlib.sha1).digest())
@@ -108,7 +99,7 @@ def getCategories(content,id):
             url = clip['movieURL']
             if not "http" in url:
                 url = "http://video1.screenwavemedia.com/Cinemassacre/smil:"+url+".smil/playlist.m3u8"
-            elif "youtube.com" in url:
+            elif "youtu" in url:
                 url = "plugin://plugin.video.youtube/?action=play_video&videoid="+video_id(url)
             date=None
             airdate=None

@@ -1,8 +1,8 @@
 plugin.video.foodnetwork================
 
+Kodi Addon for Food Network website
 
-XBMC Addon for Food Network website
-
+Version 2.1.11 added subtitles, metadata, views
 Version 2.1.10 website changes
 Version 2.1.9 website changes
 Version 2.1.8 website changes

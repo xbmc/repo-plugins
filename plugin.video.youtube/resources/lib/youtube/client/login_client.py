@@ -34,12 +34,12 @@ class LoginClient(object):
             'secret': 'iRq-c2O8K5qiysMGyAlDH5sJ'
         },
         # OLD API KEY - THANKS TO THE JERK FOR HIJACKING THE KEY AND DRAINING THE QUOTA!
-        # 'youtube-for-kodi-14': {
-        #   'system': 'Helix',
-        #  'key': 'AIzaSyBCwBLShUEzXiOceNuliClY0icE6M4AddU',
-        # 'id': '308268426735-ph3ukr2flbaila2jt73b329724mpar0g.apps.googleusercontent.com',
-        #'secret': '3m2krCjOT16wxgwErsAglOaS'
-        #},
+        'youtube-for-kodi-14-old': {
+            'system': 'Helix',
+            'key': 'AIzaSyBCwBLShUEzXiOceNuliClY0icE6M4AddU',
+            'id': '308268426735-ph3ukr2flbaila2jt73b329724mpar0g.apps.googleusercontent.com',
+            'secret': '3m2krCjOT16wxgwErsAglOaS'
+        },
         'youtube-for-kodi-14': {
             'system': 'Helix',
             'key': 'AIzaSyDXWo8-scFY-Ugcn2A0vGo8023hpcWtXto',

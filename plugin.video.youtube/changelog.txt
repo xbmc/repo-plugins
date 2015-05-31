@@ -1,3 +1,7 @@
+5.1.5 (2015-05-29)
+UPD: remove deprecation warning for Isengard
+FIX: Issue 7163 (Missing pagination for subscriptions - YouTube APIv3 bug)
+
 5.1.4 (2015-05-26)
 ADD: Frodo support (only if you install via zip or bromix repo)
 UPD: new API-KEY - thanks to the guy for hijacking the key for trailer searches

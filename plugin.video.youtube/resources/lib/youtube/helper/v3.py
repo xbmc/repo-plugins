@@ -198,8 +198,21 @@ def response_to_items(provider, context, json_data, sort=None, reverse_sort=Fals
         pass
 
     # next page
+    """
+    This will try to prevent the issue 7163 (https://code.google.com/p/gdata-issues/issues/detail?id=7163).
+    Somehow the APIv3 is missing the token for the next page. We implemented our own calculation for the token
+    into the YouTube client...this should work for up to ~2000 entries.
+    """
+    yt_total_results = int(json_data.get('pageInfo', {}).get('totalResults', 0))
+    yt_results_per_page = int(json_data.get('pageInfo', {}).get('resultsPerPage', 0))
+    page = int(context.get_param('page', 1))
     yt_next_page_token = json_data.get('nextPageToken', '')
-    if process_next_page and yt_next_page_token:
+    if yt_next_page_token or (page * yt_results_per_page < yt_total_results):
+        if not yt_next_page_token:
+            client = provider.get_client(context)
+            yt_next_page_token = client.calculate_next_page_token(page+1, yt_results_per_page)
+            pass
+
         new_params = {}
         new_params.update(context.get_params())
         new_params['page_token'] = yt_next_page_token

@@ -10,6 +10,30 @@ import unittest
 class TestClient(unittest.TestCase):
     TEST_ACCESS_TOKEN = ''
 
+    def test_calc_next_page_token(self):
+        """
+        client = YouTube(config=YouTube.CONFIGS['youtube-for-kodi-14-old'], items_per_page=50)
+        page_token = ''
+        for i in range(0, 500):
+            json_data = client.get_playlist_items('UUfwx98Wty7LhdlkxL5PZyLA', page_token=page_token)
+            page_token = json_data.get('nextPageToken', '')
+            if not page_token:
+                break
+
+            print '%d\t%s' % (i, page_token)
+            pass
+        """
+
+
+        client = YouTube()
+        token = client.calculate_next_page_token(2, 1)
+        for i in range(2, 50):
+            token = client.calculate_next_page_token(i, 50)
+            print 'Page=%d token=%s' % (i, token)
+            pass
+
+        pass
+
     def test_my_subscriptions_tv(self):
         client = YouTube(access_token_tv=self.TEST_ACCESS_TOKEN)
         json_data = client.get_my_subscriptions(page_token=None)

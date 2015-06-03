@@ -1,12 +1,12 @@
+# This addon display menu to select a stream from list.
+#   - The format of the list is : plugin.video.stream-selector/select ? <name> := <link> [ @@ <name> := <link> ]*
+
 import xbmc
 import xbmcgui
 import xbmcplugin
-
 import urlparse
 import urllib
 import webbrowser
-# This addpm display menu to select a stream from given list.
-#   - The format of the list is plugin.video.stream-selector/select ? <name> := <link> [ @@ <name> := <link> ]*
 
 class Addon():
     def handle(self):

@@ -2,7 +2,7 @@
 <strings>
     <string id="30000">Arte +7</string>
 
-    <!-- menu items -->
+    <!-- menu items & misc messages -->
     <string id="30001">Toutes les vidéos</string>
     <string id="30002">Sélection</string>
     <string id="30003">Les plus vues</string>
@@ -10,15 +10,22 @@
     <string id="30005">Thèmes</string>
     <string id="30006">Direct</string>
 
+    <string id="30007">Téléchargement</string>
+    <string id="30008">Téléchargement terminé</string>
+    <string id="30009">Erreur</string>
+    <string id="30010">Veuillez choisir un répertoire de destination dans les paramètres</string>
+
     <!-- context menu -->
-    <string id="30020">Add to queue</string>
+    <string id="30020">Ajouter à la queue</string>
     <string id="30021">Télécharger la vidéo</string>
 
     <!-- options -->
     <string id="30050">Langage (Vidéos)</string>
-    <string id="30051">Qualité vidéo préferée</string>
-    <string id="30052">Protocole de streaming</string>
-    <string id="30053">Répertoire de téléchargement</string>
+    <string id="30051">Préférer les versions originales</string>
+    <string id="30052">Qualité vidéo préferée</string>
+    <string id="30053">Protocole de streaming</string>
+    <string id="30054">Répertoire de téléchargement</string>
+    <string id="30055">Qualité des vidéos téléchargées</string>
 
     <!-- themes -->
     <string id="3000501">Actualités</string>

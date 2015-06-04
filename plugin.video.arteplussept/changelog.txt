@@ -1,3 +1,10 @@
+v0.4.0
+
+- Fixed download procedure (got rid of simpledownloader for a more shitty solution)
+- Added download quality setting
+- Added very low quality setting (may not be available for every video - fallbacks on highest)
+- You can choose to always play videos in subtitled original version rather than dubbed if available
+
 v0.3.0
 - Added ability to browse by theme (thanks to https://github.com/zerty)
 

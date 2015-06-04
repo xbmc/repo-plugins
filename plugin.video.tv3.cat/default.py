@@ -1,5 +1,11 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
+
+'''
+ TV3cat Kodi addon
+ @author: jqandreu
+ @contact: jqsandreu@gmail.com
+'''
+
 import os
 import sys
 import re
@@ -52,6 +58,7 @@ url_directe_tv3 = 'http://ccma-tva-es-abertis-live.hls.adaptive.level3.net/es/ng
 url_directe_324 = 'http://ccma-tva-int-abertis-live.hls.adaptive.level3.net/int/ngrp:324_web/playlist.m3u8'
 url_directe_c33s3 = 'http://ccma-tva-es-abertis-live.hls.adaptive.level3.net/es/ngrp:c33_web/playlist.m3u8'
 url_directe_esport3 = 'http://ccma-tva-es-abertis-live.hls.adaptive.level3.net/es/ngrp:es3_web/playlist.m3u8'
+url_arafem ='http://dinamics.ccma.cat/wsarafem/arafem/tv'
 
 addon = xbmcaddon.Addon()
 addon_path = xbmc.translatePath(addon.getAddonInfo('path'))
@@ -198,21 +205,101 @@ def listDirecte():
     thumb_324 = os.path.join(addon_path, 'resources', 'media', '324_thumbnail.png')
     thumb_c33s3 = os.path.join(addon_path, 'resources', 'media', 'c33-super3_thumbnail.png')
     thumb_esp3 = os.path.join(addon_path, 'resources', 'media', 'esports3_thumbnail.png')
+    
+    #info channels
+    data = getDataVideo(url_arafem)
+    
+    if data <> None:
+        c = data.get('canal',None)
+        
+        
+        if c <> None:
+        
+            arafemtv3 = ''
+            arafem33 = ''
+            arafemesp3 = ''
+            arafem324 = ''
+            arafemtv3_sinop = ''
+            arafem33_sinop = ''
+            arafemesp3_sinop = ''
+            arafem324_sinop = ''
+            
+            i = 0
+            while i < 5:
+                nameChannel = c[i].get('ara_fem',{}).get('codi_canal',None)
+                
+                if nameChannel == 'tv3':
+                    arafemtv3 = c[i].get('ara_fem',{}).get('titol_programa',None)
+                    arafemtv3_sinop = c[i].get('ara_fem',{}).get('sinopsi',None)
+                if nameChannel == 'cs3' or nameChannel == '33d':
+                    arafem33 = c[i].get('ara_fem',{}).get('titol_programa',None)
+                    arafem33_sinop = c[i].get('ara_fem',{}).get('sinopsi',None)
+                if nameChannel == 'esport3':
+                    arafemesp3 = c[i].get('ara_fem',{}).get('titol_programa',None)
+                    arafemesp3_sinop = c[i].get('ara_fem',{}).get('sinopsi',None)
+                if nameChannel == '324':
+                    arafem324 = c[i].get('ara_fem',{}).get('titol_programa',None)
+                    arafem324_sinop = c[i].get('ara_fem',{}).get('sinopsi',None)
+                    
+                i = i + 1
+               
+        infolabelstv3 = {}
+        infolabels324 = {}
+        infolabels33 = {}
+        infolabelsesp3 = {}
+        
+        if arafemtv3 <> None:
+            infolabelstv3['title'] = arafemtv3
+        if arafemtv3_sinop <> None:
+            if type(arafemtv3) is int or type(arafemtv3) is float:
+                arafemtv3 = str(arafemtv3)
+            arafemtv3_sinop = '[B]' + arafemtv3 + '[/B]' + '[CR]' + arafemtv3_sinop
+            infolabelstv3['plot'] = arafemtv3_sinop
+            
+        if arafem33 <> None:
+            infolabels33['title'] = arafem33
+        if arafem33_sinop <> None:
+            if type(arafem33) is int or type(arafem33) is float:
+                arafem33 = str(arafem33)
+            arafem33_sinop = '[B]' + arafem33 + '[/B]' + '[CR]' + arafem33_sinop
+            infolabels33['plot'] = arafem33_sinop
+            
+        if arafemesp3 <> None:
+            infolabelsesp3['title'] = arafemesp3
+        if arafemesp3_sinop <> None:
+            if type(arafemesp3) is int or type(arafemesp3) is float:
+                arafemesp3 = str(arafemesp3)
+            arafemesp3_sinop = '[B]' + arafemesp3 + '[/B]' + '[CR]' + arafemesp3_sinop
+            infolabelsesp3['plot'] = arafemesp3_sinop
+            
+        if arafem324 <> None:
+            infolabels324['title'] = arafem324
+        if arafem324_sinop <> None:
+            if type(arafem324) is int or type(arafem324) is float:
+                arafem324 = str(arafem324)
+            arafem324_sinop = '[B]' + arafem324 + '[/B]' + '[CR]' + arafem324_sinop
+            infolabels324['plot'] = arafem324_sinop
+            
+        
  
     listTV3 = xbmcgui.ListItem(addon.getLocalizedString(t_tv3).encode("utf-8"), iconImage=thumb_tv3,  thumbnailImage=thumb_tv3)
     listTV3.setProperty('isPlayable','true')
+    listTV3.setInfo('video', infolabelstv3)
     xbmcplugin.addDirectoryItem(handle=addon_handle,url=url_directe_tv3,listitem=listTV3)
     
     list324 = xbmcgui.ListItem(addon.getLocalizedString(t_canal324).encode("utf-8"), iconImage=thumb_324,  thumbnailImage=thumb_324)
     list324.setProperty('isPlayable','true')
+    list324.setInfo('video', infolabels324)
     xbmcplugin.addDirectoryItem(handle=addon_handle,url=url_directe_324,listitem=list324)
     
     listC33S3 = xbmcgui.ListItem(addon.getLocalizedString(t_c33super3).encode("utf-8"), iconImage=thumb_c33s3,  thumbnailImage=thumb_c33s3)
     listC33S3.setProperty('isPlayable','true')
+    listC33S3.setInfo('video', infolabels33)
     xbmcplugin.addDirectoryItem(handle=addon_handle,url=url_directe_c33s3,listitem=listC33S3)
     
     listEsport3 = xbmcgui.ListItem(addon.getLocalizedString(t_esport3).encode("utf-8"), iconImage=thumb_esp3,  thumbnailImage=thumb_esp3)
     listEsport3.setProperty('isPlayable','true')
+    listEsport3.setInfo('video', infolabelsesp3)
     xbmcplugin.addDirectoryItem(handle=addon_handle,url=url_directe_esport3,listitem=listEsport3)
         
     xbmcplugin.endOfDirectory(addon_handle) 
@@ -353,7 +440,9 @@ def addLink(data):
         liz = xbmcgui.ListItem(titol, iconImage="DefaultVideo.png", thumbnailImage=image)
         
         if descripcio == None:
-            descripcio = ''       
+            descripcio = '' 
+        else:
+            descripcio = descripcio.replace('<br />', '')
             
         if programa <> None:
             if type(programa) is int or type(programa) is float:
@@ -382,8 +471,10 @@ def addLink(data):
             year = data_emisio[6:10]
             infolabels['aired'] = dt
             infolabels['year'] = year
+            
           
         liz.setInfo('video', infolabels)
+        #liz.setProperty('Fanart_Image','http://statics.ccma.cat/multimedia/jpg/0/9/1417625843490.jpg')
         liz.addStreamInfo('video',{'duration':durada})
         liz.setProperty('isPlayable','true')
         ok = xbmcplugin.addDirectoryItem(handle=addon_handle,url=linkvideo,listitem=liz)

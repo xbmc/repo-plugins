@@ -1,3 +1,12 @@
+v1.3.0
+- Fixed minor errors
+
+v1.2.9
+- Fixed minor errors
+
+v1.2.8
+- Added info on live channels
+
 v1.2.7
 - Initial version
 

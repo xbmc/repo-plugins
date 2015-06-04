@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.tv3.cat" name="TV3cat" version="1.2.7" provider-name="jqandreu">
+<addon id="plugin.video.tv3.cat" name="TV3cat" version="1.3.0" provider-name="jqandreu">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>
@@ -16,7 +16,7 @@
         <description lang="es">Toda la programación de TV3 a la carta.[CR]Las listas de los más vistos, destacados, programas ordenados de la A a la Z. [CR]Canales en directo: TV3cat, K33, Super3, 3/24, Esport3</description>
         <language>ca</language>
         <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-        <source>https://github.com/AddonScriptorDE/plugin.video.cbsnews_com</source>
+        <source>https://github.com/jqandreu/plugin.video.tv3.cat</source>
         <website>http://www.tv3.cat</website>
     </extension>
 </addon>

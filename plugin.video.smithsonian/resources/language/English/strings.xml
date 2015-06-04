@@ -11,6 +11,10 @@
        <string id="30010">Smithsonian Channel</string>
        <string id="30011">No Videos Found</string>
 
+       <string id="30020">Content Type</string>
+       <string id="30021">Files</string>
+       <string id="30022">Movies</string>
+       <string id="30023">Episodes</string>
 
        <string id="30030">Proxy</string>
        <string id="30040">Proxy IP</string>
@@ -20,6 +24,13 @@
        <string id="30044">Password</string>
        <string id="30050">Sub-Titles</string>
        <string id="30051">Enable Sub-Titles</string>
+
+       <string id="30070">Enable Views</string>
+       <string id="30071">Default View</string>
+       <string id="30072">Episode View</string>
+       <string id="30073">View</string>
+
+
 
 </strings>
 

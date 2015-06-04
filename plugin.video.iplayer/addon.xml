@@ -21,5 +21,6 @@
         <email>buzz at exotica org uk</email>
         <website>https://github.com/joolswills/plugin.video.iplayer</website>
         <source>https://github.com/joolswills/plugin.video.iplayer.git</source>
+        <broken>Broken due to website changes</broken>
     </extension>
 </addon>

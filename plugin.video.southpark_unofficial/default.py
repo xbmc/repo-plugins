@@ -169,17 +169,17 @@ def playEpisode(url, title, thumbnail):
 		else:
 			print "["+addonID+"] missing some vtt subs..."
 
-	while player.isPlaying():
-		time.sleep(1)
-		if pos != playlist.getposition():
-			pos = playlist.getposition()
-			if len(ccs) >= playlist.size():
-				player.setSubtitles(ccs[pos])
-				player.showSubtitles(cc_settings)
-			else:
-				print "["+addonID+"] missing some vtt subs..."
-	player.stop()
-	playlist.clear()
+	while pos < playlist.size() and player.isPlaying():
+		while player.isPlaying():
+			time.sleep(0.05)
+			if pos != playlist.getposition():
+				pos = playlist.getposition()
+				if len(ccs) >= playlist.size():
+					player.setSubtitles(ccs[pos])
+					player.showSubtitles(cc_settings)
+				else:
+					print "["+addonID+"] missing some vtt subs..."
+		time.sleep(10)
 	return
 
 def translation(id):

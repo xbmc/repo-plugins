@@ -1,4 +1,5 @@
 Version 1.4.1 Initial toggle.sg release
 Version 1.4.2 Fix for Telemovies
 Version 1.4.3 Added all channels tv-catchup
+Version 1.5.0 Added metadata, optimized for ftv skin
 

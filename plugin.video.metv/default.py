@@ -1,25 +1,21 @@
 # -*- coding: utf-8 -*-
-# MeTV XBMC Addon
+# MeTV Kodi Addon
 
-import sys
-import httplib
-
+import sys,httplib
 import urllib, urllib2, cookielib, datetime, time, re, os, string
 import xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs, xbmc
-import cgi, gzip
-from StringIO import StringIO
+import zlib,json,HTMLParser
+h = HTMLParser.HTMLParser()
+qp  = urllib.quote_plus
+uqp = urllib.unquote_plus
 
 
-
-USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25'
-GENRE_TV  = "TV"
-UTF8          = 'utf-8'
+UTF8     = 'utf-8'
 METVBASE = 'http://metvnetwork.com%s'
 
 addon         = xbmcaddon.Addon('plugin.video.metv')
 __addonname__ = addon.getAddonInfo('name')
 __language__  = addon.getLocalizedString
-
 
 home          = addon.getAddonInfo('path').decode(UTF8)
 icon          = xbmc.translatePath(os.path.join(home, 'icon.png'))
@@ -30,168 +26,196 @@ def log(txt):
     message = '%s: %s' % (__addonname__, txt.encode('ascii', 'ignore'))
     xbmc.log(msg=message, level=xbmc.LOGDEBUG)
 
-def cleanfilename(name):    
-    valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
-    return ''.join(c for c in name if c in valid_chars)
+USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25'
+defaultHeaders = {'User-Agent':USER_AGENT, 'Accept':"text/html", 'Accept-Encoding':'gzip,deflate,sdch', 'Accept-Language':'en-US,en;q=0.8'} 
 
-def demunge(munge):
-        try:
-            munge = urllib.unquote_plus(munge).decode(UTF8)
-        except:
-            pass
-        return munge
+def getRequest(url, user_data=None, headers = defaultHeaders , alert=True):
 
-def getRequest(url, user_data=None, headers = {'User-Agent':USER_AGENT, 'Accept':"text/html", 'Accept-Encoding':'gzip,deflate,sdch', 'Accept-Language':'en-US,en;q=0.8'}  ):
-              log("getRequest URL:"+str(url))
-              req = urllib2.Request(url.encode(UTF8), user_data, headers)
+    if addon.getSetting('us_proxy_enable') == 'true':
+        us_proxy = 'http://%s:%s' % (addon.getSetting('us_proxy'), addon.getSetting('us_proxy_port'))
+        proxy_handler = urllib2.ProxyHandler({'http':us_proxy})
+        if addon.getSetting('us_proxy_pass') <> '' and addon.getSetting('us_proxy_user') <> '':
+            log('Using authenticated proxy: ' + us_proxy)
+            password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+            password_mgr.add_password(None, us_proxy, addon.getSetting('us_proxy_user'), addon.getSetting('us_proxy_pass'))
+            proxy_auth_handler = urllib2.ProxyBasicAuthHandler(password_mgr)
+            opener = urllib2.build_opener(proxy_handler, proxy_auth_handler)
+        else:
+            log('Using proxy: ' + us_proxy)
+            opener = urllib2.build_opener(proxy_handler)
+    else:   
+        opener = urllib2.build_opener()
+    urllib2.install_opener(opener)
 
-              try:
-                 response = urllib2.urlopen(req)
-                 if response.info().getheader('Content-Encoding') == 'gzip':
-                    log("Content Encoding == gzip")
-                    buf = StringIO( response.read())
-                    f = gzip.GzipFile(fileobj=buf)
-                    link1 = f.read()
-                 else:
-                    link1=response.read()
-              except:
-                 link1 = ""
+    log("getRequest URL:"+str(url))
+    req = urllib2.Request(url.encode(UTF8), user_data, headers)
 
-              if not (str(url).endswith('.zip')):
-                 link1 = str(link1).replace('\n','')
-              return(link1)
+    try:
+       response = urllib2.urlopen(req, timeout=30)
+       page = response.read()
+       if response.info().getheader('Content-Encoding') == 'gzip':
+           log("Content Encoding == gzip")
+           page = zlib.decompress(page, zlib.MAX_WBITS + 16)
+
+    except urllib2.URLError, e:
+       if alert:
+           xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( __addonname__, e , 5000) )
+       page = ""
+
+    return(page)
 
 
-def getSources(fanart):
-              urlbase   = METVBASE % ('/videos/')
-              pg = getRequest(urlbase)
-              blob = re.search('<div class="video-library-list clearfix">(.+?)video-library-list -->',pg).group(1)
-              cats = re.findall('href="(.+?)".+?src="(.+?)".+?<h2>(.+?)<', blob)
-              for caturl, catimage, catname in cats:
-                  pg = getRequest(METVBASE % (caturl))
-                  try:
-                     (cathead,catsyn)=re.search('<span class="new-episodes">(.+?)<.+?"video-landing-main-desc-wrap clearfix".+?-->(.+?)<',pg).groups()
-                     catdesc = '%s \n %s' % (cathead.strip(), catsyn.strip())
-                  except:
-                     catdesc = re.search('"video-landing-main-desc-wrap clearfix".+?-->(.+?)<',pg).group(1).strip()
-                  addDir(catname,caturl,'GC',catimage,fanart,catdesc,GENRE_TV,'',False)
 
-def getCats(cat_url):
-              urlbase   = METVBASE % (cat_url)
-              pg = getRequest(urlbase)
-              try:
-                series = re.search('class="new-episodes">.+?<h2>(.+?)</h2>',pg).group(1)
-              except:
-                series = 'MeTV'
-              showart = METVBASE % (re.search('<img class="video-landing-billboard" src="(.+?)"',pg).group(1))
-              blob = re.search('<div class="video-landing-episodes-wrap clearfix">(.+?)video-landing-episodes-wrap -->',pg).group(1)
-              shows = re.findall('episode-title"><a href="(.+?)">(.+?)<.+?thumb-img" src="(.+?)".+?episode-desc">(.+?)<',blob)
-              for showpage,showname, showimg, showdesc in shows:
-                 showname = '%s - %s' % (series, showname)
-                 showdesc = showdesc.replace('</span>','')
-                 try:
-                   showurl = re.search('/media/(.+?)/',showimg).group(1)
-                 except:
-                   showurl = 'BADASS'+showpage
-                 showurl = "%s?url=%s&name=%s&mode=GS" %(sys.argv[0], urllib.quote_plus(showurl), urllib.quote_plus(showname))
-                 addLink(showurl.encode(UTF8),showname,showimg,showart,showdesc,GENRE_TV,'')
 
+def getShows():
+   xbmcplugin.setContent(int(sys.argv[1]), 'files')
+   xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_UNSORTED)
+   xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_TITLE)
+   xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_EPISODE)
+
+   ilist=[]
+   pg = getRequest(METVBASE % '/videos/')
+   m = re.compile('<div class="video-library-list clearfix">(.+?)video-library-list -->',re.DOTALL).search(pg)
+   shows = re.compile('href="(.+?)".+?src="(.+?)".+?<h2>(.+?)<',re.DOTALL).findall(pg,m.start(1),m.end(1))
+   for url, img, name in shows:
+       pg = getRequest(METVBASE % url)
+       img = METVBASE % img
+       try:
+          (cathead,catsyn)=re.compile('<span class="new-episodes">(.+?)<.+?"video-landing-main-desc-wrap clearfix".+?-->(.+?)<',re.DOTALL).search(pg).groups()
+          plot = '%s \n %s' % (cathead.strip(), catsyn.strip())
+       except:
+          plot = re.compile('"video-landing-main-desc-wrap clearfix".+?-->(.+?)<',re.DOTALL).search(pg).group(1).strip()
+       name = name.strip()
+       fanart = addonfanart
+       infoList = {}
+       infoList['MPAA']        = ''
+       infoList['TVShowTitle'] = name
+       infoList['Title']       = name
+       infoList['Studio']      = 'MeTV'
+       infoList['Genre']       = ''
+       infoList['Plot'] = h.unescape(plot.decode(UTF8))
+       mode = 'GE'
+       u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
+       liz=xbmcgui.ListItem(name, '',icon, img)
+       liz.setInfo( 'Video', infoList)
+       liz.setProperty('fanart_image', fanart)
+       ilist.append((u, liz, True))
+   xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+   if addon.getSetting('enable_views') == 'true':
+      xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('default_view'))
+   xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+
+def getEpisodes(eurl, showName):
+   xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+   xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_UNSORTED)
+   xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_TITLE)
+   xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+   xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_EPISODE)
+
+   ilist=[] 
+   pg = getRequest(METVBASE % eurl)
+   try:
+      showName = re.compile('class="new-episodes">.+?<h2>(.+?)</h2>',re.DOTALL).search(pg).group(1)
+   except:
+      showName = 'MeTV'
+   m = re.compile('<img class="video-landing-billboard" src="(.+?)"',re.DOTALL).search(pg)
+   fanart = METVBASE % m.group(1)
+   m = re.compile('<div class="video-landing-episodes-wrap clearfix">(.+?)video-landing-episodes-wrap -->',re.DOTALL).search(pg, m.end(1))
+   episodes = re.compile('episode-title"><a href="(.+?)">(.+?)<.+?thumb-img" src="(.+?)".+?episode-desc">(.+?)<',re.DOTALL).findall(pg,m.start(1),m.end(1))
+   for showpage, name, thumb, plot in episodes:
+      plot = plot.replace('</span>','')
+      try:
+         url = re.compile('/media/(.+?)/').search(thumb).group(1)
+      except:
+         url = 'BADASS'+showpage
+      u = "%s?url=%s&name=%s&mode=GV" %(sys.argv[0], qp(url), qp(name))
+      infoList = {}
+      infoList['MPAA']        = ''
+      infoList['TVShowTitle'] = showName
+      infoList['Title']       = name
+      infoList['Studio']      = 'MeTV'
+      infoList['Genre']       = ''
+      infoList['Season']      = 0
+      infoList['Episode']     = -1
+      infoList['Plot']        = h.unescape(plot)
+      liz=xbmcgui.ListItem(name, '',None, thumb)
+      liz.setInfo( 'Video', infoList)
+      liz.addStreamInfo('video', { 'codec': 'mp4', 
+                                   'width' : 720, 
+                                   'height' : 480, 
+                                   'aspect' : 1.37 })
+      liz.addStreamInfo('audio', { 'codec': 'aac', 'language' : 'en'})
+      liz.addStreamInfo('subtitle', { 'language' : 'en'})
+      liz.setProperty('fanart_image', fanart)
+      liz.setProperty('IsPlayable', 'true')
+      ilist.append((u, liz, False))
+   xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+   if addon.getSetting('enable_views') == 'true':
+      xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('episode_view'))
+   xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 def getUrl(mediaID):
-            if mediaID.startswith('BADASS'):
-              mediaID = METVBASE % mediaID.replace('BADASS','')
-              pg = getRequest(mediaID)
-              mediaID = re.search('mediaId=(.+?)&',pg).group(1)
-            in0 = '<tns:in0>%s</tns:in0>' % mediaID
-            in1 = '<tns:in1 xsi:nil="true" />'
-            SoapMessage = """<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><SOAP-ENV:Body><tns:getPlaylistByMediaId xmlns:tns="http://service.data.media.pluggd.com">"""+in0+in1+"""</tns:getPlaylistByMediaId></SOAP-ENV:Body></SOAP-ENV:Envelope>"""
-            html = getRequest("http://ps2.delvenetworks.com/PlaylistService", 
-                               user_data = SoapMessage, 
-                               headers={ "Host": "ps2.delvenetworks.com", 
-                               "User-Agent":"Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.10) Gecko/20100914 Firefox/3.6.10",
-                               "Content-type": "text/xml; charset=\"UTF-8\"", "Content-length": "%d" % len(SoapMessage), 
-                               "Referer": "http://static.delvenetworks.com/deployments/player/player-3.27.1.0.swf?playerForm=Chromeless", 
-                               "X-Page-URL": "http://metvnetwork.com/video/", "SOAPAction": "\"\""})
-            streams = re.findall('<Stream>(.+?)</Stream>',html)
-            show_url=''
-            highbitrate = float(0)
-            for stream in streams:
-               (url, bitrate) = re.search('<url>(.+?)</u.+?<videoBitRate>(.+?)</v',stream).groups()
-               if (float(bitrate)) > highbitrate:
-                  show_url = url
-                  highbitrate = float(bitrate)
-            show_url  = show_url.split('mp4:',1)[1]
-            finalurl  = 'http://s2.cpl.delvenetworks.com/%s' % show_url
-            return finalurl
-
-def getShow(mediaID, show_name):
-            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = getUrl(mediaID)))
+     if mediaID.startswith('BADASS'):
+        mediaID = METVBASE % mediaID.replace('BADASS','')
+        pg = getRequest(mediaID)
+        mediaID = re.compile('mediaId=(.+?)&',re.DOTALL).search(pg).group(1)
+     in0 = '<tns:in0>%s</tns:in0>' % mediaID
+     in1 = '<tns:in1 xsi:nil="true" />'
+     SoapMessage = """<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><SOAP-ENV:Body><tns:getPlaylistByMediaId xmlns:tns="http://service.data.media.pluggd.com">"""+in0+in1+"""</tns:getPlaylistByMediaId></SOAP-ENV:Body></SOAP-ENV:Envelope>"""
+     html = getRequest("http://ps2.delvenetworks.com/PlaylistService", 
+                        user_data = SoapMessage, 
+                        headers={ "Host": "ps2.delvenetworks.com", 
+                        "User-Agent":"Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.10) Gecko/20100914 Firefox/3.6.10",
+                        "Content-type": "text/xml; charset=\"UTF-8\"", "Content-length": "%d" % len(SoapMessage), 
+                        "Referer": "http://static.delvenetworks.com/deployments/player/player-3.27.1.0.swf?playerForm=Chromeless", 
+                        "X-Page-URL": "http://metvnetwork.com/video/", "SOAPAction": "\"\""})
+     streams = re.compile('<Stream>(.+?)</Stream>',re.DOTALL).findall(html)
+     show_url=''
+     highbitrate = float(0)
+     for stream in streams:
+         (url, bitrate) = re.compile('<url>(.+?)</u.+?<videoBitRate>(.+?)</v',re.DOTALL).search(stream).groups()
+         if (float(bitrate)) > highbitrate:
+            show_url = url
+            highbitrate = float(bitrate)
+     show_url  = show_url.split('mp4:',1)[1]
+     finalurl  = 'http://s2.cpl.delvenetworks.com/%s' % show_url
+     return finalurl
 
 
-def play_playlist(name, list):
-        playlist = xbmc.PlayList(1)
-        playlist.clear()
-        item = 0
-        for i in list:
-            item += 1
-            info = xbmcgui.ListItem('%s) %s' %(str(item),name))
-            playlist.add(i, info)
-        xbmc.executebuiltin('playlist.playoffset(video,0)')
 
-
-def addDir(name,url,mode,iconimage,fanart,description,genre,date,showcontext=True,playlist=None,autoplay=False):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+mode
-        dir_playable = False
-        cm = []
-
-        if mode != 'SR':
-            u += "&name="+urllib.quote_plus(name)
-            if (fanart is None) or fanart == '': fanart = addonfanart
-            u += "&fanart="+urllib.quote_plus(fanart)
-            dir_image = "DefaultFolder.png"
-            dir_folder = True
-        else:
-            dir_image = "DefaultVideo.png"
-            dir_folder = False
-            dir_playable = True
-
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage=dir_image, thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": description, "Genre": genre, "Year": date } )
-        liz.setProperty( "Fanart_Image", fanart )
-
-        if dir_playable == True:
-         liz.setProperty('IsPlayable', 'true')
-        if not playlist is None:
-            playlist_name = name.split(') ')[1]
-            cm.append(('Play '+playlist_name+' PlayList','XBMC.RunPlugin(%s?mode=PP&name=%s&playlist=%s)' %(sys.argv[0], playlist_name, urllib.quote_plus(str(playlist).replace(',','|')))))
-        liz.addContextMenuItems(cm)
-        return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=dir_folder)
-
-def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,playlist=None, autoplay=False):
-        return addDir(name,url,'SR',iconimage,fanart,description,genre,date,showcontext,playlist,autoplay)
-
+def getVideo(url, show_name):
+    url = uqp(url)
+    if (addon.getSetting('sub_enable') == "true"):
+       try:
+           a = json.loads(getRequest('http://api.video.limelight.com/rest/organizations/abee2d5fad8944c790db6a0bfd3b9ebd/media/%s/properties.json' % url))
+           xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = getUrl(url)))
+           try: 
+               subfile = a["captions"][0]["url"]
+               xbmc.sleep(2000)
+               xbmc.Player().setSubtitles(subfile)
+           except:
+               pass
+       except:
+           pass
+    else:
+       xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = getUrl(url)))
 
 # MAIN EVENT PROCESSING STARTS HERE
-
-xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
 
 parms = {}
 try:
     parms = dict( arg.split( "=" ) for arg in ((sys.argv[2][1:]).split( "&" )) )
     for key in parms:
-       parms[key] = demunge(parms[key])
+      try:    parms[key] = urllib.unquote_plus(parms[key]).decode(UTF8)
+      except: pass
 except:
     parms = {}
 
 p = parms.get
 
 mode = p('mode',None)
-if mode==  None:  getSources(p('fanart'))
-elif mode=='SR':  xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=p('url')))
-elif mode=='PP':  play_playlist(p('name'), p('playlist'))
-elif mode=='GC':  getCats(p('url'))
-elif mode=='GS':  getShow(p('url'), p('name'))
 
-xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
+if mode==  None:  getShows()
+elif mode=='GE':  getEpisodes(p('url'), p('name'))
+elif mode=='GV':  getVideo(p('url'), p('name'))

@@ -14,9 +14,9 @@
 
     <!--Category Descriptions  30031-30035 from http://www.arretsurimages.net/emissions.php-->
     <!--@rret sur images-->
-    <string id="30031">Program of media literacy, that you might already have been watching on France 5.</string>
+    <string id="30031">Media literacy program, that you might already have been watching on France 5.</string>
     <!--Ligne J@une-->
-    <string id="30032">Talk show which explores the shift between traditional and internet media.</string>
+    <string id="30032">A talk show exploring the shift between traditional and Internet media.</string>
     <!--d@ns le texte-->
     <string id="30033">Literary program that delves into the secrets of writers' production.</string>
     <!--@ux sources-->
@@ -30,7 +30,7 @@
 
     <!--Errors-->
     <string id="30050">Logon Error</string>
-    <string id="30051">Enter your username and password</string>
+    <string id="30051">Enter your username (@si email) and password</string>
     <string id="30052">in the plugin settings</string>
     <string id="30053">User could not be authenticated</string>
     <string id="30054">Main video not found</string>
@@ -38,7 +38,7 @@
 
     <!--Settings-->
     <string id="30070">Login Information</string>
-    <string id="30071">username</string>
+    <string id="30071">username (email)</string>
     <string id="30072">password</string>
     <string id="30080">Sort Method</string>
     <string id="30081">Sort programs by</string>

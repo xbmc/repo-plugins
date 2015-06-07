@@ -30,7 +30,7 @@
 
     <!--Errors-->
     <string id="30050">Erreur de connexion</string>
-    <string id="30051">Saisissez votre nom d'utilisateur et mot de passe</string>
+    <string id="30051">Saisissez votre nom d'utilisateur (e-mail) et mot de passe</string>
     <string id="30052">dans les paramètres de l'add-on</string>
     <string id="30053">Utilisateur / mot de passe incorrect</string>
     <string id="30054">Vidéo principale non trouvée</string>
@@ -38,7 +38,7 @@
 
     <!--Settings-->
     <string id="30070">Compte</string>
-    <string id="30071">utilisateur</string>
+    <string id="30071">e-mail utilisé pour @si</string>
     <string id="30072">mot de passe</string>
     <string id="30080">Affichage</string>
     <string id="30081">Afficher les émissions</string>

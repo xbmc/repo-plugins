@@ -1,3 +1,9 @@
+[B]Version 2.3.9[/B]
+
+- Update some strings for clarification
+  (thanks to Axel Simon)
+- Update to gotham
+
 [B]Version 2.3.8[/B]
 
 - Fix after website change (responsive design)

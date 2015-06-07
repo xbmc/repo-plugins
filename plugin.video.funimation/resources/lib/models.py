@@ -1,398 +1,145 @@
-
-class TemplateModel(object):
-    _common_fields = [
-        'nid',
-        'show_thumbnail',
-        'title',
-        'total',
-        'votes'
-    ]
-
+class Structure(object):
     _fields = []
 
     def __init__(self, **kwargs):
-        self._fields.extend(self._common_fields)
         for k, v in kwargs.iteritems():
             if k in self._fields:
                 setattr(self, k, v)
 
-    @property
-    def icon(self):
-        return self.show_thumbnail
+    def get(self, key, default=None):
+        return getattr(self, key, default)
 
-    @property
-    def thumbnail(self):
-        return self.show_thumbnail
+    def __repr__(self):
+        return repr(self.__dict__)
+
+
+# noinspection PyUnresolvedReferences
+class Show(Structure):
+    _fields = [
+        'asset_id',
+        'pubDate',
+        'series_name',
+        'series_description',
+        'episode_count',
+        'genres',
+        'show_rating',
+        'thumbnail_large',
+        'poster_art',
+        'popularity',
+    ]
 
     @property
     def label(self):
-        return self.title
+        return self.series_name
 
     @property
-    def query_string(self):
-        raise NotImplementedError()
+    def label2(self):
+        return '[{0}]'.format(self.show_rating)
+
+    @property
+    def icon(self):
+        return self.thumbnail_large
+
+    @property
+    def thumbnail(self):
+        return self.poster_art
+
+    @property
+    def info(self):
+        return {
+            'genre': self.genres,
+            'plot': self.series_description,
+            'episode': self.episode_count,
+            'year': self.pubDate.split('/')[2],
+            'votes': str(self.popularity),
+            'mpaa': self.show_rating,
+            'aired': '{2}-{1}-{0}'.format(*self.pubDate.split('/')),
+        }
+
+    @property
+    def query(self):
+        return {'show_id': self.asset_id, 'get': 'videos'}
+
+    @property
+    def genre(self):
+        if self.genres is not None:
+            return self.genres.split(',')
+        else:
+            return ''
+
+
+# noinspection PyUnresolvedReferences
+class Video(Structure):
+    _fields = [
+        'asset_id',
+        'releaseDate',
+        'title',
+        'video_url',
+        'quality',
+        'description',
+        'number',
+        'duration',
+        'thumbnail_url',
+        'rating',
+        'releaseDate',
+        'dub_sub',
+    ]
+
+    @property
+    def label(self):
+        if self.number:
+            # self.number sometimes is a unicode str that's why we use repr()
+            lbl = '%s. %s (%s)' % (repr(self.number), self.title, self.dub_sub)
+        else:
+            lbl = '%s (%s)' % (self.title, self.dub_sub)
+        return lbl
+
+    @property
+    def sub(self):
+        return self.dub_sub == 'Sub'
+
+    @property
+    def dub(self):
+        return self.dub_sub == 'Dub'
+
+    @property
+    def label2(self):
+        return '[{0}]'.format(self.rating)
+
+    @property
+    def icon(self):
+        return self.thumbnail_url
+
+    @property
+    def thumbnail(self):
+        return self.thumbnail_url
+
+    @property
+    def info(self):
+        return {
+            'plot': self.description,
+            'episode': self.number,
+            'year': self.releaseDate.split('/')[0],
+            'mpaa': self.rating,
+            'aired': self.releaseDate.replace('/', '-'),
+        }
 
     @property
     def stream_info(self):
-        if self.quality == 4000:
+        if '1080' in self.quality:
             w, h = 1920, 1080
-        elif self.quality == 3500:
+        elif '720' in self.quality:
             w, h = 1080, 720
         else:
             w, h = 640, 480
-        aspect = w / float(h)
-
-        si = {
+        return {
             'codec': 'mp4',
-            'aspect': aspect,
+            'aspect': w / float(h),
             'width': w,
             'height': h,
             'duration': self.duration
         }
 
-        return si
-
     @property
-    def sub(self):
-        return self.sub_dub == 'Sub'
-
-    @property
-    def dub(self):
-        return self.sub_dub == 'Dub'
-
-    def get(self, key, default=None):
-        return getattr(self, key, default)
-
-    # not sure if i like this, might show to much info
-    def __repr__(self):
-        return repr(self.__dict__)
-
-
-class Show(TemplateModel):
-    _fields = [
-        'all_terms',
-        'maturity_rating',
-        'mobile_banner_large',
-        'post_date',
-        'show_thumbnail_accedo',
-        'similar_shows',
-        'video_section',
-    ]
-
-    @property
-    def thumbnail(self):
-        return self.mobile_banner_large
-
-    @property
-    def label2(self):
-        return '[' + self.maturity_rating + ']'
-
-    @property
-    def vtypes(self):
-        vt = ','.join([i.lower() for i in self.video_section])
-        return vt
-
-    @property
-    def info(self):
-        video_info = {
-            'genre': ', '.join(self.all_terms),
-            'votes': self.votes,
-            'aired': self.post_date.strftime('%Y-%m-%d'),
-            'year': self.post_date.strftime('%Y'),
-        }
-
-        return video_info
-
-    @property
-    def query_string(self):
-        qry = {
-            'id': self.nid,
-            'folder': 'true',
-            'path': '/show',
-            'vtypes': self.vtypes,
-        }
-
-        return qry
-
-    @property
-    def stream_info(self):
-        raise NotImplementedError()
-
-    @property
-    def sub(self):
-        raise NotImplementedError()
-
-    @property
-    def dub(self):
-        raise NotImplementedError()
-
-
-class Episode(TemplateModel):
-    _fields = [
-        'aip',
-        'duration',
-        'episode_number',
-        'episode_thumbnail',
-        'exclusive',
-        'funimation_id',
-        'language',
-        'promo',
-        'rating',
-        'show_title',
-        'sub_dub',
-        'type',
-        'video_quality',
-        'video_thumbnail_accedo'
-    ]
-
-    @property
-    def label(self):
-        lbl = '%d. %s (%s)' % (self.episode_number, self.title, self.sub_dub)
-        return lbl
-
-    @property
-    def thumbnail(self):
-        return self.episode_thumbnail
-
-    @property
-    def quality(self):
-        count = self.video_quality.count('HD (720)')
-        if count >= 2:
-            return 4000
-        elif count == 1:
-            return 3500
-        else:
-            return 2000
-
-    @property
-    def info(self):
-        video_info = {
-            'duration': self.duration,
-            'episode': self.episode_number,
-            'votes': self.votes,
-            'tvshowtitle': self.show_title,
-        }
-
-        return video_info
-
-    @property
-    def query_string(self):
-        qry = {
-            'id': self.nid,
-            'path': '/show/episodes',
-            'videoid': self.funimation_id,
-        }
-
-        return qry
-
-
-class Movie(TemplateModel):
-    _fields = [
-        'aip',
-        'duration',
-        'funimation_id',
-        'language',
-        'mobile_banner_large',
-        'promo',
-        'rating',
-        'show_title',
-        'sub_dub',
-        'term',
-        'tv_key_art',
-        'video_quality',
-        'video_thumbnail_accedo',
-    ]
-
-    @property
-    def quality(self):
-        count = self.video_quality.count('HD (720)')
-        if count >= 2:
-            return 4000
-        elif count == 1:
-            return 3500
-        else:
-            return 2000
-
-    @property
-    def info(self):
-        video_info = {
-            'duration': self.duration,
-            'votes': self.votes,
-            'mpaa': self.rating,
-        }
-
-        return video_info
-
-    @property
-    def query_string(self):
-        qry = {
-            'id': self.nid,
-            'path': '/show/episodes',
-            'videoid': self.funimation_id,
-        }
-
-        return qry
-
-
-class Clip(TemplateModel):
-    _fields = [
-        'duration',
-        'funimation_id',
-        'funimationid',
-        'post_date',
-        'rating',
-        'show_id',
-        'show_title',
-        'term',
-        'type',
-        'video_thumbnail_accedo',
-    ]
-
-    @property
-    def quality(self):
-            return 2000
-
-    @property
-    def info(self):
-        video_info = {
-            'duration': self.duration,
-            'tvshowtitle': self.show_title,
-        }
-
-        return video_info
-
-    @property
-    def query_string(self):
-        qry = {
-            'id': self.nid,
-            'path': '/show/episodes',
-            'videoid': self.funimation_id,
-        }
-
-        return qry
-
-    @property
-    def sub(self):
-        raise NotImplementedError()
-
-    @property
-    def dub(self):
-        raise NotImplementedError()
-
-
-class Trailer(TemplateModel):
-    _fields = [
-        'duration',
-        'funimation_id',
-        'is_mature',
-        'show_title',
-        'video_quality',
-        'video_thumbnail_accedo',
-    ]
-
-    @property
-    def quality(self):
-        count = self.video_quality.count('HD (720)')
-        if count >= 2:
-            return 4000
-        elif count == 1:
-            return 3500
-        else:
-            return 2000
-
-    @property
-    def info(self):
-        video_info = {
-            'duration': self.duration,
-            'tvshowtitle': self.show_title,
-        }
-
-        return video_info
-
-    @property
-    def query_string(self):
-        qry = {
-            'id': self.nid,
-            'path': '/show/episodes',
-            'videoid': self.funimation_id,
-        }
-
-        return qry
-
-    @property
-    def sub(self):
-        raise NotImplementedError()
-
-    @property
-    def dub(self):
-        raise NotImplementedError()
-
-
-class ShowDetail(TemplateModel):
-    _fields = [
-        'aspect_ratio',
-        'body',
-        'featured_product',
-        'genre',
-        'has_episodes',
-        'has_subscription',
-        'has_videos',
-        'is_featured',
-        'maturity_rating',
-        'mobile_banner_large',
-        'official_trailer',
-        'path',
-        'post_date',
-        'similar_shows',
-        'teaser',
-        'tv_key_art',
-        'type',
-        'updated_date',
-        'video_types',
-    ]
-
-    @property
-    def stream_info(self):
-        raise NotImplementedError()
-
-    @property
-    def sub(self):
-        raise NotImplementedError()
-
-    @property
-    def dub(self):
-        raise NotImplementedError()
-
-
-class EpisodeDetail(TemplateModel):
-    _fields = [
-        'aip',
-        'aspect_ratio',
-        'body',
-        'duration',
-        'episode_number',
-        'funimation_id',
-        'genre',
-        'group_nid',
-        'group_path',
-        'group_title',
-        'maturity_rating',
-        'path',
-        'post_date',
-        'quality',
-        'sequence_number',
-        'sub_dub',
-        'subscription_sunrise_date',
-        'subscription_sunset_date',
-        'sunrise_date',
-        'sunset_date',
-        'teaser',
-        'type',
-        'updated_date',
-        'video',
-        'video_quality',
-    ]
-
-    @property
-    def stream_info(self):
-        raise NotImplementedError()
+    def query(self):
+        return {'videoid': self.asset_id}

@@ -1,29 +1,21 @@
+import os
 import sys
 import xbmc
-import xbmcgui
-import xbmcvfs
-import xbmcplugin
 import xbmcaddon
 
-settings = xbmcaddon.Addon()
-language = settings.getLocalizedString
-plugin = settings.getAddonInfo('id')
+addon = xbmcaddon.Addon()
 
 if __name__ == '__main__':
     import resources.lib.common as common
-    common.log('ARGV: ' + repr(sys.argv), common.INFO)
+    common.log('ARGV: ' + repr(sys.argv))
 
-    try:
-        import StorageServer
-        cache = StorageServer.StorageServer(common.plugin,
-            int(settings.getSetting('cache_time')))
-    except ImportError:
-        common.log("Common Plugin Cache isn't installed, using dummy class.")
-        import storageserverdummy
-        cache = storageserverdummy.StorageServer(common.plugin)
+    cookie_file = os.path.join(
+        xbmc.translatePath(addon.getAddonInfo('profile')), 'fun-cookie.txt')
 
-    from resources.lib.api import Api
-    api = Api()
+    from resources.lib import Funimation
+    api = Funimation(addon.getSetting('username'),
+                     addon.getSetting('password'),
+                     cookie_file)
 
     import resources.lib.nav as nav
     nav.list_menu()

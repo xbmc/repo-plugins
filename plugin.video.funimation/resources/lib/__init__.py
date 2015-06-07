@@ -1,0 +1,1 @@
+from .funimation import Funimation

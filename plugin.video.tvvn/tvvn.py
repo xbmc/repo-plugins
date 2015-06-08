@@ -158,9 +158,23 @@ def play_link(chn, src):
         d_progress = xbmcgui.DialogProgress()
         d_progress.create("", addon.getLocalizedString(30009))
 
+
+        #print(data['channels'][chn]['src']['id'])
+        #m3u8 url from fpt
+        if data['channels'][chn]['src']['playpath'] == "m3u8_fpt":
+            url = 'http://fptplay.net/show/getlinklivetv'
+            page_id = data['channels'][chn]['src']['page_id']
+            page_q = data['channels'][chn]['src']['page_q']
+            values={'id': page_id, 'quality': page_q, 'mobile': 'web'}
+            post_data = urllib.urlencode(values)
+            req = urllib2.Request(url, post_data)
+            response = urllib2.urlopen(req)
+            the_page = response.read()
+            the_data = json.loads(the_page)
+            full_url=the_data['stream']
+
         #m3u8 url using before & after marker
-        print(data['channels'][chn]['src']['playpath'])
-        if data['channels'][chn]['src']['playpath'] == "m3u8_bau":
+        elif data['channels'][chn]['src']['playpath'] == "m3u8_bau":
             stringA=urllib2.urlopen(data['channels'][chn]['src']['page_url']).read().decode('utf-8')
             stringB=(data['channels'][chn]['src']['url_before'])
             stringC=(data['channels'][chn]['src']['url_after'])

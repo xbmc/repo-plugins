@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
 	id="plugin.video.tvvn"
-	version="0.9.5"
+	version="0.9.6"
 	name="TV Viet Nam"
 	provider-name="Binh Nguyen">
 	<requires>

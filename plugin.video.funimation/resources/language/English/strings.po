@@ -1,6 +1,6 @@
 # XBMC Media Center language file
 # Addon Name: Funimation
-# Addon id: _plugin.video.funimation
+# Addon id: plugin.video.funimation
 # Addon Provider: Aaron Frase (afrase91@gmail.com)
 msgid ""
 msgstr ""
@@ -23,35 +23,27 @@ msgid "Browse Shows"
 msgstr ""
 
 msgctxt "#30011"
-msgid "Search Shows"
+msgid "Browse Latest"
 msgstr ""
 
 msgctxt "#30012"
-msgid "Episodes"
+msgid "Browse Simulcasts"
 msgstr ""
 
 msgctxt "#30013"
-msgid "Movies"
+msgid "Browse Featured"
 msgstr ""
 
 msgctxt "#30014"
-msgid "Trailers"
-msgstr ""
-
-msgctxt "#30015"
-msgid "Clips"
-msgstr ""
-
-msgctxt "#30016"
-msgid "More Results"
-msgstr ""
-
-msgctxt "#30017"
 msgid "Browse by Genre"
 msgstr ""
 
-msgctxt "#30018"
-msgid "Browse by Rating"
+msgctxt "#30015"
+msgid "Browse Alphabetically"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Search"
 msgstr ""
 
 
@@ -68,27 +60,6 @@ msgctxt "#30202"
 msgid "Password"
 msgstr ""
 
-msgctxt "#30203"
-msgid "Enable Caching"
-msgstr ""
-
-msgctxt "#30204"
-msgid "Only show Sub, Dub or Both?"
-msgstr ""
-
-msgctxt "#30205"
-msgid "Both"
-msgstr ""
-
-msgctxt "#30206"
-msgid "Sub"
-msgstr ""
-
-msgctxt "#30207"
-msgid "Dub"
-msgstr ""
-
-
 # advanced settings 30210-30220
 msgctxt "#30210"
 msgid "Advanced"
@@ -98,16 +69,8 @@ msgctxt "#30211"
 msgid "Log level"
 msgstr ""
 
-msgctxt "#30216"
-msgid "Notification Length"
-msgstr ""
-
-msgctxt "#30217"
-msgid "Cache expiration in hours"
-msgstr ""
-
 msgctxt "#30218"
-msgid "Clear cache"
+msgid "Clear Cookies"
 msgstr ""
 
 msgctxt "#30219"
@@ -141,127 +104,13 @@ msgid "Unknown Error"
 msgstr ""
 
 msgctxt "#30602"
-msgid "Cache has been cleared"
+msgid "Cookies have been cleared"
 msgstr ""
 
 msgctxt "#30603"
 msgid "No results"
 msgstr ""
 
-
-# genres 30700-30730
-msgctxt "#30700"
-msgid "Action"
-msgstr ""
-
-msgctxt "#30701"
-msgid "Adventure"
-msgstr ""
-
-msgctxt "#30702"
-msgid "Bishonen"
-msgstr ""
-
-msgctxt "#30703"
-msgid "Bishoujo"
-msgstr ""
-
-msgctxt "#30704"
-msgid "Comedy"
-msgstr ""
-
-msgctxt "#30705"
-msgid "Cyberpunk"
-msgstr ""
-
-msgctxt "#30706"
-msgid "Drama"
-msgstr ""
-
-msgctxt "#30707"
-msgid "Fan Service"
-msgstr ""
-
-msgctxt "#30708"
-msgid "Fantasy"
-msgstr ""
-
-msgctxt "#30709"
-msgid "Harem"
-msgstr ""
-
-msgctxt "#30710"
-msgid "Historical"
-msgstr ""
-
-msgctxt "#30711"
-msgid "Horror"
-msgstr ""
-
-msgctxt "#30712"
-msgid "Live Action"
-msgstr ""
-
-msgctxt "#30713"
-msgid "Magical Girl"
-msgstr ""
-
-msgctxt "#30714"
-msgid "Martial Arts"
-msgstr ""
-
-msgctxt "#30715"
-msgid "Mecha"
-msgstr ""
-
-msgctxt "#30716"
-msgid "Moe"
-msgstr ""
-
-msgctxt "#30717"
-msgid "Mystery"
-msgstr ""
-
-msgctxt "#30718"
-msgid "Reverse Harem"
-msgstr ""
-
-msgctxt "#30719"
-msgid "Romance"
-msgstr ""
-
-msgctxt "#30720"
-msgid "School"
-msgstr ""
-
-msgctxt "#30721"
-msgid "Sci Fi"
-msgstr ""
-
-msgctxt "#30722"
-msgid "Shonen"
-msgstr ""
-
-msgctxt "#30723"
-msgid "Slice of Life"
-msgstr ""
-
-msgctxt "#30724"
-msgid "Space"
-msgstr ""
-
-msgctxt "#30725"
-msgid "Sports"
-msgstr ""
-
-msgctxt "#30726"
-msgid "Super Power"
-msgstr ""
-
-msgctxt "#30727"
-msgid "Supernatural"
-msgstr ""
-
-msgctxt "#30728"
-msgid "Yuri"
+msgctxt "#30604"
+msgid "Cookie file does not exist"
 msgstr ""

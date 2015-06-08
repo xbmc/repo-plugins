@@ -107,6 +107,14 @@ class Provider(kodion.AbstractProvider):
     def get_fanart(self, context):
         return context.create_resource_path('media', 'fanart.jpg')
 
+    @kodion.RegisterProviderPath('^/search/$')
+    def endpoint_search(self, context, re_match):
+        query = context.get_param('q', '')
+        if not query:
+            return []
+
+        return self.on_search(query, context, re_match)
+
     def on_search(self, search_text, context, re_match):
         self.set_content_type(context, kodion.constants.content_type.EPISODES)
 
@@ -412,6 +420,7 @@ class Provider(kodion.AbstractProvider):
     @kodion.RegisterProviderPath('^/featured/$')
     def _on_featured(self, context, re_match):
         return helper.do_xml_featured_response(context, self, self.get_client(context).get_featured())
+
 
     def on_root(self, context, re_match):
         result = []

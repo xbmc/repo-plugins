@@ -112,9 +112,9 @@ class SimpleXbmcGui(object):
     xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listItem,isFolder=True,totalItems = objectCount)
 
   def listAvaibleMediathekes(self, mediathekNames):
-    rootPath = os.path.join(self.settings.getAddonInfo('path'),"resources/logos/");
+    rootPath = os.path.join(self.settings.getAddonInfo('path'),"resources/logos/png/");
     for name in mediathekNames:
-      listItem=xbmcgui.ListItem(name, iconImage="DefaultFolder.png",thumbnailImage=os.path.join(rootPath,name+".jpg"))
+      listItem=xbmcgui.ListItem(name, iconImage="DefaultFolder.png",thumbnailImage=os.path.join(rootPath,name+".png"))
       url = "%s?type=%s" % (sys.argv[0], name)
       xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listItem,isFolder=True)
   

@@ -20,6 +20,7 @@
     <website></website>
     <email></email>
     <source></source>
+    <broken>Set broken on request of author</broken>
   </extension>
 </addon>
 

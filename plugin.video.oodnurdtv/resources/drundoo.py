@@ -121,7 +121,19 @@ class drundoo:
                             'CityTV_2':'6',
                             '24Kitchen_2':'1',
                             'bbt_1':'6',
-                            'TheVoice':'6'}
+                            'TheVoice':'6',
+                            'Cinemax_3':'6',
+                            'EKids_1':'6',
+                            'Kanal3':'6',
+                            'bTVLady':'1',
+                            'BNT2_2':'1',
+                            'BulgariaonA_1':'1',
+                            'SkatTV':'6',
+                            'HobbyTV':'1',
+                            'DestinationB_2':'6',
+                            'TVEvropa_2':'6',
+                            'Evrokom':'1',
+			    'TiankovTV_1':'1'}
                 temp = temp[0:x1]+'='+myStat[myTV]+temp[x1:x2]+'&live&'+temp[x2:x3]
 
                 play_link = temp
@@ -131,7 +143,7 @@ class drundoo:
 	def make_shows(self,url,my_mode):
 
 		#timeshift_url = 'http://www.drundoo.com/channels/97/btv_hd/'
-		
+		    
 
 		timeshift_url = url
 		

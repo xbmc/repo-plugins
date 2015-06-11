@@ -4,4 +4,12 @@
     <string id="30001">Fox Business News</string>
     <string id="30002">Show Clips</string>
     <string id="30003">News Clips</string>
+
+       <string id="30070">Enable Views</string>
+       <string id="30071">Default View</string>
+       <string id="30072">Episode View</string>
+       <string id="30073">View</string>
+
+
+
 </strings>

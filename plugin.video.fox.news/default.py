@@ -161,7 +161,8 @@ def get_videolist(url):
     for i in items:
         item_url = None
         state = i['media-status']['@attributes']['state']
-        title = i['title'].replace('&amp;','&').encode('utf-8')
+        try:    title = i['title'].encode('utf-8').replace('&amp;','&')
+        except: title = i['title']
         if state != 'active':
             addon_log('item state: %s: %s' %(title, state))
             continue
@@ -205,12 +206,15 @@ def get_videolist(url):
             continue
         thumb = i['media-group']['media-thumbnail']['@attributes']['url']
         date_time = datetime(*(time.strptime(i['pubDate'][:-6], '%a, %d %b %Y %H:%M:%S')[:6]))
+        try:    plot = i['description'].encode('utf-8').replace('&amp;','&')
+        except: 
+             plot = ''
         info = {
             'Title': title,
             'Date': date_time.strftime('%d.%m.%Y'),
             'Premiered': date_time.strftime('%d-%m-%Y'),
             'Duration': get_duration(i['itunes-duration']),
-            'Plot': i['description'].replace('&amp;','&').encode('utf-8')
+            'Plot': plot
             }
         add_dir(title, item_url, thumb, 'resolve_url', info)
 
@@ -246,7 +250,8 @@ def add_dir(name, url, iconimage, mode, info={}):
     if mode == 'resolve_url':
         isfolder = False
         listitem.setProperty('IsPlayable', 'true')
-    listitem.setInfo(type="Video", infoLabels=info)
+    if info != {}:
+       listitem.setInfo(type="Video", infoLabels=info)
     xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listitem, isfolder)
 
 
@@ -262,18 +267,26 @@ except:
 
 if mode == None:
     get_categories()
+    if addon.getSetting('enable_views') == 'true':
+      xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('default_view'))
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 elif mode == 'get_categories':
     get_categories(params['url'])
+    if addon.getSetting('enable_views') == 'true':
+      xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('default_view'))
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 elif mode == 'get_sub_cat':
     get_sub_categories(params['url'])
+    if addon.getSetting('enable_views') == 'true':
+      xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('default_view'))
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 elif mode == 'get_playlist':
     get_playlist(params['url'])
+    if addon.getSetting('enable_views') == 'true':
+      xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('default_view'))
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 elif mode == 'get_videolist':
@@ -281,6 +294,9 @@ elif mode == 'get_videolist':
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_GENRE)
+    if addon.getSetting('enable_views') == 'true':
+      xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('episode_view'))
+
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 elif mode == 'resolve_url':

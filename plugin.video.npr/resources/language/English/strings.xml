@@ -4,4 +4,9 @@
     <string id="30001">Goto Next Page</string>
     <string id="30002">NPR Music</string>
     <string id="30003">No Playable Video Found</string>
+
+    <string id="30070">Enable Views</string>
+    <string id="30071">Default View</string>
+    <string id="30072">Episode View</string>
+    <string id="30073">View</string>
 </strings>

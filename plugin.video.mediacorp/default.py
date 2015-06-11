@@ -155,8 +155,12 @@ def getEpis(epurl, startOff):
             epis = re.compile('<li class="fixed-height__item.+?href="(.+?)".+?data-src="(.+?)".+?href=.+?">(.+?)<.+?</div',re.DOTALL).findall(html)
             end = (startOff+pageSize)
             if end > len(epis): end = len(epis)
-            for url, img, name in epis[startOff:end]:
-                 vid = url.rsplit('/',1)[1]
+            for url, thumb, name in epis[startOff:end]:
+              infoList = {}
+              name = name.replace('\n','').strip()
+              vid = url.rsplit('/',1)[1]
+              if not (thumb.startswith('http')): thumb = 'http://video.toggle.sg'+thumb
+              if addon.getSetting('enable_meta') == 'true':
                  vurl = 'http://toggleplayer-1410100339.ap-southeast-1.elb.amazonaws.com/v0.30/mwEmbed/mwEmbedFrame.php?&wid=_27017&uiconf_id=8413350&entry_id='+vid+'&flashvars[ks]=0&flashvars[logo]=undefined&flashvars[toggle.sgPlus]=false&flashvars[vast]=%7B%22htmlCompanions%22%3A%22video-companion-ad-320-100-in-flash%3A320%3A100%22%7D&flashvars[multiDrm]=%7B%22plugin%22%3Atrue%2C%22isClear%22%3Atrue%7D&flashvars[localizationCode]=en&flashvars[autoPlay]=true&flashvars[proxyData]=%7B%22initObj%22%3A%7B%22Locale%22%3A%7B%22LocaleLanguage%22%3A%22%22%2C%22LocaleCountry%22%3A%22%22%2C%22LocaleDevice%22%3A%22%22%2C%22LocaleUserState%22%3A0%7D%2C%22Platform%22%3A0%2C%22SiteGuid%22%3A0%2C%22DomainID%22%3A%220%22%2C%22UDID%22%3A%22%22%2C%22ApiUser%22%3A%22tvpapi_147%22%2C%22ApiPass%22%3A%2211111%22%7D%2C%22MediaID%22%3A%22'+vid+'%22%2C%22iMediaID%22%3A%22'+vid+'%22%2C%22picSize%22%3A%22640X360%22%7D&playerId=SilverlightContainer&forceMobileHTML5=true&urid=2.29.1.10&callback='
                  html = getRequest(vurl)
                  html = re.compile('kalturaIframePackageData = (.+?)};',re.DOTALL).search(html).group(1)
@@ -171,7 +175,6 @@ def getEpis(epurl, startOff):
 
                  thumb = a['thumbnailUrl']
                  name  = a['name']
-                 infoList = {}
                  infoList['Date']  = a['startDate'].split('T',1)[0]
                  infoList['Aired'] = infoList['Date']
                  try: infoList['duration']    = int(a['duration'])
@@ -200,6 +203,36 @@ def getEpis(epurl, startOff):
                  try: infoList['Episode']     = int(metas['Episode number'])
                  except: pass
                  infoList['Plot'] = a['description']
+              u = '%s?url=%s&mode=GV' % (sys.argv[0], qp(vid))
+              liz=xbmcgui.ListItem(name, '',None, thumb)
+              liz.setInfo( 'Video', infoList)
+              if addon.getSetting('vid_res') == '1': streams = {'codec':'h264', 'width':1280, 'height':720, 'aspect':1.78}
+              else: streams = {'codec':'h264', 'width':640, 'height':480, 'aspect':1.78}
+              liz.addStreamInfo('video', streams )
+              liz.addStreamInfo('audio', { 'codec': 'aac', 'language' : 'en'})
+              liz.addStreamInfo('subtitle', { 'language' : 'en'})
+              liz.setProperty('fanart_image', thumb)
+              liz.setProperty('IsPlayable', 'true')
+              ilist.append((u, liz, False))
+            if end != len(epis):
+                 liz=xbmcgui.ListItem(__language__(30012), '',nextIcon, None)
+                 u = '%s?url=%s&mode=GE&start=%s' % (sys.argv[0],qp(epurl), str(startOff+pageSize))
+                 ilist.append((u, liz, True))
+            xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+            if addon.getSetting('enable_views') == 'true':
+               xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('episode_view'))
+            xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+
+def getVid(vid):
+                 vid = uqp(vid)
+                 vurl = 'http://toggleplayer-1410100339.ap-southeast-1.elb.amazonaws.com/v0.30/mwEmbed/mwEmbedFrame.php?&wid=_27017&uiconf_id=8413350&entry_id='+vid+'&flashvars[ks]=0&flashvars[logo]=undefined&flashvars[toggle.sgPlus]=false&flashvars[vast]=%7B%22htmlCompanions%22%3A%22video-companion-ad-320-100-in-flash%3A320%3A100%22%7D&flashvars[multiDrm]=%7B%22plugin%22%3Atrue%2C%22isClear%22%3Atrue%7D&flashvars[localizationCode]=en&flashvars[autoPlay]=true&flashvars[proxyData]=%7B%22initObj%22%3A%7B%22Locale%22%3A%7B%22LocaleLanguage%22%3A%22%22%2C%22LocaleCountry%22%3A%22%22%2C%22LocaleDevice%22%3A%22%22%2C%22LocaleUserState%22%3A0%7D%2C%22Platform%22%3A0%2C%22SiteGuid%22%3A0%2C%22DomainID%22%3A%220%22%2C%22UDID%22%3A%22%22%2C%22ApiUser%22%3A%22tvpapi_147%22%2C%22ApiPass%22%3A%2211111%22%7D%2C%22MediaID%22%3A%22'+vid+'%22%2C%22iMediaID%22%3A%22'+vid+'%22%2C%22picSize%22%3A%22640X360%22%7D&playerId=SilverlightContainer&forceMobileHTML5=true&urid=2.29.1.10&callback='
+                 html = getRequest(vurl)
+                 html = re.compile('kalturaIframePackageData = (.+?)};',re.DOTALL).search(html).group(1)
+                 html = html+'}'
+                 html = html.replace('\\','')
+                 a = json.loads(html)
+                 a = a['entryResult']['meta']
                  a = a['partnerData']['Files']
                  u =''
                  if addon.getSetting('vid_res') == '1':
@@ -221,35 +254,8 @@ def getEpis(epurl, startOff):
                          break
                  if ( u == '' or u.endswith('.wvm')):
                       u=''
-
-                 url = u
-                 u = '%s?url=%s&mode=GV' % (sys.argv[0], qp(url))
-                 liz=xbmcgui.ListItem(name, '',None, thumb)
-                 liz.setInfo( 'Video', infoList)
-                 if addon.getSetting('vid_res') == '1': streams = {'codec':'h264', 'width':1280, 'height':720, 'aspect':1.78}
-                 else: streams = {'codec':'h264', 'width':640, 'height':480, 'aspect':1.78}
-                 liz.addStreamInfo('video', streams )
-                 liz.addStreamInfo('audio', { 'codec': 'aac', 'language' : 'en'})
-                 liz.addStreamInfo('subtitle', { 'language' : 'en'})
-                 liz.setProperty('fanart_image', thumb)
-                 liz.setProperty('IsPlayable', 'true')
-                 ilist.append((u, liz, False))
-            if end != len(epis):
-                 liz=xbmcgui.ListItem(__language__(30012), '',nextIcon, None)
-                 u = '%s?url=%s&mode=GE&start=%s' % (sys.argv[0],qp(epurl), str(startOff+pageSize))
-                 ilist.append((u, liz, True))
-            xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
-            if addon.getSetting('enable_views') == 'true':
-               xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('episode_view'))
-            xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
-
-def getVid(vurl):
-            u = uqp(vurl)
-            if ( u == '' or u.endswith('.wvm')):
-                 u=''
-                 xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( __addonname__, __language__(30011) , 10000) )
-            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = u))
+                      xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( __addonname__, __language__(30011) , 10000) )
+                 xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = u))
 
 
 # MAIN EVENT PROCESSING STARTS HERE

@@ -1,6 +1,12 @@
 {
-    "timestamp":"1433600185",
+    "timestamp":"1433932669",
     "sources": {
+        "hplus": {
+			"login": "true",
+            "url": "http://hplus.com.vn/user/login/",
+			"post": {"email": "g4644345@trbvm.com", "passwd": "g4644345", "remember": "false", "href": "http://hplus.com.vn/vi"},
+            "app": ""
+        },
         "vtc": {
             "url": "rtmp://38.107.180.195:1935/live",
             "swfurl": "http://vtc.com.vn/player_6_10_2011.swf",
@@ -82,17 +88,21 @@
             "content": [
             {"type":"chn","id":"hplus_vtv1"},
             {"type":"chn","id":"hplus_vtv2"},
-            {"type":"chn_","id":"hplus_vtv3"},
+            {"type":"chn","id":"hplus_vtv3"},
             {"type":"chn_","id":"hplus_vtv3hd"},
-            {"type":"chn_","id":"hplus_vtv6hd"},
+            {"type":"chn","id":"hplus_vtv6hd"},
             {"type":"chn","id":"hplus_vtv9"},
-            {"type":"chn_","id":"hplus_htv1"},
+            {"type":"chn","id":"hplus_htv1"},
             {"type":"chn_","id":"hplus_htv2"},
             {"type":"chn_","id":"hplus_htv2hd"},
             {"type":"chn_","id":"hplus_htv3"},
-            {"type":"chn_","id":"hplus_htv4"},
-            {"type":"chn_","id":"hplus_htv7hd"},
-            {"type":"chn_","id":"hplus_htv9hd"}
+            {"type":"chn","id":"hplus_htv4"},
+            {"type":"chn","id":"hplus_htv7hd"},
+            {"type":"chn","id":"hplus_htv9hd"},
+            {"type":"chn","id":"hplus_vtc3"},
+            {"type":"chn","id":"hplus_vtc4"},
+            {"type":"chn","id":"hplus_vtc6"},
+            {"type":"chn","id":"hplus_vtc10"}
             ]
         },
         "vtvplus": {
@@ -550,6 +560,58 @@
                 "id":"hplus",
                 "playpath": "m3u8_bau",
                 "page_url": "http://hplus.com.vn/vi/content/detail/htv9-hd-2667.html",
+                "url_before": "var iosUrl = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "hplus_vtc3": {
+            "title": "VTC3",
+            "logo": "default.png",
+            "desc": "Kênh thể thao",
+            "src": {
+                "id":"hplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://hplus.com.vn/vi/content/detail/vtc-3-hd-2058.html",
+                "url_before": "var iosUrl = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "hplus_vtc4": {
+            "title": "VTC4",
+            "logo": "default.png",
+            "desc": "",
+            "src": {
+                "id":"hplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://hplus.com.vn/vi/content/detail/vtc-4-2057.html",
+                "url_before": "var iosUrl = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "hplus_vtc6": {
+            "title": "VTC6",
+            "logo": "default.png",
+            "desc": "",
+            "src": {
+                "id":"hplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://hplus.com.vn/vi/content/detail/vtc-6-2056.html",
+                "url_before": "var iosUrl = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "hplus_vtc10": {
+            "title": "VTC10",
+            "logo": "default.png",
+            "desc": "",
+            "src": {
+                "id":"hplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://hplus.com.vn/vi/content/detail/vtc-10-2051.html",
                 "url_before": "var iosUrl = \"",
                 "url_after": "\";",
                 "referer": ""

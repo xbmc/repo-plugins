@@ -1,9 +1,9 @@
 # -*- coding: UTF-8 -*-
 #---------------------------------------------------------------------
 # File: tvvn.py
-# Version: 0.9.5
+# Version: 0.9.7
 # By:   Binh Nguyen <b@zecoj.com>
-# Date: Sun May 31 21:16:00 AEST 2015
+# Date: Wed Jun 10 20:38:16 AEST 2015
 #---------------------------------------------------------------------
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 
 import os, re, sys, gzip, urllib, urllib2, string, xbmcaddon, xbmcplugin, xbmcgui, xbmcvfs
 from StringIO import StringIO
+from cookielib import CookieJar
 
 try:
         import json
@@ -158,8 +159,17 @@ def play_link(chn, src):
         d_progress = xbmcgui.DialogProgress()
         d_progress.create("", addon.getLocalizedString(30009))
 
+        cj = CookieJar()
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
 
-        #print(data['channels'][chn]['src']['id'])
+        #login if required
+        if src in data['sources'] and 'login' in data['sources'][src] and data['sources'][src]['login'] == "true":
+            url = data['sources'][src]['url']
+            values = data['sources'][src]['post']
+            post_data = urllib.urlencode(values)
+            response = opener.open(url, post_data)
+            the_page = response.read()
+
         #m3u8 url from fpt
         if data['channels'][chn]['src']['playpath'] == "m3u8_fpt":
             url = 'http://fptplay.net/show/getlinklivetv'
@@ -175,7 +185,8 @@ def play_link(chn, src):
 
         #m3u8 url using before & after marker
         elif data['channels'][chn]['src']['playpath'] == "m3u8_bau":
-            stringA=urllib2.urlopen(data['channels'][chn]['src']['page_url']).read().decode('utf-8')
+            #stringA=urllib2.urlopen(data['channels'][chn]['src']['page_url']).read().decode('utf-8')
+            stringA=opener.open(data['channels'][chn]['src']['page_url']).read().decode('utf-8')
             stringB=(data['channels'][chn]['src']['url_before'])
             stringC=(data['channels'][chn]['src']['url_after'])
             full_url=re.search(re.escape(stringB)+"(.*?)"+re.escape(stringC),stringA).group(1)

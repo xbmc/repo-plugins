@@ -14,5 +14,25 @@
     <string id="30011">880 Kbps</string>
     <string id="30012">1200 Kbps</string>
     <string id="30013">2400 Kbps</string>
+    <string id="30014">Video Bitrate</string>
+
+       <string id="30020">Full Episodes</string>
+       <string id="30021">Clips</string>
+       <string id="30022">Previews</string>
+
+       <string id="30030">Proxy</string>
+       <string id="30040">Proxy IP</string>
+       <string id="30041">Port</string>
+       <string id="30042">Enable Proxy</string>
+       <string id="30043">User Name</string>
+       <string id="30044">Password</string>
+       <string id="30050">Sub-Titles</string>
+       <string id="30051">Enable Sub-Titles</string>
+       <string id="30052">Streaming Quality</string>
+
+       <string id="30070">Enable Views</string>
+       <string id="30071">Default View</string>
+       <string id="30072">Episode View</string>
+       <string id="30073">View</string>
 
 </strings>

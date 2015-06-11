@@ -6,7 +6,7 @@
        <string id="30010">WRAL</string>
        <string id="30011">No Videos Found</string>
        <string id="30012">All Programs</string>
-       <string id="30013">Programs A to Z</string>
+       <string id="30013">Page Size</string>
        <string id="30014">Search</string>
        <string id="30020">Full Episodes</string>
        <string id="30021">Clips</string>
@@ -20,6 +20,13 @@
        <string id="30044">Password</string>
        <string id="30050">Sub-Titles</string>
        <string id="30051">Enable Sub-Titles</string>
+
+       <string id="30070">Enable Views</string>
+       <string id="30071">Channels View</string>
+       <string id="30072">Episodes View</string>
+       <string id="30073">View</string>
+       <string id="30074">Shows View</string>
+
 
 </strings>
 

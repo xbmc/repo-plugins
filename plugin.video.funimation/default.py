@@ -7,8 +7,8 @@ import xbmcaddon
 addon = xbmcaddon.Addon()
 
 if __name__ == '__main__':
-    from resources import common
-    common.log('ARGV: ' + repr(sys.argv))
+    import resources.lib.common as common
+    common.log('ARGV: ' + repr(sys.argv), common.DEBUG)
 
     cookie_file = os.path.join(
         xbmc.translatePath(addon.getAddonInfo('profile')), 'fun-cookie.txt')
@@ -18,5 +18,5 @@ if __name__ == '__main__':
                      addon.getSetting('password'),
                      cookie_file)
 
-    from resources import nav
+    import resources.lib.nav as nav
     nav.list_menu()

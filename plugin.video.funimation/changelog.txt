@@ -1,3 +1,6 @@
+v1.1.2
+- Fixed module import error
+
 v1.1.1
 - Removed unused dependeny
 - Fixed addon ID

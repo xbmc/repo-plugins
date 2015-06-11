@@ -25,7 +25,8 @@ def log(txt):
     message = '%s: %s' % (__addonname__, txt.encode('ascii', 'ignore'))
     xbmc.log(msg=message, level=xbmc.LOGDEBUG)
 
-USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25'
+USER_AGENT    = 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36'
+#USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25'
 defaultHeaders = {'User-Agent':USER_AGENT, 'Accept':"text/html", 'Accept-Encoding':'gzip,deflate,sdch', 'Accept-Language':'en-US,en;q=0.8'} 
 
 def getRequest(url, headers = defaultHeaders):
@@ -46,36 +47,38 @@ def getShows():
    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_UNSORTED)
    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_TITLE)
    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_EPISODE)
-
    ilist=[]
-   basehtml = getRequest('http://www.bravotv.com/now/')
-   cats = re.compile('<div class="wrap imageLoading".+?href="(.+?)".+?title="(.+?)".+?lazy-src="(.+?)".+?</div',re.DOTALL).findall(basehtml)
-   for url, name,img in cats:
+   basehtml = getRequest('http://www.bravotv.com/full-episodes')
+   cats = re.compile('<div class="views-row">.+?href="(.+?)".+?title="(.+?)".+?src="(.+?)".+?data-src="(.+?)".+?</article',re.DOTALL).findall(basehtml)
+   for url, name,img, fanart in cats:
        name = name.strip()
-       url = BRAVOBASE % (url)
+       surl = BRAVOBASE % (url)
+       img  = fanart
+       epiHTML = getRequest(surl)
+       epis = re.compile('<li class="watch__episode.+?href="(.+?)".+?</ul>',re.DOTALL).findall(epiHTML)
+       vcnt = len(epis)
+       url  = BRAVOBASE % epis[len(epis)-1]
        html = getRequest(url)
-       try:    fanart = re.compile('<img class="showBaner" src="(.+?)"',re.DOTALL).search(html).group(1)
-       except: fanart = addonfanart
-       plot = re.compile('"og:description" content="(.+?)"',re.DOTALL).search(html).group(1)
-       html = re.compile("Drupal\.settings, (.+?)\);<",re.DOTALL).search(html).group(1)
+       purl = re.compile('data-src="(.+?)"',re.DOTALL).search(html).group(1)
+       purl = 'http://link.theplatform.com/s'+(purl.replace('/bravo_vod_p3/embed/select','').split('.com/p')[1]).split('?',1)[0]+'?mbr=true&player=Bravo%20VOD%20Player%20%28Phase%203%29&format=Script&height=576&width=1024'
+       html = getRequest(purl)
        a = json.loads(html)
-       try: b = a["tve_widgets"]["more_episodes"]["assets1"][0]
-       except: continue
        infoList = {}
-       dstr = (b['aired_date'].split('-'))
-       infoList['Date']        = '%s-%s-%s' % (dstr[2], dstr[0].zfill(2), dstr[1].zfill(2))
+       infoList['Date']        = datetime.datetime.fromtimestamp(a['pubDate']/1000).strftime('%Y-%m-%d')
        infoList['Aired']       = infoList['Date']
-       infoList['MPAA']        = ''
-       infoList['TVShowTitle'] = b['show_title']
-       infoList['Title']       = b['show_title']
-       infoList['Studio']      = 'Bravo'
-       infoList['Genre']       = ''
-       infoList['Episode']     = int(a["tve_widgets"]["more_episodes"]["assets_number"])
+       infoList['MPAA']        = a['ratings'][0]['rating']
+       infoList['TVShowTitle'] = name
+       infoList['Title']       = name
+       infoList['Studio']      = a['provider']
+       infoList['Genre']       = (a['nbcu$advertisingGenre']).replace('and','/')
+       infoList['Episode']     = vcnt
        infoList['Year']        = int(infoList['Aired'].split('-',1)[0])
-       infoList['Plot'] = h.unescape(plot.decode(UTF8))
+       infoList['Plot'] = re.compile('"og:description" content="(.+?)"',re.DOTALL).search(epiHTML).group(1)
+       infoList['Plot'] = h.unescape(infoList['Plot'].decode('utf-8'))
+       url = surl
        mode = 'GE'
        u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
-       liz=xbmcgui.ListItem(name, '',icon, img)
+       liz=xbmcgui.ListItem(name, '',None, img)
        liz.setInfo( 'Video', infoList)
        liz.setProperty('fanart_image', fanart)
        ilist.append((u, liz, True))
@@ -91,32 +94,33 @@ def getEpisodes(eurl, showName):
    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_TITLE)
    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_VIDEO_YEAR)
    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_EPISODE)
-
    ilist=[]        
-   html = getRequest(eurl)
-   try:    fanart = re.compile('<img class="showBaner" src="(.+?)"',re.DOTALL).search(html).group(1)
-   except: fanart = addonfanart
-   html = re.compile("Drupal\.settings, (.+?)\);<",re.DOTALL).search(html).group(1)
-   a = json.loads(html)
-   mode = 'GV'
-   for b in a["tve_widgets"]["more_episodes"]["assets1"]:
+   epiHTML = getRequest(eurl)
+   (tvshow,  fanart) = re.compile('og:title" content="(.+?)".+?"og:image" content="(.+?)"',re.DOTALL).search(epiHTML).groups()
+   epis = re.compile('<li class="watch__episode.+?href="(.+?)".+?</ul>',re.DOTALL).findall(epiHTML)
+   for url in epis:
+      url  = BRAVOBASE % url
+      html = getRequest(url)
+      purl = re.compile('data-src="(.+?)"',re.DOTALL).search(html).group(1)
+      purl = 'http://link.theplatform.com/s'+(purl.replace('/bravo_vod_p3/embed/select','').split('.com/p')[1]).split('?',1)[0]+'?mbr=true&player=Bravo%20VOD%20Player%20%28Phase%203%29&format=Script&height=576&width=1024'
+      html = getRequest(purl)
+      a = json.loads(html)
       infoList = {}
-      dstr = (b['aired_date'].rsplit('-'))
-      infoList['Date']        = '%s-%s-%s' % (dstr[2], dstr[0].zfill(2), dstr[1].zfill(2))
+      infoList['Date']        = datetime.datetime.fromtimestamp(a['pubDate']/1000).strftime('%Y-%m-%d')
       infoList['Aired']       = infoList['Date']
-      infoList['MPAA']        = ''
-      infoList['TVShowTitle'] = b['show_title']
-      infoList['Title']       = b['episode_title']
-      infoList['Studio']      = 'Bravo'
-      infoList['Genre']       = ''
-      infoList['Season']      = b['season_n']
-      infoList['Episode']     = b['episode_n']
+      infoList['MPAA']        = a['ratings'][0]['rating']
+      infoList['Studio']      = a['provider']
+      infoList['Genre']       = (a['nbcu$advertisingGenre']).replace('and','/')
+      infoList['Episode']     = int(a['pl1$episodeNumber'])
+      infoList['Season']      = int(a['pl1$seasonNumber'])
       infoList['Year']        = int(infoList['Aired'].split('-',1)[0])
-      infoList['Plot']        = h.unescape(b["synopsis"])
-      thumb = b["episode_thumbnail"]["url"]
-      url   = b['link']
-      name  = b['episode_title'].encode(UTF8)
-      u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],url, qp(name), mode)
+      infoList['Plot'] = h.unescape(a['description'])
+      infoList['TVShowTitle'] = tvshow
+      infoList['Title']       = a['title']
+      name = a['title']
+      thumb = a['defaultThumbnailUrl']
+      url = purl.split('?',1)[0]
+      u = '%s?url=%s&name=%s&mode=GV' % (sys.argv[0],qp(url), qp(name))
       liz=xbmcgui.ListItem(name, '',None, thumb)
       liz.setInfo( 'Video', infoList)
       liz.addStreamInfo('video', { 'codec': 'h264', 
@@ -137,12 +141,9 @@ def getEpisodes(eurl, showName):
 def getVideo(url, show_name):
     gvu1 = 'https://tvebravo-vh.akamaihd.net/i/prod/video/%s_,40,25,18,12,7,4,2,00.mp4.csmil/master.m3u8?b=&__b__=1000&hdnea=st=%s~exp=%s'
     gvu2 = 'https://tvebravo-vh.akamaihd.net/i/prod/video/%s_,1696,1296,896,696,496,240,306,.mp4.csmil/master.m3u8?b=&__b__=1000&hdnea=st=%s~exp=%s'
-    url = BRAVOBASE % url
+    url = uqp(url)
+    url = url+'?mbr=true&player=Bravo%20VOD%20Player%20%28Phase%203%29&format=Script&height=576&width=1024'
     html = getRequest(url)
-    url = re.compile('data-release-url="(.+?)"',re.DOTALL).search(html).group(1)
-    url = 'http:'+url+'&player=Bravo%20VOD%20Player%20%28Phase%203%29&format=Script&height=576&width=1024'
-    html = getRequest(url)
-
     a = json.loads(html)
     suburl = a["captions"][0]["src"]
     url = suburl.split('/caption/',1)[1]

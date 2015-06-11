@@ -86,8 +86,10 @@ def getShows():
        url = 'http://www.cookingchanneltv.com%s' % url
        name=name.strip()
        html = getRequest(durl, alert=False)
-       try:    plot = re.compile('"og:description" content="(.+?)"',re.DOTALL).search(html).group(1)
-       except: plot = name
+       try:    plot, thumb = re.compile('"og:description" content="(.+?)".+?"og:image" content="(.+?)"',re.DOTALL).search(html).groups()
+       except: 
+              plot = name
+              thumb = icon
        infoList = {}
        infoList['TVShowTitle'] = name
        infoList['Title']       = name
@@ -98,7 +100,7 @@ def getShows():
        infoList['Plot'] = h.unescape(plot)
        mode = 'GE'
        u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],url, qp(name), mode)
-       liz=xbmcgui.ListItem(name, '',icon,None)
+       liz=xbmcgui.ListItem(name, '',None, thumb)
        liz.setInfo( 'Video', infoList)
        liz.setProperty('fanart_image', addonfanart)
        ilist.append((u, liz, True))
@@ -124,7 +126,7 @@ def getEpisodes(url, showName):
       except: continue
       url     = b['releaseUrl']
       name    = h.unescape(b['title'])
-      thumb   = b['thumbnailUrl']
+      thumb   = b['thumbnailUrl'].replace('92x69.jpg','480x360.jpg')
 
       infoList = {}
       infoList['Duration']    = b['length']

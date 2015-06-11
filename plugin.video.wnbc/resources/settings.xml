@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
+
 	<category label="30050">
 		<setting type="sep" />
            <setting id="sub_enable" type="bool" label="30051" default="false"/>
 		<setting type="sep" />
 	</category>
 
-	<category label="30000">
+  <category label="30073">
 		<setting type="sep" />
-     		<setting id="vid_res" type="enum" label="30000" lvalues="30001|30002" default="1" />
+		<setting id='enable_views' type ="bool" label="30070" default="false"/>
+		<setting id="shows_view" type="text" label="30071" default="56" enable="!eq(-1,false)"/>
+		<setting id="category_view"   type="text" label="30074" default="57" enable="!eq(-2,false)"/>
+		<setting id="episode_view" type="text" label="30072" default="56" enable="!eq(-3,false)"/>
 		<setting type="sep" />
-	</category>
+  </category>
+
+
 
 	<category label="30030">
 		<setting type="sep" />
@@ -21,4 +27,11 @@
 		<setting id="us_proxy_pass" type="text" label="30044" default=""/>
 		<setting type="sep" />
 	</category>
+
+	<category label="30080">
+		<setting type="sep" />
+           <setting id="init_meta" type="bool" label="30081" default="true"/>
+		<setting type="sep" />
+	</category>
+
 </settings>

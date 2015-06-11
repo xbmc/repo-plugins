@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 # WNBC Programs XBMC Addon
 
-import sys
-import httplib
-
+import sys,httplib
 import urllib, urllib2, cookielib, datetime, time, re, os, string
 import xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs, xbmc
-import cgi, gzip
-from StringIO import StringIO
-import json
+import zlib,json,HTMLParser
+h = HTMLParser.HTMLParser()
+qp  = urllib.quote_plus
+uqp = urllib.unquote_plus
 
 
 UTF8          = 'utf-8'
@@ -21,25 +20,17 @@ __language__  = addon.getLocalizedString
 home          = addon.getAddonInfo('path').decode(UTF8)
 icon          = xbmc.translatePath(os.path.join(home, 'icon.png'))
 addonfanart   = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
+profile       = addon.getAddonInfo('profile').decode(UTF8)
+pdir  = xbmc.translatePath(os.path.join(profile))
+if not os.path.isdir(pdir):
+   os.makedirs(pdir)
 
+metafile      = xbmc.translatePath(os.path.join(profile, 'shows.json'))
 
-
-qp  = urllib.quote_plus
-uqp = urllib.unquote_plus
 
 def log(txt):
     message = '%s: %s' % (__addonname__, txt.encode('ascii', 'ignore'))
     xbmc.log(msg=message, level=xbmc.LOGDEBUG)
-
-def cleanname(name):    
-    return name.replace('&apos;',"'").replace('&#8217;',"'").replace('&amp;','&').replace('&#39;',"'").replace('&quot;','"').replace('&#039;',"'")
-
-def demunge(munge):
-        try:
-            munge = urllib.unquote_plus(munge).decode(UTF8)
-        except:
-            pass
-        return munge
 
 
 USER_AGENT    = 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.93 Safari/537.36'
@@ -50,143 +41,205 @@ defaultHeaders = {'User-Agent':USER_AGENT,
 
 def getRequest(url, user_data=None, headers = defaultHeaders , alert=True, donotuseproxy=False):
 
-              log("getRequest URL:"+str(url))
-              if (donotuseproxy==False) and (addon.getSetting('us_proxy_enable') == 'true'):
-                  us_proxy = 'http://%s:%s' % (addon.getSetting('us_proxy'), addon.getSetting('us_proxy_port'))
-                  proxy_handler = urllib2.ProxyHandler({'http':us_proxy})
-                  if addon.getSetting('us_proxy_pass') <> '' and addon.getSetting('us_proxy_user') <> '':
-                      log('Using authenticated proxy: ' + us_proxy)
-                      password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
-                      password_mgr.add_password(None, us_proxy, addon.getSetting('us_proxy_user'), addon.getSetting('us_proxy_pass'))
-                      proxy_auth_handler = urllib2.ProxyBasicAuthHandler(password_mgr)
-                      opener = urllib2.build_opener(proxy_handler, proxy_auth_handler)
-                  else:
-                      log('Using proxy: ' + us_proxy)
-                      opener = urllib2.build_opener(proxy_handler)
-              else:   
-                  opener = urllib2.build_opener()
-              urllib2.install_opener(opener)
+    log("getRequest URL:"+str(url))
+    if (donotuseproxy==False) and (addon.getSetting('us_proxy_enable') == 'true'):
+        us_proxy = 'http://%s:%s' % (addon.getSetting('us_proxy'), addon.getSetting('us_proxy_port'))
+        proxy_handler = urllib2.ProxyHandler({'http':us_proxy})
+        if addon.getSetting('us_proxy_pass') <> '' and addon.getSetting('us_proxy_user') <> '':
+            log('Using authenticated proxy: ' + us_proxy)
+            password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+            password_mgr.add_password(None, us_proxy, addon.getSetting('us_proxy_user'), addon.getSetting('us_proxy_pass'))
+            proxy_auth_handler = urllib2.ProxyBasicAuthHandler(password_mgr)
+            opener = urllib2.build_opener(proxy_handler, proxy_auth_handler)
+        else:
+            log('Using proxy: ' + us_proxy)
+            opener = urllib2.build_opener(proxy_handler)
+    else:   
+        opener = urllib2.build_opener()
+    urllib2.install_opener(opener)
 
-              log("getRequest URL:"+str(url))
-              req = urllib2.Request(url.encode(UTF8), user_data, headers)
+    log("getRequest URL:"+str(url))
+    req = urllib2.Request(url.encode(UTF8), user_data, headers)
 
-              try:
-                 response = urllib2.urlopen(req)
-                 if response.info().getheader('Content-Encoding') == 'gzip':
-                    log("Content Encoding == gzip")
-                    buf = StringIO( response.read())
-                    f = gzip.GzipFile(fileobj=buf)
-                    link1 = f.read()
-                 else:
-                    link1=response.read()
+    try:
+       response = urllib2.urlopen(req, timeout=30)
+       page = response.read()
+       if response.info().getheader('Content-Encoding') == 'gzip':
+           log("Content Encoding == gzip")
+           page = zlib.decompress(page, zlib.MAX_WBITS + 16)
 
-              except urllib2.URLError, e:
-                 if alert:
-                     xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( __addonname__, e , 10000) )
-                 link1 = ""
-
-              if not (str(url).endswith('.zip')):
-                 link1 = str(link1).replace('\n','')
-              return(link1)
+    except urllib2.URLError, e:
+       if alert:
+           xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( __addonname__, e , 5000) )
+       page = ""
+    return(page)
 
 
-
-def getSources(fanart):
+def getSources():
+        xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_UNSORTED)
+        xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_TITLE)
+        xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_EPISODE)
         ilist=[]
+        meta ={}
+        if addon.getSetting('init_meta') != 'true':
+          try:
+            with open(metafile) as infile:
+                meta = json.load(infile)
+          except: pass
+        showDialog = len(meta)
         html = getRequest('http://www.nbc.com/ajax/dropdowns-global/America-New_York', donotuseproxy=True)
         a    = json.loads(html)['menu_html']
-        a = a.encode('utf-8')
         a = re.compile('title">Current Episodes</div>(.+?)<div class="more-link">',re.DOTALL).search(a).group(1)
         b    = re.compile('<a href="(.+?)">(.+?)</a>', re.DOTALL).findall(a)
+        if showDialog == 0 : 
+           pDialog = xbmcgui.DialogProgress()
+           pDialog.create('NBC', 'Initializing ...')
+           numShows = len(b)
+           i = 1
         for url, name in b:
-              name=cleanname(name)
-              plot = ''
+              try:
+                  (name, plot,img) = meta[url]
+              except:
+                   html = getRequest(('http://www.nbc.com%s' % url.replace('/video','',1)), donotuseproxy=True)
+                   try:
+                       name, plot, img = re.compile('"og:title" content="(.+?)".+?"og:description" content="(.+?)".+?"og:image" content="(.+?)"',re.DOTALL).search(html).groups()
+                   except:
+                       try:
+                          plot, name, img = re.compile('"description" content="(.+?)".+?"og:title" content="(.+?)".+?"og:image" content="(.+?)"',re.DOTALL).search(html).groups()
+                       except:
+                          name, plot,img = re.compile('"og:title" content="(.+?)".+?="description" content="(.+?)".+?"og:image" content="(.+?)"',re.DOTALL).search(html).groups()
+                   meta[url] = (name, plot, img)
               lmode = 'GC'
-              u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],url, qp(name), lmode)
-              liz=xbmcgui.ListItem(name, '','DefaultFolder.png', icon)
+              name = h.unescape(name)
+              u = '%s?url=%s&mode=%s' % (sys.argv[0],url, lmode)
+              liz=xbmcgui.ListItem(name, '',None, img)
               liz.setInfo( 'Video', { "Title": name, "Plot": plot })
               ilist.append((u, liz, True))
-
+              if showDialog == 0 : 
+                 pDialog.update(int((100*i)/numShows))
+                 i = i+1
+        if showDialog == 0 : pDialog.close()
+        with open(metafile, 'w') as outfile:
+            json.dump(meta, outfile)
+        outfile.close
+        addon.setSetting(id='init_meta', value='false')
         xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+        if addon.getSetting('enable_views') == 'true':
+           xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('shows_view'))
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
 
-def getCats(gcurl, catname):
+def getCats(gcurl):
+        xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+        xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_UNSORTED)
+        xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_TITLE)
+        xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+        xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_EPISODE)
         ilist=[]
         html = getRequest(('http://www.nbc.com%s' % gcurl), donotuseproxy=True)
         if 'the-tonight-show' in gcurl:
-             startep = re.compile('<a href="/the-tonight-show/episodes/(.+?)"').search(html).group(1)
+             startep = re.compile('<a href="/the-tonight-show/episodes/(.+?)"',re.DOTALL).search(html).group(1)
              for i in range(int(startep)-5,int(startep)):
                      url  = 'http://www.nbc.com/the-tonight-show/episodes/%s' % str(i)
                      pg = getRequest(url, donotuseproxy=True)
-                     dataid = re.compile('data-video-id="(.+?)"').search(pg).group(1)
-                     img    = re.compile('<img class="visuallyHidden" src="(.+?)"').search(pg).group(1)
-                     name   = cleanname(re.compile('itemprop="title">(.+?)<').search(pg).group(1))
-                     plot   = cleanname(re.compile('itemprop="description"><p>(.+?)<').search(pg).group(1))
+                     dataid = re.compile('data-video-id="(.+?)"',re.DOTALL).search(pg).group(1)
+                     img    = re.compile('<img class="visuallyHidden" src="(.+?)"',re.DOTALL).search(pg).group(1)
+                     name   = h.unescape(re.compile('itemprop="title">(.+?)<',re.DOTALL).search(pg).group(1))
+                     plot   = h.unescape(re.compile('itemprop="description"><p>(.+?)<',re.DOTALL).search(pg).group(1))
                      url    = 'http://link.theplatform.com/s/NnzsPC/'+dataid+'?mbr=true&manifest=m3u&player=Onsite%20Player%20--%20No%20End%20Card&policy=43674'
                      lmode = 'GV'
-                     u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(catname), lmode)
-                     liz=xbmcgui.ListItem(name, plot,'DefaultFolder.png', img)
-                     liz.setInfo( 'Video', { "Title": name, "Studio": catname, "Plot": plot})
+                     u = '%s?url=%s&mode=%s' % (sys.argv[0],qp(url), lmode)
+                     liz=xbmcgui.ListItem(name, '',None, img)
+                     liz.setInfo( 'Video', { "Title": name, "Plot": plot})
                      liz.setProperty('IsPlayable', 'true')
                      ilist.append((u, liz, False))
 
         else:
 
-              blob = re.compile('\(Drupal.settings,(.+?)\);').search(html).group(1)
+              blob = re.compile('\(Drupal.settings,(.+?)\);',re.DOTALL).search(html).group(1)
               a  = json.loads(blob)
-              cars = re.compile('<div class="nbc_mpx_carousel.+?id="(.+?)".+?"pane-title">(.+?)<.+?>(.+?)<').findall(html)
+              cars = re.compile('<div class="nbc_mpx_carousel.+?id="(.+?)".+?"pane-title">(.+?)<.+?>(.+?)<',re.DOTALL).findall(html)
               for carid, name1, name2 in cars:
 
                      url = a['video_carousel'][carid]['feedUrl']
                      img = a['video_carousel'][carid]['defaultImages']['big']
-                     name = cleanname((name1+name2).replace('<span class="strong">','').replace('</h2>',''))
-                     plot = cleanname(catname)
+                     name = h.unescape((name1+name2).replace('<span class="strong">','').replace('</h2>','')).strip()
                      lmode = 'GS'
-                     u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(catname), lmode)
-                     liz=xbmcgui.ListItem(name, plot,'DefaultFolder.png', img)
-                     liz.setInfo( 'Video', { "Title": name, "Studio": catname, "Plot": plot})
+                     u = '%s?url=%s&mode=%s' % (sys.argv[0],qp(url), lmode)
+                     liz=xbmcgui.ListItem(name, '',img, None)
                      ilist.append((u, liz, True))
 
         xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
-
-                 
+        if addon.getSetting('enable_views') == 'true':
+           xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('category_view'))
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
+                
               
 
-def getShow(gsurl, catname):
-              ilist=[]
-              pg = getRequest(('http://www.nbc.com%s?range=1-29' % uqp(gsurl)), donotuseproxy=True)
-              a  =  json.loads(pg)['entries']
-              for e in a:
+def getShow(gsurl):
+    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_UNSORTED)
+    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_TITLE)
+    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_EPISODE)
+    ilist=[]
+    pg = getRequest(('http://www.nbc.com%s?range=1-29' % uqp(gsurl)), donotuseproxy=True)
+    a  =  json.loads(pg)['entries']
+    for e in a:
+           infoList = {}
+           name = h.unescape(e['title'])
+           infoList['Title'] = name
+           infoList['Plot']  = h.unescape(e['description'])
+           infoList['TVShowTitle'] = e['showShortName']
+           try:    infoList['Season'] = int(e['season'])
+           except: infoList['Season'] = 0
+           try:    infoList['Episode'] = int(e['episode'])
+           except: infoList['Episode'] = 0
+           infoList['duration'] = int(e['duration'].split(' ',1)[0])*60
+           infoList['Studio'] = 'NBC'
+           ad = e['airdate'].split('/')
+           if int(ad[2]) > 30 : ad = '19%s-%s-%s' % (ad[2], ad[0], ad[1])
+           else: ad = '20%s-%s-%s' % (ad[2], ad[0], ad[1])
+           infoList['date'] = ad
+           infoList['Aired'] = infoList['date']
+           infoList['Year']  = int(infoList['date'].split('-',1)[0])
+           url  = e['playerUrl']
+           img  = e['images']['medium']
+           lmode = 'GV'
+           u = '%s?url=%s&mode=%s' % (sys.argv[0],qp(url), lmode)
+           liz=xbmcgui.ListItem(name, '',None, img)
+           liz.setInfo( 'Video', infoList)
+           liz.addStreamInfo('video', { 'codec': 'avc1', 
+                                   'width' : 1280, 
+                                   'height' : 720, 
+                                   'aspect' : 1.78 })
+           liz.addStreamInfo('audio', { 'codec': 'aac', 'language' : 'en', 'channels': 2})
+           liz.addStreamInfo('subtitle', { 'language' : 'en'})
+           liz.setProperty('IsPlayable', 'true')
+           ilist.append((u, liz, False))
 
-                     name = cleanname(e['title'].encode('utf-8'))
-                     plot = cleanname(e['description'].encode('utf-8'))
-                     url  = e['playerUrl']
-                     img  = e['images']['medium']
-                     lmode = 'GV'
-                     u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), lmode)
-                     liz=xbmcgui.ListItem(name, plot,'DefaultFolder.png', img)
-                     liz.setInfo( 'Video', { "Title": name, "Studio": catname, "Plot": plot})
-                     liz.setProperty('IsPlayable', 'true')
-                     ilist.append((u, liz, False))
-
-              xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+    xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+    if addon.getSetting('enable_views') == 'true':
+        xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('episode_view'))
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
 def getVideo(surl):
             if surl.startswith('//') : surl = 'http:'+surl
             if not ('http://link.theplatform.com' in surl):
                 html = getRequest(surl)
-                surl = re.compile('<meta name="tp:EnableExternalController".+?href="(.+?)"').search(html).group(1)
+                surl = re.compile('<meta name="tp:EnableExternalController".+?href="(.+?)"',re.DOTALL).search(html).group(1)
                 surl = surl.replace('&player=','&manifest=m3u&player=',1)
 
             try:
              html = getRequest(surl)
-             finalurl  = re.compile('<video src="(.+?)"').search(html).group(1)
+             finalurl  = re.compile('<video src="(.+?)"',re.DOTALL).search(html).group(1)
              if 'nbcvodenc-i.akamaihd.net' in finalurl:
-               html = getRequest(finalurl, donotuseproxy=True)
-               html += '#'
-               choices = re.compile('BANDWIDTH=([0-9]*).+?http(.+?)#').findall(html)
+               html1 = getRequest(finalurl, donotuseproxy=True)
+               html1 = html1.replace('\n','')
+               html1 += '#'
+               choices = re.compile('BANDWIDTH=([0-9]*).+?http(.+?)#').findall(html1)
                bw = 0
                for bwidth, link in choices:
                   if int(bwidth) > bw:
@@ -196,7 +249,7 @@ def getVideo(surl):
              xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = finalurl))
 
              try:
-               suburl    = re.compile('<textstream src="(.+?)"').search(html).group(1)
+               suburl    = re.compile('<textstream src="(.+?)"',re.DOTALL).search(html).group(1)
 
                if (suburl != "") and ('.tt' in suburl) and (addon.getSetting('sub_enable') == "true"):
                  profile = addon.getAddonInfo('profile').decode(UTF8)
@@ -208,7 +261,7 @@ def getVideo(surl):
                  pg = getRequest(suburl, donotuseproxy=True)
                  if pg != "":
                    ofile = open(subfile, 'w+')
-                   captions = re.compile('<p begin="(.+?)" end="(.+?)">(.+?)</p>').findall(pg)
+                   captions = re.compile('<p begin="(.+?)" end="(.+?)">(.+?)</p>',re.DOTALL).findall(pg)
                    idx = 1
                    for cstart, cend, caption in captions:
                      cstart = cstart.replace('.',',')
@@ -230,13 +283,13 @@ def getVideo(surl):
 
 # MAIN EVENT PROCESSING STARTS HERE
 
-xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
 
 parms = {}
 try:
     parms = dict( arg.split( "=" ) for arg in ((sys.argv[2][1:]).split( "&" )) )
     for key in parms:
-       parms[key] = demunge(parms[key])
+      try:    parms[key] = urllib.unquote_plus(parms[key]).decode(UTF8)
+      except: pass
 except:
     parms = {}
 
@@ -244,11 +297,7 @@ p = parms.get
 
 mode = p('mode',None)
 
-if mode==  None:  getSources(p('fanart'))
-elif mode=='SR':  xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=p('url')))
-elif mode=='GS':  getShow(p('url'),p('name'))
-elif mode=='GC':  getCats(p('url'),p('name'))
+if mode==  None:  getSources()
+elif mode=='GS':  getShow(p('url'))
+elif mode=='GC':  getCats(p('url'))
 elif mode=='GV':  getVideo(p('url'))
-
-xbmcplugin.endOfDirectory(int(sys.argv[1]))
-

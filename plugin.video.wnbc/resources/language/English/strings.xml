@@ -3,11 +3,12 @@
        <string id="30000">Video Resolution</string>
        <string id="30001">SD</string>
        <string id="30002">HD</string>
-       <string id="30010">WNBC</string>
-       <string id="30011">Video Expired</string>
-       <string id="30012">All Programs</string>
-       <string id="30013">Programs A to Z</string>
-       <string id="30014">Search</string>
+       <string id="30010">WNBC Programs</string>
+       <string id="30011">No Playable Video Found</string>
+       <string id="30012">Next</string>
+       <string id="30013">Page Size</string>
+ 
+
        <string id="30020">Full Episodes</string>
        <string id="30021">Clips</string>
        <string id="30022">Previews</string>
@@ -20,6 +21,15 @@
        <string id="30044">Password</string>
        <string id="30050">Sub-Titles</string>
        <string id="30051">Enable Sub-Titles</string>
+       <string id="30052">Streaming Quality</string>
+
+       <string id="30070">Enable Views</string>
+       <string id="30071">Shows View</string>
+       <string id="30072">Episodes View</string>
+       <string id="30073">View</string>
+       <string id="30074">Category View</string>
+
+       <string id="30080">Metadata</string>
+       <string id="30081">Initialize Metadata Next Start</string>
 
 </strings>
-

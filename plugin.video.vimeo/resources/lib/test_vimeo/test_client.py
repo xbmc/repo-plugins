@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 __author__ = 'bromix'
 
 import unittest
@@ -35,7 +37,7 @@ class TestClient(unittest.TestCase):
 
     def test_search(self):
         client = Client()
-        xml_data = client.search(query='batman robin')
+        xml_data = client.search(query='The Breakfast Club é Extras')
         pass
 
     def test_featured(self):

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 __author__ = 'bromix'
 
 from resources.lib import kodion
@@ -50,7 +52,7 @@ class TestProvider(unittest.TestCase):
         provider = Provider()
 
         path = kodion.utils.create_path(kodion.constants.paths.SEARCH, 'query')
-        context = kodion.Context(path=path, params={'q': 'batman'})
+        context = kodion.Context(path=path, params={'q': u'Bäume'})
         context.set_localization(30511, 'Go to %s')
         result = provider.navigate(context)
         items = result[0]

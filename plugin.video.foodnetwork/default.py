@@ -74,8 +74,8 @@ def getShows():
 
    ilist=[]
    html = getRequest('http://www.foodnetwork.com/videos/players/food-network-full-episodes.vc.html')
-   m = re.compile('<select(.+?)</select>', re.DOTALL).search(html)
-   a = re.compile('value="(.+?)">(.+?)<', re.DOTALL).findall(html,m.start(1),m.end(1))
+   m = re.compile('<section class=multichannel-component>(.+?)</section', re.DOTALL).search(html)
+   a = re.compile('<a href="(.+?)".+?data-max=35>(.+?)<.+?</div', re.DOTALL).findall(html,m.start(1),m.end(1))
    for url, name in a:
        url = 'http://www.foodnetwork.com%s' % url
        name=name.strip()
@@ -84,23 +84,24 @@ def getShows():
        html1  = '{"channels": ['+html1+']}'
        a = json.loads(html1)
        a = a['channels'][0]
-       infoList = {}
-       infoList['TVShowTitle'] = a['title']
-       infoList['Title']       = a['title']
-       infoList['Studio']      = __language__(30010)
-       infoList['Genre']       = ''
-       try:    infoList['Episode'] = a['total']
-       except: infoList['Episode'] = 0
-
-       purl = 'http://www.foodnetwork.com%s' % re.compile('<dd>.+?href="(.+?)"', re.DOTALL).search(html).group(1)
-       html = getRequest(purl)
-       try:    plot = re.compile('<meta name=description content="(.+?)"',re.DOTALL).search(html).group(1)
-       except: plot = name
-       infoList['Plot'] = h.unescape(plot)
+#       infoList = {}
+#       infoList['TVShowTitle'] = a['title']
+#       infoList['Title']       = a['title']
+#       infoList['Studio']      = __language__(30010)
+#       infoList['Genre']       = ''
+#       try:    infoList['Episode'] = a['total']
+#       except: infoList['Episode'] = 0
+       try: thumb = a['videos'][0]['thumbnailUrl16x9'].replace('126x71.jpg','480x360.jpg')
+       except: thumb = icon
+#       purl = 'http://www.foodnetwork.com%s' % re.compile('<dd>.+?href="(.+?)"', re.DOTALL).search(html).group(1)
+#       html = getRequest(purl)
+#       try:    plot = re.compile('<meta name=description content="(.+?)"',re.DOTALL).search(html).group(1)
+#       except: plot = name
+#       infoList['Plot'] = h.unescape(plot)
        mode = 'GE'
        u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],url, qp(name), mode)
-       liz=xbmcgui.ListItem(name, '',icon,None)
-       liz.setInfo( 'Video', infoList)
+       liz=xbmcgui.ListItem(name, '',None, thumb)
+#       liz.setInfo( 'Video', infoList)
        liz.setProperty('fanart_image', addonfanart)
        ilist.append((u, liz, True))
    xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
@@ -126,7 +127,7 @@ def getEpisodes(url, showName):
    for b in a:
       url     = b['releaseUrl']
       name    = h.unescape(b['title'])
-      thumb   = b['thumbnailUrl16x9']
+      thumb   = b['thumbnailUrl16x9'].replace('126x71.jpg','480x360.jpg')
       infoList = {}
       infoList['Duration']    = b['length']
       infoList['Title']       = h.unescape(b['title'])

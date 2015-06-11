@@ -30,6 +30,7 @@ import gzip
 
 nos_url = 'http://content.nos.nl/apps/feeds/journaal-app/page/1'
 playlist_format = 'http://content.nos.nl/apps/broadcast/{}/format/mp4-web03'
+playlist_format = 'http://content.nos.nl/apps/broadcast/{}/format/all'
 headers = (
     ('X-NOS-App', 'LGE/hammerhead;Android/4.4.3;nl.nos.app/3.1'),
     ('X-NOS-Salt', '1417002425'),
@@ -44,6 +45,13 @@ def addLink(title, url, thumb):
   liz=xbmcgui.ListItem(title, thumbnailImage=thumb)
   xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=liz, isFolder=False)
 
+def get_response(playlist_url):
+  playlist_request = urllib2.Request(playlist_url)
+  for header in headers:
+    playlist_request.add_header(*header)
+  playlist_response = urllib2.urlopen(playlist_request)
+  return playlist_response
+
 def scan(params):
   request = urllib2.Request(nos_url)
   for header in headers:
@@ -56,17 +64,24 @@ def scan(params):
     stuff = json.loads(data)
     for item in sorted(stuff['broadcasts'], key=lambda item: item['pub_date'], reverse=True):
       playlist_url = playlist_format.format(item['id'])
-      playlist_request = urllib2.Request(playlist_url)
-      for header in headers:
-        playlist_request.add_header(*header)
-      playlist_response = urllib2.urlopen(playlist_request)
+      try:
+        playlist_response = get_response(playlist_url)
+      except urllib2.HTTPError:
+        try:
+          playlist_url = playlist_format2.format(item['id'])
+          playlist_response = get_response(playlist_url)
+        except urllib2.HTTPError:
+          continue
       if playlist_response.info().get('Content-Encoding') == 'gzip':
         playlist_buf = StringIO(playlist_response.read())
         playlist_f = gzip.GzipFile(fileobj=playlist_buf)
         playlist_data = playlist_f.read()
         playlist_stuff = json.loads(playlist_data)
         title = playlist_stuff['title']
-        video_url = playlist_stuff['url']
+        try:
+          video_url = playlist_stuff['url']
+        except KeyError:
+          video_url = playlist_stuff['video_urls'][0]['url']
         img = None
         addLink(title, video_url, img)
   xbmcplugin.endOfDirectory(int(sys.argv[1]))

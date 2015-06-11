@@ -6,13 +6,6 @@ import unittest
 
 
 class TestProvider(unittest.TestCase):
-    def test_top_10(self):
-        context = kodion.Context(path='/top10/')
-        provider = Provider()
-        result = provider.navigate(context)
-        list = result[0]
-        pass
-
     def test_format(self):
         context = kodion.Context(path='/format/2/')
         provider = Provider()

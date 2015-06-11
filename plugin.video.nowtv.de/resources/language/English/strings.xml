@@ -58,4 +58,7 @@
 
     <!-- NOW TV -->
     <string id="30500">DRM protected streams are not supported</string>
+    <string id="30501">The video costs %s</string>
+    <string id="30502">Please visit www.nowtv.de, to acquire the content there.</string>
+    <string id="30503">Show only free videos</string>
 </strings>

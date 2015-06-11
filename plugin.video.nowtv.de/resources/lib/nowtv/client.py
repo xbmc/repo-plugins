@@ -1,4 +1,5 @@
 import hashlib
+import json
 import re
 import uuid
 import time
@@ -276,76 +277,129 @@ class Client(object):
             pass
         return result
 
-    def get_videos(self, channel_config, format_id):
+    def get_format_tabs(self, channel_config, seo_url):
         # first get the correct id for the format
         params = {
             'fields': '*,.*,formatTabs.*,formatTabs.formatTabPages.*',
-            'name': '%s.php' % format_id
+            'name': '%s.php' % seo_url
         }
         json_data = self._perform_request(channel_config, params=params, path='formats/seo')
-        items = json_data.get('formatTabs', {}).get('items', [])
-        format_title = json_data.get('title', '')
 
+        result = []
+        tab_items = json_data.get('formatTabs', {})
+        if not tab_items:
+            tab_items = {}
+            pass
+        tab_items = tab_items.get('items', [])
+
+        for tab_item in tab_items:
+            title = tab_item['headline']
+            # only valid title
+            if title:
+                tab = {
+                    'title': title,
+                    'id': tab_item['id'],
+                    'images': {
+                        'thumb': json_data['defaultImage169Logo'],
+                        'fanart': json_data['defaultImage169Format']
+                    }
+                }
+                if json_data.get('tabSeason', False):
+                    tab['type'] = 'season'
+                    pass
+                else:
+                    tab['type'] = 'year'
+                    pass
+                result.append(tab)
+                pass
+            pass
+        return result
+
+    def get_videos_by_format_list(self, channel_config, format_list_id):
         video_list = []
-        if len(items) > 0:
-            _format_id = items[0]['id']
-            params = {
-                'fields': '*,formatTabPages.*,formatTabPages.container.*,formatTabPages.container.movies.*,formatTabPages.container.movies.format.*,formatTabPages.container.movies.paymentPaytypes.*,formatTabPages.container.movies.pictures'
-            }
-            json_data = self._perform_request(channel_config, params=params, path='formatlists/%s/' % str(_format_id))
-            format_tab_pages = json_data.get('formatTabPages', {})
-            items = format_tab_pages.get('items', [])
 
-            for item in items:
-                container = item.get('container', {})
-                movies = container.get('movies', {})
-                if not movies:
-                    movies = {}
+        params = {
+            'fields': '*,formatTabPages.*,formatTabPages.container.*,formatTabPages.container.movies.*,formatTabPages.container.movies.format.*,formatTabPages.container.movies.paymentPaytypes.*,formatTabPages.container.movies.pictures',
+            'maxPerPage': '100',
+            'page': '1'
+        }
+        json_data = self._perform_request(channel_config, params=params, path='formatlists/%s/' % str(format_list_id))
+        format_tab_pages = json_data.get('formatTabPages', {})
+        items = format_tab_pages.get('items', [])
+
+        for item in items:
+            container = item.get('container', {})
+            movies = container.get('movies', {})
+            if not movies:
+                movies = {}
+                pass
+            _items = movies.get('items', [])
+            for _item in _items:
+                video_path = '%s/%s' % (_item['format']['seoUrl'], _item['seoUrl'])
+                thumb = ''
+                thumbs = _item.get('pictures', {})
+                if not thumbs:
+                    thumbs = {}
                     pass
-                _items = movies.get('items', [])
-                for _item in _items:
-                    if _item.get('free', False):
-                        video_path = '%s/%s' % (_item['format']['seoUrl'], _item['seoUrl'])
-                        thumb = ''
-                        thumbs = _item.get('pictures', {})
-                        if not thumbs:
-                            thumbs = {}
-                            pass
-                        thumbs = thumbs.get('default', [])
-                        if len(thumbs):
-                            thumb = channel_config['thumb-url'] % str(thumbs[0]['id'])
-                            pass
-                        else:
-                            thumb = _item.get('format', {}).get('defaultImage169Logo', '')
-                            pass
-                        video = {
-                            'title': _item['title'],
-                            'format': format_title,
-                            'id': _item['id'],
-                            'path': video_path,
-                            'plot': _item['articleLong'],
-                            'published': _item['broadcastStartDate'],
-                            'duration': _item['duration'],
-                            'season': int(_item.get('season', 0)),
-                            'episode': int(_item.get('episode', 0)),
-                            'images': {
-                                'thumb': thumb,
-                                'fanart': _item.get('format', {}).get('defaultImage169Format', '')
-                            }
-                        }
-                        video_list.append(video)
-                        pass
+                thumbs = thumbs.get('default', [])
+                if len(thumbs):
+                    thumb = channel_config['thumb-url'] % str(thumbs[0]['id'])
                     pass
+                else:
+                    thumb = _item.get('format', {}).get('defaultImage169Logo', '')
+                    pass
+                video = {
+                    'title': _item['title'],
+                    'free': _item.get('free', False),
+                    'format': _item.get('format', {}).get('title', ''),
+                    'id': _item['id'],
+                    'path': video_path,
+                    'plot': _item['articleLong'],
+                    'published': _item['broadcastStartDate'],
+                    'duration': _item['duration'],
+                    'season': int(_item.get('season', 0)),
+                    'episode': int(_item.get('episode', 0)),
+                    'images': {
+                        'thumb': thumb,
+                        'fanart': _item.get('format', {}).get('defaultImage169Format', '')
+                    }
+                }
+                # add price
+                if not video['free']:
+                    price = _item['paymentPaytypes']['items'][0]
+                    price = '%s %s' % (price['price'], price['currency'])
+                    video['price'] = price
+                    pass
+                video_list.append(video)
                 pass
             pass
 
         return {'items': video_list}
 
+    def _make_item_to_format(self, json_item):
+        format_item = {
+            'title': json_item['title'],
+            'station': json_item.get('station', ''),
+            'id': json_item['id'],
+            'seoUrl': json_item['seoUrl'],
+            'images': {
+                'fanart': json_item.get('defaultImage169Format', ''),
+                'thumb': json_item.get('defaultImage169Logo')
+            }
+        }
+        return format_item
+
     def get_formats(self, channel_config):
+        filter = {
+            'Station': channel_config['id'],
+            'Disabled': '0',
+            'CategoryId': {
+                'containsIn': ['serie', 'news']
+            }
+        }
         params = {
             'fields': 'title,station,title,titleGroup,seoUrl,categoryId,*',
-            'filter': '{"Station":"%s","Disabled":"0","CategoryId":{"containsIn":["serie","news"]}}' % channel_config[
-                'id'],
+            'filter': json.dumps(filter),
             'maxPerPage': '1000'
         }
         json_data = self._perform_request(channel_config, params=params, path='formats')
@@ -354,25 +408,45 @@ class Client(object):
         items = json_data.get('items', [])
         for item in items:
             if item['icon'] in ['free', 'new']:
-                format_list.append(
-                    {
-                        'title': item['title'],
-                        'id': item['seoUrl'],
-                        'images': {
-                            'fanart': item.get('defaultImage169Format', ''),
-                            'thumb': item.get('defaultImage169Logo')
-                        }
-                    }
-                )
+                format_item = self._make_item_to_format(item)
+                format_list.append(format_item)
                 pass
             pass
 
         return {'items': format_list}
 
     def search(self, q):
-        params = {'word': q,
-                  'extend': '1'}
-        return self._perform_request(path='/api/query/json/content.format_search', params=params)
+        def _search(_q, _page=1, _count=0):
+            _result = []
+            _params = {'fields': 'id,title,station,seoUrl,searchAliasName,icon,*',
+                       'maxPerPage': '500',
+                       'page': str(_page)}
+            _json_data = self._perform_request(None, path='formats', params=_params)
+            _total = _json_data.get('total', 0)
+            _items = _json_data.get('items', [])
+            _count += len(_items)
+
+            for _item in _items:
+                if re.search(_q, _item.get('title', ''), re.IGNORECASE):
+                    _result.append(_item)
+                    pass
+                pass
+
+            if _count < _total:
+                _result.extend(_search(_q, _page+1, _count))
+                pass
+            return _result
+
+        items = _search(q, 1)
+        format_list = []
+        for item in items:
+            if item['icon'] in ['free', 'new']:
+                format_item = self._make_item_to_format(item)
+                format_list.append(format_item)
+                pass
+            pass
+
+        return {'items': format_list}
 
     def _perform_request(self, channel_config, method='GET', headers=None, path=None, post_data=None, params=None,
                          allow_redirects=True):
@@ -392,10 +466,13 @@ class Client(object):
             'Origin': 'http://www.nowtv.de',
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.152 Safari/537.36',
             'DNT': '1',
-            'Referer': 'http://www.nowtv.de/%s' % channel_config['id'],
+            'Referer': 'http://www.nowtv.de/',
             'Accept-Encoding': 'gzip',
             'Accept-Language': 'en-US,en;q=0.8,de;q=0.6'
         }
+        if channel_config:
+            _headers['Referer'] = 'http://www.nowtv.de/%s' % channel_config['id']
+            pass
         _headers.update(headers)
 
         # url

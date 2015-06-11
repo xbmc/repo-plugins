@@ -1,3 +1,18 @@
+v1.1.1
+- Removed unused dependeny
+- Fixed addon ID
+
+v1.1.0
+- Almost a complete rewrite
+- Using the PS3 app API
+- More menus and better quality images
+- Now displays, episode and show details
+- Removed caching
+
+v1.0.3
+- Added a check to see if user is a subscriber
+- The clear cache option now properly clears the StorageServer cache
+
 v1.0.2
 - Removed some unused strings
 - Removed 'optional="true"' from addon.xml because it does nothing

@@ -12,15 +12,8 @@ __language__ = __settings__.getLocalizedString
 home = __settings__.getAddonInfo('path')
 icon = xbmc.translatePath(os.path.join(home, 'icon.png'))
 
-
-if (__settings__.getSetting('username') == "") or (__settings__.getSetting('password') == ""):
-	xbmc.executebuiltin("XBMC.Notification(" + __settings__.getAddonInfo('name') + "," + __language__(30000) + ",10000,"+icon+")")
-	__settings__.openSettings()
-
 cj = cookielib.CookieJar()
 opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-
-domain = 'www.manoto1.com'
 
 # Thanks to micahg!
 def getStreamsFromPlayList(playlist):
@@ -34,7 +27,7 @@ def getStreamsFromPlayList(playlist):
 
         # request the games        
         try:
-        	resp = urllib2.urlopen(req)
+        	resp = opener.open(req)
         except urllib2.URLError, ue:
         	print("URL error trying to open playlist")
         	return None
@@ -62,12 +55,14 @@ def getStreamsFromPlayList(playlist):
         		bandwidth = m.group(1)
         	elif len(line) > 0 and len(bandwidth) > 0:
         		# add the playlist
-        		streams[bandwidth] = (("" if line.lower().startswith("http") else prefix) + line).strip()
+        		streams[bandwidth] = (("" if line.lower().startswith("http") else prefix) + line + 
+						("" if len(playlist.split("?")) != 2 else "&" + playlist.split("?")[1])).strip()
 
 	return streams
 
 
-def loginAndParse():
+def fetch():
+	domain = 'www.manoto1.com'
 	url = 'https://' + domain + '/live'
 
 	if not cj:		
@@ -79,10 +74,6 @@ def loginAndParse():
 			ck = cookielib.Cookie(version=0, name=parsedJS[0][0], value=parsedJS[0][1], port=None, port_specified=False, domain=domain, domain_specified=False, domain_initial_dot=False, path='/', path_specified=True, secure=False, expires=None, discard=True, comment=None, comment_url=None, rest={'HttpOnly': None}, rfc2109=False)		
 			cj.set_cookie(ck)
 	
-        params = 'UserName=%s&Password=%s&btnLogin=ture&bRememberMe=false' % (urllib.quote(__settings__.getSetting('username')), urllib.quote(__settings__.getSetting('password')))
-
-	resp = opener.open('https://www.manoto1.com/User/Home/Login', params) 
-
 	resp = opener.open(url)
 	html_data = resp.read()
 
@@ -121,6 +112,4 @@ def loginAndParse():
 
 	return True
 
-while not loginAndParse():
-	xbmc.executebuiltin("XBMC.Notification(" + __settings__.getAddonInfo('name') + "," + __language__(30001) + ",10000,"+icon+")")
-	__settings__.openSettings()
+fetch()

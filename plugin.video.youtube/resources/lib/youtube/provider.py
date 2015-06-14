@@ -1,5 +1,3 @@
-import weakref
-
 __author__ = 'bromix'
 
 from resources.lib.youtube.helper import yt_subscriptions
@@ -8,8 +6,8 @@ from resources.lib.kodion.utils import FunctionCache
 from resources.lib.kodion.items import *
 from resources.lib.youtube.client import YouTube
 from .helper import v3, ResourceManager, yt_specials, yt_playlist, yt_login, yt_setup_wizard, yt_video, \
-    yt_context_menu, yt_play, yt_old_actions
-from .youtube_exceptions import YouTubeException, LoginException
+    yt_context_menu, yt_play, yt_old_actions, UrlResolver, UrlToItemConverter
+from .youtube_exceptions import LoginException
 
 
 class Provider(kodion.AbstractProvider):
@@ -194,6 +192,22 @@ class Provider(kodion.AbstractProvider):
 
     def get_fanart(self, context):
         return context.create_resource_path('media', 'fanart.jpg')
+
+    @kodion.RegisterProviderPath('^/uri2addon/$')
+    def on_uri2addon(self, context, re_match):
+        uri = context.get_param('uri', '')
+        if not uri:
+            return False
+
+        resolver = UrlResolver(context)
+        res_url = resolver.resolve(uri)
+        url_converter = UrlToItemConverter(flatten=True)
+        url_converter.add_urls([res_url], self, context)
+        items = url_converter.get_items(self, context)
+        if len(items) > 0:
+            return items[0]
+
+        return False
 
     @kodion.RegisterProviderPath('^/playlist/(?P<playlist_id>.*)/$')
     def _on_playlist(self, context, re_match):

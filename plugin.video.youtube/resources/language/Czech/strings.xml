@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Kodion Settings -->
+    <string id="30000">Hlavní</string>
+    <string id="30001">Jméno</string>
+    <string id="30002">Heslo</string>
+
+    <string id="30009">Vždy se zeptat na kvalitu</string>
+    <string id="30010">Kvalita videa</string>
+    <string id="30011">480p</string>
+	<string id="30012">720p (HD)</string>
+	<string id="30013">1080p (HD)</string>
+    <string id="30014">2160p (4k)</string>
+    <string id="30015">4320p (8k)</string>
+    <string id="30016">240p</string>
+    <string id="30017">360p</string>
+
+    <string id="30020">Povolit 3D</string>
+    <string id="30021">Zobrazit fanart</string>
+    <string id="30022">Položek na stránku</string>
+    <string id="30023">Velikost historie vyhledávání</string>
+    <string id="30024">Velikost cache(MB)</string>
+    <string id="30025">Povolit průvodce nastavením</string>
+    <string id="30026">Vynutit zobrazení</string>
+    <string id="30027">Zobrazit: Výchozí</string>
+    <string id="30028">Zobrazit: Epizody</string>
+    <string id="30029">Zobrazit: Filmy</string>
+    <string id="30030">Spustit průvodce nastavením?</string>
+    <string id="30031">Pokročilé</string>
+    <string id="30032">Zobrazit: TV Show</string>
+    <string id="30033">Zobrazit: Skladby</string>
+    <string id="30034">Zobrazit: Umělci</string>
+    <string id="30035">Zobrazit: Alba</string>
+    <string id="30036">Podpora alternativního přehrávače</string>
+
+    <!-- Kodion Common -->
+    <string id="30100">Oblíbené</string>
+    <string id="30101">Přidat do oblíbených</string>
+    <string id="30102">Hledat</string>
+    <string id="30103">Knihovna</string>
+    <string id="30104">Zvýraznění</string>
+    <string id="30105">Archiv</string>
+    <string id="30106">Další strana (%d)</string>
+    <string id="30107">Sledovat později</string>
+    <string id="30108">Odstranit</string>
+    <string id="30109">Poslední videa</string>
+    <string id="30110">Nové hledání</string>
+    <string id="30111">Přihlásit</string>
+    <string id="30112">Odhlásit</string>
+    <string id="30113">Přejmenovat</string>
+    <string id="30114">Potvrdit smazání</string>
+    <string id="30115">Potvrdit přesunutí</string>
+    <string id="30116">Smazat "%s"?</string>
+    <string id="30117">Přesunout "%s"?</string>
+    <string id="30118">Smazat</string>
+    <string id="30119">Prosím čekejte...</string>
+    <string id="30120">Vyčistit</string>
+
+    <!-- YouTube -->
+    <string id="30500">Kanály</string>
+    <string id="30501">Seznamy</string>
+    <string id="30502">Jít na %s</string>
+    <string id="30503">Zobrazit fanart kanálu</string>
+    <string id="30504">Odběry</string>
+    <string id="30505">Odhlásit odběr</string>
+    <string id="30506">Přihlásit k odběru</string>
+    <string id="30507">Můj kanál</string>
+    <string id="30508">Videa, která se líbí</string>
+    <string id="30509">Historie</string>
+    <string id="30510">Mé odběry</string>
+    <string id="30511">Přidat video do fronty</string>
+    <string id="30512">Procházet kanály</string>
+    <string id="30513">Populární videa</string>
+    <string id="30514">Související videa</string>
+    <string id="30515">Automaticky odstranit ze 'Shlédnout později'</string>
+    <string id="30516">Složky</string>
+    <string id="30517">Odebírat od %s</string>
+    <string id="30518">Jít na '%s'</string>
+    <string id="30519">a zadejte následující kód:</string>
+    <string id="30520">Přidat do...</string>
+    <string id="30521">Vyberte seznam</string>
+    <string id="30522">Nový seznam...</string>
+    <string id="30523">Jazyk</string>
+    <string id="30524">Vyberte jazyk</string>
+    <string id="30525">Vyberte region</string>
+    <string id="30526">Přizpůsobit</string>
+    <string id="30527">Vybrat jazyk a region?</string>
+    <string id="30528">Ohodnotit...</string>
+    <string id="30529">Líbí se mi to</string>
+    <string id="30530">Nelíbí se mi to</string>
+    <string id="30531">Přehrát vše</string>
+    <string id="30532">Výchozí</string>
+    <string id="30533">Naopak</string>
+    <string id="30534">Náhodně</string>
+    <string id="30535">Vyberte pořadí seznamu</string>
+    <string id="30536">Obnovuji seznam...</string>
+    <string id="30537">Přehrát odtud</string>
+    <string id="30538">Videa, která se nelíbí</string>
+    <string id="30539">Živě</string>
+    <string id="30540">Přehrát pomocí...</string>
+    <string id="30541">Zobrazit název kanálu v popisku</string>
+    <string id="30542">rtmpe stream není podporován</string>
+    <string id="30543">Obnovit</string>
+    <string id="30544">Více odkazů z popisku</string>
+    <string id="30545">Žádné další odkazy nenalezeny</string>
+    <string id="30546">Prosím přihlaste se dvakrát!</string>
+    <string id="30547">Je zapotřebí povolit dvě aplikace pro správnou funkci doplňku.</string>
+    <string id="30548">Více...</string>
+    <string id="30549">Žádné streamy nenalezeny</string>
+</strings>

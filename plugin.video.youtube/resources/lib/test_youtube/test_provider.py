@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 __author__ = 'bromix'
 
 from resources.lib import kodion
@@ -96,7 +98,7 @@ class TestProvider(unittest.TestCase):
         provider = Provider()
 
         path = kodion.utils.create_path('search')
-        context = kodion.Context(path=path, params={'q': 'lgr'})
+        context = kodion.Context(path=path, params={'q': 'The Breakfast Club é Extras'})
         context.set_localization(30502, 'Go to %s')
         result = provider.navigate(context)
         items = result[0]

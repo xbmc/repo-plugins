@@ -5,6 +5,7 @@
     <string id="30001">Użytkownik</string>
     <string id="30002">Hasło</string>
 
+    <string id="30009">Pytaj o jakość strumienia wideo</string>
     <string id="30010">Jakość wideo</string>
     <string id="30011">480p</string>
     <string id="30012">720p (HD)</string>
@@ -102,4 +103,8 @@
     <string id="30543">Odśwież</string>
     <string id="30544">Dodatkowe łącza z treści opisu</string>
     <string id="30545">Brak kolejnych łączy.</string>
+    <string id="30546">Wymagane dwukrotne logowanie!</string>
+    <string id="30547">Musisz aktywować dwie aplikacje, aby YouTube działało poprawnie.</string>
+    <string id="30548">Więcej...</string>
+    <string id="30549">Brak strumieni wideo</string>
 </strings>

@@ -1,10 +1,10 @@
-from resources.lib import kodion
-from resources.lib.youtube.client import YouTube
-from resources.lib.youtube.helper.video_info import VideoInfo
-
 __author__ = 'bromix'
 
 import unittest
+
+from resources.lib import kodion
+from resources.lib.youtube.client import YouTube
+from resources.lib.youtube.helper.video_info import VideoInfo
 
 
 class TestClient(unittest.TestCase):
@@ -35,8 +35,11 @@ class TestClient(unittest.TestCase):
         pass
 
     def test_my_subscriptions_tv(self):
-        client = YouTube(access_token_tv=self.TEST_ACCESS_TOKEN)
-        json_data = client.get_my_subscriptions(page_token=None)
+        client = YouTube(items_per_page=5, access_token_tv=self.TEST_ACCESS_TOKEN)
+        json_data_page1 = client.get_my_subscriptions(page_token=None)
+        json_data_page2 = client.get_my_subscriptions(page_token=json_data_page1['next_page_token'], offset=json_data_page1['offset'])
+        json_data_page3 = client.get_my_subscriptions(page_token=json_data_page2['next_page_token'], offset=json_data_page2['offset'])
+        json_data_page4 = client.get_my_subscriptions(page_token=json_data_page3['next_page_token'], offset=json_data_page3['offset'])
         pass
 
     def test_get_live_events(self):
@@ -183,6 +186,9 @@ class TestClient(unittest.TestCase):
         client = YouTube()
 
         context = kodion.Context()
+
+        # FLASH?
+        streams = client.get_video_streams(context, 'zyg0WUsY9HI')
 
         # VEVO
         streams = client.get_video_streams(context, 'nfWlot6h_JM')

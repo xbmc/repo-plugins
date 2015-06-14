@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.youtube" name="YouTube" version="5.1.5" provider-name="bromix">
+<addon id="plugin.video.youtube" name="YouTube" version="5.1.6" provider-name="bromix">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 	</requires>
@@ -7,7 +7,7 @@
 		<provides>video</provides>
 	</extension>
 	<extension point="xbmc.addon.metadata">
-		<summary lang="en">Plugin for YouTube</summary>
+        <summary lang="en">Plugin for YouTube</summary>
         <description lang="en">YouTube is a one of the biggest video-sharing websites of the world.</description>
 		<summary lang="de">Plugin für YouTube</summary>
         <description lang="de">YouTube ist ein eines der größten Video-Sharing-Websites der Welt.</description>
@@ -21,6 +21,8 @@
         <description lang="ru">Данное дополнение позволяет находить и смотреть видео на всеми любимом сайте.</description>
         <summary lang="fr">Plugin pour YouTube</summary>
         <description lang="fr">YouTube est l'un des plus grands sites de partage vidéos du monde.</description>
+        <summary lang="zh">YouTube附加元件</summary>
+        <description lang="zh">「Youtube」是全世界最大的影片分享網站</description>
 		<disclaimer lang="en"></disclaimer>
 		<language></language>
 		<platform>all</platform>

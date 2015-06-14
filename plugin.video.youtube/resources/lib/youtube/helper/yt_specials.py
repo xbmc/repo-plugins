@@ -203,8 +203,9 @@ def _process_new_uploaded_videos_tv(provider, context, re_match):
     provider.set_content_type(context, kodion.constants.content_type.EPISODES)
 
     result = []
-    continuations = context.get_param('continuations', '')
-    json_data = provider.get_client(context).get_my_subscriptions(page_token=continuations)
+    next_page_token = context.get_param('next_page_token', '')
+    offset = int(context.get_param('offset', 0))
+    json_data = provider.get_client(context).get_my_subscriptions(page_token=next_page_token, offset=offset)
     result.extend(tv.my_subscriptions_to_items(provider, context, json_data))
 
     return result

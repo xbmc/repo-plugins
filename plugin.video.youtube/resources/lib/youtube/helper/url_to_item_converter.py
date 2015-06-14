@@ -1,7 +1,6 @@
-import re
-
 __author__ = 'bromix'
 
+import re
 import urlparse
 from resources.lib.kodion.items import VideoItem, DirectoryItem
 from . import utils

@@ -608,7 +608,7 @@ class VideoInfo(object):
                     yt_format = self.FORMAT.get(itag, None)
                     if not yt_format:
                         raise Exception('unknown yt_format for itag "%s"' % itag)
-                    yt_format['rtmpe'] = True
+                    yt_format['video']['rtmpe'] = True
                     video_stream = {'url': url,
                                     'meta': meta_info}
                     video_stream.update(yt_format)

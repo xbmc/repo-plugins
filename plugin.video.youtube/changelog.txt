@@ -1,3 +1,12 @@
+5.1.6 (2015-06-14)
+ADD: Chinese (Traditional) (thx 2 beddfaf916)
+ADD: Czech (thx 2 tomaswcz)
+ADD: Romanian (thx 2 Danny3)
+UPD: test some new pagination for 'My Subscriptions'
+UPD: Polish (thx 2 Etharr)
+FIX: show notification again for unsupported rtmpe streams
+FIX: unicode/utf-8 trouble in kodion
+
 5.1.5 (2015-05-29)
 UPD: remove deprecation warning for Isengard
 FIX: Issue 7163 (Missing pagination for subscriptions - YouTube APIv3 bug)

@@ -1,6 +1,6 @@
 __all__ = ['KodionException', 'RegisterProviderPath', 'AbstractProvider', 'Context']
 
-__version__ = '1.5.1'
+__version__ = '1.5.4'
 
 # import base exception of kodion directly into the kodion namespace
 from .exceptions import KodionException

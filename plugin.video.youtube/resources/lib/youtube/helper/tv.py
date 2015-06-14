@@ -24,11 +24,12 @@ def my_subscriptions_to_items(provider, context, json_data):
     utils.update_fanarts(provider, context, channel_item_dict)
 
     # next page
-    continuations = json_data.get('continuations', '')
-    if continuations:
+    next_page_token = json_data.get('next_page_token', '')
+    if next_page_token or json_data.get('continue', False):
         new_params = {}
         new_params.update(context.get_params())
-        new_params['continuations'] = continuations
+        new_params['next_page_token'] = next_page_token
+        new_params['offset'] = int(json_data.get('offset', 0))
 
         new_context = context.clone(new_params=new_params)
 

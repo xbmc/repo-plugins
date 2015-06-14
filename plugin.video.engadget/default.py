@@ -1,5 +1,5 @@
 __author__ = "divingmule, and Hans van den Bogert"
-__copyright__ = "Copyright 2013"
+__copyright__ = "Copyright 2015"
 __license__ = "GPL"
 __version__ = "2"
 __maintainer__ = "Hans van den Bogert"
@@ -11,11 +11,13 @@ import urllib2
 import re
 import json
 import StorageServer
+import xbmc
 import xbmcplugin
 import xbmcgui
 import xbmcaddon
-from urlparse import urlparse, parse_qs
+from urlparse import parse_qs
 from traceback import format_exc
+import sys
 
 addon = xbmcaddon.Addon()
 addon_profile = xbmc.translatePath(addon.getAddonInfo('profile'))
@@ -24,8 +26,7 @@ addon_id = addon.getAddonInfo('id')
 addon_dir = xbmc.translatePath(addon.getAddonInfo('path'))
 sys.path.append(os.path.join(addon_dir, 'resources', 'lib'))
 
-# Do extra imports including html5lib from local addon dir
-import html5lib
+# Do extra imports including from local addon dir
 from bs4 import BeautifulSoup
 
 cache = StorageServer.StorageServer("engadget", 24)
@@ -35,9 +36,14 @@ base_url = 'http://www.engadget.com'
 
 
 def addon_log(string):
+
+    """
+
+    :type string: string
+    """
     try:
         log_message = string.encode('utf-8', 'ignore')
-    except:
+    except UnicodeEncodeError:
         log_message = 'addonException: addon_log'
     xbmc.log("[%s-%s]: %s" % (addon_id, addon_version, log_message), level=xbmc.LOGDEBUG)
 
@@ -86,11 +92,10 @@ def display_category(url):
         link = i('a', {'class': 'video-link'})[1]['href']
         img = i('a', {'class': 'video-link'})[0].img['src']
         add_dir(title, link, img, 'resolve_url', False)
-    try:
-        next_page = soup.find('li', class_='older').a['href']
-        add_dir(language(30008), next_page, icon, 'get_category')
-    except:
-        pass
+
+    next_page = soup.find('li', class_='older').a['href']
+    add_dir(language(30008), next_page, icon, 'get_category')
+
     cache.set('page_url', page_url)
 
 
@@ -103,28 +108,30 @@ def resolve_url(url):
         }
     preferred = int(addon.getSetting('preferred'))
     video_id = url.split('/')[-1]
+    addon_log('video ID: {0}'.format(video_id))
 
     try:
         link_cache = eval(cache.get('link_cache'))
-        item = [(i[video_id]['url'], i[video_id]['ren']) for i in link_cache if video_id in i][0]
+        cached_item = [(i[video_id]['url'], i[video_id]['ren']) for i in link_cache if video_id in i][0]
         addon_log('return item from cache')
-    except:
+    except IndexError:  # If not at least one item was found i.e. [0] is non-existent, then
         addon_log('addonException: %s' % format_exc())
-        item = cache_playlist(video_id)
-    if item:
-        extension_format = '_%s.%s?cat=Tech&subcat=Web'
-        stream_url = urllib.unquote(item[0]).split('.mp4')[0]
+        cached_item = cache_playlist(video_id)
+    if cached_item:
+        stream_url = urllib.unquote(cached_item[0])
         addon_log('preferred setting: %s' % settings[preferred])
         resolved_url = None
         while (preferred >= 0) and not resolved_url:
             try:
                 ren_id, ren_type = [
-                    (i['ID'], i['RenditionType']) for i in item[1] if i['ID'] in settings[preferred]][0]
-                resolved_url = stream_url + extension_format % (ren_id, ren_type)
+                    (i['ID'], i['RenditionType']) for i in cached_item[1] if i['ID'] in settings[preferred]][0]
+                # Adhere to 5min's format, their base URL is always an MP4, but depending on the rendition type you
+                # need the following to get an actual working URL
+                resolved_url = stream_url.replace(".mp4", "_{0}.{1}".format(ren_id, ren_type))
                 addon_log('Resolved: %s' % resolved_url)
-            except:
+            except IndexError:  # Assume that if we couldn't access [0], it isn't available
                 addon_log('addonException: %s' % format_exc())
-                addon_log('Setting unavailabel: %s' % settings[preferred])
+                addon_log('Setting unavailable: %s' % settings[preferred])
                 preferred -= 1
         return resolved_url
 
@@ -132,6 +139,7 @@ def resolve_url(url):
 def cache_playlist(video_id):
     url = 'http://syn.5min.com/handlers/SenseHandler.ashx?'
     script_url = 'http://www.engadget.com/embed-5min/?playList=%s&autoStart=true' % video_id
+    addon_log("Get script: " + script_url)
     script_html = make_request(script_url)
     # workaround: soup dies on the script tag
     script_html2 = script_html.replace('</scr" + "ipt>"', "")
@@ -141,7 +149,7 @@ def cache_playlist(video_id):
     # Why the original author ever wanted to include a javascript snippet, which happens to be valid
     # python syntax, is beyond me
     script_params = eval((script[5:].replace('\r\n', '').split(';')[0]))
-    params = {
+    url_params = {
         'ExposureType': 'PlayerSeed',
         'autoStart': script_params['autoStart'],
         'cbCount': '3',
@@ -159,40 +167,41 @@ def cache_playlist(video_id):
         'videoCount': '50',
         'videoGroupID': script_params['videoGroupID']
         }
-    data = json.loads(make_request(url + urllib.urlencode(params)), 'utf-8')
+    addon_log("complete url: " + url + urllib.urlencode(url_params))
+    data = json.loads(make_request(url + urllib.urlencode(url_params)), 'utf-8')
     items = data['binding']
     pattern = re.compile('videoUrl=(.+?)&')
-    try:
-        link_cache = eval(cache.get('link_cache'))
-        if len(link_cache) > 300:
-            del link_cache[:100]
-    except:
-        addon_log('addonException: %s' % format_exc())
-        link_cache = []
+    link_cache = eval(cache.get('link_cache'))
+    if len(link_cache) > 300:
+        del link_cache[:100]
+
     for i in items:
         match = pattern.findall(i['EmbededURL'])
+        addon_log("Regexp matches for videoUrl: " + match[0])
         try:
             item_dict = {str(i['ID']): {'url': match[0],
                                         'ren': i['Renditions']}}
             link_cache.append(item_dict)
-        except:
+        except (KeyError, IndexError):
             addon_log('addonException: %s' % format_exc())
     cache.set('link_cache', repr(link_cache))
     addon_log('link_cache items %s' % len(link_cache))
     try:
-        return [(i[video_id]['url'], i[video_id]['ren']) for i in link_cache if video_id in i][0]
-    except:
+        video_url = [(i[video_id]['url'], i[video_id]['ren']) for i in link_cache if video_id in i][0]
+        addon_log(str(video_url))
+        return video_url
+    except IndexError:
         addon_log('addonException: %s' % format_exc())
 
 
-def add_dir(name, url, iconimage, mode, isfolder=True):
-    params = {'name': name, 'url': url, 'mode': mode}
-    url = '%s?%s' % (sys.argv[0], urllib.urlencode(params))
-    listitem = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-    if not isfolder:
-        listitem.setProperty('IsPlayable', 'true')
-    listitem.setInfo(type="Video", infoLabels={'Title': name})
-    xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listitem, isfolder)
+def add_dir(name, url, icon_image, dir_mode, is_folder=True):
+    dir_params = {'name': name, 'url': url, 'mode': dir_mode}
+    url = '%s?%s' % (sys.argv[0], urllib.urlencode(dir_params))
+    list_item = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=icon_image)
+    if not is_folder:
+        list_item.setProperty('IsPlayable', 'true')
+    list_item.setInfo(type="Video", infoLabels={'Title': name})
+    xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, list_item, is_folder)
 
 
 def get_params():
@@ -202,28 +211,28 @@ def get_params():
     return p
 
 
-params = get_params()
-addon_log(repr(params))
+def main():
+    params = get_params()
+    addon_log(repr(params))
 
-try:
-    mode = params['mode']
-except:
-    mode = None
+    mode = params.get('mode')
 
-if mode is None:
-    display_categories()
-    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+    if mode is None:
+        display_categories()
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-elif mode == 'get_category':
-    display_category(params['url'])
-    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+    elif mode == 'get_category':
+        display_category(params['url'])
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
+    elif mode == 'resolve_url':
+        success = False
+        resolved_url = resolve_url(params['url'])
+        if resolved_url:
+            success = True
+        else:
+            resolved_url = ''
+        item = xbmcgui.ListItem(path=resolved_url)
+        xbmcplugin.setResolvedUrl(int(sys.argv[1]), success, item)
 
-elif mode == 'resolve_url':
-    success = False
-    resolved_url = resolve_url(params['url'])
-    if resolved_url:
-        success = True
-    else:
-        resolved_url = ''
-    item = xbmcgui.ListItem(path=resolved_url)
-    xbmcplugin.setResolvedUrl(int(sys.argv[1]), success, item)
+if __name__ == "__main__":
+    main()

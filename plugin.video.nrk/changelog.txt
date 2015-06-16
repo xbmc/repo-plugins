@@ -1,3 +1,6 @@
+[B]4.5.0[/B]
+- Fikset søk og kategorier etter sideendringer
+
 [B]4.4.23[/B]
 - Fikset søk og kategorier etter sideendringer
 - Lagt til NRK Tegnspråk

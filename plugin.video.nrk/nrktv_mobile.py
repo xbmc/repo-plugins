@@ -24,27 +24,39 @@ session = Session()
 session.headers['User-Agent'] = 'xbmc.org'
 session.headers['app-version-android'] = '51'
 
-_image_url = "http://m.nrk.no/m/img?kaleidoId=%s&width=%d"
+
+class ImageMixin(object):
+    image_id = None
+    _image_url = "http://m.nrk.no/m/img?kaleidoId=%s&width=%d"
+
+    @property
+    def thumb(self):
+        return self._image_url % (self.image_id, 500) if self.image_id else None
+
+    @property
+    def fanart(self):
+        return self._image_url % (self.image_id, 1920) if self.image_id else None
 
 
-class Model(object):
+class Base(object):
     id = None
     title = None
+    is_series = False
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
 
-class Category(Model):
+class Category(Base):
     @staticmethod
     def from_response(r):
         return Category(
-            title=r['displayValue'],
+            title=r.get('displayValue', None) or r['title'],
             id=r['categoryId'],
         )
 
 
-class Channel(Model):
+class Channel(ImageMixin, Base):
     media_url = None
 
     @staticmethod
@@ -53,13 +65,35 @@ class Channel(Model):
             title=r['title'],
             id=r['channelId'],
             media_url=r['mediaUrl'],
-            thumb=_image_url % (r['imageId'], 250),
-            fanart=_image_url % (r['imageId'], 1920),
+            image_id=r['imageId'],
         )
 
 
-class Program(Model):
+class Series(ImageMixin, Base):
+    is_series = True
     description = None
+    legal_age = None
+    available = True
+    category = None
+    """:class:`Category`"""
+
+    @staticmethod
+    def from_response(r):
+        category = Category.from_response(r['category']) if 'category' in r else None
+        return Series(
+            id=r['seriesId'],
+            title=r['title'].strip(),
+            category=category,
+            description=r.get('description'),
+            legal_age=r.get('legalAge') or r.get('aldersgrense'),
+            image_id=r.get('seriesImageId', r.get('imageId', None)),
+            available=r.get('isAvailable', True)
+        )
+
+
+class Program(Series):
+    is_series = False
+
     episode = None
     """Episode number, name or date as string."""
 
@@ -69,19 +103,11 @@ class Program(Model):
     duration = None
     """In seconds"""
 
-    category = None
-    """:class:`Category`"""
-
-    legal_age = None
-    image_id = None
     media_urls = None
-    available = True
 
     @staticmethod
     def from_response(r):
-        category = Category.from_response(r['category']) if 'category' in r \
-            else None
-
+        category = Category.from_response(r['category']) if 'category' in r else None
         aired = None
         try:
             aired = datetime.datetime.fromtimestamp(
@@ -105,8 +131,6 @@ class Program(Model):
             image_id=r['imageId'],
             legal_age=r.get('legalAge') or r.get('aldersgrense'),
             media_urls=media_urls,
-            thumb=_image_url % (r['imageId'], 250),
-            fanart=_image_url % (r['imageId'], 1920),
             episode=r.get('episodeNumberOrDate'),
             aired=aired,
             available=r.get('isAvailable', True)
@@ -146,3 +170,35 @@ def program(program_id):
 def channels():
     return [Channel.from_response(item) for item in _get('/channels')]
 
+
+def categories():
+    return [Category.from_response(item) for item in _get('/categories/')]
+
+
+def _to_series_or_program(item):
+    if item.get('seriesId', '').strip():
+        return Series.from_response(item)
+    return Program.from_response(item)
+
+
+def programs(category_id):
+    items = _get('/categories/%s/programs' % category_id)
+    items = [item for item in items if item.get('title', '').strip() != ''
+             and item['programId'] != 'notransmission']
+    return map(_to_series_or_program, items)
+
+
+def _hit_to_series_or_program(item):
+    hit_type = item.get('type', None)
+    if hit_type == 'serie':
+        return Series.from_response(item['hit'])
+    elif hit_type == 'episode' or hit_type == 'program':
+        return Program.from_response(item['hit'])
+    return None
+
+
+def search(query):
+    response = _get('/search/' + query)
+    if response['hits'] is None:
+        return []
+    return filter(None, map(_hit_to_series_or_program, response['hits']))

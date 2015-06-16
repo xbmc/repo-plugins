@@ -46,6 +46,9 @@ class Provider(kodion.AbstractProvider):
             image = video.get('media_content_thumbnail_large', '')
             if content_type == 'movies':
                 image = video.get('poster', '')
+                if not image:
+                    image = video.get('media_content_thumbnail_large')
+                    pass
                 pass
             video_item.set_image(image)
             video_item.set_fanart(self.get_fanart(context))
@@ -77,7 +80,7 @@ class Provider(kodion.AbstractProvider):
         for show in json_data:
             show_item = DirectoryItem(show['title'],
                                       context.create_uri(['show', str(show['id'])], {'type': content_type}),
-                                      image=show['img_topbanner_ipad'])
+                                      image=show.get('img_topbanner_ipad', show['img_thumbnail']))
             show_item.set_fanart(self.get_fanart(context))
 
             context_menu = [(context.localize(kodion.constants.localize.FAVORITES_ADD),
@@ -274,7 +277,6 @@ class Provider(kodion.AbstractProvider):
         if video_url:
             uri_item = UriItem(video_url)
             return uri_item
-            pass
 
         return False
 

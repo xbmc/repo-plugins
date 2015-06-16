@@ -32,6 +32,12 @@ class AbstractContext(object):
         self._uri = self.create_uri(self._path, self._params)
         pass
 
+    def format_date_short(self, date_obj):
+        raise NotImplementedError()
+
+    def format_time(self, time_obj):
+        raise NotImplementedError()
+
     def get_language(self):
         raise NotImplementedError()
 
@@ -113,7 +119,11 @@ class AbstractContext(object):
 
             # encode in utf-8
             for param in uri_params:
-                uri_params[param] = unicode(params[param]).encode('utf-8')
+                if isinstance(params[param], int):
+                    params[param] = str(params[param])
+                    pass
+
+                uri_params[param] = to_utf8(params[param])
                 pass
             uri += '?' + urllib.urlencode(uri_params)
             pass

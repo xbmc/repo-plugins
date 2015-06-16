@@ -1,6 +1,6 @@
 __all__ = ['SearchHistory', 'FavoriteList', 'WatchLaterList', 'FunctionCache', 'AccessManager', 'ViewManager',
            'strip_html_from_text', 'create_path', 'create_uri_path', 'find_best_fit', 'to_unicode', 'to_utf8',
-           'datetime_parser']
+           'datetime_parser', 'select_stream']
 
 import datetime_parser as datetime_parser
 from .methods import *

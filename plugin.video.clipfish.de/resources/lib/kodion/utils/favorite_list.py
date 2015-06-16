@@ -22,8 +22,8 @@ class FavoriteList(Storage):
             result.append(item)
             pass
 
-        def _sort(item):
-            return item.get_name().upper()
+        def _sort(_item):
+            return _item.get_name().upper()
 
         return sorted(result, key=_sort, reverse=False)
 

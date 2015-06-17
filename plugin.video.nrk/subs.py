@@ -16,8 +16,8 @@
 import os
 import re
 import xbmc
+import requests
 from io import BytesIO
-from nrktv import session as requests
 
 
 def get_subtitles(video_id):

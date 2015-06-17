@@ -1,3 +1,8 @@
+1.1.2 (2015-06-16)
+FIX: Script error because of missing images in the API
+FIX: added alternative images, if posters are missing for movies
+UPD: kodion
+
 1.1.1 (2015-04-22)
 UPD: improved playback. Working with the id of the video, so videos stay watched
 

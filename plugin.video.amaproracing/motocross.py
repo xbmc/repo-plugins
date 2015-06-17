@@ -21,6 +21,31 @@ class motocross():
 
 
     def FULL_MOTOS_ON_DEMAND(self):
+        for n in range(0, 4):
+            #current max is 121              
+            url = 'http://www.promotocross.com/media-block-get-results-ajax/ajax/451/16/video/all/all/all/all/all/'+str(n*11)
+            print url
+            req = urllib2.Request(url)      
+            req.add_header('User-Agent', ' Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+            response = urllib2.urlopen(req)        
+            json_source = json.load(response)
+            response.close()
+
+            link = json_source[1]['data']
+            link = link.decode('utf-8')
+            link = link.replace('\n',"")
+            print link
+            
+            match = re.compile('<img typeof="foaf:Image" src="(.+?)"(.*?)/></a>(.*?)<a href="(.*?)">(.+?)Full Race').findall(link)         
+            for image_url, junk, junk2, url, title in match:                
+                title = title.replace('(','')
+                title = title.replace(':','')
+                print image_url
+                print title + ' ' + MAIN_URL+url                
+                self.addDir(title,MAIN_URL+url,104,image_url)
+                
+
+    def FULL_MOTOS_ON_DEMAND_OLD(self):
         url = MAIN_URL+'/mx/video?category=451'
         req = urllib2.Request(url)      
         req.add_header('User-Agent', ' Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')

@@ -26,6 +26,19 @@ import os
 utils.VerifyKeymaps()
 
 
+if utils.ADDON.getSetting('AUTOSTART') == 'true':
+    utils.LaunchSF()
+
+
+def checkDisabled():
+    if xbmc.getCondVisibility('System.HasAddon(%s)' % utils.ADDONID) == 0:
+        utils.DeleteKeymap(utils.KEYMAP_HOT)
+        utils.DeleteKeymap(utils.KEYMAP_MENU)
+        return True
+
+    return False
+
+
 class MyMonitor(xbmc.Monitor):
     def __init__(self):
         xbmc.Monitor.__init__(self)
@@ -48,18 +61,15 @@ class MyMonitor(xbmc.Monitor):
 
 monitor = MyMonitor()
 
+import xbmcgui
 while (not xbmc.abortRequested):
     xbmc.sleep(1000)
-    if xbmc.getCondVisibility('System.HasAddon(%s)' % utils.ADDONID) == 0:
-        utils.DeleteKeymap(utils.KEYMAP_HOT)
-        utils.DeleteKeymap(utils.KEYMAP_MENU)
+    if checkDisabled():
         xbmc.sleep(1000)
-        xbmc.executebuiltin('Action(reloadkeymaps)')  
+        xbmc.executebuiltin('Action(reloadkeymaps)') 
 
 
-if xbmc.getCondVisibility('System.HasAddon(%s)' % utils.ADDONID) == 0:
-    utils.DeleteKeymap(utils.KEYMAP_HOT)
-    utils.DeleteKeymap(utils.KEYMAP_MENU)
+checkDisabled()
 
 
 del monitor

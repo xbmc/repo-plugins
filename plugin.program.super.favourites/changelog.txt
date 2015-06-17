@@ -1,11 +1,128 @@
+[B][COLOR blue]This file contains ALOT of useful information regarding the functionality of Super Favourites - PLEASE READ IT!![/COLOR][/B]
+
+
+1.0.35:
+    - Added ability to set default view mode; via settings or from the context menu
+    - Added descriptions for Super Favourites built-in features
+
+
+1.0.34:
+    - Added description option, this is automatically populated if the override menu is used to add an item to Super Favourites
+    - Added more view types (List, Big list, Thumbnail, Poster Wrap, Fanart, Media info, Media info 2, Media info 3)
+    - Open Super Favourites from Videos Add-ons menu for most view types
+
+
+1.0.33:
+    - Added ability to add Android Apps directly to Super Favourites via the override menu (finally!)
+    - Improved the fix for the adding of playlist Super Favourites back to Kodi favourites (existing items will need to be re-added)
+
+
+1.0.32.1:
+    - Fixed adding of playlist Super Favourites back to Kodi favourites (existing items will need to be re-added)
+
+
+1.0.32:
+    [B][COLOR blue]- THIS IS A BIG DEAL >>> create ExecuteBuiltin favourites via the 'Create new manual entry' item[/COLOR][/B]
+    [B][COLOR blue]- see http://kodi.wiki/view/List_of_built-in_functions for full list of functionality now available directly from within Super Favourites[/COLOR][/B]
+    - fixed upgrading from version 1.0.25
+    - fixed RunScript manual entry handling of extra parameters
+
+
+1.0.31
+    - iSearch can now be performed using IMDB numbers (ttxxxxxxx)
+    - copy, cut and paste functionality for quickly moving Super Favourites and Super Folders
+    - when pasting a Super Folder you will be given the choice to copy the folder or to create a Super Favourite link to the original Super Folder
+
+
+1.0.30.1
+    - bug fix in folder configuration settings
+
+
+1.0.30
+    - hide folders by adding VISIBLE=false into the folder.cfg file (only manually at the moment)
+    - fixed sfile related bugs
+    - fixed iRecommend feature
+
+
+1.0.29.1
+    - quick fix to download script
+
+
+v1.0.29
+    - switched over to xbmcvfc - should now allow main SF folder to be located on a share
+    - fixed refreshing when adding items to iPlay
+
+
+v1.0.28.1
+    - bug fixes in chooser.py
+
+
+v1.0.28
+    - improved startup time
+    - added new iRemember feature - store your iSearch keywords - available from the iSearch context menu
+    - added iSearch support for YouTube 5.x.x version
+    - pressing menu button whilst displaying the Super Favourites override menu will now open standard menu
+    - various ascii decoding issues resolved
+    - added option to autostart SF when Kodi starts (configurable via settings - Advanced tab) 
+    - improved iSearch/iRecommend logic when adding to Kodi favourites
+    - added manual entry of SF items
+    - if a file called changelog.txt is found when importing from a zipfile the contents will be displayed when the import is complete
+
+
+v1.0.27.6
+    - removed debug code
+
+
+v1.0.27.5
+    - fixed override menu from PVR window (10601)
+    - added fix for Helix override menu text justification
+
+
+v1.0.27.4
+    - added option to show override context menu as a select dialog
+    - fixed streaming of live tv addons
+    - fixed folder names containing certain characters in chooser dialog, eg +
+
+
+v1.0.27.3
+    - fixed alphabetical sort in OTTV
+    - fixed folder names containing certain characters,  eg +
+    - fixed playback when parameters contain commas
+    - fixed iSearch for some addons
+    - locked Super Folders no longer display inherited thumbnail
+
+
+v1.0.27.2
+    - fixed colourise feature
+
+
+v1.0.27.1
+    - quick fix to enable URL browse menu item in iPlay when there are no playlists
+
+
+v1.0.27
+    - fixed iRecommend
+    - added Synopsis to iRecommend items (configurable via settings)
+    - complete re-write of SF specific options logic (hopefully to future proof adding SF options)
+    - new improved Change Playback modes (via Edit Favourites menu) - should stop looping
+    - certain items now only appear in root of SF rather than being configurable
+    - added iPlay - explore, manage and play your Playlists from within SF
+
+v1.0.26
+    - version bump
+
+
 v1.0.25
     - version bump for submission to org
+
 
 v1.0.24
     - import from remote now configurable to appear in main list as well as via settings
 
+
 v1.0.23
     - more fanart fixes
+
 
 v1.0.22
     - fixed missing fanart
@@ -38,44 +155,53 @@ v1.0.18
     - fixed playback of files
     - keymaps removed when addon is uninstalled
 
+
 v1.0.17
     - stopped changelog appearing inappropriately
     - added configurable default fanart
 
+
 v1.0.16
-   - programmble hotkey to launch Super Favourites
-   - thumbails and fanart path now use Kodi's "special protocol" - should simplify copying to other setups
+   - programmable hotkey to launch Super Favourites
+   - thumbnails and fanart path now use Kodi's "special protocol" - should simplify copying to other setups
    - Super Folders sorted alphabetically
    - added chooser.py script to allow skinners to populate skin settings with Super Favourites shortcuts - see readme
    - improved fanart handling
+
 
 v1.0.15
    - stopped override context menu creation on certain builds of Kodi crashing
    - changed override context menu to only appear where it makes sense
    - improved installed addon detection
-   - added preliminary fanart support, currently only on items added via menu overide
+   - added preliminary fanart support, currently only on items added via menu override
+
 
 v1.0.14
    - fixed 2nd bug in context menu keymap creation
 
+
 v1.0.13
    - fixed bug in context menu keymap creation
 
+
 v1.0.12
-   - tidy up iSearch keyword when populated via overide menu (configurable)
+   - tidy up iSearch keyword when populated via override menu (configurable)
    - add iSearch addon to override menu, always shows the first one
    - iSearch items can now be reordered, renamed, and thumbs changed
    - folders can inherit image from their first favourite (configurable) 
    - added Play Using Super Favourites to override menu for YouTube videos
 
+
 v1.0.11
    - interim release for testing
+
 
 v1.0.10:
    - Added trailer playback to iRecommend
    - iRecommend metadata configurable via settings
    - Individual addon settings now available via context menu
    - Fixed bug when cancelling thumbnail selection
+
 
 v1.0.9:
    - Added iRecommend - IMDB based recommendation feature (available from iSearch menu)
@@ -89,6 +215,7 @@ v1.0.9:
 
 v1.0.8:
    - version bump for submission to org
+
 
 v1.0.7:
    - Changed editing of items to use Select Dialog due to context menu item being full (restricted to 10 items by Kodi)
@@ -123,7 +250,7 @@ v1.0.3:
 
 v1.0.2:
   - Beta release for testing / feedback
-  - Overide standard context menu, allows direct Adding to Super Favourites from any addon
+  - Override standard context menu, allows direct Adding to Super Favourites from any addon
   - Added Move Up / Move Down
   - Super Favourites now launch properly from within Super Favourites
   - Choose Thumbnails for Super Favourites and Super Folders (including built in icons when using Confluence or ReTouched)

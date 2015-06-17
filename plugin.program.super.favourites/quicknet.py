@@ -25,17 +25,24 @@ import urllib2
 
 import xbmc
 import utils
+import sfile
 
-CacheDir  = xbmc.translatePath(os.path.join(utils.ADDON.getAddonInfo('profile'), 'cache'))
+CacheDir  = os.path.join(utils.ADDON.getAddonInfo('profile'), 'c')
 CacheSize = 100
 
 
+def clearCache():
+    sfile.rmtree(CacheDir)
+    while sfile.exists(CacheDir):
+        xbmc.sleep(50)
+    checkCacheDir()
+
+
 def checkCacheDir():
-    if not os.path.isdir(CacheDir):
-        os.makedirs(CacheDir)
+    sfile.makedirs(CacheDir)
 
 
-def getURLNoCache(url, agent=None):
+def getURLNoCache(url, agent=None, tidy=True):
     req = urllib2.Request(url)
     if agent:
         req.add_header('User-Agent', agent)
@@ -43,10 +50,14 @@ def getURLNoCache(url, agent=None):
     response = urllib2.urlopen(req)
     html     = response.read()
     response.close()
-    return html.replace('\r', '').replace('\n', '').replace('\t', '')
+
+    if tidy:
+        html = html.replace('\r', '').replace('\n', '').replace('\t', '')
+
+    return html
 
 
-def getURL(url, maxSec=0, agent=None):
+def getURL(url, maxSec=0, agent=None, tidy=True):
     purgeCache()
     
     if url == None:
@@ -54,11 +65,11 @@ def getURL(url, maxSec=0, agent=None):
 
     if maxSec > 0:
         timestamp = getTimestamp(url)
-    if timestamp > 0:
-        if (time.time() - timestamp) <= maxSec:
-            return getCachedData(url)
+        if timestamp > 0:
+            if (time.time() - timestamp) <= maxSec:
+                return getCachedData(url)
 			
-    data = getURLNoCache(url, agent)
+    data = getURLNoCache(url, agent, tidy)
     addToCache(url, data)
     return data
 
@@ -67,9 +78,8 @@ def getTimestamp(url):
     cacheKey  = createKey(url)
     cachePath = os.path.join(CacheDir, cacheKey)
 
-    if os.path.isfile(cachePath):
-        try:    return os.path.getmtime(cachePath)
-        except: pass
+    try:    return sfile.mtime(cachePath)
+    except: pass
 
     return 0
 
@@ -77,10 +87,7 @@ def getTimestamp(url):
 def getCachedData(url):
     cacheKey  = createKey(url)
     cachePath = os.path.join(CacheDir, cacheKey)
-    f         = file(cachePath, 'r')
-
-    data = f.read()
-    f.close()
+    data      = sfile.read(cachePath)
 
     return data
 
@@ -90,7 +97,7 @@ def addToCache(url, data):
 
     cacheKey  = createKey(url)
     cachePath = os.path.join(CacheDir, cacheKey)
-    f         = file(cachePath, 'w')
+    f         = sfile.file(cachePath, 'w')
 
     f.write(data)
     f.close()
@@ -108,19 +115,18 @@ def createKey(url):
 
         
 def purgeCache():
-    files  = glob.glob(os.path.join(CacheDir, '*'))
+    files   = sfile.glob(CacheDir)
     nFiles = len(files)
 
     try:
         while nFiles > gCacheSize:            
             oldestFile = getOldestFile(files)
-            path       = os.path.join(CacheDir, oldestFile)
  
-            while os.path.exists(path):
-                try:    os.remove(path)
+            while sfile.exists(oldestFile):
+                try:    sfile.remove(oldestFile)
                 except: pass
 
-            files  = glob.glob(os.path.join(CacheDir, '*'))
+            files  = sfile.glob(CacheDir)
             nFiles = len(files)
     except:
         pass
@@ -131,11 +137,11 @@ def getOldestFile(files):
         return None
     
     now    = time.time()
-    oldest = files[0], now - os.path.getctime(files[0])
+    oldest = (files[0], now - sfile.ctime(files[0]))
 
     for f in files[1:]:
-        age = now - os.path.getctime(f)
+        age = now - sfile.ctime(f)
         if age > oldest[1]:
-            oldest = f, age
+            oldest = (f, age)
 
     return oldest[0]

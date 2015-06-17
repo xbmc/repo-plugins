@@ -1,5 +1,5 @@
 #
-#       Copyright (C) 2014
+#       Copyright (C) 2014-2015
 #       Sean Poyser (seanpoyser@gmail.com)
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -24,6 +24,7 @@ import xbmcaddon
 import xbmcgui
 import os
 import re
+import sfile
 
 
 def GetXBMCVersion():
@@ -31,7 +32,7 @@ def GetXBMCVersion():
 
     version = xbmcaddon.Addon('xbmc.addon').getAddonInfo('version')
     version = version.split('.')
-    return int(version[0]), int(version[1]) #major, minor
+    return int(version[0]), int(version[1]) #major, minor eg, 13.9.902
 
 
 def GETTEXT(id):
@@ -53,9 +54,10 @@ VERSION =  ADDON.getAddonInfo('version')
 ICON    =  os.path.join(HOME, 'icon.png')
 FANART  =  os.path.join(HOME, 'fanart.jpg')
 SEARCH  =  os.path.join(HOME, 'resources', 'media', 'search.png')
-DISPLAY = ADDON.getSetting('DISPLAYNAME')
+DISPLAY =  ADDON.getSetting('DISPLAYNAME')
 TITLE   =  GETTEXT(30000)
 
+DEBUG   = ADDON.getSetting('DEBUG') == 'true'
 
 
 KEYMAP_HOT  = 'super_favourites_hot.xml'
@@ -64,6 +66,7 @@ KEYMAP_MENU = 'super_favourites_menu.xml'
 MAJOR, MINOR = GetXBMCVersion()
 FRODO        = (MAJOR == 12) and (MINOR < 9)
 GOTHAM       = (MAJOR == 13) or (MAJOR == 12 and MINOR == 9)
+HELIX        = (MAJOR == 14) or (MAJOR == 13 and MINOR == 9)
 
 FILENAME     = 'favourites.xml'
 FOLDERCFG    = 'folder.cfg'
@@ -72,8 +75,11 @@ FOLDERCFG    = 'folder.cfg'
 def log(text):
     try:
         output = '%s V%s : %s' % (TITLE, VERSION, str(text))
-        #print output
-        xbmc.log(output, xbmc.LOGDEBUG)
+        
+        if DEBUG:
+            xbmc.log(output)
+        else:
+            xbmc.log(output, xbmc.LOGDEBUG)
     except:
         pass
 
@@ -117,6 +123,10 @@ def generateMD5(text):
     return '0'
 
 
+def LaunchSF():
+    xbmc.executebuiltin('ActivateWindow(videos,plugin://%s)' % ADDONID)
+
+
 def CheckVersion():
     try:
         prev = ADDON.getSetting('VERSION')
@@ -130,39 +140,53 @@ def CheckVersion():
 
         verifySuperSearch()
 
+        src = os.path.join(ROOT, 'cache')
+        dst = os.path.join(ROOT, 'C')
+        sfile.rename(src, dst)
+
         ADDON.setSetting('VERSION', curr)
 
-        if prev == '0.0.0' or prev== '1.0.0':
-            folder  = xbmc.translatePath(PROFILE)
-            if not os.path.isdir(folder):
-                try:    os.makedirs(folder) 
-                except: pass
+        if prev == '0.0.0' or prev == '1.0.0':
+            sfile.makedirs(PROFILE) 
 
         #call showChangeLog like this to workaround bug in openElec
         script = os.path.join(HOME, 'showChangelog.py')
         cmd    = 'AlarmClock(%s,RunScript(%s),%d,True)' % ('changelog', script, 0)
         xbmc.executebuiltin(cmd)
-    except Exception, e:
+    except:
         pass
 
 
 def verifySuperSearch():
-    dst = os.path.join(xbmc.translatePath(ROOT), 'Search')
+    src = os.path.join(ROOT, 'Search')
+    dst = os.path.join(ROOT, 'S')
+
+    sfile.rename(src, dst)
+
+    dst = os.path.join(ROOT, 'S')
     src = os.path.join(HOME, 'resources', 'Search', FILENAME)
 
-    try:    os.makedirs(dst)
+    try:    sfile.makedirs(dst)
     except: pass
 
     dst = os.path.join(dst, FILENAME)
 
-    if not os.path.exists(dst):
-        try:
-            import shutil
-            shutil.copyfile(src, dst)
-        except:
-            pass
-        return
+    if not sfile.exists(dst):
+        sfile.copy(src, dst)
 
+    try:
+        #patch any changes
+        xml = sfile.read(dst)
+
+        xml = xml.replace('1channel/?mode=7000', '1channel/?mode=Search')
+        xml = xml.replace('plugin.video.genesis/?action=actors_movies', 'plugin.video.genesis/?action=people_movies')
+        xml = xml.replace('plugin.video.genesis/?action=actors_shows',  'plugin.video.genesis/?action=people_shows')
+
+        f = sfile.file(dst, 'w')
+        f.write(xml)            
+        f.close()
+    except:
+        pass
 
     import favourite
 
@@ -187,17 +211,16 @@ def UpdateKeymaps():
 
         
 def DeleteKeymap(map):
-    path = os.path.join(xbmc.translatePath('special://profile/keymaps'), map)
+    path = os.path.join('special://profile/keymaps', map)
     DeleteFile(path)
 
 
 def DeleteFile(path):
     tries = 5
-    while os.path.exists(path) and tries > 0:
+    while sfile.exists(path) and tries > 0:
         tries -= 1 
         try: 
-            os.remove(path) 
-            break 
+            sfile.remove(path) 
         except: 
             xbmc.sleep(500)
 
@@ -205,8 +228,11 @@ def DeleteFile(path):
 def VerifyKeymaps():
     reload = False
 
-    if VerifyKeymapHot():  reload = True
-    if VerifyKeymapMenu(): reload = True
+    if VerifyKeymapHot():
+        reload = True
+
+    if VerifyKeymapMenu():
+        reload = True
 
     if not reload:
         return
@@ -219,9 +245,9 @@ def VerifyKeymapHot():
     if ADDON.getSetting('HOTKEY') == GETTEXT(30111): #i.e. programmable
         return False    
 
-    dest = os.path.join(xbmc.translatePath('special://profile/keymaps'), KEYMAP_HOT)
+    dest = os.path.join('special://profile/keymaps', KEYMAP_HOT)
 
-    if os.path.exists(dest):
+    if sfile.exists(dest):
         return False
 
     key = ADDON.getSetting('HOTKEY')
@@ -245,18 +271,18 @@ def VerifyKeymapHot():
 
 
 def WriteKeymap(start, end):
-    dest = os.path.join(xbmc.translatePath('special://profile/keymaps'), KEYMAP_HOT)
+    dest = os.path.join('special://profile/keymaps', KEYMAP_HOT)
     cmd  = '<keymap><Global><keyboard><%s>XBMC.RunScript(special://home/addons/plugin.program.super.favourites/hot.py)</%s></keyboard></Global></keymap>'  % (start, end)
     
-    f = open(dest, mode='w')
+    f = sfile.file(dest, 'w')
     f.write(cmd)
     f.close()
     xbmc.sleep(1000)
 
     tries = 4
-    while not os.path.exists(dest) and tries > 0:
+    while not sfile.exists(dest) and tries > 0:
         tries -= 1
-        f = open(dest, mode='w')
+        f = sfile.file(dest, 'w')
         f.write(t)
         f.close()
         xbmc.sleep(1000)
@@ -264,29 +290,24 @@ def WriteKeymap(start, end):
     return True
 
 
-def VerifyKeymapMenu(): 
+def VerifyKeymapMenu():
     context = ADDON.getSetting('CONTEXT')  == 'true'
 
-    DeleteKeymap(KEYMAP_MENU)
-
-    if not context:        
+    if not context:
+        DeleteKeymap(KEYMAP_MENU)
         return True
 
-    keymap = xbmc.translatePath('special://profile/keymaps')
-    src    = os.path.join(HOME, 'resources', 'keymaps', KEYMAP_MENU)
+    keymap = 'special://profile/keymaps'
     dst    = os.path.join(keymap, KEYMAP_MENU)
 
-    try:
-        if not os.path.isdir(keymap):
-            os.makedirs(keymap)
-    except:
-        pass
+    if sfile.exists(dst):
+        return False
 
-    try:
-        import shutil
-        shutil.copy(src, dst)
-    except:
-        pass
+    src = os.path.join(HOME, 'resources', 'keymaps', KEYMAP_MENU)
+
+    sfile.makedirs(keymap)
+    
+    sfile.copy(src, dst)
 
     return True
 
@@ -326,16 +347,84 @@ def isATV():
 
 def GetFolder(title):
     default = ROOT
-    folder  = xbmc.translatePath(PROFILE)
 
-    if not os.path.isdir(folder):
-        os.makedirs(folder) 
+    sfile.makedirs(PROFILE) 
 
     folder = xbmcgui.Dialog().browse(3, title, 'files', '', False, False, default)
     if folder == default:
         return None
 
-    return xbmc.translatePath(folder)
+    return folder
+
+
+html_escape_table = {
+    "&": "&amp;",
+    '"': "&quot;",
+    "'": "&apos;",
+    ">": "&gt;",
+    "<": "&lt;",
+    }
+
+
+def escape(text):
+    return str(''.join(html_escape_table.get(c,c) for c in text))
+
+
+def unescape(text):
+    text = text.replace('&amp;',  '&')
+    text = text.replace('&quot;', '"')
+    text = text.replace('&apos;', '\'')
+    text = text.replace('&gt;',   '>')
+    text = text.replace('&lt;',   '<')
+    return text
+
+
+def fix(text):
+    ret = ''
+    for ch in text:
+        if ord(ch) < 128:
+            ret += ch
+    return ret
+
+
+
+def Clean(name):
+    import re
+    name   = re.sub('\([0-9)]*\)', '', name)
+
+    items = name.split(']')
+    name  = ''
+
+    for item in items:
+        if len(item) == 0:
+            continue
+
+        item += ']'
+        item  = re.sub('\[[^)]*\]', '', item)
+
+        if len(item) > 0:
+            name += item
+
+    name  = name.replace('[', '')
+    name  = name.replace(']', '')
+    name  = name.strip()
+
+    while True:
+        length = len(name)
+        name = name.replace('  ', ' ')
+        if length == len(name):
+            break
+
+    return name
+
+
+
+#Remove Tags method from
+#http://stackoverflow.com/questions/9662346/python-code-to-remove-html-tags-from-a-string
+
+TAG_RE = re.compile('<.*?>')
+def RemoveTags(html):
+    return TAG_RE.sub('', html)
 
 
 def showBusy():
@@ -353,7 +442,7 @@ def showBusy():
     return busy
 
 
-def showText(heading, text):
+def showText(heading, text, waitForClose=False):
     id = 10147
 
     xbmc.executebuiltin('ActivateWindow(%d)' % id)
@@ -365,12 +454,15 @@ def showText(heading, text):
     while (retry > 0):
         try:
             xbmc.sleep(10)
-            retry -= 1
             win.getControl(1).setLabel(heading)
             win.getControl(5).setText(text)
-            return
+            retry = 0
         except:
-            pass
+            retry -= 1
+
+    if waitForClose:
+        while xbmc.getCondVisibility('Window.IsVisible(%d)' % id) == 1:
+            xbmc.sleep(50)
 
 
 def showChangelog(addonID=None):
@@ -380,8 +472,7 @@ def showChangelog(addonID=None):
         else: 
             ADDON = xbmcaddon.Addon(ADDONID)
 
-        f     = open(ADDON.getAddonInfo('changelog'))
-        text  = f.read()
+        text  = sfile.read(ADDON.getAddonInfo('changelog'))
         title = '%s - %s' % (xbmc.getLocalizedString(24054), ADDON.getAddonInfo('name'))
 
         showText(title, text)

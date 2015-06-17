@@ -1,0 +1,159 @@
+<window>
+    <coordinates>
+        <system>1</system>
+        <posx>470</posx>
+        <posy>255</posy>
+     </coordinates>
+	<animation effect="fade" time="250">WindowOpen</animation>
+    <animation effect="fade" time="250">WindowClose</animation>
+    <controls>
+        <control type="image" id="5001">
+			<description>1 item background image</description>
+			<posx>0</posx>
+			<posy>0</posy>
+			<width>342</width>
+			<height>96</height>
+			<texture border="20">DialogBack.png</texture>       
+		</control>
+        <control type="image" id="5002">
+			<description>2 item background image</description>
+			<posx>0</posx>
+			<posy>0</posy>
+			<width>342</width>
+			<height>134</height>
+			<texture border="20">DialogBack.png</texture>
+		</control>
+        <control type="image" id="5003">
+			<description>3 item background image</description>
+			<posx>0</posx>
+			<posy>0</posy>
+			<width>342</width>
+			<height>172</height>
+			<texture border="20">DialogBack.png</texture>
+		</control>
+        <control type="image" id="5004">
+			<description>4 item background image</description>
+			<posx>0</posx>
+			<posy>0</posy>
+			<width>342</width>
+			 <height>210</height>
+			<texture border="20">DialogBack.png</texture>
+		</control>
+        <control type="image" id="5005">
+			<description>5+ item background image</description>
+			<posx>0</posx>
+			<posy>0</posy>
+			<width>342</width>
+			 <height>248</height>
+			<texture border="20">DialogBack.png</texture>
+		</control>
+		
+	    <control type="list" id="3000">
+        <description>List to hold 'buttons'</description>
+	    <posx>20</posx>
+	    <posy>30</posy>
+	    <width>300</width>
+	    <height>190</height>	    
+        <itemwidth>300</itemwidth>
+        <itemheight>38</itemheight> 
+        <pagecontrol>4000</pagecontrol>  
+        <scrolltime>200</scrolltime>
+        <onright>4000</onright>
+        <onleft>4000</onleft>  
+		
+        <itemlayout width="300" height="38">                
+            <control type="image">
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>300</width>
+                <height>38</height>
+                <texture border="5">button-nofocus.png</texture>
+            </control>
+            <control type="label">
+		        <posx>0</posx>
+		        <posy>0</posy>
+    		    <width>300</width>
+	    	    <height>38</height>
+		        <font>fontContextMenu</font>
+                <textcolor>FF999999</textcolor>
+		        <aligny>center</aligny>		    
+		        <align>center</align>
+		        <info>ListItem.Label</info>
+		   </control>
+       </itemlayout>
+
+       <focusedlayout width="300" height="38">
+            <control type="image">
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>300</width>
+                <height>38</height>
+                <texture border="5">button-nofocus.png</texture>
+            </control>    
+            <control type="label">
+		        <posx>0</posx>
+	     	    <posy>0</posy>
+		        <width>300</width>
+		        <height>38</height>
+		        <font>fontContextMenu</font>
+                <textcolor>FF999999</textcolor>
+		        <aligny>center</aligny>		    
+		        <align>center</align>
+		        <info>ListItem.Label</info>
+		    </control>
+            
+			<control type="image">
+                <visible>Control.HasFocus(3000)</visible>
+		        <posx>0</posx>
+		        <posy>0</posy>
+		        <width>300</width>
+		        <height>38</height>                                        
+                <texture border="5" fallback="button-focus2.png">button-focus.png</texture>
+ 		    </control>
+            <control type="label">
+                <visible>Control.HasFocus(3000)</visible>
+   		        <posx>0</posx>
+		        <posy>0</posy>
+		        <width>300</width>
+		        <height>38</height>
+		        <font>fontContextMenu</font>
+                <textcolor>white</textcolor>
+		        <aligny>center</aligny>		    
+		        <align>center</align>
+		        <info>ListItem.Label</info>
+		    </control>                           
+        </focusedlayout>
+	</control>  
+        <control type="scrollbar" id="4000">
+                <posx>315</posx>
+                <posy>30</posy>
+                <width>25</width>
+                <height>190</height>
+                <texturesliderbackground border="0,14,0,14">ScrollBarV.png</texturesliderbackground>
+                <texturesliderbar border="0,14,0,14">ScrollBarV_bar.png</texturesliderbar>
+                <texturesliderbarfocus border="0,14,0,14">ScrollBarV_bar_focus.png</texturesliderbarfocus>
+                <textureslidernib>ScrollBarNib.png</textureslidernib>
+                <textureslidernibfocus>ScrollBarNib.png</textureslidernibfocus>
+                <onleft>3000</onleft>
+                <onright>3000</onright>                
+                <showonepage>false</showonepage>
+                <orientation>vertical</orientation>
+            </control>  
+    
+        <control type="button" id="3001">
+            <description>Close Window button</description>
+            <posx>260</posx>
+            <posy>5</posy>
+            <width>64</width>
+            <height>32</height>
+            <label>-</label>
+            <font>-</font>
+            <onclick>PreviousMenu</onclick>
+            <texturefocus>DialogCloseButton-focus.png</texturefocus>
+            <texturenofocus>DialogCloseButton.png</texturenofocus>
+            <visible>system.getbool(input.enablemouse)</visible>			
+            <onup>3000</onup>
+            <ondown>3000</ondown>
+	</control>	
+    </controls>
+</window>

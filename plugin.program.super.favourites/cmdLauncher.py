@@ -1,5 +1,5 @@
 #
-#       Copyright (C) 2014
+#       Copyright (C) 2015-
 #       Sean Poyser (seanpoyser@gmail.com)
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -19,6 +19,25 @@
 #
 
 import xbmc
+
+import favourite
 import utils
 
-xbmc.executebuiltin('RunAddon(%s)' % utils.ADDONID)
+FRODO = utils.FRODO
+
+
+if __name__ == '__main__':
+    cmd = sys.argv[1]
+    cmd = favourite.tidy(cmd)  
+
+    if cmd.startswith('RunScript'):    
+        #workaround bug in Frodo that can cause lock-up
+        #when running a script favourite
+        if FRODO:
+            update = '%s' % (sys.argv[0])
+            update = 'Container.Update(%s,replace)' % update
+            xbmc.executebuiltin(update)
+
+    xbmc.executebuiltin('ActivateWindow(Home)')
+    xbmc.executebuiltin(cmd)
+   

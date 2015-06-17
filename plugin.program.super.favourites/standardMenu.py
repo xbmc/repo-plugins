@@ -1,5 +1,5 @@
 #
-#       Copyright (C) 2014
+#       Copyright (C) 2014-
 #       Sean Poyser (seanpoyser@gmail.com)
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -20,5 +20,21 @@
 
 import xbmc
 
-xbmc.sleep(120)
-xbmc.executebuiltin('Action(ContextMenu)')
+
+def openMenu():
+    if xbmc.getCondVisibility('Window.IsActive(ContextMenu)') == 1:
+        return
+
+    xbmc.executebuiltin('Action(ContextMenu)')
+
+    import utils    
+    import os
+
+    path   = utils.HOME
+    script = os.path.join(path, sys.argv[0])
+    cmd    = 'AlarmClock(%s,RunScript(%s),%d,True)' % ('menu', script, 0)
+
+    xbmc.executebuiltin(cmd)  
+
+
+openMenu()

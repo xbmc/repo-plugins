@@ -27,7 +27,7 @@ ROOT     = utils.ROOT
 FILENAME = utils.FILENAME
 
 def getDefaultSearch():
-    file  = os.path.join(xbmc.translatePath(ROOT), 'Search', FILENAME)
+    file  = os.path.join(ROOT, 'S', FILENAME)
     faves = favourite.getFavourites(file)
 
     if len(faves) > 0:

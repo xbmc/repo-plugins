@@ -1,5 +1,5 @@
 #
-#       Copyright (C) 2014
+#       Copyright (C) 2014-
 #       Sean Poyser (seanpoyser@gmail.com)
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -21,6 +21,7 @@
 
 import xbmc
 import xbmcgui
+import os
 
 
 _STD_SETTINGS = 0
@@ -42,36 +43,6 @@ def getDefaultSearch():
         return fave[0]
 
     return ''
-
-
-def clean(name):
-    import re
-    name   = re.sub('\([0-9)]*\)', '', name)
-
-    items = name.split(']')
-    name  = ''
-
-    for item in items:
-        if len(item) == 0:
-            continue
-
-        item += ']'
-        item  = re.sub('\[[^)]*\]', '', item)
-
-        if len(item) > 0:
-            name += item
-
-    name  = name.replace('[', '')
-    name  = name.replace(']', '')
-    name  = name.strip()
-
-    while True:
-        length = len(name)
-        name = name.replace('  ', ' ')
-        if length == len(name):
-            break
-
-    return name
 
 
 def doStandard(useScript=True):
@@ -125,14 +96,37 @@ def activateCommand(cmd):
     xbmc.executebuiltin('Container.Update(%s)' % plugin)
 
 
+def getDescription():
+    labels = []
+    labels.append('ListItem.Plot')
+    labels.append('ListItem.Property(Addon.Description)')
+    labels.append('ListItem.Property(Addon.Summary)')
+    labels.append('ListItem.Property(Artist_Description)')
+    labels.append('ListItem.Property(Album_Description)')
+    labels.append('ListItem.Artist')
+    labels.append('ListItem.Comment')
+
+    for label in labels:
+        desc = xbmc.getInfoLabel(label)
+        if len(desc) > 0:
+            return desc
+
+    return ''
+
+
 def doMenu():
     try:
         import utils
     except:
         doStandard(useScript=False)
-        return    
+        return  
 
-    active = [1, 2, 25, 40, 500, 501, 502] #28 is video Playlist
+    DEBUG = utils.ADDON.getSetting('DEBUG') == 'true'
+    if DEBUG:
+        window = xbmcgui.getCurrentWindowId()
+        utils.DialogOK('Current Window ID %d' % window)  
+
+    active = [0, 1, 2, 25, 40, 500, 501, 502, 601]
     window = xbmcgui.getCurrentWindowId()
     utils.log('Window     : %d' % window)  
     if window-10000 not in active:
@@ -159,9 +153,12 @@ def doMenu():
     filename = xbmc.getInfoLabel('ListItem.FilenameAndPath')
     name     = xbmc.getInfoLabel('ListItem.Label')
     thumb    = xbmc.getInfoLabel('ListItem.Thumb')    
+    thumb    = xbmc.getInfoLabel('ListItem.Art(thumb)')
     playable = xbmc.getInfoLabel('ListItem.Property(IsPlayable)').lower() == 'true'
     fanart   = xbmc.getInfoLabel('ListItem.Property(Fanart_Image)')
+    fanart   = xbmc.getInfoLabel('ListItem.Art(fanart)')
     isFolder = xbmc.getCondVisibility('ListItem.IsFolder') == 1
+    desc     = getDescription()
 
     try:    file = xbmc.Player().getPlayingFile()
     except: file = None
@@ -206,31 +203,22 @@ def doMenu():
         #return doStandard()
     
     if (len(menu) == 0) and len(path) > 0:
-        ytID = ''
-
-        if path.startswith('plugin://plugin.video.youtube') and 'videoid=' in path:
-            try:
-                ytID = path.rsplit('videoid=', 1)[-1][0:11]
-                menu.append((utils.GETTEXT(30104), _PLAYTUBE))
-            except:
-                ytID = ''
-
-        #utils.verifySuperSearch()
-
-        default = getDefaultSearch()
-
         menu.append((utils.GETTEXT(30047), _ADDTOFAVES))
         menu.append((utils.GETTEXT(30049), _SF_SETTINGS))
-        menu.append((utils.GETTEXT(30054), _SEARCH))
 
-        if len(default) > 0:
-            menu.append((utils.GETTEXT(30098) % default, _SEARCHDEF))
+        if utils.ADDON.getSetting('SHOWSS') == 'true':
+            menu.append((utils.GETTEXT(30054), _SEARCH))
+
+            default = getDefaultSearch()
+            if len(default) > 0:
+                menu.append((utils.GETTEXT(30098) % default, _SEARCHDEF))
 
         menu.append((utils.GETTEXT(30048), _STD_SETTINGS))
 
-    #elif window == 10000: #Home screen
-    #    menu.append((utils.GETTEXT(30053), _LAUNCH_SF))
-    #    menu.append((utils.GETTEXT(30049), _SF_SETTINGS))
+    elif window == 10000: #Home screen
+        #menu.append((utils.GETTEXT(30053), _LAUNCH_SF))
+        #menu.append((utils.GETTEXT(30049), _SF_SETTINGS))
+        pass
 
 
     if len(menu) == 0:
@@ -238,7 +226,14 @@ def doMenu():
         return
 
     xbmcgui.Window(10000).setProperty('SF_MENU_VISIBLE', 'true')
-    choice = menus.showMenu(utils.ADDONID, menu)
+
+    dialog = utils.ADDON.getSetting('CONTEXT_STYLE') == '1'
+
+    if dialog:
+        choice = menus.selectMenu(utils.TITLE, menu)
+    else:
+        choice = menus.showMenu(utils.ADDONID, menu, utils.HELIX)
+
 
     if choice == _STD_SETTINGS:
         doStandard()
@@ -253,12 +248,6 @@ def doMenu():
     #    import download
     #    download.download(file, 'c:\\temp\\file.mpg', 'Super Favourites')
 
-    if choice == _PLAYTUBE:
-        if len(ytID) != 11:
-            return
-        import yt    
-        if not yt.PlayVideo(ytID):
-            utils.DialogOK(utils.GETTEXT(30105))
     
     if choice == _STD_SETTINGS:
         doStandard()
@@ -267,6 +256,7 @@ def doMenu():
         utils.ADDON.openSettings()
 
     if choice == _ADDTOFAVES:
+        import favourite
         if isFolder:
             cmd =  'ActivateWindow(%d,"%s' % (window, path)
         elif path.lower().startswith('script'):
@@ -277,11 +267,14 @@ def doMenu():
             cmd = 'PlayMedia("%s' % filename
         #elif path.lower().startswith('musicdb') and len(filename) > 0:
         #    cmd = 'PlayMedia("%s")' % filename
+        elif path.lower().startswith('androidapp'):
+            cmd = 'StartAndroidActivity("%s")' % path.replace('androidapp://sources/apps/', '', 1)
         else:            
-            cmd = 'PlayMedia("%s&sf_win_id=%d_' % (path, window)
+            cmd = 'PlayMedia("%s")' % path
+            cmd = favourite.updateSFOption(cmd, 'winID', window)
 
-        import favourite
         cmd = favourite.addFanart(cmd, fanart)
+        cmd = favourite.updateSFOption(cmd, 'desc', desc)
 
         if isFolder:
             cmd = cmd.replace('")', '",return)')
@@ -289,11 +282,11 @@ def doMenu():
         copyFave(name, thumb, cmd)
 
     if choice == _LAUNCH_SF:
-        xbmc.executebuiltin('ActivateWindow(programs,plugin://%s)' % utils.ADDONID)
+        utils.LaunchSF()
 
     if choice == _SEARCH or choice == _SEARCHDEF:
         if utils.ADDON.getSetting('STRIPNUMBERS') == 'true':
-            name = clean(name)
+            name = utils.Clean(name)
 
         thumb  = thumb  if len(thumb)  > 0 else 'null'
         fanart = fanart if len(fanart) > 0 else 'null'
@@ -314,11 +307,6 @@ def doMenu():
 
 
 def main():
-    if len(sys.argv) > 1 and sys.argv[1] == 'preload':
-        import utils
-        utils.log('capture script preloaded')
-        return
-
     if xbmcgui.Window(10000).getProperty('SF_MENU_VISIBLE') == 'true':
         return
 
@@ -331,4 +319,5 @@ except Exception, e:
     import utils
     utils.log('Exception in capture.py %s' % str(e))
 
+xbmc.sleep(1000)
 xbmcgui.Window(10000).clearProperty('SF_MENU_VISIBLE')

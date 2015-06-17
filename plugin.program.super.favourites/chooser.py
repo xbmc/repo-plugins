@@ -1,5 +1,5 @@
 
-#       Copyright (C) 2013-2014
+#       Copyright (C) 2013-
 #       Sean Poyser (seanpoyser@gmail.com)
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -7,7 +7,7 @@
 #  the Free Software Foundation; either version 2, or (at your option)
 #  any later version.
 #
-#  This Program is distributed in the hope that it will be useful,
+#  This Progr`am is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #  GNU General Public License for more details.
@@ -30,21 +30,22 @@ import urllib
 
 import utils
 import favourite
+import sfile
 
-ADDON     = utils.ADDON
-HOME      = utils.HOME
-PROFILE   = utils.PROFILE
-FILENAME  = utils.FILENAME
-FOLDERCFG = utils.FOLDERCFG
-ADDONID   = utils.ADDONID
-ICON      = utils.ICON
+ADDON       = utils.ADDON
+HOME        = utils.HOME
+PROFILE     = utils.PROFILE
+FILENAME    = utils.FILENAME
+FOLDERCFG   = utils.FOLDERCFG
+ADDONID     = utils.ADDONID
+ICON        = utils.ICON
+DISPLAYNAME = ADDON.getSetting('DISPLAYNAME') 
 
 INHERIT   = ADDON.getSetting('INHERIT') == 'true'
 GETTEXT   = ADDON.getLocalizedString
 
 
 def getFolderThumb(path):
-    path  = xbmc.translatePath(path)
     cfg   = os.path.join(path, FOLDERCFG)
     thumb = getParam('ICON', cfg)
 
@@ -72,9 +73,7 @@ def getParam(param, file):
     try:
         config = []
         param  = param.upper() + '='
-        f      = open(file, 'r')
-        config = f.readlines()
-        f.close()
+        config = sfile.readlines(file)
     except:
         return ''
 
@@ -110,10 +109,11 @@ class Main:
 
         faves = self.getFaves()
         MyDialog(faves, self.PROPERTY, self.CHANGETITLE, self.PATH, self.MODE)
-            
+        
+    
     def _parse_argv(self):
         try:           
-            params = dict(arg.split('=') for arg in sys.argv[1].split('&' ))          
+            params = dict(arg.split('=') for arg in sys.argv[1].split('&'))          
         except:
             params = {}
                     
@@ -121,11 +121,12 @@ class Main:
         property    = params.get('property', '')
         changeTitle = params.get('changetitle',   '').lower() == 'true'
 
+        path = path.replace('SF_AMP_SF', '&')
+
         self.init(property, path, changeTitle)
 
 
-    def init(self, property, path, changeTitle):
-                    
+    def init(self, property, path, changeTitle): 
         self.PATH        = path
         self.PROPERTY    = property
         self.CHANGETITLE = changeTitle
@@ -138,6 +139,8 @@ class Main:
         else:                
             self.FULLPATH = xbmc.translatePath(os.path.join(utils.PROFILE, self.PATH))
 
+        self.FULLPATH = urllib.unquote_plus(self.FULLPATH)
+
                 
     def getFaves(self):
         file     = os.path.join(self.FULLPATH, FILENAME).decode('utf-8')
@@ -147,6 +150,9 @@ class Main:
         if self.MODE != 'xbmc':        
             try:    
                 current, dirs, files = os.walk(self.FULLPATH).next()
+
+                dirs = sorted(dirs, key=str.lower)
+
                 for dir in dirs:
                     path = os.path.join(self.FULLPATH, dir)
                 
@@ -209,7 +215,7 @@ class MainGui(xbmcgui.WindowXMLDialog):
             if cmd.lower().startswith('activatewindow'):
                 cmd = cmd.replace('")', '",return)')
 
-            cmd = favourite.removeFanart(cmd)
+            cmd = favourite.removeSFOptions(cmd)
 
             listitem.setProperty('Path', cmd)
             
@@ -230,7 +236,8 @@ class MainGui(xbmcgui.WindowXMLDialog):
             fullpath = 'special://profile/'
             thumb    = ''
 
-            listitem = xbmcgui.ListItem(GETTEXT(30106))
+            label    = GETTEXT(30106) % DISPLAYNAME
+            listitem = xbmcgui.ListItem(label)
 
             listitem.setIconImage(thumb)
             listitem.setProperty('Icon',     thumb)
@@ -254,7 +261,7 @@ class MainGui(xbmcgui.WindowXMLDialog):
 
         try:
             fullpath = os.path.join(utils.PROFILE, self.path)
-            thumb    = getFolderThumb(fullpath)
+            thumb    = getFolderThumb(fullpath) if self.mode != 'root' else ICON
 
             listitem = xbmcgui.ListItem(path + GETTEXT(30102))
                      
@@ -348,13 +355,14 @@ class MainGui(xbmcgui.WindowXMLDialog):
 
 
     def changeFolder(self, path):
-        cmd = 'RunScript(special://home/addons/%s/chooser.py,property=%s&path=%s&changetitle=%s)' % (ADDONID, self.property,  path, self.changeTitle)
+        path = path.replace('&', 'SF_AMP_SF')
+        cmd = 'RunScript(special://home/addons/%s/chooser.py,property=%s&path=%s&changetitle=%s)' % (ADDONID, self.property, path, self.changeTitle)
         self.close()    
         xbmc.executebuiltin(cmd)
 
         
 def MyDialog(faves, property, changeTitle, path, mode):
-    w = MainGui('DialogSelect.xml', HOME, faves=faves, property=property, changeTitle=changeTitle, path=path, mode=mode)
+    w = MainGui('DialogSelect.xml', HOME, faves=faves, property=property, changeTitle=changeTitle, path=urllib.unquote_plus(path), mode=mode)
     w.doModal()
     del w
 

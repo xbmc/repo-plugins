@@ -27,6 +27,7 @@ ACTION_BACK          = 92
 ACTION_PARENT_DIR    = 9
 ACTION_PREVIOUS_MENU = 10
 ACTION_CONTEXT_MENU  = 117
+ACTION_C_KEY         = 122
 
 ACTION_LEFT  = 1
 ACTION_RIGHT = 2
@@ -36,17 +37,19 @@ ACTION_DOWN  = 4
 
 class ContextMenu(xbmcgui.WindowXMLDialog):
 
-    def __new__(cls, addonID, menu):
-        return super(ContextMenu, cls).__new__(cls, 'contextmenu.xml', xbmcaddon.Addon(addonID).getAddonInfo('path'))
+    def __new__(cls, addonID, menu, helix):
+        if helix:
+            return super(ContextMenu, cls).__new__(cls, 'contextmenu_helix.xml', xbmcaddon.Addon(addonID).getAddonInfo('path'))
+        else:
+            return super(ContextMenu, cls).__new__(cls, 'contextmenu.xml', xbmcaddon.Addon(addonID).getAddonInfo('path'))
         
 
-    def __init__(self, addonID, menu):
+    def __init__(self, addonID, menu, helix):
         super(ContextMenu, self).__init__()
         self.menu = menu
 
         
     def onInit(self):
-    
         for i in range(5):
             self.getControl(5001+i).setVisible(False)
             
@@ -72,7 +75,12 @@ class ContextMenu(xbmcgui.WindowXMLDialog):
     def onAction(self, action):        
         actionId = action.getId()
 
-        if actionId in [ACTION_CONTEXT_MENU, ACTION_PARENT_DIR, ACTION_PREVIOUS_MENU, ACTION_BACK]:
+        if actionId in [ACTION_CONTEXT_MENU, ACTION_C_KEY]:
+            self.params = 0
+            #xbmc.sleep(100)
+            return self.close()
+
+        if actionId in [ACTION_PARENT_DIR, ACTION_PREVIOUS_MENU, ACTION_BACK]:
             return self.close()
 
 
@@ -89,8 +97,8 @@ class ContextMenu(xbmcgui.WindowXMLDialog):
         pass
 
 
-def showMenu(addonID, menu):
-    menu = ContextMenu(addonID, menu)
+def showMenu(addonID, menu, helix=False):
+    menu = ContextMenu(addonID, menu, helix)
     menu.doModal()
     params = menu.params
     del menu

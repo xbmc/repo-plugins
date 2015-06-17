@@ -1,3 +1,6 @@
+v1.0.5 (Tuesday, 16 june 2015) :
+- changed icon and fanart due to changes in the website
+
 v1.0.4 (Monday, 18 may 2015) :
 - adjustments due to changes in the website: cookiewall circumvented by adding a cookie to the header (thanks bas lichtjaar)
 

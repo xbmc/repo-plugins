@@ -17,8 +17,8 @@
 #
 #also in ..._const
 __addon__       = "plugin.video.tweakers"
-__date__        = "18 may 2015"
-__version__     = "1.0.4"
+__date__        = "16 june 2015"
+__version__     = "1.0.5"
 
 #
 # Imports

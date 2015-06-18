@@ -2,7 +2,6 @@ import json
 
 __author__ = 'bromix'
 
-from .. import constants
 from .video_item import VideoItem
 from .directory_item import DirectoryItem
 from .audio_item import AudioItem

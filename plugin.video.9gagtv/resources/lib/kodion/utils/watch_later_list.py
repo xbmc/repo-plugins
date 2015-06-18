@@ -5,6 +5,7 @@ import datetime
 from .storage import Storage
 from .. import items
 
+
 class WatchLaterList(Storage):
     def __init__(self, filename):
         Storage.__init__(self, filename)

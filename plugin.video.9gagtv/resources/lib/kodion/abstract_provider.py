@@ -61,10 +61,10 @@ class AbstractProvider(object):
         pass
 
     def _process_wizard(self, context):
-        def _setup_views(_context, view):
+        def _setup_views(_context, _view):
             view_manager = utils.ViewManager(_context)
-            if not view_manager.update_view_mode(_context.localize(self._local_map['kodion.wizard.view.%s' % view]),
-                                                 view):
+            if not view_manager.update_view_mode(_context.localize(self._local_map['kodion.wizard.view.%s' % _view]),
+                                                 _view):
                 return
 
             _context.get_settings().set_bool(constants.setting.VIEW_OVERRIDE, True)
@@ -145,54 +145,18 @@ class AbstractProvider(object):
         return self.on_extra_fanart(new_context, re_match)
 
     def on_search(self, search_text, context, re_match):
-        """
-        This method must be implemented by the derived class if the default search will be used.
-        :param search_text:
-        :param path:
-        :param params:
-        :param re_match:
-        :return:
-        """
         raise NotImplementedError()
 
     def on_root(self, context, re_match):
-        """
-        This method must be implemented by the derived class
-        :param path:
-        :param params:
-        :param re_match:
-        :return:
-        """
         raise NotImplementedError()
 
     def on_watch_later(self, context, re_match):
-        """
-        This method can be implemented by the derived class to set the content type or add a sort method.
-        :param path:
-        :param params:
-        :param re_match:
-        :return:
-        """
         pass
 
     def _internal_root(self, context, re_match):
-        """
-        Internal method to call the on root event.
-        :param path:
-        :param params:
-        :param re_match:
-        :return:
-        """
         return self.on_root(context, re_match)
 
     def _internal_favorite(self, context, re_match):
-        """
-        Internal implementation of handling favorites.
-        :param path:
-        :param params:
-        :param re_match:
-        :return:
-        """
         context.add_sort_method(constants.sort_method.LABEL_IGNORE_THE)
 
         params = context.get_params()
@@ -224,13 +188,6 @@ class AbstractProvider(object):
         pass
 
     def _internal_watch_later(self, context, re_match):
-        """
-        Internal implementation of handling a watch later list.
-        :param path:
-        :param params:
-        :param re_match:
-        :return:
-        """
         self.on_watch_later(context, re_match)
 
         params = context.get_params()
@@ -262,13 +219,6 @@ class AbstractProvider(object):
         pass
 
     def _internal_search(self, context, re_match):
-        """
-        Internal implementation of handling a search.
-        :param path:
-        :param params:
-        :param re_match:
-        :return:
-        """
         params = context.get_params()
 
         command = re_match.group('command')

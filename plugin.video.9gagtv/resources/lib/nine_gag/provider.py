@@ -72,7 +72,7 @@ class Provider(kodion.AbstractProvider):
                 video_url = 'plugin://plugin.video.youtube/play/?video_id=' + video_id
                 pass
             elif video_type == 'vimeo':
-                video_id = video['id']
+                video_id = video['external_id']
                 video_url = 'plugin://plugin.video.vimeo/play/?video_id=' + video_id
                 pass
             else:

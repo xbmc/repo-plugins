@@ -1,6 +1,9 @@
+v2015.6.18
+- Fixed Motocross Highlights to Showcase to follow suit with website changes
+
 v2015.6.15
-- Changed how Motocross On Demand Scrapes Videos
-- Increased the amount of Motocross On Demand Moto's are displayed
+- Changed how On Demand Scrapes Videos
+- Increased the amount of On Demand Moto's are displayed
 
 v1.0.1
 - Fixes for upstream changes to the Motocross section

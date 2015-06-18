@@ -15,7 +15,7 @@ class motocross():
 
     def CATEGORIES(self):
         self.addDir('Full Motos On Demand','/GET_YEAR',100,'')    
-        self.addDir('Highlights','/GET_HIGHLIGHTS',101,'')        
+        self.addDir('Showcase','/GET_HIGHLIGHTS',101,'')        
         self.SET_LIVE_LINK(MAIN_URL+'/mx/live') 
         #self.addDir('Test Archive','http://www.promotocross.com/mx/event/hangtown-2015/video/2015-hangtown-250-moto-1-full-race',106,'')
 
@@ -226,15 +226,17 @@ class motocross():
               
         #print data_sources
         #video_source =  json_source['videoSources']
-        video_source =  json_source['showCase']
+        video_source =  json_source['spotlight']
+        #video_source =  json_source['showCase']
         for item in video_source:
             #url =  item['sourceUrl'] + '|' + header_encoded            
             url = item['iosStreamUrl']
             name = item['title']
-            #info = item['info']
-            imgurl = item['image']
-            imgurl = 'http://hdliveextra-pmd.edgesuite.net/HD/image_sports/mobile/'+imgurl+'_m61.jpg'
-            self.addLink(name,url,name,imgurl) 
+            if 'full race' not in name.lower():
+                #info = item['info']
+                imgurl = item['image']
+                imgurl = 'http://hdliveextra-pmd.edgesuite.net/HD/image_sports/mobile/'+imgurl+'_m61.jpg'
+                self.addLink(name,url,name,imgurl) 
     
 
     def SET_LIVE_LINK(self,url): 

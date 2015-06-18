@@ -1,6 +1,7 @@
 import hashlib
 
 from storage import Storage
+from .methods import to_utf8
 
 
 class SearchHistory(Storage):
@@ -28,7 +29,7 @@ class SearchHistory(Storage):
 
     def _make_id(self, search_text):
         m = hashlib.md5()
-        m.update(search_text.encode('utf-8'))
+        m.update(to_utf8(search_text))
         return m.hexdigest()
 
     def rename(self, old_search_text, new_search_text):

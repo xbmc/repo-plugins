@@ -1,7 +1,7 @@
 __author__ = 'bromix'
 
 DEBUG = 0
-INFO = 1
+INFO = 2
 NOTICE = 2
 WARNING = 3
 ERROR = 4

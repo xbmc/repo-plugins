@@ -71,7 +71,8 @@ def getSources(fanart):
     for y in x:
         if y['type'] == "Category":
           title = y['title']
-          desc  = y['description']
+          try: desc  = y['description']
+          except: desc = ''
           url = urllib.quote_plus(json.dumps(y['shows']))
           addDir(title, url , 'GC', icon, fanart, desc, '', '')
 
@@ -168,7 +169,7 @@ def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,pl
 
 # MAIN EVENT PROCESSING STARTS HERE
 
-xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
+#xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
 
 parms = {}
 try:

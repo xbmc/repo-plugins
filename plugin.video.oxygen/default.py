@@ -72,7 +72,7 @@ def getShows():
        infoList['Genre']       = ''
        infoList['Episode']     = int(a["tve_widgets"]["rules_based_asset_list2"]["assets_number"])
        infoList['Year']        = int(infoList['Aired'].split('-',1)[0])
-       infoList['Plot']        = h.unescape(plot)
+       infoList['Plot']        = h.unescape(plot.decode(UTF8))
        mode = 'GE'
        u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
        liz=xbmcgui.ListItem(name, '',icon, None)

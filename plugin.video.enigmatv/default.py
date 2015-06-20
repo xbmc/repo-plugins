@@ -1,6 +1,8 @@
-import xbmc, xbmcgui, xbmcplugin, xbmcaddon, sys, urllib2, time, urlparse, os
+import xbmc, xbmcgui, xbmcplugin, xbmcaddon, sys, urllib2, datetime, time, threading, urlparse, os, urllib, re, zipfile, random
 from xml.dom import Node, minidom
 from random import randint
+
+
 
 global mode
 global GetURL
@@ -14,15 +16,33 @@ global AB
 global AC
 global xml
 global SID
+global PICON
+global epgtextarray
+
+
+
 
 Settings = xbmcaddon.Addon('plugin.video.enigmatv')
-cache_dir = os.path.join(xbmc.translatePath(Settings.getAddonInfo('profile')), 'cache')
+cache_dir = unicode(os.path.join(xbmc.translatePath(Settings.getAddonInfo('profile')), 'cache'),'utf-8')
 if not os.path.isdir(cache_dir):
 
    os.makedirs(cache_dir)
 XMLFile = os.path.join(cache_dir, 'data.xml')
 
-print 'Cache Dir = ' + cache_dir
+picon_dir = unicode(os.path.join(xbmc.translatePath(Settings.getAddonInfo('profile')), 'picons'),'utf-8')
+if not os.path.isdir(picon_dir):
+
+   os.makedirs(picon_dir)
+PICONFile = os.path.join(picon_dir, 'picons.zip')
+
+#view-mode
+current_skin = xbmc.getSkinDir();
+if 'confluence' in current_skin:
+   defaultViewMode = 'Container.SetViewMode(503)'
+else:
+   defaultViewMode = 'Container.SetViewMode(518)'
+thumbViewMode = 'Container.SetViewMode(500)'
+smallListViewMode = 'Container.SetViewMode(51)'
 
 IP = str(Settings.getSetting('IPServer'))
 WebPort = str(Settings.getSetting('WebPort'))
@@ -32,6 +52,7 @@ VB = int(Settings.getSetting('VB'))
 VS = int(Settings.getSetting('VS'))
 AB = int(Settings.getSetting('AB'))
 AC = int(Settings.getSetting('AC'))
+
 
 language = Settings.getLocalizedString
 
@@ -55,10 +76,31 @@ mode = 'init'
 PNames = []
 PIDs = []
 CNames = []
+
 CIDs = []
 PCIDs = []
+Picons = []
+
+epgtextDict = {}
+
+
+CEPGs = []
+CEPGsDescription = []
+CEPGsStart = []
+CEPGsEnd = []
+CEPGsDuration = []
+CEPGsNEXT = []
+CEPGsNEXTDescription = []
+CEPGsNEXTStart = []
+CEPGsNEXTEnd = []
+CEPGsNEXTDuration = []
+
 
 OK = True
+
+addon = xbmcaddon.Addon('plugin.video.enigmatv')
+
+
 
 def save_data(txt, temp):
    try:
@@ -66,16 +108,100 @@ def save_data(txt, temp):
    except:
       print 'Error while saving data %s' % temp
 
-def addItem(caption, link, icon=None, thumbnail=None, folder=False):
-   ProviderItem = xbmcgui.ListItem(unicode(caption))
-   ProviderItem.addContextMenuItems([('Context', 'XBMC.RunScript()',),])
-   ProviderItem.setInfo(type='Video', infoLabels={ 'Title': caption })
+
+def addItem(caption, link, epg, description, epgstart, epgend, epgduration, epgnext, descriptionnext, epgnextstart, epgnextend, epgnextduration, icon=None, thumbnail=None, folder=False):
+   try:
+      ProviderItem = xbmcgui.ListItem(unicode(caption, "ascii"), icon, icon)
+   except UnicodeError:
+      ProviderItem = xbmcgui.ListItem(unicode(caption, "utf-8"), icon, icon)
+
+   epgtext = description
+   epgtextNext = descriptionnext
+   epgnowtext = (language(40002)).encode("utf-8")
+   epgnextext = (language(40003)).encode("utf-8")
+   epgdescriptiontext = (language(40004)).encode("utf-8")
+   btnshowepginfo = (language(40005)).encode("utf-8")
+   btnshowepginfoNEXT = (language(40006)).encode("utf-8")
+
+   epgstillrunningtimeoutput = ""
+
+   timenowH = (time.strftime("%H"))
+   timenowM = (time.strftime("%M"))
+
+   timenowH = int(timenowH)*60
+   timenowM = int(timenowM)
+   timenowMs = timenowH+timenowM
+   print "timenowMs: " + str(timenowMs)
+
+   if epgend != "":
+      timeepgendH = epgend[0:2]
+      timeepgendM = epgend[-2:]
+
+      if timeepgendH == "00":
+         timeepgendH = "0"
+      if timeepgendM == "00":
+         timeepgendM = "0"
+      timeepgendH = int(timeepgendH)*60
+      timeepgendM = int(timeepgendM)
+      timeepgendMs = timeepgendH+timeepgendM
+      print "timeepgendMs: " + str(timeepgendMs)
+
+      epgdiff=timeepgendMs-timenowMs
+
+      if epgdiff < 0:
+         epgdiff = 1440-epgdiff
+
+      if epgdiff < 720:
+         epgstillrunningtimeoutput = " (+"+str(epgdiff)+" min)"
+      else:
+         epgstillrunningtimeoutput = ""
+
+
+
+   if epgstart == "" or epgend == "":
+      epgnowtime = ""
+   else:
+      epgnowtime = " " + epgstart + " - " + epgend
+
+   if epgnextstart == "" or epgnextend == "":
+      epgnexttime = ""
+   else:
+      epgnexttime = " " + epgnextstart + " - " + epgnextend
+
+   if epgnextduration != "":
+      epgnextduration = " (" + epgnextduration + " min)"
+
+   
+   epg = shortnstring(epg)
+   epgnext = shortnstring(epgnext)
+
+   if epgtext == '' or epgtext == 'None' or epgnext == ' ':
+      epgtext = (language(40001)).encode("utf-8")
+   description = epgnowtext + epgnowtime + epgstillrunningtimeoutput + '\r\n' + epg + '\r\n\r\n' + epgnextext + epgnexttime + epgnextduration + '\r\n' + epgnext
+
+   if folder==True:
+      description = ''
+
+   if folder==False:
+      ProviderItem.addContextMenuItems([(btnshowepginfo, unicode('XBMC.RunScript(special://home/addons/plugin.video.enigmatv/epgdescriptiondialog.py,'+epgdescriptiontext+epgtext+', '+epgnowtext+epg+')','utf-8')), (btnshowepginfoNEXT, unicode('XBMC.RunScript(special://home/addons/plugin.video.enigmatv/epgdescriptiondialog.py,'+epgdescriptiontext+epgtextNext+', '+epgnextext+epgnext+')','utf-8'))])
+
+   ProviderItem.setInfo( type="Video", infoLabels={ "Title": unicode(caption, "utf-8") } )
+   ProviderItem.setInfo( type="Video", infoLabels={ "Plot": description } )
    ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=link, listitem=ProviderItem, isFolder=folder)
    return ok
 
-def end_of_directory(OK):
+def shortnstring (text):
+   size=50
+   info = text[0:size]
+   if len(info) == size:
+      info = info+"..."
+   return info
 
-   xbmcplugin.endOfDirectory(handle=int(sys.argv[1]), succeeded=OK)
+
+def end_of_directory(OK):
+   xbmcplugin.setContent(int(sys.argv[1]),'episodes')
+   xbmcplugin.endOfDirectory(handle=int(sys.argv[1]), succeeded=OK, updateListing=False, cacheToDisc=False)
+   xbmc.executebuiltin(defaultViewMode)
 
 def createArrays(xml):
    for providers in xml.getElementsByTagName('EnigmaTVProvider'):
@@ -89,6 +215,22 @@ def createArrays(xml):
          CIDs.append(CurrentCID)
          CNames.append(channels.getAttribute('Name').encode('utf8'))
 
+         CEPGs.append(channels.getAttribute('EPG').encode('utf8'))
+         CEPGsDescription.append(channels.getAttribute('EPGDesc').encode('utf8'))
+         CEPGsStart.append(channels.getAttribute('EPGStart').encode('utf8'))
+         CEPGsEnd.append(channels.getAttribute('EPGEnd').encode('utf8'))
+         CEPGsDuration.append(channels.getAttribute('EPGDuration').encode('utf8'))
+
+
+         CEPGsNEXT.append(channels.getAttribute('EPGNext').encode('utf8'))
+         CEPGsNEXTDescription.append(channels.getAttribute('EPGNextDesc').encode('utf8'))
+         CEPGsNEXTStart.append(channels.getAttribute('EPGNextStart').encode('utf8'))
+         CEPGsNEXTEnd.append(channels.getAttribute('EPGNextEnd').encode('utf8'))
+         CEPGsNEXTDuration.append(channels.getAttribute('EPGNextDuration').encode('utf8'))
+
+         Picons.append(channels.getAttribute('PiconID').encode('utf8'))
+         
+
 def createProvList(url):
    print 'Creating Providers list'
    try:
@@ -96,15 +238,19 @@ def createProvList(url):
       if response and response.getcode() == 200:
          xml = response.read()
          save_data(xml,XMLFile)
-         print xml
+         #print xml
          xmlstr = minidom.parseString(xml)
 
       createArrays(xmlstr)
 
       for index in range(len(PIDs)):
-         addItem(PNames[index], 'plugin://plugin.video.enigmatv/?mode=GetChannels&ProvID='+PIDs[index], '', '', True)
+         addon = xbmcaddon.Addon('plugin.video.enigmatv')
+         piconx = os.path.join(addon.getAddonInfo('path'), 'defaultpicon.png')
+         addItem(PNames[index], 'plugin://plugin.video.enigmatv/?mode=GetChannels&ProvID='+PIDs[index], '', '', '', '', '', '', '', '', '', '', piconx, piconx, True)
 
       end_of_directory(OK)
+      
+
 
    except Exception, e:
       print 'Error connecting to the Server : ' + str(e)
@@ -112,15 +258,48 @@ def createProvList(url):
 
 def createChanList(ProvID):
    print 'Creating Channels list with ProvID = ' + str(ProvID)
-   xml = eval(file(XMLFile, 'r').read())
-   xmlstr = minidom.parseString(xml)
+   response = urllib2.urlopen(GetURL)
+   if response and response.getcode() == 200:
+      xml = response.read()
+      save_data(xml,XMLFile)
+      #print xml
+      xmlstr = minidom.parseString(xml)
+
    createArrays(xmlstr)
+
+   
+   for xxx in range(len(CEPGs)):
+      if CEPGs[xxx]=="":
+         CEPGs[xxx] = (language(40001)).encode("utf-8")
+   for xxx in range(len(CEPGsDescription)):
+      if CEPGsDescription[xxx]=="":
+         CEPGsDescription[xxx] = (language(40001)).encode("utf-8")
+
+   for xxx in range(len(CEPGsNEXT)):
+      if CEPGsNEXT[xxx]=="":
+         CEPGsNEXT[xxx] = (language(40001)).encode("utf-8")
+   for xxx in range(len(CEPGsNEXTDescription)):
+      if CEPGsNEXTDescription[xxx]=="":
+         CEPGsNEXTDescription[xxx] = (language(40001)).encode("utf-8")
+
+
    for index in range(len(PCIDs)):
       if int(PCIDs[index]) == int(ProvID):
-         addItem(CNames[index], 'plugin://plugin.video.enigmatv/?mode=SetChannels&ProvID='+str(PCIDs[index])+'&ChanID='+str(CIDs[index])+'&ChanName='+str(CNames[index]), '', '', False)
-         print CNames[index]
+         addon = xbmcaddon.Addon('plugin.video.enigmatv')
+         folder = picon_dir
+         the_file = Picons[index]+'.png'
+         file_path = os.path.join(folder, the_file)
+         if os.path.isfile(file_path):
+            piconx = os.path.join(picon_dir, the_file)
+         else:
+            piconx = os.path.join(addon.getAddonInfo('path'), 'defaultpicon.png')
 
-def SetChannel(ProvID, ChanID, ChanName):
+         addItem("[B]"+CNames[index] +"[/B]           "+ CEPGs[index]+'      ', 'plugin://plugin.video.enigmatv/?mode=SetChannels&ProvID='+str(PCIDs[index])+'&ChanID='+str(CIDs[index])+'&ChanName='+str(CNames[index])+'&ChanEPG='+str(CEPGs[index])+'&ChanEPGNEXT='+str(CEPGsNEXT[index])+'&ChanPicon='+str(Picons[index])+'&ChanDescription='+str(CEPGsDescription[index]), CEPGs[index], CEPGsDescription[index], CEPGsStart[index], CEPGsEnd[index], CEPGsDuration[index], CEPGsNEXT[index], CEPGsNEXTDescription[index], CEPGsNEXTStart[index], CEPGsNEXTEnd[index], CEPGsNEXTDuration[index], piconx, piconx, False)
+         #print CNames[index] + " EPGNOW: "+ CEPGs[index]
+   
+
+
+def SetChannel(ProvID, ChanID, ChanName, ChanEPG, ChanEPGNEXT, ChanPicon, ChanDescription):
 
    xbmc.executebuiltin('ActivateWindow(busydialog)')
 
@@ -136,12 +315,13 @@ def SetChannel(ProvID, ChanID, ChanName):
    for index in range(20):
       SID = SID + str(randint(1,9))
 
-   print 'SID = ' + str(SID)
+   #print 'SID = ' + str(SID)
 
    url = 'http://'+str(IP)+':'+str(WebPort)+'/CMD.php?FNC=SETTV&PID='+str(ProvID)+'&CID='+str(ChanID)+'&TV=1&PASSWORD='+str(Password)+'&SID='+str(SID)+'&VTYPE=1&OS=XBMC&VB='+str(VB)+'&VS='+str(VS)+'&AB='+str(AB)+'&AC='+str(AC)
-   print 'URL = ' + str(url)
+   #print 'URL = ' + str(url)
 
    IsOkSETTV = 1
+
 
    try:
       print 'Sending SETTV command to the server'
@@ -170,14 +350,24 @@ def SetChannel(ProvID, ChanID, ChanName):
          if IsCheckOK==1:
             IsOkXBMC=1
             try:
+               
                StreamURL=str(checkurl)
                print 'Stream URL = ' + StreamURL
                addon = xbmcaddon.Addon('plugin.video.enigmatv')
-               icon = addon.getAddonInfo('icon')
-               li = xbmcgui.ListItem(label=ChanName, iconImage=icon, thumbnailImage=icon, path=StreamURL)
-               li.setInfo(type='Video', infoLabels={ 'Title': ChanName })
+
+               folder = picon_dir
+               the_file = ChanPicon+'.png'
+               file_path = os.path.join(folder, the_file)
+               if os.path.isfile(file_path):
+                  piconx = os.path.join(addon.getAddonInfo('profile'), 'picons', the_file)
+               else:
+                  piconx = os.path.join(addon.getAddonInfo('path'), 'defaultpicon.png')
+
+               li = xbmcgui.ListItem(label=ChanName, iconImage=piconx, thumbnailImage=piconx, path=StreamURL)
+               li.setInfo(type='Video', infoLabels={ 'Title': ChanName})
                li.setProperty('IsPlayable', 'true')
                xbmc.Player().play(item=StreamURL, listitem=li)
+
             except Exception, e:
                IsOkXBMC=0
 
@@ -230,7 +420,6 @@ def SetChannel(ProvID, ChanID, ChanName):
       xbmcgui.Dialog().ok(Error40,Error41)
 
 
-
 def get_params():
     param = []
     paramstring = sys.argv[2]
@@ -269,12 +458,19 @@ if len(sys.argv) >= 2:
          ProvID = params['ProvID']
          ChanID = params['ChanID']
          ChanName = params['ChanName']
-         print 'Setting Channel = ProvID:' + str(ProvID) + ', ChanID:' + str(ChanID) + ', ChanName:' + str(ChanName)
-         SetChannel(ProvID, ChanID, ChanName)
+         ChanEPG = params['ChanEPG']
+         ChanEPGNEXT = params['ChanEPGNEXT']
+         ChanPicon = params['ChanPicon']
+         ChanDescription = params['ChanDescription']
+         print 'Setting Channel = ProvID:' + str(ProvID) + ', ChanID:' + str(ChanID) + ', ChanName:' + str(ChanName) + ', ChanEPG:' + str(ChanEPG) + ', ChanPicon:' + str(ChanPicon) + ', ChanDescription:' + str(ChanDescription)
+         SetChannel(ProvID, ChanID, ChanName, ChanEPG, ChanEPGNEXT, ChanPicon, ChanDescription)
          end_of_directory(OK)
+
 
    else:
       print 'Loading XML from URL'
       createProvList(GetURL)
 
-         
+
+
+

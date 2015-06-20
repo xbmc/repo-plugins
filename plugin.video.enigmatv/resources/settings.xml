@@ -10,4 +10,8 @@
         <setting label="30007"  type="enum"   id="AB" values="64 kbps|96 kbps|128 kbps|256 kbps" default="1"/>
         <setting label="30008"  type="enum"   id="AC" values="Mono|Stereo" default="1"/>
     </category>
+    <category label="30100">
+        <setting label="30102" type="action" action="RunScript($CWD/downloadpicons.py)"/>
+        <setting label="30103" type="action" action="RunScript($CWD/deletepicons.py)"/>
+    </category>
 </settings>

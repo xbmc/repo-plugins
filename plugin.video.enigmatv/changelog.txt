@@ -1,3 +1,9 @@
+2.0.0
+- Display current and next EPG
+- Display channels PICON (if loaded on server side)
+- Added German language
+- Corrected some bugs
+
 1.0.0
  - First released version
  - Connect to Enigma-TV Server

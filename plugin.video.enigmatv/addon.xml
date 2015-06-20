@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.enigmatv"
        name="Enigma-TV"
-       version="1.0.0"
-       provider-name="SPANGENBERGER S&#233;bastien">
+       version="2.0.0"
+       provider-name="SPANGENBERGER S&#233;bastien - SONNLEITNER Michael">
   <requires>
    <import addon="xbmc.python" version="2.1.0"/>
   </requires>
@@ -11,12 +11,14 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary lang="en">Enigma-TV</summary>
+	<summary lang="de">Enigma-TV</summary>
     <summary lang="fr">Enigma-TV</summary>
     <description lang="en">[B]Enigma-TV, Watch TV anywhere[/B]&#10;- Stream Dreambox over Internet (also in 3G)&#10;- Control your Dreambox (or any Enigma1/Enigma2 STB) in your network or over Internet.&#10;- Watch compressed stream using the Enigma-TV Server.&#10;- Share Providers / Channels and Medias !&#10;&#10;Visit www.enigma-tv.com for more info.[CR]</description>
+    <description lang="de">[B]Enigma-TV, Fernsehen von überall[/B]&#10;- Streamen ihre Dreambox auf Internet (auch in 3G)&#10;- Kontrollieren Sie Ihre Dreambox (oder jeder Enigma1 / Enigma2 STB) in Ihrem Netzwerk oder über das Internet.&#10;- Sehen komprimierten Stream mit der Enigma-TV Server.&#10;- Teilen Providers / Kanäle und Medien !&#10;&#10;Besuchen Sie www.enigma-tv.com für weitere Informationen.[CR]</description>    
     <description lang="fr">[B]Enigma-TV, Regardez la TV de partout[/B]&#10;- Diffusez votre Dreambox sur Internet (aussi en 3G)&#10;- Contr&#244;lez votre Dreambox (ou tout r&#233;cepteur de type Enigma1/Enigma2) dans votre r&#233;seau ou &#224; travers Internet.&#10;- Regardez un stream compress&#233; gr&#226;ce au serveur Enigma-TV.&#10;- Partagez vos Bouquets / Cha&#238;nes et M&#233;dias !&#10;&#10;Visitez www.enigma-tv.com pour plus d'information.[CR]</description>    
     <license>GPL 2.0</license>
     <platform>all</platform>
-    <language>en fr</language>
+    <language>en de fr</language>
     <email>info@enigma-tv.com</email>
     <website>http://www.enigma-tv.com</website>
     <forum>http://www.enigma-tv.com/modules/newbb</forum>

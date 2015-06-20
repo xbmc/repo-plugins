@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-    <string id="30000">Enigma-TV : Settings</string>
+    <string id="30000">Main: Settings</string>
     <string id="30001">IP/DNS Server</string>
     <string id="30002">Web Port</string>
     <string id="30003">Stream Port</string>
@@ -19,4 +19,27 @@
     <string id="30016">Please check the settings (Stream Port)</string>
     <string id="30017">Error sending SETTV command to the server</string>
     <string id="30018">Please check the settings or Internet connection ...</string>
+
+    <string id="30100">Picon: Settings</string>
+    <string id="30102">Download Picons</string>
+    <string id="30103">Delete Picons</string>
+
+    <string id="30104">Downloading Picons ... please wait</string>
+    <string id="30105">Adding Picons to the system... please wait</string>
+    <string id="30106">Adding Picons to the system... finished</string>
+    <string id="30107">All picons were added to the system.</string>
+    <string id="30108">Error managing the picon data</string>
+    <string id="30109">DOWNLOAD CANCELLED</string>
+    <string id="30110">There are no Picons to download...</string>
+    
+
+    <string id="30200">All picons deleted successfully.</string>
+
+
+    <string id="40001">[I]no EPG information [/I]</string>
+    <string id="40002">[B]NOW: [/B]</string>
+    <string id="40003">[B]NEXT: [/B]</string>
+    <string id="40004">[B]DESCRIPTION: [/B]</string>
+    <string id="40005">EPG-Info - NOW</string>
+    <string id="40006">EPG-Info - NEXT</string>
 </strings>

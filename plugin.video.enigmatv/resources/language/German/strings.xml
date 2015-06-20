@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30000">Stream Einstellungen</string>
+    <string id="30001">IP/DNS Server</string>
+    <string id="30002">Web Port</string>
+    <string id="30003">Stream Port</string>
+    <string id="30004">Passwort</string>
+    <string id="30005">Video Bitrate</string>
+    <string id="30006">Video Maßstab</string>
+    <string id="30007">Audio Bitrate</string>
+    <string id="30008">Audio Kanäle</string>
+    <string id="30009">Error connecting to the Server</string>
+    <string id="30010">Bitte die Einstellungen überprüfen :</string>
+    <string id="30011">- Rechtsklick auf das Addon-Symbol</string>
+    <string id="30012">- Bitte die fehleden Einstellungen ergänzen</string>
+    <string id="30013">Fehler beim der Wiedergabe</string>
+    <string id="30014">Bitte einen anderen Sender auswäheln ...</string>
+    <string id="30015">Stream kann nicht ergestellt werden</string>
+    <string id="30016">Bitte die Stream Einstellungen überprüfen (Stream Port)</string>
+    <string id="30017">Fehler beim Senden des SETTV Befehls</string>
+    <string id="30018">Bitte die Internet/Netzwerkverbindung überprüfen ...</string>
+
+    <string id="30100">Picon: Einstellungen</string>
+    <string id="30102">Picons herunterladen</string>
+    <string id="30103">Picons löschen</string>
+
+    <string id="30104">Picons werden heruntergeladen ... bitte warten</string>
+    <string id="30105">Picons werden hinzugefügt... bitte warten</string>
+    <string id="30106">Picons werden hinzugefügt... fertig</string>
+    <string id="30107">Alle Picons wurden hinzugefügt.</string>
+    <string id="30108">Fehler beim Verarbeiten der Picons</string>
+    <string id="30109">DOWNLOAD ABGEBROCHEN</string>
+    <string id="30110">Es stehen keine Picons zur Verfügung...</string>
+    
+    <string id="30200">Alle Picons wurden erfolgreich gelöscht.</string>
+
+    <string id="40001">[I]keine EPG-Informationen vorhanden [/I]</string>
+    <string id="40002">[B]JETZT: [/B]</string>
+    <string id="40003">[B]DANACH: [/B]</string>
+    <string id="40004">[B]BESCHREIBUNG: [/B]</string>
+    <string id="40005">EPG-Info - JETZT</string>
+    <string id="40006">EPG-Info - DANACH</string>
+</strings>

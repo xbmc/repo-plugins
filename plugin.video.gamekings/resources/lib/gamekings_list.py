@@ -102,6 +102,9 @@ class Main:
 		#this is Trailers
 		elif self.plugin_category == __language__(30003):
 			video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.tv/nieuws/")})
+		#this is E3
+		elif self.plugin_category == __language__(30004):
+			video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.tv/nieuws/")})			
 		
 		if (self.DEBUG) == 'true':
 			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "len(video_page_urls_and_titles)", str(len(video_page_urls_and_titles)) ), xbmc.LOGNOTICE )

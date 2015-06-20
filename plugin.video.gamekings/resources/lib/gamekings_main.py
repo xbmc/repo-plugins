@@ -53,18 +53,17 @@ class Main:
         url = sys.argv[0] + '?' + urllib.urlencode(parameters)
         listitem = xbmcgui.ListItem( __language__(30003), iconImage="DefaultFolder.png" )
         folder = True
-        xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)        
+        xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)    
 
-#Retired for now (14/11/2014)
-#         #
-#         # Pc
-#         #
-#         parameters = {"action" : "list", "plugin_category" : __language__(30003), "url" : "http://www.gamekings.tv/pcgamersunite/", "next_page_possible": "False"}
-#         url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-#         listitem = xbmcgui.ListItem( __language__(30003), iconImage="DefaultFolder.png" )
-#         folder = True
-#         xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
-        
+        #
+        # E3 2015
+        #
+        parameters = {"action" : "list", "plugin_category" : __language__(30004), "url" : "http://www.gamekings.tv/tag/E3-2015/page/001/", "next_page_possible": "True"}
+        url = sys.argv[0] + '?' + urllib.urlencode(parameters)
+        listitem = xbmcgui.ListItem( __language__(30004), iconImage="DefaultFolder.png" )
+        folder = True
+        xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)                
+
         # Disable sorting
         xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )
 		

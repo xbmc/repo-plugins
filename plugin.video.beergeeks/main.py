@@ -21,14 +21,17 @@ FANART = ROOTDIR+"/fanart.jpg"
 USER_AGENT = 'Mozilla/5.0 (iPhone; CPU iPhone OS 8_3 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Version/8.0 Mobile/12F70 Safari/600.1.4'
     
 def GET_EPISODES():                    
-    url = 'http://www.ora.tv/beergeeks/schedule'
+    #url = 'http://www.ora.tv/beergeeks/schedule'
+    url = 'http://www.ora.tv/beergeeks'
     req = urllib2.Request(url)
     req.add_header('User-Agent', ' Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
     response = urllib2.urlopen(req)
     source = response.read()
     response.close() 
 
-    source = re.compile('<figure>(.+?)</figure').findall(source)
+    source = source.replace('\n',"")    
+    #source = re.compile('<figure>(.+?)</figure').findall(source)
+    source = re.compile('class="panel accordian"(.+?)</div>').findall(source)
         
 
     for block in source:
@@ -36,12 +39,12 @@ def GET_EPISODES():
         #name = GET_NAME(block)
         #image = GET_IMAGE(block)
         link = GET_LINK(block)
-        #print link
+        print link
         v_code = link[link.find("_")+1:]
-        #print v_code
+        print v_code
 
         json = GET_VIDEO_INFO(v_code)
-
+        print json
         title = HTMLParser.HTMLParser().unescape(HTMLParser.HTMLParser().unescape(json['title']))
         image = 'http:'+HTMLParser.HTMLParser().unescape(json['thumbnail_url'])
         desc = json['description']
@@ -71,25 +74,26 @@ def GET_VIDEO_INFO(v_code):
 
 
 def GET_QUALITY(video_id):
+    #http://cedexis-video.ora.tv/i/beergeeks/video-14630/,basic400,basic600,sd900,sd1200,sd1500,hd720,hd1080,mobile400,.mp4.csmil/index_7_av.m3u8
     temp =""
     if QUALITY == 0:
-        #temp = "index_7_av.m3u8"
-        temp = "video-"+video_id+"mobile400.mp4.csmil/master.m3u8"
+        temp = "index_7_av.m3u8"
+        #temp = "video-"+video_id+"mobile400.mp4.csmil/master.m3u8"
     elif QUALITY == 1:
-        #temp = "index_0_av.m3u8"        
-        temp = "video-"+video_id+"basic400.mp4.csmil/master.m3u8"
+        temp = "index_0_av.m3u8"        
+        #temp = "video-"+video_id+"basic400.mp4.csmil/master.m3u8"
     elif QUALITY == 2:
-        #temp = "index_2_av.m3u8"
-        temp = "video-"+video_id+"sd900.mp4.csmil/master.m3u8"
+        temp = "index_2_av.m3u8"
+        #temp = "video-"+video_id+"sd900.mp4.csmil/master.m3u8"
     elif QUALITY == 3:
-        #temp = "index_4_av.m3u8"
-        temp = "video-"+video_id+"sd1500.mp4.csmil/master.m3u8"
+        temp = "index_4_av.m3u8"
+        #temp = "video-"+video_id+"sd1500.mp4.csmil/master.m3u8"
     elif QUALITY == 4:
-        #temp = "index_5_av.m3u8"
-        temp = "video-"+video_id+"hd720.mp4.csmil/master.m3u8"
+        temp = "index_5_av.m3u8"
+        #temp = "video-"+video_id+"hd720.mp4.csmil/master.m3u8"
     elif QUALITY == 5:
-        #temp = "index_6_av.m3u8"
-        temp = "video-"+video_id+"hd1080.mp4.csmil/master.m3u8"
+        temp = "index_6_av.m3u8"
+        #temp = "video-"+video_id+"hd1080.mp4.csmil/master.m3u8"
 
     return temp
 
@@ -104,9 +108,10 @@ def GET_IMAGE(source):
     return 'http:'+FIND(source,start_str,end_str)
 
 def GET_LINK(source):
-    start_str = '<a class="showschedule-cta cta-play" href="'
+    #start_str = '<a class="showschedule-cta cta-play" href="'
+    start_str = '/beergeeks/'
     end_str = '"'
-    return 'http://www.ora.tv/'+FIND(source,start_str,end_str)
+    return 'http://www.ora.tv/beergeeks/'+FIND(source,start_str,end_str)
 
 def FIND(source,start_str,end_str):    
     start = source.find(start_str)

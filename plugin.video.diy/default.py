@@ -75,9 +75,13 @@ def getShows():
    ilist=[]
    url = 'http://www.diynetwork.com/shows/full-episodes'
    html = getRequest(url)
-   name, plot, vidcnt, img = re.compile('"video-player-embedded">.+?<h3>(.+?)</h3>.+?<p>(.+?)</p>.+?"total"\: (.+?),.+?"thumbnailUrl" \: "(.+?)"', re.DOTALL).search(html).groups()
    a  =[]
-   a.append((icon, url, name, '%s Videos' % vidcnt))
+   try: 
+       name, vidcnt, img = re.compile('"video-player-embedded">.+?<h3>(.+?)</h3>.+?"total"\: (.+?),.+?"thumbnailUrl" \: "(.+?)"', re.DOTALL).search(html).groups()
+   
+       img = 'http://www.diynetwork.com%s' % img
+       a.append((icon, url, name, '%s Videos' % vidcnt))
+   except: pass
    m = re.compile('<div class="video-embed-metadata">(.+?)<div class="container-aside">', re.DOTALL).search(html)
    b = re.compile('<img class="" src="(.+?)".+?<a href="(.+?)">(.+?)<.+?>(.+?)<.+?</li',re.DOTALL).findall(html, m.start(1),m.end(1))
    a.extend(b)

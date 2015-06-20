@@ -3,6 +3,8 @@ plugin.video.diy
 
 XBMC Addon for DIY Network Video website
 
+Version 1.0.9 Better fix for Website change
+Version 1.0.8 Website change
 Version 1.0.7 Added Sort Methods
 Version 1.0.6 Added User Select Views
 Version 1.0.5 Added Subtitle, Metadata, fixed views

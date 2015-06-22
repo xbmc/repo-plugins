@@ -29,7 +29,7 @@ sys.path.append(os.path.join(addon_dir, 'resources', 'lib'))
 # Do extra imports including from local addon dir
 from bs4 import BeautifulSoup
 
-cache = StorageServer.StorageServer("engadget", 24)
+cache = StorageServer.StorageServer("engadget", 1)
 icon = addon.getAddonInfo('icon')
 language = addon.getLocalizedString
 base_url = 'http://www.engadget.com'
@@ -70,7 +70,7 @@ def make_request(url):
 
 
 def cache_categories():
-    soup = BeautifulSoup(make_request(base_url + '/videos'), 'html.parser')
+    soup = BeautifulSoup(make_request(base_url + '/videos/'), 'html.parser')
     cat_items = soup.find('ul', class_='tab-nav')('a')
     cats = [{'name': i.string, 'href': i['href']} for i in cat_items]
     return cats
@@ -84,6 +84,7 @@ def display_categories():
 
 def display_category(url):
     page_url = base_url + url
+    addon_log("Display items for page_url: " + page_url)
     html = make_request(page_url)
     soup = BeautifulSoup(html, 'html5lib')
     items = soup('div', {'class': 'video-listing'})[0]('div', {'class': 'video'})
@@ -96,6 +97,7 @@ def display_category(url):
     next_page = soup.find('li', class_='older').a['href']
     add_dir(language(30008), next_page, icon, 'get_category')
 
+    addon_log("Setting cache for page_url: " + page_url)
     cache.set('page_url', page_url)
 
 
@@ -110,21 +112,29 @@ def resolve_url(url):
     video_id = url.split('/')[-1]
     addon_log('video ID: {0}'.format(video_id))
 
+    # TODO Caching should not be the concern of the function itself.
     try:
         link_cache = eval(cache.get('link_cache'))
-        cached_item = [(i[video_id]['url'], i[video_id]['ren']) for i in link_cache if video_id in i][0]
-        addon_log('return item from cache')
-    except IndexError:  # If not at least one item was found i.e. [0] is non-existent, then
+        addon_log('Link cache loaded')
+    except SyntaxError:
+        link_cache = {}
         addon_log('addonException: %s' % format_exc())
-        cached_item = cache_playlist(video_id)
+
+    if video_id not in link_cache:
+        addon_log("video id not in cache, re-caching")
+        cache_playlist(video_id)
+        link_cache = eval(cache.get('link_cache'))
+
+    cached_item = link_cache[video_id]
+
     if cached_item:
-        stream_url = urllib.unquote(cached_item[0])
+        stream_url = urllib.unquote(cached_item['url'])
         addon_log('preferred setting: %s' % settings[preferred])
         resolved_url = None
         while (preferred >= 0) and not resolved_url:
             try:
                 ren_id, ren_type = [
-                    (i['ID'], i['RenditionType']) for i in cached_item[1] if i['ID'] in settings[preferred]][0]
+                    (i['ID'], i['RenditionType']) for i in cached_item['ren'] if i['ID'] in settings[preferred]][0]
                 # Adhere to 5min's format, their base URL is always an MP4, but depending on the rendition type you
                 # need the following to get an actual working URL
                 resolved_url = stream_url.replace(".mp4", "_{0}.{1}".format(ren_id, ren_type))
@@ -166,14 +176,25 @@ def cache_playlist(video_id):
         'url': urllib.quote(cache.get('page_url')),
         'videoCount': '50',
         'videoGroupID': script_params['videoGroupID']
-        }
+    }
+    addon_log("Cache for page_url was: " + cache.get('page_url'))
     addon_log("complete url: " + url + urllib.urlencode(url_params))
     data = json.loads(make_request(url + urllib.urlencode(url_params)), 'utf-8')
     items = data['binding']
     pattern = re.compile('videoUrl=(.+?)&')
-    link_cache = eval(cache.get('link_cache'))
+    # TODO Again, the caching - should not be here. This function should just get the file
+    try:
+        link_cache = eval(cache.get('link_cache'))
+    except SyntaxError:
+        # Cache is empty
+        link_cache = {}
+
+    if not isinstance(link_cache, dict):
+        link_cache = {}
+
     if len(link_cache) > 300:
-        del link_cache[:100]
+        addon_log("cache too full, clearing older items")
+        link_cache.clear()
 
     for i in items:
         match = pattern.findall(i['EmbededURL'])
@@ -181,17 +202,11 @@ def cache_playlist(video_id):
         try:
             item_dict = {str(i['ID']): {'url': match[0],
                                         'ren': i['Renditions']}}
-            link_cache.append(item_dict)
+            link_cache.update(item_dict)
         except (KeyError, IndexError):
             addon_log('addonException: %s' % format_exc())
     cache.set('link_cache', repr(link_cache))
     addon_log('link_cache items %s' % len(link_cache))
-    try:
-        video_url = [(i[video_id]['url'], i[video_id]['ren']) for i in link_cache if video_id in i][0]
-        addon_log(str(video_url))
-        return video_url
-    except IndexError:
-        addon_log('addonException: %s' % format_exc())
 
 
 def add_dir(name, url, icon_image, dir_mode, is_folder=True):

@@ -1,3 +1,6 @@
+Version 1.1.0
+Caching should now work, even in case of empty cache / initial install.
+
 Version 1.0.9
 Changed scraping again, engadget's CDN, "5min" now demanded a URL parameter which we were not including
 

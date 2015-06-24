@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.library.node.editor" name="Library Node Editor" version="0.0.1" provider-name="Unfledged, Team-Kodi">
+    <requires>
+		<import addon="xbmc.python" version="2.20.0"/>
+		<import addon="script.module.simplejson" version="3.3.0"/>
+		<import addon="script.module.unidecode" version="0.4.16"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="addon.py">
+		<provides>executable</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<summary lang="en">Manage custom library nodes.</summary>
+		<description lang="en">Create and edit custom library nodes.</description>
+		<license>GNU General Public License, v2</license>
+		<language></language>
+		<forum>http://forum.kodi.tv/showthread.php?tid=224512</forum>
+		<source>https://github.com/XBMC-Addons/plugin.library.node.editor</source>
+		<email></email>
+	</extension>
+</addon>

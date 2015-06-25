@@ -51,12 +51,21 @@ class GuardianTV:
             video["date"] = time.gmtime((mktime_tz(parsedate_tz(dt))))
             
             video["thumb"] = ""
+            width = 0
             for mediaContent in videoNode.getElementsByTagName('media:content'):
-                mimeType = mediaContent.attributes["type"].value
-                if mimeType == "image/jpeg":
-                    video["thumb"] = mediaContent.attributes["url"].value
-                    break
-                    
+                try:
+                    mimeType = mediaContent.attributes["type"].value
+                except KeyError:
+                    mimeType = ""
+                
+                imageUrl = mediaContent.attributes["url"].value
+                imageExt = imageUrl[imageUrl.rfind(".")+1:]
+                imageWidth = mediaContent.attributes["width"].value
+                
+                if (mimeType == "image/jpeg" or imageExt == "jpg" or imageExt == "jpeg") and imageWidth > width:
+                    video["thumb"] = imageUrl
+                    width = imageWidth
+            
             video["pageUrl"] = videoNode.getElementsByTagName('link')[0].firstChild.data.strip()
             
             videos.append(video)

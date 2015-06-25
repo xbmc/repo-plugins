@@ -50,7 +50,7 @@ def show_video_files(url):
     items = gtv.getVideoByChannel(url)
     for item in items:
         title = item["title"] + " (" + time.strftime("%d/%m/%Y %H:%M", item["date"]) + ")"
-        liStyle=xbmcgui.ListItem(title)
+        liStyle=xbmcgui.ListItem(title, thumbnailImage=item["thumb"])
         addLinkItem({"mode": "play", "url": item["pageUrl"]}, liStyle)
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 

@@ -1,3 +1,6 @@
+[B]1.1.1[/B]
+- Added thumbnails in video lists.
+
 [B]1.1.0[/B]
 - updated HTML parsing due to upstream changes.
 - minor changes.

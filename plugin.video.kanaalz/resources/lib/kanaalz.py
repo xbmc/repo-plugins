@@ -125,13 +125,13 @@ def handle_event(myself, handle, params):
             page = h.read()
             h.close()
             redirects = re.compile('src="(/embed/\S*)"').findall(page)
-            if len(redirects) != 1:
+            if len(redirects) < 1:
                 raise LocalException('Video niet gevonden')
             h = urlhandler.urlopen(RSSroot+redirects[0], 7*24*60*60) # Cached for a week
             page = h.read()
             h.close()
             urls = re.compile('http://.*.mp4').findall(page)
-            if len(urls) != 1:
+            if len(urls) < 1:
                 raise LocalException('Video niet gevonden')
             li = xbmcgui.ListItem(path=urls[0])
             xbmcplugin.setResolvedUrl(handle, True, li)

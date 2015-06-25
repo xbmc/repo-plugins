@@ -1,3 +1,6 @@
+v1.0.6 (Tuesday, 23 june 2015) :
+- changed fanart
+
 v1.0.5 (Tuesday, 16 june 2015) :
 - changed icon and fanart due to changes in the website
 

@@ -14,10 +14,13 @@ class SuperTennis:
         urllib2.install_opener(opener)
 
     def getUrl(self):
-        pageUrl = "http://www.federtennis.it/supertennis/"
+        pageUrl = "http://eventi.liveksoft.tv/supertennis.tv/liveadv.php"
         htmlData = urllib2.urlopen(pageUrl).read()
         
-        match=re.compile('//file: "(.+?)"').findall(htmlData)
+        # HD Stream 1280x720px
+        match=re.compile("var videoFile = '(.+?)'").findall(htmlData)
+        # SD Stream 480x270px
+        #match=re.compile("var videoFile5 = '(.+?)'").findall(htmlData)
         url = match[0]
        
         return url

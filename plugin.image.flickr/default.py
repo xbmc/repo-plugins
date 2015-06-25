@@ -28,7 +28,7 @@ def ENCODE(string):
 
 def LOG(message):
 	print 'plugin.image.flickr: %s' % ENCODE(str(message))
-	
+
 def ERROR(message,caption=''):
 	LOG(message)
 	import traceback
@@ -58,7 +58,7 @@ class NetworkTokenCache(flickrapi.tokencache.TokenCache):
 			filename = 'auth.token'
 
 		return self.get_cached_token_path(filename)
-								
+
 	def set_cached_token(self, token):
 		self.localBackup.set_cached_token(token)
 		self.memory[self.username] = token
@@ -71,7 +71,7 @@ class NetworkTokenCache(flickrapi.tokencache.TokenCache):
 		f = xbmcvfs.File(self.get_cached_token_filename(), "w")
 		f.write(str(token))
 		f.close()
-	
+
 	def get_cached_token(self):
 		backup = self.localBackup.get_cached_token()
 		if self.username in self.memory: return self.memory[self.username]
@@ -86,33 +86,33 @@ class NetworkTokenCache(flickrapi.tokencache.TokenCache):
 			except:
 				pass
 		return backup
-			
+
 	def forget(self):
 		self.localBackup.forget()
 		if self.username in self.memory:
 			del self.memory[self.username]
-								
+
 		import xbmcvfs
 		filename = self.get_cached_token_filename()
 		if xbmcvfs.exists(filename):
 			xbmcvfs.delete(filename)
-			
+
 	@staticmethod
 	def isValid():
 		import xbmcvfs
 		path = __settings__.getSetting('network_token_path')
 		return path and xbmcvfs.exists(path)
-		
+
 	token = property(get_cached_token, set_cached_token, forget, "The cached token")
-												
+
 class flickrPLUS(flickrapi.FlickrAPI):
 	def __init__(self, api_key, secret=None, username=None, token=None, format='etree', store_token=True, cache=False):
 		flickrapi.FlickrAPI.__init__(self, api_key, secret, username, token, format, store_token, cache)
 		if NetworkTokenCache.isValid():
 			self.token_cache = NetworkTokenCache(api_key, username)
-			
+
 	def walk_photos_by_page(self, method, **params):
-			rsp = method(**params) 
+			rsp = method(**params)
 
 			photoset = rsp.getchildren()[0]
 			page = int(photoset.attrib.get('page','1'))
@@ -124,24 +124,24 @@ class flickrPLUS(flickrapi.FlickrAPI):
 			self.TOTAL_ON_PAGE = perpage
 			self.TOTAL_PAGES = pages
 			if page == pages: self.TOTAL_ON_PAGE = self.TOTAL_ON_LAST_PAGE
-			
+
 			photos = rsp.findall('*/photo')
 
-			# Yield each photo 
+			# Yield each photo
 			for photo in photos:
 				yield photo
-				
+
 	def get_full_token(self, mini_token):
 		'''Gets the token given a certain frob. Used by ``get_token_part_two`` and
 		by the web authentication method.
 		'''
-		
+
 		# get a token
 		rsp = self.auth_getFullToken(mini_token=mini_token, format='xmlnode')
 
 		token = rsp.auth[0].token[0].text
 		flickrapi.LOG.debug("get_token: new token '%s'" % token)
-		
+
 		# store the auth info for next time
 		self.token_cache.token = token
 
@@ -156,7 +156,7 @@ def photoURL(farm,server,nsid,secret='',buddy=False,size='',ext='jpg'):
 		return 'http://farm%s.staticflickr.com/%s/%s%s.jpg' % (replace + (secret,))
 	else:
 		return 'http://farm%s.staticflickr.com/%s/%s%s_%s.%s' % (replace + (secret,size,ext))
-		
+
 	'''
 	s	small square 75x75
 	q	large square 150x150
@@ -168,7 +168,7 @@ def photoURL(farm,server,nsid,secret='',buddy=False,size='',ext='jpg'):
 	b	large, 1024 on longest side*
 	o	original image, either a jpg, gif or png, depending on source format
 	'''
-	
+
 class Maps:
 	def __init__(self):
 		self.map_source = ['google','yahoo','osm'][int(__settings__.getSetting('default_map_source'))]
@@ -181,7 +181,7 @@ class Maps:
 						'neighborhood':int(__settings__.getSetting('neighborhood_zoom')),
 						'photo':int(__settings__.getSetting('photo_zoom'))}
 		self.default_map_type = ['hybrid','satellite','terrain','roadmap'][int(__settings__.getSetting('default_map_type'))]
-		
+
 	def getMap(self,lat,lon,zoom,width=256,height=256,scale=1,marker=False):
 		#640x36
 		source = self.map_source
@@ -193,7 +193,7 @@ class Maps:
 		ipath = os.path.join(CACHE_PATH,fnamebase+'.jpg')
 		mark = ''
 		if marker:
-			if source == 'osm': 
+			if source == 'osm':
 				mark = '&mlat0=' + lat + '&mlon0=' + lon + '&mico0=0'
 			elif source == 'yahoo':
 				mark = ''
@@ -221,19 +221,19 @@ class Maps:
 		if zoom < 1: zoom = 1
 		if zoom >12: zoom = 12
 		return str(zoom)
-		
+
 	def doMap(self):
 		clearDirFiles(CACHE_PATH)
 		self.getMap(sys.argv[2],sys.argv[3],'photo',width=640,height=360,scale=2,marker=True)
 		xbmc.executebuiltin('SlideShow('+CACHE_PATH+')')
-	
+
 class FlickrSession:
 	API_KEY = '0a802e6334304794769996c84c57d187'
 	API_SECRET = '655ce70e86ac412e'
-	
+
 	MOBILE_API_KEY = 'f9b69ca9510b3f55fdc15aa869614b39'
 	MOBILE_API_SECRET = 'fdba8bb77fc10921'
-	
+
 	DISPLAY_VALUES = ['Square','Thumbnail','Small','Medium','Medium640','Large','Original']
 	SIZE_KEYS = {	'Square':'url_sq',
 					'Thumbnail':'url_t',
@@ -242,7 +242,7 @@ class FlickrSession:
 					'Medium640':'url_z',
 					'Large':'url_l',
 					'Original':'url_o'}
-	
+
 	def __init__(self,username=None):
 		self.flickr = None
 		self._authenticated = False
@@ -255,9 +255,9 @@ class FlickrSession:
 		self.isSlideshow = False
 		self._isMobile = None
 		if __settings__.getSetting('enable_maps') == 'true': self.maps = Maps()
-		
+
 	def authenticated(self): return self._authenticated
-		
+
 	def loadSettings(self):
 		self.username = __settings__.getSetting('flickr_username')
 		self.defaultThumbSize = self.getDisplayValue(__settings__.getSetting('default_thumb_size'))
@@ -265,13 +265,13 @@ class FlickrSession:
 		mpp = __settings__.getSetting('max_per_page')
 		mpp = [10,20,30,40,50,75,100,200,500][int(mpp)]
 		self.max_per_page = mpp
-	
+
 	def getDisplayValue(self,index):
 		return self.DISPLAY_VALUES[int(index)]
 
 	def isMobile(self,set=None):
 		if set == None:
-			if self._isMobile != None: return self._isMobile  
+			if self._isMobile != None: return self._isMobile
 			return __settings__.getSetting('mobile') == 'true'
 		if set:
 			__settings__.setSetting('mobile','true')
@@ -282,13 +282,13 @@ class FlickrSession:
 			self.flickr.api_key = self.API_KEY
 			self.flickr.secret = self.API_SECRET
 		self._isMobile = set
-	
+
 	def getKeys(self):
 		if self.isMobile():
 			return self.MOBILE_API_KEY,self.MOBILE_API_SECRET
 		else:
 			return self.API_KEY,self.API_SECRET
-		
+
 	def doTokenDialog(self,frob,perms):
 #		if False:
 #			try:
@@ -304,10 +304,10 @@ class FlickrSession:
 #			except:
 #				ERROR('')
 #				return
-			
+
 		self.isMobile(True)
 		self.doMiniTokenDialog(frob, perms)
-		
+
 	def doNormalTokenDialog(self,frob,perms):
 		url = self.flickr.auth_url('read',frob)
 		if PLUGIN: xbmcplugin.endOfDirectory(int(sys.argv[1]),succeeded=False)
@@ -333,9 +333,9 @@ class FlickrSession:
 			LOG('Invalid Token')
 			return None
 		return token
-	
+
 	def doMiniTokenDialog(self,frob,perms):
-		xbmcgui.Dialog().ok("AUTHENTICATE",'Go to http://xbmc.2ndmind.com/auth','get the code and click OK to continue')
+		xbmcgui.Dialog().ok("AUTHENTICATE",'Go to flickr.2ndmind.com','get the code and click OK to continue')
 		mini_token = ''
 		message = 'Enter 9 digit code'
 		while not len(mini_token) == 9 or not mini_token.isdigit():
@@ -346,7 +346,7 @@ class FlickrSession:
 			mini_token = keyboard.getText().replace('-','')
 			if not mini_token: return
 		self.flickr.get_full_token(mini_token) #@UnusedVariable
-		
+
 	def authenticate(self,force=False):
 		key,secret = self.getKeys()
 		self.flickr = flickrPLUS(key,secret)
@@ -375,13 +375,13 @@ class FlickrSession:
 		LOG("AUTH DONE")
 		if self.justAuthorized: return False
 		return self.finishAuthenticate(token)
-		
+
 	def authenticateMobile(self,token):
 		if not token:
 			LOG("Failed to get token (Mobile). Probably did not authorize.")
 			return False
 		return self.finishAuthenticate(token)
-		
+
 	def finishAuthenticate(self,token):
 		self.flickr.token_cache.token = token
 #		if self.username:
@@ -391,14 +391,14 @@ class FlickrSession:
 #				return True
 #			except:
 #				ERROR('Failed to authenticate with username in settings')
-			
+
 		rsp = self.flickr.auth_checkToken(auth_token=token,format='xmlnode')
 		user = rsp.auth[0].user[0]
 		self.user_id = user.attrib.get('nsid')
 		self.username = user.attrib.get('username')
 		if self.username: __settings__.setSetting('flickr_username',self.username)
 		return True
-			
+
 	def getCollectionsInfoList(self,userid=None,cid='0'):
 		if not userid: userid = self.user_id
 		col = self.flickr.collections_getTree(user_id=userid,collection_id=cid)
@@ -415,9 +415,9 @@ class FlickrSession:
 			tn_dict = self.getSetsThumbnailDict(userid=userid)
 			for c in col.find('collections').find('collection').findall('set'):
 				info_list.append({'title':c.attrib.get('title',''),'id':c.attrib.get('id',''),'tn':tn_dict.get(c.attrib.get('id',''),'')})
-		
+
 		return (mode, info_list)
-		
+
 	def getSetsInfoList(self,userid=None):
 		if not userid: userid = self.user_id
 		sets = self.flickr.photosets_getList(user_id=userid)
@@ -426,7 +426,7 @@ class FlickrSession:
 			tn = "http://farm"+s.attrib.get('farm','')+".static.flickr.com/"+s.attrib.get('server','')+"/"+s.attrib.get('primary','')+"_"+s.attrib.get('secret','')+"_s.jpg"
 			info_list.append({'title':s.find('title').text,'count':s.attrib.get('photos','0'),'id':s.attrib.get('id',''),'tn':tn})
 		return info_list
-		
+
 	def getContactsInfoList(self,userid=None):
 		if userid: contacts = self.flickr.contacts_getPublicList(user_id=userid)
 		else: contacts = self.flickr.contacts_getList()
@@ -438,7 +438,7 @@ class FlickrSession:
 				tn = "http://farm"+c.attrib.get('iconfarm','')+".static.flickr.com/"+c.attrib.get('iconserver','')+"/buddyicons/"+c.attrib.get('nsid','')+".jpg"
 			info_list.append({'username':c.attrib.get('username',''),'id':c.attrib.get('nsid',''),'tn':tn})
 		return info_list
-	
+
 	def getGroupsInfoList(self,userid=None,search=None,page=1):
 		total = None
 		if search:
@@ -472,7 +472,7 @@ class FlickrSession:
 								'id':g.attrib.get('id'),
 								'tn':tn})
 		return info_list
-		
+
 	def getTagsList(self,userid=None):
 		if not userid: userid = self.user_id
 		tags = self.flickr.tags_getListUser(user_id=userid)
@@ -480,7 +480,7 @@ class FlickrSession:
 		for t in tags.find('who').find('tags').findall('tag'):
 			t_list.append(t.text)
 		return t_list
-		
+
 	def getPlacesInfoList(self,pid,woeid=None):
 		#12,8,7
 		places = self.flickr.places_placesForUser(place_type_id=pid,woe_id=woeid)
@@ -492,7 +492,7 @@ class FlickrSession:
 								'lat':p.attrib.get('latitude'),
 								'lon':p.attrib.get('longitude')})
 		return info_list
-		
+
 	def getSetsThumbnailDict(self,userid=None):
 		if not userid: userid = self.user_id
 		sets = self.flickr.photosets_getList(user_id=userid)
@@ -500,7 +500,7 @@ class FlickrSession:
 		for s in sets.find('photosets').findall('photoset'):
 			tn_dict[s.attrib.get('id','0')] =  "http://farm"+s.attrib.get('farm','')+".static.flickr.com/"+s.attrib.get('server','')+"/"+s.attrib.get('primary','')+"_"+s.attrib.get('secret','')+"_s.jpg"
 		return tn_dict
-		
+
 	def getImageUrl(self,pid,label='Square'):
 		ps = self.flickr.photos_getSizes(photo_id=pid)
 		if label == 'all':
@@ -512,26 +512,26 @@ class FlickrSession:
 		for s in ps.find('sizes').findall('size'):
 			if s.get('label') == label:
 				return s.get('source')
-		
+
 	def addPhotos(self,method,mode,url='BLANK',page='1',mapOption=True,with_username=False,**kwargs):
 		global ShareSocial
 		try:
 			import ShareSocial #analysis:ignore
 		except:
 			pass
-		
+
 		page = int(page)
-		
+
 		#Add Previous Header if necessary
 		if page > 1:
 			previous = '<- '+__language__(30511)
 			pg = (page==2) and '-1' or  str(page-1) #if previous page is one, set to -1 to differentiate from initial showing
 			self.addDir(previous.replace('@REPLACE@',str(self.max_per_page)),url,mode,os.path.join(IMAGES_PATH,'previous.png'),page = pg,userid=kwargs.get('userid',''))
-			
+
 		#info_list = []
 		extras = 'media, date_upload, date_taken, url_sq, url_t, url_s, url_m, url_l,url_o' + self.SIZE_KEYS[self.defaultThumbSize] + ',' + self.SIZE_KEYS[self.defaultDisplaySize]
 		if mapOption: extras += ',geo'
-		
+
 		#Walk photos
 		ct=0
 		mpp = self.max_per_page
@@ -540,7 +540,7 @@ class FlickrSession:
 			ok = self.addPhoto(photo, mapOption=mapOption,with_username=with_username)
 			if not ok: break
 			ct+=1
-			
+
 		#Add Next Footer if necessary
 		#print "PAGES: " + str(page) + " " + str(self.flickr.TOTAL_PAGES) + " " + str(self.flickr.TOTAL_ON_LAST_PAGE)
 		if ct >= self.max_per_page or page < self.flickr.TOTAL_PAGES:
@@ -551,11 +551,11 @@ class FlickrSession:
 				nextp += __language__(30513)
 				if self.flickr.TOTAL_ON_LAST_PAGE: replace = str(self.flickr.TOTAL_ON_LAST_PAGE)
 				else: replace = str(self.max_per_page)
-			else: 
+			else:
 				nextp += __language__(30512)
 				replace = str(self.max_per_page)
 			if page < self.flickr.TOTAL_PAGES: self.addDir(nextp.replace('@REPLACE@',replace)+' ->',url,mode,os.path.join(IMAGES_PATH,'next.png'),page=str(page+1),userid=kwargs.get('userid',''))
-		
+
 	def addPhoto(self,photo,mapOption=False,with_username=False):
 		pid = photo.get('id')
 		title = photo.get('title')
@@ -565,11 +565,11 @@ class FlickrSession:
 				try: title = time.strftime('%m-%d-%y %I:%M %p',time.localtime(int(photo.get('dateupload'))))
 				except: pass
 				if not title: title = pid
-				
+
 		if with_username:
 			username = photo.get('username','') or ''
 			title = '[B]%s:[/B] %s' % (username,title)
-			
+
 		ptype = photo.get('media') == 'video' and 'video' or 'image'
 		#ptype = 'image'
 		thumb = photo.get(self.SIZE_KEYS[self.defaultThumbSize])
@@ -595,29 +595,29 @@ class FlickrSession:
 			lon=photo.get('longitude')
 			if not lat+lon == '00':
 				contextMenu.append((__language__(30510),'XBMC.RunScript(special://home/addons/plugin.image.flickr/default.py,map,'+lat+','+lon+')'))
-		
+
 		if ShareSocial:
 			run = self.getShareString(photo,sizes)
 			if run: contextMenu.append(('Share...',run))
-		
+
 		saveURL = photo.get('url_o',display)
 		contextMenu.append((__language__(30517),'XBMC.RunScript(special://home/addons/plugin.image.flickr/default.py,save,'+urllib.quote_plus(saveURL)+','+title+')'))
 		#contextMenu.append(('Test...','XBMC.RunScript(special://home/addons/plugin.image.flickr/default.py,slideshow)'))
-		
+
 		return self.addLink(title,display,thumb,tot=self.flickr.TOTAL_ON_PAGE,contextMenu=contextMenu,ltype=ptype)
-		
+
 	def getShareString(self,photo,sizes):
 		plink = 'http://www.flickr.com/photos/%s/%s' % (photo.get('owner',self.user_id),photo.get('id'))
 		if photo.get('media') == 'photo':
 			share = ShareSocial.getShare('plugin.image.flickr','image')
 		else:
 			share = ShareSocial.getShare('plugin.image.flickr','video')
-			
+
 		share.sourceName = 'flickr'
 		share.page = plink
 		share.latitude = photo.get('latitude')
 		share.longitude = photo.get('longitude')
-		
+
 		if photo.get('media') == 'photo':
 			share.thumbnail = photo.get('url_t',photo.get('url_s',''))
 			share.media = photo.get('url_l',photo.get('url_o',photo.get('url_t','')))
@@ -633,9 +633,9 @@ class FlickrSession:
 			share.embed = embed
 		else:
 			return None
-		
+
 		return share.toPluginRunscriptString()
-		
+
 	def userID(self):
 		if self.user_id: return self.user_id
 		username = __settings__.getSetting('flickr_username')
@@ -643,13 +643,13 @@ class FlickrSession:
 		if not username: return None
 		self.user_id = self.getUserID(username)
 		return self.userID()
-		
+
 	def getUserID(self,username):
 		if not username: return None
 		obj = self.flickr.people_findByUsername(username=username)
 		user = obj.find('user')
 		return user.attrib.get('nsid')
-		
+
 	def CATEGORIES(self):
 		uid = self.userID()
 		if self.authenticated():
@@ -668,45 +668,45 @@ class FlickrSession:
 		self.addDir(__language__(30309),'@@search@@',10,os.path.join(IMAGES_PATH,'search_flickr.png'))
 		self.addDir(__language__(30312),'@@search@@',13,os.path.join(IMAGES_PATH,'search_flickr.png'))
 		self.addDir(__language__(30310),'interesting',11,os.path.join(IMAGES_PATH,'interesting.png'))
-		
+
 	def PHOTOSTREAM(self,page,mode=1,userid='me'):
 		#if not self.authenticated() and userid == 'me':
 		#	userid = self.userID()
 		#	if not userid: return
 		#
 		self.addPhotos(self.flickr.photos_search,mode,url=userid,page=page,user_id=userid)
-		
+
 	def COLLECTION(self,cid,userid=None):
 		if cid == 'collections': cid = 0
 		mode,cols = self.getCollectionsInfoList(cid=cid,userid=userid)
 		total = len(cols)
 		for c in cols:
 			if not self.addDir(c['title'],c['id'],mode,c['tn'],tot=total,userid=userid): break
-			
+
 	def SETS(self,mode=103,userid=None):
 		sets = self.getSetsInfoList(userid=userid)
 		total = len(sets)
 		for s in sets:
 			if not self.addDir(s['title']+' ('+s['count']+')',s['id'],mode,s['tn'],tot=total): break
-	
+
 	def GALLERIES(self,userid=None):
 		galleries = self.getGalleriesInfoList(userid=userid)
 		for g in galleries:
 			if not self.addDir(g.get('title',''),g.get('id'),104,g.get('tn'),tot=len(galleries)): break
-	
+
 	def TAGS(self,userid=''):
 		tags = self.getTagsList(userid=userid)
 		for t in tags:
 			if not self.addDir(t,t,105,'',tot=len(tags),userid=userid): break
-			
+
 	def PLACES(self,pid,woeid=None,name='',zoom='2'):
 		places = self.getPlacesInfoList(pid,woeid=woeid)
-		
+
 		#If there are no places in this place id level, show all the photos
 		if not places:
 			self.PLACE(woeid,1)
 			return
-			
+
 		if woeid and len(places) > 1: self.addDir(__language__(30500).replace('@REPLACE@',name),woeid,1022,'')
 		idx=0
 		for p in places:
@@ -715,10 +715,10 @@ class FlickrSession:
 			if self.maps: tn = self.maps.getMap(p.get('lat','0'),p.get('lon','0'),zoom)
 			if not self.addDir(p.get('place','')+' ('+count+')',p.get('woeid'),1000 + pid,tn,tot=len(places)): break
 			idx+=1
-		
+
 	def FAVORITES(self,page,userid=None):
 		self.addPhotos(self.flickr.favorites_getList,6,page=page,user_id=userid)
-		
+
 	def CONTACTS(self,userid=None):
 		contacts = self.getContactsInfoList(userid=userid)
 		total = len(contacts) + 1
@@ -726,36 +726,36 @@ class FlickrSession:
 			if not self.addDir(c['username'],c['id'],107,c['tn'],tot=total): break
 		if contacts:
 			self.addDir("[B][%s][/B]" % __language__(30518),'recent_photos',800,os.path.join(IMAGES_PATH,'photostream.png'),tot=total)
-			
+
 	def CONTACTS_RECENT_PHOTOS(self,userid=None):
 		self.addPhotos(self.flickr.photos_getContactsPhotos,800,mapOption=True, with_username=True, count=50)
-		
+
 	def GROUPS(self,userid=None):
 		groups = self.getGroupsInfoList(userid)
 		total = len(groups)
 		for g in groups:
 			if not self.addDir(g['name'] + ' (%s)' % g['count'],g['id'],112,g['tn'],tot=total): break
-			
+
 	def getText(self,prompt=__language__(30501)):
 		keyboard = xbmc.Keyboard('',prompt)
 		keyboard.doModal()
 		if (keyboard.isConfirmed()):
 			return keyboard.getText()
 		return None
-	
+
 	def SEARCH_GROUPS(self,tags,page=1):
 		if not tags or tags == '@@search@@':
 			tags = self.getText() or tags
 		groups = self.getGroupsInfoList(search=tags,page=page)
 		total = len(groups)
-		
+
 		page = int(page)
 		#Add Previous Header if necessary
 		if page > 1:
 			previous = '<- '+__language__(30511)
 			pg = (page==2) and '-1' or  str(page-1) #if previous page is one, set to -1 to differentiate from initial showing
 			self.addDir(previous.replace('@REPLACE@',str(self.max_per_page)),tags,13,os.path.join(IMAGES_PATH,'previous.png'),page = pg)
-			
+
 		for g in groups:
 			if not self.addDir(g['name'] + ' (%s)' % g['count'],g['id'],112,g['tn'],tot=total): break
 		if total >= self.max_per_page:
@@ -765,29 +765,29 @@ class FlickrSession:
 				nextp += __language__(30513)
 				if self.flickr.TOTAL_ON_LAST_PAGE: replace = str(self.flickr.TOTAL_ON_LAST_PAGE)
 				else: replace = str(self.max_per_page)
-			else: 
+			else:
 				nextp += __language__(30512)
 				replace = str(self.max_per_page)
 			if page < self.flickr.TOTAL_PAGES: self.addDir(nextp.replace('@REPLACE@',replace)+' ->',tags,13,os.path.join(IMAGES_PATH,'next.png'),page=str(page+1))
-			
+
 	def SEARCH_TAGS(self,tags,page,mode=9,userid=None):
 		if tags == '@@search@@' or tags == userid:
 			tags = self.getText() or tags
 		self.addPhotos(self.flickr.photos_search,mode,url=tags,page=page,tags=tags,user_id=userid)
-		
+
 	def INTERESTING(self,page):
 		self.addPhotos(self.flickr.interestingness_getList,11,page=page)
-		
+
 	def SET(self,psid,page):
 		self.addPhotos(self.flickr.photosets_getPhotos,103,url=psid,page=page,photoset_id=psid)
-		
+
 	def GALLERY(self,gid,page):
 		self.addPhotos(self.flickr.galleries_getPhotos,103,url=gid,page=page,gallery_id=gid)
-		
+
 	def TAG(self,tag,page,userid=None):
 		if not userid: userid = 'me'
 		self.addPhotos(self.flickr.photos_search,105,url=tag,page=page,tags=tag,user_id=userid)
-		
+
 	def CONTACT(self,cid,name):
 		self.addDir(__language__(30514).replace('@NAMEREPLACE@',name).replace('@REPLACE@',__language__(30300)),cid,701,os.path.join(IMAGES_PATH,'photostream.png'))
 		self.addDir(__language__(30515).replace('@NAMEREPLACE@',name).replace('@REPLACE@',__language__(30301)),cid,702,os.path.join(IMAGES_PATH,'collections.png'))
@@ -797,13 +797,13 @@ class FlickrSession:
 		if self.authenticated(): self.addDir(__language__(30515).replace('@NAMEREPLACE@',name).replace('@REPLACE@',__language__(30305)),cid,706,os.path.join(IMAGES_PATH,'favorites.png'))
 		self.addDir(__language__(30515).replace('@NAMEREPLACE@',name).replace('@REPLACE@',__language__(30306)),cid,707,os.path.join(IMAGES_PATH,'contacts.png'))
 		self.addDir(__language__(30516).replace('@NAMEREPLACE@',name),cid,709,os.path.join(IMAGES_PATH,'search_photostream.png'))
-		
+
 	def GROUP(self,groupid):
 		self.addPhotos(self.flickr.groups_pools_getPhotos,112,mapOption=True,group_id=groupid)
-		
+
 	def PLACE(self,woeid,page):
 		self.addPhotos(self.flickr.photos_search,1022,url=woeid,page=page,woe_id=woeid,user_id='me',mapOption=True)
-	
+
 	def addLink(self,name,url,iconimage,tot=0,contextMenu=None,ltype='image'):
 		#u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&name="+urllib.quote_plus(name)
 		liz=xbmcgui.ListItem(name, iconImage="DefaultImage.png", thumbnailImage=iconimage)
@@ -814,7 +814,7 @@ class FlickrSession:
 
 	def addDir(self,name,url,mode,iconimage,page=1,tot=0,userid=''):
 		if userid: userid = "&userid="+urllib.quote_plus(userid)
-		u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&page="+str(page)+userid+"&name="+urllib.quote_plus(name.encode('ascii','replace'))
+		u=sys.argv[0]+"?url="+urllib.quote_plus(url.encode('utf-8'))+"&mode="+str(mode)+"&page="+str(page)+userid+"&name="+urllib.quote_plus(name.encode('utf-8'))
 		liz=xbmcgui.ListItem(name, 'test',iconImage="DefaultFolder.png", thumbnailImage=iconimage)
 		liz.setInfo( type="image", infoLabels={"Title": name} )
 		return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True,totalItems=tot)
@@ -822,17 +822,17 @@ class FlickrSession:
 class ImageShower(xbmcgui.Window):
 	def showImage(self,image):
 		self.addControl(xbmcgui.ControlImage(0,0,self.getWidth(),self.getHeight(), image, aspectRatio=2))
-		
+
 	def onAction(self,action):
-		if action == 10 or action == 9: self.close()		
+		if action == 10 or action == 9: self.close()
 
 def clearDirFiles(filepath):
 	if not os.path.exists(filepath): return
 	for f in os.listdir(filepath):
 		f = os.path.join(filepath,f)
 		if os.path.isfile(f): os.remove(f)
-		
-## XBMC Plugin stuff starts here --------------------------------------------------------            
+
+## XBMC Plugin stuff starts here --------------------------------------------------------
 def get_params():
 	param=[]
 	paramstring=sys.argv[2]
@@ -849,17 +849,17 @@ def get_params():
 			if (len(splitparams))==2:
 				param[splitparams[0]]=splitparams[1]
 	else:
-		param={}					
+		param={}
 	return param
 
 ### Do plugin stuff --------------------------------------------------------------------------
 def doPlugin():
 	params=get_params()
 
-	url = urllib.unquote_plus(params.get("url",''))
+	url = urllib.unquote_plus(params.get("url",'')).decode('utf-8')
 	page = int(params.get("page",'1'))
 	userid = urllib.unquote_plus(params.get("userid",''))
-	name = urllib.unquote_plus(params.get("name",''))
+	name = urllib.unquote_plus(params.get("name",'')).decode('utf-8')
 	mode = int(params.get("mode",'0'))
 
 	#print "Mode: "+str(mode)
@@ -965,7 +965,7 @@ def doPlugin():
 			ERROR('UNHANDLED URL ERROR',' (URL)')
 	except:
 		ERROR('UNHANDLED ERROR')
-		
+
 	if mode != 9999: xbmcplugin.endOfDirectory(int(sys.argv[1]),succeeded=success,updateListing=update_dir,cacheToDisc=cache)
 
 def selectVideoURL(sizes):
@@ -976,8 +976,8 @@ def selectVideoURL(sizes):
 	for size in sizeNames[:sizeIDX]:
 		if size in sizes: return sizes[size]
 	return ''
-		
-	
+
+
 def playVideo():
 		fsession = FlickrSession()
 		if not fsession.authenticate():
@@ -1015,7 +1015,7 @@ class SavePhoto:
 					fail = True
 			else:
 				fail = True
-				
+
 			if fail:
 				xbmcgui.Dialog().ok(__language__(30417),__language__(30418))
 				__settings__.openSettings()
@@ -1030,7 +1030,7 @@ class SavePhoto:
 		finally:
 			self.pd.close()
 		xbmcgui.Dialog().ok(__language__(30412),__language__(30413).replace('@REPLACE@',os.path.basename(saveFullPath)),__language__(30414).replace('@REPLACE@',save_path))
-		
+
 	def progressUpdate(self,blocks,bsize,fsize):
 		#print 'cool',blocks,bsize,fsize
 		if fsize == -1 or fsize <= bsize:
@@ -1040,14 +1040,14 @@ class SavePhoto:
 		percent = int((float(blocks) / (fsize/bsize)) * 100)
 		#print percent
 		self.pd.update(percent)
-		
+
 def registerAsShareTarget():
 	try:
 		import ShareSocial #@UnresolvedImport
 	except:
 		LOG('Could not import ShareSocial')
 		return
-	
+
 	target = ShareSocial.getShareTarget()
 	target.addonID = 'plugin.image.flickr'
 	target.name = 'flickr'
@@ -1071,7 +1071,7 @@ if __name__ == '__main__':
 			xbmcgui.Dialog().ok(__language__(30507),__language__(30506))
 		else:
 			xbmcgui.Dialog().ok(__language__(30520),__language__(30521))
-		
+
 	elif len(sys.argv) > 2 and sys.argv[2].startswith('?video_id'):
 		playVideo()
 	else:

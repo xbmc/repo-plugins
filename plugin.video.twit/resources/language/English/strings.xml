@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <string id="30000">Latest Episodes</string>
+  <string id="30000">Featured @ TWiT.tv</string>
   <string id="30001">TWiT Live</string>
   <string id="30002">Available Streams</string>
   <string id="30003">Bitgravity (hls high)</string>
@@ -8,7 +8,7 @@
   <string id="30005">Bitgravity (http 1 mbps)</string>
   <string id="30006">Bitgravity (http 400 kbps)</string>
   <string id="30007">Ustream (multibitrate hls)</string>
-  <string id="30008"></string>
+  <string id="30008">Search</string>
   <string id="30009">Flosoft.biz (multibitrate hls)</string>
   <string id="30010">Flosoft.biz (hls 720x1280)</string>
   <string id="30011">Flosoft.biz (hls 540x960)</string>
@@ -35,6 +35,8 @@
   <string id="30032">Media Info</string>
   <string id="30033">Media Info 2</string>
   <string id="30034">Media Info 3</string>
-  <string id="30035">Use show art as fanart</string>
+  <string id="30035">Download</string>
   <string id="30036">Retired Shows</string>
+  <string id="30037">Download Location</string>
+  <string id="30038">Select a location to download files.</string>
 </strings>

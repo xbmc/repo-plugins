@@ -1,3 +1,12 @@
+Version 2.1.0
+code cleanup
+release for Kodi repository
+
+Version 2.0.9
+testing/beta reworked for the twit.tv update
+added search
+added download option to context menu for episodes
+
 Version 2.0.8
 fix new shows not being added
 fix launching ircchat addon

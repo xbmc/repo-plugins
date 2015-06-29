@@ -1,3 +1,15 @@
+1.0.2 (2015-06-29)
+ADD: support for payed content
+ADD: Managing playlists (watch later) via the login (add and remove)
+ADD: Managing favorites via the login (add and remove)
+ADD: Date-spans and correct tab handling
+UPD: only show free content if you're not logged in.
+FIX: add format to addon favs.
+FIX: script error while trying to load a format (bug of the web page)
+FIX: script error while trying to load the thumbnail of an episode
+FIX: some crashes
+FIX: german localization (thx 2 ultrara1n)
+
 1.0.1 (2015-06-10)
 ADD: setting: show only 'Free' videos
 ADD: search

@@ -58,6 +58,19 @@
     <!-- NOW TV -->
     <string id="30500">Mit DRM geschützte Videos werden nicht unterstützt</string>
     <string id="30501">Das Video kostet %s</string>
-    <string id="30502">Bitte besuchen Sie www.nowtv.de,um den Inhalt dort zu erweben.</string>
+    <string id="30502">Bitte besuchen Sie www.nowtv.de, um den Inhalt dort zu erwerben.</string>
     <string id="30503">Nur freie Videos anzeigen</string>
+
+    <string id="30510">Januar</string>
+    <string id="30511">Februar</string>
+    <string id="30512">März</string>
+    <string id="30513">April</string>
+    <string id="30514">Mai</string>
+    <string id="30515">Juni</string>
+    <string id="30516">Juli</string>
+    <string id="30517">August</string>
+    <string id="30518">September</string>
+    <string id="30519">Oktober</string>
+    <string id="30520">November</string>
+    <string id="30521">Dezember</string>
 </strings>

@@ -188,6 +188,10 @@ def put(url, data=None, json=None, **kwargs):
     return _request('PUT', url, data=data, json=json, **kwargs)
 
 
+def options(url, **kwargs):
+    return _request('OPTIONS', url, **kwargs)
+
+
 def delete(url, **kwargs):
     return _request('DELETE', url, **kwargs)
 

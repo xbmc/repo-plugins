@@ -61,4 +61,17 @@
     <string id="30501">The video costs %s</string>
     <string id="30502">Please visit www.nowtv.de, to acquire the content there.</string>
     <string id="30503">Show only free videos</string>
+
+    <string id="30510">January</string>
+    <string id="30511">February</string>
+    <string id="30512">March</string>
+    <string id="30513">April</string>
+    <string id="30514">May</string>
+    <string id="30515">June</string>
+    <string id="30516">July</string>
+    <string id="30517">August</string>
+    <string id="30518">September</string>
+    <string id="30519">October</string>
+    <string id="30520">November</string>
+    <string id="30521">December</string>
 </strings>

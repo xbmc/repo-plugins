@@ -1,12 +1,10 @@
-import hashlib
 import json
 import re
-import uuid
-import time
 from xml.etree import ElementTree
+import datetime
+import time
 
 from resources.lib.kodion.exceptions import KodionException
-
 from resources.lib.kodion import simple_requests as requests
 
 
@@ -94,8 +92,10 @@ class Client(object):
                       }
     }
 
-    def __init__(self, amount=25):
+    def __init__(self, amount=25, token='', user_id=''):
         self._amount = amount
+        self._token = token
+        self._user_id = user_id
         pass
 
     def get_film_streams(self, film_id):
@@ -277,6 +277,24 @@ class Client(object):
             pass
         return result
 
+    def login(self, username_mail, password):
+        login_fields = ['*', 'user', ['agb']]
+        params = {'fields': json.dumps(login_fields)}
+        post_data = {'email': username_mail,
+                     'password': password}
+        headers = {'Referer': 'http://www.nowtv.de/?login',
+                   'Content-Type': 'application/json;charset=UTF-8'}
+        return self._perform_request(method='POST', headers=headers, path='backend/login', post_data=post_data,
+                                     params=params)
+
+    def _simple_parse_datetime(self, datetime_string):
+        result = []
+        components = datetime_string.split(' ')
+        result.extend(components[0].split('-'))
+        result.extend(components[1].split(':'))
+
+        return datetime(*result)
+
     def get_format_tabs(self, channel_config, seo_url):
         # first get the correct id for the format
         params = {
@@ -286,34 +304,154 @@ class Client(object):
         json_data = self._perform_request(channel_config, params=params, path='formats/seo')
 
         result = []
-        tab_items = json_data.get('formatTabs', {})
-        if not tab_items:
-            tab_items = {}
-            pass
-        tab_items = tab_items.get('items', [])
 
-        for tab_item in tab_items:
-            title = tab_item['headline']
-            # only valid title
-            if title:
-                tab = {
-                    'title': title,
-                    'id': tab_item['id'],
-                    'images': {
-                        'thumb': json_data['defaultImage169Logo'],
-                        'fanart': json_data['defaultImage169Format']
-                    }
-                }
-                if json_data.get('tabSeason', False):
-                    tab['type'] = 'season'
+        # years
+        if not json_data.get('tabSeason', True):
+            start_date = json_data['tabSeasonStartDate']
+            start_date = datetime.datetime(*time.strptime(start_date, '%Y-%m-%d %H:%M:%S')[:6])
+
+            end_date = str(json_data['tabSeasonEndDate'])
+            end_date = datetime.datetime(*time.strptime(end_date, '%Y-%m-%d %H:%M:%S')[:6])
+
+            # first normalize end date
+            now_date = datetime.datetime.now()
+            if end_date > now_date:
+                end_date = now_date
+                pass
+
+            for year in range(start_date.year, end_date.year + 1):
+                tab = {'title': str(year),
+                       'type': 'date-span',
+                       'images': {'thumb': json_data['defaultImage169Logo'],
+                                  'fanart': json_data['defaultImage169Format']}}
+                if year == start_date.year:
+                    tab['start'] = start_date.strftime('%Y-%m-%d %H:%M:%S')
                     pass
                 else:
-                    tab['type'] = 'year'
+                    tab['start'] = '%d-01-01 00:00:00' % year
+                    pass
+
+                if year == end_date.year:
+                    tab['end'] = end_date.strftime('%Y-%m-%d %H:%M:%S')
+                    pass
+                else:
+                    tab['end'] = '%d-12-31 00:00:00' % year
                     pass
                 result.append(tab)
                 pass
+
+            # reverse order of the years
+            result = result[::-1]
             pass
+
+        # tabs
+        if json_data.get('tabSeason', False) or json_data.get('tabSpecialTeaserPosition', '') != 'none':
+            tab_items = json_data.get('formatTabs', {})
+            if not tab_items:
+                tab_items = {}
+                pass
+            tab_items = tab_items.get('items', [])
+            for tab_item in tab_items:
+                title = tab_item['headline']
+
+                # only valid title
+                if not title:
+                    continue
+
+                tab = {'title': title,
+                       'id': tab_item['id'],
+                       'images': {'thumb': json_data['defaultImage169Logo'],
+                                  'fanart': json_data['defaultImage169Format']},
+                       'type': 'tab'}
+                result.append(tab)
+                pass
+            pass
+
         return result
+
+    def _process_video_data(self, json_data):
+        channel_id = json_data.get('format', {})
+        if channel_id:
+            channel_id = channel_id.get('station', '')
+        if not channel_id:
+            channel_id = json_data['cornerLogo']
+            pass
+        channel_config = self.CHANNELS[channel_id]
+
+        video_path = '%s/%s' % (json_data['format']['seoUrl'], json_data['seoUrl'])
+
+        # a list of possible pictures
+        picture_id = ''
+        pictures = json_data.get('pictures', {})
+        if pictures:
+            picture_id = pictures.get('default', [{'id': ''}])[0]['id']
+            pass
+        # last possible fallback
+        if not picture_id:
+            picture = json_data.get('picture', {})
+            if not picture:
+                picture = {}
+                pass
+            picture_id = picture.get('id', '')
+            pass
+        if picture_id:
+            thumb = channel_config['thumb-url'] % str(picture_id)
+            pass
+        else:
+            thumb = json_data.get('format', {}).get('defaultImage169Logo', '')
+            pass
+
+        # episode fix
+        episode = json_data.get('episode', 0)
+        if isinstance(episode, basestring):
+            episode = 0
+            pass
+        video = {
+            'title': json_data['title'],
+            'channel': channel_id,
+            'free': json_data.get('free', False),
+            'payed': json_data.get('payed', False),
+            'format': json_data.get('format', {}).get('title', ''),
+            'id': json_data['id'],
+            'path': video_path,
+            'plot': json_data.get('articleShort', json_data.get('articleLong', '')),
+            'published': json_data['broadcastStartDate'],
+            'duration': json_data['duration'],
+            'season': json_data.get('season', 0),
+            'episode': episode,
+            'images': {
+                'thumb': thumb,
+                'fanart': json_data.get('format', {}).get('defaultImage169Format', '')
+            }
+        }
+        # add price
+        if not video['free']:
+            price = json_data['paymentPaytypes']['items'][0]
+            price = '%s %s' % (price['price'], price['currency'])
+            video['price'] = price
+            pass
+
+        return video
+
+    def get_videos_by_date_filter(self, channel_config, format_id, start_date, end_date):
+        video_list = []
+
+        filter = {'BroadcastStartDate': {'between': {
+            'start': start_date,
+            'end': end_date}}, 'FormatId': int(format_id)}
+        params = {
+            'fields': '*,format,paymentPaytypes,pictures,trailers',
+            'filter': json.dumps(filter),
+            'maxPerPage': '50',
+            'order': 'BroadcastStartDate desc'}
+        json_data = self._perform_request(channel_config, params=params, path='movies')
+        items = json_data.get('items', [])
+        for item in items:
+            video = self._process_video_data(item)
+            video_list.append(video)
+            pass
+
+        return {'items': video_list}
 
     def get_videos_by_format_list(self, channel_config, format_list_id):
         video_list = []
@@ -335,41 +473,13 @@ class Client(object):
                 pass
             _items = movies.get('items', [])
             for _item in _items:
-                video_path = '%s/%s' % (_item['format']['seoUrl'], _item['seoUrl'])
-                thumb = ''
-                thumbs = _item.get('pictures', {})
-                if not thumbs:
-                    thumbs = {}
+                # in rare cases this property was missing. This also means the item on the webpage wont work either.
+                format_exists = _item.get('format', None)
+                if not format_exists:
+                    continue
                     pass
-                thumbs = thumbs.get('default', [])
-                if len(thumbs):
-                    thumb = channel_config['thumb-url'] % str(thumbs[0]['id'])
-                    pass
-                else:
-                    thumb = _item.get('format', {}).get('defaultImage169Logo', '')
-                    pass
-                video = {
-                    'title': _item['title'],
-                    'free': _item.get('free', False),
-                    'format': _item.get('format', {}).get('title', ''),
-                    'id': _item['id'],
-                    'path': video_path,
-                    'plot': _item['articleLong'],
-                    'published': _item['broadcastStartDate'],
-                    'duration': _item['duration'],
-                    'season': int(_item.get('season', 0)),
-                    'episode': int(_item.get('episode', 0)),
-                    'images': {
-                        'thumb': thumb,
-                        'fanart': _item.get('format', {}).get('defaultImage169Format', '')
-                    }
-                }
-                # add price
-                if not video['free']:
-                    price = _item['paymentPaytypes']['items'][0]
-                    price = '%s %s' % (price['price'], price['currency'])
-                    video['price'] = price
-                    pass
+
+                video = self._process_video_data(_item)
                 video_list.append(video)
                 pass
             pass
@@ -382,12 +492,121 @@ class Client(object):
             'station': json_item.get('station', ''),
             'id': json_item['id'],
             'seoUrl': json_item['seoUrl'],
+            'free': json_item['icon'] in ['free', 'new'],
             'images': {
                 'fanart': json_item.get('defaultImage169Format', ''),
                 'thumb': json_item.get('defaultImage169Logo')
             }
         }
         return format_item
+
+    def get_favorites(self, page=1):
+        params = {'fields': '*,format',
+                  'maxPerPage': str(self._amount),
+                  'page': str(page)}
+        headers = {'Accept': 'application/json'}
+        path = '/myprogramme/formats/%s' % self._user_id
+        json_data = self._perform_request(method='GET', headers=headers, path=path, params=params)
+
+        format_list = []
+        items = json_data.get('items', [])
+        for item in items:
+            item = item.get('format', {})
+            format_item = self._make_item_to_format(item)
+            format_list.append(format_item)
+            pass
+
+        return {'items': format_list}
+
+    def add_favorite_format(self, format_id):
+        headers = {'Accept': '*/*'}
+        # no idea what german developer thought by that...but I don't care anymore
+        self._perform_request(method='OPTIONS', headers=headers, path='/myprogramme/formats/newitem/')
+
+        json_data = {'formatId': str(format_id),
+                     'userId': self._user_id}
+        headers = {'Accept': 'application/json',
+                   'Content-Type': 'application/json'}
+        self._perform_request(method='POST', headers=headers, path='/myprogramme/formats/newitem/', post_data=json_data)
+
+        # again !?!?! jesus
+        path = '/myprogramme/formats/%s/' % self._user_id
+        params = {'fields': '*,format',
+                  'maxPerPage': '100',
+                  'page': '1'}
+        headers = {'Accept': 'application/json'}
+        self._perform_request(method='OPTIONS', headers=headers, path=path, params=params)
+        pass
+
+    def remove_favorite_format(self, format_id):
+        params = {'formatId': str(format_id),
+                  'userId': self._user_id}
+        headers = {'Accept': '*/*'}
+        # no idea what german developer thought by that...but I don't care anymore
+        self._perform_request(method='OPTIONS', headers=headers, path='/myprogramme/formats/delete/', params=params)
+        self._perform_request(method='DELETE', path='/myprogramme/formats/delete/', params=params)
+
+        # again !?!?! jesus
+        path = '/myprogramme/formats/%s/' % self._user_id
+        params = {'fields': '*,format',
+                  'maxPerPage': '100',
+                  'page': '1'}
+        self._perform_request(method='OPTIONS', headers=headers, path=path, params=params)
+        pass
+
+    def get_watch_later(self, page=1):
+        params = {'fields': '*,movie.*,movie.format,movie.picture,movie.preview,movie.paymentPaytypes',
+                  'maxPerPage': str(self._amount),
+                  'page': str(page)}
+        headers = {'Accept': 'application/json'}
+        path = '/myprogramme/playlist/%s' % self._user_id
+        json_data = self._perform_request(method='GET', headers=headers, path=path, params=params)
+
+        video_list = []
+        items = json_data.get('items', [])
+        for item in items:
+            item = item.get('movie', {})
+            video_item = self._process_video_data(item)
+            video_list.append(video_item)
+            pass
+
+        return {'items': video_list}
+
+    def add_watch_later_video(self, video_id):
+        headers = {'Accept': '*/*'}
+        # no idea what german developer thought by that...but I don't care anymore
+        self._perform_request(method='OPTIONS', headers=headers, path='/myprogramme/playlist/newitem/')
+
+        json_data = {'movieId': str(video_id),
+                     'userId': self._user_id}
+        headers = {'Accept': 'application/json',
+                   'Content-Type': 'application/json'}
+        self._perform_request(method='POST', headers=headers, path='/myprogramme/playlist/newitem/', post_data=json_data)
+
+        # again !?!?! jesus
+        path = '/myprogramme/playlist/%s/' % self._user_id
+        params = {'fields': '*,movie.*,movie.format,movie.picture,movie.preview,movie.paymentPaytypes',
+                  'maxPerPage': '50',
+                  'page': '1'}
+        headers = {'Accept': 'application/json'}
+        self._perform_request(method='OPTIONS', headers=headers, path=path, params=params)
+        pass
+
+    def remove_watch_later_video(self, video_id):
+        params = {'movieId': str(video_id),
+                  'userId': self._user_id}
+        headers = {'Accept': '*/*'}
+        # no idea what german developer thought by that...but I don't care anymore
+        self._perform_request(method='OPTIONS', headers=headers, path='/myprogramme/playlist/delete/', params=params)
+        self._perform_request(method='DELETE', path='/myprogramme/playlist/delete/', params=params)
+
+        # again !?!?! jesus
+        path = '/myprogramme/playlist/%s/' % self._user_id
+        params = {'fields': '*,movie.*,movie.format,movie.picture,movie.preview,movie.paymentPaytypes',
+                  'maxPerPage': '50',
+                  'page': '1'}
+        self._perform_request(method='OPTIONS', headers=headers, path=path, params=params)
+        pass
 
     def get_formats(self, channel_config):
         filter = {
@@ -407,10 +626,8 @@ class Client(object):
         format_list = []
         items = json_data.get('items', [])
         for item in items:
-            if item['icon'] in ['free', 'new']:
-                format_item = self._make_item_to_format(item)
-                format_list.append(format_item)
-                pass
+            format_item = self._make_item_to_format(item)
+            format_list.append(format_item)
             pass
 
         return {'items': format_list}
@@ -433,22 +650,20 @@ class Client(object):
                 pass
 
             if _count < _total:
-                _result.extend(_search(_q, _page+1, _count))
+                _result.extend(_search(_q, _page + 1, _count))
                 pass
             return _result
 
         items = _search(q, 1)
         format_list = []
         for item in items:
-            if item['icon'] in ['free', 'new']:
-                format_item = self._make_item_to_format(item)
-                format_list.append(format_item)
-                pass
+            format_item = self._make_item_to_format(item)
+            format_list.append(format_item)
             pass
 
         return {'items': format_list}
 
-    def _perform_request(self, channel_config, method='GET', headers=None, path=None, post_data=None, params=None,
+    def _perform_request(self, channel_config=None, method='GET', headers=None, path=None, post_data=None, params=None,
                          allow_redirects=True):
         # params
         _params = {}
@@ -462,7 +677,7 @@ class Client(object):
             headers = {}
             pass
         _headers = {
-            'Accept': 'application/json, text/plain, */*',
+            'Accept': 'application/json',
             'Origin': 'http://www.nowtv.de',
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.152 Safari/537.36',
             'DNT': '1',
@@ -472,6 +687,11 @@ class Client(object):
         }
         if channel_config:
             _headers['Referer'] = 'http://www.nowtv.de/%s' % channel_config['id']
+            pass
+
+        # set the login token
+        if self._token:
+            _headers['X-AUTH-TOKEN'] = self._token
             pass
         _headers.update(headers)
 
@@ -485,6 +705,16 @@ class Client(object):
         if method == 'GET':
             result = requests.get(_url, params=_params, headers=_headers, verify=False, allow_redirects=allow_redirects)
             pass
+        elif method == 'POST':
+            result = requests.post(_url, json=post_data, params=_params, headers=_headers, verify=False,
+                                   allow_redirects=allow_redirects)
+            pass
+        elif method == 'OPTIONS':
+            requests.options(_url, params=_params, headers=_headers, verify=False, allow_redirects=allow_redirects)
+            return {}
+        elif method == 'DELETE':
+            requests.delete(_url, params=_params, headers=_headers, verify=False, allow_redirects=allow_redirects)
+            return {}
 
         if result is None:
             return {}

@@ -108,7 +108,6 @@ def playEpisode(url, title, thumbnail):
 	pageUrl += "&CONFIG_URL=http://media.mtvnservices.com/pmt-arc/e1/players/mgid:arc:episode:"+pageurl_geo[audio_pos]+":/context4/config.xml"
 	pageUrl += "?uri=mgid:arc:episode:"+pageurl_geo[audio_pos]+":"+url+"&type=network&ref="+mainweb_geo[audio_pos]+"&geo="+ geolocation
 	pageUrl += "&group=entertainment&network=None&device=Other&networkConnectionType=None"
-	print pageUrl
 	playpath = ""
 	parts = str(len(mediagen))
 	if audio == "de" and len(mediagen) <= 1:
@@ -145,7 +144,7 @@ def playEpisode(url, title, thumbnail):
 		li.setProperty('pageUrl', pageUrl)
 		li.setProperty('SWFPlayer', "http://media.mtvnservices.com/player/prime/mediaplayerprime.2.11.3.swf")
 		li.setProperty("SWFVerify", "true")
-		if cc != "":
+		if cc != "" and cc_settings:
 			fname = os.path.join(addonpath, "subtitle_"+str(i)+"_"+str(parts)+".vtt")
 			subname = saveSubs(fname, cc)
 			if subname != "":
@@ -163,7 +162,7 @@ def playEpisode(url, title, thumbnail):
 	pos = -1
 	if pos != playlist.getposition():
 		pos = playlist.getposition()
-		if len(ccs) >= playlist.size():
+		if cc_settings and len(ccs) >= playlist.size():
 			player.setSubtitles(ccs[pos])
 			player.showSubtitles(cc_settings)
 		else:
@@ -174,7 +173,7 @@ def playEpisode(url, title, thumbnail):
 			time.sleep(0.05)
 			if pos != playlist.getposition():
 				pos = playlist.getposition()
-				if len(ccs) >= playlist.size():
+				if cc_settings and len(ccs) >= playlist.size():
 					player.setSubtitles(ccs[pos])
 					player.showSubtitles(cc_settings)
 				else:

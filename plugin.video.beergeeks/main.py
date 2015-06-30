@@ -51,15 +51,50 @@ def GET_EPISODES():
         video_id = json['video_id']
         duration = json['duration']
         #http://cedexis-video.ora.tv/i/beergeeks/video-14630/,basic400,basic600,sd900,sd1200,sd1500,hd720,hd1080,mobile400,.mp4.csmil/master.m3u8
-        stream = 'http://cedexis-video.ora.tv/i/beergeeks/video-'+str(video_id)+'/,basic400,basic600,sd900,sd1200,sd1500,hd720,hd1080,mobile400,.mp4.csmil/'        
-        q = GET_QUALITY(str(video_id))   
-        stream = stream + q + '|User-Agent='+USER_AGENT
+        stream = 'http://cedexis-video.ora.tv/i/beergeeks/video-'+str(video_id)+'/,basic400,basic600,sd900,sd1200,sd1500,hd720,hd1080,mobile400,.mp4.csmil/master.m3u8'        
+        #GET_STREAM_QUALITIES(stream)
+        #q = GET_QUALITY(str(video_id))   
+        #stream = stream + q + '|User-Agent='+USER_AGENT
 
-        addLink(title, stream, title, image, desc, duration)
+        #addLink(title, stream, title, image, desc, duration)
         #name = HTMLParser.HTMLParser().unescape(name)
 
-        
-        #addDir(name,link,100,image)
+        #name,url,mode,iconimage,fanart=None        
+        addDir(title,stream,100,image)
+
+def GET_STREAM_QUALITIES(m3u8_url,img_url):    
+        print "M3U8!!!" + m3u8_url
+        req = urllib2.Request(m3u8_url)
+        response = urllib2.urlopen(req)                    
+        master = response.read()
+        response.close()
+        #cookie =  urllib.quote(response.info().getheader('Set-Cookie'))
+
+        #print cookie
+        print master
+
+        line = re.compile("(.+?)\n").findall(master)  
+
+        try:
+            for temp_url in line:
+                if '.m3u8' in temp_url:
+                    end = m3u8_url.find('master.m3u8')
+                    print m3u8_url.find('master.m3u8')
+                    temp_url = m3u8_url[:end] + temp_url
+                    print temp_url
+                    print desc                                
+                    addLink(name +' ('+desc+')',temp_url+'|User-Agent='+USER_AGENT, name +' ('+desc+')', img_url)
+                else:
+                    desc = ''
+                    start = temp_url.find('RESOLUTION=')
+                    if start > 0:
+                        start = start + len('RESOLUTION=')
+                        #end = temp_url.find(',',start)
+                        desc = temp_url[start:]
+                    else:
+                        desc = "Audio"
+        except:
+            pass
 
 def GET_VIDEO_INFO(v_code):
     #https://www.ora.tv/oembed/0_4473hnwr0g57?format=json
@@ -244,6 +279,7 @@ if mode==None or url==None or len(url)<1:
   
 elif mode==100:
         #print "GET_YEAR MODE!"
-        GET_VIDEO(name,url,img_url)
+        #GET_VIDEO(name,url,img_url)
+        GET_STREAM_QUALITIES(url,img_url)
 
 xbmcplugin.endOfDirectory(addon_handle)

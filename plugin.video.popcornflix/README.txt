@@ -2,6 +2,7 @@ plugin.video.popcornflix================
 
 Kodi Addon for popcornflix website
 
+Version 5.0.10 fix for unicode in url
 Version 5.0.9 Added metadata and view select, version bump
 Version 1.0.8 Fix for bitrate range change and website changes
 Version 1.0.7 Fix for change in bitrate range

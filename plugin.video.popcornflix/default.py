@@ -53,7 +53,7 @@ def getRequest(url, user_data=None, headers = defaultHeaders , alert=True):
         opener = urllib2.build_opener()
     urllib2.install_opener(opener)
 
-    log("getRequest URL:"+str(url))
+#    log("getRequest URL:"+str(url))
     req = urllib2.Request(url.encode(UTF8), user_data, headers)
 
     try:

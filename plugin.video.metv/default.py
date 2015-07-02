@@ -160,23 +160,14 @@ def getUrl(mediaID):
         mediaID = METVBASE % mediaID.replace('BADASS','')
         pg = getRequest(mediaID)
         mediaID = re.compile('mediaId=(.+?)&',re.DOTALL).search(pg).group(1)
-     in0 = '<tns:in0>%s</tns:in0>' % mediaID
-     in1 = '<tns:in1 xsi:nil="true" />'
-     SoapMessage = """<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><SOAP-ENV:Body><tns:getPlaylistByMediaId xmlns:tns="http://service.data.media.pluggd.com">"""+in0+in1+"""</tns:getPlaylistByMediaId></SOAP-ENV:Body></SOAP-ENV:Envelope>"""
-     html = getRequest("http://ps2.delvenetworks.com/PlaylistService", 
-                        user_data = SoapMessage, 
-                        headers={ "Host": "ps2.delvenetworks.com", 
-                        "User-Agent":"Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.10) Gecko/20100914 Firefox/3.6.10",
-                        "Content-type": "text/xml; charset=\"UTF-8\"", "Content-length": "%d" % len(SoapMessage), 
-                        "Referer": "http://static.delvenetworks.com/deployments/player/player-3.27.1.0.swf?playerForm=Chromeless", 
-                        "X-Page-URL": "http://metvnetwork.com/video/", "SOAPAction": "\"\""})
-     streams = re.compile('<Stream>(.+?)</Stream>',re.DOTALL).findall(html)
+
+     a = json.loads(getRequest('http://production-ps.lvp.llnw.net/r/PlaylistService/media/%s/getPlaylistByMediaId' % mediaID))
      show_url=''
      highbitrate = float(0)
-     for stream in streams:
-         (url, bitrate) = re.compile('<url>(.+?)</u.+?<videoBitRate>(.+?)</v',re.DOTALL).search(stream).groups()
-         if (float(bitrate)) > highbitrate:
-            show_url = url
+     for stream in a['playlistItems'][0]['streams']:
+         bitrate = float(stream['videoBitRate'])
+         if bitrate > highbitrate:
+            show_url = stream['url']
             highbitrate = float(bitrate)
      show_url  = show_url.split('mp4:',1)[1]
      finalurl  = 'http://s2.cpl.delvenetworks.com/%s' % show_url

@@ -123,6 +123,7 @@ def getShow(osid, start='0', end=str(MAX_PER_PAGE-1), order='1', lang=str(int(ad
                       'Accept-Language' : 'en-US,en;q=0.8'})
 
       a = json.loads(html)
+      print "a = "+str(a)
       ptemplate = a['image_path_masks']['Poster']
       scnt = 0
       for show in a['data']:
@@ -154,6 +155,7 @@ def getEpisodes(sid):
                       'Referer' : 'http://www.viewster.com', 'Accept-Encoding': 'gzip,deflate,sdch', 
                       'Accept-Language' : 'en-US,en;q=0.8'})
     c = json.loads(html)
+    print "c = "+str(c)
     if c['content_type'] == 'Series':
       for clip in c['play_list']:
         if clip['clip_type'] == 'Episode':
@@ -176,6 +178,7 @@ def getVideo(sid, name):
                       'Accept-Language' : 'en-US,en;q=0.8'})
 
     c = json.loads(html)
+    print "c from GV = "+str(c)
     if c['content_type'] == 'Trailer':
       for clip in c['play_list']:
         if clip['clip_type'] == 'Trailer':
@@ -201,15 +204,18 @@ def getVideo(sid, name):
                       'Referer' : 'http://www.viewster.com/movie/%s/%s' % (sid, name), 'Accept-Encoding': 'gzip,deflate,sdch', 
                       'Accept-Language' : 'en-US,en;q=0.8'})
       a = json.loads(html)
-      html = getRequest(a['url'])
-      streams = re.compile('BANDWIDTH=(.+?),.+?http:(.+?)\?null=').findall(html)
-      show_url=''
-      highbitrate = float(0)
-      for (bitrate, url) in streams:
-         if (float(bitrate)) > highbitrate:
-             show_url = url
-             highbitrate = float(bitrate)
-      finalurl = 'http:%s' % show_url
+      print "final GV a = "+str(a)
+      finalurl = a['url']
+      if not finalurl.endswith('.mp4'):
+        html = getRequest(a['url'])
+        streams = re.compile('BANDWIDTH=(.+?),.+?http:(.+?)\?null=').findall(html)
+        show_url=''
+        highbitrate = float(0)
+        for (bitrate, url) in streams:
+           if (float(bitrate)) > highbitrate:
+               show_url = url
+               highbitrate = float(bitrate)
+        finalurl = 'http:%s' % show_url
       xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = finalurl))
 
 def play_playlist(name, list):

@@ -1,8 +1,9 @@
 plugin.video.viewster================
 
 
-XBMC Addon for viewster website
+Kodi Addon for viewster website
 
+Version 1.0.7 website change
 Version 1.0.6 category encoding fix, thanks to Andre Koehler
 Version 1.0.5 feed change - m3u8 support
 Version 1.0.4 added "all languages" support

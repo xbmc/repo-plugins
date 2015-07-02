@@ -54,13 +54,16 @@ def getShows():
    for url, name in cats:
        name = name.strip()
        url = ESQUIREBASE % (url)
+       print "url = "+str(url)
        html = getRequest(url)
        try:    fanart = re.compile('<img class="showBaner" src="(.+?)"',re.DOTALL).search(html).group(1)
        except: fanart = addonfanart
-       plot = re.compile('"og:description" content="(.+?)"',re.DOTALL).search(html).group(1)
+       try:    plot = re.compile('"og:description" content="(.+?)"',re.DOTALL).search(html).group(1)
+       except: continue
        html = re.compile("Drupal\.settings, (.+?)\);<",re.DOTALL).search(html).group(1)
        a = json.loads(html)
-       b = a["tve_widgets"]["clone_of_latest_episodes"]["assets1"][0]
+       try:    b = a["tve_widgets"]["clone_of_latest_episodes"]["assets1"][0]
+       except: continue
        infoList = {}
        dstr = (b['aired_date'].split('-'))
        infoList['Date']        = '%s-%s-%s' % (dstr[2], dstr[0].zfill(2), dstr[1].zfill(2))
@@ -166,7 +169,7 @@ def getVideo(url, show_name):
         for cstart, cend, caption in captions:
           cstart = cstart.replace('.',',')
           cend   = cend.replace('.',',').split('"',1)[0]
-          caption = caption.replace('<br/>','\n').replace('&gt;','>')
+          caption = caption.replace('<br/>','\n').replace('&gt;','>').replace('&apos;',"'").replace('&quot;','"')
           ofile.write( '%s\n%s --> %s\n%s\n\n' % (idx, cstart, cend, caption))
           idx += 1
         ofile.close()

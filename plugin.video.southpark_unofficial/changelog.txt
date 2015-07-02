@@ -24,3 +24,7 @@
 - added spanish language. it looks like it's easy to add it, less work for me! some episodes will still be in english for de/es languages. not my fault. they have errors on their DB.
 0.3.3
 - Fixed stop on slow connections
+0.3.4
+- Pseudo-fix for missing cc
+0.3.5
+- Added Search and new links.

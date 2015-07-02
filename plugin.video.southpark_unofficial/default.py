@@ -50,6 +50,7 @@ def index():
 	
     addDir(translation(30005), "Featured", 'list', icon)
     addLink(translation(30006), "Random", 'list', icon)
+    addLink(translation(30013), "Search", 'list', icon)
     for i in range(1, 19):
         addDir(translation(30007)+" "+str(i), 'season-'+str(i), 'list', icon)
     xbmcplugin.endOfDirectory(pluginhandle)
@@ -81,9 +82,22 @@ def list(url):
 			addLink(episode['title'], "banned", 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
 		else:
 			addLink(episode['title'].encode('utf-8'), episode['itemId'].encode('utf-8'), 'play', episode['images'].encode('utf-8'), episode['description'].encode('utf-8'), episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'].encode('utf-8'))
+    elif url == "Search":
+		keyboard = xbmc.Keyboard('')
+		keyboard.doModal()
+		if (keyboard.isConfirmed()):
+			text = keyboard.getText().lower()
+			jsonrsp = getUrl("http://southpark.cc.com/feeds/carousel/search/81bc07c7-07bf-4a2c-a128-257d0bc0f4f7/14/1/json/" + text.replace(' ', '+'))
+			xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_EPISODE)
+			seasonjson = _json.loads(jsonrsp)
+			for episode in seasonjson['results']:
+				if episode['_availability'] == "banned":
+					addLink(episode['title'], "banned", 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+				else:
+					addLink(episode['title'].encode('utf-8'), episode['itemId'].encode('utf-8'), 'play', episode['images'].encode('utf-8'), episode['description'].encode('utf-8'), episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'].encode('utf-8'))
     else:
         xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_EPISODE)
-        jsonrsp = getUrl("http://southpark.cc.com/feeds/carousel/video/57baee9c-b611-4260-958b-05315479a7fc/30/1/json/!airdate/"+url+"?lang="+audio)
+        jsonrsp = getUrl("http://southpark.cc.com/feeds/carousel/video/fba639b0-ae4d-49b0-9d5d-addb27823f4b/30/1/json/!airdate/"+url+"?lang="+audio)
         seasonjson = _json.loads(jsonrsp)
         for episode in seasonjson['results']:
             if episode['_availability'] == "banned":

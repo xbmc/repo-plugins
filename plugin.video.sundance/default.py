@@ -6,9 +6,8 @@ import httplib, socket
 
 import urllib, urllib2, cookielib, datetime, time, re, os, string
 import xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs, xbmc
-import cgi, gzip
-from StringIO import StringIO
-import json
+import zlib,json,HTMLParser
+h = HTMLParser.HTMLParser()
 
 
 UTF8          = 'utf-8'
@@ -30,112 +29,75 @@ def log(txt):
     message = '%s: %s' % (__addonname__, txt.encode('ascii', 'ignore'))
     xbmc.log(msg=message, level=xbmc.LOGDEBUG)
 
-def cleanname(name):
-    return name.replace('&apos;',"'").replace('&#8217;',"'").replace('&amp;','&').replace('&#39;',"'").replace('&quot;','"').replace('&#039;',"'")
-
-def demunge(munge):
-        try:
-            munge = urllib.unquote_plus(munge).decode(UTF8)
-        except:
-            pass
-        return munge
-
-
 USER_AGENT    = 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.93 Safari/537.36'
-defaultHeaders = {'User-Agent':USER_AGENT, 
-                 'Accept':"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", 
-                 'Accept-Encoding':'gzip,deflate,sdch',
-                 'Accept-Language':'en-US,en;q=0.8'} 
+defaultHeaders = {'User-Agent':USER_AGENT, 'Accept':"text/html", 'Accept-Encoding':'gzip,deflate,sdch', 'Accept-Language':'en-US,en;q=0.8'} 
 
-def getRequest(url, user_data=None, headers = defaultHeaders , alert=True):
-
-              log("getRequest URL:"+str(url))
-              if addon.getSetting('us_proxy_enable') == 'true':
-                  us_proxy = 'http://%s:%s' % (addon.getSetting('us_proxy'), addon.getSetting('us_proxy_port'))
-                  proxy_handler = urllib2.ProxyHandler({'http':us_proxy})
-                  if addon.getSetting('us_proxy_pass') <> '' and addon.getSetting('us_proxy_user') <> '':
-                      log('Using authenticated proxy: ' + us_proxy)
-                      password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
-                      password_mgr.add_password(None, us_proxy, addon.getSetting('us_proxy_user'), addon.getSetting('us_proxy_pass'))
-                      proxy_auth_handler = urllib2.ProxyBasicAuthHandler(password_mgr)
-                      opener = urllib2.build_opener(proxy_handler, proxy_auth_handler)
-                  else:
-                      log('Using proxy: ' + us_proxy)
-                      opener = urllib2.build_opener(proxy_handler)
-              else:   
-                  opener = urllib2.build_opener()
-              urllib2.install_opener(opener)
-
-              log("getRequest URL:"+str(url))
-              req = urllib2.Request(url.encode(UTF8), user_data, headers)
-
-           
-
-              try:
-                 response = urllib2.urlopen(req, timeout=30)
-
-                 if response.info().getheader('Content-Encoding') == 'gzip':
-                    log("Content Encoding == gzip")
-                    buf = StringIO( response.read())
-                    f = gzip.GzipFile(fileobj=buf)
-                    link1 = f.read()
-                 else:
-                    link1=response.read()
-
-              except urllib2.URLError, e:
-                 if alert:
-                     xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( __addonname__, e , 5000) )
-                 link1 = ""
-
-              if not (str(url).endswith('.zip')):
-                 link1 = str(link1).replace('\n','')
-              return(link1)
+def getRequest(url, headers = defaultHeaders):
+   log("getRequest URL:"+str(url))
+   req = urllib2.Request(url.encode(UTF8), None, headers)
+   try:
+      response = urllib2.urlopen(req)
+      page = response.read()
+      if response.info().getheader('Content-Encoding') == 'gzip':
+         log("Content Encoding == gzip")
+         page = zlib.decompress(page, zlib.MAX_WBITS + 16)
+   except:
+      page = ""
+   return(page)
 
 
 def getSources(fanart):
+        xbmcplugin.setContent(int(sys.argv[1]), 'files')
         ilist = []
         html = getRequest('http://www.sundance.tv/watch-now/')
-        blob = re.compile('<ul id="menu-tve-dropdown-first"(.+?)</ul').search(html).group(1)
-        a = re.compile('a href="(.+?)">(.+?)<.+?</li').findall(blob)
-        a.extend([('http://www.sundance.tv/watch-now/movies/',__language__(30020))])
-        for url,name in a:
+        a = re.compile('<h3 class="featured-row-title.+?href="(.+?)">(.+?)<.+?src="(.+?)"',re.DOTALL).findall(html)
+        a.extend([('http://www.sundance.tv/watch-now/movies/',__language__(30020),icon)])
+        for url,name,img in a:
               mode = 'GC'
-              name = cleanname(name.decode(UTF8))
+              name = h.unescape(name.decode(UTF8))
               plot = name
+              if not url.startswith('http:'): url = 'http://www.sundance.tv%s' % url
               u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
-              liz=xbmcgui.ListItem(name, '','DefaultFolder.png', icon)
+              liz=xbmcgui.ListItem(name, '','DefaultFolder.png', img)
               liz.setInfo( 'Video', { "Title": name, "Plot": plot })
               liz.setProperty('fanart_image', addonfanart)
               ilist.append((u, liz, True))
         xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
-           
+        if addon.getSetting('enable_views') == 'true':
+          xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('default_view'))
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
+   
 
 
 def getCats(gsurl,catname):
+        xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
         ilist = []
         html  = getRequest(uqp(gsurl))
         a=[]
         if '/movies/' in gsurl:
           try:
-              img,url,name,plot = re.compile('<div class="video-player-holder clearfix">.+?src="(.+?)".+?<div id="video-(.+?)".+?"video-title">(.+?)<.+?<p>(.+?)<').search(html).groups()
+              img,url,name,plot = re.compile('<div class="video-player-holder clearfix">.+?src="(.+?)".+?<div id="video-(.+?)".+?"video-title">(.+?)<.+?<p>(.+?)<',re.DOTALL).search(html).groups()
               a =[(url,img,name,plot)]
           except:
               pass
             
-        c     = re.compile('<a class="video-link related-triple".+?div id="video-(.+?)".+?src="(.+?)".+?"video-title">(.+?)<.+?"video-description">(.+?)<.+?</div').findall(html)
+        c     = re.compile('<a class="video-link related-triple".+?div id="video-(.+?)".+?src="(.+?)".+?"video-title">(.+?)<.+?"video-description">(.+?)<.+?</div',re.DOTALL).findall(html)
         a.extend(c)
-        for url, fanart, name, plot in a:
-              name = cleanname(name.decode(UTF8))
+        for url, img, name, plot in a:
+              name = h.unescape(name.decode(UTF8))
               url = 'http://c.brightcove.com/services/mobile/streaming/index/master.m3u8?videoId=%s&pubId=3605490453001' % (url)
               mode = 'GL'
               u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
-              liz=xbmcgui.ListItem(name, '','DefaultFolder.png', icon)
+              liz=xbmcgui.ListItem(name, '','DefaultFolder.png', img)
               liz.setInfo( 'Video', { "Title": name, "Studio":catname, "Plot": plot })
-              liz.setProperty('fanart_image', fanart)
+              liz.setProperty('fanart_image', img)
               liz.setProperty('IsPlayable', 'true')
               ilist.append((u, liz, False))
         if len(ilist) != 0:
-          xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+           xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+        if addon.getSetting('enable_views') == 'true':
+           xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('episode_view'))
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
 def getLink(url,vidname):
@@ -144,13 +106,12 @@ def getLink(url,vidname):
 
 # MAIN EVENT PROCESSING STARTS HERE
 
-xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
-
 parms = {}
 try:
     parms = dict( arg.split( "=" ) for arg in ((sys.argv[2][1:]).split( "&" )) )
     for key in parms:
-       parms[key] = demunge(parms[key])
+      try:    parms[key] = urllib.unquote_plus(parms[key]).decode(UTF8)
+      except: pass
 except:
     parms = {}
 
@@ -162,5 +123,4 @@ if mode==  None:  getSources(p('fanart'))
 elif mode=='GC':  getCats(p('url'),p('name'))
 elif mode=='GL':  getLink(p('url'),p('name'))
 
-xbmcplugin.endOfDirectory(int(sys.argv[1]))
 

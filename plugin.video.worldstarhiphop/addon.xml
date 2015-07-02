@@ -2,7 +2,7 @@
 <addon 
 	id="plugin.video.worldstarhiphop" 
 	name="World Star Hip Hop" 
-	version="1.0.0" 
+	version="1.0.1" 
 	provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                 version="2.1.0"/>
@@ -21,7 +21,7 @@
     <language>en</language>
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
-    <forum></forum>
+    <forum>http://forum.kodi.tv/showthread.php?tid=229385</forum>
     <website>http://worldstarhiphop.com/</website>
     <email></email>
     <source>git://github.com/skipmodea1/plugin.video.worldstarhiphop.git</source>

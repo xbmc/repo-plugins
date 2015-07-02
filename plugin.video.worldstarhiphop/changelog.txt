@@ -1,2 +1,5 @@
+v1.0.1 (Wednesday, 1 July 2015):
+- added Search
+
 v1.0.0 (Wednesday, 6 June 2015):
 - initial version

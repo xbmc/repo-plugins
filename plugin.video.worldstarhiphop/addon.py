@@ -17,8 +17,8 @@
 #
 #also in ..._const
 __addon__       = "plugin.video.worldstarhiphop"
-__date__        = "06 june 2015"
-__version__     = "1.0.0"
+__date__        = "01 july 2015"
+__version__     = "1.0.1"
 
 #
 # Imports
@@ -32,6 +32,8 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 import xbmcplugin
+
+BASEURL = "http://www.worldstarhiphop.com"
 
 LIB_DIR = xbmc.translatePath( os.path.join( xbmcaddon.Addon(id=__addon__).getAddonInfo('path'), 'resources', 'lib' ) )
 sys.path.append (LIB_DIR)
@@ -47,8 +49,6 @@ if len(sys.argv[2]) == 0:
     #
     # Main menu
     #
-    if (DEBUG) == 'true':
-        xbmc.log( "[ADDON] %s v%s (%s) is starting, ARGV = %s" % ( __addon__, __version__, __date__, repr(sys.argv) ), xbmc.LOGNOTICE )
     import worldstarhiphop_list as plugin
 else:
     action = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['action'][0]
@@ -62,5 +62,10 @@ else:
     #
     elif action == 'play':
         import worldstarhiphop_play as plugin
+    #
+    # Search
+    #
+    elif action == 'search':
+        import worldstarhiphop_search as plugin  
 
 plugin.Main() 

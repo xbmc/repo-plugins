@@ -13,7 +13,9 @@
         <setting id="NPO 1" label="30111" type="bool" default="true" />
         <setting id="NPO 2" label="30112" type="bool" default="true" />
         <setting id="NPO 3" label="30113" type="bool" default="true" />
-        <setting id="NPO 3FM" label="30114" type="bool" default="false" />
+        <setting id="NPO Radio 1" label="30115" type="bool" default="false" />
+        <setting id="NPO Radio 2" label="30116" type="bool" default="false" />
+        <setting id="NPO 3FM" label="30117" type="bool" default="false" />
         <setting id="Depth_Acht" label="30151" type="slider"  default="1" range="0,1,10" option="int" />
         <setting id="Depth_Jeugd" label="30152" type="slider"  default="1" range="0,1,10" option="int" />
     </category>

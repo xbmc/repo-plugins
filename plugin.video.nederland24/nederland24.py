@@ -38,8 +38,8 @@ IMG_DIR = os.path.join(settings.getAddonInfo("path"),"resources", "media")
 ###
 API_URL = 'http://ida.omroep.nl/aapi/?stream='
 BASE_URL = 'http://livestreams.omroep.nl/live/npo/'
-#USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53'
-USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10) AppleWebKit/600.1.25 (KHTML, like Gecko) Version/8.0 Safari/600.1.25'
+#USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 8_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Version/8.0 Mobile/12B410 Safari/600.1.4'
+USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/600.7.12 (KHTML, like Gecko) Version/8.0.7 Safari/600.7.12'
 REF_URL = 'http://www.npo.nl'
 TOKEN_URL = 'http://ida.omroep.nl/npoplayer/i.js'
 
@@ -56,6 +56,8 @@ CHANNELS = [
   ["NPO 1","npo_1.png","tvlive/ned1/ned1.isml/ned1.m3u8","Televisiekijken begint op NPO 1. Van nieuws en actualiteiten tot consumentenprogramma's en kwaliteitsdrama. Programma's die over jou en jouw wereld gaan. Met verhalen die je herkent over mensen die zomaar in je straat kunnen wonen. Ook als er iets belangrijks gebeurt, in Nederland of in de wereld, kijk je NPO 1."],
   ["NPO 2","npo_2.png","tvlive/ned2/ned2.isml/ned2.m3u8","NPO 2 zet je aan het denken. Met programma's die verdiepen en inspireren. Als je wilt weten wat het verhaal achter de actualiteit is. Of als je het eens van een andere kant wilt bekijken. NPO 2 biedt het mooiste van Nederlandse en internationale kunst en cultuur, literatuur, documentaires, art-house films en kwaliteitsdrama."],
   ["NPO 3","npo_3.png","tvlive/ned3/ned3.isml/ned3.m3u8","Op NPO 3 vind je programma's waar jong Nederland zich in herkent en die je uitdagen een eigen mening te vormen. Met veel aandacht voor nieuwe media en experimentele vernieuwing brengt NPO 3 een gevarieerd aanbod van de dagelijkse actualiteit tot muziek, reizen, human interest, talkshows en documentaires."],
+  ["NPO Radio 1","npo_radio1.png","visualradio/radio1/radio1.isml/radio1.m3u8","De onafhankelijke nieuws- en sportzender. Als er iets belangrijks gebeurt, in Nederland of in de wereld, luister je NPO Radio 1. Voor de achtergronden en het nieuws van alle kanten. Ook jouw mening telt. Er is veel ruimte voor opinie en debat waar ook luisteraars steevast aan deelnemen."],
+  ["NPO Radio 2","npo_radio2.png","visualradio/radio2/radio2.isml/radio2.m3u8","Informatie, actualiteit en het beste uit vijftig jaar popmuziek. Een toegankelijke zender met veel aandacht voor het Nederlandse lied, kleinkunst en cabaret."],
   ["NPO 3FM","npo_3fm.png","visualradio/3fm/3fm.isml/3fm.m3u8","Op NPO 3FM staat de liefde voor muziek centraal. Samen met de luisteraar vindt NPO 3FM nieuwe muziek, nieuw Nederlands poptalent en jong radiotalent. Je komt onze dj's vaak tegen op festivals en concerten."],
 ]
 
@@ -65,8 +67,7 @@ def index():
         if settings.getSetting( channel[0] )=='true' and settings.getSetting( "GEOIP" )=='false':
             addLink(channel[0],channel[2], "playVideo", os.path.join(IMG_DIR, channel[1]), channel[3])
         else:
-            #print ""
-            xbmc.log("plugin.video.nederland24:: %s not set (GEOIP)" % str(channel[0]))
+            xbmc.log("plugin.video.nederland24:: %s not set" % str(channel[0]))
     if int(settings.getSetting ( "Depth_Acht" ))!=0:
         url='http://feeds.nos.nl/journaal20uur'
         depth=int(settings.getSetting ( "Depth_Acht" ))
@@ -76,7 +77,6 @@ def index():
         depth=int(settings.getSetting ( "Depth_Jeugd" ))
         additionalChannels(url, depth)
     else:
-        #print ""
         xbmc.log("plugin.video.nederland24:: No additional channels set")
     xbmcplugin.endOfDirectory(pluginhandle)
 
@@ -115,7 +115,30 @@ def collect_token():
     page = response.read()
     response.close()
     token = re.search(r'npoplayer.token = "(.*?)"',page).group(1)
-    return token
+    #xbmc.log("plugin.video.nederland24:: oldtoken: %s" % token)
+    # site change, token invalid, needs to be reordered. Thanks to rieter for figuring this out very quickly.
+    first = -1
+    last = -1
+    for i in range(5, len(token) - 5, 1):
+	#xbmc.log("plugin.video.nederland24:: %s" % token[i])
+        if token[i].isdigit():
+            if first < 0:
+                first = i
+                #xbmc.log("plugin.video.nederland24:: %s" % token[i])
+            elif last < 0:
+                last = i
+                #xbmc.log("plugin.video.nederland24:: %s" % token[i])
+                break
+
+    newtoken = list(token)
+    if first < 0 or last < 0:
+        first = 12
+        last = 13
+    newtoken[first] = token[last]
+    newtoken[last] = token[first]
+    newtoken = ''.join(newtoken)
+    #xbmc.log("plugin.video.nederland24:: newtoken: %s" % newtoken)
+    return newtoken
 
 def addLink(name, url, mode, iconimage, description):
     u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+urllib.quote_plus(mode)
@@ -134,7 +157,6 @@ def addLink(name, url, mode, iconimage, description):
 
 def additionalChannels(url, depth):
     i = 0
-    #depth = depth
     URL = url
     #URL = 'http://feeds.nos.nl/journaal'
     items = SoupStrainer('item')
@@ -154,6 +176,7 @@ def playVideo(url):
         finalUrl=media
     else:
         URL=API_URL+BASE_URL+media+"&token=%s" % collect_token()
+        xbmc.log("plugin.video.nederland24:: URL and token %s" % str(URL))
         req = urllib2.Request(URL)
         req.add_header('User-Agent', USER_AGENT)
         req.add_header('Referer', REF_URL)

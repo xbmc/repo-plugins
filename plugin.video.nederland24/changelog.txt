@@ -1,3 +1,7 @@
+[B]4.4.1 - Helix[/B]
+-Fix token following site change
+-Add visual radio channels
+
 [B]4.2.3 - Gotham[/B]
 -Fix token requirement following site change
 

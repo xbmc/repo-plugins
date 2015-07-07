@@ -7,7 +7,8 @@
 #       jvesiluoma@gmail.com
 #
 # Version history:
-#  [B]2.0.2[/B] - Watson 2.0.2 release, plugin fixed to work with recent updates.
+#  [B]2.0.3[/B] - Watson 2.2.1 release, plugin fixed to work with recent updates. Thanks to Antti Kerola recurring recordings, fixes to searchrec and setContent in Addir Func.
+#  [B]2.0.2[/B] - Watson 2.2.0 release, plugin fixed to work with recent updates.
 #  [B]2.0.1[/B] - Watson 2.0 release, plugin fixed to work with new Watson.
 #  [B]1.1.1[/B] - Download function improved, will now download to single file, some minor updates. New icon.
 #  [B]1.1.0[/B] - Beta, programs can now be removed from recordings / favourites.
@@ -121,7 +122,7 @@
 
 
 # Global variables
-VERSION = "2.0.2"
+VERSION = "2.2.1"
 MYHEADERS = { 'User-Agent': "Watson-XBMC version "+VERSION+";" }
 DEBUG=1
 # 1=low, 2=high, any other ==> low
@@ -167,7 +168,7 @@ def INDEX():
   xbmcplugin.addDirectoryItem(int(sys.argv[1]), u, listfolder, isFolder=1)
   
   # Archive
-  u=sys.argv[0]+"?url=Archive&mode=2"
+  u=sys.argv[0]+"?url=Arc hive&mode=2"
   listfolder = xbmcgui.ListItem(watson_addon.getLocalizedString(30202))
   listfolder.setInfo('video', {'Title': watson_addon.getLocalizedString(30202)})    
   xbmcplugin.addDirectoryItem(int(sys.argv[1]), u, listfolder, isFolder=1)
@@ -203,13 +204,25 @@ def INDEX():
 #  listfolder = xbmcgui.ListItem(watson_addon.getLocalizedString(30206))
 #  listfolder.setInfo('video', {'Title': watson_addon.getLocalizedString(30206)})
 #  xbmcplugin.addDirectoryItem(int(sys.argv[1]), u, listfolder, isFolder=1)  
+
+
+# ===== By Antti Kerola: ====
+  week=watson_addon.getLocalizedString(30210).split(',') #"maanantai,tiistai,..."
+  t=time.time()
+  for i in range(0,13):
+    tt=time.localtime(t-86400*i)
+    title='%s %s' % (week[tt[6]], (time.strftime("%d.%m",tt)))
+    listfolder = xbmcgui.ListItem(title)
+    listfolder.setInfo('video', {'Title': title})
+    u=sys.argv[0]+"?url=EPG&year=%d&month=%d&day=%d&mode=13" % (tt[0],tt[1],tt[2])
+    xbmcplugin.addDirectoryItem(int(sys.argv[1]), u, listfolder, isFolder=1)
+
+# ===== By Antti Kerola ==== ^^^
   
   xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
+  
 
-
-#def testing(url):
-#  print "testing :)"
 
 def showmovies(url):
   # Find movies: https://www.watson.fi/pctv/RSS?action=search&type=all&field=all&term=elokuva&58;
@@ -335,14 +348,14 @@ def searchrec(url):
     senddesc=senddesc.replace("&#246;","o")
     senddesc=senddesc.replace("&amp;","&")
 
-    #Format: addDir(name,url,mode,thumbnail, description, permlink)    
-    addDir(sendname,sendurl.replace("&amp;","&"),4,matchitem[17]+"?width=640&height=480",senddesc, matchitem[5])    
+    #Format: addDir(name,url,mode,thumbnail, description, permlink)
+    addDir(sendname,sendurl.replace("&amp;","&"),4,matchitem[19]+"?width=640&height=480",senddesc, matchitem[5])    
 
   xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
   
 # Fetch XML and parse channel list from there and make list of channels
-def livetv(url):
+def channellist(url,showmode):
   auth_handler = urllib2.HTTPPasswordMgrWithDefaultRealm()
   auth_handler.add_password(None, "https://www.watson.fi", watson_addon.getSetting("username"), watson_addon.getSetting("password"))
   opener = urllib2.build_opener(urllib2.HTTPBasicAuthHandler(auth_handler))
@@ -357,9 +370,14 @@ def livetv(url):
       programdesc=i.getElementsByTagName('description')[0].childNodes[0].nodeValue
       programstream1=i.getElementsByTagName('media:content')[0].getAttribute("url")
       programthumb=i.getElementsByTagName('media:thumbnail')[0].getAttribute("url")
-
-      addDir(programtitle,programstream1,6,programthumb+"?width=320&height=240",programdesc,"NoContext")
-
+      channel=int(i.getElementsByTagName('guid')[0].childNodes[0].nodeValue)
+      if (showmode is 'live'):
+        addDir(programtitle,programstream1,6,programthumb+"?width=320&height=240",programdesc,"NoContext")
+      else:
+        u=sys.argv[0]+"?url=EPG&year=%d&month=%d&day=%d&mode=14&channel=%d" % (year,month,day,channel)
+        listfolder=xbmcgui.ListItem(programtitle, iconImage="DefaultFolder.png", thumbnailImage=programthumb+"?width=320&height=240")
+        listfolder.setInfo('video', {'Title': programtitle})
+        xbmcplugin.addDirectoryItem(int(sys.argv[1]), u, listfolder, isFolder=1)
     else:
       print "Encrypted channel: " + i.getElementsByTagName('title')[0].childNodes[0].nodeValue.encode('utf-8') + ", skipping.."
 
@@ -441,6 +459,8 @@ def addDir(name,url,mode,iconimage,pdesc,plink):
   contextMenuItems = []
   
   if url.startswith("http"):
+    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+
 
     # Create context menu if needed
     if plink != "NoContext":
@@ -451,6 +471,7 @@ def addDir(name,url,mode,iconimage,pdesc,plink):
         contextMenuItems.append(('Add to recordings', 'XBMC.RunPlugin(%s?url=%s&name=%s&plink=%s&mode=8)'%(sys.argv[0],"addrecording",name,plink)))
 
     list.addContextMenuItems( contextMenuItems )
+
     list.setInfo( type="Video", infoLabels={ "Title": name, 'Plot': pdesc } )
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=list,isFolder=False)                    
 
@@ -572,7 +593,7 @@ def getplaylisturl(urlin):
     redirection=""
   
   playurl={}
-  if "H264" in urlin:
+  if "RSS" in urlin:
     linestring=open(tmpfile, 'r').read()
     for line in linestring.split("\n"):  
       if "01.m3u8" in line:
@@ -767,6 +788,26 @@ try:
 except:
   pass
 
+try:
+  year=int(params["year"])
+except:
+  pass
+
+try:
+  month=int(params["month"])
+except:
+  pass
+
+try:
+  day=int(params["day"])
+except:
+  pass
+
+try:
+  channel=int(params["channel"])
+except:
+  pass
+
 if mode==None or url==None or len(url)<1:
   settings()
 
@@ -776,7 +817,7 @@ elif mode==0:
 
 # LiveTV
 elif mode==1:
-  livetv('https://www.watson.fi/pctv/RSS?action=getavailableretvchannels')
+  channellist('https://www.watson.fi/pctv/RSS?action=getavailableretvchannels', 'live')
 
 # Archive
 elif mode==2:
@@ -824,5 +865,11 @@ elif mode==11:
 # Show all movies (archive + last two weeks from ReTV channels
 #elif mode==12:
 #  testing(url) 
+
+elif mode==13:
+  channellist('https://www.watson.fi/pctv/RSS?action=getactiveretvchannels','rec') 
+
+elif mode==14:
+  searchrec("https://www.watson.fi/pctv/RSS?action=getrecordings&channel=%d&year=%d&month=%d&day=%d"% (channel,year,month,day)) 
   
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

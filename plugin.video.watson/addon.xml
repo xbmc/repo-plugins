@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.watson" name="Anvia Watson" version="2.2.0" provider-name="Jarkko Vesiluoma">
+<addon id="plugin.video.watson" name="Anvia Watson" version="2.2.1" provider-name="Jarkko Vesiluoma">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>

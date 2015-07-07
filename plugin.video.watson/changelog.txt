@@ -1,3 +1,4 @@
+[B]2.0.3[/B] - Watson 2.2.1 release, plugin fixed to work with recent updates. Thanks to Antti Kerola recurring recordings, fixes to searchrec and setContent in Addir Func.
 [B]2.2.0[/B] - Watson 2.2.0 release, LiveTV fixed, movies shortcut added, download fixed, tested to work on Kodi
 [B]2.1.2[/B] - Watson 2.1.2 release, plugin fixed to work with recent updates.
 [B]2.0.1[/B] - Watson 2.0 release, plugin fixed to work with new Watson.

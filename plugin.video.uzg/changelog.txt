@@ -1,4 +1,7 @@
-﻿﻿﻿﻿﻿﻿﻿Version 1.2.0
+﻿﻿﻿﻿﻿Version 1.3.0
+* New API NPO (token request changed)
+
+﻿﻿﻿﻿﻿﻿Version 1.2.0
 * Refactor code.
 
 Version 1.1.0

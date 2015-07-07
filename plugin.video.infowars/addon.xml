@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.infowars"
+       name="Infowars"
+       version="2.0.1"
+       provider-name="Thomas Meadows">
+  <requires>
+		<import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.module.addon.common" version="2.0.0" />
+    </requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+  <extension point="xbmc.addon.metadata">
+    <summary>Videos from Infowars.com Including live daily shows</summary>
+    <description>Videos from Infowars.com Including live daily shows</description>
+    <disclaimer lang="en">This Project was made without association of the creators of infowars.com</disclaimer>
+  	<language>en</language>
+  	<platform>all</platform>
+    <forum>http://www.kodi.tv</forum>
+    <website>https://github.com/thomasmeadows/repository.thomasmeadows</website>
+  	<email></email>
+  </extension>
+</addon>

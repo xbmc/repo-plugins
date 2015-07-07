@@ -1,0 +1,8 @@
+<settings>
+    <category label="Library Integration">
+        <setting id="tvshow-folder" type="folder" label="40803"
+                 default="special://userdata/addon_data/plugin.video.infowars/TVShows"/>
+        <setting id="movie-folder" type="folder" label="40804"
+                 default="special://userdata/addon_data/plugin.video.infowars/Movies"/>
+    </category>
+</settings>

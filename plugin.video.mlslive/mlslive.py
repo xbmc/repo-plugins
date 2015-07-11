@@ -171,13 +171,10 @@ class MLSLive:
             # parse each element we'll need
             for str in ['gid', 'type', 'id', 'gameTimeGMT', 'awayTeam',
                         'homeTeam', 'awayTeamName', 'homeTeamName', 'programId',
-                        'gs']:
-                game[str] = game_node.getElementsByTagName(str)[0].firstChild.nodeValue
-
-            # see if there is a result in the game
-            result_nodes = game_node.getElementsByTagName('result')
-            if len(result_nodes) > 0:
-                game['result'] = result_nodes[0].firstChild.nodeValue
+                        'gs', 'result', 'isLive']:
+                nodes = game_node.getElementsByTagName(str)
+                if len(nodes) > 0:
+                    game[str] = nodes[0].firstChild.nodeValue
 
             games.append(game)
 
@@ -223,6 +220,10 @@ class MLSLive:
             if game['result'] == 'F':
                 game_str += ' ([B]Final[/B])'
                 return game_str.encode('utf-8').strip()
+
+        if 'isLive' in game.keys():
+            if game['isLive'] == 'true':
+                game_str = '[I]' + game_str + '[/I]'
 
         # if we can get the date/time of the game add it
         dt = self.getGameDateTimeStr(game['gameTimeGMT'])
@@ -286,15 +287,15 @@ class MLSLive:
         jar = self.loadCookieJar()
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
 
+        # set the user agent to get the HLS stream
         opener.addheaders = [('User-Agent', urllib.quote('PS3Application libhttp/4.5.5-000 (CellOS)'))]
 
-        # set the user agent to get the HLS stream
-        opener.addheaders = [('User-agent', 'Sony')]
-        #try:
-        resp = opener.open(uri)
-        #except:
-        #    print "Unable to get live game XML configuration"
-        #    return ""
+        try:
+            resp = opener.open(uri)
+        except urllib2.URLError as error:
+            print 'ERROR: ' + error.reason + '(' + uri + ')'
+            return ""
+
         jar.save(filename=self.getCookieFile(), ignore_discard=True)
         game_xml = resp.read()
 

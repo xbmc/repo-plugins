@@ -14,7 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 '''
-import xbmc, xbmcplugin, xbmcgui, xbmcaddon, urllib, urlparse, mlslive
+import xbmc, xbmcplugin, xbmcgui, xbmcaddon, os, urllib, urlparse, mlslive
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.mlslive')
 __language__ = __settings__.getLocalizedString
@@ -32,20 +32,26 @@ def createMainMenu():
                                 listitem=live,
                                 isFolder=True)
 
+    live = xbmcgui.ListItem(__language__(30009))
+    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
+                                url=sys.argv[0] + "?" + urllib.urlencode({'id' : 'complete'}),
+                                listitem=live,
+                                isFolder=True)
+
     # signal the end of the directory
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
-def createMonthsMenu():
-    """
-    @todo filter on live or past
-    """
+def createMonthsMenu(complete = False):
+
+    key = 'compmonth' if complete else 'month'
 
     # add each month in the season
     for i in range(2,13):
+        values = { key : str(i) }
         li = xbmcgui.ListItem(__language__(MONTH_OFFSET + i))
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
-                                    url=sys.argv[0] + '?' + urllib.urlencode({'month' : str(i)}),
+                                    url=sys.argv[0] + '?' + urllib.urlencode(values),
                                     listitem = li,
                                     isFolder = True)
 
@@ -53,7 +59,7 @@ def createMonthsMenu():
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
-def createMonthMenu(month):
+def createMonthMenu(month, complete = False):
 
     mls = mlslive.MLSLive()
 
@@ -66,6 +72,20 @@ def createMonthMenu(month):
         return None
 
     for game in games:
+
+        final = False
+        if 'result' in game.keys():
+            if game['result'] == 'F':
+                final = True
+
+        # skip any finished games if showing live or upcomming
+        if final and not complete:
+            continue
+
+        # skip if showing completed and live or upcomming
+        if complete and not final:
+            continue
+
         title = mls.getGameString(game, __language__(30008))
         li = xbmcgui.ListItem(title)
         values = {'game' : game['id'],
@@ -132,6 +152,11 @@ def authenticate():
 
     # authenticate with MLS live
     my_mls = mlslive.MLSLive()
+
+    cookie_file = my_mls.getCookieFile()
+    if os.path.isfile(cookie_file):
+        os.remove(cookie_file)
+
     if not my_mls.login(username, password):
         dialog = xbmcgui.Dialog()
         dialog.ok(__language__(30004), __language__(30005))
@@ -174,9 +199,14 @@ if len(sys.argv[2]) == 0:
         createMainMenu()
 elif sys.argv[2] == '?id=live':
     createMonthsMenu()
+elif sys.argv[2] == '?id=complete':
+    createMonthsMenu(complete = True)
 elif sys.argv[2][:7] == '?month=':
     values = urlparse.parse_qs(sys.argv[2][1:])
     createMonthMenu(values['month'][0])
+elif sys.argv[2][:11] == '?compmonth=':
+    values = urlparse.parse_qs(sys.argv[2][1:])
+    createMonthMenu(values['compmonth'][0], complete = True)
 elif sys.argv[2][:10] == "?condensed":
     playGame(sys.argv[2][1:])
 elif sys.argv[2][:5] == "?game":

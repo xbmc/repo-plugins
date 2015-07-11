@@ -33,6 +33,7 @@ def GET_EPISODES():
     #source = re.compile('<figure>(.+?)</figure').findall(source)
     source = re.compile('class="panel accordian"(.+?)</div>').findall(source)
         
+    episodes = []
 
     for block in source:
         #print block
@@ -47,9 +48,11 @@ def GET_EPISODES():
         print json
         title = HTMLParser.HTMLParser().unescape(HTMLParser.HTMLParser().unescape(json['title']))
         image = 'http:'+HTMLParser.HTMLParser().unescape(json['thumbnail_url'])
-        desc = json['description']
+        desc = HTMLParser.HTMLParser().unescape(json['description'])
+        end_desc = desc.find('<')
+        desc = desc[0:end_desc]
         video_id = json['video_id']
-        duration = json['duration']
+        duration = int(json['duration'])
         #http://cedexis-video.ora.tv/i/beergeeks/video-14630/,basic400,basic600,sd900,sd1200,sd1500,hd720,hd1080,mobile400,.mp4.csmil/master.m3u8
         stream = 'http://cedexis-video.ora.tv/i/beergeeks/video-'+str(video_id)+'/,basic400,basic600,sd900,sd1200,sd1500,hd720,hd1080,mobile400,.mp4.csmil/master.m3u8'        
         #GET_STREAM_QUALITIES(stream)
@@ -58,9 +61,12 @@ def GET_EPISODES():
 
         #addLink(title, stream, title, image, desc, duration)
         #name = HTMLParser.HTMLParser().unescape(name)
-
-        #name,url,mode,iconimage,fanart=None        
-        addDir(title,stream,100,image)
+        info = {'plot':desc,'tvshowtitle':'Beer Geeks','title':title,'originaltitle':title,'duration':duration}
+        #name,url,mode,iconimage,fanart=None      
+        if title not in episodes:
+            addDir(title,stream,100,image,info)
+            episodes.append(title)
+    
 
 def GET_STREAM_QUALITIES(m3u8_url,img_url):    
         print "M3U8!!!" + m3u8_url
@@ -211,18 +217,21 @@ def addLink(name,url,title,iconimage,desc=None,duration=None):
     return ok
 
 
-def addDir(name,url,mode,iconimage,fanart=None):       
+def addDir(name,url,mode,iconimage,info,fanart=None):       
     ok=True
     u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
     u = u+"&img_url="+urllib.quote_plus(iconimage)            
-    liz=xbmcgui.ListItem(name, iconImage=ICON, thumbnailImage=iconimage)
-    liz.setInfo( type="Video", infoLabels={ "Title": name } )
+    liz=xbmcgui.ListItem(name, iconImage=ICON, thumbnailImage=iconimage)    
+    liz.setInfo( type="Video", infoLabels=info)    
     if fanart != None:
         liz.setProperty('fanart_image', fanart)
     else:
         liz.setProperty('fanart_image', FANART)
+
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)    
+    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     return ok
+
 
 def get_params():
     param=[]

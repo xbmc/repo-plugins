@@ -87,7 +87,7 @@ def display_category(url):
     addon_log("Display items for page_url: " + page_url)
     html = make_request(page_url)
     soup = BeautifulSoup(html, 'html5lib')
-    items = soup('div', {'class': 'video-listing'})[0]('div', {'class': 'video'})
+    items = soup('div', {'class': 'video-listing'})
     for i in items:
         title = i('a', {'class': 'video-link'})[1].h3.string.encode('utf-8')
         link = i('a', {'class': 'video-link'})[1]['href']

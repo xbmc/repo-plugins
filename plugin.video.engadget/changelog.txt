@@ -1,3 +1,6 @@
+Version 1.1.1
+Engadgets video website format changed, adapt to no HTML layout
+
 Version 1.1.0
 Caching should now work, even in case of empty cache / initial install.
 

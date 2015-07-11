@@ -47,6 +47,7 @@
         <setting label="30182" type="action" action="RunPlugin(plugin://plugin.video.reddit_tv/?mode=openSettings&url=dailymotion)"/>
         <setting id="ll_qualiy" type="enum" label="30183" values="480p|720p" default="1"/>
         <setting id="ll_downDir" type="folder" label="30184" default=""/>
+        <setting id="gfy_downDir" type="folder" label="30192" default=""/>
     </category>
     <category label="30118">
         <setting id="showBrowser" type="bool" label="30177" default="true"/>

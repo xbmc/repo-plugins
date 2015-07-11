@@ -48,3 +48,6 @@
 - vimeo upgrade / fix
 - Finnish translation
 - disabled downloads for youtube/vimeo
+1.3.0
+- added support for gfycat.com
+- changed mantainer to rasjani after no replies from addonscriptorde

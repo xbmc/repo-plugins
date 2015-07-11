@@ -15,6 +15,12 @@ GadgetReactor
 Changelog
 =================
 
+V1.6.0 - 2015-07-10
+Updated changes for new Toggle Page
+For sections Newest, Channel 5, Channel 8, Suria, Vasantham, Channel U
+Updated playback mechanism
+VIP Subscriber access videos ignored
+
 V1.5.5 - 2015-03-11
 Updated regular expressions to cope with website changes
 

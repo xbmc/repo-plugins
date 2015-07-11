@@ -1,7 +1,6 @@
 import sys, xbmc, xbmcgui, xbmcplugin, urllib, urllib2, urlparse, re, string, os, traceback, time, datetime, xbmcaddon
 
 import simplejson as json
-import brightcove
 
 # GadgetReactor
 # http://www.gadgetreactor.com/portfolio/sgtv
@@ -48,7 +47,7 @@ def openJson(url):
 	
 def main():
 	
-	addXBMCItem (__language__(30000), os.path.join(__thumbpath__, 'newest.png'), "?mode=getEpisodes&channel=new&show=all", True)
+	addXBMCItem (__language__(30000), os.path.join(__thumbpath__, 'newest.png'), "?mode=getNewest&channel=catchup-listing", True)
 	addXBMCItem (__language__(30001), os.path.join(__thumbpath__, 'channel5.jpg'), "?mode=loadChannel&channel=channel5", True)
 	addXBMCItem (__language__(30002), os.path.join(__thumbpath__, 'channel8.jpg'), "?mode=loadChannel&channel=channel8", True)
 	addXBMCItem (__language__(30003), os.path.join(__thumbpath__, 'channelu.jpg'), "?mode=loadChannel&channel=channelu", True)
@@ -75,14 +74,26 @@ def addXBMCItem(name, thumbnail, action_url, isFolder, Fanart_Image=None, infoLa
 		
 	xbmcplugin.addDirectoryItem(addon_handle,u,li,isFolder)
 	
-
 def channelShows(channel):
-	data=openUrl("http://xin.msn.com/en-sg/video/catchup/")		
-	showlist  = re.compile('<div data-tabkey="tab-(\d+)".*?homepage\|%s\|tab\|(.*?)\|.+?:&quot;(.+?)&quot' % (channel)).findall(data)
+	data=openUrl("http://tv.toggle.sg/en/%s/shows" % channel)
+	showlist  = re.compile('data-srcset="(.+?)".+?href="(.+?)">(.+?)<').findall(data)
 
-	for tab, show, thumb in showlist:
-		image = 'http:'+ thumb.replace('&amp;','&')
-		addXBMCItem (htmlParse(show), image, "?mode=getEpisodes&channel="+channel+"&show="+show+"&tab=tab-"+tab, True)
+	for image, url, show in showlist:
+		if "http" not in image:
+			image = "http://video.toggle.sg" + image
+		addXBMCItem (htmlParse(show), image, "?mode=getEpisodes&channel="+channel+"&show="+show+"&tab="+url+"&page=0", True)
+
+	xbmc.executebuiltin("Container.SetViewMode(500)")
+	
+def newestToggle(channel):
+	data=openUrl("http://video.toggle.sg/en/%s" % channel)
+	showlist  = re.compile('<div class="tg-teaser-item".*?data-srcset="(.+?)".+?href="(.+?)">(.+?)<').findall(data)
+
+	for image, url, show in showlist:
+		if "http" not in image:
+			image = "http://video.toggle.sg" + image
+		u=sys.argv[0]+"?mode=resolveMSN&url="+urllib.quote_plus(url)
+		addXBMCItem (htmlParse(show), image, u, False, infoLabels="")	
 
 	xbmc.executebuiltin("Container.SetViewMode(500)")
 
@@ -150,25 +161,42 @@ def channelViddsee(page, type):
 	page = str(int(page)+1)
 	addXBMCItem (__language__(31000), os.path.join(__thumbpath__, "viddsee.png"), "?mode=loadViddsee&page="+page+"&type="+type, True)	
 	
-def getEpisodes(channel, show, tab):
-	data=openUrl("http://xin.msn.com/en-sg/video/catchup/")
+def getEpisodes(channel, show, tab, page):
+	data=openUrl(tab + "/episodes")
+	meta = re.compile('10, 0,  (.+?), (.+?), (.+?)\);',re.DOTALL).search(data)
+#	print meta.group(1)
+#	print meta.group(2)
+#	print meta.group(3)
+	data = openUrl ("http://tv.toggle.sg/en/blueprint/servlet/toggle/paginate?pageSize=10&pageIndex="+str(page)+"&contentId="+meta.group(1)+"&navigationId="+meta.group(2)+"&"+meta.group(3)+"=1")
 
-	if "new" in channel:
-		episodelist = re.compile('<li.+?href="(.+?)".+?:&quot;(.+?)&quot.+?<h4>(.+?)</h4>.+?"duration">(.+?)<.+?</li>').findall(data)	
-
-	else:
-		episodechunk  = re.compile('class="section tabsection horizontal".+?data-section-id="%s".+?<div data-tabkey="%s"(.+?)</ul>' % (channel, tab)).search(data).group(1)
-		episodelist = re.compile('<li.+?href="(.+?)".+?:&quot;(.+?)&quot.+?<h4>(.+?)</h4>.+?"duration">(.+?)<.+?</li>').findall(episodechunk)
-
-	for episode_url, thumb, title, time in episodelist:
-		episode_url = "http://xin.msn.com" + episode_url
-		title=htmlParse(title)									
+	episodechunk  = re.compile('<li>(.*?)<\/li>').findall(data)
 		
-		image = 'http:'+ thumb.replace('&amp;','&')
-		infoLabels={'Title': title, 'Duration':time}
-		u=sys.argv[0]+"?mode=resolveMSN&url="+urllib.quote_plus(episode_url)
-		addXBMCItem (title, image, u, False, infoLabels=infoLabels)	
-		
+	for chunk in episodechunk:
+		episodelist = re.compile('img src="(.+?)".+?.+?item__tags(.+?)<\/div>.+?href="(.+?)">(.+?)<\/a>.+?<p>(.+?)<\/p>').search(chunk)
+		try: 
+			vip_status = episodelist.group(2)
+			if "vip" not in vip_status:
+				episode_url = episodelist.group(3)
+				title = episodelist.group(4)
+				desc = episodelist.group(5)
+				image = episodelist.group(1)
+				infoLabels={'Title': title}
+				infoLabels=	{
+					"title": title, 
+					"plot": desc,
+					}
+				u=sys.argv[0]+"?mode=resolveMSN&url="+urllib.quote_plus(episode_url)
+				addXBMCItem (title, image, u, False, infoLabels=infoLabels)	
+		except:
+			print "No file found"
+			print episodelist
+	pagination = re.compile ('pagination\'\),(.+?), (.+?), paginateLabel').search(data)
+	current_page = int( pagination.group (1) )
+	max_page = int ( pagination.group (2) )
+	if current_page < max_page:
+		page = str(current_page + 1)
+		addXBMCItem (__language__(31000), "", "?mode=getEpisodes&channel="+channel+"&show="+show+"&tab="+tab+"&page="+page, True)
+
 	xbmc.executebuiltin("Container.SetViewMode(500)")	
 
 def htmlParse(str):
@@ -185,19 +213,51 @@ def htmlParse(str):
 def resolveMSN(url):
 	progress = xbmcgui.DialogProgress()
 	progress.create("SG!TV", __language__(31002)) # Finding Link
+	id = url.split("/")[-1]
+
 	progress.update(25, __addonname__, __language__(31002))
-	videodata=openUrl(url)
-	match=re.compile("{&quot;formatCode&quot;:&quot;(...)&quot;,&quot;url&quot;:&quot;(.+?)&quot;,").findall(videodata)
+	
+	vid_url = "http://toggleplayer-1410100339.ap-southeast-1.elb.amazonaws.com/v0.30/mwEmbed/mwEmbedFrame.php?&wid=_27017&uiconf_id=8413350&entry_id="+id+"&flashvars[ks]=0&flashvars[logo]=undefined&flashvars[toggle.sgPlus]=false&flashvars[vast]=%7B%22htmlCompanions%22%3A%22video-companion-ad-320-100-in-flash%3A320%3A100%22%7D&flashvars[multiDrm]=%7B%22plugin%22%3Atrue%2C%22isClear%22%3Atrue%7D&flashvars[localizationCode]=en&flashvars[autoPlay]=true&flashvars[proxyData]=%7B%22initObj%22%3A%7B%22Locale%22%3A%7B%22LocaleLanguage%22%3A%22%22%2C%22LocaleCountry%22%3A%22%22%2C%22LocaleDevice%22%3A%22%22%2C%22LocaleUserState%22%3A0%7D%2C%22Platform%22%3A0%2C%22SiteGuid%22%3A0%2C%22DomainID%22%3A%220%22%2C%22UDID%22%3A%22%22%2C%22ApiUser%22%3A%22tvpapi_147%22%2C%22ApiPass%22%3A%2211111%22%7D%2C%22MediaID%22%3A%22"+id+"%22%2C%22iMediaID%22%3A%22"+id+"%22%2C%22picSize%22%3A%22640X360%22%7D&playerId=SilverlightContainer&forceMobileHTML5=true&urid=2.29.1.10&callback="
+
+	html=openUrl(vid_url)
+	print vid_url
 	progress.update(50, __addonname__, __language__(31003)) # Progress
-	x=0
-	for formatcode, url_quality in match:
-		if int(formatcode) > x: 
-			video_url=url_quality
-			x=int(formatcode)
+	html = re.compile('kalturaIframePackageData = (.+?)};',re.DOTALL).search(html).group(1)
+	html = html+'}'
+	html = html.replace('\\','')
+	a = json.loads(html)
+	a = a['entryResult']['meta']
+	options = a['partnerData']['Files']
+	u =''
+	for option in options:
+		print option['URL']
+		if "mp4" in option['URL'] or "MP4" in option['URL']:
+			if "http" in option['URL']:
+				u = option['URL']
+				break
+	
+	if u == "":
+		for option in options:
+			if option['Format'] == 'STB Main':
+				u = option['URL']
+				break
+				
+			if option['Format'] == 'Android':
+				u = option['URL']
+				break
+
+			if option['Format'] == 'iPhone Main':
+				u = option['URL']
+				break
+
 	progress.update(70, __addonname__, __language__(31003))
-	#
+	xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = u))
+
+	progress.update(99, __addonname__,  __language__(31004)) # Ready to Play
+	progress.close()
+	"""
 	#for brightcove media, big thanks to Scotty Roscoe
-	#
+	
 	html=videodata.replace('\r','').replace("&#39;","'").replace('&quot;','"')
 	if 'brightcove' in html:
 		blob = re.compile('<div class="wcvideoplayer" data-adpagegroups=(.+?)</div>').search(html).group(1)
@@ -208,11 +268,10 @@ def resolveMSN(url):
 	listitem = xbmcgui.ListItem(path=video_url)
 	listitem.setInfo(type='Video', infoLabels= xbmc.getInfoLabel("ListItem.InfoLabel"))
 
-	progress.update(99, __addonname__,  __language__(31004)) # Ready to Play
-	progress.close()
+
 	
 	xbmcplugin.setResolvedUrl(addon_handle, succeeded=True, listitem=listitem)
-	
+	"""
 args = urlparse.parse_qs(sys.argv[2][1:])
 
 mode = args.get('mode', None)
@@ -228,6 +287,9 @@ elif mode[0]=='loadYoutube':
 elif mode[0] =='loadChannel':
 	channel = args['channel'][0]
 	channelShows(channel)
+elif mode[0] =='getNewest':
+	channel = args['channel'][0]
+	newestToggle(channel)
 elif mode[0]=='loadViddsee':
 	page = args['page'][0]
 	type = args['type'][0]
@@ -236,7 +298,8 @@ elif mode[0]=='getEpisodes':
 	channel = args['channel'][0]
 	show = args['show'][0]
 	tab = args['tab'][0]
-	getEpisodes(channel, show, tab)	
+	page = args['page'][0]
+	getEpisodes(channel, show, tab, page)	
 elif mode[0]=='resolveMSN':
 	url = args['url'][0]
 	resolveMSN(url)

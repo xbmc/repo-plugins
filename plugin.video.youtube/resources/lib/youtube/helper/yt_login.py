@@ -112,6 +112,9 @@ def process(mode, provider, context, re_match, needs_tv_login=True):
             expires_in = expires_in_kodi
             pass
 
+        major_version = context.get_system_version().get_version()[0]
+        context.get_settings().set_int('youtube.login.version', major_version)
+
         provider.reset_client()
         context.get_access_manager().update_access_token(access_token, expires_in, refresh_token)
         context.get_ui().refresh_container()

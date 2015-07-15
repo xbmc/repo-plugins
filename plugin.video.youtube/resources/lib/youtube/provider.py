@@ -88,7 +88,8 @@ class Provider(kodion.AbstractProvider):
 
     def get_client(self, context):
         # set the items per page (later)
-        items_per_page = context.get_settings().get_items_per_page()
+        settings = context.get_settings()
+        items_per_page = settings.get_items_per_page()
 
         access_manager = context.get_access_manager()
         access_tokens = access_manager.get_access_token().split('|')
@@ -119,6 +120,16 @@ class Provider(kodion.AbstractProvider):
                 pass
 
             if access_manager.has_login_credentials() or access_manager.has_refresh_token():
+                last_kodi_version = settings.get_int('youtube.login.version', 0)
+
+                if last_kodi_version != major_version:
+                    context.log_warning(
+                        'Different KODI versions (%d != %d) signing out for new login' % (
+                            last_kodi_version, major_version))
+                    self.reset_client()
+                    access_manager.update_access_token(access_token='', refresh_token='')
+                    pass
+
                 # username, password = access_manager.get_login_credentials()
                 access_tokens = access_manager.get_access_token()
                 if access_tokens:

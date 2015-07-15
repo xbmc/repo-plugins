@@ -21,7 +21,7 @@ class XbmcContextUI(AbstractContextUI):
         pass
 
     def create_progress_dialog(self, heading, text=None, background=False):
-        if background:
+        if background and self._context.get_system_version().get_version() > (12, 3):
             return XbmcProgressDialogBG(heading, text)
 
         return XbmcProgressDialog(heading, text)

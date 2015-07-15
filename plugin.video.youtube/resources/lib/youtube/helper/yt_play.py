@@ -63,6 +63,7 @@ def play_playlist(provider, context, re_match):
         if not v3.handle_error(provider, context, json_data):
             return False
         _progress_dialog.set_total(int(json_data.get('pageInfo', {}).get('totalResults', 0)))
+
         result = v3.response_to_items(provider, context, json_data, process_next_page=False)
         videos.extend(result)
         progress_text = '%s %d/%d' % (

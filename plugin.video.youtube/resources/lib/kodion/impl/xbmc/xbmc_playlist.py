@@ -25,7 +25,9 @@ class XbmcPlaylist(AbstractPlaylist):
 
     def add(self, base_item):
         item = xbmc_items.to_item(self._context, base_item)
-        self._playlist.add(base_item.get_uri(), listitem=item)
+        if item:
+            self._playlist.add(base_item.get_uri(), listitem=item)
+            pass
         pass
 
     def shuffle(self):

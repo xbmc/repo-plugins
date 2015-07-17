@@ -1,2 +1,5 @@
+0.0.2
+- updated language files from Transifex
+
 0.0.1
 - initial release

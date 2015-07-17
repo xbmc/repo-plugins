@@ -9,220 +9,205 @@ msgstr ""
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Kodi Translation Team\n"
-"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"Language-Team: English (US) (http://www.transifex.com/projects/p/xbmc-addons/language/en_US/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en\n"
+"Language: en_US\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-# Menu items
 msgctxt "#30000"
 msgid "Add content..."
-msgstr ""
+msgstr "Add content..."
 
 msgctxt "#30001"
 msgid "Add path..."
-msgstr ""
+msgstr "Add path..."
 
 msgctxt "#30002"
 msgid "Add order..."
-msgstr ""
+msgstr "Add order..."
 
 msgctxt "#30003"
 msgid "Add limit..."
-msgstr ""
+msgstr "Add limit..."
 
 msgctxt "#30004"
 msgid "Add grouping..."
-msgstr ""
+msgstr "Add grouping..."
 
 msgctxt "#30005"
 msgid "Add rule..."
-msgstr ""
+msgstr "Add rule..."
 
 msgctxt "#30006"
 msgid "New node..."
-msgstr ""
+msgstr "New node..."
 
 msgctxt "#30007"
 msgid "New parent node..."
-msgstr ""
+msgstr "New parent node..."
 
 msgctxt "#30008"
 msgid "Reset library nodes to default..."
-msgstr ""
-
-#empty strings from id 30009 to 30090
+msgstr "Reset library nodes to default..."
 
 msgctxt "#30091"
 msgid "Video Library"
-msgstr ""
+msgstr "Video Library"
 
 msgctxt "#30092"
 msgid "Music Library"
-msgstr ""
+msgstr "Music Library"
 
-#empty strings from id 30093 to 30099
-
-# Context menu items
 msgctxt "#30100"
 msgid "Delete"
-msgstr ""
+msgstr "Delete"
 
 msgctxt "#30101"
 msgid "Edit label"
-msgstr ""
+msgstr "Edit label"
 
 msgctxt "#30102"
 msgid "Edit icon"
-msgstr ""
+msgstr "Edit icon"
 
 msgctxt "#30103"
 msgid "Browse for icon"
-msgstr ""
+msgstr "Browse for icon"
 
 msgctxt "#30104"
 msgid "Edit order"
-msgstr ""
+msgstr "Edit order"
 
 msgctxt "#30105"
 msgid "Edit visibility"
-msgstr ""
+msgstr "Edit visibility"
 
 msgctxt "#30106"
 msgid "Add to main menu"
-msgstr ""
+msgstr "Add to main menu"
 
 msgctxt "#30107"
 msgid "Browse for value"
-msgstr ""
+msgstr "Browse for value"
 
-#empty strings from id 30108 to 30199
-
-# Other menu item labels
 msgctxt "#30200"
 msgid "Content"
-msgstr ""
+msgstr "Content"
 
 msgctxt "#30201"
 msgid "Order"
-msgstr ""
+msgstr "Order"
 
 msgctxt "#30202"
 msgid "Grouping"
-msgstr ""
+msgstr "Grouping"
 
 msgctxt "#30203"
 msgid "Limit"
-msgstr ""
+msgstr "Limit"
 
 msgctxt "#30204"
 msgid "Path"
-msgstr ""
+msgstr "Path"
 
 msgctxt "#30205"
 msgid "Rule"
-msgstr ""
+msgstr "Rule"
 
-#empty strings from id 30206 to 30299
-
-# Titles for dialogs
 msgctxt "#30300"
 msgid "Set name"
-msgstr ""
+msgstr "Set name"
 
 msgctxt "#30301"
 msgid "Set visibility condition"
-msgstr ""
+msgstr "Set visibility condition"
 
 msgctxt "#30302"
 msgid "Set order index"
-msgstr ""
+msgstr "Set order index"
 
 msgctxt "#30303"
 msgid "Name of new parent node"
-msgstr ""
+msgstr "Name of new parent node"
 
 msgctxt "#30304"
 msgid "Start with defaults"
-msgstr ""
+msgstr "Start with defaults"
 
 msgctxt "#30305"
 msgid "Field"
-msgstr ""
+msgstr "Field"
 
 msgctxt "#30306"
 msgid "Operator"
-msgstr ""
+msgstr "Operator"
 
 msgctxt "#30307"
 msgid "Value"
-msgstr ""
+msgstr "Value"
 
 msgctxt "#30308"
 msgid "Content type"
-msgstr ""
+msgstr "Content type"
 
 msgctxt "#30309"
 msgid "Content"
-msgstr ""
+msgstr "Content"
 
 msgctxt "#30310"
 msgid "Group"
-msgstr ""
+msgstr "Group"
 
 msgctxt "#30311"
 msgid "Limit"
-msgstr ""
+msgstr "Limit"
 
 msgctxt "#30312"
 msgid "Path"
-msgstr ""
+msgstr "Path"
 
 msgctxt "#30313"
 msgid "Icon"
-msgstr ""
+msgstr "Icon"
 
 msgctxt "#30314"
 msgid "Order by"
-msgstr ""
+msgstr "Order by"
 
 msgctxt "#30315"
 msgid "Direction"
-msgstr ""
+msgstr "Direction"
 
 msgctxt "#30316"
 msgid "Name of new node"
-msgstr ""
+msgstr "Name of new node"
 
-#empty strings from id 30317 to 30399
-
-# Messages for dialogs
 msgctxt "#30400"
 msgid "Unable to copy default library nodes"
-msgstr ""
+msgstr "Unable to copy default library nodes"
 
 msgctxt "#30401"
 msgid "Are you sure you want to delete this node?"
-msgstr ""
+msgstr "Are you sure you want to delete this node?"
 
 msgctxt "#30402"
 msgid "Are you sure you want to reset all nodes?"
-msgstr ""
+msgstr "Are you sure you want to reset all nodes?"
 
 msgctxt "#30403"
 msgid "Are you sure you want to delete this property?"
-msgstr ""
+msgstr "Are you sure you want to delete this property?"
 
 msgctxt "#30404"
 msgid "Content parameter can't be deleted whilst this node still has an Order, Limit or Rule parameter."
-msgstr ""
+msgstr "Content parameter can't be deleted whilst this node still has an Order, Limit or Rule parameter."
 
 msgctxt "#30405"
 msgid "Are you sure you want to delete this rule?"
-msgstr ""
+msgstr "Are you sure you want to delete this rule?"
 
 msgctxt "#30406"
 msgid "Order requires a Content parameter"
-msgstr ""
+msgstr "Order requires a Content parameter"

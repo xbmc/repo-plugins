@@ -1,0 +1,89 @@
+# Kodi Media Center language file
+# Addon Name: Library Node Editor
+# Addon id: plugin.library.node.editor
+# Addon Provider: Unfledged, Team-Kodi
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Swedish (http://www.transifex.com/projects/p/xbmc-addons/language/sv/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sv\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30091"
+msgid "Video Library"
+msgstr "Videobibliotek"
+
+msgctxt "#30092"
+msgid "Music Library"
+msgstr "Musikbibliotek"
+
+msgctxt "#30100"
+msgid "Delete"
+msgstr "Ta bort"
+
+msgctxt "#30101"
+msgid "Edit label"
+msgstr "Ändra namn"
+
+msgctxt "#30102"
+msgid "Edit icon"
+msgstr "Redigera ikon"
+
+msgctxt "#30103"
+msgid "Browse for icon"
+msgstr "Bläddra bland ikoner"
+
+msgctxt "#30200"
+msgid "Content"
+msgstr "Innehåll"
+
+msgctxt "#30204"
+msgid "Path"
+msgstr "Sökväg"
+
+msgctxt "#30205"
+msgid "Rule"
+msgstr "Regel"
+
+msgctxt "#30305"
+msgid "Field"
+msgstr "Fält"
+
+msgctxt "#30306"
+msgid "Operator"
+msgstr "Operatör"
+
+msgctxt "#30307"
+msgid "Value"
+msgstr "Värde"
+
+msgctxt "#30309"
+msgid "Content"
+msgstr "Innehåll"
+
+msgctxt "#30310"
+msgid "Group"
+msgstr "Grupp"
+
+msgctxt "#30312"
+msgid "Path"
+msgstr "Sökväg"
+
+msgctxt "#30313"
+msgid "Icon"
+msgstr "Ikon"
+
+msgctxt "#30314"
+msgid "Order by"
+msgstr "Sortera efter"
+
+msgctxt "#30315"
+msgid "Direction"
+msgstr "Riktning"

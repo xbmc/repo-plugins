@@ -1,0 +1,57 @@
+# Kodi Media Center language file
+# Addon Name: Library Node Editor
+# Addon id: plugin.library.node.editor
+# Addon Provider: Unfledged, Team-Kodi
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Thai (http://www.transifex.com/projects/p/xbmc-addons/language/th/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: th\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "#30091"
+msgid "Video Library"
+msgstr "แฟ้ม วิดีโอ"
+
+msgctxt "#30092"
+msgid "Music Library"
+msgstr "คลังเพลง"
+
+msgctxt "#30100"
+msgid "Delete"
+msgstr "ลบ"
+
+msgctxt "#30101"
+msgid "Edit label"
+msgstr "แก้ป้ายชื่อ"
+
+msgctxt "#30103"
+msgid "Browse for icon"
+msgstr "เรียกดูไอคอน"
+
+msgctxt "#30204"
+msgid "Path"
+msgstr "เส้นทาง"
+
+msgctxt "#30310"
+msgid "Group"
+msgstr "กลุ่ม"
+
+msgctxt "#30312"
+msgid "Path"
+msgstr "เส้นทาง"
+
+msgctxt "#30313"
+msgid "Icon"
+msgstr "ไอคอน"
+
+msgctxt "#30314"
+msgid "Order by"
+msgstr "เรียงลำดับตาม"

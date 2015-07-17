@@ -1,0 +1,73 @@
+# Kodi Media Center language file
+# Addon Name: Library Node Editor
+# Addon id: plugin.library.node.editor
+# Addon Provider: Unfledged, Team-Kodi
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Portuguese (http://www.transifex.com/projects/p/xbmc-addons/language/pt/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30091"
+msgid "Video Library"
+msgstr "Biblioteca de Vídeo"
+
+msgctxt "#30092"
+msgid "Music Library"
+msgstr "Biblioteca de Música"
+
+msgctxt "#30100"
+msgid "Delete"
+msgstr "Apagar"
+
+msgctxt "#30101"
+msgid "Edit label"
+msgstr "Editar etiqueta"
+
+msgctxt "#30103"
+msgid "Browse for icon"
+msgstr "Procurar ícone"
+
+msgctxt "#30204"
+msgid "Path"
+msgstr "Caminho"
+
+msgctxt "#30305"
+msgid "Field"
+msgstr "Campo"
+
+msgctxt "#30306"
+msgid "Operator"
+msgstr "Operador"
+
+msgctxt "#30307"
+msgid "Value"
+msgstr "Valor"
+
+msgctxt "#30310"
+msgid "Group"
+msgstr "Grupo"
+
+msgctxt "#30312"
+msgid "Path"
+msgstr "Caminho"
+
+msgctxt "#30313"
+msgid "Icon"
+msgstr "Ícone"
+
+msgctxt "#30314"
+msgid "Order by"
+msgstr "Ordenar"
+
+msgctxt "#30315"
+msgid "Direction"
+msgstr "Direcção"

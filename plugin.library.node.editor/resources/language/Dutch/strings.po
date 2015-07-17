@@ -9,220 +9,205 @@ msgstr ""
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Kodi Translation Team\n"
-"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"Language-Team: Dutch (http://www.transifex.com/projects/p/xbmc-addons/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en\n"
+"Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-# Menu items
 msgctxt "#30000"
 msgid "Add content..."
-msgstr ""
+msgstr "Toevoegen inhoud..."
 
 msgctxt "#30001"
 msgid "Add path..."
-msgstr ""
+msgstr "Toevoegen pad..."
 
 msgctxt "#30002"
 msgid "Add order..."
-msgstr ""
+msgstr "Toevoegen volgorde..."
 
 msgctxt "#30003"
 msgid "Add limit..."
-msgstr ""
+msgstr "toevoegen limiet..."
 
 msgctxt "#30004"
 msgid "Add grouping..."
-msgstr ""
+msgstr "toevoegen groepering..."
 
 msgctxt "#30005"
 msgid "Add rule..."
-msgstr ""
+msgstr "Toevoegen regel..."
 
 msgctxt "#30006"
 msgid "New node..."
-msgstr ""
+msgstr "Nieuwe node..."
 
 msgctxt "#30007"
 msgid "New parent node..."
-msgstr ""
+msgstr "Nieuw hoofd node..."
 
 msgctxt "#30008"
 msgid "Reset library nodes to default..."
-msgstr ""
-
-#empty strings from id 30009 to 30090
+msgstr "Herstel bibliotheek nodes naar standaardwaarden..."
 
 msgctxt "#30091"
 msgid "Video Library"
-msgstr ""
+msgstr "Videobibliotheek"
 
 msgctxt "#30092"
 msgid "Music Library"
-msgstr ""
+msgstr "Music Library"
 
-#empty strings from id 30093 to 30099
-
-# Context menu items
 msgctxt "#30100"
 msgid "Delete"
-msgstr ""
+msgstr "Verwijderen"
 
 msgctxt "#30101"
 msgid "Edit label"
-msgstr ""
+msgstr "Label aanpassen"
 
 msgctxt "#30102"
 msgid "Edit icon"
-msgstr ""
+msgstr "Wijzig icoon"
 
 msgctxt "#30103"
 msgid "Browse for icon"
-msgstr ""
+msgstr "Zoek naar icoon"
 
 msgctxt "#30104"
 msgid "Edit order"
-msgstr ""
+msgstr "Wijzig volgorde"
 
 msgctxt "#30105"
 msgid "Edit visibility"
-msgstr ""
+msgstr "Aanpassen zichtbaarheid"
 
 msgctxt "#30106"
 msgid "Add to main menu"
-msgstr ""
+msgstr "Toevoegen aan het startmenu"
 
 msgctxt "#30107"
 msgid "Browse for value"
-msgstr ""
+msgstr "Zoek naar waarde"
 
-#empty strings from id 30108 to 30199
-
-# Other menu item labels
 msgctxt "#30200"
 msgid "Content"
-msgstr ""
+msgstr "Inhoud"
 
 msgctxt "#30201"
 msgid "Order"
-msgstr ""
+msgstr "Volgorde"
 
 msgctxt "#30202"
 msgid "Grouping"
-msgstr ""
+msgstr "Groepering"
 
 msgctxt "#30203"
 msgid "Limit"
-msgstr ""
+msgstr "Limiet"
 
 msgctxt "#30204"
 msgid "Path"
-msgstr ""
+msgstr "Locatie"
 
 msgctxt "#30205"
 msgid "Rule"
-msgstr ""
+msgstr "Regel"
 
-#empty strings from id 30206 to 30299
-
-# Titles for dialogs
 msgctxt "#30300"
 msgid "Set name"
-msgstr ""
+msgstr "Instellen naam"
 
 msgctxt "#30301"
 msgid "Set visibility condition"
-msgstr ""
+msgstr "Instellen zichtbaarheid conditie"
 
 msgctxt "#30302"
 msgid "Set order index"
-msgstr ""
+msgstr "Instellen volgorde index"
 
 msgctxt "#30303"
 msgid "Name of new parent node"
-msgstr ""
+msgstr "Naam van nieuwe hoofd node"
 
 msgctxt "#30304"
 msgid "Start with defaults"
-msgstr ""
+msgstr "Start met standaardwaarden"
 
 msgctxt "#30305"
 msgid "Field"
-msgstr ""
+msgstr "Veld"
 
 msgctxt "#30306"
 msgid "Operator"
-msgstr ""
+msgstr "Operator"
 
 msgctxt "#30307"
 msgid "Value"
-msgstr ""
+msgstr "Waarde"
 
 msgctxt "#30308"
 msgid "Content type"
-msgstr ""
+msgstr "Inhoud type"
 
 msgctxt "#30309"
 msgid "Content"
-msgstr ""
+msgstr "Inhoud"
 
 msgctxt "#30310"
 msgid "Group"
-msgstr ""
+msgstr "Groep"
 
 msgctxt "#30311"
 msgid "Limit"
-msgstr ""
+msgstr "Limiet"
 
 msgctxt "#30312"
 msgid "Path"
-msgstr ""
+msgstr "Locatie"
 
 msgctxt "#30313"
 msgid "Icon"
-msgstr ""
+msgstr "Icoon"
 
 msgctxt "#30314"
 msgid "Order by"
-msgstr ""
+msgstr "Sorteren op"
 
 msgctxt "#30315"
 msgid "Direction"
-msgstr ""
+msgstr "Richting"
 
 msgctxt "#30316"
 msgid "Name of new node"
-msgstr ""
+msgstr "Naam van nieuwe node"
 
-#empty strings from id 30317 to 30399
-
-# Messages for dialogs
 msgctxt "#30400"
 msgid "Unable to copy default library nodes"
-msgstr ""
+msgstr "Niet gelukt standaard bibliotheek nodes te kopiëren "
 
 msgctxt "#30401"
 msgid "Are you sure you want to delete this node?"
-msgstr ""
+msgstr "Weet u zeker dat u deze node wilt verwijderen?"
 
 msgctxt "#30402"
 msgid "Are you sure you want to reset all nodes?"
-msgstr ""
+msgstr "Wat u zeker dat u alle nodes wilt herstellen?"
 
 msgctxt "#30403"
 msgid "Are you sure you want to delete this property?"
-msgstr ""
+msgstr "Wet u zeker dat u eigendom wilt verwijderen?"
 
 msgctxt "#30404"
 msgid "Content parameter can't be deleted whilst this node still has an Order, Limit or Rule parameter."
-msgstr ""
+msgstr "Inhoudsparameter kan niet worden verwijder omdat deze node nog steeds een volgorde, limiet of regelparameter heeft."
 
 msgctxt "#30405"
 msgid "Are you sure you want to delete this rule?"
-msgstr ""
+msgstr "Wet u zeker dat u deze regel wilt verwijderen?"
 
 msgctxt "#30406"
 msgid "Order requires a Content parameter"
-msgstr ""
+msgstr "Volgorde vereist een inhoudsparameter"

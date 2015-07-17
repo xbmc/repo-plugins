@@ -1,0 +1,81 @@
+# Kodi Media Center language file
+# Addon Name: Library Node Editor
+# Addon id: plugin.library.node.editor
+# Addon Provider: Unfledged, Team-Kodi
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (New Zealand) (http://www.transifex.com/projects/p/xbmc-addons/language/en_NZ/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_NZ\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30091"
+msgid "Video Library"
+msgstr "Video Library"
+
+msgctxt "#30092"
+msgid "Music Library"
+msgstr "Music Library"
+
+msgctxt "#30100"
+msgid "Delete"
+msgstr "Delete"
+
+msgctxt "#30101"
+msgid "Edit label"
+msgstr "Edit label"
+
+msgctxt "#30103"
+msgid "Browse for icon"
+msgstr "Browse for icon"
+
+msgctxt "#30200"
+msgid "Content"
+msgstr "Content"
+
+msgctxt "#30204"
+msgid "Path"
+msgstr "Path"
+
+msgctxt "#30305"
+msgid "Field"
+msgstr "Field"
+
+msgctxt "#30306"
+msgid "Operator"
+msgstr "Operator"
+
+msgctxt "#30307"
+msgid "Value"
+msgstr "Value"
+
+msgctxt "#30309"
+msgid "Content"
+msgstr "Content"
+
+msgctxt "#30310"
+msgid "Group"
+msgstr "Group"
+
+msgctxt "#30312"
+msgid "Path"
+msgstr "Path"
+
+msgctxt "#30313"
+msgid "Icon"
+msgstr "Icon"
+
+msgctxt "#30314"
+msgid "Order by"
+msgstr "Order by"
+
+msgctxt "#30315"
+msgid "Direction"
+msgstr "Direction"

@@ -14,7 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 '''
-import xbmc, xbmcplugin, xbmcgui, xbmcaddon, os, urllib, urlparse, mlslive
+import xbmc, xbmcplugin, xbmcgui, xbmcaddon, os, urllib, urlparse, datetime, mlslive
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.mlslive')
 __language__ = __settings__.getLocalizedString
@@ -46,8 +46,13 @@ def createMonthsMenu(complete = False):
 
     key = 'compmonth' if complete else 'month'
 
+    # For live games, don't show past months
+    start_month = 2
+    if not complete:
+        start_month = datetime.datetime.now().month
+
     # add each month in the season
-    for i in range(2,13):
+    for i in range(start_month,13):
         values = { key : str(i) }
         li = xbmcgui.ListItem(__language__(MONTH_OFFSET + i))
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),

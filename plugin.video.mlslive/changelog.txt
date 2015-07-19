@@ -1,3 +1,7 @@
+[B]Version 1.15.2[/B]
+
+- don't show past months when viewing live matches
+
 [B]Version 1.15.1[/B]
 
 - separate live and completed games

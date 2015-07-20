@@ -15,42 +15,50 @@ class LoginClient(object):
             'id': '861556708454-d6dlm3lh05idd8npek18k6be8ba3oc68.apps.googleusercontent.com',
             'secret': 'SboVhoG9s0rNafixCSGGKXAT'
         },
+        # API KEY for search and channel infos. These should work most of the time without login to safe some quota
+        'youtube-for-kodi-quota': {
+            'token-allowed': False,
+            'system': 'All',
+            'key': 'AIzaSyA7v1QOHz8Q4my5J8uGSpr0zRrntRjnMmk',
+            'id': '597640352045-7um2gr1v5rgobm5bf07ebesm3er48286.apps.googleusercontent.com',
+            'secret': 'VmyQ12KkJ_N3yegu4Y-VGCXd'
+        },
         'youtube-for-kodi-fallback': {
+            'token-allowed': False,
             'system': 'Fallback!',
-            'key': 'AIzaSyD8q0h3GWdMQp4yGTeF07udY8weR25Bw54',
-            'id': '360604876433-t7hqkh8ma2oem13ftat6at6oodrg17mq.apps.googleusercontent.com',
-            'secret': 'ULXZaeSKIjBnxq42WeiZeNky'
+            'key': 'AIzaSyBEvxICg_E5g8mfndYjWHH4WEDF2fN_zXM',
+            'id': '705000440035-f7v8mhn75udt6l20r75ko7f15c39ns1c.apps.googleusercontent.com',
+            'secret': 'XeLKD8o_mdzEBDy9Nw5KMKbr'
         },
         'youtube-for-kodi-12': {
             'system': 'Frodo',
-            'key': 'AIzaSyCE2-kHR9zjtqEkA2QPNYmLap063A6Dr98',
-            'id': '530038341143-et4ksm2fjqj5p3vpdpjglemetlqqmd0r.apps.googleusercontent.com',
-            'secret': 'wdAtNLPOz-Tn2WjtCLIva9Vw'
+            'key': 'AIzaSyB6-pMlWO_XmgdM15VKGeLH4QsipdToBas',
+            'id': '131835494776-s0ef9jorci9vl0kaa5sqslupqvlku6ej.apps.googleusercontent.com',
+            'secret': 'Fz9nnfVGoH6jiLc0iefvzZYM'
         },
         'youtube-for-kodi-13': {
             'system': 'Gotham',
-            'key': 'AIzaSyC9MT7g2aqkrsKQraHR2H0V7ozC6dpfBCk',
-            'id': '548159037694-qpi2u8ic4ubm8jukcnluercra0n4gu12.apps.googleusercontent.com',
-            'secret': 'iRq-c2O8K5qiysMGyAlDH5sJ'
-        },
-        # OLD API KEY - THANKS TO THE JERK FOR HIJACKING THE KEY AND DRAINING THE QUOTA!
-        'youtube-for-kodi-14-old': {
-            'system': 'Helix',
-            'key': 'AIzaSyBCwBLShUEzXiOceNuliClY0icE6M4AddU',
-            'id': '308268426735-ph3ukr2flbaila2jt73b329724mpar0g.apps.googleusercontent.com',
-            'secret': '3m2krCjOT16wxgwErsAglOaS'
+            'key': 'AIzaSyB6-pMlWO_XmgdM15VKGeLH4QsipdToBas',
+            'id': '131835494776-s0ef9jorci9vl0kaa5sqslupqvlku6ej.apps.googleusercontent.com',
+            'secret': 'Fz9nnfVGoH6jiLc0iefvzZYM'
         },
         'youtube-for-kodi-14': {
             'system': 'Helix',
-            'key': 'AIzaSyDXWo8-scFY-Ugcn2A0vGo8023hpcWtXto',
-            'id': '971418421398-vtbkp9m1tl3dsk7hnfl1taj8hbs6ljsm.apps.googleusercontent.com',
-            'secret': 'w7LXzE14np-CmhNT1JYUtUTe'
+            'key': 'AIzaSyCOxb_JvsI1-ZneJ2SXTkwZvW3fdtaR3bg',
+            'id': '45906745725-ucn38a9eumqcgfkmv14th17s0eq8kt5f.apps.googleusercontent.com',
+            'secret': 'sK6GK-ZhzgXWehCdjaGybHRi'
         },
         'youtube-for-kodi-15': {
             'system': 'Isengard',
-            'key': 'AIzaSyAFm5cTVZFF0xjR8EJVTHEB15YbAVITgeM',
-            'id': '1032651798584-usob8et5hntg1qsp939qn2aqjhhop88h.apps.googleusercontent.com',
-            'secret': 'MIHwphxCpPC0Nqb73SYLBQsA'
+            'key': 'AIzaSyBAdxZCHbeJwnQ7dDZQJNfcaF46MdqJ24E',
+            'id': '988476436049-l9sfcivj4jtm1f2ppcvvbgsli6kvtis0.apps.googleusercontent.com',
+            'secret': '_BEENv-a3-egDz_QKo5pGZCK'
+        },
+        'youtube-for-kodi-16': {
+            'system': 'J...',
+            'key': 'AIzaSyBbgC4PZ2_hUdqqX7MIgdg2fK1nohv1jrw',
+            'id': '17932591024-8jruv1v7s78gipo7s17c91bnk26rqgpf.apps.googleusercontent.com',
+            'secret': 'bK9T234WWhqzYdcQLif1L35K'
         }
     }
 

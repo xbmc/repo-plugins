@@ -188,6 +188,7 @@ class TestClient(unittest.TestCase):
         context = kodion.Context()
 
         # FLASH?
+        streams = client.get_video_streams(context, 'B3eAMGXFw1o')
         streams = client.get_video_streams(context, 'zyg0WUsY9HI')
 
         # VEVO

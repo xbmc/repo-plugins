@@ -357,7 +357,8 @@ class YouTube(LoginClient):
         else:
             params['mine'] = 'true'
             pass
-        return self._perform_v3_request(method='GET', path='channels', params=params)
+        return self._perform_v3_request(method='GET', path='channels', params=params,
+                                        quota_optimized=channel_id != 'mine')
 
     def get_disliked_videos(self, page_token=''):
         # prepare page token
@@ -577,12 +578,20 @@ class YouTube(LoginClient):
         return _perform(_page_token=page_token, _offset=offset, _result=result)
 
     def _perform_v3_request(self, method='GET', headers=None, path=None, post_data=None, params=None,
-                            allow_redirects=True):
+                            allow_redirects=True, quota_optimized=True):
+
+        # first set the config for the corresponding system (Frodo, Gotham, Helix, ...)
+        yt_config = self._config
+        # in any case of these APIs we change the config to a common key to save some quota
+        if quota_optimized and path in ['channels', 'search']:
+            yt_config = self.CONFIGS['youtube-for-kodi-quota']
+            pass
+
         # params
         if not params:
             params = {}
             pass
-        _params = {'key': self._config['key']}
+        _params = {'key': yt_config['key']}
         _params.update(params)
 
         # headers
@@ -592,7 +601,8 @@ class YouTube(LoginClient):
         _headers = {'Host': 'www.googleapis.com',
                     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.36 Safari/537.36',
                     'Accept-Encoding': 'gzip, deflate'}
-        if self._access_token:
+        # a config can decide if a token is allowed
+        if self._access_token and yt_config.get('token-allowed', True):
             _headers['Authorization'] = 'Bearer %s' % self._access_token
             pass
         _headers.update(headers)

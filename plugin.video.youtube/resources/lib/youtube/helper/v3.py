@@ -197,6 +197,10 @@ def response_to_items(provider, context, json_data, sort=None, reverse_sort=Fals
         result = sorted(result, key=sort, reverse=reverse_sort)
         pass
 
+    # no processing of next page item
+    if not process_next_page:
+        return result
+
     # next page
     """
     This will try to prevent the issue 7163 (https://code.google.com/p/gdata-issues/issues/detail?id=7163).

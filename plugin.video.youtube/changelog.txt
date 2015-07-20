@@ -1,3 +1,8 @@
+5.1.7 (2015-07-15)
+ADD: quota optimization via separate key for none-token depended API calls
+UPD: new login semantic to sign out if someone upgrades to a newer version of KODI
+FIX: 'Next Page (X)' item was added to the current playlist for playback
+
 5.1.6 (2015-06-14)
 ADD: Chinese (Traditional) (thx 2 beddfaf916)
 ADD: Czech (thx 2 tomaswcz)

@@ -3,7 +3,7 @@ import os
 import xbmc
 import xbmcaddon
 
-addon = xbmcaddon.Addon('plugin.video.funimation')
+addon = xbmcaddon.Addon()
 name = addon.getAddonInfo('id')
 icon = addon.getAddonInfo('icon')
 msg_success = addon.getLocalizedString(30602)
@@ -18,4 +18,4 @@ if os.path.exists(cookie_path):
         name, msg_success, 3000, icon))
 else:
     xbmc.executebuiltin('Notification(%s, %s, %d, %s)' % (
-        name, msg_success, 3000, icon))
+        name, msg_fail, 3000, icon))

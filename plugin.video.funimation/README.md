@@ -8,6 +8,5 @@ request. Patches and (constructive) input are always welcome.
 Todo
 ----
 + implement a "My Watchlist"
-+ better error handling
 + get show icons from different site
 + context menu for getting show details

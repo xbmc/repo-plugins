@@ -1,3 +1,11 @@
+v1.1.4
+- created kodi logging handler
+- logging now uses pythons logging module
+- added filtering for sub/dub which closes #8
+
+v1.1.3
+- Fixed clear cookie fail message
+
 v1.1.2
 - Fixed module import error
 

@@ -1,9 +1,6 @@
 import urllib, sys, os, re, time
 import xbmcaddon, xbmcplugin, xbmcgui, xbmc
-if sys.version_info < (2, 7):
-    import simplejson
-else:
-    import json as simplejson
+import simplejson
 
 # Plugin constants
 __addonname__ = "uTorrent"
@@ -86,6 +83,7 @@ def updateList():
             sid = -1
         tup = (hashnum, status, torname, complete, size_str, up_rate, down_rate, remain_str, sid)
         torrentList.append(tup)
+    torrentList.sort(key=lambda tor : tor[2])  # sort by torrent name
     return torrentList
 
 def listTorrents():

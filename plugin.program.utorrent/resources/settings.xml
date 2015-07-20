@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <settings>
 	<setting id="ip" type="text" label="30100" default="192.168.1.1" />
 	<setting id="port" type="text" label="30101" default="8080" />

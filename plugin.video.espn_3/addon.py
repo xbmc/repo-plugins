@@ -10,8 +10,6 @@ import time
 from datetime import datetime, timedelta
 from bs4 import BeautifulSoup, SoupStrainer
 
-import xml.etree.ElementTree as ET
-
 ## Get the settings
 
 selfAddon = xbmcaddon.Addon(id='plugin.video.espn_3')
@@ -69,7 +67,7 @@ def LISTNETWORKS(url,name):
 
 def LISTSPORTS(url,name):
     data = get_html(url)
-    data = '<?xml version="1.0" encoding="CP1252"?>'+data
+    #data = '<?xml version="1.0" encoding="CP1252"?>'+data
     SaveFile('videocache.xml', data, ADDONDATA)
     if 'action=replay' in url:
         image = defaultreplay
@@ -79,8 +77,9 @@ def LISTSPORTS(url,name):
         image = defaultimage
     addDir(translation(30034), url, 1, image)
     sports = []
-    for event in ET.XML(data).findall('event'):
-        sport = event.findtext('sportDisplayValue').title().encode('utf-8')
+    events = BeautifulSoup(data, 'html.parser', parse_only = SoupStrainer('event'))
+    for event in events.find_all('event'):
+        sport = event.find('sportdisplayvalue').string.title().encode('utf-8')
         if sport not in sports:
             sports.append(sport)
     for sport in sports:
@@ -94,39 +93,42 @@ def INDEXBYSPORT(url,name):
 def INDEX(url,name,bysport=False):
     if 'action=live' in url:
         data = get_html(url)
-        data = '<?xml version="1.0" encoding="CP1252"?>'+data
+        #data = '<?xml version="1.0" encoding="CP1252"?>'+data
     else:
         data = ReadFile('videocache.xml', ADDONDATA)
-    for event in ET.XML(data).findall('event'):
-        sport = event.findtext('sportDisplayValue').title().encode('utf-8')
+    events = BeautifulSoup(data, 'html.parser', parse_only = SoupStrainer('event'))
+    for event in events.find_all('event'):
+        sport = event.find('sportdisplayvalue').string.title().encode('utf-8')
         if name <> sport and bysport == True:
             continue
         else:
-            ename = event.findtext('name').encode('utf-8')
+            ename = event.find('name').string.encode('utf-8')
             eventid = event.get('id')
-            simulcastAiringId = event.findtext('simulcastAiringId')
-            desktopStreamSource = event.findtext('desktopStreamSource')
-            bamContentId = event.get('bamContentId')
-            bamEventId = event.get('bamEventId')
+            simulcastAiringId = event.find('simulcastairingid').string
+            desktopStreamSource = event.find('desktopstreamsource').string
+            bamContentId = event.get('bamcontentid')
+            bamEventId = event.get('bameventid')
             authurl = eventid
             authurl += ','+bamContentId
             authurl += ','+bamEventId
             authurl += ','+simulcastAiringId
             authurl += ','+desktopStreamSource
-            sport2 = event.findtext('sport').title().encode('utf-8')
+            sport2 = event.find('sport').string.title()
             if sport <> sport2:
                 sport += ' ('+sport2+')'
-            league = event.findtext('league')
-            location = event.findtext('site')
-            networkid = event.findtext('networkId')
+            league = event.find('league').string
+            location = event.find('site').string
+            networkid = event.find('networkid').string
             if networkid is not None:
                 network = networkmap[networkid]
-            thumb = event.find('thumbnail').findtext('large')
-            mpaa = event.findtext('parentalRating')
-            starttime = int(event.findtext('startTimeGmtMs'))/1000
-	    eventedt = int(event.findtext('startTime'))
+            fanart = event.find('large').string
+            fanart = fanart.split('&')[0]
+            thumb = event.find('large').string
+            mpaa = event.find('parentalrating').string
+            starttime = int(event.find('starttimegmtms').string)/1000
+	    eventedt = int(event.find('starttime').string)
             etime = time.strftime("%I:%M %p",time.localtime(float(starttime)))
-            endtime = int(event.findtext('endTimeGmtMs'))/1000
+            endtime = int(event.find('endtimegmtms').string)/1000
             start = time.strftime("%m/%d/%Y %I:%M %p",time.localtime(starttime))
             aired = time.strftime("%Y-%m-%d",time.localtime(starttime))
             date = time.strftime("%m/%d/%Y",time.localtime(starttime))
@@ -145,22 +147,23 @@ def INDEX(url,name,bysport=False):
                 ename = " - ".join((udate, etime, ename))
             
             
-            end = event.findtext('summary')
+            end = event.find('summary').string
             if end == '':
-                end = event.findtext('caption')
+                end = event.find('caption').string
+            else: end = 'No Summary/ Caption Provided'
 
             plot = ''
-            if sport <> '' and sport <> ' ':
+            if sport <> None and sport <> ' ':
                 plot += 'Sport: '+sport+'\n'
-            if league <> '' and league <> ' ':
+            if league <> None and league <> ' ':
                 plot += 'League: '+league+'\n'
-            if location <> '' and location <> ' ':
+            if location <> None and location <> ' ':
                 plot += 'Location: '+location+'\n'
-            if start <> '' and start <> ' ':
+            if start <> None and start <> ' ':
                 plot += 'Air Date: '+start+'\n'
-            if length <> '' and length <> ' ' and 'action=live' in url:
+            if length <> None and length <> ' ' and 'action=live' in url:
                 plot += 'Duration: Approximately '+length+' minutes remaining'+'\n'
-	    elif length <> '' and length <> ' ' and ('action=replay' in url or 'action=upcoming' in url):
+	    elif length <> None and length <> ' ' and ('action=replay' in url or 'action=upcoming' in url):
 		plot += 'Duration: '+length+' minutes'+'\n'
             plot += end
             infoLabels = {'title':ename,
@@ -185,7 +188,7 @@ def INDEX(url,name,bysport=False):
                 mode = 9
             elif networkid == 'nbb':
                 mode = 10  
-            addLink(ename, authurl, mode, thumb, thumb, infoLabels=infoLabels)
+            addLink(ename, authurl, mode, fanart, fanart, infoLabels=infoLabels)
     xbmcplugin.setContent(pluginhandle, 'episodes')
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 

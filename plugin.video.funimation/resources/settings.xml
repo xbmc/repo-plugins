@@ -4,11 +4,13 @@
   <category label="30200">
     <setting id="username" type="text" label="30201" />
     <setting id="password" type="text" label="30202" option="hidden" />
+    <setting type="sep" />
+    <setting id="sub_dub" type="enum" label="30203" lvalues="30204|30205|30206" default="0" />
   </category>
 
   <!-- Advanced -->
   <category label="30210">
-    <setting id="loglvl" type="enum" label="30211" lvalues="30219|30220|30221|30222|30223" default="0" />
+    <setting id="loglvl" type="enum" label="30211" lvalues="30222|30221|30220|30219" default="1" />
     <setting type="sep" />
     <setting label="30218" type="action" action="RunScript($CWD/resources/lib/clear_cookies.py)"/>
   </category>

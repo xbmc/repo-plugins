@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.stream-selector" name="Stream Selector" version="1.0.0" provider-name="kodi-bees">
+  <requires>
+    <import addon="xbmc.python"  version="2.1.0"/>    
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary     lang="en">Allow to select stream to play from a list</summary>
+    <description lang="en">Allow to select stream to play from a list</description>
+    <platform>all</platform>
+  </extension>
+</addon>

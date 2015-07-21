@@ -18,6 +18,12 @@ __language__  = addon.getLocalizedString
 home          = addon.getAddonInfo('path').decode(UTF8)
 icon          = xbmc.translatePath(os.path.join(home, 'icon.png'))
 addonfanart   = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
+profile       = addon.getAddonInfo('profile').decode(UTF8)
+pdir  = xbmc.translatePath(os.path.join(profile))
+if not os.path.isdir(pdir):
+   os.makedirs(pdir)
+
+metafile      = xbmc.translatePath(os.path.join(profile, 'shows.json'))
 
 
 def log(txt):
@@ -47,10 +53,23 @@ def getShows():
    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_EPISODE)
 
    ilist=[]
+   meta ={}
+   if addon.getSetting('init_meta') != 'true':
+      try:
+         with open(metafile) as infile:
+             meta = json.load(infile)
+      except: pass
+   showDialog = len(meta)
    epiHTML = getRequest('http://www.syfy.com/episodes')
    posterHTML = getRequest('http://www.syfy.com/shows')
    posters = re.compile('<div class="grid-image-above">.+?<img  srcset="(.+?)".+?class="title">(.+?)<',re.DOTALL).findall(posterHTML)
    shows = re.compile('<div class="show id.+?<h3>(.+?)<.+?</div',re.DOTALL).findall(epiHTML)
+   if showDialog == 0 : 
+       pDialog = xbmcgui.DialogProgress()
+       pDialog.create(__language__(30082), __language__(30083))
+       numShows = len(shows)
+       i = 1
+
    for name in shows:
        poster = None
        for pimg, pname in posters:
@@ -61,43 +80,56 @@ def getShows():
        m  = re.compile('<div class="show id.+?<h3>'+name+'</h3>(.+?)</a></div>  </div>  </div>\n    </div>',re.DOTALL).search(epiHTML)
        epis = re.compile('href="(.+?)"',re.DOTALL).findall(epiHTML,m.start(1),m.end(1))
        vcnt = len(epis)
-       url  = SYFYBASE % epis[len(epis)-1]
-       html = getRequest(url)
-       purl = re.compile('data-src="(.+?)"',re.DOTALL).search(html).group(1)
-       purl = 'http:'+purl.replace('&amp;','&')
-       html = getRequest(purl)
-       purl = re.compile('<link rel="alternate" href=".+?<link rel="alternate" href="(.+?)"',re.DOTALL).search(html).group(1)
-       purl += '&format=Script&height=576&width=1024'
+       shurl  = SYFYBASE % epis[len(epis)-1]
 
-       html = getRequest(purl)
-       a = json.loads(html)
-       infoList = {}
-       infoList['Date']        = datetime.datetime.fromtimestamp(a['pubDate']/1000).strftime('%Y-%m-%d')
-       infoList['Aired']       = infoList['Date']
-       infoList['MPAA']        = a['ratings'][0]['rating']
-       infoList['TVShowTitle'] = name
-       infoList['Title']       = name
-       infoList['Studio']      = a['provider']
-       infoList['Genre']       = (a['nbcu$advertisingGenre']).replace('and','/')
-       infoList['Episode']     = vcnt
-       infoList['Year']        = int(infoList['Aired'].split('-',1)[0])
-       url = '%s/cast' % url.split('/video',1)[0]
-       html = getRequest(url)
-       try:    infoList['Plot'] = re.compile('<div class="field field-name-body.+?<p>(.+?)</p',re.DOTALL).search(html).group(1)
-       except: 
-          try:    infoList['Plot'] = re.compile('<meta name="description" content="(.+?)"',re.DOTALL).search(html).group(1)
-          except: infoList['Plot'] = '%s Episodes' % str(vcnt)
-       infoList['cast'] = re.compile('<article class="tile.+?tile-marqee">(.+?)<.+?</article',re.DOTALL).findall(html)
-       if len(infoList['cast']) == 0: 
-          infoList['cast'] = re.compile('<article class="tile.+?tile-title">(.+?)<.+?</article',re.DOTALL).findall(html)
-       infoList['Plot'] = h.unescape(infoList['Plot'])
+       try:
+          (name, poster, infoList) = meta[shurl]
+       except:
+          html = getRequest(shurl)
+          purl = re.compile('data-src="(.+?)"',re.DOTALL).search(html).group(1)
+          purl = 'http:'+purl.replace('&amp;','&')
+          html = getRequest(purl)
+          purl = re.compile('<link rel="alternate" href=".+?<link rel="alternate" href="(.+?)"',re.DOTALL).search(html).group(1)
+          purl += '&format=Script&height=576&width=1024'
+
+          html = getRequest(purl)
+          a = json.loads(html)
+          infoList = {}
+          infoList['Date']        = datetime.datetime.fromtimestamp(a['pubDate']/1000).strftime('%Y-%m-%d')
+          infoList['Aired']       = infoList['Date']
+          infoList['MPAA']        = a['ratings'][0]['rating']
+          infoList['TVShowTitle'] = name
+          infoList['Title']       = name
+          infoList['Studio']      = a['provider']
+          infoList['Genre']       = (a['nbcu$advertisingGenre']).replace('and','/')
+          infoList['Episode']     = vcnt
+          infoList['Year']        = int(infoList['Aired'].split('-',1)[0])
+          url = '%s/cast' % shurl.split('/video',1)[0]
+          html = getRequest(url)
+          try:    infoList['Plot'] = re.compile('<div class="field field-name-body.+?<p>(.+?)</p',re.DOTALL).search(html).group(1)
+          except: 
+             try:    infoList['Plot'] = re.compile('<meta name="description" content="(.+?)"',re.DOTALL).search(html).group(1)
+             except: infoList['Plot'] = '%s Episodes' % str(vcnt)
+          infoList['cast'] = re.compile('<article class="tile.+?tile-marqee">(.+?)<.+?</article',re.DOTALL).findall(html)
+          if len(infoList['cast']) == 0: 
+             infoList['cast'] = re.compile('<article class="tile.+?tile-title">(.+?)<.+?</article',re.DOTALL).findall(html)
+          infoList['Plot'] = h.unescape(infoList['Plot'])
        url = name
        mode = 'GE'
+       meta[shurl] = (name, poster, infoList)
        u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
        liz=xbmcgui.ListItem(name, '',poster, None)
        liz.setInfo( 'Video', infoList)
        liz.setProperty('fanart_image', addonfanart)
        ilist.append((u, liz, True))
+       if showDialog == 0 : 
+          pDialog.update(int((100*i)/numShows))
+          i = i+1
+   if showDialog == 0 : pDialog.close()
+   with open(metafile, 'w') as outfile:
+        json.dump(meta, outfile)
+   outfile.close
+   addon.setSetting(id='init_meta', value='false')
    xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
    if addon.getSetting('enable_views') == 'true':
       xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('default_view'))

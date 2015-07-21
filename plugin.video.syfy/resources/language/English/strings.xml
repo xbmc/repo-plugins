@@ -9,6 +9,10 @@
        <string id="30072">Episode View</string>
        <string id="30073">View</string>
 
+       <string id="30080">Metadata</string>
+       <string id="30081">Initialize Metadata Next Start</string>
+       <string id="30082">Syfy Channel</string>
+       <string id="30083">Initializing ....</string>
 
 
 </strings>

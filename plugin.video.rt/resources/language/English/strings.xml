@@ -16,4 +16,10 @@
     <string id="30025">480p</string>
     <string id="30026">320p</string>
     <string id="30027">240p</string>
+
+       <string id="30070">Enable Views</string>
+       <string id="30071">Default View</string>
+       <string id="30072">Episode View</string>
+       <string id="30073">View</string>
+
 </strings>

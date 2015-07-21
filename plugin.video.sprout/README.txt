@@ -3,6 +3,7 @@ plugin.video.sprout
 
 XBMC Addon for Sprout for Kids website
 
+Version 1.0.10 Added Show caching - should load faster
 Version 1.0.9 Added user select views
 Version 1.0.8 Added subtitles, meta-data
 Version 1.0.7 Website change

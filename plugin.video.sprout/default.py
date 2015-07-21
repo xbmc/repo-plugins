@@ -19,6 +19,12 @@ __language__  = addon.getLocalizedString
 home          = addon.getAddonInfo('path').decode(UTF8)
 icon          = xbmc.translatePath(os.path.join(home, 'icon.png'))
 addonfanart   = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
+profile       = addon.getAddonInfo('profile').decode(UTF8)
+pdir  = xbmc.translatePath(os.path.join(profile))
+if not os.path.isdir(pdir):
+   os.makedirs(pdir)
+
+metafile      = xbmc.translatePath(os.path.join(profile, 'shows.json'))
 
 
 def log(txt):
@@ -48,13 +54,31 @@ def getShows():
    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_EPISODE)
 
    ilist=[]
+   meta ={}
+   if addon.getSetting('init_meta') != 'true':
+      try:
+         with open(metafile) as infile:
+             meta = json.load(infile)
+      except: pass
+   showDialog = len(meta)
+
    basehtml = getRequest('http://www.sproutonline.com/now/')
    cats = re.compile('<div class="wrap imageLoading".+?href="(.+?)".+?title="(.+?)".+?</div',re.DOTALL).findall(basehtml)
+   if showDialog == 0 : 
+       pDialog = xbmcgui.DialogProgress()
+       pDialog.create(__language__(30082), __language__(30083))
+       numShows = len(cats)
+       i = 1
+
    for url, name in cats:
+     shurl = SPROUTBASE % (url)
+     try:
+        (name, img, fanart, infoList) = meta[url]
+     except:
+
        img = re.compile('<li class="slide show".+?<a href="'+url+'".+?<img src="(.+?)".+?</li>',re.DOTALL).search(basehtml).group(1)
        name = name.strip()
-       url = SPROUTBASE % (url)
-       html = getRequest(url)
+       html = getRequest(shurl)
        try:    fanart = re.compile('<img class="showBaner" src="(.+?)"',re.DOTALL).search(html).group(1)
        except: fanart = addonfanart
        plot = re.compile('"og:description" content="(.+?)"',re.DOTALL).search(html).group(1)
@@ -73,12 +97,21 @@ def getShows():
        infoList['Episode']     = int(a["tve_widgets"]["related_videos"]["assets_number"])
        infoList['Year']        = int(infoList['Aired'].split('-',1)[0])
        infoList['Plot']        = h.unescape(plot)
-       mode = 'GE'
-       u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
-       liz=xbmcgui.ListItem(name, '',img, None)
-       liz.setInfo( 'Video', infoList)
-       liz.setProperty('fanart_image', fanart)
-       ilist.append((u, liz, True))
+     meta[url] = (name, img, fanart, infoList)
+     mode = 'GE'
+     u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(shurl), qp(name), mode)
+     liz=xbmcgui.ListItem(name, '',img, None)
+     liz.setInfo( 'Video', infoList)
+     liz.setProperty('fanart_image', fanart)
+     ilist.append((u, liz, True))
+     if showDialog == 0 : 
+        pDialog.update(int((100*i)/numShows))
+        i = i+1
+   if showDialog == 0 : pDialog.close()
+   with open(metafile, 'w') as outfile:
+        json.dump(meta, outfile)
+   outfile.close
+   addon.setSetting(id='init_meta', value='false')
    xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
    if addon.getSetting('enable_views') == 'true':
       xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('default_view'))

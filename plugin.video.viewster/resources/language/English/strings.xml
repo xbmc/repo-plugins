@@ -10,4 +10,12 @@
        <string id="30007">Language</string>
        <string id="30008">Settings</string>
        <string id="30009">All Languages</string>
+
+       <string id="30070">Enable Views</string>
+       <string id="30071">Default View</string>
+       <string id="30072">Episodes View</string>
+       <string id="30073">View</string>
+       <string id="30074">Movies View</string>
+       <string id="30075">Shows View</string>
+
 </strings>

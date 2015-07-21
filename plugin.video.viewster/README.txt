@@ -1,9 +1,9 @@
 plugin.video.viewster================
 
+Kodi Addon for Viewster website
 
-Kodi Addon for viewster website
+Version 2.0.1 Rewrite for new API, added views
 
-Version 1.0.7 website change
 Version 1.0.6 category encoding fix, thanks to Andre Koehler
 Version 1.0.5 feed change - m3u8 support
 Version 1.0.4 added "all languages" support

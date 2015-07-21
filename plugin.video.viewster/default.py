@@ -6,12 +6,11 @@ import httplib
 
 import urllib, urllib2, cookielib, datetime, time, re, os, string
 import xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs, xbmc
-import cgi, gzip
-import json
-from StringIO import StringIO
+import zlib,json,HTMLParser
+h = HTMLParser.HTMLParser()
+qp  = urllib.quote_plus
+uqp = urllib.unquote_plus
 
-
-USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25'
 GENRE_TV  = "TV"
 UTF8          = 'utf-8'
 MAX_PER_PAGE  = 25
@@ -25,270 +24,311 @@ home          = addon.getAddonInfo('path').decode(UTF8)
 icon          = xbmc.translatePath(os.path.join(home, 'icon.png'))
 addonfanart   = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
 
-#play = False
 
 def log(txt):
     message = '%s: %s' % (__addonname__, txt.encode('ascii', 'ignore'))
     xbmc.log(msg=message, level=xbmc.LOGDEBUG)
 
-def cleanfilename(name):    
-    valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
-    return ''.join(c for c in name if c in valid_chars)
+USER_AGENT = 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36'
+defaultHeaders = {'User-Agent': USER_AGENT,
+               'Referer': 'http://www.viewster.com/',
+               'Accept-Encoding': 'gzip, deflate',
+               'Accept-Language': 'en-US,en;q=0.8',
+               'Accept': 'application/json, text/javascript, */*; q=0.01',
+               'Connection': 'keep-alive'}
 
-def demunge(munge):
-        try:
-            munge = urllib.unquote_plus(munge).decode(UTF8)
-        except:
-            pass
-        return munge
+def getRequest(url, udata=None, headers = defaultHeaders):
+   log("getRequest URL:"+str(url))
+   req = urllib2.Request(url.encode(UTF8), udata, headers)
+   try:
+      response = urllib2.urlopen(req)
+      page = response.read()
+      if response.info().getheader('Content-Encoding') == 'gzip':
+         log("Content Encoding == gzip")
+         page = zlib.decompress(page, zlib.MAX_WBITS + 16)
+   except:
+      page = ""
+   return(page)
 
+def getToken():
 
-
-
-def getRequest(url, user_data=None, headers = {'User-Agent':USER_AGENT, 'Accept':"text/html", 'Accept-Encoding':'gzip,deflate,sdch', 'Accept-Language':'en-US,en;q=0.8'}  ):
-              log("getRequest URL:"+str(url))
-              req = urllib2.Request(url.encode(UTF8), user_data, headers)
-
-              try:
-                 response = urllib2.urlopen(req)
-                 if response.info().getheader('Content-Encoding') == 'gzip':
-                    log("Content Encoding == gzip")
-                    buf = StringIO( response.read())
-                    f = gzip.GzipFile(fileobj=buf)
-                    link1 = f.read()
-                 else:
-                    link1=response.read()
-              except:
-                 link1 = ""
-
-              link1 = str(link1).replace('\n','')
-              return(link1)
+    url   = 'http://www.viewster.com/api/token/'
+    udata = ''
+    headers = defaultHeaders
+    headers['X-Requested-With']= 'XMLHttpRequest'
+    req = urllib2.Request(url, udata, headers)
+    response = urllib2.urlopen(req)
+    token = uqp(re.compile('api_token=(.+?);',re.DOTALL).search(str(response.info())).group(1))
+    return token
 
 def getSources(fanart):
-    html = getRequest('http://api.live.viewster.com/api/v1/login', headers = {'Accept': '*/*', 'Origin': 'http://www.viewster.com', 
-                      'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36',
-                      'Referer' : 'http://www.viewster.com', 'Accept-Encoding': 'gzip,deflate,sdch', 
-                      'Accept-Language' : 'en-US,en;q=0.8'})
 
-    html = getRequest('http://api.live.viewster.com/api/v1/configuration/', headers = {'Accept': 'application/json, text/javascript, */*; q=0.01', 'Origin': 'http://www.viewster.com', 
-                      'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36',
-                      'Referer' : 'http://www.viewster.com', 'Accept-Encoding': 'gzip,deflate,sdch', 
-                      'Accept-Language' : 'en-US,en;q=0.8'})
-
+    ilist = []
+    url   = 'https://public-api.viewster.com/genres'
+    headers = defaultHeaders
+    headers['Auth-token'] = getToken()
+    html = getRequest(url, None, headers)
     cats = json.loads(html)
-    x = cats['Genres']
-    for list in x:
-      sname = list['name'].encode(UTF8)
-      sid = list['id']
-      img  =   'http://divaag.vo.llnwd.net/o42/http_rtmpe/shared/Viewster_Artwork/internal_artwork/g%s_1280x720.jpg' % sid
-      sid = sid.encode(UTF8)+('#').encode(UTF8)+sname
-      addDir(sname, sid, 'GC', img, addonfanart, sname, '', '')      
-    addDir("[COLOR red]%s[/COLOR]" % __language__(30001),"/search/Movies#%s" % __language__(30001),'DS','',fanart,__language__(30001),"","",False)
-    addDir("[COLOR red]%s[/COLOR]" % __language__(30002),"/search/TvShow#%s" % __language__(30002),'DS','',fanart,__language__(30002),"","",False)
+    for list in cats:
+       name = list['Name'].decode(UTF8)
+       url = str(list['Id'])
+       img  =   'http://divaag.vo.llnwd.net/o42/http_rtmpe/shared/Viewster_Artwork/internal_artwork/g%s_1280x720.jpg' % url
+       mode = 'GC'
+       u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
+       liz=xbmcgui.ListItem(name, '',None, img)
+       liz.setProperty('fanart_image', addonfanart)
+       ilist.append((u, liz, True))
+    searches = [("/search/Movies#%s",__language__(30001)),("/search/TvShow#%s",__language__(30002))]
+    for url,name in searches:
+       url  = url % name
+       lname = "[COLOR red]%s[/COLOR]" % name
+       u = '%s?url=%s&name=%s&mode=DS' % (sys.argv[0],qp(url), qp(name))
+       liz=xbmcgui.ListItem(lname, '',icon, None)
+       ilist.append((u, liz, True))
+    xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+    if addon.getSetting('enable_views') == 'true':
+      xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('default_view'))
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 def doSearch(osid):
         keyb = xbmc.Keyboard('', 'Search')
         keyb.doModal()
         if (keyb.isConfirmed()):
             search = urllib.quote_plus(keyb.getText())
-            getShow(osid, query=search)
-
-def getCats(url):
-    (url,xname) = url.split('#',1)
-    img  =   'http://divaag.vo.llnwd.net/o42/http_rtmpe/shared/Viewster_Artwork/internal_artwork/g%s_1280x720.jpg' % url
-    html = getRequest('http://api.live.viewster.com/api/v1/home/%s' % (url), headers = {'Accept': 'application/json, text/javascript, */*; q=0.01', 'Origin': 'http://www.viewster.com', 
-                      'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36',
-                      'Referer' : 'http://www.viewster.com', 'Accept-Encoding': 'gzip,deflate,sdch', 
-                      'Accept-Language' : 'en-US,en;q=0.8'})
-    a = json.loads(html)
-    x = a['collections']
-    for list in x:
-      z = list['asset_list']
-      for list1 in z:
-        sid = list1['datasource']['path']  
-        sname = list1['metadata']['display_text']  
-        addDir(sname, '%s#%s' % (sid,sname), 'GS', img, addonfanart, xname, '', '')
-       
-
-def getShow(osid, start='0', end=str(MAX_PER_PAGE-1), order='1', lang=str(int(addon.getSetting('lang'))), query='undefined'):
-      (sid, sxname) = osid.split('#',1)
-      if '#' in sxname:
-          (sxname,start,end,order,lang,query) = sxname.split('#',5)
-      if 'Trailers' in sid:
-          lang = '1' # force to English for trailers - until f4m available
-      qurl = 'http://api.live.viewster.com/api/v1%s?from=%s&to=%s&q=%s&order=%s&lang=%s' % (sid, start, end, query, order, lang)
-      html = getRequest(qurl, headers = {'Accept': 'application/json, text/javascript, */*; q=0.01', 'Origin': 'http://www.viewster.com', 
-                      'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36',
-                      'Referer' : 'http://www.viewster.com', 'Accept-Encoding': 'gzip,deflate,sdch', 
-                      'Accept-Language' : 'en-US,en;q=0.8'})
-
-      a = json.loads(html)
-      print "a = "+str(a)
-      ptemplate = a['image_path_masks']['Poster']
-      scnt = 0
-      for show in a['data']:
-        scnt = scnt + 1
-        sname  = show['title'].encode(UTF8)
-        sdate  = show['publish_date']
-        shid   = show['id']
-        xid    = shid.encode(UTF8)+('#').encode(UTF8)+sname
-        sdesc  = show['synopsis'].encode(UTF8)
-        sgenre = show['genre']
-        ctitle = show['canonical_title']
-        simg   = ptemplate.replace('[mid]',shid).replace('[size]','')
-        if sxname != 'Tv-Series':
-            surl = sys.argv[0]+"?url="+urllib.quote_plus(shid)+"&name="+urllib.quote_plus(ctitle)+"&mode=GV"
-            addLink(surl.encode(UTF8),sname,simg.encode(UTF8),addonfanart,sdesc,sgenre,sdate,False)
-        else:
-            addDir(sname, xid , 'GE', simg.encode(UTF8), addonfanart, sdesc, sgenre, sdate)
-      if scnt >= MAX_PER_PAGE-1:
-           start = str(int(end)+1)
-           end = str(int(end)+MAX_PER_PAGE)
-           sname = '[COLOR blue] %s [/COLOR]' % __language__(30000)
-           addDir(sname, '%s#%s#%s#%s#%s#%s#%s' % (sid,sxname,start,end,order,lang,query), 'GS', icon, addonfanart, sname, '', '')
+            url = 'https://public-api.viewster.com/search/%s?pageSize=50&pageIndex=1' % uqp(search)
+            headers = defaultHeaders
+            headers['Auth-token'] = getToken()
+            headers['X-Requested-With']= 'XMLHttpRequest'
+            html = getRequest(url, None, headers)
 
 
-def getEpisodes(sid):
-    (sid, sxname) = sid.split('#',1)
-    html = getRequest('http://api.live.viewster.com/api/v1/movie/%s' % (sid), headers = {'Accept': 'application/json, text/javascript, */*; q=0.01', 'Origin': 'http://www.viewster.com', 
-                      'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36',
-                      'Referer' : 'http://www.viewster.com', 'Accept-Encoding': 'gzip,deflate,sdch', 
-                      'Accept-Language' : 'en-US,en;q=0.8'})
-    c = json.loads(html)
-    print "c = "+str(c)
-    if c['content_type'] == 'Series':
-      for clip in c['play_list']:
-        if clip['clip_type'] == 'Episode':
-           sname  = '%s - %s' % (sxname,clip['title'].encode(UTF8))
-           sdesc  = clip['title'].encode(UTF8)
-           sid    = clip['id']
-           ctitle = clip['canonical_title']
-           simg = 'http://divaag.vo.llnwd.net/o42/http_rtmpe/shared/Viewster_Artwork/movie_artwork/%s_EN.jpg' % (sid)
-           surl = sys.argv[0]+"?url="+urllib.quote_plus(sid)+"&name="+urllib.quote_plus(ctitle)+"&mode=GV"
-           addLink(surl.encode(UTF8),sname,simg.encode(UTF8),addonfanart,sdesc,'','',False)
+def getCats(url, name):
+    ilist = []
+    img   = 'http://divaag.vo.llnwd.net/o42/http_rtmpe/shared/Viewster_Artwork/internal_artwork/g%s_1280x720.jpg' % url
+    names = [('Movies', 'GM'), ('Tv-Series','GS')]
+    for name, mode in names:
+        u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
+        liz=xbmcgui.ListItem(name, '',None, img)
+        liz.setProperty('fanart_image', addonfanart)
+        ilist.append((u, liz, True))
+    xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+    if addon.getSetting('enable_views') == 'true':
+      xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('default_view'))
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
+
+def getMovie(url, name):
+    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_UNSORTED)
+    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_TITLE)
+    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_EPISODE)
+    xbmcplugin.setContent(int(sys.argv[1]), 'movies')
+
+    ilist = []
+    url   = 'https://public-api.viewster.com/movies?pageSize=200&pageIndex=1&genreId=%s' % url
+    headers = defaultHeaders
+    headers['Auth-token'] = getToken()
+    html = getRequest(url, None, headers)
+    try: a = json.loads(html)['Items']
+    except: return
+    for b in a:
+       img    = 'http://image.api.viewster.com/movies/%s/image?width=196&height=279' % b['OriginId']
+       name = b['Title']
+       vid = b['Id']
+       infoList = {}
+       infoList['Title'] = name
+       try: 
+          infoList['Genre'] = ''
+          for genre in b['Genres']: infoList['Genre'] += genre['Name']+','
+       except: pass
+       try: infoList['Plot']         = b['Synopsis']['Detailed']
+       except: pass
+       try: infoList['PlotOutline']  = b['Synopsis']['Short']
+       except: pass
+       try: infoList['Director']     = b['Directors']
+       except: pass
+       try:
+           infoList['Cast']  = []
+           for actor in b['Actors'].split(',') : infoList['Cast'].append(actor)
+       except: pass
+       try: infoList['Year']     = int(b['ReleaseDate'].split('-',1)[0])
+       except: pass
+       try: infoList['premiered']= b['ReleaseDate'].split('T')[0]
+       except: pass
+       try: infoList['Duration'] = b['Duration']
+       except: pass
+       u = '%s?url=%s&mode=GV' % (sys.argv[0], vid)
+       liz=xbmcgui.ListItem(name, '',None, img)
+       liz.setInfo( 'Video', infoList)
+       liz.addStreamInfo('video', { 'codec': 'avc1', 
+                         'width' : 856, 
+                         'height' : 480, 
+                         'aspect' : 1.78 })
+       liz.addStreamInfo('audio', { 'codec': 'aac', 'language' : 'en', 'channels': 2})
+       liz.addStreamInfo('subtitle', { 'language' : 'en'})
+       liz.setProperty('fanart_image', addonfanart)
+       liz.setProperty('IsPlayable', 'true')
+       ilist.append((u, liz, False))
+    xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+    if addon.getSetting('enable_views') == 'true':
+      xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('movies_view'))
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+          
+def getEpisodes(url, catname):
+    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_UNSORTED)
+    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_TITLE)
+    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_EPISODE)
+    xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
+
+    ilist = []
+    url   = 'https://public-api.viewster.com/series/%s/episodes' % url
+    headers = defaultHeaders
+    headers['Auth-token'] = getToken()
+    html = getRequest(url, None, headers)
+    try: a = json.loads(html)
+    except: return
+    for b in a:
+       img    = 'http://image.api.viewster.com/movies/%s/image?width=196&height=279' % b['OriginId']
+       name = b['Title']
+       vid = b['Id']
+       infoList = {}
+       infoList['Title'] = name
+       infoList['TVShowTitle'] = uqp(catname)
+       infoList['Season'] = 1
+       infoList['Episode'] = 0
+       try: 
+          infoList['Genre'] = ''
+          for genre in b['Genres']: infoList['Genre'] += genre['Name']+','
+       except: pass
+       try: infoList['Plot']         = b['Synopsis']['Detailed']
+       except: pass
+       try: infoList['PlotOutline']  = b['Synopsis']['Short']
+       except: pass
+       try: infoList['Director']     = b['Directors']
+       except: pass
+       try:
+           infoList['Cast']  = []
+           for actor in b['Actors'].split(',') : infoList['Cast'].append(actor)
+       except: pass
+       try: infoList['Year']     = int(b['ReleaseDate'].split('-',1)[0])
+       except: pass
+       try: infoList['premiered']= b['ReleaseDate'].split('T')[0]
+       except: pass
+       try: infoList['Duration'] = b['Duration']
+       except: pass
+       u = '%s?url=%s&mode=GV' % (sys.argv[0], vid)
+       liz=xbmcgui.ListItem(name, '',None, img)
+       liz.setInfo( 'Video', infoList)
+       liz.addStreamInfo('video', { 'codec': 'avc1', 
+                         'width' : 856, 
+                         'height' : 480, 
+                         'aspect' : 1.78 })
+       liz.addStreamInfo('audio', { 'codec': 'aac', 'language' : 'en', 'channels': 2})
+       liz.addStreamInfo('subtitle', { 'language' : 'en'})
+       liz.setProperty('fanart_image', addonfanart)
+       liz.setProperty('IsPlayable', 'true')
+       ilist.append((u, liz, False))
+    xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+    if addon.getSetting('enable_views') == 'true':
+      xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('episode_view'))
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+              
+
+def getShow(url, catname):
+    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_UNSORTED)
+    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_TITLE)
+    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_EPISODE)
+    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+
+    ilist = []
+    url   = 'https://public-api.viewster.com/series?pageSize=200&pageIndex=1&genreId=%s' % url
+    headers = defaultHeaders
+    headers['Auth-token'] = getToken()
+    html = getRequest(url, None, headers)
+    try: a = json.loads(html)['Items']
+    except: return
+    for b in a:
+       img    = 'http://image.api.viewster.com/movies/%s/image?width=196&height=109' % b['OriginId']
+       name = b['Title']
+       vid = b['Id']
+       infoList = {}
+       infoList['TVShowTitle'] = name
+       try: 
+          infoList['Genre'] = ''
+          for genre in b['Genres']: infoList['Genre'] += genre['Name']+','
+       except: pass
+       try: infoList['Plot']         = b['Synopsis']['Detailed']
+       except: pass
+       try: infoList['PlotOutline']  = b['Synopsis']['Short']
+       except: pass
+       try: infoList['Director']     = b['Directors']
+       except: pass
+       try:
+           infoList['Cast']  = []
+           for actor in b['Actors'].split(',') : infoList['Cast'].append(actor)
+       except: pass
+       try: infoList['Year']     = int(b['ReleaseDate'].split('-',1)[0])
+       except: pass
+       try: infoList['premiered']= b['ReleaseDate'].split('T')[0]
+       except: pass
+       u = '%s?url=%s&name=%s&mode=GE' % (sys.argv[0], vid, qp(name.encode(UTF8)))
+       liz=xbmcgui.ListItem(name, '',None, img)
+       liz.setInfo( 'Video', infoList)
+       liz.addStreamInfo('video', { 'codec': 'avc1', 
+                         'width' : 856, 
+                         'height' : 480, 
+                         'aspect' : 1.78 })
+       liz.addStreamInfo('audio', { 'codec': 'aac', 'language' : 'en', 'channels': 2})
+       liz.addStreamInfo('subtitle', { 'language' : 'en'})
+       liz.setProperty('fanart_image', addonfanart)
+       ilist.append((u, liz, True))
+    xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+    if addon.getSetting('enable_views') == 'true':
+      xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('shows_view'))
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+              
 
 def getVideo(sid, name):
 
-    sid = urllib.unquote_plus(sid)
-    name = urllib.unquote_plus(name)
-    html = getRequest('http://api.live.viewster.com/api/v1/movie/%s' % (sid), headers = {'Accept': 'application/json, text/javascript, */*; q=0.01', 'Origin': 'http://www.viewster.com', 
-                      'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36',
-                      'Referer' : 'http://www.viewster.com', 'Accept-Encoding': 'gzip,deflate,sdch', 
-                      'Accept-Language' : 'en-US,en;q=0.8'})
+#    url = 'https://public-api.viewster.com/movies/'+sid+'/video?mediaType=application%2Ff4m%2Bxml'
+    url = 'https://public-api.viewster.com/movies/'+sid+'/video'
+    headers = defaultHeaders
+    headers['Auth-token'] = getToken()
+    headers['X-Requested-With']= 'XMLHttpRequest'
 
-    c = json.loads(html)
-    print "c from GV = "+str(c)
-    if c['content_type'] == 'Trailer':
-      for clip in c['play_list']:
-        if clip['clip_type'] == 'Trailer':
-           url = clip['clip_data']['url']
-           xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=url)) 
-
-    elif c['content_type'] == 'Movie' or c['content_type'] == 'Series':
-      if c['content_type'] == 'Movie':
-        a =  c['play_list'][0]['languages'][0]
-      else:
-        for a in c['play_list']:
-          if a['autoplay'] == True:
-            break
-
-      try:
-        a =  a['link_request']
-      except:
-        return
-      parms = urllib.urlencode(a)
-      html = getRequest('http://api.live.viewster.com/api/v1/MovieLink?%s' % (parms), 
-            headers = {'Accept': '*/*', 'Origin': 'http://www.viewster.com', 
-                      'User-Agent': 'Mozilla/5.0 (iPad; CPU OS 7_0_4 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) CriOS/34.0.1847.18 #Mobile/11B554a Safari/9537.53',
-                      'Referer' : 'http://www.viewster.com/movie/%s/%s' % (sid, name), 'Accept-Encoding': 'gzip,deflate,sdch', 
-                      'Accept-Language' : 'en-US,en;q=0.8'})
-      a = json.loads(html)
-      print "final GV a = "+str(a)
-      finalurl = a['url']
-      if not finalurl.endswith('.mp4'):
-        html = getRequest(a['url'])
-        streams = re.compile('BANDWIDTH=(.+?),.+?http:(.+?)\?null=').findall(html)
-        show_url=''
-        highbitrate = float(0)
-        for (bitrate, url) in streams:
-           if (float(bitrate)) > highbitrate:
-               show_url = url
-               highbitrate = float(bitrate)
-        finalurl = 'http:%s' % show_url
-      xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = finalurl))
-
-def play_playlist(name, list):
-        playlist = xbmc.PlayList(1)
-        playlist.clear()
-        item = 0
-        for i in list:
-            item += 1
-            info = xbmcgui.ListItem('%s) %s' %(str(item),name))
-            playlist.add(i, info)
-        xbmc.executebuiltin('playlist.playoffset(video,0)')
-
-
-def addDir(name,url,mode,iconimage,fanart,description,genre,date,showcontext=True,playlist=None,autoplay=False):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+mode
-        dir_playable = False
-        cm = []
-
-        if mode != 'SR':
-            u += "&name="+urllib.quote_plus(name)
-            if (fanart is None) or fanart == '': fanart = addonfanart
-            u += "&fanart="+urllib.quote_plus(fanart)
-            dir_image = "DefaultFolder.png"
-            dir_folder = True
-        else:
-            dir_image = "DefaultVideo.png"
-            dir_folder = False
-            dir_playable = True
-
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage=dir_image, thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": description, "Genre": genre, "Year": date } )
-        liz.setProperty( "Fanart_Image", fanart )
-
-        if dir_playable == True:
-         liz.setProperty('IsPlayable', 'true')
-        if not playlist is None:
-            playlist_name = name.split(') ')[1]
-            cm.append(('Play '+playlist_name+' PlayList','XBMC.RunPlugin(%s?mode=PP&name=%s&playlist=%s)' %(sys.argv[0], playlist_name, urllib.quote_plus(str(playlist).replace(',','|')))))
-        liz.addContextMenuItems(cm)
-        return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=dir_folder)
-
-def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,playlist=None, autoplay=False):
-        return addDir(name,url,'SR',iconimage,fanart,description,genre,date,showcontext,playlist,autoplay)
+    html = getRequest(url, None, headers)
+    a = json.loads(html)
+    url = a['Uri']
+    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = url))
 
 
 
 # MAIN EVENT PROCESSING STARTS HERE
 
-xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
-
 parms = {}
 try:
     parms = dict( arg.split( "=" ) for arg in ((sys.argv[2][1:]).split( "&" )) )
     for key in parms:
-       parms[key] = demunge(parms[key])
+      try:    parms[key] = urllib.unquote_plus(parms[key]).decode(UTF8)
+      except: pass
 except:
     parms = {}
 
 p = parms.get
 
-mode = p('mode', None)
+mode = p('mode',None)
 
 if mode==  None:  getSources(p('fanart'))
-elif mode=='SR':  xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=p('url')))
-elif mode=='PP':  play_playlist(p('name'), p('playlist'))
-elif mode=='GC':  getCats(p('url'))
-elif mode=='GS':  getShow(p('url'))
-elif mode=='GE':  getEpisodes(p('url'))
+elif mode=='GC':  getCats(p('url'), p('name'))
+elif mode=='GS':  getShow(p('url'),p('name'))
+elif mode=='GM':  getMovie(p('url'),p('name'))
+elif mode=='GE':  getEpisodes(p('url'),p('name'))
 elif mode=='GV':  getVideo(p('url'),p('name'))
 elif mode=='DS':  doSearch(p('url'))
 
-xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
 

@@ -3,6 +3,7 @@ plugin.video.hgtv
 
 XBMC Addon for HGTV website
 
+Version 2.1.3 Fix for finding first show
 Version 2.1.2 Added subtitles, metadata, fixed views
 Version 2.1.1 Cleanup and fix spaces after name
 Version 2.1.0 Website changes

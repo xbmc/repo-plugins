@@ -18,6 +18,12 @@ __language__  = addon.getLocalizedString
 home          = addon.getAddonInfo('path').decode(UTF8)
 icon          = xbmc.translatePath(os.path.join(home, 'icon.png'))
 addonfanart   = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
+profile       = addon.getAddonInfo('profile').decode(UTF8)
+pdir  = xbmc.translatePath(os.path.join(profile))
+if not os.path.isdir(pdir):
+   os.makedirs(pdir)
+
+metafile      = xbmc.translatePath(os.path.join(profile, 'shows.json'))
 
 
 def log(txt):
@@ -51,10 +57,28 @@ def getMovies():
    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_DURATION)
 
    ilist=[]
+   meta ={}
+   if addon.getSetting('init_meta') != 'true':
+      try:
+         with open(metafile) as infile:
+             meta = json.load(infile)
+      except: pass
+   showDialog = len(meta)
+
    html = getRequest('http://www.smithsonianchannel.com/full-episodes')
    vids = re.compile('data-premium=".+?href="(.+?)".+?srcset="(.+?)".+?"timecode">(.+?)<.+?</li>',re.DOTALL).findall(html)
    mode = 'GV'
+   if showDialog == 0 : 
+       pDialog = xbmcgui.DialogProgress()
+       pDialog.create(__language__(30082), __language__(30083))
+       numShows = len(vids)
+       i = 1
+
    for url, thumb, dur in vids:
+     try:
+        (iconimg,fanart, infoList) = meta[url]
+     except:
+
       html = getRequest('http://www.smithsonianchannel.com%s' % url)
       m = re.compile('property="og:title" content="(.+?)"',re.DOTALL).search(html)
       title = m.group(1)
@@ -77,19 +101,28 @@ def getMovies():
       infoList['Studio']      = studio
       infoList['Genre']       = 'Documentary'
       infoList['Plot']        = h.unescape(plot)
-      name  = infoList['Title']
-      u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
-      liz=xbmcgui.ListItem(name, '',iconimg, thumb)
-      liz.setInfo( 'Video', infoList)
-      liz.addStreamInfo('video', { 'codec': 'h264', 
+     name  = infoList['Title']
+     meta[url] = (iconimg, fanart, infoList)
+     u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
+     liz=xbmcgui.ListItem(name, '',iconimg, thumb)
+     liz.setInfo( 'Video', infoList)
+     liz.addStreamInfo('video', { 'codec': 'h264', 
                                    'width' : 1920, 
                                    'height' : 1080, 
                                    'aspect' : 1.78 })
-      liz.addStreamInfo('audio', { 'codec': 'aac', 'language' : 'en'})
-      liz.addStreamInfo('subtitle', { 'language' : 'en'})
-      liz.setProperty('fanart_image', fanart)
-      liz.setProperty('IsPlayable', 'true')
-      ilist.append((u, liz, False))
+     liz.addStreamInfo('audio', { 'codec': 'aac', 'language' : 'en'})
+     liz.addStreamInfo('subtitle', { 'language' : 'en'})
+     liz.setProperty('fanart_image', fanart)
+     liz.setProperty('IsPlayable', 'true')
+     ilist.append((u, liz, False))
+     if showDialog == 0 : 
+        pDialog.update(int((100*i)/numShows))
+        i = i+1
+   if showDialog == 0 : pDialog.close()
+   with open(metafile, 'w') as outfile:
+        json.dump(meta, outfile)
+   outfile.close
+   addon.setSetting(id='init_meta', value='false')
    xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
    if addon.getSetting('enable_views') == 'true':
       xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('default_view'))

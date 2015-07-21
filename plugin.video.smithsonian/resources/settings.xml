@@ -19,9 +19,6 @@
      		<setting type="sep" />
 	</category>
 
-
-
-
      <category label="30073">
 		<setting type="sep" />
 		<setting id='enable_views' type ="bool" label="30070" default="false"/>
@@ -29,6 +26,11 @@
 		<setting type="sep" />
      </category>
 
+	<category label="30080">
+		<setting type="sep" />
+           <setting id="init_meta" type="bool" label="30081" default="true"/>
+		<setting type="sep" />
+	</category>
 
 	<category label="30030">
 		<setting type="sep" />

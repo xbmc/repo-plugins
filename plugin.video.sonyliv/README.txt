@@ -3,6 +3,7 @@ plugin.video.sonyliv
 
 XBMC Addon for Sony LIV Video website
 
+Version 1.0.10 website change
 Version 1.0.9 website change
 Version 1.0.8 cleanup for website change
 Version 1.0.7 Added multiple BC playerKeys

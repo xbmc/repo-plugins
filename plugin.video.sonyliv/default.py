@@ -236,8 +236,12 @@ def getVideo(url, playerKey):
               bcid = uqp(url)
               if (playerKey != 'AQ~~,AAABzYvvPDk~,iCNMB0hmLnxGz0SO_CwEK3e8q1VJusdj') and (playerKey != 'AQ~~,AAAB051hNik~,6rCKhN0TFnnNKf3MD5ILa725PmUN9D_9') :
                  url = 'https://secure.brightcove.com/services/viewer/htmlFederated?&width=859&height=482&flashID=BrightcoveExperience&bgcolor=%23FFFFFF&playerID=3780015692001&playerKey=AQ~~,AAAApSSxphE~,wbrmvPDFim0fWkqLtb6niKsPCskpElR9&isVid=true&isUI=true&dynamicStreaming=true&%40videoPlayer='+bcid+'&secureConnections=true&secureHTMLConnections=true'
+
               else:
-                url = 'https://secure.brightcove.com/services/viewer/htmlFederated?&width=859&height=482&flashID=BrightcoveExperience&bgcolor=%23FFFFFF&playerID=3780015692001&playerKey='+playerKey+'&isVid=true&isUI=true&dynamicStreaming=true&%40videoPlayer='+bcid+'&secureConnections=true&secureHTMLConnections=true'        
+                 u = 'http://c.brightcove.com/services/mobile/streaming/index/master.m3u8?videoId=%s&pubId=3780015692001' % bcid
+                 xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=u))
+                 return
+
               html = getRequest(url)
               m = re.compile('experienceJSON = (.+?)\};',re.DOTALL).search(html)
               a = json.loads(html[m.start(1):m.end(1)+1])

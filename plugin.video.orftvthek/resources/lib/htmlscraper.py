@@ -27,7 +27,7 @@ class htmlScraper:
         self.defaultbanner = defaultbanner
         self.defaultbackdrop = defaultbackdrop
         self.useSubtitles = useSubtitles
-        self.disableGeoblock = settings.getSetting("disableGeoblock")
+        self.disableGeoblock = settings.getSetting("disableGeoblock") == "true"
         self.xbmc.log(msg='HTML Scraper - Init done', level=xbmc.LOGDEBUG)
         
     # Extracts VideoURL from JSON String    
@@ -408,7 +408,7 @@ class htmlScraper:
         liveurls = {}
         
         
-        if self.disableGeoblock:
+        if self.disableGeoblock == True:
             liveurls['ORF1'] = "http://apasfiisl.apa.at/ipad/orf1_"+self.videoQuality.lower()+"/orf.sdp?wowzasessionid=1"
             liveurls['ORF2'] = "http://apasfiisl.apa.at/ipad/orf2_"+self.videoQuality.lower()+"/orf.sdp?wowzasessionid=1"
             liveurls['ORF3'] = "http://apasfiisl.apa.at/ipad/orf3_"+self.videoQuality.lower()+"/orf.sdp?wowzasessionid=1"

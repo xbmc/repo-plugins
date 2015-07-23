@@ -38,7 +38,7 @@ class serviceAPI:
         self.defaultbanner = defaultbanner
         self.defaultbackdrop = defaultbackdrop
         self.useSubtitles = useSubtitles
-        self.disableGeoblock = settings.getSetting("disableGeoblock")
+        self.disableGeoblock = settings.getSetting("disableGeoblock") == "true"
         self.xbmc.log(msg='ServiceAPI  - Init done', level=xbmc.LOGDEBUG);
         
     def getTableResults(self, urlAPI):

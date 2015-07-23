@@ -1,4 +1,8 @@
-Version 1.0.2
+Version 1.1.0 (23 july 2015)
+Complete rewrite, mainly due to website changes
+SPONSORED VIDEO'S DO NOT WORK ANYMORE (sorry)
+
+Version 1.0.2 (may 2015)
 Removed all the secure password saving stuff. The password has to be entered in the settings of the add-on again. 
 
 Version 1.0.1 (6 may 2015)

@@ -1,0 +1,23 @@
+[B]Version 10.0.3[/B]
+- Corrected Channel Names
+
+[B]Version 10.0.0[/B]
+- Premium user toggle
+- Forced Low quality for non Premium
+- Enter missing email/pass prompt
+- Temporary workaround for site changes
+
+[B]Version 0.3.0[/B]
+- change method of finding streams
+- only show available streams (my9 reported by site as available free, but not actually available)
+
+[B]Version 0.2.0[/B]
+- add ability to view recordings you have previously made on ustvnow.com
+- fix bug with quality settings
+
+[B]Version 0.1.1[/B]
+- Fix breakage due to site changes by implementing logins
+- add setting to choose rtmp or rtsp streams
+
+[B]Version 0.1.0[/B]
+- Initial version

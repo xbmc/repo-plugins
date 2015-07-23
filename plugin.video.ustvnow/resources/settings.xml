@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="quality" type="enum" label="30100" values="400kbps|750kbps|1024kbps" default="0" />
+    <setting id="stream_type" type="enum" label="30101" values="rtmp|rtsp" default="0" />
+    <setting id="subscription" type="bool" label="30104" default="false" />
+    <setting id="email" type="text" label="30102" default="" />
+    <setting id="password" type="text" label="30103" option="hidden" default="" />
+</settings>

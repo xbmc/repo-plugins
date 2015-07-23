@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<strings>
+    <string id="30000">USTVnow</string>
+    <string id="30001">Live</string>
+    <string id="30002">Recordings</string>
+    <string id="30003">Delete Recording</string>
+    <string id="30004">Are you sure you want to</string>
+    <string id="30005">delete this recording?</string>
+    <string id="30100">Quality</string>
+    <string id="30101">Stream Type</string>
+    <string id="30102">Email</string>
+    <string id="30103">Password</string>
+    <string id="30104">Premium Subscription</string>
+</strings>

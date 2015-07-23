@@ -1,10 +1,12 @@
 .gz
 .hg
 .idea
+.project
+.pydevproject
 *.pyo
 *.tar
 *.xcf
 *.zip
-*/.git
-*/.gitattributes
-*/.gitignore
+**/.git
+**/.gitattributes
+**/.gitignore

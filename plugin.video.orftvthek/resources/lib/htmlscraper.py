@@ -27,6 +27,7 @@ class htmlScraper:
         self.defaultbanner = defaultbanner
         self.defaultbackdrop = defaultbackdrop
         self.useSubtitles = useSubtitles
+        self.disableGeoblock = settings.getSetting("disableGeoblock")
         self.xbmc.log(msg='HTML Scraper - Init done', level=xbmc.LOGDEBUG)
         
     # Extracts VideoURL from JSON String    
@@ -405,11 +406,19 @@ class htmlScraper:
     # Returns Live Stream Listing
     def getLiveStreams(self):
         liveurls = {}
-        liveurls['ORF1'] = "http://apasfiisl.apa.at/ipad/orf1_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8";
-        liveurls['ORF2'] = "http://apasfiisl.apa.at/ipad/orf2_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8";
-        liveurls['ORF3'] = "http://apasfiisl.apa.at/ipad/orf3_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8";
-        liveurls['ORFS'] = "http://apasfiisl.apa.at/ipad/orfs_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8";
-
+        
+        
+        if self.disableGeoblock:
+            liveurls['ORF1'] = "http://apasfiisl.apa.at/ipad/orf1_"+self.videoQuality.lower()+"/orf.sdp?wowzasessionid=1"
+            liveurls['ORF2'] = "http://apasfiisl.apa.at/ipad/orf2_"+self.videoQuality.lower()+"/orf.sdp?wowzasessionid=1"
+            liveurls['ORF3'] = "http://apasfiisl.apa.at/ipad/orf3_"+self.videoQuality.lower()+"/orf.sdp?wowzasessionid=1"
+            liveurls['ORFS'] = "http://apasfiisl.apa.at/ipad/orfs_"+self.videoQuality.lower()+"/orf.sdp?wowzasessionid=1"
+        else:
+            liveurls['ORF1'] = "http://apasfiisl.apa.at/ipad/orf1_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8"
+            liveurls['ORF2'] = "http://apasfiisl.apa.at/ipad/orf2_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8"
+            liveurls['ORF3'] = "http://apasfiisl.apa.at/ipad/orf3_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8"
+            liveurls['ORFS'] = "http://apasfiisl.apa.at/ipad/orfs_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8"
+            
         html = common.fetchPage({'link': self.live_url})
         wrapper = common.parseDOM(html.get("content"),name='div',attrs={'class': 'base_list_wrapper.*mod_epg'})
         items = common.parseDOM(wrapper[0],name='li',attrs={'class': 'base_list_item.program.*?'})

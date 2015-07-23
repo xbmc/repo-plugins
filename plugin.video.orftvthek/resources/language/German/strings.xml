@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
+    <string id="30001">Startseite</string>
     <string id="30000">Neuste Sendungen</string>
-    <string id="30001">Aktuell</string>
     <string id="30002">Sendungen</string>
     <string id="30003">Themen</string>
     <string id="30004">Live</string>
@@ -36,4 +36,5 @@
     <string id="30033">Warte auf Sendungsbeginn</string>
     <string id="30034">Zeit bis zum Start:</string>
     <string id="30035">Den Livestream Starten?</string>
+    <string id="30036">Geoblock deaktivieren(nur Livestream)</string>
 </strings>

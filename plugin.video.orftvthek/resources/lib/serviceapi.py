@@ -38,6 +38,7 @@ class serviceAPI:
         self.defaultbanner = defaultbanner
         self.defaultbackdrop = defaultbackdrop
         self.useSubtitles = useSubtitles
+        self.disableGeoblock = settings.getSetting("disableGeoblock")
         self.xbmc.log(msg='ServiceAPI  - Init done', level=xbmc.LOGDEBUG);
         
     def getTableResults(self, urlAPI):
@@ -356,6 +357,16 @@ class serviceAPI:
             bannerurls = {}
             bannerurls['ORF1'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779277.png'
             bannerurls['ORF2'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779281.png'
+            bannerurls['ORF2E'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779281.png'
+            bannerurls['ORF2T'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779281.png'
+            bannerurls['ORF2B'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779281.png'
+            bannerurls['ORF2K'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779281.png'
+            bannerurls['ORF2N'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779281.png'
+            bannerurls['ORF2OOE'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779281.png'
+            bannerurls['ORF2S'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779281.png'
+            bannerurls['ORF2STMK'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779281.png'
+            bannerurls['ORF2V'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779281.png'
+            bannerurls['ORF2W'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779281.png'
             bannerurls['ORF3'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779305.png'
             bannerurls['ORFS'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779307.png'
 
@@ -388,8 +399,12 @@ class serviceAPI:
                         livestreamStreamingURLs.append(streamingURL.get('streamingUrl'))
 
                 livestreamStreamingURLs.sort()
+				
                 link = livestreamStreamingURLs[len(livestreamStreamingURLs) - 1].replace('q4a', 'q6a')
-
+                
+                if self.disableGeoblock:
+                    link = link.replace('/playlist.m3u8','?wowzasessionid=1')
+				
                 title = "[%s] %s (%s)" % (programName, result.get('title'), time.strftime('%H:%M', livestreamStart))
 
                 if program in bannerurls:

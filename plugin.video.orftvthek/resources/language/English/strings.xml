@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
+    <string id="30001">Frontpage</string>
     <string id="30000">Recently Added Shows</string>
-    <string id="30001">News</string>
     <string id="30002">Shows</string>
     <string id="30003">Topics</string>
     <string id="30004">Livestream</string>
@@ -36,4 +36,5 @@
     <string id="30033">Waiting for the broadcast to start</string>
     <string id="30034">Time till broadcast:</string>
     <string id="30035">Start the stream?</string>
+    <string id="30036">Disable Geoblock(for Livestream only)</string>
 </strings>

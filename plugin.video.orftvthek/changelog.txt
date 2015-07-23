@@ -1,3 +1,7 @@
+0.4.5
+- changed live stream urls
+- new icons
+
 0.4.4
 - fixed Error on "Sendungen" caused by empty show entries
 - fixed showing " - " instead of "no results found"

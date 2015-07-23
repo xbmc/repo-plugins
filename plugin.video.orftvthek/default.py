@@ -17,7 +17,7 @@ except:
 socket.setdefaulttimeout(30) 
 cache = StorageServer.StorageServer("plugin.video.orftvthek", 999999)
 
-version = "0.4.4"
+version = "0.4.5"
 plugin = "ORF-TVthek-" + version
 author = "sofaking,Rechi"
 
@@ -47,18 +47,18 @@ videoDelivery = "progressive"
 #media resources
 resource_path = os.path.join( basepath, "resources" )
 media_path = os.path.join( resource_path, "media" )
-defaultbanner =  os.path.join(media_path,"default_banner.jpg")
-news_banner =  os.path.join(media_path,"news_banner.jpg")
-recently_added_banner =  os.path.join(media_path,"recently_added_banner.jpg")
-shows_banner =  os.path.join(media_path,"shows_banner.jpg")
-topics_banner =  os.path.join(media_path,"topics_banner.jpg")
-live_banner =  os.path.join(media_path,"live_banner.jpg")
-tips_banner =  os.path.join(media_path,"tips_banner.jpg")
-most_popular_banner =  os.path.join(media_path,"most_popular_banner.jpg")
-archive_banner =  os.path.join(media_path,"archive_banner.jpg")
-search_banner =  os.path.join(media_path,"search_banner.jpg")
-trailer_banner =  os.path.join(media_path,"trailer_banner.jpg")
-defaultbackdrop = os.path.join(media_path,"fanart_top.png")
+defaultbanner =  os.path.join(media_path,"default_banner_v2.jpg")
+news_banner =  os.path.join(media_path,"news_banner_v2.jpg")
+recently_added_banner =  os.path.join(media_path,"recently_added_banner_v2.jpg")
+shows_banner =  os.path.join(media_path,"shows_banner_v2.jpg")
+topics_banner =  os.path.join(media_path,"topics_banner_v2.jpg")
+live_banner =  os.path.join(media_path,"live_banner_v2.jpg")
+tips_banner =  os.path.join(media_path,"tips_banner_v2.jpg")
+most_popular_banner =  os.path.join(media_path,"most_popular_banner_v2.jpg")
+archive_banner =  os.path.join(media_path,"archive_banner_v2.jpg")
+search_banner =  os.path.join(media_path,"search_banner_v2.jpg")
+trailer_banner =  os.path.join(media_path,"trailer_banner_v2.jpg")
+defaultbackdrop = os.path.join(media_path,"fanart.jpg")
 
 #load settings
 forceView = settings.getSetting("forceView") == "true"
@@ -80,8 +80,8 @@ htmlScraper = htmlScraper(xbmc,settings,pluginhandle,videoQuality,videoProtocol,
 
 
 def getMainMenu():
-    addDirectory((translation(30000)).encode("utf-8"),recently_added_banner,defaultbackdrop,translation,"","","getNewShows",pluginhandle)
     addDirectory((translation(30001)).encode("utf-8"),news_banner,defaultbackdrop,translation,"","","getAktuelles",pluginhandle)
+    addDirectory((translation(30000)).encode("utf-8"),recently_added_banner,defaultbackdrop,translation,"","","getNewShows",pluginhandle)
     addDirectory((translation(30002)).encode("utf-8"),shows_banner,defaultbackdrop,translation,"","","getSendungen",pluginhandle)
     addDirectory((translation(30003)).encode("utf-8"),topics_banner,defaultbackdrop,translation,"","","getThemen",pluginhandle)
     addDirectory((translation(30004)).encode("utf-8"),live_banner,defaultbackdrop,translation,"","","getLive",pluginhandle)

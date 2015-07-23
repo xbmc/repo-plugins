@@ -20,7 +20,7 @@ addon = xbmcaddon.Addon(id=addonID)
 socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
 icon = xbmc.translatePath('special://home/addons/'+addonID+'/icon.png')
-defaultFanart = xbmc.translatePath('special://home/addons/'+addonID+'/fanart.jpeg')
+defaultFanart = xbmc.translatePath('special://home/addons/'+addonID+'/fanart.jpg')
 forceViewMode = True
 audio_pos = int(addon.getSetting('audio_lang'))
 audio = ["en","es","de"]
@@ -51,7 +51,7 @@ def index():
     addDir(translation(30005), "Featured", 'list', icon)
     addLink(translation(30006), "Random", 'list', icon)
     addLink(translation(30013), "Search", 'list', icon)
-    for i in range(1, 19):
+    for i in range(1, 20):
         addDir(translation(30007)+" "+str(i), 'season-'+str(i), 'list', icon)
     xbmcplugin.endOfDirectory(pluginhandle)
 
@@ -274,7 +274,10 @@ def getVideoData(mediagen):
 	if sys.version_info >=  (2, 7):
 		for item in root.iter('src'):
 			if item.text != None and not "intros" in item.text:
-				rtmpe.append(item.text)
+				if audio == "es":
+					rtmpe.append(item.text)
+				elif not "acts/es" in item.text:
+					rtmpe.append(item.text)
 		for item in root.iter('rendition'):
 			if item.attrib['duration'] != None:
 				duration.append(int(item.attrib['duration']))
@@ -284,7 +287,10 @@ def getVideoData(mediagen):
 	else:
 		for item in root.getiterator('src'):
 			if item.text != None and not "intros" in item.text:
-				rtmpe.append(item.text)
+				if audio == "es":
+					rtmpe.append(item.text)
+				elif not "acts/es" in item.text:
+					rtmpe.append(item.text)
 		for item in root.getiterator('rendition'):
 			if item.attrib['duration'] != None:
 				duration.append(int(item.attrib['duration']))

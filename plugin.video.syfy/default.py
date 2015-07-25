@@ -54,12 +54,13 @@ def getShows():
 
    ilist=[]
    meta ={}
+   meta['shows']={}
    if addon.getSetting('init_meta') != 'true':
       try:
          with open(metafile) as infile:
              meta = json.load(infile)
       except: pass
-   showDialog = len(meta)
+   showDialog = len(meta['shows'])
    epiHTML = getRequest('http://www.syfy.com/episodes')
    posterHTML = getRequest('http://www.syfy.com/shows')
    posters = re.compile('<div class="grid-image-above">.+?<img  srcset="(.+?)".+?class="title">(.+?)<',re.DOTALL).findall(posterHTML)
@@ -83,7 +84,7 @@ def getShows():
        shurl  = SYFYBASE % epis[len(epis)-1]
 
        try:
-          (name, poster, infoList) = meta[shurl]
+          (name, poster, infoList) = meta['shows'][shurl]
        except:
           html = getRequest(shurl)
           purl = re.compile('data-src="(.+?)"',re.DOTALL).search(html).group(1)
@@ -116,7 +117,7 @@ def getShows():
           infoList['Plot'] = h.unescape(infoList['Plot'])
        url = name
        mode = 'GE'
-       meta[shurl] = (name, poster, infoList)
+       meta['shows'][shurl] = (name, poster, infoList)
        u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
        liz=xbmcgui.ListItem(name, '',poster, None)
        liz.setInfo( 'Video', infoList)
@@ -145,13 +146,35 @@ def getEpisodes(sname, showName):
 
    sname = uqp(sname)
    ilist=[]
+   meta ={}
+   meta[sname]={}
+   if addon.getSetting('init_meta') != 'true':
+      try:
+         with open(metafile) as infile:
+             meta = json.load(infile)
+      except: pass
+   try: showDialog = len(meta[sname])
+   except:
+         meta[sname]={}
+         showDialog = len(meta[sname])
+      
+
    html = getRequest('http://www.syfy.com/episodes')
    m  = re.compile('<div class="show id.+?<h3>'+sname+'</h3>(.+?)<div class="view-footer">',re.DOTALL).search(html)
    fd = re.compile('href="(.+?)/videos').search(html,m.start(1),m.end(1)).group(1)
    epis = re.compile('href="'+fd+'(.+?)"',re.DOTALL).findall(html,m.start(1),m.end(1))
-   for url in epis:
-      mode = 'GV'
-      url = SYFYBASE % fd+url
+   if showDialog == 0 : 
+       pDialog = xbmcgui.DialogProgress()
+       pDialog.create(__language__(30082), __language__(30083))
+       numShows = len(epis)
+       i = 1
+
+   for shurl in epis:
+    mode = 'GV'
+    try:
+       (name, purl, thumb, fanart, infoList) = meta[sname][shurl]
+    except:
+      url = SYFYBASE % fd+shurl
       html = getRequest(url)
       purl = re.compile('data-src="(.+?)"',re.DOTALL).search(html).group(1)
       purl = 'http:'+purl.replace('&amp;','&')
@@ -182,19 +205,29 @@ def getEpisodes(sname, showName):
       infoList['TVShowTitle'] = showName
       infoList['Studio']      = a['provider']
 
-      url = purl
-      u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
-      liz=xbmcgui.ListItem(name, '',icon, thumb)
-      liz.setInfo( 'Video', infoList)
-      liz.addStreamInfo('video', { 'codec': 'h264', 
+    url = purl
+    meta[sname][shurl] = (name, purl, thumb, fanart, infoList)
+    u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
+    liz=xbmcgui.ListItem(name, '',icon, thumb)
+    liz.setInfo( 'Video', infoList)
+    liz.addStreamInfo('video', { 'codec': 'h264', 
                                    'width' : 1920, 
                                    'height' : 1080, 
                                    'aspect' : 1.78 })
-      liz.addStreamInfo('audio', { 'codec': 'aac', 'language' : 'en'})
-      liz.addStreamInfo('subtitle', { 'language' : 'en'})
-      liz.setProperty('fanart_image', fanart)
-      liz.setProperty('IsPlayable', 'true')
-      ilist.append((u, liz, False))
+    liz.addStreamInfo('audio', { 'codec': 'aac', 'language' : 'en'})
+    liz.addStreamInfo('subtitle', { 'language' : 'en'})
+    liz.setProperty('fanart_image', fanart)
+    liz.setProperty('IsPlayable', 'true')
+    ilist.append((u, liz, False))
+    if showDialog == 0 : 
+       pDialog.update(int((100*i)/numShows))
+       i = i+1
+   if showDialog == 0 : pDialog.close()
+   with open(metafile, 'w') as outfile:
+        json.dump(meta, outfile)
+   outfile.close
+   addon.setSetting(id='init_meta', value='false')
+
    xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
    if addon.getSetting('enable_views') == 'true':
       xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('episode_view'))

@@ -1,3 +1,6 @@
+Version 1.1.2
+Engadgets html changed again
+
 Version 1.1.1
 Engadgets video website format changed, adapt to no HTML layout
 

@@ -1,28 +1,28 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.roosterteeth"
        name="Rooster Teeth"
-       version="1.1.0"
-       provider-name="Skipmode A1">
+       version="1.1.1"
+       provider-name="Skipmode A1, Divingmule">
   <requires>
-    <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.beautifulsoup4" version="4.3.1"/>
-    <import addon="script.module.xmltodict" version="0.7.0"/>
-    <import addon="script.common.plugin.cache" version="2.5.2"/>
-    <import addon="plugin.video.youtube" version="4.4.6"/>
+    <import addon="xbmc.python"                 version="2.1.0"/>
+    <import addon="xbmc.addon"                  version="12.0.0"/>
+	<import addon="script.module.beautifulsoup" version="3.0.8"/>
+	<import addon="script.module.requests"      version="2.4.3"/>
+    <import addon="plugin.video.youtube"        version="4.4.8"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary>Videos from RoosterTeeth.com and AchievementHunter.com</summary>
-    <description>Comedy and gaming shows from Rooster Teeth and Achievement Hunter, including the popular "Red vs Blue" series.
-    </description>
-    <platform>all</platform>
+	<summary lang="en">Watch funny videos from RoosterTeeth.com</summary>
+	<description lang="en">Watch funny videos from RoosterTeeth.com</description>
+	<disclaimer lang="en">For bugs, requests or general questions visit the Roosterteeth.com thread on the XBMC forum</disclaimer>
     <language>en</language>
+    <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
-    <source>git://github.com/skipmodea1/plugin.video.roosterteeth</source>
     <forum>http://forum.xbmc.org/showthread.php?tid=134588</forum>
     <website>http://roosterteeth.com</website>
     <email></email>
+    <source>git://github.com/skipmodea1/plugin.video.roosterteeth.git</source>
   </extension>
 </addon>

@@ -1,3 +1,6 @@
+Version 1.1.1 (24 july 2015)
+Dependency fix
+
 Version 1.1.0 (23 july 2015)
 Complete rewrite, mainly due to website changes
 SPONSORED VIDEO'S DO NOT WORK ANYMORE (sorry)

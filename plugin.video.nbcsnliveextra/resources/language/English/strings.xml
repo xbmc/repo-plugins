@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<strings>
-    <!-- Main settings -->
-    <string id="10">Main Settings</string>   
-    <string id="11">Stream Quality</string>	
-	<string id="12">User Agent</string>	
-	<string id="13">CDN Server Location</string>
-</strings>

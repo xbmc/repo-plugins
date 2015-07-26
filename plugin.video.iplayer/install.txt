@@ -1,4 +1,0 @@
-If you are using XBMC4XBOX then you should install this plugin in XBMC/plugin/video/
-If you are running a recent release of XBMC which includes the new addons system
-(for Linux/Windows/OSX/AppleTV etc), install it to addons/ - on linux this folder
-is located in $HOME/.xbmc/ for example.

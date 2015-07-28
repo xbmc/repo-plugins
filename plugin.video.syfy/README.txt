@@ -3,6 +3,7 @@ plugin.video.syfy
 
 Kodi Addon for Syfy
 
+Version 1.0.9 fix unicode and other issues
 Version 1.0.8 Added episode caching
 Version 1.0.7 Added show caching - should load faster
 Version 1.0.6 Added user view select, sort

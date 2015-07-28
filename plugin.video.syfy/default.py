@@ -87,7 +87,9 @@ def getShows():
           (name, poster, infoList) = meta['shows'][shurl]
        except:
           html = getRequest(shurl)
-          purl = re.compile('data-src="(.+?)"',re.DOTALL).search(html).group(1)
+          try:
+             purl = re.compile('data-src="(.+?)"',re.DOTALL).search(html).group(1)
+          except: continue
           purl = 'http:'+purl.replace('&amp;','&')
           html = getRequest(purl)
           purl = re.compile('<link rel="alternate" href=".+?<link rel="alternate" href="(.+?)"',re.DOTALL).search(html).group(1)
@@ -114,7 +116,7 @@ def getShows():
           infoList['cast'] = re.compile('<article class="tile.+?tile-marqee">(.+?)<.+?</article',re.DOTALL).findall(html)
           if len(infoList['cast']) == 0: 
              infoList['cast'] = re.compile('<article class="tile.+?tile-title">(.+?)<.+?</article',re.DOTALL).findall(html)
-          infoList['Plot'] = h.unescape(infoList['Plot'])
+          infoList['Plot'] = h.unescape(infoList['Plot'].decode(UTF8))
        url = name
        mode = 'GE'
        meta['shows'][shurl] = (name, poster, infoList)
@@ -195,8 +197,10 @@ def getEpisodes(sname, showName):
       infoList['Title']       = a['title']
       infoList['Studio']      = a['provider']
       infoList['Genre']       = (a['nbcu$advertisingGenre']).replace('and','/')
-      infoList['Episode']     = a['pl1$episodeNumber']
-      infoList['Season']      = a['pl1$seasonNumber']
+      try:    infoList['Episode']     = a['pl1$episodeNumber']
+      except: pass
+      try:    infoList['Season']      = a['pl1$seasonNumber']
+      except: pass
       try:
          infoList['Plot']     = h.unescape(a["description"])
       except:

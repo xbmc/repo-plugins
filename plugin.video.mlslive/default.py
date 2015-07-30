@@ -80,7 +80,7 @@ def createMonthMenu(month, complete = False):
 
         final = False
         if 'result' in game.keys():
-            if game['result'] == 'F':
+            if game['result'].upper() == 'F':
                 final = True
 
         # skip any finished games if showing live or upcomming

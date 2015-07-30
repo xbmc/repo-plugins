@@ -215,12 +215,6 @@ class MLSLive:
         game_str = game['awayTeamName'] + ' ' + separator + ' ' + \
                    game['homeTeamName']
 
-        # add the result
-        if 'result' in game.keys():
-            if game['result'] == 'F':
-                game_str += ' ([B]Final[/B])'
-                return game_str.encode('utf-8').strip()
-
         if 'isLive' in game.keys():
             if game['isLive'] == 'true':
                 game_str = '[I]' + game_str + '[/I]'
@@ -285,7 +279,9 @@ class MLSLive:
 
         uri = self.PUBLISH_POINT + '?' + urllib.urlencode(values)
         jar = self.loadCookieJar()
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar),
+                                      urllib2.HTTPHandler(debuglevel=1),
+                                      urllib2.HTTPSHandler(debuglevel=1))
 
         # set the user agent to get the HLS stream
         opener.addheaders = [('User-Agent', urllib.quote('PS3Application libhttp/4.5.5-000 (CellOS)'))]

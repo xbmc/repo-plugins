@@ -46,6 +46,12 @@ cat_com_m = addon.getSetting("cat_com_m") == "true"
 cat_com_y = addon.getSetting("cat_com_y") == "true"
 cat_com_a = addon.getSetting("cat_com_a") == "true"
 
+show_youtube = addon.getSetting("show_youtube") == "true"
+show_vimeo = addon.getSetting("show_vimeo") == "true"
+show_liveleak = addon.getSetting("show_liveleak") == "true"
+show_dailymotion = addon.getSetting("show_dailymotion") == "true"
+show_gfycat = addon.getSetting("show_gfycat") == "true"
+
 filter = addon.getSetting("filter") == "true"
 filterRating = int(addon.getSetting("filterRating"))
 filterThreshold = int(addon.getSetting("filterThreshold"))
@@ -184,11 +190,17 @@ def index():
             addDir(entry, entry.lower(), 'listSorting', "")
         else:
             addDirR(entry, entry.lower(), 'listSorting', "")
-    addDir("[ Vimeo.com ]", "all", 'listSorting', "", "site:vimeo.com")
-    addDir("[ Youtube.com ]", "all", 'listSorting', "", "site:youtu.be OR site:youtube.com")
-    addDir("[ Liveleak.com ]", "all", 'listSorting', "", "site:liveleak.com")
-    addDir("[ Dailymotion.com ]", "all", 'listSorting', "", "site:dailymotion.com")
-    addDir("[ GfyCat.com ]", "all", 'listSorting', "", "site:gfycat.com")
+
+    if show_vimeo:
+        addDir("[ Vimeo.com ]", "all", 'listSorting', "", "site:vimeo.com")
+    if show_youtube:
+        addDir("[ Youtube.com ]", "all", 'listSorting', "", "site:youtu.be OR site:youtube.com")
+    if show_liveleak:
+        addDir("[ Liveleak.com ]", "all", 'listSorting', "", "site:liveleak.com")
+    if show_dailymotion:
+        addDir("[ Dailymotion.com ]", "all", 'listSorting', "", "site:dailymotion.com")
+    if show_gfycat:
+        addDir("[ GfyCat.com ]", "all", 'listSorting', "", "site:gfycat.com")
     addDir("[B]- "+translation(30001)+"[/B]", "", 'addSubreddit', "")
     addDir("[B]- "+translation(30019)+"[/B]", "", 'searchReddits', "")
     xbmcplugin.endOfDirectory(pluginhandle)
@@ -295,22 +307,22 @@ def listVideos(url, subreddit):
             matchLiveLeak = re.compile('liveleak.com/view\\?i=(.+?)"', re.DOTALL).findall(url)
             matchGfycat = re.compile('gfycat.com/(.+?)"', re.DOTALL).findall(url)
             hoster = ""
-            if matchYoutube:
+            if matchYoutube and show_youtube:
                 hoster = "youtube"
                 videoID = matchYoutube[0]
-            elif matchVimeo:
+            elif matchVimeo and show_vimeo:
                 hoster = "vimeo"
                 videoID = matchVimeo[0].replace("#", "").split("?")[0]
-            elif matchDailyMotion:
+            elif matchDailyMotion and show_dailymotion:
                 hoster = "dailymotion"
                 videoID = matchDailyMotion[0]
-            elif matchDailyMotion2:
+            elif matchDailyMotion2 and show_dailymotion:
                 hoster = "dailymotion"
                 videoID = matchDailyMotion2[0]
-            elif matchLiveLeak:
+            elif matchLiveLeak and show_liveleak:
                 hoster = "liveleak"
                 videoID = matchLiveLeak[0].split("#")[0]
-            elif matchGfycat:
+            elif matchGfycat and show_gfycat:
                 hoster = "gfycat"
                 videoID = matchGfycat[0]
 
@@ -376,17 +388,17 @@ def autoPlay(url, type):
             matchLiveLeak = re.compile('liveleak.com/view\\?i=(.+?)"', re.DOTALL).findall(url)
             matchGfycat = re.compile('gfycat.com/(.+?)"', re.DOTALL).findall(url)
             url = ""
-            if matchYoutube:
+            if matchYoutube and show_youtube:
                 url = getYoutubePlayPluginUrl(matchYoutube[0])
-            elif matchVimeo:
+            elif matchVimeo and show_vimeo:
                 url = getVimeoPlayPluginUrl(matchVimeo[0].replace("#", "").split("?")[0])
-            elif matchDailyMotion:
+            elif matchDailyMotion and show_dailymotion:
                 url = getDailymotionPlayPluginUrl(matchDailyMotion[0])
-            elif matchDailyMotion2:
+            elif matchDailyMotion2 and show_dailymotion:
                 url = getDailymotionPlayPluginUrl(matchDailyMotion2[0])
-            elif matchLiveLeak:
+            elif matchLiveLeak and show_liveleak:
                 url = getLiveleakPlayPluginUrl(matchLiveLeak[0].split("#")[0])
-            elif matchGfyCat:
+            elif matchGfyCat and show_gfycat:
                 url = getGfycatPlayPluginUrl(matchGfycat[0])
             if url:
                 url = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode=playVideo"

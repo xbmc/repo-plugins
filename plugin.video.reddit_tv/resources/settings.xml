@@ -57,4 +57,11 @@
         <setting id="browser_osx" type="enum" label="30173" values="Chrome Launcher" default="0"/>
         <setting id="browser_lin" type="enum" label="30174" values="Chrome Launcher" default="0"/>
     </category>
+    <category label="30193">
+        <setting id="show_youtube" type="bool" label="30194" default="true"/>
+        <setting id="show_vimeo" type="bool" label="30195" default="true"/>
+        <setting id="show_liveleak" type="bool" label="30196" default="true"/>
+        <setting id="show_dailymotion" type="bool" label="30197" default="true"/>
+        <setting id="show_gfycat" type="bool" label="30198" default="true"/>
+    </category>
 </settings>

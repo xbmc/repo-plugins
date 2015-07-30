@@ -1,3 +1,8 @@
+[B]Version 1.15.3[/B]
+
+- show date for games that are final
+- fix bug that shows final games in the live menu
+
 [B]Version 1.15.2[/B]
 
 - don't show past months when viewing live matches

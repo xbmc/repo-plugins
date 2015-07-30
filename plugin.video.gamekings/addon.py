@@ -17,8 +17,8 @@
 #
 #also in ..._const
 __addon__       = "plugin.video.gamekings"
-__date__        = "20 June 2015"
-__version__     = "1.1.3"
+__date__        = "20 July 2015"
+__version__     = "1.1.5"
 
 #
 # Imports

@@ -104,7 +104,7 @@ class Main:
 			video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.tv/nieuws/")})
 		#this is E3
 		elif self.plugin_category == __language__(30004):
-			video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.tv/nieuws/")})			
+			video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.tv/")})			
 		
 		if (self.DEBUG) == 'true':
 			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "len(video_page_urls_and_titles)", str(len(video_page_urls_and_titles)) ), xbmc.LOGNOTICE )
@@ -150,7 +150,12 @@ class Main:
 				title = title.capitalize()
 			#for other categories use the title attribute	
 			else:
-				title = video_page_url_and_title['title']
+				try:
+					title = video_page_url_and_title['title']
+				except:
+					#skip the item if it's got no title
+					continue
+				
 				#convert from unicode to encoded text (don't use str() to do this)
 				title = title.encode('utf-8')
 			
@@ -186,6 +191,10 @@ class Main:
 			title = title.replace(' xxviii ',' XXVIII ')
 			title = title.replace(' xxix ',' XXIX ')
 			title = title.replace(' xxx ',' XXX ')
+
+			#remove space on first position in the title		
+			if title[0:1] == " ":
+				title = title[1:]
 						
 			if (self.DEBUG) == 'true':
 				xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "title", str(title) ), xbmc.LOGNOTICE )

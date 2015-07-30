@@ -17,7 +17,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  
 """
-import xbmc,xbmcgui,xbmcplugin,xbmcaddon,sys,os,re
+import xbmc,xbmcgui,xbmcplugin,xbmcaddon,sys,os,re,base64
 from webutils import *
 from common_variables import *
 from directory import *
@@ -41,7 +41,6 @@ def radiotv_channels(url):
 				img = img_base_url + img_old
 				addLink('[B][COLOR blue]' + titulo + '[/COLOR]' +' - ' + title_clean_up(prog)+ '[/B]',stream_url,img,totaltv)
 			except: pass
-		xbmc.executebuiltin("Container.SetViewMode(500)")
 	else:
 		sys.exit(0)
 
@@ -80,8 +79,11 @@ def grab_live_stream_url(url):
 					url2=match[0]
 					return url2
 				else:
-					match=re.compile('"file": "(.+?)",.+?\n.+?"application": "(.+?)",.+?\n.+?"streamer": "(.+?)",').findall(page_source)
-        				url2 = 'rtmp://' + match[0][2] +'/' + match[0][1] + '/' + match[0][0] + ' swfVfy=1 swfUrl=' + player + linkpart
+					id_ = re.compile('liveObj\.file = liveObj\.(.+?);').findall(page_source)
+					file_ = re.compile('"'+id_[0]+'": "(.+?)"').findall(page_source)
+					streamer = re.compile('"streamer": "(.+?)"').findall(page_source)
+					application = re.compile('"application": "(.+?)"').findall(page_source)
+        				url2 = 'rtmp://' + streamer[0] +'/' + application[0] + '/'+file_[0]+' swfVfy=1 pageUrl='+url +' swfUrl=' + player + linkpart
         				return url2
         		else:
         			match = re.compile('"stream_wma" : "(.+?)"').findall(page_source)
@@ -93,7 +95,7 @@ def grab_live_stream_url(url):
 					if not match:
 						match=re.compile('\"d\":(.+?)\"').findall(page_source)
         				url2 = match[0].replace('"','')
-        				return url2
+        				return base64.b64decode(url2)
 	else:
 		return None
 		

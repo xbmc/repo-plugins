@@ -1,3 +1,7 @@
+Version 2.4.0 (30/07/2015)
+-Fix Live
+-Fix next directory
+
 Version 2.3.0 (22/03/2015)
 -Fix rtmp streams (swfVfy parameter)
 

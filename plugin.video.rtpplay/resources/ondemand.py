@@ -96,8 +96,8 @@ def list_episodes(name,url,plot):
 			try: source_next = abrir_url(next_url)
 			except: source_next = ''
 			if source_next:
-				if re.findall('itemscope itemtype="http://schema.org/TVSeries"',source_next):
-					addDir('[B][COLOR blue]'+translate(30028)+'|[/B][/COLOR]'+titulo,next_url,16,os.path.join(artfolder,'next.png'),1,pasta=True,informacion=information)
+				if re.findall('itemtype="http://schema.org/VideoObject"',source_next):
+					addDir('[B][COLOR blue]'+translate(30028)+'|[/B][/COLOR] '+titulo,next_url,16,os.path.join(artfolder,'next.png'),1,pasta=True,informacion=information)
 		except: pass
 	xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
 	setview('episodes-view')

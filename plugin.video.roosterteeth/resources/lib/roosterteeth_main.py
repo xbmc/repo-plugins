@@ -17,7 +17,11 @@ import xbmcplugin
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
-BASEURL = 'http://www.roosterteeth.com/show/'
+RECENTLYADDEDURL = 'http://roosterteeth.com/episode/recently-added'
+ROOSTERTEETHSHOWSURL = 'http://www.roosterteeth.com/show/'
+ACHIEVEMENTHUNTERURL = 'http://achievementhunter.com/show/'
+THEKNOWSHOWSURL = 'http://theknow.tv/show'
+FUNHAUSSHOWSURL = 'http://fun.haus/show'
 
 #
 # Main class
@@ -25,62 +29,45 @@ BASEURL = 'http://www.roosterteeth.com/show/'
 class Main:
     def __init__( self ):
         #
-        # Init
+        # Recently Added Episodes
         #
-        self.DEBUG     = __settings__.getSetting('debug')
-        
-        # 
-        # Get HTML page...
+        parameters = {"action" : "list-episodes", "plugin_category" : __language__(30000), "url" : RECENTLYADDEDURL, "next_page_possible": "False"}
+        url = sys.argv[0] + '?' + urllib.urlencode(parameters)
+        listitem = xbmcgui.ListItem( __language__(30000), iconImage="DefaultFolder.png" )
+        folder = True
+        xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
         #
-        response = requests.get(BASEURL)
-        html_source = response.text
-        html_source = html_source.encode('utf-8', 'ignore')
-
-#       <li>
-#         <a href="http://www.roosterteeth.com/show/red-vs-blue">
-#             <div class="block-container">
-#                 <div class="image-container">
-#                     <img src="//s3.amazonaws.com/cdn.roosterteeth.com/uploads/images/9a888611-5b17-49ab-ad49-ca0ad6a86ee1/sm/rvb600.jpg" alt="Red vs. Blue">
-#                 </div>
-#             </div>
-#             <p class="name">Red vs. Blue</p>
-#             <p class="post-stamp">13 seasons | 377 episodes</p>
-#         </a>
-#       </li>
-        # Parse response...
-        soup = BeautifulSoup( html_source )
-        
-        shows = soup.findAll('li')
-        
-        if (self.DEBUG) == 'true':
-            xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "len(shows)", str(len(shows)) ), xbmc.LOGNOTICE )
-        
-        for show in shows:
-            #skip show if it doesn't contain BASEURL
-            if str(show.a).find(BASEURL) < 0:
-                continue
-            
-            url = show.a['href']
-            
-            try:
-                thumbnail_url =  "https:" + show.img['src']
-            except:    
-                thumbnail_url = ''
-            
-            title = show.a.text
-            if title == '':
-                try:
-                    title = show.img['alt']
-                except:
-                    title = 'Unknown Show Name'
-            
-            # Add to list...
-            parameters = {"action" : "list", "show_name" : title, "show_url" : url, "next_page_possible": "False"}
-            url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-            listitem = xbmcgui.ListItem( title, iconImage="DefaultVideo.png", thumbnailImage=thumbnail_url )
-            listitem.setInfo( "video", { "Title" : title, "Studio" : "roosterteeth" } )
-            folder = True
-            xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
+        # Roosterteeth
+        #
+        parameters = {"action" : "list-shows", "plugin_category" : __language__(30001), "url" : ROOSTERTEETHSHOWSURL, "next_page_possible": "False"}
+        url = sys.argv[0] + '?' + urllib.urlencode(parameters)
+        listitem = xbmcgui.ListItem( __language__(30001), iconImage="DefaultFolder.png" )
+        folder = True
+        xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
+        #
+        # Achievement Hunter
+        #
+        parameters = {"action" : "list-shows", "plugin_category" : __language__(30002), "url" : ACHIEVEMENTHUNTERURL, "next_page_possible": "False"}
+        url = sys.argv[0] + '?' + urllib.urlencode(parameters)
+        listitem = xbmcgui.ListItem( __language__(30002), iconImage="DefaultFolder.png" )
+        folder = True
+        xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
+        #
+        # The Know Tv
+        #
+        parameters = {"action" : "list-shows", "plugin_category" : __language__(30003), "url" : THEKNOWSHOWSURL, "next_page_possible": "False"}
+        url = sys.argv[0] + '?' + urllib.urlencode(parameters)
+        listitem = xbmcgui.ListItem( __language__(30003), iconImage="DefaultFolder.png" )
+        folder = True
+        xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
+        #
+        # Fun Haus
+        #
+        parameters = {"action" : "list-shows", "plugin_category" : __language__(30004), "url" : FUNHAUSSHOWSURL, "next_page_possible": "False"}
+        url = sys.argv[0] + '?' + urllib.urlencode(parameters)
+        listitem = xbmcgui.ListItem( __language__(30004), iconImage="DefaultFolder.png" )
+        folder = True
+        xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)                        
            
         # Disable sorting...
         xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )

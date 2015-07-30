@@ -17,6 +17,8 @@ import xbmcplugin
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
+RECENTLYADDEDURL = 'http://roosterteeth.com/episode/recently-added'
+
 #
 # Main class
 #
@@ -32,8 +34,7 @@ class Main:
 			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % ( __addon__, __version__, __date__, "ARGV", repr(sys.argv), "File", str(__file__) ), xbmc.LOGNOTICE )
 
 		# Parse parameters
-		#self.plugin_category = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['plugin_category'][0]
-		self.video_list_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['show_url'][0]
+		self.video_list_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['url'][0]
 		self.next_page_possible = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
 	
 		if (self.DEBUG) == 'true':
@@ -51,7 +52,9 @@ class Main:
 		#
 		# Init
 		#
-
+		previous_video_page_url = ''
+		after_tab_trending = False
+		after_tab_episodes = False
 		# 
 		# Get HTML page
 		#
@@ -62,22 +65,20 @@ class Main:
 		# Parse response
 		soup = BeautifulSoup( html_source )
 		
-		pos_of_episodes = str(html_source).find('tab-episodes')
-		
 		#<li>
 		#	<a href="http://ah.roosterteeth.com/episode/red-vs-blue-season-13-episode-2">
-		# 		    <div class="block-container">
-		# 		        <div class="image-container">
-		# 		            <img src="//s3.amazonaws.com/cdn.roosterteeth.com/uploads/images/bfa39842-943e-49ea-9207-e71efe9544d2/md/ep10610.jpg">
-		# 		        </div>
-		# 		        <div class="watch-status-container">
-		# 		        </div>
-		# 		        <div class="play-button-container">
-		# 		            <p class="play-circle"><i class="icon ion-play"></i></p>
-		# 		            <p class="timestamp">8:11</p>
-		# 		        </div>
-		# 		    </div>
-		#        <p class="name">Episode 2</p>
+		# 			<div class="block-container">
+		# 				<div class="image-container">
+		# 					<img src="//s3.amazonaws.com/cdn.roosterteeth.com/uploads/images/bfa39842-943e-49ea-9207-e71efe9544d2/md/ep10610.jpg">
+		# 				</div>
+		# 				<div class="watch-status-container">
+		# 				</div>
+		# 				<div class="play-button-container">
+		# 					<p class="play-circle"><i class="icon ion-play"></i></p>
+		# 					<p class="timestamp">8:11</p>
+		# 				</div>
+		# 			</div>
+		#		<p class="name">Episode 2</p>
 		#	</a>
 		#	<p class="post-stamp">3 months ago</p>
 		#</li>
@@ -88,17 +89,43 @@ class Main:
 			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "len(episodes)", str(len(episodes)) ), xbmc.LOGNOTICE )
 		
 		for episode in episodes:
+			#Only display episodes of a season
+			#The recently added page doesn't have a 'tab-episode'
+			if str(self.video_list_page_url) == RECENTLYADDEDURL:
+				pass
+			else:
+				#Only display episodes of a season
+				#<li>
+				#<input type='radio' name='tabs' id='tab-episodes' />
+				if str(episode).find("tab-episodes") >= 0:
+					after_tab_episodes = True
+				# Skip if the episode isn't a season episode
+				if after_tab_episodes == False:
+					continue
+			
+			# Skip the recently-added url
+ 			if str(episode).find('recently-added') >= 0:
+ 				continue
+			
 			# Skip an episode if it does not contain class="name"
 			pos_classname = str(episode).find('class="name"')
-			if pos_classname < 0:
+			if pos_classname == -1:
 				continue
 
 			video_page_url = episode.a['href']
 			
-			pos_of_url = str(html_source).find(video_page_url)
-			# Skip an episode if it does not come after tab-episodes
-			if pos_of_url < pos_of_episodes:
+			if (self.DEBUG) == 'true':
+				xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "video_page_url", str(video_page_url) ), xbmc.LOGNOTICE )
+			
+			# Skip a video_page_url is empty
+			if video_page_url == '':
 				continue
+			
+			# Skip episode if it's the same as the previous one
+			if video_page_url == previous_video_page_url:
+				continue
+			else:
+				previous_video_page_url = video_page_url
 			
 			try:
 				thumbnail_url = "https:" + episode.img['src']
@@ -165,7 +192,7 @@ class Main:
 			listitem.setInfo( "video", { "Title" : title, "Studio" : "roosterteeth" } )
 			folder = False
 			xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
-  		
+		
 		# Disable sorting...
 		xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )
  		

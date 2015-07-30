@@ -1,40 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <string id="30000">RoosterTeeth</string>
-  <string id="30001">Add-on Notification</string>
-  <string id="30002">Next Page</string>
-  <string id="30003">Sorry. You must be a Sponsor to see this video</string>
-  <string id="30004">Only audio is avaliable</string>
-  <string id="30005">Podcasts</string>
-  <string id="30006">Choose a stream</string>
-  <string id="30007">Retired Shows</string>
-  <string id="30008">Latest Rooster Teeth Episodes</string>
-  <string id="30009">Preferred Video Quality</string>
-  <string id="30010">High</string>
-  <string id="30011">Medium</string>
-  <string id="30012">Low</string>
-  <string id="30013">Ask</string>
-  <string id="30014">Rooster Teeth Sponsor</string>
-  <string id="30015">User Name</string>
-  <string id="30016">Password</string>
-  <string id="30017">Default view mode for episodes</string>
-  <string id="30018">List</string>
-  <string id="30019">Big list</string>
-  <string id="30020">Thumbnail</string>
-  <string id="30021">Media info</string>
-  <string id="30022">Media info 2</string>
-  <string id="30023">Media info 3</string>
-  <string id="30024">Unknown Error</string>
-  <string id="30025">Login Failed</string>
-  <string id="30026">Comedy and Gaming</string>
-  <string id="30027">Latest Achievement Hunter Episodes</string>
-  <string id="30028">Debug</string>
-  <string id="30029"></string>
-  <string id="30501">%s to %s</string>
-  <string id="30502">Page %u</string>
-  <string id="30503">Next page</string>
-  <string id="30504">Getting video location...</string>
-  <string id="30505">No video found.</string>
-  <string id="30506">Error playing media file.</string>
-  <string id="30507">Error getting page: %s</string>
+
+  <string id="30000">Recently Added Episodes</string>
+  <string id="30001">Roosterteeth</string>  
+  <string id="30002">Achievement Hunter</string>
+  <string id="30003">The Know Tv</string>
+  <string id="30004">Fun Haus</string>
+
+  <string id="30010">Preferred Video Quality</string>
+  <string id="30011">Very High</string>
+  <string id="30012">High</string>
+  <string id="30013">Medium</string>
+  <string id="30014">Low</string>
+  <string id="30015">Rooster Teeth Sponsor</string>
+  <string id="30016">User Name</string>
+  <string id="30017">Password</string>  
+  <string id="30018">Debug</string> 
+ 
+  <string id="30100">Getting video location...</string>
+  <string id="30101">Login Failed. In settings enter the correct username and </string>
+  <string id="30102">password. Or turn off the Rooster Teeth Sponsor-switch if </string>
+  <string id="30103">you aren't a sponsor.</string> 
+  <string id="30104">Login Failed: %s.</string>   
+  <string id="30105">Sorry. You must be a Sponsor to see this video</string>  
+  <string id="30106">Error getting page: %s</string>
+  <string id="30107">No video found.</string>
+  <string id="30108">Error playing media file.</string>
+  
 </strings>

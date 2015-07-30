@@ -15,10 +15,11 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 import xbmcplugin
-import this
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
+
+LOGINURL = 'http://roosterteeth.com/login'
 
 #
 # Main class
@@ -42,7 +43,6 @@ class Main:
 		
 		if (self.DEBUG) == 'true':
 			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "self.video_page_url", str(self.video_page_url) ), xbmc.LOGNOTICE )
-
 		#
 		# Play video...
 		#
@@ -73,41 +73,98 @@ class Main:
 		# Show wait dialog while parsing data...
 		#
 		dialogWait = xbmcgui.DialogProgress()
-		dialogWait.create( __language__(30504), title )
-
+		dialogWait.create( __language__(30100), title )
+		
 		try:
 			if self.IS_SPONSOR == 'true':
- 				# Login-url: 'http://roosterteeth.com/login'
- 				# 'username':  __settings__.getSetting('username')
- 				# 'password': __settings__.getSetting('password')
- 				# and something with a cookie ?!
- 				#
- 				# I have no idea how to do the login stuff :( *shakes fist*
- 			 	# And that means no sponsered vidz for anybody! *laments*
- 			 	# A sponsor video: "http://roosterteeth.com/episode/rt-sponsor-cut-season-2-rt-life-jeremys-frosting-facial"
- 			 	response = requests.get(self.video_page_url) 
-			 	html_source = response.text
-	 			html_source = html_source.encode('utf-8', 'ignore')
+				# requests is sooooo nice, respect!
+ 				with requests.Session() as s:
+ 					# get the LOGIN-page
+ 					r = s.get(LOGINURL)
+ 					
+ 					if (self.DEBUG) == 'true':
+					 	xbmc.log('get login page request, status_code:' + str(r.status_code))
+
+					# This is part of the LOGIN page, it contains a token!:
+					#
+					# 	<input name="_token" type="hidden" value="Zu8TRC43VYiTxfn3JnNgiDnTpbQvPv5xWgzFpEYJ">
+					#     <fieldset>
+					#       <h3 class="content-title">Log In</h3>
+					# 	  <label for="username">Username</label>
+					# 	  <input name="username" type="text" value="" id="username">
+					# 	  <label for="password">Password</label>
+					# 	  <input name="password" type="password" value="" id="password">
+					# 	<input type="submit" value="Log in">
+					# 	</fieldset>
+ 					
+					# get the token
+					soup = BeautifulSoup(r.text)
+					video_urls = soup.findAll('input', attrs={'name': re.compile("_token")}, limit=1)
+					token = str(video_urls[0]['value'])
+
+					# set the needed LOGIN-data
+					payload = { '_token': token, 'username': __settings__.getSetting('username'), 'password': __settings__.getSetting('password') }
+					# post the LOGIN-page with the LOGIN-data, to actually login this session
+					r = s.post(LOGINURL, data=payload)
+					
+ 					if (self.DEBUG) == 'true':
+ 						xbmc.log('post login page response, status_code:' + str(r.status_code))
+					
+					# check that the login was technically ok (status_code 200). This in itself does NOT mean that the username/password were correct. 
+					if r.status_code == 200:
+						pass
+						# check that the username is in the response. If that's the case, the login was ok and the username and password in settings are ok.
+						if str(r.text).find(__settings__.getSetting('username')) >= 0:
+							pass
+						else:
+							dialogWait.close()
+							del dialogWait
+							xbmcgui.Dialog().ok( __language__(30000), __language__(30101), __language__(30102), __language__(30103) )
+							exit(1)
+					else:
+						dialogWait.close()
+						del dialogWait
+						xbmcgui.Dialog().ok( __language__(30000), __language__(30104) % (str(r.status_code)) )
+						exit(1)
+					
+					# f.e. a sponsored_url = "http://roosterteeth.com/episode/rt-sponsor-cut-season-2-rt-life-jeremys-frosting-facial"
+					# get the page that contains the video
+					r = s.get(self.video_page_url)
+
+					if (self.DEBUG) == 'true':
+						xbmc.log('get (logged in) page response, status_code:' + str(r.status_code))
+					
+	 			 	html_source = r.text
+	 			 	html_source = html_source.encode('utf-8', 'ignore')	
  			else:
- 			 	response = requests.get(self.video_page_url) 
-			 	html_source = response.text
-			 	html_source = html_source.encode('utf-8', 'ignore')
+ 				with requests.Session() as s:
+ 				 	# get the page that contains the video
+ 			 	 	r = s.get(self.video_page_url)
+ 			 	 	# is it a sponsored video? 
+					if str(r.text).find('sponsor-only') >= 0:
+						dialogWait.close()
+						del dialogWait
+						xbmcgui.Dialog().ok( __language__(30000), __language__(30105) )
+						exit(1)	
+			 	 	html_source = r.text
+			 		html_source = html_source.encode('utf-8', 'ignore')
 	 	except urllib2.HTTPError, error:
 			if (self.DEBUG) == 'true':
 				xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "HTTPError", str(error) ), xbmc.LOGNOTICE )
 			dialogWait.close()
 			del dialogWait
-			xbmcgui.Dialog().ok( __language__(30000), __language__(30507) % (str(error) ))
+			xbmcgui.Dialog().ok( __language__(30000), __language__(30106) % (str(error) ))
 			exit(1)
 
 		soup = BeautifulSoup(html_source)
 		
+		video_url = ''
 		no_url_found = True
 		have_valid_url = False
 		youtube_video = False
 		blip_video = False
 		cloudfront_video = False
-
+		
 		# Is it a youtube video ?
 		# f.e. http://ah.roosterteeth.com/episode/happy-hour-season-1-happy-hour-1
 		#       <script>
@@ -150,6 +207,22 @@ class Main:
 #			http://wpc.1765A.taucdn.net/831765A/video/blip/9704/RoosterTeeth-RTLifePresentsHappyHour5539.mp4.m3u8
 #			#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=3024896,RESOLUTION=1280x720,NAME="720"
 #			http://wpc.1765A.taucdn.net/831765A/video/blip/9704/RoosterTeeth-RTLifePresentsHappyHour5425.m4v.m3u8
+
+#           or like this for a sponsored video f.e.: "http://www.roosterteeth.com/episode/rt-sponsor-cut-season-2-kerry-comes-out-of-the-closet"
+#			#EXTM3U
+#           #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=559104,RESOLUTION=640x360,NAME="360"
+#           http://wpc.1765A.taucdn.net/831765A/video/blip/1684/RoosterTeeth-KerryComesOutOfCloset959.m4v.m3u8
+
+#			or like this for achievementhunter f.e.: "http://achievementhunter.com/episode/lets-play-lets-play-let-s-play-no-time-to-explain"
+# 			#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=16655000,RESOLUTION=1920x1080,CODECS="avc1.4d001f,mp4a.40.2"
+# 			1080P.m3u8
+# 			#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=7264000,RESOLUTION=1280x720,CODECS="avc1.4d001f,mp4a.40.2"
+# 			720P.m3u8
+# 			#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=3377000,RESOLUTION=640x360,CODECS="avc1.4d001f,mp4a.40.2"
+# 			480P.m3u8
+# 			#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=1740000,RESOLUTION=426x238,CODECS="avc1.4d001f,mp4a.40.2"
+# 			240P.m3u8
+
 			search_for_string = "manifest: '"
 			begin_pos_search_for_blip = str(html_source).find(search_for_string)
 			if begin_pos_search_for_blip >= 0:
@@ -164,47 +237,156 @@ class Main:
 					xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "blip playlists m3u8_url", str(m3u8_url) ), xbmc.LOGNOTICE )
 				
 				try:
-					response = requests.get(m3u8_url) 
-			 		html_source = response.text
-		 			html_source = html_source.encode('utf-8', 'ignore')
+					with requests.Session() as s:
+						r = s.get(m3u8_url) 
+						html_source = r.text
+
+						if (self.DEBUG) == 'true':
+							xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "content blip playlists m3u8_url", str(html_source) ), xbmc.LOGNOTICE )
+						
+		 				html_source = html_source.encode('utf-8', 'ignore')
 				except urllib2.HTTPError, error:
 					if (self.DEBUG) == 'true':
 						xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "HTTPError", str(error) ), xbmc.LOGNOTICE )
 					dialogWait.close()
 					del dialogWait
-					xbmcgui.Dialog().ok( __language__(30000), __language__(30507) % (str(error) ))
+					xbmcgui.Dialog().ok( __language__(30000), __language__(30106) % (str(error) ))
 					exit(1)
-					
+				
+				#Very High quality
+				if self.PREFERRED_QUALITY == '0':
+					search_for_string = '1080'
+					pos_name = str(html_source).find(search_for_string)
+					if pos_name >=0 :
+						begin_pos_playlist = str(html_source).find('http',pos_name)
+						if begin_pos_playlist == -1:
+							video_url = str(m3u8_url).replace('index', str(search_for_string) + 'P')
+							have_valid_url = True
+						else:
+							end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
+							video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
+							have_valid_url = True
+					else:
+						search_for_string = '720'
+						pos_name = str(html_source).find(search_for_string)
+						if pos_name >=0 :
+							begin_pos_playlist = str(html_source).find('http',pos_name)
+							if begin_pos_playlist == -1:
+								video_url = str(m3u8_url).replace('index', str(search_for_string) + 'P')
+								have_valid_url = True
+							else:
+								end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
+								video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
+								have_valid_url = True
+						else:
+							search_for_string = '360'
+							pos_name = str(html_source).find(search_for_string)
+							if pos_name >=0 :
+								begin_pos_playlist = str(html_source).find('http',pos_name)
+								if begin_pos_playlist == -1:
+									video_url = str(m3u8_url).replace('index', str(search_for_string) + 'P')
+									have_valid_url = True
+								else:
+									end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
+									video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
+									have_valid_url = True
+							else:
+								search_for_string = '270'
+								pos_name = str(html_source).find(search_for_string)
+								if pos_name >=0 :
+									begin_pos_playlist = str(html_source).find('http',pos_name)
+									if begin_pos_playlist == -1:
+										video_url = str(m3u8_url).replace('index', str(search_for_string) + 'P')
+										have_valid_url = True
+									else:
+										end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
+										video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
+										have_valid_url = True				
     			#High quality
-    			if self.PREFERRED_QUALITY == '0':
-					search_for_string = 'NAME="720"'
+				elif self.PREFERRED_QUALITY == '1':
+					search_for_string = '720'
 					pos_name = str(html_source).find(search_for_string)
 					if pos_name >=0 :
 						begin_pos_playlist = str(html_source).find('http',pos_name)
-						end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
-						video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
-						have_valid_url = True
+						if begin_pos_playlist == -1:
+							video_url = str(m3u8_url).replace('index', str(search_for_string) + 'P')
+							have_valid_url = True
+						else:
+							end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
+							video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
+							have_valid_url = True
+					else:
+						search_for_string = '360'
+						pos_name = str(html_source).find(search_for_string)
+						if pos_name >=0 :
+							begin_pos_playlist = str(html_source).find('http',pos_name)
+							if begin_pos_playlist == -1:
+								video_url = str(m3u8_url).replace('index', str(search_for_string) + 'P')
+								have_valid_url = True
+							else:
+								end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
+								video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
+								have_valid_url = True
+						else:
+							search_for_string = '270'
+							pos_name = str(html_source).find(search_for_string)
+							if pos_name >=0 :
+								begin_pos_playlist = str(html_source).find('http',pos_name)
+								if begin_pos_playlist == -1:
+									video_url = str(m3u8_url).replace('index', str(search_for_string) + 'P')
+									have_valid_url = True
+								else:
+									end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
+									video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
+									have_valid_url = True								
     			#Medium	
-        		elif self.PREFERRED_QUALITY == '1':
-        			search_for_string = 'NAME="360"'
-        			pos_name = str(html_source).find(search_for_string)
-        			if pos_name >=0 :
-						begin_pos_playlist = str(html_source).find('http',pos_name)
-						end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
-						video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
-						have_valid_url = True	
-        		#Low
 				elif self.PREFERRED_QUALITY == '2':
-					search_for_string = 'NAME="270"'
+					search_for_string = '360'
 					pos_name = str(html_source).find(search_for_string)
 					if pos_name >=0 :
 						begin_pos_playlist = str(html_source).find('http',pos_name)
-						end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
-						video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
-						have_valid_url = True	
+						if begin_pos_playlist == -1:
+							video_url = str(m3u8_url).replace('index', str(search_for_string) + 'P')
+							have_valid_url = True
+						else:
+							end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
+							video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
+							have_valid_url = True
+					else:
+						search_for_string = '270'
+						pos_name = str(html_source).find(search_for_string)
+						if pos_name >=0 :
+							begin_pos_playlist = str(html_source).find('http',pos_name)
+							if begin_pos_playlist == -1:
+								video_url = str(m3u8_url).replace('index', str(search_for_string) + 'P')
+								have_valid_url = True
+							else:
+								end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
+								video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
+								have_valid_url = True							
+        		#Low
+				elif self.PREFERRED_QUALITY == '3':
+					search_for_string = '270'
+					pos_name = str(html_source).find(search_for_string)
+					if pos_name >=0 :
+						begin_pos_playlist = str(html_source).find('http',pos_name)
+						if begin_pos_playlist == -1:
+							video_url = str(m3u8_url).replace('index', str(search_for_string) + 'P')
+							have_valid_url = True
+						else:
+							end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
+							video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
+							have_valid_url = True								
 
 				if (self.DEBUG) == 'true':
 					xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "blip playlist video_url", str(video_url) ), xbmc.LOGNOTICE )
+				
+				#last ditch effort when m3u8 content wasn't quite what i expected 
+				if video_url == '':
+					video_url = m3u8_url	
+					have_valid_url = True			
+					if (self.DEBUG) == 'true':
+						xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "corrected blip playlist video_url", str(video_url) ), xbmc.LOGNOTICE )
 		
 		if have_valid_url:
 			pass
@@ -292,9 +474,9 @@ class Main:
 		# Alert user
 		#
 	 	elif no_url_found:
-			xbmcgui.Dialog().ok( __language__(30000), __language__(30505))
+			xbmcgui.Dialog().ok( __language__(30000), __language__(30107))
 		elif unplayable_media_file:
-			xbmcgui.Dialog().ok( __language__(30000), __language__(30506))
+			xbmcgui.Dialog().ok( __language__(30000), __language__(30108))
 	
 #
 # The End

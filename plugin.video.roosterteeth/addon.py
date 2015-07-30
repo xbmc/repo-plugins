@@ -6,11 +6,11 @@
 # Coding by Skipmode A1
 # 
 # Credits:
-#   * Dan Dar3                                   - Gametrailers xbmc plugin [http://dandar3.blogspot.com]
+#   * Dan Dar3                                   - Gametrailers kodi plugin [http://dandar3.blogspot.com]
 #   * Roosterteeth                                                          [http://www.roosterteeth.com]
-#   * Team XBMC @ XBMC.org                                                  [http://xbmc.org/]
+#   * Team KODI                                                             [http://kodi.tv/]
 #   * Leonard Richardson <leonardr@segfault.org> - BeautifulSoup            [http://www.crummy.com/software/BeautifulSoup/]
-#   * Eric Lawrence <e_lawrence@hotmail.com>     - Fiddler Web Debugger     [http://www.fiddler2.com]
+#   * Kenneth Reitz                              - Requests                 [http://docs.python-requests.org/en/latest/]
 #
 
 # 
@@ -18,8 +18,8 @@
 #
 #also in ..._const
 __addon__       = "plugin.video.roosterteeth"
-__date__        = "24 July 2015"
-__version__     = "1.1.1"
+__date__        = "29 July 2015"
+__version__     = "1.2.0"
 
 #
 # Imports
@@ -56,8 +56,13 @@ else:
     #
     # List
     #
-    if action == 'list':
-        import roosterteeth_list as plugin
+    if action == 'list-episodes':
+        import roosterteeth_list_episodes as plugin
+    #
+    # List Shows
+    #
+    if action == 'list-shows':
+        import roosterteeth_list_shows as plugin
     #
     # Play
     #

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.gronkh.de" name="Gronkh.DE" version="1.0.2" provider-name="1750 Studios">
+<addon id="plugin.video.gronkh.de" name="Gronkh.DE" version="1.1.0" provider-name="1750 Studios">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.beautifulsoup4" version="4.0.0"/>
@@ -9,14 +9,15 @@
     <extension point="xbmc.python.pluginsource" library="main.py">
         <provides>video</provides>
     </extension>
-    
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
         <summary lang="en">GronkhDE videos and livestreams</summary>
         <summary lang="de">GronkhDE Videos und Livestreams</summary>
-        <language>en de</language>
-        <description lang="en">Watch german let's plays by the gamers of GronkhDE directly in Kodi.</description>
+        <summary lang="pl">GronkhDE Wideo i Stream na Żywo</summary>
+        <language>de</language>
+        <description lang="en">Watch German let's plays by the gamers of GronkhDE directly in Kodi.</description>
         <description lang="de">Schau dir die Let's Plays von Gronkh und Co direkt in Kodi an.</description>
+        <description lang="pl">Oglądaj Let's plays graczy GronkhDE na żywo w Kodi.</description>
         <license>GPL Version 3</license>
         <source>https://git.1750studios.com/gronkhDE/plugin.video.gronkh.de.git</source>
         <email>andreas@1750studios.com</email>

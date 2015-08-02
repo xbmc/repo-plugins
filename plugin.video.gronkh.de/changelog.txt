@@ -1,3 +1,11 @@
+Version 1.1.0
+    Adding version check to prevent add-on from crashing because of deleted API endpoints
+    Adding polish translations (Thanks to Shino)
+    Adding search function
+    Updating API version
+    Changing some internal URLs
+    Making the requests more robust against failures
+
 Version 1.0.2
     Adding error fallback for broken Twitch API
     Changing the API enpoints to enable easier versioning
@@ -7,9 +15,9 @@ Version 1.0.2
     New icons, which should look better
 
 Version 1.0.1
-	Adding live streams
-	Using new API functions, based on the YouTube Data API
-	Changing and adding various thumbnails and fanarts
+    Adding live streams
+    Using new API functions, based on the YouTube Data API
+    Changing and adding various thumbnails and fanarts
 
 Version 1.0.0
-	First working version, ready to be pushed to the repo
+    First working version, ready to be pushed to the repo

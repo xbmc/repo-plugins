@@ -1,0 +1,16 @@
+<settings>
+   <setting id="forceViewMode" type="bool" label="30110" default="true"/>
+   <setting id="viewMode" type="number" label="30111" enable="eq(-1,true)" default="51"/>
+   <setting id="useThumbAsFanart" type="bool" label="30112" default="true"/>
+   <setting id="filterVids" type="bool" label="30201" default="true"/>
+   <setting id="pl0" type="text" label="30100" default="Default" />
+   <setting id="pl1" type="text" label="30101" default="" />
+   <setting id="pl2" type="text" label="30102" default="" />
+   <setting id="pl3" type="text" label="30103" default="" />
+   <setting id="pl4" type="text" label="30104" default="" />
+   <setting id="pl5" type="text" label="30105" default="" />
+   <setting id="pl6" type="text" label="30106" default="" />
+   <setting id="pl7" type="text" label="30107" default="" />
+   <setting id="pl8" type="text" label="30108" default="" />
+   <setting id="pl9" type="text" label="30109" default="" />
+</settings>

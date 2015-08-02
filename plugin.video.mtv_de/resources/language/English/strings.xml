@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30001">Hitlist Germany TOP 100</string>
+  <string id="30003">Single Jahrescharts 2014 TOP100</string>
+  <string id="30004">MTV.de Video Charts TOP100</string>
+  <string id="30005">Search: Artist</string>
+  <string id="30006">Search: Title</string>
+  <string id="30007">Latest Music Clips</string>
+  <string id="30008">Artists A-Z</string>
+  <string id="30009">Artist-Favorites</string>
+  <string id="30010">Title-Collection</string>
+  <string id="30011">Playlists</string>
+  <string id="30012">Next Page</string>
+  <string id="30100">Playlist 01</string>
+  <string id="30101">Playlist 02</string>
+  <string id="30102">Playlist 03</string>
+  <string id="30103">Playlist 04</string>
+  <string id="30104">Playlist 05</string>
+  <string id="30105">Playlist 06</string>
+  <string id="30106">Playlist 07</string>
+  <string id="30107">Playlist 08</string>
+  <string id="30108">Playlist 09</string>
+  <string id="30109">Playlist 10</string>
+  <string id="30110">Force View</string>
+  <string id="30111">ViewID</string>
+  <string id="30112">Use thumb as fanart</string>
+  <string id="30201">Filter "All Eyes On" and "Interviews"</string>
+  <string id="30202">Add to Playlist</string>
+  <string id="30203">Remove from Playlist</string>
+  <string id="30204">Add to Blacklist</string>
+  <string id="30205">Add to Artist Favs</string>
+  <string id="30206">Remove from Artist Favs</string>
+  <string id="30207">Clear Title-Collection</string>
+  <string id="30208">Delete all titles from Title-Collection?</string>
+  <string id="30209">Video is not available!</string>
+  <string id="30210">Album Top 100</string>
+  <string id="30211">Dance Charts</string>
+  <string id="30212">German Blackcharts</string>
+</strings>

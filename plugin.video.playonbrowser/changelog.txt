@@ -1,0 +1,14 @@
+v1.0.2
+- Added caching to speed up UI response. 
+- Added search for channels that allow it. 
+
+v1.0.1
+- Changed logic to use names and not ids for playback, allow My Library to work. 
+- Cleaned up the files and removed non-used code. 
+
+v1.0.0
+- Initial version
+
+v0.0.1
+- Never existed... Magic!
+

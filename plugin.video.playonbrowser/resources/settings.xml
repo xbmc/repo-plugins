@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="42001">
+        <setting label="42002" type="lsep"/>
+        <setting label="42003" type="text"   id="playonserver" default="http://192.168.0.234:54479/"/>
+        <setting id="debug" type="bool" label="32013" default="false"/>
+    </category>
+</settings>

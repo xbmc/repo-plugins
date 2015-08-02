@@ -1,3 +1,9 @@
+2.0.1 (2015-08-02)
+FIX: added missing Fanart in root menu
+
+2.0.0 (2015-08-01)
+UPD: framework
+
 1.1.1 (2015-03-31)
 ADD: support for 1080p (default 720p)
 UPD: improved video stream support

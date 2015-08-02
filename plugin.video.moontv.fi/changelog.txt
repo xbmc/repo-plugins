@@ -1,0 +1,10 @@
+Version 0.3.0
+* added pagination
+* fixed scraping
+Version 0.2.1
+* Quick and dirty fix to extract episode url's from moontv.fi
+Version 0.2.0
+* New versioning scheme to match official xbmc versioning scheme
+* using setResolvedUrl in hopes to gain speed optimizations 
+Version 0.1
+* Initial Release

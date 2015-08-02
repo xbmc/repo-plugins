@@ -1,3 +1,6 @@
+2.0.0 (2015-08-01)
+UPD: framework
+
 1.2.0 (2015-04-15)
 ADD: Category 'Hersteller-Videos' (en: 'Manufacturer videos')
 UPD: improved performance

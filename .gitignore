@@ -1,0 +1,13 @@
+.gz
+.hg
+.idea
+.project
+.pydevproject
+.travis.yml
+*.pyo
+*.tar
+*.xcf
+*.zip
+**/.git
+**/.gitattributes
+**/.gitignore

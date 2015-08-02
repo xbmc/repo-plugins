@@ -1,3 +1,6 @@
+v2015.8.2
+- Fix for scraping bug
+
 v2015.7.9
 - Fix for duplicate episodes appearing
 - Added description and improved view

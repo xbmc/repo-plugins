@@ -43,29 +43,31 @@ def GET_EPISODES():
         print link
         v_code = link[link.find("_")+1:]
         print v_code
+        try:
+            json = GET_VIDEO_INFO(v_code)        
+            print json
+            title = HTMLParser.HTMLParser().unescape(HTMLParser.HTMLParser().unescape(json['title']))
+            image = 'http:'+HTMLParser.HTMLParser().unescape(json['thumbnail_url'])
+            desc = HTMLParser.HTMLParser().unescape(json['description'])
+            end_desc = desc.find('<')
+            desc = desc[0:end_desc]
+            video_id = json['video_id']
+            duration = int(json['duration'])
+            #http://cedexis-video.ora.tv/i/beergeeks/video-14630/,basic400,basic600,sd900,sd1200,sd1500,hd720,hd1080,mobile400,.mp4.csmil/master.m3u8
+            stream = 'http://cedexis-video.ora.tv/i/beergeeks/video-'+str(video_id)+'/,basic400,basic600,sd900,sd1200,sd1500,hd720,hd1080,mobile400,.mp4.csmil/master.m3u8'        
+            #GET_STREAM_QUALITIES(stream)
+            #q = GET_QUALITY(str(video_id))   
+            #stream = stream + q + '|User-Agent='+USER_AGENT
 
-        json = GET_VIDEO_INFO(v_code)
-        print json
-        title = HTMLParser.HTMLParser().unescape(HTMLParser.HTMLParser().unescape(json['title']))
-        image = 'http:'+HTMLParser.HTMLParser().unescape(json['thumbnail_url'])
-        desc = HTMLParser.HTMLParser().unescape(json['description'])
-        end_desc = desc.find('<')
-        desc = desc[0:end_desc]
-        video_id = json['video_id']
-        duration = int(json['duration'])
-        #http://cedexis-video.ora.tv/i/beergeeks/video-14630/,basic400,basic600,sd900,sd1200,sd1500,hd720,hd1080,mobile400,.mp4.csmil/master.m3u8
-        stream = 'http://cedexis-video.ora.tv/i/beergeeks/video-'+str(video_id)+'/,basic400,basic600,sd900,sd1200,sd1500,hd720,hd1080,mobile400,.mp4.csmil/master.m3u8'        
-        #GET_STREAM_QUALITIES(stream)
-        #q = GET_QUALITY(str(video_id))   
-        #stream = stream + q + '|User-Agent='+USER_AGENT
-
-        #addLink(title, stream, title, image, desc, duration)
-        #name = HTMLParser.HTMLParser().unescape(name)
-        info = {'plot':desc,'tvshowtitle':'Beer Geeks','title':title,'originaltitle':title,'duration':duration}
-        #name,url,mode,iconimage,fanart=None      
-        if title not in episodes:
-            addDir(title,stream,100,image,info)
-            episodes.append(title)
+            #addLink(title, stream, title, image, desc, duration)
+            #name = HTMLParser.HTMLParser().unescape(name)
+            info = {'plot':desc,'tvshowtitle':'Beer Geeks','title':title,'originaltitle':title,'duration':duration}
+            #name,url,mode,iconimage,fanart=None      
+            if title not in episodes:
+                addDir(title,stream,100,image,info)
+                episodes.append(title)
+        except:
+            pass
     
 
 def GET_STREAM_QUALITIES(m3u8_url,img_url):    
@@ -105,6 +107,7 @@ def GET_STREAM_QUALITIES(m3u8_url,img_url):
 def GET_VIDEO_INFO(v_code):
     #https://www.ora.tv/oembed/0_4473hnwr0g57?format=json
     url = 'http://www.ora.tv/oembed/0_'+v_code+'?format=json'
+    print url
     req = urllib2.Request(url)
     req.add_header('User-Agent', USER_AGENT)
     response = urllib2.urlopen(req)    

@@ -3,7 +3,7 @@ import os
 import xbmc
 import xbmcaddon
 
-addon = xbmcaddon.Addon()
+addon = xbmcaddon.Addon('plugin.video.funimation')
 name = addon.getAddonInfo('id')
 icon = addon.getAddonInfo('icon')
 msg_success = addon.getLocalizedString(30602)

@@ -1,8 +1,10 @@
 plugin.video.sonyliv
 ================
 
-XBMC Addon for Sony LIV Video website
+Kodi Addon for Sony LIV Video website
 
+Version 1.0.12 website change
+Version 1.0.11 website change
 Version 1.0.10 website change
 Version 1.0.9 website change
 Version 1.0.8 cleanup for website change

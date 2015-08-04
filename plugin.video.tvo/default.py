@@ -6,9 +6,10 @@ import httplib, socket
 
 import urllib, urllib2, cookielib, datetime, time, re, os, string
 import xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs, xbmc
-import cgi, gzip
-from StringIO import StringIO
-import json
+import zlib,json,HTMLParser
+h = HTMLParser.HTMLParser()
+qp  = urllib.quote_plus
+uqp = urllib.unquote_plus
 
 
 UTF8          = 'utf-8'
@@ -21,26 +22,17 @@ __language__  = addon.getLocalizedString
 home          = addon.getAddonInfo('path').decode(UTF8)
 icon          = xbmc.translatePath(os.path.join(home, 'icon.png'))
 addonfanart   = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
+profile       = addon.getAddonInfo('profile').decode(UTF8)
+pdir  = xbmc.translatePath(os.path.join(profile))
+if not os.path.isdir(pdir):
+   os.makedirs(pdir)
 
-baseurl       = 'http://tvo.org/views/ajax?%s=%s&view_name=video_landing_page&view_display_id=%s&view_args=&view_path=node#2F120028'
-taburl        = 'http://tvo.org/views/ajax?view_name=video_landing_page&view_display_id=%s&view_args='
+metafile      = xbmc.translatePath(os.path.join(profile, 'shows.json'))
 
-qp  = urllib.quote_plus
-uqp = urllib.unquote_plus
 
 def log(txt):
     message = '%s: %s' % (__addonname__, txt.encode('ascii', 'ignore'))
     xbmc.log(msg=message, level=xbmc.LOGDEBUG)
-
-def cleanname(name):
-    return name.replace('&apos;',"'").replace('&#8217;',"'").replace('&amp;','&').replace('&#39;',"'").replace('&quot;','"')
-
-def demunge(munge):
-        try:
-            munge = urllib.unquote_plus(munge).decode(UTF8)
-        except:
-            pass
-        return munge
 
 
 USER_AGENT    = 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.93 Safari/537.36'
@@ -49,144 +41,192 @@ defaultHeaders = {'User-Agent':USER_AGENT,
                  'Accept-Encoding':'gzip,deflate,sdch',
                  'Accept-Language':'en-US,en;q=0.8'} 
 
-def getRequest(url, user_data=None, headers = defaultHeaders , alert=True):
+def getRequest(url, userdata= None, headers = defaultHeaders):
+#   log("getRequest URL:"+str(url))
+   req = urllib2.Request(url.encode(UTF8), userdata, headers)
+   try:
+      response = urllib2.urlopen(req)
+      page = response.read()
+      if response.info().getheader('Content-Encoding') == 'gzip':
+         log("Content Encoding == gzip")
+         page = zlib.decompress(page, zlib.MAX_WBITS + 16)
+   except:
+      page = ""
+   return(page)
 
-              log("getRequest URL:"+str(url))
-              if addon.getSetting('us_proxy_enable') == 'true':
-                  us_proxy = 'http://%s:%s' % (addon.getSetting('us_proxy'), addon.getSetting('us_proxy_port'))
-                  proxy_handler = urllib2.ProxyHandler({'http':us_proxy})
-                  if addon.getSetting('us_proxy_pass') <> '' and addon.getSetting('us_proxy_user') <> '':
-                      log('Using authenticated proxy: ' + us_proxy)
-                      password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
-                      password_mgr.add_password(None, us_proxy, addon.getSetting('us_proxy_user'), addon.getSetting('us_proxy_pass'))
-                      proxy_auth_handler = urllib2.ProxyBasicAuthHandler(password_mgr)
-                      opener = urllib2.build_opener(proxy_handler, proxy_auth_handler)
-                  else:
-                      log('Using proxy: ' + us_proxy)
-                      opener = urllib2.build_opener(proxy_handler)
-              else:   
-                  opener = urllib2.build_opener()
-              urllib2.install_opener(opener)
+def getSources():
+    ilist = []
+    azurl = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1'
 
-              log("getRequest URL:"+str(url))
-              req = urllib2.Request(url.encode(UTF8), user_data, headers)
+    for a in azurl:
+        name = a
+        plot = ''
+        url  = a
+        mode = 'GA'
+        u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
+        liz=xbmcgui.ListItem(name, '',icon, None)
+        liz.setProperty( "Fanart_Image", addonfanart )
+        ilist.append((u, liz, True))
+    xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-              retries = 2
-              while ( retries > 0):
-                try:
-                   response = urllib2.urlopen(req, timeout=30)
-                   retries = 0
-                except urllib2.URLError, e:
-                   retries -= 1
-                except socket.timeout:
-                   retries -= 1
            
+def getAtoZ(gzurl):
+    meta ={}
+    dirty = False
+    meta['shows']={}
+    if addon.getSetting('init_meta') != 'true':
+       try:
+          with open(metafile) as infile:
+              meta = json.load(infile)
+       except: pass
+    showDialog = len(meta['shows'])
 
-              try:
-                 if response.info().getheader('Content-Encoding') == 'gzip':
-                    log("Content Encoding == gzip")
-                    buf = StringIO( response.read())
-                    f = gzip.GzipFile(fileobj=buf)
-                    link1 = f.read()
-                 else:
-                    link1=response.read()
+    ilist = []
+    azheaders = defaultHeaders
+    azheaders['X-Requested-With'] = 'XMLHttpRequest'
+    html = getRequest('http://tvo.org/programs/%s/filter-ajax' % gzurl,None, azheaders)
+    a = re.compile('href="(.+?)">(.+?)<',re.DOTALL).findall(html)
+    if showDialog == 0 : 
+       pDialog = xbmcgui.DialogProgress()
+       pDialog.create(__language__(30082), __language__(30083))
+       numShows = len(a)
+       i = 1
 
-              except urllib2.URLError, e:
-                 if alert:
-                     xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( __addonname__, e , 10000) )
-                 link1 = ""
-
-              if not (str(url).endswith('.zip')):
-                 link1 = str(link1).replace('\n','')
-              return(link1)
-
-
-def getSources(fanart):
-        ilist = []
-        html = getRequest('http://tvo.org/video')
-        html = re.compile('Drupal.settings, (.+?)\);').search(html).group(1)
-        a = json.loads(html)['quicktabs']['qt_3']['tabs']
-        for b in a:
-              url = b['display']
-              name = b['title']
-              plot = ''
-              mode = 'GT'
-              u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
-              liz=xbmcgui.ListItem(name, '','DefaultFolder.png', icon)
-              liz.setInfo( 'Video', { "Title": name, "Plot": plot })
-              liz.setProperty('fanart_image', addonfanart)
-              ilist.append((u, liz, True))
-        xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
-           
-
-
-
-def getTabs(gturl):
-        ilist = []
-        vdi = gturl
-        url = taburl % (gturl)
-        html = getRequest(url)
-        html = html.replace('\\"',"'").replace('\\x3c','<').replace('\\x3e','>').replace('\\n','').replace('\\x26','&').replace('\\r','').replace("\\'",'').replace(chr(9),'')
-        html = json.loads(html)['display']
-        cats  = re.compile("<div class='form-item'.+?name='(.+?)'.+?value='(.+?)'.+?<label.+?>(.+?)<").findall(html)
-        for cat,url,name in cats[1:]:
-           try:
-              url = '%s|%s|%s' % (cat,url,vdi)
-              plot = ''
-              mode = 'GS'
-              u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
-              liz=xbmcgui.ListItem(name, '','DefaultFolder.png', icon)
-              liz.setInfo( 'Video', { "Title": name, "Plot": plot })
-              liz.setProperty('fanart_image', addonfanart)
-              ilist.append((u, liz, True))
-           except:
-              pass
-        xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
-           
-
-
-def getQuery(cat_url):
-        keyb = xbmc.Keyboard('', __addonname__)
-        keyb.doModal()
-        if (keyb.isConfirmed()):
-              qurl = qp('/search/?q=%s' % (keyb.getText()))
-              getCats(qurl, '')
-
-
+    for url, name in a:
+      try:
+         (vid, name, img, fanart, mode, infoList) = meta['shows'][url]
+      except:
+        mode = 'GS'
+        html = getRequest('http://tvo.org%s' % url)
+        try:
+           vid = url
+           img, plot = re.compile('field-featured-image.+?src="(.+?)".+?"field-item even">(.+?)<',re.DOTALL).search(html).groups()
+           fanart = img
+        except:
+         try:
+           mode = 'GV'
+           vid = re.compile('data-video-id="(.+?)"',re.DOTALL).search(html).group(1)
+           vurl = 'https://secure.brightcove.com/services/viewer/htmlFederated?&width=1280&height=720&flashID=BrightcoveExperience&bgcolor=%23FFFFFF&playerID=756015080001&playerKey=AQ~~,AAAABDk7A3E~,xYAUE9lVY9-LlLNVmcdybcRZ8v_nIl00&isVid=true&isUI=true&dynamicStreaming=true&%40videoPlayer='+vid+'&secureConnections=true&secureHTMLConnections=true'
+           html = getRequest(vurl)
+           m = re.compile('experienceJSON = (.+?)\};',re.DOTALL).search(html)
+           a = json.loads(html[m.start(1):m.end(1)+1])
+           a = a['data']['programmedContent']['videoPlayer']['mediaDTO']
+           img = a['thumbnailURL']
+           plot = a['longDescription']
+           fanart = a['videoStillURL']
+         except:
+           mode = 'GS'
+           img = icon
+           plot = name
+           fanart = addonfanart 
+        infoList = {}
+        name = h.unescape(name)
+        infoList['Title'] = name
+        try:    infoList['Plot']  = h.unescape(plot.decode(UTF8))
+        except: infoList['Plot'] = plot
+        infoList['TVShowTitle'] = name
+        meta['shows'][url] = (vid, name, img, fanart, mode, infoList)
+        dirty = True
+      u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(vid), qp(name), mode)
+      liz=xbmcgui.ListItem(name, '', None, img)
+      liz.setInfo( 'Video', infoList)
+      liz.setProperty( "Fanart_Image", fanart )
+      if mode == 'GV':
+         liz.setProperty('IsPlayable', 'true')
+         ilist.append((u, liz, False))
+      else: 
+         ilist.append((u, liz, True))
+      if showDialog == 0 : 
+          pDialog.update(int((100*i)/numShows))
+          i = i+1
+    if showDialog == 0 : pDialog.close()
+    if dirty == True:
+      with open(metafile, 'w') as outfile:
+         json.dump(meta, outfile)
+      outfile.close
+    addon.setSetting(id='init_meta', value='false')
+    xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
 def getShows(gsurl,catname):
+        xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
         ilist = []
-        cat,id,vdi = gsurl.split('|')
-        url = baseurl % (cat, id, vdi)
-        url = url.replace('#','%')
-        html  = getRequest(url)
-        html = html.replace('\\"',"'").replace('\\x3c','<').replace('\\x3e','>').replace('\\n','').replace('\\x26','&').replace('\\r','').replace("\\'",'').replace(chr(9),'')
-        html = json.loads(html)['display']
-        cats  = re.compile("td class=.+?tvo.org/bcid/([0-9]*).+?src='(.+?)'.+?h5>(.+?)</h5.+?description-value.+?field-content'>(.+?)<.+?</td",re.DOTALL).findall(html)
-        for url,img,name,plot in cats:
+        meta ={}
+        dirty = False
+        meta[gsurl]={}
+        if addon.getSetting('init_meta') != 'true':
            try:
-              mode = 'GL'
-              u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
-              liz=xbmcgui.ListItem(name, '','DefaultFolder.png', img)
-              liz.setInfo( 'Video', { "Title": name, "Studio":catname, "Plot": plot })
-              liz.setProperty('fanart_image', addonfanart)
-              liz.setProperty('IsPlayable', 'true')
-              ilist.append((u, liz, False))
-           except:
-              pass
+              with open(metafile) as infile:
+                  meta = json.load(infile)
+           except: pass
+        try: showDialog = len(meta[gsurl])
+        except:
+              meta[gsurl]={}
+              showDialog = len(meta[gsurl])
+      
+        html = getRequest('http://tvo.org%s' % uqp(gsurl))
+        print "html = "+str(html)
+        cats = re.compile('<div class="content-list__first.+?href="(.+?)".+?src="(.+?)".+?title="(.+?)".+?field-summary">.+?>(.+?)<',re.DOTALL).findall(html)
+        if len(cats) == 0:
+              cats = re.compile('<li class="views-row.+?href="(.+?)".+?src="(.+?)".+?title="(.+?)".+?field-summary">.+?>(.+?)<.+?</li>',re.DOTALL).findall(html)
+
+        if showDialog == 0 : 
+            pDialog = xbmcgui.DialogProgress()
+            pDialog.create(__language__(30082), __language__(30083))
+            numShows = len(cats)
+            i = 1
+
+        print "cats = "+str(cats)
+        for url,img,name,plot in cats:
+          try:
+              (name, img, vid, infoList) = meta[gsurl][url]
+          except:
+              infoList = {}
+              html = getRequest('http://tvo.org%s' % url)
+              vid = re.compile('data-video-id="(.+?)"',re.DOTALL).search(html).group(1)
+              name = h.unescape(name)
+              infoList['Title'] = name
+              try:    infoList['Plot']  = h.unescape(plot.decode(UTF8))
+              except:   infoList['Plot']  = plot
+              infoList['TVShowTitle'] = catname
+              meta[gsurl][url] = (name, img, vid, infoList)
+              dirty = True
+          u = '%s?url=%s&mode=GV' % (sys.argv[0],vid)
+          liz=xbmcgui.ListItem(name, '',None, img)
+          liz.setInfo( 'Video', infoList)
+          liz.addStreamInfo('video', { 'codec': 'avc1', 
+                                   'width' : 480, 
+                                   'height' : 360, 
+                                   'aspect' : 1.78 })
+          liz.addStreamInfo('audio', { 'codec': 'aac', 'language' : 'en', 'channels': 2})
+          liz.addStreamInfo('subtitle', { 'language' : 'en'})
+          liz.setProperty('fanart_image', img)
+          liz.setProperty('IsPlayable', 'true')
+          ilist.append((u, liz, False))
+          if showDialog == 0 : 
+             pDialog.update(int((100*i)/numShows))
+             i = i+1
+        if showDialog == 0 : pDialog.close()
+        if dirty == True:
+          with open(metafile, 'w') as outfile:
+              json.dump(meta, outfile)
+          outfile.close
+        addon.setSetting(id='init_meta', value='false')
+
         if len(ilist) != 0:
           xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+          xbmcplugin.endOfDirectory(int(sys.argv[1]))
         else:
           xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( __addonname__, __language__(30011), 10000) )
 
 
-def getLink(vid,vidname):
+def getVideo(vid):
             url = 'https://secure.brightcove.com/services/viewer/htmlFederated?&width=1280&height=720&flashID=BrightcoveExperience&bgcolor=%23FFFFFF&playerID=756015080001&playerKey=AQ~~,AAAABDk7A3E~,xYAUE9lVY9-LlLNVmcdybcRZ8v_nIl00&isVid=true&isUI=true&dynamicStreaming=true&%40videoPlayer='+vid+'&secureConnections=true&secureHTMLConnections=true'
             html = getRequest(url)
-            a = re.compile('experienceJSON = (.+?)\};').search(html).group(1)
-            a = a+'}'
-            a = json.loads(a)
+            m = re.compile('experienceJSON = (.+?)\};',re.DOTALL).search(html)
+            a = json.loads(html[m.start(1):m.end(1)+1])
             try:
                  b = a['data']['programmedContent']['videoPlayer']['mediaDTO']['IOSRenditions']
                  u =''
@@ -222,7 +262,7 @@ def getLink(vid,vidname):
                     pg = getRequest(suburl)
                     if pg != "":
                       ofile = open(subfile, 'w+')
-                      captions = re.compile('<p begin="(.+?)" end="(.+?)">(.+?)</p>').findall(pg)
+                      captions = re.compile('<p begin="(.+?)" end="(.+?)">(.+?)</p>',re.DOTALL).findall(pg)
                       idx = 1
                       for cstart, cend, caption in captions:
                         cstart = cstart.replace('.',',')
@@ -237,16 +277,14 @@ def getLink(vid,vidname):
             except:
                  xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( __addonname__, __language__(30011), 10000) )
 
-
 # MAIN EVENT PROCESSING STARTS HERE
-
-xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
 
 parms = {}
 try:
     parms = dict( arg.split( "=" ) for arg in ((sys.argv[2][1:]).split( "&" )) )
     for key in parms:
-       parms[key] = demunge(parms[key])
+      try:    parms[key] = urllib.unquote_plus(parms[key]).decode(UTF8)
+      except: pass
 except:
     parms = {}
 
@@ -254,13 +292,7 @@ p = parms.get
 
 mode = p('mode',None)
 
-if mode==  None:  getSources(p('fanart'))
-elif mode=='SR':  xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=p('url')))
-elif mode=='GQ':  getQuery(p('url'))
-elif mode=='GC':  getCats(p('url'),p('name'))
+if mode==  None:  getSources()
 elif mode=='GS':  getShows(p('url'),p('name'))
-elif mode=='GT':  getTabs(p('url'))
-elif mode=='GL':  getLink(p('url'),p('name'))
-
-xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
+elif mode=='GV':  getVideo(p('url'))
+elif mode=='GA':  getAtoZ(p('url'))

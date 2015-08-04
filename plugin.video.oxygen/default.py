@@ -10,7 +10,7 @@ qp  = urllib.quote_plus
 uqp = urllib.unquote_plus
 
 UTF8     = 'utf-8'
-OXYGENBASE = 'http://now.oxygen.com%s'
+OXYGENBASE = 'http://www.oxygen.com%s'
 
 addon         = xbmcaddon.Addon('plugin.video.oxygen')
 __addonname__ = addon.getAddonInfo('name')
@@ -19,6 +19,12 @@ __language__  = addon.getLocalizedString
 home          = addon.getAddonInfo('path').decode(UTF8)
 icon          = xbmc.translatePath(os.path.join(home, 'icon.png'))
 addonfanart   = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
+profile       = addon.getAddonInfo('profile').decode(UTF8)
+pdir  = xbmc.translatePath(os.path.join(profile))
+if not os.path.isdir(pdir):
+   os.makedirs(pdir)
+
+metafile      = xbmc.translatePath(os.path.join(profile, 'shows.json'))
 
 
 def log(txt):
@@ -48,36 +54,15 @@ def getShows():
    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_EPISODE)
 
    ilist=[]
-   basehtml = getRequest('http://now.oxygen.com')
-   cats = re.compile('<div class="wrap imageLoading".+?href="(.+?)".+?title="(.+?)".+?src="(.+?)".+?</div',re.DOTALL).findall(basehtml)
+   basehtml = getRequest('http://www.oxygen.com/full-episodes')
+   cats = re.compile('<article class="all-shows">.+?href="(.+?)".+?title="(.+?)".+?data-src="(.+?)".+?</article',re.DOTALL).findall(basehtml)
    for url, name, img in cats:
        name = name.strip()
        url = OXYGENBASE % (url)
-       html = getRequest(url)
-       try:    fanart = re.compile('<img class="showBaner" src="(.+?)"',re.DOTALL).search(html).group(1)
-       except: fanart = addonfanart
-       plot = re.compile('"og:description" content="(.+?)"',re.DOTALL).search(html).group(1)
-       html = re.compile("Drupal\.settings, (.+?)\);<",re.DOTALL).search(html).group(1)
-       a = json.loads(html)
-       try:    b = a["tve_widgets"]["rules_based_asset_list2"]["assets1"][0]
-       except: continue
-       infoList = {}
-       dstr = (b['aired_date'].split('-'))
-       infoList['Date']        = '%s-%s-%s' % (dstr[2], dstr[0].zfill(2), dstr[1].zfill(2))
-       infoList['Aired']       = infoList['Date']
-       infoList['MPAA']        = ''
-       infoList['TVShowTitle'] = b['show_title']
-       infoList['Title']       = b['show_title']
-       infoList['Studio']      = 'Oxygen'
-       infoList['Genre']       = ''
-       infoList['Episode']     = int(a["tve_widgets"]["rules_based_asset_list2"]["assets_number"])
-       infoList['Year']        = int(infoList['Aired'].split('-',1)[0])
-       infoList['Plot']        = h.unescape(plot.decode(UTF8))
        mode = 'GE'
        u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
-       liz=xbmcgui.ListItem(name, '',icon, None)
-       liz.setInfo( 'Video', infoList)
-       liz.setProperty('fanart_image', fanart)
+       liz=xbmcgui.ListItem(name, '',None, img)
+       liz.setProperty('fanart_image', addonfanart)
        ilist.append((u, liz, True))
    xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
    if addon.getSetting('enable_views') == 'true':
@@ -92,57 +77,87 @@ def getEpisodes(eurl, showName):
    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_VIDEO_YEAR)
    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_EPISODE)
 
-   ilist=[]        
-   html = getRequest(eurl)
-   try:    fanart = re.compile('<img class="showBaner" src="(.+?)"',re.DOTALL).search(html).group(1)
-   except: fanart = addonfanart
-   html = re.compile("Drupal\.settings, (.+?)\);<",re.DOTALL).search(html).group(1)
-   a = json.loads(html)
-   mode = 'GV'
-   for b in a["tve_widgets"]["rules_based_asset_list2"]["assets1"]:
+   ilist=[]
+   meta ={}
+   sname = eurl
+   meta[sname]={}
+   if addon.getSetting('init_meta') != 'true':
+      try:
+         with open(metafile) as infile:
+             meta = json.load(infile)
+      except: pass
+   try: showDialog = len(meta[sname])
+   except:
+         meta[sname]={}
+         showDialog = len(meta[sname])
+        
+   html = getRequest(uqp(eurl))
+   epis = re.compile('<li class="watch__episode.+?src="(.+?)".+?alt="(.+?)".+?href="(.+?)"',re.DOTALL).findall(html)
+   if showDialog == 0 : 
+       pDialog = xbmcgui.DialogProgress()
+       pDialog.create(__language__(30082), __language__(30083))
+       numShows = len(epis)
+       i = 1
+
+   dirty = False
+   for img,name,url in epis:
+    surl = OXYGENBASE % url
+    try:
+       (name, url, thumb, fanart, infoList) = meta[sname][surl]
+    except:
+      dirty = True
+      html = getRequest(surl)
+      url = re.compile('data-src="(.+?)"',re.DOTALL).search(html).group(1)
+      url = url.split('?',1)[0]
+      url = url.split('/select/',1)[1]
+      xurl = 'http://link.theplatform.com/s/HNK2IC/'+url+'?mbr=true&player=Oxygen%20VOD%20Player%20%28Phase%203%29&format=Script&height=576&width=1024'
+      html = getRequest(xurl)
+      a = json.loads(html)
+      fanart = a['defaultThumbnailUrl']
+      thumb = img
       infoList = {}
-      dstr = (b['aired_date'].rsplit('-'))
-      infoList['Date']        = '%s-%s-%s' % (dstr[2], dstr[0].zfill(2), dstr[1].zfill(2))
-      infoList['Aired']       = infoList['Date']
-      infoList['MPAA']        = ''
-      infoList['TVShowTitle'] = b['show_title']
-      infoList['Title']       = b['episode_title']
-      infoList['Studio']      = 'Oxygen'
-      infoList['Genre']       = ''
-      infoList['Season']      = b['season_n']
-      infoList['Episode']     = b['episode_n']
-      infoList['Year']        = int(infoList['Aired'].split('-',1)[0])
-      infoList['Plot']        = h.unescape(b["synopsis"])
-      thumb = b["episode_thumbnail"]["url"]
-      url   = b['link']
-      name  = b['episode_title'].encode(UTF8)
-      u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],url, qp(name), mode)
-      liz=xbmcgui.ListItem(name, '',None, thumb)
-      liz.setInfo( 'Video', infoList)
-      liz.addStreamInfo('video', { 'codec': 'h264', 
+      infoList['Title'] = h.unescape(name.decode(UTF8))
+      infoList['TVShowTitle'] = showName
+      infoList['Duration'] = a['duration']/1000
+      infoList['Plot'] = a['description']
+      infoList['Studio'] = a['provider']
+      infoList['MPAA'] = a['ratings'][0]['rating']
+      infoList['Season'] = a['pl1$seasonNumber']
+      infoList['Episode'] = a['pl1$episodeNumber']
+    u = '%s?url=%s&mode=GV' % (sys.argv[0],qp(url))
+    liz=xbmcgui.ListItem(name, '',None, thumb)
+    liz.setInfo( 'Video', infoList)
+    liz.addStreamInfo('video', { 'codec': 'h264', 
                                    'width' : 1920, 
                                    'height' : 1080, 
                                    'aspect' : 1.78 })
-      liz.addStreamInfo('audio', { 'codec': 'aac', 'language' : 'en'})
-      liz.addStreamInfo('subtitle', { 'language' : 'en'})
-      liz.setProperty('fanart_image', fanart)
-      liz.setProperty('IsPlayable', 'true')
-      ilist.append((u, liz, False))
+    liz.addStreamInfo('audio', { 'codec': 'aac', 'language' : 'en'})
+    liz.addStreamInfo('subtitle', { 'language' : 'en'})
+    liz.setProperty('fanart_image', fanart)
+    liz.setProperty('IsPlayable', 'true')
+    ilist.append((u, liz, False))
+    meta[sname][surl] = (name, url, thumb, fanart, infoList)
+    if showDialog == 0 : 
+       pDialog.update(int((100*i)/numShows))
+       i = i+1
+   if showDialog == 0 : pDialog.close()
+   if dirty == True:
+     with open(metafile, 'w') as outfile:
+        json.dump(meta, outfile)
+     outfile.close
+   addon.setSetting(id='init_meta', value='false')
+
    xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
    if addon.getSetting('enable_views') == 'true':
       xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('episode_view'))
    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
-def getVideo(url, show_name):
+def getVideo(url):
     gvu1 = 'https://tveoxygen-vh.akamaihd.net/i/prod/video/%s_,40,25,18,12,7,4,2,00.mp4.csmil/master.m3u8?b=&__b__=1000&hdnea=st=%s~exp=%s'
     gvu2 = 'https://tveoxygen-vh.akamaihd.net/i/prod/video/%s_,1696,1296,896,696,496,240,306,.mp4.csmil/master.m3u8?b=&__b__=1000&hdnea=st=%s~exp=%s'
-    url = OXYGENBASE % url
+    url = 'http://link.theplatform.com/s/HNK2IC/'+url+'?mbr=true&player=Oxygen%20VOD%20Player%20%28Phase%203%29&format=Script&height=576&width=1024'
     html = getRequest(url)
-    url = re.compile('data-release-url="(.+?)"',re.DOTALL).search(html).group(1)
-    url = 'http:'+url+'&player=Oxygen%20VOD%20Player%20%28Phase%203%29&format=Script&height=576&width=1024'
-    html = getRequest(url)
-
     a = json.loads(html)
     suburl = a["captions"][0]["src"]
     url = suburl.split('/caption/',1)[1]
@@ -196,4 +211,4 @@ mode = p('mode',None)
 
 if mode==  None:  getShows()
 elif mode=='GE':  getEpisodes(p('url'), p('name'))
-elif mode=='GV':  getVideo(p('url'), p('name'))
+elif mode=='GV':  getVideo(p('url'))

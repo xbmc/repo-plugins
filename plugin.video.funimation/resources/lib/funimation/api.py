@@ -101,10 +101,10 @@ class Funimation(object):
             self.http.get_cookie('ci_session').comment = '%s|%s' % (
                 username, self.user_type)
             self.http.save_cookies()
-            _logger.info('Logged in as "%s"', username)
+            self._log.info('Logged in as "%s"', username)
             return True
         except HTTPError:
-            _logger.warning('Login failed for "%s"', username)
+            self._log.warning('Login failed for "%s"', username)
             # throws a 400 error when login is wrong
             return False
 

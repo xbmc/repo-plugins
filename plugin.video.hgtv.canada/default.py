@@ -63,8 +63,7 @@ def getShows():
       if b['depth'] == 2:
        name = b['title']
        url  = b['id'].rsplit('/',1)[1]
-       mode = 'GE'
-       u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],url, qp(name), mode)
+       u = '%s?url=%s&mode=GE' % (sys.argv[0],url)
        liz=xbmcgui.ListItem(name, '',None, icon)
        liz.setProperty('fanart_image', addonfanart)
        ilist.append((u, liz, True))
@@ -74,7 +73,7 @@ def getShows():
    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
-def getEpisodes(geurl, showName):
+def getEpisodes(geurl):
   xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
   xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_UNSORTED)
   xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_TITLE)
@@ -101,14 +100,12 @@ def getEpisodes(geurl, showName):
         if wewait == False and b['hasReleases'] == True:
           name = b['title']
           url  = b['id'].rsplit('/',1)[1]
-          mode = 'GE'
-          u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],url, qp(name), mode)
+          u = '%s?url=%s&mode=GE' % (sys.argv[0],url)
           liz=xbmcgui.ListItem(name, '',None, icon)
           liz.setProperty('fanart_image', addonfanart)
           ilist.append((u, liz, True))
 
   else:  
-   mode = 'GV'
    for b in a:
       url     = 'http://hgtv-vh.akamaihd.net/i/,%s.mp4,.csmil/master.m3u8' % b['defaultThumbnailUrl'].rsplit('_',2)[0].split('http://media.hgtv.ca/videothumbnails/',1)[1]
       name    = h.unescape(b['title'])
@@ -131,7 +128,7 @@ def getEpisodes(geurl, showName):
       except: infoList['Season']  = 1
       infoList['Plot']        = h.unescape(b["description"])
       infoList['TVShowTitle'] = b['pl1$show']
-      u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
+      u = '%s?url=%s&mode=GV' % (sys.argv[0],qp(url))
       liz=xbmcgui.ListItem(name, '',icon, thumb)
       liz.setInfo( 'Video', infoList)
       liz.addStreamInfo('video', { 'codec': 'avc1', 
@@ -149,36 +146,12 @@ def getEpisodes(geurl, showName):
   xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
-def getVideo(url, show_name):
+def getVideo(url):
    url = uqp(url)
    suburl = 'http://media.hgtv.ca/videothumbnails/%s.vtt' % url.split('/i/,',1)[1].split('.mp4',1)[0]
    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=url))
 
    if (addon.getSetting('sub_enable') == "true") and (suburl != ''):
-#      profile = addon.getAddonInfo('profile').decode(UTF8)
-#      subfile = xbmc.translatePath(os.path.join(profile, 'SyfySubtitles.srt'))
-#      prodir  = xbmc.translatePath(os.path.join(profile))
-#      if not os.path.isdir(prodir):
-#         os.makedirs(prodir)
-#
-#      pg = getRequest(suburl)
-#      if pg != "":
-#        ofile = open(subfile, 'w+')
-#        captions = re.compile('<p begin="(.+?)" end="(.+?)">(.+?)</p>',re.DOTALL).findall(pg)
-#        idx = 1
-#        for cstart, cend, caption in captions:
-#          cstart = cstart.replace('.',',')
-#          cend   = cend.replace('.',',').split('"',1)[0]
-#          caption = caption.replace('<br/>','\n').replace('&gt;','>')
-#          ofile.write( '%s\n%s --> %s\n%s\n\n' % (idx, cstart, cend, caption))
-#          idx += 1
-#        ofile.close()
-#        xbmc.sleep(2000)
-#        xbmc.Player().setSubtitles(subfile)
-
-
-
-
       profile = addon.getAddonInfo('profile').decode(UTF8)
       subfile = xbmc.translatePath(os.path.join(profile, 'Subtitles.srt'))
       prodir  = xbmc.translatePath(os.path.join(profile))
@@ -210,5 +183,5 @@ p = parms.get
 mode = p('mode',None)
 
 if mode==  None:  getShows()
-elif mode=='GE':  getEpisodes(p('url'), p('name'))
-elif mode=='GV':  getVideo(p('url'), p('name'))
+elif mode=='GE':  getEpisodes(p('url'))
+elif mode=='GV':  getVideo(p('url'))

@@ -76,10 +76,12 @@ def getShows():
    url = 'http://www.hgtv.com/shows/full-episodes'
    html = getRequest(url)
 
-   name, vidcnt, img = re.compile('"video-player-embedded">.+?<h3>(.+?)</h3>.+?"total"\: (.+?),.+?"thumbnailUrl" \: "(.+?)"', re.DOTALL).search(html).groups()
-   plot = ''
    a  =[]
-   a.append((icon, url, name, '%s Videos' % vidcnt))
+   try:
+      name, vidcnt, img = re.compile('"video-player-embedded">.+?<h3>(.+?)</h3>.+?"total"\: (.+?),.+?"thumbnailUrl" \: "(.+?)"', re.DOTALL).search(html).groups()
+      plot = ''
+      a.append((icon, url, name, '%s Videos' % vidcnt))
+   except: pass
 
    m = re.compile('<div class="video-player-embedded">(.+?)<section class="text-promo module">', re.DOTALL).search(html)
    b = re.compile('<li class="block">.+?src="(.+?)".+?href="(.+?)">(.+?)<.+?noWrap">(.+?)<.+?</li>', re.DOTALL).findall(html, m.start(1),m.end(1))
@@ -89,16 +91,17 @@ def getShows():
    for img, url, name, vidcnt in a:
        name=name.strip()
        vidcnt = vidcnt.strip()
+       infoList = {}
+       try:    infoList['Episode'] = int(vidcnt.split(' ',1)[0])
+       except: infoList['Episode'] = 0
+       if infoList['Episode'] == 0: continue
        html = getRequest(url.rsplit('/',1)[0])
        try:    plot = re.compile('"og:description" content="(.+?)"',re.DOTALL).search(html).group(1)
        except: plot = name
-       infoList = {}
        infoList['TVShowTitle'] = name
        infoList['Title']       = name
        infoList['Studio']      = 'HGTV'
        infoList['Genre']       = ''
-       try:    infoList['Episode'] = int(vidcnt.split(' ',1)[0])
-       except: infoList['Episode'] = 0
        infoList['Plot'] = h.unescape(plot)
        mode = 'GE'
        u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],url, qp(name), mode)

@@ -1,0 +1,3 @@
+Version 1.0.1 Initial release
+Version 1.0.2 Fix subtitles setting text
+Version 1.0.4 better images

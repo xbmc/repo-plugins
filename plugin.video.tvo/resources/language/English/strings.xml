@@ -3,7 +3,7 @@
        <string id="30000">Video Resolution</string>
        <string id="30001">SD</string>
        <string id="30002">HD</string>
-       <string id="30010">ThinkTV PBS</string>
+       <string id="30010">TV Ontario</string>
        <string id="30011">No Videos Found</string>
        <string id="30012">All Programs</string>
        <string id="30013">Programs A to Z</string>
@@ -24,6 +24,13 @@
        <string id="30044">Password</string>
        <string id="30050">Sub-Titles</string>
        <string id="30051">Enable Sub-Titles</string>
+
+       <string id="30080">Metadata</string>
+       <string id="30081">Initialize Metadata Next Start</string>
+       <string id="30082">TV Ontario</string>
+       <string id="30083">Initializing ....</string>
+
+
 
 </strings>
 

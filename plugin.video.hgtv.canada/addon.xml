@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.hgtv.canada"
        name="HGTV Canada"
-       version="1.0.2"
+       version="1.0.3"
        provider-name="t1m">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>

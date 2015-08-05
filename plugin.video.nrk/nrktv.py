@@ -59,6 +59,15 @@ class Category(Base):
 class Channel(ImageMixin, Base):
     media_url = None
 
+    # override images. some resolutions are corrupt server side
+    @property
+    def thumb(self):
+        return self._image_url % (self.image_id, 490)
+
+    @property
+    def fanart(self):
+        return self._image_url % (self.image_id, 1910)
+
     @staticmethod
     def from_response(r):
         return Channel(

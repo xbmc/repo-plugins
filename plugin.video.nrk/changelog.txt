@@ -1,3 +1,8 @@
+[B]4.5.2[/B]
+- Fikset kanalikoner
+- Fikset beskrivelse for serier
+- Lagt til P1 Trøndelag
+
 [B]4.5.0[/B]
 - Fikset søk og kategorier etter sideendringer
 

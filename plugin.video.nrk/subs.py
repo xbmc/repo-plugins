@@ -36,6 +36,10 @@ def _ttml_to_srt(ttml):
     output = BytesIO()
     subtitles = re.compile(r'<p begin="(.*?)" dur="(.*?)".*?>(.*?)</p>',
                            re.DOTALL).findall(ttml)
+
+    if len(subtitles) > 0 and subtitles[0][2].lower().startswith('copyright'):
+        subtitles.pop(0)
+
     for i, (start, duration, text) in enumerate(subtitles):
         start = _str_to_time(start)
         duration = _str_to_time(duration)

@@ -24,7 +24,7 @@ from xbmcplugin import addDirectoryItems
 from xbmcplugin import endOfDirectory
 from xbmcgui import ListItem
 import routing
-import nrktv_mobile as nrktv
+import nrktv
 import subs
 
 plugin = routing.Plugin()
@@ -47,17 +47,18 @@ def root():
 @plugin.route('/live')
 def live():
     for ch in nrktv.channels():
-        li = ListItem(ch.title, thumbnailImage=ch.thumb)
+        li = ListItem(ch.title)
         li.setProperty('mimetype', "application/vnd.apple.mpegurl")
         li.setProperty('isplayable', 'true')
-        li.setProperty('fanart_image', ch.fanart)
+        li.setArt({'thumb': ch.thumb, 'fanart': ch.fanart})
         li.setInfo('video', {'title': ch.title})
         li.addStreamInfo('video', {'codec': 'h264', 'width': 1280, 'height': 720})
         li.addStreamInfo('audio', {'codec': 'aac', 'channels': 2})
         addDirectoryItem(plugin.handle, ch.media_url, li, False)
 
     url = "https://nrktegnsprak-lh.akamaihd.net/i/nrktegnsprak_0@111177/master.m3u8"
-    li = ListItem("Tegnspråk", thumbnailImage="http://gfx.nrk.no/R4LFuTHBHWPMmv1dkqvPGQY4-ZZTKdNKAFPg_LHhoEFA")
+    li = ListItem("Tegnspråk")
+    li.setArt({'thumb': "http://gfx.nrk.no/R4LFuTHBHWPMmv1dkqvPGQY4-ZZTKdNKAFPg_LHhoEFA"})
     li.setProperty('isplayable', 'true')
     addDirectoryItem(plugin.handle, url, li, False)
 
@@ -82,18 +83,19 @@ def add_radio_channels():
         ("Sport", "http://lyd.nrk.no/nrk_radio_sport_mp3_h"),
         ("Sápmi", "http://lyd.nrk.no/nrk_radio_sami_mp3_h"),
         ("Super", "http://lyd.nrk.no/nrk_radio_super_mp3_h"),
-        ("P1 Østlandssendingen", "http://lyd.nrk.no/nrk_radio_p1_ostlandssendingen_mp3_h"),
         ("P1 Buskerud", "http://lyd.nrk.no/nrk_radio_p1_buskerud_mp3_h"),
         ("P1 Finnmark", "http://lyd.nrk.no/nrk_radio_p1_finnmark_mp3_h"),
         ("P1 Hedemark og Oppland", "http://lyd.nrk.no/nrk_radio_p1_hedmark_og_oppland_mp3_h"),
         ("P1 Hordaland", "http://lyd.nrk.no/nrk_radio_p1_hordaland_mp3_h"),
         ("P1 Møre og Romsdal", "http://lyd.nrk.no/nrk_radio_p1_more_og_romsdal_mp3_h"),
         ("P1 Nordland", "http://lyd.nrk.no/nrk_radio_p1_nordland_mp3_h"),
+        ("P1 Oslo og Akershus", "http://lyd.nrk.no/nrk_radio_p1_ostlandssendingen_mp3_h"),
         ("P1 Rogaland", "http://lyd.nrk.no/nrk_radio_p1_rogaland_mp3_h"),
         ("P1 Sogn og Fjordane", "http://lyd.nrk.no/nrk_radio_p1_sogn_og_fjordane_mp3_h"),
         ("P1 Sørlandet", "http://lyd.nrk.no/nrk_radio_p1_sorlandet_mp3_h"),
         ("P1 Telemark", "http://lyd.nrk.no/nrk_radio_p1_telemark_mp3_h"),
         ("P1 Troms", "http://lyd.nrk.no/nrk_radio_p1_troms_mp3_h"),
+        ("P1 Trøndelag", " http://lyd.nrk.no/nrk_radio_p1_trondelag_mp3_h"),
         ("P1 Vestfold", "http://lyd.nrk.no/nrk_radio_p1_vestfold_mp3_h"),
         ("P1 Østfold", "http://lyd.nrk.no/nrk_radio_p1_ostfold_mp3_h"),
     ]
@@ -114,22 +116,27 @@ def view(items, update_listing=False, urls=None):
         title = item.title
         if getattr(item, 'episode', None):
             title += " " + item.episode
-        li = ListItem(title, thumbnailImage=getattr(item, 'thumb', ''))
+        li = ListItem(title)
         playable = plugin.route_for(url) == play
         li.setProperty('isplayable', str(playable))
-        if hasattr(item, 'fanart'):
-            li.setProperty('fanart_image', item.fanart)
+
+        li.setArt({
+            'thumb': getattr(item, 'thumb', ''),
+            'fanart': getattr(item, 'fanart', ''),
+        })
+
+        info = {'title': title}
+        if hasattr(item, 'description'):
+            info['plot'] = item.description
+        if hasattr(item, 'category') and item.category:
+            info['genre'] = item.category.title
+        if hasattr(item, 'legal_age'):
+            info['mpaa'] = item.legal_age
+        if hasattr(item, 'aired'):
+            info['aired'] = item.aired.strftime('%Y-%m-%d')
+        li.setInfo('video', info)
+
         if playable:
-            info = {
-                'title': title,
-                'plot': item.description,
-                'mpaa': item.legal_age,
-            }
-            if item.category:
-                info['genre'] = item.category.title
-            if item.aired:
-                info['aired'] = item.aired.strftime('%Y-%m-%d')
-            li.setInfo('video', info)
             li.addStreamInfo('video', {'codec': 'h264', 'width': 1280, 'height': 720, 'duration': item.duration})
             li.addStreamInfo('audio', {'codec': 'aac', 'channels': 2})
         addDirectoryItem(plugin.handle, url, li, not playable, total)

@@ -1,0 +1,61 @@
+# Kodi Media Center language file
+# Addon Name: KordKutters
+# Addon id: plugin.video.kordkutters
+# Addon Provider: enen92
+msgid ""
+msgstr ""
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "KordKutters"
+msgstr "KordKutters"
+
+msgctxt "#30001"
+msgid "Live"
+msgstr "Em directo"
+
+msgctxt "#30002"
+msgid "No live videos available right now."
+msgstr "Não existem vídeos em directo neste momento"
+
+msgctxt "#30003"
+msgid "Minimum percent to mark a video as watched"
+msgstr "Percentagem mínima para marcar um vídeo como visto"
+
+msgctxt "#30004"
+msgid "All uploads"
+msgstr "Todos os vídeos"
+
+msgctxt "#30005"
+msgid "Episode Info"
+msgstr "Informação do Episódio"
+
+msgctxt "#30006"
+msgid "Mark as watched"
+msgstr "Marcar como visto"
+
+msgctxt "#30007"
+msgid "Remove watched"
+msgstr "Remover visto"
+
+msgctxt "#30008"
+msgid "General"
+msgstr "Geral"
+
+msgctxt "#30009"
+msgid "Show all videos directory"
+msgstr "Mostrar directoria de todos os vídeos "
+
+msgctxt "#30010"
+msgid "Next Page"
+msgstr "Próxima Página"
+
+msgctxt "#30011"
+msgid "Videos per youtube page"
+msgstr "Vídeos por página do youtube"

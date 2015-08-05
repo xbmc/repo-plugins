@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.kordkutters" name="KordKutters" version="1.0.5" provider-name="enen92">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <language></language>
+    <platform>all</platform>
+    <summary lang="en">KordKutters episodes and kodi related tutorials</summary>
+    <summary lang="pt">Episódios e tutoriais do podcast Kordkutters</summary>
+    <description lang="en">Ned and Nate are two members of Team Kodi. Ned is primarily responsible for the Kodi Wiki. Nate is the Foundation president and does various jobs related to project and community management for the group. They decided to put together the KordKutters project because, frankly, they didn’t have much to do one week, and it seemed like it could be fun. They’ve been showing off Kodi for years at conventions and expos, so why not start doing videos with the exact same idea in mind?</description>
+    <description lang="pt">O Ned e o Nate são dois membros da equipa de desenvolvimento do Kodi (Team-Kodi). O Ned é o principal responsável pela documentação (wiki) do Kodi. Já o Nate é o presidente da fundação e realiza diversos trabalhos relacionados com o projecto e a gestão da comunidade para o grupo. Eles decidiram iniciar conjuntamente o projecto KordKutters uma vez que, francamente, não tinham muito para fazer numa determinada semana. Pensaram que poderia ser engraçado. Como há vários anos que fazem demonstrações do Kodi em exposições e eventos porque não fazer alguns vídeos com a mesma ideia em mente?</description>
+    <disclaimer lang="en">The author is not affiliated either with the KordKutters podcast nor the XBMC Foundation</disclaimer>
+    <disclaimer lang="pt">O autor do plugin não tem qualquer relação com o podcast KordKutters nem com a XBMC Foundation</disclaimer>
+    <forum>http://forum.kodi.tv/showthread.php?tid=230005</forum>
+    <source>https://github.com/enen92/plugin.video.kordkutters</source>
+    <website>http://www.kordkutters.com</website>
+    <platform>all</platform>
+  </extension>
+</addon>

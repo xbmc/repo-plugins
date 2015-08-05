@@ -1,3 +1,6 @@
+v1.0.2 (Wednesday, 5 August 2015):
+- fixed characterset bug when listing videos
+
 v1.0.1 (Wednesday, 1 July 2015):
 - added Search
 

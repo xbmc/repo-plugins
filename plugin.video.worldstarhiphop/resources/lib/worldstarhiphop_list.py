@@ -14,6 +14,9 @@ import xbmcaddon
 import xbmcgui
 import xbmcplugin
 
+reload(sys)  
+sys.setdefaultencoding('utf8')
+
 BASEURL = "http://www.worldstarhiphop.com"
 #
 # Main class

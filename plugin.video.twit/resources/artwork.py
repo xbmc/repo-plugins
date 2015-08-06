@@ -50,4 +50,5 @@ arts = {
     'This Week in YouTube': 'http://twit.cachefly.net/coverart/yt/yt1400.jpg',
     "Trey's Variety Hour": 'http://twit.cachefly.net/coverart/tvh/tvh600.jpg',
     'TWiT Photo': 'http://twit.cachefly.net/coverart/photo/photo600.jpg',
+    'All TWiT.tv Shows': 'http://twit.cachefly.net/coverart/all/all1400.jpg'
     }

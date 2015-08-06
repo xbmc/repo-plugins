@@ -19,7 +19,7 @@ addon_version = addon.getAddonInfo('version')
 addon_fanart = addon.getAddonInfo('fanart')
 addon_icon = addon.getAddonInfo('icon')
 addon_path = xbmc.translatePath(addon.getAddonInfo('path')
-                                ).encode('utf-8')
+    ).encode('utf-8')
 language = addon.getLocalizedString
 cache = StorageServer.StorageServer("twit", 6)
 base_url = 'https://twit.tv'
@@ -55,7 +55,7 @@ def shows_cache():
     def parse_shows_to_list(shows_url):
         soup = BeautifulSoup(make_request(shows_url), 'html.parser')
         shows_tag = (soup.find('div', class_='list media shows')
-                             ('div', class_="item media-object"))
+                        ('div', class_="item media-object"))
         show_list = [{'url': i.a['href'],
                       'thumb': i.img['src'],
                       'title': x.a.get_text(),
@@ -101,9 +101,9 @@ def get_episodes(url, iconimage):
     ''' display episodes of a specific show '''
     soup = BeautifulSoup(make_request(base_url + url), 'html.parser')
     episodes = (soup.find('div', class_='list hero episodes')
-                        ('div', class_='episode item'))
+                    ('div', class_='episode item'))
     for i in episodes:
-        title = i.span.span.string.strip().replace('\n', ' ')
+        title = i.span.get_text(' ', strip=True)
         add_dir(title, base_url + i.a['href'], i.img['src'], 'resolve_url',
                 {'plot': i.a['title']}, iconimage)
     # find more pages
@@ -152,7 +152,7 @@ def get_featured_episodes():
         cat_name = i.find_previous('h2').string
         episodes = i('div', class_='episode item')
         for x in episodes:
-            episode_name = x.span.span.string.strip().replace('\n', ' ')
+            episode_name = x.span.get_text(' ', strip=True)
             title = '[%s] %s' %(cat_name, episode_name)
             try:
                 fanart = artwork.arts[episode_name.rsplit(' ', 1)[0].strip()]

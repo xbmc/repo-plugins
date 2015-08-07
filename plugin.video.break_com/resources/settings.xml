@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <!-- kodion General -->
     <category label="30000">
-
-        <!-- kodion Visual -->
-        <setting id="video.quality.ask" type="bool" label="30009" default="false" />
+    <setting id="video.quality.ask" type="bool" label="30009" default="false" />
         <setting id="video.quality" enable="eq(-1,false)" type="enum" label="30010" lvalues="30016|30017|30011|30012|30013" default="3" />
         <setting id="addon.fanart.show" type="bool" label="30021" default="true"/>
         <setting id="addon.search.size" type="enum" label="30023" values="0|10|20|30|40|50" default="1" />

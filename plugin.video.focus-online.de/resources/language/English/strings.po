@@ -151,6 +151,10 @@ msgctxt "#30037"
 msgid "Clear cache"
 msgstr ""
 
+msgctxt "#30038"
+msgid "Setup views?"
+msgstr ""
+
 #Common
 #empty strings from id 30038 to 30099
 

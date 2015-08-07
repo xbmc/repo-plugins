@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <!-- kodion General -->
     <category label="30000">
-
-        <!-- kodion Visual -->
         <setting id="video.quality.ask" type="bool" label="30009" default="false" />
         <setting id="video.quality" type="enum" label="30010" lvalues="30011|30012|30013" default="1" />
         <setting type="sep" />

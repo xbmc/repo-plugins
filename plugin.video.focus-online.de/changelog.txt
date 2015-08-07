@@ -1,3 +1,6 @@
+2.0.3 (2015-08-07)
+FIX: localization was missing a text and the ID was wrong
+
 2.0.2 (2015-08-07)
 UPD: moved from *.xml to *.po localizations
 

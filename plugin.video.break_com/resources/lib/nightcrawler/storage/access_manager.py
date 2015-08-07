@@ -15,6 +15,14 @@ class AccessManager(object):
         self.do_login(login_method)
         return self.do_refresh_token(refresh_token_method)
 
+    def do_access_token(self, access_token_method):
+        if not self._has_access_token() or self._is_access_token_expired():
+            access_data = access_token_method()
+            self._update_access_data(access_data)
+            pass
+
+        return self._get_access()
+
     def do_login(self, login_method):
         if not self._has_login_credentials():
             return {}
@@ -103,6 +111,12 @@ class AccessManager(object):
         self._settings.set_string(self._settings.LOGIN_USERNAME, '')
         self._settings.set_string(self._settings.LOGIN_PASSWORD, '')
         self._settings.set_string(self._settings.LOGIN_HASH, '')
+        pass
+
+    def remove_access_token(self):
+        self._settings.set_string(self._settings.LOGIN_ACCESS_TOKEN, '')
+        self._settings.set_string(self._settings.LOGIN_ACCESS_TOKEN_EXPIRES, '')
+        self._settings.set_string(self._settings.LOGIN_REFRESH_TOKEN, '')
         pass
 
     def get_access_token(self):

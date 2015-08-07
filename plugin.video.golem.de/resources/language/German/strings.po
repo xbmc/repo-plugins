@@ -145,6 +145,10 @@ msgctxt "#30037"
 msgid "Clear cache"
 msgstr "Cache leeren"
 
+msgctxt "#30038"
+msgid "Setup views?"
+msgstr "Ansichten einrichten?"
+
 msgctxt "#30100"
 msgid "Favorites"
 msgstr "Favoriten"

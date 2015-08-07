@@ -47,7 +47,7 @@ class Provider(object):
 
     LOCAL_LATEST_VIDEOS = 30109
 
-    LOCAL_SETUP_OVERRIDE_VIEW = 30037
+    LOCAL_SETUP_OVERRIDE_VIEW = 30038
 
     PATH_SEARCH = '/search/list/'
     PATH_SEARCH_LIST = '/search/list/'

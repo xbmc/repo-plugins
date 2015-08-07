@@ -24,9 +24,9 @@ class Provider(nightcrawler.Provider):
         return context.create_resource_path('media/fanart.jpg')
 
     def on_setup(self, context, mode):
-        if mode == 'content-types':
+        if mode == 'content-type':
             return ['default', 'episodes']
-        return None
+        pass
 
     @nightcrawler.register_path('/play/')
     @nightcrawler.register_context_value('url', str, required=True)

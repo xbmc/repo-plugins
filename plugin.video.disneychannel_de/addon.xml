@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.disneychannel_de" name="DisneyChannel.de" version="1.1.0" provider-name="L0RE">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="de">DisneyChannel Mediathek</summary>
+        <summary lang="en">DisneyChannel media library</summary>
+        <language>de</language>
+        <description lang="de">DisneyChannel Mediathek</description>
+        <description lang="en">DisneyChannel media library</description>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <source>http://repo.l0re.com/data/plugin.video.disneychannel_de/</source>
+        <forum>http://www.kodinerds.net/index.php/Thread/11527-AddonScriptorDE-s-Addon-Sammlung/</forum>
+        <email>andreas at vogler dot name</email>
+        <website>http://www.disneychannel.de</website>
+    </extension>
+</addon>

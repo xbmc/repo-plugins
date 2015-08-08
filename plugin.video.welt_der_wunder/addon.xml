@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.welt_der_wunder" name="Welt der Wunder" version="1.1.4" provider-name="L0RE">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="de">Welt der Wunder Livestream und Mediathek</summary>
+        <summary lang="en">Welt der Wunder livestream and media library</summary>
+        <language>de</language>
+        <description lang="de">Welt der Wunder Livestream und Mediathek</description>
+        <description lang="en">Welt der Wunder livestream and media library</description>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <source>http://repo.l0re.com/data/plugin.video.welt_der_wunder/</source>
+        <forum>http://forum.xbmc.org/showthread.php?tid=132563</forum>
+        <email>andreas at vogler dot name</email>
+        <website>http://www.weltderwunder.tv</website>
+    </extension>
+</addon>

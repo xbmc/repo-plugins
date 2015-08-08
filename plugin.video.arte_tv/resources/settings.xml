@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+   <setting id="language" type="enum" label="30101" values="DE|FR" default="0"/>
+   <setting id="maxVideoQuality" type="enum" label="30106" values="480p|720p" default="1"/>
+   <setting id="streamingType" type="enum" label="30108" values="HTTP|RTMP" default="0"/>
+   <setting id="useThumbAsFanart" type="bool" label="30107" default="true"/>
+   <setting id="forceView" type="bool" label="30104" default="true"/>
+   <setting id="viewIDNew" type="number" label="30105" default="51"/>
+</settings>

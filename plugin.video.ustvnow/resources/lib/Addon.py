@@ -64,7 +64,7 @@ def get_string(string_id):
 def add_music_item(item_id, infolabels, img='', fanart='', total_items=0):
     infolabels = decode_dict(infolabels)
     url = build_plugin_url({'play': item_id})
-    log('adding item: %s - %s' % (infolabels['title'], url))
+    log('adding item: %s' % (infolabels['title']))
     listitem = xbmcgui.ListItem(infolabels['title'], iconImage=img, 
                                 thumbnailImage=img)
     listitem.setInfo('music', infolabels)
@@ -78,7 +78,7 @@ def add_video_item(url, infolabels, img='', fanart='', total_items=0,
     infolabels = decode_dict(infolabels)
     if url.find('://') == -1:
         url = build_plugin_url({'play': url})
-    log('adding item: %s - %s' % (infolabels['title'].decode('utf-8','ignore'), url))
+    log('adding item: %s' % (infolabels['title'].decode('utf-8','ignore')))
     listitem = xbmcgui.ListItem(infolabels['title'], iconImage=img, 
                                 thumbnailImage=img)
     listitem.setInfo('video', infolabels)
@@ -91,7 +91,7 @@ def add_video_item(url, infolabels, img='', fanart='', total_items=0,
 
 def add_directory(url_queries, title, img='', fanart='', total_items=0):
     url = build_plugin_url(url_queries)
-    log('adding dir: %s - %s' % (title, url))
+    log('adding dir: %s' % (title))
     listitem = xbmcgui.ListItem(decode(title), iconImage=img, thumbnailImage=img)
     if not fanart:
         fanart = addon.getAddonInfo('path') + '/fanart.jpg'

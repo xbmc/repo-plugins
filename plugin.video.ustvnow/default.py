@@ -42,8 +42,8 @@ if not password:
         Addon.set_setting('password', str(retval))
         password = Addon.get_setting('password')
         
-if premium == False:
-    Addon.set_setting('quality', '0')
+# if premium == False:
+    # Addon.set_setting('quality', '0')
 
 ustv = ustvnow.Ustvnow(email, password, premium)
 

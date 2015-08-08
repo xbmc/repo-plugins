@@ -1,3 +1,9 @@
+[B]Version 12.0.1[/B]
+- Added channel Sorting
+- Duplicate channel check
+- Removed unneeded log entries
+- Removed forced Low quality for non Premium
+
 [B]Version 10.0.3[/B]
 - Corrected Channel Names
 

@@ -1,0 +1,4 @@
+<settings>
+   <setting id="debug" type="bool" label="30004" default="false"/>
+   <setting id="bitrate" type="select" label="30003" default="Max" values="Min|Max|Select" />
+</settings>

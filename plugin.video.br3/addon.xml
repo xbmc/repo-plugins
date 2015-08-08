@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.br3" name="Bayrisches Fernsehen" version="0.5.3" provider-name="L0RE">
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Videos von Bayrischen Fernsehen</summary>
+    <summary lang="de">Videos of Bavarian Television</summary>
+    <description lang="en">Videos der Mediathek von Bayrischen Fernsehen</description>
+    <description lang="de">Video From br.de</description>
+    <website></website>
+    <source>http://repo.l0re.com/data/plugin.video.animexx/</source>
+    <forum>http://l0re.com</forum>
+    <email>andreas at vogler dot name</email>
+    <platform>all</platform>
+  </extension>
+</addon>

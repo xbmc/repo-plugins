@@ -1,0 +1,17 @@
+﻿0.1 
+- Initial Source
+0.2
+- Wip for first release
+0.3
+- Sonderzeichen eingefügt und next Knopf
+0.4 
+- Changes for Official Release
+0.5
+- Added Subtitle
+0.5.1
+- Added Length of Video and Description
+0.5.2
+- Image Changet to right resolution
+- String Ids Changed to 300XX
+0.5.3
+- Only show Subtitle when Avaible

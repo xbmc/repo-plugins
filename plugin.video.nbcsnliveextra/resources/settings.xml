@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <!--Provider-->
+  <category label="100">
+    <setting id="provider" type="enum" label="110" values="Cable One|Charter|Comcast (xfinity)|Dish Network|Direct TV|Optimum|Time Warner Cable|Verizon" default="0" />   
+    <setting id="username" type="text" label="140" default=""/>
+    <setting id="password" type="text" label="150" option="hidden" default=""/>
+  </category>
+  <!-- General -->
+  <category label="200">
+    <setting id="clear_data" type="bool" label="210" default="false"/>
+    <setting id="free_only" type="bool" label="220" default="false" />  
+  </category>
+  <!-- Visual -->
+  <category label="300">
+    <setting id="quality" type="enum" label="310" values="SD (200 kbit/s)|SD (400 kbit/s)|SD (600 kbit/s)|SD (900 kbit/s)|SD (1400 kbit/s)|HD (2200 kbit/s)|HD (3450 kbit/s)" default="6" />
+    <setting id="cdn" type="enum" label="320" values="East|West" default="0" />	  
+  </category>
+</settings>

@@ -3,6 +3,7 @@ plugin.video.tvo
 
 Kodi Addon for TVO.org Video website
 
+Version 1.0.7 website changes and redirect fixes
 Version 1.0.6 fix more unicode and scraping issues
 Version 1.0.5 fix unicode issues
 Version 1.0.4 Website change, added show cache

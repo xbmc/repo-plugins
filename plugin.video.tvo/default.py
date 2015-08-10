@@ -42,6 +42,7 @@ defaultHeaders = {'User-Agent':USER_AGENT,
                  'Accept-Language':'en-US,en;q=0.8'} 
 
 def getRequest(url, userdata= None, headers = defaultHeaders):
+
 #   log("getRequest URL:"+str(url))
    req = urllib2.Request(url.encode(UTF8), userdata, headers)
    try:
@@ -53,6 +54,19 @@ def getRequest(url, userdata= None, headers = defaultHeaders):
    except:
       page = ""
    return(page)
+
+def getHTTP(url):
+ host = url.split('//',1)[1]
+ host, url = host.split('/',1)
+ url = '/'+url
+ conn = httplib.HTTPConnection(host)
+ conn.request("GET", url)
+ r1 = conn.getresponse()
+ if r1.status != 301: return r1.read()
+ url = r1.getheader('Location')
+ return getHTTP(url)
+
+
 
 def getSources():
     ilist = []
@@ -80,7 +94,11 @@ def getAtoZ(gzurl):
           with open(metafile) as infile:
               meta = json.load(infile)
        except: pass
-    showDialog = len(meta['shows'])
+    try:
+       showDialog = len(meta['shows'][gzurl])
+    except:
+       meta['shows'][gzurl]={}
+       showDialog = 0
 
     ilist = []
     azheaders = defaultHeaders
@@ -95,10 +113,10 @@ def getAtoZ(gzurl):
 
     for url, name in a:
       try:
-         (vid, name, img, fanart, mode, infoList) = meta['shows'][url]
+         (vid, name, img, fanart, mode, infoList) = meta['shows'][gzurl][url]
       except:
         mode = 'GS'
-        html = getRequest('http://tvo.org%s' % url)
+        html = getHTTP('http://tvo.org%s' % url)
         try:
            vid = url
            img, plot = re.compile('field-featured-image.+?src="(.+?)".+?"field-item even">(.+?)<',re.DOTALL).search(html).groups()
@@ -126,7 +144,7 @@ def getAtoZ(gzurl):
         try:    infoList['Plot']  = h.unescape(plot.decode(UTF8))
         except: infoList['Plot'] = plot
         infoList['TVShowTitle'] = name
-        meta['shows'][url] = (vid, name, img, fanart, mode, infoList)
+        meta['shows'][gzurl][url] = (vid, name, img, fanart, mode, infoList)
         dirty = True
       u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(vid), qp(name), mode)
       liz=xbmcgui.ListItem(name, '', None, img)
@@ -167,7 +185,6 @@ def getShows(gsurl,catname):
               showDialog = len(meta[gsurl])
       
         html = getRequest('http://tvo.org%s' % uqp(gsurl))
-        print "html = "+str(html)
         cats = re.compile('<div class="content-list__first.+?href="(.+?)".+?src="(.+?)".+?title="(.+?)".+?field-summary">.+?>(.+?)<',re.DOTALL).findall(html)
         if len(cats) == 0:
               cats = re.compile('<li class="views-row.+?href="(.+?)".+?src="(.+?)".+?title="(.+?)".+?field-summary">.+?>(.+?)<.+?</li>',re.DOTALL).findall(html)
@@ -178,14 +195,14 @@ def getShows(gsurl,catname):
             numShows = len(cats)
             i = 1
 
-        print "cats = "+str(cats)
         for url,img,name,plot in cats:
           try:
               (name, img, vid, infoList) = meta[gsurl][url]
           except:
               infoList = {}
               html = getRequest('http://tvo.org%s' % url)
-              vid = re.compile('data-video-id="(.+?)"',re.DOTALL).search(html).group(1)
+              try: vid = re.compile('data-video-id="(.+?)"',re.DOTALL).search(html).group(1)
+              except: continue
               name = h.unescape(name)
               infoList['Title'] = name
               try:    infoList['Plot']  = h.unescape(plot.decode(UTF8))

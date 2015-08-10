@@ -149,7 +149,9 @@ def getEpis(geurl, catname):
                    dur = dur.strip()
                    for d in dur.split(':'): duration = duration*60+int(d)
               except: pass
-              title, plot,url,playerKey = re.compile('<meta content="mainNew".+?<title>(.+?)</title>.+?"description" content="(.+?)".+?"currentBrightcoveId" value="(.+?)".+?name="playerKey" value="(.+?)"',re.DOTALL).search(html).groups()
+              try:
+                 title, plot,url,playerKey = re.compile('<meta content="mainNew".+?<title>(.+?)</title>.+?"description" content="(.+?)".+?"currentBrightcoveId" value="(.+?)".+?name="playerKey" value="(.+?)"',re.DOTALL).search(html).groups()
+              except: continue
               playerKey = playerKey.split(' ',1)[0]
               playerKey = playerKey.split('=',1)[0]
               infoList ={}

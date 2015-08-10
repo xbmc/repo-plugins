@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Bravo TV XBMC Addon
+# Bravo TV Kodi Addon
 
 import sys,httplib
 import urllib, urllib2, cookielib, datetime, time, re, os, string
@@ -57,6 +57,7 @@ def getShows():
        epiHTML = getRequest(surl)
        epis = re.compile('<li class="watch__episode.+?href="(.+?)".+?</ul>',re.DOTALL).findall(epiHTML)
        vcnt = len(epis)
+       if vcnt == 0: continue
        if epis[len(epis)-1][0] != '/' : epis[len(epis)-1] = '/'+epis[len(epis)-1]
        url  = BRAVOBASE % epis[len(epis)-1]
        html = getRequest(url)
@@ -105,7 +106,9 @@ def getEpisodes(eurl, showName):
    for url in epis:
       url  = BRAVOBASE % url
       html = getRequest(url)
-      purl = re.compile('data-src="(.+?)"',re.DOTALL).search(html).group(1)
+      try:
+         purl = re.compile('data-src="(.+?)"',re.DOTALL).search(html).group(1)
+      except: continue
       purl = 'http://link.theplatform.com/s'+(purl.replace('/bravo_vod_p3/embed/select','').split('.com/p')[1]).split('?',1)[0]+'?mbr=true&player=Bravo%20VOD%20Player%20%28Phase%203%29&format=Script&height=576&width=1024'
       html = getRequest(purl)
       a = json.loads(html)

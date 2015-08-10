@@ -3,6 +3,7 @@ plugin.video.bravo
 
 Kodi Addon for Bravo TV website
 
+Version 1.0.6 Website change
 Version 1.0.5 Website change
 Version 1.0.4 Website change
 Version 1.0.3 Added user select views

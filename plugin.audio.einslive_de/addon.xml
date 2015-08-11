@@ -7,6 +7,7 @@
         <provides>audio</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
+        <broken>no longer maintained</broken>
         <platform>all</platform>
         <summary lang="de">O-Ton-Charts, Comedy, Reportagen, Talks, Klubbing, letzte Sendungen und Livestream</summary>
         <summary lang="en">O-Ton-Charts, Comedy, reports, talks, clubbing, last shows and livestream</summary>

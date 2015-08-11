@@ -7,6 +7,7 @@
         <provides>audio</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
+        <broken>no longer maintained</broken>
         <platform>all</platform>
         <summary lang="de">Mehr als 500 kostenlose Mp3-Hörbücher</summary>
         <summary lang="en">More than 500 free Mp3 audio books</summary>

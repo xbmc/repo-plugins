@@ -7,6 +7,7 @@
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
+        <broken>no longer maintained</broken>
         <platform>all</platform>
         <summary lang="en">German movie trailers</summary>
         <summary lang="de">Deutsche Filmtrailer</summary>

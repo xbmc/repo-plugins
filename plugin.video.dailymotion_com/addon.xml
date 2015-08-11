@@ -8,6 +8,7 @@
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
+        <broken>no longer maintained</broken>
         <platform>all</platform>
         <summary lang="en">Movies, TV, Music, User-Clips, 3D and Livestreams</summary>
         <language></language>

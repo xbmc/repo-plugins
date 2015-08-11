@@ -7,6 +7,7 @@
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
+        <broken>no longer maintained</broken>
         <platform>all</platform>
         <summary lang="de">News, Politik, Unterhaltung, Sport, Auto und Lifestye</summary>
         <summary lang="en">News, Politics, Entertainment, Sports, Cars and Lifestye</summary>

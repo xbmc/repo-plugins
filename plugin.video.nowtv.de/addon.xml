@@ -7,6 +7,7 @@
 		<provides>video</provides>
 	</extension>
 	<extension point="xbmc.addon.metadata">
+		<broken>no support for DRM protected streams</broken>
 		<summary lang="en">NOW TV media library</summary>
 		<summary lang="de">Mediathek für NOW TV</summary>
 		<description lang="en">With NOW TV many series, shows, documentaries and magazines can be seen from the program of RTL, RTL II, VOX, N-TV, RTL Nitro and Super RTL.</description>

@@ -255,11 +255,8 @@ def get_playable_kontexttv_url(html):
 # This function try to get a Dailymotion playable URL from the weblink and returns it ready to play it directly.
 def get_playable_dailymotion_url(html):
     pattern_dailymotion = ' src="[htp:]*?(//www.dailymotion.com/embed/video/[^"]*?)"'
-    daily_video_patterns = (
-            '"stream_h264_hq_url":"(.+?)"',
-            '"stream_h264_url":"(.+?)"',
-            '"stream_h264_ld_url":"(.+?)"',
-            )
+    daily_video_pattern = '"%s":\[{"type":"video\\\/mp4","url":"(.+?)"'
+    daily_video_qualities = ('480', '720', '380', '240') 
 
     daily_url = lutil.find_first(html, pattern_dailymotion)
     if daily_url:
@@ -267,8 +264,8 @@ def get_playable_dailymotion_url(html):
         daily_url = "http:" + daily_url
         lutil.log("attactv.play: We have found a Dailymotion video with URL: '%s'" % daily_url)
         buffer_link = lutil.carga_web(daily_url)
-        for pattern_daily_video in daily_video_patterns:
-            video_url = lutil.find_first(buffer_link, pattern_daily_video)
+        for video_quality in daily_video_qualities:
+            video_url = lutil.find_first(buffer_link, daily_video_pattern % video_quality)
             if video_url:
                 video_url = video_url.replace('\\','')
                 lutil.log("attactv.play: We have found this Dailymotion video: '%s' and let's going to play it!" % video_url)

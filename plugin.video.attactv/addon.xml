@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.attactv" name="attac tv" version="1.1.9" provider-name="Jose Antonio Montes (jamontes)">
+<addon id="plugin.video.attactv" name="attac tv" version="1.1.10" provider-name="Jose Antonio Montes (jamontes)">
     <requires>
-        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="xbmc.python" version="2.14.0"/>
         <import addon="plugin.video.youtube" version="4.4.1"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">

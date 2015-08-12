@@ -1,3 +1,5 @@
+1.1.10 (2015.08.10)
+- Quick fix on scraper due to Dailymotion website changes.
 1.1.9 (2015.03.10)
 - Added support for secured video links on Youtube and some Vimeo videos.
 1.1.8 (2015.01.10)

@@ -60,8 +60,8 @@ def get_videolist(url, cat_menu=""):
     video_rating_pattern   = '([0-9.]+[ ]+[Ss]tars)'
     video_views_pattern    = '([0-9,]+[ ]+[Vv]iews)'
     video_author_pattern   = '([Aa]dded by).*?<a href=["\']/[^/]*?/["\'][ ]*?>([^<]*?)</a>'
-    page_num_pattern       = 'href=["\']http[^"\']*?p=([0-9]+)'
-    page_num_url_pattern   = 'href=["\'](http[^"\']*?p=%d[^"\']*?)["\']'
+    page_num_pattern       = 'href=["\'][^"\']*?p=([0-9]+)'
+    page_num_url_pattern   = 'href=["\']([^"\']*?p=%d[^"\']*?)["\']'
     page_num_cur_pattern   = 'p=([0-9]+)'
 
     buffer_url = l.carga_web(url)
@@ -75,6 +75,8 @@ def get_videolist(url, cat_menu=""):
     if current_page_num != 1:
         prev_page_num = current_page_num - 1
         previous_page_url = l.find_first(buffer_url, page_num_url_pattern % prev_page_num)
+        if not "http" in previous_page_url:
+            previous_page_url = root_url + previous_page_url
         video_entry = { 'url': previous_page_url, 'title': '<< %s (%d)' % (cat_menu, prev_page_num), 'IsPlayable': False }
         video_list.append(video_entry)
         reset_cache = True
@@ -116,6 +118,8 @@ def get_videolist(url, cat_menu=""):
     if current_page_num < last_page_num:
         next_page_num = current_page_num + 1
         next_page_url = l.find_first(buffer_url, page_num_url_pattern % next_page_num)
+        if not "http" in next_page_url:
+            next_page_url = root_url + next_page_url
         video_entry = { 'url': next_page_url, 'title': '>> %s (%d/%d)' % (cat_menu, next_page_num, last_page_num), 'IsPlayable': False }
         video_list.append(video_entry)
 
@@ -176,18 +180,16 @@ def get_playable_youtube_url(video_id):
 
 def get_playable_dailymotion_url(video_id):
     """This function returns the playable URL for the Dalymotion embedded video from the video_id retrieved."""
-    daily_video_patterns = (
-        '"stream_h264_hq_url":"(.+?)"',
-        '"stream_h264_url":"(.+?)"',
-        '"stream_h264_ld_url":"(.+?)"',
-        )
+    daily_video_pattern = '"%s":\[{"type":"video\\\/mp4","url":"(.+?)"'
+    daily_video_qualities = ('480', '720', '380', '240')
 
     daily_url = 'http://www.dailymotion.com/embed/video/' + video_id
     buffer_link = l.carga_web(daily_url)
-    for pattern_daily_video in daily_video_patterns:
-        video_url = l.find_first(buffer_link, pattern_daily_video)
+    for video_quality in daily_video_qualities:
+        video_url = l.find_first(buffer_link, daily_video_pattern % video_quality)
         if video_url:
             return video_url.replace('\\', '')
+    return ""
 
 
 def get_playable_archiveorg_url(archive_url):

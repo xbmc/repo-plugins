@@ -378,7 +378,8 @@ def get_playable_url(url):
             ('youtube4',     'youtube.com/embed/([0-9A-Za-z_-]{11})',                'youtube'),
             ('vimeo1',       'vimeo.com/video/([0-9]+)',                             'vimeo'),
             ('vimeo2',       'vimeo.com%2Fvideo%2F([0-9]+)',                         'vimeo'),
-            ('arte1',        'json_url=(http://arte.tv/.*?json)',                    'arte'),
+            ('vimeo3',       'vimeo.com/([0-9]+)',                                   'vimeo'),
+            ('vimeo4',       'vimeo.com/moogaloop.swf\?clip_id=([0-9]+)',            'vimeo'),
             )
     
     buffer_url = l.carga_web(url)
@@ -414,33 +415,15 @@ def get_playable_youtube_url(video_id):
 
 def get_playable_dailymotion_url(video_id):
     """This function returns the playable URL for the Dalymotion embedded video from the video_id retrieved."""
-    daily_video_patterns = (
-        '"stream_h264_hq_url":"(.+?)"',
-        '"stream_h264_url":"(.+?)"',
-        '"stream_h264_ld_url":"(.+?)"',
-        )
+    daily_video_pattern = '"%s":\[{"type":"video\\\/mp4","url":"(.+?)"'
+    daily_video_qualities = ('480', '720', '380', '240')
 
     daily_url = 'http://www.dailymotion.com/embed/video/' + video_id
     buffer_link = l.carga_web(daily_url)
-    for pattern_daily_video in daily_video_patterns:
-        video_url = l.find_first(buffer_link, pattern_daily_video)
+    for video_quality in daily_video_qualities:
+        video_url = l.find_first(buffer_link, daily_video_pattern % video_quality)
         if video_url:
             return video_url.replace('\\','')
     return ''
-
-
-def get_playable_arte_url(json_url):
-    """This function returns the playable URL for the Arte TV embedded video from the video_id retrieved.
-    Credits and thanks to AddonScriptorDE for his Arte.tv add-on and let me learn from his code how to do it.
-    Unfortunately, I cannot call his add-on directly due to the way the video URL is already encoded into the
-    LTL website iframe, so I have to reproduce a custom version of the scraper here to let the Vox Pop to work.
-    """
-
-    # Note: the following two lines are learned from AddonScriptorDE's Arte.tv add-on code.
-    video_pattern_sd = '"HBBTV","VQU":"EQ","VMT":"mp4","VUR":"(.+?)"'
-    arte_url = json_url.replace('/player/', '/')
-
-    buffer_link = l.carga_web(arte_url)
-    return l.find_first(buffer_link, video_pattern_sd)
 
 

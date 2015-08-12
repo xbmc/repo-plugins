@@ -1,3 +1,7 @@
+1.0.1 (2015.08.10)
+- Quick fix on scraper due to Dailymotion website changes.
+- Improved parser for Vimeo videos.
+- Removed Arte TV scraper as there's no longer needed.
 1.0.0
 - Updated version number for official repo bump.
 0.0.9

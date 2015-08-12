@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.btbn" name="Bible Teachers Broadcasting Network" version="1.0.0" provider-name="Bible Teachers Broadcasting Network">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Watch a 24/7 live HD stream of Bible Teachers Broadcasting Network</summary>
+    <description lang="en">BTBN’s purpose is to reach as wide a cross-section of persons as possible. It has raised the bar of Christian programming by improving content and quality and presenting programming which is fresh and relevant.</description>
+    <disclaimer lang="en"></disclaimer>
+    <language>en</language>
+    <platform>all</platform>
+    <license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>
+    <forum></forum>
+    <website>www.btbn.tv</website>
+    <email>daniel.chen@btbn.tv</email>
+    <source></source>
+  </extension>
+</addon>

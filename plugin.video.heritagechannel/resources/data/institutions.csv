@@ -1,0 +1,58 @@
+Musée du Louvre;Paris;fr;louvre;louvre
+National Gallery;London;gb;nationalgalleryuk;natgal
+Metropolitan Museum of Art;New York City;us;metmuseum;mma
+Tate Modern;London;gb;tate;tatem
+#National Palace Museum;Taipei;tw;UC57WI69uyN_TyzpLDntWzNA;npm
+National Gallery of Art;Washington, D.C.;us;NationalGalleryArtDC;ngawdc
+#Centre Pompidou, Musée National d'Art Moderne;Paris;fr;UCI4r4IrjAM6MCVQ_phED-hA;mndam
+Musée d'Orsay;Paris;fr;MuseeOrsayOfficiel;orsay
+Victoria and Albert Museum;London;gb;vamuseum;vanda
+Reina Sofía;Madrid;es;museoreinasofia;rsofia
+National Museum of Korea;Seoul;kr;koreanmuseum;nmk
+#The Netherlands;;;;
+##AMS;;;;
+Rijksmuseum;Amsterdam;nl;rijksmuseumamsterdam;rm
+Amsterdam Museum;Amsterdam;nl;ahmamsterdam;amsmus
+Van Gogh Museum;Amsterdam;nl;atVanGoghMuseum;vangogh
+Stedelijk Museum;Amsterdam;nl;stedelijkmuseum;sm
+##Rdam; ;;;
+Maritiem Museum;Rotterdam;nl;mmph2;marimus
+Museum Boijmans Van Beuningen;Rotterdam;nl;Museumboijmans;mbvb
+##The Hague;;;;
+Gemeentemuseum;The Hague;nl;Gemeentemuseum;gemmus
+Nationaal Archief;The Hague;nl;gahetNA;na
+Koninklijke Bibliotheek, national library of the Netherlands;The Hague;nl;kbnederland;kb
+##Hilversum;;;;
+Beeld en Geluid, Institute for Sound and Vision;Hilversum;nl;BeeldenGeluid;beng
+#USA;;;;
+##NYC;;;;
+Museum of Modern Art;New York;us;MoMAvideos;moma
+Guggenheim Museum;New York;us;guggenheim;gugg
+American Museum of Natural History;New York;us;AMNHorg;amnh
+##WashingtonDC;;;;
+" Smithsonian National Air and Space Museum
+";Washington, D.C.;us;airandspace;airspace
+Smithsonian American Art Museum;Washington, D.C.;us;americanartmuseum;amerart
+##LA;;;;
+J. Paul Getty Museum;Los Angeles;us;gettymuseum;getty
+#Chicago;;;;
+Art Institute of Chicago;Chicago;us;ArtInstituteChicago;aic
+##Portland, Maine;;;;
+Portland Museum of Art;Portland, Maine;us;PortlandArtMuseum;pam
+#UK;;;;
+##London;;;;
+The British Museum;London;gb;britishmuseum;bm
+British Library;London;gb;britishlibrary;bl
+Natural History Museum;London;gb;naturalhistorymuseum;nathist
+#Spain;;;;
+##Madrid;;;;
+Museo del Prado;Madrid;es;museodelprado;prado
+Museo Thyssen-Bornemisza;Madrid;es;thyssenmuseum;thys
+##Barcelona;;;;
+Museu Picasso;Barcelona;es;museupicassobcn;picasbarca
+#Ireland;;;;
+##Dublin;;;;
+National Gallery of Ireland;Dublin;ie;nationalgalleryie;natgalie
+#Austria;;;;
+##Vienna;;;;
+Kunsthistorisches Museum;Vienna;at;KHMWien;khmw

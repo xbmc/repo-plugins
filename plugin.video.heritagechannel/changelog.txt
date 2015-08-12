@@ -1,0 +1,12 @@
+v1.0.1
+* Sunday 9th August 2015: first stable release for Helix (v14) and Isengard (v15) -35 channels added
+* Saturday 8th August 2015: removed remote csv functionality from v1.0.0 as requested by XBMC repo admin
+
+v1.0.0
+* Sunday 2nd August 2015: first stable pre-release for Helix (v14) and Isengard (v15)
+* July: added error catching and lots of little tweaks
+* Tuesday 23 June 2015: added support for reading data from csv on Github, so channels can be added remotely
+* Monday 22 June 2015: added support for reading data from local csv-file; added more channels
+
+v0.1
+* Sunday 21 June 2015: initial version 0.1.0 - 11 channels added

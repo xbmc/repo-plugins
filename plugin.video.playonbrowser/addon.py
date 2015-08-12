@@ -27,8 +27,10 @@ except Exception,e:
 
 # 
 #   Set-up global variables
+addon = xbmcaddon.Addon()
 addonId = 'plugin.video.playonbrowser'
 addonVersion = '1.0.2'
+addonId = addon.getAddonInfo('id')
 mediaPath = xbmcaddon.Addon(addonId).getAddonInfo('path') + '/resources/media/' 
 playonDataPath = '/data/data.xml'
 displayCategories = {'MoviesAndTV': 3,
@@ -267,6 +269,7 @@ def build_menu_for_search(xml):
                 mediaXml = get_xml(playonUrl)
                 mediaNode = mediaXml.find('media')
                 li = xbmcgui.ListItem(name, iconImage=image, thumbnailImage=image)
+                li.setProperty('IsPlayable', 'true')
                 li.setInfo('video', { 'plotoutline': group.attrib.get('description'), 'title': name})
                 xbmcplugin.addDirectoryItem(handle=addonHandle, url=url, listitem=li)
             
@@ -360,6 +363,7 @@ def build_menu_for_mode_folder(href, foldername, nametree):
                     """
                 li = xbmcgui.ListItem(name, iconImage=image, thumbnailImage=image)
                 li.setInfo('video', { 'plotoutline': group.attrib.get('description'), 'title': name})
+                li.setProperty('IsPlayable', 'true')
                 xbmcplugin.addDirectoryItem(handle=addonHandle, url=url, listitem=li)
      
             
@@ -392,6 +396,7 @@ def generate_list_items(xml, href, foldername, nametree):
             mediaXml = get_xml(playonUrl)
             mediaNode = mediaXml.find('media')
             li = xbmcgui.ListItem(name, iconImage=image, thumbnailImage=image)
+            li.setProperty('IsPlayable', 'true')
             li.setInfo('video', { 'plotoutline': group.attrib.get('description'), 'title': name})
             xbmcplugin.addDirectoryItem(handle=addonHandle, url=url, listitem=li)
             

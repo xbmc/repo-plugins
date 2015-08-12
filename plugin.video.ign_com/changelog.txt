@@ -1,0 +1,19 @@
+1.0.0
+- First Try
+1.0.1
+- Some small fixes
+1.0.2
+- Fixed site changes
+1.0.3 / 2.0.3
+- Fixed video playback
+- Fixed search
+2.0.4
+- Fixed small bug (error on missing thumb)
+2.0.5
+- Added 1080p support
+- Fixed video playback for some videos
+2.1.1
+- Original code until 2.0.5 done by AddonScriptorDE
+- New code by Twister
+- Fixed video playback
+- Added IGN First folder

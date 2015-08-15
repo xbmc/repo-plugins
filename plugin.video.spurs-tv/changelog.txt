@@ -1,0 +1,63 @@
+2.3.0
+ - Added a Stadium TV category
+
+2.2.0
+ - Fixed problems caused by changes to the official site video hosting
+ - Removed the option to choose the stream protocol
+
+2.1.0
+ - Enabled the Tour 2015 category
+
+2.0.1
+ - Fixed Live Audio Commentary
+
+2.0.0
+ - Reorganised the menu
+ - Added settings to control the stream protocol and video resolution
+ - Added a shortcut to change the YouTube plugin settings
+
+1.5.0
+ - Fixed the Capital One Cup category
+
+1.4.0
+ - Fixed playback problems
+ - Added a debug setting
+
+1.3.3
+ - Fixed another script error with Official Site video lists
+
+1.3.2
+ - Fixed a script error with Official Site video lists
+
+1.3.1
+ - Fixed compatibility with Android
+
+1.3.0
+ - Localized hard-coded strings
+
+1.2.1
+ - Fixed a script error with some Official Site search results
+
+1.2.0
+ - The YouTube plugin now only installs when required
+
+1.1.0
+ - Added caching for some views which will rarely change
+
+1.0.0
+ - Added support for the Spurs TV YouTube channel
+
+0.3.0
+ - Added Live Audio Commentary support
+
+0.2.1
+ - Fixed a broken dependency
+
+0.2.0
+ - Added Tour 2014 video categories
+ - Added Highlights subcategories
+ - Added Ledley King Testimonial videos 
+
+0.1.0
+ - Initial release
+ 

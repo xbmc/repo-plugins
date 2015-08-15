@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.spurs-tv" name="Spurs TV" version="2.3.0" provider-name="Leopold">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.xbmcswift2" version="2.4.0" optional="false"/>
+    <import addon="script.module.beautifulsoup4" version="4.3.1" optional="false"/>
+    <import addon="script.module.html5lib" version="0.999.0" optional="false"/>
+    <import addon="script.module.requests" version="2.3.0" optional="false"/>
+    <import addon="script.module.livestreamer" version="1.12.0" optional="false"/>
+    <import addon="plugin.video.youtube" version="4.4.10" optional="true"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <language>en</language>
+    <summary>Watch videos from Spurs TV</summary>
+    <description>This video plugin provides access to the latest Tottenham Hotspur highlights, exclusive interviews, live audio commentary, and more.</description>
+    <website>http://www.tottenhamhotspur.com/spurs-tv/</website>
+    <forum>http://forum.kodi.tv/showthread.php?tid=235234</forum>
+    <source>https://github.com/LS80/plugin.video.spurs-tv.git</source>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+  </extension>
+</addon>

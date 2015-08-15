@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 ##############################################################################
 #
 # Tweakers - Addon for XBMC
@@ -17,8 +20,8 @@
 #
 #also in ..._const
 __addon__       = "plugin.video.tweakers"
-__date__        = "23 june 2015"
-__version__     = "1.0.6"
+__date__        = "15 august 2015"
+__version__     = "1.0.7"
 
 #
 # Imports

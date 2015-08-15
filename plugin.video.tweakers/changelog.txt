@@ -1,3 +1,6 @@
+v1.0.7 (Saturday, 15 august 2015) :
+- added some utf8 stuff
+
 v1.0.6 (Tuesday, 23 june 2015) :
 - changed fanart
 

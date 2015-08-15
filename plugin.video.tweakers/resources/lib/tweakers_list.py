@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 #
 # Imports
 #
@@ -103,8 +106,12 @@ class Main:
 			# Make title
 			title = video_page_url_in_td.a['title']
 			# Convert from unicode to encoded text (don't use str() to do this)
-			title = title.encode('utf-8')
-						
+			
+			try:
+				title = title.encode('utf-8')
+			except:
+				pass
+				
 			if (self.DEBUG) == 'true':
 				xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "title", str(title) ), xbmc.LOGNOTICE )
 

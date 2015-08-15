@@ -79,7 +79,7 @@ def grab_live_stream_url(url):
 					url2=match[0]
 					return url2
 				else:
-					id_ = re.compile('liveObj\.file = liveObj\.(.+?);').findall(page_source)
+					id_ = re.compile('liveOb.+?file = liveO.+?\.(.+?);').findall(page_source)
 					file_ = re.compile('"'+id_[0]+'": "(.+?)"').findall(page_source)
 					streamer = re.compile('"streamer": "(.+?)"').findall(page_source)
 					application = re.compile('"application": "(.+?)"').findall(page_source)
@@ -116,4 +116,3 @@ def play_from_outside(name):
 		listitem.setProperty('IsPlayable', 'true')
 		listitem.setPath(path=stream_url)
 		xbmcplugin.setResolvedUrl(int(sys.argv[1]),True,listitem)
-	

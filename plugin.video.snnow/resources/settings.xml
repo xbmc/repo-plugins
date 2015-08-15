@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<settings>
+   <setting id="username"  type="text" label="30050"/>
+   <setting id="password"  type="text" label="30051" option="hidden"/>
+   <setting id="mso" type="labelenum" label="30155" values="Rogers|ShawGo|Cogeco|Source" default="Rogers" />
+</settings>

@@ -20,5 +20,6 @@
     <website></website>
     <email></email>
     <source></source>
+	<broken>Please upgrade to Kodi v14 or higher to continue using this plugin</broken>
   </extension>
 </addon>

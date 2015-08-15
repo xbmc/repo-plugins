@@ -17,5 +17,6 @@
 		<forum>http://forum.xbmc.org/showthread.php?tid=178799</forum>
 		<source>https://github.com/willforde/plugin.video.quake.live</source>
 		<website>http://www.quake-live.tv</website>
+		<broken>Please upgrade to Kodi v14 or higher to continue using this plugin</broken>
 	</extension>
 </addon>

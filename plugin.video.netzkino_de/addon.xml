@@ -19,5 +19,6 @@
 		<website>http://www.netzkino.de/</website>
 		<email>bromix at gmx dot net</email>
 		<source>https://github.com/bromix/plugin.video.netzkino_de</source>
+		<broken>Please upgrade to Kodi v14 or higher to continue using this plugin</broken>
 	</extension>
 </addon>

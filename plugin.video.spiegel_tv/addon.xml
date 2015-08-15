@@ -19,5 +19,6 @@
         <forum>http://forum.xbmc.org/showthread.php?tid=132563</forum>
         <email>AddonScriptorDE at yahoo dot de</email>
         <website>http://www.spiegel.tv</website>
+		<broken>Please upgrade to Kodi v14 or higher to continue using this plugin</broken>
     </extension>
 </addon>

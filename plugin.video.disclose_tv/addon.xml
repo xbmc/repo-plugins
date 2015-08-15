@@ -70,5 +70,6 @@
     <description lang="sk">Najväčšie centrum multimédií a alternatívnych správ o UFO videách, starovekých mystériách, konšpiračných teóriách, prísne tajnom, Novom svetovom poriadku a inom!</description>
     <description lang="sv">Största mediahubben och alternativa nyhetssidan om UFO´n, gamla mysterier, konspirationsteorier, topphemligheter, N.W.O. plus mycket mera! </description>
     <description lang="zh">最大的多媒体中心和另类新闻网站，包括UFO视频、历史之谜、阴谋论、最高机密、N.W.O. 和更多内容！</description>
+	<broken>Please upgrade to Kodi v14 or higher to continue using this plugin</broken>
   </extension>
 </addon>

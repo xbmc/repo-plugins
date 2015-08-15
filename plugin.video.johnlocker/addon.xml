@@ -20,5 +20,6 @@
 		<forum>http://forum.xbmc.org/showthread.php?tid=178796</forum>
 		<source>https://github.com/willforde/plugin.video.johnlocker</source>
 		<website>http://johnlocker.com</website>
+		<broken>Please upgrade to Kodi v14 or higher to continue using this plugin</broken>
 	</extension>
 </addon>

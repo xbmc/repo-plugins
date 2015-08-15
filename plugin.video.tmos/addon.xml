@@ -17,5 +17,6 @@
     <source>https://github.com/jester-xbmc/plugin.video.tmos</source>
     <forum>http://forum.kodi.tv/showthread.php?tid=215704</forum>
     <website>http://mikeomearashow.com/</website>
+	<broken>Please upgrade to Kodi v14 or higher to continue using this plugin</broken>
   </extension>
 </addon>

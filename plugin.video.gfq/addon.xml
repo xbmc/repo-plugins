@@ -22,5 +22,6 @@ http://www.gfqnetwork.com</description>
     <source>https://code.google.com/p/gfq-xbmc/</source>
     <forum></forum>
     <website>http://www.gfqnetwork.com/</website>
+	<broken>Please upgrade to Kodi v14 or higher to continue using this plugin</broken>
   </extension>
 </addon>

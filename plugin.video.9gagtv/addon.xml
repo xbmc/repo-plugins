@@ -20,5 +20,6 @@
 		<website>http://www.9gag.tv/</website>
 		<email>bromix at gmx dot net</email>
 		<source>https://github.com/bromix/plugin.video.9gagtv</source>
+		<broken>Please upgrade to Kodi v14 or higher</broken>
 	</extension>
 </addon>

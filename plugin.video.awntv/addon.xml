@@ -17,5 +17,6 @@
 		<forum>http://forum.xbmc.org/showthread.php?tid=200628</forum>
 		<source>https://github.com/willforde/plugin.video.awntv</source>
 		<website>http://www.awntv.com/</website>
+		<broken>Please upgrade to Kodi v14 or higher to continue using this plugin</broken>
 	</extension>
 </addon>

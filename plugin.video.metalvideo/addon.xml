@@ -19,5 +19,6 @@
 		<forum>http://forum.xbmc.org/showthread.php?tid=178798</forum>
 		<source>https://github.com/willforde/plugin.video.metalvideo</source>
 		<website>http://metalvideo.com</website>
+		<broken>Please upgrade to Kodi v14 or higher to continue using this plugin</broken>
 	</extension>
 </addon>

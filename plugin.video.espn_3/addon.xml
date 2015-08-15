@@ -21,5 +21,6 @@
 	<forum>http://forum.xbmc.org/showthread.php?tid=186028</forum>
 	<source>https://github.com/asojka09/plugin.video.espn_3.git</source>
 	<email>austinsojka@hotmail.com</email>
+	<broken>Please upgrade to Kodi v14 or higher to continue using this plugin</broken>
     </extension>
 </addon>

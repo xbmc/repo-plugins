@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <setting id="username" type="text" label="30300" />
-    <setting id="password" type="text" label="30301" option="hidden" />
-    <setting id="use_https" type="bool" label="30303" default="true" />
-    <setting id="default_privacy" type="enum" label="30310" default="0" lvalues="30311|30312|30313"/>
-    <setting id="default_list" type="action" label="30302" action="RunPlugin(plugin://plugin.video.trakt_list_manager/settings/default_list)"/>
-</settings>

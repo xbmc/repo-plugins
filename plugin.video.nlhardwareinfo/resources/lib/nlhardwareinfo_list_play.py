@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 #
 # Imports
 #
@@ -141,7 +144,12 @@ class Main:
 	
 			#Get title	
 			title = item.title.string
-			title = title.encode('utf-8')
+			
+			try:
+				title = title.encode('utf-8')
+			except:
+				pass
+			
 			title = title.replace('-',' ')
 			title = title.replace('/',' ')
 			title = title.replace(' i ',' I ')

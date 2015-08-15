@@ -1,4 +1,8 @@
-v1.0.3 (Wednesday, 3 september 2014):
+v1.0.4 (Saturday, 15 august 2015) :
+- updated youtube dependency version
+- added some utf8 stuff
+
+v1.0.3 (Saturday, 6 september 2014):
 - fixed GNU licence
 - added youtube as dependency
 

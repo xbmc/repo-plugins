@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 ##############################################################################
 #
 # NlHardwareInfo - Addon for XBMC
@@ -19,8 +22,8 @@
 #
 #also in ..._const
 __addon__       = "plugin.video.nlhardwareinfo"
-__date__        = "06 september 2014"
-__version__     = "1.0.3"
+__date__        = "15 august 2015"
+__version__     = "1.0.4"
 
 #
 # Imports

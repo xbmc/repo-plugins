@@ -1,3 +1,7 @@
+v0.0.3
+- Live streaming of CCC events
+- Add a callback to increase view count on media.ccc.de
+
 v0.0.2
 - Preferences for HD/SD and MP4/WEBM
 

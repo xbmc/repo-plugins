@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.media-ccc-de" name="CCC-TV (media.ccc.de)" version="0.0.2" provider-name="Tobias Gruetzmacher">
+<addon id="plugin.video.media-ccc-de" name="CCC-TV (media.ccc.de)" version="0.0.3" provider-name="Tobias Gruetzmacher">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.simplejson" version="3.3.0"/>

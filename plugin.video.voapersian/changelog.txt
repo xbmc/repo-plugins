@@ -1,0 +1,14 @@
+[B]0.7.0[/B]
+. 2015-07-26 Restructured 
+. 2015-07-26 Added IsPlayable
+. 2015-07-27 Reformatting urls
+. 2015-08-09 Disabling live + redundant links
+
+[B]0.6.0[/B]
+. 2015-07-25 Added Zip Install 
+. 2015-07-25 Fixed unwanted additional videos
+. 2015-07-25 Disabled rtml live
+
+[B]0.5.0[/B]
+. 2015-07-24 Created
+

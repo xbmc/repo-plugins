@@ -19,10 +19,9 @@
 import xbmcgui
 import urllib
 import urllib2
-import email.utils
-import json
 import time
 import re
+import json
 from datetime import datetime, tzinfo, timedelta
 from xml.dom import minidom
 from HTMLParser import HTMLParser
@@ -214,7 +213,7 @@ def parseRSSFeed(feed, fetch=False):
     
     if fetch is true, feed is assumed to be a URI to an RSS feed instead of
     its XML contents.
-    
+
     The returned list has to following format:
     [
         {
@@ -239,7 +238,7 @@ def parseRSSFeed(feed, fetch=False):
         },
         ...
     ]
-    
+
     @type feed: str
     @param feed: the RSS feed as XML string or a URI if fetch is true
     @type fetch: bool
@@ -258,7 +257,7 @@ def parseRSSFeed(feed, fetch=False):
                     xbmcgui.Dialog().ok(ADDON.getLocalizedString(30902), ADDON.getLocalizedString(30904) + '[CR]Error: {0} {1}'.format(e.code, e.reason))
             except urllib2.URLError, e:
                 xbmcgui.Dialog().ok(ADDON.getLocalizedString(30902), ADDON.getLocalizedString(30903) + '[CR]Error: {0}'.format(e.reason))
-                return domDict
+                return
             __fetchedFeeds[feed] = response.read()
         feed = __fetchedFeeds[feed]
     

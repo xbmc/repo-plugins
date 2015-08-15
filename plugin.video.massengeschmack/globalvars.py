@@ -20,7 +20,6 @@ import xbmcaddon
 import xbmc
 import urlparse
 import sys
-import json
 
 # globals
 ADDON_ID          = 'plugin.video.massengeschmack'

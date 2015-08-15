@@ -25,12 +25,13 @@ import resources.lib
 from resources.lib.listing import *
 
 class DataSource(object):
-    id = -1
     """Numeric ID of the show."""
-    
-    moduleName = ''
+    id = -1
+
     """Internal module name."""
-    
+    moduleName = ''
+
+    """Global meta data for the show."""
     showMetaData = {
         'Title'     : None,
         'Director'  : None,
@@ -39,7 +40,6 @@ class DataSource(object):
         'Country'   : None,
         'Plot'      : None
     }
-    """Global meta data for the show."""
     
     def getListItems(self):
         """
@@ -127,7 +127,7 @@ class DataSource(object):
                 ADDON_BASE_PATH + '/resources/media/fanart-' + MGTVDataSource.module + '.jpg',
                 MGTVDataSource.showMetaData
             ),
-			# Sakura
+            # Sakura
             ListItem(
                 SakuraDataSource.id,
                 ADDON.getLocalizedString(30290),
@@ -154,7 +154,7 @@ class DataSource(object):
         Content mode is usually either 'tvshows' or 'episodes', but can
         also be any other valid value for xbmcplugin.setContent().
         
-        @return content mode
+        :return content mode
         """
         return 'tvshows'
     
@@ -163,9 +163,7 @@ class DataSource(object):
         Build a feed URL which points to an RSS feed filtered by the given IDs.
         
         This method relies on self.id being set properly in derived classes.
-        
-        @protected
-        
+
         @type ids: list
         @param ids: a list of numeric IDs of all sub shows to filter by
         @type quality: str
@@ -210,7 +208,7 @@ class LiveDataSource(DataSource):
     def getListItems(self):
         listItems = []
         
-        if [] != self.__current:
+        if self.__current:
             listItems.append(
                 ListItem(
                     self.id,
@@ -226,7 +224,7 @@ class LiveDataSource(DataSource):
             
             listItems.extend(self.__createShowListing(self.__current, True))
             
-        if [] != self.__upcoming:
+        if self.__upcoming:
             listItems.append(
                 ListItem(
                     self.id,
@@ -274,7 +272,7 @@ class LiveDataSource(DataSource):
             streamName = name + ' [' + ADDON.getLocalizedString(30270) + ']'
             
             isFolder = True
-            if True == isLive:
+            if isLive:
                 isFolder = False
             
             listItems.append(
@@ -290,7 +288,7 @@ class LiveDataSource(DataSource):
             )
         
         return listItems
-    
+
     def __getShowName(self, id):
         if -3 == id:
             # Livetalk
@@ -324,13 +322,13 @@ class LiveDataSource(DataSource):
             return ADDON.getLocalizedString(30400)
         else:
             return '-'
-    
+
     def __getStreamURL(self, showid):
         info = resources.lib.getLiveStreamInfo(showid)
         if False == info:
             return '#'
         return info['url']
-    
+
     def __getThumbnailURL(self, id):
         return 'http://massengeschmack.tv/img/logo' + str(id) + '_feed.jpg'
     
@@ -340,9 +338,9 @@ class FKTVDataSource(DataSource):
     module       = 'fktv'
     showMetaData = {
         'Title'    : ADDON.getLocalizedString(30200),
-        'Director' :'Holger Kreymeier, Nils Beckmann, Daniel Gusy',
+        'Director' : 'Holger Kreymeier, Nils Beckmann, Daniel Gusy',
         'Genre'    : ADDON.getLocalizedString(30201),
-        'Premiered':'07.04.2007',
+        'Premiered': '07.04.2007',
         'Country'  : ADDON.getLocalizedString(30202),
         'Plot'     : ADDON.getLocalizedString(30203)
     }
@@ -377,8 +375,7 @@ class FKTVDataSource(DataSource):
     
     def getListItems(self):
         audioOnly = ADDON.getSetting('content.audioOnly')
-        
-        quality = None
+
         if 'true' == audioOnly:
             quality = 'audio'
         else:
@@ -393,7 +390,8 @@ class FKTVDataSource(DataSource):
         
         if None == submodule:
             return self.__getBaseList()
-        
+
+        # noinspection PyTypeChecker
         data      = resources.lib.parseRSSFeed(self.__urls[quality][submodule], True)
         listItems = []
         
@@ -449,7 +447,7 @@ class FKTVDataSource(DataSource):
             return 'episodes'
         
         return 'tvshows'
-    
+
     def __getThumbnailURL(self, guid):
         basePath1 = 'http://fernsehkritik.tv/images/magazin/'
         basePath2 = 'http://massengeschmack.tv/img/mag/'
@@ -559,12 +557,12 @@ class PTVDataSource(DataSource):
     id           = 2
     module       = 'ptv'
     showMetaData = {
-        'Title'    : ADDON.getLocalizedString(30210),
-        'Director' :'Holger Kreymeier, Jenny von Gagern, Steven Gräwe, Michael Stock',
-        'Genre'    : ADDON.getLocalizedString(30211),
-        'Premiered':'17.06.2013',
-        'Country'  : ADDON.getLocalizedString(30212),
-        'Plot'     : ADDON.getLocalizedString(30213)
+        'Title'     : ADDON.getLocalizedString(30210),
+        'Director'  : 'Holger Kreymeier, Jenny von Gagern, Steven Gräwe, Michael Stock',
+        'Genre'     : ADDON.getLocalizedString(30211),
+        'Premiered' : '17.06.2013',
+        'Country'   : ADDON.getLocalizedString(30212),
+        'Plot'      : ADDON.getLocalizedString(30213)
     }
     
     def __init__(self):
@@ -582,8 +580,7 @@ class PTVDataSource(DataSource):
     
     def getListItems(self):
         audioOnly = ADDON.getSetting('content.audioOnly')
-        
-        quality = None
+
         if 'true' == audioOnly:
             quality = 'audio'
         else:
@@ -591,7 +588,8 @@ class PTVDataSource(DataSource):
                 quality = 'hd'
             else:
                 quality = 'mobile'
-        
+
+        # noinspection PyTypeChecker
         data      = resources.lib.parseRSSFeed(self.__urls[quality]['all'], True)
         listItems = []
         
@@ -629,6 +627,7 @@ class PTVDataSource(DataSource):
     def getContentMode(self):
         return 'episodes'
     
+    @staticmethod
     def __getThumbnailURL(self, guid):
         # if old PTV episode
         if 13 > int(guid[4:]):
@@ -672,8 +671,7 @@ class PSDataSource(DataSource):
     
     def getListItems(self):
         audioOnly = ADDON.getSetting('content.audioOnly')
-        
-        quality = None
+
         if 'true' == audioOnly:
             quality = 'audio'
         else:
@@ -681,7 +679,8 @@ class PSDataSource(DataSource):
                 quality = 'hd'
             else:
                 quality = 'mobile'
-        
+
+        # noinspection PyTypeChecker
         data      = resources.lib.parseRSSFeed(self.__urls[quality]['all'], True)
         listItems = []
         
@@ -718,7 +717,7 @@ class PSDataSource(DataSource):
     
     def getContentMode(self):
         return 'episodes'
-    
+
     def __getThumbnailURL(self, guid):
         baseURL = 'http://dl.massengeschmack.tv/img/mag/'
         
@@ -736,9 +735,9 @@ class MGTVDataSource(DataSource):
     module       = 'mgtv'
     showMetaData = {
         'Title'     : ADDON.getLocalizedString(30230),
-        'Director'  :'Holger Kreymeier',
+        'Director'  : 'Holger Kreymeier',
         'Genre'     : ADDON.getLocalizedString(30231),
-        'Premiered' :'05.08.2013',
+        'Premiered' : '05.08.2013',
         'Country'   : ADDON.getLocalizedString(30232),
         'Plot'      : ADDON.getLocalizedString(30233)
     }
@@ -767,8 +766,7 @@ class MGTVDataSource(DataSource):
     
     def getListItems(self):
         audioOnly = ADDON.getSetting('content.audioOnly')
-        
-        quality = None
+
         if 'true' == audioOnly:
             quality = 'audio'
         else:
@@ -783,7 +781,8 @@ class MGTVDataSource(DataSource):
         
         if None == submodule:
             return self.__getBaseList()
-        
+
+        # noinspection PyTypeChecker
         data      = resources.lib.parseRSSFeed(self.__urls[quality][submodule], True)
         listItems = []
         
@@ -910,8 +909,7 @@ class PaschTVDataSource(DataSource):
     
     def getListItems(self):
         audioOnly = ADDON.getSetting('content.audioOnly')
-        
-        quality = None
+
         if 'true' == audioOnly:
             quality = 'audio'
         else:
@@ -919,7 +917,8 @@ class PaschTVDataSource(DataSource):
                 quality = 'hd'
             else:
                 quality = 'mobile'
-        
+
+        # noinspection PyTypeChecker
         data      = resources.lib.parseRSSFeed(self.__urls[quality]['all'], True)
         listItems = []
         
@@ -972,12 +971,12 @@ class NetzpredigerDataSource(DataSource):
     id           = 5
     module       = 'netzprediger'
     showMetaData = {
-        'Title'    : ADDON.getLocalizedString(30250),
-        'Director' :'Holger Kreymeier',
-        'Genre'    : ADDON.getLocalizedString(30251),
-        'Premiered':'10.10.2013',
-        'Country'  : ADDON.getLocalizedString(30252),
-        'Plot'     : ADDON.getLocalizedString(30253)
+        'Title'     : ADDON.getLocalizedString(30250),
+        'Director'  :'Holger Kreymeier',
+        'Genre'     : ADDON.getLocalizedString(30251),
+        'Premiered' :'10.10.2013',
+        'Country'   : ADDON.getLocalizedString(30252),
+        'Plot'      : ADDON.getLocalizedString(30253)
     }
     
     def __init__(self):
@@ -995,8 +994,7 @@ class NetzpredigerDataSource(DataSource):
     
     def getListItems(self):
         audioOnly = ADDON.getSetting('content.audioOnly')
-        
-        quality = None
+
         if 'true' == audioOnly:
             quality = 'audio'
         else:
@@ -1004,7 +1002,8 @@ class NetzpredigerDataSource(DataSource):
                 quality = 'hd'
             else:
                 quality = 'mobile'
-        
+
+        # noinspection PyTypeChecker
         data      = resources.lib.parseRSSFeed(self.__urls[quality]['all'], True)
         listItems = []
         
@@ -1057,9 +1056,9 @@ class AsynchronDataSource(DataSource):
     module       = 'asynchron'
     showMetaData = {
         'Title'    : ADDON.getLocalizedString(30260),
-        'Director' :'Evgenij Cernov',
+        'Director' : 'Evgenij Cernov',
         'Genre'    : ADDON.getLocalizedString(30261),
-        'Premiered':'26.02.2014',
+        'Premiered': '26.02.2014',
         'Country'  : ADDON.getLocalizedString(30262),
         'Plot'     : ADDON.getLocalizedString(30263)
     }
@@ -1079,8 +1078,7 @@ class AsynchronDataSource(DataSource):
     
     def getListItems(self):
         audioOnly = ADDON.getSetting('content.audioOnly')
-        
-        quality = None
+
         if 'true' == audioOnly:
             quality = 'audio'
         else:
@@ -1088,7 +1086,8 @@ class AsynchronDataSource(DataSource):
                 quality = 'hd'
             else:
                 quality = 'mobile'
-        
+
+        # noinspection PyTypeChecker
         data      = resources.lib.parseRSSFeed(self.__urls[quality]['all'], True)
         listItems = []
         
@@ -1135,12 +1134,12 @@ class TonangeberDataSource(DataSource):
     id           = 7
     module       = 'tonangeber'
     showMetaData = {
-        'Title'    : ADDON.getLocalizedString(30264),
-        'Director' : 'Nils Beckmann, Holger Kreymeier',
-        'Genre'    : ADDON.getLocalizedString(30265),
-        'Premiered': '17.06.2014',
-        'Country'  : ADDON.getLocalizedString(30266),
-        'Plot'     : ADDON.getLocalizedString(30267)
+        'Title'     : ADDON.getLocalizedString(30264),
+        'Director'  : 'Nils Beckmann, Holger Kreymeier',
+        'Genre'     : ADDON.getLocalizedString(30265),
+        'Premiered' : '17.06.2014',
+        'Country'   : ADDON.getLocalizedString(30266),
+        'Plot'      : ADDON.getLocalizedString(30267)
     }
     
     def __init__(self):
@@ -1158,8 +1157,7 @@ class TonangeberDataSource(DataSource):
     
     def getListItems(self):
         audioOnly = ADDON.getSetting('content.audioOnly')
-        
-        quality = None
+
         if 'true' == audioOnly:
             quality = 'audio'
         else:
@@ -1167,7 +1165,8 @@ class TonangeberDataSource(DataSource):
                 quality = 'hd'
             else:
                 quality = 'mobile'
-        
+
+        # noinspection PyTypeChecker
         data      = resources.lib.parseRSSFeed(self.__urls[quality]['all'], True)
         listItems = []
         
@@ -1235,8 +1234,7 @@ class HoaxillaTVDataSource(DataSource):
     
     def getListItems(self):
         audioOnly = ADDON.getSetting('content.audioOnly')
-        
-        quality = None
+
         if 'true' == audioOnly:
             quality = 'audio'
         else:
@@ -1244,7 +1242,8 @@ class HoaxillaTVDataSource(DataSource):
                 quality = 'hd'
             else:
                 quality = 'mobile'
-        
+
+        # noinspection PyTypeChecker
         data      = resources.lib.parseRSSFeed(self.__urls[quality]['all'], True)
         listItems = []
         
@@ -1289,14 +1288,14 @@ class SakuraDataSource(DataSource):
     id           = 9
     module       = 'sakura'
     showMetaData = {
-        'Title'    : ADDON.getLocalizedString(30290),
-        'Director' :'Volker Robrahn, Maria Timonina',
-        'Genre'    : ADDON.getLocalizedString(30291),
-        'Premiered':'21.04.2015',
-        'Country'  : ADDON.getLocalizedString(30292),
-        'Plot'     : ADDON.getLocalizedString(30293)
+        'Title'     : ADDON.getLocalizedString(30290),
+        'Director'  : 'Volker Robrahn, Maria Timonina',
+        'Genre'     : ADDON.getLocalizedString(30291),
+        'Premiered' : '21.04.2015',
+        'Country'   : ADDON.getLocalizedString(30292),
+        'Plot'      : ADDON.getLocalizedString(30293)
     }
-    
+
     def __init__(self):
         self.__urls = {
             'hd' : {
@@ -1318,8 +1317,7 @@ class SakuraDataSource(DataSource):
     
     def getListItems(self):
         audioOnly = ADDON.getSetting('content.audioOnly')
-        
-        quality = None
+
         if 'true' == audioOnly:
             quality = 'audio'
         else:
@@ -1334,7 +1332,8 @@ class SakuraDataSource(DataSource):
         
         if None == submodule:
             return self.__getBaseList()
-        
+
+        # noinspection PyTypeChecker
         data      = resources.lib.parseRSSFeed(self.__urls[quality][submodule], True)
         listItems = []
                 
@@ -1417,8 +1416,8 @@ class SakuraDataSource(DataSource):
                 }
             )
         ]
-		
-		
+
+
 def createDataSource(module=''):
     """
     Create a data source object based on the magazine name.

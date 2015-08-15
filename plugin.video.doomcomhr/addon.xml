@@ -17,5 +17,6 @@
         <forum>http://www.doom.com.hr/forum/</forum>
         <website>http://www.doom.com.hr/compet-n/</website>
         <email>admin@doom.com.hr</email>
+		<broken>Incomptible with new YouTube add-on</broken>
     </extension>
 </addon>

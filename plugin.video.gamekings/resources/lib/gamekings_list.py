@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 #
 # Imports
 #
@@ -156,9 +159,12 @@ class Main:
 					#skip the item if it's got no title
 					continue
 				
-				#convert from unicode to encoded text (don't use str() to do this)
-				title = title.encode('utf-8')
-			
+				try:
+					#convert from unicode to encoded text (don't use str() to do this)
+					title = title.encode('utf-8')
+				except:
+					pass
+				
 			title = title.replace('-',' ')
 			title = title.replace('/',' ')
 			title = title.replace(' i ',' I ')

@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 ##############################################################################
 #
 # GameKings - Addon for XBMC
@@ -17,8 +20,8 @@
 #
 #also in ..._const
 __addon__       = "plugin.video.gamekings"
-__date__        = "20 July 2015"
-__version__     = "1.1.5"
+__date__        = "15 august 2015"
+__version__     = "1.1.6"
 
 #
 # Imports

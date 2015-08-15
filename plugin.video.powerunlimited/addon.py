@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 ##############################################################################
 #
 # PowerUnlimited - Addon for XBMC
@@ -17,8 +20,8 @@
 #
 #also in ..._const
 __addon__       = "plugin.video.powerunlimited"
-__date__        = "04 May 2015"
-__version__     = "1.0.2"
+__date__        = "15 august 2015"
+__version__     = "1.0.3"
 
 #
 # Imports

@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 #
 # Imports
 #
@@ -98,7 +101,7 @@ class Main:
 					video_url = video_url[ 0 : pos_of_last_question_mark ] 
 					video_url_len = len(video_url)
 					youtubeID = video_url[len("https://www.youtube.com/embed/"):video_url_len]
-					youtube_url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % youtubeID
+					youtube_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtubeID
 				else:
 					unplayable_media_file = True
 	

@@ -1,3 +1,7 @@
+v1.0.3 (Saturday, 15 august 2015) :
+- updated youtube dependency version
+- added some utf8 stuff
+
 v1.0.2 (Monday, 4 May 2015):
 - using https for youtube now
 

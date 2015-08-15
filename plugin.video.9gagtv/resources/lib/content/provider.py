@@ -35,7 +35,8 @@ class Provider(nightcrawler.Provider):
     @nightcrawler.register_context_value('next_reference_key', unicode, default='')
     def _on_category(self, context, category_id, next_reference_key):
         external_video_urls = {'youtube': 'plugin://plugin.video.youtube/play/?video_id=%s',
-                               'vimeo': 'plugin://plugin.video.vimeo/play/?video_id=%s'}
+                               'vimeo': 'plugin://plugin.video.vimeo/play/?video_id=%s',
+                               'file': '%s'}
 
         context.set_content_type(context.CONTENT_TYPE_EPISODES)
 

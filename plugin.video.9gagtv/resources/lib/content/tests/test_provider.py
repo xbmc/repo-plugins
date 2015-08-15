@@ -18,6 +18,17 @@ class TestProvider(unittest.TestCase):
         self.assertGreater(len(result), 0)
         pass
 
+    def test_on_categories(self):
+        provider = Provider()
+        client = provider._get_client(nightcrawler.Context())
+        categories = client.get_available()
+        for category in categories:
+            context = nightcrawler.Context(path='/category/%s/' % category['id'])
+            result = provider.navigate(context)
+            self.assertGreater(len(result), 0)
+            pass
+        pass
+
     def test_on_root(self):
         provider = Provider()
 

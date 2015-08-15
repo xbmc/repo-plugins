@@ -1,3 +1,4 @@
+0.6.8 - FIX: Fixes for KIKA
 0.6.7 - FIX: Fixes for ARTE and NDR
 0.6.6 - FIX: Minor Fixes for ARTE and ARD
 0.6.5 - FIX: Minor Fixes for ARTE and NDR

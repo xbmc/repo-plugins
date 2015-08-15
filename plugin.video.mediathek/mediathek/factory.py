@@ -38,7 +38,7 @@ class MediathekFactory(object):
        #WDRMediathek.name():WDRMediathek,
        #BRAlphaMediathek.name():BRAlphaMediathek,
        NDRMediathek.name():NDRMediathek,
-       KIKAPlus.name():KIKAPlus
+       KIKA.name():KIKA
       }
   def getAvaibleMediathekTypes(self):
     return sorted(self.avaibleMediathekes.keys())

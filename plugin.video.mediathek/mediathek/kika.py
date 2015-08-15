@@ -18,79 +18,56 @@
 import re, time;
 from mediathek import *
 
-class KIKAPlus(Mediathek):
+class KIKA(Mediathek):
   def __init__(self, simpleXbmcGui):
     self.gui = simpleXbmcGui;
-    self.rootLink = "http://kikaplus.net/clients/kika/";
-    self.idLink=self.rootLink+"kikaplus/";
+    self.rootLink = "http://www.kika.de";
     self.menuTree = (
-        TreeNode("0","TV nach Alter","",False,
-          (
-            TreeNode("0.0","ab  6 Jahre",self.idLink+"index.php?ag=2",True),
-            TreeNode("0.1","ab 10 Jahre",self.idLink+"index.php?ag=3",True)
-          )
-        ),
+        TreeNode("0","Videos",self.rootLink+"/videos/index.html",True),
         TreeNode("1","Sendungen von A-Z","",False,
           (
-            TreeNode("1.0","B-C","",False,
-              (
-                TreeNode("1.0.0","Bernd & Friends",                       "http://kikaplus.net/clients/kika/kikaplus/?programm=120&ag=4",True),
-                TreeNode("1.0.1","BERND DAS BROT",                        "http://kikaplus.net/clients/kika/kikaplus/?programm=36&ag=3",True),
-                TreeNode("1.0.2","Boris - Ein Junge vom Baikalsee",       "http://kikaplus.net/clients/kika/kikaplus/?programm=179&ag=3",True),
-                TreeNode("1.0.3","Checker Can",                           "http://kikaplus.net/clients/kika/kikaplus/?programm=167&ag=3",True),
-                TreeNode("1.0.4","Checker Can - Quick Check",             "http://kikaplus.net/clients/kika/kikaplus/?programm=180&ag=3",True),
-              )
-            ),
-            TreeNode("1.1","D","",False,
-              (
-                TreeNode("1.1.0","dasbloghaus.tv",                        "http://kikaplus.net/clients/kika/kikaplus/?programm=142&ag=4",True),
-                TreeNode("1.1.1","Die Tigerentenbande",                   "http://kikaplus.net/clients/kika/kikaplus/?programm=132&ag=3",True),
-                TreeNode("1.1.2","Fluch des Falken",                      "http://kikaplus.net/clients/kika/kikaplus/?programm=166&ag=4",True),
-                TreeNode("1.1.3","Fortsetzung folgt - Die Dokumentation", "http://kikaplus.net/clients/kika/kikaplus/?programm=41&ag=3",True),
-              )
-            ),
-            TreeNode("1.2","K-L","",False,
-              (
-                TreeNode("1.2.0","KAILEREI",                              "http://kikaplus.net/clients/kika/kikaplus/?programm=155&ag=3",True),
-                TreeNode("1.2.1","KI.KA LIVE",                            "http://kikaplus.net/clients/kika/kikaplus/?programm=110&ag=4",True),
-                TreeNode("1.2.2","KRIMI.DE",                              "http://kikaplus.net/clients/kika/kikaplus/?programm=152&ag=4",True),
-                TreeNode("1.2.3","KUMMERKASTEN",                          "http://kikaplus.net/clients/kika/kikaplus/?programm=147&ag=4",True),
-                TreeNode("1.2.4","kurz+klick",                            "http://kikaplus.net/clients/kika/kikaplus/?programm=140&ag=4",True),
-                TreeNode("1.2.5","logo!",                                 "http://kikaplus.net/clients/kika/kikaplus/?programm=113&ag=4",True),
-              )
-            ),
-            TreeNode("1.3","M-Q","",False,
-              (
-                TreeNode("1.3.0","Marsupilami",                           "http://kikaplus.net/clients/kika/kikaplus/?programm=117&ag=3",True),
-                TreeNode("1.3.1","Mein Style - Die Modemacher",           "http://kikaplus.net/clients/kika/kikaplus/?programm=162&ag=4",True),
-                TreeNode("1.3.2","Meine neue Familie",                    "http://kikaplus.net/clients/kika/kikaplus/?programm=136&ag=4",True),
-                TreeNode("1.3.3","Piets irre Pleiten",                    "http://kikaplus.net/clients/kika/kikaplus/?programm=103&ag=3",True),
-                TreeNode("1.3.4","quergelesen",                           "http://kikaplus.net/clients/kika/kikaplus/?programm=135&ag=3",True),
-              )
-            ),
-            TreeNode("1.4","S-W","",False,
-              (
-                TreeNode("1.4.0","Schloss Einstein - Erfurt",             "http://kikaplus.net/clients/kika/kikaplus/?programm=90&ag=4",True),
-                TreeNode("1.4.1","Schnitzeljagd im Heiligen Land",        "http://kikaplus.net/clients/kika/kikaplus/?programm=122&ag=3",True),
-                TreeNode("1.4.2",u"Eine Möhre für Zwei",                  "http://kikaplus.net/clients/kika/kikaplus/?programm=168&ag=4",True),
-                TreeNode("1.4.3","SHERLOCK YACK - Der Zoodetektiv",       "http://kikaplus.net/clients/kika/kikaplus/?programm=184&ag=3",True),
-                TreeNode("1.4.4","STURMFREI",                             "http://kikaplus.net/clients/kika/kikaplus/?programm=165&ag=4",True),
-                TreeNode("1.4.5","TANZALARM!",                            "http://kikaplus.net/clients/kika/kikaplus/?programm=92&ag=3",True),
-                TreeNode("1.4.6","Wissen macht Ah!",                      "http://kikaplus.net/clients/kika/kikaplus/?programm=86&ag=4",True),
-              )
-            ),
-            
+            TreeNode("1.0","A",self.rootLink+"/sendungen/sendungenabisz100_page-A_zc-05fb1331.html",True),
+            TreeNode("1.1","B",self.rootLink+"/sendungen/sendungenabisz100_page-B_zc-1775e6d8.html",True),
+            TreeNode("1.2","C",self.rootLink+"/sendungen/sendungenabisz100_page-C_zc-6248eba0.html",True),
+            TreeNode("1.3","D",self.rootLink+"/sendungen/sendungenabisz100_page-D_zc-e090a8fb.html",True),
+            TreeNode("1.4","E",self.rootLink+"/sendungen/sendungenabisz100_page-E_zc-ec2376ed.html",True),
+            TreeNode("1.5","F",self.rootLink+"/sendungen/sendungenabisz100_page-F_zc-f76734a0.html",True),
+            TreeNode("1.6","G",self.rootLink+"/sendungen/sendungenabisz100_page-G_zc-34bda7c3.html",True),
+            TreeNode("1.7","H",self.rootLink+"/sendungen/sendungenabisz100_page-H_zc-7e25e70a.html",True),
+            TreeNode("1.8","I",self.rootLink+"/sendungen/sendungenabisz100_page-I_zc-b7f774f5.html",True),
+            TreeNode("1.9","J",self.rootLink+"/sendungen/sendungenabisz100_page-J_zc-3130680a.html",True),
+            TreeNode("1.10","K",self.rootLink+"/sendungen/sendungenabisz100_page-K_zc-c8f76ba1.html",True),
+            TreeNode("1.11","L",self.rootLink+"/sendungen/sendungenabisz100_page-L_zc-bbebc1a7.html",True),
+            TreeNode("1.12","M",self.rootLink+"/sendungen/sendungenabisz100_page-M_zc-00574a43.html",True),
+            TreeNode("1.13","N",self.rootLink+"/sendungen/sendungenabisz100_page-N_zc-b079366f.html",True),
+            TreeNode("1.14","O",self.rootLink+"/sendungen/sendungenabisz100_page-O_zc-febc55f5.html",True),
+            TreeNode("1.15","P",self.rootLink+"/sendungen/sendungenabisz100_page-P_zc-2c1a492f.html",True),
+            TreeNode("1.16","Q",self.rootLink+"/sendungen/sendungenabisz100_page-Q_zc-2cb019d6.html",True),
+            TreeNode("1.17","R",self.rootLink+"/sendungen/sendungenabisz100_page-R_zc-cab3e22b.html",True),
+            TreeNode("1.18","S",self.rootLink+"/sendungen/sendungenabisz100_page-S_zc-e7f420d0.html",True),
+            TreeNode("1.19","T",self.rootLink+"/sendungen/sendungenabisz100_page-T_zc-84a2709f.html",True),
+            TreeNode("1.20","U",self.rootLink+"/sendungen/sendungenabisz100_page-U_zc-a26c1157.html",True),
+            TreeNode("1.21","V",self.rootLink+"/sendungen/sendungenabisz100_page-V_zc-1fc26dc3.html",True),
+            TreeNode("1.22","W",self.rootLink+"/sendungen/sendungenabisz100_page-W_zc-25c5c777.html",True),
+            TreeNode("1.23","Y",self.rootLink+"/sendungen/sendungenabisz100_page-Y_zc-388beba7.html",True),
+            TreeNode("1.24","Z",self.rootLink+"/sendungen/sendungenabisz100_page-Z_zc-e744950d.html",True),
+            TreeNode("1.25","...",self.rootLink+"/sendungen/sendungenabisz100_page-1_zc-43c28d56.html",True)
           )
         )
       )
-    
-    self.regex_videoPages=re.compile("<a style=\".*?\" href=\"(\?id=.*?)\"( alt=\"Video abspielen\")*>\s*?<span.*?>\s*?<img.*? src=\"../(mediathek/previewpic/.*?\.jpg)\".*?title=\"<label>(.+?)</label><br />(.*?)<br /><br />Sendedatum: (\d{2}.\d{2}.\d{4})<br />");
+          
+    self.regex_videoPages=re.compile("<a href=\"(.*?sendereihe\\d+.html)\" class=\"linkAll\" title=\"(.*?)\">");
+    self.regex_videoLinks=re.compile("<a href=\"(.*?/sendungen/videos/video\\d+?)\\.html\"");
     
 
+    self.regex_xml_title=re.compile("<title>(.*?)</title>");
+    self.regex_xml_image=re.compile("<teaserimage>\\s*?<url>(.*?)</url>");
+    self.regex_xml_videoLink=re.compile("<asset>\\s*?<profileName>(.*?)</profileName>.*?<progressiveDownloadUrl>(.*?)</progressiveDownloadUrl>\\s*?</asset>",re.DOTALL)
+    
     self.regex_videoLink=re.compile("rtmp://.*?\.mp4");
   @classmethod
   def name(self):
-    return "KI.KA-Plus";
+    return "KI.KA";
   
   def isSearchable(self):
     return False;
@@ -98,25 +75,54 @@ class KIKAPlus(Mediathek):
   def searchVideo(self, searchText):
     return;
   
-  def buildPageMenu(self, link, initCount, subLink = False):
+  def buildVideoLink(self,pageLink):
+    xmlPage = self.loadPage(self.rootLink+pageLink);
+    
+    title = unicode(self.regex_xml_title.search(xmlPage).group(1),"UTF-8");
+    image = self.regex_xml_image.search(xmlPage).group(1).replace("**aspectRatio**","tlarge169").replace("**width**","1472");
+    
+    self.gui.log("%s %s"%(title,image));
+    links = {};
+    for match in self.regex_xml_videoLink.finditer(xmlPage):
+      profile = match.group(1);
+      directLink = match.group(2);
+      self.gui.log("%s %s"%(profile,directLink));
+      if("MP4 Web S" in profile):
+        links[0] = SimpleLink(directLink, 0);
+      if("MP4 Web L" in profile):
+        links[1] = SimpleLink(directLink, 0);
+      if("MP4 Web L+" in profile):
+        links[2] = SimpleLink(directLink, 0);
+      if("MP4 Web XL" in profile):
+        links[3] = SimpleLink(directLink, 0);
+    
+    return DisplayObject(title,"",image,"",links,True, None);
+  
+  def buildPageMenu(self, link, initCount):
     mainPage = self.loadPage(link);
-    videoPages = list(self.regex_videoPages.finditer(mainPage));
-    print len(videoPages);
-    for match in videoPages:
-      videoLink=match.group(1);
-      imageLink=match.group(3).replace(" ","%20");
-      
-      title = unicode(match.group(4),"UTF-8");
-      subTitle = unicode(match.group(5),"UTF-8");
-      dateString = unicode(match.group(6),"UTF-8");
-      
-      date = time.strptime(dateString,"%d.%m.%Y");
-      
-      videoPage = self.loadPage(self.idLink+videoLink, None, 4);
-      if videoPage == "":
-        continue;
-      videoLink=self.regex_videoLink.search(videoPage).group();
-      videoLinks={0:SimpleLink(videoLink,0)};
-      
-      displayObject = DisplayObject(title,subTitle,self.rootLink+imageLink,"",videoLinks,True, date);
-      self.gui.buildVideoLink(displayObject,self, initCount + len(videoPages));
+    
+    
+    videoLinks = list(self.regex_videoLinks.finditer(mainPage));
+    count = initCount + len(videoLinks)
+    if(len(videoLinks) > 0):
+      for match in videoLinks:
+        link=match.group(1)+"-avCustom.xml";
+        
+        displayObject = self.buildVideoLink(link);
+        self.gui.buildVideoLink(displayObject,self, count);
+    else:  
+      videoPages = list(self.regex_videoPages.finditer(mainPage));
+      count = initCount + len(videoPages)
+      for match in videoPages:
+        link=match.group(1);
+        
+        if(not link.startswith(self.rootLink)):
+          link = self.rootLink+link;
+          
+        subPage = self.loadPage(link);
+        linkFound = self.regex_videoLinks.search(subPage)
+        if(linkFound):
+          title = unicode(match.group(2),"UTF-8");
+          displayObject = DisplayObject(title,"",None,"",link,False, None);
+          self.gui.buildVideoLink(displayObject,self, count);
+    

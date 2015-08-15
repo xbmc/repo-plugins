@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 ##############################################################################
 #
 # Dumpert - Addon for XBMC
@@ -18,8 +21,8 @@
 #
 #also in ..._const
 __addon__       = "plugin.video.dumpert"
-__date__        = "05 may 2015"
-__version__     = "1.0.7"
+__date__        = "14 august 2015"
+__version__     = "1.0.9"
 
 #
 # Imports

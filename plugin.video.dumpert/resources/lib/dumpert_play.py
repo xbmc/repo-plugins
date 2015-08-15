@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 #
 # Imports
 #
@@ -148,11 +151,8 @@ class Main:
 					if (self.DEBUG) == 'true':
 						xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "video_url2", str(video_url) ), xbmc.LOGNOTICE )
 		
-					response = requests.get('http://google.com')
-					if response.status_code < 400:
-						have_valid_url = True
-					else:
-						unplayable_media_file = True
+					#The need for speed: let's guess that the video-url exists
+					have_valid_url = True
 		
 		# Play video...
 		if have_valid_url:

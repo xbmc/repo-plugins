@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 #
 # Imports
 #
@@ -134,6 +137,8 @@ class Main:
 	 			pos_last_dot = title.rfind('.')
 	 			title = title[pos_last_slash + 1:pos_last_dot]
 	 			title = title.capitalize()
+	 		except UnicodeDecodeError:
+	 			pass
 	 		
 			title = title.replace('-',' ')
 			title = title.replace('/',' ')

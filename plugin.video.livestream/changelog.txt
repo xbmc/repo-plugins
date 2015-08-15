@@ -1,0 +1,15 @@
+v2015.8.13
+- Added Search Archive Feature
+- Label videos as episodes and gave them air dates where applicable
+- Imporved stream fetching ability
+
+v2015.6.30
+- Made titles more descriptive
+- Alphabetic sorting (Live files first, then upcoming)
+- Disabled caching of listings
+
+v2015.6.26
+- Added search ability
+
+v0.0.1
+- Initial version

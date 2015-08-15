@@ -22,7 +22,12 @@ class TestClient(unittest.TestCase):
         pass
 
     def test_get_available(self):
-        json_data = self._client.get_available()
+        client = self._client
+        categories = client.get_available()
+        for category in categories:
+            video_data = self._client.get_posts(category['id'])
+            self.assertGreater(len(video_data['items']), 0)
+            pass
         pass
 
     def test_authenticate(self):

@@ -1,3 +1,9 @@
+3.0.1 (2015-08-15)
+[fix] support of direct video URLs
+
+3.0.0 (2015-08-07)
+UPD: framework
+
 2.0.1 (2015-06-18)
 FIX: playback of vimeo videos
 UPD: kodion

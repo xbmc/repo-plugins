@@ -103,7 +103,7 @@ class Client(nightcrawler.HttpClient):
                     'X-DEVICE-UUID': self.DEVICE_ID,
                     'X-DEVICE-TYPE': self.DEVICE_TYPE,
                     'X-REQUEST-SIGNATURE': self.calculate_request_signature(time_stamp),
-                    'User-Agent': 'Dalvik/1.6.0 (Linux; U; Android 4.4.4; GT-I9100 Build/KTU84Q)',
+                    'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.0.1; GT-I9505 Build/LRX22C)',
                     'Host': 'api.9gag.tv',
                     'Connection': 'Keep-Alive',
                     'Accept-Encoding': 'gzip'}

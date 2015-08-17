@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="plugin.audio.podcatcher"
-  version="0.1.9"
+  version="0.2.0"
   name="AudioPodcatcher"
   provider-name="Raptor 2101">
   <requires>

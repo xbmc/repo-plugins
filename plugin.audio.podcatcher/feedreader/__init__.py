@@ -15,11 +15,12 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
-import time,urllib,re;
+import time,urllib2,re, gzip;
+from StringIO import StringIO;
 from archivefile import ArchiveFile
 regex_mediaLink = re.compile("(http|ftp)://.*?\\.(mp3|mpeg|asx|wmv|ogg|mov)");
-regex_dateStringShortYear = re.compile("\\d{2} ((\\w{3,})|(\\d{2})) \\d{2}");
-regex_dateString = re.compile("\\d{2} ((\\w{3,})|(\\d{2})) \\d{4}");
+regex_dateStringShortYear = re.compile("\\d{,2} ((\\w{3,})|(\\d{2})) \\d{2}");
+regex_dateString = re.compile("\\d{,2} ((\\w{3,})|(\\d{2})) \\d{4}");
 regex_shortdateString = re.compile("\\d{4}-(\\d{2})-\\d{2}");
 regex_replaceUnusableChar = re.compile("[:/ \\.\?\\\\]")
 month_replacements_long = {
@@ -267,18 +268,20 @@ class Feed(object):
       return "False";
       
   def loadPage(self,url):
-    try:
-      safe_url = url.replace( " ", "%20" ).replace("&amp;","&")
-      self.gui.log('Downloading from url=%s' % safe_url)
-      sock = urllib.urlopen( safe_url )
+    safe_url = url.replace( " ", "%20" ).replace("&amp;","&")
+    self.gui.log('Downloading from url=%s' % safe_url)
+    sock = urllib2.urlopen( safe_url )    
+    
+    if sock.info().get('Content-Encoding') == 'gzip':
+      buf = StringIO(sock.read())
+      f = gzip.GzipFile(fileobj=buf)
+      doc = f.read()
+    else:
       doc = sock.read()
-      sock.close()
-      if doc:
-        try:
-          return doc.encode('UTF-8');
-        except:
-          return doc;
-      else:
-        return ''
+    sock.close()
+    
+    try:
+      content = doc.encode('UTF-8');
     except:
-      return ''
+      content = doc;
+    return content;

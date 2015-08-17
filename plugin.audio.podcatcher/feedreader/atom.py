@@ -47,7 +47,10 @@ class AtomFeed (Feed):
         if(enclosureNode.getAttribute("rel") != "enclosure" or enclosureNode.getAttribute("type").find("audio") is not 0):
           continue;
         feedItem.link = enclosureNode.getAttribute("href");
-        feedItem.size = int(enclosureNode.getAttribute("length"));
+        try:
+          feedItem.size = int(enclosureNode.getAttribute("length"));
+        except:
+          feedItem.size = 0;
         self.gui.log("Link %s Size: %d"%(feedItem.size,feedItem.size));
       
       if(feedItem.link == None):

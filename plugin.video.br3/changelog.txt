@@ -15,3 +15,14 @@
 - String Ids Changed to 300XX
 0.5.3
 - Only show Subtitle when Avaible
+0.5.4
+- Erstes Video Mit dabei
+0.6.0
+-Added Datums suche
+0.6.1
+- Added Live Stream
+- Datums Suche von Br Alpha
+0.6.2
+- Fehler mit Ersetzung funktion
+0.6.3
+- Search eingebaut

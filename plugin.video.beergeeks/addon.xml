@@ -19,5 +19,6 @@
     <website></website>
     <email></email>
     <source></source>
+	<broken>To continue using this plugin you must at leaste use Kodi v14</broken>
   </extension>
 </addon>

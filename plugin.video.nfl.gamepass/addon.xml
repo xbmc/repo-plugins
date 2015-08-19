@@ -1,7 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- Though the id says this is a plugin, it's actually a script (see extension
+     point). The addon started as a plugin, but became a script when it was
+     converted to a skinned addon. It is left unchanged so that users aren't
+     marooned on an old version. -->
 <addon id="plugin.video.nfl.gamepass"
        name="NFL Game Pass"
-       version="0.7.1"
+       version="0.7.4"
        provider-name="Alexqw,divingmule,BaumSchorle,eriksoderblom">
   <requires>
     <import addon="xbmc.python" version="2.19.0"/>
@@ -9,7 +13,7 @@
     <import addon="script.module.requests" version="2.4.3"/>
     <import addon="xbmc.gui" version="5.3.0"/>
   </requires>
-  <extension point="xbmc.python.pluginsource" library="default.py">
+  <extension point="xbmc.python.script" library="default.py">
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">

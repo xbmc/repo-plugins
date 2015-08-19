@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 msgctxt "#30001"
-msgid "E-Mail Address"
+msgid "Username/E-Mail"
 msgstr ""
 
 msgctxt "#30002"
@@ -86,7 +86,7 @@ msgid "Game Rewind"
 msgstr ""
 
 msgctxt "#30019"
-msgid "Choose Subscription"
+msgid "Subscription Type"
 msgstr ""
 
 msgctxt "#30020"

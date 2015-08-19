@@ -1,3 +1,26 @@
+2015.08.17 v0.7.4 -- Pete Carroll Edition
++ Revert skinutils font hack
++ New GamePass-only icon (eriksoderblom)
++   The NFL replaced Game Rewind with the "Game Pass Domestic" service
++ Correctly identify as a script now instead of a plugin (BaumSchorle)
++   Fixes an issue with not being able to exit the addon when using a shortcut
++ Code Cleanup (Alexqw)
+
+2015.08.13 v0.7.3 -- (Unreleased)
++ Add 2015 Season for Shows (kaileu)
++ 1080i skin (eriksoderblom)
++ Assorted bug fixes and tweaks (mostly for previous release's features)
+
+2015.08.11 v0.7.2 -- (Unreleased)
++ All streams now use same method (publishpoint) to play (kaileu)
++   fixes RedZone, TotalAccess, and likely a few other shows
++ Fix (mostly) font issues in non-Confluence skins (BaumSchorle)
++ Language Fixes/Clarifications (dmaiorino and Alexqw)
++ Translation: Update Dutch Translation (Vulpecula)
++ Bug fix: Coaches Tape XML now handles both UTF and ASCII (kaileu)
++ Bug fix: Close any open busy-dialogs before launching addon (Alexqw)
++ Code cleanup (Alexqw)
+
 2015.01.23 v0.7.1 -- Brian Urlacher Edition
 + Bug fix: Support Pro Bowl (kaileu)
 

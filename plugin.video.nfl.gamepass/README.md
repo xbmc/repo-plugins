@@ -1,5 +1,5 @@
 # NFL Game Pass/Rewind Kodi Plugin #
-**version 0.7.1 — Brian Urlacher Edition**
+**version 0.7.4 — Pete Carroll Edition**
 
 Before reading any further, please understand that while this addon does
 work, not all features are supported (or fully tested) and it should be

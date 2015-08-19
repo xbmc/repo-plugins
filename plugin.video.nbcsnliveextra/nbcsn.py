@@ -67,7 +67,7 @@ def SCRAPE_VIDEOS(url,scrape_type=None):
     req.add_header('Accept-Encoding', 'gzip, deflate')
     
 
-    response = urllib2.urlopen(req)
+    response = urllib2.urlopen(req)    
     json_source = json.load(response)                           
     response.close()                
     
@@ -135,7 +135,9 @@ def BUILD_VIDEO_LINK(item):
     menu_name = item['title']
     name = menu_name                
     desc = item['info']     
-    free = item['free']
+    free = int(item['free'])
+    if 'Watch Golf Channel LIVE' in name:
+        free = 1
 
     # Highlight active streams   
     start_time = item['start']

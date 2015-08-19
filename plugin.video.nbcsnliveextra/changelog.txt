@@ -1,3 +1,6 @@
+v2015.8.17
+- Bug fix for mislabeling non-free streams as free
+
 v2015.7.31
 - Added Optimum support
 

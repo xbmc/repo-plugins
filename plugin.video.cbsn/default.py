@@ -80,7 +80,7 @@ def getEpisodes():
       infoList['Plot']        = '%s UTC\n%s' % (b['startDate'], b['headline'])
       thumb = b['thumbnail_url_hd'].replace('\\','')
       name  = b['headlineshort']
-      u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
+      u = '%s?url=%s&mode=GV' % (sys.argv[0],qp(url))
       liz=xbmcgui.ListItem(name, '',None, thumb)
       liz.setInfo( 'Video', infoList)
       liz.addStreamInfo('video', { 'codec': 'h264', 
@@ -96,7 +96,7 @@ def getEpisodes():
    xbmcplugin.endOfDirectory(int(sys.argv[1]),cacheToDisc=False)
 
 
-def getVideo(url, show_name):
+def getVideo(url):
     u = uqp(url)
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = u))
 
@@ -117,4 +117,4 @@ p = parms.get
 mode = p('mode',None)
 
 if mode==  None:  getEpisodes()
-elif mode=='GV':  getVideo(p('url'), p('name'))
+elif mode=='GV':  getVideo(p('url'))

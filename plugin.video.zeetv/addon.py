@@ -14,9 +14,7 @@ def main_index():
 def current_shows():
     url = h.extract_var(args, 'url')
 
-    data = h.make_request(url, cookie_file, cookie_jar)
-
-    soup = BeautifulSoup(data)
+    soup = BeautifulSoup(h.make_request(url, cookie_file, cookie_jar))
 
     h2s = h.bs_find_all_with_class(soup, 'h2', 'bubble-title')
 
@@ -34,16 +32,15 @@ def current_shows():
             for li in h2.findNext('ul').findAll('li'):
                 a = li.find('a')
                 a_attrs = dict(a.attrs)
-                h.add_dir(addon_handle, base_url, a_attrs['title'], a_attrs['href'], 'show', dict(a.find('img').attrs)['src'])
+                img_src = dict(a.find('img').attrs)['src']
+                h.add_dir(addon_handle, base_url, a_attrs['title'], a_attrs['href'], 'show', img_src, img_src)
             break
 
 
 def archive_shows():
     url = h.extract_var(args, 'url')
 
-    data = h.make_request(url, cookie_file, cookie_jar)
-
-    soup = BeautifulSoup(data)
+    soup = BeautifulSoup(h.make_request(url, cookie_file, cookie_jar))
 
     ul = h.bs_find_with_class(soup, 'ul', 'archive-shows')
 
@@ -58,9 +55,7 @@ def show():
 
     url = '%svideo/' % (url)
 
-    data = h.make_request(url, cookie_file, cookie_jar)
-
-    soup = BeautifulSoup(data)
+    soup = BeautifulSoup(h.make_request(url, cookie_file, cookie_jar))
 
     info_div = h.bs_find_with_class(soup, 'div', 'video-n-info-wrap')
 
@@ -102,12 +97,10 @@ def show():
 
 def episode():
     url = h.extract_var(args, 'url')
-    print url
+
     name = h.extract_var(args, 'name')
 
-    data = h.make_request(url, cookie_file, cookie_jar)
-
-    soup = BeautifulSoup(data)
+    soup = BeautifulSoup(h.make_request(url, cookie_file, cookie_jar))
 
     div = h.bs_find_with_class(soup, 'div', 'video-player')
     script = div.find('script')

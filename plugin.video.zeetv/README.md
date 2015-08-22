@@ -1,2 +1,2 @@
-# plugin.video.zeetv
-Kodi video addon for http://www.zeetv.com
+# plugin.video.zeemarathi
+Kodi video addon for http://www.zeemarathi.com

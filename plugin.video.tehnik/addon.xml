@@ -17,5 +17,6 @@
     <source>https://github.com/deltha/plugin.video.tehnik</source>
     <email>deltha@gmail.com</email>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+	<broken>To continue using this plugin please upgrade to Kodi v15</broken>
   </extension>
 </addon>

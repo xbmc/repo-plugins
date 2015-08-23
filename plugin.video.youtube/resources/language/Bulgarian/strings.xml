@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Kodion Settings -->
+    <string id="30000">Общи</string>
+    <string id="30001">Потребител</string>
+    <string id="30002">Парола</string>
+
+    <string id="30009">Запитване за качеството на видеото преди възпроизвеждане</string>
+    <string id="30010">Качество на видеото</string>
+    <string id="30011">480p</string>
+    <string id="30012">720p (HD)</string>
+    <string id="30013">1080p (HD)</string>
+    <string id="30014">2160p (4k)</string>
+    <string id="30015">4320p (8k)</string>
+    <string id="30016">240p</string>
+    <string id="30017">360p</string>
+
+    <string id="30020">Разреши 3D</string>
+    <string id="30021">Показвай фен-арт</string>
+    <string id="30022">Брой елементи на страница</string>
+    <string id="30023">Историята на търсенията да пази последните</string>
+    <string id="30024">Размер на кеша (MB)</string>
+    <string id="30025">Включи помощника за настройване</string>
+    <string id="30026">Налагай на изглед</string>
+    <string id="30027">Изглед: Стандартен</string>
+    <string id="30028">Изглед: Епизоди</string>
+    <string id="30029">Изглед: Филми</string>
+    <string id="30030">Да стартира ли помощника за настройване?</string>
+    <string id="30031">Допълнителни</string>
+    <string id="30032">Изглед: ТВ Сериали</string>
+    <string id="30033">Изглед: Песни</string>
+    <string id="30034">Изглед: Артисти</string>
+    <string id="30035">Изглед: Албуми</string>
+    <string id="30036">Поддръжка за алтернативен плейър</string>
+
+    <!-- Kodion Common -->
+    <string id="30100">Любими</string>
+    <string id="30101">Добави към любимите (на добавката)</string>
+    <string id="30102">Търси в Youtube</string>
+    <string id="30103">Библиотека</string>
+    <string id="30104">Препоръчани</string>
+    <string id="30105">Архив</string>
+    <string id="30106">Следваща страница (%d)</string>
+    <string id="30107">За гледане по-късно</string>
+    <string id="30108">Премахни</string>
+    <string id="30109">Най-новите видеоклипове</string>
+    <string id="30110">Ново търсене</string>
+    <string id="30111">Вход</string>
+    <string id="30112">Изход</string>
+    <string id="30113">Преименуване</string>
+    <string id="30114">Потвърждаване на изриване</string>
+    <string id="30115">Потвърждаване на премахване</string>
+    <string id="30116">Изтриване на "%s"?</string>
+    <string id="30117">Премахване на "%s"?</string>
+    <string id="30118">Изтрий</string>
+    <string id="30119">Моля изчакайте...</string>
+    <string id="30120">Изчисти</string>
+
+    <!-- YouTube -->
+    <string id="30500">Канали</string>
+    <string id="30501">Плейлисти</string>
+    <string id="30502">Към %s</string>
+    <string id="30503">Показвай фен-арт и за канали</string>
+    <string id="30504">Абонаменти</string>
+    <string id="30505">Отписване</string>
+    <string id="30506">Абониране</string>
+    <string id="30507">Моят канал</string>
+    <string id="30508">Харесани видеоклипове</string>
+    <string id="30509">История</string>
+    <string id="30510">Абонаменти</string>
+    <string id="30511">Добави към опашката</string>
+    <string id="30512">Сърфиране в каналите</string>
+    <string id="30513">Популярни в момента</string>
+    <string id="30514">Сродни видеоклипове</string>
+    <string id="30515">Премахвай автоматично от 'Watch Later'</string>
+    <string id="30516">Папки</string>
+    <string id="30517">Абониране за %s</string>
+    <string id="30518">Отворете '%s'</string>
+    <string id="30519">и въведете следния код:</string>
+    <string id="30520">Добавяне към...</string>
+    <string id="30521">Създаване на плейлист</string>
+    <string id="30522">Нов плейлист...</string>
+    <string id="30523">Език</string>
+    <string id="30524">Изберете език</string>
+    <string id="30525">Изберете държава</string>
+    <string id="30526">Настройване</string>
+    <string id="30527">Език и държава?</string>
+    <string id="30528">Оценете...</string>
+    <string id="30529">Това ми харесва</string>
+    <string id="30530">Това не ми харесва</string>
+    <string id="30531">Пускане на всички</string>
+    <string id="30532">Стандартно</string>
+    <string id="30533">Обръщане</string>
+    <string id="30534">Разбъркване</string>
+    <string id="30535">Изберете подреждане за видеоклиовете</string>
+    <string id="30536">Обновяване на плейлист...</string>
+    <string id="30537">Възпроизведи от тук</string>
+    <string id="30538">Нехаресани видеоклипове</string>
+    <string id="30539">На живо</string>
+    <string id="30540">Възпроизведи с...</string>
+    <string id="30541">Показвай името на канала в описанието</string>
+    <string id="30542">Потоци тип rtmpe не се поддържат</string>
+    <string id="30543">Опресни</string>
+    <string id="30544">Още връзки от описанието</string>
+    <string id="30545">Не са намерени повече връзки.</string>
+    <string id="30546">Моля, влезте два пъти!</string>
+    <string id="30547">За да функционира добавката YouTube е необходимо да се активират две програми.</string>
+    <string id="30548">Още...</string>
+    <string id="30549">Не са открити видео потоци</string>
+</strings>

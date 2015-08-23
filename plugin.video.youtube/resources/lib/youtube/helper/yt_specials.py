@@ -1,7 +1,7 @@
 __author__ = 'bromix'
 
 from resources.lib import kodion
-from resources.lib.kodion.items import DirectoryItem
+from resources.lib.kodion.items import DirectoryItem, UriItem
 from resources.lib.youtube.helper import v3, tv, extract_urls, UrlResolver, UrlToItemConverter
 from . import utils
 
@@ -213,6 +213,11 @@ def _process_new_uploaded_videos_tv(provider, context, re_match):
 
 def process(category, provider, context, re_match):
     result = []
+
+    # we need a login
+    client = provider.get_client(context)
+    if not provider.is_logged_in() and category in ['new_uploaded_videos_tv', 'disliked_videos']:
+        return UriItem(context.create_uri(['sign', 'in']))
 
     if category == 'related_videos':
         return _process_related_videos(provider, context, re_match)

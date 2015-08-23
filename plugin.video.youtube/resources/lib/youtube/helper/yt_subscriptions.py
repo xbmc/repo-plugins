@@ -1,3 +1,5 @@
+from resources.lib.kodion.items import UriItem
+
 __author__ = 'bromix'
 
 from resources.lib import kodion
@@ -38,6 +40,11 @@ def _process_remove(provider, context, re_match):
 
 def process(method, provider, context, re_match):
     result = []
+
+    # we need a login
+    client = provider.get_client(context)
+    if not provider.is_logged_in():
+        return UriItem(context.create_uri(['sign', 'in']))
 
     if method == 'list':
         result.extend(_process_list(provider, context, re_match))

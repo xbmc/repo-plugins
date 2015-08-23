@@ -357,8 +357,7 @@ class YouTube(LoginClient):
         else:
             params['mine'] = 'true'
             pass
-        return self._perform_v3_request(method='GET', path='channels', params=params,
-                                        quota_optimized=channel_id != 'mine')
+        return self._perform_v3_request(method='GET', path='channels', params=params, quota_optimized=False)
 
     def get_disliked_videos(self, page_token=''):
         # prepare page token
@@ -424,7 +423,7 @@ class YouTube(LoginClient):
             params['pageToken'] = page_token
             pass
 
-        return self._perform_v3_request(method='GET', path='search', params=params)
+        return self._perform_v3_request(method='GET', path='search', params=params, quota_optimized=True)
 
     def get_related_videos(self, video_id, page_token=''):
         # prepare page token
@@ -443,7 +442,7 @@ class YouTube(LoginClient):
             params['pageToken'] = page_token
             pass
 
-        return self._perform_v3_request(method='GET', path='search', params=params)
+        return self._perform_v3_request(method='GET', path='search', params=params, quota_optimized=True)
 
     def search(self, q, search_type=['video', 'channel', 'playlist'], event_type='', page_token=''):
         """

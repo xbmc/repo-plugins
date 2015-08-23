@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 #
 # Imports
 #
@@ -14,14 +17,11 @@ import xbmcaddon
 import xbmcgui
 import xbmcplugin
 
-reload(sys)  
-sys.setdefaultencoding('utf8')
-
 RECENTLYADDEDURL = 'http://roosterteeth.com/episode/recently-added'
-ROOSTERTEETHSHOWSURL = 'http://www.roosterteeth.com/show/'
-ACHIEVEMENTHUNTERURL = 'http://achievementhunter.com/show/'
-THEKNOWSHOWSURL = 'http://theknow.tv/show'
-FUNHAUSSHOWSURL = 'http://fun.haus/show'
+ROOSTERTEETHSHOWSURL = 'https://www.roosterteeth.com/show/'
+ACHIEVEMENTHUNTERURL = 'https://achievementhunter.com/show/'
+THEKNOWSHOWSURL = 'https://theknow.tv/show'
+FUNHAUSSHOWSURL = 'https://fun.haus/show'
 
 #
 # Main class

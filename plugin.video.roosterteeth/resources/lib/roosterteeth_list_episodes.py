@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 #
 # Imports
 #
@@ -13,9 +16,6 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 import xbmcplugin
-
-reload(sys)  
-sys.setdefaultencoding('utf8')
 
 RECENTLYADDEDURL = 'http://roosterteeth.com/episode/recently-added'
 
@@ -137,7 +137,11 @@ class Main:
 			title = title [0:pos_smallerthan]
 
 			#Clean up title
-			title = title.encode('utf-8')
+			try:
+				title = title.encode('utf-8')
+			except:
+				pass
+			
 			title = title.replace('-',' ')
 			title = title.replace('/',' ')
 			title = title.replace(' i ',' I ')

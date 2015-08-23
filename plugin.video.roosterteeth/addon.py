@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 ##############################################################################
 #
 # Roosterteeth - Addon for Kodi
@@ -18,8 +21,8 @@
 #
 #also in ..._const
 __addon__       = "plugin.video.roosterteeth"
-__date__        = "29 July 2015"
-__version__     = "1.2.0"
+__date__        = "22 august 2015"
+__version__     = "1.2.2"
 
 #
 # Imports

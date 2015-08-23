@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 #
 # Imports
 #
@@ -13,9 +16,6 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 import xbmcplugin
-
-reload(sys)  
-sys.setdefaultencoding('utf8')
 
 #
 # Main class

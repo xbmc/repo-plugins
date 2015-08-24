@@ -18,9 +18,11 @@ class VideoInfo(object):
               'video': {'height': 240, 'encoding': 'h.263'},
               'audio': {'bitrate': 64, 'encoding': 'mp3'}},
         '6': {'container': 'flv',  # Discontinued
+              'discontinued': True,
               'video': {'height': 270, 'encoding': 'h.263'},
               'audio': {'bitrate': 64, 'encoding': 'mp3'}},
         '13': {'container': '3gp',  # Discontinued
+               'discontinued': True,
                'video': {'encoding': 'mpeg-4'},
                'audio': {'encoding': 'aac'}},
         '17': {'container': '3gp',
@@ -39,9 +41,11 @@ class VideoInfo(object):
                'video': {'height': 720, 'encoding': 'h.264'},
                'audio': {'bitrate': 192, 'encoding': 'aac'}},
         '34': {'container': 'flv',  # Discontinued
+               'discontinued': True,
                'video': {'height': 360, 'encoding': 'h.264'},
                'audio': {'bitrate': 128, 'encoding': 'aac'}},
         '35': {'container': 'flv',  # Discontinued
+               'discontinued': True,
                'video': {'height': 480, 'encoding': 'h.264'},
                'audio': {'bitrate': 128, 'encoding': 'aac'}},
         '36': {'container': '3gp',
@@ -65,12 +69,15 @@ class VideoInfo(object):
                'video': {'height': 360, 'encoding': 'vp8'},
                'audio': {'bitrate': 128, 'encoding': 'vorbis'}},
         '44': {'container': 'webm',  # Discontinued
+               'discontinued': True,
                'video': {'height': 480, 'encoding': 'vp8'},
                'audio': {'bitrate': 128, 'encoding': 'vorbis'}},
         '45': {'container': 'webm',  # Discontinued
+               'discontinued': True,
                'video': {'height': 720, 'encoding': 'vp8'},
                'audio': {'bitrate': 192, 'encoding': 'vorbis'}},
         '46': {'container': 'webm',  # Discontinued
+               'discontinued': True,
                'video': {'height': 1080, 'encoding': 'vp8'},
                'audio': {'bitrate': 192, 'encoding': 'vorbis'}},
         '59': {'container': 'mp4',
@@ -86,78 +93,81 @@ class VideoInfo(object):
         # === 3D ===
         '82': {'container': 'mp4',
                '3D': True,
-               'title': '360p',
+               'title': '3D@360p',
                'sort': [360, 0],
                'video': {'height': 360, 'encoding': 'h.264'},
                'audio': {'bitrate': 96, 'encoding': 'aac'}},
         '83': {'container': 'mp4',
                '3D': True,
-               'title': '240p',
+               'title': '3D@240p',
                'sort': [240, 0],
                'video': {'height': 240, 'encoding': 'h.264'},
                'audio': {'bitrate': 96, 'encoding': 'aac'}},
         '84': {'container': 'mp4',
                '3D': True,
-               'title': '720p',
+               'title': '3D@720p',
                'sort': [720, 0],
                'video': {'height': 720, 'encoding': 'h.264'},
                'audio': {'bitrate': 192, 'encoding': 'aac'}},
         '85': {'container': 'mp4',
                '3D': True,
-               'title': '1080p',
+               'title': '3D@1080p',
                'sort': [1080, 0],
                'video': {'height': 1080, 'encoding': 'h.264'},
                'audio': {'bitrate': 192, 'encoding': 'aac'}},
         '100': {'container': 'webm',
                 '3D': True,
-                'title': '360p',
+                'title': '3D@360p',
                 'sort': [360, -1],
                 'video': {'height': 360, 'encoding': 'vp8'},
                 'audio': {'bitrate': 128, 'encoding': 'vorbis'}},
         '101': {'container': 'webm',  # Discontinued
+                'discontinued': True,
                 '3D': True,
-                'title': '360p',
+                'title': '3D@360p',
                 'sort': [360, -1],
                 'video': {'height': 360, 'encoding': 'vp8'},
                 'audio': {'bitrate': 192, 'encoding': 'vorbis'}},
         '102': {'container': 'webm',  # Discontinued
+                'discontinued': True,
                 '3D': True,
                 'video': {'height': 720, 'encoding': 'vp8'},
                 'audio': {'bitrate': 192, 'encoding': 'vorbis'}},
         # === Live Streams ===
         '92': {'container': 'ts',
                'Live': True,
-               'title': '240p',
+               'title': 'Live@240p',
                'sort': [240, 0],
                'video': {'height': 240, 'encoding': 'h.264'},
                'audio': {'bitrate': 48, 'encoding': 'aac'}},
         '93': {'container': 'ts',
                'Live': True,
-               'title': '360p',
+               'title': 'Live@360p',
                'sort': [360, 0],
                'video': {'height': 360, 'encoding': 'h.264'},
                'audio': {'bitrate': 128, 'encoding': 'aac'}},
         '94': {'container': 'ts',
                'Live': True,
-               'title': '480p',
+               'title': 'Live@480p',
                'sort': [480, 0],
                'video': {'height': 480, 'encoding': 'h.264'},
                'audio': {'bitrate': 128, 'encoding': 'aac'}},
         '95': {'container': 'ts',
                'Live': True,
-               'title': '720p',
+               'title': 'Live@720p',
                'sort': [720, 0],
                'video': {'height': 720, 'encoding': 'h.264'},
                'audio': {'bitrate': 256, 'encoding': 'aac'}},
         '96': {'container': 'ts',
                'Live': True,
-               'title': '1080p',
+               'title': 'Live@1080p',
                'sort': [1080, 0],
                'video': {'height': 1080, 'encoding': 'h.264'},
                'audio': {'bitrate': 256, 'encoding': 'aac'}},
         '120': {'container': 'flv',  # Discontinued
+                'discontinued': True,
                 'Live': True,
-                'title': '720p',
+                'title': 'Live@720p',
                 'sort': [720, -10],
                 'video': {'height': 720, 'encoding': 'h.264'},
                 'audio': {'bitrate': 128, 'encoding': 'aac'}},
@@ -169,13 +179,13 @@ class VideoInfo(object):
                 'audio': {'bitrate': 96, 'encoding': 'aac'}},
         '132': {'container': 'ts',
                 'Live': True,
-                'title': '240p',
+                'title': 'Live@240p',
                 'sort': [240, 0],
                 'video': {'height': 240, 'encoding': 'h.264'},
                 'audio': {'bitrate': 48, 'encoding': 'aac'}},
         '151': {'container': 'ts',
                 'Live': True,
-                'title': '72p',
+                'title': 'Live@72p',
                 'sort': [72, 0],
                 'video': {'height': 72, 'encoding': 'h.264'},
                 'audio': {'bitrate': 24, 'encoding': 'aac'}},
@@ -196,6 +206,7 @@ class VideoInfo(object):
                 'dash/video': True,
                 'video': {'height': 1080, 'encoding': 'h.264'}},
         '138': {'container': 'mp4',  # Discontinued
+                'discontinued': True,
                 'dash/video': True,
                 'video': {'height': 2160, 'encoding': 'h.264'}},
         '160': {'container': 'mp4',
@@ -411,8 +422,15 @@ class VideoInfo(object):
 
                         itag = attr['itag']
                         yt_format = self.FORMAT.get(itag, None)
+
                         if not yt_format:
                             raise Exception('unknown yt_format for itag "%s"' % itag)
+
+                        # this format is discontinued
+                        if yt_format.get('discontinued', False):
+                            continue
+                            pass
+
                         video_stream = {'url': url}
                         video_stream.update(yt_format)
 

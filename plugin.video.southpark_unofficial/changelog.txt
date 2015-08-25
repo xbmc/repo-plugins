@@ -29,4 +29,6 @@
 0.3.5
 - Added Search and new links.
 0.3.6
-- Added Season 19
+- Added Season 19.
+0.3.7
+- Fixed german support.

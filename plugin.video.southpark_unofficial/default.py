@@ -251,6 +251,7 @@ def getCarousel():
 
 def getMediagen(id):
 	feed = ""
+	print ("http://"+mainweb_geo[audio_pos]+"/feeds/video-player/mrss/mgid:arc:episode:"+pageurl_geo[audio_pos]+":"+id+"?lang="+audio)
 	feed = getUrl("http://"+mainweb_geo[audio_pos]+"/feeds/video-player/mrss/mgid:arc:episode:"+pageurl_geo[audio_pos]+":"+id+"?lang="+audio)
 	root = ET.fromstring(feed)
 	mediagen = []
@@ -266,6 +267,8 @@ def getMediagen(id):
 
 def getVideoData(mediagen):
 	xml = ""
+	if audio == "de":
+		mediagen += "&acceptMethods=fms,hdn1,hds";
 	xml = getUrl(mediagen)
 	root = ET.fromstring(xml)
 	rtmpe = []

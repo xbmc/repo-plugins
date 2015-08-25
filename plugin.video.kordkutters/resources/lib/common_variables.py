@@ -58,7 +58,7 @@ def translate(text):
 	return selfAddon.getLocalizedString(text).encode('utf-8')
 	
 def add_sort_methods():
-	sort_methods = [('default',37),('label',1),('date',3),('duration',8),('episode',22)]
-	for method,mode in sort_methods:
-		xbmcplugin.addSortMethod(int(sys.argv[1]), mode)
+	sort_methods = [xbmcplugin.SORT_METHOD_UNSORTED,xbmcplugin.SORT_METHOD_LABEL,xbmcplugin.SORT_METHOD_DATE,xbmcplugin.SORT_METHOD_DURATION,xbmcplugin.SORT_METHOD_EPISODE]
+	for method in sort_methods:
+		xbmcplugin.addSortMethod(int(sys.argv[1]), sortMethod=method)
 	return

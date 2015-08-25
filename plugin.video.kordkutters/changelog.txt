@@ -1,3 +1,8 @@
+Version 1.0.6 (25/8/2015)
+-Avoid integers in addSortMethod (tks martijn)
+-Added pt-BR translation
+-Added bulgarian translation
+
 Version 1.0.5 (5/8/2015)
 
 -Version submited to the repo

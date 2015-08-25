@@ -27,12 +27,13 @@ def build_episode_item(name,url,mode,iconimage,page,info,video_info,audio_info):
 	videoid = url
 	u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&page="+str(page)
 	ok=True
-	liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+	liz=xbmcgui.ListItem(name)
 	cm = []
 	cm.append((translate(30005), 'XBMC.Action(Info)'))
 	if info["playcount"] == 1: cm.append((translate(30007), 'XBMC.RunPlugin(%s?mode=7&url=%s)' % (sys.argv[0],videoid)))
 	else: cm.append((translate(30006), 'XBMC.RunPlugin(%s?mode=6&url=%s)' % (sys.argv[0],videoid)))
-	liz.setProperty('fanart_image', os.path.join(addonfolder,'fanart.jpg'))
+	liz.setArt({ 'thumb': iconimage, 'banner' : os.path.join(artfolder,'banner.png'), 'fanart': os.path.join(addonfolder,'fanart.jpg') })
+	liz.setPath(u)
 	liz.setInfo( type="Video", infoLabels=info)
 	liz.addStreamInfo('video', video_info)
 	liz.addStreamInfo('audio', audio_info)
@@ -44,9 +45,9 @@ def build_episode_item(name,url,mode,iconimage,page,info,video_info,audio_info):
 def addDir(name,url,mode,iconimage,page,number_of_items,token,pasta=True):
 	u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&page="+str(page)+"&token="+urllib.quote_plus(token)
 	ok=True
-	liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-	liz.setProperty('fanart_image', os.path.join(addonfolder,'fanart.jpg'))
+	liz=xbmcgui.ListItem(name)
 	liz.setInfo( type="Video", infoLabels={ "Title": name })
+	liz.setArt({ 'thumb': iconimage, 'banner' : os.path.join(artfolder,'banner.png'), 'fanart': os.path.join(addonfolder,'fanart.jpg') })
 	liz.setPath(u)
 	ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=pasta,totalItems=number_of_items)
 	return ok

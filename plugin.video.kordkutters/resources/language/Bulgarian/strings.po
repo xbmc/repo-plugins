@@ -9,58 +9,58 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en\n"
+"Language: bg\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #settings labels
 
 msgctxt "#30000"
 msgid "KordKutters"
-msgstr ""
+msgstr "KordKutters"
 
 msgctxt "#30001"
 msgid "Live"
-msgstr ""
+msgstr "На живо"
 
 msgctxt "#30002"
 msgid "No live videos available right now."
-msgstr ""
+msgstr "В момента няма предаване на живо."
 
 msgctxt "#30003"
 msgid "Minimum percent to mark a video as watched"
-msgstr ""
+msgstr "Маркирай епизод като гледан след (процента)"
 
 msgctxt "#30004"
 msgid "All uploads"
-msgstr ""
+msgstr "Всички епизоди"
 
 msgctxt "#30005"
 msgid "Episode Info"
-msgstr ""
+msgstr "Информация за епизода"
 
 msgctxt "#30006"
 msgid "Mark as watched"
-msgstr ""
+msgstr "Маркирай като гледан"
 
 msgctxt "#30007"
 msgid "Remove watched"
-msgstr ""
+msgstr "Без изгледаните"
 
 msgctxt "#30008"
 msgid "General"
-msgstr ""
+msgstr "Основни"
 
 msgctxt "#30009"
 msgid "Show all videos directory"
-msgstr ""
+msgstr "Показвай елемент за всички епизоди"
 
 msgctxt "#30010"
 msgid "Next Page"
-msgstr ""
+msgstr "Следваща страница"
 
 msgctxt "#30011"
 msgid "Videos per youtube page"
-msgstr ""
+msgstr "Брой епизоди на страница"
 
 
 

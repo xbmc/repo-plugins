@@ -3,6 +3,7 @@ plugin.video.hgtv
 
 Kodi Addon for HGTV website
 
+Version 2.1.5 fix for null url from website
 Version 2.1.4 Website changes
 Version 2.1.3 Fix for finding first show
 Version 2.1.2 Added subtitles, metadata, fixed views

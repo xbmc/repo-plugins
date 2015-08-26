@@ -138,7 +138,8 @@ def getEpisodes(url, showName):
       infoList['Duration']    = b['length']
       infoList['Title']       = name
       infoList['Studio']      = b['publisherId']
-      html = getRequest(url)
+      try:  html = getRequest(url)
+      except: continue
       months = {'Jan':'01','Feb':'02','Mar':'03','Apr':'04','May':'05','Jun':'06','Jul':'07','Aug':'08','Sep':'09','Oct':'10','Nov':'11','Dec':'12'}
       try:
          dstr = (re.compile('"premierDate" value="(.+?)"',re.DOTALL).search(html).group(1)).split(' ')

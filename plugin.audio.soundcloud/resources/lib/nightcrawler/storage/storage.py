@@ -30,6 +30,9 @@ class Storage(object):
         self._needs_commit = False
         pass
 
+    def get_filename(self):
+        return self._filename
+
     def remove_file(self):
         self._close()
         # do nothing - only if this folder exists

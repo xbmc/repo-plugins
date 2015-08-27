@@ -128,7 +128,7 @@ def _request(method, url,
             pass
         pass
     if data or json:
-        if headers.get('Content-Type', '').startswith('application/x-www-form-urlencoded') or data:
+        if headers.get('Content-Type', '').startswith('application/x-www-form-urlencoded') and data:
             # transform a string into a map of values
             if isinstance(data, basestring):
                 _data = data.split('&')

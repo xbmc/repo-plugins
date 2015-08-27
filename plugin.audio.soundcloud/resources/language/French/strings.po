@@ -1,0 +1,310 @@
+# XBMC Media Center language file
+# Addon Name: SoundCloud
+# Addon id: plugin.audio.soundcloud
+# Addon version: 2.0.1
+# Addon Provider: bromix
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2015-08-27 16:38+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+
+msgctxt "Addon Summary"
+msgid "SoundCloud is an online audio distribution platform."
+msgstr "SoundCloud est une plateforme de streaming audio en ligne."
+
+msgctxt "Addon Description"
+msgid "SoundCloud is an online audio distribution platform that enables its users to upload, record, promote and share their originally-created sounds."
+msgstr "SoundCloud est une plateforme de streaming audio en ligne qui permet aux utilisateurs d'envoyer, d'enregistrer, de promouvoir et partager leurs créations audio originales."
+
+msgctxt "#30000"
+msgid "General"
+msgstr "Général"
+
+msgctxt "#30001"
+msgid "Username"
+msgstr "Nom d'utilisateur"
+
+msgctxt "#30002"
+msgid "Password"
+msgstr "Mot de passe"
+
+msgctxt "#30009"
+msgid "Always ask for the video quality"
+msgstr "Toujours demander pour la qualité vidéo"
+
+msgctxt "#30010"
+msgid "Video Quality"
+msgstr "Qualité vidéo"
+
+msgctxt "#30011"
+msgid "480p"
+msgstr "480p"
+
+msgctxt "#30012"
+msgid "720p (HD)"
+msgstr "720p (HD)"
+
+msgctxt "#30013"
+msgid "1080p (HD)"
+msgstr "1080p (HD)"
+
+msgctxt "#30014"
+msgid "2160p (4k)"
+msgstr "2160p (4k)"
+
+msgctxt "#30015"
+msgid "4320p (8k)"
+msgstr "4320p (8k)"
+
+msgctxt "#30016"
+msgid "240p"
+msgstr "240p"
+
+msgctxt "#30017"
+msgid "360p"
+msgstr "360p"
+
+msgctxt "#30020"
+msgid "Allow 3D"
+msgstr "Autoriser la 3D"
+
+msgctxt "#30021"
+msgid "Show Fanart"
+msgstr "Afficher le papier peint"
+
+msgctxt "#30022"
+msgid "Items per page"
+msgstr "Articles par page"
+
+msgctxt "#30023"
+msgid "Search History Size"
+msgstr "Taille de l'historique de recherche"
+
+msgctxt "#30024"
+msgid "Cache Size (MB)"
+msgstr "Taille du cache (MB)"
+
+msgctxt "#30025"
+msgid "Enable setup-wizard"
+msgstr "Activer le logiciel d'installation"
+
+msgctxt "#30026"
+msgid "Override View"
+msgstr "Modifier les vues"
+
+msgctxt "#30027"
+msgid "View: Default"
+msgstr "Vue: Défault"
+
+msgctxt "#30028"
+msgid "View: Episodes"
+msgstr "Vue: Episodes"
+
+msgctxt "#30029"
+msgid "View: Movies"
+msgstr "Vue: Films"
+
+msgctxt "#30030"
+msgid "Execute setup-wizard?"
+msgstr "Exécuter le logiciel d'installation?"
+
+msgctxt "#30031"
+msgid "Advanced"
+msgstr "Avancé"
+
+msgctxt "#30032"
+msgid "View: TV Shows"
+msgstr "Vue: Séries TV"
+
+msgctxt "#30033"
+msgid "View: Songs"
+msgstr "Vue: Musiques"
+
+msgctxt "#30034"
+msgid "View: Artists"
+msgstr "Vue: Artistes"
+
+msgctxt "#30035"
+msgid "View: Albums"
+msgstr "Vue: Albums"
+
+msgctxt "#30036"
+msgid "Support alternative player"
+msgstr "Activer le lecteur alternatif"
+
+msgctxt "#30037"
+msgid "Clear cache"
+msgstr "Vider le cache"
+
+msgctxt "#30100"
+msgid "Favorites"
+msgstr "Favoris"
+
+msgctxt "#30101"
+msgid "Add to addon favs"
+msgstr "Ajouter aux favoris"
+
+msgctxt "#30102"
+msgid "Search"
+msgstr "Rechercher"
+
+msgctxt "#30103"
+msgid "Library"
+msgstr "Librairie"
+
+msgctxt "#30104"
+msgid "Highlights"
+msgstr "Points forts"
+
+msgctxt "#30105"
+msgid "Archive"
+msgstr "Archive"
+
+msgctxt "#30106"
+msgid "Next Page (%d)"
+msgstr "Page suivante (%d)"
+
+msgctxt "#30107"
+msgid "Watch Later"
+msgstr "Regarder plus tard"
+
+msgctxt "#30108"
+msgid "Remove"
+msgstr "Effacer"
+
+msgctxt "#30109"
+msgid "Latest Videos"
+msgstr "Dernières Vidéos"
+
+msgctxt "#30110"
+msgid "New Search"
+msgstr "Nouvelle Recherche"
+
+msgctxt "#30111"
+msgid "Sign In"
+msgstr "Se connecter"
+
+msgctxt "#30112"
+msgid "Sign Out"
+msgstr "Se déconnecter"
+
+msgctxt "#30113"
+msgid "Rename"
+msgstr "Renommer"
+
+msgctxt "#30114"
+msgid "Confirm delete"
+msgstr "Confirmer la suppression"
+
+msgctxt "#30115"
+msgid "Confirm remove"
+msgstr "Confirmer l'effacement"
+
+msgctxt "#30116"
+msgid "Delete \"%s\"?"
+msgstr "Supprimer \"%s\"?"
+
+msgctxt "#30117"
+msgid "Remove \"%s\"?"
+msgstr "Effacer \"%s\"?"
+
+msgctxt "#30118"
+msgid "Delete"
+msgstr "Supprimer"
+
+msgctxt "#30119"
+msgid "Please wait..."
+msgstr "Patientez svp..."
+
+msgctxt "#30120"
+msgid "Clear"
+msgstr "Nettoyer"
+
+msgctxt "#30500"
+msgid "Explore"
+msgstr "Explorer"
+
+msgctxt "#30501"
+msgid "Trending Music"
+msgstr "Musiques Tendances"
+
+msgctxt "#30502"
+msgid "Trending Audio"
+msgstr "Audio Tendances"
+
+msgctxt "#30503"
+msgid "Music Genres"
+msgstr "Genres Musicaux"
+
+msgctxt "#30504"
+msgid "Audio Genres"
+msgstr "Genres Audio"
+
+msgctxt "#30505"
+msgid "Stream"
+msgstr "Stream"
+
+msgctxt "#30506"
+msgid "Playlists"
+msgstr "Playlists"
+
+msgctxt "#30507"
+msgid "Following"
+msgstr "Abonnements"
+
+msgctxt "#30508"
+msgid "Follow"
+msgstr "Suivre"
+
+msgctxt "#30509"
+msgid "Follower"
+msgstr "Abonnés"
+
+msgctxt "#30510"
+msgid "Likes"
+msgstr "J'aimes"
+
+msgctxt "#30511"
+msgid "Like"
+msgstr "J'aime"
+
+msgctxt "#30512"
+msgid "Tracks"
+msgstr "Morceaux"
+
+msgctxt "#30513"
+msgid "Unfollow"
+msgstr "Ne plus suivre"
+
+msgctxt "#30514"
+msgid "Unlike"
+msgstr "Je n'aime plus"
+
+msgctxt "#30515"
+msgid "People"
+msgstr "Personnes"
+
+msgctxt "#30516"
+msgid "Go to %s"
+msgstr "Aller à %s"
+
+msgctxt "#30517"
+msgid "Recommended Tracks"
+msgstr "Morceaux recommandés"
+
+msgctxt "#30518"
+msgid "Show black Fanart"
+msgstr "Afficher le papier peint sombre"
+
+msgctxt "#30519"
+msgid "Setup login?"
+msgstr "Mettre en place la connection?"

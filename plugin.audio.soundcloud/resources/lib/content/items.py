@@ -108,7 +108,7 @@ def convert_to_items(json_result, mobile_conversion=False, process_tracks_of_pla
     result = {'items': []}
 
     collection = json_result.get('collection', [])
-    for tracknumber, item in enumerate(collection):
+    for track_number, item in enumerate(collection):
         if mobile_conversion:
             # simple conversion to use the common convert_to_item() method
             user = item.get('_embedded', {}).get('user', {})
@@ -129,7 +129,7 @@ def convert_to_items(json_result, mobile_conversion=False, process_tracks_of_pla
         item = convert_to_item(item)
         if item:
             if process_tracks_of_playlist:
-                item['tracknumber'] = tracknumber+1
+                item['tracknumber'] = track_number+1
                 pass
             result['items'].append(item)
             pass

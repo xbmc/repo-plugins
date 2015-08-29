@@ -17,3 +17,6 @@
 - New code by Twister
 - Fixed video playback
 - Added IGN First folder
+2.1.2
+- Fixed duration display
+- Fixed video playback for some videos

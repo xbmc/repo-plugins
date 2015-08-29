@@ -41,6 +41,8 @@ def listVideos(url):
             match=re.compile('<li>(.+?)</li>', re.DOTALL).findall(entry)
             if len(match)>0:
               length=match[0].replace(" mins","")
+              l = length.split(':')
+              length = int(l[0])*60 + int(l[1])
               match=re.compile('<p class="video-description">\n                    <span class="publish-date">(.+?)</span> -(.+?)</p>', re.DOTALL).findall(entry)
               date=match[0][0]
               desc=match[0][1]
@@ -125,7 +127,7 @@ def listSearchResults(url):
 def playVideo(url):
         content = getUrl(url)
         match4 = re.compile("data-video='(.+?)'", re.DOTALL).findall(content)
-        if match4 and '<meta name="twitter:card" content="summary">' not in content:
+        if match4:
             listOfUrls = re.compile('"url":"(.+?)","height":(.+?),"', re.DOTALL).findall(match4[0])
             videoUrl = ""
             for x in range(0, len(listOfUrls)):

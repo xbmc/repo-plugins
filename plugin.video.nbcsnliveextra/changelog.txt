@@ -1,3 +1,6 @@
+v2015.8.21
+- Premium links now play from main window
+
 v2015.8.17
 - Bug fix for mislabeling non-free streams as free
 

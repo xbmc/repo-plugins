@@ -195,11 +195,14 @@ def BUILD_VIDEO_LINK(item):
             addLink(menu_name,url,name,imgurl,FANART,info) 
         elif FREE_ONLY == 'false':                        
             menu_name = '[COLOR='+LIVE+']'+menu_name + '[/COLOR]'
-            addDir(menu_name,url,5,imgurl,FANART,None,True,info)             
+            #addDir(menu_name,url,5,imgurl,FANART,None,True,info)             
+            addPremiumLink(menu_name,url,imgurl,FANART,None,True,info)             
+
     elif my_time < event_start:
         if free:
             menu_name = '[COLOR='+FREE_UPCOMING+']'+menu_name + '[/COLOR]'            
-            addDir(menu_name + ' ' + start_date,'/disabled',999,imgurl,FANART,None,False,info)
+            #addDir(menu_name + ' ' + start_date,'/disabled',999,imgurl,FANART,None,False,info)
+            addPremiumLink(menu_name,url,imgurl,FANART,None,True,info)             
             
         elif FREE_ONLY == 'false':
             menu_name = '[COLOR='+UPCOMING+']'+menu_name + '[/COLOR]'            
@@ -300,8 +303,9 @@ def SIGN_STREAM(stream_url, stream_name, stream_icon):
             media_token = adobe.POST_SHORT_AUTHORIZED(signed_requestor_id,authz)
             stream_url = adobe.TV_SIGN(media_token,resource_id, stream_url)
             
-
-            addLink(stream_name, stream_url, stream_name, stream_icon, FANART) 
+            listitem = xbmcgui.ListItem(path=stream_url)
+            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem)  
+            #addLink(stream_name, stream_url, stream_name, stream_icon, FANART) 
 
 
 def utc_to_local(utc_dt):
@@ -322,6 +326,21 @@ def addLink(name,url,title,iconimage,fanart,info=None):
     if info != None:
         liz.setInfo( type="Video", infoLabels=info) 
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
+    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+    return ok
+
+def addPremiumLink(name,link_url,iconimage,fanart=None,scrape_type=None,isFolder=True,info=None): 
+    params = get_params()      
+    ok=True
+    u=sys.argv[0]+"?url="+urllib.quote_plus(link_url)+"&mode=5"
+    liz=xbmcgui.ListItem(name, iconImage=ICON, thumbnailImage=iconimage)
+    liz.setProperty("IsPlayable", "true")
+    liz.setInfo( type="Video", infoLabels={ "Title": name } )
+    if info != None:
+        liz.setInfo( type="Video", infoLabels=info)        
+
+    liz.setProperty('fanart_image', fanart)
+    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)    
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     return ok
 
@@ -418,4 +437,4 @@ elif mode==5:
 if mode==1:
     xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=False)
 else:
-    xbmcplugin.endOfDirectory(ADDON_HANDLE)
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))

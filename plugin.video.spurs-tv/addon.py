@@ -86,7 +86,7 @@ def get_viewstate(soup):
 def get_media_url(entry_id):
     hls_url = 'hlsvariant://' + HLS_URL_FMT.format(entry_id)
     resolution = plugin.get_setting('resolution')
-    streams = livestreamer.streams(hls_url, sorting_excludes=[">{}".format(resolution)])
+    streams = livestreamer.streams(hls_url, sorting_excludes=[">{0}".format(resolution)])
 
     media_url = streams['best'].url
     log("Playing URL {0}".format(media_url))

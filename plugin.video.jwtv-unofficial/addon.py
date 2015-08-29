@@ -2,7 +2,7 @@
 # Licensed under the Apache License, Version 2.0
 
 import threading
-import urllib,urllib2,urlparse
+import urllib,urllib2,urlparse,base64
 import xbmcplugin,xbmcaddon,xbmcgui,sys
 import simplejson as json
 
@@ -26,6 +26,16 @@ def build_url(query):
 def get_json(url):
 	data = urllib2.urlopen(url).read().decode('utf-8')
 	return json.loads(data)
+
+def b64_encode_object(obj):
+	js = json.dumps(obj)
+	b64 = base64.b64encode(js)
+	return b64
+
+def b64_decode_object(str):
+	js = base64.b64decode(str)
+	obj = json.loads(js)
+	return obj
 
 def build_folders(subcat_ary):
 	isStreaming = mode[0] == 'Streaming'
@@ -51,16 +61,24 @@ def get_video_metadata(file_ary):
 		videoFiles.append({'id':r['guid'],'video':video['progressiveDownloadURL'],'wide_img':wide_img,'sqr_img':sqr_img,'title':r.get('title'),'dur':r.get('duration')})
 	return videoFiles
 
+def build_basic_listitem(file_data):
+	li = xbmcgui.ListItem(file_data['title'])
+	li.setIconImage(file_data['wide_img'])
+	li.setThumbnailImage(file_data['sqr_img'])
+	li.addStreamInfo('video', {'duration':file_data['dur']})
+	li.setProperty('fanart_image', file_data['wide_img'])
+	return li
+
 def build_media_entries(file_ary):
 	for v in get_video_metadata(file_ary):
-		li = xbmcgui.ListItem(v['title'])
-		li.setIconImage(v['wide_img'])
-		li.setThumbnailImage(v['sqr_img'])
-		li.addStreamInfo('video', {'duration':v['dur']})
-		li.setProperty('fanart_image', v['wide_img'])
+		li = build_basic_listitem(v)
 
 		bingeAction = 'XBMC.RunPlugin(' + build_url({'mode':'watch_from_here','from_mode':mode[0],'first':v['id']}) + ')'
-		li.addContextMenuItems([(__language__(30010), bingeAction)], replaceItems=True)
+
+		file_data = b64_encode_object(v)
+		addToPlaylistAction = 'XBMC.RunPlugin(' + build_url({'mode':'add_to_playlist','file_data':file_data}) +')'
+
+		li.addContextMenuItems([(__language__(30010), bingeAction),(__language__(30011), addToPlaylistAction)], replaceItems=True)
 		xbmcplugin.addDirectoryItem(handle=addon_handle, url=v['video'], listitem=li)
 
 def process_top_level():
@@ -152,11 +170,20 @@ def set_language(language):
 	addon.setSetting('language', language)
 	xbmc.executebuiltin('Action(ParentDir)')
 
+def add_to_playlist(file_data):
+	data = b64_decode_object(file_data)
+
+	pl = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+	li = build_basic_listitem(data)
+
+	pl.add(url=data['video'], listitem=li)
+
 mode = args.get('mode', None)
 
 if mode is None: process_top_level()
 elif mode[0] == 'languages': get_languages()
 elif mode[0] == 'set_language': set_language(args.get('language')[0])
 elif mode[0] == 'watch_from_here': process_sub_level(args.get('from_mode')[0], True, args.get('first')[0])
+elif mode[0] == 'add_to_playlist': add_to_playlist(args.get('file_data')[0])
 elif (mode[0].startswith('Streaming') and len(mode[0]) > 9): process_streaming()
 else: process_sub_level(mode[0], False, 0)

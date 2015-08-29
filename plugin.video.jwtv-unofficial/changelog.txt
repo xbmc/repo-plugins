@@ -1,3 +1,7 @@
+v1.8.2
+- Added context menu item for adding videos to the playlist
+- Confirmed Isengard compatibility
+
 v1.8.1
 - Conform to add-on rules for official repository submission.
 - Streaming stations repeat all for infinite playtime!

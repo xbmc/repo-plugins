@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.virginradio.it" name="Virgin Radio Italia" version="1.0.4" provider-name="NeverWise">
+<addon id="plugin.video.virginradio.it" name="Virgin Radio Italia" version="1.0.5" provider-name="NeverWise">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.neverwise" version="1.0.4"/>

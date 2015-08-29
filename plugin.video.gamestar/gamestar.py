@@ -25,38 +25,24 @@ class GamestarWeb(object):
     self.shortName = "GS";
 
     ##setup regular expressions
-    self.imageRegex = "<img src=\".*\" width=\"\\d*\" height=\"\\d*\" alt=\".*\" title=\".*\" />"
-    self.linkRegex =  "/videos/.*?,\\d*?\\.html"
-    self.simpleLinkRegex = "<a href=\""+self.linkRegex+"\" .+?>.+?</a>";
-    self.hrefRegex = "<a.*? href=\""+self.linkRegex+"\">"
-    self.headerRegex = "<strong>.+</strong>\\s*.*\\s*</a>"
-    self.titleRegex = "<a.*?>(.*?)</a>"
-
-    self._regEx_extractVideoThumbnail = re.compile("<div class=\"videoPreview\">\\s*"+self.hrefRegex+"\\s*"+self.imageRegex+"\\s*</a>\\s*<span>\\s*"+self.hrefRegex+"\\s*"+self.headerRegex);
-    self._regEx_extractTargetLink = re.compile(self.linkRegex);
-    self._regEx_extractVideoID = re.compile("\\d*.html");
+    self._regEx_extractVideoID = re.compile("/videos/.*?,(\\d*?)\\.html");
     self._regEx_extractVideoLink = re.compile("http.*(mp4|flv)");
     self._regEx_extractPictureLink = re.compile("(http://|//).*.jpg");
-    self._regEx_extractHeader = re.compile(self.headerRegex);
-    self._regEx_extractSimpleLink = re.compile(self.simpleLinkRegex);
-    self._regEx_extractTitle = re.compile(self.titleRegex);
+    self._regEx_extractTitle = re.compile("<videoname>\\d*?\\.(.*)\\.embed</videoname>");
     ##end setup
     
-    linkRoot = self.rootLink+"index.cfm?pid=1589&ci=";
+    linkRoot = self.rootLink+"videos/";
     imageRoot = "http://images.gamestar.de/images/idgwpgsgp/bdb/";    
 
     ##setup categories
     self.categories = {
       30001:GalleryObject(linkRoot+"latest", imageRoot+"/2018270/b144x81.jpg"),
-      30002:GalleryObject(linkRoot+"17",imageRoot+"2018272/b144x81.jpg"),
-      30003:GalleryObject(linkRoot+"18",imageRoot+"bdb/2018269/b144x81.jpg"),
-      30004:GalleryObject(linkRoot+"20",imageRoot+"2018270/b144x81.jpg"),
-      30005:GalleryObject(linkRoot+"9",imageRoot+"bdb/2016676/b144x81.jpg"),
-      30006:GalleryObject(linkRoot+"22",imageRoot+"2016431/b144x81.jpg"),
-      30007:GalleryObject(linkRoot+"15",imageRoot+"2018271/b144x81.jpg"),
-      30008:GalleryObject(linkRoot+"37",imageRoot+"2121485/b144x81.jpg"),
-      30009:GalleryObject(linkRoot+"32",imageRoot+"2018270/b144x81.jpg"),
-      30010:GalleryObject(linkRoot+"2",imageRoot+"2018274/b144x81.jpg"),
+      30002:GalleryObject(linkRoot+"tests,17/",imageRoot+"2018272/b144x81.jpg"),
+      30003:GalleryObject(linkRoot+"previews,18/",imageRoot+"bdb/2018269/b144x81.jpg"),
+      30004:GalleryObject(linkRoot+"specials,20/",imageRoot+"2018270/b144x81.jpg"),
+      30011:GalleryObject(linkRoot+"trailer,3","http://images.cgames.de/images/idgwpgsgp/bdb/2017073/b144x81.jpg"),
+      30009:GalleryObject(linkRoot+"candyland,102/","http://images.cgames.de/images/idgwpgsgp/bdb/2557236/b144x81.jpg"),
+      30010:GalleryObject(linkRoot+"boxenstop,2",imageRoot+"2018274/b144x81.jpg"),
       }
     ##endregion
     
@@ -72,18 +58,18 @@ class GamestarWeb(object):
       categorie = self.categories[categorie];
       self.gui.log(categorie.url);
       rootDocument = self.loadPage(categorie.url);
-      for videoThumbnail in self._regEx_extractVideoThumbnail.finditer(rootDocument):       
-        videoThumbnail = videoThumbnail.group()
-        videoID = self._regEx_extractVideoID.search(videoThumbnail).group().replace(".html","");
-        
-        header = self._regEx_extractHeader.search(videoThumbnail).group();
-        header = re.sub("(<strong>)|(</strong>)|(</a>)", "", header);
-        header = re.sub("\\s+", " ", header);
-        
+      
+      videoIds = set();
+      for match in self._regEx_extractVideoID.finditer(rootDocument):       
+        videoId = match.group(1);
+        if(videoId not in videoIds):
+          videoIds.add(videoId);
+          
+      for videoId in videoIds:        
         try:
-          videoObjects.append(self.loadVideoPage(header, videoID));
+          videoObjects.append(self.loadVideoPage(videoId));
         except:
-          self.gui.log("something goes wrong while processing "+videoID);
+          self.gui.log("something goes wrong while processing "+videoId);
           self.gui.log("Exception: ");
           traceback.print_exc();
           self.gui.log("Stacktrace: ");
@@ -91,12 +77,15 @@ class GamestarWeb(object):
     return videoObjects;
 
 
-  def loadVideoPage(self, title, videoID):
+  def loadVideoPage(self, videoID):
     self.gui.log(self.rootLink+"/emb/getVideoData.cfm?vid="+videoID);
     configDoc = self.loadPage(self.rootLink+"/emb/getVideoData.cfm?vid="+videoID);
     videoLink = unicode(self._regEx_extractVideoLink.search(configDoc).group());
     videoLink = self.replaceXmlEntities(videoLink);
     thumbnailLink = self._regEx_extractPictureLink.search(configDoc).group();
+    title = self._regEx_extractTitle.search(configDoc).group(1);
+    title = self.transformHtmlCodes(title);
+    
     if(not thumbnailLink.startswith('http://')):
       thumbnailLink = thumbnailLink.replace("//",'http://');
     thumbnailLink = unicode(thumbnailLink);

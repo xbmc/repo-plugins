@@ -14,125 +14,124 @@ class FattoQTV(object):
     if len(self._params) == 0: # Visualizzazione del menu.
 
       # Menu.
-      lis = Util.getHtml('http://tv.ilfattoquotidiano.it', True)
-      if lis != None:
-        lis = lis.find('ul', id='menu-videogallery')
-        lis = lis.findAll('li', id=re.compile('menu-item-[0-9]+'))
-        for li in lis:
-          ul = li.find('ul')
+      response = Util.getHtml('http://tv.ilfattoquotidiano.it', True)
+      menuItems = []
+      for ul in response.findAll('ul', 'nav-list'):
+        for li in ul.findAll('li'):
+          title = Util.normalizeText(li.a.text)
           link = li.a['href']
-          if ul == None and link.find('servizio-pubblico') == -1:
-            title = Util.normalizeText(li.a.text)
-            li = Util.createListItem(title, streamtype = 'video', infolabels = { 'title' : title })
-            xbmcplugin.addDirectoryItem(self._handle, Util.formatUrl({ 'id' : 'c', 'page' : link }), li, True)
+          li = Util.createListItem(title, streamtype = 'video', infolabels = { 'title' : title })
+          menuItems.append(( li, link, title ))
 
-        # Show items.
-        xbmcplugin.endOfDirectory(self._handle)
+      div = response.find('div', 'submenu-categories')
+      for li in div.findAll('li'):
+        link = li.a['href']
+        found = False
+        for item in menuItems:
+          if item[1] == link:
+            found = True
+            break
+        if not found:
+          title = Util.normalizeText(li.a.text)
+          li = Util.createListItem(title, streamtype = 'video', infolabels = { 'title' : title })
+          menuItems.append(( li, link, title ))
+
+      for item in sorted(menuItems, key = lambda item: item[2]):
+        xbmcplugin.addDirectoryItem(self._handle, Util.formatUrl({ 'id' : 'c', 'page' : item[1] }), item[0], True)
+
+      # Show items.
+      xbmcplugin.endOfDirectory(self._handle)
 
     else:
 
       response = Util.getHtml(self._params['page'], True)
       if response != None:
 
-        # Check if exist additional archive.
-        archive = response.find('div', 'go-to-archive')
-        if archive != None:
-          response = Util.getHtml(archive.h1.a['href'], True)
+        # Videos.
+        if self._params['id'] == 'c': # Visualizzazione video di una categoria.
+          videos = response.findAll('section', 'article-preview')
+          for video in videos:
+            divTitle = video.find('div', 'article-wrapper')
+            title = Util.normalizeText(divTitle.h3.a.text)
+            img = None
+            if video.picture.img != None:
+              img = video.picture.img['src']
+            li = Util.createListItem(title, thumbnailImage = img, streamtype = 'video', infolabels = { 'title' : title }, isPlayable = True)
+            xbmcplugin.addDirectoryItem(self._handle, Util.formatUrl({ 'id' : 'v', 'page' : divTitle.h3.a['href'] }), li, False)
 
-        if response != None:
+          # Next page.
+          nextPage = response.find('ul', 'swiper-wrapper jgrid')
+          if nextPage != None:
+            pages = nextPage.findAll('li')
+            index = -1
+            for page in pages:
+              if page.a['class'] == 'active cc':
+                index = pages.index(page) + 1
+                break # Stops "for page in pages:".
+            if index < len(pages):
+              url = Util.formatUrl({ 'id' : 'c', 'page' : pages[index].a['href'] })
+              xbmcplugin.addDirectoryItem(self._handle, url, Util.createItemPage(Util.normalizeText(pages[index].a.text)), True)
 
-          # Videos.
-          if self._params['id'] == 'c': # Visualizzazione video di una categoria.
-            videos = response.findAll('div', 'video-excerpt')
-            for video in videos:
-              title = Util.normalizeText(video.h2.a.text)
-              desc = video.p
-              li = Util.createListItem(title, thumbnailImage = self._normalizeImageUrl(video.img['src']), streamtype = 'video', infolabels = { 'title' : title, 'plot' : Util.normalizeText(desc.text if desc != None else '') }, isPlayable = True)
-              xbmcplugin.addDirectoryItem(self._handle, Util.formatUrl({ 'id' : 'v', 'page' : video.h2.a['href'] }), li, False)
+          # Show items.
+          xbmcplugin.endOfDirectory(self._handle)
 
-            # Next page.
-            nextPage = response.find('span', 'current')
-            if nextPage != None:
-              url = Util.formatUrl({ 'id' : 'c', 'page' : nextPage.nextSibling['href'] })
-              xbmcplugin.addDirectoryItem(self._handle, url, Util.createItemPage(Util.normalizeText(nextPage.nextSibling.text)), True)
+        # Play video.
+        elif self._params['id'] == 'v':
+          title = Util.normalizeText(response.find('meta', { 'name' : 'EdTitle' })['content'])
+          img = response.find('meta', { 'name' : 'EdImage' })['content']
+          descr = response.find('div', 'tv-desc-body').text
 
-            # Show items.
-            xbmcplugin.endOfDirectory(self._handle)
+          # Video del fatto.
+          videoId = response.find('param', { 'name' : '@videoPlayer' })
+          if videoId != None:
+            playerID = 2274739660001
+            publisherID = 1328010481001
+            const = 'ef59d16acbb13614346264dfe58844284718fb7b'
+            conn = httplib.HTTPConnection('c.brightcove.com')
+            envelope = remoting.Envelope(amfVersion=3)
+            envelope.bodies.append(('/1', remoting.Request(target='com.brightcove.player.runtime.PlayerMediaFacade.findMediaById', body=[const, playerID, videoId['value'], publisherID], envelope=envelope)))
+            conn.request('POST', '/services/messagebroker/amf?playerId={0}'.format(str(playerID)), str(remoting.encode(envelope).read()), {'content-type': 'application/x-amf'})
+            response = conn.getresponse().read()
+            response = remoting.decode(response).bodies[0][1].body
 
-          # Play video.
-          elif self._params['id'] == 'v':
-            title = Util.normalizeText(response.find('h1', 'entry-title full-title').text)
-            img = response.find('link', rel='image_src')['href']
-            content = response.find('span', 'content')
-            descr = None
-            if content != None:
-              descr = content.renderContents()
-              if len(descr) == 0:
-                descr = content.nextSibling.renderContents()
-              if len(descr) > 0:
-                descr = Util.normalizeText(Util.trimTags(descr))
+            if response != None:
+              item = sorted(response['renditions'], key=lambda item: item['encodingRate'], reverse=True)[0]
+              streamUrl = item['defaultURL']
 
-            # Video del fatto.
-            videoId = response.find('param', { 'name' : '@videoPlayer' })
-            if videoId != None:
-              playerID = 2274739660001
-              publisherID = 1328010481001
-              const = 'ef59d16acbb13614346264dfe58844284718fb7b'
-              conn = httplib.HTTPConnection('c.brightcove.com')
-              envelope = remoting.Envelope(amfVersion=3)
-              envelope.bodies.append(('/1', remoting.Request(target='com.brightcove.player.runtime.PlayerMediaFacade.findMediaById', body=[const, playerID, videoId['value'], publisherID], envelope=envelope)))
-              conn.request('POST', '/services/messagebroker/amf?playerId={0}'.format(str(playerID)), str(remoting.encode(envelope).read()), {'content-type': 'application/x-amf'})
-              response = conn.getresponse().read()
-              response = remoting.decode(response).bodies[0][1].body
+              # Divido url da playpath.
+              index = streamUrl.find('&')
+              url = streamUrl[:index]
+              playpath = streamUrl[index + 1:]
 
-              if response != None:
-                item = sorted(response['renditions'], key=lambda item: item['encodingRate'], reverse=True)[0]
-                streamUrl = item['defaultURL']
+              # Divido url da app.
+              index = url.find('/', 7)
+              app = url[index + 1:]
+              if app[-1:] == '/':
+                app = app[:-1]
 
-                # Divido url da playpath.
-                index = streamUrl.find('&')
-                url = streamUrl[:index]
-                playpath = streamUrl[index + 1:]
-
-                # Divido url da app.
-                index = url.find('/', 7)
-                app = url[index + 1:]
-                if app[-1:] == '/':
-                  app = app[:-1]
-
-                Util.playStream(self._handle, title, img, '{0}:1935 app={1} playpath={2}'.format(url[:index], app, playpath), 'video', { 'title' : title, 'plot' : descr })
-              else:
-                Util.showVideoNotAvailableDialog()
-
-            # Altri video.
+              Util.playStream(self._handle, title, img, '{0}:1935 app={1} playpath={2}'.format(url[:index], app, playpath), 'video', { 'title' : title, 'plot' : descr })
             else:
-              responseString = response.renderContents()
+              Util.showVideoNotAvailableDialog()
 
-              # Video di youtube.
-              if responseString.find('www.youtube.com/embed') > -1:
-                videoId = re.compile('http://www.youtube.com/embed/(.+?)\?').findall(response.find('iframe')['src'])
-                if len(videoId) > 0:
-                  Util.playStream(self._handle, title, img, 'plugin://plugin.video.youtube/play/?video_id={0}'.format(videoId[0]), 'video', { 'title' : title, 'plot' : descr })
+          # Altri video.
+          else:
+            responseString = response.renderContents()
 
-              # Video servizio pubblico.
-              elif responseString.find('meride-video-container') > -1:
-                Util.playStream(self._handle, title, img, 'plugin://plugin.video.serviziopubblico/?id=e&page={0}&title={1}&img={2}&descr={3}'.format(self._params['page'], self._stripNonAscii(title), img, self._stripNonAscii(descr)), 'video', { 'title' : title, 'plot' : descr })
+            # Video di youtube.
+            if responseString.find('www.youtube.com/embed') > -1:
+              videoId = re.compile('http://www.youtube.com/embed/(.+?)\?').findall(response.find('iframe')['src'])
+              if len(videoId) > 0:
+                Util.playStream(self._handle, title, img, 'plugin://plugin.video.youtube/play/?video_id={0}'.format(videoId[0]), 'video', { 'title' : title, 'plot' : descr })
 
-              # Video non gestito.
-              else:
-                Util.showVideoNotAvailableDialog()
+            # Video servizio pubblico.
+            elif responseString.find('meride-video-container') > -1:
+              params = { 'id' : 'e', 'page' : self._params['page'], 'title' : title, 'img' : img, 'descr' : descr }
+              url = Util.formatUrl(params, 'plugin://plugin.video.serviziopubblico/')
+              Util.playStream(self._handle, title, img, url, 'video', { 'title' : title, 'plot' : descr })
 
-
-  def _normalizeImageUrl(self, img):
-    index = img.find('?')
-    if index > 0:
-      img = img[:index]
-    return img
-
-
-  def _stripNonAscii(self, string):
-    stripped = (c for c in string if 0 < ord(c) < 127)
-    return ''.join(stripped)
+            # Video non gestito.
+            else:
+              Util.showVideoNotAvailableDialog()
 
 
 # Entry point.

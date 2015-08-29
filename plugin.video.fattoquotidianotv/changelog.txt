@@ -1,3 +1,6 @@
+[B]Version 1.0.2[/B]
+- Updated code to the new site.
+
 [B]Version 1.0.1[/B]
 - Small bugfix/improvements.
 

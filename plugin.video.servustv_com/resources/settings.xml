@@ -1,0 +1,8 @@
+<settings>
+   <setting id="quality" type="enum" label="30105" values="240p|480p|720p" default="2"/>
+   <setting id="qualityLive" type="enum" label="30106" values="LOW|HIGH" default="1"/>
+   <setting id="siteVersion" type="enum" label="30104" values="DE|AT" default="0"/>
+   <setting id="useThumbAsFanart" type="bool" label="30101" default="true"/>
+   <setting id="forceView" type="bool" label="30102" default="true"/>
+   <setting id="viewID" type="number" label="30103" enable="eq(-1,true)" default="51"/>
+</settings>

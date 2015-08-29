@@ -1,0 +1,9 @@
+1.0.0
+- Initial release
+1.0.2
+- CHanged to Working Structur
+- Live TV now WOrking
+1.0.3
+- New Version Number
+1.0.4
+- Wrong file

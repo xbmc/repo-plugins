@@ -1,0 +1,2 @@
+npptpsetup --create my_tunnel --server at.vpntraffic.com  --username AO9404 --password 8DU4UK --encrypt
+pon my_tunnel

@@ -1,7 +1,7 @@
 plugin.video.nfl-teams
 =======================
 
-XBMC addon showing videos from NFL teams
+Kodi (former XBMC) addon showing videos from NFL teams
 
 
 Other NFL related addons

@@ -7,6 +7,7 @@ class Team(resources.lib.nflcs.NFLCS):
     _categories = [
         "Afternoon Wrap",
         "Coach Executive",
+        "Fantasy",
         "Game Highlights",
         "Gameday",
         "Morning Report",

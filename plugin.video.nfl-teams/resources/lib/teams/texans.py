@@ -8,7 +8,7 @@ class Team(resources.lib.nflcs.NFLCS):
     _categories = [
         "Cheerleaders",
         "Community",
-        # "Español", # TODO: Does currently not return any videos. Most likely an encoding issue
+        # "Español",  # Does not return any videos, neither in Kodi or on the website
         "Football",
         "Friday Facebook Mailbag",
         "Gameday",
@@ -19,9 +19,9 @@ class Team(resources.lib.nflcs.NFLCS):
         "Season Highlights",
         "Special Segments",
         "Texans Huddle",
-        "Texans 'On the Clock'",
         "Texans TV",
         "TORO",
+        "Training Camp presented by PC",
     ]
 
     def __init__(self, parameters):

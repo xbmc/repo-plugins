@@ -8,12 +8,17 @@ class Team(resources.lib.nflcs.NFLCS):
         "Broncos TV",
         "Cheerleaders",
         "Community",
-        "Events",
-        "Locker Room",
+        "Elway Exclusive",
+        "Highlights",
+        "Historical Vault",
+        "Interviews",
         "Mic'd Up",
         "NFL Network",
+        "Postgame Locker Room",
+        "Postgame Press Conferences",
         "Press Conferences",
-        "Pandora Unforgettable Moments",
+        "Stadium Experiences",
+        "Victory Speech",
     ]
 
     def __init__(self, parameters):

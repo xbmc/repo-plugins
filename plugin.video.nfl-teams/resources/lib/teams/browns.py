@@ -14,6 +14,9 @@ class Team(resources.lib.nflcs.NFLCS):
         "Video - NFL Network",
         "Video - Off the Field",
         "Video - Press Conferences",
+        "Video - Pro Bowl",
+        "Video - Senior Bowl",
+        "Video - Training Camp",
     ]
 
     def __init__(self, parameters):

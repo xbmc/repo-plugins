@@ -13,6 +13,8 @@ class Team(resources.lib.nflcs.NFLCS):
         "Espanol",
         "Features",
         "Gameday",
+        "Highlights",
+        "In a Minute",
         "Interviews",
         "Kid Zone",
         "News Conferences",

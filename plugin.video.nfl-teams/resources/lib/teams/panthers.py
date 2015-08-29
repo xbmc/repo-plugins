@@ -7,6 +7,7 @@ class Team(resources.lib.nflcs.NFLCS):
     _categories = [
         "Coach Interviews",
         "Community",
+        "Mailbag",
         "NFL Network",
         "Panthers Gameday",
         "Panthers Huddle",

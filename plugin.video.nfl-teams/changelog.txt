@@ -1,3 +1,7 @@
+[B]Version 1.2.0 - 2015-08-27[/B]
+- Added support for new metadata layout used by four teams so far.
+- Updated categories for all teams.
+
 [B]Version 1.1.3 - 2014-10-22[/B]
 - Big cleanup of code.
 - Fixed bug of video lists not loading in case of missing fields for some videos.

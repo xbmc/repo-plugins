@@ -10,6 +10,7 @@ class Team(resources.lib.nflcs.NFLCS):
         "Comcast SportsNet",
         "Community",
         "Game Day",
+        "Health and Wellness",
         "NFL Films",
         "Press Conferences",
         "Redskins News",

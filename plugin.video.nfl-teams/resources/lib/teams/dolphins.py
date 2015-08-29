@@ -7,7 +7,6 @@ class Team(resources.lib.nflcs.NFLCS):
     _categories = [
         "Camp Dolphins",
         "Community",
-        "Draft",
         "En Espanol",
         "FinsidersTV",
         "Game Day",

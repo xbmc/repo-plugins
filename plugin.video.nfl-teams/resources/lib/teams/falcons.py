@@ -6,19 +6,22 @@ class Team(resources.lib.nflcs.NFLCS):
     _cdaweb_url = "http://www.atlantafalcons.com/cda-web/"
     _categories = [
         "Video - Cheerleaders",
+        "Video - Coach's Corner",
         "Video - Community",
         "Video - D-Block",
-        "Video - Game Highlights",
-        "Video - Game Week",
+        "Video - Draft",
+        "Video - FalconCast",
+        "Video - FalconsLIVE",
+        "Video - Features",
         "Video - Gameday",
-        "Video - NFL Draft",
+        "Video - Highlights",
+        "Video - History",
+        "Video - Interviews & Press Conferences",
+        "Video - New Stadium"
         "Video - NFL Network",
-        "Video - Offseason",
-        "Video - Player Shows",
         "Video - Playoffs",
         "Video - Quick Hits",
         "Video - Training Camp",
-        "Video - Vantage Point",
     ]
 
     def __init__(self, parameters):

@@ -5,6 +5,7 @@ class Team(resources.lib.nflcs.NFLCS):
     _short = "bengals"
     _cdaweb_url = "http://www.bengals.com/cda-web/"
     _categories = [
+        "Audio Conference Calls",
         "Bengals Breakdown",
         "Bengals Weekly",
         "Bengals.com Features",

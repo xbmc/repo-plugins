@@ -6,20 +6,20 @@ class Team(resources.lib.nflcs.NFLCS):
     _cdaweb_url = "http://www.chicagobears.com/cda-web/"
     _categories = [
         "Bear Down of the Week",
-        "Bear Trax",
         "Bears Buzz",
-        "Draft Central 2014",
+        "Bears InSight",
+        "Bears Roundtable",
+        "Draft",
         "Features",
         "Game Preview",
         "Highlights",
         "Inside The Bears",
         "Keys to the Game",
         "NFL Network",
-        "Offseason",
         "Press Conferences",
+        "Sideline Soundtrack",
         "Sounds of the Game",
         "Thayer's Playbook",
-        "Training Camp",
     ]
 
     def __init__(self, parameters):

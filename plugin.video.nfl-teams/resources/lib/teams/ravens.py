@@ -10,16 +10,13 @@ class Team(resources.lib.nflcs.NFLCS):
         "Community",
         "CSN",
         "Gameday",
-        "Mailbag",
+        "LIVE",
         "NFL Network",
+        "Poe",
         "Press Conferences",
-        "Pump-Up Takeovers",
-        "Rave TV - 1 Winning Drive",
-        "Rave TV - Ravens One-on-One",
-        "Rave TV - Ravens Report",
-        "Ray Lewis",
-        "Super Bowl XLVII",
-        "Training Camp",
+        "Ravens Productions - Ravens Report",
+        "Ravens Productions - Unscripted",
+        "Ravens Productions - Wired",
     ]
 
     def __init__(self, parameters):

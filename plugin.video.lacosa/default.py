@@ -13,15 +13,15 @@ class LaCosa(object):
     if len(self._params) == 0: # Visualizzazione del menu.
 
       # Diretta.
-      live = self._getLaCosaResponse('')
-      if live != None:
-        phpPage = live.find('div', 'box_bottom').script['src']
-        img = live.find('img', 'logo')['src']
-        live = Util.getHtml(phpPage).renderContents()
-        if live != None:
-          url = '{0}.m3u8'.format(re.compile('file: "(.+?)\.m3u8"').findall(live)[0])
-          li = Util.createListItem(Util.getTranslation(30000), thumbnailImage = img, streamtype = 'video', infolabels = { 'title' : Util._addonName }, isPlayable = True) # Diretta.
-          xbmcplugin.addDirectoryItem(self._handle, url, li, False)
+      #live = self._getLaCosaResponse('')
+      #if live != None:
+      #  phpPage = live.find('div', 'box_bottom').script['src']
+      #  img = live.find('img', 'logo')['src']
+      #  live = Util.getHtml(phpPage).renderContents()
+      #  if live != None:
+      #    url = '{0}.m3u8'.format(re.compile('file: "(.+?)\.m3u8"').findall(live)[0])
+      #    li = Util.createListItem(Util.getTranslation(30000), thumbnailImage = img, streamtype = 'video', infolabels = { 'title' : Util._addonName }, isPlayable = True) # Diretta.
+      #    xbmcplugin.addDirectoryItem(self._handle, url, li, False)
 
       # Shows.
       shows = self._getLaCosaResponse('/rubriche')
@@ -32,15 +32,17 @@ class LaCosa(object):
           li = Util.createListItem(title, thumbnailImage = show.img['src'], streamtype = 'video', infolabels = { 'title' : title, 'plot' : Util.normalizeText(show.p.text) })
           xbmcplugin.addDirectoryItem(self._handle, Util.formatUrl({ 'id' : 's', 'page' : show.a['href'] }), li, True)
 
-      if (live == None or not live) and (shows == None or not shows): # Se sono vuoti oppure liste vuote.
-        Util.showConnectionErrorDialog() # Errore connessione internet!
-      elif live == None or not live:
-        xbmcgui.Dialog().ok(Util._addonName, Util.getTranslation(30001)) # Errore recupero stream diretta.
-      elif shows == None or not shows:
+      #if (live == None or not live) and (shows == None or not shows): # Se sono vuoti oppure liste vuote.
+      #  Util.showConnectionErrorDialog() # Errore connessione internet!
+      #elif live == None or not live:
+      #  xbmcgui.Dialog().ok(Util._addonName, Util.getTranslation(30001)) # Errore recupero stream diretta.
+      #el
+      if shows == None or not shows:
         xbmcgui.Dialog().ok(Util._addonName, Util.getTranslation(30002)) # Errore recupero shows.
 
       # Show items.
-      if live != None or shows != None:
+      #if live != None or shows != None:
+      if shows != None:
         xbmcplugin.endOfDirectory(self._handle)
 
     else:
@@ -75,7 +77,7 @@ class LaCosa(object):
           title = Util.normalizeText(response.find('meta', { 'property' : 'og:title' })['content'])
           img = response.find('meta', { 'property' : 'og:image' })['content']
           descr = Util.normalizeText(response.find('meta', { 'property' : 'og:description' })['content'])
-          streams = re.compile("file: '(.+?)'").findall(response.renderContents())
+          streams = re.compile("sources: \[\{file: '(.+?)'").findall(response.renderContents())
           try:
             Util.playStream(self._handle, title, img, streams[0], 'video', { 'title' : title, 'plot' : descr })
           except:

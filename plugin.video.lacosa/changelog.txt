@@ -1,3 +1,7 @@
+[B]Version 1.0.6[/B]
+- Removed live, no more provided on the site.
+- Small bugfix.
+
 [B]Version 1.0.5[/B]
 - Small bugfix/improvements.
 

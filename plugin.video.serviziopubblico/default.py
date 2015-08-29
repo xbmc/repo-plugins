@@ -68,10 +68,11 @@ class ServizioPubblico(object):
           img = response.find('meta', { 'property' : 'og:image' })['content']
           tide = response.find('h3', 'entry-title')
           title = Util.normalizeText(tide.text)
-          descr = Util.normalizeText(Util.trimTags(tide.parent.p.renderContents()))
+          descr = Util.normalizeText(Util.trimTags(tide.parent.text))
 
           responseString = response.renderContents()
 
+          # Servizio pubblico.
           if responseString.find('meride-video-container') > -1:
             self._playVideo(response, title, img, descr)
 
@@ -79,7 +80,8 @@ class ServizioPubblico(object):
           elif responseString.find('<object id="flashObj"') > -1:
             urlParam = response.find('param', { 'name' : 'flashVars' })['value']
             urlParam = re.search("linkBaseURL=(.+?)&", urlParam).group(1).replace('%3A', ':').replace('%2F', '/')
-            Util.playStream(self._handle, title, img, 'plugin://plugin.video.fattoquotidianotv/?id=v&page={0}'.format(urlParam), 'video', { 'title' : title, 'plot' : descr })
+            url = Util.formatUrl({ 'id' : 'v', 'page' : urlParam }, 'plugin://plugin.video.fattoquotidianotv/')
+            Util.playStream(self._handle, title, img, url, 'video', { 'title' : title, 'plot' : descr })
 
           else:
             Util.showVideoNotAvailableDialog()

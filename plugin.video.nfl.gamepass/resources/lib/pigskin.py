@@ -1,11 +1,12 @@
 """
-A Kodi-agnostic library for NFL Game Pass and Game Rewind support.
+A Kodi-agnostic library for NFL Game Pass
 """
 import codecs
 import cookielib
 import hashlib
 import random
 import m3u8
+import sys
 import urllib
 from traceback import format_exc
 from uuid import getnode as get_mac
@@ -19,31 +20,31 @@ class pigskin(object):
     def __init__(self, subscription, proxy_config, cookie_file, debug=False):
         self.subscription = subscription
         self.debug = debug
+        self.base_url = 'https://gamepass.nfl.com/nflgp'
+        self.servlets_url = 'http://gamepass.nfl.com/nflgp/servlets'
         self.non_seasonal_shows = {'Super Bowl Archives': '117'}
         self.seasonal_shows = {
+            'A Football Life': {'2015': '249', '2014': '218', '2013': '186', '2012': '154'},
             'NFL Gameday': {'2015': '252', '2014': '212', '2013': '179', '2012': '146'},
+            'Hard Knocks': {'2015': '251', '2014': '220', '2013': '223'},
+            'Sound FX': {'2015': '256', '2014': '215', '2013': '183', '2012': '150'},
             'Top 100 Players': {'2015': '257', '2014': '217', '2013': '185', '2012': '153'}
         }
         self.boxscore_url = 'http://neulionms-a.akamaihd.net/fs/nfl/nfl/edl/nflgr'
 
-        if subscription == 'gamepass':
-            self.base_url = 'https://gamepass.nfl.com/nflgp'
-            self.servlets_url = 'http://gamepass.nfl.com/nflgp/servlets'
+        if subscription == 'international':
             self.seasonal_shows.update({
                 'Playbook': {'2015': '255', '2014': '213', '2013': '180', '2012': '147'},
                 'NFL Total Access': {'2015': '254', '2014': '214', '2013': '181', '2012': '148'},
                 'NFL RedZone Archives': {'2015': '248', '2014': '221', '2013': '182', '2012': '149'},
-                'Sound FX': {'2015': '256', '2014': '215', '2013': '183', '2012': '150'},
                 'Coaches Show': {'2014': '216', '2013': '184', '2012': '151'},
-                'A Football Life': {'2015': '249', '2014': '218', '2013': '186', '2012': '154'},
                 'NFL Films Presents': {'2014': '219', '2013': '187'},
-                'Hard Knocks': {'2015': '251', '2014': '220', '2013': '223'},
                 'Hall of Fame': {'2015': '253', '2014': '222'}
             })
-        elif subscription == 'gamerewind':
-            self.base_url = 'https://gamerewind.nfl.com/nflgr'
-            self.servlets_url = 'http://gamerewind.nfl.com/nflgr/servlets'
-
+        elif subscription == 'domestic':
+            self.seasonal_shows.update({
+                'America\'s Game': {}
+            })
         else:
             raise ValueError('"%s" is not a supported subscription.' % subscription)
 
@@ -61,6 +62,10 @@ class pigskin(object):
         except IOError:
             pass
         self.http_session.cookies = self.cookie_jar
+
+        if self.debug:
+            self.log('Debugging enabled.')
+            self.log('Python Version: %s' % sys.version)
 
     class LoginFailure(Exception):
         def __init__(self, value):
@@ -144,18 +149,18 @@ class pigskin(object):
         sc_data = self.make_request(url=url, method='post', payload=post_data)
 
         if '</userName>' not in sc_data:
-            self.log('No user name detected.')
+            self.log('No user name detected in Game Pass response.')
             return False
         elif '</subscription>' not in sc_data:
-            self.log('No subscription detected.')
+            self.log('No subscription detected in Game Pass response.')
             return False
         else:
-            self.log('Subscription and user name detected.')
+            self.log('Subscription and user name detected in Game Pass response.')
             return True
 
     def gen_plid(self):
         """Return a "unique" MD5 hash. Getting the video path requires a plid,
-        which looks like an and always changes. Reusing a plid does not work,
+        which looks like MD5 and always changes. Reusing a plid does not work,
         so our guess is that it's a id for each instance of the player.
         """
         rand = random.getrandbits(10)
@@ -220,8 +225,6 @@ class pigskin(object):
         else:
             post_data = {'id': video_id, 'type': stream_type, 'nt': '1'}
 
-        # I hate lying with User-Agent. Points to anyone who can get all the
-        # streams we need without lying.
         headers = {'User-Agent': 'iPad'}
         m3u8_data = self.make_request(url=url, method='post', payload=post_data, headers=headers)
         m3u8_dict = xmltodict.parse(m3u8_data)['result']
@@ -229,8 +232,8 @@ class pigskin(object):
 
         m3u8_url = m3u8_dict['path'].replace('_ipad', '')
         m3u8_param = m3u8_url.split('?', 1)[-1]
-        # Please don't add User-Agent here unless you are /sure/ it is needed
-        m3u8_header = {'Cookie': 'nlqptid=' + m3u8_param, 'Accept-encoding': 'identity', 'Connection': 'keep-alive'}
+        # I hate lying with User-Agent. Points to anyone who can make this work without lying.
+        m3u8_header = {'Cookie': 'nlqptid=' + m3u8_param, 'User-Agent': 'Safari/537.36 Mozilla/5.0 AppleWebKit/537.36 Chrome/31.0.1650.57', 'Accept-encoding': 'identity, gzip, deflate', 'Connection': 'keep-alive'}
 
         m3u8_obj = m3u8.load(m3u8_url)
         if m3u8_obj.is_variant:  # if this m3u8 contains links to other m3u8s
@@ -339,21 +342,20 @@ class pigskin(object):
 
         return games
 
-    # Handles necessary steps and checks to login to Game Pass/Rewind
     def login(self, username=None, password=None):
-        """Complete login process for Game Pass/Rewind. Errors (auth issues,
-        blackout, etc) are raised as LoginFailure.
+        """Complete login process for Game Pass. Errors (auth issues, blackout,
+        etc) are raised as LoginFailure.
         """
         if self.check_for_subscription():
-            self.log('Already logged into %s' % self.subscription)
+            self.log('Already logged into Game Pass %s' % self.subscription)
         else:
             if username and password:
                 self.log('Not (yet) logged into %s' % self.subscription)
                 self.login_to_account(username, password)
                 if not self.check_for_subscription():
                     raise self.LoginFailure('%s login failed' % self.subscription)
-                elif self.subscription == 'gamerewind' and self.service_blackout():
-                    raise self.LoginFailure('Game Rewind Blackout')
+                elif self.subscription == 'domestic' and self.service_blackout():
+                    raise self.LoginFailure('Game Pass Domestic Blackout')
             else:
                 # might need sans-login check here for Game Pass, though as of
                 # 2014, there /may/ no longer be any sans-login regions.
@@ -361,8 +363,8 @@ class pigskin(object):
                 raise self.LoginFailure('No username and password supplied.')
 
     def login_to_account(self, username, password):
-        """Blindly authenticate to Game Pass/Rewind. Use
-        check_for_subscription() to determine success.
+        """Blindly authenticate to Game Pass. Use check_for_subscription() to
+        determine success.
         """
         url = self.base_url + '/secure/nfllogin'
         post_data = {
@@ -425,9 +427,9 @@ class pigskin(object):
             return False
 
     def service_blackout(self):
-        """Return whether Game Rewind is blacked out."""
+        """Return whether Game Pass is blacked out."""
         url = self.base_url + '/secure/schedule'
-        blackout_message = ('Due to broadcast restrictions, the NFL Game Rewind service is currently unavailable.'
+        blackout_message = ('Due to broadcast restrictions, NFL Game Pass Domestic is currently unavailable.'
                             ' Please check back later.')
         service_data = self.make_request(url=url, method='get')
 

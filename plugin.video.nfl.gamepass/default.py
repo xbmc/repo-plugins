@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-A Kodi addon/skin for NFL Game Pass and Game Rewind.
+A Kodi addon/skin for NFL Game Pass
 """
 import calendar
 from datetime import datetime
@@ -25,16 +25,16 @@ LOGGING_PREFIX = '[%s-%s]' % (addon.getAddonInfo('id'), addon.getAddonInfo('vers
 if not xbmcvfs.exists(ADDON_PROFILE):
     xbmcvfs.mkdir(ADDON_PROFILE)
 
-if addon.getSetting('subscription') == '0':  # Game Pass
+if addon.getSetting('subscription') == '0':  # Game Pass International
     cookie_file = os.path.join(ADDON_PROFILE, 'gp_cookie_file')
     username = addon.getSetting('email')
     password = addon.getSetting('password')
-    sub_name = 'gamepass'
-else:  # Game Rewind
+    sub_name = 'international'
+else:  # Game Pass Domestic
     cookie_file = os.path.join(ADDON_PROFILE, 'gr_cookie_file')
     username = addon.getSetting('gr_email')
     password = addon.getSetting('gr_password')
-    sub_name = 'gamerewind'
+    sub_name = 'domestic'
 if addon.getSetting('debug') == 'false':
     debug = False
 else:
@@ -93,8 +93,8 @@ class GamepassGUI(xbmcgui.WindowXML):
         self.games_list = self.window.getControl(230)
         self.live_list = self.window.getControl(240)
 
-        if gpr.subscription == 'gamepass':
-            self.window.setProperty('gamepass', 'true')
+        if gpr.subscription == 'domestic':
+            self.window.setProperty('domestic', 'true')
 
         if self.list_refill:
             self.season_list.reset()
@@ -399,7 +399,7 @@ class GamepassGUI(xbmcgui.WindowXML):
                 self.clicked_season = -1
 
                 if controlId in [110, 120]:
-                    self.main_selection = 'GamePass/Rewind'
+                    self.main_selection = 'GamePass'
                     self.window.setProperty('NW_clicked', 'false')
                     self.window.setProperty('GP_clicked', 'true')
 
@@ -414,7 +414,7 @@ class GamepassGUI(xbmcgui.WindowXML):
                     self.main_selection = 'NFL Network'
                     self.window.setProperty('NW_clicked', 'true')
                     self.window.setProperty('GP_clicked', 'false')
-                    if gpr.subscription == 'gamepass':
+                    if gpr.subscription == 'international':
                         listitem = xbmcgui.ListItem('NFL Network - Live', 'NFL Network - Live')
                         self.live_items.append(listitem)
                         if gpr.redzone_on_air():
@@ -427,7 +427,7 @@ class GamepassGUI(xbmcgui.WindowXML):
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 return
 
-            if self.main_selection == 'GamePass/Rewind':
+            if self.main_selection == 'GamePass':
                 if controlId == 210:  # season is clicked
                     self.init('season')
                     self.selected_season = self.season_list.getSelectedItem().getLabel()
@@ -558,8 +558,8 @@ if __name__ == "__main__":
         gpr.login(username, password)
     except gpr.LoginFailure as error:
         dialog = xbmcgui.Dialog()
-        if error.value == 'Game Rewind Blackout':
-            addon_log('Rewind is in blackout.')
+        if error.value == 'Game Pass Domestic Blackout':
+            addon_log('Game Pass Domestic is in blackout.')
             dialog.ok(language(30021),
                       language(30022))
         else:

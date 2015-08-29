@@ -1,3 +1,14 @@
+2015.08.27 v0.8.0 -- Julius Peppers Edition
++ Fix regression; can now watch streams for more than ~20 minutes on all platforms
++ Replace Game Rewind with Game Pass Domestic
++   Preliminary Support (please report any bugs)
++ Renamed Game Pass to Game Pass International
++ New Logos for Game Pass Domestic and International (eriksoderblom)
++ Bug fix: Games after 2015 preseason Week 1 wouldn't play (kaileu)
++ Bump required version of Requests to 2.7.0
++ Small improvements to debugging
++ Code cleanup
+
 2015.08.17 v0.7.4 -- Pete Carroll Edition
 + Revert skinutils font hack
 + New GamePass-only icon (eriksoderblom)

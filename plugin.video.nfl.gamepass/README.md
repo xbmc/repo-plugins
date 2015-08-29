@@ -1,11 +1,10 @@
-# NFL Game Pass/Rewind Kodi Plugin #
-**version 0.7.4 — Pete Carroll Edition**
+# NFL Game Pass Kodi Plugin #
+**version 0.8.0 — Julius Peppers Edition**
 
-Before reading any further, please understand that while this addon does
-work, not all features are supported (or fully tested) and it should be
+Before reading any further, please understand that while this addon does work,
+not all features are supported (or fully tested) and it should be forever
 regarded as a beta release. It may crash, spay your puppy, and/or cause your
-oven to not heat to 400° F properly. The addon is under development, and needs
-a whole lot of love.
+oven to not heat to 400° F properly.
 
 If you're interested in helping out, just drop us an email or send a pull
 request. Patches and (constructive) input are always welcome.
@@ -15,25 +14,30 @@ request. Patches and (constructive) input are always welcome.
 This addon requires Kodi Helix or later. XBMC Gotham and earlier are no longer
 supported due to upstream changes in the skinning system.
 
-Now that this addon is part of the official Kodi repository, all dependencies
-are installed automatically. However, if you're installing straight from
-source, make sure the following two dependencies are installed:
- * xmltodict (http://mirrors.kodi.tv/addons/frodo/script.module.xmltodict/)
- * Requests 2.x (http://mirrors.kodi.tv/addons/frodo/script.module.requests/)
+This addon is part of the official Kodi repository, thus all dependencies are
+installed automatically. However, if you're installing straight from source,
+make sure the following two dependencies are installed:
+ * xmltodict (http://mirrors.kodi.tv/addons/gotham/script.module.xmltodict/)
+ * Requests 2.x (http://mirrors.kodi.tv/addons/gotham/script.module.requests/)
 
 ## What is NFL Game Pass? ##
 
-NFL Game Pass is website that allows those of us outside of the US (or with IPs
-outside of the US ;-) to watch NFL games. Archives of old games stretch back to
-2009, coaches film (22 man view) is available, as is audio from each team's
-radio network. Overall, it is a sweet service offered by the NFL for those of
-us who must have our American Football fix.
+NFL Game Pass is website that allows those with subscriptions to watch NFL
+games. Archives of old games stretch back to 2009, coaches film (22 man view) is
+available, as is audio from each team's radio network. Overall, it is a sweet
+service offered by the NFL for those of us who must have our American Football
+fix.
 
-## What is NFL Game Rewind? ##
+## What is Game Pass Domestic? ##
 
-NFL Game Rewind is the USA version of Game Pass, but the service is blacked out
-during live games, and doesn't have access to NFL Network - Live, many of the
-archived shows, etc.
+NFL Game Pass Domestic is the USA version of Game Pass, but the service is
+blacked out during live games. Previously it lacked other features, but with the
+recent revamping (mid-2015) of their service, we have yet to find a side-by-side
+comparison of the two services. Information from Game Pass Domestic users would
+be most appreciated.
+
+As of mid-August 2015, we do not yet have complete support for Game Pass
+Domestic, but work in ongoing and should be stabilizing soon.
 
 ## Why write a plugin for Kodi? ##
 
@@ -59,13 +63,13 @@ By now, most core features are supported.
  * NFL RedZone - Live
  * Sound FX
  * Super Bowl Archives
+ * Top 100 Players
  * NFL Total Access
 
 Currently unsupported features:
  * Archived games prior to 2011
  * Alternate team audio
  * Coaches Show
- * Top 100 Players
 
 ## Release names ##
 
@@ -78,4 +82,4 @@ flattery, etc), and we'll gladly name a future release after them.
 A rough roadmap follows:
 
 * Continue work towards feature completeness
-* Stabilize Game Rewind support
+* Stabilize Game Pass Domestic support

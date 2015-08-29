@@ -29,30 +29,30 @@
               <left>140</left>
               <width>1000</width>
               <height>30</height>
-              <defaultcontrol condition="IsEmpty(Window.Property(gamepass))">120</defaultcontrol>
               <defaultcontrol>110</defaultcontrol>
               <control type="button" id="110">
-                  <description>Gamepass button</description>
+                  <description>International Gamepass button</description>
+                  <visible>IsEmpty(Window.Property(domestic))</visible>
                   <left>0</left>
                   <width>375</width>
                   <height>56</height>
                   <ondown>210</ondown>
                   <onleft>90</onleft>
-                  <onright>120</onright>
-                  <texturefocus>GamePass/gamepass_focus.png</texturefocus>
-                  <texturenofocus>GamePass/gamepass_bg.png</texturenofocus>
-                  <visible>!IsEmpty(Window.Property(gamepass))</visible>
+                  <onright>130</onright>
+                  <texturefocus>GamePass/gp_int_focus.png</texturefocus>
+                  <texturenofocus>GamePass/gp_int_normal.png</texturenofocus>
             </control>
-            <control type="button" id="120">
-                  <description>Rewind button</description>
+            <control type="button" id="110">
+                  <description>Domestic Gamepass button</description>
+                  <visible>!IsEmpty(Window.Property(domestic))</visible>
+                  <left>0</left>
                   <width>375</width>
                   <height>56</height>
                   <ondown>210</ondown>
-                  <onleft>110</onleft>
+                  <onleft>90</onleft>
                   <onright>130</onright>
-                  <texturefocus>GamePass/rewind_focus.png</texturefocus>
-                  <texturenofocus>GamePass/rewind_bg.png</texturenofocus>
-                  <visible>IsEmpty(Window.Property(gamepass))</visible>
+                  <texturefocus>GamePass/gp_dom_focus.png</texturefocus>
+                  <texturenofocus>GamePass/gp_dom_normal.png</texturenofocus>
             </control>
             <control type="button" id="130">
                   <description>Network button</description>
@@ -60,7 +60,7 @@
                   <width>375</width>
                   <height>56</height>
                   <ondown>240</ondown>
-                  <onleft>120</onleft>
+                  <onleft>110</onleft>
                   <onright>90</onright>
                   <texturefocus>GamePass/network_focus.png</texturefocus>
                   <texturenofocus>GamePass/network_bg.png</texturenofocus>
@@ -68,22 +68,24 @@
         </control>
 
         <control type="image">
-            <description>Gamepass active overlay</description>
+            <description>International Gamepass active overlay</description>
+            <visible>IsEmpty(Window.Property(domestic))</visible>
             <left>140</left>
             <width>375</width>
             <height>56</height>
             <aspectratio>stretch</aspectratio>
-            <texture>GamePass/gamepass_focus2.png</texture>
+            <texture>GamePass/gp_int_selected.png</texture>
             <visible>!Control.HasFocus(110) + SubString(Window.Property(GP_clicked),true) + Control.IsVisible(110)</visible>
         </control>
         <control type="image">
-            <description>GameRewind active overlay</description>
+            <description>Domestic Gamepass active overlay</description>
+            <visible>!IsEmpty(Window.Property(domestic))</visible>
             <left>140</left>
             <width>375</width>
             <height>56</height>
             <aspectratio>stretch</aspectratio>
-            <texture>GamePass/rewind_focus2.png</texture>
-            <visible>!Control.HasFocus(120) + SubString(Window.Property(GP_clicked),true) + Control.IsVisible(120)</visible>
+            <texture>GamePass/gp_dom_selected.png</texture>
+            <visible>!Control.HasFocus(110) + SubString(Window.Property(GP_clicked),true) + Control.IsVisible(110)</visible>
         </control>
         <control type="image">
             <description>NFL Network active overlay</description>
@@ -102,7 +104,6 @@
             <height>56</height>
             <ondown>210</ondown>
             <onleft>130</onleft>
-            <onright condition="IsEmpty(Window.Property(gamepass))">120</onright>
             <onright>110</onright>
             <texturefocus>GamePass/settings_focus.png</texturefocus>
             <texturenofocus>GamePass/settings.png</texturenofocus>

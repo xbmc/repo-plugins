@@ -78,11 +78,11 @@ msgid "Choose a game version"
 msgstr ""
 
 msgctxt "#30017"
-msgid "Game Pass"
+msgid "Game Pass International"
 msgstr ""
 
 msgctxt "#30018"
-msgid "Game Rewind"
+msgid "Game Pass Domestic"
 msgstr ""
 
 msgctxt "#30019"
@@ -98,11 +98,11 @@ msgid "Error"
 msgstr ""
 
 msgctxt "#30022"
-msgid "Due to broadcast restrictions, NFL Game Rewind is currently unavailable. Please try again later."
+msgid "Due to broadcast restrictions, NFL Game Pass Domestic is currently unavailable. Please try again later."
 msgstr ""
 
 msgctxt "#30023"
-msgid "Logging into NFL Game Pass/Rewind failed. Make sure that your account information is correct and your subscription is valid."
+msgid "Logging into NFL Game Pass failed. Make sure that your account information is correct and your subscription is valid."
 msgstr ""
 
 msgctxt "#30024"
@@ -146,7 +146,7 @@ msgid "Proxy Settings"
 msgstr ""
 
 msgctxt "#30034"
-msgid "Use an HTTP proxy to access Game Pass/Game Rewind"
+msgid "Use an HTTP proxy to access Game Pass"
 msgstr ""
 
 msgctxt "#30035"

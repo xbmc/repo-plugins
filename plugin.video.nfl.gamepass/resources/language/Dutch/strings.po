@@ -78,12 +78,12 @@ msgid "Choose a game version"
 msgstr "Kies een wedstrijd versie"
 
 msgctxt "#30017"
-msgid "Game Pass"
-msgstr "Game Pass"
+msgid "Game Pass International"
+msgstr "Game Pass Internationaal"
 
 msgctxt "#30018"
-msgid "Game Rewind"
-msgstr "Game Rewind"
+msgid "Game Pass Domestic"
+msgstr "Game Pass Domestic"
 
 msgctxt "#30019"
 msgid "Subscription Type"
@@ -98,12 +98,12 @@ msgid "Error"
 msgstr "Fout"
 
 msgctxt "#30022"
-msgid "Due to broadcast restrictions, NFL Game Rewind is currently unavailable. Please try again later."
-msgstr "Vanwege uitzend beperkingen, NFL Game Rewind is momenteel niet beschikbaar. Probeer het later opnieuw."
+msgid "Due to broadcast restrictions, NFL Game Pass Domestic is currently unavailable. Please try again later."
+msgstr "Vanwege uitzend beperkingen, NFL Game Pass Domestic is momenteel niet beschikbaar. Probeer het later opnieuw."
 
 msgctxt "#30023"
-msgid "Logging into NFL Game Pass/Rewind failed. Make sure that your account information is correct and your subscription is valid."
-msgstr "Inloggen in NFL Game Pass/Rewind mislukt. Zorg ervoor dat uw account informatie correct zijn en uw abonnement geldig is."
+msgid "Logging into NFL Game Pass failed. Make sure that your account information is correct and your subscription is valid."
+msgstr "Inloggen in NFL Game Pass mislukt. Zorg ervoor dat uw account informatie correct zijn en uw abonnement geldig is."
 
 msgctxt "#30024"
 msgid "Some bad jujumagumbo just went down. Please enable debuging, and submit a bug report."

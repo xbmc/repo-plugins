@@ -67,7 +67,7 @@
                 <align>right</align>
                 <aligny>center</aligny>
                 <label>$INFO[Player.Time] / $INFO[Player.Duration]</label>
-                <font>nflgamepass_font12</font>
+                <font>font12</font>
                 <textcolor>FFEEEEEE</textcolor>
             </control>
         </control>
@@ -99,7 +99,7 @@
                     <aligny>center</aligny>
                     <scroll>false</scroll>
                     <info>ListItem.Label</info>
-                    <font>nflgamepass_font12</font>
+                    <font>font12</font>
                     <textcolor>FF111111</textcolor>
                     <wrapmultiline>false</wrapmultiline>
                     <scrollspeed>50</scrollspeed>
@@ -127,7 +127,7 @@
                     <aligny>center</aligny>
                     <scroll>false</scroll>
                     <info>ListItem.Label</info>
-                    <font>nflgamepass_font12</font>
+                    <font>font12</font>
                     <textcolor>FFFFFFFF</textcolor>
                     <wrapmultiline>false</wrapmultiline>
                     <scrollspeed>50</scrollspeed>
@@ -142,7 +142,7 @@
                     <aligny>center</aligny>
                     <scroll>false</scroll>
                     <info>ListItem.Label</info>
-                    <font>nflgamepass_font12</font>
+                    <font>font12</font>
                     <textcolor>FF111111</textcolor>
                     <wrapmultiline>false</wrapmultiline>
                     <scrollspeed>50</scrollspeed>

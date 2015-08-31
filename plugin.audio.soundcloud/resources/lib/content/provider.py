@@ -498,7 +498,8 @@ class Provider(nightcrawler.Provider):
             result.append({'type': 'folder',
                            'title': context.localize(self.SOUNDCLOUD_LOCAL_STREAM),
                            'uri': context.create_uri('stream'),
-                           'images': {'thumbnail': context.create_resource_path('media/stream.png')}})
+                           'images': {'thumbnail': context.create_resource_path('media/stream.png'),
+                                      'fanart': self.get_fanart(context)}})
             pass
 
         # search

@@ -1,3 +1,6 @@
+2.0.2 (2015-08-31)
+[fix] add missing fanart
+
 2.0.1 (2015-08-27)
 [add] French (thx 2 Soullivaneuh)
 [upd] moved to *.po files

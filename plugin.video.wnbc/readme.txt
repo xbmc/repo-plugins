@@ -1,3 +1,4 @@
+Version 1.0.9 website change
 Version 1.0.8 added metadata and selectable views
 Version 1.0.7 website change
 Version 1.0.6 use proxy for classics

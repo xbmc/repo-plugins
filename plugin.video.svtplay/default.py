@@ -22,6 +22,7 @@ MODE_PROGRAM = "pr"
 MODE_CLIPS = "clips"
 MODE_LIVE_PROGRAMS = "live-channels"
 MODE_LATEST = "ep"
+MODE_LATEST_NEWS = 'news'
 MODE_POPULAR = "popular"
 MODE_LAST_CHANCE = "last-chance"
 MODE_VIDEO = "video"
@@ -56,6 +57,7 @@ def viewStart():
 
   addDirectoryItem(localize(30009), { "mode": MODE_POPULAR })
   addDirectoryItem(localize(30003), { "mode": MODE_LATEST })
+  addDirectoryItem(localize(30004), { "mode": MODE_LATEST_NEWS })
   addDirectoryItem(localize(30010), { "mode": MODE_LAST_CHANCE })
   addDirectoryItem(localize(30002), { "mode": MODE_LIVE_PROGRAMS })
   addDirectoryItem(localize(30008), { "mode": MODE_CHANNELS })
@@ -125,6 +127,13 @@ def viewPopular():
 
 def viewLatestVideos():
   articles = svt.getLatestVideos()
+  if not articles:
+    return
+  for article in articles:
+    createDirItem(article, MODE_VIDEO)
+
+def viewLatestNews():
+  articles = svt.getLatestNews()
   if not articles:
     return
   for article in articles:
@@ -366,6 +375,8 @@ elif ARG_MODE == MODE_VIDEO:
   startVideo(ARG_URL)
 elif ARG_MODE == MODE_LATEST:
   viewLatestVideos()
+elif ARG_MODE == MODE_LATEST_NEWS:
+  viewLatestNews()
 elif ARG_MODE == MODE_POPULAR:
   viewPopular()
 elif ARG_MODE == MODE_LAST_CHANCE:

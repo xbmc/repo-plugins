@@ -10,6 +10,7 @@ URL_A_TO_O = "/program"
 URL_TO_SEARCH = "/sok?q="
 URL_TO_OA = "/kategorier/oppetarkiv"
 URL_TO_CHANNELS = "/kanaler"
+URL_TO_NEWS = "/nyheter"
 
 JSON_SUFFIX = "?output=json"
 
@@ -24,6 +25,11 @@ SEARCH_LIST_TITLES = "[^\"']*playJs-search-titles[^\"']*"
 SEARCH_LIST_EPISODES = "[^\"']*playJs-search-episodes[^\"']*"
 SEARCH_LIST_CLIPS = "[^\"']*playJs-search-clips[^\"']*"
 
+def getLatestNews():
+  """
+  Returns a list of latest news.
+  """
+  return getArticles("playJs-latest", URL_TO_NEWS)
 
 def getAtoO():
   """
@@ -39,9 +45,10 @@ def getAtoO():
 
   for index, text in enumerate(texts):
     program = {}
-    program["title"] = common.replaceHTMLCodes(text)
-    program["url"] = hrefs[index]
-    programs.append(program)
+    if (hrefs[index][0:7] != u'/genre/'):
+        program["title"] = common.replaceHTMLCodes(text)
+        program["url"] = hrefs[index]
+        programs.append(program)
 
   return programs
 

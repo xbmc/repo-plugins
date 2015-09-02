@@ -227,12 +227,13 @@ def getShow(gsurl):
 
 def getVideo(surl):
             if surl.startswith('//') : surl = 'http:'+surl
-            if not ('http://link.theplatform.com' in surl):
-                html = getRequest(surl)
-                surl = re.compile('<meta name="tp:EnableExternalController".+?href="(.+?)"',re.DOTALL).search(html).group(1)
-                surl = surl.replace('&player=','&manifest=m3u&player=',1)
+#            if not ('http://link.theplatform.com' in surl):
+#                html = getRequest(surl)
+#                surl = re.compile('<meta name="tp:EnableExternalController".+?href="(.+?)"',re.DOTALL).search(html).group(1)
+#                surl = surl.replace('&player=','&manifest=m3u&player=',1)
 
             try:
+             surl = 'http://link.theplatform.com/s/NnzsPC/'+surl.split('?',1)[0].rsplit('/',1)[1]+'?mbr=true&mbr=true&player=Onsite%20Player&policy=43674&manifest=m3u'
              html = getRequest(surl)
              finalurl  = re.compile('<video src="(.+?)"',re.DOTALL).search(html).group(1)
              if 'nbcvodenc-i.akamaihd.net' in finalurl:
@@ -266,7 +267,11 @@ def getVideo(surl):
                    for cstart, cend, caption in captions:
                      cstart = cstart.replace('.',',')
                      cend   = cend.replace('.',',').split('"',1)[0]
-                     caption = caption.replace('<br/>','\n').replace('&gt;','>').replace('&apos;',"'")
+#                     caption = caption.replace('<br/>','\n').replace('&gt;','>').replace('&apos;',"'")
+                     caption = caption.replace('<br/>','\n')
+                     try:
+                       caption = h.unescape(caption)
+                     except: pass
                      ofile.write( '%s\n%s --> %s\n%s\n\n' % (idx, cstart, cend, caption))
                      idx += 1
                    ofile.close()

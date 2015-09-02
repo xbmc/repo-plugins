@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.ustvnow" version="12.0.1" name="USTVnow" provider-name="Lunatixz">
+<addon id="plugin.video.ustvnow" version="12.0.3" name="USTVnow" provider-name="Lunatixz">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>
@@ -7,8 +7,10 @@
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="en">Plays live streams and recordings from ustvnow.com</summary>
-        <description lang="en">Live streaming US TV. You MUST log in to view streams (see addon settings). You can also play any recordings you have made on ustvnow.com</description>
+        <summary lang="en">USTVnow lets you watch all your favorite US television channels from anywhere around the world. Visit ustvnow.com for more Information</summary>
+        <description lang="en">Initially when you sign up you will be registering for our free plan that lets you share our antenna to receive all major terrestrial stations that as an American citizen or resident you would normally be able to receive for free (ABC, CBS, CW, FOX, NBC, PBS). 
+        After this you have the option to upgrade to any of our paid plans. You can cancel or switch plans at any time. Monthly plans automatically renew but you can cancel anytime in order not to be billed again when your current 30 day period has expired. Note, you must first sign up for our free plan and then you can upgrade to a paid plan. Channels included in USTVNow paid plans.
+        ABC, CBS, CW, FOX, NBC, PBS, My9, AE, Animal Planet, Bravo, Cartoon Network, CNBC, CNN, Comedy Central, Discovery Channel, ESPN, FX, Fox News, History, Lifetime, National Geographic, Nickelodeon, Spike, Syfy, TBS, TNT, USA, AMC. For more channels including HBO and SHOWTIME, see our Premium Plans with up to 200 channels and HD.</description>
         <platform>all</platform>
         <language>en</language>
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>

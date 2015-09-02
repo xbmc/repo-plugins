@@ -4,5 +4,5 @@
     <setting id="stream_type" type="enum" label="30101" values="rtmp|rtsp" default="0" />
     <setting id="subscription" type="bool" label="30104" default="false" />
     <setting id="email" type="text" label="30102" default="" />
-    <setting id="password" type="text" label="30103" option="hidden" default="" />
+    <setting id="password" type="text" label="30103" default="" />
 </settings>

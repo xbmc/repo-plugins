@@ -31,26 +31,27 @@ premium = Addon.get_setting('subscription') == "true"
 dlg = xbmcgui.Dialog()
 
 if not email:
+    dlg.ok("USTVnow", "Please visit www.ustvnow.com", "and register for your login credentials")
     retval = dlg.input('Enter USTVnow Account Email', type=xbmcgui.INPUT_ALPHANUM)
     if retval and len(retval) > 0:
         Addon.set_setting('email', str(retval))
         email = Addon.get_setting('email')
-        
-if not password:
     retval = dlg.input('Enter USTVnow Account Password', type=xbmcgui.INPUT_ALPHANUM)
     if retval and len(retval) > 0:
         Addon.set_setting('password', str(retval))
         password = Addon.get_setting('password')
+    if dlg.yesno("USTVnow", 'Are you a premium subscriber?'):
+        Addon.set_setting('subscription', 'true')
+    else:
+        Addon.set_setting('subscription', 'false')
         
-# if premium == False:
-    # Addon.set_setting('quality', '0')
-
+if premium == False:
+    Addon.set_setting('quality', '0')
+    
 ustv = ustvnow.Ustvnow(email, password, premium)
-
 Addon.log('plugin url: ' + Addon.plugin_url)
 Addon.log('plugin queries: ' + str(Addon.plugin_queries))
 Addon.log('plugin handle: ' + str(Addon.plugin_handle))
-
 mode = Addon.plugin_queries['mode']
 
 if mode == 'main':
@@ -64,26 +65,30 @@ elif mode == 'live':
     stream_type = ['rtmp', 'rtsp'][int(Addon.get_setting('stream_type'))]
     channels = ustv.get_channels(int(Addon.get_setting('quality')), 
                                      stream_type)
-    for c in channels:
-        Addon.add_video_item(c['url'],
-                             {'title': '%s - %s' % (c['name'], 
-                                                    c['now']['title']),
-                              'plot': c['now']['plot']},
-                             img=c['icon'])
-
+    if channels:
+        for c in channels:
+            rURL = "plugin://plugin.video.ustvnow/?name="+c['name']+"&mode=play"
+            item = xbmcgui.ListItem(path=rURL)
+            Addon.add_video_item(rURL,
+                                 {'title': '%s - %s' % (c['name'], 
+                                                        c['now']['title']),
+                                  'plot': c['now']['plot']},
+                                 img=c['icon'])
+                             
 elif mode == 'recordings':
     Addon.log(mode)
     stream_type = ['rtmp', 'rtsp'][int(Addon.get_setting('stream_type'))]
     recordings = ustv.get_recordings(int(Addon.get_setting('quality')), 
                                      stream_type)
-    for r in recordings:
-        cm_del = (Addon.get_string(30003), 
-                  'XBMC.RunPlugin(%s/?mode=delete&del=%s)' % 
-                       (Addon.plugin_url, urllib.quote(r['del_url'])))
-        title = '%s (%s on %s)' % (r['title'], r['rec_date'], r['channel'])
-        Addon.add_video_item(r['stream_url'], {'title': title, 
-                                               'plot': r['plot']},
-                             img=r['icon'], cm=[cm_del], cm_replace=True)
+    if recordings:
+        for r in recordings:
+            cm_del = (Addon.get_string(30003), 
+                      'XBMC.RunPlugin(%s/?mode=delete&del=%s)' % 
+                           (Addon.plugin_url, urllib.quote(r['del_url'])))
+            title = '%s (%s on %s)' % (r['title'], r['rec_date'], r['channel'])
+            Addon.add_video_item(r['stream_url'], {'title': title, 
+                                                   'plot': r['plot']},
+                                 img=r['icon'], cm=[cm_del], cm_replace=True)
 
 elif mode == 'delete':
     dialog = xbmcgui.Dialog()
@@ -101,13 +106,10 @@ elif mode=='play':
        channels = ustv.get_channels(quality,stream_type)
        for c in channels:
          if c['name'] == name:
-           # print "URL = "+c['url']
            print "setResolvedUrl"
            item = xbmcgui.ListItem(path=c['url'])
            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
     except:
-      pass
+        pass
 
 Addon.end_of_directory()
-        
-

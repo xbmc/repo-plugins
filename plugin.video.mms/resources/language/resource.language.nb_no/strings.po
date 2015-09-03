@@ -1,0 +1,65 @@
+# XBMC Media Center language file
+# Addon Name: Missing Movies
+# Addon id: plugin.video.mms
+msgid ""
+msgstr ""
+
+msgctxt "#30001"
+msgid "Blacklisted file extensions"
+msgstr "Svartelistede filtyper"
+
+msgctxt "#30002"
+msgid "Blacklisted directory names"
+msgstr "Svartelistede mappenavn"
+
+msgctxt "#30003"
+msgid "Blacklisted words (separated with |)"
+msgstr "Svartelistede ord (skill med |)"
+
+msgctxt "#30004"
+msgid "Scan sources recursively"
+msgstr "Søk kilder rekursivt"
+
+msgctxt "#30005"
+msgid "Missing movies"
+msgstr "Manglende filmer"
+
+msgctxt "#30006"
+msgid "Missing TV shows"
+msgstr "Manglende TV-serier"
+
+msgctxt "#30007"
+msgid "Missing episodes"
+msgstr "Manglende episoder"
+
+msgctxt "#30008"
+msgid "Sources"
+msgstr "Kilder"
+
+msgctxt "#30009"
+msgid "Export"
+msgstr "Eksporter"
+
+msgctxt "#30010"
+msgid "Movie sources"
+msgstr "Film-kilder"
+
+msgctxt "#30011"
+msgid "TV sources"
+msgstr "TV-kilder"
+
+msgctxt "#30012"
+msgid "All video sources"
+msgstr "Alle videokilder"
+
+msgctxt "#30013"
+msgid "Select destination"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Success"
+msgstr "Vellykket"
+
+msgctxt "#30015"
+msgid "Successfully exported to %s"
+msgstr "Eksportert til %s"

@@ -123,13 +123,17 @@ def showSingleMovieItem(idItem):
         for episode in episodes:
                 item = dict()
                 item['label'] = episode.title
-                item['is_playable'] = False
                 item['icon']= episode.thumb
                 item['thumbnail']= episode.thumb
                 props = dict()
                 props.update(fanart_image = item['thumbnail'])
                 item['properties'] = props
-                item['path'] = plugin.url_for('playManifest',manifest=episode.manifest,title = episode.title)
+                if(episode.stream_type == F4M_TYPE):
+                    item['path'] = plugin.url_for('playManifest',manifest=episode.manifest,title = episode.title)
+                    item['is_playable'] = False
+                elif(episode.stream_type == M3U_TYPE):
+                    item['path'] = episode.manifest
+                    item['is_playable'] = True
                 items.append(item)
     return items
 
@@ -143,13 +147,17 @@ def showSingleMovieItemSeason(seasonId,idItem):
             for episode in season.episodes:
                 item = dict()
                 item['label'] = episode.title
-                item['is_playable'] = False
                 item['icon']= episode.thumb
                 item['thumbnail']= episode.thumb
                 props = dict()
                 props.update(fanart_image = item['thumbnail'])
                 item['properties'] = props
-                item['path'] = plugin.url_for('playManifest',manifest=episode.manifest,title = episode.title)
+                if(episode.stream_type == F4M_TYPE):
+                    item['path'] = plugin.url_for('playManifest',manifest=episode.manifest,title = episode.title)
+                    item['is_playable'] = False
+                elif(episode.stream_type == M3U_TYPE):
+                    item['path'] = episode.manifest
+                    item['is_playable'] = True
                 items.append(item)
     return items
 
@@ -244,13 +252,17 @@ def showSingleTvItem(idItem):
         for episode in episodes:
                 item = dict()
                 item['label'] = episode.title
-                item['is_playable'] = False
                 item['icon']= episode.thumb
                 item['thumbnail']= episode.thumb
                 props = dict()
                 props.update(fanart_image = item['thumbnail'])
                 item['properties'] = props
-                item['path'] = plugin.url_for('playManifest',manifest=episode.manifest,title = episode.title)
+                if(episode.stream_type == F4M_TYPE):
+                    item['path'] = plugin.url_for('playManifest',manifest=episode.manifest,title = episode.title)
+                    item['is_playable'] = False
+                elif(episode.stream_type == M3U_TYPE):
+                    item['path'] = episode.manifest
+                    item['is_playable'] = True
                 items.append(item)
     return items
 
@@ -264,13 +276,17 @@ def showSingleTvItemSeason(seasonId,idItem):
             for episode in season.episodes:
                 item = dict()
                 item['label'] = episode.title
-                item['is_playable'] = False
                 item['icon']= episode.thumb
                 item['thumbnail']= episode.thumb
                 props = dict()
                 props.update(fanart_image = item['thumbnail'])
                 item['properties'] = props
-                item['path'] = plugin.url_for('playManifest',manifest=episode.manifest,title = episode.title)
+                if(episode.stream_type == F4M_TYPE):
+                    item['path'] = plugin.url_for('playManifest',manifest=episode.manifest,title = episode.title)
+                    item['is_playable'] = False
+                elif(episode.stream_type == M3U_TYPE):
+                    item['path'] = episode.manifest
+                    item['is_playable'] = True
                 items.append(item)
     return items
 
@@ -362,13 +378,17 @@ def showSingleAnimeItem(idItem):
         for episode in episodes:
                 item = dict()
                 item['label'] = episode.title
-                item['is_playable'] = False
                 item['icon']= episode.thumb
                 item['thumbnail']= episode.thumb
                 props = dict()
                 props.update(fanart_image = item['thumbnail'])
                 item['properties'] = props
-                item['path'] = plugin.url_for('playManifest',manifest=episode.manifest,title = episode.title)
+                if(episode.stream_type == F4M_TYPE):
+                    item['path'] = plugin.url_for('playManifest',manifest=episode.manifest,title = episode.title)
+                    item['is_playable'] = False
+                elif(episode.stream_type == M3U_TYPE):
+                    item['path'] = episode.manifest
+                    item['is_playable'] = True
                 items.append(item)
     return items
 
@@ -382,13 +402,17 @@ def showSingleAnimeItemSeason(seasonId,idItem):
             for episode in season.episodes:
                 item = dict()
                 item['label'] = episode.title
-                item['is_playable'] = False
                 item['icon']= episode.thumb
                 item['thumbnail']= episode.thumb
                 props = dict()
                 props.update(fanart_image = item['thumbnail'])
                 item['properties'] = props
-                item['path'] = plugin.url_for('playManifest',manifest=episode.manifest,title = episode.title)
+                if(episode.stream_type == F4M_TYPE):
+                    item['path'] = plugin.url_for('playManifest',manifest=episode.manifest,title = episode.title)
+                    item['is_playable'] = False
+                elif(episode.stream_type == M3U_TYPE):
+                    item['path'] = episode.manifest
+                    item['is_playable'] = True
                 items.append(item)
     return items
 '''

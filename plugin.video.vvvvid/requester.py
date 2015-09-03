@@ -38,6 +38,10 @@ ROOT_LABEL_MOVIES = "Movies"
 ROOT_LABEL_ANIME = "Anime"
 ROOT_LABEL_SHOWS = "Shows"
 
+# episode stream type
+F4M_TYPE = '10'
+M3U_TYPE = '20'     # .m3u8 is the unicode version of .m3u
+
 
 def getChannelsPath(type):
     if type == MODE_MOVIES:
@@ -138,8 +142,13 @@ def get_seasons_for_item(itemPlayable):
                 prefix = ''
                 postfix= '?g=DRIEGSYPNOBI&hdcore=3.6.0&plugin=aasp-3.6.0.50.41'
                 if('http' not in episodeData['embed_info']):
+                    episode.stream_type = F4M_TYPE
                     prefix = 'http://wowzaondemand.top-ix.org/videomg/_definst_/mp4:'
                     postfix = '/manifest.f4m'
+                if('.m3u' in episodeData['embed_info']):
+                    episode.stream_type = M3U_TYPE
+                    prefix = ''
+                    postfix = ''
                 episode.manifest = prefix +  episodeData['embed_info'] + postfix
                 episode.title = ((episodeData['number'] + ' - ' + episodeData['title'])).encode('utf-8','replace')
                 episode.thumb = episodeData['thumbnail']

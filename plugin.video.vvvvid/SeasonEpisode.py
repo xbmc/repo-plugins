@@ -5,3 +5,4 @@ class SeasonEpisode():
     manifest = ''
     title = ''
     thumb = ''
+    stream_type = ''

@@ -1,5 +1,5 @@
 #
-#      Copyright (C) 2013 Tommy Winther
+#      Copyright (C) 2015 Tommy Winther
 #      http://tommy.winther.nu
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -117,7 +117,11 @@ class TV3PlayAddon(object):
             item.setInfo('video', infoLabels)
             item.setProperty('IsPlayable', 'true')
             item.setProperty('Fanart_Image', fanart)
-            items.append((PATH + '?region=%s&playVideo=%s' % (self.region, video['id']), item))
+
+            if 'hlspath' in video:
+                items.append((video['hlspath'], item))
+            else:
+                items.append((PATH + '?region=%s&playVideo=%s' % (self.region, video['id']), item))
 
         xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_EPISODE)
         xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_TITLE)

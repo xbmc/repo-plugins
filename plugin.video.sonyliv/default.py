@@ -107,7 +107,7 @@ def getCats(gsurl,catname):
         xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_EPISODE)
         ilist = []
         url   = uqp(gsurl)
-        url   = url.split('genre=')[1]
+        url   = url.split('genre-',1)[1]
         url   = 'http://www.sonyliv.com/show/categoryShows?max=100&offset=0&genre=%s' % url
         html  = getRequest(url)            
         c     = re.compile('<li class=.+?id="show_(.+?)".+?title="(.+?)".+?src=(.+?) .+?</li',re.DOTALL).findall(html)
@@ -136,7 +136,9 @@ def getEpis(geurl, catname):
         xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
         ilist = []
         geurl   = uqp(geurl)
-        html  = getRequest(geurl)            
+        geheaders = defaultHeaders
+        geheaders['X-Requested-With'] = 'XMLHttpRequest'
+        html  = getRequest(geurl, None, geheaders)            
         c     = re.compile("<div title='(.+?)'.+?href='(.+?)'.+?src='(.+?)'.+?<span class=.+?>(.+?)<.+?</div",re.DOTALL).findall(html)
         for name, murl, img, dur in c:
               murl = 'http://www.sonyliv.com%s' % murl
@@ -150,7 +152,7 @@ def getEpis(geurl, catname):
                    for d in dur.split(':'): duration = duration*60+int(d)
               except: pass
               try:
-                 title, plot,url,playerKey = re.compile('<meta content="mainNew".+?<title>(.+?)</title>.+?"description" content="(.+?)".+?"currentBrightcoveId" value="(.+?)".+?name="playerKey" value="(.+?)"',re.DOTALL).search(html).groups()
+                 plot,title, url,playerKey = re.compile('<meta content="mainNew".+?"description" content="(.+?)".+?"twitter:title" content="(.+?)".+?"currentBrightcoveId" value="(.+?)".+?name="playerKey" value="(.+?)"',re.DOTALL).search(html).groups()
               except: continue
               playerKey = playerKey.split(' ',1)[0]
               playerKey = playerKey.split('=',1)[0]

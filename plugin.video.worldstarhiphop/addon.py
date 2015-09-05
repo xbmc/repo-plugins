@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 ##############################################################################
 #
 # WorldStarHipHop - Addon for XBMC
@@ -17,8 +20,8 @@
 #
 #also in ..._const
 __addon__       = "plugin.video.worldstarhiphop"
-__date__        = "05 august 2015"
-__version__     = "1.0.2"
+__date__        = "5 september 2015"
+__version__     = "1.0.5"
 
 #
 # Imports

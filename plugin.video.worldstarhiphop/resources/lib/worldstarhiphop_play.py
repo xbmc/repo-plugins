@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 #
 # Imports
 #
@@ -71,14 +74,29 @@ class Main:
 
 		try:
 			vid = YDStreamExtractor.getVideoInfo(video_url,quality=int(self.VIDEO)) #quality is 0=SD, 1=720p, 2=1080p and is a maximum
-			stream_video_url = vid.streamURL()
+			video_url = vid.streamURL()
 			have_valid_url = True
 		except:
-			unplayable_media_file = True
+			# Maybe it's an 18+ video ?!
+			# 
+			# Get HTML page...
+			#
+			html_source = HTTPCommunicator().get( video_url )
+			# A bit of a dirty hack, but let's try it anyway... 
+			# so.addVariable("file","http://hw-videos.worldstarhiphop.com/u/vid/2015/09/SAWGSqGpaohk.mp4");
+			if str(html_source).find("file") >= 0:
+				#
+				# Seems like it's an 18+ video
+				begin_pos_video_file = str(html_source).find("http", str(html_source).find("file") )
+				end_pos_video_file = str(html_source).find('"', begin_pos_video_file)
+				video_url = html_source[begin_pos_video_file:end_pos_video_file]
+				have_valid_url = True
+			else:
+				unplayable_media_file = True
  	
  		if (self.DEBUG) == 'true':
  			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "have_valid_url", str(have_valid_url) ), xbmc.LOGNOTICE )
- 			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "stream_video_url", str(stream_video_url) ), xbmc.LOGNOTICE )
+ 			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "video_url", str(video_url) ), xbmc.LOGNOTICE )
 	
 		if have_valid_url:
 			playlist = xbmc.PlayList( xbmc.PLAYLIST_VIDEO )
@@ -87,7 +105,7 @@ class Main:
 			listitem = xbmcgui.ListItem( title, iconImage="DefaultVideo.png", thumbnailImage=thumbnail_url )
 			xbmcplugin.setResolvedUrl(handle=int(sys.argv[1]), succeeded=True, listitem=listitem)
 			listitem.setInfo( "video", { "Title": title, "Studio" : "WorldStarHipHop", "Plot" : plot, "Genre" : genre } )
-			playlist.add( stream_video_url, listitem )
+			playlist.add( video_url, listitem )
 	
 			# Close wait dialog
 			dialogWait.close()

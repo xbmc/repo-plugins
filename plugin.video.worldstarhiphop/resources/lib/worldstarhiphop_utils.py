@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 import zlib
 import httplib
 import urllib
@@ -15,6 +18,7 @@ class HTTPCommunicator :
     #
     def post( self, host, url, params ):
         parameters  = urllib.urlencode( params )
+        #headers     = { "Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain", "Accept-Encoding" : "gzip", "Cookie": "WSHHAdultOk=true" }
         headers     = { "Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain", "Accept-Encoding" : "gzip" }
         connection  = httplib.HTTPConnection("%s:80" % host)
         
@@ -41,14 +45,15 @@ class HTTPCommunicator :
     # GET
     #
     def get( self, url ):
-        h = urllib2.HTTPHandler(debuglevel=0)
+        user_agent = "Mozilla/5.0 (Linux; Android 4.3; Nexus 7 Build/JSS15Q) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.72 Safari/537.36"
+        values = {}
+        #headers = { "User-Agent"      : user_agent , "Accept-Encoding" : "gzip", "Cookie" : "WSHHAdultOk=true" }
+        headers = { "User-Agent"      : user_agent , "Accept-Encoding" : "gzip" }
+        data = urllib.urlencode(values)
+        req = urllib2.Request(url, data, headers)
+        f = urllib2.urlopen(req)
         
-        request = urllib2.Request( url )
-        request.add_header( "Accept-Encoding", "gzip" ) 
-        opener = urllib2.build_opener(h)
-        f = opener.open(request)
-
-        # Compressed (gzip) response...
+        # Compressed (gzip) response
         if f.headers.get( "content-encoding" ) == "gzip" :
             htmlGzippedData = f.read()
             stringIO        = StringIO.StringIO( htmlGzippedData )
@@ -59,7 +64,7 @@ class HTTPCommunicator :
             # print "[HTTP Communicator] GET %s" % url
             # print "[HTTP Communicator] Result size : compressed [%u], decompressed [%u]" % ( len( htmlGzippedData ), len ( htmlData ) )
             
-        # Plain text response...
+        # Plain text response
         else :
             htmlData = f.read()
         
@@ -75,7 +80,7 @@ class HTTPCommunicator :
     def exists( self, url ):
         try :
             request            = urllib2.Request( url )
-            request.get_method = lambda : 'HEAD'
+            request.get_method = lambda : "HEAD"
             response           = urllib2.urlopen( request )
             response.close()
             return True

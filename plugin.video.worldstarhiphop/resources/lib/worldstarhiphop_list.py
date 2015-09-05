@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 #
 # Imports
 #
@@ -13,9 +16,6 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 import xbmcplugin
-
-reload(sys)  
-sys.setdefaultencoding('utf8')
 
 BASEURL = "http://www.worldstarhiphop.com"
 #
@@ -146,7 +146,11 @@ class Main:
 			title = item_string[start_pos_title + 1 :end_pos_title]
 	
 			#Clean up title
-			title = title.encode('utf-8')
+			try:
+				title = title.encode('utf-8')
+			except:
+				pass
+			
 			title = title.replace('-',' ')
 			title = title.replace('/',' ')
 			title = title.replace(' i ',' I ')
@@ -182,6 +186,7 @@ class Main:
 			title = title.replace('  ',' ')
 			title = title.replace('  ',' ')
 			#welcome to characterset-hell
+			title = title.replace('&pound;',"Pound Sign")
 			title = title.replace('&amp;#039;',"'")
 			title = title.replace('&amp;#39;',"'")
 			title = title.replace('&amp;quot;','"')
@@ -193,6 +198,7 @@ class Main:
   		 	title = title.replace('&ldquo;','"')
   		  	title = title.replace('&rdquo;','"')
   		  	title = title.replace('&rsquo;',"'")
+		  	title = title.replace('&ndash;',"/")
 			
 			if (self.DEBUG) == 'true':
 				xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "title", str(title) ), xbmc.LOGNOTICE )

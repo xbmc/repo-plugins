@@ -9,6 +9,7 @@
 	<string id="200">General</string>
 	<string id="210">Clear Saved Data</string>
 	<string id="220">Only Display FREE Content</string>	
+	<string id="230">Play Stream From Main Window</string>	
     <!-- Stream settings -->
     <string id="300">Stream</string>   
     <string id="310">Stream Quality</string>		

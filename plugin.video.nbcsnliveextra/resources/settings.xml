@@ -2,7 +2,7 @@
 <settings>
   <!--Provider-->
   <category label="100">
-    <setting id="provider" type="enum" label="110" values="Cable One|Charter|Comcast (xfinity)|Dish Network|Direct TV|Optimum|Time Warner Cable|Verizon" default="0" />   
+    <setting id="provider" type="labelenum" label="110" values="Cable One|Charter|Comcast (xfinity)|Cox|Dish Network|Direct TV|Optimum|Time Warner Cable|Verizon" sort="yes"/>   
     <setting id="username" type="text" label="140" default=""/>
     <setting id="password" type="text" label="150" option="hidden" default=""/>
   </category>
@@ -10,6 +10,7 @@
   <category label="200">
     <setting id="clear_data" type="bool" label="210" default="false"/>
     <setting id="free_only" type="bool" label="220" default="false" />  
+    <setting id="play_main" type="bool" label="230" default="true" />  
   </category>
   <!-- Visual -->
   <category label="300">

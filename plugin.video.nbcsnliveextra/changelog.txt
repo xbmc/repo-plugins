@@ -1,5 +1,10 @@
+v2015.9.4
+- Added Cox support
+- Added General setting to toggle ability to play from main window
+- Code clean up
+
 v2015.8.21
-- Premium links now play from main window
+- Premium links now plays from main window
 
 v2015.8.17
 - Bug fix for mislabeling non-free streams as free

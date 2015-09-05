@@ -236,27 +236,31 @@ PASSWORD = str(settings.getSetting(id="password"))
 PROVIDER = str(settings.getSetting(id="provider"))
 CLEAR = str(settings.getSetting(id="clear_data"))
 FREE_ONLY = str(settings.getSetting(id="free_only"))
+PLAY_MAIN = str(settings.getSetting(id="play_main"))
 
 if CLEAR == 'true':
    CLEAR_SAVED_DATA()
 
-
+print 'PROVIDER!!!'
+print PROVIDER
 MSO_ID = ''
-if PROVIDER == '0':
+if PROVIDER == 'Cable One':
     MSO_ID = 'auth_cableone_net'
-elif PROVIDER == '1':    
+elif PROVIDER == 'Charter':    
     MSO_ID = 'Charter_Direct'  
-elif PROVIDER == '2':    
+elif PROVIDER == 'Comcast (xfinity)':    
     MSO_ID = 'Comcast_SSO'  
-elif PROVIDER == '3':
+elif PROVIDER == 'Cox':
+    MSO_ID = 'Cox' 
+elif PROVIDER == 'Dish Network':
     MSO_ID = 'Dish' 
-elif PROVIDER == '4':
+elif PROVIDER == 'Direct TV':
     MSO_ID = 'DTV'
-elif PROVIDER == '5':
+elif PROVIDER == 'Optimum':
     MSO_ID = 'Cablevision'
-elif PROVIDER == '6':
+elif PROVIDER == 'Time Warner Cable':
     MSO_ID = 'TWC'
-elif PROVIDER == '7':
+elif PROVIDER == 'Verizon':
     MSO_ID = 'Verizon'
 
 IDP_URL = 'https://sp.auth.adobe.com//adobe-services/1.0/authenticate/saml?domain_name=adobe.com&noflash=true&mso_id='+MSO_ID+'&requestor_id=nbcsports&no_iframe=true&client_type=iOS&client_version=1.9&redirect_url=http://adobepass.ios.app/'

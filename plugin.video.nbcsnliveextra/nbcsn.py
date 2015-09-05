@@ -20,6 +20,7 @@ from resources.providers.twc import TWC
 from resources.providers.verizon import VERIZON
 from resources.providers.cable_one import CABLE_ONE
 from resources.providers.optimum import OPTIMUM
+from resources.providers.cox import COX
 
 
 def CATEGORIES():           
@@ -188,6 +189,7 @@ def BUILD_VIDEO_LINK(item):
     start_date = datetime.strftime(utc_to_local(start_date),xbmc.getRegion('dateshort')+' '+xbmc.getRegion('time').replace('%H%H','%H').replace(':%S',''))       
     info['plot'] = 'Starting at: '+start_date+'\n\n'+info['plot']
 
+    
     if url != '':
         if free:
             url = url + "|User-Agent=" + UA_NBCSN
@@ -195,14 +197,18 @@ def BUILD_VIDEO_LINK(item):
             addLink(menu_name,url,name,imgurl,FANART,info) 
         elif FREE_ONLY == 'false':                        
             menu_name = '[COLOR='+LIVE+']'+menu_name + '[/COLOR]'
-            #addDir(menu_name,url,5,imgurl,FANART,None,True,info)             
-            addPremiumLink(menu_name,url,imgurl,FANART,None,True,info)             
+            if str(PLAY_MAIN) == 'true':
+                addPremiumLink(menu_name,url,imgurl,FANART,None,info)             
+            else:
+                addDir(menu_name,url,5,imgurl,FANART,None,True,info)             
 
     elif my_time < event_start:
         if free:
             menu_name = '[COLOR='+FREE_UPCOMING+']'+menu_name + '[/COLOR]'            
-            #addDir(menu_name + ' ' + start_date,'/disabled',999,imgurl,FANART,None,False,info)
-            addPremiumLink(menu_name,url,imgurl,FANART,None,True,info)             
+            if str(PLAY_MAIN) == 'true':
+                addPremiumLink(menu_name,url,imgurl,FANART,None,info)             
+            else:
+                addDir(menu_name + ' ' + start_date,'/disabled',999,imgurl,FANART,None,False,info)
             
         elif FREE_ONLY == 'false':
             menu_name = '[COLOR='+UPCOMING+']'+menu_name + '[/COLOR]'            
@@ -231,6 +237,8 @@ def SIGN_STREAM(stream_url, stream_name, stream_icon):
         provider = CABLE_ONE()
     elif MSO_ID == 'Cablevision':
         provider = OPTIMUM()
+    elif MSO_ID == 'Cox':
+        provider = COX()
 
     #provider = SET_PROVIDER()
 
@@ -275,11 +283,13 @@ def SIGN_STREAM(stream_url, stream_name, stream_icon):
             var_1, var_2, var_3 = provider.GET_IDP()            
             saml_response, relay_state = provider.LOGIN(var_1, var_2, var_3)
             #Error logging in. Abort! Abort!
+            print "SAML RESPONSE:"
             print saml_response
+            print "RELAY STATE:"
             print relay_state
 
             if saml_response == '' and relay_state == '':
-                msg = "Please verify that your username and password is correct"
+                msg = "Please verify that your username and password are correct"
                 dialog = xbmcgui.Dialog() 
                 ok = dialog.ok('Login Failed', msg)
                 return
@@ -299,13 +309,22 @@ def SIGN_STREAM(stream_url, stream_name, stream_icon):
             msg = "Failed to authorize"
             dialog = xbmcgui.Dialog() 
             ok = dialog.ok('Authorization Failed', msg)
+            #Delete the invalid auth.token file
+            fname = os.path.join(ADDON_PATH_PROFILE, 'auth.token')
+            os.remove(fname)
         else:
             media_token = adobe.POST_SHORT_AUTHORIZED(signed_requestor_id,authz)
             stream_url = adobe.TV_SIGN(media_token,resource_id, stream_url)
             
             listitem = xbmcgui.ListItem(path=stream_url)
-            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem)  
-            #addLink(stream_name, stream_url, stream_name, stream_icon, FANART) 
+            
+            print "PLAY FROM MAIN!!!!"
+            print str(PLAY_MAIN)
+
+            if str(PLAY_MAIN) == 'true':
+                xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem)
+            else:
+                addLink(stream_name, stream_url, stream_name, stream_icon, FANART) 
 
 
 def utc_to_local(utc_dt):
@@ -329,7 +348,7 @@ def addLink(name,url,title,iconimage,fanart,info=None):
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     return ok
 
-def addPremiumLink(name,link_url,iconimage,fanart=None,scrape_type=None,isFolder=True,info=None): 
+def addPremiumLink(name,link_url,iconimage,fanart=None,scrape_type=None,info=None): 
     params = get_params()      
     ok=True
     u=sys.argv[0]+"?url="+urllib.quote_plus(link_url)+"&mode=5"

@@ -48,7 +48,7 @@ def filter_video(path):
         logging.debug("skipping '%s'. contains blacklisted word" % path)
         return False
 
-    filename = os.path.basename(path.rstrip("\\/"))
+    filename = os.path.basename(path.rstrip('/'))
     basename, ext = os.path.splitext(filename)
 
     if ext == "" or ext.lower() not in FILE_EXTENSIONS:
@@ -98,7 +98,10 @@ def find_missing_videos(sources, known_paths):
                 continue
 
             if abs_path not in known_paths:
+                logging.debug("'%s' identified as missing" % abs_path)
                 missing.append(abs_path)
+            else:
+                logging.debug("'%s' identified as known" % abs_path)
     return missing
 
 
@@ -107,6 +110,10 @@ def list_files(files):
     xbmcplugin.setContent(plugin.handle, "files")
     for path in files:
         li = ListItem(os.path.basename(path))
+
+        if not re.match(r"[A-z0-9]+://.*", path) and os.sep == '\\':
+            # Un-normalize for windows, otherwise manual search doesn't work
+            path = path.replace("/", os.sep)
         addDirectoryItem(plugin.handle, path, li, False, len(files))
     endOfDirectory(plugin.handle)
 

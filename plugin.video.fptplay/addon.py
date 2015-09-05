@@ -29,7 +29,7 @@ def getEvents(url):
         plugin.log.error('Something wrong when get list fpt play event !')
         return None
     soup = BeautifulSoup(result.content, convertEntities=BeautifulSoup.HTML_ENTITIES)
-    
+
     item = soup.find('ul', {'class' : 'slider_event'})
     if item == None :
         return None
@@ -54,7 +54,7 @@ def getEvents(url):
         if cn not in cns :
             cns.append(cn)
     return cns
-    
+
 def getChannels(url):
     cns = []
     result = None
@@ -67,42 +67,42 @@ def getChannels(url):
         plugin.log.error('Something wrong when get list fpt play channel !')
         return None
     soup = BeautifulSoup(result.content, convertEntities=BeautifulSoup.HTML_ENTITIES)
-    
+
     items = soup.findAll('div', {'class' : 'item_view'})
     for item in items:
-            
+
         ac = item.find('a', {'class' : 'tv_channel '})
-        
+
         if ac == None :
             ac = item.find('a', {'class' : 'tv_channel active'})
             if ac == None :
                 continue
-        
+
         lock = item.find('img', {'class' : 'lock'})
-        
+
         if lock != None :
             continue
-        
+
         dataref = ac.get('data-href')
-        
+
         if dataref == None :
             continue
-        
+
         img = ac.find('img', {'class' : 'img-responsive'})
-        
+
         imgthumbnail = ''
-        
+
         if img != None :
             imgthumbnail = img.get('data-original')
-            
+
         if not dataref.startswith(crawurl) :
             continue
-            
+
         channelid = dataref[26:]
-        
+
         if not channelid :
             continue
-            
+
         title = channelid
         cn = {
                 'label': title,
@@ -114,7 +114,7 @@ def getChannels(url):
     return cns
 
 def getLink(id = None):
-    
+
     if id.startswith('http://') :
         #is event
         id = getChannelIdFromEventLink(id)
@@ -127,16 +127,17 @@ def getLink(id = None):
             "mobile": "web"
             },
         headers={'Content-Type': 'application/x-www-form-urlencoded',
-                'User-Agent':'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.81 Safari/537.36'
+                'User-Agent':'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.81 Safari/537.36',
+                'X-Requested-With':'XMLHttpRequest'
                 }
         )
-        
+
     if result.status_code != 200 :
         plugin.log.error("Can't get link for id " + id)
         return None
     info = json.loads(result.content)
     return info['stream']
-    
+
 def startChannel():
     channelid = __settings__.getSetting('start_channelid')
     link = getLink(channelid)
@@ -168,7 +169,6 @@ def index():
 def plays(id):
     link = getLink(id)
     plugin.set_resolved_url(link)
-    
+
 if __name__ == '__main__':
     plugin.run()
-    

@@ -1,0 +1,6 @@
+[B]4.0.0[/B]
+- Reworked existing features
+- Added ability to show identify missing TV shows
+- Improved detection of DVD/Bluray files, samples, extras and other false positives
+- Performance improvements
+- Unicode support

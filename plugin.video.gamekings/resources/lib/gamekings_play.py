@@ -110,14 +110,14 @@ class Main:
 			video_urls = soup.findAll('iframe', attrs={'src': re.compile("^https://www.youtube.com/embed/")}, limit=1)
 			if len(video_urls) == 0:
 				pos_of_gogoVideo = str(html_data).find('gogoVideo')
-				pos_of_youtube = str(html_data).find('www.youtube.com/watch?')
+				pos_of_youtube_after_gogoVideo = str(html_data).find('www.youtube.com/watch?', pos_of_gogoVideo)
 				
 				# is it gogo video or gogo youtube video?
 				
 				if pos_of_gogoVideo < 0:
 					pass
 				else:
-					if pos_of_youtube < 0:
+					if pos_of_youtube_after_gogoVideo < 0:
 		 				#This is f.e. for Gamekings Extra
 		 				#<script type="text/javascript">
 		 				#   gogoVideo(92091,"MjAxNDExMTNfRXh0cmEubXA0LGh0dHA6Ly93d3cuZ2FtZWtpbmdzLnR2L3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDE0MTExNF9FeHRyYV9zcGxhc2gtMTAyNHg1NzYuanBnLEdhbWVraW5ncyBFeHRyYTogV2Vsa2UgZ2FtZXMgc3BlbGVuIHdpaiBkaXQgbmFqYWFyPw==");
@@ -125,6 +125,7 @@ class Main:
 		 				#the base86 encode string looks like this decoded:
 		 				#20141113_Extra.mp4,http://www.gamekings.tv/wp-content/uploads/20141114_Extra_splash-1024x576.jpg,Gamekings Extra: Welke games spelen wij dit najaar?
 						gogo_video = True
+						#ignore youtube links in the comments
 					else:
 						#This is f.e. for Trailers
 						#gogoVideo("http://www.gamekings.tv/wp-content/uploads/nieuws20150723_LifeisStrangeE4-1024x576.jpg","http://www.youtube.com/watch?v=AukgNY6Uxww",pseudo,host);
@@ -157,7 +158,7 @@ class Main:
 				video_url = str(video_urls[0]['src'])	
 			elif gogo_youtube_video:
 				search_for_string = 'www.youtube.com/watch?v='
-				begin_pos = str(html_data).find(search_for_string) + len('www.youtube.com/watch?v=')
+				begin_pos = str(html_data).find(search_for_string, pos_of_gogoVideo) + len('www.youtube.com/watch?v=')
 				end_pos = str(html_data).find('"',begin_pos)
 				youtubeID = str(html_data)[begin_pos:end_pos]
 				video_url = youtubeID

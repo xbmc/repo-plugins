@@ -1,3 +1,6 @@
+v1.1.7 (Thursday, 27 2015) :
+- small fix for gogoVideo
+
 v1.1.6 (Saturday, 15 august 2015) :
 - added youtube as a dependency
 - added some utf8 stuff

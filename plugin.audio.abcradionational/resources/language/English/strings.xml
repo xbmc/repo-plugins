@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
   <!-- Plugin name -->
-  <string id="30000">Live Stream</string>
+  <string id="30000">Radio National: Live Stream</string>
   <string id="30001">Podcasts: Just in</string>
-  <string id="30002">Podcasts: by Subject</string>
-  <string id="30003">Podcasts: by Program</string>
+  <string id="30002">Podcasts: Browse by subject name</string>
+  <string id="30003">Podcasts: Browse by program name</string>
 </strings>

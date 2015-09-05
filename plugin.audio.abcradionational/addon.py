@@ -1,16 +1,36 @@
 from xbmcswift2 import Plugin, xbmcgui
 from resources.lib import abcradionational
 
+
 plugin = Plugin()
+
+# base url for fetching podcasts 
+URL = "http://abc.net.au/radionational"
+
 
 @plugin.route('/')
 def main_menu():
+    """
+    main menu 
+    """
     items = [
-        {'label': plugin.get_string(30000), 'path': "http://www.abc.net.au/res/streaming/audio/aac/news_radio.pls",
-         'is_playable': True},
-        {'label': plugin.get_string(30001), 'path': plugin.url_for('just_in')},
-        {'label': plugin.get_string(30002), 'path': plugin.url_for('subject_list')},
-        {'label': plugin.get_string(30003), 'path': plugin.url_for('program_menu')},
+        {
+            'label': plugin.get_string(30000), 
+            'path': "http://www.abc.net.au/radio/stations/RN/live?play=true",
+            'thumbnail': "http://www.abc.net.au/local/global_img/programs/howtolisten.jpg", 
+            'is_playable': True},
+        {
+            'label': plugin.get_string(30001), 
+            'path': plugin.url_for('just_in'),
+            'thumbnail': "https://pbs.twimg.com/profile_images/470802028856213504/A4Dg37Ey_400x400.jpeg"},
+        {
+            'label': plugin.get_string(30002), 
+            'path': plugin.url_for('subject_list'),
+            'thumbnail': "https://pbs.twimg.com/profile_images/470802028856213504/A4Dg37Ey_400x400.jpeg"},
+        {
+            'label': plugin.get_string(30003),
+            'path': plugin.url_for('program_list'),
+            'thumbnail': "https://pbs.twimg.com/profile_images/470802028856213504/A4Dg37Ey_400x400.jpeg"},
     ]
 
     return items
@@ -18,67 +38,87 @@ def main_menu():
 
 @plugin.route('/just_in/')
 def just_in():
-    subjects = abcradionational.get_podcasts("/podcasts")
+    """
+    contains playable podcasts listed as just-in
+    """
+    soup = abcradionational.get_soup(URL + "/podcasts")
+    
+    playable_podcast = abcradionational.get_playable_podcast(soup)
+    
+    items = abcradionational.compile_playable_podcast(playable_podcast)
 
-    items = [{
-        'label': subject['title'],
-        'path': subject['url'],
-        'is_playable': True,
-    } for subject in subjects]
 
     return items
 
 
 @plugin.route('/subject_list/')
 def subject_list():
-    subjects = abcradionational.get_subjects("/podcasts/subjects")
+    """
+    contains a list of navigable podcast by subjects
+    """
+    items = []
 
-    items = [{
-        'label': subject['title'],
-        'path': plugin.url_for('subject_item', url=subject['url']),
-    } for subject in subjects]
+    soup = abcradionational.get_soup(URL + "/podcasts/subjects")
+    
+    subject_heading = abcradionational.get_podcast_heading(soup)
+    
+    for subject in subject_heading:
+        items.append({
+            'label': subject['title'],
+            'path': plugin.url_for('subject_item', url=subject['url']),
+        })
 
-    sorted_items = sorted(items, key=lambda item: item['label'])
-
-    return sorted_items
+    return items
 
 
 @plugin.route('/subject_item/<url>/')
 def subject_item(url):
-    subjects = abcradionational.podcasts_get(url)
+    """
+    contains the playable podcasts for subjects
+    """
+    soup = abcradionational.get_soup(url)
+    
+    playable_podcast = abcradionational.get_playable_podcast(soup)
 
-    items = [{
-        'label': subject['title'],
-        'path': subject['url'],
-        'is_playable': True,
-    } for subject in subjects]
+    items = abcradionational.compile_playable_podcast(playable_podcast)
 
-    return items
-
-             
-@plugin.route('/program_menu/')
-def program_menu():
-    subjects = abcradionational.get_programs("/podcasts/program")
-
-    items = [{
-        'label': subject['title'],
-        'path': plugin.url_for('program_item',url=subject['url']),
-    } for subject in subjects]
-
-    #sorted_items = sorted(items, key=lambda item: item['label'])
 
     return items
 
 
-@plugin.route('/program_item/<url>/')
+@plugin.route('/program_list/')
+def program_list():
+    """
+    contains a list of navigable menu items by program name 
+    """
+    items = []
+
+    soup = abcradionational.get_soup(URL + "/podcasts/program")
+    
+    program_heading = abcradionational.get_podcast_heading(soup)
+
+    for program in program_heading:
+        items.append({
+            'label': program['title'],
+            'path': plugin.url_for('program_item', url=program['url']),
+        })
+
+    return items
+
+
+@plugin.route('/program_list/<url>/')
 def program_item(url):
-    programs = abcradionational.podcasts_get(url)
+    """
+    contains the playable podcasts for program names
+    """
+    items = []
+    
+    soup = abcradionational.get_soup(url)
 
-    items = [{
-        'label': program['title'],
-        'path': program['url'],
-        'is_playable': True,
-    } for program in programs]
+    playable_podcast = abcradionational.get_playable_podcast(soup)
+
+    items = abcradionational.compile_playable_podcast(playable_podcast)
+
     return items
 
 

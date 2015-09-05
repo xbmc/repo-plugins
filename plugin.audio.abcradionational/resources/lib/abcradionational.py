@@ -1,93 +1,96 @@
 import requests
-from BeautifulSoup import BeautifulSoup
 import re
+from bs4 import BeautifulSoup
 
-ABC_URL= "http://abc.net.au/radionational"
-
-def get_podcasts(url_id):
+def get_soup(url):
     """
-    returns playable podcasts links from ABC website
-    """
-    url = ABC_URL + url_id
-    page = requests.get(url)
-    soup = BeautifulSoup(page.text)
-    urls = soup.findAll('a', 'ico-download')
-    titles = soup.findAll('h3', 'title')
-
-    title_out = []
-    for title in titles:
-        title_out.append(re.sub('&#039;', "'", title.text))
-
-    output = []
-    for i in range(len(title_out)):
-		url = urls[i]['href']
-		title = title_out[i]
-		output.append({'url': url, 'title': title})
-   
-    return output
-
-
-def podcasts_get(url):
-    """
-    returns playable podcasts depending on arg
+    @param: url of site to be scraped
     """
     page = requests.get(url)
-    soup = BeautifulSoup(page.text)
-    urls = soup.findAll('a', 'ico-download')
-    titles = soup.findAll('h3', 'title')
+    soup = BeautifulSoup(page.text, 'html.parser')
     
-    titles_out = []
-    for title in titles:
-        titles_out.append(re.sub('&#039;', "'", title.text))
+    print "type: ", type(soup)
+    return soup
 
-    output = []
-    for i in range(len(titles_out)):
-        try:
-            url = urls[i]['href']
-            title = titles_out[i]
-            output.append({'url': url, 'title': title})
-        except IndexError:
-            pass
+get_soup("http://abc.net.au/radionational/podcasts")
 
-    return output
-
-
-def get_programs(url_id):
+def get_playable_podcast(soup):
     """
-    returns program info from ABC website
+    @param: parsed html page            
     """
-    url = ABC_URL + url_id
-    page = requests.get(url)
-    soup = BeautifulSoup(page.text)
-    urls = soup.findAll(href=re.compile("/radionational/programs/"))
-    programs = []
-    for i in range(len(urls)):
-        path = urls[i]['href']
-        path_final = "http://www.abc.net.au" + path
-        title = re.sub('&#039;', "'", urls[i].text)
-        programs.append({'url': path_final, 'title': title})
-        program_final = programs[40:131]
+    subjects = []
+
+    for content in soup.find_all('div', class_= "cs-teaser"):
+        
+        try:        
+            link = content.find('a', {'class': 'ico ico-download'})
+            link = link.get('href')
+            print "\n\nLink: ", link
+
+            title = content.find('h3', {'class': 'title'})
+            title = title.get_text()
+
+            desc = content.find('div', {'class': 'summary'})
+            desc = desc.get_text()
+            
+     
+            thumbnail = content.find('img')
+            thumbnail = thumbnail.get('src')
+        except AttributeError:
+            continue
+       
+       
+        item = {
+                'url': link,
+                'title': title,
+                'desc': desc,
+                'thumbnail': thumbnail
+        }
+        
+        #needto check that item is not null here
+        subjects.append(item) 
     
-    return program_final
+    return subjects
 
 
-def get_subjects(url_id):
+def get_podcast_heading(soup):
     """
-    returns subject info from ABC website
+    @para: parsed html page
     """
-    url = ABC_URL + url_id
-    page = requests.get(url)
-    soup = BeautifulSoup(page.text)
-    urls = soup.findAll(href=re.compile("/radionational/subjects/"))
-    programs = []
-
-    for i in range(len(urls)):
-        path = urls[i]['href']
-        path_final = "http://www.abc.net.au" + path
-        title = re.sub('&#039;', "'", urls[i].text)
-        programs.append({'url': path_final, 'title': title})
-        sorted_programs = sorted(programs, key=lambda item: item['title'])
-        programs_final = programs[10:30]
+    subjects = []
     
-    return programs_final
+    for content in soup.find_all('div', class_= 'header'):    
+        
+        link = content.find('a')
+        link = link.get('href')
+        link = "http://abc.net.au" + link 
 
+        title = content.find('h3')
+        title = title.get_text()
+        
+        item = { 
+                'url': link,
+                'title': title
+        }
+
+        subjects.append(item)
+
+    return subjects
+
+
+def compile_playable_podcast(playable_podcast):
+    """
+    @para: list containing dict of key/values pairs for playable podcasts
+    """
+    items = []
+
+    for podcast in playable_podcast:
+        items.append({
+            'label': podcast['title'],
+            'thumbnail': podcast['thumbnail'],
+            'path': podcast['url'],
+            'info': podcast['desc'],
+            'is_playable': True,
+    })
+
+    return items

@@ -17,7 +17,6 @@
 
 import json
 import xbmc
-import fsutils
 import logging
 from collections import namedtuple
 
@@ -38,6 +37,10 @@ def _unstack(paths):
             yield path
 
 
+def _normalize_path(path):
+    return path.replace('\\', '/').rstrip('/')
+
+
 def get_movies():
     query = {
         "jsonrpc": "2.0",
@@ -46,7 +49,7 @@ def get_movies():
         "id": 1
     }
     items = jsonrpc(query)['result'].get('movies', [])
-    return list(_unstack((item['file'].encode('utf-8') for item in items)))
+    return list(map(_normalize_path, _unstack((item['file'].encode('utf-8') for item in items))))
 
 
 def get_tvshows():
@@ -57,7 +60,7 @@ def get_tvshows():
         "id": 1
     }
     items = jsonrpc(query)['result'].get('tvshows', [])
-    return [item['file'].encode('utf-8').rstrip('\\/') for item in items]
+    return [_normalize_path(item['file'].encode('utf-8')) for item in items]
 
 
 def get_episodes():
@@ -68,7 +71,7 @@ def get_episodes():
         "id": 1
     }
     items = jsonrpc(query)['result'].get('episodes', [])
-    return list(_unstack((item['file'].encode('utf-8') for item in items)))
+    return list(map(_normalize_path, _unstack((item['file'].encode('utf-8') for item in items))))
 
 
 def get_sources():
@@ -79,7 +82,7 @@ def get_sources():
         "id": 1
     }
     response = jsonrpc(query)
-    return [Source(item['label'].encode('utf-8'), item['file'].encode('utf-8').rstrip('\\/'))
+    return [Source(item['label'].encode('utf-8'), _normalize_path(item['file'].encode('utf-8')))
             for item in response['result'].get('sources', [])]
 
 
@@ -91,11 +94,10 @@ def _identify_source_content():
     tv_sources = []
 
     for source in get_sources():
-        sep = fsutils.separator(source.path)
-        if any((path.startswith(source.path + sep) for path in movie_content)):
+        if any((path.startswith(source.path + '/') for path in movie_content)):
             movie_sources.append(source)
             logging.debug("source '%s' identified as movie source" % source.path)
-        elif any((path.startswith(source.path + sep) for path in tv_content)):
+        elif any((path.startswith(source.path + '/') for path in tv_content)):
             tv_sources.append(source)
             logging.debug("source '%s' identified as tv source" % source.path)
         else:

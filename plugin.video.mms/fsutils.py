@@ -55,15 +55,13 @@ def _listdir(path):
 
 def walk(path, filter_dir=lambda *args: True):
     assert not isinstance(path, unicode)
-    path.rstrip(b'\\/')
     return _walk(path, b'', filter_dir)
 
 
 def listdir(path):
     assert not isinstance(path, unicode)
-    sep = separator(path)
-    if not path.endswith(sep):
-        path += sep
+    if not path.endswith('/'):
+        path += '/'
 
     dirs, files = _listdir(path)
     for name in dirs:
@@ -99,18 +97,11 @@ def join(base_path, *paths):
     """
     assert isinstance(base_path, str)
     assert base_path != b""
-    sep = separator(base_path)
     result = base_path
 
     for path in paths:
-        if result != b"" and not result.endswith(sep) and not path.startswith(sep):
-            result += sep
+        if result != b"" and not result.endswith('/') and not path.startswith('/'):
+            result += '/'
         result += path
 
     return result
-
-
-def separator(base_dir):
-    if b'/' in base_dir:
-        return b'/'
-    return str(os.sep)

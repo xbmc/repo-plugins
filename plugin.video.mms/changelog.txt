@@ -1,3 +1,6 @@
+[B]4.0.1[/B]
+- Fixed remote paths getting identified as missing on windows
+
 [B]4.0.0[/B]
 - Reworked existing features
 - Added ability to show identify missing TV shows

@@ -31,10 +31,11 @@ icon = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('path')+'/icon.png').de
 useThumbAsFanart=addon.getSetting("useThumbAsFanart") == "true"
 defaultBackground = ""
 defaultThumb = ""
-global debuging
-debuging=addon.getSetting("debug")
 global bitrate
 bitrate=addon.getSetting("bitrate")
+global kurzvideos
+kurzvideos=addon.getSetting("kurzvideos")
+
 profile    = xbmc.translatePath( addon.getAddonInfo('profile') ).decode("utf-8")
 temp       = xbmc.translatePath( os.path.join( profile, 'temp', '') ).decode("utf-8")
 
@@ -81,12 +82,8 @@ def addLink(name, url, mode, iconimage, duration="", desc="", genre=''):
 	liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc, "Genre": genre})
 	liz.setProperty('IsPlayable', 'true')
 	liz.addStreamInfo('video', { 'duration' : duration })
-	if useThumbAsFanart:
-		if not iconimage or iconimage==icon or iconimage==defaultThumb:
-			iconimage = defaultBackground
-		liz.setProperty("fanart_image", iconimage)
-	else:
-		liz.setProperty("fanart_image", defaultBackground)
+	liz.setProperty("fanart_image", iconimage)
+	#liz.setProperty("fanart_image", defaultBackground)
 	xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
 	ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz)
 	return ok
@@ -202,7 +199,10 @@ def list_serie(url):
     addLink(name=title, url=url, mode="folge", iconimage=image,duration=dauer,desc=inhaltstext)      
     kurz_inhalt = inhalt[inhalt.find('<div class="containerInner">')+1:]
     kurz_inhalt = kurz_inhalt[:kurz_inhalt.find('<div class="sectionHead clearFix">')]
-    match=re.compile('data-filter_entire_broadcasts_url="([^"]+)"', re.DOTALL).findall(kurz_inhalt)
+    if kurzvideos=="false":
+       match=re.compile('data-filter_entire_broadcasts_url="([^"]+)"', re.DOTALL).findall(kurz_inhalt)
+    else:
+       match=re.compile("data-more_url='([^']+)'", re.DOTALL).findall(kurz_inhalt)      
     url2=baseurl+match[0]
     jsonurl(url2)
     

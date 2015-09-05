@@ -2,8 +2,7 @@
 <strings>
   <string id="30001">A-Z</string>
   <string id="30002">Settings</string> 
-  <string id="30003">Quality</string> 
-  <string id="30004">Debug</string> 
+  <string id="30003">Quality</string>  
   <string id="30005">Date(Bayrischen Fernsehen)</string> 
   <string id="30006">Date(BR Alpha)</string> 
   <string id="30007">Br Alpha Live</string> 
@@ -11,4 +10,5 @@
   <string id="30009">Select Date</string> 
   <string id="30010">Search Word</string> 
   <string id="30011">Search</string> 
+  <string id="30012">Bonus Matrial</string> 
 </strings>

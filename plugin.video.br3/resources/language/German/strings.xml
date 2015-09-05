@@ -3,7 +3,6 @@
   <string id="30001">A-Z</string>
   <string id="30002">Einstellungen</string> 
   <string id="30003">Qualitaet</string> 
-  <string id="30004">Debug</string> 
   <string id="30005">Datum(Bayrischen Fernsehen)</string> 
   <string id="30006">Datum(BR Alpha)</string> 
   <string id="30007">Br Alpha Live</string> 
@@ -11,4 +10,5 @@
   <string id="30009">Datum auswählen</string> 
   <string id="30010">Suchbegriff</string> 
   <string id="30011">Search</string> 
+  <string id="30012">Bonus Matrial</string> 
 </strings>

@@ -6,3 +6,5 @@
 - Orginal Code until 1.1.0. was from AddonScriptorDE
 - New Version from L0RE
 - Fixed Version from L0RE
+1.1.2
+- Added Nick Night

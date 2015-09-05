@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.nick_de" name="Nickelodeon.de" version="1.1.1" provider-name="L0RE">
+<addon id="plugin.video.nick_de" name="Nickelodeon.de" version="1.1.4" provider-name="L0RE">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>
@@ -15,7 +15,7 @@
         <description lang="en">Nick.de ist die kostenlose Website von Nickelodeon.</description>
         <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
         <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-        <source>http://repo.l0re.com/data/plugin.video.nick_de/</source>
+        <source>https://github.com/kodinerds/repo/tree/master/addons/plugin.video.nick_de</source>
         <forum>http://forum.xbmc.org/showthread.php?tid=132563</forum>
         <email>andreas at vogler dot name</email>
         <website>http://www.nick.de</website>

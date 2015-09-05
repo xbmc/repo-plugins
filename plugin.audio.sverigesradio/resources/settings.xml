@@ -2,5 +2,6 @@
 <settings>
     <category label="32000">
         <setting id="quality" type="enum" label="32001" default="2" lvalues="32111|32112|32113"/>
+        <setting id="preference" type="enum" label="32002" default="0" lvalues="32121|32122"/>
     </category>
 </settings>

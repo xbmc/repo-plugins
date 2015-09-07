@@ -115,9 +115,9 @@ def episode():
         if iframe:
             attrs = dict(iframe.attrs)
             youtube_url = attrs['src']
+            print youtube_url
             video_id = urlparse.urlparse(youtube_url).path.replace('/embed/', '')
             url = 'plugin://plugin.video.youtube/play/?video_id=%s' % video_id
-            print url
             h.add_dir_video(addon_handle, name, url, '', '')
 
 

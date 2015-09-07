@@ -36,6 +36,7 @@ def add_dir(addon_handle, base_url, name, url, mode, icon_image='DefaultFolder.p
 def add_dir_video(addon_handle, name, url, thumbnail, plot):
     liz = xbmcgui.ListItem(name, iconImage='DefaultVideo.png', thumbnailImage=thumbnail)
     liz.setInfo(type='Video', infoLabels={'Title': name, 'Plot': plot})
+    liz.setProperty("IsPlayable", "true")
     xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=liz)
 
 

@@ -1,4 +1,4 @@
-import urllib, urllib2, random, adobe, json
+import urllib, urllib2, random, time, datetime, adobe, json, xml.dom.minidom
 from msofactory import MSOFactory
 from cookies import Cookies
 from settings import Settings
@@ -14,6 +14,7 @@ class SportsnetNow:
         self.AUTHORIZED_MSO_URI = 'https://sp.auth.adobe.com/adobe-services/1.0/config/SportsnetNow'
         self.PUBLISH_POINT = 'http://now.sportsnet.ca/service/publishpoint?format=json'
         self.USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 8_3 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12F69 ipad sn now 4.0912'
+        self.EPG_PREFIX = 'http://smb.cdnak.nyc.neulion.com/u/smb/sportsnetnow/configs/epg/'
 
     @staticmethod
     def instance():
@@ -83,6 +84,90 @@ class SportsnetNow:
         return None
 
 
+    def getChannelResourceMap(self):
+        """
+        Get the mapping from ID to channel abbreviation
+        """
+        settings = Settings.instance().get(self.getRequestorID())
+        chan_map = {}
+        if settings and 'CHAN_MAP' in settings.keys():
+            return settings['CHAN_MAP']
+
+        jar = Cookies.getCookieJar()
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
+        opener.addheaders = [('User-Agent', urllib.quote(self.USER_AGENT))]
+
+        try:
+            resp = opener.open(self.CONFIG_URI)
+        except urllib2.URLError, e:
+            print e.args
+            return None
+        Cookies.saveCookieJar(jar)
+
+        config_xml = resp.read()
+        dom = xml.dom.minidom.parseString(config_xml)
+        result_node = dom.getElementsByTagName('result')[0]
+        map_node = result_node.getElementsByTagName('channelResourceMap')[0]
+        for chan_node in map_node.getElementsByTagName('channel'):
+            cid = chan_node.attributes['id']
+            abr = chan_node.attributes['resourceId']
+            chan_map[cid.value] = abr.value
+
+        Settings.instance().store(self.getRequestorID(), 'CHAN_MAP', chan_map)
+
+        return chan_map
+
+
+    def getGuideData(self):
+        """
+        Get the guid data for the channels right now.
+        """
+        now = datetime.datetime.now()
+        url = self.EPG_PREFIX + now.strftime("%Y/%m/%d.xml")
+
+        jar = Cookies.getCookieJar()
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
+        opener.addheaders = [('User-Agent', urllib.quote(self.USER_AGENT))]
+
+        try:
+            resp = opener.open(url)
+        except urllib2.URLError, e:
+            print e.args
+            return None
+        Cookies.saveCookieJar(jar)
+
+        guide_xml = resp.read()
+        guide = {}
+        dom = xml.dom.minidom.parseString(guide_xml)
+        channels_node = dom.getElementsByTagName('channelEPG')[0]
+        for channel_node in channels_node.getElementsByTagName('EPG'):
+            cid = channel_node.attributes['channelId'].value
+            curr_item = None
+            for item in channel_node.getElementsByTagName('item'):
+                time_str = item.attributes['sl'].value.split('.')[0]
+                item_time = time.strptime(time_str, '%Y-%m-%dT%H:%M:%S')
+                item_time = datetime.datetime.fromtimestamp(time.mktime(item_time))
+
+                if item_time > now:
+                    break
+                curr_item = item
+
+            if curr_item:
+                show = {}
+                try:
+                    title = curr_item.attributes['t']
+                except:
+                    title = curr_item.attributes['e']
+                episode = curr_item.attributes['e']
+                description = curr_item.attributes['ed']
+                show['tvshowtitle'] = title.value.encode('utf-8').strip()
+                show['title'] = episode.value.encode('utf-8').strip()
+                show['plot'] = description.value.encode('utf-8').strip()
+                guide[cid] = show
+
+        return guide
+
+
     def getChannels(self):
         jar = Cookies.getCookieJar()
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
@@ -96,9 +181,11 @@ class SportsnetNow:
         Cookies.saveCookieJar(jar)
 
         channels = json.loads(resp.read())
+        channel_map = self.getChannelResourceMap()
 
         for channel in channels:
-            abbr = 'SN' + channel['seoName'][10:].capitalize()
+            chan_id =str(channel['id'])
+            abbr = channel_map[chan_id]
             channel['abbr'] = abbr
 
         Settings.instance().store(self.getRequestorID(), 'CHANNELS', channels)
@@ -116,23 +203,41 @@ class SportsnetNow:
 
         # Get the MSO class from the 
         mso = MSOFactory.getMSO(msoName)
+        if mso == None:
+            print "Invalid MSO"
+            return None
+
 
         # Authorize with the MSO
-        mso.authorize(self, username, password)
+        if not mso.authorize(self, username, password):
+            return False
 
         ap = adobe.AdobePass()
-        ap.sessionDevice(self)
 
-        settings = Settings.instance().get(self.getRequestorID())
+        if not ap.sessionDevice(self):
+            print "Session device failed."
+            return False
 
-        result = ap.preAuthorize(self, ['SNEast', 'SNOne', 'SNOntario', 'SNWest',
-                                        'SNPacific', 'SN360', 'SNWorld'])
+        channels = self.getChannelResourceMap()
+        result = ap.preAuthorize(self, channels)
+
+        if not result:
+            print "Preauthorize failed."
+            return False
+
+        return True
 
 
-    def getChannel(self, id, name, msoName='Rogers'):
-
+    def getChannel(self, id, name, msoName):
+        """
+        Get the channel stream address.
+        @param id The channle id
+        @param name The channel name
+        @param the MSO name (eg: Rogers)
+        """
         ap = adobe.AdobePass()
         if not ap.authorizeDevice(self, msoName, name):
+            print "Authorize device failed"
             return None
         token = ap.deviceShortAuthorize(self, msoName)
 
@@ -142,7 +247,7 @@ class SportsnetNow:
 
     def getPublishPoint(self, id, name, token):
         """
-        Get the stream address.
+        Get the stream address. Do not call directly.
         @param name the channel name
         @param token the token to authorize the stream
         """

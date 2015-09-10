@@ -40,15 +40,35 @@ def createMainMenu():
         return
 
     sn.checkMSOs()
-    sn.authorize(creds['u'], creds['p'], creds['m'])
+    if not sn.authorize(creds['u'], creds['p'], creds['m']):
+        dialog = xbmcgui.Dialog()
+        dialog.ok(__language__(30004), __language__(30004))
+        xbmcplugin.endOfDirectory(handle = int(sys.argv[1]),
+                                  succeeded=False)
+
 
     channels = sn.getChannels()
-
-    print channels
+    guide = sn.getGuideData()
     for channel in channels:
+        prog = guide[str(channel['id'])]
         values = { 'menu' : 'channel', 'name' : channel['name'],
                    'id' : channel['id'], 'abbr' : channel['abbr'] }
-        live = xbmcgui.ListItem(values['name'])
+        for key in prog.keys():
+            values[key] = prog[key]
+        title = values['name']
+        if prog['tvshowtitle']:
+            title += ' ([B]' + prog['tvshowtitle'] + '[/B]'
+            if prog['title']:
+                title += ' - [I]' + prog['title'] + '[/I]'
+            title += ')'
+        live = xbmcgui.ListItem(title)
+        labels = {"TVShowTitle" : prog['tvshowtitle'],
+                  "Studio" : channel['name']}
+        if 'title' in values:
+            labels['Title'] = prog['title']
+        if 'plot' in values:
+            labels["Plot"] = prog['plot']
+        live.setInfo(type="Video", infoLabels=labels)
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
                                     url=sys.argv[0] + "?" + urllib.urlencode(values),
                                     listitem=live,
@@ -65,7 +85,6 @@ def createLiveMenu(values):
 
 
     channels = provider.getChannels()
-    print channels
     for channel in channels:
         values = { 'menu' : 'channel', 'provider' : pid,
                    'name' : channel['name'], 'id' : channel['id'],
@@ -82,14 +101,22 @@ def createLiveMenu(values):
 
 def playChannel(values):
     sn = snnow.SportsnetNow()
-    stream = sn.getChannel(values['id'][0], values['abbr'][0])
+    mso = __settings__.getSetting("mso")
+    stream = sn.getChannel(values['id'][0], values['abbr'][0], mso)
     if not stream:
         dialog = xbmcgui.Dialog()
         dialog.ok(__language__(30004), __language__(30005))
     else:
         name = values['name'][0]
         li = xbmcgui.ListItem(name)
-        li.setInfo( type="Video", infoLabels={"Title" : name})
+
+        labels = {"TVShowTitle" : values['tvshowtitle'][0],
+                  "Studio" : values['name'][0]}
+        if 'title' in values:
+            labels['Title'] = values['title'][0]
+        if 'plotoutline' in values:
+            labels["Plot"] = values['plot'][0]
+        li.setInfo(type="Video", infoLabels=labels)
         p = xbmc.Player()
         p.play(stream, li)
 

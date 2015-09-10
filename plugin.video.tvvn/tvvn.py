@@ -1,9 +1,9 @@
 # -*- coding: UTF-8 -*-
 #---------------------------------------------------------------------
 # File: tvvn.py
-# Version: 0.9.7
+# Version: 0.9.8
 # By:   Binh Nguyen <b@zecoj.com>
-# Date: Wed Jun 10 20:38:16 AEST 2015
+# Date: Thu Sep 10 21:33:49 AEST 2015
 #---------------------------------------------------------------------
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ def get_params():
                         splitparams=pairsofparams[i].split('=')
                         if (len(splitparams))==2:
                                 param[splitparams[0]]=splitparams[1]
-                                                        
+
         return param
 
 params=get_params()
@@ -177,19 +177,55 @@ def play_link(chn, src):
             page_q = data['channels'][chn]['src']['page_q']
             values={'id': page_id, 'quality': page_q, 'mobile': 'web'}
             post_data = urllib.urlencode(values)
-            req = urllib2.Request(url, post_data)
+            header = {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With':'XMLHttpRequest', 'Referer':'http://fptplay.net/livetv'}
+            req = urllib2.Request(url, post_data, header)
             response = urllib2.urlopen(req)
             the_page = response.read()
             the_data = json.loads(the_page)
             full_url=the_data['stream']
 
+        #m3u8 url from tvnet
+        elif data['channels'][chn]['src']['playpath'] == "m3u8_tvnet":
+            url = 'http://www.tvnet.gov.vn/xml.php?id='+data['channels'][chn]['src']['page_id']+'&tp=l'
+            stringA=opener.open(url).read().decode('utf-8')
+            stringB="<play1>[^?]+"
+            stringC="</play1>"
+            stringD="<connect>"
+            stringE="</connect>"
+            stringF="<play>"
+            stringG="/playlist.m3u8</play>"
+            full_url_BC=re.search(stringB+"(.*?)"+re.escape(stringC),stringA).group(1)
+            full_url_DE=re.search(re.escape(stringD)+"(.*?)"+re.escape(stringE),stringA).group(1)
+            full_url_FG=re.search(re.escape(stringF)+"(.*?)"+re.escape(stringG),stringA).group(1)
+            full_url=full_url_DE + "/" + full_url_FG + full_url_BC
+            print full_url
+
         #m3u8 url using before & after marker
         elif data['channels'][chn]['src']['playpath'] == "m3u8_bau":
-            #stringA=urllib2.urlopen(data['channels'][chn]['src']['page_url']).read().decode('utf-8')
-            stringA=opener.open(data['channels'][chn]['src']['page_url']).read().decode('utf-8')
+            if data['channels'][chn]['src'].get('header'):
+                header=(data['channels'][chn]['src']['header'])
+            else:
+                header=None
+            if data['channels'][chn]['src'].get('post'):
+                post=data['channels'][chn]['src']['post']
+            else:
+                post=None
+
+            if header==None:
+                req = urllib2.Request(data['channels'][chn]['src']['page_url'], post)
+            else:
+                req = urllib2.Request(data['channels'][chn]['src']['page_url'], post, header)
+
+            response = urllib2.urlopen(req)
+            #print(response)
+            the_page = response.read()
+            #print(the_page)
+
+            stringA=the_page
             stringB=(data['channels'][chn]['src']['url_before'])
             stringC=(data['channels'][chn]['src']['url_after'])
             full_url=re.search(re.escape(stringB)+"(.*?)"+re.escape(stringC),stringA).group(1)
+            print(full_url)
 
         #traditional rtmp(e)
         else:
@@ -211,6 +247,7 @@ def play_link(chn, src):
                     app = data['sources'][src]['app']
 
             full_url = videoUrl+' swfVfy=1 live=1 token='+token+' playpath='+playpath+' flashVer='+flashVer+' pageUrl='+pageUrl+' tcUrl='+videoUrl+' swfUrl='+swfUrl
+
         d_progress.close()
         xbmc.Player().play(full_url)
         return

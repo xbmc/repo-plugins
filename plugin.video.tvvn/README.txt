@@ -1,6 +1,6 @@
 This plugin allows you to watch live TV channels or listen to radio stations
-in Viet Nam or from oversea providers straight from the XBMC interface,
-eliminates the needs for using browsers and flashplayer, etc.
+in Viet Nam or from overseas providers straight from the XBMC interface,
+thus eliminating the needs for using browsers and flashplayer, etc.
 
 DISCLAIMER: All live streams are pulled from online providers and in no way
 represent my views or opinions. I also hold no control over the quality of

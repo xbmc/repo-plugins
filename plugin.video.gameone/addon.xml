@@ -16,5 +16,6 @@
 		<description lang="de">Inhalte von gameone.de ansehen: TV Folgen, Blog, Podcasts</description>
 		<summary lang="en">Gameone</summary>
 		<description lang="en">Watch german contents from gameone.de: TV Episodes, Blog, Podcasts</description>
+		<broken>Site will be taken offline.</broken>
 	</extension>
 </addon>

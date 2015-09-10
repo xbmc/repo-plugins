@@ -1,8 +1,10 @@
 plugin.video.thinktv
 ================
 
-XBMC Addon for Think TV PBS Video website
+Kodi Addon for Think TV PBS Video website
 
+Version 1.0.20 add 1080 support
+Version 1.0.19 fix for m3u8 url change
 Version 1.0.18 add'l fix for PBSKids .flv because I'm an idiot
 Version 1.0.17 changed PBSKids to use progressive mp4 rather than rtmp (thanks to toejam)
 Version 1.0.15 Added icons (thanks to freem@n), featured programs, popular programs

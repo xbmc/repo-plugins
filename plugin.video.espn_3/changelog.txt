@@ -1,11 +1,19 @@
 --------------------------------
+version 1.2.4 (September 15 2015)
+--------------------------------
+- Added ability to only list RTMP/HDS Stream Types to prevent confusion. *See Settings*
+
+
+--------------------------------
 version 1.2.3 (July 20 2015)
+--------------------------------
 - Changed code to use BeautifulSoup 4 for all scraping, as it seems to correctly encode for XML.
   Still, slower than Elementree, but more stable
 - Changed some code to pull full res pics for Thumb and Fanart from ESPN website.
 
 --------------------------------
 version 1.2.1 (July 7 2015)
+--------------------------------
 - Added some code to solve issues with timestamp on ESPN 3 website.
 
 --------------------------------

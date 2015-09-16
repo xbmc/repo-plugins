@@ -19,7 +19,7 @@ defaultfanart = 'special://home/addons/plugin.video.espn_3/fanart.jpg'
 defaultlive = 'special://home/addons/plugin.video.espn_3/resources/media/new_live.png'
 defaultreplay = 'special://home/addons/plugin.video.espn_3/resources/media/new_replay.png'
 defaultupcoming = 'special://home/addons/plugin.video.espn_3/resources/media/new_upcoming.png'
-
+StreamType = selfAddon.getSetting('StreamType')
 pluginpath = selfAddon.getAddonInfo('path')
 pluginhandle = int(sys.argv[1])
 
@@ -99,8 +99,11 @@ def INDEX(url,name,bysport=False):
     events = BeautifulSoup(data, 'html.parser', parse_only = SoupStrainer('event'))
     for event in events.find_all('event'):
         sport = event.find('sportdisplayvalue').string.title().encode('utf-8')
+        desktopStreamSource = event.find('desktopstreamsource').string
         if name <> sport and bysport == True:
             continue
+        elif desktopStreamSource == 'HLS' and StreamType == 'true':
+        	  pass
         else:
             ename = event.find('name').string.encode('utf-8')
             eventid = event.get('id')

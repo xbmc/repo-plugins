@@ -54,7 +54,7 @@ def getShows():
    url = 'http://www.foodnetwork.ca/video/'
    html = getRequest(url)
    a = re.compile('ShawVideoDrawer\(.+?drawerTitle: "(.+?)".+?categories: "(.+?)".+?\);',re.DOTALL).findall(html)
-   for name, url in a[3:]:
+   for name, url in a[2:]:
        mode = 'GE'
        u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],url, qp(name), mode)
        liz=xbmcgui.ListItem(name, '',None, icon)

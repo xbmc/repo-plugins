@@ -939,7 +939,7 @@ class RuleFunctions():
                 content = "tvshows"
             self.createBrowseNode( content, "actors" )
             returnVal = self.browser( self.niceMatchName( match ) )
-        elif match == "studios":
+        elif match == "studio":
             self.createBrowseNode( content, "studios" )
             returnVal = self.browser( self.niceMatchName( match ) )
         elif match == "path":

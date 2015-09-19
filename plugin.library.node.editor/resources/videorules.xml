@@ -178,7 +178,7 @@
 			<movies>True</movies>
 			<operator>numeric</operator>
 		</match>
-		<match name="studios">
+		<match name="studio">
 			<label>20388</label>
 			<movies>True</movies>
 			<tvshows>True</tvshows>

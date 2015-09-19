@@ -27,7 +27,7 @@ def log(txt):
     xbmc.log(msg=message, level=xbmc.LOGDEBUG)
 
 USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25'
-defaultHeaders = {'User-Agent':USER_AGENT, 'Accept':"text/html", 'Accept-Encoding':'gzip,deflate,sdch', 'Accept-Language':'en-US,en;q=0.8'} 
+defaultHeaders = {'User-Agent':USER_AGENT, 'Host':"www.metv.com",'Upgrade-Insecure-Requests':'1', 'Accept':"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", 'Accept-Encoding':'gzip,deflate,sdch', 'Accept-Language':'en-US,en;q=0.8', 'Connection':'keep-alive'} 
 
 def getRequest(url, user_data=None, headers = defaultHeaders , alert=True):
 
@@ -74,17 +74,23 @@ def getShows():
    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_EPISODE)
 
    ilist=[]
+   name = __language__(30013)
+   ilist.append(('%s?url=%s&name=%s&mode=GE' % (sys.argv[0],qp('/videos/promos/'), qp(name)), xbmcgui.ListItem(name, '',icon, icon), True))
+   name = __language__(30014)
+   ilist.append(('%s?url=%s&name=%s&mode=GE' % (sys.argv[0],qp('/videos/classic-commercials'),qp(name)),xbmcgui.ListItem(name,'',icon, icon), True))
+   name = __language__(30015)
+   ilist.append(('%s?url=%s&name=%s&mode=GE' % (sys.argv[0],qp('/videos/public-domain-classics'),qp(name)),xbmcgui.ListItem(name,'',icon,icon), True))
+
    pg = getRequest(METVBASE % '/videos/')
-   m = re.compile('<div class="video-library-list clearfix">(.+?)video-library-list -->',re.DOTALL).search(pg)
-   shows = re.compile('href="(.+?)".+?src="(.+?)".+?<h2>(.+?)<',re.DOTALL).findall(pg,m.start(1),m.end(1))
+   shows = re.compile('<div class="content-grid-item video-grid-item.+?href="(.+?)".+?src="(.+?)".+?">(.+?)<.+?</div>',re.DOTALL).findall(pg)
    for url, img, name in shows:
-       pg = getRequest(METVBASE % url)
-       img = METVBASE % img
+       pg = getRequest(METVBASE % url.rsplit('/',1)[0])
        try:
-          (cathead,catsyn)=re.compile('<span class="new-episodes">(.+?)<.+?"video-landing-main-desc-wrap clearfix".+?-->(.+?)<',re.DOTALL).search(pg).groups()
-          plot = '%s \n %s' % (cathead.strip(), catsyn.strip())
+         plot = re.compile('<div class="show-synopsis has-airings">(.+?)</div',re.DOTALL).search(pg).group(1).strip()
        except:
-          plot = re.compile('"video-landing-main-desc-wrap clearfix".+?-->(.+?)<',re.DOTALL).search(pg).group(1).strip()
+         try:    plot = re.compile('<div class="show-synopsis">(.+?)</div',re.DOTALL).search(pg).group(1).strip()
+         except: plot = ''
+
        name = name.strip()
        fanart = addonfanart
        infoList = {}
@@ -115,16 +121,17 @@ def getEpisodes(eurl, showName):
 
    ilist=[] 
    pg = getRequest(METVBASE % eurl)
-   try:
-      showName = re.compile('class="new-episodes">.+?<h2>(.+?)</h2>',re.DOTALL).search(pg).group(1)
-   except:
-      showName = 'MeTV'
-   m = re.compile('<img class="video-landing-billboard" src="(.+?)"',re.DOTALL).search(pg)
-   fanart = METVBASE % m.group(1)
-   m = re.compile('<div class="video-landing-episodes-wrap clearfix">(.+?)video-landing-episodes-wrap -->',re.DOTALL).search(pg, m.end(1))
-   episodes = re.compile('episode-title"><a href="(.+?)">(.+?)<.+?thumb-img" src="(.+?)".+?episode-desc">(.+?)<',re.DOTALL).findall(pg,m.start(1),m.end(1))
-   for showpage, name, thumb, plot in episodes:
-      plot = plot.replace('</span>','')
+
+   try:     showName = re.compile('<div class="show-header".+?<h1>(.+?)</h1>',re.DOTALL).search(pg).group(1)
+   except:  showName = 'MeTV'
+   try:     fanart = re.compile('<img class="show-banner" src="(.+?)"',re.DOTALL).search(pg).group(1)
+   except:  fanart = addonfanart
+   m = re.compile("<script src='/js/reminders.js(.+?)main-content ",re.DOTALL).search(pg)
+   try:      x = len(m.group(1))
+   except:   m = re.compile('<div id="main-content">(.+?)<a href="/video/#">',re.DOTALL).search(pg)
+   episodes = re.compile('<div class="category-list-item clearfix">.+?href="(.+?)".+?img src="(.+?)".+?href=.+?>(.+?)<.+?</div>(.+?)<div class="content-meta content-meta-tags">',re.DOTALL).findall(pg,m.start(1),m.end(1))
+   for showpage, thumb, name, plot in episodes:
+      plot = plot.replace('</span>','').strip()
       try:
          url = re.compile('/media/(.+?)/').search(thumb).group(1)
       except:
@@ -156,12 +163,9 @@ def getEpisodes(eurl, showName):
    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 def getUrl(mediaID):
-     if mediaID.startswith('BADASS'):
-        mediaID = METVBASE % mediaID.replace('BADASS','')
-        pg = getRequest(mediaID)
-        mediaID = re.compile('mediaId=(.+?)&',re.DOTALL).search(pg).group(1)
-
-     a = json.loads(getRequest('http://production-ps.lvp.llnw.net/r/PlaylistService/media/%s/getPlaylistByMediaId' % mediaID))
+     headers = defaultHeaders
+     headers['Host']='production-ps.lvp.llnw.net'
+     a = json.loads(getRequest('http://production-ps.lvp.llnw.net/r/PlaylistService/media/%s/getPlaylistByMediaId' % mediaID, None, headers))
      show_url=''
      highbitrate = float(0)
      for stream in a['playlistItems'][0]['streams']:
@@ -176,11 +180,21 @@ def getUrl(mediaID):
 
 
 def getVideo(url, show_name):
-    url = uqp(url)
+    mediaID = uqp(url)
+    if mediaID.startswith('BADASS'):
+        mediaID = METVBASE % mediaID.replace('BADASS','')
+        pg = getRequest(mediaID)
+        mediaID = re.compile('currentVideoID = "(.+?)"',re.DOTALL).search(pg).group(1)
+    url = mediaID
+    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = getUrl(url)))
+
+
     if (addon.getSetting('sub_enable') == "true"):
        try:
-           a = json.loads(getRequest('http://api.video.limelight.com/rest/organizations/abee2d5fad8944c790db6a0bfd3b9ebd/media/%s/properties.json' % url))
-           xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = getUrl(url)))
+           headers = defaultHeaders
+           headers['Host']='api.video.limelight.com'
+
+           a = json.loads(getRequest('http://api.video.limelight.com/rest/organizations/abee2d5fad8944c790db6a0bfd3b9ebd/media/%s/properties.json' % url, None, headers))
            try: 
                subfile = a["captions"][0]["url"]
                xbmc.sleep(2000)
@@ -189,8 +203,6 @@ def getVideo(url, show_name):
                pass
        except:
            pass
-    else:
-       xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = getUrl(url)))
 
 # MAIN EVENT PROCESSING STARTS HERE
 

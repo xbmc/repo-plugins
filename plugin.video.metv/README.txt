@@ -1,8 +1,10 @@
 plugin.video.metv
 ================
 
-XBMC Addon for MeTV website
+Kodi Addon for MeTV website
 
+Version 1.4.3 More Website changes
+Version 1.4.2 Website change
 Version 1.4.1 Website change
 Version 1.4.0 added metadata, subtitles and views
 Version 1.1.2 fix for commercials

@@ -312,10 +312,11 @@ def getShow(gsurl):
     url = a['recommended_encoding']['url']
     pg = getRequest('%s?format=json' % url)
     url = json.loads(pg)['url']
-    if ('.m3u8' in url) and addon.getSetting('vid_res') == '1':
+    if ('.m3u8' in url) and addon.getSetting('vid_res') >= '1':
        try:
            url = url.rsplit('-hls-',1)[0]
-           url += '-hls-2500k.m3u8'
+           if 'hd-1080p' in url and addon.getSetting('vid_res') == '2': url += '-hls-6500k.m3u8'
+           else: url += '-hls-2500k.m3u8'
        except:
            pass
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = url))

@@ -3,6 +3,7 @@
        <string id="30000">Video Resolution</string>
        <string id="30001">SD</string>
        <string id="30002">HD</string>
+       <string id="30003">1080</string>
        <string id="30010">ThinkTV PBS</string>
        <string id="30011">No Videos Found</string>
        <string id="30012">All Programs</string>

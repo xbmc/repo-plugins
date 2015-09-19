@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.thinktv"
        name="PBS ThinkTV"
-       version="1.0.19"
+       version="1.0.20"
        provider-name="t1m">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>

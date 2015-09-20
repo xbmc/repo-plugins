@@ -262,6 +262,8 @@ elif PROVIDER == 'Time Warner Cable':
     MSO_ID = 'TWC'
 elif PROVIDER == 'Verizon':
     MSO_ID = 'Verizon'
+elif PROVIDER == 'Bright House':
+    MSO_ID = 'Brighthouse'
 
 IDP_URL = 'https://sp.auth.adobe.com//adobe-services/1.0/authenticate/saml?domain_name=adobe.com&noflash=true&mso_id='+MSO_ID+'&requestor_id=nbcsports&no_iframe=true&client_type=iOS&client_version=1.9&redirect_url=http://adobepass.ios.app/'
 ORIGIN = ''

@@ -1,3 +1,6 @@
+v2015.9.17
+- Added Bright House support
+
 v2015.9.4
 - Added Cox support
 - Added General setting to toggle ability to play from main window

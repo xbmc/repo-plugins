@@ -1,6 +1,6 @@
 __author__ = 'bromix'
 
-import urlparse
+import uuid
 import urllib
 import urllib2
 from StringIO import StringIO
@@ -56,6 +56,7 @@ class Response():
         return {}
 
     pass
+
 
 __HTTP_CODE_TO_REASON__ = {200: 'OK',
                            405: 'Method Not Allowed'}
@@ -128,7 +129,7 @@ def _request(method, url,
             pass
         pass
     if data or json:
-        if headers.get('Content-Type', '').startswith('application/x-www-form-urlencoded') and data:
+        if headers.get('Content-Type', '').lower().startswith('application/x-www-form-urlencoded') and data:
             # transform a string into a map of values
             if isinstance(data, basestring):
                 _data = data.split('&')
@@ -147,8 +148,22 @@ def _request(method, url,
             # urlencode
             request.data = urllib.urlencode(data)
             pass
-        elif headers.get('Content-Type', '').startswith('application/json') and data and isinstance(data, dict):
+        elif headers.get('Content-Type', '').lower().startswith('application/json') and data and isinstance(data, dict):
             request.data = utils.strings.to_utf8(real_json.dumps(data))
+            pass
+        elif headers.get('Content-Type', '').lower().startswith('multipart/form-data') and data and isinstance(data,
+                                                                                                               dict):
+            boundary = str(uuid.uuid4())
+            request.add_header('Content-Type', 'multipart/form-data; boundary=%s' % boundary)
+
+            request_data = ''
+            for name, value in data.iteritems():
+                request_data += '--%s\r\nContent-Disposition: form-data; name="%s"\r\nContent-Length: %d\r\n\r\n%s\r\n' % (
+                    boundary, name, len(value), value)
+                pass
+            request_data += '--%s--\r\n' % boundary
+            request_data = utils.strings.to_utf8(request_data)
+            request.data = request_data
             pass
         elif json and isinstance(json, dict):
             request.data = utils.strings.to_utf8(real_json.dumps(json))

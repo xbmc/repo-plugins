@@ -13,7 +13,7 @@ class Client(nightcrawler.HttpClient):
         nightcrawler.HttpClient.__init__(self, default_header={'Accept-Encoding': 'gzip',
                                                                'Host': 'api.soundcloud.com:443',
                                                                'Connection': 'Keep-Alive',
-                                                               'User-Agent': 'SoundCloud-Android/14.10.01-27 (Android 4.4.4; samsung GT-I9100'})
+                                                               'User-Agent': 'SoundCloud-Android/15.09.14-release (Android 5.0.1; samsung GT-I9505)'})
         self._access_token = access_token
         self._items_per_page = items_per_page
 
@@ -313,7 +313,9 @@ class Client(nightcrawler.HttpClient):
                      'password': nightcrawler.utils.strings.to_utf8(password),
                      'scope': 'non-expiring'}
 
-        response = self._request(self._create_url('oauth2/token'), method='POST', post_data=post_data)
+        headers = {'Content-Type': 'multipart/form-data'}
+
+        response = self._request(self._create_url('oauth2/token'), method='POST', headers=headers, post_data=post_data)
         self._handle_error(response)
         return response.json()
 

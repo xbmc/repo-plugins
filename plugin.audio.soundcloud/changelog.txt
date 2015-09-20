@@ -1,3 +1,8 @@
+2.0.3 (2015-09-20)
+[add] Hebrew (thx 2 smoky-jr)
+[fix] skip incomplete items (bug of SoundCloud)
+[fix] login
+
 2.0.2 (2015-08-31)
 [fix] add missing fanart
 

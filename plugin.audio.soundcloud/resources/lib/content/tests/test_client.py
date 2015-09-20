@@ -31,6 +31,8 @@ class TestClient(unittest.TestCase):
     def test_search(self):
         client = Client()
         tracks = client.search('angerfist', category='sounds')
+        playlist = client.search('angerfist', category='sets')
+        people = client.search('angerfist', category='people')
         pass
 
     def test_get_favorites(self):

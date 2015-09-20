@@ -1,3 +1,8 @@
+[B]Version 1.0.2[/B]
+
+- Add support for Telus
+- Fix unicode encoding/decoding bugs
+
 [B]Version 1.0.1[/B]
 
 - Add support for Shaw Go

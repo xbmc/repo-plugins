@@ -160,9 +160,9 @@ class SportsnetNow:
                     title = curr_item.attributes['e']
                 episode = curr_item.attributes['e']
                 description = curr_item.attributes['ed']
-                show['tvshowtitle'] = title.value.encode('utf-8').strip()
-                show['title'] = episode.value.encode('utf-8').strip()
-                show['plot'] = description.value.encode('utf-8').strip()
+                show['tvshowtitle'] = title.value.encode('utf-8').strip().decode('utf-8')
+                show['title'] = episode.value.encode('utf-8').strip().decode('utf-8')
+                show['plot'] = description.value.encode('utf-8').strip().decode('utf-8')
                 guide[cid] = show
 
         return guide
@@ -210,6 +210,7 @@ class SportsnetNow:
 
         # Authorize with the MSO
         if not mso.authorize(self, username, password):
+            print "Failed to authorize with MSO"
             return False
 
         ap = adobe.AdobePass()
@@ -235,8 +236,15 @@ class SportsnetNow:
         @param name The channel name
         @param the MSO name (eg: Rogers)
         """
+        mso = MSOFactory.getMSO(msoName)
+        if mso == None:
+            print "Invalid MSO"
+            return None
+
+        mso_id = mso.getID()
+
         ap = adobe.AdobePass()
-        if not ap.authorizeDevice(self, msoName, name):
+        if not ap.authorizeDevice(self, mso_id, name):
             print "Authorize device failed"
             return None
         token = ap.deviceShortAuthorize(self, msoName)

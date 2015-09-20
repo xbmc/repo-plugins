@@ -54,7 +54,7 @@ def createMainMenu():
         values = { 'menu' : 'channel', 'name' : channel['name'],
                    'id' : channel['id'], 'abbr' : channel['abbr'] }
         for key in prog.keys():
-            values[key] = prog[key]
+            values[key] = prog[key].encode('utf-8')
         title = values['name']
         if prog['tvshowtitle']:
             title += ' ([B]' + prog['tvshowtitle'] + '[/B]'

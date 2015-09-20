@@ -10,6 +10,11 @@ class ShawGo:
     """
 
     @staticmethod
+    def getID():
+        return 'ShawGo'
+
+
+    @staticmethod
     def authorize(streamProvider, username, password):
         """
         Perform authorization with ShawGo
@@ -77,6 +82,7 @@ class ShawGo:
             resp = opener.open(url, urllib.urlencode(values))
         except urllib2.URLError, e:
             print e.args
+            return None
         Cookies.saveCookieJar(jar)
 
         html = resp.read()

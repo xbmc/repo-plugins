@@ -9,6 +9,10 @@ class Rogers:
     """
 
     @staticmethod
+    def getID():
+        return 'Rogers'
+
+    @staticmethod
     def authorize(streamProvider, username, password):
         """
         Perform authorization with Rogers

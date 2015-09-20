@@ -16,14 +16,6 @@
 #   * Kenneth Reitz                              - Requests                 [http://docs.python-requests.org/en/latest/]
 #
 
-# 
-# Constants
-#
-#also in ..._const
-__addon__       = "plugin.video.roosterteeth"
-__date__        = "22 august 2015"
-__version__     = "1.2.2"
-
 #
 # Imports
 #
@@ -40,11 +32,13 @@ import xbmcplugin
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
-LIB_DIR = xbmc.translatePath( os.path.join( xbmcaddon.Addon(id=__addon__).getAddonInfo('path'), 'resources', 'lib' ) )
+LIB_DIR = xbmc.translatePath( os.path.join( xbmcaddon.Addon(id="plugin.video.roosterteeth").getAddonInfo('path'), 'resources', 'lib' ) )
 sys.path.append (LIB_DIR)
 
+from roosterteeth_const import __addon__, __settings__, __language__, __images_path__, __date__, __version__
+
 # Get plugin settings
-DEBUG = xbmcaddon.Addon(id='plugin.video.roosterteeth').getSetting('debug')
+DEBUG = xbmcaddon.Addon(id=__addon__).getSetting('debug')
 
 # Parse parameters...
 if len(sys.argv[2]) == 0:

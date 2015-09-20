@@ -1,3 +1,11 @@
+Version 1.2.4 (16 september 2015)
+Fixes due to website changes
+Removed Fun Haus due to SSL error
+Added next page to Recently Added Episodes
+
+Version 1.2.3 (30 august 2015)
+Only login for sponsored video's
+
 Version 1.2.2 (22 august 2015)
 Site switched to https (except recently-added)
 Fun Haus doesn't work atm, maybe it'll work in a bit

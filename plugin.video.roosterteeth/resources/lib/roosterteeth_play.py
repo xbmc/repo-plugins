@@ -76,85 +76,131 @@ class Main:
 		dialogWait.create( __language__(30100), title )
 		
 		try:
-			if self.IS_SPONSOR == 'true':
-				# requests is sooooo nice, respect!
- 				with requests.Session() as s:
- 					# get the LOGIN-page
- 					r = s.get(LOGINURL)
- 					
- 					if (self.DEBUG) == 'true':
-					 	xbmc.log('get login page request, status_code:' + str(r.status_code))
-
-					# This is part of the LOGIN page, it contains a token!:
-					#
-					# 	<input name="_token" type="hidden" value="Zu8TRC43VYiTxfn3JnNgiDnTpbQvPv5xWgzFpEYJ">
-					#     <fieldset>
-					#       <h3 class="content-title">Log In</h3>
-					# 	  <label for="username">Username</label>
-					# 	  <input name="username" type="text" value="" id="username">
-					# 	  <label for="password">Password</label>
-					# 	  <input name="password" type="password" value="" id="password">
-					# 	<input type="submit" value="Log in">
-					# 	</fieldset>
- 					
-					# get the token
-					soup = BeautifulSoup(r.text)
-					video_urls = soup.findAll('input', attrs={'name': re.compile("_token")}, limit=1)
-					token = str(video_urls[0]['value'])
-
-					# set the needed LOGIN-data
-					payload = { '_token': token, 'username': __settings__.getSetting('username'), 'password': __settings__.getSetting('password') }
-					# post the LOGIN-page with the LOGIN-data, to actually login this session
-					r = s.post(LOGINURL, data=payload)
+			# requests is sooooo nice, respect!
+			self.session = requests.Session()
+			
+			# get the page that contains the video
+		 	reply = self.session.get(self.video_page_url)
+		 	
+			# is it a sponsored video? 
+			if str(reply.text).find('sponsor-only') >= 0:
+				if self.IS_SPONSOR == 'true':
+					try:
+						# we need a NEW (!!!) session
+						self.session = requests.Session()
+						
+						# get the LOGIN-page
+						reply = self.session.get(LOGINURL)
+						
+						if (self.DEBUG) == 'true':
+					 		xbmc.log('get login page request, status_code:' + str(reply.status_code))
 					
- 					if (self.DEBUG) == 'true':
- 						xbmc.log('post login page response, status_code:' + str(r.status_code))
+						# This is part of the LOGIN page, it contains a token!:
+						#
+						# 	<input name="_token" type="hidden" value="Zu8TRC43VYiTxfn3JnNgiDnTpbQvPv5xWgzFpEYJ">
+						#     <fieldset>
+						#       <h3 class="content-title">Log In</h3>
+						# 	  <label for="username">Username</label>
+						# 	  <input name="username" type="text" value="" id="username">
+						# 	  <label for="password">Password</label>
+						# 	  <input name="password" type="password" value="" id="password">
+						# 	<input type="submit" value="Log in">
+						# 	</fieldset>
+							
+						# get the token
+						soup = BeautifulSoup(reply.text)
+						video_urls = soup.findAll('input', attrs={'name': re.compile("_token")}, limit=1)
+						token = str(video_urls[0]['value'])
 					
-					# check that the login was technically ok (status_code 200). This in itself does NOT mean that the username/password were correct. 
-					if r.status_code == 200:
-						pass
-						# check that the username is in the response. If that's the case, the login was ok and the username and password in settings are ok.
-						if str(r.text).find(__settings__.getSetting('username')) >= 0:
+						# set the needed LOGIN-data
+						payload = { '_token': token, 'username': __settings__.getSetting('username'), 'password': __settings__.getSetting('password') }
+						# post the LOGIN-page with the LOGIN-data, to actually login this session
+						reply = self.session.post(LOGINURL, data=payload)
+						
+						if (self.DEBUG) == 'true':
+							xbmc.log('post login page response, status_code:' + str(reply.status_code))
+						
+						# check that the login was technically ok (status_code 200). This in itself does NOT mean that the username/password were correct. 
+						if reply.status_code == 200:
 							pass
+							# check that the username is in the response. If that's the case, the login was ok and the username and password in settings are ok.
+							if str(reply.text).find(__settings__.getSetting('username')) >= 0:
+								if (self.DEBUG) == 'true':
+									xbmc.log('login was successfull!')
+								pass
+							else:
+								try:
+									dialogWait.close()
+									del dialogWait
+								except:
+									pass
+								xbmcgui.Dialog().ok( __language__(30000), __language__(30101), __language__(30102), __language__(30103) )
+								exit(1)
 						else:
+							try:
+								dialogWait.close()
+								del dialogWait
+							except:
+								pass
+							xbmcgui.Dialog().ok( __language__(30000), __language__(30104) % (str(reply.status_code)) )
+							exit(1)
+						
+						# let's try getting the page again after a login
+						reply = self.session.get(self.video_page_url)
+							
+				 	except urllib2.HTTPError, error:
+						if (self.DEBUG) == 'true':
+							xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "HTTPError", str(error) ), xbmc.LOGNOTICE )
+						try:
 							dialogWait.close()
 							del dialogWait
-							xbmcgui.Dialog().ok( __language__(30000), __language__(30101), __language__(30102), __language__(30103) )
-							exit(1)
-					else:
-						dialogWait.close()
-						del dialogWait
-						xbmcgui.Dialog().ok( __language__(30000), __language__(30104) % (str(r.status_code)) )
-						exit(1)
-					
-					# f.e. a sponsored_url = "http://roosterteeth.com/episode/rt-sponsor-cut-season-2-rt-life-jeremys-frosting-facial"
-					# get the page that contains the video
-					r = s.get(self.video_page_url)
+						except:
+							pass
+						xbmcgui.Dialog().ok( __language__(30000), __language__(30106) % (str(error) ))
+						exit(1)						
+					except:
+						exception = sys.exc_info()[0]
+						if (self.DEBUG) == 'true':
+							xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "Exception1:", str(exception) ), xbmc.LOGNOTICE )
+						try:
+							dialogWait.close()
+							del dialogWait
+						except:
+							pass
+						exit(1)									
 
-					if (self.DEBUG) == 'true':
-						xbmc.log('get (logged in) page response, status_code:' + str(r.status_code))
-					
-	 			 	html_source = r.text
-	 			 	html_source = html_source.encode('utf-8', 'ignore')	
- 			else:
- 				with requests.Session() as s:
- 				 	# get the page that contains the video
- 			 	 	r = s.get(self.video_page_url)
- 			 	 	# is it a sponsored video? 
-					if str(r.text).find('sponsor-only') >= 0:
+				else:
+					try:
 						dialogWait.close()
 						del dialogWait
-						xbmcgui.Dialog().ok( __language__(30000), __language__(30105) )
-						exit(1)	
-			 	 	html_source = r.text
-			 		html_source = html_source.encode('utf-8', 'ignore')
+					except:
+						pass
+					xbmcgui.Dialog().ok( __language__(30000), __language__(30105) )
+					exit(1)
+
 	 	except urllib2.HTTPError, error:
 			if (self.DEBUG) == 'true':
 				xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "HTTPError", str(error) ), xbmc.LOGNOTICE )
-			dialogWait.close()
-			del dialogWait
+				try:
+					dialogWait.close()
+					del dialogWait
+				except:
+					pass
 			xbmcgui.Dialog().ok( __language__(30000), __language__(30106) % (str(error) ))
 			exit(1)
+ 		except:
+ 			exception = sys.exc_info()[0]
+ 			if (self.DEBUG) == 'true':
+ 				xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "Exception2:", str(exception) ), xbmc.LOGNOTICE )
+ 			try:
+ 				dialogWait.close()
+ 				del dialogWait
+ 			except:
+ 				pass
+ 			exit(1)
+						
+		html_source = reply.text
+		html_source = html_source.encode('utf-8', 'ignore')		
 
 		soup = BeautifulSoup(html_source)
 		
@@ -225,6 +271,15 @@ class Main:
 
 			search_for_string = "manifest: '"
 			begin_pos_search_for_blip = str(html_source).find(search_for_string)
+			if begin_pos_search_for_blip < 0:
+				#if nothings found, let's try and search for something else 	
+				search_for_string = "file: '"
+				begin_pos_search_for_blip = str(html_source).find(search_for_string)
+				if begin_pos_search_for_blip < 0:
+					#if nothings found, let's try and search for something else 	
+					search_for_string = "file : '"
+					begin_pos_search_for_blip = str(html_source).find(search_for_string)
+					
 			if begin_pos_search_for_blip >= 0:
 				begin_pos_m3u8_url = begin_pos_search_for_blip + len(search_for_string)
 				blip_video = True
@@ -237,19 +292,21 @@ class Main:
 					xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "blip playlists m3u8_url", str(m3u8_url) ), xbmc.LOGNOTICE )
 				
 				try:
-					with requests.Session() as s:
-						r = s.get(m3u8_url) 
-						html_source = r.text
+					reply = self.session.get(m3u8_url) 
+					html_source = reply.text
 
-						if (self.DEBUG) == 'true':
-							xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "content blip playlists m3u8_url", str(html_source) ), xbmc.LOGNOTICE )
-						
-		 				html_source = html_source.encode('utf-8', 'ignore')
+					if (self.DEBUG) == 'true':
+						xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "content blip playlists m3u8_url", str(html_source) ), xbmc.LOGNOTICE )
+					
+	 				html_source = html_source.encode('utf-8', 'ignore')
 				except urllib2.HTTPError, error:
 					if (self.DEBUG) == 'true':
 						xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "HTTPError", str(error) ), xbmc.LOGNOTICE )
-					dialogWait.close()
-					del dialogWait
+					try:
+						dialogWait.close()
+						del dialogWait
+					except:
+						pass
 					xbmcgui.Dialog().ok( __language__(30000), __language__(30106) % (str(error) ))
 					exit(1)
 				
@@ -464,8 +521,11 @@ class Main:
 			playlist.add( video_url, listitem )
 	
 			# Close wait dialog...
-			dialogWait.close()
-			del dialogWait
+			try:
+				dialogWait.close()
+				del dialogWait
+			except:
+				pass
 			
 			# Play video...
 			xbmcPlayer = xbmc.Player()
@@ -477,7 +537,7 @@ class Main:
 			xbmcgui.Dialog().ok( __language__(30000), __language__(30107))
 		elif unplayable_media_file:
 			xbmcgui.Dialog().ok( __language__(30000), __language__(30108))
-	
+
 #
 # The End
 #

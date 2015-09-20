@@ -18,13 +18,15 @@
   <string id="30018">Debug</string> 
  
   <string id="30100">Getting video location...</string>
-  <string id="30101">Login Failed. In settings enter the correct username and </string>
-  <string id="30102">password. Or turn off the Rooster Teeth Sponsor-switch if </string>
-  <string id="30103">you aren't a sponsor.</string> 
+  <string id="30101">Login has failed for this Sponsored video. In settings enter</string>
+  <string id="30102">the correct username and password. Or turn off the Rooster</string>
+  <string id="30103">Teeth Sponsor-switch if you aren't a Sponsor.</string> 
   <string id="30104">Login Failed: %s.</string>   
   <string id="30105">Sorry. You must be a Sponsor to see this video</string>  
   <string id="30106">Error getting page: %s</string>
   <string id="30107">No video found.</string>
   <string id="30108">Error playing media file.</string>
+  
+  <string id="30200">Next page</string>
   
 </strings>

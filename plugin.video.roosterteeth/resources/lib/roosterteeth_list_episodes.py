@@ -17,7 +17,7 @@ import xbmcaddon
 import xbmcgui
 import xbmcplugin
 
-RECENTLYADDEDURL = 'http://roosterteeth.com/episode/recently-added'
+RECENTLYADDEDURL = 'https://roosterteeth.com/episode/recently-added'
 
 #
 # Main class
@@ -39,6 +39,25 @@ class Main:
 	
 		if (self.DEBUG) == 'true':
 			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "self.video_list_page_url", str(self.video_list_page_url) ), xbmc.LOGNOTICE )
+
+		if self.next_page_possible == 'True':
+			# Determine current item number, next item number, next_url
+			pos_of_page		 			 	 = self.video_list_page_url.rfind('?page=')
+			if pos_of_page >= 0:
+				page_number_str			     = str(self.video_list_page_url[pos_of_page + len('?page='):pos_of_page + len('?page=') + len('000')])
+				page_number					 = int(page_number_str)
+				page_number_next			 = page_number + 1
+				if page_number_next >= 100:
+					page_number_next_str = str(page_number_next)
+				elif page_number_next >= 10:
+					page_number_next_str = '0' + str(page_number_next)
+				else:				
+					page_number_next_str = '00' + str(page_number_next)
+				self.next_url = str(self.video_list_page_url).replace(page_number_str, page_number_next_str)
+			
+				if (self.DEBUG) == 'true':
+					xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "self.next_url", str(urllib.unquote_plus(self.next_url)) ), xbmc.LOGNOTICE )
+	
 		
 		#
 		# Get the videos...
@@ -91,7 +110,7 @@ class Main:
 		for episode in episodes:
 			#Only display episodes of a season
 			#The recently added page doesn't have a 'tab-episode'
-			if str(self.video_list_page_url) == RECENTLYADDEDURL:
+			if str(self.video_list_page_url).find(RECENTLYADDEDURL) >= 0:
 				pass
 			else:
 				#Only display episodes of a season
@@ -195,6 +214,14 @@ class Main:
 			listitem = xbmcgui.ListItem( title, iconImage="DefaultVideo.png", thumbnailImage=thumbnail_url )
 			listitem.setInfo( "video", { "Title" : title, "Studio" : "roosterteeth" } )
 			folder = False
+			xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
+			
+		# Next page entry...
+		if self.next_page_possible == 'True':
+			parameters = {"action" : "list-episodes", "url" : str(self.next_url), "next_page_possible": self.next_page_possible}
+			url = sys.argv[0] + '?' + urllib.urlencode(parameters)
+			listitem = xbmcgui.ListItem (__language__(30200), iconImage = "DefaultFolder.png", thumbnailImage = os.path.join(__images_path__, 'next-page.png'))
+			folder = True
 			xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
 		
 		# Disable sorting...

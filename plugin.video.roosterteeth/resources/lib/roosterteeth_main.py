@@ -17,11 +17,11 @@ import xbmcaddon
 import xbmcgui
 import xbmcplugin
 
-RECENTLYADDEDURL = 'http://roosterteeth.com/episode/recently-added'
+RECENTLYADDEDURL = 'https://roosterteeth.com/episode/recently-added?page=001'
 ROOSTERTEETHSHOWSURL = 'https://www.roosterteeth.com/show/'
 ACHIEVEMENTHUNTERURL = 'https://achievementhunter.com/show/'
 THEKNOWSHOWSURL = 'https://theknow.tv/show'
-FUNHAUSSHOWSURL = 'https://fun.haus/show'
+#FUNHAUSSHOWSURL = 'https://fun.haus/show'
 
 #
 # Main class
@@ -31,7 +31,7 @@ class Main:
         #
         # Recently Added Episodes
         #
-        parameters = {"action" : "list-episodes", "plugin_category" : __language__(30000), "url" : RECENTLYADDEDURL, "next_page_possible": "False"}
+        parameters = {"action" : "list-episodes", "plugin_category" : __language__(30000), "url" : RECENTLYADDEDURL, "next_page_possible": "True"}
         url = sys.argv[0] + '?' + urllib.urlencode(parameters)
         listitem = xbmcgui.ListItem( __language__(30000), iconImage="DefaultFolder.png" )
         folder = True
@@ -60,14 +60,16 @@ class Main:
         listitem = xbmcgui.ListItem( __language__(30003), iconImage="DefaultFolder.png" )
         folder = True
         xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
-        #
-        # Fun Haus
-        #
-        parameters = {"action" : "list-shows", "plugin_category" : __language__(30004), "url" : FUNHAUSSHOWSURL, "next_page_possible": "False"}
-        url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-        listitem = xbmcgui.ListItem( __language__(30004), iconImage="DefaultFolder.png" )
-        folder = True
-        xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)                        
+
+# Removed because of SSL error on 16 september 2015
+#         #
+#         # Fun Haus
+#         #
+#         parameters = {"action" : "list-shows", "plugin_category" : __language__(30004), "url" : FUNHAUSSHOWSURL, "next_page_possible": "False"}
+#         url = sys.argv[0] + '?' + urllib.urlencode(parameters)
+#         listitem = xbmcgui.ListItem( __language__(30004), iconImage="DefaultFolder.png" )
+#         folder = True
+#         xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)                        
            
         # Disable sorting...
         xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )

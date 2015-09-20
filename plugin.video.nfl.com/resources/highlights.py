@@ -12,14 +12,16 @@ class Navigation:
 
     def get_navigation(self, html):
         ''' will parse the navigation for nfl highlights html into a dict
-            e.g. http://www.nfl.com/big-play-highlights'''
+            e.g. http://www.nfl.com/big-play-highlights '''
         def parse_soup(soup):
-            return [{'value':i['data-value'], 'href': i.a['href'], 'label': i.a.string,
-                     'selected': i['class']} for i in soup('li')]
+            return [{'value':i['data-value'], 'href': i.a['href'],
+                     'label': i.a.string, 'selected': i['class']} for
+                         i in soup('li')]
 
         def set_selected(item_list):
             try:
-                return [i['label'] for i in item_list if 'selected' in i['selected']][0]
+                return [i['label'] for i in item_list if
+                            'selected' in i['selected']][0]
             except IndexError:
                 pass
 
@@ -28,21 +30,28 @@ class Navigation:
         nav = {}
         for i in scripts:
             if 'data-value="2013"' in i.contents[0]:
-                nav['seasons'] = parse_soup(BeautifulSoup(i.contents[0], convertEntities=BeautifulSoup.HTML_ENTITIES))
+                nav['seasons'] = parse_soup(BeautifulSoup(i.contents[0],
+                        convertEntities=BeautifulSoup.HTML_ENTITIES))
                 self.season = set_selected(nav['seasons'])
             elif 'data-value="All Teams"' in i.contents[0]:
-                nav['teams'] = parse_soup(BeautifulSoup(i.contents[0], convertEntities=BeautifulSoup.HTML_ENTITIES))
+                nav['teams'] = parse_soup(BeautifulSoup(i.contents[0],
+                        convertEntities=BeautifulSoup.HTML_ENTITIES))
                 self.team = set_selected(nav['teams'])
-            elif 'data-value="REG"' in i.contents[0] or 'data-value="PRE"' in i.contents[0] or 'data-value="POST"' in i.contents[0]:
-                nav['seasontypes'] = parse_soup(BeautifulSoup(i.contents[0], convertEntities=BeautifulSoup.HTML_ENTITIES))
+            elif ('data-value="REG"' in i.contents[0] or 'data-value="PRE"' in
+                    i.contents[0] or 'data-value="POST"' in i.contents[0]):
+                nav['seasontypes'] = parse_soup(BeautifulSoup(i.contents[0],
+                        convertEntities=BeautifulSoup.HTML_ENTITIES))
                 self.season_type = set_selected(nav['seasontypes'])
             elif 'data-value="1"' in i.contents[0]:
-                nav['weeks'] = parse_soup(BeautifulSoup(i.contents[0], convertEntities=BeautifulSoup.HTML_ENTITIES))
+                nav['weeks'] = parse_soup(BeautifulSoup(i.contents[0],
+                        convertEntities=BeautifulSoup.HTML_ENTITIES))
                 self.week = set_selected(nav['weeks'])
             else:
                 try:
-                    if int(i.contents[0].split('data-value="')[1].split('"')[0]) > 100000:
-                        nav['games'] = parse_soup(BeautifulSoup(i.contents[0], convertEntities=BeautifulSoup.HTML_ENTITIES))
+                    if int(i.contents[0].split('data-value="')[1].split('"')[0]
+                           ) > 100000:
+                        nav['games'] = parse_soup(BeautifulSoup(i.contents[0],
+                                convertEntities=BeautifulSoup.HTML_ENTITIES))
                         self.game = set_selected(nav['games'])
                 except:
                     pass
@@ -52,18 +61,21 @@ class Navigation:
 
 
     def get_feed_url(self, href=None):
-        '''returns the feed url for the given href e.g /big-play-highlights/2013/REG/1'''
+        ''' formats and returns the feed url for the given href
+            e.g. /big-play-highlights/2013/REG/1 '''
         team = None
         season = None
         season_type = None
         week = None
         game = None
-        base_url = 'http://www.nfl.com/feeds-rs/videos/byChannel/nfl-game-highlights'
-        years = ['2010', '2011', '2012', '2013', '2014']
+        base_url = ('http://www.nfl.com/feeds-rs/videos/byChannel/'
+            'nfl-game-highlights')
+        years = ['2010', '2011', '2012', '2013', '2014', '2015']
         season_types = ['PRE','REG', 'POST']
 
         if href is None:
-            filter = '/bySeasonType/%s/%s' %(self.nav['seasons'][-1]['value'], self.nav['seasontypes'][-1]['value'])
+            filter = '/bySeasonType/%s/%s' %(self.nav['seasons'][-1]['value'],
+                    self.nav['seasontypes'][-1]['value'])
         else:
             items = href.split('/')
             try:
@@ -85,11 +97,14 @@ class Navigation:
 
             if team:
                 if season_type == 'PRE':
-                    filter = '/byTeam/%s/bySeasonType/%s/%s' %(team, season, season_type)
+                    filter = '/byTeam/%s/bySeasonType/%s/%s' %(
+                            team, season, season_type)
                 elif week == '100':
-                    filter = '/byTeam/%s/bySeasonType/%s/%s' %(team, season, season_type)
+                    filter = '/byTeam/%s/bySeasonType/%s/%s' %(
+                            team, season, season_type)
                 else:
-                    filter = '/byTeam/%s/byWeek/%s/%s/%s' %(team, season, season_type, week)
+                    filter = '/byTeam/%s/byWeek/%s/%s/%s' %(
+                            team, season, season_type, week)
 
             elif game:
                 filter = '/byGame/%s' %game

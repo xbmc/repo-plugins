@@ -1,4 +1,3 @@
 <settings>
   <setting id="prefered_bitrate" type="enum" label="30020" lvalues="30018|30017|30016|30015" default="2"/>
-  <setting id="debug" type="bool" label="30019" default="false"/>
 </settings>

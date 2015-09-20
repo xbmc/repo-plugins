@@ -158,9 +158,13 @@ def getVideo(url, show_name):
    url = uqp(url)
    url = url.split('?',1)[0]
    surl = 'http://www.history.com/components/get-signed-signature?url=xc6n8B/%s' % url.rsplit('/',1)[1]
+   print "surl = "+str(surl)
    sig = getRequest(surl).strip()
+   print "sig = "+str(sig)
    url = url+'?policy=27773&metafile=false&mbr=true&format=SMIL&Tracking=true&Embedded=true&sig=%s' % sig
+   print "url = "+str(url)
    html = getRequest(url)
+   print "html = "+str(html)
    url  = re.compile('<video src="(.+?)"',re.DOTALL).search(html).group(1)
    url  = url.replace('&amp;','&')
    x = url.split('.mp4',1)[0].rsplit('_',1)[1]

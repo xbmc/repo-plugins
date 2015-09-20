@@ -21,8 +21,10 @@ socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
 icon = xbmc.translatePath('special://home/addons/'+addonID+'/icon.png')
 defaultFanart = xbmc.translatePath('special://home/addons/'+addonID+'/fanart.jpg')
+defaultImgDir = xbmc.translatePath('special://home/addons/'+addonID+'/imgs/')
 forceViewMode = True
 audio_pos = int(addon.getSetting('audio_lang'))
+playrandom = addon.getSetting('playrandom') == "true"
 audio = ["en","es","de"]
 audio = audio[audio_pos]
 mainweb_geo = ["southpark.cc.com","southpark.cc.com","www.southpark.de"]
@@ -52,7 +54,7 @@ def index():
     addLink(translation(30006), "Random", 'list', icon)
     addLink(translation(30013), "Search", 'list', icon)
     for i in range(1, 20):
-        addDir(translation(30007)+" "+str(i), 'season-'+str(i), 'list', icon)
+        addDir(translation(30007)+" "+str(i), 'season-'+str(i), 'list', defaultImgDir+str(i)+".jpg")
     xbmcplugin.endOfDirectory(pluginhandle)
 
 
@@ -63,7 +65,9 @@ def list(url):
         promojson = _json.loads(jsonrsp)
         for episode in promojson['results']:
             if episode['_availability'] == "banned":
-				addLink(episode['title'], "banned", 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+				addLink(episode['title'] + " [Banned]" , "banned", 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+            elif episode['_availability'] == "beforepremiere":
+				addLink(episode['title'] + " [Premiere]", "beforepremiere", 'play', episode['images'], "Premiere in " + getTimer(episode['originalAirDate']) +"\n" + episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
             else:
 				addLink(episode['title'].encode('utf-8'), episode['itemId'].encode('utf-8'), 'play', episode['images'].encode('utf-8'), episode['description'].encode('utf-8'), episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'].encode('utf-8'))
     elif url == "Random":
@@ -78,10 +82,17 @@ def list(url):
 		seasonjson = _json.loads(jsonrsp)
 		ep = int(rand[1])-1
 		episode = seasonjson['results'][ep]
-		if episode['_availability'] == "banned":
-			addLink(episode['title'], "banned", 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+		if playrandom:
+			if episode['_availability'] == "banned":
+				episode = seasonjson['results'][0]
+			playEpisode(episode['itemId'].encode('utf-8'), episode['title'], episode['images'])
 		else:
-			addLink(episode['title'].encode('utf-8'), episode['itemId'].encode('utf-8'), 'play', episode['images'].encode('utf-8'), episode['description'].encode('utf-8'), episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'].encode('utf-8'))
+			if episode['_availability'] == "banned":
+				addLink(episode['title'] + " [Banned]" , "banned", 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+			elif episode['_availability'] == "beforepremiere":
+				addLink(episode['title'] + " [Premiere]", "beforepremiere", 'play', episode['images'], "Premiere in " + getTimer(episode['originalAirDate']) +"\n" + episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+			else:
+				addLink(episode['title'].encode('utf-8'), episode['itemId'].encode('utf-8'), 'play', episode['images'].encode('utf-8'), episode['description'].encode('utf-8'), episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'].encode('utf-8'))
     elif url == "Search":
 		keyboard = xbmc.Keyboard('')
 		keyboard.doModal()
@@ -92,7 +103,9 @@ def list(url):
 			seasonjson = _json.loads(jsonrsp)
 			for episode in seasonjson['results']:
 				if episode['_availability'] == "banned":
-					addLink(episode['title'], "banned", 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+					addLink(episode['title'] + " [Banned]" , "banned", 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+				elif episode['_availability'] == "beforepremiere":
+					addLink(episode['title'] + " [Premiere]", "beforepremiere", 'play', episode['images'], "Premiere in " + getTimer(episode['originalAirDate']) +"\n" + episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
 				else:
 					addLink(episode['title'].encode('utf-8'), episode['itemId'].encode('utf-8'), 'play', episode['images'].encode('utf-8'), episode['description'].encode('utf-8'), episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'].encode('utf-8'))
     else:
@@ -101,7 +114,9 @@ def list(url):
         seasonjson = _json.loads(jsonrsp)
         for episode in seasonjson['results']:
             if episode['_availability'] == "banned":
-				addLink(episode['title'], "banned", 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+				addLink(episode['title'] + " [Banned]" , "banned", 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
+            elif episode['_availability'] == "beforepremiere":
+				addLink(episode['title'] + " [Premiere]", "beforepremiere", 'play', episode['images'], "Premiere in " + getTimer(episode['originalAirDate']) +"\n" + episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
             else:
 				addLink(episode['title'].encode('utf-8'), episode['itemId'].encode('utf-8'), 'play', episode['images'].encode('utf-8'), episode['description'].encode('utf-8'), episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'].encode('utf-8'))
     xbmcplugin.endOfDirectory(pluginhandle)
@@ -110,6 +125,9 @@ def list(url):
 def playEpisode(url, title, thumbnail):
 	if url == "banned":
 		notifyText(translation(30011), 7000)
+		return
+	elif url == "beforepremiere":
+		notifyText(translation(30014), 7000)
 		return
 	mediagen = getMediagen(url)
 	if len(mediagen) == 0:
@@ -229,10 +247,10 @@ def addLink(name, url, mode, iconimage, desc="", season="", episode="", date="")
     return ok
 
 
-def addDir(name, url, mode, iconimage):
+def addDir(name, url, mode, iconimage="DefaultFolder.png"):
     u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
     ok = True
-    liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+    liz = xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"Title": name})
     liz.setProperty("fanart_image", defaultFanart)
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
@@ -310,6 +328,15 @@ def saveSubs(fname, stream):
 	output.close()
 	return stream
 
+def getTimer(premiere):
+	diff = int(premiere) - int(time.time())
+	if diff < 0:
+		diff = 0;
+	days = int(diff/86400)
+	hours = int((diff%86400)/3600)
+	mins =  int((diff%3600)/60)
+#	secs = int(diff % 60)
+	return "%02dd %02dh %02dm" % (days, hours, mins)
 	
 def unescape(s):
 	htmlCodes = [["'", '&#39;'],['"', '&quot;'],['', '&gt;'],['', '&lt;'],['&', '&amp;']]

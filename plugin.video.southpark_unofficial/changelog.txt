@@ -32,3 +32,9 @@
 - Added Season 19.
 0.3.7
 - Fixed german support.
+0.3.8
+- Fixed premiere episodes
+- Added [Banned]/[Premiere] tags
+0.3.9
+- Added a timer before release on premiere episodes on the description.
+- Added seasons covers.

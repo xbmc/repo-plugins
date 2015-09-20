@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: iPhoto
 # Addon id: plugin.image.iphoto
 # Addon Provider: jingai
@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/xbmc-addons/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,11 +30,11 @@ msgstr "Ignoruj ​​'Oflagowany' album"
 
 msgctxt "#30003"
 msgid "Auto update library"
-msgstr "Automatyczna aktualizacja biblioteki"
+msgstr "Aktualizuj bibliotekę autoamtycznie"
 
 msgctxt "#30004"
 msgid "Hide Update Library item in main menu"
-msgstr "Ukryj przycik aktualizacji w menu głównym"
+msgstr "Ukrywaj przycisk aktualizacji w menu startowym"
 
 msgctxt "#30005"
 msgid "Ignore empty albums"
@@ -62,7 +62,7 @@ msgstr "Pary Lat/Lon"
 
 msgctxt "#30020"
 msgid "Default photo sort method"
-msgstr "Domyśłna metoda sortowania zdjęć"
+msgstr "Domyślna metoda sortowania obrazów"
 
 msgctxt "#30021"
 msgid "None"
@@ -86,7 +86,7 @@ msgstr "Pobierz mapy z Google"
 
 msgctxt "#30026"
 msgid "Show map as fanart"
-msgstr "Pokaż mapę jako fanart"
+msgstr "Pokazuj mapę jako fototapetę"
 
 msgctxt "#30027"
 msgid "Managed Library (change requires rescan)"
@@ -114,11 +114,11 @@ msgstr "Domyśłny"
 
 msgctxt "#30062"
 msgid "Pic Thumbs"
-msgstr "Miniatury zdjęć"
+msgstr "Miniatury obrazów"
 
 msgctxt "#30063"
 msgid "Image Wrap"
-msgstr "Zawijanie zdjęcia"
+msgstr "Kolejka obrazów"
 
 msgctxt "#30066"
 msgid "View mode in Metropolis"
@@ -130,15 +130,15 @@ msgstr "Domyśłny"
 
 msgctxt "#30068"
 msgid "Picture Grid"
-msgstr "Kratowanie zdjęcia"
+msgstr "Siatka obrazów"
 
 msgctxt "#30069"
 msgid "Galary Fanart"
-msgstr "Galeria Fanart"
+msgstr "Galeria fototapet"
 
 msgctxt "#30080"
 msgid "Default photo sort direction"
-msgstr "Domyślny kierunek sortownia zdjęć"
+msgstr "Domyślny kierunek sortownia obrazów"
 
 msgctxt "#30081"
 msgid "Ascending"
@@ -162,7 +162,7 @@ msgstr "Skóra"
 
 msgctxt "#30099"
 msgid "Advanced"
-msgstr "Zaawansowany"
+msgstr "Zaawansowane"
 
 msgctxt "#30100"
 msgid "Events"
@@ -230,7 +230,7 @@ msgstr "Usuń z pamięci podręcznej mapy"
 
 msgctxt "#30216"
 msgid "Reset add-on database"
-msgstr "Zerowanie bazy danych wtyczki"
+msgstr "Czyszczenie bazy danych dodatku"
 
 msgctxt "#30217"
 msgid "Add-on documentation"
@@ -238,7 +238,7 @@ msgstr "Dokumentacja wtyczki"
 
 msgctxt "#30219"
 msgid "Resetting add-on database..."
-msgstr "Trwa zerowanie bazy danych wtyczki..."
+msgstr "Trwa czyszczenie bazy danych dodatku..."
 
 msgctxt "#30220"
 msgid "Enable Support for Places?"
@@ -258,11 +258,11 @@ msgstr "Dodatkowo potrzebne będzie przeimportowanie bazy."
 
 msgctxt "#30230"
 msgid "Delete add-on database?"
-msgstr "Usunąć bazę danych wtyczki?"
+msgstr "Usunąć bazę danych dodatku?"
 
 msgctxt "#30231"
 msgid "Add-on database is corrupt."
-msgstr "Baza danych wtyczki jest zepsuta."
+msgstr "Baza danych dodatku jest uszkodzona."
 
 msgctxt "#30232"
 msgid "Deleting it will not harm your Photo Library."
@@ -274,7 +274,7 @@ msgstr "Konieczne będzie ponowne skanowanie po tym."
 
 msgctxt "#30240"
 msgid "Failed to initialize add-on database."
-msgstr "Nieudana inicjacja bazy danych wtyczki."
+msgstr "Nieudana inicjacja bazy danych dodatku."
 
 msgctxt "#30241"
 msgid "Please reimport your Library."
@@ -282,7 +282,7 @@ msgstr "Proszę ponownie zaimportować biblioteke."
 
 msgctxt "#30250"
 msgid "Deleting cached map images"
-msgstr "Usuwanie mapy tymczasowych zdjęć"
+msgstr "Usuwanie mapy tymczasowych obrazów"
 
 msgctxt "#30252"
 msgid "Scanning..."
@@ -294,7 +294,7 @@ msgstr "Import biblioteki w toku"
 
 msgctxt "#30261"
 msgid "Unable to reset database."
-msgstr "Nie można wyzerować bazy danych."
+msgstr "Nie można wyczyścić bazy danych. "
 
 msgctxt "#30262"
 msgid "Currently unsupported"
@@ -322,11 +322,11 @@ msgstr "Brak pozycji"
 
 msgctxt "#30320"
 msgid "Database reset"
-msgstr "Zerowanie bazy danych"
+msgstr "Czyszczenie bazy danych"
 
 msgctxt "#30321"
 msgid "Failed to reset database"
-msgstr "Niepowodzenie zerowania bazy danych"
+msgstr "Niepowodzenie czyszczenia bazy danych"
 
 msgctxt "#30322"
 msgid "Deleted %d cached maps"

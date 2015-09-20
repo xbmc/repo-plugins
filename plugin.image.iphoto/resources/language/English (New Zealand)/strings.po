@@ -1,0 +1,337 @@
+# Kodi Media Center language file
+# Addon Name: iPhoto
+# Addon id: plugin.image.iphoto
+# Addon Provider: jingai
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (New Zealand) (http://www.transifex.com/projects/p/xbmc-addons/language/en_NZ/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_NZ\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Path to iPhoto or Aperture Library"
+msgstr "Path to iPhoto or Aperture Library"
+
+msgctxt "#30001"
+msgid "Ignore published (MobileMe) albums"
+msgstr "Ignore published (MobileMe) albums"
+
+msgctxt "#30002"
+msgid "Ignore 'Flagged' album"
+msgstr "Ignore 'Flagged' album"
+
+msgctxt "#30003"
+msgid "Auto update library"
+msgstr "Auto update library"
+
+msgctxt "#30004"
+msgid "Hide Update Library item in main menu"
+msgstr "Hide Update Library item in main menu"
+
+msgctxt "#30005"
+msgid "Ignore empty albums"
+msgstr "Ignore empty albums"
+
+msgctxt "#30006"
+msgid "Ignore keywords"
+msgstr "Ignore keywords"
+
+msgctxt "#30015"
+msgid "Enable Places support"
+msgstr "Enable Places support"
+
+msgctxt "#30016"
+msgid "Show Places as"
+msgstr "Show Places as"
+
+msgctxt "#30017"
+msgid "Addresses"
+msgstr "Addresses"
+
+msgctxt "#30018"
+msgid "Lat/Lon Pairs"
+msgstr "Lat/Lon Pairs"
+
+msgctxt "#30020"
+msgid "Default photo sort method"
+msgstr "Default photo sort method"
+
+msgctxt "#30021"
+msgid "None"
+msgstr "None"
+
+msgctxt "#30022"
+msgid "XML Date"
+msgstr "XML Date"
+
+msgctxt "#30023"
+msgid "Label"
+msgstr "Label"
+
+msgctxt "#30024"
+msgid "Size"
+msgstr "Size"
+
+msgctxt "#30025"
+msgid "Download maps from Google"
+msgstr "Download maps from Google"
+
+msgctxt "#30026"
+msgid "Show map as fanart"
+msgstr "Show map as fanart"
+
+msgctxt "#30027"
+msgid "Managed Library (change requires rescan)"
+msgstr "Managed Library (change requires rescan)"
+
+msgctxt "#30028"
+msgid "Local root path to Masters"
+msgstr "Local root path to Masters"
+
+msgctxt "#30029"
+msgid "Rewrite root path as"
+msgstr "Rewrite root path as"
+
+msgctxt "#30030"
+msgid "Hide View Documentation item in main menu"
+msgstr "Hide View Documentation item in main menu"
+
+msgctxt "#30060"
+msgid "View mode in Confluence"
+msgstr "View mode in Confluence"
+
+msgctxt "#30061"
+msgid "Default"
+msgstr "Default"
+
+msgctxt "#30062"
+msgid "Pic Thumbs"
+msgstr "Pic Thumbs"
+
+msgctxt "#30063"
+msgid "Image Wrap"
+msgstr "Image Wrap"
+
+msgctxt "#30066"
+msgid "View mode in Metropolis"
+msgstr "View mode in Metropolis"
+
+msgctxt "#30067"
+msgid "Default"
+msgstr "Default"
+
+msgctxt "#30068"
+msgid "Picture Grid"
+msgstr "Picture Grid"
+
+msgctxt "#30069"
+msgid "Galary Fanart"
+msgstr "Galary Fanart"
+
+msgctxt "#30080"
+msgid "Default photo sort direction"
+msgstr "Default photo sort direction"
+
+msgctxt "#30081"
+msgid "Ascending"
+msgstr "Ascending"
+
+msgctxt "#30082"
+msgid "Descending"
+msgstr "Descending"
+
+msgctxt "#30090"
+msgid "General"
+msgstr "General"
+
+msgctxt "#30091"
+msgid "View"
+msgstr "View"
+
+msgctxt "#30092"
+msgid "Skin"
+msgstr "Skin"
+
+msgctxt "#30099"
+msgid "Advanced"
+msgstr "Advanced"
+
+msgctxt "#30100"
+msgid "Events"
+msgstr "Events"
+
+msgctxt "#30101"
+msgid "Albums"
+msgstr "Albums"
+
+msgctxt "#30102"
+msgid "Ratings"
+msgstr "Ratings"
+
+msgctxt "#30103"
+msgid "<< Update Library >>"
+msgstr "<< Update Library >>"
+
+msgctxt "#30104"
+msgid "Keywords"
+msgstr "Keywords"
+
+msgctxt "#30105"
+msgid "Faces"
+msgstr "Faces"
+
+msgctxt "#30106"
+msgid "Places"
+msgstr "Places"
+
+msgctxt "#30107"
+msgid "<< View Documentation >>"
+msgstr "<< View Documentation >>"
+
+msgctxt "#30108"
+msgid "Projects"
+msgstr "Projects"
+
+msgctxt "#30200"
+msgid "%d star"
+msgstr "%d star"
+
+msgctxt "#30210"
+msgid "Importing Library"
+msgstr "Importing Library"
+
+msgctxt "#30211"
+msgid "Imported %d items"
+msgstr "Imported %d items"
+
+msgctxt "#30212"
+msgid "Scanning Library..."
+msgstr "Scanning Library..."
+
+msgctxt "#30213"
+msgid "Update library"
+msgstr "Update library"
+
+msgctxt "#30214"
+msgid "Ignore Keyword"
+msgstr "Ignore Keyword"
+
+msgctxt "#30215"
+msgid "Remove cached maps"
+msgstr "Remove cached maps"
+
+msgctxt "#30216"
+msgid "Reset add-on database"
+msgstr "Reset add-on database"
+
+msgctxt "#30217"
+msgid "Add-on documentation"
+msgstr "Add-on documentation"
+
+msgctxt "#30219"
+msgid "Resetting add-on database..."
+msgstr "Resetting add-on database..."
+
+msgctxt "#30220"
+msgid "Enable Support for Places?"
+msgstr "Enable Support for Places?"
+
+msgctxt "#30221"
+msgid "Places looks up addresses via Google."
+msgstr "Places looks up addresses via Google."
+
+msgctxt "#30222"
+msgid "This can slow down the library import a bit."
+msgstr "This can slow down the library import a bit."
+
+msgctxt "#30223"
+msgid "You will also need to reimport your library."
+msgstr "You will also need to reimport your library."
+
+msgctxt "#30230"
+msgid "Delete add-on database?"
+msgstr "Delete add-on database?"
+
+msgctxt "#30231"
+msgid "Add-on database is corrupt."
+msgstr "Add-on database is corrupt."
+
+msgctxt "#30232"
+msgid "Deleting it will not harm your Photo Library."
+msgstr "Deleting it will not harm your Photo Library."
+
+msgctxt "#30233"
+msgid "You will need to rescan after this."
+msgstr "You will need to rescan after this."
+
+msgctxt "#30240"
+msgid "Failed to initialize add-on database."
+msgstr "Failed to initialise add-on database."
+
+msgctxt "#30241"
+msgid "Please reimport your Library."
+msgstr "Please reimport your Library."
+
+msgctxt "#30250"
+msgid "Deleting cached map images"
+msgstr "Deleting cached map images"
+
+msgctxt "#30252"
+msgid "Scanning..."
+msgstr "Scanning..."
+
+msgctxt "#30260"
+msgid "Library import in progress"
+msgstr "Library import in progress"
+
+msgctxt "#30261"
+msgid "Unable to reset database."
+msgstr "Unable to reset database."
+
+msgctxt "#30262"
+msgid "Currently unsupported"
+msgstr "Currently unsupported"
+
+msgctxt "#30263"
+msgid "This function is unsupported %s %s."
+msgstr "This function is unsupported %s %s."
+
+msgctxt "#30300"
+msgid "Library import in progress"
+msgstr "Library import in progress"
+
+msgctxt "#30301"
+msgid "Library import successful"
+msgstr "Library import successful"
+
+msgctxt "#30302"
+msgid "Library import failed"
+msgstr "Library import failed"
+
+msgctxt "#30310"
+msgid "No items"
+msgstr "No items"
+
+msgctxt "#30320"
+msgid "Database reset"
+msgstr "Database reset"
+
+msgctxt "#30321"
+msgid "Failed to reset database"
+msgstr "Failed to reset database"
+
+msgctxt "#30322"
+msgid "Deleted %d cached maps"
+msgstr "Deleted %d cached maps"
+
+msgctxt "#30330"
+msgid "Keyword '%s' hidden"
+msgstr "Keyword '%s' hidden"

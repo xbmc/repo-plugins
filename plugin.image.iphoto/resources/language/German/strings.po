@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: iPhoto
 # Addon id: plugin.image.iphoto
 # Addon Provider: jingai
@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: German (http://www.transifex.com/projects/p/xbmc-addons/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,11 +22,11 @@ msgstr "Pfad zu iPhoto- oder Aperture-Bibliothek"
 
 msgctxt "#30001"
 msgid "Ignore published (MobileMe) albums"
-msgstr "Ignoriere veröffentlichte (MobileMe-) Alben"
+msgstr "Veröffentlichte (MobileMe-) Alben ignorieren"
 
 msgctxt "#30002"
 msgid "Ignore 'Flagged' album"
-msgstr "Ignorierte 'geflaggte' Alben"
+msgstr "'Geflaggte' Alben ignorieren"
 
 msgctxt "#30003"
 msgid "Auto update library"
@@ -38,15 +38,15 @@ msgstr "Verstecke Aktualisiere Datenbank Punkt im Hauptmenü"
 
 msgctxt "#30005"
 msgid "Ignore empty albums"
-msgstr "Ignoriere leere Alben"
+msgstr "Leere Alben ignorieren"
 
 msgctxt "#30006"
 msgid "Ignore keywords"
-msgstr "Ignoriere Schlüsselwörter"
+msgstr "Schlüsselwörter ignorieren"
 
 msgctxt "#30015"
 msgid "Enable Places support"
-msgstr "Aktiviere Plätze-Unterstützung"
+msgstr "Plätze-Unterstützung aktivieren"
 
 msgctxt "#30016"
 msgid "Show Places as"
@@ -74,19 +74,19 @@ msgstr "XML-Datum"
 
 msgctxt "#30023"
 msgid "Label"
-msgstr "Label"
+msgstr "Bezeichnung"
 
 msgctxt "#30024"
 msgid "Size"
-msgstr "Size"
+msgstr "Größe"
 
 msgctxt "#30025"
 msgid "Download maps from Google"
-msgstr "Karte von Google laden"
+msgstr "Karten von Google herunterladen"
 
 msgctxt "#30026"
 msgid "Show map as fanart"
-msgstr "Zeige Karte als Fanart"
+msgstr "Karte als Fanart anzeigen"
 
 msgctxt "#30027"
 msgid "Managed Library (change requires rescan)"
@@ -102,7 +102,7 @@ msgstr "Schreibe Stammpfad als"
 
 msgctxt "#30030"
 msgid "Hide View Documentation item in main menu"
-msgstr "Verstecke \"Zeige Handbuch\" im Hauptmenü"
+msgstr "\"Zeige Handbuch\" im Hauptmenü verstecken"
 
 msgctxt "#30060"
 msgid "View mode in Confluence"
@@ -130,7 +130,7 @@ msgstr "Standard"
 
 msgctxt "#30068"
 msgid "Picture Grid"
-msgstr "Fotogitter"
+msgstr "Bildgitter"
 
 msgctxt "#30069"
 msgid "Galary Fanart"
@@ -166,7 +166,7 @@ msgstr "Fortgeschritten"
 
 msgctxt "#30100"
 msgid "Events"
-msgstr "Geschehen"
+msgstr "Ereignisse"
 
 msgctxt "#30101"
 msgid "Albums"
@@ -178,7 +178,7 @@ msgstr "Bewertungen"
 
 msgctxt "#30103"
 msgid "<< Update Library >>"
-msgstr "<< Aktualisiere Bibliothek >>"
+msgstr "<< Bibliothek aktualisieren >>"
 
 msgctxt "#30104"
 msgid "Keywords"
@@ -194,7 +194,7 @@ msgstr "Plätze"
 
 msgctxt "#30107"
 msgid "<< View Documentation >>"
-msgstr "<< Zeige Handbuch >>"
+msgstr "<< Handbuch ansehen >>"
 
 msgctxt "#30108"
 msgid "Projects"
@@ -206,15 +206,15 @@ msgstr "%d Sterne"
 
 msgctxt "#30210"
 msgid "Importing Library"
-msgstr "Importiere Bibliothek"
+msgstr "Bibliothek wird importiert"
 
 msgctxt "#30211"
 msgid "Imported %d items"
-msgstr "Importierte %d Oblekte"
+msgstr "Importierte %d Elemente"
 
 msgctxt "#30212"
 msgid "Scanning Library..."
-msgstr "Scanne Bibliothek"
+msgstr "Bibliothek wird gescannt..."
 
 msgctxt "#30213"
 msgid "Update library"
@@ -222,11 +222,11 @@ msgstr "Bibliothek aktualisieren"
 
 msgctxt "#30214"
 msgid "Ignore Keyword"
-msgstr "Ignoriere Schlüsselwort"
+msgstr "Schlüsselwort ignorieren"
 
 msgctxt "#30215"
 msgid "Remove cached maps"
-msgstr "Entferne zwischengespeicherte Karten"
+msgstr "Zwischengespeicherte Karten entfernen"
 
 msgctxt "#30216"
 msgid "Reset add-on database"
@@ -270,7 +270,7 @@ msgstr "Löschen wird Ihre Fotobibliothek nicht beeinflussen."
 
 msgctxt "#30233"
 msgid "You will need to rescan after this."
-msgstr "Hiernach wirst du rescannen müssen."
+msgstr "Hiernach werden Sie erneut scannen müssen."
 
 msgctxt "#30240"
 msgid "Failed to initialize add-on database."
@@ -278,11 +278,11 @@ msgstr "Initialisierung der Add-on Datenbank fehlgeschlagen."
 
 msgctxt "#30241"
 msgid "Please reimport your Library."
-msgstr "Bitte reimportiere deine Datenbank."
+msgstr "Bitte importieren Sie Ihre Datenbank erneut."
 
 msgctxt "#30250"
 msgid "Deleting cached map images"
-msgstr "Lösche zwischengespeicherte Kartenbilder"
+msgstr "Zwischengespeicherte Kartenbilder werden gelöscht"
 
 msgctxt "#30252"
 msgid "Scanning..."
@@ -294,7 +294,7 @@ msgstr "Bibliotheksimport läuft"
 
 msgctxt "#30261"
 msgid "Unable to reset database."
-msgstr "Datenbank zurücksetzen fehlgeschlagen."
+msgstr "Datenbank konnte nicht zurückgesetzt werden."
 
 msgctxt "#30262"
 msgid "Currently unsupported"
@@ -318,7 +318,7 @@ msgstr "Bibliotheksimport fehlgeschlagen"
 
 msgctxt "#30310"
 msgid "No items"
-msgstr "Keine Inhalte"
+msgstr "Keine Elemente"
 
 msgctxt "#30320"
 msgid "Database reset"

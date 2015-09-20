@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.image.iphoto" name="iPhoto" version="2.1.10" provider-name="jingai">
+<addon id="plugin.image.iphoto" name="iPhoto" version="2.1.11" provider-name="jingai">
     <requires>
 	<import addon="xbmc.python" version="2.1.0"/>
 	<import addon="script.module.simplejson" version="2.0.10"/>
@@ -9,50 +9,65 @@
     </extension>
     <extension point="xbmc.addon.metadata">
 	<summary lang="af">Voer iPhoto biblioteek in</summary>
-	<summary lang="be">Imports iPhoto library into XBMC.</summary>
-	<summary lang="bg">Внася iPhoto библиотека в XBMC</summary>
-	<summary lang="da">Importerer iPhoto-bibliotek til XBMC</summary>
-	<summary lang="de">Importiert die iPhoto-Bibliothek in XBMC.</summary>
-	<summary lang="el">Εισάγει συλλογές iPhoto στο XBMC.</summary>
-	<summary lang="en">Imports iPhoto library into XBMC.</summary>
-	<summary lang="es">Importa biblioteca de iPhoto a XBMC.</summary>
-	<summary lang="fr">Importe une médiathèque iPhoto dans XBMC.</summary>
-	<summary lang="gl">Importar a biblioteca de iPhoto no XBMC.</summary>
-	<summary lang="he">יבא ספריית iPhoto אל XBMC.</summary>
+	<summary lang="be">Imports iPhoto library into Kodi.</summary>
+	<summary lang="bg">Внася iPhoto библиотека в Kodi</summary>
+	<summary lang="ca">Importa la biblioteca de l'iPhoto a l'Kodi.</summary>
+	<summary lang="da">Importerer iPhoto-bibliotek til Kodi</summary>
+	<summary lang="de">Importiert die iPhoto-Bibliothek in Kodi.</summary>
+	<summary lang="el">Εισάγει συλλογές iPhoto στο Kodi.</summary>
+	<summary lang="en">Imports iPhoto library into Kodi.</summary>
+	<summary lang="en_AU">Imports iPhoto library into Kodi.</summary>
+	<summary lang="en_NZ">Imports iPhoto library into Kodi.</summary>
+	<summary lang="en_US">Imports iPhoto library into Kodi.</summary>
+	<summary lang="es">Importa biblioteca de iPhoto a Kodi.</summary>
+	<summary lang="fr">Importe une phototèque iPhoto dans Kodi.</summary>
+	<summary lang="fr_CA">Importe la photothèque iPhoto dans Kodi.</summary>
+	<summary lang="gl">Importar a biblioteca de iPhoto no Kodi.</summary>
+	<summary lang="he">יבוא ספריית iPhoto ל־Kodi.</summary>
 	<summary lang="hi">एक्सबीएमसी मे आईचीत्र क्रमादेस का आयात करता है.</summary>
-	<summary lang="hr">Uvoz iPhoto zbirke u XBMC.</summary>
-	<summary lang="hu">iPhoto könyvtár importálása az XBMC-be</summary>
-	<summary lang="it">Importa la libreria iPhoto in XBMC.</summary>
-	<summary lang="ja">iPhoto ライブラリを XBMC に読み込む</summary>
-	<summary lang="ko">iPhoto 라이브러리를 XBMC로 가져오세요.</summary>
-	<summary lang="lt">Importuoti iPhoto biblioteka i XBMC.</summary>
-	<summary lang="nl">Importeert iPhoto bibliotheek in XBMC.</summary>
-	<summary lang="no">Importer iPhoto bibloteket til XBMC</summary>
-	<summary lang="pl">Importuj bibliotekę iPhoto prosto do XBMC</summary>
-	<summary lang="pt">Importa bibliotecas iPhoto para o XBMC.</summary>
-	<summary lang="pt_BR">Importar Coleção iPhoto para o XBMC</summary>
-	<summary lang="ru">Импортировать iPhoto библиотеку в XBMC</summary>
-	<summary lang="sk">Importuje iPhoto knižnicu do XBMC</summary>
-	<summary lang="sv">Importerar iPhoto-bibliotek till XBMC.</summary>
-	<summary lang="zh">导入iPhoto照片库到XBMC</summary>
+	<summary lang="hr">Uvoz iPhoto zbirke u Kodi.</summary>
+	<summary lang="hu">iPhoto könyvtár importálása az Kodi-be</summary>
+	<summary lang="it">Importa la libreria iPhoto in Kodi.</summary>
+	<summary lang="ja">iPhoto ライブラリを Kodi に読み込む</summary>
+	<summary lang="ko">iPhoto 라이브러리를 Kodi로 가져오세요.</summary>
+	<summary lang="lt">Importuoja iPhoto biblioteką i Kodi.</summary>
+	<summary lang="lv">Importē iPhoto bibliotēku Kodi.</summary>
+	<summary lang="nl">Importeert iPhoto bibliotheek in Kodi.</summary>
+	<summary lang="no">Importer iPhoto bibloteket til Kodi</summary>
+	<summary lang="pl">Importuj bibliotekę iPhoto prosto do Kodi</summary>
+	<summary lang="pt">Importa bibliotecas iPhoto para o Kodi.</summary>
+	<summary lang="pt_BR">Importar Coleção iPhoto para o Kodi</summary>
+	<summary lang="ru">Импортировать iPhoto библиотеку в Kodi</summary>
+	<summary lang="sk">Importuje iPhoto knižnicu do Kodi</summary>
+	<summary lang="sl">Uvozi iPhoto knjižnico v Kodi.</summary>
+	<summary lang="sv">Importerar iPhoto-bibliotek till Kodi.</summary>
+	<summary lang="zh">导入iPhoto照片库到Kodi</summary>
 	<description lang="af">Voer iPhoto biblioteek in na Gebeurtenisse, Albums, Gesigte, Plekke, Sleutelwoorde en Graderings kategoriee.[CR][CR]Vir meer inligting, sien die Readme by http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="be">Imports iPhoto library into Events, Albums, Faces, Places, Keywords, and Ratings categories.[CR][CR]For more information, see the README at http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="bg">Внася iPhoto библиотека в следните категории: Събития, Албуми, Лица, Места, Ключови думи и Оценки.[CR][CR]За повече информация прочетете файла README на адрес http://github.com/jingai/plugin.image.iphoto</description>
+	<description lang="ca">Importa la biblioteca de l'iPhoto dins les categories Esdeveniments, Àlbums, Cares, Llocs, Paraules Clau i Puntuacions.[CR][CR]Per a més informació, llegeix el README dins http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="da">Importerer iPhoto-bibliotek til kategorierne Begivenheder, Albummer, Ansigter, Steder, Nøgleord og Ratings.[CR][CR]For mere information, se README-filen på http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="de">Importiert die iPhoto Datenbank in Veranstaltungen, Alben, Gesichter, Orte, Stichwörter und Bewertungskategorien. [CR][CR]Für mehr Informationen, siehe README unter http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="el">Εισάγει συλλογές iPhoto στις κατηγορίες Γεγονότα, Άλμπουμ, Πρόσωπα, Τοποθεσίες, Λέξεις Κλειδιά και Αξιολογήσεις.[CR][CR]Για περισσότερες πληροφορίες, δείτε το README στην ιστοσελίδα http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="en">Imports iPhoto library into Events, Albums, Faces, Places, Keywords, and Ratings categories.[CR][CR]For more information, see the README at http://github.com/jingai/plugin.image.iphoto</description>
+	<description lang="en_AU">Imports iPhoto library into Events, Albums, Faces, Places, Keywords, and Ratings categories.[CR][CR]For more information, see the README at http://github.com/jingai/plugin.image.iphoto</description>
+	<description lang="en_NZ">Imports iPhoto library into Events, Albums, Faces, Places, Keywords, and Ratings categories.[CR][CR]For more information, see the README at http://github.com/jingai/plugin.image.iphoto</description>
+	<description lang="en_US">Imports iPhoto library into Events, Albums, Faces, Places, Keywords, and Ratings categories.[CR][CR]For more information, see the README at http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="es">Importe su biblioteca de iPhoto en Eventos, Álbumes, Caras, Lugares, Palabras Clave y Valoraciones.[CR][CR]Para más información, lea el README en http://github.com/jingai/plugin.image.iphoto</description>
+	<description lang="fr">Importations de la bibliothèque iPhoto dans des événements, Albums, Visages, Lieux, Mots clés, et Catégories de notes. [CR] [CR] Pour plus d'informations, voir le README sur http://github.com/jingai/plugin.image.iphoto</description>
+	<description lang="fr_CA">Importe la photothèque IPhoto dans les catégories d'événements, d'albums, de visages, de lieux, de mots-clefs et d'évaluation.[CR][CR]Pour plus d'Informations, consulter le README sur http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="gl">Importe a súa biblioteca de iPhoto en Eventos, Álbums, Rostros, Lugares, Palabras Chave e Puntuacións.[CR][CR]Para máis información, lea o README en http://github.com/jingai/plugin.image.iphoto</description>
-	<description lang="he">מיבא ספריית iPhoto אל הקטגוריות אירועים, תמונות, פרצופים, מקומות, מילות מפתח ודירוג.[CR][CR]למידע נוסף, ראה README ב-http://github.com/jingai/plugin.image.iphoto</description>
+	<description lang="he">מיבא ספריית iPhoto אל קטגוריות אירועים, תמונות, פרצופים, מקומות, מילות מפתח ודירוג.[CR][CR]מידע נוסף בקובץ README ב־http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="hi"> आईचीत्र क्रमादेस को  इवेंट्स, आलबम्स, फेसस, प्लेसस, कीवर्ड्स, और रेटिंग्स के विभगो मे का आयात करता है.[सीआर][सीआर]अधिक जानकारी के लिए  http://github.com/jingai/plugin.image.iphoto पर रेअदमी को देखे</description>
 	<description lang="hr">Uvoz iPhoto zbirke u događaje, albume, lica, mjesta, ključne riječi i kategorija ocjena.[CR][CR]Za više informacija, pogledajte README datoteku na http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="hu">iPhoto könyvtár importálása az Események, Albumok és Besorolás kategóriákba.</description>
 	<description lang="it">Importa la libreria iPhoto nelle categorie Eventi, Album, Volti, Luoghi, Parole chiave e Classifica. [CR][CR]Per maggiori informazioni, vedi il file README su http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="ko">iPhoro 라이브러리를 이벤트, 앨범, 얼굴, 장고, 키워드, 평점 카테고리로 가져오세요.[CR][CR]자세한 정보는 http://github.com/jingai/plugin.image.iphoto 에서 README 파일을 참고하세요.</description>
-	<description lang="lt">Importuoja(-uoti) iPhoto Library į/iš renginiai, albumai, veidai, vietos raktinius žodžius, ir reitingus:. Norėdami gauti daugiau informacijos iš failo readme http://github.com/jingai/plugin.image.iphoto</description>
-	<description lang="pl">Importuj zawartość iPhoto do takich bibliotek jak Wydarzenia, Albumy, Twarze, Miejsca, Słowa kluczowe czy Oceny kategorii[CR][CR]By dowiedzieć się wiecej, zajrzyj pod http://github.com/jingai/plugin.image.iphoto i przeczytaj README</description>
-	<description lang="pt">Importa bibliotecas iPhoto para Eventos, Álbuns e Classificações.</description>
+	<description lang="lt">Importuoja iPhoto biblioteką į įvykių, albumų, veidų, vietų, raktinių žodžių ir reitingų kategorijas.[CR Norėdami gauti daugiau informacijos, peržiūrėkite iš failo readme http://github.com/jingai/plugin.image.iphoto</description>
+	<description lang="nl">Importeer iPhoto bibliotheek in Evenementen, Albums, Gezichten, Plaatsen, Trefwoorden, en waarderingen categoriën.[CR][CR] Voor meer informatie, zie de README op http://github.com/jingai/plugin.image.iphoto</description>
+	<description lang="no">Importerer iPhoto bibliotek til Begivenheter, Album, Ansikter, Steder, Nøkkelord og Rangerings katagoriene.[CR][CR]For mer infomasjon les README ved http://github.com/jingai/plugin.image.iphoto</description>
+	<description lang="pl">Importuj zawartość iPhoto do takich bibliotek jak wydarzenia, albumy, twarze, miejsca, słowa kluczowe czy oceny kategorii[CR][CR]By dowiedzieć się wiecej, zajrzyj pod http://github.com/jingai/plugin.image.iphoto i przeczytaj README</description>
+	<description lang="pt">Importa bibliotecas iPhoto para categorias de Eventos, Álbuns, Rostos, Locais, Palavras-chave, e Classificações.[CR][CR]Para mais informação, consulte README em http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="pt_BR">Importações biblioteca do iPhoto em Eventos, Álbuns, Rostos, Lugares, palavras-chave e categorias de ratings. [CR] [CR] Para mais informações, consulte o README no&#10;http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="sk">Importuje iPhoto knižnicu do Udalostí, Albumov, Klúčových slov a Hodnotení v kategóriách.&#10;&#10;Pre via informácií si prečítajte README na http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="sv">Importerar iPhoto biblioteket till händelser, album, ansikten, platser, nyckelord och betygs kategorier.[CR][CR]För mer information, läs README på http://github.com/jingai/plugin.image.iphoto</description>
@@ -61,7 +76,7 @@
 	<platform>all</platform>
 	<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 	<forum>http://forum.xbmc.org/showthread.php?tid=77612</forum>
-	<source>http://github.com/jingai/plugin.image.iphoto</source>
 	<email>jingai at floatingpenguins dot com</email>
+	<source>http://github.com/jingai/plugin.image.iphoto</source>
     </extension>
 </addon>

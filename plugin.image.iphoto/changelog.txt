@@ -1,4 +1,7 @@
-2.1.9 - 20131230
+2.1.11 - 20150918
+- Update language files from Transifex.
+
+2.1.10 - 20130106
 - Re-enable Set Sort Direction option.
 - Update language files from Transifex.
 

@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: iPhoto
 # Addon id: plugin.image.iphoto
 # Addon Provider: jingai
@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Icelandic (http://www.transifex.com/projects/p/xbmc-addons/language/is/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,6 +31,10 @@ msgstr "Útgefandi"
 msgctxt "#30024"
 msgid "Size"
 msgstr "Stærð"
+
+msgctxt "#30060"
+msgid "View mode in Confluence"
+msgstr "Hamur sýnar í Confluence"
 
 msgctxt "#30061"
 msgid "Default"
@@ -67,6 +71,10 @@ msgstr "Sýn"
 msgctxt "#30092"
 msgid "Skin"
 msgstr "Útlit"
+
+msgctxt "#30099"
+msgid "Advanced"
+msgstr "Ítarlegt"
 
 msgctxt "#30100"
 msgid "Events"

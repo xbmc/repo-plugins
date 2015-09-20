@@ -1,0 +1,337 @@
+# Kodi Media Center language file
+# Addon Name: iPhoto
+# Addon id: plugin.image.iphoto
+# Addon Provider: jingai
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: French (Canada) (http://www.transifex.com/projects/p/xbmc-addons/language/fr_CA/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr_CA\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgctxt "#30000"
+msgid "Path to iPhoto or Aperture Library"
+msgstr "Chemin vers IPhoto ou la bibliothèque Aperture"
+
+msgctxt "#30001"
+msgid "Ignore published (MobileMe) albums"
+msgstr "Ignorer les albums publiés (MobileMe)"
+
+msgctxt "#30002"
+msgid "Ignore 'Flagged' album"
+msgstr "Ignorer les albums « marqués »"
+
+msgctxt "#30003"
+msgid "Auto update library"
+msgstr "Mise à jour automatique de la photothèque"
+
+msgctxt "#30004"
+msgid "Hide Update Library item in main menu"
+msgstr "Cacher l'élément Mise à jour de la photothèque dans le menu principal"
+
+msgctxt "#30005"
+msgid "Ignore empty albums"
+msgstr "Ignorer les albums vides"
+
+msgctxt "#30006"
+msgid "Ignore keywords"
+msgstr "Ignorer les mots clefs"
+
+msgctxt "#30015"
+msgid "Enable Places support"
+msgstr "Activer la prise en charge de Lieux"
+
+msgctxt "#30016"
+msgid "Show Places as"
+msgstr "Afficher Lieux comme"
+
+msgctxt "#30017"
+msgid "Addresses"
+msgstr "Adresses"
+
+msgctxt "#30018"
+msgid "Lat/Lon Pairs"
+msgstr "Paires latitude/longitude"
+
+msgctxt "#30020"
+msgid "Default photo sort method"
+msgstr "Méthode de tri par défaut des photos"
+
+msgctxt "#30021"
+msgid "None"
+msgstr "Aucun"
+
+msgctxt "#30022"
+msgid "XML Date"
+msgstr "Date XML"
+
+msgctxt "#30023"
+msgid "Label"
+msgstr "Étiquette"
+
+msgctxt "#30024"
+msgid "Size"
+msgstr "Taille"
+
+msgctxt "#30025"
+msgid "Download maps from Google"
+msgstr "Télécharger les cartes de Google"
+
+msgctxt "#30026"
+msgid "Show map as fanart"
+msgstr "Afficher la carte comme fanart"
+
+msgctxt "#30027"
+msgid "Managed Library (change requires rescan)"
+msgstr "Photothèque gérée (le changement requiert un nouveau balayage)"
+
+msgctxt "#30028"
+msgid "Local root path to Masters"
+msgstr "Chemin root local vers Maîtres"
+
+msgctxt "#30029"
+msgid "Rewrite root path as"
+msgstr "Réécrire le chemin root comme"
+
+msgctxt "#30030"
+msgid "Hide View Documentation item in main menu"
+msgstr "Masquer l'élément Voir la documentation dans le menu principal"
+
+msgctxt "#30060"
+msgid "View mode in Confluence"
+msgstr "Mode de visualisation dans Confluence"
+
+msgctxt "#30061"
+msgid "Default"
+msgstr "Par défaut"
+
+msgctxt "#30062"
+msgid "Pic Thumbs"
+msgstr "Imagettes"
+
+msgctxt "#30063"
+msgid "Image Wrap"
+msgstr "Bouclage d'images"
+
+msgctxt "#30066"
+msgid "View mode in Metropolis"
+msgstr "Mode de visualisation dans Metropolis"
+
+msgctxt "#30067"
+msgid "Default"
+msgstr "Par défaut"
+
+msgctxt "#30068"
+msgid "Picture Grid"
+msgstr "Grille d'images"
+
+msgctxt "#30069"
+msgid "Galary Fanart"
+msgstr "Galerie de fanart"
+
+msgctxt "#30080"
+msgid "Default photo sort direction"
+msgstr "Direction du tri des photos par défaut"
+
+msgctxt "#30081"
+msgid "Ascending"
+msgstr "Croissant"
+
+msgctxt "#30082"
+msgid "Descending"
+msgstr "Décroissant"
+
+msgctxt "#30090"
+msgid "General"
+msgstr "Général"
+
+msgctxt "#30091"
+msgid "View"
+msgstr "Vue"
+
+msgctxt "#30092"
+msgid "Skin"
+msgstr "Habillage"
+
+msgctxt "#30099"
+msgid "Advanced"
+msgstr "Avancé"
+
+msgctxt "#30100"
+msgid "Events"
+msgstr "Événements"
+
+msgctxt "#30101"
+msgid "Albums"
+msgstr "Albums"
+
+msgctxt "#30102"
+msgid "Ratings"
+msgstr "Évaluations"
+
+msgctxt "#30103"
+msgid "<< Update Library >>"
+msgstr "<< Mise à jour de la photothèque >>"
+
+msgctxt "#30104"
+msgid "Keywords"
+msgstr "Mots clefs"
+
+msgctxt "#30105"
+msgid "Faces"
+msgstr "Visages"
+
+msgctxt "#30106"
+msgid "Places"
+msgstr "Lieux"
+
+msgctxt "#30107"
+msgid "<< View Documentation >>"
+msgstr "<< Voir la documentation >>"
+
+msgctxt "#30108"
+msgid "Projects"
+msgstr "Projets"
+
+msgctxt "#30200"
+msgid "%d star"
+msgstr "%d étoiles"
+
+msgctxt "#30210"
+msgid "Importing Library"
+msgstr "Importation de la photothèque"
+
+msgctxt "#30211"
+msgid "Imported %d items"
+msgstr "%d éléments importés"
+
+msgctxt "#30212"
+msgid "Scanning Library..."
+msgstr "Balayage de la photothèque..."
+
+msgctxt "#30213"
+msgid "Update library"
+msgstr "Mise à jour de la photothèque"
+
+msgctxt "#30214"
+msgid "Ignore Keyword"
+msgstr "Ignorer les mots clefs"
+
+msgctxt "#30215"
+msgid "Remove cached maps"
+msgstr "Supprimer les cartes de la cache"
+
+msgctxt "#30216"
+msgid "Reset add-on database"
+msgstr "Réinitialiser la base de données de l'addiciel"
+
+msgctxt "#30217"
+msgid "Add-on documentation"
+msgstr "Documentation de l'addiciel"
+
+msgctxt "#30219"
+msgid "Resetting add-on database..."
+msgstr "Réinitialisation de la base de données de l'addiciel..."
+
+msgctxt "#30220"
+msgid "Enable Support for Places?"
+msgstr "Activer la prise en charge de Lieux?"
+
+msgctxt "#30221"
+msgid "Places looks up addresses via Google."
+msgstr "Lieux cherche les adresses avec Google."
+
+msgctxt "#30222"
+msgid "This can slow down the library import a bit."
+msgstr "Ceci peut un peu ralentir l'importation de la photothèque."
+
+msgctxt "#30223"
+msgid "You will also need to reimport your library."
+msgstr "Vous devrez aussi réimporter votre photothèque"
+
+msgctxt "#30230"
+msgid "Delete add-on database?"
+msgstr "Supprimer la base de données de l'addiciel?"
+
+msgctxt "#30231"
+msgid "Add-on database is corrupt."
+msgstr "La base de données de l'addiciel est corrompue."
+
+msgctxt "#30232"
+msgid "Deleting it will not harm your Photo Library."
+msgstr "Le supprimer ne causera aucun dommage à votre photothèque."
+
+msgctxt "#30233"
+msgid "You will need to rescan after this."
+msgstr "Vous devrez rebalayer après ceci."
+
+msgctxt "#30240"
+msgid "Failed to initialize add-on database."
+msgstr "Échec lors de l'initialisation de la base de données de l'addiciel."
+
+msgctxt "#30241"
+msgid "Please reimport your Library."
+msgstr "Veuillez réimporter votre photothèque."
+
+msgctxt "#30250"
+msgid "Deleting cached map images"
+msgstr "Suppression des images de carte dans le cache"
+
+msgctxt "#30252"
+msgid "Scanning..."
+msgstr "Balayage..."
+
+msgctxt "#30260"
+msgid "Library import in progress"
+msgstr "Importation de la photothèque en cours"
+
+msgctxt "#30261"
+msgid "Unable to reset database."
+msgstr "Impossible de réinitialiser la base de données."
+
+msgctxt "#30262"
+msgid "Currently unsupported"
+msgstr "Non pris en charge présentement"
+
+msgctxt "#30263"
+msgid "This function is unsupported %s %s."
+msgstr "Cette fonction n'est pas prise en charge %s %s."
+
+msgctxt "#30300"
+msgid "Library import in progress"
+msgstr "Importation de la photothèque en cours"
+
+msgctxt "#30301"
+msgid "Library import successful"
+msgstr "La photothèque a été importé avec succès"
+
+msgctxt "#30302"
+msgid "Library import failed"
+msgstr "L'importation de la bibliothèque à échouée"
+
+msgctxt "#30310"
+msgid "No items"
+msgstr "Aucun élément"
+
+msgctxt "#30320"
+msgid "Database reset"
+msgstr "Réinitialisation de la base de données"
+
+msgctxt "#30321"
+msgid "Failed to reset database"
+msgstr "Impossible de réinitialiser la base de données"
+
+msgctxt "#30322"
+msgid "Deleted %d cached maps"
+msgstr "%d cartes supprimées du cache"
+
+msgctxt "#30330"
+msgid "Keyword '%s' hidden"
+msgstr "Mot clef « %s » caché"

@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: iPhoto
 # Addon id: plugin.image.iphoto
 # Addon Provider: jingai
@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Lithuanian (http://www.transifex.com/projects/p/xbmc-addons/language/lt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,11 +30,11 @@ msgstr "Ignoruoti 'Flagged' albumą"
 
 msgctxt "#30003"
 msgid "Auto update library"
-msgstr "Automatinis bibliotekos naujinimas"
+msgstr "Automatiškai atnaujinti biblioteką"
 
 msgctxt "#30004"
 msgid "Hide Update Library item in main menu"
-msgstr "Slėpti Naujinti bibliotekos elementą pagrindiniame meniu"
+msgstr "Slėpti bibliotekos atnaujinimo elementą pagrindiniame meniu"
 
 msgctxt "#30005"
 msgid "Ignore empty albums"
@@ -46,11 +46,11 @@ msgstr "Ignoruoti raktažodžius"
 
 msgctxt "#30015"
 msgid "Enable Places support"
-msgstr "Įjungti 'Klubai' paramą"
+msgstr "Įjungti vietų palaikymą"
 
 msgctxt "#30016"
 msgid "Show Places as"
-msgstr "Rodyti 'Klubai' kaip"
+msgstr "Rodyti vietas kaip"
 
 msgctxt "#30017"
 msgid "Addresses"
@@ -58,7 +58,7 @@ msgstr "Adresai"
 
 msgctxt "#30018"
 msgid "Lat/Lon Pairs"
-msgstr "Lat/Lon poros"
+msgstr "Platumos/Ilgumos poros"
 
 msgctxt "#30020"
 msgid "Default photo sort method"
@@ -66,7 +66,7 @@ msgstr "Numatytasis nuotraukų rūšiavimo būdas"
 
 msgctxt "#30021"
 msgid "None"
-msgstr "Niekas"
+msgstr "Joks"
 
 msgctxt "#30022"
 msgid "XML Date"
@@ -90,23 +90,23 @@ msgstr "Rodyti žemėlapį kaip FanArt"
 
 msgctxt "#30027"
 msgid "Managed Library (change requires rescan)"
-msgstr "Tvarkyti biblioteką (pakeitimas reikalauja 'Nuskaityti iš naujo')"
+msgstr "Valdoma biblioteka (pakeitimas reikalauja pakartotinio nuskaitymo)"
 
 msgctxt "#30028"
 msgid "Local root path to Masters"
-msgstr "Lokacinis šakninio kelio vadovas"
+msgstr "Vietinis šakninis kelias į pagrindinį"
 
 msgctxt "#30029"
 msgid "Rewrite root path as"
-msgstr "Perrašykite šakninį kelią"
+msgstr "Perrašyti šakninį kelią kaip"
 
 msgctxt "#30030"
 msgid "Hide View Documentation item in main menu"
-msgstr "Rodyti 'Paslėpti dokumentaciją' punktą pagrindiniame meniu"
+msgstr "Slėpti dokumentacijos rodymo elementą pagrindiniame meniu"
 
 msgctxt "#30060"
 msgid "View mode in Confluence"
-msgstr "Confluence peržiūros režimas"
+msgstr "Confluence rodinio režimas"
 
 msgctxt "#30061"
 msgid "Default"
@@ -114,15 +114,15 @@ msgstr "Numatytasis"
 
 msgctxt "#30062"
 msgid "Pic Thumbs"
-msgstr "Pic Thumbs"
+msgstr "Miniatiūros"
 
 msgctxt "#30063"
 msgid "Image Wrap"
-msgstr "Paveikslėlio suskleidimas"
+msgstr "Atvaizdų karusėlė"
 
 msgctxt "#30066"
 msgid "View mode in Metropolis"
-msgstr "Peržiūros režimas 'Metropolis'"
+msgstr "Metropolis rodinio režimas"
 
 msgctxt "#30067"
 msgid "Default"
@@ -130,31 +130,31 @@ msgstr "Numatytasis"
 
 msgctxt "#30068"
 msgid "Picture Grid"
-msgstr "Vaizdo tinklelis"
+msgstr "Paveikslėlių tinklelis"
 
 msgctxt "#30069"
 msgid "Galary Fanart"
-msgstr "Galerija FanArt"
+msgstr "Fanart galerija"
 
 msgctxt "#30080"
 msgid "Default photo sort direction"
-msgstr "Numatytosios nuotraukos rūšiavimo kryptis"
+msgstr "Numatytoji nuotraukų rūšiavimo kryptis"
 
 msgctxt "#30081"
 msgid "Ascending"
-msgstr "Didėjančia tvarka"
+msgstr "Didėjančiai"
 
 msgctxt "#30082"
 msgid "Descending"
-msgstr "Mažėjančia tvarka"
+msgstr "Mažėjančiai"
 
 msgctxt "#30090"
 msgid "General"
-msgstr "Pagrindinis"
+msgstr "Pagrindiniai"
 
 msgctxt "#30091"
 msgid "View"
-msgstr "Peržiūrėti"
+msgstr "Peržiūra"
 
 msgctxt "#30092"
 msgid "Skin"
@@ -162,11 +162,11 @@ msgstr "Teminė išvaizda"
 
 msgctxt "#30099"
 msgid "Advanced"
-msgstr "Išplėstinė(-is)"
+msgstr "Išplėstiniai"
 
 msgctxt "#30100"
 msgid "Events"
-msgstr "Renginiai"
+msgstr "Įvykiai"
 
 msgctxt "#30101"
 msgid "Albums"
@@ -178,7 +178,7 @@ msgstr "Reitingai"
 
 msgctxt "#30103"
 msgid "<< Update Library >>"
-msgstr "<< Naujinti biblioteką >>"
+msgstr "<< Atnaujinti biblioteką >>"
 
 msgctxt "#30104"
 msgid "Keywords"
@@ -202,23 +202,23 @@ msgstr "Projektai"
 
 msgctxt "#30200"
 msgid "%d star"
-msgstr "%d žvaigždė"
+msgstr "%d žvaigždutė"
 
 msgctxt "#30210"
 msgid "Importing Library"
-msgstr "Importuoti biblioteką"
+msgstr "Importuojama biblioteka"
 
 msgctxt "#30211"
 msgid "Imported %d items"
-msgstr "Importuoti %d elementai"
+msgstr "Importuota elementų: %d"
 
 msgctxt "#30212"
 msgid "Scanning Library..."
-msgstr "Nuskaityti bibliotekas..."
+msgstr "Nuskaitoma biblioteka..."
 
 msgctxt "#30213"
 msgid "Update library"
-msgstr "Naujinti biblioteką"
+msgstr "Atnaujinti biblioteką"
 
 msgctxt "#30214"
 msgid "Ignore Keyword"
@@ -230,7 +230,7 @@ msgstr "Pašalinti talpykloje saugomus žemėlapius"
 
 msgctxt "#30216"
 msgid "Reset add-on database"
-msgstr "Atstatyti priedą duomenų bazėje"
+msgstr "Atstatyti priedo duomenų bazę"
 
 msgctxt "#30217"
 msgid "Add-on documentation"
@@ -238,7 +238,7 @@ msgstr "Priedo dokumentacija"
 
 msgctxt "#30219"
 msgid "Resetting add-on database..."
-msgstr "Atstatyti priedo duomenų bazę"
+msgstr "Atstatoma priedo duomenų bazę"
 
 msgctxt "#30220"
 msgid "Enable Support for Places?"
@@ -246,31 +246,31 @@ msgstr "Įgalinti vietų palaikymą?"
 
 msgctxt "#30221"
 msgid "Places looks up addresses via Google."
-msgstr "Vietos adresai yra ieškomi Google via."
+msgstr "Vietos adresai yra ieškomi Google."
 
 msgctxt "#30222"
 msgid "This can slow down the library import a bit."
-msgstr "Tai gali sulėtinti bibliotekos importavimą"
+msgstr "Tai gali šiek tiek sulėtinti bibliotekos importavimą"
 
 msgctxt "#30223"
 msgid "You will also need to reimport your library."
-msgstr "Jums taip pat reikės iš naujo importuoti savo biblioteką."
+msgstr "Jums taip pat reikės iš naujo importuoti biblioteką."
 
 msgctxt "#30230"
 msgid "Delete add-on database?"
-msgstr "Ištrinti priedo duomenų bazę?"
+msgstr "Panaikinti priedo duomenų bazę?"
 
 msgctxt "#30231"
 msgid "Add-on database is corrupt."
-msgstr "Priedo duomenų bazę sugadinta."
+msgstr "Priedo duomenų bazė sugadinta."
 
 msgctxt "#30232"
 msgid "Deleting it will not harm your Photo Library."
-msgstr "Juos ištrinant nepakenks jūsų Photo Library."
+msgstr "Jos panaikinimas nepakenks jūsų nuotraukų bibliotekai."
 
 msgctxt "#30233"
 msgid "You will need to rescan after this."
-msgstr "Jums reikės nuskaityti dar po to."
+msgstr "Jums reikės iš naujo nuskaityti po šito."
 
 msgctxt "#30240"
 msgid "Failed to initialize add-on database."
@@ -278,15 +278,15 @@ msgstr "Nepavyko inicijuoti priedo duomenų bazės."
 
 msgctxt "#30241"
 msgid "Please reimport your Library."
-msgstr "Prašome iš naujo importuoti savo biblioteką."
+msgstr "Prašome iš naujo importuoti biblioteką."
 
 msgctxt "#30250"
 msgid "Deleting cached map images"
-msgstr "Ištrinti talpykloje žemėlapio vaizdus"
+msgstr "Pašalinami talpykloje esantys žemėlapio atvaizdai"
 
 msgctxt "#30252"
 msgid "Scanning..."
-msgstr "Nuskaitymas..."
+msgstr "Nuskaitoma..."
 
 msgctxt "#30260"
 msgid "Library import in progress"
@@ -294,11 +294,11 @@ msgstr "Vyksta bibliotekos importas"
 
 msgctxt "#30261"
 msgid "Unable to reset database."
-msgstr "Nepavyko atnaujinti duomenų bazės."
+msgstr "Nepavyko atstatyti duomenų bazės."
 
 msgctxt "#30262"
 msgid "Currently unsupported"
-msgstr "Šiuo metu nepalaiko"
+msgstr "Šiuo metu nepalaikoma"
 
 msgctxt "#30263"
 msgid "This function is unsupported %s %s."
@@ -318,11 +318,11 @@ msgstr "Bibliotekos importas nepavyko"
 
 msgctxt "#30310"
 msgid "No items"
-msgstr "Jokių elementų"
+msgstr "Nėra elementų"
 
 msgctxt "#30320"
 msgid "Database reset"
-msgstr "Duomenų bazė atstatoma"
+msgstr "Duomenų bazė atstatyta"
 
 msgctxt "#30321"
 msgid "Failed to reset database"
@@ -330,7 +330,7 @@ msgstr "Duomenų bazė atstatymas nepavyko"
 
 msgctxt "#30322"
 msgid "Deleted %d cached maps"
-msgstr "Panaikinta %d žemėlapiai talpykloje"
+msgstr "Panaikinta žemėlapių talpykloje: %d"
 
 msgctxt "#30330"
 msgid "Keyword '%s' hidden"

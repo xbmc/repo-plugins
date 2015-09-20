@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: iPhoto
 # Addon id: plugin.image.iphoto
 # Addon Provider: jingai
@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Norwegian (http://www.transifex.com/projects/p/xbmc-addons/language/no/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,9 +16,61 @@ msgstr ""
 "Language: no\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30000"
+msgid "Path to iPhoto or Aperture Library"
+msgstr "Sti til iPhoto eller Aperture bibliotek"
+
+msgctxt "#30001"
+msgid "Ignore published (MobileMe) albums"
+msgstr "Ignorer publiserte (MobileMe) albu"
+
+msgctxt "#30002"
+msgid "Ignore 'Flagged' album"
+msgstr "Ignorer 'Flagga' album"
+
+msgctxt "#30003"
+msgid "Auto update library"
+msgstr "Auto oppdater bibliotek"
+
+msgctxt "#30004"
+msgid "Hide Update Library item in main menu"
+msgstr "Skjul Oppdater Bibliotek oppføringen i hovedmenyen"
+
+msgctxt "#30005"
+msgid "Ignore empty albums"
+msgstr "Ignorer tomme album"
+
+msgctxt "#30006"
+msgid "Ignore keywords"
+msgstr "Ignorer nøkkelord"
+
+msgctxt "#30015"
+msgid "Enable Places support"
+msgstr "Aktiver støtte for Steder"
+
+msgctxt "#30016"
+msgid "Show Places as"
+msgstr "Vis Steder som"
+
+msgctxt "#30017"
+msgid "Addresses"
+msgstr "Adresser"
+
+msgctxt "#30018"
+msgid "Lat/Lon Pairs"
+msgstr "Lat/Lon Par"
+
+msgctxt "#30020"
+msgid "Default photo sort method"
+msgstr "Standard metode for sortering av bilder"
+
 msgctxt "#30021"
 msgid "None"
 msgstr "Ingen"
+
+msgctxt "#30022"
+msgid "XML Date"
+msgstr "XML Dato"
 
 msgctxt "#30023"
 msgid "Label"
@@ -27,6 +79,30 @@ msgstr "Plateselskap"
 msgctxt "#30024"
 msgid "Size"
 msgstr "Størrelse"
+
+msgctxt "#30025"
+msgid "Download maps from Google"
+msgstr "Last ned kart fra Google"
+
+msgctxt "#30026"
+msgid "Show map as fanart"
+msgstr "Vis kart som fanart"
+
+msgctxt "#30027"
+msgid "Managed Library (change requires rescan)"
+msgstr "Behandlet Bibliotek (endring krever ny skanning)"
+
+msgctxt "#30028"
+msgid "Local root path to Masters"
+msgstr "Lokal rot sti til Masters"
+
+msgctxt "#30029"
+msgid "Rewrite root path as"
+msgstr "Omskriv rot sti til"
+
+msgctxt "#30030"
+msgid "Hide View Documentation item in main menu"
+msgstr "Skjul Vis Dokumentasjon oppføringen i hovedmenyen"
 
 msgctxt "#30060"
 msgid "View mode in Confluence"
@@ -44,9 +120,25 @@ msgctxt "#30063"
 msgid "Image Wrap"
 msgstr "Bildeinnpakking"
 
+msgctxt "#30066"
+msgid "View mode in Metropolis"
+msgstr "Visnings modus i Metropolis"
+
 msgctxt "#30067"
 msgid "Default"
 msgstr "Standard"
+
+msgctxt "#30068"
+msgid "Picture Grid"
+msgstr "Bilde Rutenett"
+
+msgctxt "#30069"
+msgid "Galary Fanart"
+msgstr "Galleri Fanart"
+
+msgctxt "#30080"
+msgid "Default photo sort direction"
+msgstr "Standard metode for retnings-sortering av bilder"
 
 msgctxt "#30081"
 msgid "Ascending"
@@ -72,14 +164,174 @@ msgctxt "#30099"
 msgid "Advanced"
 msgstr "Avansert"
 
+msgctxt "#30100"
+msgid "Events"
+msgstr "Begivenheter"
+
 msgctxt "#30101"
 msgid "Albums"
 msgstr "Album"
+
+msgctxt "#30102"
+msgid "Ratings"
+msgstr "Rangering"
+
+msgctxt "#30103"
+msgid "<< Update Library >>"
+msgstr "<< Oppdater Bibliotek >>"
 
 msgctxt "#30104"
 msgid "Keywords"
 msgstr "Nøkkelord "
 
+msgctxt "#30105"
+msgid "Faces"
+msgstr "Ansikter"
+
+msgctxt "#30106"
+msgid "Places"
+msgstr "Steder"
+
+msgctxt "#30107"
+msgid "<< View Documentation >>"
+msgstr "<< Vis Dokumentasjon >>"
+
+msgctxt "#30108"
+msgid "Projects"
+msgstr "Prosjekter"
+
+msgctxt "#30200"
+msgid "%d star"
+msgstr "%d stjerne"
+
+msgctxt "#30210"
+msgid "Importing Library"
+msgstr "Importerer Bibliotek"
+
+msgctxt "#30211"
+msgid "Imported %d items"
+msgstr "Importert %d elementer"
+
+msgctxt "#30212"
+msgid "Scanning Library..."
+msgstr "Skanner Bibliotek..."
+
 msgctxt "#30213"
 msgid "Update library"
 msgstr "Oppdater bibliotek"
+
+msgctxt "#30214"
+msgid "Ignore Keyword"
+msgstr "Ignorer Nøkkelord"
+
+msgctxt "#30215"
+msgid "Remove cached maps"
+msgstr "Fjern mellomlagrede kart"
+
+msgctxt "#30216"
+msgid "Reset add-on database"
+msgstr "Nullstill database for tillegg"
+
+msgctxt "#30217"
+msgid "Add-on documentation"
+msgstr "Dokumentasjon for tillegg"
+
+msgctxt "#30219"
+msgid "Resetting add-on database..."
+msgstr "Nullstiller database for tillegg"
+
+msgctxt "#30220"
+msgid "Enable Support for Places?"
+msgstr "Aktiver støtte for Steder?"
+
+msgctxt "#30221"
+msgid "Places looks up addresses via Google."
+msgstr "Steder sjekker adresser via Google."
+
+msgctxt "#30222"
+msgid "This can slow down the library import a bit."
+msgstr "Dette kan sinke bibliotek importen litt."
+
+msgctxt "#30223"
+msgid "You will also need to reimport your library."
+msgstr "Du må også importere biblioteket ditt på nytt."
+
+msgctxt "#30230"
+msgid "Delete add-on database?"
+msgstr "Slett database for tillegg"
+
+msgctxt "#30231"
+msgid "Add-on database is corrupt."
+msgstr "Databasen for tillegg er skadet."
+
+msgctxt "#30232"
+msgid "Deleting it will not harm your Photo Library."
+msgstr "Å slette den vil ikke skade Bilde Biblioteket ditt."
+
+msgctxt "#30233"
+msgid "You will need to rescan after this."
+msgstr "Du må skanne på nytt etter dette."
+
+msgctxt "#30240"
+msgid "Failed to initialize add-on database."
+msgstr "Initialisering av database for tillegg var mislykket"
+
+msgctxt "#30241"
+msgid "Please reimport your Library."
+msgstr "Vennligst importer Biblioteket ditt på nytt."
+
+msgctxt "#30250"
+msgid "Deleting cached map images"
+msgstr "Fjerner mellomlagrede bilder av kart"
+
+msgctxt "#30252"
+msgid "Scanning..."
+msgstr "Skanner..."
+
+msgctxt "#30260"
+msgid "Library import in progress"
+msgstr "Import av bibliotek pågår"
+
+msgctxt "#30261"
+msgid "Unable to reset database."
+msgstr "Klarer ikke å nullstille database."
+
+msgctxt "#30262"
+msgid "Currently unsupported"
+msgstr "Ikke støttet for øyeblikket"
+
+msgctxt "#30263"
+msgid "This function is unsupported %s %s."
+msgstr "Denne funksjonen støttes ikke %s %s."
+
+msgctxt "#30300"
+msgid "Library import in progress"
+msgstr "Import av bibliotek pågår"
+
+msgctxt "#30301"
+msgid "Library import successful"
+msgstr "Import av bibliotek var vellykket"
+
+msgctxt "#30302"
+msgid "Library import failed"
+msgstr "Import av bibliotek var mislykket"
+
+msgctxt "#30310"
+msgid "No items"
+msgstr "Ingen elementer"
+
+msgctxt "#30320"
+msgid "Database reset"
+msgstr "Database nullstilt"
+
+msgctxt "#30321"
+msgid "Failed to reset database"
+msgstr "Nullstilling av database var mislykket"
+
+msgctxt "#30322"
+msgid "Deleted %d cached maps"
+msgstr "Slettet %d mellomlagrede kart"
+
+msgctxt "#30330"
+msgid "Keyword '%s' hidden"
+msgstr "Nøkkelord '%s' skjult"

@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: iPhoto
 # Addon id: plugin.image.iphoto
 # Addon Provider: jingai
@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Portuguese (http://www.transifex.com/projects/p/xbmc-addons/language/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,7 +18,7 @@ msgstr ""
 
 msgctxt "#30000"
 msgid "Path to iPhoto or Aperture Library"
-msgstr "Localização de biblioteca iPhoto ou Aperture"
+msgstr "Localização da Biblioteca iPhoto ou Aperture"
 
 msgctxt "#30001"
 msgid "Ignore published (MobileMe) albums"
@@ -26,15 +26,15 @@ msgstr "Ignorar álbuns publicados (MobileMe)"
 
 msgctxt "#30002"
 msgid "Ignore 'Flagged' album"
-msgstr "Ignorar álbuns 'marcados'"
+msgstr "Ignorar álbuns 'Marcados'"
 
 msgctxt "#30003"
 msgid "Auto update library"
-msgstr "Actualizar biblioteca automaticamente"
+msgstr "Actualizar automaticamente a biblioteca"
 
 msgctxt "#30004"
 msgid "Hide Update Library item in main menu"
-msgstr "Ocultar 'Actualizando Biblioteca' no menu principal"
+msgstr "Ocultar item Actualizar Biblioteca no menu principal"
 
 msgctxt "#30005"
 msgid "Ignore empty albums"
@@ -46,11 +46,11 @@ msgstr "Ignorar palavras-chave"
 
 msgctxt "#30015"
 msgid "Enable Places support"
-msgstr "Activar suporte de Lugares"
+msgstr "Activar suporte de Locais"
 
 msgctxt "#30016"
 msgid "Show Places as"
-msgstr "Exibir Lugares como"
+msgstr "Mostrar Locais como"
 
 msgctxt "#30017"
 msgid "Addresses"
@@ -62,7 +62,7 @@ msgstr "Pares Lat/Lon"
 
 msgctxt "#30020"
 msgid "Default photo sort method"
-msgstr "Método padrão para ordenar fotos"
+msgstr "Método predefinido para ordenar fotos"
 
 msgctxt "#30021"
 msgid "None"
@@ -86,11 +86,11 @@ msgstr "Transferir mapas do Google"
 
 msgctxt "#30026"
 msgid "Show map as fanart"
-msgstr "Exibir mapa como fanart"
+msgstr "Exibir o mapa como \"fanart\""
 
 msgctxt "#30027"
 msgid "Managed Library (change requires rescan)"
-msgstr "Biblioteca Organizada (necessita de reanálise)"
+msgstr "Biblioteca Organizada (alteração requer reanálise)"
 
 msgctxt "#30028"
 msgid "Local root path to Masters"
@@ -102,7 +102,7 @@ msgstr "Reescrever localização raiz como"
 
 msgctxt "#30030"
 msgid "Hide View Documentation item in main menu"
-msgstr "Ocultar \"Ver Documentação\" do menu principal"
+msgstr "Ocultar item Ver Documentação no menu principal"
 
 msgctxt "#30060"
 msgid "View mode in Confluence"
@@ -122,7 +122,7 @@ msgstr "Imagens"
 
 msgctxt "#30066"
 msgid "View mode in Metropolis"
-msgstr "Vista em Metropolis"
+msgstr "Tipo de vista em Metropolis"
 
 msgctxt "#30067"
 msgid "Default"
@@ -130,7 +130,7 @@ msgstr "Padrão"
 
 msgctxt "#30068"
 msgid "Picture Grid"
-msgstr "Grelha de Fotos"
+msgstr "Grelha de Imagens"
 
 msgctxt "#30069"
 msgid "Galary Fanart"
@@ -138,7 +138,7 @@ msgstr "Fanart da Galeria"
 
 msgctxt "#30080"
 msgid "Default photo sort direction"
-msgstr "Orientação padrão da ordenação das fotos "
+msgstr "Orientação predefinida da ordenação das fotos"
 
 msgctxt "#30081"
 msgid "Ascending"
@@ -150,11 +150,11 @@ msgstr "Descendente"
 
 msgctxt "#30090"
 msgid "General"
-msgstr "Menus"
+msgstr "Geral"
 
 msgctxt "#30091"
 msgid "View"
-msgstr "Ver"
+msgstr "Vista"
 
 msgctxt "#30092"
 msgid "Skin"
@@ -170,7 +170,7 @@ msgstr "Eventos"
 
 msgctxt "#30101"
 msgid "Albums"
-msgstr "Álbums"
+msgstr "Álbuns"
 
 msgctxt "#30102"
 msgid "Ratings"
@@ -190,7 +190,7 @@ msgstr "Rostos"
 
 msgctxt "#30106"
 msgid "Places"
-msgstr "Lugares"
+msgstr "Locais"
 
 msgctxt "#30107"
 msgid "<< View Documentation >>"
@@ -214,11 +214,11 @@ msgstr "%d itens importados"
 
 msgctxt "#30212"
 msgid "Scanning Library..."
-msgstr "Analisando Biblioteca..."
+msgstr "A Analisar a Biblioteca ..."
 
 msgctxt "#30213"
 msgid "Update library"
-msgstr "Importar biblioteca iPhoto"
+msgstr "Actualizar biblioteca"
 
 msgctxt "#30214"
 msgid "Ignore Keyword"
@@ -242,7 +242,7 @@ msgstr "Apagando a base de dados do add-on..."
 
 msgctxt "#30220"
 msgid "Enable Support for Places?"
-msgstr "Activar Suporte para Lugares?"
+msgstr "Activar Suporte para Locais?"
 
 msgctxt "#30221"
 msgid "Places looks up addresses via Google."
@@ -254,7 +254,7 @@ msgstr "Isto pode atrasar um pouco a importação da biblioteca."
 
 msgctxt "#30223"
 msgid "You will also need to reimport your library."
-msgstr "Também necessitará de reimportar a sua biblioteca."
+msgstr "Também irá precisar de reimportar a sua biblioteca."
 
 msgctxt "#30230"
 msgid "Delete add-on database?"
@@ -266,7 +266,7 @@ msgstr "A base de dados do add-on está corrompida."
 
 msgctxt "#30232"
 msgid "Deleting it will not harm your Photo Library."
-msgstr "Apagá-la não irá afectar a sua Biblioteca de Fotos."
+msgstr "Ao apagá-la não irá afectar a sua Biblioteca de Fotografias."
 
 msgctxt "#30233"
 msgid "You will need to rescan after this."
@@ -286,11 +286,11 @@ msgstr "Apagando imagens de mapa em cache"
 
 msgctxt "#30252"
 msgid "Scanning..."
-msgstr "Analisando..."
+msgstr "A analisar ..."
 
 msgctxt "#30260"
 msgid "Library import in progress"
-msgstr "Importação de biblioteca a decorrer"
+msgstr "Importação da biblioteca em progresso"
 
 msgctxt "#30261"
 msgid "Unable to reset database."
@@ -306,11 +306,11 @@ msgstr "Esta função não é suportada %s %s."
 
 msgctxt "#30300"
 msgid "Library import in progress"
-msgstr "Importação de biblioteca a decorrer"
+msgstr "Importação da biblioteca em progresso"
 
 msgctxt "#30301"
 msgid "Library import successful"
-msgstr "A importação de biblioteca foi concluída"
+msgstr "Importação da biblioteca bem sucedida"
 
 msgctxt "#30302"
 msgid "Library import failed"
@@ -322,7 +322,7 @@ msgstr "Sem itens"
 
 msgctxt "#30320"
 msgid "Database reset"
-msgstr "Reinicialização da base de dados"
+msgstr "Reiniciar Base de Dados"
 
 msgctxt "#30321"
 msgid "Failed to reset database"

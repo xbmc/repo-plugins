@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: iPhoto
 # Addon id: plugin.image.iphoto
 # Addon Provider: jingai
@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Galician (http://www.transifex.com/projects/p/xbmc-addons/language/gl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,7 +18,7 @@ msgstr ""
 
 msgctxt "#30000"
 msgid "Path to iPhoto or Aperture Library"
-msgstr "Camiño á Biblioteca de iPhoto ou Aperture"
+msgstr "Ruta á Biblioteca de iPhoto ou Aperture"
 
 msgctxt "#30001"
 msgid "Ignore published (MobileMe) albums"
@@ -94,7 +94,7 @@ msgstr "Xestionar a biblioteca (requírese volver a analizar)"
 
 msgctxt "#30028"
 msgid "Local root path to Masters"
-msgstr "Camiño local a Masters"
+msgstr "Ruta local a Masters"
 
 msgctxt "#30029"
 msgid "Rewrite root path as"
@@ -110,7 +110,7 @@ msgstr "Modo Vista en Confluence"
 
 msgctxt "#30061"
 msgid "Default"
-msgstr "Predeterminado"
+msgstr "Predefinido"
 
 msgctxt "#30062"
 msgid "Pic Thumbs"
@@ -186,7 +186,7 @@ msgstr "Verbas chave"
 
 msgctxt "#30105"
 msgid "Faces"
-msgstr "Rostros"
+msgstr "Facianas"
 
 msgctxt "#30106"
 msgid "Places"

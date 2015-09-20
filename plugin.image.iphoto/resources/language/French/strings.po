@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: iPhoto
 # Addon id: plugin.image.iphoto
 # Addon Provider: jingai
@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: French (http://www.transifex.com/projects/p/xbmc-addons/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,13 +16,25 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
+msgctxt "#30000"
+msgid "Path to iPhoto or Aperture Library"
+msgstr "Chemin vers la photothèque iPhoto ou Aperture"
+
+msgctxt "#30001"
+msgid "Ignore published (MobileMe) albums"
+msgstr "Ignorer les albums (MobileMe) publiés"
+
+msgctxt "#30002"
+msgid "Ignore 'Flagged' album"
+msgstr "Ignorer les albums 'Signalé'"
+
 msgctxt "#30003"
 msgid "Auto update library"
-msgstr "Mise à jour automatique de la médiathèque"
+msgstr "Mettre à jour automatiquement la médiathèque"
 
 msgctxt "#30004"
 msgid "Hide Update Library item in main menu"
-msgstr "Cacher l'élément Mise à jour de la Médiathèque dans le menu principal "
+msgstr "Masquer l'élément Mettre à jour la médiathèque du menu principal "
 
 msgctxt "#30005"
 msgid "Ignore empty albums"
@@ -32,9 +44,21 @@ msgctxt "#30006"
 msgid "Ignore keywords"
 msgstr "Ignorer les mots-clés"
 
+msgctxt "#30015"
+msgid "Enable Places support"
+msgstr "Activer la gestion des Lieux"
+
+msgctxt "#30016"
+msgid "Show Places as"
+msgstr "Montrer les Lieux comme"
+
 msgctxt "#30017"
 msgid "Addresses"
 msgstr "Adresses"
+
+msgctxt "#30018"
+msgid "Lat/Lon Pairs"
+msgstr "Paires Lat/Lon"
 
 msgctxt "#30020"
 msgid "Default photo sort method"
@@ -64,6 +88,18 @@ msgctxt "#30026"
 msgid "Show map as fanart"
 msgstr "Montrer la carte comme un fanart"
 
+msgctxt "#30027"
+msgid "Managed Library (change requires rescan)"
+msgstr "Administrer la bibliothèque (le changement exige un nouveau scan)"
+
+msgctxt "#30028"
+msgid "Local root path to Masters"
+msgstr "Chemin racine local des masters"
+
+msgctxt "#30029"
+msgid "Rewrite root path as"
+msgstr "Réécrire le chemin local"
+
 msgctxt "#30030"
 msgid "Hide View Documentation item in main menu"
 msgstr "Cacher l'élément Voir Documentation dans le menu principal"
@@ -84,6 +120,10 @@ msgctxt "#30063"
 msgid "Image Wrap"
 msgstr "Galerie d'images"
 
+msgctxt "#30066"
+msgid "View mode in Metropolis"
+msgstr "Voir mode dans Metropolis"
+
 msgctxt "#30067"
 msgid "Default"
 msgstr "Défaut"
@@ -91,6 +131,10 @@ msgstr "Défaut"
 msgctxt "#30068"
 msgid "Picture Grid"
 msgstr "Grille Image"
+
+msgctxt "#30069"
+msgid "Galary Fanart"
+msgstr "Galeries de Fanart"
 
 msgctxt "#30080"
 msgid "Default photo sort direction"
@@ -140,6 +184,10 @@ msgctxt "#30104"
 msgid "Keywords"
 msgstr "Mots-clés"
 
+msgctxt "#30105"
+msgid "Faces"
+msgstr "Visages"
+
 msgctxt "#30106"
 msgid "Places"
 msgstr "Endroits"
@@ -158,15 +206,19 @@ msgstr "%d étoile"
 
 msgctxt "#30210"
 msgid "Importing Library"
-msgstr "Import de la Médiathèque"
+msgstr "Importation de la médiathèque"
 
 msgctxt "#30211"
 msgid "Imported %d items"
 msgstr "%d éléments importés"
 
+msgctxt "#30212"
+msgid "Scanning Library..."
+msgstr "Balayage de la médiathèque..."
+
 msgctxt "#30213"
 msgid "Update library"
-msgstr "Actualiser la médiathèque"
+msgstr "Mettre à jour la médiathèque"
 
 msgctxt "#30214"
 msgid "Ignore Keyword"
@@ -188,9 +240,17 @@ msgctxt "#30219"
 msgid "Resetting add-on database..."
 msgstr "Réinitialisation de la base de données de l'extension..."
 
+msgctxt "#30220"
+msgid "Enable Support for Places?"
+msgstr "Activer le support pour les localités?"
+
+msgctxt "#30221"
+msgid "Places looks up addresses via Google."
+msgstr "Rechercher l'adresse des lieux via Google."
+
 msgctxt "#30222"
 msgid "This can slow down the library import a bit."
-msgstr "Ceci peut ralentir l'import de la médiathèque. "
+msgstr "Ceci peut ralentir un peu l'importation de médiathèque. "
 
 msgctxt "#30223"
 msgid "You will also need to reimport your library."
@@ -206,7 +266,7 @@ msgstr "La base de données de l'extension est corrompue."
 
 msgctxt "#30232"
 msgid "Deleting it will not harm your Photo Library."
-msgstr "La suppression ne causera pas de dommage à la Médiathèque Photo."
+msgstr "La suppression ne causera pas de dommage à votre photothèque."
 
 msgctxt "#30233"
 msgid "You will need to rescan after this."
@@ -218,7 +278,7 @@ msgstr "Échec de l'initialisation de la base de données de l'extension."
 
 msgctxt "#30241"
 msgid "Please reimport your Library."
-msgstr "Veuillez réimporter votre Médiathèque."
+msgstr "Veuillez réimporter votre médiathèque."
 
 msgctxt "#30250"
 msgid "Deleting cached map images"
@@ -230,7 +290,7 @@ msgstr "Balayage..."
 
 msgctxt "#30260"
 msgid "Library import in progress"
-msgstr "Import de la Médiathèque en cours"
+msgstr "Importation de la médiathèque en cours"
 
 msgctxt "#30261"
 msgid "Unable to reset database."
@@ -246,15 +306,15 @@ msgstr "Cette fonction n'est pas supportée %s %s."
 
 msgctxt "#30300"
 msgid "Library import in progress"
-msgstr "Import de la Médiathèque en cours"
+msgstr "Importation de la médiathèque en cours"
 
 msgctxt "#30301"
 msgid "Library import successful"
-msgstr "Import de la Médiathèque réalisé avec succès"
+msgstr "Importation de la médiathèque réussie"
 
 msgctxt "#30302"
 msgid "Library import failed"
-msgstr "Import de la Médiathèque non réalisé"
+msgstr "Importation de la médiathèque échoué"
 
 msgctxt "#30310"
 msgid "No items"

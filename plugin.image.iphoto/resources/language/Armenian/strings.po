@@ -1,0 +1,61 @@
+# Kodi Media Center language file
+# Addon Name: iPhoto
+# Addon id: plugin.image.iphoto
+# Addon Provider: jingai
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Armenian (http://www.transifex.com/projects/p/xbmc-addons/language/hy/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: hy\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30021"
+msgid "None"
+msgstr "Ոչինչ"
+
+msgctxt "#30024"
+msgid "Size"
+msgstr "Չափս"
+
+msgctxt "#30061"
+msgid "Default"
+msgstr "Նախնական"
+
+msgctxt "#30062"
+msgid "Pic Thumbs"
+msgstr "Նկարների նմուշներ"
+
+msgctxt "#30063"
+msgid "Image Wrap"
+msgstr "Նկարապատել"
+
+msgctxt "#30067"
+msgid "Default"
+msgstr "Նախնական"
+
+msgctxt "#30081"
+msgid "Ascending"
+msgstr "Աճող"
+
+msgctxt "#30082"
+msgid "Descending"
+msgstr "Նվազող"
+
+msgctxt "#30090"
+msgid "General"
+msgstr "Գլխավոր"
+
+msgctxt "#30092"
+msgid "Skin"
+msgstr "Տեսք"
+
+msgctxt "#30101"
+msgid "Albums"
+msgstr "Ալբոմներ"

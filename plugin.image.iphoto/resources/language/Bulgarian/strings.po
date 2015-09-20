@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: iPhoto
 # Addon id: plugin.image.iphoto
 # Addon Provider: jingai
@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Bulgarian (http://www.transifex.com/projects/p/xbmc-addons/language/bg/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,21 +16,41 @@ msgstr ""
 "Language: bg\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30003"
+msgid "Auto update library"
+msgstr "Автоматично обновяване на библиотеката"
+
+msgctxt "#30016"
+msgid "Show Places as"
+msgstr "Показвай местата като"
+
+msgctxt "#30017"
+msgid "Addresses"
+msgstr "Адреси"
+
 msgctxt "#30021"
 msgid "None"
 msgstr "Без"
 
+msgctxt "#30022"
+msgid "XML Date"
+msgstr "XML дата"
+
 msgctxt "#30023"
 msgid "Label"
-msgstr "Label"
+msgstr "Етикет"
 
 msgctxt "#30024"
 msgid "Size"
 msgstr "Размер"
 
+msgctxt "#30026"
+msgid "Show map as fanart"
+msgstr "Показвай картата като фен-арт "
+
 msgctxt "#30060"
 msgid "View mode in Confluence"
-msgstr "Вид в Confluence"
+msgstr "Изглед в Confluence"
 
 msgctxt "#30061"
 msgid "Default"
@@ -48,6 +68,10 @@ msgctxt "#30067"
 msgid "Default"
 msgstr "Стандартна"
 
+msgctxt "#30069"
+msgid "Galary Fanart"
+msgstr "Фен-арт галерия"
+
 msgctxt "#30081"
 msgid "Ascending"
 msgstr "Възходящ"
@@ -62,7 +86,7 @@ msgstr "Общи"
 
 msgctxt "#30091"
 msgid "View"
-msgstr "Вид"
+msgstr "Изглед"
 
 msgctxt "#30092"
 msgid "Skin"
@@ -72,18 +96,46 @@ msgctxt "#30099"
 msgid "Advanced"
 msgstr "Допълнителни"
 
+msgctxt "#30100"
+msgid "Events"
+msgstr "Събития"
+
 msgctxt "#30101"
 msgid "Albums"
 msgstr "Албуми"
 
 msgctxt "#30102"
 msgid "Ratings"
-msgstr "Рейтинг"
+msgstr "Оценка"
 
 msgctxt "#30104"
 msgid "Keywords"
 msgstr "Ключови думи"
 
+msgctxt "#30105"
+msgid "Faces"
+msgstr "Лица"
+
+msgctxt "#30106"
+msgid "Places"
+msgstr "Места"
+
+msgctxt "#30108"
+msgid "Projects"
+msgstr "Проекти"
+
+msgctxt "#30212"
+msgid "Scanning Library..."
+msgstr "Сканиране на библиотеката..."
+
 msgctxt "#30213"
 msgid "Update library"
 msgstr "Актуализирай библиотеката"
+
+msgctxt "#30252"
+msgid "Scanning..."
+msgstr "Сканиране..."
+
+msgctxt "#30310"
+msgid "No items"
+msgstr "Няма елементи"

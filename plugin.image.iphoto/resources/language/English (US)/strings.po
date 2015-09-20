@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: iPhoto
 # Addon id: plugin.image.iphoto
 # Addon Provider: jingai
@@ -8,14 +8,376 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
-"Language-Team: English (US) (http://www.transifex.com/projects/p/xbmc-addons/language/en_US/)\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en_US/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: en_US\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#Plugin settings strings
+
+msgctxt "#30000"
+msgid "Path to iPhoto or Aperture Library"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Ignore published (MobileMe) albums"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Ignore 'Flagged' album"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Auto update library"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Hide Update Library item in main menu"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Ignore empty albums"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Ignore keywords"
+msgstr ""
+
+#empty strings from id 30007 to 30014
+
+msgctxt "#30015"
+msgid "Enable Places support"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Show Places as"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Addresses"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Lat/Lon Pairs"
+msgstr ""
+
+#empty string with id 30019
+#Plugin settings Skin strings
+
+msgctxt "#30020"
+msgid "Default photo sort method"
+msgstr ""
+
+msgctxt "#30021"
+msgid "None"
+msgstr ""
+
+msgctxt "#30022"
+msgid "XML Date"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Label"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Size"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Download maps from Google"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Show map as fanart"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Managed Library (change requires rescan)"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Local root path to Masters"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Rewrite root path as"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Hide View Documentation item in main menu"
+msgstr ""
+
+#empty strings from id 30031 to 30059
+
+msgctxt "#30060"
+msgid "View mode in Confluence"
+msgstr ""
+
+msgctxt "#30061"
+msgid "Default"
+msgstr ""
+
+msgctxt "#30062"
+msgid "Pic Thumbs"
+msgstr ""
+
+msgctxt "#30063"
+msgid "Image Wrap"
+msgstr ""
+
+#empty strings from id 30064 to 30065
+
+msgctxt "#30066"
+msgid "View mode in Metropolis"
+msgstr ""
+
+msgctxt "#30067"
+msgid "Default"
+msgstr ""
+
+msgctxt "#30068"
+msgid "Picture Grid"
+msgstr ""
+
+msgctxt "#30069"
+msgid "Galary Fanart"
+msgstr ""
+
+#empty strings from id 30070 to 30079
+
+msgctxt "#30080"
+msgid "Default photo sort direction"
+msgstr ""
+
+msgctxt "#30081"
+msgid "Ascending"
+msgstr ""
+
+msgctxt "#30082"
+msgid "Descending"
+msgstr ""
+
+#empty strings from id 30083 to 30089
+#Plugin settings Categories strings
+
 msgctxt "#30090"
 msgid "General"
-msgstr "General"
+msgstr ""
+
+msgctxt "#30091"
+msgid "View"
+msgstr ""
+
+msgctxt "#30092"
+msgid "Skin"
+msgstr ""
+
+#empty strings from id 30093 to 30098
+
+msgctxt "#30099"
+msgid "Advanced"
+msgstr ""
+
+#Category strings
+
+msgctxt "#30100"
+msgid "Events"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Albums"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Ratings"
+msgstr ""
+
+msgctxt "#30103"
+msgid "<< Update Library >>"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Keywords"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Faces"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Places"
+msgstr ""
+
+msgctxt "#30107"
+msgid "<< View Documentation >>"
+msgstr ""
+
+msgctxt "#30108"
+msgid "Projects"
+msgstr ""
+
+#empty strings from id 30109 to 30199
+#Plugin strings
+
+msgctxt "#30200"
+msgid "%d star"
+msgstr ""
+
+#empty strings from id 30201 to 30209
+
+msgctxt "#30210"
+msgid "Importing Library"
+msgstr ""
+
+msgctxt "#30211"
+msgid "Imported %d items"
+msgstr ""
+
+msgctxt "#30212"
+msgid "Scanning Library..."
+msgstr ""
+
+msgctxt "#30213"
+msgid "Update library"
+msgstr ""
+
+msgctxt "#30214"
+msgid "Ignore Keyword"
+msgstr ""
+
+msgctxt "#30215"
+msgid "Remove cached maps"
+msgstr ""
+
+msgctxt "#30216"
+msgid "Reset add-on database"
+msgstr ""
+
+msgctxt "#30217"
+msgid "Add-on documentation"
+msgstr ""
+
+#empty string with id 30218
+
+msgctxt "#30219"
+msgid "Resetting add-on database..."
+msgstr ""
+
+msgctxt "#30220"
+msgid "Enable Support for Places?"
+msgstr ""
+
+msgctxt "#30221"
+msgid "Places looks up addresses via Google."
+msgstr ""
+
+msgctxt "#30222"
+msgid "This can slow down the library import a bit."
+msgstr ""
+
+msgctxt "#30223"
+msgid "You will also need to reimport your library."
+msgstr ""
+
+#empty strings from id 30224 to 30229
+
+msgctxt "#30230"
+msgid "Delete add-on database?"
+msgstr ""
+
+msgctxt "#30231"
+msgid "Add-on database is corrupt."
+msgstr ""
+
+msgctxt "#30232"
+msgid "Deleting it will not harm your Photo Library."
+msgstr ""
+
+msgctxt "#30233"
+msgid "You will need to rescan after this."
+msgstr ""
+
+#empty strings from id 30234 to 30239
+
+msgctxt "#30240"
+msgid "Failed to initialize add-on database."
+msgstr ""
+
+msgctxt "#30241"
+msgid "Please reimport your Library."
+msgstr ""
+
+#empty strings from id 30242 to 30249
+
+msgctxt "#30250"
+msgid "Deleting cached map images"
+msgstr ""
+
+#empty string with id 30251
+
+msgctxt "#30252"
+msgid "Scanning..."
+msgstr ""
+
+#empty strings from id 30253 to 30259
+
+msgctxt "#30260"
+msgid "Library import in progress"
+msgstr ""
+
+msgctxt "#30261"
+msgid "Unable to reset database."
+msgstr ""
+
+msgctxt "#30262"
+msgid "Currently unsupported"
+msgstr ""
+
+msgctxt "#30263"
+msgid "This function is unsupported %s %s."
+msgstr ""
+
+#empty strings from id 30264 to 30299
+#Action Results (Notifications)
+
+msgctxt "#30300"
+msgid "Library import in progress"
+msgstr ""
+
+msgctxt "#30301"
+msgid "Library import successful"
+msgstr ""
+
+msgctxt "#30302"
+msgid "Library import failed"
+msgstr ""
+
+#empty strings from id 30303 to 30309
+
+msgctxt "#30310"
+msgid "No items"
+msgstr ""
+
+#empty strings from id 30311 to 30319
+
+msgctxt "#30320"
+msgid "Database reset"
+msgstr ""
+
+msgctxt "#30321"
+msgid "Failed to reset database"
+msgstr ""
+
+msgctxt "#30322"
+msgid "Deleted %d cached maps"
+msgstr ""
+
+#empty strings from id 30323 to 30329
+
+msgctxt "#30330"
+msgid "Keyword '%s' hidden"
+msgstr ""

@@ -1,0 +1,328 @@
+# XBMC Media Center language file
+# Addon Name: SoundCloud
+# Addon id: plugin.audio.soundcloud
+# Addon version: 2.0.1
+# Addon Provider: bromix
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2015-08-27 16:38+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Hebrew\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: he\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "SoundCloud is an online audio distribution platform."
+msgstr "סאונדקלאוד הוא פלטפורמת הפצת אודיו באינטרנט."
+
+msgctxt "Addon Description"
+msgid "SoundCloud is an online audio distribution platform that enables its users to upload, record, promote and share their originally-created sounds."
+msgstr "סאונדקלאוד הוא פלטפורמה הפצת אודיו מקוונת המאפשרת למשתמשים שלה להעלות, להקליט, לקדם ולשתף את היצירות שלהם."
+
+#Settings
+
+#Settings
+
+msgctxt "#30000"
+msgid "General"
+msgstr "כללי"
+
+msgctxt "#30001"
+msgid "Username"
+msgstr "שם משתמש"
+
+msgctxt "#30002"
+msgid "Password"
+msgstr "סיסמה"
+
+#empty strings from id 30003 to 30008
+
+msgctxt "#30009"
+msgid "Always ask for the video quality"
+msgstr "תמיד שאל לאיכות הווידאו"
+
+msgctxt "#30010"
+msgid "Video Quality"
+msgstr "איכות ווידאו"
+
+msgctxt "#30011"
+msgid "480p"
+msgstr ""
+
+msgctxt "#30012"
+msgid "720p (HD)"
+msgstr ""
+
+msgctxt "#30013"
+msgid "1080p (HD)"
+msgstr ""
+
+msgctxt "#30014"
+msgid "2160p (4k)"
+msgstr ""
+
+msgctxt "#30015"
+msgid "4320p (8k)"
+msgstr ""
+
+msgctxt "#30016"
+msgid "240p"
+msgstr ""
+
+msgctxt "#30017"
+msgid "360p"
+msgstr ""
+
+#empty strings from id 30018 to 30019
+
+msgctxt "#30020"
+msgid "Allow 3D"
+msgstr "אפשר 3D"
+
+msgctxt "#30021"
+msgid "Show Fanart"
+msgstr "הצג Fanart"
+
+msgctxt "#30022"
+msgid "Items per page"
+msgstr "מספר פריטים לעמוד"
+
+msgctxt "#30023"
+msgid "Search History Size"
+msgstr "גודל היסטוריית חיפוש"
+
+msgctxt "#30024"
+msgid "Cache Size (MB)"
+msgstr "גודל זיכרון מטמון (MB)"
+
+msgctxt "#30025"
+msgid "Enable setup-wizard"
+msgstr "אפשר אשף ההתקנה"
+
+msgctxt "#30026"
+msgid "Override View"
+msgstr "תצוגה"
+
+msgctxt "#30027"
+msgid "View: Default"
+msgstr "תצוגה: ברירת מחדל"
+
+msgctxt "#30028"
+msgid "View: Episodes"
+msgstr "תצוגה: פרקים"
+
+msgctxt "#30029"
+msgid "View: Movies"
+msgstr "תצוגה: סרטים"
+
+msgctxt "#30030"
+msgid "Execute setup-wizard?"
+msgstr "האם לבצע אשף ההתקנה?"
+
+msgctxt "#30031"
+msgid "Advanced"
+msgstr "מתקדם"
+
+msgctxt "#30032"
+msgid "View: TV Shows"
+msgstr "תצוגה: סדרות"
+
+msgctxt "#30033"
+msgid "View: Songs"
+msgstr "תצוגה: שירים"
+
+msgctxt "#30034"
+msgid "View: Artists"
+msgstr "תצוגה: אמנים"
+
+msgctxt "#30035"
+msgid "View: Albums"
+msgstr "תצוגה: אלבומים"
+
+msgctxt "#30036"
+msgid "Support alternative player"
+msgstr "תמיכה בנגן חלופי"
+
+msgctxt "#30037"
+msgid "Clear cache"
+msgstr "נקה זיכרון מטמון"
+
+msgctxt "#30038"
+msgid "Setup views?"
+msgstr "הגדרת תצוגה?"
+
+#Common
+#empty strings from id 30038 to 30099
+
+msgctxt "#30100"
+msgid "Favorites"
+msgstr "מועדפים"
+
+msgctxt "#30101"
+msgid "Add to addon favs"
+msgstr "הוסף למועדפים של התוסף"
+
+msgctxt "#30102"
+msgid "Search"
+msgstr "חיפוש"
+
+msgctxt "#30103"
+msgid "Library"
+msgstr "ספרייה"
+
+msgctxt "#30104"
+msgid "Highlights"
+msgstr "מודגשים"
+
+msgctxt "#30105"
+msgid "Archive"
+msgstr "ארכיון"
+
+msgctxt "#30106"
+msgid "Next Page (%d)"
+msgstr "עמוד הבא (%d)"
+
+msgctxt "#30107"
+msgid "Watch Later"
+msgstr "צפה מאוחר יותר"
+
+msgctxt "#30108"
+msgid "Remove"
+msgstr "הסר"
+
+msgctxt "#30109"
+msgid "Latest Videos"
+msgstr "סרטונים אחרונים"
+
+msgctxt "#30110"
+msgid "New Search"
+msgstr "חיפוש חדש"
+
+msgctxt "#30111"
+msgid "Sign In"
+msgstr "התחבר"
+
+msgctxt "#30112"
+msgid "Sign Out"
+msgstr "התנתק"
+
+msgctxt "#30113"
+msgid "Rename"
+msgstr "שנה שם"
+
+msgctxt "#30114"
+msgid "Confirm delete"
+msgstr "אשר מחיקה"
+
+msgctxt "#30115"
+msgid "Confirm remove"
+msgstr "אשר הסרה"
+
+msgctxt "#30116"
+msgid "Delete \"%s\"?"
+msgstr "למחוק \"%s\"?"
+
+msgctxt "#30117"
+msgid "Remove \"%s\"?"
+msgstr "להסיר \"%s\"?"
+
+msgctxt "#30118"
+msgid "מחק"
+msgstr ""
+
+msgctxt "#30119"
+msgid "Please wait..."
+msgstr "אנא המתן..."
+
+msgctxt "#30120"
+msgid "Clear"
+msgstr "נקה"
+
+#SoundCloud
+#empty strings from id 30121 to 30499
+
+msgctxt "#30500"
+msgid "Explore"
+msgstr "סייר"
+
+msgctxt "#30501"
+msgid "Trending Music"
+msgstr "מוזיקה עכשווית"
+
+msgctxt "#30502"
+msgid "Trending Audio"
+msgstr "אודיו עכשווית"
+
+msgctxt "#30503"
+msgid "Music Genres"
+msgstr "ז'אנרי מוסיקה"
+
+msgctxt "#30504"
+msgid "Audio Genres"
+msgstr "ז'אנרי אודיו"
+
+msgctxt "#30505"
+msgid "Stream"
+msgstr "הזרמה"
+
+msgctxt "#30506"
+msgid "Playlists"
+msgstr "רשימות השמעה"
+
+msgctxt "#30507"
+msgid "Following"
+msgstr "עוקבים"
+
+msgctxt "#30508"
+msgid "Follow"
+msgstr "עקוב"
+
+msgctxt "#30509"
+msgid "Follower"
+msgstr "עוקב"
+
+msgctxt "#30510"
+msgid "Likes"
+msgstr "אוהבים"
+
+msgctxt "#30511"
+msgid "Like"
+msgstr "אוהב"
+
+msgctxt "#30512"
+msgid "Tracks"
+msgstr "רצועות"
+
+msgctxt "#30513"
+msgid "Unfollow"
+msgstr "הפסק לעקוב"
+
+msgctxt "#30514"
+msgid "Unlike"
+msgstr "לא אוהב"
+
+msgctxt "#30515"
+msgid "People"
+msgstr "אנשים"
+
+msgctxt "#30516"
+msgid "Go to %s"
+msgstr "עבור אל %s"
+
+msgctxt "#30517"
+msgid "Recommended Tracks"
+msgstr "שירים מומלצים"
+
+msgctxt "#30518"
+msgid "Show black Fanart"
+msgstr "הצג Fanart שחור"
+
+msgctxt "#30519"
+msgid "Setup login?"
+msgstr "הגדרת התחברות?"

@@ -162,7 +162,7 @@ def process_item(context, item, resolve=False):
         pass
     else:
         if not xbmcplugin.addDirectoryItem(handle=context.get_handle(), url=item['uri'], listitem=kodi_item,
-                                           isFolder=item['type'] == 'folder'):
+                                           isFolder=(item['type'] == 'folder')):
             raise ProviderException('Failed to add folder item')
         pass
     pass

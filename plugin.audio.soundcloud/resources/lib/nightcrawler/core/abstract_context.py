@@ -1,3 +1,4 @@
+import json
 import os
 import urllib
 
@@ -227,8 +228,13 @@ class AbstractContext(object):
             uri_params.update(params)
 
             # encode in utf-8
-            for param in uri_params:
-                uri_params[param] = utils.strings.to_utf8(params[param])
+            for key in uri_params:
+                param = params[key]
+                # convert dict to string via json
+                if isinstance(param, dict):
+                    param = json.dumps(param)
+                    pass
+                uri_params[key] = utils.strings.to_utf8(param)
                 pass
             uri += '?' + urllib.urlencode(uri_params)
             pass

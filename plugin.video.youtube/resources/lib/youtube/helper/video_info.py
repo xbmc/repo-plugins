@@ -615,6 +615,10 @@ class VideoInfo(object):
                     if not yt_format:
                         raise Exception('unknown yt_format for itag "%s"' % itag)
 
+                    if yt_format.get('discontinued', False):
+                        continue
+                        pass
+
                     video_stream = {'url': url,
                                     'meta': meta_info}
                     video_stream.update(yt_format)

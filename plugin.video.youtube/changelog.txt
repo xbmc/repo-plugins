@@ -1,3 +1,9 @@
+5.1.9 (2015-09-21)
+[add] Hebrew (thx 2 smoky-jr)
+[upd] don't set default season and episodes (1x1)
+[upd] another try to optimize the quota problem. Move all searches to the individual keys instead of one global
+[fix] playback issues (skip discontinued video/format by YouTube)
+
 5.1.8 (2015-08-23)
 [add] Bulgarian (thx 2 NEOhidra)
 [upd] new quota shaping

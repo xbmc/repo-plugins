@@ -485,7 +485,7 @@ class YouTube(LoginClient):
             params['pageToken'] = page_token
             pass
 
-        return self._perform_v3_request(method='GET', path='search', params=params)
+        return self._perform_v3_request(method='GET', path='search', params=params, quota_optimized=False)
 
     def get_my_subscriptions(self, page_token=None, offset=0):
         if not page_token:

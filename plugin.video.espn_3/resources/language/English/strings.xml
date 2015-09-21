@@ -28,4 +28,5 @@
     <string id="30039">Unable to playback video</string>
     <string id="30040">Blacked Out</string>
     <string id="30050">Set the color of LIVE Events(6 digit HEX Value)</string>
+    <string id="30060">List ONLY RTMP/HDS Streams</string>
 </strings>

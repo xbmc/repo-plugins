@@ -1,0 +1,59 @@
+--------------------------------
+version 1.2.4 (September 15 2015)
+--------------------------------
+- Added ability to only list RTMP/HDS Stream Types to prevent confusion. *See Settings*
+
+
+--------------------------------
+version 1.2.3 (July 20 2015)
+--------------------------------
+- Changed code to use BeautifulSoup 4 for all scraping, as it seems to correctly encode for XML.
+  Still, slower than Elementree, but more stable
+- Changed some code to pull full res pics for Thumb and Fanart from ESPN website.
+
+--------------------------------
+version 1.2.1 (July 7 2015)
+--------------------------------
+- Added some code to solve issues with timestamp on ESPN 3 website.
+
+--------------------------------
+version 1.2 (June 19 2015)
+--------------------------------
+- Switching filename default.py to addon.py to keep up with Kodi
+- Added support for BeautifulSoup 4 for future proofing
+
+--------------------------------
+version 1.1.1 (June 16 2015)
+--------------------------------
+- fixed Live streaming issues.
+- still not sure if HDS content is working. please leave comments in github if you are having issues, or PM me through Kodi Forums
+
+--------------------------------
+version 1.1.0 (June 5 2015)
+--------------------------------
+- added exeptions for RTMP and HLS streams
+- cleaned up code a little bit to utilize proper URL's from ESPN's website
+- HDS (Live) streams still do not work.
+
+--------------------------------
+version 1.0.4 (November 2014)
+--------------------------------
+- fixed Duration label reporting wrong times in replay section
+- added more useful information to the Info Labels
+
+--------------------------------
+version 1.0.3 (November 2014)
+--------------------------------
+- continued work on Replay All function. Replay All function tries to go back 1 year.
+- Updated the View information in the Live Feeds to have Time displayed first.
+- Ability to color code the feeds that are actually Live (See Settings for more info).
+
+--------------------------------
+version 1.0.2                 
+--------------------------------
+- Updated and fixed the replay function to include feeds from the same day
+
+--------------------------------
+version 1.0.0                      
+--------------------------------
+- Initial commit

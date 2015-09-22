@@ -1,3 +1,8 @@
+3.0.0 (2015-09-22)
+[add] HD playback
+[upd] new framework
+[upd] new navigation
+
 2.2.1 (2015-03-31)
 FIX: improve playback on ARM systems
 

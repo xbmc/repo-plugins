@@ -178,7 +178,7 @@ def getLink(url,vidname):
         username = addon.getSetting('login_name')
         password = addon.getSetting('login_pass')
         url1  = ('http://tubitv.com/login') # the login is extremely sensitive to headers and position so using urrlib2 calls
-        xheaders = aheaders
+        xheaders = aheaders.copy()
         xheaders.update({"Content-Type": "application/x-www-form-urlencoded"})
         udata = 'username=%s&password=%s' % (urllib.quote(username),urllib.quote(password))
         req = urllib2.Request(url1, udata, xheaders)
@@ -221,10 +221,13 @@ def getLink(url,vidname):
         try:
           vres = int(addon.getSetting('vid_res'))
           data = getRequest(u)
+          data = data +'#'
           urls = re.compile('BANDWIDTH=[0-9]*(.+?)#', re.DOTALL).findall(data)
           if vres !=0: vres = len(urls)-1
+
           u = '%s/%s' % (u.rsplit('/',1)[0], urls[vres].strip())
         except: pass
+        u = u.replace('-FQ-','-SD-',1)
 
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=u))
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30100">Generale</string>
+  <string id="30101">PCloud username (email)</string>
+  <string id="30102">PCloud password</string>
+  <string id="30103">Accedi</string>
+  <string id="30104">Accedi a PCloud?</string>
+  <string id="30105">auth</string>
+  <string id="30106">auth expiry</string>
+  <string id="30107">Errore</string>
+  <string id="30108">Accesso a PCloud fallito (vedi log)</string>
+  <string id="30109">ERRORE: accesso a PCloud fallito</string>
+  <string id="30110">Successo</string>
+  <string id="30111">Accesso eseguito con successo</string>
+  <string id="30112">ID dell'ultimo folder usato</string>
+  <string id="30113">Torna al folder di livello superiore</string>
+</strings>

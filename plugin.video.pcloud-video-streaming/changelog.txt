@@ -1,0 +1,14 @@
+v1.0.1 -- 19-Sep-2015
+---------------------
+- Now correctly setting watched/unwatched/progress markers
+- Now persisting last used folder ID
+- Added "go up one folder" list item
+
+v0.1.1 -- 04-Sep-2015
+---------------------
+- Initial version
+- Get real URL from PCloud's streaming API
+- Add settings dialog for username & password
+- Persist auth
+- Add real thumbnails to files
+- Strings localization

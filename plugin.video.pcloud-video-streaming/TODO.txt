@@ -1,0 +1,7 @@
+TODO
+- Add context menu for deletion of files
+- Add context menu for deletion of folders
+- Add context menu for "mark as watched"?
+
+DONE
+- See changelog.txt

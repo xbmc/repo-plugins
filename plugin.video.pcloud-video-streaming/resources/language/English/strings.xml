@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30100">General</string>
+  <string id="30101">PCloud username (email)</string>
+  <string id="30102">PCloud password</string>
+  <string id="30103">Log On</string>
+  <string id="30104">Log on to PCloud?</string>
+  <string id="30105">auth</string>
+  <string id="30106">auth expiry</string>
+  <string id="30107">Error</string>
+  <string id="30108">Cannot log on to PCloud (see log)</string>
+  <string id="30109">ERROR: cannot logon to PCloud</string>
+  <string id="30110">Success</string>
+  <string id="30111">Logon successful</string>
+  <string id="30112">Last used folder ID</string>
+  <string id="30113">Back to parent folder</string>
+</strings>

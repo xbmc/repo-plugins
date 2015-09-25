@@ -1,3 +1,11 @@
+v2015.9.22
+- Removed Search Archive
+- Search now has the ability to list events, accounts and videos separately
+- When selecting an account videos are separated into Upcoming and Past events
+
+v2015.9.21
+- Fix for live & archive search errors
+
 v2015.8.13
 - Added Search Archive Feature
 - Label videos as episodes and gave them air dates where applicable

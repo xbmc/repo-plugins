@@ -127,7 +127,7 @@ def listSearchResults(url):
 def playVideo(url):
         content = getUrl(url)
         match4 = re.compile("data-video='(.+?)'", re.DOTALL).findall(content)
-        if match4:
+        if match4 and 'div class="hero-poster instant-play"' not in content:
             listOfUrls = re.compile('"url":"(.+?)","height":(.+?),"', re.DOTALL).findall(match4[0])
             videoUrl = ""
             for x in range(0, len(listOfUrls)):

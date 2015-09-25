@@ -13,6 +13,8 @@ from StringIO import StringIO
 import xml.etree.ElementTree as ET
 import binascii
 from subtitles import download_subtitles
+import time
+from datetime import datetime
 
 
 # Setting Variablen Des Plugins
@@ -134,40 +136,81 @@ def getbuchstabe(url):
        
       except :
          error=1
-         if debuging=="true":
-           xbmc.log("URL ERROR: "+ entry )
+         debug("URL ERROR: "+ entry )
     xbmcplugin.endOfDirectory(addon_handle,succeeded=True,updateListing=False,cacheToDisc=True)
 
 
 def jsonurl(url) :   
-    if debuging=="true":
-       xbmc.log("Json Url"+ url)
+
+    debug("Json Url "+ url)
     inhalt = geturl(url)
     inhalt=ersetze(inhalt)
     spl=inhalt.split('<article ')
     for i in range(1,len(spl),1):
       entry=spl[i].replace('\\"','"') 
       entry=entry.replace('\\/','/') 
-      if "duration" in entry:
-        match=re.compile('<a href="([^"]+)"', re.DOTALL).findall(entry)      
-        url=baseurl+match[0]
-        match=re.compile('data-src-m="([^"]+)"', re.DOTALL).findall(entry)      
-        image=baseurl+match[0]
-        match=re.compile('<span class="episode">([^<]+)</span>', re.DOTALL).findall(entry)      
-        title=match[0]  
-        match=re.compile('<time class=\"duration\" datetime=\"[^\"]+\">([0-9]+) Min.</time>', re.DOTALL).findall(entry)      
-        if match:
+      debug("Entry:"+ entry)
+        
+      match=re.compile('<a href="([^"]+)"', re.DOTALL).findall(entry)      
+      url=baseurl+match[0]
+      match=re.compile('data-src-m="([^"]+)"', re.DOTALL).findall(entry)      
+      image=baseurl+match[0]
+      match=re.compile('<span class="episode">([^<]+)</span>', re.DOTALL).findall(entry)      
+      title=match[0]       
+      match=re.compile('<time class=\"duration\" datetime=\"[^\"]+\">([0-9]+) Min.</time>', re.DOTALL).findall(entry)  
+      if match:
          dauer=match[0]
-        else:
-          dauer=""
-        match=re.compile('responsive.png\" alt=\"([^"]+)"', re.DOTALL).findall(entry)  
-        if match:
+      else:
+         dauer="1"
+      match=re.compile('responsive.png\" alt=\"([^"]+)"', re.DOTALL).findall(entry)  
+      if match:
          inhaltstext=match[0]
-        else:
+      else:
           inhaltstext=""
-        if debuging=="true":
-           xbmc.log("Dauer "+ dauer )          
-        addLink(name=title, url=url, mode="folge", iconimage=image,duration=dauer,desc=inhaltstext)      
+      
+      match=re.compile('ata-broadcast_start_date="([^T]+)T([0-9]+:[0-9]+)+', re.DOTALL).findall(entry)
+      if match:
+        start_datum=match[0][0]
+        start_zeit=match[0][1]
+      else:
+        start_datum=""
+        start_zeit=""
+      if not start_zeit=="":
+        match=re.compile('ata-broadcast_end_date="([^T]+)T([0-9]+:[0-9]+)+', re.DOTALL).findall(entry)
+        end_datum=match[0][0]
+        end_zeit=match[0][1]
+        endobj=time.strptime (end_datum +" "+ end_zeit,"%Y-%m-%d %H:%M")
+        endtime=time.mktime(endobj)
+        startobj=time.strptime(start_datum +" "+ start_zeit,"%Y-%m-%d %H:%M")
+        starttime=time.mktime(startobj)
+        nowtime=time.mktime(datetime.now().timetuple())
+        dauer=str((endtime-starttime)/60)
+        debug("dauer:"+str(dauer))
+      if not start_datum=="":
+         if starttime <  nowtime  and  endtime >  nowtime :  
+           dauer=str((endtime-nowtime)/60)
+           title=title +" ( [COLOR red] Läuft [/COLOR])"
+         else:
+           title=title +" ( "+  time.strftime("%d/%m/%Y %H:%M",startobj)  +" Uhr)"
+         senderarry=re.compile('<p class="welleLive ir sprite">([^<]+)</p>', re.DOTALL).findall(entry)
+         if senderarry:
+            sender=senderarry[0]
+         else:
+            sender=""
+         sender=sender.replace("Bayerisches Fernsehen",'BR')         
+         regionarray=re.compile('<p class=\"region\">([^<]+)</p>', re.DOTALL).findall(entry)
+         if regionarray:
+            region=regionarray[0]
+         else:
+            region=""
+         region=region.replace("Regionalprogramm",'')      
+         if not sender=="":         
+           title=sender +" "+ region + " - "+ title          
+      debug("URL : " + url)       
+      debug("iconimage : " + image)   
+      debug("duration : " + dauer)   
+      debug("desc : " + inhaltstext)   
+      addLink(name=title, url=url, mode="folge", iconimage=image,duration=dauer,desc=inhaltstext)      
     if '"next":' in inhalt:
        match=re.compile('"next": "([^"]+)"', re.DOTALL).findall(inhalt) 
        next=baseurl+match[0]
@@ -225,40 +268,50 @@ def folge(url):
       download_subtitles(subtitle, temp)    
     inhalt = inhalt[:inhalt.find('<asset type="HDS')]  
     spl=inhalt.split('<asset ')
-    if bitrate=="Select":
-        quls=re.compile('<recommendedBandwidth>([^<]+)</recommendedBandwidth>', re.DOTALL).findall(inhalt)
-        dialog = xbmcgui.Dialog()
-        nr=dialog.select("Bitrate", quls)      
-        br=quls[nr]  
-        for i in range(1,len(spl),1):
-          entry=spl[i]    
-          if debuging=="true":
-             xbmc.log("Folge entry"+ entry)
-          if br in entry :
-            was=entry     
+    debug("split")
+    if "Live HLS" in inhalt:
+       debug("LIVE")
+       was=spl[3]
+       debug ("Live: "+ was)
     else:
-      if  bitrate=="Max":
-         was=spl[-1] 
-      if  bitrate=="Min":
-         was=spl[1] 
-    if debuging=="true":         
-       xbmc.log("XXX was"+ was)          
+       if bitrate=="Select":
+          quls=re.compile('<recommendedBandwidth>([^<]+)</recommendedBandwidth>', re.DOTALL).findall(inhalt)
+          dialog = xbmcgui.Dialog()
+          nr=dialog.select("Bitrate", quls)      
+          br=quls[nr]  
+          for i in range(1,len(spl),1):
+            entry=spl[i]    
+            if debuging=="true":
+             xbmc.log("Folge entry"+ entry)
+            if br in entry :
+              was=entry     
+       else:
+        if  bitrate=="Max":
+          was=spl[-1] 
+        if  bitrate=="Min":
+          was=spl[1]        
+    debug("XXX was"+ was)          
     match=re.compile('<downloadUrl\>([^<]+)</downloadUrl>', re.DOTALL).findall(was)
     if match :
       video=match[0]
     else :
        match=re.compile('<url>([^<]+)</url', re.DOTALL).findall(was)
        video=match[0]
-    if debuging=="true":
-      debug("XXX video: video")
-      xbmc.log("XXX Subtitle:"+ temp+ "br3.srt")       
+    debug("XXX video url:"+ video)
+    debug("XXX Subtitle:"+ temp+ "br3.srt")       
     listitem = xbmcgui.ListItem(path=video)
     if sub :
       listitem.setSubtitles([ temp+ "br3.srt"])
     xbmcplugin.setResolvedUrl(addon_handle,True, listitem)  
-def playlive(url):
-      listitem = xbmcgui.ListItem(path=url) 
-      xbmcplugin.setResolvedUrl(addon_handle,True, listitem)  
+def live(url):
+      url="http://www.br.de/mediathek/video/livestreams-100.html"
+      inhalt = geturl(url)
+      match=re.compile('data-filter_entire_broadcasts_url="([^"]+)"', re.DOTALL).findall(inhalt)
+      json_url=match[0]
+      debug("Jsonurl="+json_url)
+      jsonurl(baseurl+json_url)
+
+      
 def getdatum (starturl,sender):
    debug("XXX Start getdatum" )
    dialog = xbmcgui.Dialog()
@@ -346,8 +399,7 @@ if mode is '':
     addDir(translation(30001), translation(30001), 'A-Z', "")
     addDir(translation(30005), translation(30005), 'Datum_BR3', "")
     addDir(translation(30006), translation(30006), 'Datum_ALPHA', "")
-    addLink(translation(30007) , url="http://livestreams.br.de/i/bralpha_germany@119899/master.m3u8", mode="playlive", iconimage="",duration="",desc="") 
-    addLink(translation(30008), url="http://livestreams.br.de/i/bfssued_germany@119890/master.m3u8", mode="playlive", iconimage="",duration="",desc="")
+    addDir(translation(30007) , translation(30007),"live","") 
     addDir(translation(30011), translation(30011), 'Search', "")
     addDir(translation(30002), translation(30002), 'Settings', "")   
     xbmcplugin.endOfDirectory(addon_handle,succeeded=True,updateListing=False,cacheToDisc=True)
@@ -370,8 +422,8 @@ else:
           jsonurl(url)   
   if mode == 'folge':
           folge(url)      
-  if mode == 'playlive':
-          playlive(url)     
+  if mode == 'live':
+          live(url)     
   if mode == 'Search':
           search()             
   if mode == 'getcontent_search':

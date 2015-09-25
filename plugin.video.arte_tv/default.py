@@ -191,10 +191,12 @@ def listConcerts(url=""):
     if not url:
         url = baseUrlConcert+"/"+language
     content = getUrl(url)
-    content = content[:content.find('<div class="video_box_tab_1')]
-    spl = content.split('<article')
+    contentnew = content[content.find('<div class="view-content">'):]
+    contentnew = content[:content.find('<nav class="navigation">'):]
+    spl = contentnew.split('<article')
     for i in range(1, len(spl), 1):
         entry = spl[i]
+        xbmc.log("XXX uRL: " + entry)
         match = re.compile('title="(.+?)"', re.DOTALL).findall(entry)
         title = cleanTitle(match[0])
         match = re.compile('href="(.+?)"', re.DOTALL).findall(entry)
@@ -207,7 +209,7 @@ def listConcerts(url=""):
             addLink(title, url, 'playVideoNew', thumb, "")
     match = re.compile('<li class="pager-next">.+?href="(.+?)"', re.DOTALL).findall(content)
     if match:
-        addDir(translation(30010), baseUrlConcert+match[0], "listConcerts", "")
+        addDir(translation(30010), baseUrlConcert+match[0], "listConcerts", "")    
     xbmcplugin.endOfDirectory(pluginhandle)
     if forceViewMode:
         xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')

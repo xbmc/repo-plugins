@@ -16,3 +16,5 @@
 - patch hasnt helped so it is removed
 1.1.0
 - New Version for Officaial Release
+1.1.3
+- Site fix

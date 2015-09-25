@@ -20,8 +20,6 @@ socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
 forceViewMode = addon.getSetting("forceViewMode") == "true"
 useThumbAsFanart = addon.getSetting("useThumbAsFanart") == "true"
-global debuging
-debuging = addon.getSetting("debug")
 viewMode = str(addon.getSetting("viewMode"))
 icon = xbmc.translatePath('special://home/addons/'+addonID+'/icon.png')
 urlMain = "http://disneychannel.de"
@@ -30,14 +28,13 @@ opener.addheaders = [('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:25.0) Gecko
 
 
 def index():
-    addDir(translation(30001), urlMain+"/_stream/search.json?q=video&filter[type]=Video&filter[start_date_s]="+(datetime.date.today()-datetime.timedelta(days=1)).strftime("%Y-%m-%d")+"&limit=50&offset=0", 'listVideos', icon)
-    addDir(translation(30002), urlMain+"/_stream/search.json?q=video&filter[type]=Video&filter[start_date_s]="+(datetime.date.today()-datetime.timedelta(days=2)).strftime("%Y-%m-%d")+"&limit=50&offset=0", 'listVideos', icon)
-    addDir((datetime.date.today()-datetime.timedelta(days=3)).strftime("%b %d, %Y"), urlMain+"/_stream/search.json?q=video&filter[type]=Video&filter[start_date_s]="+(datetime.date.today()-datetime.timedelta(days=3)).strftime("%Y-%m-%d")+"&limit=50&offset=0", 'listVideos', icon)
-    addDir((datetime.date.today()-datetime.timedelta(days=4)).strftime("%b %d, %Y"), urlMain+"/_stream/search.json?q=video&filter[type]=Video&filter[start_date_s]="+(datetime.date.today()-datetime.timedelta(days=4)).strftime("%Y-%m-%d")+"&limit=50&offset=0", 'listVideos', icon)
-    addDir((datetime.date.today()-datetime.timedelta(days=5)).strftime("%b %d, %Y"), urlMain+"/_stream/search.json?q=video&filter[type]=Video&filter[start_date_s]="+(datetime.date.today()-datetime.timedelta(days=5)).strftime("%Y-%m-%d")+"&limit=50&offset=0", 'listVideos', icon)
-    addDir((datetime.date.today()-datetime.timedelta(days=6)).strftime("%b %d, %Y"), urlMain+"/_stream/search.json?q=video&filter[type]=Video&filter[start_date_s]="+(datetime.date.today()-datetime.timedelta(days=6)).strftime("%Y-%m-%d")+"&limit=50&offset=0", 'listVideos', icon)
-    addDir((datetime.date.today()-datetime.timedelta(days=7)).strftime("%b %d, %Y"), urlMain+"/_stream/search.json?q=video&filter[type]=Video&filter[start_date_s]="+(datetime.date.today()-datetime.timedelta(days=7)).strftime("%Y-%m-%d")+"&limit=50&offset=0", 'listVideos', icon)
-    #M3U8 via SSL is not supported in current XBMC builds
+    addDir(translation(30001), urlMain+"/_fta_stream/search.json?q=video&filter[type]=Video&filter[start_date_s]="+(datetime.date.today()-datetime.timedelta(days=1)).strftime("%Y-%m-%d")+"&limit=50&offset=0", 'listVideos', icon)
+    addDir(translation(30002), urlMain+"/_fta_stream/search.json?q=video&filter[type]=Video&filter[start_date_s]="+(datetime.date.today()-datetime.timedelta(days=2)).strftime("%Y-%m-%d")+"&limit=50&offset=0", 'listVideos', icon)
+    addDir((datetime.date.today()-datetime.timedelta(days=3)).strftime("%b %d, %Y"), urlMain+"/_fta_stream/search.json?q=video&filter[type]=Video&filter[start_date_s]="+(datetime.date.today()-datetime.timedelta(days=3)).strftime("%Y-%m-%d")+"&limit=50&offset=0", 'listVideos', icon)
+    addDir((datetime.date.today()-datetime.timedelta(days=4)).strftime("%b %d, %Y"), urlMain+"/_fta_stream/search.json?q=video&filter[type]=Video&filter[start_date_s]="+(datetime.date.today()-datetime.timedelta(days=4)).strftime("%Y-%m-%d")+"&limit=50&offset=0", 'listVideos', icon)
+    addDir((datetime.date.today()-datetime.timedelta(days=5)).strftime("%b %d, %Y"), urlMain+"/_fta_stream/search.json?q=video&filter[type]=Video&filter[start_date_s]="+(datetime.date.today()-datetime.timedelta(days=5)).strftime("%Y-%m-%d")+"&limit=50&offset=0", 'listVideos', icon)
+    addDir((datetime.date.today()-datetime.timedelta(days=6)).strftime("%b %d, %Y"), urlMain+"/_fta_stream/search.json?q=video&filter[type]=Video&filter[start_date_s]="+(datetime.date.today()-datetime.timedelta(days=6)).strftime("%Y-%m-%d")+"&limit=50&offset=0", 'listVideos', icon)
+    addDir((datetime.date.today()-datetime.timedelta(days=7)).strftime("%b %d, %Y"), urlMain+"/_fta_stream/search.json?q=video&filter[type]=Video&filter[start_date_s]="+(datetime.date.today()-datetime.timedelta(days=7)).strftime("%Y-%m-%d")+"&limit=50&offset=0", 'listVideos', icon)
     addLink(translation(30003), "", 'playLive', icon)
     xbmcplugin.endOfDirectory(pluginhandle)
 
@@ -57,35 +54,19 @@ def listVideos(url):
         xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 
-def getRedirectedUrl(url):
-    if debuging=="true":
-       xbmc.log("DISNEY PLUGIN: [getRedirectedUrl] url:" + url)
-    req = urllib2.Request(url)
-    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:24.0) Gecko/20100101 Firefox/24.0')
-    response = urllib2.urlopen(req)
-    response.close()
-    return str(response.geturl())
-
-
 def playVideo(url):
-    if debuging=="true":
-       xbmc.log("DISNEY PLUGIN: [Playvideo]  URL:"+ url)
     content = opener.open(url).read()
-    match = re.compile('"dataUrl":"(.+?)"', re.DOTALL).findall(content)
-    finalURL = getRedirectedUrl(match[0])
-    if debuging=="true":
-      xbmc.log("DISNEY PLUGIN: [Playvideo] finalURL: "+ finalURL)
+    match = re.compile('embedURL":"(.+?)",', re.DOTALL).findall(content)
+    content = opener.open(match[0]).read()
+    match2 = re.compile('url":"https://once-eu.unicornmedia.com(.+?)"', re.DOTALL).findall(content)
+    finalURL = 'http://once-eu.unicornmedia.com' + match2[0]
     listitem = xbmcgui.ListItem(path=finalURL)
     xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 
 def playLive():
-    if debuging=="true":
-       xbmc.log("DISNEY PLUGIN: [PlayLive]")
     content = opener.open(urlMain+"/livestream").read()
     match = re.compile('"hlsStreamUrl":"(.+?)"', re.DOTALL).findall(content)
-    if debuging=="true":
-       xbmc.log("DISNEY PLUGIN: [PlayLive] URL: " + match[0])
     listitem = xbmcgui.ListItem(path=match[0])
     xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 

@@ -18,6 +18,17 @@ forceViewMode = addon.getSetting("forceViewMode") == "true"
 useThumbAsFanart = addon.getSetting("useThumbAsFanart") == "true"
 viewMode = str(addon.getSetting("viewMode"))
 
+def debug(content):
+    log(content, xbmc.LOGDEBUG)
+    
+def notice(content):
+    log(content, xbmc.LOGNOTICE)
+
+def log(msg, level=xbmc.LOGNOTICE):
+    addon = xbmcaddon.Addon()
+    addonID = addon.getAddonInfo('id')
+    xbmc.log('%s: %s' % (addonID, msg), level) 
+    
 def index():
         artistsFavsCount=0
         if os.path.exists(artistsFavsFile):
@@ -37,12 +48,12 @@ def index():
             titlesCount = len(fh.readlines())
           fh.close()
         addDir("TV-Shows","http://www.mtv.de/shows/async_data.json?sort=playable",'listShows',"")
-        addDir(translation(30007),"http://www.mtv.de/musik",'listVideos_old',"")
-        addDir(translation(30001),"http://www.mtv.de/charts/5-hitlist-germany-top-100",'listVideos_old',"")
-        addDir(translation(30004),"http://www.mtv.de/charts/8-mtv-de-videocharts",'listVideos_old',"")
-        addDir(translation(30003),"http://www.mtv.de/charts/199-top-100-single-jahrescharts-2013",'listVideos_old',"")
-        addDir(translation(30212),"http://www.mtv.de/charts/9-deutsche-black-charts",'listVideos_old',"")
-        addDir(translation(30211),"http://www.mtv.de/charts/6-dance-charts",'listVideos_old',"")
+        addDir(translation(30007),"http://www.mtv.de/musik?expanded=true",'listVideos_old',"")
+        addDir(translation(30001),"http://www.mtv.de/charts/5-hitlist-germany-top-100?expanded=true",'listVideos_old',"")
+        addDir(translation(30004),"http://www.mtv.de/charts/8-mtv-de-videocharts?expanded=true",'listVideos_old',"")
+        addDir(translation(30003),"http://www.mtv.de/charts/199-top-100-single-jahrescharts-2013?expanded=true",'listVideos_old',"")
+        addDir(translation(30212),"http://www.mtv.de/charts/9-deutsche-black-charts?expanded=true",'listVideos_old',"")
+        addDir(translation(30211),"http://www.mtv.de/charts/6-dance-charts?expanded=true",'listVideos_old',"")
         addDir(str(translation(30009))+" ("+str(artistsFavsCount)+")","ARTISTSFAVS",'artistsFavs',"")
         #addTCDir(str(translation(30010))+" ("+str(titlesCount)+")","ARTISTS",'titles',"")
         addDir(translation(30008),"ARTISTS_AZ",'artists',"")
@@ -219,7 +230,7 @@ def listShow(url):
           listVideos_new(url)
 
 def listVideos_new(url):
-        xbmc.log("URL:: "+ url)
+        debug("listVideos_new URL:: "+ url)
         contentTitles=""
         if os.path.exists(titlesListFile):
           fh = open(titlesListFile, 'r')
@@ -231,12 +242,14 @@ def listVideos_new(url):
           contentBlacklist=fh.read()
           fh.close()
         content = getUrl(url)
+        debug(content)
         content=content.replace("\/","/")
         struktur = json.loads(content)
         so=struktur['seasons']
         for nr,wert in so.items():
-          for element in wert['playlist']:
-            title=element['title'] +" ( "+ element['subtitle'] + " )"
+          for element in wert['playlist']:            
+            title=element['title'] +" ( "+ element['subtitle'] + " )"            
+            title = unicode(title).encode('utf-8')
             try:
               thumb="http://images.mtvnn.com/"+ str(element['riptide_image_id']) +"/306x172_"
             except: 
@@ -252,42 +265,78 @@ def listVideos_new(url):
         if forceViewMode:
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 def listVideos_old(url):
-        xbmc.log("URL OLD:: "+ url)
-        contentTitles=""
-        if os.path.exists(titlesListFile):
-          fh = open(titlesListFile, 'r')
-          contentTitles=fh.read()
-          fh.close()
-        contentBlacklist=""
-        if os.path.exists(blacklistFile):
-          fh = open(blacklistFile, 'r')
-          contentBlacklist=fh.read()
-          fh.close()
+        debug("URL :"+ url)
         content = getUrl(url)
-        newTitles=""
-        content = content[content.find("window.pagePlaylist"):]
-        content = content[:content.find("</script>")]
-        spl=content.split('"id":')
-        for i in range(1,len(spl),1):
-              entry=spl[i]           
-              match=re.compile('"title\":"(.+?)"', re.DOTALL).findall(entry)
-              title=match[0]
-              match=re.compile('"mrss":"(.+?)"', re.DOTALL).findall(entry)
-              url=match[0] + "-ad_site-de.mtv-ad_site_referer-http://www.mtv.de/&umaSite=mtv.de"
-              match=re.compile('"subtitle":"(.+?)"', re.DOTALL).findall(entry)
-              subtitle=match[0]
-              #sub
-              title=title+" - "+subtitle
-              title=cleanTitle(title)
-              match=re.compile('"riptide_image_id":"(.+?)"', re.DOTALL).findall(entry)     
-              try:              
-                 thumb=thumb="http://images.mtvnn.com/"+ str(match[0]) +"/306x172_"
-              except:
-                 thumb=""
-              addLink(title,url,'playVideo',thumb)
-  
+        ids=[]
+        title=[]
+        subtitle=[]
+        mrss=[]
+        chartn=[]
+        charto=[]
+        
+        riptide_image_id=[]
+        jsonlist = content[content.find("window.pagePlaylist ="):]
+        jsonlist = jsonlist[jsonlist.find("["):]
+        jsonlist = jsonlist[:jsonlist.find(";")]
+        jsonlist=jsonlist.replace("\/","/")
+        struktur = json.loads(jsonlist)
+        anzahl=len(struktur)
+        for element in range (0,anzahl):
+            ids.append(struktur[element]['id'])
+            title.append(unicode(struktur[element]['title']).encode('utf-8'))
+            subtitle.append(unicode(struktur[element]['subtitle']).encode('utf-8'))
+            mrss.append(struktur[element]['mrss'])
+            try:
+              riptide_image_id.append("http://images.mtvnn.com/"+str(struktur[element]['riptide_image_id']) +"/306x172_")
+            except:
+               riptide_image_id.append("")             
+        zusatzlist = content[content.find('<ul class="video-collection">'):]
+        zusatzlist = zusatzlist[:zusatzlist.find('window.pagePlaylist')]
+        spl = zusatzlist.split('<li class="playable video-collection-video"> ')        
+        chartn = ids[:]
+        charto = ids[:]
+        for i in range(1, len(spl), 1):
+             entry=spl[i]   
+             debug("Entry : "+ entry)
+             try:
+               match = re.compile('<div class="teaser-image" data-object-id="([^"]+)">', re.DOTALL).findall(entry)
+               id=match[0]             
+             except:
+                continue
+             match = re.compile('<div class="chart-position">([^<]+)</div>', re.DOTALL).findall(entry)
+             chartnew=match[0]
+             try:          
+                match = re.compile('<div class="chart-history-position">([^<]+)</div>', re.DOTALL).findall(entry)
+                chartold=match[0]
+             except:
+                 chartold=-1
+             try:
+                id_video=ids.index(int(id))               
+                chartn[id_video]=int(chartnew)
+                charto[id_video]=int(chartold)
+             except:
+                debug("Kein Video zu :" +id)    
+        if len(chartn) >0 :
+            sort_chartn,sort_ids,sort_title,sort_subtitle,sort_mrss,sort_charto,sort_riptide_image_id = (list(x) for x in zip(*sorted(zip(chartn,ids,title,subtitle,mrss,charto,riptide_image_id))))
+            anzahl=len(sort_ids)
+            for element in range (0,anzahl):
+              if int(sort_charto[element])==0 :
+                 nr="[COLOR green] "+ str(sort_chartn[element]) +". ( NEU ) [/COLOR]"
+              elif int(sort_charto[element])==-1  or sort_chartn[element] > 500 :
+                 if int(sort_charto[element])==-1 :
+                   nr =str(sort_chartn[element]) +"."
+                 else:
+                   nr=""
+              elif sort_chartn[element] < sort_charto[element]:
+                 nr="[COLOR green] "+ str(sort_chartn[element]) +". ( + "+ str(int(sort_charto[element])-int(sort_chartn[element])) +" ) [/COLOR]"
+              elif sort_chartn[element] > sort_charto[element] :
+                 nr="[COLOR red] "+ str(sort_chartn[element]) +". ( - "+ str(int(sort_chartn[element])-int(sort_charto[element])) +" ) [/COLOR]"
+              else :
+                 nr=str(sort_chartn[element]) +". ( - )"
+              title_video=nr +sort_title[element] + " - "+ sort_subtitle[element]          
+              addLink(title_video,sort_mrss[element],'playVideo',sort_riptide_image_id[element])  
         xbmcplugin.endOfDirectory(pluginhandle)
-        xbmc.executebuiltin('XBMC.RunScript(special://home/addons/'+addonID+'/titles.py,'+urllib.quote_plus(newTitles)+')')
+        #xbmc.executebuiltin('XBMC.RunScript(special://home/addons/'+addonID+'/titles.py,'+urllib.quote_plus(newTitles)+')')
         if forceViewMode:
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
           
@@ -424,7 +473,7 @@ def getUrl(url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0')
         response = urllib2.urlopen(req,timeout=60)
-        link=response.read()
+        link=response.read()        
         response.close()
         return link
 

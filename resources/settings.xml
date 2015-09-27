@@ -1,0 +1,14 @@
+<settings>
+<category label="30100">
+    <setting id="search_signed" label="30110" type="bool" default="false" />
+    <setting id="search_ad" label="30120" type="bool" default="false" />
+    <setting id="subtitles" label="30130" type="bool" default="false" />
+</category>
+<category label="Streams">
+    <setting id="streams_autoplay" label="30205" type="bool" default="true" />
+    <setting id="catchup_source" label="30210" type="enum" values="Any|Akamai|Limelight" default="0" enable="eq(-1,true)" />
+    <setting id="catchup_bitrate" label="30211" type="enum" values="Highest|800kbps|1012kbps|1500kbps|1800kbps|2400kbps|3116kbps|5510kbps" default="0" enable="eq(-2,true)" />
+    <setting id="live_source" label="30220" type="enum" values="Any|Akamai|Limelight" default="0" enable="eq(-3,true)" />
+    <setting id="live_bitrate" label="30230" type="enum" values="Highest|345kbps|501kbps|923kbps|1470kbps|1700kbps|2128kbps|2908kbs|3628kbps|5166kbps" default="0" enable="eq(-4,true)" />
+</category>
+</settings>

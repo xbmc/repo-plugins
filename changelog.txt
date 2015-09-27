@@ -1,0 +1,26 @@
+v1.0.0rc2
+Added regional channels for live TV.
+Fixed display of icons for live TV.
+Fixed bug in bitrate selection of live TV.
+Fixed bug in bitrate selection of some catchup content.
+
+v1.0.0rc1
+Fixed bug in category and search view: Programmes with multiple episodes did not show up correctly.
+
+v1.0.0beta5
+Moved from urllib2 to requests (adds dependency to requests add-on from official repo).
+Corrected ambiguous values in settings.
+
+v1.0.0beta4
+Added experimental support for sorting content by date, if the date is part of the title.
+
+v1.0.0beta3
+Fixed problem with some older catchup content, which was not found correctly.
+
+v1.0.0beta2
+Fixed typo in settings.
+Fixed live TV for News, Parliament and Alba.
+
+v1.0.0beta1
+Initial release.
+

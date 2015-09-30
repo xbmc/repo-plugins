@@ -1,3 +1,13 @@
+v1.0.0
+Corrected a few typos.
+
+v1.0.0rc4
+Added additional sources for catchup content.
+Adapted to new website layout in Highlights section.
+
+v1.0.0rc3
+Fixed bug in bitrate selection of live TV and catchup content.
+
 v1.0.0rc2
 Added regional channels for live TV.
 Fixed display of icons for live TV.

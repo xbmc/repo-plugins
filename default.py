@@ -91,7 +91,7 @@ def ScrapeSearchEpisodes(url):
         # If multiple episodes are found, the programme_id is suitable to add a new directory.
         if match_episodes:
             num_episodes=re.compile('<a class="view-more-container avail stat" href="/iplayer/episodes/%s".+?<em class="view-more-heading">(.+?)<'%programme_id,re.DOTALL).findall(html)
-            AddMenuEntry("%s - %s avaliable episodes"%(name,num_episodes[0]),programme_id,121,iconimage,plot,'')
+            AddMenuEntry("%s - %s available episodes"%(name,num_episodes[0]),programme_id,121,iconimage,plot,'')
         else:
             episode_url = "http://www.bbc.co.uk/iplayer/episode/%s" % programme_id
             CheckAutoplay(name,episode_url,iconimage,plot)
@@ -157,7 +157,7 @@ def ScrapeCategoryEpisodes(url):
         # If multiple episodes are found, the programme_id is suitable to add a new directory.
         if match_episodes:
             num_episodes=re.compile('<a class="view-more-container avail stat" href="/iplayer/episodes/%s".+?<em class="view-more-heading">(.+?)<'%programme_id,re.DOTALL).findall(html)
-            AddMenuEntry("%s - %s avaliable episodes"%(name,num_episodes[0]),programme_id,121,iconimage,plot,'')
+            AddMenuEntry("%s - %s available episodes"%(name,num_episodes[0]),programme_id,121,iconimage,plot,'')
         # If only one episode is found, the episode_id is suitable to add a directory or stream.
         # This is required because some programmes which have their own page will redirect
         # the programme_id to the program page which may look entirely different from
@@ -190,16 +190,17 @@ def GetFilteredCategory(url):
 # All entries are scraped of the intro page and the pages linked from the intro page.
 def ListHighlights():
     html=OpenURL('http://www.bbc.co.uk/iplayer')
-    match1=re.compile('stream-item-promo"> <a href="http://www.bbc.co.uk/iplayer/group/(.+?)" title="(.+?)"',re.DOTALL).findall(html.replace('amp;',''))
-    for episode_id, name in match1:
-        AddMenuEntry('Collection: %s'%name, episode_id, 127, '', '','')
-    match1=re.compile('<a href="/iplayer/group/(.+?)"> (.+?) </a>.+?</div> </div> </div> </div>',re.DOTALL).findall(html.replace('amp;',''))
-    for episode_id, name in match1:
-        AddMenuEntry('Collection: %s'%name, episode_id, 127, '', '','')
-    match1=re.compile('<a href="/iplayer/episode/(.+?)/.+?title="(.+?)".+?img src="(.+?)".+?<p class="synopsis">.+?>(.+?)</span>',re.DOTALL).findall(html.replace('amp;',''))
-    for episode_id, name, iconimage, plot in match1:
-        episode_url = "http://www.bbc.co.uk/iplayer/episode/%s" % episode_id 
-        CheckAutoplay(name,episode_url,iconimage,plot)
+    match1=re.compile('<p class=" typo typo--goose">.+?<a href="/iplayer/group/(.+?)" class="grouped-items__title grouped-items__title--desc stat"><strong>(.+?)</strong></a>.+?<em>(.+?)</em>',re.DOTALL).findall(html.replace('amp;',''))
+    for episode_id, name, num_episodes in match1:
+        AddMenuEntry('Collection: %s - %s available programmes'%(name,num_episodes), episode_id, 127, '', '','')
+    match1=re.compile('href="/iplayer/episode/(.+?)/.+?\nclass="single-item stat".+?class="single-item__title.+?<strong>(.+?)</strong>(.+?)data-ip-src="(.+?)".+?class="single-item__overlay__desc">(.+?)<',re.DOTALL).findall(html.replace('amp;',''))
+    for episode_id, name, subtitle, iconimage, plot in match1:
+        episode_url = "http://www.bbc.co.uk/iplayer/episode/%s" % episode_id
+        sub_match=re.compile('class="single-item__subtitle.+?>(.+?)<',re.DOTALL).findall(subtitle)
+        if len(sub_match)==1:
+            CheckAutoplay("%s: %s"%(name,sub_match[0]),episode_url,iconimage,plot)
+        else:
+            CheckAutoplay(name,episode_url,iconimage,plot)
 
 
 # GetGroups scrapes information on a particular group, a special kind of collection.
@@ -357,36 +358,40 @@ def ParseStreams(stream_id):
                 elif int(bandwidth) == 5509880 :
                     tmp_br=7
                 retlist.append((tmp_sup,tmp_br,url))
-    if not retlist:
-        match=re.compile('kind="video".+?connection href="(.+?)".+?supplier="(.+?)".+?transferFormat="(.+?)"').findall(html.replace('amp;',''))
-        for m3u8_url, supplier, transfer_format in match:
-            tmp_sup=0
-            tmp_br=0
-            if transfer_format == 'hls':
-                if supplier == 'akamai_hls_open':
-                    tmp_sup=1
-                elif supplier == 'limelight_hls_open':
-                    tmp_sup=2
-                m3u8_breakdown=re.compile('.+?master.m3u8(.+?)$').findall(m3u8_url)
-            # print m3u8_url
-            # print m3u8_breakdown
-            m3u8_html = OpenURL(m3u8_url)
-            # print m3u8_html
-            m3u8_match=re.compile('BANDWIDTH=(.+?),RESOLUTION=(.+?),.+?\n(.+?)\n').findall(m3u8_html)
-            # print m3u8_match
-            for bandwidth, resolution, stream in m3u8_match:
-                # print bandwidth
-                # print resolution
-                # print stream
-                url="%s%s"%(stream,m3u8_breakdown[0][0])
-                # This is not entirely correct, displayed bandwidth may be higher than actual bandwidth.
-                if int(bandwidth) <= 800000 :
-                    tmp_br=1
-                elif int(bandwidth) <= 1500000 :
-                    tmp_br=3
-                elif int(bandwidth) <= 2400000 :
-                    tmp_br=5
-                retlist.append((tmp_sup,tmp_br,url))
+    # It may be useful to parse these additional streams as a default as they offer additional bandwidths.
+    match=re.compile('kind="video".+?connection href="(.+?)".+?supplier="(.+?)".+?transferFormat="(.+?)"').findall(html.replace('amp;',''))
+    # print match
+    unique = []
+    [unique.append(item) for item in match if item not in unique]
+    # print unique
+    for m3u8_url, supplier, transfer_format in unique:
+        tmp_sup=0
+        tmp_br=0
+        if transfer_format == 'hls':
+            if supplier == 'akamai_hls_open':
+                tmp_sup=1
+            elif supplier == 'limelight_hls_open':
+                tmp_sup=2
+            m3u8_breakdown=re.compile('.+?master.m3u8(.+?)$').findall(m3u8_url)
+        # print m3u8_url
+        # print m3u8_breakdown
+        m3u8_html = OpenURL(m3u8_url)
+        # print m3u8_html
+        m3u8_match=re.compile('BANDWIDTH=(.+?),RESOLUTION=(.+?),.+?\n(.+?)\n').findall(m3u8_html)
+        # print m3u8_match
+        for bandwidth, resolution, stream in m3u8_match:
+            # print bandwidth
+            # print resolution
+            # print stream
+            url="%s%s"%(stream,m3u8_breakdown[0][0])
+            # This is not entirely correct, displayed bandwidth may be higher or lower than actual bandwidth.
+            if int(bandwidth) <= 801000 :
+                tmp_br=1
+            elif int(bandwidth) <= 1510000 :
+                tmp_br=3
+            elif int(bandwidth) <= 2410000 :
+                tmp_br=5
+            retlist.append((tmp_sup,tmp_br,url))
     match=re.compile('service="captions".+?connection href="(.+?)"').findall(html.replace('amp;',''))
     # print "Subtitle URL: %s"%match
     # print retlist
@@ -439,6 +444,9 @@ def AddAvailableStreamItem(name,url,iconimage,description):
     streams=streams_all[0]
     source=int(ADDON.getSetting('catchup_source'))
     bitrate=int(ADDON.getSetting('catchup_bitrate'))
+    # print "Selected source is %s"%source
+    # print "Selected bitrate is %s"%bitrate
+    # print streams
     if source > 0:
         if bitrate > 0:
             # Case 1: Selected source and selected bitrate
@@ -448,11 +456,11 @@ def AddAvailableStreamItem(name,url,iconimage,description):
                 match=[x for x in streams if (x[1] == bitrate)]
                 if len(match)==0:
                     # Second Fallback: Use any lower bitrate from selected source.
-                    match=[x for x in streams if (x[0] == source) and (x[1] in range(1,bitrate-1))]
+                    match=[x for x in streams if (x[0] == source) and (x[1] in range(1,bitrate))]
                     match.sort(key=lambda x: x[1], reverse=True)
                     if len(match)==0:
                          # Third Fallback: Use any lower bitrate from any source.
-                         match=[x for x in streams if (x[1]  in range(1,bitrate-1))]
+                         match=[x for x in streams if (x[1]  in range(1,bitrate))]
                          match.sort(key=lambda x: x[1], reverse=True)
         else:
             # Case 2: Selected source and any bitrate
@@ -468,7 +476,7 @@ def AddAvailableStreamItem(name,url,iconimage,description):
             if len(match)==0:
                 # Fallback: Use any source and any lower bitrate
                 match=streams
-                match=[x for x in streams if (x[1]  in range(1,bitrate-1))]
+                match=[x for x in streams if (x[1]  in range(1,bitrate))]
                 match.sort(key=lambda x: x[1], reverse=True)
         else:
             # Case 4: Any source and any bitrate
@@ -517,7 +525,7 @@ def AddAvailableLiveStreamItem(name,channelname,iconimage):
             match=[x for x in streams_available if (x[0] == stream_bitrates[bitrate_selected])]
             if len(match)==0:
                 # Fallback: Use any lower bitrate from any source.
-                match=[x for x in streams_available if (x[0]  in range(1,stream_bitrates[bitrate_selected-1]))]
+                match=[x for x in streams_available if (x[0]  in range(1,stream_bitrates[bitrate_selected-1]+1))]
                 match.sort(key=lambda x: x[0], reverse=True)
             # print "Selected bitrate is %s"%stream_bitrates[bitrate_selected]
             # print match

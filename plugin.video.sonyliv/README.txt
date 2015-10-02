@@ -3,6 +3,7 @@ plugin.video.sonyliv
 
 Kodi Addon for Sony LIV Video website
 
+Version 1.0.15 website change
 Version 1.0.14 website change
 Version 1.0.13 website errors workaround
 Version 1.0.12 website change

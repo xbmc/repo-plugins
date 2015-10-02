@@ -138,8 +138,8 @@ def getEpis(geurl, catname):
         geurl   = uqp(geurl)
         geheaders = defaultHeaders
         geheaders['X-Requested-With'] = 'XMLHttpRequest'
-        html  = getRequest(geurl, None, geheaders)            
-        c     = re.compile("<div title='(.+?)'.+?href='(.+?)'.+?src='(.+?)'.+?<span class=.+?>(.+?)<.+?</div",re.DOTALL).findall(html)
+        html  = getRequest(geurl, None, geheaders)
+        c     = re.compile('<li class="span2 episodeList'+".+?title='(.+?)'.+?href='(.+?)'.+?src='(.+?)'.+?<span class=.+?>(.+?)<.+?</div",re.DOTALL).findall(html)
         for name, murl, img, dur in c:
               murl = 'http://www.sonyliv.com%s' % murl
               html = getRequest(murl)
@@ -152,10 +152,10 @@ def getEpis(geurl, catname):
                    for d in dur.split(':'): duration = duration*60+int(d)
               except: pass
               try:
-                 plot,title, url,playerKey = re.compile('<meta content="mainNew".+?"description" content="(.+?)".+?"twitter:title" content="(.+?)".+?"currentBrightcoveId" value="(.+?)".+?name="playerKey" value="(.+?)"',re.DOTALL).search(html).groups()
+                 plot,title, url = re.compile('<meta content="mainNew".+?"description" content="(.+?)".+?"twitter:title" content="(.+?)".+?"twitter:image:src" content="(.+?)"',re.DOTALL).search(html).groups()
+                 url = url.rsplit('.',1)[0].rsplit('-',1)[1]
               except: continue
-              playerKey = playerKey.split(' ',1)[0]
-              playerKey = playerKey.split('=',1)[0]
+              playerKey=''
               infoList ={}
               infoList['Title'] = h.unescape(title)
               infoList['TVShowTitle'] = catname
@@ -202,17 +202,16 @@ def getMovies(gmurl):
         catname = 'Movies'
         ilist = []
         geurl   = uqp(gmurl)
-        html  = getRequest(gmurl)            
-        c     = re.compile("<a title='(.+?)'.+?href="+'"(.+?)"'+".+?src='(.+?)'.+?<span class=.+?</small>(.+?)<.+?</div",re.DOTALL).findall(html)
-        for name, murl, img, year in c:
+        html  = getRequest(gmurl)
+        c     = re.compile('<div class="item movieItem".+?href="(.+?)".+?title="(.+?)"'+".+?src='(.+?)'.+?</div",re.DOTALL).findall(html)
+        for murl, name, img in c:
               html = getRequest(murl)
-              title, plot,playerKey,url = re.compile('"og:title" content="(.+?)".+?"og:description" content="(.+?)".+?playerKey=(.+?)&amp;videoID=(.+?)&',re.DOTALL).search(html).groups()
-              playerKey = playerKey.split(' ',1)[0]
-              playerKey = playerKey.split('=',1)[0]
+              playerKey = 'movie'
+              title, plot, url = re.compile('"og:title" content="(.+?)".+?"og:description" content="(.+?)".+?"og:video:secure_url" content="(.+?)"',re.DOTALL).search(html).groups()
+              url = url.split('videoID=',1)[1].split('&',1)[0]
               infoList ={}
               infoList['Title'] = h.unescape(title)
               infoList['Plot']  = h.unescape(plot)
-              infoList['Year']  = int(year.strip())
 
               u = '%s?url=%s&playerkey=%s&mode=GV' % (sys.argv[0],qp(url), playerKey)
               liz=xbmcgui.ListItem(name, '',None, img)
@@ -238,13 +237,18 @@ def getMovies(gmurl):
 
 def getVideo(url, playerKey):
               bcid = uqp(url)
-              if (playerKey != 'AQ~~,AAABzYvvPDk~,iCNMB0hmLnxGz0SO_CwEK3e8q1VJusdj') and (playerKey != 'AQ~~,AAAB051hNik~,6rCKhN0TFnnNKf3MD5ILa725PmUN9D_9') :
-                 url = 'https://secure.brightcove.com/services/viewer/htmlFederated?&width=859&height=482&flashID=BrightcoveExperience&bgcolor=%23FFFFFF&playerID=3780015692001&playerKey=AQ~~,AAAApSSxphE~,wbrmvPDFim0fWkqLtb6niKsPCskpElR9&isVid=true&isUI=true&dynamicStreaming=true&%40videoPlayer='+bcid+'&secureConnections=true&secureHTMLConnections=true'
-
+              if playerKey == 'movie':
+                    u = 'http://c.brightcove.com/services/mobile/streaming/index/master.m3u8?playerId=4114135046001&lineupId=&affiliateId=&pubId=2008390121001&videoId=%s' % bcid
+                    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=u))
+                    return
               else:
-                 u = 'http://c.brightcove.com/services/mobile/streaming/index/master.m3u8?videoId=%s&pubId=3780015692001' % bcid
-                 xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=u))
-                 return
+                u = 'http://c.brightcove.com/services/mobile/streaming/index/master.m3u8?videoId=%s&pubId=3780015692001' % bcid
+                html = getRequest(u)
+                if 'BANDWIDTH=' in html:
+                    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=u))
+                    return
+                else:
+                    url = 'https://secure.brightcove.com/services/viewer/htmlFederated?&width=859&height=482&flashID=BrightcoveExperience&bgcolor=%23FFFFFF&playerID=3780015692001&playerKey=AQ~~,AAAApSSxphE~,wbrmvPDFim0fWkqLtb6niKsPCskpElR9&isVid=true&isUI=true&dynamicStreaming=true&%40videoPlayer='+bcid+'&secureConnections=true&secureHTMLConnections=true'
 
               html = getRequest(url)
               m = re.compile('experienceJSON = (.+?)\};',re.DOTALL).search(html)

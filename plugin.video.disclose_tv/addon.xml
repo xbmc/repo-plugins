@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.disclose_tv" name="Disclose.tv" version="0.1.3" provider-name="Tristan Fischer (sphere@dersphere.de)">
+<addon id="plugin.video.disclose_tv" name="Disclose.tv" version="0.1.4" provider-name="Tristan Fischer (sphere@dersphere.de)">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.xbmcswift2" version="1.3.0"/>

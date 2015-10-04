@@ -55,11 +55,12 @@ def getShows():
   liz = xbmcgui.ListItem('RT Live', '',icon, None)
   liveUrl = '%s?url=%s&mode=GL' % (sys.argv[0],qp('abc'))
   ilist.append((liveUrl, liz, True))
-  match = re.compile('card-rows__content .+?src="(.+?)".+?class="link link_hover" href="(.+?)">(.+?)<.+?class="link link_disabled".+?>(.+?)</a',re.DOTALL).findall(page)
+  match = re.compile('<li class="card-rows__item.+?src="(.+?)".+?href="(.+?)">(.+?)<.+?class="link link_disabled".+?>(.+?)</li',re.DOTALL).findall(page)
   for img,url,name,plot in match:
        infoList = {}
+       name = name.strip()
        infoList['Title'] = name
-       infoList['Plot']  = plot.strip().replace('<p>','').replace('</p>','')
+       infoList['Plot']  = h.unescape(plot.strip().replace('<p>','').replace('</p>','').decode(UTF8))
        u = '%s?url=%s&mode=GE' % (sys.argv[0],qp(url))
        liz=xbmcgui.ListItem(name, '',img, None)
        liz.setInfo( 'Video', infoList)
@@ -110,9 +111,10 @@ def getEpisodes(url):
    match = re.compile('static-three_med-one">.+?src="(.+?)".+?class="link link_hover" href="(.+?)">(.+?)<.+?class="card__summary ">(.+?)</',re.DOTALL).findall(page)
    ilist = []
    for img,url,name,plot in match:
+       name = name.strip()
        infoList = {}
        infoList['Title'] = name
-       infoList['Plot']  = plot.strip().replace('<p>','').replace('</p>','')
+       infoList['Plot']  = h.unescape(plot.strip().replace('<p>','').replace('</p>','').decode(UTF8))
        u = '%s?url=%s&mode=GV' % (sys.argv[0],qp(url))
        liz=xbmcgui.ListItem(name, '',None, img)
        liz.setInfo( 'Video', infoList)
@@ -133,7 +135,6 @@ def getEpisodes(url):
 
 
 def getVideo(url):
-    print "url = "+str(url)
     html=getRequest(RTBASE_URL+url)
     try:
         m = re.compile('file:.+?"(.+?)"',re.DOTALL).search(html)

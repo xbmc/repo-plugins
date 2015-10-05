@@ -44,7 +44,7 @@ def getRequest(url, udata=None, headers = defaultHeaders):
 
 
 def getShows():
-    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+    xbmcplugin.setContent(int(sys.argv[1]), 'movies')
     xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_UNSORTED)
     xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_TITLE)
     xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_VIDEO_YEAR)
@@ -57,7 +57,8 @@ def getShows():
     for b in epis:
        url   = b['vod']['contentId']
        name  = b['name']
-       thumb = b['imageProfiles'][1]['url']
+       try: thumb = b['imageProfiles'][1]['url']
+       except: thumb = b['vod']['associations']['franchises'][0]['imageProfiles'][0]['url']
        fanart = thumb
        infoList = {}
        infoList['Title'] = name

@@ -70,9 +70,11 @@ def ListLive():
             AddMenuEntry(name, id, 123, iconimage, '', '')
 
 
-# GetAtoZ allows to list programmes based on alphabetical order.
-# GetAtoZ only creates the corresponding directories for each character.
 def ListAtoZ():
+    """List programmes based on alphabetical order.
+
+    Only creates the corresponding directories for each character.
+    """
     characters = [
         ('A', 'a'), ('B', 'b'), ('C', 'c'), ('D', 'd'), ('E', 'e'), ('F', 'f'),
         ('G', 'g'), ('H', 'h'), ('I', 'i'), ('J', 'j'), ('K', 'k'), ('L', 'l'),
@@ -83,9 +85,11 @@ def ListAtoZ():
         AddMenuEntry(name, url, 124, '', '', '')
 
 
-# GetAtoZPage allows to list programmes based on alphabetical order.
-# GetAtoZPage creates the list of programmes for one character.
 def GetAtoZPage(url):
+    """Allows to list programmes based on alphabetical order.
+
+    Creates the list of programmes for one character.
+    """
     link = OpenURL('http://www.bbc.co.uk/iplayer/a-z/%s' % url)
     match = re.compile(
         '<a href="/iplayer/brand/(.+?)".+?<span class="title">(.+?)</span>',
@@ -94,9 +98,12 @@ def GetAtoZPage(url):
         AddMenuEntry(name, programme_id, 121, '', '', '')
 
 
-# ScrapeSearchEpisodes extracts the episode IDs from the search result HTML.
-# If there are more pages of search results, ScrapeSearchEpisodes also returns the page number of the next result page.
 def ScrapeSearchEpisodes(url):
+    """Extracts the episode IDs from the search result HTML.
+
+    If there are more pages of search results, ScrapeSearchEpisodes also
+    returns the page number of the next result page.
+    """
     html = OpenURL(url)
     # In search mode, available and unavailable programmes will be found.
     # While unavailable programmes are all marked by "unavailable",
@@ -132,8 +139,8 @@ def ScrapeSearchEpisodes(url):
     return nextpage
 
 
-# EvaluateSearch parses the Search result page(s) for available programmes and lists them.
 def EvaluateSearch(url):
+    """Parses the Search result page(s) for available programmes and lists them."""
     nextpage = ScrapeSearchEpisodes(url)
     # To make matters worse, there is a LOT of unavailable programmes and no way to search only for
     # available programs, so we need to parse several pages.
@@ -148,9 +155,11 @@ def EvaluateSearch(url):
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
 
 
-# ListCategories parses the available categories and creates directories for selecting one of them.
-# The category names are scraped from the website.
 def ListCategories():
+    """Parses the available categories and creates directories for selecting one of them.
+
+    The category names are scraped from the website.
+    """
     html = OpenURL('http://www.bbc.co.uk/iplayer')
     match = re.compile(
         '<a href="/iplayer/categories/(.+?)" class="stat">(.+?)</a>'
@@ -159,9 +168,11 @@ def ListCategories():
         AddMenuEntry(name, url, 125, '', '', '')
 
 
-# ListCategoryFilters parses the available category filters (if available) and creates directories for selcting them.
-# If there are no filters available, all programmes will be listed using GetFilteredCategory.
 def ListCategoryFilters(url):
+    """Parses the available category filters (if available) and creates directories for selcting them.
+
+    If there are no filters available, all programmes will be listed using GetFilteredCategory.
+    """
     NEW_URL = 'http://www.bbc.co.uk/iplayer/categories/%s/all?sort=atoz' % url
     # Read selected category's page.
     html = OpenURL(NEW_URL)
@@ -177,9 +188,11 @@ def ListCategoryFilters(url):
         GetFilteredCategory(url)
 
 
-# ScrapeCategoryEpisodes scrapes the episode IDs from the category pages.
-# It also returns the ID of the next page, if there are more pages in the same category.
 def ScrapeCategoryEpisodes(url):
+    """Scrapes the episode IDs from the category pages.
+
+    It also returns the ID of the next page, if there are more pages in the same category.
+    """
     # Read selected category's page.
     html = OpenURL(url)
     # Scrape all programmes on this page and create one menu entry each.
@@ -221,8 +234,8 @@ def ScrapeCategoryEpisodes(url):
     return nextpage
 
 
-# GetFilteredCategory parses the programmes available in the category view.
 def GetFilteredCategory(url):
+    """Parses the programmes available in the category view."""
     NEW_URL = 'http://www.bbc.co.uk/iplayer/categories/%s/all?sort=atoz' % url
     nextpage = ScrapeCategoryEpisodes(NEW_URL)
     # Some categories consist of several pages, we need to parse all of them.
@@ -234,9 +247,11 @@ def GetFilteredCategory(url):
             break
 
 
-# ListHighlights creates a list of the programmes in the highlights section.
-# All entries are scraped of the intro page and the pages linked from the intro page.
 def ListHighlights():
+    """Creates a list of the programmes in the highlights section.
+
+    All entries are scraped of the intro page and the pages linked from the intro page.
+    """
     html = OpenURL('http://www.bbc.co.uk/iplayer')
     match1 = re.compile(
         '<p class=" typo typo--goose">.+?'
@@ -265,8 +280,8 @@ def ListHighlights():
             CheckAutoplay(name, episode_url, iconimage, plot)
 
 
-# GetGroups scrapes information on a particular group, a special kind of collection.
 def GetGroups(url):
+    """Scrapes information on a particular group, a special kind of collection."""
     new_url = "http://www.bbc.co.uk/iplayer/group/%s" % url
     html = OpenURL(new_url)
     # In group mode, different kind of programmes can be found-
@@ -296,8 +311,8 @@ def GetGroups(url):
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
 
 
-# ListMostPopular scrapes all episodes of the most popular page.
 def ListMostPopular():
+    """Scrapes all episodes of the most popular page."""
     html = OpenURL('http://www.bbc.co.uk/iplayer/group/most-popular')
     match1 = re.compile(
         'data-ip-id="(.+?)">.+?href="(.+?)" title="(.+?)".+?img src="(.+?)".+?<p class="synopsis">(.+?)</p>',
@@ -319,8 +334,8 @@ def ListMostPopular():
         CheckAutoplay(name, url_out, iconimage.replace('336x189', '832x468'), plot)
 
 
-# Search simply calls the online search function. The search is then evaluated in EvaluateSearch.
 def Search():
+    """Simply calls the online search function. The search is then evaluated in EvaluateSearch."""
     search_entered = ''
     keyboard = xbmc.Keyboard(search_entered, 'Search iPlayer')
     keyboard.doModal()
@@ -332,8 +347,8 @@ def Search():
     EvaluateSearch(NEW_URL)
 
 
-# GetEpisodes gets all programmes corresponding to a certain programme ID.
 def GetEpisodes(programme_id):
+    """Gets all programmes corresponding to a certain programme ID."""
     # Construct URL and load HTML
     url = 'http://www.bbc.co.uk/iplayer/episodes/%s' % programme_id
     html = OpenURL(url)
@@ -374,8 +389,8 @@ def GetEpisodes(programme_id):
         xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
 
 
-# AddAvailableStreamsDirectory will create one menu entry for each available stream of a particular stream_id
 def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
+    """Will create one menu entry for each available stream of a particular stream_id"""
     # print "Stream ID: %s"%stream_id
     streams = ParseStreams(stream_id)
     # print streams
@@ -509,10 +524,9 @@ def ScrapeAvailableStreams(url):
         stream_id_ad = []
     return {'stream_id_st': stream_id_st, 'stream_id_sl': stream_id_sl, 'stream_id_ad': stream_id_ad}
 
-# AddAvailableStreamItem play a streamm based on settings for preferred catchup source and bitrate.
-
 
 def AddAvailableStreamItem(name, url, iconimage, description):
+    """Play a streamm based on settings for preferred catchup source and bitrate."""
     stream_ids = ScrapeAvailableStreams(url)
     if stream_ids['stream_id_ad']:
         streams_all = ParseStreams(stream_ids['stream_id_ad'])
@@ -571,8 +585,8 @@ def AddAvailableStreamItem(name, url, iconimage, description):
     PlayStream(name, match[0][2], iconimage, description, subtitles_url)
 
 
-# GetAvailableStreams calls AddAvailableStreamsDirectory based on user settings
 def GetAvailableStreams(name, url, iconimage, description):
+    """Calls AddAvailableStreamsDirectory based on user settings"""
     stream_ids = ScrapeAvailableStreams(url)
     AddAvailableStreamsDirectory(name, stream_ids['stream_id_st'], iconimage, description)
     # If we searched for Audio Described programmes and they have been found, append them to the list.
@@ -583,8 +597,8 @@ def GetAvailableStreams(name, url, iconimage, description):
         AddAvailableStreamsDirectory(name + ' - (Signed)', stream_ids['stream_id_sl'], iconimage, description)
 
 
-# AddAvailableLiveStreamItem play a live stream based on settings for preferred live source and bitrate.
 def AddAvailableLiveStreamItem(name, channelname, iconimage):
+    """Play a live stream based on settings for preferred live source and bitrate."""
     stream_bitrates = [9999, 345, 501, 923, 1470, 1700, 2128, 2908, 3628, 5166]
     if int(ADDON.getSetting('live_source')) == 1:
         providers = [('ak', 'Akamai')]
@@ -622,10 +636,14 @@ def AddAvailableLiveStreamItem(name, channelname, iconimage):
             PlayStream(name, streams_available[0][1], iconimage, '', '')
 
 
-# AddAvailableLiveStreamsDirectory retrieves the available live streams for a channel
-# Input parameters name and iconimage are only used for displaying the channel.
-# Input parameter channelname determines which channel is queried.
 def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
+    """Retrieves the available live streams for a channel
+
+    Args:
+        name: only used for displaying the channel.
+        iconimage: only used for displaying the channel.
+        channelname: determines which channel is queried.
+    """
     providers = [('ak', 'Akamai'), ('llnw', 'Limelight')]
     for provider_url, provider_name in providers:
         # First we query the available streams from this website
@@ -701,11 +719,12 @@ def get_params():
 
 re_date = re.compile('([0-9]{1,2})[/]([0-9]{1,2})[/]([0-9]{4})')
 
-# AddMenuEntry adds a new line to the Kodi list of playables.
-# It is used in multiple ways in the plugin, which are distinguished by modes.
-
 
 def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url):
+    """Adds a new line to the Kodi list of playables.
+
+    It is used in multiple ways in the plugin, which are distinguished by modes.
+    """
     u = (sys.argv[0] + "?url=" + urllib.quote_plus(url) + "&mode=" + str(mode) + "&name=" +
          urllib.quote_plus(name) + "&iconimage=" + urllib.quote_plus(iconimage) + "&description=" +
          urllib.quote_plus(description) + "&subtitles_url=" + urllib.quote_plus(subtitles_url))

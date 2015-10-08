@@ -3,6 +3,7 @@ plugin.video.tubitv
 
 Kodi Addon for TUBI TV website
 
+Version 1.0.9 website change
 Version 1.0.8 website change
 Version 1.0.7 website change, added views
 Version 1.0.6 website change

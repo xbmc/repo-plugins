@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division
+
 import os
 import re
 import sys
 import urllib
+from operator import itemgetter
 
 import requests
 
@@ -402,20 +405,18 @@ def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
         subtitles_url = ''
     suppliers = ['', 'Akamai', 'Limelight', 'Level3']
     bitrates = [0, 800, 1012, 1500, 1800, 2400, 3116, 5510]
-    for supplier, bitrate, url in streams[0]:
-        if (int(bitrate) == 7) or (int(bitrate) == 5):
-            TITLE = name+' - [COLOR white]%s[/COLOR] - [COLOR green]%s kbps[/COLOR]' % (
-                suppliers[supplier], bitrates[bitrate])
-        elif (int(bitrate) == 6) or (int(bitrate) == 3):
-            TITLE = name+' - [COLOR white]%s[/COLOR] - [COLOR yellow]%s kbps[/COLOR]' % (
-                suppliers[supplier], bitrates[bitrate])
-        elif int(bitrate) == 4:
-            TITLE = name+' - [COLOR white]%s[/COLOR] - [COLOR orange]%s kbps[/COLOR]' % (
-                suppliers[supplier], bitrates[bitrate])
+    for supplier, bitrate, url in sorted(streams[0], key=itemgetter(1), reverse=True):
+        if bitrate in (6, 7):
+            color = 'green'
+        elif bitrate in (4, 5):
+            color = 'yellow'
+        elif bitrate == 3:
+            color = 'orange'
         else:
-            TITLE = name+' - [COLOR white]%s[/COLOR] - [COLOR red]%s kbps[/COLOR]' % (
-                suppliers[supplier], bitrates[bitrate])
-        AddMenuEntry(TITLE, url, 201, iconimage, description, subtitles_url)
+            color = 'red'
+        title = name + ' - [I][COLOR %s]%0.1f Mbps[/COLOR] [COLOR white]%s[/COLOR][/I]' % (
+            color, bitrates[bitrate] / 1000, suppliers[supplier])
+        AddMenuEntry(title, url, 201, iconimage, description, subtitles_url)
 
 
 def ParseStreams(stream_id):
@@ -654,6 +655,7 @@ def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
         channelname: determines which channel is queried.
     """
     providers = [('ak', 'Akamai'), ('llnw', 'Limelight')]
+    streams = []
     for provider_url, provider_name in providers:
         # First we query the available streams from this website
         url = 'http://a.files.bbci.co.uk/media/live/manifesto/audio_video/simulcast/hds/uk/pc/%s/%s.f4m' % (
@@ -661,20 +663,27 @@ def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
         html = OpenURL(url)
         # Use regexp to get the different versions using various bitrates
         match = re.compile('href="(.+?)".+?bitrate="(.+?)"').findall(html.replace('amp;', ''))
-        # Add each of them to the Kodi selection menu
-        for address, bitrate in match:
-            url = address.replace('f4m', 'm3u8')
-            # For easier selection use colors to indicate high and low bitrate streams
-            if int(bitrate) > 2100:
-                title = name + ' - [COLOR white]%s[/COLOR] - [COLOR green]%s kbps[/COLOR]' % (provider_name, bitrate)
-            elif int(bitrate) > 1000:
-                title = name + ' - [COLOR white]%s[/COLOR] - [COLOR yellow]%s kbps[/COLOR]' % (provider_name, bitrate)
-            elif int(bitrate) > 600:
-                title = name + ' - [COLOR white]%s[/COLOR] - [COLOR orange]%s kbps[/COLOR]' % (provider_name, bitrate)
-            else:
-                title = name + ' - [COLOR white]%s[/COLOR] - [COLOR red]%s kbps[/COLOR]' % (provider_name, bitrate)
-            # Finally add them to the selection menu.
-            AddMenuEntry(title, url, 201, iconimage, '', '')
+        # Add provider name to the stream list.
+        streams.extend([list(stream) + [provider_name] for stream in match])
+
+    # Add each stream to the Kodi selection menu.
+    for address, bitrate, provider_name in sorted(streams, key=lambda x: int(x[1]), reverse=True):
+        url = address.replace('f4m', 'm3u8')
+        # For easier selection use colors to indicate high and low bitrate streams
+        bitrate = int(bitrate)
+        if bitrate > 2100:
+            color = 'green'
+        elif bitrate > 1000:
+            color = 'yellow'
+        elif bitrate > 600:
+            color = 'orange'
+        else:
+            color = 'red'
+
+        title = name + ' - [I][COLOR %s]%0.1f Mbps[/COLOR] [COLOR white]%s[/COLOR][/I]' % (
+            color, bitrate / 1000, provider_name)
+        # Finally add them to the selection menu.
+        AddMenuEntry(title, url, 201, iconimage, '', '')
 
 
 def OpenURL(url):

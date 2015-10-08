@@ -1,4 +1,7 @@
-﻿[B]1.1.4 (2015.7.20)[/B]
+﻿[B]1.1.5 (2015.10.8)[/B]
+changed: hide password in settings
+
+[B]1.1.4 (2015.7.20)[/B]
 changed: show torrents sorted by name
 added requires of simplejson
 fixed: bug in settings.xml

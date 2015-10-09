@@ -227,7 +227,7 @@ def getLink(url,vidname):
 
           u = '%s/%s' % (u.rsplit('/',1)[0], urls[vres].strip())
         except: pass
-        u = u.replace('-FQ-','-SD-',1)
+        u = u.replace('-FQ-','-SD-',1).replace('-UQ-','-HD-',1)
 
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=u))
 

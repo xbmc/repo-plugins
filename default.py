@@ -2,9 +2,11 @@
 
 from __future__ import division
 
+import datetime
 import os
 import re
 import sys
+import time
 import urllib
 from operator import itemgetter
 
@@ -357,7 +359,8 @@ def GetEpisodes(programme_id):
     html = OpenURL(url)
     # Extract all programmes from the page
     match = re.compile(
-        'data-ip-id=".+?">.+?<a href="(.+?)" title="(.+?)".+?data-ip-src="(.+?)">.+?class="synopsis">(.+?)</p>',
+        'data-ip-id=".+?">.+?<a href="(.+?)" title="(.+?)".+?data-ip-src="(.+?)">'
+        '.+?class="synopsis">(.+?)</p>(?:.+?First shown: (.+?)\n)?',
         re.DOTALL).findall(html)
     # If there is only one match, this is one programme only. We can stop and get the available streams right away.
     if len(match) == 1:
@@ -365,29 +368,43 @@ def GetEpisodes(programme_id):
         name = match[0][1]
         iconimage = match[0][2]
         plot = match[0][3]
-        CheckAutoplay(name, _URL_, iconimage.replace('336x189', '832x468'), plot)
+        try:
+            date = datetime.datetime(*(time.strptime(match[0][4], '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
+        except ValueError:
+            date = ''
+        CheckAutoplay(name + ' [I]' + date + '[/I]', _URL_, iconimage.replace('336x189', '832x468'), plot)
     # If there are multiple programmes on this page, we need to add them all as entries to the menu.
     else:
-        for URL, name, iconimage, plot in match:
+        for URL, name, iconimage, plot, date in match:
             _URL_ = 'http://www.bbc.co.uk/%s' % URL
-            CheckAutoplay(name, _URL_, iconimage.replace('336x189', '832x468'), plot)
+            try:
+                # Need to use equivelent for datetime.strptime() due to weird TypeError.
+                date = datetime.datetime(*(time.strptime(date, '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
+            except ValueError:
+                date = ''
+            CheckAutoplay(name + ' [I]' + date + '[/I]', _URL_, iconimage.replace('336x189', '832x468'), plot)
         # Some programmes consist of several pages, we need to parse all of them.
         while True:
-            try:
-                # Check if a next page exists and if so load it.
-                nextpage = re.compile('<span class="next bp1"> <a href=".+?page=(\d+)">').findall(html)
-                temp_url = '%s?page=%s' % (url, nextpage[0])
-                html = OpenURL(temp_url)
-                # Parse all programmes on this page and create one menu entry each.
-                match = re.compile(
-                    'data-ip-id=".+?">.+?<a href="(.+?)" title="(.+?)".+?'
-                    'data-ip-src="(.+?)">.+?class="synopsis">(.+?)</p>',
-                    re.DOTALL).findall(html)
-                for URL, name, iconimage, plot in match:
-                    _URL_ = 'http://www.bbc.co.uk/%s' % URL
-                    CheckAutoplay(name, _URL_, iconimage.replace('336x189', '832x468'), plot)
-            except:
+            # Check if a next page exists and if so load it.
+            nextpage = re.compile('<span class="next bp1"> <a href=".+?page=(\d+)">').findall(html)
+            if not nextpage:
                 break
+            temp_url = '%s?page=%s' % (url, nextpage[0])
+            html = OpenURL(temp_url)
+            # Parse all programmes on this page and create one menu entry each.
+            match = re.compile(
+                'data-ip-id=".+?">.+?<a href="(.+?)" title="(.+?)".+?'
+                'data-ip-src="(.+?)">.+?class="synopsis">(.+?)</p>'
+                '(?:.+?First shown: (.+?)\n)?',
+                re.DOTALL).findall(html)
+            for URL, name, iconimage, plot, date in match:
+                _URL_ = 'http://www.bbc.co.uk/%s' % URL
+                try:
+                    date = datetime.datetime(*(time.strptime(date, '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
+                except ValueError:
+                    date = ''
+                CheckAutoplay(name + ' [I]' + date + '[/I]', _URL_, iconimage.replace('336x189', '832x468'), plot)
+
         xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
         xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
 
@@ -761,16 +778,20 @@ def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url):
     date = re_date.findall(name)
     if date:
         date_string = "%s.%s.%s" % (date[0][0], date[0][1], date[0][2])
-        # print date_string
+        aired = datetime.datetime(*(time.strptime(date_string, '%d.%m.%Y')[0:6])).strftime('%Y-%m-%d')
     else:
         # Use a dummy date for all entries without a date.
-        date_string = "01.01.2999"
-    liz.setInfo("video",
-                infoLabels={"title": name,
-                            "plot": description,
-                            "plotoutline": description,
-                            "date": date_string}
-                )
+        date_string = "01.01.1970"
+        aired = None
+
+    liz.setInfo("video", {
+                "title": name,
+                "plot": description,
+                "plotoutline": description,
+                'date': date_string,
+                'aired': aired,
+                })
+
     # Modes 201-299 will create a new playable line.
     if ((mode == 201) or (mode == 202) or (mode == 203)):
         # print "Adding playable entry with subtitles file: %s"%subtitles_url
@@ -783,7 +804,7 @@ def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url):
         liz.setProperty("IsFolder", "true")
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
     liz.setProperty("Property(Addon.Name)", "iPlayer WWW")
-    xbmcplugin.setContent(int(sys.argv[1]), 'movies')
+    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     return True
 
 re_subtitles = re.compile('^\s*<p.*?begin=\"(.*?)\.([0-9]+)\"\s+.*?end=\"(.*?)\.([0-9]+)\"\s*>(.*?)</p>')

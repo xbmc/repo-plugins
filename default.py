@@ -759,6 +759,7 @@ def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url):
         date_dt = datetime.datetime(*(time.strptime(match.group(), '%d/%m/%Y')[0:6]))
         date_string = date_dt.strftime('%d.%m.%Y')
         aired = date_dt.strftime('%Y-%m-%d')
+        name = name.replace(match.group(), '').strip()
     else:
         # Use a dummy date for all entries without a date.
         date_string = "01.01.1970"

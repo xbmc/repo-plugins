@@ -373,7 +373,7 @@ def GetEpisodes(programme_id):
                 aired = datetime.datetime(*(time.strptime(aired, '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
             except ValueError:
                 aired = ''
-            CheckAutoplay(name + ' ' + aired, _URL_, iconimage.replace('336x189', '832x468'), plot)
+            CheckAutoplay(name, _URL_, iconimage.replace('336x189', '832x468'), plot, aired=aired)
 
         # If there is only one match, this is one programme only.
         if len(match) == 1:
@@ -503,11 +503,11 @@ def ParseStreams(stream_id):
     return retlist, match
 
 
-def CheckAutoplay(name, url, iconimage, plot):
+def CheckAutoplay(name, url, iconimage, plot, aired=None):
     if ADDON.getSetting('streams_autoplay') == 'true':
-        AddMenuEntry(name, url, 202, iconimage, plot, '')
+        AddMenuEntry(name, url, 202, iconimage, plot, '', aired=aired)
     else:
-        AddMenuEntry(name, url, 122, iconimage, plot, '')
+        AddMenuEntry(name, url, 122, iconimage, plot, '', aired=aired)
 
 
 def ScrapeAvailableStreams(url):
@@ -741,7 +741,7 @@ def get_params():
     return param
 
 
-def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, resolution=None):
+def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=None, resolution=None):
     """Adds a new line to the Kodi list of playables.
 
     It is used in multiple ways in the plugin, which are distinguished by modes.
@@ -757,12 +757,14 @@ def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, resolut
     if match:
         date_dt = datetime.datetime(*(time.strptime(match.group(), '%d/%m/%Y')[0:6]))
         date_string = date_dt.strftime('%d.%m.%Y')
-        aired = date_dt.strftime('%Y-%m-%d')
-        name = name.replace(match.group(), '').strip()
+        if not aired:
+            aired = date_dt.strftime('%Y-%m-%d')
     else:
-        # Use a dummy date for all entries without a date.
-        date_string = "01.01.1970"
-        aired = None
+        if aired:
+            date_string = datetime.datetime(*(time.strptime(aired, '%d/%m/%Y')[0:6])).strftime('%d.%m.%Y')
+        else:
+            # Use a dummy date for all entries without a date.
+            date_string = "01.01.1970"
 
     # Modes 201-299 will create a new playable line, otherwise create a new directory line.
     if mode in (201, 202, 203):

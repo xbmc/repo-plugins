@@ -6,8 +6,8 @@
 
   <string id="30200">Streams</string>
   <string id="30205">Play stream automatically using these settings</string>
-  <string id="30210">Catchup bitrate</string>
-  <string id="30211">Catchup CDN source</string>
-  <string id="30220">Live bitrate</string>
-  <string id="30230">Live CDN source</string>
+  <string id="30210">Catchup CDN source</string>
+  <string id="30211">Catchup bitrate</string>
+  <string id="30220">Live CDN source</string>
+  <string id="30230">Live bitrate</string>
 </strings>

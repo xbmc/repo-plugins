@@ -1,3 +1,9 @@
+v1.0.1
+Fixup code to pep8 standard (by cas--)
+Convert to docstrings (by cas--)
+Fixed typo (by cas--)
+Added error dialog
+
 v1.0.0
 Corrected a few typos.
 

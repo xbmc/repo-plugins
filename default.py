@@ -493,6 +493,15 @@ def ParseStreams(stream_id):
     match = re.compile('service="captions".+?connection href="(.+?)"').findall(html.replace('amp;', ''))
     # print "Subtitle URL: %s"%match
     # print retlist
+    if not match:
+        # print "No streams found"
+        check_geo = re.search(
+            '<error id="geolocation"/>', html)
+        if check_geo:
+            # print "Geoblock detected, raising error message"
+            dialog = xbmcgui.Dialog()
+            dialog.ok("Error", "BBC iPlayer TV programmes are available to play in the UK only.")
+            raise
     return retlist, match
 
 
@@ -675,6 +684,14 @@ def OpenURL(url):
 
 
 def PlayStream(name, url, iconimage, description, subtitles_url):
+    html = OpenURL(url)
+    check_geo = re.search(
+        '<H1>Access Denied</H1>', html)
+    if check_geo:
+        # print "Geoblock detected, raising error message"
+        dialog = xbmcgui.Dialog()
+        dialog.ok("Error", "BBC iPlayer TV programmes are available to play in the UK only.")
+        raise
     liz = xbmcgui.ListItem(name, iconImage='DefaultVideo.png', thumbnailImage=iconimage)
     liz.setInfo(type='Video', infoLabels={'Title': name})
     liz.setProperty("IsPlayable", "true")

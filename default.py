@@ -363,7 +363,7 @@ def GetEpisodes(programme_id):
         match = re.compile(
             'data-ip-id=".+?">.+?<a href="(.+?)" title="(.+?)'
             '".+?data-ip-src="(.+?)">.+?class="synopsis">(.+?)</p>'
-            '(?:.+?First shown: (.+?)\n)?',
+            '(?:.+?class="release">\s+First shown: (.+?)\n)?',
             re.DOTALL).findall(html)
 
         for URL, name, iconimage, plot, aired in match:

@@ -402,7 +402,7 @@ def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
         subtitles_url = ''
     suppliers = ['', 'Akamai', 'Limelight', 'Level3']
     bitrates = [0, 800, 1012, 1500, 1800, 2400, 3116, 5510]
-    for supplier, bitrate, url in sorted(streams[0], key=itemgetter(1), reverse=True):
+    for supplier, bitrate, url, resolution in sorted(streams[0], key=itemgetter(1), reverse=True):
         if bitrate in (5, 7):
             color = 'green'
         elif bitrate == 6:
@@ -413,7 +413,7 @@ def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
             color = 'orange'
         title = name + ' - [I][COLOR %s]%0.1f Mbps[/COLOR] [COLOR lightgray]%s[/COLOR][/I]' % (
             color, bitrates[bitrate] / 1000, suppliers[supplier])
-        AddMenuEntry(title, url, 201, iconimage, description, subtitles_url)
+        AddMenuEntry(title, url, 201, iconimage, description, subtitles_url, resolution=resolution)
 
 
 def ParseStreams(stream_id):
@@ -451,7 +451,7 @@ def ParseStreams(stream_id):
                     tmp_br = 6
                 elif int(bandwidth) == 5509880:
                     tmp_br = 7
-                retlist.append((tmp_sup, tmp_br, url))
+                retlist.append((tmp_sup, tmp_br, url, resolution))
     # It may be useful to parse these additional streams as a default as they offer additional bandwidths.
     match = re.compile(
         'kind="video".+?connection href="(.+?)".+?supplier="(.+?)".+?transferFormat="(.+?)"'
@@ -487,7 +487,7 @@ def ParseStreams(stream_id):
                 tmp_br = 3
             elif int(bandwidth) <= 2410000:
                 tmp_br = 5
-            retlist.append((tmp_sup, tmp_br, url))
+            retlist.append((tmp_sup, tmp_br, url, resolution))
     match = re.compile('service="captions".+?connection href="(.+?)"').findall(html.replace('amp;', ''))
     # print "Subtitle URL: %s"%match
     # print retlist
@@ -741,7 +741,7 @@ def get_params():
     return param
 
 
-def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url):
+def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, resolution=None):
     """Adds a new line to the Kodi list of playables.
 
     It is used in multiple ways in the plugin, which are distinguished by modes.
@@ -778,6 +778,18 @@ def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url):
         "plotoutline": description,
         'date': date_string,
         'aired': aired})
+
+    video_streaminfo = {'codec': 'h264'}
+    if not isFolder:
+        if resolution:
+            resolution = resolution.split('x')
+            video_streaminfo['aspect'] = round(int(resolution[0]) / int(resolution[1]), 2)
+            video_streaminfo['width'] = resolution[0]
+            video_streaminfo['height'] = resolution[1]
+        listitem.addStreamInfo('video', video_streaminfo)
+        listitem.addStreamInfo('audio', {'codec': 'aac', 'language': 'en', 'channels': 2})
+        if subtitles_url:
+            listitem.addStreamInfo('subtitle', {'language': 'en'})
 
     listitem.setProperty("IsPlayable", str(not isFolder).lower())
     listitem.setProperty("IsFolder", str(isFolder).lower())

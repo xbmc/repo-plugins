@@ -357,53 +357,34 @@ def GetEpisodes(programme_id):
     # Construct URL and load HTML
     url = 'http://www.bbc.co.uk/iplayer/episodes/%s' % programme_id
     html = OpenURL(url)
-    # Extract all programmes from the page
-    match = re.compile(
-        'data-ip-id=".+?">.+?<a href="(.+?)" title="(.+?)".+?data-ip-src="(.+?)">'
-        '.+?class="synopsis">(.+?)</p>(?:.+?First shown: (.+?)\n)?',
-        re.DOTALL).findall(html)
-    # If there is only one match, this is one programme only. We can stop and get the available streams right away.
-    if len(match) == 1:
-        _URL_ = 'http://www.bbc.co.uk/%s' % match[0][0]
-        name = match[0][1]
-        iconimage = match[0][2]
-        plot = match[0][3]
-        try:
-            date = datetime.datetime(*(time.strptime(match[0][4], '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
-        except ValueError:
-            date = ''
-        CheckAutoplay(name + ' [I]' + date + '[/I]', _URL_, iconimage.replace('336x189', '832x468'), plot)
-    # If there are multiple programmes on this page, we need to add them all as entries to the menu.
-    else:
-        for URL, name, iconimage, plot, date in match:
+
+    while True:
+        # Extract all programmes from the page
+        match = re.compile(
+            'data-ip-id=".+?">.+?<a href="(.+?)" title="(.+?)'
+            '".+?data-ip-src="(.+?)">.+?class="synopsis">(.+?)</p>'
+            '(?:.+?First shown: (.+?)\n)?',
+            re.DOTALL).findall(html)
+
+        for URL, name, iconimage, plot, aired in match:
             _URL_ = 'http://www.bbc.co.uk/%s' % URL
             try:
                 # Need to use equivelent for datetime.strptime() due to weird TypeError.
-                date = datetime.datetime(*(time.strptime(date, '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
+                aired = datetime.datetime(*(time.strptime(aired, '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
             except ValueError:
-                date = ''
-            CheckAutoplay(name + ' [I]' + date + '[/I]', _URL_, iconimage.replace('336x189', '832x468'), plot)
-        # Some programmes consist of several pages, we need to parse all of them.
-        while True:
-            # Check if a next page exists and if so load it.
-            nextpage = re.compile('<span class="next bp1"> <a href=".+?page=(\d+)">').findall(html)
-            if not nextpage:
-                break
-            temp_url = '%s?page=%s' % (url, nextpage[0])
-            html = OpenURL(temp_url)
-            # Parse all programmes on this page and create one menu entry each.
-            match = re.compile(
-                'data-ip-id=".+?">.+?<a href="(.+?)" title="(.+?)".+?'
-                'data-ip-src="(.+?)">.+?class="synopsis">(.+?)</p>'
-                '(?:.+?First shown: (.+?)\n)?',
-                re.DOTALL).findall(html)
-            for URL, name, iconimage, plot, date in match:
-                _URL_ = 'http://www.bbc.co.uk/%s' % URL
-                try:
-                    date = datetime.datetime(*(time.strptime(date, '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
-                except ValueError:
-                    date = ''
-                CheckAutoplay(name + ' [I]' + date + '[/I]', _URL_, iconimage.replace('336x189', '832x468'), plot)
+                aired = ''
+            CheckAutoplay(name + ' ' + aired, _URL_, iconimage.replace('336x189', '832x468'), plot)
+
+        # If there is only one match, this is one programme only.
+        if len(match) == 1:
+            break
+
+        # Some programmes consist of several pages, check if a next page exists and if so load it.
+        nextpage = re.compile('<span class="next bp1"> <a href=".+?page=(\d+)">').findall(html)
+        if not nextpage:
+            break
+        temp_url = '%s?page=%s' % (url, nextpage[0])
+        html = OpenURL(temp_url)
 
         xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
         xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)

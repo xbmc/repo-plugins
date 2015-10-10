@@ -760,50 +760,49 @@ def get_params():
                 param[splitparams[0]] = splitparams[1]
     return param
 
-re_date = re.compile('([0-9]{1,2})[/]([0-9]{1,2})[/]([0-9]{4})')
-
 
 def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url):
     """Adds a new line to the Kodi list of playables.
 
     It is used in multiple ways in the plugin, which are distinguished by modes.
     """
-    u = (sys.argv[0] + "?url=" + urllib.quote_plus(url) + "&mode=" + str(mode) + "&name=" +
-         urllib.quote_plus(name) + "&iconimage=" + urllib.quote_plus(iconimage) + "&description=" +
-         urllib.quote_plus(description) + "&subtitles_url=" + urllib.quote_plus(subtitles_url))
-    # print u
-    liz = xbmcgui.ListItem(label=name, label2=description, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-    # Sometimes the names contain dates, e.g. for programmes which are broadcast daily.
-    # In this case, try to extract the date from the title and add it as an InfoLabel to allow sorting by date.
-    date = re_date.findall(name)
-    if date:
-        date_string = "%s.%s.%s" % (date[0][0], date[0][1], date[0][2])
-        aired = datetime.datetime(*(time.strptime(date_string, '%d.%m.%Y')[0:6])).strftime('%Y-%m-%d')
+    listitem_url = (sys.argv[0] + "?url=" + urllib.quote_plus(url) + "&mode=" + str(mode) +
+                    "&name=" + urllib.quote_plus(name) +
+                    "&iconimage=" + urllib.quote_plus(iconimage) +
+                    "&description=" + urllib.quote_plus(description) +
+                    "&subtitles_url=" + urllib.quote_plus(subtitles_url))
+
+    # Try to extract the date from the title and add it as an InfoLabel to allow sorting by date.
+    match = re.search(r'\d{1,2}/\d{1,2}/\d{4}', name)
+    if match:
+        date_dt = datetime.datetime(*(time.strptime(match.group(), '%d/%m/%Y')[0:6]))
+        date_string = date_dt.strftime('%d.%m.%Y')
+        aired = date_dt.strftime('%Y-%m-%d')
     else:
         # Use a dummy date for all entries without a date.
         date_string = "01.01.1970"
         aired = None
 
-    liz.setInfo("video", {
-                "title": name,
-                "plot": description,
-                "plotoutline": description,
-                'date': date_string,
-                'aired': aired,
-                })
-
-    # Modes 201-299 will create a new playable line.
-    if ((mode == 201) or (mode == 202) or (mode == 203)):
-        # print "Adding playable entry with subtitles file: %s"%subtitles_url
-        liz.setProperty("IsPlayable", "true")
-        liz.setProperty("IsFolder", "false")
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=False)
-    # Other modes will create a new directory line.
+    # Modes 201-299 will create a new playable line, otherwise create a new directory line.
+    if mode in (201, 202, 203):
+        isFolder = False
     else:
-        liz.setProperty("IsPlayable", "false")
-        liz.setProperty("IsFolder", "true")
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
-    liz.setProperty("Property(Addon.Name)", "iPlayer WWW")
+        isFolder = True
+
+    listitem = xbmcgui.ListItem(label=name, label2=description,
+                                iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+    listitem.setInfo("video", {
+        "title": name,
+        "plot": description,
+        "plotoutline": description,
+        'date': date_string,
+        'aired': aired})
+
+    listitem.setProperty("IsPlayable", str(not isFolder).lower())
+    listitem.setProperty("IsFolder", str(isFolder).lower())
+    # list_item.setProperty("Property(Addon.Name)", "iPlayer WWW")  # XXX: Was unused and unsure of purpose.
+    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
+                                url=listitem_url, listitem=listitem, isFolder=isFolder)
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     return True
 

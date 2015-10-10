@@ -382,12 +382,11 @@ def GetEpisodes(programme_id):
         # Some programmes consist of several pages, check if a next page exists and if so load it.
         nextpage = re.compile('<span class="next bp1"> <a href=".+?page=(\d+)">').findall(html)
         if not nextpage:
+            xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
+            xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
             break
         temp_url = '%s?page=%s' % (url, nextpage[0])
         html = OpenURL(temp_url)
-
-        xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
-        xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
 
 
 def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):

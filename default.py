@@ -403,15 +403,15 @@ def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
     suppliers = ['', 'Akamai', 'Limelight', 'Level3']
     bitrates = [0, 800, 1012, 1500, 1800, 2400, 3116, 5510]
     for supplier, bitrate, url in sorted(streams[0], key=itemgetter(1), reverse=True):
-        if bitrate in (6, 7):
+        if bitrate in (5, 7):
             color = 'green'
-        elif bitrate in (4, 5):
+        elif bitrate == 6:
+            color = 'blue'
+        elif bitrate in (3, 4):
             color = 'yellow'
-        elif bitrate == 3:
-            color = 'orange'
         else:
-            color = 'red'
-        title = name + ' - [I][COLOR %s]%0.1f Mbps[/COLOR] [COLOR white]%s[/COLOR][/I]' % (
+            color = 'orange'
+        title = name + ' - [I][COLOR %s]%0.1f Mbps[/COLOR] [COLOR lightgray]%s[/COLOR][/I]' % (
             color, bitrates[bitrate] / 1000, suppliers[supplier])
         AddMenuEntry(title, url, 201, iconimage, description, subtitles_url)
 

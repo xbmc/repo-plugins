@@ -1,8 +1,14 @@
+v1.1.0
+Added first aired date for episodes.
+Redesigned user interface for manual stream selection and preferences dialog.
+Cleaned up unneccesary code.
+Improved error dialog.
+
 v1.0.1
-Fixup code to pep8 standard (by cas--)
-Convert to docstrings (by cas--)
-Fixed typo (by cas--)
-Added error dialog
+Fixup code to pep8 standard.
+Convert to docstrings.
+Fixed typo.
+Added error dialog.
 
 v1.0.0
 Corrected a few typos.

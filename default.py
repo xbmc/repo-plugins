@@ -734,7 +734,7 @@ def PlayStream(name, url, iconimage, description, subtitles_url):
     html = OpenURL(url)
     check_geo = re.search(
         '<H1>Access Denied</H1>', html)
-    if check_geo:
+    if check_geo or not html:
         # print "Geoblock detected, raising error message"
         dialog = xbmcgui.Dialog()
         dialog.ok("Error", "BBC iPlayer TV programmes are available to play in the UK only.")

@@ -363,14 +363,17 @@ def GetEpisodes(programme_id):
         match = re.compile(
             'data-ip-id=".+?">.+?<a href="(.+?)" title="(.+?)'
             '".+?data-ip-src="(.+?)">.+?class="synopsis">(.+?)</p>'
-            '(?:.+?class="release">\s+First shown: (.+?)\n)?',
+            '(.+?)<div class="period"',
             re.DOTALL).findall(html)
 
-        for URL, name, iconimage, plot, aired in match:
+        for URL, name, iconimage, plot, more in match:
             _URL_ = 'http://www.bbc.co.uk/%s' % URL
+            aired = re.compile(
+                '.+?class="release">\s+First shown: (.+?)\n',
+                re.DOTALL).findall(more)
             try:
                 # Need to use equivelent for datetime.strptime() due to weird TypeError.
-                aired = datetime.datetime(*(time.strptime(aired, '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
+                aired = datetime.datetime(*(time.strptime(aired[0], '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
             except ValueError:
                 aired = ''
             CheckAutoplay(name, _URL_, iconimage.replace('336x189', '832x468'), plot, aired=aired)

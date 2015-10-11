@@ -48,21 +48,24 @@ def filter_video(path):
         logging.debug("skipping '%s'. contains blacklisted word" % path)
         return False
 
-    filename = os.path.basename(path.rstrip('/'))
-    basename, ext = os.path.splitext(filename)
+    dirname, filename = os.path.split(path.rstrip('/'))
+    root, ext = os.path.splitext(filename)
 
     if ext == "" or ext.lower() not in FILE_EXTENSIONS:
         return False
 
-    if basename.lower() in ["sample", "trailer"]:
+    if root.lower() in ["sample", "trailer"]:
         return False
 
     if re.match(r"^.*[!#~_,;:|\.\-\+\(\{\[<](sample|trailer)[\)\}\]]*$",
-                basename.lower(), re.IGNORECASE):
+                root.lower(), re.IGNORECASE):
         logging.debug("identified '%s' as sample or trailer" % path)
         return False
 
-    if filename == "VIDEO_TS.IFO" or filename == "index.bdmv":
+    parentdir = os.path.basename(dirname.rstrip('/'))
+    if parentdir.upper() == 'VIDEO_TS' and filename.upper() == 'VIDEO_TS.IFO':
+        return True
+    if parentdir.upper() == 'BDMV' and filename.lower() == 'index.bdmv':
         return True
     if re.match(r"^.*[\\/](VIDEO_TS|BDMV)[\\/].*$", path):
         logging.debug("identified '%s' as dvd or bluray companion file" % path)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <setting id="blacklisted_extensions" label="30001" type="text" default=".bin|.dat|.zip" />
+    <setting id="blacklisted_extensions" label="30001" type="text" default=".bin|.dat|.url|.zip" />
     <setting id="blacklisted_directories" label="30002" type="text" default="sample|subs|extras" />
     <setting id="blacklisted_words" label="30003" type="text" default="" />
     <setting id="scan_recursively" label="30004" type="bool" default="true" />

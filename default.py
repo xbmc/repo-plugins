@@ -135,11 +135,36 @@ def ScrapeSearchEpisodes(url):
             episode_url = "http://www.bbc.co.uk/iplayer/episode/%s" % programme_id
             CheckAutoplay(name, episode_url, iconimage, plot)
     match1 = re.compile(
-        'episode"  data-ip-id="(.+?)">.+?" title="(.+?)".+?img src="(.+?)".+?<p class="synopsis">(.+?)</p>',
+        'episode"  data-ip-id="(.+?)">'
+        '.+?" title="(.+?)"'
+        '.+?img src="(.+?)"'
+        '.+?<p class="synopsis">(.+?)</p>'
+        '(.+?)<div class="period"',
         re.DOTALL).findall(html.replace('amp;', ''))
-    for programme_id, name, iconimage, plot in match1:
+    for programme_id, name, iconimage, plot, more in match1:
         episode_url = "http://www.bbc.co.uk/iplayer/episode/%s" % programme_id
-        CheckAutoplay(name, episode_url, iconimage, plot)
+        aired = re.compile(
+            '.+?class="release">\s+First shown: (.+?)\n',
+            re.DOTALL).findall(more)
+        if aired:
+            try:
+                # Need to use equivelent for datetime.strptime() due to weird TypeError.
+                aired = datetime.datetime(*(time.strptime(aired[0], '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
+            except ValueError:
+                aired = ''
+        else:
+             aired = ''
+        CheckAutoplay(name, episode_url, iconimage, plot, aired=aired)
+    match1 = re.compile(
+        'search-group"  data-ip-id="(.+?)">'
+        '.+?" title="(.+?)"'
+        '.+?img src="(.+?)"'
+        '.+?<p class="synopsis">(.+?)</p>'
+        '.+?<a class="view-more-container sibling stat" href="(.+?)">',
+        re.DOTALL).findall(html.replace('amp;', ''))
+    for programme_id, name, iconimage, plot, group_url in match1:
+        episode_url = "http://www.bbc.co.uk%s" % group_url
+        ScrapeSearchEpisodes(episode_url)
     nextpage = re.compile('<span class="next txt"> <a href=".+?page=(\d+)">').findall(html)
     return nextpage
 
@@ -268,75 +293,85 @@ def ListHighlights():
         AddMenuEntry('Collection: %s - %s available programmes' % (
             name, num_episodes), episode_id, 127, '', '', '')
     match1 = re.compile(
+        'href="http://www.bbc.co.uk/iplayer/group/(.+?)"\n'
+        'class="single-item single-item--promotion stat"'
+        '.+?<h1 class="single-item__title typo typo--skylark"><strong>(.+?)</strong></h1>\n'
+        '.+?<h2 class="single-item__subtitle typo typo--canary">(.+?)</h2>',
+        re.DOTALL).findall(html)
+    for episode_id, name, plot in match1:
+        AddMenuEntry('Collection: %s' % (name), episode_id, 127, '', plot, '')
+    match1 = re.compile(
         'href="/iplayer/episode/(.+?)/.+?\n'
         'class="single-item stat".+?'
         'class="single-item__title.+?'
         '<strong>(.+?)</strong>(.+?)'
         'data-ip-src="(.+?)".+?'
-        'class="single-item__overlay__desc">(.+?)<',
+        'class="single-item__overlay__desc">(.+?)<'
+        '(.+?)</div>',
         re.DOTALL).findall(html.replace('amp;', ''))
-    for episode_id, name, subtitle, iconimage, plot in match1:
+    for episode_id, name, subtitle, iconimage, plot, more in match1:
         episode_url = "http://www.bbc.co.uk/iplayer/episode/%s" % episode_id
+        aired = re.compile(
+            '.+?First shown: (.+?)</p>',
+            re.DOTALL).findall(more)
+        try:
+            # Need to use equivelent for datetime.strptime() due to weird TypeError.
+            aired = datetime.datetime(*(time.strptime(aired[0], '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
+        except ValueError:
+            aired = ''
         sub_match = re.compile(
             'class="single-item__subtitle.+?>(.+?)<', re.DOTALL).findall(subtitle)
         if len(sub_match) == 1:
-            CheckAutoplay("%s: %s" % (name, sub_match[0]), episode_url, iconimage, plot)
+            CheckAutoplay("%s: %s" % (name, sub_match[0]), episode_url, iconimage, plot, aired=aired)
         else:
-            CheckAutoplay(name, episode_url, iconimage, plot)
+            CheckAutoplay(name, episode_url, iconimage, plot, aired=aired)
 
 
 def GetGroups(url):
     """Scrapes information on a particular group, a special kind of collection."""
     new_url = "http://www.bbc.co.uk/iplayer/group/%s" % url
     html = OpenURL(new_url)
-    # In group mode, different kind of programmes can be found-
-    # Unfortunately, there are several classes of "available" programmes.
-    # Thus, we need to match all of them.
-    match1 = re.compile(
-        'data-ip-id="(.+?)">.+?" title="(.+?)".+?img src="(.+?)".+?<p class="synopsis">(.+?)</p>',
-        re.DOTALL).findall(html.replace('amp;', ''))
-    for episode_id, name, iconimage, plot in match1:
-        episode_url = "http://www.bbc.co.uk/iplayer/episode/%s" % episode_id
-        CheckAutoplay(name, episode_url, iconimage, plot)
-    # Some groups consist of several pages of programmes. We want to find all of them, of course.
+
     while True:
-        try:
-            nextpage = re.compile('<span class="next txt">.+?page=(.+?)">', re.DOTALL).findall(html)
-            temp_url = '%s?page=%s' % (new_url, nextpage[0])
-            html = OpenURL(temp_url)
-            match1 = re.compile(
-                'data-ip-id="(.+?)">.+?" title="(.+?)".+?img src="(.+?)".+?<p class="synopsis">(.+?)</p>',
-                re.DOTALL).findall(html.replace('amp;', ''))
-            for episode_id, name, iconimage, plot in match1:
-                episode_url = "http://www.bbc.co.uk/iplayer/episode/%s" % episode_id
-                CheckAutoplay(name, episode_url, iconimage, plot)
-        except:
+        # Extract all programmes from the page
+        match = re.compile(
+            'data-ip-id=".+?">.+?<a href="(.+?)" title="(.+?)'
+            '".+?data-ip-src="(.+?)">.+?class="synopsis">(.+?)</p>'
+            '(.+?)<div class="period"',
+            re.DOTALL).findall(html)
+
+        for URL, name, iconimage, plot, more in match:
+            _URL_ = 'http://www.bbc.co.uk/%s' % URL
+            aired = re.compile(
+                '.+?class="release">\s+First shown: (.+?)\n',
+                re.DOTALL).findall(more)
+            if aired:
+                try:
+                    # Need to use equivelent for datetime.strptime() due to weird TypeError.
+                    aired = datetime.datetime(*(time.strptime(aired[0], '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
+                except ValueError:
+                    aired = ''
+            else:
+                aired = ''
+            CheckAutoplay(name, _URL_, iconimage.replace('336x189', '832x468'), plot, aired=aired)
+
+        # If there is only one match, this is one programme only.
+        if len(match) == 1:
             break
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
+
+        # Some programmes consist of several pages, check if a next page exists and if so load it.
+        nextpage = re.compile('<span class="next bp1"> <a href=".+?page=(\d+)">').findall(html)
+        if not nextpage:
+            xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
+            xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
+            break
+        temp_url = '%s?page=%s' % (new_url, nextpage[0])
+        html = OpenURL(temp_url)
 
 
 def ListMostPopular():
     """Scrapes all episodes of the most popular page."""
-    html = OpenURL('http://www.bbc.co.uk/iplayer/group/most-popular')
-    match1 = re.compile(
-        'data-ip-id="(.+?)">.+?href="(.+?)" title="(.+?)".+?img src="(.+?)".+?<p class="synopsis">(.+?)</p>',
-        re.DOTALL).findall(html.replace('amp;', ''))
-    for programme_id, url, name, iconimage, plot in match1:
-        try:
-            # If there is a special block of HTML code, there are several episodes available for this programme.
-            getseries = html.split(url)[1]
-            number = re.compile('<em>(.+?)</em>').findall(getseries)[0]
-            if programme_id not in url:
-                name = '%s - [COLOR orange](%s Available)[/COLOR]' % (name, number.strip())
-        except:
-            name = name
-        url_out = 'http://www.bbc.co.uk%s' % url
-        if programme_id not in url_out:
-            programme_id = programme_id
-        else:
-            programme_id = ''
-        CheckAutoplay(name, url_out, iconimage.replace('336x189', '832x468'), plot)
+    GetGroups('most-popular')
 
 
 def Search():
@@ -371,10 +406,13 @@ def GetEpisodes(programme_id):
             aired = re.compile(
                 '.+?class="release">\s+First shown: (.+?)\n',
                 re.DOTALL).findall(more)
-            try:
-                # Need to use equivelent for datetime.strptime() due to weird TypeError.
-                aired = datetime.datetime(*(time.strptime(aired[0], '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
-            except ValueError:
+            if aired:
+                try:
+                    # Need to use equivelent for datetime.strptime() due to weird TypeError.
+                    aired = datetime.datetime(*(time.strptime(aired[0], '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
+                except ValueError:
+                    aired = ''
+            else:
                 aired = ''
             CheckAutoplay(name, _URL_, iconimage.replace('336x189', '832x468'), plot, aired=aired)
 

@@ -6,9 +6,9 @@
 </category>
 <category label="Streams">
     <setting id="streams_autoplay" label="30205" type="bool" default="true" />
-    <setting id="catchup_source" label="30210" type="enum" values="Any|Akamai|Limelight" default="0" enable="eq(-2,true)" />
-    <setting id="catchup_bitrate" label="30211" type="enum" values="Fastest|0.8 Mbps|1.0 Mbps|1.5 Mbps|1.8 Mbps|2.4 Mbps|3.1 Mbps|5.5 Mbps" default="0" enable="eq(-1,true)" />
-    <setting id="live_source" label="30220" type="enum" values="Any|Akamai|Limelight" default="0" enable="eq(-4,true)" />
-    <setting id="live_bitrate" label="30230" type="enum" values="Fastest|0.3 Mbps|0.5 Mbps|1.0 Mbps|1.5 Mbps|1.7 Mbps|2.1 Mbps|2.9 Mbs|3.6 Mbps|5.1 Mbps" default="0" enable="eq(-3,true)" />
+    <setting id="catchup_source" label="30210" type="enum" values="Any|Akamai|Limelight" default="0" enable="eq(-1,true)" />
+    <setting id="catchup_bitrate" label="30211" type="enum" values="Fastest|0.8 Mbps|1.0 Mbps|1.5 Mbps|1.8 Mbps|2.4 Mbps|3.1 Mbps|5.5 Mbps" default="0" enable="eq(-2,true)" />
+    <setting id="live_source" label="30220" type="enum" values="Any|Akamai|Limelight" default="0" enable="eq(-3,true)" />
+    <setting id="live_bitrate" label="30230" type="enum" values="Fastest|0.3 Mbps|0.5 Mbps|1.0 Mbps|1.5 Mbps|1.7 Mbps|2.1 Mbps|2.9 Mbs|3.6 Mbps|5.1 Mbps" default="0" enable="eq(-4,true)" />
 </category>
 </settings>

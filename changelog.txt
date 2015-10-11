@@ -1,3 +1,6 @@
+v1.1.1
+Fixed bug in settings dialog.
+
 v1.1.0
 Added first aired date for episodes.
 Redesigned user interface for manual stream selection and preferences dialog.

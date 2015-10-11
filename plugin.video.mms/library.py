@@ -19,6 +19,7 @@ import json
 import xbmc
 import logging
 from collections import namedtuple
+from urllib import unquote
 
 
 Source = namedtuple('Source', ['name', 'path'])
@@ -35,6 +36,12 @@ def _unstack(paths):
                 yield part
         else:
             yield path
+
+
+def _unstack_multipath(path):
+    if path.startswith("multipath://"):
+        return [unquote(subpath) for subpath in path.split("multipath://")[1].split('/') if subpath]
+    return [path]
 
 
 def _normalize_path(path):
@@ -82,8 +89,12 @@ def get_sources():
         "id": 1
     }
     response = jsonrpc(query)
-    return [Source(item['label'].encode('utf-8'), _normalize_path(item['file'].encode('utf-8')))
-            for item in response['result'].get('sources', [])]
+    sources = []
+    for item in response['result'].get('sources', []):
+        paths = _unstack_multipath(item['file'].encode('utf-8'))
+        for path in paths:
+            sources.append(Source(item['label'].encode('utf-8'), _normalize_path(path)))
+    return sources
 
 
 def _identify_source_content():

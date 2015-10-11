@@ -1,3 +1,8 @@
+[B]4.0.2[/B]
+- Fixed multi-path sources
+- Fixed bluray backup files detected as missing
+- Added .url files to the default blacklist
+
 [B]4.0.1[/B]
 - Fixed remote paths getting identified as missing on windows
 

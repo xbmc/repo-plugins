@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division
+
+import datetime
 import os
 import re
 import sys
+import time
 import urllib
+from operator import itemgetter
 
 import requests
 
@@ -352,41 +357,36 @@ def GetEpisodes(programme_id):
     # Construct URL and load HTML
     url = 'http://www.bbc.co.uk/iplayer/episodes/%s' % programme_id
     html = OpenURL(url)
-    # Extract all programmes from the page
-    match = re.compile(
-        'data-ip-id=".+?">.+?<a href="(.+?)" title="(.+?)".+?data-ip-src="(.+?)">.+?class="synopsis">(.+?)</p>',
-        re.DOTALL).findall(html)
-    # If there is only one match, this is one programme only. We can stop and get the available streams right away.
-    if len(match) == 1:
-        _URL_ = 'http://www.bbc.co.uk/%s' % match[0][0]
-        name = match[0][1]
-        iconimage = match[0][2]
-        plot = match[0][3]
-        CheckAutoplay(name, _URL_, iconimage.replace('336x189', '832x468'), plot)
-    # If there are multiple programmes on this page, we need to add them all as entries to the menu.
-    else:
-        for URL, name, iconimage, plot in match:
+
+    while True:
+        # Extract all programmes from the page
+        match = re.compile(
+            'data-ip-id=".+?">.+?<a href="(.+?)" title="(.+?)'
+            '".+?data-ip-src="(.+?)">.+?class="synopsis">(.+?)</p>'
+            '(?:.+?class="release">\s+First shown: (.+?)\n)?',
+            re.DOTALL).findall(html)
+
+        for URL, name, iconimage, plot, aired in match:
             _URL_ = 'http://www.bbc.co.uk/%s' % URL
-            CheckAutoplay(name, _URL_, iconimage.replace('336x189', '832x468'), plot)
-        # Some programmes consist of several pages, we need to parse all of them.
-        while True:
             try:
-                # Check if a next page exists and if so load it.
-                nextpage = re.compile('<span class="next bp1"> <a href=".+?page=(\d+)">').findall(html)
-                temp_url = '%s?page=%s' % (url, nextpage[0])
-                html = OpenURL(temp_url)
-                # Parse all programmes on this page and create one menu entry each.
-                match = re.compile(
-                    'data-ip-id=".+?">.+?<a href="(.+?)" title="(.+?)".+?'
-                    'data-ip-src="(.+?)">.+?class="synopsis">(.+?)</p>',
-                    re.DOTALL).findall(html)
-                for URL, name, iconimage, plot in match:
-                    _URL_ = 'http://www.bbc.co.uk/%s' % URL
-                    CheckAutoplay(name, _URL_, iconimage.replace('336x189', '832x468'), plot)
-            except:
-                break
-        xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
-        xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
+                # Need to use equivelent for datetime.strptime() due to weird TypeError.
+                aired = datetime.datetime(*(time.strptime(aired, '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
+            except ValueError:
+                aired = ''
+            CheckAutoplay(name, _URL_, iconimage.replace('336x189', '832x468'), plot, aired=aired)
+
+        # If there is only one match, this is one programme only.
+        if len(match) == 1:
+            break
+
+        # Some programmes consist of several pages, check if a next page exists and if so load it.
+        nextpage = re.compile('<span class="next bp1"> <a href=".+?page=(\d+)">').findall(html)
+        if not nextpage:
+            xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
+            xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
+            break
+        temp_url = '%s?page=%s' % (url, nextpage[0])
+        html = OpenURL(temp_url)
 
 
 def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
@@ -402,20 +402,18 @@ def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
         subtitles_url = ''
     suppliers = ['', 'Akamai', 'Limelight', 'Level3']
     bitrates = [0, 800, 1012, 1500, 1800, 2400, 3116, 5510]
-    for supplier, bitrate, url in streams[0]:
-        if (int(bitrate) == 7) or (int(bitrate) == 5):
-            TITLE = name+' - [COLOR white]%s[/COLOR] - [COLOR green]%s kbps[/COLOR]' % (
-                suppliers[supplier], bitrates[bitrate])
-        elif (int(bitrate) == 6) or (int(bitrate) == 3):
-            TITLE = name+' - [COLOR white]%s[/COLOR] - [COLOR yellow]%s kbps[/COLOR]' % (
-                suppliers[supplier], bitrates[bitrate])
-        elif int(bitrate) == 4:
-            TITLE = name+' - [COLOR white]%s[/COLOR] - [COLOR orange]%s kbps[/COLOR]' % (
-                suppliers[supplier], bitrates[bitrate])
+    for supplier, bitrate, url, resolution in sorted(streams[0], key=itemgetter(1), reverse=True):
+        if bitrate in (5, 7):
+            color = 'green'
+        elif bitrate == 6:
+            color = 'blue'
+        elif bitrate in (3, 4):
+            color = 'yellow'
         else:
-            TITLE = name+' - [COLOR white]%s[/COLOR] - [COLOR red]%s kbps[/COLOR]' % (
-                suppliers[supplier], bitrates[bitrate])
-        AddMenuEntry(TITLE, url, 201, iconimage, description, subtitles_url)
+            color = 'orange'
+        title = name + ' - [I][COLOR %s]%0.1f Mbps[/COLOR] [COLOR lightgray]%s[/COLOR][/I]' % (
+            color, bitrates[bitrate] / 1000, suppliers[supplier])
+        AddMenuEntry(title, url, 201, iconimage, description, subtitles_url, resolution=resolution)
 
 
 def ParseStreams(stream_id):
@@ -453,7 +451,7 @@ def ParseStreams(stream_id):
                     tmp_br = 6
                 elif int(bandwidth) == 5509880:
                     tmp_br = 7
-                retlist.append((tmp_sup, tmp_br, url))
+                retlist.append((tmp_sup, tmp_br, url, resolution))
     # It may be useful to parse these additional streams as a default as they offer additional bandwidths.
     match = re.compile(
         'kind="video".+?connection href="(.+?)".+?supplier="(.+?)".+?transferFormat="(.+?)"'
@@ -489,7 +487,7 @@ def ParseStreams(stream_id):
                 tmp_br = 3
             elif int(bandwidth) <= 2410000:
                 tmp_br = 5
-            retlist.append((tmp_sup, tmp_br, url))
+            retlist.append((tmp_sup, tmp_br, url, resolution))
     match = re.compile('service="captions".+?connection href="(.+?)"').findall(html.replace('amp;', ''))
     # print "Subtitle URL: %s"%match
     # print retlist
@@ -505,11 +503,11 @@ def ParseStreams(stream_id):
     return retlist, match
 
 
-def CheckAutoplay(name, url, iconimage, plot):
+def CheckAutoplay(name, url, iconimage, plot, aired=None):
     if ADDON.getSetting('streams_autoplay') == 'true':
-        AddMenuEntry(name, url, 202, iconimage, plot, '')
+        AddMenuEntry(name, url, 202, iconimage, plot, '', aired=aired)
     else:
-        AddMenuEntry(name, url, 122, iconimage, plot, '')
+        AddMenuEntry(name, url, 122, iconimage, plot, '', aired=aired)
 
 
 def ScrapeAvailableStreams(url):
@@ -654,6 +652,7 @@ def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
         channelname: determines which channel is queried.
     """
     providers = [('ak', 'Akamai'), ('llnw', 'Limelight')]
+    streams = []
     for provider_url, provider_name in providers:
         # First we query the available streams from this website
         url = 'http://a.files.bbci.co.uk/media/live/manifesto/audio_video/simulcast/hds/uk/pc/%s/%s.f4m' % (
@@ -661,20 +660,27 @@ def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
         html = OpenURL(url)
         # Use regexp to get the different versions using various bitrates
         match = re.compile('href="(.+?)".+?bitrate="(.+?)"').findall(html.replace('amp;', ''))
-        # Add each of them to the Kodi selection menu
-        for address, bitrate in match:
-            url = address.replace('f4m', 'm3u8')
-            # For easier selection use colors to indicate high and low bitrate streams
-            if int(bitrate) > 2100:
-                title = name + ' - [COLOR white]%s[/COLOR] - [COLOR green]%s kbps[/COLOR]' % (provider_name, bitrate)
-            elif int(bitrate) > 1000:
-                title = name + ' - [COLOR white]%s[/COLOR] - [COLOR yellow]%s kbps[/COLOR]' % (provider_name, bitrate)
-            elif int(bitrate) > 600:
-                title = name + ' - [COLOR white]%s[/COLOR] - [COLOR orange]%s kbps[/COLOR]' % (provider_name, bitrate)
-            else:
-                title = name + ' - [COLOR white]%s[/COLOR] - [COLOR red]%s kbps[/COLOR]' % (provider_name, bitrate)
-            # Finally add them to the selection menu.
-            AddMenuEntry(title, url, 201, iconimage, '', '')
+        # Add provider name to the stream list.
+        streams.extend([list(stream) + [provider_name] for stream in match])
+
+    # Add each stream to the Kodi selection menu.
+    for address, bitrate, provider_name in sorted(streams, key=lambda x: int(x[1]), reverse=True):
+        url = address.replace('f4m', 'm3u8')
+        # For easier selection use colors to indicate high and low bitrate streams
+        bitrate = int(bitrate)
+        if bitrate > 2100:
+            color = 'green'
+        elif bitrate > 1000:
+            color = 'yellow'
+        elif bitrate > 600:
+            color = 'orange'
+        else:
+            color = 'red'
+
+        title = name + ' - [I][COLOR %s]%0.1f Mbps[/COLOR] [COLOR white]%s[/COLOR][/I]' % (
+            color, bitrate / 1000, provider_name)
+        # Finally add them to the selection menu.
+        AddMenuEntry(title, url, 201, iconimage, '', '')
 
 
 def OpenURL(url):
@@ -734,47 +740,64 @@ def get_params():
                 param[splitparams[0]] = splitparams[1]
     return param
 
-re_date = re.compile('([0-9]{1,2})[/]([0-9]{1,2})[/]([0-9]{4})')
 
-
-def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url):
+def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=None, resolution=None):
     """Adds a new line to the Kodi list of playables.
 
     It is used in multiple ways in the plugin, which are distinguished by modes.
     """
-    u = (sys.argv[0] + "?url=" + urllib.quote_plus(url) + "&mode=" + str(mode) + "&name=" +
-         urllib.quote_plus(name) + "&iconimage=" + urllib.quote_plus(iconimage) + "&description=" +
-         urllib.quote_plus(description) + "&subtitles_url=" + urllib.quote_plus(subtitles_url))
-    # print u
-    liz = xbmcgui.ListItem(label=name, label2=description, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-    # Sometimes the names contain dates, e.g. for programmes which are broadcast daily.
-    # In this case, try to extract the date from the title and add it as an InfoLabel to allow sorting by date.
-    date = re_date.findall(name)
-    if date:
-        date_string = "%s.%s.%s" % (date[0][0], date[0][1], date[0][2])
-        # print date_string
+    listitem_url = (sys.argv[0] + "?url=" + urllib.quote_plus(url) + "&mode=" + str(mode) +
+                    "&name=" + urllib.quote_plus(name) +
+                    "&iconimage=" + urllib.quote_plus(iconimage) +
+                    "&description=" + urllib.quote_plus(description) +
+                    "&subtitles_url=" + urllib.quote_plus(subtitles_url))
+
+    # Try to extract the date from the title and add it as an InfoLabel to allow sorting by date.
+    match = re.search(r'\d{1,2}/\d{1,2}/\d{4}', name)
+    if match:
+        date_dt = datetime.datetime(*(time.strptime(match.group(), '%d/%m/%Y')[0:6]))
+        date_string = date_dt.strftime('%d.%m.%Y')
+        if not aired:
+            aired = date_dt.strftime('%Y-%m-%d')
     else:
-        # Use a dummy date for all entries without a date.
-        date_string = "01.01.2999"
-    liz.setInfo("video",
-                infoLabels={"title": name,
-                            "plot": description,
-                            "plotoutline": description,
-                            "date": date_string}
-                )
-    # Modes 201-299 will create a new playable line.
-    if ((mode == 201) or (mode == 202) or (mode == 203)):
-        # print "Adding playable entry with subtitles file: %s"%subtitles_url
-        liz.setProperty("IsPlayable", "true")
-        liz.setProperty("IsFolder", "false")
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=False)
-    # Other modes will create a new directory line.
+        if aired:
+            date_string = datetime.datetime(*(time.strptime(aired, '%d/%m/%Y')[0:6])).strftime('%d.%m.%Y')
+        else:
+            # Use a dummy date for all entries without a date.
+            date_string = "01.01.1970"
+
+    # Modes 201-299 will create a new playable line, otherwise create a new directory line.
+    if mode in (201, 202, 203):
+        isFolder = False
     else:
-        liz.setProperty("IsPlayable", "false")
-        liz.setProperty("IsFolder", "true")
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
-    liz.setProperty("Property(Addon.Name)", "iPlayer WWW")
-    xbmcplugin.setContent(int(sys.argv[1]), 'movies')
+        isFolder = True
+
+    listitem = xbmcgui.ListItem(label=name, label2=description,
+                                iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+    listitem.setInfo("video", {
+        "title": name,
+        "plot": description,
+        "plotoutline": description,
+        'date': date_string,
+        'aired': aired})
+
+    video_streaminfo = {'codec': 'h264'}
+    if not isFolder:
+        if resolution:
+            resolution = resolution.split('x')
+            video_streaminfo['aspect'] = round(int(resolution[0]) / int(resolution[1]), 2)
+            video_streaminfo['width'] = resolution[0]
+            video_streaminfo['height'] = resolution[1]
+        listitem.addStreamInfo('video', video_streaminfo)
+        listitem.addStreamInfo('audio', {'codec': 'aac', 'language': 'en', 'channels': 2})
+        if subtitles_url:
+            listitem.addStreamInfo('subtitle', {'language': 'en'})
+
+    listitem.setProperty("IsPlayable", str(not isFolder).lower())
+    listitem.setProperty("IsFolder", str(isFolder).lower())
+    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
+                                url=listitem_url, listitem=listitem, isFolder=isFolder)
+    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     return True
 
 re_subtitles = re.compile('^\s*<p.*?begin=\"(.*?)\.([0-9]+)\"\s+.*?end=\"(.*?)\.([0-9]+)\"\s*>(.*?)</p>')

@@ -8,8 +8,8 @@
         <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en">Watch TV from BBC's iPlayer website</summary>
-    <description lang="en">This plugin enables (UK only) playing of TV catchup content from the BBC iPlayer website. Live TV feeds are also supported.</description>
+    <summary lang="en">Watch TV from BBC iPlayer</summary>
+    <description lang="en">This plugin (UK only) enables playing of Live and Catchup TV content from the BBC iPlayer website.</description>
     <platform>all</platform>
   </extension>
 </addon>

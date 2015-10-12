@@ -11,6 +11,11 @@ import urllib
 from operator import itemgetter
 
 import requests
+import requests.packages.urllib3
+
+import cookielib
+
+import json
 
 import xbmc
 import xbmcaddon
@@ -44,6 +49,8 @@ def CATEGORIES():
     AddMenuEntry('Categories', 'url', 103, '', '', '')
     AddMenuEntry('Search', 'url', 104, '', '', '')
     AddMenuEntry('Watch Live', 'url', 101, '', '', '')
+    AddMenuEntry('Watching', 'url', 107, '', '', '')
+    AddMenuEntry('Favourites', 'url', 108, '', '', '')
 
 
 # ListLive creates menu entries for all live channels.
@@ -724,10 +731,44 @@ def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
         AddMenuEntry(title, url, 201, iconimage, '', '')
 
 
+def GetCookies():
+    cookie_file = os.path.join(DIR_USERDATA,'iplayer.cookies')
+    cj = cookielib.LWPCookieJar(cookie_file)
+
+    if(os.path.exists(cookie_file)):
+        try:
+            cj.load(ignore_discard=True, ignore_expires=True)
+        except:
+            xbmcgui.Dialog().notification("Error", "Cookie Load Failed", xbmcgui.NOTIFICATION_ERROR)
+    else:
+        xbmcgui.Dialog().notification("Error", "Cookie No Such File", xbmcgui.NOTIFICATION_ERROR)
+    
+    return cj
+
+
 def OpenURL(url):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:38.0) Gecko/20100101 Firefox/41.0'}
-    r = requests.get(url, headers=headers)
+    cookies = GetCookies()
+    r = requests.get(url, headers=headers, cookies=cookies)
+    for cookie in r.cookies:
+        cookies.set_cookie(cookie)
+    cookies.save(ignore_discard=True, ignore_expires=True)
     return r.content
+
+
+def OpenURLPost(url, post_data):
+    headers = {
+               'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:38.0) Gecko/20100101 Firefox/41.0',
+               'Host':'ssl.bbc.co.uk',
+               'Accept':'*/*',
+               'Referer':'https://ssl.bbc.co.uk/id/signin',
+               'Content-Type':'application/x-www-form-urlencoded'}
+    cookies = GetCookies()
+    r = requests.post(url, headers=headers, data=post_data, allow_redirects=False, cookies=cookies)
+    for cookie in r.cookies:
+        cookies.set_cookie(cookie)
+    cookies.save(ignore_discard=True, ignore_expires=True)
+    return r
 
 
 def PlayStream(name, url, iconimage, description, subtitles_url):
@@ -930,6 +971,70 @@ def download_subtitles(url):
     return outfile
 
 
+def SignInBBCiD():
+    #Below is required to get around an ssl issue
+    requests.packages.urllib3.disable_warnings()
+    sign_in_url="https://ssl.bbc.co.uk/id/signin"
+    
+    username=ADDON.getSetting('bbc_id_username')
+    password=ADDON.getSetting('bbc_id_password')
+    
+    post_data={
+               'unique': username, 
+               'password': password, 
+               'rememberme':'0'}
+    r = OpenURLPost(sign_in_url, post_data)
+    if (r.status_code == 302):
+        xbmcgui.Dialog().notification("BBCiD Sign In", "Successful")
+    else:
+        xbmcgui.Dialog().notification("BBCiD Sign In", "Failed - check settings")
+
+
+def SignOutBBCiD():
+    sign_out_url="https://ssl.bbc.co.uk/id/signout"
+    OpenURL(sign_out_url)
+
+
+def StatusBBCiD():
+    status_url="https://ssl.bbc.co.uk/id/status"
+    html=OpenURL(status_url)
+    if("You are signed in." in html):
+        xbmcgui.Dialog().ok("BBC iD", "You are signed in.")
+    else:
+        xbmcgui.Dialog().ok("BBC iD", "You are currently not signed in.")
+
+
+def ListWatching():
+    #StatusBBCiD()
+    #xbmcgui.Dialog().notification("BBC iPlayer", "List Watching not implemented", xbmcgui.NOTIFICATION_ERROR)
+    identity_cookie = None
+    for cookie in GetCookies():
+        if (cookie.name == 'IDENTITY'):
+            identity_cookie = cookie.value
+            break
+    url = "https://ibl.api.bbci.co.uk/ibl/v1/user/watching?identity_cookie=%s" % identity_cookie
+    html = OpenURL(url)
+    json_data = json.loads(html)
+    watching_list = json_data.get('watching').get('elements')
+    for watching in watching_list:
+        programme = watching.get('programme')
+        name = programme.get('title')
+        programme_id = programme.get('id')
+        AddMenuEntry(name, programme_id, 121, '', '', '')
+
+
+def ListFavourites():
+    #xbmcgui.Dialog().notification("BBC iPlayer", "List Favourites not implemented", xbmcgui.NOTIFICATION_ERROR)
+    """Scrapes all episodes of the favourites page."""
+    html = OpenURL('http://www.bbc.co.uk/iplayer/usercomponents/favourites/programmes.json')
+    json_data = json.loads(html)
+    favourites = json_data.get('programmes')
+    for favourite in favourites:
+        name = favourite.get('title')
+        programme_id = favourite.get('id')
+        AddMenuEntry(name, programme_id, 121, '', '', '')
+
+
 params = get_params()
 url = None
 name = None
@@ -964,6 +1069,8 @@ except:
     pass
 
 
+SignInBBCiD()
+
 # These are the modes which tell the plugin where to go.
 if mode is None or url is None or len(url) < 1:
     CATEGORIES()
@@ -986,6 +1093,12 @@ elif mode == 105:
 
 elif mode == 106:
     ListHighlights()
+
+elif mode == 107:
+    ListWatching()
+    
+elif mode == 108:
+    ListFavourites()
 
 # Modes 121-199 will create a sub directory menu entry
 elif mode == 121:

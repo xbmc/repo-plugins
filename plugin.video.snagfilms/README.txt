@@ -2,8 +2,9 @@ plugin.video.snagfilms
 ================
 
 
-XBMC Addon for Snagfilms website
+Kodi Addon for Snagfilms website
 
+Version 1.0.10 Website changes
 Version 1.0.9 Website changes
 Version 1.0.8 Website changes
 Version 1.0.7 website change, added retry on html request

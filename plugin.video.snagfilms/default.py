@@ -1,20 +1,17 @@
 # -*- coding: utf-8 -*-
-# snagfilms XBMC Addon
+# Snagfilms Kodi Video Addon
 
 import sys
 import httplib
 
 import urllib, urllib2, cookielib, datetime, time, re, os, string
 import xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs, xbmc
-import cgi, gzip
-from StringIO import StringIO
-import json
+import zlib,json,HTMLParser
+h = HTMLParser.HTMLParser()
 
 
 USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25'
-GENRE_TV  = "TV"
 UTF8          = 'utf-8'
-MAX_PER_PAGE  = 25
 
 addon         = xbmcaddon.Addon('plugin.video.snagfilms')
 __addonname__ = addon.getAddonInfo('name')
@@ -32,49 +29,24 @@ def log(txt):
     message = '%s: %s' % (__addonname__, txt.encode('ascii', 'ignore'))
     xbmc.log(msg=message, level=xbmc.LOGDEBUG)
 
-def cleanname(name):    
-    return name.replace('&apos;',"'").replace('&#8217;',"'").replace('&amp;','&').replace('&#39;',"'").replace('&quot;','"').replace('&nbsp;',' ')
 
-def demunge(munge):
-        try:
-            munge = urllib.unquote_plus(munge).decode(UTF8)
-        except:
-            pass
-        return munge
+defaultHeaders = {'User-Agent':USER_AGENT, 'Accept':"application/json, text/javascript, text/html,*/*", 'Accept-Encoding':'gzip,deflate,sdch', 'Accept-Language':'en-US,en;q=0.8'}
 
-def getRequest(url, user_data=None, headers = {'User-Agent':USER_AGENT, 'Accept':"text/html", 'Accept-Encoding':'gzip,deflate,sdch', 'Accept-Language':'en-US,en;q=0.8'}  ):
+def getRequest(url, udata=None, headers = defaultHeaders):
+   log("getRequest URL:"+str(url))
+   req = urllib2.Request(url.encode(UTF8), udata, headers)
+   try:
+      response = urllib2.urlopen(req)
+      page = response.read()
+      if response.info().getheader('Content-Encoding') == 'gzip':
+         log("Content Encoding == gzip")
+         page = zlib.decompress(page, zlib.MAX_WBITS + 16)
+   except:
+      page = ""
+   return(page)
 
 
-      retries = 0
-      while retries < 2:
-           try:
-              req = urllib2.Request(url.encode(UTF8), user_data, headers)
 
-              try:
-                 response = urllib2.urlopen(req)
-                 if response.info().getheader('Content-Encoding') == 'gzip':
-                    log("Content Encoding == gzip")
-                    buf = StringIO( response.read())
-                    f = gzip.GzipFile(fileobj=buf)
-                    link1 = f.read()
-                 else:
-                    link1=response.read()
-              except:
-                 link1 = ""
-
-              link1 = str(link1).replace('\n','')
-              return(link1)
-
-           except urllib2.HTTPError,e:
-              if e.code == 500:
-                     dialog = xbmcgui.Dialog()
-                     ok = dialog.ok(__addonname__, __language__(31000))
-                     break
-              retries += 1
-              xbmc.sleep(2)
-              continue
-           else:
-              break
 
 def getSources(fanart):
               dolist = [('http://www.snagfilms.com/categories/','GM', 30002, icon),('http://www.snagfilms.com/shows/','GM', 30003, icon),('ABC','GH', 30015, icon)]
@@ -84,13 +56,14 @@ def getSources(fanart):
                   liz  = xbmcgui.ListItem(name,'',img,img)
                   liz.setProperty('fanart_image', addonfanart)
                   xbmcplugin.addDirectoryItem(int(sys.argv[1]), '%s?url=%s&mode=%s' % (sys.argv[0],qp(url), mode), liz, True)
+              xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 def getShows(fanart):
     ilist=[]
     html = getRequest('http://www.snagfilms.com/shows/')
-    cats = re.compile('image:(.+?)}').findall(html)
+    cats = re.compile('image:(.+?)}',re.DOTALL).findall(html)
     for blob in cats:
-      c_vars = re.compile("'(.+?)'").findall(blob)
+      c_vars = re.compile("'(.+?)'",re.DOTALL).findall(blob)
       img  = c_vars[0].encode(UTF8)
       name = urllib.unquote_plus(str(c_vars[2]).replace('\\x','%')).encode(UTF8)
       plot = name
@@ -98,11 +71,12 @@ def getShows(fanart):
       if url.startswith('/show'):
           mode = 'GC'
           u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
-          liz=xbmcgui.ListItem(name, '','DefaultFolder.png', img)
+          liz=xbmcgui.ListItem(name, '',None, img)
           liz.setInfo( 'Video', { "Title": name, "Plot": plot })
           liz.setProperty('fanart_image', addonfanart)
           ilist.append((u, liz, True))
     xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
 
@@ -110,7 +84,7 @@ def getMovies(murl):
     ilist=[]
     murl = uqp(murl)
     html = getRequest(murl)
-    html = re.compile('Snag.page.data = (.+?)];').search(html).group(1)
+    html = re.compile('Snag.page.data = (.+?)];',re.DOTALL).search(html).group(1)
     html = html + ']'
     a = json.loads(html)
     a = a[3]['data']['items']
@@ -124,19 +98,21 @@ def getMovies(murl):
        if 'shows' in murl: mode ='GC'
        else: mode = 'GT'
        u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(gurl), qp(name), mode)
-       liz=xbmcgui.ListItem(name, '','DefaultFolder.png', img)
+       liz=xbmcgui.ListItem(name, '',None, img)
        liz.setInfo( 'Video', { "Title": name, "Plot": plot })
        liz.setProperty('fanart_image', addonfanart)
        ilist.append((u, liz, True))
     xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
 def getMovieType(url, name):
     ilist=[]
     url = uqp(url)
     (url, img) = url.split('#',1)
-    html = getRequest('http://www.snagfilms.com%s' % url)
-    html = re.compile('Snag.page.data = (.+?)];').search(html).group(1)
+    if not 'http://' in url: url = 'http://www.snagfilms.com%s' % url
+    html = getRequest(url)
+    html = re.compile('Snag.page.data = (.+?)];',re.DOTALL).search(html).group(1)
     html = html + ']'
     a = json.loads(html)
     mode = 'GG'
@@ -147,12 +123,13 @@ def getMovieType(url, name):
          plot = name
          gurl = url +'#'+item["id"]
          u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(gurl), qp(name), mode)
-         liz=xbmcgui.ListItem(name, '','DefaultFolder.png', img)
+         liz=xbmcgui.ListItem(name, '',None, img)
          liz.setInfo( 'Video', { "Title": name, "Plot": plot })
          liz.setProperty('fanart_image', addonfanart)
          ilist.append((u, liz, True))
       except: pass
     xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
 
@@ -160,17 +137,19 @@ def getGenre(url):
     ilist=[]
     url = uqp(url)
     (url, id) = url.split('#',1)
-    html = getRequest('http://www.snagfilms.com%s' % url)
-    html = re.compile('Snag.page.data = (.+?)];').search(html).group(1)
+    if not 'http://' in url: url = 'http://www.snagfilms.com%s' % url
+    html = getRequest(url)
+    html = re.compile('Snag.page.data = (.+?)];',re.DOTALL).search(html).group(1)
     html = html + ']'
     a = json.loads(html)
     for b in a[1:]:
-      try:
-       if b["id"] == id:
+       try:    z = b["id"]
+       except: continue
+       if z == id:
          c = b['data']['items']
          for item in c:
-            name = cleanname(item['title']).encode(UTF8)
-            plot = cleanname(item['description']).encode(UTF8)
+            name = h.unescape(item['title'])
+            plot = h.unescape(item['description'])
             u  = "%s?url=%s&mode=GV" % (sys.argv[0], qp(item['id']))
             img  = item['images']['poster']
             liz=xbmcgui.ListItem(name, '','DefaultFolder.png', img)
@@ -179,8 +158,8 @@ def getGenre(url):
             liz.setProperty('IsPlayable', 'true')
             liz.setProperty('mimetype', 'video/x-msvideo')
             ilist.append((u, liz, False))
-      except: pass
     xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
 def getSearch(sid):
@@ -192,12 +171,9 @@ def getSearch(sid):
 
          url2 = 'http://www.snagfilms.com/'
          user_data = urllib.urlencode({'url': x_url})
-         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0', 
-                    'Accept' : '*/*',
-                    'Referer' : 'http://www.snagfilms.com%s' % (x_url),
-                    'X-Requested-With' : 'XMLHttpRequest',
-                    'Origin': 'http://www.snagfilms.com'}
 
+         headers = defaultHeaders
+         headers['X-Requested-With'] = 'XMLHttpRequest'
          cj = cookielib.CookieJar()
          opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
          urllib2.install_opener(opener)
@@ -206,23 +182,17 @@ def getSearch(sid):
 
          url2 = 'http://www.snagfilms.com/apis/user/incrementPageView'
          user_data = urllib.urlencode({'url': x_url})
-         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Fi refox/11.0',
-                    'Accept' : '*/*',
-                    'Referer' : 'http://www.snagfilms.com%s' % (x_url),
-                    'X-Requested-With' : 'XMLHttpRequest',
-                    'Origin': 'http://www.snagfilms.com'}
          html = getRequest(url2, user_data, headers)
 
          s_url = 'http://www.snagfilms.com/apis/search.json?searchTerm=%s&type=film&limit=50' % (search)
          html = getRequest(s_url, None, headers)
-         shows = re.compile('{"id":"(.+?)".+?"title":"(.+?)".+?"imageUrl":"(.+?)"').findall(html)
+         shows = re.compile('{"id":"(.+?)".+?"title":"(.+?)".+?"imageUrl":"(.+?)"',re.DOTALL).findall(html)
          ilist=[]
          for sid, name, simg in shows:
              u = "%s?url=%s&mode=GV" %(sys.argv[0], uqp(sid))
              img = uqp(simg)
-             img = img.split('url=',1)[1]
              plot = name
-             liz=xbmcgui.ListItem(name, '','DefaultFolder.png', img)
+             liz=xbmcgui.ListItem(name, '',None, img)
              liz.setInfo( 'Video', { "Title": name, "Plot": plot })
              liz.setProperty('fanart_image', addonfanart)
              liz.setProperty('mimetype', 'video/x-msvideo')
@@ -233,18 +203,18 @@ def getSearch(sid):
 
          s_url = 'http://www.snagfilms.com/apis/search.json?searchTerm=%s&type=show&limit=50' % (search)
          html = getRequest(s_url, None, headers)
-         shows = re.compile('{"id":"(.+?)".+?"title":"(.+?)".+?"permaLink":"(.+?)".+?"imageUrl":"(.+?)"').findall(html)
+         shows = re.compile('{"id":"(.+?)".+?"title":"(.+?)".+?"permaLink":"(.+?)".+?"imageUrl":"(.+?)"',re.DOTALL).findall(html)
          ilist =[]
          for sid, name, surl, simg in shows:
              u = "%s?url=%s&mode=GC" %(sys.argv[0], uqp(surl))
              img = uqp(simg)
-             img = img.split('url=',1)[1]
              plot = name
-             liz=xbmcgui.ListItem(name, '','DefaultFolder.png', img)
+             liz=xbmcgui.ListItem(name, '',None, img)
              liz.setInfo( 'Video', { "Title": name, "Plot": plot })
              liz.setProperty('fanart_image', addonfanart)
              ilist.append((u, liz, True))
          xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
 def getCats(c_url, sort_type='popular'):
@@ -256,28 +226,21 @@ def getCats(c_url, sort_type='popular'):
     urllib2.install_opener(opener)
 
     html = getRequest(cat_url)
-    x_url = re.compile('rel="canonical" href="(.+?)"').search(html).group(1)
-    try:    showid = re.compile('data-content-id="(.+?)"').search(html).group(1)
+    x_url = re.compile('rel="canonical" href="(.+?)"',re.DOTALL).search(html).group(1)
+    try:    showid = re.compile('data-content-id="(.+?)"',re.DOTALL).search(html).group(1)
     except: showid = ''
 
     url3 = 'http://www.snagfilms.com/apis/show/%s' % (showid)
     url2 = 'http://www.snagfilms.com/apis/user/incrementPageView'
     user_data = urllib.urlencode({'url': x_url})
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0', 
-               'Accept' : '*/*',
-               'Referer' : 'http://www.snagfilms.com%s' % (c_url),
-               'X-Requested-With' : 'XMLHttpRequest', 
-               'Origin': 'http://www.snagfilms.com'}
+
+    headers = defaultHeaders
+    headers['X-Requested-With'] = 'XMLHttpRequest'
+
     html = getRequest(url2, user_data, headers)
 
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0', 
-               'Accept' : 'application/json, text/javascript, */*',
-               'Referer' : 'http://www.snagfilms.com%s' % (c_url),
-               'X-Requested-With' : 'XMLHttpRequest', 
-               'Origin': 'http://www.snagfilms.com'}
-
     html = getRequest(url3, None , headers)
-    shows = re.compile('{"id":"(.+?)".+?"title":"(.+?)".+?"logline":"(.+?)".+?"primaryCategory".+?"title":"(.+?)".+?{"height".+?"src":"(.+?)"').findall(html)
+    shows = re.compile('{"id":"(.+?)".+?"title":"(.+?)".+?"logline":"(.+?)".+?"primaryCategory".+?"title":"(.+?)".+?{"height".+?"src":"(.+?)"',re.DOTALL).findall(html)
     ilist=[]
     for sid, name, sdesc, sgenre, simg in shows:
       if ('url=' in simg):
@@ -286,8 +249,8 @@ def getCats(c_url, sort_type='popular'):
       if not ('ytimg' in simg):
           u = "%s?url=%s&mode=GV" %(sys.argv[0], uqp(sid))
           img = simg
-          plot = cleanname(sdesc)
-          liz=xbmcgui.ListItem(name, '','DefaultFolder.png', img)
+          plot = h.unescape(sdesc)
+          liz=xbmcgui.ListItem(name, '',None, img)
           liz.setInfo( 'Video', { "Title": name, "Plot": plot })
           liz.setProperty('fanart_image', addonfanart)
           liz.setProperty('mimetype', 'video/x-msvideo')
@@ -297,19 +260,20 @@ def getCats(c_url, sort_type='popular'):
           ytid = simg.split('/')[4]
           u = 'plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=%s' % (ytid)
           img = simg
-          plot = cleanname(sdesc)
-          liz=xbmcgui.ListItem(name, '','DefaultFolder.png', img)
+          plot = h.unescape(sdesc)
+          liz=xbmcgui.ListItem(name, '',None, img)
           liz.setInfo( 'Video', { "Title": name, "Plot": plot })
           liz.setProperty('fanart_image', addonfanart)
           liz.setProperty('IsPlayable', 'true')
           ilist.append((u, liz, False))
     xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
 
 def getVideo(sid):
     html = getRequest('http://www.snagfilms.com/api/assets.jsp?id=%s' % (sid))
-    playlist = re.compile('"bitrate" : (.+?),.+?"streamName" : "(.+?)"').findall(html)
+    playlist = re.compile('"bitrate" : (.+?),.+?"streamName" : "(.+?)"',re.DOTALL).findall(html)
     try:
        bitrates = [500, 1500, 2500, 5000, 7000, 9500, 15000]
        try:
@@ -338,13 +302,14 @@ parms = {}
 try:
     parms = dict( arg.split( "=" ) for arg in ((sys.argv[2][1:]).split( "&" )) )
     for key in parms:
-       parms[key] = demunge(parms[key])
+      try:    parms[key] = urllib.unquote_plus(parms[key]).decode(UTF8)
+      except: pass
 except:
     parms = {}
 
 p = parms.get
 
-mode = p('mode', None)
+mode = p('mode',None)
 
 if mode==  None:  getSources(p('fanart'))
 elif mode=='GV':  getVideo(p('url'))
@@ -354,10 +319,6 @@ elif mode=='GC':  getCats(p('url'))
 elif mode=='GH':  getSearch(p('url'))
 elif mode=='GT':  getMovieType(p('url'),p('name'))
 elif mode=='GG':  getGenre(p('url'))
-
-
-xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
 
 
 

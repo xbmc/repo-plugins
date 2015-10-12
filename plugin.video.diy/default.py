@@ -83,7 +83,7 @@ def getShows():
        a.append((icon, url, name, '%s Videos' % vidcnt))
    except: pass
    m = re.compile('<div class="video-embed-metadata">(.+?)<div class="container-aside">', re.DOTALL).search(html)
-   b = re.compile('<img class="" src="(.+?)".+?<a href="(.+?)">(.+?)<.+?>(.+?)<.+?</li',re.DOTALL).findall(html, m.start(1),m.end(1))
+   b = re.compile('<img class="" data-src="(.+?)".+?<a href="(.+?)">(.+?)<.+?>(.+?)<.+?</li',re.DOTALL).findall(html, m.start(1),m.end(1))
    a.extend(b)
    for img, url, name, vidcnt in a:
        name=name.strip()

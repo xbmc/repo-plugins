@@ -370,7 +370,7 @@ def ListHighlights():
             else:
                 CheckAutoplay(name, episode_url, iconimage, plot, aired=aired)
     # Finally add all programmes which have been identified as part of a group before.
-    for episode in list(reversed(OrderedDict((x[1], x) for x in reversed(episodelist)).values())):
+    for episode in list(OrderedDict((x[1], x) for x in episodelist).values()):
         episode_url = "http://www.bbc.co.uk/iplayer/episode/%s" % episode[0]
         CheckAutoplay(episode[1], episode_url, episode[3], episode[2], episode[4])
     

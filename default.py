@@ -283,23 +283,56 @@ def ListHighlights():
     All entries are scraped of the intro page and the pages linked from the intro page.
     """
     html = OpenURL('http://www.bbc.co.uk/iplayer')
+    # Match all regular groups.
     match1 = re.compile(
-        '<p class=" typo typo--goose">.+?'
-        '<a href="/iplayer/group/(.+?)" '
-        'class="grouped-items__title grouped-items__title--desc stat">'
-        '<strong>(.+?)</strong></a>.+?<em>(.+?)</em>',
+        'data-group-name="(.+?)".+?'
+        'href="/iplayer/group/(.+?)".+?'
+        '<em>(.+?)</em>',
         re.DOTALL).findall(html.replace('amp;', ''))
-    for episode_id, name, num_episodes in match1:
+    for name, episode_id, num_episodes in match1:
         AddMenuEntry('Collection: %s - %s available programmes' % (
             name, num_episodes), episode_id, 127, '', '', '')
+    # Match special groups. Usually this is just Exclusive content.
     match1 = re.compile(
         'href="http://www.bbc.co.uk/iplayer/group/(.+?)"\n'
-        'class="single-item single-item--promotion stat"'
-        '.+?<h1 class="single-item__title typo typo--skylark"><strong>(.+?)</strong></h1>\n'
-        '.+?<h2 class="single-item__subtitle typo typo--canary">(.+?)</h2>',
+        'class="single-item single-item--promotion stat".+?'
+        '<strong>(.+?)</strong>.+?'
+        'typo--canary">(.+?)<',
         re.DOTALL).findall(html)
     for episode_id, name, plot in match1:
         AddMenuEntry('Collection: %s' % (name), episode_id, 127, '', plot, '')
+    # Match groups again
+    # We need to do this to get the previewed episodes for groups.
+    match1 = re.compile(
+        'data-group-name="(.+?)".+?'
+        'data-group-type="(.+?)"(.+?)</ul>',
+        re.DOTALL).findall(html.replace('amp;', ''))
+    # Some programmes show up twice in HTML, once inside the groups, once outside.
+    # We need to parse both to avoid duplicates and to make sure we get all of them.
+    episodelist = []
+    for group_name, group_type, more in match1:
+        match2 = re.compile(
+            'href="/iplayer/episode/(.+?)/.+?'
+            'typo--skylark"><strong>(.+?)</strong>(.+?)</li>',
+            re.DOTALL).findall(more)
+        for episode_id, name, evenmore in match2:
+            # The next two lines require verification.
+            # At the time of writing these lines, no series-catchup group was available to test.
+            if group_type == 'series-catchup':
+                name = "%s, %s" % (group_name, name)
+            match3 = re.compile(
+                'typo--canary">(.+?)<',
+                re.DOTALL).findall(evenmore)
+            if match3:
+                name = "%s: %s" % (name, match3[0])
+            episodelist.append(
+                [episode_id,
+                name,
+                'This programme is part of the collection: %s' % group_name,
+                'DefaultVideo.png',
+                '']
+                )
+    # Match all individual episodes in Highlights.
     match1 = re.compile(
         'href="/iplayer/episode/(.+?)/.+?\n'
         'class="single-item stat".+?'
@@ -321,10 +354,24 @@ def ListHighlights():
             aired = ''
         sub_match = re.compile(
             'class="single-item__subtitle.+?>(.+?)<', re.DOTALL).findall(subtitle)
-        if len(sub_match) == 1:
-            CheckAutoplay("%s: %s" % (name, sub_match[0]), episode_url, iconimage, plot, aired=aired)
-        else:
-            CheckAutoplay(name, episode_url, iconimage, plot, aired=aired)
+        # We need to make sure not to list episodes which are part of a group twice.
+        # If we already identified an episode as part of a group, add information to the list and continue.
+        add_entry = True
+        for n,i in enumerate(episodelist):
+            if i[0]==episode_id:
+                episodelist[n][2]=plot
+                episodelist[n][3]=iconimage
+                episodelist[n][4]=aired
+                add_entry = False
+        if add_entry:
+            if len(sub_match) == 1:
+                CheckAutoplay("%s: %s" % (name, sub_match[0]), episode_url, iconimage, plot, aired=aired)
+            else:
+                CheckAutoplay(name, episode_url, iconimage, plot, aired=aired)
+    # Finally add all programmes which have been identified as part of a group before.
+    for episode in episodelist:
+        episode_url = "http://www.bbc.co.uk/iplayer/episode/%s" % episode[0]
+        CheckAutoplay(episode[1], episode_url, episode[3], episode[2], episode[4])
 
 
 def GetGroups(url):

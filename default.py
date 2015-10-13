@@ -9,6 +9,7 @@ import sys
 import time
 import urllib
 from operator import itemgetter
+from collections import OrderedDict
 
 import requests
 
@@ -290,7 +291,7 @@ def ListHighlights():
         '<em>(.+?)</em>',
         re.DOTALL).findall(html.replace('amp;', ''))
     for name, episode_id, num_episodes in match1:
-        AddMenuEntry('Collection: %s - %s available programmes' % (
+        AddMenuEntry(' Collection: %s - %s available programmes' % (
             name, num_episodes), episode_id, 127, '', '', '')
     # Match special groups. Usually this is just Exclusive content.
     match1 = re.compile(
@@ -300,7 +301,7 @@ def ListHighlights():
         'typo--canary">(.+?)<',
         re.DOTALL).findall(html)
     for episode_id, name, plot in match1:
-        AddMenuEntry('Collection: %s' % (name), episode_id, 127, '', plot, '')
+        AddMenuEntry(' Collection: %s' % (name), episode_id, 127, '', plot, '')
     # Match groups again
     # We need to do this to get the previewed episodes for groups.
     match1 = re.compile(
@@ -369,10 +370,11 @@ def ListHighlights():
             else:
                 CheckAutoplay(name, episode_url, iconimage, plot, aired=aired)
     # Finally add all programmes which have been identified as part of a group before.
-    for episode in episodelist:
+    for episode in list(reversed(OrderedDict((x[1], x) for x in reversed(episodelist)).values())):
         episode_url = "http://www.bbc.co.uk/iplayer/episode/%s" % episode[0]
         CheckAutoplay(episode[1], episode_url, episode[3], episode[2], episode[4])
-
+    
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
 
 def GetGroups(url):
     """Scrapes information on a particular group, a special kind of collection."""

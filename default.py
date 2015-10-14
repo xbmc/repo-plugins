@@ -316,7 +316,6 @@ def ListHighlights():
             'typo--skylark"><strong>(.+?)</strong>(.+?)</li>',
             re.DOTALL).findall(more)
         for episode_id, name, evenmore in match2:
-            print episode_id
             # The next two lines require verification.
             # At the time of writing these lines, no series-catchup group was available to test.
             if group_type == 'series-catchup':

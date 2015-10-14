@@ -9,7 +9,6 @@ import sys
 import time
 import urllib
 from operator import itemgetter
-from collections import OrderedDict
 
 import requests
 
@@ -317,6 +316,7 @@ def ListHighlights():
             'typo--skylark"><strong>(.+?)</strong>(.+?)</li>',
             re.DOTALL).findall(more)
         for episode_id, name, evenmore in match2:
+            print episode_id
             # The next two lines require verification.
             # At the time of writing these lines, no series-catchup group was available to test.
             if group_type == 'series-catchup':
@@ -326,13 +326,18 @@ def ListHighlights():
                 re.DOTALL).findall(evenmore)
             if match3:
                 name = "%s: %s" % (name, match3[0])
-            episodelist.append(
-                [episode_id,
-                name,
-                'This programme is part of the collection: %s' % group_name,
-                'DefaultVideo.png',
-                '']
-                )
+            add_entry = True
+            for n,i in enumerate(episodelist):
+                if i[0]==episode_id:
+                    add_entry = False
+            if add_entry:
+                episodelist.append(
+                    [episode_id,
+                    name,
+                    'This programme is part of the collection: %s' % group_name,
+                    'DefaultVideo.png',
+                    '']
+                    )
     # Match all individual episodes in Highlights.
     match1 = re.compile(
         'href="/iplayer/episode/(.+?)/.+?\n'
@@ -370,10 +375,10 @@ def ListHighlights():
             else:
                 CheckAutoplay(name, episode_url, iconimage, plot, aired=aired)
     # Finally add all programmes which have been identified as part of a group before.
-    for episode in list(OrderedDict((x[1], x) for x in episodelist).values()):
+    for episode in episodelist:
         episode_url = "http://www.bbc.co.uk/iplayer/episode/%s" % episode[0]
         CheckAutoplay(episode[1], episode_url, episode[3], episode[2], episode[4])
-    
+
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
 
 def GetGroups(url):

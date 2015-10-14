@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.ifc"
+       name="IFC"
+       version="1.0.1"
+       provider-name="t1m">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">IFC - Independent Film Channel</summary>
+    <description lang="en">IFC (formerly the Independent Film Channel) is an American cable and satellite television network that is owned by AMC Networks. Programming on the channel includes original comedies, acquired series, and fan favorite films that are "always on, slightly off."</description>
+    <disclaimer lang="en">Feel free to use this script. For information visit the wiki.</disclaimer>
+    <platform>all</platform>
+    <language>en</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum></forum>
+    <website>www.ifc.com</website>
+    <email></email>
+    <source>https://github.com/learningit/plugin.video.ifc</source>
+  </extension>
+</addon>

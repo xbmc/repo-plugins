@@ -1,0 +1,4 @@
+Version 1.0.1 Initial release
+Version 1.0.2 cleaned up addon.xml
+Version 1.0.3 fixed feed and views
+Version 1.0.4 fix for unicode issues

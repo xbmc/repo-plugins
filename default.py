@@ -353,10 +353,13 @@ def ListHighlights():
         aired = re.compile(
             '.+?First shown: (.+?)</p>',
             re.DOTALL).findall(more)
-        try:
-            # Need to use equivelent for datetime.strptime() due to weird TypeError.
-            aired = datetime.datetime(*(time.strptime(aired[0], '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
-        except ValueError:
+        if aired:
+            try:
+                # Need to use equivelent for datetime.strptime() due to weird TypeError.
+                aired = datetime.datetime(*(time.strptime(aired[0], '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
+            except ValueError:
+                aired = ''
+        else:
             aired = ''
         sub_match = re.compile(
             'class="single-item__subtitle.+?>(.+?)<', re.DOTALL).findall(subtitle)

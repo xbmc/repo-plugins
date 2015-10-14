@@ -394,6 +394,21 @@ def Search():
     EvaluateSearch(NEW_URL)
 
 
+def ParseAired(aired):
+    if aired:
+        try:
+            # Need to use equivelent for datetime.strptime() due to weird TypeError.
+            aired = datetime.datetime(*(time.strptime(aired, '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
+        except ValueError:
+            aired = ''
+    else:
+        aired = ''
+    return aired
+
+
+def ParseImageUrl(url):
+    return url.replace("{recipe}", "288x162")
+
 def GetEpisodes(programme_id):
     """Gets all programmes corresponding to a certain programme ID."""
     # Construct URL and load HTML
@@ -831,7 +846,7 @@ def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=N
     listitem_url = (sys.argv[0] + "?url=" + urllib.quote_plus(url) + "&mode=" + str(mode) +
                     "&name=" + urllib.quote_plus(name) +
                     "&iconimage=" + urllib.quote_plus(iconimage) +
-                    "&description=" + urllib.quote_plus(description) +
+                    "&description=" + urllib.quote_plus(description) + 
                     "&subtitles_url=" + urllib.quote_plus(subtitles_url))
 
     # Try to extract the date from the title and add it as an InfoLabel to allow sorting by date.
@@ -1005,8 +1020,6 @@ def StatusBBCiD():
 
 
 def ListWatching():
-    #StatusBBCiD()
-    #xbmcgui.Dialog().notification("BBC iPlayer", "List Watching not implemented", xbmcgui.NOTIFICATION_ERROR)
     identity_cookie = None
     for cookie in GetCookies():
         if (cookie.name == 'IDENTITY'):
@@ -1018,9 +1031,18 @@ def ListWatching():
     watching_list = json_data.get('watching').get('elements')
     for watching in watching_list:
         programme = watching.get('programme')
-        name = programme.get('title')
-        programme_id = programme.get('id')
-        AddMenuEntry(name, programme_id, 121, '', '', '')
+        episode = watching.get('episode')
+        title = episode.get('title')
+        subtitle = episode.get('subtitle')
+        if(subtitle):
+            title += ", " + subtitle
+        episode_id = episode.get('id')
+        plot = episode.get('synopses').get('large')
+        aired = episode.get('release_date')
+        image_url = ParseImageUrl(episode.get('images').get('standard'))
+        aired = ParseAired(aired)
+        url="http://www.bbc.co.uk/iplayer/episode/%s" % (episode_id) 
+        CheckAutoplay(title, url, image_url, plot, aired)
 
 
 def ListFavourites():
@@ -1028,11 +1050,19 @@ def ListFavourites():
     """Scrapes all episodes of the favourites page."""
     html = OpenURL('http://www.bbc.co.uk/iplayer/usercomponents/favourites/programmes.json')
     json_data = json.loads(html)
-    favourites = json_data.get('programmes')
-    for favourite in favourites:
-        name = favourite.get('title')
-        programme_id = favourite.get('id')
-        AddMenuEntry(name, programme_id, 121, '', '', '')
+    #favourites = json_data.get('favourites')
+    programmes = json_data.get('programmes')
+    for programme in programmes:
+        id = programme.get('id')
+        url = "http://www.bbc.co.uk/iplayer/brand/%s" % (id)
+        title = programme.get('title')
+        initial_child = programme.get('initial_children')[0]
+        image=initial_child.get('images')
+        image_url=ParseImageUrl(image.get('standard'))
+        synopses = initial_child.get('synopses')
+        plot = synopses.get('small')
+        aired = ParseAired(initial_child.get('release_date'))
+        CheckAutoplay(title, url, image_url, plot, aired)
 
 
 params = get_params()

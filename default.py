@@ -65,6 +65,7 @@ def ListLive():
         ('bbc_two_scotland', 'bbc_two', 'BBC Two Scotland'),
         ('bbc_two_northern_ireland_digital', 'bbc_two', 'BBC Two Northern Ireland'),
         ('bbc_two_wales_digital', 'bbc_two', 'BBC Two Wales'),
+        ('bbc_one_london', 'bbc_one', 'BBC One London'),
     ]
     for id, img, name in channel_list:
         iconimage = xbmc.translatePath(

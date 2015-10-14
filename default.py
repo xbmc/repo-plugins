@@ -65,6 +65,7 @@ def ListLive():
         ('bbc_two_scotland', 'bbc_two', 'BBC Two Scotland'),
         ('bbc_two_northern_ireland_digital', 'bbc_two', 'BBC Two Northern Ireland'),
         ('bbc_two_wales_digital', 'bbc_two', 'BBC Two Wales'),
+        ('bbc_one_london', 'bbc_one', 'BBC One London'),
     ]
     for id, img, name in channel_list:
         iconimage = xbmc.translatePath(
@@ -290,7 +291,7 @@ def ListHighlights():
         '<em>(.+?)</em>',
         re.DOTALL).findall(html.replace('amp;', ''))
     for name, episode_id, num_episodes in match1:
-        AddMenuEntry('Collection: %s - %s available programmes' % (
+        AddMenuEntry(' Collection: %s - %s available programmes' % (
             name, num_episodes), episode_id, 127, '', '', '')
     # Match special groups. Usually this is just Exclusive content.
     match1 = re.compile(
@@ -300,7 +301,7 @@ def ListHighlights():
         'typo--canary">(.+?)<',
         re.DOTALL).findall(html)
     for episode_id, name, plot in match1:
-        AddMenuEntry('Collection: %s' % (name), episode_id, 127, '', plot, '')
+        AddMenuEntry(' Collection: %s' % (name), episode_id, 127, '', plot, '')
     # Match groups again
     # We need to do this to get the previewed episodes for groups.
     match1 = re.compile(
@@ -325,13 +326,18 @@ def ListHighlights():
                 re.DOTALL).findall(evenmore)
             if match3:
                 name = "%s: %s" % (name, match3[0])
-            episodelist.append(
-                [episode_id,
-                name,
-                'This programme is part of the collection: %s' % group_name,
-                'DefaultVideo.png',
-                '']
-                )
+            add_entry = True
+            for n,i in enumerate(episodelist):
+                if i[0]==episode_id:
+                    add_entry = False
+            if add_entry:
+                episodelist.append(
+                    [episode_id,
+                    name,
+                    'This programme is part of the collection: %s' % group_name,
+                    'DefaultVideo.png',
+                    '']
+                    )
     # Match all individual episodes in Highlights.
     match1 = re.compile(
         'href="/iplayer/episode/(.+?)/.+?\n'
@@ -373,6 +379,7 @@ def ListHighlights():
         episode_url = "http://www.bbc.co.uk/iplayer/episode/%s" % episode[0]
         CheckAutoplay(episode[1], episode_url, episode[3], episode[2], episode[4])
 
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
 
 def GetGroups(url):
     """Scrapes information on a particular group, a special kind of collection."""

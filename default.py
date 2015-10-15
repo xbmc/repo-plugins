@@ -22,6 +22,8 @@ import xbmcaddon
 import xbmcgui
 import xbmcplugin
 
+from LoginPopup import LoginPopup
+
 __addonid__ = "plugin.video.iplayerwww"
 __plugin_handle__ = int(sys.argv[1])
 
@@ -838,7 +840,7 @@ def get_params():
     return param
 
 
-def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=None, resolution=None):
+def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=None, resolution=None, logged_in=False):
     """Adds a new line to the Kodi list of playables.
 
     It is used in multiple ways in the plugin, which are distinguished by modes.
@@ -847,7 +849,8 @@ def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=N
                     "&name=" + urllib.quote_plus(name) +
                     "&iconimage=" + urllib.quote_plus(iconimage) +
                     "&description=" + urllib.quote_plus(description) + 
-                    "&subtitles_url=" + urllib.quote_plus(subtitles_url))
+                    "&subtitles_url=" + urllib.quote_plus(subtitles_url) +
+                    "&logged_in=" + str(logged_in))
 
     # Try to extract the date from the title and add it as an InfoLabel to allow sorting by date.
     match = re.search(r'\d{1,2}/\d{1,2}/\d{4}', name)
@@ -1014,12 +1017,35 @@ def StatusBBCiD():
     status_url="https://ssl.bbc.co.uk/id/status"
     html=OpenURL(status_url)
     if("You are signed in." in html):
-        xbmcgui.Dialog().ok("BBC iD", "You are signed in.")
+        return True
+    return False
+
+
+def CheckLogin(logged_in):
+    if(logged_in == True or StatusBBCiD() == True):
+        logged_in = True
+        return True
+    elif ADDON.getSetting('bbc_id_enabled') != 'true':
+        xbmcgui.Dialog().ok("BBCiD Sign In", "BBCiD set-up required, please check settings.")
     else:
-        xbmcgui.Dialog().ok("BBC iD", "You are currently not signed in.")
+        attemptLogin = xbmcgui.Dialog().yesno("BBCiD Sign In", "Do you wish to sign in?")
+        if attemptLogin:
+            SignInBBCiD()
+            if(StatusBBCiD()):
+                xbmcgui.Dialog().notification("BBCiD Sign In", "Successful")
+                logged_in = True;
+                return True;
+            else:
+                xbmcgui.Dialog().notification("BBCiD Sign In", "Failed - check settings")
+    
+    return False
 
+def ListWatching(logged_in):
 
-def ListWatching():
+    if(CheckLogin(logged_in) == False):
+        CATEGORIES()
+        return
+
     identity_cookie = None
     for cookie in GetCookies():
         if (cookie.name == 'IDENTITY'):
@@ -1045,8 +1071,12 @@ def ListWatching():
         CheckAutoplay(title, url, image_url, plot, aired)
 
 
-def ListFavourites():
-    #xbmcgui.Dialog().notification("BBC iPlayer", "List Favourites not implemented", xbmcgui.NOTIFICATION_ERROR)
+def ListFavourites(logged_in):
+
+    if(CheckLogin(logged_in) == False):
+        CATEGORIES()
+        return
+    
     """Scrapes all episodes of the favourites page."""
     html = OpenURL('http://www.bbc.co.uk/iplayer/usercomponents/favourites/programmes.json')
     json_data = json.loads(html)
@@ -1072,6 +1102,7 @@ mode = None
 iconimage = None
 description = None
 subtitles_url = None
+logged_in = False
 
 try:
     url = urllib.unquote_plus(params["url"])
@@ -1097,11 +1128,12 @@ try:
     subtitles_url = urllib.unquote_plus(params["subtitles_url"])
 except:
     pass
+try:
+    logged_in = params['logged_in'] == 'True'
+except:
+    pass
 
 
-SignInBBCiD()
-
-# These are the modes which tell the plugin where to go.
 if mode is None or url is None or len(url) < 1:
     CATEGORIES()
 
@@ -1125,10 +1157,10 @@ elif mode == 106:
     ListHighlights()
 
 elif mode == 107:
-    ListWatching()
-    
+    ListWatching(logged_in)
+
 elif mode == 108:
-    ListFavourites()
+    ListFavourites(logged_in)
 
 # Modes 121-199 will create a sub directory menu entry
 elif mode == 121:

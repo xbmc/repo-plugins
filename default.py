@@ -22,8 +22,6 @@ import xbmcaddon
 import xbmcgui
 import xbmcplugin
 
-from LoginPopup import LoginPopup
-
 __addonid__ = "plugin.video.iplayerwww"
 __plugin_handle__ = int(sys.argv[1])
 

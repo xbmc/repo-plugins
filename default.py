@@ -1132,6 +1132,7 @@ except:
     pass
 
 
+# These are the modes which tell the plugin where to go.
 if mode is None or url is None or len(url) < 1:
     CATEGORIES()
 

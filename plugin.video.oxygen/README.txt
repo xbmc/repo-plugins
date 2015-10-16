@@ -3,6 +3,7 @@ plugin.video.oxygen
 
 Kodi Addon for Oxygen Channel website
 
+Version 1.0.7 website fix
 Version 1.0.6 cache fix
 Version 1.0.5 website changes
 Version 1.0.4 Website change

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <!--General-->
+    <category label="30110">
+        <setting id="video_quality" type="select" label="30114" values="64kbps|180kbps|320kbps|450kbps|600kbps|950kbps|1500kbps" default="320kbps" />
+        <setting type="sep"/>
+        <setting id="enable_subtitles" type="bool" default="true" label="30111" />
+        <setting type="sep"/>
+        <setting id="subtitle_language" type="text" default="" label="30113" enable="eq(-2,true)"/>        
+    </category>
+</settings>

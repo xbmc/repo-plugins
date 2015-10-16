@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30000">TED Talks</string>
+    
+    <!--Categories-->
+    <string id="30001">Legújabb Beszélgetések</string>
+    <string id="30002">Felszólalók</string>
+    <string id="30004">Keresés</string>
+    <string id="30005">Kedvencek</string>
+    <string id="30007">Téma</string>
+    
+    <!--NavItems-->
+    <string id="30020"> Következő</string>
+    <string id="30021"> Előző</string>
+    
+    <!--Category Descriptions  30031-30033 from ted.com-->
+    <!--Newest-->
+    <string id="30031">TED egy kicsi non-profit szervezet aminek célpontjában az Ötlet áll amit érdemes megosztani. A webhely kezdete 1984-re nyúlik vissza egy konferenciára ami 3 külön világot hozott össze: Technológia, Szórakozás, Tervezés. Azóta a kör csak bővült. Az éves TED konferenciával együtt Long Beach, Californiában és a globális konferenciával Oxfordban, a TED magába foglalja a díjnyertes TEDTalks videóoldalt is, valamint a nyílt fordítási programot, az új TEDx közösségi programot, az ezévi TEDIndia konferenciát és az éves TED díjat.</string>
+    <!--Speakers-->
+    <string id="30032">Az előadók választéka a TED-nél kibővült tudósokkal, filozófusokkal, zenészekkel, vallási vezetőkkel, filantrópokkal és még sokan másokkal. Az évek folyamán a TED felszólalók között volt Bill Gates, Frank Gehry, Jane Goodall, Al Gore, Billy Graham, Peter Gabriel, Quincy Jones, Bono.</string>
+    <!--Search-->
+    <string id="30034">Beszédek keresése a TED.com-on</string>
+    <!--Favorites-->
+    <string id="30035">A kedvenc beszédeid</string>
+    
+    <!--Errors-->
+    <string id="30050">Bejelentkezési hiba</string>
+    <string id="30051">A felhasználó nem volt hitelesíthető</string>
+    
+    <!--Settings-->
+    <string id="30075">Belépési adatok</string>
+    <string id="30070">felhasználónév</string>
+    <string id="30071">jelszó</string>
+    
+    <!--Context Menu-->
+    <!--<string id="13347">Queue item</string>from system-->
+    <string id="30090">Hozzáadás a TED.com kedvencekhez</string>
+    <string id="30091">A kedvencekhez adás sikeres volt</string>
+    <string id="30092">A kedvencekhez adás nem sikerült</string>
+    <string id="30093">Eltávolítás a TED.com kedvencekből</string>
+    <string id="30094">A kedvencekből való eltávolítás sikeres</string>
+    <string id="30095">A kedvencekből való eltávolítás nem sikerült</string>
+    <string id="30096">Videó letöltése</string>
+</strings>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.ted.talks" name="TED Talks" version="4.2.6" provider-name="rwparris2, moreginger">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.elementtree" version="1.2.7"/>
+    <import addon="script.module.parsedom" version="0.9.1"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <!-- There are subtitles on TED in many languages,
+    and this plugin is (partially) internationalized in several,
+    but it seems better to claim the one we are sure of for now. -->
+    <language>en</language>
+    <summary lang="en">Watch talks from TED.com, a site dedicated to 'Ideas Worth Spreading'</summary>
+    <summary lang="hu">Beszédek megtekintése a TED.com-ról</summary>
+    <summary lang="pt">Veja debates de TED.com, um site dedicado a 'Ideias com Valor'</summary>
+    <description lang="en">TED is a small nonprofit devoted to Ideas Worth Spreading. It started out (in 1984) as a conference bringing together people from three worlds: Technology, Entertainment, Design. Since then its scope has become ever broader.</description>
+    <description lang="hu">TED egy kicsi non-profit szervezet aminek célpontjában az Ötlet áll amit érdemes megosztani. A webhely kezdete 1984-re nyúlik vissza egy konferenciára ami 3 külön világot hozott össze: Technológia, Szórakozás, Tervezés. Azóta a kör csak bővült.</description>
+    <description lang="pt">TED é uma organização sem fins lucrativos dedicada a 'Ideias com Valor'. Foi iniciada em 1984 como uma conferência que pretendia juntar pessoas de três mundos: Tecnologia, Entretenimento e Design. Desde ai tornou-se muito mais abrangente.</description>
+    <platform>all</platform>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum>http://forum.xbmc.org/showthread.php?tid=36866</forum>
+    <website>https://github.com/moreginger/xbmc-plugin.video.ted.talks</website>
+    <source>https://github.com/moreginger/xbmc-plugin.video.ted.talks.git</source>
+  </extension>
+</addon>

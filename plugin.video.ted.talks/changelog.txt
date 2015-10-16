@@ -1,0 +1,117 @@
+[B]Version 4.2.6[/B]
+Fix topics (issue#54)
+
+[B]Version 4.2.5[/B]
+Added topics browsing (pull#52 thanks to Tibo-lg)
+Removed themes category which has been replaced by topics (issue#53)
+
+[B]Version 4.2.4[/B]
+Fix issue attempting to show subtitles when there aren't any (issue#50 issue#51)
+
+[B]Version 4.2.3[/B]
+Fix workaround for newest talks with Python <2.7 (issue#41)
+
+[B]Version 4.2.2[/B]
+Fix issue that stopped plugin loading (issue#47)
+
+[B]Version 4.2.1[/B]
+Fix speakers (issue#45)
+Fix newest talks for Python <2.7 (issue#41)
+
+[B]Version 4.2.0[/B]
+Updates to support new TED site (issue#45)
+Added support for talk search (issue#12)
+Fix issue when trying to guess ISO code for language (issue#39)
+Fix setting video duration (issue#41)
+Performance improvements for Themes browser (issue#33)
+Grouped speakers list by pages instead of by letter (issue#46)
+
+[B]Version 4.1.9[/B]
+Fix playing talks where the title text has no colon (issue#38)
+
+[B]Version 4.1.8[/B]
+Allow video quality to be set (issue#37)
+Playback of Vimeo-hosted talks (issue#24)
+Fix playback of Youtube-hosted talks
+Performance improvements for Newest Talks and video startup (issue#33)
+
+[B]Version 4.1.7[/B]
+Fix subtitles (issue#35) thanks to omega32
+Major version bump for XBMC Frodo
+
+[B]Version 3.1.6[/B]
+Fix getting subtitles using default xbmc language (issue#30)
+
+[B]Version 3.1.5[/B]
+Fix subtitles (issue#29)
+Fix for listItem API change in XBMC on Raspberry Pi builds and/or Frodo (issue#28)
+
+[B]Version 3.1.4[/B]
+Respect order of custom language codes when fetching subtitles (issue#26)
+Allow subtitles to be disabled (issue#27)
+
+[B]Version 3.1.3[/B]
+Fix subtitles (issue#25)
+
+[B]Version 3.1.2[/B]
+Fix themes (issue#22)
+
+[B]Version 3.1.1[/B]
+Support subtitles with language subcodes, such as pt-br (issue#10)
+
+[B]Version 3.1.0[/B]
+Subtitle support (issue#10)
+Fix favorites (issue#17)
+Speakers list divided by first letter of last name (issue#18)
+
+[B]Version 3.0.1[/B]
+Full speaker list restored (issue#14)
+
+[B]Version 3.0.0[/B]
+Bump major version for Eden repository
+
+[B]Version 2.3.1[/B]
+Works on Dharma again
+Newest Talks now work on Eden+Win32
+Remove duplicates of some themes
+
+[B]Version 2.3.0[/B]
+Get new talks from RSS feeds
+Update themes scraper to cope with website changes
+Icons for themes
+Log correct version number for plugin on startup
+
+[B]Version 2.2.6[/B]
+Fix for problem introduced in 2.2.5 where certain talks could not be played.
+
+[B]Version 2.2.5[/B]
+Fixed playback of certain videos would fail (thanks to moreginger)
+
+[B]Version 2.2.4[/B]
+Fixed newest talks - handle unicode characters (thanks to moreginger)
+Fixed newest talks - prev/next buttons not showing (thanks to helmut mikulcik)
+Fixed favorites - not working (thanks to jherrob a gmail com)
+
+[B]Version 2.2.3[/B]
+Ted talks moved most videos to youtube
+
+[B]Version 2.2.2[/B]
+
+- fixed: download link names (reqexp strings) changed
+- updated version number to the current one
+
+thanks to zedDB
+
+[B]Version 2.2.1[/B]
+
+- fixed: thumbs size changed
+
+[B]Version 2.2.0[/B]
+
+- use "xbmc.translatePath()" to handle cookie better
+- fix: error in listing speakers due to non ascii character
+  thanks to Colin Guthrie
+
+[B]Version 2.1.9[/B]
+
+- Updated Icon

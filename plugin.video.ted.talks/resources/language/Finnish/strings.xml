@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings> <!--Finnish  24/12/2009-->
+    <string id="30000">TED Talks</string>
+    
+    <!--Categories-->
+    <string id="30001">Uusimmat keskustelut</string>
+    <string id="30002">Puhujat</string>
+    <string id="30004">Haku</string>
+    <string id="30005">Suosikit</string>
+    <string id="30007">Aiheet</string>
+    
+    <!--NavItems-->
+    <string id="30020"> Seuraava</string>
+    <string id="30021"> Aiempi</string>
+    
+    <!--Search-->
+    <string id="30034">Etsi keskusteluja TED.com:sta</string>
+    <!--Favorites-->
+    <string id="30035">Suosikki keskustelut.</string>
+    
+    <!--Errors-->
+    <string id="30050">Kirjautumisvirhe</string>
+    <string id="30051">Käyttäjän todentaminen ei onnistu</string>
+    
+    <!--Settings-->
+    <string id="30075">Kirjautuminen</string>
+    <string id="30070">Käyttäjänimi</string>
+    <string id="30071">Salasana</string>
+    
+    <!--Context Menu-->
+    <!--<string id="13347">Queue item</string>from system-->
+    <string id="30090">Lisää TED.com suosikkeihin</string>
+    <string id="30091">Suosikkeihin lisääminen onnistui</string>
+    <string id="30092">Suosikkeihin lisääminen epäonnistui</string>
+    <string id="30093">Poista TED.com suosikkeista</string>
+    <string id="30094">Suosikkeista poistaminen onnistui</string>
+    <string id="30095">Suosikkeista poistaminen epäonnistui</string>
+    <string id="30096">Lataa Video</string>
+</strings>

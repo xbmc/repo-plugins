@@ -1,3 +1,5 @@
+v1.3.1
+- Fixes due to website changes
 v1.3.0
 - Fixed minor errors
 

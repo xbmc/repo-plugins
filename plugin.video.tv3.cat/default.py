@@ -177,7 +177,7 @@ def listSections(url):
     
     
     for i in match:
-        d = re.compile('<li><a href="(.+)">(.+)</a></li>').findall(i)
+        d = re.compile('<li>[^<]+<a href="(.+)">[\n\r\s]+(.+)[\n\r\s]+</a>').findall(i)
         for program in d:
             url = program[0]
             titol = program[1]
@@ -340,7 +340,7 @@ def listProgramesAZ(url, letters):
     
     
     for i in match:
-        d = re.compile('<li><a href="(.+)">(.+)</a></li>').findall(i)
+        d = re.compile('<li>[^<]+<a href="(.+)">[\n\r\s]+(.+)[\n\r\s]+</a>').findall(i)
         for program in d:
             url = program[0]
             titol = program[1]

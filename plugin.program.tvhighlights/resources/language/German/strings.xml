@@ -1,0 +1,29 @@
+<!-- TV Highlights Grabber TV Digital -->
+<!-- German Language File -->
+
+<strings>
+    <string id="30010">TV Highlights</string>
+    <string id="30011">TV Highlights Rubrik</string>
+
+    <string id="30100">TV Highlights Filminformation</string>
+    <string id="30101">Genre:</string>
+    <string id="30102">Rating:</string>
+    <string id="30103">Beschreibung:</string>
+    <string id="30104">TV Highlights des Tages</string>
+    <string id="30105">Rubrik</string>
+    <string id="30106">Dienst gestartet</string>
+
+    <string id="30110">Allgemein</string>
+    <string id="30111">Mastermode</string>
+    <string id="30112">Splitmode</string>
+    <string id="30113">Zeige SKY Sender</string>
+    <string id="30114">Info bei Systemstart</string>
+
+    <string id="30120">Spielfilm</string>
+    <string id="30121">Serie</string>
+    <string id="30122">Sport</string>
+    <string id="30123">Unterhaltung</string>
+    <string id="30124">Doku und Info</string>
+    <string id="30125">Kinder</string>
+</strings>
+

@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<includes>
+        <include name="HomeRecentlyAddedTVHighlightsTodayInfo">
+                        <control type="group" id="5777">
+                                <left>160</left>
+                                <top>50</top>
+                                <visible>Container(9000).Hasfocus(12) + !Skin.HasSetting(HomepageHideRecentlyAddedVideo)</visible>
+                                <include>VisibleFadeEffect</include>
+                                <control type="label">
+                                        <description>Title label</description>
+                                        <left>240</left>
+                                        <top>310</top>
+                                        <height>20</height>
+                                        <width>480</width>
+                                        <label>$ADDON[plugin.program.tvhighlights  30104]</label>
+                                        <align>center</align>
+                                        <aligny>center</aligny>
+                                        <font>font12_title</font>
+                                        <textcolor>white</textcolor>
+                                        <shadowcolor>black</shadowcolor>
+                                </control>
+                                <control type="list" id="58051">
+                                        <animation effect="slide" start="0,0" end="120,0" time="0" condition="StringCompare(Container(58051).NumItems,3)">conditional</animation>
+                                        <animation effect="slide" start="0,0" end="240,0" time="0" condition="StringCompare(Container(58051).NumItems,2)">conditional</animation>
+                                        <animation effect="slide" start="0,0" end="360,0" time="0" condition="StringCompare(Container(58051).NumItems,1)">conditional</animation>
+                                        <left>0</left>
+                                        <top>0</top>
+                                        <width>960</width>
+                                        <height>330</height>
+                                        <onleft>58051</onleft>
+                                        <onright>58051</onright>
+                                        <onup>20</onup>
+                                        <ondown condition="System.HasAddon(script.globalsearch)">608</ondown>
+                                        <ondown condition="!System.HasAddon(script.globalsearch)">603</ondown>
+                                        <viewtype label="535">list</viewtype>
+                                        <pagecontrol>-</pagecontrol>
+                                        <scrolltime>200</scrolltime>
+                                        <orientation>Horizontal</orientation>
+                                        <itemlayout height="220" width="240">
+                                                <control type="image">
+                                                        <description>background</description>
+                                                        <left>0</left>
+                                                        <top>0</top>
+                                                        <width>240</width>
+                                                        <height>310</height>
+                                                        <texture border="15">RecentAddedBack.png</texture>
+                                                </control>
+
+                                                <control type="image">
+                                                        <description>background2</description>
+
+                                                        <left>20</left>
+                                                        <top>195</top>
+                                                        <width>80</width>
+                                                        <height>40</height>
+
+                                                        <texture border="15">RecentAddedBackWhite.png</texture>
+                                                </control>
+
+                                                <control type="image">
+                                                        <left>10</left>
+                                                        <top>10</top>
+                                                        <width>220</width>
+                                                        <height>155</height>
+                                                        <aspectratio>scale</aspectratio>
+                                                        <texture background="true">$INFO[ListItem.Thumb]</texture>
+                                                        <bordertexture border="5">button-nofocus.png</bordertexture>
+                                                        <bordersize>5</bordersize>
+                                                </control>
+
+
+
+                                                <control type="image">
+                                                        <left>20</left>
+                                                        <top>175</top>
+                                                        <width>80</width>
+                                                        <height>80</height>
+                                                        <aspectratio>keep</aspectratio>
+                                                        <align>left</align>
+                                                        <aligny>top</aligny>
+
+                                                        <texture background="false">$INFO[ListItem.ActualIcon]</texture>
+                                                        <bordersize>5</bordersize>
+                                                </control>
+
+
+
+                                                <control type="label" id="starttime">
+                                                        <left>120</left>
+                                                        <top>195</top>
+                                                        <width>100</width>
+                                                        <height>20</height>
+                                                        <font>font10</font>
+                                                        <textcolor>grey2</textcolor>
+                                                        <shadowcolor>black</shadowcolor>
+                                                        <selectedcolor>selected</selectedcolor>
+                                                        <align>right</align>
+                                                        <aligny>top</aligny>
+                                                        <label>$INFO[ListItem.Label2]</label>
+                                                </control>
+                                                <control type="label" id="movietitle">
+                                                        <left>20</left>
+                                                        <top>168</top>
+                                                        <width>200</width>
+                                                        <height>20</height>
+                                                        <font>font12</font>
+                                                        <textcolor>white</textcolor>
+                                                        <shadowcolor>black</shadowcolor>
+                                                        <selectedcolor>selected</selectedcolor>
+                                                        <align>center</align>
+                                                        <aligny>center</aligny>
+                                                        <label>$INFO[ListItem.Label]</label>
+                                                </control>
+                                                <control type="label" id="moviecomment">
+                                                        <left>20</left>
+                                                        <top>270</top>
+                                                        <width>200</width>
+                                                        <height>20</height>
+                                                        <font>font12</font>
+                                                        <textcolor>grey2</textcolor>
+                                                        <shadowcolor>black</shadowcolor>
+                                                        <selectedcolor>selected</selectedcolor>
+                                                        <align>left</align>
+                                                        <aligny>top</aligny>
+                                                        <label>$INFO[ListItem.Property(comment)]</label>
+                                                </control>
+
+                                                <control type="label" id="moviegenre">
+                                                        <left>120</left>
+                                                        <top>215</top>
+                                                        <width>100</width>
+                                                        <height>20</height>
+                                                        <font>font10</font>
+                                                        <textcolor>grey2</textcolor>
+                                                        <shadowcolor>black</shadowcolor>
+                                                        <selectedcolor>selected</selectedcolor>
+                                                        <align>right</align>
+                                                        <aligny>top</aligny>
+                                                        <label>$INFO[ListItem.Property(channel)]</label>
+                                                </control>
+
+                                                <control type="label" id="country">
+                                                        <left>120</left>
+                                                        <top>255</top>
+                                                        <width>100</width>
+                                                        <height>20</height>
+                                                        <font>font10</font>
+                                                        <textcolor>grey2</textcolor>
+                                                        <shadowcolor>black</shadowcolor>
+                                                        <selectedcolor>selected</selectedcolor>
+                                                        <align>right</align>
+                                                        <aligny>top</aligny>
+                                                        <label>$INFO[ListItem.Property(country)]</label>
+                                                </control>
+
+                                                <control type="label" id="extrainfos">
+                                                        <left>20</left>
+                                                        <top>245</top>
+                                                        <width>200</width>
+                                                        <height>20</height>
+                                                        <font>font10</font>
+                                                        <textcolor>grey2</textcolor>
+                                                        <shadowcolor>black</shadowcolor>
+                                                        <selectedcolor>selected</selectedcolor>
+                                                        <align>center</align>
+                                                        <aligny>top</aligny>
+                                                        <label>$INFO[ListItem.Property(extrainfos)]</label>
+                                                </control>
+
+
+
+                                        </itemlayout>
+                                        <focusedlayout height="220" width="240">
+                                                <control type="image">
+                                                        <description>background</description>
+                                                        <left>0</left>
+                                                        <top>0</top>
+                                                        <width>240</width>
+                                                        <height>310</height>
+                                                        <texture border="15">RecentAddedBack.png</texture>
+                                                </control>
+                                                <control type="image">
+                                                        <left>10</left>
+                                                        <top>10</top>
+                                                        <width>220</width>
+                                                        <height>155</height>
+                                                        <aspectratio>scale</aspectratio>
+                                                        <texture background="true">$INFO[ListItem.Icon]</texture>
+                                                        <bordertexture border="5">folder-focus.png</bordertexture>
+                                                        <bordersize>5</bordersize>
+                                                        <visible>Control.HasFocus(58051)</visible>
+                                                </control>
+                                                <control type="image">
+                                                        <left>10</left>
+                                                        <top>10</top>
+                                                        <width>220</width>
+                                                        <height>155</height>
+                                                        <aspectratio>scale</aspectratio>
+                                                        <texture>$INFO[ListItem.Icon]</texture>
+                                                        <bordertexture border="5">button-nofocus.png</bordertexture>
+                                                        <bordersize>5</bordersize>
+                                                        <visible>!Control.HasFocus(58051)</visible>
+                                                </control>
+
+                                                <control type="image">
+                                                        <description>background2</description>
+                                                        <left>20</left>
+                                                        <top>195</top>
+                                                        <width>80</width>
+                                                        <height>40</height>
+                                                        <texture border="15">RecentAddedBackWhite.png</texture>
+                                                </control>
+
+
+                                                <control type="image">
+                                                        <left>20</left>
+                                                        <top>175</top>
+                                                        <width>80</width>
+                                                        <height>80</height>
+                                                        <aspectratio>keep</aspectratio>
+                                                        <texture background="false">$INFO[ListItem.ActualIcon]</texture>
+                                                        <bordersize>0</bordersize>
+                                                </control>
+
+
+
+                                                <control type="label">
+                                                        <left>120</left>
+                                                        <top>195</top>
+                                                        <width>100</width>
+                                                        <height>20</height>
+                                                        <font>font10</font>
+                                                        <textcolor>grey2</textcolor>
+                                                        <shadowcolor>black</shadowcolor>
+                                                        <selectedcolor>selected</selectedcolor>
+                                                        <align>right</align>
+                                                        <aligny>top</aligny>
+                                                        <label>$INFO[ListItem.Label2]</label>
+                                                </control>
+                                                <control type="label">
+                                                        <left>20</left>
+                                                        <top>168</top>
+                                                        <width>200</width>
+                                                        <height>20</height>
+                                                        <font>font12</font>
+                                                        <textcolor>white</textcolor>
+                                                        <shadowcolor>black</shadowcolor>
+                                                        <selectedcolor>selected</selectedcolor>
+                                                        <align>center</align>
+                                                        <aligny>center</aligny>
+                                                        <label>$INFO[ListItem.Label]</label>
+                                                        <visible>!Control.HasFocus(58051)</visible>
+                                                </control>
+                                                <control type="label">
+                                                        <left>20</left>
+                                                        <top>168</top>
+                                                        <width>200</width>
+                                                        <height>20</height>
+                                                        <font>font12</font>
+                                                        <textcolor>blue</textcolor>
+                                                        <selectedcolor>selected</selectedcolor>
+                                                        <align>center</align>
+                                                        <aligny>center</aligny>
+                                                        <label>$INFO[ListItem.Label]</label>
+                                                        <visible>Control.HasFocus(58051)</visible>
+                                                </control>
+
+
+                                                <control type="label" id="moviecomment">
+                                                        <left>20</left>
+                                                        <top>270</top>
+                                                        <width>200</width>
+                                                        <height>20</height>
+                                                        <font>font12</font>
+                                                        <textcolor>grey2</textcolor>
+                                                        <shadowcolor>black</shadowcolor>
+                                                        <selectedcolor>selected</selectedcolor>
+                                                        <align>left</align>
+                                                        <aligny>top</aligny>
+                                                        <label>$INFO[ListItem.Property(comment)]</label>
+                                                        <visible>!Control.HasFocus(58051)</visible>
+                                                </control>
+                                                <control type="label" id="moviecommentblue">
+                                                        <left>20</left>
+                                                        <top>270</top>
+                                                        <width>200</width>
+                                                        <height>20</height>
+                                                        <font>font12</font>
+                                                        <textcolor>blue</textcolor>
+                                                        <shadowcolor>black</shadowcolor>
+                                                        <selectedcolor>selected</selectedcolor>
+                                                        <align>left</align>
+                                                        <aligny>top</aligny>
+                                                        <label>$INFO[ListItem.Property(comment)]</label>
+                                                        <visible>Control.HasFocus(58051)</visible>
+                                                </control>
+
+
+                                                <control type="label" id="moviegenre">
+                                                        <left>120</left>
+                                                        <top>215</top>
+                                                        <width>100</width>
+                                                        <height>20</height>
+                                                        <font>font10</font>
+                                                        <textcolor>grey2</textcolor>
+                                                        <shadowcolor>black</shadowcolor>
+                                                        <selectedcolor>selected</selectedcolor>
+                                                        <align>right</align>
+                                                        <aligny>top</aligny>
+                                                        <label>$INFO[ListItem.Property(channel)]</label>
+                                                </control>
+
+                                                <control type="label" id="country">
+                                                        <left>120</left>
+                                                        <top>255</top>
+                                                        <width>100</width>
+                                                        <height>20</height>
+                                                        <font>font10</font>
+                                                        <textcolor>grey2</textcolor>
+                                                        <shadowcolor>black</shadowcolor>
+                                                        <selectedcolor>selected</selectedcolor>
+                                                        <align>right</align>
+                                                        <aligny>top</aligny>
+                                                        <label>$INFO[ListItem.Property(country)]</label>
+                                                </control>
+
+                                                <control type="label" id="extrainfos">
+                                                        <left>20</left>
+                                                        <top>245</top>
+                                                        <width>200</width>
+                                                        <height>20</height>
+                                                        <font>font10</font>
+                                                        <textcolor>grey2</textcolor>
+                                                        <shadowcolor>black</shadowcolor>
+                                                        <selectedcolor>selected</selectedcolor>
+                                                        <align>center</align>
+                                                        <aligny>top</aligny>
+                                                        <label>$INFO[ListItem.Property(extrainfos)]</label>
+                                                </control>
+
+
+
+
+
+
+
+
+
+
+
+
+                                        </focusedlayout>
+                                        <content>
+                                                <item>
+                                                        <property name="channel">$INFO[Window.Property(TVHighlightsToday.1.Channel)]</property>
+                                                        <!--<property name="comment">$INFO[Window.Property(TVHighlightsToday.1.Comment)]</property>-->
+                                                        <property name="comment">$INFO[Window.Property(TVHighlightsToday.Info.Title)]</property>
+                                                        <property name="genre">$INFO[Window.Property(TVHighlightsToday.1.Genre)]</property>
+                                                        <property name="country">$INFO[Window.Property(TVHighlightsToday.1.Country)]</property>
+                                                        <property name="year">$INFO[Window.Property(TVHighlightsToday.1.Year)]</property>
+                                                        <label>$INFO[Window.Property(TVHighlightsToday.1.Title)]</label>
+                                                        <onclick>RunScript(plugin.program.tvhighlights,"?methode=infopopup&detailurl=$INFO[Window.Property(TVHighlightsToday.1.Popup)]")</onclick>
+                                                       <!-- <onclick>RunScript(plugin.program.tvhighlights,"?methode=get_tvdigital_movie_details&detailurl=$INFO[Window.Property(TVHighlightsToday.1.Popup)]")</onclick> -->
+<!--                                                        <onclick>RunScript(plugin.program.tvhighlights,"?methode=show_select_dialog")</onclick> -->
+                                                        <logo>$INFO[Window.Property(TVHighlightsToday.1.Logo)]</logo>
+                                                        <icon>$INFO[Window.Property(TVHighlightsToday.1.Logo)]</icon>
+
+                                                        <property name="extrainfos">$INFO[Window.Property(TVHighlightsToday.1.Extrainfos)]</property>
+                                                        <label2>$INFO[Window.Property(TVHighlightsToday.1.Time)]</label2>
+                                                        <thumb>$INFO[Window.Property(TVHighlightsToday.1.Thumb)]</thumb>
+                                                        <actualicon>$INFO[Window.Property(TVHighlightsToday.1.Logo)]</actualicon>
+                                                        <visible>!IsEmpty(Window.Property(TVHighlightsToday.1.Title))</visible>
+                                                </item>
+                                                <item>
+                                                        <property name="channel">$INFO[Window.Property(TVHighlightsToday.2.Channel)]</property>
+                                                        <property name="comment">$INFO[Window.Property(TVHighlightsToday.2.Comment)]</property>
+                                                        <property name="genre">$INFO[Window.Property(TVHighlightsToday.2.Genre)]</property>
+                                                        <property name="country">$INFO[Window.Property(TVHighlightsToday.2.Country)]</property>
+                                                        <property name="year">$INFO[Window.Property(TVHighlightsToday.2.Year)]</property>
+                                                        <property name="extrainfos">$INFO[Window.Property(TVHighlightsToday.2.Extrainfos)]</property>
+
+                                                        <label>$INFO[Window.Property(TVHighlightsToday.2.Title)]</label>
+                                                        <label2>$INFO[Window.Property(TVHighlightsToday.2.Time)]</label2>
+                                                        <onclick>RunScript(plugin.program.tvhighlights,"?methode=infopopup&detailurl=$INFO[Window.Property(TVHighlightsToday.2.Popup)]")</onclick>
+                                                        <thumb2>$INFO[Window.Property(TVHighlightsToday.2.Logo)]</thumb2>
+                                                        <icon>$INFO[Window.Property(TVHighlightsToday.2.Logo)]</icon>
+                                                        <thumb>$INFO[Window.Property(TVHighlightsToday.2.Thumb)]</thumb>
+                                                        <visible>!IsEmpty(Window.Property(TVHighlightsToday.2.Title))</visible>
+                                                        <actualicon>$INFO[Window.Property(TVHighlightsToday.2.Logo)]</actualicon>
+                                                </item>
+                                                <item>
+                                                        <property name="channel">$INFO[Window.Property(TVHighlightsToday.3.Channel)]</property>
+                                                        <property name="comment">$INFO[Window.Property(TVHighlightsToday.3.Comment)]</property>
+                                                        <property name="genre">$INFO[Window.Property(TVHighlightsToday.3.Genre)]</property>
+                                                        <property name="country">$INFO[Window.Property(TVHighlightsToday.3.Country)]</property>
+                                                        <property name="year">$INFO[Window.Property(TVHighlightsToday.3.Year)]</property>
+                                                        <property name="extrainfos">$INFO[Window.Property(TVHighlightsToday.3.Extrainfos)]</property>
+                                                        <label>$INFO[Window.Property(TVHighlightsToday.3.Title)]</label>
+                                                        <label2>$INFO[Window.Property(TVHighlightsToday.3.Time)]</label2>
+                                                        <onclick>RunScript(plugin.program.tvhighlights,"?methode=infopopup&detailurl=$INFO[Window.Property(TVHighlightsToday.3.Popup)]")</onclick>
+                                                        <logo>$INFO[Window.Property(TVHighlightsToday.3.Logo)]</logo>
+                                                        <icon>$INFO[Window.Property(TVHighlightsToday.3.Logo)]</icon>
+                                                        <actualicon>$INFO[Window.Property(TVHighlightsToday.3.Logo)]</actualicon>
+                                                        <thumb>$INFO[Window.Property(TVHighlightsToday.3.Thumb)]</thumb>
+                                                        <visible>!IsEmpty(Window.Property(TVHighlightsToday.3.Title))</visible>
+                                                </item>
+                                                <item>
+                                                        <property name="channel">$INFO[Window.Property(TVHighlightsToday.4.Channel)]</property>
+                                                        <property name="comment">$INFO[Window.Property(TVHighlightsToday.4.Comment)]</property>
+                                                        <property name="genre">$INFO[Window.Property(TVHighlightsToday.4.Genre)]</property>
+                                                        <property name="country">$INFO[Window.Property(TVHighlightsToday.4.Country)]</property>
+                                                        <property name="year">$INFO[Window.Property(TVHighlightsToday.4.Year)]</property>
+
+                                                        <property name="extrainfos">$INFO[Window.Property(TVHighlightsToday.4.Extrainfos)]</property>
+                                                        <label>$INFO[Window.Property(TVHighlightsToday.4.Title)]</label>
+                                                        <label2>$INFO[Window.Property(TVHighlightsToday.4.Time)]</label2>
+                                                        <onclick>RunScript(plugin.program.tvhighlights,"?methode=infopopup&detailurl=$INFO[Window.Property(TVHighlightsToday.4.Popup)]")</onclick>
+                                                        <logo>$INFO[Window.Property(TVHighlightsToday.4.Logo)]</logo>
+                                                        <icon>$INFO[Window.Property(TVHighlightsToday.4.Logo)]</icon>
+                                                        <actualicon>$INFO[Window.Property(TVHighlightsToday.4.Logo)]</actualicon>
+                                                        <thumb>$INFO[Window.Property(TVHighlightsToday.4.Thumb)]</thumb>
+                                                        <visible>!IsEmpty(Window.Property(TVHighlightsToday.4.Title))</visible>
+                                                </item>
+                                                <item>
+                                                        <property name="channel">$INFO[Window.Property(TVHighlightsToday.5.Channel)]</property>
+                                                        <property name="comment">$INFO[Window.Property(TVHighlightsToday.5.Comment)]</property>
+                                                        <property name="genre">$INFO[Window.Property(TVHighlightsToday.5.Genre)]</property>
+                                                        <property name="country">$INFO[Window.Property(TVHighlightsToday.5.Country)]</property>
+                                                        <property name="year">$INFO[Window.Property(TVHighlightsToday.5.Year)]</property>
+                                                        <property name="extrainfos">$INFO[Window.Property(TVHighlightsToday.5.Extrainfos)]</property>
+
+                                                        <label>$INFO[Window.Property(TVHighlightsToday.5.Title)]</label>
+                                                        <label2>$INFO[Window.Property(TVHighlightsToday.5.Time)]</label2>
+                                                        <onclick>RunScript(plugin.program.tvhighlights,"?methode=infopopup&detailurl=$INFO[Window.Property(TVHighlightsToday.5.Popup)]")</onclick>
+
+                                                        <logo>$INFO[Window.Property(TVHighlightsToday.5.Logo)]</logo>
+                                                        <icon>$INFO[Window.Property(TVHighlightsToday.5.Logo)]</icon>
+                                                        <actualicon>$INFO[Window.Property(TVHighlightsToday.5.Logo)]</actualicon>
+                                                        <thumb>$INFO[Window.Property(TVHighlightsToday.5.Thumb)]</thumb>
+                                                        <visible>!IsEmpty(Window.Property(TVHighlightsToday.5.Title))</visible>
+                                                </item>
+                                                <item>
+                                                        <property name="channel">$INFO[Window.Property(TVHighlightsToday.6.Channel)]</property>
+                                                        <property name="comment">$INFO[Window.Property(TVHighlightsToday.6.Comment)]</property>
+                                                        <property name="genre">$INFO[Window.Property(TVHighlightsToday.6.Genre)]</property>
+                                                        <property name="country">$INFO[Window.Property(TVHighlightsToday.6.Country)]</property>
+                                                        <property name="year">$INFO[Window.Property(TVHighlightsToday.6.Year)]</property>
+                                                        <property name="extrainfos">$INFO[Window.Property(TVHighlightsToday.6.Extrainfos)]</property>
+
+                                                        <label>$INFO[Window.Property(TVHighlightsToday.6.Title)]</label>
+                                                        <label2>$INFO[Window.Property(TVHighlightsToday.6.Time)]</label2>
+                                                        <onclick>RunScript(plugin.program.tvhighlights,"?methode=infopopup&detailurl=$INFO[Window.Property(TVHighlightsToday.6.Popup)]")</onclick>
+                                                        <logo>$INFO[Window.Property(TVHighlightsToday.6.Logo)]</logo>
+                                                        <icon>$INFO[Window.Property(TVHighlightsToday.6.Logo)]</icon>
+                                                        <actualicon>$INFO[Window.Property(TVHighlightsToday.6.Logo)]</actualicon>
+                                                        <thumb>$INFO[Window.Property(TVHighlightsToday.6.Thumb)]</thumb>
+                                                        <visible>!IsEmpty(Window.Property(TVHighlightsToday.6.Title))</visible>
+                                                </item>
+                                                <item>
+                                                        <property name="channel">$INFO[Window.Property(TVHighlightsToday.7.Channel)]</property>
+                                                        <property name="comment">$INFO[Window.Property(TVHighlightsToday.7.Comment)]</property>
+                                                        <property name="genre">$INFO[Window.Property(TVHighlightsToday.7.Genre)]</property>
+                                                        <property name="country">$INFO[Window.Property(TVHighlightsToday.7.Country)]</property>
+                                                        <property name="year">$INFO[Window.Property(TVHighlightsToday.7.Year)]</property>
+                                                        <property name="extrainfos">$INFO[Window.Property(TVHighlightsToday.7.Extrainfos)]</property>
+
+                                                        <label>$INFO[Window.Property(TVHighlightsToday.7.Title)]</label>
+                                                        <label2>$INFO[Window.Property(TVHighlightsToday.7.Time)]</label2>
+                                                        <onclick>RunScript(plugin.program.tvhighlights,"?methode=infopopup&detailurl=$INFO[Window.Property(TVHighlightsToday.7.Popup)]")</onclick>
+                                                        <actualicon>$INFO[Window.Property(TVHighlightsToday.7.Logo)]</actualicon>
+                                                        <logo>$INFO[Window.Property(TVHighlightsToday.7.Logo)]</logo>
+                                                        <icon>$INFO[Window.Property(TVHighlightsToday.7.Logo)]</icon>
+                                                        <thumb>$INFO[Window.Property(TVHighlightsToday.7.Thumb)]</thumb>
+                                                        <visible>!IsEmpty(Window.Property(TVHighlightsToday.7.Title))</visible>
+                                                </item>
+                                                <item>
+                                                        <property name="channel">$INFO[Window.Property(TVHighlightsToday.8.Channel)]</property>
+                                                        <property name="comment">$INFO[Window.Property(TVHighlightsToday.8.Comment)]</property>
+                                                        <property name="genre">$INFO[Window.Property(TVHighlightsToday.8.Genre)]</property>
+                                                        <property name="country">$INFO[Window.Property(TVHighlightsToday.8.Country)]</property>
+                                                        <property name="year">$INFO[Window.Property(TVHighlightsToday.8.Year)]</property>
+                                                        <property name="extrainfos">$INFO[Window.Property(TVHighlightsToday.8.Extrainfos)]</property>
+
+                                                        <label>$INFO[Window.Property(TVHighlightsToday.8.Title)]</label>
+                                                        <label2>$INFO[Window.Property(TVHighlightsToday.8.Time)]</label2>
+                                                        <onclick>RunScript(plugin.program.tvhighlights,"?methode=infopopup&detailurl=$INFO[Window.Property(TVHighlightsToday.8.Popup)]")</onclick>
+                                                        <logo>$INFO[Window.Property(TVHighlightsToday.8.Logo)]</logo>
+                                                        <icon>$INFO[Window.Property(TVHighlightsToday.8.Logo)]</icon>
+                                                        <actualicon>$INFO[Window.Property(TVHighlightsToday.8.Logo)]</actualicon>
+                                                        <thumb>$INFO[Window.Property(TVHighlightsToday.8.Thumb)]</thumb>
+                                                        <visible>!IsEmpty(Window.Property(TVHighlightsToday.8.Title))</visible>
+
+                                                </item>
+                                                <item>
+                                                        <property name="channel">$INFO[Window.Property(TVHighlightsToday.9.Channel)]</property>
+                                                        <property name="comment">$INFO[Window.Property(TVHighlightsToday.9.Comment)]</property>
+                                                        <property name="genre">$INFO[Window.Property(TVHighlightsToday.9.Genre)]</property>
+                                                        <property name="country">$INFO[Window.Property(TVHighlightsToday.9.Country)]</property>
+                                                        <property name="year">$INFO[Window.Property(TVHighlightsToday.9.Year)]</property>
+                                                        <property name="extrainfos">$INFO[Window.Property(TVHighlightsToday.9.Extrainfos)]</property>
+
+                                                        <label>$INFO[Window.Property(TVHighlightsToday.9.Title)]</label>
+                                                        <label2>$INFO[Window.Property(TVHighlightsToday.9.Time)]</label2>
+                                                        <onclick>RunScript(plugin.program.tvhighlights,"?methode=infopopup&detailurl=$INFO[Window.Property(TVHighlightsToday.9.Popup)]")</onclick>
+
+                                                        <logo>$INFO[Window.Property(TVHighlightsToday.9.Logo)]</logo>
+                                                        <icon>$INFO[Window.Property(TVHighlightsToday.9.Logo)]</icon>
+                                                        <actualicon>$INFO[Window.Property(TVHighlightsToday.9.Logo)]</actualicon>
+                                                        <thumb>$INFO[Window.Property(TVHighlightsToday.9.Thumb)]</thumb>
+                                                        <visible>!IsEmpty(Window.Property(TVHighlightsToday.9.Title))</visible>
+                                                </item>
+                                        </content>
+                                </control>
+                                <control type="button">
+                                        <description>left Arrow</description>
+                                        <left>-40</left>
+                                        <top>90</top>
+                                        <width>30</width>
+                                        <height>40</height>
+                                        <texturefocus>arrow-big-left.png</texturefocus>
+                                        <texturenofocus>arrow-big-left.png</texturenofocus>
+                                        <onclick>Control.Move(58051,-1)</onclick>
+                                        <visible>Control.HasFocus(58051) + Container(58051).HasPrevious</visible>
+                                        <include>VisibleFadeEffect</include>
+                                </control>
+                                <control type="button">
+                                        <description>right Arrow</description>
+                                        <left>970</left>
+                                        <top>90</top>
+                                        <width>30</width>
+                                        <height>40</height>
+                                        <texturefocus>arrow-big-right.png</texturefocus>
+                                        <texturenofocus>arrow-big-right.png</texturenofocus>
+                                        <onclick>Control.Move(58051,1)</onclick>
+                                        <visible>Control.HasFocus(58051) + Container(58051).HasNext</visible>
+                                        <include>VisibleFadeEffect</include>
+                                </control>
+                        </control>
+	</include>
+</includes>
+

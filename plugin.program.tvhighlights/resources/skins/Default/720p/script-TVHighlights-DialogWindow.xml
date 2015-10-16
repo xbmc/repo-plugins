@@ -1,0 +1,294 @@
+<!-- plugin.program.tvhighlights - InfoWindow - START -->
+<!-- Confluence Skin adapted -->
+<window>
+        <defaultcontrol always="true">855655</defaultcontrol>
+	<include>dialogeffect</include>
+	<controls>
+		<control type="group" id="576757">
+			<left>235</left>
+                        <top>20</top>
+                        <width>810</width>
+                        <height>680</height>
+
+	                <control type="image">
+	                        <description>background image</description>
+	                        <left>0</left>
+	                        <top>0</top>
+	                        <width>810</width>
+	                        <height>680</height>
+	                        <texture border="40">ConfluenceDialogBack2.png</texture>
+	                </control>
+	                <control type="image">
+	                        <description>Dialog Header image</description>
+	                        <left>40</left>
+	                        <top>16</top>
+	                        <width>730</width>
+	                        <height>40</height>
+	                        <texture>ConfluenceDialogHeader.png</texture>
+	                </control>
+	                <control type="label" id="1">
+	                        <description>header label</description>
+	                        <left>40</left>
+	                        <top>20</top>
+	                        <width>730</width>
+	                        <height>30</height>
+	                        <font>font13_title</font>
+	               <!--         <label>TV Highlights Filminformation</label>  -->
+	                        <label>$ADDON[plugin.program.tvhighlights  30100]</label>
+	                        <align>center</align>
+	                        <aligny>center</aligny>
+	                        <textcolor>selected</textcolor>
+	                        <shadowcolor>black</shadowcolor>
+	                </control>
+	                <control type="button" id="855655">
+	                        <description>Close Window button</description>
+	                        <left>720</left>
+	                        <top>15</top>
+	                        <width>64</width>
+	                        <height>32</height>
+	                        <label>-</label>
+	                        <font>-</font>
+	                        <onclick>PreviousMenu</onclick>
+	                        <texturefocus>DialogCloseButton-focus.png</texturefocus>
+	                        <texturenofocus>DialogCloseButton.png</texturenofocus>
+	                        <onleft>10</onleft>
+	                        <onright>10</onright>
+	                        <onup>10</onup>
+	                        <ondown>10</ondown>
+	                        <visible>system.getbool(input.enablemouse)</visible>
+	                </control>
+	
+
+
+
+                        <control type="label">
+                                  <left>20</left>
+                                  <top>60</top>
+                                  <width>770</width>
+                                  <height>36</height>
+                                  <font>font24_title</font>
+                                  <label>$INFO[Window(Home).Property(TVHighlightsToday.Info.Title)]</label>
+                                  <align>center</align>
+                                  <aligny>center</aligny>
+                        </control>
+                        <control type="label">
+                                  <left>20</left>
+                                  <top>96</top>
+                                  <width>770</width>
+                                  <height>36</height>
+                                  <font>font20_title</font>
+                                  <label>$INFO[Window(Home).Property(TVHighlightsToday.Info.Subtitle)]</label>
+                                  <align>center</align>
+                                  <aligny>center</aligny>
+                        </control>
+
+
+                        <control type="image">
+                                  <left>415</left>
+                                  <top>170</top>
+                                  <width>320</width>
+                                  <height>240</height>
+				  <texture border="15">$INFO[Window(Home).Property(TVHighlightsToday.Info.Picture)]</texture>
+                        </control>
+
+			<control type="label">
+                                  <left>60</left>
+                                  <top>360</top>
+                                  <width>310</width>
+                                  <height>15</height>
+                                  <font>font20_title</font>
+                                  <textcolor>blue</textcolor>
+                            <!--      <label>Genre:</label>  -->
+                                  <label>$ADDON[plugin.program.tvhighlights  30101]</label>
+                                  <align>left</align>
+                                  <aligny>center</aligny>
+                        </control>
+
+
+			<control type="label">
+                                  <left>60</left>
+                                  <top>400</top>
+                                  <width>310</width>
+                                  <height>10</height>
+                                  <font>font12</font>
+                                  <label>$INFO[Window(Home).Property(TVHighlightsToday.Info.Genre)]</label>
+                                  <align>left</align>
+                                  <aligny>center</aligny>
+                                  <scroll>true</scroll>
+                                  <scrollspeed>50</scrollspeed>
+                        </control>
+			<control type="label">
+                                  <left>415</left>
+                                  <top>420</top>
+                                  <width>320</width>
+                                  <height>10</height>
+                                  <font>font12</font>
+                                  <label>$INFO[Window(Home).Property(TVHighlightsToday.Info.Broadcastdetails)]</label>
+                                  <align>center</align>
+                                  <aligny>center</aligny>
+                                  <scroll>true</scroll>
+                                  <scrollspeed>50</scrollspeed>
+                        </control>
+
+
+			<control type="label">
+                                  <left>60</left>
+                                  <top>160</top>
+                                  <width>310</width>
+                                  <height>15</height>
+                                  <font>font20_title</font>
+                                  <textcolor>blue</textcolor>
+                                  <label>$ADDON[plugin.program.tvhighlights  30102]</label>
+<!--                                  <label>Rating:</label> -->
+                                  <align>left</align>
+                                  <aligny>center</aligny>
+                        </control>
+
+
+                        <control type="label">
+                                  <left>60</left>
+                                  <top>200</top>
+                                  <width>300</width>
+                                  <height>10</height>
+                                  <font>font12</font>
+                                  <label>$INFO[Window(Home).Property(TVHighlightsToday.Info.RatingType.1)]</label>
+                                  <align>left</align>
+                                  <aligny>center</aligny>
+                        </control>
+                        <control type="label">
+                                  <left>60</left>
+                                  <top>230</top>
+                                  <width>300</width>
+                                  <height>10</height>
+                                  <font>font12</font>
+                                  <label>$INFO[Window(Home).Property(TVHighlightsToday.Info.RatingType.2)]</label>
+                                  <align>left</align>
+                                  <aligny>center</aligny>
+                        </control>
+                        <control type="label">
+                                  <left>60</left>
+                                  <top>260</top>
+                                  <width>300</width>
+                                  <height>10</height>
+                                  <font>font12</font>
+                                  <label>$INFO[Window(Home).Property(TVHighlightsToday.Info.RatingType.3)]</label>
+                                  <align>left</align>
+                                  <aligny>center</aligny>
+                        </control>
+                        <control type="label">
+                                  <left>60</left>
+                                  <top>290</top>
+                                  <width>300</width>
+                                  <height>10</height>
+                                  <font>font12</font>
+                                  <label>$INFO[Window(Home).Property(TVHighlightsToday.Info.RatingType.4)]</label>
+                                  <align>left</align>
+                                  <aligny>center</aligny>
+                        </control>
+                        <control type="label">
+                                  <left>60</left>
+                                  <top>320</top>
+                                  <width>300</width>
+                                  <height>10</height>
+                                  <font>font12</font>
+                                  <label>$INFO[Window(Home).Property(TVHighlightsToday.Info.RatingType.5)]</label>
+                                  <align>left</align>
+                                  <aligny>center</aligny>
+                        </control>
+
+
+
+
+
+
+                        <control type="label">
+                                  <left>260</left>
+                                  <top>200</top>
+                                  <width>300</width>
+                                  <height>10</height>
+                                  <font>font12</font>
+                                  <label>$INFO[Window(Home).Property(TVHighlightsToday.Info.Rating.1)] / 3</label>
+                                  <align>left</align>
+                                  <aligny>center</aligny>
+                        </control>
+                        <control type="label">
+                                  <left>260</left>
+                                  <top>230</top>
+                                  <width>300</width>
+                                  <height>10</height>
+                                  <font>font12</font>
+                                  <label>$INFO[Window(Home).Property(TVHighlightsToday.Info.Rating.2)] / 3</label>
+                                  <align>left</align>
+                                  <aligny>center</aligny>
+                        </control>
+                        <control type="label">
+                                  <left>260</left>
+                                  <top>260</top>
+                                  <width>300</width>
+                                  <height>10</height>
+                                  <font>font12</font>
+                                  <label>$INFO[Window(Home).Property(TVHighlightsToday.Info.Rating.3)] / 3</label>
+                                  <align>left</align>
+                                  <aligny>center</aligny>
+                        </control>
+                        <control type="label">
+                                  <left>260</left>
+                                  <top>290</top>
+                                  <width>300</width>
+                                  <height>10</height>
+                                  <font>font12</font>
+                                  <label>$INFO[Window(Home).Property(TVHighlightsToday.Info.Rating.4)] / 3</label>
+                                  <align>left</align>
+                                  <aligny>center</aligny>
+                        </control>
+                        <control type="label">
+                                  <left>260</left>
+                                  <top>320</top>
+                                  <width>300</width>
+                                  <height>10</height>
+                                  <font>font12</font>
+                                  <label>$INFO[Window(Home).Property(TVHighlightsToday.Info.Rating.5)] / 3</label>
+                                  <align>left</align>
+                                  <aligny>center</aligny>
+                        </control>
+
+
+			<control type="label">
+                                  <left>60</left>
+                                  <top>440</top>
+                                  <width>310</width>
+                                  <height>15</height>
+                                  <font>font20_title</font>
+                                  <textcolor>blue</textcolor>
+<!--                                  <label>Beschreibung:</label> -->
+                                  <label>$ADDON[plugin.program.tvhighlights  30103]</label>
+                                  <align>left</align>
+                                  <aligny>center</aligny>
+                        </control>
+
+
+
+                        <control type="textbox">
+                                <left>60</left>
+                                <top>480</top>
+                                <width>670</width>
+                                <height>140</height>
+                                <font>font13</font>
+                                <textcolor>white</textcolor>
+                                <shadowcolor>black</shadowcolor>
+                                <selectedcolor>selected</selectedcolor>
+                                <align>left</align>
+   				<scrolltime>200</scrolltime>
+   				<autoscroll delay="5000" time="5000" repeat="10000">!IsEmpty(Window(Home).Property(TVHighlightsToday.Info.Description))</autoscroll>
+                                <label>$INFO[Window(Home).Property(TVHighlightsToday.Info.Description)]</label>
+                        </control>
+
+
+
+                </control>
+
+	</controls>
+
+</window>
+
+<!-- plugin.program.tvhighlights - InfoWindow - END -->

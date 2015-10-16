@@ -1,0 +1,41 @@
+v0.1.0
+- addon.xml fixes
+
+v0.0.9
+- Added fanart picture
+- localisation finished
+- added possibility to disable startup infopopup from service
+- added english language file
+- code cleanup
+
+v0.0.8
+- bug fix splitmode popup
+- new infowin function for skinners (XML)
+- localisation (XML)
+- grabber improvement for website bugs
+
+v0.0.7
+- added categorie dialog
+- modification of script-tvhighlights.xml
+- bug fixes
+
+v0.0.6
+- added info window
+- bug fixes
+
+v0.0.5
+- complete redesign
+- added modeselect
+  - mastermode
+  - splitmode
+- added pluginoptions controllability
+
+v0.0.4
+- added settingsoption for SKY-TV
+
+v0.0.3
+- lots of bugfixes
+- PayTV Filter
+
+v0.0.2
+- initial release

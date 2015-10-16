@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30110">
+        <setting id="mastermode" type="bool" label="30111" default="true"/>
+        <setting id="showsky" type="bool" label="30113" default="true"/>
+        <setting id="enableinfo" type="bool" label="30114" default="true"/>
+    </category>
+    <category label="30112">
+        <setting id="setting_spielfilm" type="bool" label="30120" default="true"/>
+        <setting id="setting_sport" type="bool" label="30122" default="false"/>
+        <setting id="setting_serie" type="bool" label="30121" default="false"/>
+        <setting id="setting_unterhaltung" type="bool" label="30123" default="false"/>
+        <setting id="setting_doku" type="bool" label="30124" default="false"/>
+        <setting id="setting_kinder" type="bool" label="30125" default="false"/>
+    </category>
+    <category label="30111">
+        <setting id="mastertype" type="labelenum" label="30105" default="spielfilm" values="spielfilm|sport|serie|unterhaltung|doku-und-info|kinder" />
+    </category>
+</settings>
+

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.program.tvhighlights" name="TV Highlights Grabber - TV Digital" version="0.1.0" provider-name="TDOe">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+    </requires>
+    <extension point="xbmc.python.script" library="default.py" />
+    <extension point="xbmc.service" library="starter.py" start="startup">
+    </extension>
+
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">Fetch todays TV Highlights from www.tvdigital.de</summary>
+        <summary lang="de">Holt die TV Highlights des Tages von www.tvdigital.de</summary>
+        <language>de</language>
+        <description lang="en">Fetch todays TV Highlights from www.tvdigital.de</description>
+        <description lang="de">Holt die TV Highlights des Tages von www.tvdigital.de</description>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <source>https://github.com/tobias-d-oe/plugin.program.tvhighlights</source>
+        <forum>http://goo.gl/TdGZsF</forum>
+        <email>-</email>
+        <website>-</website>
+    </extension>
+</addon>

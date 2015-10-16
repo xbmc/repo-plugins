@@ -48,8 +48,9 @@ fanart          = 'special://home/addons/plugin.video.gronkh.de/fanart.jpg'
 setting         = addon.getSetting
 params          = urlparse.parse_qs(sys.argv[2][1:])
 
-API_VERSION     = 2
-API_URL         = 'http://gronkh.1750studios.com/api/'
+BASE_URL        = 'http://gronkh.1750studios.com'
+API_VERSION     = 3
+API_URL         = BASE_URL + '/api/'
 
 baseurl         = API_URL + 'v' + str(API_VERSION) + '/'
 
@@ -99,7 +100,7 @@ def getCachedJson(url):
     etagsf.close()
 
     if url not in etags or 'etag' not in etags[url]:
-        r = requests.get(url + '/', headers=headers)
+        r = requests.get(url, headers=headers)
         if 'Etag' in r.headers:
             etags[url] = {}
             etags[url]['path'] = cachedir + hashlib.md5(url).hexdigest() + '.json'
@@ -167,23 +168,24 @@ def checkVersion():
         quit()
         return
 
-def index(a_slug=None):
-    checkVersion()
-    if a_slug:
+def index(a_id=None):
+    if a_id:
         li = xbmcgui.ListItem(loc(30001))
         li.setIconImage(icondir + 'games.png')
         li.setThumbnailImage(icondir + 'games.png')
         li.setArt({'fanart' : fanart})
-        params = {'mode' : 'LPs', 'author' : a_slug}
+        params = {'mode' : 'LPs', 'author' : a_id}
         xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params), listitem=li, isFolder=True)
 
         li = xbmcgui.ListItem(loc(30002))
         li.setIconImage(icondir + 'tests.png')
         li.setThumbnailImage(icondir + 'tests.png')
         li.setArt({'fanart' : fanart})
-        params = {'mode' : 'LTs', 'author' : a_slug}
+        params = {'mode' : 'LTs', 'author' : a_id}
         xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params), listitem=li, isFolder=True)
     else:
+        checkVersion()
+
         li = xbmcgui.ListItem(loc(30010))
         li.setIconImage(icondir + 'recent.png')
         li.setThumbnailImage(icondir + 'recent.png')
@@ -279,41 +281,41 @@ def search():
 
 def showAuthors():
     authors = getCachedJson(baseurl + 'authors')
-    for aut in authors['authors']:
+    for aut in authors:
         li = xbmcgui.ListItem(aut['name'])
-        li.setIconImage(aut['avatar'])
-        li.setThumbnailImage(aut['avatar'])
-        li.setArt({'fanart' : aut['fanart']})
-        params = {'author' : aut['slug']}
+        li.setIconImage(BASE_URL + aut['avatar'])
+        li.setThumbnailImage(BASE_URL + aut['avatar'])
+        li.setArt({'fanart' : BASE_URL + aut['fanArt']})
+        params = {'author' : aut['id']}
         xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params),
             listitem=li, isFolder=True)
         xbmcplugin.addSortMethod(addon_handle,
             sortMethod=xbmcplugin.SORT_METHOD_LABEL)
     xbmcplugin.endOfDirectory(addon_handle)
 
-def showTests(a_slug=None, search=None):
-    if a_slug:
-        author = getCachedJson(baseurl + 'authors/' + a_slug)
-        games = getCachedJson(baseurl + 'tests/' + a_slug)
-        for game in games['tests']:
-            li = xbmcgui.ListItem(game['gamename'])
-            li.setIconImage(game['thumb'])
-            li.setThumbnailImage(game['thumb'])
-            params = {'mode' : 'play_video', 'type': 'test', 'slug' : game['slug']}
+def showTests(a_id=None, search=None):
+    if a_id:
+        author = getCachedJson(baseurl + 'authors/' + str(a_id))
+        games = getCachedJson(baseurl + 'author/' + str(a_id) + '/tests')
+        for game in games:
+            li = xbmcgui.ListItem(game['name'])
+            li.setIconImage(BASE_URL + game['thumb'])
+            li.setThumbnailImage(BASE_URL + game['thumb'])
+            params = {'mode' : 'play_video', 'type': 'test', 'id' : game['id']}
             li.setInfo('video', {
-                                    'title' : game['gamename'],
+                                    'title' : game['name'],
                                     'episode': 1,
                                     'season': 1,
                                     'director': author['name'],
-                                    'plot': game['description'],
+                                    'plot': game['descr'],
                                     'rating': game['rating'],
                                     'duration': makeTimeString(game['duration']),
                                     'votes': str(game['votes']),
                                     'premiered': game['aired']
                                 })
-            li.setArt({'thumb': game['thumb'],
-                        'poster': game['poster'],
-                        'fanart': game['thumb']})
+            li.setArt({'thumb': BASE_URL + game['thumb'],
+                        'poster': BASE_URL + game['poster'],
+                        'fanart': BASE_URL + game['thumb']})
             li.setProperty('isPlayable','true')
             li.addStreamInfo('video', {'duration': game['duration']})
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params),
@@ -324,27 +326,27 @@ def showTests(a_slug=None, search=None):
     elif search:
         auts = {}
         games = getCachedJson(baseurl + 'search/tests/' + search)
-        for game in games['tests']:
-            if game['author'] not in auts:
-                auts[game['author']] = getCachedJson(baseurl + 'authors/' + game['author'])
-            li = xbmcgui.ListItem(game['gamename'])
-            li.setIconImage(game['thumb'])
-            li.setThumbnailImage(game['thumb'])
-            params = {'mode' : 'play_video', 'type': 'test', 'slug' : game['slug']}
+        for game in games:
+            if game['authorId'] not in auts:
+                auts[game['authorId']] = getCachedJson(baseurl + 'authors/' + str(game['authorId']))
+            li = xbmcgui.ListItem(game['name'])
+            li.setIconImage(BASE_URL + game['thumb'])
+            li.setThumbnailImage(BASE_URL + game['thumb'])
+            params = {'mode' : 'play_video', 'type': 'test', 'id' : game['id']}
             li.setInfo('video', {
-                                    'title' : game['gamename'],
+                                    'title' : game['name'],
                                     'episode': 1,
                                     'season': 1,
-                                    'director': auts[game['author']]['name'],
-                                    'plot': game['description'],
+                                    'director': auts[game['authorId']]['name'],
+                                    'plot': game['descr'],
                                     'rating': game['rating'],
                                     'duration': makeTimeString(game['duration']),
                                     'votes': str(game['votes']),
                                     'premiered': game['aired']
                                 })
-            li.setArt({'thumb': game['thumb'],
-                        'poster': game['poster'],
-                        'fanart': game['thumb']})
+            li.setArt({'thumb': BASE_URL + game['thumb'],
+                        'poster': BASE_URL + game['poster'],
+                        'fanart': BASE_URL + game['thumb']})
             li.setProperty('isPlayable','true')
             li.addStreamInfo('video', {'duration': game['duration']})
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params),
@@ -355,27 +357,27 @@ def showTests(a_slug=None, search=None):
     else:
         auts = {}
         games = getCachedJson(baseurl + 'tests')
-        for game in games['tests']:
-            if game['author'] not in auts:
-                auts[game['author']] = getCachedJson(baseurl + 'authors/' + game['author'])
-            li = xbmcgui.ListItem(game['gamename'])
-            li.setIconImage(game['thumb'])
-            li.setThumbnailImage(game['thumb'])
-            params = {'mode' : 'play_video', 'type': 'test', 'slug' : game['slug']}
+        for game in games:
+            if game['authorId'] not in auts:
+                auts[game['authorId']] = getCachedJson(baseurl + 'authors/' + str(game['authorId']))
+            li = xbmcgui.ListItem(game['name'])
+            li.setIconImage(BASE_URL + game['thumb'])
+            li.setThumbnailImage(BASE_URL + game['thumb'])
+            params = {'mode' : 'play_video', 'type': 'test', 'id' : game['id']}
             li.setInfo('video', {
-                                    'title' : game['gamename'],
+                                    'title' : game['name'],
                                     'episode': 1,
                                     'season': 1,
-                                    'director': auts[game['author']]['name'],
-                                    'plot': game['description'],
+                                    'director': auts[game['authorId']]['name'],
+                                    'plot': game['descr'],
                                     'rating': game['rating'],
                                     'duration': makeTimeString(game['duration']),
                                     'votes': str(game['votes']),
                                     'premiered': game['aired']
                                 })
-            li.setArt({'thumb': game['thumb'],
-                        'poster': game['poster'],
-                        'fanart': game['thumb']})
+            li.setArt({'thumb': BASE_URL + game['thumb'],
+                        'poster': BASE_URL + game['poster'],
+                        'fanart': BASE_URL + game['thumb']})
             li.setProperty('isPlayable','true')
             li.addStreamInfo('video', {'duration': game['duration']})
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params),
@@ -384,15 +386,15 @@ def showTests(a_slug=None, search=None):
                 sortMethod=xbmcplugin.SORT_METHOD_LABEL)
         xbmcplugin.endOfDirectory(addon_handle)
 
-def showLPs(a_slug=None, search=None):
-    if a_slug:
-        games = getCachedJson(baseurl + 'lets-plays/' + a_slug)
-        for lp in games['lets-plays']:
-            li = xbmcgui.ListItem(lp['gamename'])
-            li.setIconImage(lp['postersmall'])
-            li.setThumbnailImage(lp['posterbig'])
+def showLPs(a_id=None, search=None):
+    if a_id:
+        games = getCachedJson(baseurl + 'author/' + str(a_id) + '/lets-plays')
+        for lp in games:
+            li = xbmcgui.ListItem(lp['name'])
+            li.setIconImage(BASE_URL + lp['poster'])
+            li.setThumbnailImage(BASE_URL + lp['poster'])
             li.setArt({'fanart' : fanart})
-            params = {'mode' : 'show_episodes', 'game' : lp['slug']}
+            params = {'mode' : 'show_episodes', 'game' : lp['id']}
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params),
                 listitem=li, isFolder=True)
             xbmcplugin.addSortMethod(addon_handle,
@@ -401,14 +403,14 @@ def showLPs(a_slug=None, search=None):
     elif search:
         auts = {}
         games = getCachedJson(baseurl + 'search/lets-plays/' + search)
-        for lp in games['lets-plays']:
-            if lp['author'] not in auts:
-                auts[lp['author']] = getCachedJson(baseurl + 'authors/' + lp['author'])
-            li = xbmcgui.ListItem(lp['gamename'] + ' (' + auts[lp['author']]['name'] + ')')
-            li.setIconImage(lp['postersmall'])
-            li.setThumbnailImage(lp['posterbig'])
+        for lp in games:
+            if lp['authorId'] not in auts:
+                auts[lp['authorId']] = getCachedJson(baseurl + 'authors/' + str(lp['authorId']))
+            li = xbmcgui.ListItem(lp['name'] + ' (' + auts[lp['authorId']]['name'] + ')')
+            li.setIconImage(BASE_URL + lp['poster'])
+            li.setThumbnailImage(BASE_URL + lp['poster'])
             li.setArt({'fanart' : fanart})
-            params = {'mode' : 'show_episodes', 'game' : lp['slug']}
+            params = {'mode' : 'show_episodes', 'game' : lp['id']}
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params),
                 listitem=li, isFolder=True)
             xbmcplugin.addSortMethod(addon_handle,
@@ -417,44 +419,44 @@ def showLPs(a_slug=None, search=None):
     else:
         auts = {}
         games = getCachedJson(baseurl + 'lets-plays')
-        for lp in games['lets-plays']:
-            if lp['author'] not in auts:
-                auts[lp['author']] = getCachedJson(baseurl + 'authors/' + lp['author'])
-            li = xbmcgui.ListItem(lp['gamename'] + ' (' + auts[lp['author']]['name'] + ')')
-            li.setIconImage(lp['postersmall'])
-            li.setThumbnailImage(lp['posterbig'])
+        for lp in games:
+            if lp['authorId'] not in auts:
+                auts[lp['authorId']] = getCachedJson(baseurl + 'authors/' + str(lp['authorId']))
+            li = xbmcgui.ListItem(lp['name'] + ' (' + auts[lp['authorId']]['name'] + ')')
+            li.setIconImage(BASE_URL + lp['poster'])
+            li.setThumbnailImage(BASE_URL + lp['poster'])
             li.setArt({'fanart' : fanart})
-            params = {'mode' : 'show_episodes', 'game' : lp['slug']}
+            params = {'mode' : 'show_episodes', 'game' : lp['id']}
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params),
                 listitem=li, isFolder=True)
             xbmcplugin.addSortMethod(addon_handle,
                 sortMethod=xbmcplugin.SORT_METHOD_LABEL)
         xbmcplugin.endOfDirectory(addon_handle)
 
-def showEpisodes(g_slug):
-    lp = getCachedJson(baseurl + 'lets-play/' + g_slug)
-    eps = getCachedJson(baseurl + 'episodes/' + g_slug)
-    aut = getCachedJson(baseurl + 'authors/' + lp['author'])
-    for ep in eps['episodes']:
-        li = xbmcgui.ListItem(ep['episodename'].split(': ')[-1])
-        li.setIconImage(ep['thumb'])
-        li.setThumbnailImage(ep['thumb'])
-        params = {'mode' : 'play_video', 'type' : 'episode', 'slug': ep['episodeslug']}
+def showEpisodes(l_id):
+    lp = getCachedJson(baseurl + 'lets-plays/' + str(l_id))
+    eps = getCachedJson(baseurl + 'lets-play/' + str(l_id) + '/episodes')
+    aut = getCachedJson(baseurl + 'authors/' + str(lp['authorId']))
+    for ep in eps:
+        li = xbmcgui.ListItem(ep['name'].split(': ')[-1])
+        li.setIconImage(BASE_URL + ep['thumb'])
+        li.setThumbnailImage(BASE_URL + ep['thumb'])
+        params = {'mode' : 'play_video', 'type' : 'episode', 'id': ep['id'], 'lid': l_id}
         li.setInfo('video', {
-                                'title' : ep['episodename'].split(': ')[-1],
-                                'originaltitle': lp['gamename'],
+                                'title' : ep['name'].split(': ')[-1],
+                                'originaltitle': lp['name'],
                                 'episode': ep['episode'],
                                 'season': 1,
                                 'director': aut['name'],
-                                'plot': ep['description'],
+                                'plot': ep['descr'],
                                 'rating': ep['rating'],
                                 'duration': makeTimeString(ep['duration']),
                                 'votes': str(ep['votes']),
                                 'premiered': ep['aired']
                             })
-        li.setArt({'thumb': ep['thumb'],
-                    'poster': lp['posterbig'],
-                    'fanart': ep['thumb']})
+        li.setArt({'thumb': BASE_URL + ep['thumb'],
+                    'poster': BASE_URL + lp['poster'],
+                    'fanart': BASE_URL + ep['thumb']})
         li.setProperty('isPlayable','true')
         li.addStreamInfo('video', {'duration': ep['duration']})
         xbmcplugin.setContent(addon_handle, 'episodes')
@@ -468,30 +470,30 @@ def showRecentEpisodes():
     lps = {}
     auts = {}
     episodes = getCachedJson(baseurl + 'recent')
-    for ep in episodes['episodes']:
-        if ep['gameslug'] not in lps:
-            lps[ep['gameslug']] = getCachedJson(baseurl + 'lets-play/' + ep['gameslug'])
-        if lps[ep['gameslug']]['author'] not in auts:
-            auts[lps[ep['gameslug']]['author']] = getCachedJson(baseurl + 'authors/' + lps[ep['gameslug']]['author'])
-        li = xbmcgui.ListItem(ep['episodename'].split(': ')[-1])
-        li.setIconImage(ep['thumb'])
-        li.setThumbnailImage(ep['thumb'])
-        params = {'mode' : 'play_video', 'type' : 'episode', 'slug': ep['episodeslug']}
+    for ep in episodes:
+        if ep['letsPlayId'] not in lps:
+            lps[ep['letsPlayId']] = getCachedJson(baseurl + 'lets-plays/' + str(ep['letsPlayId']))
+        if ep['authorId'] not in auts:
+            auts[ep['authorId']] = getCachedJson(baseurl + 'authors/' + str(ep['authorId']))
+        li = xbmcgui.ListItem(ep['name'].split(': ')[-1])
+        li.setIconImage(BASE_URL + ep['thumb'])
+        li.setThumbnailImage(BASE_URL + ep['thumb'])
+        params = {'mode' : 'play_video', 'type' : 'episode', 'id': ep['id'], 'lid': ep['letsPlayId']}
         li.setInfo('video', {
-                                'title' : ep['episodename'].split(': ')[-1],
-                                'originaltitle': lps[ep['gameslug']]['gamename'],
+                                'title' : ep['name'].split(': ')[-1],
+                                'originaltitle': lps[ep['letsPlayId']]['name'],
                                 'episode': ep['episode'],
                                 'season': 1,
-                                'director': auts[lps[ep['gameslug']]['author']]['name'],
-                                'plot': ep['description'],
+                                'director': auts[ep['authorId']]['name'],
+                                'plot': ep['descr'],
                                 'rating': ep['rating'],
                                 'duration': makeTimeString(ep['duration']),
                                 'votes': str(ep['votes']),
                                 'premiered': ep['aired']
                             })
-        li.setArt({'thumb': ep['thumb'],
-                    'poster': lps[ep['gameslug']]['posterbig'],
-                    'fanart': ep['thumb']})
+        li.setArt({'thumb': BASE_URL + ep['thumb'],
+                    'poster': BASE_URL + lps[ep['letsPlayId']]['poster'],
+                    'fanart': BASE_URL + ep['thumb']})
         li.setProperty('isPlayable','true')
         li.addStreamInfo('video', {'duration': ep['duration']})
         xbmcplugin.setContent(addon_handle, 'episodes')
@@ -505,30 +507,30 @@ def showSearchEpisodes(search):
     lps = {}
     auts = {}
     episodes = getCachedJson(baseurl + 'search/episodes/' + search)
-    for ep in episodes['episodes']:
-        if ep['gameslug'] not in lps:
-            lps[ep['gameslug']] = getCachedJson(baseurl + 'lets-play/' + ep['gameslug'])
-        if lps[ep['gameslug']]['author'] not in auts:
-            auts[lps[ep['gameslug']]['author']] = getCachedJson(baseurl + 'authors/' + lps[ep['gameslug']]['author'])
-        li = xbmcgui.ListItem(ep['episodename'].split(': ')[-1])
-        li.setIconImage(ep['thumb'])
-        li.setThumbnailImage(ep['thumb'])
-        params = {'mode' : 'play_video', 'type' : 'episode', 'slug': ep['episodeslug']}
+    for ep in episodes:
+        if ep['letsPlayId'] not in lps:
+            lps[ep['letsPlayId']] = getCachedJson(baseurl + 'lets-plays/' + str(ep['letsPlayId']))
+        if ep['authorId'] not in auts:
+            auts[ep['authorId']] = getCachedJson(baseurl + 'authors/' + str(ep['authorId']))
+        li = xbmcgui.ListItem(ep['name'].split(': ')[-1])
+        li.setIconImage(BASE_URL + ep['thumb'])
+        li.setThumbnailImage(BASE_URL + ep['thumb'])
+        params = {'mode' : 'play_video', 'type' : 'episode', 'id': ep['id'], 'lid': ep['letsPlayId']}
         li.setInfo('video', {
-                                'title' : ep['episodename'].split(': ')[-1],
-                                'originaltitle': lps[ep['gameslug']]['gamename'],
+                                'title' : ep['name'].split(': ')[-1],
+                                'originaltitle': lps[ep['letsPlayId']]['name'],
                                 'episode': ep['episode'],
                                 'season': 1,
-                                'director': auts[lps[ep['gameslug']]['author']]['name'],
-                                'plot': ep['description'],
+                                'director': auts[ep['authorId']]['name'],
+                                'plot': ep['descr'],
                                 'rating': ep['rating'],
                                 'duration': makeTimeString(ep['duration']),
                                 'votes': str(ep['votes']),
                                 'premiered': ep['aired']
                             })
-        li.setArt({'thumb': ep['thumb'],
-                    'poster': lps[ep['gameslug']]['posterbig'],
-                    'fanart': ep['thumb']})
+        li.setArt({'thumb': BASE_URL + ep['thumb'],
+                    'poster': BASE_URL + lps[ep['letsPlayId']]['poster'],
+                    'fanart': BASE_URL + ep['thumb']})
         li.setProperty('isPlayable','true')
         li.addStreamInfo('video', {'duration': ep['duration']})
         xbmcplugin.setContent(addon_handle, 'episodes')
@@ -538,55 +540,55 @@ def showSearchEpisodes(search):
             sortMethod=xbmcplugin.SORT_METHOD_NONE)
     xbmcplugin.endOfDirectory(addon_handle)
 
-def startVideo(t, s):
+def startVideo(t, i, l):
     if t == 'test':
-        lt = getCachedJson(baseurl + 'test/' + s)
-        aut = getCachedJson(baseurl + 'authors/' + lt['author'])
+        lt = getCachedJson(baseurl + 'tests/' + str(i))
+        aut = getCachedJson(baseurl + 'authors/' + str(lt['authorId']))
 
-        li = xbmcgui.ListItem(lt['gamename'], path='plugin://plugin.video.youtube/play/?video_id=' + lt['youtube'])
-        li.setIconImage(lt['thumb'])
-        li.setThumbnailImage(lt['thumb'])
+        li = xbmcgui.ListItem(lt['name'], path='plugin://plugin.video.youtube/play/?video_id=' + lt['youtube'])
+        li.setIconImage(BASE_URL + lt['thumb'])
+        li.setThumbnailImage(BASE_URL + lt['thumb'])
         li.setInfo('video', {
-                                'title' : lt['gamename'],
+                                'title' : lt['name'],
                                 'episode': 1,
                                 'season': 1,
                                 'director': aut['name'],
-                                'plot': lt['description'],
+                                'plot': lt['descr'],
                                 'rating': lt['rating'],
                                 'duration': makeTimeString(lt['duration']),
                                 'votes': str(lt['votes']),
                                 'premiered': lt['aired']
                             })
-        li.setArt({'thumb': lt['thumb'],
-                    'poster': lt['poster'],
-                    'fanart': lt['thumb']})
+        li.setArt({'thumb': BASE_URL + lt['thumb'],
+                    'poster': BASE_URL + lt['poster'],
+                    'fanart': BASE_URL + lt['thumb']})
         li.setProperty('isPlayable','true')
         li.addStreamInfo('video', {'duration': lt['duration']})
         xbmcplugin.setResolvedUrl(handle=addon_handle, succeeded=True, listitem=li)
     else:
-        ep = getCachedJson(baseurl + 'episode/' + s)
-        lp = getCachedJson(baseurl + 'lets-play/' + ep['gameslug'])
-        aut = getCachedJson(baseurl + 'authors/' + lp['author'])
+        ep = getCachedJson(baseurl + 'lets-play/' + str(l) + '/episodes/' + str(i))
+        lp = getCachedJson(baseurl + 'lets-plays/' + str(l))
+        aut = getCachedJson(baseurl + 'authors/' + str(ep['authorId']))
 
-        li = xbmcgui.ListItem(ep['episodename'].split(': ')[-1], path='plugin://plugin.video.youtube/play/?video_id=' + ep['youtube'])
-        li.setIconImage(ep['thumb'])
-        li.setThumbnailImage(ep['thumb'])
+        li = xbmcgui.ListItem(ep['name'].split(': ')[-1], path='plugin://plugin.video.youtube/play/?video_id=' + ep['youtube'])
+        li.setIconImage(BASE_URL + ep['thumb'])
+        li.setThumbnailImage(BASE_URL + ep['thumb'])
         li.setInfo('video', {
-                                'title' : ep['episodename'].split(': ')[-1],
-                                'originaltitle': lp['gamename'],
+                                'title' : ep['name'].split(': ')[-1],
+                                'originaltitle': lp['name'],
                                 'episode': ep['episode'],
                                 'season': 1,
                                 'director': aut['name'],
-                                'plot': ep['description'],
+                                'plot': ep['descr'],
                                 'tracknumber': ep['episode'],
                                 'rating': ep['rating'],
                                 'duration': makeTimeString(ep['duration']),
                                 'votes': str(ep['votes']),
                                 'premiered': ep['aired']
                             })
-        li.setArt({'thumb': ep['thumb'],
-                    'poster': lp['posterbig'],
-                    'fanart': ep['thumb']})
+        li.setArt({'thumb': BASE_URL + ep['thumb'],
+                    'poster': BASE_URL + lp['poster'],
+                    'fanart': BASE_URL + ep['thumb']})
         li.setProperty('isPlayable','true')
         li.addStreamInfo('video', {'duration': ep['duration']})
         xbmcplugin.setResolvedUrl(handle=addon_handle, succeeded=True, listitem=li)
@@ -716,7 +718,10 @@ if 'mode' in params:
         else:
             showEpisodes(params['game'][0])
     elif params['mode'][0] == 'play_video':
-        startVideo(params['type'][0], params['slug'][0])
+        if 'lid' in params:
+            startVideo(params['type'][0], params['id'][0], params['lid'][0])
+        else:
+            startVideo(params['type'][0], params['id'][0], None)
     elif params['mode'][0] == 'live':
         showLiveStreams()
     elif params['mode'][0] == 'start_livestream':

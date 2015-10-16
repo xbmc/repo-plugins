@@ -1,3 +1,14 @@
+Version 1.1.1
+    Updating API version
+        Using IDs for API calls instead of slugs.
+        The API calls should now perform better and be faster on slower conenctions.
+        Also the new API returns smaller pictures where big pictures would not make sense.
+        Furthermore the new API uses a database maintained by me, so missing episodes which
+        are not on Gronkh.de could however be avaiable in the API.
+    Some small changes to the codebase (changed some API endpoints and their return values)
+    Renaming the plugin to Gronkh.de (new notation)
+    Chaning some information in the addon.xml (Author email)
+
 Version 1.1.0
     Adding version check to prevent add-on from crashing because of deleted API endpoints
     Adding polish translations (Thanks to Shino)

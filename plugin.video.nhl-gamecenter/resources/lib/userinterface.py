@@ -60,28 +60,21 @@ def CATEGORIES():
     #Check if cookies are up to date
     checkLogin()
     
-    if (USERNAME in open(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp')).read()) and USERNAME != '':
-        #Show categories
-        addDir(LOCAL_STRING(31100),'/live',1,'',True)
-        #addDir(LOCAL_STRING(31150),'/lastnight',9,'',True)
-        addDir(LOCAL_STRING(31160),'/latest',11,'',True)
-        addDir(LOCAL_STRING(31140),'/highlights',4,'',True)
-        addDir(LOCAL_STRING(31110),'/condensed',4,'',True)
-        addDir(LOCAL_STRING(31120),'/archive',4,'',True)
+    #if (USERNAME in open(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp')).read()) and USERNAME != '':
+    #if (USERNAME.lower() in (open(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp')).read()).lower()) and USERNAME != '':
+    #Show categories
+    addDir(LOCAL_STRING(31100),'/live',1,'',True)
+    #addDir(LOCAL_STRING(31150),'/lastnight',9,'',True)
+    addDir(LOCAL_STRING(31160),'/latest',11,'',True)
+    addDir(LOCAL_STRING(31140),'/highlights',4,'',True)
+    addDir(LOCAL_STRING(31110),'/condensed',4,'',True)
+    addDir(LOCAL_STRING(31120),'/archive',4,'',True)
 
-        #Space between Score Notifications
-        addDir('','Do Nothing',-1,'',False)
-        addDir('Turn On Score Notifications','Notifications ON',100,'',False)
-        addDir('Turn Off Score Notifications','Notifications OFF',101,'',False)
-        #addDir(LOCAL_STRING(31130),'/classic',10,'',True)
-    else:
-        os.remove(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'))
-        print "cookies removed"
-        
-        dialog = xbmcgui.Dialog()
-        dialog.ok('Login failed', 'Check your login credentials')
-        xbmcplugin.endOfDirectory(handle = int(sys.argv[1]),succeeded=False)
-        return None
+    #Space between Score Notifications
+    addDir('','Do Nothing',-1,'',False)
+    addDir('Turn On Score Notifications','Notifications ON',100,'',False)
+    addDir('Turn Off Score Notifications','Notifications OFF',101,'',False)
+    #addDir(LOCAL_STRING(31130),'/classic',10,'',True)
 
 
 

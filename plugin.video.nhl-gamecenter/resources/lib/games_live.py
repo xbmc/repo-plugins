@@ -20,7 +20,7 @@ def getLiveGames(live):
     for i in range(1, 2):
         cj = cookielib.LWPCookieJar()
         cj.load(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'),ignore_discard=True)
-        url = "http://gamecenter.nhl.com/nhlgc/servlets/games"                
+        url = "http://gamecenter.nhl.com/nhlgc/servlets/games"                       
         #1#url = 'http://live.nhl.com/GameData/SeasonSchedule-20142015.json'                
         #2#http://smb.cdnak.neulion.com/fs/nhl/mobile/feed_new/data/streams/2014/ipad/02_0047.json
         #3#http://nlds150.cdnak.neulion.com/nlds_vod/nhl/vod/2014/10/15/47/2_47_bos_det_1415_a_whole_1_ipad.mp4.m3u8
@@ -37,7 +37,7 @@ def getLiveGames(live):
         #Try to login again if File not accessible
         if "<code>noaccess</code>" in downloadedXML:
             print "No access to XML file"
-            login()
+            checkLogin()
             continue
         else:
             print "Download successful"
@@ -184,21 +184,41 @@ def getLiveGameLinks(url):
             #Add teamnames to the list
             homeTeam = game[6]
             awayTeam = game[7]
-            linkList = [[homeTeam, awayTeam]]            
+            linkList = [[homeTeam, awayTeam]]       
+            feed_list = [2,4]
+
+            #Add special video streams to list
+            if FRENCH_FEED == 'true':
+                feed_list.append(8)
+            if GOALIE_CAM == 'true':
+                feed_list.append(64)
+                feed_list.append(128)
             
-            for feed in [2,4]:
-                #Get the m3u8 URL
+            for feed in feed_list:
+                #Get the m3u8 URL                
                 cj = cookielib.LWPCookieJar()
                 cj.load(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'),ignore_discard=True)
                 publishPointURL = "http://gamecenter.nhl.com/nhlgc/servlets/publishpoint?type=game&id=" + game[1] + game[2].zfill(2) + game[3].zfill(4) + "&gs=live&ft=" + str(feed) + "&nt=1"
-                print publishPointURL
+                print "publish point == " + publishPointURL
                 opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-                opener.addheaders = [('User-Agent', USERAGENT)]
-                response = opener.open(publishPointURL, urllib.urlencode({'app':'true'}))
-                downloadedXML = response.read()
+                if feed in [2,4]:
+                    opener.addheaders = [('User-Agent', USERAGENT)]
+                else:
+                    opener.addheaders = [('User-Agent', 'Mozilla/5.0 (iPad; CPU OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53')]
+                try:
+                    response = opener.open(publishPointURL, urllib.urlencode({'app':'true'}))                
+                    downloadedXML = response.read()
+                except:
+                    continue
+                
+                #publishPointURL = "http://gamecenter.nhl.com/nhlgc/servlets/publishpoint?type=game&id=%s&gs=%s&ft=%d&nt=1" % (gameID, playType, feedType)                
+                #header = [('User-Agent', 'Mozilla/5.0 (iPad; CPU OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53')]
+                #downloadData, statusCode = downloadURL("publishPoint", publishPointURL, cj, header, urllib.urlencode({'app':'true'}), True)
 
                 xml = parseString(downloadedXML)
                 m3u8URL = xml.getElementsByTagName('path')[0].childNodes[0].nodeValue
+				
+
             
                 #Quality settings
                 if QUALITY == 4 or 'bestquality' in url:
@@ -226,8 +246,11 @@ def getLiveGameLinks(url):
                 elif 'highlights' in url:
                     m3u8URL = m3u8URL.replace('_whole_', '_continuous_')
                 
+
+
                 #Header for needed for first decryption key
                 header = {'Cookie' : 'nlqptid=' +  m3u8URL.split('?', 1)[1], 'User-Agent' : 'Safari/537.36 Mozilla/5.0 AppleWebKit/537.36 Chrome/31.0.1650.57', 'Accept-Encoding' : 'gzip,deflate', 'Connection' : 'Keep-Alive'}
+
             
                 #Live games need additional cookies
                 if "live" in url:
@@ -269,59 +292,32 @@ def getLiveGameLinks(url):
                         cookies = cookies + cookie.name + "=" + cookie.value + "; "
             
                     header = {'Cookie' : cookies, 'User-Agent' : 'Safari/537.36 Mozilla/5.0 AppleWebKit/537.36 Chrome/31.0.1650.57', 'Accept-Encoding' : 'gzip,deflate', 'Connection' : 'Keep-Alive'}
-            
+                    #header = {'Cookie' : cookies, 'User-Agent' : 'NHL1415/4.1030 CFNetwork/711.1.12 Darwin/14.0.0', 'Accept-Encoding' : 'gzip,deflate', 'Connection' : 'Keep-Alive'}
+					
+                #Set CDN Server
+                m3u8URL = cdnServer(m3u8URL)
+
                 #Get teamnames
                 teams = getTeams()
-                #Home/Awaay url
+                
                 if feed == 2:
-                    #linkList.append([LOCAL_STRING(31320), m3u8URL + "|" + urllib.urlencode(header)])
-                    linkList.append(['[B]'+LOCAL_STRING(31320)+"[/B] ("+teams[homeTeam][TEAMNAME]+" feed)", m3u8URL + "|" + urllib.urlencode(header)])
-                else:
-                    #linkList.append([LOCAL_STRING(31330), m3u8URL + "|" + urllib.urlencode(header)])
+                    #Home                    
+                    linkList.append(['[B]'+LOCAL_STRING(31320)+"[/B] ("+teams[homeTeam][TEAMNAME]+" feed)", m3u8URL + "|" + urllib.urlencode(header)])      
+                elif feed == 4:
+                    #Away                    
                     linkList.append(['[B]'+LOCAL_STRING(31330)+"[/B] ("+teams[awayTeam][TEAMNAME]+" feed)", m3u8URL + "|" + urllib.urlencode(header)])
-            
+                elif feed == 8:
+                    #French
+                    linkList.append(['[B]French feed[/B]', m3u8URL + "|" + urllib.urlencode(header)])
+                elif feed == 64:
+                    #Goalie Cam Left
+                    linkList.append(['[B]Goalie Cam 1[/B]', m3u8URL + "|" + urllib.urlencode(header)])      
+                elif feed == 128:
+                    #Goalie Cam Right
+                    linkList.append(['[B]Goalie Cam 2[/B]', m3u8URL + "|" + urllib.urlencode(header)])
+                
 
-                                  
-            """
-            if m3u8URL.find('_h_') > -1:               
-                #Away url
-                linkList.append(['[B]'+LOCAL_STRING(31330)+"[/B] ("+teams[awayTeam][TEAMNAME]+" feed)",  m3u8URL.replace('_h_', '_a_') + "|" + urllib.urlencode(header)])
-                #Home url
-                linkList.append(['[B]'+LOCAL_STRING(31320)+"[/B] ("+teams[homeTeam][TEAMNAME]+" feed)", m3u8URL + "|" + urllib.urlencode(header)])                                 
-                #French url                 
-                #m3u8URL = m3u8URL.replace('/nlds_vod/nhl/', '/nlds_vod/nhlfr/')
-                #linkList.append(['French',  m3u8URL.replace('_h_', '_fr_') + "|" + urllib.urlencode(header)])
-            else:                                                
-                #Away url
-                linkList.append(['[B]'+LOCAL_STRING(31330)+"[/B] ("+teams[awayTeam][TEAMNAME]+" feed)", m3u8URL + "|" + urllib.urlencode(header)]) 
-                #Home url
-                linkList.append(['[B]'+LOCAL_STRING(31320)+"[/B] ("+teams[homeTeam][TEAMNAME]+" feed)",  m3u8URL.replace('_a_', '_h_') + "|" + urllib.urlencode(header)])                                
-                #French url
-                #m3u8URL = m3u8URL.replace('/nlds_vod/nhl/', '/nlds_vod/nhlfr/')
-                #linkList.append(['French',  m3u8URL.replace('_a_', '_fr_') + "|" + urllib.urlencode(header)])                
-            """
-            
-                        
-            #French streams (experimental)
-            """
-            if game[4] != '' and (homeTeam == 'MON' or homeTeam == 'OTT'):
-                home_url = home_url.replace('/nhl/', '/nhlfr/')
-                home_url = home_url.replace('nlds138', 'nlds60')
-                linkList.append([LOCAL_STRING(31320) + ' (' + LOCAL_STRING(31340) + ')', home_url + "|User-Agent=" + USERAGENT])
-            if game[5] != '' and (awayTeam == 'MON' or awayTeam == 'OTT'):
-                away_url = away_url.replace('/nhl/', '/nhlfr/')
-                away_url = away_url.replace('nlds138', 'nlds60')
-                linkList.append([LOCAL_STRING(31330) + ' (' + LOCAL_STRING(31340) + ')', away_url + "|User-Agent=" + USERAGENT])
-            """
-            
-            #No streams available
-            """"
-            if game[4] == '' and game[5] == '':
-                if game[0][:5] == 'FINAL':
-                    linkList.append([LOCAL_STRING(31370),''])
-                else:
-                    linkList.append([LOCAL_STRING(31380),''])
-            """
+				
             break
     
     return linkList

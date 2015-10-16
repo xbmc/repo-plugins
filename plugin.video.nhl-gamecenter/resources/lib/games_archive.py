@@ -174,7 +174,13 @@ def getGameLinks(url):
                 quality = '_800'
            
             #Get the HLS stream
-            playPath = game[4][37:][:-49]
+            #replace the old substring method with one that grabs the last "." in the string
+            #playPath = game[4][37:][:-49]
+            last_period = game[4].rfind('.')
+            print "LAST PERIOD!!! = " + str(last_period)
+            playPath = game[4][37:last_period]
+            print playPath
+
             http_url = "http://nhl.cdn.neulion.net/" + playPath[4:] + "/v1/playlist" + quality + ".m3u8"            
             http_url = http_url.replace('/pc/', '/ced/')
            
@@ -210,6 +216,9 @@ def getGameLinks(url):
                     http_url = http_url.replace('condensed', 'continuous')
            
            
+            #Set CDN Server
+            http_url = cdnServer(http_url)
+		   
             home_url = http_url
             away_url = http_url.replace('_h_', '_a_')
            

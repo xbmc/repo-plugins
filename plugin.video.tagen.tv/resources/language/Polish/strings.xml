@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-<string id="30011"> CET</string>
-<string id="30012"> Czas środkowoeuropejski</string>
-<string id="30013">Czas rozpoczęcia= </string>
-<string id="30014">VOD</string>
-<string id="30015">Tagen TV </string>
-<string id="30016">Jasnowidz</string>
-<string id="30017">Planer</string>
-<string id="30018">Transmisja Na Żywo ..</string>
-<string id="30019">[COLOR yellow][CR][CR]Prosimy o wsparcie z dostawcą treści wideo![/COLOR]</string>
-<string id="30020">[COLOR yellow][CR]http://tagen.tv/kontakt/[/COLOR]</string>
-<string id="30021">Nie znaleziono mediów url!</string>
-<string id="30022">błąd!</string>
+  <!-- Plugin name -->
+  <string id="30000">Tagen TV</string>
+  <string id="30001">Oglądaj na żywo</string>
+  <string id="30002">Transmisja na żywo</string>
+  <string id="30003">Planer</string>
 </strings>

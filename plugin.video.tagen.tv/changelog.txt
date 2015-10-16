@@ -1,7 +1,4 @@
-created by celadoor.
-
-Version 0.0.5 - added Planner  pre-recorded videos.
-
-Version 0.0.4 -Initial Release. Tagen TV video plugin.
+Version 0.1
+    - Initial Release. Tagen TV video plugin.
 
 

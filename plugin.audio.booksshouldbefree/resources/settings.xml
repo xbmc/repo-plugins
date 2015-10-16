@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="">
+        <setting id="VERSION"        type="text"     label="DEBUG - Current Version"  default="0.0.0" visible="false"/>
+        <setting id="RESUME_INFO"    type="text"     label="DEBUG - Resume Info"      default=""      visible="false"/>
+        <setting id="RESUME_CHAPTER" type="text"     label="DEBUG - Resume Chapter"   default=""      visible="false"/>
+        <setting id="RESUME_TIME"    type="text"     label="DEBUG - Resume Time"      default=""      visible="false"/>
+
+        <setting id="VIEW"       type="enum"      label="30013" lvalues="30014|30015" default="0"  visible="true"/>
+        <setting id="SORT"       type="enum"      label="30013" lvalues="30016|30017" default="0"  visible="true"/>
+        <setting id="RESULTS"    type="labelenum" label="30018"  values="30|60|100"   default="30" visible="true"/>
+    </category>  
+</settings>

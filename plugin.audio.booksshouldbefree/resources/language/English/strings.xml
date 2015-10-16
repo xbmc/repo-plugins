@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<string id="30000">Loyal Books</string>
+	<string id="30001">More...</string>
+	<string id="30002">No audio book available</string>
+	<string id="30003">Play all</string>
+	<string id="30004">Chapter</string>
+	<string id="30005">Top Books</string>
+	<string id="30006">Children</string>
+	<string id="30007">Fiction</string>
+	<string id="30008">Fantasy</string>
+	<string id="30009">Mystery</string>
+	<string id="30010">All Genres...</string>
+	<string id="30011">Search</string>
+	<string id="30012">Resume</string>
+	<string id="30013">Sort by</string>
+	<string id="30014">Title</string>
+	<string id="30015">Author</string>
+	<string id="30016">Popularity</string>
+	<string id="30017">Alphabetic</string>
+	<string id="30018">Results</string>
+	<string id="30019">Remove resume point</string>	
+</strings>

@@ -1,0 +1,29 @@
+v1.0.7:
+    - Updated for org submission
+    - Updated to new name - Loyal Books
+    - Updated icon
+    - Improved quality of search results
+
+v1.0.6:
+  - Fixed missing chapters, thanks to Volker Cordes for new regex
+  - Cleaned up displayed text
+
+v1.0.5:
+  - Fixes due to changes at website
+  - Added quicknet module to increase speed of addon and reduce bandwidth
+
+v1.0.4:
+  - Fixed searching
+
+v1.0.3:
+  - Added 'Resume' feature
+
+v1.0.2:
+  - Fixed Genre author results
+
+v1.0.1:
+  - Added Genre results settings
+  - Work around for bug in XBMC context menu causing certain parameters to become become lowercase
+
+v1.0.0:
+  - Initial release

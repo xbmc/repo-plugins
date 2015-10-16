@@ -15,10 +15,14 @@ You should have received a copy of the GNU General Public License along with
 this program; if not, write to the Free Software Foundation,
 Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 """
-
+import os
 import re
 import sys
 import urllib
+try:
+    import cPickle as pickle
+except:
+    import pickle
 
 import xbmc
 import xbmcgui
@@ -70,11 +74,13 @@ def endofdirectory(sortMethod='none'):
     """
     # Set sortmethod to something xbmc can use
     if sortMethod == 'title':
-        sortMethod = xbmcplugin.SORT_METHOD_LABEL
+        sortMethod = xbmcplugin.SORT_METHOD_TITLE
     elif sortMethod == 'none':
         sortMethod = xbmcplugin.SORT_METHOD_NONE
     elif sortMethod == 'date':
         sortMethod = xbmcplugin.SORT_METHOD_DATE
+    elif sortMethod == 'label':
+        sortMethod = xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE
 
     # Sort methods are required in library mode
     xbmcplugin.addSortMethod(int(sys.argv[1]),
@@ -116,6 +122,7 @@ def add_item(args,
     info.setdefault('year',         '0')
     info.setdefault('playhead',     '0')
     info.setdefault('duration',     '0')
+    info.setdefault('episode',      '0')
     info.setdefault('plot',         'None')
 
     # Create params for xbmcplugin module
@@ -136,46 +143,50 @@ def add_item(args,
         '&year='       + urllib.quote_plus(info['year'])         +\
         '&playhead='   + urllib.quote_plus(info['playhead'])     +\
         '&duration='   + urllib.quote_plus(info['duration'])     +\
+        '&episode='   + urllib.quote_plus(info['episode'])     +\
         '&plot='       + urllib.quote_plus(info['plot']          +'%20')
 
     # Create list item
     li = xbmcgui.ListItem(label          = info['title'],
                           thumbnailImage = info['thumb'])
     li.setInfo(type       = "Video",
-               infoLabels = {"Title": info['title'],
-                             "Plot":  info['plot'],
-                             "Year":  info['year']})
+               infoLabels = {"Title":   info['title'],
+                             "Plot":    info['plot'],
+                             "Year":    info['year'],
+							 "episode": info['episode']})
     li.setProperty("Fanart_Image", info['fanart_image'])
 
     # Add context menu
     s1  = re.sub(rex, 'add_to_queue',      u)
     s2  = re.sub(rex, 'remove_from_queue', u)
+    #s3  = re.sub(rex, 'list_media', u)
 
-    cm = [('Add-on settings', 'XBMC.Addon.OpenSettings(%s)' % args._id)]
+    cm = [(args._lang(30505), 'XBMC.Addon.OpenSettings(%s)' % args._id)]
 
     if (args.mode is not None and
         args.mode not in 'channels|list_categories'):
 
-        cm.insert(0, ('Queue Video', 'XBMC.Action(Queue)'))
+        cm.insert(0, (args._lang(30504), 'XBMC.Action(Queue)'))
 
     if not isFolder:
         # Let XBMC know this can be played, unlike a folder
         li.setProperty('IsPlayable', 'true')
 
         if queued:
-            cm.insert(1, ('Dequeue Series', 'XBMC.RunPlugin(%s)' % s2))
+            cm.insert(1, (args._lang(30501), 'XBMC.RunPlugin(%s)' % s2))
         else:
-            cm.insert(1, ('Enqueue Series', 'XBMC.RunPlugin(%s)' % s1))
+            cm.insert(1, (args._lang(30502), 'XBMC.RunPlugin(%s)' % s1))
 
     else:
         if (args.mode is not None and
             args.mode in 'list_coll|list_series|queue'):
 
             if queued:
-                cm.insert(1, ('Dequeue Series', 'XBMC.RunPlugin(%s)' % s2))
+                cm.insert(1, (args._lang(30501), 'XBMC.RunPlugin(%s)' % s2))
             else:
-                cm.insert(1, ('Enqueue Series', 'XBMC.RunPlugin(%s)' % s1))
+                cm.insert(1, (args._lang(30502), 'XBMC.RunPlugin(%s)' % s1))
 
+    #cm.insert(2, (args._lang(30503), 'XBMC.RunPlugin(%s)' % s3))
     cm.append(('Toggle debug', 'XBMC.ToggleDebug'))
 
     li.addContextMenuItems(cm, replaceItems=True)
@@ -345,7 +356,7 @@ def main():
     """
     args = parse_args()
 
-    if crj.load_shelf(args) is False:
+    if crj.load_pickle(args) is False:
         add_item(args,
                 {'title': 'Session failed: Check login'})
         endofdirectory()
@@ -355,5 +366,10 @@ def main():
 
         check_mode(args)
 
-    # Close shelf
-    args.user_data.close()
+    try:
+        base_path = xbmc.translatePath(args._addon.getAddonInfo('profile')).decode('utf-8')
+        pickle_path = os.path.join(base_path, "cruchyPickle")
+        user_data = pickle.dump(args.user_data, open(pickle_path, 'wb'))
+
+    except:
+        log("CR: Unable to dump pickle")

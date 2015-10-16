@@ -23,12 +23,15 @@ import json
 import gzip
 import time
 import random
-import shelve
 import socket
 import string
 import datetime
 import StringIO
 import cookielib
+try:
+    import cPickle as pickle
+except:
+    import pickle
 
 import ssl
 import urllib
@@ -53,7 +56,7 @@ __XBMCBUILD__ = xbmc.getInfoLabel("System.BuildVersion") + " " + sys.platform
 
 
 
-def load_shelf(args):
+def load_pickle(args):
     """Load persistent user data and start Crunchyroll session.
 
     """
@@ -63,13 +66,24 @@ def load_shelf(args):
 
     base_path = xbmc.translatePath(args._addon.getAddonInfo('profile')).decode('utf-8')
 
-    shelf_path = os.path.join(base_path, "cruchyXBMC")
+    pickle_path = os.path.join(base_path, "cruchyPickle")
 
     current_datetime = datetime.datetime.now(dateutil.tz.tzutc())
+	
+    if not os.path.exists(base_path):
+         os.makedirs(base_path)
+	
+    try:
+        # Load persistent vars
+        user_data = pickle.load(open(pickle_path))
+
+    except:
+        log("CR: Unable to load pickle")
+        
+        user_data = {}
 
     try:
         # Load persistent vars
-        user_data = shelve.open(shelf_path, writeback=True)
 
         if change_language == "0":
             user_data.setdefault('API_LOCALE',"enUS")
@@ -91,13 +105,15 @@ def load_shelf(args):
             user_data['API_LOCALE']  = "esLA"
         elif change_language == "9":
             user_data['API_LOCALE']  = "esES"
+        elif change_language == "10":
+            user_data['API_LOCALE']  = "itIT"
 
         user_data['username'] = args._addon.getSetting("crunchy_username")
         user_data['password'] = args._addon.getSetting("crunchy_password")
 
         if 'device_id' not in user_data:
             char_set  = string.ascii_letters + string.digits
-            device_id = ''.join(random.sample(char_set, 32))
+            device_id = 'FFFF'+''.join(random.sample(char_set, 4))+'-KODI-'+''.join(random.sample(char_set, 4))+'-'+''.join(random.sample(char_set, 4))+'-'+''.join(random.sample(char_set, 12))
             user_data["device_id"] = device_id
             log("CR: New device_id created. New device ID: "
                 + str(device_id))
@@ -121,12 +137,14 @@ def load_shelf(args):
     except:
         log("CR: Unexpected error: %s" % (sys.exc_info(),), xbmc.LOGERROR)
 
+        '''
         # Get process ownership info
         log("CR: Effective User:   %d" % (os.geteuid(),), xbmc.LOGERROR)
         log("CR: Effective Group:  %d" % (os.getegid(),), xbmc.LOGERROR)
         log("CR: User:             %d" % (os.getuid(),), xbmc.LOGERROR)
         log("CR: Group:            %d" % (os.getgid(),), xbmc.LOGERROR)
         log("CR: Groups: %s" % str(os.getgroups()), xbmc.LOGERROR)
+        '''
 
         # Reset user_data
         user_data['session_id']      = ''
@@ -141,7 +159,7 @@ def load_shelf(args):
 
         args.user_data = user_data
 
-        log("CR: Unable to load shelve")
+        log("CR: Unable to load pickle")
 
         return False
 
@@ -507,7 +525,7 @@ def list_series(args):
                           'filterx':    args.filterx,
                           'offset':     offset})
 
-    crm.endofdirectory('none')
+    crm.endofdirectory('label')
 
 
 def list_categories(args):
@@ -527,7 +545,7 @@ def list_categories(args):
                           'filterx':    'tag:' + i['tag']},
                          isFolder=True)
 
-    crm.endofdirectory('none')
+    crm.endofdirectory('label')
 
 
 def list_collections(args):
@@ -574,7 +592,7 @@ def list_collections(args):
                              isFolder=True,
                              queued=queued)
 
-    crm.endofdirectory('none')
+    crm.endofdirectory('title')
 
 
 def list_media(args):
@@ -620,9 +638,12 @@ def list_media_items(args, request, series_name, season, mode, fanart):
 
     """
     for media in request:
-        queued = ((media['series']['series_id']
+	
+        series_id = (media['series']['series_id']
                        if mode == "history"
-                       else args.series_id) in args.user_data['queue'])
+                       else args.series_id)
+
+        queued = (series_id in args.user_data['queue'])
 
         # The following are items to help display Recently Watched
         # and Queue items correctly
@@ -735,10 +756,18 @@ def list_media_items(args, request, series_name, season, mode, fanart):
         url = media['url']
         media_id = url.split('-')[-1]
 
+        visto = " "
+        if int(float(playhead)) > 10 :
+            played   = args._lang(30401)
+            porcentaje = (( int(float(playhead)) * 100 ) / int(float(duration)))+1
+            visto = "[COLOR FFbc3bfd] " + played + " [/COLOR] [COLOR FF6fe335]" + str(porcentaje) + "%[/COLOR]"
+            
         crm.add_item(args,
-                     {'title':        name.encode("utf8"),
+                     {'title':        name.encode("utf8") + visto,
                       'mode':         'videoplay',
                       'id':           media_id.encode("utf8"),
+                      'series_id':    series_id,
+                      'episode':      str(media['episode_number']).encode("utf8"),
                       'thumb':        thumb.encode("utf8"),
                       'url':          url.encode("utf8"),
                       'fanart_image': fanart,
@@ -749,7 +778,7 @@ def list_media_items(args, request, series_name, season, mode, fanart):
                      isFolder=False,
                      queued=queued)
 
-    crm.endofdirectory('none')
+    crm.endofdirectory('title')
 
 
 def history(args):

@@ -122,8 +122,10 @@ def getEpisodes(eurl, showName):
       infoList['Plot'] = a['description']
       infoList['Studio'] = a['provider']
       infoList['MPAA'] = a['ratings'][0]['rating']
-      infoList['Season'] = a['pl1$seasonNumber']
-      infoList['Episode'] = a['pl1$episodeNumber']
+      try:    infoList['Season'] = a['pl1$seasonNumber']
+      except: pass
+      try:    infoList['Episode'] = a['pl1$episodeNumber']
+      except: pass
     u = '%s?url=%s&mode=GV' % (sys.argv[0],qp(url))
     liz=xbmcgui.ListItem(name, '',None, thumb)
     liz.setInfo( 'Video', infoList)

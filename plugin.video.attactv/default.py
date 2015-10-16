@@ -184,7 +184,7 @@ def play_video(params):
     lutil.log("attactv.play "+repr(params))
 
     # Here we define the list of video sources supported.
-    video_sources = ('dailymotion', 'youtube', 'vimeo', 'kontexttv')
+    video_sources = ('dailymotion', 'youtube', 'vimeo', 'kontexttv', 'wsftv')
     buffer_link = lutil.carga_web(params.get("url"))
     for  source in video_sources:
         video_url = eval("get_playable_%s_url(buffer_link)" % source)
@@ -202,7 +202,7 @@ def play_video(params):
 # This function try to get a Youtube playable URL from the weblink and returns it ready to call the Youtube plugin.
 def get_playable_youtube_url(html):
     pattern_youtube1 = '<param name="movie" value="[htps:]*?//www.youtube.com/v/([0-9A-Za-z_-]{11})[^>]+>'
-    pattern_youtube2 = ' src="[htps:]*?//www.youtube.com/embed/([0-9A-Za-z_-]{11})"'
+    pattern_youtube2 = ' src="[htps:]*?//www.youtube.com/embed/([0-9A-Za-z_-]{11})'
 
     video_id = lutil.find_first(html, pattern_youtube1)
     if video_id:
@@ -248,6 +248,25 @@ def get_playable_kontexttv_url(html):
         lutil.log("attactv.play: We have found this KontextTV video: http:%s and let's going to play it!" % video_url)
         # This is a hack to fix the lack of the "http:" sometimes into the video URL on the HTML code.
         return "http:" + video_url
+
+    return ""
+
+# This function try to get a World Social Forum TV playable URL from the weblink and returns it ready to play it directly.
+def get_playable_wsftv_url(html):
+    wsftv_patterns = (" src='[htps:]*?(//wsftv.net/[^']*?)'", " src='[htps:]*?(//www.wsftv.net/[^']*?)'")
+    wsftv_video_pattern = "'clip'[: ]+'(http[^']*?)'"
+
+    for pattern_wsftv in wsftv_patterns:
+        wsftv_url = lutil.find_first(html, pattern_wsftv)
+        if wsftv_url:
+            # This is a hack to fix the lack of the "http:" sometimes into the video URL on the HTML code.
+            wsftv_url = "http:" + wsftv_url
+            lutil.log("attactv.play: We have found a WSFTV video with URL: '%s'" % wsftv_url)
+            buffer_link = lutil.carga_web(wsftv_url)
+            video_url = lutil.find_first(buffer_link, wsftv_video_pattern)
+            if video_url:
+                lutil.log("attactv.play: We have found this WSFTV video: '%s' and let's going to play it!" % video_url)
+                return video_url
 
     return ""
 

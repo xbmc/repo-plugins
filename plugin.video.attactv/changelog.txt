@@ -1,3 +1,6 @@
+1.1.11 (2015.10.09)
+- Added support for the World Socal Forum website videos.
+- Small improvement to the Youtube videos parser.
 1.1.10 (2015.08.10)
 - Quick fix on scraper due to Dailymotion website changes.
 1.1.9 (2015.03.10)

@@ -3,7 +3,7 @@
   id="plugin.video.richplanet"
   name="Richplanet TV" 
   provider-name="celadoor" 
-  version="0.1.8">
+  version="0.1.9">
   <requires>
     <import  addon="xbmc.python"                      version="2.1.0" />
     <import  addon="script.common.plugin.cache"       version="1.5.1" />
@@ -22,6 +22,7 @@
 	<forum>http://forum.xbmc.org/showthread.php?tid=177472</forum>
 	<website>http://www.richplanet.net/sponsor.php</website>
 	<email></email>
+	<broken>deprecated</broken>
 	<source>http://celadoor.github.io/plugin.video.richplanet.zip</source>
   </extension>
 </addon>

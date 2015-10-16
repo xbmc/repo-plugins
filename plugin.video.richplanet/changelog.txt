@@ -1,4 +1,6 @@
 Richplanet Tv Video Plugin created by celadoor.
+Version 0.1.9 - Add now broken due to video site blip closedown.
+
 Version 0.1.8 -Fixed broken video url.
 
 Version 0.1.7 -Fixed broken video url and added video duration.

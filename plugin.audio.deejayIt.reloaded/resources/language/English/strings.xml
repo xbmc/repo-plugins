@@ -4,7 +4,7 @@
     <!-- Category strings -->
     <string id="30001">older</string>
     <string id="30002">Error</string>
-    <string id="30003">In reloaded list reception</string>
+    <string id="30003">In programs list reception</string>
     <string id="30004">In episodes list reception</string>
     <string id="30005">In episode playback</string>
     <!-- Category messages -->

@@ -8,7 +8,7 @@ import re
 import urllib2
 from BeautifulSoup import BeautifulSoup
 import datetime
-import xbmc
+#import xbmc
 
 NOW = datetime.datetime.now()
 ANNO = NOW.year
@@ -28,17 +28,29 @@ def month_to_num(date):
     """
     return{
     'Gennaio' : 1,
+    'gennaio' : 1,
     'Febbraio' : 2,
+    'febbraio' : 2,
     'Marzo' : 3,
+    'marzo' : 3,
     'Aprile' : 4,
+    'aprile' : 4,
     'Maggio' : 5,
+    'maggio' : 5,
     'Giugno' : 6,
+    'giugno' : 6,
     'Luglio' : 7,
+    'luglio' : 7,
     'Agosto' : 8,
+    'agosto' : 8,
     'Settembre' : 9,
+    'settembre' : 9,
     'Ottobre' : 10,
+    'ottobre' : 10,
     'Novembre' : 11,
-    'Dicembre' : 12
+    'novembre' : 11,
+    'Dicembre' : 12,
+    'dicembre' : 12
     }[date]
 
 
@@ -79,6 +91,22 @@ def translate_date(ep_title):
         translated_date = '19.12.1982'
     return translated_date
 
+def get_img(soup):
+    player = soup.find('div', {'id': 'playerCont'})
+    if not player:
+#            xbmc.log('fanArt: div id playerCont not found', 1)
+        img = None
+    else:
+        hit = re.findall("image=(.*.jpg)",
+            player.iframe['src'])
+        if not hit:
+#                xbmc.log('fanArt: regex does not match', 1)
+            img = None
+        else:
+            img = hit[0]
+#                xbmc.log('fanArt:'+img, 1)
+    return img
+
 
 def get_reloaded_list_in_page(url, reloaded_list):
     """
@@ -105,11 +133,17 @@ def get_reloaded_list_in_page(url, reloaded_list):
     soup = BeautifulSoup(urllib2.urlopen(url))
     prog_list = soup.find('ul', {'class': 'block-grid four-up mobile-two-up'}).findAll('li')
     for prog in prog_list:
-        prog_name_url = prog.a
+        # This is needed for issue #14, sometimes the show is has got no
+        # picture. In this case we fall back to DeeJay grayscale logo.
+        if prog.img:
+            url_immagine = prog.img['src']
+        else:
+            url_immagine = 'http://www.deejay.it/wp-content/themes/deejay/images/logo.png'
+
         reloaded_list.append(
-            (prog_name_url['title'],
-                prog.img['src'],
-                prog_name_url['href'],
+            (prog.a['title'],
+                url_immagine,
+                prog.a['href'],
                 translate_date(prog.hgroup.span.string))
             )
     nextpage = soup.find('a', {'class': 'nextpostslink'})
@@ -124,6 +158,8 @@ def get_reloaded_list_in_page(url, reloaded_list):
 def get_reloaded_list():
     """
     Crawl over all the pages to return the complete list of reloaded shows.
+    Include shows that are not available any more from the web interface, such
+    as Dee Giallo.
     This returns an array of tuples containing the following info for all the
     reloaded shows:
     (Program name,
@@ -145,10 +181,63 @@ def get_reloaded_list():
     lista, nextpageurl = get_reloaded_list_in_page(url, [])
     while nextpageurl:
         lista, nextpageurl = get_reloaded_list_in_page(nextpageurl, lista)
+    # Appending Dee Giallo
+    # Dee Giallo is now (27 Sep 2015) back in the list returned by the website.
+    # lista.append(
+    #     ('Dee Giallo',
+    #         'http://www.deejay.it/wp-content/themes/deejay/images/logo.png',
+    #         'http://www.deejay.it/audio/20130526-4/269989/',
+    #         '26.05.2013'
+    #         )
+    #     )
     return lista
 
 
-def get_episodi(url, oldimg):
+def get_podcast_list():
+    """
+    Retrieve the list of podcast from the website
+    This returns an array of tuples containing the following info for all the
+    shows with podcasts:
+        (titolo,
+            pic,
+            indirizzo,
+            dataAstrale,
+            podcast [array of tuples (titolo, indirizzo)]
+    Input:
+        None
+    Output
+        The above-mentioned array
+    E.g.:
+    (TBD)
+    """
+    url = "http://www.deejay.it/podcast/radio/"
+    #hardcoded url
+    soup = BeautifulSoup(urllib2.urlopen(url))
+    podcast_section = soup.find('div', {'class': 'article-list'})
+    if podcast_section:
+        lista = []
+        article_list = podcast_section.findAll('article')
+        for show in article_list:
+            podcast = []
+            episodi = show.findAll('li')
+            for episodio in episodi:
+                podcast.append(
+                    (episodio.find('a')['title'],   #titolo
+                        episodio.find('a')['href']) #indirizzo
+                    )
+            lista.append(
+                (show.find('a')['title'],   #titolo
+                show.find('img')['src'],    #pic
+                show.find('a')['href'],     #indirizzo
+                translate_date(show.find('span', {'class': 'hour'}).text),
+                podcast)                    #array di podcast
+            )
+        return lista
+    else:
+        return None
+
+
+def get_episodi_reloaded(url, oldimg):
     """
     Return all the available episodes of the selected reloaed show. A single
     webpage is parsed.
@@ -174,19 +263,7 @@ def get_episodi(url, oldimg):
     if oldimg is not None:
         img = oldimg[0]
     else:
-        player = soup.find('div', {'id': 'playerCont'})
-        if not player:
-            xbmc.log('fanArt: div id playerCont not found', 1)
-            img = None
-        else:
-            hit = re.findall("image=(.*.jpg)",
-                player.iframe['src'])
-            if not hit:
-                xbmc.log('fanArt: regex does not match', 1)
-                img = None
-            else:
-                img = hit[0]
-                xbmc.log('fanArt:'+img, 1)
+        img = get_img(soup)
 
     new_url = soup.find('span', {'class': 'small-title'})
     # This is as the user pressed on Archivio+
@@ -201,6 +278,65 @@ def get_episodi(url, oldimg):
                 (
                     episodio.a['href'],
                     translate_date(episodio.a['title']),
+                    episodio.a['title'])
+                )
+
+    #Passo finale: aggiungi il link alla pagina successiva
+    nextpage = soup.find('a', {'class': 'nextpostslink'})
+    if not nextpage:
+        nextpageurl = ''
+    else:
+        nextpageurl = nextpage['href']
+    return lista_episodi, nextpageurl, img
+
+
+def get_episodi_podcast(url, oldimg):
+    """
+    Return all the available episodes of the selected podcast show. A single
+    webpage is parsed.
+    Input
+        url is the site's page that lists all the available episodes. E.g.:
+        i) http://www.deejay.it/audio/20141215-10/412901/ or
+        ii) http://www.deejay.it/audio/?podcast=ciao-belli
+        oldimg is a string carrying the path of the picture to be used as
+        fanArt. This must be extracted from type i) pages and passed when
+        parsing type ii) pages from which you can't retrieve such info.
+    Output
+    lista_episodi an array of tuples carrying the episode's details:
+    (link to the webpage where you play the episode to be used by get_epfile(),
+        Date,
+        Episode's title)
+    nextpageurl is the URL of the next page listing the older episodes of the
+    show, if any.
+    img, that is the fanArt URL to be used for every episode of the Reloaded.
+    """
+    soup = BeautifulSoup(urllib2.urlopen(url))
+    #If the fanArt URL is already know there is no need to re-extract it since
+    #it is a show-wise property and not episode-specific.
+    if oldimg is not None:
+        img = oldimg[0]
+    else:
+        img = get_img(soup)
+
+    new_url = soup.find('span', {'class': 'small-title'})
+    # This is as the user pressed on Archivio+
+    if new_url:
+        soup = soup = BeautifulSoup(urllib2.urlopen(new_url.a['href']))
+    lista_episodi = []
+    episodi = soup.find('ul', {'class': 'lista podcast-archive'}).findAll('li')
+    if episodi:
+        data_ep = '19.12.1982'
+        # The date is defined only for the first podcast episode of the day; we
+        # have to store it across loop iterations. If nothing is found then
+        # 19.12.1982 is returned.
+        for episodio in episodi:
+            tmp = episodio.find('span', {'class': 'small-title red'})
+            if tmp is not None:
+                data_ep = translate_date(tmp.text)
+            lista_episodi.append(
+                (
+                    episodio.a['href'],
+                    data_ep,
                     episodio.a['title'])
                 )
 
@@ -241,17 +377,18 @@ def get_epfile(url):
 
 
 #    ---------------------------------------------------
-#PROGRAMMI = get_reloaded_list()
-#for p in PROGRAMMI:
+# PROGRAMMI = get_reloaded_list()
+# for p in PROGRAMMI:
 #    print p
 
 #p = PROGRAMMI[17][2]
 #print p
 
 #eps = get_episodi('http://www.deejay.it/audio/page/13/?reloaded=dee-giallo','')
-#eps = get_episodi('http://www.deejay.it/audio/20141215-10/412901/','')
+#eps = get_episodi('http://www.deejay.it/audio/20141215-10/412901/')
+#eps = get_episodi_reloaded('http://www.deejay.it/audio/poesie-10/418750/', None)
 #eps = get_episodi('http://www.deejay.it/audio/20141223-2/414155/', 'pippo')
-#for e in eps:
+# for e in eps:
 #    print e
 
 #fileurl = get_epfile('http://www.deejay.it/audio/20130527-3/269977/')
@@ -259,3 +396,10 @@ def get_epfile(url):
 
 #dataAstrale = translate_date('15 Dicembre')
 #print dataAstrale
+
+# LISTA = get_podcast_list()
+# prog = LISTA[15]
+
+# DCI = get_episodi_podcast('http://www.deejay.it/audio/?podcast=deejay-chiama-italia', None)
+# for ep in DCI:
+#     print ep

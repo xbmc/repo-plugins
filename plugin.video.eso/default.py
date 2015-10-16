@@ -202,10 +202,7 @@ def play_video(params):
     pattern_video_failover = '<span class="archive_dl_text"><a href="([^"]*?)"'
     pattern_video = 'file: fix_protocol\("([^"]*?)"\),[^l]+label: \'([SH]D)\''
 
-    video_options = {}
-    for url, vquality in lutil.find_multiple(buffer_link, pattern_video):
-        video_options[vquality] = url
-
+    video_options = dict((vquality, url) for (url, vquality) in lutil.find_multiple(buffer_link, pattern_video))
     lutil.log("eso.play video options"+repr(video_options))
 
     video_url = video_options.get('%s' % ('SD', 'HD')[quality], '') or video_options.get('SD', '')
@@ -217,11 +214,12 @@ def play_video(params):
             lutil.log('eso.play ERROR: we cannot reproduce this video URL: "%s"' % video_url)
             return lutil.showWarning(translation(30012))
     else:
-        video_url = lutil.find_first(buffer_link, pattern_video_failover)
-        if video_url:
-            root_url = eso_url if eso_url in page_url else space_url
-            try:
+        for video_url in lutil.find_multiple(buffer_link, pattern_video_failover):
+            if not 'medium_' in video_url: continue
+            if not video_url.startswith('http'):
+                root_url = eso_url if eso_url in page_url else space_url
                 video_url = "%s%s" % (root_url, video_url)
+            try:
                 lutil.log("eso.play: We have found this video as failover option: '%s' and let's going to play it!" % video_url)
                 return lutil.play_resolved_url(pluginhandle = pluginhandle, url = video_url)
             except:

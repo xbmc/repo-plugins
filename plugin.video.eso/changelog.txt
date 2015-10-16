@@ -1,3 +1,5 @@
+1.0.4
+- Improved failover parser for Spacetelescope videos.
 1.0.3
 - Fixes for Hubble videos due to Spacetelescope wesite changes.
 - Recover thumbnails images due to ESO website changes.

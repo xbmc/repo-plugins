@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon
+	id="plugin.audio.releasefm"
+	name="Release FM"
+	version="1.0.0"
+	provider-name="ReleaseFM">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0" />
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>audio</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+		<source>https://github.com/releasefm/plugin.audio.releasefm</source>
+		<platform>all</platform>
+		<language>en</language>
+		<summary>Release FM - Underground dance music from the UK - www.releasefm.net</summary>
+		<description>Release FM was started by a group of very talented and knowledgeable DJ’s, who just happened to also be radio enthusiasts. Between them, there is over a century of experience in underground dance music and radio broadcasting. This exciting resume includes…Starting the longest running underground dance music station in this country – which is still broadcasting today, Artist management (UK Number 1 artist), Record Label, Event Management and DJing. This wealth of experience and knowledge is the reason why we feel, Release FM is the best and most progressive radio station on the dial and web. Release FM believe in showcasing the very best upfront, forthcoming and classic dance music, tailored towards the clued up and musically intelligent listener, who crave something that isn’t being covered by mainstream stations.</description>
+	</extension>
+</addon>

@@ -76,13 +76,21 @@ class Main:
             xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "len(shows)", str(len(shows)) ), xbmc.LOGNOTICE )
         
         for show in shows:
-            #skip show if it doesn't contain the website show url
+            #skip show if it doesn't contain the website show url (https or http) 
             if str(show.a).find(self.video_list_page_url) < 0:
-                continue
+                self.video_list_page_url_http = str(self.video_list_page_url).replace("https", "http")
+                if str(show.a).find(self.video_list_page_url_http) < 0:
+                    if (self.DEBUG) == 'true':
+                        xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "skipped show that doesn't contain website show url", str(self.video_list_page_url)), xbmc.LOGNOTICE )
+                        xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "skipped show that doesn't contain website show url", str(self.video_list_page_url_http)), xbmc.LOGNOTICE )
+                        xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "skipped show that doesn't contain website show url", str(show)), xbmc.LOGNOTICE )
+                    continue
 
             # Skip a show if it does not contain class="name"
             pos_classname = str(show).find('class="name"')
             if pos_classname < 0:
+                if (self.DEBUG) == 'true':
+                    xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, 'skipped show without class="name"', str(show)), xbmc.LOGNOTICE )
                 continue
             
             url = show.a['href']

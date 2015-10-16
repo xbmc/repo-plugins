@@ -319,13 +319,13 @@ def build_coming_soon_directory():
 @retry((IndexError, TypeError))
 def build_top_150_directory():
     data = getUrl( 'http://www.traileraddict.com/top150' )
-    link_title_views = re.compile( '<img src="/images/arrow2.png" class="arrow"> <a href="(.+?)">(.+?)</a> <span style="font-size:7pt;">(.+?)</span>' ).findall( data )
+    link_title_views = re.compile( '<li><a href="(.+?)" class="m_title">(.+?)</a></li>' ).findall( data )
     item_count = 75
-    for list in range( 0, 150 ):
-        if item_count == 150:
+    for list in range( 0, 149 ):
+        if item_count == 149:
             item_count = 0
-        title = link_title_views[item_count][1] + ' ' + link_title_views[item_count][2]
-        url = 'http://www.traileraddict.com/' + link_title_views[item_count][0]
+        title = link_title_views[item_count][1]
+        url = 'http://www.traileraddict.com' + link_title_views[item_count][0]
         u = { 'mode': '4', 'name': clean( title.rsplit(' (')[0] ), 'url': url }
         addListItem(label = clean( title ), image = poster_thumb, url = u, isFolder = True, totalItems = 150, infoLabels = False)
         item_count = item_count + 1
@@ -388,7 +388,7 @@ def play_video( url, name, download ):
         url = re.compile( 'hdurl=(.+?)&', re.DOTALL ).findall( data )[0]  
     else:
         url = re.compile( 'fileurl=(.+?)&', re.DOTALL ).findall( data )[0] 
-    url = url.replace( '%3A', ':').replace( '%2F', '/' ).replace( '%3F', '?' ).replace( '%3D', '=' ).replace( '%26', '&' ).replace( '%2F', '//' )
+    url = url.replace( '%3A', ':').replace( '%2F', '/' ).replace( '%3F', '?' ).replace( '%3D', '=' ).replace( '%26', '&' ).replace( '%2F', '//' ).strip()
     infoLabels = { "Title": name , "Studio": plugin }
     if download == 'True':
         start_download(name, str(url))

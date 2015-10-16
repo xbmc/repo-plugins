@@ -1,7 +1,8 @@
-[B]Version 2.1.0[/B]
+[B]Version 2.2.0[/B]
+- Small fix to strip trailing spaces on end of video url causing links to fail
 
-- Updated regex for grabbing trailer id
-- Added metahandlers support to grab extended metadata for trailers
+[B]Version 2.1.0[/B]
+- Updated for new token code logic
 
 [B]Version 2.0.10[/B]
 

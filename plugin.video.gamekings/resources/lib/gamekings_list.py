@@ -41,7 +41,7 @@ class Main:
 		
 		if self.next_page_possible == 'True':
 		# Determine current item number, next item number, next_url
-		#f.e. http://www.gamekings.tv/category/videos/page/001/
+		#f.e. http://www.gamekings.nl/category/videos/page/001/
 			pos_of_page		 			 	 = self.video_list_page_url.rfind('/page/')
 			if pos_of_page >= 0:
 				page_number_str			     = str(self.video_list_page_url[pos_of_page + len('/page/'):pos_of_page + len('/page/') + len('000')])
@@ -81,33 +81,33 @@ class Main:
 		soup = BeautifulSoup( html_source )
 		
 		# Get the thumbnail urls
-		#<img src="http://www.gamekings.tv/wp-content/uploads/20130307_gowascensionreviewsplash1-75x75.jpg" alt="God of War: Ascension Review">
-		#for http://www.gamekings.tv/pcgamersunite/ the thumbnail links sometimes contain '//': f.e. http://www.gamekings.tv//wp-content/uploads/20110706_hww_alienwarelaptop_slider-75x75.jpg
-		#thumbnail_urls = soup.findAll('img', attrs={'src': re.compile("^http://www.gamekings.tv/wp-content/uploads/")})
-		thumbnail_urls = soup.findAll('img', attrs={'src': re.compile("^http://www.gamekings.tv/")})
+		#<img src="http://www.gamekings.nl/wp-content/uploads/20130307_gowascensionreviewsplash1-75x75.jpg" alt="God of War: Ascension Review">
+		#for http://www.gamekings.nl/pcgamersunite/ the thumbnail links sometimes contain '//': f.e. http://www.gamekings.nl//wp-content/uploads/20110706_hww_alienwarelaptop_slider-75x75.jpg
+		#thumbnail_urls = soup.findAll('img', attrs={'src': re.compile("^http://www.gamekings.nl/wp-content/uploads/")})
+		thumbnail_urls = soup.findAll('img', attrs={'src': re.compile("^http://www.gamekings.nl/")})
 		
 		if (self.DEBUG) == 'true':
 			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "len(thumbnail_urls)", str(len(thumbnail_urls)) ), xbmc.LOGNOTICE )
 		
 		# Get the titles and video page urls
-		#<a href="http://www.gamekings.tv/videos/lars-gustavsson-over-battlefield-4/" title="Lars Gustavsson over Battlefield 4">
-		#skip this: <a href='http://www.gamekings.tv/videos/lars-gustavsson-over-battlefield-4/#disqus_thread'>
+		#<a href="http://www.gamekings.nl/videos/lars-gustavsson-over-battlefield-4/" title="Lars Gustavsson over Battlefield 4">
+		#skip this: <a href='http://www.gamekings.nl/videos/lars-gustavsson-over-battlefield-4/#disqus_thread'>
 		
 		#this is Videos	
 		if self.plugin_category == __language__(30000):
-			video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.tv/")})
+			video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.nl/")})
 		#this is Afleveringen	
 		elif self.plugin_category == __language__(30001):
-			video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.tv/")})
+			video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.nl/")})
 		#this is Gamekings Extra	
 		elif self.plugin_category == __language__(30002):
-			video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.tv/nieuws/")})
+			video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.nl/nieuws/")})
 		#this is Trailers
 		elif self.plugin_category == __language__(30003):
-			video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.tv/nieuws/")})
+			video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.nl/nieuws/")})
 		#this is E3
 		elif self.plugin_category == __language__(30004):
-			video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.tv/")})			
+			video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.nl/")})			
 		
 		if (self.DEBUG) == 'true':
 			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "len(video_page_urls_and_titles)", str(len(video_page_urls_and_titles)) ), xbmc.LOGNOTICE )

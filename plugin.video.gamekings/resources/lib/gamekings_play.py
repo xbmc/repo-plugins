@@ -73,7 +73,7 @@ class Main:
 		httpCommunicator = HTTPCommunicator()
 		
 		#Sometimes a page request gets a HTTP Error 500: Internal Server Error
-		#f.e. http://www.gamekings.tv/videos/het-fenomeen-minecraft/
+		#f.e. http://www.gamekings.nl/videos/het-fenomeen-minecraft/
 		try:
 			html_data = httpCommunicator.get ( self.video_page_url )
 		except urllib2.HTTPError, error:
@@ -96,11 +96,11 @@ class Main:
 		# Is a stream?	
 		
 		#this is f.e. for Videos		
-		#<meta property="og:video" content="http://stream.gamekings.tv/20130306_SpecialForces.mp4"/>
-		#sometimes the content is not (!!) correct and the real link will be "http://stream.gamekings.tv/large/20130529_E3Journaal.mp4" :(
+		#<meta property="og:video" content="http://stream.gamekings.nl/20130306_SpecialForces.mp4"/>
+		#sometimes the content is not (!!) correct and the real link will be "http://stream.gamekings.nl/large/20130529_E3Journaal.mp4" :(
 		#May 2014: videos are vimeo files now:
-		#<meta property="og:video" content="http://stream.gamekings.tv/http://player.vimeo.com/external/111637217.hd.mp4?s=10e5d0efd4d10756b535b115140ebe13"/>
-		video_urls = soup.findAll('meta', attrs={'content': re.compile("^http://stream.gamekings.tv/")}, limit=1)
+		#<meta property="og:video" content="http://stream.gamekings.nl/http://player.vimeo.com/external/111637217.hd.mp4?s=10e5d0efd4d10756b535b115140ebe13"/>
+		video_urls = soup.findAll('meta', attrs={'content': re.compile("^http://stream.gamekings.nl/")}, limit=1)
 		if len(video_urls) == 0:
 			#let's search for something else 
 
@@ -123,12 +123,12 @@ class Main:
 		 				#   gogoVideo(92091,"MjAxNDExMTNfRXh0cmEubXA0LGh0dHA6Ly93d3cuZ2FtZWtpbmdzLnR2L3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDE0MTExNF9FeHRyYV9zcGxhc2gtMTAyNHg1NzYuanBnLEdhbWVraW5ncyBFeHRyYTogV2Vsa2UgZ2FtZXMgc3BlbGVuIHdpaiBkaXQgbmFqYWFyPw==");
 		 				#</script>
 		 				#the base86 encode string looks like this decoded:
-		 				#20141113_Extra.mp4,http://www.gamekings.tv/wp-content/uploads/20141114_Extra_splash-1024x576.jpg,Gamekings Extra: Welke games spelen wij dit najaar?
+		 				#20141113_Extra.mp4,http://www.gamekings.nl/wp-content/uploads/20141114_Extra_splash-1024x576.jpg,Gamekings Extra: Welke games spelen wij dit najaar?
 						gogo_video = True
 						#ignore youtube links in the comments
 					else:
 						#This is f.e. for Trailers
-						#gogoVideo("http://www.gamekings.tv/wp-content/uploads/nieuws20150723_LifeisStrangeE4-1024x576.jpg","http://www.youtube.com/watch?v=AukgNY6Uxww",pseudo,host);
+						#gogoVideo("http://www.gamekings.nl/wp-content/uploads/nieuws20150723_LifeisStrangeE4-1024x576.jpg","http://www.youtube.com/watch?v=AukgNY6Uxww",pseudo,host);
 						gogo_youtube_video = True
 			else:
 				youtube_video = True
@@ -168,10 +168,10 @@ class Main:
 
 			# Check if it's a vimeo file
 			if video_url.count("vimeo") > 0:
-				#the vimeo video_url looks like this: http://stream.gamekings.tv/http://player.vimeo.com/external/118907131.hd.mp4?s=486e834bab4dc380743d814653c52050
+				#the vimeo video_url looks like this: http://stream.gamekings.nl/http://player.vimeo.com/external/118907131.hd.mp4?s=486e834bab4dc380743d814653c52050
 				#therefore the stream stuff got to be removed
-				video_url = video_url.replace("http://stream.gamekings.tv/large", "")
-				video_url = video_url.replace("http://stream.gamekings.tv/", "")
+				video_url = video_url.replace("http://stream.gamekings.nl/large", "")
+				video_url = video_url.replace("http://stream.gamekings.nl/", "")
 				have_valid_url = True
 			else:
 				if youtube_video:
@@ -183,11 +183,11 @@ class Main:
 						video_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtubeID
 						have_valid_url = True
 					else:
-						video_url = "http://stream.gamekings.tv/large/" + video_url
+						video_url = "http://stream.gamekings.nl/large/" + video_url
 						if httpCommunicator.exists( video_url ):
 							have_valid_url = True
 						else:
-							video_url = video_url.replace("http://stream.gamekings.tv/large", "http://stream.gamekings.tv/")
+							video_url = video_url.replace("http://stream.gamekings.nl/large", "http://stream.gamekings.nl/")
 							if httpCommunicator.exists( video_url ):
 								have_valid_url = True
 							else:

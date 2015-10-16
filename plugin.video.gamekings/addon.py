@@ -4,13 +4,13 @@
 ##############################################################################
 #
 # GameKings - Addon for XBMC
-# http://www.gamekings.tv/
+# http://www.gamekings.nl/
 #
 # Coding by Skipmode A1
 # 
 # Credits:
 #   * Dan Dar3                                   - Gametrailers xbmc plugin [http://dandar3.blogspot.com]
-#   * Gamekings                                                             [http://www.gamekings.tv]
+#   * Gamekings                                                             [http://www.gamekings.nl]
 #   * Team XBMC @ XBMC.org                                                  [http://xbmc.org/]
 #   * Leonard Richardson <leonardr@segfault.org> - BeautifulSoup            [http://www.crummy.com/software/BeautifulSoup/]
 #
@@ -20,8 +20,8 @@
 #
 #also in ..._const
 __addon__       = "plugin.video.gamekings"
-__date__        = "27 august 2015"
-__version__     = "1.1.7"
+__date__        = "11 oktober 2015"
+__version__     = "1.1.8"
 
 #
 # Imports

@@ -25,7 +25,7 @@ class Main:
         #
         # Videos
         #
-        parameters = {"action" : "list", "plugin_category" : __language__(30000), "url" : "http://www.gamekings.tv/category/videos/page/001/", "next_page_possible": "True"}
+        parameters = {"action" : "list", "plugin_category" : __language__(30000), "url" : "http://www.gamekings.nl/category/videos/page/001/", "next_page_possible": "True"}
         url = sys.argv[0] + '?' + urllib.urlencode(parameters)
         listitem = xbmcgui.ListItem( __language__(30000), iconImage="DefaultFolder.png" )
         folder = True
@@ -34,7 +34,7 @@ class Main:
         #
         # Afleveringen
         #
-        parameters = {"action" : "list", "plugin_category" : __language__(30001), "url" : "http://www.gamekings.tv/category/tv-afleveringen/page/001/", "next_page_possible": "True"}
+        parameters = {"action" : "list", "plugin_category" : __language__(30001), "url" : "http://www.gamekings.nl/category/tv-afleveringen/page/001/", "next_page_possible": "True"}
         url = sys.argv[0] + '?' + urllib.urlencode(parameters)
         listitem = xbmcgui.ListItem( __language__(30001), iconImage="DefaultFolder.png" )
         folder = True
@@ -43,7 +43,7 @@ class Main:
         #
         # Gamekings Extra
         #
-        parameters = {"action" : "list", "plugin_category" : __language__(30002), "url" : "http://www.gamekings.tv/category/nieuws/page/001/", "next_page_possible": "True"}
+        parameters = {"action" : "list", "plugin_category" : __language__(30002), "url" : "http://www.gamekings.nl/category/nieuws/page/001/", "next_page_possible": "True"}
         url = sys.argv[0] + '?' + urllib.urlencode(parameters)
         listitem = xbmcgui.ListItem( __language__(30002), iconImage="DefaultFolder.png" )
         folder = True
@@ -52,7 +52,7 @@ class Main:
         #
         # Trailers
         #
-        parameters = {"action" : "list", "plugin_category" : __language__(30003), "url" : "http://www.gamekings.tv/tag/Trailer/page/001/", "next_page_possible": "True"}
+        parameters = {"action" : "list", "plugin_category" : __language__(30003), "url" : "http://www.gamekings.nl/tag/Trailer/page/001/", "next_page_possible": "True"}
         url = sys.argv[0] + '?' + urllib.urlencode(parameters)
         listitem = xbmcgui.ListItem( __language__(30003), iconImage="DefaultFolder.png" )
         folder = True
@@ -61,7 +61,7 @@ class Main:
         #
         # E3 2015
         #
-        parameters = {"action" : "list", "plugin_category" : __language__(30004), "url" : "http://www.gamekings.tv/tag/E3-2015/page/001/", "next_page_possible": "True"}
+        parameters = {"action" : "list", "plugin_category" : __language__(30004), "url" : "http://www.gamekings.nl/tag/E3-2015/page/001/", "next_page_possible": "True"}
         url = sys.argv[0] + '?' + urllib.urlencode(parameters)
         listitem = xbmcgui.ListItem( __language__(30004), iconImage="DefaultFolder.png" )
         folder = True

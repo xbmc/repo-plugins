@@ -1,5 +1,8 @@
-v1.1.7 (Thursday, 27 2015) :
-- small fix for gogoVideo
+v1.1.8 (Sunday, 11 oktober 2015) :
+- changes due to website url extension change
+
+v1.1.7 (Thursday, 27 august 2015) :
+- small fix for gogoVideo (Gamekings Extra)
 
 v1.1.6 (Saturday, 15 august 2015) :
 - added youtube as a dependency

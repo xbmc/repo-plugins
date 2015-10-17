@@ -1,3 +1,6 @@
+Version 1.2.6 (17 oktober 2015)
+Fixes due to website change
+
 Version 1.2.5 (5 oktober 2015)
 Fixes due to website change
 

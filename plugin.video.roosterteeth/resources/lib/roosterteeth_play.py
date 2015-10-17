@@ -83,7 +83,7 @@ class Main:
 		 	reply = self.session.get(self.video_page_url)
 		 	
 			# is it a sponsored video? 
-			if str(reply.text).find('sponsor-only') >= 0:
+			if str(reply.text).find('sponsor-only') >= 0 or str(reply.text).find('non-sponsor'):
 				if self.IS_SPONSOR == 'true':
 					try:
 						# we need a NEW (!!!) session
@@ -127,6 +127,8 @@ class Main:
 							if str(reply.text).find(__settings__.getSetting('username')) >= 0:
 								if (self.DEBUG) == 'true':
 									xbmc.log('login was successfull!')
+									# let's try getting the page again after a login, hopefully it contains a link to the video now
+									reply = self.session.get(self.video_page_url)
 								pass
 							else:
 								try:
@@ -144,9 +146,6 @@ class Main:
 								pass
 							xbmcgui.Dialog().ok( __language__(30000), __language__(30104) % (str(reply.status_code)) )
 							exit(1)
-						
-						# let's try getting the page again after a login
-						reply = self.session.get(self.video_page_url)
 							
 				 	except urllib2.HTTPError, error:
 						if (self.DEBUG) == 'true':

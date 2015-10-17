@@ -1,40 +1,39 @@
 '''
     qobuz.node.article
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~
 
+    :part_of: xbmc-qobuz
     :copyright: (c) 2012 by Joachim Basmaison, Cyril Leclerc
     :license: GPLv3, see LICENSE for more details.
 '''
-import xbmcgui
-import xbmc
-
+import xbmcgui  # @UnresolvedImport
 from inode import INode
 from gui.contextmenu import contextMenu
 from node import Flag
 from api import api
-'''
-    @class Node_articles
-'''
+import qobuz  # @UnresolvedImport
+
 
 class WidgetArticle(xbmcgui.WindowDialog):
     def __init__(self, *a, **ka):
         super(WidgetArticle, self).__init__()
-    
+
     def onInit(self):
         self.image = xbmcgui.ControlImage(100, 250, 125, 75, aspectRatio=2)
-        pass
-        
+
     def onClick(self, action):
         super(WidgetArticle, self).onClick(action)
-        
+
     def onAction(self, action):
         super(WidgetArticle, self).onAction(action)
-    
+
     def onFocus(self, action):
         super(WidgetArticle, self).onFocus(action)
 
-class Node_article(INode):
 
+class Node_article(INode):
+    """@class Node_articles
+    """
     def __init__(self, parent=None, parameters=None):
         super(Node_article, self).__init__(parent, parameters)
         self.nt = Flag.ARTICLE
@@ -45,7 +44,7 @@ class Node_article(INode):
         author = self.get_property('author')
         if author:
             author += '%s / ' % (author)
-        return '%s%s' % ( author,
+        return '%s%s' % (author,
                              self.get_property('title'))
 
     def makeListItem(self, **ka):
@@ -72,18 +71,19 @@ class Node_article(INode):
             image = image.replace('http://player.', 'http://www.')
         return image
 
-    def fetch(self, Dir, lvl , whiteFlag, blackFlag):
+    def fetch(self, Dir, lvl, whiteFlag, blackFlag):
         data = api.get('/article/get', article_id=self.nid)
-        if not data: 
+        if not data:
             return False
         self.data = data['data']
         return True
 
-    def populate(self, Dir, lvl , whiteFlag, blackFlag):
+    def populate(self, Dir, lvl, whiteFlag, blackFlag):
         pass
-        
+
     def displayWidget(self):
-        w = xbmcgui.WindowXMLDialog('plugin.audio.qobuz-article.xml', qobuz.path.base)
+        w = xbmcgui.WindowXMLDialog('plugin.audio.qobuz-article.xml',
+                                    qobuz.path.base)
         w.show()
         w.doModal()
         w.close()

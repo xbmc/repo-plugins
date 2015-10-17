@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Thai language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/th/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30001">การกระทำ</string>
+    <string id="30002">ออก</string>
+    <string id="30028">ชื่อผู้ใช้</string>
+    <string id="30081">แสดง ที่ชื่นชอบ</string>
+    <string id="30086">ข่าว</string>
+    <string id="30114">แคช</string>
+
+    <!-- credentials -->
+    <string id="30147">ชื่อผู้ใช้</string>
+    <string id="30148">รหัสผ่าน</string>
+    <string id="30150">สตรีม</string>
+    <string id="30157">ทุกอัลบั้ม</string>
+    <string id="30159">สำรวจข้อมูล</string>
+    <string id="30165">เปลี่ยนชื่อ</string>
+    <string id="30166">ลบ</string>
+    <string id="30172">สำเร็จ</string>
+    <string id="30184">รายการเล่น</string>
+
+    <!-- nodes -->
+    <string id="30188">ป้ายชื่อ</string>
+    <string id="30189">ประเภท</string>
+</strings>

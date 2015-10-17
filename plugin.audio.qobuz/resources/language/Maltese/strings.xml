@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Maltese language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/mt/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30028">Username</string>
+    <string id="30114">Cache</string>
+
+    <!-- credentials -->
+    <string id="30147">Username</string>
+    <string id="30148">Sigriet</string>
+    <string id="30166">Neħħi</string>
+    <string id="30172">Lest</string>
+    <string id="30184">Playlist</string>
+
+    <!-- nodes -->
+    <string id="30188">Isem:</string>
+    <string id="30189">Ġeneru</string>
+</strings>

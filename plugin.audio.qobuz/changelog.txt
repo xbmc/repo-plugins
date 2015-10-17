@@ -1,6 +1,17 @@
-1.2.0
+1.2.1
 -----
-* revert to original plugin version 1.0.0
+* Feature: Playing HiRes purchased tracks (setting and hires property on track)
+* Fix: Favorite error
+* Fix: Collection is working
+* Fix: Notification image
+* Fix: Plugin name, Qobuz XBMC -> Kodi (addon.xml)
+
+1.2.0
+* updated version after plugin to
+
+1.0.1
+-----
+* update language files from Transifex
 
 1.0.0
 -----

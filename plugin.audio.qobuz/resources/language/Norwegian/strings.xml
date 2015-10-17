@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Norwegian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/no/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30001">Action</string>
+    <string id="30002">Avslutt</string>
+    <string id="30028">Brukernavn</string>
+    <string id="30081">Vis Favoritter</string>
+    <string id="30086">Nyheter</string>
+    <string id="30114">Mellomlagring</string>
+
+    <!-- credentials -->
+    <string id="30147">Brukernavn</string>
+    <string id="30148">Passord</string>
+
+    <!-- Sort -->
+    <string id="30149">Tilkobling</string>
+    <string id="30150">Strøm</string>
+    <string id="30152">Annet</string>
+    <string id="30157">Alle album</string>
+    <string id="30159">Skann</string>
+    <string id="30165">Nytt navn</string>
+    <string id="30166">Fjern</string>
+    <string id="30172">Ferdig</string>
+    <string id="30184">Spilleliste</string>
+
+    <!-- nodes -->
+    <string id="30188">Navn</string>
+    <string id="30189">Sjanger</string>
+</strings>

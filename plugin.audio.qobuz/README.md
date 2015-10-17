@@ -2,8 +2,8 @@ This is a Qobuz plugin for XBMC
 -------------------------------
 It enables access to Qobuz music streaming service directly from XBMC (http://xbmc.org)
 
-Main Features : 
----------------
+Main Features: 
+--------------
 
 - Show and manage (add/remove/create/rename/delete) playlists
 - Show purchased products

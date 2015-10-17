@@ -1,10 +1,11 @@
 '''
     qobuz.api.raw
-    ~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~
 
-    Our base api, all method are mapped like <endpoint>_<method>
+    Our base api, all method are mapped like in <endpoint>_<method>
     see Qobuz API on GitHub (https://github.com/Qobuz/api-documentation)
-    
+
+    :part_of: xbmc-qobuz
     :copyright: (c) 2012 by Joachim Basmaison, Cyril Leclerc
     :license: GPLv3, see LICENSE for more details.
 '''
@@ -22,19 +23,14 @@ from debug import warn, info
 
 socket.timeout = 5
 
-def _api_error_string(self, url="", params={}, json=""): 
-        return 'Something went wrong with request: %s\n%s\n%s' % (
-                url, pprint.pformat(params),
-                pprint.pformat(json))
 
 class QobuzApiRaw(object):
 
     def __init__(self):
-        self.appid = "285473059" # XBMC
-        #self.appid = "214748364" # :]
+        self.appid = "285473059"  # XBMC
         self.version = '0.2'
         self.baseUrl = 'http://www.qobuz.com/api.json/'
-        
+
         self.user_auth_token = None
         self.user_id = None
         self.error = None
@@ -46,9 +42,15 @@ class QobuzApiRaw(object):
         self.error = None
         self.__set_s4()
 
+    def _api_error_string(self, url="", params={}, json=""):
+        s = 'Something went wrong with request (code=%s)\nurl=%s\nparams=%s' \
+            '\njson=%s'
+        s %= (self.status_code, url, pprint.pformat(params),
+              pprint.pformat(json))
+        return s
+
     def _check_ka(self, ka, mandatory, allowed=[]):
-        """
-        Checking parameters before sending our request
+        """Checking parameters before sending our request
         - if mandatory parameter is missing raise error
         - if a given parameter is neither in mandatory or allowed
         raise error (Creating exception class like MissingParameter
@@ -84,25 +86,26 @@ class QobuzApiRaw(object):
             Arguments:
             params:    parameters dictionary
             uri   :    service/method
-            opt   :    Optionnal named parameters 
+            opt   :    Optionnal named parameters
                         - noToken=True/False
-                       
+
             Return None if something went wrong
             Return raw data from qobuz on success as dictionary
-            
+
             * on error you can check error and status_code
-            
-            Example: 
-            
-                ret = api._api_request({'username':'foo', 
-                                  'password':'bar'}, 
+
+            Example:
+
+                ret = api._api_request({'username':'foo',
+                                  'password':'bar'},
                                  'user/login', noToken=True)
                 print 'Error: %s [%s]' % (api.error, api.status_code)
-                
+
             This should produce something like:
             Error: [200]
             Error: Bad Request [400]
         """
+        info(self, 'uri: %s, params: %s' % (uri, params))
         self.statTotalRequest += 1
         self.error = ''
         self.status_code = None
@@ -137,7 +140,7 @@ class QobuzApiRaw(object):
                 self.error = "Not Found"
             else:
                 self.error = "Server error"
-            self.error = _api_error_string(url, _copy_params)
+            self.error = self._api_error_string(url, _copy_params)
             warn(self, self.error)
             return None
         if not r.content:
@@ -149,7 +152,8 @@ class QobuzApiRaw(object):
         try:
             response_json = r.json()
         except Exception as e:
-            warn(self, "Json loads failed to load... retrying!\n%s" %(repr(e)))
+            warn(self, "Json loads failed to load... retrying!\n%s" % (
+                repr(e)))
             try:
                 response_json = r.json()
             except:
@@ -162,26 +166,20 @@ class QobuzApiRaw(object):
         except:
             pass
         if status == 'error':
-            self.error = _api_error_string(url, _copy_params, response_json)
+            self.error = self._api_error_string(
+                url, _copy_params, response_json)
             warn(self, self.error)
             return None
         return response_json
 
-    """
-        This method is used when you are caching token and want to skip
-        login
-    """
     def set_user_data(self, user_id, user_auth_token):
         if not (user_id or user_auth_token):
-            raise QobuzXbmcError(who=self, what='missing_argument', 
+            raise QobuzXbmcError(who=self, what='missing_argument',
                                  additional='uid|token')
         self.user_auth_token = user_auth_token
-        self.user_id = user_id 
+        self.user_id = user_id
         self.logged_on = time()
 
-    """
-        Erase user specific data
-    """
     def logout(self):
         self.user_auth_token = None
         self.user_id = None
@@ -190,15 +188,12 @@ class QobuzApiRaw(object):
     def user_login(self, **ka):
         data = self._user_login(**ka)
         if data:
-            self.set_user_data(data['user_auth_token'], 
+            self.set_user_data(data['user_auth_token'],
                                data['user']['id'])
             return data
         self.logout()
         return None
 
-    '''
-    User
-    '''
     def _user_login(self, **ka):
         self._check_ka(ka, ['username', 'password'], ['email'])
         data = self._api_request(ka, '/user/login', noToken=True)
@@ -220,9 +215,6 @@ class QobuzApiRaw(object):
         data = self._api_request(ka, '/user/update')
         return data
 
-    '''
-    Track
-    '''
     def track_get(self, **ka):
         self._check_ka(ka, ['track_id'])
         data = self._api_request(ka, '/track/get')
@@ -245,7 +237,6 @@ class QobuzApiRaw(object):
                   }
         return self._api_request(params, '/track/getFileUrl')
 
-    # MAPI UNTESTED
     def track_search(self, **ka):
         self._check_ka(ka, ['query'], ['limit'])
         data = self._api_request(ka, '/track/search')
@@ -257,16 +248,16 @@ class QobuzApiRaw(object):
         # (http://www.qobuz.com/apps/api/QobuzAPI-TermsofUse.pdf)
         params = {'user_id': self.user_id, 'track_id': track_id}
         return self._api_request(params, '/track/reportStreamingStart')
-    
+
     def track_resportStreamingEnd(self, track_id, duration):
         duration = math.floor(int(duration))
         if duration < 5:
             info(self, 'Duration lesser than 5s, abort reporting')
             return None
-        #@todo ???
-        user_auth_token = ''
+        # @todo ???
+        user_auth_token = ''  # @UnusedVariable
         try:
-            user_auth_token = self.user_auth_token
+            user_auth_token = self.user_auth_token  # @UnusedVariable
         except:
             warn(self, 'No authentification token')
             return None
@@ -276,9 +267,6 @@ class QobuzApiRaw(object):
                   }
         return self._api_request(params, '/track/reportStreamingEnd')
 
-    '''
-    Album
-    '''
     def album_get(self, **ka):
         self._check_ka(ka, ['album_id'])
         return self._api_request(ka, '/album/get')
@@ -287,14 +275,11 @@ class QobuzApiRaw(object):
         self._check_ka(ka, [], ['type', 'genre_id', 'limit', 'offset'])
         return self._api_request(ka, '/album/getFeatured')
 
-    '''
-    Purchase
-    '''
     def purchase_getUserPurchases(self, **ka):
-        self._check_ka(ka, [], ['order_id', 'order_line_id', 'flat', 'limit', 'offset'])
+        self._check_ka(ka, [], ['order_id', 'order_line_id', 'flat', 'limit',
+                                'offset'])
         return self._api_request(ka, "/purchase/getUserPurchases")
 
-    # SEARCH #
     def search_getResults(self, **ka):
         self._check_ka(ka, ['query'], ['type', 'limit', 'offset'])
         mandatory = ['query', 'type']
@@ -305,9 +290,6 @@ class QobuzApiRaw(object):
                                      additional=label)
         return self._api_request(ka, '/search/getResults')
 
-    """
-        Favorite
-    """
     def favorite_getUserFavorites(self, **ka):
         self._check_ka(ka, [], ['user_id', 'type', 'limit', 'offset'])
         return self._api_request(ka, '/favorite/getUserFavorites')
@@ -334,9 +316,6 @@ class QobuzApiRaw(object):
                                  additional='artist_ids|albums_ids|track_ids')
         return self._api_request(ka, '/favorite/delete')
 
-    """
-    Playlist
-    """
     def playlist_get(self, **ka):
         self._check_ka(ka, ['playlist_id'], ['extra', 'limit', 'offset'])
         return self._api_request(ka, '/playlist/get')
@@ -355,7 +334,7 @@ class QobuzApiRaw(object):
     def playlist_deleteTracks(self, **ka):
         self._check_ka(ka, ['playlist_id'], ['playlist_track_ids'])
         return self._api_request(ka, '/playlist/deleteTracks')
-       
+
     def playlist_subscribe(self, **ka):
         mandatory = ['playlist_id']
         found = None
@@ -373,7 +352,7 @@ class QobuzApiRaw(object):
 
     def playlist_create(self, **ka):
         self._check_ka(ka, ['name'], ['is_public',
-                       'is_collaborative', 'tracks_id', 'album_id'])
+                                      'is_collaborative', 'tracks_id', 'album_id'])
         if not 'is_public' in ka:
             ka['is_public'] = True
         if not 'is_collaborative' in ka:
@@ -389,17 +368,15 @@ class QobuzApiRaw(object):
 
     def playlist_update(self, **ka):
         self._check_ka(ka, ['playlist_id'], ['name', 'description',
-                       'is_public', 'is_collaborative', 'tracks_id'])
+                                             'is_public', 'is_collaborative', 'tracks_id'])
         res = self._api_request(ka, '/playlist/update')
         return res
-    
+
     def playlist_getPublicPlaylists(self, **ka):
-        self._check_ka(ka, '', ['type','limit','offset'])
+        self._check_ka(ka, '', ['type', 'limit', 'offset'])
         res = self._api_request(ka, '/playlist/getPublicPlaylists')
         return res
-    """
-        Artist
-    """
+
     def artist_getSimilarArtists(self, **ka):
         self._check_ka(ka, ['artist_id', 'limit', 'offset'])
         return self._api_request(ka, '/artist/getSimilarArtists')
@@ -409,23 +386,14 @@ class QobuzApiRaw(object):
         data = self._api_request(ka, '/artist/get')
         return data
 
-    """
-        Genre
-    """
     def genre_list(self, **ka):
         self._check_ka(ka, [], ['parent_id', 'limit', 'offset'])
         return self._api_request(ka, '/genre/list')
 
-    """
-        Label
-    """
     def label_list(self, **ka):
         self._check_ka(ka, [], ['limit', 'offset'])
         return self._api_request(ka, '/label/list')
 
-    """
-        Article
-    """
     def article_listRubrics(self, **ka):
         self._check_ka(ka, [], ['extra', 'limit', 'offset'])
         return self._api_request(ka, '/article/listRubrics')
@@ -437,3 +405,18 @@ class QobuzApiRaw(object):
     def article_get(self, **ka):
         self._check_ka(ka, ['article_id'])
         return self._api_request(ka, '/article/get')
+
+    def collection_getAlbums(self, **ka):
+        self._check_ka(ka, [], ['source', 'artist_id', 'query',
+                                'limit', 'offset'])
+        return self._api_request(ka, '/collection/getAlbums')
+
+    def collection_getArtists(self, **ka):
+        self._check_ka(ka, [], ['source', 'query',
+                                'limit', 'offset'])
+        return self._api_request(ka, '/collection/getArtists')
+
+    def collection_getTracks(self, **ka):
+        self._check_ka(ka, [], ['source', 'artist_id', 'album_id', 'query',
+                                'limit', 'offset'])
+        return self._api_request(ka, '/collection/getTracks')

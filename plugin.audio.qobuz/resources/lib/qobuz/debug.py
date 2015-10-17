@@ -1,19 +1,11 @@
-#     Copyright 2011 Joachim Basmaison, Cyril Leclerc
-#
-#     This file is part of xbmc-qobuz.
-#
-#     xbmc-qobuz is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
-#
-#     xbmc-qobuz is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-#     GNU General Public License for more details.
-#
-#     You should have received a copy of the GNU General Public License
-#     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>..
+'''
+    qobuz.debug
+    ~~~~~~~~~~~
+
+    :part_of: xbmc-qobuz
+    :copyright: (c) 2012 by Joachim Basmaison, Cyril Leclerc
+    :license: GPLv3, see LICENSE for more details.
+'''
 __debugging__ = True
 ourlog = None
 LOGDEBUG = None
@@ -22,8 +14,8 @@ LOGERROR = None
 LOGSEVERE = None
 
 try:
-    import xbmc
-    import xbmcaddon
+    import xbmc  # @UnresolvedImport
+    import xbmcaddon  # @UnresolvedImport
     ourlog = xbmc.log
     LOGDEBUG = xbmc.LOGDEBUG
     LOGNOTICE = xbmc.LOGNOTICE
@@ -42,6 +34,7 @@ except:
         print lvl + msg
     ourlog = logfunc
 
+
 def log(obj, msg, lvl=LOGNOTICE):
     """Base for all logging function, run in/out Xbmc
         Inside Xbmc loggin functions use xbmc.log else they just print
@@ -59,20 +52,24 @@ def log(obj, msg, lvl=LOGNOTICE):
             name = type(obj)
     ourlog('[Qobuz/' + str(name) + "] " + msg, lvl)
 
+
 def warn(obj, msg):
     """facility: LOGERROR
     """
     log(obj, msg, LOGERROR)
+
 
 def info(obj, msg):
     """facility: LOGNOTICE
     """
     log(obj, msg, LOGNOTICE)
 
+
 def debug(obj, msg):
     """facility: LOGDEBUG
     """
     log(obj, msg, LOGDEBUG)
+
 
 def error(obj, msg):
     """facility: LOGSEVERE

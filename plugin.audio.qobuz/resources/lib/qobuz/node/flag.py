@@ -1,106 +1,113 @@
-#     Copyright 2011 Joachim Basmaison, Cyril Leclerc
-#
-#     This file is part of xbmc-qobuz.
-#
-#     xbmc-qobuz is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
-#
-#     xbmc-qobuz is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-#     GNU General Public License for more details.
-#
-#     You should have received a copy of the GNU General Public License
-#     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
+'''
+    qobuz.node.flag
+    ~~~~~~~~~~~~~~~
 
+    :part_of: xbmc-qobuz
+    :copyright: (c) 2012 by Joachim Basmaison, Cyril Leclerc
+    :license: GPLv3, see LICENSE for more details.
+'''
 from exception import QobuzXbmcError
 from debug import warn
 
-class __Flag__():
-    def __init__(self):
-        self.NODE = 1 << 1
-        self.TRACK = 1 << 2
-        self.PLAYLIST = 1 << 3
-        self.USERPLAYLISTS = 1 << 4
-        self.RECOMMENDATION = 1 << 5
-        self.ROOT = 1 << 6
-        self.ALBUM = 1 << 7
-        self.PURCHASES = 1 << 8
-        self.SEARCH = 1 << 9
-        self.ARTIST = 1 << 10
-        self.SIMILAR_ARTIST = 1 << 11
-        self.FAVORITES = 1 << 12
-        self.FRIEND = 1 << 13
-        self.FRIEND_LIST = 1 << 14
-        self.GENRE = 1 << 15
-        self.LABEL = 1 << 16
-        self.ALBUMS = 1 << 17
-        self.ARTICLES = 1 << 18
-        self.ARTICLE = 1 << 19
-        self.ARTICLE_RUBRICS = 1 << 20
-        self.ALBUMS_BY_ARTIST = 1 << 21
-        self.PUBLIC_PLAYLISTS = 1 << 22
-        self.STOPBUILD = 1 <<  100
-        self.NONE = 1 << 101
 
-        self.totalFlag = 22
+class FlagEnum(object):
+    NODE = 1 << 1
+    TRACK = 1 << 2
+    PLAYLIST = 1 << 3
+    USERPLAYLISTS = 1 << 4
+    RECOMMENDATION = 1 << 5
+    ROOT = 1 << 6
+    ALBUM = 1 << 7
+    PURCHASES = 1 << 8
+    SEARCH = 1 << 9
+    ARTIST = 1 << 10
+    SIMILAR_ARTIST = 1 << 11
+    FAVORITES = 1 << 12
+    FRIEND = 1 << 13
+    FRIENDS = 1 << 14
+    GENRE = 1 << 15
+    LABEL = 1 << 16
+    ALBUMS = 1 << 17
+    ARTICLES = 1 << 18
+    ARTICLE = 1 << 19
+    ARTICLE_RUBRICS = 1 << 20
+    ALBUMS_BY_ARTIST = 1 << 21
+    PUBLIC_PLAYLISTS = 1 << 22
+    COLLECTION = 1 << 23
+    COLLECTIONS = 1 << 24
+    FAVORITE = 1 << 25
+    PURCHASE = 1 << 26
+
+    STOPBUILD = 1 << 100
+    NONE = 1 << 101
+
+    def __init__(self):
+
+        self.totalFlag = 26
         self.ALL = 0
-        for i in range(1, self.totalFlag+1):
+        for i in range(1, self.totalFlag + 1):
             self.ALL |= (1 << i)
 
-    def to_s(self, flag):
+    @classmethod
+    def to_s(cls, flag):
         if not flag:
-            warn(self, "Missing flag parameter")
+            warn(cls, "Missing flag parameter")
             return ''
         flag = int(flag)
-        if flag & self.TRACK == self.TRACK:
+        if flag & cls.TRACK == cls.TRACK:
             return "track"
-        elif flag & self.PLAYLIST == self.PLAYLIST:
+        elif flag & cls.PLAYLIST == cls.PLAYLIST:
             return "playlist"
-        elif flag & self.USERPLAYLISTS == self.USERPLAYLISTS:
+        elif flag & cls.USERPLAYLISTS == cls.USERPLAYLISTS:
             return "user_playlists"
-        elif flag & self.RECOMMENDATION == self.RECOMMENDATION:
+        elif flag & cls.RECOMMENDATION == cls.RECOMMENDATION:
             return "recommendation"
-        elif flag & self.ROOT == self.ROOT:
+        elif flag & cls.ROOT == cls.ROOT:
             return "root"
-        elif flag & self.ALBUM == self.ALBUM:
+        elif flag & cls.ALBUM == cls.ALBUM:
             return "album"
-        elif flag & self.PURCHASES == self.PURCHASES:
+        elif flag & cls.PURCHASES == cls.PURCHASES:
             return "purchases"
-        elif flag & self.FAVORITES == self.FAVORITES:
+        elif flag & cls.PURCHASE == cls.PURCHASE:
+            return "purchase"
+        elif flag & cls.FAVORITES == cls.FAVORITES:
             return "favorites"
-        elif flag & self.SEARCH == self.SEARCH:
+        elif flag & cls.FAVORITE == cls.FAVORITE:
+            return "favorite"
+        elif flag & cls.SEARCH == cls.SEARCH:
             return "search"
-        elif flag & self.ARTIST == self.ARTIST:
+        elif flag & cls.ARTIST == cls.ARTIST:
             return "artist"
-        elif flag & self.SIMILAR_ARTIST == self.SIMILAR_ARTIST:
+        elif flag & cls.SIMILAR_ARTIST == cls.SIMILAR_ARTIST:
             return "similar_artist"
-        elif flag & self.FRIEND == self.FRIEND:
+        elif flag & cls.FRIEND == cls.FRIEND:
             return "friend"
-        elif flag & self.FRIEND_LIST == self.FRIEND_LIST:
-            return "friend_list"
-        elif flag & self.GENRE == self.GENRE:
+        elif flag & cls.FRIENDS == cls.FRIENDS:
+            return "friends"
+        elif flag & cls.GENRE == cls.GENRE:
             return "genre"
-        elif flag & self.LABEL == self.LABEL:
+        elif flag & cls.LABEL == cls.LABEL:
             return "label"
-        elif flag & self.NODE == self.NODE:
+        elif flag & cls.NODE == cls.NODE:
             return "inode"
-        elif flag & self.STOPBUILD == self.STOPBUILD:
+        elif flag & cls.STOPBUILD == cls.STOPBUILD:
             return "stop_build_down"
-        elif flag & self.ARTICLES == self.ARTICLES:
+        elif flag & cls.ARTICLES == cls.ARTICLES:
             return "articles"
-        elif flag & self.ARTICLE == self.ARTICLE:
+        elif flag & cls.ARTICLE == cls.ARTICLE:
             return "article"
-        elif flag & self.PUBLIC_PLAYLISTS == self.PUBLIC_PLAYLISTS:
+        elif flag & cls.PUBLIC_PLAYLISTS == cls.PUBLIC_PLAYLISTS:
             return "public_playlists"
-        elif flag & self.ARTICLE_RUBRICS == self.ARTICLE_RUBRICS:
+        elif flag & cls.ARTICLE_RUBRICS == cls.ARTICLE_RUBRICS:
             return "article_rubrics"
-        elif flag & self.ALBUMS_BY_ARTIST == self.ALBUMS_BY_ARTIST:
+        elif flag & cls.ALBUMS_BY_ARTIST == cls.ALBUMS_BY_ARTIST:
             return "albums_by_artist"
+        elif flag & cls.COLLECTION == cls.COLLECTION:
+            return "collection"
+        elif flag & cls.COLLECTIONS == cls.COLLECTIONS:
+            return "collections"
         else:
             raise QobuzXbmcError(
-                who=self, what='invalid_flag', additional=repr(flag))
+                who=cls, what='invalid_flag', additional=repr(flag))
 
-Flag = __Flag__()
+Flag = FlagEnum()

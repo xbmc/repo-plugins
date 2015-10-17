@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Lithuanian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/lt/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30001">Veiksmas</string>
+    <string id="30002">Išjungti XBMC grotuvą</string>
+    <string id="30028">Naudotojo vardas</string>
+    <string id="30081">Rodyti Mėgstamiausi</string>
+    <string id="30086">Naujas</string>
+    <string id="30114">Buferizacija</string>
+
+    <!-- credentials -->
+    <string id="30147">Naudotojo vardas</string>
+    <string id="30148">Slaptažodis</string>
+    <string id="30150">Srautas</string>
+    <string id="30157">Visi albumai</string>
+    <string id="30159">Peržvelgti</string>
+    <string id="30165">Pervadinti</string>
+    <string id="30166">Pašalinti</string>
+
+    <!-- Progress bar -->
+    <string id="30169">Paleidimas</string>
+    <string id="30172">Baigti</string>
+    <string id="30184">Grojaraštis</string>
+
+    <!-- nodes -->
+    <string id="30188">Etiketė</string>
+    <string id="30189">Žanras</string>
+</strings>

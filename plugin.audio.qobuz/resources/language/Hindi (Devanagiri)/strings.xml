@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Hindi (Devanagiri) language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/hi/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30028">उपयोगकर्ता नाम</string>
+    <string id="30114">कैश</string>
+
+    <!-- credentials -->
+    <string id="30147">उपयोगकर्ता नाम</string>
+    <string id="30157">सभी एल्बमें</string>
+    <string id="30159">बारीकी से देखना</string>
+    <string id="30165">नया नामा रखना </string>
+    <string id="30166">हटाना</string>
+    <string id="30172">टेके</string>
+    <string id="30184">प्लेलिस्ट</string>
+    <string id="30189">शैली</string>
+</strings>

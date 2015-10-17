@@ -1,6 +1,13 @@
-import sys
-import xbmcgui
-import xbmc
+'''
+    qobuz.gui.window.base
+    ~~~~~~~~~~~~~~~~~~~~~
+
+    :part_of: xbmc-qobuz
+    :copyright: (c) 2012 by Joachim Basmaison, Cyril Leclerc
+    :license: GPLv3, see LICENSE for more details.
+'''
+import xbmcgui  # @UnresolvedImport
+# import xbmc  # @UnresolvedImport
 
 # getLocalizedString = sys.modules['__main__'].getLocalizedString
 
@@ -36,7 +43,7 @@ class Window(xbmcgui.WindowXML):
 #        self.button_exit = self.getControl(self.control_id_button_exit)
 
         # translate buttons
-#        self.button_action.setLabel(getLocalizedString(self.translation_id_action))
+# self.button_action.setLabel(getLocalizedString(self.translation_id_action))
 # self.button_exit.setLabel(getLocalizedString(self.translation_id_exit))
 
     def onAction(self, action):

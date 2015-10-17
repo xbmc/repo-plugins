@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Hebrew language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/he/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30001">פעולה</string>
+    <string id="30002">יציאה</string>
+    <string id="30003">טקסט דוגמה</string>
+    <string id="30004">רשימת השמעה של Qobuz</string>
+    <string id="30005">אין רשימת השמעה נוכחית</string>
+    <string id="30006">מגבלת חיפוש שירים</string>
+    <string id="30007">מגבלת חיפוש אלבומים</string>
+    <string id="30008">מגבלת חיפוש אמנים</string>
+    <string id="30009">אין שירות </string>
+    <string id="30010">Qobuz XBMC</string>
+    <string id="30011">לא ניתן להתחבר אל Qobuz.</string>
+    <string id="30012">אנא נסה שנית מאוחר יותר</string>
+    <string id="30013">חדש...</string>
+    <string id="30014">נוצר</string>
+    <string id="30015">חפש שירים...</string>
+    <string id="30016">חפש אלבומים...</string>
+    <string id="30017">חפש אמנים...</string>
+    <string id="30018">שירי Qobuz פופולריים עבור האמן...</string>
+    <string id="30019">שירי Qobuz פופולריים</string>
+    <string id="30020">מועדפי Qobuz שלי</string>
+    <string id="30021">הצג רשימות השמעה</string>
+    <string id="30022">חפש שירים המוצעים ע"י Qobuz</string>
+    <string id="30023">לא נמצאו שירים מתאימים.</string>
+    <string id="30024">חפש אלבומים המוצעים ע"י Qobuz</string>
+    <string id="30025">לא נמצאו אלבומים מתאימים.</string>
+    <string id="30026">חפש אמנים המוצעים ע"י Qobuz</string>
+    <string id="30027">לא נמצאו אמנים מתאימים.</string>
+    <string id="30028">שם משתמש</string>
+    <string id="30029">לא נמצאו רשימות השמעה של Qobuz.</string>
+    <string id="30030">חפש אלבומי אמן המוצעים ע"י Qobuz</string>
+    <string id="30031">לא נמצאו אלבומים מתאימים.</string>
+    <string id="30032">לא נמצאו אמנים מתאימים.</string>
+    <string id="30033">אין לך מועדפים.</string>
+    <string id="30034">אין שירים פופולריים.</string>
+    <string id="30035">אין לך רשימות השמעה של Qobuz.</string>
+    <string id="30036">הינך חייב להיות מחובר</string>
+    <string id="30037">לשם גישה לרשימות השמעה של Qobuz</string>
+    <string id="30038">נוסף למועדפים</string>
+    <string id="30039">להוסיף מועדפים</string>
+    <string id="30040">הוסר ממועדפי Qobuz</string>
+    <string id="30041">להסרה ממועדפי Qobuz.</string>
+    <string id="30042">לגשת לשיורת הזרמת המוזיקה Qobuz[CR][I]אנא&#10;		בדוק את פרטי המשתמש בהגדרות ההרחבה[CR]או נסה שנית מאחור יותר[/I]&#10;	</string>
+    <string id="30043">חפש שירי אמן פופולריים המוצעים ע"י Qobuz&#10;	</string>
+    <string id="30044">אין שירים פופולריים.</string>
+    <string id="30045">לא נמצאו אמנים מתאימים.</string>
+    <string id="30046">נכשל בניגון שיר</string>
+    <string id="30047">שם רשימת השמעה של Qobuz</string>
+    <string id="30048">לא יכול ליצור רשימת השמעה של Qobuz</string>
+    <string id="30049">נוצרה רשימת השמעה של Qobuz</string>
+    <string id="30050">ליצירת רשימת השמעה של Qobuz.</string>
+    <string id="30051">שם רשימת השמעה של Qobuz</string>
+    <string id="30052">לא יכול לשנות שם רשימת השמעה של Qobuz</string>
+    <string id="30053">לשנות שם רשימת השמעה של Qobuz.</string>
+    <string id="30054">מחק רשימת השמעה זו של Qobuz?</string>
+    <string id="30055">לא יכול למחוק רשימת השמעה של Qobuz</string>
+    <string id="30056">למחוק רשימת השמעה של Qobuz.</string>
+    <string id="30057">שם רשימת השמעה של Qobuz</string>
+    <string id="30058">לא יכול ליצור רשימת השמעה של Qobuz</string>
+    <string id="30059">נוצרה רשימת השמעה של Qobuz</string>
+    <string id="30060">לא יכול להוסיף אל רשימת השמעה</string>
+    <string id="30061">השיר נוסף אל רשימת ההשמעה של Qobuz</string>
+    <string id="30062">אין לך רשימות השמעה של Qobuz.</string>
+    <string id="30063">להוסיף אל רשימת השמעה של Qobuz.</string>
+    <string id="30064">מחק שיר זה מתוך</string>
+    <string id="30065">רשימת ההשמעה של Qobuz?</string>
+    <string id="30066">נכשל בהסרה</string>
+    <string id="30067">השיר מרשימת השמעה של Qobuz.</string>
+    <string id="30068">הוסר שיר מרשימת השמעה של Qobuz</string>
+    <string id="30069">למחוק שיר מרשימת השמעה של Qobuz.</string>
+    <string id="30070">אין אמנים דומים.</string>
+    <string id="30071">לא ניתן להתחבר.</string>
+    <string id="30072">בדוק שם משתמש וסיסמה בהגדרות.</string>
+    <string id="30073">מועדף Qobuz</string>
+    <string id="30074">לא מועדף Qobuz</string>
+    <string id="30075">הסר מרשימת השמעה של Qobuz</string>
+    <string id="30076">הוסף אל רשימת השמעה של Qobuz</string>
+    <string id="30077">שירים נוספים</string>
+    <string id="30078">צור רשימת השמעה של Qobuz</string>
+    <string id="30079">מחק רשימת השמעה של Qobuz</string>
+    <string id="30080">שנה שם של רשימת השמעה</string>
+    <string id="30081">הצג מועדפים</string>
+    <string id="30082">הוסף כרשימת השמעה חדשה</string>
+    <string id="30083">מועדפי Qobuz</string>
+
+    <!-- Recommandation -->
+    <string id="30084">הצג מומלצים</string>
+    <string id="30085">פרסי עיתונות</string>
+    <string id="30086">חדשות</string>
+    <string id="30087">הנמכרים ביותר</string>
+    <string id="30088">נבחרי העורך</string>
+    <string id="30089">פופ / רוק</string>
+    <string id="30090">אלקטרוני</string>
+    <string id="30091">ג'אז</string>
+    <string id="30092">שאנסון</string>
+    <string id="30093">נשמה / פאנק/ראפ</string>
+    <string id="30094">מוזיקת עולם</string>
+    <string id="30095">בלוז / קאנטרי/עממית</string>
+    <string id="30096">פסקולי סרטים</string>
+    <string id="30097">קלאסית</string>
+    <string id="30098">כולם</string>
+    <string id="30099">רגאיי</string>
+    <string id="30100">מסמכים היסטוריים / ספרות / הומור</string>
+    <string id="30101">הצג רכישות</string>
+    <string id="30102">הצג חדשות</string>
+    <string id="30103">הבולטים ביותר</string>
+    <string id="30104">ראפ / היפהופ / RnB / נשמה</string>
+    <string id="30105">ילדים / קריוקי / אמביינט</string>
+    <string id="30106">טכנו</string>
+    <string id="30107">רגאיי</string>
+
+    <!-- Cache Addon Menu -->
+    <string id="30108">אורך חיים בדקות של נתוני Qobuz שונים&#10;		במטמון[CR][I]- הגדר אפס לביטול שימוש במטמון[/I]</string>
+    <string id="30109">אורך חיי מטמון אלבום</string>
+    <string id="30110">אורך חיי מטמון אמן</string>
+    <string id="30111">אורך חיי מטמון רצועה</string>
+    <string id="30112">אורך חיי מטמון מומלץ</string>
+    <string id="30113">אורך חיי מטמון של רשימת השמעה אישית</string>
+    <string id="30114">זכרון מטמון</string>
+    <string id="30115">הגדרות מטמון</string>
+    <string id="30116">אורך חיי מטמון של אימות</string>
+    <string id="30117">מחק מטמון</string>
+    <string id="30118">מנהל רשימת השמעה</string>
+
+    <!-- Cache Notify -->
+    <string id="30119">מטמון Qobuz</string>
+    <string id="30120">שגיאה בעת מחיקת מטמון נתונים</string>
+    <string id="30121">הסר נתונים מהמטמון</string>
+    <string id="30122">האם אתה בטוח שברצונך למחוק את כל זיכרון המטמון</string>
+    <string id="30123">על זיכרון המטמון הוסר</string>
+
+    <!-- Stream -->
+    <string id="30124">סוג הזרמה</string>
+    <string id="30125">דלג על הדגמה</string>
+
+    <!-- URL Resolver -->
+    <string id="30126">אפשור Resolver</string>
+
+    <!-- Color -->
+    <string id="30127">צבעים</string>
+    <string id="30128">צבע פריטי תפריט Context</string>
+    <string id="30129">צבע התרעה של פריטי תפריט Context</string>
+    <string id="30130">צבע פריטי רשימת השמעה</string>
+    <string id="30131">מבנה תפריט Context</string>
+
+    <!-- Qobuz Player -->
+    <string id="30132">נגן Qobuz</string>
+    <string id="30133">מנגן שיר</string>
+    <string id="30134">נכשל בניגון שיר</string>
+
+    <!-- Search -->
+    <string id="30135">חיופש מאופשר</string>
+    <string id="30136">אין שיר מתאים</string>
+    <string id="30137">אין אלבום מתאים</string>
+    <string id="30138">אין אמן מתאים</string>
+
+    <!-- Notification -->
+    <string id="30139">Qobuz</string>
+    <string id="30140">תיקיה ריקה</string>
+    <string id="30141">התראה</string>
+    <string id="30142">התראה בעת התחלת ניגון שיר</string>
+    <string id="30143">אין מה להוסיף</string>
+    <string id="30144">הוסף אלבומים למועדפים?</string>
+    <string id="30145">הוסף רצועות למועדפים?</string>
+    <string id="30146">הוסף אמנים אל מועדפים?</string>
+
+    <!-- credentials -->
+    <string id="30147">שם משתמש</string>
+    <string id="30148">סיסמא</string>
+
+    <!-- Sort -->
+    <string id="30149">אישורי משתמש</string>
+    <string id="30150">זרימה</string>
+    <string id="30151">הגבלת חיפוש</string>
+    <string id="30152">אחר</string>
+    <string id="30153">הצג פריטים מומלצים</string>
+    <string id="30154">אפשר יכולת סריקה (נסיוני)</string>
+    <string id="30155">מספר הפריטים בעמוד</string>
+
+    <!-- Context Menu -->
+    <string id="30156">אלבום זה</string>
+    <string id="30157">כל האלבומים</string>
+    <string id="30158">הצג תיקיה גדולה</string>
+    <string id="30159">סרוק</string>
+    <string id="30160">אמן דומה</string>
+    <string id="30161">הוסף לרשימת השמעה נוכחית</string>
+    <string id="30162">הצג רשימות השמעה</string>
+    <string id="30163">קבע כנוכחי</string>
+    <string id="30164">צור</string>
+    <string id="30165">שנה שם</string>
+    <string id="30166">הסר</string>
+    <string id="30167">הוסף למועדפים</string>
+    <string id="30168">הרשם</string>
+
+    <!-- Progress bar -->
+    <string id="30169">מתחיל</string>
+    <string id="30170">תיקיה ריקה</string>
+    <string id="30171">מציג</string>
+    <string id="30172">סיים</string>
+    <string id="30173">מעבד נתונים</string>
+    <string id="30174">מצא אמן דומה</string>
+
+    <!-- Free account warning -->
+    <string id="30175">התרעת חשבון חינמי</string>
+    <string id="30176">ניתן להאזין לדקת הדגמה יחידה</string>
+    <string id="30177">להאזנה מלאה למוזיקה עליך להירשם.</string>
+    <string id="30178">Qobuz מזרים mp3 ו-FLAC</string>
+
+    <!-- Friends -->
+    <string id="30179"> של חברים</string>
+    <string id="30180">חברים</string>
+    <string id="30181">הוסף חבר</string>
+
+    <!-- playlists -->
+    <string id="30182">צור רשימת השמעה</string>
+    <string id="30183">רשימת השמעה של Qobuz</string>
+    <string id="30184">רשימת השמעה</string>
+    <string id="30185">הוסר</string>
+    <string id="30186">לא יכול להסיר רשימת השמעה</string>
+    <string id="30187">נרשם לרשימת ההשמעה</string>
+
+    <!-- nodes -->
+    <string id="30188">חברת הפקה</string>
+    <string id="30189">סגנון</string>
+    <string id="30190">רשימות השמעה ציבוריות</string>
+
+    <!-- options -->
+    <string id="30191">הצג מומלצים</string>
+</strings>

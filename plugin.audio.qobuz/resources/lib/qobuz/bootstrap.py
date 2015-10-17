@@ -1,19 +1,11 @@
-#     Copyright 2011 Joachim Basmaison, Cyril Leclerc
-#
-#     This file is part of xbmc-qobuz.
-#
-#     xbmc-qobuz is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
-#
-#     xbmc-qobuz is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-#     GNU General Public License for more details.
-#
-#     You should have received a copy of the GNU General Public License
-#     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
+'''
+    qobuz.bootstrap
+    ~~~~~~~~~~~~~~~
+
+    :part_of: xbmc-qobuz
+    :copyright: (c) 2012 by Joachim Basmaison, Cyril Leclerc
+    :license: GPLv3, see LICENSE for more details.
+'''
 import sys
 import os
 
@@ -23,8 +15,11 @@ from dog import dog
 from node import Flag
 from exception import QobuzXbmcError
 from gui.util import dialogLoginFailure, getSetting, containerRefresh
-import qobuz
+from gui.util import dialogServiceTemporarilyUnavailable
+import qobuz  # @UnresolvedImport
 from cache import cache
+
+
 def get_checked_parameters():
     """Parse parameters passed to xbmc plugin as sys.argv
     """
@@ -51,10 +46,12 @@ def get_checked_parameters():
                          (splitparams[0], splitparams[1]))
     return rparam
 
+
 class QobuzBootstrap(object):
     """Set some boot properties
     and route query based on parameters
     """
+
     def __init__(self, __addon__, __handle__):
         qobuz.addon = __addon__
         self.handle = __handle__
@@ -74,7 +71,10 @@ class QobuzBootstrap(object):
         cache.base_path = qobuz.path.cache
         api.stream_format = 6 if getSetting('streamtype') == 'flac' else 5
         if not api.login(getSetting('username'), getSetting('password')):
-            dialogLoginFailure()
+            if api.status_code == 503:
+                dialogServiceTemporarilyUnavailable()
+            else:
+                dialogLoginFailure()
             #@TODO sys.exit killing XBMC? FRODO BUG ?
             # sys.exit(1)
             containerRefresh()
@@ -85,8 +85,10 @@ class QobuzBootstrap(object):
         """Setting some common path used by our application
             cache, image...
         """
-        import xbmc
+        import xbmc  # @UnresolvedImport
+
         class PathObject ():
+
             def __init__(self):
                 self.base = qobuz.addon.getAddonInfo('path')
 
@@ -110,14 +112,15 @@ class QobuzBootstrap(object):
             '''
             Make dir
             '''
-            def mkdir(self, dir):
-                if not os.path.isdir(dir):
+
+            def mkdir(self, path):
+                if not os.path.isdir(path):
                     try:
-                        os.makedirs(dir)
+                        os.makedirs(path)
                     except:
-                        warn("Cannot create directory: " + dir)
+                        warn("Cannot create directory: " + path)
                         exit(2)
-                    info(self, "Directory created: " + dir)
+                    info(self, "Directory created: " + path)
         qobuz.path = PathObject()
         qobuz.path._set_dir()
         qobuz.path.mkdir(qobuz.path.cache)
@@ -136,7 +139,8 @@ class QobuzBootstrap(object):
         except:
             warn(self, "No 'mode' parameter")
         for p in self.params:
-            info(self, "Param: " + p + ' = ' + str(self.params[p]))
+            info(self, "Param: %s = %s (%s)" % (p, str(self.params[p]),
+                                                Flag.to_s(self.params['nt'])))
 
     def dispatch(self):
         """Routing based on parameters
@@ -162,7 +166,7 @@ class QobuzBootstrap(object):
         elif self.MODE == Mode.SCAN:
             r = renderer(self.nodeType, self.params)
             r.enable_progress = False
-            r.whiteFlag = Flag.TRACK 
+            r.whiteFlag = Flag.TRACK
             r.depth = -1
             return r.scan()
         else:

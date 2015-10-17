@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Serbian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/sr/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30002">Izađi iz</string>
+    <string id="30028">Korisničko ime</string>
+    <string id="30114">Keš</string>
+
+    <!-- credentials -->
+    <string id="30147">Korisničko ime</string>
+    <string id="30148">Lozinka</string>
+    <string id="30150">Zapis</string>
+    <string id="30157">Svi albumi</string>
+    <string id="30159">Analiziraj</string>
+    <string id="30165">Preimenuj</string>
+    <string id="30166">Ukloni</string>
+    <string id="30172">Završi</string>
+    <string id="30184">Spisak za rep.</string>
+
+    <!-- nodes -->
+    <string id="30188">Etiketa</string>
+    <string id="30189">Žanr</string>
+</strings>

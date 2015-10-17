@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Basque language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/eu/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30002">Irten</string>
+    <string id="30028">Erabiltzailea</string>
+    <string id="30114">Katxea</string>
+
+    <!-- credentials -->
+    <string id="30147">Erabiltzailea</string>
+    <string id="30148">Pasahitza</string>
+    <string id="30150">Stream</string>
+    <string id="30157">Album guztiak</string>
+    <string id="30159">Eskaneatu</string>
+    <string id="30165">Berrizendatu</string>
+    <string id="30166">Kendu</string>
+
+    <!-- Progress bar -->
+    <string id="30169">Abiarazten</string>
+    <string id="30172">Eginda</string>
+    <string id="30184">Zerrenda</string>
+
+    <!-- nodes -->
+    <string id="30188">Etiketa</string>
+    <string id="30189">Generoa</string>
+</strings>

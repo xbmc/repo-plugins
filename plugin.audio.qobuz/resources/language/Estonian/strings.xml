@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Estonian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/et/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30002">Lõpeta</string>
+    <string id="30028">Kasutajanimi</string>
+    <string id="30081">Näita lemmikuid</string>
+    <string id="30114">Vahemälu</string>
+
+    <!-- credentials -->
+    <string id="30147">Kasutajanimi</string>
+    <string id="30148">Salasõna</string>
+
+    <!-- Sort -->
+    <string id="30149">Ühendus</string>
+    <string id="30150">Voog</string>
+    <string id="30152">Muu</string>
+    <string id="30157">Kõik albumid</string>
+    <string id="30159">Skaneeri</string>
+    <string id="30165">Nimeta ümber</string>
+    <string id="30166">Eemalda</string>
+    <string id="30172">Tehtud</string>
+    <string id="30184">Mängukava</string>
+
+    <!-- nodes -->
+    <string id="30188">Leibel</string>
+    <string id="30189">Žanr</string>
+</strings>

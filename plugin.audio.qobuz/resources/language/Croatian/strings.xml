@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Croatian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/hr/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30001">Akcija</string>
+    <string id="30002">Izaz</string>
+    <string id="30028">Korisničko ime</string>
+    <string id="30081">Prikaži Omiljeno</string>
+    <string id="30114">Predmemorija</string>
+
+    <!-- credentials -->
+    <string id="30147">Korisničko ime</string>
+    <string id="30148">Zaporka</string>
+
+    <!-- Sort -->
+    <string id="30149">Veza</string>
+    <string id="30150">Dostavljanje medija (Stream)</string>
+    <string id="30152">Ostalo</string>
+    <string id="30157">Svi albumi</string>
+    <string id="30159">Skeniraj</string>
+    <string id="30165">Preimenuj</string>
+    <string id="30166">Makni</string>
+
+    <!-- Progress bar -->
+    <string id="30169">Pokretanje</string>
+    <string id="30172">Gotovo</string>
+    <string id="30180">Prijatelji</string>
+    <string id="30184">Lista izvedbi</string>
+
+    <!-- nodes -->
+    <string id="30188">Oznaka</string>
+    <string id="30189">Žanr</string>
+</strings>

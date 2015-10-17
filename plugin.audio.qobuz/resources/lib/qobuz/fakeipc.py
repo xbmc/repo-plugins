@@ -1,15 +1,24 @@
-import xbmcgui
+'''
+    qobuz.fakeipc
+    ~~~~~~~~~~~~~
+
+    :part_of: xbmc-qobuz
+    :copyright: (c) 2012 by Joachim Basmaison, Cyril Leclerc
+    :license: GPLv3, see LICENSE for more details.
+'''
+import xbmcgui  # @UnresolvedImport
 import threading
 import json
 from time import time
 
 lock = threading.Lock()
 
+
 class FakeIPC:
-    
-    def __init__(self, key = "Qobuz.IPC.Data"):
+
+    def __init__(self, key="Qobuz.IPC.Data"):
         self.key = key
-    
+
     def acquire(self, callback):
         global lock
         if not lock.acquire(60):
@@ -23,16 +32,17 @@ class FakeIPC:
     def read(self):
         def cb():
             data = xbmcgui.Window(10000).getProperty(self.key)
-            if data: return json.loads(data)
+            if data:
+                return json.loads(data)
             return None
         return self.acquire(cb)
-        
+
     def write(self, v):
         def cb():
             v['updatedOn'] = time()
             xbmcgui.Window(10000).setProperty(self.key, json.dumps(v))
         self.acquire(cb)
-        
+
     def delete(self):
         def cb():
 

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Czech language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/cs/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30001">Činnost</string>
+    <string id="30002">Ukončit</string>
+    <string id="30028">Uživatelské jméno</string>
+    <string id="30081">Zobrazit oblíbené</string>
+    <string id="30086">Zprávy</string>
+    <string id="30114">Vyrovnávací paměť</string>
+
+    <!-- credentials -->
+    <string id="30147">Uživatelské jméno</string>
+    <string id="30148">Heslo</string>
+    <string id="30150">Proud</string>
+    <string id="30152">Další</string>
+    <string id="30157">Všechna alba</string>
+    <string id="30159">Vyhledat</string>
+    <string id="30165">Přejmenovat</string>
+    <string id="30166">Odstranit</string>
+    <string id="30172">Hotovo</string>
+    <string id="30184">Seznam stop</string>
+
+    <!-- nodes -->
+    <string id="30188">Label</string>
+    <string id="30189">Žánr</string>
+</strings>

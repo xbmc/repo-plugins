@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Polish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/pl/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30001">Akcja</string>
+    <string id="30002">Wyjście</string>
+    <string id="30003">Tekst przykładowy</string>
+    <string id="30004">Lista odtwarzania</string>
+    <string id="30005">Brak listy odtwarzania</string>
+    <string id="30006">Limit wyszukiwania utworu</string>
+    <string id="30007">Limit wyszukiwania albumu</string>
+    <string id="30008">Limit wyszukiwania artysty</string>
+    <string id="30009">Brak usługi Qobuz</string>
+    <string id="30010">Qobuz XBMC</string>
+    <string id="30011">Nie można połączyć się z Qobuz.</string>
+    <string id="30012">Proszę spróbować później</string>
+    <string id="30013">Nowe...</string>
+    <string id="30014">Zrobione</string>
+    <string id="30015">Szukaj utworów...</string>
+    <string id="30016">Szukaj albumy...</string>
+    <string id="30017">Szukaj artystów...</string>
+    <string id="30018">Popularne utwory dla artysty...</string>
+    <string id="30019">Popularne utwory</string>
+    <string id="30020">Moje ulubione</string>
+    <string id="30021">Pokaż listę odtwarzania</string>
+    <string id="30022">Szukaj utworów</string>
+    <string id="30023">Brak pasujących utworów.</string>
+    <string id="30024">Szukaj albumów</string>
+    <string id="30025">Brak pasujących albumów.</string>
+    <string id="30026">Szukaj artystów</string>
+    <string id="30027">Brak pasujących artystów.</string>
+    <string id="30028">Użytkownik</string>
+    <string id="30029">Nie znaleziono listy odtwarzania.</string>
+    <string id="30030">Szukaj albumów artysty</string>
+    <string id="30031">Brak pasujących albumów.</string>
+    <string id="30032">Brak pasujących artystów.</string>
+    <string id="30033">Nie masz ulubionych.</string>
+    <string id="30034">Brak popularnych utworów.</string>
+    <string id="30035">Nie masz listy odtwarzania.</string>
+    <string id="30036">Trzeba zalogować się</string>
+    <string id="30037">by uzyskać dostęp do list odtwarzania</string>
+    <string id="30038">Dodano do ulubionych</string>
+    <string id="30039">by dodać ulubione.</string>
+    <string id="30040">Usunięte z ulubionych</string>
+    <string id="30041">by usunąć ulubione.</string>
+    <string id="30042">by uzyskać dostęp do serwisu strumieniowania muzyki Qobuz[CR][I]&#10;		Proszę sprawdzić uprawnienia w ustawieniach wtyczki[CR]lub spróbować później[/I]&#10;	</string>
+    <string id="30043">Szukaj popularnych utworów artysty&#10;	</string>
+    <string id="30044">Brak popularnych utworów.</string>
+    <string id="30045">Brak pasujących artystów.</string>
+    <string id="30046">Nie można odtworzyć utworu</string>
+    <string id="30047">Nazwa listy odtwarzania</string>
+    <string id="30048">Nie można utworzyć listy odtwarzania</string>
+    <string id="30049">Utworzono listę odtwarzania</string>
+    <string id="30050">by stworzyć listę odtwarzania</string>
+    <string id="30051">Nazwa listy odtwarzania</string>
+    <string id="30052">Nie można zmienić nazwy listy odtwarzania</string>
+    <string id="30053">by zmienić nazwę listy odtwarzania</string>
+    <string id="30054">Usunąć tę listę odtwarzania?</string>
+    <string id="30055">Nie można usunąć listy odtwarzania</string>
+    <string id="30056">aby usunąć listę odtwarzania.</string>
+    <string id="30057">Nazwa listy odtwarzania</string>
+    <string id="30058">Nie można utworzyć listy odtwarzania</string>
+    <string id="30059">Utworzono listę odtwarzania</string>
+    <string id="30060">Nie można dodać do listy odtwarzania</string>
+    <string id="30061">Dodano utwór do listy odtwarzania</string>
+    <string id="30062">Nie ma żadnej listy odtwarzania.</string>
+    <string id="30063">aby dodać utwór do listy odtwarzania.</string>
+    <string id="30064">Usunąć ten utwór z</string>
+    <string id="30065">listy odtwarzania?</string>
+    <string id="30066">Nieudane usunięcie</string>
+    <string id="30067"> utworu z listy odtwarzania.</string>
+    <string id="30068">Usunięto utwór z listy odtwarzania</string>
+    <string id="30069">aby usunąć utwór z listy odtwarzania.</string>
+    <string id="30070">Brak podobnych wykonawców.</string>
+    <string id="30071">Nie można zalogować.</string>
+    <string id="30072">Sprawdź użytkownika i hasło w ustawieniach.</string>
+    <string id="30073">Ulubione</string>
+    <string id="30074">Nie w ulubionych</string>
+    <string id="30075">Usuń z listy odtwarzania</string>
+    <string id="30076">Dodaj do listy odtwarzania</string>
+    <string id="30077">Więcej utworów</string>
+    <string id="30078">Stwórz listę odtwarzania</string>
+    <string id="30079">Usuń listę odtwarzania</string>
+    <string id="30080">Zmień nazwę listy odtwarzania</string>
+    <string id="30081">Pokaż Ulubione</string>
+    <string id="30082">Dodaj jako nową listę odtwarzania</string>
+    <string id="30083">Ulubione</string>
+
+    <!-- Recommandation -->
+    <string id="30084">Pokaż rekomendacje</string>
+    <string id="30085">Nagrody prasowe</string>
+    <string id="30086">Wiadomości</string>
+    <string id="30087">Bestsellery</string>
+    <string id="30088">Wybór Redakcji</string>
+    <string id="30089">Pop / Rock</string>
+    <string id="30090">Electro</string>
+    <string id="30091">Jazz</string>
+    <string id="30092">Francuska piosenka</string>
+    <string id="30093">Soul / Funk/Rap</string>
+    <string id="30094">World Music</string>
+    <string id="30095">Blues / Country/Folk</string>
+    <string id="30096">Filmowa ścieżka dźwiękowa</string>
+    <string id="30097">Klasyka</string>
+    <string id="30098">Wszystkie</string>
+    <string id="30099">Reggae</string>
+    <string id="30100">Dokumenty historiyczne / Litteratura / Humor</string>
+    <string id="30101">Pokaż kupione</string>
+    <string id="30102">Pokaż nowości</string>
+    <string id="30103">Most featured</string>
+    <string id="30104">Rap / HipHop / RB / Soul</string>
+    <string id="30105">Dzieci / Karakoke / Ambiance</string>
+    <string id="30106">Techno</string>
+    <string id="30107">Reggae</string>
+
+    <!-- Cache Addon Menu -->
+    <string id="30108">Czas w minutach na trzymanie różnych danych Qobuz w buforze&#10;[CR][I]- Ustaw zero by wyłączyć buforowanie[/I]</string>
+    <string id="30109">Bufor albumu</string>
+    <string id="30110">Bufor wykonawcy</string>
+    <string id="30111">Bufor utworu</string>
+    <string id="30112">Bufor rekomendacji</string>
+    <string id="30113">Bufor listy odtwarzania użytkownika</string>
+    <string id="30114">Pamięć podręczna</string>
+    <string id="30115">Ustawienia bufora</string>
+    <string id="30116">Bufor autoryzacji</string>
+    <string id="30117">Usuń bufor</string>
+    <string id="30118">Zarządzanie listą odtwarzania</string>
+
+    <!-- Cache Notify -->
+    <string id="30119">Bufor</string>
+    <string id="30120">Błąd w czasie kasowania zbuforowanych danych</string>
+    <string id="30121">Usuń zbuforowane dane</string>
+    <string id="30122">Na pewno chcesz usunąć wszystkie zbuforowane dane</string>
+    <string id="30123">Usunięto wszystkie zbuforowane dane</string>
+
+    <!-- Stream -->
+    <string id="30124">Typ strumienia</string>
+    <string id="30125">Pomiń próbki</string>
+
+    <!-- URL Resolver -->
+    <string id="30126">Rozpoznawanie włączone</string>
+
+    <!-- Color -->
+    <string id="30127">Kolory</string>
+    <string id="30128">Kolor pozycji w menu podręcznym</string>
+    <string id="30129">Kolor pozycji ostrzeżeń w menu podręcznym</string>
+    <string id="30130">Kolor pozycji listy odtwarzania</string>
+    <string id="30131">Format sekcji menu podręcznego</string>
+
+    <!-- Qobuz Player -->
+    <string id="30132">Odtwarzacz Qobuz</string>
+    <string id="30133">Odtwarzanie utworu</string>
+    <string id="30134">Błąd odtwarzania utworu</string>
+
+    <!-- Search -->
+    <string id="30135">Szukanie włączone</string>
+    <string id="30136">Brak pasujących utworów</string>
+    <string id="30137">Brak pasujących albumów</string>
+    <string id="30138">Brak pasującego wykonawcy</string>
+
+    <!-- Notification -->
+    <string id="30139">Qobuz</string>
+    <string id="30140">Pusty katalog</string>
+    <string id="30141">Powiadomienie</string>
+    <string id="30142">Powiadomienie przy starcie utworu</string>
+    <string id="30143">Nic do dodania</string>
+    <string id="30144">Dodać albumy do ulubionych?</string>
+    <string id="30145">Dodać utwory do ulubionych?</string>
+    <string id="30146">Dodać wykonawcę do ulubionych?</string>
+
+    <!-- credentials -->
+    <string id="30147">Użytkownik</string>
+    <string id="30148">Hasło</string>
+
+    <!-- Sort -->
+    <string id="30149">Autoryzacja</string>
+    <string id="30150">Strumień</string>
+    <string id="30151">Limit szukania</string>
+    <string id="30152">Inne</string>
+    <string id="30153">Pokaż polecane pozycje</string>
+    <string id="30154">Włącz wyszukiwanie (eksperymentalne)</string>
+    <string id="30155">Liczba pozycji na stronę</string>
+
+    <!-- Context Menu -->
+    <string id="30156">Ten album</string>
+    <string id="30157">Wszystkie albumy</string>
+    <string id="30158">Pokaż duży katalog</string>
+    <string id="30159">Skanuj</string>
+    <string id="30160">Podobny wykonawca</string>
+    <string id="30161">Dodaj do bieżącej listy odtwarzania</string>
+    <string id="30162">Pokaż listy odtwarzania</string>
+    <string id="30163">Ustaw jako bieżące</string>
+    <string id="30164">Stwórz</string>
+    <string id="30165">Zmień nazwę</string>
+    <string id="30166">Usuń</string>
+    <string id="30167">Dodaj do ulubionych</string>
+    <string id="30168">Subskrybcja</string>
+
+    <!-- Progress bar -->
+    <string id="30169">Uruchamiam</string>
+    <string id="30170">Pusty katalog</string>
+    <string id="30171">Wyświetlanie</string>
+    <string id="30172">Gotowe</string>
+    <string id="30173">Przetwarzanie danych</string>
+    <string id="30174">Szukanie podobnego wykonawcy</string>
+
+    <!-- Free account warning -->
+    <string id="30175">Ostrzeżenie darmowego konta</string>
+    <string id="30176">Darmowe konto umożliwia odsłuchiwanie tylko jednominutowej próbki</string>
+    <string id="30177">Tylko z abonamentem można słuchać muzyki bez ograniczeń.</string>
+    <string id="30178">Strumień mp3 i FLAC</string>
+
+    <!-- Friends -->
+    <string id="30179">i przyjaciele</string>
+    <string id="30180">Przyjaciele</string>
+    <string id="30181">Dodaj przyjaciela</string>
+
+    <!-- playlists -->
+    <string id="30182">Stwórz listę odtwarzania</string>
+    <string id="30183">Lista odtwarzania</string>
+    <string id="30184">Playlista</string>
+    <string id="30185">Usunięto</string>
+    <string id="30186">Nie można usunąć listy odtwarzania</string>
+    <string id="30187">lista odtwarzania zasubskrybowana</string>
+
+    <!-- nodes -->
+    <string id="30188">Wytwórnia</string>
+    <string id="30189">Gatunek</string>
+    <string id="30190">Publiczne listy odtwarzania</string>
+
+    <!-- options -->
+    <string id="30191">Pokaż rekomendacje</string>
+</strings>

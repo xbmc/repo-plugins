@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.qobuz" name="Qobuz XBMC" version="1.2.0"
+<addon id="plugin.audio.qobuz" name="Qobuz" version="1.2.1"
 	provider-name="d@corp">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />
@@ -10,22 +10,44 @@
 		<provides>audio</provides>
 	</extension>
 	<extension point="xbmc.addon.metadata">
+		<summary lang="be">Qobuz addon for Kodi.</summary>
+		<summary lang="da">Qobuz addon til Kodi.</summary>
+		<summary lang="de">Qobuz Addon für Kodi</summary>
+		<summary lang="el">Πρόσθετο του Qobuz για το Kodi.</summary>
+		<summary lang="en">Qobuz addon for Kodi.</summary>
+		<summary lang="es">Complemento Qobuz para Kodi.</summary>
+		<summary lang="fa_IR">Qobuz افزودنی برای Kodi.</summary>
+		<summary lang="fr">Extension Qobuz pour Kodi</summary>
+		<summary lang="gl">Complemento Qobuz para Kodi.</summary>
+		<summary lang="he">הרחבת Qobuz עבור Kodi.</summary>
+		<summary lang="it">Qobuz addon per Kodi.</summary>
+		<summary lang="nl">Qobuz addon voor Kodi</summary>
+		<summary lang="pl">Wtyczka Qobuz dla Kodi.</summary>
+		<summary lang="pt">Addon Qobuz para o Kodi.</summary>
+		<summary lang="pt_BR">Addon Qobuz para Kodi.</summary>
+		<summary lang="sk">Qobuz doplnok pre Kodi.</summary>
+		<summary lang="sv">Qobuz-tillägg för Kodi.</summary>
+		<description lang="be">Qobuz addon for Kodi&#10;It enables access to Qobuz music streaming service.&#10;You should enter your Qobuz username and password in the addon settings and you need a valid subscription.&#10;(This application uses the Qobuz API but is not certified by Qobuz.)</description>
+		<description lang="da">Qobuz-addon til Kodi&#10;Den muliggør ⏎ »»»adgang til Qobuz' musik-streaming-service.⏎ »»»Indtast dit Qobuz-brugernavn og password i addon'ens ⏎ »»»indstillinger, og du behøver en gyldig tilmelding.»»»(Dette program anvender Qobuz' API, men er ikke certificeret af Qobuz.)</description>
+		<description lang="de">Qobuz addon für Kodi&#10; [CR]das dir den Zugriff auf den Qobuz Streaming-Service ermöglicht. [CR]&#10;Du benötigst ein gültiges Abonnement und must deinen Benutzer mit Kennwort hinterlegen.[CR]&#10;(Dieses Programm benutzt die Qobuz API, ist aber nicht zertifiziert).</description>
+		<description lang="el">Πρόσθετο του Qobuz για το Kodi&#10;Σας δίνει &#10;πρόσβαση στην υπηρεσία μουσικών ροών του Qobuz. &#10;Πρέπει να εισάγετε το όνομα χρήστη και τον κωδικό πρόσβασής σας&#10;στις ρυθμίσεις του πρόσθετου, και απαιτείται μια έγκυρη συνδρομή. &#10;(Αυτή η εφαρμογή χρησιμοποιεί το API του Qobuz, αλλά δεν είναι εγκεκριμένη από το Qobuz.)</description>
+		<description lang="en">Qobuz addon for Kodi.&#10;It enables access to Qobuz music streaming service.&#10;You should enter your Qobuz username and password in the addon settings and you need a valid subscription.&#10;(This application uses the Qobuz API but is not certified by Qobuz.)</description>
+		<description lang="es">Qobuz, complemento para Kodi&#10;Permite &#10;acceder al servicio de música Qobuz. &#10;Introduce tu usuario y contraseña de Qobuz en los&#10;ajustes, necesitas una suscripción válida. &#10;(Esta aplicación usa la API de Qobuz pero no está certificada por Qobuz.)</description>
+		<description lang="fr">addon Qobuz pour Kodi.&#10;Il permet d'accéder à l'ensemble du service streaming de Qobuz.&#10;Vous devez fournir un nom d'utilisateur ainsi qu'un mot de passe dans les paramètres de l'addon et un abonnement valide &#10;(This application uses the Qobuz API but is not certified by Qobuz.)</description>
+		<description lang="gl">Complemento Qobuz para Kodi&#10; Habilita o &#10;acceso ao servizo de transmisión de música de Qobuz. &#10;Ten de introducir o seu nome de usuario e contrasinal na&#10;configuración mais unha subscrición válida. &#10;(Esta aplicación fai uso do API de Qobuz pero non está certificada.)</description>
+		<description lang="he">הרחבת Qobuz עבור Kodi&#10; ההרחבה מאפשרת &#10; גישה אל שירותי הזרמת המוזיקה של Qobuz. &#10;תצטרך להזין שם משתמש וסיסמת Qobuz בהגדרות&#10;			ההרחבה ויש צורך במנוי תקף. &#10;			(אפליקציה זו משתמשת ב-API של Qobuz אך אינה אושרה רשמית ע"י Qobuz.)</description>
+		<description lang="it">Addon Qobuz per Kodi&#10; Abilita ⏎ »»»accedi al servizio Qobuz music streaming. ⏎ »»»Dovresti inserire il nome utente e password Qobuz nelle impostazioni dell'addon⏎ »»» ed hai bisogno di una sottoscrizione valida . ⏎ »»»(Questa applicazione usa l'api Qobuz ma non è certificata da Qobuz.)</description>
+		<description lang="nl">Qobuz add-on voor Kodi&#10; het stelt beschikbaar ⏎&#10;⇥⇥⇥entree tot de Qobuz music streaming diensten. ⏎&#10;⇥⇥⇥je moet jou Qobuz username and password invullen in de add-on⏎&#10;⇥⇥⇥instellingen en je hebt een geldige inschrijving nodig. ⏎&#10;⇥⇥⇥(deze applicatie gebruik de Qobuz API maar is niet gecertificeerd door Qobuz.)</description>
+		<description lang="pl">Wtyczka Qobuz.&#10;Umożliwia dostęp do muzycznego strumienia Qobuz. &#10;Trzeba podać użytkownika i hasło Qobuzz w ustawieniach wtyczki&#10;oraz posiadać ważny abonament. &#10;(Ta aplikacja używa Qobuz API, ale nie jest certyfikowana przez Qobuz.)</description>
+		<description lang="pt">Addon Qobuz para o Kodi&#10; Permite &#10; aceder ao serviço de transmissão de músicas do Qobuz. &#10;Deve introduzir o seu nome de utilizador e palavra-passe nas definições&#10;do addon. É necessário ter uma subcrição válida. &#10;(Esta aplicação usa a API do Qobuz mas não é certificada pelo Qobuz.)</description>
+		<description lang="pt_BR">Addon Qobuz para Kodi&#10;Se ativo acesse o serviço de streaming de músicas do Qobuz. Você deve entrar com seu nome de usuário e senha nas configurações do addon, e você necessita também possuir uma subscrição válida. (Esta aplicação usa a API do Qobuz API mas não é certificada por Qobuz.)</description>
+		<description lang="sk">Qobuz doplnok pre Kodi&#10;&#10;Povoľuje prístup k Qobuz streamovacej službe.&#10;Mali by ste zadať Vaše Qobuz užívateľské meno a heslo v nastaveniach doplnku a potrebujete platné predplatné.&#10;(Táto aplikácie používa Qobuz API, ale nie je certifikovaná od Qobuz.)</description>
+		<description lang="sv">Qobuz tillägg för Kodi&#10; Det ger &#10;»»»åtkomst till Qobuz musikströmningstjänst.&#10;»»»Du måste ange ditt Qobuz användarnamn och lösenord i tilläggs-&#10;»»»inställningarna och du behöver en giltig prenumeration.&#10;»»»(Denna applikation använder Qobuz API, men är inte certifierad av Qobuz.)</description>
 		<language>en fr</language>
-		<summary lang="en">Qobuz addon for XBMC.</summary>
-		<description lang="en">Qobuz addon for XBMC. It enables 
-			access to Qobuz music streaming service. 
-			You should enter your Qobuz username and password in the addon
-			settings and you need a valid subscription. 
-			(This application uses the Qobuz API but is not certified by Qobuz.)</description>
-		<description lang="fr">addon Qobuz pour XBMC. Il permet
-			d'accéder à l'ensemble du service streaming de Qobuz. Vous devez
-			fournir un nom d'utilisateur ainsi qu'un mot de passe dans les
-			paramètres de l'addon et un abonnement valide 
-			(This application uses the Qobuz API but is not certified by Qobuz.)</description>
 		<platform>all</platform>
 	</extension>
 	<extension point="xbmc.service"
-	    library="resources/lib/qobuz/service/monitor.py" start='login' />
-    <extension point="xbmc.service" 
-	    library="resources/lib/qobuz/service/httpd.py" start='login' />
+	  library="resources/lib/qobuz/service/monitor.py" start='login' />
+  <extension point="xbmc.service" 
+	  library="resources/lib/qobuz/service/httpd.py" start='login' />
 </addon>

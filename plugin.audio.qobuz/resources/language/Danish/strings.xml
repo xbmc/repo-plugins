@@ -4,37 +4,229 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="3101">Handling</string>
-    <string id="3102">Afslut</string>
-    <string id="3120">Demotekst</string>
-    <string id="29000">Qobuz Afspilningsliste</string>
-    <string id="29001">Ingen aktuel afspilningsliste</string>
-    <string id="30002">Grænse for nummersøgning</string>
-    <string id="30003">Grænse for albumsøgning</string>
-    <string id="30004">Grænse for kunstnersøgning</string>
-    <string id="30007">Ingen Qobuz service</string>
-    <string id="30008">Qobuz XBMC</string>
-    <string id="30009">Kan ikke forbinde til Qobuz.</string>
-    <string id="30010">Prøv venligst igen senere</string>
-    <string id="30011">Ny...</string>
-    <string id="30012">Fuldført</string>
-    <string id="30013">Søg efter sange...</string>
-    <string id="30014">Søg efter albummer...</string>
-    <string id="30015">Søg efter kunstnere...</string>
-    <string id="30019">Vis afspilningslister</string>
-    <string id="30026">Brugernavn</string>
-    <string id="30068">Ingen lignende kunstnere</string>
-    <string id="30069">Kunne ikke logge ind.</string>
-    <string id="30079">Vis Favoritter</string>
-    <string id="31006">Cache</string>
-    <string id="37001">Adgangskode</string>
-    <string id="38001">Stream</string>
-    <string id="39001">Alle albummer</string>
-    <string id="39003">Skan</string>
-    <string id="39009">Omdøb</string>
-    <string id="39010">Fjern</string>
+    <string id="30001">Handling</string>
+    <string id="30002">Afslut</string>
+    <string id="30003">Demotekst</string>
+    <string id="30004">Qobuz Afspilningsliste</string>
+    <string id="30005">Ingen aktuel afspilningsliste</string>
+    <string id="30006">Grænse for nummersøgning</string>
+    <string id="30007">Grænse for albumsøgning</string>
+    <string id="30008">Grænse for kunstnersøgning</string>
+    <string id="30009">Ingen Qobuz service</string>
+    <string id="30010">Qobuz XBMC</string>
+    <string id="30011">Kan ikke forbinde til Qobuz.</string>
+    <string id="30012">Prøv venligst igen senere</string>
+    <string id="30013">Ny...</string>
+    <string id="30014">Fuldført</string>
+    <string id="30015">Søg efter sange...</string>
+    <string id="30016">Søg efter albummer...</string>
+    <string id="30017">Søg efter kunstnere...</string>
+    <string id="30018">Populære Qobuz sange af kunstner...</string>
+    <string id="30019">Populære Qubuz sange</string>
+    <string id="30020">Mine Qobuz favoritter </string>
+    <string id="30021">Vis afspilningslister</string>
+    <string id="30022">Søg efter sange via Qobuz</string>
+    <string id="30023">Ingen matchende sange.</string>
+    <string id="30024">Søg efter albummer via Qobuz</string>
+    <string id="30025">Ingen matchende albums.</string>
+    <string id="30026">Søg efter kunstnere via Qobuz</string>
+    <string id="30027">Ingen matchende kunstnere</string>
+    <string id="30028">Brugernavn</string>
+    <string id="30029">Ingen Qobuz afspilningsliste fundet</string>
+    <string id="30030">Søg efter albummer af kunstner via Qobuz</string>
+    <string id="30031">Ingen matchende albummer.</string>
+    <string id="30032">Ingen matchende kunstnere.</string>
+    <string id="30033">Du har ingen favoritter.</string>
+    <string id="30034">Ingen populære sange.</string>
+    <string id="30035">Du har ingen afspilningslister i Qobuz .</string>
+    <string id="30036">Du skal være logget ind</string>
+    <string id="30037">for at få adgang til dine Qobuz afspilningslister</string>
+    <string id="30038">Føjet til favoritter</string>
+    <string id="30039">for at tilføje favoritter.</string>
+    <string id="30040">Fjernet fra Qobuz favoritter</string>
+    <string id="30041">for at fjerne favoritter i Qobuz</string>
+    <string id="30042">For at få adgang til Qobuz Musik-streamingtjeneste[CR][I]Tjek venligst dine &#10;		kontooplysning under indstillinger[CR]eller prøv igen senere[/I]&#10;	</string>
+    <string id="30043">Søg efter populære sange af kunstner via Qobuz&#10;	</string>
+    <string id="30044">Ingen populære sange.</string>
+    <string id="30045">Ingen matchende kunstnere.</string>
+    <string id="30046">Kan ikke afspille sangen</string>
+    <string id="30047">Qobuz navn på afspilningsliste </string>
+    <string id="30048">Kan ikke oprette Qobuz afspilningsliste </string>
+    <string id="30049">Qobuz afspilningsliste oprettet</string>
+    <string id="30050">for at oprette en Qobuz afspilningsliste.</string>
+    <string id="30051">Qobuz navn på afspilningsliste</string>
+    <string id="30052">Kan ikke omdøbe Qobuz afspilningsliste</string>
+    <string id="30053">Omdøb en Qobuz afspilningsliste.</string>
+    <string id="30054">Slet denne Qobuz afspilningsliste?</string>
+    <string id="30055">Kan ikke fjerne Qobuz afspilningsliste</string>
+    <string id="30056">for at slette en Qobuz afspilningsliste.</string>
+    <string id="30057">Qobuz navn på afspilningsliste</string>
+    <string id="30058">Kan ikke oprette Qobuz afspilningsliste</string>
+    <string id="30059">Qobuz afspilningsliste oprettet</string>
+    <string id="30060">Kan ikke føje til afspilningslisten</string>
+    <string id="30061">Føjede sang til Qobuz afspilningslisten</string>
+    <string id="30062">Du har ingen Qobuz afspilningslister.</string>
+    <string id="30063">Føj en sang til en Qobuz afspilningsliste.</string>
+    <string id="30064">Slet denne sang fra</string>
+    <string id="30065">Qobuz afspilningslisten?</string>
+    <string id="30066">Sletning af sang </string>
+    <string id="30067">fra afspilningsliste mislykkedes.</string>
+    <string id="30068">Fjernede sangen fra Qobuz afspilningslisten</string>
+    <string id="30069">for at slette en sang fra en Qobuz afspilningsliste.</string>
+    <string id="30070">Ingen lignende kunstnere.</string>
+    <string id="30071">Kunne ikke logge ind.</string>
+    <string id="30072">Tjek brugernavn og adgangskode under indstillinger.</string>
+    <string id="30073">Qobuz favorit</string>
+    <string id="30074">Ikke Qobuz favorit</string>
+    <string id="30075">Fjern fra Qobuz afspilningsliste</string>
+    <string id="30076">Føj til Qobuz afspilningsliste</string>
+    <string id="30077">Flere sange</string>
+    <string id="30078">Opret Qobuz afspilningsliste</string>
+    <string id="30079">Slet Qobuz afspilningsliste</string>
+    <string id="30080">Omdøb Qobuz afspilningsliste</string>
+    <string id="30081">Vis Favoritter</string>
+    <string id="30082">Tilføj som ny afspilningsliste</string>
+    <string id="30083">Qobuz-favoritter</string>
+
+    <!-- Recommandation -->
+    <string id="30084">Vis anbefalinger</string>
+    <string id="30085">Priser fra pressen</string>
+    <string id="30086">Nyheder</string>
+    <string id="30087">Bestsellere</string>
+    <string id="30088">Redaktørens valg</string>
+    <string id="30089">Pop / Rock</string>
+    <string id="30090">Electro</string>
+    <string id="30091">Jazz</string>
+    <string id="30092">Chanson Française</string>
+    <string id="30093">Soul / Funk/Rap</string>
+    <string id="30094">Verdensmusik</string>
+    <string id="30095">Blues / Country/Folk</string>
+    <string id="30096">Soundtracks til Film</string>
+    <string id="30097">Klassisk</string>
+    <string id="30098">Dem Alle</string>
+    <string id="30099">Reggae</string>
+    <string id="30100">Historiske dokumenter / Litteratur / Humor</string>
+    <string id="30101">Vis Indkøb</string>
+    <string id="30102">Vis Nyheder</string>
+    <string id="30103">Mest fremhævede</string>
+    <string id="30104">Rap / HipHop / RB / Soul</string>
+    <string id="30105">Børn / Karakoke / Stemninger</string>
+    <string id="30106">Techno</string>
+    <string id="30107">Reggae</string>
+
+    <!-- Cache Addon Menu -->
+    <string id="30108">Tid i minutter som forskellige Qobuz-data skal opbevares i cachen[CR][I]- Sæt til nul for at deaktivere caching[/I]</string>
+    <string id="30109">Varighed af cache til Albummer</string>
+    <string id="30110">Varighed af cache til Kunstnere</string>
+    <string id="30111">Varighed af cache til Numre</string>
+    <string id="30112">Anbefalet varighed af cache</string>
+    <string id="30113">Brugerdefineret varighed af cache</string>
+    <string id="30114">Cache</string>
+    <string id="30115">Indstillinger til cache</string>
+    <string id="30116">Godkendelse af cache-varighed</string>
+    <string id="30117">Ryd cache</string>
+    <string id="30118">Administrering af afspilningsliste</string>
+
+    <!-- Cache Notify -->
+    <string id="30119">Qobuz cache</string>
+    <string id="30120">Fejl opstod ved sletning af data i cache</string>
+    <string id="30121">Fjern cachet data</string>
+    <string id="30122">Vil du virkelig fjerne al cachet data</string>
+    <string id="30123">Al cachet data er fjernet</string>
+
+    <!-- Stream -->
+    <string id="30124">Streamtype</string>
+    <string id="30125">Spring over udpluk</string>
+
+    <!-- URL Resolver -->
+    <string id="30126">Aktivering af opløser</string>
+
+    <!-- Color -->
+    <string id="30127">Farver</string>
+    <string id="30128">Farve på elementer i konteksmenu</string>
+    <string id="30129">Farve på advarsel i kontekstmenu</string>
+    <string id="30130">Farve på emner i afspilningsliste</string>
+    <string id="30131">Afsnitsformat for kontekstmenuen</string>
+
+    <!-- Qobuz Player -->
+    <string id="30132">Qobuz afspiller</string>
+    <string id="30133">Spiller sang</string>
+    <string id="30134">Afspilnings af sang mislykkedes</string>
+
+    <!-- Search -->
+    <string id="30135">Aktiver søgning</string>
+    <string id="30136">Ingen matchende sange</string>
+    <string id="30137">Ingen matchende albummer</string>
+    <string id="30138">Ingen matchende kunstnere</string>
+
+    <!-- Notification -->
+    <string id="30139">Qobuz</string>
+    <string id="30140">Tom mappe</string>
+    <string id="30141">Besked</string>
+    <string id="30142">Giv besked når sang startes</string>
+    <string id="30143">Intet at tilføje</string>
+    <string id="30144">Føj albums til favoritter?</string>
+    <string id="30145">Føj spor til favoritter?</string>
+    <string id="30146">Føj kunstnere til favoritter?</string>
+
+    <!-- credentials -->
+    <string id="30147">Brugernavn</string>
+    <string id="30148">Adgangskode</string>
+
+    <!-- Sort -->
+    <string id="30149">Brugeroplysninger</string>
+    <string id="30150">Stream</string>
+    <string id="30151">Søgegrænse</string>
+    <string id="30152">Andre</string>
+    <string id="30153">Vis anbefalede emner</string>
+    <string id="30154">Aktiver scan-funktion (eksperimenterende)</string>
+    <string id="30155">*items*-nummer, sidevist</string>
+
+    <!-- Context Menu -->
+    <string id="30156">Dette album</string>
+    <string id="30157">Alle albummer</string>
+    <string id="30158">Vis stor mappe</string>
+    <string id="30159">Skan</string>
+    <string id="30160">Lignende kunstner</string>
+    <string id="30161">Føj til aktuel afspilningsliste</string>
+    <string id="30162">Vis afspilningslister</string>
+    <string id="30163">Sæt som aktuel</string>
+    <string id="30164">Opret</string>
+    <string id="30165">Omdøb</string>
+    <string id="30166">Fjern</string>
+    <string id="30167">Føj til favoritter</string>
 
     <!-- Progress bar -->
-    <string id="40000">Starter</string>
-    <string id="40003">Færdig</string>
+    <string id="30169">Starter</string>
+    <string id="30170">Tom mappe</string>
+    <string id="30171">Viser</string>
+    <string id="30172">Færdig</string>
+    <string id="30173">Behandler data</string>
+    <string id="30174">Finder lignende kunstner</string>
+
+    <!-- Free account warning -->
+    <string id="30175">Advarsel om gratis konto</string>
+    <string id="30176">Gratis konto kan kun lytte til 1mn udpluk</string>
+    <string id="30177">Du skal abonnere for at lytte til musik i fuld længde.</string>
+    <string id="30178">Qobuz stream mp3 og FLAC</string>
+
+    <!-- Friends -->
+    <string id="30179">s Venner</string>
+    <string id="30180">Venner</string>
+    <string id="30181">Tilføj Ven</string>
+
+    <!-- playlists -->
+    <string id="30182">Lav Spilleliste</string>
+    <string id="30183">Qobuz-spilleliste</string>
+    <string id="30184">Afspilningsliste</string>
+    <string id="30185">Fjernet</string>
+    <string id="30186">Kan ikke fjerne spilleliste</string>
+    <string id="30187">Abonnement på spilleliste oprettet</string>
+
+    <!-- nodes -->
+    <string id="30188">Navn</string>
+    <string id="30189">Genre</string>
+
+    <!-- options -->
+    <string id="30191">Vis anbefalinger</string>
 </strings>

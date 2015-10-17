@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Chinese (Traditional) language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/zh_TW/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30001">動作</string>
+    <string id="30002">離開</string>
+    <string id="30028">帳號</string>
+    <string id="30081">顯示我的最愛</string>
+    <string id="30114">快取</string>
+
+    <!-- credentials -->
+    <string id="30147">帳號</string>
+    <string id="30148">密碼</string>
+
+    <!-- Sort -->
+    <string id="30149">連接</string>
+    <string id="30150">媒體流</string>
+    <string id="30152">其他</string>
+    <string id="30157">全部專輯</string>
+    <string id="30159">掃描</string>
+    <string id="30165">重新命名</string>
+    <string id="30166">移除</string>
+    <string id="30172">完成</string>
+    <string id="30184">播放列表</string>
+
+    <!-- nodes -->
+    <string id="30188">標籤</string>
+    <string id="30189">類別</string>
+</strings>

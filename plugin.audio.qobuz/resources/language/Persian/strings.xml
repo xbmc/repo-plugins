@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Persian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/fa/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30028">نام کاربری</string>
+    <string id="30081">نمایش علاقه‌مندی‌ها</string>
+
+    <!-- credentials -->
+    <string id="30147">نام کاربری</string>
+    <string id="30148">کلمه عبور</string>
+    <string id="30159">اسکن</string>
+    <string id="30165">تغییر نام</string>
+</strings>

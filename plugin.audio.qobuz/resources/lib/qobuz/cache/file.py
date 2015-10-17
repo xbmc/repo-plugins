@@ -1,18 +1,26 @@
 '''
-    qobuz.storage.file
-    ~~~~~~~~~~~~~~~~~~
+    qobuz.cache.file
+    ~~~~~~~~~~~~~~~~
 
     Class that implement caching to disk
 
+    :part_of: xbmc-qobuz
     :copyright: (c) 2012 by Joachim Basmaison, Cyril Leclerc
     :license: GPLv3, see LICENSE for more details.
 '''
-import hashlib
-import pickle
+try:
+    """cPickle is a faster implementation of pickle, we are using it if
+    present
+    """
+    import cPickle as pickle
+except ImportError:
+    import pickle
 import os
 
 from base import CacheBase
 from util.file import RenamedTemporaryFile, unlink
+from util.hash import hashit
+
 
 class CacheFile(CacheBase):
 
@@ -27,10 +35,8 @@ class CacheFile(CacheBase):
 
     def make_key(self, *a, **ka):
         argstr = '/'.join(a[:])
-        argstr += '/'.join([ '%s=%s' % (key, ka[key]) for key in sorted(ka)])
-        m = hashlib.md5()
-        m.update(argstr)
-        return m.hexdigest()
+        argstr += '/'.join(['%s=%s' % (key, ka[key]) for key in sorted(ka)])
+        return hashit(argstr)
 
     def _make_path(self, key):
         xpath = []

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Vietnamese language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/vi/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30002">Thoát</string>
+    <string id="30028">Tên truy nhập</string>
+    <string id="30081">Hiện ưa thích</string>
+    <string id="30114">Cache</string>
+
+    <!-- credentials -->
+    <string id="30147">Tên truy nhập</string>
+    <string id="30148">Mật khẩu</string>
+    <string id="30150">Luồng</string>
+    <string id="30152">Khác</string>
+    <string id="30157">Tất cả các album</string>
+    <string id="30159">Quét</string>
+    <string id="30165">Đổi Tên</string>
+    <string id="30166">Xóa</string>
+    <string id="30172">Xong</string>
+    <string id="30184">Playlist</string>
+    <string id="30189">Thể loại</string>
+</strings>

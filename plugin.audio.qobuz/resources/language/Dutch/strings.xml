@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Dutch language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/nl/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30001">Actie</string>
+    <string id="30002">Stoppen</string>
+    <string id="30003">Demo Tekst</string>
+    <string id="30004">Qobuz Afspeellijst</string>
+    <string id="30005">Geen huidige afspeellijst</string>
+    <string id="30006">Nummer zoek limiet</string>
+    <string id="30007">Album zoek limiet</string>
+    <string id="30008">Artiest zoek limiet</string>
+    <string id="30009">Geen Qobuz service</string>
+    <string id="30010">Qobuz XBMC</string>
+    <string id="30011">Kan geen verbinding maken met Qobuz.</string>
+    <string id="30012">Probeer het later nogmaals</string>
+    <string id="30013">Nieuw...</string>
+    <string id="30014">Gemaakt</string>
+    <string id="30015">Zoek voor nummers...</string>
+    <string id="30016">Zoek voor albums...</string>
+    <string id="30017">Zoek voor artiesten...</string>
+    <string id="30018">Populaire Qobuz nummers voor artiest...</string>
+    <string id="30019">Populaire Qobuz nummers</string>
+    <string id="30020">Mijn Qobuz favorieten</string>
+    <string id="30021">Toon afspeellijsten</string>
+    <string id="30022">Zoek voor nummers gesponsord door Qobuz</string>
+    <string id="30023">Geen overeenkomstige nummers.</string>
+    <string id="30024">Zoek voor albums gesponsord door Qobuz</string>
+    <string id="30025">Geen overeenkomstige albums.</string>
+    <string id="30026">Zoek voor artiesten gesponsord door Qobuz</string>
+    <string id="30027">Geen overeenkomstige artiesten.</string>
+    <string id="30028">Gebruikersnaam</string>
+    <string id="30029">Geen Qobuz afspeellijst gevonden.</string>
+    <string id="30030">Zoek voor albums van artiest gesponsord door Quboz</string>
+    <string id="30031">Geen overeenkomstige albums.</string>
+    <string id="30032">Geen overeenkomstige artiesten.</string>
+    <string id="30033">U heeft geen favorieten.</string>
+    <string id="30034">Geen populaire nummers.</string>
+    <string id="30035">U heeft gee Qobuz afspeellijsten.</string>
+    <string id="30036">U moet ingelogd zijn</string>
+    <string id="30037">om uw Qobuz afspeellijsten te benaderen</string>
+    <string id="30038">Toegevoegd aan favorieten</string>
+    <string id="30039">om favorieten toe te voegen.</string>
+    <string id="30040">Verwijderd van Qobuz favorieten</string>
+    <string id="30041">om Qobuz favorieten te verwijderen.</string>
+    <string id="30042">om toegang te krijgen tot de Qobuz Music Streaming service[CR][I]&#10;⇥⇥controleer uw gegevens in de add-on settings[CR] of probeer het later nog eens[/I]⇥</string>
+    <string id="30043">Zoek op populaire nummers van artiest gesponsord door Qobuz&#10;⇥</string>
+    <string id="30044">Geen populaire nummers.</string>
+    <string id="30045">Geen overeenkomstige artiesten.</string>
+    <string id="30046">Afspelen nummer niet mogelijk</string>
+    <string id="30047">Naam Qobuz afspeellijst</string>
+    <string id="30048">Aanmaken Qobuz afspeellijst niet mogelijk</string>
+    <string id="30049">Qobuz afspeelijst aangemaakt</string>
+    <string id="30050">om een Qobuz afspeellijst aan te maken.</string>
+    <string id="30051">Naam Qobuz afspeellijst</string>
+    <string id="30052">Hernoemen van Qobuz afspeellijst niet mogelijk</string>
+    <string id="30053">om een Qobuz afspeellijst te hernoemen</string>
+    <string id="30054">verwijder deze Qobus afspeellijst?</string>
+    <string id="30055">Kan de Qobuz afspeellijst niet verwijderen</string>
+    <string id="30056">een Qobuz afspeellijst verwijderen.</string>
+    <string id="30057">Naam Qobuz afspeellijst</string>
+    <string id="30058">Aanmaken Qobuz afspeellijst niet mogelijk</string>
+    <string id="30059">Qobuz afspeelijst aangemaakt</string>
+    <string id="30060">kan het niet toevoegen aan de afspeellijst</string>
+    <string id="30061">Nummer toegevoegd aan Qobus afspeellijst</string>
+    <string id="30062">U heeft gee Qobuz afspeellijsten.</string>
+    <string id="30063">Een nummer toevoegen aan de Qobuz afspeellijst</string>
+    <string id="30064">Verwijder dit nummer uit</string>
+    <string id="30065">de Qobuz afspeellijst?</string>
+    <string id="30066">Niet gelukt om te verwijderen</string>
+    <string id="30067">Nummer van de Qobuz afspeellijst</string>
+    <string id="30068">nummer verwijdert uit de Qobuz afspeellijst</string>
+    <string id="30069">een nummer verwijderen uit de Qobuz afspeellijst</string>
+    <string id="30070">Geen alternatieve artiesten</string>
+    <string id="30071">login mislukt</string>
+    <string id="30072">Controleer gebruikersnaam en wachtwoord in instellingen.</string>
+    <string id="30073">Qobuz favorieten</string>
+    <string id="30074">geen Qobuz favoriet</string>
+    <string id="30075">Verwijder uit de Qobuz afspeellijst</string>
+    <string id="30076">Voeg toe aan Qobuz afspeellijst</string>
+    <string id="30077">meer nummers</string>
+    <string id="30078">maak een Qobuz afspeellijst</string>
+    <string id="30079">verwijder Qobuz afspeellijst</string>
+    <string id="30080">Hernoem afspeellijst</string>
+    <string id="30081">Bekijk Favorieten</string>
+    <string id="30082">Toevoegen als nieuwe afspeellijst</string>
+    <string id="30083">Qobuz favorieten</string>
+
+    <!-- Recommandation -->
+    <string id="30084">toon aanbevelingen</string>
+    <string id="30085">Media prijzen</string>
+    <string id="30086">Nieuws</string>
+    <string id="30087">beste verkopen</string>
+    <string id="30088">Keuze van de redactie</string>
+    <string id="30089">Pop / Rock</string>
+    <string id="30090">Electro</string>
+    <string id="30091">Jazz</string>
+    <string id="30092">Chanson Française</string>
+    <string id="30093">Soul / Funk / Rap</string>
+    <string id="30094">Wereldmuziek</string>
+    <string id="30095">Blues / Country / Folk</string>
+    <string id="30096">Film geluidsband</string>
+    <string id="30097">Klassiek</string>
+    <string id="30098">allemaal</string>
+    <string id="30099">Raggae</string>
+    <string id="30100">Historische documenten / literatuur / Humor</string>
+    <string id="30101">Bekijk aankopen</string>
+    <string id="30102">bekijk nieuws</string>
+    <string id="30103">meest aanbevolen</string>
+    <string id="30104">Rap / HipHop / RB / Soul</string>
+    <string id="30105">kinderen / Karaoke / Ambiance</string>
+    <string id="30106">Techno</string>
+    <string id="30107">Reggeae</string>
+
+    <!-- Cache Addon Menu -->
+    <string id="30108">Tijd in minuten voor verschillende Qobuz gegevens moeten worden ingenomen&#10;⇥⇥Cache[CR][I]- zet op nul om cashing te stoppen[/I]</string>
+    <string id="30109">duur van Album cache</string>
+    <string id="30110">duur van artiesten cache</string>
+    <string id="30111">Duur van nummer cache</string>
+    <string id="30112">Geadviseerde duur van cache</string>
+    <string id="30113">Gebruikers afspeellijstcache duur</string>
+    <string id="30114">Buffer</string>
+    <string id="30115">Cache instellingenen</string>
+    <string id="30116">authenticatie  cache duur</string>
+    <string id="30117">leeg Cache</string>
+    <string id="30118">afspeellijstmanager</string>
+
+    <!-- Cache Notify -->
+    <string id="30119">Qobuz cache</string>
+    <string id="30120">fout ontstaan tijdens verwijderen van gecachte gegevens</string>
+    <string id="30121">verwijder gecachte data</string>
+    <string id="30122">Wet u zeker dat u alle gecachte data wilt verwijderen</string>
+    <string id="30123">Alle gecachte dat verwijderd</string>
+
+    <!-- Stream -->
+    <string id="30124">stream type</string>
+    <string id="30125">sla voorbeeld over</string>
+
+    <!-- URL Resolver -->
+    <string id="30126">oplosser activeren</string>
+
+    <!-- Color -->
+    <string id="30127">kleuren</string>
+    <string id="30128">Context menu items kleur</string>
+    <string id="30129">Context menu items waarschuwingskleur</string>
+    <string id="30130">Afspeellijstitems kleur</string>
+    <string id="30131">Context menu sectie formaat</string>
+
+    <!-- Qobuz Player -->
+    <string id="30132">Qobuz speler</string>
+    <string id="30133">afspelen nummer</string>
+    <string id="30134">niet gelukt om nummer af te spelen</string>
+
+    <!-- Search -->
+    <string id="30135">activeer zoeken</string>
+    <string id="30136">Geen overeenkomstig nummer</string>
+    <string id="30137">Geen overeenkomstig album</string>
+    <string id="30138">Geen overeenkomstig artiest</string>
+
+    <!-- Notification -->
+    <string id="30139">Qobuz</string>
+    <string id="30140">leeg map</string>
+    <string id="30141">mededeling</string>
+    <string id="30142">Geef melding wanneer nummer wordt gestart</string>
+    <string id="30143">niets toe te voegen</string>
+    <string id="30144">Voeg albums toe aan favorieten?</string>
+    <string id="30145">Nummers toevoegen aan favorieten?</string>
+    <string id="30146">Voeg artiesten toe aan favorieten</string>
+
+    <!-- credentials -->
+    <string id="30147">Gebruikersnaam</string>
+    <string id="30148">Wachtwoord</string>
+
+    <!-- Sort -->
+    <string id="30149">gebruikersinloggegevens</string>
+    <string id="30150">Stream</string>
+    <string id="30151">Zoek limiet</string>
+    <string id="30152">Andere</string>
+    <string id="30153">Toon aanbevolen items</string>
+    <string id="30154">Activeer zoek functie (experimenteel)</string>
+    <string id="30155">itemsnummer per pagina</string>
+
+    <!-- Context Menu -->
+    <string id="30156">dit album</string>
+    <string id="30157">Alle albums</string>
+    <string id="30158">toon grote locatie</string>
+    <string id="30159">Scannen</string>
+    <string id="30160">vergelijkbare artiest</string>
+    <string id="30161">voeg toe aan huidige afspeellijst</string>
+    <string id="30162">Toon afspeellijsten</string>
+    <string id="30163">stel in als huidige</string>
+    <string id="30164">creëer</string>
+    <string id="30165">Hernoem</string>
+    <string id="30166">Verwijder</string>
+    <string id="30167">Voeg toe aan favorieten</string>
+    <string id="30168">abboneren</string>
+
+    <!-- Progress bar -->
+    <string id="30169">Starten</string>
+    <string id="30170">leeg map</string>
+    <string id="30171">weergeven</string>
+    <string id="30172">OK</string>
+    <string id="30173">verwerken data</string>
+    <string id="30174">zoeken gelijkwaardige artiest</string>
+
+    <!-- Free account warning -->
+    <string id="30175">gratis account waarschuwing</string>
+    <string id="30176">Een gratis account kan alleen luisteren naar 1 min. voorbeelden</string>
+    <string id="30177">U moet u abboneren om naar de volledige muziek te luisteren.</string>
+    <string id="30178">Qobuz zend mp3 en FLAC uit</string>
+
+    <!-- Friends -->
+    <string id="30179">Zijn vrienden</string>
+    <string id="30180">Vrienden</string>
+    <string id="30181">Vriend toevoegen</string>
+
+    <!-- playlists -->
+    <string id="30182">Creëer afspeelllijst</string>
+    <string id="30183">Qobuz Afspeellijst</string>
+    <string id="30184">Afspeellijst</string>
+    <string id="30185">Verwijderd</string>
+    <string id="30186">kan Afspeellijst niet verwijderen</string>
+    <string id="30187">Op afspeellijst geabonneerd</string>
+
+    <!-- nodes -->
+    <string id="30188">Platenlabel</string>
+    <string id="30189">Genre</string>
+    <string id="30190">Publieke afspeellijsten</string>
+
+    <!-- options -->
+    <string id="30191">toon aanbevelingen</string>
+</strings>

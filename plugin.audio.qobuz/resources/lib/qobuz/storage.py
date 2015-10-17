@@ -1,10 +1,11 @@
 '''
-    xbmcswift2.storage
-    ~~~~~~~~~~~~~~~~~~
+    qobuz.storage
+    ~~~~~~~~~~~~~
 
     This module contains persistent storage classes.
 
-    :copyright: (c) 2012 by Jonathan Beluch
+    :part_of: xbmc-qobuz
+    :copyright: (c) 2012 by Joachim Basmaison, Cyril Leclerc
     :license: GPLv3, see LICENSE for more details.
 '''
 import os
@@ -18,14 +19,17 @@ except ImportError:
 import shutil
 import collections
 from datetime import datetime
-#from xbmcswift2.logger import log
+
+
 class MyLog():
+
     def debug(self, *a):
         print a[0] % (a[1:])
 log = MyLog()
 
+
 class _PersistentDictMixin(object):
-    ''' Persistent dictionary with an API compatible with shelve and anydbm.
+    """Persistent dictionary with an API compatible with shelve and anydbm.
 
     The dict is kept in memory, so the dictionary operations run as fast as
     a regular dictionary.
@@ -35,9 +39,11 @@ class _PersistentDictMixin(object):
     Input file format is automatically discovered.
     Output file format is selectable between pickle, json, and csv.
     All three serialization formats are backed by fast C implementations.
-    '''
+    """
 
     def __init__(self, filename, flag='c', mode=None, file_format='pickle'):
+        """Constructor
+        """
         self.flag = flag                    # r=readonly, c=create, or n=new
         self.mode = mode                    # None or an octal triple like 0644
         self.file_format = file_format      # 'csv', 'json', or 'pickle'
@@ -50,7 +56,8 @@ class _PersistentDictMixin(object):
                 self.load(fileobj)
 
     def sync(self):
-        '''Write the dict to disk'''
+        """Write the dict to disk
+        """
         if self.flag == 'r':
             return
         filename = self.filename
@@ -68,7 +75,8 @@ class _PersistentDictMixin(object):
             os.chmod(self.filename, self.mode)
 
     def close(self):
-        '''Calls sync'''
+        """Calls sync
+        """
         self.sync()
 
     def __enter__(self):
@@ -78,7 +86,8 @@ class _PersistentDictMixin(object):
         self.close()
 
     def dump(self, fileobj):
-        '''Handles the writing of the dict to the file object'''
+        """Handles the writing of the dict to the file object
+        """
         if self.file_format == 'csv':
             csv.writer(fileobj).writerows(self.raw_dict().items())
         elif self.file_format == 'json':
@@ -90,7 +99,8 @@ class _PersistentDictMixin(object):
                                       repr(self.file_format))
 
     def load(self, fileobj):
-        '''Load the dict from the file object'''
+        """Load the dict from the file object
+        """
         # try formats from most restrictive to least restrictive
         for loader in (pickle.load, json.load, csv.reader):
             fileobj.seek(0)
@@ -98,15 +108,16 @@ class _PersistentDictMixin(object):
                 return self.initial_update(loader(fileobj))
             except Exception as e:
                 pass
-        raise ValueError('File not in a supported format')
+        raise ValueError('File not in a supported format, %s', e)
 
     def raw_dict(self):
-        '''Returns the underlying dict'''
+        """Returns the underlying dict
+        """
         raise NotImplementedError
 
 
 class _Storage(collections.MutableMapping, _PersistentDictMixin):
-    '''Storage that acts like a dict but also can persist to disk.
+    """Storage that acts like a dict but also can persist to disk.
 
     :param filename: An absolute filepath to reprsent the storage on disk. The
                      storage will loaded from this file if it already exists,
@@ -118,10 +129,11 @@ class _Storage(collections.MutableMapping, _PersistentDictMixin):
     .. warning:: Currently there are no limitations on the size of the storage.
                  Please be sure to call :meth:`~xbmcswift2._Storage.clear`
                  periodically.
-    '''
+    """
 
     def __init__(self, filename, file_format='pickle'):
-        '''Acceptable formats are 'csv', 'json' and 'pickle'.'''
+        """Acceptable formats are 'csv', 'json' and 'pickle'.
+        """
         self._items = {}
         _PersistentDictMixin.__init__(self, filename, file_format=file_format)
 
@@ -141,20 +153,22 @@ class _Storage(collections.MutableMapping, _PersistentDictMixin):
         return self._items.__len__
 
     def raw_dict(self):
-        '''Returns the wrapped dict'''
+        """Returns the wrapped dict
+        """
         return self._items
 
     initial_update = collections.MutableMapping.update
 
 
 class TimedStorage(_Storage):
-    '''A dict with the ability to persist to disk and TTL for items.'''
+    """A dict with the ability to persist to disk and TTL for items.
+    """
 
     def __init__(self, filename, file_format='pickle', TTL=None):
-        '''TTL if provided should be a datetime.timedelta. Any entries
+        """TTL if provided should be a datetime.timedelta. Any entries
         older than the provided TTL will be removed upon load and upon item
         access.
-        '''
+        """
         self.TTL = TTL
         _Storage.__init__(self, filename, file_format=file_format)
 
@@ -167,17 +181,17 @@ class TimedStorage(_Storage):
     def __getitem__(self, key):
         val, timestamp = self._items[key]
         if self.TTL and (datetime.utcnow() -
-            datetime.utcfromtimestamp(timestamp) > self.TTL):
+                         datetime.utcfromtimestamp(timestamp) > self.TTL):
             del self._items[key]
             return self._items[key][0]  # Will raise KeyError
         return val
 
     def initial_update(self, mapping):
-        '''Initially fills the underlying dictionary with keys, values and
+        """Initially fills the underlying dictionary with keys, values and
         timestamps.
-        '''
+        """
         for key, val in mapping.items():
             _, timestamp = val
             if not self.TTL or (datetime.utcnow() -
-                datetime.utcfromtimestamp(timestamp) < self.TTL):
+                                datetime.utcfromtimestamp(timestamp) < self.TTL):
                 self.__setitem__(key, val, raw=True)

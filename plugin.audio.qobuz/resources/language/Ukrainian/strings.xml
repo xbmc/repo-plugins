@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Ukrainian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/uk/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30002">Вихід</string>
+    <string id="30028">Ім'я користувача</string>
+    <string id="30081">Показати улюблене</string>
+    <string id="30114">Буферизація</string>
+
+    <!-- credentials -->
+    <string id="30147">Ім'я користувача</string>
+    <string id="30148">Пароль</string>
+    <string id="30150">Потік</string>
+    <string id="30152">Інше</string>
+    <string id="30157">Усі альбоми</string>
+    <string id="30159">Сканувати</string>
+    <string id="30165">Перейменували</string>
+    <string id="30166">Видалити</string>
+    <string id="30172">Готово</string>
+    <string id="30184">Список відтворювання</string>
+
+    <!-- nodes -->
+    <string id="30188">Студія</string>
+    <string id="30189">Жанр</string>
+</strings>

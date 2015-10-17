@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Tamil (India) language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ta_IN/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30028">பயனர்பெயர்</string>
+    <string id="30114">தேக்கு</string>
+
+    <!-- credentials -->
+    <string id="30147">பயனர்பெயர்</string>
+    <string id="30148">அடையாளச் சொல்</string>
+
+    <!-- Progress bar -->
+    <string id="30169">தொடங்குகிறது</string>
+    <string id="30184">பட்டியல்</string>
+
+    <!-- nodes -->
+    <string id="30188">சிட்டை</string>
+    <string id="30189">பிரிவுகள்</string>
+</strings>

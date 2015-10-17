@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Korean language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ko/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30001">액션</string>
+    <string id="30002">종료</string>
+    <string id="30028">사용자명</string>
+    <string id="30081">즐겨찾기</string>
+    <string id="30086">뉴스</string>
+    <string id="30114">캐시</string>
+
+    <!-- credentials -->
+    <string id="30147">사용자명</string>
+    <string id="30148">비밀번호</string>
+    <string id="30150">스트림</string>
+    <string id="30152">기타</string>
+    <string id="30157">모든 앨범</string>
+    <string id="30159">검색</string>
+    <string id="30165">이름변경</string>
+    <string id="30166">제거</string>
+
+    <!-- Progress bar -->
+    <string id="30169">시작</string>
+    <string id="30172">완료</string>
+    <string id="30180">친구</string>
+    <string id="30184">재생목록</string>
+
+    <!-- nodes -->
+    <string id="30188">레이블</string>
+    <string id="30189">장르</string>
+</strings>

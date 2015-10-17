@@ -2,23 +2,20 @@
     qobuz.node.article_rubrics
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+    :part_of: xbmc-qobuz
     :copyright: (c) 2012 by Joachim Basmaison, Cyril Leclerc
     :license: GPLv3, see LICENSE for more details.
 '''
-import xbmcgui
-import xbmc
-
-import qobuz
-from flag import NodeFlag as Flag
+import qobuz  # @UnresolvedImport
+from flag import Flag
 from inode import INode
 from articles import Node_articles
 from gui.util import getImage, getSetting
 
-'''
-    @class Node_article_rubrics
-'''
 
 class Node_article_rubrics(INode):
+    """@class Node_article_rubrics
+    """
 
     def __init__(self, parent=None, parameters=None):
         super(Node_article_rubrics, self).__init__(parent, parameters)
@@ -30,22 +27,23 @@ class Node_article_rubrics(INode):
 
     def make_url(self, **ka):
         url = super(Node_article_rubrics, self).make_url(**ka)
-        if self.rubric_id :
+        if self.rubric_id:
             url += "&qid=" + str(self.rubric_id)
         return url
-    
+
     def get_label(self):
         l = self.get_property('title')
-        if not l: return "Articles"
+        if not l:
+            return "Articles"
         return l
 
-    def fetch(self, Dir, lvl , whiteFlag, blackFlag):
+    def fetch(self, Dir, lvl, whiteFlag, blackFlag):
         limit = getSetting('pagination_limit')
         data = qobuz.registry.get(
-                                  name='article_listrubrics', 
-                                  id=self.nid, offset=self.offset, 
-                                  limit=limit)
-        if not data: 
+            name='article_listrubrics',
+            id=self.nid, offset=self.offset,
+            limit=limit)
+        if not data:
             return False
         self.data = data['data']
         return True

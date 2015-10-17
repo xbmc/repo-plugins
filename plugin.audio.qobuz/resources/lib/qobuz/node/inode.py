@@ -1,45 +1,38 @@
-#     Copyright 2011 Joachim Basmaison, Cyril Leclerc
-#
-#     This file is part of xbmc-qobuz.
-#
-#     xbmc-qobuz is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
-#
-#     xbmc-qobuz is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-#     GNU General Public License for more details.
-#
-#     You should have received a copy of the GNU General Public License
-#     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
+'''
+    qobuz.node.inode
+    ~~~~~~~~~~~~~~~~
 
-import sys, os
+    :part_of: xbmc-qobuz
+    :copyright: (c) 2012 by Joachim Basmaison, Cyril Leclerc
+    :license: GPLv3, see LICENSE for more details.
+'''
+import os
+import sys
+from time import time
+import urllib
 import weakref
 
-import qobuz
-from constants import Mode
-from node import Flag
-from exception import QobuzXbmcError as Qerror
-from gui.util import color, lang, runPlugin, containerUpdate, \
-    getSetting
-from debug import log, warn
-from gui.contextmenu import contextMenu
-from node import getNode
-from renderer import renderer
-import urllib
-from time import time
-from cache import cache
-from storage import _Storage
 from api import api
+from cache import cache
+from constants import Mode
+from debug import log, warn
+from exception import QobuzXbmcError as Qerror
+from gui.contextmenu import contextMenu
+from gui.util import color, lang, runPlugin, containerUpdate, getSetting
+from node import Flag
+from node import getNode
+import qobuz  # @UnresolvedImport
+from renderer import renderer
+from storage import _Storage
+from util.common import isEmpty
+
 
 class INode(object):
     '''Our base node, every node must inherit or mimic is behaviour
         Parameters:
             parent: object, does this node have a parent
             parameters: dictionary, system argument parsed as dictionary
-        
+
         Calling build_down on a node start the building process
             - pre_build_down: Retrieve data (disk, internet...) and store
                 result in self.data
@@ -48,6 +41,7 @@ class INode(object):
         The main buil_down method is responsible for the logic flow (recursive,
             depth, whiteFlag, blackFlag...)
     '''
+
     def __init__(self, parent=None, parameters={}):
         self.data = None
         self.parameters = parameters
@@ -114,11 +108,11 @@ class INode(object):
         return self._content_type
 
     @content_type.setter
-    def content_type(self, type):
-        if type not in ['songs', 'albums', 'files', 'artists']:
+    def content_type(self, kind):
+        if kind not in ['songs', 'albums', 'files', 'artists']:
             raise Qerror(
-                who=self, what='invalid_type', additional=type)
-        self._content_type = type
+                who=self, what='invalid_type', additional=kind)
+        self._content_type = kind
 
     ''' data '''
     @property
@@ -135,10 +129,11 @@ class INode(object):
         self.hook_post_data()
 
     ''' Called after node data is set '''
+
     def hook_post_data(self):
         pass
 
-    def get_property(self, pathList):
+    def get_property(self, pathList, defaultReturn=u''):
         """Property are just a easy way to access JSON data (self.data)
             Parameters:
             pathList: a string or a list of string, each string can be
@@ -147,34 +142,37 @@ class INode(object):
                 string (empty string when all fail or when there's no data)
             * When passing array of string the method return the first
             path returning data
-            
+
             Example:
-                image = self.get_property(['image/extralarge', 
-                                       'image/mega', 
+                image = self.get_property(['image/extralarge',
+                                       'image/mega',
                                        'picture'])
         """
         if isinstance(pathList, basestring):
-            return self.__get_property(pathList)
+            res = self.__get_property(pathList)
+            return res if res is not None else defaultReturn
         for path in pathList:
             data = self.__get_property(path)
-            if data:
+            if data is not None:
                 return data
-        return ''
+        return defaultReturn
 
     def __get_property(self, path):
         """Helper used by get_property method
         """
-        if not self.data:
-            return ''
+        if not self.data or self.data is None:
+            return None
         xPath = path.split('/')
         root = self.data
         for i in range(0, len(xPath)):
             if not xPath[i] in root:
-                return ''
+                return None
             root = root[xPath[i]]
+            if isEmpty(root):
+                return None
         if root and root != 'None':
             return root
-        return ''
+        return None
 
     def __add_pagination(self, data):
         """build_down helper: Add pagination data when needed
@@ -186,13 +184,15 @@ class INode(object):
         items = None
         need_pagination = False
         for p in paginated:
-            if p in data:
-                items = data[p]
-                if items['limit'] is None:
-                    continue
-                if items['total'] > (items['offset'] + items['limit']):
-                    need_pagination = True
-                    break
+            if not p in data or data[p] is None:
+                warn(self, 'No pagination data')
+                continue
+            items = data[p]
+            if items['limit'] is None:
+                continue
+            if items['total'] > (items['offset'] + items['limit']):
+                need_pagination = True
+                break
         if not need_pagination:
             return False
         url = self.make_url(offset=items['offset'] + items['limit'])
@@ -207,6 +207,7 @@ class INode(object):
         A hash for storing script parameter, each node have a copy of them.
         TODO: each node don't need to copy parameter
     '''
+
     def set_parameters(self, parameters):
         """Setting parameters property
             Parameter:
@@ -219,22 +220,25 @@ class INode(object):
             Parameters:
                 name: parameter name
                 value: parameter value
-            
+
             * Optional quote=True/False, when quote=True we are using
-            urllib.quote_plus befoer setting value
+            urllib.quote_plus before setting value
         """
         if 'quote' in ka and ka['quote'] == True:
             value = urllib.quote_plus(value)
         self.parameters[name] = value
 
-    def get_parameter(self, name, **ka):
+    def get_parameter(self, name, default=None, **ka):
         if not self.parameters:
-            return None
+            return default
         if not name in self.parameters:
-            return None
+            return default
+        value = self.parameters[name]
+        if value is None:
+            return default
         if 'unQuote' in ka and ka['unQuote'] == True:
-            return urllib.unquote_plus(self.parameters[name])
-        return self.parameters[name]
+            return urllib.unquote_plus(value)
+        return value
 
     def del_parameter(self, name):
         if not name in self.parameters:
@@ -255,13 +259,14 @@ class INode(object):
             ka['nt'] = self.nt
         if not 'nid' in ka and self.nid:
             ka['nid'] = self.nid
-     
+
         url = sys.argv[0] + '?mode=' + str(ka['mode']) + '&nt=' + \
             str(ka['nt'])
         if 'nid' in ka:
             url += "&nid=" + str(ka['nid'])
         offset = self.offset
-        if 'offset' in ka: offset = ka['offset']
+        if 'offset' in ka:
+            offset = ka['offset']
         if offset != None:
             url += '&offset=' + str(offset)
         if 'nm' in ka:
@@ -270,14 +275,14 @@ class INode(object):
         if 'qnt' in ka:
             qnt = ka['qnt']
         if qnt:
-            url+= '&qnt=' + str(qnt)
+            url += '&qnt=' + str(qnt)
         qid = self.get_parameter('qid')
         if 'qid' in ka:
             qid = ka['qid']
         if qid:
-            url+= '&qid=' + str(qid)
+            url += '&qid=' + str(qid)
         if 'query' in ka:
-            url+= '&query=' + ka['query']
+            url += '&query=' + ka['query']
         return url
 
     '''
@@ -285,8 +290,9 @@ class INode(object):
         return  a xbml list item
         Class can overload this method
     '''
+
     def makeListItem(self, **ka):
-        import xbmcgui
+        import xbmcgui  # @UnresolvedImport
         if not 'url' in ka:
             ka['url'] = self.make_url()
         if not 'label' in ka:
@@ -305,7 +311,6 @@ class INode(object):
         ctxMenu = contextMenu()
         self.attach_context_menu(item, ctxMenu)
         item.addContextMenuItems(ctxMenu.getTuples(), ka['replaceItems'])
-        item.addContextMenuItems(ctxMenu.getTuples(), ka['replaceItems'])
         return item
 
     def add_child(self, child):
@@ -318,8 +323,13 @@ class INode(object):
         return self.childs
 
     def set_label(self, label):
-        self.label = label #label.encode('utf8', 'replace')
+        self._label = label
         return self
+
+    def get_label(self):
+        return self._label
+
+    label = property(get_label, set_label)
 
     def get_image(self):
         if self.image:
@@ -332,14 +342,11 @@ class INode(object):
         self.image = image
         return self
 
-    def get_label(self):
-        return self.label
-
     def get_label2(self):
         return self.label2
 
-    def render_nodes(self, nt, parameters, lvl = 1, whiteFlag = Flag.ALL, 
-                     blackFlag = Flag.TRACK & Flag.STOPBUILD):
+    def render_nodes(self, nt, parameters, lvl=1, whiteFlag=Flag.ALL,
+                     blackFlag=Flag.TRACK & Flag.STOPBUILD):
         render = renderer(nt, parameters)
         render.depth = -1
         render.whiteFlag = whiteFlag
@@ -354,7 +361,7 @@ class INode(object):
         '''
         return True
 
-    def populating(self, Dir, lvl=1, whiteFlag=None, blackFlag=None, 
+    def populating(self, Dir, lvl=1, whiteFlag=None, blackFlag=None,
                    gData=None):
         if Dir.Progress.iscanceled():
             return False
@@ -391,7 +398,7 @@ class INode(object):
                 gData['count'] += 1
                 Dir.update(gData, "Working", label, child.get_label())
             else:
-                log(self, "Skipping node: %s" % ( Flag.to_s(child.nt)) )
+                log(self, "Skipping node: %s" % (Flag.to_s(child.nt)))
             """ Calling builiding down on child """
             child.populating(Dir, lvl, whiteFlag, blackFlag, gData)
         return gData['count']
@@ -403,7 +410,7 @@ class INode(object):
         simply fetch data from qobuz (cached data)
         """
         pass
-    
+
     def __add_pagination_node(self, Dir, lvl=1, whiteFlag=Flag.NODE):
         """Helper/Called by build_down to add special node when pagination is
         required
@@ -418,7 +425,8 @@ class INode(object):
             label = self.get_label()
             if not label and self.parent:
                 label = self.parent.get_label()
-            if self.label2: label = self.label2
+            if self.label2:
+                label = self.label2
             nextLabel = (
                 '[ %s  %s / %s ]') % (color(colorItem, label),
                                       self.pagination_next_offset,
@@ -437,89 +445,86 @@ class INode(object):
 
         url = self.make_url(nt=Flag.ROOT, mode=Mode.VIEW, nm='')
         menu.add(path='qobuz', label="Qobuz", cmd=containerUpdate(url, False),
-                 id='', pos = -5)     
+                 id='', pos=-5)
         ''' ARTIST '''
         if self.nt & (Flag.ALBUM | Flag.TRACK | Flag.ARTIST):
             artist_id = self.get_artist_id()
-            #if not artist_id:
-            #    import pprint
-            #    print pprint.pformat(self.data)
             artist_name = self.get_artist()
-            urlArtist = self.make_url(nt=Flag.ARTIST, nid=artist_id, 
+            urlArtist = self.make_url(nt=Flag.ARTIST, nid=artist_id,
                                       mode=Mode.VIEW)
-            menu.add(path='artist/all_album', 
-                          label="%s %s" % (lang(39001), artist_name), 
+            menu.add(path='artist/all_album',
+                          label="%s %s" % (lang(30157), artist_name),
                           cmd=containerUpdate(urlArtist), pos=-10)
 
             ''' Similar artist '''
-            url = self.make_url(nt=Flag.SIMILAR_ARTIST, 
+            url = self.make_url(nt=Flag.SIMILAR_ARTIST,
                                 nid=artist_id, mode=Mode.VIEW)
-            menu.add(path='artist/similar', 
-                          label=lang(39004), 
+            menu.add(path='artist/similar',
+                          label=lang(30160),
                           cmd=containerUpdate(url))
         ''' FAVORITES '''
-        wf = self.nt & (~Flag.FAVORITES)
+        wf = self.nt & (~Flag.FAVORITE)
         if self.parent:
-            wf = wf and self.parent.nt & ~Flag.FAVORITES
+            wf = wf and self.parent.nt & ~Flag.FAVORITE
         if wf:
             ''' ADD TO FAVORITES / TRACKS'''
-            url = self.make_url(nt=Flag.FAVORITES,
+            url = self.make_url(nt=Flag.FAVORITE,
                                 nm='', mode=Mode.VIEW)
-            menu.add(path='favorites', label="Favorites", 
-                     cmd=containerUpdate(url, True),pos=-9)   
-            url = self.make_url(nt=Flag.FAVORITES, 
-                                          nm='gui_add_tracks', 
-                                          qid=self.nid, 
-                                          qnt=self.nt, 
-                                          mode=Mode.VIEW)
-            menu.add(path='favorites/add_tracks', 
-                          label=lang(39011) + ' tracks', cmd=runPlugin(url))
+            menu.add(path='favorites', label="Favorites",
+                     cmd=containerUpdate(url, True), pos=-9)
+            url = self.make_url(nt=Flag.FAVORITE,
+                                nm='gui_add_tracks',
+                                qid=self.nid,
+                                qnt=self.nt,
+                                mode=Mode.VIEW)
+            menu.add(path='favorites/add_tracks',
+                          label=lang(30167) + ' tracks', cmd=runPlugin(url))
             ''' ADD TO FAVORITES / Albums'''
-            url = self.make_url(nt=Flag.FAVORITES, 
-                                          nm='gui_add_albums', 
-                                          qid=self.nid, 
-                                          qnt=self.nt, 
-                                          mode=Mode.VIEW)
-            menu.add(path='favorites/add_albums', 
-                          label=lang(39011) + ' albums', cmd=runPlugin(url))
+            url = self.make_url(nt=Flag.FAVORITE,
+                                nm='gui_add_albums',
+                                qid=self.nid,
+                                qnt=self.nt,
+                                mode=Mode.VIEW)
+            menu.add(path='favorites/add_albums',
+                          label=lang(30167) + ' albums', cmd=runPlugin(url))
             ''' ADD TO FAVORITES / Artists'''
-            url = self.make_url(nt=Flag.FAVORITES, 
-                                          nm='gui_add_artists', 
-                                          qid=self.nid, 
-                                          qnt=self.nt, 
-                                          mode=Mode.VIEW)
-            menu.add(path='favorites/add_artists', 
-                          label=lang(39011) + ' artists', cmd=runPlugin(url))
+            url = self.make_url(nt=Flag.FAVORITE,
+                                nm='gui_add_artists',
+                                qid=self.nid,
+                                qnt=self.nt,
+                                mode=Mode.VIEW)
+            menu.add(path='favorites/add_artists',
+                          label=lang(30167) + ' artists', cmd=runPlugin(url))
 
-        if self.parent and (self.parent.nt & Flag.FAVORITES):
-            url = self.make_url(nt=Flag.FAVORITES,
+        if self.parent and (self.parent.nt & Flag.FAVORITE):
+            url = self.make_url(nt=Flag.FAVORITE,
                                 nm='', mode=Mode.VIEW)
-            menu.add(path='favorites', label="Favorites", 
-                     cmd=containerUpdate(url, True),pos=-9)  
-            url = self.make_url(nt=Flag.FAVORITES, nm='gui_remove',
+            menu.add(path='favorites', label="Favorites",
+                     cmd=containerUpdate(url, True), pos=-9)
+            url = self.make_url(nt=Flag.FAVORITE, nm='gui_remove',
                                 qid=self.nid, qnt=self.nt,
                                 mode=Mode.VIEW)
-            menu.add(path='favorites/remove', 
-                     label='Remove %s' % (self.get_label()), 
+            menu.add(path='favorites/remove',
+                     label='Remove %s' % (self.get_label()),
                      cmd=runPlugin(url), color=colorCaution)
         wf = ~Flag.USERPLAYLISTS
 #        if self.parent:
 #            wf = wf and self.parent.nt & (~Flag.USERPLAYLISTS)
-        if wf: 
+        if wf:
             ''' PLAYLIST '''
-            cmd = containerUpdate(self.make_url(nt=Flag.USERPLAYLISTS, 
-                                    nid='', mode=Mode.VIEW))
-            menu.add(path='playlist', pos = 1,
+            cmd = containerUpdate(self.make_url(nt=Flag.USERPLAYLISTS,
+                                                nid='', mode=Mode.VIEW))
+            menu.add(path='playlist', pos=1,
                           label="Playlist", cmd=cmd, mode=Mode.VIEW)
 
             ''' ADD TO CURRENT PLAYLIST '''
-            cmd = runPlugin(self.make_url(nt=Flag.PLAYLIST, 
-                                            nm='gui_add_to_current', 
-                                            qnt=self.nt,
-                                            mode=Mode.VIEW,
-                                            qid=self.nid))
-            menu.add(path='playlist/add_to_current', 
-                          label=lang(39005), cmd=cmd)
+            cmd = runPlugin(self.make_url(nt=Flag.PLAYLIST,
+                                          nm='gui_add_to_current',
+                                          qnt=self.nt,
+                                          mode=Mode.VIEW,
+                                          qid=self.nid))
+            menu.add(path='playlist/add_to_current',
+                          label=lang(30161), cmd=cmd)
             label = self.get_label()
             try:
                 label = label.encode('utf8', 'replace')
@@ -529,60 +534,60 @@ class INode(object):
             label = urllib.quote_plus(label)
             ''' ADD AS NEW '''
             cmd = runPlugin(self.make_url(nt=Flag.PLAYLIST,
-                                            nm='gui_add_as_new', 
-                                            qnt=self.nt,
-                                            query=label,
-                                            mode=Mode.VIEW,
-                                            qid=self.nid))
-            menu.add(path='playlist/add_as_new', 
-                          label=lang(30080), cmd=cmd)
+                                          nm='gui_add_as_new',
+                                          qnt=self.nt,
+                                          query=label,
+                                          mode=Mode.VIEW,
+                                          qid=self.nid))
+            menu.add(path='playlist/add_as_new',
+                          label=lang(30082), cmd=cmd)
 
 #            ''' Show playlist '''
 #            if not (self.nt ^ Flag.USERPLAYLISTS != Flag.USERPLAYLISTS):
-#                cmd = containerUpdate(self.make_url(nt=Flag.USERPLAYLISTS, 
+#                cmd = containerUpdate(self.make_url(nt=Flag.USERPLAYLISTS,
 #                                    id='', mode=Mode.VIEW))
-#                menu.add(path='playlist/show', 
-#                          label=lang(39006), cmd=cmd)
+#                menu.add(path='playlist/show',
+#                          label=lang(30162), cmd=cmd)
 
         ''' PLAYLIST / CREATE '''
         cFlag = (Flag.PLAYLIST | Flag.USERPLAYLISTS)
         if self.nt | cFlag == cFlag:
-            cmd = runPlugin(self.make_url(nt=Flag.PLAYLIST, 
+            cmd = runPlugin(self.make_url(nt=Flag.PLAYLIST,
                                           nm="gui_create", mode=Mode.VIEW))
-            menu.add(path='playlist/create', 
-                          label=lang(39008), cmd=cmd)
+            menu.add(path='playlist/create',
+                          label=lang(30164), cmd=cmd)
         ''' VIEW BIG DIR '''
         cmd = containerUpdate(self.make_url(mode=Mode.VIEW_BIG_DIR))
-        menu.add(path='qobuz/big_dir', 
-                          label=lang(39002), cmd=cmd)
+        menu.add(path='qobuz/big_dir',
+                 label=lang(30158), cmd=cmd)
         ''' SCAN '''
         if getSetting('enable_scan_feature', isBool=True):
             query = urllib.quote_plus(self.make_url(mode=Mode.SCAN))
             url = self.make_url(nt=Flag.ROOT, mode=Mode.VIEW,
                                 nm='gui_scan', query=query)
-            menu.add(path='qobuz/scan', 
-                            cmd=runPlugin(url),
-                            label='scan')
-        if self.nt & (Flag.ALL & ~Flag.ALBUM & ~Flag.TRACK 
-                        & ~Flag.PLAYLIST):
+            menu.add(path='qobuz/scan',
+                     cmd=runPlugin(url),
+                     label='scan')
+        if self.nt & (Flag.ALL & ~Flag.ALBUM & ~Flag.TRACK
+                      & ~Flag.PLAYLIST):
             ''' ERASE CACHE '''
-            cmd = runPlugin(self.make_url(nt=Flag.ROOT, nm="cache_remove", 
-                                      mode=Mode.VIEW))
-            menu.add(path='qobuz/erase_cache', 
-                          label=lang(31009), cmd=cmd, 
+            cmd = runPlugin(self.make_url(nt=Flag.ROOT, nm="cache_remove",
+                                          mode=Mode.VIEW))
+            menu.add(path='qobuz/erase_cache',
+                          label=lang(30117), cmd=cmd,
                           color=colorCaution, pos=10)
 
     def get_user_storage(self):
         if self.user_storage:
             return self.user_storage
         filename = os.path.join(cache.base_path, 'localuserdata-%s.local' %
-                            str(api.user_id))
+                                str(api.user_id))
         self.user_storage = _Storage(filename)
         return self.user_storage
 
     def get_user_data(self):
-        data = api.get('/user/login', username=api.username, 
+        data = api.get('/user/login', username=api.username,
                        password=api.password)
-        if not data: 
+        if not data:
             return None
         return data['user']

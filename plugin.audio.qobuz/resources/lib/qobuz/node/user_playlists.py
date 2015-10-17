@@ -1,32 +1,26 @@
-#     Copyright 2011 Joachim Basmaison, Cyril Leclerc
-#
-#     This file is part of xbmc-qobuz.
-#
-#     xbmc-qobuz is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
-#
-#     xbmc-qobuz is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-#     GNU General Public License for more details.
-#
-#     You should have received a copy of the GNU General Public License
-#     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
+'''
+    qobuz.node.user_playlist
+    ~~~~~~~~~~~~~~~~~~~~~~~
+
+    :part_of: xbmc-qobuz
+    :copyright: (c) 2012 by Joachim Basmaison, Cyril Leclerc
+    :license: GPLv3, see LICENSE for more details.
+'''
 from node import Flag, getNode
 from inode import INode
 from debug import warn, error
 from gui.util import lang, getImage, getSetting
 from api import api
 
+
 class Node_user_playlists(INode):
     """User playlists node
         This node list playlist made by user and saved on Qobuz server
     """
+
     def __init__(self, parent=None, parameters=None):
         super(Node_user_playlists, self).__init__(parent, parameters)
-        self.label = lang(30019)
+        self.label = lang(30021)
         self.image = getImage('userplaylists')
         self.nt = Flag.USERPLAYLISTS
         self.content_type = 'files'
@@ -60,8 +54,8 @@ class Node_user_playlists(INode):
 
     def fetch(self, Dir, lvl, whiteFlag, blackFlag):
         limit = getSetting('pagination_limit')
-        data = api.get('/playlist/getUserPlaylists', limit=limit, 
-                                offset=self.offset, user_id=api.user_id)
+        data = api.get('/playlist/getUserPlaylists', limit=limit,
+                       offset=self.offset, user_id=api.user_id)
         if not data:
             warn(self, "Build-down: Cannot fetch user playlists data")
             return False

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Spanish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/es/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30001">Acción</string>
+    <string id="30002">Salir</string>
+    <string id="30003">Texto de prueba</string>
+    <string id="30004">Lista de reproducción de Qobuz</string>
+    <string id="30005">No hay lista de reproducción</string>
+    <string id="30006">Límite de búsqueda de Canciones</string>
+    <string id="30007">Límite de búsqueda de Álbumes</string>
+    <string id="30008">Límite de búsqueda de Artistas</string>
+    <string id="30009">No hay servicio de Qobuz</string>
+    <string id="30010">Qobuz XBMC</string>
+    <string id="30011">No es posible conectar con Qobuz</string>
+    <string id="30012">Por favor, inténtelo más tarde</string>
+    <string id="30013">Nuevo...</string>
+    <string id="30014">Hecho</string>
+    <string id="30015">Buscar canciones...</string>
+    <string id="30016">Buscar álbumes...</string>
+    <string id="30017">Buscar artistas...</string>
+    <string id="30018">Canciones populare sn Qobuz para el artista...</string>
+    <string id="30019">Canciones populares en Qobuz</string>
+    <string id="30020">Mis favoritos de Qobuz</string>
+    <string id="30021">Mostrar listas de reproducción</string>
+    <string id="30022">Buscar canciones mediante Qobuz</string>
+    <string id="30023">No hay canciones coincidentes.</string>
+    <string id="30024">Buscar álbumes mediante Qobuz</string>
+    <string id="30025">No hay álbumes coincidentes.</string>
+    <string id="30026">Buscar artistas mediante Qobuz</string>
+    <string id="30027">No hay artistas coincidentes.</string>
+    <string id="30028">Usuario</string>
+    <string id="30029">No se han encontrado listas de reproducción de Qobuz.</string>
+    <string id="30030">Buscar álbumes de artista mediante Qobuz</string>
+    <string id="30031">No hay álbumes coincidentes.</string>
+    <string id="30032">No hay artistas coincidentes.</string>
+    <string id="30033">No tienes favoritos.</string>
+    <string id="30034">No hay canciones populares.</string>
+    <string id="30035">No tienes listas de reproducción de Qobuz.</string>
+    <string id="30036">Tienes que estar conectado.</string>
+    <string id="30037">para acceder a tus listas de reproducción Qobuz</string>
+    <string id="30038">Añadido a favoritos</string>
+    <string id="30039">para añadir favoritos.</string>
+    <string id="30040">Eliminado de favoritos de Qobuz</string>
+    <string id="30041">para eliminar de favoritos de Qobuz.</string>
+    <string id="30042">para acceder al servicio de Música en Streaming de Qobuz[CR][I]Por favor⏎ »»comprueba tus credenciales en los ajustes del complemento[CR]o vuelve a intentar más tarde[/I]⏎ »</string>
+    <string id="30043">Buscar canciones populares por artista mediante Qobuz⏎ »</string>
+    <string id="30044">No hay canciones populares.</string>
+    <string id="30045">No hay artistas coincidentes.</string>
+    <string id="30046">Imposible reproducir canción</string>
+    <string id="30047">Nombre de lista de reproducción de Qobuz</string>
+    <string id="30048">No se puede crear la lista de reproducción de Qobuz</string>
+    <string id="30049">Lista de reproducción de Qobuz creada</string>
+    <string id="30050">para crear una lista de reproducción Qobuz.</string>
+    <string id="30051">Nombre de lista de reproducción de Qobuz</string>
+    <string id="30052">No se puede crear la lista de reproducción de Qobuz</string>
+    <string id="30053">para cambiar el nombre a la lista de reproducción de Qobuz.</string>
+    <string id="30054">¿Borrar la lista de reproducción de Qobuz?</string>
+    <string id="30055">No se puede borrar la lista de reproducción de Qobuz</string>
+    <string id="30056">para borrar la lista de reproducción de Qobuz.</string>
+    <string id="30057">Nombre de lista de reproducción de Qobuz</string>
+    <string id="30058">No se puede crear la lista de reproducción de Qobuz</string>
+    <string id="30059">Lista de reproducción de Qobuz creada</string>
+    <string id="30060">No se puede añadir a la lista de reproducción</string>
+    <string id="30061">Canción añadida a la lista de reproducción de Qobuz.</string>
+    <string id="30062">No tienes listas de reproducción de Qobuz.</string>
+    <string id="30063">para añadir una canción a la lista de reproducción Qobuz.</string>
+    <string id="30064">Eliminar esta canción de</string>
+    <string id="30065">la lista de reproducción de Qobuz?</string>
+    <string id="30066">Eliminación fallida</string>
+    <string id="30067">canción de la lista de reproducción de Qobuz.</string>
+    <string id="30068">Canción eliminada de la lista de reproducción de Qobuz</string>
+    <string id="30069">para eliminar una canción de la lista de reproducción de Qobuz.</string>
+    <string id="30070">No hay artistas similares.</string>
+    <string id="30071">No se ha podido iniciar sesión.</string>
+    <string id="30072">Compruebe su usuario y contraseña en los ajustes.</string>
+    <string id="30073">Favorito de Qobuz</string>
+    <string id="30074">No favorito de Qobuz</string>
+    <string id="30075">Eliminar de la lista de reproducción de Qobuz</string>
+    <string id="30076">Añadir a la lista de reproducción de Qobuz</string>
+    <string id="30077">Más canciones</string>
+    <string id="30078">Hacer lista de reproducción de Qobuz</string>
+    <string id="30079">Eliminar lista de reproduccion de Qobuz</string>
+    <string id="30080">Renombrar lista de reproducción</string>
+    <string id="30081">Mostrar Favoritos</string>
+    <string id="30082">Añadir como nueva lista de reproducción</string>
+    <string id="30083">Favoritos de Qobuz</string>
+
+    <!-- Recommandation -->
+    <string id="30084">Mostrar recomendaciones</string>
+    <string id="30085">Premios de crítica</string>
+    <string id="30086">Noticias</string>
+    <string id="30087">Más vendidos</string>
+    <string id="30088">Selección del Editor</string>
+    <string id="30089">Pop / Rock</string>
+    <string id="30090">Electro</string>
+    <string id="30091">Jazz</string>
+    <string id="30092">Canción Francesa</string>
+    <string id="30093">Soul / Funk/Rap</string>
+    <string id="30094">Músicas del Mundo</string>
+    <string id="30095">Blues / Country/Folk</string>
+    <string id="30096">Bandas Sonoras</string>
+    <string id="30097">Clásica</string>
+    <string id="30098">Todas</string>
+    <string id="30099">Reggae</string>
+    <string id="30100">Documentos históricos / Literatura / Humor</string>
+    <string id="30101">Mostrar compras</string>
+    <string id="30102">Mostrar Noticias</string>
+    <string id="30103">Más destacados</string>
+    <string id="30104">Rap / HipHop / RB / Soul</string>
+    <string id="30105">Infantil / Karaoke / Ambiente</string>
+    <string id="30106">Techno</string>
+    <string id="30107">Reggae</string>
+
+    <!-- Cache Addon Menu -->
+    <string id="30108">Tiempo en minutos para mantener datos de Qobuz en&#10;		caché[CR][I]- Fijar en cero para deshabilitar caché[/I]</string>
+    <string id="30109">Duración de la caché del álbum</string>
+    <string id="30110">Duración de la caché del artista</string>
+    <string id="30111">Duración de la caché de la pista</string>
+    <string id="30112">Duración de la caché de la recomendación</string>
+    <string id="30113">Duración de la caché de la lista de reproducción del usuario</string>
+    <string id="30114">Caché</string>
+    <string id="30115">Ajustes de caché</string>
+    <string id="30116">Duración de la caché de autentificación</string>
+    <string id="30117">Borrar caché</string>
+    <string id="30118">Administrador de listas de reproducción</string>
+
+    <!-- Cache Notify -->
+    <string id="30119">Caché de Qobuz</string>
+    <string id="30120">Error al borrar datos de la caché</string>
+    <string id="30121">Borrar datos de caché</string>
+    <string id="30122">¿Quieres eliminar todos los datos de caché?</string>
+    <string id="30123">Eliminados todos los datos de caché</string>
+
+    <!-- Stream -->
+    <string id="30124">Tipo de transmisión</string>
+    <string id="30125">Saltar muestra</string>
+
+    <!-- URL Resolver -->
+    <string id="30126">Habilitar solucionador</string>
+
+    <!-- Color -->
+    <string id="30127">Colores</string>
+    <string id="30128">Color de los elementos del menú contextual</string>
+    <string id="30129">Color de advertencia de los elementos del menú contextual</string>
+    <string id="30130">Color de los elementos de la lista de reproducción</string>
+    <string id="30131">Formato de la sección del menú contextual</string>
+
+    <!-- Qobuz Player -->
+    <string id="30132">Reproductor Qobuz</string>
+    <string id="30133">Reproduciendo canción</string>
+    <string id="30134">Error al reproducir canción</string>
+
+    <!-- Search -->
+    <string id="30135">Búsqueda habilitada</string>
+    <string id="30136">No hay canciones coincidentes</string>
+    <string id="30137">No hay álbumes coincidentes</string>
+    <string id="30138">No hay artistas coincidentes</string>
+
+    <!-- Notification -->
+    <string id="30139">Qobuz</string>
+    <string id="30140">Directorio vacío</string>
+    <string id="30141">Notificación</string>
+    <string id="30142">Notificar al comienzo de la canción</string>
+    <string id="30143">Nada que añadir</string>
+    <string id="30144">¿Añadir álbumes a favoritos?</string>
+    <string id="30145">¿Añadir pistas a favoritos?</string>
+    <string id="30146">¿Añadir artistas a favoritos?</string>
+
+    <!-- credentials -->
+    <string id="30147">Usuario</string>
+    <string id="30148">Contraseña</string>
+
+    <!-- Sort -->
+    <string id="30149">Credenciales de usuario</string>
+    <string id="30150">Flujo</string>
+    <string id="30151">Límite de búsqueda</string>
+    <string id="30152">Otros</string>
+    <string id="30153">Mostrar recomendaciones</string>
+    <string id="30154">Habilitar análisis (experimental)</string>
+    <string id="30155">Número de elementos por página</string>
+
+    <!-- Context Menu -->
+    <string id="30156">Este álbum</string>
+    <string id="30157">Todos los álbumes</string>
+    <string id="30158">Ver directorio grande</string>
+    <string id="30159">Analizar</string>
+    <string id="30160">Artista similar</string>
+    <string id="30161">Añadir a lista de reproducción actual</string>
+    <string id="30162">Mostrar listas de reproducción</string>
+    <string id="30163">Establecer como actual</string>
+    <string id="30164">Crear</string>
+    <string id="30165">Renombrar</string>
+    <string id="30166">Eliminar</string>
+    <string id="30167">Añadir a favoritos</string>
+    <string id="30168">Suscribir</string>
+
+    <!-- Progress bar -->
+    <string id="30169">Empezando</string>
+    <string id="30170">Directorio vacío</string>
+    <string id="30171">Mostrando</string>
+    <string id="30172">Hecho</string>
+    <string id="30173">Procesando datos</string>
+    <string id="30174">Buscando artista similar</string>
+
+    <!-- Free account warning -->
+    <string id="30175">Aviso de cuenta gratuita</string>
+    <string id="30176">Las cuentas gratuitas solo pueden escuchar muestras de 1 minuto</string>
+    <string id="30177">Tienes que suscribirte para escuchar toda la música.</string>
+    <string id="30178">Transmisión de Qobuz en mp3 y FLAC</string>
+
+    <!-- Friends -->
+    <string id="30179">los Amigos</string>
+    <string id="30180">Amigos</string>
+    <string id="30181">Añadir Amigo</string>
+
+    <!-- playlists -->
+    <string id="30182">Crear Lista de reproducción</string>
+    <string id="30183">Lista de reproducción de Qobuz</string>
+    <string id="30184">Lista de reproducción</string>
+    <string id="30185">Eliminado</string>
+    <string id="30186">No se puede borrar la lista de reproducción</string>
+    <string id="30187">lista de reproducción suscrita</string>
+
+    <!-- nodes -->
+    <string id="30188">Firma</string>
+    <string id="30189">Género</string>
+    <string id="30190">Listas de reproducción públicas</string>
+
+    <!-- options -->
+    <string id="30191">Mostrar recomendaciones</string>
+</strings>

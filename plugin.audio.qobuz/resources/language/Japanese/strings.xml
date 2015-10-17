@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Japanese language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ja/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30002">終了</string>
+    <string id="30028">ユーザー名</string>
+    <string id="30081">お気に入りを表示</string>
+    <string id="30114">キャッシュ</string>
+
+    <!-- credentials -->
+    <string id="30147">ユーザー名</string>
+    <string id="30148">パスワード</string>
+    <string id="30150">ストリーム</string>
+    <string id="30152">その他</string>
+    <string id="30157">すべてのアルバム</string>
+    <string id="30159">スキャン</string>
+    <string id="30165">名前の変更</string>
+    <string id="30166">削除</string>
+
+    <!-- Progress bar -->
+    <string id="30169">開始中</string>
+    <string id="30172">完了</string>
+    <string id="30184">プレイリスト</string>
+
+    <!-- nodes -->
+    <string id="30188">レーベル</string>
+    <string id="30189">ジャンル</string>
+</strings>

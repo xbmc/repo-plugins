@@ -1,12 +1,13 @@
 '''
-    qobuz.storage.base
-    ~~~~~~~~~~~~~~~~~~
+    qobuz.cache.base
+    ~~~~~~~~~~~~~~~~
 
     A class to handle caching
-    
+
     ::cached decorator that will cache a function call based on his
     positional and named parameter
 
+    :part_of: xbmc-qobuz
     :copyright: (c) 2012 by Joachim Basmaison, Cyril Leclerc
     :license: GPLv3, see LICENSE for more details.
 '''
@@ -14,27 +15,30 @@ from time import time
 __seed__ = __name__ + '0.0.1'
 __magic__ = 0
 pos = 0
-for i in [ ord(c) for c in __seed__[:]]:
-    __magic__ += i * 2**pos
-    pos+=1
+for i in [ord(c) for c in __seed__[:]]:
+    __magic__ += i * 2 ** pos
+    pos += 1
 BadMagic = 1 << 1
 BadKey = 1 << 2
 NoData = 1 << 3
 StoreError = 1 << 4
 DeleteError = 1 << 5
 
+
 class CacheBase(object):
-    ''' A base class for caching
-    '''
+    """A base class for caching
+    """
+
     def __init__(self, *a, **ka):
         self.cached_function_name = __name__
 
     def cached(self, f, *a, **ka):
-        '''Decorator
+        """Decorator
             All positional and named parameters are used to make the key
-        '''
+        """
         that = self
         self.cached_function_name = f.__name__
+
         def wrapped_function(self, *a, **ka):
             that.error = 0
             key = that.make_key(*a, **ka)
@@ -56,13 +60,13 @@ class CacheBase(object):
                 if black_key in ka:
                     del ka[black_key]
             entry = {
-                 'updated_on': time(),
-                 'data': data,
-                 'ttl': that.get_ttl(key, *a, **ka),
-                 'pa': a,
-                 'ka': ka,
-                 'magic': __magic__,
-                 'key': key
+                'updated_on': time(),
+                'data': data,
+                'ttl': that.get_ttl(key, *a, **ka),
+                'pa': a,
+                'ka': ka,
+                'magic': __magic__,
+                'key': key
             }
             if not that.sync(key, entry):
                 that.error &= StoreError
@@ -96,10 +100,10 @@ class CacheBase(object):
         return True
 
     def load(self, key, *a, **ka):
-        ''' return tuple (Status, Data)
+        """Return tuple (Status, Data)
             Status: Bool
             Data: Arbitrary data
-        '''
+        """
         raise NotImplemented()
 
     def load_from_store(self, *a, **ka):

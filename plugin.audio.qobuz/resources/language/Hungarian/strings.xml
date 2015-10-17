@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Hungarian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/hu/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30001">Akció</string>
+    <string id="30002">Kilépés</string>
+    <string id="30028">Felhasználónév</string>
+    <string id="30081">A kedvencek mutatása</string>
+    <string id="30086">Újdonságok</string>
+    <string id="30114">Gyorsítótár</string>
+
+    <!-- credentials -->
+    <string id="30147">Felhasználónév</string>
+    <string id="30148">Jelszó</string>
+    <string id="30150">Adatfolyam</string>
+    <string id="30152">Másik</string>
+    <string id="30157">Minden album</string>
+    <string id="30159">Keresés</string>
+    <string id="30165">Átnevezés</string>
+    <string id="30166">Törlés</string>
+
+    <!-- Progress bar -->
+    <string id="30169">Kezdődik</string>
+    <string id="30172">Rendben</string>
+    <string id="30184">Lejátszási lista</string>
+
+    <!-- nodes -->
+    <string id="30188">Címke</string>
+    <string id="30189">Műfaj</string>
+</strings>

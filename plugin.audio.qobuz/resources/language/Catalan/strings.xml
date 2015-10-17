@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Catalan language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ca/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30001">Acció</string>
+    <string id="30002">Surt</string>
+    <string id="30028">Nom d'usuari</string>
+    <string id="30081">Mostra els preferits</string>
+    <string id="30114">Memòria cau</string>
+
+    <!-- credentials -->
+    <string id="30147">Nom d'usuari</string>
+    <string id="30148">Contrasenya</string>
+    <string id="30150">Flux</string>
+    <string id="30152">Altres</string>
+    <string id="30157">Tots els àlbums</string>
+    <string id="30159">Cerca</string>
+    <string id="30165">Canvia el nom</string>
+    <string id="30166">Suprimeix</string>
+
+    <!-- Progress bar -->
+    <string id="30169">Inici</string>
+    <string id="30172">Fet</string>
+    <string id="30184">Llista de reproducció</string>
+
+    <!-- nodes -->
+    <string id="30188">Etiqueta</string>
+    <string id="30189">Gènere</string>
+</strings>

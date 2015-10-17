@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Turkish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/tr/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30002">Çıkış</string>
+    <string id="30028">Kullanıcı Adı</string>
+    <string id="30081">Favorileri göster</string>
+    <string id="30114">Önbellek</string>
+
+    <!-- credentials -->
+    <string id="30147">Kullanıcı Adı</string>
+    <string id="30148">Parola</string>
+
+    <!-- Sort -->
+    <string id="30149">Bağlantı</string>
+    <string id="30150">Akış</string>
+    <string id="30152">Diğer</string>
+    <string id="30157">Bütün albümler</string>
+    <string id="30159">Tara</string>
+    <string id="30165">Yeniden adlandır</string>
+    <string id="30166">Kaldır</string>
+    <string id="30172">Tamam</string>
+    <string id="30184">Çalma listesi</string>
+
+    <!-- nodes -->
+    <string id="30188">Etiket</string>
+    <string id="30189">Tarz</string>
+</strings>

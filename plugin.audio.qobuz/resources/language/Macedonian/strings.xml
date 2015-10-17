@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Macedonian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/mk/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30002">Излези од</string>
+    <string id="30028">Корисничко име</string>
+    <string id="30081">Прикажи Фаворити</string>
+    <string id="30114">Кеш</string>
+
+    <!-- credentials -->
+    <string id="30147">Корисничко име</string>
+    <string id="30148">Лозинка</string>
+    <string id="30157">Сите албуми</string>
+    <string id="30159">Анализирај</string>
+    <string id="30165">Преименувај</string>
+    <string id="30166">Отстрани</string>
+    <string id="30172">Заврши</string>
+    <string id="30184">Список за реп.</string>
+    <string id="30189">Жанр</string>
+</strings>

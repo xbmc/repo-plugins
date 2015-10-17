@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Finnish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/fi/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30002">Lopeta</string>
+    <string id="30028">Käyttäjätunnus</string>
+    <string id="30081">Näytä suosikit</string>
+    <string id="30114">Välimuistit</string>
+
+    <!-- credentials -->
+    <string id="30147">Käyttäjätunnus</string>
+    <string id="30148">Salasana</string>
+    <string id="30150">Katso</string>
+    <string id="30157">Kaikki albumit</string>
+    <string id="30159">Hae tiedot</string>
+    <string id="30165">Nimeä uudelleen</string>
+    <string id="30166">Poista</string>
+    <string id="30172">Hyväksy</string>
+    <string id="30184">Toistolista</string>
+
+    <!-- nodes -->
+    <string id="30188">Nimi</string>
+    <string id="30189">Lajityyppi</string>
+</strings>

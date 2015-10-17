@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Spanish (Argentina) language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/es_AR/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30002">Salir</string>
+    <string id="30028">Usuario</string>
+    <string id="30081">Mostrar Favoritos</string>
+    <string id="30114">Caché</string>
+
+    <!-- credentials -->
+    <string id="30147">Usuario</string>
+    <string id="30148">Contraseña</string>
+    <string id="30150">Flujo</string>
+    <string id="30152">Otro</string>
+    <string id="30157">Todos los álbumes</string>
+    <string id="30159">Analizar</string>
+    <string id="30165">Renombrar</string>
+    <string id="30166">Eliminar</string>
+    <string id="30172">Hecho</string>
+    <string id="30184">Lista de reproducción</string>
+
+    <!-- nodes -->
+    <string id="30188">Firma</string>
+    <string id="30189">Género</string>
+</strings>

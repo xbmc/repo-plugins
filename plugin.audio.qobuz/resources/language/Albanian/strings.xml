@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Albanian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/sq/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30002">Dalje</string>
+    <string id="30028">Emër-kalues</string>
+    <string id="30114">Cache</string>
+
+    <!-- credentials -->
+    <string id="30147">Emër-kalues</string>
+    <string id="30148">Fjalkalim</string>
+    <string id="30157">Gjith albumet</string>
+    <string id="30159">Kërko</string>
+    <string id="30165">Riemërto</string>
+    <string id="30166">Fshij</string>
+    <string id="30172">U bë</string>
+    <string id="30184">Lista e Lojës</string>
+
+    <!-- nodes -->
+    <string id="30188">Etiketë</string>
+    <string id="30189">Stili</string>
+</strings>

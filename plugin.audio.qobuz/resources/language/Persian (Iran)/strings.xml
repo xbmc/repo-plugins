@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Persian (Iran) language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/fa_IR/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30001">عمل</string>
+    <string id="30002">خروج</string>
+    <string id="30003">متن دمو</string>
+    <string id="30004">لیست پخش Qobuz</string>
+    <string id="30005">لیست پخش فعالی موجود نیست</string>
+    <string id="30006">محدودیت جستجوی ترانه ها</string>
+    <string id="30007">محدودیت جست و جوی آلبوم</string>
+    <string id="30008">محدودیت جست و جوی هنرمند</string>
+    <string id="30009">سرویس Qobuz موجود نیست</string>
+    <string id="30010">Qobuz XBMC</string>
+    <string id="30011">نمی توان به  Qobuz متصل شد.</string>
+    <string id="30012">لطفا بعدا دوباره امتحان کنید</string>
+    <string id="30013">جدید...</string>
+    <string id="30028">نام کاربری</string>
+    <string id="30114">حافظه ی نهان</string>
+
+    <!-- credentials -->
+    <string id="30147">نام کاربری</string>
+    <string id="30148">رمز عبور</string>
+    <string id="30166">حذف کردن</string>
+    <string id="30172">انجام شد</string>
+    <string id="30184">لیست پخش</string>
+    <string id="30189">ژانر</string>
+</strings>

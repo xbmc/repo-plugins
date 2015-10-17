@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Indonesian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/id/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30002">Keluar</string>
+    <string id="30028">Nama</string>
+    <string id="30114">Cache</string>
+
+    <!-- credentials -->
+    <string id="30147">Nama</string>
+    <string id="30148">Password</string>
+    <string id="30150">Stream</string>
+    <string id="30157">Semua album</string>
+    <string id="30159">Pindai</string>
+    <string id="30165">Ganti Nama</string>
+    <string id="30166">Hapus</string>
+
+    <!-- Progress bar -->
+    <string id="30169">Memulai</string>
+    <string id="30172">Selesai</string>
+    <string id="30184">Daftar Main</string>
+
+    <!-- nodes -->
+    <string id="30188">Label</string>
+    <string id="30189">Aliran</string>
+</strings>

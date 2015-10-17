@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Amharic language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/am/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30002">መውጫ </string>
+    <string id="30028">የተጠቃሚ ስም </string>
+    <string id="30081">የምወዳቸውን ማሳያ</string>
+
+    <!-- credentials -->
+    <string id="30147">የተጠቃሚ ስም </string>
+    <string id="30148">የመግቢያ ቃል</string>
+    <string id="30152">ሌሎች</string>
+    <string id="30157">ሁሉንም አልበሞች</string>
+    <string id="30159">ማሰሻ </string>
+    <string id="30165">እንደገና መሰየሚያ</string>
+    <string id="30166">ማስወገጃ </string>
+    <string id="30172">እሺ </string>
+    <string id="30184">የሚጫወተው ዝርዝር </string>
+
+    <!-- nodes -->
+    <string id="30188">ምልክት </string>
+</strings>

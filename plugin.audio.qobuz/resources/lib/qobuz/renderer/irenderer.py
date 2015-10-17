@@ -1,22 +1,15 @@
-#     Copyright 2011 Joachim Basmaison, Cyril Leclerc
-#
-#     This file is part of xbmc-qobuz.
-#
-#     xbmc-qobuz is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
-#
-#     xbmc-qobuz is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-#     GNU General Public License for more details.
-#
-#     You should have received a copy of the GNU General Public License
-#     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
+'''
+    qobuz.renderer.irenderer
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+
+    :part_of: xbmc-qobuz
+    :copyright: (c) 2012 by Joachim Basmaison, Cyril Leclerc
+    :license: GPLv3, see LICENSE for more details.
+'''
 from debug import log
 from node import Flag
 from node import getNode
+
 
 class IRenderer(object):
     """Base class for our renderer
@@ -24,7 +17,8 @@ class IRenderer(object):
         node_type: int, type of node (see node.NodeFlag)
         parameters: dictionary, parameters passed to our plugin
     """
-    def __init__(self, node_type, parameters = {}):
+
+    def __init__(self, node_type, parameters={}):
         self.node_type = node_type
         self.parameters = parameters
         self.root = None
@@ -39,7 +33,8 @@ class IRenderer(object):
         """Import correct node object based on node_type parameter, setting
         self.root
         """
-        if self.root: return self.root
+        if self.root:
+            return self.root
         self.root = getNode(self.node_type, self.parameters)
         return self.root
 
@@ -63,5 +58,5 @@ class IRenderer(object):
                 return True
             return False
 
-    def run (self):
+    def run(self):
         raise NotImplemented()

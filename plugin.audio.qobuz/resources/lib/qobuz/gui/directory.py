@@ -1,46 +1,38 @@
-#     Copyright 2011 Joachim Basmaison, Cyril Leclerc
-#
-#     This file is part of xbmc-qobuz.
-#
-#     xbmc-qobuz is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
-#
-#     xbmc-qobuz is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-#     GNU General Public License for more details.
-#
-#     You should have received a copy of the GNU General Public License
-#     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
+'''
+    qobuz.gui.directory
+    ~~~~~~~~~~~~~~~~~~~
 
-import xbmcplugin
-import xbmcgui
+    :part_of: xbmc-qobuz
+    :copyright: (c) 2012 by Joachim Basmaison, Cyril Leclerc
+    :license: GPLv3, see LICENSE for more details.
+'''
+import xbmcplugin  # @UnresolvedImport
+import xbmcgui  # @UnresolvedImport
 
 from progress import Progress
 import time
-from debug import log
 from gui.util import lang
 from exception import QobuzXbmcError as Qerror
 
+
 class Directory():
-    """This class permit to add item to Xbmc directory or store nodes 
+    """This class permit to add item to Xbmc directory or store nodes
         that we retrieve while building our tree
-        
+
         Parameters:
         root: node, The root node
         nodeList: list, list of node (empty list by default)
-        
+
         Named parameters:
             withProgress: bool, if set to false no Xbmc progress is displayed
-        
+
         Note: After init you can set some optional parameters:
             asList: Don't put item to Xbmc Directory
             replaceItem: When attaching context menu to item, control if
                 we are replacing Xbmc Default menu
     """
-    def __init__(self, root, nodeList = [], **ka):
+
+    def __init__(self, root, nodeList=[], **ka):
         self.nodes = []
         self.label = "Qobuz Progress / "
         self.root = root
@@ -57,7 +49,7 @@ class Directory():
         self.total_put = 0
         self.started_on = time.time()
         self.Progress.create(self.label + root.get_label())
-        self.update({'count': 0, 'total':100}, lang(40000))
+        self.update({'count': 0, 'total': 100}, lang(30169))
         self.line1 = ''
         self.line2 = ''
         self.line3 = ''
@@ -79,8 +71,7 @@ class Directory():
             self.root = None
         except:
             print "Something went wrong while deleting tree"
-        
-            
+
     def elapsed(self):
         """Return elapsed time since directory has been created
         """
@@ -99,28 +90,28 @@ class Directory():
             self.total_put += 1
             return True
         return self.__add_node(node)
-       
+
     def __add_node(self, node):
         """Helper: Add node to xbmc.Directory
             Parameter:
             node: node, node to add
         """
-        if self.is_canceled() : 
+        if self.is_canceled():
             return False
         item = node.makeListItem(replaceItems=self.replaceItems)
         if not item:
             return False
         url = node.make_url(asLocalURL=self.asLocalURL)
         if not self.add_to_xbmc_directory(url=url,
-                                item=item,
-                                is_folder=node.is_folder):
+                                          item=item,
+                                          is_folder=node.is_folder):
             self.put_item_ok = False
             return False
         return True
 
     def update(self, gData, line1, line2='', line3=''):
         """Update progress bar associated with this directory
-        
+
             Parameters:
             gData: Dictionary object that keep information across call
             line1: progress line 1
@@ -172,12 +163,12 @@ class Directory():
                 is_folder: bool
         """
         if not xbmcplugin.addDirectoryItem(self.handle,
-                                    ka['url'],
-                                    ka['item'],
-                                    ka['is_folder'],
-                                    self.total_put):
+                                           ka['url'],
+                                           ka['item'],
+                                           ka['is_folder'],
+                                           self.total_put):
             return False
-        self.total_put += 1    
+        self.total_put += 1
         return True
 
     def close(self):
@@ -199,14 +190,14 @@ class Directory():
             success = False
         if not self.asList:
             xbmcplugin.setContent(
-                                  handle=self.handle, 
-                                  content=self.content_type)
+                handle=self.handle,
+                content=self.content_type)
             xbmcplugin.endOfDirectory(handle=self.handle,
-                                  succeeded=success,
-                                  updateListing=False,
-                                  cacheToDisc=success)
-        self.update({'count': 100, 'total':100}, lang(40003), 
-                    "%s : %s items" % (lang(40002), str(self.total_put)))
+                                      succeeded=success,
+                                      updateListing=False,
+                                      cacheToDisc=success)
+        self.update({'count': 100, 'total': 100}, lang(30172),
+                    "%s : %s items" % (lang(30171), str(self.total_put)))
         self.close()
         return self.total_put
 

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Icelandic language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/is/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30002">Hætta</string>
+    <string id="30028">Notandanafn</string>
+    <string id="30086">Fréttir</string>
+    <string id="30114">Biðminni</string>
+
+    <!-- credentials -->
+    <string id="30147">Notandanafn</string>
+    <string id="30148">Lykilorð</string>
+    <string id="30150">Straumur</string>
+    <string id="30157">Allar hljómplötur</string>
+    <string id="30159">Leita</string>
+    <string id="30165">Endurnefna</string>
+    <string id="30166">Fjarlægja</string>
+    <string id="30172">Búið</string>
+    <string id="30184">Lagalista</string>
+
+    <!-- nodes -->
+    <string id="30188">Útgefandi</string>
+    <string id="30189">Flokkur</string>
+</strings>

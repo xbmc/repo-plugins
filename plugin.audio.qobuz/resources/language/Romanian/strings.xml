@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Romanian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ro/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30002">Ieșire</string>
+    <string id="30028">Utilizator</string>
+    <string id="30081">Afişează favorite</string>
+    <string id="30114">Stocare în avans</string>
+
+    <!-- credentials -->
+    <string id="30147">Utilizator</string>
+    <string id="30148">Parolă</string>
+    <string id="30150">Flux</string>
+    <string id="30152">Altele</string>
+    <string id="30157">Toate albumele</string>
+    <string id="30159">Scanează</string>
+    <string id="30165">Redenumește</string>
+    <string id="30166">Elimină</string>
+    <string id="30172">Gata</string>
+    <string id="30184">Listă de redare</string>
+
+    <!-- nodes -->
+    <string id="30188">Etichetă</string>
+    <string id="30189">Gen</string>
+</strings>

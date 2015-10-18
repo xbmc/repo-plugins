@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings >
+	<category label="3000">
+		<setting type="text" id="client_id" default="0000000048145120" option="hidden" visible="false"/>
+		<setting label="30001" type="folder" id="video_library_folder" option="writeable"/>
+		<setting label="30002" type="folder" id="music_library_folder" option="writeable"/>
+		<setting label="30003" type="bool" id="clean_folder" value="true"/>
+    </category>
+</settings>

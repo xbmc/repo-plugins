@@ -1,0 +1,12 @@
+v1.0.4
+- The onedrive.ini is stored in the userdata folder of the addon
+v1.0.3
+- Fix of slideshow
+- Fix of encoding/decoding
+v1.0.2
+- Fix support of folders with more than 200 items
+- Fix support of account names with special characters
+v1.0.1
+- Login process fix
+v1.0.0
+- Initial version

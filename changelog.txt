@@ -1,3 +1,9 @@
+v1.2.0
+Added personalisation features.
+Fixed S4C live TV.
+Final tweaks and fixes for Highlights section.
+Added error pop-ups for requests.
+
 v1.1.2
 Adapted to new layout of Highlights page.
 Part of this is still experimental and may need further fixes.

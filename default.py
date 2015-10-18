@@ -829,7 +829,12 @@ def GetCookies():
 def OpenURL(url):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:38.0) Gecko/20100101 Firefox/41.0'}
     cookies = GetCookies()
-    r = requests.get(url, headers=headers, cookies=cookies)
+    try:
+        r = requests.get(url, headers=headers, cookies=cookies)
+    except requests.exceptions.RequestException as e:
+        dialog = xbmcgui.Dialog()
+        dialog.ok("Error", "%s" % e)
+        sys.exit(1)
     for cookie in r.cookies:
         cookies.set_cookie(cookie)
     cookies.save(ignore_discard=True, ignore_expires=True)
@@ -844,7 +849,12 @@ def OpenURLPost(url, post_data):
                'Referer':'https://ssl.bbc.co.uk/id/signin',
                'Content-Type':'application/x-www-form-urlencoded'}
     cookies = GetCookies()
-    r = requests.post(url, headers=headers, data=post_data, allow_redirects=False, cookies=cookies)
+    try:
+        r = requests.post(url, headers=headers, data=post_data, allow_redirects=False, cookies=cookies)
+    except requests.exceptions.RequestException as e:
+        dialog = xbmcgui.Dialog()
+        dialog.ok("Error", "%s" % e)
+        sys.exit(1)
     for cookie in r.cookies:
         cookies.set_cookie(cookie)
     cookies.save(ignore_discard=True, ignore_expires=True)

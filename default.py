@@ -11,6 +11,11 @@ import urllib
 from operator import itemgetter
 
 import requests
+import requests.packages.urllib3
+
+import cookielib
+
+import json
 
 import xbmc
 import xbmcaddon
@@ -44,6 +49,8 @@ def CATEGORIES():
     AddMenuEntry('Categories', 'url', 103, '', '', '')
     AddMenuEntry('Search', 'url', 104, '', '', '')
     AddMenuEntry('Watch Live', 'url', 101, '', '', '')
+    AddMenuEntry('Watching', 'url', 107, '', '', '')
+    AddMenuEntry('Favourites', 'url', 108, '', '', '')
 
 
 # ListLive creates menu entries for all live channels.
@@ -444,6 +451,21 @@ def Search():
     EvaluateSearch(NEW_URL)
 
 
+def ParseAired(aired):
+    if aired:
+        try:
+            # Need to use equivelent for datetime.strptime() due to weird TypeError.
+            aired = datetime.datetime(*(time.strptime(aired, '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
+        except ValueError:
+            aired = ''
+    else:
+        aired = ''
+    return aired
+
+
+def ParseImageUrl(url):
+    return url.replace("{recipe}", "288x162")
+
 def GetEpisodes(programme_id):
     """Gets all programmes corresponding to a certain programme ID."""
     # Construct URL and load HTML
@@ -789,10 +811,44 @@ def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
         AddMenuEntry(title, url, 201, iconimage, '', '')
 
 
+def GetCookies():
+    cookie_file = os.path.join(DIR_USERDATA,'iplayer.cookies')
+    cj = cookielib.LWPCookieJar(cookie_file)
+
+    if(os.path.exists(cookie_file)):
+        try:
+            cj.load(ignore_discard=True, ignore_expires=True)
+        except:
+            xbmcgui.Dialog().notification("Error", "Cookie Load Failed", xbmcgui.NOTIFICATION_ERROR)
+    else:
+        xbmcgui.Dialog().notification("Error", "Cookie No Such File", xbmcgui.NOTIFICATION_ERROR)
+    
+    return cj
+
+
 def OpenURL(url):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:38.0) Gecko/20100101 Firefox/41.0'}
-    r = requests.get(url, headers=headers)
+    cookies = GetCookies()
+    r = requests.get(url, headers=headers, cookies=cookies)
+    for cookie in r.cookies:
+        cookies.set_cookie(cookie)
+    cookies.save(ignore_discard=True, ignore_expires=True)
     return r.content
+
+
+def OpenURLPost(url, post_data):
+    headers = {
+               'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:38.0) Gecko/20100101 Firefox/41.0',
+               'Host':'ssl.bbc.co.uk',
+               'Accept':'*/*',
+               'Referer':'https://ssl.bbc.co.uk/id/signin',
+               'Content-Type':'application/x-www-form-urlencoded'}
+    cookies = GetCookies()
+    r = requests.post(url, headers=headers, data=post_data, allow_redirects=False, cookies=cookies)
+    for cookie in r.cookies:
+        cookies.set_cookie(cookie)
+    cookies.save(ignore_discard=True, ignore_expires=True)
+    return r
 
 
 def PlayStream(name, url, iconimage, description, subtitles_url):
@@ -847,7 +903,7 @@ def get_params():
     return param
 
 
-def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=None, resolution=None):
+def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=None, resolution=None, logged_in=False):
     """Adds a new line to the Kodi list of playables.
 
     It is used in multiple ways in the plugin, which are distinguished by modes.
@@ -855,8 +911,9 @@ def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=N
     listitem_url = (sys.argv[0] + "?url=" + urllib.quote_plus(url) + "&mode=" + str(mode) +
                     "&name=" + urllib.quote_plus(name) +
                     "&iconimage=" + urllib.quote_plus(iconimage) +
-                    "&description=" + urllib.quote_plus(description) +
-                    "&subtitles_url=" + urllib.quote_plus(subtitles_url))
+                    "&description=" + urllib.quote_plus(description) + 
+                    "&subtitles_url=" + urllib.quote_plus(subtitles_url) +
+                    "&logged_in=" + str(logged_in))
 
     # Try to extract the date from the title and add it as an InfoLabel to allow sorting by date.
     match = re.search(r'\d{1,2}/\d{1,2}/\d{4}', name)
@@ -995,6 +1052,112 @@ def download_subtitles(url):
     return outfile
 
 
+def SignInBBCiD():
+    #Below is required to get around an ssl issue
+    requests.packages.urllib3.disable_warnings()
+    sign_in_url="https://ssl.bbc.co.uk/id/signin"
+    
+    username=ADDON.getSetting('bbc_id_username')
+    password=ADDON.getSetting('bbc_id_password')
+    
+    post_data={
+               'unique': username, 
+               'password': password, 
+               'rememberme':'0'}
+    r = OpenURLPost(sign_in_url, post_data)
+    if (r.status_code == 302):
+        xbmcgui.Dialog().notification("BBCiD Sign In", "Successful")
+    else:
+        xbmcgui.Dialog().notification("BBCiD Sign In", "Failed - check settings")
+
+
+def SignOutBBCiD():
+    sign_out_url="https://ssl.bbc.co.uk/id/signout"
+    OpenURL(sign_out_url)
+
+
+def StatusBBCiD():
+    status_url="https://ssl.bbc.co.uk/id/status"
+    html=OpenURL(status_url)
+    if("You are signed in." in html):
+        return True
+    return False
+
+
+def CheckLogin(logged_in):
+    if(logged_in == True or StatusBBCiD() == True):
+        logged_in = True
+        return True
+    elif ADDON.getSetting('bbc_id_enabled') != 'true':
+        xbmcgui.Dialog().ok("BBCiD Sign In", "BBCiD set-up required, please check settings.")
+    else:
+        attemptLogin = xbmcgui.Dialog().yesno("BBCiD Sign In", "Do you wish to sign in?")
+        if attemptLogin:
+            SignInBBCiD()
+            if(StatusBBCiD()):
+                xbmcgui.Dialog().notification("BBCiD Sign In", "Successful")
+                logged_in = True;
+                return True;
+            else:
+                xbmcgui.Dialog().notification("BBCiD Sign In", "Failed - check settings")
+    
+    return False
+
+def ListWatching(logged_in):
+
+    if(CheckLogin(logged_in) == False):
+        CATEGORIES()
+        return
+
+    identity_cookie = None
+    for cookie in GetCookies():
+        if (cookie.name == 'IDENTITY'):
+            identity_cookie = cookie.value
+            break
+    url = "https://ibl.api.bbci.co.uk/ibl/v1/user/watching?identity_cookie=%s" % identity_cookie
+    html = OpenURL(url)
+    json_data = json.loads(html)
+    watching_list = json_data.get('watching').get('elements')
+    for watching in watching_list:
+        programme = watching.get('programme')
+        episode = watching.get('episode')
+        title = episode.get('title')
+        subtitle = episode.get('subtitle')
+        if(subtitle):
+            title += ", " + subtitle
+        episode_id = episode.get('id')
+        plot = episode.get('synopses').get('large')
+        aired = episode.get('release_date')
+        image_url = ParseImageUrl(episode.get('images').get('standard'))
+        aired = ParseAired(aired)
+        url="http://www.bbc.co.uk/iplayer/episode/%s" % (episode_id) 
+        CheckAutoplay(title, url, image_url, plot, aired)
+
+
+def ListFavourites(logged_in):
+
+    if(CheckLogin(logged_in) == False):
+        CATEGORIES()
+        return
+    
+    """Scrapes all episodes of the favourites page."""
+    html = OpenURL('http://www.bbc.co.uk/iplayer/usercomponents/favourites/programmes.json')
+    json_data = json.loads(html)
+    #favourites = json_data.get('favourites')
+    programmes = json_data.get('programmes')
+    for programme in programmes:
+        id = programme.get('id')
+        url = "http://www.bbc.co.uk/iplayer/brand/%s" % (id)
+        title = programme.get('title')
+        initial_child = programme.get('initial_children')[0]
+        image=initial_child.get('images')
+        image_url=ParseImageUrl(image.get('standard'))
+        synopses = initial_child.get('synopses')
+        plot = synopses.get('small')
+        aired = ParseAired(initial_child.get('release_date'))
+        CheckAutoplay(title, url, image_url, plot, aired)
+
+
 params = get_params()
 url = None
 name = None
@@ -1002,6 +1165,7 @@ mode = None
 iconimage = None
 description = None
 subtitles_url = None
+logged_in = False
 
 try:
     url = urllib.unquote_plus(params["url"])
@@ -1025,6 +1189,10 @@ except:
     pass
 try:
     subtitles_url = urllib.unquote_plus(params["subtitles_url"])
+except:
+    pass
+try:
+    logged_in = params['logged_in'] == 'True'
 except:
     pass
 
@@ -1051,6 +1219,12 @@ elif mode == 105:
 
 elif mode == 106:
     ListHighlights()
+
+elif mode == 107:
+    ListWatching(logged_in)
+
+elif mode == 108:
+    ListFavourites(logged_in)
 
 # Modes 121-199 will create a sub directory menu entry
 elif mode == 121:

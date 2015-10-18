@@ -1,0 +1,16 @@
+<strings>
+  <string id="30100">General</string>
+  <string id="30110">Play Signed programmes when available</string>
+  <string id="30120">Play Audio Described programmes when available</string>
+  <string id="30130">Use subtitles when available</string>
+  <string id="30140">Enable BBC iD</string>
+  <string id="30141">BBC Username</string>
+  <string id="30142">BBC Password</string>
+
+  <string id="30200">Streams</string>
+  <string id="30205">Play stream automatically using these settings</string>
+  <string id="30210">Catchup CDN source</string>
+  <string id="30211">Catchup bitrate</string>
+  <string id="30220">Live CDN source</string>
+  <string id="30230">Live bitrate</string>
+</strings>

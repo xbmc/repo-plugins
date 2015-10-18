@@ -25,6 +25,8 @@ import xbmcplugin
 __addonid__ = "plugin.video.iplayerwww"
 __plugin_handle__ = int(sys.argv[1])
 
+def translation(id):
+    return xbmcaddon.Addon(__addonid__).getLocalizedString(id)
 
 def GetAddonInfo():
     addon_info = {}
@@ -43,14 +45,14 @@ DIR_USERDATA = xbmc.translatePath(__addoninfo__["profile"])
 
 
 def CATEGORIES():
-    AddMenuEntry('Highlights', 'url', 106, '', '', '')
-    AddMenuEntry('Most Popular', 'url', 105, '', '', '')
-    AddMenuEntry('Programme List A-Z', 'url', 102, '', '', '')
-    AddMenuEntry('Categories', 'url', 103, '', '', '')
-    AddMenuEntry('Search', 'url', 104, '', '', '')
-    AddMenuEntry('Watch Live', 'url', 101, '', '', '')
-    AddMenuEntry('Watching', 'url', 107, '', '', '')
-    AddMenuEntry('Favourites', 'url', 108, '', '', '')
+    AddMenuEntry(translation(31000), 'url', 106, '', '', '')
+    AddMenuEntry(translation(31001), 'url', 105, '', '', '')
+    AddMenuEntry(translation(31002), 'url', 102, '', '', '')
+    AddMenuEntry(translation(31003), 'url', 103, '', '', '')
+    AddMenuEntry(translation(31004), 'url', 104, '', '', '')
+    AddMenuEntry(translation(31005), 'url', 101, '', '', '')
+    AddMenuEntry(translation(31006), 'url', 107, '', '', '')
+    AddMenuEntry(translation(31007), 'url', 108, '', '', '')
 
 
 # ListLive creates menu entries for all live channels.
@@ -618,7 +620,7 @@ def ParseStreams(stream_id):
         if check_geo:
             # print "Geoblock detected, raising error message"
             dialog = xbmcgui.Dialog()
-            dialog.ok("Error", "BBC iPlayer TV programmes are available to play in the UK only.")
+            dialog.ok(translation(32000), translation(32001))
             raise
     return retlist, match
 
@@ -819,9 +821,9 @@ def GetCookies():
         try:
             cj.load(ignore_discard=True, ignore_expires=True)
         except:
-            xbmcgui.Dialog().notification("Error", "Cookie Load Failed", xbmcgui.NOTIFICATION_ERROR)
+            xbmcgui.Dialog().notification(translation(32000), translation(32002), xbmcgui.NOTIFICATION_ERROR)
     else:
-        xbmcgui.Dialog().notification("Error", "Cookie No Such File", xbmcgui.NOTIFICATION_ERROR)
+        xbmcgui.Dialog().notification(translation(32000), translation(32003), xbmcgui.NOTIFICATION_ERROR)
     
     return cj
 
@@ -833,7 +835,7 @@ def OpenURL(url):
         r = requests.get(url, headers=headers, cookies=cookies)
     except requests.exceptions.RequestException as e:
         dialog = xbmcgui.Dialog()
-        dialog.ok("Error", "%s" % e)
+        dialog.ok(translation(32000), "%s" % e)
         sys.exit(1)
     for cookie in r.cookies:
         cookies.set_cookie(cookie)
@@ -853,7 +855,7 @@ def OpenURLPost(url, post_data):
         r = requests.post(url, headers=headers, data=post_data, allow_redirects=False, cookies=cookies)
     except requests.exceptions.RequestException as e:
         dialog = xbmcgui.Dialog()
-        dialog.ok("Error", "%s" % e)
+        dialog.ok(translation(32000), "%s" % e)
         sys.exit(1)
     for cookie in r.cookies:
         cookies.set_cookie(cookie)
@@ -868,7 +870,7 @@ def PlayStream(name, url, iconimage, description, subtitles_url):
     if check_geo or not html:
         # print "Geoblock detected, raising error message"
         dialog = xbmcgui.Dialog()
-        dialog.ok("Error", "BBC iPlayer TV programmes are available to play in the UK only.")
+        dialog.ok(translation(32000), translation(32001))
         raise
     liz = xbmcgui.ListItem(name, iconImage='DefaultVideo.png', thumbnailImage=iconimage)
     liz.setInfo(type='Video', infoLabels={'Title': name})
@@ -1076,9 +1078,9 @@ def SignInBBCiD():
                'rememberme':'0'}
     r = OpenURLPost(sign_in_url, post_data)
     if (r.status_code == 302):
-        xbmcgui.Dialog().notification("BBCiD Sign In", "Successful")
+        xbmcgui.Dialog().notification(translation(31008), translation(31009))
     else:
-        xbmcgui.Dialog().notification("BBCiD Sign In", "Failed - check settings")
+        xbmcgui.Dialog().notification(translation(31008), translation(31009))
 
 
 def SignOutBBCiD():
@@ -1099,17 +1101,17 @@ def CheckLogin(logged_in):
         logged_in = True
         return True
     elif ADDON.getSetting('bbc_id_enabled') != 'true':
-        xbmcgui.Dialog().ok("BBCiD Sign In", "BBCiD set-up required, please check settings.")
+        xbmcgui.Dialog().ok(translation(31008), translation(31011))
     else:
-        attemptLogin = xbmcgui.Dialog().yesno("BBCiD Sign In", "Do you wish to sign in?")
+        attemptLogin = xbmcgui.Dialog().yesno(translation(31008), translation(31012))
         if attemptLogin:
             SignInBBCiD()
             if(StatusBBCiD()):
-                xbmcgui.Dialog().notification("BBCiD Sign In", "Successful")
+                xbmcgui.Dialog().notification(translation(31008), translation(31009))
                 logged_in = True;
                 return True;
             else:
-                xbmcgui.Dialog().notification("BBCiD Sign In", "Failed - check settings")
+                xbmcgui.Dialog().notification(translation(31008), translation(31010))
     
     return False
 

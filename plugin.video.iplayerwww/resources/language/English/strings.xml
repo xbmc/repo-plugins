@@ -13,4 +13,24 @@
   <string id="30211">Catchup bitrate</string>
   <string id="30220">Live CDN source</string>
   <string id="30230">Live bitrate</string>
+
+  <string id="31000">Highlights</string>
+  <string id="31001">Most Popular</string>
+  <string id="31002">Programme List A-Z</string>
+  <string id="31003">Categories</string>
+  <string id="31004">Search</string>
+  <string id="31005">Watch Live</string>
+  <string id="31006">Watching</string>
+  <string id="31007">Favourites</string>
+  <string id="31008">BBCiD Sign In</string>
+  <string id="31009">Successful</string>
+  <string id="31010">Failed - check settings</string>
+  <string id="31011">BBCiD set-up required, please check settings.</string>
+  <string id="31012">Do you wish to sign in?</string>
+
+  <string id="32000">Error</string>
+  <string id="32001">BBC iPlayer TV programmes are available to play in the UK only.</string>
+  <string id="32002">Cookie Load Failed</string>
+  <string id="32003">Cookie No Such File</string>
+
 </strings>

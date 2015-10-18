@@ -1,3 +1,6 @@
+v1.2.1
+Localized main menu entries and pop-up messages.
+
 v1.2.0
 Added personalisation features.
 Fixed S4C live TV.

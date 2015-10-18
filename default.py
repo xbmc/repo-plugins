@@ -320,7 +320,7 @@ def ListHighlights():
             # The next two lines require verification.
             # At the time of writing these lines, no series-catchup group was available to test.
             if group_type == 'series-catchup':
-                name = "%s, %s" % (group_name, name)
+                name = "%s: %s" % (group_name, name)
             match3 = re.compile(
                 'typo--canary">(.+?)<',
                 re.DOTALL).findall(evenmore)
@@ -714,8 +714,12 @@ def AddAvailableLiveStreamItem(name, channelname, iconimage):
     bitrate_selected = int(ADDON.getSetting('live_bitrate'))
     for provider_url, provider_name in providers:
         # First we query the available streams from this website
-        url = 'http://a.files.bbci.co.uk/media/live/manifesto/audio_video/simulcast/hds/uk/pc/%s/%s.f4m' % (
-            provider_url, channelname)
+        if channelname == 's4cpbs':
+            url = 'http://a.files.bbci.co.uk/media/live/manifests/hds/pc/%s/%s.f4m' % (
+                provider_url, channelname)
+        else:
+            url = 'http://a.files.bbci.co.uk/media/live/manifesto/audio_video/simulcast/hds/uk/pc/%s/%s.f4m' % (
+                provider_url, channelname)
         html = OpenURL(url)
         # Use regexp to get the different versions using various bitrates
         match = re.compile('href="(.+?)".+?bitrate="(.+?)"').findall(html.replace('amp;', ''))
@@ -753,8 +757,12 @@ def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
     streams = []
     for provider_url, provider_name in providers:
         # First we query the available streams from this website
-        url = 'http://a.files.bbci.co.uk/media/live/manifesto/audio_video/simulcast/hds/uk/pc/%s/%s.f4m' % (
-            provider_url, channelname)
+        if channelname == 's4cpbs':
+            url = 'http://a.files.bbci.co.uk/media/live/manifests/hds/pc/%s/%s.f4m' % (
+                provider_url, channelname)
+        else:
+            url = 'http://a.files.bbci.co.uk/media/live/manifesto/audio_video/simulcast/hds/uk/pc/%s/%s.f4m' % (
+                provider_url, channelname)
         html = OpenURL(url)
         # Use regexp to get the different versions using various bitrates
         match = re.compile('href="(.+?)".+?bitrate="(.+?)"').findall(html.replace('amp;', ''))

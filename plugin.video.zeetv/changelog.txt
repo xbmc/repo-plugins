@@ -1,3 +1,6 @@
+v0.0.5
+- Handle encrypted urls. Issue #2
+
 v0.0.4
 - Fixed broken youtube playback
 

@@ -3,7 +3,12 @@ import os.path
 import sys
 import urlparse
 import xbmcplugin
-from resources.lib import helpers as h
+
+sys.path = [os.path.join(os.path.dirname(os.path.abspath(__file__)), 'resources', 'lib'), ] + sys.path
+
+import helpers as h
+import decrypt
+from slimit.parser import Parser
 
 
 def main_index():
@@ -64,8 +69,8 @@ def show():
         'prev': [],
         'next': []
     }
-    page_type = 'prev'
     if pagination:
+        page_type = 'prev'
         pages_li = pagination.findAll('li')[1:-1]
         for li in pages_li:
             attrs = dict(li.attrs)
@@ -106,7 +111,27 @@ def episode():
     script = div.find('script')
     url = ''
     if script:
-        url = script.text.split('bigmumbai = ', 2)[2].split(';')[0][1:-1]
+        script_text = script.text
+        _dailytoday = ''
+        _subject = ''
+
+        parser = Parser()
+        tree = parser.parse(script.text)
+        for node in tree.children():
+            ecma = node.to_ecma()
+            if ecma.startswith('var dailytoday ='):
+                _dailytoday = node.children()[0].children()[1].to_ecma()[1:-1]
+            elif ecma.startswith('var subject ='):
+                _subject = node.children()[0].children()[1].to_ecma()[1:-1]
+            # elif "var bigmumbai = " not in ecma and "bigmumbai = " in ecma:
+            #     print ecma
+
+        if _dailytoday and _subject:
+            url = decrypt.decrypt_url(_dailytoday, _subject)
+        else:
+            url = script.text.split('bigmumbai = ', 2)[2].split(';')[0][1:-1]
+
+        print url
         plot = h.bs_find_with_class(soup, 'div', 'vp-info').find('span', {'itemprop': 'description'}).text
         thumbnail = soup.find('div', {'itemprop': 'video'}).find('meta', {'itemprop': 'thumbnailUrl'})['content']
         h.add_dir_video(addon_handle, name, url, thumbnail, plot)

@@ -139,8 +139,8 @@ def ScrapeSearchEpisodes(url):
                 '<a class="view-more-container avail stat" href="/iplayer/episodes/%s".+?'
                 '<em class="view-more-heading">(.+?)<' % programme_id,
                 re.DOTALL).findall(html)
-            AddMenuEntry("%s - %s available episodes" % (
-                name, num_episodes[0]), programme_id, 121, iconimage, plot, '')
+            AddMenuEntry("%s - %s %s" % (
+                name, num_episodes[0], translation(31013)), programme_id, 121, iconimage, plot, '')
         else:
             episode_url = "http://www.bbc.co.uk/iplayer/episode/%s" % programme_id
             CheckAutoplay(name, episode_url, iconimage, plot)
@@ -254,8 +254,8 @@ def ScrapeCategoryEpisodes(url):
                 'href="/iplayer/episodes/%s".+?<em '
                 'class="view-more-heading">(.+?)<' % programme_id,
                 re.DOTALL).findall(html)
-            AddMenuEntry("%s - %s available episodes" % (
-                name, num_episodes[0]), programme_id, 121, iconimage, plot, '')
+            AddMenuEntry("%s - %s %s" % (
+                name, num_episodes[0], translation(31013)), programme_id, 121, iconimage, plot, '')
         # If only one episode is found, the episode_id is suitable to add a directory or stream.
         # This is required because some programmes which have their own page will redirect
         # the programme_id to the program page which may look entirely different from
@@ -300,8 +300,8 @@ def ListHighlights():
         '<em>(.+?)</em>',
         re.DOTALL).findall(html.replace('amp;', ''))
     for name, episode_id, num_episodes in match1:
-        AddMenuEntry(' Collection: %s - %s available programmes' % (
-            name, num_episodes), episode_id, 127, '', '', '')
+        AddMenuEntry(' %s: %s - %s %s' % (
+            translation(31014), name, num_episodes, translation(31015)), episode_id, 127, '', '', '')
     # Match special groups. Usually this is just Exclusive content.
     match1 = re.compile(
         'href="http://www.bbc.co.uk/iplayer/group/(.+?)"\n'
@@ -310,7 +310,7 @@ def ListHighlights():
         'typo--canary">(.+?)<',
         re.DOTALL).findall(html)
     for episode_id, name, plot in match1:
-        AddMenuEntry(' Collection: %s' % (name), episode_id, 127, '', plot, '')
+        AddMenuEntry(' %s: %s' % (translation(31014), name), episode_id, 127, '', plot, '')
     # Match groups again
     # We need to do this to get the previewed episodes for groups.
     match1 = re.compile(
@@ -343,7 +343,7 @@ def ListHighlights():
                 episodelist.append(
                     [episode_id,
                     name,
-                    'This programme is part of the collection: %s' % group_name,
+                    '%s: %s' % (translation(31016), group_name),
                     'DefaultVideo.png',
                     '']
                     )
@@ -1080,7 +1080,7 @@ def SignInBBCiD():
     if (r.status_code == 302):
         xbmcgui.Dialog().notification(translation(31008), translation(31009))
     else:
-        xbmcgui.Dialog().notification(translation(31008), translation(31009))
+        xbmcgui.Dialog().notification(translation(31008), translation(31010))
 
 
 def SignOutBBCiD():

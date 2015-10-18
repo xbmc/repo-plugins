@@ -27,10 +27,13 @@
   <string id="31010">Failed - check settings</string>
   <string id="31011">BBCiD set-up required, please check settings.</string>
   <string id="31012">Do you wish to sign in?</string>
+  <string id="31013">available episodes</string>
+  <string id="31014">Collection</string>
+  <string id="31015">available programmes</string>
+  <string id="31016">This programme is part of the collection</string>
 
   <string id="32000">Error</string>
   <string id="32001">BBC iPlayer TV programmes are available to play in the UK only.</string>
   <string id="32002">Cookie Load Failed</string>
   <string id="32003">Cookie No Such File</string>
-
 </strings>

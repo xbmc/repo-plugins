@@ -1,3 +1,7 @@
+v1.2.2
+Further localization of messages.
+Fixed bugs in translations.
+
 v1.2.1
 Localized main menu entries and pop-up messages.
 

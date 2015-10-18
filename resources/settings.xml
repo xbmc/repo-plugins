@@ -3,8 +3,11 @@
     <setting id="search_signed" label="30110" type="bool" default="false" />
     <setting id="search_ad" label="30120" type="bool" default="false" />
     <setting id="subtitles" label="30130" type="bool" default="false" />
+    <setting id="bbc_id_enabled" label="30140" default="false" type="bool" />
+    <setting id="bbc_id_username" label="30141" default="" type="text" enable="eq(-1,true)" subsetting="true"/>
+    <setting id="bbc_id_password" label="30142" default="" type="text" enable="eq(-2,true) + !eq(-1,)" subsetting="true" option="hidden"/>
 </category>
-<category label="Streams">
+<category label="30200">
     <setting id="streams_autoplay" label="30205" type="bool" default="true" />
     <setting id="catchup_source" label="30210" type="enum" values="Any|Akamai|Limelight" default="0" enable="eq(-1,true)" />
     <setting id="catchup_bitrate" label="30211" type="enum" values="Fastest|0.8 Mbps|1.0 Mbps|1.5 Mbps|1.8 Mbps|2.4 Mbps|3.1 Mbps|5.5 Mbps" default="0" enable="eq(-2,true)" />

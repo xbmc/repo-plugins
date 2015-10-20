@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.onedrive" name="OneDrive" version="1.0.4" provider-name="Carlos Guzman (cguZZman)">
-    <requires>
-        <import addon="xbmc.python" version="2.1.0"/>
-    </requires>
-    <extension point="xbmc.python.pluginsource" library="addon.py">
-        <provides>image audio video</provides>
-    </extension>
-    <extension point="xbmc.addon.metadata">
-    	<platform>all</platform>
-    	<language>en</language>
-        <summary>Microsoft OneDrive for KODI</summary>
-        <description>Play all your media from Microsoft OneDrive including Videos, Music and Pictures. Unlimited number of accounts. This program is not affiliated with or sponsored by Microsoft.</description>
-        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-        <source>https://github.com/cguZZman/k-onedrive</source>
-        <email>carlosguzmang@hotmail.com</email>
-    </extension>
+<addon id="plugin.onedrive" name="OneDrive" version="1.0.5" provider-name="Carlos Guzman (cguZZman)">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0" />
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="addon.py">
+		<provides>image audio video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<language>en</language>
+		<summary>Microsoft OneDrive for KODI</summary>
+		<description>
+			Play all your media from Microsoft OneDrive including Videos, Music and Pictures.
+			Unlimited number of accounts. 
+			This program is not affiliated with or sponsored by Microsoft.
+		</description>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<source>https://github.com/cguZZman/k-onedrive</source>
+		<email>carlosguzmang@hotmail.com</email>
+		<forum>http://forum.kodi.tv/showthread.php?tid=228443</forum>
+		<website>http://onedrive.daro.mx/</website>
+	</extension>
 </addon>

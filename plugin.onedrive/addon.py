@@ -49,12 +49,21 @@ extra_parameters = {'expand': 'thumbnails'}
 dialog = xbmcgui.Dialog();
 progress_dialog = xbmcgui.DialogProgress() 
 root_url = '/drive/root/children'
+
+addon_data_path = utils.Utils.unicode(xbmc.translatePath(addon.getAddonInfo('profile')))
+if not os.path.exists(addon_data_path):
+    try:
+        os.makedirs(addon_data_path)
+    except:
+        xbmc.sleep(3000)
+        os.makedirs(addon_data_path)
+
+config_path = addon_data_path + '/onedrive.ini'
 old_config_path = xbmc.translatePath('special://home/onedrive.ini')
-config_path = utils.Utils.unicode(xbmc.translatePath(addon.getAddonInfo('profile'))) + '/onedrive.ini'
 if os.path.exists(old_config_path) and not os.path.exists(config_path):
     try:
         shutil.move(old_config_path, config_path)
-    except:
+    except Exception as e:
         dialog.ok(addonname, addon.getLocalizedString(30028) % config_path)
 
 onedrives = {}
@@ -226,7 +235,7 @@ try:
                 xbmc.executebuiltin('Container.Refresh')
             else:
                 progress_dialog.close()
-                dialog.ok(addonname, addon.getLocalizedString(30022), addon.getLocalizedString(30016))
+                dialog.ok(addonname, addon.getLocalizedString(30022), addon.getLocalizedString(30016), addon.getLocalizedString(30029))
     elif action[0] == 'remove_account':
         driveid = args.get('driveid')[0]
         if dialog.yesno(addonname, addon.getLocalizedString(30023) % config.get(driveid, 'name'), None):

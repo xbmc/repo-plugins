@@ -1,3 +1,8 @@
+v1.2.3
+Fixed various bugs in personalisation features.
+Improved cookie handling.
+Make sure the user data directory exists.
+
 v1.2.2
 Further localization of messages.
 Fixed bugs in translations.

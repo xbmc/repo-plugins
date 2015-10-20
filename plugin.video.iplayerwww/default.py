@@ -42,7 +42,11 @@ def GetAddonInfo():
 __addoninfo__ = GetAddonInfo()
 ADDON = xbmcaddon.Addon(id='plugin.video.iplayerwww')
 DIR_USERDATA = xbmc.translatePath(__addoninfo__["profile"])
+cookie_jar = None
 
+
+if(not os.path.exists(DIR_USERDATA)):
+    os.makedirs(DIR_USERDATA)
 
 def CATEGORIES():
     AddMenuEntry(translation(31000), 'url', 106, '', '', '')
@@ -68,13 +72,13 @@ def ListLive():
         ('bbc_parliament', 'bbc_parliament', 'BBC Parliament'),
         ('bbc_alba', 'bbc_alba', 'Alba'),
         ('s4cpbs', 's4c', 'S4C'),
+        ('bbc_one_london', 'bbc_one', 'BBC One London'),
         ('bbc_one_scotland_hd', 'bbc_one', 'BBC One Scotland'),
         ('bbc_one_northern_ireland_hd', 'bbc_one', 'BBC One Northern Ireland'),
         ('bbc_one_wales_hd', 'bbc_one', 'BBC One Wales'),
         ('bbc_two_scotland', 'bbc_two', 'BBC Two Scotland'),
         ('bbc_two_northern_ireland_digital', 'bbc_two', 'BBC Two Northern Ireland'),
         ('bbc_two_wales_digital', 'bbc_two', 'BBC Two Wales'),
-        ('bbc_one_london', 'bbc_one', 'BBC One London'),
     ]
     for id, img, name in channel_list:
         iconimage = xbmc.translatePath(
@@ -813,33 +817,31 @@ def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
         AddMenuEntry(title, url, 201, iconimage, '', '')
 
 
-def GetCookies():
+def InitialiseCookieJar():
     cookie_file = os.path.join(DIR_USERDATA,'iplayer.cookies')
     cj = cookielib.LWPCookieJar(cookie_file)
-
     if(os.path.exists(cookie_file)):
         try:
             cj.load(ignore_discard=True, ignore_expires=True)
         except:
             xbmcgui.Dialog().notification(translation(32000), translation(32002), xbmcgui.NOTIFICATION_ERROR)
-    else:
-        xbmcgui.Dialog().notification(translation(32000), translation(32003), xbmcgui.NOTIFICATION_ERROR)
-    
     return cj
 
 
 def OpenURL(url):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:38.0) Gecko/20100101 Firefox/41.0'}
-    cookies = GetCookies()
     try:
-        r = requests.get(url, headers=headers, cookies=cookies)
+        r = requests.get(url, headers=headers, cookies=cookie_jar)
     except requests.exceptions.RequestException as e:
         dialog = xbmcgui.Dialog()
         dialog.ok(translation(32000), "%s" % e)
         sys.exit(1)
-    for cookie in r.cookies:
-        cookies.set_cookie(cookie)
-    cookies.save(ignore_discard=True, ignore_expires=True)
+    try:
+        for cookie in r.cookies:
+            cookie_jar.set_cookie(cookie)
+        cookie_jar.save(ignore_discard=True, ignore_expires=True)
+    except:
+        pass
     return r.content
 
 
@@ -850,16 +852,18 @@ def OpenURLPost(url, post_data):
                'Accept':'*/*',
                'Referer':'https://ssl.bbc.co.uk/id/signin',
                'Content-Type':'application/x-www-form-urlencoded'}
-    cookies = GetCookies()
     try:
-        r = requests.post(url, headers=headers, data=post_data, allow_redirects=False, cookies=cookies)
+        r = requests.post(url, headers=headers, data=post_data, allow_redirects=False, cookies=cookie_jar)
     except requests.exceptions.RequestException as e:
         dialog = xbmcgui.Dialog()
         dialog.ok(translation(32000), "%s" % e)
         sys.exit(1)
-    for cookie in r.cookies:
-        cookies.set_cookie(cookie)
-    cookies.save(ignore_discard=True, ignore_expires=True)
+    try:
+        for cookie in r.cookies:
+            cookie_jar.set_cookie(cookie)
+        cookie_jar.save(ignore_discard=True, ignore_expires=True)
+    except:
+        pass
     return r
 
 
@@ -970,6 +974,7 @@ def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=N
 
     listitem.setProperty("IsPlayable", str(not isFolder).lower())
     listitem.setProperty("IsFolder", str(isFolder).lower())
+    listitem.setProperty("Property(Addon.Name)", "iPlayer WWW")
     xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
                                 url=listitem_url, listitem=listitem, isFolder=isFolder)
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
@@ -1091,7 +1096,7 @@ def SignOutBBCiD():
 def StatusBBCiD():
     status_url="https://ssl.bbc.co.uk/id/status"
     html=OpenURL(status_url)
-    if("You are signed in." in html):
+    if("You are signed in" in html):
         return True
     return False
 
@@ -1122,7 +1127,7 @@ def ListWatching(logged_in):
         return
 
     identity_cookie = None
-    for cookie in GetCookies():
+    for cookie in cookie_jar:
         if (cookie.name == 'IDENTITY'):
             identity_cookie = cookie.value
             break
@@ -1138,7 +1143,7 @@ def ListWatching(logged_in):
         if(subtitle):
             title += ", " + subtitle
         episode_id = episode.get('id')
-        plot = episode.get('synopses').get('large')
+        plot = episode.get('synopses').get('large') or ''
         aired = episode.get('release_date')
         image_url = ParseImageUrl(episode.get('images').get('standard'))
         aired = ParseAired(aired)
@@ -1170,6 +1175,7 @@ def ListFavourites(logged_in):
         CheckAutoplay(title, url, image_url, plot, aired)
 
 
+cookie_jar = InitialiseCookieJar()
 params = get_params()
 url = None
 name = None

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.program.tvhighlights" name="TV Highlights Grabber - TV Digital" version="0.1.0" provider-name="TDOe">
+<addon id="plugin.program.tvhighlights" name="TV Highlights Grabber - TV Digital" version="0.1.1" provider-name="TDOe">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>
@@ -13,7 +13,13 @@
         <summary lang="de">Holt die TV Highlights des Tages von www.tvdigital.de</summary>
         <language>de</language>
         <description lang="en">Fetch todays TV Highlights from www.tvdigital.de</description>
-        <description lang="de">Holt die TV Highlights des Tages von www.tvdigital.de</description>
+        <description lang="de">
+            Holt die TV Highlights des Tages von www.tvdigital.de
+
+Dieses Plugin benoetigt eine Skin-Integration!
+Hierfür bitte README.txt im Ordner integration beachten
+oder online unter https://goo.gl/GtK41L nachlesen.
+        </description>
         <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
         <source>https://github.com/tobias-d-oe/plugin.program.tvhighlights</source>
         <forum>http://goo.gl/TdGZsF</forum>

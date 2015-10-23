@@ -1,3 +1,7 @@
+v0.1.1
+- localisation bugfix
+- genre-order fix
+
 v0.1.0
 - addon.xml fixes
 

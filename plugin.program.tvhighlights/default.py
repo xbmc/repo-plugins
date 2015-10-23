@@ -6,8 +6,8 @@
 #        AUTHOR:  Tobias D. Oestreicher
 #
 #       LICENSE:  GPLv3 <http://www.gnu.org/licenses/gpl.txt>
-#       VERSION:  0.1.0
-#       CREATED:  02.09.2015
+#       VERSION:  0.1.1
+#       CREATED:  20.10.2015
 #
 ###########################################################################
 #
@@ -653,10 +653,10 @@ elif methode=='show_select_dialog':
         get_tvdigital_mastermode_highlights('spielfilm')
     elif ret==1:
         clear_tvdigital_mastermode_highlights()
-        get_tvdigital_mastermode_highlights('sport')
+        get_tvdigital_mastermode_highlights('serie')
     elif ret==2:
         clear_tvdigital_mastermode_highlights()
-        get_tvdigital_mastermode_highlights('serie')
+        get_tvdigital_mastermode_highlights('sport')
     elif ret==3:
         clear_tvdigital_mastermode_highlights()
         get_tvdigital_mastermode_highlights('unterhaltung')

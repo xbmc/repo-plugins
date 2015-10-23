@@ -6,8 +6,8 @@
 #        AUTHOR:  Tobias D. Oestreicher
 #
 #       LICENSE:  GPLv3 <http://www.gnu.org/licenses/gpl.txt>
-#       VERSION:  0.1.0
-#       CREATED:  02.09.2015
+#       VERSION:  0.1.1
+#       CREATED:  20.10.2015
 #
 ###########################################################################
 #
@@ -36,9 +36,11 @@ mdelay = 14400 # 4h
 addon       = xbmcaddon.Addon()
 enableinfo  = addon.getSetting('enableinfo')
 translation = addon.getLocalizedString
+notifyheader= str(translation(30010))
+notifytxt   = str(translation(30106))
 
-if enableinfo == true:
-    xbmc.executebuiltin('XBMC.Notification(str(translation(30010)), str(translation(30106)) ,4000,'+icon+')')
+if enableinfo == 'true':
+    xbmc.executebuiltin('XBMC.Notification('+notifyheader+', '+notifytxt+' ,4000,'+icon+')')
 
 xbmc.executebuiltin('XBMC.RunScript(plugin.program.tvhighlights,"?methode=settings")')
 

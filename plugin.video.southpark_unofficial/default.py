@@ -54,7 +54,7 @@ def index():
     addLink(translation(30006), "Random", 'list', icon)
     addLink(translation(30013), "Search", 'list', icon)
     for i in range(1, 20):
-        addDir(translation(30007)+" "+str(i), 'season-'+str(i), 'list', defaultImgDir+str(i)+".jpg")
+        addDir(translation(30007)+" "+str(i), str(i), 'list', defaultImgDir+str(i)+".jpg")
     xbmcplugin.endOfDirectory(pluginhandle)
 
 
@@ -69,7 +69,7 @@ def list(url):
             elif episode['_availability'] == "beforepremiere":
 				addLink(episode['title'] + " [Premiere]", "beforepremiere", 'play', episode['images'], "Premiere in " + getTimer(episode['originalAirDate']) +"\n" + episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
             else:
-				addLink(episode['title'].encode('utf-8'), episode['itemId'].encode('utf-8'), 'play', episode['images'].encode('utf-8'), episode['description'].encode('utf-8'), episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'].encode('utf-8'))
+				addLink(episode['title'], episode['itemId'], 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
     elif url == "Random":
 		notifyText(translation(30003), 2000)
 		rand = getUrl("http://"+mainweb_geo[audio_pos]+fullep_geo[audio_pos]+"random")
@@ -77,22 +77,28 @@ def list(url):
 		where = "http://"+mainweb_geo[audio_pos]+fullep_geo[audio_pos]+"s"
 		rand = rand.split(where)[1].split("-")[0]
 		rand = rand.split("e")
-		# cc.com is the ony one with jsons so descriptions will be in english
-		jsonrsp = getUrl("http://southpark.cc.com/feeds/carousel/video/57baee9c-b611-4260-958b-05315479a7fc/30/1/json/!airdate/season-"+str(int(rand[0]))+"?lang="+audio)
+		if audio == "de":
+			# sp.de returns a JS instead of a JSON so i need to convert it
+			jsonrsp = getUrl("http://www.southpark.de/feeds/full-episode/carousel/"+str(int(rand[0]))+"/c48e799a-9227-44d8-878f-248b0d065714").decode('utf-8')
+			jsonrsp = JStoJSON(jsonrsp)
+			jsonrsp = toUSJSON(jsonrsp)
+		else:
+			# cc.com is the ony one with jsons so descriptions will be in english
+			jsonrsp = getUrl("http://southpark.cc.com/feeds/carousel/video/06bb4aa7-9917-4b6a-ae93-5ed7be79556a/30/1/json/!airdate/season-"+str(int(rand[0]))+"?lang="+audio)
 		seasonjson = _json.loads(jsonrsp)
 		ep = int(rand[1])-1
 		episode = seasonjson['results'][ep]
 		if playrandom:
 			if episode['_availability'] == "banned":
 				episode = seasonjson['results'][0]
-			playEpisode(episode['itemId'].encode('utf-8'), episode['title'], episode['images'])
+			playEpisode(episode['itemId'], episode['title'], episode['images'])
 		else:
 			if episode['_availability'] == "banned":
 				addLink(episode['title'] + " [Banned]" , "banned", 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
 			elif episode['_availability'] == "beforepremiere":
 				addLink(episode['title'] + " [Premiere]", "beforepremiere", 'play', episode['images'], "Premiere in " + getTimer(episode['originalAirDate']) +"\n" + episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
 			else:
-				addLink(episode['title'].encode('utf-8'), episode['itemId'].encode('utf-8'), 'play', episode['images'].encode('utf-8'), episode['description'].encode('utf-8'), episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'].encode('utf-8'))
+				addLink(episode['title'], episode['itemId'], 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
     elif url == "Search":
 		keyboard = xbmc.Keyboard('')
 		keyboard.doModal()
@@ -107,10 +113,15 @@ def list(url):
 				elif episode['_availability'] == "beforepremiere":
 					addLink(episode['title'] + " [Premiere]", "beforepremiere", 'play', episode['images'], "Premiere in " + getTimer(episode['originalAirDate']) +"\n" + episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
 				else:
-					addLink(episode['title'].encode('utf-8'), episode['itemId'].encode('utf-8'), 'play', episode['images'].encode('utf-8'), episode['description'].encode('utf-8'), episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'].encode('utf-8'))
+					addLink(episode['title'], episode['itemId'], 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
     else:
         xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_EPISODE)
-        jsonrsp = getUrl("http://southpark.cc.com/feeds/carousel/video/fba639b0-ae4d-49b0-9d5d-addb27823f4b/30/1/json/!airdate/"+url+"?lang="+audio)
+        if audio == "de":
+			jsonrsp = getUrl("http://www.southpark.de/feeds/full-episode/carousel/"+url+"/c48e799a-9227-44d8-878f-248b0d065714").decode('utf-8')
+			jsonrsp = JStoJSON(jsonrsp)
+			jsonrsp = toUSJSON(jsonrsp)
+        else:
+			jsonrsp = getUrl("http://southpark.cc.com/feeds/carousel/video/06bb4aa7-9917-4b6a-ae93-5ed7be79556a/30/1/json/!airdate/season-"+url+"?lang="+audio)
         seasonjson = _json.loads(jsonrsp)
         for episode in seasonjson['results']:
             if episode['_availability'] == "banned":
@@ -118,7 +129,7 @@ def list(url):
             elif episode['_availability'] == "beforepremiere":
 				addLink(episode['title'] + " [Premiere]", "beforepremiere", 'play', episode['images'], "Premiere in " + getTimer(episode['originalAirDate']) +"\n" + episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
             else:
-				addLink(episode['title'].encode('utf-8'), episode['itemId'].encode('utf-8'), 'play', episode['images'].encode('utf-8'), episode['description'].encode('utf-8'), episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'].encode('utf-8'))
+				addLink(episode['title'], episode['itemId'], 'play', episode['images'], episode['description'], episode['episodeNumber'][0]+episode['episodeNumber'][1], episode['episodeNumber'][2]+episode['episodeNumber'][3],episode['originalAirDate'])
     xbmcplugin.endOfDirectory(pluginhandle)
     xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
@@ -133,7 +144,7 @@ def playEpisode(url, title, thumbnail):
 	if len(mediagen) == 0:
 		notifyText(translation(30011), 7000)
 		return
-	notifyText(translation(30009)+" " + title, 3000)
+	notifyText(translation(30009) + " " + encode(title), 3000)
 	rtmp = ""
 	pageUrl = "http://media.mtvnservices.com/player/prime/mediaplayerprime.2.11.3.swf?uri=mgid:arc:episode:"+pageurl_geo[audio_pos]+":"+url
 	pageUrl += "&type=network&ref=southpark.cc.com&geo="+ geolocation +"&group=entertainment&network=None&device=Other&networkConnectionType=None"
@@ -172,7 +183,7 @@ def playEpisode(url, title, thumbnail):
 		li.setProperty('conn', "B:0")
 		if playpath != "":
 			li.setProperty('PlayPath', playpath)
-		li.setProperty('flashVer', "WIN 12,0,0,70")
+		li.setProperty('flashVer', "WIN 19,0,0,185")
 		li.setProperty('pageUrl', pageUrl)
 		li.setProperty('SWFPlayer', "http://media.mtvnservices.com/player/prime/mediaplayerprime.2.11.3.swf")
 		li.setProperty("SWFVerify", "true")
@@ -214,11 +225,15 @@ def playEpisode(url, title, thumbnail):
 	return
 
 def translation(id):
-    return addon.getLocalizedString(id).encode('utf-8')
+    return encode(addon.getLocalizedString(id))
 	
 def notifyText(text, time=5000):
-	addonname   = addon.getAddonInfo('name')
-	xbmc.executebuiltin('Notification(%s, %s, %d, %s)'%(addonname, text, time, icon))
+	utext = encode(text)
+	uaddonname = encode(addon.getAddonInfo('name'))
+	utime = encode(str(time))
+	uicon = encode(icon);
+	notification = 'Notification(%s, %s, %s, %s)' % (uaddonname, utext, utime, uicon)
+	xbmc.executebuiltin(notification)
 
 def getUrl(url):
 	link = ""
@@ -234,10 +249,16 @@ def getUrl(url):
 	return link
 
 def addLink(name, url, mode, iconimage, desc="", season="", episode="", date=""):
-    u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&title="+str(name)+"&thumbnail="+str(iconimage)
+    if "?" in iconimage:
+		pos = iconimage.index('?') - len(iconimage)
+		iconimage = iconimage[:pos]
+    u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+mode+"&title="+name+"&thumbnail="+iconimage
     convdate = ""
     if date != "":
-        convdate = datetime.datetime.fromtimestamp(int(date)).strftime('%Y-%m-%d %H:%M:%S')
+		try:
+			convdate = datetime.datetime.fromtimestamp(int(date)).strftime('%Y-%m-%d %H:%M:%S')
+		except ValueError:
+			convdate = date
     ok = True
     liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc, "Season": season, "Episode": episode, "Aired": convdate})
@@ -257,19 +278,18 @@ def addDir(name, url, mode, iconimage="DefaultFolder.png"):
     return ok
 
 def getCarousel():
-	html = getUrl("http://southpark.cc.com/")
-	html = html.split("</section><section class=")
-	data_url = html[1].split("data-url=\"")
-	data_url = data_url[1]
-	data_url = data_url.split("\"")[0]
-	carousel = data_url.split("{resultsPerPage}/{currentPage}/json/{sort}")[0]
-	carousel += "14/1/json/airdate"
-	carousel += data_url.split("{resultsPerPage}/{currentPage}/json/{sort}")[1]
-	return "http://southpark.cc.com" + carousel + "?lang="+audio
+##	html = getUrl("http://southpark.cc.com/")
+#	html = html.split("</section><section class=")
+#	data_url = html[1].split("data-url=\"")
+#	data_url = data_url[1]
+#	data_url = data_url.split("\"")[0]
+#	carousel = data_url.split("{resultsPerPage}/{currentPage}/json/{sort}")[0]
+#	carousel += "14/1/json/airdate"
+#	carousel += data_url.split("{resultsPerPage}/{currentPage}/json/{sort}")[1]
+	return "http://southpark.cc.com/feeds/carousel/video/351c1323-0b96-402d-a8b9-40d01b2e9bde/30/1/json/!airdate/promotion-0?lang="+audio
 
 def getMediagen(id):
 	feed = ""
-	print ("http://"+mainweb_geo[audio_pos]+"/feeds/video-player/mrss/mgid:arc:episode:"+pageurl_geo[audio_pos]+":"+id+"?lang="+audio)
 	feed = getUrl("http://"+mainweb_geo[audio_pos]+"/feeds/video-player/mrss/mgid:arc:episode:"+pageurl_geo[audio_pos]+":"+id+"?lang="+audio)
 	root = ET.fromstring(feed)
 	mediagen = []
@@ -287,6 +307,7 @@ def getVideoData(mediagen):
 	xml = ""
 	if audio == "de":
 		mediagen += "&acceptMethods=fms,hdn1,hds";
+	print mediagen
 	xml = getUrl(mediagen)
 	root = ET.fromstring(xml)
 	rtmpe = []
@@ -329,7 +350,12 @@ def saveSubs(fname, stream):
 	return stream
 
 def getTimer(premiere):
-	diff = int(premiere) - int(time.time())
+	try:
+		diff = int(premiere) - int(time.time())
+	except ValueError:
+		date = time.strptime(premiere, "%d.%m.%Y") # 30.09.2015
+		diff = int(time.mktime(date)) - int(time.time())
+		
 	if diff < 0:
 		diff = 0;
 	days = int(diff/86400)
@@ -337,7 +363,46 @@ def getTimer(premiere):
 	mins =  int((diff%3600)/60)
 #	secs = int(diff % 60)
 	return "%02dd %02dh %02dm" % (days, hours, mins)
+
+def encode(string):
+	try:
+		return string.encode('UTF-8','replace')
+	except UnicodeError:
+		return string
+   
 	
+def JStoJSON(s):
+	s = re.sub("/\*([\s\S]*?)\*/", "", s)
+	s = s.replace('\n', '')
+	s = s.replace("{","{'")
+	s = s.replace(":", "':")
+	s = s.replace(",", ",'")
+	s = s.replace(",' ", ", ")
+	s = s.replace(", ]", "]")
+	s = s.replace("http':", "http:")
+	s = s.replace("{'", '{"')
+	s = s.replace("'}", '"}')
+	s = s.replace("':'", '":"')
+	s = s.replace("','", '","')
+	s = s.replace("':", '":')
+	s = s.replace('": ', "': ")
+	s = s.replace('":-', "':-")
+	s = s.replace("\\'", "'")
+	return s
+	
+def toUSJSON(s):
+	if s[2] == 's' and s[3] == 'e':
+		s = s.replace('{"season":', '')
+		s = s[:-1]
+	s = s.replace('"episode"', '"results"')
+	s = s.replace('"available"', '"_availability"')
+	s = s.replace('"donotair"', '"banned"')
+	s = s.replace('"thumbnail_larger"', '"images"')
+	s = s.replace('"id"', '"itemId"')
+	s = s.replace('"episodenumber"', '"episodeNumber"')
+	s = s.replace('"airdate"', '"originalAirDate"')
+	return s
+
 def unescape(s):
 	htmlCodes = [["'", '&#39;'],['"', '&quot;'],['', '&gt;'],['', '&lt;'],['&', '&amp;']]
 	for code in htmlCodes:

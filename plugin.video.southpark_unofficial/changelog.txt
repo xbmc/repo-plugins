@@ -38,3 +38,8 @@
 0.3.9
 - Added a timer before release on premiere episodes on the description.
 - Added seasons covers.
+0.4.0
+- Fixed again DE support
+- Added DE descriptions/titles on seasons and random episodes.
+0.4.1
+- Fixed DE/EN/ES and carousel

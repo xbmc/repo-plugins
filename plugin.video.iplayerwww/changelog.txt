@@ -1,3 +1,9 @@
+v1.2.4
+Added Channel Highlights.
+Fixed missing plot bug in Watching.
+Fixed bugs related to UTF-8 encoded programme names.
+Fixed HTML tags showing up in some Highlights programme names.
+
 v1.2.3
 Fixed various bugs in personalisation features.
 Improved cookie handling.

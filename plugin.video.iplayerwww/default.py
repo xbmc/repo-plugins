@@ -49,7 +49,8 @@ if(not os.path.exists(DIR_USERDATA)):
     os.makedirs(DIR_USERDATA)
 
 def CATEGORIES():
-    AddMenuEntry(translation(31000), 'url', 106, '', '', '')
+    AddMenuEntry(translation(31000), 'iplayer', 106, '', '', '')
+    AddMenuEntry(translation(31017), 'url', 109, '', '', '')
     AddMenuEntry(translation(31001), 'url', 105, '', '', '')
     AddMenuEntry(translation(31002), 'url', 102, '', '', '')
     AddMenuEntry(translation(31003), 'url', 103, '', '', '')
@@ -291,12 +292,35 @@ def GetFilteredCategory(url):
             break
 
 
-def ListHighlights():
+def ListChannelHighlights():
+    """Creates a list directories linked to the highlights section of each channel.
+
+    """
+    channel_list = [
+        ('bbcone', 'bbc_one', 'BBC One'),
+        ('bbctwo', 'bbc_two', 'BBC Two'),
+        ('bbcthree', 'bbc_three', 'BBC Three'),
+        ('bbcfour', 'bbc_four', 'BBC Four'),
+        ('tv/cbbc', 'cbbc', 'CBBC'),
+        ('tv/cbeebies', 'cbeebies', 'CBeebies'),
+        ('tv/bbcnews', 'bbc_news24', 'BBC News Channel'),
+        ('tv/bbcparliament', 'bbc_parliament', 'BBC Parliament'),
+        ('tv/bbcalba', 'bbc_alba', 'Alba'),
+        ('tv/s4c', 's4c', 'S4C'),
+    ]
+    for id, img, name in channel_list:
+        iconimage = xbmc.translatePath(
+            os.path.join('special://home/addons/plugin.video.iplayerwww/media', img + '.png'))
+        AddMenuEntry(name, id, 106, iconimage, '', '')
+
+
+
+def ListHighlights(url):
     """Creates a list of the programmes in the highlights section.
 
     All entries are scraped of the intro page and the pages linked from the intro page.
     """
-    html = OpenURL('http://www.bbc.co.uk/iplayer')
+    html = OpenURL('http://www.bbc.co.uk/%s' % url)
     # Match all regular groups.
     match1 = re.compile(
         'data-group-name="(.+?)".+?'
@@ -325,13 +349,21 @@ def ListHighlights():
     # We need to parse both to avoid duplicates and to make sure we get all of them.
     episodelist = []
     for group_name, group_type, more in match1:
-        match2 = re.compile(
-            'href="/iplayer/episode/(.+?)/.+?'
-            'typo--skylark"><strong>(.+?)</strong>(.+?)</li>',
-            re.DOTALL).findall(more)
+        # CBBC and Cbeebies uses different fonts, so they need a different regexp.
+        if ((url == 'tv/cbbc') or (url == 'tv/cbeebies')):
+            match2 = re.compile(
+                'href="/iplayer/episode/(.+?)/.+?'
+                'typo--canary"><strong>(.+?)</strong>(.+?)</li>',
+                re.DOTALL).findall(more)
+        else:
+            match2 = re.compile(
+                'href="/iplayer/episode/(.+?)/.+?'
+                'typo--skylark"><strong>(.+?)</strong>(.+?)</li>',
+                re.DOTALL).findall(more)
         for episode_id, name, evenmore in match2:
-            # The next two lines require verification.
-            # At the time of writing these lines, no series-catchup group was available to test.
+            # Omnibus programmes contain a lot of HTML format code which needs to be striped.
+            name = re.sub('<.+?>','',name)
+            # Series Catchup content needs the title to be composed including the series name.
             if group_type == 'series-catchup':
                 name = "%s: %s" % (group_name, name)
             match3 = re.compile(
@@ -363,6 +395,8 @@ def ListHighlights():
         re.DOTALL).findall(html.replace('amp;', ''))
     for episode_id, name, subtitle, iconimage, plot, more in match1:
         episode_url = "http://www.bbc.co.uk/iplayer/episode/%s" % episode_id
+        # Omnibus programmes contain a lot of HTML format code which needs to be striped.
+        name = re.sub('<.+?>','',name)
         aired = re.compile(
             '.+?First shown: (.+?)</p>',
             re.DOTALL).findall(more)
@@ -842,7 +876,7 @@ def OpenURL(url):
         cookie_jar.save(ignore_discard=True, ignore_expires=True)
     except:
         pass
-    return r.content
+    return r.content.decode('utf-8')
 
 
 def OpenURLPost(url, post_data):
@@ -919,16 +953,26 @@ def get_params():
     return param
 
 
+#Creates a 'urlencoded' string from a unicode input
+def utf8_quote_plus(unicode):
+    return urllib.quote_plus(unicode.encode('utf-8'))
+
+
+#Gets a unicode string from a 'urlencoded' string
+def utf8_unquote_plus(str):
+    return urllib.unquote_plus(str).decode('utf-8')
+
+
 def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=None, resolution=None, logged_in=False):
     """Adds a new line to the Kodi list of playables.
 
     It is used in multiple ways in the plugin, which are distinguished by modes.
     """
-    listitem_url = (sys.argv[0] + "?url=" + urllib.quote_plus(url) + "&mode=" + str(mode) +
-                    "&name=" + urllib.quote_plus(name) +
-                    "&iconimage=" + urllib.quote_plus(iconimage) +
-                    "&description=" + urllib.quote_plus(description) + 
-                    "&subtitles_url=" + urllib.quote_plus(subtitles_url) +
+    listitem_url = (sys.argv[0] + "?url=" + utf8_quote_plus(url) + "&mode=" + str(mode) +
+                    "&name=" + utf8_quote_plus(name) +
+                    "&iconimage=" + utf8_quote_plus(iconimage) +
+                    "&description=" + utf8_quote_plus(description) + 
+                    "&subtitles_url=" + utf8_quote_plus(subtitles_url) +
                     "&logged_in=" + str(logged_in))
 
     # Try to extract the date from the title and add it as an InfoLabel to allow sorting by date.
@@ -1143,7 +1187,7 @@ def ListWatching(logged_in):
         if(subtitle):
             title += ", " + subtitle
         episode_id = episode.get('id')
-        plot = episode.get('synopses').get('large') or ''
+        plot = episode.get('synopses').get('large') or " "
         aired = episode.get('release_date')
         image_url = ParseImageUrl(episode.get('images').get('standard'))
         aired = ParseAired(aired)
@@ -1186,15 +1230,15 @@ subtitles_url = None
 logged_in = False
 
 try:
-    url = urllib.unquote_plus(params["url"])
+    url = utf8_unquote_plus(params["url"])
 except:
     pass
 try:
-    name = urllib.unquote_plus(params["name"])
+    name = utf8_unquote_plus(params["name"])
 except:
     pass
 try:
-    iconimage = urllib.unquote_plus(params["iconimage"])
+    iconimage = utf8_unquote_plus(params["iconimage"])
 except:
     pass
 try:
@@ -1202,11 +1246,11 @@ try:
 except:
     pass
 try:
-    description = urllib.unquote_plus(params["description"])
+    description = utf8_unquote_plus(params["description"])
 except:
     pass
 try:
-    subtitles_url = urllib.unquote_plus(params["subtitles_url"])
+    subtitles_url = utf8_unquote_plus(params["subtitles_url"])
 except:
     pass
 try:
@@ -1236,13 +1280,16 @@ elif mode == 105:
     ListMostPopular()
 
 elif mode == 106:
-    ListHighlights()
+    ListHighlights(url)
 
 elif mode == 107:
     ListWatching(logged_in)
 
 elif mode == 108:
     ListFavourites(logged_in)
+
+elif mode == 109:
+    ListChannelHighlights()
 
 # Modes 121-199 will create a sub directory menu entry
 elif mode == 121:

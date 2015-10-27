@@ -325,7 +325,7 @@ def ListHighlights(url):
     match1 = re.compile(
         'data-group-name="(.+?)".+?'
         'href="/iplayer/group/(.+?)".+?'
-        '<em>(.+?)</em>',
+        '<strong>(.+?)</strong>',
         re.DOTALL).findall(html.replace('amp;', ''))
     for name, episode_id, num_episodes in match1:
         AddMenuEntry(' %s: %s - %s %s' % (

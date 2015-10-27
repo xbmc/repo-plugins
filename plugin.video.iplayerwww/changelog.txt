@@ -1,3 +1,6 @@
+v1.2.5
+Adapted to new design Highlights website.
+
 v1.2.4
 Added Channel Highlights.
 Fixed missing plot bug in Watching.

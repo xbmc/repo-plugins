@@ -1,3 +1,8 @@
+Version 1.2.7 (21 oktober 2015)
+Bugfix in playing videos
+Going back to http, since https doesn't seem to work anymore atm
+Funhouse is added once more
+
 Version 1.2.6 (17 oktober 2015)
 Fixes due to website change
 

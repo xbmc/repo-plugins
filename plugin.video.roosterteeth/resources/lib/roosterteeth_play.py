@@ -83,7 +83,7 @@ class Main:
 		 	reply = self.session.get(self.video_page_url)
 		 	
 			# is it a sponsored video? 
-			if str(reply.text).find('sponsor-only') >= 0 or str(reply.text).find('non-sponsor'):
+			if str(reply.text).find('sponsor-only') >= 0 or str(reply.text).find('non-sponsor') >= 0:
 				if self.IS_SPONSOR == 'true':
 					try:
 						# we need a NEW (!!!) session
@@ -127,9 +127,8 @@ class Main:
 							if str(reply.text).find(__settings__.getSetting('username')) >= 0:
 								if (self.DEBUG) == 'true':
 									xbmc.log('login was successfull!')
-									# let's try getting the page again after a login, hopefully it contains a link to the video now
-									reply = self.session.get(self.video_page_url)
-								pass
+								# let's try getting the page again after a login, hopefully it contains a link to the video now
+								reply = self.session.get(self.video_page_url)									
 							else:
 								try:
 									dialogWait.close()
@@ -197,7 +196,7 @@ class Main:
  			except:
  				pass
  			exit(1)
-						
+		
 		html_source = reply.text
 		html_source = html_source.encode('utf-8', 'ignore')		
 

@@ -17,7 +17,7 @@ import xbmcaddon
 import xbmcgui
 import xbmcplugin
 
-RECENTLYADDEDURL = 'https://roosterteeth.com/episode/recently-added'
+RECENTLYADDEDURL = 'http://roosterteeth.com/episode/recently-added'
 
 #
 # Main class

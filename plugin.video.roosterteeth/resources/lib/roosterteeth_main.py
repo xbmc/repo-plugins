@@ -17,11 +17,11 @@ import xbmcaddon
 import xbmcgui
 import xbmcplugin
 
-RECENTLYADDEDURL = 'https://roosterteeth.com/episode/recently-added?page=001'
-ROOSTERTEETHSHOWSURL = 'https://www.roosterteeth.com/show/'
-ACHIEVEMENTHUNTERURL = 'https://achievementhunter.com/show/'
-THEKNOWSHOWSURL = 'https://theknow.tv/show'
-#FUNHAUSSHOWSURL = 'https://fun.haus/show'
+RECENTLYADDEDURL = 'http://roosterteeth.com/episode/recently-added?page=001'
+ROOSTERTEETHSHOWSURL = 'http://www.roosterteeth.com/show/'
+ACHIEVEMENTHUNTERURL = 'http://achievementhunter.com/show/'
+THEKNOWSHOWSURL = 'http://theknow.tv/show'
+FUNHAUSSHOWSURL = 'http://fun.haus/show'
 
 #
 # Main class
@@ -61,15 +61,14 @@ class Main:
         folder = True
         xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
 
-# Removed because of SSL error on 16 september 2015
-#         #
-#         # Fun Haus
-#         #
-#         parameters = {"action" : "list-shows", "plugin_category" : __language__(30004), "url" : FUNHAUSSHOWSURL, "next_page_possible": "False"}
-#         url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-#         listitem = xbmcgui.ListItem( __language__(30004), iconImage="DefaultFolder.png" )
-#         folder = True
-#         xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)                        
+        #
+        # Fun Haus
+        #
+        parameters = {"action" : "list-shows", "plugin_category" : __language__(30004), "url" : FUNHAUSSHOWSURL, "next_page_possible": "False"}
+        url = sys.argv[0] + '?' + urllib.urlencode(parameters)
+        listitem = xbmcgui.ListItem( __language__(30004), iconImage="DefaultFolder.png" )
+        folder = True
+        xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)                        
            
         # Disable sorting...
         xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )

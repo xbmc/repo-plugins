@@ -63,43 +63,37 @@ def getShows():
    showDialog = len(meta)
 
    basehtml = getRequest('http://www.sproutonline.com/now/')
-   cats = re.compile('<div class="wrap imageLoading".+?href="(.+?)".+?title="(.+?)".+?</div',re.DOTALL).findall(basehtml)
+   cats = re.compile('<li class="filter-option'+".+?'name': '(.+?)'"+'.+?src="(.+?)".+?<span>(.+?)<.+?</li', re.DOTALL).findall(basehtml)
    if showDialog == 0 : 
        pDialog = xbmcgui.DialogProgress()
        pDialog.create(__language__(30082), __language__(30083))
        numShows = len(cats)
        i = 1
 
-   for url, name in cats:
-     shurl = SPROUTBASE % (url)
+   fanart = addonfanart
+   for url, img, name in cats:
+    shurl = SPROUTBASE % '/watch?show=%s' % (url)
+    html = getRequest(shurl)
+    epis = re.compile('<li class="video-reference.+?href="(.+?)"(.+?)</li>', re.DOTALL).findall(html)
+    hasEpisodes = False
+    for url, utype in epis:
+       if 'FULL EPISODE' in utype:
+           hasEpisodes = True
+           break
+    if hasEpisodes:
      try:
         (name, img, fanart, infoList) = meta[url]
      except:
 
-       img = re.compile('<li class="slide show".+?<a href="'+url+'".+?<img src="(.+?)".+?</li>',re.DOTALL).search(basehtml).group(1)
        name = name.strip()
-       html = getRequest(shurl)
-       try:    fanart = re.compile('<img class="showBaner" src="(.+?)"',re.DOTALL).search(html).group(1)
-       except: fanart = addonfanart
-       plot = re.compile('"og:description" content="(.+?)"',re.DOTALL).search(html).group(1)
-       html = re.compile("Drupal\.settings, (.+?)\);<",re.DOTALL).search(html).group(1)
-       a = json.loads(html)
-       b = a["tve_widgets"]["related_videos"]["assets1"][0]
        infoList = {}
-       dstr = (b['aired_date'].split('-'))
-       infoList['Date']        = '%s-%s-%s' % (dstr[2], dstr[0].zfill(2), dstr[1].zfill(2))
-       infoList['Aired']       = infoList['Date']
-       infoList['MPAA']        = 'G'
-       infoList['TVShowTitle'] = b['show_title']
-       infoList['Title']       = b['show_title']
+       infoList['MPAA']        = 'TV-G'
+       infoList['TVShowTitle'] = name
+       infoList['Title']       = name
        infoList['Studio']      = 'Sprout'
        infoList['Genre']       = 'Kids'
-       infoList['Episode']     = int(a["tve_widgets"]["related_videos"]["assets_number"])
-       infoList['Year']        = int(infoList['Aired'].split('-',1)[0])
-       infoList['Plot']        = h.unescape(plot)
      meta[url] = (name, img, fanart, infoList)
-     mode = 'GE'
-     u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(shurl), qp(name), mode)
+     u = '%s?url=%s&name=%s&mode=GE' % (sys.argv[0],qp(shurl), qp(name))
      liz=xbmcgui.ListItem(name, '',img, None)
      liz.setInfo( 'Video', infoList)
      liz.setProperty('fanart_image', fanart)
@@ -127,29 +121,32 @@ def getEpisodes(eurl, showName):
 
    ilist=[]        
    html = getRequest(eurl)
-   try:    fanart = re.compile('<img class="showBaner" src="(.+?)"',re.DOTALL).search(html).group(1)
-   except: fanart = addonfanart
-   html = re.compile("Drupal\.settings, (.+?)\);<",re.DOTALL).search(html).group(1)
-   a = json.loads(html)
-   mode = 'GV'
-   for b in a["tve_widgets"]["related_videos"]["assets1"]:
+   epis = re.compile('<li class="video-reference.+?href="(.+?)"(.+?)</li>', re.DOTALL).findall(html)
+   for url, utype in epis:
+     if 'FULL EPISODE' in utype:
+      html = getRequest(SPROUTBASE % url)
+      xurl = re.compile('"video": "(.+?)"', re.DOTALL).search(html).group(1)
+      html = getRequest('%s?format=script' % xurl)
+      a = json.loads(html)
       infoList = {}
-      dstr = (b['aired_date'].rsplit('-'))
-      infoList['Date']        = '%s-%s-%s' % (dstr[2], dstr[0].zfill(2), dstr[1].zfill(2))
-      infoList['Aired']       = infoList['Date']
-      infoList['MPAA']        = 'G'
-      infoList['TVShowTitle'] = b['show_title']
-      infoList['Title']       = b['episode_title']
-      infoList['Studio']      = 'Sprout'
-      infoList['Genre']       = 'Kids'
-      infoList['Season']      = b['season_n']
-      infoList['Episode']     = b['episode_n']
-      infoList['Year']        = int(infoList['Aired'].split('-',1)[0])
-      infoList['Plot']        = h.unescape(b["synopsis"])
-      thumb = b["episode_thumbnail"]["url"]
-      url   = b['link']
-      name  = b['episode_title']
-      u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
+      infoList['MPAA']            = 'TV-G'
+      infoList['TVShowTitle']     = showName
+      infoList['Title']           = a['title']
+      infoList['Studio']          = 'Sprout'
+      try:    infoList['Duration'] = int(a['duration']/1000)
+      except: pass
+      try:    infoList['Genre']   = a['nbcu$advertisingGenre']
+      except: pass
+      try:    infoList['Season']  = a['pl1$seasonNumber']
+      except: infoList['Season']  = -1
+      try:    infoList['Episode'] = a['pl1$episodeNumber']
+      except: infoList['Episode'] = -1
+      infoList['Plot']            = a['description']
+      thumb = a['defaultThumbnailUrl']
+      fanart = thumb
+      url   = xurl
+      name  = a['title']
+      u = '%s?url=%s&mode=GV' % (sys.argv[0],qp(url))
       liz=xbmcgui.ListItem(name, '',None, thumb)
       liz.setInfo( 'Video', infoList)
       liz.addStreamInfo('video', { 'codec': 'h264', 
@@ -167,19 +164,15 @@ def getEpisodes(eurl, showName):
    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
-def getVideo(url, show_name):
+def getVideo(url):
     gvu1 = 'https://tvesprout-vh.akamaihd.net/i/prod/video/%s_,40,25,18,12,7,4,2,00.mp4.csmil/master.m3u8?b=&__b__=1000&hdnea=st=%s~exp=%s'
     gvu2 = 'https://tvesprout-vh.akamaihd.net/i/prod/video/%s_,1696,1296,896,696,496,240,306,.mp4.csmil/master.m3u8?b=&__b__=1000&hdnea=st=%s~exp=%s'
-    url = SPROUTBASE % uqp(url)
-    html = getRequest(url)
-    url = re.compile('data-release-url="(.+?)"',re.DOTALL).search(html).group(1)
-    url = 'http:'+url+'&player=Sprout%20VOD%20Player%20%28Phase%203%29&format=Script&height=576&width=1024'
-    html = getRequest(url)
-
+    html = getRequest('%s?format=script' % uqp(url))
     a = json.loads(html)
     suburl = a["captions"][0]["src"]
-    url = suburl.split('/caption/',1)[1]
-    url = url.split('.',1)[0]
+    try:    url = suburl.split('/caption/',1)[1]
+    except: url = suburl.split('/NBCU_Sprout/',1)[1]
+    url = url.rsplit('.',1)[0]
     td = (datetime.datetime.utcnow()- datetime.datetime(1970,1,1))
     unow = int((td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6)
     u   =  gvu1 % (url, str(unow), str(unow+60))
@@ -229,4 +222,4 @@ mode = p('mode',None)
 
 if mode==  None:  getShows()
 elif mode=='GE':  getEpisodes(p('url'), p('name'))
-elif mode=='GV':  getVideo(p('url'), p('name'))
+elif mode=='GV':  getVideo(p('url'))

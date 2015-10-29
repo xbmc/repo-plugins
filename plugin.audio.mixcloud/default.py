@@ -46,11 +46,14 @@ URL_FAVORITES=   'https://api.mixcloud.com/me/favorites/'
 URL_FOLLOWINGS=  'https://api.mixcloud.com/me/following/'
 URL_FOLLOWERS=   'https://api.mixcloud.com/me/followers/'
 URL_LISTENS=     'https://api.mixcloud.com/me/listens/'
+URL_UPLOADS=     'https://api.mixcloud.com/me/cloudcasts/'
+URL_LISTENLATER= 'https://api.mixcloud.com/me/listen-later/'
+URL_PLAYLISTS=   'https://api.mixcloud.com/me/playlists/'
 URL_JACKYNIX=    'http://api.mixcloud.com/jackyNIX/'
 URL_STREAM=      'http://www.mixcloud.com/api/1/cloudcast/{0}.json?embed_type=cloudcast'
 URL_FAVORITE=    'https://api.mixcloud.com{0}/favorite/'
 URL_FOLLOW=      'https://api.mixcloud.com{0}/follow/'
-URL_TOKEN=       'https://www.mixcloud.com/oauth/access_token?client_id=Vef7HWkSjCzEFvdhet&redirect_uri=http://forum.kodi.tv/showthread.php?tid=116386&client_secret=VK7hwemnZWBexDbnVZqXLapVbPK3FFYT&code='
+URL_TOKEN=       'https://www.mixcloud.com/oauth/access_token'
 
 
 
@@ -63,8 +66,11 @@ MODE_HISTORY=     14
 MODE_JACKYNIX=    15
 MODE_FOLLOWERS=   16
 MODE_LISTENS=     17
+MODE_UPLOADS=     18
+MODE_PLAYLISTS=   19
 MODE_CATEGORIES=  20
 MODE_USERS=       21
+MODE_LISTENLATER= 22
 MODE_SEARCH=      30
 MODE_PLAY=        40
 MODE_ADDFAVORITE= 50
@@ -116,6 +122,7 @@ STR_TRACKNUMBER= u'tracknumber'
 STR_TYPE=        u'type'
 STR_USER=        u'user'
 STR_YEAR=        u'year'
+STR_REDIRECTURI= u'http://forum.kodi.tv/showthread.php?tid=116386'
 
 STR_THUMB_SIZES= {0:u'small',1:u'thumbnail',2:u'medium',3:u'large',4:u'extra_large'}
 
@@ -161,6 +168,9 @@ STRLOC_MAINMENU_LISTENS=        __addon__.getLocalizedString(30109)
 STRLOC_SEARCHMENU_CLOUDCASTS=   __addon__.getLocalizedString(30110)
 STRLOC_SEARCHMENU_USERS=        __addon__.getLocalizedString(30111)
 STRLOC_SEARCHMENU_HISTORY=      __addon__.getLocalizedString(30112)
+STRLOC_MAINMENU_UPLOADS=        __addon__.getLocalizedString(30113)
+STRLOC_MAINMENU_PLAYLISTS=      __addon__.getLocalizedString(30114)
+STRLOC_MAINMENU_LISTENLATER=    __addon__.getLocalizedString(30115)
 STRLOC_CONTEXTMENU_ADDFAVORITE= __addon__.getLocalizedString(30120)
 STRLOC_CONTEXTMENU_DELFAVORITE= __addon__.getLocalizedString(30121)
 STRLOC_CONTEXTMENU_ADDFOLLOWING=__addon__.getLocalizedString(30122)
@@ -207,6 +217,9 @@ def show_home_menu():
         add_folder_item(name=STRLOC_MAINMENU_FOLLOWERS,parameters={STR_MODE:MODE_FOLLOWERS},img=get_icon('yourfollowers.png'))
         add_folder_item(name=STRLOC_MAINMENU_FAVORITES,parameters={STR_MODE:MODE_FAVORITES},img=get_icon('yourfavorites.png'))
         add_folder_item(name=STRLOC_MAINMENU_LISTENS,parameters={STR_MODE:MODE_LISTENS},img=get_icon('yourlistens.png'))
+        add_folder_item(name=STRLOC_MAINMENU_UPLOADS,parameters={STR_MODE:MODE_UPLOADS},img=get_icon('youruploads.png'))
+        add_folder_item(name=STRLOC_MAINMENU_PLAYLISTS,parameters={STR_MODE:MODE_PLAYLISTS},img=get_icon('yourplaylists.png'))
+        add_folder_item(name=STRLOC_MAINMENU_LISTENLATER,parameters={STR_MODE:MODE_LISTENLATER},img=get_icon('listenlater.png'))
     add_folder_item(name=STRLOC_MAINMENU_HOT,parameters={STR_MODE:MODE_HOT,STR_OFFSET:0},img=get_icon('hot.png'))
     add_folder_item(name=STRLOC_MAINMENU_CATEGORIES,parameters={STR_MODE:MODE_CATEGORIES,STR_OFFSET:0},img=get_icon('categories.png'))
     add_folder_item(name=STRLOC_MAINMENU_SEARCH,parameters={STR_MODE:MODE_SEARCH},img=get_icon('search.png'))
@@ -217,6 +230,10 @@ def show_home_menu():
 
 
 def show_feed_menu(offset):
+    if check_profile_state():
+        found=get_cloudcasts(URL_FEED,{STR_ACCESS_TOKEN:access_token,STR_LIMIT:limit,STR_OFFSET:offset})
+        if found==limit:
+            add_folder_item(name=STRLOC_COMMON_MORE,parameters={STR_MODE:MODE_FEED,STR_OFFSET:offset+limit})
     xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
 
 
@@ -272,6 +289,38 @@ def show_listens_menu(offset):
         found=get_cloudcasts(URL_LISTENS,{STR_ACCESS_TOKEN:access_token,STR_LIMIT:limit,STR_OFFSET:offset})
         if found==limit:
             add_folder_item(name=STRLOC_COMMON_MORE,parameters={STR_MODE:MODE_LISTENS,STR_OFFSET:offset+limit})
+    xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
+
+
+
+def show_uploads_menu(offset):
+    if check_profile_state():
+        found=get_cloudcasts(URL_UPLOADS,{STR_ACCESS_TOKEN:access_token,STR_LIMIT:limit,STR_OFFSET:offset})
+        if found==limit:
+            add_folder_item(name=STRLOC_COMMON_MORE,parameters={STR_MODE:MODE_UPLOADS,STR_OFFSET:offset+limit})
+    xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
+
+
+
+def show_listenlater_menu(offset):
+    if check_profile_state():
+        found=get_cloudcasts(URL_LISTENLATER,{STR_ACCESS_TOKEN:access_token,STR_LIMIT:limit,STR_OFFSET:offset})
+        if found==limit:
+            add_folder_item(name=STRLOC_COMMON_MORE,parameters={STR_MODE:MODE_LISTENLATER,STR_OFFSET:offset+limit})
+    xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
+
+
+
+def show_playlists_menu(key,offset):
+    if key=="":
+        if check_profile_state():
+            found=get_playlists(URL_PLAYLISTS,{STR_ACCESS_TOKEN:access_token,STR_LIMIT:limit,STR_OFFSET:offset})
+            if found==limit:
+                add_folder_item(name=STRLOC_COMMON_MORE,parameters={STR_MODE:MODE_PLAYLISTS,STR_OFFSET:offset+limit})
+    else:
+        found=get_cloudcasts(URL_API+key[1:len(key)-1]+'/cloudcasts/',{STR_LIMIT:limit,STR_OFFSET:offset})
+        if found==limit:
+            add_folder_item(name=STRLOC_COMMON_MORE,parameters={STR_MODE:MODE_PLAYLISTS,STR_KEY:key,STR_OFFSET:offset+limit})
     xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
 
 
@@ -333,36 +382,41 @@ def check_profile_state():
 
     # ask for code if no token provided yet
     if not access_token:
-        if debugenabled:
-            print('MIXCLOUD No access_token found')
+        log_if_debug('No access_token found')
         ask=True
         while ask:
             ask=xbmcgui.Dialog().ok('Mixcloud',STRLOC_COMMON_TOKEN_ERROR,STRLOC_COMMON_AUTH_CODE)
             if ask:
-#                __addon__.openSettings()
-#                oath_code=__addon__.getSetting('oath_code')
-
                 oath_code=get_query(oath_code)
                 __addon__.setSetting('oath_code',oath_code)
                 __addon__.setSetting('access_token','')
                 if oath_code<>'':
                     try:
-                        if debugenabled:
-                            print('MIXCLOUD getting access token ' + URL_TOKEN+oath_code)
-                        h=urllib2.urlopen(URL_TOKEN+oath_code)
+                        values={
+                                'client_id' : STR_CLIENTID,
+                                'redirect_uri' : STR_REDIRECTURI,
+                                'client_secret' : STR_CLIENTSECRET,
+                                'code' : oath_code
+                               }
+                        headers={
+                                 'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
+                                 'Referer' : 'http://offliberty.com/'
+                                }
+                        postdata = urllib.urlencode(values)
+                        log_if_debug('Getting access token ' + URL_TOKEN + '?' + postdata)
+                        request = urllib2.Request('https://www.mixcloud.com/oauth/access_token', postdata, headers, 'https://www.mixcloud.com/')
+                        h = urllib2.urlopen(request)
                         content=h.read()
                         json_content=json.loads(content)
                         if STR_ACCESS_TOKEN in json_content and json_content[STR_ACCESS_TOKEN] :
-                            if debugenabled:
-                                print('MIXCLOUD Access_token received')
+                            log_if_debug('Access_token received')
                             access_token=json_content[STR_ACCESS_TOKEN]
                             __addon__.setSetting('access_token',access_token)
                         else:
-                            if debugenabled:
-                                print('MIXCLOUD No access_token received')
-                                print json_content
+                            log_if_debug('No access_token received')
+                            log_if_debug(json_content)
                     except:
-                        print('MIXCLOUD oath_code failed error=%s' % (sys.exc_info()[1]))
+                        log_always('oath_code failed error=%s' % (sys.exc_info()[1]))
 
                 ask=(access_token=='')
 
@@ -399,11 +453,9 @@ def play_cloudcast(key):
         _listitem.setInfo(type='Music',infoLabels=_infolabels)
         xbmcplugin.setResolvedUrl(handle=plugin_handle,succeeded=True,listitem=_listitem)
         add_to_settinglist('play_history_list',key,'play_history_max')
-        if debugenabled:
-            print('MIXCLOUD playing '+url)
+        log_if_debug('Playing '+url)
     else:
-        if debugenabled:
-            print('MIXCLOUD '+'stop player')
+        log_if_debug('Stop player')
         xbmcplugin.setResolvedUrl(handle=plugin_handle,succeeded=False,listitem=xbmcgui.ListItem())
 
 
@@ -412,8 +464,7 @@ def get_cloudcasts(url,parameters):
     found=0
     if len(parameters)>0:
         url=url+'?'+urllib.urlencode(parameters)
-    if debugenabled:
-        print('MIXCLOUD '+'get cloudcasts '+url)
+    log_if_debug('Get cloudcasts '+url)
     h=urllib2.urlopen(url)
     content=h.read()
     json_content=json.loads(content)
@@ -440,12 +491,15 @@ def get_cloudcasts(url,parameters):
 def get_cloudcast(url,parameters,index=1,total=0,forinfo=False):
     if len(parameters)>0:
         url=url+'?'+urllib.urlencode(parameters)
-    if debugenabled:
-        print('MIXCLOUD '+'get cloudcast '+url)
-    h=urllib2.urlopen(url)
-    content=h.read()
-    json_cloudcast=json.loads(content)
-    return add_cloudcast(index,json_cloudcast,total,forinfo)
+    log_if_debug('Get cloudcast '+url)
+    try:
+        h=urllib2.urlopen(url)
+        content=h.read()
+        json_cloudcast=json.loads(content)
+        return add_cloudcast(index,json_cloudcast,total,forinfo)
+    except:
+        log_always('Get cloudcast failed error=%s' % (sys.exc_info()[1]))
+    return {}
 
 
 
@@ -504,13 +558,9 @@ def add_cloudcast(index,json_cloudcast,total,forinfo=False):
 
 def get_stream_offliberty(cloudcast_key):
     ck=URL_MIXCLOUD[:-1]+cloudcast_key
-    if debugenabled:
-        print('MIXCLOUD '+'resolving offliberty cloudcast stream for '+ck)
+    log_if_debug('Resolving offliberty cloudcast stream for '+ck)
     for retry in range(1, 10):
         try:
-#        request = urllib2.Request('http://offliberty.com/off.php', 'track=%s&refext=' % ck)
-#        request = urllib2.Request('http://offliberty.com/off54.php', 'track=%s&refext=' % ck)
-#        request.add_header('Referer', 'http://offliberty.com/')
             values={
                     'track' : ck,
                     'refext' : ''
@@ -526,18 +576,16 @@ def get_stream_offliberty(cloudcast_key):
             match=re.search('HREF="(.*)" class="download"', data)
             if match:
                 return match.group(1)
-            elif debugenabled:
-                print('MIXCLOUD '+'wrong response try=%s code=%s len=%s, trying again...' % (retry, response.getcode(), len(data)))
+            else:
+                log_if_debug('Wrong response try=%s code=%s len=%s, trying again...' % (retry, response.getcode(), len(data)))
         except:
-            if debugenabled:
-                print('MIXCLOUD '+'unexpected error try=%s error=%s, trying again...' % (retry, sys.exc_info()[0]))
+            log_always('Unexpected error try=%s error=%s, trying again...' % (retry, sys.exc_info()[0]))
 
 
 
 def get_stream_local(cloudcast_key):
     ck=URL_MIXCLOUD[:-1]+cloudcast_key
-    if debugenabled:
-        print('MIXCLOUD '+'locally resolving cloudcast stream for '+ck)
+    log_if_debug('Locally resolving cloudcast stream for '+ck)
     headers={
              'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
              'Referer' : URL_MIXCLOUD
@@ -548,28 +596,25 @@ def get_stream_local(cloudcast_key):
     match=re.search('m-p-ref="cloudcast_page" m-play-info="(.*)" m-preview=', data)
     if match:
         try:
-            if debugenabled:
-                print('MIXCLOUD '+'decoding '+match.group(1))
+            log_if_debug('Decoding '+match.group(1))
             playInfo=base64.b64decode(match.group(1))
             magicString=base64.b64decode('cGxlYXNlZG9udGRvd25sb2Fkb3VybXVzaWN0aGVhcnRpc3Rzd29udGdldHBhaWQ=')
             playInfoJSON=''.join(chr(ord(a) ^ ord(b)) for a,b in zip(playInfo,cycle(magicString)))
             json_content=json.loads(playInfoJSON)
             if STR_STREAMURL in json_content and json_content[STR_STREAMURL]:
                 return json_content[STR_STREAMURL]
-            elif debugenabled:
-                print('MIXCLOUD '+'unable to resolve (content)')
+            else:
+                log_if_debug('Unable to resolve (content)')
         except:
-            if debugenabled:
-                print('MIXCLOUD '+'unexpected error resolving local error=%s' % (sys.exc_info()[0]))
-    elif debugenabled:
-        print('MIXCLOUD '+'unable to resolve (match)')
+            log_always('Unexpected error resolving local error=%s' % (sys.exc_info()[0]))
+    else:
+        log_if_debug('Unable to resolve (match)')
 
 
 
 def get_stream(cloudcast_key):
     global resolverid
-    if debugenabled:
-        print('MIXCLOUD '+'resolverid=%s' % (resolverid))
+    log_if_debug('Resolverid=%s' % (resolverid))
     resolverid_orig=resolverid
 
     resolvers={Resolver.local : get_stream_local,
@@ -577,13 +622,11 @@ def get_stream(cloudcast_key):
     strm=resolvers[resolverid](cloudcast_key)
 
     if not strm:
-        if debugenabled:
-            print('MIXCLOUD '+'cannot solve using preferred resolver')
+        log_if_debug('Cannot solve using preferred resolver')
         dialog=xbmcgui.Dialog()
 
         while (not strm) and dialog.yesno('MixCloud',STRLOC_COMMON_RESOLVER_ERROR):
-            if debugenabled:
-                print('MIXCLOUD '+'changing resolver')
+            log_if_debug('Changing resolver')
 		    
             resolverid=resolverid+1
             if resolverid>Resolver.offliberty:
@@ -595,6 +638,27 @@ def get_stream(cloudcast_key):
                 __addon__.setSetting('resolver',str(resolverid))
 
     return strm
+
+
+
+def get_playlists(url,parameters):
+    found=0
+    if len(parameters)>0:
+        url=url+'?'+urllib.urlencode(parameters)
+    h=urllib2.urlopen(url)
+    content=h.read()
+    json_content=json.loads(content)
+    if STR_DATA in json_content and json_content[STR_DATA]:
+        json_data=json_content[STR_DATA]
+        for json_category in json_data:
+            if STR_NAME in json_category and json_category[STR_NAME]:
+                json_name=json_category[STR_NAME]
+                json_key=''
+                if STR_KEY in json_category and json_category[STR_KEY]:
+                    json_key=json_category[STR_KEY]
+                add_folder_item(name=json_name,parameters={STR_MODE:MODE_PLAYLISTS,STR_KEY:json_key})
+                found=found+1
+    return found
 
 
 
@@ -650,8 +714,7 @@ def get_users(url,parameters):
 
 def favoritefollow(urltmp,key,action):
     url=urltmp.replace('{0}',key)+"?"+urllib.urlencode({STR_ACCESS_TOKEN:access_token})
-    if debugenabled:
-        print action + ': ' + url
+    log_if_debug(action + ': ' + url)
     opener = urllib2.build_opener(urllib2.HTTPHandler)
     request = urllib2.Request(url, data='none')
     request.get_method = lambda: action
@@ -667,8 +730,7 @@ def favoritefollow(urltmp,key,action):
                 json_info=json_info+'\nFAILED!'
     if json_info=='':
         json_info='Unknown error occured.'
-        if debugenabled:
-            print data
+        log_if_debug(data)
     xbmcgui.Dialog().ok('Mixcloud',json_info)
     return ''
 
@@ -714,7 +776,18 @@ def add_to_settinglist(name,value,maxname):
         settinglist.pop()
     __addon__.setSetting(name,', '.join(settinglist))
 
-    
+
+
+def log_if_debug(message):
+    if debugenabled:
+        xbmc.log(msg='MIXCLOUD '+message,level=xbmc.LOGNOTICE)
+
+
+
+def log_always(message):
+    xbmc.log(msg='MIXCLOUD '+message,level=xbmc.LOGERROR)
+
+
 
 params=parameters_string_to_dict(urllib.unquote(sys.argv[2]))
 mode=int(params.get(STR_MODE,"0"))
@@ -722,13 +795,12 @@ offset=int(params.get(STR_OFFSET,"0"))
 key=params.get(STR_KEY,"")
 query=params.get(STR_QUERY,"")
 
-if debugenabled:
-    print('MIXCLOUD '+"##########################################################")
-    print('MIXCLOUD '+"Mode: %s" % mode)
-    print('MIXCLOUD '+"Offset: %s" % offset)
-    print('MIXCLOUD '+"Key: %s" % key)
-    print('MIXCLOUD '+"Query: %s" % query)
-    print('MIXCLOUD '+"##########################################################")
+log_if_debug("##########################################################")
+log_if_debug("Mode: %s" % mode)
+log_if_debug("Offset: %s" % offset)
+log_if_debug("Key: %s" % key)
+log_if_debug("Query: %s" % query)
+log_if_debug("##########################################################")
 	
 if not sys.argv[2] or mode==MODE_HOME:
     ok=show_home_menu()
@@ -742,6 +814,12 @@ elif mode==MODE_FOLLOWERS:
     ok=show_followers_menu(offset)
 elif mode==MODE_LISTENS:
     ok=show_listens_menu(offset)
+elif mode==MODE_UPLOADS:
+    ok=show_uploads_menu(offset)
+elif mode==MODE_LISTENLATER:
+    ok=show_listenlater_menu(offset)
+elif mode==MODE_PLAYLISTS:
+    ok=show_playlists_menu(key,offset)
 elif mode==MODE_HOT:
     ok=show_hot_menu(offset)
 elif mode==MODE_CATEGORIES:

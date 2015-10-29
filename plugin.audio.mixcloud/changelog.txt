@@ -1,3 +1,19 @@
+2.1.1
+- Added listen later
+- Renamed "hot" to "trending"
+
+2.1.0
+- Replaced print by xbmc.log
+- Version bump for helix, insengard
+
+2.0.3
+- Fixed authentication exception
+- Fixed getting cloudcast exception 404 NOT FOUND
+
+2.0.2
+- Added uploads
+- Added playlists
+
 2.0.1
 - Fixed bug in authentication code landing page
 

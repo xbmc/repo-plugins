@@ -4,26 +4,45 @@
 	<string id="30000">Mixcloud</string>
 	<string id="30001">Meer...</string>
 	<string id="30002">Resolven url mislukt. Gebruik andere resolver?</string>
+	<string id="30003">Geen (geldig) access token gevonden.</string>
+	<string id="30004">Gelieve uw authenticatie code in te geven.</string>
 	<!-- main menu -->
-	<string id="30100">Hot</string>
-	<string id="30101">Nieuw</string>
-	<string id="30102">Populair</string>
+	<string id="30100">Trending</string>
+	<string id="30101">Uw Favorieten</string>
+	<string id="30102">Uw Followings</string>
 	<string id="30103">Categorieën</string>
 	<string id="30104">Zoeken</string>
 	<string id="30105">Geschiedenis</string>
 	<string id="30106">jackyNIX's cloudcasts (schaamteloze plug :p)</string>
+	<string id="30107">Feed</string>
+	<string id="30108">Uw Followers</string>
+	<string id="30109">Uw Listens</string>
+	<string id="30113">Uw Uploads</string>
+	<string id="30114">Uw Playlists</string>
+	<string id="30115">Later Beluisteren</string>
 	<!-- search menu -->
 	<string id="30110">Cloudcasts...</string>
 	<string id="30111">Gebruikers...</string>
 	<string id="30112">Geschiedenis...</string>
+	<!-- context menu -->
+	<string id="30120">Favorite cloudcast</string>
+	<string id="30121">Unfavorite cloudcast</string>
+	<string id="30122">Follow gebruiker</string>
+	<string id="30123">Unfollow gebruiker</string>
 	<!-- general settings -->
 	<string id="30200">Algemeen</string>
 	<string id="30201">Maximum cloudcasts per pagina</string>
 	<string id="30202">Grootte van afbeeldingen</string>
 	<string id="30203">Debug modus</string>
+	<string id="30204">Uitgebreide cloudcast info (trager)</string>
 	<string id="30211">Resolver</string>
 	<!-- history settings -->
 	<string id="30220">Geschiedenis</string>
 	<string id="30221">Maximum afgespeelde cloudcasts</string>
 	<string id="30222">Maximum zoekopdrachten</string>
+	<!-- account settings -->
+	<string id="30230">Account (beta)</string>
+	<string id="30231">Gebruik Mixcloud account</string>
+	<string id="30232">Authenticatie code</string>
+	<string id="30233">Authenticatie access token</string>
 </strings>

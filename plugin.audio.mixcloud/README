@@ -1,18 +1,21 @@
 ============================================
 
-XBMC Mixcloud Plugin - jackyNIX
+KODI Mixcloud Plugin - jackyNIX
 
 ============================================
 
 Contributors:
-	-	jackyNIX
-	-	Bochi
-	-	SilentException
-	-	fleshgolem
+  - jackyNIX
+  - Bochi
+  - SilentException
+  - fleshgolem
 
 ============================================
 
-Current version: 2.0.1 gotham - frodo
+Current version: 2.1.1
+  - Isengard
+  - Helix
+  - Gotham
 
 ============================================
 
@@ -22,17 +25,18 @@ Features:
     - Followers
     - Favorites
     - Listens
+    - Uploads
+    - Listen later
+    - Playlists
   - Browse
-    - New
-    - Hot
-    - Popular
+    - Trending
     - Categories
   - Search
     - Cloudcasts
     - Users
   - Play cloudcasts
     - Local resolver
-	- Offliberty resolver
+    - Offliberty resolver
   - Thumbnails
   - History
     - Played cloudcasts

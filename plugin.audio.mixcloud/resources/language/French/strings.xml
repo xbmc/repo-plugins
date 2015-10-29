@@ -4,26 +4,45 @@
 	<string id="30000">Mixcloud</string>
 	<string id="30001">Plus...</string>
 	<string id="30002">Résoudre url échoué. Utiliser résolveur différent?</string>
+	<string id="30003">Access token (valide) introuvable.</string>
+	<string id="30004">Introduisez votre code d'autorisation.</string>
 	<!-- main menu -->
-	<string id="30100">Hot</string>
-	<string id="30101">Nouveau</string>
-	<string id="30102">Populaire</string>
+	<string id="30100">Tendences</string>
+	<string id="30101">Votre Favoris</string>
+	<string id="30102">Votre Followings</string>
 	<string id="30103">Catégories</string>
 	<string id="30104">Recherche</string>
 	<string id="30105">Histoire</string>
 	<string id="30106">jackyNIX's cloudcasts (shameless plug :p)</string>
+	<string id="30107">Feed</string>
+	<string id="30108">Votre Followers</string>
+	<string id="30109">Votre Listens</string>
+	<string id="30113">Votre Uploads</string>
+	<string id="30114">Votre Playlists</string>
+	<string id="30115">Ecouter Plus Tard</string>
 	<!-- search menu -->
 	<string id="30110">Cloudcasts...</string>
 	<string id="30111">Utilisateurs...</string>
 	<string id="30112">Histoire...</string>
+	<!-- context menu -->
+	<string id="30120">Favorite cloudcast</string>
+	<string id="30121">Unfavorite cloudcast</string>
+	<string id="30122">Follow utilisateur</string>
+	<string id="30123">Unfollow utilisateur</string>
 	<!-- general settings -->
 	<string id="30200">Général</string>
 	<string id="30201">Nombre maximal de cloudcasts par page</string>
 	<string id="30202">Dimensions des icônes téléchargés</string>
 	<string id="30203">Mode debug</string>
+	<string id="30204">Info cloudcast extensive (plus lente)</string>
 	<string id="30211">Résolveur</string>
 	<!-- history settings -->
 	<string id="30220">Histoire</string>
 	<string id="30221">Nombre maximal de cloudcasts écoutés</string>
 	<string id="30222">Nombre maximal de recherches</string>
+	<!-- account settings -->
+	<string id="30230">Account (beta)</string>
+	<string id="30231">Uiliser Mixcloud account</string>
+	<string id="30232">Code d'autorisation</string>
+	<string id="30233">Autorisation access token</string>
 </strings>

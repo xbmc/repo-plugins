@@ -1,3 +1,6 @@
+[B]4.0.3[/B]
+- Fixed case conversion for blacklists (now case insensitive)
+
 [B]4.0.2[/B]
 - Fixed multi-path sources
 - Fixed bluray backup files detected as missing

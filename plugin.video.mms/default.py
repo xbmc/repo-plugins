@@ -33,18 +33,22 @@ from xbmcplugin import addDirectoryItem, endOfDirectory
 plugin = routing.Plugin()
 addon = xbmcaddon.Addon()
 
-FILE_EXTENSIONS = filter(bool, set(xbmc.getSupportedMedia('video').split('|'))
-    - set(addon.getSetting('blacklisted_extensions').split('|')))
 
-BLACKLISTED_WORDS = filter(bool, addon.getSetting('blacklisted_words').split('|'))
-BLACKLISTED_DIRECTORIES = filter(bool, addon.getSetting('blacklisted_directories').split('|'))
+def convert_pipe_str(string):
+    return set([part.lower() for part in string.split('|') if part])
+
+
+FILE_EXTENSIONS = convert_pipe_str(xbmc.getSupportedMedia('video')) \
+    - convert_pipe_str(addon.getSetting('blacklisted_extensions'))
+BLACKLISTED_WORDS = convert_pipe_str(addon.getSetting('blacklisted_words'))
+BLACKLISTED_DIRECTORIES = convert_pipe_str(addon.getSetting('blacklisted_directories'))
 SCAN_RECURSIVELY = addon.getSetting('scan_recursively') == 'true'
 
 tr = addon.getLocalizedString
 
 
 def filter_video(path):
-    if any((word in path for word in BLACKLISTED_WORDS)):
+    if any((word.lower() in path for word in BLACKLISTED_WORDS)):
         logging.debug("skipping '%s'. contains blacklisted word" % path)
         return False
 

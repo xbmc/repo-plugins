@@ -1,3 +1,8 @@
+v1.2.6
+Cleaned up scraping of aired date.
+Fixed subtitles for newer programmes.
+Fixed some missing channel icons for Live TV.
+
 v1.2.5
 Adapted to new design Highlights website.
 

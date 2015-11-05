@@ -30,40 +30,17 @@ defaultHeaders = {'User-Agent':USER_AGENT,
                  'Accept-Encoding':'gzip,deflate,sdch',
                  'Accept-Language':'en-US,en;q=0.8'} 
 
-def getRequest(url, user_data=None, headers = defaultHeaders , alert=True):
-
-    if addon.getSetting('us_proxy_enable') == 'true':
-        us_proxy = 'http://%s:%s' % (addon.getSetting('us_proxy'), addon.getSetting('us_proxy_port'))
-        proxy_handler = urllib2.ProxyHandler({'http':us_proxy})
-        if addon.getSetting('us_proxy_pass') <> '' and addon.getSetting('us_proxy_user') <> '':
-            log('Using authenticated proxy: ' + us_proxy)
-            password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
-            password_mgr.add_password(None, us_proxy, addon.getSetting('us_proxy_user'), addon.getSetting('us_proxy_pass'))
-            proxy_auth_handler = urllib2.ProxyBasicAuthHandler(password_mgr)
-            opener = urllib2.build_opener(proxy_handler, proxy_auth_handler)
-        else:
-            log('Using proxy: ' + us_proxy)
-            opener = urllib2.build_opener(proxy_handler)
-    else:   
-        opener = urllib2.build_opener()
-    urllib2.install_opener(opener)
-
-    log("getRequest URL:"+str(url))
-    req = urllib2.Request(url.encode(UTF8), user_data, headers)
-
-    try:
-       response = urllib2.urlopen(req, timeout=30)
-       page = response.read()
-       if response.info().getheader('Content-Encoding') == 'gzip':
-           log("Content Encoding == gzip")
-           page = zlib.decompress(page, zlib.MAX_WBITS + 16)
-
-    except urllib2.URLError, e:
-       if alert:
-           xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( __addonname__, e , 5000) )
-       page = ""
-
-    return(page)
+def getRequest(url, headers = defaultHeaders):
+   req = urllib2.Request(url.encode(UTF8), None, headers)
+   try:
+      response = urllib2.urlopen(req)
+      page = response.read()
+      if response.info().getheader('Content-Encoding') == 'gzip':
+         log("Content Encoding == gzip")
+         page = zlib.decompress(page, zlib.MAX_WBITS + 16)
+   except:
+      page = ""
+   return(page)
 
 
 def getShows():
@@ -80,28 +57,16 @@ def getShows():
        url = 'http://www.foodnetwork.com%s' % url
        name=name.strip()
        html = getRequest(url)
-       html1  = re.compile('"channels":\[(.+?)\]\},', re.DOTALL).search(html).group(1)
+       try:    html1  = re.compile('"channels":\[(.+?)\]\},', re.DOTALL).search(html).group(1)
+       except: html1  = re.compile('"channels": \[(.+?)\]\},', re.DOTALL).search(html).group(1)
        html1  = '{"channels": ['+html1+']}'
        a = json.loads(html1)
        a = a['channels'][0]
-#       infoList = {}
-#       infoList['TVShowTitle'] = a['title']
-#       infoList['Title']       = a['title']
-#       infoList['Studio']      = __language__(30010)
-#       infoList['Genre']       = ''
-#       try:    infoList['Episode'] = a['total']
-#       except: infoList['Episode'] = 0
        try: thumb = a['videos'][0]['thumbnailUrl16x9'].replace('126x71.jpg','480x360.jpg')
        except: thumb = icon
-#       purl = 'http://www.foodnetwork.com%s' % re.compile('<dd>.+?href="(.+?)"', re.DOTALL).search(html).group(1)
-#       html = getRequest(purl)
-#       try:    plot = re.compile('<meta name=description content="(.+?)"',re.DOTALL).search(html).group(1)
-#       except: plot = name
-#       infoList['Plot'] = h.unescape(plot)
        mode = 'GE'
        u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],url, qp(name), mode)
        liz=xbmcgui.ListItem(name, '',None, thumb)
-#       liz.setInfo( 'Video', infoList)
        liz.setProperty('fanart_image', addonfanart)
        ilist.append((u, liz, True))
    xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
@@ -119,7 +84,8 @@ def getEpisodes(url, showName):
 
    ilist=[]
    html  = getRequest(uqp(url))
-   html  = re.compile('"channels":\[(.+?)\]\},', re.DOTALL).search(html).group(1)
+   try:    html  = re.compile('"channels":\[(.+?)\]\},', re.DOTALL).search(html).group(1)
+   except: html  = re.compile('"channels": \[(.+?)\]\},', re.DOTALL).search(html).group(1)
    html  = '{"channels": ['+html+']}'
    a = json.loads(html)
    a = a['channels'][0]['videos']
@@ -141,7 +107,7 @@ def getEpisodes(url, showName):
          infoList['Aired']       = infoList['Date']
       except: pass
       try:    infoList['MPAA'] = re.compile('ratings="(.+?)"',re.DOTALL).search(html).group(1).split(':',1)[1]
-      except: infoList['MPAA'] = None
+      except: pass
       try:    infoList['Episode'] = int(re.compile('"episodeNumber" value="..(.+?)H"',re.DOTALL).search(html).group(1), 16)
       except: infoList['Episode'] = None
       try:    infoList['Season']  = int(re.compile('"episodeNumber" value="(.+?)H"',re.DOTALL).search(html).group(1),16)/256

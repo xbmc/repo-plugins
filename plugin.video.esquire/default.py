@@ -53,13 +53,14 @@ def getShows():
    cats = re.compile('<a href="(.+?)".+?>(.+?)</a',re.DOTALL).findall(blob)
    for url, name in cats:
        name = name.strip()
+       name = h.unescape(name.decode(UTF8))
        url = ESQUIREBASE % (url)
        print "url = "+str(url)
        html = getRequest(url)
        try:    fanart = re.compile('<img class="showBaner" src="(.+?)"',re.DOTALL).search(html).group(1)
        except: fanart = addonfanart
-       try:    plot = re.compile('"og:description" content="(.+?)"',re.DOTALL).search(html).group(1)
-       except: continue
+       try:    plot = re.compile('"twitter:description" content="(.+?)"',re.DOTALL).search(html).group(1)
+       except: plot = ''
        html = re.compile("Drupal\.settings, (.+?)\);<",re.DOTALL).search(html).group(1)
        a = json.loads(html)
        try:    b = a["tve_widgets"]["clone_of_latest_episodes"]["assets1"][0]
@@ -75,7 +76,7 @@ def getShows():
        infoList['Genre']       = ''
        infoList['Episode']     = int(a["tve_widgets"]["clone_of_latest_episodes"]["assets_number"])
        infoList['Year']        = int(infoList['Aired'].split('-',1)[0])
-       infoList['Plot']        = h.unescape(plot)
+       infoList['Plot']        = h.unescape(plot.decode(UTF8))
        mode = 'GE'
        u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
        liz=xbmcgui.ListItem(name, '',icon, None)

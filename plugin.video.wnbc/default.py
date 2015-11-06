@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# WNBC Programs XBMC Addon
+# WNBC Programs Kodi Addon
 
 import sys,httplib
 import urllib, urllib2, cookielib, datetime, time, re, os, string
@@ -139,15 +139,17 @@ def getCats(gcurl):
         ilist=[]
         html = getRequest(('http://www.nbc.com%s' % gcurl), donotuseproxy=True)
         if 'the-tonight-show' in gcurl:
-             startep = re.compile('<a href="/the-tonight-show/episodes/(.+?)"',re.DOTALL).search(html).group(1)
-             for i in range(int(startep)-5,int(startep)):
-                     url  = 'http://www.nbc.com/the-tonight-show/episodes/%s' % str(i)
-                     pg = getRequest(url, donotuseproxy=True)
-                     dataid = re.compile('data-video-id="(.+?)"',re.DOTALL).search(pg).group(1)
+             html = getRequest('http://www.nbc.com/the-tonight-show/episodes', donotuseproxy=True)
+             urls = re.compile('class="icon-full-episode".+?href="(.+?)".+?</div', re.DOTALL).findall(html)
+             for url in urls:
+                     pg = getRequest(('http://www.nbc.com%s' % url), donotuseproxy=True)
+                     try:    dataid = re.compile('data-video-id="(.+?)"',re.DOTALL).search(pg).group(1)
+                     except: continue
                      img    = re.compile('<img class="visuallyHidden" src="(.+?)"',re.DOTALL).search(pg).group(1)
                      name   = h.unescape(re.compile('itemprop="title">(.+?)<',re.DOTALL).search(pg).group(1))
                      plot   = h.unescape(re.compile('itemprop="description"><p>(.+?)<',re.DOTALL).search(pg).group(1))
-                     url    = 'http://link.theplatform.com/s/NnzsPC/'+dataid+'?mbr=true&manifest=m3u&player=Onsite%20Player%20--%20No%20End%20Card&policy=43674'
+                     url    = re.compile('<iframe id="player" class="player" src="(.+?)"', re.DOTALL).search(pg).group(1)
+                     url    = url.replace('amp;','')
                      lmode = 'GV'
                      u = '%s?url=%s&mode=%s' % (sys.argv[0],qp(url), lmode)
                      liz=xbmcgui.ListItem(name, '',None, img)
@@ -226,14 +228,19 @@ def getShow(gsurl):
 
 
 def getVideo(surl):
+            surl = uqp(surl)
             if surl.startswith('//') : surl = 'http:'+surl
-#            if not ('http://link.theplatform.com' in surl):
-#                html = getRequest(surl)
-#                surl = re.compile('<meta name="tp:EnableExternalController".+?href="(.+?)"',re.DOTALL).search(html).group(1)
-#                surl = surl.replace('&player=','&manifest=m3u&player=',1)
+            if not ('http://link.theplatform.com' in surl):
+                html = getRequest(surl)
+                surl = re.compile('<meta name="twitter:player" content="(.+?)"',re.DOTALL).search(html).group(1)
+                if not ('onsite_no_endcard' in surl): surl = surl.split('?',1)[0].rsplit('/',1)[1]
 
             try:
-             surl = 'http://link.theplatform.com/s/NnzsPC/'+surl.split('?',1)[0].rsplit('/',1)[1]+'?mbr=true&mbr=true&player=Onsite%20Player&policy=43674&manifest=m3u'
+             if not ('onsite_no_endcard' in surl): 
+                surl = 'http://link.theplatform.com/s/NnzsPC/media/'+surl+'?mbr=true&player=Onsite%20Player&policy=43674&manifest=m3u&format=SMIL&Tracking=true&Embedded=true&formats=MPEG4,FLV,MP3'
+             else:
+                surl = surl.split('?',1)[0].rsplit('/',1)[1]
+                surl = 'https://link.theplatform.com/s/NnzsPC/'+surl+'?mbr=true&mbr=true&player=Onsite%20Player%20--%20No%20End%20Card&policy=43674&format=SMIL&manifest=m3u'
              html = getRequest(surl)
              finalurl  = re.compile('<video src="(.+?)"',re.DOTALL).search(html).group(1)
              if 'nbcvodenc-i.akamaihd.net' in finalurl:
@@ -267,7 +274,6 @@ def getVideo(surl):
                    for cstart, cend, caption in captions:
                      cstart = cstart.replace('.',',')
                      cend   = cend.replace('.',',').split('"',1)[0]
-#                     caption = caption.replace('<br/>','\n').replace('&gt;','>').replace('&apos;',"'")
                      caption = caption.replace('<br/>','\n')
                      try:
                        caption = h.unescape(caption)

@@ -1,3 +1,12 @@
+# Version 0.5.1
+
+* fixed download when RTMP playback is selected
+
+# Version 0.5.0
+
+* Switched to a new API
+* Strings updated to match the new ARTE categories
+
 # Version 0.4.0
 
 * Fixed download procedure (got rid of simpledownloader for a more shitty solution)

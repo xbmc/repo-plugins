@@ -1,5 +1,8 @@
-v0.4.0
+v0.5.0
+- Switched to a new API
+- Strings updated to match the new ARTE categories
 
+v0.4.0
 - Fixed download procedure (got rid of simpledownloader for a more shitty solution)
 - Added download quality setting
 - Added very low quality setting (may not be available for every video - fallbacks on highest)

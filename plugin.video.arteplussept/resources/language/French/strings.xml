@@ -7,7 +7,7 @@
     <string id="30002">Sélection</string>
     <string id="30003">Les plus vues</string>
     <string id="30004">Dernière chance</string>
-    <string id="30005">Thèmes</string>
+    <string id="30005">Catégories</string>
     <string id="30006">Direct</string>
 
     <string id="30007">Téléchargement</string>
@@ -27,17 +27,13 @@
     <string id="30054">Répertoire de téléchargement</string>
     <string id="30055">Qualité des vidéos téléchargées</string>
 
-    <!-- themes -->
-    <string id="3000501">Actualités</string>
-    <string id="3000502">Documentaire</string>
-    <string id="3000503">Découverte</string>
-    <string id="3000504">Europe</string>
-    <string id="3000505">Géopolitique &amp; Histoire</string>
-    <string id="3000506">Société</string>
-    <string id="3000507">Junior</string>
-    <string id="3000508">Autre</string>
-    <string id="3000509">Cinéma &amp; Fiction</string>
-    <string id="3000510">Art, Culture &amp; Spectacle</string>
-    <string id="3000511">Culture Pop &amp; Alternative</string>
-    <string id="3000512">Environnement &amp; Science</string>
+    <!-- categories -->
+    <string id="3000501">Actu &amp; société</string>
+    <string id="3000502">Séries &amp; fiction</string>
+    <string id="3000503">Cinéma</string>
+    <string id="3000504">Arts &amp; spectacles classiques</string>
+    <string id="3000505">Culture pop</string>
+    <string id="3000506">Découverte</string>
+    <string id="3000507">Histoire</string>
+    <string id="3000508">Junior</string>
 </strings>

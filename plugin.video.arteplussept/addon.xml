@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.arteplussept" name="Arte +7" version="0.4.0" provider-name="bmf">
+<addon id="plugin.video.arteplussept" name="Arte +7" version="0.5.1" provider-name="bmf">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.xbmcswift2" version="2.4.0"/>
@@ -21,9 +21,9 @@ https://github.com/known-as-bmf/plugin.video.arteplussept
         </description>
         <description lang="de">
 Sehen Sie Videos von Arte +7
-For feature requests / issues:
+Für Fehlerberichte und Verbesserungsvorschläge:
 https://github.com/known-as-bmf/plugin.video.arteplussept/issues
-Contributions are welcome:
+Mithilfe ist willkommen:
 https://github.com/known-as-bmf/plugin.video.arteplussept
         </description>
         <description lang="en">

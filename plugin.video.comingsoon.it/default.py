@@ -18,9 +18,12 @@ def log(msg, force = False):
 def loadPage(url):
 	req = urllib2.Request(url)
 	req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:29.0) Gecko/20100101 Firefox/29.0')
-	response = urllib2.urlopen(req)
-	code = response.read().decode("utf-8")
-	response.close()
+	try:
+		response = urllib2.urlopen(req)
+		code = response.read().decode("utf-8")
+		response.close()
+	except:
+		return False
 	return code
 
 def getMoviesList(page = 1, intheaters = True):
@@ -34,13 +37,13 @@ def getMoviesList(page = 1, intheaters = True):
 	else:
 		content =  loadPage(home + "/cinema/calendariouscite/?r=" + str(page))
 	if (content):
-		bpage = BeautifulSoup(content)
+		bpage = BeautifulSoup(content, "html.parser")
 		if (bpage):
-			htmlmovies = bpage.find_all("div", attrs={"class": "cs-component__products-list-item"})
+			htmlmovies = bpage.find_all("a", attrs={"class": "col-xs-12 cinema"})
 			if (htmlmovies):
 				for htmlmovie in htmlmovies:
-					if (htmlmovie.a and htmlmovie.a.has_attr('href')):
-						res = re.search(".*?\/.*?\/([0-9]+)\/scheda\/", htmlmovie.a['href'])
+					if (htmlmovie and htmlmovie.has_attr('href')):
+						res = re.search(".*?\/.*?\/([0-9]+)\/scheda\/", htmlmovie['href'])
 						if (res):
 							id = res.group(1)						
 							titolo = ""
@@ -51,34 +54,42 @@ def getMoviesList(page = 1, intheaters = True):
 							anno = ""
 							regia = ""
 							cast = ""
-							infolist = htmlmovie.find("div", attrs={"class": "cs-component__products-list-item-text"})
-							if (infolist):
-								if (infolist.h3):
-									titolo = infolist.h3.string
-								if (infolist.h4):
-									titolooriginale = infolist.h4.string
-								if (infolist.ul):
-									infos = infolist.ul.find_all('li')
-									if (infos):
-										for info in infos:
-											if (info.span):
-												if (info.span.string == 'DATA USCITA'):
-													data = info.contents[1][1:].strip()
-												elif (info.span.string == 'GENERE'):
-													genere = info.contents[1][1:].strip()
-												elif (info.span.string == 'NAZIONALITA&#39;'):
-													nazione = info.contents[1][1:].strip()
-												elif (info.span.string == 'ANNO'):
-													anno = info.contents[1][1:].strip()
-												elif (info.span.string == 'REGIA'):
-													regia = info.contents[1][1:].strip()
-												elif (info.span.string == 'CAST'):
-													cast = info.contents[1][1:].strip()
+							div = htmlmovie.find("div", attrs={"class": "h3 titolo cat-hover-color anim25"})
+							if (div):
+								titolo= div.string
+							div = htmlmovie.find("div", attrs={"class": "h5 sottotitolo"})
+							if (div):
+								titolo= div.string
+							ul = htmlmovie.find("ul", attrs={"class": "col-xs-9 box-descrizione"})
+							if (ul):
+								infos = ul.find_all('li')
+								if (infos):
+									for info in infos:
+										if (info.span):
+											if (info.span.string == 'DATA USCITA'):
+												data = info.contents[1][1:].strip()
+											elif (info.span.string == 'GENERE'):
+												genere = info.contents[1][1:].strip()
+											elif (info.span.string == 'NAZIONALITA&#39;'):
+												nazione = info.contents[1][1:].strip()
+											elif (info.span.string == 'ANNO'):
+												anno = info.contents[1][1:].strip()
+											elif (info.span.string == 'REGIA'):
+												regia = info.contents[1][1:].strip()
+											elif (info.span.string == 'CAST'):
+												cast = info.contents[1][1:].strip()
 							movies.append( { "id": id,  "title": titolo, "originaltitle": titolooriginale, "date": data, "genre": genere, "nation": nazione, "year": anno, "director": regia, "cast": cast } )
 				if (intheaters):
-					next = bpage.find("li", attrs={"class": "next-last "})
-					if (next):
-						movies.append( { "id": page + 1,  "title": 32002 } )
+					ul = bpage.find("ul", attrs={"class": "pagination"})
+					if (ul):
+						pages = ul.find_all('li')
+						if (pages):
+							first = pages[0].a
+							if (not (first and first.has_attr("class") and 'disattivato' in first["class"])):
+								movies.append( { "id": page - 1,  "title": 32001 } )
+							last = pages[-1].a
+							if (not (last and last.has_attr("class") and 'disattivato' in last["class"])):
+								movies.append( { "id": page + 1,  "title": 32002 } )
 				else:
 					movies.append( { "id": page - 7,  "title": 32003 } )
 					movies.append( { "id": page + 7,  "title": 32004 } )
@@ -88,9 +99,9 @@ def getMoviesVideos(id):
 	videos = []
 	content =  loadPage("http://www.comingsoon.it/film/movie/%s/video/" % str(id)) # url http://www.comingsoon.it/film/something/{movieid}/scheda/
 	if (content):
-		page = BeautifulSoup(content)
+		page = BeautifulSoup(content, "html.parser")
 		if (page):
-			htmlrows = page.find_all("div", attrs={"class": "cs-components__vertical-big-player-moviesrow"})
+			htmlrows = page.find_all("div", attrs={"class": "video-player-xl-articolo video-player-xl-sinistra"})
 			if (htmlrows):
 				for htmlrow in htmlrows:
 					htmlvideos = htmlrow.find_all('a')
@@ -100,9 +111,9 @@ def getMoviesVideos(id):
 							if (res):
 								vid = res.group(1)
 								nome = ""
-								div = htmlvideo.find("div", attrs={"class": "cs-component__goto-videos-item-text"})
-								if (div and div.p):
-									nome = div.p.string
+								div = htmlvideo.find("div", attrs={"class": "h6 descrizione"})
+								if (div):
+									nome = div.string
 							videos.append( { "vid": vid,  "name": nome } )
 		return videos
 							

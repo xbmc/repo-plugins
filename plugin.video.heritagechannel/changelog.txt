@@ -1,3 +1,7 @@
+v1.0.2
+* Monday 2nd November 2015 - added 35 channels, now 70 in total
+* Updated main icon
+
 v1.0.1
 * Sunday 9th August 2015: first stable release for Helix (v14) and Isengard (v15) -35 channels added
 * Saturday 8th August 2015: removed remote csv functionality from v1.0.0 as requested by XBMC repo admin

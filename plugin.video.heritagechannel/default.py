@@ -5,7 +5,7 @@
 # These addons depends upon the Youtube addon by Bromix (http://kodi.wiki/view/Add-on:YouTube), so install that as well
 #
 # Version 1.0.1 with 35 channels / 9-8-2015 by ookgezellig@gmail.com
-#
+# See also http://addons.kodi.tv/show/plugin.video.heritagechannel
 # ------------------------------------------------------------
 # License: GPL (http://www.gnu.org/licenses/gpl-3.0.html)
 # ------------------------------------------------------------

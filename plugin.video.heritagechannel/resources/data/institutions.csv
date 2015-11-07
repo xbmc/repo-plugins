@@ -1,58 +1,71 @@
-Musée du Louvre;Paris;fr;louvre;louvre
-National Gallery;London;gb;nationalgalleryuk;natgal
-Metropolitan Museum of Art;New York City;us;metmuseum;mma
-Tate Modern;London;gb;tate;tatem
-#National Palace Museum;Taipei;tw;UC57WI69uyN_TyzpLDntWzNA;npm
-National Gallery of Art;Washington, D.C.;us;NationalGalleryArtDC;ngawdc
-#Centre Pompidou, Musée National d'Art Moderne;Paris;fr;UCI4r4IrjAM6MCVQ_phED-hA;mndam
-Musée d'Orsay;Paris;fr;MuseeOrsayOfficiel;orsay
-Victoria and Albert Museum;London;gb;vamuseum;vanda
-Reina Sofía;Madrid;es;museoreinasofia;rsofia
-National Museum of Korea;Seoul;kr;koreanmuseum;nmk
-#The Netherlands;;;;
-##AMS;;;;
-Rijksmuseum;Amsterdam;nl;rijksmuseumamsterdam;rm
-Amsterdam Museum;Amsterdam;nl;ahmamsterdam;amsmus
-Van Gogh Museum;Amsterdam;nl;atVanGoghMuseum;vangogh
-Stedelijk Museum;Amsterdam;nl;stedelijkmuseum;sm
-##Rdam; ;;;
-Maritiem Museum;Rotterdam;nl;mmph2;marimus
-Museum Boijmans Van Beuningen;Rotterdam;nl;Museumboijmans;mbvb
-##The Hague;;;;
-Gemeentemuseum;The Hague;nl;Gemeentemuseum;gemmus
-Nationaal Archief;The Hague;nl;gahetNA;na
-Koninklijke Bibliotheek, national library of the Netherlands;The Hague;nl;kbnederland;kb
-##Hilversum;;;;
-Beeld en Geluid, Institute for Sound and Vision;Hilversum;nl;BeeldenGeluid;beng
-#USA;;;;
-##NYC;;;;
-Museum of Modern Art;New York;us;MoMAvideos;moma
-Guggenheim Museum;New York;us;guggenheim;gugg
+#name;#city;#countrycode;#YoutubeID;#abbrev
+Acropolis Museum ;Athens ;gr;TheAcropolisMuseum;acropolis
 American Museum of Natural History;New York;us;AMNHorg;amnh
-##WashingtonDC;;;;
-" Smithsonian National Air and Space Museum
-";Washington, D.C.;us;airandspace;airspace
-Smithsonian American Art Museum;Washington, D.C.;us;americanartmuseum;amerart
-##LA;;;;
-J. Paul Getty Museum;Los Angeles;us;gettymuseum;getty
-#Chicago;;;;
+Amsterdam Museum;Amsterdam;nl;ahmamsterdam;amsmus
+Art Gallery of New South Wales;Sydney;au;ArtGalleryNSW;agnsw
+Art Gallery of Ontario ;Toronto ;ca;ArtGalleryofOntario;ago
 Art Institute of Chicago;Chicago;us;ArtInstituteChicago;aic
-##Portland, Maine;;;;
-Portland Museum of Art;Portland, Maine;us;PortlandArtMuseum;pam
-#UK;;;;
-##London;;;;
-The British Museum;London;gb;britishmuseum;bm
+Ashmolean Museum ;Oxford ;us;AshmoleanVideos;ashmo
+Australian Centre for the Moving Image;Melbourne;au;acmionline;acmi
+Beeld en Geluid, Institute for Sound and Vision;Hilversum;nl;BeeldenGeluid;beng
+Belvedere  Palace and Museum;Vienna ;at;belvederewien;belvv
 British Library;London;gb;britishlibrary;bl
-Natural History Museum;London;gb;naturalhistorymuseum;nathist
-#Spain;;;;
-##Madrid;;;;
+Dali Theatre and Museum;Figueres;es;FundacioDali;dali
+Fine Arts Museums of San Francisco;San Francisco;us;FAMSF;famsf
+Gemeentemuseum;The Hague;nl;Gemeentemuseum;gemmus
+Glasgow Museums;Glasgow ;gb;GlasgowMuseums;glasm
+Grand Palais;Paris;fr;Rmngrandpalais;grandp
+Guggenheim Museum;New York;us;guggenheim;gugg
+Institut Valenci� d'Art Modern;Valencia;es;gvaIVAM;ivam
+J. Paul Getty Museum;Los Angeles;us;gettymuseum;getty
+Koninklijke Bibliotheek, national library of the Netherlands;The Hague;nl;kbnederland;kb
+Kunsthistorisches Museum;Vienna;at;KHMWien;khmw
+Los Angeles County Museum of Art;Los Angeles;us;lacmavideo;lacma
+Maritiem Museum;Rotterdam;nl;mmph2;marimus
+Melbourne Museum | Museum Victoria;Melbourne ;au;museumvictoria;musvict
+Metropolitan Museum of Art;New York City;us;metmuseum;mma
+Montreal Museum of Fine Arts ;Montreal ;ca;MBAMMMFA;mmfa
+Mori Art Museum;Tokyo;jp;moriartmuseum;mori
+Musée d'Orsay;Paris;fr;MuseeOrsayOfficiel;orsay
+Musée du Louvre;Paris;fr;louvre;louvre
+Musée du quai Branly;Paris;fr;quaibranly;quaibr
+Musée de l'Orangerie ;Paris ;fr;museeorangerie;orange
+Musée du Louvre-Lens;Lens ;fr;LeLouvreLens;mll
 Museo del Prado;Madrid;es;museodelprado;prado
 Museo Thyssen-Bornemisza;Madrid;es;thyssenmuseum;thys
-##Barcelona;;;;
 Museu Picasso;Barcelona;es;museupicassobcn;picasbarca
-#Ireland;;;;
-##Dublin;;;;
+Museum Boijmans Van Beuningen;Rotterdam;nl;Museumboijmans;mbvb
+Museum of Contemporary Art  Australia ;Sydney ;au;MCASydney;mcaau
+Museum of Fine Arts ;Houston ;us;MFAHART;mfah
+Museum of Fine Arts ;Boston ;us;mfaboston;mfabos
+Museum of Modern Art;New York;us;MoMAvideos;moma
+Nationaal Archief;The Hague;nl;gahetNA;na
+National Gallery;London;gb;nationalgalleryuk;natgal
+National Gallery of Art;Washington, D.C.;us;NationalGalleryArtDC;ngawdc
+National Gallery of Australia ;Canberra ;au;NationalGalleryAus;ngaau
 National Gallery of Ireland;Dublin;ie;nationalgalleryie;natgalie
-#Austria;;;;
-##Vienna;;;;
-Kunsthistorisches Museum;Vienna;at;KHMWien;khmw
+National Museum of Korea;Seoul;kr;koreanmuseum;nmk
+National Museums in Berlin | Staatlichen Museen zu Berlin;Berlin ;de;smbchannel;smb
+National Museums Liverpool;Liverpool ;gb;NMLWebTeam;nml
+National Museums of Scotland;Edinburgh;gb;NtlMuseumsScot;natmusscot
+National Portrait Gallery;London;gb;natportraitgallery;natport
+Natural History Museum;London;gb;naturalhistorymuseum;nathist
+Portland Museum of Art;Portland, Maine;us;PortlandArtMuseum;pam
+Queensland Art Gallery | Gallery of Modern Art;Brisbane;au;queenslandartgallery;qagoma
+Reina Sofía;Madrid;es;museoreinasofia;rsofia
+Rijksmuseum;Amsterdam;nl;rijksmuseumamsterdam;rm
+Royal Academy of Arts ;London ;gb;RoyalAcademyofArts;raoal
+Royal Ontario Museum ;Toronto ;ca;RoyalOntarioMuseum;rom
+Saatchi Gallery;London;gb;saatchigallofficial;saatchi
+Serpentine Galleries ;London ;gb;theserpentinegallery;serp
+Smithsonian American Art Museum;Washington, D.C.;us;americanartmuseum;amerart
+Smithsonian National Air and Space Museum;Washington, D.C.;us;airandspace;airspace
+Smithsonian National Portrait Gallery ;Washington, D.C. ;us;NatlPortraitGallery;npgwdc
+Somerset House;London;gb;somersethouselondon;somerset
+Stedelijk Museum;Amsterdam;nl;stedelijkmuseum;sm
+Tate Modern;London;gb;tate;tatem
+The British Museum;London;gb;britishmuseum;bm
+The Israel Museum ;Jerusalem ;il;museumisrael;mi
+Tokyo National Museum;Tokyo;jp;TokyoNationalMuseum;tnmjp
+Van Gogh Museum;Amsterdam;nl;atVanGoghMuseum;vangogh
+Victoria and Albert Museum;London;gb;vamuseum;vanda

@@ -1,8 +1,12 @@
 # plugin.video.heritagechannel
 The Heritage Channnel - video addon for Kodi Helix (v14) / Isengard (v15). 
 Videos from cultural, natural, scientific, academic, technical and other heritage organisations from across the world.
-   
-So far includes 35 insitutions:
+
+See also http://addons.kodi.tv/show/plugin.video.heritagechannel // http://kodi.wiki/view/Add-on:The_Heritage_Channel // http://forum.kodi.tv/showthread.php?tid=235754
+
+How to install: http://kodicommunity.com/how-to-install-the-heritage-channel-on-kodi/
+
+So far includes 70 insitutions:
 1 Musée du Louvre,Paris
 2 National Gallery,London
 3 Metropolitan Museum of Art,New York City
@@ -38,3 +42,39 @@ So far includes 35 insitutions:
 33 Museu Picasso,Barcelona
 34 National Gallery of Ireland,Dublin
 35 Kunsthistorisches Museum,Vienna
+36 Somerset House, London
+37 National Portrait Gallery, London
+38 National Museums of Scotland, Edinburgh
+39 Fine Arts Museums of San Francisco
+40 Saatchi Gallery, London
+41 Grand Palais, Paris
+42 Tokyo National Museum, Tokyo
+43 Dali Theatre and Museum, Figueres
+44 Musée du quai Branly, Paris
+45 Australian Centre for the Moving Image, Melbourne
+46 Queensland Art Gallery | Gallery of Modern Art, Brisbane
+47 Mori Art Museum, Tokyo
+48 Los Angeles County Museum of Art, Los Angeles
+49 Institut Valencià d'Art Modern, Valencia
+50 Art Gallery of New South Wales, Sydney
+51 Museum of Fine Arts, Boston
+52 Acropolis Museum, Athens
+53 Smithsonian National Portrait Gallery, Washington DC 
+54 Glasgow Museums, Glasgow
+55 Royal Academy of Arts, London 
+56 Montreal Museum of Fine Arts, Montreal 
+57 Museum of Liverpool, Liverpool
+58 The Israel Museum, Jerusalem 
+59 Belvedere Palace and Museum, Vienna
+60 Royal Ontario Museum, Toronto 
+61 Serpentine Galleries, London 
+62 National Museums in Berlin | Staatlichen Museen zu Berlin
+63 Musée de l'Orangerie, Paris 
+64 Museum of Contemporary Art  Australia, Sydney 
+65 Art Gallery of Ontario, Toronto
+66 Museum of Fine Arts, Houston 
+67 Melbourne Museum | Museum Victoria, Melbourne
+68 Musée du Louvre-Lens, Paris
+69 National Gallery of Australia, Canberra 
+70 Ashmolean Museum, Oxford 
+

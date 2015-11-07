@@ -77,7 +77,7 @@ class LaCosa(object):
           title = Util.normalizeText(response.find('meta', { 'property' : 'og:title' })['content'])
           img = response.find('meta', { 'property' : 'og:image' })['content']
           descr = Util.normalizeText(response.find('meta', { 'property' : 'og:description' })['content'])
-          streams = re.compile("sources: \[\{file: '(.+?)'").findall(response.renderContents())
+          streams = re.compile("',file: '(.+?)'").findall(response.renderContents())
           try:
             Util.playStream(self._handle, title, img, streams[0], 'video', { 'title' : title, 'plot' : descr })
           except:

@@ -1,3 +1,6 @@
+[B]Version 1.0.7[/B]
+- Fixed bug that doesn't allow to reproduce video correctly.
+
 [B]Version 1.0.6[/B]
 - Removed live, no more provided on the site.
 - Small bugfix.

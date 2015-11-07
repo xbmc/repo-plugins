@@ -30,4 +30,6 @@
     <string id="30027">Unknown error:</string>
     <string id="30028">Unable to move your previous accounts information file. Please move it manually to %s or add your accounts again.</string>
     <string id="30029">Need help? e-mail me: carlosguzmang@hotmail.com</string>
+    <string id="30030">Collaboration</string>
+    <string id="30031">Report errors automatically to help resolve them quickly</string>
 </strings>

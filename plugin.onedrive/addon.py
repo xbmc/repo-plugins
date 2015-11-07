@@ -29,7 +29,9 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 import xbmcaddon
+import traceback
 import urllib
+import urllib2
 import ConfigParser
 from resources.lib.api.onedrive import OneDrive
 from resources.lib.api import utils
@@ -180,6 +182,14 @@ def remove_readonly(fn, path, excinfo):
     elif fn is os.remove:
         os.chmod(path, stat.S_IWRITE)
         os.remove(path)
+def report_error(ex):
+    tb = traceback.format_exc()
+    print tb
+    if addon.getSetting('report_error') == 'true':
+        try:
+            urllib2.urlopen('http://onedrive.daro.mx/report-error.jsp', urllib.urlencode({'stacktrace':tb})).read()
+        except urllib2.URLError, e:
+            print e
 try:
     if action is None:
         for driveid in onedrives:
@@ -209,6 +219,7 @@ try:
                     onedrive.login(json['code']);
                 except Exception as e:
                     dialog.ok(addonname, addon.getLocalizedString(30015), utils.Utils.str(e), addon.getLocalizedString(30016))
+                    report_error(e)
                     loginFailed = True
                 if not loginFailed:
                     try:
@@ -217,6 +228,7 @@ try:
                     except Exception as e:
                         info = None
                         dialog.ok(addonname, addon.getLocalizedString(30018), utils.Utils.str(e), addon.getLocalizedString(30016))
+                        report_error(e)
                     if info is None:
                         progress_dialog.close()
                     elif info['id'] in onedrives:
@@ -231,7 +243,9 @@ try:
                             save_onedrive_config(config, onedrive)
                             progress_dialog.close()
                         except Exception as e:
+                            print e
                             dialog.ok(addonname, addon.getLocalizedString(30021), utils.Utils.str(e), addon.getLocalizedString(30016))
+                            report_error(e)
                 xbmc.executebuiltin('Container.Refresh')
             else:
                 progress_dialog.close()
@@ -297,3 +311,4 @@ try:
         xbmcplugin.setResolvedUrl(addon_handle, True, list_item)
 except Exception as ex:
     dialog.ok(addonname, addon.getLocalizedString(30027), utils.Utils.str(ex), addon.getLocalizedString(30016))
+    report_error(ex)

@@ -4,6 +4,9 @@
 		<setting type="text" id="client_id" default="0000000048145120" option="hidden" visible="false"/>
 		<setting label="30001" type="folder" id="video_library_folder" option="writeable"/>
 		<setting label="30002" type="folder" id="music_library_folder" option="writeable"/>
-		<setting label="30003" type="bool" id="clean_folder" value="true"/>
+		<setting label="30003" type="bool" id="clean_folder" default="true" value="true"/>
+    </category>
+	<category label="30030">
+		<setting label="30031" type="bool" id="report_error" default="true" value="true"/>
     </category>
 </settings>

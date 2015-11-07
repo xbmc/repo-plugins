@@ -64,7 +64,6 @@ class OneDrive:
             self.refresh_token = jsonResponse['refresh_token']
             if not self.event_listener is None:
                 self.event_listener(self, 'login_success', jsonResponse)
-
             
     def _get_login_request_data(self, grant_type, code=None):
         data = {
@@ -84,7 +83,7 @@ class OneDrive:
             if error['code'] == 'request_token_expired' or error['code'] == 'unauthenticated':
                 return False
             else:
-                raise Exception('request', 'Unknow error: "' + error['code'] + '": ' + error['message'] + ', retry times: '+self.retry_times);
+                raise Exception('request', 'Unknown error: "' + error['code'] + '": ' + error['message'] + ', retry times: '+self.retry_times);
         return True
     
     def _make_path(self, path):

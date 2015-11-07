@@ -1,4 +1,4 @@
-# k-onedrive
+# Onedrive KODI Addon
 OneDrive for KODI
 
 Play all your media from Microsoft OneDrive including Videos, Music and Pictures. Unlimited number of accounts. 

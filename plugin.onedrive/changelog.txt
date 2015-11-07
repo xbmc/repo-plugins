@@ -1,3 +1,7 @@
+v1.0.6
+- Functionality to report errors
+v1.0.5
+- Minor fixes
 v1.0.4
 - The onedrive.ini is stored in the userdata folder of the addon
 v1.0.3

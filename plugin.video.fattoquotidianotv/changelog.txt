@@ -1,3 +1,6 @@
+[B]Version 1.0.3[/B]
+- Fixed bug that doesn't allow to reproduce video correctly.
+
 [B]Version 1.0.2[/B]
 - Updated code to the new site.
 

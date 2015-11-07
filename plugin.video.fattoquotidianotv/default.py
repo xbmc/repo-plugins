@@ -82,14 +82,14 @@ class FattoQTV(object):
           descr = response.find('div', 'tv-desc-body').text
 
           # Video del fatto.
-          videoId = response.find('param', { 'name' : '@videoPlayer' })
+          videoId = response.find('video', { 'id' : 'bcPlayer' })
           if videoId != None:
             playerID = 2274739660001
             publisherID = 1328010481001
             const = 'ef59d16acbb13614346264dfe58844284718fb7b'
             conn = httplib.HTTPConnection('c.brightcove.com')
             envelope = remoting.Envelope(amfVersion=3)
-            envelope.bodies.append(('/1', remoting.Request(target='com.brightcove.player.runtime.PlayerMediaFacade.findMediaById', body=[const, playerID, videoId['value'], publisherID], envelope=envelope)))
+            envelope.bodies.append(('/1', remoting.Request(target='com.brightcove.player.runtime.PlayerMediaFacade.findMediaById', body=[const, playerID, videoId['data-video-id'], publisherID], envelope=envelope)))
             conn.request('POST', '/services/messagebroker/amf?playerId={0}'.format(str(playerID)), str(remoting.encode(envelope).read()), {'content-type': 'application/x-amf'})
             response = conn.getresponse().read()
             response = remoting.decode(response).bodies[0][1].body

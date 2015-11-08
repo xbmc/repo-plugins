@@ -362,8 +362,7 @@ def getVideo(caturl):
               for b in a:
                 if b["version"] == 2:
                    data = getRequest(b["url"])
-                   data = data+'#'
-                   urls = re.compile('CODECS=".+?"(.+?)#').findall(data)
+                   urls = re.compile('CODECS=".+?\r(.+?)\r').findall(data)
                    for url in urls:
                        if (int(url.split('/',1)[0]) <= maxbitrate): vurl = url
                    vurl = '%s/%s' % (b["url"].rsplit('/',1)[0] , vurl.strip())

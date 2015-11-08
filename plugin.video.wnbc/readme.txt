@@ -1,3 +1,5 @@
+Version 1.0.12 fix for tonight show
+Version 1.0.11 website change
 Version 1.0.10 website change
 Version 1.0.9 website change
 Version 1.0.8 added metadata and selectable views

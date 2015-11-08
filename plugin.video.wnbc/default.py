@@ -236,12 +236,18 @@ def getVideo(surl):
                 if not ('onsite_no_endcard' in surl): surl = surl.split('?',1)[0].rsplit('/',1)[1]
 
             try:
+             print "surl = "+str(surl)
              if not ('onsite_no_endcard' in surl): 
                 surl = 'http://link.theplatform.com/s/NnzsPC/media/'+surl+'?mbr=true&player=Onsite%20Player&policy=43674&manifest=m3u&format=SMIL&Tracking=true&Embedded=true&formats=MPEG4,FLV,MP3'
              else:
-                surl = surl.split('?',1)[0].rsplit('/',1)[1]
-                surl = 'https://link.theplatform.com/s/NnzsPC/'+surl+'?mbr=true&mbr=true&player=Onsite%20Player%20--%20No%20End%20Card&policy=43674&format=SMIL&manifest=m3u'
-             html = getRequest(surl)
+                vid = surl.split('?',1)[0].rsplit('/',1)[1]
+                surl = 'https://link.theplatform.com/s/NnzsPC/media/'+vid+'?mbr=true&player=Onsite%20Player%20--%20No%20End%20Card&policy=43674&format=SMIL&manifest=m3u&Tracking=true&Embedded=true&formats=MPEG4,FLV,MP3'
+             print "final surl = "+str(surl)
+             html = getRequest(surl, alert=False)
+             if html == "":
+                 surl = 'http://link.theplatform.com/s/NnzsPC/'+vid+'?mbr=true&player=Onsite%20Player%20--%20No%20End%20Card&policy=43674&format=SMIL&manifest=m3u&Tracking=true&Embedded=true&formats=MPEG4,FLV,MP3'
+                 html = getRequest(surl, alert=False)
+
              finalurl  = re.compile('<video src="(.+?)"',re.DOTALL).search(html).group(1)
              if 'nbcvodenc-i.akamaihd.net' in finalurl:
                html1 = getRequest(finalurl, donotuseproxy=True)

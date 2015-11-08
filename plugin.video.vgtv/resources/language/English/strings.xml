@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Plugin name -->
+    <string id="30000">VGTV</string>
+
+    <!-- Main menu items -->
+    <string id="30001">Featured</string>
+    <string id="30002">Series</string>
+    <string id="30003">News</string>
+    <string id="30004">Documentaries</string>
+    <string id="30005">Most seen</string>
+    <string id="30006">Categories</string>
+    <string id="30007">Live</string>
+    <string id="30008">Search</string>
+
+    <!-- Pagination -->
+    <string id="30009">Previous page</string>
+    <string id="30010">Next page</string>
+
+    <!-- Search context -->
+    <string id="30011">Remove from history</string>
+</strings>

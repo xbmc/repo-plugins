@@ -1,5 +1,15 @@
+v-1.3.3
+- Fixed website changes
+- Added search function
+- Added dependency on BeautifulSoup
+- Minor improvements
+
+v1.3.2
+- Fixed website changes
+
 v1.3.1
 - Fixes due to website changes
+
 v1.3.0
 - Fixed minor errors
 

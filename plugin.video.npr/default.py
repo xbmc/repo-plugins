@@ -147,7 +147,9 @@ def getCats(url):
 def getVideo(url):
             html = getRequest(uqp(url))
             try:
-                finalurl = re.compile("'SD'.+?file:'(.+?)'",re.DOTALL).search(html).group(1)
+                 a = re.compile("data-jwplayer='(.+?)'>", re.DOTALL).search(html).group(1)
+                 a = json.loads(a)
+                 finalurl = a['sources'][1]['file']
             except:
                 try:
                     videoid = re.compile('<div class="video-wrap">.+?src="http://www\.youtube\.com/embed/(.+?)\?',re.DOTALL).search(html).group(1)

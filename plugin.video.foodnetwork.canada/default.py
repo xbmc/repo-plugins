@@ -45,7 +45,7 @@ def getRequest(url, headers = defaultHeaders):
 
 
 def getShows():
-   xbmcplugin.setContent(int(sys.argv[1]), 'files')
+   xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_UNSORTED)
    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_TITLE)
    xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_EPISODE)
@@ -55,8 +55,7 @@ def getShows():
    html = getRequest(url)
    a = re.compile('ShawVideoDrawer\(.+?drawerTitle: "(.+?)".+?categories: "(.+?)".+?\);',re.DOTALL).findall(html)
    for name, url in a[1:]:
-       mode = 'GE'
-       u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],url, qp(name), mode)
+       u = '%s?url=%s&name=%s&mode=GE' % (sys.argv[0], urllib.quote(url), qp(name))
        liz=xbmcgui.ListItem(name, '',None, icon)
        liz.setProperty('fanart_image', addonfanart)
        ilist.append((u, liz, True))
@@ -67,7 +66,6 @@ def getShows():
 
 
 def getEpisodes(geurl, showName):
-  geurl = urllib.quote(geurl)
   xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
   xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_UNSORTED)
   xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_TITLE)

@@ -61,3 +61,6 @@ target/
 .settings/
 .project
 .pydevproject
+
+# Backup Files
+*.bak

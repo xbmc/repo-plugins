@@ -1,3 +1,6 @@
+v1.2.7
+Fixed bug in Categories with subtcategories, which was introduced in 1.2.6.
+
 v1.2.6
 Cleaned up scraping of aired date.
 Fixed subtitles for newer programmes.

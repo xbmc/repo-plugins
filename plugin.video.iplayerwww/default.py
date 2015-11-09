@@ -226,7 +226,7 @@ def ListCategoryFilters(url):
     # Read selected category's page.
     html = OpenURL(NEW_URL)
     # Some categories offer filters, we want to provide these filters as options.
-    match1 = re.search(
+    match1 = re.findall(
         '<li class="filter"> <a class="name" href="/iplayer/categories/(.+?)"> (.+?)</a>',
         html.replace('amp;', ''),
         re.DOTALL)

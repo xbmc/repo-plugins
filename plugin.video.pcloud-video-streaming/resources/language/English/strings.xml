@@ -14,4 +14,12 @@
   <string id="30111">Logon successful</string>
   <string id="30112">Last used folder ID</string>
   <string id="30113">Back to parent folder</string>
+  <string id="30114">Delete from PCloud...</string>
+  <string id="30115">Confirm Delete</string>
+  <string id="30116">Delete '{0}' from PCloud?</string>
+  <string id="30117">Operation cannot be undone.</string>
+  <string id="30118">Deleted successfully</string>
+  <string id="30119">Error during delete (see log)</string>
+  <string id="30120">ERROR: cannot delete file or folder from PCloud</string>
+  <string id="30121">Mark as watched</string>
 </strings>

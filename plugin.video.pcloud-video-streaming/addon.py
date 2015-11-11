@@ -76,6 +76,7 @@ def AuthenticateToPCloud():
 			myAddon.getLocalizedString(30111), # Logon successful
 			time=5000)
 	return True
+
 	
 folderID = None
 
@@ -95,7 +96,6 @@ if mode[0] == "folder":
 		folderID = int(myAddon.getSetting("lastUsedFolderID"))
 	else:
 		folderID = int(folderID[0])
-	
 	folderContents = pcloud.ListFolderContents(folderID)
 	# Collect all file IDs in order to get thhumbnails
 	allFileIDs = [ oneItem["fileid"] for oneItem in folderContents["metadata"]["contents"] if not oneItem["isfolder"] ]
@@ -103,13 +103,19 @@ if mode[0] == "folder":
 	# Then iterate through all the files in order to populate the GUI
 	for oneItem in folderContents["metadata"]["contents"]:
 		if oneItem["isfolder"] == True:
-			url = base_url + "?mode=folder&folderID=" + `oneItem["folderid"]`
 			li = xbmcgui.ListItem(oneItem["name"], iconImage='DefaultFolder.png')
+			# Add context menu item for "delete folder"
+			deleteActionMenuText = myAddon.getLocalizedString(30114) # "Delete from PCloud..."
+			deleteActionUrl = base_url + "?mode=delete&folderID=" + `oneItem["folderid"]` + "&filename=" + urllib.quote(oneItem["name"])
+			li.addContextMenuItems(
+				[(deleteActionMenuText, "RunPlugin(" + deleteActionUrl + ")")])
+			# Finally add the list item to the directory
+			url = base_url + "?mode=folder&folderID=" + `oneItem["folderid"]`
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
 									listitem=li, isFolder=True)
 		else:
 			contentType = oneItem["contenttype"]
-			if contentType != "video/mp4": #TODO: add more content types
+			if contentType[:6] != "video/":
 				continue
 			thumbnailUrl = thumbs.get(oneItem["fileid"], None)
 			if thumbnailUrl is None:
@@ -128,7 +134,17 @@ if mode[0] == "folder":
 				{ 	"codec", oneItem["audiocodec"] }
 			)
 			# The below is necessary in order for xbmcplugin.setResolvedUrl() to work properly
-			li.setProperty('IsPlayable', 'true')
+			li.setProperty("IsPlayable", "true")
+			# Add context menu item for delete file
+			deleteActionMenuText = myAddon.getLocalizedString(30114) # "Delete from PCloud..."
+			deleteActionUrl = base_url + "?mode=delete&fileID=" + `oneItem["fileid"]` + "&filename=" + urllib.quote(oneItem["name"])
+			# Add context menu item for mark as watched
+			markAsWatchedMenuText = myAddon.getLocalizedString(30121) # "Mark as watched"
+			li.addContextMenuItems(
+				[(deleteActionMenuText, "RunPlugin(" + deleteActionUrl + ")"),
+				(markAsWatchedMenuText, "Action(ToggleWatched)")]
+				)
+			# Finally add the list item to the directory
 			fileUrl = base_url + "?mode=file&fileID=" + `oneItem["fileid"]`
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=fileUrl, listitem=li)
 	# now add "go up one level" fake directory, unless we're in the root folder
@@ -155,3 +171,47 @@ elif mode[0] == "file":
 	# want to play that URL as a response to this call.
 	item = xbmcgui.ListItem(path=streamingUrl)
 	xbmcplugin.setResolvedUrl(addon_handle, True, item)
+
+elif mode[0] == "delete":
+	# This branch can be called as a result of a context menu item callback
+	if IsAuthMissing():
+		authResult = AuthenticateToPCloud()
+		if authResult == False:
+			exit()
+	idToDelete = args.get("fileID", None)
+	if idToDelete is None:
+		idToDelete = int(args["folderID"][0])
+		deleteFolder = True
+	else:
+		idToDelete = int(idToDelete[0])
+		deleteFolder = False
+	filename = urllib.unquote(args["filename"][0])
+	filenameShort = filename[:35] # first 35 char
+	if filenameShort != filename:
+		filenameShort += "..." 
+	yesNoDialog = xbmcgui.Dialog()
+	wantToDelete = yesNoDialog.yesno(
+					myAddon.getLocalizedString(30115), 						# "Confirm Delete"
+					myAddon.getLocalizedString(30116).format(filenameShort),# "Delete '{0}' from PCloud?"
+					myAddon.getLocalizedString(30117))						# "Operation cannot be undone."
+	if not wantToDelete:
+		exit()
+	try:
+		if deleteFolder:
+			pcloud.DeleteFolder(idToDelete)
+		else:
+			pcloud.DeleteFile(idToDelete)
+	except Exception as ex:
+		xbmcgui.Dialog().notification(
+			myAddon.getLocalizedString(30107), # "Error"
+			myAddon.getLocalizedString(30119), # "Error during delete (see log)"
+			icon=xbmcgui.NOTIFICATION_ERROR,
+			time=5000)
+		xbmc.log(myAddon.getLocalizedString(30120) + ": " + `ex`, xbmc.LOGERROR) # "ERROR: cannot delete file or folder from PCloud"
+		exit()
+	xbmc.executebuiltin("Container.Refresh()")
+	xbmcgui.Dialog().notification(
+		myAddon.getLocalizedString(30110), # "Success"
+		myAddon.getLocalizedString(30118), # "Deleted successfully"
+		time=5000)
+

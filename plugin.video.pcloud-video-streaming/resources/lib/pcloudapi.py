@@ -127,6 +127,26 @@ class PCloudApi:
 		thumbs = { oneThumb["fileid"]: "https://{0}{1}".format(oneThumb["hosts"][0], oneThumb["path"]) for oneThumb in response["thumbs"] if oneThumb["result"] == 0 } 
 		return thumbs
 
+	def DeleteFile(self, fileID):
+		self.CheckIfAuthPresent()
+		url = self.PCLOUD_BASE_URL + "deletefile?auth=" + self.auth + "&fileid=" + `fileID`
+		outputStream = urllib2.urlopen(url)
+		response = json.load(outputStream)
+		outputStream.close()
+		if response["result"] != 0:
+			errorMessage = self.GetErrorMessage(response["result"])
+			raise Exception("Error calling deletefile: " + errorMessage)
+		
+	def DeleteFolder(self, folderID):
+		self.CheckIfAuthPresent()
+		url = self.PCLOUD_BASE_URL + "deletefolderrecursive?auth=" + self.auth + "&folderid=" + `folderID`
+		outputStream = urllib2.urlopen(url)
+		response = json.load(outputStream)
+		outputStream.close()
+		if response["result"] != 0:
+			errorMessage = self.GetErrorMessage(response["result"])
+			raise Exception("Error calling deletefolderrecursive: " + errorMessage)
+
 #auth = PerformLogon("username@example.com", "password")
 #ListFolderContents("/Vcast")
 #ListFolderContents(34719254)

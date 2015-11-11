@@ -136,6 +136,15 @@ class DataSource(object):
                 ADDON_BASE_PATH + '/resources/media/fanart-' + SakuraDataSource.module + '.jpg',
                 SakuraDataSource.showMetaData
             ),
+            # Migropolis
+            ListItem(
+                MigropolisDataSource.id,
+                ADDON.getLocalizedString(30410),
+                resources.lib.assembleListURL(MigropolisDataSource.module),
+                ADDON_BASE_PATH + '/resources/media/banner-' + MigropolisDataSource.module + '.png',
+                ADDON_BASE_PATH + '/resources/media/fanart-' + MigropolisDataSource.module + '.jpg',
+                MigropolisDataSource.showMetaData
+            ),
             # Live
             ListItem(
                 LiveDataSource.id,
@@ -447,34 +456,6 @@ class FKTVDataSource(DataSource):
             return 'episodes'
         
         return 'tvshows'
-
-    def __getThumbnailURL(self, guid):
-        basePath1 = 'http://fernsehkritik.tv/images/magazin/'
-        basePath2 = 'http://massengeschmack.tv/img/mag/'
-        basePath3 = 'http://dl.massengeschmack.tv/img/mag/'
-
-        if 'fktv' == guid[:4]:
-            # if new Postecke or new FKTV episode
-            if -1 != guid[4:].find('-') or re.match(r'^fktv(\d+)interview\d+', guid) or 128 < int(guid[4:]):
-                return basePath3 + guid + '.jpg'
-            return basePath1 + 'folge' + guid[4:] + '@2x.jpg'
-        elif 'postecke' == guid[:8]:
-            # if newer Postecke
-            if 128 < int(guid[8:]):
-                return basePath3 + guid + '.jpg'
-            return basePath2 + 'postecke.jpg'
-        elif 'interview-' == guid[:10]:
-            # ugly fixes for single episodes
-            if 'remote' == guid[10:]:
-                return basePath2 + 'remotecontrol.jpg'
-            elif 'weber' == guid[10:]:
-                return basePath3 + 'interview-' + guid[10:] + '.jpg'
-            
-            return basePath2 + guid[10:] + '.jpg'
-        elif 'sendeschluss' == guid[:12] and 14 < int(guid[12:]):
-            return basePath3 + guid + '.jpg'
-        
-        return basePath2 + guid + '.jpg'
     
     def __getBaseList(self):
         return [
@@ -626,22 +607,6 @@ class PTVDataSource(DataSource):
     
     def getContentMode(self):
         return 'episodes'
-    
-    @staticmethod
-    def __getThumbnailURL(self, guid):
-        # if old PTV episode
-        if 13 > int(guid[4:]):
-            episodeNumber = '1'
-            if 'ptv-pilot' == guid[:9]:
-                if 'ptv-pilot' != guid:
-                    # if not very first episode
-                    episodeNumber= guid[9:]
-            else:
-                episodeNumber = guid[4:]
-            
-            return 'http://pantoffel.tv/img/thumbs/ptv' + episodeNumber + '_shot1@2x.jpg'
-        
-        return 'http://dl.massengeschmack.tv/img/mag/' + guid + '.jpg'
 
 
 class PSDataSource(DataSource):
@@ -717,17 +682,6 @@ class PSDataSource(DataSource):
     
     def getContentMode(self):
         return 'episodes'
-
-    def __getThumbnailURL(self, guid):
-        baseURL = 'http://dl.massengeschmack.tv/img/mag/'
-        
-        if 'ps-pilot' == guid:
-            guid = 'ps1'
-        
-        if 11 > int(guid[2:]):
-            baseURL = 'http://massengeschmack.tv/img/ps/'
-        
-        return baseURL + guid + '.jpg'
 
 
 class MGTVDataSource(DataSource):
@@ -822,13 +776,6 @@ class MGTVDataSource(DataSource):
             return 'episodes'
         
         return 'tvshows'
-    
-    def __getThumbnailURL(self, guid):
-        # if 'studio-' == guid[:7]:
-        #     return 'http://massengeschmack.tv/img/mag/studio' + guid[7:] + '.jpg'
-        
-        # return 'http://massengeschmack.tv/img/mgfeedlogo.jpg'
-        return 'http://dl.massengeschmack.tv/img/mag/' + guid + '.jpg'
     
     def __getBaseList(self):
         return [
@@ -955,17 +902,7 @@ class PaschTVDataSource(DataSource):
     
     def getContentMode(self):
         return 'episodes'
-    
-    def __getThumbnailURL(self, guid):
-        baseURL = 'http://dl.massengeschmack.tv/img/mag/'
-        
-        if 6 > int(guid[5:]):
-            baseURL = 'http://massengeschmack.tv/img/mag/'
-        
-        if 'pasch2' == guid:
-            guid = 'paschtv2'
-        
-        return baseURL + guid + '.jpg'
+
 
 class NetzpredigerDataSource(DataSource):
     id           = 5
@@ -1040,15 +977,6 @@ class NetzpredigerDataSource(DataSource):
     
     def getContentMode(self):
         return 'episodes'
-    
-    def __getThumbnailURL(self, guid):
-        # if old Netzprediger episode
-        if 6 > int(guid[13:]):
-            name    = guid[:12]
-            episode = guid[13:]
-            return 'http://massengeschmack.tv/img/mag/' + name + episode + '.jpg'
-        
-        return 'http://dl.massengeschmack.tv/img/mag/' + guid + '.jpg'
 
 
 class AsynchronDataSource(DataSource):
@@ -1124,11 +1052,7 @@ class AsynchronDataSource(DataSource):
     
     def getContentMode(self):
         return 'episodes'
-    
-    def __getThumbnailURL(self, guid):
-        if '1' == guid[10:]:
-            return 'http://dl.massengeschmack.tv/img/screens/' + guid + '.jpg'
-        return 'http://dl.massengeschmack.tv/img/mag/' + guid + '.jpg'
+
 
 class TonangeberDataSource(DataSource):
     id           = 7
@@ -1203,9 +1127,7 @@ class TonangeberDataSource(DataSource):
     
     def getContentMode(self):
         return 'episodes'
-    
-    def __getThumbnailURL(self, guid):
-        return 'http://dl.massengeschmack.tv/img/mag/' + guid + '.jpg'
+
 
 class HoaxillaTVDataSource(DataSource):
     id           = 8
@@ -1280,9 +1202,7 @@ class HoaxillaTVDataSource(DataSource):
     
     def getContentMode(self):
         return 'episodes'
-    
-    def __getThumbnailURL(self, guid):
-        return 'http://dl.massengeschmack.tv/img/mag/' + guid + '.jpg'
+
 
 class SakuraDataSource(DataSource):
     id           = 9
@@ -1374,9 +1294,6 @@ class SakuraDataSource(DataSource):
         
         return 'tvshows'
     
-    def __getThumbnailURL(self, guid):
-        return 'http://dl.massengeschmack.tv/img/mag/' + guid + '.jpg'
-    
     def __getBaseList(self):
         return [
             # All
@@ -1417,6 +1334,80 @@ class SakuraDataSource(DataSource):
             )
         ]
 
+class MigropolisDataSource(DataSource):
+    id           = 10
+    module       = 'migropolis'
+    showMetaData = {
+        'Title'     : ADDON.getLocalizedString(30410),
+        'Director'  : 'Tom Knoll',
+        'Genre'     : ADDON.getLocalizedString(30411),
+        'Premiered' : '13.10.2015',
+        'Country'   : ADDON.getLocalizedString(30412),
+        'Plot'      : ADDON.getLocalizedString(30413)
+    }
+
+    def __init__(self):
+        self.__urls = {
+            'hd' : {
+                'all' : DataSource._buildFeedURL(self, [1], 'hd')
+            },
+            'mobile' : {
+                'all' : DataSource._buildFeedURL(self, [1], 'mobile')
+            },
+            'audio' : {
+                'all' : DataSource._buildFeedURL(self, [1], 'audio')
+            }
+        }
+
+    def getListItems(self):
+        audioOnly = ADDON.getSetting('content.audioOnly')
+
+        if 'true' == audioOnly:
+            quality = 'audio'
+        else:
+            if 0 == int(ADDON.getSetting('content.quality')):
+                quality = 'hd'
+            else:
+                quality = 'mobile'
+
+        # noinspection PyTypeChecker
+        data      = resources.lib.parseRSSFeed(self.__urls[quality]['all'], True)
+        listItems = []
+
+        for i in data:
+            iconimage = i['thumbUrl']
+            date      = resources.lib.parseUTCDateString(i['pubdate']).strftime('%d.%m.%Y')
+            metaData  = {
+                'Title'     : i['title'],
+                'Genre'     : ADDON.getLocalizedString(30411),
+                'Date'      : date,
+                'Premiered' : date,
+                'Country'   : ADDON.getLocalizedString(30412),
+                'Plot'      : i['description'],
+                'Duration'  : int(i['duration']) / 60
+            }
+            streamInfo = {
+                'duration' : i['duration']
+            }
+
+            listItems.append(
+                ListItem(
+                    self.id,
+                    i['title'],
+                    resources.lib.assemblePlayURL(i['url'], i['title'], iconimage, metaData, streamInfo),
+                    iconimage,
+                    ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
+                    metaData,
+                    streamInfo,
+                    False
+                )
+            )
+
+        return listItems
+
+    def getContentMode(self):
+        return 'episodes'
+
 
 def createDataSource(module=''):
     """
@@ -1449,5 +1440,7 @@ def createDataSource(module=''):
         return HoaxillaTVDataSource()
     elif 'sakura' == module:
         return SakuraDataSource()
+    elif 'migropolis' == module:
+        return MigropolisDataSource()
     else:
         return DataSource()

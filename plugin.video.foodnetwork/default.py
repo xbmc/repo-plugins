@@ -51,8 +51,8 @@ def getShows():
 
    ilist=[]
    html = getRequest('http://www.foodnetwork.com/videos/players/food-network-full-episodes.vc.html')
-   m = re.compile('<section class=multichannel-component>(.+?)</section', re.DOTALL).search(html)
-   a = re.compile('<a href="(.+?)".+?data-max=35>(.+?)<.+?</div', re.DOTALL).findall(html,m.start(1),m.end(1))
+   m = re.compile('<section class="multichannel-component">(.+?)</section', re.DOTALL).search(html)
+   a = re.compile('<a href="(.+?)".+?data-max="35">(.+?)<.+?</div', re.DOTALL).findall(html,m.start(1),m.end(1))
    for url, name in a:
        url = 'http://www.foodnetwork.com%s' % url
        name=name.strip()

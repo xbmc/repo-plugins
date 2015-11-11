@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.vgpodcasts" name="VG Podcasts" version="1.0.1" provider-name="Espen Hovlandsdal">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.requests" version="2.8.1"/>
+    <import addon="script.module.routing" version="0.2.0"/>
+    <import addon="script.module.simplejson" version="2.0.10"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <language>no</language>
+    <summary lang="en">Podcasts from VG.no</summary>
+    <summary lang="no">Hør podcasts fra VG.no</summary>
+    <description lang="en">Enjoy podcasts from VG.no - News, sports and entertainment - mainly Norwegian.</description>
+    <description lang="no">Hør podcasts fra VG.no - Nyheter, sport og underholding.</description>
+    <license>The MIT License (MIT)</license>
+    <source>https://github.com/rexxars/kodi-vg-podcasts.git</source>
+    <forum>https://github.com/rexxars/kodi-vg-podcasts.git</forum>
+    <email>espen@hovlandsdal.com</email>
+  </extension>
+</addon>

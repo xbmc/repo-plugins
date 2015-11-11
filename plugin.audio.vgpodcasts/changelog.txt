@@ -1,0 +1,5 @@
+[B]1.0.1[/B]
+- Improve description/summary of addon
+
+[B]1.0.0[/B]
+- Initial release

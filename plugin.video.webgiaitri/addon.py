@@ -5,19 +5,14 @@ import xbmcgui
 import xbmcplugin
 import xbmcaddon
 import xbmc
-import urllib, json
-import urllib2
-import webbrowser
-import httplib
-from resources.lib import requests
 from resources.lib import CMDTools
-from resources.lib import CommonFunctions
-
-
 from resources import ngamvn
 from resources import haivainoi
 from resources import gioitre
-from resources import beatvn
+from resources import xemvn
+from resources import talktv
+from resources import facebook
+
 #?web
 base_url = sys.argv[0]
 
@@ -27,29 +22,39 @@ def build_url(query):
 addon_handle = int(sys.argv[1])
 addon       = xbmcaddon.Addon()
 addonname   = addon.getAddonInfo('name')
-
 args = urlparse.parse_qs(sys.argv[2][1:])
 
 xbmcplugin.setContent(addon_handle, 'movies')
+#Get web name
 web = args.get('web', None)
 xbmc.log(str(args))
 
-webs=[{'name':ngamvn.get_Web_Name(), 'img':ngamvn.get_img_thumb_url()},
-	  {'name':haivainoi.get_Web_Name(), 'img':haivainoi.get_img_thumb_url()},
-	  {'name':gioitre.get_Web_Name(), 'img':gioitre.get_img_thumb_url()},
-	  {'name':beatvn.get_Web_Name(), 'img':beatvn.get_img_thumb_url()}]
+#List Website
+webs=[{'name':xemvn.get_Web_Name(), 'img':xemvn.get_img_thumb_url()},	  
+	  {'name':gioitre.get_Web_Name(), 'img':gioitre.get_img_thumb_url()},	  	  
+	  {'name':talktv.get_Web_Name(), 'img':talktv.get_img_thumb_url()},
+	  {'name':facebook.get_Web_Name(), 'img':facebook.get_img_thumb_url()},
+	  {'name':ngamvn.get_Web_Name(), 'img':ngamvn.get_img_thumb_url()},	  
+	  {'name':haivainoi.get_Web_Name(), 'img':haivainoi.get_img_thumb_url()}]
+
+#set view
 if web==None:
 	for w in webs:
 		li = xbmcgui.ListItem(w['name'], iconImage=w['img'])
 		urlList = build_url({'web' : w['name']})	
-		xbmcplugin.addDirectoryItem(handle=addon_handle , url=urlList, listitem=li, isFolder=True)		
-		xbmc.executebuiltin('Container.SetViewweb(501)')
-	xbmcplugin.endOfDirectory(addon_handle)
+		xbmcplugin.addDirectoryItem(handle=addon_handle , url=urlList, listitem=li, isFolder=True)
 elif web[0]==ngamvn.get_Web_Name():	
 	ngamvn.view()
 elif web[0]==haivainoi.get_Web_Name():	
 	haivainoi.view()
 elif web[0]==gioitre.get_Web_Name():	
 	gioitre.view()
-elif web[0]==beatvn.get_Web_Name():	
-	beatvn.view()
+elif web[0]==xemvn.get_Web_Name():	
+	xemvn.view()
+elif web[0]==talktv.get_Web_Name():	
+	talktv.view()
+elif web[0]==facebook.get_Web_Name():	
+	facebook.view()
+xbmc.executebuiltin('Container.SetViewMode(501)')
+xbmcplugin.endOfDirectory(addon_handle)				
+

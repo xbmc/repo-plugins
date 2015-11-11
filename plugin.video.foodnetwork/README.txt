@@ -2,6 +2,7 @@ plugin.video.foodnetwork================
 
 Kodi Addon for Food Network website
 
+Version 2.1.15 website changes
 Version 2.1.14 website changes
 Version 2.1.13 website changes
 Version 2.1.12 minor changes for image res

@@ -117,7 +117,7 @@ class OneDrive:
             jsonResponse = json.loads(response)
             self.retry_times = 0
             return jsonResponse
-        except urllib2.URLError, e:
+        except urllib2.HTTPError as e:
             print e
             print url
             if self.retry_times < 1:

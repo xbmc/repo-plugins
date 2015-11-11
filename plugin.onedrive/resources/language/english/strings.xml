@@ -32,4 +32,7 @@
     <string id="30029">Need help? e-mail me: carlosguzmang@hotmail.com</string>
     <string id="30030">Collaboration</string>
     <string id="30031">Report errors automatically to help resolve them quickly</string>
+    <string id="30032">Auto-Refreshed slideshow</string>
+    <string id="30033">Refresh interval in minutes</string>
+    <string id="30034">'%s' is not a folder</string>
 </strings>

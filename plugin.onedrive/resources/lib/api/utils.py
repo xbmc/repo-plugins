@@ -40,4 +40,7 @@ class Utils:
         return u'%s' % (txt)
     @staticmethod
     def str(txt):
-        return Utils.unicode(txt).encode("utf-8")
+        return Utils.unicode(txt).encode("utf-8", 'replace')
+    @staticmethod
+    def ascii(txt):
+        return Utils.unicode(txt).encode('ascii', 'ignore')

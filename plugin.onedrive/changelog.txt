@@ -1,3 +1,5 @@
+v1.0.7
+- New feature: Auto-refreshed slideshow
 v1.0.6
 - Functionality to report errors
 v1.0.5

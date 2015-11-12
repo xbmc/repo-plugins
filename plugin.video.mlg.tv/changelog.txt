@@ -1,0 +1,11 @@
+v0.0.3
+- Added language support
+- Added german language
+- fixed xbmc.python version
+- added icon
+
+v0.0.2
+- Add changelog.txt
+
+v0.0.1
+- Initial version

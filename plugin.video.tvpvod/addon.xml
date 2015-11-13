@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.tvpvod" name="TVP.pl VOD" version="0.0.1" provider-name="adrkal89">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="pl">Wtyczka TVP VOD</summary>
+    <summary lang="en">TVP VOD Plugin</summary>
+    <description lang="pl">Wtyczka umożliwiająca oglądanie TVP VOD.</description>
+    <description lang="en">Allowing You to watch TVP VOD.</description>
+    <disclaimer lang="pl"></disclaimer>
+    <language></language>
+    <platform>all</platform>
+    <license></license>
+    <forum></forum>
+    <website></website>
+    <email>adriankalicki89 at gmail dot com</email>
+    <source></source>
+  </extension>
+</addon>

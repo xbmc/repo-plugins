@@ -1,3 +1,6 @@
+5.1.10 (2015-09-21)
+[fix] signature calculation (e.g. VEVO)
+
 5.1.9 (2015-09-21)
 [add] Hebrew (thx 2 smoky-jr)
 [upd] don't set default season and episodes (1x1)

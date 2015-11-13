@@ -188,7 +188,7 @@ class TestClient(unittest.TestCase):
         context = kodion.Context()
 
         # ranadom stuff
-        streams = client.get_video_streams(context, 'FlvtHMO6XHY')
+        #streams = client.get_video_streams(context, 'FlvtHMO6XHY')
         #streams = client.get_video_streams(context, 'zyg0WUsY9HI')
 
         # Exception: Sign in to confirm your age

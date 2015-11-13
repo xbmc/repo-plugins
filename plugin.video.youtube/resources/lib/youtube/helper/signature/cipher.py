@@ -53,7 +53,7 @@ class Cipher(object):
 
         url = java_script_url
         if not url.startswith('http'):
-            url = 'http://'+url
+            url = 'http://' + url
             pass
 
         result = requests.get(url, headers=headers, verify=False, allow_redirects=True)
@@ -87,8 +87,9 @@ class Cipher(object):
                 pass
 
             # real object functions
-            cipher_match = re.match(r'(?P<object_name>[\$a-zA-Z0-9]+)\.(?P<function_name>[\$a-zA-Z0-9]+)\((?P<parameter>[^)]+)\)',
-                                    line)
+            cipher_match = re.match(
+                r'(?P<object_name>[\$a-zA-Z0-9]+)\.(?P<function_name>[\$a-zA-Z0-9]+)\((?P<parameter>[^)]+)\)',
+                line)
             if cipher_match:
                 object_name = cipher_match.group('object_name')
                 function_name = cipher_match.group('function_name')
@@ -143,7 +144,7 @@ class Cipher(object):
         return json_script
 
     def _find_signature_function_name(self, java_script):
-        #match = re.search('signature\s?=\s?(?P<name>[a-zA-Z]+)\([^)]+\)', self._java_script)
+        # match = re.search('signature\s?=\s?(?P<name>[a-zA-Z]+)\([^)]+\)', self._java_script)
         match = re.search('set..signature..(?P<name>[$a-zA-Z]+)\([^)]\)', java_script)
         if match:
             return match.group('name')
@@ -153,8 +154,7 @@ class Cipher(object):
     def _find_function_body(self, function_name, java_script):
         # normalize function name
         function_name = function_name.replace('$', '\$')
-        match = re.search(r'function\s+%s\((?P<parameter>[^)]+)\)\s?\{\s?(?P<body>[^}]+)\s?\}' % function_name,
-                          java_script)
+        match = re.search(r'(?:var\s+%s=function|function\s+%s)\((?P<parameter>[^)]+)\)\s?\{\s?(?P<body>[^}]+)\s?\}' % (function_name, function_name), java_script)
         if match:
             return match.group('parameter'), match.group('body')
 

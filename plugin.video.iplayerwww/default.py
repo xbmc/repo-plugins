@@ -174,6 +174,9 @@ def ScrapeSearchEpisodes(url):
             re.DOTALL)
         aired = ParseAired(aired.group(1) if aired else '')
         CheckAutoplay(name, episode_url, iconimage, plot, aired=aired)
+
+    #FAIL
+    '''
     match1 = re.compile(
         'search-group"  data-ip-id="(.+?)">'
         '.+?" title="(.+?)"'
@@ -184,6 +187,8 @@ def ScrapeSearchEpisodes(url):
     for programme_id, name, iconimage, plot, group_url in match1:
         episode_url = "http://www.bbc.co.uk%s" % group_url
         ScrapeSearchEpisodes(episode_url)
+    '''
+
     nextpage = re.compile('<span class="next txt"> <a href=".+?page=(\d+)">').findall(html)
     return nextpage
 

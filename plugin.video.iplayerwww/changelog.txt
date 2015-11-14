@@ -1,3 +1,6 @@
+v1.2.8
+Temporarily removed support for search groups as it may cause Search to fail completely.
+
 v1.2.7
 Fixed bug in Categories with subtcategories, which was introduced in 1.2.6.
 

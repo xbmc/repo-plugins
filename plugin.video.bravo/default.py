@@ -78,8 +78,10 @@ def getShows():
        infoList['Genre']       = (a['nbcu$advertisingGenre']).replace('and','/')
        infoList['Episode']     = vcnt
        infoList['Year']        = int(infoList['Aired'].split('-',1)[0])
-       infoList['Plot'] = re.compile('"og:description" content="(.+?)"',re.DOTALL).search(epiHTML).group(1)
-       infoList['Plot'] = h.unescape(infoList['Plot'].decode('utf-8'))
+       try:
+          infoList['Plot'] = re.compile('"og:description" content="(.+?)"',re.DOTALL).search(epiHTML).group(1)
+          infoList['Plot'] = h.unescape(infoList['Plot'].decode('utf-8'))
+       except: pass
        url = surl
        mode = 'GE'
        u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)

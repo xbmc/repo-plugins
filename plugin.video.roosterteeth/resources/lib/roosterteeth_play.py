@@ -20,6 +20,13 @@ import xbmcgui
 import xbmcplugin
 
 LOGINURL = 'http://roosterteeth.com/login'
+NEWHLS = 'NewHLS-'
+VQ1080P = '1080P'
+VQ720P  = '720P'
+VQ480P  = '480P'
+VQ360P  = '360P'
+VQ240P  = '240P'
+
 
 #
 # Main class
@@ -267,6 +274,18 @@ class Main:
 # 			#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=1740000,RESOLUTION=426x238,CODECS="avc1.4d001f,mp4a.40.2"
 # 			240P.m3u8
 
+#			or like this for newer stuff f.e.: " http://roosterteeth.com/episode/the-know-game-news-season-1-fallout-4-b-r-o-k-e-n"
+# 			#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=6037000,RESOLUTION=1920x1080,CODECS="avc1.4d001f,mp4a.40.2"
+# 			NewHLS-1080P.m3u8
+# 			#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=3181000,RESOLUTION=1280x720,CODECS="avc1.4d001f,mp4a.40.2"
+# 			NewHLS-720P.m3u8
+# 			#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=1765000,RESOLUTION=854x480,CODECS="avc1.4d001f,mp4a.40.2"
+# 			NewHLS-480P.m3u8
+# 			#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=1261000,RESOLUTION=640x360,CODECS="avc1.4d001f,mp4a.40.2"
+# 			NewHLS-360P.m3u8
+# 			#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=742000,RESOLUTION=426x240,CODECS="avc1.4d001f,mp4a.40.2"
+# 			NewHLS-240P.m3u8
+
 			search_for_string = "manifest: '"
 			begin_pos_search_for_blip = str(html_source).find(search_for_string)
 			if begin_pos_search_for_blip < 0:
@@ -307,132 +326,242 @@ class Main:
 						pass
 					xbmcgui.Dialog().ok( __language__(30000), __language__(30106) % (str(error) ))
 					exit(1)
-				
+		
 				#Very High quality
 				if self.PREFERRED_QUALITY == '0':
-					search_for_string = '1080'
+					if str(html_source).find(NEWHLS) >= 0:
+						search_for_string = NEWHLS + VQ1080P
+					else: 
+						search_for_string = VQ1080P
 					pos_name = str(html_source).find(search_for_string)
 					if pos_name >=0 :
 						begin_pos_playlist = str(html_source).find('http',pos_name)
 						if begin_pos_playlist == -1:
-							video_url = str(m3u8_url).replace('index', str(search_for_string) + 'P')
+							video_url = str(m3u8_url).replace('index', str(search_for_string))
 							have_valid_url = True
 						else:
 							end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
 							video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
 							have_valid_url = True
 					else:
-						search_for_string = '720'
+						if str(html_source).find(NEWHLS) >= 0:
+							search_for_string = NEWHLS + VQ720P
+						else: 
+							search_for_string = VQ720P
 						pos_name = str(html_source).find(search_for_string)
 						if pos_name >=0 :
 							begin_pos_playlist = str(html_source).find('http',pos_name)
 							if begin_pos_playlist == -1:
-								video_url = str(m3u8_url).replace('index', str(search_for_string) + 'P')
+								video_url = str(m3u8_url).replace('index', str(search_for_string))
 								have_valid_url = True
 							else:
 								end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
 								video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
 								have_valid_url = True
 						else:
-							search_for_string = '360'
+							if str(html_source).find(NEWHLS) >= 0:
+								search_for_string = NEWHLS + VQ480P
+							else: 
+								search_for_string = VQ480P
 							pos_name = str(html_source).find(search_for_string)
 							if pos_name >=0 :
 								begin_pos_playlist = str(html_source).find('http',pos_name)
 								if begin_pos_playlist == -1:
-									video_url = str(m3u8_url).replace('index', str(search_for_string) + 'P')
+									video_url = str(m3u8_url).replace('index', str(search_for_string))
 									have_valid_url = True
 								else:
 									end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
 									video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
 									have_valid_url = True
 							else:
-								search_for_string = '270'
+								if str(html_source).find(NEWHLS) >= 0:
+									search_for_string = NEWHLS + VQ360P
+								else: 
+									search_for_string = VQ360P
 								pos_name = str(html_source).find(search_for_string)
 								if pos_name >=0 :
 									begin_pos_playlist = str(html_source).find('http',pos_name)
 									if begin_pos_playlist == -1:
-										video_url = str(m3u8_url).replace('index', str(search_for_string) + 'P')
+										video_url = str(m3u8_url).replace('index', str(search_for_string))
 										have_valid_url = True
 									else:
 										end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
 										video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
-										have_valid_url = True				
+										have_valid_url = True	
+								else:			
+									if str(html_source).find(NEWHLS) >= 0:
+										search_for_string = NEWHLS + VQ240P
+									else: 
+										search_for_string = VQ240P
+									pos_name = str(html_source).find(search_for_string)
+									if pos_name >=0 :
+										begin_pos_playlist = str(html_source).find('http',pos_name)
+										if begin_pos_playlist == -1:
+											video_url = str(m3u8_url).replace('index', str(search_for_string))
+											have_valid_url = True
+										else:
+											end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
+											video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
+											have_valid_url = True											
+
     			#High quality
 				elif self.PREFERRED_QUALITY == '1':
-					search_for_string = '720'
+					if str(html_source).find(NEWHLS) >= 0:
+						search_for_string = NEWHLS + VQ720P
+					else: 
+						search_for_string = VQ720P
 					pos_name = str(html_source).find(search_for_string)
 					if pos_name >=0 :
 						begin_pos_playlist = str(html_source).find('http',pos_name)
 						if begin_pos_playlist == -1:
-							video_url = str(m3u8_url).replace('index', str(search_for_string) + 'P')
+							video_url = str(m3u8_url).replace('index', str(search_for_string))
 							have_valid_url = True
 						else:
 							end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
 							video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
 							have_valid_url = True
 					else:
-						search_for_string = '360'
+						if str(html_source).find(NEWHLS) >= 0:
+							search_for_string = NEWHLS + VQ480P
+						else: 
+							search_for_string = VQ480P
 						pos_name = str(html_source).find(search_for_string)
 						if pos_name >=0 :
 							begin_pos_playlist = str(html_source).find('http',pos_name)
 							if begin_pos_playlist == -1:
-								video_url = str(m3u8_url).replace('index', str(search_for_string) + 'P')
+								video_url = str(m3u8_url).replace('index', str(search_for_string))
 								have_valid_url = True
 							else:
 								end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
 								video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
 								have_valid_url = True
 						else:
-							search_for_string = '270'
+							if str(html_source).find(NEWHLS) >= 0:
+								search_for_string = NEWHLS + VQ360P
+							else: 
+								search_for_string = VQ360P
 							pos_name = str(html_source).find(search_for_string)
 							if pos_name >=0 :
 								begin_pos_playlist = str(html_source).find('http',pos_name)
 								if begin_pos_playlist == -1:
-									video_url = str(m3u8_url).replace('index', str(search_for_string) + 'P')
+									video_url = str(m3u8_url).replace('index', str(search_for_string))
 									have_valid_url = True
 								else:
 									end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
 									video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
-									have_valid_url = True								
+									have_valid_url = True	
+							else:
+								if str(html_source).find(NEWHLS) >= 0:
+									search_for_string = NEWHLS + VQ240P
+								else: 
+									search_for_string = VQ240P
+								pos_name = str(html_source).find(search_for_string)
+								if pos_name >=0 :
+									begin_pos_playlist = str(html_source).find('http',pos_name)
+									if begin_pos_playlist == -1:
+										video_url = str(m3u8_url).replace('index', str(search_for_string))
+										have_valid_url = True
+									else:
+										end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
+										video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
+										have_valid_url = True	
+																	
     			#Medium	
 				elif self.PREFERRED_QUALITY == '2':
-					search_for_string = '360'
+					if str(html_source).find(NEWHLS) >= 0:
+						search_for_string = NEWHLS + VQ480P
+					else: 
+						search_for_string = VQ480P
 					pos_name = str(html_source).find(search_for_string)
 					if pos_name >=0 :
 						begin_pos_playlist = str(html_source).find('http',pos_name)
 						if begin_pos_playlist == -1:
-							video_url = str(m3u8_url).replace('index', str(search_for_string) + 'P')
+							video_url = str(m3u8_url).replace('index', str(search_for_string))
 							have_valid_url = True
 						else:
 							end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
 							video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
 							have_valid_url = True
 					else:
-						search_for_string = '270'
+						if str(html_source).find(NEWHLS) >= 0:
+							search_for_string = NEWHLS + VQ360P
+						else: 
+							search_for_string = VQ360P
 						pos_name = str(html_source).find(search_for_string)
 						if pos_name >=0 :
 							begin_pos_playlist = str(html_source).find('http',pos_name)
 							if begin_pos_playlist == -1:
-								video_url = str(m3u8_url).replace('index', str(search_for_string) + 'P')
+								video_url = str(m3u8_url).replace('index', str(search_for_string))
 								have_valid_url = True
 							else:
 								end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
 								video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
-								have_valid_url = True							
+								have_valid_url = True	
+						else:
+							if str(html_source).find(NEWHLS) >= 0:
+								search_for_string = NEWHLS + VQ240P
+							else: 
+								search_for_string = VQ240P
+							pos_name = str(html_source).find(search_for_string)
+							if pos_name >=0 :
+								begin_pos_playlist = str(html_source).find('http',pos_name)
+								if begin_pos_playlist == -1:
+									video_url = str(m3u8_url).replace('index', str(search_for_string))
+									have_valid_url = True
+								else:
+									end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
+									video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
+									have_valid_url = True	
+																							
         		#Low
 				elif self.PREFERRED_QUALITY == '3':
-					search_for_string = '270'
+					if str(html_source).find(NEWHLS) >= 0:
+						search_for_string = NEWHLS + VQ360P
+					else: 
+						search_for_string = VQ360P
 					pos_name = str(html_source).find(search_for_string)
 					if pos_name >=0 :
 						begin_pos_playlist = str(html_source).find('http',pos_name)
 						if begin_pos_playlist == -1:
-							video_url = str(m3u8_url).replace('index', str(search_for_string) + 'P')
+							video_url = str(m3u8_url).replace('index', str(search_for_string))
 							have_valid_url = True
 						else:
 							end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
 							video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
-							have_valid_url = True								
+							have_valid_url = True		
+					else:
+						if str(html_source).find(NEWHLS) >= 0:
+							search_for_string = NEWHLS + VQ240P
+						else: 
+							search_for_string = VQ240P
+						pos_name = str(html_source).find(search_for_string)
+						if pos_name >=0 :
+							begin_pos_playlist = str(html_source).find('http',pos_name)
+							if begin_pos_playlist == -1:
+								video_url = str(m3u8_url).replace('index', str(search_for_string))
+								have_valid_url = True
+							else:
+								end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
+								video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
+								have_valid_url = True									
 
+				#Very Low
+				elif self.PREFERRED_QUALITY == '4':
+					if str(html_source).find(NEWHLS) >= 0:
+						search_for_string = NEWHLS + VQ240P
+					else: 
+						search_for_string = VQ240P
+					pos_name = str(html_source).find(search_for_string)
+					if pos_name >=0 :
+						begin_pos_playlist = str(html_source).find('http',pos_name)
+						if begin_pos_playlist == -1:
+							video_url = str(m3u8_url).replace('index', str(search_for_string))
+							have_valid_url = True
+						else:
+							end_pos_playlist = str(html_source).find("m3u8",begin_pos_playlist) + len("m3u8") 			
+							video_url = str(html_source)[begin_pos_playlist:end_pos_playlist]
+							have_valid_url = True		
+					
 				if (self.DEBUG) == 'true':
 					xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "blip playlist video_url", str(video_url) ), xbmc.LOGNOTICE )
 				

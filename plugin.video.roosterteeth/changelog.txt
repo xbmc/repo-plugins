@@ -1,3 +1,7 @@
+Version 1.2.8 (12 november 2015)
+Fixed Recently Added Videos (Thanks Steve for the hint)
+Improved playing of videos in lower quality
+
 Version 1.2.7 (21 oktober 2015)
 Bugfix in playing videos
 Going back to http, since https doesn't seem to work anymore atm

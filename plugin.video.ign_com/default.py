@@ -16,12 +16,12 @@ else:
 viewMode=str(addon.getSetting("viewMode"))
 
 maxVideoHeight = [360,540,720,1080][int(maxVideoQuality)]
-maxVideoBitrate=[1000000,1500000,2500000,5000000][int(maxVideoQuality)]
+maxVideoBitrate=[500000,1500000,2500000,5000000][int(maxVideoQuality)]
 maxVideoQuality=[640,960,1280,1920][int(maxVideoQuality)]
 
 def index():
         addDir(translation(30002),"http://www.ign.com/videos/all/filtergalleryajax?filter=all",'listVideos',"")
-        addDir("IGN Daily Fix","http://www.ign.com/videos/series/ign-daily-fix",'listVideos',"")
+        addDir("IGN Daily Fix","http://www.ign.com/videos/series/daily-fix",'listVideos',"")
         addDir("IGN Live","http://www.ign.com/videos/series/ign-live",'listVideos',"")
         addDir("IGN First","http://www.ign.com/videos/series/playstation-app-ign-first",'listVideos',"")
         addDir(translation(30003),"http://www.ign.com/videos/all/filtergalleryajax?filter=games-review",'listVideos',"")
@@ -127,7 +127,7 @@ def listSearchResults(url):
 def playVideo(url):
         content = getUrl(url)
         match4 = re.compile("data-video='(.+?)'", re.DOTALL).findall(content)
-        if match4 and 'div class="hero-poster instant-play"' not in content:
+        if match4 and 'div class="hero-poster instant-play"' not in content and 'div class="hero-unit-container"' not in content:
             listOfUrls = re.compile('"url":"(.+?)","height":(.+?),"', re.DOTALL).findall(match4[0])
             videoUrl = ""
             for x in range(0, len(listOfUrls)):
@@ -135,15 +135,20 @@ def playVideo(url):
                     videoUrl = listOfUrls[x][0]
             finalUrl = videoUrl.replace("\\", "")
         else:
-            match1 = re.compile('"video_id":"(.+?)"', re.DOTALL).findall(content)
-            match2 = re.compile('data-id="(.+?)"', re.DOTALL).findall(content)
-            match3 = re.compile('data-video-id="(.+?)"', re.DOTALL).findall(content)
             videoID = ""
+            if 'div class="hero-unit-container"' in content:
+                match1 = re.compile('<div class="hero-poster instant-play".+?data-slug=".+?".+? data-id="(.+?)".+?>', re.DOTALL).findall(content)
+                videoID=match1[0]
+            match2 = re.compile('data-id="(.+?)"', re.DOTALL).findall(content)
+            match3 = re.compile('"video_id":"(.+?)"', re.DOTALL).findall(content)
+            match4 = re.compile('data-video-id="(.+?)"', re.DOTALL).findall(content)
             if match1:
                 videoID=match1[0]
             elif match2:
                 videoID=match2[0]
             elif match3:
+                videoID=match3[0]
+            elif match4:
                 videoID=match3[0]
             content = getUrl("http://www.ign.com/videos/configs/id/"+videoID+".config").replace("\\", "")
             match = re.compile('"url":"(.+?)/zencoder/(.+?)/(.+?)/(.+?)/(.+?)/(.+?)-(.+?)-(.+?)"', re.DOTALL).findall(content)

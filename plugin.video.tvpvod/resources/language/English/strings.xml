@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<strings>
+	<string id="30000">General</string>
+	<string id="30001">Video resolution</string>
+	<string id="30002">Low</string>
+	<string id="30003">Medium</string>
+	<string id="30004">High</string>
+</strings>

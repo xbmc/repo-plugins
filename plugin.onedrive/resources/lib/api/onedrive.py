@@ -25,6 +25,7 @@ import urllib2
 import json
 import re
 from resources.lib.api import utils
+import sys
 
 class OneDrive:
     _login_url = 'https://login.live.com/oauth20_token.srf'
@@ -40,25 +41,34 @@ class OneDrive:
         self.access_token = self.refresh_token = ''
         self.event_listener = None
     def begin_signin(self):
-        response = urllib2.urlopen(self._signin_url).read()
+        try:
+            response = urllib2.urlopen(self._signin_url).read()
+        except Exception as e:
+            raise OneDriveException(e, sys.exc_info()[2], self._signin_url, '')
         jsonResponse = json.loads(response)
         return jsonResponse['pin']
     def finish_signin(self, pin):
         url = self._signin_url + '?' + urllib.urlencode({'action': 'code', 'pin': pin})
-        response = urllib2.urlopen(url).read()
+        try:
+            response = urllib2.urlopen(url).read()
+        except Exception as e:
+            raise OneDriveException(e, sys.exc_info()[2], url, '')
         jsonResponse = json.loads(response)
         return jsonResponse
     def login(self, code=None):
         if code is None:
             data = self._get_login_request_data('refresh_token')
             if data['refresh_token'] == '' :
-                raise Exception('login', 'No authorization code or refresh token provided.')
+                raise OneDriveException(Exception('login', 'No authorization code or refresh token provided.'), None, 'login method', data)
         else:
             data = self._get_login_request_data('authorization_code', code)
-        response = urllib2.urlopen(self._login_url, urllib.urlencode(data)).read()
+        try:
+            response = urllib2.urlopen(self._login_url, urllib.urlencode(data)).read()
+        except Exception as e:
+            raise OneDriveException(e, sys.exc_info()[2], self._login_url, data)
         jsonResponse = json.loads(response)
         if 'error' in jsonResponse:
-            raise Exception('login', utils.Utils.str(jsonResponse['error']), utils.Utils.str(jsonResponse['error_description']))
+            raise OneDriveException(Exception('login', utils.Utils.str(jsonResponse['error']), utils.Utils.str(jsonResponse['error_description'])), None, 'response of login', response)
         else:
             self.access_token = jsonResponse['access_token']
             self.refresh_token = jsonResponse['refresh_token']
@@ -76,15 +86,6 @@ class OneDrive:
         elif grant_type == 'refresh_token':
             data['refresh_token'] = self.refresh_token
         return data
-    
-    def _check_response_pass(self, response):
-        if 'error' in response:
-            error = response['error']
-            if error['code'] == 'request_token_expired' or error['code'] == 'unauthenticated':
-                return False
-            else:
-                raise Exception('request', 'Unknown error: "' + error['code'] + '": ' + error['message'] + ', retry times: '+self.retry_times);
-        return True
     
     def _make_path(self, path):
         if not (re.search("^\/", path)):
@@ -118,18 +119,28 @@ class OneDrive:
             self.retry_times = 0
             return jsonResponse
         except urllib2.HTTPError as e:
-            print e
-            print url
             if self.retry_times < 1:
                 if e.code == 401 or e.code == 404:
                     self.login()
                 self.retry_times += 1
                 return self.request(method, path, params, raw_url)
             else:
-                raise e
-
+                raise OneDriveException(e, sys.exc_info()[2], url, url_params)
+        except Exception as e:
+            raise OneDriveException(e, sys.exc_info()[2], url, url_params)
     def get(self, path, **kwargs):
         return self.request('get', path, **kwargs)
     
     def post(self, path, **kwargs):
         return self.request('post', path, **kwargs)
+
+class OneDriveException(Exception):
+    origin = None
+    tb = None
+    url = None
+    body = None
+    def __init__(self, origin, tb, url, body):
+        self.origin = origin
+        self.tb = tb
+        self.url = url
+        self.body = body

@@ -35,4 +35,12 @@
     <string id="30032">Auto-Refreshed slideshow</string>
     <string id="30033">Refresh interval in minutes</string>
     <string id="30034">'%s' is not a folder</string>
+    <string id="30035">OneDrive is temporary unavailable for this operation.</string>
+    <string id="30036">Something went wrong with this operation.</string>
+    <string id="30037">File or folder not found. Make sure is still in your drive or try removing and adding your account again to Kodi.</string>
+    <string id="30038">Please try again later.</string>
+    <string id="30039">Search in OneDrive...</string>
+    <string id="30040">Searching '%s', please wait...</string>
+    <string id="30041">Processing results, please wait...</string>
+    <string id="30042">Enter text to search:</string>
 </strings>

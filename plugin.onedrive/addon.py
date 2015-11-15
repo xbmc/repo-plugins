@@ -33,11 +33,10 @@ import traceback
 import urllib
 import urllib2
 import ConfigParser
-from resources.lib.api.onedrive import OneDrive
+from resources.lib.api.onedrive import OneDrive, OneDriveException
 from resources.lib.api import utils
 import threading
 import time
-
 base_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
 args = urlparse.parse_qs(sys.argv[2][1:])
@@ -49,7 +48,14 @@ action = args.get('action', None)
 try:
     content_type = args.get('content_type')[0]
 except:
-    content_type = 'video'
+    wid = xbmcgui.getCurrentWindowId()
+    if wid == 10005 or wid == 10500 or wid == 10501 or wid == 10502: 
+        content_type = 'audio'
+    elif wid == 10002:
+        content_type = 'image'
+    else:
+        content_type = 'video'
+
 extra_parameters = {'expand': 'thumbnails'}
 dialog = xbmcgui.Dialog();
 progress_dialog = xbmcgui.DialogProgress() 
@@ -99,7 +105,7 @@ def set_audio_info(list_item, data):
     list_item.setInfo('music', {
         'tracknumber' : utils.Utils.get_safe_value(data['audio'], 'track'), \
         'discnumber' : utils.Utils.get_safe_value(data['audio'], 'disc'), \
-        'duration' : int(utils.Utils.get_safe_value(data['audio'], 'duration'))/1000, \
+        'duration' : int(utils.Utils.get_safe_value(data['audio'], 'duration') or '0')/1000, \
         'year' : utils.Utils.get_safe_value(data['audio'], 'year'), \
         'genre' : utils.Utils.get_safe_value(data['audio'], 'genre'), \
         'album': utils.Utils.get_safe_value(data['audio'], 'album'), \
@@ -119,7 +125,7 @@ def set_video_info(list_item, data):
 def process_files(files, driveid):
     for f in files['value']:
         item_id = f['id']
-        file_name = utils.Utils.str(f['name'])
+        file_name = utils.Utils.unicode(f['name'])
         is_folder = 'folder' in f
         url = None
         list_item = xbmcgui.ListItem(file_name)
@@ -127,12 +133,18 @@ def process_files(files, driveid):
         if is_folder:
             params = {'action':'open_folder', 'content_type': content_type, 'item_id': item_id, 'driveid': driveid}
             url = base_url + '?' + urllib.urlencode(params)
+            context_options = []
             if content_type == 'audio' or content_type == 'video':
                 params['action'] = 'export_folder'
-                list_item.addContextMenuItems([(addon.getLocalizedString(30004), 'RunPlugin('+base_url + '?' + urllib.urlencode(params)+')')])
+                context_options.append((addon.getLocalizedString(30004), 'RunPlugin('+base_url + '?' + urllib.urlencode(params)+')'))
             elif content_type == 'image':
                 params['action'] = 'slideshow'
-                list_item.addContextMenuItems([(addon.getLocalizedString(30032), 'RunPlugin('+base_url + '?' + urllib.urlencode(params)+')')])
+                context_options.append((addon.getLocalizedString(30032), 'RunPlugin('+base_url + '?' + urllib.urlencode(params)+')'))
+            params['action'] = 'search'
+            params['c'] = time.time()
+            cmd = 'ActivateWindow(%d,%s?%s,return)' % (xbmcgui.getCurrentWindowId(), base_url, urllib.urlencode(params))
+            context_options.append((addon.getLocalizedString(30039), cmd))
+            list_item.addContextMenuItems(context_options)
         elif (('video' in f or extension == 'mkv') and content_type == 'video') or ('audio' in f and content_type == 'audio'):
             params = {'action':'play', 'content_type': content_type, 'item_id': item_id, 'driveid': driveid}
             url = base_url + '?' + urllib.urlencode(params)
@@ -171,7 +183,6 @@ def refresh_slideshow(driveid, item_id, childCount, waitForSlideshow):
     print 'Waiting up to ' + interval + ' minute(s) to check if it''s needed to refresh the slideshow of folder ' + item_id + '...'
     current_time = time.time()
     target_time = current_time + int(interval) * 60
-    # wait until refresh interval or something happens...
     while not monitor.abortRequested() and target_time > current_time and xbmcgui.getCurrentWindowId() == 12007:
         if monitor.waitForAbort(10):
             break
@@ -199,7 +210,7 @@ def start_auto_refreshed_slideshow(driveid, item_id, oldChildCount):
         t.setDaemon(True)
         t.start()
     else:
-        dialog.ok(addonname, addon.getLocalizedString(30034) % f['name'])
+        dialog.ok(addonname, addon.getLocalizedString(30034) % utils.Utils.unicode(f['name']))
 
 def export_folder(name, item_id, driveid, destination_folder):
     parent_folder = os.path.join(destination_folder, name)
@@ -237,14 +248,21 @@ def remove_readonly(fn, path, excinfo):
     elif fn is os.remove:
         os.chmod(path, stat.S_IWRITE)
         os.remove(path)
-def report_error(ex):
+def report_error(e):
     tb = traceback.format_exc()
+    if isinstance(e, OneDriveException):
+        try:
+            tb += '\n--Origin: --\n' + ''.join(traceback.format_exception(type(e.origin), e.origin, e.tb))
+            tb += '\n--url--\n' + e.url
+            tb += '\n\n--body--\n' + e.body
+        except Exception as e:
+            tb += '\n--Exception trying build the report: --\n' + traceback.format_exc()
     print tb
     if addon.getSetting('report_error') == 'true':
         try:
             urllib2.urlopen('http://onedrive.daro.mx/report-error.jsp', urllib.urlencode({'stacktrace':tb})).read()
-        except urllib2.URLError, e:
-            print e
+        except Exception as e:
+            print traceback.format_exc()
 try:
     if action is None:
         for driveid in onedrives:
@@ -252,7 +270,12 @@ try:
             params = {'action':'open_drive', 'content_type': content_type, 'driveid': onedrives[driveid].driveid}
             url = base_url + '?' + urllib.urlencode(params)
             params = {'action':'remove_account', 'content_type': content_type, 'driveid': onedrives[driveid].driveid}
-            list_item.addContextMenuItems([(addon.getLocalizedString(30007), 'RunPlugin('+base_url + '?' + urllib.urlencode(params)+')')])
+            context_options = [(addon.getLocalizedString(30007), 'RunPlugin('+base_url + '?' + urllib.urlencode(params)+')')]
+            params['action'] = 'search'
+            params['c'] = time.time()
+            cmd = 'ActivateWindow(%d,%s?%s,return)' % (xbmcgui.getCurrentWindowId(), base_url, urllib.urlencode(params))
+            context_options.append((addon.getLocalizedString(30039), cmd))
+            list_item.addContextMenuItems(context_options)
             xbmcplugin.addDirectoryItem(addon_handle, url, list_item, True)
         list_item = xbmcgui.ListItem(addon.getLocalizedString(30006))
         params = {'action':'add_account', 'content_type': content_type}
@@ -356,18 +379,49 @@ try:
         driveid = args.get('driveid')[0]
         item_id = args.get('item_id')[0]
         start_auto_refreshed_slideshow(driveid, item_id, -1)
+    elif action[0] == 'search':
+        url = '/drive'
+        driveid = args.get('driveid')[0]
+        if 'item_id' in args:
+            item_id = args.get('item_id')[0]
+            url += '/items/'+item_id
+        else:
+            url += '/root'
+        d = dialog.input(addonname + ' - ' + addon.getLocalizedString(30042))
+        if d != '':
+            progress_dialog.create(addonname, addon.getLocalizedString(30040) % d)
+            progress_dialog.update(0)
+            extra_parameters['q'] = d
+            #extra_parameters['filter'] = content_type + ' ne null'
+            extra_parameters['filter'] = 'file ne null'
+            files = onedrives[driveid].get(url+'/view.search', params=extra_parameters )
+            progress_dialog.update(50, addon.getLocalizedString(30041))
+            process_files(files, driveid)
+            progress_dialog.close()
+        xbmcplugin.endOfDirectory(addon_handle)
     elif action[0] == 'play':
         driveid = args.get('driveid')[0]
         item_id = args.get('item_id')[0]
         f = onedrives[driveid].get('/drive/items/'+item_id)
         url = f['@content.downloadUrl']
-        list_item = xbmcgui.ListItem(utils.Utils.str(f['name']))
+        list_item = xbmcgui.ListItem(utils.Utils.unicode(f['name']))
         set_info = set_audio_info if content_type == 'audio' else set_video_info
         set_info(list_item, f)
         list_item.select(True)
         list_item.setPath(url)
         list_item.setProperty('mimetype', utils.Utils.get_safe_value(f['file'], 'mimeType'))
         xbmcplugin.setResolvedUrl(addon_handle, True, list_item)
-except Exception as ex:
-    dialog.ok(addonname, addon.getLocalizedString(30027), utils.Utils.unicode(ex), addon.getLocalizedString(30016))
-    report_error(ex)
+except Exception as e:
+    ex = e
+    if isinstance(ex, OneDriveException):
+        ex = ex.origin
+    if isinstance(ex, urllib2.HTTPError):
+        if ex.code >= 500:
+            dialog.ok(addonname, addon.getLocalizedString(30035), addon.getLocalizedString(30038))
+        elif ex.code == 404:
+            dialog.ok(addonname, addon.getLocalizedString(30037))
+        if ex.code >= 400:
+            dialog.ok(addonname, addon.getLocalizedString(30036), addon.getLocalizedString(30038))
+    else:
+        dialog.ok(addonname, addon.getLocalizedString(30027), utils.Utils.unicode(ex), addon.getLocalizedString(30016))
+    report_error(e)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.addon.id" name="mlg.tv" version="0.0.3" provider-name="marinewater">
+<addon id="plugin.video.mlg.tv" name="mlg.tv" version="0.0.4" provider-name="marinewater">
   <requires>
     <import addon="xbmc.python" version="2.20.0"/>
   </requires>

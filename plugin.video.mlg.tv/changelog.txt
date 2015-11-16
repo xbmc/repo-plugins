@@ -1,3 +1,6 @@
+v0.0.4
+- fixed wrong addon id
+
 v0.0.3
 - Added language support
 - Added german language

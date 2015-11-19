@@ -50,16 +50,15 @@ def getSources(fanart):
         xbmcplugin.setContent(int(sys.argv[1]), 'files')
         ilist = []
         html = getRequest('http://www.sundance.tv/watch-now/')
-        a = re.compile('<h3 class="featured-row-title.+?href="(.+?)">(.+?)<.+?src="(.+?)"',re.DOTALL).findall(html)
-        a.extend([('http://www.sundance.tv/watch-now/movies/',__language__(30020),icon)])
-        for url,name,img in a:
+        a = re.compile(' <div class="show-title tablet-only">(.+?)<.+?href="(.+?)".+?src="(.+?)"',re.DOTALL).findall(html)
+        a.extend([(__language__(30020),'http://www.sundance.tv/watch-now/movies/',icon)])
+        for name,url,img in a:
               mode = 'GC'
               name = h.unescape(name.decode(UTF8))
-              plot = name
-              if not url.startswith('http:'): url = 'http://www.sundance.tv%s' % url
+#              plot = name
               u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
-              liz=xbmcgui.ListItem(name, '','DefaultFolder.png', img)
-              liz.setInfo( 'Video', { "Title": name, "Plot": plot })
+              liz=xbmcgui.ListItem(name, '',None, img)
+#              liz.setInfo( 'Video', { "Title": name, "Plot": plot })
               liz.setProperty('fanart_image', addonfanart)
               ilist.append((u, liz, True))
         xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
@@ -69,28 +68,61 @@ def getSources(fanart):
    
 
 
-def getCats(gsurl,catname):
+def getCats(url,catname):
         xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
         ilist = []
-        html  = getRequest(uqp(gsurl))
-        a=[]
-        if '/movies/' in gsurl:
-          try:
-              img,url,name,plot = re.compile('<div class="video-player-holder clearfix">.+?src="(.+?)".+?<div id="video-(.+?)".+?"video-title">(.+?)<.+?<p>(.+?)<',re.DOTALL).search(html).groups()
-              a =[(url,img,name,plot)]
-          except:
-              pass
-            
-        c     = re.compile('<a class="video-link related-triple".+?div id="video-(.+?)".+?src="(.+?)".+?"video-title">(.+?)<.+?"video-description">(.+?)<.+?</div',re.DOTALL).findall(html)
-        a.extend(c)
-        for url, img, name, plot in a:
-              name = h.unescape(name.decode(UTF8))
-              url = 'http://c.brightcove.com/services/mobile/streaming/index/master.m3u8?videoId=%s&pubId=3605490453001' % (url)
-              mode = 'GL'
-              u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
-              liz=xbmcgui.ListItem(name, '','DefaultFolder.png', img)
-              liz.setInfo( 'Video', { "Title": name, "Studio":catname, "Plot": plot })
-              liz.setProperty('fanart_image', img)
+        url = uqp(url)
+        hurl = 'http://www.sundance.tv/watch-now/'
+        if '/movies/' in url : 
+             seriesName = 'movie'
+             hurl = hurl+'movies'
+        else:    seriesName = url.replace('/series/','',1)
+        target = '<a class="episode" href="/watch-now/%s/(.+?)"' % seriesName
+        html  = getRequest(hurl)
+        a  = re.compile(target, re.DOTALL).findall(html)
+        url = a[0]
+        html = getRequest('http://www.sundance.tv/watch-now/%s/%s' % (seriesName, url))
+        for url in a:
+              vid = url.split('/',1)[0]
+              target = '<div id="video-%s-hover"(.+?)</a' % vid
+              try: 
+                  blob = re.compile(target, re.DOTALL).search(html).group(1)
+                  name = re.compile('"video-title">(.+?)<', re.DOTALL).search(blob).group(1)
+              except:
+                  target = '<div id="video-%s".+?video-title">(.+?)<' % vid
+                  name = re.compile(target, re.DOTALL).search(html).group(1)
+              target = '<div id="video-%s" class="video".+?src="(.+?)"' % vid
+              try:     img = re.compile(target, re.DOTALL).search(html).group(1)
+              except:  img = icon
+              infoList={}
+              infoList['Title'] = name
+              if not '/movies' in hurl:
+                 try: infoList['TVShowTitle'] = re.compile('<h2>(.+?)<', re.DOTALL).search(blob).group(1)
+                 except: pass
+                 try: infoList['Season'] = int(re.compile('"episode-info">.+?Season (.+?)\|', re.DOTALL).search(blob).group(1))
+                 except: pass
+                 try: infoList['Episode'] = int(re.compile('"episode-info">.+?Episode (.+?)\|', re.DOTALL).search(blob).group(1))
+                 except: pass
+                 try:
+                   aired = re.compile('"episode-info">.+?Aired on (.+?)<', re.DOTALL).search(blob).group(1)
+                   aired = aired.split('/')
+                   aired = '%s-%s-%s' % (aired[2].strip(),aired[0], aired[1])
+                   infoList['Aired'] = aired
+                 except: pass
+              try: infoList['Plot'] = re.compile('class="video-description">(.+?)<', re.DOTALL).search(blob).group(1)
+              except: 
+                  try: infoList['Plot'] = re.compile('<h4 class="video-title">.+?<p>(.+?)<', re.DOTALL).search(html).group(1)
+                  except: pass
+              url = vid
+              u = '%s?url=%s&name=%s&mode=GL' % (sys.argv[0],qp(url), qp(name))
+              liz=xbmcgui.ListItem(name, '', None, img)
+              liz.setInfo( 'Video', infoList)
+              liz.addStreamInfo('video', { 'codec': 'h264', 
+                                   'width' : 960, 
+                                   'height' : 540, 
+                                   'aspect' : 1.78 })
+              liz.addStreamInfo('audio', { 'codec': 'aac', 'language' : 'en'})
+              liz.setProperty('fanart_image', img )
               liz.setProperty('IsPlayable', 'true')
               ilist.append((u, liz, False))
         if len(ilist) != 0:
@@ -100,7 +132,11 @@ def getCats(gsurl,catname):
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
+
+
 def getLink(url,vidname):
+              vid = uqp(url)
+              url = 'http://c.brightcove.com/services/mobile/streaming/index/master.m3u8?videoId=%s&pubId=3605490453001' % (vid)
               xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=url))
 
 
@@ -121,6 +157,7 @@ mode = p('mode',None)
 
 if mode==  None:  getSources(p('fanart'))
 elif mode=='GC':  getCats(p('url'),p('name'))
+elif mode=='GM':  getMovies(p('url'),p('name'))
 elif mode=='GL':  getLink(p('url'),p('name'))
 
 

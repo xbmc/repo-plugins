@@ -3,6 +3,7 @@ plugin.video.thinktv
 
 Kodi Addon for Think TV PBS Video website
 
+Version 1.0.21 change to json request
 Version 1.0.20 add 1080 support
 Version 1.0.19 fix for m3u8 url change
 Version 1.0.18 add'l fix for PBSKids .flv because I'm an idiot

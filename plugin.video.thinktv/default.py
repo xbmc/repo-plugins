@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# ThinkTV PBS XBMC Addon
+# ThinkTV PBS Kodi Addon
 #
 # To do: add featured, popular programs to all and a to z.
 #
@@ -14,9 +14,9 @@ uqp = urllib.unquote_plus
 
 UTF8     = 'utf-8'
 
-addon         = xbmcaddon.Addon('plugin.video.thinktv')
-__addonname__ = addon.getAddonInfo('name')
-__language__  = addon.getLocalizedString
+addon      = xbmcaddon.Addon('plugin.video.thinktv')
+addonName  = addon.getAddonInfo('name')
+addonLang  = addon.getLocalizedString
 
 
 home          = addon.getAddonInfo('path').decode(UTF8)
@@ -34,7 +34,7 @@ pkicon        = xbmc.translatePath(os.path.join(media, 'PBS_Kids_ICON.png'))
 pkfanart      = xbmc.translatePath(os.path.join(media, 'PBS_Kids_Fanart.jpg'))
 
 def log(txt):
-    message = '%s: %s' % (__addonname__, txt.encode('ascii', 'ignore'))
+    message = '%s: %s' % (addonName, txt.encode('ascii', 'ignore'))
     xbmc.log(msg=message, level=xbmc.LOGDEBUG)
 
 USER_AGENT    = 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.93 Safari/537.36'
@@ -72,7 +72,7 @@ def getRequest(url, user_data=None, headers = defaultHeaders , alert=True):
            page = zlib.decompress(page, zlib.MAX_WBITS + 16)
     except urllib2.URLError, e:
        if alert:
-           xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( __addonname__, e , 5000) )
+           xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( addonName, e , 5000) )
        page = ""
     return(page)
 
@@ -98,7 +98,7 @@ def getSources(fanart):
               ('GZ', 30013, icon_a_to_z), ('GQ', 30014, icon_search), ('GKS', 30015, pkicon)]
 
     for mode, gstr, img in dolist:
-        name = __language__(gstr)
+        name = addonLang(gstr)
         liz  = xbmcgui.ListItem(name,'',None,img)
         liz.setProperty( "Fanart_Image", addonfanart )
         xbmcplugin.addDirectoryItem(int(sys.argv[1]), '%s?url=%s&mode=%s' % (sys.argv[0],qp(url), mode), liz, True)
@@ -106,7 +106,7 @@ def getSources(fanart):
 
 
 def getQuery(cat_url):
-    keyb = xbmc.Keyboard('', __addonname__)
+    keyb = xbmc.Keyboard('', addonName)
     keyb.doModal()
     if (keyb.isConfirmed()):
         qurl = qp('/search/?q=%s' % (keyb.getText()))
@@ -227,7 +227,7 @@ def getVids(gvurl,catname, img=None, plot=None, fanart=None):
     for gtype, gfind, gindex in dolist:
         if gfind in pg:
             url = '%s/%s/' % (gvurl, gtype)
-            name = __language__(gindex)
+            name = addonLang(gindex)
             if plot == None:
                 plot = name
             else:
@@ -306,7 +306,7 @@ def getCats(gcurl, catname):
 
 
 def getShow(gsurl):
-    pg = getRequest('http://video.pbs.org/videoInfo/%s/?format=json' % (gsurl))
+    pg = getRequest('http://player.pbs.org/videoInfo/%s/?format=json' % (gsurl))
     a  =  json.loads(pg)
     suburl = a['closed_captions_url']
     url = a['recommended_encoding']['url']
@@ -365,7 +365,7 @@ def getPBSKidsCats(kcurl, kcname, img):
         ilist=[]
         dolist = [('episode', 30020), ('clip', 30021)]
         for kctype, iname in dolist:
-              name = __language__(iname)
+              name = addonLang(iname)
               url = 'http://pbskids.org/pbsk/video/api/getVideos/?callback=&startindex=1&endindex=200&program=%s&type=%s&category=&group=&selectedID=&status=available&player=flash&flash=true' % (kcname.replace('-',' ').replace('&','&amp;'), kctype)
               mode = 'GKV'
               u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(kcname), mode)
@@ -450,5 +450,5 @@ elif mode=='GKC': getPBSKidsCats(p('url'),p('name'),p('img'))
 elif mode=='GKV': getPBSKidsVids(p('url'),p('name'))
 elif mode=='PKP': playPBSKidsVid(p('url'),p('captions'))
 
-xbmcplugin.endOfDirectory(int(sys.argv[1]))
+if (mode!='PKP') and (mode!='GS'): xbmcplugin.endOfDirectory(int(sys.argv[1]))
 

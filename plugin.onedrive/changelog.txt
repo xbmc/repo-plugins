@@ -1,3 +1,7 @@
+v1.1.1
+- Show picture fixed
+- Retry request in case of failure
+- Minor fixes
 v1.1.0
 - Search function added
 v1.0.7

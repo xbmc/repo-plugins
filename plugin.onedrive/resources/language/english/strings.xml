@@ -43,4 +43,7 @@
     <string id="30040">Searching '%s', please wait...</string>
     <string id="30041">Processing results, please wait...</string>
     <string id="30042">Enter text to search:</string>
+    <string id="30043">Something happened with the request%s.</string>
+    <string id="30044">Will try in %s seconds.</string>
+    <string id="30045">Attempt %s of %s.</string>
 </strings>

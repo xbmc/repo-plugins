@@ -26,6 +26,10 @@ import json
 import re
 from resources.lib.api import utils
 import sys
+import xbmc
+import xbmcgui
+import xbmcaddon
+import time
 
 class OneDrive:
     _login_url = 'https://login.live.com/oauth20_token.srf'
@@ -35,26 +39,21 @@ class OneDrive:
     exporting_count = 0
     exporting_target = 0
     exporting_percent = 0
+    retry_target = 2
     def __init__(self, client_id):
         self.retry_times = 0
         self.client_id = client_id
         self.access_token = self.refresh_token = ''
         self.event_listener = None
+        self.monitor = xbmc.Monitor()
+        self.addon = xbmcaddon.Addon()
+        self.addonname = self.addon.getAddonInfo('name')
+        self.progress_dialog = xbmcgui.DialogProgress()
     def begin_signin(self):
-        try:
-            response = urllib2.urlopen(self._signin_url).read()
-        except Exception as e:
-            raise OneDriveException(e, sys.exc_info()[2], self._signin_url, '')
-        jsonResponse = json.loads(response)
-        return jsonResponse['pin']
+        return self.request('get', self._signin_url, None, True)['pin']
     def finish_signin(self, pin):
         url = self._signin_url + '?' + urllib.urlencode({'action': 'code', 'pin': pin})
-        try:
-            response = urllib2.urlopen(url).read()
-        except Exception as e:
-            raise OneDriveException(e, sys.exc_info()[2], url, '')
-        jsonResponse = json.loads(response)
-        return jsonResponse
+        return self.request('get', url, None, True)
     def login(self, code=None):
         if code is None:
             data = self._get_login_request_data('refresh_token')
@@ -62,19 +61,15 @@ class OneDrive:
                 raise OneDriveException(Exception('login', 'No authorization code or refresh token provided.'), None, 'login method', data)
         else:
             data = self._get_login_request_data('authorization_code', code)
-        try:
-            response = urllib2.urlopen(self._login_url, urllib.urlencode(data)).read()
-        except Exception as e:
-            raise OneDriveException(e, sys.exc_info()[2], self._login_url, data)
-        jsonResponse = json.loads(response)
+        jsonResponse = self.request('post', self._login_url, data, True)
         if 'error' in jsonResponse:
-            raise OneDriveException(Exception('login', utils.Utils.str(jsonResponse['error']), utils.Utils.str(jsonResponse['error_description'])), None, 'response of login', response)
+            raise OneDriveException(Exception('login', utils.Utils.str(jsonResponse['error']), utils.Utils.str(jsonResponse['error_description'])), None, 'response of login', str(jsonResponse))
         else:
             self.access_token = jsonResponse['access_token']
             self.refresh_token = jsonResponse['refresh_token']
             if not self.event_listener is None:
                 self.event_listener(self, 'login_success', jsonResponse)
-            
+    
     def _get_login_request_data(self, grant_type, code=None):
         data = {
             'client_id': self.client_id,
@@ -92,13 +87,14 @@ class OneDrive:
             path = "/" + path
         return path
     
-    def get_url_params(self, params=None):
+    def get_url_params(self, params=None, raw_url=False):
         access_token = self.access_token
         if access_token is None:
             raise Exception('request', 'Not logged in.')
         if params is None:
             params = {}
-        params['access_token'] = access_token
+        if not raw_url:
+            params['access_token'] = access_token
         return urllib.urlencode(params)
     
     def get_url(self, method, path, params=None):
@@ -108,26 +104,45 @@ class OneDrive:
         return url
     
     def request(self, method, path, params=None, raw_url=False):
+        url_params = self.get_url_params(params, raw_url)
+        url = self.get_url(method, path, url_params) if not raw_url else path
         try:
-            url_params = self.get_url_params(params)
-            url = self.get_url(method, path, url_params) if not raw_url else path
             if method == 'get':
                 response = urllib2.urlopen(url).read()
             else:
                 response = urllib2.urlopen(url, url_params).read()
-            jsonResponse = json.loads(response)
             self.retry_times = 0
-            return jsonResponse
-        except urllib2.HTTPError as e:
-            if self.retry_times < 1:
-                if e.code == 401 or e.code == 404:
-                    self.login()
+            return json.loads(response)
+        except Exception as e:
+            if self.retry_times < self.retry_target:
                 self.retry_times += 1
+                if isinstance(e, urllib2.HTTPError) and (e.code == 401 or e.code == 404):
+                    self.login()
+                else:
+                    again = ' again'
+                    attempt = self.addon.getLocalizedString(30045) % (str(self.retry_times), str(self.retry_target))
+                    seconds = self.retry_times*5
+                    if self.retry_times == 1:
+                        again = ''
+                        attempt = None
+                    self.progress_dialog.create(self.addonname)
+                    current_time = time.time()
+                    max_waiting_time = current_time + seconds
+                    while not self.monitor.abortRequested() and max_waiting_time > current_time and not self.progress_dialog.iscanceled():
+                        remaining = round(max_waiting_time-current_time)
+                        p = int(remaining/seconds*100) if remaining > 0 else 0
+                        p = 100 if p > 100 else p
+                        self.progress_dialog.update(p, self.addon.getLocalizedString(30043) % again + ' ' + self.addon.getLocalizedString(30044) % str(int(remaining)), attempt)
+                        if self.monitor.waitForAbort(1):
+                            break
+                        current_time = time.time()
+                    self.progress_dialog.close()
                 return self.request(method, path, params, raw_url)
             else:
+                self.progress_dialog.close()
+                self.retry_times = 0
                 raise OneDriveException(e, sys.exc_info()[2], url, url_params)
-        except Exception as e:
-            raise OneDriveException(e, sys.exc_info()[2], url, url_params)
+        
     def get(self, path, **kwargs):
         return self.request('get', path, **kwargs)
     

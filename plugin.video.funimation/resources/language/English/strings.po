@@ -76,32 +76,48 @@ msgctxt "#30206"
 msgid "Dub"
 msgstr ""
 
-# advanced settings 30210-30220
+msgctxt "#30207"
+msgid "Video quality"
+msgstr ""
+
+msgctxt "#30208"
+msgid "SD480"
+msgstr ""
+
+msgctxt "#30209"
+msgid "HD720"
+msgstr ""
+
 msgctxt "#30210"
+msgid "HD1080"
+msgstr ""
+
+# advanced settings 30220-30230
+msgctxt "#30220"
 msgid "Advanced"
 msgstr ""
 
-msgctxt "#30211"
+msgctxt "#30221"
 msgid "Log level"
 msgstr ""
 
-msgctxt "#30218"
+msgctxt "#30228"
 msgid "Clear Cookies"
 msgstr ""
 
-msgctxt "#30219"
+msgctxt "#30229"
 msgid "Error"
 msgstr ""
 
-msgctxt "#30220"
+msgctxt "#30230"
 msgid "Warn"
 msgstr ""
 
-msgctxt "#30221"
+msgctxt "#30231"
 msgid "Info"
 msgstr ""
 
-msgctxt "#30222"
+msgctxt "#30232"
 msgid "Debug"
 msgstr ""
 

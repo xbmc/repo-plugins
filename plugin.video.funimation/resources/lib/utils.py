@@ -26,6 +26,7 @@ STRINGMAP = {
 
 _log = logging.getLogger('funimation')
 
+
 def show_message(msg, title=None, icon=None):
     addon = xbmcaddon.Addon()
     if title is None:

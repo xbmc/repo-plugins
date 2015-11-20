@@ -1,24 +1,24 @@
 # -*- coding: utf-8 -*-
 import xbmc
-from logging import Handler
+import logging
 
 
 # python log levels to kodis log levels
 # everything is sent to notice except errors and warnings
 py_to_kodi = {
-    10: 2,
-    20: 2,
-    30: 3,
-    40: 4,
-    50: 5,
+    logging.DEBUG:    2,
+    logging.INFO:     2,
+    logging.WARN:     3,
+    logging.ERROR:    4,
+    logging.CRITICAL: 5,
 }
 
 
-class KodiHandler(Handler):
+class KodiHandler(logging.Handler):
 
     def emit(self, record):
         try:
             msg = self.format(record)
-            xbmc.log(msg.decode('utf8'), py_to_kodi[record.levelno])
+            xbmc.log(msg, py_to_kodi[record.levelno])
         except:
             self.handleError(record)

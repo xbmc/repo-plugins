@@ -1,3 +1,7 @@
+v1.2.0
+- Added the ability to select the video quality you want
+- Fixed shows with a lot of videos not showing them all
+
 v1.1.5
 - Fixed clear cookie script
 - Removed old reference to _logger

@@ -1,5 +1,5 @@
 {
-    "timestamp":"1441883934",
+    "timestamp":"1447828736",
     "sources": {
         "vtvgo": {
             "url": "http://vtvgo.vn/streaming.php?id=XXX_PID",
@@ -32,7 +32,7 @@
             {"type":"dir","id":"fpt"},
             {"type":"dir","id":"vtc"},
             {"type":"dir","id":"vtvgo"},
-            {"type":"dir","id":"hplus"},
+            {"type":"dir_","id":"hplus"},
             {"type":"dir","id":"vtvplus"},
             {"type":"dir","id":"vov"},
             {"type":"dir_","id":"local"}
@@ -990,7 +990,7 @@
             "src": {
                 "id":"vtc",
                 "playpath": "m3u8_tvnet",
-				"page_id":"9",
+				"page_id":"vtv1",
                 "referer": "VTV1/15"
             }
         },
@@ -1001,7 +1001,7 @@
             "src": {
                 "id":"vtc",
                 "playpath": "m3u8_tvnet",
-				"page_id":"10",
+				"page_id":"vtv2",
                 "referer": "VTV2/23"
             }
         },
@@ -1012,7 +1012,7 @@
             "src": {
                 "id":"vtc",
                 "playpath": "m3u8_tvnet",
-				"page_id":"11",
+				"page_id":"vtv3",
                 "referer": "VTV3/3"
             }
         },
@@ -1023,7 +1023,7 @@
             "src": {
                 "id":"vtc",
                 "playpath": "m3u8_tvnet",
-				"page_id":"12",
+				"page_id":"vtv4",
                 "referer": "VTV4/2"
             }
         },
@@ -1034,7 +1034,7 @@
             "src": {
                 "id":"vtc",
                 "playpath": "m3u8_tvnet",
-				"page_id":"1",
+				"page_id":"vtc1",
                 "referer": "VTC1/10"
             }
         },
@@ -1045,7 +1045,7 @@
             "src": {
                 "id":"vtc",
                 "playpath": "m3u8_tvnet",
-				"page_id":"4",
+				"page_id":"vtc10",
                 "referer": "VTC10/22"
             }
         },
@@ -1056,7 +1056,7 @@
             "src": {
                 "id":"vtc",
                 "playpath": "m3u8_tvnet",
-				"page_id":"5",
+				"page_id":"vtc16",
                 "referer": "VTC2/11"
             }
         },
@@ -1067,7 +1067,7 @@
             "src": {
                 "id":"vtc",
                 "playpath": "m3u8_tvnet",
-				"page_id":"75",
+				"page_id":"ttxvn",
                 "referer": ""
             }
         },
@@ -1078,7 +1078,7 @@
             "src": {
                 "id":"vtc",
                 "playpath": "m3u8_tvnet",
-				"page_id":"8",
+				"page_id":"htv9",
                 "referer": ""
             }
         },
@@ -1089,7 +1089,7 @@
             "src": {
                 "id":"vtc",
                 "playpath": "m3u8_tvnet",
-				"page_id":"6",
+				"page_id":"hn1",
                 "referer": ""
             }
         },
@@ -1100,7 +1100,7 @@
             "src": {
                 "id":"vtc",
                 "playpath": "m3u8_tvnet",
-				"page_id":"13",
+				"page_id":"vov1",
                 "referer": "VOV1/29"
             }
         },
@@ -1111,7 +1111,7 @@
             "src": {
                 "id":"vtc",
                 "playpath": "m3u8_tvnet",
-				"page_id":"14",
+				"page_id":"vov2",
                 "referer": "VOV2/28"
             }
         },
@@ -1122,7 +1122,7 @@
             "src": {
                 "id":"vtc",
                 "playpath": "m3u8_tvnet",
-				"page_id":"15",
+				"page_id":"vov3",
                 "referer": "VOV3/27"
             }
         },
@@ -1133,7 +1133,7 @@
             "src": {
                 "id":"vtc",
                 "playpath": "m3u8_tvnet",
-				"page_id":"16",
+				"page_id":"vov5",
                 "referer": "VOV5/25"
             }
         },

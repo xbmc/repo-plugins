@@ -1,9 +1,9 @@
 # -*- coding: UTF-8 -*-
 #---------------------------------------------------------------------
 # File: tvvn.py
-# Version: 0.9.8
+# Version: 0.9.9
 # By:   Binh Nguyen <b@zecoj.com>
-# Date: Thu Sep 10 21:33:49 AEST 2015
+# Date: Wed Nov 18 21:46:19 AEDT 2015
 #---------------------------------------------------------------------
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -175,9 +175,9 @@ def play_link(chn, src):
             url = 'http://fptplay.net/show/getlinklivetv'
             page_id = data['channels'][chn]['src']['page_id']
             page_q = data['channels'][chn]['src']['page_q']
-            values={'id': page_id, 'quality': page_q, 'mobile': 'web'}
+            values={'id': page_id, 'type': 'newchannel', 'quality': page_q, 'mobile': 'web'}
             post_data = urllib.urlencode(values)
-            header = {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With':'XMLHttpRequest', 'Referer':'http://fptplay.net/livetv'}
+            header = {'Content-Type': 'application/x-www-form-urlencoded', 'Host':'fptplay.net','Origin':'http://fptplay.net','X-Requested-With':'XMLHttpRequest', 'Referer':'http://fptplay.net/livetv'}
             req = urllib2.Request(url, post_data, header)
             response = urllib2.urlopen(req)
             the_page = response.read()
@@ -186,18 +186,12 @@ def play_link(chn, src):
 
         #m3u8 url from tvnet
         elif data['channels'][chn]['src']['playpath'] == "m3u8_tvnet":
-            url = 'http://www.tvnet.gov.vn/xml.php?id='+data['channels'][chn]['src']['page_id']+'&tp=l'
+            url = 'http://118.107.85.21:1337/get-stream.json?p=smil:'+data['channels'][chn]['src']['page_id']+'.smil&t=l'
             stringA=opener.open(url).read().decode('utf-8')
-            stringB="<play1>[^?]+"
-            stringC="</play1>"
-            stringD="<connect>"
-            stringE="</connect>"
-            stringF="<play>"
-            stringG="/playlist.m3u8</play>"
+            stringB='"url": "'
+            stringC='"'
             full_url_BC=re.search(stringB+"(.*?)"+re.escape(stringC),stringA).group(1)
-            full_url_DE=re.search(re.escape(stringD)+"(.*?)"+re.escape(stringE),stringA).group(1)
-            full_url_FG=re.search(re.escape(stringF)+"(.*?)"+re.escape(stringG),stringA).group(1)
-            full_url=full_url_DE + "/" + full_url_FG + full_url_BC
+            full_url=full_url_BC
             print full_url
 
         #m3u8 url using before & after marker

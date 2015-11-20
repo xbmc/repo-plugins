@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
 from urllib2 import HTTPError
-from functools import wraps
 
 from .httpclient import HTTPClient
 from .models import Video, Show
@@ -13,26 +12,28 @@ class Funimation(object):
 
     def __init__(self, username=None, password=None, cookiefile=None):
         super(Funimation, self).__init__()
-        self.http = HTTPClient('https://www.funimation.com/', cookiefile,
+        self.http = HTTPClient('http://www.funimation.com/', cookiefile,
                                [('User-Agent', 'Sony-PS3')])
         self._log = logging.getLogger('funimation')
         # defaults to the free account user
         # hmm... the API doesn't appear to validate the users subscription
         # level so if this was changed you might be able to watch
         # the paid videos ;)
+        # FunimationSubscriptionUser = paid account
+        # FunimationUser = free account
         self.user_type = 'FunimationUser'
         self.logged_in = self.login(username, password)
 
-    def get_shows(self, limit=1000, offset=0, sort=None, first_letter=None,
+    def get_shows(self, limit=3000, offset=0, sort=None, first_letter=None,
                   filter=None):
         query = self._build_query(locals())
         return self._request('feeds/ps/shows', query)
 
-    def get_videos(self, show_id, limit=1000, offset=0):
+    def get_videos(self, show_id, limit=3000, offset=0):
         query = self._build_query(locals())
         return self._request('feeds/ps/videos', query)
 
-    def get_featured(self, limit=1000, offset=0):
+    def get_featured(self, limit=3000, offset=0):
         query = self._build_query(locals())
         return self._request('feeds/ps/featured', query)
 
@@ -40,14 +41,14 @@ class Funimation(object):
         query = self._build_query(locals())
         return self._request('feeds/ps/search', query)
 
-    def get_latest(self, limit=1000, offset=0):
+    def get_latest(self, limit=3000, offset=0):
         if self.user_type == 'FunimationSubscriptionUser':
             sort = 'SortOptionLatestSubscription'
         else:
             sort = 'SortOptionLatestFree'
         return self.get_shows(limit, offset, sort)
 
-    def get_simulcast(self, limit=1000, offset=0):
+    def get_simulcast(self, limit=3000, offset=0):
         return self.get_shows(limit, offset, filter='FilterOptionSimulcast')
 
     def get_genres(self):
@@ -69,7 +70,7 @@ class Funimation(object):
     def login(self, username, password):
         # This is complicated because we want to know if the username has
         # changed without having the login every time the plugin is ran.
-        # Unfortunetly we wont know if the users subscription status has
+        # Unfortunately we wont know if the users subscription status has
         # changed since we are reusing the cookie from previous requests.
         if not username and not password:
             self._log.warning('No login credentials, using free account')
@@ -92,7 +93,8 @@ class Funimation(object):
         payload = {'username': username, 'password': password,
                    'playstation_id': ''}
         try:
-            resp = self.http.post('feeds/ps/login.json?v=2', payload)
+            resp = self.http.post(
+                'https://www.funimation.com/feeds/ps/login.json?v=2', payload)
             utype = resp.get('user_type')
             if utype is not None:
                 # Convert snake case to camel case.

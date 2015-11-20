@@ -56,7 +56,7 @@ class HTTPClient(object):
         return None
 
     def save_cookies(self):
-        self._log.debug('Saving cookie')
+        self._log.debug('Saving cookie to "%s"', self._cookiejar.filename)
         self._cookiejar.save()
 
     def _request(self, request):
@@ -72,7 +72,8 @@ class HTTPClient(object):
         return content
 
     def _build_request(self, url, data=None):
-        url = self.base_url + url
+        if not url.startswith('http'):
+            url = self.base_url + url
         if data is not None:
             if isinstance(data, dict):
                 req = urllib2.Request(url, json.dumps(data),
@@ -81,5 +82,5 @@ class HTTPClient(object):
                 req = urllib2.Request(url, data)
         else:
             req = urllib2.Request(url)
-        self._log.debug(req.get_full_url())
+        self._log.info(req.get_full_url())
         return req

@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-import os
 import sys
 import logging
-import xbmc
 import xbmcaddon
 from resources.lib.kodi_handler import KodiHandler
 

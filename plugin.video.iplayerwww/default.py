@@ -122,7 +122,7 @@ def ParseAired(aired):
     if aired:
         try:
             # Need to use equivelent for datetime.strptime() due to weird TypeError.
-            return datetime.datetime(*(time.strptime(aired[0], '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
+            return datetime.datetime(*(time.strptime(aired, '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
         except ValueError:
             pass
     return ''
@@ -255,9 +255,10 @@ def ScrapeCategoryEpisodes(url):
         'data-ip-id="(.+?)">.+?'
         '<a href="/iplayer/episode/(.+?)/.+?"title top-title">'
         '(.+?)<.+?img src="(.+?)"(.+?)'
-        '<p class="synopsis">(.+?)</p>',
+        '<p class="synopsis">(.+?)</p>'
+        '(.+?)<div class="period"',
         re.DOTALL).findall(html.replace('amp;', ''))
-    for programme_id, episode_id, name, iconimage, sub_content, plot in match:
+    for programme_id, episode_id, name, iconimage, sub_content, plot, more in match:
         # Some programmes actually contain multiple episodes.
         # These can be recognized by some extra HTML code
         match_episodes = re.search(
@@ -286,7 +287,12 @@ def ScrapeCategoryEpisodes(url):
             if subtitle_match:
                 name += ", %s" % subtitle_match.group(1)
             episode_url = "http://www.bbc.co.uk/iplayer/episode/%s" % episode_id
-            CheckAutoplay(name, episode_url, iconimage, plot)
+            aired = re.search(
+                '.+?class="release">\s+First shown: (.+?)\n',
+                more,
+                re.DOTALL)
+            aired = ParseAired(aired.group(1) if aired else '')
+            CheckAutoplay(name, episode_url, iconimage, plot, aired=aired)
         # Check if a next page exists and if so return the index
     nextpage = re.compile('<span class="next txt"> <a href=".+?page=(\d+)">').findall(html)
     return nextpage

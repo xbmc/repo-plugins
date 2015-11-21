@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.iplayerwww" name="iPlayer WWW" version="1.2.8" provider-name="CaptainT, Cas, ihurst">
+<addon id="plugin.video.iplayerwww" name="iPlayer WWW" version="1.2.9" provider-name="CaptainT, Cas, ihurst">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.requests" version="2.7.0"/>

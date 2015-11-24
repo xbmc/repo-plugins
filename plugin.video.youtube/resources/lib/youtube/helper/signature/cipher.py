@@ -162,7 +162,7 @@ class Cipher(object):
 
     def _find_object_body(self, object_name, java_script):
         object_name = object_name.replace('$', '\$')
-        match = re.search(r'var %s={(?P<object_body>.*?})};' % object_name, java_script)
+        match = re.search(r'var %s={(?P<object_body>.*?})};' % object_name, java_script, re.S)
         if match:
             return match.group('object_body')
         return ''
@@ -181,6 +181,7 @@ class Cipher(object):
             if not _function.endswith('}'):
                 _function += '}'
                 pass
+            _function = _function.strip()
 
             match = re.match('(?P<name>[^:]*):function\((?P<parameter>[^)]*)\)\{(?P<body>[^}]+)\}', _function)
             if match:

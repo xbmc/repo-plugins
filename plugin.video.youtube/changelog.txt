@@ -1,4 +1,7 @@
-5.1.10 (2015-09-21)
+5.1.11 (2015-11-24)
+[fix] signature calculation (e.g. VEVO)
+
+5.1.10 (2015-11-13)
 [fix] signature calculation (e.g. VEVO)
 
 5.1.9 (2015-09-21)

@@ -1,3 +1,6 @@
+3.0.2 (2015-08-15)
+[add] forum url (thx 2 NEOhidra)
+
 3.0.1 (2015-08-15)
 [fix] support of direct video URLs
 

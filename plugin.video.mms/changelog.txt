@@ -1,3 +1,6 @@
+[B]4.0.4[/B]
+- Fixed detection of stacked files with comma in filename.
+
 [B]4.0.3[/B]
 - Fixed case conversion for blacklists (now case insensitive)
 

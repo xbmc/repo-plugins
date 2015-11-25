@@ -33,7 +33,8 @@ def _unstack(paths):
     for path in paths:
         if path.startswith("stack://"):
             for part in path.split("stack://", 1)[1].split(" , "):
-                yield part
+                # un-escape commas
+                yield part.replace(',,', ',')
         else:
             yield path
 

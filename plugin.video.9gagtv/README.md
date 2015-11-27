@@ -7,6 +7,10 @@
 
 # **Changelog:**
 
+## **3.0.2**
+
+* forum url (thx 2 NEOhidra)
+
 ## **3.0.1**
 
 * support of direct video URLs
@@ -14,10 +18,5 @@
 ## **3.0.0**
 
 * framework
-
-## **2.0.1**
-
-* playback of vimeo videos
-* kodion
 
 

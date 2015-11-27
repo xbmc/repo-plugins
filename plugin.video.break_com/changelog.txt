@@ -1,3 +1,6 @@
+4.0.3 (2015-11-27)
+[add] forum url (thx 2 NEOhidra)
+
 4.0.2 (2015-08-07)
 FIX: localization was missing a text and the ID was wrong
 

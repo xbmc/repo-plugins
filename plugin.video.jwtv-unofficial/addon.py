@@ -14,6 +14,7 @@ xbmcplugin.setContent(addon_handle, 'movies')
 vres = xbmcplugin.getSetting(addon_handle, 'video_res')
 if vres not in ['0','1','2','3']: vres = '0'
 video_res = [720,480,360,180][int(vres)]
+subtitles = xbmcplugin.getSetting(addon_handle, 'subtitles')
 
 addon = xbmcaddon.Addon()
 __language__ = addon.getLocalizedString
@@ -57,7 +58,10 @@ def get_video_metadata(file_ary):
 		if 'sqr' in r['images']: sqr_img = r['images']['sqr'].get('md')
 		elif 'cvr' in r['images']: sqr_img = r['images']['cvr'].get('md')
 		if 'pnr' in r['images']: wide_img = r['images']['pnr'].get('md')
-		video = sorted([x for x in r['files'] if x['frameHeight'] <= video_res], reverse=True)[0]
+		videos = sorted(r['files'], key=lambda x: x['subtitled'], reverse=(subtitles == False))
+		videos = sorted([x for x in videos if x['frameHeight'] <= video_res], reverse=True)
+		print videos
+		video = videos[0]
 		videoFiles.append({'id':r['guid'],'video':video['progressiveDownloadURL'],'wide_img':wide_img,'sqr_img':sqr_img,'title':r.get('title'),'dur':r.get('duration')})
 	return videoFiles
 
@@ -97,9 +101,6 @@ def process_top_level():
 	li = xbmcgui.ListItem(__language__(30005))
 	xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
 	xbmcplugin.endOfDirectory(addon_handle)
-
-	# Analytics tracking - just to see how widespread the sue of this add-on is.
-	urllib2.urlopen('https://api.segment.io/v1/pixel/track?data=ewogICJ3cml0ZUtleSI6ICI1dUd1S0prN0dPWkJSRFlZZWplblZTTVJCUERlcXUwNCIsCiAgInVzZXJJZCI6ICIxOFloWkFwZUdHIiwKICAiZXZlbnQiOiAiVG9wIExldmVsIgp9').read()
 
 def build_playlist(file_ary, first):
 	added = 0

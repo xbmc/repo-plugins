@@ -32,13 +32,13 @@ def radiotv_channels(url):
 		page_source = ''
 		msgok(translate(30001),translate(30018))
 	if page_source:
-		match=re.compile('<a title="(.+?)" href="(.+?)" class="mask-live"><img alt="(.+?)" src=".+?src=(.+?)&.+?" c').findall(page_source)
+		match=re.compile('<a title="(.+?)" href="(.+?)" class="mask-live"><img alt="(.+?)" src="(.+?)\?.+?" c').findall(page_source)
 		totaltv = len(match)
 		for titulo,url2,prog,img_old in match:
 			try:
 				titulo = title_clean_up(titulo)
 				stream_url = grab_live_stream_url(base_url + url2)
-				img = img_base_url + img_old
+				img = img_old
 				addLink('[B][COLOR blue]' + titulo + '[/COLOR]' +' - ' + title_clean_up(prog)+ '[/B]',stream_url,img,totaltv)
 			except: pass
 	else:

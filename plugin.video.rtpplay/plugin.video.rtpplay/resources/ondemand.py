@@ -85,8 +85,8 @@ def list_episodes(name,url,plot):
 				if titulo_array: 
 					if 'itemprop' not in titulo_array[0]:
 						titulo = title_clean_up(titulo_array[0])
-				img_tmp = re.compile('itemprop="image" src=".+?src=(.+?)&.+?"').findall(match)
-				if img_tmp: img = img_base_url + img_tmp[0]
+				img_tmp = re.compile('itemprop="thumbnail" src="(.+?)\?.+?" alt').findall(match)
+				if img_tmp: img = img_tmp[0]
 				else: img = ''
 				if data and lnk:
 					information = { "Title": titulo,"plot":plot,"aired":format_data(data[0]) }
@@ -121,7 +121,7 @@ def list_emissoes(urltmp):
 							sinopse=re.findall('id="promo">.+?\n.+?<p>(.*?)</p>', source, re.DOTALL)
 							if sinopse: plot = clean_html(title_clean_up(sinopse[0]))
 							information={ "Title": title_clean_up(titulo),"plot":plot }
-							try: thumbnail=img_base_url + re.compile('src=(.+?)&amp').findall(source)[0]
+							try: thumbnail = re.compile('itemprop="thumbnail" src="(.+?)\?.+?"').findall(source)[0]
 							except: thumbnail=''
 						except: information={ "Title": title_clean_up(titulo),"plot":translate(30026) };thumbnail=''
 					else: information={ "Title": title_clean_up(titulo),"plot":translate(30026) };thumbnail=''
@@ -177,7 +177,7 @@ def list_show_search(url):
 							sinopse=re.findall('id="promo">.+?\n.+?<p>(.*?)</p>', source, re.DOTALL)
 							if sinopse: plot = clean_html(title_clean_up(sinopse[0]))
 							information={ "Title": title_clean_up(titulo),"plot":plot }
-							try: thumbnail=img_base_url + re.compile('src=(.+?)&amp').findall(source)[0]
+							try: thumbnail = re.compile('<link itemprop="thumbnail" href="(.+?)\?.+?">').findall(source)[0]
 							except: thumbnail=''
 						except: information={ "Title": title_clean_up(titulo),"plot":translate(30026) };thumbnail=''
 					else: information={ "Title": title_clean_up(titulo),"plot":translate(30026) };thumbnail=''

@@ -39,10 +39,11 @@ class RTPPlayer(xbmc.Player):
 	def onPlayBackStopped(self):
 		print("player stopped")
 		self._playbackLock = False
-		if self.timepos/self.totalTime > 0.92 and self.playingfile == self.array[-1]:
-			mark_as_watched(self.urlwatched)
-		else: pass
-
+		try:
+			if float(self.timepos/self.totalTime) > 0.92 and self.playingfile == self.array[-1]:
+				mark_as_watched(self.urlwatched)
+			else: pass
+		except: pass
 
 	def onPlayBackEnded(self):              
 		self.onPlayBackStopped()

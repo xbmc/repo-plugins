@@ -1,4 +1,5 @@
-import requests
+import re
+import urllib2
 
 from xbmcswift2 import xbmc
 
@@ -11,6 +12,8 @@ T_ERROR_SERVER = 30002
 T_ERROR_COURSES = 30003
 T_ERROR_VIDEOS = 30004
 
+agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:32.0) Gecko/20100101 Firefox/32.0'
+
 def log(message):
     xbmc.log(message)
 
@@ -18,41 +21,53 @@ def alert(title, message):
     xbmc.executebuiltin("Notification(" + title + "," + message + ")")
 
 def get_courses():
-    url = BASE_URL + '/cursos'
-    page = requests.get(url , verify=False)
-    soup = BeautifulSoup(page.content)
+    url = BASE_URL + '/courses'
+    req = urllib2.Request(url)
+    req.add_header('User-agent', agent)
+    soup = BeautifulSoup(urllib2.urlopen(req).read(), convertEntities=BeautifulSoup.HTML_ENTITIES)
+
     output = []
 
-    for article in soup.find('section').findAll('article'):
-        anchor = article.find('h3').find('a', {'class': 'blue'})
-        text = anchor.text.encode('utf8')
-        link = anchor.get('href')
-        img  = article.find('img').get('src')
-        videos = article.find('i', {'class': 'mdi-av-play-arrow'})
+    for index, div in enumerate(soup.findAll('div', {'class': ' col-xs-12 col-md-4 col-lg-4'})):
+        if index is 0:
+            divparent = soup.find('section', {'class': 'row'})
+            premium = divparent.find('div', {'class': 'small-padding yellow darken-3 be-small white-text'})
+            if premium is not None:
+                continue
+            videos = divparent.find('i', {'class': 'mdi-av-queue-music'}).parent
+            videosc = filter(str.isdigit, videos.text.encode('utf8'))
+        else:
+            premium = div.find('div', {'class': 'small-padding yellow darken-3 be-small white-text'})
+            if premium is not None:
+                continue
+            videos = div.parent.parent.find('i', {'class': 'mdi-av-queue-music'}).parent
+            videosc = filter(str.isdigit, videos.text.encode('utf8'))
+        anchor = div.find('a')
+        text = div.find('h2').text.encode('utf8')
+        link = anchor.get('href').encode('utf8')
+        img  = div.find('img').get('src')
         if videos is not None:
-            videos = ' (' + videos.parent.text.encode('utf8') + ')'
+            videos = ' (' + videosc + ')'
             output.append({'title': text + videos,
-             'url': link,
-             'thumbnail': img,
-             })
+                'url': link,
+                'thumbnail': img,
+            })
 
     return output
 
 def get_course(url):
     url = BASE_URL + url
-    page = requests.get(url, verify=False)
-    soup = BeautifulSoup(page.content)
+    req = urllib2.Request(url)
+    req.add_header('User-agent', agent)
+    soup = BeautifulSoup(urllib2.urlopen(req).read(), convertEntities=BeautifulSoup.HTML_ENTITIES)
     output = []
 
-    aitems = soup.find(id='recordline').find('ul').findAll('a')
-    liitems = soup.find(id='recordline').find('ul').findAll('li')
-
-    for idx, val in enumerate(aitems):
-        link = val.get('href')
-        title = liitems[idx].get('data-original-title')
+    for index, li in enumerate(soup.findAll('li', {'class': 'be-normal no-margin grey-text large-padding uppercase big-line-height'})):
+        link = li.find('a').get('href')
+        title = li.find('div', {'class': 'col-xs-10 col-lg-11'})
         if title is not None:
             output.append({
-                'title': title.encode('utf8'),
+                'title': title.text.encode('utf8'),
                 'url': link})
 
     return output
@@ -60,7 +75,8 @@ def get_course(url):
 
 def get_video(url):
     url = BASE_URL + url
-    page = requests.get(url, verify=False)
-    soup = BeautifulSoup(page.content)
+    req = urllib2.Request(url)
+    req.add_header('User-agent', agent)
+    soup = BeautifulSoup(urllib2.urlopen(req).read(), convertEntities=BeautifulSoup.HTML_ENTITIES)
 
-    return soup.find(id='video_id_h').get('value')
+    return soup.find(id='youtube_video_id').get('value')

@@ -1,3 +1,6 @@
+1.0.3
+- Fix scrapper
+
 1.0.2
 - Migrated to xbmcswift2
 - Fix scrapper

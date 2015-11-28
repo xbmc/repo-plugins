@@ -18,7 +18,7 @@ def courses():
 
     if len(courses) == 0:
         cf.alert(plugin.name, plugin.get_string(cf.T_ERROR_COURSES))
-    
+
     return courses
 
 

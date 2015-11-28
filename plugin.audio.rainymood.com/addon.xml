@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.rainymood.com" name="Rainymood.com" version="1.2.0" provider-name="cdwertmann">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">Rainymood.com</summary>
+        <description lang="en">Listen to the soothing sound of rain</description>
+        <website>https://github.com/cdwertmann/plugin.audio.rainymood.com</website>
+        <source>git://github.com/cdwertmann/plugin.audio.rainymood.com.git</source>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+        <disclaimer>Rainymood.com has not endorsed this addon</disclaimer>
+    </extension>
+</addon>

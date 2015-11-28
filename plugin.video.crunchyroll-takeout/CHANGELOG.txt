@@ -1,4 +1,8 @@
-[B]2.2[/B]
+[B]2.2.1[/B]
+Pulled Fix for Queue in Episode view (thanks rpowellgit)
+Added Trakt.tv info (from ineffablebob)
+Reverted Stupid sorting rulles that just messed stuff up.
+[B]2.2.0[/B]
 Replaced Shelf with Pickle (randomllama)
 "fix" the stupid Android bug
 Fix: v. Work around in a stupid way that just won't crash when it fails.

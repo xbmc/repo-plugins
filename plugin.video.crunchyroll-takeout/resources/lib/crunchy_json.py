@@ -545,7 +545,7 @@ def list_categories(args):
                           'filterx':    'tag:' + i['tag']},
                          isFolder=True)
 
-    crm.endofdirectory('label')
+    crm.endofdirectory('none')
 
 
 def list_collections(args):
@@ -592,7 +592,7 @@ def list_collections(args):
                              isFolder=True,
                              queued=queued)
 
-    crm.endofdirectory('title')
+    crm.endofdirectory('none')
 
 
 def list_media(args):
@@ -639,9 +639,12 @@ def list_media_items(args, request, series_name, season, mode, fanart):
     """
     for media in request:
 	
-        series_id = (media['series']['series_id']
-                       if mode == "history"
-                       else args.series_id)
+        if mode == "history":
+            series_id = media['series']['series_id']
+        elif args.series_id:
+            series_id = args.series_id
+        else:
+            series_id = 'None'
 
         queued = (series_id in args.user_data['queue'])
 
@@ -778,7 +781,7 @@ def list_media_items(args, request, series_name, season, mode, fanart):
                      isFolder=False,
                      queued=queued)
 
-    crm.endofdirectory('title')
+    crm.endofdirectory('none')
 
 
 def history(args):
@@ -1024,6 +1027,7 @@ def start_playback(args):
     quality     = res_quality[int(args._addon.getSetting("video_quality"))]
 
     fields = "".join(["media.episode_number,",
+                      "media.series_name,",
                       "media.name,",
                       "media.playhead,",
                       "media.description,",
@@ -1064,8 +1068,12 @@ def start_playback(args):
                 url = allurl['low']
 
             item = xbmcgui.ListItem(args.name, path=url)
-            item.setInfo(type="Video", infoLabels={"Title":     args.name,
-                                                   "playcount": playcount})
+            # TVShowTitle, Season, and Episode are used by the Trakt.tv add-on to determine what is being played
+            item.setInfo(type="Video", infoLabels={"Title":       args.name,
+                                                   "TVShowTitle": request['data']['series_name'],
+                                                   "Season": args.season,
+                                                   "Episode": request['data']['episode_number'],
+                                                   "playcount":   playcount})
             item.setThumbnailImage(args.icon)
             item.setProperty('TotalTime',  args.duration)
             item.setProperty('ResumeTime', resumetime)

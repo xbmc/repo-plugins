@@ -68,13 +68,17 @@ class Plugin_mod(Plugin):
 
     def _make_listitem(self, label, label2='', iconImage='', thumbnail='',
                        path='', **options):
-
-        li = xbmcgui.ListItem(label, label2=label2, iconImage=iconImage,
-                              thumbnailImage=thumbnail, path=path)
+        
+        li = xbmcgui.ListItem(label, label2=label2, iconImage=iconImage, thumbnailImage=thumbnail, path=path)
         cleaned_info = clean_dict(options.get('info'))        
-
+        
         li.setArt({ 'poster': options.get('thumb')})
-
+        li.setInfo('video', {
+            'originaltitle': label,
+            'title': label,
+            'sorttitle': options.get('key')
+        })
+        
         if cleaned_info:
             li.setInfo('video', cleaned_info)
         if options.get('is_playable'):
@@ -113,11 +117,13 @@ def main_menu():
     menulist = dataNew['menu']
     items = []
     for (key, val) in enumerate(menulist):
-        items.append({"label": u"{0}".format(val['title']),
+        items.append({
+            "label": u"{0}".format(val['title']),
+            "key": u"{0}".format(key),
             'url': plugin.url_for('tvList',type=val['key']),
             'thumb': "{0}".format(val["thumb"])})
 
-    return plugin.add_items(items)
+    return plugin.add_items(items, False, [xbmcplugin.SORT_METHOD_VIDEO_SORT_TITLE, xbmcplugin.SORT_METHOD_VIDEO_TITLE])
 
 
 @plugin.route('/tvlist/<type>')
@@ -160,16 +166,20 @@ def tvList(type):
         if menulist:
             for (key, val) in enumerate(menulist):
                 if val['type'] == 'item':
-                    items.append({"label": u"{0}".format(val['title']),
+                    items.append({
+                        "label": u"{0}".format(val['title']),
+                        "key": u"{0}".format(key),
                         'url': plugin.url_for('tvPlay',type=val['key']),
                         'thumb': "{0}".format(val["thumb"])})
                 elif val['type'] == 'menu':
-                    items.append({"label": u"{0}".format(val['title']),
+                    items.append({
+                        "label": u"{0}".format(val['title']),
+                        "key": u"{0}".format(key),
                         'url': plugin.url_for('tvList',type=val['key']),
                         'thumb': "{0}".format(val["thumb"])})
 
 
-    return plugin.add_items(items)
+    return plugin.add_items(items, False, [xbmcplugin.SORT_METHOD_VIDEO_SORT_TITLE, xbmcplugin.SORT_METHOD_VIDEO_TITLE])
 
 @plugin.route('/tvPlay/<type>')
 def tvPlay(type):

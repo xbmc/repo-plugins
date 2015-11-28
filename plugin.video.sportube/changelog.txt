@@ -1,0 +1,6 @@
+[B]1.0.1[/B]
+- fixed addon init
+
+[B]1.0.0[/B]
+- first release
+

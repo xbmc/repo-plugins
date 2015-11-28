@@ -4,6 +4,7 @@ OneDrive for KODI
 Play all your media from Microsoft OneDrive including Videos, Music and Pictures. 
 * Unlimited personal accounts
 * Playback your music and videos. Listing of videos with thumbnails.
+* Subtitles can be assigned automatically if a .str file exists next to the video. 
 * Export your videos to your library (.strm files). You can export your music too, but kodi won't support it yet. It's a Kodi issue for now.
 * Show your photos individually or run a slideshow of them. Listing of pictures with thumbnails.
 * Auto-Refreshed slideshow.

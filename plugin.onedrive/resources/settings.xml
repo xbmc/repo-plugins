@@ -5,6 +5,7 @@
 		<setting label="30001" type="folder" id="video_library_folder" option="writeable"/>
 		<setting label="30002" type="folder" id="music_library_folder" option="writeable"/>
 		<setting label="30003" type="bool" id="clean_folder" default="true" value="true"/>
+		<setting label="30051" type="bool" id="set_subtitle" default="true" value="true"/>
     </category>
 	<category label="30032">
 		<setting label="30033" type="number" id="slideshow_refresh_interval" default="5" value="true"/>

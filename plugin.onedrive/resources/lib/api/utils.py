@@ -29,10 +29,16 @@ class Utils:
             return name[index+1:].lower()
         return ''
     @staticmethod
-    def get_safe_value(dictionary, key):
+    def replace_extension(name, newExtension):
+        index = name.rfind('.')
+        if index > -1:
+            return name[:index+1] + newExtension
+        return name
+    @staticmethod
+    def get_safe_value(dictionary, key, default_value=None):
         if key in dictionary:
             return dictionary[key]
-        return None
+        return default_value
     @staticmethod
     def unicode(txt):
         if isinstance (txt,str):

@@ -46,4 +46,10 @@
     <string id="30043">Something happened with the request%s.</string>
     <string id="30044">Will try in %s seconds.</string>
     <string id="30045">Attempt %s of %s.</string>
+    <string id="30046">Your credentials are no longer valid. You need to sign in again.%sDo you want to start the process?</string>
+    <string id="30047">%s of %s items loaded in this folder, please wait...</string>
+    <string id="30048">%s of %s items loaded from search, please wait...</string>
+    <string id="30049">Loading %s items in this folder, please wait...</string>
+    <string id="30050">Loading %s items from search, please wait...</string>
+    <string id="30051">When playing videos, set the subtitle file located next to the video (.srt)</string>
 </strings>

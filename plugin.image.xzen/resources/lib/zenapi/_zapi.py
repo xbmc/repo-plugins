@@ -115,7 +115,7 @@ def MakeRequest(method, params, auth=None, use_ssl=True, keyring = None):
     headers['Content-Type'] = 'application/json'
     #log("Make Request with headers: " + str(headers))
     global _opener
-    ver='1.6'
+    ver='1.8'
     #ver='1.2'
     if use_ssl is False and auth is None:
         url = 'http://api.zenfolio.com/api/%s/zfapi.asmx'%ver

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="plugin.image.xzen"
-  version="0.0.9"
-  name="XZen"
-  provider-name="bossanova808">
+  version="0.1.0"
+  name="XZen">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
@@ -11,10 +10,15 @@
     <provides>image</provides>
   </extension>
  <extension point="xbmc.addon.metadata">
-    <platform>all</platform>
-    <language></language>
     <summary lang="en">Zenfolio Browser for XBMC</summary>
     <description lang="en">Browse the public Zenfolio galleries, and view your Zenfolio photo portfolios in XBMC</description>
     <disclaimer lang="en"></disclaimer>
+    <platform>all</platform>
+    <language></language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum>http://forum.xbmc.org/showthread.php?tid=153178</forum>
+    <website>http://wiki.xbmc.org/index.php?title=Add-on:XZen</website>
+    <email></email>
+    <source>https://github.com/bossanova808/plugin.image.xzen</source>
   </extension>
 </addon>

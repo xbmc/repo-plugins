@@ -1,3 +1,6 @@
+5.1.12 (2015-11-29)
+[fix] sort issues with Jarvis (thx 2 guidosarducci)
+
 5.1.11 (2015-11-24)
 [fix] signature calculation (e.g. VEVO)
 

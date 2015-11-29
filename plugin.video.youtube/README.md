@@ -11,6 +11,10 @@
 
 # **Changelog:**
 
+## **5.1.11**
+
+* signature calculation (e.g. VEVO)
+
 ## **5.1.10**
 
 * signature calculation (e.g. VEVO)
@@ -21,14 +25,6 @@
 * don't set default season and episodes (1x1)
 * another try to optimize the quota problem. Move all searches to the individual keys instead of one global
 * playback issues (skip discontinued video/format by YouTube)
-
-## **5.1.8**
-
-* Bulgarian (thx 2 NEOhidra)
-* new quota shaping
-* personal playlists (Watch Later, Liked Video, ...) should work again
-* playback of VEVO videos - some videos still using discontinued ITAG13
-* show login, when an endpoint is called, which requires permissions.
 
 
 # **Images:**

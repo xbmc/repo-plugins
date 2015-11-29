@@ -63,13 +63,47 @@ def getShows():
       if b['depth'] == 2:
        name = b['title']
        url  = b['id'].rsplit('/',1)[1]
-       u = '%s?url=%s&mode=GE' % (sys.argv[0],url)
+       u = '%s?url=%s&mode=GC' % (sys.argv[0],url)
        liz=xbmcgui.ListItem(name, '',None, icon)
        liz.setProperty('fanart_image', addonfanart)
        ilist.append((u, liz, True))
    xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
    if addon.getSetting('enable_views') == 'true':
       xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('default_view'))
+   xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+
+def getCats(geurl):
+   xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+   xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_UNSORTED)
+   xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_TITLE)
+   xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+   xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_EPISODE)
+
+   ilist=[]
+   url = 'http://common.farm1.smdg.ca/Forms/PlatformVideoFeed?platformUrl=http%3A//feed.theplatform.com/f/dtjsEC/EAlt6FfQ_kCX/categories%3Fpretty%3Dtrue%26byHasReleases%3Dtrue%26range%3D1-1000%26byCustomValue%3D%7Bplayertag%7D%7Bz/HGTVNEWVC%20-%20New%20Video%20Center%7D%26sort%3DfullTitle&callback='
+   html = getRequest(url)
+   a = json.loads(html[1:len(html)-1])['items']
+   pid = 'http://data.media.theplatform.com/media/data/Category/%s' % geurl
+   wewait = True
+   for b in a:
+      if b['parentId'] == pid:
+        if wewait == True:
+          if b['title'] == 'Full Episodes': 
+             wewait = False
+             pid = b['id']
+          if b['hasReleases'] == False: continue
+        if wewait == False and b['hasReleases'] == True:
+          name = b['title']
+          url  = b['id'].rsplit('/',1)[1]
+          u = '%s?url=%s&mode=GE' % (sys.argv[0],url)
+          liz=xbmcgui.ListItem(name, '',None, icon)
+          liz.setProperty('fanart_image', addonfanart)
+          ilist.append((u, liz, True))
+
+   xbmcplugin.addDirectoryItems(int(sys.argv[1]), ilist, len(ilist))
+   if addon.getSetting('enable_views') == 'true':
+      xbmc.executebuiltin("Container.SetViewMode(%s)" % addon.getSetting('episode_view'))
    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
@@ -183,5 +217,6 @@ p = parms.get
 mode = p('mode',None)
 
 if mode==  None:  getShows()
+elif mode=='GC':  getCats(p('url'))
 elif mode=='GE':  getEpisodes(p('url'))
 elif mode=='GV':  getVideo(p('url'))

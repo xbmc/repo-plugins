@@ -177,7 +177,8 @@ def get_main_video(url):
             link = click.findParent()['href']
             debug('Main video link found: %s' % link)
         else:
-            debug('No \"cliquer ici\" found')
+            debug('No \"cliquer ici\" found. Trying link with "fichiers"...')
+            link = download_page.replace('telecharger', 'fichiers')
     else:
         debug('No main video found')
     return {'title': title, 'url': link}

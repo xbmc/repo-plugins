@@ -3,6 +3,8 @@ plugin.video.cbc
 
 Kodi Addon for CBC Video website
 
+Version 1.0.13 more website changes
+Version 1.0.12 extensive website change
 Version 1.0.11 Added 'episodes' view
 Version 1.0.10 Improve video resolution
 Version 1.0.9 Improve video resolution

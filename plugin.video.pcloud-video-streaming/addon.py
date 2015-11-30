@@ -115,24 +115,28 @@ if mode[0] == "folder":
 									listitem=li, isFolder=True)
 		else:
 			contentType = oneItem["contenttype"]
-			if contentType[:6] != "video/":
+			if contentType[:6] != "video/" and contentType[:6] != "audio/":
 				continue
 			thumbnailUrl = thumbs.get(oneItem["fileid"], None)
 			if thumbnailUrl is None:
-				thumbnailUrl = "DefaultVideo.png"
+				if contentType[:6] == "video/":
+					thumbnailUrl = "DefaultVideo.png"
+				elif contentType[:6] == "audio/":
+					thumbnailUrl = "DefaultAlbumCover.png"
 			li = xbmcgui.ListItem(oneItem["name"], iconImage=thumbnailUrl)
-			li.addStreamInfo(
-				"video", 
-				{ 	"duration": int(float(oneItem["duration"])),
-					"codec": oneItem["videocodec"],
-					"width": oneItem["width"],
-					"height": oneItem["height"]
-				}
-			)
-			li.addStreamInfo(
-				"audio",
-				{ 	"codec", oneItem["audiocodec"] }
-			)
+			if contentType[:6] == "video/":
+				li.addStreamInfo(
+					"video", 
+					{ 	"duration": int(float(oneItem["duration"])),
+						"codec": oneItem["videocodec"],
+						"width": oneItem["width"],
+						"height": oneItem["height"]
+					}
+				)
+				li.addStreamInfo(
+					"audio",
+					{ 	"codec", oneItem["audiocodec"] }
+				)
 			# The below is necessary in order for xbmcplugin.setResolvedUrl() to work properly
 			li.setProperty("IsPlayable", "true")
 			# Add context menu item for delete file

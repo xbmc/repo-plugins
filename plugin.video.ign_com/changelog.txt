@@ -26,3 +26,8 @@
 - Adjusted file paths for video reviews and IGN-Daily-Fix to match new layout of web page
 2.1.5
 - Fixed a bug where wrong bitrate was chosen for some 360p videos
+2.1.6
+- Fixed Daily-Fix
+- Added page counter for video lists
+- Removed 'IGN-First', 'IGN-Live' and 'List Series' from folders since filter options and dedicated pages seem to have disappeared from the page. Looking for an alternative solution, for now these options are not supported. Let me know on the forums if you find any dedicated page.
+- To make up for this I added the following podcasts: Up At Noon, Game Scoop!, Beyond!, Unlocked, Nintendo Voice Chat, Esports Weekly, and Fireteam Chat

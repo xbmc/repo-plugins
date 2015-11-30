@@ -21,13 +21,20 @@ maxVideoQuality=[640,960,1280,1920][int(maxVideoQuality)]
 
 def index():
         addDir(translation(30002),"http://www.ign.com/videos/all/filtergalleryajax?filter=all",'listVideos',"")
-        addDir("IGN Daily Fix","http://www.ign.com/videos/series/daily-fix",'listVideos',"")
-        addDir("IGN Live","http://www.ign.com/videos/series/ign-live",'listVideos',"")
-        addDir("IGN First","http://www.ign.com/videos/series/playstation-app-ign-first",'listVideos',"")
+        addDir("IGN Daily Fix","http://www.ign.com/watch/daily-fix?category=videos&page=1",'listSeriesEpisodes',"")
+        # addDir("IGN Live","http://www.ign.com/videos/series/ign-live",'listVideos',"")
+        # addDir("IGN First","http://www.ign.com/videos/series/playstation-app-ign-first",'listVideos',"")
         addDir(translation(30003),"http://www.ign.com/videos/all/filtergalleryajax?filter=games-review",'listVideos',"")
         addDir(translation(30004),"http://www.ign.com/videos/all/filtergalleryajax?filter=games-trailer",'listVideos',"")
         addDir(translation(30005),"http://www.ign.com/videos/all/filtergalleryajax?filter=movies-trailer",'listVideos',"")
-        addDir(translation(30007),"http://www.ign.com/videos/allseriesajax",'listSeries',"")
+        addDir("Up At Noon","http://www.ign.com/watch/up-at-noon?category=videos&page=1",'listSeriesEpisodes',"")
+        addDir("Game Scoop!","http://www.ign.com/watch/game-scoop?category=videos&page=1",'listSeriesEpisodes',"")
+        addDir("Beyond!","http://www.ign.com/watch/beyond?category=videos&page=1",'listSeriesEpisodes',"")
+        addDir("Unlocked","http://www.ign.com/watch/unlocked?category=videos&page=1",'listSeriesEpisodes',"")
+        addDir("Nintendo Voice Chat","http://www.ign.com/watch/nintendo-voice-chat?category=videos&page=1",'listSeriesEpisodes',"")
+        addDir("Esports Weekly","http://www.ign.com/watch/esports-weekly?category=videos&page=1",'listSeriesEpisodes',"")
+        addDir("Fireteam Chat","http://www.ign.com/watch/fireteam-chat?category=videos&page=1",'listSeriesEpisodes',"")
+        # addDir(translation(30007),"http://www.ign.com/videos/allseriesajax",'listSeries',"")
         addDir(translation(30008),"",'search',"")
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode==True:
@@ -58,12 +65,35 @@ def listVideos(url):
                   thumb=match[0].replace("_small.jpg", ".jpg")
               addLink(title,url,'playVideo',thumb,date+"\n"+desc,length)
         matchPage=re.compile('<a id="moreVideos" href="(.+?)"', re.DOTALL).findall(content)
+        pageCount=re.compile('<a id="moreVideos" href=".+?page=(.+?).+?"', re.DOTALL).findall(content)
         if len(matchPage)>0:
           urlNext="http://www.ign.com"+matchPage[0]
-          addDir(translation(30001),urlNext,'listVideos',"")
+          addDir(translation(30001)+" ("+str(pageCount[0])+")",urlNext,'listVideos',"")
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode==True:
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
+
+def listSeriesEpisodes(url):
+    content = getUrl(url)
+    match = re.compile('<a.+?class="video-link".+?href="(.+?)".+?data-title="(.+?)".+?>.+?<img src="(.+?)" />.+?<div class="video-title">(.+?)</div>.+?<div class="video-duration">(.+?)</div>.+?<div class="ago">(.+?)</div>', re.DOTALL).findall(content)
+    for i in range(0,len(match),1):
+        vidurl = "http://www.ign.com/"+match[i][0]
+        description = match[i][1]
+        thumb = match[i][2]
+        title = match[i][3]
+        drSplit = match[i][4].split(':')
+        duration = int(drSplit[0])*60+int(drSplit[1])
+        date = match[i][5]
+        addLink(title,vidurl,'playVideo',thumb,date+"\n"+description,duration)
+    matchPage=re.compile('<a class="next" href="://(.+?)">Next&nbsp;&raquo;</a>', re.DOTALL).findall(content)
+    pageCount=re.compile('<a class="next" href="://.+?page=(.+?)">Next&nbsp;&raquo;</a>', re.DOTALL).findall(content)
+    addDir(translation(30001)+" ("+str(pageCount[0])+")","http://www.ign.com"+matchPage[0]+"&category=videos",'listSeriesEpisodes',"")
+    xbmcplugin.endOfDirectory(pluginhandle)
+    if forceViewMode==True:
+        xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
+
+
+
 
 def listSeries(url):
         content = getUrl(url)
@@ -226,6 +256,8 @@ elif mode == 'listSearchResults':
     listSearchResults(url)
 elif mode == 'playVideo':
     playVideo(url)
+elif mode == 'listSeriesEpisodes':
+    listSeriesEpisodes(url)
 elif mode == 'search':
     search()
 else:

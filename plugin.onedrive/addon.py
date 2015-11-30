@@ -405,7 +405,7 @@ try:
         driveid = args.get('driveid')[0]
         item_id = args.get('item_id')[0]
         onedrive = onedrives[driveid]
-        child_count = int(args.get('child_count')[0])
+        child_count = 0 if 'child_count' not in args else int(args.get('child_count')[0])
         big_folder = child_count > big_folder_min
         if big_folder:
             if pg_bg_created:

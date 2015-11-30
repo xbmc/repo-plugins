@@ -1,3 +1,5 @@
+v1.1.3
+- Minor fixes
 v1.1.2
 - Subtitles can be assigned automatically if a .str file exists next to the video.
 - Fix Auto-refreshed slideshow

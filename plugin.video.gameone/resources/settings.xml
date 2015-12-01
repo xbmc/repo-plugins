@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-  <category label="30300">
-    <setting id="videoquality" type="enum" label="30310" lvalues="30311|30312|30313" default="2" />
-    <setting id="showsettings" type="bool" label="30320" default="true" />
-    <setting id="showlogo" type="bool" label="30330" default="false" />
-  </category>
-</settings>

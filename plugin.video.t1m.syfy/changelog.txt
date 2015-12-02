@@ -1,2 +1,0 @@
-Version 2.0.1 Initial v2 release
-Version 2.0.2 release cleanup

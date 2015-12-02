@@ -1,0 +1,12 @@
+script.module.t1mlib
+================
+
+Library of support routines for t1m addons
+
+V1.0.7 cleanup for release
+V1.0.6 fix for subtitles
+V1.0.5 added getAddonCats
+V1.0.4 fix request headers init
+V1.0.3 cleanup
+V1.0.2 fix for unicode
+V1.0.1 Initial version

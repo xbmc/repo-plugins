@@ -5,7 +5,7 @@
      marooned on an old version. -->
 <addon id="plugin.video.nfl.gamepass"
        name="NFL Game Pass"
-       version="0.8.0"
+       version="0.8.1"
        provider-name="Alexqw,divingmule,BaumSchorle,eriksoderblom">
   <requires>
     <import addon="xbmc.python" version="2.19.0"/>

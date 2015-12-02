@@ -1,3 +1,11 @@
+2015.12.02 v0.8.1 -- Brett Favre Edition
++ Add NFL Honors and some old seasons (2010-2011) of other shows
++ Dropped non-fuctioning old (< 2014) NFL Total Access seasons
++ Make RedZone button show even when in "pre" mode
++ Fix proxy protocol selection (thanks to maguire for reporting)
++ Cleanup method to detect running games (kaileu)
++ Assorted small improvements
+
 2015.08.27 v0.8.0 -- Julius Peppers Edition
 + Fix regression; can now watch streams for more than ~20 minutes on all platforms
 + Replace Game Rewind with Game Pass Domestic

@@ -140,3 +140,35 @@ msgstr "Geavanceerd"
 msgctxt "#30032"
 msgid "Coaches Film"
 msgstr "Coaches Film"
+
+msgctxt "#30033"
+msgid "Proxy Settings"
+msgstr ""
+
+msgctxt "#30034"
+msgid "Use an HTTP proxy to access Game Pass"
+msgstr ""
+
+msgctxt "#30035"
+msgid "Protocol"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Server"
+msgstr ""
+
+msgctxt "#30037"
+msgid "Port"
+msgstr ""
+
+msgctxt "#30038"
+msgid "Username"
+msgstr ""
+
+msgctxt "#30039"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30042"
+msgid "Enable 'Basic' Authentication"
+msgstr ""

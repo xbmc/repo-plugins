@@ -25,21 +25,22 @@ class pigskin(object):
         self.non_seasonal_shows = {'Super Bowl Archives': '117'}
         self.seasonal_shows = {
             'A Football Life': {'2015': '249', '2014': '218', '2013': '186', '2012': '154'},
-            'NFL Gameday': {'2015': '252', '2014': '212', '2013': '179', '2012': '146'},
+            'NFL Gameday': {'2015': '252', '2014': '212', '2013': '179', '2012': '146', '2011': '113', '2010': '85'},
             'Hard Knocks': {'2015': '251', '2014': '220', '2013': '223'},
-            'Sound FX': {'2015': '256', '2014': '215', '2013': '183', '2012': '150'},
-            'Top 100 Players': {'2015': '257', '2014': '217', '2013': '185', '2012': '153'}
+            'Sound FX': {'2015': '256', '2014': '215', '2013': '183', '2012': '150', '2011': '118'},
+            'Top 100 Players': {'2015': '257', '2014': '217', '2013': '185', '2012': '153', '2011': '121'}
         }
         self.boxscore_url = 'http://neulionms-a.akamaihd.net/fs/nfl/nfl/edl/nflgr'
 
         if subscription == 'international':
             self.seasonal_shows.update({
-                'Playbook': {'2015': '255', '2014': '213', '2013': '180', '2012': '147'},
-                'NFL Total Access': {'2015': '254', '2014': '214', '2013': '181', '2012': '148'},
+                'Playbook': {'2015': '255', '2014': '213', '2013': '180', '2012': '147', '2011': '114', '2010': '86'},
+                'NFL Total Access': {'2015': '254', '2014': '214'},
                 'NFL RedZone Archives': {'2015': '248', '2014': '221', '2013': '182', '2012': '149'},
                 'Coaches Show': {'2014': '216', '2013': '184', '2012': '151'},
                 'NFL Films Presents': {'2014': '219', '2013': '187'},
-                'Hall of Fame': {'2015': '253', '2014': '222'}
+                'Hall of Fame': {'2015': '250', '2014': '222'},
+                'NFL Honors': {'2015': '253', '2014': '224'}
             })
         elif subscription == 'domestic':
             self.seasonal_shows.update({
@@ -419,7 +420,7 @@ class pigskin(object):
         sc_data = self.make_request(url=url, method='post', payload=post_data)
 
         sc_dict = xmltodict.parse(sc_data)['result']
-        if sc_dict['rzPhase'] == 'in':
+        if sc_dict['rzPhase'] in ('pre', 'in'):
             self.log('RedZone is on air.')
             return True
         else:

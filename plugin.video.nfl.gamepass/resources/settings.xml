@@ -15,12 +15,12 @@
   </category>
   <category label="30033">
     <setting id="proxy_enabled" type="bool" label="30034" default="false"/>
-    <setting id="proxy_scheme" type="select" label="30035" lvalues="30040|30041" default="http" enable="eq(-1,true)"/>
+    <setting id="proxy_scheme" type="labelenum" label="30035" values="http|https" default="http" enable="eq(-1,true)"/>
     <setting id="proxy_host" type="text" label="30036" default="" enable="eq(-2,true)"/>
     <setting id="proxy_port" type="number" label="30037" default="" enable="eq(-3,true)"/>
-    <setting type="lsep" label="30042"/>
-    <setting id="proxy_username" type="text" label="30038" default="" enable="eq(-5,true)"/>
-    <setting id="proxy_password" type="text" label="30039" default="" option="hidden" enable="eq(-6,true)"/>
+    <setting id="proxy_auth" type="bool" label="30042" default="false" enable="eq(-4,true)"/>
+    <setting id="proxy_username" type="text" label="30038" default="" enable="eq(-1,true)"/>
+    <setting id="proxy_password" type="text" label="30039" default="" option="hidden" enable="eq(-2,true)"/>
   </category>
   <category label="30031">
     <setting id="debug" type="bool" label="Add-on debugging" default="false"/>

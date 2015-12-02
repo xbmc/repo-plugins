@@ -1,0 +1,11 @@
+plugin.video.t1m.tubitv
+================
+
+Kodi V2 Addon for tubitv
+
+V2.0.5 cleanup for release
+V2.0.4 fix for new url scramble
+V2.0.3 fix for metadata - reset metadata in settings before running
+V2.0.2 fix for release
+V2.0.1 initial v2 release
+

@@ -1,3 +1,6 @@
+2.2.2 (2015-12-02)
+[upd] addon.xml (thx 2 NEOhidra)
+
 2.2.1 (2015-04-28)
 UPD: name update
 UPD: changed server for content

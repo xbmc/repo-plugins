@@ -1,3 +1,5 @@
+v1.1.4
+- Fix the auto-refreshed slideshow when a connection error happens with OneDrive.
 v1.1.3
 - Minor fixes
 v1.1.2

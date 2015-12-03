@@ -194,7 +194,7 @@ def print_slideshow_info(onedrive):
 def refresh_slideshow(driveid, item_id, child_count, waitForSlideshow):
     onedrive = onedrives[driveid]
     if waitForSlideshow:
-        print 'Waiting up to 10 minutes until the slideshow of folder ' + item_id + ' start...'
+        print 'Waiting up to 10 minutes until the slideshow of folder ' + item_id + ' starts...'
         current_time = time.time()
         max_waiting_time = current_time + 10 * 60
         while not cancelOperation(onedrive) and xbmcgui.getCurrentWindowId() != 12007 and max_waiting_time > current_time:
@@ -203,7 +203,7 @@ def refresh_slideshow(driveid, item_id, child_count, waitForSlideshow):
             current_time = time.time()
         print_slideshow_info(onedrive)
     interval = addon.getSetting('slideshow_refresh_interval')
-    print 'Waiting up to ' + interval + ' minute(s) to check if it''s needed to refresh the slideshow of folder ' + item_id + '...'
+    print 'Waiting up to ' + interval + ' minute(s) to check if it is needed to refresh the slideshow of folder ' + item_id + '...'
     current_time = time.time()
     target_time = current_time + int(interval) * 60
     while not cancelOperation(onedrive) and target_time > current_time and xbmcgui.getCurrentWindowId() == 12007:
@@ -212,7 +212,18 @@ def refresh_slideshow(driveid, item_id, child_count, waitForSlideshow):
         current_time = time.time()
     print_slideshow_info(onedrive)
     if not cancelOperation(onedrive) and xbmcgui.getCurrentWindowId() == 12007:
-        start_auto_refreshed_slideshow(driveid, item_id, child_count)
+        try:
+            start_auto_refreshed_slideshow(driveid, item_id, child_count)
+        except Exception as e:
+            print 'Slideshow fails to auto refresh. Will be restarted when possible. Error: '
+            if isinstance(e, OneDriveException):
+                try:
+                    print ''.join(traceback.format_exception(type(e.origin), e.origin, e.tb))
+                except:
+                    traceback.print_exc()
+            else:
+                traceback.print_exc()
+            refresh_slideshow(driveid, item_id, -1, waitForSlideshow)
     else:
         print 'Slideshow is not running anymore or abort requested.'
 

@@ -4,6 +4,7 @@ plugin.video.cbc
 Kodi V2 Addon for CBC - for use in Canada only
 For Kodi Isengard and later releases
 
+V2.0.6 unicode fix
 V2.0.5 cleanup for release
 V2.0.4 add latest 'the national' b'cast
 V2.0.3 fix subtitles

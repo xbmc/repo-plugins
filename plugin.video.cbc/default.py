@@ -88,6 +88,7 @@ class myAddon(t1mAddon):
    pDialog.update(0)
    dirty = False
    for i,(url,name,img) in list(enumerate(epis, start=1)):
+     name = name.decode('utf-8','replace')
      try:
          (name, img, infoList) = meta[sname][url] 
      except:
@@ -106,7 +107,7 @@ class myAddon(t1mAddon):
          dirty = True
 
      fanart = img
-     ilist = self.addMenuItem(name.decode('utf-8'),'GV', ilist, url, img, fanart, infoList, isFolder=False)
+     ilist = self.addMenuItem(name,'GV', ilist, url, img, fanart, infoList, isFolder=False)
      pDialog.update(int((100*i)/numShows))
    pDialog.close()
    if dirty == True: self.updateAddonMeta(meta)

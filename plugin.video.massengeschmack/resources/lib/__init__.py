@@ -214,7 +214,7 @@ def parseRSSFeed(feed, fetch=False):
     if fetch is true, feed is assumed to be a URI to an RSS feed instead of
     its XML contents.
 
-    The returned list has to following format:
+    The returned list has the following format:
     [
         {
             'title'       : summary1,
@@ -267,18 +267,22 @@ def parseRSSFeed(feed, fetch=False):
     parser = HTMLParser()
     for node in dom.getElementsByTagName('item'):
         # convert duration string to seconds
-        duration = node.getElementsByTagName('itunes:duration')[0].firstChild.nodeValue
-        h, m, s  = map(int, duration.split(':'))
-        duration = timedelta(hours=h, minutes=m, seconds=s).seconds
-        
+        duration = 0
+        fc = node.getElementsByTagName('itunes:duration')[0].firstChild
+        if None != fc:
+            h, m, s  = map(int, fc.nodeValue.split(':'))
+            duration = timedelta(hours=h, minutes=m, seconds=s).seconds
+
         description = parser.unescape(node.getElementsByTagName('description')[0].firstChild.nodeValue).encode('utf-8')
         
         # get thumbnail URL
         thumbUrl = ''
-        thumbUrlMatch = re.search('^<img src="([^"]+)" /><br>', description)
+        thumbUrlMatch = re.search('^<img[^>]* src="([^"]+)" /><br>', description)
         if None != thumbUrlMatch:
             thumbUrl = thumbUrlMatch.group(1)
-            if None == re.match('^https?://', thumbUrl):
+            if 0 == thumbUrl.index('//'):
+                thumbUrl = 'https:' + thumbUrl
+            elif None == re.match('^https?://', thumbUrl):
                 thumbUrl = HTTP_BASE_URI + re.sub('^/', '', thumbUrl)
 
         # strip HTML tags

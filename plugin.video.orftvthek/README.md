@@ -21,6 +21,7 @@ Current Features
 * HTTP Stream H264 (Stable)
 * Search Function
 * Missed Shows
+* Blacklist Shows
 
 
 Known Issues

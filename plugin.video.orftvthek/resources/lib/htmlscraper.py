@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64,socket,datetime,time,os,os.path,urlparse,json
 import CommonFunctions as common
-
+from resources.lib.helpers import *
 from base import *
 
 class htmlScraper:
@@ -28,6 +28,7 @@ class htmlScraper:
         self.defaultbackdrop = defaultbackdrop
         self.useSubtitles = useSubtitles
         self.disableGeoblock = settings.getSetting("disableGeoblock") == "true"
+        self.enableBlacklist = settings.getSetting("enableBlacklist") == "true"
         self.xbmc.log(msg='HTML Scraper - Init done', level=xbmc.LOGDEBUG)
         
     # Extracts VideoURL from JSON String    
@@ -76,6 +77,8 @@ class htmlScraper:
             if date != "":
                 title = "%s - %s" % (title,date)
                 
+            
+            
             parameters = {"link" : link,"title" : title,"banner" : image,"backdrop" : "", "mode" : "openSeries"}
             
 
@@ -278,7 +281,15 @@ class htmlScraper:
             description = (self.translation(30008)).encode("utf-8")
         if not self.useSubtitles:
             subtitles = None;
-        liz = createListItem(title,banner,description,duration,date,channel,videourl,playable,folder,self.translation,backdrop,self.pluginhandle,subtitles)    
+        params = parameters_string_to_dict(videourl)
+        mode = params.get('mode')
+        print mode
+        blacklist = False
+        if self.enableBlacklist:
+            if mode == 'openSeries' or mode == 'getSendungenDetail':
+                blacklist = True
+        
+        liz = createListItem(title,banner,description,duration,date,channel,videourl,playable,folder,self.translation,backdrop,self.pluginhandle,subtitles,blacklist)    
         return liz
     
     # Parses all "ZIB" Shows
@@ -294,12 +305,10 @@ class htmlScraper:
             title = common.parseDOM(item,name='h4')
             if len(title) > 0:
                 title = title[0].encode('UTF-8')
-                print title
                 item_href = common.parseDOM(item,name='a',attrs={'class':'base_list_item_inner.*?'},ret="href")
                 image_container = common.parseDOM(item,name='figure',attrs={'class':'episode_image'},ret="href")
                 desc = self.translation(30008).encode('UTF-8')
                 image = common.parseDOM(item,name='img',attrs={},ret="src")
-                print len(image)
                 if len(image) > 0:
                     image = common.replaceHTMLCodes(image[0]).encode('UTF-8').replace("height=180","height=265").replace("width=320","width=500")
                 else:
@@ -555,7 +564,6 @@ class htmlScraper:
             cache.table_name = "searchhistory"
             keyboard_in = self.removeUmlauts(keyboard.getText())
             if keyboard_in != link:
-                print cache.get("searches")
                 some_dict = cache.get("searches") + "|"+keyboard_in
                 cache.set("searches",some_dict);
             searchurl = "%s?q=%s"%(self.search_base_url,keyboard_in.replace(" ","+"))

@@ -17,7 +17,7 @@ except:
 socket.setdefaulttimeout(30) 
 cache = StorageServer.StorageServer("plugin.video.orftvthek", 999999)
 
-version = "0.4.6"
+version = "0.5.1"
 plugin = "ORF-TVthek-" + version
 author = "sofaking,Rechi"
 
@@ -58,6 +58,7 @@ most_popular_banner =  os.path.join(media_path,"most_popular_banner_v2.jpg")
 archive_banner =  os.path.join(media_path,"archive_banner_v2.jpg")
 search_banner =  os.path.join(media_path,"search_banner_v2.jpg")
 trailer_banner =  os.path.join(media_path,"trailer_banner_v2.jpg")
+blacklist_banner =  os.path.join(media_path,"blacklist_banner.jpg")
 defaultbackdrop = os.path.join(media_path,"fanart.jpg")
 
 #load settings
@@ -66,6 +67,7 @@ useServiceAPI = settings.getSetting("useServiceAPI") == "true"
 autoPlay = settings.getSetting("autoPlay") == "true"
 useSubtitles = settings.getSetting("useSubtitles") == "true"
 videoQuality = settings.getSetting("videoQuality")
+enableBlacklist = settings.getSetting("enableBlacklist") == "true"
 
 try:
     videoQuality = video_quality_list[int(videoQuality)]
@@ -90,6 +92,9 @@ def getMainMenu():
     addDirectory((translation(30018)).encode("utf-8"),archive_banner,defaultbackdrop,translation,"","","getArchiv",pluginhandle)
     addDirectory((translation(30007)).encode("utf-8"),search_banner,defaultbackdrop,translation,"","","getSearchHistory",pluginhandle)
     addDirectory((translation(30027)).encode("utf-8"),trailer_banner,defaultbackdrop,translation,"","","openTrailers",pluginhandle)
+    #blacklist
+    if enableBlacklist:
+        addDirectory((translation(30037)).encode("utf-8"),blacklist_banner,defaultbackdrop,translation,"","","openBlacklist",pluginhandle)
     listCallback(False,thumbViewMode,pluginhandle)
     
     
@@ -121,7 +126,7 @@ def searchTV():
       cache.set("searches",some_dict);
       searchurl = "%s/search?q=%s"%(base_url,keyboard_in.replace(" ","+").replace("Ö","O").replace("ö","o").replace("Ü","U").replace("ü","u").replace("Ä","A").replace("ä","a"))
       searchurl = searchurl
-      getTableResults(searchurl)
+      getTableResults(searchurl,cache)
     else:
       addDirectory((translation(30014)).encode("utf-8"),defaultbanner,defaultbackdrop,translation,"","","",pluginhandle)
     listCallback(False,defaultViewMode,pluginhandle)
@@ -140,13 +145,26 @@ mode=params.get('mode')
 link=params.get('link')
 banner=params.get('banner')
 
-
 #modes
 if mode == 'openSeries':
     playlist = htmlScraper.getLinks(link,banner,playlist)
     if autoPlay and playlist != None:
         xbmc.Player().play(playlist)
     listCallback(False,defaultViewMode,pluginhandle)
+elif mode == 'unblacklistShow':
+    title=params.get('title')
+    unblacklistItem(title)
+    addDirectory(">> %s <<" % (translation(30039)).encode("utf-8"),defaultbanner,defaultbackdrop,translation,"","","",pluginhandle)
+    printBlacklist(defaultbanner,defaultbackdrop,translation,pluginhandle)
+    xbmcplugin.endOfDirectory(pluginhandle)
+elif mode == 'blacklistShow':
+    title=params.get('title')
+    blacklistItem(title)
+    xbmc.executebuiltin('Container.Refresh')
+if mode == 'openBlacklist':
+    addDirectory(">> %s <<" % (translation(30039)).encode("utf-8"),defaultbanner,defaultbackdrop,translation,"","","",pluginhandle)
+    printBlacklist(defaultbanner,defaultbackdrop,translation,pluginhandle)
+    xbmcplugin.endOfDirectory(pluginhandle)
 elif mode == 'getSendungen':
     if useServiceAPI:
         jsonScraper.getCategories()

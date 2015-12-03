@@ -43,7 +43,6 @@ class serviceAPI:
         
     def getTableResults(self, urlAPI):
         urlAPI = urlAPI % self.serviceAPItoken
-        print urlAPI
         try:
             response = urllib2.urlopen(urlAPI)
             responseCode = response.getcode()
@@ -53,7 +52,6 @@ class serviceAPI:
 
         if responseCode == 200:
             global time
-            print responseCode
             jsonData = json.loads(response.read())
             if 'teaserItems' in jsonData:
                 results = jsonData['teaserItems']

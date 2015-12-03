@@ -3,6 +3,7 @@ plugin.video.metv
 
 Kodi Addon for MeTV website
 
+Version 1.4.4 website change
 Version 1.4.3 More Website changes
 Version 1.4.2 Website change
 Version 1.4.1 Website change

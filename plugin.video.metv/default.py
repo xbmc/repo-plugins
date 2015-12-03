@@ -126,7 +126,7 @@ def getEpisodes(eurl, showName):
    except:  showName = 'MeTV'
    try:     fanart = re.compile('<img class="show-banner" src="(.+?)"',re.DOTALL).search(pg).group(1)
    except:  fanart = addonfanart
-   m = re.compile("<script src='/js/reminders.js(.+?)main-content ",re.DOTALL).search(pg)
+   m = re.compile('<div id="main-content">(.+?)main-content ',re.DOTALL).search(pg)
    try:      x = len(m.group(1))
    except:   m = re.compile('<div id="main-content">(.+?)<a href="/video/#">',re.DOTALL).search(pg)
    episodes = re.compile('<div class="category-list-item clearfix">.+?href="(.+?)".+?img src="(.+?)".+?href=.+?>(.+?)<.+?</div>(.+?)<div class="content-meta content-meta-tags">',re.DOTALL).findall(pg,m.start(1),m.end(1))

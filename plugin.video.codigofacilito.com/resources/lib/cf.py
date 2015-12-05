@@ -20,28 +20,30 @@ def log(message):
 def alert(title, message):
     xbmc.executebuiltin("Notification(" + title + "," + message + ")")
 
-def get_courses():
-    url = BASE_URL + '/courses'
+def get_soup_url(url):
     req = urllib2.Request(url)
     req.add_header('User-agent', agent)
-    soup = BeautifulSoup(urllib2.urlopen(req).read(), convertEntities=BeautifulSoup.HTML_ENTITIES)
+    return BeautifulSoup(urllib2.urlopen(req).read(), convertEntities=BeautifulSoup.HTML_ENTITIES)
 
+def get_courses():
+    url = BASE_URL + '/courses'
+    soup = get_soup_url(url)
     output = []
 
     for index, div in enumerate(soup.findAll('div', {'class': ' col-xs-12 col-md-4 col-lg-4'})):
         if index is 0:
             divparent = soup.find('section', {'class': 'row'})
             premium = divparent.find('div', {'class': 'small-padding yellow darken-3 be-small white-text'})
-            if premium is not None:
-                continue
             videos = divparent.find('i', {'class': 'mdi-av-queue-music'}).parent
             videosc = filter(str.isdigit, videos.text.encode('utf8'))
-        else:
-            premium = div.find('div', {'class': 'small-padding yellow darken-3 be-small white-text'})
             if premium is not None:
                 continue
-            videos = div.parent.parent.find('i', {'class': 'mdi-av-queue-music'}).parent
+        else:
+            premium = div.find('div', {'class': 'small-padding yellow darken-3 be-small white-text'})
+            videos = div.find('i', {'class': 'mdi-av-queue-music'}).parent
             videosc = filter(str.isdigit, videos.text.encode('utf8'))
+            if premium is not None:
+                continue
         anchor = div.find('a')
         text = div.find('h2').text.encode('utf8')
         link = anchor.get('href').encode('utf8')
@@ -50,16 +52,14 @@ def get_courses():
             videos = ' (' + videosc + ')'
             output.append({'title': text + videos,
                 'url': link,
-                'thumbnail': img,
+                'thumbnail': BASE_URL + img,
             })
 
     return output
 
 def get_course(url):
     url = BASE_URL + url
-    req = urllib2.Request(url)
-    req.add_header('User-agent', agent)
-    soup = BeautifulSoup(urllib2.urlopen(req).read(), convertEntities=BeautifulSoup.HTML_ENTITIES)
+    soup = get_soup_url(url)
     output = []
 
     for index, li in enumerate(soup.findAll('li', {'class': 'be-normal no-margin grey-text large-padding uppercase big-line-height'})):
@@ -75,8 +75,6 @@ def get_course(url):
 
 def get_video(url):
     url = BASE_URL + url
-    req = urllib2.Request(url)
-    req.add_header('User-agent', agent)
-    soup = BeautifulSoup(urllib2.urlopen(req).read(), convertEntities=BeautifulSoup.HTML_ENTITIES)
+    soup = get_soup_url(url)
 
     return soup.find(id='youtube_video_id').get('value')

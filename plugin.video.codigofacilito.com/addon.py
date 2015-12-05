@@ -9,6 +9,7 @@ plugin = Plugin()
 def courses():
     courses = []
     for course in cf.get_courses():
+        xbmc.log(course['thumbnail'])
         title = course['title']
         courses.append({
             'label': title,
@@ -19,7 +20,7 @@ def courses():
     if len(courses) == 0:
         cf.alert(plugin.name, plugin.get_string(cf.T_ERROR_COURSES))
 
-    return courses
+    return plugin.finish(courses, view_mode='thumbnail')
 
 
 @plugin.route('/course/<url>')

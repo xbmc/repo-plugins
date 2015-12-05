@@ -1,3 +1,7 @@
+1.0.4
+- Fix videos count
+- Enabled thumbnails for courses
+
 1.0.3
 - Fix scrapper
 

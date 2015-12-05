@@ -152,7 +152,7 @@ def main_list(params):
     if prev_page_url:
         prev_page = lutil.find_first(prev_page_url, pattern_pagenum)
         lutil.log('eso.main_list Value of prev_page: %s prev_page_url: "%s%s"' % (prev_page, root_url, prev_page_url))
-        prev_page_url = "%s%s%s" % (root_url, prev_page_url.replace('&amp;', '&').replace('&quot;', '"'), '' if 'search=' in prev_page_url else sort_url_param)
+        prev_page_url = "%s%s" % (root_url, prev_page_url.replace('&amp;', '&').replace('&quot;', '"'))
         reset_cache = "yes"
         lutil.addDir(action="main_list", title="<< %s (%s)" % (translation(30106), prev_page), url=prev_page_url, reset_cache=reset_cache, genre=genre)
 
@@ -176,7 +176,7 @@ def main_list(params):
         last_page = lutil.find_multiple(buffer_web, pattern_lastpage)[-1]
         next_page = lutil.find_first(next_page_url, pattern_pagenum)
         lutil.log('eso.main_list Value of next_page: %s last_page: %s next_page_url: "%s%s"' % (next_page, last_page, root_url, next_page_url))
-        next_page_url = "%s%s%s" % (root_url, next_page_url.replace('&amp;', '&').replace('&quot;', '"'), '' if 'search=' in next_page_url else sort_url_param)
+        next_page_url = "%s%s" % (root_url, next_page_url.replace('&amp;', '&').replace('&quot;', '"'))
         lutil.addDir(action="main_list", title=">> %s (%s/%s)" % (translation(30010), next_page, last_page), url=next_page_url, reset_cache=reset_cache, genre=genre)
 
     lutil.close_dir(pluginhandle, updateListing=updateListing)
@@ -186,7 +186,7 @@ def main_list(params):
 def search(params):
     search_string = lutil.get_keyboard_text(translation(30105))
     if search_string:
-        params['url'] += lutil.get_url_encoded(search_string)
+        params['url'] += lutil.get_url_encoded(search_string) + sort_url_param.replace('?', '&')
         lutil.log("eso.search Value of search url: %s" % params['url'])
         return main_list(params)
 
@@ -215,7 +215,7 @@ def play_video(params):
             return lutil.showWarning(translation(30012))
     else:
         for video_url in lutil.find_multiple(buffer_link, pattern_video_failover):
-            if not 'medium_' in video_url: continue
+            if video_url.endswith('zip'): continue
             if not video_url.startswith('http'):
                 root_url = eso_url if eso_url in page_url else space_url
                 video_url = "%s%s" % (root_url, video_url)

@@ -1,3 +1,6 @@
+1.0.5 (2015.12.05)
+- Improved failover video parser.
+- Quickfix for "by date" order filter in Next/Previous pages and Search entries.
 1.0.4
 - Improved failover parser for Spacetelescope videos.
 1.0.3

@@ -5,19 +5,19 @@ import xml.etree.ElementTree as xmltree
 import urllib
 from traceback import print_exc
 
-__addon__        = xbmcaddon.Addon()
-__addonid__      = __addon__.getAddonInfo('id').decode( 'utf-8' )
-__addonversion__ = __addon__.getAddonInfo('version')
-__language__     = __addon__.getLocalizedString
-__cwd__          = __addon__.getAddonInfo('path').decode("utf-8")
-__addonname__    = __addon__.getAddonInfo('name').decode("utf-8")
-__defaultpath__  = xbmc.translatePath( os.path.join( __cwd__, 'resources' ).encode("utf-8") ).decode("utf-8")
-ltype            = sys.modules[ '__main__' ].ltype
+ADDON        = xbmcaddon.Addon()
+ADDONID      = ADDON.getAddonInfo('id').decode( 'utf-8' )
+ADDONVERSION = ADDON.getAddonInfo('version')
+LANGUAGE     = ADDON.getLocalizedString
+CWD          = ADDON.getAddonInfo('path').decode("utf-8")
+ADDONNAME    = ADDON.getAddonInfo('name').decode("utf-8")
+DEFAULTPATH  = xbmc.translatePath( os.path.join( CWD, 'resources' ).encode("utf-8") ).decode("utf-8")
+ltype        = sys.modules[ '__main__' ].ltype
 
 def log(txt):
     if isinstance (txt,str):
         txt = txt.decode('utf-8')
-    message = u'%s: %s' % (__addonid__, txt)
+    message = u'%s: %s' % (ADDONID, txt)
     xbmc.log(msg=message.encode('utf-8'), level=xbmc.LOGDEBUG)
 
 class ViewAttribFunctions():
@@ -26,9 +26,9 @@ class ViewAttribFunctions():
 
     def _load_rules( self ):
         if ltype == 'video':
-            overridepath = os.path.join( __defaultpath__ , "videorules.xml" )
+            overridepath = os.path.join( DEFAULTPATH , "videorules.xml" )
         else:
-            overridepath = os.path.join( __defaultpath__ , "musicrules.xml" )
+            overridepath = os.path.join( DEFAULTPATH , "musicrules.xml" )
         try:
             tree = xmltree.parse( overridepath )
             return tree
@@ -56,7 +56,7 @@ class ViewAttribFunctions():
             selectName.append( xbmc.getLocalizedString( int( elem.attrib.get( "label" ) ) ) )
             selectValue.append( elem.text )
         # Let the user select a content type
-        selectedContent = xbmcgui.Dialog().select( __language__( 30309 ), selectName )
+        selectedContent = xbmcgui.Dialog().select( LANGUAGE( 30309 ), selectName )
         # If the user selected no operator...
         if selectedContent == -1:
             return
@@ -85,7 +85,7 @@ class ViewAttribFunctions():
                 selectName.append( xbmc.getLocalizedString( int( elem.find( "label" ).text ) ) )
                 selectValue.append( elem.attrib.get( "name" ) )
         # Let the user select a content type
-        selectedGrouping = xbmcgui.Dialog().select( __language__( 30310 ), selectName )
+        selectedGrouping = xbmcgui.Dialog().select( LANGUAGE( 30310 ), selectName )
         # If the user selected no operator...
         if selectedGrouping == -1:
             return
@@ -106,7 +106,7 @@ class ViewAttribFunctions():
             print_exc()
 
     def editLimit( self, actionPath, curValue ):
-        returnVal = xbmcgui.Dialog().input( __language__( 30311 ), curValue, type=xbmcgui.INPUT_NUMERIC )
+        returnVal = xbmcgui.Dialog().input( LANGUAGE( 30311 ), curValue, type=xbmcgui.INPUT_NUMERIC )
         if returnVal != "":
             self.writeUpdatedRule( actionPath, "limit", returnVal )
 
@@ -128,17 +128,17 @@ class ViewAttribFunctions():
                 print_exc()
 
     def editPath( self, actionPath, curValue ):
-        returnVal = xbmcgui.Dialog().input( __language__( 30312 ), curValue, type=xbmcgui.INPUT_ALPHANUM )
+        returnVal = xbmcgui.Dialog().input( LANGUAGE( 30312 ), curValue, type=xbmcgui.INPUT_ALPHANUM )
         if returnVal != "":
             self.writeUpdatedRule( actionPath, "path", returnVal.decode( "utf-8" ) )
 
     def editIcon( self, actionPath, curValue ):
-        returnVal = xbmcgui.Dialog().input( __language__( 30313 ), curValue, type=xbmcgui.INPUT_ALPHANUM )
+        returnVal = xbmcgui.Dialog().input( LANGUAGE( 30313 ), curValue, type=xbmcgui.INPUT_ALPHANUM )
         if returnVal != "":
             self.writeUpdatedRule( actionPath, "icon", returnVal.decode( "utf-8" ) )
 
     def browseIcon( self, actionPath ):
-        returnVal = xbmcgui.Dialog().browse( 2, __language__( 30313 ), "files", useThumbs = True )
+        returnVal = xbmcgui.Dialog().browse( 2, LANGUAGE( 30313 ), "files", useThumbs = True )
         if returnVal:
             self.writeUpdatedRule( actionPath, "icon", returnVal )
 

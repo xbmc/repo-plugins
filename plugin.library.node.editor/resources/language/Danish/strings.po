@@ -36,9 +36,17 @@ msgctxt "#30103"
 msgid "Browse for icon"
 msgstr "Se efter ikon"
 
+msgctxt "#30200"
+msgid "Content"
+msgstr "Indhold"
+
 msgctxt "#30204"
 msgid "Path"
 msgstr "Sti"
+
+msgctxt "#30309"
+msgid "Content"
+msgstr "Indhold"
 
 msgctxt "#30310"
 msgid "Group"

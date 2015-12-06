@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.library.node.editor" name="Library Node Editor" version="0.0.3" provider-name="Unfledged, Team-Kodi">
+<addon id="plugin.library.node.editor" name="Library Node Editor" version="0.0.4" provider-name="Unfledged, Team-Kodi">
     <requires>
 		<import addon="xbmc.python" version="2.20.0"/>
 		<import addon="script.module.simplejson" version="3.3.0"/>
@@ -11,7 +11,9 @@
 	<extension point="xbmc.addon.metadata">
 		<summary lang="de">Benutzerdefinierte Bibliotheksknoten verwalten.</summary>
 		<summary lang="en">Manage custom library nodes.</summary>
+		<summary lang="en_NZ">Manage custom library nodes.</summary>
 		<summary lang="en_US">Manage custom library nodes.</summary>
+		<summary lang="fr">Gére des nœuds de médiathèque personnalisés.</summary>
 		<summary lang="fr_CA">Gérer des nœuds de médiathèque personnalisés.</summary>
 		<summary lang="it">Gestisci nodi libreria personalizzati</summary>
 		<summary lang="ko">사용자 라이브러리 노드 관리자</summary>
@@ -22,7 +24,9 @@
 		<summary lang="ro">Administrați noduri mediatecă personalizate</summary>
 		<description lang="de">Benutzerdefinierte Bibliotheksknoten erstellen und bearbeiten.</description>
 		<description lang="en">Create and edit custom library nodes.</description>
+		<description lang="en_NZ">Create and edit custom library nodes.</description>
 		<description lang="en_US">Create and edit custom library nodes.</description>
+		<description lang="fr">Crée et modifie des nœuds de médiathèque personnalisés.</description>
 		<description lang="fr_CA">Créer et modifier des nœuds de médiathèque personnalisés.</description>
 		<description lang="it">Crea e modifica nodi libreria personalizzati.</description>
 		<description lang="ko">사용자 라이브러리 노드를 생성하고 편집합니다.</description>

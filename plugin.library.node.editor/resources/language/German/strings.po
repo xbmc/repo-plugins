@@ -200,6 +200,10 @@ msgctxt "#30403"
 msgid "Are you sure you want to delete this property?"
 msgstr "Sind Sie Sicher, dass Sie diese Eigenschaft löschen möchten?"
 
+msgctxt "#30404"
+msgid "Content parameter can't be deleted whilst this node still has an Order, Limit or Rule parameter."
+msgstr "Inhaltsparameter kann nicht gelöscht werden, solange dieser Knoten noch eine Sortierung, Beschränkung oder Regel enthält."
+
 msgctxt "#30405"
 msgid "Are you sure you want to delete this rule?"
 msgstr "Sind Sie Sicher, dass Sie diese Regel löschen möchten?"

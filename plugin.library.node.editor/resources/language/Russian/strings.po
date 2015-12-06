@@ -32,6 +32,10 @@ msgctxt "#30101"
 msgid "Edit label"
 msgstr "Изменить название"
 
+msgctxt "#30102"
+msgid "Edit icon"
+msgstr "Изменить иконку"
+
 msgctxt "#30103"
 msgid "Browse for icon"
 msgstr "Найти значок"
@@ -43,6 +47,10 @@ msgstr "Содержимое"
 msgctxt "#30204"
 msgid "Path"
 msgstr "Путь"
+
+msgctxt "#30205"
+msgid "Rule"
+msgstr "Правило"
 
 msgctxt "#30307"
 msgid "Value"

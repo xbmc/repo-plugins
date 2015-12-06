@@ -32,6 +32,10 @@ msgctxt "#30312"
 msgid "Path"
 msgstr "Putanja"
 
+msgctxt "#30313"
+msgid "Icon"
+msgstr "Ikone"
+
 msgctxt "#30314"
 msgid "Order by"
 msgstr "Složi po"

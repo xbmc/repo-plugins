@@ -5,20 +5,20 @@ import xml.etree.ElementTree as xmltree
 import urllib
 from traceback import print_exc
 
-__addon__        = xbmcaddon.Addon()
-__addonid__      = __addon__.getAddonInfo('id').decode( 'utf-8' )
-__addonversion__ = __addon__.getAddonInfo('version')
-__xbmcversion__  = xbmc.getInfoLabel( "System.BuildVersion" ).split(".")[0]
-__language__     = __addon__.getLocalizedString
-__cwd__          = __addon__.getAddonInfo('path').decode("utf-8")
-__addonname__    = __addon__.getAddonInfo('name').decode("utf-8")
-__defaultpath__  = xbmc.translatePath( os.path.join( __cwd__, 'resources' ).encode("utf-8") ).decode("utf-8")
-ltype            = sys.modules[ '__main__' ].ltype
+ADDON        = xbmcaddon.Addon()
+ADDONID      = ADDON.getAddonInfo('id').decode( 'utf-8' )
+ADDONVERSION = ADDON.getAddonInfo('version')
+KODIVERSION  = xbmc.getInfoLabel( "System.BuildVersion" ).split(".")[0]
+LANGUAGE     = ADDON.getLocalizedString
+CWD          = ADDON.getAddonInfo('path').decode("utf-8")
+ADDONNAME    = ADDON.getAddonInfo('name').decode("utf-8")
+DEFAULTPATH  = xbmc.translatePath( os.path.join( CWD, 'resources' ).encode("utf-8") ).decode("utf-8")
+ltype        = sys.modules[ '__main__' ].ltype
 
 def log(txt):
     if isinstance (txt,str):
         txt = txt.decode('utf-8')
-    message = u'%s: %s' % (__addonid__, txt)
+    message = u'%s: %s' % (ADDONID, txt)
     xbmc.log(msg=message.encode('utf-8'), level=xbmc.LOGDEBUG)
 
 class OrderByFunctions():
@@ -27,9 +27,9 @@ class OrderByFunctions():
 
     def _load_rules( self ):
         if ltype == 'video':
-            overridepath = os.path.join( __defaultpath__ , "videorules.xml" )
+            overridepath = os.path.join( DEFAULTPATH , "videorules.xml" )
         else:
-            overridepath = os.path.join( __defaultpath__ , "musicrules.xml" )
+            overridepath = os.path.join( DEFAULTPATH , "musicrules.xml" )
         try:
             tree = xmltree.parse( overridepath )
             return tree
@@ -108,7 +108,7 @@ class OrderByFunctions():
         selectName.append( xbmc.getLocalizedString( 590 ) )
         selectValue.append( "random" )
         # Let the user select an operator
-        selectedOperator = xbmcgui.Dialog().select( __language__( 30314 ), selectName )
+        selectedOperator = xbmcgui.Dialog().select( LANGUAGE( 30314 ), selectName )
         # If the user selected no operator...
         if selectedOperator == -1:
             return
@@ -128,7 +128,7 @@ class OrderByFunctions():
             selectName.append( xbmc.getLocalizedString( int( elem.attrib.get( "label" ) ) ) )
             selectValue.append( elem.text )
         # Let the user select an operator
-        selectedOperator = xbmcgui.Dialog().select( __language__( 30315 ), selectName )
+        selectedOperator = xbmcgui.Dialog().select( LANGUAGE( 30315 ), selectName )
         # If the user selected no operator...
         if selectedOperator == -1:
             return
@@ -161,7 +161,7 @@ class OrderByFunctions():
             # Get the content type
             content = root.find( "content" )
             if content is None:
-                xbmcgui.Dialog().ok( __addonname__, __language__( 30406 ) )
+                xbmcgui.Dialog().ok( ADDONNAME, LANGUAGE( 30406 ) )
                 return
             else:
                 content = content.text

@@ -32,6 +32,10 @@ msgctxt "#30101"
 msgid "Edit label"
 msgstr "Sunting label"
 
+msgctxt "#30102"
+msgid "Edit icon"
+msgstr "Sunting ikon"
+
 msgctxt "#30200"
 msgid "Content"
 msgstr "Kandungan"
@@ -39,6 +43,10 @@ msgstr "Kandungan"
 msgctxt "#30204"
 msgid "Path"
 msgstr "Laluan"
+
+msgctxt "#30205"
+msgid "Rule"
+msgstr "Peraturan"
 
 msgctxt "#30309"
 msgid "Content"

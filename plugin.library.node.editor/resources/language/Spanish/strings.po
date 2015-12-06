@@ -36,6 +36,10 @@ msgctxt "#30103"
 msgid "Browse for icon"
 msgstr "Buscar por icono"
 
+msgctxt "#30200"
+msgid "Content"
+msgstr "Contenido"
+
 msgctxt "#30204"
 msgid "Path"
 msgstr "Ruta"
@@ -51,6 +55,10 @@ msgstr "Operador"
 msgctxt "#30307"
 msgid "Value"
 msgstr "Valor"
+
+msgctxt "#30309"
+msgid "Content"
+msgstr "Contenido"
 
 msgctxt "#30310"
 msgid "Group"

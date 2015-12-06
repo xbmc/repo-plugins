@@ -13,16 +13,16 @@ if sys.version_info < (2, 7):
 else:
     import json as simplejson
 
-__addon__        = xbmcaddon.Addon()
-__addonid__      = __addon__.getAddonInfo('id').decode( 'utf-8' )
-__addonversion__ = __addon__.getAddonInfo('version')
-__language__     = __addon__.getLocalizedString
-__cwd__          = __addon__.getAddonInfo('path').decode("utf-8")
-__addonname__    = __addon__.getAddonInfo('name').decode("utf-8")
-__resource__     = xbmc.translatePath( os.path.join( __cwd__, 'resources', 'lib' ) ).decode("utf-8")
-__datapath__     = os.path.join( xbmc.translatePath( "special://profile/" ).decode( 'utf-8' ), "addon_data", __addonid__ )
+ADDON        = xbmcaddon.Addon()
+ADDONID      = ADDON.getAddonInfo('id').decode( 'utf-8' )
+ADDONVERSION = ADDON.getAddonInfo('version')
+LANGUAGE     = ADDON.getLocalizedString
+CWD          = ADDON.getAddonInfo('path').decode("utf-8")
+ADDONNAME    = ADDON.getAddonInfo('name').decode("utf-8")
+RESOURCE     = xbmc.translatePath( os.path.join( CWD, 'resources', 'lib' ) ).decode("utf-8")
+DATAPATH     = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile')).decode('utf-8')
 
-sys.path.append(__resource__)
+sys.path.append(RESOURCE)
 
 # character entity reference
 CHAR_ENTITY_REXP = re.compile('&(%s);' % '|'.join(name2codepoint))
@@ -40,7 +40,7 @@ REMOVE_REXP = re.compile('-{2,}')
 def log(txt):
     if isinstance (txt,str):
         txt = txt.decode('utf-8')
-    message = u'%s: %s' % (__addonid__, txt)
+    message = u'%s: %s' % (ADDONID, txt)
     xbmc.log(msg=message.encode('utf-8'), level=xbmc.LOGDEBUG)
 
 class Main:
@@ -56,21 +56,21 @@ class Main:
                 dirs, files = xbmcvfs.listdir( originDir )
                 self.copyNode( dirs, files, targetDir, originDir )
         else:
-            xbmcgui.Dialog().ok(__addonname__, __language__( 30400 ) )
+            xbmcgui.Dialog().ok(ADDONNAME, LANGUAGE( 30400 ) )
             print_exc
             xbmcplugin.endOfDirectory(handle=int(sys.argv[1]))
             return
         # Create data if not exists
-        if not os.path.exists(__datapath__):
-            xbmcvfs.mkdir(__datapath__)
+        if not os.path.exists(DATAPATH):
+            xbmcvfs.mkdir(DATAPATH)
         if "type" in self.PARAMS:
             # We're performing a specific action
             if self.PARAMS[ "type" ] == "delete":
-                message = __language__( 30401 )
+                message = LANGUAGE( 30401 )
                 if self.PARAMS[ "actionPath" ] == targetDir:
                     # Ask the user is they want to reset all nodes
-                    message = __language__( 30402 )
-                result = xbmcgui.Dialog().yesno(__addonname__, message )
+                    message = LANGUAGE( 30402 )
+                result = xbmcgui.Dialog().yesno(ADDONNAME, message )
                 if result:
                     if self.PARAMS[ "actionPath" ].endswith( ".xml" ):
                         # Delete single file
@@ -82,7 +82,7 @@ class Main:
                 else:
                     return
             elif self.PARAMS[ "type" ] == "deletenode":
-                result = xbmcgui.Dialog().yesno(__addonname__, __language__( 30403 ) )
+                result = xbmcgui.Dialog().yesno(ADDONNAME, LANGUAGE( 30403 ) )
                 if result:
                     self.changeViewElement( self.PARAMS[ "actionPath" ], self.PARAMS[ "node" ], "" )
             elif self.PARAMS[ "type" ] == "editlabel":
@@ -91,7 +91,7 @@ class Main:
                 else:
                     label = self.PARAMS[ "label" ]
                 # Get new label from keyboard dialog
-                keyboard = xbmc.Keyboard( label, __language__( 30300 ), False )
+                keyboard = xbmc.Keyboard( label, LANGUAGE( 30300 ), False )
                 keyboard.doModal()
                 if ( keyboard.isConfirmed() ):
                     newlabel = keyboard.getText().decode( "utf-8" )
@@ -103,7 +103,7 @@ class Main:
             elif self.PARAMS[ "type" ] == "editvisibility":
                 currentVisibility = self.getRootAttrib( self.PARAMS[ "actionPath" ], "visible" )
                 # Get new visibility from keyboard dialog
-                keyboard = xbmc.Keyboard( currentVisibility, __language__( 30301 ), False )
+                keyboard = xbmc.Keyboard( currentVisibility, LANGUAGE( 30301 ), False )
                 keyboard.doModal()
                 if ( keyboard.isConfirmed() ):
                     newVisibility = keyboard.getText()
@@ -115,13 +115,13 @@ class Main:
             elif self.PARAMS[ "type" ] == "editorder":
                 currentOrder = self.getRootAttrib( self.PARAMS[ "actionPath" ], "order" )
                 # Get new label from keyboard dialog
-                neworder = xbmcgui.Dialog().numeric( 0, __language__( 30302 ), currentOrder )
+                neworder = xbmcgui.Dialog().numeric( 0, LANGUAGE( 30302 ), currentOrder )
                 if neworder != "" and neworder != currentOrder:
                     # We've got a new label, update the xml file
                     self.changeRootAttrib( self.PARAMS[ "actionPath" ], "order", neworder )
             elif self.PARAMS[ "type" ] == "newView":
                 # Get new view name from keyboard dialog
-                keyboard = xbmc.Keyboard( "", __language__( 30316 ), False )
+                keyboard = xbmc.Keyboard( "", LANGUAGE( 30316 ), False )
                 keyboard.doModal()
                 if ( keyboard.isConfirmed() ):
                     newView = keyboard.getText().decode( "utf-8" )
@@ -146,7 +146,7 @@ class Main:
                     return
             elif self.PARAMS[ "type" ] == "newNode":
                 # Get new node name from the keyboard dialog
-                keyboard = xbmc.Keyboard( "", __language__( 30303 ), False )
+                keyboard = xbmc.Keyboard( "", LANGUAGE( 30303 ), False )
                 keyboard.doModal()
                 if ( keyboard.isConfirmed() ):
                     newNode = keyboard.getText().decode( "utf8" )
@@ -169,7 +169,7 @@ class Main:
                     # Ask user if they want to import defaults
                     defaultNames = [ xbmc.getLocalizedString( 231 ), xbmc.getLocalizedString( 342 ), xbmc.getLocalizedString( 20343 ), xbmc.getLocalizedString( 20389 ) ]
                     defaultValues = [ "", "movies", "tvshows", "musicvideos" ]
-                    selected = xbmcgui.Dialog().select( __language__( 30304 ), defaultNames )
+                    selected = xbmcgui.Dialog().select( LANGUAGE( 30304 ), defaultNames )
                     # If the user selected some defaults...
                     if selected != -1 and selected != 0:
                         try:
@@ -282,20 +282,20 @@ class Main:
             commands = []
             commandsNode = []
             commandsView = []
-            commandsNode.append( ( __language__(30101), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=editlabel&actionPath=" % ltype + os.path.join( nodes[ key ][ 2 ], "index.xml" ) + "&label=" + nodes[ key ][ 0 ] + ")" ) )
-            commandsNode.append( ( __language__(30102), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=editIcon&actionPath=" % ltype + os.path.join( nodes[ key ][ 2 ], "index.xml" ) + "&value=" + nodes[ key ][ 1 ] + ")" ) )
-            commandsNode.append( ( __language__(30103), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=browseIcon&actionPath=" % ltype + os.path.join( nodes [ key ][ 2 ], "index.xml" ) + ")" ) )
-            commandsNode.append( ( __language__(30104), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=editorder&actionPath=" % ltype + os.path.join( nodes[ key ][ 2 ], "index.xml" ) + ")" ) )
-            commandsNode.append( ( __language__(30105), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=editvisibility&actionPath=" % ltype + os.path.join( nodes[ key ][ 2 ], "index.xml" ) + ")" ) )
-            commandsNode.append( ( __language__(30100), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=delete&actionPath=" % ltype + nodes[ key ][ 2 ] + ")" ) )
+            commandsNode.append( ( LANGUAGE(30101), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=editlabel&actionPath=" % ltype + os.path.join( nodes[ key ][ 2 ], "index.xml" ) + "&label=" + nodes[ key ][ 0 ] + ")" ) )
+            commandsNode.append( ( LANGUAGE(30102), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=editIcon&actionPath=" % ltype + os.path.join( nodes[ key ][ 2 ], "index.xml" ) + "&value=" + nodes[ key ][ 1 ] + ")" ) )
+            commandsNode.append( ( LANGUAGE(30103), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=browseIcon&actionPath=" % ltype + os.path.join( nodes [ key ][ 2 ], "index.xml" ) + ")" ) )
+            commandsNode.append( ( LANGUAGE(30104), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=editorder&actionPath=" % ltype + os.path.join( nodes[ key ][ 2 ], "index.xml" ) + ")" ) )
+            commandsNode.append( ( LANGUAGE(30105), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=editvisibility&actionPath=" % ltype + os.path.join( nodes[ key ][ 2 ], "index.xml" ) + ")" ) )
+            commandsNode.append( ( LANGUAGE(30100), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=delete&actionPath=" % ltype + nodes[ key ][ 2 ] + ")" ) )
             if showAddToMenu:
-                commandsNode.append( ( __language__(30106), "XBMC.RunScript(script.skinshortcuts,type=addNode&options=" + urllib.unquote( nodes[ key ][ 2 ] ).replace( targetDir, "" ) + "|" + urllib.quote( label.encode( "utf-8" ) ) + "|" + urllib.quote( nodes[ key ][ 1 ].encode( "utf-8" ) ) + ")" ) )
-            commandsView.append( ( __language__(30101), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=editlabel&actionPath=" % ltype + nodes[ key ][ 2 ] + "&label=" + nodes[ key ][ 0 ] + ")" ) )
-            commandsView.append( ( __language__(30102), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=editIcon&actionPath=" % ltype + nodes[ key ][ 2 ] + "&value=" + nodes[ key ][ 1 ] + ")" ) )
-            commandsView.append( ( __language__(30103), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=browseIcon&actionPath=" % ltype + nodes[ key ][ 2 ] + ")" ) )
-            commandsView.append( ( __language__(30104), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=editorder&actionPath=" % ltype + nodes[ key ][ 2 ] + ")" ) )
-            commandsView.append( ( __language__(30105), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=editvisibility&actionPath=" % ltype + nodes[ key ][ 2 ] + ")" ) )
-            commandsView.append( ( __language__(30100), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=delete&actionPath=" % ltype + nodes[ key ][ 2 ] + ")" ) )
+                commandsNode.append( ( LANGUAGE(30106), "XBMC.RunScript(script.skinshortcuts,type=addNode&options=" + urllib.unquote( nodes[ key ][ 2 ] ).replace( targetDir, "" ) + "|" + urllib.quote( label.encode( "utf-8" ) ) + "|" + urllib.quote( nodes[ key ][ 1 ].encode( "utf-8" ) ) + ")" ) )
+            commandsView.append( ( LANGUAGE(30101), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=editlabel&actionPath=" % ltype + nodes[ key ][ 2 ] + "&label=" + nodes[ key ][ 0 ] + ")" ) )
+            commandsView.append( ( LANGUAGE(30102), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=editIcon&actionPath=" % ltype + nodes[ key ][ 2 ] + "&value=" + nodes[ key ][ 1 ] + ")" ) )
+            commandsView.append( ( LANGUAGE(30103), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=browseIcon&actionPath=" % ltype + nodes[ key ][ 2 ] + ")" ) )
+            commandsView.append( ( LANGUAGE(30104), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=editorder&actionPath=" % ltype + nodes[ key ][ 2 ] + ")" ) )
+            commandsView.append( ( LANGUAGE(30105), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=editvisibility&actionPath=" % ltype + nodes[ key ][ 2 ] + ")" ) )
+            commandsView.append( ( LANGUAGE(30100), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=delete&actionPath=" % ltype + nodes[ key ][ 2 ] + ")" ) )
             if nodes[ key ][ 3 ] == "folder":
                 listitem.addContextMenuItems( commandsNode, replaceItems = True )
                 xbmcplugin.addDirectoryItem( int(sys.argv[ 1 ]), "plugin://plugin.library.node.editor?ltype=%s&path=" % ltype + nodes[ key ][ 2 ], listitem, isFolder=True )
@@ -318,10 +318,10 @@ class Main:
                         else:
                             translated = RULE.translateRule( [ rule[ 1 ], rule[ 2 ], rule[ 3 ] ] )
                         if len(translated) == 2:
-                            listitem = xbmcgui.ListItem( label="%s: %s %s" % ( __language__(30205), translated[ 0 ][ 0 ], translated[ 1 ][ 0 ] ) )
+                            listitem = xbmcgui.ListItem( label="%s: %s %s" % ( LANGUAGE(30205), translated[ 0 ][ 0 ], translated[ 1 ][ 0 ] ) )
                         else:
-                            listitem = xbmcgui.ListItem( label="%s: %s %s %s" % ( __language__(30205), translated[ 0 ][ 0 ], translated[ 1 ][ 0 ], translated[ 2 ][ 1 ] ) )
-                        commands.append( ( __language__( 30100 ), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=deleteRule&actionPath=" % ltype + os.path.join( self.PATH, "index.xml" ) + "&rule=" + str( rulecount ) + ")" ) )
+                            listitem = xbmcgui.ListItem( label="%s: %s %s %s" % ( LANGUAGE(30205), translated[ 0 ][ 0 ], translated[ 1 ][ 0 ], translated[ 2 ][ 1 ] ) )
+                        commands.append( ( LANGUAGE( 30100 ), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=deleteRule&actionPath=" % ltype + os.path.join( self.PATH, "index.xml" ) + "&rule=" + str( rulecount ) + ")" ) )
                         action = "plugin://plugin.library.node.editor?ltype=%s&type=rule&actionPath=" % ltype + os.path.join( self.PATH, "index.xml" ) + "&rule=" + str( rulecount )
                         rulecount += 1
                     listitem.addContextMenuItems( commands, replaceItems = True )
@@ -330,16 +330,16 @@ class Main:
                     else:
                         xbmcplugin.addDirectoryItem( int(sys.argv[ 1 ]), action, listitem, isFolder=False )
             # New rule
-            xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=%s&type=rule&actionPath=" % ltype + os.path.join( self.PATH, "index.xml" ) + "&rule=" + str( nextRule), xbmcgui.ListItem( label=__language__(30005) ), isFolder=True )
+            xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=%s&type=rule&actionPath=" % ltype + os.path.join( self.PATH, "index.xml" ) + "&rule=" + str( nextRule), xbmcgui.ListItem( label=LANGUAGE(30005) ), isFolder=True )
         showReset = False
         if self.PATH == "":
             self.PATH = urllib.quote( targetDir )
             showReset = True
         # New view and node
-        xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=%s&type=newView&actionPath=" % ltype + self.PATH, xbmcgui.ListItem( label=__language__(30006) ), isFolder=False )
-        xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=%s&type=newNode&actionPath=" % ltype + self.PATH, xbmcgui.ListItem( label=__language__(30007) ), isFolder=False )
+        xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=%s&type=newView&actionPath=" % ltype + self.PATH, xbmcgui.ListItem( label=LANGUAGE(30006) ), isFolder=False )
+        xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=%s&type=newNode&actionPath=" % ltype + self.PATH, xbmcgui.ListItem( label=LANGUAGE(30007) ), isFolder=False )
         if showReset:
-            xbmcplugin.addDirectoryItem( int(sys.argv[ 1 ]), "plugin://plugin.library.node.editor?ltype=%s&type=delete&actionPath=" % ltype + targetDir, xbmcgui.ListItem( label=__language__(30008) ), isFolder=False )
+            xbmcplugin.addDirectoryItem( int(sys.argv[ 1 ]), "plugin://plugin.library.node.editor?ltype=%s&type=delete&actionPath=" % ltype + targetDir, xbmcgui.ListItem( label=LANGUAGE(30008) ), isFolder=False )
         xbmcplugin.endOfDirectory(handle=int(sys.argv[1]))
 
     def RulesList( self ):
@@ -358,8 +358,8 @@ class Main:
                 commands = []
                 if rule[ 0 ] == "content":
                     # 1 = Content
-                    listitem = xbmcgui.ListItem( label="%s: %s" % ( __language__(30200), ATTRIB.translateContent( rule[ 1 ] ) ) )
-                    commands.append( ( __language__(30100), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=deletenode&actionPath=" % ltype + self.PATH + "&node=content)" ) )
+                    listitem = xbmcgui.ListItem( label="%s: %s" % ( LANGUAGE(30200), ATTRIB.translateContent( rule[ 1 ] ) ) )
+                    commands.append( ( LANGUAGE(30100), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=deletenode&actionPath=" % ltype + self.PATH + "&node=content)" ) )
                     action = "plugin://plugin.library.node.editor?ltype=%s&type=editContent&actionPath=" % ltype + self.PATH
                     hasContent = True
                     content = rule[ 1 ]
@@ -368,29 +368,29 @@ class Main:
                     # 2 = direction (optional?)
                     if len( rule ) == 3:
                         translate = ORDERBY.translateOrderBy( [ rule[ 1 ], rule[ 2 ] ] )
-                        listitem = xbmcgui.ListItem( label="%s: %s (%s)" % ( __language__(30201), translate[ 0 ][ 0 ], translate[ 1 ][ 0 ] ) )
+                        listitem = xbmcgui.ListItem( label="%s: %s (%s)" % ( LANGUAGE(30201), translate[ 0 ][ 0 ], translate[ 1 ][ 0 ] ) )
                     else:
                         translate = ORDERBY.translateOrderBy( [ rule[ 1 ], "" ] )
-                        listitem = xbmcgui.ListItem( label="%s: %s" % ( __language__(30201), translate[ 0 ][ 0 ] ) )
-                    commands.append( ( __language__(30100), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=deletenode&actionPath=" % ltype + self.PATH + "&node=order)" ) )
+                        listitem = xbmcgui.ListItem( label="%s: %s" % ( LANGUAGE(30201), translate[ 0 ][ 0 ] ) )
+                    commands.append( ( LANGUAGE(30100), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=deletenode&actionPath=" % ltype + self.PATH + "&node=order)" ) )
                     action = "plugin://plugin.library.node.editor?ltype=%s&type=orderby&actionPath=" % ltype + self.PATH
                     hasOrder = True
                 elif rule[ 0 ] == "group":
                     # 1 = group
-                    listitem = xbmcgui.ListItem( label="%s: %s" % ( __language__(30202), ATTRIB.translateGroup( rule[ 1 ] ) ) )
-                    commands.append( ( __language__(30100), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=deletenode&actionPath=" % ltype + self.PATH + "&node=group)" ) )
+                    listitem = xbmcgui.ListItem( label="%s: %s" % ( LANGUAGE(30202), ATTRIB.translateGroup( rule[ 1 ] ) ) )
+                    commands.append( ( LANGUAGE(30100), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=deletenode&actionPath=" % ltype + self.PATH + "&node=group)" ) )
                     action = "plugin://plugin.library.node.editor?ltype=%s&type=editGroup&actionPath=" % ltype + self.PATH + "&value=" + rule[ 1 ] + "&content=" + content
                     hasGroup = True
                 elif rule[ 0 ] == "limit":
                     # 1 = limit
-                    listitem = xbmcgui.ListItem( label="%s: %s" % ( __language__(30203), rule[ 1 ] ) )
-                    commands.append( ( __language__(30100), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=deletenode&actionPath=" % ltype + self.PATH + "&node=limit)" ) )
+                    listitem = xbmcgui.ListItem( label="%s: %s" % ( LANGUAGE(30203), rule[ 1 ] ) )
+                    commands.append( ( LANGUAGE(30100), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=deletenode&actionPath=" % ltype + self.PATH + "&node=limit)" ) )
                     action = "plugin://plugin.library.node.editor?ltype=%s&type=editLimit&actionPath=" % ltype + self.PATH + "&value=" + rule[ 1 ]
                     hasLimit = True
                 elif rule[ 0 ] == "path":
                     # 1 = path
-                    listitem = xbmcgui.ListItem( label="%s: %s" % ( __language__(30204), rule[ 1 ] ) )
-                    commands.append( ( __language__(30100), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=deletenode&actionPath=" % ltype + self.PATH + "&node=path)" ) )
+                    listitem = xbmcgui.ListItem( label="%s: %s" % ( LANGUAGE(30204), rule[ 1 ] ) )
+                    commands.append( ( LANGUAGE(30100), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=deletenode&actionPath=" % ltype + self.PATH + "&node=path)" ) )
                     action = "plugin://plugin.library.node.editor?ltype=%s&type=editPath&actionPath=" % ltype + self.PATH + "&value=" + rule[ 1 ]
                     hasPath = True
                 elif rule[ 0 ] == "rule":
@@ -403,10 +403,10 @@ class Main:
                     else:
                         translated = RULE.translateRule( [ rule[ 1 ], rule[ 2 ], rule[ 3 ] ] )
                     if translated[ 2 ][ 0 ] == "|NONE|":
-                        listitem = xbmcgui.ListItem( label="%s: %s %s" % ( __language__(30205), translated[ 0 ][ 0 ], translated[ 1 ][ 0 ] ) )
+                        listitem = xbmcgui.ListItem( label="%s: %s %s" % ( LANGUAGE(30205), translated[ 0 ][ 0 ], translated[ 1 ][ 0 ] ) )
                     else:
-                        listitem = xbmcgui.ListItem( label="%s: %s %s %s" % ( __language__(30205), translated[ 0 ][ 0 ], translated[ 1 ][ 0 ], translated[ 2 ][ 1 ] ) )
-                    commands.append( ( __language__(30100), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=deleteRule&actionPath=" % ltype + self.PATH + "&rule=" + str( rule[ 4 ] ) + ")" ) )
+                        listitem = xbmcgui.ListItem( label="%s: %s %s %s" % ( LANGUAGE(30205), translated[ 0 ][ 0 ], translated[ 1 ][ 0 ], translated[ 2 ][ 1 ] ) )
+                    commands.append( ( LANGUAGE(30100), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=deleteRule&actionPath=" % ltype + self.PATH + "&rule=" + str( rule[ 4 ] ) + ")" ) )
                     action = "plugin://plugin.library.node.editor?ltype=%s&type=rule&actionPath=" % ltype + self.PATH + "&rule=" + str( rule[ 4 ] )
                     rulecount += 1
                 listitem.addContextMenuItems( commands, replaceItems = True )
@@ -416,22 +416,22 @@ class Main:
                     xbmcplugin.addDirectoryItem( int(sys.argv[ 1 ]), action, listitem, isFolder=False )
         if not hasContent and not hasPath:
             # Add content
-            xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=%s&type=editContent&actionPath=" % ltype + self.PATH, xbmcgui.ListItem( label=__language__(30000) ) )
+            xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=%s&type=editContent&actionPath=" % ltype + self.PATH, xbmcgui.ListItem( label=LANGUAGE(30000) ) )
         if not hasOrder and hasContent:
             # Add order
-            xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=%s&type=orderby&actionPath=" % ltype + self.PATH, xbmcgui.ListItem( label=__language__(30002) ), isFolder=True )
+            xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=%s&type=orderby&actionPath=" % ltype + self.PATH, xbmcgui.ListItem( label=LANGUAGE(30002) ), isFolder=True )
         if not hasGroup and hasContent:
             # Add group
-            xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=%s&type=editGroup&actionPath=" % ltype + self.PATH + "&content=" + content, xbmcgui.ListItem( label=__language__(30004) ) )
+            xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=%s&type=editGroup&actionPath=" % ltype + self.PATH + "&content=" + content, xbmcgui.ListItem( label=LANGUAGE(30004) ) )
         if not hasLimit and hasContent:
             # Add limit
-            xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=%s&type=editLimit&actionPath=" % ltype + self.PATH + "&value=25", xbmcgui.ListItem( label=__language__(30003) ) )
+            xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=%s&type=editLimit&actionPath=" % ltype + self.PATH + "&value=25", xbmcgui.ListItem( label=LANGUAGE(30003) ) )
         if not hasPath and not hasContent:
             # Add path
-            xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=%s&type=addPath&actionPath=" % ltype + self.PATH, xbmcgui.ListItem( label=__language__(30001) ) )
+            xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=%s&type=addPath&actionPath=" % ltype + self.PATH, xbmcgui.ListItem( label=LANGUAGE(30001) ) )
         if hasContent:
             # Add rule
-            xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=%s&type=rule&actionPath=" % ltype + self.PATH + "&rule=" + str( nextRule ), xbmcgui.ListItem( label=__language__(30005) ), isFolder = True )
+            xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=%s&type=rule&actionPath=" % ltype + self.PATH + "&rule=" + str( nextRule ), xbmcgui.ListItem( label=LANGUAGE(30005) ), isFolder = True )
         xbmcplugin.endOfDirectory(handle=int(sys.argv[1]))
 
     def _parse_argv( self ):
@@ -587,7 +587,7 @@ class Main:
                 order = root.find( "order" )
                 limit = root.find( "limit" )
                 if rule is not None or order is not None or limit is not None:
-                    xbmcgui.Dialog().ok( __addonname__, __language__( 30404 ) )
+                    xbmcgui.Dialog().ok( ADDONNAME, LANGUAGE( 30404 ) )
                     return
             # Find the element
             node = root.find( element )
@@ -726,9 +726,9 @@ class Main:
         return text
 
 if ( __name__ == "__main__" ):
-    log('script version %s started' % __addonversion__)
+    log('script version %s started' % ADDONVERSION)
     # Profiling
-    #filename = os.path.join( __datapath__, strftime( "%Y%m%d%H%M%S",gmtime() ) + "-" + str( random.randrange(0,100000) ) + ".log" )
+    #filename = os.path.join( DATAPATH, strftime( "%Y%m%d%H%M%S",gmtime() ) + "-" + str( random.randrange(0,100000) ) + ".log" )
     #cProfile.run( 'Main()', filename )
     #stream = open( filename + ".txt", 'w')
     #p = pstats.Stats( filename, stream = stream )
@@ -737,8 +737,8 @@ if ( __name__ == "__main__" ):
     # No profiling
     ltype = ''
     if sys.argv[2] == '':
-        xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=video", xbmcgui.ListItem( label=__language__(30091) ), isFolder=True )
-        xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=music", xbmcgui.ListItem( label=__language__(30092) ), isFolder=True )
+        xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=video", xbmcgui.ListItem( label=LANGUAGE(30091) ), isFolder=True )
+        xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=music", xbmcgui.ListItem( label=LANGUAGE(30092) ), isFolder=True )
         xbmcplugin.endOfDirectory(handle=int(sys.argv[1]))
     else:
         params = dict( arg.split( "=" ) for arg in sys.argv[ 2 ][1:].split( "&" ) )

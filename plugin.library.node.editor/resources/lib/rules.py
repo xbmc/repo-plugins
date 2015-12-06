@@ -10,20 +10,20 @@ if sys.version_info < (2, 7):
 else:
     import json as simplejson
 
-__addon__        = xbmcaddon.Addon()
-__addonid__      = __addon__.getAddonInfo('id').decode( 'utf-8' )
-__addonversion__ = __addon__.getAddonInfo('version')
-__addonname__    = __addon__.getAddonInfo('name').decode("utf-8")
-__language__     = __addon__.getLocalizedString
-__cwd__          = __addon__.getAddonInfo('path').decode("utf-8")
-__defaultpath__  = xbmc.translatePath( os.path.join( __cwd__, 'resources' ).encode("utf-8") ).decode("utf-8")
-__datapath__     = os.path.join( xbmc.translatePath( "special://profile/" ).decode( 'utf-8' ), "addon_data", __addonid__ )
-ltype            = sys.modules[ '__main__' ].ltype
+ADDON        = xbmcaddon.Addon()
+ADDONID      = ADDON.getAddonInfo('id').decode( 'utf-8' )
+ADDONVERSION = ADDON.getAddonInfo('version')
+ADDONNAME    = ADDON.getAddonInfo('name').decode("utf-8")
+LANGUAGE     = ADDON.getLocalizedString
+CWD          = ADDON.getAddonInfo('path').decode("utf-8")
+DEFAULTPATH  = xbmc.translatePath( os.path.join( CWD, 'resources' ).encode("utf-8") ).decode("utf-8")
+DATAPATH     = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile')).decode('utf-8')
+ltype        = sys.modules[ '__main__' ].ltype
 
 def log(txt):
     if isinstance (txt,str):
         txt = txt.decode('utf-8')
-    message = u'%s: %s' % (__addonid__, txt)
+    message = u'%s: %s' % (ADDONID, txt)
     xbmc.log(msg=message.encode('utf-8'), level=xbmc.LOGDEBUG)
 
 class RuleFunctions():
@@ -32,9 +32,9 @@ class RuleFunctions():
 
     def _load_rules( self ):
         if ltype == 'video':
-            overridepath = os.path.join( __defaultpath__ , "videorules.xml" )
+            overridepath = os.path.join( DEFAULTPATH , "videorules.xml" )
         else:
-            overridepath = os.path.join( __defaultpath__ , "musicrules.xml" )
+            overridepath = os.path.join( DEFAULTPATH , "musicrules.xml" )
         try:
             tree = xmltree.parse( overridepath )
             return tree
@@ -119,8 +119,8 @@ class RuleFunctions():
                             xbmcplugin.addDirectoryItem( int(sys.argv[ 1 ]), action, listitem, isFolder=False )
                             # Check if this match type can be browsed
                             if self.canBrowse( translated[ 0 ][ 1 ], content ):
-                                #listitem.addContextMenuItems( [(__language__(30107), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=browseValue&actionPath=" % ltype + actionPath + "&rule=" + str( ruleCount ) + "&match=" + translated[ 0 ][ 1 ] + "&content=" + content + ")" )], replaceItems = True )
-                                listitem = xbmcgui.ListItem( label=__language__(30107) )
+                                #listitem.addContextMenuItems( [(LANGUAGE(30107), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=browseValue&actionPath=" % ltype + actionPath + "&rule=" + str( ruleCount ) + "&match=" + translated[ 0 ][ 1 ] + "&content=" + content + ")" )], replaceItems = True )
+                                listitem = xbmcgui.ListItem( label=LANGUAGE(30107) )
                                 action = "plugin://plugin.library.node.editor?ltype=%s&type=browseValue&actionPath=" % ltype + actionPath + "&rule=" + str( ruleCount ) + "&match=" + translated[ 0 ][ 1 ] + "&content=" + content
                                 xbmcplugin.addDirectoryItem( int(sys.argv[ 1 ]), action, listitem, isFolder=False )
                             #self.browse( translated[ 0 ][ 1 ], content )
@@ -149,7 +149,7 @@ class RuleFunctions():
                 selectName.append( xbmc.getLocalizedString( int( elem.find( "label" ).text ) ) )
                 selectValue.append( elem.attrib.get( "name" ) )
         # Let the user select an operator
-        selectedOperator = xbmcgui.Dialog().select( __language__( 30305 ), selectName )
+        selectedOperator = xbmcgui.Dialog().select( LANGUAGE( 30305 ), selectName )
         # If the user selected no operator...
         if selectedOperator == -1:
             return
@@ -168,7 +168,7 @@ class RuleFunctions():
                     selectName.append( xbmc.getLocalizedString( int( operators.attrib.get( "label" ) ) ) )
                     selectValue.append( operators.text )
         # Let the user select an operator
-        selectedOperator = xbmcgui.Dialog().select( __language__( 30306 ), selectName )
+        selectedOperator = xbmcgui.Dialog().select( LANGUAGE( 30306 ), selectName )
         # If the user selected no operator...
         if selectedOperator == -1:
             return
@@ -183,9 +183,9 @@ class RuleFunctions():
                 ( filePath, fileName ) = os.path.split( actionPath )
                 # Load the rules file
                 if ltype == 'video':
-                    tree = xmltree.parse( os.path.join( __datapath__, "videorules.xml" ) )
+                    tree = xmltree.parse( os.path.join( DATAPATH, "videorules.xml" ) )
                 else:
-                    tree = xmltree.parse( os.path.join( __datapath__, "musicrules.xml" ) )
+                    tree = xmltree.parse( os.path.join( DATAPATH, "musicrules.xml" ) )
                 root = tree.getroot()
                 nodes = root.findall( "node" )
                 for node in nodes:
@@ -248,7 +248,7 @@ class RuleFunctions():
                 type = xbmcgui.INPUT_DATE
             if group == "isornot":
                 type = xbmcgui.INPUT_ALPHANUM
-            returnVal = xbmcgui.Dialog().input( __language__( 30307 ), curValue, type=type )
+            returnVal = xbmcgui.Dialog().input( LANGUAGE( 30307 ), curValue, type=type )
             if returnVal != "":
                 self.writeUpdatedRule( actionPath, ruleNum, value=returnVal.decode( "utf-8" ) )
         except:
@@ -350,7 +350,7 @@ class RuleFunctions():
 
     def deleteRule( self, actionPath, ruleNum ):
         # This function deletes a rule
-        result = xbmcgui.Dialog().yesno(__addonname__, __language__( 30405 ) )
+        result = xbmcgui.Dialog().yesno(ADDONNAME, LANGUAGE( 30405 ) )
         if not result:
             return
         if actionPath.endswith( "index.xml" ):
@@ -398,9 +398,9 @@ class RuleFunctions():
         try:
             # Load the rules file
             if ltype == 'video':
-                tree = xmltree.parse( os.path.join( __datapath__, "videorules.xml" ) )
+                tree = xmltree.parse( os.path.join( DATAPATH, "videorules.xml" ) )
             else:
-                tree = xmltree.parse( os.path.join( __datapath__, "musicrules.xml" ) )
+                tree = xmltree.parse( os.path.join( DATAPATH, "musicrules.xml" ) )
             root = tree.getroot()
             # Find the relevant node
             nodes = root.findall( "node" )
@@ -444,8 +444,8 @@ class RuleFunctions():
                         xbmcplugin.addDirectoryItem( int(sys.argv[ 1 ]), action, listitem, isFolder=False )
                         # Check if this match type can be browsed
                         if self.canBrowse( translated[ 0 ][ 1 ] ):
-                            #listitem.addContextMenuItems( [(__language__(30107), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=browseValue&actionPath=" % ltype + actionPath + "&rule=" + str( ruleCount ) + "&match=" + translated[ 0 ][ 1 ] + "&content=" + content + ")" )], replaceItems = True )
-                            listitem = xbmcgui.ListItem( label=__language__(30107) )
+                            #listitem.addContextMenuItems( [(LANGUAGE(30107), "XBMC.RunPlugin(plugin://plugin.library.node.editor?ltype=%s&type=browseValue&actionPath=" % ltype + actionPath + "&rule=" + str( ruleCount ) + "&match=" + translated[ 0 ][ 1 ] + "&content=" + content + ")" )], replaceItems = True )
+                            listitem = xbmcgui.ListItem( label=LANGUAGE(30107) )
                             action = "plugin://plugin.library.node.editor?ltype=%s&type=browseValue&actionPath=" % ltype + actionPath + "&rule=" + str( ruleCount ) + "&match=" + translated[ 0 ][ 1 ] + "&content=NONE"
                             xbmcplugin.addDirectoryItem( int(sys.argv[ 1 ]), action, listitem, isFolder=False )
                         #self.browse( translated[ 0 ][ 1 ], content )
@@ -466,8 +466,8 @@ class RuleFunctions():
             rulesfile = 'videorules.xml'
         else:
             rulesfile = 'musicrules.xml'
-        if os.path.exists( os.path.join( __datapath__, rulesfile ) ):
-            tree = xmltree.parse( os.path.join( __datapath__, rulesfile ) )
+        if os.path.exists( os.path.join( DATAPATH, rulesfile ) ):
+            tree = xmltree.parse( os.path.join( DATAPATH, rulesfile ) )
             root = tree.getroot()
         else:
             tree = xmltree.ElementTree( xmltree.Element( "rules" ) )
@@ -506,7 +506,7 @@ class RuleFunctions():
         xmltree.SubElement( newRule, "value" )
         # Save the file
         self.indent( root )
-        tree.write( os.path.join( __datapath__, rulesfile ), encoding="UTF-8" )
+        tree.write( os.path.join( DATAPATH, rulesfile ), encoding="UTF-8" )
         # Now add the rule to all views within the node
         dirs, files = xbmcvfs.listdir( filePath )
         for file in files:
@@ -539,7 +539,7 @@ class RuleFunctions():
         else:
             rulesfile = 'musicrules.xml'
         try:
-            tree = xmltree.parse( os.path.join( __datapath__, rulesfile ) )
+            tree = xmltree.parse( os.path.join( DATAPATH, rulesfile ) )
             root = tree.getroot()
             nodes = root.findall( "node" )
             for node in nodes:
@@ -582,7 +582,7 @@ class RuleFunctions():
                         ruleCount += 1
                         # Save the file
             self.indent( root )
-            tree.write( os.path.join( __datapath__, rulesfile ), encoding="UTF-8" )
+            tree.write( os.path.join( DATAPATH, rulesfile ), encoding="UTF-8" )
         except:
             print_exc()
             return
@@ -631,7 +631,7 @@ class RuleFunctions():
         else:
             rulesfile = 'musicrules.xml'
         try:
-            tree = xmltree.parse( os.path.join( __datapath__, rulesfile ) )
+            tree = xmltree.parse( os.path.join( DATAPATH, rulesfile ) )
             root = tree.getroot()
             nodes = root.findall( "node" )
             for node in nodes:
@@ -654,7 +654,7 @@ class RuleFunctions():
                         ruleCount += 1
             # Save the file
             self.indent( root )
-            tree.write( os.path.join( __datapath__, rulesfile ), encoding="UTF-8" )
+            tree.write( os.path.join( DATAPATH, rulesfile ), encoding="UTF-8" )
         except:
             print_exc()
             return
@@ -697,7 +697,7 @@ class RuleFunctions():
             rulesfile = 'musicrules.xml'
         try:
             # Remove all rules for this parent node from the rules file
-            tree = xmltree.parse( os.path.join( __datapath__, rulesfile ) )
+            tree = xmltree.parse( os.path.join( DATAPATH, rulesfile ) )
             root = tree.getroot()
             nodes = root.findall( "node" )
             for node in nodes:
@@ -705,7 +705,7 @@ class RuleFunctions():
                     root.remove( node )
             # Write the updated file
             self.indent( root )
-            tree.write( os.path.join( __datapath__, rulesfile ), encoding="UTF-8" )
+            tree.write( os.path.join( DATAPATH, rulesfile ), encoding="UTF-8" )
         except:
             print_exc()
 
@@ -756,9 +756,9 @@ class RuleFunctions():
         # Load all the node rules for current directory
         #actionPath = os.path.join( actionPath, "index.xml" )
         if ltype == 'video':
-            filename = os.path.join( __datapath__, "videorules.xml" )
+            filename = os.path.join( DATAPATH, "videorules.xml" )
         else:
-            filename = os.path.join( __datapath__, "musicrules.xml" )
+            filename = os.path.join( DATAPATH, "musicrules.xml" )
         if os.path.exists( filename ):
             try:
                 # Load the xml file
@@ -798,8 +798,8 @@ class RuleFunctions():
             rulesfile = 'videorules.xml'
         else:
             rulesfile = 'musicrules.xml'
-        if os.path.exists( os.path.join( __datapath__, rulesfile ) ):
-            ruleTree = xmltree.parse( os.path.join( __datapath__, rulesfile ) )
+        if os.path.exists( os.path.join( DATAPATH, rulesfile ) ):
+            ruleTree = xmltree.parse( os.path.join( DATAPATH, rulesfile ) )
             ruleRoot = ruleTree.getroot()
         else:
             ruleTree = xmltree.ElementTree( xmltree.Element( "rules" ) )
@@ -835,7 +835,7 @@ class RuleFunctions():
             self.indent( root )
             tree.write( actionPath, encoding="UTF-8" )
             self.indent( ruleRoot )
-            ruleTree.write( os.path.join( __datapath__, rulesfile ), encoding="UTF-8" )
+            ruleTree.write( os.path.join( DATAPATH, rulesfile ), encoding="UTF-8" )
         except:
             print_exc()
         #/BETA2 ONLY CODE
@@ -901,7 +901,7 @@ class RuleFunctions():
                     content = matchesValue[ 0 ]
                 else:
                     # Display a select dialog so user can choose their content
-                    selectedContent = xbmcgui.Dialog().select( __language__( 30308 ), matchesList )
+                    selectedContent = xbmcgui.Dialog().select( LANGUAGE( 30308 ), matchesList )
                     # If the user selected nothing...
                     if selectedContent == -1:
                         return
@@ -1015,7 +1015,7 @@ class RuleFunctions():
                 listings.append( listitem )
                 values.append( item[ "label" ] )
         # Show dialog
-        w = ShowDialog( "DialogSelect.xml", __cwd__, listing=listings, windowtitle=title )
+        w = ShowDialog( "DialogSelect.xml", CWD, listing=listings, windowtitle=title )
         w.doModal()
         selectedItem = w.result
         del w
@@ -1043,7 +1043,7 @@ class RuleFunctions():
                 listings.append( listitem )
                 values.append( item[ "label" ] )
         # Show dialog
-        w = ShowDialog( "DialogSelect.xml", __cwd__, listing=listings, windowtitle=title )
+        w = ShowDialog( "DialogSelect.xml", CWD, listing=listings, windowtitle=title )
         w.doModal()
         selectedItem = w.result
         del w

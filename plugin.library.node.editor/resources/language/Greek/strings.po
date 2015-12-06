@@ -40,9 +40,33 @@ msgctxt "#30103"
 msgid "Browse for icon"
 msgstr "Αναζήτηση εικονιδίου"
 
+msgctxt "#30104"
+msgid "Edit order"
+msgstr "Επεξεργασία Σειράς"
+
+msgctxt "#30105"
+msgid "Edit visibility"
+msgstr "Επεξεργασία Ορατότητας"
+
+msgctxt "#30106"
+msgid "Add to main menu"
+msgstr "Προσθήκη στο κεντρικό μενού"
+
 msgctxt "#30200"
 msgid "Content"
 msgstr "Περιεχόμενο"
+
+msgctxt "#30201"
+msgid "Order"
+msgstr "Σειρά"
+
+msgctxt "#30202"
+msgid "Grouping"
+msgstr "Ομαδοποίηση"
+
+msgctxt "#30203"
+msgid "Limit"
+msgstr "Όριο"
 
 msgctxt "#30204"
 msgid "Path"
@@ -51,6 +75,10 @@ msgstr "Διαδρομή"
 msgctxt "#30205"
 msgid "Rule"
 msgstr "Κανόνας"
+
+msgctxt "#30300"
+msgid "Set name"
+msgstr "Ορισμός Ονόματος"
 
 msgctxt "#30305"
 msgid "Field"
@@ -71,6 +99,10 @@ msgstr "Περιεχόμενο"
 msgctxt "#30310"
 msgid "Group"
 msgstr "Γκρουπ"
+
+msgctxt "#30311"
+msgid "Limit"
+msgstr "Όριο"
 
 msgctxt "#30312"
 msgid "Path"

@@ -16,6 +16,26 @@ msgstr ""
 "Language: he\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30000"
+msgid "Add content..."
+msgstr "הוספת תוכן ..."
+
+msgctxt "#30001"
+msgid "Add path..."
+msgstr "הוספת נתיב ..."
+
+msgctxt "#30003"
+msgid "Add limit..."
+msgstr "הוספת גבול ..."
+
+msgctxt "#30004"
+msgid "Add grouping..."
+msgstr "הוספת הקבצה ..."
+
+msgctxt "#30005"
+msgid "Add rule..."
+msgstr "הוספת כלל ..."
+
 msgctxt "#30091"
 msgid "Video Library"
 msgstr "ספריית וידאו"
@@ -40,6 +60,30 @@ msgctxt "#30103"
 msgid "Browse for icon"
 msgstr "בחירת סמל"
 
+msgctxt "#30106"
+msgid "Add to main menu"
+msgstr "הוסף לתפריט ראשי"
+
+msgctxt "#30107"
+msgid "Browse for value"
+msgstr "חפש ערך"
+
+msgctxt "#30200"
+msgid "Content"
+msgstr "תוכן"
+
+msgctxt "#30201"
+msgid "Order"
+msgstr "סדר"
+
+msgctxt "#30202"
+msgid "Grouping"
+msgstr "קיבוץ"
+
+msgctxt "#30203"
+msgid "Limit"
+msgstr "מגבלה"
+
 msgctxt "#30204"
 msgid "Path"
 msgstr "נתיב"
@@ -47,6 +91,14 @@ msgstr "נתיב"
 msgctxt "#30205"
 msgid "Rule"
 msgstr "חוק"
+
+msgctxt "#30300"
+msgid "Set name"
+msgstr "שם נקבע"
+
+msgctxt "#30304"
+msgid "Start with defaults"
+msgstr "התחל עם ברירת מחדל"
 
 msgctxt "#30305"
 msgid "Field"
@@ -60,9 +112,21 @@ msgctxt "#30307"
 msgid "Value"
 msgstr "ערך"
 
+msgctxt "#30308"
+msgid "Content type"
+msgstr "סוג תוכן"
+
+msgctxt "#30309"
+msgid "Content"
+msgstr "תוכן"
+
 msgctxt "#30310"
 msgid "Group"
 msgstr "קבוצה"
+
+msgctxt "#30311"
+msgid "Limit"
+msgstr "מגבלה"
 
 msgctxt "#30312"
 msgid "Path"
@@ -79,3 +143,15 @@ msgstr "סדר לפי"
 msgctxt "#30315"
 msgid "Direction"
 msgstr "כיוון"
+
+msgctxt "#30403"
+msgid "Are you sure you want to delete this property?"
+msgstr "האם אתה בטוח שאתה רוצה למחוק את הנכס הזה?"
+
+msgctxt "#30405"
+msgid "Are you sure you want to delete this rule?"
+msgstr "האם אתה בטוח שאתה רוצה למחוק את הכלל הזה?"
+
+msgctxt "#30406"
+msgid "Order requires a Content parameter"
+msgstr "הצו מחייב פרמטר תוכן"

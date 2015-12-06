@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.orftvthek" name="ORF TVthek" version="0.5.1" provider-name="sofaking">
+<addon id="plugin.video.orftvthek" name="ORF TVthek" version="0.5.2" provider-name="sofaking">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.parsedom" version="0.9.1"/>
@@ -17,6 +17,7 @@
         <description lang="de">ORF TVthek - Ermöglicht Ihnen den Zugriff auf die ORF TVthek Video Platform</description>
         <description lang="en">ORF TVthek - This plugin provides access to the Austrian "ORF TVthek"</description>
         <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <forum>http://forum.kodi.tv/showthread.php?tid=159835</forum>
         <email>sofaking@gettingmoney.at</email>
         <website>http://ast47.net/</website>
         <source>http://github.com/s0faking/plugin.video.orftvthek</source>

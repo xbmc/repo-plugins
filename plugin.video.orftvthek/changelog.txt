@@ -1,3 +1,6 @@
+0.5.2
+- fixed error when addon_data folder is already in place
+
 0.5.1
 - fixed addon.xml language format error
 

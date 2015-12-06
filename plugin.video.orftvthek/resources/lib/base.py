@@ -127,7 +127,8 @@ def blacklistItem(title):
             setBlacklist(data,bl_json_file)
     #create json file
     else:
-        os.makedirs(addonUserDataFolder)
+        if not os.path.exists(addonUserDataFolder):
+            os.makedirs(addonUserDataFolder)
         data = []
         data.append(title)
         setBlacklist(data,bl_json_file)

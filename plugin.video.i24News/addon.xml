@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.i24News"
        name="i24 News"
-       version="1.0.4"
+       version="1.0.5"
        provider-name="t1m">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -22,5 +22,6 @@
     <website>http://www.i24news.tv/en/</website>
     <email></email>
     <source>https://github.com/learningit/plugin.video.i24News</source>
+    <broken>This addon is no longer supported by the author</broken>
   </extension>
 </addon>

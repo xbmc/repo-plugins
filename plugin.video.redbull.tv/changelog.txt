@@ -1,3 +1,6 @@
+1.2.1 (2015-12-07)
+[upd] addon.xml (thx 2 NEOhidra)
+
 1.2.0 (2015-05-15)
 ADD: ask for video quality (optional)
 ADD: caching

@@ -1,3 +1,7 @@
+2.0.5 (2015-12-07)
+[add] Bulgarian (thx 2 NEOhidra)
+[upd] addon.xml (thx 2 NEOhidra)
+
 2.0.4 (2015-12-02)
 [add] Dutch (thx 2 steefdw)
 

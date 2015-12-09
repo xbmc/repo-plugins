@@ -12,13 +12,15 @@ import xbmcplugin
 import xbmcgui
 import xbmcaddon
 import os
+import traceback
+from StringIO import StringIO 
+import gzip 
 
 #'Base settings'
 #'Start of the plugin functionality is at the end of the file'
 addon = xbmcaddon.Addon()
 addonID = 'plugin.video.srf_podcast_ch'
 pluginhandle = int(sys.argv[1])
-baseurl = 'http://www.srf.ch/podcasts'
 socket.setdefaulttimeout(30)
 translation = addon.getLocalizedString
 xbmcplugin.setPluginCategory(pluginhandle,"News")
@@ -34,7 +36,7 @@ viewModeShows = str(addon.getSetting("viewIDShows"))
 #'this method list all TV shows from SRF when SRF-Podcast was selected in the main menu'
 def listTvShows():
     url = 'http://il.srf.ch/integrationlayer/1.0/ue/srf/tv/assetGroup/editorialPlayerAlphabetical.json'
-    response = json.load(urllib2.urlopen(url))
+    response = json.load(open_srf_url(url))
     shows =  response["AssetGroups"]["Show"]
     title = ''
     desc = ''
@@ -60,17 +62,16 @@ def listTvShows():
         xbmc.executebuiltin('Container.SetViewMode('+viewModeShows+')')
 
 #'this method list all episodes of the selected show'
-def listEpisodes(showid):
+def listEpisodes(showid,showbackground):
     url = 'http://il.srf.ch/integrationlayer/1.0/ue/srf/assetSet/listByAssetGroup/'+showid+'.json'
-    response = json.load(urllib2.urlopen(url))
+    response = json.load(open_srf_url(url))
     show =  response["AssetSets"]["AssetSet"]
     
     for episode in show:
         title = episode['title']
         url = ''
         desc = ''
-        picture = ''
-        length = int(episode['Assets']['Video'][0]['duration']) / 1000 / 60 
+        picture = '' 
         pubdate = episode['publishedDate']
         
         try:
@@ -82,9 +83,16 @@ def listEpisodes(showid):
         except:
             # no picture
             picture = ''
- 
-        url = episode['Assets']['Video'][0]['id']
-        addLink(title, url, 'playepisode', desc, picture, length, pubdate)
+        try:
+            length = int(episode['Assets']['Video'][0]['duration']) / 1000 / 60
+        except:
+            length = 0
+        try:
+            url = episode['Assets']['Video'][0]['id']
+        except:
+            url = 'no url'
+
+        addLink(title, url, 'playepisode', desc, picture, length, pubdate,showbackground)
        
     xbmcplugin.endOfDirectory(pluginhandle)
     if forceViewMode:
@@ -98,7 +106,7 @@ def playepisode(episodeid):
     
     try:
         url = 'http://il.srf.ch/integrationlayer/1.0/ue/srf/video/detail/'+episodeid+'.json'
-        response = json.load(urllib2.urlopen(url))
+        response = json.load(open_srf_url(url))
         urls =  response["Video"]["Playlists"]['Playlist'][0]['url']
         besturl = ''
         if urls.__len__() > 1:
@@ -136,7 +144,7 @@ def playepisode(episodeid):
 #'helper method to create a folder with subitems'
 def addShow(name, url, mode, desc, iconimage):
     ok = True
-    directoryurl = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
+    directoryurl = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&showbackground="+urllib.quote_plus(iconimage)
     liz = xbmcgui.ListItem(name)
     liz.setIconImage("DefaultFolder.png")
     liz.setThumbnailImage(iconimage)
@@ -148,14 +156,14 @@ def addShow(name, url, mode, desc, iconimage):
     return ok
     
 #'helper method to create an item in the list'
-def addLink(name, url, mode, desc, iconurl, length, pubdate):
+def addLink(name, url, mode, desc, iconurl, length, pubdate, showbackground):
     ok = True
     linkurl = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
     liz = xbmcgui.ListItem(name)
     liz.setIconImage("DefaultFolder.png")
     liz.setThumbnailImage(iconurl)
     liz.setLabel2(desc)
-    liz.setArt({'poster' : iconurl , 'banner' : iconurl, 'fanart' : iconurl, 'clearart' : iconurl, 'clearlogo' : iconurl, 'landscape' : iconurl})
+    liz.setArt({'poster' : iconurl , 'banner' : iconurl, 'fanart' : showbackground, 'clearart' : iconurl, 'clearlogo' : iconurl, 'landscape' : showbackground})
     liz.setInfo(type='Video', infoLabels={"Title": name, "Duration": length, "Plot": desc, "Aired" : pubdate})
     liz.setProperty('IsPlayable', 'true')
     xbmcplugin.setContent(pluginhandle,"episodes")
@@ -173,11 +181,29 @@ def parameters_string_to_dict(parameters):
                 paramDict[paramSplits[0]] = paramSplits[1]
     return paramDict
 
+def open_srf_url(urlstring):
+    request = urllib2.Request(urlstring) 
+    request.add_header('Accept-encoding', 'gzip') 
+    response = ''
+    try:
+        response = urllib2.urlopen(urlstring) 
+        if response.info().get('Content-Encoding') == 'gzip': 
+            buf = StringIO( response.read()) 
+            f = gzip.GzipFile(fileobj=buf) 
+            response = f.read()
+    except Exception as e:
+        print traceback.format_exc()
+        dialog = xbmcgui.Dialog().ok('xStream Error',str(e.__class__.__name__),str(e))
+    
+    return response
+
 #'Start'
 #'What to do... if nothing is given we start with the index'
 params = parameters_string_to_dict(sys.argv[2])
 mode = params.get('mode', '')
 url = params.get('url', '')
+showbackground = urllib.unquote_plus(params.get('showbackground', ''))
+
 #mode = urllib.unquote_plus(params.get('mode', ''))
 #url = urllib.unquote_plus(params.get('url', ''))
 #name = urllib.unquote_plus(params.get('name', ''))
@@ -185,7 +211,7 @@ url = params.get('url', '')
 if mode == 'listTvShows':
     listTvShows()
 elif mode == 'listEpisodes':
-    listEpisodes(url)
+    listEpisodes(url,showbackground)
 elif mode == 'playepisode':
     playepisode(url)
 else:

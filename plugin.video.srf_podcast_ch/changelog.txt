@@ -1,3 +1,8 @@
+[B]v1.2.1[/B]
+- Better fanart handling for episodes
+- Fixed Bug with gzip urls
+- Better error handling
+
 [B]v1.1.0[/B]
 - Added Force View
 - Added better fanart and logo

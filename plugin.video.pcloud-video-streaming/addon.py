@@ -106,7 +106,7 @@ if mode[0] == "folder":
 			li = xbmcgui.ListItem(oneItem["name"], iconImage='DefaultFolder.png')
 			# Add context menu item for "delete folder"
 			deleteActionMenuText = myAddon.getLocalizedString(30114) # "Delete from PCloud..."
-			deleteActionUrl = base_url + "?mode=delete&folderID=" + `oneItem["folderid"]` + "&filename=" + urllib.quote(oneItem["name"])
+			deleteActionUrl = base_url + "?mode=delete&folderID=" + `oneItem["folderid"]` + "&filename=" + urllib.quote(oneItem["name"].encode("utf-8"))
 			li.addContextMenuItems(
 				[(deleteActionMenuText, "RunPlugin(" + deleteActionUrl + ")")])
 			# Finally add the list item to the directory
@@ -141,7 +141,7 @@ if mode[0] == "folder":
 			li.setProperty("IsPlayable", "true")
 			# Add context menu item for delete file
 			deleteActionMenuText = myAddon.getLocalizedString(30114) # "Delete from PCloud..."
-			deleteActionUrl = base_url + "?mode=delete&fileID=" + `oneItem["fileid"]` + "&filename=" + urllib.quote(oneItem["name"])
+			deleteActionUrl = base_url + "?mode=delete&fileID=" + `oneItem["fileid"]` + "&filename=" + urllib.quote(oneItem["name"].encode("utf-8"))
 			# Add context menu item for mark as watched
 			markAsWatchedMenuText = myAddon.getLocalizedString(30121) # "Mark as watched"
 			li.addContextMenuItems(
@@ -189,7 +189,7 @@ elif mode[0] == "delete":
 	else:
 		idToDelete = int(idToDelete[0])
 		deleteFolder = False
-	filename = urllib.unquote(args["filename"][0])
+	filename = urllib.unquote(args["filename"][0].decode("utf-8"))
 	filenameShort = filename[:35] # first 35 char
 	if filenameShort != filename:
 		filenameShort += "..." 

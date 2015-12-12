@@ -45,7 +45,7 @@ class myAddon(t1mAddon):
   def getAddonVideo(self,vid):
 
     pg = self.getRequest('http://www.tcm.com/tveverywhere/services/videoXML.do?id=%s' % vid)
-    url = re.compile('<file bitrate="2048".+?>(.+?)<',re.DOTALL).search(pg).group(1)
+    url = re.compile('<file bitrate=.+?>(.+?)<',re.DOTALL).search(pg).group(1)
     filename = url[1:len(url)-4]
 
     a=re.compile('<akamai>(.+?)</akamai>', re.DOTALL).search(pg).group(1)

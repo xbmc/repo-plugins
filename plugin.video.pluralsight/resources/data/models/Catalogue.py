@@ -1,4 +1,5 @@
 import sqlite3
+import cPickle
 import os
 from random import randint
 import string
@@ -36,11 +37,11 @@ class Clip:
         self.duration = duration
         self.title = title
 
-    def get_url(self, username):
+    def get_url(self, username, quality="1024x768mp4"):
         return "http://www.pluralsight.com/metadata/live/users/{username}/" \
                "viewclip/{courseName}/{authorHandle}/{moduleName}/{clipIndex}" \
-               "/1024x768mp4".format(username=username, courseName=self.course_name, authorHandle=self.author_handle,
-                                     moduleName=self.module_name, clipIndex=self.index)
+               "/{quality}".format(username=username, courseName=self.course_name, authorHandle=self.author_handle,
+                                     moduleName=self.module_name, clipIndex=self.index, quality=quality)
 
 
 class Catalogue:
@@ -122,6 +123,12 @@ class Catalogue:
             database.commit()
         else:
             database = sqlite3.connect(database_path)
+            # Deviations from the original schema should be
+            # defined here so that upgrades will work correctly
+            database.execute('''
+                CREATE TABLE IF NOT EXISTS cookies (
+                    cookieblob TEXT
+            )''')
 
         database.row_factory = sqlite3.Row
         self.database = database
@@ -174,6 +181,11 @@ class Catalogue:
         self.database.execute('DELETE FROM auth')
         self.database.execute('INSERT INTO auth(token) VALUES(?)', (token,))
         self.database.commit()
+        
+    def update_cookies(self,cookies):
+        self.database.execute('DELETE FROM cookies')
+        self.database.execute('INSERT INTO cookies(cookieblob) VALUES(?)', (cPickle.dumps(cookies), ))
+        self.database.commit()
 
     @property
     def etag(self):
@@ -208,6 +220,10 @@ class Catalogue:
     @property
     def favourites(self):
         return self.database.cursor().execute('SELECT * FROM favourite').fetchall()
+        
+    @property
+    def cookies(self):
+        return cPickle.loads( str( self.database.cursor().execute('SELECT * FROM cookies').fetchall()[0]["cookieblob"] ) )
 
     @property
     def search_history(self):

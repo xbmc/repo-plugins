@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.pluralsight" name="Pluralsight" version="1.0.0" provider-name="Emery &amp; Horan">
+<addon id="plugin.video.pluralsight" name="Pluralsight" version="1.1.0" provider-name="Emery &amp; Horan">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>

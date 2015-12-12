@@ -1,2 +1,5 @@
+v1.1.0
+- Added support for Bookmarks & Recently Watched (thanks papersackpuppet)
+- Fixed up error handling around invalid logins
 v1.0
 - Initial Version

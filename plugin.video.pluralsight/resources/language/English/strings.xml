@@ -3,14 +3,16 @@
     <string id="30000">Pluralsight</string>
 
     <!--Categories and sub-folders -->
-    <string id="30001">Courses</string>
+    <string id="30001">All Courses</string>
     <string id="30002">New Courses</string>
     <string id="30003">Categories</string>
     <string id="30004">Favourites</string>
     <string id="30005">Authors</string>
     <string id="30006">Search</string>
     <string id="30007">Learn Something New</string>
-    
+    <string id="30008">Bookmarks</string>
+    <string id="30009">Recently Watched</string>
+        
 	<string id="30010">Add to Favourite Courses</string>
 	<string id="30011">New Search</string>
 	<string id="30012">Remove From Favourites</string>
@@ -24,4 +26,5 @@
     <string id="30024">You appear be attempting to use an email address to login
 
 Pluralsight requires the username instead, please change this in the settings</string>
+    <string id="30025">Incorrect Username or Password</string>
 </strings>

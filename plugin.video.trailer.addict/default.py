@@ -362,32 +362,22 @@ def build_featured_directory( page ):
 @retry((IndexError, TypeError)) 
 def play_video( url, name, download ):
     data = getUrl( url )
-    trailerId = re.compile( '<meta itemprop="embedUrl" content=".+traileraddict\.com/emd/(.+?)\?id=.+?">' ).findall( data )[0]
     
-    #Create token
-    _local1 = list(trailerId)
-    _local2 = ""
-    for _local3 in _local1:
-        _local2 = (_local2 + _alpha(int(_local3)))
+    title = re.search('<meta itemprop="name" content="(.+?)">', data)
+    video_urls = re.compile("file: '(.+?)'").findall(data)
+    thumb = re.search('<meta itemprop="thumbnailUrl" content="(.+?)">', data)
     
-    m = hashlib.md5()
-    m.update(_local2 + trailerId)
-    token = m.hexdigest()[2:7]
-
-    url = 'http://www.traileraddict.com/js/flash/fv-secure.php?tid=%s&token=%s' % (trailerId, token)
-    data = getUrl( url )
-    thumb = re.compile( '&image=(.+?)&' ).findall( data )[0]
-    title = re.compile( '&filmtitle=(.+?)&' ).findall( data )
-    if len(title):
-        name = urllib.unquote_plus(title[0]) + ' (' + settings.getLocalizedString(30017) + ')'
-    if thumb == 'http://www.traileraddict.com/images/noembed-removed.png':
-        dialog = xbmcgui.Dialog()
-        ok = dialog.ok(plugin, settings.getLocalizedString( 30012 ))
-        return
+    if title:
+        name = urllib.unquote_plus(title.group(1)) + ' (' + settings.getLocalizedString(30017) + ')'
+    if thumb:
+        if thumb.group(1) == 'http://www.traileraddict.com/images/noembed-removed.png':
+            dialog = xbmcgui.Dialog()
+            ok = dialog.ok(plugin, settings.getLocalizedString( 30012 ))
+            return
     if settings.getSetting('streamQuality') == '1':
-        url = re.compile( 'hdurl=(.+?)&', re.DOTALL ).findall( data )[0]  
+        url = video_urls[1]
     else:
-        url = re.compile( 'fileurl=(.+?)&', re.DOTALL ).findall( data )[0] 
+        url = video_urls[0]
     url = url.replace( '%3A', ':').replace( '%2F', '/' ).replace( '%3F', '?' ).replace( '%3D', '=' ).replace( '%26', '&' ).replace( '%2F', '//' ).strip()
     infoLabels = { "Title": name , "Studio": plugin }
     if download == 'True':

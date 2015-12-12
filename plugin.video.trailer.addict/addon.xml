@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.trailer.addict"
        name="Trailer Addict"
-       version="2.2.0"
+       version="2.3.0"
        provider-name="stacked, Eldorado">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -9,7 +9,7 @@
 	<import addon="script.module.simple.downloader" version="0.9.3"/>
 	<import addon="script.module.buggalo" version="1.1.2"/>
 	<import addon="script.module.simplejson" version="2.0.10"/>
-        <import addon="script.module.metahandler" version="2.7.0" />
+    <import addon="script.module.metahandler" version="2.7.0" />
   </requires>
   <extension point="xbmc.python.pluginsource"
             library="default.py">

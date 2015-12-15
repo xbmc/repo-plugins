@@ -2,6 +2,8 @@ plugin.video.viewster================
 
 Kodi Addon for Viewster website
 
+Version 2.0.3 fix for non-English videos
+Version 2.0.2 website change
 Version 2.0.1 Rewrite for new API, added views
 
 Version 1.0.6 category encoding fix, thanks to Andre Koehler

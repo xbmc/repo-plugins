@@ -66,7 +66,7 @@ class myAddon(t1mAddon):
    try:    i = len(meta)
    except: meta={}
    html  = self.getRequest('http://tubitv.com%s' % url)
-   shows = re.compile("<A class='img_box' href='(.+?)'.+?src='(.+?)'.+?title'>(.+?)<.+?description'>(.+?)<.+?</A",re.DOTALL).findall(html)
+   shows = re.compile("<A class=.+?href='(.+?)'.+?src='(.+?)'.+?title'>(.+?)<.+?description'>(.+?)<.+?</A",re.DOTALL).findall(html)
    pDialog = xbmcgui.DialogProgress()
    pDialog.create(self.addonName, self.localLang(30101))
    pDialog.update(0)

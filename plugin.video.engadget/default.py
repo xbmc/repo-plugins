@@ -1,10 +1,3 @@
-__author__ = "divingmule, and Hans van den Bogert"
-__copyright__ = "Copyright 2015"
-__license__ = "GPL"
-__version__ = "2"
-__maintainer__ = "Hans van den Bogert"
-__email__ = "hansbogert@gmail.com"
-
 import os
 import urllib
 import urllib2
@@ -15,19 +8,26 @@ import xbmc
 import xbmcplugin
 import xbmcgui
 import xbmcaddon
-from urlparse import parse_qs, parse_qsl
-from traceback import format_exc
+from urlparse import parse_qs, urlparse
 import sys
+# Do extra imports including from local addon dir
+from bs4 import BeautifulSoup
+
+__author__ = "divingmule, and Hans van den Bogert"
+__copyright__ = "Copyright 2015"
+__license__ = "GPL"
+__version__ = "2"
+__maintainer__ = "Hans van den Bogert"
+__email__ = "hansbogert@gmail.com"
 
 addon = xbmcaddon.Addon()
+addon_name = addon.getAddonInfo('name')
 addon_profile = xbmc.translatePath(addon.getAddonInfo('profile'))
 addon_version = addon.getAddonInfo('version')
 addon_id = addon.getAddonInfo('id')
 addon_dir = xbmc.translatePath(addon.getAddonInfo('path'))
 sys.path.append(os.path.join(addon_dir, 'resources', 'lib'))
 
-# Do extra imports including from local addon dir
-from bs4 import BeautifulSoup
 
 cache = StorageServer.StorageServer("engadget", 1)
 icon = addon.getAddonInfo('icon')
@@ -69,143 +69,89 @@ def make_request(url):
             addon_log('We failed with error code - %s.' % e.code)
 
 
-def cache_categories():
-    soup = BeautifulSoup(make_request(base_url + '/videos/'), 'html.parser')
-    cat_items = soup.find('ul', class_='tab-nav')('a')
-    cats = [{'name': i.string, 'href': i['href']} for i in cat_items]
-    return cats
+def display_all_items():
+    def get_item_as_tuple(item):
+        title = item['title']
+        embed_html = None
+        video_url = None
+        image_url = None
+
+        for i in item['media_content']:
+
+            if i['media_medium'] == "image":
+                image_url = i['url']
+            elif i['media_medium'] == "video":
+                embed_html = i['media_html']
+                video_url = i['url']
+            else:
+                addon_log("Other format")
+
+        return title, embed_html, video_url, image_url
+
+    feed_url = "http://feeds.contenthub.aol.com/syndication/2.0/feeds/article" \
+        "?sid=6d83dd23075648c2924a6469c80026c7&articleText=7&max=100"
+    s_data = make_request(feed_url)
+    addon_log("AOL feed data:" + str(s_data))
+    json_data = json.loads(s_data)
+
+    items = [get_item_as_tuple(x) for x in (json_data['channel']['item'])]
+
+    # It is a video if a item tuple contains an video url
+    video_items = [x for x in items if x[1] is not None]
+
+    # Big assumption here, the video is the 2nd item in the json list gotten by the AOL CDN
+    for (title, embed_url, url, image) in video_items:
+        add_dir(title, embed_url, url, image, 'resolve_url', False)
 
 
-def display_categories():
-    cats = cache.cacheFunction(cache_categories)
-    for i in cats:
-        add_dir(i['name'], i['href'], icon, 'get_category')
+def resolve_item(embed_url, url):
+    domain = urlparse(url).netloc
+    addon_log("Domain of media url is: " + domain)
 
+    retrievers = {
+        "on.aol.com": retrieve_url_for_aol,
+        "www.youtube.com": retrieve_url_for_youtube,
 
-def display_category(url):
-    page_url = base_url + url
-    addon_log("Display items for page_url: " + page_url)
-    html = make_request(page_url)
-    soup = BeautifulSoup(html, 'html5lib')
-    items = soup('div', {'class': 'video-listing'})
-    for i in items:
-        title = i('a', {'class': 'video-link'})[1].h3.string.encode('utf-8')
-        link = i('a', {'class': 'video-link'})[1]['href']
-        img = i('a', {'class': 'video-link'})[0].img['src']
-        add_dir(title, link, img, 'resolve_url', False)
-
-    next_page = soup.find('li', class_='older').a['href']
-    add_dir(language(30008), next_page, icon, 'get_category')
-
-    addon_log("Setting cache for page_url: " + page_url)
-    cache.set('page_url', page_url)
-
-
-def resolve_url(url):
-    settings = {
-        0: [16, 128],
-        1: [32, 2, 1],
-        2: [64, 4],
-        3: [8]
-        }
-    preferred = int(addon.getSetting('preferred'))
-    video_id = url.split('/')[-1]
-    addon_log('video ID: {0}'.format(video_id))
-
-    # TODO Caching should not be the concern of the function itself.
-    try:
-        link_cache = eval(cache.get('link_cache'))
-        addon_log('Link cache loaded')
-    except SyntaxError:
-        link_cache = {}
-        addon_log('addonException: %s' % format_exc())
-
-    if video_id not in link_cache:
-        addon_log("video id not in cache, re-caching")
-        cache_playlist(video_id)
-        link_cache = eval(cache.get('link_cache'))
-
-    cached_item = link_cache[video_id]
-
-    if cached_item:
-        stream_url = urllib.unquote(cached_item['url'])
-        addon_log('preferred setting: %s' % settings[preferred])
-        resolved_url = None
-        while (preferred >= 0) and not resolved_url:
-            try:
-                ren_id, ren_type = [
-                    (i['ID'], i['RenditionType']) for i in cached_item['ren'] if i['ID'] in settings[preferred]][0]
-                # Adhere to 5min's format, their base URL is always an MP4, but depending on the rendition type you
-                # need the following to get an actual working URL
-                resolved_url = stream_url.replace(".mp4", "_{0}.{1}".format(ren_id, ren_type))
-                addon_log('Resolved: %s' % resolved_url)
-            except IndexError:  # Assume that if we couldn't access [0], it isn't available
-                addon_log('addonException: %s' % format_exc())
-                addon_log('Setting unavailable: %s' % settings[preferred])
-                preferred -= 1
-        return resolved_url
-
-
-def cache_playlist(video_id):
-    url = 'http://syn.5min.com/handlers/SenseHandler.ashx?'
-    script_url = 'http://www.engadget.com/embed-5min/?playList=%s&autoStart=true' % video_id
-    addon_log("Get script: " + script_url)
-    script_html = make_request(script_url)
-    script_soup = BeautifulSoup(script_html, 'html.parser')
-    param_list = parse_qsl(script_soup.script.attrs['src'].split("?")[1])
-    script_params = dict(param_list)
-    url_params = {
-        'ExposureType': 'PlayerSeed',
-        'autoStart': script_params['autoStart'],
-        'cbCount': '3',
-        # 'cbCustomID': script_params['cbCustomID'], ## No longer included
-        'colorPallet': script_params['colorPallet'],
-        'counter': '0',
-        'filterString': '',
-        'func': 'GetResults',
-        'hasCompanion': script_params['hasCompanion'],
-        'isPlayerSeed': 'true',
-        'playlist': video_id,
-        'relatedMode': script_params['relatedMode'],
-        'sid': script_params['sid'],
-        'url': urllib.quote(cache.get('page_url')),
-        'videoCount': '50',
-        'videoGroupID': script_params['videoGroupID']
     }
-    addon_log("Cache for page_url was: " + cache.get('page_url'))
-    addon_log("complete url: " + url + urllib.urlencode(url_params))
-    data = json.loads(make_request(url + urllib.urlencode(url_params)), 'utf-8')
-    items = data['binding']
-    pattern = re.compile('videoUrl=(.+?)&')
-    #   TODO Again, the caching - should not be here. This function should just get the file
-    try:
-        link_cache = eval(cache.get('link_cache'))
-    except SyntaxError:
-        # Cache is empty
-        link_cache = {}
+    retriever = retrievers.get(domain, nothing)
 
-    if not isinstance(link_cache, dict):
-        link_cache = {}
-
-    if len(link_cache) > 300:
-        addon_log("cache too full, clearing older items")
-        link_cache.clear()
-
-    for i in items:
-        match = pattern.findall(i['EmbededURL'])
-        addon_log("Regexp matches for videoUrl: " + match[0])
-        try:
-            item_dict = {str(i['ID']): {'url': match[0],
-                                        'ren': i['Renditions']}}
-            link_cache.update(item_dict)
-        except (KeyError, IndexError):
-            addon_log('addonException: %s' % format_exc())
-    cache.set('link_cache', repr(link_cache))
-    addon_log('link_cache items %s' % len(link_cache))
+    addon_log("returning embed_url  and url for playback: " + embed_url + " " + url)
+    return retriever(embed_url, url)
 
 
-def add_dir(name, url, icon_image, dir_mode, is_folder=True):
-    dir_params = {'name': name, 'url': url, 'mode': dir_mode}
+def nothing(embed_url, url):
+    xbmcgui.Dialog().ok(addon_name, "The video source is not playable")
+    return None
+
+
+def retrieve_url_for_aol(embed_url, url):
+    javascript_embed_tag = BeautifulSoup(embed_url, 'html.parser')
+    addon_log(str(javascript_embed_tag))
+    javascript_source = javascript_embed_tag.find('script').get('src')
+    addon_log("javascript source from embed code" + str(javascript_source))
+    javascript_blob = make_request(javascript_source)
+    # addon_log("the javascript blob" + javascript_blob)
+    pattern = re.compile('"videoUrls":\[".*?"\]')
+    # Necessary dirty step, it's actually javascript, which happens to be JSON.
+    s_urls = pattern.findall(javascript_blob)[0]
+    # pre and post pend curly brace, to make it valid JSON
+    s_urls_with_curly = "{" + s_urls + "}"
+
+    addon_log("url strings retrieved from javascript blob: " + s_urls_with_curly)
+    json_urls = json.loads(s_urls_with_curly)
+    addon_log("Sending url to Kodi: " + json_urls['videoUrls'][0])
+    return json_urls['videoUrls'][0]
+
+
+def retrieve_url_for_youtube(embed_url, url):
+    qs = parse_qs(urlparse(url).query)
+    video_id = qs['v'][0]
+    addon_log("Youtube videoId:" + video_id)
+    return "plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid={0}".format(video_id)
+
+
+def add_dir(name, embed_url, url, icon_image, dir_mode, is_folder=True):
+    dir_params = {'name': name, 'embed_url': embed_url, 'url': url, 'mode': dir_mode}
     url = '%s?%s' % (sys.argv[0], urllib.urlencode(dir_params))
     list_item = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=icon_image)
     if not is_folder:
@@ -228,15 +174,12 @@ def main():
     mode = params.get('mode')
 
     if mode is None:
-        display_categories()
+        display_all_items()
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-    elif mode == 'get_category':
-        display_category(params['url'])
-        xbmcplugin.endOfDirectory(int(sys.argv[1]))
     elif mode == 'resolve_url':
         success = False
-        resolved_url = resolve_url(params['url'])
+        resolved_url = resolve_item(params['embed_url'], params['url'])
         if resolved_url:
             success = True
         else:

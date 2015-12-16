@@ -1,3 +1,6 @@
+Version 1.2.0
+Engadgets html changed again - Using a xml feed instead of scraping main engadget website.
+
 Version 1.1.2
 Engadgets html changed again
 

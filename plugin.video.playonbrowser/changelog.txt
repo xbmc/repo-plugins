@@ -1,3 +1,9 @@
+v1.0.4
+- Support for Playon v.4.0, Check Playonbrowsers settings for changes.
+
+v1.0.3
+- Bug Corrections
+
 v1.0.2
 - Added caching to speed up UI response. 
 - Added search for channels that allow it. 

@@ -1,7 +1,7 @@
 # Playon Browser Media Center language file
 # Addon Name: Playon Browser
 # Addon id: plugin.video.playonbrowser
-# Addon Provider: sytone
+# Addon Provider: sytone, lunatixz
 msgid ""
 msgstr ""
 "Project-Id-Version: plugin.video.playonbrowser Addons\n"
@@ -26,4 +26,20 @@ msgstr ""
 
 msgctxt "#42003"
 msgid "Playon Server and port"
+msgstr ""
+
+msgctxt "#42004"
+msgid "Navigate to Kodi's Videos/Files, Click 'add videos..."
+msgstr ""
+
+msgctxt "#42005"
+msgid "Enter [B]UPNP://[/B] as path, select 'none' type & 'ok'."
+msgstr ""
+
+msgctxt "#42006"
+msgid "Browse UPNP sources, Select 'Playon:' & 'ok'"
+msgstr ""
+
+msgctxt "#42007"
+msgid "Enable Debugging"
 msgstr ""

@@ -3,6 +3,9 @@
     <category label="42001">
         <setting label="42002" type="lsep"/>
         <setting label="42003" type="text"   id="playonserver" default="http://192.168.0.234:54479/"/>
-        <setting id="debug" type="bool" label="32013" default="false"/>
+        <setting label="42004" type="lsep"/>
+        <setting label="42005" type="lsep"/>
+        <setting label="42006" type="folder" source="video" id="playonid" default="upnp://"/>
+        <setting label="42007" type="bool"  id="debug" default="false"/>
     </category>
 </settings>

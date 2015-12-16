@@ -1,23 +1,10 @@
 import sys
-import urlparse
-import urllib
-import urllib2
-import xbmc
-import xbmcplugin
-import xbmcaddon
-import xbmcgui
-import string
-import htmllib
-import os
-import platform
-import random
-import calendar
-import re
+import urlparse, urllib, urllib2, htmllib
+import string, os, re, sys
+import platform, calendar, random
 import CommonFunctions
+import xbmc, xbmcplugin, xbmcaddon, xbmcgui, xbmcvfs
 import xml.etree.ElementTree as ElementTree 
-#from addon.common.net import Net
-#from metahandler import metahandlers
-
 try:
     import StorageServer
     Cache_Enabled = True
@@ -25,11 +12,13 @@ except Exception,e:
     import storageserverdummy as StorageServer
     Cache_Enabled = False
 
-# 
+# from metahandler import metahandlers
+
+#
 #   Set-up global variables
 addon = xbmcaddon.Addon()
 addonId = 'plugin.video.playonbrowser'
-addonVersion = '1.0.2'
+addonVersion = addon.getAddonInfo('version')
 addonId = addon.getAddonInfo('id')
 mediaPath = xbmcaddon.Addon(addonId).getAddonInfo('path') + '/resources/media/' 
 playonDataPath = '/data/data.xml'
@@ -77,6 +66,7 @@ args = urlparse.parse_qs(sys.argv[2][1:])
 #   Pull the settings in. 
 settings = xbmcaddon.Addon(id=addonId)
 playonInternalUrl = settings.getSetting("playonserver").rstrip('/')
+playonExternalUrl = settings.getSetting("playonid").rstrip('/')
 debug = settings.getSetting("debug")
 cachePeriod = 1 #hours
 
@@ -119,7 +109,6 @@ def build_playon_search_url(id, searchterm):
     log_message('build_playon_search_url: '+ id + "::" + searchterm)
     return playonInternalUrl + playonDataPath + "?id=" + id + "&searchterm=dc:description%20contains%20" + searchterm
 
-    
 def get_xml(url):
     if Cache_Enabled == True:  
         commoncache = StorageServer.StorageServer("plugin.video.playonbrowser",cachePeriod)
@@ -133,8 +122,7 @@ def get_xml(url):
     if not result:
         result = False
     return result  
-    
-    
+        
 def get_xml_request(url):
     """ This will pull down the XML content and return a ElementTree. """
     try:
@@ -444,7 +432,7 @@ elif mode == 'video' : # Video link from Addon or STRM. Parse and play.
     # Run though the name tree! No restart issues but slower.
     playonUrl = build_playon_url()
     xml = get_xml(playonUrl)
-
+    
     if nametree == None:
         # Play the href directly. 
         playonUrl = build_playon_url(href)
@@ -452,7 +440,7 @@ elif mode == 'video' : # Video link from Addon or STRM. Parse and play.
         mediaXml = get_xml(playonUrl)
         mediaNode = mediaXml.find('media')
         src = mediaNode.attrib.get('src')
-        url =  playonInternalUrl + '/' + src
+        url =  playonExternalUrl + '/' + src.split('.')[0].split('/')[0] + '/'
         vplaylist = xbmc.PlayList( xbmc.PLAYLIST_VIDEO )
         vplaylist.clear()
         vplaylist.add(mediaPath + 'DummyEntry.mp4')
@@ -487,18 +475,14 @@ elif mode == 'video' : # Video link from Addon or STRM. Parse and play.
                                 mediaXml = get_xml(playonUrl)
                                 mediaNode = mediaXml.find('media')
                                 src = mediaNode.attrib.get('src')
-                                url =  playonInternalUrl + '/' + src
+                                url =  playonExternalUrl + '/' + src.split('.')[0].split('/')[0] + '/'
                                 vplaylist = xbmc.PlayList( xbmc.PLAYLIST_VIDEO )
                                 vplaylist.clear()
                                 vplaylist.add(mediaPath + 'DummyEntry.mp4')
                                 vplaylist.add(url)
-                                listitem=xbmcgui.ListItem (name)
+                                listitem=xbmcgui.ListItem(name)
                                 xbmc.Player().stop()
                                 xbmc.sleep(50)
                                 xbmc.Player().play(vplaylist,listitem)
                                 xbmc.sleep(50)
                                 xbmc.executebuiltin("ActivateWindow('fullscreenvideo')")
-        
-
-        
-

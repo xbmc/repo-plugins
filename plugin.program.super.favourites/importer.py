@@ -1,5 +1,5 @@
 #
-#       Copyright (C) 2014
+#       Copyright (C) 2014-
 #       Sean Poyser (seanpoyser@gmail.com)
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -33,25 +33,26 @@ CHANGELOG = None
 
 ADDON    = utils.ADDON
 ADDONID  = utils.ADDONID
-HOME     = xbmc.translatePath(ADDON.getAddonInfo('profile')) #has to be a real path
+HOME     = xbmc.translatePath('special://userdata')
 ROOT     = utils.ROOT
-REMOTE   = ADDON.getSetting('REMOTE').lower() == 'true'
-LOCATION = ADDON.getSetting('LOCATION')
 TITLE    = utils.TITLE
 
-
 GETTEXT  = utils.GETTEXT
+
+REMOTE       = ADDON.getSetting('REMOTE').lower() == 'true'
+LOCATION     = ADDON.getSetting('LOCATION')
+IMPORT_RESET = ADDON.getSetting('IMPORT_RESET').lower() == 'true'
+
  
-def main():
-    toImport = True
-
-    if len(sys.argv) > 1:
-        toImport = sys.argv[1].lower() != 'false'
-
+def main(toImport, settings):
     if toImport:
         doImport()
+        if settings:
+            utils.openSettings(ADDONID, 4.7)
     else:
         doExport()
+        if settings:
+            utils.openSettings(ADDONID, 4.8)
 
 
 def doImport():
@@ -88,14 +89,15 @@ def _doImportFromRemote():
         dp = utils.Progress(TITLE, line1 = GETTEXT(30140) % GETTEXT(30000), line2 = location.replace('%20', ' '), line3 = GETTEXT(30141))
 
         import download
-        download.doDownload(location, file, TITLE)
+        import urllib
+        download.doDownload(urllib.quote_plus(location), urllib.quote_plus(file), urllib.quote_plus(TITLE), quiet=True)
 
-        if os.path.exists(file):
+        if os.path.exists(file): 
             success = extractAll(file, dp, location.replace('%20', ' '))
             utils.DeleteFile(file)
             return success
     except Exception, e:
-        utils.log(e)
+        utils.log('Error in _doImportFromRemote %s' % str(e))
 
     return False
 
@@ -106,7 +108,7 @@ def _doImportFromLocal(filename):
         return extractAll(filename, dp, filename)
 
     except Exception, e:
-        utils.log(e)
+        utils.log('Error in _doImportFromLocal %s' % str(e))
 
     return False
 
@@ -115,19 +117,28 @@ def _doImportFromLocal(filename):
 def doExport():
     try:
         include = utils.DialogYesNo(GETTEXT(30129), line2='', line3=GETTEXT(30130), noLabel=None, yesLabel=None)
-        folder  = getFolder(GETTEXT(30131))
+        folder  = getFolder(GETTEXT(30131))        
 
         if not folder:
             return False
 
-        filename = os.path.join(folder, 'Super Favourites.zip')
+        filename = 'Super Favourites.zip'
+        src      = os.path.join(HOME,   filename)
+        dst      = os.path.join(folder, filename)
 
-        doZipfile(filename, include)
+        doZipfile(src, include)
+
+        sfile.remove(dst)
+        sfile.rename(src, dst)
+
         utils.DialogOK(GETTEXT(30132))
         return True
 
     except Exception, e:
-        utils.log(e)
+        utils.log('Error in doExport %s' % str(e))
+
+    try:    sfile.remove(src)
+    except: pass
 
     return False
 
@@ -135,9 +146,11 @@ def doExport():
 def doZipfile(outputFile, includeSettings=True):
     zip = None
 
-    source  = os.path.join(HOME, 'Temp')
+    source  = os.path.join(HOME, 'SF_Temp')
+
     if sfile.exists(source):
         sfile.rmtree(source)
+
     sfile.copytree(ROOT, source)
 
     relroot = os.path.abspath(os.path.join(source, os.pardir))
@@ -161,6 +174,10 @@ def doZipfile(outputFile, includeSettings=True):
             if file == 'settings.xml':
                 continue
 
+            #ignore python obj
+            if len(file.split('.py')[-1]) == 1:
+                continue
+
             arcname  = os.path.join(local, file)
             filename = os.path.join(root, file)           
             zip.write(filename, arcname)
@@ -170,7 +187,8 @@ def doZipfile(outputFile, includeSettings=True):
             zip = zipfile.ZipFile(output_filename, 'w', zipfile.ZIP_DEFLATED)
 
         arcname  = 'settings.xml'
-        filename = os.path.join(HOME, arcname)
+        filename = os.path.join(ADDON.getAddonInfo('profile'), arcname)
+        filename = xbmc.translatePath(filename) #has to be a real path
 
         zip.write(filename, arcname)
 
@@ -185,8 +203,17 @@ def extractAll(filename, dp, location):
 
     relroot = os.path.abspath(os.path.join(ROOT, os.pardir))
 
-    root    = os.path.join(HOME, 'Temp')
+    root    = os.path.join(HOME, 'SF_Temp')
     profile = os.path.join(root, 'Super Favourites')
+
+    #copy existing settings to root
+    dst = os.path.join(root, 'settings.xml')
+    src = os.path.join(ROOT, 'settings.xml')
+    sfile.copy(src, dst)
+
+    if IMPORT_RESET:
+        try:    sfile.rmtree(os.path.join(ROOT, 'Super Favourites'))
+        except: pass
 
     try:
         nItem = float(len(zin.infolist()))
@@ -202,7 +229,7 @@ def extractAll(filename, dp, location):
 
             if filename == 'settings.xml':
                 if utils.DialogYesNo(GETTEXT(30135), line2='', line3=GETTEXT(30136), noLabel=None, yesLabel=None):
-                    zin.extract(item, HOME)
+                    zin.extract(item, root)
             elif filename == 'changelog.txt':
                 try:
                     zin.extract(item, root)      
@@ -225,7 +252,7 @@ def extractAll(filename, dp, location):
 
     except Exception, e:
         utils.log('Error whilst unzipping %s' % location)
-        utils.log(e)
+        utils.log(e)        
         return False
 
     sfile.copytree(root, ROOT)
@@ -244,16 +271,24 @@ def getFile(title, ext):
 
 
 def getFolder(title):
-    folder = xbmcgui.Dialog().browse(3, title, 'files', '', False, False, os.sep)
+    folder = xbmcgui.Dialog().browse(3, title, 'files', '', False, False, '')
 
     return xbmc.translatePath(folder)
 
 
 if __name__ == '__main__':
     try:
-        main()
-        import xbmcaddon
-        xbmcaddon.Addon(ADDONID).openSettings()
+        toImport = True
+        settings = False
+
+        if len(sys.argv) > 1:
+            toImport = sys.argv[1].lower() != 'false'
+            settings = True
+
+        if len(sys.argv) > 2:
+            settings = sys.argv[2].lower() != 'false'
+
+        main(toImport, settings)
         xbmc.executebuiltin('Container.Refresh')
 
     except:

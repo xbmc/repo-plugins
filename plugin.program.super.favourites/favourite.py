@@ -28,8 +28,6 @@ import utils
 import sfile
 
 
-HOMESPECIAL = 'special://home/'
-HOMEFULL    = xbmc.translatePath(HOMESPECIAL)
 
 SHOWUNAVAIL = utils.ADDON.getSetting('SHOWUNAVAIL') == 'true'
 
@@ -138,10 +136,10 @@ def writeFavourites(file, faves):
             thumb = utils.escape(fave[1])
             cmd   = utils.escape(fave[2])
 
-            if isKodi:
+            if isKodi and cmd.lower().startswith('playmedia'):
                 cmd = removeSFOptions(cmd)
 
-            thumb = convertToHome(thumb)
+            thumb = utils.convertToHome(thumb)
 
             name  = 'name="%s" '  % name
             thumb = 'thumb="%s">' % thumb
@@ -186,17 +184,18 @@ def isValid(cmd):
 
     cmd = tidy(cmd)
 
-    if 'PlayMedia' in cmd:
+    #if 'PlayMedia' in cmd:
+    if cmd.startswith('PlayMedia'):
         return utils.verifyPlayMedia(cmd)
-        
 
-    if 'plugin' in cmd:        
-        if not utils.verifyPlugin(cmd):
-            return False
-
-    if 'RunScript' in cmd:
+    #if 'RunScript' in cmd:
+    if cmd.startswith('RunScript'):
         cmd = re.sub('/&content_type=(.+?)"\)', '")', cmd)
         if not utils.verifyScript(cmd):
+            return False
+        
+    if 'plugin' in cmd:        
+        if not utils.verifyPlugin(cmd):
             return False
         
     return True
@@ -206,6 +205,7 @@ def updateFave(file, update):
     cmd = update[2]
 
     fave, index, nFaves = findFave(file, cmd)
+    
    
     removeFave(file, cmd)
     return insertFave(file, update, index)
@@ -237,6 +237,11 @@ def findFave(file, cmd):
     for idx, fave in enumerate(faves):
         if '[%SF%]' in fave[2]:
             test = fave[2].split('[%SF%]', 1)
+            if cmd.startswith(test[0]) and cmd.endswith(test[1]):
+                return fave, idx, len(faves)
+
+        if '[%SF+%]' in fave[2]:
+            test = fave[2].split('[%SF+%]', 1)
             if cmd.startswith(test[0]) and cmd.endswith(test[1]):
                 return fave, idx, len(faves)
 
@@ -313,6 +318,7 @@ def removeFave(file, cmd):
 
 def shiftFave(file, cmd, up):
     fave, index, nFaves = findFave(file, cmd)
+
     max = nFaves - 1
     if up:
         index -= 1
@@ -341,27 +347,40 @@ def renameFave(file, cmd, newName):
 
 
 def equals(fave, cmd):
+    fave = fave.strip()
+    cmd  = cmd.strip()
+
     if fave == cmd:
         return True
 
     fave = removeSFOptions(fave)
     cmd  = removeSFOptions(cmd)
 
+
     if fave == cmd:
         return True
 
-    if '[%SF%]' not in fave:
-        return False
-
-    test = fave.split('[%SF%]', 1)
-    if cmd.startswith(test[0])  and cmd.endswith(test[1]):
+    if fave == cmd.replace('")', '/")'):
         return True
+
+    if '[%SF%]' in fave:
+        test = fave.split('[%SF%]', 1)
+        if cmd.startswith(test[0])  and cmd.endswith(test[1]):
+            return True
+
+    if '[%SF+%]' in fave:
+        test = fave.split('[%SF+%]', 1)
+        if cmd.startswith(test[0])  and cmd.endswith(test[1]):
+            return True
 
     return False
 
 
 def addFanart(cmd, fanart):
-    return updateSFOption(cmd, 'fanart', convertToHome(fanart))
+    if len(fanart) < 1:
+        return cmd
+
+    return updateSFOption(cmd, 'fanart', utils.convertToHome(fanart))
 
 
 def updateSFOption(cmd, option, value):
@@ -433,13 +452,6 @@ def removeSFOptions(cmd):
     cmd = cmd.replace('/")', '")')
 
     return cmd
-
-
-def convertToHome(text):
-    if text.startswith(HOMEFULL):
-        text = text.replace(HOMEFULL, HOMESPECIAL)
-
-    return text
 
 
 def getFanart(cmd):

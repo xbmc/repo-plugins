@@ -20,7 +20,6 @@
 
 import os
 import time
-import glob
 import urllib2
 
 import xbmc

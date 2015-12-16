@@ -1,5 +1,5 @@
 
-#       Copyright (C) 2013-
+#       Copyright (C) 2015
 #       Sean Poyser (seanpoyser@gmail.com)
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -17,18 +17,23 @@
 #  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 #  http://www.gnu.org/copyleft/gpl.html
 #
+#  this module provides a wrapper around the Kodi xbmcvfs class
 
 
 import xbmcvfs
 
 
 def exists(filename):
-    return xbmcvfs.exists(filename)
+    if xbmcvfs.exists(filename):
+        return True
+
+    return xbmcvfs.exists(filename + '/')
 
 
 def isfile(filename):
     if not exists(filename):
-        raise Exception('sfile.isFile error %s does not exists' % filename)
+        #raise Exception('sfile.isfile error %s does not exists' % filename)
+        return False
 
     import stat
     return stat.S_ISREG(xbmcvfs.Stat(filename).st_mode())
@@ -36,7 +41,8 @@ def isfile(filename):
 
 def isdir(folder):
     if not exists(folder):
-        raise Exception('sfile.isDdir error %s does not exists' % folder)
+        #raise Exception('sfile.isdir error %s does not exists' % folder)
+        return False
 
     import stat
     return stat.S_ISDIR(xbmcvfs.Stat(folder).st_mode())
@@ -44,6 +50,10 @@ def isdir(folder):
 
 def file(filename, type):
     return xbmcvfs.File(filename, type)
+
+
+def size(filename):
+    return xbmcvfs.File(filename).size()
 
 
 def read(filename):
@@ -78,7 +88,14 @@ def makedirs(path):
     xbmcvfs.mkdirs(path)
 
 
+def delete(filename):
+    return remove(filename)
+
+
 def remove(filename):
+    if isdir(filename):
+        return rmtree(filename)
+
     return xbmcvfs.delete(filename)
 
 
@@ -97,10 +114,13 @@ def rmtree(folder):
 
 def copytree(src, dst):
     import os
-    current, dirs, files = walk(src)
 
-    if not exists(dst):
-        makedirs(dst)
+    if exists(dst):
+        rmtree(dst)
+
+    makedirs(dst)
+
+    current, dirs, files = walk(src)
 
     for file in files:
         copy(os.path.join(current, file), os.path.join(dst, file))
@@ -109,15 +129,29 @@ def copytree(src, dst):
         copytree(os.path.join(src, dir), os.path.join(dst, dir))
 
 
-def copy(src, dst):
+def copy(src, dst, overWrite=True):
+    if not overWrite and exists(dst):
+        return False
+
+    if isdir(src):
+        return copytree(src, dst)
+
     return xbmcvfs.copy(src, dst)
 
 
 def rename(src, dst):
+    if src == dst:
+        return
+
     if not exists(src):
         return
 
     if isdir(src):
+        if src.lower() == dst.lower():
+            newSrc = src +'sfile_temp_name'
+            rename(src, newSrc)
+            src = newSrc
+        
         copytree(src, dst)
         rmtree(src)
         return
@@ -141,10 +175,48 @@ def ctime(filename):
     return status.st_ctime()
 
 
-
 #def status(filename):
 #    if not exists(filename):
 #        raise Exception('sfile.status error %s does not exists' % filename)
 #
 #    status = xbmcvfs.Stat(filename)
 #    return status
+
+
+def getfolder(path):
+    import os
+    path = path.replace('/', os.sep)
+    if path.endswith(os.sep):
+        path += 'filename'
+
+    try:    return path.rsplit(os.sep, 1)[0]       
+    except: return ''
+
+
+def getfilename(path):
+    import os
+    path = path.replace('/', os.sep)
+    try:    return path.rsplit(os.sep, 1)[-1]
+    except: return ''
+
+
+def removeextension(path):
+    try:    return path.rsplit('.', 1)[0]
+    except: path
+
+
+def getextension(path):
+    try:    return path.rsplit('.')[-1]
+    except: return ''
+
+
+def isempty(folder):
+    current, dirs, files = walk(folder)
+
+    if len(dirs) > 0:
+        return False
+
+    if len(files) > 0:
+        return False
+
+    return True

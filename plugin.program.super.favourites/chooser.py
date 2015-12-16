@@ -96,7 +96,8 @@ def GetFave(property, path='', changeTitle=False):
         xbmc.sleep(100)
 
     xbmc.sleep(500)
-    return len(xbmc.getInfoLabel('Skin.String(OTT.Path)')) > 0
+
+    return len(xbmc.getInfoLabel('Skin.String(%s.Path)' % property)) > 0
 
 
 class Main:
@@ -195,9 +196,10 @@ class MainGui(xbmcgui.WindowXMLDialog):
 
         self.getControl(5).setVisible(False)
         self.getControl(1).setLabel(GETTEXT(30000))
+        self.getControl(1).setVisible(False)
 
         #the remove item 
-        self.favList.addItem(xbmcgui.ListItem(GETTEXT(30100), iconImage='DefaultAddonNone.png'))
+        #self.favList.addItem(xbmcgui.ListItem(GETTEXT(30100), iconImage='DefaultAddonNone.png'))
 
         if self.mode != 'xbmc':
             self.addFolderItem()
@@ -207,17 +209,28 @@ class MainGui(xbmcgui.WindowXMLDialog):
 
         for fave in self.faves:            
             listitem = xbmcgui.ListItem(fave[0])
+
+            icon = fave[1]
+            if not icon:
+                icon = ICON 
             
-            listitem.setIconImage(fave[1])
+            listitem.setIconImage(icon)
             listitem.setProperty('Icon', fave[1])
 
             cmd = fave[2]
             if cmd.lower().startswith('activatewindow'):
                 cmd = cmd.replace('")', '",return)')
 
+            fanart = favourite.getFanart(cmd) 
+            desc   = favourite.getOption(cmd, 'desc')
+            mode   = favourite.getOption(cmd, 'mode')
+
             cmd = favourite.removeSFOptions(cmd)
 
-            listitem.setProperty('Path', cmd)
+            listitem.setProperty('Path',   cmd)
+            listitem.setProperty('Fanart', fanart)
+            listitem.setProperty('Desc',   desc)
+            listitem.setProperty('Mode',   mode)
             
             if len(fave) > 3 and fave[3]:
                 listitem.setProperty('IsFolder', 'true')
@@ -225,19 +238,22 @@ class MainGui(xbmcgui.WindowXMLDialog):
             self.favList.addItem(listitem)
             
         # add a dummy item with no action assigned
-        listitem = xbmcgui.ListItem(GETTEXT(30101))
-        listitem.setProperty('Path', 'noop')
-        self.favList.addItem(listitem)
+        #listitem = xbmcgui.ListItem(GETTEXT(30101))
+        #listitem.setProperty('Path', 'noop')
+        #self.favList.addItem(listitem)
         self.setFocus(self.favList)
 
 
     def addXBMCFavouritesItem(self):
         try:
             fullpath = 'special://profile/'
-            thumb    = ''
+
+            thumb = getParam('ICON', os.path.join(PROFILE, FOLDERCFG))
+            if len(thumb) < 1:
+                thumb = 'icon_favourites.png'
 
             label    = GETTEXT(30106) % DISPLAYNAME
-            listitem = xbmcgui.ListItem(label)
+            listitem = xbmcgui.ListItem(label) 
 
             listitem.setIconImage(thumb)
             listitem.setProperty('Icon',     thumb)
@@ -263,13 +279,20 @@ class MainGui(xbmcgui.WindowXMLDialog):
             fullpath = os.path.join(utils.PROFILE, self.path)
             thumb    = getFolderThumb(fullpath) if self.mode != 'root' else ICON
 
-            listitem = xbmcgui.ListItem(path + GETTEXT(30102))
-                     
+            #open folder
+            listitem = xbmcgui.ListItem(path + GETTEXT(30102))                     
             listitem.setIconImage(thumb)
             listitem.setProperty('Icon',     thumb)
             listitem.setProperty('Path',     self.path)
             listitem.setProperty('IsFolder', 'open')
+            self.favList.addItem(listitem)
 
+            #play folder
+            listitem = xbmcgui.ListItem(path + GETTEXT(30236))                     
+            listitem.setIconImage(thumb)
+            listitem.setProperty('Icon',     thumb)
+            listitem.setProperty('Path',     self.path)
+            listitem.setProperty('IsFolder', 'play')
             self.favList.addItem(listitem)
 
         except Exception, e:
@@ -297,14 +320,26 @@ class MainGui(xbmcgui.WindowXMLDialog):
         if controlID == 6 or controlID == 3:
             num = self.favList.getSelectedPosition()
 
-            if num > 0:
+            if num >= 0:
                 favPath  = self.favList.getSelectedItem().getProperty('Path')
                 favLabel = self.favList.getSelectedItem().getLabel()
                 favIcon  = self.favList.getSelectedItem().getProperty('Icon')
                 isFolder = self.favList.getSelectedItem().getProperty('IsFolder')
 
+                if not isFolder:
+                    fanart = self.favList.getSelectedItem().getProperty('Fanart')
+                    desc   = self.favList.getSelectedItem().getProperty('Desc')
+                    mode   = self.favList.getSelectedItem().getProperty('Mode')
+
+                    favPath = favourite.updateSFOption(favPath, 'fanart', fanart)
+                    favPath = favourite.updateSFOption(favPath, 'desc',   desc)
+                    favPath = favourite.updateSFOption(favPath, 'mode',   mode)
+
+                favLabel = utils.fix(favLabel)
                 if favLabel.endswith(GETTEXT(30102)):
                     favLabel = favLabel.replace(GETTEXT(30102), '')
+                if favLabel.endswith(GETTEXT(30236)):
+                    favLabel = favLabel.replace(GETTEXT(30236), '')
 
                 if isFolder:
                     if isFolder.lower() == 'true':
@@ -317,6 +352,14 @@ class MainGui(xbmcgui.WindowXMLDialog):
                         cmd += 'folder=%s' % urllib.quote_plus(favPath)
                         cmd += '",return)'
                         favPath = cmd
+                    if isFolder.lower() == 'play':
+                        cmd  = 'PlayMedia("plugin://'
+                        cmd += utils.ADDONID + '/?'
+                        cmd += 'label=%s&' % urllib.quote_plus(favLabel)
+                        cmd += 'mode=%s&'  % urllib.quote_plus('5400')
+                        cmd += 'folder=%s' % urllib.quote_plus(favPath)
+                        cmd += '")'
+                        favPath = cmd                        
                 
                 if self.changeTitle:
                     keyboard = xbmc.Keyboard(favLabel, xbmc.getLocalizedString(528), False)

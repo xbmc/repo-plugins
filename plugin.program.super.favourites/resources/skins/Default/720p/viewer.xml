@@ -1,0 +1,60 @@
+<window id="1000">
+    <coordinates>
+        <system>1</system>
+        <posx>20</posx>
+        <posy>20</posy>
+	    <defaultcontrol always="false">2000</defaultcontrol>
+     </coordinates>
+	 
+	<animation effect="fade" time="250">WindowOpen</animation>
+    <animation effect="fade" time="250">WindowClose</animation>
+	
+	<controls>
+  	     <control type="image">
+            <description>Background Image</description>
+            <posx>0</posx>
+            <posy>0</posy>
+            <width>1240</width>
+            <height>680</height>
+			<texture border="20">DialogBack.png</texture>       
+            <fadetime>250</fadetime>
+        </control>
+		
+		<control type="image" id="1000">
+            <description>Fanart Image</description>
+            <posx>10</posx>
+            <posy>10</posy>
+            <width>1220</width>
+            <height>660</height>
+			<aspectratio>stretch</aspectratio>			
+            <fadetime>250</fadetime>
+        </control>
+		
+		<control type="image" id="1100">
+            <description>Thumbnail Image</description>
+            <posx>850</posx>
+            <posy>110</posy>		
+			<width>360</width>
+			<height>540</height>
+			<aspectratio aligny="bottom">keep</aspectratio>
+            <fadetime>250</fadetime>
+        </control>
+		 
+		<control type="button" id="2000">
+			<description>Close Window button</description>
+			<posx>1158</posx>
+			<posy>5</posy>
+			<width>64</width>
+			<height>32</height>
+			<label>-</label>
+			<font>-</font>
+			<onclick>PreviousMenu</onclick>
+			<texturefocus>DialogCloseButton-focus.png</texturefocus>
+			<texturenofocus>DialogCloseButton.png</texturenofocus>
+			<onleft></onleft>
+			<onright></onright>
+			<onup></onup>
+			<ondown></ondown>
+		</control>
+	</controls>
+</window>

@@ -28,12 +28,12 @@ import urllib
 import re
 
 import quicknet
+import player
 import favourite
 import history
 import utils
 import cache
 import sfile
-
 
 ADDONID  = utils.ADDONID
 ADDON    = utils.ADDON
@@ -42,6 +42,7 @@ ROOT     = utils.ROOT
 PROFILE  = utils.PROFILE
 VERSION  = utils.VERSION
 ICON     = utils.ICON
+
 
 FANART   = utils.FANART
 SEARCH   = utils.SEARCH
@@ -57,77 +58,81 @@ FILENAME      = utils.FILENAME
 FOLDERCFG     = utils.FOLDERCFG
 
 
-PLAYMEDIA_MODE      = 1
-ACTIVATEWINDOW_MODE = 2
-RUNPLUGIN_MODE      = 3
-ACTION_MODE         = 4
+PLAYMEDIA_MODE      = utils.PLAYMEDIA_MODE
+ACTIVATEWINDOW_MODE = utils.ACTIVATEWINDOW_MODE
+RUNPLUGIN_MODE      = utils.RUNPLUGIN_MODE
+ACTION_MODE         = utils.ACTION_MODE
 
 MANUAL_CMD = 'SF_MANUAL_CMD_'
 
-
-#PLAYLIST_EXT = '.m3u|.xsp|.strm'
-PLAYLIST_EXT = '.m3u'
-
-DISPLAYNAME = ADDON.getSetting('DISPLAYNAME') 
-if not DISPLAYNAME:
-    DISPLAYNAME = 'Kodi'
+#Display name no longer configurable
+#DISPLAYNAME = ADDON.getSetting('DISPLAYNAME') 
+#if not DISPLAYNAME:
+#    DISPLAYNAME = 'Kodi'
+DISPLAYNAME = 'Kodi'
 
 # -----Addon Modes ----- #
-_IGNORE              = -10
-_MAIN                = -2
-_SUPERSEARCH         = 0
-_SUPERSEARCHDEF      = 10
-_EXTSEARCH           = 25 #used to trigger new Super Search from outside of addon
-_SEPARATOR           = 50
-_SETTINGS            = 100
-_VIEWTYPE            = 150
-_ADDTOXBMC           = 200
-_XBMC                = 300
-_FOLDER              = 400
-_NEWFOLDER           = 500
-_PLAYMEDIA           = 600
-_ACTIVATEWINDOW      = 650
-_ACTIVATEWINDOW_XBMC = 660
-_ACTIVATESEARCH      = 675
-_REMOVEFOLDER        = 700
-_REMOVEFAVE          = 800
-_RENAMEFOLDER        = 900
-_RENAMEFAVE          = 1000
-_THUMBFAVE           = 1500
-_THUMBFOLDER         = 1600
-_PLAYBACKMODE        = 1700
-_EDITTERM            = 1900
-_EDITFOLDER          = 2000
-_EDITFAVE            = 2100
-_SECURE              = 2200
-_UNSECURE            = 2300
-_PLAYLIST            = 2400
-_COLOURFOLDER        = 2500
-_COLOURFAVE          = 2600
-_RECOMMEND_KEY       = 2700
-_RECOMMEND_IMDB      = 2800
-_PLAYTRAILER         = 2900
-_EDITSEARCH          = 3000
-_IMPORT              = 3100
-_IPLAY               = 3200
-_PLAYLISTFILE        = 3300 
-_PLAYLISTITEM        = 3400 
-_PLAYLISTBROWSE      = 3500
-_DELETEPLAYLIST      = 3600
-_COPYPLAYLIST        = 3700
-_PLAYPLAYLIST        = 3800
-_COPYPLAYLISTITEM    = 3900
-_URLPLAYLIST         = 4000
-_HISTORYSHOW         = 4100
-_HISTORYADD          = 4200
-_HISTORYREMOVE       = 4300
-_MANUAL              = 4400
-_CUT                 = 4500
-_COPY                = 4600
-_PASTE               = 4700
-_CUTFOLDER           = 4800
-_COPYFOLDER          = 4900
-_PASTEFOLDER         = 5000
+_IGNORE                = -10
+_MAIN                  = -2
+_SUPERSEARCH           = 0
+_SUPERSEARCHDEF        = 10
+_EXTSEARCH             = 25 #used to trigger new Super Search from outside of addon
+_SEPARATOR             = 50
+_SETTINGS              = 100
+_VIEWTYPE              = 150
+_ADDTOXBMC             = 200
+_XBMC                  = 300
+_FOLDER                = 400
+_NEWFOLDER             = 500
+_PLAYMEDIA             = 600
+_ACTIVATEWINDOW        = 650
+_ACTIVATEWINDOW_XBMC   = 660
+_ACTIVATESEARCH        = 675
+_REMOVEFOLDER          = 700
+_REMOVEFAVE            = 800
+_RENAMEFOLDER          = 900
+_RENAMEFAVE            = 1000
+_THUMBFAVE             = 1500
+_THUMBFOLDER           = 1600
+_PLAYBACKMODE          = 1700
+_EDITTERM              = 1900
+_EDITFOLDER            = 2000
+_EDITFAVE              = 2100
+_SECURE                = 2200
+_UNSECURE              = 2300
+_PLAYLIST              = 2400
+_COLOURFOLDER          = 2500
+_COLOURFAVE            = 2600
+_RECOMMEND_KEY         = 2700
+_RECOMMEND_KEY_A       = 2710
+_RECOMMEND_IMDB        = 2800
+_PLAYTRAILER           = 2900
+_EDITSEARCH            = 3000
+_IMPORT                = 3100
+_IPLAY                 = 3200
+_PLAYLISTFILE          = 3300 
+_PLAYLISTITEM          = 3400 
+_PLAYLISTBROWSE        = 3500
+_DELETEPLAYLIST        = 3600
+_COPY_TO_SF            = 3700
+_COPY_TO_SF_ITEM       = 3800
+_PLAYPLAYLIST          = 3900
+_URLPLAYLIST           = 4000
+_HISTORYSHOW           = 4100
+_HISTORYADD            = 4200
+_HISTORYREMOVE         = 4300
+_MANUAL                = 4400
+_CUT                   = 4500
+_COPY                  = 4600
+_PASTE                 = 4700
+_CUTFOLDER             = 4800
+_COPYFOLDER            = 4900
+_PASTEFOLDER           = 5000
+_IEXPLORE              = 5100
+_PLAY_FILE             = 5200
+_PLAY_FOLDER           = 5300
+_PLAY_SUPER_FOLDER     = 5400
+_PLAY_SUPER_FOLDER_EXT = 5450
 
 
 # --------------------- Addon Settings --------------------- #
@@ -141,14 +146,45 @@ SHOWRECOMMEND         = ADDON.getSetting('SHOWRECOMMEND')         == 'true'
 PLAY_PLAYLISTS        = ADDON.getSetting('PLAY_PLAYLISTS')        == 'true'
 METARECOMMEND         = ADDON.getSetting('METARECOMMEND')         == 'true'
 SYNOPSRECOMMEND       = ADDON.getSetting('SYNOPSRECOMMEND')       == 'true'
+RECOMMENDAUTO         = ADDON.getSetting('RECOMMENDFIRST')        == 'true'
 INHERIT               = ADDON.getSetting('INHERIT')               == 'true'
 REMOTE                = ADDON.getSetting('REMOTE')                == 'true'
 SHOWIPLAY             = ADDON.getSetting('SHOWIPLAY')             == 'true'
 SHOWIHISTORY          = ADDON.getSetting('SHOWREMEMBER')          == 'true'
+SHOWIEXPLORE          = ADDON.getSetting('SHOWIEXPLORE')          == 'true'
 COPY_PLAYLISTS        = ADDON.getSetting('COPY_PLAYLISTS')        == 'true'
 ALLOW_PLAYLIST_DELETE = ADDON.getSetting('ALLOW_PLAYLIST_DELETE') == 'true'
+DISABLEMOVIEVIEW      = ADDON.getSetting('DISABLEMOVIEVIEW')      == 'true'
+ALPHA_SORT            = ADDON.getSetting('ALPHA_SORT')            == 'true'
+LABEL_NUMERIC         = ADDON.getSetting('LABEL_NUMERIC')         == 'true'
+DEBUG                 = ADDON.getSetting('DEBUG')                 == 'true'
+DLG_MENU              = ADDON.getSetting('CONTEXT_STYLE')         == '1'
 DEFAULT_FANART        = ADDON.getSetting('DEFAULT_FANART')
+
 VIEWTYPE              = int(ADDON.getSetting('VIEWTYPE'))
+CONTENTTYPE           = ADDON.getSetting('CONTENTTYPE')
+
+
+ART_LANDSCAPE = int(ADDON.getSetting('ART_LANDSCAPE'))
+ART_BANNER    = int(ADDON.getSetting('ART_BANNER'))
+ART_POSTER    = int(ADDON.getSetting('ART_POSTER'))
+
+
+CONTENTTYPES = {}
+CONTENTTYPES[GETTEXT(35029)] = 'files'
+CONTENTTYPES[GETTEXT(35030)] = 'songs'
+CONTENTTYPES[GETTEXT(35031)] = 'artists'
+CONTENTTYPES[GETTEXT(35032)] = 'albums'
+CONTENTTYPES[GETTEXT(35033)] = 'movies'
+CONTENTTYPES[GETTEXT(35034)] = 'tvshows'
+CONTENTTYPES[GETTEXT(35035)] = 'episodes'
+CONTENTTYPES[GETTEXT(35036)] = 'musicvideos'
+CONTENTTYPES[GETTEXT(35037)] = ''
+
+
+if ADDON.getSetting('SHOW_STARTUP_TXT') == 'true':
+    utils.DialogOK(ADDON.getSetting('STARTUP_TXT'))
+    ADDON.setSetting('SHOW_STARTUP_TXT', 'false')
 
 
 if REMOTE:
@@ -164,6 +200,8 @@ if DEFAULT_FANART == '2':
 
 CONTENTMODE   = False
 ISEARCH_EMPTY = '__iSearch__'
+
+NUMBER_SEP = ' | '
 # ---------------------------------------------------------- #
 
 utils.CheckVersion()
@@ -177,18 +215,6 @@ separator = False
 
 global currentFolder
 currentFolder = PROFILE
-
-
-def clean(text):
-    if not text:
-        return None
-
-    text = re.sub('[:\\\\/*?\<>|"]+', '', text)
-    text = text.strip()
-    if len(text) < 1:
-        return  None
-
-    return text
 
 
 def main():
@@ -206,7 +232,7 @@ def setViewType():
     try:    src = re.compile('defaultresolution="(.+?)"').findall(xml)[0]
     except: src = re.compile('<res.+?folder="(.+?)"').findall(xml)[0]
 
-    types = ['MyVideoNav.xml', 'MyMusicNav.xml', 'MyPrograms.xml']
+    types = ['MyVideoNav.xml', 'MyMusicNav.xml', 'MyPrograms.xml', 'Includes_View_Modes.xml', 'IncludesViews.xml']
     views = []
 
     for type in types:
@@ -309,21 +335,14 @@ def addGlobalMenuItem(menu, item, ignore, label, thumbnail, u, keyword):
 
     menu.append((GETTEXT(30005), 'XBMC.RunPlugin(%s?mode=%d)' % (sys.argv[0], _SETTINGS)))
 
-    try:
-        addon = re.compile('"(.+?)"').search(item).group(1)
-        addon = addon.replace('plugin://', '')
-        addon = addon.replace('/', '')
-        addon = addon.split('?', 1)[0]
+    addon = utils.findAddon(item)
 
-        if addon == utils.ADDONID:
-            return
+    if addon == None or addon == ADDONID:
+        return
+
+    label = utils.getSettingsLabel(addon)
         
-        if xbmc.getCondVisibility('System.HasAddon(%s)' % addon) == 0:
-            return
-        
-        menu.append((GETTEXT(30094) % xbmcaddon.Addon(addon).getAddonInfo('name'), 'XBMC.RunPlugin(%s?mode=%d&addon=%s)' % (sys.argv[0], _SETTINGS, urllib.quote_plus(addon))))
-    except:
-        pass
+    menu.append((label, 'XBMC.RunPlugin(%s?mode=%d&addon=%s)' % (sys.argv[0], _SETTINGS, urllib.quote_plus(addon))))
 
 
 def addFavouriteMenuItem(menu, name, thumb, cmd, keyword):
@@ -352,12 +371,15 @@ def getCurrentWindowId():
 def addToXBMC(name, thumb, cmd,  keyword):
     p = get_params(cmd.replace('?', '&'))
 
+    if LABEL_NUMERIC:
+        name = name.split(NUMBER_SEP, 1)[-1]
+
     try: 
         mode = int(p['mode'])
         if mode == _FOLDER:
             label = urllib.unquote_plus(p['label'])
             path  = urllib.unquote_plus(p['path'])
-            path  = favourite.convertToHome(path)
+            path  = utils.convertToHome(path)
             cmd   = '%s?label=%s&mode=%d&path=%s' % (sys.argv[0], label, _FOLDER, urllib.quote_plus(path))
     except:
         mode = _IGNORE
@@ -368,20 +390,32 @@ def addToXBMC(name, thumb, cmd,  keyword):
     search    = mode == _SUPERSEARCH
     edit      = mode == _EDITTERM
     activate  = mode == _ACTIVATESEARCH
+    activateW = mode == _ACTIVATEWINDOW
     recommend = mode == _RECOMMEND_KEY or mode == _RECOMMEND_IMDB
     iPlay     = mode == _IPLAY
     history   = mode == _HISTORYSHOW
-    isSF      = cmd.startswith('"plugin://%s' % utils.ADDONID)
+    playSF    = mode == _PLAY_SUPER_FOLDER
+    isSF      = cmd.startswith('"plugin://%s' % ADDONID)
+
+    isCached = False
+    if activateW:
+        isCached = utils.DialogYesNo(GETTEXT(30207))
+
+    try:    fanart = urllib.unquote_plus(p['fanart'])
+    except: fanart = ''
 
     if activate:
         cmd = urllib.unquote_plus(p['cmd'])
+    elif isCached or playSF:
+        cmd = 'PlayMedia(%s)' % cmd
     elif isSF:
         cmd = cmd.replace('+', '%20')
         cmd = 'ActivateWindow(%d,%s,return)' % (getCurrentWindowId(), cmd)
-        if mode == _ACTIVATEWINDOW:
+        if activateW:
             cmd = cmd.replace('mode=%d' % _ACTIVATEWINDOW, 'mode=%d' % _ACTIVATEWINDOW_XBMC) 
     else:
-        cmd = 'PlayMedia(%s)' % cmd
+        fanart = ''
+        cmd    = 'PlayMedia(%s)' % cmd
 
     if search:
         name = GETTEXT(30054)
@@ -403,7 +437,9 @@ def addToXBMC(name, thumb, cmd,  keyword):
 
     if folder:
         thumbnail, fanart = getFolderThumb(path)
-        cmd = favourite.addFanart(cmd, fanart)
+        #cmd = favourite.addFanart(cmd, fanart)
+
+    cmd = favourite.addFanart(cmd, fanart)
 
     keyword = urllib.unquote_plus(keyword)
     if len(keyword) > 0:
@@ -428,6 +464,21 @@ def addToXBMC(name, thumb, cmd,  keyword):
 
 def refresh():
     xbmc.executebuiltin('Container.Refresh')
+    #xbmc.executebuiltin('Container.Refresh(%s)' % (sys.argv[0] + sys.argv[2]))
+
+
+def removeAutoplay(path):
+    cfg  = os.path.join(path, FOLDERCFG)
+    clearParam('AUTOPLAY', cfg)
+
+    refresh()
+
+
+def addAutoplay(path):
+    cfg  = os.path.join(path, FOLDERCFG)
+    setParam('AUTOPLAY', 'True', cfg)
+
+    refresh()
 
 
 def addLock(path, name):
@@ -533,11 +584,27 @@ def showXBMCFolder():
     parseFile(file)
 
 
-def parseFile(file):
+def cleanForSort(text):
+    text = text[0]
+    text = text.lower()
+    text = utils.Clean(text)
+    return text
+
+
+def parseFile(file, sortorder=0, label_numeric=None, index=0):
+    if sortorder == 0:
+        sortorder = 1 if ALPHA_SORT else 2
+
     global separator
     faves = favourite.getFavourites(file)
 
+    if label_numeric == None:
+        label_numeric = LABEL_NUMERIC
+
     text = GETTEXT(30099) % DISPLAYNAME if mode == _XBMC else GETTEXT(30068)
+
+    if sortorder == 1: #ALPHA_SORT:
+         faves = sorted(faves, key=lambda x: cleanForSort(x))
 
     for fave in faves:
         label  = fave[0]
@@ -554,11 +621,13 @@ def parseFile(file):
         menu.append((text, 'XBMC.RunPlugin(%s?mode=%d&file=%s&cmd=%s&name=%s&thumb=%s)' % (sys.argv[0], _EDITFAVE, urllib.quote_plus(file), urllib.quote_plus(cmd), urllib.quote_plus(label), urllib.quote_plus(thumb))))
 
 
-        if isPlaylist(cmd) and (not PLAY_PLAYLISTS):
-            menu.append((GETTEXT(30084), 'XBMC.RunPlugin(%s?mode=%d&file=%s&cmd=%s)' % (sys.argv[0], _PLAYLIST, urllib.quote_plus(file), urllib.quote_plus(cmd))))
+        if not PLAY_PLAYLISTS:
+            import playlist
+            if playlist.isPlaylist(cmd):
+                menu.append((GETTEXT(30084), 'XBMC.RunPlugin(%s?mode=%d&file=%s&cmd=%s)' % (sys.argv[0], _PLAYLIST, urllib.quote_plus(file), urllib.quote_plus(cmd))))
 
         menu.append((GETTEXT(30178), 'XBMC.RunPlugin(%s?mode=%d&file=%s&cmd=%s)' % (sys.argv[0], _COPY, urllib.quote_plus(file), urllib.quote_plus(cmd))))
-        menu.append((GETTEXT(30177), 'XBMC.RunPlugin(%s?mode=%d&file=%s&cmd=%s)' % (sys.argv[0], _CUT, urllib.quote_plus(file),  urllib.quote_plus(cmd))))
+        #menu.append((GETTEXT(30177), 'XBMC.RunPlugin(%s?mode=%d&file=%s&cmd=%s)' % (sys.argv[0], _CUT, urllib.quote_plus(file),  urllib.quote_plus(cmd))))
 
         type     = _ACTIVATEWINDOW
         isFolder = True
@@ -570,14 +639,60 @@ def parseFile(file):
             type     = _PLAYMEDIA
             isFolder = False
 
+        label, index = addPrefixToLabel(index, label, label_numeric)
+
         addDir(label, type, cmd=cmd, thumbnail=thumb, isFolder=isFolder, menu=menu, fanart=fanart, infolabels=infolabel)
 
     separator = len(faves) > 0
 
 
+def getPrefix(index):
+    index += 1
+    prefix = str(index) + NUMBER_SEP
+    if index < 10:
+        prefix = '0' + prefix
+    return prefix, index
+
+
+def addPrefixToLabel(index, label, addPrefix=None):
+    if addPrefix == None:
+        addPrefix = LABEL_NUMERIC
+
+    if not addPrefix:
+        return label, index
+
+    prefix, index = getPrefix(index)
+
+    locn = -1
+
+    SEARCHING = 0
+    INELEMENT = 1  
+    BODY      = 2  
+    mode = SEARCHING
+
+    for c in label:
+        locn += 1
+        if mode == SEARCHING:
+            if c is '[':           
+                mode = INELEMENT
+            else:
+                mode = BODY
+
+        elif mode == INELEMENT:
+            if c is ']':
+                mode = SEARCHING
+
+        if mode == BODY:
+            break
+        
+    label = label[:locn] + prefix + label[locn:]
+    return label, index
+
+
 def getFolderThumb(path, isXBMC=False):
     cfg    = os.path.join(path, FOLDERCFG)
-    thumb  = getParam('ICON', cfg)
+    cfg    = getParams(cfg)
+    thumb  = getParam('ICON',   cfg)
     fanart = getParam('FANART', cfg)
 
     if thumb and fanart:
@@ -624,6 +739,12 @@ def addMainItems():
 
     addSuperSearch()
 
+    if SHOWIEXPLORE:
+        separator = False
+        folder    = 'DefaultFolder.png'
+        addDir(GETTEXT(30225), _IEXPLORE, thumbnail=folder, isFolder=True, infolabels={'plot':GETTEXT(30227)})
+        separator = True
+
 
     if SHOWIPLAY:
         separator = False
@@ -655,8 +776,92 @@ def addMainItems():
         fanart    = ''
 
         addDir(GETTEXT(30125), _IMPORT, thumbnail=thumbnail, isFolder=False, fanart=fanart, infolabels={'plot':GETTEXT(30198)})
-        separator = True    
+        separator = True 
 
+
+def playSuperFolder(path, id):
+    if path:
+        file = os.path.join(path, FILENAME)
+    else:
+        file = os.path.join(PROFILE, FILENAME)
+
+    faves = favourite.getFavourites(file)
+
+    if ALPHA_SORT:
+         faves = sorted(faves, key=lambda x: cleanForSort(x))
+
+    items = []
+
+    for fave in faves:
+        label  = fave[0]
+        thumb  = fave[1]
+        cmd    = fave[2]
+
+        try:
+            cmd = re.compile('"(.+?)"').search(cmd).group(1)
+            cmd = favourite.removeSFOptions(cmd)
+            items.append([label, cmd, thumb])
+        except:
+            pass
+
+    utils.log('Play Super Folder - Items')
+    utils.log(items)
+
+    utils.playItems(items, id)
+
+
+def playFolder(folder):
+    if sfile.isfile(folder):
+         folder = sfile.getfolder(folder)
+
+    files = utils.parseFolder(folder, subfolders=False)
+
+    items = []
+    for file in files:
+        items.append([file[0], file[1]])
+
+    utils.playItems(items)
+
+
+def playFile(filename): 
+    #cmd = 'PlayMedia(%s)' % path
+    #xbmc.executebuiltin(cmd)
+
+    items = [[sfile.getfilename(filename), filename]]
+    utils.playItems(items)
+  
+
+def iExplore(path=None):
+    file   = 'DefaultMovies.png'
+    folder = 'DefaultFolder.png'
+
+    if not path: 
+        path = xbmcgui.Dialog().browse(3, GETTEXT(30226), 'files', '', False, False) 
+
+    try:    items = utils.parseFolder(path)
+    except: items = []
+
+    index = 0
+
+    for item in items:
+        label  = item[0]
+        url    = item[1].replace('\\', '/')
+        isFile = item[2]
+
+        title = label
+        label, index = addPrefixToLabel(index, label)
+
+        menu = []
+            
+        if isFile:
+            menu.append((GETTEXT(30230), 'XBMC.RunPlugin(%s?mode=%d&path=%s)' % (sys.argv[0], _PLAY_FOLDER, urllib.quote_plus(url))))
+            menu.append((GETTEXT(30047), 'XBMC.RunPlugin(%s?mode=%d&path=%s&label=%s&thumb=%s)' % (sys.argv[0], _COPY_TO_SF_ITEM, urllib.quote_plus(url), urllib.quote_plus(title), urllib.quote_plus(file))))
+            addDir(label, _PLAY_FILE, path=url, thumbnail=file, isFolder=False, menu=menu, infolabels={'plot':GETTEXT(30229) % title})
+        else:
+            menu.append((GETTEXT(30231), 'XBMC.RunPlugin(%s?mode=%d&path=%s)' % (sys.argv[0], _PLAY_FOLDER, urllib.quote_plus(url))))
+            menu.append((GETTEXT(30047), 'XBMC.RunPlugin(%s?mode=%d&path=%s&label=%s&thumb=%s)' % (sys.argv[0], _COPY_TO_SF, urllib.quote_plus(url), urllib.quote_plus(title), urllib.quote_plus(folder))))
+            addDir(label, _IEXPLORE, path=url, thumbnail=folder, isFolder=True, menu=menu, infolabels={'plot':GETTEXT(30228) % title})
+ 
 
 def parseFolder(folder):
     global separator
@@ -669,53 +874,107 @@ def parseFolder(folder):
    
     dirs = sorted(dirs, key=str.lower)
 
+    folderConfig  = os.path.join(folder,  FOLDERCFG)
+    folderConfig  = getParams(folderConfig)
+    label_numeric = getParam('NUMERICAL', folderConfig)
+    sortorder     = getParam('SORT',      folderConfig)
+
+    if label_numeric:
+        label_numeric = label_numeric.lower() == 'true'
+    else:
+        label_numeric = LABEL_NUMERIC
+
+    try:    sortorder = int(sortorder)
+    except: sortorder = 0
+
+    index = 0
+
     for dir in dirs:
         path = os.path.join(current, dir)
 
         folderConfig = os.path.join(path, FOLDERCFG)
 
-        visible = getParam('VISIBLE', folderConfig)
+        visible = 'true' if DEBUG else getParam('VISIBLE', folderConfig)
         if visible and visible.lower() == 'false':
             continue
 
-        lock   = getParam('LOCK',   folderConfig)
-        colour = getParam('COLOUR', folderConfig)
-        desc   = getParam('DESC',   folderConfig)
+        folderConfig = getParams(folderConfig)
 
+        lock      = getParam('LOCK',     folderConfig)
+        colour    = getParam('COLOUR',   folderConfig)
+        desc      = getParam('DESC',     folderConfig)
+        autoplay  = getParam('AUTOPLAY', folderConfig)
+        
         infolabel = None
         if desc:
             infolabel = {'plot':desc}
     
         menu = []
+
         menu.append((GETTEXT(30067), 'XBMC.RunPlugin(%s?mode=%d&path=%s&name=%s)' % (sys.argv[0], _EDITFOLDER, urllib.quote_plus(path), urllib.quote_plus(dir))))
 
-        if lock:
-            menu.append((GETTEXT(30077), 'XBMC.RunPlugin(%s?mode=%d&path=%s&name=%s)' % (sys.argv[0], _UNSECURE, urllib.quote_plus(path), urllib.quote_plus(dir))))
+        if autoplay:
+            menu.append((GETTEXT(30235), 'XBMC.Container.Update(%s?mode=%d&path=%s)' % (sys.argv[0], _FOLDER, urllib.quote_plus(path))))
         else:
-            menu.append((GETTEXT(30076), 'XBMC.RunPlugin(%s?mode=%d&path=%s&name=%s)' % (sys.argv[0], _SECURE,   urllib.quote_plus(path), urllib.quote_plus(dir))))
+            menu.append((GETTEXT(30232), 'XBMC.RunPlugin(%s?mode=%d&path=%s)' % (sys.argv[0], _PLAY_SUPER_FOLDER, urllib.quote_plus(path))))
 
-        thumbnail, fanart = getFolderThumb(path)
+        #if lock: #lock is now on Edit Super Folder menu
+        #    menu.append((GETTEXT(30077), 'XBMC.RunPlugin(%s?mode=%d&path=%s&name=%s)' % (sys.argv[0], _UNSECURE, urllib.quote_plus(path), urllib.quote_plus(dir))))
+        #else:
+        #    menu.append((GETTEXT(30076), 'XBMC.RunPlugin(%s?mode=%d&path=%s&name=%s)' % (sys.argv[0], _SECURE,   urllib.quote_plus(path), urllib.quote_plus(dir))))
 
-        if colour:
-            dir = '[COLOR %s]%s[/COLOR]' % (colour, dir)
+        thumbnail, fanart = getFolderThumb(path)       
 
         if not lock:
             menu.append((GETTEXT(30181), 'XBMC.RunPlugin(%s?mode=%d&path=%s)' % (sys.argv[0], _COPYFOLDER, urllib.quote_plus(path))))
-            menu.append((GETTEXT(30180), 'XBMC.RunPlugin(%s?mode=%d&path=%s)' % (sys.argv[0], _CUTFOLDER,  urllib.quote_plus(path))))
+            #menu.append((GETTEXT(30180), 'XBMC.RunPlugin(%s?mode=%d&path=%s)' % (sys.argv[0], _CUTFOLDER,  urllib.quote_plus(path))))        
+
+        if label_numeric:
+            prefix, index = getPrefix(index)
+            dir = prefix + dir
+
+        if colour:
+            dir = '[COLOR %s]%s[/COLOR]' % (colour, dir)
         
-        addDir(dir, _FOLDER, path=path, thumbnail=thumbnail, isFolder=True, menu=menu, fanart=fanart, infolabels=infolabel)
+        mode       = _PLAY_SUPER_FOLDER if autoplay else _FOLDER
+        isFolder   = not autoplay
+        isPlayable = not isFolder
+        
+        addDir(dir, mode, path=path, thumbnail=thumbnail, isFolder=isFolder, menu=menu, fanart=fanart, infolabels=infolabel, isPlayable=isPlayable)
 
     if len(dirs) > 0:
         separator = True
 
     file = os.path.join(folder, FILENAME)
-    parseFile(file)
+
+    parseFile(file, sortorder, label_numeric, index)
 
 
-def getParam(param, file):
+def getParams(file):
+    params = {}
+
     try:
         config = []
         config = sfile.readlines(file)
+    except Exception, e:
+        return None
+
+    for line in config:
+        items = line.split('=', 1)
+        try:    params[items[0]] = items[1]
+        except: pass
+
+    return params
+
+
+def getParam(param, cfg):
+    if isinstance(cfg, dict):
+        try:    return cfg[param]
+        except: return None
+        
+    try:
+        config = []
+        config = sfile.readlines(cfg)
     except Exception, e:
         return None
 
@@ -737,6 +996,8 @@ def setParam(param, value, file):
         config = sfile.readlines(file)
     except:
         pass
+
+    value = str(value)
         
     copy = []
     for line in config:
@@ -773,7 +1034,13 @@ def getColour():
         return None
 
     import menus
-    option = menus.selectMenu(GETTEXT(30086), menu)
+    if DLG_MENU:
+        option = menus.selectMenu(GETTEXT(30086), menu)
+    else:
+        option = menus.showMenu(ADDONID, menu)
+
+
+    #option = menus.selectMenu(GETTEXT(30086), menu)
                  
     if option < 0:
         return None
@@ -842,27 +1109,29 @@ def removeThumbFolder(path):
     return True
 
 
-def fanartFolder(path):
-    image = getImage()
+def fanartFolder(path,image=None):
+    if not image:
+        image = getImage()
 
     if not image:
         return False
-
-    image = favourite.convertToHome(image)
+    
+    image = utils.convertToHome(image)
 
     folderConfig = os.path.join(path, FOLDERCFG)
     setParam('FANART', image, folderConfig)
     return True
 
 
-def thumbFolder(path):
-    image = getImage()
+def thumbFolder(path, image=None):
+    if not image:
+       image = getImage()
 
     if not image:
         return False
 
     folderConfig = os.path.join(path, FOLDERCFG)
-    setParam('ICON', image, folderConfig)
+    setParam('ICON', utils.convertToHome(image), folderConfig)
     return True
 
 
@@ -888,8 +1157,9 @@ def removeFanartFave(file, cmd):
     return True
 
 
-def fanartFave(file, cmd):
-    image = getImage()
+def fanartFave(file, cmd, image=None):
+    if not image:
+        image = getImage()
 
     if not image:
         return False
@@ -901,8 +1171,9 @@ def fanartFave(file, cmd):
     return favourite.updateFave(file, fave)
 
 
-def thumbFave(file, cmd):
-    image = getImage()
+def thumbFave(file, cmd, image=None):
+    if not image:
+        image = getImage()
 
     if not image:
         return False
@@ -918,7 +1189,7 @@ def getFolder(title):
 
 
 def createNewFolder(current):
-    text = clean(getText(GETTEXT(30013)))
+    text = utils.fileSystemSafe(getText(GETTEXT(30013)))
     if not text:
         return False
 
@@ -956,7 +1227,10 @@ def changePlaybackMode(file, cmd):
     options.append([runPlugin,      RUNPLUGIN_MODE])
 
     import menus
-    option = menus.selectMenu(GETTEXT(30052), options)
+    if DLG_MENU:
+        option = menus.selectMenu(GETTEXT(30052), options)
+    else:
+        option = menus.showMenu(ADDONID, options)
 
     if option == mode:
         return False
@@ -978,37 +1252,81 @@ def changePlaybackMode(file, cmd):
 
 def editFolder(path, name):
     cfg       = os.path.join(path, FOLDERCFG)
-    thumb     = getParam('ICON',   cfg)
-    fanart    = getParam('FANART', cfg)
+    cfg       = getParams(cfg)
+
+    thumb     = getParam('ICON',     cfg)
+    fanart    = getParam('FANART',   cfg)
+    lock      = getParam('LOCK',     cfg)
+    autoplay  = getParam('AUTOPLAY', cfg)
+    sortorder = getParam('SORT',     cfg)
+
     hasThumb  = thumb  and len(thumb)  > 0
     hasFanart = fanart and len(fanart) > 0
 
     REMOVE       = 0
     RENAME       = 1
     CHOOSETHUMB  = 2
-    CHOOSEFANART = 3
-    REMOVETHUMB  = 4
-    REMOVEFANART = 5
-    DESCRIPTION  = 6
-    COLOUR       = 7
+    PASTETHUMB   = 3
+    CHOOSEFANART = 4
+    PASTEFANART  = 5
+    REMOVETHUMB  = 6
+    REMOVEFANART = 7
+    DESCRIPTION  = 8
+    PASTEDESC    = 9
+    COLOUR       = 10
+    LOCK         = 11
+    AUTOPLAY     = 12
+    SORTORDER    = 13
+
+    thumb_clip  = xbmcgui.Window(10000).getProperty('SF_THUMB')
+    fanart_clip = xbmcgui.Window(10000).getProperty('SF_FANART')
+    desc_clip   = xbmcgui.Window(10000).getProperty('SF_DESCRIPTION')
 
     options = []
     options.append([GETTEXT(30011), REMOVE])
     options.append([GETTEXT(30012), RENAME])
-    options.append([GETTEXT(30194), DESCRIPTION])
 
+    #lock/unlock
+    label = GETTEXT(30077) if lock else GETTEXT(30076) 
+    options.append([label, LOCK])
+
+    #autoplay
+    label = GETTEXT(30234) if autoplay else GETTEXT(30233)
+    options.append([label, AUTOPLAY])
+
+    #sortorder
+    options.append([GETTEXT(30237), SORTORDER])
+ 
+    #description
+    options.append([GETTEXT(30194), DESCRIPTION])
+    if len(desc_clip) > 0:
+        options.append([GETTEXT(30212), PASTEDESC])
+
+    #thumb
     options.append([GETTEXT(30043), CHOOSETHUMB])
+
+    if len(thumb_clip) > 0:
+        options.append([GETTEXT(30210), PASTETHUMB])
+
     if hasThumb:
         options.append([GETTEXT(30097), REMOVETHUMB])
 
+    #fanart
     options.append([GETTEXT(30107), CHOOSEFANART])
+
+    if len(fanart_clip) > 0:
+        options.append([GETTEXT(30211), PASTEFANART])
+
     if hasFanart:
         options.append([GETTEXT(30108), REMOVEFANART])
 
     options.append([GETTEXT(30085), COLOUR])
 
     import menus
-    option = menus.selectMenu(name, options)
+    if DLG_MENU:
+        option = menus.selectMenu(name, options)
+    else:
+        option = menus.showMenu(ADDONID, options)
 
     if option == REMOVE:
         return removeFolder(path)
@@ -1019,11 +1337,20 @@ def editFolder(path, name):
     if option == DESCRIPTION:
         return editFolderDescription(path, name)
 
+    if option == PASTEDESC:
+        return editFolderDescription(path, name, desc_clip)
+
     if option == CHOOSETHUMB:
         return thumbFolder(path)
 
+    if option == PASTETHUMB:
+        return thumbFolder(path, thumb_clip)
+
     if option == CHOOSEFANART:
         return fanartFolder(path)
+
+    if option == PASTEFANART:
+        return fanartFolder(path, fanart_clip)
 
     if option == REMOVETHUMB:
         return removeThumbFolder(path)
@@ -1034,7 +1361,64 @@ def editFolder(path, name):
     if option == COLOUR:
         return colourFolder(path)
 
+    if option == LOCK:
+        dir = sfile.getfilename(path)
+        if lock:
+            removeLock(path, name)
+        else:
+            addLock(path, name)
+        refresh()
+
+    if option == AUTOPLAY:
+        if autoplay:
+            removeAutoplay(path)
+        else:
+            addAutoplay(path)
+
+    if option == SORTORDER:
+        setFolderSortOrder(path, sortorder)
+
+
     return False
+
+
+def setFolderSortOrder(path, current):
+    try:    current = int(current)
+    except: current = 0
+
+    config = GETTEXT(30238) # 0
+    alpha  = GETTEXT(30239) # 1
+    manual = GETTEXT(30240) # 2
+
+    if current == 0:
+        config = '[COLOR selected]%s[/COLOR]' % config
+
+    if current == 1:
+        alpha = '[COLOR selected]%s[/COLOR]' % alpha
+
+    if current == 2:
+        manual = '[COLOR selected]%s[/COLOR]' % manual
+
+    options = []
+    options.append([config, 0])
+    options.append([alpha,  1])
+    options.append([manual, 2])
+
+    import menus
+    if DLG_MENU:
+        option = menus.selectMenu(GETTEXT(30237), options)
+    else:
+        option = menus.showMenu(ADDONID, options)
+
+    if option == current:
+        return False
+
+    if option == -1:
+        return False
+
+    cfg = os.path.join(path, FOLDERCFG)
+
+    setParam('SORT', option, cfg)
     
 
 def editFave(file, cmd, name, thumb):
@@ -1050,28 +1434,61 @@ def editFave(file, cmd, name, thumb):
     REMOVE       = 4
     RENAME       = 5
     DESCRIPTION  = 6
-    CHOOSETHUMB  = 7
-    CHOOSEFANART = 8
-    REMOVETHUMB  = 9
-    REMOVEFANART = 10
-    COLOUR       = 11
-    PLAYBACKMODE = 12
-    MANUALEDIT   = 13
+    PASTEDESC    = 7
+    CHOOSETHUMB  = 8
+    PASTETHUMB   = 9
+    CHOOSEFANART = 10
+    PASTEFANART  = 11
+    REMOVETHUMB  = 12
+    REMOVEFANART = 13
+    COLOUR       = 14
+    PLAYBACKMODE = 15
+    MANUALEDIT   = 16
+
+    thumb_clip  = xbmcgui.Window(10000).getProperty('SF_THUMB')
+    fanart_clip = xbmcgui.Window(10000).getProperty('SF_FANART')
+    desc_clip   = xbmcgui.Window(10000).getProperty('SF_DESCRIPTION')
+
+    path = sfile.getfolder(file)
+    cfg  = os.path.join(path, FOLDERCFG)
+
+    try:    sortorder = int(getParam('SORT', cfg))
+    except: sortorder = 0
+
+    if sortorder == 0:
+        sortorder = 1 if ALPHA_SORT else 2
 
     options = []
-    options.append([GETTEXT(30041), UP])
-    options.append([GETTEXT(30042), DOWN])
+
+    if sortorder == 2:
+        options.append([GETTEXT(30041), UP])
+        options.append([GETTEXT(30042), DOWN])
+
     options.append([GETTEXT(30007), COPY])
     options.append([GETTEXT(30008), MOVE])
     options.append([GETTEXT(30009), REMOVE])
     options.append([GETTEXT(30010), RENAME])
-    options.append([GETTEXT(30194), DESCRIPTION])
 
+    #description
+    options.append([GETTEXT(30194), DESCRIPTION])
+    if len(desc_clip) > 0:
+        options.append([GETTEXT(30212), PASTEDESC])
+
+    #thumb
     options.append([GETTEXT(30043), CHOOSETHUMB])
+
+    if len(thumb_clip) > 0:
+        options.append([GETTEXT(30210), PASTETHUMB])
+
     if hasThumb:
         options.append([GETTEXT(30097), REMOVETHUMB])
 
+    #fanart
     options.append([GETTEXT(30107), CHOOSEFANART])
+
+    if len(fanart_clip) > 0:
+        options.append([GETTEXT(30211), PASTEFANART])
+
     if hasFanart:
         options.append([GETTEXT(30108), REMOVEFANART])
 
@@ -1083,7 +1500,10 @@ def editFave(file, cmd, name, thumb):
     options.append([GETTEXT(30168), MANUALEDIT])
 
     import menus
-    option = menus.selectMenu(name, options)
+    if DLG_MENU:
+        option = menus.selectMenu(name, options)
+    else:
+        option = menus.showMenu(ADDONID, options)
 
     if option == UP:
         return favourite.shiftFave(file, cmd, up=True)
@@ -1106,11 +1526,20 @@ def editFave(file, cmd, name, thumb):
     if option == DESCRIPTION:
         return editDescription(file, cmd, name)
 
+    if option == PASTEDESC:
+        return editDescription(file, cmd, name, desc_clip)
+
     if option == CHOOSETHUMB:
         return thumbFave(file, cmd)
 
+    if option == PASTETHUMB:
+        return thumbFave(file, cmd, thumb_clip)
+
     if option == CHOOSEFANART:
         return fanartFave(file, cmd)
+
+    if option == PASTEFANART:
+        return fanartFave(file, cmd, fanart_clip)
 
     if option == REMOVETHUMB:
         return removeThumbFave(file, cmd)
@@ -1130,11 +1559,12 @@ def editFave(file, cmd, name, thumb):
     return False
 
 
-def editFolderDescription(path, name):
+def editFolderDescription(path, name, desc=None):
     cfg  = os.path.join(path, FOLDERCFG)
-    desc = getParam('DESC', cfg)
 
-    desc = getText(name, text=desc, hidden=False, allowEmpty=True)
+    if desc == None:
+        desc = getParam('DESC', cfg)
+        desc = getText(name, text=desc, hidden=False, allowEmpty=True)
 
     if desc == None:
         return False
@@ -1144,13 +1574,14 @@ def editFolderDescription(path, name):
     return True
 
 
-def editDescription(file, cmd, name):
+def editDescription(file, cmd, name, desc=None):
     fave, index, nFaves = favourite.findFave(file, cmd)
     if not fave:
         return False
 
-    desc = favourite.getOption(cmd, 'desc')
-    desc = getText(name, text=desc, hidden=False, allowEmpty=True)
+    if desc == None:
+        desc = favourite.getOption(cmd, 'desc')
+        desc = getText(name, text=desc, hidden=False, allowEmpty=True)
 
     if desc == None:
         return False
@@ -1305,6 +1736,10 @@ def manualType(name, cmd):
 
     import menus
     option = menus.selectMenu(title, options)
+    #if DLG_MENU:
+    #    option = menus.selectMenu(title, options)
+    #else:
+    #    option = menus.showMenu(ADDONID, options)
 
     return option
 
@@ -1338,20 +1773,40 @@ def editSearch(file, cmd, name, thumb):
     DOWN         = 1
     RENAME       = 2
     CHOOSETHUMB  = 3
-    CHOOSEFANART = 4
-    REMOVETHUMB  = 5
-    REMOVEFANART = 6
-    COLOUR       = 7
+    PASTETHUMB   = 4
+    CHOOSEFANART = 5
+    PASTEFANART  = 6
+    REMOVETHUMB  = 7
+    REMOVEFANART = 8
+    COLOUR       = 9
+
+    thumb_clip  = xbmcgui.Window(10000).getProperty('SF_THUMB')
+    fanart_clip = xbmcgui.Window(10000).getProperty('SF_FANART')
 
     options = []
-    options.append([GETTEXT(30041), UP])
-    options.append([GETTEXT(30042), DOWN])
+
+
+    if not ALPHA_SORT:
+        options.append([GETTEXT(30041), UP])
+        options.append([GETTEXT(30042), DOWN])
+
     options.append([GETTEXT(30010), RENAME])
+
+    #thumb
     options.append([GETTEXT(30043), CHOOSETHUMB])
-    options.append([GETTEXT(30107), CHOOSEFANART])
+
+    if len(thumb_clip) > 0:
+        options.append([GETTEXT(30210), PASTETHUMB])
 
     if hasThumb:
         options.append([GETTEXT(30097), REMOVETHUMB])
+
+
+    #fanart
+    options.append([GETTEXT(30107), CHOOSEFANART])
+
+    if len(fanart_clip) > 0:
+        options.append([GETTEXT(30211), PASTEFANART])    
 
     if hasFanart:
         options.append([GETTEXT(30108), REMOVEFANART])
@@ -1359,7 +1814,10 @@ def editSearch(file, cmd, name, thumb):
     options.append([GETTEXT(30085), COLOUR])
 
     import menus
-    option = menus.selectMenu(name, options)
+    if DLG_MENU:
+        option = menus.selectMenu(name, options)
+    else:
+        option = menus.showMenu(ADDONID, options)
 
     if option == UP:
         return favourite.shiftFave(file, cmd, up=True)
@@ -1373,11 +1831,17 @@ def editSearch(file, cmd, name, thumb):
     if option == CHOOSETHUMB:
         return thumbFave(file, cmd)
 
-    if option == CHOOSEFANART:
-        return fanartFave(file, cmd)
+    if option == PASTETHUMB:
+        return thumbFave(file, cmd, thumb_clip)
 
     if option == REMOVETHUMB:
         return removeThumbFave(file, cmd)
+
+    if option == CHOOSEFANART:
+        return fanartFave(file, cmd)
+
+    if option == PASTEFANART:
+        return fanartFave(file, cmd, fanart_clip)
 
     if option == REMOVEFANART:
         return removeFanartFave(file, cmd)
@@ -1390,8 +1854,10 @@ def editSearch(file, cmd, name, thumb):
 
 def renameFolder(path):
     label = path.rsplit(os.sep, 1)[-1]
+    title = label
 
-    text = clean(getText(GETTEXT(30015) % label, label))
+    try:    text  = utils.fileSystemSafe(getText(GETTEXT(30015) % title, label))
+    except: title = utils.fix(title)
 
     if not text:
         return False
@@ -1422,6 +1888,7 @@ def colourFolder(path):
 
 def removeFolder(path):
     label = path.rsplit(os.sep, 1)[-1]
+    label = utils.fix(label)
     if not utils.DialogYesNo(GETTEXT(30016) % label, GETTEXT(30017), GETTEXT(30018)):
         return False
 
@@ -1574,7 +2041,16 @@ def getMovieMenu(infolabels, menu=None):
     return menu
 
 
-def recommendIMDB(imdb, keyword):
+def hasIMDBRecommendations(imdb):
+    url  = 'http://imdb.com/title/%s' % imdb
+    html = quicknet.getURL(url, maxSec=86400, agent='Firefox')
+
+    items = re.compile('<div class="rec_details".+?<a href="/title/(.+?)/?ref_=tt_rec_tt"><b>(.+?)</b></a>.+?<div class="rec-outline">(.+?)</p>').findall(html)
+
+    return len(items) > 0
+
+
+def recommendIMDB(imdb, keyword, fallback=True):
     grabber = None
     if METARECOMMEND:
         try:
@@ -1588,8 +2064,10 @@ def recommendIMDB(imdb, keyword):
 
     items = re.compile('<div class="rec_details".+?<a href="/title/(.+?)/?ref_=tt_rec_tt"><b>(.+?)</b></a>.+?<div class="rec-outline">(.+?)</p>').findall(html)
 
-    if len(items) == 0:
-        return recommendKey(keyword)
+    if len(items) == 0 and fallback:
+        return recommendKey(keyword, RECOMMENDAUTO)
+
+    count = 0
 
     infolabels = {}
 
@@ -1617,13 +2095,17 @@ def recommendIMDB(imdb, keyword):
             menu = getMovieMenu(infolabels)
             getHistoryItem(menu, name, thumbnail, fanart, False)
 
+            name, count = addPrefixToLabel(count, name)
+
             addDir(name, _SUPERSEARCH, thumbnail=thumbnail, isFolder=True, menu=menu, fanart=fanart, keyword=name, imdb=imdb, infolabels=infolabels, totalItems=len(items))
 
         except:
             pass
 
+    return count
+
     
-def recommendKey(keyword):
+def recommendKey(keyword, autoRecommend):
     grabber = None
     if METARECOMMEND:
         try:
@@ -1639,9 +2121,15 @@ def recommendKey(keyword):
 
     infolabels = {}
 
+    index = 0
+
     for item in items:
-        imdb  = item[0]
-        name  = item[1]
+        imdb = item[0]
+        name = item[1]
+
+        if autoRecommend:
+            autoRecommend = hasIMDBRecommendations(imdb)
+
         if 'video game' in item[2].lower():
             continue
 
@@ -1663,7 +2151,15 @@ def recommendKey(keyword):
         menu = getMovieMenu(infolabels)
         getHistoryItem(menu, name, thumbnail, fanart, False)
 
-        addDir(label, _SUPERSEARCH, thumbnail=thumbnail, isFolder=True, menu=menu, fanart=fanart, keyword=name, imdb=imdb, infolabels=infolabels, totalItems=len(items))
+        label, index = addPrefixToLabel(index, label)
+
+        if autoRecommend:
+            autoRecommend = False
+            addDir(label, _RECOMMEND_KEY_A,  thumbnail=thumbnail, isFolder=True, menu=menu, fanart=fanart, keyword=name, infolabels=infolabels)
+            if recommendIMDB(imdb, keyword, fallback=False) > 0:
+                return
+        else:
+            addDir(label, _SUPERSEARCH, thumbnail=thumbnail, isFolder=True, menu=menu, fanart=fanart, keyword=name, imdb=imdb, infolabels=infolabels, totalItems=len(items))
     
 
 def editSearchTerm(_keyword):
@@ -1693,6 +2189,9 @@ def externalSearch():
 
 def iHistoryBrowse():
     items = history.browse()
+    items = sorted(items, key=lambda x: x[0].lower())
+
+    index = 0
 
     for item in items:
         label  = item[0]
@@ -1705,7 +2204,9 @@ def iHistoryBrowse():
 
         desc = GETTEXT(30200) % label
 
-        addDir(label, _SUPERSEARCH, thumbnail=thumb, isFolder=True, fanart=fanart, keyword=label, menu=menu, infolabels={'plot':desc})
+        text, index = addPrefixToLabel(index, label)
+
+        addDir(text, _SUPERSEARCH, thumbnail=thumb, isFolder=True, fanart=fanart, keyword=label, menu=menu, infolabels={'plot':desc})
 
     return False
 
@@ -1717,17 +2218,20 @@ def iHistoryAdd(keyword, image, fanart):
 def iHistoryRemove(name):
     return history.remove(name)
 
+
 def iPlay():
     #add browse item
     #addDir(GETTEXT(30148), _PLAYLISTBROWSE, thumbnail='DefaultMusicPlaylists.png', isFolder=False) 
+
+    import playlist
 
     nItems = 0
 
     folder = os.path.join(ROOT, 'PL')
     sfile.makedirs(folder)
 
-    #parse SF folder
-    nItems += addPlaylistItems(parsePlaylistFolder(folder), 'DefaultMusicVideos.png', delete=True)
+    #parse SF folder   
+    nItems += addPlaylistItems(playlist.parseFolder(folder), 'DefaultMusicVideos.png', delete=True)
 
     #parse SF list 
     file = os.path.join(folder, FILENAME)
@@ -1744,9 +2248,9 @@ def iPlay():
 
     #parse Kodi folders    
     folder  = 'special://profile/playlists'
-    nItems += addPlaylistItems(parsePlaylistFolder(os.path.join(folder, 'video')), 'DefaultMovies.png',      delete=ALLOW_PLAYLIST_DELETE)
-    nItems += addPlaylistItems(parsePlaylistFolder(os.path.join(folder, 'music')), 'DefaultMusicSongs.png',  delete=ALLOW_PLAYLIST_DELETE)
-    nItems += addPlaylistItems(parsePlaylistFolder(os.path.join(folder, 'mixed')), 'DefaultMusicVideos.png', delete=ALLOW_PLAYLIST_DELETE)
+    nItems += addPlaylistItems(playlist.parseFolder(os.path.join(folder, 'video')), 'DefaultMovies.png',      delete=ALLOW_PLAYLIST_DELETE)
+    nItems += addPlaylistItems(playlist.parseFolder(os.path.join(folder, 'music')), 'DefaultMusicSongs.png',  delete=ALLOW_PLAYLIST_DELETE)
+    nItems += addPlaylistItems(playlist.parseFolder(os.path.join(folder, 'mixed')), 'DefaultMusicVideos.png', delete=ALLOW_PLAYLIST_DELETE)
 
     return nItems > 0
 
@@ -1770,12 +2274,13 @@ def addPlaylistItems(items, thumbnail='DefaultMovies.png', delete=False):
         #menu.append((GETTEXT(30153), 'XBMC.Container.Update(%s)' % cmd))
         menu.append((GETTEXT(30153), 'XBMC.RunPlugin(%s)' % cmd))
 
-        menu.append((GETTEXT(30084), 'XBMC.PlayMedia(%s)' % path))
+        #menu.append((GETTEXT(30084), 'XBMC.PlayMedia(%s)' % path))
+        menu.append((GETTEXT(30084), 'XBMC.RunPlugin(%s?mode=%d&cmd=%s)' % (sys.argv[0], _PLAYLIST, urllib.quote_plus(path))))
 
         if delete:
             menu.append((GETTEXT(30150), 'XBMC.RunPlugin(%s?mode=%d&path=%s)' % (sys.argv[0], _DELETEPLAYLIST, urllib.quote_plus(path))))
 
-        menu.append((GETTEXT(30047), 'XBMC.RunPlugin(%s?mode=%d&path=%s&label=%s&thumb=%s)' % (sys.argv[0], _COPYPLAYLIST, urllib.quote_plus(path), urllib.quote_plus(title), urllib.quote_plus(thumbnail))))
+        menu.append((GETTEXT(30047), 'XBMC.RunPlugin(%s?mode=%d&path=%s&label=%s&thumb=%s)' % (sys.argv[0], _COPY_TO_SF, urllib.quote_plus(path), urllib.quote_plus(title), urllib.quote_plus(thumbnail))))
         
 
         addDir(title, _PLAYLISTFILE, path=path, thumbnail=thumbnail, menu=menu) 
@@ -1832,8 +2337,8 @@ def iPlaylistURL(url):
     return True
 
 
-def iPlaylistFile(path):
-    if sfile.exists(path):
+def iPlaylistFile(path):    
+    if not sfile.exists(path):
         return iPlaylistURL(path)
 
     playlist = sfile.readlines(path)
@@ -1841,8 +2346,9 @@ def iPlaylistFile(path):
     return addItems(playlist)
 
 
-def addItems(playlist):
-    items = parsePlaylist(playlist)
+def addItems(playList): 
+    import playlist
+    items = playlist.parse(playList)
 
     nItem = len(items)
 
@@ -1854,13 +2360,13 @@ def addItems(playlist):
         isAudio = title.lower().endswith('.mp3')
         if isAudio:
             title = title.replace('.mp3', '')
-            thumb = 'DefaultAudio.png'
+            thumb = ICON #'DefaultAudio.png'
         else:
-            thumb = 'DefaultFile.png'
+            thumb = ICON #'DefaultFile.png'
 
         title = utils.unescape(title).strip()
 
-        menu.append((GETTEXT(30047), 'XBMC.RunPlugin(%s?mode=%d&path=%s&label=%s&thumb=%s)' % (sys.argv[0], _COPYPLAYLISTITEM, urllib.quote_plus(path), urllib.quote_plus(title), urllib.quote_plus(thumb))))
+        menu.append((GETTEXT(30047), 'XBMC.RunPlugin(%s?mode=%d&path=%s&label=%s&thumb=%s)' % (sys.argv[0], _COPY_TO_SF_ITEM, urllib.quote_plus(path), urllib.quote_plus(title), urllib.quote_plus(thumb))))
 
         isPlayable = xbmcgui.getCurrentWindowId() != 10001
 
@@ -1869,61 +2375,6 @@ def addItems(playlist):
 
     return nItem > 0
         
-
-def parsePlaylistFolder(folder):
-    try:    current, dirs, files = sfile.walk(folder)
-    except: return []
-
-    items = []
-
-    for file in files:
-        try:
-            path = os.path.join(current, file)
-            file = file.rsplit('.', 1)
-            ext  = file[-1]
-            file = file[0]            
-            if ext in PLAYLIST_EXT:
-                items.append([path, file])
-        except:
-            pass
-
-    return items
-
-
-def parsePlaylist(playlist):
-    if len(playlist) == 0:
-        return []
-
-    items = []
-    path  = ''
-    title = ''
- 
-    try:
-        for line in playlist:
-            line = line.strip()
-            if line.startswith('#EXTINF:'):
-                path  = line.split(':', 1)[-1].split(',', 1)[-1]
-            else:
-                title = line.replace('rtmp://$OPT:rtmp-raw=', '')
-                if len(path) > 0 and len(title) > 0:
-                    items.append([path, title])
-                path  = ''
-                title = ''
-    except:
-        pass
-            
-    return items
-
-
-def getPlaylist():
-    root     = HOME.split(os.sep, 1)[0] + os.sep    
-    playlist = xbmcgui.Dialog().browse(1,GETTEXT(30148), 'files', PLAYLIST_EXT, False, False, root)
-    
-    if playlist and playlist != root:
-        return playlist
-
-    return None
-
 
 def iPlaylistURLBrowse():
     valid = False
@@ -1941,7 +2392,7 @@ def iPlaylistURLBrowse():
         try:    html = quicknet.getURL(text, maxSec=0, tidy=False)
         except: html = ''
 
-        items = parsePlaylist(html.split('\n'))
+        items = parse(html.split('\n'))
         valid = len(items) > 0
 
         if not valid:
@@ -1968,7 +2419,8 @@ def iPlaylistURLBrowse():
 
 
 def iPlaylistBrowse():
-    playlist = getPlaylist()
+    import playlist
+    playlist = playlist.getPlaylist()
 
     if not playlist:
         return False
@@ -1997,7 +2449,7 @@ def addPlaylistToSF(name, cmd, thumb):
 
     file  = os.path.join(folder, FILENAME)
 
-    cmd = favourite.convertToHome(cmd)
+    cmd = utils.convertToHome(cmd)
 
     if favourite.findFave(file, cmd)[0]:
         return False
@@ -2011,40 +2463,29 @@ def addPlaylistToSF(name, cmd, thumb):
     return True
 
 
-def iPlayCopyItemToSF(path, title, thumb):
+def copyToSF(cmd, title, thumb, playMedia):
     folder = utils.GetFolder(title)
     if not folder:
         return
 
     copy = ['', '', '']
-    path = path
 
     copy[0] = title
     copy[1] = thumb
-    copy[2] = 'PlayMedia("%s")' % path
 
-    file = os.path.join(folder, FILENAME)
-    favourite.copyFave(file, copy)
-
-
-def iPlayCopyToSF(path, title, thumb):
-    folder = utils.GetFolder(title)
-    if not folder:
-        return
-
-    copy = ['', '', '']
-    path = path
-
-    copy[0] = title
-    copy[1] = thumb
-    copy[2] = 'ActivateWindow(10025,"%s",return)' % path
+    if playMedia:
+        copy[2] = 'PlayMedia("%s")' % path
+    else:
+        copy[2] = 'ActivateWindow(10025,"%s",return)' % cmd
 
     file = os.path.join(folder, FILENAME)
     favourite.copyFave(file, copy)
 
 
 def shortenText(text, length):
+    text = utils.fix(text)
     text = text.strip()
+
     if len(text) <= length:
         return text
 
@@ -2098,7 +2539,7 @@ def superSearch(keyword='', image=SEARCH, fanart=FANART, imdb=''):
         fanart = BLANK
 
     keyword = keyword.split(' - [I]', 1)[0]
-
+    
     if keyword.startswith('tt'): #assume IMDB number
         url  = 'http://m.imdb.com/title/%s/' % keyword
         html = quicknet.getURL(url)
@@ -2143,13 +2584,19 @@ def superSearch(keyword='', image=SEARCH, fanart=FANART, imdb=''):
 
     addSeparatorItem(menu)
 
+    index = 0
+
     if SHOWIHISTORY and history.exists():
         #reset menu
         menu = []
         menu.append(editItem)
+
         if historyItem:
             menu.append(historyItem)
-        addDir(GETTEXT(30163), _HISTORYSHOW, thumbnail=SEARCH, isFolder=True, menu=menu, infolabels={'plot':GETTEXT(30201)})
+
+        label, index = addPrefixToLabel(index, GETTEXT(30163))
+
+        addDir(label, _HISTORYSHOW, thumbnail=SEARCH, isFolder=True, menu=menu, infolabels={'plot':GETTEXT(30201)})
 
     if SHOWRECOMMEND and len(keyword) > 0:
         #reset menu
@@ -2159,10 +2606,14 @@ def superSearch(keyword='', image=SEARCH, fanart=FANART, imdb=''):
             menu.append(historyItem)
         getMovieMenu(infolabels, menu)
 
-        if len(imdb) > 0:
-            addDir(GETTEXT(30088), _RECOMMEND_IMDB, thumbnail=image, isFolder=True, menu=menu, fanart=fanart, keyword=keyword, imdb=imdb, infolabels={'plot':GETTEXT(30202) % (keyword, imdb)})
+        label, index = addPrefixToLabel(index, GETTEXT(30088))
+
+        if len(imdb) > 0:            
+            addDir(label, _RECOMMEND_IMDB, thumbnail=image, isFolder=True, menu=menu, fanart=fanart, keyword=keyword, imdb=imdb, infolabels={'plot':GETTEXT(30202) % (keyword, imdb.replace('/?', ''))})
+        elif RECOMMENDAUTO:
+            addDir(label, _RECOMMEND_KEY,  thumbnail=image, isFolder=True, menu=menu, fanart=fanart, keyword=keyword, infolabels={'plot':GETTEXT(30215) % keyword})
         else:
-            addDir(GETTEXT(30088), _RECOMMEND_KEY,  thumbnail=image, isFolder=True, menu=menu, fanart=fanart, keyword=keyword, infolabels={'plot':GETTEXT(30205) % keyword})
+            addDir(label, _RECOMMEND_KEY,  thumbnail=image, isFolder=True, menu=menu, fanart=fanart, keyword=keyword, infolabels={'plot':GETTEXT(30205) % keyword})
         
     keyword = urllib.quote_plus(keyword.replace('&', ''))  
 
@@ -2171,14 +2622,19 @@ def superSearch(keyword='', image=SEARCH, fanart=FANART, imdb=''):
 
     if len(faves) == 0:
         #try shipped search file
-        file = os.path.join(HOME, 'resources', 'Search', FILENAME)
+        file = os.path.join(HOME, 'resources', 'search', FILENAME)
         faves = favourite.getFavourites(file) 
+
+    if ALPHA_SORT:
+         faves = sorted(faves, key=lambda x: cleanForSort(x))
 
     for fave in faves:
         label = fave[0]
         thumb = fave[1]
-        cmd   = fave[2].replace('[%SF%]', keyword)
-        #cmd   = favourite.removeSFOptions(cmd)
+        cmd   = fave[2]
+
+        cmd   = cmd.replace('[%SF%]',  keyword)
+        cmd   = cmd.replace('[%SF+%]', keyword.replace('+', '%2b'))
 
         fan = fanart
         if SHOW_FANART:
@@ -2187,82 +2643,28 @@ def superSearch(keyword='', image=SEARCH, fanart=FANART, imdb=''):
                 fan = fanart
 
         menu = []
+
+        menu.append((GETTEXT(30103), 'XBMC.RunPlugin(%s?mode=%d&file=%s&cmd=%s&name=%s&thumb=%s)' % (sys.argv[0], _EDITSEARCH, urllib.quote_plus(file), urllib.quote_plus(cmd), urllib.quote_plus(label), urllib.quote_plus(thumb))))
+
         menu.append(editItem)
 
         if historyItem:
             menu.append(historyItem)
 
-        menu.append((GETTEXT(30103), 'XBMC.RunPlugin(%s?mode=%d&file=%s&cmd=%s&name=%s&thumb=%s)' % (sys.argv[0], _EDITSEARCH, urllib.quote_plus(file), urllib.quote_plus(cmd), urllib.quote_plus(label), urllib.quote_plus(thumb))))
-
         #special fix for GlobalSearch, use local launcher (globalsearch.py) to bypass keyboard
         cmd = cmd.replace('script.globalsearch', os.path.join(HOME, 'globalsearch.py'))
 
-        infolabel = {'plot':GETTEXT(30206) % (label, keyword)}
+        infolabel = {'plot':GETTEXT(30206) % (label, urllib.unquote_plus(keyword))}
+
+        label, index = addPrefixToLabel(index, label)
+
         addDir(label, _ACTIVATESEARCH, cmd=cmd, thumbnail=thumb, isFolder=True, menu=menu, fanart=fan, keyword=keyword, infolabels=infolabel)
     
     return True
 
 
-def playCommand(originalCmd): 
-    try:
-        xbmc.executebuiltin('Dialog.Close(busydialog)') #Isengard fix
-
-        cmd = favourite.tidy(originalCmd)
-        
-        #if a 'Super Favourite' favourite just do it
-        if ADDONID in cmd:
-             return xbmc.executebuiltin(cmd)
-
-        #if in contentMode just do it
-        if contentMode:
-            xbmc.executebuiltin('ActivateWindow(Home)') #some items don't play nicely if launched from wrong window
-            if cmd.lower().startswith('activatewindow'):
-                cmd = cmd.replace('")', '",return)') #just in case return is missing                
-            return xbmc.executebuiltin(cmd)
-
-        if cmd.startswith('RunScript'):    
-            #workaround bug in Frodo that can cause lock-up
-            #when running a script favourite
-            if FRODO:
-                xbmc.executebuiltin('ActivateWindow(Home)')
-    
-        if isPlaylist(cmd):
-            if PLAY_PLAYLISTS:
-                return playPlaylist(cmd)      
-
-        if 'ActivateWindow' in cmd:
-            return activateWindowCommand(cmd) 
-
-        if 'PlayMedia' in cmd:
-            return playMedia(originalCmd)
-
-        if 'ExecuteBuiltin' in cmd:
-            try:    
-                cmd = cmd.split('ExecuteBuiltin("', 1)[-1]
-                cmd = cmd.rsplit('")')[0]
-            except:
-                pass
-
-        xbmc.executebuiltin(cmd)
-
-
-    except Exception, e:
-        utils.log('Error in playCommand')
-        utils.log('Command: %s' % cmd)
-        utils.log('Error:   %s' % str(e))        
-
-
-def isPlaylist(cmd):
-    return cmd.lower().replace(',return', '').endswith('.m3u")')
-
-
-def playPlaylist(cmd):
-    if cmd.lower().startswith('activatewindow'):
-        playlist = cmd.split(',', 1)
-        playlist = playlist[-1][:-1]
-        cmd      = 'PlayMedia(%s)' % playlist
-
-    xbmc.executebuiltin(cmd)
+def playCommand(originalCmd):
+    player.playCommand(originalCmd, contentMode)
 
 
 def cutCopy(file, cmd, cut=True):
@@ -2356,7 +2758,7 @@ def pasteFolderLink(src, dst, folderName):
     if colour:
         folderName = '[COLOR %s]%s[/COLOR]' % (colour, folderName)
 
-    path  = favourite.convertToHome(src)
+    path  = utils.convertToHome(src)
 
     cmd = '%s?label=%s&mode=%d&path=%s' % (sys.argv[0], folderName, _FOLDER, urllib.quote_plus(path))
     cmd = '"%s"' % cmd  
@@ -2416,71 +2818,24 @@ def pasteCut(file, cmd, folder):
 
     return favourite.removeFave(file, cmd)
 
-
-def playMedia(original):
-    cmd = favourite.tidy(original).replace(',', '') #remove spurious commas
-    
-    try:    mode = int(favourite.getOption(original, 'mode'))
-    except: mode = 0
-
-
-    if mode == PLAYMEDIA_MODE:
-        xbmc.executebuiltin(cmd)
-        return
-
-    plugin = re.compile('"(.+?)"').search(cmd).group(1)
-
-
-    if len(plugin) < 1:
-        xbmc.executebuiltin(cmd)
-        return
-
-    if mode == ACTIVATEWINDOW_MODE:   
-        try:    winID = int(favourite.getOption(original, 'winID'))
-        except: winID = 10025
-
-        #check if it is a different window and if so activate it
-        id = xbmcgui.getCurrentWindowId()
-
-        if id != winID :
-            xbmc.executebuiltin('ActivateWindow(%d)', winID)
-
-        cmd = 'Container.Update(%s)' % plugin
-
-        xbmc.executebuiltin(cmd)
-        return
-
-    if mode == RUNPLUGIN_MODE:
-        cmd = 'RunPlugin(%s)' % plugin
-
-        xbmc.executebuiltin(cmd)
-        return
-
-    #if all else fails just execute it
-    xbmc.executebuiltin(cmd)
     
 
 def activateWindowCommand(cmd):
-    cmds = cmd.split(',', 1)
+    player.activateWindowCommand(cmd)
 
-    plugin   = None
-    activate = None
 
-    if len(cmds) == 1:
-        activate = cmds[0]
-    else:
-        activate = cmds[0]+',return)'
-        plugin   = cmds[1][:-1]
+def addArtwork(setting, thumbnail, fanart):
+    if setting == 0:
+        return ''
 
-    #check if it is a different window and if so activate it
-    id = str(xbmcgui.getCurrentWindowId())    
+    if setting == 1:
+        return thumbnail
 
-    if id not in activate:
-        xbmc.executebuiltin(activate)
+    if setting == 2:
+        return fanart
 
-    if plugin:  
-        xbmc.executebuiltin('Container.Update(%s)' % plugin)
-
+    return ''
+    
     
 def addDir(label, mode, index=-1, path = '', cmd = '', thumbnail='', isFolder=True, menu=None, fanart=FANART, keyword='', imdb='', infolabels={}, totalItems=0, isPlayable=False):
     global separator
@@ -2537,7 +2892,16 @@ def addDir(label, mode, index=-1, path = '', cmd = '', thumbnail='', isFolder=Tr
         fanart = FANART
 
     if fanart != BLANK and SHOW_FANART:
-        liz.setProperty('Fanart_Image', fanart)     
+        liz.setProperty('Fanart_Image', fanart)
+
+    if hasattr(liz, 'setArt'):
+        art = {}
+        art['landscape'] = addArtwork(ART_LANDSCAPE, thumbnail, fanart)
+        art['banner']    = addArtwork(ART_BANNER,    thumbnail, fanart)
+        art['poster']    = addArtwork(ART_POSTER,    thumbnail, fanart)
+        
+        if len(art) > 0:
+            liz.setArt(art) 
 
     #this propery can be accessed in a skin via: $INFO[ListItem.Property(Super_Favourites_Folder)]
     #or in Python via: xbmc.getInfoLabel('ListItem.Property(Super_Favourites_Folder)')
@@ -2568,25 +2932,19 @@ def addDir(label, mode, index=-1, path = '', cmd = '', thumbnail='', isFolder=Tr
 
     xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=isFolder, totalItems=totalItems)
 
+
+def get_params(path):
+    params = {}
+    path   = path.split('?', 1)[-1]
+    pairs  = path.split('&')
+
+    for pair in pairs:
+        split = pair.split('=')
+        if len(split) > 1:
+            params[split[0]] = urllib.unquote_plus(split[1])
+
+    return params
    
-def get_params(p):
-    param=[]
-    paramstring=p
-    if len(paramstring)>=2:
-        params=p
-        cleanedparams=params.replace('?','')
-        if (params[len(params)-1]=='/'):
-           params=params[0:len(params)-2]
-        pairsofparams=cleanedparams.split('&')
-        param={}
-        for i in range(len(pairsofparams)):
-            splitparams={}
-            splitparams=pairsofparams[i].split('=')
-            if (len(splitparams))==2:
-                param[splitparams[0]]=splitparams[1]
-    return param
-
-
 params = get_params(sys.argv[2])
 
 theFolder = ''
@@ -2595,25 +2953,25 @@ thepath   = ''
 try:    mode = int(params['mode'])
 except: mode = _MAIN
 
-try:    file = urllib.unquote_plus(params['file'])
+try:    file = params['file']
 except: file = None
 
-try:    cmd = urllib.unquote_plus(params['cmd'])
+try:    cmd = params['cmd']
 except: cmd = None
 
-try:    path = urllib.unquote_plus(params['path'])
+try:    path = params['path']
 except: path = None
 
-try:    name = urllib.unquote_plus(params['name'])
+try:    name = params['name']
 except: name = ''
 
-try:    label = urllib.unquote_plus(params['label'])
+try:    label = params['label']
 except: label = ''
 
-try:    folder = urllib.unquote_plus(params['folder'])
+try:    folder = params['folder']
 except: folder = ''
 
-try:    content = urllib.unquote_plus(params['content'])
+try:    content = params['content']
 except: content = ''
 
 try:    contentMode = params['contentMode'].lower() == 'true'
@@ -2623,7 +2981,19 @@ except: contentMode = False
 doRefresh   = False
 doEnd       = True
 cacheToDisc = False
-contentType = 'movies'
+
+
+#which menu was SF launched from
+try:    launchMode = params['content_type']
+except: launchMode = ''
+
+
+contentType = CONTENTTYPE
+#convert visible (in settings) string to a string that Kodi recognises
+if contentType in CONTENTTYPES:
+    contentType = CONTENTTYPES[contentType]
+else:
+    contentType = ''
 
 
 if len(content) > 0:   
@@ -2634,12 +3004,11 @@ if len(content) > 0:
 
         if len(path) > 0:
             folder = ''
-            import re
             plugin = re.compile('.+?"(.+?)"').search(path).group(1)
 
             prams = get_params(plugin)
 
-            try:    folder = urllib.unquote_plus(prams['folder'])
+            try:    folder = prams['folder']
             except: pass
 
             if len(folder) == 0:
@@ -2655,17 +3024,25 @@ if len(content) > 0:
     CONTENTMODE = True
 
 
-if len(folder) > 0:   
-    mode = _FOLDER
+if len(folder) > 0:
+    if mode == _MAIN:    
+        mode = _FOLDER
+
     path = os.path.join(PROFILE, folder)
 
 
+utils.log('------------------ Launch Parameters ------------------')
 utils.log(sys.argv[2])
 utils.log(sys.argv)
-utils.log('Mode    = %d' % mode)
-utils.log('cmd     = %s' % cmd)
-utils.log('folder  = %s' % folder)
-utils.log('params  = %s' % params)
+utils.log('mode        = %d' % mode)
+utils.log('cmd         = %s' % cmd)
+utils.log('folder      = %s' % folder)
+utils.log('params      = %s' % params)
+utils.log('launchMode  = %s' % launchMode)
+utils.log('contentType = %s' % contentType)
+utils.log('viewType    = %s' % VIEWTYPE)
+utils.log('-------------------------------------------------------')
+
 
 if mode == _PLAYMEDIA:
     if not contentMode:
@@ -2684,7 +3061,7 @@ elif mode == _ACTIVATEWINDOW_XBMC:
     doEnd = True
     mode  = _IGNORE
 
-    if PLAY_PLAYLISTS and isPlaylist(cmd):        
+    if PLAY_PLAYLISTS and player.isPlaylist(cmd):        
         playCommand(cmd)
 
         #Container.Update removes current item from history to stop looping
@@ -2701,7 +3078,8 @@ elif mode == _ACTIVATEWINDOW_XBMC:
 
 
 elif mode == _PLAYLIST:
-    playPlaylist(cmd)
+    import playlist
+    playlist.play(cmd)
 
 
 if mode == _ACTIVATESEARCH:
@@ -2734,7 +3112,7 @@ elif mode == _REMOVEFOLDER:
 
 elif mode == _RENAMEFOLDER:
     doRefresh = renameFolder(path)
-
+    
 
 elif mode == _EDITFOLDER:
     if unlock(path):
@@ -2742,13 +3120,13 @@ elif mode == _EDITFOLDER:
 
 
 elif mode == _EDITFAVE:
-    try:    thumb = urllib.unquote_plus(params['thumb'])
+    try:    thumb = params['thumb']
     except: thumb = 'null'
     doRefresh = editFave(file, cmd, name, thumb)
 
 
 elif mode == _EDITSEARCH:
-    try:    thumb = urllib.unquote_plus(params['thumb'])
+    try:    thumb = params['thumb']
     except: thumb = 'null'
     doRefresh = editSearch(file, cmd, name, thumb)
 
@@ -2766,7 +3144,7 @@ elif mode == _COPY:
 
 
 elif mode == _PASTE:
-    try:    folder = urllib.unquote_plus(params['paste'])
+    try:    folder = params['paste']
     except: folder
     doRefresh = paste(folder)
 
@@ -2780,7 +3158,7 @@ elif mode == _COPYFOLDER:
 
 
 elif mode == _PASTEFOLDER:
-    try:    folder = urllib.unquote_plus(params['paste'])
+    try:    folder = params['paste']
     except: folder
     doRefresh = pasteFolder(folder)
 
@@ -2794,8 +3172,8 @@ elif mode == _RENAMEFAVE:
 
 
 elif mode == _ADDTOXBMC:
-    thumb   = urllib.unquote_plus(params['thumb'])
-    keyword = urllib.unquote_plus(params['keyword'])
+    thumb   = params['thumb']
+    keyword = params['keyword']
     addToXBMC(name, thumb, cmd, keyword)
 
 
@@ -2810,14 +3188,14 @@ elif mode == _THUMBFOLDER:
 elif mode == _PLAYBACKMODE:
     doRefresh = changePlaybackMode(file, cmd)
 
-    
+
 elif mode == _SETTINGS:
     try :
-        addon = urllib.unquote_plus(params['addon'])
-        xbmcaddon.Addon(addon).openSettings()
+        addonID = params['addon']
+        utils.openSettings(addonID)
     except:
-        ADDON.openSettings()
-        refresh()
+        utils.openSettings(ADDONID)
+        doRefresh = True
 
 
 elif mode == _SEPARATOR:
@@ -2829,16 +3207,16 @@ elif mode == _EXTSEARCH:
 
 
 elif mode == _SUPERSEARCH or mode == _SUPERSEARCHDEF:
-    try:    keyword = urllib.unquote_plus(params['keyword'])
+    try:    keyword = params['keyword']
     except: keyword = ''
 
-    try:    imdb = urllib.unquote_plus(params['imdb'])
+    try:    imdb = params['imdb']
     except: imdb = ''
 
-    try:    image = urllib.unquote_plus(params['image'])
+    try:    image = params['image']
     except: image = BLANK
 
-    try:    fanart = urllib.unquote_plus(params['fanart'])
+    try:    fanart = params['fanart']
     except: fanart = BLANK
 
     cacheToDisc = False #len(keyword) > 0 and mode == _SUPERSEARCH
@@ -2854,7 +3232,7 @@ elif mode == _SUPERSEARCH or mode == _SUPERSEARCHDEF:
 
 
 elif mode == _EDITTERM:
-    try:    keyword = urllib.unquote_plus(params['keyword'])
+    try:    keyword = params['keyword']
     except: keyword = ''
     editSearchTerm(keyword)
     cacheToDisc=True
@@ -2872,29 +3250,33 @@ elif mode == _UNSECURE:
 elif mode == _IMPORT:
     import importer
     importer.doImport()
+    #doRefresh = True
 
 
-elif mode == _RECOMMEND_KEY:
-    try:    keyword = urllib.unquote_plus(params['keyword'])
+elif mode == _RECOMMEND_KEY or mode == _RECOMMEND_KEY_A:
+    try:    keyword = params['keyword']
     except: keyword = ''
 
     cacheToDisc = True
     doEnd       = True
     contentType = 'movies'
 
-    recommendKey(keyword)
+    if mode == _RECOMMEND_KEY:
+        recommendKey(keyword, RECOMMENDAUTO)
+    else:
+        recommendKey(keyword, False)        
 
 
 elif mode == _RECOMMEND_IMDB:
-    try:    imdb = urllib.unquote_plus(params['imdb'])
+    try:    imdb = params['imdb']
     except: imdb = ''
 
-    try:    keyword = urllib.unquote_plus(params['keyword'])
+    try:    keyword = params['keyword']
     except: keyword = ''
 
     try:
         if ADDON.getSetting('CACHERECOMMEND') != 'true':
-            callback = urllib.unquote_plus(params['callback'])
+            callback = params['callback']
 
         cacheToDisc = True
         doEnd       = True
@@ -2902,7 +3284,7 @@ elif mode == _RECOMMEND_IMDB:
 
         recommendIMDB(imdb, keyword)
 
-    except:
+    except Exception, e:
         winID = xbmcgui.getCurrentWindowId()
         cmd   = '%s?mode=%d&keyword=%s&imdb=%s&callback=%s' % (sys.argv[0], _RECOMMEND_IMDB, urllib.quote_plus(keyword), urllib.quote_plus(imdb), 'callback')
         xbmc.executebuiltin('Container.Refresh(%s)' % cmd)
@@ -2926,7 +3308,7 @@ elif mode == _PLAYLISTFILE:
 
 
 elif mode == _PLAYLISTITEM:
-    try:    image = urllib.unquote_plus(params['image'])
+    try:    image = params['image']
     except: image = BLANK
 
     iPlaylistItem(path, label, image)
@@ -2940,16 +3322,16 @@ elif mode == _DELETEPLAYLIST:
     doRefresh = iPlaylistDelete(path)
 
 
-elif mode == _COPYPLAYLIST:
+elif mode == _COPY_TO_SF:
     doRefresh = False
-    thumb     = urllib.unquote_plus(params['thumb'])
-    iPlayCopyToSF(path, label, thumb)
+    thumb     = params['thumb']
+    copyToSF(path, label, thumb, playMedia=False)
 
 
-elif mode == _COPYPLAYLISTITEM:
+elif mode == _COPY_TO_SF_ITEM:
     doRefresh = False
-    thumb     = urllib.unquote_plus(params['thumb'])
-    iPlayCopyItemToSF(path, label, thumb)
+    thumb     = params['thumb']
+    copyToSF(path, label, thumb, playMedia=True)
 
 
 elif mode == _URLPLAYLIST:
@@ -2961,25 +3343,19 @@ elif mode == _HISTORYSHOW:
 
 
 elif mode == _HISTORYADD:
-    try:    keyword = urllib.unquote_plus(params['keyword'])
+    try:    keyword = params['keyword']
     except: keyword = ''
 
-    try:    image = urllib.unquote_plus(params['image'])
+    try:    image = params['image']
     except: image = BLANK
 
-    try:    fanart = urllib.unquote_plus(params['fanart'])
+    try:    fanart = params['fanart']
     except: fanart = FANART
-
-    try:    refres = urllib.unquote_plus(params['refresh']) == 'true'
-    except: refres = True
 
     image  = image.replace('SF@V', '/')
     fanart = fanart.replace('SF@V', '/')
 
     doRefresh = iHistoryAdd(keyword, image, fanart)
-    #if not refres:
-    #    doRefresh = False
-
 
 elif mode == _HISTORYREMOVE:
     doRefresh = iHistoryRemove(name)
@@ -2991,8 +3367,32 @@ elif mode == _MANUAL:
 
 elif mode == _VIEWTYPE:
     doRefresh = setViewType()
-        
 
+elif mode == _IEXPLORE:
+    cacheToDisc = True
+    iExplore(path)
+
+
+elif mode == _PLAY_FILE:
+    playFile(path)
+
+
+elif mode == _PLAY_FOLDER:
+    playFolder(path)
+
+
+elif mode == _PLAY_SUPER_FOLDER_EXT:
+    playSuperFolder(path, id=-1)
+    #now remove this item from history to prevent looping
+    cmd = 'XBMC.Container.Update(%s?mode=%d,replace)' % (sys.argv[0], _MAIN)
+    xbmc.executebuiltin(cmd)
+    doEnd = True
+
+
+elif mode == _PLAY_SUPER_FOLDER:
+    playSuperFolder(path, id=int(sys.argv[1]))
+    
+    
 elif mode == _MAIN:
     main()
 
@@ -3023,14 +3423,17 @@ if nItem < 1:
 if doRefresh:
     refresh()
 
+handle = int(sys.argv[1])
+
 if doEnd:
     if len(contentType) > 0:
-        xbmcplugin.setContent(int(sys.argv[1]), contentType)
-    xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=cacheToDisc)
-    if VIEWTYPE > 0:        
-        print "SETTING VIEWTYPE"
-        xbmc.executebuiltin('Container.SetViewMode(%d)' % VIEWTYPE)
+        xbmcplugin.setContent(handle, contentType)
 
+    if handle > -1:
+        xbmcplugin.endOfDirectory(handle, cacheToDisc=cacheToDisc)
+
+    if VIEWTYPE > 0:        
+        xbmc.executebuiltin('Container.SetViewMode(%d)' % VIEWTYPE)
 
 
 if mode == _PLAYMEDIA:

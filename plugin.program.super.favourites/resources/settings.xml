@@ -1,75 +1,119 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <category label="30070">
-		<setting id="VERSION"    type="text" label="" default="0.0.0" visible="false"/>	
-		<setting id="MANUAL_ID"  type="text" label="" default="1"     visible="false"/>	
+<category label="30070">
+    <setting id="VERSION"    type="text" label="" default="0.0.0" visible="false"/>	
+    <setting id="MANUAL_ID"  type="text" label="" default="1"     visible="false"/>	
 		
-		<setting id="DISPLAYNAME" label="30120" type="labelenum" lvalues="30122|30121"/>
-		<setting id="FOLDER"      label="30056" type="folder"    default="special://profile/addon_data/plugin.program.super.favourites/" />
+    <setting id="DISPLAYNAME" label="30120" type="labelenum" lvalues="30122|30121" visible="false"/>
+    <setting id="FOLDER"      label="30056" type="folder"    default="special://profile/addon_data/plugin.program.super.favourites/" />
 		
-        <setting id="HOTKEY"      label="30026" type="labelenum" lvalues="30027|30028|30029|30030|30031|30032|30033|30034|30035|30036|30037|30038|30039|30058|30111"/>		
-		<setting                  label="30112" type="action"    action="RunScript($CWD/keyProgrammer.py)" enable="eq(-1,14)" visible="eq(-1,14)"/>
+    <setting id="HOTKEY"      label="30026" type="labelenum" lvalues="30027|30028|30029|30030|30031|30032|30033|30034|30035|30036|30037|30038|30039|30058|30111"/>		
+    <setting                  label="30112" type="action"    action="RunScript($CWD/keyProgrammer.py)" enable="eq(-1,14)" visible="eq(-1,14)"/>
 		
-		<setting id="CACHE"       label="30071" type="enum" lvalues="30072|30073|30074|30075"/>		
+    <setting id="CACHE"       label="30071" type="enum" lvalues="30072|30073|30074|30075"/>		
 		
-		<setting type="sep" visible="true" />
+    <setting type="sep" visible="true" />	
 		
-		<setting id="CONTEXT"       label="30050" type="bool" default="false" />
-		<setting id="CONTEXT_STYLE" label="30158" type="enum" lvalues="30159|30160" />
+    <setting id="DEBUG" label="30154" type="bool" default="false" />
 		
-		<setting type="sep" visible="true" />			
-		
-		<setting id="DEBUG"       label="30154" type="bool"      default="false" />
-		<setting type="sep" visible="true" />
-	</category>
+    <setting type="sep" visible="true" />
+</category>
 	
-	<category label="30022">	
-		<setting id="SHOWNEW"        label="30023" type="bool"      default="true"  />
-		<setting id="SHOWXBMC"       label="30024" type="bool"      default="true"  />		
-		<setting id="SHOWSEP"        label="30051" type="bool"      default="true"  />			
-		<setting id="SHOWUNAVAIL"    label="30138" type="bool"      default="false" />
-		<setting id="INHERIT"        label="30096" type="bool"      default="true"  />	
-        <setting id="SHOW_FANART"    label="30064" type="bool"      default="true"  />
-        <setting id="DEFAULT_FANART" label="30113" type="enum"      default="30114" lvalues="30114|30115|30116"/>
-        <setting id="DEFAULT_IMAGE"  label="30117" type="file"      default=""      enable="eq(-1,1)" visible="eq(-1,1)"/>		
-		<setting id="SHOWIMPORT"     label="30139" type="bool"      default="false"  />
-		<setting id="VIEWTYPE"       label="30203" type="number"    default="0"      />		
+<category label="30022">	
+    <setting id="ALPHA_SORT"       label="30213" type="bool"      default="false" />	
+    <setting id="LABEL_NUMERIC"    label="30223" type="bool"      default="false" />			
+    <setting id="SHOWNEW"          label="30023" type="bool"      default="true"  />
+    <setting id="SHOWXBMC"         label="30024" type="bool"      default="true"  />		
+    <setting id="SHOWSEP"          label="30051" type="bool"      default="true"  />			
+    <setting id="SHOWUNAVAIL"      label="30138" type="bool"      default="false" />
+    <setting id="SHOWIMPORT"       label="30139" type="bool"      default="false"  />		
 		
-		<setting type="sep" visible="true" />
-	</category>
+    <setting id="DUMMY"            label="35021" type="lsep" />
+    <setting id="INHERIT"          label="30096" type="bool"      default="true"  />	
+    <setting id="SHOW_FANART"      label="30064" type="bool"      default="true"  />
+    <setting id="DEFAULT_FANART"   label="30113" type="enum"      lvalues="30114|30115|30116" visible="eq(-1,true)"/>
+    <setting id="DEFAULT_IMAGE"    label="30117" type="file"      default="" visible="eq(-1,1)+eq(-2,true)"/>		
+		
+    <setting id="ART_LANDSCAPE"    label="35025" type="enum"      lvalues="35024|35022|35023" default="0"/>
+    <setting id="ART_BANNER"       label="35026" type="enum"      lvalues="35024|35022|35023" default="0" />
+    <setting id="ART_POSTER"       label="35027" type="enum"      lvalues="35024|35022|35023" default="0" />
+		
+    <setting type="sep" visible="true" />			>
+		
+    <setting id="SHOW_STARTUP_TXT"   type="bool"  label="30221"  default="false" />	
+    <setting id="STARTUP_TXT"        type="text"  label="30222"  default="[COLOR chartreuse][B]Please enter the startup message[CR]you would like to display[/B][/COLOR]" visible="eq(-1,true)"/>	
+		
+    <setting type="sep" visible="true" />
+		
+    <setting id="DISABLEMOVIEVIEW" label="30208" type="bool"      default="false" visible="false" />	
+    <setting id="CONTENTTYPE"      label="35028" type="labelenum" lvalues="35033|35034|35035|35031|35032|35030|35036|35029|35037"/>		
+    <setting id="VIEWTYPE"         label="30203" type="number"    default="0" />			
+		
+    <setting type="sep" visible="true" />
+</category>
 	
-	<category label="30161">	
-        <setting id="DUMMY"           label="30054" type="lsep"/>	
-		<setting id="SHOWSS"          label="30055" type="bool"                                    default="true" />
-		<setting id="SHOWREMEMBER"    label="30167" type="bool"  enable="eq(-1,true)"              default="true" visible="eq(-1,true)"/>
-		<setting id="SHOWRECOMMEND"   label="30063" type="bool"  enable="eq(-2,true)"              default="true" visible="eq(-2,true)"/>
-		<setting id="METARECOMMEND"   label="30093" type="bool"  enable="eq(-3,true)+eq(-1,true)"  default="true" visible="eq(-3,true)+eq(-1,true)"/>
-        <setting id="SYNOPSRECOMMEND" label="30157" type="bool"  enable="eq(-4,true)+eq(-2,true)"  default="true" visible="eq(-4,true)+eq(-2,true)"/>
-		<setting id="CACHERECOMMEND"  label="30089" type="bool"  enable="eq(-5,true)+eq(-3,true)"  default="true" visible="eq(-5,true)+eq(-3,true)"/>
-		<setting id="STRIPNUMBERS"    label="30095" type="bool"  enable="eq(-6,true)"              default="true" visible="eq(-6,true)"/>
+<category label="35000">
+    <setting id="MENU_MSG"                    type="bool" default="true" visible="false"/>	
+    <setting id="CONTEXT"       label="35001" type="bool" default="false" />
+    <setting id="CONTEXT_STYLE" label="35002" type="enum" lvalues="35003|35004" />
+    <setting id="MENU_EDITFAVE" label="35018" type="bool" default="false" />
 		
-        <setting id="DUMMY"                 label="30151" type="lsep"/>	
-		<setting id="SHOWIPLAY"             label="30145" type="bool" default="true" />
-		<setting id="COPY_PLAYLISTS"        label="30149" type="bool" default="false" visible="eq(-1,true)"/>
-		<setting id="ALLOW_PLAYLIST_DELETE" label="30152" type="bool" default="false" visible="eq(-2,true)"/>
+    <setting type="sep" />
 		
-		<setting type="sep" visible="true" />
-	</category>
+    <setting id="DUMMY"        label="35005" type="lsep" />
+		
+    <setting id="MENU_QUICKLAUNCH"    label="35020" type="bool" default="true" />
+    <setting id="MENU_ADDTOFAVES"     label="35006" type="bool" default="true" />
+    <setting id="MENU_DEF_ISEARCH"    label="35007" type="bool" default="true" />
+    <setting id="MENU_ISEARCH"        label="35008" type="bool" default="true" />
+    <setting id="MENU_IRECOMMEND"     label="35009" type="bool" default="true" />
+    <setting id="MENU_COPY_PROPS"     label="35010" type="bool" default="true" />
+    <setting id="MENU_VIEW_IMAGES"    label="35011" type="bool" default="true" />
+    <setting id="MENU_SF_SETTINGS"    label="35012" type="bool" default="true" />
+    <setting id="MENU_ADDON_SETTINGS" label="35013" type="bool" default="true" />
+    <setting id="MENU_STD_MENU"       label="35014" type="bool" default="true" />
+    <setting id="MENU_PLUGINS"        label="35019" type="bool" default="true" />
+		
+    <setting type="sep" visible="true" />
+</category>>
 	
-	<category label="30082">
-		<setting id="AUTOSTART" label="30162" type="bool" default="false" />
+<category label="30161">	
+    <setting id="DUMMY"           label="30054" type="lsep"/>	
+    <setting id="SHOWSS"          label="30055" type="bool"                                    default="true" />
+    <setting id="SHOWREMEMBER"    label="30167" type="bool"  enable="eq(-1,true)"              default="true" visible="eq(-1,true)"/>
+    <setting id="SHOWRECOMMEND"   label="30063" type="bool"  enable="eq(-2,true)"              default="true" visible="eq(-2,true)"/>
+    <setting id="METARECOMMEND"   label="30093" type="bool"  enable="eq(-3,true)+eq(-1,true)"  default="true" visible="eq(-3,true)+eq(-1,true)"/>
+    <setting id="SYNOPSRECOMMEND" label="30157" type="bool"  enable="eq(-4,true)+eq(-2,true)"  default="true" visible="eq(-4,true)+eq(-2,true)"/>
+    <setting id="RECOMMENDFIRST"  label="30214" type="bool"  enable="eq(-5,true)+eq(-3,true)"  default="false" visible="eq(-5,true)+eq(-3,true)"/>
+    <setting id="CACHERECOMMEND"  label="30089" type="bool"  enable="eq(-6,true)+eq(-4,true)"  default="true" visible="eq(-6,true)+eq(-4,true)"/>
+    <setting id="STRIPNUMBERS"    label="30095" type="bool"  enable="eq(-7,true)"              default="true" visible="eq(-7,true)"/>
 		
-		<setting type="sep" visible="true" />
+    <setting id="DUMMY"                 label="30225" type="lsep"/>	
+    <setting id="SHOWIEXPLORE"          label="30224" type="bool" default="true" />
 		
-        <setting id="PLAY_PLAYLISTS" label="30083" type="bool" default="true" />
+    <setting id="DUMMY"                 label="30151" type="lsep"/>	
+    <setting id="SHOWIPLAY"             label="30145" type="bool" default="true" />
+    <setting id="COPY_PLAYLISTS"        label="30149" type="bool" default="false" visible="eq(-1,true)"/>
+    <setting id="ALLOW_PLAYLIST_DELETE" label="30152" type="bool" default="false" visible="eq(-2,true)"/>
+		
+    <setting type="sep" visible="true" />
+</category>
+	
+<category label="30082">
+    <setting id="AUTOSTART" label="30162" type="bool" default="false" />
+		
+    <setting type="sep" visible="true" />
+		
+    <setting id="PLAY_PLAYLISTS" label="30083" type="bool" default="true" />
 				
-		<setting type="sep" visible="true" />
+    <setting type="sep" visible="true" />
 		
-		<setting id="REMOTE"   label="30125" type="bool"                           default="false" />
-		<setting id="LOCATION" label="30126" type="text"      enable="eq(-1,true)" default="" visible="eq(-1,true)"/>
-		<setting               label="30127" type="action"    action="RunScript($CWD/importer.py,True)"  option="close" />
-		<setting               label="30128" type="action"    action="RunScript($CWD/importer.py,False)" option="close" />
+    <setting id="REMOTE"       label="30125" type="bool"                           default="false" />
+    <setting id="LOCATION"     label="30126" type="text"      enable="eq(-1,true)" default="" visible="eq(-1,true)"/>
+    <setting id="IMPORT_RESET" label="30218" type="bool"                           default="false" />
+    <setting                   label="30127" type="action"    action="RunScript($CWD/importer.py,True)"  option="close" />
+    <setting                   label="30128" type="action"    action="RunScript($CWD/importer.py,False)" option="close" />
 		
-		<setting type="sep" visible="true" />			>
-	</category>
+    <setting type="sep" visible="true" />			>
+</category>
 </settings> 

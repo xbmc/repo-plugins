@@ -36,19 +36,24 @@ def GetXBMCVersion():
 
 
 def GETTEXT(id):
-    text = ADDON.getLocalizedString(id)
-    name = ADDON.getLocalizedString(30121)
+    return ADDON.getLocalizedString(id)
+    #text = ADDON.getLocalizedString(id)
+    #name = ADDON.getLocalizedString(30121)
 
-    if name == DISPLAY:
-        return text
-    text = text.replace(name, DISPLAY)
-    return text
+    #if name == DISPLAY:
+    #    return text
+    #text = text.replace(name, DISPLAY)
+    #return text
 
 
 ADDONID = 'plugin.program.super.favourites'
 ADDON   =  xbmcaddon.Addon(ADDONID)
 HOME    =  ADDON.getAddonInfo('path')
+
 ROOT    =  ADDON.getSetting('FOLDER')
+if not ROOT:
+    ROOT = 'special://profile/addon_data/plugin.program.super.favourites/'
+
 PROFILE =  os.path.join(ROOT, 'Super Favourites')
 VERSION =  ADDON.getAddonInfo('version')
 ICON    =  os.path.join(HOME, 'icon.png')
@@ -56,6 +61,23 @@ FANART  =  os.path.join(HOME, 'fanart.jpg')
 SEARCH  =  os.path.join(HOME, 'resources', 'media', 'search.png')
 DISPLAY =  ADDON.getSetting('DISPLAYNAME')
 TITLE   =  GETTEXT(30000)
+
+
+PLAYABLE = xbmc.getSupportedMedia('video') + '|' + xbmc.getSupportedMedia('music')
+PLAYABLE = PLAYABLE.replace('|.zip', '')
+#PLAYABLE = 'mp3|mp4|m4v|avi|flv|mpg|mov|txt|%s' % SRC
+PLAYABLE = PLAYABLE.split('|')
+
+
+PLAYMEDIA_MODE      = 1
+ACTIVATEWINDOW_MODE = 2
+RUNPLUGIN_MODE      = 3
+ACTION_MODE         = 4
+
+
+HOMESPECIAL = 'special://home/'
+HOMEFULL    = xbmc.translatePath(HOMESPECIAL)
+
 
 DEBUG   = ADDON.getSetting('DEBUG') == 'true'
 
@@ -67,6 +89,7 @@ MAJOR, MINOR = GetXBMCVersion()
 FRODO        = (MAJOR == 12) and (MINOR < 9)
 GOTHAM       = (MAJOR == 13) or (MAJOR == 12 and MINOR == 9)
 HELIX        = (MAJOR == 14) or (MAJOR == 13 and MINOR == 9)
+ISENGARD     = (MAJOR == 15) or (MAJOR == 14 and MINOR == 9)
 
 FILENAME     = 'favourites.xml'
 FOLDERCFG    = 'folder.cfg'
@@ -132,13 +155,12 @@ def CheckVersion():
         prev = ADDON.getSetting('VERSION')
         curr = VERSION
 
-        if xbmcgui.Window(10000).getProperty('OTT_RUNNING') != 'True':
-            VerifyKeymaps()
-
         if prev == curr:        
             return
 
         verifySuperSearch()
+        VerifySettinngs()
+        VerifyZipFiles()
 
         src = os.path.join(ROOT, 'cache')
         dst = os.path.join(ROOT, 'C')
@@ -157,18 +179,29 @@ def CheckVersion():
         pass
 
 
+def VerifyZipFiles():
+    #cleanup corrupt zip files
+    sfile.remove(os.path.join('special://userdata', '_sf_temp.zip'))
+    sfile.remove(os.path.join('special://userdata', 'SF_Temp'))
+
+
+def VerifySettinngs():
+    #patch any settings that have changed types or values
+    if ADDON.getSetting('DISABLEMOVIEVIEW') == 'true':
+        ADDON.setSetting('DISABLEMOVIEVIEW', 'false')
+        ADDON.setSetting('CONTENTTYPE', '')
+
+
 def verifySuperSearch():
-    src = os.path.join(ROOT, 'Search')
+    old = os.path.join(ROOT, 'Search')
     dst = os.path.join(ROOT, 'S')
 
-    sfile.rename(src, dst)
-
-    dst = os.path.join(ROOT, 'S')
-    src = os.path.join(HOME, 'resources', 'Search', FILENAME)
+    sfile.rename(old, dst)
 
     try:    sfile.makedirs(dst)
     except: pass
 
+    src = os.path.join(HOME, 'resources', 'search', FILENAME)
     dst = os.path.join(dst, FILENAME)
 
     if not sfile.exists(dst):
@@ -178,9 +211,11 @@ def verifySuperSearch():
         #patch any changes
         xml = sfile.read(dst)
 
-        xml = xml.replace('1channel/?mode=7000', '1channel/?mode=Search')
-        xml = xml.replace('plugin.video.genesis/?action=actors_movies', 'plugin.video.genesis/?action=people_movies')
-        xml = xml.replace('plugin.video.genesis/?action=actors_shows',  'plugin.video.genesis/?action=people_shows')
+        xml = xml.replace('is/?action=movies_search&', 'is/?action=movieSearch&')
+        xml = xml.replace('is/?action=people_movies&', 'is/?action=moviePerson&')
+        xml = xml.replace('is/?action=shows_search&',  'is/?action=tvSearch&')
+        xml = xml.replace('is/?action=people_shows&',  'is/?action=tvPerson&')
+
 
         f = sfile.file(dst, 'w')
         f.write(xml)            
@@ -190,16 +225,17 @@ def verifySuperSearch():
 
     import favourite
 
-    new   = favourite.getFavourites(src, validate=False)
-    line1 = GETTEXT(30123)
-    line2 = GETTEXT(30124)
+    new = favourite.getFavourites(src, validate=False)
+
+    #line1 = GETTEXT(30123)
+    #line2 = GETTEXT(30124)
 
     for item in new:
         fave, index, nFaves = favourite.findFave(dst, item[2])
         if index < 0:
-            line = line1 % item[0]
-            if DialogYesNo(line1=line, line2=line2):
-                favourite.addFave(dst, item)
+            #line = line1 % item[0]
+            #if DialogYesNo(line1=line, line2=line2):
+            favourite.addFave(dst, item)
 
 
 def UpdateKeymaps():
@@ -223,6 +259,27 @@ def DeleteFile(path):
             sfile.remove(path) 
         except: 
             xbmc.sleep(500)
+
+def verifyLocation():
+    #if still set to default location reset, to workaround
+    #Android bug in browse folder dialog
+    location = ADDON.getSetting('FOLDER')
+
+    profile  = 'special://profile/addon_data/plugin.program.super.favourites/'
+    userdata = 'special://userdata/addon_data/plugin.program.super.favourites/'
+
+    if (location == profile) or (location == userdata):
+        ADDON.setSetting('FOLDER', '')
+        
+
+def verifyPlugins():
+    folder = os.path.join(ROOT, 'Plugins')
+
+    if sfile.exists(folder):
+        return
+
+    try:    sfile.makedirs(folder)
+    except: pass
 
 
 def VerifyKeymaps():
@@ -283,7 +340,7 @@ def WriteKeymap(start, end):
     while not sfile.exists(dest) and tries > 0:
         tries -= 1
         f = sfile.file(dest, 'w')
-        f.write(t)
+        f.write(cmd)
         f.close()
         xbmc.sleep(1000)
 
@@ -384,8 +441,7 @@ def fix(text):
     for ch in text:
         if ord(ch) < 128:
             ret += ch
-    return ret
-
+    return ret.strip()
 
 
 def Clean(name):
@@ -415,7 +471,72 @@ def Clean(name):
         if length == len(name):
             break
 
-    return name
+    return name.strip()
+
+
+def fileSystemSafe(text):
+    if not text:
+        return None
+
+    text = re.sub('[:\\\\/*?\<>|"]+', '', text)
+    text = text.strip()
+    if len(text) < 1:
+        return  None
+
+    return text
+
+
+def findAddon(item):
+    try:
+        try:    addon = re.compile('"(.+?)"').search(item).group(1)
+        except: addon = item
+
+        addon = addon.replace('plugin://', '')
+        addon = addon.replace('script://', '')
+        addon = addon.replace('/', '')
+        addon = addon.split('?', 1)[0]        
+
+        if xbmc.getCondVisibility('System.HasAddon(%s)' % addon) == 0:
+            addon = None
+    except:
+        addon = None
+
+    return addon
+
+
+def getSettingsLabel(addon):
+    label = xbmcaddon.Addon(addon).getAddonInfo('name')
+    label = fix(label)
+    label = label.strip()
+
+    try:
+        if len(label) > 0:
+            return GETTEXT(30094) % label
+    except:
+        pass
+
+    return GETTEXT(30094) % GETTEXT(30217)
+
+
+#logic for setting focus inspired by lambda
+def openSettings(addonID, focus=None):
+    if not focus:            
+        return xbmcaddon.Addon(addonID).openSettings()
+    
+    try:
+        xbmc.executebuiltin('Addon.OpenSettings(%s)' % addonID)
+
+        value1, value2 = str(focus).split('.')
+
+        if FRODO:
+            xbmc.executebuiltin('SetFocus(%d)' % (int(value1) + 200))
+            xbmc.executebuiltin('SetFocus(%d)' % (int(value2) + 100))
+        else:
+            xbmc.executebuiltin('SetFocus(%d)' % (int(value1) + 100))
+            xbmc.executebuiltin('SetFocus(%d)' % (int(value2) + 200))
+
+    except:
+        return
 
 
 
@@ -479,6 +600,114 @@ def showChangelog(addonID=None):
 
     except:
         pass
+
+
+def getAllPlayableFiles(folder):
+    files = {}
+ 
+    _getAllPlayableFiles(folder, files)
+
+    return files
+
+
+def _getAllPlayableFiles(folder, theFiles):
+    current, dirs, files = sfile.walk(folder)
+
+    for dir in dirs:        
+        path = os.path.join(current, dir)
+        _getAllPlayableFiles(path, theFiles)
+
+    for file in files:
+        path = os.path.join(current, file)
+        if isPlayable(path):
+            size = sfile.size(path)
+            theFiles[path] = [path, size]
+
+
+def isFilePlayable(path):
+    try:    return ('.' + sfile.getextension(path) in PLAYABLE)
+    except: return False
+
+
+def isPlayable(path):
+    if not sfile.exists(path):
+        return False
+
+    if sfile.isfile(path):
+        playable = isFilePlayable(path)
+        return playable
+         
+    current, dirs, files = sfile.walk(path)
+
+    for file in files:
+        if isPlayable(os.path.join(current, file)):
+            return True
+
+    for dir in dirs:        
+        if isPlayable(os.path.join(current, dir)):
+            return True
+
+    return False
+
+
+
+def parseFolder(folder, subfolders=True):
+    items = []
+
+    current, dirs, files = sfile.walk(folder)
+
+    if subfolders:
+        for dir in dirs:        
+            path = os.path.join(current, dir)
+            if isPlayable(path):
+                items.append([dir, path, False])
+
+    for file in files:
+        path = os.path.join(current, file)
+        if isPlayable(path):
+            items.append([file, path, True])
+
+    return items
+
+
+
+def playItems(items, id=-1): 
+    if items == None or len(items) < 1:
+        return
+
+    pl = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+    pl.clear() 
+
+    resolved = False
+
+    for item in items:
+        title     = item[0]
+        url       = item[1]
+        if len(item) > 2:
+            iconImage = item[2]
+        else:
+            iconImage = ICON
+
+        liz   = xbmcgui.ListItem(title, iconImage=iconImage, thumbnailImage=iconImage)
+        liz.setInfo(type='Video', infoLabels={'Title':title})
+        pl.add(url, liz)
+
+        if id >= 0 and (not resolved):
+            import xbmcplugin
+            resolved = True
+            xbmcplugin.setResolvedUrl(id, True, liz)
+    
+    if id == -1:
+        xbmc.Player().play(pl)
+
+
+def convertToHome(text):
+    if text.startswith(HOMEFULL):
+        text = text.replace(HOMEFULL, HOMESPECIAL)
+
+    return text
+
+
 
 if __name__ == '__main__':
     pass

@@ -23,7 +23,10 @@ import xbmc
 import os
 
 
+utils.VerifyZipFiles()
 utils.VerifyKeymaps()
+utils.verifyPlugins()
+utils.verifyLocation()
 
 
 if utils.ADDON.getSetting('AUTOSTART') == 'true':
@@ -31,12 +34,13 @@ if utils.ADDON.getSetting('AUTOSTART') == 'true':
 
 
 def checkDisabled():
-    if xbmc.getCondVisibility('System.HasAddon(%s)' % utils.ADDONID) == 0:
-        utils.DeleteKeymap(utils.KEYMAP_HOT)
-        utils.DeleteKeymap(utils.KEYMAP_MENU)
-        return True
-
-    return False
+    try:
+        if xbmc.getCondVisibility('System.HasAddon(%s)' % utils.ADDONID) == 0:
+            utils.DeleteKeymap(utils.KEYMAP_HOT)
+            utils.DeleteKeymap(utils.KEYMAP_MENU)
+            return True
+    except:
+        return False
 
 
 class MyMonitor(xbmc.Monitor):
@@ -49,6 +53,8 @@ class MyMonitor(xbmc.Monitor):
     def onSettingsChanged(self):
         hotkey  = utils.ADDON.getSetting('HOTKEY')
         context = utils.ADDON.getSetting('CONTEXT')  == 'true'
+
+        utils.VerifyKeymaps()
 
         if self.hotkey == hotkey and self.context == context:
             return

@@ -1,63 +1,162 @@
-[B][COLOR blue]This file contains ALOT of useful information regarding the functionality of Super Favourites - PLEASE READ IT!![/COLOR][/B]
+[B][COLOR chartreuse]This file contains ALOT of useful information regarding the functionality of Super Favourites - PLEASE READ IT!![/COLOR][/B]
 
 
-1.0.35:
+[COLOR chartreuse]1.0.43: 16th December 2015[/COLOR]
+    - submitted to org
+    - fixed renaming folders when only case is changed
+
+
+[COLOR chartreuse]1.0.42: 17th November 2015[/COLOR]
+    - Super Favourites global menu now disabled by default
+    - configurable artwork for the following infolabels: 'banner', 'landscape' and 'poster'
+    - configurable view content type
+    - fixed folder icon to use "special protocol"
+    - fixed launching of favourites that have their playmode set to ACTIVATEWINDOW
+    - prevent attempting to launch the standard context menu on home screen
+    - sort order of folders can now be individually set via the Edit Super Folder option
+
+
+[COLOR chartreuse]1.0.41: 8th November 2015[/COLOR]
+    - added optional numerical label
+    - added iExplore functionality - browse anywhere for playable media
+    - added play folder functionality, including autoplay via the Edit Super Folder option
+    - moved Lock/Unlock Super Folder functionality to the Edit Super Folder menu
+    - display name no longer configurable
+
+
+[COLOR chartreuse]1.0.40.3:[/COLOR]
+    - configurable startup message - see display settings
+
+
+[COLOR chartreuse]1.0.40.2:[/COLOR]
+    - automatically refresh after importing from a remote location
+    - made metahandler dependency optional
+    - add Super Favourites menu to the standard Kodi context menu (Isengard and above only)
+    - fixed alphabetical sorting when names contain formatting tags (e.g. ['B'])
+    - fix for when Super Folder names contain non-ascii characters
+
+
+[COLOR chartreuse]1.0.40.1:[/COLOR]
+    - re-fix for when addon names contain non-ascii characters (in context menu)
+    - fix for context menu from favourites dialog
+    - improved logic for when Now playing menu item appears
+
+
+[COLOR chartreuse]1.0.40:[/COLOR]
+    - quickly launch your Super Favourites directly from the Super Favourites global menu
+    - workaround SMB browsing 'bug' on Android
+    - fixed exporting to a share
+    - can now add items directly from the 'My addons' section
+    - fixed setting focus when opening settings
+
+
+[COLOR chartreuse]1.0.39.1:[/COLOR]
+    - plugins folder created automatically
+    - improved context menu launching from global menu
+    - revert context menu when uninstalled
+    - fixed renaming Super Folders
+
+[COLOR chartreuse]1.0.39:[/COLOR]
+    - new plugin framework for adding external items to global menu - [B]see readme.txt for full details[/B]
+    - option to edit name when adding to Super Favourites via the global menu
+    - option to clear current Super Favourites when importing	
+    - fixed programming of hot-key
+
+
+[COLOR chartreuse]1.0.38.3:[/COLOR]
+    - fix to chooser.py to remove hard-coded property
+
+
+[COLOR chartreuse]1.0.38.2:[/COLOR]
+    - fix for when addon names contain non-ascii characters
+
+
+[COLOR chartreuse]1.0.38.1:[/COLOR]
+    - configurable Super Favourites global menu
+    - selected addon settings now available directly from Super Favourites global menu
+
+
+[COLOR chartreuse]1.0.38:[/COLOR]
+    - fixed alignment in Super Favourites global menu in Isengard release version
+
+
+[COLOR chartreuse]1.0.37.1:[/COLOR]
+    - added view images option to Super Favourites global menu
+
+
+[COLOR chartreuse]1.0.37:[/COLOR]
+    - fixed adding to Super Favourites global menu option
+    - added 'Copy images and description' to global Super Favourites menu; these can then be pasted via the 'Edit Super Favourite' option within Super Favourites
+    - added Google Image Search addon to iSearch; this requires the Google addon by ruuk (in the official Kodi repo under Picture addons)
+    - added option to sort Super Favourites alphabetically
+    - improved global Super Favourites menu resizing logic
+    - added iRecommend feature to global Super Favourites menu
+    - added 'Quick Select' option to iRecommend feature - automatically picks first item of IMBD keyword search to populate iRecommend
+
+
+[COLOR chartreuse]1.0.36:[/COLOR]
+    - option to disable 'movie content view' - use if you get rectangular icons in thumbnail view
+    - can now add items from File Manager window directly to Super Favourites
+    - Option to switch off caching when adding items back to Kodi favourites (particularly useful for 'Search' type favourites)
+
+
+[COLOR chartreuse]1.0.35:[/COLOR]
     - Added ability to set default view mode; via settings or from the context menu
     - Added descriptions for Super Favourites built-in features
 
 
-1.0.34:
+[COLOR chartreuse]1.0.34:[/COLOR]
     - Added description option, this is automatically populated if the override menu is used to add an item to Super Favourites
     - Added more view types (List, Big list, Thumbnail, Poster Wrap, Fanart, Media info, Media info 2, Media info 3)
     - Open Super Favourites from Videos Add-ons menu for most view types
 
 
-1.0.33:
+[COLOR chartreuse]1.0.33:[/COLOR]
     - Added ability to add Android Apps directly to Super Favourites via the override menu (finally!)
     - Improved the fix for the adding of playlist Super Favourites back to Kodi favourites (existing items will need to be re-added)
 
 
-1.0.32.1:
+[COLOR chartreuse]1.0.32.1:[/COLOR]
     - Fixed adding of playlist Super Favourites back to Kodi favourites (existing items will need to be re-added)
 
 
-1.0.32:
-    [B][COLOR blue]- THIS IS A BIG DEAL >>> create ExecuteBuiltin favourites via the 'Create new manual entry' item[/COLOR][/B]
-    [B][COLOR blue]- see http://kodi.wiki/view/List_of_built-in_functions for full list of functionality now available directly from within Super Favourites[/COLOR][/B]
+[COLOR chartreuse]1.0.32:[/COLOR]
+    [B][COLOR chartreuse]- THIS IS A BIG DEAL >>> create ExecuteBuiltin favourites via the 'Create new manual entry' item[/COLOR][/B]
+    [B][COLOR chartreuse]- see http://kodi.wiki/view/List_of_built-in_functions for full list of functionality now available directly from within Super Favourites[/COLOR][/B]
     - fixed upgrading from version 1.0.25
     - fixed RunScript manual entry handling of extra parameters
 
 
-1.0.31
+[COLOR chartreuse]1.0.31[/COLOR]
     - iSearch can now be performed using IMDB numbers (ttxxxxxxx)
     - copy, cut and paste functionality for quickly moving Super Favourites and Super Folders
     - when pasting a Super Folder you will be given the choice to copy the folder or to create a Super Favourite link to the original Super Folder
 
 
-1.0.30.1
+[COLOR chartreuse]1.0.30.1[/COLOR]
     - bug fix in folder configuration settings
 
 
-1.0.30
+[COLOR chartreuse]1.0.30[/COLOR]
     - hide folders by adding VISIBLE=false into the folder.cfg file (only manually at the moment)
     - fixed sfile related bugs
     - fixed iRecommend feature
 
 
-1.0.29.1
+[COLOR chartreuse]1.0.29.1[/COLOR]
     - quick fix to download script
 
 
-v1.0.29
+[COLOR chartreuse]v1.0.29[/COLOR]
     - switched over to xbmcvfc - should now allow main SF folder to be located on a share
     - fixed refreshing when adding items to iPlay
 
 
-v1.0.28.1
+[COLOR chartreuse]v1.0.28.1[/COLOR]
     - bug fixes in chooser.py
 
 
-v1.0.28
+[COLOR chartreuse]v1.0.28[/COLOR]
     - improved startup time
     - added new iRemember feature - store your iSearch keywords - available from the iSearch context menu
     - added iSearch support for YouTube 5.x.x version
@@ -69,22 +168,22 @@ v1.0.28
     - if a file called changelog.txt is found when importing from a zipfile the contents will be displayed when the import is complete
 
 
-v1.0.27.6
+[COLOR chartreuse]v1.0.27.6[/COLOR]
     - removed debug code
 
 
-v1.0.27.5
+[COLOR chartreuse]v1.0.27.5[/COLOR]
     - fixed override menu from PVR window (10601)
     - added fix for Helix override menu text justification
 
 
-v1.0.27.4
+[COLOR chartreuse]v1.0.27.4[/COLOR]
     - added option to show override context menu as a select dialog
     - fixed streaming of live tv addons
     - fixed folder names containing certain characters in chooser dialog, eg +
 
 
-v1.0.27.3
+[COLOR chartreuse]v1.0.27.3[/COLOR]
     - fixed alphabetical sort in OTTV
     - fixed folder names containing certain characters,  eg +
     - fixed playback when parameters contain commas
@@ -92,15 +191,15 @@ v1.0.27.3
     - locked Super Folders no longer display inherited thumbnail
 
 
-v1.0.27.2
+[COLOR chartreuse]v1.0.27.2[/COLOR]
     - fixed colourise feature
 
 
-v1.0.27.1
+[COLOR chartreuse]v1.0.27.1[/COLOR]
     - quick fix to enable URL browse menu item in iPlay when there are no playlists
 
 
-v1.0.27
+[COLOR chartreuse]v1.0.27[/COLOR]
     - fixed iRecommend
     - added Synopsis to iRecommend items (configurable via settings)
     - complete re-write of SF specific options logic (hopefully to future proof adding SF options)
@@ -108,37 +207,38 @@ v1.0.27
     - certain items now only appear in root of SF rather than being configurable
     - added iPlay - explore, manage and play your Playlists from within SF
 
-v1.0.26
+
+[COLOR chartreuse]v1.0.26[/COLOR]
     - version bump
 
 
-v1.0.25
+[COLOR chartreuse]v1.0.25[/COLOR]
     - version bump for submission to org
 
 
-v1.0.24
+[COLOR chartreuse]v1.0.24[/COLOR]
     - import from remote now configurable to appear in main list as well as via settings
 
 
-v1.0.23
+[COLOR chartreuse]v1.0.23[/COLOR]
     - more fanart fixes
 
 
-v1.0.22
+[COLOR chartreuse]v1.0.22[/COLOR]
     - fixed missing fanart
 
 
-v1.0.21
+[COLOR chartreuse]v1.0.21[/COLOR]
     - Super Folders are now added to Kodi favourites now use Kodi's "special protocol"
     - unavailable addons can be configured to still be displayed
     - better use of 'return' parameter for ActivateWindow favourites
 
 
-v1.0.20
+[COLOR chartreuse]v1.0.20[/COLOR]
     - fix in override menu calling VerifySuperSearch each time
 
 
-v1.0.19
+[COLOR chartreuse]v1.0.19[/COLOR]
     - new iSearch items are now imported rather than overwriting
     - import and export functionality - under the Advanced settings tab
     - fixed Add to Kodi Favourites
@@ -146,7 +246,7 @@ v1.0.19
     - added setting to show unavailable addons
 
 
-v1.0.18
+[COLOR chartreuse]v1.0.18[/COLOR]
     - iSearch can now be added to Kodi favourites
     - updated iSearch items with fanart
     - configurable UI name, can be XBMC or Kodi
@@ -156,12 +256,12 @@ v1.0.18
     - keymaps removed when addon is uninstalled
 
 
-v1.0.17
+[COLOR chartreuse]v1.0.17[/COLOR]
     - stopped changelog appearing inappropriately
     - added configurable default fanart
 
 
-v1.0.16
+[COLOR chartreuse]v1.0.16[/COLOR]
    - programmable hotkey to launch Super Favourites
    - thumbnails and fanart path now use Kodi's "special protocol" - should simplify copying to other setups
    - Super Folders sorted alphabetically
@@ -169,22 +269,22 @@ v1.0.16
    - improved fanart handling
 
 
-v1.0.15
+[COLOR chartreuse]v1.0.15[/COLOR]
    - stopped override context menu creation on certain builds of Kodi crashing
    - changed override context menu to only appear where it makes sense
    - improved installed addon detection
    - added preliminary fanart support, currently only on items added via menu override
 
 
-v1.0.14
+[COLOR chartreuse]v1.0.14[/COLOR]
    - fixed 2nd bug in context menu keymap creation
 
 
-v1.0.13
+[COLOR chartreuse]v1.0.13[/COLOR]
    - fixed bug in context menu keymap creation
 
 
-v1.0.12
+[COLOR chartreuse]v1.0.12[/COLOR]
    - tidy up iSearch keyword when populated via override menu (configurable)
    - add iSearch addon to override menu, always shows the first one
    - iSearch items can now be reordered, renamed, and thumbs changed
@@ -192,18 +292,18 @@ v1.0.12
    - added Play Using Super Favourites to override menu for YouTube videos
 
 
-v1.0.11
+[COLOR chartreuse]v1.0.11[/COLOR]
    - interim release for testing
 
 
-v1.0.10:
+[COLOR chartreuse]v1.0.10:[/COLOR]
    - Added trailer playback to iRecommend
    - iRecommend metadata configurable via settings
    - Individual addon settings now available via context menu
    - Fixed bug when cancelling thumbnail selection
 
 
-v1.0.9:
+[COLOR chartreuse]v1.0.9:[/COLOR]
    - Added iRecommend - IMDB based recommendation feature (available from iSearch menu)
    - Removed skin specific icons
    - Renamed Super Search to iSearch to avoid confusion with similar feature in other addons
@@ -213,18 +313,19 @@ v1.0.9:
    - Locked folders now need unlocking before editing/removing
    - Colourize favourites and folders
 
-v1.0.8:
+
+[COLOR chartreuse]v1.0.8:[/COLOR]
    - version bump for submission to org
 
 
-v1.0.7:
+[COLOR chartreuse]v1.0.7:[/COLOR]
    - Changed editing of items to use Select Dialog due to context menu item being full (restricted to 10 items by Kodi)
    - Choose Thumbnail for 'Explore Kodi Favourites' item
    - Password protect Super Folders - including configurable caching of passwords
    - Automatically play m3u playlists - context menu or configurable via settings
 
 
-v1.0.6:
+[COLOR chartreuse]v1.0.6:[/COLOR]
   - Added Kodi profiles support (importing of profiles into Super Favourites not yet supported)
   - Added Globalsearch to Super Search - uses a special launcher to bypass GlobalSearch keyboard entry
   - Changed handling of non-ascii characters
@@ -232,23 +333,23 @@ v1.0.6:
   - Bug fixes
 
 
-v1.0.5:
+[COLOR chartreuse]v1.0.5:[/COLOR]
   - Super Search - configurable multi-addon search functionality
   - Configurable root folder
   - Pseudo TV Live compatibility
 
 
-v1.0.4:
+[COLOR chartreuse]v1.0.4:[/COLOR]
   - Fixed context menu override when addon is disabled
   - Better identification of filetype when using Files.GetDirectory json request
 
 
-v1.0.3:
+[COLOR chartreuse]v1.0.3:[/COLOR]
   - Improved handling of non-ascii characters
   - Add back to Kodi favourites for both folders and favourites
 
 
-v1.0.2:
+[COLOR chartreuse]v1.0.2:[/COLOR]
   - Beta release for testing / feedback
   - Override standard context menu, allows direct Adding to Super Favourites from any addon
   - Added Move Up / Move Down
@@ -257,9 +358,9 @@ v1.0.2:
   - Coloured text works correctly in favourite names
 
 
-v1.0.1:
+[COLOR chartreuse]v1.0.1:[/COLOR]
   - Bug fixes
 
 
-v1.0.0:
+[COLOR chartreuse]v1.0.0:[/COLOR]
   - Initial release

@@ -83,9 +83,10 @@ def main():
     start = 'key id="%d"' % key
     end   = 'key'
 
-    utils.WriteKeymap(start, end)
+    if utils.WriteKeymap(start, end):
+        xbmc.sleep(1000)
+        xbmc.executebuiltin('Action(reloadkeymaps)')  
 
-    return True
     
 if __name__ == '__main__':
     main()

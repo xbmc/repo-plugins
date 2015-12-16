@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Viewster XBMC Addon
+# Viewster Kodi Addon
 
 import sys
 import httplib
@@ -11,9 +11,7 @@ h = HTMLParser.HTMLParser()
 qp  = urllib.quote_plus
 uqp = urllib.unquote_plus
 
-GENRE_TV  = "TV"
 UTF8          = 'utf-8'
-MAX_PER_PAGE  = 25
 
 addon         = xbmcaddon.Addon('plugin.video.viewster')
 __addonname__ = addon.getAddonInfo('name')
@@ -52,10 +50,18 @@ def getRequest(url, udata=None, headers = defaultHeaders):
 
 def getToken():
 
-    url   = 'http://www.viewster.com/api/token/'
-    udata = ''
-    headers = defaultHeaders
-    headers['X-Requested-With']= 'XMLHttpRequest'
+    url = 'https://www.viewster.com/'
+    udata = None
+    headers = {'User-Agent': USER_AGENT,
+               'Accept-Encoding': 'gzip, deflate, sdch',
+               'Accept-Language': 'en-US,en;q=0.8',
+               'Connection': 'keep-alive'}
+    headers['Host'] = 'www.viewster.com'
+    headers['Upgrade-Insecure-Requests'] = '1'
+    headers['Accept'] = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+    headers['If-None-Match'] = 'W/"1db6-XP9MvSddVilh+ytjiBJpJw"'
+    headers['If-Modified-Since'] = 'Wed, 09 Sep 2015 14:47:22 GMT'
+
     req = urllib2.Request(url, udata, headers)
     response = urllib2.urlopen(req)
     token = uqp(re.compile('api_token=(.+?);',re.DOTALL).search(str(response.info())).group(1))
@@ -131,6 +137,7 @@ def getMovie(url, name):
     html = getRequest(url, None, headers)
     try: a = json.loads(html)['Items']
     except: return
+
     for b in a:
        img    = 'http://image.api.viewster.com/movies/%s/image?width=196&height=279' % b['OriginId']
        name = b['Title']
@@ -293,8 +300,8 @@ def getShow(url, catname):
 
 def getVideo(sid, name):
 
-#    url = 'https://public-api.viewster.com/movies/'+sid+'/video?mediaType=application%2Ff4m%2Bxml'
-    url = 'https://public-api.viewster.com/movies/'+sid+'/video'
+    url = 'https://public-api.viewster.com/movies/'+sid+'/video?mediaType=video%2Fmp4'
+
     headers = defaultHeaders
     headers['Auth-token'] = getToken()
     headers['X-Requested-With']= 'XMLHttpRequest'

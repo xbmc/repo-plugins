@@ -37,7 +37,8 @@ PLUGIN_ID = 'plugin.video.nrwision'
 BASE_URL = 'http://wwwocf.nrwision.de'
 ART_BASE_URL = BASE_URL + '/fileadmin/kodi/images'
 BACKGROUND = ART_BASE_URL + '/kodi_hintergrund.png'
-USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.30 (KHTML, like Gecko) Ubuntu/11.04 Chromium/12.0.742.112 Chrome/12.0.742.112 Safari/534.30 Kodi"
+USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.30 (KHTML, like Gecko) Ubuntu/11.04 Chromium/12.0.742.112 Chrome/12.0.742.112 Safari/534.30 Kodi'
+FILE_NOT_FOUND = ''
 
 plugin = Plugin(PLUGIN_NAME, PLUGIN_ID, __file__)
 plugin.register_module(playlist, url_prefix='/_playlist')
@@ -51,6 +52,7 @@ xbmcplugin.setContent(addonHandle, 'tvshows')
 def show_homepage():
     xbmc.executebuiltin('Container.SetViewMode(500)')
 
+    addMenuEntry('live', addon.getLocalizedString(30007), '/kodi_live.png', BACKGROUND)
     addMenuEntry('tipps', addon.getLocalizedString(30001), '/kodi_tippsderwoche.png', BACKGROUND)
     addMenuEntry('videocharts', addon.getLocalizedString(30002), '/kodi_videocharts.png', BACKGROUND)
     addMenuEntry('woche', addon.getLocalizedString(30006), '/kodi_aktuell.png', BACKGROUND)
@@ -96,6 +98,11 @@ def orte2(url):
     buildMenuFromJson(url)
     return []
 
+@plugin.route('/live/')
+def live():
+    li = xbmcgui.ListItem('Live', iconImage='/kodi_live.png')
+    xbmc.Player(xbmc.PLAYER_CORE_AUTO).play('rtmp://fms.nrwision.de/live playpath=livestream swfUrl=http://www.nrwision.de/typo3conf/ext/user_pxcontent/res/player5.swf pageUrl=https://www.nrwision.de/programm/livestream.html swfVfy=true live=true', li)
+    return []
 
 # Suche
 @plugin.route('/suche/')
@@ -152,7 +159,8 @@ def buildList(sourceUrl):
         xbmc.executebuiltin('Container.SetViewMode(515)')
 
         for show in data['result']:
-            url = plugin.url_for('view', url=show['video5'], title=show['title'], icon=show['imgpath'])
+            xbmc.log(show['title'])
+            url = plugin.url_for('view', url=show.get('video5', FILE_NOT_FOUND), title=show['title'], icon=show['imgpath'])
             li = xbmcgui.ListItem(
                 show['title'],
                 iconImage=BASE_URL + '/' + show['imgpath'])
@@ -220,6 +228,8 @@ def buildMenuFromJson(sourceUrl):
         xbmc.executebuiltin('Container.SetViewMode(' + data['params']['viewmode'] +')')
 
         for i in data['menu']:
+            if ('stringId' in i):
+                i['title'] = addon.getLocalizedString(i['stringId'])
             addSubmenuEntry(i['type'], i['url'] , i['title'], i['image'], BACKGROUND)
         xbmcplugin.endOfDirectory(addonHandle)
     return []

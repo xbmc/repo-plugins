@@ -6,3 +6,10 @@ v1.0.2
 
 v1.0.3
 - bug fixes
+
+v1.1
+- bug fix
+- live stream added
+
+v1.2
+- improved localisation

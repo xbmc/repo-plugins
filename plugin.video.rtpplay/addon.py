@@ -161,6 +161,7 @@ elif mode==19: add_favourite(name,url,iconimage,plot)
 elif mode==20: remove_favourite(name)
 elif mode==21: mark_as_watched(url)
 elif mode==22: remove_watched_mark(url)
+elif mode==23: play_live(url)
 elif mode == "resolve_and_play": play_from_outside(name)
 
 if (mode != 12) and (mode != 8) and (mode !=5) and (mode !=19) and (mode !=20) and (mode !=21) and (mode !=22) and (mode != "resolve_and_play"):

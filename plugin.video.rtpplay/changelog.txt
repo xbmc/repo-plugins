@@ -1,3 +1,6 @@
+Version 2.5.3 (18/12/2015)
+-Fixed live channels
+
 Version 2.5.1 (21/11/2015)
 -Global update (tks sheik)
 

@@ -37,9 +37,10 @@ def radiotv_channels(url):
 		for titulo,url2,prog,img_old in match:
 			try:
 				titulo = title_clean_up(titulo)
-				stream_url = grab_live_stream_url(base_url + url2)
+				stream_url = base_url + url2
 				img = img_old
-				addLink('[B][COLOR blue]' + titulo + '[/COLOR]' +' - ' + title_clean_up(prog)+ '[/B]',stream_url,img,totaltv)
+				addDir('[B][COLOR blue]' + titulo + '[/COLOR]' +' - ' + title_clean_up(prog)+ '[/B]',stream_url,23,img,totaltv,pasta=False,informacion=None)
+				#addLink(,stream_url,img,totaltv)
 			except: pass
 	else:
 		sys.exit(0)
@@ -79,7 +80,7 @@ def grab_live_stream_url(url):
 					url2=match[0]
 					return url2
 				else:
-					id_ = re.compile('liveOb.+?file = liveO.+?\.(.+?);').findall(page_source)
+					id_ = re.compile('live.+?file = live.+?\.(.+?);').findall(page_source)
 					file_ = re.compile('"'+id_[0]+'": "(.+?)"').findall(page_source)
 					streamer = re.compile('"streamer": "(.+?)"').findall(page_source)
 					application = re.compile('"application": "(.+?)"').findall(page_source)
@@ -98,6 +99,10 @@ def grab_live_stream_url(url):
         				return base64.b64decode(url2)
 	else:
 		return None
+
+def play_live(url):
+	stream_url = grab_live_stream_url(url)
+	xbmc.Player().play(stream_url)
 		
 def play_from_outside(name):
 	url = 'http://www.rtp.pt/play/direto/' + name

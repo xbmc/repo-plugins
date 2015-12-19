@@ -364,8 +364,15 @@ def play_video( url, name, download ):
     data = getUrl( url )
     
     title = re.search('<meta itemprop="name" content="(.+?)">', data)
-    video_urls = re.compile("file: '(.+?)'").findall(data)
     thumb = re.search('<meta itemprop="thumbnailUrl" content="(.+?)">', data)
+
+    trailerId = re.search( '<meta itemprop="embedUrl" content=".+traileraddict\.com/emd/(.+?)\?id=.+?">', data)
+    
+    if trailerId:
+        data = getUrl('http://v.traileraddict.com/%s' % trailerId.group(1))
+        video_urls = re.compile("file: '(.+?)'").findall(data)    
+    else:
+        return
     
     if title:
         name = urllib.unquote_plus(title.group(1)) + ' (' + settings.getLocalizedString(30017) + ')'

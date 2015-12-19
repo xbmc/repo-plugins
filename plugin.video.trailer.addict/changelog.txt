@@ -1,3 +1,6 @@
+[B]Version 2.4.0[/B]
+- Adjusted to changes in site layout for playable link location
+
 [B]Version 2.3.0[/B]
 - Updated to new site video links, site no longer uses flash
 

@@ -57,7 +57,7 @@ class XbmcContextUI(AbstractContextUI):
 
         # Starting with Gotham (13.X > ...)
         dialog = xbmcgui.Dialog()
-        result = dialog.input(title, str(default), type=xbmcgui.INPUT_ALPHANUM)
+        result = dialog.input(title, utils.to_unicode(default), type=xbmcgui.INPUT_ALPHANUM)
         if result:
             text = utils.to_unicode(result)
             return True, text

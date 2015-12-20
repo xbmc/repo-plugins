@@ -140,8 +140,8 @@ def ScrapeSearchEpisodes(url):
     # there are several classes of "available" programmes.
     # Thus, we need to match all of them.
     match1 = re.compile(
-        'programme"  data-ip-id="(.+?)">.+?class="title top-title">(.+?)'
-        '<.+?img src="(.+?)".+?<p class="synopsis">(.+?)</p>',
+        'programme"  data-ip-id="(.+?)">.+?class="title.+?top-title">(.+?)'
+        '<.+?img.+?src="(.+?)".+?<p.+?class="synopsis">(.+?)</p>',
         re.DOTALL).findall(html.replace('amp;', ''))
     for programme_id, name, iconimage, plot in match1:
         # Some programmes actually contain multiple episodes (haven't seen that for episodes yet).
@@ -151,8 +151,8 @@ def ScrapeSearchEpisodes(url):
         # If multiple episodes are found, the programme_id is suitable to add a new directory.
         if match_episodes:
             num_episodes = re.compile(
-                '<a class="view-more-container avail stat" href="/iplayer/episodes/%s".+?'
-                '<em class="view-more-heading">(.+?)<' % programme_id,
+                '<a.+?class="view-more-container.+?avail.+?stat".+?href="/iplayer/episodes/%s".+?'
+                '<em.+?class="view-more-heading">(.+?)<' % programme_id,
                 re.DOTALL).findall(html)
             AddMenuEntry("%s - %s %s" % (
                 name, num_episodes[0], translation(31013)), programme_id, 121, iconimage, plot, '')
@@ -161,10 +161,10 @@ def ScrapeSearchEpisodes(url):
             CheckAutoplay(name, episode_url, iconimage, plot)
     match1 = re.compile(
         'episode"  data-ip-id="(.+?)">'
-        '.+?" title="(.+?)"'
-        '.+?img src="(.+?)"'
-        '.+?<p class="synopsis">(.+?)</p>'
-        '(.+?)<div class="period"',
+        '.+?".+?title="(.+?)"'
+        '.+?img.+?src="(.+?)"'
+        '.+?<p.+?class="synopsis">(.+?)</p>'
+        '(.+?)<div.+?class="period"',
         re.DOTALL).findall(html.replace('amp;', ''))
     for programme_id, name, iconimage, plot, more in match1:
         episode_url = "http://www.bbc.co.uk/iplayer/episode/%s" % programme_id
@@ -250,13 +250,14 @@ def ScrapeCategoryEpisodes(url):
     """
     # Read selected category's page.
     html = OpenURL(url)
+
     # Scrape all programmes on this page and create one menu entry each.
     match = re.compile(
         'data-ip-id="(.+?)">.+?'
-        '<a href="/iplayer/episode/(.+?)/.+?"title top-title">'
-        '(.+?)<.+?img src="(.+?)"(.+?)'
-        '<p class="synopsis">(.+?)</p>'
-        '(.+?)<div class="period"',
+        '<a.+?href="/iplayer/episode/(.+?)/.+?"title.+?top-title">'
+        '(.+?)<.+?img.+?src="(.+?)"(.+?)'
+        '<p.+?class="synopsis">(.+?)</p>'
+        '(.+?)<div.+?class="period"',
         re.DOTALL).findall(html.replace('amp;', ''))
     for programme_id, episode_id, name, iconimage, sub_content, plot, more in match:
         # Some programmes actually contain multiple episodes.
@@ -266,7 +267,7 @@ def ScrapeCategoryEpisodes(url):
         # If multiple episodes are found, the programme_id is suitable to add a new directory.
         if match_episodes:
             num_episodes = re.search(
-                '<a class="view-more-container avail stat" '
+                '<a.+?class="view-more-container.+?avail.+?stat".+?'
                 'href="/iplayer/episodes/%s".+?<em '
                 'class="view-more-heading">(.+?)<' % programme_id,
                 html,
@@ -445,15 +446,16 @@ def ListHighlights(url):
 
 def GetGroups(url):
     """Scrapes information on a particular group, a special kind of collection."""
+
     new_url = "http://www.bbc.co.uk/iplayer/group/%s" % url
     html = OpenURL(new_url)
 
     while True:
         # Extract all programmes from the page
         match = re.compile(
-            'data-ip-id=".+?">.+?<a href="(.+?)" title="(.+?)'
+            'data-ip-id=".+?">.+?<a.+?href="(.+?)".+?title="(.+?)'
             '".+?data-ip-src="(.+?)">.+?class="synopsis">(.+?)</p>'
-            '(.+?)<div class="period"',
+            '(.+?)<div.+?class="period"',
             re.DOTALL).findall(html)
 
         for URL, name, iconimage, plot, more in match:
@@ -509,9 +511,9 @@ def GetEpisodes(programme_id):
     while True:
         # Extract all programmes from the page
         match = re.compile(
-            'data-ip-id=".+?">.+?<a href="(.+?)" title="(.+?)'
+            'data-ip-id=".+?">.+?<a.+?href="(.+?)".+?title="(.+?)'
             '".+?data-ip-src="(.+?)">.+?class="synopsis">(.+?)</p>'
-            '(.+?)<div class="period"',
+            '(.+?)<div.+?class="period"',
             re.DOTALL).findall(html)
 
         for URL, name, iconimage, plot, more in match:

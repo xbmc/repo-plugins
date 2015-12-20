@@ -34,5 +34,8 @@ class XbmcSystemVersion(AbstractSystemVersion):
         if self._version >= (15, 0):
             self._name = 'Isengard'
             pass
+        if self._version >= (16, 0):
+            self._name = 'Jarvis'
+            pass
 
     pass

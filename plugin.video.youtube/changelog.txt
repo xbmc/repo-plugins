@@ -1,3 +1,7 @@
+5.1.14 (2015-12-22)
+[upd] default search order by date (newest first)
+[fix] VEVO signature calculation
+
 5.1.13 (2015-12-20)
 [fix] frodo...DIE FRODO DIE !!!
 [fix] some cleanup for Jarvis

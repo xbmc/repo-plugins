@@ -154,7 +154,7 @@ class Cipher(object):
     def _find_function_body(self, function_name, java_script):
         # normalize function name
         function_name = function_name.replace('$', '\$')
-        match = re.search(r'(?:var\s+%s=function|function\s+%s)\((?P<parameter>[^)]+)\)\s?\{\s?(?P<body>[^}]+)\s?\}' % (function_name, function_name), java_script)
+        match = re.search(r'\s?%s=function\((?P<parameter>[^)]+)\)\s?\{\s?(?P<body>[^}]+)\s?\}' % function_name, java_script)
         if match:
             return match.group('parameter'), match.group('body')
 

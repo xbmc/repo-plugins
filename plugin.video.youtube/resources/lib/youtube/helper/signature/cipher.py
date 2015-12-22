@@ -67,8 +67,8 @@ class Cipher(object):
             raise Exception('Signature function not found')
 
         function = self._find_function_body(function_name, java_script)
-        function_parameter = function[0].split(',')
-        function_body = function[1].split(';')
+        function_parameter = function[0].replace('\n', '').split(',')
+        function_body = function[1].replace('\n', '').split(';')
 
         json_script = {'actions': []}
         for line in function_body:

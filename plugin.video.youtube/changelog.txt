@@ -1,3 +1,6 @@
+5.1.15 (2015-12-22)
+[fix] signature calculation
+
 5.1.14 (2015-12-22)
 [upd] default search order by date (newest first)
 [fix] VEVO signature calculation

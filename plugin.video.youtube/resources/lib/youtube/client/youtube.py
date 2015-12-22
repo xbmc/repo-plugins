@@ -474,7 +474,8 @@ class YouTube(LoginClient):
                   'part': 'snippet',
                   'regionCode': self._country,
                   'hl': self._language,
-                  'maxResults': str(self._max_results)}
+                  'maxResults': str(self._max_results),
+                  'order': 'date'}
         if event_type and event_type in ['live', 'upcoming', 'completed']:
             params['eventType'] = event_type
             pass

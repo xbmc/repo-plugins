@@ -135,7 +135,7 @@ if mode[0] == "folder":
 				)
 				li.addStreamInfo(
 					"audio",
-					{ 	"codec", oneItem["audiocodec"] }
+					{ "codec": oneItem["audiocodec"] }
 				)
 			# The below is necessary in order for xbmcplugin.setResolvedUrl() to work properly
 			li.setProperty("IsPlayable", "true")

@@ -1,3 +1,9 @@
+v1.2.1 -- 21-Dec-2015
+- Reverted mistaken Python version dependency,
+
+v1.2.0 -- 20-Dec-2015
+- Syntax changes to make the plugin work on the Android port of Kodi
+
 v1.1.2 -- 06-Dec-2015
 - Added support for Russian (Cyrillic) filenames and folder names
 

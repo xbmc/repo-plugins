@@ -124,7 +124,13 @@ class PCloudApi:
 			errorMessage = self.GetErrorMessage(response["result"])
 			raise Exception("Error calling getthumbslinks: " + errorMessage)
 		# Turn it into a dictionary indexed by file ID, the value being the thumbnail URL
-		thumbs = { oneThumb["fileid"]: "https://{0}{1}".format(oneThumb["hosts"][0], oneThumb["path"]) for oneThumb in response["thumbs"] if oneThumb["result"] == 0 } 
+		thumbs = dict()
+		for oneThumb in response["thumbs"]:
+			if oneThumb["result"] == 0:
+				thumbs[oneThumb["fileid"]] = "https://{0}{1}".format(oneThumb["hosts"][0], oneThumb["path"])
+		# NOTE: cannot use list comprehension (like below) because the Python interpreter in
+		# the Android Kodi port does not seem to understand the syntax.
+		# thumbs = { oneThumb["fileid"]: "https://{0}{1}".format(oneThumb["hosts"][0], oneThumb["path"]) for oneThumb in response["thumbs"] if oneThumb["result"] == 0 } 
 		return thumbs
 
 	def DeleteFile(self, fileID):

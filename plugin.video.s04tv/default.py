@@ -1,4 +1,4 @@
-# Copyright (C) 2014 Malte Loepmann (maloep@googlemail.com)
+# Copyright (C) 2015 Malte Loepmann (maloep@googlemail.com)
 #
 # This program is free software; you can redistribute it and/or modify it under the terms 
 # of the GNU General Public License as published by the Free Software Foundation; 
@@ -251,8 +251,9 @@ def buildVideoDir(url, doc):
             if(not hideflag):
                 title = '[EXCL] ' +title
             extraInfo['IsFreeContent'] = 'False'
-                
-        url = BASE_URL + url
+        
+        if(not url.startswith("http")):
+            url = BASE_URL + url
         addLink(title, url, 4, imageUrl, date, extraInfo)
     
     #paging
@@ -275,8 +276,15 @@ def buildVideoDir(url, doc):
 
 
 def getVideoUrl(url, doc):
-    xbmc.log('getVideoUrl')
+    xbmc.log('getVideoUrl: url=' +url)
     
+	#HACK: Free content may be hosted on youtube
+    if(url.startswith("https://youtu.be/")):
+        videoId = url.replace("https://youtu.be/", "")
+        url='plugin://plugin.video.youtube/?action=play_video&videoid=' +videoId
+        listitem = xbmcgui.ListItem(path=url)
+        return xbmcplugin.setResolvedUrl(thisPlugin, True, listitem)
+	
     #check if we need to login
     isFreeContent = xbmc.getInfoLabel( "ListItem.Property(IsFreeContent)" ) == 'True'
     if(not isFreeContent):

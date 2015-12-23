@@ -2,6 +2,7 @@
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon, urllib, re, string, sys, os, buggalo
 import simplejson as json
 import hashlib
+import unwise
 
 plugin = 'Trailer Addict'
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
@@ -370,7 +371,8 @@ def play_video( url, name, download ):
     
     if trailerId:
         data = getUrl('http://v.traileraddict.com/%s' % trailerId.group(1))
-        video_urls = re.compile("file: '(.+?)'").findall(data)    
+        data = unwise.unwise_process(data)
+        video_urls = re.compile("file:'(.+?)'").findall(data)    
     else:
         return
     

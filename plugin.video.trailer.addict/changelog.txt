@@ -1,3 +1,6 @@
+[B]Version 2.5.0[/B]
+- Added unwise unpacker library
+
 [B]Version 2.4.0[/B]
 - Adjusted to changes in site layout for playable link location
 

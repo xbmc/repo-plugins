@@ -20,11 +20,11 @@ MODE_CHANNELS = "kanaler"
 MODE_A_TO_O = "a-o"
 MODE_PROGRAM = "pr"
 MODE_CLIPS = "clips"
-MODE_LIVE_PROGRAMS = "live-channels"
-MODE_LATEST = "ep"
+MODE_LIVE_PROGRAMS = "live"
+MODE_LATEST = "senaste"
 MODE_LATEST_NEWS = 'news'
-MODE_POPULAR = "popular"
-MODE_LAST_CHANCE = "last-chance"
+MODE_POPULAR = "populara"
+MODE_LAST_CHANCE = "sista-chansen"
 MODE_VIDEO = "video"
 MODE_CATEGORIES = "categories"
 MODE_CATEGORY = "ti"
@@ -57,7 +57,6 @@ def viewStart():
 
   addDirectoryItem(localize(30009), { "mode": MODE_POPULAR })
   addDirectoryItem(localize(30003), { "mode": MODE_LATEST })
-  addDirectoryItem(localize(30004), { "mode": MODE_LATEST_NEWS })
   addDirectoryItem(localize(30010), { "mode": MODE_LAST_CHANCE })
   addDirectoryItem(localize(30002), { "mode": MODE_LIVE_PROGRAMS })
   addDirectoryItem(localize(30008), { "mode": MODE_CHANNELS })
@@ -118,41 +117,14 @@ def viewProgramsByLetter(letter):
   for program in programs:
     addDirectoryItem(program["title"], { "mode": MODE_PROGRAM, "url": program["url"] })
 
-def viewPopular():
-  articles = svt.getPopular()
-  if not articles:
+def viewSection(section, page):
+  (items, moreItems) = svt.getItems(section, page)
+  if not items:
     return
-  for article in articles:
-    createDirItem(article, MODE_VIDEO)
-
-def viewLatestVideos():
-  articles = svt.getLatestVideos()
-  if not articles:
-    return
-  for article in articles:
-    createDirItem(article, MODE_VIDEO)
-
-def viewLatestNews():
-  articles = svt.getLatestNews()
-  if not articles:
-    return
-  for article in articles:
-    createDirItem(article, MODE_VIDEO)
-
-def viewLastChance():
-  articles = svt.getLastChance()
-  if not articles:
-    return
-  for article in articles:
-    createDirItem(article, MODE_VIDEO)
-
-def viewLivePrograms():
-  articles = svt.getLivePrograms()
-  if not articles:
-    return
-  for article in articles:
-    if article["live"] == True:
-      createDirItem(article, MODE_VIDEO)
+  for item in items:
+    createDirItem(item, MODE_VIDEO)
+  if moreItems:
+    addNextPageItem(page+1, section)
 
 def viewChannels():
   channels = svt.getChannels()
@@ -274,6 +246,10 @@ def createDirItem(article, mode):
       info = article["info"]
     addDirectoryItem(article["title"], params, article["thumbnail"], folder, False, info)
 
+def addNextPageItem(nextPage, section):
+  addDirectoryItem("Next page",
+                   {  "page": nextPage,
+                      "mode": section})
 
 def startVideo(url):
   """
@@ -352,8 +328,12 @@ def addDirectoryItem(title, params, thumbnail = None, folder = True, live = Fals
 
 # Main segment of script
 ARG_PARAMS = helper.getUrlParameters(sys.argv[2])
+common.log(ARG_PARAMS)
 ARG_MODE = ARG_PARAMS.get("mode")
 ARG_URL = urllib.unquote_plus(ARG_PARAMS.get("url", ""))
+ARG_PAGE = ARG_PARAMS.get("page")
+if not ARG_PAGE:
+  ARG_PAGE = "1"
 
 if not ARG_MODE:
   viewStart()
@@ -373,16 +353,11 @@ elif ARG_MODE == MODE_CLIPS:
   viewClips(ARG_URL)
 elif ARG_MODE == MODE_VIDEO:
   startVideo(ARG_URL)
-elif ARG_MODE == MODE_LATEST:
-  viewLatestVideos()
-elif ARG_MODE == MODE_LATEST_NEWS:
-  viewLatestNews()
-elif ARG_MODE == MODE_POPULAR:
-  viewPopular()
-elif ARG_MODE == MODE_LAST_CHANCE:
-  viewLastChance()
-elif ARG_MODE == MODE_LIVE_PROGRAMS:
-  viewLivePrograms()
+elif ARG_MODE == MODE_POPULAR or \
+     ARG_MODE == MODE_LATEST or \
+     ARG_MODE == MODE_LAST_CHANCE or \
+     ARG_MODE == MODE_LIVE_PROGRAMS:
+  viewSection(ARG_MODE, int(ARG_PAGE))
 elif ARG_MODE == MODE_CHANNELS:
   viewChannels()
 elif ARG_MODE == MODE_LETTER:

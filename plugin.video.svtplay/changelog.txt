@@ -1,3 +1,8 @@
+Version 4.0.20
+-------------
+- Update to parser for new site layout
+- Merry Christmas!
+
 Version 4.0.18
 -------------
 - Fix spamming genres (rysport)

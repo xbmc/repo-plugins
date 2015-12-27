@@ -116,9 +116,10 @@ def getShows(gcurl):
       
 
         html = getRequest('http://abc.go.com/shows/abc-updates/news/insider/143-for-free-watch-abc-watch-full-episodes-with-no-sign-in-042715?cid=abchp_143_for_free')
-        m = re.compile('<section class="description expanded">(.+?)</section>', re.DOTALL).search(html)
+        m = re.compile('<section class="m-blog_detail-body(.+?)</section>', re.DOTALL).search(html)
         try:    blob = re.compile('<a href="'+gcurl+'"(.+?)<p align="center">',re.DOTALL).search(html[m.start(1):m.end(1)]).group(1)
         except: blob = re.compile('<a href="'+gcurl+'"(.+?)</section>',re.DOTALL).search(html).group(1)
+        blob = blob.replace(' target="_self"','')
         vids = re.compile('<a href="(.+?)">(.+?)</a>.+?>(.+?)</p>',re.DOTALL).findall(blob)
         if showDialog == 0 : 
             pDialog = xbmcgui.DialogProgress()
@@ -139,23 +140,28 @@ def getShows(gcurl):
                except: 
                  try: 
                      vd = re.compile('data-video-id="VDKA(.+?)"',re.DOTALL).search(html).group(1)
-                 except: continue
+                 except:
+                     continue
 
                url = 'http://cdnapi.kaltura.com//api_v3/index.php?service=multirequest&action=null&ignoreNull=1&2%3Aaction=getContextData&3%3Aaction=list&2%3AcontextDataParams%3AflavorTags=uplynk&2%3AentryId='+vd+'&apiVersion=3%2E1%2E5&1%3Aversion=-1&2%3AcontextDataParams%3AstreamerType=http&3%3Afilter%3AentryIdEqual='+vd+'&clientTag=kdp%3Av3%2E9%2E2&1%3AentryId='+vd+'&2%3AcontextDataParams%3AobjectType=KalturaEntryContextDataParams&3%3Afilter%3AobjectType=KalturaCuePointFilter&2%3Aservice=baseentry&1%3Aservice=baseentry&1%3Aaction=get'
                html = getRequest(url)
                url,duration,catname,thumb,sdate = re.compile('<dataUrl>(.+?)</dataUrl>.+?<duration>(.+?)</duration>.+?<categories>(.+?)</categories>.+?<thumbnailUrl>(.+?)</thumbnailUrl>.+?<startDate>(.+?)</startDate>',re.DOTALL).search(html).groups()
-#               thumb = re.compile('<thumbnailUrl>(.+?)</thumbnailUrl>',re.DOTALL).search(html).group(1).strip()
-#               catname = re.compile('<categories>(.+?)</categories>',re.DOTALL).search(html).group(1).strip()
                url = url.strip()
                thumb = thumb.strip()
                fanart = thumb
                infoList = {}
                try:
                  x = name.split(' ',3)
-                 if x[1].startswith('Ep'):
-                   infoList['Season'] = int(x[0].replace('S',''))
-                   infoList['Episode'] = int(x[2])
-                   name = x[3]
+                 if x[1].startswith('Ep') or (x[0].startswith('S') and x[1].startswith('E')):
+                   infoList['Season'] = int(x[0].replace('S','',1))
+                   if x[1].startswith('Ep'):
+                      infoList['Episode'] = int(x[2])
+                      name = x[3]
+                   else:
+                      x = name.split(' ',2)
+                      infoList['Episode'] = int(x[1].replace('E','',1))
+                      name = x[2]
+
                  else: raise ValueError('Non fatal error')
                except:
                    infoList['Season'] = 0

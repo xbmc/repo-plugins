@@ -1,3 +1,11 @@
+v1.3.0
+Redesign of scrapers for more robustness, speed and ease of maintenance.
+New progress bar during lengthy scrapes.
+Search groups are supported again.
+Fixed missing aired date.
+Corrected and added dependencies.
+Added support for keyword injection in Search.
+
 v1.2.10
 Fix for changed HTML layout.
 

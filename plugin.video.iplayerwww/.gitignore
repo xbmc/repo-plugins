@@ -64,3 +64,4 @@ target/
 
 # Backup Files
 *.bak
+*~

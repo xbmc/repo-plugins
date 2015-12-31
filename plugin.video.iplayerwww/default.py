@@ -120,7 +120,7 @@ def ParseAired(aired):
     if aired:
         try:
             # Need to use equivelent for datetime.strptime() due to weird TypeError.
-            return datetime.datetime(*(time.strptime(aired, '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
+            return datetime.datetime(*(time.strptime(aired[0], '%d %b %Y')[0:6])).strftime('%d/%m/%Y')
         except ValueError:
             pass
     return ''
@@ -191,7 +191,8 @@ def ScrapeEpisodes(page_url):
         # NOTE remove inner li to match outer li
 
         # <li data-version-type="hd">
-        html = re.sub(r'<li data-version-type.*?</li>', '', html, flags=(re.DOTALL | re.MULTILINE))
+        html = re.compile(r'<li data-version-type.*?</li>',
+                          flags=(re.DOTALL | re.MULTILINE)).sub('', html)
 
         # <li class="list-item programme"  data-ip-id="p026f2t4">
         list_items = re.findall(r'<li class="list-item.*?</li>', html, flags=(re.DOTALL | re.MULTILINE))
@@ -489,7 +490,7 @@ def ListHighlights(highlights_url):
             listed, flags=(re.DOTALL | re.MULTILINE))
         if title_match:
             name = title_match.group(1)
-            name = re.sub(r'<.*?>','', name, flags=(re.DOTALL | re.MULTILINE))
+            name = re.compile(r'<.*?>', flags=(re.DOTALL | re.MULTILINE)).sub('', name)
 
         # <p class="grouped-items__subtitle typo typo--canary">24/12/2015</p>
         subtitle_match = re.search(
@@ -560,7 +561,7 @@ def ListHighlights(highlights_url):
             single, flags=(re.DOTALL | re.MULTILINE))
         if title_match:
             name = title_match.group(1)
-            name = re.sub(r'<.*?>','', name, flags=(re.DOTALL | re.MULTILINE))
+            name = re.compile(r'<.*?>', flags=(re.DOTALL | re.MULTILINE)).sub('', name)
 
         # <p class="single-item__subtitle typo typo--canary">From Buddhist Monk to Rock Star</p>
         subtitle_match = re.search(

@@ -1,3 +1,7 @@
+v1.3.1
+Fixed aired date in Favourites and Watching.
+Fixed incompatibility with Python 2.6.
+
 v1.3.0
 Redesign of scrapers for more robustness, speed and ease of maintenance.
 New progress bar during lengthy scrapes.

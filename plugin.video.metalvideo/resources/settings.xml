@@ -7,5 +7,8 @@
 		<setting type="sep" />
 		<setting label="$ADDON[script.module.xbmcutil 32921]" type="action" action="RunScript(plugin.video.metalvideo, setViewMode, folder)"/>
 		<setting label="$ADDON[script.module.xbmcutil 32922]" type="action" action="RunScript(plugin.video.metalvideo, setViewMode, video)"/>
+		<!-- Disable Caching -->
+		<setting type="sep" />
+		<setting id="disable-cache" type="bool" label="$LOCALIZE[24021] $LOCALIZE[439]" default="false"/>
 	</category>
 </settings>

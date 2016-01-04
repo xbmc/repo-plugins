@@ -1,5 +1,10 @@
+1.0.2 (2015-12-31)
+  - fix #2: call ListItem.setInfo() once for each infoLabel
+  - fix #1: python2.6/3.0 string formatting requires field numbers
+
 1.0.1 (2015-12-07)
   - use ListItem.setArt() rather than .setProperty()
+
 1.0.0 (2015.12.06)
   - first public release
 

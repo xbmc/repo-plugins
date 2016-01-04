@@ -21,24 +21,34 @@ import urllib2,re
 from operator import itemgetter, attrgetter
 import time
 from datetime import datetime
+import xml.etree.ElementTree as ET
 
 class RtlXL:
     def __init__(self):
         self.overzichtcache = 'leeg'
         self.items = 'leeg'
     
+    def __gettextitem(self, element, elementnaam):
+        el = element.find(elementnaam)
+        if el is None:
+            return ''
+        return el.text
+    
     def __overzicht(self):
         req = urllib2.Request('http://www.rtl.nl/system/s4m/ipadfd/d=ipad/')
         req.add_header('User-Agent', 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:25.0) Gecko/20100101 Firefox/25.0')
+        req.add_header('Accept-Encoding', 'utf-8')
         response = urllib2.urlopen(req)
-        link=response.read()
+        xmlstring = response.read()
         response.close()
+        tree = ET.ElementTree(ET.fromstring(xmlstring))
+        root = tree.getroot()
         rtlitemlist = list()
-        for match in re.compile('<serieitem>(.+?)</serieitem>').findall(link):
-            itemsperserie_url = re.compile('<itemsperserie_url>(.+?)</itemsperserie_url>').findall(match)
-            serienaam = re.compile('<serienaam>(.+?)</serienaam>').findall(match)
-            seriescoverurl = re.compile('<seriescoverurl>(.+?)</seriescoverurl>').findall(match)
-            rtlitem = {'label': serienaam[0], 'url': itemsperserie_url[0], 'thumbnail': seriescoverurl[0]}
+        for serieitem in root.findall('serieitem'):
+            itemsperserie_url = self.__gettextitem(serieitem,'itemsperserie_url')
+            serienaam = self.__gettextitem(serieitem,'serienaam')
+            seriescoverurl = self.__gettextitem(serieitem,'seriescoverurl')
+            rtlitem = {'label': serienaam, 'url': itemsperserie_url, 'thumbnail': seriescoverurl}
             rtlitemlist.append(rtlitem)
         self.overzichtcache = sorted(rtlitemlist, key=lambda x: x['label'], reverse=False)
         
@@ -51,21 +61,24 @@ class RtlXL:
     def __items(self, url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:25.0) Gecko/20100101 Firefox/25.0')
+        req.add_header('Accept-Encoding', 'utf-8')
         response = urllib2.urlopen(req)
-        link=response.read()
+        xmlstring = response.read()
         response.close()
         rtlitemlist = list()
-        for match in re.compile('<item>(.+?)</item>').findall(link):
-            TimeStamp = re.compile('<TimeStamp>(.+?)</TimeStamp>').findall(match)
-            classname = re.compile('<classname>(.+?)</classname>').findall(match)
-            samenvattingkort = re.compile('<samenvattingkort>(.+?)</samenvattingkort>').findall(match)
-            thumbnail = re.compile('<thumbnail>(.+?)</thumbnail>').findall(match)
-            title = re.compile('<title>(.+?)</title>').findall(match)
-            movie = re.compile('<movie>(.+?)</movie>').findall(match)
-            serienaam = re.compile('<serienaam>(.+?)</serienaam>').findall(match)
-            if len(title) == 1 and len(TimeStamp) == 1 and len(thumbnail) == 1 and len(samenvattingkort) == 1 and len(movie) == 1 and len(classname) == 1 and len(serienaam) == 1:
-                rtlitem = {'label': title[0],'TimeStamp': TimeStamp[0],'thumbnail': thumbnail[0],'path': movie[0],'classname': classname[0]}
-                rtlitemlist.append(rtlitem)
+        tree = ET.ElementTree(ET.fromstring(xmlstring))
+        root = tree.getroot()
+        rtlitemlist = list()
+        for item in root.findall('item'):
+            TimeStamp = self.__gettextitem(item,'TimeStamp')
+            classname = self.__gettextitem(item,'classname')
+            samenvattingkort = self.__gettextitem(item,'samenvattingkort')
+            thumbnail = self.__gettextitem(item,'thumbnail')
+            title = self.__gettextitem(item,'title')
+            movie = self.__gettextitem(item,'movie')
+            serienaam = self.__gettextitem(item,'serienaam')
+            rtlitem = {'label': title,'TimeStamp': TimeStamp,'thumbnail': thumbnail,'path': movie,'classname': classname}
+            rtlitemlist.append(rtlitem)
         self.items = rtlitemlist    
     
     def __is_uitzending(self,item):

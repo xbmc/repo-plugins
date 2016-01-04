@@ -1,4 +1,7 @@
-﻿Version 1.1.0
+﻿Version 1.1.1
+Read XML as UTF-8
+
+Version 1.1.0
 Refactor the code.
 
 ﻿﻿﻿﻿﻿﻿﻿﻿Version 1.0.11

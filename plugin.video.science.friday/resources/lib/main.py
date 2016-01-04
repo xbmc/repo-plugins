@@ -1,5 +1,5 @@
 """
-	Copyright: (c) 2013 William Forde (willforde+kodi@gmail.com)
+	Copyright: (c) 2016 William Forde (willforde+kodi@gmail.com)
 	License: GPLv3, see LICENSE for more details
 	
 	This program is free software: you can redistribute it and/or modify
@@ -24,68 +24,35 @@ BASEURL = u"http://www.sciencefriday.com%s"
 class Initialize(listitem.VirtualFS):
 	@plugin.error_handler
 	def scraper(self):
-		# Fetch Video Content
 		_plugin = plugin
-		url = BASEURL % u"/about/about-science-friday.html"
-		sourceCode = urlhandler.urlread(url, 604800) # TTL = 1 Week
-		
 		# Add Extra Items
-		self.icon = icon = _plugin.getIcon()
+		icon = _plugin.getIcon()
 		self.add_youtube_videos("UUDjGU4DP3b-eGxrsipCvoVQ")
-		self.add_item(_plugin.getuni(30101), thumbnail=(icon,0), url={"action":"Recent", "url":"/video/index.html#page/full-width-list/1", "type":"video"})
-		self.add_item(_plugin.getuni(30102), thumbnail=(icon,0), url={"action":"Recent", "url":"/audio/index.html#page/full-width-list/1", "type":"audio"})
 		
-		# Fetch and Return VideoItems
-		return self.regex_scraper(sourceCode)
-	
-	def regex_scraper(self, sourceCode):
-		# Create Speed vars
-		localListitem = listitem.ListItem
-		_plugin = plugin
-		icon = self.icon
-		import re
-		
-		# Deside on content type to show be default
-		if _plugin.getSetting("defaultview") == u"0": # Video
-			menuItem = _plugin.getuni(30103)
-			localType = u"video-list"
-			contextType = u"segment-list"
-		
-		else: # Audio
-			menuItem = _plugin.getuni(30104)
-			localType = u"segment-list"
-			contextType = u"video-list"
-		
-		# Loop each topic
-		for url, title in re.findall('<li><a\shref="(/topics/\S+?\.html)">(.+?)</a></li>', sourceCode):
-			# Create listitem of Data For Video
-			item = localListitem()
-			item.setLabel(title)
-			item.setThumb(icon)
-			item.setParamDict(action="ContentLister", url=u"%s#page/bytopic/1" % url, type=localType)
-			item.addContextMenuItem(menuItem, "XBMC.Container.Update", action="ContentLister", url=u"%s#page/bytopic/1" % url, type=contextType)
-			yield item.getListitemTuple(False)
+		# Fetch Video Content
+		url = BASEURL % "/explore/"
+		with urlhandler.urlopen(url, 604800) as sourceObj: # :TTL = 1 Week
+			return parsers.TopicsParser().parse(sourceObj)
 
 class ContentLister(listitem.VirtualFS):
 	@plugin.error_handler
 	def scraper(self):
 		_plugin = plugin
-		# Add link to Alternitve Listing
-		if _plugin["type"] == u"video-list": self.add_item(_plugin.getuni(30103), thumbnail=(_plugin.getIcon(),0), url={"action":"ContentLister", "updatelisting":"true", "url":_plugin["url"], "type":"segment-list"})
-		else: self.add_item(_plugin.getuni(30104), thumbnail=(_plugin.getIcon(),0), url={"action":"ContentLister", "updatelisting":"true", "url":_plugin["url"], "type":"video-list"})
+		if not "nextpagecount" in _plugin:
+			# Add link to Alternitve Listing
+			_url = _plugin.copy()
+			_plugin["nextpagecount"] = 1
+			_url["updatelisting"] = "true"
+			_url["type"] = "segment" if _url["type"] == "video" else "video"
+			if "topic" in _plugin:
+				if _url["type"] == "video": self.add_item(_plugin.getuni(30104), thumbnail=(_plugin.getIcon(),0), url=_url)
+				else: self.add_item(_plugin.getuni(30103), thumbnail=(_plugin.getIcon(),0), url=_url)
 		
 		# Fetch Video Content
-		url = BASEURL % _plugin["url"]
+		url = (BASEURL % "/wp-admin/admin-ajax.php?action=get_results&paged=%(nextpagecount)s&sfid=%(sfid)s&post_types=%(type)s") % _plugin
+		if "topic" in _plugin: url += "&_sft_topic=%s" % _plugin["topic"]
 		with urlhandler.urlopen(url, 14400) as sourceObj: # TTL = 4 Hours
-			return parsers.VideosParser().parse(sourceObj, _plugin["type"])
-
-class Recent(listitem.VirtualFS):
-	@plugin.error_handler
-	def scraper(self):
-		# Fetch Video Content
-		url = BASEURL % plugin["url"]
-		with urlhandler.urlopen(url, 14400) as sourceObj: # TTL = 4 Hours
-			return parsers.RecentParser().parse(sourceObj)
+			return parsers.ContentParser().parse(sourceObj)
 
 class PlayVideo(listitem.PlaySource):
 	@plugin.error_handler
@@ -110,10 +77,4 @@ class PlayAudio(listitem.PlayMedia):
 	@plugin.error_handler
 	def resolve(self):
 		# Create url for oembed api
-		url = BASEURL % plugin["url"]
-		sourceCode = urlhandler.urlread(url, 14400, stripEntity=False)# TTL = 4 Hours
-		import re
-		
-		# Search sourceCode for audo file
-		stitcher = re.findall('<a\sclass="stitcher-ll"\shref="(http://app\.stitcher\.com\S+?)"\starget="_blank">', sourceCode)[0]
-		return plugin.parse_qs(stitcher[stitcher.find(u"?")+1:])[u"url"]
+		return plugin["audio"]

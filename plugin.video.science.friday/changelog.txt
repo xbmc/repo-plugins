@@ -1,8 +1,12 @@
+[B]Version 2.1.0[/B] 2016-01-04
+- Added option to disable url caching from the add-on settings.
+- Rewrite addon to work with site changes
+
 [B]Version 2.0.0[/B] 2015-02-20
 - Fixed bug with no images showing
 - Fixed some small encoding issue
 - Added option to view alternative list from other list
-- Change to return a generator instead of a list
+- Changed to return a generator instead of a list
 - Changed settings.xml to use new methods for setting view mode
 - Removed xbmcutil.cleanup try finally catch
 - Removed unneeded set_sort_methods

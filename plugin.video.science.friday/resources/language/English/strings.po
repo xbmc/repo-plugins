@@ -38,9 +38,9 @@ msgid "Recent Audio"
 msgstr ""
 
 msgctxt "#30103"
-msgid "List Audio Links"
+msgid "List Audio Items"
 msgstr ""
 
 msgctxt "#30104"
-msgid "List Videos Links"
+msgid "List Video Items"
 msgstr ""

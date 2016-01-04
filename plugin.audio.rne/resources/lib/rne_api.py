@@ -67,7 +67,9 @@ def get_clean_title(title):
         replace('&Ntilde;',   'Ñ').\
         replace('&Ccedil;',   'Ç').\
         replace('&#034;',     '"').\
+        replace('&#34;',      '"').\
         replace('&#039;',     "´").\
+        replace('&#39;',      "´").\
         replace('&#160;',     " ").\
         replace('&#8211;',     '').\
         replace('&#8217;',    "'").\
@@ -77,7 +79,9 @@ def get_clean_title(title):
         replace('&#8230;',     '').\
         replace('&rsquo;',    "´").\
         replace('&laquo;',    '"').\
+        replace('&ldquo;',    '"').\
         replace('&raquo;',    '"').\
+        replace('&rdquo;',    '"').\
         replace('&iexcl;',    '¡').\
         replace('&iinte;',    '¿').\
         replace('&amp;',      '&').\
@@ -229,7 +233,7 @@ def get_audio_list(program_url, localized=lambda x: x):
     audio_dur_pattern     = '<span class="col_dur">([^<]*?)</span>'
     audio_title_pattern   = '<span class="titulo-tooltip"><a href="[^"]*?" title="[^>]*?>([^<]*?)</a></span>'
     audio_desc_pattern    = '<span class="detalle">(.*?)</span>'
-    audio_link_pattern    = '<span class="col_tip">.*?<a href="(http.*?mp3)"'
+    audio_link_pattern    = '<span class="col_tip">.*?<a href="(http.*?mp[34])"'
     audio_rating_pattern  = '<span class="col_pop"><span title="([^"]*?)" class="pc([0-9]*?)">'
     audio_year_pattern    = '([0-9]{4})'
     page_num_pattern      = 'pbq=([0-9]+)'
@@ -293,7 +297,8 @@ def get_audio_list(program_url, localized=lambda x: x):
                 'action'     : 'play_audio',
                 'IsPlayable' : True,
                 }
-        audio_list.append(audio_entry)
+        if url: # This is to make sure the URL is valid.
+            audio_list.append(audio_entry)
 
     last_page_num     = l.find_first(buffer_url, page_num_url_pattern % 'Último')
     if last_page_num and curr_page_num != last_page_num:
@@ -313,38 +318,25 @@ def get_audio_list(program_url, localized=lambda x: x):
 def get_direct_channels():
     """This function makes the direct channels menu."""
 
-    direct_url    = 'u3m.s%/se.evtr.eviloidar//:ptth'[::-1]
     channel_list  = (
-            ( 'Radio Nacional',   'rne'),
-            ( 'Radio Clásica',    'radioclasica'),
-            ( 'Radio 3',          'radio3'),
-            ( 'Ràdio 4',          'radio4'),
-            ( 'Radio 5',          'radio5'),
-            ( 'Radio Exterior',   'radioexterior'),
+            ( 'Radio Nacional',   '3pm.1oidar/evtr/502.47.55.591//:ptth'[::-1]),
+            ( 'Radio Clásica',    '3pm.acisalcoidar/evtr/712.47.55.591//:ptth'[::-1]),
+            ( 'Radio 3',          '3pm.3oidar/evtr/712.47.55.591//:ptth'[::-1]),
+            # ( 'Ràdio 4',          'radio4',        ''),
+            # ( 'Radio 5',          'radio5',        ''),
+            # ( 'Radio Exterior',   'radioexterior', ''),
             )
 
     menu_entries  = []
-    for channel, playlist in channel_list:
+    for channel, url in channel_list:
         menu_item = {
                 'action' : 'play_audio',
                 'title'  : channel,
-                'url'    : direct_url % playlist,
+                'url'    : url,
         }
         menu_entries.append(menu_item)
 
     return menu_entries
-
-
-def get_playable_url(url):
-    """This function gets the stream url for direct channels."""
-
-    playable_url_pattern = ')oidua.tsaceci?*.ptth('[::-1]
-
-    buffer_url           = l.carga_web(url)
-    stream_url           = l.find_first(buffer_url, playable_url_pattern)
-    l.log('get_playable_url has found this URL for direct playback. url: "%s"' % stream_url)
-
-    return stream_url
 
 
 def get_search_playable_url(url):
@@ -364,25 +356,25 @@ def get_search_url(searchtext):
 
     search_prefix = '/rodacsub/se.evtr.www//:ptth'[::-1] + '=q?telvreSelgooG'[::-1]
     search_suffix = (
-                    '&se_gnal=rl&EVTR=tneilc&oidar=etis&racsuB=Gntb&'[::-1] +\
-                    '&8ftu=ei&8ftu=eo&se=lh&se.evtr.www=morftsoh'[::-1] +\
-                    'se=gnalu&5=mgmun&dtd_on_lmx=tuptuo&*=sdleifteg'[::-1] +\
-                    '&0=mrqtne&0=rqtne&1dA3%LA3%DA3%etad=tros&'[::-1] +\
-                    '0_esaF_LP__a=pstne'[::-1]
+                    '&=rartlif_timbus&oidar=etis&=atsah&=edsed&'[::-1] +\
+                    'oiduaE252%EVTR=sdleifderiuqer&oidua=tnoc'[::-1]
                     )
 
-    return  search_prefix + searchtext + search_suffix
+    return  search_prefix + l.get_url_encoded(searchtext) + search_suffix
 
 
 def get_search_list(search_url, localized=lambda x: x):
     """This function gets the list of items returned by the search engine."""
 
-    search_section_sep    = 'data-assetID='
-    search_link_pattern   = 'data-permaLink="([^"]*?)"'
-    search_title_pattern  = '<span class="hddn" style=[^>]*?>([^<]*?)</span>'
-    search_desc_pattern   = '<meta itemprop="description" content="([^"]*?)"'
-    search_dur_pattern    = '<meta itemprop="duration" content="T([0-9]+)H([0-9]+)M([0-9]+)S"'
-    page_url_pattern      = '<li class="%s"><a title="[^"]*?" href="([^"]*?)">'
+    search_section_sep    = '<div class="mediaBox audioBox "'
+    search_link_pattern   = '&quot;src&quot;:&quot;(http.*?mp3)&quot;'
+    search_title_pattern  = '<span class="maintitle">([^<]*?)</span>'
+    search_desc_pattern   = '<div class="auxBox">[^<]*?<p>(.*?)</p>'
+    search_dur_pattern    = '<span class="duration">(.*?)</span>'
+    hour_dur_pattern      = '([0-9]+)h'
+    min_dur_pattern       = '([0-9.]+) min'
+    search_year_pattern   = '<span class="datpub">[0-9]+.[0-9]+.([0-9]+)</span>'
+    page_url_pattern      = '<li class="be_on"><span class="ico arrow %s_"><a href="([^"]*?)"'
     page_num_pattern      = 'start=([0-9]+)' # Starts by 0 and the results goes from 10 to 10.
 
     search_root           = '/rodacsub/se.evtr.www//:ptth'[::-1]
@@ -391,7 +383,7 @@ def get_search_list(search_url, localized=lambda x: x):
     search_list           = []
     reset_cache           = False
 
-    previous_page_url     = l.find_first(buffer_url, page_url_pattern % 'previous')
+    previous_page_url     = l.find_first(buffer_url, page_url_pattern % 'back')
     if previous_page_url:
         prev_page_num     = int(l.find_first(previous_page_url, page_num_pattern))/10 + 1
         search_entry      = {
@@ -404,10 +396,18 @@ def get_search_list(search_url, localized=lambda x: x):
         reset_cache = True
 
     for search_section in buffer_url.split(search_section_sep)[1:]:
-        H, M, S           = l.find_first(search_section, search_dur_pattern) or ('00', '00', '00')
-        title             = l.find_first(search_section, search_title_pattern)
-        desc              = l.find_first(search_section, search_desc_pattern)
+        duration          = l.find_first(search_section, search_dur_pattern)
+        H                 = l.find_first(duration, hour_dur_pattern) or '00'
+        minutes           = l.find_first(duration, min_dur_pattern) or '00'
+        year              = l.find_first(search_section, search_year_pattern)
+        title             = l.find_first(search_section, search_title_pattern).strip()
+        desc              = l.find_first(search_section, search_desc_pattern).strip()
         url               = l.find_first(search_section, search_link_pattern)
+
+        if '.' in minutes:
+            M, S          = (minutes[:2], minutes[3:5])
+        else:
+            M, S          = (minutes, '00')
 
         seconds           = str(int(H) * 3600 + int(M) * 60 + int(S))
 
@@ -419,7 +419,8 @@ def get_search_list(search_url, localized=lambda x: x):
                 'title'      : get_clean_title(title),
                 'comment'    : get_clean_title(desc.replace('&amp;', '&')),
                 'duration'   : seconds,
-                'action'     : 'play_search',
+                'year'       : year,
+                'action'     : 'play_audio',
                 'IsPlayable' : True,
                 }
         search_list.append(search_entry)

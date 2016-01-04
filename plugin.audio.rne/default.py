@@ -251,15 +251,16 @@ def search_list(params):
             'album'     : '"%s"' % params.get('search'),
             'artist'    : get_located_string('Search result'),
             'comment'   : audio_entry.get('comment', ''),
+            'year'      : audio_entry.get('year', ''),
             'duration'  : audio_entry.get('duration', 1),
             'rating'    : 0,
         },
         'path'          : p.get_plugin_path(
             url         = audio_entry.get('url'),
-            action      = 'play_search',
+            action      = audio_entry.get('action'),
         ) if audio_entry.get('IsPlayable') else p.get_plugin_path(
             url         = audio_entry.get('url'),
-            action      = 'search_list',
+            action      = audio_entry.get('action'),
             search      = params.get('search'),
             reset_cache = reset_cache,
         ),
@@ -269,25 +270,11 @@ def search_list(params):
     p.add_items(audio_items, reset_cache == 'yes')
 
 
-def play_search(params):
-    """This function plays the audio found by the search function."""
-    p.log("rne.play_search "+repr(params))
-
-    url = api.get_search_playable_url(params.get("url"))
-    if url:
-        return p.play_resolved_url(url)
-    else:
-        p.showWarning(get_located_string('Audio not located'))
-
-
 def play_audio(params):
     """This function plays the audio source."""
     p.log("rne.play_audio "+repr(params))
 
     url = params.get("url")
-
-    if url.endswith('m3u'):
-        url = api.get_playable_url(url)
 
     if url:
         return p.play_resolved_url(url)

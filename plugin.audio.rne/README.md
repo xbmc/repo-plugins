@@ -18,7 +18,7 @@ RNE Podcasts: KODI audio add-on to listen to the podcasts from *RNE* web site.
 
 Initial release 1.0.0
 
-[![Build Status](https://secure.travis-ci.org/jamontes/plugin.audio.rne.png)](http://travis-ci.org/jamontes/plugin.audio.rne)
+[![Build Status](https://secure.travis-ci.org/jamontes/plugin.audio.rne.png?branch=master)](http://travis-ci.org/jamontes/plugin.audio.rne)
 
 
 This KODI add-on allows you to listen to all the podcast of the emission programmes from the spanish national radio *RNE* website.

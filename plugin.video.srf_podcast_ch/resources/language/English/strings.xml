@@ -6,6 +6,8 @@
   <string id="30004">Remove from SRF Favorites</string>
   <string id="30104">Use Fan Art</string>
   <string id="30101">Force Menu Views</string>
-  <string id="30106">ViewID for Show List</string>
   <string id="30102">ViewID for Videos</string>
+  <string id="30106">ViewID for Show List</string>
+  <string id="30107">Number of episodes shown per page</string>
+  <string id="33001">Show older episodes of this show..</string>
 </strings>

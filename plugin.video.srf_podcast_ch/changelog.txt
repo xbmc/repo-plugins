@@ -1,3 +1,11 @@
+[B]v1.3.1[/B]
+- Fixed smaller issues in the previous version.
+
+[B]v1.2.2[/B]
+- Added other Swiss Channels: RTS, RSI and RTR
+- You can now scroll to older episodes of a show
+- You can now set how many episodes shall be shown on one page (settings)
+
 [B]v1.2.1[/B]
 - Better fanart handling for episodes
 - Fixed Bug with gzip urls

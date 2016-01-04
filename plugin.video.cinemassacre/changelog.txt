@@ -1,3 +1,9 @@
+[B]Version 2.0.2[/B]
+
+- marked as broken since the video feed has disappeared
+- use an older, local feed file instead
+- most videos are unplayable as they have been taken offline or moved
+
 [B]Version 2.0.1[/B]
 
 - new youtube video ID regex

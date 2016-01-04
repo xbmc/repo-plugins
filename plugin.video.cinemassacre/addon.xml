@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.cinemassacre" name="cinemassacre" version="2.0.1" provider-name="cdwertmann">
+<addon id="plugin.video.cinemassacre" name="cinemassacre" version="2.0.2" provider-name="cdwertmann">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.common.plugin.cache" version="0.9.1"/>
@@ -15,5 +15,6 @@
         <website>https://github.com/cdwertmann/plugin.video.cinemassacre</website>
         <source>git://github.com/cdwertmann/plugin.video.cinemassacre.git</source>
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+        <broken>Video feed has disappeared</broken>
     </extension>
 </addon>

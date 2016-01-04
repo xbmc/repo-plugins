@@ -52,16 +52,21 @@ def log(msg):
     xbmc.log(PLUGIN_NAME + ": "+ str(msg), level=xbmc.LOGNOTICE)
 
 def getContent():
-    devicetoken=binascii.b2a_hex(os.urandom(32))
-    deviceuid=binascii.b2a_hex(os.urandom(20)).upper()
-    signature=get_signature(os.urandom(20),os.urandom(20))
-    timestamp=datetime.now().strftime("%Y-%m-%dT%H:%M:%S.000Z")
-    URL="http://cinemassacre.screenwavemedia.com/AppServer/SWMAppFeed.php?appname=Cinemassacre&appversion=1.5.8&devicetoken="+devicetoken+"&deviceuid="+deviceuid+"&lastupdateid=0&timestamp="+timestamp+"&signature="+signature
-    log(URL)
-    req = urllib2.Request(URL)
-    response = urllib2.urlopen(req)
-    xml=response.read()
-    response.close()
+    # devicetoken=binascii.b2a_hex(os.urandom(32))
+    # deviceuid=binascii.b2a_hex(os.urandom(20)).upper()
+    # signature=get_signature(os.urandom(20),os.urandom(20))
+    # timestamp=datetime.now().strftime("%Y-%m-%dT%H:%M:%S.000Z")
+    # URL="http://cinemassacre.screenwavemedia.com/AppServer/SWMAppFeed.php?appname=Cinemassacre&appversion=1.5.8&devicetoken="+devicetoken+"&deviceuid="+deviceuid+"&lastupdateid=0&timestamp="+timestamp+"&signature="+signature
+    # log(URL)
+    # req = urllib2.Request(URL)
+    # response = urllib2.urlopen(req)
+    # xml=response.read()
+    # response.close()
+    addon = xbmcaddon.Addon()
+    addon_path = addon.getAddonInfo('path')
+    _path = os.path.join(addon_path,'test.xml')
+    f = open(_path, 'r')
+    xml = f.read()
     return xmltodict.parse(xml)['document']
 
 def getCategories(content,id):

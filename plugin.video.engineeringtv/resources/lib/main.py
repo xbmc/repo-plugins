@@ -18,6 +18,7 @@
 
 # Call Necessary Imports
 from xbmcutil import listitem, urlhandler, plugin
+import parsers
 
 class Initialize(listitem.VirtualFS):
 	@plugin.error_handler
@@ -76,7 +77,7 @@ class Recent(listitem.VirtualFS):
 			# Create listitem of Data
 			item = localListitem()
 			item.setAudioFlags()
-			item.setVideoFlags(False)
+			#item.setVideoFlags(False)
 			item.setLabel(node.findtext("title"))
 			item.setThumb(node.find("enclosure").get("url"))
 			item.setInfoDict(plot=node.findtext("description"), credits=node.findtext("author"))
@@ -109,23 +110,22 @@ class Videos(listitem.VirtualFS):
 		sourceCode = urlhandler.urlread(url, 604800) # TTL = 1 Week
 		
 		# Fetch List of Sub Categories
-		import CommonFunctions, re
-		searchID = re.compile('href="/feed/magnify.rss/(\S+?)"')
-		sources = CommonFunctions.parseDOM(sourceCode, u"div", {u"class":u"mvp_page_title_expressive clearfix"})
-		if len(sources) == 1: return self.videoList(u"/watch/playlist/%s" % searchID.findall(sources[0])[0])
-		else: return self.genreList(sources, searchID)
+		parser = parsers.subCategories()
+		results = parser.fromstring(sourceCode, None)
+		if len(results) == 1: return self.videoList(u"/watch/playlist/%s" % results[0][1])
+		else: return self.genreList(results)
 	
-	def genreList(self, sources, searchID):
+	def genreList(self, sources):
 		# Set Content Properties
 		self.set_sort_methods(self.sort_method_unsorted)
 		
 		# Loop and display each source
 		localListitem = listitem.ListItem
-		for htmlSegment in sources:
+		for title, urlID in sources:
 			# Create listitem of Data
 			item = localListitem()
-			item.setLabel(htmlSegment[htmlSegment.rfind(u"</div>")+6:].strip().title())
-			item.setParamDict(action="Videos", url=u"/watch/playlist/%s" % searchID.findall(htmlSegment)[0])
+			item.setLabel(title)
+			item.setParamDict(action="Videos", url=u"/watch/playlist/%s" % urlID)
 			
 			# Store Listitem data
 			yield item.getListitemTuple(False)
@@ -148,83 +148,40 @@ class Videos(listitem.VirtualFS):
 			urlDB.sync()
 			urlDB.close()
 		
-		# Read in data from cache and decode into unicode
-		sourceCode = sourceObj.read().decode("utf-8")
-		
 		# Set Content Properties
 		self.set_sort_methods(self.sort_method_unsorted)
 		
-		# Loop and display each Video
-		import CommonFunctions, re
-		localListitem = listitem.ListItem
-		searchTitle = re.compile('title="(.+?)"')
-		searchUrl = re.compile('<a href="(\S+?)"')
-		searchImg = re.compile("background-image: url\('(\S+?)'\)")
-		nextUrl = re.findall('<a class="mvp-pagenum-next mvp-pagenum-pagelink" href="(\S+?)">', sourceCode)
-		if nextUrl: self.add_next_page(url={"url":nextUrl[0]})
-		for htmlSegment in CommonFunctions.parseDOM(sourceCode, u"div", {u"class":u"mvp_grid_panel_\d"}):    
-			# Fetch url
-			url = searchUrl.findall(htmlSegment)[0]
-			url = url[url.rfind("/video/"):]
-			
-			# Create listitem of Data
-			item = localListitem()
-			item.setAudioFlags()
-			item.setVideoFlags(False)
-			item.setLabel(searchTitle.findall(htmlSegment)[0])
-			item.setThumb(searchImg.findall(htmlSegment)[0])
-			item.setParamDict(action="PlayVideo", url=url)
-			
-			# Add Context item to link to related videos
-			item.addRelatedContext(url=url)
-			
-			# Store Listitem data
-			yield item.getListitemTuple(True)
+		parser = parsers.VideoParser()
+		return parser.parse(sourceObj)
 
 class Related(listitem.VirtualFS):
 	@plugin.error_handler
 	def scraper(self):
-		# Fetch SourceCode of Site
-		url = u"http://www.engineeringtv.com%(url)s" % plugin
-		sourceCode = urlhandler.urlread(url, 14400) # TTL = 4 Hours
-		
 		# Set Content Properties
 		self.set_sort_methods(self.sort_method_unsorted)
 		
-		# Fetch and Return VideoItems
-		return self.regex_scraper(sourceCode)
-	
-	def regex_scraper(self, sourceCode):
-		# Loop and display each Video
-		import CommonFunctions, re
-		localListitem = listitem.ListItem
-		searchTitle = re.compile('title="(.+?)"')
-		searchUrl = re.compile('<a href="(\S+?)"')
-		searchImg = re.compile("background-image: url\('(http\S+?)'\)")
-		for htmlSegment in CommonFunctions.parseDOM(sourceCode, u"div", {u"class":u"magnify-widget-playlist-item"}):    
-			# Fetch url
-			url = searchUrl.findall(htmlSegment)[0]
-			url = url[url.rfind("/video/"):]
-			
-			# Create listitem of Data
-			item = localListitem()
-			item.setAudioFlags()
-			item.setVideoFlags(False)
-			item.setLabel(searchTitle.findall(htmlSegment)[0])
-			item.setThumb(searchImg.findall(htmlSegment)[0])
-			item.setParamDict(action="PlayVideo", url=url)
-			
-			# Add Context item to link to related videos
-			item.addRelatedContext(url=url, updatelisting="true")
-			
-			# Store Listitem data
-			yield item.getListitemTuple(True)
+		# Fetch SourceCode of Site
+		url = u"http://www.engineeringtv.com%(url)s" % plugin
+		with urlhandler.urlopen(url, 14400) as sourceObj: # TTL = 4 Hours
+			return parsers.RelatedParser().parse(sourceObj)
 
-class PlayVideo(listitem.PlayMedia):
+class PlayVideo(listitem.PlaySource):
 	@plugin.error_handler
 	def resolve(self):
 		# Call Needed Imports
 		import re
+		
+		try:
+			# Fetch SourceCode of Site
+			url = u"http://www.engineeringtv.com%(url)s" % plugin
+			sourceCode = urlhandler.urlread(url, 1800, stripEntity=False) # TTL = 30 Mins
+			
+			# Fetch Youtube ID
+			videoID = re.findall("ytInit\('mvp_swfo_embed_\S+?_\d+?',\s+'100%',\s+'100%'.\s+'(\S+?)',", sourceCode)
+			if videoID: return self.sourceType(videoID[0], "youtube_com")
+			else: raise IndexError
+		except:
+			pass
 		
 		try:
 			# Fetch SourceCode of Site
@@ -238,10 +195,11 @@ class PlayVideo(listitem.PlayMedia):
 			
 			# Fetch Video Url
 			videoUrl = re.findall('"pipeline_xid"\s*:\s*"(http://videos\.\S+?)"', sourceCode)
-			print videoUrl
 			return {"type":u"video/mp4", "url":videoUrl[0]}
-		
 		except:
+			pass
+		
+		try:
 			# Fetch SourceCode of Site
 			url = u"http://www.engineeringtv.com%(url)s" % plugin
 			sourceCode = urlhandler.urlread(url, 1800, stripEntity=False) # TTL = 30 Mins
@@ -256,3 +214,5 @@ class PlayVideo(listitem.PlayMedia):
 			if videoUrls:
 				videoUrls = sorted(videoUrls, key=lambda videos: videos[0], reverse=True)
 				return {"type":u"video/mp4", "url":videoUrls[0]}
+		except:
+			pass

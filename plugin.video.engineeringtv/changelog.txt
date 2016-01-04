@@ -1,3 +1,10 @@
+[B]Version 2.0.1[/B] 2016-01-04
+- Fixed bug with some videos not playing. Now playes from youtube where possible
+- Added option to disable url caching from the add-on settings
+- Disable SD/HD video flag, Unable to determine resolution
+- Removed script.module.parsedom dependency
+- Removed leftover print statement
+
 [B]Version 2.0.0[/B] 2015-02-20
 - Fixed backkup video url scraper
 - Removed set_content call
@@ -6,7 +13,7 @@
 - Removed xbmcutil.cleanup try finally catch
 - Removed results.append from Next_Page (Not needed anymore)
 - Changed settings.xml to use new methods for setting view mode
-- Change to return a generator instead of a list
+- Changed to return a generator instead of a list
 - Some small method renames
 
 [B]Version 1.0.2[/B] 2014-06-30

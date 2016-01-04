@@ -1,4 +1,14 @@
-v2015.11.3
+v2015.12.29
+- Fix video streams dropping
+
+v2015.11.12
+- Bug fix
+
+v2015.11.11
+- Fix video streams dropping
+- Brought back stream quality selection via dialog
+
+v2015.11.6
 - Removed Quality selection for temporary fix for all streams
 
 v2015.11.3

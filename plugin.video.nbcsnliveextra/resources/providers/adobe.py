@@ -286,31 +286,6 @@ class ADOBE():
         resp = opener.open(url, data)
         url = resp.read()
         resp.close()    
-        print url
-
-        ################################
-        # Get Cookie from manifest file
-        ################################
-        #stream_cookie = ''
-        #try:
-        #req = urllib2.Request(url)  
-        #req.add_header('User-Agent',  'AppleCoreMedia/1.0.0.12F70 (iPhone; U; CPU OS 8_3 like Mac OS X; en_us)')
-        #response = urllib2.urlopen(req)        
-        #stream_cookie = response.info()['Set-Cookie']
-        #response.close() 
-        #except:
-        #pass
-
-        #print stream_cookie
-
-        #Set quality level based on user settings
-        url = SET_STREAM_QUALITY(url)            
-
-        url = url+"|User-Agent="+UA_NBCSN
-        #if stream_cookie != '':
-        #url = url + "&Cookie="+stream_cookie
-
-        print url
-        #addLink(stream_name,url,stream_name,stream_icon,FANART) 
+        
         return url
         

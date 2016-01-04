@@ -10,11 +10,13 @@
   <category label="200">
     <setting id="clear_data" type="bool" label="210" default="false"/>
     <setting id="free_only" type="bool" label="220" default="false" />  
-    <setting id="play_main" type="bool" label="230" default="true" />  
+    
   </category>
   <!-- Visual -->
   <category label="300">
-    <setting id="quality" type="enum" label="310" values="SD (200 kbit/s)|SD (400 kbit/s)|SD (600 kbit/s)|SD (900 kbit/s)|SD (1400 kbit/s)|HD (2200 kbit/s)|HD (3450 kbit/s)" default="6" />
+    <!--<setting id="quality" type="enum" label="310" values="SD (200 kbit/s)|SD (400 kbit/s)|SD (600 kbit/s)|SD (900 kbit/s)|SD (1400 kbit/s)|HD (2200 kbit/s)|HD (3450 kbit/s)" default="6" />-->
     <setting id="cdn" type="enum" label="320" values="East|West" default="0" />	  
+    <!-- Moved this from general -->
+    <setting id="play_main" type="bool" label="230" default="true" />  
   </category>
 </settings>

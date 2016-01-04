@@ -88,6 +88,7 @@ def GET_SIGNED_REQUESTOR_ID():
 
 def SET_STREAM_QUALITY(url):
     print url
+    '''
     if QUALITY == 0:
         q_lvl = "200000"
         q_lvl_golf = "296k"
@@ -110,14 +111,100 @@ def SET_STREAM_QUALITY(url):
         q_lvl = "3450000"
         #q_lvl = "4296000"
         q_lvl_golf = "4296k"
+    '''
+
+
+    stream_url = {}
+    stream_title = []
+
+    #Open master file a get cookie    
+    cj = cookielib.LWPCookieJar()
+    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+    opener.addheaders = [ ("Accept", "*/*"),
+                        ("Accept-Encoding", "deflate"),
+                        ("Accept-Language", "en-us"),                                                                                                              
+                        ("User-Agent", UA_NBCSN)]
+
+    resp = opener.open(url)
+    master = resp.read()
+    resp.close()   
+    cookies = '' 
+    for cookie in cj:                    
+        if cookies != '':
+            cookies = cookies + "; "
+        cookies = cookies + cookie.name + "=" + cookie.value
     
+    print master
+    line = re.compile("(.+?)\n").findall(master)  
+    
+    xplayback = ''.join([random.choice('0123456789ABCDEF') for x in range(32)])
+    xplayback = xplayback[0:7]+'-'+xplayback[8:12]+'-'+xplayback[13:17]+'-'+xplayback[18:22]+'-'+xplayback[23:]
+
+    for temp_url in line:
+        if '#EXT' not in temp_url:
+            temp_url = temp_url.rstrip()
+            if 'http' not in temp_url:
+                if 'master' in url:
+                    start = url.find('master')
+                elif 'manifest' in url:
+                    start = url.find('manifest')
+                
+                replace_url_chunk = url[start:url.find('?')]                
+                temp_url = url.replace(replace_url_chunk,temp_url)
+                
+            temp_url = temp_url.rstrip() + "|User-Agent=" + UA_NBCSN
+            
+            #if cookies != '':                
+            #temp_url = temp_url + "&Cookie=" + cookies
+            
+            stream_title.append(desc)
+            stream_url.update({desc:temp_url})
+        else:
+            desc = ''
+            start = temp_url.find('BANDWIDTH=')
+            if start > 0:
+                start = start + len('BANDWIDTH=')
+                end = temp_url.find(',',start)
+                desc = temp_url[start:end]
+                try:
+                    int(desc)
+                    desc = str(int(desc)/1000) + ' kbps'
+                except:
+                    pass            
+    
+    
+    if len(stream_title) > 0:
+        ret = 0      
+        stream_title.sort(key=natural_sort_key)            
+        dialog = xbmcgui.Dialog() 
+        ret = dialog.select('Choose Stream Quality', stream_title)
+        
+        if ret >=0:
+            url = stream_url.get(stream_title[ret])           
+        else:
+            sys.exit()
+    else:
+        msg = "No playable streams found."
+        dialog = xbmcgui.Dialog() 
+        ok = dialog.ok('Streams Not Found', msg)
+
     '''
     url = url.replace('master.m3u8',q_lvl_golf+'/proge.m3u8')       
     url = url.replace('manifest(format=m3u8-aapl-v3)','QualityLevels('+q_lvl+')/Manifest(video,format=m3u8-aapl-v3,audiotrack=audio_en_0)')       
     url = url.replace('manifest(format=m3u8-aapl,filtername=vodcut)','QualityLevels('+q_lvl+')/Manifest(video,format=m3u8-aapl,filtername=vodcut)')
     url = url.replace('manifest(format=m3u8-aapl-v3,filtername=vodcut)','QualityLevels('+q_lvl+')/Manifest(video,format=m3u8-aapl-v3,audiotrack=audio_en_0,filtername=vodcut)')
     '''
+    
+    print "STREAM URL === " + url 
+
     return url
+
+
+def natural_sort_key(s):
+    _nsre = re.compile('([0-9]+)')
+    return [int(text) if text.isdigit() else text.lower()
+            for text in re.split(_nsre, s)] 
+
 
 def SAVE_COOKIE(cj):
     # Cookielib patch for Year 2038 problem
@@ -228,7 +315,7 @@ ROOT_URL = 'http://stream.nbcsports.com/data/mobile/'
 settings = xbmcaddon.Addon(id='plugin.video.nbcsnliveextra')
 
 #Main settings
-QUALITY = int(settings.getSetting(id="quality"))
+#QUALITY = int(settings.getSetting(id="quality"))
 #USER_AGENT = str(settings.getSetting(id="user-agent"))
 CDN = int(settings.getSetting(id="cdn"))
 USERNAME = str(settings.getSetting(id="username"))
@@ -274,7 +361,7 @@ REFERER = ''
 UA_IPHONE = 'Mozilla/5.0 (iPhone; CPU iPhone OS 8_4 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12H143'
 UA_PC = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.81 Safari/537.36'
 UA_ADOBE_PASS = 'AdobePassNativeClient/1.9 (iPhone; U; CPU iPhone OS 8.4 like Mac OS X; en-us)'
-UA_NBCSN = 'NBCSports/1030 CFNetwork/711.3.18 Darwin/14.0.0'
+UA_NBCSN = 'AppleCoreMedia/1.0.0.12H143 (iPhone; U; CPU OS 8_4 like Mac OS X; en_us)'
 
 
 #Create Random Device ID and save it to a file

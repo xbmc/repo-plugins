@@ -131,7 +131,7 @@ def BUILD_VIDEO_LINK(item):
         pass
     
     #Set quality level based on user settings    
-    url = SET_STREAM_QUALITY(url)                      
+    #url = SET_STREAM_QUALITY(url)                      
     
     
     menu_name = item['title']
@@ -193,9 +193,12 @@ def BUILD_VIDEO_LINK(item):
     
     if url != '':
         if free:
-            url = url + "|User-Agent=" + UA_NBCSN
             menu_name = '[COLOR='+FREE+']'+menu_name + '[/COLOR]'
-            addLink(menu_name,url,name,imgurl,FANART,info) 
+            #addLink(menu_name,url,name,imgurl,FANART,info) 
+            if str(PLAY_MAIN) == 'true':
+                addFreeLink(menu_name,url,imgurl,FANART,None,info)              
+            else:
+                addDir(menu_name,url,6,imgurl,FANART,None,True,info)             
         elif FREE_ONLY == 'false':                        
             menu_name = '[COLOR='+LIVE+']'+menu_name + '[/COLOR]'
             if str(PLAY_MAIN) == 'true':
@@ -306,7 +309,8 @@ def SIGN_STREAM(stream_url, stream_name, stream_icon):
             adobe.POST_SESSION_DEVICE(signed_requestor_id)    
 
 
-        authz = adobe.POST_AUTHORIZE_DEVICE(resource_id,signed_requestor_id)        
+        authz = adobe.POST_AUTHORIZE_DEVICE(resource_id,signed_requestor_id)      
+        
 
         if 'Authorization failed' in authz or authz == '':
             msg = "Failed to authorize"
@@ -318,6 +322,8 @@ def SIGN_STREAM(stream_url, stream_name, stream_icon):
         else:
             media_token = adobe.POST_SHORT_AUTHORIZED(signed_requestor_id,authz)
             stream_url = adobe.TV_SIGN(media_token,resource_id, stream_url)
+            #Set quality level based on user settings    
+            stream_url = SET_STREAM_QUALITY(stream_url)   
             
             listitem = xbmcgui.ListItem(path=stream_url)
             
@@ -351,10 +357,25 @@ def addLink(name,url,title,iconimage,fanart,info=None):
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     return ok
 
+def addFreeLink(name,link_url,iconimage,fanart=None,scrape_type=None,info=None): 
+    params = get_params()      
+    ok=True
+    u=sys.argv[0]+"?url="+urllib.quote_plus(link_url)+"&mode=6&icon_image="+urllib.quote_plus(iconimage)
+    liz=xbmcgui.ListItem(name, iconImage=ICON, thumbnailImage=iconimage)
+    liz.setProperty("IsPlayable", "true")
+    liz.setInfo( type="Video", infoLabels={ "Title": name } )
+    if info != None:
+        liz.setInfo( type="Video", infoLabels=info)        
+
+    liz.setProperty('fanart_image', fanart)
+    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)    
+    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+    return ok
+
 def addPremiumLink(name,link_url,iconimage,fanart=None,scrape_type=None,info=None): 
     params = get_params()      
     ok=True
-    u=sys.argv[0]+"?url="+urllib.quote_plus(link_url)+"&mode=5"
+    u=sys.argv[0]+"?url="+urllib.quote_plus(link_url)+"&mode=5&icon_image="+urllib.quote_plus(iconimage)
     liz=xbmcgui.ListItem(name, iconImage=ICON, thumbnailImage=iconimage)
     liz.setProperty("IsPlayable", "true")
     liz.setInfo( type="Video", infoLabels={ "Title": name } )
@@ -434,6 +455,7 @@ print "Mode: "+str(mode)
 print "URL: "+str(url)
 print "Name: "+str(name)
 print "scrape_type:"+str(scrape_type)
+print "icon image:"+str(icon_image)
 
 
 if mode==None or url==None or len(url)<1:        
@@ -454,6 +476,16 @@ elif mode==5:
             dialog = xbmcgui.Dialog() 
             ok = dialog.ok('Credentials Missing', msg)
             #sys.exit("Credentials not provided")
+elif mode==6:
+    #Set quality level based on user settings    
+    stream_url = SET_STREAM_QUALITY(url) 
+    listitem = xbmcgui.ListItem(path=stream_url)
+
+    if str(PLAY_MAIN) == 'true':
+        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem)
+    else:
+        addLink(name, stream_url, name, icon_image, FANART)
+
 
 #Don't cache live and upcoming list
 if mode==1:

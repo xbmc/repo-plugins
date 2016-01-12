@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.playonbrowser" name="Playon Browser" version="1.0.4" provider-name="Sytone, Lunatixz">
+<addon id="plugin.video.playonbrowser" name="Playon Browser" version="1.0.5" provider-name="Sytone, Lunatixz">
   <requires>
-    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="xbmc.python" version="2.14.0"/>
     <import addon="script.module.parsedom" version="2.5.2"/> 
     <import addon="script.module.metahandler" version="2.7.0"/>
     <import addon="script.module.addon.common" version="2.0.0"/>

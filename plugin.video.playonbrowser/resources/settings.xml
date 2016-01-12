@@ -2,7 +2,7 @@
 <settings>
     <category label="42001">
         <setting label="42002" type="lsep"/>
-        <setting label="42003" type="text"   id="playonserver" default="http://192.168.0.234:54479/"/>
+        <setting label="42003" type="text"   id="playonserver" default="http://192.168.0.1:54479/"/>
         <setting label="42004" type="lsep"/>
         <setting label="42005" type="lsep"/>
         <setting label="42006" type="folder" source="video" id="playonid" default="upnp://"/>

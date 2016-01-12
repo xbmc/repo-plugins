@@ -255,7 +255,7 @@ def build_menu_for_search(xml):
             elif group.attrib.get('type') == 'video':
                 playonUrl = build_playon_url(group.attrib.get('href'))
                 mediaXml = get_xml(playonUrl)
-                mediaNode = mediaXml.find('media')
+                # mediaNode = mediaXml.find('media')
                 li = xbmcgui.ListItem(name, iconImage=image, thumbnailImage=image)
                 li.setProperty('IsPlayable', 'true')
                 li.setInfo('video', { 'plotoutline': group.attrib.get('description'), 'title': name})
@@ -335,7 +335,7 @@ def build_menu_for_mode_folder(href, foldername, nametree):
             elif group.attrib.get('type') == 'video':
                 playonUrl = build_playon_url(group.attrib.get('href'))
                 mediaXml = get_xml(playonUrl)
-                mediaNode = mediaXml.find('media')
+                # mediaNode = mediaXml.find('media')
                 """
                 try:
                     
@@ -382,7 +382,7 @@ def generate_list_items(xml, href, foldername, nametree):
         elif group.attrib.get('type') == 'video':
             playonUrl = build_playon_url(group.attrib.get('href'))
             mediaXml = get_xml(playonUrl)
-            mediaNode = mediaXml.find('media')
+            # mediaNode = mediaXml.find('media')
             li = xbmcgui.ListItem(name, iconImage=image, thumbnailImage=image)
             li.setProperty('IsPlayable', 'true')
             li.setInfo('video', { 'plotoutline': group.attrib.get('description'), 'title': name})

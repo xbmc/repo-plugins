@@ -20,29 +20,27 @@
 	<string id="30113">Uw Uploads</string>
 	<string id="30114">Uw Playlists</string>
 	<string id="30115">Later Beluisteren</string>
+	<string id="30116">Account...</string>
 	<!-- search menu -->
-	<string id="30110">Cloudcasts...</string>
-	<string id="30111">Gebruikers...</string>
-	<string id="30112">Geschiedenis...</string>
+	<string id="30200">Cloudcasts...</string>
+	<string id="30201">Gebruikers...</string>
+	<string id="30202">Geschiedenis...</string>
 	<!-- context menu -->
-	<string id="30120">Favorite cloudcast</string>
-	<string id="30121">Unfavorite cloudcast</string>
-	<string id="30122">Follow gebruiker</string>
-	<string id="30123">Unfollow gebruiker</string>
+	<string id="30300">Favorite cloudcast</string>
+	<string id="30301">Unfavorite cloudcast</string>
+	<string id="30302">Follow gebruiker</string>
+	<string id="30303">Unfollow gebruiker</string>
+	<string id="30304">Cloudcast toevoegen aan Later Beluisteren</string>
+	<string id="30305">Cloudcast verwijderen van Later Beluisteren</string>
 	<!-- general settings -->
-	<string id="30200">Algemeen</string>
-	<string id="30201">Maximum cloudcasts per pagina</string>
-	<string id="30202">Grootte van afbeeldingen</string>
-	<string id="30203">Debug modus</string>
-	<string id="30204">Uitgebreide cloudcast info (trager)</string>
-	<string id="30211">Resolver</string>
+	<string id="30400">Algemeen</string>
+	<string id="30401">Maximum cloudcasts per pagina</string>
+	<string id="30402">Grootte van afbeeldingen</string>
+	<string id="30403">Debug modus</string>
+	<string id="30404">Uitgebreide cloudcast info (trager)</string>
+	<string id="30405">Resolver</string>
 	<!-- history settings -->
-	<string id="30220">Geschiedenis</string>
-	<string id="30221">Maximum afgespeelde cloudcasts</string>
-	<string id="30222">Maximum zoekopdrachten</string>
-	<!-- account settings -->
-	<string id="30230">Account (beta)</string>
-	<string id="30231">Gebruik Mixcloud account</string>
-	<string id="30232">Authenticatie code</string>
-	<string id="30233">Authenticatie access token</string>
+	<string id="30500">Geschiedenis</string>
+	<string id="30501">Maximum afgespeelde cloudcasts</string>
+	<string id="30502">Maximum zoekopdrachten</string>
 </strings>

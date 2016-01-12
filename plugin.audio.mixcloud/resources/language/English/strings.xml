@@ -20,29 +20,27 @@
 	<string id="30113">Your Uploads</string>
 	<string id="30114">Your Playlists</string>
 	<string id="30115">Listen Later</string>
+	<string id="30116">Account...</string>
 	<!-- search menu -->
-	<string id="30110">Cloudcasts...</string>
-	<string id="30111">Users...</string>
-	<string id="30112">History...</string>
+	<string id="30200">Cloudcasts...</string>
+	<string id="30201">Users...</string>
+	<string id="30202">History...</string>
 	<!-- context menu -->
-	<string id="30120">Favorite cloudcast</string>
-	<string id="30121">Unfavorite cloudcast</string>
-	<string id="30122">Follow user</string>
-	<string id="30123">Unfollow user</string>
+	<string id="30300">Favorite cloudcast</string>
+	<string id="30301">Unfavorite cloudcast</string>
+	<string id="30302">Follow user</string>
+	<string id="30303">Unfollow user</string>
+	<string id="30304">Add cloudcast to Listen Later</string>
+	<string id="30305">Remove cloudcast from Listen Later</string>
 	<!-- general settings -->
-	<string id="30200">General</string>
-	<string id="30201">Maximum cloudcasts on page</string>
-	<string id="30202">Download thumbnail size</string>
-	<string id="30203">Debug mode</string>
-	<string id="30204">Extended cloudcast info (slower)</string>
-	<string id="30211">Resolver</string>
+	<string id="30400">General</string>
+	<string id="30401">Maximum cloudcasts on page</string>
+	<string id="30402">Download thumbnail size</string>
+	<string id="30403">Debug mode</string>
+	<string id="30404">Extended cloudcast info (slower)</string>
+	<string id="30405">Resolver</string>
 	<!-- history settings -->
-	<string id="30220">History</string>
-	<string id="30221">Maximum played cloudcasts</string>
-	<string id="30222">Maximum searches</string>
-	<!-- account settings -->
-	<string id="30230">Account (beta)</string>
-	<string id="30231">Use Mixcloud account</string>
-	<string id="30232">Authentication code</string>
-	<string id="30233">Authentication access token</string>
+	<string id="30500">History</string>
+	<string id="30501">Maximum played cloudcasts</string>
+	<string id="30502">Maximum searches</string>
 </strings>

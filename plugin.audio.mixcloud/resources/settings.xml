@@ -2,26 +2,19 @@
 <settings>
 
   <!-- General -->
-  <category label="30200">
-    <setting id="page_limit" type="enum" label="30201" values="10|20|30|40|50" default="1" />
-    <setting id="thumb_size" type="enum" label="30202" values="very small|small|medium|large|extra large" default="2" />
-    <setting id="resolver" type="enum" label="30211" values="local|offliberty" default="0" />
-    <setting id="ext_info" type="bool" label="30204" default="false" />
+  <category label="30400">
+    <setting id="page_limit" type="enum" label="30401" values="10|20|30|40|50" default="1" />
+    <setting id="thumb_size" type="enum" label="30402" values="very small|small|medium|large|extra large" default="2" />
+    <setting id="resolver" type="enum" label="30405" values="local|offliberty" default="0" />
+    <setting id="ext_info" type="bool" label="30404" default="false" />
     <setting type="sep" />
-    <setting id="debug" type="bool" label="30203" default="false" />
-  </category>
-
-  <!-- Account -->
-  <category label="30230">
-    <setting id="use_account" type="bool" label="30231" />
-    <setting id="oath_code" type="text" label="30232" />
-    <setting id="access_token" type="text" label="30233" enable="true"/>
+    <setting id="debug" type="bool" label="30403" default="false" />
   </category>
 
   <!-- History -->
-  <category label="30220">
-    <setting id="play_history_max" type="enum" label="30221" values="10|20|30|40|50" default="0"/>
-    <setting id="search_history_max" type="enum" label="30222" values="10|20|30|40|50" default="0" enable="false"/>
+  <category label="30500">
+    <setting id="play_history_max" type="enum" label="30501" values="10|20|30|40|50" default="0"/>
+    <setting id="search_history_max" type="enum" label="30502" values="10|20|30|40|50" default="0" enable="false"/>
   </category>
 
 </settings>

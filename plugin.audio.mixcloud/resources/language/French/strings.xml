@@ -20,29 +20,27 @@
 	<string id="30113">Votre Uploads</string>
 	<string id="30114">Votre Playlists</string>
 	<string id="30115">Ecouter Plus Tard</string>
+	<string id="30116">Account...</string>
 	<!-- search menu -->
-	<string id="30110">Cloudcasts...</string>
-	<string id="30111">Utilisateurs...</string>
-	<string id="30112">Histoire...</string>
+	<string id="30200">Cloudcasts...</string>
+	<string id="30201">Utilisateurs...</string>
+	<string id="30202">Histoire...</string>
 	<!-- context menu -->
-	<string id="30120">Favorite cloudcast</string>
-	<string id="30121">Unfavorite cloudcast</string>
-	<string id="30122">Follow utilisateur</string>
-	<string id="30123">Unfollow utilisateur</string>
+	<string id="30300">Favorite cloudcast</string>
+	<string id="30301">Unfavorite cloudcast</string>
+	<string id="30302">Follow utilisateur</string>
+	<string id="30303">Unfollow utilisateur</string>
+	<string id="30304">Add cloudcast to Listen Later</string>
+	<string id="30305">Remove cloudcast from Listen Later</string>
 	<!-- general settings -->
-	<string id="30200">Général</string>
-	<string id="30201">Nombre maximal de cloudcasts par page</string>
-	<string id="30202">Dimensions des icônes téléchargés</string>
-	<string id="30203">Mode debug</string>
-	<string id="30204">Info cloudcast extensive (plus lente)</string>
-	<string id="30211">Résolveur</string>
+	<string id="30400">Général</string>
+	<string id="30401">Nombre maximal de cloudcasts par page</string>
+	<string id="30402">Dimensions des icônes téléchargés</string>
+	<string id="30403">Mode debug</string>
+	<string id="30404">Info cloudcast extensive (plus lente)</string>
+	<string id="30405">Résolveur</string>
 	<!-- history settings -->
-	<string id="30220">Histoire</string>
-	<string id="30221">Nombre maximal de cloudcasts écoutés</string>
-	<string id="30222">Nombre maximal de recherches</string>
-	<!-- account settings -->
-	<string id="30230">Account (beta)</string>
-	<string id="30231">Uiliser Mixcloud account</string>
-	<string id="30232">Code d'autorisation</string>
-	<string id="30233">Autorisation access token</string>
+	<string id="30500">Histoire</string>
+	<string id="30501">Nombre maximal de cloudcasts écoutés</string>
+	<string id="30502">Nombre maximal de recherches</string>
 </strings>

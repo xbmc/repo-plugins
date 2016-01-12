@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<!-- Provider -->
+	<string id="100">General</string>
+	<string id="140">Username</string>
+	<string id="150">Password</string>
+	<string id="160">Automatically play best stream available</string>
+</strings>
+

@@ -1,3 +1,17 @@
+v2016.1.8
+- Bumped kodi python version
+
+v2015.11.12
+- Bug fix
+
+v2015.10.21
+- Get all feeds from event
+
+v2015.10.2
+- Added play best stream automatically setting
+- Changed code to accommodate for 1 or more streams per event for both live and archive
+- Added description to stream info
+
 v2015.9.22
 - Removed Search Archive
 - Search now has the ability to list events, accounts and videos separately

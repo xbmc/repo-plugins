@@ -1,3 +1,7 @@
+v1.0.3
+- Russian language supprt (Thanks to anare!)
+- Minor fix for case sensitive file systems
+
 v1.0.2
 - 2015/11/15: Minor changes for repo upload.
 

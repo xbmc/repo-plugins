@@ -59,11 +59,13 @@ class PhotoAppGUI:
 
         self.photo_app_path = addon.getSetting('photo_library_path')
         if (self.photo_app_path == ""):
-            self.photo_app_path = os.getenv("HOME") + '/Pictures/Fotos Library.photoslibrary'
-            addon.setSetting('photo_library_path', self.photo_app_path)
-	
-	self.photo_app_db_file = self.photo_app_path + '/database/Library.apdb'
-	self.photo_app_picture_path = self.photo_app_path + '/Masters'
+            self.photo_app_path = os.getenv("HOME") + '/Pictures/Fotos Library.photoslibrary/'
+        elif (self.photo_app_path[-1:] <> '/'):
+            self.photo_app_path = self.photo_app_path + '/'
+        addon.setSetting('photo_library_path', self.photo_app_path)
+
+        self.photo_app_db_file = self.photo_app_path + 'Database/Library.apdb'
+        self.photo_app_picture_path = self.photo_app_path + '/Masters'
 
         self.use_local_copy = addon.getSetting('use_local_copy')
         if (self.use_local_copy == ""):

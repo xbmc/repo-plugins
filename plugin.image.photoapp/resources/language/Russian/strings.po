@@ -1,0 +1,89 @@
+# Kodi Media Center language file
+# Addon Name: Photo App
+# Addon id: plugin.image.photoapp
+# Addon Provider: stonebug
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: PhotoApp.KodiPlugin@stonebug.com\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Claude Marksteiner\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "События"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Альбомы"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Слайд-шоу"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Нет элементов"
+msgstr ""
+
+msgctxt "#30200"
+msgid "Общие"
+msgstr ""
+
+msgctxt "#30210"
+msgid "Photo-Library"
+msgstr ""
+
+msgctxt "#30220"
+msgid "Сделать локальную копию из Photo-Library"
+msgstr ""
+
+msgctxt "#30300"
+msgid "Обзор"
+msgstr ""
+
+msgctxt "#30310"
+msgid "Сорт. как"
+msgstr ""
+
+msgctxt "#30311"
+msgid "Пусто"
+msgstr ""
+
+msgctxt "#30312"
+msgid "Название"
+msgstr ""
+
+msgctxt "#30320"
+msgid "Сорт. по"
+msgstr ""
+
+msgctxt "#30321"
+msgid "По возрастанию"
+msgstr ""
+
+msgctxt "#30322"
+msgid "По убыванию"
+msgstr ""
+
+msgctxt "#30330"
+msgid "Вид"
+msgstr ""
+
+msgctxt "#30331"
+msgid "Список"
+msgstr ""
+
+msgctxt "#30332"
+msgid "Миниатюра"
+msgstr ""
+
+msgctxt "#30333"
+msgid "Изображение"
+msgstr ""

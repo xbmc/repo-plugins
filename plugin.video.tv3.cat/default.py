@@ -86,7 +86,7 @@ def listDestaquem():
     soup = BeautifulSoup(html_destacats)
     dest = None
     try:
-        destacat = soup.find("div", {"class" : "subitem destacat"}).a["href"]
+        destacat = soup.find("section", {"class" : "subitem destacat"}).a["href"]
         code = destacat[-8:-1]
   
         html_data = getUrl(url_datavideos + code + '&profile=pc')
@@ -106,10 +106,10 @@ def listDestaquem():
         
         
    
-    destacatsPetits = soup.findAll("div", { "class" : "subitem R-petit"})
+    #destacatsPetits = soup.findAll("div", { "class" : "subitem R-petit"})
     
     try:
-        destacatsPetits = soup.findAll("div", { "class" : "subitem R-petit"})
+        destacatsPetits = soup.findAll("section", { "class" : "subitem R-petit"})
         
         for c in destacatsPetits:
             a = c.a["href"]
@@ -436,7 +436,7 @@ def listProgramesAZ(url, letters):
     
 def listVideos(url, cercar):
     xbmc.log("--------------listVideos----------")
-   
+    
     xbmc.log('Url listvideos: ' + url)
     link = getUrl(url)
     

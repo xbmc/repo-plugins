@@ -1,4 +1,7 @@
-v-1.3.3
+v1.3.4
+- Fixed website changes
+
+v1.3.3
 - Fixed website changes
 - Added search function
 - Added dependency on BeautifulSoup

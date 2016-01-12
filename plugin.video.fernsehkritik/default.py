@@ -49,17 +49,18 @@ def getEpDetails(ep):
             html=response.read()
             response.close()
             soup = BeautifulSoup(html)        
-            url = soup.find_all('source')[0]['src'] or ""
+            url = re.search(re.escape('{ type: "video/webm",src:  "')+'(.*?)'+re.escape('" }'),html).group(1) or ""
+            image = re.search(re.escape('POSTER = "')+'(.*?)'+re.escape('";'),html).group(1) or ""
             title = soup.find('h3').contents[0] or ""
-            return url, title
+            return url, title, image
         except Exception as e:
             log("retry fetching episode "+str(ep))
             continue
 
     if (ep==latest_ep):
-        return "","neueste Folge momentan nur im Abo"
+        return "","neueste Folge momentan nur im Abo",""
     else:
-        return "","Fehler beim Laden der Folge"
+        return "","Fehler beim Laden der Folge",""
 
 def addItems(start):
     if (start>latest_ep):
@@ -69,8 +70,8 @@ def addItems(start):
         end=0
 
     for ep in reversed(range(end+1,start+1)):
-        url, title = cache.cacheFunction(getEpDetails, ep)
-        listitem=xbmcgui.ListItem (title, iconImage='http://fernsehkritik.tv/images/magazin/folge'+str(ep)+'.jpg')
+        url, title, image = cache.cacheFunction(getEpDetails, ep)
+        listitem=xbmcgui.ListItem (title, iconImage=image)
         listitem.setInfo( type="Video", infoLabels={ "title": title })
         #listitem.setProperty('IsPlayable', 'true')
         #listitem.addStreamInfo('video', {'duration': clip['duration']})

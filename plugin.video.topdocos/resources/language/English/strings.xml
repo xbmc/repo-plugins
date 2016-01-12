@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!-- Plugin name -->
+  <string id="30000">Featured</string>
+  <string id="30001">Recently Added</string>
+  <string id="30002">Highest Rated</string>
+  <string id="30003">Most Voted</string>
+  <string id="30004">Most Shared</string>
+  <string id="30005">All Categories(A-Z)</string>
+</strings>

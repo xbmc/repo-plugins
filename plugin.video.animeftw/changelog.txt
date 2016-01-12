@@ -1,0 +1,83 @@
+[B]Version 2.2.1[/B]
+- Updated Description of the addon.
+
+[B]Version 2.2.0[/B]
+- Updated xbmc.python to version 2.20.0
+- Added fanart.jpg to comply with Kodi requirements.
+
+[B]Version 2.1.2[/B]
+- Updated xbmc.python to version 2.2.0
+
+[B]Version 2.1.1[/B]
+- Fixed an issue where Series with Movies were not getting listed properly.
+
+[B]Version 2.1.0[/B]
+- Added Token validation
+- Improved error handling for the login.
+
+[B]Version 2.0.0[/B]
+- Branding update for Unlicensed only model.
+- Changed to Version 2 of the AnimeFTW.tv API
+- Added Token authentcation through login system.
+- Replaced ElementTree with Requests
+
+[B]Version 1.7.3[/B]
+- Replacing BeautifulSoup with ElementTree, courtesy of don @ AFTW
+
+[B]Version 1.7.2[/B]
+- Updated Python Version
+- Added Language Tag
+
+[B]Version 1.7.1[/B]
+- Changed Repo Location
+
+[B]Version 1.7.0[/B]
+- Changed playback mechanism
+
+[B]Version 1.6.9[/B]
+- Fixed 500 item limit.
+
+[B]Version 1.6.8[/B]
+- Fixed anime descriptions.
+
+[B]Version 1.6.7[/B]
+- More bug fixes.
+
+[B]Version 1.6.6[/B]
+- Fixed a few bugs.
+
+[B]Version 1.6.5[/B]
+- Completely revised; based on new API
+
+[B]Version 1.5.5[/B]
+- Fixed compatibility with new site changes
+- Added disclaimer about new policy regarding free users
+
+[B]Version 1.5.0[/B]
+- Made compatible with the official XBMC repo specifications
+- Improved login handling when no username/password is set
+
+[B]Version 1.4.0[/B]
+- Added LICENSE.txt
+
+[B]Version 1.3.5[/B]
+- Added 'Latest Additions'
+
+[B]Version 1.3.0[/B]
+- Various bug fixes
+- Improved error handling
+- Loading directories shows progress
+- MyAnimeList API should be functioning properly again
+
+[B]Version 1.2.5[/B]
+- Fixed anime listing
+
+[B]Version 1.2.0[/B]
+- Fixed movie list for advanced members
+
+[B]Version 1.1.0[/B]
+- Updated login code
+- Enabled poster, genre and plot listings if available
+
+[B]Version 1.0.0[/B]
+- Initial release

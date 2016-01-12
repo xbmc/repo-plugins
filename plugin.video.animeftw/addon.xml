@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.animeftw" name="AnimeFTW.tv" version="2.2.1" provider-name="FTW Entertainment LLC">
+  <requires>
+    <import addon="xbmc.python" version="2.20.0"/>
+    <import addon="script.module.requests" version="2.7.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <language>en jp</language>
+    <platform>all</platform>
+	<website>http://www.animeftw.tv</website>
+	<source>https://ftw-entertainment-llc-apps.googlecode.com/svn/trunk/plugin.video.animeftw/</source>
+	<forum>http://forum.xbmc.org/showthread.php?tid=80010</forum>
+	<email>developers@ftwentertainment.com</email>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <summary>Watch high definition, unlicensed streaming anime from AnimeFTW.tv!</summary>
+    <description>AnimeFTW.tv provides unlicensed, high-definition, streaming anime to it's users. With over 1450 series and 10 Terabytes of video available, AnimeFTW.tv aims to provide the best collection of unlicensed anime series, OVAs, and movies.
+    </description>
+    <disclaimer>You must have an account at www.animeftw.tv and be logged in for this addon to function! Only the first two episodes are available to free members!</disclaimer>
+  </extension>
+</addon>

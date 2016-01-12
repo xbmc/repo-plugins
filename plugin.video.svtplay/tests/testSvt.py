@@ -82,28 +82,13 @@ class TestSvtModule(unittest.TestCase):
       for key in item.keys():
         self.assertIsNotNone(item[key])
 
-  def test_get_popular(self):
-    items = svt.getPopular()
-
-    self.assertHasContent(items)
-
-  def test_get_latest_videos(self):
-    items = svt.getLatestVideos()
-
-    self.assertHasContent(items)
-
-  def test_get_last_chance(self):
-    items = svt.getLastChance()
-
-    self.assertHasContent(items)
-
-  def test_get_live_programs(self):
-    items = svt.getLivePrograms()
-
-    self.assertHasContent(items)
-
   def test_get_channels(self):
     items = svt.getChannels()
+
+    self.assertHasContent(items)
+
+  def test_get_latest_news(self):
+    items = svt.getLatestNews()
 
     self.assertHasContent(items)
 

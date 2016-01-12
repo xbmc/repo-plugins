@@ -57,6 +57,7 @@ def viewStart():
 
   addDirectoryItem(localize(30009), { "mode": MODE_POPULAR })
   addDirectoryItem(localize(30003), { "mode": MODE_LATEST })
+  addDirectoryItem(localize(30004), { "mode": MODE_LATEST_NEWS })
   addDirectoryItem(localize(30010), { "mode": MODE_LAST_CHANCE })
   addDirectoryItem(localize(30002), { "mode": MODE_LIVE_PROGRAMS })
   addDirectoryItem(localize(30008), { "mode": MODE_CHANNELS })
@@ -132,6 +133,13 @@ def viewChannels():
     return
   for channel in channels:
     createDirItem(channel, MODE_VIDEO)
+
+def viewLatestNews():
+    items = svt.getLatestNews()
+    if not items:
+      return
+    for item in items:
+      createDirItem(item, MODE_VIDEO)
 
 def viewCategory(url):
   if url == svt.URL_TO_OA:
@@ -358,6 +366,8 @@ elif ARG_MODE == MODE_POPULAR or \
      ARG_MODE == MODE_LAST_CHANCE or \
      ARG_MODE == MODE_LIVE_PROGRAMS:
   viewSection(ARG_MODE, int(ARG_PAGE))
+elif ARG_MODE == MODE_LATEST_NEWS:
+  viewLatestNews()
 elif ARG_MODE == MODE_CHANNELS:
   viewChannels()
 elif ARG_MODE == MODE_LETTER:

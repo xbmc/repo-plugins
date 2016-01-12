@@ -1,3 +1,7 @@
+Version 4.0.21
+-------------
+- Latest News is back
+
 Version 4.0.20
 -------------
 - Update to parser for new site layout

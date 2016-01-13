@@ -25,9 +25,9 @@ class myAddon(t1mAddon):
    html = self.getRequest('http://www.cbc.ca/player/tv')
    html = re.compile('<section class="section-cats full">(.+?)</section>', re.DOTALL).search(html).group(1)
    shows = re.compile('<a href="(.+?)">(.+?)</a>', re.DOTALL).findall(html)
-   shows.append(('http://www.cbc.ca/player/news','News'))
-   shows.append(('http://www.cbc.ca/player/Sports','Sports'))
-   shows.append(('http://www.cbc.ca/player/news/TV%20Shows/The%20National/Latest%20Broadcast','The National - Latest Broadcast'))
+   shows.append(('/player/news','News'))
+   shows.append(('/player/Sports','Sports'))
+   shows.append(('/player/news/TV%20Shows/The%20National/Latest%20Broadcast','The National - Latest Broadcast'))
 
    for url, name in shows:
       ilist = self.addMenuItem(name,'GC', ilist, url+'|'+name, self.addonIcon, self.addonFanart, infoList, isFolder=True)
@@ -41,7 +41,7 @@ class myAddon(t1mAddon):
    gcurl = urllib.quote(xurl[0])
    gcurl = gcurl.replace('%3A',':',1)
    catname = xurl[1]
-   html  = self.getRequest(gcurl)
+   html  = self.getRequest('http://www.cbc.ca%s' % gcurl)
    try:    
            html = re.compile('<section class="category-subs full">(.+?)</section', re.DOTALL).search(html).group(1)
            shows = re.compile('a href="(.+?)">(.+?)<', re.DOTALL).findall(html)
@@ -53,6 +53,7 @@ class myAddon(t1mAddon):
       except:
            html = re.compile('<section class="section-cats full">(.+?)</section', re.DOTALL).search(html).group(1)
            shows = re.compile('a href="(.+?)">(.+?)<', re.DOTALL).findall(html)
+        
 
    for url, name in shows:
       ilist = self.addMenuItem(name,'GE', ilist, url+'|'+catname, self.addonIcon, self.addonFanart, infoList, isFolder=True)
@@ -76,7 +77,7 @@ class myAddon(t1mAddon):
    meta = self.getAddonMeta()
    try:    i = len(meta[sname])
    except: meta[sname]={}
-   html  = self.getRequest(geurl)
+   html  = self.getRequest('http://www.cbc.ca%s' % geurl)
    html  = re.compile('<section class="category-content full">(.+?)</section', re.DOTALL).search(html).group(1)
    if '<li class="active">' in html:
         return(self.getAddonShows(url, ilist))
@@ -167,7 +168,7 @@ class myAddon(t1mAddon):
             u = re.compile('<video src="(.+?)"', re.DOTALL).search(html).group(1)
             html = self.getProxyRequest(u)
             try:
-                urls = re.compile('BANDWIDTH=(.+?),.+?mp4a.40.2"(.+?)\n', re.DOTALL).findall(html)
+                urls = re.compile('BANDWIDTH=(.+?),.+?CODECS=".+?"(.+?)\n', re.DOTALL).findall(html)
                 x = 0
                 for (bw, v) in urls:
                    if int(bw)> x:
@@ -176,7 +177,7 @@ class myAddon(t1mAddon):
        
                 u = yy.strip()  
             except:
-                u = re.compile('mp4a.40.2"(.+?)#', re.DOTALL).search(html).group(1)
+                u = re.compile('CODECS=".+?"(.+?)#', re.DOTALL).search(html).group(1)
             u = u.strip()
             liz = xbmcgui.ListItem(path=u)
             try:

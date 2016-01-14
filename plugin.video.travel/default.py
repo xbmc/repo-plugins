@@ -75,14 +75,17 @@ def getShows():
    ilist=[]
    html = getRequest('http://www.travelchannel.com/shows/whats-new-on-travel-channel/articles/full-episodes')
    m = re.compile('<article(.+?)</article',re.DOTALL).search(html)
-   a = re.compile('<section class="topn-wrapper">.+?<a href="(.+?)".+?blank">(.+?)<.+?src="(.+?)".+?<p>(.+?)<.+?</section>', re.DOTALL).findall(html,m.start(1),m.end(1))
-   a[(len(a)-1)] = ('/video/p/1?wcmmode=disabled',__language__(30021),icon,__language__(30021))
-   for url,name,img,plot in a:
+   a = re.compile('<div class="fullEpisode.+?<a href="(.+?)".+?title">(.+?)<.+?src="(.+?)".+?</div', re.DOTALL).findall(html,m.start(1),m.end(1))
+   a[(len(a)-1)] = ('/video/p/1?wcmmode=disabled',__language__(30021),icon)
+   for url,name,img in a:
        html  = getRequest('http://www.travelchannel.com%s' % url, alert=False)
        c     = re.compile("data\-videoplaylist\-data='(.+?)'>", re.DOTALL).findall(html)
        if len(c) == 0: continue
        else: vidcnt = len(c)
        name=name.strip()
+       b = json.loads(c[0])
+       img = 'http://www.travelchannel.com%s' % b['thumbnailUrl']
+       plot = name
        fanart = img
        infoList = {}
        infoList['TVShowTitle'] = name

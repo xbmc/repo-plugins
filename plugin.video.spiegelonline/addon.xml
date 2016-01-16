@@ -16,5 +16,6 @@
         <website>https://github.com/cdwertmann/plugin.video.spiegelonline</website>
         <source>git://github.com/cdwertmann/plugin.video.spiegelonline.git</source>
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+        <broken>Add-on does not function properly</broken>
     </extension>
 </addon>

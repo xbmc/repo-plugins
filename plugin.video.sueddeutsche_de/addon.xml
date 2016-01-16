@@ -14,5 +14,6 @@
         <description lang="de">Sueddeutsche.de Mediathek</description>
         <description lang="en">Sueddeutsche.de video library</description>
     <platform>all</platform>
+    <broken>Add-on does not function properly</broken>
     </extension>
 </addon>

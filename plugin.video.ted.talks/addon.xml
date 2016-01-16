@@ -24,5 +24,6 @@
     <forum>http://forum.xbmc.org/showthread.php?tid=36866</forum>
     <website>https://github.com/moreginger/xbmc-plugin.video.ted.talks</website>
     <source>https://github.com/moreginger/xbmc-plugin.video.ted.talks.git</source>
+    <broken>To continue using this add-on please update to newer Kodi version.</broken>
   </extension>
 </addon>

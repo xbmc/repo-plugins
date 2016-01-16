@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.nascar"
        name="Nascar.com"
-       version="2.0.3"
+       version="2.0.4"
        provider-name="divingmule">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -18,5 +18,6 @@
     <language>en</language>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
     <source>https://code.google.com/p/xnascar/</source>
+    <broken>Add-on does not function properly</broken>
   </extension>
 </addon>

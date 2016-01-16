@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.elisa.viihde" name="Elisa Viihde" version="0.0.6" provider-name="zippoman, purtsi, teerytko, anylonen">
+<addon id="plugin.video.elisa.viihde" name="Elisa Viihde" version="0.0.7" provider-name="zippoman, purtsi, teerytko, anylonen">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.simplejson"/>
@@ -18,5 +18,6 @@
 	<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 	<website>https://github.com/anylonen/XBMC-Elisa-Viihde-plugin</website>
 	<source>https://github.com/anylonen/XBMC-Elisa-Viihde-plugin.git</source>
+	<broken>To continue using this add-on please update to newer Kodi version.</broken>
     </extension>
 </addon>

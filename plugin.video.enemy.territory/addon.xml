@@ -17,5 +17,6 @@
 		<forum>http://forum.xbmc.org/showthread.php?tid=178789</forum>
 		<source>https://github.com/willforde/plugin.video.enemy.territory</source>
 		<website>http://enemyterritory.sectornetwork.com/data/playlist_MySQL.php</website>
+		<broken>Add-on does not function properly</broken>
 	</extension>
 </addon>

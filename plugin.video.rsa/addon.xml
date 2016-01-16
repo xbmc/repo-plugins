@@ -20,5 +20,6 @@
         <website></website>
         <email>lextoumbourou@gmail.com</email>
         <source>https://github.com/lextoumbourou/plugin.video.rsa</source>
+        <broken>Add-on does not function properly</broken>
 </extension>
 </addon>

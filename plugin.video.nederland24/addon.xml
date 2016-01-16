@@ -20,5 +20,6 @@
       <email></email>
       <source>https://github.com/bosel/plugin.video.nederland24</source>
       <disclaimer lang="en">Copyright 2011-2015 bosel.This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</disclaimer>
+      <broken>To continue using this add-on please update to newer Kodi version.</broken>
   </extension>
 </addon>

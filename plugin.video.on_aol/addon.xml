@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.on_aol" name="On Aol" version="1.0.3" provider-name="divingmule">
+<addon id="plugin.video.on_aol" name="On Aol" version="1.0.4" provider-name="divingmule">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.beautifulsoup" version="3.0.8"/>
@@ -17,5 +17,6 @@
     </description>
     <platform>all</platform>
     <language>en</language>
+    <broken>Add-on does not function properly</broken>
   </extension>
 </addon>

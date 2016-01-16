@@ -23,5 +23,6 @@
 		<website></website>
 		<source>https://github.com/tuxpoldo/entertain-xbmc.git</source>
 		<email></email>
+		<broken>Add-on does not function properly</broken>
 	</extension>
 </addon>

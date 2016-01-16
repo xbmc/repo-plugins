@@ -17,5 +17,6 @@
     <description lang="en">Free Educational Video Tutorials on Computer Programming, Adobe Software, Computer Science and More!</description>
     <license>MIT</license>
     <website>http://github.com/lextoumbourou/plugin.video.thenewboston</website>
+    <broken>Add-on does not function properly</broken>
   </extension>
 </addon>

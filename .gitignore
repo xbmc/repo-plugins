@@ -1,6 +1,9 @@
+.DS_Store
+.editorconfig
 .git
 .gz
 .hg
+.hg_archival.txt
 .idea
 .project
 .pydevproject

@@ -1,0 +1,8 @@
+<settings>
+   <setting id="minLengthNew" type="enum" label="30103" values="0|5|10|20|30" default="0"/>
+   <setting id="showSubtitles" type="bool" label="30105" default="false"/>
+   <setting id="useThumbAsFanart" type="bool" label="30104" default="true"/>
+   <setting id="forceView" type="bool" label="30101" default="true"/>
+   <setting id="viewIDShows" type="number" label="30106" default="500"/>
+   <setting id="viewIDVideos" type="number" label="30102" default="51"/>
+</settings>

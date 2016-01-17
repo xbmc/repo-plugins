@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30001">Alle Sendungen</string>
+  <string id="30002">Suchen</string>
+  <string id="30003">Nachrichten</string>
+  <string id="30004">Themen</string>
+  <string id="30005">Tipps</string>
+  <string id="30006">Neu</string>
+  <string id="30007">Meistgesehen</string>
+  <string id="30008">Sendungen</string>
+  <string id="30009">Themen</string>
+  <string id="30010">Favoriten</string>
+  <string id="30011">Nächste Seite</string>
+  <string id="30012">Zur Wiedergabeliste hinzufügen</string>
+  <string id="30013">Sendungen nach Datum</string>
+  <string id="30028">Zu Addon Favs hinzufügen</string>
+  <string id="30029">Aus Addon Favs entfernen</string>
+  <string id="30030">Sender</string>
+  <string id="30031">Rubriken</string>
+  <string id="30101">View erzwingen</string>
+  <string id="30102">ViewID (Videos)</string>
+  <string id="30103">Minimale Videolänge in Minuten</string>
+  <string id="30104">Thumb als Fanart nutzen</string>
+  <string id="30105">Untertitel aktivieren (falls verfügbar)</string>
+  <string id="30106">ViewID (Sendungen)</string>
+</strings>

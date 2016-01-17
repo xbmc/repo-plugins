@@ -138,9 +138,9 @@ def playLiveStream():
     #http://hdiosstv-f.akamaihd.net/i/servustvhdde_1@75540/index_912_av-b.m3u8?sd=10&b=0-1500&rebase=on
     xbmc.log("XXX uRL: " + qualityLive)
     if qualityLive=="1": 
-      streamUrl="http://hdiosstv-f.akamaihd.net/i/servustvhdde_1@75540/index_1112_av-b.m3u8?sd=10&b=0-1500&rebase=on"
+      streamUrl="http://hdiosstv-f.akamaihd.net/i/servustvhdde_1@75540/index_1112_av-p.m3u8?sd=10&b=0-1500&rebase=on"
     else :
-       streamUrl="http://hdiosstv-f.akamaihd.net/i/servustvhdde_1@75540/index_912_av-b.m3u8?sd=10&b=0-1500&rebase=on"
+       streamUrl="http://hdiosstv-f.akamaihd.net/i/servustvhdde_1@75540/index_912_av-p.m3u8?sd=10&b=0-1500&rebase=on"
     xbmc.log("XXX uRLx: " + streamUrl)
     listitem = xbmcgui.ListItem(path=streamUrl)
     xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)

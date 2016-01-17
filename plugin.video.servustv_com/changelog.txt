@@ -7,3 +7,5 @@
 - New Version Number
 1.0.4
 - Wrong file
+1.0.7
+- Fixed Live Stream

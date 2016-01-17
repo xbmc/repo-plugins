@@ -119,6 +119,7 @@ def resolve_item(embed_url, url):
     return retriever(embed_url, url)
 
 
+# TODO: Not very functional, find a better place to pop up the Dialog.
 def nothing(embed_url, url):
     xbmcgui.Dialog().ok(addon_name, "The video source is not playable")
     return None
@@ -151,7 +152,7 @@ def retrieve_url_for_youtube(embed_url, url):
 
 
 def add_dir(name, embed_url, url, icon_image, dir_mode, is_folder=True):
-    dir_params = {'name': name, 'embed_url': embed_url, 'url': url, 'mode': dir_mode}
+    dir_params = {'embed_url': embed_url, 'url': url, 'mode': dir_mode}
     url = '%s?%s' % (sys.argv[0], urllib.urlencode(dir_params))
     list_item = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=icon_image)
     if not is_folder:

@@ -6,7 +6,6 @@ import xbmcplugin
 import urllib
 import urllib2
 import urlparse
-import xmltodict
 import re
 from bs4 import BeautifulSoup
 
@@ -37,8 +36,7 @@ def getLatestEp():
     response = opener.open("http://fernsehkritik.tv/feed")
     html=response.read()
     response.close()
-    d=xmltodict.parse(html)
-    return re.findall(r'\d+',d['rss']['channel']['item'][0]['link'])[0]
+    return re.search("fktv(\d+)</guid>",html).group(1)
 
 latest_ep=int(cache.cacheFunction(getLatestEp))
 
@@ -71,8 +69,8 @@ def addItems(start):
 
     for ep in reversed(range(end+1,start+1)):
         url, title, image = cache.cacheFunction(getEpDetails, ep)
-        listitem=xbmcgui.ListItem (title, iconImage=image)
-        listitem.setInfo( type="Video", infoLabels={ "title": title })
+        listitem=xbmcgui.ListItem(title, iconImage=image, thumbnailImage=image)
+        listitem.setInfo( type="Video", infoLabels={ "title": title , "episode": ep })
         #listitem.setProperty('IsPlayable', 'true')
         #listitem.addStreamInfo('video', {'duration': clip['duration']})
         xbmcplugin.addDirectoryItem(addon_handle, url, listitem,totalItems=start-end)

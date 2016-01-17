@@ -71,7 +71,8 @@ def filter_video(path):
         return True
     if parentdir.upper() == 'BDMV' and filename.lower() == 'index.bdmv':
         return True
-    if re.match(r"^.*[\\/](VIDEO_TS|BDMV)[\\/].*$", path):
+    if re.match(r"^.*[\\/](VIDEO_TS|BDMV)[\\/].*$", path) \
+            or (parentdir.upper() == 'CERTIFICATE' and filename.lower() == 'id.bdmv'):
         logging.debug("identified '%s' as dvd or bluray companion file" % path)
         return False
 

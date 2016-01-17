@@ -1,3 +1,6 @@
+[B]4.0.5[/B]
+- Improved detection of bluray companion files.
+
 [B]4.0.4[/B]
 - Fixed detection of stacked files with comma in filename.
 

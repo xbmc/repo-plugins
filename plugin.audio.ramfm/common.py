@@ -17,7 +17,7 @@
 #  http://www.gnu.org/copyleft/gpl.html
 #
 
-import urllib
+#import urllib
 import geturllib
 import os
 import xbmc

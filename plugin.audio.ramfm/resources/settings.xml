@@ -9,9 +9,5 @@
         <setting id="RECORD_FOLDER" type="folder" label="30104" default=""/>
         <setting id="ASK_FOLDER"    type="bool"   label="30105" default="false"/>
         <setting id="ASK_FILENAME"  type="bool"   label="30106" default="true"/>
-    </category>  
-    <category label="30107">
-        <setting  id="AUTO"         type="bool"   label="30108"                                            default="false"/>
-        <setting  id="NEW_TALKSHOW" type="select" label="30109" source="/lib" mask=".py"  option="hideext" default="All"/>
     </category>
 </settings>

@@ -1,5 +1,5 @@
 #
-#      Copyright (C) 2013 Sean Poyser
+#      Copyright (C) 2013- Sean Poyser
 #
 #  This Program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -28,7 +28,6 @@ import xbmcgui
 import datetime
 import time
 import os
-import nowplaying
 import common
 
 ADDONID  = 'plugin.audio.ramfm'
@@ -48,10 +47,8 @@ _REQUEST     = 200
 _LETTER      = 300
 _TRACK       = 400
 _RECORD      = 500
-_SLIDESHOW   = 600
 _PODCASTS    = 700
 _PLAYPODCAST = 800
-_NOWPLAYING  = 900
 
 MODE_FREE   = 1000
 MODE_SONG   = 1100
@@ -149,41 +146,12 @@ def Record():
     dp.close()
 
 
-def StartNowPlaying():
-    app = None
-    try:
-        app = nowplaying.NowPlaying()
-        app.doModal()   
-    except Exception, e:
-        pass
-
-    if app:
-        del app
-
-
-def StartSlideShow():
-    import slideshow
-    slideshow.Start()
-
-
 def Play():
-    slideshow = (ADDON.getSetting('AUTO') == 'true')
-
     pl = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
     pl.clear()    
     pl.add(URL)
 
-    if slideshow:
-        #necessary otherwise XBMC gets stuck
-        #showing "Working" notification
-        xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
     xbmc.Player().play(pl)
-
-    if slideshow:
-        xbmc.sleep(1000)
-        StartSlideShow()
-
 
 
 def PlayPodcast(name, link):
@@ -276,11 +244,13 @@ def RequestLetter(letter):
 
     items = response.split('<!-- start')[1:]
     for item in items:
+        item = item.replace(' (& ', ' (& ')
         mode = MODE_FREE
         if '<i>song recently played</i>' in item:
             mode = MODE_IGNORE if hide else MODE_SONG
         if '<i>artist recently played</i>' in item:
             mode = MODE_IGNORE if hide else MODE_ARTIST
+
 
         if mode == MODE_FREE:
             match = re.compile('<a href="javascript:request\((.+?)\)" title="(.+?)">.+?<img src="http://ramfm.org/artistpic/(.+?)".+?alt="(.+?)">').findall(item)[0]
@@ -292,7 +262,7 @@ def RequestLetter(letter):
 
         if mode == MODE_ARTIST or mode == MODE_SONG:
             item   = item.replace('&nbsp;', ' ')
-            match  = re.compile('title="(.+?)".+?<p><img src="http://ramfm.org/artistpic/(.+?)".+?alt="(.+?)">(.+?)\(').findall(item)[0]
+            match  = re.compile('title="(.+?)".+?<p><img src="http://ramfm.org/artistpic/(.+?)".+?alt="(.+?)">(.+?)\(<i>').findall(item)[0]
             reason = match[0]
             title  = match[3].split('  ')[2]
             image  = match[1]
@@ -300,10 +270,21 @@ def RequestLetter(letter):
             addUnavailable(title, artist, image, reason)
 
 
+def clean(name):
+    name = name.replace('&#233;', 'e')
+
+    return name.strip()
+
+
 
 def addAvailable(title, artist, image, request):
     image = 'http://ramfm.org/artistpic/%s' % image.replace(' ', '%20')   
-    name  = title.replace('Request ', '')
+    name  = title
+
+    if name.startswith('Request'):
+        name  = name.replace('Request ', '')
+
+    name = clean(name)
     
     id   = request.split(',')[0]
     ip   = request.split('\'')[1]
@@ -320,7 +301,8 @@ def addAvailable(title, artist, image, request):
 def addUnavailable(title, artist, image, reason):
     image  = 'http://ramfm.org/artistpic/%s' % image.replace(' ', '%20')
     name   = artist + ' - ' + title + '[I] (%s)[/I]' % reason
-    name   = '[COLOR=FFFF0000]' + name + '[/COLOR]'  
+    name   = '[COLOR=FFFF0000]' + name + '[/COLOR]'
+    name   = clean(name)  
         
     u    = sys.argv[0] 
     u   += '?mode=' + str(mode)
@@ -356,8 +338,6 @@ def Main():
     addDir(GETTEXT(30036), _PLAYNOW,     False)
     addDir(GETTEXT(30037), _RECORD,      False)
     addDir(GETTEXT(30031), _REQUEST,     True)
-    #addDir(GETTEXT(30038), _NOWPLAYING,  False)
-    addDir(GETTEXT(30039), _SLIDESHOW,   False)
     addDir(GETTEXT(30040), _PODCASTS,    True)
 
     play = ADDON.getSetting('PLAY')=='true'
@@ -377,6 +357,7 @@ def addLetter(letter):
 
 
 def addDir(name, mode, isFolder):
+    name = clean(name)
     thumbnail = ICON
     u         = sys.argv[0] + '?mode=' + str(mode)        
     liz       = xbmcgui.ListItem(name, iconImage=thumbnail, thumbnailImage=thumbnail)
@@ -434,11 +415,6 @@ elif mode == _LETTER:
     except:
         pass
 
-elif mode == _SLIDESHOW:
-    if IsPlaying(GETTEXT(30041)):
-        StartSlideShow()
-
-
 elif mode == _TRACK:    
     try:
         url=urllib.unquote_plus(params['url'])
@@ -466,11 +442,6 @@ elif mode == MODE_SONG:
 elif mode == MODE_ARTIST:
     ShowError(GETTEXT(30044))
 
-
-elif mode == _NOWPLAYING:
-    if IsPlaying(GETTEXT(30042)):
-        doEnd = False
-        StartNowPlaying()
     
 try:    
     xbmcplugin.endOfDirectory(int(sys.argv[1]))

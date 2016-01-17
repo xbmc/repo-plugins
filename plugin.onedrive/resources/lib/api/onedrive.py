@@ -62,7 +62,7 @@ class OneDrive:
         if code is None:
             data = self._get_login_request_data('refresh_token')
             if data['refresh_token'] == '' :
-                raise OneDriveException(Exception('login', 'No authorization code or refresh token provided.'), None, 'login method', data)
+                raise OneDriveException(Exception('login', 'No authorization code or refresh token provided.'), None, 'login method', str(data))
         else:
             data = self._get_login_request_data('authorization_code', code)
         jsonResponse = self.post(self._login_url, params=data, raw_url=True)

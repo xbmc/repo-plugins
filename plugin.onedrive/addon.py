@@ -250,7 +250,7 @@ def start_auto_refreshed_slideshow(driveid, item_id, oldchild_count):
     else:
         dialog.ok(addonname, addon.getLocalizedString(30034) % utils.Utils.unicode(f['name']))
 
-def export_folder(name, item_id, driveid, destination_folder):
+def export_folder(name, item_id, driveid, destination_folder, directLink=None):
     onedrive = onedrives[driveid]
     parent_folder = os.path.join(destination_folder, name)
     if not os.path.exists(parent_folder):
@@ -259,7 +259,10 @@ def export_folder(name, item_id, driveid, destination_folder):
         except:
             monitor.waitForAbort(3)
             os.makedirs(parent_folder)
-    files = onedrive.get('/drive/items/'+item_id+'/children')
+    if directLink is None:
+        files = onedrive.get('/drive/items/'+item_id+'/children')
+    else:
+        files = onedrive.get(directLink, raw_url=True)
     if cancelOperation(onedrive):
         return
     for f in files['value']:
@@ -288,6 +291,8 @@ def export_folder(name, item_id, driveid, destination_folder):
         if onedrive.exporting_percent < p:
             onedrive.exporting_percent = p
         progress_dialog.update(onedrive.exporting_percent, parent_folder, name)
+    if '@odata.nextLink' in files and not cancelOperation(onedrive):
+        export_folder(os.path.basename(parent_folder), item_id, driveid, destination_folder, files['@odata.nextLink'])
 
 def remove_readonly(fn, path, excinfo):
     if fn is os.rmdir:
@@ -303,7 +308,7 @@ def report_error(e):
         try:
             tb += '\n--Origin: --\n' + ''.join(traceback.format_exception(type(e.origin), e.origin, e.tb))
             tb += '\n--url--\n' + e.url
-            tb += '\n\n--body--\n' + e.body
+            tb += '\n\n--body--\n' + utils.Utils.str(e.body)
         except Exception as e:
             tb += '\n--Exception trying build the report: --\n' + traceback.format_exc()
     tb += '\nVersion: %s' % addon.getAddonInfo('version')

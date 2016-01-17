@@ -1,0 +1,63 @@
+# Kodi Media Center language file
+# Addon Name: Food Biker
+# Addon id: plugin.video.foodbiker
+# Addon Provider: foodbiker
+msgid ""
+msgstr ""
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#settings labels
+
+msgctxt "#30000"
+msgid "Food Biker"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Live"
+msgstr ""
+
+msgctxt "#30002"
+msgid "No live videos available right now."
+msgstr ""
+
+msgctxt "#30003"
+msgid "Minimum percent to mark a video as watched"
+msgstr ""
+
+msgctxt "#30004"
+msgid "All uploads"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Episode Info"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Mark as watched"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Remove watched"
+msgstr ""
+
+msgctxt "#30008"
+msgid "General"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Show all videos directory"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Next Page"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Videos per youtube page"
+msgstr ""

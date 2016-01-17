@@ -1,0 +1,15 @@
+Food Biker Video Addon Changelog
+
+*** 1.0.3 ***
+Debugging with Food Biker Repository
+Shortened URLs
+Cleaned whitespace
+Language correction
+Ensured correct python version for Isengard
+
+*** 1.0.2 ***
+Updated Artwork
+
+*** 1.0.1 ***
+Project Creation
+Initial release

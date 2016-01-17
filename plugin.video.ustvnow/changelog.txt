@@ -1,4 +1,64 @@
-[B]Version 12.0.2[/B]
+[B]Version 12.0.18[/B]
+- Fixed update service
+
+[B]Version 12.0.17[/B]
+- Fixed Commoncache issues
+
+[B]Version 12.0.16[/B]
+- Fixed Commoncache issues
+
+[B]Version 12.0.15[/B]
+- Misc. tweaks
+
+[B]Version 12.0.14[/B]
+- Misc. tweaks
+
+[B]Version 12.0.13[/B]
+- Misc. tweaks
+
+[B]Version 12.0.12[/B]
+- Old code removed, new code stable.
+- Fixed SD/HD streaming issues.
+- Various tweaks and fixes.
+    
+[B]Version 12.0.11[/B]
+- "NEW" code exclusive features:
+    - Tweaked Caching, boosted TVGuide and Channel load times.
+    
+[B]Version 12.0.10[/B]
+- "NEW" code exclusive features:
+    - Added Scheduling *Thanks yrabl.
+    - Improved UI *Thanks yrabl.
+    
+[B]Version 12.0.9[/B]
+- "NEW" code exclusive features:
+    - Tweaked login
+    - Added TV Guide Artwork *Thanks yrabl.
+    - Improved Record/Favourites *Thanks yrabl.
+    
+[B]Version 12.0.8[/B]
+- "NEW" code exclusive features:
+    - Tweaked File Service and Settings.
+    - Improved TV Guide Channel launching.
+    
+[B]Version 12.0.7[/B]
+- High quality Channel logos
+- "NEW" code exclusive features:
+    - Record folder fixed, Favorites still experimental. 
+
+[B]Version 12.0.5[/B]
+- "NEW" code exclusive features:
+    - Standard and IPTVsimple M3U generator
+    - Background service - Updates M3U's and XMLTV (Strms do not require refreshing) every 6 hrs.
+- New HD feeds, Premium users only!
+
+[B]Version 12.0.4[/B]
+- New parsing code, To use new code enter settings and select "NEW"
+- "NEW" code exclusive features:
+  - STRM & XMLTV generator
+  - TV Guide
+
+[B]Version 12.0.3[/B]
 - Added Login verification
 - Added Feedback Prompts 
 

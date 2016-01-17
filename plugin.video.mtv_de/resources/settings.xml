@@ -1,4 +1,5 @@
 <settings>
+   <setting id="country" type="select" label="30213" lvalues="30214|30215" default="0"/>
    <setting id="forceViewMode" type="bool" label="30110" default="true"/>
    <setting id="viewMode" type="number" label="30111" enable="eq(-1,true)" default="51"/>
    <setting id="useThumbAsFanart" type="bool" label="30112" default="true"/>

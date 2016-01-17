@@ -201,11 +201,19 @@ def Book(_url, title, image, author):
     contextMenu.append((GETTEXT(30003), cmd))
     match = re.compile('name:"(.+?)".+?mp3:"(.+?)"}').findall(match[0])
     for chapter, url in match:
-        if 'Chapter' in chapter:
-            num = fix(chapter).split('Chapter')[1].strip().split(' ')[0]
+
+        if 'Chapters' in chapter:
+            num = fix(chapter).split('Chapters', 1)[-1].strip()
+            if len (num) > 0:
+                num = ' ' + num
+            chapter = GETTEXT(30020) + num
+
+        elif 'Chapter' in chapter:
+            num = fix(chapter).split('Chapter', 1)[-1].strip().split(' ')[0]
             if len (num) > 0:
                 num = ' ' + num
             chapter = GETTEXT(30004) + num
+
         AddChapter(url, title, clean(chapter), image, contextMenu)
 
 
@@ -252,14 +260,17 @@ def Search(page, keyword):
     url = 'https://www.google.co.uk/search?q=%s+mp3+downloads+site:www.loyalbooks.com&start=%d' % (keyword, start)
 
     html = GetHTMLDirect(url)
+    html = html.split('Search Results', 1)[-1]
 
-    links = html.split('class="web_result">')
+    links = html.split('class="web_result"')
     links = links[1:]
 
     root = URL + 'book/'
     for link in links:
+        print link
+        print "__________________________"
         try:
-            url   = root + re.compile('%s(.+?)%%26source' % root).search(link).group(1)
+            url   = root + re.compile('%s(.+?)%%26ei' % root).search(link).group(1)
             title = re.compile('>(.+?)</a').search(link.split(url, 1)[-1]).group(1)
 
             AddBook(title, None, url)

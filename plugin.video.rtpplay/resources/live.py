@@ -74,29 +74,22 @@ def grab_live_stream_url(url):
 			elif type_stream == '1': versao = 'rtmp'
 			elif type_stream == '2': versao = 'm3u8'
 			#Scrape the page source for each type of stream	
+			match = re.compile('"stream_wma" : "(.+?)"').findall(page_source)
+			if match:
+				url2=match[0]
+				return url2
 			if versao == 'rtmp':
-				match = re.compile('"stream_wma" : "(.+?)"').findall(page_source)
-				if match:
-					url2=match[0]
-					return url2
-				else:
-					id_ = re.compile('live.+?file = live.+?\.(.+?);').findall(page_source)
-					file_ = re.compile('"'+id_[0]+'": "(.+?)"').findall(page_source)
-					streamer = re.compile('"streamer": "(.+?)"').findall(page_source)
-					application = re.compile('"application": "(.+?)"').findall(page_source)
-        				url2 = 'rtmp://' + streamer[0] +'/' + application[0] + '/'+file_[0]+' swfVfy=1 pageUrl='+url +' swfUrl=' + player + linkpart
-        				return url2
-        		else:
-        			match = re.compile('"stream_wma" : "(.+?)"').findall(page_source)
-        			if match:
-					url2=match[0]
-					return url2
-				else:        			
-					match=re.compile('\"smil\":(.+?)\"').findall(page_source)
-					if not match:
-						match=re.compile('\"d\":(.+?)\"').findall(page_source)
-        				url2 = match[0].replace('"','')
-        				return base64.b64decode(url2)
+				id_ = re.compile('live.+?file = live.+?\.(.+?);').findall(page_source)
+				file_ = re.compile('"'+id_[0]+'": "(.+?)"').findall(page_source)
+				streamer = re.compile('"streamer": "(.+?)"').findall(page_source)
+				application = re.compile('"application": "(.+?)"').findall(page_source)
+        			url2 = 'rtmp://' + streamer[0] +'/' + application[0] + '/'+file_[0]+' swfVfy=1 pageUrl='+url +' swfUrl=' + player + linkpart
+        			return url2
+			else:
+				smil_ = re.compile('liveo.smil = liveo\.(.+?);').findall(page_source)
+				file_ = re.compile('"'+smil_[0]+'":"(.+?)"').findall(page_source)
+				if file_:
+					return file_[0]+'|User-Agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36'
 	else:
 		return None
 

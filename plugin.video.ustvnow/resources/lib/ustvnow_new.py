@@ -46,7 +46,7 @@ class Ustvnow:
         self.user = user
         self.password = password
         self.premium = premium
-        self.write_type = int(Addon.get_setting('write_type'))     
+        self.write_type = int(Addon.get_setting('enable_write'))     
         self.LIVETV     = self.mBASE_URL + '/iphone/1/live/playingnow?pgonly=true&token=%s'
         self.RECORDINGS = self.mBASE_URL + '/iphone/1/dvr/viewdvrlist?pgonly=true&token=%s'
         try:   

@@ -198,8 +198,8 @@ elif mode == 'guidedata':
     
 elif mode == 'playlist':
     ustv.get_channels(quality_type, stream_type)
-    Addon.makeXMLTV(ustv.get_guidedata(quality_type, stream_type),urllib.unquote(os.path.join(write_path, 'xmltv.xml')))
-        
+    Addon.makeXMLTV(ustv.get_guidedata(quality_type, stream_type),urllib.unquote(os.path.join(write_path, 'xmltv.xml')))    
+    
 elif mode == 'tvguide':  
     fpath = os.path.join(write_path, 'xmltv.xml')  
     try:

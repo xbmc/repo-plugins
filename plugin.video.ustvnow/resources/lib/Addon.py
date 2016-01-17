@@ -158,7 +158,7 @@ def makeM3U(links):
     if links:
         for l in links:
             #Add name based filename
-            if int(get_setting('write_type')) == 3:
+            if int(get_setting('enable_write')) == 3:
                 playlist.write('#EXTINF:-1, tvg-id="'+l['name']+'" tvg-logo="'+l['name']+'" tvg-name="'+l['name']+'"  group-title="USTVnow",'+l['name']+'\n')
             else:
                 playlist.write('#EXTINF:'+l['name']+'\n')

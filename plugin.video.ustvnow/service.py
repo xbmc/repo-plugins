@@ -27,8 +27,8 @@ while not monitor.abortRequested():
         # Abort was requested while waiting. We should exit
         break
         
-    if int(Addon.get_setting('write_type')) != 0 and len(Addon.get_setting('email')) >= 1:
-        if int(Addon.get_setting('write_type')) in [2,3]:
+    if int(Addon.get_setting('enable_write')) > 0 and len(Addon.get_setting('email')) >= 1:
+        if int(Addon.get_setting('enable_write')) in [2,3]:
             MSG = 'M3U'
         else:
             MSG = 'STRM'
@@ -48,10 +48,8 @@ while not monitor.abortRequested():
             SyncUpdate = datetime.datetime.strptime(Update_LastRun, "%Y-%m-%d %H:%M:%S.%f")
 
         if now > SyncUpdate:
-            xbmc.executebuiltin("XBMC.RunPlugin(plugin://plugin.video.ustvnow/?mode=playlist)")
-            
-            if Addon.get_setting('silent') == 'false':
-                xbmc.executebuiltin("Notification( %s, %s, %d, %s)" % ("USTVnow", "%s/XMLTV Updated" %MSG, 1000, Addon.ICON) )
-        
             Update_NextRun = ((now + datetime.timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S.%f"))
             Addon.setProperty('Update_NextRun', str(Update_NextRun))
+            xbmc.executebuiltin("XBMC.RunPlugin(plugin://plugin.video.ustvnow/?mode=playlist)")         
+            if Addon.get_setting('silent') == 'false':
+                xbmc.executebuiltin("Notification( %s, %s, %d, %s)" % ("USTVnow", "%s/XMLTV Updated" %MSG, 1000, Addon.ICON) )

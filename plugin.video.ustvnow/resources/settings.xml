@@ -6,7 +6,7 @@
     <setting id="subscription_last" visible="false" type="bool" default="false" />
     <setting id="email" type="text" label="30102" default="" />
     <setting id="password" type="text" option="hidden" label="30103" default="" />
-    <setting id="write_type" type="enum" label="30109" values="Disabled|STRM|Standard m3u|IPTVsimple m3u" default="3" />
+    <setting id="enable_write" type="enum" label="30109" values="Disabled|STRM|Standard m3u|IPTVsimple m3u" default="0" />
     <setting id="write_folder" type="folder" source="auto"  visible="!eq(-1,0)" label="30106" default="special://userdata/plugin.video.ustvnow/"/>
     <setting id="silent" type="bool" label="30105" visible="!eq(-2,0)" default="false" />
 </settings>

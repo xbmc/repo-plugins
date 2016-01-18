@@ -4,6 +4,7 @@ plugin.video.cbc
 Kodi V2 Addon for CBC - for use in Canada only
 For Kodi Isengard and later releases
 
+V2.0.9 unicode issue
 V2.0.8 bump xbmc.python
 V2.0.7 website changes
 V2.0.6 unicode fix

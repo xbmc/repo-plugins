@@ -51,8 +51,8 @@ class Category(Base):
     @staticmethod
     def from_response(r):
         return Category(
-            title=r.get('displayValue', None) or r['title'],
-            id=r['categoryId'],
+            title=r.get('displayValue', r.get('title', None)),
+            id=r.get('categoryId', None),
         )
 
 
@@ -147,7 +147,7 @@ class Program(Series):
 
 
 def _get(path):
-    r = session.get("http://m.nrk.no/tvapi/v1" + path)
+    r = session.get("http://tvapi.nrk.no/v1" + path)
     r.raise_for_status()
     return r.json()
 

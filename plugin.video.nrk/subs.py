@@ -33,18 +33,28 @@ def get_subtitles(video_id):
 
 
 def _ttml_to_srt(ttml):
-    output = BytesIO()
-    subtitles = re.compile(r'<p begin="(.*?)" dur="(.*?)".*?>(.*?)</p>',
+    lines = re.compile(r'<p begin="(.*?)" dur="(.*?)".*?>(.*?)</p>',
                            re.DOTALL).findall(ttml)
 
-    if len(subtitles) > 0 and subtitles[0][2].lower().startswith('copyright'):
-        subtitles.pop(0)
+    # drop copyright line
+    if len(lines) > 0 and lines[0][2].lower().startswith('copyright'):
+        lines.pop(0)
 
-    for i, (start, duration, text) in enumerate(subtitles):
+    subtitles = []
+    for start, duration, text in lines:
         start = _str_to_time(start)
         duration = _str_to_time(duration)
         end = start + duration
+        subtitles.append((start, end, text))
 
+    # fix overlapping
+    for i in xrange(0, len(subtitles) - 1):
+        start, end, text = subtitles[i]
+        start_next, _, _ = subtitles[i + 1]
+        subtitles[i] = (start, min(end, start_next - 1), text)
+
+    output = BytesIO()
+    for i, (start, end, text) in enumerate(subtitles):
         text = text.replace('<span style="italic">', '<i>') \
             .replace('</span>', '</i>') \
             .replace('&amp;', '&') \

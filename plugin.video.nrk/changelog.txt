@@ -1,3 +1,8 @@
+[B]4.5.4[/B]
+- Fikset "Aktuelt"
+- Fikset sortering i kategorier
+- Fikset overlapping av teksting
+
 [B]4.5.2[/B]
 - Fikset kanalikoner
 - Fikset beskrivelse for serier

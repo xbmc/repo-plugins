@@ -103,7 +103,9 @@ class myAddon(t1mAddon):
          except: plot=name
          infoList['TVShowTitle'] = sname
          infoList['Title'] = name
-         infoList['Plot'] = h.unescape(plot.decode('utf-8'))
+         try:    infoList['Plot'] = h.unescape(plot.decode('utf-8'))
+         except: infoList['Plot'] = h.unescape(plot)
+
          meta[sname][url] = (name, img, infoList)
          dirty = True
 

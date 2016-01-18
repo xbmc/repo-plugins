@@ -21,6 +21,7 @@
        <string id="30016">User Email</string>
        <string id="30017">User Password</string>
        <string id="30018">Enable Login</string>
+       <string id="30019">PBS Station</string>
 
        <string id="30020">View</string>
        <string id="30021">Enable Views</string>
@@ -35,6 +36,9 @@
        <string id="30045">Episodes</string>
        <string id="30046">Clips</string>
        <string id="30047">Previews</string>
+       <string id="30048">Local PBS Programs</string>
+       <string id="30049">Video Expired or requires Passport Membership</string>
+       <string id="30050">Next Page</string>
 
 </strings>
 

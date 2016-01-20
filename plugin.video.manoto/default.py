@@ -62,7 +62,7 @@ def getStreamsFromPlayList(playlist):
 
 
 def fetch():
-	domain = 'www.manoto1.com'
+	domain = 'www.manototv.com'
 	url = 'https://' + domain + '/live'
 
 	if not cj:		

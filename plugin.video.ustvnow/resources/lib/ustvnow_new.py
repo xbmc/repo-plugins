@@ -82,39 +82,42 @@ class Ustvnow:
     def get_channels_NEW(self, quality, stream_type):
         Addon.log('get_channels_NEW,' + str(quality) + ',' + stream_type)
         self.token = self._login()
-        content = self._get_json('gtv/1/live/channelguide', {'token': self.token,'format': stream_type, 'l': '1'})
         channels = []
-        results = content['results'];
-        for i in results:
-            try:
-                if i['order'] == 1:
-                    name = Addon.cleanChanName(i['stream_code'])
-                    url = "plugin://plugin.video.ustvnow/?name="+name+"&mode=play"
-                    mediatype = i['mediatype']
-                    poster_url = 'http://mc.ustvnow.com/gtv/1/live/viewposter?srsid=' + str(i['srsid']) + '&cs=' + i['callsign'] + '&tid=' + mediatype
-                    mediatype = mediatype.replace('SH', 'tvshow').replace('EP', 'episode').replace('MV', 'movie')
-                    if self.premium == False:
-                        if name not in ['CW','ABC','FOX','PBS','CBS','NBC','MY9']:
-                            raise Exception()
-                    channels.append({
-                        'name': name,
-                        'sname' : i['callsign'],
-                        'url': url,
-                        'episode_title': i['episode_title'],
-                        'title': i['title'],
-                        'plot': i['description'],
-                        'plotoutline': i['synopsis'],
-                        'mediatype': mediatype,
-                        'playable': True,
-                        'icon': self.uBASE_URL + '/' + i['img'],
-                        'poster_url': poster_url
-                        })
-                        
-                    if self.write_type == 1:
-                        Addon.makeSTRM(name, url)
-                    self.make_Playlists(quality, stream_type)
-            except:
-                pass
+        try:
+            content = self._get_json('gtv/1/live/channelguide', {'token': self.token,'format': stream_type, 'l': '1440'})
+            results = content['results'];
+            for i in results:
+                try:
+                    if i['order'] == 1:
+                        name = Addon.cleanChanName(i['stream_code'])
+                        url = "plugin://plugin.video.ustvnow/?name="+name+"&mode=play"
+                        mediatype = i['mediatype']
+                        poster_url = 'http://mc.ustvnow.com/gtv/1/live/viewposter?srsid=' + str(i['srsid']) + '&cs=' + i['callsign'] + '&tid=' + mediatype
+                        mediatype = mediatype.replace('SH', 'tvshow').replace('EP', 'episode').replace('MV', 'movie')
+                        if self.premium == False:
+                            if name not in ['CW','ABC','FOX','PBS','CBS','NBC','MY9']:
+                                raise Exception()
+                        channels.append({
+                            'name': name,
+                            'sname' : i['callsign'],
+                            'url': url,
+                            'episode_title': i['episode_title'],
+                            'title': i['title'],
+                            'plot': i['description'],
+                            'plotoutline': i['synopsis'],
+                            'mediatype': mediatype,
+                            'playable': True,
+                            'icon': self.uBASE_URL + '/' + i['img'],
+                            'poster_url': poster_url
+                            })
+                            
+                        if self.write_type == 1:
+                            Addon.makeSTRM(name, url)
+                        self.make_Playlists(quality, stream_type)
+                except:
+                    pass
+        except:
+            channels = self.get_link(quality, stream_type)
         return channels
 
         
@@ -471,37 +474,31 @@ class Ustvnow:
         
     def _login_ALT(self):
         Addon.log('_login_NEW_ALT')
-        try:
-            self.cj = cookielib.CookieJar()
-            opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.cj)) 
-            urllib2.install_opener(opener)
-            url = self._build_json('gtv/1/live/login', {'username': self.user, 
-                                                   'password': self.password, 
-                                                   'device':'gtv', 
-                                                   'redir':'0'})
-            response = opener.open(url)
-            for cookie in self.cj:
-                if cookie.name == 'token':
-                    return cookie.value
-        except:
-            pass
+        self.cj = cookielib.CookieJar()
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.cj)) 
+        urllib2.install_opener(opener)
+        url = self._build_json('gtv/1/live/login', {'username': self.user, 
+                                               'password': self.password, 
+                                               'device':'gtv', 
+                                               'redir':'0'})
+        response = opener.open(url)
+        for cookie in self.cj:
+            if cookie.name == 'token':
+                return cookie.value
         return 'False'
     
     
     def _login_ORG(self):
         Addon.log('_login_ORG')
-        try:
-            self.cj = cookielib.CookieJar()
-            opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.cj))
-            urllib2.install_opener(opener)
-            url = self._build_url('iphone_login', {'username': self.user, 
-                                                   'password': self.password})
-            response = opener.open(url)
-            for cookie in self.cj:
-                if cookie.name == 'token':
-                    return cookie.value
-        except:
-            pass
+        self.cj = cookielib.CookieJar()
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.cj))
+        urllib2.install_opener(opener)
+        url = self._build_url('iphone_login', {'username': self.user, 
+                                               'password': self.password})
+        response = opener.open(url)
+        for cookie in self.cj:
+            if cookie.name == 'token':
+                return cookie.value
         return 'False'
 
         

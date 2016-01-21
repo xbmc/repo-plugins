@@ -81,49 +81,53 @@ if mode == 'main':
 elif mode == 'live':
     channels = ustv.get_channels_NEW(quality_type, stream_type)
     if channels:
-        for c in channels:
-            rURL = "plugin://plugin.video.ustvnow/?name="+c['name']+"&mode=play"
-            logo = xbmc.translatePath(os.path.join(plugin_path, 'resources', 'images', c['name']+'.png'))
-            item = xbmcgui.ListItem(path=rURL)
-            name = c["name"];
-            sname = c["sname"];
-            icon = c["icon"];
-            poster_url = c["poster_url"];
-            episode_title = c["episode_title"];
-            title = c["title"];
-            plot = c["plot"];
-            plotoutline = c["plotoutline"];
-            mediatype = c["mediatype"];
-            if mediatype != "movie":
-                tvshowtitle = title
-            if episode_title != "":
-                title = '%s - %s - %s' % (name, (title).replace('&amp;','&').replace('&quot;','"'), (episode_title).replace('&amp;','&').replace('&quot;','"'))
-            else:
-                title = '%s - %s' % (name, (title).replace('&amp;','&').replace('&quot;','"'))
-            for quality in range(1,4):
-                parameters = urllib.urlencode( {
-                    'c': sname,
-                    'i': icon,
-                    'q': str(quality),
-                    'u': email,
-                    'p': password } );
-                    
-                if quality==1:
-                    quality_name = 'Low';
-                elif quality==2:
-                    quality_name = 'Medium';
+        try:
+            for c in channels:
+                rURL = "plugin://plugin.video.ustvnow/?name="+c['name']+"&mode=play"
+                logo = xbmc.translatePath(os.path.join(plugin_path, 'resources', 'images', c['name']+'.png'))
+                item = xbmcgui.ListItem(path=rURL)
+                name = c["name"];
+                sname = c["sname"];
+                icon = c["icon"];
+                poster_url = c["poster_url"];
+                episode_title = c["episode_title"];
+                title = c["title"];
+                plot = c["plot"];
+                plotoutline = c["plotoutline"];
+                mediatype = c["mediatype"];
+                if mediatype != "movie":
+                    tvshowtitle = title
+                if episode_title != "":
+                    title = '%s - %s - %s' % (name, (title).replace('&amp;','&').replace('&quot;','"'), (episode_title).replace('&amp;','&').replace('&quot;','"'))
                 else:
-                    quality_name = 'High';
-                    
-            Addon.add_video_item(rURL,
-            
-                                 {'title': title,
-                                 'plot': plot,
-                                 'mediatype': mediatype,
-                                 'plotoutline': plotoutline},
-                                 img=logo, fanart=poster_url, HD=quality_name, playable=c['playable'])
-            xbmcplugin.setContent(Addon.plugin_handle, 'episodes')
-                             
+                    title = '%s - %s' % (name, (title).replace('&amp;','&').replace('&quot;','"'))
+                for quality in range(1,4):
+                    parameters = urllib.urlencode( {
+                        'c': sname,
+                        'i': icon,
+                        'q': str(quality),
+                        'u': email,
+                        'p': password } );
+                        
+                    if quality==1:
+                        quality_name = 'Low';
+                    elif quality==2:
+                        quality_name = 'Medium';
+                    else:
+                        quality_name = 'High';
+                        
+                Addon.add_video_item(rURL,
+                
+                                     {'title': title,
+                                     'plot': plot,
+                                     'mediatype': mediatype,
+                                     'plotoutline': plotoutline},
+                                     img=logo, fanart=poster_url, HD=quality_name, playable=c['playable'])
+                xbmcplugin.setContent(Addon.plugin_handle, 'episodes')
+        except:
+            for c in channels:
+                logo = xbmc.translatePath(os.path.join(plugin_path, 'resources', 'images', c['name']+'.png'))
+                Addon.add_video_item(c['url'],{'title': '%s - %s' % (c['name'], c['now']['title']), 'plot': c['now']['plot']}, img=logo)
 elif mode == 'recordings':
     stream_type = ['rtmp', 'rtsp'][int(Addon.get_setting('stream_type'))]
     recordings = ustv.get_recordings(quality_type, stream_type, 'recordings')

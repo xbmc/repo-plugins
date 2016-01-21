@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.playonbrowser" name="Playon Browser" version="1.0.5" provider-name="Sytone, Lunatixz">
+<addon id="plugin.video.playonbrowser" name="Playon Browser" version="1.0.6" provider-name="Sytone, Lunatixz">
   <requires>
     <import addon="xbmc.python" version="2.14.0"/>
     <import addon="script.module.parsedom" version="2.5.2"/> 
@@ -13,13 +13,12 @@
   <extension point="xbmc.addon.metadata">
     <summary lang="en">Allows you to browse m.playon.tv from your remote.</summary>
     <description lang="en">Allows you to interact with the playon web interface using the standard controls in kodi.</description>
-    <disclaimer lang="en"></disclaimer>
-    <language></language>
+    <disclaimer lang="en">Requires Playon Software</disclaimer>
+    <language>en</language>
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
     <forum>http://forum.kodi.tv/showthread.php?tid=233136</forum>
-    <website></website>
-    <email></email>
-    <source></source>
+    <website>www.playon.tv</website>
+    <source>https://github.com/Lunatixz/XBMC_Addons/tree/master/plugin.video.playonbrowser</source>
   </extension>
 </addon>

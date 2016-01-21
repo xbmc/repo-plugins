@@ -318,37 +318,38 @@ def get_audio_list(program_url, localized=lambda x: x):
 def get_direct_channels():
     """This function makes the direct channels menu."""
 
+    direct_url    = 'u3m.3pm.s%/evtr/moc.noitomulf.maerts.evtr.emf-s%//:ptth'[::-1]
     channel_list  = (
-            ( 'Radio Nacional',   '3pm.1oidar/evtr/502.47.55.591//:ptth'[::-1]),
-            ( 'Radio Clásica',    '3pm.acisalcoidar/evtr/712.47.55.591//:ptth'[::-1]),
-            ( 'Radio 3',          '3pm.3oidar/evtr/712.47.55.591//:ptth'[::-1]),
-            # ( 'Ràdio 4',          'radio4',        ''),
-            # ( 'Radio 5',          'radio5',        ''),
-            # ( 'Radio Exterior',   'radioexterior', ''),
+            ( 'Radio Nacional',   'radio1'),
+            ( 'Radio Clásica',    'radioclasica'),
+            ( 'Radio 3',          'radio3'),
+            ( 'Ràdio 4',          'radio4'),
+            ( 'Radio 5',          'radio5'),
+            ( 'Radio Exterior',   'radioexterior'),
             )
 
     menu_entries  = []
-    for channel, url in channel_list:
+    for channel, playlist in channel_list:
         menu_item = {
                 'action' : 'play_audio',
                 'title'  : channel,
-                'url'    : url,
+                'url'    : direct_url % (playlist, playlist),
         }
         menu_entries.append(menu_item)
 
     return menu_entries
 
 
-def get_search_playable_url(url):
-    """This function gets the playable url for search results."""
+def get_playable_url(url):
+    """This function gets the stream url for direct channels."""
 
-    playable_url_pattern = '<link rel="audio_src" href="(h.*?p3)"'
+    playable_url_pattern = ')3pm?*.ptth('[::-1]
 
     buffer_url           = l.carga_web(url)
-    playable_url         = l.find_first(buffer_url, playable_url_pattern).replace('//www', 'ndcka.1dovm//'[::-1])
-    l.log('get_search_playable_url has found this URL for direct playback. url: "%s"' % playable_url)
+    stream_url           = l.find_first(buffer_url, playable_url_pattern)
+    l.log('get_playable_url has found this URL for direct playback. url: "%s"' % stream_url)
 
-    return playable_url
+    return stream_url
 
 
 def get_search_url(searchtext):

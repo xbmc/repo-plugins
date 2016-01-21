@@ -276,6 +276,9 @@ def play_audio(params):
 
     url = params.get("url")
 
+    if url.endswith('m3u'):
+        url = api.get_playable_url(url)
+
     if url:
         return p.play_resolved_url(url)
     else:

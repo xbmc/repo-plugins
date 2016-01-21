@@ -2,8 +2,8 @@
 <addon 
 	id="plugin.video.tweakers" 
 	name="Tweakers" 
-	version="1.0.7" 
-	provider-name="Skipmode A1,Amelandbor">
+	version="1.0.8" 
+	provider-name="Skipmode A1,Amelandbor,ninovanhooff">
   <requires>
     <import addon="xbmc.python"                 version="2.1.0"/>
     <import addon="xbmc.addon"                  version="12.0.0"/>

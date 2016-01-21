@@ -1,3 +1,7 @@
+v1.0.8 (Thursday, 14 january 2016) :
+- added blurred background (kudos to ninovanhooff!)
+- added refresh option (kudos to ninovanhooff!)
+
 v1.0.7 (Saturday, 15 august 2015) :
 - added some utf8 stuff
 

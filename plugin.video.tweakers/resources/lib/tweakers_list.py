@@ -125,6 +125,8 @@ class Main:
 			url = sys.argv[0] + '?' + urllib.urlencode(parameters)
 			listitem = xbmcgui.ListItem( title, iconImage="DefaultVideo.png", thumbnailImage=thumbnail_url )
 			listitem.setInfo( "video", { "Title" : title, "Studio" : "tweakers" } )
+			listitem.addContextMenuItems([ ('Refresh', 'Container.Refresh') ])
+			listitem.setArt({'fanart': os.path.join(__images_path__, 'fanart-blur.jpg')})
 			folder = False
 			xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
 
@@ -135,6 +137,7 @@ class Main:
 			parameters = {"action" : "list", "plugin_category" : self.plugin_category, "url" : str(self.next_url), "next_page_possible": self.next_page_possible}
 			url = sys.argv[0] + '?' + urllib.urlencode(parameters)
 			listitem = xbmcgui.ListItem (__language__(30503), iconImage = "DefaultFolder.png", thumbnailImage = os.path.join(__images_path__, 'next-page.png'))
+			listitem.setArt({'fanart': os.path.join(__images_path__, 'fanart-blur.jpg')})
 			folder = True
 			xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
 			

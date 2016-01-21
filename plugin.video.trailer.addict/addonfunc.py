@@ -11,7 +11,7 @@ from urlparse import urlparse
 from os.path import splitext, basename
 settings = sys.modules["__main__"].settings
 plugin = sys.modules["__main__"].plugin
-useragent = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0'
+useragent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36'
 import SimpleDownloader as downloader
 downloader = downloader.SimpleDownloader()
 

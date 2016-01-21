@@ -372,7 +372,7 @@ def play_video( url, name, download ):
     if trailerId:
         data = getUrl('http://v.traileraddict.com/%s' % trailerId.group(1))
         data = unwise.unwise_process(data)
-        video_urls = re.compile("file:'(.+?)'").findall(data)    
+        video_urls = re.compile("file:[\\\]*'(.+?)'").findall(data)
     else:
         return
     

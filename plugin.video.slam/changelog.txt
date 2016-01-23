@@ -1,0 +1,5 @@
+v1.0.1 (07.01.2016)
+- Name changes and webcam stream added
+
+v1.0.0 (01.10.2015)
+- Initial Release

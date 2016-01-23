@@ -209,9 +209,7 @@ def get_categories(path):
             plugin_path = plugin.url_for('show_playlist', playlist_id='0_2nmzot3u')
         elif title == "Live Audio Commentary":
             playable = True
-            url = urljoin(HOST, href)
-            entry_id = get_soup(url).find('div', 'video')['data-videoid']
-            plugin_path = plugin.url_for('play_video', entry_id=entry_id)
+            plugin_path = plugin.url_for('play_video', entry_id='0_7nqzdt52')
         elif 'children' in a.parent['class']:
             plugin_path = plugin.url_for('show_subcategories', path=href)
         else:

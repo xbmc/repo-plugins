@@ -1,3 +1,6 @@
+2.3.2
+ - Fixed an error on the main index page caused by changes to Live Audio Commentary
+
 2.3.1
  - Fixed an error when playing videos on Android/iOS/Mac OS X
 

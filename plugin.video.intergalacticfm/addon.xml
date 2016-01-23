@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.intergalacticfm"
+       name="Intergalactic FM TV"
+       version="0.0.3"
+       provider-name="Pander">
+    <requires>
+        <import addon="xbmc.python" version="2.20.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">Music Pro Galaxy</summary>
+        <summary lang="de">Music Pro Galaxy</summary>
+        <summary lang="nl">Music Pro Galaxy</summary>
+        <description lang="en"><![CDATA[
+Video channel of listener-supported, commercial-free, underground/alternative radio broadcasting from Intergalacic FM.
+
+See also the audio plugin.
+
+Please consider donating at https://intergalacticfm.com to keep Intergalactic FM in orbit! Music Pro Galaxy.
+        ]]></description>
+        <description lang="de"><![CDATA[
+Videosender vom hörergetragenen, werbefreien, underground / alternative Radio von Intergalactic FM.
+
+Siehe auch die Audio-Plugin.
+
+Bitte denk über eine Spende auf https://intergalacticfm.com nach, um Intergalactic FM in der Umlaufbahn zu erhalte! Music Pro Galaxy.
+        ]]></description>
+        <description lang="nl"><![CDATA[
+Videokanaal van luisteraarondersteunde, reclamevrije, alternatieve radiouitzendingen van Intergalactic FM.
+
+Zie ook de audioplugin.
+
+Overweeg a.u.b. een donatie te doen op https://intergalacticfm.com om Intergalactic FM in haar baan te houden! Music Pro Galaxy.
+        ]]></description>
+        <license>The Apache License, Version 2.0</license>
+        <website>http://intergalacticfm.com</website>
+        <source>https://github.com/PanderMusubi/plugin.video.intergalacticfm</source>
+    </extension>
+</addon>

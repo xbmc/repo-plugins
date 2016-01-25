@@ -1,3 +1,6 @@
+[B]Version 2.7.0[/B]
+- Updated to most recent user agents, had an old one on last update, and added randomizer to choose between 3 different agents (IE, FireFox, Chrome)
+
 [B]Version 2.6.0[/B]
 - Updated user agent
 - Updated regex for matching video url

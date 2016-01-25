@@ -9,9 +9,14 @@ __version__ = '0.0.10'
 import xbmc, xbmcgui, xbmcaddon, xbmcplugin, urllib, urllib2, sys, time, datetime, buggalo
 from urlparse import urlparse
 from os.path import splitext, basename
+import random
 settings = sys.modules["__main__"].settings
 plugin = sys.modules["__main__"].plugin
-useragent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36'
+agents = ['Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36',
+             'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0',
+             'Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko']
+useragent = random.choice(agents)             
+accept = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
 import SimpleDownloader as downloader
 downloader = downloader.SimpleDownloader()
 
@@ -81,6 +86,7 @@ def getPage(url, gzip = False, form_data={}):
 			form_data = urllib.urlencode(form_data)
 			req = urllib2.Request(url, form_data)        
 		req.add_header('User-Agent', useragent)
+		req.add_header('Accept', accept)
 		content = urllib2.urlopen(req)
 		if gzip:
 			try:

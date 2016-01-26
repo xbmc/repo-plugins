@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="$LOCALIZE[128]" description="כללי">
+		<setting type="lsep" label=""/>
+		<setting type="lsep" label="Please note: AutoView is currently support only Featherence Skin!"/>
+		<setting id="General_AutoView" type="bool" default="true" label="$ADDON[script.featherence.service 20]" visible="true"/>
+		<setting id="General_AutoView_A" type="text" default="" label="General_AutoView_A" visible="false"/>
+		<setting id="General_AutoView_B" type="text" default="" label="General_AutoView_B" visible="false"/>
+		<setting id="General_AutoView_C" type="text" default="" label="General_AutoView_C" visible="false"/>
+		<setting type="lsep" label="$ADDON[script.featherence.service 8]"/>
+		<setting id="General_TVModeDialog" type="bool" default="true" label="$ADDON[script.featherence.service 16]" visible="true"/>
+		<setting id="General_TVModeShuffle" type="bool" default="true" label="$ADDON[script.featherence.service 17]" enable="eq(-1,true)" subsetting="true"/>
+		<setting type="lsep" label="$ADDON[script.featherence.service 62]" visible="eq(-1,false)"/>
+		
+		<setting id="General_Language" type="select" default="" label="Main Language" values=" |Arabic|Bulgarian|Catalan|Chinese|Czech|Dansk|Dutch|English|Finnish|French|Georgian|German|Greek|Haitian|Hebrew|Hindi|Hungarian|Indonesian|Italian|Irish|Japanese|Kazakh|Korean|Polish|Portuguese|Romanian|Russian|Serbian|Slovak|Spanish|Swedish|Thai|Turkish|Ukrainian|Uzbek|Ukrainian|Russian" enable="true" visible="true"/>
+		<setting type="lsep" label="$ADDON[script.featherence.service 32043]"/>
+		<setting id="General_Language2" type="select" default="English" label="Secondary Language" values=" |Arabic|Bulgarian|Catalan|Chinese|Czech|Dansk|Dutch|English|Finnish|French|Georgian|German|Greek|Haitian|Hebrew|Hindi|Hungarian|Indonesian|Italian|Irish|Japanese|Kazakh|Korean|Polish|Portuguese|Romanian|Russian|Serbian|Slovak|Spanish|Swedish|Thai|Turkish|Ukrainian|Uzbek|Ukrainian|Russian" enable="true" visible="true"/>
+		<setting id="General_Language3" type="select" default="" label="Additonal Language" values=" |Arabic|Bulgarian|Catalan|Chinese|Czech|Dansk|Dutch|English|Finnish|French|Georgian|German|Greek|Haitian|Hebrew|Hindi|Hungarian|Indonesian|Italian|Irish|Japanese|Kazakh|Korean|Polish|Portuguese|Romanian|Russian|Serbian|Slovak|Spanish|Swedish|Thai|Turkish|Ukrainian|Uzbek|Ukrainian|Russian" enable="true" visible="true"/>
+		<setting type="lsep" label=""/>
+		<setting id="Search_History" type="bool" default="true" label="$ADDON[script.featherence.service 32046]" visible="true"/>
+		<setting id="Search_Limit" type="slider" default="40" label="$ADDON[script.featherence.service 32047]" range="0,40" option="int" enable="eq(-1,true)" subsetting="true" visible="true"/>
+		
+		<setting type="lsep" label=""/>
+		<setting id="Addon_ShowLog" type="bool" default="true" label="$ADDON[script.featherence.service 24]" visible="true"/>
+		<setting type="lsep" label="$ADDON[script.featherence.service 25]" visible="eq(-1,true)"/>
+		<setting id="Addon_ShowLog2" type="slider" default="1" label="$ADDON[script.featherence.service 26]" range="0,1,7" option="int" subsetting="true" visible="eq(-2,true)"/>
+		<setting id="Addon_Update" type="text" default="false" label="Addon_Update" visible="false"/>
+		<setting id="Addon_UpdateDate" type="text" default="" label="Addon_UpdateDate" visible="false"/>
+		<setting id="Addon_UpdateLog" type="bool" default="false" label="Addon_UpdateLog" visible="false"/>
+		<setting id="Addon_Version" type="text" default="" label="Addon_Version" visible="false"/>
+		<setting type="lsep" label=""/>
+	
+	</category>
+		
+	<category label="$LOCALIZE[33071]" description="רקעים מותאמים אישית">
+		<setting id="Fanart_Enable" type="bool" default="true" label="$ADDON[script.featherence.service 28]" description="אפשר רקעים" visible="true"/>
+		<setting type="lsep" label="$ADDON[script.featherence.service 32074]" visible="eq(-1,true)"/>
+		<setting id="Fanart_EnableCustom" type="bool" default="false" label="$LOCALIZE[21389]" subsetting="true" description="אפשר רקע מותאם אישית" visible="eq(-2,true)"/>
+		<setting type="lsep" label="$ADDON[script.featherence.service 32075]" visible="eq(-3,true) + eq(-1,true)"/>
+	</category>
+	
+	<category label="About" description="About">
+		<setting type="lsep" label=""/>
+		<setting type="lsep" label="[B][COLOR=yellow]Featherence[/COLOR][/B][CR]"/>
+		<setting type="lsep" label="[B][COLOR=blue]Facebook[/COLOR][/B]: www.facebook.com/groups/featherence[CR]"/>
+		<setting type="action" action="RunScript(script.featherence.service,,?mode=512&amp;value=1)" label="Featherence Facebook Group Website" option="close" visible="true"/>
+		<setting type="lsep" label="$ADDON[script.featherence.service 32048] $ADDON[script.featherence.service 32049]" visible="true"/>
+		<setting type="action" action="RunScript(script.featherence.service,,?mode=7)" label="Post on Facebook!" option="close" visible=""/>
+		<setting type="lsep" label="[B][COLOR=blue]YouTube[/COLOR][/B]: www.youtube.com/user/finalmakerr[CR]"/>
+		<setting type="action" action="RunScript(script.featherence.service,,?mode=32&amp;value=3)" label="Featherence YouTube Channel" option="close" visible="true"/>
+		<setting type="lsep" label="[B][COLOR=blue]Github[/COLOR][/B]: www.github.com/finalmakerr/featherence[CR]"/>
+		<setting type="action" action="RunScript(script.featherence.service,,?mode=512&amp;value=2)" label="Featherence Github Server" option="close" visible="true"/>
+		<setting type="lsep" label="[CR]$ADDON[script.featherence.service 32044]"/>
+		<setting type="lsep" label="$ADDON[script.featherence.service 32045]"/>
+		<setting type="lsep" label=""/>
+	</category>
+
+</settings>

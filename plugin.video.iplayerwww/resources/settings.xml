@@ -3,6 +3,9 @@
     <setting id="search_signed" label="30110" type="bool" default="false" />
     <setting id="search_ad" label="30120" type="bool" default="false" />
     <setting id="subtitles" label="30130" type="bool" default="false" />
+    <setting id="suppress_incomplete" label="30150" type="bool" default="false" />
+    <setting id="scrape_atoz" label="30160" type="enum" lvalues="30161|30162" default="0" />
+    <setting id="paginate_episodes" label="30170" type="enum" lvalues="30171|30172" default="1" />
     <setting id="bbc_id_enabled" label="30140" default="false" type="bool" />
     <setting id="bbc_id_username" label="30141" default="" type="text" enable="eq(-1,true)" subsetting="true"/>
     <setting id="bbc_id_password" label="30142" default="" type="text" enable="eq(-2,true) + !eq(-1,)" subsetting="true" option="hidden"/>

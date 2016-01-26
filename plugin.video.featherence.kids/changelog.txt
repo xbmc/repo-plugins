@@ -1,0 +1,69 @@
+------------------------
+WIP - WORK IN PROGRESS
+------------------------
+
+------------------------
+Featherence Kids v0.2.2 (24-01-16)
+------------------------
+- Major bugs fix.
+
+------------------------
+Featherence Kids v0.2.1 (20-01-16)
+------------------------
+- Added about us section with useful information and contact tools.
+- Added contents in varied languages.
+- Added Remove-All-Buttons to My Kids script.
+- Added Search History option to smart search button.
+- Minor bugs fix.
+- My kids button now support adding favourites items as well.
+- Update default sorting.
+- Update English language.
+- *Update saving/loading script to include local media when sharing.
+*Previous backups will not work!
+
+------------------------
+Featherence Kids v0.2.0 (15-01-16)
+------------------------
+- Added new method of choosing up to 3 prefered languages.
+- Added thumbnails for main and sub categories.
+- Added description to some contents in English and Hebrew.
+- Added fanart for some contents.
+- Added TV Mode support for over 100 series.
+- TV mode now occur also inside container.
+- Added thousands of new videos.
+- Added SdarotTV search.
+- Update English translation.
+- Update Hebrew translation.
+- Update all links to be available per choosens languages only.
+- Major bugs fix.
+- Major resorting of contents.
+- Major update of broken links.
+- Major update of random play button.
+- Reduce addon size.
+
+------------------------
+Featherence Kids v0.1.6 (25-12-15)
+------------------------
+- Added about 60 new tvshows.
+- Update TV Mode shuffle function.
+- Update TV Mode accuracy.
+- Minor bugs fix.
+- *Extra attempt to play another video if the first has failed.
+*Failing is an issue of the Youtube plugin.
+
+------------------------
+Featherence Kids v0.1.2-4 (17-12-15)
+------------------------
+- Minor bugs fix.
+- Added new contents.
+
+------------------------
+Featherence Kids v0.1.1 (13-12-15)
+------------------------
+- add search button.
+- add some video for kids.
+
+------------------------
+Featherence Kids v0.1.0 (08-12-15)
+------------------------
+- First release.

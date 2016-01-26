@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.featherence.kids" name="Featherence Kids" version="0.2.2" provider-name="finalmakerr">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+	<import addon="plugin.video.youtube" version="5.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+	<platform>all</platform>
+    <summary lang="en">Worldwide kids addon</summary>
+	<summary lang="he">הרחבת ילדים בינלאומית</summary>
+    <description lang="en">Features:
+- Smart TV Mode and Randomise Play.
+- Smart Interface allow the users to easily create thier own addon from within Kodi and share it with others.
+- Customized Fanart for each button.
+- Support unlimited URLs per content from varied sources such as Youtube, Dailymotion, Dropbox..
+- Smart Search button.
+- Multilanguage support (over 30 countries).
+- Sorted and Organized contents.</description>
+	<description lang="he"></description>
+    <disclaimer lang="en">The author does not host or distribute any of the content displayed by this addon. The author does not have any affiliation with the content provider.</disclaimer>
+	<forum>http://forum.kodi.tv/showthread.php?tid=252567</forum>
+	<email>featherence@groups.facebook.com</email>
+	<source>https://github.com/finalmakerr/featherence/tree/master/master/plugin.video.featherence.kids</source>
+	<website>https://www.facebook.com/groups/featherence/</website>
+  </extension>
+</addon>

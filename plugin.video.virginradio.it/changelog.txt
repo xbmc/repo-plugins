@@ -1,3 +1,8 @@
+[B]Version 1.0.6[/B]
+- Updated code to the site changes.
+- Added menu Video/Audio.
+- Updated to the new neverwise library.
+
 [B]Version 1.0.5[/B]
 - Updated code to the site changes.
 

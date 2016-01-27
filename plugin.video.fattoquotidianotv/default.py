@@ -1,7 +1,6 @@
 #!/usr/bin/python
-import re, sys, xbmcplugin, httplib#, datetime
+import re, sys, os, xbmcplugin#, datetime
 from neverwise import Util
-from pyamf import remoting
 
 
 class FattoQTV(object):
@@ -11,48 +10,68 @@ class FattoQTV(object):
 
   def __init__(self):
 
-    if len(self._params) == 0: # Visualizzazione del menu.
+    if len(self._params) == 0: # Scelta tra Audio o Video
+
+      Util.createAudioVideoItems(self._handle)
+
+      # Show items.
+      xbmcplugin.endOfDirectory(self._handle)
+
+    elif len(self._params) == 1 and self._params['content_type'] == 'video': # Visualizzazione del menu video.
 
       # Menu.
-      response = Util.getHtml('http://tv.ilfattoquotidiano.it', True)
-      menuItems = []
-      for ul in response.findAll('ul', 'nav-list'):
-        for li in ul.findAll('li'):
-          title = Util.normalizeText(li.a.text)
+      response = Util.getResponseBS('http://tv.ilfattoquotidiano.it')
+
+      if response.isSucceeded:
+
+        menuItems = []
+        for ul in response.body.findAll('ul', 'nav-list'):
+          for li in ul.findAll('li'):
+            title = li.a.text
+            link = li.a['href']
+            li = Util.createListItem(title)
+            menuItems.append(( li, link, title ))
+
+        div = response.body.find('div', 'submenu-categories')
+        for li in div.findAll('li'):
           link = li.a['href']
-          li = Util.createListItem(title, streamtype = 'video', infolabels = { 'title' : title })
-          menuItems.append(( li, link, title ))
+          found = False
+          for item in menuItems:
+            if item[1] == link:
+              found = True
+              break
+          if not found:
+            title = li.a.text
+            li = Util.createListItem(title)
+            menuItems.append(( li, link, title ))
 
-      div = response.find('div', 'submenu-categories')
-      for li in div.findAll('li'):
-        link = li.a['href']
-        found = False
-        for item in menuItems:
-          if item[1] == link:
-            found = True
-            break
-        if not found:
-          title = Util.normalizeText(li.a.text)
-          li = Util.createListItem(title, streamtype = 'video', infolabels = { 'title' : title })
-          menuItems.append(( li, link, title ))
+        for item in sorted(menuItems, key = lambda item: item[2]):
+          xbmcplugin.addDirectoryItem(self._handle, Util.formatUrl({ 'id' : 'c', 'page' : item[1] }), item[0], True)
 
-      for item in sorted(menuItems, key = lambda item: item[2]):
-        xbmcplugin.addDirectoryItem(self._handle, Util.formatUrl({ 'id' : 'c', 'page' : item[1] }), item[0], True)
+        # Show items.
+        xbmcplugin.endOfDirectory(self._handle)
+
+    elif len(self._params) == 1 and self._params['content_type'] == 'audio': # Visualizzazione del menu audio.
+
+      img = '{0}/resources/images/fqRadio.png'.format(os.path.dirname(os.path.abspath(__file__)))
+      li = Util.createListItem(Util.getTranslation(30000), thumbnailImage = img) # Radio.
+      xbmcplugin.addDirectoryItem(self._handle, 'http://fqradio.ns0.it:8000/;audio.mp3', li, False)
+      xbmcplugin.addDirectoryItem(self._handle, Util.formatUrl({ 'id' : 'p', 'page' : self._getUrlPodcast() }), Util.createListItem(Util.getTranslation(30001), thumbnailImage = 'DefaultAddonLyrics.png'), True)
 
       # Show items.
       xbmcplugin.endOfDirectory(self._handle)
 
     else:
 
-      response = Util.getHtml(self._params['page'], True)
-      if response != None:
+      response = Util.getResponseBS(self._params['page'])
+      if response.isSucceeded:
 
         # Videos.
         if self._params['id'] == 'c': # Visualizzazione video di una categoria.
-          videos = response.findAll('section', 'article-preview')
+          videos = response.body.findAll('section', 'article-preview')
           for video in videos:
             divTitle = video.find('div', 'article-wrapper')
-            title = Util.normalizeText(divTitle.h3.a.text)
+            title = divTitle.h3.a.text
             img = None
             if video.picture.img != None:
               img = video.picture.img['src']
@@ -60,68 +79,60 @@ class FattoQTV(object):
             xbmcplugin.addDirectoryItem(self._handle, Util.formatUrl({ 'id' : 'v', 'page' : divTitle.h3.a['href'] }), li, False)
 
           # Next page.
-          nextPage = response.find('ul', 'swiper-wrapper jgrid')
-          if nextPage != None:
-            pages = nextPage.findAll('li')
-            index = -1
-            for page in pages:
-              if page.a['class'] == 'active cc':
-                index = pages.index(page) + 1
-                break # Stops "for page in pages:".
-            if index < len(pages):
-              url = Util.formatUrl({ 'id' : 'c', 'page' : pages[index].a['href'] })
-              xbmcplugin.addDirectoryItem(self._handle, url, Util.createItemPage(Util.normalizeText(pages[index].a.text)), True)
+          self._nextPage(response.body, 'c', '{0}')
+
+          # Show items.
+          xbmcplugin.endOfDirectory(self._handle)
+
+        # Podcast.
+        if self._params['id'] == 'p': # Visualizzazione podcast.
+          podcasts = response.body.find('section', 'fqRadio fqRadio-palinsesto')
+          podcasts = podcasts.findAll('div', 'ungrid-row')
+          for podcast in podcasts:
+            title = u'{0} ({1})'.format(podcast.find('div', 'ungrid-col program').a.text, podcast.find('div', 'ungrid-col program-date').text)
+            url = podcast.find('div', 'ungrid-col dwl-podcast').a['href']
+            li = Util.createListItem(title, thumbnailImage = 'DefaultAudio.png', streamtype = 'audio', infolabels = { 'title' : title })
+            xbmcplugin.addDirectoryItem(self._handle, url, li, False)
+
+          # Next page.
+          self._nextPage(response.body, 'p', '{0}/{1}'.format(self._getUrlPodcast(), '{0}'))
 
           # Show items.
           xbmcplugin.endOfDirectory(self._handle)
 
         # Play video.
         elif self._params['id'] == 'v':
-          title = Util.normalizeText(response.find('meta', { 'name' : 'EdTitle' })['content'])
-          img = response.find('meta', { 'name' : 'EdImage' })['content']
-          descr = response.find('div', 'tv-desc-body').text
+          title = response.body.find('meta', { 'property' : 'og:title' })['content']
+          img = response.body.find('meta', { 'property' : 'og:image' })['content']
+          descr = response.body.find('div', 'tv-desc-body').text
 
           # Video del fatto.
-          videoId = response.find('video', { 'id' : 'bcPlayer' })
-          if videoId != None:
-            playerID = 2274739660001
-            publisherID = 1328010481001
-            const = 'ef59d16acbb13614346264dfe58844284718fb7b'
-            conn = httplib.HTTPConnection('c.brightcove.com')
-            envelope = remoting.Envelope(amfVersion=3)
-            envelope.bodies.append(('/1', remoting.Request(target='com.brightcove.player.runtime.PlayerMediaFacade.findMediaById', body=[const, playerID, videoId['data-video-id'], publisherID], envelope=envelope)))
-            conn.request('POST', '/services/messagebroker/amf?playerId={0}'.format(str(playerID)), str(remoting.encode(envelope).read()), {'content-type': 'application/x-amf'})
-            response = conn.getresponse().read()
-            response = remoting.decode(response).bodies[0][1].body
+          video = response.body.find('video', { 'id' : 'bcPlayer' })
+          if video != None:
+            #playerID = 2274739660001
+            #publisherID = 1328010481001
+            url = 'https://edge.api.brightcove.com/playback/v1/accounts/{0}/videos/{1}'.format(video['data-account'], video['data-video-id'])
+            headers = { 'Accept' : 'application/json;pk=BCpkADawqM0xNxj2Rs11iwmFoNJoG2nXUQs67brI7oR2qm0Dwn__kPcbvLJb7M34IY2ar-WxWvi8wHr6cRbP7nmgilWaDrqZEeQm4O5K6z6B2A3afiPFbv7T4LcsQKN2PqIIgIIr3AXq43vL' }
+            response = Util.getResponseJson(url, headers)
+            if response.isSucceeded:
 
-            if response != None:
-              item = sorted(response['renditions'], key=lambda item: item['encodingRate'], reverse=True)[0]
-              streamUrl = item['defaultURL']
+              sources = sorted(response.body['sources'], key = lambda item: item['avg_bitrate'] if 'avg_bitrate' in item else 0, reverse = True)
+              if 'src' in sources[0]:
+                source = sources[0]['src']
+              else:
+                source = sources[1]['src']
 
-              # Divido url da playpath.
-              index = streamUrl.find('&')
-              url = streamUrl[:index]
-              playpath = streamUrl[index + 1:]
-
-              # Divido url da app.
-              index = url.find('/', 7)
-              app = url[index + 1:]
-              if app[-1:] == '/':
-                app = app[:-1]
-
-              Util.playStream(self._handle, title, img, '{0}:1935 app={1} playpath={2}'.format(url[:index], app, playpath), 'video', { 'title' : title, 'plot' : descr })
-            else:
-              Util.showVideoNotAvailableDialog()
+              Util.playStream(self._handle, title, img, source, 'video', { 'title' : title, 'plot' : descr })
 
           # Altri video.
           else:
-            responseString = response.renderContents()
+            responseString = response.body.renderContents()
 
             # Video di youtube.
             if responseString.find('www.youtube.com/embed') > -1:
-              videoId = re.compile('http://www.youtube.com/embed/(.+?)\?').findall(response.find('iframe')['src'])
-              if len(videoId) > 0:
-                Util.playStream(self._handle, title, img, 'plugin://plugin.video.youtube/play/?video_id={0}'.format(videoId[0]), 'video', { 'title' : title, 'plot' : descr })
+              video = re.search('http://www.youtube.com/embed/(.+?)\?', response.body.find('iframe')['src'])
+              if video != None:
+                Util.playStream(self._handle, title, img, 'plugin://plugin.video.youtube/play/?video_id={0}'.format(video.group(1)), 'video', { 'title' : title, 'plot' : descr })
 
             # Video servizio pubblico.
             elif responseString.find('meride-video-container') > -1:
@@ -134,8 +145,25 @@ class FattoQTV(object):
               Util.showVideoNotAvailableDialog()
 
 
+  def _getUrlPodcast(self):
+    return 'http://www.ilfattoquotidiano.it/fq-radio/podcast'
+
+
+  def _nextPage(self, bsSource, paramId, urlStringFormat):
+    nextPage = bsSource.find('ul', 'swiper-wrapper jgrid')
+    if nextPage != None:
+      pages = nextPage.findAll('li')
+      index = -1
+      for page in pages:
+        if page.a['class'] == 'active cc':
+          index = pages.index(page) + 1
+          break # Stops "for page in pages:".
+      if index < len(pages):
+        Util.createNextPageItem(self._handle, pages[index].a.text, { 'id' : paramId, 'page' : urlStringFormat.format(pages[index].a['href']) })
+
+
 # Entry point.
 #startTime = datetime.datetime.now()
-fc = FattoQTV()
-del fc
+fq = FattoQTV()
+del fq
 #print '{0} azione {1}'.format(Util._addonName, str(datetime.datetime.now() - startTime))

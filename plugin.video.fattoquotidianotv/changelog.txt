@@ -1,3 +1,9 @@
+[B]Version 1.0.4[/B]
+- Fixed bug that doesn't allow to reproduce some video correctly.
+- Added radio and podcast.
+- Added menu Video/Audio.
+- Updated to the new neverwise library.
+
 [B]Version 1.0.3[/B]
 - Fixed bug that doesn't allow to reproduce video correctly.
 

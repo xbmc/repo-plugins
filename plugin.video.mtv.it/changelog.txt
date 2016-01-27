@@ -1,3 +1,7 @@
+[B]Version 1.0.4[/B]
+- Modified the management of the video quality, now is in the addon settings.
+- Updated to the new neverwise library.
+
 [B]Version 1.0.3[/B]
 - Small bugfix/improvements.
 

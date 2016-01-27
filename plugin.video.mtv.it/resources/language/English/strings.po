@@ -21,33 +21,37 @@ msgid "Too late![CR]The rights of this video has expired."
 msgstr ""
 
 msgctxt "#30001"
-msgid "Very high quality"
+msgid "Video content streaming quality"
 msgstr ""
 
 msgctxt "#30002"
-msgid "High quality"
+msgid "180p"
 msgstr ""
 
 msgctxt "#30003"
-msgid "Good quality"
+msgid "270p"
 msgstr ""
 
 msgctxt "#30004"
-msgid "Reasonable quality"
+msgid "360p"
 msgstr ""
 
 msgctxt "#30005"
-msgid "Sufficient quality"
+msgid "432p"
 msgstr ""
 
 msgctxt "#30006"
-msgid "Mediocre quality"
+msgid "576p"
 msgstr ""
 
 msgctxt "#30007"
-msgid "Low quality"
+msgid "720p"
 msgstr ""
 
 msgctxt "#30008"
-msgid "Very low quality"
+msgid "1080p"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Don't show seasons if there's only one"
 msgstr ""

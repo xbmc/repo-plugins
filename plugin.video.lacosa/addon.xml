@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.lacosa" name="La Cosa" version="1.0.7" provider-name="NeverWise">
+<addon id="plugin.video.lacosa" name="La Cosa" version="1.0.8" provider-name="NeverWise">
   <requires>
-    <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.neverwise" version="1.0.4"/>
+    <import addon="xbmc.python" version="2.14.0"/>
+    <import addon="script.module.neverwise" version="1.0.6"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>

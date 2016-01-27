@@ -1,3 +1,6 @@
+[B]Version 1.0.8[/B]
+- Updated to the new neverwise library.
+
 [B]Version 1.0.7[/B]
 - Fixed bug that doesn't allow to reproduce video correctly.
 

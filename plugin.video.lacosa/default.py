@@ -25,11 +25,11 @@ class LaCosa(object):
 
       # Shows.
       shows = self._getLaCosaResponse('/rubriche')
-      if shows != None:
-        shows = shows.findAll('div', 'icon_programmi')
+      if shows.isSucceeded:
+        shows = shows.body.findAll('div', 'icon_programmi')
         for show in shows:
-          title = Util.normalizeText(show.h3.a.text)
-          li = Util.createListItem(title, thumbnailImage = show.img['src'], streamtype = 'video', infolabels = { 'title' : title, 'plot' : Util.normalizeText(show.p.text) })
+          title = show.h3.a.text
+          li = Util.createListItem(title, thumbnailImage = show.img['src'], streamtype = 'video', infolabels = { 'title' : title, 'plot' : show.p.text })
           xbmcplugin.addDirectoryItem(self._handle, Util.formatUrl({ 'id' : 's', 'page' : show.a['href'] }), li, True)
 
       #if (live == None or not live) and (shows == None or not shows): # Se sono vuoti oppure liste vuote.
@@ -47,14 +47,14 @@ class LaCosa(object):
 
     else:
 
-      response = Util.getHtml(self._params['page'], True)
-      if response != None:
+      response = Util.getResponseBS(self._params['page'])
+      if response.isSucceeded:
 
         # Videos.
         if self._params['id'] == 's': # Visualizzazione video di uno show.
-          videos = response.find('div', id='recenti_canale').findAll('li')
+          videos = response.body.find('div', id='recenti_canale').findAll('li')
           for video in videos:
-            title = Util.normalizeText(video.h4.text)
+            title = video.h4.text
             time = video.find('span', 'videoTime')
             if time != None:
               time = time.text.split(':')
@@ -74,10 +74,10 @@ class LaCosa(object):
 
         # Play video.
         elif self._params['id'] == 'v':
-          title = Util.normalizeText(response.find('meta', { 'property' : 'og:title' })['content'])
-          img = response.find('meta', { 'property' : 'og:image' })['content']
-          descr = Util.normalizeText(response.find('meta', { 'property' : 'og:description' })['content'])
-          streams = re.compile("',file: '(.+?)'").findall(response.renderContents())
+          title = response.body.find('meta', { 'property' : 'og:title' })['content']
+          img = response.body.find('meta', { 'property' : 'og:image' })['content']
+          descr = response.body.find('meta', { 'property' : 'og:description' })['content']
+          streams = re.findall("',file: '(.+?)'", response.body.renderContents())
           try:
             Util.playStream(self._handle, title, img, streams[0], 'video', { 'title' : title, 'plot' : descr })
           except:
@@ -85,7 +85,7 @@ class LaCosa(object):
 
 
   def _getLaCosaResponse(self, link):
-    return Util.getHtml('http://www.beppegrillo.it/la_cosa{0}'.format(link))
+    return Util.getResponseBS('http://www.beppegrillo.it/la_cosa{0}'.format(link))
 
 
 # Entry point.

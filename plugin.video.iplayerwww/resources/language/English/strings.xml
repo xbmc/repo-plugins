@@ -6,6 +6,13 @@
   <string id="30140">Enable BBC iD</string>
   <string id="30141">BBC Username</string>
   <string id="30142">BBC Password</string>
+  <string id="30150">Suppress programmes with incomplete information in Highlights</string>
+  <string id="30160">Behaviour for getting A-Z</string>
+  <string id="30161">By character</string>
+  <string id="30162">All at once</string>
+  <string id="30170">Behaviour for getting programmes</string>
+  <string id="30171">By page</string>
+  <string id="30172">All at once</string>
 
   <string id="30200">Streams</string>
   <string id="30205">Play stream automatically using these settings</string>

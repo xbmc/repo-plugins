@@ -1,3 +1,10 @@
+v1.3.2
+Fixed missing multiple episodes in Favourites.
+Added missing unescaping of HTML.
+Fix for single page listings.
+Minor fixes of potential errors.
+Added optional settings for displaying programme lists.
+
 v1.3.1
 Fixed aired date in Favourites and Watching.
 Fixed incompatibility with Python 2.6.

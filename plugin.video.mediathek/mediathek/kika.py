@@ -57,9 +57,9 @@ class KIKA(Mediathek):
       )
           
     self.regex_videoPages=re.compile("<a href=\"(.*?sendereihe\\d+.html)\" class=\"linkAll\" title=\"(.*?)\">");
-    self.regex_videoLinks=re.compile("<a href=\"(.*?/sendungen/videos/video\\d+?)\\.html\"");
+    self.regex_videoLinks=re.compile("<a href=\"(.*?/videos/video\\d+?)\\.html\"");
     
-
+    self.regex_xml_channel=re.compile("<channelName>(.*?)</channelName>");
     self.regex_xml_title=re.compile("<title>(.*?)</title>");
     self.regex_xml_image=re.compile("<teaserimage>\\s*?<url>(.*?)</url>");
     self.regex_xml_videoLink=re.compile("<asset>\\s*?<profileName>(.*?)</profileName>.*?<progressiveDownloadUrl>(.*?)</progressiveDownloadUrl>\\s*?</asset>",re.DOTALL)
@@ -77,7 +77,9 @@ class KIKA(Mediathek):
   
   def buildVideoLink(self,pageLink):
     xmlPage = self.loadPage(self.rootLink+pageLink);
-    
+    channel = self.regex_xml_channel.search(xmlPage);
+    if(channel is not None):
+      channel = unicode(channel.group(1),"UTF-8");
     title = unicode(self.regex_xml_title.search(xmlPage).group(1),"UTF-8");
     image = self.regex_xml_image.search(xmlPage).group(1).replace("**aspectRatio**","tlarge169").replace("**width**","1472");
     
@@ -96,7 +98,10 @@ class KIKA(Mediathek):
       if("MP4 Web XL" in profile):
         links[3] = SimpleLink(directLink, 0);
     
-    return DisplayObject(title,"",image,"",links,True, None);
+    if(channel is not None):
+      return DisplayObject(channel,title,image,"",links,True, None);
+    else:
+      return DisplayObject(title,"",image,"",links,True, None);
   
   def buildPageMenu(self, link, initCount):
     mainPage = self.loadPage(link);
@@ -120,7 +125,7 @@ class KIKA(Mediathek):
           link = self.rootLink+link;
           
         subPage = self.loadPage(link);
-        linkFound = self.regex_videoLinks.search(subPage)
+        linkFound = self.regex_videoLinks.search(subPage);
         if(linkFound):
           title = unicode(match.group(2),"UTF-8");
           displayObject = DisplayObject(title,"",None,"",link,False, None);

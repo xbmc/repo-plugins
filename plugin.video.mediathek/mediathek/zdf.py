@@ -208,7 +208,7 @@ class ZDFMediathek(Mediathek):
             size = int(streamObject.getElementsByTagName("filesize")[0].childNodes[0].data);
           except:
             size = 0;
-          if(self.baseType == "rtmp_smil_http"):
+          if("rtmp_smil_http" in self.baseType):
             links = self.getRtmpLinks(url, size);
             break;
           else:
@@ -256,6 +256,7 @@ class ZDFMediathek(Mediathek):
       #sys.exit();
   
   def getRtmpLinks(self, url, size):
+    self.gui.log("decoding smil page")
     links = {};
     hostConfig = {};
     smilPage = self.loadPage(url);
@@ -270,7 +271,7 @@ class ZDFMediathek(Mediathek):
     #extract hostData
     for paramGroup in xmlDocument.getElementsByTagName("paramGroup"):
       groupName = paramGroup.getAttribute("xml:id");
-      print paramGroup.toxml()
+      
       host = "";
       app = ""
       for param in paramGroup.childNodes:
@@ -278,7 +279,8 @@ class ZDFMediathek(Mediathek):
         paramName = param.getAttribute("name");
         if(paramName == "app"): app = param.getAttribute("value");
         if(paramName == "host"): host = param.getAttribute("value");
-      hostConfig[groupName] = "rtmp://"+host+"/"+app+"/";
+      self.gui.log("%s rtmp://%s/%s/"%(groupName,host,app))
+      hostConfig[groupName] = "rtmp://%s/%s/"%(host,app);
       
     
     videoNodes = xmlDocument.getElementsByTagName("video");
@@ -289,8 +291,9 @@ class ZDFMediathek(Mediathek):
       
       hostString = hostConfig[paramGroupName];
       urlString = videoNode.getAttribute("src");
-      
-      link = SimpleLink(hostString+" playPath="+urlString,size);
+      link = "%s playPath=%s"%(hostString,urlString)
+      self.gui.log(link)
+      link = SimpleLink(link,size);
       if(quality == "low"):
         links[0] = link
       elif(quality == "high"):
@@ -298,7 +301,7 @@ class ZDFMediathek(Mediathek):
       elif(quality == "veryhigh"):
         links[2] = link
       elif(quality == "hd"):
-        links[3] = SimpleLink(url, size);
+        links[3] = link
     xmlDocument.unlink();
     return links;
     

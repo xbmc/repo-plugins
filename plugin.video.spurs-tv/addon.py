@@ -207,6 +207,11 @@ def get_categories(path):
             plugin_path = plugin.url_for('show_categories', path=href)
         elif title == "Ledley King Testimonial":
             plugin_path = plugin.url_for('show_playlist', playlist_id='0_2nmzot3u')
+        elif title == "The Vault":
+            plugin_path = plugin.url_for('show_playlist', playlist_id='0_32nxk7s7')
+        elif title == "A Question of Spurs":
+            playable = True
+            plugin_path = plugin.url_for('play_video', entry_id='0_52u0px90')
         elif title == "Live Audio Commentary":
             playable = True
             plugin_path = plugin.url_for('play_video', entry_id='0_7nqzdt52')

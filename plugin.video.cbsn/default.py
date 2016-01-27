@@ -17,28 +17,28 @@ class myAddon(t1mAddon):
    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
    html = self.getRequest('http://cbsn1.cbsistatic.com/scripts/VideoPlayer.js')
    try:
-       urlbase = re.compile('this.hlsurl_nab = "(.+?)"', re.DOTALL).search(html).group(1)
+       urlbase = re.compile("this.hlsurl_nab = '(.+?)'", re.DOTALL).search(html).group(1)
    except:
-       urlbase = re.compile('this.hlsurl_na =  "(.+?)"', re.DOTALL).search(html).group(1)
+       urlbase = re.compile("this.hlsurl_na =  '(.+?)'", re.DOTALL).search(html).group(1)
    urlbase = urlbase.rsplit('/',1)[0]
    bselect = int(self.addon.getSetting('bselect'))
    bwidth = ['120','360','700','1200','1800','2200','4000']
    bw = 'index_%s' % (bwidth[bselect])
    c = [{'type':'dvr',
-        'url' :'%s/%s_av-b.m3u8?sd=10&rebase=on' % (urlbase, bw),
+        'url' :'%s/%s_av-p.m3u8?sd=10&rebase=on' % (urlbase, bw),
         'startDate' : str(datetime.date.today()),
         'segmentDur'  : '59:59',
         'headline'  : 'LIVE',
         'headlineshort' : 'LIVE',
-        'thumbnail_url_hd' : self.addonIcon.replace('\\','/')},
-
-        {'type':'dvr',
-        'url' :'%s/%s_av-p.m3u8?sd=10&rebase=on' % (urlbase, bw),
-        'startDate' : str(datetime.date.today()),
-        'segmentDur'  : '59:59',
-        'headline'  : 'LIVE (Alternate)',
-        'headlineshort' : 'LIVE (Alternate)',
         'thumbnail_url_hd' : self.addonIcon.replace('\\','/')}]
+
+#        {'type':'dvr',
+#        'url' :'%s/%s_av-p.m3u8?sd=10&rebase=on' % (urlbase, bw),
+#        'startDate' : str(datetime.date.today()),
+#        'segmentDur'  : '59:59',
+#        'headline'  : 'LIVE (Alternate)',
+#        'headlineshort' : 'LIVE (Alternate)',
+#        'thumbnail_url_hd' : self.addonIcon.replace('\\','/')}]
 
    html = self.getRequest('http://cbsn.cbsnews.com/rundown/?device=desktop')
    a = json.loads(html)

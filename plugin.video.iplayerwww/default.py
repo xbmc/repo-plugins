@@ -1353,12 +1353,14 @@ def ListFavourites(logged_in):
         plot = synopses.get('small')
         aired = FirstShownToAired(initial_child.get('release_date'))
         CheckAutoplay(episode_title, url, image_url, plot, aired)
-        more = initial_child.get('parent_position')
+        more = programme.get('count')
         if more:
             episodes_url = "http://www.bbc.co.uk/iplayer/episodes/" + id
             AddMenuEntry('[B]%s[/B] - %s %s' % (title, more, translation(31013)),
                          episodes_url, 128, image_url, '', '')
 
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
 
 cookie_jar = InitialiseCookieJar()
 params = get_params()

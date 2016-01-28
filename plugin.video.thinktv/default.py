@@ -120,9 +120,11 @@ class myAddon(t1mAddon):
         html = self.getRequest('http://www.pbs.org/favorite-shows-page/1/')
         a = json.loads(html)
         cats = a['content']
-    elif gsurl == 'localpbs':       
+    elif gsurl == 'localpbs':
+        xheaders = self.defaultHeaders.copy()
+        xheaders['X-Requested-With'] = 'XMLHttpRequest'
         pbsol = self.addon.getSetting('pbsol')
-        html = self.getRequest('http://www.pbs.org/shows-page/0/?genre=&title=&callsign=%s' % (pbsol))
+        html = self.getRequest('http://www.pbs.org/shows-page/0/?genre=&title=&callsign=%s&alphabetically=true' % (pbsol), None, xheaders)
         a = json.loads(html)
         cats = a['results']['content']
     else:
@@ -196,13 +198,13 @@ class myAddon(t1mAddon):
     try:    i = len(meta[sname])
     except: meta[sname]={}
     html = self.getRequest('http://www.pbs.org/show/%s/%s/?page=%s' % (url, stype, pageNum))
-    epis = re.compile('<article class="video-promo">.+?href="/video/(.+?)/.+?data-srcset="(.+?)".+?alt="(.+?)".+?class="duration">(.+?)<.+?class="description">(.+?)<',re.DOTALL).findall(html)
+    epis = re.compile('<article class="video-summary">.+?href="/video/(.+?)/.+?data-srcset="(.+?)".+?alt="(.+?)".+?class="description">(.+?)<.+?class="video-popover__duration">(.+?)<',re.DOTALL).findall(html)
     dirty = False
     pDialog = xbmcgui.DialogProgress()
     pDialog.create(self.addonName, addonLanguage(30101))
     pDialog.update(0)
     numShows = len(epis)
-    for i, (url, imgs, name, duration, plot)  in list(enumerate(epis, start=1)):
+    for i, (url, imgs, name, plot, duration)  in list(enumerate(epis, start=1)):
       try:   (name, thumb, fanart, infoList) = meta[sname][url]
       except:
         dirty = True

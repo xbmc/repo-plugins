@@ -64,7 +64,7 @@ def show_root_menu():
         for live in response["RESULT"]:
             link = live[4]
             imageUrl = live[2]
-            title = live[1] + " - " + live[12] + " (" + live[11][11:] + ")"
+            title = live[1] + " - " + live[13] + " (" + live[12][11:16] + ")"
             liStyle = xbmcgui.ListItem(title, thumbnailImage=imageUrl)
             addLinkItem(link, liStyle)
     xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_LABEL)

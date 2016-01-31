@@ -1,3 +1,6 @@
+[B]1.0.3[/B]
+- updated API usage due to upstream changes
+
 [B]1.0.2[/B]
 - updated API usage due to upstream changes
 

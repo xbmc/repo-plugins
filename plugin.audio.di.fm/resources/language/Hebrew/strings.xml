@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<!-- The strings 30000 to 30999 is reserved for plug-in parameters -->
+	<!--GENERAL STRINGS -->
+
+	<string id="30014">כללי</string>
+	<string id="30011">מיין לפי A-Z (משפיע גם על 'מעודפים שלי')</string>
+	<string id="30030">השתמש בזרם ראשון לכל ערוץ (מתחיל לנגן מהר יותר)</string>
+	<string id="30012">תפוגת מטמון זרם בימים (0 = אף פעם)</string>
+	<string id="30010">אלץ רענון מטמון (שימוש בעת שינוי הגדרות)</string>
+    <string id="30031">הורד זרם אקראי מכל ערוץ (מהיר יותר לאחר מטמון)</string>
+
+	<string id="30001">מקור זרם</string>
+
+	<string id="30002">פרימיום</string>
+	<string id="30003">דוא"ל/שם משתמש</string>
+	<string id="30004">סיסמה</string>
+	<string id="30005">השתמש ברשימת ההשמעה 'המועדפים שלי'</string>
+	<string id="30013">קצב סיביות של הזרם</string>
+
+	<string id="30006">אודות</string>
+	<string id="30007">גרסה</string>
+	<string id="30008">יוצר</string>
+	<string id="30009">דף הבית</string>
+
+	<string id="30015">קבל זרמים של HQ 320k עם DI פרימיום ב-http://www.di.fm</string>
+	<string id="30016">גרסה:  3.1.0</string>
+	<string id="30017">יוצר:  Tim C. 'Bitcrusher' Steinmetz</string>
+	<string id="30018">דף הבית:  http://qualisoft.dk</string>
+	<string id="30019">דוא"ל:  timcst@gmail.com</string>
+
+	<string id="30020">סטטיסטיקה</string>
+	<string id="30021">אפשר שליחה של סטטיסטיקה</string>
+	<string id="30022">חשבתי שיהיה מעניין לראות כמה פעיל</string>
+	<string id="30023">התקנות נמצאות שם בחוץ. התוכנית היא להכין קצת</string>
+	<string id="30024">סטטיסטיקה חזותית והצגתה ב-http://stats.qualisoft.dk</string>
+	<string id="30025">זה רק ינסה לשלוח סטטיסטיקה כל 24 שעות.</string>
+	<string id="30026">מה נשלח:</string>
+	<string id="30027">סוג חשבון (ציבורי/פרימיום), גרסת תוסף, ארץ.</string>
+	<string id="30028">אני יודע שזה קצת טריק זול, זה כברירת מחדל ;)</string>
+	<string id="30029">-Tim</string>
+
+	<string id="30100">שגיאת חיבור</string>
+	<string id="30101">לא ניתן להתחבר ל-di.fm</string>
+	<string id="30102">בדוק את חיבור האינטרנט שלך</string>
+    <string id="30103">ואתר האינטרנט בדפדפן שלך</string>
+
+	<string id="30110">לא מצאו זרמים</string>
+	<string id="30111">אולי חברותך ל-DI פרימיום שלך פג?</string>
+	<string id="30112">או התוסף שבור (פריסת HTML השתנתה)</string>
+
+	<string id="30120">זמן המוקצב לחיבור</string>
+	<string id="30121">לא היתה אפשרות לקבל את רשימת ההשמעה מכתובת url זו:</string>
+
+	<string id="30130">נמצאו ערוצים חדשים</string>
+	<string id="30131">נמצא </string>
+	<string id="30132"> פיסה(ות) חדשים של ערוצים</string>
+	<string id="30133">כלומר יכולים להיות שיש ערוצים חדשים.</string>
+	<string id="30134">ערוצים חדשים מודגשים בכחול</string>
+
+	<string id="30140">קבצי מטמון חסרים</string>
+	<string id="30141">לפחות אחד מקבצי המטמון חסר</string>
+	<string id="30142">אנא גש להגדרות התוסף</string>
+	<string id="30143">ובחר "אלץ רענון זיכרון המטמון"</string>
+
+	<string id="30150">תמונת ערוץ חסרה</string>
+	<string id="30151">יש </string>
+	<string id="30152"> פיסה(ות) ערוצים חסרים</string>
+	<string id="30153">אתה צריך לרענן את זיכרון המטמון שלך</string>
+	<string id="30154">הפוך ללא זמין באמצעות 'המועדפים שלי' כדי לקבל ערוצים חדשים</string>
+	
+	<string id="30160">בעיה בהורדת תמונת ערוץ</string>
+	<string id="30161">הייתה בעיה בהורדה תמונת ערוץ ל: </string>
+	<string id="30162">מ-URL: </string>
+
+    <string id="30170">ההתחברות נכשלה</string>
+    <string id="30171">שם משתמש או סיסמה לא חוקיים</string>
+    <string id="30172">אולי החשבון שלך פג?</string>
+
+    <string id="30180">לא נמצאו מועדפים</string>
+    <string id="30181">התחבר ל-di.fm בדפדפן שלך וגש אל "ניהול מועדפים'</string>
+    <string id="30182">או בטל 'השתמש המועדפים שלי' מתוך הגדרות התוסף</string>
+
+
+</strings>

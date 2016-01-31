@@ -31,6 +31,7 @@ class HTTPComm:
             ('Keep-Alive', '115'),
             ('Connection', 'keep-alive'),
             ('Cache-Control', 'max-age=0'),
+            ('Referer', 'http://www.di.fm/')
         ]
 
         try:

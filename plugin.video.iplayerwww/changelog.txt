@@ -1,3 +1,6 @@
+v1.3.4
+Fix for new URL of BBC Three.
+
 v1.3.3
 Fix for episode count in Favourites.
 

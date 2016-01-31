@@ -1,3 +1,6 @@
+[B]4.5.5[/B]
+- Fikset avspilling etter sideendringer
+
 [B]4.5.4[/B]
 - Fikset "Aktuelt"
 - Fikset sortering i kategorier

@@ -209,7 +209,7 @@ def series_view(series_id):
 def play(video_id):
     urls = nrktv.program(video_id).media_urls
     if not urls:
-        return
+        raise Exception("could not find any streams")
     url = urls[0] if len(urls) == 1 else "stack://" + ' , '.join(urls)
 
     xbmcplugin.setResolvedUrl(plugin.handle, True, ListItem(path=url))

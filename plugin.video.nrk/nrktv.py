@@ -128,7 +128,8 @@ class Program(Series):
         if 'parts' in r:
             parts = sorted(r['parts'], key=lambda x: x['part'])
             media_urls = [part['mediaUrl'] for part in parts]
-        elif 'mediaUrl' in r:
+
+        if 'mediaUrl' in r and len(media_urls) == 0:
             media_urls = [r['mediaUrl']]
 
         return Program(

@@ -408,7 +408,7 @@ def ListChannelHighlights():
     channel_list = [
         ('bbcone', 'bbc_one', 'BBC One'),
         ('bbctwo', 'bbc_two', 'BBC Two'),
-        ('bbcthree', 'bbc_three', 'BBC Three'),
+        ('tv/bbcthree', 'bbc_three', 'BBC Three'),
         ('bbcfour', 'bbc_four', 'BBC Four'),
         ('tv/cbbc', 'cbbc', 'CBBC'),
         ('tv/cbeebies', 'cbeebies', 'CBeebies'),

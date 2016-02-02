@@ -14,6 +14,7 @@ from requests.packages import urllib3
 import cookielib
 import json
 import HTMLParser
+import codecs
 
 import xbmc
 import xbmcaddon
@@ -1170,7 +1171,7 @@ def download_subtitles(url):
     # <p begin="0:01:12.400" end="0:01:13.880">Thinking.</p>
     outfile = os.path.join(DIR_USERDATA, 'iplayer.srt')
     # print "Downloading subtitles from %s to %s"%(url, outfile)
-    fw = open(outfile, 'w')
+    fw = codecs.open(outfile, 'w', encoding='utf-8')
 
     if not url:
         fw.write("1\n0:00:00,001 --> 0:01:00,001\nNo subtitles available\n\n")

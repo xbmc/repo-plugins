@@ -43,6 +43,8 @@ plugin = Plugin()
 I18NINDEX = { 
              'video_not_online' : 30008,
              'toggle_watched' : 30011,
+             'unordered' : 30012,
+             'episode' : 30013,
              }
 
 def get_localized_string(label):
@@ -51,7 +53,10 @@ def get_localized_string(label):
 
 @plugin.route('/')
 def index():
-    return (htmlscraper.build_menuitems(plugin.url_for, 'play_video', get_localized_string))
+#    return (htmlscraper.build_menuitems(plugin.url_for, 'play_video', get_localized_string))
+    items = htmlscraper.build_menuitems(plugin.url_for, 'play_video', get_localized_string)
+#    items = [create_item(movie) for movie in movies]
+    return plugin.finish(items, sort_methods=['label', 'episode'])     
 
 @plugin.route('/video/<ekey>')
 def play_video(ekey):

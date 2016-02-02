@@ -3,4 +3,6 @@
   <!-- Plugin name -->
   <string id="30008">Video is not available.</string>
   <string id="30011">watched / unwatched</string>  
+  <string id="30012">unordered</string>
+  <string id="30013">episode</string>
 </strings>

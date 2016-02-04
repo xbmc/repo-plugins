@@ -308,7 +308,7 @@ def report_error(e):
         try:
             tb += '\n--Origin: --\n' + ''.join(traceback.format_exception(type(e.origin), e.origin, e.tb))
             tb += '\n--url--\n' + e.url
-            tb += '\n\n--body--\n' + utils.Utils.str(e.body)
+            tb += '\n--body--\n' + utils.Utils.str(e.body)
         except Exception as e:
             tb += '\n--Exception trying build the report: --\n' + traceback.format_exc()
     tb += '\nVersion: %s' % addon.getAddonInfo('version')
@@ -539,6 +539,7 @@ except Exception as e:
     ex = e
     requested_url = None
     report = True
+    selection = None
     if isinstance(ex, OneDriveException):
         ex = ex.origin
         requested_url = e.url
@@ -547,21 +548,25 @@ except Exception as e:
             dialog.ok(addonname, addon.getLocalizedString(30035), addon.getLocalizedString(30038))
         if ex.code >= 400:
             if requested_url is not None and requested_url == login_url:
+                selection = False
                 if dialog.yesno(addonname, addon.getLocalizedString(30046) % '\n'):
                     xbmc.executebuiltin('RunPlugin('+base_url + '?' + urllib.urlencode({'action':'add_account', 'content_type': content_type})+')')
-                    report = False
+                    selection = True
             else:
                 if ex.code == 404:
                     dialog.ok(addonname, addon.getLocalizedString(30037))
                 elif ex.code == 401:
+                    selection = False
                     if dialog.yesno(addonname, addon.getLocalizedString(30046) % '\n'):
                         xbmc.executebuiltin('RunPlugin('+base_url + '?' + urllib.urlencode({'action':'add_account', 'content_type': content_type})+')')
-                        report = False
+                        selection = True
                 else:
                     dialog.ok(addonname, addon.getLocalizedString(30036), addon.getLocalizedString(30038))
     else:
         dialog.ok(addonname, addon.getLocalizedString(30027), utils.Utils.unicode(ex), addon.getLocalizedString(30016))
     if report:
+        if isinstance(e, OneDriveException):
+            e.body += '\n--selection: --\n' + utils.Utils.str(selection)
         report_error(e)
 finally:
     if pg_bg_created:

@@ -1,3 +1,6 @@
+v1.1.6
+- Fix ssl error for users using an outdated version of python
+- More information is collected when an error happens to try make easier the diagnostic 
 v1.1.5
 - Fix folder exporting when the folder contains more than 200 items. 
 v1.1.4

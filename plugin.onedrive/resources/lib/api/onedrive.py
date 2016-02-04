@@ -30,6 +30,13 @@ import xbmc
 import xbmcgui
 import xbmcaddon
 import time
+import ssl
+
+try:
+    if hasattr(ssl, '_create_unverified_context'):
+        ssl._create_default_https_context = ssl._create_unverified_context
+except:
+    None
 
 class OneDrive:
     _login_url = 'https://login.live.com/oauth20_token.srf'
@@ -40,6 +47,7 @@ class OneDrive:
     exporting_target = 0
     exporting_percent = 0
     retry_target = 2
+    
     def __init__(self, client_id):
         self.retry_times = 0
         self.client_id = client_id
@@ -151,6 +159,12 @@ class OneDrive:
                 if self.pg_bg_created:
                     self.progress_dialog_bg.close()
                 self.retry_times = 0
+                response = None
+                try:
+                    response = e.read()
+                except:
+                    response = 'Error reading the body response!'
+                url_params += '\n--service response: --\n' + utils.Utils.str(response)
                 raise OneDriveException(e, sys.exc_info()[2], url, url_params)
         
     def get(self, path, **kwargs):

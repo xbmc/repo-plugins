@@ -1,3 +1,8 @@
+v1.3.5
+- Improved video info
+- Updated python version
+- Added new section Col·leccions
+
 v1.3.4
 - Fixed website changes
 

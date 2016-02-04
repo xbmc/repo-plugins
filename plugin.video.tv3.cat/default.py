@@ -45,6 +45,7 @@ t_canal324=30019
 t_c33super3=30020
 t_esport3=30021
 t_cercar=30022
+t_coleccions=30023
 
 
 url_base = 'http://www.ccma.cat'
@@ -72,6 +73,7 @@ def index():
     addDir(addon.getLocalizedString(t_avuidestaquem).encode("utf-8"),"","destaquem","")
     addDir(addon.getLocalizedString(t_noperdis).encode("utf-8"),"","noperdis","")
     addDir(addon.getLocalizedString(t_mesvist).encode("utf-8"),"","mesvist","")
+    addDir(addon.getLocalizedString(t_coleccions).encode("utf-8"),"","coleccions","")
     addDir(addon.getLocalizedString(t_programes).encode("utf-8"),"","programes","")
     addDir(addon.getLocalizedString(t_directe).encode("utf-8"),"","directe","")
     addDir(addon.getLocalizedString(t_cercar).encode("utf-8"),"","cercar","")
@@ -196,10 +198,43 @@ def listMesVist():
     except KeyError as e:
         xbmc.log("Exception KeyError listMesVist: " + str(e))
     except Exception as e:
-        xbmc.log("Exception Item destacat: " + str(e))
+        xbmc.log("Exception listMesVist: " + str(e))
         
   
     xbmcplugin.endOfDirectory(addon_handle)
+    
+def listColeccions():
+    xbmc.log("--------------listColeccions----------")
+    
+    link = getUrl(url_coleccions)
+    
+    soup = BeautifulSoup(link)
+    
+    try: 
+        
+        colecc = soup.findAll("a", {"class" : "media-object"})
+        xbmc.log("Col·leccions - elements trobats: " + str(len(colecc)))
+        
+        for a in colecc:
+           
+            url = a["href"]
+            url = url_base + url
+            t = a["title"]
+            titol = t.encode("utf-8")
+            xbmc.log("Col·leccions -t: " + titol)
+            img = a.img["src"]
+          
+            addDir(titol ,url,'listvideos', img)
+            
+    except AttributeError as e:
+        xbmc.log("Exception AtributeError listColeccions: " + str(e))
+    except KeyError as e:
+        xbmc.log("Exception KeyError listColeccions: " + str(e))
+    except Exception as e:
+        xbmc.log("Exception listColeccions: " + str(e))
+    
+        
+    xbmcplugin.endOfDirectory(addon_handle) 
     
 def dirSections():
    
@@ -440,20 +475,42 @@ def listVideos(url, cercar):
     xbmc.log('Url listvideos: ' + url)
     link = getUrl(url)
     
-    match = re.compile('<li class="F-llistat-item">[^<]*<a.+?href="(.+?)">').findall(link)
-   
-    if len(match) <> 0: 
+    #match = re.compile('<li class="F-llistat-item">[^<]*<a.+?href="(.+?)">').findall(link)
+    #xbmc.log("match - elemtents trobats: " + str(match))
+    soup = BeautifulSoup(link)
+    links = None
+    try:
+        links = soup.findAll("div", {"class" : "F-itemContenidorIntern C-destacatVideo"})
+        
+        if len(links) == 0:
+            links = soup.findAll("li", {"class" : "F-llistat-item"})
+        
+       
+    except AttributeError as e:
+        xbmc.log("Exception AtributeError listVideos: " + str(e))
+    except KeyError as e:
+        xbmc.log("Exception KeyError  listVideos: " + str(e))
+    except Exception as e:
+        xbmc.log("Exception listVideos: " + str(e))
+    
+    
+    
+    if len(links) <> 0: 
     
         #test code
-        url_test = match[0]
+        #url_test = links[0]
+        url_test = links[0].a["href"]
+        
         test = re.compile('/tv3/alacarta/.+?/([0-9]{7})').findall(url_test)
         if len(test) < 1:
-            match = re.compile('<article class="M-destacat.+?">[^<]*<a.+?href="(.+?)" title=".+?">').findall(link)
+            links = re.compile('<article class="M-destacat.+?">[^<]*<a.+?href="(.+?)" title=".+?">').findall(link)
         
         
-        if len(match) <> 0:
+        if len(links) <> 0:
         
-            for c in match:
+            for l in links:
+                
+                c = l.a["href"]
                 
                 code = c[-8:-1]
                 data = getDataVideo(url_datavideos + code + '&profile=pc')
@@ -499,6 +556,7 @@ def addDir(name, url, mode,iconimage):
     u = build_url({'mode':mode,'name':name,'url':url})
     liz = xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"title":name})
+    liz.setArt({'fanart' : iconimage})
     ok = xbmcplugin.addDirectoryItem(handle=addon_handle,url=u,listitem=liz,isFolder=True)
     return ok
     
@@ -535,13 +593,24 @@ def addLink(data):
         else:
             descripcio = descripcio.replace('<br />', '')
             
+        header = ""
         if programa <> None:
             if type(programa) is int or type(programa) is float:
                 programa = str(programa)
-            descripcio = '[B]' + programa + '[/B]' + '[CR]' + descripcio
+            header = '[B]' + programa + '[/B]' + '[CR]'
             
            
         infolabels = {}
+        
+           
+        if data_emisio <> None:
+            dt = data_emisio[0:10]
+            year = data_emisio[6:10]
+            infolabels['aired'] = dt
+            infolabels['year'] = year
+            header = header + dt + '[CR]'
+            
+        descripcio = header + descripcio
         
         if titol <> None:
             infolabels['title'] = titol
@@ -556,16 +625,10 @@ def addLink(data):
           
         if tematica <> None:
             infolabels['genre'] = tematica
-           
-        if data_emisio <> None:
-            dt = data_emisio[0:10]
-            year = data_emisio[6:10]
-            infolabels['aired'] = dt
-            infolabels['year'] = year
+        
             
           
         liz.setInfo('video', infolabels)
-        #liz.setProperty('Fanart_Image','http://statics.ccma.cat/multimedia/jpg/0/9/1417625843490.jpg')
         liz.addStreamInfo('video',{'duration':durada})
         liz.setProperty('isPlayable','true')
         ok = xbmcplugin.addDirectoryItem(handle=addon_handle,url=linkvideo,listitem=liz)
@@ -688,6 +751,10 @@ elif mode[0]=='directe':
 
 elif mode[0]=='cercar':
    
-    search()    
+    search()   
+
+elif mode[0]=='coleccions':
+   
+    listColeccions()        
     
     

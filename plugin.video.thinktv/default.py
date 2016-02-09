@@ -286,13 +286,12 @@ class myAddon(t1mAddon):
 
  def getAddonVideo(self,url):
     addonLanguage  = self.addon.getLocalizedString
-    pg = self.getRequest('http://player.pbs.org/videoInfo/%s/?format=json' % (url))
-    a  =  json.loads(pg)
-    suburl = a['closed_captions_url']
-    url = a['recommended_encoding']['url']
-    pg = self.getRequest('%s?format=json' % url)
-    url = json.loads(pg)['url']
-    if url == None:
+    pg = self.getRequest('http://player.pbs.org/viralplayer/%s' % (url))
+    try:
+       url,suburl = re.compile("PBS.videoData =.+?recommended_encoding.+?'url'.+?'(.+?)'.+?'closed_captions_url'.+?'(.+?)'", re.DOTALL).search(pg).groups()
+       pg = self.getRequest('%s?format=json' % url)
+       url = json.loads(pg)['url']
+    except:
        xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( self.addonName, addonLanguage(30049) , 4000) )
        return
     if 'mp4:' in url: url = 'http://ga.video.cdn.pbs.org/%s' % url.split('mp4:',1)[1]

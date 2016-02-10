@@ -59,6 +59,8 @@ class myAddon(t1mAddon):
           html = self.getRequest(purl)
           a = json.loads(html)
           infoList = {}
+          try: name = name.encode('utf-8', errors='ignore')
+          except: continue
           infoList['Date']        = datetime.datetime.fromtimestamp(a['pubDate']/1000).strftime('%Y-%m-%d')
           infoList['Aired']       = infoList['Date']
           infoList['MPAA']        = a['ratings'][0]['rating']

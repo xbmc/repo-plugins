@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.thisweekinstartups" name="This Week in Startups" version="1.0.0" provider-name="Damon Toumbourou">
+  <requires>
+    <import addon="xbmc.python"                     version="2.20.0"/>
+    <import addon="script.module.xbmcswift2"        version="2.4.0"/>
+    <import addon="script.module.beautifulsoup4"    version="4.3.1"/>
+    <import addon="script.module.requests"          version="2.5.3"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <language></language>
+    <summary lang="en">This Week in Startups.
+    </summary>
+    <description lang="en">The most interesting, outrageous and illuminating stories from the world of entrepreneurship.
+    </description>
+    <license>The MIT License (MIT)</license>
+    <forum>http://forum.xbmc.org/showthread.php?tid=184904</forum>
+    <email>dtoumbourou@gmail.com</email>
+    <source>https://github.com/DamonToumbourou/plugin.video.thisweekinstartups.git</source>
+    <website></website>
+  </extension>
+</addon>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.dplay" name="Dplay" version="1.0.0" provider-name="NeverWise">
+  <requires>
+    <import addon="xbmc.python" version="2.14.0"/>
+    <import addon="script.module.neverwise" version="1.0.7"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary lang="it">Dplay</summary>
+    <summary lang="en">Dplay</summary>
+    <description lang="it">Dplay è un servizio di streaming video che ti consente di guardare gratis e on demand i tuoi programmi preferiti di Real Time, Dmax, DeejayTV, Focus, Giallo, Frisbee e K2 dove vuoi e quando vuoi.[CR][CR]Con il meglio della programmazione dei canali free di Discovery Italia, Dplay porta la TV oltre i soliti schermi.</description>
+    <description lang="en">Dplay is a video streaming service that lets you watch, for free and on demand, your favorite Real Time, Dmax, DeejayTv, Focus, Yellow, Frisbee and K2 programs where you want and when you want.[CR][CR]Featuring the best programming free channels of Discovery Italy, Dplay brings the TV beyond the usual TV screens.</description>
+    <disclaimer lang="it">Alcune parti di questo addon potrebbero non essere legali nel tuo paese di residenza. Si prega di verificare la legislazione in vigore prima di installare.</disclaimer>
+    <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence. Please check with your local laws before installing.</disclaimer>
+    <language>it</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+    <forum></forum>
+    <website></website>
+    <email></email>
+    <source>https://github.com/NeverWise/plugin.video.dplay</source>
+  </extension>
+</addon>

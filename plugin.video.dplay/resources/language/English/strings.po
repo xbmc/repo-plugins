@@ -1,0 +1,65 @@
+# XBMC Media Center language file
+# Addon Name: Dplay
+# Addon id: plugin.video.dplay
+# Addon Provider: NeverWise
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: <email>\n"
+"POT-Creation-Date: 2016-01-24\n"
+"PO-Revision-Date: 2016-01-24\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Video content streaming quality"
+msgstr ""
+
+msgctxt "#30001"
+msgid "180p"
+msgstr ""
+
+msgctxt "#30002"
+msgid "270p"
+msgstr ""
+
+msgctxt "#30003"
+msgid "360p"
+msgstr ""
+
+msgctxt "#30004"
+msgid "432p"
+msgstr ""
+
+msgctxt "#30005"
+msgid "576p"
+msgstr ""
+
+msgctxt "#30006"
+msgid "720p"
+msgstr ""
+
+msgctxt "#30007"
+msgid "1080p"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Don't show seasons if there's only one"
+msgstr ""
+
+msgctxt "#30009"
+msgid "{show} ({number} episodes)"
+msgstr ""
+
+msgctxt "#30010"
+msgid "{season} ({numberof} episodes of {numbertot} available)"
+msgstr ""
+
+msgctxt "#30011"
+msgid "{episode} (Episode {number})"
+msgstr ""

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.image.500px" name="500px" version="0.2.4"
+<addon id="plugin.image.500px" name="500px" version="0.2.5"
        provider-name="Patrick L Archibald [patrick.archibald@gmail.com], Clément MATHIEU [clement@unportant.info]">
   <requires>
     <import addon="script.module.simplejson" version="2.0.10"/>

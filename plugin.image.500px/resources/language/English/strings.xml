@@ -8,5 +8,9 @@
   <string id="30005">Fresh today</string>
   <string id="30006">Fresh yesterday</string>
   <string id="30007">Fresh this week</string>
-  <string id="30008">Quantity</string>
+  <string id="30008">Images per page</string>
+  <string id="30009">Limit number of pages</string>
+  <string id="30010">Maximum number of pages</string>
+  <string id="30011">Image size</string>
+  <string id="30012">Thumbnail size</string>
 </strings>

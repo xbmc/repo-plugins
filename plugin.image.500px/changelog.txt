@@ -1,3 +1,6 @@
+Version 0.2.5 - February 7, 2016
+- Added option to set which image and thumbnail sizes to fetch from 500px to get higher quality images.
+- Added option to limit the number of pages shown in image listings to make recursive slideshow more responsive.
 Version 0.2.4 - January 23, 2016
 - Replaced fanart and icon images with current 500px brand assets. https://about.500px.com/press/
 Version 0.2.3 - December 8, 2014

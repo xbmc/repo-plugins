@@ -17,6 +17,10 @@ from fivehundredpx.client import FiveHundredPXAPI
 
 _CONSUMER_KEY = 'LvUFQHMQgSlaWe3aRQot6Ct5ZC2pdTMyTLS0GMfF'
 _RPP = int(xbmcplugin.getSetting(fivehundredpxutils.xbmc.addon_handle, 'rpp'))
+_LIMITP = str(xbmcplugin.getSetting(fivehundredpxutils.xbmc.addon_handle, 'limitpages'))
+_MAXP = int(xbmcplugin.getSetting(fivehundredpxutils.xbmc.addon_handle, 'maxpages'))
+_IMGSIZE = int(xbmcplugin.getSetting(fivehundredpxutils.xbmc.addon_handle, 'imgsize'))
+_TMBSIZE = int(xbmcplugin.getSetting(fivehundredpxutils.xbmc.addon_handle, 'tmbsize'))
 API = FiveHundredPXAPI()
 
 
@@ -38,15 +42,16 @@ def feature():
     category = params.get('category', None)
     page = int(params.get('page', 1))
 
-    resp = API.photos(feature=feature, only=category, rpp=_RPP, consumer_key=_CONSUMER_KEY, image_size=[2, 4], page=page)
+    resp = API.photos(feature=feature, only=category, rpp=_RPP, consumer_key=_CONSUMER_KEY, image_size=[_TMBSIZE, _IMGSIZE], page=page)
 
     for image in map(Image, resp['photos']):
         fivehundredpxutils.xbmc.add_image(image)
 
-    if resp['current_page'] != resp['total_pages']:
-        next_page = page + 1
-        url = fivehundredpxutils.xbmc.encode_child_url('feature', feature=feature, category=category, page=next_page)
-        fivehundredpxutils.xbmc.add_dir('Next page', url)
+    if not (_LIMITP == 'true' and (resp['current_page'] >= _MAXP)):
+        if resp['current_page'] < resp['total_pages']:
+            next_page = page + 1
+            url = fivehundredpxutils.xbmc.encode_child_url('feature', feature=feature, category=category, page=next_page)
+            fivehundredpxutils.xbmc.add_dir('Next page', url)
 
     fivehundredpxutils.xbmc.end_of_directory()
 
@@ -69,7 +74,7 @@ def search():
         term = params['term']
         page = int(params.get('page', 1))
 
-    resp = API.photos_search(term=term, rpp=_RPP, consumer_key=_CONSUMER_KEY, image_size=[2, 4], page=page)
+    resp = API.photos_search(term=term, rpp=_RPP, consumer_key=_CONSUMER_KEY, image_size=[_TMBSIZE, _IMGSIZE], page=page)
     
     if (resp['total_items'] == 0):
         xbmc.executebuiltin('Notification(%s, %s)' % (__addonname__, "Your search returned no matches."))
@@ -78,13 +83,14 @@ def search():
     for image in map(Image, resp['photos']):
         fivehundredpxutils.xbmc.add_image(image)
 
-    if resp['current_page'] != resp['total_pages']:
-        next_page = page + 1
-        if 'ctxsearch' in params:
-            url = fivehundredpxutils.xbmc.encode_child_url('search', term=term, page=next_page, ctxsearch=True)
-        else:
-            url = fivehundredpxutils.xbmc.encode_child_url('search', term=term, page=next_page)
-        fivehundredpxutils.xbmc.add_dir('Next page', url)
+    if not (_LIMITP == 'true' and (resp['current_page'] >= _MAXP)):
+        if resp['current_page'] < resp['total_pages']:
+            next_page = page + 1
+            if 'ctxsearch' in params:
+                url = fivehundredpxutils.xbmc.encode_child_url('search', term=term, page=next_page, ctxsearch=True)
+            else:
+                url = fivehundredpxutils.xbmc.encode_child_url('search', term=term, page=next_page)
+            fivehundredpxutils.xbmc.add_dir('Next page', url)
 
     fivehundredpxutils.xbmc.end_of_directory()
 

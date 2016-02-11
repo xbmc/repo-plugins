@@ -7,6 +7,7 @@ import xbmcgui
 import xbmcaddon
 from datetime import datetime, timedelta
 import time
+import xbmc
 
 myAddon = xbmcaddon.Addon()
 
@@ -115,7 +116,11 @@ if mode[0] == "folder":
 									listitem=li, isFolder=True)
 		else:
 			contentType = oneItem["contenttype"]
-			if contentType[:6] != "video/" and contentType[:6] != "audio/":
+			xbmc.log ("contentType is: ")
+			xbmc.log (contentType)
+			if not contentType.startswith("video/"
+				) and not contentType.startswith("audio/"
+				) and not contentType.startswith("application/x-iso9660-image"):
 				continue
 			thumbnailUrl = thumbs.get(oneItem["fileid"], None)
 			if thumbnailUrl is None:

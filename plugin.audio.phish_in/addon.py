@@ -82,7 +82,7 @@ class ListItem(object):
 
 class ListItemTrack(ListItem):
     def add_url(self):
-        params = u'item_type=track&path={}'.format(self.url_params['path'])
+        params = u'item_type=track&path={0}'.format(self.url_params['path'])
         print(_URL)
         self.url = u'{0}?{1}'.format(_URL, params)
 
@@ -127,7 +127,7 @@ class RespShow(Resp):
         sbd = self.data['sbd']
         label = u'{0} {1}'.format(date, venue_text)
         if sbd:
-            label = u'{} (sbd)'.format(label)
+            label = u'{0} (sbd)'.format(label)
         return label
 
     def get_url_params(self):
@@ -143,7 +143,7 @@ class RespShowBasic(Resp):
         sbd = self.data['sbd']
         label = u'{0} {1}'.format(date, venue_text)
         if sbd:
-            label = u'{} (sbd)'.format(label)
+            label = u'{0} (sbd)'.format(label)
         return label
 
     def get_url_params(self):
@@ -350,9 +350,9 @@ def router(paramstring):
             handle_show(params)
         elif it == 'track':
             handle_track(params)
-        elif params['action'] == 'listing':
-            # Display the list of items in a given category.
-            list_items(params['category'])
+        #elif params['action'] == 'listing':
+            ## Display the list of items in a given category.
+            #list_items(params['category'])
         elif params['action'] == 'play':
             # Play item from a provided URL.
             play_item(params['item'])

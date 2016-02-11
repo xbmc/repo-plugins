@@ -1,3 +1,7 @@
+1.0.3 (2016-02-07)
+  - update python version to 2.20.0
+  - fix #3: add field numbers to strings with a single placeholder
+
 1.0.2 (2015-12-31)
   - fix #2: call ListItem.setInfo() once for each infoLabel
   - fix #1: python2.6/3.0 string formatting requires field numbers

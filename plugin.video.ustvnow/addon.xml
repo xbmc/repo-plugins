@@ -1,27 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.ustvnow" version="12.0.20" name="USTVnow" provider-name="Lunatixz">
+<addon id="plugin.video.ustvnow" name="USTVnow" provider-name="Lunatixz, mhancoc7" version="12.0.21">
     <requires>
-        <import addon="xbmc.python" version="2.14.0"/>
-        <import addon="script.module.requests" />
-        <import addon="script.module.httplib2" />
-        <import addon="script.module.beautifulsoup" />
-        <import addon="script.module.simplejson" version="3.3.0"/>
-        <import addon="script.module.t0mm0.common" version="2.0.0"/>
-        <import addon="script.common.plugin.cache" version="2.5.5"/>
+        <import addon="xbmc.python" version="2.1.0" />
     </requires>
-    <extension point="xbmc.python.pluginsource" library="default.py">
+    <extension library="main.py" point="xbmc.python.pluginsource">
         <provides>video</provides>
     </extension>
-    <extension point="xbmc.service" library="service.py" start="startup"/>
     <extension point="xbmc.addon.metadata">
-        <summary lang="en">theOfficial USTVnow Plugin lets you watch all your favorite US television channels from anywhere around the world. Visit www.ustvnow.com for more Information</summary>
-        <description lang="en">Initially when you sign up you will be registering for our free plan that lets you share our antenna to receive all major terrestrial stations that as an American citizen or resident you would normally be able to receive for free (ABC, CBS, CW, FOX, NBC, PBS). 
-        After this you have the option to upgrade to any of our paid plans. You can cancel or switch plans at any time. Monthly plans automatically renew but you can cancel anytime in order not to be billed again when your current 30 day period has expired. Note, you must first sign up for our free plan and then you can upgrade to a paid plan. Channels included in USTVNow paid plans.
-        ABC, CBS, CW, FOX, NBC, PBS, My9, AE, Animal Planet, Bravo, Cartoon Network, CNBC, CNN, Comedy Central, Discovery Channel, ESPN, FX, Fox News, History, Lifetime, National Geographic, Nickelodeon, Spike, Syfy, TBS, TNT, USA, AMC. For more channels including HBO and SHOWTIME, see our Premium Plans with up to 200 channels and HD.</description>
+        <summary>Watch All the Major American Television Networks Live in HD for Free!</summary>
+        <description>Watch All the Major American Television Networks Live in HD! Entirely Legal and Free! You can also record content through their web site, and there is an optional premium service available with all kinds of other channels. Signup for a free account through the following link today: http://watch.ustvnow.com</description>
         <platform>all</platform>
-        <language>en</language>
-        <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
-        <source>https://github.com/Lunatixz/XBMC_Addons/tree/master/plugin.video.ustvnow</source>
-        <forum>http://forum.kodi.tv/showthread.php?tid=233135</forum>   
+        <forum>http://forum.kodi.tv/showthread.php?tid=233135</forum>
+        <website>http://watch.ustvnow.com/</website>
     </extension>
 </addon>

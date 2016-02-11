@@ -25,12 +25,12 @@ import urllib2
 import json
 import re
 from resources.lib.api import utils
-import sys
 import xbmc
 import xbmcgui
 import xbmcaddon
 import time
 import ssl
+import traceback
 
 try:
     if hasattr(ssl, '_create_unverified_context'):
@@ -156,16 +156,21 @@ class OneDrive:
                     self.progress_dialog_bg.close()
                 return self.request(method, path, params, raw_url, retry)
             else:
+                tb = traceback.format_exc()
                 if self.pg_bg_created:
                     self.progress_dialog_bg.close()
                 self.retry_times = 0
                 response = None
-                try:
-                    response = e.read()
-                except:
-                    response = 'Error reading the body response!'
+                if isinstance(e, urllib2.HTTPError):
+                    origin = OneDriveHttpException(e)
+                    try:
+                        response = e.read()
+                    except:
+                        response = 'Error reading the body response!\n' + traceback.format_exc()
+                else:
+                    origin = e
                 url_params += '\n--service response: --\n' + utils.Utils.str(response)
-                raise OneDriveException(e, sys.exc_info()[2], url, url_params)
+                raise OneDriveException(origin, tb, url, url_params)
         
     def get(self, path, **kwargs):
         return self.request('get', path, **kwargs)
@@ -183,3 +188,8 @@ class OneDriveException(Exception):
         self.tb = tb
         self.url = url
         self.body = body
+
+class OneDriveHttpException(urllib2.HTTPError):
+    def __init__(self, origin):
+        self.code = origin.code
+        

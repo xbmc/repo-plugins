@@ -1,37 +1,55 @@
-v1.1.6
+v1.1.7 released - February 6, 2016:
+- Add support to play ISO video files 
+- Minor changes 
+--------------------------
+v1.1.6 released - January 31, 2016:
 - Fix ssl error for users using an outdated version of python
 - More information is collected when an error happens to try make easier the diagnostic 
-v1.1.5
+--------------------------
+v1.1.5 released - January 12, 2016:
 - Fix folder exporting when the folder contains more than 200 items. 
-v1.1.4
+--------------------------
+v1.1.4 released - December 2, 2015:
 - Fix the auto-refreshed slideshow when a connection error happens with OneDrive.
-v1.1.3
+--------------------------
+v1.1.3 released - November 30, 2015:
 - Minor fixes
-v1.1.2
+--------------------------
+v1.1.2 released - November 28, 2015:
 - Subtitles can be assigned automatically if a .str file exists next to the video.
 - Fix Auto-refreshed slideshow
 - Minor fixes
-v1.1.1
+--------------------------
+v1.1.1 released - November 15, 2015:
 - Show picture fixed
 - Retry request in case of failure
 - Minor fixes
-v1.1.0
+--------------------------
+v1.1.0 released - November 15, 2015:
 - Search function added
-v1.0.7
+--------------------------
+v1.0.7 released - November 11, 2015:
 - New feature: Auto-refreshed slideshow
-v1.0.6
+--------------------------
+v1.0.6 released - November 8, 2015:
 - Functionality to report errors
-v1.0.5
+--------------------------
+v1.0.5 released - Octuber 20, 2015:
 - Minor fixes
-v1.0.4
+--------------------------
+v1.0.5 released - Octuber 20, 2015:
+- Minor fixes
+--------------------------
+v1.0.4 released - Octuber 18, 2015:
 - The onedrive.ini is stored in the userdata folder of the addon
-v1.0.3
-- Fix of slideshow
+--------------------------
+v1.0.3 released - Octuber 18, 2015:
+- Fix of pictures slideshow
 - Fix of encoding/decoding
-v1.0.2
-- Fix support of folders with more than 200 items
+--------------------------
+v1.0.2 released - August 27, 2015
+- Fix support of folders with more than 200 files
 - Fix support of account names with special characters
-v1.0.1
+--------------------------
+v1.0.1 - June 14, 2015
 - Login process fix
-v1.0.0
-- Initial version

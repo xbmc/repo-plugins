@@ -88,6 +88,8 @@ login_url = ''
 config = ConfigParser.ConfigParser()
 config.read(config_path)
 
+ext_videos = ['mkv', 'iso']
+
 def cancelOperation(onedrive):
     return monitor.abortRequested() or (pg_created and progress_dialog.iscanceled()) or (pg_bg_created and progress_dialog_bg.isFinished()) or onedrive.cancelOperation()
     
@@ -158,7 +160,7 @@ def process_files(files, driveid, child_count, child_loaded, big_folder):
             cmd = 'ActivateWindow(%d,%s?%s,return)' % (xbmcgui.getCurrentWindowId(), base_url, urllib.urlencode(params))
             context_options.append((addon.getLocalizedString(30039), cmd))
             list_item.addContextMenuItems(context_options)
-        elif (('video' in f or extension == 'mkv') and content_type == 'video') or ('audio' in f and content_type == 'audio'):
+        elif (('video' in f or extension in ext_videos) and content_type == 'video') or ('audio' in f and content_type == 'audio'):
             params = {'action':'play', 'content_type': content_type, 'item_id': item_id, 'driveid': driveid}
             url = base_url + '?' + urllib.urlencode(params)
             set_info = set_audio_info if content_type == 'audio' else set_video_info
@@ -280,7 +282,7 @@ def export_folder(name, item_id, driveid, destination_folder, directLink=None):
         name = utils.Utils.ascii(f['name'])
         if is_folder:
             export_folder(name, f['id'], driveid, parent_folder)
-        elif (('video' in f or extension == 'mkv') and content_type == 'video') or ('audio' in f and content_type == 'audio'):
+        elif (('video' in f or extension in ext_videos) and content_type == 'video') or ('audio' in f and content_type == 'audio'):
             params = {'action':'play', 'content_type': content_type, 'item_id': f['id'], 'driveid': driveid}
             url = base_url + '?' + urllib.urlencode(params)
             fo = open(os.path.join(parent_folder, name + '.strm'), 'wb')
@@ -306,7 +308,7 @@ def report_error(e):
     tb = traceback.format_exc()
     if isinstance(e, OneDriveException):
         try:
-            tb += '\n--Origin: --\n' + ''.join(traceback.format_exception(type(e.origin), e.origin, e.tb))
+            tb += '\n--Origin: --\n' + e.tb
             tb += '\n--url--\n' + e.url
             tb += '\n--body--\n' + utils.Utils.str(e.body)
         except Exception as e:

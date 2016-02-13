@@ -1,20 +1,28 @@
 <settings>
 <category label="30100">
+    <setting label="30101" type="lsep"  />
     <setting id="search_signed" label="30110" type="bool" default="false" />
     <setting id="search_ad" label="30120" type="bool" default="false" />
     <setting id="subtitles" label="30130" type="bool" default="false" />
     <setting id="suppress_incomplete" label="30150" type="bool" default="false" />
     <setting id="scrape_atoz" label="30160" type="enum" lvalues="30161|30162" default="0" />
     <setting id="paginate_episodes" label="30170" type="enum" lvalues="30171|30172" default="1" />
+    <setting label="30102" type="lsep"  />
+    <setting id="radio_paginate_episodes" label="30170" type="enum" lvalues="30171|30172" default="2" />
+    <setting label="30103" type="lsep"  />
     <setting id="bbc_id_enabled" label="30140" default="false" type="bool" />
     <setting id="bbc_id_username" label="30141" default="" type="text" enable="eq(-1,true)" subsetting="true"/>
     <setting id="bbc_id_password" label="30142" default="" type="text" enable="eq(-2,true) + !eq(-1,)" subsetting="true" option="hidden"/>
 </category>
 <category label="30200">
+    <setting label="30103" type="lsep"  />
     <setting id="streams_autoplay" label="30205" type="bool" default="true" />
-    <setting id="catchup_source" label="30210" type="enum" values="Any|Akamai|Limelight" default="0" enable="eq(-1,true)" />
-    <setting id="catchup_bitrate" label="30211" type="enum" values="Fastest|0.8 Mbps|1.0 Mbps|1.5 Mbps|1.8 Mbps|2.4 Mbps|3.1 Mbps|5.5 Mbps" default="0" enable="eq(-2,true)" />
-    <setting id="live_source" label="30220" type="enum" values="Any|Akamai|Limelight" default="0" enable="eq(-3,true)" />
-    <setting id="live_bitrate" label="30230" type="enum" values="Fastest|0.3 Mbps|0.5 Mbps|1.0 Mbps|1.5 Mbps|1.7 Mbps|2.1 Mbps|2.9 Mbs|3.6 Mbps|5.1 Mbps" default="0" enable="eq(-4,true)" />
+    <setting label="30101" type="lsep"  />
+    <setting id="catchup_source" label="30210" type="enum" values="Any|Akamai|Limelight" default="0" enable="eq(-2,true)" />
+    <setting id="catchup_bitrate" label="30211" type="enum" values="Fastest|0.8 Mbps|1.0 Mbps|1.5 Mbps|1.8 Mbps|2.4 Mbps|3.1 Mbps|5.5 Mbps" default="0" enable="eq(-3,true)" />
+    <setting id="live_source" label="30220" type="enum" values="Any|Akamai|Limelight" default="0" enable="eq(-4,true)" />
+    <setting id="live_bitrate" label="30230" type="enum" values="Fastest|0.3 Mbps|0.5 Mbps|1.0 Mbps|1.5 Mbps|1.7 Mbps|2.1 Mbps|2.9 Mbs|3.6 Mbps|5.1 Mbps" default="0" enable="eq(-5,true)" />
+    <setting label="30102" type="lsep"  />
+    <setting id="radio_source" label="30231" type="enum" values="Any|Akamai|Limelight" default="0" enable="eq(-7,true)" />
 </category>
 </settings>

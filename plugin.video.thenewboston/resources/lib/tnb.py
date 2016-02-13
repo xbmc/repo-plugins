@@ -1,18 +1,25 @@
 import requests
 from BeautifulSoup import BeautifulSoup
+from urlparse import urlparse
 
 
 BASE_URL = 'https://www.thenewboston.com/videos.php'
+
+
+def get_lesson_id(url):
+    return int(url.split('=')[-1])
 
 
 def get_categories():
     """Scrape categories from homepage."""
     page = requests.get(BASE_URL, verify=False)
     soup = BeautifulSoup(page.content)
-    output = [{'title': 'Top 10 Courses'}]
+    output = [{'title': u'Most Popular Courses'}]
 
-    for c in soup.find(id='main_aside').findAll('h4'):
-        output.append({'title': c.text})
+    for c in (
+        soup.find(id='content-wrapper').findAll('div', 'video-category-panel')
+    ):
+        output.append({'title': c.find('span', 'panel-title').text})
 
     return output
 
@@ -21,26 +28,32 @@ def get_topics(category):
     """Scrape topics from homepage."""
     page = requests.get(BASE_URL, verify=False)
     soup = BeautifulSoup(page.content)
-    output = []
-    get_lesson_id = lambda url: url.split('=')[-1]
 
-    if category == 'Top 10 Courses':
-        playlist = soup.find(id='featured_playlists')
-        for item in playlist.findAll('div', 'item'):
-            link = item.find('a', 'featured-playlist-title')
+    content = soup.find(id='content-wrapper')
+    output = []
+
+    if category == u'Most Popular Courses':
+        courses = content.find('table', 'videos-top-courses')
+
+        for item in courses.findAll('tr'):
+            link = courses.findAll('tr')[0].a['href']
+            thumbnail = item.find('img').get('src')
+            title = item.h4.text.replace('&nbsp;', '').strip()
+
             output.append({
-                'thumbnail': item.find('img').get('src'),
-                'title': link.text.replace('&nbsp;', '').strip(),
-                'lesson_id': get_lesson_id(link['href'])})
-    else:
-        sidebar = soup.find(id='main_aside')
-        for dl in sidebar.findAll('dl'):
-            if dl.find('h4').text == category:
-                for item in dl.findAll('dd'):
-                    link = item.find('a', 'category-name')
-                    output.append({
-                        'title': link.getText(' '),
-                        'lesson_id': get_lesson_id(link['href'])})
+                'thumbnail': thumbnail,
+                'title': title,
+                'lesson_id': get_lesson_id(link)})
+
+    for panel in content.findAll('div', 'video-category-panel'):
+        found_category = panel.find('span', 'panel-title').text
+
+        if found_category == category:
+            for item in panel.find('div', 'list-group').findAll('a'):
+                output.append({
+                    'title': item.text,
+                    'lesson_id': get_lesson_id(item['href'])})
+            break
 
     return output
 
@@ -52,9 +65,9 @@ def get_lessons(lesson_id):
     soup = BeautifulSoup(page.content)
     output = []
 
-    for item in soup.find(id='playlist').findAll('dd'):
-        video_id = item.find('a')['href'].split('=')[-1]
-        title = item.find('a').text
+    for item in soup.find(id='main-menu').find('ul', 'navigation').findAll('li'):
+        video_id = item.a['href'].split('=')[-1]
+        title = item.a.text
         output.append({
             'title': title, 'lesson_id': lesson_id,
             'video_id': video_id})
@@ -67,4 +80,4 @@ def get_video(lesson_id, video_id):
     url = '{0}?cat={1}&video={2}'.format(BASE_URL, lesson_id, video_id)
     page = requests.get(url, verify=False)
     soup = BeautifulSoup(page.content)
-    return soup.find('iframe')['src'].split('/')[-1]
+    return urlparse(soup.find('iframe')['src']).path.split('/')[-1]

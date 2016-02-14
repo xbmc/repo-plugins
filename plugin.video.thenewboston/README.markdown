@@ -11,7 +11,7 @@ Plugin available through official repo. Installation info available [here](http:
 XBMC Version
 ------------
 
-Frodo/Gotham
+Gotham
 
 License
 -------

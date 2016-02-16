@@ -35,3 +35,7 @@
 - Experimental Feature: If IGN is running a live stream it will show up in the main folder (Can be activated via settings)
 - Moved podcasts to separate folder
 - Some code clean up to better match python best practices
+2.2.1
+- Showing running livestreams in the main directory is now enabled by default.
+- Added 'IGN Anime Club' and 'IGN Unfiltered' to podcasts.
+- New Experimental Feature: Show IGN1 24 hour live stream in main directory. Has to be activated via settings.

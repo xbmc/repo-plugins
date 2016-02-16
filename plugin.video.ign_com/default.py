@@ -16,10 +16,15 @@ pluginhandle = int(sys.argv[1])
 addon = xbmcaddon.Addon(id='plugin.video.ign_com')
 translation = addon.getLocalizedString
 
-experimental = addon.getSetting("experimentalLiveStream")
-experimentalSetting = False
-if experimental == "true":
-    experimentalSetting = True
+live_stream = addon.getSetting("LiveStream")
+live_stream_setting = False
+if live_stream == "true":
+    live_stream_setting = True
+
+ign1 = addon.getSetting("IGN1")
+ign1_setting = False
+if ign1 == "true":
+    ign1_setting = True
 
 max_video_quality = addon.getSetting("maxVideoQualityRes")
 force_view_mode = addon.getSetting("force_view_mode")
@@ -35,7 +40,7 @@ max_video_quality = [640, 960, 1280, 1920][int(max_video_quality)]
 
 
 def index():
-    if experimentalSetting:
+    if live_stream_setting:
         content = get_url("http://www.ign.com")
         match = re.compile('"m3uUrl":"(.+?).m3u8"}', re.DOTALL).findall(content)
         if len(match) > 0:
@@ -51,6 +56,8 @@ def index():
     add_dir(translation(30005), "http://www.ign.com/videos/all/filtergalleryajax?filter=movies-trailer", 'list_videos', "")
     add_dir("Podcasts", "", 'podcast_index', "")
     # addDir(translation(30007),"http://www.ign.com/videos/allseriesajax",'list_series',"")
+    if ign1_setting:
+        add_link("IGN1", "http://videochannel.ign.com/stitcher/now.m3u8", 'play_live_stream', "", "IGN1 - IGN's 24 hour streaming channel: Broadcasting the latest IGN original shows, live programming, gameplay footage, video reviews, previews and more", "LIVE")
     add_dir(translation(30008), "", 'search', "")
     xbmcplugin.endOfDirectory(pluginhandle)
     if force_view_mode:
@@ -65,6 +72,8 @@ def podcast_index():
     add_dir("Nintendo Voice Chat", "http://www.ign.com/watch/nintendo-voice-chat?category=videos&page=1", 'list_series_episodes', "")
     add_dir("Esports Weekly", "http://www.ign.com/watch/esports-weekly?category=videos&page=1", 'list_series_episodes', "")
     add_dir("Fireteam Chat", "http://www.ign.com/watch/fireteam-chat?category=videos&page=1", 'list_series_episodes', "")
+    add_dir("IGN Anime Club", "http://www.ign.com/watch/ign-anime-club?category=videos&page=1", 'list_series_episodes', "")
+    add_dir("IGN Unfiltered", "http://www.ign.com/watch/ign-unfiltered?category=videos&page=1", 'list_series_episodes', "")
     xbmcplugin.endOfDirectory(pluginhandle)
     if force_view_mode:
         xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
@@ -270,24 +279,24 @@ def parameters_string_to_dict(parameters):
 def add_link(name, url, mode, iconimage, desc="", duration=""):
     u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
     liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": desc, "Duration": duration } )
+    liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc, "Duration": duration})
     liz.setProperty('IsPlayable', 'true')
-    ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
+    ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz)
     return ok
 
 
 def add_dir(name, url, mode, iconimage, desc=""):
     u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
     liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-    liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": desc } )
-    ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+    liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc})
+    ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
     return ok
          
 params = parameters_string_to_dict(sys.argv[2])
 mode = params.get('mode')
 url = params.get('url')
 if isinstance(url, str):
-  url = urllib.unquote_plus(url)
+    url = urllib.unquote_plus(url)
 
 if mode == 'list_videos':
     list_videos(url)

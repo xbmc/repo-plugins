@@ -1,0 +1,38 @@
+{
+"type": "video",
+"sophoraId": "video1217664",
+"trackingPixels": [
+{"trackingPixel": "http://tagessch.ivwbox.de/cgi-bin/ivw/CP/tagesschau/tagesschau;page=/api/multimedia/video/video1217664.json"},
+{"trackingPixel": "http://gsea.ivwbox.de/cgi-bin/ivw/CP/0114_05"},
+{"trackingPixel": "http://de.sitestat.com/ndr/ts-app/s?api.multimedia.video.video1217664&amp;cid=video1217664&amp;pdt=20121120T1456&amp;pti=WIRTSCHAFT_Die_wichtigsten_Meldungen_im_Ueberblick&amp;otp=video&amp;ctp=segment&amp;bri=nicht-definiert&amp;src=ard-aktuell"}
+],
+"details": "http://www.tagesschau.de/api/multimedia/video/video1217664.json",
+"detailsWeb": "http://www.tagesschau.de/multimedia/video/video1217664.html",
+"date": "2012-11-20T14:55:00.000+01:00",
+"externalTags": null,
+"source": null,
+"headline": "WIRTSCHAFT: Die wichtigsten Meldungen",
+"shorttitle": null,
+"shorttext": null,
+"in": "00:00:00.00",
+"out": "00:07:52.00",
+"inMilli": 0,
+"outMilli": 472000,
+"broadcastDate": "2012-11-20T14:55:00.000+01:00",
+"duration": null,
+"screenFormat": "16:9",
+"mediadata": [
+{"h264s": "http://media.tagesschau.de/video/2012/1120/TV-20121120-1447-0601.webs.h264.mp4"}
+,
+{"h264m": "http://media.tagesschau.de/video/2012/1120/TV-20121120-1447-0601.webm.h264.mp4"}
+,
+{"h264l": "http://media.tagesschau.de/video/2012/1120/TV-20121120-1447-0601.webl.h264.mp4"}
+,
+{"podcastvideom": "http://media.tagesschau.de/video/2012/1120/TV-20121120-1447-0601.podm.h264.mp4"}
+],
+"images": [
+]
+,
+"relatedVideos": null,
+"endOfContent": null
+}

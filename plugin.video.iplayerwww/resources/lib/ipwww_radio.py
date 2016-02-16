@@ -437,8 +437,6 @@ def ListLiveHQ():
         ('bbc_asian_network', 'BBC Asian Network'),
     ]
     for id, name in channel_list:
-        #AddMenuEntry(name, id, 133, '', '', '')
-        #url = "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/%s.m3u8" % id
         AddMenuEntry(name, id, 214, '', '', '')
 
 
@@ -502,9 +500,8 @@ def ListFavourites(logged_in):
             url = "http://www.bbc.co.uk/programmes/%s" % programme_id
             CheckAutoplay(episode_title, url, image, ' ', '')
 
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
-
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
 
 
 def ListMostPopular():
@@ -549,8 +546,9 @@ def ListMostPopular():
             CheckAutoplay(title, url, image, ' ', '')
 
     #BUG: this should sort by original order but it doesn't (see http://trac.kodi.tv/ticket/10252)
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
+
 
 
 def Search(search_entered):

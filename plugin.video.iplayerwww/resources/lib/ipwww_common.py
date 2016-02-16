@@ -5,6 +5,8 @@ import os
 import re
 import requests
 from requests.packages import urllib3
+#Below is required to get around an ssl issue
+urllib3.disable_warnings()
 import cookielib
 import urllib
 import HTMLParser
@@ -155,8 +157,6 @@ cookie_jar = InitialiseCookieJar()
 
 
 def SignInBBCiD():
-    #Below is required to get around an ssl issue
-    urllib3.disable_warnings()
     sign_in_url="https://ssl.bbc.co.uk/id/signin"
 
     username=ADDON.getSetting('bbc_id_username')
@@ -273,6 +273,8 @@ def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=N
     """Adds a new line to the Kodi list of playables.
     It is used in multiple ways in the plugin, which are distinguished by modes.
     """
+    if not iconimage:
+        iconimage="DefaultFolder.png"
     listitem_url = (sys.argv[0] + "?url=" + utf8_quote_plus(url) + "&mode=" + str(mode) +
                     "&name=" + utf8_quote_plus(name) +
                     "&iconimage=" + utf8_quote_plus(iconimage) +
@@ -341,6 +343,7 @@ def CreateBaseDirectory(content_type):
         AddMenuEntry(translation(30317), 'url', 109, '', '', '')
         AddMenuEntry(translation(30301), 'url', 105, '', '', '')
         AddMenuEntry(translation(30302), 'url', 102, '', '', '')
+        AddMenuEntry(translation(30327), 'url', 120, '', '', '')
         AddMenuEntry(translation(30303), 'url', 103, '', '', '')
         AddMenuEntry(translation(30304), 'url', 104, '', '', '')
         AddMenuEntry(translation(30305), 'url', 101, '', '', '')
@@ -365,6 +368,8 @@ def CreateBaseDirectory(content_type):
                             'url', 105, '', '', '')
         AddMenuEntry((translation(30323)+translation(30302)),
                             'url', 102, '', '', '')
+        AddMenuEntry((translation(30323)+translation(30327)),
+                            'url', 120, '', '', '')
         AddMenuEntry((translation(30323)+translation(30303)),
                             'url', 103, '', '', '')
         AddMenuEntry((translation(30323)+translation(30304)),

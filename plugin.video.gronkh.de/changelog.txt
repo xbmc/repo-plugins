@@ -1,10 +1,17 @@
+Version 1.1.2
+    Some small changes on how streams are showed
+    Adding stream quality switcher
+    Adding GronkhTV live stream
+    Fixing wrong-sized fanarts
+    Adding live streams of other lets-players from Gronkh.de
+
 Version 1.1.1
     Updating API version
         Using IDs for API calls instead of slugs.
         The API calls should now perform better and be faster on slower conenctions.
         Also the new API returns smaller pictures where big pictures would not make sense.
         Furthermore the new API uses a database maintained by me, so missing episodes which
-        are not on Gronkh.de could however be avaiable in the API.
+        are not on Gronkh.de could however be available in the API.
     Some small changes to the codebase (changed some API endpoints and their return values)
     Renaming the plugin to Gronkh.de (new notation)
     Chaning some information in the addon.xml (Author email)

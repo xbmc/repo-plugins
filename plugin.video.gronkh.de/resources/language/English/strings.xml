@@ -16,6 +16,8 @@
     <string id="30014">No entries found.</string>
     <string id="30015">Server error, try again later.</string>
     <string id="30016">This version is outdated, please update.</string>
+    <string id="30017">Choose a quality</string>
+    <string id="30018">This stream seems to be offline</string>
 
     <string id="30100">Clear cache</string>
     <string id="30101">Do Not Track</string>

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-    Gronkh.DE Kodi plugin
+    Gronkh.de Kodi plugin
     Copyright (C) 2015  1750 Studios/Andreas Mieke
 
     This program is free software: you can redistribute it and/or modify
@@ -36,7 +36,7 @@ if sys.argv[1] == 'clearcache':
     for f in files:
         xbmcvfs.delete(cachedir + f)
     dialog = xbmcgui.Dialog()
-    dialog.notification('Gronkh.DE', loc(30004), xbmcgui.NOTIFICATION_INFO, 5000)
+    dialog.notification('Gronkh.de', loc(30004), xbmcgui.NOTIFICATION_INFO, 5000)
     quit()
 
 addon_handle    = int(sys.argv[1])
@@ -56,7 +56,7 @@ baseurl         = API_URL + 'v' + str(API_VERSION) + '/'
 
 twitchStreamInfo= 'https://api.twitch.tv/kraken/streams/'
 
-twitchnames     = ['gronkh']
+twitchnames     = ['gronkh', 'gronkhtv', 'sarazar', 'amraslp', 'lookslikelinklive', 'truemg', 'rahmschnitzel', 'zombey', 'herrdekay', 'suishomaru']
 
 if not setting('user-id'):
     addon.setSetting('user-id', uuid.uuid4().hex[:16])
@@ -116,7 +116,7 @@ def getCachedJson(url):
             j = {}
     else:
         headers['If-None-Match'] = etags[url]['etag']
-        r = requests.get(url + '/', headers=headers)
+        r = requests.get(url, headers=headers)
         if r.status_code == 304:
             etagsf = xbmcvfs.File(etags[url]['path'], 'r')
             j = json.loads(etagsf.read())
@@ -137,7 +137,7 @@ def getCachedJson(url):
 
     if j == {}:
         dialog = xbmcgui.Dialog()
-        dialog.notification('Gronkh.DE', loc(30015), xbmcgui.NOTIFICATION_INFO, 5000)
+        dialog.notification('Gronkh.de', loc(30015), xbmcgui.NOTIFICATION_INFO, 5000)
         quit()
         return
 
@@ -150,6 +150,64 @@ def getCachedJson(url):
 def makeTimeString(s):
     return str(int(s/60))
 
+def chooseM3U8(url):
+    r = requests.get(url)
+
+    url = 0
+    playlists = []
+    bandwidth = ""
+    resolution = ""
+    for line in str(r.content).split('\n'):
+        line.strip()
+        if line.find('\r'):
+            line = line.split('\r')[0]
+
+        if url == 1:
+            playlist = {}
+            playlist['bandwidth'] = bandwidth
+            playlist['url'] = line
+            playlist['resolution'] = resolution
+            playlists.append(playlist)
+            url = 0
+
+        elif line.startswith('#EXT-X-STREAM-INF:'):
+            url = 1
+
+            start = line.find('BANDWIDTH=')
+            bandwidth = line[start:].split('=')[1]
+            end = bandwidth.find(',')
+            if end != -1:
+                bandwidth = bandwidth[:end]
+
+            start = line.find('RESOLUTION=')
+            if start != -1:
+                resolution = line[start:].split('=')[1]
+                end = resolution.find(',')
+                if end != -1:
+                    resolution = resolution[:end]
+            else:
+                resolution = '-'
+
+        else:
+            pass
+
+    if len(playlists) == 0:
+        dialog = xbmcgui.Dialog()
+        dialog.notification('Gronkh.de', loc(30018), xbmcgui.NOTIFICATION_ERROR, 5000)
+        quit()
+
+    strings = []
+    for pl in playlists:
+        strings.append(pl['resolution'] + ' (' + pl['bandwidth'] + 'bps)')
+
+    dialog = xbmcgui.Dialog()
+    ret = dialog.select(loc(30017), strings)
+
+    if ret == -1:
+        quit()
+
+    return playlists[ret]['url']
+
 ##### Functions
 def checkVersion():
     versions = getCachedJson(API_URL + 'version')
@@ -159,12 +217,12 @@ def checkVersion():
 
     if API_VERSION in versions['deprecated']:
         dialog = xbmcgui.Dialog()
-        dialog.notification('Gronkh.DE', loc(30016), xbmcgui.NOTIFICATION_WARNING, 5000)
+        dialog.notification('Gronkh.de', loc(30016), xbmcgui.NOTIFICATION_WARNING, 5000)
         return
 
     if API_VERSION in versions['deleted']:
         dialog = xbmcgui.Dialog()
-        dialog.notification('Gronkh.DE', loc(30016), xbmcgui.NOTIFICATION_ERROR, 5000)
+        dialog.notification('Gronkh.de', loc(30016), xbmcgui.NOTIFICATION_ERROR, 5000)
         quit()
         return
 
@@ -241,7 +299,7 @@ def search():
 
     if result['lets-plays'] == 0 and result['tests'] == 0 and result['episodes'] == 0:
         dialog = xbmcgui.Dialog()
-        dialog.notification('Gronkh.DE', loc(30014), xbmcgui.NOTIFICATION_INFO, 5000)
+        dialog.notification('Gronkh.de', loc(30014), xbmcgui.NOTIFICATION_INFO, 5000)
         quit()
 
     if result['lets-plays'] != 0:
@@ -315,7 +373,7 @@ def showTests(a_id=None, search=None):
                                 })
             li.setArt({'thumb': BASE_URL + game['thumb'],
                         'poster': BASE_URL + game['poster'],
-                        'fanart': BASE_URL + game['thumb']})
+                        'fanart': BASE_URL + game['fanArt']})
             li.setProperty('isPlayable','true')
             li.addStreamInfo('video', {'duration': game['duration']})
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params),
@@ -346,7 +404,7 @@ def showTests(a_id=None, search=None):
                                 })
             li.setArt({'thumb': BASE_URL + game['thumb'],
                         'poster': BASE_URL + game['poster'],
-                        'fanart': BASE_URL + game['thumb']})
+                        'fanart': BASE_URL + game['fanArt']})
             li.setProperty('isPlayable','true')
             li.addStreamInfo('video', {'duration': game['duration']})
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params),
@@ -377,7 +435,7 @@ def showTests(a_id=None, search=None):
                                 })
             li.setArt({'thumb': BASE_URL + game['thumb'],
                         'poster': BASE_URL + game['poster'],
-                        'fanart': BASE_URL + game['thumb']})
+                        'fanart': BASE_URL + game['fanArt']})
             li.setProperty('isPlayable','true')
             li.addStreamInfo('video', {'duration': game['duration']})
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params),
@@ -456,7 +514,7 @@ def showEpisodes(l_id):
                             })
         li.setArt({'thumb': BASE_URL + ep['thumb'],
                     'poster': BASE_URL + lp['poster'],
-                    'fanart': BASE_URL + ep['thumb']})
+                    'fanart': BASE_URL + ep['fanArt']})
         li.setProperty('isPlayable','true')
         li.addStreamInfo('video', {'duration': ep['duration']})
         xbmcplugin.setContent(addon_handle, 'episodes')
@@ -493,7 +551,7 @@ def showRecentEpisodes():
                             })
         li.setArt({'thumb': BASE_URL + ep['thumb'],
                     'poster': BASE_URL + lps[ep['letsPlayId']]['poster'],
-                    'fanart': BASE_URL + ep['thumb']})
+                    'fanart': BASE_URL + ep['fanArt']})
         li.setProperty('isPlayable','true')
         li.addStreamInfo('video', {'duration': ep['duration']})
         xbmcplugin.setContent(addon_handle, 'episodes')
@@ -530,7 +588,7 @@ def showSearchEpisodes(search):
                             })
         li.setArt({'thumb': BASE_URL + ep['thumb'],
                     'poster': BASE_URL + lps[ep['letsPlayId']]['poster'],
-                    'fanart': BASE_URL + ep['thumb']})
+                    'fanart': BASE_URL + ep['fanArt']})
         li.setProperty('isPlayable','true')
         li.addStreamInfo('video', {'duration': ep['duration']})
         xbmcplugin.setContent(addon_handle, 'episodes')
@@ -561,7 +619,7 @@ def startVideo(t, i, l):
                             })
         li.setArt({'thumb': BASE_URL + lt['thumb'],
                     'poster': BASE_URL + lt['poster'],
-                    'fanart': BASE_URL + lt['thumb']})
+                    'fanart': BASE_URL + lt['fanArt']})
         li.setProperty('isPlayable','true')
         li.addStreamInfo('video', {'duration': lt['duration']})
         xbmcplugin.setResolvedUrl(handle=addon_handle, succeeded=True, listitem=li)
@@ -588,7 +646,7 @@ def startVideo(t, i, l):
                             })
         li.setArt({'thumb': BASE_URL + ep['thumb'],
                     'poster': BASE_URL + lp['poster'],
-                    'fanart': BASE_URL + ep['thumb']})
+                    'fanart': BASE_URL + ep['fanArt']})
         li.setProperty('isPlayable','true')
         li.addStreamInfo('video', {'duration': ep['duration']})
         xbmcplugin.setResolvedUrl(handle=addon_handle, succeeded=True, listitem=li)
@@ -605,11 +663,11 @@ def showLiveStreams():
                 z = z + 1
                 if z > 5:
                     dialog = xbmcgui.Dialog()
-                    dialog.notification('gronkh.DE', loc(30009), xbmcgui.NOTIFICATION_ERROR, 10000)
+                    dialog.notification('Gronkh.de', loc(30009), xbmcgui.NOTIFICATION_ERROR, 10000)
                     quit()
         if stream:
             li = None
-            if stream['game']:
+            if stream['game'] and stream['game'] != "Gaming Talk Shows":
                 li = xbmcgui.ListItem(stream['channel']['display_name'] + ' - ' + loc(30006) + ': ' + stream['game'])
             else:
                 li = xbmcgui.ListItem(stream['channel']['display_name'] + ' - ' + stream['channel']['status'])
@@ -627,10 +685,10 @@ def showLiveStreams():
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=makeUrl(params),
                 listitem=li)
         else:
-            li = xbmcgui.ListItem(u'[' + name + u'] – ' + loc(30005))
+            li = xbmcgui.ListItem(name + u' - ' + loc(30005))
             li.setArt({ 'fanart' : fanart})
             li.setInfo('video', {
-                                    'title' : u'[' + name + u'] – ' + loc(30005),
+                                    'title' : name + u' - ' + loc(30005),
                                     'episode': 1,
                                     'season': 1,
                                     'director': name
@@ -651,18 +709,18 @@ def startLiveStream(stream, name):
 
     if stream:
             li = None
-            if stream['game']:
+            if stream['game'] and stream['game'] != "Gaming Talk Shows":
                 li = xbmcgui.ListItem(stream['channel']['display_name'] + ' - ' + loc(30006) + ': ' + stream['game'],
-                    path='http://usher.twitch.tv/api/channel/hls/' +
+                    path=chooseM3U8('http://usher.twitch.tv/api/channel/hls/' +
                     name + '.m3u8?player=twitchweb&token=' +
                     token + '&sig=' +
-                    sig + '&allow_audio_only=true&allow_source=true&type=any&p=666')
+                    sig + '&allow_audio_only=true&allow_source=true&type=any&p=666'))
             else:
                 li = xbmcgui.ListItem(stream['channel']['display_name'] + ' - ' + stream['channel']['status'],
-                    path='http://usher.twitch.tv/api/channel/hls/' +
+                    path=chooseM3U8('http://usher.twitch.tv/api/channel/hls/' +
                     name + '.m3u8?player=twitchweb&token=' +
                     token + '&sig=' +
-                    sig + '&allow_audio_only=true&allow_source=true&type=any&p=666')
+                    sig + '&allow_audio_only=true&allow_source=true&type=any&p=666'))
             li.setIconImage(stream['channel']['logo'])
             li.setThumbnailImage(stream['preview']['large'] + '?' + unicode(time.time()))
             li.setArt({ 'fanart' : stream['channel']['profile_banner'],
@@ -675,17 +733,17 @@ def startLiveStream(stream, name):
             li.setProperty('isPlayable','true')
             xbmcplugin.setResolvedUrl(handle=addon_handle, succeeded=True, listitem=li)
     else:
-        li = xbmcgui.ListItem(u'[' + name + u'] – ' + loc(30005),
-            path='http://usher.twitch.tv/api/channel/hls/' +
+        li = xbmcgui.ListItem(name + u' - ' + loc(30005),
+            path=chooseM3U8('http://usher.twitch.tv/api/channel/hls/' +
             name + '.m3u8?player=twitchweb&token=' +
             token + '&sig=' +
-            sig + '&allow_audio_only=true&allow_source=true&type=any&p=666')
+            sig + '&allow_audio_only=true&allow_source=true&type=any&p=666'))
         if stream:
             li.setIconImage(stream['preview']['medium'])
             li.setThumbnailImage(stream['preview']['large'])
         li.setArt({ 'fanart' : fanart})
         li.setInfo('video', {
-                                'title' : u'[' + name + u'] – ' + loc(30005),
+                                'title' : name + u' - ' + loc(30005),
                                 'episode': 1,
                                 'season': 1,
                                 'director': name

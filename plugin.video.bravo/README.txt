@@ -4,6 +4,7 @@ plugin.video.bravo
 Kodi Addon for Bravo TV website
 for Kodi Isengard and later
 
+Version 3.0.1 separate scraping routines for future functions
 Version 2.0.3 cleanup for release
 Version 2.0.2 website change
 Version 2.0.1 initial v2 release

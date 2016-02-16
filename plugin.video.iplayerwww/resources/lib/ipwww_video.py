@@ -78,6 +78,29 @@ def ListAtoZ():
         for name, url in characters:
             AddMenuEntry(name, url, 124, '', '', '')
 
+def ListChannelAtoZ():
+    """List programmes for each channel based on alphabetical order.
+
+    Only creates the corresponding directories for each channel.
+    """
+    channel_list = [
+        ('bbcone', 'bbc_one', 'BBC One'),
+        ('bbctwo', 'bbc_two', 'BBC Two'),
+        ('tv/bbcthree', 'bbc_three', 'BBC Three'),
+        ('bbcfour', 'bbc_four', 'BBC Four'),
+        ('tv/cbbc', 'cbbc', 'CBBC'),
+        ('tv/cbeebies', 'cbeebies', 'CBeebies'),
+        ('tv/bbcnews', 'bbc_news24', 'BBC News Channel'),
+        ('tv/bbcparliament', 'bbc_parliament', 'BBC Parliament'),
+        ('tv/bbcalba', 'bbc_alba', 'Alba'),
+        ('tv/s4c', 's4c', 'S4C'),
+    ]
+    for id, img, name in channel_list:
+        iconimage = xbmc.translatePath(
+            os.path.join('special://home/addons/plugin.video.iplayerwww/media', img + '.png'))
+        url = "http://www.bbc.co.uk/%s/a-z" % id
+        AddMenuEntry(name, url, 128, iconimage, '', '')
+
 
 def GetAtoZPage(url):
     """Allows to list programmes based on alphabetical order.
@@ -153,7 +176,7 @@ def ScrapeEpisodes(page_url):
     total_pages = 1
     current_page = 1
     page_range = range(1)
-    paginate = re.search(r'<div class="paginate.*?</div>',html)
+    paginate = re.search(r'<div class="paginate.*?</div>', html, re.DOTALL)
     next_page = 1
     if paginate:
         if int(ADDON.getSetting('paginate_episodes')) == 0:
@@ -161,7 +184,9 @@ def ScrapeEpisodes(page_url):
             if current_page_match:
                 current_page = int(current_page_match.group(1))
             page_range = range(current_page, current_page+1)
-            next_page_match = re.search(r'<span class="next txt">.+?href="(.*?page=)(.*?)"', paginate.group(0))
+            next_page_match = re.search(r'<span class="next txt">.+?href="(.*?page=)(.*?)"',
+                                        paginate.group(0),
+                                        re.DOTALL)
             if next_page_match:
                 page_base_url = next_page_match.group(1)
                 next_page = int(next_page_match.group(2))
@@ -169,14 +194,13 @@ def ScrapeEpisodes(page_url):
                 next_page = current_page
             page_range = range(current_page, current_page+1)
         else:
-            pages = re.findall(r'<li class="page.*?</li>',paginate.group(0))
+            pages = re.findall(r'<li class="page.*?</li>',paginate.group(0),re.DOTALL)
             if pages:
                 last = pages[-1]
-                last_page = re.search(r'<a href="(.*?page=)(.*?)">',last)
+                last_page = re.search(r'<a href="(.*?page=)(.*?)"',last)
                 page_base_url = last_page.group(1)
                 total_pages = int(last_page.group(2))
             page_range = range(1, total_pages+1)
-
 
     for page in page_range:
 
@@ -322,9 +346,9 @@ def ScrapeEpisodes(page_url):
             page_url = 'http://www.bbc.co.uk' + page_base_url + str(next_page)
             AddMenuEntry(" [COLOR orange]%s >>[/COLOR]" % translation(30320), page_url, 128, '', '', '')
 
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
 
     pDialog.close()
 
@@ -619,10 +643,9 @@ def ListHighlights(highlights_url):
         if ((ADDON.getSetting('suppress_incomplete') == 'false') or (not episode[4] == '')):
             CheckAutoplay(episode[1], episode_url, episode[3], episode[2], episode[4])
 
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
-
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
 
 def ListMostPopular():
     """Scrapes all episodes of the most popular page."""

@@ -1,10 +1,21 @@
-v1.1.0 (Saturday, 25 oktober 2014):
+v1.1.2 (2016-02-13)
+- changed the listing and playing of videos
+- The contextual menu item 'Play from here' is available now, it queues all the videos in the list from a certain point
+- updated to latest requirements for a Kodi-addon
+- skipping first video if there is more than 1 video available
+- changed fanart
+- added fanart-blurred
+
+v1.1.1 (2015-08-15):
+- added some utf-8 stuff
+
+v1.1.0 (2014-10-25):
 - changes due to website changes
 - removed All Videos category
 
-v1.0.1 (Saturday, 6 september 2014):
+v1.0.1 (2014-09-06):
 - fixed GNU licence
 - added forum link
 
-v1.0.0 (Wednesday, 13 august 2014):
+v1.0.0 (2014-08-13):
 - initial version

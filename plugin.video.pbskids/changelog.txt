@@ -1,1 +1,1 @@
-Version 2.0.2 Initial release
+Version 3.0.1 separate scraper for future functions

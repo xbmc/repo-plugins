@@ -1,3 +1,5 @@
+1.0.5 (2016.02.14)
+- Quick fix for direct channels due to website changes.
 1.0.4 (2016.01.21)
 - Updated the direct channels sources (great thanks to vicglez).
 1.0.3 (2016.01.17)

@@ -121,7 +121,7 @@ def get_create_index():
 
     menu_patterns = (
             ( 'program_list', '<a href="([^"]*?)" title="(Listado de programas)"><span>'),
-            ( 'menu_direct',  'title="Ver directos de RNE" href="([^"]*?)"><span><strong>(Radio en directo)<'),
+            ( 'menu_direct',  'href="([^"]*?)".*?([Ee]n [Dd]irecto)'),
             )
 
     buffer_url   = l.carga_web(main_url)
@@ -132,7 +132,7 @@ def get_create_index():
         if url:
             menu_item = {
                 'action' : action,
-                'title'  : get_clean_title(title),
+                'title'  : get_clean_title(title).capitalize(),
                 'args'   : url,
                 }
             menu_entries.append(menu_item)

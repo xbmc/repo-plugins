@@ -1,9 +1,10 @@
 plugin.video.thinktv
 ================
 
-Kodi Video V2 Addon for PBS ThinkTV
+Kodi Video Addon for PBS ThinkTV
 For Kodi Isengard and above releases
 
+Version 3.0.1 separate scraper for future functions
 Version 2.0.8 website changes
 Version 2.0.7 website changes
 Version 2.0.6 added Next Page for shows

@@ -1,6 +1,6 @@
 plugin.video.pbskids
 ================
 
-Kodi Addon for PBS Kids Video website
+Kodi Addon for Think TV PBS Kids Video website
 
-Version 2.0.2 Initial release
+Version 3.0.1 Separate scraper for future functions

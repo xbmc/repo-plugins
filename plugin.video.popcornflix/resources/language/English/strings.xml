@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<strings>
+    <string id="30000">Favorite Sessions</string>
+    <string id="30001">Goto Next Page</string>
+    <string id="30002">NPR Music</string>
+    <string id="30003">No Playable Video Found</string>
+
+    <string id="30020">View</string>
+    <string id="30021">Enable Views</string>
+    <string id="30022">Default View</string>
+    <string id="30023">Movies View</string>
+    <string id="30024">Shows View</string>
+    <string id="30025">Episodes View</string>
+
+</strings>

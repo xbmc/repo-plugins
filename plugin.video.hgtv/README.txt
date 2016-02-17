@@ -1,0 +1,15 @@
+plugin.video.hgtv
+================
+
+Kodi Addon for HGTV website
+
+Version 3.0.1 Isengard - separate scraper
+
+Version 2.1.5 fix for null url from website
+Version 2.1.4 Website changes
+Version 2.1.3 Fix for finding first show
+Version 2.1.2 Added subtitles, metadata, fixed views
+Version 2.1.1 Cleanup and fix spaces after name
+Version 2.1.0 Website changes
+version 2.0.2 initial release
+

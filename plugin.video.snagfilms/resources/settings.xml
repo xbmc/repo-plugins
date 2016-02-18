@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<settings>
+  <category label="Settings">
+    <setting type="sep" />
+    <setting id="bitrate" type="enum" lvalues="30005|30006|30007|30008|30009|30010|30011" label="30004" default="6"/>
+
+  </category>
+</settings>

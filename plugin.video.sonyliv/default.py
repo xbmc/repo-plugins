@@ -35,7 +35,8 @@ USER_AGENT    = 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, 
 defaultHeaders = {'User-Agent':USER_AGENT, 
                  'Accept':"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8", 
                  'Accept-Encoding':'gzip,deflate,sdch',
-                 'Accept-Language':'en-US,en;q=0.8'} 
+                 'Accept-Language':'en-US,en;q=0.8',
+                 'X-Forwarded-For': '117.211.162.172'} 
 
 def getRequest(url, user_data=None, headers = defaultHeaders , alert=True, donotuseproxy=True):
 
@@ -83,7 +84,9 @@ def getSources():
         liz.setProperty('fanart_image', addonfanart)
         ilist.append((u, liz, True))
         
-        html = getRequest('http://www.sonyliv.com/show/list')
+#        html = getRequest('http://www.sonyliv.com/show/list')
+        html = getRequest('http://www.sonyliv.com/custompage/all_show_page')
+        print "html = "+str(html)
         a = re.compile('<div class="item genre.+?src=(.+?) .+?href="(.+?)">(.+?)<',re.DOTALL).findall(html)
         for iconImg,url,name in a:
               mode = 'GC'
@@ -117,7 +120,8 @@ def getCats(gsurl,catname):
               img  = img.strip("'")
               mode = 'GE'
               url   = 'http://www.sonyliv.com/show/allEpisodeList?&showId=%s&offset=0&galleryId=&max=%s' % (url, str(pageSize))
-              u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
+              try:  u = '%s?url=%s&name=%s&mode=%s' % (sys.argv[0],qp(url), qp(name), mode)
+              except: continue
               liz=xbmcgui.ListItem(name, '','DefaultFolder.png', img)
               liz.setInfo( 'Video', { "Title": name, "Studio":catname, "Plot": plot })
               liz.setProperty('fanart_image', addonfanart)
@@ -207,7 +211,9 @@ def getMovies(gmurl):
         for murl, name, img in c:
               html = getRequest(murl)
               playerKey = 'movie'
-              title, plot, url = re.compile('"og:title" content="(.+?)".+?"og:description" content="(.+?)".+?"og:video:secure_url" content="(.+?)"',re.DOTALL).search(html).groups()
+              try : title, plot, url = re.compile('"og:title" content="(.+?)".+?"og:description" content="(.+?)".+?"og:video:secure_url" content="(.+?)"',re.DOTALL).search(html).groups()
+              except:
+                continue
               url = url.split('videoID=',1)[1].split('&',1)[0]
               infoList ={}
               infoList['Title'] = h.unescape(title)
@@ -253,7 +259,14 @@ def getVideo(url, playerKey):
               html = getRequest(url)
               m = re.compile('experienceJSON = (.+?)\};',re.DOTALL).search(html)
               a = json.loads(html[m.start(1):m.end(1)+1])
-              b = a['data']['programmedContent']['videoPlayer']['mediaDTO']['IOSRenditions']
+              try: b = a['data']['programmedContent']['videoPlayer']['mediaDTO']['IOSRenditions']
+              except:
+                   url = 'https://secure.brightcove.com/services/viewer/htmlFederated?&width=859&height=482&flashID=BrightcoveExperience&bgcolor=%23FFFFFF&playerID=4338954681001&playerKey=AQ~~,AAAD8j3oFYk~,fDHFFMur_5DXDIFqSUkWtqHU8Fwf7wRy&isVid=true&isUI=true&dynamicStreaming=true&%40videoPlayer='+bcid+'&secureConnections=true&secureHTMLConnections=true'
+                   html = getRequest(url)
+                   m = re.compile('experienceJSON = (.+?)\};',re.DOTALL).search(html)
+                   a = json.loads(html[m.start(1):m.end(1)+1])
+                   b = a['data']['programmedContent']['videoPlayer']['mediaDTO']['IOSRenditions']
+
               u =''
               rate = 0
               for c in b:

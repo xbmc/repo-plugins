@@ -191,13 +191,13 @@ class VideoContentParser(object):
         return VideoContent(tsid, title, timestamp, videourls, imageurls, duration)    
 
 
-    def parse_broadcast(self, jsonbroadcast):
+    def parse_broadcast(self, jsonbroadcast, timestring = '%d.%m.%Y'):
         """Parses the broadcast JSON into a LazyVideoContent object."""
         tsid = jsonbroadcast["sophoraId"]
         title = jsonbroadcast["title"]
         timestamp = self._parse_date(jsonbroadcast["broadcastDate"])
         if(timestamp):
-            title = title + timestamp.date().strftime(' vom %d.%m.%Y')
+            title = title + timestamp.strftime(' vom ' + timestring)
         imageurls = self._parse_image_urls(jsonbroadcast["images"][0]["variants"])
         details = jsonbroadcast["details"]
         description = None
@@ -330,6 +330,7 @@ class VideoContentProvider(object):
             videos.append(video)
 
         videos.append(self.tagesschau_in_100_sek())
+	videos.append(self._parser.parse_broadcast(data["latestBroadcast"], '%d.%m.%Y %H:%M'))
 
         self._logger.info("found " + str(len(videos)) + " videos")              
         return videos

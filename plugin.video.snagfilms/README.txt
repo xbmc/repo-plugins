@@ -1,9 +1,9 @@
 plugin.video.snagfilms
 ================
 
-
 Kodi Addon for Snagfilms website
 
+Version 3.0.1 Isengard version - separate scraper
 version 1.0.11 website changes / use hls m3u8
 Version 1.0.10 Website changes
 Version 1.0.9 Website changes

@@ -78,8 +78,8 @@ if mode == 'main':
     ustv.build_main()
 
 elif mode == 'live':
-    stream_type = 'rtmp'
-    channels = ustv.get_channels(quality_type, stream_type)
+
+    channels = ustv.get_channels(quality_type)
     if channels:
         for c in channels:
             rURL = "plugin://plugin.video.ustvnow/?name=" + c['name'] + "&mode=play"
@@ -130,16 +130,17 @@ elif mode == 'live':
             xbmcplugin.setContent(Addon.plugin_handle, 'movie')
 
 elif mode == 'recordings':
-    stream_type = ['rtsp', 'rtmp'][int(Addon.get_setting('rec_stream_type'))]
-    recordings_quality = int(Addon.get_setting('quality'))
-    # This ensures that recordings are 1024kbps or less
-    if recordings_quality == 3:
-        recordings_quality = 2
-    recordings = ustv.get_recordings(int(recordings_quality), 
-                                     stream_type, 'recordings')
+
+
+
+
+
+    recordings = ustv.get_recordings('recordings')
+
         
     if recordings:
         for r in recordings:
+            rURL = "plugin://plugin.video.ustvnow/?scheduleid=" + str(r['scheduleid']) + "&mode=play_dvr"
             channel = r['channel']
             if r['channel'] == 'AE':
                 channel = 'A&E'
@@ -178,7 +179,7 @@ elif mode == 'recordings':
                 cm_menu = [cm_refresh, cm_del]
             else:
                 cm_menu = [cm_refresh]
-            Addon.add_video_item(r['stream_url'], {'title': title, 
+            Addon.add_video_item(rURL, {'title': title, 
                                                    'plot': r['plot'],
                                                    'plotoutline': r['synopsis'],
                                                    'tvshowtitle': r['tvshowtitle'],
@@ -187,13 +188,13 @@ elif mode == 'recordings':
         xbmcplugin.setContent(Addon.plugin_handle, 'movie')
 
 elif mode == 'scheduled':
-    stream_type = 'rtmp'
-    recordings_quality = int(Addon.get_setting('quality'))
-    # This ensures that recordings are 1024kbps or less
-    if recordings_quality == 3:
-        recordings_quality = 2
-    recordings = ustv.get_recordings(int(recordings_quality), 
-                                     stream_type, 'scheduled')
+
+
+
+
+
+    recordings = ustv.get_recordings('scheduled')
+
         
     if recordings:
         for r in recordings:
@@ -241,13 +242,13 @@ elif mode == 'scheduled':
         xbmcplugin.setContent(Addon.plugin_handle, 'movie')
 
 elif mode == 'recurring':
-    stream_type = 'rtmp'
-    recordings_quality = int(Addon.get_setting('quality'))
-    # This ensures that recordings are 1024kbps or less
-    if recordings_quality == 3:
-        recordings_quality = 2
-    recordings = ustv.get_recordings(int(recordings_quality), 
-                                     stream_type, 'recurring')
+
+
+
+
+
+    recordings = ustv.get_recordings('recurring')
+
         
     if recordings:
         for r in recordings:
@@ -276,9 +277,9 @@ elif mode == 'recurring':
         xbmcplugin.setContent(Addon.plugin_handle, 'movie')
 
 elif mode == 'movies_now':
-    stream_type = 'rtmp'
-    now = ustv.get_movies(int(quality_type), 
-                                     stream_type, 'now')
+
+    now = ustv.get_movies(int(quality_type), 'now')
+
         
     if now:
         for r in now:
@@ -313,9 +314,9 @@ elif mode == 'movies_now':
         xbmcplugin.setContent(Addon.plugin_handle, 'movie')
 
 elif mode == 'movies_today':
-    stream_type = 'rtmp'
-    today = ustv.get_movies(int(quality_type), 
-                                     stream_type, 'today')
+
+    today = ustv.get_movies(int(quality_type), 'today')
+
         
     if today:
         for r in today:
@@ -351,9 +352,8 @@ elif mode == 'movies_today':
         xbmcplugin.setContent(Addon.plugin_handle, 'movie')
 
 elif mode == 'movies_later':
-    stream_type = 'rtmp'
-    later = ustv.get_movies(int(quality_type), 
-                                     stream_type, 'later')
+
+    later = ustv.get_movies(int(quality_type), 'later')
         
     if later:
         for r in later:
@@ -389,8 +389,8 @@ elif mode == 'movies_later':
         xbmcplugin.setContent(Addon.plugin_handle, 'movie')
 
 elif mode == 'sports_now':
-    stream_type = 'rtmp'
-    channels = ustv.get_sports(quality_type, stream_type, 'now')
+
+    channels = ustv.get_sports(quality_type, 'now')
     if channels:
         for c in channels:
             rURL = "plugin://plugin.video.ustvnow/?name=" + c['name'] + "&mode=play"
@@ -431,12 +431,13 @@ elif mode == 'sports_now':
             xbmcplugin.setContent(Addon.plugin_handle, 'movie')
 
 elif mode == 'sports_today':
-    stream_type = 'rtmp'
-    channels = ustv.get_sports(quality_type, stream_type, 'today')
+
+    channels = ustv.get_sports(quality_type, 'today')
     if channels:
         for c in channels:
             rURL = "plugin://plugin.video.ustvnow/?name=" + c['name'] + "&mode=play"
             name = c["name"];
+
 
             logo = xbmc.translatePath(os.path.join(plugin_path, 'resources', 'images', 'logos', c['name']+'.png'))
             poster_url = c["poster_url"];
@@ -473,8 +474,8 @@ elif mode == 'sports_today':
             xbmcplugin.setContent(Addon.plugin_handle, 'movie')
 
 elif mode == 'sports_later':
-    stream_type = 'rtmp'
-    channels = ustv.get_sports(quality_type, stream_type, 'later')
+
+    channels = ustv.get_sports(quality_type, 'later')
     if channels:
         for c in channels:
             rURL = "plugin://plugin.video.ustvnow/?name=" + c['name'] + "&mode=play"
@@ -515,10 +516,9 @@ elif mode == 'sports_later':
 
 elif mode == 'guidedata':
     fpath = Addon.plugin_queries['file']               
-    Addon.makeXMLTV(ustv.get_guidedata(quality_type, stream_type),urllib.unquote(fpath))
+    Addon.makeXMLTV(ustv.get_guidedata(quality_type),urllib.unquote(fpath))
 
 elif mode == 'tvguide':  
-    stream_type = 'rtmp'
     fpath = os.path.join(write_path, 'xmltv.xml')  
     try:
         name = Addon.plugin_queries['name']
@@ -552,7 +552,7 @@ elif mode == 'tvguide':
                                      img=listings[l][6].replace(' ','%20') , playable=playable, cm=cm_menu, cm_replace=True)
 
     except:
-        if Addon.makeXMLTV(ustv.get_guidedata(quality_type, stream_type),urllib.unquote(fpath)) == True:
+        if Addon.makeXMLTV(ustv.get_guidedata(quality_type),urllib.unquote(fpath)) == True:
             listings = ustv.get_tvguide(fpath)
             if listings:
                 for l in range(len(listings)):
@@ -618,15 +618,40 @@ elif mode == 'settings':
 
 elif mode=='play':
     name = Addon.plugin_queries['name']
-    src = random.choice(['lv5', 'lv7', 'lv9'])
+
     Addon.log(name)
-    stream_type = 'rtmp'
+
     channels = []
-    channels = ustv.get_link(quality_type, stream_type, src)
+    channels = ustv.get_link(quality_type)
     if channels:
         Addon.log(str(channels))
         for c in channels:
             if c['name'] == name:
+                url = c['url']
+                Addon.log(url)
+                item = xbmcgui.ListItem(path=url)
+                xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+
+
+elif mode=='play_dvr':
+    scheduleid = Addon.plugin_queries['scheduleid']
+    if quality_type == 0:
+        recordings_quality = '350'
+    elif quality_type == 1:
+        recordings_quality = '650'
+    elif quality_type == 2:
+        recordings_quality = '950'
+    else:
+        recordings_quality = '950'
+    if quality_type == 3:
+        quality_type = 2
+    Addon.log(scheduleid)
+    channels = []
+    channels = ustv.get_dvr_link(quality_type,recordings_quality)
+    if channels:
+        Addon.log(str(channels))
+        for c in channels:
+            if c['scheduleid'] == scheduleid:
                 url = c['url']
                 Addon.log(url)
                 item = xbmcgui.ListItem(path=url)

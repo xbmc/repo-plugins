@@ -25,7 +25,7 @@
 
 import sys, os, re
 import urllib, urllib2, socket, cookielib
-import json
+import json, random
 import xbmcgui, xbmc, xbmcvfs
 import Addon
 
@@ -42,6 +42,8 @@ class Ustvnow:
         self.password = password
         self.dlg = xbmcgui.Dialog()
         self.mBASE_URL = 'http://m-api.ustvnow.com'
+        self.mcBASE_URL = 'http://mc.ustvnow.com'
+        self.uBASE_URL = 'http://lv2.ustvnow.com'
 
     def build_main(self):
         mode = Addon.plugin_queries['mode']
@@ -64,25 +66,36 @@ class Ustvnow:
         if Addon.get_setting('show_settings_option') == 'true':
             Addon.add_directory({'mode': 'settings'}, Addon.get_string(30002)) 
 
-    def get_channels(self, quality, stream_type):
-        Addon.log('get_channels,' + str(quality) + ',' + stream_type)
+    def get_channels(self, quality):
+        Addon.log('get_channels,' + str(quality))
         token_check = self._get_json('gtv/1/live/getcustomerkey', {'token': Addon.get_setting('token')})['username']
         if token_check != Addon.get_setting('email'):
             self.token = self._login()
         else:
             self.token = Addon.get_setting('token')
-        account_type = self._get_json('gtv/1/live/getuserbytoken', {'token': self.token})['data']['plan_free']
-        if account_type == 1:
-            Addon.set_setting('free_package', 'true')
-            if Addon.get_setting('quality') == '3':
-                Addon.set_setting('quality', '2')
-        else:
-            Addon.set_setting('free_package', 'false')
+        passkey = self._get_json('gtv/1/live/viewdvrlist', {'token': self.token})['globalparams']['passkey']
+        try:
+            stream_check = self._get_json('stream/1/live/view', {'token': self.token, 'key': passkey, 'scode': 'whtm'})['domain']
+        except:
+            self.token = self._login_alt()
         dvr_check = self._get_json('gtv/1/live/getuserbytoken', {'token': self.token})['data']['plan_name']
         if 'DVR' in dvr_check:
             Addon.set_setting('dvr', 'true')
         else:
             Addon.set_setting('dvr', 'false')
+        account_type = self._get_json('gtv/1/live/getuserbytoken', {'token': self.token})['data']['plan_free']
+        if account_type == 1 and dvr_check != 'Nittany Plan':
+
+            Addon.set_setting('free_package', 'true')
+            if Addon.get_setting('quality') == '3':
+                Addon.set_setting('quality', '2')
+        else:
+            Addon.set_setting('free_package', 'false')
+
+
+
+
+
         content = self._get_json('gtv/1/live/channelguide', {'token': self.token})
         channels = []
         results = content['results'];
@@ -93,7 +106,7 @@ class Ustvnow:
                     event_date_time = datetime.fromtimestamp(i['ut_start']).strftime('%I:%M %p').lstrip('0')
                     name = Addon.cleanChanName(i['stream_code'])
                     mediatype = i['mediatype']
-                    poster_url = self.mBASE_URL + '/gtv/1/live/viewposter?srsid=' + str(i['srsid']) + '&cs=' + i['callsign'] + '&tid=' + mediatype
+                    poster_url = self.mcBASE_URL + '/gtv/1/live/viewposter?srsid=' + str(i['srsid']) + '&cs=' + i['callsign'] + '&tid=' + mediatype
                     mediatype = mediatype.replace('SH', 'tvshow').replace('EP', 'episode').replace('MV', 'movie')
                     rec_url = '/gtv/1/dvr/updatedvr?scheduleid=' + str(i['scheduleid']) + '&token=' + self.token + '&action=add'
                     set_url = '/gtv/1/dvr/updatedvrtimer?connectorid=' + str(i['connectorid']) + '&prgsvcid=' + str(i['prgsvcid']) + '&eventtime=' + str(i['event_time']) + '&token=' + self.token + '&action=add'
@@ -128,23 +141,38 @@ class Ustvnow:
                 pass
         return channels 
 
-    def get_link(self, quality, stream_type, src):
-        Addon.log('get_link,' + str(quality) + ',' + stream_type)
+    def get_link(self, quality):
+        Addon.log('get_link,' + str(quality))
         token_check = self._get_json('gtv/1/live/getcustomerkey', {'token': Addon.get_setting('token')})['username']
         if token_check != Addon.get_setting('email'):
             self.token = self._login()
         else:
             self.token = Addon.get_setting('token')
+        passkey = self._get_json('gtv/1/live/viewdvrlist', {'token': self.token})['globalparams']['passkey']
+        try:
+            stream_check = self._get_json('stream/1/live/view', {'token': self.token, 'key': passkey, 'scode': 'whtm'})['domain']
+        except:
+            self.token = self._login_alt()
         content = self._get_json('gtv/1/live/channelguide', {'token': self.token})
         channels = []
         results = content['results'];
-        passkey = self._get_json('gtv/1/live/viewdvrlist', {'token': self.token})['globalparams']['passkey']
+
         quality = (quality + 1)
+        #used for alternate stream options
+        src = random.choice(['lv5', 'lv7', 'lv9'])
+        #used for alternate stream options
+        stream_type = 'rtmp'
         for i in results:
             try:
                 if i['order'] == 1:
+                    if quality == 4 and i['scode'] == 'whvl':
+                        quality = (quality - 1)
                     name = Addon.cleanChanName(i['stream_code'])
-                    url = stream_type + '://' + str(src) + '.ustvnow.com:1935/dvrtest?key=' + passkey + '/mp4:' + i['streamname'] + str(quality)
+                    stream = self._get_json('stream/1/live/view', {'token': self.token, 'key': passkey, 'scode': i['scode']})['stream']
+                    if Addon.get_setting('live_stream_option') == '0':
+                        url = stream.replace('smil:', 'mp4:').replace('USTVNOW1', 'USTVNOW').replace('USTVNOW', 'USTVNOW' + str(quality))
+                    else:
+                        url = stream_type + '://' + str(src) + '.ustvnow.com:1935/dvrtest?key=' + passkey + '/mp4:' + i['streamname'] + str(quality)
                     if Addon.get_setting('free_package') == 'true':
                         if name in ['CW','ABC','FOX','PBS','CBS','NBC','MY9']:
                             channels.append({ 
@@ -158,30 +186,85 @@ class Ustvnow:
                             })
             except:
                 pass
-        return channels    
+        return channels 
 
-    def get_recordings(self, quality, stream_type, type='recordings'):
-        from datetime import datetime
-        if quality == 3:
-            quality -= 1
-        Addon.log('get_recordings,' + str(quality) + ',' + stream_type)
+
+    def get_dvr_link(self, quality_type, recordings_quality):
+        Addon.log('get_dvr_link,' + str(recordings_quality))
         token_check = self._get_json('gtv/1/live/getcustomerkey', {'token': Addon.get_setting('token')})['username']
         if token_check != Addon.get_setting('email'):
             self.token = self._login()
         else:
             self.token = Addon.get_setting('token')
-        account_type = self._get_json('gtv/1/live/getuserbytoken', {'token': self.token})['data']['plan_free']
-        if account_type == 1:
-            Addon.set_setting('free_package', 'true')
-            if Addon.get_setting('quality') == '3':
-                Addon.set_setting('quality', '2')
+        passkey = self._get_json('gtv/1/live/viewdvrlist', {'token': self.token})['globalparams']['passkey']
+        try:
+            stream_check = self._get_json('stream/1/live/view', {'token': self.token, 'key': passkey, 'scode': 'whtm'})['domain']
+        except:
+            self.token = self._login_alt()
+        content = self._get_json('gtv/1/live/viewdvrlist', {'token': self.token})
+        channels = []
+        results = content['results'];
+        #used for alternate stream options
+        app_name = 'dvrrokuplay'
+        #used for alternate stream options
+        stream_type = 'rtsp'
+        for i in results:
+            try:
+                name = Addon.cleanChanName(i['stream_code'])
+                scheduleid = str(i['scheduleid'])
+                stream = self._get_json('stream/1/dvr/play', {'token': self.token, 'key': passkey, 'scheduleid': i['scheduleid']})['stream']
+                if Addon.get_setting('recordings_stream_option') == '0':
+                    url = stream.replace('smil:', 'mp4:').replace('.smil', '_' + str(recordings_quality) + '.mp4').replace('350', str(recordings_quality))
+                else:
+                    url = stream_type + '://' + i['dvrlocation'] + '.ustvnow.com:1935/' + app_name + '/mp4:' + [i['filename_low'], i['filename_med'], i['filename_high']][quality_type]
+                if Addon.get_setting('free_package') == 'true':
+                    if name in ['CW','ABC','FOX','PBS','CBS','NBC','MY9']:
+                        channels.append({ 
+                            'scheduleid': scheduleid,    
+                            'url': url
+                            })
+                else:
+                    channels.append({
+                        'scheduleid': scheduleid,
+                        'url': url
+                        })
+            except:
+                pass
+        return channels    
+
+    def get_recordings(self, type='recordings'):
+        from datetime import datetime
+
+
+        Addon.log('get_recordings')
+        token_check = self._get_json('gtv/1/live/getcustomerkey', {'token': Addon.get_setting('token')})['username']
+        if token_check != Addon.get_setting('email'):
+            self.token = self._login()
         else:
-            Addon.set_setting('free_package', 'false')
+            self.token = Addon.get_setting('token')
+        passkey = self._get_json('gtv/1/live/viewdvrlist', {'token': self.token})['globalparams']['passkey']
+        try:
+            stream_check = self._get_json('stream/1/live/view', {'token': self.token, 'key': passkey, 'scode': 'whtm'})['domain']
+        except:
+            self.token = self._login_alt()
         dvr_check = self._get_json('gtv/1/live/getuserbytoken', {'token': self.token})['data']['plan_name']
         if 'DVR' in dvr_check:
             Addon.set_setting('dvr', 'true')
         else:
             Addon.set_setting('dvr', 'false')
+        account_type = self._get_json('gtv/1/live/getuserbytoken', {'token': self.token})['data']['plan_free']
+        if account_type == 1 and dvr_check != 'Nittany Plan':
+
+            Addon.set_setting('free_package', 'true')
+            if Addon.get_setting('quality') == '3':
+                Addon.set_setting('quality', '2')
+        else:
+            Addon.set_setting('free_package', 'false')
+
+
+
+
+
         content = self._get_json('gtv/1/live/viewdvrlist', {'token': self.token})
         recordings = []
         scheduled = []
@@ -191,7 +274,7 @@ class Ustvnow:
         for i in results:
             chan = Addon.cleanChanName(i['callsign'])
             mediatype = i['connectorid'][:2]
-            icon = self.mBASE_URL + '/gtv/1/live/viewposter?srsid=' + str(i['srsid']) + '&cs=' + i['callsign'] + '&tid=' + mediatype
+            icon = self.mcBASE_URL + '/gtv/1/live/viewposter?srsid=' + str(i['srsid']) + '&cs=' + i['callsign'] + '&tid=' + mediatype
             title = i['title']
             plot = i['description']
             plot = plot.replace("&amp;", "&").replace('&quot;','"')
@@ -216,13 +299,13 @@ class Ustvnow:
             duration = i['runtime']
             episode_title = i['episode_title']
             app_name = 'dvrrokuplay'
-            url = stream_type + '://' + i['dvrlocation'] + '.ustvnow.com:1935/' + app_name + '/mp4:' + [i['filename_low'], i['filename_med'], i['filename_high']][quality]
+
             del_url = '/gtv/1/dvr/updatedvr?scheduleid=' + str(i['scheduleid']) + '&token=' + self.token + '&action=remove'
             remove_url = '/gtv/1/dvr/updatedvrtimer?connectorid=' + str(i['connectorid']) + '&prgsvcid=' + str(i['prgsvcid']) + '&eventtime=' + str(i['event_time']) + '&token=' + self.token + '&action=remove'
             set_url = '/gtv/1/dvr/updatedvrtimer?connectorid=' + str(i['connectorid']) + '&prgsvcid=' + str(i['prgsvcid']) + '&eventtime=' + str(i['event_time']) +'&token=' + self.token + '&action=add'
             if (type == 'recordings' and event_inprogress == 0):
                 recordings.append({'channel': chan,
-                                   'stream_url': url,
+
                                    'title': title,
                                    'episode_title': episode_title,
                                    'tvshowtitle': title,
@@ -240,10 +323,11 @@ class Ustvnow:
                                    'remove_url': remove_url,
                                    'dvrtimertype': dvrtimertype,
                                    'mediatype': mediatype,
+                                   'scheduleid': i['scheduleid']
                                    })
             elif (type == 'scheduled' and event_inprogress != 0):
                 scheduled.append({'channel': chan,
-                                   'stream_url': url,
+
                                    'title': title,
                                    'episode_title': episode_title,
                                    'tvshowtitle': title,
@@ -267,7 +351,7 @@ class Ustvnow:
                 if aChannelname not in achannels:
                     achannels.append(aChannelname)
                     recurring.append({'channel': chan,
-                                   'stream_url': url,
+
                                    'title': title,
                                    'episode_title': episode_title,
                                    'tvshowtitle': title,
@@ -290,27 +374,34 @@ class Ustvnow:
         else:
             return []
         return recordings
+        
 
-    def get_movies(self, quality, stream_type, type='now'):
+    def get_movies(self, quality, type='now'):
         from datetime import datetime
-        Addon.log('get_movies' + str(quality) + ',' + stream_type)
+        Addon.log('get_movies' + str(quality))
         token_check = self._get_json('gtv/1/live/getcustomerkey', {'token': Addon.get_setting('token')})['username']
         if token_check != Addon.get_setting('email'):
             self.token = self._login()
         else:
             self.token = Addon.get_setting('token')
-        account_type = self._get_json('gtv/1/live/getuserbytoken', {'token': self.token})['data']['plan_free']
-        if account_type == 1:
-            Addon.set_setting('free_package', 'true')
-            if Addon.get_setting('quality') == '3':
-                Addon.set_setting('quality', '2')
-        else:
-            Addon.set_setting('free_package', 'false')
+        passkey = self._get_json('gtv/1/live/viewdvrlist', {'token': self.token})['globalparams']['passkey']
+        try:
+            stream_check = self._get_json('stream/1/live/view', {'token': self.token, 'key': passkey, 'scode': 'whtm'})['domain']
+        except:
+            self.token = self._login_alt()
         dvr_check = self._get_json('gtv/1/live/getuserbytoken', {'token': self.token})['data']['plan_name']
         if 'DVR' in dvr_check:
             Addon.set_setting('dvr', 'true')
         else:
             Addon.set_setting('dvr', 'false')
+        account_type = self._get_json('gtv/1/live/getuserbytoken', {'token': self.token})['data']['plan_free']
+        if account_type == 1 and dvr_check != 'Nittany Plan':
+
+            Addon.set_setting('free_package', 'true')
+            if Addon.get_setting('quality') == '3':
+                Addon.set_setting('quality', '2')
+        else:
+            Addon.set_setting('free_package', 'false')
         content = self._get_json('gtv/1/live/upcoming', {'token': self.token})
         now = []
         today = []
@@ -319,7 +410,7 @@ class Ustvnow:
         for i in results:
             chan = Addon.cleanChanName(i['callsign'])
             mediatype = i['connectorid'][:2]
-            icon = self.mBASE_URL + '/gtv/1/live/viewposter?srsid=' + str(i['srsid']) + '&cs=' + i['callsign'] + '&tid=' + mediatype
+            icon = self.mcBASE_URL + '/gtv/1/live/viewposter?srsid=' + str(i['srsid']) + '&cs=' + i['callsign'] + '&tid=' + mediatype
             title = i['title']
             plot = i['description']
             plot = plot.replace("&amp;", "&").replace('&quot;','"')
@@ -452,25 +543,31 @@ class Ustvnow:
             return []
         return now
 
-    def get_sports(self, quality, stream_type, type='now'):
-        Addon.log('get_sports,' + str(quality) + ',' + stream_type)
+    def get_sports(self, quality, type='now'):
+        Addon.log('get_sports,' + str(quality))
         token_check = self._get_json('gtv/1/live/getcustomerkey', {'token': Addon.get_setting('token')})['username']
         if token_check != Addon.get_setting('email'):
             self.token = self._login()
         else:
             self.token = Addon.get_setting('token')
-        account_type = self._get_json('gtv/1/live/getuserbytoken', {'token': self.token})['data']['plan_free']
-        if account_type == 1:
-            Addon.set_setting('free_package', 'true')
-            if Addon.get_setting('quality') == '3':
-                Addon.set_setting('quality', '2')
-        else:
-            Addon.set_setting('free_package', 'false')
+        passkey = self._get_json('gtv/1/live/viewdvrlist', {'token': self.token})['globalparams']['passkey']
+        try:
+            stream_check = self._get_json('stream/1/live/view', {'token': self.token, 'key': passkey, 'scode': 'whtm'})['domain']
+        except:
+            self.token = self._login_alt()
         dvr_check = self._get_json('gtv/1/live/getuserbytoken', {'token': self.token})['data']['plan_name']
         if 'DVR' in dvr_check:
             Addon.set_setting('dvr', 'true')
         else:
             Addon.set_setting('dvr', 'false')
+        account_type = self._get_json('gtv/1/live/getuserbytoken', {'token': self.token})['data']['plan_free']
+        if account_type == 1 and dvr_check != 'Nittany Plan':
+
+            Addon.set_setting('free_package', 'true')
+            if Addon.get_setting('quality') == '3':
+                Addon.set_setting('quality', '2')
+        else:
+            Addon.set_setting('free_package', 'false')
         content = self._get_json('gtv/1/live/channelguide', {'token': self.token})
         now = []
         today = []
@@ -478,7 +575,7 @@ class Ustvnow:
         results = content['results'];
         import time, datetime
         date_today = datetime.date.today()
-        sports = ['Basketball', 'Football', 'Baseball', 'Soccer', 'Tennis', 'Golf', 'Skating', 'Skateboarding', 'Skiing', 'Snowboarding', 'Rugby', 'Nascar']
+        sports = ['Basketball', 'Football', 'Baseball', 'Soccer', 'Tennis', 'Golf', 'Skating', 'Skateboarding', 'Skiing', 'Snowboarding', 'Rugby', 'Nascar', 'Bowling']
         for i in results:
             from datetime import datetime
             event_time = datetime.fromtimestamp(i['ut_start']).strftime('%I:%M %p').lstrip('0')
@@ -492,7 +589,7 @@ class Ustvnow:
                 if type == 'now' and i['order'] == 1:
                     name = Addon.cleanChanName(i['stream_code'])
                     mediatype = i['mediatype']
-                    poster_url = self.mBASE_URL + '/gtv/1/live/viewposter?srsid=' + str(i['srsid']) + '&cs=' + i['callsign'] + '&tid=' + mediatype
+                    poster_url = self.mcBASE_URL + '/gtv/1/live/viewposter?srsid=' + str(i['srsid']) + '&cs=' + i['callsign'] + '&tid=' + mediatype
                     mediatype = mediatype.replace('SH', 'tvshow').replace('EP', 'episode').replace('MV', 'movie')
                     rec_url = '/gtv/1/dvr/updatedvr?scheduleid=' + str(i['scheduleid']) + '&token=' + self.token + '&action=add'
                     set_url = '/gtv/1/dvr/updatedvrtimer?connectorid=' + str(i['connectorid']) + '&prgsvcid=' + str(i['prgsvcid']) + '&eventtime=' + str(i['event_time']) + '&token=' + self.token + '&action=add'
@@ -528,7 +625,7 @@ class Ustvnow:
                 elif type == 'today' and i['order'] != 1 and str(date_today) == str(i['event_date']):
                     name = Addon.cleanChanName(i['stream_code'])
                     mediatype = i['mediatype']
-                    poster_url = self.mBASE_URL + '/gtv/1/live/viewposter?srsid=' + str(i['srsid']) + '&cs=' + i['callsign'] + '&tid=' + mediatype
+                    poster_url = self.mcBASE_URL + '/gtv/1/live/viewposter?srsid=' + str(i['srsid']) + '&cs=' + i['callsign'] + '&tid=' + mediatype
                     mediatype = mediatype.replace('SH', 'tvshow').replace('EP', 'episode').replace('MV', 'movie')
                     rec_url = '/gtv/1/dvr/updatedvr?scheduleid=' + str(i['scheduleid']) + '&token=' + self.token + '&action=add'
                     set_url = '/gtv/1/dvr/updatedvrtimer?connectorid=' + str(i['connectorid']) + '&prgsvcid=' + str(i['prgsvcid']) + '&eventtime=' + str(i['event_time']) + '&token=' + self.token + '&action=add'
@@ -564,7 +661,7 @@ class Ustvnow:
                 elif type == 'later' and i['order'] != 1 and str(date_today) != str(i['event_date']):
                     name = Addon.cleanChanName(i['stream_code'])
                     mediatype = i['mediatype']
-                    poster_url = self.mBASE_URL + '/gtv/1/live/viewposter?srsid=' + str(i['srsid']) + '&cs=' + i['callsign'] + '&tid=' + mediatype
+                    poster_url = self.mcBASE_URL + '/gtv/1/live/viewposter?srsid=' + str(i['srsid']) + '&cs=' + i['callsign'] + '&tid=' + mediatype
                     mediatype = mediatype.replace('SH', 'tvshow').replace('EP', 'episode').replace('MV', 'movie')
                     rec_url = '/gtv/1/dvr/updatedvr?scheduleid=' + str(i['scheduleid']) + '&token=' + self.token + '&action=add'
                     set_url = '/gtv/1/dvr/updatedvrtimer?connectorid=' + str(i['connectorid']) + '&prgsvcid=' + str(i['prgsvcid']) + '&eventtime=' + str(i['event_time']) + '&token=' + self.token + '&action=add'
@@ -608,13 +705,18 @@ class Ustvnow:
             return []
         return now
 
-    def get_guidedata(self, quality, stream_type):
+    def get_guidedata(self, quality):
         Addon.log('get_guidedata')
         token_check = self._get_json('gtv/1/live/getcustomerkey', {'token': Addon.get_setting('token')})['username']
         if token_check != Addon.get_setting('email'):
             self.token = self._login()
         else:
             self.token = Addon.get_setting('token')
+        passkey = self._get_json('gtv/1/live/viewdvrlist', {'token': self.token})['globalparams']['passkey']
+        try:
+            stream_check = self._get_json('stream/1/live/view', {'token': self.token, 'key': passkey, 'scode': 'whtm'})['domain']
+        except:
+            self.token = self._login_alt()
         content = self._get_json('gtv/1/live/channelguide', {'token': self.token})
         results = content['results'];
         now = time();
@@ -625,7 +727,7 @@ class Ustvnow:
         base.setAttribute("generator-info-name", "IPTV Plugin");
         base.setAttribute("generator-info-url", "http://www.xmltv.org/");
         doc.appendChild(base)
-        channels = self.get_channels(quality, stream_type);
+        channels = self.get_channels(quality);
 
         for channel in channels:
             name = channel['name'];
@@ -708,7 +810,7 @@ class Ustvnow:
             pg_entry.appendChild(en_entry);
 
             i_entry = doc.createElement('icon');
-            i_entry.setAttribute("src", self.mBASE_URL + '/gtv/1/live/viewposter?srsid=' + str(programme['srsid']) + '&cs=' + programme['callsign'] + '&tid=' + programme['mediatype']);
+            i_entry.setAttribute("src", self.mcBASE_URL + '/gtv/1/live/viewposter?srsid=' + str(programme['srsid']) + '&cs=' + programme['callsign'] + '&tid=' + programme['mediatype']);
             pg_entry.appendChild(i_entry);
 
             d_entry = doc.createElement('event_date_time');
@@ -780,6 +882,14 @@ class Ustvnow:
         else:
             return '%s/%s' % (self.mBASE_URL, path)
 
+    def _build_url_alt(self, path, queries={}):
+        Addon.log('_build_url_alt')
+        if queries:
+            query = Addon.build_query(queries)
+            return '%s/%s?%s' % (self.uBASE_URL, path, query)
+        else:
+            return '%s/%s' % (self.uBASE_URL, path)
+
     def _build_json(self, path, queries={}):
         Addon.log('_build_json')
         if queries:
@@ -788,7 +898,7 @@ class Ustvnow:
         else:
             return '%s/%s' % (self.mBASE_URL, path)
 
-            
+           
     def _fetch(self, url, form_data=False):
         Addon.log('_fetch')
         opener = urllib2.build_opener()
@@ -828,6 +938,7 @@ class Ustvnow:
             html = False
         return html
         
+        
     def _login(self):
         Addon.log('_login')
         self.cj = cookielib.CookieJar()
@@ -844,4 +955,18 @@ class Ustvnow:
                 return cookie.value
             else:
                 self.dlg.ok(Addon.get_string(30000), Addon.get_string(30011))
+        return 'False'
+
+    def _login_alt(self):
+        Addon.log('_login_alt')
+        self.cj = cookielib.CookieJar()
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.cj))
+        urllib2.install_opener(opener)
+        url = self._build_url_alt('iphone_login', {'username': self.user, 
+                                                   'password': self.password})
+        response = opener.open(url)
+        for cookie in self.cj:
+            if cookie.name == 'token':
+                Addon.set_setting('token', cookie.value)
+                return cookie.value
         return 'False'

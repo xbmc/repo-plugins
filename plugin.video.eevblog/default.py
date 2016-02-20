@@ -3,7 +3,7 @@ import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, tracebac
 __plugin__ =  'EEVblog'
 __author__ = 'Clumsy <clumsy@xbmc.org>'
 __date__ = '20-06-2014'
-__version__ = '0.2.6'
+__version__ = '0.2.8'
 __settings__ = xbmcaddon.Addon(id='plugin.video.eevblog')
 
 # Thanks to some of the other plugin authors, where I borrowed some ideas from !
@@ -47,6 +47,7 @@ def build_episodes_directory():
     listitem = xbmcgui.ListItem(label = name, iconImage = "", thumbnailImage = "")
     #listitem.setInfo( type = "Video", infoLabels = { "Title": name, "Director": __plugin__, "Studio": __plugin__, "Genre": "Video Blog", "Plot": plot[0], "Episode": "" } )
     if ep_url:
+      ep_url = re.sub('^https://','http://', ep_url) # TODO: get rid of this, as soon as kodi versions get a more mature python version. silly workaround.
       u = sys.argv[0] + "?mode=2&url=" + ep_url + "&name=" + name
       xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = False)
       xbmcplugin.addSortMethod( handle = int(sys.argv[ 1 ]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
@@ -83,7 +84,7 @@ def play_video(ep_url):
   except:
     xbmc.executebuiltin( "Dialog.Close(busydialog)" )
     xbmc.executebuiltin('Notification(Error,Something went wrong,2000)')
-    return
+    raise
   xbmc.Player().play(item=url, listitem=listitem)
 
 def get_params():

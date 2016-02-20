@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.eevblog"
        name="EEVblog"
-       version="0.2.7"
+       version="0.2.8"
        provider-name="Clumsy">
   <requires>
     <import addon="xbmc.python" version="2.14.0"/>

@@ -1,3 +1,6 @@
+[B|Version 0.2.8[/B]
+
+- Workaround kodi python missing SNI for youtube https links. Thanks mintsoft.
 [B|Version 0.2.7[/B]
 
 - Fixes the plugin after changes in site layout. Thanks mintsoft.

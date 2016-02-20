@@ -9,11 +9,11 @@ import re
 
 plugin = Plugin()
 __settings__ = xbmcaddon.Addon(id='plugin.video.fptplay')
-crawurl = 'http://fptplay.net/livetv'
+crawurl = 'https://fptplay.net/livetv'
 
 def getAllChannels():
     cns = []
-    cns.extend(getEvents(crawurl))
+    #cns.extend(getEvents(crawurl))
     cns.extend(getChannels(crawurl))
     return cns
 
@@ -68,7 +68,7 @@ def getChannels(url):
         return None
     soup = BeautifulSoup(result.content, convertEntities=BeautifulSoup.HTML_ENTITIES)
 
-    items = soup.findAll('div', {'class' : 'item_view'})
+    items = soup.findAll('div', {'class' : 'hover01'})
     for item in items:
 
         ac = item.find('a', {'class' : 'tv_channel '})
@@ -98,7 +98,7 @@ def getChannels(url):
         if not dataref.startswith(crawurl) :
             continue
 
-        channelid = dataref[26:]
+        channelid = dataref[27:]
 
         if not channelid :
             continue
@@ -115,13 +115,31 @@ def getChannels(url):
 
 def getLink(id = None):
 
-    if id.startswith('http://') :
+    if id.startswith('https://') :
         #is event
         id = getChannelIdFromEventLink(id)
     if id == None :
         return None
+
+
+    #get cookie & csrf
+    result = urlfetch.fetch(
+        crawurl,
+        headers={
+            'User-Agent':'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.81 Safari/537.36'
+            })
+
+    #plugin.log.error(result.content)
+
+    m = re.search(r"name=\"_token\" content=\"(.+)\"",result.content)
+
+    if m == None :
+        return None
+    csrf = m.group(1)
+    cookie='laravel_session=' + result.cookies.get('laravel_session') + ";"
+
     result = urlfetch.post(
-        'http://fptplay.net/show/getlinklivetv',
+        'https://fptplay.net/show/getlinklivetv',
         data={"id": id,
             "quality": __settings__.getSetting('quality'),
             "mobile": "web",
@@ -130,14 +148,19 @@ def getLink(id = None):
         headers={'Content-Type': 'application/x-www-form-urlencoded',
                 'User-Agent':'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.81 Safari/537.36',
                 'X-Requested-With':'XMLHttpRequest',
-                'Referer':'http://fptplay.net/livetv'
+                'Referer':'https://fptplay.net/livetv',
+                'x-csrf-token': csrf,
+                'cookie':cookie
                 }
         )
 
     if result.status_code != 200 :
         plugin.log.error("Can't get link for id " + id)
         return None
+
     info = json.loads(result.content)
+    plugin.log.error(info)
+
     return info['stream']
 
 def startChannel():

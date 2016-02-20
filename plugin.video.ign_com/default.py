@@ -127,7 +127,8 @@ def list_series_episodes(url):
         add_link(title, vidurl, 'play_video', thumb, date + "\n" + description, duration)
     match_page = re.compile('<a class="next" href="://(.+?)">Next&nbsp;&raquo;</a>', re.DOTALL).findall(content)
     page_count = re.compile('<a class="next" href="://.+?page=(.+?)">Next&nbsp;&raquo;</a>', re.DOTALL).findall(content)
-    add_dir(translation(30001) + " (" + str(page_count[0]) + ")", "http://www.ign.com" + match_page[0] + "&category=videos", 'list_series_episodes', "")
+    if len(page_count) > 0:
+        add_dir(translation(30001) + " (" + str(page_count[0]) + ")", "http://www.ign.com" + match_page[0] + "&category=videos", 'list_series_episodes', "")
     xbmcplugin.endOfDirectory(pluginhandle)
     if force_view_mode:
         xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')

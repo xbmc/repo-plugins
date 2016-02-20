@@ -1,54 +1,60 @@
-v1.1.8 (Sunday, 11 oktober 2015) :
+v1.1.9 (2016-02-20)
+updated to latest requirements for a Kodi-addon
+changed fanart
+added fanart-blurred
+changed icon
+
+v1.1.8 (2015-09-11) :
 - changes due to website url extension change
 
-v1.1.7 (Thursday, 27 august 2015) :
+v1.1.7 (2015-08-27) :
 - small fix for gogoVideo (Gamekings Extra)
 
-v1.1.6 (Saturday, 15 august 2015) :
+v1.1.6 (2015-08-15) :
 - added youtube as a dependency
 - added some utf8 stuff
 
-v1.1.5 (Monday, 20 July 2015) :
+v1.1.5 (2015-07-20) :
 - added support for youtube files
 - added support for gogoVideo youtube files (odd but true)
 
-v1.1.4 (Thursday, 25 June 2015) :
+v1.1.4 (2015-06-25) :
 - minor fixes in category "More E3 2015"
 
-v1.1.3 (Saturday, 20 June 2015) :
+v1.1.3 (2015-06-20) :
 - added category "More E3 2015"
 
-v1.1.2 (Wednesday, 1 april 2015 (no joke!)) :
+v1.1.2 (2015-04-01) :
 - changes in video category due to website changes
 - changed category Gamekings Extra due to due to website changes
 - added category Trailers
 
-v1.1.1 (Saturday, 14 February 2015) :
+v1.1.1 (2015-02-14) :
 - small fix for category Gamekings Extra
 
-v1.1.0 (Friday, 14 November 2014) :
+v1.1.0 (2014-11-14) :
 - added category Gamekings Extra (mad props to Amelandbor!)
 - retired category Pc because of lack of updates
 - changed fanart.jpg
 
-v1.0.4 (Sunday, 11 May 2014) :
+v1.0.4 (2014-05-11) :
 - support vimeo files
 
-v1.0.3 (Saturday, 7 July 2013) :
+v1.0.3 (2013-07-07) :
 - added beautiful soup as dependency
 - added dutch strings
 
-v1.0.2 (Wednesday, 29 may 2013) :
+v1.0.2 (2013-05-29) :
 - sometimes the video-url in the content-tag is not (!) correct, in that case trying with added '/large' in the video-url
 
-v1.0.1 (Wednesday, 10 april 2013) :
+v1.0.1 (2013-04-10) :
 - fixed thumbnails for pc category
 - removed repeating episodes in afleveringen category
 - added popup if media file cannnot be played or is not found
 - filled in optional fields in addon.xml
 - used title attribute more if possible
 
-v1.0.0 (Sunday, 2 april 2013) :
+v1.0.0 (2013-04-02) :
 - initial version
 - filled in optional fields in addon.xml
 - added a display of an httperror

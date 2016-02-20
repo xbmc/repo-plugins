@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!-- Cooking with Kodi -->
+  <string id="30000">Search Recipes</string>
+  <string id="30001">Highest Rated</string>
+  <string id="30002">Just Added</string>
+  <string id="30003">Most Searched For</string>
+  <string id="30004">Random Recipes</string>
+</strings>

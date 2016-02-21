@@ -62,6 +62,39 @@ class LoginClient(object):
         }
     }
 
+    CREDENTIALS_POOL = [
+        {
+            'system': 'Kodi YouTube Pool 1',
+            'key': 'kodi-youtube-pool-1',
+            'id': '761989675853-s2fmvsdjk4f57hh52phne3288pl3dd25.apps.googleusercontent.com',
+            'secret': 'i_3LGLwtSYJh2klLNNzG1lJG'
+        },
+        {
+            'system': 'Kodi YouTube Pool 2',
+            'key': 'kodi-youtube-pool-2',
+            'id': '313453013574-f7lfuf8k1tefptiv8n850bgqcbjc2dr3.apps.googleusercontent.com',
+            'secret': 'fMnkhokm0Fv5MZluc5BsXeIv'
+        },
+        {
+            'system': 'Kodi YouTube Pool 3',
+            'key': 'kodi-youtube-pool-3',
+            'id': '1081682822181-1a450qlirkjjfa8v3hgskhrdbg76c9r7.apps.googleusercontent.com',
+            'secret': 'wqJfNZBHf_xTi3dGgUpf2eaM'
+        },
+        {
+            'system': 'Kodi YouTube Pool 4',
+            'key': 'kodi-youtube-pool-4',
+            'id': '669595706732-5mdckd0b6dpbmoigg3hq6ac5u98hqiff.apps.googleusercontent.com',
+            'secret': 'Dtx20RiLmE5zTARelXma0pom'
+        },
+        {
+            'system': 'Kodi YouTube Pool 5',
+            'key': 'kodi-youtube-pool-5',
+            'id': '147802564020-8h2bs3r0e9ofoid9ame4pa1tu44k80n7.apps.googleusercontent.com',
+            'secret': 'LlFMl7WSO8CE7Lq5Yj_Ru11t'
+        }
+    ]
+
     def __init__(self, config={}, language='en-US', access_token='', access_token_tv=''):
         if not config:
             config = self.CONFIGS['youtube-for-kodi-fallback']

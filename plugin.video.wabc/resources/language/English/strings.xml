@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<strings>
+
+       <string id="30012">Meta Data Cache</string>
+       <string id="30013">Enable Metadata Cache</string>
+       <string id="30014">Reset Metadata Cache</string>
+
+       <string id="30020">View</string>
+       <string id="30021">Enable Views</string>
+       <string id="30022">Default View</string>
+       <string id="30023">Movies View</string>
+       <string id="30024">Shows View</string>
+       <string id="30025">Episodes View</string>
+
+       <string id="30040">Metadata</string>
+       <string id="30041">Initialize Metadata Next Start</string>
+       <string id="30042">Initializing ....</string>
+
+       <string id="30101">Initializing ....</string>
+
+</strings>
+

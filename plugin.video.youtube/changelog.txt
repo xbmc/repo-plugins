@@ -1,3 +1,12 @@
+5.1.19 (2016-02-24)
+[fix] Final fix for API
+
+5.1.18 (2016-02-23)
+[fix] Change API Keys for Kodi 16 and Kodi 17. Hope it help.
+
+5.1.17 (2016-01-25)
+[add] support kodi 17 by Uukrul
+
 5.1.16 (2015-12-24)
 [fix] reverted search order by date
 

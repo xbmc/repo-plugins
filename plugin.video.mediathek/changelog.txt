@@ -1,3 +1,4 @@
+0.7.1 - FIX: Minor bugfixes for ard
 0.7.0 - FIX: Minor bugfixes for arte,Kika,ZDF
 0.6.9 - FIX: Fixes for NDR (by
 0.6.8 - FIX: Fixes for KIKA

@@ -64,9 +64,9 @@ class ARDMediathek(Mediathek):
 			))
                       )
     self.configLink = self.rootLink+"/play/media/%s?devicetype=pc&feature=flash"
-    
-    self.regex_VideoPageLink = re.compile("<a href=\".*Video\?documentId=(\d+)&amp;bcastId=\d+\" class=\"textLink\">\s+?<p class=\"dachzeile\">(.*?)</p>\s+?<h4 class=\"headline\">(.*?)</h4>")
-    self.regex_CategoryPageLink = re.compile("<a href=\"(.*Sendung\?documentId=\d+&amp;bcastId=\d+)\" class=\"textLink\">\s+?<p class=\"dachzeile\">.*?</p>\s+?<h4 class=\"headline\">(.*?)</h4>\s+?<p class=\"subtitle\">(.*?)</p>")
+                                                     #.*Video\?bcastId=\d+&amp;documentId=(\d+)\" class=\"textLink\">\s+?<p class=\"dachzeile\">(.*?)</p>\s+?<h4 class=\"headline\">(.*?)</h4>
+    self.regex_VideoPageLink = re.compile("<a href=\".*Video\?.*?documentId=(\d+).*?\" class=\"textLink\">\s+?<p class=\"dachzeile\">(.*?)</p>\s+?<h4 class=\"headline\">(.*?)</h4>")
+    self.regex_CategoryPageLink = re.compile("<a href=\"(.*Sendung\?.*?documentId=\d+.*?)\" class=\"textLink\">\s+?<p class=\"dachzeile\">.*?</p>\s+?<h4 class=\"headline\">(.*?)</h4>\s+?<p class=\"subtitle\">(.*?)</p>")
     self.pageSelectString = "&mcontent%s=page.%s"
     self.regex_DetermineSelectedPage = re.compile("&mcontents{0,1}=page.(\d+)");
     

@@ -1,3 +1,4 @@
+Version 1.0.13 fix for empty show
 Version 1.0.12 fix for tonight show
 Version 1.0.11 website change
 Version 1.0.10 website change

@@ -7,7 +7,7 @@
     </category>
     
     <category label="30050">
-        <setting label="30051" type="enum" id="content.quality" lvalues="30052|30053" enable="eq(1,false)" default="0" />
+        <setting label="30051" type="enum" id="content.quality" lvalues="30055|30052|30053" enable="eq(1,false)" default="0" />
         <setting label="30054" type="bool" id="content.audioOnly" default="false" />
     </category>
     

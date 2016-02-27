@@ -1,0 +1,20 @@
+{
+    "id": 6,
+    "order": 50,
+    "metadata": {
+        "Title": 30260,
+        "Director": "Tom Knoll, Stefan „kuhpunkt“ Lensa",
+        "Genre": 30261,
+        "Country": 30202,
+        "Plot": 30263,
+        "Premiered": "2014-02-26"
+    },
+    "fanart": "fanart-asynchron-20160220.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ]
+}

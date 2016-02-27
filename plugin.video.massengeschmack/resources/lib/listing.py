@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # 
-# Massengeschmack XBMC add-on
-# Copyright (C) 2013 by Janek Bevendorff
+# Massengeschmack Kodi add-on
+# Copyright (C) 2013-2016 by Janek Bevendorff
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,32 +16,42 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import xbmc
 import xbmcplugin
 import xbmcgui
-import json
 
 from globalvars import *
-import resources.lib
 
-class Listing:
+
+class Listing(object):
+    def __init__(self):
+        self.__source = None
+
     def generate(self, source):
         """
         Generate listing from data source.
+        Will return False if the given DataSource does not intend to return a non-empty listing generator,
+        i.e. when L{resources.lib.datasource.DataSource.hasListItems} returns False
         
-        @type source: DataSource
+        @type source: resources.lib.datasource.DataSource
         @param source: the data source object
+        @rtype: bool
+        @return Whether the given DataSource actually intends to return a non-empty listing
         """
+        if not source.hasListItems():
+            return False
+
         self.__source = source
         items         = source.getListItems()
-        subscriptions = resources.lib.getSubscriptions()
+
         for i in items:
-            if 0 > i.getData('id') or i.getData('id') in subscriptions:
-                self.__addDir(i)
+            self.__addDir(i)
+
+        return True
     
     def show(self):
         """
         Show the listing after it has been generated.
+        You should check the output of L{generate} before trying to show a listing.
         """
         if 'true' == ADDON.getSetting('advanced.viewmodeFix'):
             self.setViewMode(510)
@@ -60,18 +70,20 @@ class Listing:
         xbmc.executebuiltin('Container.SetViewMode(' + str(id) + ')')
     
     def __addDir(self, listItem):
-        xbmcListItem = xbmcgui.ListItem(listItem.getData('name'), iconImage=listItem.getData('thumbnail'), thumbnailImage=listItem.getData('thumbnail'))
+        xbmcListItem = xbmcgui.ListItem(listItem.getData('name'), iconImage=listItem.getData('thumbnail'),
+                                        thumbnailImage=listItem.getData('thumbnail'))
         xbmcListItem.setInfo(type='video', infoLabels=listItem.getData('metaData'))
         xbmcListItem.setProperty('fanart_image', listItem.getData('fanart'))
         # fix for XBMC4Xbox
         if not IS_XBOX:
             xbmcListItem.addStreamInfo('video', listItem.getData('streamInfo'))
         
-        xbmcplugin.addDirectoryItem(ADDON_HANDLE, url=listItem.getData('url'), listitem=xbmcListItem, isFolder=listItem.getData('isFolder'))
+        xbmcplugin.addDirectoryItem(ADDON_HANDLE, url=listItem.getData('url'), listitem=xbmcListItem,
+                                    isFolder=listItem.getData('isFolder'))
 
 
 class ListItem:
-    def __init__(self, id=0, name='', url='', thumbnail='', fanart='', metaData={}, streamInfo={}, isFolder=True):
+    def __init__(self, id=0, name='', url='', thumbnail='', fanart='', metaData=None, streamInfo=None, isFolder=True):
         """
         Generate list item from given parameters.
         
@@ -92,6 +104,11 @@ class ListItem:
         @type  isFolder  : bool
         @param isFolder  : True if this item is a folder
         """
+        if streamInfo is None:
+            streamInfo = {}
+        if metaData is None:
+            metaData = {}
+
         self.__data = {
             'id'        : id,
             'name'      : name,

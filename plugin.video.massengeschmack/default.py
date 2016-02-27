@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # 
-# Massengeschmack XBMC add-on
-# Copyright (C) 2013 by Janek Bevendorff
+# Massengeschmack Kodi add-on
+# Copyright (C) 2013-2016 by Janek Bevendorff
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -32,60 +32,26 @@ if '' == ADDON.getSetting('account.username') or '' == ADDON.getSetting('account
 lib.installHTTPLoginData(ADDON.getSetting('account.username'), ADDON.getSetting('account.password'))
 
 # if we're on the start page, verify login data first
-if not 'cmd' in ADDON_ARGS:
-    response = lib.fetchSubscriptions(True)
-    if 200 != response['code']:
-        dialog = xbmcgui.Dialog()
-        if -1 == response['code']:
-            dialog.ok(ADDON.getLocalizedString(30902), ADDON.getLocalizedString(30903) + '[CR]Error: {0}'.format(response['reason']))
-        elif 401 == response['code']:
-            dialog.ok(ADDON.getLocalizedString(30102), ADDON.getLocalizedString(30103))
-            ADDON.openSettings()
-        else:
-            dialog.ok(ADDON.getLocalizedString(30902), ADDON.getLocalizedString(30904) + '[CR]Error: {0} {1}'.format(response['code'], response['reason']))
-        exit(1)
-    
-    # if all went well, cache subscriptions
-    lib.cacheSubscriptions(response['subscriptions'])
-
+if 'cmd' not in ADDON_ARGS:
+    lib.handleHttpStatus(lib.probeLogin(showDialog=True))
 
 # analyze URL
-if not 'cmd' in ADDON_ARGS:
+if 'cmd' not in ADDON_ARGS:
     ADDON_ARGS['cmd'] = 'list'
 
 if 'list' == ADDON_ARGS['cmd']:
-    listing    = lib.Listing()
-    datasource = None
-    if 'module' in ADDON_ARGS:
-        datasource = lib.datasource.createDataSource(ADDON_ARGS['module'])
-    else:
-        datasource = lib.datasource.createDataSource()
-    listing.generate(datasource)
-    listing.show()
+    listing    = lib.listing.Listing()
+    datasource = lib.datasource.createDataSource(ADDON_ARGS.get('module', None))
+    if listing.generate(datasource):
+        listing.show()
     
 elif 'play' == ADDON_ARGS['cmd']:
-    name       = ''
-    iconImage  = ''
-    metaData   = {}
-    streamInfo = {}
-    if 'name' in ADDON_ARGS:
-        name = ADDON_ARGS['name']
-    if 'iconimage' in ADDON_ARGS:
-        iconImage = ADDON_ARGS['iconimage']
-    if 'metadata' in ADDON_ARGS:
-        metaData = json.loads(ADDON_ARGS['metadata'])
-    if 'streaminfo' in ADDON_ARGS:
-        streamInfo = json.loads(ADDON_ARGS['streaminfo'])
+    name       = ADDON_ARGS.get('name', '')
+    iconImage  = ADDON_ARGS.get('iconimage', '')
+    metaData   = json.loads(ADDON_ARGS.get('metadata', '{}'))
+    streamInfo = json.loads(ADDON_ARGS.get('streaminfo', '{}'))
     
-    listitem = xbmcgui.ListItem(name, iconImage=iconImage, thumbnailImage=iconImage)
-    listitem.setInfo('video', metaData)
-    if not IS_XBOX:
-        listitem.addStreamInfo('video', streamInfo)
-    playlist = xbmc.PlayList(1)
-    playlist.clear()
-    playlist.add(ADDON_ARGS['url'], listitem)
-    xbmc.Player().play(playlist)
-    playlist.clear()
+    lib.playVideoStream(ADDON_ARGS['url'], name, iconImage, metaData, streamInfo)
     
 else:
-    raise RuntimeError(ADDON_ARGS['cmd'] + ': ' + ADDON.getLocalizedString(30901)) 
+    raise RuntimeError(ADDON_ARGS['cmd'] + ': ' + ADDON.getLocalizedString(30901))

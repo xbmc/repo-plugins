@@ -1,0 +1,20 @@
+{
+    "id": 10,
+    "order": 80,
+    "metadata": {
+        "Title": 30410,
+        "Director": "Tom Knoll       ",
+        "Genre": 30411,
+        "Country": 30202,
+        "Plot": 30413,
+        "Premiered": "2015-10-13"
+    },
+    "fanart": "fanart-migropolis-20160220.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ]
+}

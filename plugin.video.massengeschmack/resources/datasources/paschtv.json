@@ -1,0 +1,40 @@
+{
+    "id": 4,
+    "order": 30,
+    "metadata": {
+        "Title": 30240,
+        "Director": "Holger Kreymeier, Mario Perez",
+        "Genre": 30241,
+        "Country": 30202,
+        "Plot": 30243,
+        "Premiered": "2013-10-10"
+    },
+    "fanart": "fanart-paschtv-20160221.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1, 2],
+            "metadata": {
+                "Title": 30300,
+                "Plot": 30244
+            }
+        },
+        {
+            "name": "episodes",
+            "ids": [1],
+            "metadata": {
+                "Title": 30301,
+                "Plot": 30245
+            }
+        },
+        {
+            "name": "extra",
+            "ids": [2],
+            "metadata": {
+                "Title": 30303,
+                "Plot": 30246
+            }
+        }
+    ]
+}

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # 
-# Massengeschmack XBMC add-on
-# Copyright (C) 2013 by Janek Bevendorff
+# Massengeschmack Kodi add-on
+# Copyright (C) 2013-2016 by Janek Bevendorff
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,145 +16,190 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import xbmcgui
-import urllib
-import datetime
-import re
-from globalvars import *
+import json
+import os
+import glob
+from datetime import datetime
+import time
 import resources.lib
 from resources.lib.listing import *
 
+
 class DataSource(object):
-    """Numeric ID of the show."""
-    id = -1
+    """
+    Generic DataSource class.
+    This class can either be subclassed or bootstrapped with a JSON definition
+    for creating a custom DataSource.
+    """
 
-    """Internal module name."""
-    moduleName = ''
+    class Submodule:
+        """
+        DataSource submodule DTO.
+        """
+        def __init__(self):
+            self.name = None    # type: str
+            """Name of the submodule."""
 
-    """Global meta data for the show."""
-    showMetaData = {
-        'Title'     : None,
-        'Director'  : None,
-        'Genre'     : None,
-        'Premiered' : None,
-        'Country'   : None,
-        'Plot'      : None
-    }
-    
-    def getListItems(self):
+            self.ids = []   # type: list of int
+            """Feed IDs contained in this submodule."""
+
+            self.feedName = None    # type: str
+            """Custom feed name (overrides automatically generated name from feed IDs)"""
+
+            self.moduleMetaData = {}    # type: dict
+            """Metadata for the submodule (int values can be used to reference i18n strings)."""
+
+            self.pagination = True  # type: bool
+            """Whether to enable pagination."""
+
+            self.isActive = True    # type: bool
+            """Whether this submodule is currently active."""
+
+        def __eq__(self, other):
+            if type(other) is str:
+                return self.name == other
+            return self.name == other.name
+
+        def __hash__(self):
+            return self.name.__hash__()
+
+        def getModuleTitle(self):
+            """
+            Get display title for current submodule.
+
+            @rtype: str
+            @return: submodule title to be displayed in listings
+            """
+            title = self.moduleMetaData.get('Title', ADDON.getLocalizedString(30198))
+            if not self.isActive:
+                # rstrip() for removing workaround white-space for 16 char min-length issue
+                # see <http://trac.kodi.tv/ticket/16599>
+                title = title.rstrip() + ' ' + ADDON.getLocalizedString(30199)
+            return title
+
+    def __init__(self):
+        self.id = None  # type: int
+        """Numeric ID of the show."""
+
+        self.moduleName = None  # type: str
+        """Internal module name."""
+
+        self.sortOrder = 0  # type: int
+        """Show listing sort order."""
+
+        self.showMetaData = {}    # type: dict
+        """Global meta data for the show  (int values can be used to reference i18n strings)."""
+
+        self.availableQualities = []    # type: list
+        """Available quality settings for this DataSource."""
+
+        self.bannerPath = None  # type: str
+        """Path to banner image file."""
+
+        self.fanartPath = None  # type: str
+        """Path to fanart image file."""
+
+        self.isActive = True    # type: bool
+        """Whether the show is currently active."""
+
+        self.submodules = []    # type: list of DataSource.Submodule
+        """Available submodules."""
+
+    def __eq__(self, other):
+        return self.id == other.id
+
+    def __hash__(self):
+        return self.id.__hash__()
+
+    def __getitem__(self, item):
+        return self.submodules[item]
+
+    @classmethod
+    def bootstrap(cls, jsonFile):
         """
-        Generate a list of ListItem objects for the current data source.
+        Bootstrap new DataSource instance from given JSON definition file.
+
+        @type jsonFile: str
+        @param jsonFile: path to JSON bootstrap file
+        @rtype: DataSource
+        @return bootstrapped DataSource
         """
-        return [
-            # Fernsehkritik-TV
-            ListItem(
-                FKTVDataSource.id,
-                ADDON.getLocalizedString(30200),
-                resources.lib.assembleListURL(FKTVDataSource.module),
-                ADDON_BASE_PATH + '/resources/media/banner-' + FKTVDataSource.module + '.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + FKTVDataSource.module + '.jpg',
-                FKTVDataSource.showMetaData
-            ),
-            # Pantoffel-TV
-            ListItem(
-                PTVDataSource.id,
-                ADDON.getLocalizedString(30210),
-                resources.lib.assembleListURL(PTVDataSource.module),
-                ADDON_BASE_PATH + '/resources/media/banner-' + PTVDataSource.module + '.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + PTVDataSource.module + '.jpg',
-                PTVDataSource.showMetaData
-            ),
-            # Pressesch(l)au
-            ListItem(
-                PSDataSource.id,
-                ADDON.getLocalizedString(30220),
-                resources.lib.assembleListURL(PSDataSource.module),
-                ADDON_BASE_PATH + '/resources/media/banner-' + PSDataSource.module + '.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + PSDataSource.module + '.jpg',
-                PSDataSource.showMetaData
-            ),
-            # Pasch-TV
-            ListItem(
-                PaschTVDataSource.id,
-                ADDON.getLocalizedString(30240),
-                resources.lib.assembleListURL(PaschTVDataSource.module),
-                ADDON_BASE_PATH + '/resources/media/banner-' + PaschTVDataSource.module + '.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + PaschTVDataSource.module + '.jpg',
-                PaschTVDataSource.showMetaData
-            ),
-            # Netzprediger
-            ListItem(
-                NetzpredigerDataSource.id,
-                ADDON.getLocalizedString(30250),
-                resources.lib.assembleListURL(NetzpredigerDataSource.module),
-                ADDON_BASE_PATH + '/resources/media/banner-' + NetzpredigerDataSource.module + '_20140310.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + NetzpredigerDataSource.module + '_20140310.jpg',
-                NetzpredigerDataSource.showMetaData
-            ),
-            # Asynchron
-            ListItem(
-                AsynchronDataSource.id,
-                ADDON.getLocalizedString(30260),
-                resources.lib.assembleListURL(AsynchronDataSource.module),
-                ADDON_BASE_PATH + '/resources/media/banner-' + AsynchronDataSource.module + '.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + AsynchronDataSource.module + '.jpg',
-                AsynchronDataSource.showMetaData
-            ),
-            # Tonangeber
-            ListItem(
-                TonangeberDataSource.id,
-                ADDON.getLocalizedString(30264),
-                resources.lib.assembleListURL(TonangeberDataSource.module),
-                ADDON_BASE_PATH + '/resources/media/banner-' + TonangeberDataSource.module + '.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + TonangeberDataSource.module + '.jpg',
-                TonangeberDataSource.showMetaData
-            ),
-            # Hoaxilla-TV
-            ListItem(
-                HoaxillaTVDataSource.id,
-                ADDON.getLocalizedString(30400),
-                resources.lib.assembleListURL(HoaxillaTVDataSource.module),
-                ADDON_BASE_PATH + '/resources/media/banner-' + HoaxillaTVDataSource.module + '.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + HoaxillaTVDataSource.module + '.jpg',
-                HoaxillaTVDataSource.showMetaData
-            ),
-            # Massengeschmack-TV
-            ListItem(
-                MGTVDataSource.id,
-                ADDON.getLocalizedString(30230),
-                resources.lib.assembleListURL(MGTVDataSource.module),
-                ADDON_BASE_PATH + '/resources/media/banner-' + MGTVDataSource.module + '.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + MGTVDataSource.module + '.jpg',
-                MGTVDataSource.showMetaData
-            ),
-            # Sakura
-            ListItem(
-                SakuraDataSource.id,
-                ADDON.getLocalizedString(30290),
-                resources.lib.assembleListURL(SakuraDataSource.module),
-                ADDON_BASE_PATH + '/resources/media/banner-' + SakuraDataSource.module + '.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + SakuraDataSource.module + '.jpg',
-                SakuraDataSource.showMetaData
-            ),
-            # Migropolis
-            ListItem(
-                MigropolisDataSource.id,
-                ADDON.getLocalizedString(30410),
-                resources.lib.assembleListURL(MigropolisDataSource.module),
-                ADDON_BASE_PATH + '/resources/media/banner-' + MigropolisDataSource.module + '.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + MigropolisDataSource.module + '.jpg',
-                MigropolisDataSource.showMetaData
-            ),
-            # Live
-            ListItem(
-                LiveDataSource.id,
-                ADDON.getLocalizedString(30270),
-                resources.lib.assembleListURL(LiveDataSource.module),
-                ADDON_BASE_PATH + '/resources/media/banner-' + LiveDataSource.module + '.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + LiveDataSource.module + '.jpg',
-                LiveDataSource.showMetaData
-            ),
-        ]
+
+        def __localizeDict(d):
+            for k in d:
+                d[k] = ADDON.getLocalizedString(d[k]) if type(d[k]) is int else d[k]
+            return d
+
+        with open(jsonFile, 'r') as f:
+            jd = json.load(f, 'utf-8')
+
+        ds            = cls()
+        ds.moduleName = os.path.basename(jsonFile).replace('.json', '')
+        ds.id         = jd.get('id', ds.id)
+        ds.sortOrder  = jd.get('order', ds.sortOrder)
+        ds.isActive   = jd.get('active', ds.isActive)
+
+        ds.availableQualities.extend(jd.get('qualities', []))
+        ds.showMetaData.update(__localizeDict(jd.get('metadata', {})))
+
+        if 'banner' in jd:
+            ds.bannerPath = ADDON_BASE_PATH + '/resources/media/' + jd['banner']
+        else:
+            ds.bannerPath = HTTP_BASE_URI + 'img/header/mg_banner_' + str(ds.id) + '.jpg?' + time.strftime('%Y%m%d')
+
+        if 'fanart' in jd:
+            ds.fanartPath = ADDON_BASE_PATH + '/resources/media/' + jd['fanart']
+
+        sm = jd.get('submodules', [])
+        for i in sm:
+            s = cls.Submodule()
+            s.name       = i.get('name', s.name)
+            s.feedName   = i.get('feed_name', s.feedName)
+            s.pagination = i.get('pagination', s.pagination)
+            s.isActive   = i.get('active', s.isActive)
+            s.ids.extend(i.get('ids', []))
+            s.moduleMetaData.update(__localizeDict(i.get('metadata', {})))
+            ds.submodules.append(s)
+
+        return ds
+
+    def getQuality(self):
+        """
+        Get currently selected quality setting.
+
+        @rtype: str
+        @return: quality identifier (best, hd, mobile, audio), None if no quality settings available
+        """
+        audioOnly = ADDON.getSetting('content.audioOnly')
+
+        quality = None
+        if 'true' == audioOnly and 'audio' in self.availableQualities:
+            quality = 'audio'
+        else:
+            qualitySetting = int(ADDON.getSetting('content.quality'))
+            if 0 == qualitySetting:
+                quality = 'best'
+            elif 1 == qualitySetting:
+                quality = 'hd'
+            elif 2 == qualitySetting:
+                quality = 'mobile'
+
+            if quality not in self.availableQualities:
+                quality = self.availableQualities[0] if self.availableQualities else None
+
+        return quality
+
+    def getCurrentSubmoduleName(self):
+        """
+        Get the name of the current submodule.
+
+        @rtype: str
+        @return: submodule name or None if we're not in a submodule
+        """
+        submodule = None
+        if 'submodule' in ADDON_ARGS and ADDON_ARGS['submodule'] in self.submodules:
+            submodule = ADDON_ARGS['submodule']
+        return submodule
     
     def getContentMode(self):
         """
@@ -162,1285 +207,414 @@ class DataSource(object):
         
         Content mode is usually either 'tvshows' or 'episodes', but can
         also be any other valid value for xbmcplugin.setContent().
-        
-        :return content mode
+
+        @rtype: bool
+        @return content mode
         """
-        return 'tvshows'
-    
-    def _buildFeedURL(self, ids, quality):
+        return 'episodes'
+
+    def getShowTitle(self):
         """
-        Build a feed URL which points to an RSS feed filtered by the given IDs.
-        
+        Get display title for current show.
+
+        @rtype: str
+        @return: show title to be displayed in listings
+        """
+        title = self.showMetaData.get('Title', ADDON.getLocalizedString(30198))
+        if not self.isActive:
+            # rstrip() for removing workaround white-space for 16 char min-length issue
+            # see <http://trac.kodi.tv/ticket/16599>
+            title = title.rstrip() + ' ' + ADDON.getLocalizedString(30199)
+        return title
+
+    def buildFeedURL(self, submodule, quality, page=1):
+        """
+        Build a feed URL which points to an RSS feed which is filtered by the given IDs.
+
         This method relies on self.id being set properly in derived classes.
 
-        @type ids: list
-        @param ids: a list of numeric IDs of all sub shows to filter by
+        @type submodule: DataSource.Submodule
+        @param submodule: submodule for which to generate the feed URL
         @type quality: str
-        @param quality: the movie quality (either 'hd', 'mobile' or 'audio')
+        @param quality: the movie quality (either 'best', 'hd', 'mobile' or 'audio')
+        @type page: int
+        @param page: page for pagination
+        @rtype: str
+        @return feed URL string
         """
-        url = HTTP_BASE_FEED_URI
-        
-        first = True
-        for i in ids:
-            if not first:
-                url += 'x'
-            first = False
-            url += str(self.id) + '-' + str(i)
-            
-        url += '/' + quality + '.xml'
-        
+        url = HTTP_BASE_FEED_URI + '/'
+
+        if submodule.feedName:
+            url += submodule.feedName
+        else:
+            first = True
+            for i in submodule.ids:
+                if not first:
+                    url += 'x'
+                first = False
+                url += str(self.id) + '-' + str(i)
+
+        url += '/' + quality + '.xml?page=' + str(page)
+
         return url
 
+    def hasListItems(self):
+        """
+        Whether the DataSource intends to return a non-empty ListItem generator when calling L{getListItems}.
+        You should check the output of this method before creating a sub-listing that depends on the
+        returned ListItems from this DataSource.
 
+        @return: True if getListItems will return a non-empty generator
+        """
+        return True
+
+    def getListItems(self):
+        """
+        Return a generator object of L{resources.lib.listing.ListItem} objects for the current data source.
+
+        @rtype: generator of resources.lib.listing.ListItem
+        @return: generator object
+        """
+        submoduleName = self.getCurrentSubmoduleName()
+
+        # show selection list if there are several submodules and we're not inside one already
+        if len(self.submodules) > 1 and not submoduleName:
+            for i in self.__getBaseList():
+                yield i
+            return
+
+        # if there is only one submodule, don't show a selection list
+        if len(self.submodules) == 1 and not submoduleName:
+            submoduleName = self.submodules[0].name
+
+        # shouldn't happen
+        if submoduleName is None:
+            raise RuntimeError("No valid submodule given.")
+
+        currentPage = int(ADDON_ARGS['page']) if 'page' in ADDON_ARGS else 1
+        submodule   = next(s for s in self.submodules if s.name == submoduleName)
+        data        = resources.lib.parseRSSFeed(self.buildFeedURL(submodule, self.getQuality(), currentPage), True)
+
+        for i in data:
+            iconimage = i["thumbUrl"]
+            date      = resources.lib.parseUTCDateString(i['pubdate']).strftime('%d.%m.%Y')
+            metaData  = {
+                'Title'     : i['title'],
+                'Genre'     : self.showMetaData.get('Genre', ''),
+                'Date'      : date,
+                'Country'   : self.showMetaData.get('Country', ''),
+                'Plot'      : i['description'],
+                'Duration'  : int(i['duration']) / 60
+            }
+            streamInfo = {
+                'duration' : i['duration']
+            }
+
+            yield ListItem(
+                self.id,
+                i['title'],
+                resources.lib.assemblePlayURL(i['url'], i['title'], iconimage, metaData, streamInfo),
+                iconimage,
+                self.fanartPath,
+                metaData,
+                streamInfo,
+                False
+            )
+
+        # forward pagination
+        if submodule.pagination and len(data) >= 10:
+            yield ListItem(
+                self.id,
+                ADDON.getLocalizedString(30140),
+                resources.lib.assembleListURL(self.moduleName, submodule.name, page=currentPage + 1),
+                self.bannerPath,
+                self.fanartPath
+            )
+
+    def __getBaseList(self):
+        # create generator object of submodules with inactive submodules coming last
+        for active in (True, False):
+            for i in (s for s in self.submodules if s.isActive == active):
+                yield ListItem(
+                    self.id,
+                    i.getModuleTitle(),
+                    resources.lib.assembleListURL(self.moduleName, i.name),
+                    self.bannerPath,
+                    self.fanartPath,
+                    {
+                        'Title': i.moduleMetaData.get('Title', ''),
+                        'Plot': i.moduleMetaData.get('Plot', '')
+                    }
+                )
+
+
+class DataSourceRegistry:
+    """
+    Decorator for registering custom DataSource classes.
+    Any non-bootstrapped DataSource that shall be hooked into the DataSource list, needs to be decorated.
+    The only exception is L{OverviewDataSource} which is always the root DataSource and
+    therefore registered implicitly.
+    """
+
+    __dataSources = {}
+
+    def __init__(self, moduleName):
+        """
+        Register class as DataSource. The specified moduleName will be used to automatically instantiate
+        DataSources when that submodule is called via KODI URI.
+
+        @type moduleName: str
+        @param moduleName: module name to register for
+        @return: decorated DataSource
+        """
+        self.__moduleName = moduleName
+
+    def __call__(self, cls):
+        if self.__moduleName not in self.__dataSources:
+            self.__dataSources[self.__moduleName] = cls
+        return self.__dataSources[self.__moduleName]
+
+    @classmethod
+    def getDataSources(cls):
+        """
+        Return a set of registered DataSource classes.
+
+        @rtype: set of DataSource
+        @return all registered DataSources
+        """
+        return set(cls.__dataSources.values())
+
+    @classmethod
+    def getDataSourceByName(cls, moduleName):
+        """
+        Get DataSource class by registered module name.
+
+        @param moduleName: module name the DataSource was registered for
+        @rtype DataSource
+        @return: the DataSource class or None if no DataSource is registered under moduleName
+        """
+        return cls.__dataSources.get(moduleName, None)
+
+
+class OverviewDataSource(DataSource):
+    """
+    Overview DataSource for displaying an overview of all registered show DataSources.
+    This is the root DataSource that is displayed at top level.
+    """
+
+    @classmethod
+    def bootstrap(cls, jsonFile):
+        raise NotImplementedError
+
+    def getListItems(self):
+        dataSources = []
+
+        # add all registered DataSources to the list
+        for i in DataSourceRegistry.getDataSources():
+            dataSources.append(i())
+
+        # boostrap any remaining DataSources from available bootstrap files
+        bootstrapFiles = glob.glob(ADDON_BOOTSTRAP_PATH + '/*.json')
+        for i in bootstrapFiles:
+            dataSources.append(DataSource.bootstrap(i))
+
+        # sort DataSources as defined in each DataSource's sortOrder property
+        dataSources.sort(key=lambda x: x.sortOrder)
+
+        # create generator object of shows with inactive submodules coming last
+        for active in (True, False):
+            for i in (s for s in dataSources if s.isActive == active):
+                yield ListItem(
+                    i.id,
+                    i.getShowTitle(),
+                    resources.lib.assembleListURL(i.moduleName),
+                    i.bannerPath,
+                    i.fanartPath,
+                    i.showMetaData
+                )
+
+    def getContentMode(self):
+        return "tvshows"
+
+
+@DataSourceRegistry('live')
 class LiveDataSource(DataSource):
-    id           = -9999
-    module       = 'live'
-    showMetaData = {
-        'Title'    : ADDON.getLocalizedString(30270),
-        'Country'  : ADDON.getLocalizedString(30271),
-        'Plot'     : ADDON.getLocalizedString(30272)
-    }
-    
+    """
+    Custom DataSource for LIVE streams.
+    """
+
     def __init__(self):
-        self.__shows    = resources.lib.getLiveShows()
-        self.__current  = []
-        self.__upcoming = []
-        self.__isLive   = False
-        
+        super(LiveDataSource, self).__init__()
+
+        self.id           = -9999
+        self.moduleName   = 'live'
+        self.sortOrder    = 600
+        self.showMetaData = {
+            'Title'    : ADDON.getLocalizedString(30270),
+            'Country'  : ADDON.getLocalizedString(30202),
+            'Plot'     : ADDON.getLocalizedString(30272)
+        }
+        self.bannerPath = ADDON_BASE_PATH + '/resources/media/banner-massengeschmack-20160220.png'
+        self.fanartPath = ADDON_BASE_PATH + '/resources/media/fanart-massengeschmack-20160220.jpg'
+        self.isActive   = True
+
+        self.isLive     = False
+
+        # if we're about to play a stream, don't continue with querying data about other streams from the server
+        if 'playStream' in ADDON_ARGS:
+            info = resources.lib.getLiveStreamInfo(ADDON_ARGS['playStream'])
+            resources.lib.playVideoStream(info['url'],
+                                          ADDON_ARGS.get('streamName', ''),
+                                          ADDON_ARGS.get('iconImage', ''),
+                                          json.loads(ADDON_ARGS.get('metaData', '{}')))
+            return
+
+        # otherwise continue with regular listing
+        self.__shows      = resources.lib.getLiveShows()
+        self.__recordings = []
+        self.__current    = []
+        self.__upcoming   = []
+
         for i in self.__shows:
             if i['isLive']:
-                self.__isLive = True
+                self.isLive = True
                 self.__current.append(i)
             else:
                 self.__upcoming.append(i)
-    
-    def getListItems(self):
-        listItems = []
-        
-        if self.__current:
-            listItems.append(
-                ListItem(
-                    self.id,
-                    ADDON.getLocalizedString(30273),
-                    '#',
-                    self.__getThumbnailURL(0),
-                    ADDON_BASE_PATH + '/resources/media/fanart-' + LiveDataSource.module + '.jpg',
-                    {
-                        'Plot' : ADDON.getLocalizedString(30274)
-                    }
-                )
-            )
-            
-            listItems.extend(self.__createShowListing(self.__current, True))
-            
-        if self.__upcoming:
-            listItems.append(
-                ListItem(
-                    self.id,
-                    ADDON.getLocalizedString(30275),
-                    '#',
-                    self.__getThumbnailURL(0),
-                    ADDON_BASE_PATH + '/resources/media/fanart-' + LiveDataSource.module + '.jpg',
-                    {
-                        'Plot' : ADDON.getLocalizedString(30276)
-                    }
-                )
-            )
-            listItems.extend(self.__createShowListing(self.__upcoming))
-        
-        return listItems
-    
+
+        # if there is a show live on air, mark it in the list and move it to the top
+        if self.isLive:
+            self.sortOrder = -10000
+            self.showMetaData['Title'] = self.showMetaData['Title'].rstrip() + ' ' + ADDON.getLocalizedString(30278)
+
+    @classmethod
+    def bootstrap(cls, jsonFile):
+        raise NotImplementedError
+
     def getContentMode(self):
         return 'episodes'
-    
-    def __createShowListing(self, shows, isLive=False):
-        listItems = []
-        
+
+    def hasListItems(self):
+        return 'playStream' not in ADDON_ARGS
+
+    def getListItems(self):
+        # don't generate a listing when we're about to play a live stream or recording
+        # we should never end here because hasListItems() should be checked before calling this method,
+        # but exit method here just in case
+        if 'playStream' in ADDON_ARGS:
+            return
+
+        # otherwise ask for list of recordings additionally to the already queried live and upcoming streams
+        self.__recordings = resources.lib.getLiveShows(True)
+
+        # start building listing
+        if self.__current:
+            yield ListItem(
+                self.id,
+                ADDON.getLocalizedString(30273),
+                '#',
+                self.__getThumbnailURL(0),
+                self.fanartPath,
+            )
+
+            for i in self.__createShowListing(self.__current, 'live'):
+                yield i
+
+        if self.__upcoming:
+            yield ListItem(
+                self.id,
+                ADDON.getLocalizedString(30275),
+                '#',
+                self.__getThumbnailURL(0),
+                self.fanartPath,
+            )
+
+            for i in self.__createShowListing(self.__upcoming, 'upcoming'):
+                yield i
+
+        if self.__recordings:
+            yield ListItem(
+                self.id,
+                ADDON.getLocalizedString(30281),
+                '#',
+                self.__getThumbnailURL(0),
+                self.fanartPath,
+            )
+
+            for i in self.__createShowListing(self.__recordings, 'recording'):
+                yield i
+
+    def __createShowListing(self, shows, mode):
         for i in shows:
-            iconimage = self.__getThumbnailURL(i['pid'])
-            plot      = i['oneliner']
-            time      = datetime.datetime.fromtimestamp(float(i['begin'])).strftime('%d.%m.%Y, %H:%M:%S')
-            date      = datetime.datetime.fromtimestamp(float(i['begin'])).strftime('%d.%m.%Y')
-            name      = self.__getShowName(int(i['pid']))
-            
-            if None == plot:
-                plot = ''
+            iconImage = self.__getThumbnailURL(i['pid'])
+            time      = datetime.fromtimestamp(float(i['begin'])).strftime('%d.%m.%Y, %H:%M:%S')
+            date      = datetime.fromtimestamp(float(i['begin'])).strftime('%d.%m.%Y')
+            name      = i['oneliner']
+            plot      = ADDON.getLocalizedString(30277).format(name, time)
+
+            streamName = name
+            if mode == 'live':
+                # add [ON AIR] if stream is live
+                streamName += ' ' + ADDON.getLocalizedString(30278)
+                listName = name
             else:
-                plot += '\n\n'
-            
-            plot += ADDON.getLocalizedString(30277).format(name, time)
-            
+                if mode == 'upcoming':
+                    # add "Starts on..."
+                    dateString = ADDON.getLocalizedString(30279).format(time)
+                else:
+                    # add "Recorded on..."
+                    dateString = ADDON.getLocalizedString(30292).format(time)
+                    streamName += ' ' + ADDON.getLocalizedString(30294)
+
+                listName = '    ' + name + ' -> ' + dateString
+
             metaData  = {
-                'Title'     : name,
+                'Title'     : streamName,
                 'Date'      : date,
-                'Premiered' : date,
                 'Plot'      : plot
             }
-            
-            listName   = '    ' + name + ' [' + time + ']'
-            streamName = name + ' [' + ADDON.getLocalizedString(30270) + ']'
-            
-            isFolder = True
-            if isLive:
-                isFolder = False
-            
-            listItems.append(
-                ListItem(
-                    self.id,
-                    listName,
-                    resources.lib.assemblePlayURL(self.__getStreamURL(i['showid']), streamName, iconimage, metaData),
-                    iconimage,
-                    ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                    metaData,
-                    isFolder=isFolder
-                )
-            )
-        
-        return listItems
 
-    def __getShowName(self, id):
-        if -3 == id:
-            # Livetalk
-            return ADDON.getLocalizedString(30280)
-        elif 0 == id:
-            # Massengeschmack-TV
-            return ADDON.getLocalizedString(30230)
-        elif 1 == id:
-            # FKTV
-            return ADDON.getLocalizedString(30200)
-        elif 2 == id:
-            # PantoffelTV
-            return ADDON.getLocalizedString(30210)
-        elif 3 == id:
-            # Pressesch(l)au
-            return ADDON.getLocalizedString(30220)
-        elif 4 == id:
-            # Pasch-TV
-            return ADDON.getLocalizedString(30240)
-        elif 5 == id:
-            # Netzprediger
-            return ADDON.getLocalizedString(30250)
-        elif 6 == id:
-            # Asynchron
-            return ADDON.getLocalizedString(30260)
-        elif 7 == id:
-            # Tonangeber
-            return ADDON.getLocalizedString(30264)
-        elif 8 == id:
-            # Hoaxilla-TV
-            return ADDON.getLocalizedString(30400)
-        else:
-            return '-'
-
-    def __getStreamURL(self, showid):
-        info = resources.lib.getLiveStreamInfo(showid)
-        if False == info:
-            return '#'
-        return info['url']
-
-    def __getThumbnailURL(self, id):
-        return 'http://massengeschmack.tv/img/logo' + str(id) + '_feed.jpg'
-    
-
-class FKTVDataSource(DataSource):
-    id           = 1
-    module       = 'fktv'
-    showMetaData = {
-        'Title'    : ADDON.getLocalizedString(30200),
-        'Director' : 'Holger Kreymeier, Nils Beckmann, Daniel Gusy',
-        'Genre'    : ADDON.getLocalizedString(30201),
-        'Premiered': '07.04.2007',
-        'Country'  : ADDON.getLocalizedString(30202),
-        'Plot'     : ADDON.getLocalizedString(30203)
-    }
-    
-    def __init__(self):
-        self.__urls = {
-            'hd' : {
-                'all'          : DataSource._buildFeedURL(self, [1, 2, 3, 4, 5], 'hd'),
-                'episodes'     : DataSource._buildFeedURL(self, [1], 'hd'),
-                'postecke'     : DataSource._buildFeedURL(self, [2], 'hd'),
-                'interviews'   : DataSource._buildFeedURL(self, [3], 'hd'),
-                'extras'       : DataSource._buildFeedURL(self, [4], 'hd'),
-                'sendeschluss' : DataSource._buildFeedURL(self, [5], 'hd')
-            },
-            'mobile' : {
-                'all'          : DataSource._buildFeedURL(self, [1, 2, 3, 4, 5], 'mobile'),
-                'episodes'     : DataSource._buildFeedURL(self, [1], 'mobile'),
-                'postecke'     : DataSource._buildFeedURL(self, [2], 'mobile'),
-                'interviews'   : DataSource._buildFeedURL(self, [3], 'mobile'),
-                'extras'       : DataSource._buildFeedURL(self, [4], 'mobile'),
-                'sendeschluss' : DataSource._buildFeedURL(self, [5], 'mobile')
-            },
-            'audio' : {
-                'all'          : DataSource._buildFeedURL(self, [1, 2, 3, 4, 5], 'audio'),
-                'episodes'     : DataSource._buildFeedURL(self, [1], 'audio'),
-                'postecke'     : DataSource._buildFeedURL(self, [2], 'audio'),
-                'interviews'   : DataSource._buildFeedURL(self, [3], 'audio'),
-                'extras'       : DataSource._buildFeedURL(self, [4], 'audio'),
-                'sendeschluss' : DataSource._buildFeedURL(self, [5], 'audio')
-            }
-        }
-    
-    def getListItems(self):
-        audioOnly = ADDON.getSetting('content.audioOnly')
-
-        if 'true' == audioOnly:
-            quality = 'audio'
-        else:
-            if 0 == int(ADDON.getSetting('content.quality')):
-                quality = 'hd'
+            if mode == 'live' or mode == 'recording':
+                listUrl = resources.lib.assembleListURL(self.moduleName, playStream=i['showid'], streamName=streamName,
+                                                        iconImage=iconImage, metaData=json.dumps(metaData))
             else:
-                quality = 'mobile'
-        
-        submodule = None
-        if 'submodule' in ADDON_ARGS and ADDON_ARGS['submodule'] in self.__urls[quality]:
-            submodule = ADDON_ARGS['submodule']
-        
-        if None == submodule:
-            return self.__getBaseList()
+                # don't create a real list URL for upcoming shows
+                listUrl = '#'
 
-        # noinspection PyTypeChecker
-        data      = resources.lib.parseRSSFeed(self.__urls[quality][submodule], True)
-        listItems = []
-        
-        # in old Postecke category show link to Massengeschmack Direkt
-        if 'postecke' == submodule:
-            listItems.append(
-                ListItem(
-                    MGTVDataSource.id,
-                    ADDON.getLocalizedString(30367),
-                    resources.lib.assembleListURL(MGTVDataSource.module, 'direkt'),
-                    ADDON_BASE_PATH + '/resources/media/banner-' + MGTVDataSource.module + 'direkt.png',
-                    ADDON_BASE_PATH + '/resources/media/fanart-' + MGTVDataSource.module + '.jpg',
-                    {
-                        'Title' : ADDON.getLocalizedString(30367),
-                        'Plot'  : ADDON.getLocalizedString(30368)
-                    }
-                )
-            )
-        
-        for i in data:
-            iconimage = i["thumbUrl"]
-            date      = resources.lib.parseUTCDateString(i['pubdate']).strftime('%d.%m.%Y')
-            metaData  = {
-                'Title'     : i['title'],
-                'Genre'     : ADDON.getLocalizedString(30201),
-                'Date'      : date,
-                'Premiered' : date,
-                'Country'   : ADDON.getLocalizedString(30232),
-                'Plot'      : i['description'],
-                'Duration'  : int(i['duration']) / 60
-            }
-            streamInfo = {
-                'duration' : i['duration']
-            }
-            
-            listItems.append(
-                ListItem(
-                    self.id,
-                    i['title'],
-                    resources.lib.assemblePlayURL(i['url'], i['title'], iconimage, metaData, streamInfo),
-                    iconimage,
-                    ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                    metaData,
-                    streamInfo,
-                    False
-                )
-            )
-        
-        return listItems
-    
-    def getContentMode(self):
-        if 'submodule' in ADDON_ARGS:
-            return 'episodes'
-        
-        return 'tvshows'
-    
-    def __getBaseList(self):
-        return [
-            # All
-            ListItem(
+            yield ListItem(
                 self.id,
-                ADDON.getLocalizedString(30300),
-                resources.lib.assembleListURL(self.module, 'all'),
-                ADDON_BASE_PATH + '/resources/media/banner-' + self.module + '.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                {
-                    'Title': ADDON.getLocalizedString(30300),
-                    'Plot': ADDON.getLocalizedString(30350)
-                }
-            ),
-            # Episodes
-            ListItem(
-                self.id,
-                ADDON.getLocalizedString(30301),
-                resources.lib.assembleListURL(self.module, 'episodes'),
-                ADDON_BASE_PATH + '/resources/media/banner-' + self.module + '.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                {
-                    'Title': ADDON.getLocalizedString(30301),
-                    'Plot': ADDON.getLocalizedString(30351)
-                }
-            ),
-            # Sendeschluss
-            ListItem(
-                self.id,
-                ADDON.getLocalizedString(30356),
-                resources.lib.assembleListURL(self.module, 'sendeschluss'),
-                ADDON_BASE_PATH + '/resources/media/banner-' + self.module + '.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                {
-                    'Title': ADDON.getLocalizedString(30356),
-                    'Plot': ADDON.getLocalizedString(30357)
-                }
-            ),
-            # Postecke
-            ListItem(
-                self.id,
-                ADDON.getLocalizedString(30352),
-                resources.lib.assembleListURL(self.module, 'postecke'),
-                ADDON_BASE_PATH + '/resources/media/banner-' + self.module + '.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                {
-                    'Title': ADDON.getLocalizedString(30352),
-                    'Plot': ADDON.getLocalizedString(30353)
-                }
-            ),
-            # Interviews
-            ListItem(
-                self.id,
-                ADDON.getLocalizedString(30302),
-                resources.lib.assembleListURL(self.module, 'interviews'),
-                ADDON_BASE_PATH + '/resources/media/banner-' + self.module + '.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                {
-                    'Title': ADDON.getLocalizedString(30302),
-                    'Plot': ADDON.getLocalizedString(30354)
-                }
-            ),
-            # Extras
-            ListItem(
-                self.id,
-                ADDON.getLocalizedString(30303),
-                resources.lib.assembleListURL(self.module, 'extras') ,
-                ADDON_BASE_PATH + '/resources/media/banner-' + self.module + '.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                {
-                    'Title': ADDON.getLocalizedString(30303),
-                    'Plot': ADDON.getLocalizedString(30355)
-                }
-            )
-        ]
-
-
-class PTVDataSource(DataSource):
-    id           = 2
-    module       = 'ptv'
-    showMetaData = {
-        'Title'     : ADDON.getLocalizedString(30210),
-        'Director'  : 'Holger Kreymeier, Jenny von Gagern, Steven Gräwe, Michael Stock',
-        'Genre'     : ADDON.getLocalizedString(30211),
-        'Premiered' : '17.06.2013',
-        'Country'   : ADDON.getLocalizedString(30212),
-        'Plot'      : ADDON.getLocalizedString(30213)
-    }
-    
-    def __init__(self):
-        self.__urls = {
-            'hd' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'hd'),
-            },
-            'mobile' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'mobile'),
-            },
-            'audio' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'audio'),
-            }
-        }
-    
-    def getListItems(self):
-        audioOnly = ADDON.getSetting('content.audioOnly')
-
-        if 'true' == audioOnly:
-            quality = 'audio'
-        else:
-            if 0 == int(ADDON.getSetting('content.quality')):
-                quality = 'hd'
-            else:
-                quality = 'mobile'
-
-        # noinspection PyTypeChecker
-        data      = resources.lib.parseRSSFeed(self.__urls[quality]['all'], True)
-        listItems = []
-        
-        for i in data:
-            iconimage = i['thumbUrl']
-            date      = resources.lib.parseUTCDateString(i['pubdate']).strftime('%d.%m.%Y')
-            metaData  = {
-                'Title'     : i['title'],
-                'Genre'     : ADDON.getLocalizedString(30211),
-                'Date'      : date,
-                'Premiered' : date,
-                'Country'   : ADDON.getLocalizedString(30232),
-                'Plot'      : i['description'],
-                'Duration'  : int(i['duration']) / 60
-            }
-            streamInfo = {
-                'duration' : i['duration']
-            }
-            
-            listItems.append(
-                ListItem(
-                    self.id,
-                    i['title'],
-                    resources.lib.assemblePlayURL(i['url'], i['title'], iconimage, metaData, streamInfo),
-                    iconimage,
-                    ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                    metaData,
-                    streamInfo,
-                    False
-                )
-            )
-        
-        return listItems
-    
-    def getContentMode(self):
-        return 'episodes'
-
-
-class PSDataSource(DataSource):
-    id           = 3
-    module       = 'ps'
-    showMetaData = {
-        'Title'     : ADDON.getLocalizedString(30220),
-        'Director'  :'Holger Kreymeier, Steven Gräwe, Daniel Gusy',
-        'Genre'     : ADDON.getLocalizedString(30221),
-        'Premiered' :'01.08.2013',
-        'Country'   : ADDON.getLocalizedString(30222),
-        'Plot'      : ADDON.getLocalizedString(30223)
-    }
-    
-    def __init__(self):
-        self.__urls = {
-            'hd' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'hd'),
-            },
-            'mobile' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'mobile'),
-            },
-            'audio' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'audio'),
-            }
-        }
-    
-    def getListItems(self):
-        audioOnly = ADDON.getSetting('content.audioOnly')
-
-        if 'true' == audioOnly:
-            quality = 'audio'
-        else:
-            if 0 == int(ADDON.getSetting('content.quality')):
-                quality = 'hd'
-            else:
-                quality = 'mobile'
-
-        # noinspection PyTypeChecker
-        data      = resources.lib.parseRSSFeed(self.__urls[quality]['all'], True)
-        listItems = []
-        
-        for i in data:
-            iconimage = i['thumbUrl']
-            date      = resources.lib.parseUTCDateString(i['pubdate']).strftime('%d.%m.%Y')
-            metaData  = {
-                'Title'     : i['title'],
-                'Genre'     : ADDON.getLocalizedString(30221),
-                'Date'      : date,
-                'Premiered' : date,
-                'Country'   : ADDON.getLocalizedString(30232),
-                'Plot'      : i['description'],
-                'Duration'  : int(i['duration']) / 60
-            }
-            streamInfo = {
-                'duration' : i['duration']
-            }
-            
-            listItems.append(
-                ListItem(
-                    self.id,
-                    i['title'],
-                    resources.lib.assemblePlayURL(i['url'], i['title'], iconimage, metaData, streamInfo),
-                    iconimage,
-                    ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                    metaData,
-                    streamInfo,
-                    False
-                )
-            )
-        
-        return listItems
-    
-    def getContentMode(self):
-        return 'episodes'
-
-
-class MGTVDataSource(DataSource):
-    id           = 0
-    module       = 'mgtv'
-    showMetaData = {
-        'Title'     : ADDON.getLocalizedString(30230),
-        'Director'  : 'Holger Kreymeier',
-        'Genre'     : ADDON.getLocalizedString(30231),
-        'Premiered' : '05.08.2013',
-        'Country'   : ADDON.getLocalizedString(30232),
-        'Plot'      : ADDON.getLocalizedString(30233)
-    }
-    
-    def __init__(self):
-        self.__urls = {
-            'hd' : {
-                'all'      : DataSource._buildFeedURL(self, [1, 2, 3], 'hd'),
-                'internal' : DataSource._buildFeedURL(self, [1], 'hd'),
-                'studio'   : DataSource._buildFeedURL(self, [2], 'hd'),
-                'direkt'   : DataSource._buildFeedURL(self, [3], 'hd')
-            },
-            'mobile' : {
-                'all'      : DataSource._buildFeedURL(self, [1, 2, 3], 'mobile'),
-                'internal' : DataSource._buildFeedURL(self, [1], 'mobile'),
-                'studio'   : DataSource._buildFeedURL(self, [2], 'mobile'),
-                'direkt'   : DataSource._buildFeedURL(self, [3], 'mobile')
-            },
-            'audio' : {
-                'all'      : DataSource._buildFeedURL(self, [1, 2, 3], 'audio'),
-                'internal' : DataSource._buildFeedURL(self, [1], 'audio'),
-                'studio'   : DataSource._buildFeedURL(self, [2], 'audio'),
-                'direkt'   : DataSource._buildFeedURL(self, [3], 'audio')
-            }
-        }
-    
-    def getListItems(self):
-        audioOnly = ADDON.getSetting('content.audioOnly')
-
-        if 'true' == audioOnly:
-            quality = 'audio'
-        else:
-            if 0 == int(ADDON.getSetting('content.quality')):
-                quality = 'hd'
-            else:
-                quality = 'mobile'
-        
-        submodule = None
-        if 'submodule' in ADDON_ARGS and ADDON_ARGS['submodule'] in self.__urls[quality]:
-            submodule = ADDON_ARGS['submodule']
-        
-        if None == submodule:
-            return self.__getBaseList()
-
-        # noinspection PyTypeChecker
-        data      = resources.lib.parseRSSFeed(self.__urls[quality][submodule], True)
-        listItems = []
-        
-        for i in data:
-            iconimage = i['thumbUrl']
-            date      = resources.lib.parseUTCDateString(i['pubdate']).strftime('%d.%m.%Y')
-            metaData  = {
-                'Title'     : i['title'],
-                'Genre'     : ADDON.getLocalizedString(30231),
-                'Date'      : date,
-                'Premiered' : date,
-                'Country'   : ADDON.getLocalizedString(30232),
-                'Plot'      : i['description'],
-                'Duration'  : int(i['duration']) / 60
-            }
-            streamInfo = {
-                'duration' : i['duration']
-            }
-            
-            listItems.append(
-                ListItem(
-                    self.id,
-                    i['title'],
-                    resources.lib.assemblePlayURL(i['url'], i['title'], iconimage, metaData, streamInfo),
-                    iconimage,
-                    ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                    metaData,
-                    streamInfo,
-                    False
-                )
-            )
-        
-        return listItems
-    
-    def getContentMode(self):
-        if 'submodule' in ADDON_ARGS:
-            return 'episodes'
-        
-        return 'tvshows'
-    
-    def __getBaseList(self):
-        return [
-            # All
-            ListItem(
-                self.id,
-                ADDON.getLocalizedString(30300),
-                resources.lib.assembleListURL(self.module, 'all'),
-                ADDON_BASE_PATH + '/resources/media/banner-' + self.module + '_20140818.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                {
-                    'Title': ADDON.getLocalizedString(30300),
-                    'Plot': ADDON.getLocalizedString(30361)
-                }
-            ),
-            # Das Studio
-            ListItem(
-                self.id,
-                ADDON.getLocalizedString(30360),
-                resources.lib.assembleListURL(self.module, 'studio'),
-                ADDON_BASE_PATH + '/resources/media/banner-' + self.module + 'studio.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                {
-                    'Title': ADDON.getLocalizedString(30360),
-                    'Plot': ADDON.getLocalizedString(30362)
-                }
-            ),
-            # Massengeschmack Direkt
-            ListItem(
-                self.id,
-                ADDON.getLocalizedString(30365),
-                resources.lib.assembleListURL(self.module, 'direkt'),
-                ADDON_BASE_PATH + '/resources/media/banner-' + self.module + 'direkt.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                {
-                    'Title': ADDON.getLocalizedString(30365),
-                    'Plot': ADDON.getLocalizedString(30366)
-                }
-            ),
-            # Massengeschmack Internal
-            ListItem(
-                self.id,
-                ADDON.getLocalizedString(30363),
-                resources.lib.assembleListURL(self.module, 'internal'),
-                ADDON_BASE_PATH + '/resources/media/banner-' + self.module + '_20140818.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                {
-                    'Title': ADDON.getLocalizedString(30363),
-                    'Plot': ADDON.getLocalizedString(30364)
-                }
-            )
-        ]
-
-class PaschTVDataSource(DataSource):
-    id           = 4
-    module       = 'paschtv'
-    showMetaData = {
-        'Title'    : ADDON.getLocalizedString(30240),
-        'Director' :'Holger Kreymeier,',
-        'Genre'    : ADDON.getLocalizedString(30241),
-        'Premiered':'10.10.2013',
-        'Country'  : ADDON.getLocalizedString(30242),
-        'Plot'     : ADDON.getLocalizedString(30243)
-    }
-    
-    def __init__(self):
-        self.__urls = {
-            'hd' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'hd'),
-            },
-            'mobile' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'mobile'),
-            },
-            'audio' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'audio'),
-            }
-        }
-    
-    def getListItems(self):
-        audioOnly = ADDON.getSetting('content.audioOnly')
-
-        if 'true' == audioOnly:
-            quality = 'audio'
-        else:
-            if 0 == int(ADDON.getSetting('content.quality')):
-                quality = 'hd'
-            else:
-                quality = 'mobile'
-
-        # noinspection PyTypeChecker
-        data      = resources.lib.parseRSSFeed(self.__urls[quality]['all'], True)
-        listItems = []
-        
-        for i in data:
-            iconimage = i['thumbUrl']
-            date      = resources.lib.parseUTCDateString(i['pubdate']).strftime('%d.%m.%Y')
-            metaData  = {
-                'Title'     : i['title'],
-                'Genre'     : ADDON.getLocalizedString(30241),
-                'Date'      : date,
-                'Premiered' : date,
-                'Country'   : ADDON.getLocalizedString(30242),
-                'Plot'      : i['description'],
-                'Duration'  : int(i['duration']) / 60
-            }
-            streamInfo = {
-                'duration' : i['duration']
-            }
-            
-            listItems.append(
-                ListItem(
-                    self.id,
-                    i['title'],
-                    resources.lib.assemblePlayURL(i['url'], i['title'], iconimage, metaData, streamInfo),
-                    iconimage,
-                    ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                    metaData,
-                    streamInfo,
-                    False
-                )
-            )
-        
-        return listItems
-    
-    def getContentMode(self):
-        return 'episodes'
-
-
-class NetzpredigerDataSource(DataSource):
-    id           = 5
-    module       = 'netzprediger'
-    showMetaData = {
-        'Title'     : ADDON.getLocalizedString(30250),
-        'Director'  :'Holger Kreymeier',
-        'Genre'     : ADDON.getLocalizedString(30251),
-        'Premiered' :'10.10.2013',
-        'Country'   : ADDON.getLocalizedString(30252),
-        'Plot'      : ADDON.getLocalizedString(30253)
-    }
-    
-    def __init__(self):
-        self.__urls = {
-            'hd' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'hd'),
-            },
-            'mobile' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'mobile'),
-            },
-            'audio' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'audio'),
-            }
-        }
-    
-    def getListItems(self):
-        audioOnly = ADDON.getSetting('content.audioOnly')
-
-        if 'true' == audioOnly:
-            quality = 'audio'
-        else:
-            if 0 == int(ADDON.getSetting('content.quality')):
-                quality = 'hd'
-            else:
-                quality = 'mobile'
-
-        # noinspection PyTypeChecker
-        data      = resources.lib.parseRSSFeed(self.__urls[quality]['all'], True)
-        listItems = []
-        
-        for i in data:
-            iconimage = i['thumbUrl']
-            date      = resources.lib.parseUTCDateString(i['pubdate']).strftime('%d.%m.%Y')
-            metaData  = {
-                'Title'     : i['title'],
-                'Genre'     : ADDON.getLocalizedString(30251),
-                'Date'      : date,
-                'Premiered' : date,
-                'Country'   : ADDON.getLocalizedString(30252),
-                'Plot'      : i['description'],
-                'Duration'  : int(i['duration']) / 60
-            }
-            streamInfo = {
-                'duration' : i['duration']
-            }
-            
-            listItems.append(
-                ListItem(
-                    self.id,
-                    i['title'],
-                    resources.lib.assemblePlayURL(i['url'], i['title'], iconimage, metaData, streamInfo),
-                    iconimage,
-                    ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '_20140310.jpg',
-                    metaData,
-                    streamInfo,
-                    False
-                )
-            )
-        
-        return listItems
-    
-    def getContentMode(self):
-        return 'episodes'
-
-
-class AsynchronDataSource(DataSource):
-    id           = 6
-    module       = 'asynchron'
-    showMetaData = {
-        'Title'    : ADDON.getLocalizedString(30260),
-        'Director' : 'Evgenij Cernov',
-        'Genre'    : ADDON.getLocalizedString(30261),
-        'Premiered': '26.02.2014',
-        'Country'  : ADDON.getLocalizedString(30262),
-        'Plot'     : ADDON.getLocalizedString(30263)
-    }
-    
-    def __init__(self):
-        self.__urls = {
-            'hd' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'hd'),
-            },
-            'mobile' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'mobile'),
-            },
-            'audio' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'audio'),
-            }
-        }
-    
-    def getListItems(self):
-        audioOnly = ADDON.getSetting('content.audioOnly')
-
-        if 'true' == audioOnly:
-            quality = 'audio'
-        else:
-            if 0 == int(ADDON.getSetting('content.quality')):
-                quality = 'hd'
-            else:
-                quality = 'mobile'
-
-        # noinspection PyTypeChecker
-        data      = resources.lib.parseRSSFeed(self.__urls[quality]['all'], True)
-        listItems = []
-        
-        for i in data:
-            iconimage = i['thumbUrl']
-            date      = resources.lib.parseUTCDateString(i['pubdate']).strftime('%d.%m.%Y')
-            metaData  = {
-                'Title'     : i['title'],
-                'Genre'     : ADDON.getLocalizedString(30261),
-                'Date'      : date,
-                'Premiered' : date,
-                'Country'   : ADDON.getLocalizedString(30262),
-                'Plot'      : i['description'],
-                'Duration'  : int(i['duration']) / 60
-            }
-            streamInfo = {
-                'duration' : i['duration']
-            }
-            
-            listItems.append(
-                ListItem(
-                    self.id,
-                    i['title'],
-                    resources.lib.assemblePlayURL(i['url'], i['title'], iconimage, metaData, streamInfo),
-                    iconimage,
-                    ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                    metaData,
-                    streamInfo,
-                    False
-                )
-            )
-        
-        return listItems
-    
-    def getContentMode(self):
-        return 'episodes'
-
-
-class TonangeberDataSource(DataSource):
-    id           = 7
-    module       = 'tonangeber'
-    showMetaData = {
-        'Title'     : ADDON.getLocalizedString(30264),
-        'Director'  : 'Nils Beckmann, Holger Kreymeier',
-        'Genre'     : ADDON.getLocalizedString(30265),
-        'Premiered' : '17.06.2014',
-        'Country'   : ADDON.getLocalizedString(30266),
-        'Plot'      : ADDON.getLocalizedString(30267)
-    }
-    
-    def __init__(self):
-        self.__urls = {
-            'hd' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'hd'),
-            },
-            'mobile' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'mobile'),
-            },
-            'audio' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'audio'),
-            }
-        }
-    
-    def getListItems(self):
-        audioOnly = ADDON.getSetting('content.audioOnly')
-
-        if 'true' == audioOnly:
-            quality = 'audio'
-        else:
-            if 0 == int(ADDON.getSetting('content.quality')):
-                quality = 'hd'
-            else:
-                quality = 'mobile'
-
-        # noinspection PyTypeChecker
-        data      = resources.lib.parseRSSFeed(self.__urls[quality]['all'], True)
-        listItems = []
-        
-        for i in data:
-            iconimage = i['thumbUrl']
-            date      = resources.lib.parseUTCDateString(i['pubdate']).strftime('%d.%m.%Y')
-            metaData  = {
-                'Title'     : i['title'],
-                'Genre'     : ADDON.getLocalizedString(30265),
-                'Date'      : date,
-                'Premiered' : date,
-                'Country'   : ADDON.getLocalizedString(30266),
-                'Plot'      : i['description'],
-                'Duration'  : int(i['duration']) / 60
-            }
-            streamInfo = {
-                'duration' : i['duration']
-            }
-            
-            listItems.append(
-                ListItem(
-                    self.id,
-                    i['title'],
-                    resources.lib.assemblePlayURL(i['url'], i['title'], iconimage, metaData, streamInfo),
-                    iconimage,
-                    ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                    metaData,
-                    streamInfo,
-                    False
-                )
-            )
-        
-        return listItems
-    
-    def getContentMode(self):
-        return 'episodes'
-
-
-class HoaxillaTVDataSource(DataSource):
-    id           = 8
-    module       = 'hoaxillatv'
-    showMetaData = {
-        'Title'    : ADDON.getLocalizedString(30400),
-        'Director' : 'Alexa Waschkau, Alexander Waschkau, Holger Kreymeier',
-        'Genre'    : ADDON.getLocalizedString(30401),
-        'Premiered': '17.06.2014',
-        'Country'  : ADDON.getLocalizedString(30402),
-        'Plot'     : ADDON.getLocalizedString(30403)
-    }
-    
-    def __init__(self):
-        self.__urls = {
-            'hd' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'hd'),
-            },
-            'mobile' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'mobile'),
-            },
-            'audio' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'audio'),
-            }
-        }
-    
-    def getListItems(self):
-        audioOnly = ADDON.getSetting('content.audioOnly')
-
-        if 'true' == audioOnly:
-            quality = 'audio'
-        else:
-            if 0 == int(ADDON.getSetting('content.quality')):
-                quality = 'hd'
-            else:
-                quality = 'mobile'
-
-        # noinspection PyTypeChecker
-        data      = resources.lib.parseRSSFeed(self.__urls[quality]['all'], True)
-        listItems = []
-        
-        for i in data:
-            iconimage = i['thumbUrl']
-            date      = resources.lib.parseUTCDateString(i['pubdate']).strftime('%d.%m.%Y')
-            metaData  = {
-                'Title'     : i['title'],
-                'Genre'     : ADDON.getLocalizedString(30401),
-                'Date'      : date,
-                'Premiered' : date,
-                'Country'   : ADDON.getLocalizedString(30402),
-                'Plot'      : i['description'],
-                'Duration'  : int(i['duration']) / 60
-            }
-            streamInfo = {
-                'duration' : i['duration']
-            }
-            
-            listItems.append(
-                ListItem(
-                    self.id,
-                    i['title'],
-                    resources.lib.assemblePlayURL(i['url'], i['title'], iconimage, metaData, streamInfo),
-                    iconimage,
-                    ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                    metaData,
-                    streamInfo,
-                    False
-                )
-            )
-        
-        return listItems
-    
-    def getContentMode(self):
-        return 'episodes'
-
-
-class SakuraDataSource(DataSource):
-    id           = 9
-    module       = 'sakura'
-    showMetaData = {
-        'Title'     : ADDON.getLocalizedString(30290),
-        'Director'  : 'Volker Robrahn, Maria Timonina',
-        'Genre'     : ADDON.getLocalizedString(30291),
-        'Premiered' : '21.04.2015',
-        'Country'   : ADDON.getLocalizedString(30292),
-        'Plot'      : ADDON.getLocalizedString(30293)
-    }
-
-    def __init__(self):
-        self.__urls = {
-            'hd' : {
-                'all'          : DataSource._buildFeedURL(self, [1, 2], 'hd'),
-                'episodes'     : DataSource._buildFeedURL(self, [1], 'hd'),
-                'interviews'     : DataSource._buildFeedURL(self, [2], 'hd')
-            },
-            'mobile' : {
-                'all'          : DataSource._buildFeedURL(self, [1, 2], 'mobile'),
-                'episodes'     : DataSource._buildFeedURL(self, [1], 'mobile'),
-                'interviews'     : DataSource._buildFeedURL(self, [2], 'mobile')
-            },
-            'audio' : {
-                'all'          : DataSource._buildFeedURL(self, [1, 2], 'audio'),
-                'episodes'     : DataSource._buildFeedURL(self, [1], 'audio'),
-                'interviews'     : DataSource._buildFeedURL(self, [2], 'audio')
-            }
-        }
-    
-    def getListItems(self):
-        audioOnly = ADDON.getSetting('content.audioOnly')
-
-        if 'true' == audioOnly:
-            quality = 'audio'
-        else:
-            if 0 == int(ADDON.getSetting('content.quality')):
-                quality = 'hd'
-            else:
-                quality = 'mobile'
-        
-        submodule = None
-        if 'submodule' in ADDON_ARGS and ADDON_ARGS['submodule'] in self.__urls[quality]:
-            submodule = ADDON_ARGS['submodule']
-        
-        if None == submodule:
-            return self.__getBaseList()
-
-        # noinspection PyTypeChecker
-        data      = resources.lib.parseRSSFeed(self.__urls[quality][submodule], True)
-        listItems = []
-                
-        for i in data:
-            iconimage = i["thumbUrl"]
-            date      = resources.lib.parseUTCDateString(i['pubdate']).strftime('%d.%m.%Y')
-            metaData  = {
-                'Title'     : i['title'],
-                'Genre'     : ADDON.getLocalizedString(30291),
-                'Date'      : date,
-                'Premiered' : date,
-                'Country'   : ADDON.getLocalizedString(30292),
-                'Plot'      : i['description'],
-                'Duration'  : int(i['duration']) / 60
-            }
-            streamInfo = {
-                'duration' : i['duration']
-            }
-            
-            listItems.append(
-                ListItem(
-                    self.id,
-                    i['title'],
-                    resources.lib.assemblePlayURL(i['url'], i['title'], iconimage, metaData, streamInfo),
-                    iconimage,
-                    ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                    metaData,
-                    streamInfo,
-                    False
-                )
-            )
-        
-        return listItems
-    
-    def getContentMode(self):
-        if 'submodule' in ADDON_ARGS:
-            return 'episodes'
-        
-        return 'tvshows'
-    
-    def __getBaseList(self):
-        return [
-            # All
-            ListItem(
-                self.id,
-                ADDON.getLocalizedString(30300),
-                resources.lib.assembleListURL(self.module, 'all'),
-                ADDON_BASE_PATH + '/resources/media/banner-' + self.module + '.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                {
-                    'Title': ADDON.getLocalizedString(30300),
-                    'Plot': ADDON.getLocalizedString(30370)
-                }
-            ),
-            # Episodes
-            ListItem(
-                self.id,
-                ADDON.getLocalizedString(30301),
-                resources.lib.assembleListURL(self.module, 'episodes'),
-                ADDON_BASE_PATH + '/resources/media/banner-' + self.module + '.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                {
-                    'Title': ADDON.getLocalizedString(30301),
-                    'Plot': ADDON.getLocalizedString(30371)
-                }
-            ),
-            # Interviews
-            ListItem(
-                self.id,
-                ADDON.getLocalizedString(30302),
-                resources.lib.assembleListURL(self.module, 'interviews'),
-                ADDON_BASE_PATH + '/resources/media/banner-' + self.module + '.png',
-                ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                {
-                    'Title': ADDON.getLocalizedString(30302),
-                    'Plot': ADDON.getLocalizedString(30354)
-                }
-            )
-        ]
-
-class MigropolisDataSource(DataSource):
-    id           = 10
-    module       = 'migropolis'
-    showMetaData = {
-        'Title'     : ADDON.getLocalizedString(30410),
-        'Director'  : 'Tom Knoll',
-        'Genre'     : ADDON.getLocalizedString(30411),
-        'Premiered' : '13.10.2015',
-        'Country'   : ADDON.getLocalizedString(30412),
-        'Plot'      : ADDON.getLocalizedString(30413)
-    }
-
-    def __init__(self):
-        self.__urls = {
-            'hd' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'hd')
-            },
-            'mobile' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'mobile')
-            },
-            'audio' : {
-                'all' : DataSource._buildFeedURL(self, [1], 'audio')
-            }
-        }
-
-    def getListItems(self):
-        audioOnly = ADDON.getSetting('content.audioOnly')
-
-        if 'true' == audioOnly:
-            quality = 'audio'
-        else:
-            if 0 == int(ADDON.getSetting('content.quality')):
-                quality = 'hd'
-            else:
-                quality = 'mobile'
-
-        # noinspection PyTypeChecker
-        data      = resources.lib.parseRSSFeed(self.__urls[quality]['all'], True)
-        listItems = []
-
-        for i in data:
-            iconimage = i['thumbUrl']
-            date      = resources.lib.parseUTCDateString(i['pubdate']).strftime('%d.%m.%Y')
-            metaData  = {
-                'Title'     : i['title'],
-                'Genre'     : ADDON.getLocalizedString(30411),
-                'Date'      : date,
-                'Premiered' : date,
-                'Country'   : ADDON.getLocalizedString(30412),
-                'Plot'      : i['description'],
-                'Duration'  : int(i['duration']) / 60
-            }
-            streamInfo = {
-                'duration' : i['duration']
-            }
-
-            listItems.append(
-                ListItem(
-                    self.id,
-                    i['title'],
-                    resources.lib.assemblePlayURL(i['url'], i['title'], iconimage, metaData, streamInfo),
-                    iconimage,
-                    ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
-                    metaData,
-                    streamInfo,
-                    False
-                )
+                listName,
+                listUrl,
+                iconImage,
+                self.fanartPath,
+                metaData,
+                isFolder=(mode == 'upcoming')
             )
 
-        return listItems
+    @staticmethod
+    def __getThumbnailURL(id):
+        return HTTP_BASE_URI + '/img/logo' + str(id) + '_feed.jpg'
 
-    def getContentMode(self):
-        return 'episodes'
 
-
-def createDataSource(module=''):
+def createDataSource(module=None):
     """
-    Create a data source object based on the magazine name.
-    If left empty, an overview data source will be generated.
+    Create a L{DataSource} object based on the given module name.
+    If no module name is given, an overview DataSource will be generated.
     
     @type module: str
-    @keyword module: the magazine name (fktv, ptv, ps, mgtv, paschtv, netzprediger, asynchron)
-    @return: DataSource instance
+    @keyword module: the magazine name, None or empty string for overview
+    @rtype: DataSource
+    @return: generated DataSource
     """
-    if 'live' == module:
-        return LiveDataSource()
-    elif 'fktv' == module:
-        return FKTVDataSource()
-    elif 'ptv' == module:
-        return PTVDataSource()
-    elif 'ps' == module:
-        return PSDataSource()
-    elif 'mgtv' == module:
-        return MGTVDataSource()
-    elif 'paschtv' == module:
-        return PaschTVDataSource()
-    elif 'netzprediger' == module:
-        return NetzpredigerDataSource()
-    elif 'asynchron' == module:
-        return AsynchronDataSource()
-    elif 'tonangeber' == module:
-        return TonangeberDataSource()
-    elif 'hoaxillatv' == module:
-        return HoaxillaTVDataSource()
-    elif 'sakura' == module:
-        return SakuraDataSource()
-    elif 'migropolis' == module:
-        return MigropolisDataSource()
+    if not module:
+        return OverviewDataSource()
+
+    bootstrapFile = ADDON_BOOTSTRAP_PATH + '/' + module + '.json'
+    if os.path.isfile(bootstrapFile):
+        return DataSource.bootstrap(bootstrapFile)
     else:
-        return DataSource()
+        ds = DataSourceRegistry.getDataSourceByName(module)
+        if ds is None:
+            raise RuntimeError("Invalid module {}".format(module))
+        return ds()
+

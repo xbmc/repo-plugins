@@ -1,0 +1,40 @@
+{
+    "id": 9,
+    "order": 70,
+    "metadata": {
+    "Title": 30290,
+    "Director": "Volker Robrahn, Maria Timonina",
+    "Genre": 30291,
+    "Country": 30202,
+    "Plot": 30293,
+    "Premiered": "2015-04-21"
+    },
+    "fanart": "fanart-sakura-20160221.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1, 2],
+            "metadata": {
+                "Title": 30300,
+                "Plot": 30370
+            }
+        },
+        {
+            "name": "episodes",
+            "ids": [1],
+            "metadata": {
+                "Title": 30301,
+                "Plot": 30371
+            }
+        },
+        {
+            "name": "interviews",
+            "ids": [2],
+            "metadata": {
+                "Title": 30302,
+                "Plot": 30354
+            }
+        }
+    ]
+}

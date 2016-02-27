@@ -1,0 +1,40 @@
+{
+    "id": 3,
+    "order": 20,
+    "metadata": {
+        "Title": 30220,
+        "Director": "Lars Golenia    ",
+        "Genre": 30221,
+        "Country": 30202,
+        "Plot": 30223,
+        "Premiered": "2013-08-01"
+    },
+    "fanart": "fanart-presseschlau-20160221.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1, 2],
+            "metadata": {
+                "Title": 30300,
+                "Plot": 30224
+            }
+        },
+        {
+            "name": "episodes",
+            "ids": [1],
+            "metadata": {
+                "Title": 30301,
+                "Plot": 30225
+            }
+        },
+        {
+            "name": "interviews",
+            "ids": [2],
+            "metadata": {
+                "Title": 30302,
+                "Plot": 30354
+            }
+        }
+    ]
+}

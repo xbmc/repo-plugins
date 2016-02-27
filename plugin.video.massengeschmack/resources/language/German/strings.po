@@ -1,0 +1,534 @@
+# Kodi Media Center language file
+# Addon Name: Massengeschmack
+# Addon id: plugin.video.massengeschmack
+# Addon Provider: Janek Bevendorff <janek at jbev dot net>
+
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2016-02-19 18:52+0000\n"
+"PO-Revision-Date: 2016-02-19 18:52+0000\n"
+"Last-Translator: Janek Bevendorff <janek at jbev dot net>\n"
+"Language-Team: German\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+
+# ----------------------------------------------------------------------------------
+# Settings
+# ----------------------------------------------------------------------------------
+
+msgctxt "#30001"
+msgid "Account"
+msgstr "Konto"
+
+msgctxt "#30002"
+msgid "Warning: Login credentials will not be saved in encrypted form!"
+msgstr "Warnung: Login-Daten werden nicht in verschlüsselter Form gespeichert!"
+
+msgctxt "#30003"
+msgid "Username"
+msgstr "Benutzername"
+
+msgctxt "#30004"
+msgid "Password"
+msgstr "Passwort"
+
+msgctxt "#30050"
+msgid "Contents"
+msgstr "Inhalte"
+
+msgctxt "#30051"
+msgid "Video Quality"
+msgstr "Video-Qualität"
+
+msgctxt "#30055"
+msgid "Best Quality (1080p)"
+msgstr "Beste Qualität (1080p)"
+
+msgctxt "#30052"
+msgid "HD Quality (720p)"
+msgstr "HD-Qualität (720p)"
+
+msgctxt "#30053"
+msgid "Podcast Version (SD)"
+msgstr "Podcast-Version (SD)"
+
+msgctxt "#30054"
+msgid "Audio only (may not be available for all contents)"
+msgstr "Nur Audio (möglicherweise nicht für alle Inhalte verfügbar)"
+
+msgctxt "#30060"
+msgid "Advanced Settings"
+msgstr "Erweiterte Einstellungen"
+
+msgctxt "#30061"
+msgid "Apply ViewMode fix for AeonNox 5"
+msgstr "ViewMode-Fix für AeonNox 5 anwenden"
+
+
+# ----------------------------------------------------------------------------------
+# Application start up
+# ----------------------------------------------------------------------------------
+
+msgctxt "#30100"
+msgid "No login data found!"
+msgstr "Keine Login-Daten gefunden!"
+
+msgctxt "#30101"
+msgid "You need to configure your login credentials\nbefore you can use this add-on."
+msgstr "Sie müssen zuerst Ihre Login-Daten angeben,\nbevor Sie dieses Add-on verwenden können."
+
+msgctxt "#30102"
+msgid "Login failed!"
+msgstr "Login fehlgeschlagen!"
+
+msgctxt "#30103"
+msgid "Could not log into your Massengeschmack account,\nplease check your login credentials!"
+msgstr "Login-in für Ihr Massengeschmack-Konto fehlgeschlagen,\nbitte prüfen Sie Ihre Benutzer-Daten!"
+
+msgctxt "#30104"
+msgid "Probing login data…"
+msgstr "Teste Login-Daten…"
+
+msgctxt "#30105"
+msgid "Your login credentials for these contents are invalid,\nmaybe you didn't subscribe to them?"
+msgstr "Ihre Login-Daten sind für diese Inhalte ungültig,\nhaben Sie diese vielleicht nicht abonniert?"
+
+msgctxt "#30106"
+msgid "Massengeschmack API unavailable (rate limit exceeded?)\nPlease try again later."
+msgstr "Massengeschmack-API zur Zeit nicht verfügbar (Rate-Limit überschritten?)\nBitte versuchen Sie es später erneut."
+
+
+# ----------------------------------------------------------------------------------
+# Magazine listings and descriptions
+# ----------------------------------------------------------------------------------
+
+msgctxt "#30140"
+msgid "OLDER >>"
+msgstr "ÄLTERE >>"
+
+msgctxt "#30150"
+msgid "Latest releases"
+msgstr "Neuste Veröffentlichungen"
+
+msgctxt "#30151"
+msgid "Main feed with latest releases from all magazines."
+msgstr "Haupt-Feed mit neusten Folgen aus allen Magazinen."
+
+msgctxt "#30198"
+msgid "[Missing Title] "
+msgstr "[Fehlender Titel]"
+
+msgctxt "#30199"
+msgid "[inactive]"
+msgstr "[inaktiv]"
+
+msgctxt "#30200"
+msgid "Fernsehkritik-TV"
+msgstr "Fernsehkritik-TV"
+
+msgctxt "#30201"
+msgid "Satirical, Critical, Investigative"
+msgstr "Satirisch, Kritisch, Investigativ"
+
+msgctxt "#30202"
+# workaround for 16 char min-length issue, see <http://trac.kodi.tv/ticket/16599>
+msgid "Germany         "
+msgstr "Deutschland     "
+
+msgctxt "#30203"
+msgid "Fernsehkritik-TV is the dinosaur on Massengeschmack – battling against bad television since 2007 and, amongst "
+"other things, awarded with the Grimme Online Award and the Deutsche Webvideopreis. With partly journalistic and "
+"investigative, partly satirical and derisive contributions, Holger grills the antiquated medium of television and "
+"demands: Schalten Sie mal wieder ab!"
+msgstr "Fernsehkritik-TV ist der Dino bei Massengeschmack – seit 2007 im stetigen Kampf gegen schlechtes Fernsehen, "
+"ausgezeichnet u.a. mit dem Grimme Online Award und dem Deutschen Webvideopreis. Mit teils journalistisch-investigativen "
+"und teils satirisch-spöttischen Beiträgen fühlt Holger Kreymeier dem rückständigen Medium Fernsehen auf den Zahn "
+"und fordert: Schalten Sie mal wieder ab!"
+
+msgctxt "#30204"
+msgid "FKTV Plus"
+msgstr "FKTV Plus"
+
+msgctxt "#30205"
+msgid "Subscriber-only FKTV extra"
+msgstr "FKTV-Extra nur für Abonnenten"
+
+msgctxt "#30210"
+msgid "Pantoffel-TV    "
+msgstr "Pantoffel-TV    "
+
+msgctxt "#30211"
+msgid "Movies, TV Shows, Culture, Home Entertainment"
+msgstr "Filme, Serien, Kultur, Home Entertainment"
+
+msgctxt "#30213"
+msgid "Pantoffel-TV is the home cinema magazine on Massengeschmack – latest releases on the DVD and BluRay market "
+"are discussed in a relaxed atmosphere. For this, Nils Beckmann, Mario Perez and Holger Kreymeyer often welcome "
+"illustrious guests who produce movie reviews themselves or work in the film business. Besides, there are "
+"categories such as “Original vs. Remake” in which old classics are compared to their remakes. And exclusively for "
+"subscribers there is always a competition with draws for discussed movies."
+msgstr "Pantoffel-TV ist das Heimkino-Magazin bei Massengeschmack – aktuelle Neuerscheinungen auf dem DVD- und "
+"BluRay-Markt werden in lockerer Runde besprochen. Nils Beckmann, Mario Perez und Holger Kreymeier begrüßen dazu "
+"auch regelmäßig illustre Gäste, die selbst Filmkritiken machen oder im Filmbusiness tätig sind. Außerdem gibt es "
+"Rubriken wie etwa „Original vs. Remake“, wo alte Klassiker mit ihren Neuverfilmungen verglichen werden. Und exklusiv "
+"für Abonnenten gibt es auch immer ein Gewinnspiel mit Verlosungen aktuell besprochener Filme."
+
+msgctxt "#30220"
+msgid "Pressesch(l)au  "
+msgstr "Pressesch(l)au  "
+
+msgctxt "#30221"
+msgid "Satirical, Critical, Comedy"
+msgstr "Satirisch, Kritisch, Comedy"
+
+msgctxt "#30223"
+msgid "Pressesch(l)au dives into the bizarre abyss of print media. Lars Golenia reviews articles, shows "
+"unbelievable magazines and scoffs at hoaxes and badly researched content. All that with cabaret comments. "
+"A satiric sweeping blow with comedy elements."
+msgstr "Pressesch(l)au taucht ein in die skurrilen Abgründe der Printmedien. Lars Golenia rezensiert Artikel, zeigt "
+"unglaubliche Zeitschriften und spottet über Falschmeldungen und schlecht recherchierte Inhalte. Alles garniert mit "
+"kabarettistischen Kommentaren. Ein satirischer Rundumschlag mit Comedy-Elementen."
+
+msgctxt "#30224"
+msgid "All Pressesch(l)au episodes and extras"
+msgstr "Alle Pressesch(l)au-Folgen und Extras"
+
+msgctxt "#30225"
+msgid "Regular Pressesch(l)au episodes"
+msgstr "Reguläre Pressesch(l)au-Folgen"
+
+msgctxt "#30230"
+msgid "Massengeschmack-TV"
+msgstr "Massengeschmack-TV"
+
+msgctxt "#30231"
+msgid "Comedy, Scripted Reality"
+msgstr "Comedy, Scripted Reality"
+
+msgctxt "#30233"
+msgid "In this category you find all extra content from Massengeschmack such as “Massengeschmack Direkt” or the "
+"satirical weekly show “Das Studio”."
+msgstr "In dieser Kategorie finden Sie alle Extra-Inhalte von Massengeschmack wie etwa „Massengeschmack Direkt“ "
+"oder die wöchentliche Satireshow „Das Studio“."
+
+msgctxt "#30240"
+msgid "Pasch-TV        "
+msgstr "Pasch-TV        "
+
+msgctxt "#30241"
+msgid "Board games, Tabletop, Review, Let's Play"
+msgstr "Brettspiele, Rezension, Let's Play"
+
+msgctxt "#30244"
+msgid "All Pasch-TV episodes and extras"
+msgstr "Alle Pasch-TV-Folgen und Extras"
+
+msgctxt "#30245"
+msgid "Regular Pasch-TV episodes"
+msgstr "Reguläre Pasch-TV-Folgen"
+
+msgctxt "#30246"
+msgid "Pasch-TV extras "
+msgstr "Pasch-TV-Extras "
+
+msgctxt "#30243"
+msgid "Pasch-TV is all about the world of tabletop games. For each episode one board game is played – "
+"and in fact consequently to the end, no matter how bad, boring or frustrating it is for the participants. "
+"But of course, sometimes we also come across very recommendable games."
+msgstr "In Pasch-TV geht es um die Welt der Brettspiele. Pro Ausgabe wird ein Brettspiel gespielt – und zwar konsequent "
+"zu Ende, egal wie schlecht, langweilig oder frustrierend es für die Teilnehmer ist. Und manchmal sind ja "
+"auch richtig empfehlenswerte Spiele dabei."
+
+msgctxt "#30250"
+msgid "Netzprediger    "
+msgstr "Netzprediger    "
+
+msgctxt "#30251"
+msgid "Internet, Media "
+msgstr "Internet, Medien"
+
+msgctxt "#30253"
+msgid "Our live show Netzprediger presents current and bizarre things from the Web – moderated by Adam Wolke. "
+"Always following the latest trends on the Web – and always mercilessly blunt."
+msgstr "Aktuelles und Skurriles aus dem Netz bietet unsere Live-Show Netzprediger – moderiert von Adam Wolke. Immer "
+"den aktuellen Trends im World Wide Web auf der Spur - und dabei gnadenlos direkt."
+
+msgctxt "#30254"
+msgid "All Netzprediger episodes and extras"
+msgstr "Alle Netzprediger-Folgen und Extras"
+
+msgctxt "#30255"
+msgid "Regular Netzprediger episodes"
+msgstr "Reguläre Netzprediger-Folgen"
+
+msgctxt "#30260"
+msgid "Asynchron       "
+msgstr "Asynchron       "
+
+msgctxt "#30261"
+msgid "Movies, TV Shows"
+msgstr "Filme, Serien   "
+
+msgctxt "#30263"
+msgid "Asynchron deals with dubbing of TV shows and movies. How good are the voice actors? How close to the original "
+"are the dialogs? Asynchron is available exclusively for subscribers. A magazine about this special topic – "
+"that exists on Massengeschmack only."
+msgstr "Asynchron beschäftigt sich mit der Synchronisation von Serien und Filmen. Wie gut sind die Sprecher? "
+"Wie nah am Original sind die Dialoge? Asynchron ist exklusiv im Abo verfügbar. Ein Magazin zu diesem speziellen "
+"Thema – das gibt es nur auf Massengeschmack."
+
+msgctxt "#30264"
+msgid "Tonangeber      "
+msgstr "Tonangeber      "
+
+msgctxt "#30265"
+msgid "Music           "
+msgstr "Music           "
+
+msgctxt "#30267"
+msgid "The music magazine on Massengeschmack – current CD reviews, illustrious live guests and the merciless view "
+"to the German album charts: Nils Beckmanmn, the passionate music junkie, lures us into all music genres from "
+"Rock to Pop, from Jazz to Rock."
+msgstr "Das Musikmagazin auf Massengeschmack – aktuelle CD-Kritiken, illustre Live-Gäste und der gnadenlose Blick auf "
+"die aktuellen deutschen Album-Charts: Nils Beckmann, Musik-Junkie aus Leidenschaft, entführt uns in alle "
+"Musikbereiche von Rap bis Pop, von Jazz bis Rock."
+
+msgctxt "#30270"
+msgid "LIVE Streams    "
+msgstr "LIVE-Sendungen  "
+
+msgctxt "#30272"
+msgid "Massengeschmack Live streams"
+msgstr "Massengeschmack Live-Streams"
+
+msgctxt "#30273"
+msgid "Live:"
+msgstr "Live:"
+
+msgctxt "#30274"
+msgid "The following shows are currently online"
+msgstr "Die folgenden Sendungen sind gerade online"
+
+msgctxt "#30275"
+msgid "Upcoming:"
+msgstr "Upcoming:"
+
+msgctxt "#30281"
+msgid "Recordings:"
+msgstr "Aufzeichnungen:"
+
+msgctxt "#30276"
+msgid "Shows coming live next"
+msgstr "Sendungen, die demnächst online kommen"
+
+msgctxt "#30277"
+msgid "Live stream: {0}\nAir date: {1}"
+msgstr "Live-Stream: {0}\nSendedatum: {1}"
+
+msgctxt "#30278"
+msgid "[ON AIR]"
+msgstr "[ON AIR]"
+
+msgctxt "#30294"
+msgid "[RECORDING]"
+msgstr "[AUFZEICHNUNG"
+
+msgctxt "#30279"
+msgid "Starts on {}"
+msgstr "Startet am {}"
+
+msgctxt "#30292"
+msgid "Recorded on {}"
+msgstr "Aufgezeichnet am {}"
+
+msgctxt "#30280"
+msgid "Livetalk"
+msgstr ""
+
+msgctxt "#30290"
+msgid "Sakura          "
+msgstr "Sakura          "
+
+msgctxt "#30291"
+msgid "Anime, Manga    "
+msgstr "Anime, Manga    "
+
+msgctxt "#30293"
+msgid "Sakura is the Anime and Manga magazine on Massengeschmack. New releases from the Japanese comic and "
+"cartoon world are presented every month. Besides, there are interviews, tips and attendances at fan events."
+msgstr "Sakura ist das Anime- und Mangamagazin bei Massengeschmack. Jeden Monat werden aktuelle Neuerscheinungen aus "
+"der japanischen Comic- und Zeichentrickwelt vorgestellt, dazu gibt es Interviews, Tipps und Besuche auf Fan-Events."
+
+msgctxt "#30300"
+msgid "All"
+msgstr "Alle"
+
+msgctxt "#30301"
+msgid "Episodes"
+msgstr "Folgen"
+
+msgctxt "#30302"
+msgid "Interviews"
+msgstr "Interviews"
+
+msgctxt "#30303"
+msgid "Extras"
+msgstr "Extras"
+
+msgctxt "#30350"
+msgid "All Fernsehkritik-TV episodes and extras, including Postecke, uncut interview and other specials."
+msgstr "Alle Fernsehkritik-TV-Folgen und Extras, einschließlich Postecke, ungeschnittenen Interviews "
+"und anderen Specials."
+
+msgctxt "#30351"
+msgid "Regular Fernsehkritik-TV episodes."
+msgstr "Reguläre Fernsehkritik-TV-Folgen."
+
+msgctxt "#30352"
+msgid "Postecke"
+msgstr "Postecke"
+
+msgctxt "#30353"
+msgid "Postecke is a video podcast in which Holger reads and answers letters from Fernsehkritik-TV viewers "
+"(now replaced by Massengeschmack Direkt)."
+msgstr "Die Postecke ist ein Video-Podcast, in dem Holger Zuschauerpost vorliest und beantwortet "
+"(nun ersetzt durch Massengeschmack Direkt)."
+
+msgctxt "#30354"
+msgid "Uncut interviews."
+msgstr "Ungeschnittene Interviews."
+
+msgctxt "#30355"
+msgid "Various extras  "
+msgstr "Verschiedene Extras"
+
+msgctxt "#30356"
+msgid "Sendeschluss"
+msgstr "Sendeschluss"
+
+msgctxt "#30357"
+msgid "Sendeschluss is a weekly retro TV magazine in which Holger deals with either very iconic or very bizarre "
+"TV shows from back in the day."
+msgstr "Sendeschluss ist ein wöchentliches Retro-TV-Magazin, in dem Holger sich besonders kultige oder "
+"besonders skurrile Fernsehshows von damals vornimmt."
+
+msgctxt "#30360"
+msgid "Das Studio"
+msgstr "Das Studio"
+
+msgctxt "#30361"
+msgid "All Massengeschmack-TV content, including “Massengeschmack Direkt“, “Das Studio” and any extras."
+msgstr "Alle Massengeschmack-TV-Inhalte, einschließlich „Massengeschmack Direkt“, „Das Studio“, sowie sämtliche Extras."
+
+msgctxt "#30362"
+msgid "“Das Studio” is the Massengeschmack reality show. It is guaranteed to be fake and scripted!"
+msgstr "„Das Studio“ ist die Massengeschmack-Reality-Show. Sie ist garantiert gefaked und gescripted!"
+
+msgctxt "#30363"
+msgid "Massengeschmack Internal"
+msgstr "Massengeschmack Intern"
+
+msgctxt "#30364"
+msgid "Massengeschmack announcements and uncategorized extras."
+msgstr "Massengeschmack-Ankündigungen und unkategorisierte Extras."
+
+msgctxt "#30365"
+msgid "Massengeschmack Direkt"
+msgstr "Massengeschmack Direkt"
+
+msgctxt "#30366"
+msgid "Fan mail and live talk for subscribers."
+msgstr "Postecke und Live-Talk für Abonnenten."
+
+msgctxt "#30367"
+msgid "-> Massengeschmack Direkt"
+msgstr "-> Massengeschmack Direkt"
+
+msgctxt "#30368"
+msgid "Postecke has been replaced by “Massengeschmack Direkt”. Click on this link to go to the new "
+"“Massengeschmack Direkt” category. You can also find it in the main category „Massengeschmack-TV“"
+msgstr "Postecke wurde durch „Massengeschmack Direkt“ ersetzt. Klicken Sie auf den Link, um zur neuen "
+"„Massengeschmack Direkt“-Kategorie zu gelangen. Sie können diese auch in der Hauptkategorie "
+"„Massengeschmack-TV“ finden."
+
+msgctxt "#30370"
+msgid "All Sakura epsisodes und interviews"
+msgstr "Alle Sakura-Folgen und Interviews"
+
+msgctxt "#30371"
+msgid "Regular Sakura episodes"
+msgstr "Reguläre Sakura-Folgen"
+
+msgctxt "#30375"
+msgid "MG Interaktiv"
+msgstr "MG Interaktiv"
+
+msgctxt "#30376"
+msgid "Massengeschmack Game Show"
+msgstr "Massengeschmack Spielshow"
+
+msgctxt "#30377"
+msgid "Spendennacht"
+msgstr "Spendennacht"
+
+msgctxt "#30378"
+msgid "Contribution night for the Supernanny lawsuit"
+msgstr "Spendennacht zum Supernanny-Prozess"
+
+msgctxt "#30400"
+msgid "Hoaxilla-TV     "
+msgstr "Hoaxilla-TV     "
+
+msgctxt "#30401"
+msgid "Information, Scepticism Conspiracy Theories, Urban Legends"
+msgstr "Information, Skeptizismus Verschwörungstheorien, Urbane Legenden"
+
+msgctxt "#30403"
+msgid "Is Elvis alive? Was there never a man on the moon? Are we all being poisoned by Chemtrails? The world is full "
+"of gloomy and partly bizarre conspiracy theories. Alexa and Alex clear things up, bring up facts and show what's "
+"really behind many a lunatic theory."
+msgstr "Elvis lebt? Es war nie ein Mensch auf dem Mond? Wir alle werden von Chemtrails vergiftet? Die Welt ist voller "
+"düsterer und teils skurriler Verschwörungstheorien. Alexa und Alex klären auf, bringen Fakten und zeigen, was "
+"tatsächlich dran ist an so manchen verrückten Theorien."
+
+msgctxt "#30410"
+msgid "Migropolis      "
+msgstr "Migropolis      "
+
+msgctxt "#30411"
+msgid "Information, Culture, Politics, Migration"
+msgstr "Information, Kultur, Politik, Migration"
+
+msgctxt "#30413"
+msgid "Migropolis portrays people who have migrated to Germany. What moves them? How do they like it here? And what "
+"kind of life did they live before?"
+msgstr "Migropolis porträtiert Menschen, die nach Deutschland eingewandert sind. Was bewegt sie? Wie gefällt es "
+"ihnen in Deutschland? Und was für ein Leben haben sie vorher gelebt?"
+
+
+# ----------------------------------------------------------------------------------
+# General runtime error messages
+# ----------------------------------------------------------------------------------
+
+msgctxt "#30901"
+msgid "Invalid internal command!\nThis is probably a bug. You should report it if it happens more often."
+msgstr "Ungültiges internes Kommando!\nDies ist möglicherweise ein Bug und Sie sollten ihn melden, wenn er "
+"häufiger auftritt."
+
+msgctxt "#30902"
+msgid "Request failed!"
+msgstr "Request fehlgeschlagen!"
+
+msgctxt "#30903"
+msgid "Could not complete request, maybe the network is down?"
+msgstr "Konnte Request nicht ausführen, ist vielleicht das Netzwerk unerreichbar?"
+
+msgctxt "#30904"
+msgid "Could not complete request, server replied:"
+msgstr "Konnte Request nicht ausführen, Server antwortete:"

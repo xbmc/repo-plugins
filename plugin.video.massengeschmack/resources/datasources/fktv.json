@@ -1,0 +1,73 @@
+{
+    "id": 1,
+    "order": 0,
+    "metadata": {
+        "Title": 30200,
+        "Director": "Holger Kreymeier",
+        "Genre": 30201,
+        "Country": 30202,
+        "Plot": 30203,
+        "Premiered": "2007-04-07"
+    },
+    "fanart": "fanart-fktv-20160220.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1, 2, 3, 4, 5, 6],
+            "metadata": {
+                "Title": 30300,
+                "Plot": 30350
+            }
+        },
+        {
+            "name": "episodes",
+            "ids": [1],
+            "metadata": {
+                "Title": 30301,
+                "Plot": 30351
+            }
+        },
+        {
+            "name": "sendeschluss",
+            "ids": [5],
+            "metadata": {
+                "Title": 30356,
+                "Plot": 30357
+            }
+        },
+        {
+            "name": "plus",
+            "ids": [6],
+            "metadata": {
+                "Title": 30204,
+                "Plot": 30205
+            }
+        },
+        {
+            "name": "interviews",
+            "ids": [3],
+            "metadata": {
+                "Title": 30302,
+                "Plot": 30354
+            }
+        },
+        {
+           "name":  "extras",
+            "ids": [4],
+            "metadata": {
+                "Title": 30303,
+                "Plot": 30355
+            }
+        },
+        {
+            "name": "postecke",
+            "ids": [2],
+            "metadata": {
+                "Title": 30352,
+                "Plot": 30353
+            },
+            "active": false
+        }
+    ]
+}

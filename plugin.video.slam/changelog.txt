@@ -1,3 +1,6 @@
+v1.0.2 (21.02.2016)
+- Remove incorrect youtube requirement
+
 v1.0.1 (07.01.2016)
 - Name changes and webcam stream added
 

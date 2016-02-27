@@ -107,7 +107,9 @@ def getSources():
                        try:
                           plot, name, img = re.compile('"description" content="(.+?)".+?"og:title" content="(.+?)".+?"og:image" content="(.+?)"',re.DOTALL).search(html).groups()
                        except:
-                          name, plot,img = re.compile('"og:title" content="(.+?)".+?="description" content="(.+?)".+?"og:image" content="(.+?)"',re.DOTALL).search(html).groups()
+                          try: 
+                             name, plot,img = re.compile('"og:title" content="(.+?)".+?="description" content="(.+?)".+?"og:image" content="(.+?)"',re.DOTALL).search(html).groups()
+                          except: continue
                    meta[url] = (name, plot, img)
               lmode = 'GC'
               name = h.unescape(name)
@@ -236,13 +238,11 @@ def getVideo(surl):
                 if not ('onsite_no_endcard' in surl): surl = surl.split('?',1)[0].rsplit('/',1)[1]
 
             try:
-             print "surl = "+str(surl)
              if not ('onsite_no_endcard' in surl): 
                 surl = 'http://link.theplatform.com/s/NnzsPC/media/'+surl+'?mbr=true&player=Onsite%20Player&policy=43674&manifest=m3u&format=SMIL&Tracking=true&Embedded=true&formats=MPEG4,FLV,MP3'
              else:
                 vid = surl.split('?',1)[0].rsplit('/',1)[1]
                 surl = 'https://link.theplatform.com/s/NnzsPC/media/'+vid+'?mbr=true&player=Onsite%20Player%20--%20No%20End%20Card&policy=43674&format=SMIL&manifest=m3u&Tracking=true&Embedded=true&formats=MPEG4,FLV,MP3'
-             print "final surl = "+str(surl)
              html = getRequest(surl, alert=False)
              if html == "":
                  surl = 'http://link.theplatform.com/s/NnzsPC/'+vid+'?mbr=true&player=Onsite%20Player%20--%20No%20End%20Card&policy=43674&format=SMIL&manifest=m3u&Tracking=true&Embedded=true&formats=MPEG4,FLV,MP3'

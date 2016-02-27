@@ -31,6 +31,16 @@ urlMainnight ="http://www.nicknight.de"
 opener = urllib2.build_opener()
 opener.addheaders = [('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:25.0) Gecko/20100101 Firefox/25.0')]
 
+def debug(content):
+    log(content, xbmc.LOGDEBUG)
+    
+def notice(content):
+    log(content, xbmc.LOGNOTICE)
+
+def log(msg, level=xbmc.LOGNOTICE):
+    addon = xbmcaddon.Addon()
+    addonID = addon.getAddonInfo('id')
+    xbmc.log('%s: %s' % (addonID, msg), level) 
 
 def index():
     if jrOnly:
@@ -64,8 +74,9 @@ def nightMain():
         xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideos(url):
+    debug("listVideos URL: "+ url)
     content = opener.open(url).read()
-    spl = content.split("class='playlist-item'")
+    spl = content.split("class='fullepisode playlist-item'")
     for i in range(1, len(spl), 1):
         entry = spl[i]
         match1 = re.compile("class='title'>(.+?)<", re.DOTALL).findall(entry)
@@ -78,6 +89,8 @@ def listVideos(url):
         thumb = match[0].replace("140x105","640x")
         match = re.compile("href='(.+?)'", re.DOTALL).findall(entry)
         url = match[0]
+        if not urlMain in url:
+          url=urlMain+url
         addLink(title, url, 'playVideo', thumb)
     xbmcplugin.endOfDirectory(pluginhandle)
     if forceViewMode:
@@ -98,18 +111,20 @@ def listShows(url):
 
 
 def listShowsJR(url):
+    debug ("listShowsJR :" +url)
     content = opener.open(url).read()
-    content = content[content.find("id='teaser_collection_featured_franchise_videos'"):]
-    spl = content.split("class='teaser_item'")
+    content = content[content.find("<ul class='carouFredSel'>"):]
+    spl = content.split("<li class='item'>")
     for i in range(1, len(spl), 1):
         entry = spl[i]
-        match = re.compile('title="(.+?)"', re.DOTALL).findall(entry)
+        match = re.compile('alt="([^-]+)-', re.DOTALL).findall(entry)
         title = match[0]
         title = cleanTitle(title)
         match = re.compile('src="(.+?)"', re.DOTALL).findall(entry)
         thumb = match[0]
         match = re.compile('href="(.+?)"', re.DOTALL).findall(entry)
         url = urlMainJR+match[0]
+        debug("listShowsJR Showurl: "+ url)
         addDir(title, url, 'listVideosJR', thumb)
     xbmcplugin.endOfDirectory(pluginhandle)
     if forceViewMode:
@@ -120,7 +135,6 @@ def listShowsNight(url):
     content = opener.open(url).read()
     content = content[content.find("<ul class='carouFredSel'>"):]
     content = content[:content.find("</ul>")]
-                          #<li class='item'><a href="/shows/47target=""><img alt="    " src="http://images.mtvnn.com/8271361a0d8075e0ea51d234c875d0a7/original" title="" /></a></li>
     match = re.compile('<li class=\'item\'><a href="([^"]+)" target=""><img alt="([^"]+)" src="([^"]+)" title="" /></a></li>', re.DOTALL).findall(content)
     for element in match:
         title = element[1]
@@ -132,11 +146,12 @@ def listShowsNight(url):
         xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideosJR(url):
+    debug("listVideosJR URL: "+ url)
     content = opener.open(url).read()
-    if "id='teaser_collection_videos_hub_newest'" in content:
-        content = content[content.find("id='teaser_collection_videos_hub_newest'"):]
-        content = content[:content.find("<!-- all shows -->")]
-    spl = content.split("class='teaser_item'")
+    if "<div class='video-container_playlist'>" in content:
+        content = content[content.find("<div class='video-container_playlist'>"):]
+        content = content[:content.find("</div>")]
+    spl = content.split("class='fullepisode playlist-item'")
     for i in range(1, len(spl), 1):
         entry = spl[i]
         match = re.compile('title="(.+?)"', re.DOTALL).findall(entry)
@@ -144,8 +159,8 @@ def listVideosJR(url):
         title = cleanTitle(title)
         match = re.compile('src="(.+?)"', re.DOTALL).findall(entry)
         thumb = match[0]
-        match = re.compile('href="(.+?)"', re.DOTALL).findall(entry)
-        url = urlMainJR+match[0]
+        match = re.compile("href='(.+?)'", re.DOTALL).findall(entry)
+        url = match[0]
         addLink(title, url, 'playVideo', thumb)
     xbmcplugin.endOfDirectory(pluginhandle)
     if forceViewMode:
@@ -153,11 +168,11 @@ def listVideosJR(url):
 
 def listVideosnight(url):
     xbmc.log("NICK :listVideosnight url "+ url)
-    content = opener.open(url).read()
-    if "id='teaser_collection_videos_hub_newest'" in content:
+    content = opener.open(url).read()        
+    if "<ol class='playlist'>" in content:
         content = content[content.find("<ol class='playlist'>"):]
-        content = content[:content.find("</ol>")]
-    spl = content.split("<li class='playlist-item' ")
+        content = content[:content.find("</ol>")]                         
+    spl = content.split("playlist-item' data-item-id")     
     for i in range(1, len(spl), 1):
         entry = spl[i]
         xbmc.log("NICK :listVideosnight "+ entry)
@@ -177,14 +192,11 @@ def listVideosnight(url):
 def playVideo(url):
     xbmc.log("NICK : "+ url) 
     content = opener.open(url).read()
-    #player.load("local_playlist", "7eed040e75aa1773b996", {}, null, "http://api.mtvnn.com/v2/mrss.xml?uri=mgid:sensei:video:mtvnn.com:local_playlist-7eed040e75aa1773b996")
-    #"local_playlist", "1db9d312eca9749f11ea", "http://api.mtvnn.com/v2/mrss.xml?uri=mgid:sensei:video:mtvnn.com:local_playlist-1db9d312eca9749f11ea", "http://images.mtvnn.com/dc6e9832b0b00ea7b924dd8724f921ae2/640x>", autoplay, true, siteSection, reportingSuite, null);
-  
-    match1 = re.compile('"local_playlist", "[^"]+", "([^"]+)"', re.DOTALL).findall(content)
+    # data-mrss="http://api.mtvnn.com/v2/mrss.xml?uri=mgid:sensei:video:mtvnn.com:local_playlist-42c03a89f16e99f0d018"
+    match1 = re.compile('data-mrss="([^"]+)"', re.DOTALL).findall(content)
     #mrss     : 'http://api.mtvnn.com/v2/mrss?uri=mgid:sensei:video:mtvnn.com:local_playlist-a3dff586129cb4d17dc5',
-    match2 = re.compile('mrss     : \'([^\']+)\'', re.DOTALL).findall(content)
-    match3 = re.compile('mrss     : "([^\"]+)"', re.DOTALL).findall(content)
-    xbmc.log("NICK : "+ match3[0])
+    match2 = re.compile('mrss[\s]*: \'([^\']+)\'', re.DOTALL).findall(content)                        
+    match3 = re.compile('mrss"[\s]*: "([^\"]+)"', re.DOTALL).findall(content)
     if urlMain in url:
         content = opener.open(match1[0]).read()
     elif urlMainJR in url :

@@ -8,3 +8,5 @@
 - Fixed Version from L0RE
 1.1.2
 - Added Nick Night
+1.1.5
+- Fix New Urls

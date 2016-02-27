@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.radio.dancefloor" name="Radio Dancefloor 90s" version="1.0.0" provider-name="bosso">
+    <requires>
+        <import addon="xbmc.python" version="2.20.0" />
+        <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+        <import addon="script.module.requests" version="2.9.1"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">http://www.radiodancefloor.net</summary>
+        <summary lang="it">http://www.radiodancefloor.it</summary>
+        <license>GNU General Public License, v2</license>
+        <description lang="en">The Sound of the 90s</description>
+        <platform>all</platform>
+    </extension>
+</addon>

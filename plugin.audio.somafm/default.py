@@ -26,13 +26,13 @@ __ms_per_day__ = 24 * 60 * 60 * 1000
 
 
 def log(msg):
-    xbmc.log(str(msg))
+    xbmc.log(str(msg), level=xbmc.LOGDEBUG)
 
 
 log(sys.argv)
 
-rootURL = "http://somafm.com/"
-tempdir = xbmc.translatePath("special://temp/somafm")
+rootURL = "https://somafm.com/"
+tempdir = xbmc.translatePath("special://home/userdata/addon_data/%s" % __addonid__)
 xbmcvfs.mkdirs(tempdir)
 
 LOCAL_CHANNELS_FILE_PATH = os.path.join(tempdir, CHANNELS_FILE_NAME)
@@ -92,6 +92,7 @@ def build_directory():
             channel.geticon(),
             channel.getthumbnail(),
             plugin_url + channel.getid())
+        li.setArt({"fanart" : xbmc.translatePath("special://home/addons/%s/fanart.jpg" % __addonid__)})
 
         li.setProperty("IsPlayable", "true")
 
@@ -111,10 +112,6 @@ def build_directory():
     xbmcplugin.addSortMethod(handle, SORT_METHOD_UNSORTED)
     xbmcplugin.addSortMethod(handle, SORT_METHOD_LISTENERS)
     xbmcplugin.addSortMethod(handle, SORT_METHOD_GENRE)
-
-
-def firewall_mode():
-    return xbmcplugin.getSetting(handle, "firewall") == 'true'
 
 
 def format_priority():
@@ -144,10 +141,10 @@ def play(item_to_play):
     xml_data = ET.fromstring(channel_data)
     try:
         channel_data = xml_data.find(".//channel[@id='" + item_to_play + "']")
-        channel = Channel(handle, tempdir, channel_data, quality_priority(), format_priority(), firewall_mode())
+        channel = Channel(handle, tempdir, channel_data, quality_priority(), format_priority())
     except:
         for element in xml_data.findall(".//channel"):
-            channel = Channel(handle, tempdir, element, quality_priority(), format_priority(), firewall_mode())
+            channel = Channel(handle, tempdir, element, quality_priority(), format_priority())
             if channel.getid() == item_to_play:
                 break
 
@@ -156,6 +153,7 @@ def play(item_to_play):
                          channel.geticon(),
                          channel.getthumbnail(),
                          channel.get_content_url())
+    list_item.setArt({"fanart" : xbmc.translatePath("special://home/addons/%s/fanart.jpg" % __addonid__)})
     xbmcplugin.setResolvedUrl(handle, True, list_item)
 
 

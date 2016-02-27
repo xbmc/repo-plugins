@@ -1,11 +1,15 @@
 SomaFM XBMC Plugin
 ==================
 
+![SomaFM icon](icon.png?raw=true)
+
+This description is a bit outdated. You can simply install this `addon` by browsing the official repositories from within Kodi.
+
 Installation
 ------------
 
 Installation currently requires you to know where your `addons` folder is located. Please refer to
-the [XBMC Wiki article on `userdata`](http://wiki.xbmc.org/?title=Userdata) to find it. To find the
+the [Kodi Wiki article on `userdata`](http://kodi.org/?title=Userdata) to find it. To find the
 `addons` folder, simply replace every instance of `userdata` in the article with `addons`.
 
 ### Git
@@ -16,7 +20,7 @@ the [XBMC Wiki article on `userdata`](http://wiki.xbmc.org/?title=Userdata) to f
 
 On Linux and possibly Mac OSX
 
-    cd ~/xbmc/addons/
+    cd ~/kodi/addons/
     git clone https://github.com/Oderik/xbmc-somafm.git plugin.audio.somafm
 
 ### ZIP
@@ -33,4 +37,8 @@ Again on Linux and possibly Mac OSX
     wget --content-disposition https://github.com/Oderik/xbmc-somafm/archive/master.zip
     unzip xbmc-somafm-master.zip 
     mv xbmc-somafm-master/ plugin.audio.somafm
-    mv plugin.audio.somafm/ ~/xbmc/addons/
+    mv plugin.audio.somafm/ ~/kodi/addons/
+
+![SomaFM fanart](fanart.jpg?raw=true)
+
+Lone DJ photo ©2000 Merin McDonell. Used with permission.

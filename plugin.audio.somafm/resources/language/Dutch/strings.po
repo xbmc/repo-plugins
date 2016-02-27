@@ -8,39 +8,39 @@ msgstr ""
 
 msgctxt "#32000"
 msgid "Stream"
-msgstr ""
+msgstr "Stream"
 
 msgctxt "#32001"
 msgid "Quality"
-msgstr ""
+msgstr "Kwaliteit"
 
 msgctxt "#32002"
 msgid "Format"
-msgstr ""
+msgstr "Formaat"
 
 msgctxt "#32004"
 msgid "SomaFM"
-msgstr ""
+msgstr "SomaFM"
 
 msgctxt "#32005"
 msgid "Cache cleared."
-msgstr ""
+msgstr "Cache geleegd."
 
 msgctxt "#32006"
 msgid "Cache"
-msgstr ""
+msgstr "Cache"
 
 msgctxt "#32007"
 msgid "Clear channel and playlist cache"
-msgstr ""
+msgstr "Leeg cache van kanaal en playlist"
 
 msgctxt "#32008"
 msgid "Refresh channel list from server"
-msgstr ""
+msgstr "Ververs kanaallijst van server"
 
 msgctxt "#32009"
 msgid "Please consider donating to keep SomaFM alive.\nVisit https://somafm.com"
-msgstr ""
+msgstr "Doneer a.u.b. om SomaFM in leven te houden.\nGa naar https://somafm.com"
 
 #enums
 
@@ -48,52 +48,52 @@ msgstr ""
 
 msgctxt "#32913"
 msgid "High, medium, low"
-msgstr ""
+msgstr "Hoog, middel, laag"
 
 msgctxt "#32912"
 msgid "Medium, high, low"
-msgstr ""
+msgstr "Middel, hoog, laag"
 
 msgctxt "#32911"
 msgid "Medium, low, high"
-msgstr ""
+msgstr "Middel, laag, hoog"
 
 msgctxt "#32910"
 msgid "Low, medium, high"
-msgstr ""
+msgstr "Laag, middel, hoog"
 
 #format
 
 msgctxt "#32920"
 msgid "MP3 only"
-msgstr ""
+msgstr "Alleen MP3"
 
 msgctxt "#32921"
 msgid "MP3, AAC"
-msgstr ""
+msgstr "MP3, AAC"
 
 msgctxt "#32922"
 msgid "AAC, MP3"
-msgstr ""
+msgstr "AAC, MP#"
 
 msgctxt "#32923"
 msgid "AAC only"
-msgstr ""
+msgstr "Alleen AAC"
 
 #ttl
 
 msgctxt "#32930"
 msgid "Always"
-msgstr ""
+msgstr "Altijd"
 
 msgctxt "#32931"
 msgid "Once in a day"
-msgstr ""
+msgstr "Eens per dag"
 
 msgctxt "#32932"
 msgid "Once in a week"
-msgstr ""
+msgstr "Eens per week"
 
 msgctxt "#32933"
 msgid "Once in a month"
-msgstr ""
+msgstr "Eens per maand"

@@ -124,7 +124,7 @@ class MLSLive:
         return None
 
 
-    def getGamesXML(self, month, year = '2015'):
+    def getGamesXML(self, month, year = '2016'):
 
         values = {'format' : 'xml',
                   'year' : year,

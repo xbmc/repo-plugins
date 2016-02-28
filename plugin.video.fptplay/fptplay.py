@@ -1,20 +1,24 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from xbmcswift2 import Plugin,xbmcaddon, xbmc
 import urlfetch
 from BeautifulSoup import BeautifulSoup
 import json
 import re
+import urllib
+
+plugin = Plugin()
 
 crawurl = 'https://fptplay.net/livetv'
 
 def getLinkById(id = None, quality = "3"):
 
-    if id.startswith('https://') :
-        #is event
-        id = getChannelIdFromEventLink(id)
-    if id == None :
-        return None
+    #if id.startswith('https://') :
+    #    #is event
+    #    id = getChannelIdFromEventLink(id)
+    #if id == None :
+    #    return None
 
 
     #get cookie & csrf
@@ -31,8 +35,8 @@ def getLinkById(id = None, quality = "3"):
     #csrf = m.group(1)
 
     cookie='laravel_session=' + result.cookies.get('laravel_session') + ";"
-    csrf = result.cookies.get('token')
-
+    csrf = urllib.unquote(result.cookies.get('token'))
+    #plugin.log.info(csrf)
     result = urlfetch.post(
         'https://fptplay.net/show/getlinklivetv',
         data={"id": id,
@@ -48,7 +52,7 @@ def getLinkById(id = None, quality = "3"):
                 'cookie':cookie
                 }
         )
-
+    plugin.log.info(result.content)
     if result.status_code != 200 :
         return None
 
@@ -77,7 +81,7 @@ def getLink(uri = None, quality = "3"):
     id = m.group(1)
     
     cookie='laravel_session=' + result.cookies.get('laravel_session') + ";"
-    csrf = result.cookies.get('token')
+    csrf = urllib.unquote(result.cookies.get('token'))
     
     result = urlfetch.post(
         'https://fptplay.net/show/getlinklivetv',
@@ -101,3 +105,4 @@ def getLink(uri = None, quality = "3"):
     info = json.loads(result.content)
 
     return info['stream']
+

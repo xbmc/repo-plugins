@@ -45,6 +45,7 @@ class OAuthHandler(object):
         )
         request.sign_request(self._sigmethod,self._consumer,self.access_token)
         headers.update(request.to_header())
+        return request
 
     def get_authorization_url(self):
         try:

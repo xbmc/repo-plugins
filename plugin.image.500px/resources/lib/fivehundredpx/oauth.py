@@ -211,9 +211,11 @@ class OAuthRequest(object):
 
     def to_postdata(self):
         """Serialize as post data for a POST request."""
-        return '&'.join(['%s=%s' % (escape(str(k)), escape(str(v))) \
+        # return '&'.join(['%s=%s' % (escape(str(k)), escape(str(v))) \
+        #     for k, v in self.parameters.iteritems()])
+        return '&'.join(['%s=%s' % (escape(str(k)), str(v).replace(" ", "+")) \
             for k, v in self.parameters.iteritems()])
-
+	
     def to_url(self):
         """Serialize as a URL for a GET request."""
         return '%s?%s' % (self.get_normalized_http_url(), self.to_postdata())
@@ -227,8 +229,17 @@ class OAuthRequest(object):
         except:
             pass
         # Escape key values before sorting.
-        key_values = [(escape(_utf8_str(k)), escape(_utf8_str(v))) \
-            for k,v in params.items()]
+        # key_values = [(escape(_utf8_str(k)), escape(_utf8_str(v))) \
+        #     for k,v in params.items()]
+        
+        # for this param: image_size[]=2&image_size[]=3
+        key_values = []
+        for k,v in params.items():
+            if type(v) in (list, tuple):
+                [ key_values.append( (escape(_utf8_str(k)), escape(_utf8_str(_v)) )) for _v in v ]
+            else:
+                key_values.append( (escape(_utf8_str(k)), escape(_utf8_str(v)) ) )
+    
         # Sort lexicographically, first after key, then after value.
         key_values.sort()
         # Combine key value pairs into a string.

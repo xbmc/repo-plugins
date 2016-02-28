@@ -13,4 +13,7 @@
   <string id="30010">Maximum number of pages</string>
   <string id="30011">Image size</string>
   <string id="30012">Thumbnail size</string>
+  <string id="30013">Use thumbnails on folders where available</string>
+  <string id="30020">User</string>
+  <string id="30021">Username</string>
 </strings>

@@ -3,6 +3,7 @@ import os
 import sys
 import urllib
 import urlparse
+import string
 
 import xbmcgui
 import xbmcplugin
@@ -24,22 +25,25 @@ def encode_child_url(mode, **kwargs):
     return "%s?&%s" % (addon_url, urllib.urlencode(params))
 
 
-def add_dir(name, url):
+def add_dir(name, url, thumb=None):
     def enhance_name(value):
-        return value.replace('_', ' ').title()
+        return string.capwords(value.replace('_', ' '))
 
     name = enhance_name(name)
     item = xbmcgui.ListItem(name)
     item.setInfo(type="Image", infoLabels={"Title": name})
+    if thumb:
+        item.setArt({'thumb': thumb})
     xbmcplugin.addDirectoryItem(addon_handle, url, item, True)
 
 
 def add_image(image):
-    item = xbmcgui.ListItem(image.name, thumbnailImage=image.thumb_url)
+    item = xbmcgui.ListItem(image.name)
+    item.setArt({'thumb': image.thumb_url})
     
     if not 'ctxsearch' in addon_params:
         label = "More from %s" % image.userfullname # i18n
-        url = encode_child_url('search', term=image.userid, ctxsearch=True)
+        url = encode_child_url('search', term=image.username, ctxsearch=True)
         action = "XBMC.Container.Update(%s)" % url
         item.addContextMenuItems([(label, action,)])
             

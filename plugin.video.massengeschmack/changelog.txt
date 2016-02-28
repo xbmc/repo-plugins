@@ -1,10 +1,13 @@
+2.0.1
+ - Fix feed parse error
+
 2.0.0
  - Major code refactoring
  - Move to new v1 API (you may experience rate limiting now)
  - Add main feed with latest releases from all magazines
  - Add support for FKTV Plus
  - Add pagination to allow watching older episodes
- - Add "Best" quality setting fur 1080p streams
+ - Add "Best" quality setting for 1080p streams
  - Update magazine artwork
  - Update magazine descriptions
  - List recordings of recent live streams

@@ -259,7 +259,7 @@ def parseRSSFeed(feed, fetch=False):
         # convert duration string to seconds
         duration = 0
         fc = node.getElementsByTagName('itunes:duration')[0].firstChild
-        if None != fc:
+        if fc is not None:
             h, m, s  = map(int, fc.nodeValue.split(':'))
             duration = timedelta(hours=h, minutes=m, seconds=s).seconds
 

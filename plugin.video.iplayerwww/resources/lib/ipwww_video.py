@@ -18,6 +18,8 @@ import xbmcgui
 import xbmcplugin
 import xbmcaddon
 
+import random
+
 ADDON = xbmcaddon.Addon(id='plugin.video.iplayerwww')
 
 
@@ -26,7 +28,6 @@ def ListLive():
     channel_list = [
         ('bbc_one_hd', 'bbc_one', 'BBC One'),
         ('bbc_two_hd', 'bbc_two', 'BBC Two'),
-        ('bbc_three_hd', 'bbc_three', 'BBC Three'),
         ('bbc_four_hd', 'bbc_four', 'BBC Four'),
         ('cbbc_hd', 'cbbc', 'CBBC'),
         ('cbeebies_hd', 'cbeebies', 'CBeebies'),
@@ -740,47 +741,33 @@ def Search(search_entered):
     ScrapeEpisodes(NEW_URL)
 
 
+
 def AddAvailableLiveStreamItem(name, channelname, iconimage):
     """Play a live stream based on settings for preferred live source and bitrate."""
-    stream_bitrates = [9999, 345, 501, 923, 1470, 1700, 2128, 2908, 3628, 5166]
-    if int(ADDON.getSetting('live_source')) == 1:
-        providers = [('ak', 'Akamai')]
-    elif int(ADDON.getSetting('live_source')) == 2:
-        providers = [('llnw', 'Limelight')]
-    else:
-        providers = [('ak', 'Akamai'), ('llnw', 'Limelight')]
+    #live_bitrate "Fastest|0.3 Mbps|0.6 Mbps|1.0 Mbps|1.5 Mbps|1.7 Mbps|2.1 Mbps|3.0 Mbs|3.6 Mbps|5.3 Mbps"
+    stream_bitrates = [9999, 300, 576, 974, 1500, 1732, 2100, 3000, 3600, 5308] 
+
     bitrate_selected = int(ADDON.getSetting('live_bitrate'))
-    for provider_url, provider_name in providers:
-        # First we query the available streams from this website
-        if channelname == 's4cpbs':
-            url = 'http://a.files.bbci.co.uk/media/live/manifests/hds/pc/%s/%s.f4m' % (
-                provider_url, channelname)
-        else:
-            url = 'http://a.files.bbci.co.uk/media/live/manifesto/audio_video/simulcast/hds/uk/pc/%s/%s.f4m' % (
-                provider_url, channelname)
-        html = OpenURL(url)
-        # Use regexp to get the different versions using various bitrates
-        match = re.compile('href="(.+?)".+?bitrate="(.+?)"').findall(html)
-        streams_available = []
-        for address, bitrate in match:
-            url = address.replace('f4m', 'm3u8')
-            streams_available.append((int(bitrate), url))
-        streams_available.sort(key=lambda x: x[0], reverse=True)
-        # print streams_available
-        # Play the prefered option
-        if bitrate_selected > 0:
-            match = [x for x in streams_available if (x[0] == stream_bitrates[bitrate_selected])]
-            if len(match) == 0:
-                # Fallback: Use any lower bitrate from any source.
-                match = [x for x in streams_available if (x[0] in range(1, stream_bitrates[bitrate_selected - 1] + 1))]
-                match.sort(key=lambda x: x[0], reverse=True)
-            # print "Selected bitrate is %s"%stream_bitrates[bitrate_selected]
-            # print match
-            # print "Playing %s from %s with bitrate %s"%(name, match[0][1], match [0][0])
-            PlayStream(name, match[0][1], iconimage, '', '')
-        # Play the fastest available stream of the preferred provider
-        else:
-            PlayStream(name, streams_available[0][1], iconimage, '', '')
+
+    retlist = []
+    NEW_URL = "http://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/iptv-all/vpid/%s/transferformat/hls?cb=%d" % (channelname, random.randrange(10000,99999)) 
+
+    html = OpenURL(NEW_URL)
+
+    # Parse the different streams and add them as new directory entries.
+    match = re.compile(
+        'media.+?bitrate="(.+?)".+?encoding="(.+?)".+?connection.+?href="(.+?)".+?supplier="(.+?)".+?transferFormat="(.+?)"'
+        ).findall(html)
+    for bitrate, encoding, url, supplier, transfer_format in match:
+        retlist.append((supplier, int(bitrate), url, encoding))
+
+    retlist = sorted(retlist, key=itemgetter(1,0), reverse=True)
+
+    for (supplier, bitrate, url, encoding) in retlist:
+
+        if bitrate <= stream_bitrates[bitrate_selected]: 
+            PlayStream(name, url, iconimage, '', '')
+
 
 
 def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
@@ -791,27 +778,22 @@ def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
         iconimage: only used for displaying the channel.
         channelname: determines which channel is queried.
     """
-    providers = [('ak', 'Akamai'), ('llnw', 'Limelight')]
-    streams = []
-    for provider_url, provider_name in providers:
-        # First we query the available streams from this website
-        if channelname == 's4cpbs':
-            url = 'http://a.files.bbci.co.uk/media/live/manifests/hds/pc/%s/%s.f4m' % (
-                provider_url, channelname)
-        else:
-            url = 'http://a.files.bbci.co.uk/media/live/manifesto/audio_video/simulcast/hds/uk/pc/%s/%s.f4m' % (
-                provider_url, channelname)
-        html = OpenURL(url)
-        # Use regexp to get the different versions using various bitrates
-        match = re.compile('href="(.+?)".+?bitrate="(.+?)"').findall(html)
-        # Add provider name to the stream list.
-        streams.extend([list(stream) + [provider_name] for stream in match])
+    retlist = []
+    NEW_URL = "http://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/iptv-all/vpid/%s/transferformat/hls?cb=%d" % (channelname, random.randrange(10000,99999)) 
 
-    # Add each stream to the Kodi selection menu.
-    for address, bitrate, provider_name in sorted(streams, key=lambda x: int(x[1]), reverse=True):
-        url = address.replace('f4m', 'm3u8')
-        # For easier selection use colors to indicate high and low bitrate streams
-        bitrate = int(bitrate)
+    html = OpenURL(NEW_URL)
+
+    # Parse the different streams and add them as new directory entries.
+    match = re.compile(
+        'media.+?bitrate="(.+?)".+?encoding="(.+?)".+?connection.+?href="(.+?)".+?supplier="(.+?)".+?transferFormat="(.+?)"'
+        ).findall(html)
+    for bitrate, encoding, url, supplier, transfer_format in match:
+        retlist.append((supplier, int(bitrate), url, encoding))
+
+    retlist = sorted(retlist, key=itemgetter(1,0), reverse=True)
+
+    for (supplier, bitrate, url, encoding) in retlist:
+
         if bitrate > 2100:
             color = 'green'
         elif bitrate > 1000:
@@ -820,10 +802,7 @@ def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
             color = 'orange'
         else:
             color = 'red'
-
-        title = name + ' - [I][COLOR %s]%0.1f Mbps[/COLOR] [COLOR white]%s[/COLOR][/I]' % (
-            color, bitrate / 1000, provider_name)
-        # Finally add them to the selection menu.
+        title = name + ' - [I][COLOR %s]%0.1f Mbps[/COLOR] [COLOR white]%s[/COLOR][/I]' % (color, bitrate/1000.0, supplier)
         AddMenuEntry(title, url, 201, iconimage, '', '')
 
 
@@ -1057,7 +1036,6 @@ def ScrapeAvailableStreams(url):
         url_tmp = "http://www.bbc.co.uk%s" % url_ad[0]
         html = OpenURL(url_tmp)
         stream_id_ad = re.compile('"vpid":"(.+?)"').findall(html)
-        # print stream_id_ad
     else:
         stream_id_ad = []
     return {'stream_id_st': stream_id_st, 'stream_id_sl': stream_id_sl, 'stream_id_ad': stream_id_ad}

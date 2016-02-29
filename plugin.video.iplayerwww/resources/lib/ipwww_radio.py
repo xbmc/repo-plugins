@@ -11,6 +11,8 @@ import xbmcgui
 import xbmcplugin
 import xbmcaddon
 
+import random
+
 ADDON = xbmcaddon.Addon(id='plugin.video.iplayerwww')
 
 
@@ -133,6 +135,7 @@ def GetPage(page_url, just_episodes=False):
         percent = int(100*page/total_pages)
         pDialog.update(percent,translation(30319))
 
+
     if int(ADDON.getSetting('radio_paginate_episodes')) == 0:
         if current_page < next_page:
             page_url = 'http://www.bbc.co.uk' + page_base_url + str(next_page)
@@ -154,55 +157,22 @@ def GetEpisodes(url):
 
 def AddAvailableLiveStreamItem(name, channelname, iconimage):
     """Play a live stream based on settings for preferred live source and bitrate."""
-    
-    stream_bitrates = [128] #TODO add more bitrates
-    if int(ADDON.getSetting('radio_source')) == 1:
-        providers = [('ak', 'Akamai')]
-    elif int(ADDON.getSetting('radio_source')) == 2:
-        providers = [('llnw', 'Limelight')]
-    else:
-        providers = [('ak', 'Akamai'), ('llnw', 'Limelight')]
-    bitrate_selected = 0 #TODO int(ADDON.getSetting('live_bitrate'))
-    for provider_url, provider_name in providers:
-        # First we query the available streams from this website
+    providers = [('ak', 'Akamai'), ('llnw', 'Limelight')]
+    location_qualities = {'uk' : ['sbr_vlow', 'sbr_low', 'sbr_med', 'sbr_high'], 'nonuk': ['sbr_vlow', 'sbr_low'] }
+    location_settings = ['uk', 'nonuk']
 
-        url = 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hds/uk/high/%s/%s.f4m' % (provider_url, channelname)
-        html = OpenURL(url)
-        # Use regexp to get the different versions using various bitrates
-        match = re.compile('href="(.+?)".+?bitrate="(.+?)"').findall(html)
-        streams_available = []
-        for address, bitrate in match:
-            url = address.replace('f4m', 'm3u8')
-            streams_available.append((int(bitrate), url))
-        streams_available.sort(key=lambda x: x[0], reverse=True)
-
-        # Play the prefered option
-        if bitrate_selected > 0:
-            match = [x for x in streams_available if (x[0] == stream_bitrates[bitrate_selected])]
-            if len(match) == 0:
-                # Fallback: Use any lower bitrate from any source.
-                match = [x for x in streams_available if (x[0] in range(1, stream_bitrates[bitrate_selected - 1] + 1))]
-                match.sort(key=lambda x: x[0], reverse=True)
-
-            PlayStream(name, match[0][1], iconimage, '', '')
-        # Play the fastest available stream of the preferred provider
-        else:
-            PlayStream(name, streams_available[0][1], iconimage, '', '')
-
-
-def AddAvailableLiveStreamItemHQ(name, channelname, iconimage):
-    """Play a live stream based on settings for preferred live source and bitrate."""
-
-    if int(ADDON.getSetting('radio_source')) == 1:
-        providers = [('ak', 'Akamai')]
-    elif int(ADDON.getSetting('radio_source')) == 2:
-        providers = [('llnw', 'Limelight')]
-    else:
-        providers = [('ak', 'Akamai'), ('llnw', 'Limelight')]
+    location = location_settings[int(ADDON.getSetting('radio_location'))]
 
     for provider_url, provider_name in providers:
-        url = 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/%s/%s.m3u8' % (provider_url, channelname)
-        PlayStream(name, url, iconimage, '', '')
+        qualities = location_qualities[location]
+        max_quality = int(ADDON.getSetting('radio_live_bitrate')) + 1
+        max_quality = min(len(qualities),max_quality)
+        qualities = qualities[0:max_quality]
+        qualities.reverse()
+        for quality in qualities: 
+            url = 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/%s/%s/%s/%s.m3u8' % (location, quality, provider_url, channelname)
+
+            PlayStream(name, url, iconimage, '', '')
 
 
 def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
@@ -214,37 +184,22 @@ def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
         channelname: determines which channel is queried.
     """
     providers = [('ak', 'Akamai'), ('llnw', 'Limelight')]
-    streams = []
-    for provider_url, provider_name in providers:
-        # First we query the available streams from this website
-        #TODO add high bitrate streams
-        url = 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hds/uk/high/%s/%s.f4m' % (provider_url, channelname)
-        html = OpenURL(url)
+    location_qualities = {'uk' : ['sbr_vlow', 'sbr_low', 'sbr_med', 'sbr_high'], 'nonuk': ['sbr_vlow', 'sbr_low'] }
+    location_names = {'uk': 'UK', 'nonuk': 'International'}
+    quality_colours = {'sbr_vlow': 'red', 'sbr_low': 'orange', 'sbr_med': 'yellow', 'sbr_high': 'green'}
+    quality_bitrates = {'sbr_vlow': '48', 'sbr_low': '96', 'sbr_med': '128', 'sbr_high': '320'}
 
-        # Use regexp to get the different versions using various bitrates
-        match = re.compile('href="(.+?)".+?bitrate="(.+?)"').findall(html)
-        # Add provider name to the stream list.
-        streams.extend([list(stream) + [provider_name] for stream in match])
+    for location in location_qualities.keys():
+        qualities = location_qualities[location]
+        qualities.reverse()
+        for quality in qualities:
+            for provider_url, provider_name in providers:
+                url = 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/%s/%s/%s/%s.m3u8' % (location, quality, provider_url, channelname)
 
-    # Add each stream to the Kodi selection menu.
-    for address, bitrate, provider_name in sorted(streams, key=lambda x: int(x[1]), reverse=True):
-        url = address.replace('f4m', 'm3u8')
-        # For easier selection use colors to indicate high and low bitrate streams
-        bitrate = int(bitrate)
-        if bitrate > 192:
-            color = 'green'
-        elif bitrate > 128:
-            color = 'yellow'
-        elif bitrate > 64:
-            color = 'orange'
-        else:
-            color = 'red'
+                title = name + ' - [I][COLOR %s]%s Kbps[/COLOR] [COLOR white]%s[/COLOR] [COLOR grey]%s[/COLOR][/I]' % (
+                    quality_colours[quality], quality_bitrates[quality] , location_names[location], provider_name)
 
-        title = name + ' - [I][COLOR %s]%d Kbps[/COLOR] [COLOR white]%s[/COLOR][/I]' % (
-            color, bitrate , provider_name)
-        # Finally add them to the selection menu.
-        #TODO find radio icons
-        AddMenuEntry(title, url, 201, '', '', '')
+                AddMenuEntry(title, url, 201, '', '', '')
 
 
 def PlayStream(name, url, iconimage, description, subtitles_url):
@@ -269,19 +224,18 @@ def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
 
     streams = ParseStreams(stream_id)
 
-    suppliers = ['', 'Akamai', 'Limelight', 'Level3']
     for supplier, bitrate, url, encoding in sorted(streams[0], key=itemgetter(1), reverse=True):
         bitrate = int(bitrate)
         if bitrate >= 320:
             color = 'green'
-        elif bitrate >= 192:
-            color = 'blue'
         elif bitrate >= 128:
             color = 'yellow'
-        else:
+        elif bitrate >= 96:
             color = 'orange'
+        else:
+            color = 'red'
         title = name + ' - [I][COLOR %s]%d Kbps %s[/COLOR] [COLOR lightgray]%s[/COLOR][/I]' % (
-            color, bitrate, encoding, suppliers[supplier])
+            color, bitrate, encoding, supplier)
         AddMenuEntry(title, url, 201, iconimage, description, '', '')
 
 
@@ -308,6 +262,7 @@ def AddAvailableStreamItem(name, url, iconimage, description):
         match = streams
         match.sort(key=lambda x: x[1], reverse=True)
     PlayStream(name, match[0][2], iconimage, description, '')
+
 
 
 def ListAtoZ():
@@ -362,7 +317,8 @@ def ListLive():
         ('bbc_1xtra', 'BBC Radio 1Xtra'),
         ('bbc_radio_two', 'BBC Radio 2'),
         ('bbc_radio_three', 'BBC Radio 3'),
-        ('bbc_radio_fourfm', 'BBC Radio 4'),
+        ('bbc_radio_fourfm', 'BBC Radio 4 FM'),
+        ('bbc_radio_fourlw', 'BBC Radio 4 LW'),
         ('bbc_radio_four_extra', 'BBC Radio 4 Extra'),
         ('bbc_radio_five_live', 'BBC Radio 5 live'),
         ('bbc_radio_five_live_sports_extra', 'BBC Radio 5 live sports extra'),
@@ -420,25 +376,6 @@ def ListLive():
             AddMenuEntry(name, id, 213, '', '', '')
         else:
             AddMenuEntry(name, id, 133, '', '', '')
-
-
-def ListLiveHQ():
-    channel_list = [
-        ('bbc_radio_one', 'BBC Radio 1'),
-        ('bbc_1xtra', 'BBC Radio 1Xtra'),
-        ('bbc_radio_two', 'BBC Radio 2'),
-        ('bbc_radio_three', 'BBC Radio 3'),
-        ('bbc_radio_fourfm', 'BBC Radio 4 FM'),
-        ('bbc_radio_fourlw', 'BBC Radio 4 LW'),
-        ('bbc_radio_four_extra', 'BBC Radio 4 Extra'),
-        ('bbc_radio_five_live', 'BBC Radio 5 live'),
-        ('bbc_radio_five_live_sports_extra', 'BBC Radio 5 live sports extra'),
-        ('bbc_6music', 'BBC Radio 6 Music'),
-        ('bbc_asian_network', 'BBC Asian Network'),
-    ]
-    for id, name in channel_list:
-        AddMenuEntry(name, id, 214, '', '', '')
-
 
 
 def ListFavourites(logged_in):
@@ -568,7 +505,6 @@ def Search(search_entered):
 
 def GetAvailableStreams(name, url, iconimage, description):
     """Calls AddAvailableStreamsDirectory based on user settings"""
-
     stream_ids = ScrapeAvailableStreams(url)
     if stream_ids:
         AddAvailableStreamsDirectory(name, stream_ids, iconimage, description)
@@ -578,26 +514,16 @@ def ParseStreams(stream_id):
     retlist = []
     # print "Parsing streams for PID: %s"%stream_id[0]
     # Open the page with the actual strem information and display the various available streams.
-    NEW_URL = "http://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/iptv-all/vpid/%s" % stream_id[0]
+    NEW_URL = "http://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/apple-ipad-hls/vpid/%s/proto/http?cb=%d" % (stream_id[0], random.randrange(10000,99999)) #NOTE magic from get_iplayer
+
     html = OpenURL(NEW_URL)
+
     # Parse the different streams and add them as new directory entries.
     match = re.compile(
         'media.+?bitrate="(.+?)".+?encoding="(.+?)".+?connection.+?href="(.+?)".+?supplier="(.+?)".+?transferFormat="(.+?)"'
         ).findall(html)
-    for bitrate, encoding, m3u8_url, supplier, transfer_format in match:
-        tmp_sup = 0
-        tmp_br = 0
-        if transfer_format == 'hls':
-            if supplier == 'akamai_hls_open':
-                tmp_sup = 1
-            elif supplier == 'limelight_hls_open': #NOTE: just guessing?
-                tmp_sup = 2
-
-            m3u8_html = OpenURL(m3u8_url)
-            m3u8_match = re.compile('BANDWIDTH=(.+?),.*?CODECS="(.+?)"\n(.+?)\n').findall(m3u8_html)
-            for bandwidth, codecs, stream in m3u8_match:
-                url = stream
-                retlist.append((tmp_sup, bitrate, url, encoding))
+    for bitrate, encoding, url, supplier, transfer_format in match:
+        retlist.append((supplier, bitrate, url, encoding))
 
     return retlist, match
 

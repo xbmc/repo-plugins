@@ -1,3 +1,12 @@
+v2.1.1
+Fixed live HD TV.
+
+v2.1.0
+Added support for international radio.
+Set default Live TV to 1.7Mbps.
+Live Radio max bitrate setting.
+Removed BBC Three live.
+
 v2.0.1
 Reverted sorting of programmes back to previous default.
 Fixed various warnings in the logfile.

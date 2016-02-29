@@ -1,7 +1,7 @@
 This plugin was inspired by the BBC iPlayer plugin of Mikey1234.
 http://www.xunitytalk.com/
 
-Thanks to the get_iplayer project. Their code helped to sort out live streams.
+Thanks to the get_iplayer project. Their code helped to sort out live streams more than once.
 https://github.com/get-iplayer/get_iplayer
 
 Channel Icons by b_balthasar

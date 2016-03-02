@@ -351,7 +351,6 @@ def CreateBaseDirectory(content_type):
         AddMenuEntry(translation(30307), 'url', 108, '', '', '')
         AddMenuEntry(translation(30325), 'url', 119, '', '', '')
     elif content_type == "audio":
-        AddMenuEntry(translation(30322), 'url', 118, '', '', '')
         AddMenuEntry(translation(30321), 'url', 113, '', '', '')
         AddMenuEntry(translation(30302), 'url', 112, '', '', '')
         AddMenuEntry(translation(30303), 'url', 114, '', '', '')
@@ -380,8 +379,6 @@ def CreateBaseDirectory(content_type):
                             'url', 107, '', '', '')
         AddMenuEntry((translation(30323)+translation(30307)),
                             'url', 108, '', '', '')
-        AddMenuEntry((translation(30324)+translation(30322)),
-                            'url', 118, '', '', '')
         AddMenuEntry((translation(30324)+translation(30321)),
                             'url', 113, '', '', '')
         AddMenuEntry((translation(30324)+translation(30302)),

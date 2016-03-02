@@ -1,3 +1,6 @@
+[B]4.5.6[/B]
+- API-endringer
+
 [B]4.5.5[/B]
 - Fikset avspilling etter sideendringer
 

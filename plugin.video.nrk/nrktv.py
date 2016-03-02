@@ -21,8 +21,8 @@ import datetime
 from requests import Session
 
 session = Session()
-session.headers['User-Agent'] = 'xbmc.org'
-session.headers['app-version-android'] = '51'
+session.headers['User-Agent'] = 'kodi.tv'
+session.headers['app-version-android'] = '999'
 
 
 class ImageMixin(object):
@@ -73,8 +73,8 @@ class Channel(ImageMixin, Base):
         return Channel(
             title=r['title'],
             id=r['channelId'],
-            media_url=r['mediaUrl'],
-            image_id=r['imageId'],
+            media_url=r.get('mediaUrl'),
+            image_id=r.get('imageId'),
         )
 
 
@@ -178,7 +178,8 @@ def program(program_id):
 
 
 def channels():
-    return [Channel.from_response(item) for item in _get('/channels')]
+    chs = [Channel.from_response(item) for item in _get('/channels')]
+    return [ch for ch in chs if ch.media_url]
 
 
 def categories():

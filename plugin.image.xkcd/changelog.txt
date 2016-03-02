@@ -1,2 +1,6 @@
+v1.0.1
+- addon.xml fix
+- automatically fetch latest comics
+
 v1.0.0
 - Initial Release.

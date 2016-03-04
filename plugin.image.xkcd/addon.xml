@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.image.xkcd" name="XKCD" version="1.0.1" provider-name="phil65">
+<addon id="plugin.image.xkcd" name="XKCD" version="1.0.2" provider-name="phil65">
 	<requires>
 		<import addon="xbmc.python" version="2.19.0"/>
 		<import addon="script.module.simplejson" version="2.0.10"/>
 		<import addon="script.module.routing" version="0.1.0"/>
 	</requires>
-	<extension point="xbmc.python.library" library="default.py" />
 	<extension point="xbmc.python.pluginsource" library="plugin.py">
 		<provides>image</provides>
 	</extension>
+	<extension point="xbmc.python.library" library="default.py" />
 	<extension point="xbmc.addon.metadata">
 		<language></language>
 		<summary lang="en">XKCD Webcomic</summary>

@@ -1,3 +1,6 @@
+v1.0.2
+- fix primary extension point type
+
 v1.0.1
 - addon.xml fix
 - automatically fetch latest comics

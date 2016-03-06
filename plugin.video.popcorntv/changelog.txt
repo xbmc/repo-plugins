@@ -1,3 +1,7 @@
+[B]1.0.11[/B]
+- Used setResolvedUrl for playback.
+- Fixed spaces in thumb URL.
+
 [B]1.0.10[/B]
 - Updated page parsing because of upstream HTML changes.
 - Don't sort items in root folder.

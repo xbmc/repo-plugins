@@ -59,6 +59,7 @@ def show_video_files(url):
     
     for video in page["videoList"]:
         liStyle=xbmcgui.ListItem(video["title"], thumbnailImage=video["thumb"])
+        liStyle.setProperty('IsPlayable', 'true')
         addLinkItem({"mode": "video", "url": video["url"]}, liStyle)
         
     if page["firstPageUrl"] is not None:
@@ -82,9 +83,12 @@ def show_video_files(url):
 def play_video(url):
     popcorntv = PopcornTV()
     metadata = popcorntv.getVideoMetadata(url)
-    video_url = popcorntv.getVideoURL(metadata["smilUrl"])
-    liStyle=xbmcgui.ListItem(metadata["title"], thumbnailImage=metadata["thumb"])
-    xbmc.Player().play(video_url, liStyle)
+    thumb = metadata["thumb"]
+    # Fix thumb URL
+    thumb = thumb.replace(" ", "%20")
+    video = popcorntv.getVideoURL(metadata["smilUrl"])
+    liStyle=xbmcgui.ListItem(metadata["title"], thumbnailImage=thumb, path=video)
+    xbmcplugin.setResolvedUrl(handle=handle, succeeded=True, listitem=liStyle)
     
 # parameter values
 params = parameters_string_to_dict(sys.argv[2])

@@ -5,7 +5,7 @@
     name="Tagesschau"
     provider-name="Jörn Schumacher, Henning Saul">
   <requires>
-    <import addon="xbmc.python" version="2.14.0"
+    <import addon="xbmc.python" version="2.14.0"></import>
   </requires>
   
   <extension point="xbmc.python.pluginsource" library="tagesschau.py">

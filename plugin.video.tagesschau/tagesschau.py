@@ -140,7 +140,9 @@ if params.get(ACTION_PARAM) == 'play_video':
     if(subtitles_file != None):
         # the following only works in Gotham, see
         # http://forum.xbmc.org/showthread.php?tid=154805&page=7&highlight=subtitle
-        listitem.setProperty('upnp:subtitle:1', subtitles_file)             
+        listitem.setProperty('upnp:subtitle:1', subtitles_file)
+        listitem.setSubtitles((subtitles_file,))
+
     xbmcplugin.setResolvedUrl(handle=int(sys.argv[1]), succeeded=(url != None), listitem=listitem)
 
 elif params.get(ACTION_PARAM) == 'list_feed':

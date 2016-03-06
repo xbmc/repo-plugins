@@ -1,3 +1,6 @@
+version 2.2.1
+ * Fixed issue where subtitles did not work (thanks to Mikel)
+
 version 2.2.0
  * Added regular Tagesschau to "Latest Broadcasts"
 

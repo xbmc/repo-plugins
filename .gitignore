@@ -9,6 +9,7 @@
 .pydevproject
 .travis.yml
 *.pyo
+*.pyc
 *.tar
 *.xcf
 *.zip

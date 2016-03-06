@@ -286,7 +286,9 @@ def SIGN_STREAM(stream_url, stream_name, stream_icon):
         #If cookies are expired or auth token is not present run login or provider has changed
         if expired_cookies or not os.path.isfile(auth_token_file) or (last_provider != MSO_ID):
             #saml_request, relay_state, saml_submit_url = adobe.GET_IDP()            
-            var_1, var_2, var_3 = provider.GET_IDP()            
+            var_1, var_2, var_3 = provider.GET_IDP()  
+            #Decode HTML
+            var_3 = HTMLParser.HTMLParser().unescape(var_3)
             saml_response, relay_state = provider.LOGIN(var_1, var_2, var_3)
             #Error logging in. Abort! Abort!
             print "SAML RESPONSE:"

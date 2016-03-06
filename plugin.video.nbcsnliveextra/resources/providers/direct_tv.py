@@ -42,12 +42,16 @@ class DIRECT_TV():
 
         relay_state = FIND(idp_source,'<input type="hidden" name="RelayState" value="','"')
 
+
         saml_submit_url = FIND(idp_source,'action="','"')
+
+        #saml_submit_url = "https://idp.dtvce.com/dtv-idp-authn/authn/v2"
         
         
         print saml_submit_url
         print relay_state
         print saml_request
+        #sys.exit()
         
         return saml_request, relay_state, saml_submit_url
 

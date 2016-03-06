@@ -1,3 +1,17 @@
+v2016.2.3.2
+- Fixed new bugs released in prev version
+
+v2016.2.3
+- Add setting to automatically play best stream available
+- Bug fix
+
+v2016.1.28
+- Fix for Dish login
+- Minor bug fixes
+
+v2016.1.22
+- Fix for Direct TV login
+
 v2015.12.29
 - Fix video streams dropping
 

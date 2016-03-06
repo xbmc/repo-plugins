@@ -117,7 +117,7 @@ def SET_STREAM_QUALITY(url):
     stream_url = {}
     stream_title = []
 
-    #Open master file a get cookie    
+    #Open master file a get cookie(s)
     cj = cookielib.LWPCookieJar()
     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
     opener.addheaders = [ ("Accept", "*/*"),
@@ -127,7 +127,8 @@ def SET_STREAM_QUALITY(url):
 
     resp = opener.open(url)
     master = resp.read()
-    resp.close()   
+    resp.close()  
+
     cookies = '' 
     for cookie in cj:                    
         if cookies != '':
@@ -135,6 +136,7 @@ def SET_STREAM_QUALITY(url):
         cookies = cookies + cookie.name + "=" + cookie.value
     
     print master
+    print cookies
     line = re.compile("(.+?)\n").findall(master)  
     
     xplayback = ''.join([random.choice('0123456789ABCDEF') for x in range(32)])
@@ -143,15 +145,20 @@ def SET_STREAM_QUALITY(url):
     for temp_url in line:
         if '#EXT' not in temp_url:
             temp_url = temp_url.rstrip()
+            start = 0
             if 'http' not in temp_url:
                 if 'master' in url:
                     start = url.find('master')
                 elif 'manifest' in url:
-                    start = url.find('manifest')
-                
-                replace_url_chunk = url[start:url.find('?')]                
-                temp_url = url.replace(replace_url_chunk,temp_url)
-                
+                    start = url.find('manifest')                
+            
+            if url.find('?') != -1:
+                replace_url_chunk = url[start:url.find('?')]    
+            else:
+                replace_url_chunk = url[start:]    
+            
+            
+            temp_url = url.replace(replace_url_chunk,temp_url)              
             temp_url = temp_url.rstrip() + "|User-Agent=" + UA_NBCSN
             
             #if cookies != '':                
@@ -174,11 +181,16 @@ def SET_STREAM_QUALITY(url):
     
     
     if len(stream_title) > 0:
-        ret = 0      
-        stream_title.sort(key=natural_sort_key)            
-        dialog = xbmcgui.Dialog() 
-        ret = dialog.select('Choose Stream Quality', stream_title)
-        
+        ret =-1      
+        stream_title.sort(key=natural_sort_key)  
+        print "PLAY BEST SETTING"
+        print PLAY_BEST
+        if str(PLAY_BEST) == 'true':
+            ret = len(stream_title)-1            
+        else:
+            dialog = xbmcgui.Dialog() 
+            ret = dialog.select('Choose Stream Quality', stream_title)
+            print ret
         if ret >=0:
             url = stream_url.get(stream_title[ret])           
         else:
@@ -208,7 +220,7 @@ def natural_sort_key(s):
 
 def SAVE_COOKIE(cj):
     # Cookielib patch for Year 2038 problem
-    # Possibly wrap this in if to check if box is indeed 32bit
+    # Possibly wrap this in if to check if device is using a 32bit OS
     for cookie in cj:
         # Jan, 1 2038
         if cookie.expires >= 2145916800:
@@ -324,6 +336,7 @@ PROVIDER = str(settings.getSetting(id="provider"))
 CLEAR = str(settings.getSetting(id="clear_data"))
 FREE_ONLY = str(settings.getSetting(id="free_only"))
 PLAY_MAIN = str(settings.getSetting(id="play_main"))
+PLAY_BEST = str(settings.getSetting(id="play_best"))
 
 if CLEAR == 'true':
    CLEAR_SAVED_DATA()
@@ -342,7 +355,7 @@ elif PROVIDER == 'Cox':
 elif PROVIDER == 'Dish Network':
     MSO_ID = 'Dish' 
 elif PROVIDER == 'Direct TV':
-    MSO_ID = 'DTV'
+    MSO_ID = 'DTV'    
 elif PROVIDER == 'Optimum':
     MSO_ID = 'Cablevision'
 elif PROVIDER == 'Time Warner Cable':
@@ -352,7 +365,8 @@ elif PROVIDER == 'Verizon':
 elif PROVIDER == 'Bright House':
     MSO_ID = 'Brighthouse'
 
-IDP_URL = 'https://sp.auth.adobe.com//adobe-services/1.0/authenticate/saml?domain_name=adobe.com&noflash=true&mso_id='+MSO_ID+'&requestor_id=nbcsports&no_iframe=true&client_type=iOS&client_version=1.9&redirect_url=http://adobepass.ios.app/'
+
+IDP_URL = 'https://sp.auth.adobe.com/adobe-services/1.0/authenticate/saml?domain_name=adobe.com&noflash=true&mso_id='+MSO_ID+'&requestor_id=nbcsports&no_iframe=true&client_type=iOS&client_version=1.9.2&redirect_url=http://adobepass.ios.app/'           
 ORIGIN = ''
 REFERER = ''
 

@@ -8,4 +8,4 @@ This plugin was built to watch** live and archive video of NBC Sports events
 
 Thread: http://forum.kodi.tv/showthread.php?tid=207159
 
-** Some streams require a valid Cable / Satellite provider account to view
+** Most streams require a valid Cable / Satellite provider account to view

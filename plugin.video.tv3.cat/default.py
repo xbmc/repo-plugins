@@ -20,33 +20,8 @@ import json
 import math
 import time
 from BeautifulSoup import BeautifulSoup
-
-
-#Localized strings
-t_avuidestaquem=30001
-t_noperdis=30002
-t_mesvist=30003
-t_programes=30004
-t_series=30005
-t_informatius=30006
-t_entreteniment=30007
-t_esports=30008
-t_documentals=30009
-t_divulgacio=30010
-t_cultura=30011
-t_musica=30012
-t_tots=30013
-t_emissio=30014
-t_seguent=30015
-t_anterior=30016
-t_directe=30017
-t_tv3=30018
-t_canal324=30019
-t_c33super3=30020
-t_esport3=30021
-t_cercar=30022
-t_coleccions=30023
-
+from resources.lib.tv3_strings import TV3Strings
+from resources.lib.utils import buildUrl, getHtml, getDataVideo, toSeconds
 
 url_base = 'http://www.ccma.cat'
 url_alacarta = 'http://www.ccma.cat/tv3/alacarta/'
@@ -63,191 +38,355 @@ url_directe_c33s3 = 'http://ccma-tva-es-abertis-live.hls.adaptive.level3.net/es/
 url_directe_esport3 = 'http://ccma-tva-es-abertis-live.hls.adaptive.level3.net/es/ngrp:es3_web/playlist.m3u8'
 url_arafem ='http://dinamics.ccma.cat/wsarafem/arafem/tv'
 
+
 addon = xbmcaddon.Addon()
 addon_path = xbmc.translatePath(addon.getAddonInfo('path'))
+strs = TV3Strings(addon)
 
 def index():
     xbmc.log( "--------------index------------------")
     
     
-    addDir(addon.getLocalizedString(t_avuidestaquem).encode("utf-8"),"","destaquem","")
-    addDir(addon.getLocalizedString(t_noperdis).encode("utf-8"),"","noperdis","")
-    addDir(addon.getLocalizedString(t_mesvist).encode("utf-8"),"","mesvist","")
-    addDir(addon.getLocalizedString(t_coleccions).encode("utf-8"),"","coleccions","")
-    addDir(addon.getLocalizedString(t_programes).encode("utf-8"),"","programes","")
-    addDir(addon.getLocalizedString(t_directe).encode("utf-8"),"","directe","")
-    addDir(addon.getLocalizedString(t_cercar).encode("utf-8"),"","cercar","")
+    addDir(strs.get('avuidestaquem'),"","destaquem","")
+    addDir(strs.get('noperdis'), url_coleccions,"noperdis","")
+    addDir(strs.get('mesvist'), url_mesvist,"mesvist","")
+    addDir(strs.get('coleccions'),"","coleccions","")
+    addDir(strs.get('programes'),"","programes","")
+    addDir(strs.get('directe'),"","directe","")
+    addDir(strs.get('cercar'),"","cercar","")
     
     xbmcplugin.endOfDirectory(addon_handle)
+    
     
 def listDestaquem():
     xbmc.log("--------------listDestaquem----------")
    
-    html_destacats = getUrl(url_alacarta)
-   
-    soup = BeautifulSoup(html_destacats)
-    dest = None
-    try:
-        destacat = soup.find("section", {"class" : "subitem destacat"}).a["href"]
-        code = destacat[-8:-1]
-  
-        html_data = getUrl(url_datavideos + code + '&profile=pc')
-
-        html_data = html_data.decode("ISO-8859-1")
-        data =json.loads(html_data)
-        
-        if len(data) > 0:
-            addLink(data)
-       
-    except AttributeError as e:
-        xbmc.log("Exception AtributeError Item destacat: " + str(e))
-    except KeyError as e:
-        xbmc.log("Exception KeyError Item destacat: " + str(e))
-    except Exception as e:
-        xbmc.log("Exception Item destacat: " + str(e))
-        
-        
-   
-    #destacatsPetits = soup.findAll("div", { "class" : "subitem R-petit"})
+    html_destacats = getHtml(url_alacarta)
     
-    try:
-        destacatsPetits = soup.findAll("section", { "class" : "subitem R-petit"})
-        
-        for c in destacatsPetits:
-            a = c.a["href"]
-            code = a[-8:-1]
-        
-            xbmc.log( "--------CODIS VIDEOS------------")
-            xbmc.log( "codi: " + code)
-            xbmc.log( "url: " + url_datavideos + code + '&profile=pc')
+    if html_destacats:
+   
+        soup = BeautifulSoup(html_destacats)
+        dest = None
+        try:
+            destacat = soup.find("section", {"class" : "subitem destacat"}).a["href"]
+            code = destacat[-8:-1]
+      
+            html_data = getHtml(url_datavideos + code + '&profile=pc')
     
-            html_data = getUrl(url_datavideos + code + '&profile=pc')
-        
             html_data = html_data.decode("ISO-8859-1")
             data =json.loads(html_data)
-        
+            
             if len(data) > 0:
-                addLink(data)
-    except AttributeError as e:
-        xbmc.log("Exception AtributeError Altres items: " + str(e))
-    except KeyError as e:
-        xbmc.log("Exception KeyError Altres items: " + str(e))
-    except Exception as e:
-        xbmc.log("Exception Item destacat: " + str(e))
+                addVideo2(data)
+           
+        except AttributeError as e:
+            xbmc.log("Exception AtributeError Item destacat: " + str(e))
+        except KeyError as e:
+            xbmc.log("Exception KeyError Item destacat: " + str(e))
+        except Exception as e:
+            xbmc.log("Exception Item destacat: " + str(e))
+            
+            
+       
+        #destacatsPetits = soup.findAll("div", { "class" : "subitem R-petit"})
+        
+        try:
+            destacatsPetits = soup.findAll("section", { "class" : "subitem R-petit"})
+            
+            for c in destacatsPetits:
+                a = c.a["href"]
+                code = a[-8:-1]
+            
+                xbmc.log( "--------CODIS VIDEOS------------")
+                xbmc.log( "codi: " + code)
+                xbmc.log( "url: " + url_datavideos + code + '&profile=pc')
+        
+                html_data = getHtml(url_datavideos + code + '&profile=pc')
+            
+                html_data = html_data.decode("ISO-8859-1")
+                data =json.loads(html_data)
+            
+                if len(data) > 0:
+                    addVideo2(data)
+        except AttributeError as e:
+            xbmc.log("Exception AtributeError Altres items: " + str(e))
+        except KeyError as e:
+            xbmc.log("Exception KeyError Altres items: " + str(e))
+        except Exception as e:
+            xbmc.log("Exception Item destacat: " + str(e))
+        
+        
+        
+       
+        xbmcplugin.endOfDirectory(addon_handle)
     
+def listDestaquem2():
+    xbmc.log("--------------listDestaquem----------")
     
-    
+    titol = ""
+    url = ""
+    durada = ""
+    programa = ""
+    img = ""
+    data = ""
+    resum = ""
    
-    xbmcplugin.endOfDirectory(addon_handle)
+    html_destacats = getHtml(url_alacarta)
     
+    if html_destacats:
     
+        soup = BeautifulSoup(html_destacats.decode('utf-8','ignore'))
+        
+        try:
+            destacat = soup.find("section", {"class" : "subitem destacat"})
+            titol = destacat.a["title"]
+            url = destacat.a["href"]
+            durada = toSeconds(destacat.find("time", {"class" : "duration"}).string)
+            programa = destacat.find("div", {"class" : "R-titular"}).small.string
+            img = destacat.img["src"]
+            
+            
+            addVideo(titol, url, img, durada, programa, data, resum)
+            
+          
+           
+        except AttributeError as e:
+            xbmc.log("Exception AtributeError Item destacat: " + str(e))
+        except KeyError as e:
+            xbmc.log("Exception KeyError Item destacat: " + str(e))
+        except Exception as e:
+            xbmc.log("Exception Item destacat: " + str(e))
+            
+            
+        titol = ""
+        url = ""
+        durada = ""
+        programa = ""
+        img = ""
+        data = ""
+        resum = ""
+       
+        
+        try:
+            destacatsPetits = soup.findAll("section", { "class" : "subitem R-petit"})
+            xbmc.log("Destacats petits trobats: " + str(len(destacatsPetits)))
+            
+        except AttributeError as e:
+            xbmc.log("Exception AtributeError Altres items: " + str(e))
+            
+        except KeyError as e:
+            xbmc.log("Exception KeyError Altres items: " + str(e))
+            
+        except Exception as e:
+            xbmc.log("Exception Item destacat: " + str(e))
+           
+            
+            
+        for d in destacatsPetits:
+            
+            try:     
+            
+                titol = d.a["title"]
+                url = d.a["href"]
+                durada = toSeconds(d.find("time", {"class" : "duration"}).string)
+                programa = d.find("div", {"class" : "R-titular"}).small.string
+                img = d.img["src"]
+                
+               
+                addVideo(titol, url, img, durada, programa, data, resum)
+            
+            except AttributeError as e:
+                xbmc.log("Exception AtributeError Altres items: " + str(e))
+               
+            except KeyError as e:
+                xbmc.log("Exception KeyError Altres items: " + str(e))
+                
+            except Exception as e:
+                xbmc.log("Exception Item destacat: " + str(e))
+                
+           
+        
+       
+        xbmcplugin.endOfDirectory(addon_handle)
+        
+        
+
 def listNoPerdis():
     xbmc.log("--------------listNoPerdis----------")
     
-    link = getUrl(url_coleccions)
+    link = getHtml(url_coleccions)
+    
+    if link:
  
-    soup = BeautifulSoup(link)
-    
-    try: 
-        links = soup.findAll("li", {"class" : "sensePunt R-elementLlistat  C-llistatVideo"})
-    
-        for i in links:
-            a = i.a["href"]
-            code = a[-8:-1]
-            
-            link = getUrl(url_datavideos + code + '&profile=pc')
-            
-            link = link.decode("ISO-8859-1")
-            data =json.loads(link)
-            
-            if len(data) > 0:
-                addLink(data)
-    except AttributeError as e:
-        xbmc.log("Exception AtributeError NoPerdis: " + str(e))
-    except KeyError as e:
-        xbmc.log("Exception KeyError NoPerdis: " + str(e))
-    except Exception as e:
-        xbmc.log("Exception Item destacat: " + str(e))
-    
-   
-    xbmcplugin.endOfDirectory(addon_handle) 
+        soup = BeautifulSoup(link)
         
+        try: 
+            links = soup.findAll("li", {"class" : "sensePunt R-elementLlistat  C-llistatVideo"})
+        
+            for i in links:
+                a = i.a["href"]
+                code = a[-8:-1]
+                
+                link = getHtml(url_datavideos + code + '&profile=pc')
+                
+                link = link.decode("ISO-8859-1")
+                data =json.loads(link)
+                
+                if len(data) > 0:
+                    addVideo2(data)
+        except AttributeError as e:
+            xbmc.log("Exception AtributeError NoPerdis: " + str(e))
+        except KeyError as e:
+            xbmc.log("Exception KeyError NoPerdis: " + str(e))
+        except Exception as e:
+            xbmc.log("Exception Item destacat: " + str(e))
+        
+       
+        xbmcplugin.endOfDirectory(addon_handle)   
+    
+    
+    
+def listNoPerdis2(url):
+    xbmc.log("--------------listNoPerdis----------")
+    
+    
+    titol = ""
+    urlVideo = ""
+    durada = ""
+    programa = ""
+    img = ""
+    data = ""
+    resum = ""
+    
+    link = getHtml(url)
+    
+    if link:
+ 
+        soup = BeautifulSoup(link.decode('utf-8','ignore'))
+        
+        try: 
+            links = soup.findAll("li", {"class" : "sensePunt R-elementLlistat  C-llistatVideo"})
+            
+            
+        except AttributeError as e:
+            xbmc.log("Exception AtributeError NoPerdis: " + str(e))
+        except KeyError as e:
+            xbmc.log("Exception KeyError NoPerdis: " + str(e))
+        except Exception as e:
+            xbmc.log("Exception Item destacat: " + str(e))  
+            
+              
+        for d in links:
+            
+            try:
+            
+                titol = d.find("div", {"class" : "titol"}).a.string.strip()
+                urlVideo = d.a["href"]
+                durada = toSeconds(d.find("time", {"class" : "duration"}).string)
+                programa = d.find("div", {"class" : "infoNoticia"}).small.string
+                img = d.img["src"]
+                
+                xbmc.log("DestPe - titol: " + titol.encode("utf-8"))
+                xbmc.log("Url: " + url)
+                xbmc.log("Img: " + img  )
+                
+                addVideo(titol, urlVideo, img, durada, programa, data, resum)
+                
+            except AttributeError as e:
+                xbmc.log("Exception AtributeError NoPerdis: " + str(e))
+            except KeyError as e:
+                xbmc.log("Exception KeyError NoPerdis: " + str(e))
+            except Exception as e:
+                xbmc.log("Exception Item destacat: " + str(e))
+            
+       
+        
+        xbmcplugin.endOfDirectory(addon_handle) 
+        
+
+
 def listMesVist():
     xbmc.log("--------------listMesVist----------")
    
-    link = getUrl(url_mesvist)
-  
-    soup = BeautifulSoup(link)
+    link = getHtml(url_mesvist)
     
-    try: 
-        links = soup.findAll("li", {"class" : "sensePunt R-elementLlistat  C-llistatVideo"})
-        
-        for i in links:
-            a = i.a["href"]
-            code = a[-8:-1]
-            
-            link = getUrl(url_datavideos + code + '&profile=pc')
-            
-            link = link.decode("ISO-8859-1")
-            data =json.loads(link)
-            
-            if len(data) > 0:
-                addLink(data)
-    except AttributeError as e:
-        xbmc.log("Exception AtributeError listMesVist: " + str(e))
-    except KeyError as e:
-        xbmc.log("Exception KeyError listMesVist: " + str(e))
-    except Exception as e:
-        xbmc.log("Exception listMesVist: " + str(e))
-        
+    if link:
   
-    xbmcplugin.endOfDirectory(addon_handle)
+        soup = BeautifulSoup(link)
+        
+        try: 
+            links = soup.findAll("li", {"class" : "sensePunt R-elementLlistat  C-llistatVideo"})
+            
+            for i in links:
+                a = i.a["href"]
+                code = a[-8:-1]
+                
+                link = getHtml(url_datavideos + code + '&profile=pc')
+                
+                link = link.decode("ISO-8859-1")
+                data =json.loads(link)
+                
+                if len(data) > 0:
+                    addVideo2(data)
+        except AttributeError as e:
+            xbmc.log("Exception AtributeError listMesVist: " + str(e))
+        except KeyError as e:
+            xbmc.log("Exception KeyError listMesVist: " + str(e))
+        except Exception as e:
+            xbmc.log("Exception listMesVist: " + str(e))
+            
+      
+        xbmcplugin.endOfDirectory(addon_handle)
+    
+    
     
 def listColeccions():
     xbmc.log("--------------listColeccions----------")
     
-    link = getUrl(url_coleccions)
+    link = getHtml(url_coleccions)
     
-    soup = BeautifulSoup(link)
+    if link:
     
-    try: 
+        soup = BeautifulSoup(link)
         
-        colecc = soup.findAll("a", {"class" : "media-object"})
-        xbmc.log("Col·leccions - elements trobats: " + str(len(colecc)))
-        
-        for a in colecc:
-           
-            url = a["href"]
-            url = url_base + url
-            t = a["title"]
-            titol = t.encode("utf-8")
-            xbmc.log("Col·leccions -t: " + titol)
-            img = a.img["src"]
-          
-            addDir(titol ,url,'listvideos', img)
+        try: 
             
-    except AttributeError as e:
-        xbmc.log("Exception AtributeError listColeccions: " + str(e))
-    except KeyError as e:
-        xbmc.log("Exception KeyError listColeccions: " + str(e))
-    except Exception as e:
-        xbmc.log("Exception listColeccions: " + str(e))
-    
+            colecc = soup.findAll("a", {"class" : "media-object"})
+            xbmc.log("Col·leccions - elements trobats: " + str(len(colecc)))
+            
+            for a in colecc:
+               
+                url = a["href"]
+                url = url_base + url
+                t = a["title"]
+                titol = t.encode("utf-8")
+                xbmc.log("Col·leccions -t: " + titol)
+                img = a.img["src"]
+              
+                addDir(titol ,url,'listvideos', img)
+                
+        except AttributeError as e:
+            xbmc.log("Exception AtributeError listColeccions: " + str(e))
+        except KeyError as e:
+            xbmc.log("Exception KeyError listColeccions: " + str(e))
+        except Exception as e:
+            xbmc.log("Exception listColeccions: " + str(e))
         
-    xbmcplugin.endOfDirectory(addon_handle) 
+            
+        xbmcplugin.endOfDirectory(addon_handle) 
     
 def dirSections():
    
-    addDir(addon.getLocalizedString(t_series).encode("utf-8"),"/series/","sections","")
-    addDir(addon.getLocalizedString(t_informatius).encode("utf-8"),"/informatius/","sections","")
-    addDir(addon.getLocalizedString(t_entreteniment).encode("utf-8"),"/entreteniment/","sections","")
-    addDir(addon.getLocalizedString(t_esports).encode("utf-8"),"/esports/","sections","")
-    addDir(addon.getLocalizedString(t_documentals).encode("utf-8"),"/documentals/","sections","")
-    addDir(addon.getLocalizedString(t_divulgacio).encode("utf-8"),"/divulgacio/","sections","")
-    addDir(addon.getLocalizedString(t_cultura).encode("utf-8"),"/cultura/","sections","")
-    addDir(addon.getLocalizedString(t_musica).encode("utf-8"),"/musica/","sections","")
-    addDir(addon.getLocalizedString(t_emissio).encode("utf-8"),"","dirAZemisio","")
-    addDir(addon.getLocalizedString(t_tots).encode("utf-8"),"","dirAZtots","")
+    addDir(strs.get('series'),"/series/","sections","")
+    addDir(strs.get('informatius'),"/informatius/","sections","")
+    addDir(strs.get('entreteniment'),"/entreteniment/","sections","")
+    addDir(strs.get('esports'),"/esports/","sections","")
+    addDir(strs.get('documentals'),"/documentals/","sections","")
+    addDir(strs.get('divulgacio'),"/divulgacio/","sections","")
+    addDir(strs.get('cultura'),"/cultura/","sections","")
+    addDir(strs.get('musica'),"/musica/","sections","")
+    addDir(strs.get('emissio'),"","dirAZemisio","")
+    addDir(strs.get('tots'),"","dirAZtots","")
     
    
     xbmcplugin.endOfDirectory(addon_handle)
@@ -255,51 +394,52 @@ def dirSections():
 def listSections(url):
     xbmc.log("--------------listSections----------")
     
-    link = getUrl(url_programes_emisio + url)
+    link = getHtml(url_programes_emisio + url)
     
-    soup = BeautifulSoup(link)
-    
-    try: 
-        #Grups programes de cada lletra
-        links = soup.findAll("ul", {"class" : "R-abcProgrames"})
+    if link: 
+        soup = BeautifulSoup(link)
         
-        for i in links:
-            xbmc.log("------------------Grup programes per lletra------------------")
-            ls = i.findAll("li")
+        try: 
+            #Grups programes de cada lletra
+            links = soup.findAll("ul", {"class" : "R-abcProgrames"})
             
-            for li in ls:
-                url = li.a["href"]
-                t = str(li.a.string)
-                titol = re.sub('^[\n\r\s]+', '', t)
+            for i in links:
+                xbmc.log("------------------Grup programes per lletra------------------")
+                ls = i.findAll("li")
                 
-             
-                #test url
-                urlProg = url_base + url
-                if urlProg == urlApm or urlProg == urlZonaZaping:
-                        url_final = urlProg + 'clips/'
-                        
-                else:
-                    match = re.compile('(http://www.ccma.cat/tv3/alacarta/.+?/fitxa-programa/)(\d+/)').findall(urlProg)
-                    if len(match) <> 0:
-                        url1 = match[0][0]
-                        urlcode = match[0][1]
-                        url_final = url1 + 'ultims-programes/' + urlcode
+                for li in ls:
+                    url = li.a["href"]
+                    t = str(li.a.string)
+                    titol = re.sub('^[\n\r\s]+', '', t)
+                    
+                 
+                    #test url
+                    urlProg = url_base + url
+                    if urlProg == urlApm or urlProg == urlZonaZaping:
+                            url_final = urlProg + 'clips/'
+                            
                     else:
-                        url_final = urlProg + 'ultims-programes/'
-                        
-                xbmc.log ("url final: " + str(url_final))
-            
-                addDir(titol ,url_final,'listvideos', "")
-            
-    except AttributeError as e:
-        xbmc.log("Exception AtributeError listSections: " + str(e))
-    except KeyError as e:
-        xbmc.log("Exception KeyError listSections: " + str(e))
-    except Exception as e:
-        xbmc.log("Exception listSections: " + str(e))
-    
+                        match = re.compile('(http://www.ccma.cat/tv3/alacarta/.+?/fitxa-programa/)(\d+/)').findall(urlProg)
+                        if len(match) <> 0:
+                            url1 = match[0][0]
+                            urlcode = match[0][1]
+                            url_final = url1 + 'ultims-programes/' + urlcode
+                        else:
+                            url_final = urlProg + 'ultims-programes/'
+                            
+                    xbmc.log ("url final: " + str(url_final))
+                
+                    addDir(titol ,url_final,'listvideos', "")
+                
+        except AttributeError as e:
+            xbmc.log("Exception AtributeError listSections: " + str(e))
+        except KeyError as e:
+            xbmc.log("Exception KeyError listSections: " + str(e))
+        except Exception as e:
+            xbmc.log("Exception listSections: " + str(e))
         
-    xbmcplugin.endOfDirectory(addon_handle) 
+            
+        xbmcplugin.endOfDirectory(addon_handle) 
     
 def listDirecte():
     xbmc.log("--------------listDirecte----------")
@@ -312,11 +452,11 @@ def listDirecte():
     #info channels
     data = getDataVideo(url_arafem)
     
-    if data <> None:
+    if data:
         c = data.get('canal',None)
         
         
-        if c <> None:
+        if c:
         
             arafemtv3 = ''
             arafem33 = ''
@@ -351,33 +491,33 @@ def listDirecte():
         infolabels33 = {}
         infolabelsesp3 = {}
         
-        if arafemtv3 <> None:
+        if arafemtv3:
             infolabelstv3['title'] = arafemtv3
-        if arafemtv3_sinop <> None:
+        if arafemtv3_sinop:
             if type(arafemtv3) is int or type(arafemtv3) is float:
                 arafemtv3 = str(arafemtv3)
             arafemtv3_sinop = '[B]' + arafemtv3 + '[/B]' + '[CR]' + arafemtv3_sinop
             infolabelstv3['plot'] = arafemtv3_sinop
             
-        if arafem33 <> None:
+        if arafem33:
             infolabels33['title'] = arafem33
-        if arafem33_sinop <> None:
+        if arafem33_sinop:
             if type(arafem33) is int or type(arafem33) is float:
                 arafem33 = str(arafem33)
             arafem33_sinop = '[B]' + arafem33 + '[/B]' + '[CR]' + arafem33_sinop
             infolabels33['plot'] = arafem33_sinop
             
-        if arafemesp3 <> None:
+        if arafemesp3:
             infolabelsesp3['title'] = arafemesp3
-        if arafemesp3_sinop <> None:
+        if arafemesp3_sinop:
             if type(arafemesp3) is int or type(arafemesp3) is float:
                 arafemesp3 = str(arafemesp3)
             arafemesp3_sinop = '[B]' + arafemesp3 + '[/B]' + '[CR]' + arafemesp3_sinop
             infolabelsesp3['plot'] = arafemesp3_sinop
             
-        if arafem324 <> None:
+        if arafem324:
             infolabels324['title'] = arafem324
-        if arafem324_sinop <> None:
+        if arafem324_sinop:
             if type(arafem324) is int or type(arafem324) is float:
                 arafem324 = str(arafem324)
             arafem324_sinop = '[B]' + arafem324 + '[/B]' + '[CR]' + arafem324_sinop
@@ -385,22 +525,22 @@ def listDirecte():
             
         
  
-    listTV3 = xbmcgui.ListItem(addon.getLocalizedString(t_tv3).encode("utf-8"), iconImage=thumb_tv3,  thumbnailImage=thumb_tv3)
+    listTV3 = xbmcgui.ListItem(strs.get('tv3'), iconImage=thumb_tv3,  thumbnailImage=thumb_tv3)
     listTV3.setProperty('isPlayable','true')
     listTV3.setInfo('video', infolabelstv3)
     xbmcplugin.addDirectoryItem(handle=addon_handle,url=url_directe_tv3,listitem=listTV3)
     
-    list324 = xbmcgui.ListItem(addon.getLocalizedString(t_canal324).encode("utf-8"), iconImage=thumb_324,  thumbnailImage=thumb_324)
+    list324 = xbmcgui.ListItem(strs.get('canal324'), iconImage=thumb_324,  thumbnailImage=thumb_324)
     list324.setProperty('isPlayable','true')
     list324.setInfo('video', infolabels324)
     xbmcplugin.addDirectoryItem(handle=addon_handle,url=url_directe_324,listitem=list324)
     
-    listC33S3 = xbmcgui.ListItem(addon.getLocalizedString(t_c33super3).encode("utf-8"), iconImage=thumb_c33s3,  thumbnailImage=thumb_c33s3)
+    listC33S3 = xbmcgui.ListItem(strs.get('c33super3'), iconImage=thumb_c33s3,  thumbnailImage=thumb_c33s3)
     listC33S3.setProperty('isPlayable','true')
     listC33S3.setInfo('video', infolabels33)
     xbmcplugin.addDirectoryItem(handle=addon_handle,url=url_directe_c33s3,listitem=listC33S3)
     
-    listEsport3 = xbmcgui.ListItem(addon.getLocalizedString(t_esport3).encode("utf-8"), iconImage=thumb_esp3,  thumbnailImage=thumb_esp3)
+    listEsport3 = xbmcgui.ListItem(strs.get('esport3'), iconImage=thumb_esp3,  thumbnailImage=thumb_esp3)
     listEsport3.setProperty('isPlayable','true')
     listEsport3.setInfo('video', infolabelsesp3)
     xbmcplugin.addDirectoryItem(handle=addon_handle,url=url_directe_esport3,listitem=listEsport3)
@@ -412,7 +552,7 @@ def dirAZ_emisio():
   
     addDir("A-C","#A-C","listAZemisio","")
     addDir("D-E","D-E","listAZemisio","")
-    addDir("H-I","H-I","listAZemisio","")
+    addDir("F-I","F-I","listAZemisio","")
     addDir("J-L","J-L","listAZemisio","")
     addDir("M-P","M-P","listAZemisio","")
     addDir("Q-S","Q-S","listAZemisio","")
@@ -426,7 +566,7 @@ def dirAZ_tots():
 
     addDir("A-C","#A-C","listAZtots","")
     addDir("D-E","D-E","listAZtots","")
-    addDir("H-I","H-I","listAZtots","")
+    addDir("F-I","F-I","listAZtots","")
     addDir("J-L","J-L","listAZtots","")
     addDir("M-P","M-P","listAZtots","")
     addDir("Q-S","Q-S","listAZtots","")
@@ -438,87 +578,192 @@ def dirAZ_tots():
 def listProgramesAZ(url, letters):
     xbmc.log("--------------listProgramesAZ----------")
   
-    r = '<div class="M-separadorSeccio"><h1 class="titol">[' + letters + ']</h1></div>\s*<ul class="R-abcProgrames">[\s\S]*?</ul>'
+    html = getHtml(url)
     
-    link = getUrl(url)
-    match = re.compile(r).findall(link)
-    
-    
-    
-    for i in match:
-        d = re.compile('<li>[^<]+<a href="(.+)">[\n\r\s]+(.+)[\n\r\s]+</a>').findall(i)
-        for program in d:
-            url = program[0]
-            titol = program[1]
-            
-            #test url
-            urlProg = url_base + url
-            
-            if urlProg == urlApm or urlProg == urlZonaZaping:
-                    url_final = urlProg + 'clips/'
-            else:
-                match = re.compile('(http://www.ccma.cat/tv3/alacarta/.+?/fitxa-programa/)(\d+/)').findall(urlProg)
-                if len(match) <> 0:
-                    url1 = match[0][0]
-                    urlcode = match[0][1]
-                    url_final = url1 + 'ultims-programes/' + urlcode
-                else:
-                    url_final = urlProg + 'ultims-programes/'
-            
-            addDir(titol,url_final,'listvideos', "")
+    if html: 
+   
+   
+        soup = BeautifulSoup(html.decode('utf-8','ignore'))
         
-    xbmcplugin.endOfDirectory(addon_handle) 
-    
-def listVideos(url, cercar):
-    xbmc.log("--------------listVideos----------")
-    
-    xbmc.log('Url listvideos: ' + url)
-    link = getUrl(url)
-    
-    #match = re.compile('<li class="F-llistat-item">[^<]*<a.+?href="(.+?)">').findall(link)
-    #xbmc.log("match - elemtents trobats: " + str(match))
-    soup = BeautifulSoup(link)
-    links = None
-    try:
-        links = soup.findAll("div", {"class" : "F-itemContenidorIntern C-destacatVideo"})
-        
-        if len(links) == 0:
-            links = soup.findAll("li", {"class" : "F-llistat-item"})
+        elements = soup.findAll("ul", {"class" : "R-abcProgrames"})
         
        
-    except AttributeError as e:
-        xbmc.log("Exception AtributeError listVideos: " + str(e))
-    except KeyError as e:
-        xbmc.log("Exception KeyError  listVideos: " + str(e))
-    except Exception as e:
-        xbmc.log("Exception listVideos: " + str(e))
-    
-    
-    
-    if len(links) <> 0: 
-    
-        #test code
-        #url_test = links[0]
-        url_test = links[0].a["href"]
+        li = None
         
-        test = re.compile('/tv3/alacarta/.+?/([0-9]{7})').findall(url_test)
-        if len(test) < 1:
-            links = re.compile('<article class="M-destacat.+?">[^<]*<a.+?href="(.+?)" title=".+?">').findall(link)
+        if len(elements) > 0:
+            
+            if letters == "#A-C":
+                
+                li = elements[0:4]
+                
+            elif letters == "D-E":
+                
+                li = elements[4:6]
+                
+            elif letters == "F-I":
+                
+                li = elements[6:10]
+                
+            elif letters == "J-L":
+                
+                li = elements[10:13]
+                
+            elif letters == "M-P":
+                
+                li = elements[13:17]
+            
+            elif letters == "Q-S":
+                
+                li = elements[17:20]
+                
+            elif letters == "T-V":
+                
+                li = elements[20:23]
+                
+            elif letters == "X-Z":
+                
+                li = elements[23:]
+                
+            if li <> None and len(li) > 0:
+                
+                
+                for l in li:
+                    
+                    links = l.findAll("li")
+                    
+                    if len(links) > 0:
+                        
+                        for i in links:
+                            
+                            url = i.a["href"]
+                            titol = i.a.string.strip().encode("utf-8")
+                            
+                            #test url
+                            urlProg = url_base + url
+                            if urlProg == urlApm or urlProg == urlZonaZaping:
+                                    url_final = urlProg + 'clips/'
+                                    
+                            else:
+                                match = re.compile('(http://www.ccma.cat/tv3/alacarta/.+?/fitxa-programa/)(\d+/)').findall(urlProg)
+                                if len(match) <> 0:
+                                    url1 = match[0][0]
+                                    urlcode = match[0][1]
+                                    url_final = url1 + 'ultims-programes/' + urlcode
+                                else:
+                                    url_final = urlProg + 'ultims-programes/'
+                            
+                            
+                            
+                            addDir(titol,url_final,'listvideos', "")
+                
+        
+            
+        xbmcplugin.endOfDirectory(addon_handle) 
+    
+def listVideos(url, cercar, program):
+    xbmc.log("--------------listVideos----------")
+    
+    xbmc.log('listVideos--Url listvideos: ' + url)
+    
+    link = getHtml(url)
+    
+    
+    if link:
+   
+        soup = BeautifulSoup(link.decode('utf-8','ignore'))
+        links = None
+        try:
+            links = soup.findAll("div", {"class" : "F-itemContenidorIntern C-destacatVideo"})
+            
+            if not links:
+                links = soup.findAll("li", {"class" : "F-llistat-item"})
+                
+            #Col·leccions
+            if not links:
+                links = soup.findAll("div", {"class" : "F-itemContenidorIntern C-destacatVideo"})
+                
+            #Zona Zapping
+            if not links:
+                links = soup.findAll("article", {"class" : "M-destacat  C-destacatVideo T-alacartaTema C-3linies "})
+            
+           
+        except AttributeError as e:
+            xbmc.log("listVideos--getLinks--Exception AtributeError listVideos: " + str(e))
+        except KeyError as e:
+            xbmc.log("listVideos--getLinks--Exception KeyError  listVideos: " + str(e))
+        except Exception as e:
+            xbmc.log("listVideos--getLinks--Exception listVideos: " + str(e))
         
         
-        if len(links) <> 0:
+        
+        if links: 
+            
         
             for l in links:
+            
+                try:     
                 
-                c = l.a["href"]
-                
-                code = c[-8:-1]
-                data = getDataVideo(url_datavideos + code + '&profile=pc')
+                    titElement = l.find("h3", {"class" : "titol"})
+                    xbmc.log("lisVideos--bucle addVideo--Titol: %s" % (str(titElement)))
                     
-                if data <> None and len(data) > 0:
-                    addLink(data)
+                    if titElement:
+                        titol = titElement.a.string
+                        
+                    
+                    else: #Coleccions
+                        titol = l.a["title"]
+                        
+                    urlvideo = l.a["href"]
+                    
+                    
+                    durElement = l.find("time", {"class" : "duration"})
+                    if durElement:
+                        durada = toSeconds(durElement["datetime"])
+                    else:
+                        durada = None
+                        
+                    img = l.img["src"]
+                    
+                    datElement = l.find("time", {"class" : "data"})
+                    if datElement :
+                        data = datElement.string
+                    else:
+                        data = None
+                    
+                    
+                    resElement = l.find("p", {"class" : "entradeta"})
+                    if resElement :
+                        resum = resElement.string
+                    else:
+                        resum = None
+                      
+                    
+                    #Search
+                    if cercar: 
+                        prElement = l.find("span", {"class" : "programa"})
+                         
+                        if prElement:
+                            program = prElement.string.encode("utf-8")
+                    
+                    
+                    addVideo(titol, urlvideo, img, durada, program, data, resum)
                 
-               
+                except AttributeError as e:
+                    xbmc.log("listVideos--bucle addVideo--Exception AtributeError: " + str(e))
+                   
+                except KeyError as e:
+                    xbmc.log("listVideos--bucle addVideo--Exception KeyError: " + str(e))
+                    
+                except Exception as e:
+                    xbmc.log("listVideos--bucle addVideo--Exception: " + str(e))
+                    
+            else:
+                xbmc.log("No s'ha trobat cap video")
+        
+        
+        
+           ###############################################################################
+                   
             #Pagination
             match = re.compile('<p class="numeracio">P\xc3\xa0gina (\d+) de (\d+)</p>').findall(link)
             if len(match) <> 0:
@@ -533,34 +778,86 @@ def listVideos(url, cercar):
                             url_next = url + nextPage
                         else:
                             url_next = re.sub('&pagina=[\d]+', nextPage, url)
-                        addDir(addon.getLocalizedString(t_seguent).encode("utf-8"), url_next, "listvideoscercar", "")
+                        addDir(strs.get('seguent'), url_next, "listvideoscercar","", program)
                     else:
                         url_next = url + '?text=&profile=&items_pagina=15' + nextPage
-                        addDir(addon.getLocalizedString(t_seguent).encode("utf-8"), url_next, "listvideos", "")
+                        addDir(strs.get('seguent'), url_next, "listvideos", "", program)
                     
             xbmcplugin.endOfDirectory(addon_handle)
             
 def search():
     xbmc.log("--------------search----------")
     
-    keyboard = xbmc.Keyboard('', addon.getLocalizedString(t_cercar).encode("utf-8"))
+    keyboard = xbmc.Keyboard('', strs.get('cercar'))
     keyboard.doModal()
     if keyboard.isConfirmed() and keyboard.getText():
         search_string = keyboard.getText().replace(" ", "+")
         url = "http://www.ccma.cat/tv3/alacarta/cercador/?items_pagina=15&profile=videos&text="+search_string
-        listVideos(url, True)
+        listVideos(url, True, "")
         
             
     
-def addDir(name, url, mode,iconimage):
-    u = build_url({'mode':mode,'name':name,'url':url})
+def addDir(name, url, mode,iconimage,program=None):
+    
+    if program:
+        
+        p = program
+        
+    else:
+        
+        p = name
+        
+        
+    u = buildUrl({'mode':mode,'name':p,'url':url}, base_url)
     liz = xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"title":name})
     liz.setArt({'fanart' : iconimage})
+    
     ok = xbmcplugin.addDirectoryItem(handle=addon_handle,url=u,listitem=liz,isFolder=True)
     return ok
     
-def addLink(data):
+
+
+
+
+def addVideo(titol, url, img, durada, programa, data, resum):
+    xbmc.log("-------------------addVideo------------------------------")
+    
+    
+    li = xbmcgui.ListItem(titol, iconImage="DefaultVideo.png", thumbnailImage=img)
+    u = buildUrl({'mode':'playVideo','name':"",'url':url}, base_url)
+    
+    infolabels = {}
+    
+    if titol <> None:
+        infolabels['title'] = titol
+        
+        
+    infolabels['plot'] = ""
+    
+    if programa :
+        programa =  '[B]' + programa.decode("utf-8") + '[/B]' + '[CR]'
+        infolabels['plot'] =  programa
+        
+    if data :
+        
+        data = data + '[CR]'
+        infolabels['plot'] =  infolabels['plot'] + data
+        
+        year = data[6:10]
+        infolabels['year'] = year
+        
+    if resum :
+        infolabels['plot'] = infolabels['plot']  + resum
+    
+    
+    li.setInfo('video', infolabels)
+    li.addStreamInfo('video',{'duration':durada})
+    li.setProperty('isPlayable','true')
+    xbmcplugin.addDirectoryItem(handle=addon_handle,url=u,listitem=li)
+    
+
+def addVideo2(data):
     ok = True
    
     linkvideo = None
@@ -636,47 +933,47 @@ def addLink(data):
     else:
         ok = None
     return ok
+    
+        
+    
+def playVideo(url):    
+    
+    xbmc.log("---------------playVideo--------------------")
+    
+    code = url[-8:-1]
   
-def build_url(query):
-	return base_url + '?' + urllib.urlencode(query)
-	
-def getUrl(url):
-    req = urllib2.Request(url)
-    response = urllib2.urlopen(req)
-    link = response.read()
-    response.close()
+    html_data = getHtml(url_datavideos + code + '&profile=pc')
     
-    return link
-
-
-def getDataVideo(url):
-
-    link = getUrl(url)
-   
-    try:
     
-        link = link.decode("ISO-8859-1")
-        data =json.loads(link)
+    if html_data:
         
-    except ValueError:
-        return None
+        html_data = html_data.decode("ISO-8859-1")
+        data =json.loads(html_data)
             
-    except TypeError:
-        return None
+        urlvideo = None
         
-    except:
-        return None
-        
-    else:
         if len(data) > 0:
+            
+            
+            media = data.get('media',{})
         
-            return data
-            
-        else:
-            return None
-            
-
-  
+            if type(media) is list and len(media) > 0:
+                media_dict = media[0]
+                urlvideo = media_dict.get('url', None)
+            else:
+                urlvideo = media.get('url', None)
+                
+            if urlvideo:
+                xbmc.log("Play video - url:  " + urlvideo)
+                
+                item = xbmcgui.ListItem(path=urlvideo)
+                xbmcplugin.setResolvedUrl(addon_handle, True, item)
+               
+    
+    
+    
+###############################################################################################   
+###############################################################################################            
 base_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
 args = urlparse.parse_qs(sys.argv[2][1:])
@@ -686,6 +983,9 @@ xbmcplugin.setContent(addon_handle, 'movies')
 mode = args.get('mode', None)
 url = args.get('url', [''])
 name = args.get('name', None)
+if (name <> None) and (len(name) > 0):
+    name = name[0].replace("\n", "")
+program = args.get('program', None)
   
 
 
@@ -710,7 +1010,7 @@ elif mode[0]=='noperdis':
     
 elif mode[0]=='mesvist':
 
-    listMesVist()
+     listMesVist()
 
 elif mode[0]=='programes':
 
@@ -722,11 +1022,11 @@ elif mode[0]=='sections':
 
 elif mode[0]=='listvideos':
    
-    listVideos(url[0], None)
+    listVideos(url[0], None, name)
     
 elif mode[0]=='listvideoscercar':
    
-    listVideos(url[0], True)
+    listVideos(url[0], True, "")
     
 
 elif mode[0]=='dirAZemisio':
@@ -755,6 +1055,10 @@ elif mode[0]=='cercar':
 
 elif mode[0]=='coleccions':
    
-    listColeccions()        
+    listColeccions()
+    
+elif mode[0]=='playVideo':
+   
+    playVideo(url[0])         
     
     

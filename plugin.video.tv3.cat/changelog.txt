@@ -1,7 +1,15 @@
+v1.3.6
+- Fixed website changes
+- Improved efficiency in listing videos
+
 v1.3.5
 - Improved video info
 - Updated python version
+<<<<<<< HEAD
+- Added new section Coleccions
+=======
 - Added new section Col·leccions
+>>>>>>> 9ac9dbf9e533374637b0d13c1303e0211a28784b
 
 v1.3.4
 - Fixed website changes

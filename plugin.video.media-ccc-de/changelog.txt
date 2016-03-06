@@ -1,3 +1,13 @@
+v0.0.5
+- The everything-was-broken release
+- Fix route to capture complete path (fixes #5).
+- Update dependency to express required Kodi version.
+- Remove orig_mime since display_mime_type was dropped from the API.
+- Refactor recording code a bit (also fixes #9).
+- Use Travis-CI for some tests.
+- Make reading recording JSON a bit safer.
+- Add more metadata.
+
 v0.0.4
 - The right-after-congress-release
 - switch to kodi-plugin-routing

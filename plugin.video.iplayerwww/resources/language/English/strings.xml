@@ -23,9 +23,9 @@
   <string id="30211">Catchup bitrate</string>
   <string id="30220">Live CDN source</string>
   <string id="30230">Live bitrate</string>
-  <string id="30231">Radio CDN Source</string>
-  <string id="30232">Radio Location</string>
-  <string id="30233">Max Live Radio Bitrate</string>
+  <string id="30231">Radio CDN source</string>
+  <string id="30232">Radio location</string>
+  <string id="30233">Max Live Radio bitrate</string>
 
   <string id="30300">Highlights</string>
   <string id="30301">Most Popular</string>

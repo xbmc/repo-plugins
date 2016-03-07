@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.showcase.canada"
+       name="Showcase Canada"
+       version="3.0.1"
+       provider-name="t1m">
+  <requires>
+    <import addon="xbmc.python" version="2.20.0"/>
+    <import addon="script.module.t1mlib" version="1.0.14"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Showcase Canada - For Use Only In Canada</summary>
+    <description lang="en">Big. Bold. Hits. With a top-rated line-up of hit series, breakout cable exclusives and big-ticket movies, Showcase is a powerhouse of TVs best.</description>
+    <disclaimer lang="en">Feel free to use this script. For information visit the wiki.</disclaimer>
+    <platform>all</platform>
+    <language>en</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum></forum>
+    <website>http://www.showcase.ca</website>
+    <email></email>
+    <source>https://github.com/learningit/plugin.video.showcase.canada</source>
+  </extension>
+</addon>

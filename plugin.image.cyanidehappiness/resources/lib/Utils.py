@@ -12,9 +12,7 @@ import urllib2
 import os
 import sys
 import time
-import hashlib
 import simplejson as json
-from functools import wraps
 
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo('id')
@@ -24,22 +22,6 @@ ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
 ADDON_VERSION = ADDON.getAddonInfo('version')
 ADDON_DATA_PATH = xbmc.translatePath("special://profile/addon_data/%s" % ADDON_ID).decode("utf-8")
 SETTING = ADDON.getSetting
-
-
-def busy_dialog(func):
-    """
-    Decorator to show busy dialog while function is running
-    Only one of the decorated functions may run simultaniously
-    """
-
-    @wraps(func)
-    def decorator(self, *args, **kwargs):
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
-        result = func(self, *args, **kwargs)
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
-        return result
-
-    return decorator
 
 
 def get_http(url=None, headers=False):
@@ -63,40 +45,6 @@ def get_http(url=None, headers=False):
             xbmc.sleep(1000)
             succeed += 1
     return None
-
-
-def get_JSON_response(url="", cache_days=0.0, folder=False, headers=False):
-    """
-    get JSON response for *url, makes use of prop and file cache.
-    """
-    now = time.time()
-    hashed_url = hashlib.md5(url).hexdigest()
-    if folder:
-        cache_path = xbmc.translatePath(os.path.join(ADDON_DATA_PATH, folder))
-    else:
-        cache_path = xbmc.translatePath(os.path.join(ADDON_DATA_PATH))
-    path = os.path.join(cache_path, hashed_url + ".txt")
-    cache_seconds = int(cache_days * 86400.0)
-    if xbmcvfs.exists(path) and ((now - os.path.getmtime(path)) < cache_seconds):
-        results = read_from_file(path)
-        log("loaded file for %s. time: %f" % (url, time.time() - now))
-    else:
-        response = get_http(url, headers)
-        try:
-            results = json.loads(response)
-            log("download %s. time: %f" % (url, time.time() - now))
-            save_to_file(results, hashed_url, cache_path)
-        except:
-            log("Exception: Could not get new JSON data from %s. Tryin to fallback to cache" % url)
-            log(response)
-            if xbmcvfs.exists(path):
-                results = read_from_file(path)
-            else:
-                results = []
-    if results:
-        return results
-    else:
-        return []
 
 
 def log(txt):

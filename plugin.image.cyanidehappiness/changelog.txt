@@ -1,2 +1,9 @@
+v1.0.2
+- fix primary extension point
+
+v1.0.1
+- Cleanup
+- Translations
+
 v1.0.0
 - Initial Release.

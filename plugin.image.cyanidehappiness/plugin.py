@@ -14,6 +14,9 @@ from resources.lib.Utils import *
 
 plugin = routing.Plugin()
 
+MAX_COUNT = 3868
+ITEMS_PER_PAGE = 10
+
 
 @plugin.route('/')
 def root():
@@ -38,9 +41,9 @@ def todaysimages():
 def browsebyoffset():
     xbmcplugin.setContent(plugin.handle, 'genres')
     items = []
-    for i in range(0, 380):
-        items.append((plugin.url_for(browsebyoffset_view, i*10),
-                      xbmcgui.ListItem("%s - %s" % (str(i * 10 + 1), str((i + 1) * 10))),
+    for i in range(0, MAX_COUNT // ITEMS_PER_PAGE):
+        items.append((plugin.url_for(browsebyoffset_view, i * ITEMS_PER_PAGE),
+                      xbmcgui.ListItem("%s - %s" % (str(i * ITEMS_PER_PAGE + 1), str((i + 1) * ITEMS_PER_PAGE))),
                       True))
     xbmcplugin.addDirectoryItems(plugin.handle, items)
     xbmcplugin.endOfDirectory(plugin.handle)
@@ -55,7 +58,7 @@ def browsebyoffset_view(offset):
     xbmcplugin.endOfDirectory(plugin.handle)
 
 
-def get_cyanide_images(limit=10, offset=0, randomize=False):
+def get_cyanide_images(limit=ITEMS_PER_PAGE, offset=0, randomize=False):
     now = datetime.datetime.now()
     filename = "cyanide%ix%ix%i" % (now.month, now.day, now.year)
     path = xbmc.translatePath(ADDON_DATA_PATH + "/" + filename + ".txt")
@@ -63,7 +66,7 @@ def get_cyanide_images(limit=10, offset=0, randomize=False):
         return read_from_file(path)
     items = []
     for i in range(1, limit):
-        comic_id = random.randrange(1, 3868) if randomize else i + offset
+        comic_id = random.randrange(1, MAX_COUNT) if randomize else i + offset
         url = 'http://www.explosm.net/comics/%i/' % comic_id
         response = get_http(url)
         if response:

@@ -19,13 +19,18 @@ def _get_items(resource, key="channel", id=CHANNEL_ID, max_results=50, order='da
     qs = QS_FMT.format(key, id, max_results, query, order)
     url = urlunparse((SCHEME, HOST, os.path.join(PATH, resource), None, qs, None))
     response = json.loads(requests.get(url).text)
-    
+
     for item in response['items']:
         snippet = item['snippet']
-        thumbnail = snippet['thumbnails']['high']['url']
         title = snippet['title']
+        if title == "Private video":
+            continue
+        try:
+            thumbnail = snippet['thumbnails']['high']['url']
+        except KeyError:
+            thumbnail = None
         published_at = utils.date_from_str(snippet['publishedAt'].split('T')[0], "%Y-%m-%d")
-        
+
         try:
             id = item['id']['videoId'] # search result
         except TypeError:
@@ -50,11 +55,11 @@ def get_latest():
 
 def get_search_results(query):
     return _get_items("search", query=query)
-    
-        
+
+
 if __name__ == "__main__":
-    for playlist_id, title, thumbnail in get_playlists():
+    for playlist_id, title, thumbnail, published_at in get_playlists():
         print
         print title
-        for item_id, title, thumbnail in get_playlist_items(playlist_id):
+        for item_id, title, thumbnail, published_at in get_playlist_items(playlist_id):
             print '\t', title

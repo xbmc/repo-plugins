@@ -1,3 +1,7 @@
+2.8.0
+ - Fixed YouTube playlists
+ - Updated fanart
+
 2.7.0
  - Kodi Krypton is now a requirement
  - Use Rollbar for automatically reporting errors

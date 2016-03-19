@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="Soap4.me">
+        <setting label="Авторизация" type="lsep" />
+        <setting id="username" type="text" label="Ваш логин" default="" />
+        <setting id="password" type="text" label="Ваш пароль" option="hidden" default="" />
+<!--    </category>
+    <category label="Список видео">-->
+        <setting label="Список видео" type="lsep" />
+        <setting id="quality" type="enum" label="Качество видео по возможности" values="Все|SD|720p"/>
+        <setting id="translate" type="enum" label="Перевод по возможности" values="Все|Субтитры|Голос"/>
+        <setting id="sorting" type="enum" label="Сортировка" values="Сначала новые|Сначала старые" />
+
+        <!--        <setting label="Группировка" type="lsep" />
+        <setting id="group_quality" type="bool" label="Группировать по качеству" default="false" />
+        <setting id="group_translate" type="bool" label="Группировать по переводу" default="false" />
+        <setting id="group_season" type="bool" label="Группировать по сезонам" default="true" /> -->
+    </category>
+</settings>

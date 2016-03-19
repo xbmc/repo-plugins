@@ -1,0 +1,9 @@
+v0.3.1
+- Add information for adding in repo
+
+v0.3.0
+- Fixing bugs
+- Add marks for episodes
+
+v0.2.0
+- Initial version

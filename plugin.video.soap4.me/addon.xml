@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.soap4.me" name="Soap4.me" version="0.3.1" provider-name="info@soap4.me">
+    <requires>
+        <import addon="xbmc.python" version="2.19.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" provides="video" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Soap4.me is the best for apple devices</summary>
+        <summary lang="ru">Soap4.me лучший для apple девайсов</summary>
+        <description lang="en">Thanks @gimlis and @speedpoke</description>
+        <description lang="ru">спасибо @gimlis и @speedpoke за него :)</description>
+        <platform>all</platform>
+        <website>http://soap4.me</website>
+  </extension>
+</addon>

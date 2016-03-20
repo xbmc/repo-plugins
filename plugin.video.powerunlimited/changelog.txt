@@ -1,14 +1,22 @@
-v1.0.3 (Saturday, 15 august 2015) :
+v1.0.4 (2016-03-12) :
+- changed the listing and playing of videos
+- the contextual menu item 'Play from here' is available now, it queues all the videos in the list from a certain point
+- updated to latest requirements for a Kodi-addon
+- added fanart-blurred
+- added 'refresh' in contextual menu
+- added requests as requirement
+
+v1.0.3 (2015-08-15) :
 - updated youtube dependency version
 - added some utf8 stuff
 
-v1.0.2 (Monday, 4 May 2015):
+v1.0.2 (2015-04-04):
 - using https for youtube now
 
-v1.0.1 (Saturday, 6 september 2014):
+v1.0.1 (2014-09-06):
 - fixed GNU licence
 - added youtube as dependency
 - added forum link
 
-v1.0.0 (Thursday, 28 august 2014) :
+v1.0.0 (2014-08-28) :
 - initial version 

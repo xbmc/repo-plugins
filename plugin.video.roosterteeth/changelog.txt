@@ -1,55 +1,62 @@
-Version 1.2.8 (12 november 2015)
+v1.2.9 (2016-03-12) :
+changed the listing and playing of videos
+the contextual menu item 'Play from here' is available now, it queues all the videos in the list from a certain point
+updated to latest requirements for a Kodi-addon
+added fanart-blurred
+added 'refresh' in contextual menu
+
+v1.2.8 (2015-11-12) :
 Fixed Recently Added Videos (Thanks Steve for the hint)
 Improved playing of videos in lower quality
 
-Version 1.2.7 (21 oktober 2015)
+v1.2.7 (2015-10-21) :
 Bugfix in playing videos
 Going back to http, since https doesn't seem to work anymore atm
 Funhouse is added once more
 
-Version 1.2.6 (17 oktober 2015)
+v1.2.6 (2015-10-17) :
 Fixes due to website change
 
-Version 1.2.5 (5 oktober 2015)
+v1.2.5 (2015-10-05) :
 Fixes due to website change
 
-Version 1.2.4 (16 september 2015)
+v1.2.4 (2015-09-16) :
 Fixes due to website changes
 Removed Fun Haus due to SSL error
 Added next page to Recently Added Episodes
 
-Version 1.2.3 (30 august 2015)
+v1.2.3 (2015-08-30) :
 Only login for sponsored video's
 
-Version 1.2.2 (22 august 2015)
+v1.2.2 (2015-08-33) :
 Site switched to https (except recently-added)
 Fun Haus doesn't work atm, maybe it'll work in a bit
 
-Version 1.2.1 (15 august 2015)
+v1.2.1 (2015-08-15) :
 Added some utf-8 stuff
 Updated youtube dependency version
 
-Version 1.2.0 (29 july 2015)
+v1.2.0 (2015-07-29) :
 Added support for sponsored videos
 Added Achievement Hunter
 Added The Know Tv
 Added Fun Haus
 Removed some duplicate shows
 
-Version 1.1.1 (24 july 2015)
+v1.1.1 (2016-07-24) :
 Dependency fix
 
-Version 1.1.0 (23 july 2015)
+v1.1.0 (2015-07-23) :
 Complete rewrite, mainly due to website changes
 SPONSORED VIDEO'S DO NOT WORK ANYMORE (sorry)
 
-Version 1.0.2 (may 2015)
+v1.0.2 (2015-05-12) :
 Removed all the secure password saving stuff. The password has to be entered in the settings of the add-on again. 
 
-Version 1.0.1 (6 may 2015)
+v1.0.1 (2015-05-06) :
 Removed password storage as a dependency
 
-Version 1.0.0 (5 may 2015)
+v1.0.0 (2015-05-05) :
 The password is stored in keyring now (thanks to JBu92 for the suggestion)
 If there's a password in settings.xml, it will be converted to the password in keyring (the password in settings.xml will be blanked).
 If the user wants to view a sponsored video and the username/password doesn't work, the user will be asked to type in the correct password. If the userid/password works, the password will be stored in keyring.
@@ -59,43 +66,43 @@ Always delete cookie file
 Small changes in logging
 Sponsor Early Screening videos are NOT working
 
-Version 0.1.1
+v0.1.1
 Changes due to website changes
 
-Version 0.1.0
+v0.1.0
 Changes due to website changes
 Video Quality is 480p/720p/1080p now
 
-Version 0.0.91
+v0.0.91
 Try and fix the parsing in case of a html parsing error by the python parser. This error
-mainly occurs with the html python parser <= 2.7.2 (windows xmbc 12 and older, OS all versions, 
-linux all versions)
+mainly occurs with the html python parser <= 2.7.2 (windows xmbc 12 and older, OS all versions,
+linux all vs)
 
-Version 0.0.9
+v0.0.9
 Mixed the current rt and ah shows
 Mixed the retired rt and ah shows
 Add dir for recent ah episodes
 
-Version 0.0.8
+v0.0.8
 Fixed so that there is no need to delete the cookie file when watching sponsored videos.
 Thanks to AikenDrum for the patch.
 
-Version 0.0.7
-Because divingmule seems off the grid for a bit, i (Skipmode A1) have patched this version and put it in my repo. 
+v0.0.7
+Because divingmule seems off the grid for a bit, i (Skipmode A1) have patched this version and put it in my repo.
 I'll push it to the xbmc repo, so it will automaticly update for everybody. 
 Thanks to Frenzy for the patch.
 
-Version 0.0.6
+v0.0.6
 release to xbmc.org repository
 
-Version 0.0.5
+v0.0.5
 beta/testing release
 added initial support for sponsor only videos
 added more media information where available
 set content to tv shows/episodes, enabling more view modes
 added setting 'Default view mode for episodes'
 
-Version 0.0.4
+v0.0.4
 bug fixes
 added podcasts
 added 'Latest' episodes directory

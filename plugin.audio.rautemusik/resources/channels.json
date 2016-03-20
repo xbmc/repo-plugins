@@ -168,7 +168,7 @@
 		"bigcitybeats" : {
 			"nameid" : 30319,
 			"descriptionid" : 30419,
-			"url" : "http://bigcitybeats-high.rautemusik.fm/listen.pls",
+			"url" : "http://bcb-high.rautemusik.fm/listen.pls",
 			"web" : "http://www.rautemusik.fm/bigcitybeats/",
 			"electronic" : 1,
 			"special" : 1
@@ -193,6 +193,42 @@
 			"url" : "http://oriental-high.rautemusik.fm/listen.pls",
 			"web" : "http://www.rautemusik.fm/oriental/",
 			"world" : 1
+		},
+		"top40" : {
+			"nameid" : 30323,
+			"descriptionid" : 30423,
+			"url" : "http://top40-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/top40/",
+			"popncharts" : 1
+		},
+		"90s" : {
+			"nameid" : 30324,
+			"descriptionid" : 30424,
+			"url" : "http://top40-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/90s/",
+			"popncharts" : 1,
+			"oldies" : 1
+		},
+		"klassik" : {
+			"nameid" : 30325,
+			"descriptionid" : 30425,
+			"url" : "http://klassik-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/klassik/",
+			"special" : 1
+		},
+		"solopiano" : {
+			"nameid" : 30326,
+			"descriptionid" : 30426,
+			"url" : "http://solopiano-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/solopiano/",
+			"special" : 1
+		},
+		"coaching" : {
+			"nameid" : 30327,
+			"descriptionid" : 30427,
+			"url" : "http://coaching-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/coaching/",
+			"special" : 1
 		}
 	}
 }

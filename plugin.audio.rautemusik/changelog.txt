@@ -1,3 +1,11 @@
+0.3.0
+- Fixed broken Link for BugCityBeats
+- Added new channel "Top 40"
+- Added new channel "90s"
+- Added new channel "Klassik"
+- Added new channel "Solo Piano"
+- Added new channel "Coaching"
+
 0.2.0
 - Published version
 

@@ -31,6 +31,11 @@
 	<string id="30320">Lounge</string>
 	<string id="30321">DrumStep</string>
 	<string id="30322">Oriental</string>
+	<string id="30323">Top 40</string>
+	<string id="30324">90s</string>
+	<string id="30325">Klassik</string>
+	<string id="30326">Solo Piano</string>
+	<string id="30327">DAS Coachingradio</string>
 	<string id="30401">Pop, Rock, Charts, 80s &amp; new Hits</string>
 	<string id="30402">Techno, Dance, Handsup</string>
 	<string id="30403">House, RnB, Dance, Electro</string>
@@ -52,5 +57,10 @@
 	<string id="30419">House, Electro</string>
 	<string id="30420">Ambient, Jazz, Chillout</string>
 	<string id="30421">Drum &amp; Bass Radio</string>
-	<string id="30422">Arabische Musik, Oriental</string>
+	<string id="30422">Arabic Music, Oriental</string>
+	<string id="30423">Top 40 Charts</string>
+	<string id="30424">90s, Eurodance</string>
+	<string id="30425">Classic Music, Opera, Symphony</string>
+	<string id="30426">Solo Piano, Piano Music</string>
+	<string id="30427">Easy Listening & Coaching</string>
 </strings>

@@ -3,7 +3,8 @@
 
   <!-- General -->
   <category label="10">
-    <setting id="quality" type="enum" label="11" values="SD (320x180)|SD (480x270)|SD (640x360)|SD (1024x576)|HD (1280x720)|HD (1920x1080)" default="4" />   	
+    <!--<setting id="quality" type="enum" label="11" values="SD (320x180)|SD (480x270)|SD (640x360)|SD (1024x576)|HD (1280x720)|HD (1920x1080)" default="4" />   	-->
+    <setting id="auto_play" type="bool" label="20" default="true"/>
   </category>  
   
 </settings>

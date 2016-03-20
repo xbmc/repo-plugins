@@ -2,4 +2,5 @@
 <strings>
     <!-- Main settings -->     
     <string id="11">Stream Quality</string>	
+    <string id="20">Automatically play best stream available</string>	
 </strings>

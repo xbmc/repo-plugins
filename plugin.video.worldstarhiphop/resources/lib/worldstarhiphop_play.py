@@ -4,121 +4,123 @@
 #
 # Imports
 #
-from BeautifulSoup import BeautifulSoup
-from worldstarhiphop_const import __addon__, __settings__, __language__, __images_path__, __date__, __version__
+from worldstarhiphop_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
 from worldstarhiphop_utils import HTTPCommunicator
-import os
-import re
 import sys
-import urllib, urllib2
 import urlparse
 import xbmc
-import xbmcaddon
 import xbmcgui
 import xbmcplugin
 import YDStreamExtractor
+
 
 #
 # Main class
 #
 class Main:
-	#
-	# Init
-	#
-	def __init__( self ) :
-		# Get plugin settings
-		self.DEBUG = __settings__.getSetting('debug')
-		self.VIDEO = __settings__.getSetting('video')
-		
-		if (self.DEBUG) == 'true':
-			print 'Python Version: ' + sys.version
-			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % ( __addon__, __version__, __date__, "ARGV", repr(sys.argv), "File", str(__file__) ), xbmc.LOGNOTICE )
-		
-		# Parse parameters...
-		self.video_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['video_page_url'][0]
-		
-		if (self.DEBUG) == 'true':
-			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "self.video_page_url", str(self.video_page_url) ), xbmc.LOGNOTICE )
+    #
+    # Init
+    #
+    def __init__(self):
+        # Get the command line arguments
+        # Get the plugin url in plugin:// notation
+        self.plugin_url = sys.argv[0]
+        # Get the plugin handle as an integer number
+        self.plugin_handle = int(sys.argv[1])
 
-		#
-		# Play video...
-		#
-		self.playVideo()
-	
-	#
-	# Play video...
-	#
-	def playVideo( self ) :
-		#
-		# Init
-		#
-		unplayable_media_file = False
-		have_valid_url = False
-		
-		#
-		# Get current list item details...
-		#
-		title     	  = unicode( xbmc.getInfoLabel( "ListItem.Title"  ), "utf-8" )
-		thumbnail_url =          xbmc.getInfoImage( "ListItem.Thumb"  )
-		studio    	  = unicode( xbmc.getInfoLabel( "ListItem.Studio" ), "utf-8" )
-		plot          = unicode( xbmc.getInfoLabel( "ListItem.Plot"   ), "utf-8" )
-		genre         = unicode( xbmc.getInfoLabel( "ListItem.Genre"  ), "utf-8" )
-		
-		#
-		# Show wait dialog while parsing data...
-		#
-		dialogWait = xbmcgui.DialogProgress()
-		dialogWait.create( __language__(30504), title )
-		
-		video_url = self.video_page_url
+        # Get plugin settings
+        self.DEBUG = SETTINGS.getSetting('debug')
+        self.VIDEO = SETTINGS.getSetting('video')
 
-		try:
-			vid = YDStreamExtractor.getVideoInfo(video_url,quality=int(self.VIDEO)) #quality is 0=SD, 1=720p, 2=1080p and is a maximum
-			video_url = vid.streamURL()
-			have_valid_url = True
-		except:
-			# Maybe it's an 18+ video ?!
-			# 
-			# Get HTML page...
-			#
-			html_source = HTTPCommunicator().get( video_url )
-			# A bit of a dirty hack, but let's try it anyway... 
-			# so.addVariable("file","http://hw-videos.worldstarhiphop.com/u/vid/2015/09/SAWGSqGpaohk.mp4");
-			if str(html_source).find("file") >= 0:
-				#
-				# Seems like it's an 18+ video
-				begin_pos_video_file = str(html_source).find("http", str(html_source).find("file") )
-				end_pos_video_file = str(html_source).find('"', begin_pos_video_file)
-				video_url = html_source[begin_pos_video_file:end_pos_video_file]
-				have_valid_url = True
-			else:
-				unplayable_media_file = True
- 	
- 		if (self.DEBUG) == 'true':
- 			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "have_valid_url", str(have_valid_url) ), xbmc.LOGNOTICE )
- 			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "video_url", str(video_url) ), xbmc.LOGNOTICE )
-	
-		if have_valid_url:
-			playlist = xbmc.PlayList( xbmc.PLAYLIST_VIDEO )
-			playlist.clear()
-		
-			listitem = xbmcgui.ListItem( title, iconImage="DefaultVideo.png", thumbnailImage=thumbnail_url )
-			xbmcplugin.setResolvedUrl(handle=int(sys.argv[1]), succeeded=True, listitem=listitem)
-			listitem.setInfo( "video", { "Title": title, "Studio" : "WorldStarHipHop", "Plot" : plot, "Genre" : genre } )
-			playlist.add( video_url, listitem )
-	
-			# Close wait dialog
-			dialogWait.close()
-			del dialogWait
-			
-			# Play video
-			xbmcPlayer = xbmc.Player()
-			xbmcPlayer.play( playlist )
-		#
-		# Alert user
-		#
-		elif unplayable_media_file:
-			xbmcgui.Dialog().ok( __language__(30000), __language__(30506))
-#
-# The End
-#
+        if (self.DEBUG) == 'true':
+            print 'Python Version: ' + sys.version
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
+            ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGNOTICE)
+
+        # Parse parameters...
+        self.video_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['video_page_url'][0]
+        # Get the title.
+        self.title = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['title'][0]
+        self.title = str(self.title)
+
+        if (self.DEBUG) == 'true':
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+            ADDON, VERSION, DATE, "self.video_page_url", str(self.video_page_url)), xbmc.LOGNOTICE)
+
+        #
+        # Play video...
+        #
+        self.playVideo()
+
+    #
+    # Play video...
+    #
+    def playVideo(self):
+        #
+        # Init
+        #
+        is_folder = False
+        # Create a list for our items.
+        listing = []
+        unplayable_media_file = False
+        have_valid_url = False
+
+        #
+        # Get current list item details...
+        #
+        #title = unicode(xbmc.getInfoLabel("ListItem.Title"), "utf-8")
+        thumbnail_url = xbmc.getInfoImage("ListItem.Thumb")
+        studio = unicode(xbmc.getInfoLabel("ListItem.Studio"), "utf-8")
+        plot = unicode(xbmc.getInfoLabel("ListItem.Plot"), "utf-8")
+        genre = unicode(xbmc.getInfoLabel("ListItem.Genre"), "utf-8")
+
+        #
+        # Show wait dialog while parsing data...
+        #
+        dialogWait = xbmcgui.DialogProgress()
+        dialogWait.create(LANGUAGE(30504), self.title)
+        # wait 1 second
+        xbmc.sleep(1000)
+
+        video_url = self.video_page_url
+
+        try:
+            vid = YDStreamExtractor.getVideoInfo(video_url, quality=int(
+                self.VIDEO))  # quality is 0=SD, 1=720p, 2=1080p and is a maximum
+            video_url = vid.streamURL()
+            have_valid_url = True
+        except:
+            # Maybe it's an 18+ video ?!
+            #
+            # Get HTML page...
+            #
+            html_source = HTTPCommunicator().get(video_url)
+            # A bit of a dirty hack, but let's try it anyway...
+            # so.addVariable("file","http://hw-videos.worldstarhiphop.com/u/vid/2015/09/SAWGSqGpaohk.mp4");
+            if str(html_source).find("file") >= 0:
+                #
+                # Seems like it's an 18+ video
+                begin_pos_video_file = str(html_source).find("http", str(html_source).find("file"))
+                end_pos_video_file = str(html_source).find('"', begin_pos_video_file)
+                video_url = html_source[begin_pos_video_file:end_pos_video_file]
+                have_valid_url = True
+            else:
+                unplayable_media_file = True
+
+        if (self.DEBUG) == 'true':
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+            ADDON, VERSION, DATE, "have_valid_url", str(have_valid_url)), xbmc.LOGNOTICE)
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+            ADDON, VERSION, DATE, "video_url", str(video_url)), xbmc.LOGNOTICE)
+
+        if have_valid_url:
+            list_item = xbmcgui.ListItem(path=video_url)
+            xbmcplugin.setResolvedUrl(self.plugin_handle, True, list_item)
+        #
+        # Alert user
+        #
+        elif unplayable_media_file:
+            xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30506))
+        #
+        # The End
+        #

@@ -7,10 +7,9 @@ import xbmcaddon
 #
 # Constants
 # 
-__addon__       = "plugin.video.worldstarhiphop"
-__settings__    = xbmcaddon.Addon(id=__addon__ )
-__language__    = __settings__.getLocalizedString
-__images_path__ = os.path.join( xbmcaddon.Addon(id=__addon__ ).getAddonInfo('path'), 'resources', 'images' )
-__addon__       = "plugin.video.worldstarhiphop"
-__date__        = "5 september 2015"
-__version__     = "1.0.5"
+ADDON = "plugin.video.worldstarhiphop"
+SETTINGS = xbmcaddon.Addon(id=ADDON)
+LANGUAGE = SETTINGS.getLocalizedString
+IMAGES_PATH = os.path.join(xbmcaddon.Addon(id=ADDON).getAddonInfo('path'), 'resources', 'images')
+DATE = "2016-03-12"
+VERSION = "1.0.6"

@@ -18,10 +18,10 @@
 # 
 # Constants
 #
-#also in ..._const
-__addon__       = "plugin.video.worldstarhiphop"
-__date__        = "5 september 2015"
-__version__     = "1.0.5"
+# also in ..._const
+__addon__ = "plugin.video.worldstarhiphop"
+__date__ = "5 september 2015"
+__version__ = "1.0.5"
 
 #
 # Imports
@@ -38,14 +38,15 @@ import xbmcplugin
 
 BASEURL = "http://www.worldstarhiphop.com"
 
-LIB_DIR = xbmc.translatePath( os.path.join( xbmcaddon.Addon(id=__addon__).getAddonInfo('path'), 'resources', 'lib' ) )
-sys.path.append (LIB_DIR)
+LIB_DIR = xbmc.translatePath(os.path.join(xbmcaddon.Addon(id=__addon__).getAddonInfo('path'), 'resources', 'lib'))
+sys.path.append(LIB_DIR)
 
 # Get plugin settings
 DEBUG = xbmcaddon.Addon(id='plugin.video.worldstarhiphop').getSetting('debug')
 
 if (DEBUG) == 'true':
-    xbmc.log( "[ADDON] %s v%s (%s) is starting, ARGV = %s" % ( __addon__, __version__, __date__, repr(sys.argv) ), xbmc.LOGNOTICE )
+    xbmc.log("[ADDON] %s v%s (%s) is starting, ARGV = %s" % (__addon__, __version__, __date__, repr(sys.argv)),
+             xbmc.LOGNOTICE)
 
 # Parse parameters...
 if len(sys.argv[2]) == 0:
@@ -69,6 +70,6 @@ else:
     # Search
     #
     elif action == 'search':
-        import worldstarhiphop_search as plugin  
+        import worldstarhiphop_search as plugin
 
-plugin.Main() 
+plugin.Main()

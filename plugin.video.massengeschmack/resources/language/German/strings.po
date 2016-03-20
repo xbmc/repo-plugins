@@ -340,12 +340,12 @@ msgid "[RECORDING]"
 msgstr "[AUFZEICHNUNG"
 
 msgctxt "#30279"
-msgid "Starts on {}"
-msgstr "Startet am {}"
+msgid "Starts on {0}"
+msgstr "Startet am {0}"
 
 msgctxt "#30292"
-msgid "Recorded on {}"
-msgstr "Aufgezeichnet am {}"
+msgid "Recorded on {0}"
+msgstr "Aufgezeichnet am {0}"
 
 msgctxt "#30280"
 msgid "Livetalk"

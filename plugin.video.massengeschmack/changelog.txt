@@ -1,3 +1,6 @@
+2.0.2
+ - Fix Python 2.6 format string issue
+
 2.0.1
  - Fix feed parse error
 

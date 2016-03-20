@@ -324,11 +324,11 @@ msgid "[RECORDING]"
 msgstr ""
 
 msgctxt "#30279"
-msgid "Starts on {}"
+msgid "Starts on {0}"
 msgstr ""
 
 msgctxt "#30292"
-msgid "Recorded on {}"
+msgid "Recorded on {0}"
 msgstr ""
 
 msgctxt "#30280"

@@ -1,12 +1,19 @@
-v1.0.4 (Saturday, 15 august 2015) :
+v1.0.5 (2016-03-12) :
+- changed the listing and playing of videos
+- the contextual menu item 'Play from here' is available now, it queues all the videos in the list from a certain point
+- updated to latest requirements for a Kodi-addon
+- added fanart-blurred
+- added 'refresh' in contextual menu
+
+v1.0.4 (2015-08-15) :
 - updated youtube dependency version
 - added some utf8 stuff
 
-v1.0.3 (Saturday, 6 september 2014):
+v1.0.3 (2014-09-06) :
 - fixed GNU licence
 - added youtube as dependency
 
-v1.0.2 (Wednesday, 3 July 2013):
+v1.0.2 (2013-07-03) :
 - using different page to get the video items
 - removed the 'losse items' category 
 - the plugin now starts by displaying the available video's
@@ -16,8 +23,8 @@ v1.0.2 (Wednesday, 3 July 2013):
 - added beautiful soup as dependency
 - added dutch strings
 
-v1.0.1 (Friday, 10 May 2013):
+v1.0.1 (2013-04-10) :
 - added optional fields addon.xml
 
-v1.0.0 (Wednesday, 10 April 2013):
+v1.0.0 (2013-04-10) :
 - initial version

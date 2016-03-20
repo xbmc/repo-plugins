@@ -1,86 +1,90 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-import zlib
+import StringIO
+import gzip
 import httplib
 import urllib
 import urllib2
-import gzip
-import StringIO
-import urlparse
+
 
 #
 #
 #
-class HTTPCommunicator :
+class HTTPCommunicator:
     #
     # POST
     #
-    def post( self, host, url, params ):
-        parameters  = urllib.urlencode( params )
-        headers     = { "Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain", "Accept-Encoding" : "gzip" }
-        connection  = httplib.HTTPConnection("%s:80" % host)
-        
-        connection.request( "POST", url, parameters, headers )
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def post(host, url, params):
+        parameters = urllib.urlencode(params)
+        headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain",
+                   "Accept-Encoding": "gzip", "Cookie": "TnetID=1lmx3gb83nsK7j82d8f_OJp0uH7sjsE4"}
+        connection = httplib.HTTPConnection("%s:80" % host)
+
+        connection.request("POST", url, parameters, headers)
         response = connection.getresponse()
-        
+
         # Compressed (gzip) response...
-        if response.getheader( "content-encoding" ) == "gzip" :
-            htmlGzippedData = response.read()
-            stringIO       = StringIO.StringIO( htmlGzippedData )
-            gzipper        = gzip.GzipFile( fileobj = stringIO )
-            htmlData       = gzipper.read()
+        if response.getheader("content-encoding") == "gzip":
+            html_gzipped_data = response.read()
+            string_io = StringIO.StringIO(html_gzipped_data)
+            gzipper = gzip.GzipFile(fileobj=string_io)
+            html_data = gzipper.read()
         # Plain text response...
-        else :
-            htmlData = response.read()
+        else:
+            html_data = response.read()
 
         # Cleanup
         connection.close()
 
         # Return value
-        return htmlData
+        return html_data
 
     #
     # GET
     #
-    def get( self, url ):
-        h = urllib2.HTTPHandler(debuglevel=0)
-        
-        request = urllib2.Request( url )
-        request.add_header( "Accept-Encoding", "gzip" ) 
-        opener = urllib2.build_opener(h)
-        f = opener.open(request)
+    @staticmethod
+    def get(url):
+        user_agent = "Mozilla/5.0 (Linux; Android 4.3; Nexus 7 Build/JSS15Q) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.72 Safari/537.36"
+        values = {}
+        headers = {'User-Agent': user_agent,
+                   'Accept-Encoding': 'gzip',
+                   "Cookie": 'TnetID=1lmx3gb83nsK7j82d8f_OJp0uH7sjsE4'}
+        data = urllib.urlencode(values)
+        req = urllib2.Request(url, data, headers)
+        f = urllib2.urlopen(req)
 
-        # Compressed (gzip) response...
-        if f.headers.get( "content-encoding" ) == "gzip" :
-            htmlGzippedData = f.read()
-            stringIO        = StringIO.StringIO( htmlGzippedData )
-            gzipper         = gzip.GzipFile( fileobj = stringIO )
-            htmlData        = gzipper.read()
-            
-            # Debug
-            # print "[HTTP Communicator] GET %s" % url
-            # print "[HTTP Communicator] Result size : compressed [%u], decompressed [%u]" % ( len( htmlGzippedData ), len ( htmlData ) )
-            
-        # Plain text response...
-        else :
-            htmlData = f.read()
-        
+        # Compressed (gzip) response
+        if f.headers.get("content-encoding") == "gzip":
+            html_gzipped_data = f.read()
+            string_io = StringIO.StringIO(html_gzipped_data)
+            gzipper = gzip.GzipFile(fileobj=string_io)
+            html_data = gzipper.read()
+
+        # Plain text response
+        else:
+            html_data = f.read()
+
         # Cleanup
         f.close()
 
         # Return value
-        return htmlData
+        return html_data
 
     #
     # Check if URL exists
     #
-    def exists( self, url ):
-        try :
-            request            = urllib2.Request( url )
-            request.get_method = lambda : 'HEAD'
-            response           = urllib2.urlopen( request )
+    @staticmethod
+    def exists(url):
+        try:
+            request = urllib2.Request(url)
+            request.get_method = lambda: 'HEAD'
+            response = urllib2.urlopen(request)
             response.close()
             return True
-        except :
+        except:
             return False

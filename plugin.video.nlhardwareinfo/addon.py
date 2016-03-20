@@ -1,51 +1,30 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-##############################################################################
-#
-# NlHardwareInfo - Addon for XBMC
-# http://nl.hardware.info/
-#
-# Coding by Skipmode A1
-# 
-# Credits:
-#   * Dan Dar3                                   - Gamespot xbmc plugin [http://dandar3.blogspot.com]
-#   * NlHardwareInfo                                                    [http://nl.hardware.info]
-#   * Team XBMC @ XBMC.org                                              [http://xbmc.org/]
-#   * Leonard Richardson <leonardr@segfault.org> - BeautifulSoup 3.0.7a [http://www.crummy.com/software/BeautifulSoup/]
-#   * Eric Lawrence <e_lawrence@hotmail.com>     - Fiddler Web Debugger [http://www.fiddler2.com]
-#   * http://nl.hardware.info/
-#
-
-# 
-# Constants
-#
-#also in ..._const
-__addon__       = "plugin.video.nlhardwareinfo"
-__date__        = "15 august 2015"
-__version__     = "1.0.4"
-
 #
 # Imports
 #
 import os
-import re
 import sys
-import urllib
-import urlparse
 import xbmc
 import xbmcaddon
-import xbmcgui
-import xbmcplugin
 
-LIB_DIR = xbmc.translatePath( os.path.join( xbmcaddon.Addon(id=__addon__).getAddonInfo('path'), 'resources', 'lib' ) )
-sys.path.append (LIB_DIR)
+reload(sys)
+sys.setdefaultencoding('utf8')
+
+LIB_DIR = xbmc.translatePath(
+    os.path.join(xbmcaddon.Addon(id="plugin.video.nlhardwareinfo").getAddonInfo('path'), 'resources', 'lib'))
+sys.path.append(LIB_DIR)
+
+from nlhardwareinfo_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
 
 # Get plugin settings
-DEBUG = xbmcaddon.Addon(id='plugin.video.nlhardwareinfo').getSetting('debug')
+DEBUG = xbmcaddon.Addon(id=ADDON).getSetting('debug')
 
-if (DEBUG) == 'true':
-    xbmc.log( "[ADDON] %s v%s (%s) is starting, ARGV = %s" % ( __addon__, __version__, __date__, repr(sys.argv) ), xbmc.LOGNOTICE )
+if DEBUG == 'true':
+    xbmc.log("[ADDON] %s, Python Version %s" % (ADDON, str(sys.version)), xbmc.LOGNOTICE)
+    xbmc.log("[ADDON] %s v%s (%s) is starting, ARGV = %s" % (ADDON, VERSION, DATE, repr(sys.argv)),
+             xbmc.LOGNOTICE)
 
 import nlhardwareinfo_list_play as plugin
 

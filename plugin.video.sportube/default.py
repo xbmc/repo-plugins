@@ -48,23 +48,36 @@ def show_root_menu():
     match = re.compile('var url_cdn = "(.+?)"').findall(htmlData)
     urlCdn = match[0]
 
-    url = baseUrl + "tv.jsonp?callback=sportube_tv&api_key=" + apiKey
+    url = baseUrl + "tv.jsonp?callback=sportube_tv&id=&api_key=" + apiKey
     headers = {'referer': pageUrl}
     request = urllib2.Request(url, headers = headers)
     data = urllib2.urlopen(request).read()
     # Convert JSONP object into JSON
     # https://stackoverflow.com/questions/30554522/django-parse-jsonp-json-with-padding
     data_json = data.split("(")[1].strip(")")
-    response = json.loads(data_json)
-
-    if "ERROR" in response:
-        xbmc.log(msg="API Error: " + response["ERROR"])
+    liveEvents = json.loads(data_json)
+    
+    url = baseUrl + "live_events.jsonp?callback=sportube_live&id=&api_key=" + apiKey
+    headers = {'referer': pageUrl}
+    request = urllib2.Request(url, headers = headers)
+    data = urllib2.urlopen(request).read()
+    data_json = data.split("(")[1].strip(")")
+    liveStreams = json.loads(data_json)
+    
+    if "ERROR" in liveEvents:
+        xbmc.log(msg="Error in tv.jsonp: " + liveEvents["ERROR"])
+    elif "ERROR" in liveStreams:
+        xbmc.log(msg="Error in live_events.jsonp: " + liveStreams["ERROR"])
     else:
         # Parse video feed
-        for live in response["RESULT"]:
-            link = live[4]
-            imageUrl = live[2]
-            title = live[1] + " - " + live[13] + " (" + live[12][11:16] + ")"
+        for event in liveEvents["RESULT"]:
+            linkId = event[9]
+            for stream in liveStreams["RESULT"]:
+                if stream[0] == linkId:
+                    link = stream[15]
+                    break
+            imageUrl = event[2]
+            title = event[1] + " - " + event[11] + " (" + event[10][11:16] + ")"
             liStyle = xbmcgui.ListItem(title, thumbnailImage=imageUrl)
             addLinkItem(link, liStyle)
     xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_LABEL)

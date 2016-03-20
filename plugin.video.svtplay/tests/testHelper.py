@@ -116,3 +116,16 @@ class TestHelperModule(unittest.TestCase):
     expected = "http://svtplay.se/apa/extralarge/"
     result = helper.prepareThumb(url, "http://svtplay.se")
     self.assertEqual(expected, result)
+
+  def test_cleanUrl(self):
+    url1 = "apa.bepa?cc1=1232"
+    url2 = "apa.bepa?alt=123&cc1=434"
+    url3 = "apa.bepa"
+    result1 = helper.cleanUrl(url1)
+    self.assertEqual("apa.bepa?", result1)
+
+    result2 = helper.cleanUrl(url2)
+    self.assertEqual("apa.bepa?&alt=123", result2)
+
+    result3 = helper.cleanUrl(url3)
+    self.assertEqual("apa.bepa", result3)

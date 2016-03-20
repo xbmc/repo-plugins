@@ -1,3 +1,11 @@
+Version 4.0.23
+-------------
+- Fix broken settings, issue #148
+
+Version 4.0.22
+-------------
+- Fix some videos being broken, issue #148
+
 Version 4.0.21
 -------------
 - Latest News is back

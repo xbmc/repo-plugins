@@ -4,6 +4,7 @@
         <setting id="PLAY"          type="bool"   label="30101" default="false"/>
         <setting id="HIDE"          type="bool"   label="30102" default="false"/>
         <setting id="VERSION"       type="text"   label=""      default="0.0.0" visible="false"/>
+        <setting id="STREAM"        type="bool"   label=""      default="true"  visible="false"/>		
     </category>  
     <category label="30103">
         <setting id="RECORD_FOLDER" type="folder" label="30104" default=""/>

@@ -117,12 +117,22 @@ class SportsnetNow:
 
         return chan_map
 
+    def getServerTime(self):
+        """
+        Convert the local time to GMT-5, the timezone in which the guide data is
+        stored.
+        """
+        loc_time = datetime.datetime.fromtimestamp(time.mktime(time.localtime()))
+        gmt_time = datetime.datetime.fromtimestamp(time.mktime(time.gmtime()))
+        delta = gmt_time - loc_time
+        delta = datetime.timedelta(seconds = delta.seconds - 18000)
+        return datetime.datetime.now() + delta
 
     def getGuideData(self):
         """
         Get the guid data for the channels right now.
         """
-        now = datetime.datetime.now()
+        now = self.getServerTime()
         url = self.EPG_PREFIX + now.strftime("%Y/%m/%d.xml")
 
         jar = Cookies.getCookieJar()

@@ -1,3 +1,6 @@
+1.0.6
+- Fix scrapper
+
 1.0.5
 - Fix dependencies
 - Back to list view in courses

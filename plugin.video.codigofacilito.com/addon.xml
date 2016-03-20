@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.codigofacilito.com" version="1.0.5" name="CodigoFacilito.com" provider-name="BuNKeR (@ezeescobar)">
+<addon id="plugin.video.codigofacilito.com" version="1.0.6" name="CodigoFacilito.com" provider-name="BuNKeR (@ezeescobar)">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.beautifulsoup" version="3.2.1" />

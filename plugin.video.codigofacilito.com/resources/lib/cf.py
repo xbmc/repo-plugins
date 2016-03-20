@@ -27,33 +27,31 @@ def get_soup_url(url):
 
 def get_courses():
     url = BASE_URL + '/courses'
+
     soup = get_soup_url(url)
     output = []
 
-    for index, div in enumerate(soup.findAll('div', {'class': ' col-xs-12 col-md-4 col-lg-4'})):
+    for index, div in enumerate(soup.findAll('div', {'class': ' col-xs-12 col-sm-6 col-md-3 col-lg-2'})):
         if index is 0:
-            divparent = soup.find('section', {'class': 'row'})
-            premium = divparent.find('div', {'class': 'small-padding yellow darken-3 be-small white-text'})
-            videos = divparent.find('i', {'class': 'mdi-av-queue-music'}).parent
-            videosc = filter(str.isdigit, videos.text.encode('utf8'))
-            if premium is not None:
-                continue
+            videos = soup.find('i', {'class': 'mdi-av-queue-music'})
         else:
-            premium = div.find('div', {'class': 'small-padding yellow darken-3 be-small white-text'})
-            videos = div.find('i', {'class': 'mdi-av-queue-music'}).parent
-            videosc = filter(str.isdigit, videos.text.encode('utf8'))
-            if premium is not None:
-                continue
+            videos = div.find('i', {'class': 'mdi-av-queue-music'})
+        if videos is None:
+            continue
+        videosc = filter(str.isdigit, videos.parent.text.encode('utf8'))
         anchor = div.find('a')
         text = div.find('h2').text.encode('utf8')
         link = anchor.get('href').encode('utf8')
         img  = div.find('img').get('src')
-        if videos is not None:
-            videos = ' (' + videosc + ')'
-            output.append({'title': text + videos,
-                'url': link,
-                'thumbnail': BASE_URL + img,
-            })
+        alt  = div.find('img').get('alt')
+        if alt.startswith('Conlap'):
+            continue
+        videos = ' (' + videosc + ')'
+
+        output.append({'title': text + videos,
+            'url': link,
+            'thumbnail': BASE_URL + img,
+        })
 
     return output
 

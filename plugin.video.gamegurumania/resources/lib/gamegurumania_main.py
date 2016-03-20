@@ -1,8 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 #
 # Imports
 #
 from BeautifulSoup import BeautifulSoup
-from gamegurumania_const import __settings__, __language__, __images_path__, __addon__, __plugin__, __author__, __url__, __date__, __version__
+from gamegurumania_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
 from gamegurumania_utils import HTTPCommunicator
 import os
 import re
@@ -13,104 +16,143 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 import xbmcplugin
+import os
+
 
 #
 # Main class
 #
 class Main:
-    def __init__( self ):
-        
+    def __init__(self):
+        # Get the command line arguments
+        # Get the plugin url in plugin:// notation
+        self.plugin_url = sys.argv[0]
+        # Get the plugin handle as an integer number
+        self.plugin_handle = int(sys.argv[1])
+
         #
         # All Videos
         #
-        parameters = {"action" : "list-play", "plugin_category" : __language__(30000), "url" : "http://www.ggmania.com/more.php3?next=000", "next_page_possible": "True"}
-        url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-        listitem = xbmcgui.ListItem( __language__(30000), iconImage="DefaultFolder.png" )
-        folder = True
-        xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
-        
+        parameters = {"action": "list-play", "plugin_category": LANGUAGE(30000),
+                      "url": "http://www.ggmania.com/more.php3?next=000", "next_page_possible": "True"}
+        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        list_item = xbmcgui.ListItem(LANGUAGE(30000), iconImage="DefaultFolder.png")
+        is_folder = True
+        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
+        list_item.setProperty('IsPlayable', 'false')
+        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
+
         #
         # Movie
         #
-        parameters = {"action" : "list-play", "plugin_category" : __language__(30001), "url" : "http://www.ggmania.com/more.php3?next=000&kategory=movie", "next_page_possible": "True"}
-        url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-        listitem = xbmcgui.ListItem( __language__(30001), iconImage="DefaultFolder.png" )
-        folder = True
-        xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
-       
+        parameters = {"action": "list-play", "plugin_category": LANGUAGE(30001),
+                      "url": "http://www.ggmania.com/more.php3?next=000&kategory=movie", "next_page_possible": "True"}
+        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        list_item = xbmcgui.ListItem(LANGUAGE(30001), iconImage="DefaultFolder.png")
+        is_folder = True
+        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
+        list_item.setProperty('IsPlayable', 'false')
+        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
+
         #
         # Console
         #
-        parameters = {"action" : "list-play", "plugin_category" : __language__(30002), "url" : "http://www.ggmania.com/more.php3?next=000&kategory=console", "next_page_possible": "True"}
-        url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-        listitem = xbmcgui.ListItem( __language__(30002), iconImage="DefaultFolder.png" )
-        folder = True
-        xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
-       
+        parameters = {"action": "list-play", "plugin_category": LANGUAGE(30002),
+                      "url": "http://www.ggmania.com/more.php3?next=000&kategory=console", "next_page_possible": "True"}
+        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        list_item = xbmcgui.ListItem(LANGUAGE(30002), iconImage="DefaultFolder.png")
+        is_folder = True
+        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
+        list_item.setProperty('IsPlayable', 'false')
+        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
+
         #
         # Preview
         #
-        parameters = {"action" : "list-play", "plugin_category" : __language__(30003), "url" : "http://www.ggmania.com/more.php3?next=000&kategory=preview", "next_page_possible": "True"}
-        url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-        listitem = xbmcgui.ListItem( __language__(30003), iconImage="DefaultFolder.png" )
-        folder = True
-        xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
-        
+        parameters = {"action": "list-play", "plugin_category": LANGUAGE(30003),
+                      "url": "http://www.ggmania.com/more.php3?next=000&kategory=preview", "next_page_possible": "True"}
+        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        list_item = xbmcgui.ListItem(LANGUAGE(30003), iconImage="DefaultFolder.png")
+        is_folder = True
+        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
+        list_item.setProperty('IsPlayable', 'false')
+        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
+
         #
         # Tech
         #
-        parameters = {"action" : "list-play", "plugin_category" : __language__(30004), "url" : "http://www.ggmania.com/more.php3?next=000&kategory=tech", "next_page_possible": "True"}
-        url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-        listitem = xbmcgui.ListItem( __language__(30004), iconImage="DefaultFolder.png" )
-        folder = True
-        xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
-        
+        parameters = {"action": "list-play", "plugin_category": LANGUAGE(30004),
+                      "url": "http://www.ggmania.com/more.php3?next=000&kategory=tech", "next_page_possible": "True"}
+        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        list_item = xbmcgui.ListItem(LANGUAGE(30004), iconImage="DefaultFolder.png")
+        is_folder = True
+        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
+        list_item.setProperty('IsPlayable', 'false')
+        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
+
         #
         # Demo
         #
-        parameters = {"action" : "list-play", "plugin_category" : __language__(30005), "url" : "http://www.ggmania.com/more.php3?next=000&kategory=demo", "next_page_possible": "True"}
-        url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-        listitem = xbmcgui.ListItem( __language__(30005), iconImage="DefaultFolder.png" )
-        folder = True
-        xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
-        
+        parameters = {"action": "list-play", "plugin_category": LANGUAGE(30005),
+                      "url": "http://www.ggmania.com/more.php3?next=000&kategory=demo", "next_page_possible": "True"}
+        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        list_item = xbmcgui.ListItem(LANGUAGE(30005), iconImage="DefaultFolder.png")
+        is_folder = True
+        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
+        list_item.setProperty('IsPlayable', 'false')
+        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
+
         #
         # Interview
         #
-        parameters = {"action" : "list-play", "plugin_category" : __language__(30006), "url" : "http://www.ggmania.com/more.php3?next=000&kategory=interview", "next_page_possible": "True"}
-        url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-        listitem = xbmcgui.ListItem( __language__(30006), iconImage="DefaultFolder.png" )
-        folder = True
-        xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
-        
+        parameters = {"action": "list-play", "plugin_category": LANGUAGE(30006),
+                      "url": "http://www.ggmania.com/more.php3?next=000&kategory=interview",
+                      "next_page_possible": "True"}
+        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        list_item = xbmcgui.ListItem(LANGUAGE(30006), iconImage="DefaultFolder.png")
+        is_folder = True
+        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
+        list_item.setProperty('IsPlayable', 'false')
+        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
+
         #
         # FreeGame
         #
-        parameters = {"action" : "list-play", "plugin_category" : __language__(30007), "url" : "http://www.ggmania.com/more.php3?next=000&kategory=freegame", "next_page_possible": "True"}
-        url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-        listitem = xbmcgui.ListItem( __language__(30007), iconImage="DefaultFolder.png" )
-        folder = True
-        xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
-        
+        parameters = {"action": "list-play", "plugin_category": LANGUAGE(30007),
+                      "url": "http://www.ggmania.com/more.php3?next=000&kategory=freegame",
+                      "next_page_possible": "True"}
+        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        list_item = xbmcgui.ListItem(LANGUAGE(30007), iconImage="DefaultFolder.png")
+        is_folder = True
+        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
+        list_item.setProperty('IsPlayable', 'false')
+        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
+
         #
         # Media
         #
-        parameters = {"action" : "list-play", "plugin_category" : __language__(30008), "url" : "http://www.ggmania.com/more.php3?next=000&kategory=media", "next_page_possible": "True"}
-        url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-        listitem = xbmcgui.ListItem( __language__(30008), iconImage="DefaultFolder.png" )
-        folder = True
-        xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
+        parameters = {"action": "list-play", "plugin_category": LANGUAGE(30008),
+                      "url": "http://www.ggmania.com/more.php3?next=000&kategory=media", "next_page_possible": "True"}
+        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        list_item = xbmcgui.ListItem(LANGUAGE(30008), iconImage="DefaultFolder.png")
+        is_folder = True
+        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
+        list_item.setProperty('IsPlayable', 'false')
+        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
 
         #
         # Gold
         #
-        parameters = {"action" : "list-play", "plugin_category" : __language__(30009), "url" : "http://www.ggmania.com/more.php3?next=000&kategory=gold", "next_page_possible": "True"}
-        url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-        listitem = xbmcgui.ListItem( __language__(30009), iconImage="DefaultFolder.png" )
-        folder = True
-        xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)        
-        # Disable sorting...
-        xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )
-		
-        # End of list...
-        xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=True )
+        parameters = {"action": "list-play", "plugin_category": LANGUAGE(30009),
+                      "url": "http://www.ggmania.com/more.php3?next=000&kategory=gold", "next_page_possible": "True"}
+        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        list_item = xbmcgui.ListItem(LANGUAGE(30009), iconImage="DefaultFolder.png")
+        is_folder = True
+        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
+        list_item.setProperty('IsPlayable', 'false')
+        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
+
+        # Disable sorting
+        xbmcplugin.addSortMethod(handle=self.plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_NONE)
+        # Finish creating a virtual folder.
+        xbmcplugin.endOfDirectory(self.plugin_handle)

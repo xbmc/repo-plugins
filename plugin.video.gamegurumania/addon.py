@@ -1,54 +1,36 @@
-##############################################################################
-#
-# Gamegurumania - Addon for XBMC
-# http://www.gamegurumania.com/
-#
-# Coding by Skipmode A1
-# 
-# Credits:
-#   * Dan Dar3                                   - Gamespot xbmc plugin [http://dandar3.blogspot.com]
-#   * GameGuruMania                                                     [http://www.gamegurumania.com]
-#   * Team XBMC @ XBMC.org                                              [http://xbmc.org/]
-#   * Leonard Richardson <leonardr@segfault.org> - BeautifulSoup 3.0.7a [http://www.crummy.com/software/BeautifulSoup/]
-#   * Eric Lawrence <e_lawrence@hotmail.com>     - Fiddler Web Debugger [http://www.fiddler2.com]
-#
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
 
-# 
-# Constants
-#
-#also in ..._const
-__addon__       = "plugin.video.gamegurumania"
-__plugin__      = "GameGuruMania"
-__author__      = "Skipmode A1"
-__url__         = ""
-__date__        = "02 oktober 2014"
-__version__     = "1.0.2"
 #
 # Imports
 #
 import os
-import re
 import sys
-import urllib
 import urlparse
 import xbmc
 import xbmcaddon
-import xbmcgui
-import xbmcplugin
 
-LIB_DIR = xbmc.translatePath( os.path.join( xbmcaddon.Addon(id=__addon__).getAddonInfo('path'), 'resources', 'lib' ) )
-sys.path.append (LIB_DIR)
+reload(sys)
+sys.setdefaultencoding('utf8')
+
+LIB_DIR = xbmc.translatePath(
+    os.path.join(xbmcaddon.Addon(id="plugin.video.gamegurumania").getAddonInfo('path'), 'resources', 'lib'))
+sys.path.append(LIB_DIR)
+
+from gamegurumania_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
 
 # Get plugin settings
-DEBUG = xbmcaddon.Addon(id='plugin.video.gamegurumania').getSetting('debug')
+DEBUG = xbmcaddon.Addon(id=ADDON).getSetting('debug')
 
 # Parse parameters...
 if len(sys.argv[2]) == 0:
     #
     # Main menu
     #
-    if (DEBUG) == 'true':
-        xbmc.log( "[ADDON] %s v%s (%s) is starting, ARGV = %s" % ( __addon__, __version__, __date__, repr(sys.argv) ), xbmc.LOGNOTICE )
+    if DEBUG == 'true':
+        xbmc.log("[ADDON] %s, Python Version %s" % (ADDON, str(sys.version)), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) is starting, ARGV = %s" % (ADDON, VERSION, DATE, repr(sys.argv)),
+                 xbmc.LOGNOTICE)
     import gamegurumania_main as plugin
 else:
     action = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['action'][0]
@@ -57,5 +39,5 @@ else:
     #
     if action == 'list-play':
         import gamegurumania_list_play as plugin
-  
+
 plugin.Main()

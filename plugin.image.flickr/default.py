@@ -515,6 +515,9 @@ class FlickrSession:
 
 	def addPhotos(self,method,mode,url='BLANK',page='1',mapOption=True,with_username=False,**kwargs):
 		global ShareSocial
+
+		xbmcplugin.setContent(int(sys.argv[1]), 'images')
+
 		try:
 			import ShareSocial #analysis:ignore
 		except:

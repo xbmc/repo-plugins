@@ -1,5 +1,13 @@
 flickrXBMC Changelog
 
+*** 1.0.9 ***
+
+Now sets content type to images when displaying a list of images
+
+*** 1.0.8 ***
+
+Change the authentication site url
+
 *** 1.0.7 ***
 
 Change site url for authentication

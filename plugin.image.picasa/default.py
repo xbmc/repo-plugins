@@ -1,20 +1,104 @@
 #!/usr/bin/python
 import os, sys
 from addon import AddonHelper
+import OAuthHelper
 
-__plugin__ =  'picasa'
-__author__ = 'ruuk'
+API_LEVEL = 1
 
-#xbmc.executebuiltin("Container.SetViewMode(500)")
+SESSION = None
+from xbmcswift2 import Plugin
+from xbmcswift2.plugin import log as log__, NotFoundException
 
-#protected = private
-#private = anyone with link
-#public = public
+class ClassPlugin(Plugin):
+	def _dispatch(self, path):
+		for rule in self._routes:
+			try:
+				view_func, items = rule.match(path)
+			except NotFoundException:
+				continue
+			log__.info('Request for "%s" matches rule for function "%s"', path, view_func.__name__)
+			listitems = view_func(SESSION,**items)
 
-#import xbmc
-#print xbmc.getInfoLabel('Skin.CurrentTheme ')
-#print xbmc.getSkinDir()
-#print 'TES: ' + xbmc.getInfoLabel('Window(Pictures).Property(Viewmode)')
+			if not self._end_of_directory and self.handle >= 0:
+				if listitems is None:
+					self.finish(succeeded=False)
+				else:
+					listitems = self.finish(listitems)
+
+			return listitems
+		raise NotFoundException, 'No matching view found for %s' % path
+
+plugin = ClassPlugin()
+
+def LOG(msg): print 'plugin.image.picasa: %s' % msg
+
+def ERROR(message,hide_tb=False):
+	LOG('ERROR: ' + message)
+	short = str(sys.exc_info()[1])
+	if hide_tb:
+		LOG('ERROR Message: ' + short)
+	else:
+		import traceback #@Reimport
+		traceback.print_exc()
+	return short
+
+def U(string):
+	if isinstance(string,str):
+		return string.decode("utf-8")
+	return string
+
+def S(uni):
+	if isinstance(uni,unicode):
+		return uni.encode("utf-8")
+	return uni
+
+class PicasaWebAPI(OAuthHelper.GoogleOAuthorizer):
+	baseURL = 'https://picasaweb.google.com'
+
+	def __init__(self):
+		self.helper = AddonHelper('plugin.image.picasa')
+		OAuthHelper.GoogleOAuthorizer.__init__(self,
+			addon_id='plugin.image.picasa',
+			client_id='905208609020-blro1d2vo7qnjo53ku3ajt6tk40i02ip.apps.googleusercontent.com',
+			client_secret='9V-BDq0uD4VN8VAfP0U0wIOp',
+			auth_scope='https://picasaweb.google.com/data/'
+		)
+
+class PicasaWebOauth2API(PicasaWebAPI):
+	def GetFeed(self,url=None,*args,**kwargs):
+		token = self.getToken()
+		if not token: return {}
+		url = self.baseURL + url + '&alt=json'
+		for k,v in kwargs.items():
+			url += '&{0}={1}'.format(k.replace('_','-'),v)
+		headers = {	'Authorization': 'Bearer ' + token,
+						'GData-Version':'2'
+		}
+		resp = self.session.get(url,headers=headers)
+		try:
+			json = resp.json()
+		except:
+			print repr(resp.text)
+			raise
+		return json.get('feed')
+
+class PicasaWebPublicAPI(PicasaWebAPI):
+	publicAPIKey = 'AIzaSyCt4tydVOveutwJX8CmTbf05y5LLZVwm0A'
+
+	def GetFeed(self,url=None,*args,**kwargs):
+		url = self.baseURL + url + '&alt=json'
+		for k,v in kwargs.items():
+			url += '&{0}={1}'.format(k.replace('_','-'),v)
+		headers = {	'X-GData-Key': 'key=' + self.publicAPIKey,
+						'GData-Version':'2'
+		}
+		resp = self.session.get(url,headers=headers)
+		try:
+			json = resp.json()
+		except:
+			print resp.text
+			raise
+		return json.get('feed')
 
 class picasaPhotosSession(AddonHelper):
 	def __init__(self,show_image=False):
@@ -22,164 +106,106 @@ class picasaPhotosSession(AddonHelper):
 		if show_image: return self.showImage()
 		self._api = None
 		self.pfilter = None
+		self.currentUser = self.getSetting('current_user',None)
 		self.privacy_levels = ['public','private','protected']
-		
-		if self.getSetting('use_login') == 'true':
-			self.user = 'default'
+
+		if self.getSetting('use_login',False):
+			self._user = 'default'
 		else:
-			self.user = self.getSetting('login_email').split('@')[0]
-		
+			self._user = self.getSetting('username')
+
 		cache_path = self.dataPath('cache')
 		if not os.path.exists(cache_path): os.makedirs(cache_path)
-		
+
 		mpp = self.getSettingInt('max_per_page')
 		self.max_per_page = [10,20,30,40,50,75,100,200,500,1000][mpp]
 		self.isSlideshow = self.getParamString('plugin_slideshow_ss','false') == 'true'
-		print 'plugin.image.picasa: isSlideshow: %s' % self.isSlideshow
-		
-		update_dir = False
-		cache = True
-	
-		success = self.go(	self.getParamInt('mode',None),
-							self.getParamString('url',None),
-							self.getParamString('name',None),
-							self.getParamString('user',self.user,no_unquote=True))
-		
-		if self.getParamInt('start_index',None): update_dir = True
-		self.endOfDirectory(succeeded=success,updateListing=update_dir,cacheToDisc=cache)
-	
+		LOG('isSlideshow: %s' % self.isSlideshow)
+
 	def setApi(self):
-		import gdata.photos.service
-		self._api = gdata.photos.service.PhotosService()
-		self._api.email = self.getSetting('login_email')
-		self._api.password = self.getSetting('login_pass')
-		self._api.source = '2ndmind.com-picasaPhotosXBMC'
-		token_path = self.dataPath('token')
-		if os.path.exists(token_path):
-			f = open(token_path,'r')
-			token = f.read()
-			f.close()
-			self._api.SetClientLoginToken(token)
+		self._api = None
+		if self.getSetting('use_login',False):
+			self._api = PicasaWebOauth2API()
+			self._api.setUser(self.currentUser)
+			if not self._api.authorized():
+				if not self._api.users():
+					if self.addUser():
+						return self._api
+					self._user = ''
+					return
+				self._api.authorize()
+		else:
+			self._api = PicasaWebPublicAPI()
 		return self._api
-		
+
 	def api(self):
 		if self._api: return self._api
 		return self.setApi()
-		
-	def login(self):
-		from gdata.service import CaptchaRequired,BadAuthentication
-		login = True
-		fail = ''
-		try:
-			self.api().ProgrammaticLogin()
-		except CaptchaRequired,e: #@UnusedVariable
-			login = False
-			fail = 'captcha'
-		except BadAuthentication,e: #@UnusedVariable
-				fail = 'badauth'
-			
-		ct=0
-		while fail == 'captcha' and not login:
-			try:
-				ctoken = self.api()._GetCaptchaToken()
-				curl = self.api()._GetCaptchaURL()
-				#show image, get response
-				response = self.doCaptcha(curl,ct+1)
-				if not response: break
-				#print response,ctoken
-				self.api().ProgrammaticLogin(ctoken,response)
-				break
-			except CaptchaRequired,e: #@UnusedVariable
-				fail = 'captcha'
-				print 'CAPTCHA FAIL'
-			except BadAuthentication,e: #@UnusedVariable
-				fail = 'badauth'
-				print 'BAD AUTHENTICATION'
-			if ct > 2: break
-			ct+=1
-				
-		token = self.api().GetClientLoginToken()
-		if not token:
-			if fail == 'captcha':
-				self.xbmcgui().Dialog().ok(self.lang(30300),self.lang(30300),self.lang(30301),'http://google.com/accounts/DisplayUnlockCaptcha')
-			elif fail == 'badauth':
-				self.xbmcgui().Dialog().ok(self.lang(30302),self.lang(30302),self.lang(30303))
-			return False
-			
-		token_path = self.dataPath('token')
-		f = open(token_path,'w')
-		f.write(token)
-		f.close()
-		return True
-		
-	def doCaptcha(self,url,trynum):
-		target_file = self.dataPath('cache/captcha_image.jpg')
-		fn = self.getFile(url,target_file)
-		win = self.xbmcgui().WindowDialog()
-		image = self.xbmcgui().ControlImage(0,0,300,105,fn)
-		self.endOfDirectory(False,True,True)
-		win.addControl(image)
-		win.show()
-		keyboard = self.xbmc().Keyboard('',self.lang(30304) + str(trynum))
-		keyboard.doModal()
-		win.close()
-		del win
-		if keyboard.isConfirmed(): return keyboard.getText()
-		return ''
-				
-	def go(self,mode,url,name,user):
-		#print mode,url,name,user
-		#for x in range(1,20): self.login()
-		#return
-		success = False
-		terms = ''
-		if mode==4 or mode==5:
-			terms = self.getParamString('terms')
-			if not terms: terms = self.getSearchTerms()
-		try:
-			success = self.process(mode,url,name,user,terms)
-			#print 'NO_LOGIN ' + str(mode)
-		except: #TODO more discriminating except clause
-			import traceback
-			traceback.print_exc()
-			if self.user == 'default':
-				print 'PHOTOS: LOGIN ' + str(mode)
-				if not self.login(): return False #only login if we have to
-			success = self.process(mode,url,name,user,terms)
-		return success
-				
-	def process(self,mode,url,name,user,terms):
-		if mode==None or url==None or len(url)<1:
-			print 'plugin.image.picasa - Version: %s' % self.version() 
-			self.CATEGORIES()
-		elif mode==1:
-			self.ALBUMS(user=url)
-		elif mode==2:
-			self.TAGS(user=url)
-		elif mode==3:
-			self.CONTACTS(user=url)
-		elif mode==4:
-			return self.SEARCH_USER(user=url,terms=terms)
-		elif mode==5:
-			return self.SEARCH_PICASA(terms=terms)
-		elif mode==101:
-			self.ALBUM(url,user=user)
-		elif mode==102:
-			self.TAG(url,user=user)
-		elif mode==103:
-			self.CONTACT(url,name)
-		return True
-	
+
+	def checkUpgrade(self):
+		lastAPILevel = self.getSetting('API_LEVEL',0)
+		if lastAPILevel >= API_LEVEL: return
+
+		self.setSetting('API_LEVEL',API_LEVEL)
+
+		if lastAPILevel < 1:
+			LOG('API Level < 1: Updating token storage...')
+
+			users = None
+			token = self.getSetting('access_token')
+			if token:
+				users = {
+					'default':{
+						'access_token': token,
+						'refresh_token': self.getSetting('refresh_token'),
+						'token_expiration': self.getSetting('token_expiration','0')
+					}
+				}
+				self.currentUser = 'default'
+				self.setSetting('current_user','default')
+				self.setSetting('access_token','')
+				self.setSetting('refresh_token','')
+				self.setSetting('token_expiration','')
+			print users
+			if not users:
+				usersString = self.getSetting('users')
+				if not usersString: return
+				self.setSetting('users','')
+				import json, binascii
+				users = json.loads(binascii.unhexlify(usersString))
+
+			replace = {}
+			ID = 0
+			for k in users.keys():
+				if k == self.currentUser:
+					self.currentUser = ID
+					self.setSetting('current_user',ID)
+				replace[ID] = users[k]
+				replace[ID]['name'] = k
+				ID += 1
+
+			self._api = PicasaWebOauth2API()
+			self._api.setUsers(replace)
+			self._api.setUser(self.currentUser)
+
+	def changeCurrentUser(self,ID,name=None):
+		self.api().setUser(ID)
+		if name: self.api().setUserName(name)
+		self.setSetting('current_user',ID)
+
+	def deleteUser(self,ID):
+		self.api().deleteUser(ID)
+
 	def showImage(self):
 		url = sys.argv[2].split('=',1)[-1]
 		url = self.urllib().unquote(url)
-		print('plugin.image.picasa - Showing photo with URL: ' + url)
+		LOG('Showing photo with URL: ' + url)
 		image_path = os.path.join(self.dataPath('cache'),'image.jpg')
 		open(image_path,'w').write(self.urllib2().urlopen(url).read())
 		listitem = self.xbmcgui().ListItem(label='PicasaWeb Photo', path=image_path)
 		listitem.setInfo(type='pictures',infoLabels={"Title": 'PicasaWeb Photo'})
 		self.xbmcplugin().setResolvedUrl(handle=int(sys.argv[1]), succeeded=True, listitem=listitem)
-		
+
 	def filterAllows(self,privacy):
 		if privacy == 'only_you': privacy = 'protected'
 		if not self.pfilter: self.pfilter = self.getSettingInt('privacy_filter')
@@ -187,83 +213,97 @@ class picasaPhotosSession(AddonHelper):
 		level = self.privacy_levels.index(privacy)
 		if level <= self.pfilter: return True
 		return False
-		
-	def getSearchTerms(self):
+
+	def getSearchTerms(self,terms=''):
+		terms = terms or plugin.request.args.get('terms',[''])[0]
+		if terms: return terms
 		keyboard = self.xbmc().Keyboard('',self.lang(30404))
 		keyboard.doModal()
 		if keyboard.isConfirmed(): return keyboard.getText()
 		return ''
-			
+
 	def getMapParams(self):
 		mtype = ['hybrid','satellite','terrain','roadmap'][self.getSettingInt('default_map_type')]
 		msource = ['google','yahoo','osm'][self.getSettingInt('default_map_source')]
 		mzoom = self.getSetting('map_zoom')
 		return "type=%s&source=%s&zoom=%s" % (mtype,msource,mzoom)
-		
-	def addPhotos(self,photos,mode=None,**kwargs):
-		self.setViewMode('viewmode_photos')
-		
-		total = int(photos.total_results.text)
-		start = int(photos.start_index.text)
-		per_page = int(photos.items_per_page.text)
-		url = self.getParamString('url',self.user)
-		
+
+	def addPhotos(self,photos,source='',ID=''):
+		plugin.set_content('images')
+
+		total = photos['openSearch$totalResults']['$t']
+		start = photos['openSearch$startIndex']['$t']
+		per_page = photos['openSearch$itemsPerPage']['$t']
+		items = []
 		## Previous Page ------------------------#
 		if start > 1:
 			previous = '<- '+ self.lang(30401)
 			previous_index = start - per_page
-			self.addDir(previous.replace('@REPLACE@',str(per_page)),self.addonPath('resources/images/previous.png'),url=url,mode=mode,start_index=previous_index,**kwargs)
+			items.append({	'label':previous.replace('@REPLACE@',str(per_page)),
+							'path':plugin.url_for(source,ID=ID,start=previous_index),
+							'thumbnail':self.addonPath('resources/images/previous.png'),
+			})
 		##---------------------------------------#
-		
+
 		mparams = self.getMapParams()
-		import time
-		for p in photos.entry:
-			if not self.filterAllows(p.extension_elements[0].text): continue
+		for p in photos.get('entry',[]):
+			if not self.filterAllows(p['gphoto$access']['$t']): continue
 			contextMenu = []
-			lat_lon = p.geo.Point.pos.text
-			if lat_lon:
-				lat_lon = ','.join(lat_lon.split())
-				contextMenu = [	(self.lang(30405),'XBMC.RunScript(special://home/addons/plugin.image.picasa/maps.py,plugin.image.picasa,%s,%s)' % (lat_lon,mparams)),
-								(self.lang(30406) % self.lang(30407),'XBMC.RunScript(special://home/addons/plugin.image.picasa/default.py,viewmode,viewmode_photos)'),
+			gps = p.get('georss$where')
+			if gps:
+				gps = ','.join(gps['gml$Point']['gml$pos']['$t'].split())
+				contextMenu = [	(self.lang(30405),'XBMC.RunScript(special://home/addons/plugin.image.picasa/maps.py,plugin.image.picasa,%s,%s)' % (gps,mparams)),
+								(self.lang(30406) % self.lang(30407),'XBMC.RunScript(plugin.image.picasa,viewmode,viewmode_photos)'),
 								]
-			content = p.media.content[-1]
-			mtype = 'pictures'
-			img_url = p.content.src
+			content = p['media$group']['media$content']
+			mtype = ''
+			video = ''
+			img_url = ''
+			for c in content:
+				if c['type'].startswith('video'):
+					mtype = 'video'
+					video = c['url']
+				elif c['type'].startswith('image'):
+					mtype = 'pictures'
+					img_url = c['url']
+			img_url = p['media$group']['media$content'][-1]['url']
 			first,second = img_url.rsplit('/',1)
-			img_url = '/'.join([first,'s0',second]) + '&t=' + str(time.time()) #without this, photos larger than 2048w XBMC says: "Texture manager unable to load file:" - Go Figure
-			#img_url = self.urllib().quote(img_url)
-			#img_url = 'plugin://plugin.image.picasa/?photo_url=' + img_url
-			#print img_url,p.media.description.text
-			title = p.media.description.text or p.title.text or p.media.title.text
+			img_url = '/'.join([first,'s0',second]) #Not working since Gotham # + '&t=' + str(time.time()) #without this, photos larger than 2048w XBMC says: "Texture manager unable to load file:" - Go Figure
+			title = U(p['media$group']['media$description']['$t'] or p['title']['$t'] or p['media$group']['media$title']['$t'])
 			title = title.replace('\n',' ')
-			if content.medium == 'video':
-				mtype = 'video'
-				img_url = content.url
-			contextMenu.append(('Download','XBMC.RunScript(special://home/addons/plugin.image.picasa/default.py,download,%s)' % img_url))
-			if p.media.thumbnail and len(p.media.thumbnail) > 2:
-				thumb = p.media.thumbnail[2].url
+			contextMenu.append(('Download','XBMC.RunScript(plugin.image.picasa,download,%s)' % self.urllib().quote(img_url)))
+			if p['media$group']['media$thumbnail'] and len(p['media$group']['media$thumbnail']) > 2:
+				thumb = p['media$group']['media$thumbnail'][2]['url']
 			else:
-				thumb = p.media.content[0].url
-			if not self.addLink(title,img_url,thumb,total=total,contextMenu=contextMenu,mtype=mtype): break
-			
+				thumb = p['media$group']['media$thumbnail'][0]['url']
+			items.append({	'label':title,
+							'path':mtype == 'video' and video or img_url,
+							'thumbnail':thumb,
+							'context_menu':contextMenu,
+							'info':{'type':mtype},
+							'is_playable':True
+			})
+
 		## Next     Page ------------------------#
-		total = int(photos.total_results.text)
 		end_of_page =  (start + per_page) - 1
-		
-		if end_of_page >= total: return
-		
+
+		if end_of_page >= total: return plugin.finish(items, update_listing=not self.initial(), view_mode=self.getViewMode('viewmode_photos'))
+
 		next_ = '('+str(end_of_page)+'/'+str(total)+') '
-		
+
 		maybe_left = total - end_of_page
 		if maybe_left <= per_page:
 			next_ += self.lang(30403).replace('@REPLACE@',str(maybe_left))
 		else:
 			next_ += self.lang(30402).replace('@REPLACE@',str(per_page))
-		
+
 		next_index = start + per_page
-		self.addDir(next_+' ->',self.addonPath('resources/images/next.png'),url=url,mode=mode,start_index=next_index,**kwargs)
-		##---------------------------------------#
-		
+		items.append({	'label':next_+' ->',
+						'path':plugin.url_for(source,ID=ID,start=next_index),
+						'thumbnail':self.addonPath('resources/images/next.png'),
+		})
+		return plugin.finish(items, update_listing=not self.initial(), view_mode=self.getViewMode('viewmode_photos'))
+
 	def getCachedThumbnail(self,name,url):
 		tn = self.dataPath('cache/' + self.binascii().hexlify(name) + '.jpg')
 		if not os.path.exists(tn):
@@ -273,71 +313,148 @@ class picasaPhotosSession(AddonHelper):
 				return url
 		else:
 			return tn
-				
-	def setViewMode(self,setting):
-		mode = self.getSetting(setting)
-		if mode: self.xbmc().executebuiltin("Container.SetViewMode(%s)" % mode)
-		
-	def CATEGORIES(self):
-		if self.user: self.addDir(self.lang(30100),url=self.user,mode=1,_thumbnail=self.addonPath('resources/images/albums.png'))
-		if self.user: self.addDir(self.lang(30101),url=self.user,mode=2,_thumbnail=self.addonPath('resources/images/tags.png'))
-		if self.user: self.addDir(self.lang(30102),url=self.user,mode=3,_thumbnail=self.addonPath('resources/images/contacts.png'))
-		if self.user: self.addDir(self.lang(30103),url=self.user,mode=4,_thumbnail=self.addonPath('resources/images/search.png'))
-		self.addDir(self.lang(30104),url='default',mode=5,_thumbnail=self.addonPath('resources/images/search_picasa.png'))
-		
-	def ALBUMS(self,user='default'):
-		self.setViewMode('viewmode_albums')
-		
-		albums = self.api().GetFeed('/data/feed/api/user/%s?kind=album&thumbsize=256c' % (user))
-		#albums = self.api().GetUserFeed(user=user)
-		tot = int(albums.total_results.text)
-		cm = [(self.lang(30406) % self.lang(30100),'XBMC.RunScript(special://home/addons/plugin.image.picasa/default.py,viewmode,viewmode_albums)')]
-		for album in albums.entry:
-			if not self.filterAllows(album.access.text): continue
-			title = album.title.text + ' (' + album.numphotos.text + ')'
-			if not self.addDir(title,album.media.thumbnail[0].url,tot,contextMenu=cm,url=album.gphoto_id.text,mode=101,user=user): break
-			
-	def TAGS(self,user='default'):
-		self.setViewMode('viewmode_tags')
-		
-		tags = self.api().GetFeed('/data/feed/api/user/%s?kind=tag' % user)
-		tot = int(tags.total_results.text)
-		cm = [(self.lang(30406) % self.lang(30101),'XBMC.RunScript(special://home/addons/plugin.image.picasa/default.py,viewmode,viewmode_tags)')]
-		for t in tags.entry:
-			if not self.addDir(t.title.text,'',tot,contextMenu=cm,url=t.title.text,mode=102,user=user): break
-			
-	def CONTACTS(self,user='default'):
-		self.setViewMode('viewmode_favorites')
-		
-		contacts = self.api().GetFeed('/data/feed/api/user/%s/contacts?kind=user' % (user))
-		tot = int(contacts.total_results.text)
-		cm = [(self.lang(30406) % self.lang(30102),'XBMC.RunScript(special://home/addons/plugin.image.picasa/default.py,viewmode,viewmode_favorites)')]
-		for c in contacts.entry:
-			tn = self.getCachedThumbnail(c.user.text, c.thumbnail.text)
-			#tn = c.thumbnail.text
-			#tn = tn.replace('s64-c','s256-c').replace('?sz=64','?sz=256')
-			if not self.addDir(c.nickname.text,tn,tot,contextMenu=cm,url=c.user.text,mode=103,name=c.nickname.text): break
-			
-	def SEARCH_USER(self,user='default',terms=''):
-		if not terms: return False
-		start = self.getParamInt('start_index',1)
-		uri = '/data/feed/api/user/%s?kind=photo&q=%s' % (user, terms)
-		photos = self.api().GetFeed(uri,limit=self.maxPerPage(),start_index=start)
-		self.addPhotos(photos,mode=4,terms=terms)
-		return True
-			
-	def SEARCH_PICASA(self,terms=''):
-		if not terms: return False
-		start = self.getParamInt('start_index',1)
-		uri = '/data/feed/api/all?q=%s' % (terms.lower())
-		photos = self.api().GetFeed(uri,limit=self.maxPerPage(),start_index=start)
-		self.addPhotos(photos,mode=5,terms=terms)
-		return True
-				
-	def CONTACT(self,user,name):
-		self.setViewMode('viewmode_contact')
 
-		#fix for names ending in 
+	def apiAuthorized(self):
+		return self.api() and self.api().authorized()
+
+	@plugin.route('/')
+	@plugin.route('/categories/',name='CATEGORIES_SWITCH',options={'switch':True})
+	def CATEGORIES(self,switch=None,add=None):
+		if switch:
+			self.switchUser()
+		else:
+			self.checkUpgrade()
+
+		LOG(('Version: %s' % self.version()) + (self.apiAuthorized() and ' AUTHORIZED' or ''))
+		items = []
+		if self.apiAuthorized() and self.user():
+			items.append({'label':self.lang(30100),'path':plugin.url_for('ALBUMS'),'thumbnail':self.addonPath('resources/images/albums.png')})
+			items.append({'label':self.lang(30101),'path':plugin.url_for('TAGS'),'thumbnail':self.addonPath('resources/images/tags.png')})
+			items.append({'label':self.lang(30102),'path':plugin.url_for('CONTACTS'),'thumbnail':self.addonPath('resources/images/contacts.png')})
+			items.append({'label':self.lang(30103),'path':plugin.url_for('SEARCH_USER'),'thumbnail':self.addonPath('resources/images/search.png')})
+		items.append({'label':self.lang(30104),'path':plugin.url_for('SEARCH_PICASA'),'thumbnail':self.addonPath('resources/images/search_picasa.png')})
+		if self.user():
+			items.append({'label':'Users ([B]{0}[/B])'.format(self.api().userName()),'path':plugin.url_for('CATEGORIES_SWITCH')})
+		return plugin.finish(items, update_listing=bool(switch))
+
+	def askUserName(self,msg='Enter User Name To Add'):
+		return self.xbmcgui().Dialog().input(msg)
+
+	def addUser(self):
+		IDs = [u[0] for u in self.api().users()]
+		name = self.askUserName()
+		if not name: return False
+		ID = 0
+		while str(ID) in IDs: ID+=1
+		ID = str(ID)
+		api = self.api() or self._api
+		if not api: return
+		api.setUser(ID)
+		api.setUserName(name)
+		api.authorize()
+		if not api.authorized():
+			api.deleteUser(ID)
+			api.setUser(self.currentUser)
+			return False
+		self.changeCurrentUser(ID,name)
+		return True
+
+	def renameUser(self,users=None):
+		users = users or self.api().users()
+		disp = ['[B]{0}[/B]'.format(u[1]) for u in users]
+		idx = self.xbmcgui().Dialog().select('Users',disp)
+		if idx < 0: return
+		new = self.askUserName('Enter New Name')
+		if not new: return
+		self.api().renameUser(users[idx][0],new)
+
+	def switchUser(self):
+		users = self.api().users()
+		others = [u for u in users if u[0] != self.currentUser]
+		disp = ['[B]{0}[/B]'.format(u[1]) for u in others]
+		idx = self.xbmcgui().Dialog().select('Users',disp + ['[COLOR FF00FF00]+[/COLOR] Add A User','[COLOR FFFFFF00]=[/COLOR] Rename A User','[COLOR FFFF0000]-[/COLOR] Remove A User'])
+		if idx < 0: return
+		if idx == len(others):
+			self.addUser()
+		elif idx == len(others) + 1:
+			self.renameUser(users)
+		elif idx == len(others) + 2:
+			disp = ['[B]{0}[/B]'.format(u[1]) for u in others]
+			idx = self.xbmcgui().Dialog().select('Users',disp)
+			if idx < 0: return
+			ID = others[idx][0]
+			self.deleteUser(ID)
+		else:
+			self.changeCurrentUser(others[idx][0])
+
+	@plugin.route('/albums/')
+	def ALBUMS(self):
+		user = self.user()
+
+		albums = self.api().GetFeed('/data/feed/api/user/%s?kind=album&thumbsize=256c' % user)
+		#tot = len(albums['entry'])
+		cm = [(self.lang(30406) % self.lang(30100),'XBMC.RunScript(plugin.image.picasa,viewmode,viewmode_albums)')]
+		items = []
+		for album in albums.get('entry',[]):
+			if not self.filterAllows(album['gphoto$access']['$t']): continue
+			title = u'{0} ({1})'.format(U(album['title']['$t']),album['gphoto$numphotos']['$t'])
+			items.append({	'label':title,
+							'path':plugin.url_for('ALBUM',ID=album['gphoto$id']['$t'],user=user),
+							'thumbnail':album['media$group']['media$thumbnail'][0]['url'],
+							'context_menu':cm})
+		return plugin.finish(items,view_mode=self.getViewMode('viewmode_albums'))
+
+	@plugin.route('/tags/')
+	def TAGS(self):
+		user = self.user()
+
+		tags = self.api().GetFeed('/data/feed/api/user/%s?kind=tag' % user)
+		#tot = int(tags.total_results.text)
+		cm = [(self.lang(30406) % self.lang(30101),'XBMC.RunScript(plugin.image.picasa,viewmode,viewmode_tags)')]
+		items = []
+		for t in tags.get('entry',[]):
+			items.append({	'label':U(t['title']['$t']),
+							'path':plugin.url_for('TAG',ID=t['title']['$t'],user=user),
+							'thumbnail':self.addonPath('resources/images/tags.png'),
+							'context_menu':cm})
+		return plugin.finish(items, view_mode=self.getViewMode('viewmode_tags'))
+
+	@plugin.route('/contacts/')
+	def CONTACTS(self):
+		contacts = self.api().GetFeed('/data/feed/api/user/%s/contacts?kind=user' % self.user())
+		#tot = int(contacts.total_results.text)
+		cm = [(self.lang(30406) % self.lang(30102),'XBMC.RunScript(plugin.image.picasa,viewmode,viewmode_favorites)')]
+		items = []
+		for c in contacts.get('entry',[]):
+			tn = self.getCachedThumbnail(c['gphoto$user']['$t'], c['gphoto$thumbnail']['$t'])
+			#tn = c['thumbnail']['$t']
+			#tn = tn.replace('s64-c','s256-c').replace('?sz=64','?sz=256')
+			items.append({	u'label':U(c['gphoto$nickname']['$t']),
+							'path':plugin.url_for('CONTACT',user=S(c['gphoto$user']['$t']),name=S(c['gphoto$nickname']['$t'])),
+							'thumbnail':tn,
+							'context_menu':cm})
+		return plugin.finish(items, view_mode=self.getViewMode('viewmode_favorites'))
+
+	@plugin.route('/search_user/')
+	@plugin.route('/search_user/<ID>',name='SEARCH_USER_PAGE')
+	def SEARCH_USER(self,ID=''):
+		terms = self.getSearchTerms(ID)
+		uri = '/data/feed/api/user/%s?kind=photo&q=%s' % (self.user(), self.urllib().quote(terms))
+		photos = self.api().GetFeed(uri,max_results=self.maxPerPage(),start_index=self.start())
+		return self.addPhotos(photos,'SEARCH_USER_PAGE',terms)
+
+	@plugin.route('/search/')
+	@plugin.route('/search/<ID>',name='SEARCH_PICASA_PAGE')
+	def SEARCH_PICASA(self,ID=''):
+		terms = self.getSearchTerms(ID)
+		uri = '/data/feed/api/all?q=%s' % self.urllib().quote(terms.lower())
+		photos = self.api().GetFeed(uri,max_results=self.maxPerPage(),start_index=self.start())
+		return self.addPhotos(photos,'SEARCH_PICASA_PAGE',terms)
+
+	@plugin.route('/contact/<user>')
+	def CONTACT(self,user):
+		name = U(plugin.request.args.get('name',[''])[0])
+		#fix for names ending in
 		if name[-1].lower() == 's':
 			albums = self.lang(30200).replace("@REPLACE@'s",name + "'").replace('@REPLACE@',name)
 			tags = self.lang(30201).replace("@REPLACE@'s",name + "'").replace('@REPLACE@',name)
@@ -348,30 +465,59 @@ class picasaPhotosSession(AddonHelper):
 			tags = self.lang(30201).replace('@REPLACE@',name)
 			favs = self.lang(30202).replace('@REPLACE@',name)
 			search = self.lang(30203).replace('@REPLACE@',name)
-			
-		cm = [(self.lang(30406) % self.lang(30408),'XBMC.RunScript(special://home/addons/plugin.image.picasa/default.py,viewmode,viewmode_contact)')]
-		self.addDir(albums,self.addonPath('resources/images/albums.png'),contextMenu=cm,url=user,mode=1)
-		self.addDir(tags,self.addonPath('resources/images/tags.png'),contextMenu=cm,url=user,mode=2)
-		self.addDir(favs,self.addonPath('resources/images/contacts.png'),contextMenu=cm,url=user,mode=3)
-		self.addDir(search,self.addonPath('resources/images/search.png'),contextMenu=cm,url=user,mode=4)
-	
-	def TAG(self,tag,user='default'):
-		start = self.getParamInt('start_index',1)
-		uri = '/data/feed/api/user/%s?kind=photo&tag=%s' % (user, tag.lower())
-		photos = self.api().GetFeed(uri,limit=self.maxPerPage(),start_index=start)
-		self.addPhotos(photos,mode=102,user=user)
 
-	def ALBUM(self,aid,user='default'):
-		start = self.getParamInt('start_index',1)
-		uri = '/data/feed/api/user/%s/albumid/%s?kind=photo' % (user,aid)
-		print uri
-		photos = self.api().GetFeed(uri,limit=self.maxPerPage(),start_index=start)
-		self.addPhotos(photos,mode=101,user=user)
-		
+		cm = [(self.lang(30406) % self.lang(30408),'XBMC.RunScript(plugin.image.picasa,viewmode,viewmode_contact)')]
+		items = []
+		items.append({	'label':albums,
+						'path':plugin.url_for('ALBUMS',user=user),
+						'thumbnail':self.addonPath('resources/images/albums.png'),
+						'context_menu':cm
+		})
+		items.append({	'label':tags,
+						'path':plugin.url_for('TAGS',user=user),
+						'thumbnail':self.addonPath('resources/images/tags.png'),
+						'context_menu':cm
+		})
+		items.append({	'label':favs,
+						'path':plugin.url_for('CONTACTS',user=user),
+						'thumbnail':self.addonPath('resources/images/contacts.png'),
+						'context_menu':cm
+		})
+		items.append({	'label':search,
+						'path':plugin.url_for('SEARCH_USER',user=user),
+						'thumbnail':self.addonPath('resources/images/searcg.png'),
+						'context_menu':cm
+		})
+		return plugin.finish(items, view_mode=self.getViewMode('viewmode_contact'))
+
+	@plugin.route('/tag/<ID>')
+	def TAG(self,ID):
+		uri = '/data/feed/api/user/%s?kind=photo&tag=%s' % (self.user(), ID.lower())
+		photos = self.api().GetFeed(uri,max_results=self.maxPerPage(),start_index=self.start())
+		return self.addPhotos(photos,'TAG',ID)
+
+	@plugin.route('/album/<ID>')
+	def ALBUM(self,ID):
+		uri = '/data/feed/api/user/%s/albumid/%s?kind=photo' % (self.user(),ID)
+		photos = self.api().GetFeed(uri,max_results=self.maxPerPage(),start_index=self.start())
+		return self.addPhotos(photos,'ALBUM',ID)
+
+	def user(self):
+		return plugin.request.args.get('user',[self._user])[0]
+
+	def start(self):
+		return plugin.request.args.get('start',[1])[0]
+
+	def initial(self):
+		return not plugin.request.args.get('start')
+
+	def getViewMode(self,setting):
+		return self.getSetting(setting) or None
+
 	def maxPerPage(self):
 		if self.isSlideshow: return 1000
 		return self.max_per_page
-			
+
 def setViewDefault():
 	import xbmc #@UnresolvedImport
 	setting = sys.argv[2]
@@ -384,14 +530,14 @@ def setViewDefault():
 		except:
 			pass
 	if not view_mode: return
-	#print "ViewMode: " + view_mode
 	AddonHelper('plugin.image.picasa').setSetting(setting,view_mode)
-	
+
 def downloadURL():
-	url = sys.argv[2]
+	import urllib
+	url = urllib.unquote(sys.argv[2])
 	import saveurl
 	saveurl.SaveURL('plugin.image.picasa',url,'cache')
-	
+
 if sys.argv[1] == 'viewmode':
 	setViewDefault()
 elif sys.argv[1] == 'download':
@@ -399,5 +545,9 @@ elif sys.argv[1] == 'download':
 elif len(sys.argv) > 2 and sys.argv[2].startswith('?photo_url'):
 	picasaPhotosSession(show_image=True)
 else:
-	picasaPhotosSession()
-	
+	try:
+		SESSION = picasaPhotosSession()
+		plugin.run()
+	except:
+		ERROR('FAIL')
+

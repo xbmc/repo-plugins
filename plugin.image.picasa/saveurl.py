@@ -11,7 +11,7 @@ def ERROR(message,hide_tb=False):
 	return short
 	
 def LOG(message):
-	print 'FORUMBROWSER: %s' % message
+	print 'plugin.image.picasa: %s' % message
 	
 class SaveURL:
 	def __init__(self,addonID,url,temp):

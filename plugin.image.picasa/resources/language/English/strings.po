@@ -18,11 +18,7 @@ msgid "General"
 msgstr ""
 
 msgctxt "#30001"
-msgid "Login Email"
-msgstr ""
-
-msgctxt "#30002"
-msgid "Login Password"
+msgid "User Name"
 msgstr ""
 
 msgctxt "#30003"
@@ -58,7 +54,7 @@ msgid "Private"
 msgstr ""
 
 msgctxt "#30011"
-msgid "Use Login"
+msgid "Use With Authorization"
 msgstr ""
 
 #empty strings from id 30012 to 30099

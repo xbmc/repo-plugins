@@ -1,6 +1,73 @@
 picasaPhotos Changelog
-	
-Current Version : 1.0.2
+
+*** 1.0.18 ***
+
+Set content type to images when displaying images
+
+*** 1.0.17 ***
+
+Remove requests2 import
+
+*** 1.0.16 ***
+
+Updated OAuth module because it was accidently overwriting the refresh token on refresh thereby making the next refresh impossible
+
+*** 1.0.15 ***
+
+Moved token/user handling to the OAuth helper module
+Added the ability to change user names
+
+*** 1.0.14 ***
+
+Added the ability to have multiple users
+
+*** 1.0.13 ***
+
+Fix for images not displaying on Gotham
+
+*** 1.0.12 ***
+
+More fixes for encoding errors
+
+*** 1.0.11 ***
+
+More fixes for encoding errors
+
+*** 1.0.10 ***
+
+More fixes for encoding errors
+
+*** 1.0.9 ***
+
+Fix for encoding errors
+
+*** 1.0.8 ***
+
+Added import for the requests module to addon.xml
+
+*** 1.0.7 ***
+
+Add manual printing of traceback for platforms like ATV2
+
+*** 1.0.6 ***
+
+Fix for error when not using authentication
+Change default max items per page to 20
+
+*** 1.0.5 ***
+
+Changed 'Use Login' in settings to 'Use With Authorization'
+
+*** 1.0.4 ***
+
+Add xbmcswift2 import to addon.xml
+Remove elementtree import
+
+*** 1.0.3 ***
+
+Dump google API and create internal API
+Change to oauth2 device authentication
+Use xbmcswift2 for plugin URL routing
 
 *** 1.0.2 ***
 

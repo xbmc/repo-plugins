@@ -1,0 +1,58 @@
+0.8-    (22/03/2016)
+        Added Shaqtin' a fool, The starters, and more videos
+        Show live/upcoming games in local timezone, according to settings
+        Added 720p at 60fps video quality
+        Added list of upcoming live games
+        Force the bitrate of live games
+        Show the start time of upcoming games
+        Move condensed link inside archive, alongside home/away feeds
+        Move highlights link inside archive, alongside home/away feeds
+        Enable playing 2012/2013 season
+0.7-    (10/12/2014)
+        Force the bitrate of archive and condensed videos (xbmc always picks 720p format)
+        Fixed year for previous season
+0.6.7-  (29/03/2014)
+        Fixed a bug causing a "One or more items failed to play" error even though the playback worked
+0.6.6-  (24/03/2014)
+        The archive and condensed games work again, but require Gotham
+0.6.5-  (02/12/2013)
+        added home/away feeds
+        fix highlight and top plays on frodo
+        nba tv live: force the right bitrate by getting the xml first
+0.6.4-  (24/11/2013)
+        added nba tv live
+        fixed live in different timezones
+        added highlights and top plays
+        removed httplib2 dependency
+        fix week ending too soon for people not in America on sunday night
+0.6.3-  (17/11/2013)
+        fix new orleans team name
+        delete the video urls cached if the video quality setting has changed
+        fix detecting live games again (guess end date)
+        fix error when scores are enabled
+0.6.2-  (15/11/2013)
+        Remember the playback position
+        Remember video url after parsing it (using cache plugin)
+        Better detection of live and past game
+0.6.1-  (13/11/2013)
+        Added live games (working only for gotham), fixed archive 'video not found' when the video is actually up
+0.6-    (09/11/2013)
+        Try and guess the game url if the xml returned is empty
+0.5.3- Added markers: (F) for future games and (NV) for games without videos
+0.5.2- Removed py-dom-xpath from the requirements and links to the httplib2 addon
+0.5- Rewrote the login procedure to identify errors
+0.4- Removed the extra images to save space
+0.3- First released version
+0.2- Patched for the 2012-2013 season playoffs
+0.1.6- bugfix for missing 2012 finals games
+0.1.1- bugfix for missing 2012 finals games
+0.1.0- added listing for complete 2011/2012 season
+0.0.9- fix for new domain watch.nba.com
+0.0.8- fix for playoff game recaps
+0.0.7- fix for archived playoff games
+0.0.6- fix for strange schedule js response
+0.0.5- apply quality settings for highlights, high = 720p
+0.0.4- added highlights and scores
+0.0.3- video idx check
+0.0.2- initial release
+0.0.1- initial test version

@@ -17,12 +17,6 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  
 """
-from _codecs import encode
-from cgitb import enable
-from platform import mac_ver
-
-from PIL._imaging import outline
-
 import xbmc, xbmcgui, xbmcaddon, xbmcplugin, xbmcvfs, sys, os, re,json
 from common_variables import *
 from directory import *
@@ -224,9 +218,9 @@ def get_show_episode_parts(name, url, iconimage):
         source = ''
 
     if source:
-        match = re.compile("videoUrl: '(.*)playlist\.m3u8\?([^']*)',").findall(source)
+        match = re.compile("[:=] '(.*)playlist\.m3u8\?([^']*)'\s*[,;]").findall(source)
 
-        if match[0]:
+        if match and match[0]:
             link = match[0][0] + tvi_resolver(match[0][0] + 'playlist.m3u8?' + match[0][1]).replace("%3D", "=")
             print link
             playlist = xbmc.PlayList(1)
@@ -246,6 +240,7 @@ def tvi_resolver(url):
     try:
         source = abrir_url(url)
     except:
+        print "Unexpected error:", sys.exc_info()[0], sys.exc_info()[1]
         source = ''
     if source:
         try:
@@ -261,6 +256,7 @@ def tvi_resolver(url):
             if match[0][0]:
                 return match[0]
         except:
+            print "Unexpected error:", sys.exc_info()[0], sys.exc_info()[1]
             return ''
     else:
         msgok(translate(30001), translate(30018))

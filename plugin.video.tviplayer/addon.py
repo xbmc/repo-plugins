@@ -20,6 +20,8 @@
 
 import urllib,urllib2,re,xbmcplugin,xbmcgui,xbmc,xbmcaddon,xbmcvfs
 import os,sys
+from _ast import mod
+
 from resources.common_variables import *
 from resources.utilities import *
 from resources.directory import *
@@ -103,10 +105,7 @@ except: pass
 try: plot=urllib.unquote_plus(params["plot"])
 except: pass
 
-print ("Mode: "+str(mode))
-print ("URL: "+str(url))
-print ("Name: "+str(name))
-print ("iconimage: "+str(iconimage))
+xbmc.log('TVI-KODI-PLAYER Mode: %s   URL: %s  Name: %s  IconImage: %s' % (str(mode), str(url),str(name),str(iconimage)))
 
 
 if mode==None: main_menu()

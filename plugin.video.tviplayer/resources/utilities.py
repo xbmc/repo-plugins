@@ -27,9 +27,6 @@ def title_clean_up(title):
 
 def removeNonAscii(s): return "".join(filter(lambda x: ord(x)<128, s))
 
-def clean_html(text):
-    return text.replace('<span id="etcPlus0">...</span><span class="moretext" id="hiddenText0">','').replace('<span onclick="RTPPLAY.utils.textHideShow(0)" id="moreText0" class="maistext" title="Saiba mais sobre o programa"><b> mostrar mais<span class="img_play_nr">','').replace('</span>','').replace('</b>','').replace('</p>','').replace('<br />','').replace('<br/>','').replace('<p>','').replace('<br>','')
-
 def format_data(data):
     dateformate = "%d/%m/%Y"
     if data=="Hoje" : return date.today().strftime(dateformate)

@@ -41,13 +41,12 @@ class myAddon(t1mAddon):
          thumb  = a['thumbnail_s']
          fanart = a['thumbnail']
          subtitle = a['subtitle']
-         genre = a['genre']['TV']
          infoList['Title'] = name
          st = datetime.datetime.fromtimestamp(int(a['pubDate'])/1000).strftime('%H:%M')
          et = datetime.datetime.fromtimestamp(int(a['endDate'])/1000).strftime('%H:%M')
          duration = (int(a['endDate'])-int(a['pubDate']))/1000
          infoList['Plot']  = st +' - '+ et + '        ' + str(duration/60) + ' min.\n' + subtitle + '\n'+ plot +'\n'+content
          infoList['duration'] = duration
-         infoList['genre'] = genre
+         infoList['genre'] = 'News'
          ilist = self.addMenuItem(name,'GV', ilist, nhkurl, thumb, fanart, infoList, isFolder=False)
       return(ilist)

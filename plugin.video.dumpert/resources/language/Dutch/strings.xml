@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!--
+     * Main
+     -->
+    <string id="30000">Toppers</string>
+    <string id="30001">Filmpjes</string>
+    <string id="30002">Themas</string>
+    <string id="30003">Floppers</string>
+    <string id="30004">Zoeken</string>
+    <string id="30005">Toppers Tijdmachine</string>
+    <string id="30006">Klassiekerts</string>
+
+    <!-- 
+     * Settings labels 
+     -->
+    <string id="30100">Versie</string>
+    <string id="30101">Auteur</string>
+    <string id="30102">Website</string>
+
+    <string id="30200">Video player</string>
+    <string id="30201">Auto</string>
+    <string id="30202">DVDPlayer</string>
+    <string id="30203">MPlayer</string>
+
+    <string id="30300">Video kwaliteit</string>
+    <string id="30301">Laag</string>
+    <string id="30302">Midden</string>
+    <string id="30303">Hoog (indien beschikbaar)</string>
+
+    <string id="30400">Debug</string>
+    <string id="30600">Toon NSFW filmpjes</string>
+
+    <!--
+    * Texts
+    -->
+    <string id="30501">%s tot %s</string>
+    <string id="30502">Pagina %u</string>
+    <string id="30503">Volgende pagina</string>
+    <string id="30504">Video wordt opgehaald...</string>
+    <string id="30505">Video niet gevonden.</string>
+    <string id="30506">Fout bij het afspelen van video.</string>
+    <string id="30507">Fout bij ophalen van pagina %s</string>
+    <string id="30508">Wat zoek je?</string>
+    <string id="30509">Kies een datum</string>
+    <string id="30510">Dagtop voor %s</string>
+    <string id="30511">Weektop voor %s</string>
+    <string id="30512">Maandtop voor %s</string>
+</strings>

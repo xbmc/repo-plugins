@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+<!--the number after default indicates the index, index 0 is the first lvalue, index 1 is the second lvalue and so on-->
+	<setting id="video"         label="30300" type="enum" default="2" lvalues="30301|30302|30303"/>
+	<setting id="nsfw" 		label="30600" type="bool" default="false"/>
+	<setting id="debug" 		label="30400" type="bool" default="false"/>
+</settings>

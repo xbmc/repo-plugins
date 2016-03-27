@@ -30,7 +30,7 @@ class myAddon(t1mAddon):
      html = self.getRequest('http://abc.go.com/shows/abc-updates/news/insider/143-for-free-watch-abc-watch-full-episodes-with-no-sign-in-042715?cid=abchp_143_for_free')
      a = re.compile('<p align="center".+?<a.+?name="(.+?)".+?<a href="(.+?)">(.+?)</a>',re.DOTALL).findall(html)
      for id, url, name in a:
-              name = name.replace('<strong>','').replace('</strong>','')
+              name = name.replace('<strong>','').replace('</strong>','').replace('<b>','').replace('</b>','')
               name=h.unescape(name.decode(UTF8))
               try:
                  thumb,plot = re.compile('<div class="imageContainer"><a href="'+url+'".+?"src":"(.+?)".+?<p(.+?)</p>',re.DOTALL).search(ihtml).groups()
@@ -57,20 +57,12 @@ class myAddon(t1mAddon):
         try:  i = len(meta[sname])
         except:
               meta[sname]={}
-        html = self.getRequest('http://abc.go.com/shows/abc-updates/news/insider/143-for-free-watch-abc-watch-full-episodes-with-no-sign-in-042715?cid=abchp_143_for_free')
-        m = re.compile('<section class="m-blog_detail-body(.+?)</section>', re.DOTALL).search(html)
-        try:    blob = re.compile('<a href="'+gcurl+'"(.+?)<p align="center">',re.DOTALL).search(html[m.start(1):m.end(1)]).group(1)
-        except: blob = re.compile('<a href="'+gcurl+'"(.+?)</section>',re.DOTALL).search(html).group(1)
-        blob = blob.replace(' target="_self"','')
-        vids = re.compile('<a href="(.+?)">(.+?)</a>.+?>(.+?)</p>',re.DOTALL).findall(blob)
-        if len(vids) == 0:
-            try: vurl = re.compile('<a href="(.+?)">.+?</a>',re.DOTALL).search(blob).group(1)
-            except: return(ilist)
-            if not vurl.endswith('/episode-guide'): vurl = vurl+'/episode-guide'
-            html = self.getRequest(vurl)
-            vids = re.compile('data-videoid=.+?tile-content-overlay video">.+?<a  href="(.+?)".+?class="extra-light">(.+?)<.+?<p>(.+?)</p>',re.DOTALL).findall(html)
-            if len(vids) == 0: 
-               vids = re.compile('<article class="item  ">.+?<span class="flag name".+?<a href="(.+?)">(.+?)<.+?">(.+?)<',re.DOTALL).findall(html)
+        vurl = gcurl
+        if not vurl.endswith('/episode-guide'): vurl = vurl+'/episode-guide'
+        html = self.getRequest(vurl)
+        vids = re.compile('data-videoid=.+?tile-content-overlay video">.+?<a  href="(.+?)".+?class="extra-light">(.+?)<.+?<p>(.+?)</p>',re.DOTALL).findall(html)
+        if len(vids) == 0: 
+           vids = re.compile('<article class="item  ">.+?<span class="flag name".+?<a href="(.+?)">(.+?)<.+?">(.+?)<',re.DOTALL).findall(html)
 
 
         pDialog = xbmcgui.DialogProgress()

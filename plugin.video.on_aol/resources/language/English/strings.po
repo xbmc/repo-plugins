@@ -1,0 +1,35 @@
+# XBMC Media Center language file
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2016-03-28 13:35+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+
+msgctxt "#30007"
+msgid "Next Page"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Preferred Video Quality"
+msgstr ""
+
+msgctxt "#30010"
+msgid "LD"
+msgstr ""
+
+msgctxt "#30011"
+msgid "SD"
+msgstr ""
+
+msgctxt "#30012"
+msgid "HD"
+msgstr ""

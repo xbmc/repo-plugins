@@ -1,0 +1,32 @@
+v0.5.2 (2016-03-27)
+ - Fix a possible context menu search error
+
+v0.5.1 (2016-03-27)
+ - Fix video clips for non-UK users
+
+v0.5.0 (2016-03-26)
+ - Report errors to Rollbar
+
+v0.4.0 (2016-03-26)
+ - Added a context menu item to search for the movie review clips
+
+v0.3.2 (2016-03-23)
+ - Fixed the video review clips
+
+v0.3.1 (2014-12-19)
+ - Fixed a possible script error when checking for a movie library
+
+v0.3.0 (2014-11-04)
+ - Added a YouTube search based on the movie library
+
+v0.2.1 (2014-11-03)
+ - Fixed the broken 0.2.0 release
+
+v0.2.0 (2014-11-03)
+ - Added YouTube content
+
+v0.1.0 (2014-11-01)
+ - Fixed to work with new BBC website design
+
+v0.0.1 (2014-02-25)
+ - Initial release

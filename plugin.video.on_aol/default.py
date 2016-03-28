@@ -243,8 +243,7 @@ def display_video_grid(name, url):
     data = cache.cacheFunction(get_cat_page, url)
     items = [i['videos'] for i in data['video_grids'] if i['name'] == name][0]
     for i in items:
-        add_dir(i['title'].encode('utf-8'), i['id'], 'video',
-                i['thumb'], i['info'])
+        add_dir(i['title'], i['id'], 'video', i['thumb'], i['info'])
 
 
 def display_module(name, url):

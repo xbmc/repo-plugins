@@ -4,7 +4,7 @@
   <string id="30000">JeuxVideo.com</string>
   <string id="30001">Gaming Live</string>
   <string id="30002">Columns</string>
-  <string id="30003">Other</string>
+  <string id="30003">Reports</string>
   <string id="30004">All</string>
   <string id="30005">Play in %s</string>
   <!-- 301xx: settings -->
@@ -13,4 +13,19 @@
   <string id="30102">Miscellaneous settings</string>
   <string id="30103">Clear cache</string>
   <string id="30104">The cache is now empty.</string>
+  <!-- 302xx: platforms (no translation) -->
+  <string id="30201">PC</string>
+  <string id="30202">PlayStation 4</string>
+  <string id="30203">Xbox One</string>
+  <string id="30204">PlayStation 3</string>
+  <string id="30205">Xbox 360</string>
+  <string id="30206">Wii U</string>
+  <string id="30207">Wii</string>
+  <string id="30208">Nintendo 3DS</string>
+  <string id="30209">PlayStation Vita</string>
+  <string id="30210">Nintendo DS</string>
+  <string id="30211">PlayStation Portable</string>
+  <string id="30212">Iphone</string>
+  <string id="30213">Android</string>
+ 
 </strings>

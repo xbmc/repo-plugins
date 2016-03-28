@@ -1,9 +1,11 @@
 import urllib2
 import contextlib
 import collections
-import operator
 import time
+import re
 import xml.etree.ElementTree as ET
+import HTMLParser
+import email.utils
 from datetime import datetime
 from xbmcswift2 import Plugin, xbmcgui
 
@@ -12,28 +14,27 @@ plugin = Plugin()
 #########################
 ##  Resource fetching  ##
 #########################
-# this addon uses the webservice API used by mobile apps, URLs and credentials have been found by MITM.
-
-# authentication handing with urllib2 is so munch messy that it is quicker to do it directly
-# the identifiers seems to be hard-coded in apps, they will probably be revoked one day...
-WS_AUTH = 'Basic YXBwX2FuZF9tczpEOSFtVlI0Yw=='
 WS_MACHINES = 'https://ws.jeuxvideo.com/00.machines_version.xml'
 WS_CATEGORIES = {
-    'gaming_live': 'https://ws.jeuxvideo.com/04.flux_videos_gaming.xml',
-    'chroniques': 'https://ws.jeuxvideo.com/04.flux_videos_chroniques.xml',
-    'autres': 'https://ws.jeuxvideo.com/04.flux_videos_autres.xml',
+    'gaming_live': 'http://www.jeuxvideo.com/rss/itunes.xml',
+    'chroniques': 'http://www.jeuxvideo.com/rss/itunes-chroniques.xml',
+    'reportage': 'http://www.jeuxvideo.com/rss/itunes_reportage.xml',
 }
+
+for platform in [ 'pc', 'ps4', 'xo', 'ps3', '360', 'wiiu', 'wii', '3ds', 'vita', 'ds', 'psp', 'iphone', 'android' ]:
+    WS_CATEGORIES[platform] = 'http://www.jeuxvideo.com/rss/itunes-%s.xml' % (platform, )
+
 RESOLUTIONS = [ '270p', '400p', '720p', '1080p' ]
 
 def call_ws(url):
     ''' Returns a XML tree parsed from the result of given WebService url. '''
     plugin.log.info('Calling WS: %s', url)
-    request = urllib2.Request(url, headers={ 'Authorization': WS_AUTH })
+    request = urllib2.Request(url)
     with contextlib.closing(urllib2.urlopen(request)) as handle:
         return ET.parse(handle)
 
 Machine = collections.namedtuple('Machine', [ 'id', 'name', 'icon' ])
-Video = collections.namedtuple('Video', [ 'title', 'type', 'desc', 'date', 'length', 'machines', 'thumbnail', 'urls' ])
+Video = collections.namedtuple('Video', [ 'title', 'desc', 'date', 'length',  'thumbnail', 'urls' ])
 
 def safe_find(element, match, default=None):
     ''' Used to provide a default value for non-essentials elements. '''
@@ -45,35 +46,42 @@ def parse_length(t):
     splitted = t.split(':')
     return int(splitted[0]) * 60 + int(splitted[1])
 
-def safe_strptime(date_string, format):
-    ''' WTF?? See http://forum.kodi.tv/showthread.php?tid=112916 '''
-    try: return datetime.strptime(date_string, format)
-    except TypeError: return datetime(*(time.strptime(date_string, format)[0:6]))
+def get_thumb(**kwargs):
+    if '-' in kwargs['kind'] or '_' in kwargs['kind']:
+        kwargs['kind'] = kwargs['kind'].replace('-', '_')
+        return 'http://image.jeuxvideo.com/images/videos/{kind}_images/{id}-high.jpg'.format(**kwargs)
+    else:
+        return 'http://image.jeuxvideo.com/images/videos/{kind}-images/{id}-high.jpg'.format(**kwargs)
 
-@plugin.cached(24*60)
-def get_machines():
-    machines = call_ws(WS_MACHINES).findall('./machine')
-    return [ Machine(m.find('id').text, m.find('nom').text, safe_find(m, 'url_icone')) for m in machines ]
+def get_video(**kwargs):
+    return 'http://{subdomain}.jeuxvideo.com/{path}-{reso}.mp4'.format(**kwargs)
 
 @plugin.cached(5)
 def get_videos(category):
-    videos = call_ws(WS_CATEGORIES[category]).findall('./video')
+    videos = call_ws(WS_CATEGORIES[category]).findall('.//item')
+    result = []
+    # the text items are CDATA... but still have XML entities...
+    unescape = HTMLParser.HTMLParser().unescape
 
-    return [ Video(
-        title     = v.find('titre').text,
-        type      = safe_find(v, 'type'),
-        desc      = safe_find(v, 'resume'),
-        date      = safe_strptime(safe_find(v, 'date', '01/01/2000'), '%d/%m/%Y'),
-        length    = parse_length(safe_find(v, 'duree', '0:00')),
-        machines  = set( m.text for m in v.findall('./id_machine') ),
-        thumbnail = safe_find(v, 'url_image'),
-        urls      = [
-            safe_find(v, 'url_expanded'),
-            safe_find(v, 'url_expanded_400'),
-            safe_find(v, 'url_expanded_720'),
-            safe_find(v, 'url_expanded_1080'),
-        ]
-    ) for v in videos ]
+    for v in videos:
+        enc = v.find('enclosure')
+        data = re.search(r'jeuxvideo.com/(?P<path>(?P<kind>.+?)/(?P<id>.+?))(?:\-\D+)?.mp4', enc.attrib['url']).groupdict()
+        plugin.log.info('uri=%s data=%s', enc.attrib['url'], repr(data))
+        result.append(Video(
+            title     = unescape(v.find('title').text),
+            desc      = unescape(safe_find(v, 'description', '')),
+            # yay, Python date handling!
+            date      = datetime.fromtimestamp(time.mktime(email.utils.parsedate(safe_find(v, 'pubDate', 'Sat, 1 Jan 2000, 00:00:00')))),
+            length    = parse_length(enc.attrib['length']),
+            thumbnail = get_thumb(**data),
+            urls      = [
+                enc.attrib['url'],                                   # 270p
+                get_video(subdomain='videohd', reso='high', **data), # 400p
+                get_video(subdomain='video720', reso='720p', **data),
+                get_video(subdomain='video1080', reso='1080p', **data),
+            ]
+        ))
+    return result
 
 ##################
 ##  Item lists  ##
@@ -89,28 +97,47 @@ def index():
         'path': plugin.url_for('category_index', category='chroniques'),
     }, {
         'label': plugin.get_string(30003),
-        'path': plugin.url_for('category_index', category='autres'),
+        'path': plugin.url_for('category_index', category='reportage'),
+    }, {
+        'label': plugin.get_string(30201),
+        'path': plugin.url_for('category_index', category='pc'),
+    }, {
+        'label': plugin.get_string(30202),
+        'path': plugin.url_for('category_index', category='ps4'),
+    }, {
+        'label': plugin.get_string(30203),
+        'path': plugin.url_for('category_index', category='xo'),
+    }, {
+        'label': plugin.get_string(30204),
+        'path': plugin.url_for('category_index', category='ps3'),
+    }, {
+        'label': plugin.get_string(30205),
+        'path': plugin.url_for('category_index', category='360'),
+    }, {
+        'label': plugin.get_string(30206),
+        'path': plugin.url_for('category_index', category='wiiu'),
+    }, {
+        'label': plugin.get_string(30207),
+        'path': plugin.url_for('category_index', category='wii'),
+    }, {
+        'label': plugin.get_string(30208),
+        'path': plugin.url_for('category_index', category='3ds'),
+    }, {
+        'label': plugin.get_string(30209),
+        'path': plugin.url_for('category_index', category='vita'),
+    }, {
+        'label': plugin.get_string(30210),
+        'path': plugin.url_for('category_index', category='ds'),
+    }, {
+        'label': plugin.get_string(30211),
+        'path': plugin.url_for('category_index', category='psp'),
+    }, {
+        'label': plugin.get_string(30212),
+        'path': plugin.url_for('category_index', category='iphone'),
+    }, {
+        'label': plugin.get_string(30013),
+        'path': plugin.url_for('category_index', category='android'),
     } ]
-
-@plugin.route('/categories/<category>/')
-def category_index(category):
-    result = [ {
-        'label': plugin.get_string(30004),
-        'path': plugin.url_for('video_list', category=category, machine='all')
-    } ]
-
-    # display only machines that actually contain videos
-    existing_machines = reduce(operator.ior, ( v.machines for v in get_videos(category) ), set())
-
-    for m in get_machines():
-        if m.id not in existing_machines: continue
-        result.append({
-            'label': m.name,
-            'path': plugin.url_for('video_list', category=category, machine=m.id),
-            'icon': m.icon
-        })
-
-    return result
 
 def select_url(urls):
     ''' Chose one of the available URLs depending on settings and available resolutions. '''
@@ -122,13 +149,11 @@ def select_url(urls):
         # nothing? search in the higher ones
         return next( u for u in urls[best:] if u )
 
-@plugin.route('/categories/<category>/<machine>/')
-def video_list(category, machine):
+@plugin.route('/categories/<category>/')
+def category_index(category):
     videos = get_videos(category)
-    if machine != 'all':
-        videos = filter(lambda v: machine in v.machines, videos)
     return [ {
-        'label': '[%s] %s' % (v.type, v.title) if v.type else v.title,
+        'label': v.title,
         'thumbnail': v.thumbnail,
         'stream_info': { 'video': { 'duration': v.length } },
         'info': {

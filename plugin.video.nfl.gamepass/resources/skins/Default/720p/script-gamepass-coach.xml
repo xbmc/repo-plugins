@@ -1,0 +1,171 @@
+<window type="window" id="9507">
+    <allowoverlay>yes</allowoverlay>
+    <defaultcontrol always="true">110</defaultcontrol>
+    <controls>
+        <control type="image">
+            <description>Normal Default Background Image</description>
+            <width>1280</width>
+            <height>720</height>
+            <aspectratio>scale</aspectratio>
+            <texture>../../../../fanart.jpg</texture>
+        </control>
+        <control type="label" id="99">
+            <description>Title text</description>
+            <left>92</left>
+            <height>60</height>
+            <top>10</top>
+            <width>800</width>
+            <align>center</align>
+            <aligny>center</aligny>
+            <info></info>
+            <font>font30</font>
+            <textcolor>FFEEEEEE</textcolor>
+            <shadowcolor>ff000000</shadowcolor>
+            <wrapmultiline>false</wrapmultiline>
+            <visible>![Player.HasMedia + Control.IsVisible(101)]</visible>
+        </control>
+
+        <control type="image">
+            <description>Video shadow</description>
+            <left>7</left>
+            <top>85</top>
+            <width>970</width>
+            <height>550</height>
+            <aspectratio>stretch</aspectratio>
+            <texture border="8">GamePass/shadowbox.png</texture>
+            <visible>Control.IsVisible(100) + Player.HasMedia</visible>
+        </control>
+        <control type="videowindow" id="100">
+            <description>960x540 Video</description>
+            <left>12</left>
+            <top>0</top>
+            <width>960</width>
+        </control>
+
+        <control type="group">
+            <visible>Control.IsVisible(100) + Player.HasMedia</visible>
+
+            <control type="progress">
+                <left>8</left>
+                <top>630</top>
+                <width>968</width>
+                <height>20</height>
+                <texturebg border="8" colordiffuse="66CCCCCC">GamePass/progressbg.png</texturebg>
+                <lefttexture>-</lefttexture>
+                <midtexture border="8" colordiffuse="CCFFFFFF">GamePass/progress.png</midtexture>
+                <righttexture>-</righttexture>
+                <overlaytexture>-</overlaytexture>
+                <info>Player.Progress</info>   
+            </control>
+
+            <control type="label">
+                <description>Remaining time</description>
+                <top>645</top>
+                <left>760</left>
+                <height>30</height>
+                <width>200</width>
+                <align>right</align>
+                <aligny>center</aligny>
+                <label>$INFO[Player.Time] / $INFO[Player.Duration]</label>
+                <font>font12</font>
+                <textcolor>FFEEEEEE</textcolor>
+            </control>
+        </control>
+
+        <control type="list" id="110">
+            <description>Play list container</description>
+            <left>985</left>
+            <top>0</top>
+            <width>280</width>
+            <height>720</height>
+            <viewtype label="list">list</viewtype>
+            <orientation>vertical</orientation>
+            <autoscroll>false</autoscroll>
+            <pagecontrol>60</pagecontrol>
+            <onleft>90</onleft>
+            <onright>60</onright>
+            <visible>![Player.HasMedia + Control.IsVisible(101)]</visible>
+            <itemlayout width="280" height="40">
+                <control type="image">
+                    <width>280</width>
+                    <height>40</height>
+                    <texture>GamePass/week_bg.png</texture>
+                </control>
+                <control type="label">
+                    <description>Clip description, not focused</description>
+                    <left>5</left>
+                    <width>270</width>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <scroll>false</scroll>
+                    <info>ListItem.Label</info>
+                    <font>font12</font>
+                    <textcolor>FF111111</textcolor>
+                    <wrapmultiline>false</wrapmultiline>
+                    <scrollspeed>50</scrollspeed>
+                    <scrollsuffix> - </scrollsuffix>
+                </control>
+            </itemlayout>
+            <focusedlayout width="280" height="40">
+                <control type="image">
+                    <width>280</width>
+                    <height>40</height>
+                    <texture>GamePass/week_focus.png</texture>
+                    <visible>Control.HasFocus(110)</visible>
+                </control>
+                <control type="image">
+                    <width>280</width>
+                    <height>40</height>
+                    <texture>GamePass/week_focus2.png</texture>
+                    <visible>!Control.HasFocus(110)</visible>
+                </control>
+                <control type="label">
+                    <description>Clip description, focused</description>
+                    <left>5</left>
+                    <width>270</width>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <scroll>false</scroll>
+                    <info>ListItem.Label</info>
+                    <font>font12</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <wrapmultiline>false</wrapmultiline>
+                    <scrollspeed>50</scrollspeed>
+                    <scrollsuffix> - </scrollsuffix>
+                    <visible>Control.HasFocus(110)</visible>
+                </control>
+                <control type="label">
+                    <description>Clip description, not focused</description>
+                    <left>5</left>
+                    <width>270</width>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <scroll>false</scroll>
+                    <info>ListItem.Label</info>
+                    <font>font12</font>
+                    <textcolor>FF111111</textcolor>
+                    <wrapmultiline>false</wrapmultiline>
+                    <scrollspeed>50</scrollspeed>
+                    <scrollsuffix> - </scrollsuffix>
+                    <visible>!Control.HasFocus(110)</visible>
+                </control>
+            </focusedlayout>
+        </control>
+        <control type="scrollbar" id="60">
+            <left>1270</left>
+            <top>0</top>
+            <width>10</width>
+            <height>720</height>
+            <onup>60</onup>
+            <ondown>60</ondown>
+            <onleft>110</onleft>
+            <onright>110</onright>
+            <texturesliderbackground>-</texturesliderbackground>
+            <texturesliderbar border="1" flipx="true">GamePass/texturesliderbar.png</texturesliderbar>
+            <texturesliderbarfocus border="1" flipx="true">GamePass/texturesliderbar2.png</texturesliderbarfocus>
+            <showonepage>false</showonepage>
+            <orientation>vertical</orientation>
+            <visible>![Player.HasMedia + Control.IsVisible(101)]</visible>
+        </control>
+    </controls>
+</window>

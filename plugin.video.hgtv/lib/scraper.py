@@ -27,14 +27,7 @@ class myAddon(t1mAddon):
    url = 'http://www.hgtv.com/shows/full-episodes'
    html = self.getRequest(url)
    a = []
-   try:
-      name, vidcnt, img = re.compile('"video-player-embedded">.+?<h3>(.+?)</h3>.+?"total"\: (.+?),.+?"thumbnailUrl" \: "(.+?)"', re.DOTALL).search(html).groups()
-      plot = ''
-      a.append((icon, url, name, '%s Videos' % vidcnt))
-   except: pass
-   m = re.compile('<div class="video-player-embedded">(.+?)<section class="text-promo module">', re.DOTALL).search(html)
-   b = re.compile('<li class="block">.+?src="(.+?)".+?href="(.+?)">(.+?)<.+?noWrap">(.+?)<.+?</li>', re.DOTALL).findall(html, m.start(1),m.end(1))
-   a.extend(b)
+   a = re.compile('m-MediaBlock">.+?href="(.+?)".+?data-src="(.+?)".+?HeadlineText">(.+?)<.+?AssetInfo">(.+?)<', re.DOTALL).findall(html)
 
    meta = self.getAddonMeta()
    try:    i = len(meta['shows'])
@@ -44,7 +37,7 @@ class myAddon(t1mAddon):
    pDialog.update(0)
    dirty = False
    numShows = len(a)
-   for i, (thumb, url, name, vidcnt) in list(enumerate(a, start=1)):
+   for i, (url, thumb, name, vidcnt) in list(enumerate(a, start=1)):
       try:
         (name, url, thumb, fanart, infoList) = meta['shows'][url]
       except:

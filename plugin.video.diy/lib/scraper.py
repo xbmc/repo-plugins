@@ -28,22 +28,15 @@ class myAddon(t1mAddon):
      except: meta['shows']={}
 
      html = self.getRequest('http://www.diynetwork.com/shows/full-episodes')
-     a  =[]
-     try: 
-       name, vidcnt, img = re.compile('"video-player-embedded">.+?<h3>(.+?)</h3>.+?"total"\: (.+?),.+?"thumbnailUrl" \: "(.+?)"', re.DOTALL).search(html).groups()
-       img = DIYBASE % img
-       a.append((icon, url, name, '%s Videos' % vidcnt))
-     except: pass
-     m = re.compile('<div class="video-embed-metadata">(.+?)<div class="container-aside">', re.DOTALL).search(html)
-     b = re.compile('<img class="" data-src="(.+?)".+?<a href="(.+?)">(.+?)<.+?>(.+?)<.+?</li',re.DOTALL).findall(html, m.start(1),m.end(1))
-     a.extend(b)
+     html = re.compile('<div class="l-Columns l-Columns--2up(.+?)<div class="newsletter parbase section">', re.DOTALL).search(html).group(1)
+     a = re.compile('m-MediaBlock">.+?href="(.+?)".+?data-src="(.+?)".+?HeadlineText">(.+?)<.+?AssetInfo">(.+?)<', re.DOTALL).findall(html)
      pDialog = xbmcgui.DialogProgress()
      pDialog.create(self.addonName, addonLanguage(30101))
      pDialog.update(0)
      dirty = False
      numShows = len(a)
      fanart = self.addonFanart
-     for i, (thumb, url, name, vidcnt) in list(enumerate(a, start=1)):
+     for i, (url, thumb, name, vidcnt) in list(enumerate(a, start=1)):
       try:
         (name, url, thumb, fanart, infoList) = meta['shows'][url]
       except:

@@ -7,3 +7,4 @@ V2.0.6 unicode fix
 V2.0.7 website changes
 V2.0.8 bump xbmc.python
 V2.0.9 unicode issue
+V3.0.1 Separate scraper for future functions

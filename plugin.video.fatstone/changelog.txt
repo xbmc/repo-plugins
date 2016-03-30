@@ -1,0 +1,8 @@
+[B]1.0.1[/B]
+- Removed .gitignore and .gitattribute files
+- Removed unused translation data
+- Updated python version in addon.xml
+
+[B]1.0.0[/B]
+- Første versjon
+

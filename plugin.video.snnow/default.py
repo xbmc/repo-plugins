@@ -46,23 +46,33 @@ def createMainMenu():
         xbmcplugin.endOfDirectory(handle = int(sys.argv[1]),
                                   succeeded=False)
 
-
     channels = sn.getChannels()
     guide = sn.getGuideData()
+    
     for channel in channels:
-        prog = guide[str(channel['id'])]
+        chanId = str(channel['id'])
         values = { 'menu' : 'channel', 'name' : channel['name'],
                    'id' : channel['id'], 'abbr' : channel['abbr'] }
-        for key in prog.keys():
-            values[key] = prog[key].encode('utf-8')
+
         title = values['name']
-        if prog['tvshowtitle']:
-            title += ' ([B]' + prog['tvshowtitle'] + '[/B]'
-            if prog['title']:
-                title += ' - [I]' + prog['title'] + '[/I]'
-            title += ')'
+        showTitle = channel['name']
+
+        if chanId in guide.keys():
+            prog = guide[chanId]
+            for key in prog.keys():
+                values[key] = prog[key].encode('utf-8')
+        
+            if prog['tvshowtitle']:
+                title += ' ([B]' + prog['tvshowtitle'] + '[/B]'
+                if prog['title']:
+                    title += ' - [I]' + prog['title'] + '[/I]'
+                title += ')'
+
+            showTitle = prog['tvshowtitle']
+
         live = xbmcgui.ListItem(title)
-        labels = {"TVShowTitle" : prog['tvshowtitle'],
+        
+        labels = {"TVShowTitle" : showTitle,
                   "Studio" : channel['name']}
         if 'title' in values:
             labels['Title'] = prog['title']
@@ -72,7 +82,7 @@ def createMainMenu():
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
                                     url=sys.argv[0] + "?" + urllib.urlencode(values),
                                     listitem=live,
-                                    isFolder=False)
+                                    isFolder=True)
 
     # signal the end of the directory
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
@@ -119,9 +129,6 @@ def playChannel(values):
         li.setInfo(type="Video", infoLabels=labels)
         p = xbmc.Player()
         p.play(stream, li)
-
-    # signal the end of the directory
-    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
 if len(sys.argv[2]) == 0:

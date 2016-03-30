@@ -20,7 +20,6 @@ CHANNELS_FILE_NAME = "channels.xml"
 
 __addon__ = "Intergalactic FM"
 __addonid__ = "plugin.audio.intergalacticfm"
-__version__ = "1.0.4"
 
 __ms_per_day__ = 24 * 60 * 60 * 1000
 
@@ -31,7 +30,7 @@ def log(msg):
 
 log(sys.argv)
 
-rootURL = "https://intergalacticfm.com/"
+rootURL = "http://intergalacticfm.com/"
 tempdir = xbmc.translatePath("special://home/userdata/addon_data/%s" % __addonid__)
 xbmcvfs.mkdirs(tempdir)
 
@@ -63,7 +62,7 @@ def fetch_local_channel_data():
 
 def fetch_cached_channel_data():
     if os.path.getmtime(LOCAL_CHANNELS_FILE_PATH) + cache_ttl_in_ms() > time.time():
-        print "Using cached channel.xml"
+        print("Using cached channel.xml")
         return fetch_local_channel_data()
     # don't delete the cached file so we can still use it as a fallback
     # if something goes wrong fetching the channel data from server
@@ -92,7 +91,7 @@ def build_directory():
             channel.geticon(),
             channel.getthumbnail(),
             plugin_url + channel.getid())
-        li.setArt({"fanart" : xbmc.translatePath("special://home/addons/%s/fanart.jpg" % __addonid__)})
+        li.setArt({"fanart": xbmc.translatePath("special://home/addons/%s/fanart.jpg" % __addonid__)})
 
         li.setProperty("IsPlayable", "true")
 
@@ -121,22 +120,24 @@ def firewall_mode():
 def format_priority():
     setting = xbmcplugin.getSetting(handle, "priority_format")
     result = [["mp3"], ["mp3", "aac"], ["aac", "mp3"], ["aac"], ][int(setting)]
-    print "Format setting is %s, using priority %s" % (setting, str(result))
+    print("Format setting is %s, using priority %s" % (setting, str(result)))
     return result
 
 
 def quality_priority():
     setting = xbmcplugin.getSetting(handle, "priority_quality")
-    result = [['slowpls', 'fastpls', 'highestpls', ], ['fastpls', 'slowpls', 'highestpls', ],
-                ['fastpls', 'highestpls', 'slowpls', ], ['highestpls', 'fastpls', 'slowpls', ], ][int(setting)]
-    print "Quality setting is %s, using priority %s" % (setting, str(result))
+    result = [['slowpls', 'fastpls', 'highestpls', ],
+              ['fastpls', 'slowpls', 'highestpls', ],
+              ['fastpls', 'highestpls', 'slowpls', ],
+              ['highestpls', 'fastpls', 'slowpls', ], ][int(setting)]
+    print("Quality setting is %s, using priority %s" % (setting, str(result)))
     return result
 
 
 def cache_ttl_in_ms():
     setting = xbmcplugin.getSetting(handle, "cache_ttl")
     result = [0, __ms_per_day__, 7 * __ms_per_day__, 30 * __ms_per_day__][int(setting)]
-    print "Cache setting is %s, using ttl of %dms" % (setting, result)
+    print("Cache setting is %s, using ttl of %dms" % (setting, result))
     return result
 
 
@@ -157,7 +158,7 @@ def play(item_to_play):
                          channel.geticon(),
                          channel.getthumbnail(),
                          channel.get_content_url())
-    list_item.setArt({"fanart" : xbmc.translatePath("special://home/addons/%s/fanart.jpg" % __addonid__)})
+    list_item.setArt({"fanart": xbmc.translatePath("special://home/addons/%s/fanart.jpg" % __addonid__)})
     xbmcplugin.setResolvedUrl(handle, True, list_item)
 
 
@@ -174,7 +175,7 @@ if handle == 0:
     if query == "clearcache":
         clearcache()
     else:
-        print query
+        print(query)
 else:
     path = urlparse.urlparse(plugin_url).path
     item_to_play = os.path.basename(path)

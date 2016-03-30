@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+
+	<category label="30012">
+		<setting type="sep" />
+		<setting id='enable_meta' type ="bool" label="30013" default="true"/>
+           <setting id="init_meta" type="bool" label="30014" default="true" enable="!eq(-1,false)"/>
+		<setting type="sep" />
+	</category>
+
+  <category label="30020">
+		<setting type="sep" />
+		<setting id='enable_views' type ="bool" label="30021" default="false"/>
+		<setting id="default_view" type="text" label="30022" default="50" enable="!eq(-1,false)"/>
+		<setting id="movie_view"   type="text" label="30023" default="50" enable="!eq(-2,false)"/>
+		<setting id="show_view"    type="text" label="30024" default="50" enable="!eq(-3,false)"/>
+		<setting id="episode_view" type="text" label="30025" default="50" enable="!eq(-4,false)"/>
+		<setting type="sep" />
+  </category>
+
+</settings>

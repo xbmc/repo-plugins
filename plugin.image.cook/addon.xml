@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.image.cook" name="Cooking with Kodi" version="1.0.0" provider-name="Damon Toumbourou">
+  <requires>
+    <import addon="xbmc.python"                     version="2.20.0"/>
+    <import addon="script.module.xbmcswift2"        version="2.4.0"/>
+    <import addon="script.module.beautifulsoup4"    version="4.3.1"/>
+    <import addon="script.module.requests"          version="2.5.3"/>
+    <import addon="script.module.pyxbmct"           version="1.1.4"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>image</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <language></language>
+    <summary lang="en_GB">Recipes, cooking tips, ideas and inspiration.
+    </summary>
+    <description lang="en_GB">A comprehensive collection of recipes, cooking tips, ideas and inspiration.
+    </description>
+    <license>The MIT License (MIT)</license>
+    <forum>http://forum.xbmc.org/showthread.php?tid=184904</forum>
+    <email>dtoumbourou@gmail.com</email>
+    <source>https://github.com/DamonToumbourou/script.cook</source>
+    <website></website>
+  </extension>
+</addon>

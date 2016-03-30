@@ -43,7 +43,7 @@ msgid "Refresh channel list from server"
 msgstr ""
 
 msgctxt "#32009"
-msgid "Please consider donating to keep Intergalactic FM in orbit.\nVisit https://intergalacticfm.com"
+msgid "Please consider donating to keep Intergalactic FM in orbit.\nVisit http://intergalacticfm.com"
 msgstr ""
 
 #enums

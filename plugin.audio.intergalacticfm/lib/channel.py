@@ -85,7 +85,7 @@ class Channel(object):
 
     def get_content_url(self):
         for playlist_meta in self.get_prioritized_playlists():
-            print "Trying " + str(playlist_meta)
+            print("Trying " + str(playlist_meta))
             filepath = self.get_playlist_file(playlist_meta[2])
             play_list = xbmc.PlayList(PLAYLIST_MUSIC)
             play_list.load(filepath)
@@ -94,15 +94,14 @@ class Channel(object):
                 stream_url = play_list.__getitem__(i).getfilename()
                 if (urlparse.urlparse(stream_url).port is None) == self.firewall_mode:
                     streams.append(stream_url)
-                    print "Accepting " + stream_url
+                    print("Accepting " + stream_url)
                 else:
-                    print "Rejecting " + stream_url
+                    print("Rejecting " + stream_url)
             if len(streams) > 0:
                 return random.choice(streams)
 
     def getthumbnail(self):
         return self.get_simple_element('xlimage', 'largeimage', 'image')
-
 
     def geticon(self):
         return self.get_simple_element('largeimage', 'xlimage', 'image')

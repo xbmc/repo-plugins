@@ -2,5 +2,5 @@
 <settings>
    <setting id="username"  type="text" label="30050"/>
    <setting id="password"  type="text" label="30051" option="hidden"/>
-   <setting id="mso" type="labelenum" label="30155" values="Rogers|ShawGo|Telus" default="Rogers" />
+   <setting id="mso" type="labelenum" label="30155" values="Rogers|ShawGo|Telus|Cogeco" default="Rogers" />
 </settings>

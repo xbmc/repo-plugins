@@ -3,6 +3,7 @@ plugin.video.hgtv
 
 Kodi Addon for HGTV website
 
+Version 3.0.2 website changes
 Version 3.0.1 Isengard - separate scraper
 
 Version 2.1.5 fix for null url from website

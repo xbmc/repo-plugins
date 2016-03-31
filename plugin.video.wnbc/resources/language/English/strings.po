@@ -1,0 +1,61 @@
+# Kodi Media Center language file
+# Addon Name: WNBC Programs
+# Addon id: plugin.video.wnbc
+# Addon Provider: learningit
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30012"
+msgid "Meta Data Cache"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Enable Metadata Cache"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Reset Metadata Cache"
+msgstr ""
+
+msgctxt "#30020"
+msgid "View"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Enable View"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Default View"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Movies View"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Shows View"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Episodes View"
+msgstr ""
+
+msgctxt "#30040"
+msgid "Metadata"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Metadata"
+msgstr "Initialize Metadata Next Start"

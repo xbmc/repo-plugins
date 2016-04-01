@@ -56,7 +56,7 @@ except:
     settings.setSetting('quality', '0')
     quality = 0
 
-lutil.log('eso quality setup to "%s"' % ('SD', 'HD')[quality])
+lutil.log('eso quality setup to "%s"' % ('SD', 'HD', 'UltraHD')[quality])
 
 eso_url  = 'http://www.eso.org'
 space_url = 'http://www.spacetelescope.org'
@@ -199,14 +199,21 @@ def play_video(params):
 
     page_url = params.get("url")
     buffer_link = lutil.carga_web(page_url)
-    pattern_video_failover = '<span class="archive_dl_text"><a href="([^"]*?)"'
-    pattern_video = 'file: fix_protocol\("([^"]*?)"\),[^l]+label: \'([SH]D)\''
+    pattern_video = '<span class="archive_dl_text"><a href="([^"]*?)"'
+    quality_list = { 'UltraHD' : 'ultra_hd/', 'HD' : 'hd_and_apple', 'SD': 'medium_podcast' }
 
-    video_options = dict((vquality, url) for (url, vquality) in lutil.find_multiple(buffer_link, pattern_video))
+    video_list = [url for url in lutil.find_multiple(buffer_link, pattern_video) if not url.endswith(('zip','srt','pdf','mxf','wav'))]
+    lutil.log("eso.play video list"+repr(video_list))
+    video_options = dict((vquality, url) for url in video_list for vquality in quality_list.keys() if quality_list[vquality] in url)
     lutil.log("eso.play video options"+repr(video_options))
 
-    video_url = video_options.get('%s' % ('SD', 'HD')[quality], '') or video_options.get('SD', '')
+    video_url = video_options.get('%s' % ('SD', 'HD', 'UltraHD')[quality], '') or video_options.get('SD', '') or video_list[0] if len(video_list) else ''
     if video_url:
+        if video_url.startswith('//'):
+            video_url = "%s%s" % ('http:', video_url)
+        elif video_url.startswith('/'):
+            root_url = eso_url if eso_url in page_url else space_url
+            video_url = "%s%s" % (root_url, video_url)
         try:
             lutil.log("eso.play: We have found this video: '%s' and let's going to play it!" % video_url)
             return lutil.play_resolved_url(pluginhandle = pluginhandle, url = video_url)
@@ -214,20 +221,8 @@ def play_video(params):
             lutil.log('eso.play ERROR: we cannot reproduce this video URL: "%s"' % video_url)
             return lutil.showWarning(translation(30012))
     else:
-        for video_url in lutil.find_multiple(buffer_link, pattern_video_failover):
-            if video_url.endswith('zip'): continue
-            if not video_url.startswith('http'):
-                root_url = eso_url if eso_url in page_url else space_url
-                video_url = "%s%s" % (root_url, video_url)
-            try:
-                lutil.log("eso.play: We have found this video as failover option: '%s' and let's going to play it!" % video_url)
-                return lutil.play_resolved_url(pluginhandle = pluginhandle, url = video_url)
-            except:
-                lutil.log('eso.play ERROR: we cannot reproduce this video URL as failover: "%s"' % video_url)
-                return lutil.showWarning(translation(30012))
-
-    lutil.log('eso.play ERROR: we cannot play the video from this source yet: "%s"' % params.get("url"))
-    return lutil.showWarning(translation(30011))
+        lutil.log('eso.play ERROR: we cannot play the video from this source yet: "%s"' % params.get("url"))
+        return lutil.showWarning(translation(30011))
 
 
 run()

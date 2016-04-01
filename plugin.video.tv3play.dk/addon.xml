@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.tv3play.dk" version="2.0.8" name="TV3 Play" provider-name="twinther">
+<addon id="plugin.video.tv3play.dk" version="3.0.1" name="TV3 Play" provider-name="anorm">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.buggalo" version="1.1.6"/>
@@ -31,28 +31,28 @@
         <summary lang="sk">Sledujte najaktuálnejšie vysielanie z TV3 Play a Viasat 4 Play</summary>
         <summary lang="sv">Titta på dom senaste serierna från TV3 Play och Viasat 4 Play</summary>
         <summary lang="zh">观看TV3 Play和Viasat 4 Play最新节目</summary>
-        <description lang="be">On TV3 Play you can watch all of TV3's own programming and some foreign series. There is also extra feature for some programming.[CR][CR]If you have comments or suggestions for this addon, please feel free to participate in the debate on my blog at http://tommy.winther.nu</description>
-        <description lang="ca">A TV3 Play podeu veure tota la programació pròpia de TV3 i algunes sèries estrangeres. Hi ha també extres d'alguns programes.[CR][CR]Si teniu comentaris o suggerències per aquest afegitó, per favor no dubteu en participar en el debat al meu blog http://tommy.winther.nu</description>
-        <description lang="da">På TV3 Play kan du se alle TV3's egne programmer og nogle udenlandske serier. Der er også ekstramateriale til flere af programmerne.[CR][CR]Har du kommentarer, ris eller ros til denne addon, er du velkommen til at deltage i debatten på min blog på http://tommy.winther.nu</description>
-        <description lang="de">Auf TV3 Play kannst du alle TV3 Programme und einige ausländische Serien sehen. Außerdem gibt es für einige Programme extra funktionen. [CR][CR]Falls du Kommentare oder Empfehlungen für dieses Addon hast, fühle dich so frei und beteilige dich an der Debatte auf meinem Blog unter http://tommy.winther.nu</description>
-        <description lang="el">Στο TV3 Play μπορείτε να παρακολουθήσετε όλο το πρόγραμμά του καθώς και κάποιες ξένες σειρές. Υπάρχουν, επίσης, επιπλέον λειτουργίες για κάποια προγράμματα.[CR][CR]Αν έχετε σχόλια ή προτάσεις για αυτό το πρόσθετο, παρακαλούμε να συμμετάσχετε ελεύθερα στη συζήτηση στο blog μου στο http://tommy.winther.nu</description>
-        <description lang="en">On TV3 Play you can watch all of TV3's own programming and some foreign series. There is also extra feature for some programming.[CR][CR]If you have comments or suggestions for this addon, please feel free to participate in the debate on my blog at http://tommy.winther.nu</description>
-        <description lang="es">En TV3 Play puedes ver todos los programas de TV3 y algunas series extranjeras. También hay características especiales para algunos programas.[CR][CR]Si tienes comentarios o sugerencias acerca de este complemento, no dudes en participar en el debate de mi blog en http://tommy.winther.nu</description>
-        <description lang="fr">Sur TV3 Play vous pouvez regarder tous les programmes de TV3 et quelques séries étrangères. Il y a aussi une fonctionnalité supplémentaire pour quelques programmes.[CR][CR]Si vous avez des commentaires ou des suggestions pour cette extension, venez participer au débat sur mon blog http://tommy.winther.nu</description>
-        <description lang="gl">En TV3 Play pode ver toda a programación da canle e algunhas series extranxeiras, mais tamén características adicionais nalgunha programación.[CR][CR]Se ten comentarios ou suxestións sobre este complemento, pode participar no debate do meu blogue en http://tommy.winther.nu</description>
-        <description lang="he">ב-TV3 Play הינך יכול לצפות בכל תוכניות TV3 ובסדרות זרות נוספות. לתוכניות מסויימות קיימת יכולות נוספות.[CR][CR]אם יש לך הערות או הצעות להרחבה זו, אנא הרגש חופשי להשתתף בדיון שבבלוג שלי שבכתובת http://tommy.winther.nu</description>
-        <description lang="hr">Na TV3 Play možete gledati sav program koji je u vlasništvu TV3's i neke strane serije. Postoje i dodatne značajke za neke programe.[CR][CR]Ako imate komentare i prijedloge za ovaj dodatak, uključite se u raspravu na mojem blogu na http://tommy.winther.nu</description>
-        <description lang="hu">A TV3 Play-en saját műsorokat és külföldi sorozatokat nézhet. [CR][CR]Ha hozzászólása vagy javaslata van a kiegészítővel kapcsolatban, keresse fel a blogomat a tommy.winther.nu címen</description>
-        <description lang="it">Con TV3Play puoi guardare tutta la programmazione di TV3 e qualche altra serie. Ci sono anche funzionalità extra per alcuni palinsesti.[CR][CR]Se hai commenti o suggerimenti per questo addon, sentiti libero di partecipare alla discussione sul mio blog: http://tommy.winther.nu</description>
-        <description lang="ko">On TV3 Play you can watch all of TV3's own programming and some foreign series. There is also extra feature for some programming.[CR][CR]If you have comments or suggestions for this addon, please feel free to participate in the debate on my blog at http://tommy.winther.nu</description>
-        <description lang="lt">TV3 Play priede galite žiūrėti visas TV3 savo šalies ir kai kurias užsienio laidas. Taip pat yra papildoma programos funkcija[CR] [Cr]Jei turite pastabų ar pasiūlymų šiam priedui, prašome nedvejodami dalyvauti diskusijose mano dienoraštyje http://tommy.winther.nu</description>
-        <description lang="no">På TV3 Play kan du se alle av TV3s egne programmer og noen utenlanske serier. Det finnes også tilleggsfunksjoner til noen av programmene. Hvis du har kommentarer eller forslag til dette tillegget, føl deg fri til å bli med i debatten på min blogg: http://tommy.winther.nu</description>
-        <description lang="pl">Na TV3 Play możesz oglądać wszystkie własne programy TV3 oraz kilka zagranicznych serii. Istnieje równierz dodatkowa funkcje dla niektórych programów.[CR][CR]Jeśli masz uwagi lub sugestie dotyczące tej wtyczki, uprzejmie prosimy o udział w debacie na blogu na http://tommy.winther.nu</description>
-        <description lang="pt">Com o TV3 Play, pode ver toda a programação própria da TV3 e ainda algumas séries estrangeiras. Tem também mais funcionalidades para alguma programação.[CR][CR]Se tiver comentários ou sugestões para este addon, esteja à vontade para participar no debate no meu blog emhttp://tommy.winther.nu</description>
-        <description lang="pt_BR">Na TV3 você pode assistir toda a programação da própria TV3 e algumas séries estrangeiras. Há também recursos extras para alguma programação. [CR] [CR] Se você tiver comentários ou sugestões para este add-on, por favor, sinta-se livre para participar do debate no meu blog em http://tommy.winther.nu</description>
-        <description lang="sk">Na TV3 Play môžete sledovať všetku vlastnú tvorbu TV3 a niektoré zahraničné seriály. K dispozícii je tiež extra funkcie pre niektoré programy.&#10;&#10;Ak máte poznámky či pripomienky k tomuto doplnku, prosím prispejte do diskusie na blogu http://tommy.winther.nu.</description>
-        <description lang="sv">På TV3 Play kan du se alla TV3's egna program samt några utländska serier. Det finns också extra funktioner för några av programmen.[CR][CR]Om du har kommentarer eller förslag för detta tillägg, känn dig som hemma och delta i debatten på min blogg http://tommy.winther.nu</description>
-        <description lang="zh">在TV3 Play你可以观看TV3全部自有和国外系列节目，还有一些节目的附加内容。[CR][CR]对本插件有何意见或建议，请到我的博客讨论http://tommy.winther.nu</description>
+        <description lang="be">On TV3 Play you can watch all of TV3's own programming and some foreign series. There is also extra feature for some programming.</description>
+        <description lang="ca">A TV3 Play podeu veure tota la programació pròpia de TV3 i algunes sèries estrangeres. Hi ha també extres d'alguns programes.</description>
+        <description lang="da">På TV3 Play kan du se alle TV3's egne programmer og nogle udenlandske serier. Der er også ekstramateriale til flere af programmerne.</description>
+        <description lang="de">Auf TV3 Play kannst du alle TV3 Programme und einige ausländische Serien sehen. Außerdem gibt es für einige Programme extra funktionen. </description>
+        <description lang="el">Στο TV3 Play μπορείτε να παρακολουθήσετε όλο το πρόγραμμά του καθώς και κάποιες ξένες σειρές. Υπάρχουν, επίσης, επιπλέον λειτουργίες για κάποια προγράμματα.</description>
+        <description lang="en">On TV3 Play you can watch all of TV3's own programming and some foreign series. There is also extra feature for some programming.</description>
+        <description lang="es">En TV3 Play puedes ver todos los programas de TV3 y algunas series extranjeras. También hay características especiales para algunos programas.</description>
+        <description lang="fr">Sur TV3 Play vous pouvez regarder tous les programmes de TV3 et quelques séries étrangères. Il y a aussi une fonctionnalité supplémentaire pour quelques programmes.</description>
+        <description lang="gl">En TV3 Play pode ver toda a programación da canle e algunhas series extranxeiras, mais tamén características adicionais nalgunha programación.</description>
+        <description lang="he">ב-TV3 Play הינך יכול לצפות בכל תוכניות TV3 ובסדרות זרות נוספות. לתוכניות מסויימות קיימת יכולות נוספות.</description>
+        <description lang="hr">Na TV3 Play možete gledati sav program koji je u vlasništvu TV3's i neke strane serije. Postoje i dodatne značajke za neke programe.</description>
+        <description lang="hu">A TV3 Play-en saját műsorokat és külföldi sorozatokat nézhet.  címen</description>
+        <description lang="it">Con TV3Play puoi guardare tutta la programmazione di TV3 e qualche altra serie. Ci sono anche funzionalità extra per alcuni palinsesti.</description>
+        <description lang="ko">On TV3 Play you can watch all of TV3's own programming and some foreign series. There is also extra feature for some programming.</description>
+        <description lang="lt">TV3 Play priede galite žiūrėti visas TV3 savo šalies ir kai kurias užsienio laidas. Taip pat yra papildoma programos funkcija</description>
+        <description lang="no">På TV3 Play kan du se alle av TV3s egne programmer og noen utenlanske serier. Det finnes også tilleggsfunksjoner til noen av programmene.</description>
+        <description lang="pl">Na TV3 Play możesz oglądać wszystkie własne programy TV3 oraz kilka zagranicznych serii. Istnieje równierz dodatkowa funkcje dla niektórych programów.</description>
+        <description lang="pt">Com o TV3 Play, pode ver toda a programação própria da TV3 e ainda algumas séries estrangeiras. Tem também mais funcionalidades para alguma programação.</description>
+        <description lang="pt_BR">Na TV3 você pode assistir toda a programação da própria TV3 e algumas séries estrangeiras. Há também recursos extras para alguma programação. </description>
+        <description lang="sk">Na TV3 Play môžete sledovať všetku vlastnú tvorbu TV3 a niektoré zahraničné seriály. K dispozícii je tiež extra funkcie pre niektoré programy.</description>
+        <description lang="sv">På TV3 Play kan du se alla TV3's egna program samt några utländska serier. Det finns också extra funktioner för några av programmen.</description>
+        <description lang="zh">在TV3 Play你可以观看TV3全部自有和国外系列节目，还有一些节目的附加内容。</description>
         <disclaimer lang="be">Some parts of this addon may not be legal in your country of residence - please check with your local laws.</disclaimer>
         <disclaimer lang="ca">Algunes parts d'aquest afegitó podrien ser il·legals al vostre pais de residència - per favor, comprovau les vostres lleis locals.</disclaimer>
         <disclaimer lang="da">Nogle dele af denne addon er muligvis ikke lovlige i dit land - kontroller venligst dine lokale love.</disclaimer>
@@ -78,8 +78,8 @@
         <license>GPLv2</license>
         <platform>all</platform>
         <language>da se no lt lv ee bg</language>
-        <website>http://tommy.winther.nu</website>
-        <email>tommy@winther.nu</email>
-        <source>https://github.com/xbmc-danish-addons/plugin.video.tv3play.dk</source>
+        <website>https://github.com/anorm/plugin.video.tv3play.dk</website>
+        <email>anders@norman.info</email>
+        <source>https://github.com/anorm/plugin.video.tv3play.dk</source>
     </extension>
 </addon>

@@ -1,6 +1,9 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 #
-#      Copyright (C) 2015 Tommy Winther
-#      http://tommy.winther.nu
+# Contributors:
+#      Tommy Winther
+#      Anders Norman
 #
 #  This Program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -21,7 +24,7 @@ import os
 import sys
 import urlparse
 import re
-import mobileapi
+import urllib
 
 import xbmc
 import xbmcgui
@@ -30,98 +33,128 @@ import xbmcplugin
 
 import buggalo
 
-REGIONS = ['tv3play.dk', 'tv3play.se', 'tv3play.no', 'tv3play.lt', 'tv3play.lv', 'tv3play.ee', 'tv6play.se',
-           'tv8play.se', 'tv10play.se', 'viasat4play.no', 'play.novatv.bg']
-
+from mtgapi import MtgApi, MtgApiException
 
 class TV3PlayAddon(object):
     def __init__(self, region):
         self.region = region
-        self.api = mobileapi.TV3PlayMobileApi(region)
+        self.api = MtgApi(region)
+
+    def _build_url(self, query):
+        if not 'region' in query.keys():
+            query['region'] = self.region
+        return PATH + '?' + urllib.urlencode(query)
 
     def listRegions(self):
         items = list()
-        for region in REGIONS:
+        for region in MtgApi.REGIONS:
             item = xbmcgui.ListItem(region, iconImage=ICON)
             item.setProperty('Fanart_Image', FANART)
-            items.append((PATH + '?region=%s' % region, item, True))
+            url = self._build_url({'region': region})
+            items.append((url, item, True))
 
         xbmcplugin.addDirectoryItems(HANDLE, items)
         xbmcplugin.endOfDirectory(HANDLE)
 
-    def listPrograms(self):
+    def listChannels(self):
+        items = list()
+        for channel_id, channel_name in self.api.get_channels().iteritems():
+            item = xbmcgui.ListItem(channel_name, iconImage=self.api.get_channel_icon(channel_id))
+            item.setProperty('Fanart_Image', FANART)
+            url = self._build_url({'channel': channel_id})
+            items.append((url, item, True))
+
+        xbmcplugin.addDirectoryItems(HANDLE, items)
+        xbmcplugin.endOfDirectory(HANDLE)
+
+    def listShows(self, channel):
         items = list()
 
-        formats = self.api.getAllFormats()
-        if not formats:
+        shows = self.api.get_shows(channel)
+        if not shows:
             xbmcplugin.endOfDirectory(HANDLE, succeeded=False)
             self.displayError(ADDON.getLocalizedString(30205))
             return
 
-        for series in formats:
-            fanart = mobileapi.IMAGE_URL % series['image'].replace(' ', '%20')
+        for show in shows:
+            fanart = show['image']
 
             infoLabels = {
-                'title': series['title'],
-                'plot': series['description']
+                'title': show['title']
+                #'plot': show['description']
             }
 
-            item = xbmcgui.ListItem(series['title'], iconImage=fanart)
+            item = xbmcgui.ListItem(show['title'], iconImage=fanart)
             item.setInfo('video', infoLabels)
             item.setProperty('Fanart_Image', fanart)
-            items.append((PATH + '?region=%s&format=%s' % (self.region, series['id']), item, True))
+            url = self._build_url({'seasons_url': show['_links']['seasons']['href']})
+            items.append((url, item, True))
 
         xbmcplugin.addDirectoryItems(HANDLE, items)
+        xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_TITLE)
         xbmcplugin.endOfDirectory(HANDLE)
 
-    def listCategories(self, formatId):
-        detailed = self.api.detailed(formatId)
+    def listSeasons(self, seasons_url):
+        seasons = self.api.get_seasons(seasons_url)
 
-        for category in detailed['formatcategories']:
-            fanart = mobileapi.IMAGE_URL % category['image'].replace(' ', '%20')
+        for season in seasons:
+            fanart = season['_links']['image']['href'].format(size='500x500')
 
-            item = xbmcgui.ListItem(category['name'], iconImage=fanart)
+            item = xbmcgui.ListItem(season['title'], iconImage=fanart)
             item.setProperty('Fanart_Image', fanart)
+            url = self._build_url({'episodes_url': season['_links']['videos']['href']})
             xbmcplugin.addDirectoryItem(HANDLE,
-                                        PATH + '?region=%s&format=%s&category=%s' % (self.region, formatId, category['id']),
+                                        url,
                                         item, True)
 
+        xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_TITLE)
         xbmcplugin.endOfDirectory(HANDLE)
 
-    def listVideos(self, category):
+    def listEpisodes(self, episodes_url):
         items = list()
 
-        videos = self.api.getVideos(category)
-        for video in videos:
-            fanart = mobileapi.IMAGE_URL % video['image'].replace(' ', '%20')
+        episodes = self.api.get_episodes(episodes_url)
 
-            infoLabels = {
-                'title': video['title'],
+        for episode in episodes:
+            fanart = episode['_links']['image']['href'].format(size='500x500')
+
+            info_labels = {
+                'title': episode['title'],
                 'studio': ADDON.getAddonInfo('name'),
-                'plot': video['description'],
-                'plotoutline': video['summary'],
-                'tvshowtitle': video['formattitle']
+                'plot': episode['description'],
+                'plotoutline': episode['summary'],
+                'tvshowtitle': episode['format_title']
             }
-            if 'length' in video and video['length'] is not None:
-                infoLabels['duration'] = int(video['length']) / 60
+            if 'duration' in episode and episode['duration'] is not None:
+                info_labels['duration'] = int(episode['duration'])
 
-            if 'airdate' in video and video['airdate'] is not None:
-                airdate = video['airdate']
-                infoLabels['date'] = '%s.%s.%s' % (airdate[8:10], airdate[5:7], airdate[0:4])
-                infoLabels['year'] = int(airdate[0:4])
+            if 'broadcasts' in episode:
+                if 'air_at' in episode['broadcasts'] and episode['broadcasts']['air_at'] is not None:
+                    airdate = episode['air_at']
+                    info_labels['date'] = '%s.%s.%s' % (airdate[8:10], airdate[5:7], airdate[0:4])
+                    info_labels['year'] = int(airdate[0:4])
 
-            if 'episode' in video and video['episode'] is not None:
-                infoLabels['episode'] = int(video['episode'])
+            if 'format_position' in episode:
+                if episode['format_position']['is_episodic'] == 'true':
+                    if 'episode' in episode['format_position'] and episode['format_position']['episode'] is not None:
+                        info_labels['episode'] = int(episode['episode'])
 
-            item = xbmcgui.ListItem(video['title'], iconImage=fanart)
-            item.setInfo('video', infoLabels)
+            item = xbmcgui.ListItem(episode['title'], iconImage=fanart)
+            item.setInfo('episode', info_labels)
             item.setProperty('IsPlayable', 'true')
             item.setProperty('Fanart_Image', fanart)
 
-            if 'hlspath' in video:
-                items.append((video['hlspath'], item))
-            else:
-                items.append((PATH + '?region=%s&playVideo=%s' % (self.region, video['id']), item))
+            streams = self.api.get_streams(episode)
+            url = ""
+            if 'hls' in streams and streams['hls'] is not None:
+                url = streams['hls']
+            elif 'high' in streams and streams['high'] is not None:
+                url = streams['high']
+            elif 'medium' in streams and streams['medium'] is not None:
+                url = streams['medium']
+            elif 'low' in streams and streams['low'] is not None:
+                url = streams['low']
+            items.append((url, item))
 
         xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_EPISODE)
         xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_TITLE)
@@ -155,6 +188,7 @@ class TV3PlayAddon(object):
 
 
 if __name__ == '__main__':
+    xbmc.log("{}{}".format(sys.argv[0], sys.argv[2]))
     ADDON = xbmcaddon.Addon()
     PATH = sys.argv[0]
     HANDLE = int(sys.argv[1])
@@ -170,24 +204,26 @@ if __name__ == '__main__':
     r = None
     if 'region' in PARAMS:
         r = PARAMS['region'][0]
-    elif ADDON.getSetting('region') in REGIONS:
+    elif ADDON.getSetting('region') in MtgApi.REGIONS:
         r = ADDON.getSetting('region')
 
-    buggalo.SUBMIT_URL = 'http://tommy.winther.nu/exception/submit.php'
+    buggalo.SUBMIT_URL = 'http://buggalo.ext.norman.info/submit.php'
     tv3PlayAddon = TV3PlayAddon(r)
     try:
         if 'playVideo' in PARAMS:
             tv3PlayAddon.playVideo(PARAMS['playVideo'][0])
-        elif 'format' in PARAMS and 'category' in PARAMS:
-            tv3PlayAddon.listVideos(PARAMS['category'][0])
-        elif 'format' in PARAMS:
-            tv3PlayAddon.listCategories(PARAMS['format'][0])
+        elif 'episodes_url' in PARAMS:
+            tv3PlayAddon.listEpisodes(PARAMS['episodes_url'][0])
+        elif 'seasons_url' in PARAMS:
+            tv3PlayAddon.listSeasons(PARAMS['seasons_url'][0])
+        elif 'channel' in PARAMS:
+            tv3PlayAddon.listShows(PARAMS['channel'][0])
         elif r:
-            tv3PlayAddon.listPrograms()
+            tv3PlayAddon.listChannels()
         else:
             tv3PlayAddon.listRegions()
 
-    except mobileapi.TV3PlayMobileApiException, ex:
+    except MtgApiException as ex:
         tv3PlayAddon.displayError(str(ex))
 
     except Exception:

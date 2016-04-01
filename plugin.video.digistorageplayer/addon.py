@@ -48,43 +48,42 @@ if mode is None:
     files = s.get(api_base + '/api/v2/mounts/' + mount['id'] + '/files/list', params = {'path': '/'}).json()['files']
     for file in files:
         if file['type'] == 'dir':
-            url = build_url({'mode': 'folder', 'foldername': '/' + file['name'], 'action': 'folder'})
-            li = xbmcgui.ListItem('/' + file['name'], iconImage='DefaultFolder.png')
+            url = build_url({'mode': 'folder', 'foldername': '/' + file['name'].encode("utf-8"), 'action': 'folder'})
+            li = xbmcgui.ListItem('/' + file['name'].encode("utf-8"), iconImage='DefaultFolder.png')
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                 listitem=li, isFolder=True)
-        elif '.mp3' in file['name'] or '.mkv' in file['name']:
-            url = build_url({'mode': 'video', 'foldername': '/' + file['name']})
-            li = xbmcgui.ListItem(file['name'], iconImage='DefaultFolder.png')
+        elif '.mp3' in file['name'] or '.mkv' in file['name'] or '.avi' in file['name'] or '.mpeg' in file['name'] or '.mp4' in file['name'] or '.flac' in file['name']:
+            url = build_url({'mode': 'video', 'foldername': '/' + file['name'].encode("utf-8")})
+            li = xbmcgui.ListItem(file['name'].encode("utf-8"), iconImage='DefaultFolder.png')
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                 listitem=li, isFolder=False)
         elif '.jpg' in file['name'] or '.png' in file['name'] or '.jpeg' in file['name']:
-            url = build_url({'mode': 'picture', 'foldername': '/' + file['name']})
-            li = xbmcgui.ListItem(file['name'], iconImage='DefaultFolder.png')
+            url = build_url({'mode': 'picture', 'foldername': '/' + file['name'].encode("utf-8")})
+            li = xbmcgui.ListItem(file['name'].encode("utf-8"), iconImage='DefaultFolder.png')
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
 
     xbmcplugin.endOfDirectory(addon_handle)
 elif mode[0] == 'folder':
     listing = []
-    foldername = args['foldername'][0]
+    foldername = args['foldername'][0].encode("utf-8")
     files = s.get(api_base + '/api/v2/mounts/' + mount['id'] + '/files/list', params = {'path': foldername + '/'}).json()['files']
     for file in files:
         if file['type'] == 'dir':
-            xbmc_log(u'%s: %s' % ('Digi Storage Player', file['name']))
-            url = build_url({'mode': 'folder', 'foldername': foldername + '/' + file['name']})
+            url = build_url({'mode': 'folder', 'foldername': foldername + '/' + file['name'].encode("utf-8")})
             li = xbmcgui.ListItem(foldername + '/' + file['name'], iconImage='DefaultFolder.png')
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                 listitem=li, isFolder=True)
-        elif '.mp3' in file['name'] or '.mkv' in file['name']:
-            tempoUrl = s.get(api_base + '/api/v2/mounts/' + mount['id'] + '/files/download', params = {'path': foldername + '/' + file['name']}, verify=False).json()['link']
+        elif '.mp3' in file['name'] or '.mkv' in file['name'] or '.avi' in file['name'] or '.mpeg' in file['name'] or '.mp4' in file['name'] or '.flac' in file['name']:
+            tempoUrl = s.get(api_base + '/api/v2/mounts/' + mount['id'] + '/files/download', params = {'path': foldername + '/' + file['name'].encode("utf-8")}, verify=False).json()['link']
             url = build_url({'mode': 'picture', 'foldername': tempoUrl})
-            li = xbmcgui.ListItem(file['name'], iconImage='DefaultFolder.png')
+            li = xbmcgui.ListItem(file['name'].encode("utf-8"), iconImage='DefaultFolder.png')
             li.addContextMenuItems([ ('Play', 'PlayMedia('+tempoUrl+')')])
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                 listitem=li, isFolder=False)
 
         elif '.jpg' in file['name'] or '.png' in file['name'] or '.jpeg' in file['name']:
-            url = build_url({'mode': 'picture', 'foldername': foldername + '/' + file['name']})
-            li = xbmcgui.ListItem(file['name'], iconImage='DefaultFolder.png')
+            url = build_url({'mode': 'picture', 'foldername': foldername + '/' + file['name'].encode("utf-8")})
+            li = xbmcgui.ListItem(file['name'].encode("utf-8"), iconImage='DefaultFolder.png')
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                 listitem=li, isFolder=False)
     xbmcplugin.endOfDirectory(addon_handle)

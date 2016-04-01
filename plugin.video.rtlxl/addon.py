@@ -54,7 +54,7 @@ def show_alles(url):
     
 def show_items(opgehaaldeitemsclass):
     items = [{
-        'path': item['path'],
+        'path': item['path'] + '|Referer='+item['path']+'&User-Agent=Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0',
         'label': item['label'],
         'thumbnail': item['thumbnail'],
         'is_playable': True,

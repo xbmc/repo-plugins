@@ -1,3 +1,6 @@
+1.0.6 (2016.04.01)
+- Fixed video parser due to website changes.
+- Support for Ultra HD videos option available from add-on settings menu.
 1.0.5 (2015.12.05)
 - Improved failover video parser.
 - Quickfix for "by date" order filter in Next/Previous pages and Search entries.

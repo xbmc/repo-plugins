@@ -1,4 +1,7 @@
-﻿Version 1.1.1
+﻿Version 1.1.2
+Fix 418.
+
+Version 1.1.1
 Read XML as UTF-8
 
 Version 1.1.0

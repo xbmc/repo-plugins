@@ -64,7 +64,7 @@ def viewStart():
   addDirectoryItem(localize(30000), { "mode": MODE_A_TO_O })
   addDirectoryItem(localize(30001), { "mode": MODE_CATEGORIES })
   addDirectoryItem(localize(30007), { "mode": MODE_BESTOF_CATEGORIES })
-  addDirectoryItem(localize(30006), { "mode": MODE_SEARCH })
+  #addDirectoryItem(localize(30006), { "mode": MODE_SEARCH })
   addDirectoryItem(localize(30405), { "mode": MODE_FAVORITES })
   addDirectoryItem(localize(30400), { "mode": MODE_PLAYLIST_MANAGER }, folder=False)
 

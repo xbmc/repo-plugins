@@ -2,6 +2,6 @@
 <settings>
 	<category label="30000">
 		<setting id="region" label="30001" type="labelenum" default="Overview"
-                 values="Overview|tv3play.dk|tv3play.se|tv3play.no|tv3play.lt|tv3play.lv|tv3play.ee|tv6play.se|tv8play.se|tv10play.se|viasat4play.no|play.novatv.bg" />
+                 values="Overview|bg|dk|ee|lt|lv|no|se" />
     </category>
 </settings>

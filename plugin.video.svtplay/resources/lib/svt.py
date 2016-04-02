@@ -56,24 +56,23 @@ def getCategories():
   """
   html = getPage(URL_A_TO_O)
 
-
   container = parseDOM(html,
-                       "ul",
-                       attrs = { "class": "[^\"']*play_categories-link-grid[^\"']*"})
+                       "div",
+                       attrs = { "class": "[^\"']*play_promotion-grid[^\"']*"})
   if not container:
     helper.errorMsg("Could not find container")
     return None
 
   titles = parseDOM(container,
                     "span",
-                    attrs={"class": "[^\"']*play_category-grid__title[^\"']*"})
+                    attrs={"class": "[^\"']*play_promotion-item__caption_inner[^\"']*"})
   if not titles:
     helper.errorMsg("Could not find titles")
     return None
 
   thumbs = parseDOM(container,
                     "img",
-                    attrs = { "class": "[^\"']*play_category-grid__image[^\"']*" },
+                    attrs = { "class": "[^\"']*play_promotion-item__image[^\"']*" },
                     ret = "src")
   if not thumbs:
     helper.errorMsg("Could not find thumbnails")
@@ -81,7 +80,7 @@ def getCategories():
 
   hrefs = parseDOM(container,
                    "a",
-                    attrs={"class": "[^\"']*play_category-grid__link[^\"']*"},
+                    attrs={"class": "[^\"']*play_promotion-item__link[^\"']*"},
                     ret="href")
   if not hrefs:
     helper.errorMsg("Could not find hrefs")
@@ -96,7 +95,12 @@ def getCategories():
     if category["url"].endswith("oppetarkiv"):
       # Skip the "Oppetarkiv" category
       continue
+    elif category["url"].startswith("/genre"):
+      # No support for /genre yet TODO: Add support
+      continue
 
+    # One ugly hack for the React generated HTML
+    title = parseDOM(title, "span")[0]
     category["title"] = common.replaceHTMLCodes(title)
     category["thumbnail"] = helper.prepareThumb(thumbs[index], baseUrl=BASE_URL)
     categories.append(category)
@@ -170,13 +174,13 @@ def getAlphas():
   Returns a list of all letters in the alphabet that has programs.
   """
   html = getPage(URL_A_TO_O)
-  container = parseDOM(html, "ul", attrs = { "class" : "[^\"']*play_alphabetic-list[^\"']*" })
+  container = parseDOM(html, "ul", attrs = { "class" : "[^\"']*play_alphabetic-skiplinks[^\"']*" })
 
   if not container:
     helper.errorMsg("No container found!")
     return None
 
-  letters = parseDOM(container[0], "h3", attrs = { "class" : "[^\"']*play_alphabetic-list__letter[^\"']*" })
+  letters = parseDOM(container[0], "a", attrs = { "class" : "[^\"']*play_alphabetic-skiplinks__link[^\"']*" })
 
   if not letters:
     helper.errorMsg("Could not find any letters!")
@@ -186,8 +190,8 @@ def getAlphas():
 
   for letter in letters:
     alpha = {}
-    alpha["title"] = helper.convertChar(letter)
-    alpha["char"] =  letter
+    alpha["title"] = common.replaceHTMLCodes(letter).encode("utf-8")
+    alpha["char"] =  letter.encode("utf-8")
     alphas.append(alpha)
 
   return alphas
@@ -201,7 +205,7 @@ def getProgramsByLetter(letter):
 
   html = getPage(URL_A_TO_O)
 
-  letterboxes = parseDOM(html, "li", attrs = { "class": "[^\"']*play_alphabetic-list__letter-container[^\"']*" })
+  letterboxes = parseDOM(html, "div", attrs = { "class": "[^\"']*play_alphabetic-list__letter-container[^\"']*" })
   if not letterboxes:
     helper.errorMsg("No containers found for letter '%s'" % letter)
     return None
@@ -210,12 +214,12 @@ def getProgramsByLetter(letter):
 
   for letterbox in letterboxes:
 
-    heading = parseDOM(letterbox, "h3")[0]
+    heading = parseDOM(letterbox, "a", attrs = { "class": "[^\"']*play_alphabetic-list__letter[^\"']*"})[0]
 
-    if heading == letter:
+    if heading.encode("utf-8") == letter:
       break
 
-  lis = parseDOM(letterbox, "li", attrs = { "class": "[^\"']*play_js-filterable-item[^\"']*" })
+  lis = parseDOM(letterbox, "li", attrs = { "class": "[^\"']*play_alphabetic-list__item[^\"']*" })
   if not lis:
     helper.errorMsg("No items found for letter '"+letter+"'")
     return None
@@ -287,28 +291,15 @@ def getChannels():
   """
   Returns the live channels from the page "Kanaler".
   """
-  anchor_class = "[^\"']*play_zapper__menu-item-link[^\"']*"
-  html = getPage(URL_TO_CHANNELS)
-
-  container = parseDOM(html, "ul", attrs = { "data-play_tabarea" : "ta-schedule"})
-  if not container:
-    helper.errorMsg("No container found for channels")
-    return None
-
-  channels = []
-  ch_boxes = parseDOM(container, "li")
-  for box in ch_boxes:
-    title = parseDOM(box, "a", attrs = {"class" : anchor_class}, ret = "data-channel")[0]
-    url = parseDOM(box, "a", attrs = {"class" : anchor_class}, ret = "href")[0]
-    plot = parseDOM(box, "span", attrs = {"class" : "[^\"']*play_zapper__menu-item-title[^\"']*"})[0]
-    thumbnail = parseDOM(box, "a", attrs = {"class" : anchor_class}, ret = "data-thumbnail")[0]
-    channels.append({
-      "title" : title.title(),
-      "url" : url,
-      "thumbnail" : helper.prepareThumb(thumbnail, baseUrl=BASE_URL),
-      "info" : { "title" : common.replaceHTMLCodes(plot), "plot" : common.replaceHTMLCodes(plot)}
-    })
-
+  # Parsing this since React is way too complicated.
+  # Results are hard coded instead
+  channels = [
+    {"title" : "SVT1", "url" : "/kanaler/svt1", "thumbnail" : ""},
+    {"title" : "SVT2", "url" : "/kanaler/svt2", "thumbnail" : ""},
+    {"title" : "Barnkanalen", "url" : "/kanaler/barnkanalen", "thumbnail" : ""},
+    {"title" : "SVT24", "url" : "/kanaler/svt24", "thumbnail" : ""},
+    {"title" : "Kunskapskanalen", "url" : "/kanaler/kunskapskanalen", "thumbnail" : ""},
+  ]
   return channels
 
 def getEpisodes(url):

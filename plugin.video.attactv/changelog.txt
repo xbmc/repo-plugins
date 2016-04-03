@@ -1,3 +1,6 @@
+1.1.12 (2016.04.03)
+- Quick fix on scraper due to Vimeo website changes.
+- Code refactoring and cleaning.
 1.1.11 (2015.10.09)
 - Added support for the World Socal Forum website videos.
 - Small improvement to the Youtube videos parser.

@@ -1,3 +1,8 @@
+Version 1.1.2
+added prefered quality setting "Adaptive Bitrate"
+added suport for HLS streams
+fix videos failing to play where the only option is HLS
+
 Version 1.1.1
 bug fix
 

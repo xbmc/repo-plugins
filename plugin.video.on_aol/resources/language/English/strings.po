@@ -33,3 +33,7 @@ msgstr ""
 msgctxt "#30012"
 msgid "HD"
 msgstr ""
+
+msgctxt "#30013"
+msgid "Adaptive Bitrate"
+msgstr ""

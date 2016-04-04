@@ -341,12 +341,20 @@ def resolve_url(video_id):
     resolved_url = ''
     success = False
     quality_types = {'0': 'LD', '1': 'SD', '2': 'HD'}
+    quality = addon.getSetting('qual')
     j_url = 'http://feedapi.b2c.on.aol.com/v1.0/app/videos/aolon/%s/details'
     data = json.loads(make_request(j_url %video_id))
+    hls_url = None
+    if (data['response']['data'].has_key('videoMasterPlaylist') and
+            data['response']['data']['videoMasterPlaylist']):
+        hls_url = data['response']['data']['videoMasterPlaylist']
+        if quality == '3':
+            resolved_url = hls_url
+        addon_log('HLS Stream')
     renditions = data['response']['data']['renditions']
-    if renditions:
+    if renditions and not resolved_url:
         for i in renditions:
-            if quality_types[addon.getSetting('qual')] in i['quality']:
+            if quality_types.has_key(quality) and quality_types[quality] in i['quality']:
                 resolved_url = i['url']
                 break
         if not resolved_url:
@@ -364,6 +372,8 @@ def resolve_url(video_id):
                     resolved_url = renditions[0]['url']
                 except:
                     pass
+    if not resolved_url and hls_url:
+        resolved_url = hls_url
     if resolved_url:
         success = True
     item = xbmcgui.ListItem(path=resolved_url)

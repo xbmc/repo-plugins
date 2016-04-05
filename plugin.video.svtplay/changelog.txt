@@ -1,10 +1,11 @@
+Version 4.0.25
+-------------
+- Fix program listing and search
+
 Version 4.0.24
 -------------
 - Fix broken A-Z listing
 - Fix broken channel listing
-
-Please note that search and category drama are
-temporarily disabled.
 
 Version 4.0.23
 -------------

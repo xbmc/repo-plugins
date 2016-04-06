@@ -164,13 +164,19 @@ def get_playable_url(url):
 
 
 def get_playable_vimeo_url(video_id):
-    """This function returns the playable URL for the Vimeo embedded video from the video_id retrieved.
-    This is a workaround to avoid the problem found with the Vimeo Add-on running on Gotham. Under Frodo, calling the Vimeo Add-on with the video_id works great."""
-    video_pattern_sd = '"sd":{.*?,"url":"([^"]*?)"'
-    video_info_url   = 'https://player.vimeo.com/video/' + video_id
+    """This function returns the playable URL for the Vimeo embedded video from the video_id retrieved."""
+    video_quality_pattern = '"profile":[0-9]+,"width":([0-9]+),.*?,"url":"([^"]*?)"'
+    quality_list          = ('640', '480', '1280')
 
+    video_info_url   = 'https://player.vimeo.com/video/' + video_id
     buffer_link = l.carga_web(video_info_url)
-    return l.find_first(buffer_link, video_pattern_sd)
+    video_options  = dict((quality, video) for quality, video in l.find_multiple(buffer_link, video_quality_pattern))
+    l.log("List of video options: "+repr(video_options))
+    for quality in quality_list:
+        if quality in video_options:
+            return video_options.get(quality)
+
+    return ""
 
 
 def get_playable_youtube_url(video_id):

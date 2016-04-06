@@ -1,3 +1,5 @@
+1.0.7 (2016.04.05)
+- Update Vimeo scraper due to Vimeo website changes.
 1.0.6 (2015.08.11)
 - Quick fix on scraper due to Dailymotion website changes.
 - Fixed Next/Previous Page entries due to website changes.

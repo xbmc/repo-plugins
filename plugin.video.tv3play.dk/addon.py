@@ -188,7 +188,7 @@ class TV3PlayAddon(object):
 
 
 if __name__ == '__main__':
-    xbmc.log("{}{}".format(sys.argv[0], sys.argv[2]))
+    xbmc.log("{0}{1}".format(sys.argv[0], sys.argv[2]))
     ADDON = xbmcaddon.Addon()
     PATH = sys.argv[0]
     HANDLE = int(sys.argv[1])

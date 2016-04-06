@@ -36,7 +36,7 @@ class JsonApi(object):
         if queryParams:
             url += '?' + urllib.urlencode(queryParams)
 
-        xbmc.log('Calling API: {}'.format(url))
+        xbmc.log('Calling API: {0}'.format(url))
 
         content = self._http_request(url)
 
@@ -80,7 +80,7 @@ class MtgApi(object):
                  "AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B314 Safari/531.21.10"
 
     def __init__(self, region):
-        xbmc.log('Starting MtgApi for region {}'.format(region))
+        xbmc.log('Starting MtgApi for region {0}'.format(region))
         self._json_api = JsonApi()
         self._config = None
         self._region = region or MtgApi.REGIONS[0]
@@ -232,26 +232,26 @@ class MtgApi(object):
         """
         Runs a series of tests on the API
         """
-        sys.stdout.write(u'Regions: {}\n'.format(", ".join(MtgApi.REGIONS)).encode('utf-8'))
+        sys.stdout.write(u'Regions: {0}\n'.format(", ".join(MtgApi.REGIONS)).encode('utf-8'))
 
         region = 'no'
-        sys.stdout.write(u'Testing region: {}\n'.format(region).encode('utf-8'))
+        sys.stdout.write(u'Testing region: {0}\n'.format(region).encode('utf-8'))
         api = MtgApi(region)
 
         channels = api.get_channels();
         for channel_id, channel_name in channels.iteritems():
-            sys.stdout.write(u'  Channel: {}\n'.format(channel_name).encode('utf-8'))
+            sys.stdout.write(u'  Channel: {0}\n'.format(channel_name).encode('utf-8'))
 
             shows = api.get_shows(channel_id)
             for show in shows:
-                sys.stdout.write(u'    Show: {}\n'.format(show['title']).encode('utf-8'))
+                sys.stdout.write(u'    Show: {0}\n'.format(show['title']).encode('utf-8'))
 
                 seasons = api.get_seasons(show)
                 for season in seasons:
-                    sys.stdout.write(u'      Season: {}\n'.format(season['title']).encode('utf-8'))
+                    sys.stdout.write(u'      Season: {0}\n'.format(season['title']).encode('utf-8'))
 
                     for episode in api.get_episodes(season):
-                        sys.stdout.write(u'        Episode: {}\n'.format(episode['title']).encode('utf-8'))
+                        sys.stdout.write(u'        Episode: {0}\n'.format(episode['title']).encode('utf-8'))
                         api.get_streams(episode)
                         break
 

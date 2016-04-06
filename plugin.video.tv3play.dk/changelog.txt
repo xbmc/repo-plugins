@@ -1,3 +1,6 @@
+[B]Version 3.0.2 - 2016-04-04[/B]
+- Fixed crash on Android caused by limited format string support
+
 [B]Version 3.0.1 - 2016-03-31[/B]
 - Changed provider to anorm
 - Fixed bug on duration meta-data

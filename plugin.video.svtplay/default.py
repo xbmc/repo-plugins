@@ -21,10 +21,10 @@ MODE_A_TO_O = "a-o"
 MODE_PROGRAM = "pr"
 MODE_CLIPS = "clips"
 MODE_LIVE_PROGRAMS = "live"
-MODE_LATEST = "senaste"
+MODE_LATEST = "latest"
 MODE_LATEST_NEWS = 'news'
-MODE_POPULAR = "populara"
-MODE_LAST_CHANCE = "sista-chansen"
+MODE_POPULAR = "popular"
+MODE_LAST_CHANCE = "last_chance"
 MODE_VIDEO = "video"
 MODE_CATEGORIES = "categories"
 MODE_CATEGORY = "ti"
@@ -64,7 +64,7 @@ def viewStart():
   addDirectoryItem(localize(30000), { "mode": MODE_A_TO_O })
   addDirectoryItem(localize(30001), { "mode": MODE_CATEGORIES })
   addDirectoryItem(localize(30007), { "mode": MODE_BESTOF_CATEGORIES })
-  #addDirectoryItem(localize(30006), { "mode": MODE_SEARCH })
+  addDirectoryItem(localize(30006), { "mode": MODE_SEARCH })
   addDirectoryItem(localize(30405), { "mode": MODE_FAVORITES })
   addDirectoryItem(localize(30400), { "mode": MODE_PLAYLIST_MANAGER }, folder=False)
 
@@ -116,7 +116,7 @@ def viewProgramsByLetter(letter):
   programs = svt.getProgramsByLetter(letter)
 
   for program in programs:
-    addDirectoryItem(program["title"], { "mode": MODE_PROGRAM, "url": program["url"] })
+    addDirectoryItem(program["title"], { "mode": MODE_PROGRAM, "url": program["url"] }, thumbnail=program["thumbnail"])
 
 def viewSection(section, page):
   (items, moreItems) = svt.getItems(section, page)
@@ -197,9 +197,7 @@ def viewSearch():
 
   keyword = re.sub(r" ", "+", keyword)
 
-  url = svt.URL_TO_SEARCH + keyword
-
-  results = svt.getSearchResults(url)
+  results = svt.getSearchResults(keyword)
   for result in results:
     mode = MODE_VIDEO
     if result["type"] == "program":

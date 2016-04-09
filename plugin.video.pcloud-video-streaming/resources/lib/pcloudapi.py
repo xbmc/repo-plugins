@@ -1,7 +1,9 @@
 import urllib2
+import xbmc
 import json
 import hashlib
 from numbers import Number 	# to check whether a certain variable is numeric
+from loginfailedexception import LoginFailedException
 
 class PCloudApi:
 	PCLOUD_BASE_URL = 'https://api.pcloud.com/'
@@ -91,14 +93,18 @@ class PCloudApi:
 			outputStream = urllib2.urlopen(url)
 			response = json.load(outputStream)
 			outputStream.close()
-			if response["result"] == 2005: # directory does not exist
+			errCode = response["result"]
+			if errCode == 2005: # directory does not exist
 				folderNameOrID = 0
 				tryAgain = True # try again on the root directory
+			elif errCode == 2000: # Log in failed. Perhaps old token?
+				raise LoginFailedException("Error: Log in failed (2000)")
+				tryAgain = False
 			else:
 				tryAgain = False
-				if response["result"] != 0:
-					errorMessage = self.GetErrorMessage(response["result"])
-					raise Exception("Error calling listfolder: " + errorMessage)
+				if errCode != 0:
+					errorMessage = self.GetErrorMessage(errCode)
+					raise Exception("Error calling listfolder: {0} ({1})".format(errorMessage, errCode))
 		return response
 
 	def GetStreamingUrl(self, fileID):

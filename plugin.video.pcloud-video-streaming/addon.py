@@ -1,4 +1,5 @@
 import resources.lib.pcloudapi
+from resources.lib.loginfailedexception import LoginFailedException
 import sys
 import urllib
 import urlparse
@@ -97,7 +98,15 @@ if mode[0] == "folder":
 		folderID = int(myAddon.getSetting("lastUsedFolderID"))
 	else:
 		folderID = int(folderID[0])
-	folderContents = pcloud.ListFolderContents(folderID)
+	try:
+		folderContents = pcloud.ListFolderContents(folderID)
+	except LoginFailedException as lfEx:
+		authResult = AuthenticateToPCloud()
+		if authResult == False:
+			exit()
+		# try again
+		folderContents = pcloud.ListFolderContents(folderID)
+	
 	# Collect all file IDs in order to get thhumbnails
 	allFileIDs = [ oneItem["fileid"] for oneItem in folderContents["metadata"]["contents"] if not oneItem["isfolder"] ]
 	thumbs = pcloud.GetThumbnails(allFileIDs)

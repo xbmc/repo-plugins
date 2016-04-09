@@ -1,3 +1,6 @@
+v1.2.3 -- 09-Apr-2016
+- Fixed issue #2 whereby expired logon token would crash the plugin on startup. Now in that case the authentication dialog is shown.
+
 v1.2.2 -- 07-Feb-2016
 - Added support for ISO files
 

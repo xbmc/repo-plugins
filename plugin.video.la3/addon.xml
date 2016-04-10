@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.la3" name="La3" version="1.0.0" provider-name="NeverWise">
+  <requires>
+    <import addon="xbmc.python" version="2.14.0"/>
+    <import addon="script.module.neverwise" version="1.0.3"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary lang="it">La3</summary>
+    <summary lang="en">La3</summary>
+    <description lang="it">La3 è un canale televisivo italiano edito da 3 Italia.</description>
+    <description lang="en">La3 is an Italian television channel edited by 3 Italy.</description>
+    <disclaimer lang="it">Alcune parti di questo addon potrebbero non essere legali nel tuo paese di residenza. Si prega di verificare la legislazione in vigore prima di installare.</disclaimer>
+    <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence. Please check with your local laws before installing.</disclaimer>
+    <language>it</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+    <forum></forum>
+    <website></website>
+    <email></email>
+    <source>https://github.com/NeverWise/plugin.video.la3</source>
+  </extension>
+</addon>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.image.500px" name="500px" version="0.3.0"
+<addon id="plugin.image.500px" name="500px" version="0.3.2"
        provider-name="Patrick L Archibald [patrick.archibald@gmail.com]">
   <requires>
     <import addon="script.module.simplejson" version="2.0.10"/>
@@ -13,7 +13,7 @@
     <platform>all</platform>
     <summary lang="en">View photos from http://500px.com.</summary>
     <description lang="en">
-      View photos from http://500px.com. 
+      View photos from http://500px.com.
 
 This addon was created by Patrick L Archibald (PLA), with contributions by Clément MATHIEU, Marian Flor, and Snorre Løvås.
 

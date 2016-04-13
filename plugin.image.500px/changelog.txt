@@ -1,3 +1,9 @@
+Version 0.3.2 - April 11, 2016
+- Set content type to images per https://github.com/pla1/plugin.image.500px/issues/7
+
+Version 0.3.1 - April 10, 2016
+- Fixed Kodi behaviour where UI did not react on picture context items
+
 Version 0.3.0 - February 27, 2016
 - Added option to set your username on 500px
 - Added user features. Show your own pictures and galleries.
@@ -13,23 +19,23 @@ Version 0.2.4 - January 23, 2016
 - Replaced fanart and icon images with current 500px brand assets. https://about.500px.com/press/
 
 Version 0.2.3 - December 8, 2014
-- Append resources/lib to system path. 
+- Append resources/lib to system path.
 
 Version 0.2.2 - April 21, 2014
 - Fixes search when entering an empty string or when dismissing the search dialog.
 
 Version 0.2.1 - June 21, 2013
-- Rename module utils to resolve a confict. 
+- Rename module utils to resolve a confict.
 
 Version 0.2.0 - June 19, 2013
 - Export features as directory rather than as a addon setting
 - Added python-500px dependency
-- Faster image list loading 
+- Faster image list loading
 - Added paginated view ("Next page")
 - Added search mode
 
 Version 0.1.3 - March 4, 2012
-- Reorganized GitHub repository. Submitted and accepted in the official XBMC repository for version 11 (Eden). 
+- Reorganized GitHub repository. Submitted and accepted in the official XBMC repository for version 11 (Eden).
 
 Version 0.1.2 - March 3, 2012
 - Dropped requires elements from addon.xml

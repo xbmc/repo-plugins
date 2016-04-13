@@ -318,9 +318,9 @@ def get_audio_list(program_url, localized=lambda x: x):
 def get_direct_channels():
     """This function makes the direct channels menu."""
 
-    direct_url    = 'u3m.3pm.s%/evtr/moc.noitomulf.maerts.evtr.emf-s%//:ptth'[::-1]
+    direct_url    = 'u3m.s%/se.evtr.eviloidar//:ptth'[::-1]
     channel_list  = (
-            ( 'Radio Nacional',   'radio1'),
+            ( 'Radio Nacional',   'rne'),
             ( 'Radio Clásica',    'radioclasica'),
             ( 'Radio 3',          'radio3'),
             ( 'Ràdio 4',          'radio4'),
@@ -333,7 +333,7 @@ def get_direct_channels():
         menu_item = {
                 'action' : 'play_audio',
                 'title'  : channel,
-                'url'    : direct_url % (playlist, playlist),
+                'url'    : direct_url % playlist,
         }
         menu_entries.append(menu_item)
 
@@ -343,7 +343,7 @@ def get_direct_channels():
 def get_playable_url(url):
     """This function gets the stream url for direct channels."""
 
-    playable_url_pattern = ')3pm?*.ptth('[::-1]
+    playable_url_pattern = ')oidua.tsaceci?*.ptth('[::-1]
 
     buffer_url           = l.carga_web(url)
     stream_url           = l.find_first(buffer_url, playable_url_pattern)

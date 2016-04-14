@@ -96,7 +96,7 @@ def feature():
         xbmc.executebuiltin('Notification(%s, %s,,%s)' % (__addonname__, 'Error from API: '+str(e.status),__icon__))
         xbmc.log(__addonname__+' - Error from API: '+str(e), xbmc.LOGERROR)
         return
-    
+    fivehundredpxutils.xbmc.xbmcplugin.setContent(fivehundredpxutils.xbmc.addon_handle, 'images')
     for image in map(Image, resp['photos']):
         fivehundredpxutils.xbmc.add_image(image)
 
@@ -134,11 +134,11 @@ def search():
         xbmc.executebuiltin('Notification(%s, %s,,%s)' % (__addonname__, 'Error from API: '+str(e.status),__icon__))
         xbmc.log(__addonname__+' - Error from API: '+str(e), xbmc.LOGERROR)
         return
-    
+
     if (resp['total_items'] == 0):
         xbmc.executebuiltin('Notification(%s, %s,,%s)' % (__addonname__, "Your search returned no matches.",__icon__))
         return
-    
+    fivehundredpxutils.xbmc.xbmcplugin.setContent(fivehundredpxutils.xbmc.addon_handle, 'images')
     for image in map(Image, resp['photos']):
         fivehundredpxutils.xbmc.add_image(image)
 
@@ -248,7 +248,7 @@ def user_features():
 
         url = fivehundredpxutils.xbmc.encode_child_url('categories', feature='user_friends', user_id=user.id)
         fivehundredpxutils.xbmc.add_dir(user.fullname+'\'s friends\' photos', url, user.picture)
- 
+
     fivehundredpxutils.xbmc.end_of_directory()
 
 
@@ -257,7 +257,7 @@ def list_galleries():
     params = fivehundredpxutils.xbmc.addon_params
     page = int(params.get('page', 1))
     user_id = params.get('user_id', None)
-    
+
     try:
         resp = API.galleries(consumer_key=_CONSUMER_KEY, user_id=user_id, sort='position',sort_direction='asc', include_cover=1, cover_size=_TMBSIZE, page=page, rpp=_RPP)
     except Exception, e:
@@ -298,7 +298,7 @@ def gallery():
         xbmc.executebuiltin('Notification(%s, %s,,%s)' % (__addonname__, 'Error from API: '+str(e.status),__icon__))
         xbmc.log(__addonname__+' - Error from API: '+str(e), xbmc.LOGERROR)
         return
-
+    fivehundredpxutils.xbmc.xbmcplugin.setContent(fivehundredpxutils.xbmc.addon_handle, 'images')
     for image in map(Image, resp['photos']):
         fivehundredpxutils.xbmc.add_image(image)
 
@@ -323,13 +323,13 @@ def friends():
         xbmc.executebuiltin('Notification(%s, %s,,%s)' % (__addonname__, 'Error from API: '+str(e.status),__icon__))
         xbmc.log(__addonname__+' - Error from API: '+str(e), xbmc.LOGERROR)
         return
-        
+
     if (resp['friends_count'] == 0):
         xbmc.executebuiltin('Notification(%s, %s,,%s)' % (__addonname__, "No friends found for "+user_id, __icon__))
         return
 
     for friend in resp['friends']:
-        #xbmc.log(__addonname__+' - friend info '+str(friend), 0)      
+        #xbmc.log(__addonname__+' - friend info '+str(friend), 0)
         url = fivehundredpxutils.xbmc.encode_child_url('user_features', user_id=friend['id'])
         userpicture = None
         if _TMBFOLDERS == 'true':

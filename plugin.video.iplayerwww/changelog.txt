@@ -1,3 +1,7 @@
+v2.2.0
+Added support for Red Button.
+Fixed empty directory in Channel Highlights.
+
 v2.1.3
 Added more bitrate options for Radio.
 Switched to new stable source for live TV.

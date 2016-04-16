@@ -49,18 +49,23 @@ class myAddon(t1mAddon):
        except: infoList['Episode'] = 0
        if infoList['Episode'] == 0: continue
        html = self.getRequest(url.rsplit('/',1)[0])
-       try:    plot = re.compile('"og:description" content="(.+?)"',re.DOTALL).search(html).group(1)
-       except: plot = name
-       try:    
-           fanart = re.compile('property="og:image" content="(.+?)"',re.DOTALL).search(html).group(1)
-           fanart = fanart.replace('616.347.jpeg','1280.720.jpeg',1)
-       except: fanart = thumb
+       plot = re.compile('"og:description" content="(.+?)"',re.DOTALL).search(html)
+       if plot != None:
+           plot = plot.group(1)
+       else:
+           plot = name
+       fanart = re.compile('property="og:image" content="(.+?)"',re.DOTALL).search(html)
+       if fanart != None:
+           fanart = fanart.group(1).replace('616.347.jpeg','1280.720.jpeg',1)
+       else:
+           fanart = thumb
        infoList['TVShowTitle'] = name
        infoList['Title']       = name
        infoList['Studio']      = 'HGTV'
        infoList['Plot'] = h.unescape(plot)
+       infoList['mediatype'] = 'tvshow'
        meta['shows'][url] = (name, url, thumb, fanart, infoList)
-      ilist = self.addMenuItem(name,'GE', ilist, url+'|'+name, thumb, fanart, infoList, isFolder=True)
+      ilist = self.addMenuItem(name,'GE', ilist, url, thumb, fanart, infoList, isFolder=True)
       pDialog.update(int((100*i)/numShows))
    pDialog.close()
    if dirty == True: self.updateAddonMeta(meta)
@@ -72,15 +77,18 @@ class myAddon(t1mAddon):
         self.defaultVidStream['width']  = 1280
         self.defaultVidStream['height'] = 720
         url = uqp(url)
-        url, showName = url.split('|',1)
+        showName = xbmc.getInfoLabel('ListItem.Title')
         meta  = self.getAddonMeta()
         sname = url
-        try:  i = len(meta[sname])
-        except:
+        if meta.get(sname) == None:
               meta[sname]={}
         html  = self.getRequest(url)
-        html    = re.compile("data\-video\-prop='(.+?)'></div>",re.DOTALL).search(html).group(1)
-        a = json.loads(html)
+        html    = re.compile('<div id="video-player".+?type="text/x-config">(.+?)</script>',re.DOTALL).search(html)
+        if html != None:
+              a = json.loads(html.group(1))
+        else:
+              xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( self.addonName, addonLanguage(30011) , 5000) )
+              return(ilist)
         vids = a['channels'][0]['videos']
         pDialog = xbmcgui.DialogProgress()
         pDialog.create(self.addonName, addonLanguage(30101))
@@ -89,9 +97,9 @@ class myAddon(t1mAddon):
         dirty = False
         for i,b in list(enumerate(vids, start=1)):
          url     = b['releaseUrl']
-         try:
+         if meta[sname].get(url) != None:
            (name, url, thumb, fanart, infoList) = meta[sname][url]
-         except:
+         else:
            dirty = True
            name    = h.unescape(b['title'])
            fanart  = 'http://www.hgtv.com%s' % b['thumbnailUrl']
@@ -118,6 +126,7 @@ class myAddon(t1mAddon):
            except: infoList['Season']  = 1
            infoList['Plot']        = h.unescape(b["description"])
            infoList['TVShowTitle'] = showName
+           infoList['mediatype'] = 'episode'
            meta[sname][url] = (name, url, thumb, fanart, infoList)
          ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False)
          pDialog.update(int((100*i)/numShows))
@@ -130,17 +139,16 @@ class myAddon(t1mAddon):
   def getAddonVideo(self,url):
    html   = self.getRequest(uqp(url))
    suburl =''
-   try:    
-           subs = re.compile('<textstream src="(.+?)"',re.DOTALL).findall(html)
-           for st in subs:
-             if '.srt' in st:
-                suburl = st
-                break
-   except: pass
+   subs = re.compile('<textstream src="(.+?)"',re.DOTALL).findall(html)
+   for st in subs:
+      if '.srt' in st:
+         suburl = st
+         break
 
-   try:
-     url   = re.compile('<video src="(.+?)"',re.DOTALL).search(html).group(1)
-   except:
+   url   = re.compile('<video src="(.+?)"',re.DOTALL).search(html)
+   if url != None:
+     url = url.group(1)
+   else:
      url, msg   = re.compile('<ref src="(.+?)".+?abstract="(.+?)"',re.DOTALL).search(html).groups()
      xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( self.addonName, msg , 5000) )
      return

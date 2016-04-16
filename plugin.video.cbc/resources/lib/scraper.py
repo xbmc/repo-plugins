@@ -13,6 +13,7 @@ import datetime
 import HTMLParser
 import zlib
 import sys
+import xbmc
 
 h = HTMLParser.HTMLParser()
 uqp = urllib.unquote_plus
@@ -165,13 +166,13 @@ class myAddon(t1mAddon):
                   vwid = b['width']
 
             u = u.split('/meta.smil',1)[0]
-            suburl = u+'?mbr=true&format=preview'
-            u = u + '?mbr=true&manifest=m3u'
+            suburl = u+'?mbr=true&format=preview&feed=Player%20Selector%20-%20Prod'
+            u = u + '?mbr=true&manifest=m3u&feed=Player%20Selector%20-%20Prod'
             html = self.getProxyRequest(u)
             u = re.compile('<video src="(.+?)"', re.DOTALL).search(html).group(1)
             html = self.getProxyRequest(u)
             try:
-                urls = re.compile('BANDWIDTH=(.+?),.+?CODECS=".+?"(.+?)\n', re.DOTALL).findall(html)
+                urls = re.compile('BANDWIDTH=(.+?),.+?\n(.+?)\n', re.DOTALL).findall(html)
                 x = 0
                 for (bw, v) in urls:
                    if int(bw)> x:

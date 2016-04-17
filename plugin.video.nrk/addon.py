@@ -106,63 +106,108 @@ def add_radio_channels():
         addDirectoryItem(plugin.handle, url, li, False)
 
 
+def set_steam_details(item, li):
+    li.setProperty('isplayable', 'true')
+    li.addStreamInfo('video', {'codec': 'h264', 'width': 1280, 'height': 720, 'duration': item.duration})
+    li.addStreamInfo('audio', {'codec': 'aac', 'channels': 2})
+
+
+def set_common_properties(item, li):
+    li.setArt({
+        'thumb': getattr(item, 'thumb', ''),
+        'fanart': getattr(item, 'fanart', ''),
+    })
+    info = {}
+    if hasattr(item, 'description'):
+        info['plot'] = item.description
+    if hasattr(item, 'category') and item.category:
+        info['genre'] = item.category.title
+    if hasattr(item, 'legal_age'):
+        info['mpaa'] = item.legal_age
+    if hasattr(item, 'aired'):
+        info['aired'] = item.aired.strftime('%Y-%m-%d')
+    li.setInfo('video', info)
+
+
 def view(items, update_listing=False, urls=None):
-    if urls is None:
-        urls = [plugin.url_for_path(item.url) for item in items]
     total = len(items)
     for i, (item, url) in enumerate(zip(items, urls)):
         if not getattr(item, 'available', True):
             continue
-        title = item.title
-        if getattr(item, 'episode', None):
-            title += " " + item.episode
-        li = ListItem(title)
+        li = ListItem(item.title)
+        set_common_properties(item, li)
         playable = plugin.route_for(url) == play
-        li.setProperty('isplayable', str(playable))
-        li.setArt({
-            'thumb': getattr(item, 'thumb', ''),
-            'fanart': getattr(item, 'fanart', ''),
-        })
-
-        info = {'title': title, 'count': i}
-        if hasattr(item, 'description'):
-            info['plot'] = item.description
-        if hasattr(item, 'category') and item.category:
-            info['genre'] = item.category.title
-        if hasattr(item, 'legal_age'):
-            info['mpaa'] = item.legal_age
-        if hasattr(item, 'aired'):
-            info['aired'] = item.aired.strftime('%Y-%m-%d')
-        li.setInfo('video', info)
-
         if playable:
-            li.addStreamInfo('video', {'codec': 'h264', 'width': 1280, 'height': 720, 'duration': item.duration})
-            li.addStreamInfo('audio', {'codec': 'aac', 'channels': 2})
+            set_steam_details(item, li)
+        li.setInfo('video', {'count': i, 'title': item.title, 'mediatype': 'video'})
         addDirectoryItem(plugin.handle, url, li, not playable, total)
     endOfDirectory(plugin.handle, updateListing=update_listing)
 
 
+def show_episode_list(episodes):
+    episodes = filter(lambda ep: getattr(ep, 'available', True), episodes)
+    for i, item in enumerate(episodes):
+        li = ListItem(item.episode)
+        set_common_properties(item, li)
+        set_steam_details(item, li)
+        li.setInfo('video', {
+            'title': item.episode,
+            'count': i,
+            'mediatype': 'episode',
+            'tvshowtitle': item.title})
+
+        url = plugin.url_for(play, item.id)
+        addDirectoryItem(plugin.handle, url, li, False)
+    endOfDirectory(plugin.handle)
+
+
+def show_plug_list(items):
+    items = filter(lambda ep: getattr(ep, 'available', True), items)
+    for i, item in enumerate(items):
+        title = item.title
+        if item.episode:
+            title += " (%s)" % item.episode
+        li = ListItem(title)
+        set_common_properties(item, li)
+        set_steam_details(item, li)
+        li.setInfo('video', {
+            'title': title,
+            'count': i,
+            'mediatype': 'video'})
+
+        if getattr(item, 'series_id', None):
+            action = "container.update(\"%s\")" % plugin.url_for(series_view, item.series_id)
+            li.addContextMenuItems([("Gå til serie", action)])
+
+        url = plugin.url_for(play, item.id)
+        addDirectoryItem(plugin.handle, url, li, False)
+    endOfDirectory(plugin.handle)
+
+
+def set_content_type_videos():
+    t = 'videos' if tuple(map(int, xbmc.__version__.split('.'))) >= (2, 25, 0) else 'episodes'
+    xbmcplugin.setContent(plugin.handle, t)
+
+
 @plugin.route('/recommended')
 def recommended():
-    xbmcplugin.setContent(plugin.handle, 'episodes')
+    set_content_type_videos()
     programs = nrktv.recommended_programs()
-    urls = [plugin.url_for(play, item.id) for item in programs]
-    view(programs, urls=urls)
+    show_plug_list(programs)
 
 
 @plugin.route('/mostrecent')
 def mostrecent():
-    xbmcplugin.setContent(plugin.handle, 'episodes')
+    set_content_type_videos()
     programs = nrktv.recent_programs()
-    urls = [plugin.url_for(play, item.id) for item in programs]
-    view(programs, urls=urls)
+    show_plug_list(programs)
 
 
 @plugin.route('/popular')
 def popular():
-    xbmcplugin.setContent(plugin.handle, 'episodes')
+    set_content_type_videos()
     programs = nrktv.popular_programs()
-    view(programs, urls=[plugin.url_for(play, item.id) for item in programs])
+    show_plug_list(programs)
 
 
 def _to_series_or_program_url(item):
@@ -171,7 +216,7 @@ def _to_series_or_program_url(item):
 
 @plugin.route('/category/<category_id>')
 def category(category_id):
-    xbmcplugin.setContent(plugin.handle, 'episodes')
+    set_content_type_videos()
     xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_PLAYLIST_ORDER)
     xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_FOLDERS)
     items = nrktv.programs(category_id)
@@ -199,10 +244,9 @@ def search():
 
 @plugin.route('/series/<series_id>')
 def series_view(series_id):
-    xbmcplugin.setContent(plugin.handle, 'episodes')
+    set_content_type_videos()
     programs = nrktv.episodes(series_id)
-    urls = [plugin.url_for(play, item.id) for item in programs]
-    view(programs, urls=urls)
+    show_episode_list(programs)
 
 
 @plugin.route('/play/<video_id>')
@@ -231,5 +275,5 @@ def play_url():
     xbmcplugin.setResolvedUrl(plugin.handle, True, ListItem(path=url))
 
 
-if __name__ == '__main__':
+def run():
     plugin.run()

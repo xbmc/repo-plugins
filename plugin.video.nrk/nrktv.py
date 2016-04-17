@@ -106,6 +106,8 @@ class Program(Series):
     episode = None
     """Episode number, name or date as string."""
 
+    series_id = None
+
     aired = None
     """Date and time aired as :class:`datetime.datetime`"""
 
@@ -134,6 +136,7 @@ class Program(Series):
 
         return Program(
             id=r['programId'],
+            series_id=r.get('seriesId'),
             title=r['title'].strip(),
             category=category,
             description=r.get('description'),

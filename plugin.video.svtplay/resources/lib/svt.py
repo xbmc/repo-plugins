@@ -7,6 +7,7 @@ import CommonFunctions as common
 
 BASE_URL = "http://svtplay.se"
 API_URL = "http://svtplay.se/api/"
+FORSLAG_JSON_URL = "http://www.svtplay.se/ajax/sok/forslag.json"
 
 URL_A_TO_O = "/program"
 URL_TO_SEARCH = "/sok?q="
@@ -23,10 +24,6 @@ SECTION_LATEST_CLIPS = "play_js-tabpanel-more-clips"
 SECTION_EPISODES = "play_js-tabpanel-more-episodes"
 SECTION_LIVE_PROGRAMS = "live-channels"
 
-SEARCH_LIST_TITLES = "[^\"']*playJs-search-titles[^\"']*"
-SEARCH_LIST_EPISODES = "[^\"']*playJs-search-episodes[^\"']*"
-SEARCH_LIST_CLIPS = "[^\"']*playJs-search-clips[^\"']*"
-
 # Using Python magic to create shortcut
 parseDOM = common.parseDOM 
 
@@ -34,23 +31,27 @@ def getAtoO():
   """
   Returns a list of all programs, sorted A-Z.
   """
-  html = getPage(URL_A_TO_O)
-
-  link_class = "[^\"']*play_link-list__link[^\"']*"
-  texts = parseDOM(html, "a" , attrs = { "class": link_class })
-  hrefs = parseDOM(html, "a" , attrs = { "class": link_class }, ret = "href")
-
+  r = requests.get(FORSLAG_JSON_URL)
+  if r.status_code != 200:
+    common.log("Could not fetch forslag JSON!")
+    return None
+  
+  items = []
   programs = []
+  for json_item in r.json():
+    if json_item["isGenre"] != "genre":
+      programs.append(json_item)
 
-  for index, text in enumerate(texts):
-    program = {}
-    if (hrefs[index][0:7] != u'/genre/'):
-        program["title"] = common.replaceHTMLCodes(text)
-        program["url"] = hrefs[index]
-        programs.append(program)
+  programs = sorted(programs, key=lambda program: program["title"])
 
-  return programs
+  for program in programs:
+    item = {}
+    item["title"] = common.replaceHTMLCodes(program["title"])
+    item["thumbnail"] = helper.prepareThumb(program["thumbnail"], baseUrl=BASE_URL)
+    item["url"] = program["url"]
+    items.append(item)
 
+  return items
 
 def getCategories():
   """
@@ -297,7 +298,8 @@ def getChannels():
 
   for channel in contents["channels"]:
     item = {}
-    item["title"] = channel["name"]
+    program_title = channel["schedule"][0]["title"]
+    item["title"] = channel["name"]+" - "+program_title
     item["thumbnail"] = \
       "http://svtplay.se//public/images/channels/posters/%s.png" % channel["title"]
     item["info"] = {}

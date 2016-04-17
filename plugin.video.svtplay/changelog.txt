@@ -1,3 +1,7 @@
+Version 4.0.26
+-------------
+- Fix broken playback of channels
+
 Version 4.0.25
 -------------
 - Fix program listing and search

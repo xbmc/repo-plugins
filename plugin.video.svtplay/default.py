@@ -97,13 +97,17 @@ def viewAtoO():
   programs = svt.getAtoO()
 
   for program in programs:
-    addDirectoryItem(program["title"], { "mode": MODE_PROGRAM, "url": program["url"] })
+    addDirectoryItem(program["title"],
+                {"mode": MODE_PROGRAM, "url": program["url"]},
+                thumbnail=program["thumbnail"])
 
 def viewCategories():
   categories = svt.getCategories()
 
   for category in categories:
-    addDirectoryItem(category["title"], { "mode": MODE_CATEGORY, "url": category["url"] }, thumbnail=category["thumbnail"])
+    addDirectoryItem(category["title"],
+                {"mode": MODE_CATEGORY, "url": category["url"] },
+                thumbnail=category["thumbnail"])
 
 def viewAlphaDirectories():
   alphas = svt.getAlphas()
@@ -262,30 +266,39 @@ def startVideo(url):
   Starts the XBMC player if a valid video URL is
   found for the given page URL.
   """
-  if not url.startswith("/"):
-    url = "/" + url
+  if not "m3u8" in url:
+    if not url.startswith("/"):
+      url = "/" + url
+    url = svt.BASE_URL + url + svt.JSON_SUFFIX
 
-  url = svt.BASE_URL + url + svt.JSON_SUFFIX
+    try:
+      show_obj = helper.resolveShowURL(url)
+    except ValueError:
+      common.log("Could not decode JSON for "+url)
+      return
+  else:
+    show_obj = {"videoUrl": url, "subtitleUrl": ""}
 
-  show_obj = helper.resolveShowURL(url)
+  if show_obj["videoUrl"]:
+    playVideo(show_obj)
+  else:
+    dialog = xbmcgui.Dialog()
+    dialog.ok("SVT Play", localize(30100))
+
+def playVideo(show_obj):
   player = xbmc.Player()
   startTime = time.time()
 
-  if show_obj["videoUrl"]:
-    xbmcplugin.setResolvedUrl(PLUGIN_HANDLE, True, xbmcgui.ListItem(path=show_obj["videoUrl"]))
+  xbmcplugin.setResolvedUrl(PLUGIN_HANDLE, True, xbmcgui.ListItem(path=show_obj["videoUrl"]))
 
-    if show_obj["subtitleUrl"]:
-      while not player.isPlaying() and time.time() - startTime < 10:
-        time.sleep(1.)
+  if show_obj["subtitleUrl"]:
+    while not player.isPlaying() and time.time() - startTime < 10:
+      time.sleep(1.)
 
-      player.setSubtitles(show_obj["subtitleUrl"])
+    player.setSubtitles(show_obj["subtitleUrl"])
 
-      if not helper.getSetting(S_SHOW_SUBTITLES):
-        player.showSubtitles(False)
-  else:
-    # No video URL was found
-    dialog = xbmcgui.Dialog()
-    dialog.ok("SVT Play", localize(30100))
+    if not helper.getSetting(S_SHOW_SUBTITLES):
+      player.showSubtitles(False)
 
 
 def addDirectoryItem(title, params, thumbnail = None, folder = True, live = False, info = None):

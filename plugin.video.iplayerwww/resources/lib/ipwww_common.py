@@ -289,7 +289,7 @@ def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=N
         date_string = ""
 
     # Modes 201-299 will create a new playable line, otherwise create a new directory line.
-    if mode in (201, 202, 203, 211, 212, 213, 214):
+    if mode in (201, 202, 203, 204, 211, 212, 213, 214):
         isFolder = False
     # Mode 119 is not a folder, but it is also not a playable.
     elif mode == 119:
@@ -347,8 +347,10 @@ def CreateBaseDirectory(content_type):
         AddMenuEntry(translation(30303), 'url', 103, '', '', '')
         AddMenuEntry(translation(30304), 'url', 104, '', '', '')
         AddMenuEntry(translation(30305), 'url', 101, '', '', '')
+        AddMenuEntry(translation(30328), 'url', 118, '', '', '')
         AddMenuEntry(translation(30306), 'url', 107, '', '', '')
         AddMenuEntry(translation(30307), 'url', 108, '', '', '')
+
         AddMenuEntry(translation(30325), 'url', 119, '', '', '')
     elif content_type == "audio":
         AddMenuEntry(translation(30321), 'url', 113, '', '', '')
@@ -375,10 +377,13 @@ def CreateBaseDirectory(content_type):
                             'url', 104, '', '', '')
         AddMenuEntry((translation(30323)+translation(30305)),
                             'url', 101, '', '', '')
+        AddMenuEntry((translation(30323)+translation(30328)),
+                            'url', 118, '', '', '')
         AddMenuEntry((translation(30323)+translation(30306)),
                             'url', 107, '', '', '')
         AddMenuEntry((translation(30323)+translation(30307)),
                             'url', 108, '', '', '')
+
         AddMenuEntry((translation(30324)+translation(30321)),
                             'url', 113, '', '', '')
         AddMenuEntry((translation(30324)+translation(30302)),

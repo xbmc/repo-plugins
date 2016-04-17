@@ -139,7 +139,7 @@ def GetPage(page_url, just_episodes=False):
     if int(ADDON.getSetting('radio_paginate_episodes')) == 0:
         if current_page < next_page:
             page_url = 'http://www.bbc.co.uk' + page_base_url + str(next_page)
-            AddMenuEntry(" [COLOR orange]%s >>[/COLOR]" % translation(30320), page_url, 136, '', '', '')
+            AddMenuEntry(" [COLOR ffffa500]%s >>[/COLOR]" % translation(30320), page_url, 136, '', '', '')
 
     #BUG: this should sort by original order but it doesn't (see http://trac.kodi.tv/ticket/10252)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
@@ -184,10 +184,23 @@ def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
         channelname: determines which channel is queried.
     """
     providers = [('ak', 'Akamai'), ('llnw', 'Limelight')]
-    location_qualities = {'uk' : ['sbr_vlow', 'sbr_low', 'sbr_med', 'sbr_high'], 'nonuk': ['sbr_vlow', 'sbr_low'] }
+    location_qualities = {
+                          'uk' : ['sbr_vlow', 'sbr_low', 'sbr_med', 'sbr_high'],
+                          'nonuk': ['sbr_vlow', 'sbr_low']
+                         }
     location_names = {'uk': 'UK', 'nonuk': 'International'}
-    quality_colours = {'sbr_vlow': 'red', 'sbr_low': 'orange', 'sbr_med': 'yellow', 'sbr_high': 'green'}
-    quality_bitrates = {'sbr_vlow': '48', 'sbr_low': '96', 'sbr_med': '128', 'sbr_high': '320'}
+    quality_colours = {
+                       'sbr_vlow': 'ffff0000',
+                       'sbr_low': 'ffffa500',
+                       'sbr_med': 'ffffff00',
+                       'sbr_high': 'ff008000'
+                       }
+    quality_bitrates = {
+                        'sbr_vlow': '48',
+                        'sbr_low': '96',
+                        'sbr_med': '128',
+                        'sbr_high': '320'
+                       }
 
     for location in location_qualities.keys():
         qualities = location_qualities[location]
@@ -196,7 +209,7 @@ def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
             for provider_url, provider_name in providers:
                 url = 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/%s/%s/%s/%s.m3u8' % (location, quality, provider_url, channelname)
 
-                title = name + ' - [I][COLOR %s]%s Kbps[/COLOR] [COLOR white]%s[/COLOR] [COLOR grey]%s[/COLOR][/I]' % (
+                title = name + ' - [I][COLOR %s]%s Kbps[/COLOR] [COLOR fff1f1f1]%s[/COLOR] [COLOR ffb4b4b4]%s[/COLOR][/I]' % (
                     quality_colours[quality], quality_bitrates[quality] , location_names[location], provider_name)
 
                 AddMenuEntry(title, url, 201, '', '', '')
@@ -227,14 +240,14 @@ def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
     for supplier, bitrate, url, encoding in sorted(streams[0], key=itemgetter(1), reverse=True):
         bitrate = int(bitrate)
         if bitrate >= 320:
-            color = 'green'
+            color = 'ff008000'
         elif bitrate >= 128:
-            color = 'yellow'
+            color = 'ffffff00'
         elif bitrate >= 96:
-            color = 'orange'
+            color = 'ffffa500'
         else:
-            color = 'red'
-        title = name + ' - [I][COLOR %s]%d Kbps %s[/COLOR] [COLOR lightgray]%s[/COLOR][/I]' % (
+            color = 'ffff0000'
+        title = name + ' - [I][COLOR %s]%d Kbps %s[/COLOR] [COLOR ffd3d3d3]%s[/COLOR][/I]' % (
             color, bitrate, encoding, supplier)
         AddMenuEntry(title, url, 201, iconimage, description, '', '')
 

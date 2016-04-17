@@ -55,10 +55,17 @@
   <string id="30325">Sign out BBCiD</string>
   <string id="30326">BBCiD Sign Out</string>
   <string id="30327">Channel A-Z</string>
+  <string id="30328">Red Button</string>
 
   <string id="30400">Error</string>
   <string id="30401">BBC iPlayer TV programmes are available to play in the UK only.</string>
   <string id="30402">Cookie Load Failed</string>
   <string id="30403">Playback failed</string>
   <string id="30404">Can't find stream.</string>
+  <string id="30405">Warning</string>
+  <string id="30406">Red Button channels may be unavailable depending on their schedule.</string>
+  <string id="30407">Usage of Red Button is at your own risk.</string>
+  <string id="30408">Agree</string>
+  <string id="30409">Disagree</string>
+
 </strings>

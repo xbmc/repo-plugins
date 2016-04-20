@@ -1,0 +1,49 @@
+# Kodi Media Center language file
+# Addon Name: HGTV
+# Addon id: plugin.video.hgtv
+# Addon Provider: t1m
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Amharic (http://www.transifex.com/projects/p/xbmc-addons/language/am/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: am\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgctxt "#30011"
+msgid "No Playable Video Found"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Meta Data Cache"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Enable Metadata Cache"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Reset Metadata Cache"
+msgstr ""
+
+msgctxt "#30040"
+msgid "Metadata"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Initialize Metadata Next Start"
+msgstr ""
+
+msgctxt "#30042"
+msgid "Initializing ...."
+msgstr ""
+
+msgctxt "#30101"
+msgid "Initializing ...."
+msgstr ""

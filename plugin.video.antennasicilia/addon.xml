@@ -1,0 +1,24 @@
+<?xml  version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.antennasicilia"
+       name="Antenna Sicilia"
+	   version="1.0.0"
+	   provider-name="Kalamos, Inc.">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="it">Il canale più seguita dai Siciliani!</summary>
+		<description lang="it">Il canale più seguita dai Siciliani!</description>
+		<summary lang="en">Sicilian most popular TV channel!</summary>
+		<description lang="en">Sicilian most popular TV channel!</description>
+		<platform>all</platform>
+		<license>GNU General Public License, v2</license>
+		<forum>http://forum.kodi.tv/showthread.php?tid=209948</forum>
+		<source>https://github.com/zag2me/script.hello.world</source>
+		<email>zag@kodi.org</email>
+		<language>en</language>
+	</extension>
+</addon>

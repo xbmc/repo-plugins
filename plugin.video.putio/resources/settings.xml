@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+
+<settings>
+    <category label="32000">
+        <setting id="oauth2_token" type="text"  label="32001" default="" />
+    </category>
+</settings>

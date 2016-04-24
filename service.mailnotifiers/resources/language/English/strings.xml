@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+
+  <!-- English -->
+
+    <string id="610">message(s)</string>
+    <string id="611">(%s) New e-mail%s</string>
+    <string id="612">Received on %s (UTC)</string>
+    <string id="613">Connection error </string>
+    <string id="614">Please set Username and Password</string>
+    <string id="615">Update in %i second</string>
+    <string id="616">Fetching Mails %s...</string>
+  <!-- Script Settings -->
+
+    <string id="30100">Server Name</string>
+    <string id="30101">Mail Username</string>
+    <string id="30102">Mail Password</string>
+    <string id="30103">Server address</string>
+    <string id="30104">Port</string>
+    <string id="30105">SSL</string>
+    <string id="30106">Type</string>
+    <string id="30107">Time</string>
+    <string id="30114">Popup New mail</string>
+    <string id="30115">Popup Connexion Error</string>
+    <string id="30116">Folder</string>
+    <string id="30117">Show update time</string>
+    <string id="30118">Enable server</string>
+    <string id="30119">Width</string>
+    <string id="30120">Heigth</string>
+    <string id="30121">Font</string>
+    <string id="30122">Text color</string>
+    <string id="30123">Alternate display (Display servers one after one)</string>
+    <string id="30124">Display by skin</string>
+    <string id="30127">Max Size Message</string>
+    <string id="30128">Filter search messages IMAP</string>
+    <string id="30129">Debug</string>
+    <string id="30130">Multilines (Display messages on multilines)</string>
+</strings>

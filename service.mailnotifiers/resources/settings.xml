@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category>
+        <!--<setting id="time" type="text" label="30107" default="60" />-->
+       <setting id="time" type="slider" label="30107" range="1,1,60" option="int" default="1" />
+       <setting id="popup" type="bool" label="30114" default="True" />
+       <setting id="erreur" type="bool" label="30115" default="True" />
+       <setting id="show_update" type="bool" label="30117" default="True" />
+       <setting id="alt" type="bool" label="30123" default="True" />
+       <setting id="multilines" type="bool" label="30130" default="True" />
+       <setting id="x" type="text"  label="x" default="50"/>
+       <setting id="y" type="text"  label="y" default="20"/>
+       <setting id="width" type="text"  label="30119" default="500"/>
+       <setting id="height" type="text"  label="30120" default="300"/>
+       <setting id="font" type="text"  label="30121" default="font13"/>
+       <setting id="color" type="text"  label="30122" default="#FFFFFFFF"/>
+       <setting id="skin" type="bool" label="30124" default="False" />
+       <setting id="max_msg_size" type="text" label="30127" default="10000"/>
+       <setting id="search_param" type="text" label="30128" default="unseen"/>
+       <setting id="debug" type="bool" label="30129" default="False"/>
+
+
+    </category>
+    <category label="Serveur 1">
+       <setting id="enableserver1" type="bool" label="30118" default="false" />
+       <setting id="name1" type="text"  label="30100" default="" enable="eq(-1,true)"/>
+       <setting id="user1" type="text"  label="30101" default="" enable="eq(-2,true)"/>
+       <setting id="pass1" type="text" option = "hidden" label="30102" default="" enable="eq(-3,true)"/>
+       <setting id="server1" type="text" label="30103" default="" enable="eq(-4,true)"/>
+       <setting id="port1" type="text" label="30104" default="110" enable="eq(-5,true)"/>
+       <setting id="ssl1" type="bool" label="30105" default="false" enable="eq(-6,true)"/>
+       <setting id="type1" type="enum" label="30106" values="POP3|IMAP" enable="eq(-7,true)"/>
+       <setting id="folder1" type="text" label="30116"  default="INBOX" enable="eq(-8,true)"/>
+    </category>
+    <category label="Serveur 2">
+       <setting id="enableserver2" type="bool" label="30118" default="false" />
+       <setting id="name2" type="text"  label="30100" default="" enable="eq(-1,true)"/>
+       <setting id="user2" type="text"  label="30101" default="" enable="eq(-2,true)"/>
+       <setting id="pass2" type="text" option = "hidden" label="30102" default="" enable="eq(-3,true)"/>
+       <setting id="server2" type="text" label="30103" default="" enable="eq(-4,true)"/>
+       <setting id="port2" type="text" label="30104" default="110" enable="eq(-5,true)"/>
+       <setting id="ssl2" type="bool" label="30105" default="False" enable="eq(-6,true)"/>
+       <setting id="type2" type="enum" label="30106" values="POP3|IMAP" enable="eq(-7,true)"/>
+       <setting id="folder2" type="text" label="30116"  default="INBOX"/>
+    </category>
+    <category label="Serveur 3">
+       <setting id="enableserver3" type="bool" label="30118" default="false" />
+       <setting id="name3" type="text"  label="30100" default="" enable="eq(-1,true)"/>
+       <setting id="user3" type="text"  label="30101" default="" enable="eq(-2,true)"/>
+       <setting id="pass3" type="text" option = "hidden" label="30102" default="" enable="eq(-3,true)"/>
+       <setting id="server3" type="text" label="30103" default="" enable="eq(-4,true)"/>
+       <setting id="port3" type="text" label="30104" default="110" enable="eq(-5,true)"/>
+       <setting id="ssl3" type="bool" label="30105" default="False" enable="eq(-6,true)"/>
+       <setting id="type3" type="enum" label="30106" values="POP3|IMAP" enable="eq(-7,true)"/>
+       <setting id="folder3" type="text" label="30116"  default="INBOX"/>
+    </category>
+</settings>

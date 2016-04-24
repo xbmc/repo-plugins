@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+
+  <!-- french -->
+
+    <string id="610">message(s)</string>
+    <string id="611">Nouveau(x) message(s)</string>
+    <string id="612">Received on %s (UTC)</string>
+    <string id="613">Erreur de connection</string>
+    <string id="614">SVP votre nom et mot de passe</string>
+    <string id="615">Mise à jour : %i secondes</string>
+    <string id="616">Relève du courrier %s...</string>
+  <!-- Script Settings -->
+
+    <string id="30100">Nom du serveur</string>
+    <string id="30101">Utilisateur</string>
+    <string id="30102">Mot de passe</string>
+    <string id="30103">Adresse du Serveur</string>
+    <string id="30104">Port</string>
+    <string id="30105">SSL</string>
+    <string id="30106">Type</string>
+    <string id="30107">Temps</string>
+    <string id="30114">Popup Nouveau mail</string>
+    <string id="30115">Popup Erreur connection</string>
+    <string id="30116">Dossier</string>
+    <string id="30117">Afficher le temps de mise à jour</string>
+    <string id="30118">Active le serveur</string>
+    <string id="30119">Largeur</string>
+    <string id="30120">Hauteur</string>
+    <string id="30121">Police</string>
+    <string id="30122">Couleur du texte</string>
+    <string id="30123">Affichage alterné (Affiche les serveurs l'un après l'autre)</string>
+    <string id="30124">Affichage défini dans le skin</string>
+    <string id="30127">Taille max du message</string>
+    <string id="30128">Filtre de recherche des messages IMAP</string>
+    <string id="30129">Debug</string>
+    <string id="30130">Multilignes (Affichage des messages en multilignes)</string>
+
+</strings>

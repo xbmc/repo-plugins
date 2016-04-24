@@ -1,0 +1,38 @@
+mail-notifier est un service qui permet de voir l'arrivée de nouveaux mails sur la page HOME de xbmc
+
+INSTALLATION:
+	Ajouter le fichier ZIP par l'interface système de XBMC
+	Ensuite configurer les différents serveurs de mail, trois au maximum
+	ONGLET Général
+	 Temps : Temps, en seconde, entre deux relevés de mail
+	 Popup Nouveau mail : Affiche une fenetre popup lors de l'&arrivée d'un nouveau mail
+	 Popup Erreur de connection : Affiche un popup en d'erreur de connection
+         Afficher le temp de mise à jour : oui/non
+	 Alternatif: oui/non Affiche les serveurs l'un après l'autre
+	 x : position de l'affichage
+	 y : position de l'affichage
+	 Largeur : Largeur de l'affichage
+	 Hauteur : Hauteur de l'affichage
+	 Police : Police utilisée pour l'affichage
+ 	 Couleur du texte : sous la forme xbmc (#FFFFFFFF)
+         Affichage défini dans le skin : True/False (Défaut : False)
+	ONGLET Serveur
+         Active le Serveur :oui/non
+ 	 Mon du serveur : Nom qui apparaitra dans la fenetre HOME
+	 Utilisateur : login pour le serveur mail
+	 Mot de passe : votre mot de passe, attention il sera en clair dans le fichier setting.xml
+	 Adresse de serveur : normalement sous la forme pop.monfai.fr
+	 Port : 110 pour POP3 995 pour POP3S (SSL)
+	 SSL : utilise le mode SSL yes ou no
+	 Type : POP3 / IMAP
+	 Dossier : Nom du dossier IMAP à relever
+
+Une fois configuré il est nécessaire déactiver et d'activer le service pour que les modifcations soient prise en compte.
+
+Si vous cochez SKIN à True l'affichage se fera uniquement si le skin défini dans son fichier Home.xml les property comme par exemple :
+
+<label>$INFO[Window.property(notifier.nameX)] : $INFO[Window.property(notifier.msgX)] </label>
+
+Où X est le numéro du serveur défini dans les options du plugin
+
+Pour les skinner il y a la propriété notifier.enableX qui est à true si le serveur est activé et à false si le serveur n'est pas activé (X est le numéro du serveur défini dans les options du plugin)

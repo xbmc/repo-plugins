@@ -1,4 +1,7 @@
-v1.1.2 (2016-02-13)
+v1.1.3 (2016-04-17):
+- updated due to website changes
+
+v1.1.2 (2016-02-13):
 - changed the listing and playing of videos
 - The contextual menu item 'Play from here' is available now, it queues all the videos in the list from a certain point
 - updated to latest requirements for a Kodi-addon

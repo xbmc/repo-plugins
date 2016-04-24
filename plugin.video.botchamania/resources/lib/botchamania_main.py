@@ -24,22 +24,11 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        # #
-        # # All Videos
-        # #
-        # parameters = {"action" : "list", "plugin_category" : LANGUAGE(30000), "url" : "http://botchamania.com/page/1/", "next_page_possible": "True"}
-        # url = self.plugin_url + '?' + urllib.urlencode(parameters)
-        # list_item = xbmcgui.ListItem( LANGUAGE(30000), iconImage="DefaultFolder.png" )
-        # is_folder = True
-        # list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
-        # list_item.setProperty('IsPlayable', 'false')
-        # xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
-
         #
         # Botchamania
         #
         parameters = {"action": "list", "plugin_category": LANGUAGE(30001),
-                      "url": "http://botchamania.com/category/botchamania/page/1/", "next_page_possible": "True"}
+                      "url": "http://botchamania.com/category/botchamania/", "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30001), iconImage="DefaultFolder.png")
         is_folder = True
@@ -51,7 +40,7 @@ class Main:
         # OSWReview
         #
         parameters = {"action": "list", "plugin_category": LANGUAGE(30002),
-                      "url": "http://botchamania.com/category/oswreview/page/1/", "next_page_possible": "True"}
+                      "url": "http://botchamania.com/category/oswreview/", "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30002), iconImage="DefaultFolder.png")
         is_folder = True
@@ -60,24 +49,12 @@ class Main:
         xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
 
         #
-        # NerdSlam
+        # Misc
         #
         parameters = {"action": "list", "plugin_category": LANGUAGE(30003),
-                      "url": "http://botchamania.com/category/nerdslam/page/1/", "next_page_possible": "True"}
+                      "url": "http://botchamania.com/category/misc/", "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30003), iconImage="DefaultFolder.png")
-        is_folder = True
-        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
-        list_item.setProperty('IsPlayable', 'false')
-        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
-
-        #
-        #   PPV Recaps
-        #
-        parameters = {"action": "list", "plugin_category": LANGUAGE(30008),
-                      "url": "http://botchamania.com/category/ppv-recaps/page/1/", "next_page_possible": "True"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
-        list_item = xbmcgui.ListItem(LANGUAGE(30008), iconImage="DefaultFolder.png")
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
         list_item.setProperty('IsPlayable', 'false')

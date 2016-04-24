@@ -1,3 +1,7 @@
+Version 4.0.27
+-------------
+- Fix broken episode listing
+
 Version 4.0.26
 -------------
 - Fix broken playback of channels

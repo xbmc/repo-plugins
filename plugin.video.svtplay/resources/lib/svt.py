@@ -321,6 +321,7 @@ def getEpisodes(url):
   """
   Returns the episodes for a program URL.
   """
+  url = url.replace("/senaste","")
   return getProgramItems(SECTION_EPISODES, url)
 
 def getClips(url):

@@ -2,8 +2,8 @@
 <addon 
 	id="plugin.video.dumpert" 
 	name="Dumpert" 
-	version="1.1.0"
-	provider-name="Skipmode A1">
+	version="1.1.1"
+	provider-name="Skipmode A1, Sparkline">
   <requires>
     <import addon="xbmc.python"                 version="2.14.0"/>
 	<import addon="script.module.beautifulsoup" version="3.0.8"/>

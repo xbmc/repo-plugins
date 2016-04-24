@@ -50,4 +50,22 @@ else:
     elif action == 'play':
         import dumpert_play as plugin
 
+    #
+    # Search
+    #
+    elif action == 'search':
+        import dumpert_search as plugin
+
+    #
+    # Timemachine
+    #
+    elif action == 'timemachine':
+        import dumpert_timemachine as plugin
+
+    #
+    # JSON
+    #
+    elif action == 'json':
+        import dumpert_json as plugin
+
 plugin.Main()

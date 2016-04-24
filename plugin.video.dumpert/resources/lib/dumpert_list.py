@@ -88,7 +88,10 @@ class Main:
         #
         # Get HTML page
         #
-        html_source = requests.get(self.video_list_page_url).text
+        if SETTINGS.getSetting('nsfw') == 'true':
+            html_source = requests.get(self.video_list_page_url, cookies={'nsfw': '1'}).text
+        else:
+            html_source = requests.get(self.video_list_page_url).text
 
         # Parse response
         soup = BeautifulSoup(html_source)
@@ -147,6 +150,24 @@ class Main:
                 titles_and_thumbnail_urls_index = titles_and_thumbnail_urls_index + 1
                 continue
 
+            description = '...'
+            #<a href="http://www.dumpert.nl/mediabase/6721593/46f416fa/stukje_snowboarden.html?thema=bikini" class="dumpthumb" title="Stukje snowboarden">
+            #	<img src="http://media.dumpert.nl/sq_thumbs/6721593_46f416fa.jpg" alt="Stukje snowboarden" title="Stukje snowboarden" width="100" height="100" />
+            #	<span class="video"></span>
+            #	<div class="details">
+            #		<h1>Stukje snowboarden</h1>
+            #		<date>5 februari 2016 10:32</date>
+            #		<p class="stats">views: 63687 kudos: 313</p>
+            #		<p class="description">Fuck winterkleding </p>
+            #	</div>
+            #</a>
+            try:
+                description = titles_and_thumbnail_urls[titles_and_thumbnail_urls_index].parent.find("p","description").string
+                description = description.encode('utf-8')
+            except:
+                pass
+
+
             # Make title
             title = ''
             try:
@@ -179,7 +200,7 @@ class Main:
                 thumbnail_url = titles_and_thumbnail_urls[titles_and_thumbnail_urls_index]['src']
 
             list_item = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_url)
-            list_item.setInfo("video", {"title": title, "studio": ADDON})
+            list_item.setInfo("video", {"title": title, "studio": ADDON, "plot": description})
             list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
                               'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'true')

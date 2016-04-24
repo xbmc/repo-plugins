@@ -84,7 +84,10 @@ class Main:
         #
         # Get HTML page...
         #
-        html_source = requests.get(self.video_list_page_url).text
+        if SETTINGS.getSetting('nsfw') == 'true':
+            html_source = requests.get(self.video_list_page_url, cookies={'nsfw': '1'}).text
+        else:
+            html_source = requests.get(self.video_list_page_url).text
 
         # Parse response...
         soup = BeautifulSoup(html_source)
@@ -164,8 +167,7 @@ class Main:
                           "url": str(theme_base_url) + str(next_page) + '/',
                           "next_page_possible": self.next_page_possible}
             url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-            list_item = xbmcgui.ListItem(LANGUAGE(30503), list_item,
-                                         thumbnailImage=os.path.join(IMAGES_PATH, 'next-page.png'))
+            list_item = xbmcgui.ListItem(LANGUAGE(30503), thumbnailImage=os.path.join(IMAGES_PATH, 'next-page.png'))
             list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'false')
             is_folder = True

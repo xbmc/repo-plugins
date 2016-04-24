@@ -70,9 +70,9 @@ class Main:
         #
         # Get current list item details...
         #
-        #title = unicode(xbmc.getInfoLabel("listitem.Title"), "utf-8")
+        # title = unicode(xbmc.getInfoLabel("listitem.Title"), "utf-8")
         thumbnail_url = xbmc.getInfoImage("list_item.Thumb")
-        #studio = unicode(xbmc.getInfoLabel("list_item.Studio"), "utf-8")
+        # studio = unicode(xbmc.getInfoLabel("list_item.Studio"), "utf-8")
         plot = unicode(xbmc.getInfoLabel("list_item.Plot"), "utf-8")
         genre = unicode(xbmc.getInfoLabel("list_item.Genre"), "utf-8")
 
@@ -86,7 +86,11 @@ class Main:
 
         html_source = ''
         try:
-            response = requests.get(self.video_page_url)
+            if SETTINGS.getSetting('nsfw') == 'true':
+                response = requests.get(self.video_page_url, cookies={'nsfw': '1'})
+            else:
+                response = requests.get(self.video_page_url)
+
             html_source = response.text
         except urllib2.HTTPError, error:
             if self.DEBUG == 'true':

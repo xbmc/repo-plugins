@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!-- main menu -->
+  <string id="30001">Jeux</string>
+  <string id="30002">Suivis</string>
+  <string id="30003">Recherche</string>
+  <string id="30004">Configuration</string>
+  <string id="30005">Streams à l'affiche</string>
+  <string id="30006">Équipes</string>
+  <string id="30008">Chaînes</string>
+  
+  <!--search -->
+  <string id="30007">Recherche d'une chaîne</string>
+  
+  <!--general --> 
+  <string id="30010">TwitchTV</string>
+  <string id="30011">page suivante...</string>
+  <string id="30012">-- Streams en direct --</string>
+  <string id="30013">-- Chaînes suivies --</string>
+
+   <!--notifications --> 
+  <string id="30020">Erreur HTTP</string>
+  <string id="30021">Aucune donnée en direct disponible</string>
+  <string id="30022">Aucune archive trouvé pour</string>
+  <string id="30023">User Token Error</string>
+  <string id="30024">Réglages vidéos modifiés</string>
+  <string id="30025">Réglages vidéo sélectionnés non disponibles</string>
+  <string id="30026">TwitchApi error</string>
+  <string id="30027">JSON error</string>
+  <string id="30028">Échec de l'analyse du résultat</string>
+  <string id="30029">Veuillez vérifier votre connexion internet</string>
+  
+  <!--settings -->
+  <string id="30040">Qualité vidéo</string>
+  <string id="30041">Meilleure possible</string>
+  <string id="30042">720p</string>
+  <string id="30043">480p</string>
+  <string id="30044">360p</string>
+  <string id="30063">226p (Mobile)</string>
+  <string id="30045">Afficher titres</string>
+  <string id="30046">Streamer - Titre du stream</string>
+  <string id="30047">Spectateurs - Streamer - Titre du stream</string>
+  <string id="30048">Titre du stream</string>
+  <string id="30049">Streamer</string>
+  <string id="30051">Streamer - Nom du jeu - Titre du stream</string>
+
+  <string id="30050">Nom d'utilisateur</string>
+  
+  <!--title-->
+  <string id="30060">Streamer inconnu</string>
+  <string id="30061">Stream sans titre</string>
+  <string id="30062">Nombre inconnu de viewers</string>
+  <string id="30064">Jeu inconnu</string>
+
+  <string id="30065">Tronquer l'affichage des titres</string>
+
+</strings>

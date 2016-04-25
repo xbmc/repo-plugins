@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!-- main menu -->
+  <string id="30001">Spil</string>
+  <string id="30002">Følger</string>
+  <string id="30066">Fulgte Spil</string>
+  <string id="30003">Søg</string>
+  <string id="30004">Indstillinger</string>
+  <string id="30005">Fremhævede Spil</string>
+  <string id="30006">Hold</string>
+  <string id="30008">Kanaler</string>
+  
+  <!--search -->
+  <string id="30007">Søg efter kanaler</string>
+  
+  <!--general --> 
+  <string id="30010">TwitchTV</string>
+  <string id="30011">næste side...</string>
+  <string id="30012">-- Nuværende Live Streams --</string>
+  <string id="30013">-- Fulgte Kanaler --</string>
+
+   <!--notifications --> 
+  <string id="30020">Http fejl</string>
+  <string id="30021">Ingen Live Data Fundet</string>
+  <string id="30022">Ingen arkiver fundet for</string>
+  <string id="30023">Bruger Token Fejl</string>
+  <string id="30024">Skiftet video indstillinger</string>
+  <string id="30025">Valgte video indstillinger er ikke tilgængelige</string>
+  <string id="30026">TwitchApi fejl</string>
+  <string id="30027">JSON fejl</string>
+  <string id="30028">Kan ikke afkode resultat sættet</string>
+  <string id="30029">Tjek din internet forbindelse</string>
+  
+  <!--settings -->
+  <string id="30040">Video Kvalitet</string>
+  <string id="30041">Bedst mulige</string>
+  <string id="30042">720p</string>
+  <string id="30043">480p</string>
+  <string id="30044">360p</string>
+  <string id="30063">226p (Mobil)</string>
+  <string id="30045">Vis titler</string>
+  <string id="30046">Streamer - Stream Titel</string>
+  <string id="30047">Seere - Streamer - Stream Titel</string>
+  <string id="30048">Stream Titel</string>
+  <string id="30049">Streamer</string>
+  <string id="30051">Streamer - Spil Titel - Stream Titel</string>
+  <string id="30067">Spil Titel Seere | Streamer - Stream Titel</string>
+  <string id="30052">Enable</string>
+  <string id="30053">Adgangskode (OAuth Token)</string>
+
+  <string id="30050">Brugernavn</string>
+  
+  <!--title-->
+  <string id="30060">Unavngivet Streamer</string>
+  <string id="30061">Unavngivet Stream</string>
+  <string id="30062">Ukendt Nummer af Seere</string>
+  <string id="30064">Ukendt Spil</string>
+
+  <string id="30065">Afkort viste titler</string>
+
+</strings>

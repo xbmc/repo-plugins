@@ -3,6 +3,7 @@
   <!-- main menu -->
   <string id="30001">Gry</string>
   <string id="30002">Śledzeni</string>
+  <string id="30066">Śledzone gry</string>
   <string id="30003">Szukaj</string>
   <string id="30004">Ustawienia</string>
   <string id="30005">Popularne kanały</string>
@@ -43,7 +44,10 @@
   <string id="30048">Tytuł</string>
   <string id="30049">Kanał</string>
   <string id="30051">Kanał - Gra - Tytuł</string>
-  
+  <string id="30067">Gra Liczba oglądających | Kanał - Tytuł</string>
+  <string id="30052">Włączone</string>
+  <string id="30053">Token OAuth</string>
+
   <string id="30050">Użytkownik</string>
 
   <string id="30060">Kanał bez nazwy</string>

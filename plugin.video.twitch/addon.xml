@@ -1,27 +1,30 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-<addon id='plugin.video.twitch' version='1.3.1' name='TwitchTV' provider-name='StateOfTheArt and ccaspers'>
-  <requires>
-    <import addon='xbmc.python' version='2.1.0'/>
-    <import addon='script.module.simplejson' version='2.0.10'/>
-    <import addon="script.module.xbmcswift2" version="1.2.0"/>
-  </requires>
-  <extension point='xbmc.python.pluginsource' library='default.py'>
+<addon id='plugin.video.twitch' version='1.4.0' name='Twitch' provider-name='StateOfTheArt and ccaspers'>
+    <requires>
+        <import addon='xbmc.python' version='2.20.0'/>
+        <import addon="script.module.xbmcswift2" version="1.2.0"/>
+    </requires>
+    <extension point='xbmc.python.pluginsource' library='resources/lib/__run__.py'>
         <provides>video</provides>
-  </extension>
-  <extension point='xbmc.addon.metadata'>
-    <platform>all</platform>
-    <language>en</language>
-    <source>https://github.com/StateOfTheArt89/Twitch.tv-on-XBMC</source>
-    <license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>
-    <summary lang='de'>TwitchTV video plugin</summary>
-    <description lang='de'>Schaue die besten Gaming-Streams! </description>
-    <summary lang='en'>TwitchTV video plugin</summary>
-    <description lang='en'>Watch your favorite gaming streams!</description>
-    <summary lang='es'>TwitchTV video plugin</summary>
-    <description lang='es'>¡Mira los streams de tus juegos favoritos!</description>
-    <summary lang='nl'>TwitchTV video plugin</summary>
-    <description lang='nl'>Bekijk je favoriete gaming-streams!</description>
-    <summary lang='pl'>TwitchTV video plugin</summary>
-    <description lang='pl'>Oglądaj ulubione programy TwitchTV!</description>
-  </extension>
+    </extension>
+    <extension point='xbmc.addon.metadata'>
+        <platform>all</platform>
+        <language>en</language>
+        <source>https://github.com/StateOfTheArt89/Twitch.tv-on-XBMC</source>
+        <license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>
+        <summary lang='da'>Twitch video plugin</summary>
+        <description lang='da'>Se dine favorit gaming streams!</description>
+        <summary lang='de'>Twitch video plugin</summary>
+        <description lang='de'>Schaue die besten Gaming-Streams!</description>
+        <summary lang='en'>Twitch video plugin</summary>
+        <description lang='en'>Watch your favorite gaming streams!</description>
+        <summary lang='es'>Twitch video plugin</summary>
+        <description lang='es'>¡Mira los streams de tus juegos favoritos!</description>
+        <summary lang='fr'>Twitch video plugin</summary>
+        <description lang='fr'>Regardez les streams de vos jeux favoris !</description>
+        <summary lang='nl'>Twitch video plugin</summary>
+        <description lang='nl'>Bekijk je favoriete gaming-streams!</description>
+        <summary lang='pl'>Twitch video plugin</summary>
+        <description lang='pl'>Oglądaj ulubione programy TwitchTV!</description>
+    </extension>
 </addon>

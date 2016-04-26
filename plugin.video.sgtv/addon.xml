@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.sgtv"
        name="SG!TV"
-       version="1.6.0"
+       version="1.7.0"
        provider-name="Sean, GadgetReactor.com">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -9,12 +9,12 @@
     <import addon="plugin.video.youtube" version="4.4.10" />
     <import addon="script.module.pyamf" version="0.6.2"/>
   </requires>
-  
+
   <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>
   </extension>
-  
-  <extension point="xbmc.addon.metadata">  
+
+  <extension point="xbmc.addon.metadata">
   <summary lang="en">Singapore TV Video Add-on</summary>
     <description lang="en">	Putting together Singapore-based media content from a variety of local sources. List of channels include Mediacorp 5, 8, Suria, Vasantham, Channel U, CNA, Viddsee, and local Youtubers.
 	</description>

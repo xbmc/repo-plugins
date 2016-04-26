@@ -1,0 +1,140 @@
+# Kodi Media Center language file
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2016-04-22 16:49+0000\n"
+"PO-Revision-Date: 2016-04-22 20:00+0010\n"
+"Last-Translator: senufo <senufo2@gmail.com>\n"
+"Language-Team: EN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#English
+
+msgctxt "#610"
+msgid "message(s)"
+msgstr ""
+
+msgctxt "#611"
+msgid "(%s) New e-mail%s"
+msgstr ""
+
+msgctxt "#612"
+msgid "Received on %s"
+msgstr ""
+
+msgctxt "#613"
+msgid "Error Connecting to server"
+msgstr ""
+
+msgctxt "#614"
+msgid "Please set Username and Password"
+msgstr ""
+
+msgctxt "#615"
+msgid "Update in %i second(s)"
+msgstr ""
+
+msgctxt "#616"
+msgid "Fectching Mails %s"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Server name"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Username"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Server"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Port"
+msgstr ""
+
+msgctxt "#30105"
+msgid "SSL"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Type"
+msgstr ""
+
+msgctxt "#30107"
+msgid "Time"
+msgstr ""
+
+#empty strings from id 30108 to 30113
+
+msgctxt "#30114"
+msgid "Popup New Mail"
+msgstr ""
+
+msgctxt "#30115"
+msgid "Popup Connexion Error"
+msgstr ""
+
+msgctxt "#30116"
+msgid "Folder"
+msgstr ""
+
+msgctxt "#30117"
+msgid "Show Update Time"
+msgstr ""
+
+msgctxt "#30118"
+msgid "Enable Server"
+msgstr ""
+
+msgctxt "#30119"
+msgid "Width"
+msgstr ""
+
+msgctxt "#30120"
+msgid "Height"
+msgstr ""
+
+msgctxt "#30121"
+msgid "Font"
+msgstr ""
+
+msgctxt "#30122"
+msgid "Text color"
+msgstr ""
+
+msgctxt "#30123"
+msgid "Alternate display (Display servers one after one)"
+msgstr ""
+
+msgctxt "#30124"
+msgid "Display by skin"
+msgstr ""
+
+#empty strings from id 30125 to 30126
+
+msgctxt "#30127"
+msgid "Max Size Message"
+msgstr ""
+
+msgctxt "#30128"
+msgid "Filter search messages IMAP"
+msgstr ""
+
+msgctxt "#30129"
+msgid "Debug"
+msgstr ""
+
+msgctxt "#30130"
+msgid "Multines (Display messages on multilines)"
+msgstr ""

@@ -1,0 +1,52 @@
+0.2.9
+- Add mono or multiline choice
+0.2.8
+- replace debug msg fonction by xbmc.log
+- test with isengard and jarvis kodi versions
+0.2.3
+- Display msg even if the nb msg = zero
+0.2.2
+- Update comments and debug messages. Fix wrong indent
+0.2.0
+- add debug message function
+0.1.9
+- add max_msg_size and filter imap in settings.xml for compatibility with
+script.mail
+0.1.8
+- add Window.property notifier.nameX, notifier.msgX and notifier.enableX
+0.1.7
+- Cleanning code, remove unused function
+0.1.6
+- Correct bugs in Boolean test
+0.1.5
+- add alternate display for multiple servers
+0.1.4
+- add x,y,width, height, font and textcolor custom
+0.1.3
+- Don't use Home.xml for display message, write directly with setLabel
+function (thanks to Frost)
+- Change parameters in settings.xml
+- Display or not update time
+- Update translation
+0.1.2
+- Bug correction if only 2 mails servers
+0.1.0
+- Add IMAP support (to be tested)
+- Correct bug enumMail = 0
+- Correct bug table Msg
+- Update translate files
+0.0.9
+- Use bool and enum in settings.xml
+0.0.8
+- Display messages with file skin Home.xml with ControlLabel and getID
+0.0.7
+- Add popup for new message
+0.0.5
+- Add mail icon in Home screen 
+0.0.4
+- Notification Popup for new email
+- Configuration for window message position 
+0.0.3
+- Correction bug POP SSL
+0.0.2 
+- First functional version

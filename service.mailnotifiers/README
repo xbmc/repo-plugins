@@ -1,0 +1,37 @@
+mail-notification is a service that allows you to see the arrival of new mail on the HOME page of xbmc
+
+INSTALLATION:
+	Add the ZIP file from the XBMC interface system
+	Then configure the various mail servers, up to three
+	General Tab
+	 Time: Time in seconds between two mail surveys
+	 New mail popup: Displays a popup window when the arrival of a new & mail
+	 Popup error connection: Displays a popup error in connection
+	 Show update time: Display update time
+	 Alternate display (Display servers one after one) : yes/no
+	 x : display position
+	 y : display position
+	 width : display width
+	 height : display height
+	 font : display font
+	 text color : #FFFFFFFF
+         Display in skin : True/False (default  False)
+	TAB Server
+	  Enable server : yes/no
+	  My Server: The name that will appear in the HOME
+	  User login to the mail server
+	  Password: your password, be careful it will be clear from the file setting.xml
+	  Server Address: normally in the form pop.monfai.fr or imap.monfai.fr
+	  Port: 110 to 995 for POP3 POP3 (SSL)
+	  SSL: SSL uses the yes or no
+	  Type: POP3 / IMAP
+	  FOLDER: IMAP folder name
+Once configured it is necessary to deactivate and activate the service for the modifcations are taken into account.
+
+If you check SKIN to True the messages  will be displayed only if the skin Home.xml file defined in the property such as:
+
+<label> $ INFO [Window.property (notifier.nameX)]: $ INFO [Window.property (notifier.msgX)] </ label>
+
+Where X is the number of the server defined in the plugin options
+
+For the skinner : notifier.enableX property which is true if the server is enabled and false if the server is not enabled (X is the number of server defined in the plugin options)

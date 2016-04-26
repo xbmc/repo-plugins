@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="service.notifier"
+       name="Mail Notifier"
+       version="0.2.9"
+       provider-name="Senufo">
+  <requires>
+     <import addon="xbmc.python" version="2.19.0"/>
+  </requires>
+  <extension point="xbmc.service"
+             library="notifier.py" start="login">
+  </extension>
+ <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary lang="en">Email Notifier</summary>
+    <summary lang="fr">Notification de l'arrivée des mails</summary>
+    <description lang="en">Notify new email[CR]Please note there is a bug with Aeon MQ5, messages superimposed. I have not yet found a solution[CR]For integration in the skin read README file
+    </description>
+    <description lang="fr">Notification de l'arrivée des mails[CR]Attention il y a un bug avec Aeon MQ5, les messages se superposent. je n'ai pas encore trouvé de solution[CR]Pour l'intégration dans un skin lisez le fichier LISEZMOI
+    </description>
+ </extension>
+</addon>

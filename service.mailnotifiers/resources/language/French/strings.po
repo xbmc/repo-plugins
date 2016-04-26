@@ -1,0 +1,140 @@
+# Kodi Media Center language file
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2016-04-22 16:49+0000\n"
+"PO-Revision-Date: 2016-04-22 20:00+0010\n"
+"Last-Translator: senufo <senufo2@gmail.com>\n"
+"Language-Team: EN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#English
+
+msgctxt "#610"
+msgid "message(s)"
+msgstr "message(s)"
+
+msgctxt "#611"
+msgid "(%s) New e-mail%s"
+msgstr "(%s) Nouveau courriel%s"
+
+msgctxt "#612"
+msgid "Received on %s"
+msgstr "Reçu sur %s"
+
+msgctxt "#613"
+msgid "Error Connecting to server"
+msgstr "Erreur de connection au serveur"
+
+msgctxt "#614"
+msgid "Please set Username and Password"
+msgstr "SVP votre nom et mot de passe"
+
+msgctxt "#615"
+msgid "Update in %i second(s)"
+msgstr "Mise à jour dans %i seconde(s)"
+
+msgctxt "#616"
+msgid "Fectching Mails %s"
+msgstr "Relève du courrier %s..."
+
+msgctxt "#30100"
+msgid "Server name"
+msgstr "Nom du serveur"
+
+msgctxt "#30101"
+msgid "Username"
+msgstr "Utilisateur"
+
+msgctxt "#30102"
+msgid "Password"
+msgstr "Mot de passe"
+
+msgctxt "#30103"
+msgid "Server"
+msgstr "Serveur"
+
+msgctxt "#30104"
+msgid "Port"
+msgstr "Port"
+
+msgctxt "#30105"
+msgid "SSL"
+msgstr "SSL"
+
+msgctxt "#30106"
+msgid "Type"
+msgstr "Type"
+
+msgctxt "#30107"
+msgid "Time"
+msgstr "Temps"
+
+#empty strings from id 30108 to 30113
+
+msgctxt "#30114"
+msgid "Popup New Mail"
+msgstr "Popup Nouveau courriel"
+
+msgctxt "#30115"
+msgid "Popup Connexion Error"
+msgstr "Popup erreur de connection"
+
+msgctxt "#30116"
+msgid "Folder"
+msgstr "Dossier"
+
+msgctxt "#30117"
+msgid "Show Update Time"
+msgstr "Afficher le temps de mise à jour "
+
+msgctxt "#30118"
+msgid "Enable Server"
+msgstr "Active le serveur"
+
+msgctxt "#30119"
+msgid "Width"
+msgstr "Largeur"
+
+msgctxt "#30120"
+msgid "Height"
+msgstr "Hauteur"
+
+msgctxt "#30121"
+msgid "Font"
+msgstr "Police"
+
+msgctxt "#30122"
+msgid "Text color"
+msgstr "Couleur du texte"
+
+msgctxt "#30123"
+msgid "Alternate display (Display servers one after one)"
+msgstr "Affichage alterné (Affiche les serveurs l'un après l'autre"
+
+msgctxt "#30124"
+msgid "Display by skin"
+msgstr "Affichage défini dans le skin"
+
+#empty strings from id 30125 to 30126
+
+msgctxt "#30127"
+msgid "Max Size Message"
+msgstr "Taille maximum des messages IMAP"
+
+msgctxt "#30128"
+msgid "Filter search messages IMAP"
+msgstr "Filtre de recherche des messages IMAP"
+
+msgctxt "#30129"
+msgid "Debug"
+msgstr "Debug"
+
+msgctxt "#30130"
+msgid "Multilines (Display messages on multilines)"
+msgstr "Multilignes (Afficahge des messages en multilignes)"

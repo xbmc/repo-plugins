@@ -88,3 +88,9 @@
 - added ability to play new type twitch VODs + major code refactoring/optimisation and bug fixes (now utilising python-twitch [0.3.8] by ingwinlu). - ingwinlu
 1.3.1
 - fixed bug: addon would not play non-transcoded streams if requested quality was lower than source
+1.3.2
+- added followed games Thanks to stevensmedia
+1.3.3
+- added French language
+1.4.0
+- Major code refactoring + IRC integration. Thanks to anxdpanic

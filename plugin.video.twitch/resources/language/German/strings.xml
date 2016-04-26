@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
   <!-- main menu -->
-  <string id="30001">Games</string>
-  <string id="30002">Folgend</string>
+  <string id="30001">Spiele</string>
+  <string id="30002">Abonnements</string>
+  <string id="30066">Abonnierte Spiele</string>
   <string id="30003">Suche</string>
   <string id="30004">Einstellungen</string>
   <string id="30005">Featured Streams</string>
@@ -15,44 +16,47 @@
    <!--general --> 
   <string id="30010">TwitchTV</string>
   <string id="30011">nächste Seite...</string>
-  <string id="30012">-- Jetzt live --</string>
-  <string id="30013">-- Folgend --</string>
+  <string id="30012">-- Aktuelle Live-Streams --</string>
+  <string id="30013">-- Abonnierte Kanäle --</string>
 
 
    <!--notifications --> 
-  <string id="30020">Http Fehler</string>
+  <string id="30020">HTTP-Fehler</string>
   <string id="30021">Keine Live-Daten gefunden</string>
-  <string id="30022">Keine Archive gefunden für</string>
-  <string id="30023">User Token Fehler</string>
-  <string id="30024">Geaenderte Video Einstellung</string>
-  <string id="30025">Gewaehlte Qualitaet nicht verfuegbar...Eventuell Premium Content?</string>
-  <string id="30026">TwitchApi Fehler</string>
-  <string id="30027">JSON Fehler</string>
-  <string id="30028">Fehlerhaftes Datenformat</string>
-  <string id="30029">Bitte Internet-Verbindung pruefen</string>
+  <string id="30022">Keine Aufzeichnungen gefunden für</string>
+  <string id="30023">Benutzer-Token-Fehler</string>
+  <string id="30024">Geänderte Video-Einstellungen</string>
+  <string id="30025">Ausgewählte Video-Einstellungen nicht verfügbar</string>
+  <string id="30026">TwitchApi-Fehler</string>
+  <string id="30027">JSON-Fehler</string>
+  <string id="30028">Fehler beim Lesen der Daten</string>
+  <string id="30029">Bitte Internet-Verbindung prüfen</string>
   
     <!--settings -->
-  <string id="30040">Video Qualität</string>
-  <string id="30041">Beste</string>
+  <string id="30040">Video-Qualität</string>
+  <string id="30041">Bestmöglich</string>
   <string id="30042">720p</string>
   <string id="30043">480p</string>
   <string id="30044">360p</string>
-  <string id="30063">226p (Mobile)</string>
-  <string id="30045">Stream-Bezeichnung</string>
-  <string id="30046">Streamer - Status</string>
-  <string id="30047">Zuschauerzahl - Streamer - Status</string>
-  <string id="30048">Status</string>
+  <string id="30063">226p (Mobil)</string>
+  <string id="30045">Zeige Stream-Namen</string>
+  <string id="30046">Streamer - Stream-Name</string>
+  <string id="30047">Zuschauer - Streamer - Stream-Name</string>
+  <string id="30048">Stream-Name</string>
   <string id="30049">Streamer</string>
-  <string id="30051">Streamer - Game Title - Stream Title</string>
+  <string id="30051">Streamer - Spielname - Stream-Name</string>
+  <string id="30067">Zuschauer bei Spiel | Streamer - Stream-Name</string>
+  <string id="30052">Erlauben</string>
+  <string id="30053">Passwort (OAuth-Token)</string>
 
   <string id="30050">Benutzername</string>
   
   <!--title-->
-  <string id="30060">Unbenannter Streamer</string>
-  <string id="30061">Unbenannter Stream</string>
-  <string id="30062">Unbekannte Zuschauerzahl</string>
-  <string id="30064">Unbekannt Game</string>
+  <string id="30060">Nicht benannter Streamer</string>
+  <string id="30061">Nicht benannter Stream</string>
+  <string id="30062">Nicht bekannte Zuschauerzahl</string>
+  <string id="30064">Nicht bekanntes Spiel</string>
 
-  <string id="30065">Abschneiden angezeigt Titel</string>
+  <string id="30065">Schneide angezeigte Namen ab</string>
 
 </strings>

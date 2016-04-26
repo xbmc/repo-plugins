@@ -40,16 +40,19 @@ class Main:
                 ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGNOTICE)
 
         # Parse parameters
-        if len(sys.argv[2]) == 0:
-            self.plugin_category = LANGUAGE(30000)
-            self.video_list_page_url = "http://tweakers.net/video/zoeken/?page=001"
-            self.video_list_page_url = str(self.video_list_page_url)
-            self.next_page_possible = "True"
-        else:
+        try:
             self.plugin_category = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['plugin_category'][0]
             self.video_list_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['url'][0]
-            self.video_list_page_url = str(self.video_list_page_url)
             self.next_page_possible = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+        except:
+            self.plugin_category = LANGUAGE(30000)
+            self.next_page_possible = "True"
+            # Get the search-string from the user
+            keyboard = xbmc.Keyboard('', LANGUAGE(30103))
+            keyboard.doModal()
+            if keyboard.isConfirmed():
+                self.search_string = keyboard.getText()
+                self.video_list_page_url = "http://tweakers.net/video/zoeken?keyword=%s&page=001" % (self.search_string)
 
         if self.DEBUG == 'true':
             xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
@@ -58,10 +61,10 @@ class Main:
         if self.next_page_possible == "True":
             # Determine current item number, next item number, next_url
             # f.e. http://www.tweakers.net/category/videos/page/001/
-            pos_of_page = self.video_list_page_url.rfind('?page=')
+            pos_of_page = self.video_list_page_url.rfind('&page=')
             if pos_of_page >= 0:
                 page_number_str = str(
-                    self.video_list_page_url[pos_of_page + len('?page='):pos_of_page + len('?page=') + len('000')])
+                    self.video_list_page_url[pos_of_page + len('&page='):pos_of_page + len('&page=') + len('000')])
                 page_number = int(page_number_str)
                 page_number_next = page_number + 1
                 if page_number_next >= 100:
@@ -118,22 +121,9 @@ class Main:
             xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                 ADDON, VERSION, DATE, "len(video_page_url_in_tds)", str(len(video_page_url_in_tds))), xbmc.LOGNOTICE)
 
-        # Add Search item
-        video_page_url = ""
-        title = LANGUAGE(30103)
-        thumbnail_url = ""
-        list_item = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_url)
-        list_item.setInfo("video", {"title": title, "studio": ADDON})
-        list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
-                          'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
-        list_item.setProperty('IsPlayable', 'false')
-        parameters = {"action": "search", "video_page_url": video_page_url, "title": title}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
-        is_folder = True
-        # Add refresh option to context menu
-        list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])
-        # Add our item to the listing as a 3-element tuple.
-        listing.append((url, list_item, is_folder))
+        #skip the first thumbnails
+        if len(thumbnail_urls) - len(video_page_url_in_tds) > 0:
+            thumbnail_urls_index = thumbnail_urls_index + (len(thumbnail_urls) - len(video_page_url_in_tds))
 
         for video_page_url_in_td in video_page_url_in_tds:
             video_page_url = video_page_url_in_td.a['href']
@@ -176,7 +166,7 @@ class Main:
             list_item = xbmcgui.ListItem(LANGUAGE(30503), thumbnailImage=os.path.join(IMAGES_PATH, 'next-page.png'))
             list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'false')
-            parameters = {"action": "list", "plugin_category": self.plugin_category, "url": str(self.next_url),
+            parameters = {"action": "search", "plugin_category": self.plugin_category, "url": str(self.next_url),
                           "next_page_possible": self.next_page_possible}
             url = self.plugin_url + '?' + urllib.urlencode(parameters)
             is_folder = True

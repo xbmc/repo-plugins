@@ -1,3 +1,6 @@
+v1.1.0 (2016-04-24)
+- added search
+
 v1.0.9 (2016-02-07)
 - changed the listing and playing of videos
 - The contextual menu item 'Play from here' is available now, it queues all the videos in the list from a certain point

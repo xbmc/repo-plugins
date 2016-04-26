@@ -44,5 +44,10 @@ else:
     #
     elif action == 'play':
         import tweakers_play as plugin
+    #
+    # Search
+    #
+    elif action == 'search':
+        import tweakers_search as plugin
 
 plugin.Main()

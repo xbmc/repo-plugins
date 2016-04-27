@@ -14,6 +14,7 @@ import xbmcplugin
 import xbmcgui
 import xbmcaddon
 import xml.etree.ElementTree as ET
+from random import randint
 
 addonID = 'plugin.video.southpark_unofficial'
 addon = xbmcaddon.Addon(id=addonID)
@@ -79,9 +80,9 @@ def list(url):
 		rand = rand.split("e")
 		if audio == "de":
 			# sp.de returns a JS instead of a JSON so i need to convert it
-			jsonrsp = getUrl("http://www.southpark.de/feeds/full-episode/carousel/"+str(int(rand[0]))+"/c48e799a-9227-44d8-878f-248b0d065714").decode('utf-8')
-			jsonrsp = JStoJSON(jsonrsp)
-			jsonrsp = toUSJSON(jsonrsp)
+			jsonrsp = getUrl("http://www.southpark.de/feeds/carousel/video/e3748950-6c2a-4201-8e45-89e255c06df1/30/1/json/!airdate/season-"+str(int(rand[0]))).decode('utf-8')
+			#jsonrsp = JStoJSON(jsonrsp)
+			#jsonrsp = toUSJSON(jsonrsp)
 		else:
 			# cc.com is the ony one with jsons so descriptions will be in english
 			jsonrsp = getUrl("http://southpark.cc.com/feeds/carousel/video/06bb4aa7-9917-4b6a-ae93-5ed7be79556a/30/1/json/!airdate/season-"+str(int(rand[0]))+"?lang="+audio)
@@ -117,9 +118,9 @@ def list(url):
     else:
         xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_EPISODE)
         if audio == "de":
-			jsonrsp = getUrl("http://www.southpark.de/feeds/full-episode/carousel/"+url+"/c48e799a-9227-44d8-878f-248b0d065714").decode('utf-8')
-			jsonrsp = JStoJSON(jsonrsp)
-			jsonrsp = toUSJSON(jsonrsp)
+			jsonrsp = getUrl("http://www.southpark.de/feeds/carousel/video/e3748950-6c2a-4201-8e45-89e255c06df1/30/1/json/!airdate/season-"+url).decode('utf-8')
+			#jsonrsp = JStoJSON(jsonrsp)
+			#jsonrsp = toUSJSON(jsonrsp)
         else:
 			jsonrsp = getUrl("http://southpark.cc.com/feeds/carousel/video/06bb4aa7-9917-4b6a-ae93-5ed7be79556a/30/1/json/!airdate/season-"+url+"?lang="+audio)
         seasonjson = _json.loads(jsonrsp)
@@ -306,7 +307,8 @@ def getMediagen(id):
 def getVideoData(mediagen):
 	xml = ""
 	if audio == "de":
-		mediagen += "&acceptMethods=fms,hdn1,hds";
+		mediagen += "&deviceOsVersion=4.4.4&acceptMethods=hls";
+		mediagen = mediagen.replace('{device}', 'Android')
 	print mediagen
 	xml = getUrl(mediagen)
 	root = ET.fromstring(xml)

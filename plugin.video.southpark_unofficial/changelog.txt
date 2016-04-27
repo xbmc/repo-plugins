@@ -43,3 +43,5 @@
 - Added DE descriptions/titles on seasons and random episodes.
 0.4.1
 - Fixed DE/EN/ES and carousel
+0.4.2
+- Fixed DE language (thanks to JinJin @kodi forums)

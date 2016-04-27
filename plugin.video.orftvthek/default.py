@@ -17,7 +17,7 @@ except:
 socket.setdefaulttimeout(30) 
 cache = StorageServer.StorageServer("plugin.video.orftvthek", 999999)
 
-version = "0.5.2"
+version = "0.5.3"
 plugin = "ORF-TVthek-" + version
 author = "sofaking,Rechi"
 
@@ -40,7 +40,7 @@ smallListViewMode = 'Container.SetViewMode(51)'
 playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO) 
  
 #hardcoded
-video_quality_list = ["Q1A", "Q4A", "Q6A"]
+video_quality_list = ["Q1A", "Q4A", "Q6A", "Q8C"]
 videoProtocol = "http"
 videoDelivery = "progressive"
 

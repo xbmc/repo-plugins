@@ -31,4 +31,4 @@ Known Issues
 
 Legal
 -----
-This addon gives you access to videos on the ORF TVthek Website but is not endorsed, certified or otherwise approved in any way by ORF.
+This addon provides access to videos on the ORF TVthek Website but is not endorsed, certified or otherwise approved in any way by ORF.

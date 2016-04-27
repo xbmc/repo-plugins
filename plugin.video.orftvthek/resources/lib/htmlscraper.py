@@ -283,7 +283,6 @@ class htmlScraper:
             subtitles = None;
         params = parameters_string_to_dict(videourl)
         mode = params.get('mode')
-        print mode
         blacklist = False
         if self.enableBlacklist:
             if mode == 'openSeries' or mode == 'getSendungenDetail':
@@ -375,7 +374,6 @@ class htmlScraper:
             current_videourl = self.getVideoUrl(data.get("selected_video")["sources"]);
         except Exception, e:
             current_subtitles = None
-            print e
 
         if len(video_items) > 1:
             parameters = {"mode" : "playlist"}

@@ -398,7 +398,7 @@ class serviceAPI:
 
                 livestreamStreamingURLs.sort()
 				
-                link = livestreamStreamingURLs[len(livestreamStreamingURLs) - 1].replace('q4a', 'q6a')
+                link = livestreamStreamingURLs[len(livestreamStreamingURLs) - 1].replace('q4a', self.videoQuality)
                 
                 if self.disableGeoblock:
                     link = link.replace('/playlist.m3u8','?wowzasessionid=1')

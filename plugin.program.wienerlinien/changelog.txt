@@ -1,3 +1,7 @@
+0.1.2
+
+* fixed Error when no departure value is set
+
 0.1.1
 
 * fixed Translation Error (German) 

@@ -22,7 +22,7 @@ except:
 cache = StorageServer.StorageServer("plugin.program.wienerlinien", 999999)
 
 
-version = "0.1.1"
+version = "0.1.2"
 plugin = "WienerLinien-" + version
 author = "sofaking"
 
@@ -168,17 +168,20 @@ def getJsonMessage(url):
             departure_str = ""
             jam_str = ""
             for departures in row['departures']['departure']:
-                departure_str += "%s min | " % departures['departureTime']['countdown']
-            name = row['name']
-            towards = row['towards']
-            if row['trafficjam']:
-                jam_str = (translation(30007)).encode("utf-8")
-            title = "%s | %s | %s | %s" % (name.encode('utf-8'),towards.encode('utf-8'),departure_str,jam_str)
-            parameters = {"title" : title,"mode" : "refreshStations","id": url}
-            u = sys.argv[0] + '?' + urllib.urlencode(parameters)
-            liz=xbmcgui.ListItem(label=title, label2=departure_str,iconImage=os.path.join(basepath,"icon.png"))
-            liz.setProperty('IsPlayable', 'false')
-            xbmcplugin.addDirectoryItem(handle=pluginhandle,url=u,listitem=liz,isFolder=True)
+                try:
+                    departure_str += "%s min | " % departures['departureTime']['countdown']
+                    name = row['name']
+                    towards = row['towards']
+                    if row['trafficjam']:
+                        jam_str = (translation(30007)).encode("utf-8")
+                    title = "%s | %s | %s | %s" % (name.encode('utf-8'),towards.encode('utf-8'),departure_str,jam_str)
+                    parameters = {"title" : title,"mode" : "refreshStations","id": url}
+                    u = sys.argv[0] + '?' + urllib.urlencode(parameters)
+                    liz=xbmcgui.ListItem(label=title, label2=departure_str,iconImage=os.path.join(basepath,"icon.png"))
+                    liz.setProperty('IsPlayable', 'false')
+                    xbmcplugin.addDirectoryItem(handle=pluginhandle,url=u,listitem=liz,isFolder=True)
+                except:
+                    pass
     xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_LABEL )
     xbmcplugin.endOfDirectory(pluginhandle)
 

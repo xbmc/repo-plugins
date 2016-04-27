@@ -27,7 +27,6 @@ import os
 import urllib2
 import time
 import datetime
-import math
 
 
 plugin = Plugin()
@@ -117,8 +116,8 @@ def get_dates():
     dates.append((str(today), plugin.get_string(30008))) # Today
     dates.append((str(today - one_day), plugin.get_string(30009))) # Yesterday
     for i in xrange(2, 8): #TODO: find better interval
-        date = str(today - (one_day * i))
-        dates.append((date, date))
+        cdate = today - (one_day * i)
+        dates.append((str(cdate), '{d:%A}, {d:%d}'.format(d=cdate)))
     return dates
 
 headers = {'user-agent': plugin.name + '/' + plugin.addon.getAddonInfo('version')}
@@ -230,27 +229,28 @@ def download_file(vid):
 @plugin.route('/live', name='live')
 def play_live():
     data = load_json(live_json.format(lang=language[0].upper()))
-    url = data['video']['VSR'][0]['VUR']
-    return plugin.play_video({
-        'label': data['video']['VTI'],
-        'path': (url + ' live=1')
-    })
+    url = data['video']['VSR'][1]['VUR']
+    return plugin.set_resolved_url(url)#{
+    #    'label': data['video']['VTI'],
+    #    #'path': (url + ' live=1')
+    #    'path': url
+    #})
 
 
 def create_item(data, options=None):
     options = options or {}
 
-    if data.get('VDA'): # airdate found
-        airdate = parse_date(data.get('VDA')[:-6])
-    if data.get('VRU'): # deletion found
-        deletiondate = parse_date(data.get('VRU')[:-6])
+
+    airdate = parse_date(data.get('VDA')[:-6]) if data.get('VDA') else None
 
     label = ''
     # prefixes
     if options.get('show_airtime'):
-        label += '[COLOR fffa481c]{d.hour:02}:{d.minute:02}[/COLOR] '.format(d=airdate)
+            label += '[COLOR fffa481c]{d.hour:02}:{d.minute:02}[/COLOR] '.format(d=airdate)
     if options.get('show_deletetime'):
-        label += '[COLOR ffff0000]{d:%a} {d:%d} {d.hour:02}:{d.minute:02}[/COLOR] '.format(d=deletiondate)
+        if data.get('VRU'): # deletion found
+            deletiondate = parse_date(data.get('VRU')[:-6])
+            label += '[COLOR ffff0000]{d:%a} {d:%d} {d.hour:02}:{d.minute:02}[/COLOR] '.format(d=deletiondate)
     if options.get('show_views'):
         label += '[COLOR ff00aae3]{v:>6}[/COLOR] '.format(v=parse_views(data.get('VVI')))
 
@@ -309,7 +309,7 @@ def create_video(vid, downloading=False):
             video = filtered[0]
             break
     return {
-        'label': data['videoJsonPlayer']['VST']['VNA'] if downloading else data['videoJsonPlayer']['VTI'],
+        'label': data['videoJsonPlayer']['VST']['VNA'] if downloading else None, #data['videoJsonPlayer']['VTI'],
         'path': video['url'],
         'thumbnail': data['videoJsonPlayer']['VTU']['IUR']
     }

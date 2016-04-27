@@ -1,6 +1,12 @@
+# Version 0.5.4
+
+* updated dependency version
+* changed live stream to m3u8 to get around RTMP scaling issue
+* playing an item should no longer change the listitem label
+
 # Version 0.5.3
 
-* cosmetic improvements (inspired by from http://www.kodinerds.net/index.php/Thread/48300-Release-Arte-tv-v3/)
+* cosmetic improvements (inspired by http://www.kodinerds.net/index.php/Thread/48300-Release-Arte-tv-v3/)
 
 # Version 0.5.2
 

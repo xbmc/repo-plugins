@@ -36,6 +36,12 @@ url_directe_tv3 = 'http://ccma-tva-es-abertis-live.hls.adaptive.level3.net/es/ng
 url_directe_324 = 'http://ccma-tva-int-abertis-live.hls.adaptive.level3.net/int/ngrp:324_web/playlist.m3u8'
 url_directe_c33s3 = 'http://ccma-tva-es-abertis-live.hls.adaptive.level3.net/es/ngrp:c33_web/playlist.m3u8'
 url_directe_esport3 = 'http://ccma-tva-es-abertis-live.hls.adaptive.level3.net/es/ngrp:es3_web/playlist.m3u8'
+#Feeds per a fer streaming des de l'estranger
+url_directe_tv3_int = 'http://ccma-tva-int-abertis-live.hls.adaptive.level3.net/int/ngrp:tv3_web/playlist.m3u8'
+url_directe_324_int = 'http://ccma-tva-int-abertis-live.hls.adaptive.level3.net/int/ngrp:324_web/playlist.m3u8'
+url_directe_c33s3_int = 'http://ccma-tva-int-abertis-live.hls.adaptive.level3.net/int/ngrp:c33_web/playlist.m3u8'
+url_directe_esport3_int = 'http://ccma-tva-int-abertis-live.hls.adaptive.level3.net/int/ngrp:es3_web/playlist.m3u8'
+
 url_arafem ='http://dinamics.ccma.cat/wsarafem/arafem/tv'
 
 
@@ -493,35 +499,43 @@ def listDirecte():
         
         if arafemtv3:
             infolabelstv3['title'] = arafemtv3
+            infotv3 = '[B]' + arafemtv3 + '[/B]' + '[CR]'
         if arafemtv3_sinop:
             if type(arafemtv3) is int or type(arafemtv3) is float:
                 arafemtv3 = str(arafemtv3)
-            arafemtv3_sinop = '[B]' + arafemtv3 + '[/B]' + '[CR]' + arafemtv3_sinop
-            infolabelstv3['plot'] = arafemtv3_sinop
+            infotv3 = infotv3 + arafemtv3_sinop
+            
+        infolabelstv3['plot'] = infotv3
             
         if arafem33:
             infolabels33['title'] = arafem33
+            info33 = '[B]' + arafem33 + '[/B]' + '[CR]' 
         if arafem33_sinop:
             if type(arafem33) is int or type(arafem33) is float:
                 arafem33 = str(arafem33)
-            arafem33_sinop = '[B]' + arafem33 + '[/B]' + '[CR]' + arafem33_sinop
-            infolabels33['plot'] = arafem33_sinop
+            info33 = info33 + arafem33_sinop
+            
+        infolabels33['plot'] = info33
             
         if arafemesp3:
             infolabelsesp3['title'] = arafemesp3
+            infoesp3 = '[B]' + arafemesp3 + '[/B]' + '[CR]'
         if arafemesp3_sinop:
             if type(arafemesp3) is int or type(arafemesp3) is float:
                 arafemesp3 = str(arafemesp3)
-            arafemesp3_sinop = '[B]' + arafemesp3 + '[/B]' + '[CR]' + arafemesp3_sinop
-            infolabelsesp3['plot'] = arafemesp3_sinop
+            infoesp3 = infoesp3  + arafemesp3_sinop
+            
+        infolabelsesp3['plot'] = infoesp3
             
         if arafem324:
             infolabels324['title'] = arafem324
+            info324 = '[B]' + arafem324 + '[/B]' + '[CR]' 
         if arafem324_sinop:
             if type(arafem324) is int or type(arafem324) is float:
                 arafem324 = str(arafem324)
-            arafem324_sinop = '[B]' + arafem324 + '[/B]' + '[CR]' + arafem324_sinop
-            infolabels324['plot'] = arafem324_sinop
+            info324 = info324 + arafem324_sinop
+            
+        infolabels324['plot'] = info324
             
         
  
@@ -544,6 +558,26 @@ def listDirecte():
     listEsport3.setProperty('isPlayable','true')
     listEsport3.setInfo('video', infolabelsesp3)
     xbmcplugin.addDirectoryItem(handle=addon_handle,url=url_directe_esport3,listitem=listEsport3)
+
+    listTV3 = xbmcgui.ListItem(strs.get('tv3_int'), iconImage=thumb_tv3,  thumbnailImage=thumb_tv3)
+    listTV3.setProperty('isPlayable','true')
+    listTV3.setInfo('video', infolabelstv3)
+    xbmcplugin.addDirectoryItem(handle=addon_handle,url=url_directe_tv3_int,listitem=listTV3)
+    
+    list324 = xbmcgui.ListItem(strs.get('canal324_int'), iconImage=thumb_324,  thumbnailImage=thumb_324)
+    list324.setProperty('isPlayable','true')
+    list324.setInfo('video', infolabels324)
+    xbmcplugin.addDirectoryItem(handle=addon_handle,url=url_directe_324_int,listitem=list324)
+    
+    listC33S3 = xbmcgui.ListItem(strs.get('c33super3_int'), iconImage=thumb_c33s3,  thumbnailImage=thumb_c33s3)
+    listC33S3.setProperty('isPlayable','true')
+    listC33S3.setInfo('video', infolabels33)
+    xbmcplugin.addDirectoryItem(handle=addon_handle,url=url_directe_c33s3_int,listitem=listC33S3)
+    
+    listEsport3 = xbmcgui.ListItem(strs.get('esport3_int'), iconImage=thumb_esp3,  thumbnailImage=thumb_esp3)
+    listEsport3.setProperty('isPlayable','true')
+    listEsport3.setInfo('video', infolabelsesp3)
+    xbmcplugin.addDirectoryItem(handle=addon_handle,url=url_directe_esport3_int,listitem=listEsport3)
         
     xbmcplugin.endOfDirectory(addon_handle) 
     

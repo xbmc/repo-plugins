@@ -36,7 +36,11 @@ class TV3Strings:
                     'c33super3' : 30020,
                     'esport3' : 30021,
                     'cercar' : 30022,
-                    'coleccions' : 30023
+                    'coleccions' : 30023,
+                    'tv3_int' : 30024,
+                    'canal324_int' : 30025,
+                    'c33super3_int' : 30026,
+                    'esport3_int' : 30027
                     }
        
        

@@ -1,3 +1,12 @@
+v.1.3.7
+- Afegides urls per l'emissió internacional dels canals en directe. Gràcies a jrdfrncs
+- Afegida traducció del noruec. Gràcies a jrdfrncs
+- Correcció d'errors
+
+- Added urls to international broadcast of live channels. Thanks to jrdfrncs
+- Added norwegian translation. Thanks to jrdfrncs
+- Fixed minor errors
+
 v1.3.6
 - Fixed website changes
 - Improved efficiency in listing videos

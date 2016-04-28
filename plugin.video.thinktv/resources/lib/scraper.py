@@ -158,7 +158,7 @@ class myAddon(t1mAddon):
     html = self.getRequest('http://www.pbs.org/show/%s/episodes/' % url)
     cnts = re.compile('<ul class="video-catalog-nav">.+?<strong>(.+?)<.+?<strong>(.+?)<.+?<strong>(.+?)<', re.DOTALL).search(html)
     if cnts is not None:   ecnt, ccnt, pcnt = cnts.groups()
-    else: enct, ccnt, pcnt = ('','','')
+    else: ecnt, ccnt, pcnt = ('0','0','0')
     infoList = {}
     infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
     infoList['Title'] = infoList['TVShowTitle']
@@ -182,6 +182,7 @@ class myAddon(t1mAddon):
 
     for i, (url, imgs, name, plot, duration)  in list(enumerate(epis, start=1)):
         name = h.unescape(name.decode(UTF8))
+        name = name.replace('Video thumbnail: ','',1)
         plot=plot.strip()
         duration = duration.strip()
         infoList = {}

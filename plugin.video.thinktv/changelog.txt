@@ -1,2 +1,3 @@
+Version 3.0.4 fix for 1080, ecnt bug
 Version 3.0.3 cleanup
 Version 3.0.1 Separate scraper for future functions

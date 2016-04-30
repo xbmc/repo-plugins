@@ -1,0 +1,77 @@
+# Kodi Media Center language file
+# Addon Name: Library Node Editor
+# Addon id: plugin.library.node.editor
+# Addon Provider: Unfledged, Team-Kodi
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Turkish (http://www.transifex.com/projects/p/xbmc-addons/language/tr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: tr\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "#30091"
+msgid "Video Library"
+msgstr "Video Kitaplığı"
+
+msgctxt "#30092"
+msgid "Music Library"
+msgstr "Müzik Kitaplığı"
+
+msgctxt "#30100"
+msgid "Delete"
+msgstr "Sil"
+
+msgctxt "#30101"
+msgid "Edit label"
+msgstr "Etiketi düzenle"
+
+msgctxt "#30102"
+msgid "Edit icon"
+msgstr "Simgeyi Düzenle"
+
+msgctxt "#30103"
+msgid "Browse for icon"
+msgstr "Simgeye gözat"
+
+msgctxt "#30204"
+msgid "Path"
+msgstr "Yol"
+
+msgctxt "#30205"
+msgid "Rule"
+msgstr "Kural"
+
+msgctxt "#30305"
+msgid "Field"
+msgstr "Alan"
+
+msgctxt "#30306"
+msgid "Operator"
+msgstr "İşletici"
+
+msgctxt "#30310"
+msgid "Group"
+msgstr "Grup"
+
+msgctxt "#30312"
+msgid "Path"
+msgstr "Yol"
+
+msgctxt "#30313"
+msgid "Icon"
+msgstr "Simge"
+
+msgctxt "#30314"
+msgid "Order by"
+msgstr "Sırala"
+
+msgctxt "#30315"
+msgid "Direction"
+msgstr "Yön"

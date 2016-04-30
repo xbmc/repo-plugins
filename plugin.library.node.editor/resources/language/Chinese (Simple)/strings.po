@@ -1,0 +1,81 @@
+# Kodi Media Center language file
+# Addon Name: Library Node Editor
+# Addon id: plugin.library.node.editor
+# Addon Provider: Unfledged, Team-Kodi
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Chinese (Simple) (http://www.transifex.com/projects/p/xbmc-addons/language/zh/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "#30091"
+msgid "Video Library"
+msgstr "视频资料库"
+
+msgctxt "#30092"
+msgid "Music Library"
+msgstr "音乐资料库"
+
+msgctxt "#30100"
+msgid "Delete"
+msgstr "删除"
+
+msgctxt "#30101"
+msgid "Edit label"
+msgstr "编辑标签"
+
+msgctxt "#30103"
+msgid "Browse for icon"
+msgstr "浏览图标"
+
+msgctxt "#30200"
+msgid "Content"
+msgstr "内容"
+
+msgctxt "#30204"
+msgid "Path"
+msgstr "路径"
+
+msgctxt "#30305"
+msgid "Field"
+msgstr "域"
+
+msgctxt "#30306"
+msgid "Operator"
+msgstr "算子"
+
+msgctxt "#30307"
+msgid "Value"
+msgstr "值"
+
+msgctxt "#30309"
+msgid "Content"
+msgstr "内容"
+
+msgctxt "#30310"
+msgid "Group"
+msgstr "组"
+
+msgctxt "#30312"
+msgid "Path"
+msgstr "路径"
+
+msgctxt "#30313"
+msgid "Icon"
+msgstr "图标"
+
+msgctxt "#30314"
+msgid "Order by"
+msgstr "排序"
+
+msgctxt "#30315"
+msgid "Direction"
+msgstr "方向"

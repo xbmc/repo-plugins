@@ -343,7 +343,7 @@ def get_direct_channels():
 def get_playable_url(url):
     """This function gets the stream url for direct channels."""
 
-    playable_url_pattern = ')oidua.tsaceci?*.ptth('[::-1]
+    playable_url_pattern = '))3pm|oidua.tsaceci:?(?*.ptth('[::-1]
 
     buffer_url           = l.carga_web(url)
     stream_url           = l.find_first(buffer_url, playable_url_pattern)

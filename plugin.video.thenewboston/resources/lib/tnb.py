@@ -19,7 +19,7 @@ def get_categories():
     for c in (
         soup.find(id='content-wrapper').findAll('div', 'video-category-panel')
     ):
-        output.append({'title': c.find('span', 'panel-title').text})
+        output.append({'title': c.find('h2', 'panel-title').text})
 
     return output
 
@@ -46,7 +46,7 @@ def get_topics(category):
                 'lesson_id': get_lesson_id(link)})
 
     for panel in content.findAll('div', 'video-category-panel'):
-        found_category = panel.find('span', 'panel-title').text
+        found_category = panel.find('h2', 'panel-title').text
 
         if found_category == category:
             for item in panel.find('div', 'list-group').findAll('a'):

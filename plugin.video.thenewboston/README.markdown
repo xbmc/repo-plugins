@@ -1,17 +1,17 @@
 TheNewBoston Kodi (XBMC) Plugin
 =================================
 
-Watch videos on XBMC from TheNewBoston.
+Watch videos on Kodi from TheNewBoston.
 
 Setup/Installation
 -------------------
 
 Plugin available through official repo. Installation info available [here](http://wiki.xbmc.org/index.php?title=Add-ons).
 
-XBMC Version
+Kodi Version
 ------------
 
-Gotham
+Gotham and up.
 
 License
 -------

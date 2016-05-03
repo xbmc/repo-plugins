@@ -18,6 +18,6 @@
         <description lang="en">Put.io is a service that combines cloud storage and bittorrent. You need an account to use this plug-in. Get one from https://put.io</description>
         <language></language>
         <license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>
-        <broken>Add-on does not function properly</broken>
+        <broken>deprecated</broken>
     </extension>
 </addon>

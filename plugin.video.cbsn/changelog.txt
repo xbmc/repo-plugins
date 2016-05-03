@@ -1,5 +1,2 @@
-Version 2.0.1 Initial v2 release
-Version 2.0.2 cleanup for release
-Version 2.0.3 website change (live url)
-Version 2.0.4 website change (live url)
+Version 3.0.2 website change
 Version 3.0.1 separated scraper for future functions

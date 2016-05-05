@@ -59,3 +59,11 @@ msgstr "Silme Onayı"
 msgctxt "#32061"
 msgid "Are you sure?"
 msgstr "Emin misiniz?"
+
+msgctxt "#32062"
+msgid "Payment Reminder"
+msgstr "Ödeme Hatırlatması"
+
+msgctxt "#32063"
+msgid "Your payment has expired. Your files will be listed but you won't be playing them."
+msgstr "Ödemenizin günü geçmiş görünüyor. Dosyalarınızı listeleyebilecek ancak izleyemeyeceksiniz."

@@ -2,15 +2,14 @@
 import os
 import json
 import logging
+import binascii
 import webbrowser
 from urllib import urlencode
+from datetime import datetime
 
 import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
-
-import iso8601
-import binascii
 
 KB = 1024
 MB = 1024 * KB
@@ -141,8 +140,8 @@ class _BaseResource(object):
         self.name = None
         self.__dict__.update(resource_dict)
         try:
-            self.created_at = iso8601.parse_date(self.created_at)
-        except (AttributeError, iso8601.ParseError):
+            self.created_at = strptime(self.created_at)
+        except Exception:
             self.created_at = None
 
     def __str__(self):
@@ -157,12 +156,17 @@ class _BaseResource(object):
 
 class _File(_BaseResource):
 
-    # FIXME: temporarily added 'start_from' parameter
     @classmethod
     def get(cls, id):
-        d = cls.client.request('/files/%s?start_from=1' % id, method='GET')
+        d = cls.client.request('/files/%i?start_from=1' % id, method='GET')
         t = d['file']
         return cls(t)
+
+    @classmethod
+    def list(cls, parent_id=0):
+        d = cls.client.request('/files/list?start_from=1', params={'parent_id': parent_id})
+        files = d['files']
+        return [cls(f) for f in files]
 
     # FIXME: temporarily added.
     def stream_url(self):
@@ -186,13 +190,6 @@ class _File(_BaseResource):
     @property
     def is_folder(self):
         return self.content_type == 'application/x-directory'
-
-    # FIXME: temporarily added 'start_from' parameter
-    @classmethod
-    def list(cls, parent_id=0):
-        d = cls.client.request('/files/list?start_from=1', params={'parent_id': parent_id})
-        files = d['files']
-        return [cls(f) for f in files]
 
     @classmethod
     def upload(cls, path, name=None, parent_id=0):
@@ -323,7 +320,7 @@ class _Transfer(_BaseResource):
 
     @classmethod
     def get(cls, id):
-        d = cls.client.request('/transfers/%s' % id, method='GET')
+        d = cls.client.request('/transfers/%i' % id, method='GET')
         t = d['transfer']
         return cls(t)
 
@@ -371,3 +368,21 @@ class _Account(_BaseResource):
     @classmethod
     def settings(cls):
         return cls.client.request('/account/settings', method='GET')
+
+
+# Due to a nasty bug in datetime module, datetime.strptime calls
+# are not thread-safe and can throw a TypeError. Details: https://bugs.python.org/issue7980
+# Here we are implementing simple RFC3339 parser which is used in Put.io APIv2.
+def strptime(date):
+    """Returns datetime object from the given date, which is in a specific format: YYYY-MM-ddTHH:mm:ss"""
+    d = {
+            'year': date[0:4],
+            'month': date[5:7],
+            'day': date[8:10],
+            'hour': date[11:13],
+            'minute': date[14:16],
+            'second': date[17:],
+            }
+
+    d = dict((k, int(v)) for k, v in d.iteritems())
+    return datetime(**d)

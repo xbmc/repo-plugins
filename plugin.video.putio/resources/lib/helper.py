@@ -2,8 +2,8 @@ import putio
 import xbmcgui
 import xbmcaddon
 
-__settings__ = xbmcaddon.Addon(id='plugin.video.putio')
-__lang__ = __settings__.getLocalizedString
+SETTINGS = xbmcaddon.Addon(id='plugin.video.putio')
+I18N = SETTINGS.getLocalizedString
 
 
 class PutioAuthFailureException(Exception):
@@ -21,7 +21,7 @@ class PutioApiHandler(object):
 
     def __init__(self, oauth2_token):
         if not oauth2_token:
-            raise PutioAuthFailureException(header=__lang__(30001), message=__lang__(30002))
+            raise PutioAuthFailureException(header=I18N(30001), message=I18N(30002))
         self.client = putio.Client(access_token=oauth2_token, use_retry=True)
 
     def get(self, id_):
@@ -38,3 +38,7 @@ class PutioApiHandler(object):
         if item.is_audio or item.is_video or item.is_folder:
             return True
         return False
+
+    def is_account_active(self):
+        r = self.client.Account.info()
+        return r['info']['account_active']

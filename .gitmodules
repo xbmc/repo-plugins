@@ -1,0 +1,6 @@
+[submodule "AntennaSicilia"]
+	path = AntennaSicilia
+	url = https://github.com/RosarioACali/AntennaSicilia.git
+[submodule "plugin.video.antennasicilia"]
+	path = plugin.video.antennasicilia
+	url = https://github.com/RosarioACali/plugin.video.antennasicilia.git

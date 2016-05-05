@@ -6,12 +6,14 @@ import json
 import re
 import urllib
 import xbmcplugin
+import xbmc
 import calendar
 import datetime
 import sys
 import xml.etree.ElementTree as ET
 
 UTF8 = 'utf-8'
+NHKBASE = 'http://www3.nhk.or.jp/%s'
 
 class myAddon(t1mAddon):
 
@@ -38,8 +40,10 @@ class myAddon(t1mAddon):
          plot = a['description']
          content = a['content']
          name = a['title']
-         thumb  = a['thumbnail_s']
-         fanart = a['thumbnail']
+         thumb  =  a['thumbnail_s']
+         if not thumb.startswith('http'): thumb  = NHKBASE % a['thumbnail_s']
+         fanart =  a['thumbnail']
+         if not fanart.startswith('http'): fanart = NHKBASE % a['thumbnail']
          subtitle = a['subtitle']
          infoList['Title'] = name
          st = datetime.datetime.fromtimestamp(int(a['pubDate'])/1000).strftime('%H:%M')
@@ -48,5 +52,17 @@ class myAddon(t1mAddon):
          infoList['Plot']  = st +' - '+ et + '        ' + str(duration/60) + ' min.\n' + subtitle + '\n'+ plot +'\n'+content
          infoList['duration'] = duration
          infoList['genre'] = 'News'
+         infoList['mediatype'] = 'episode'
+         infoList['studio'] = 'NHK'
          ilist = self.addMenuItem(name,'GV', ilist, nhkurl, thumb, fanart, infoList, isFolder=False)
       return(ilist)
+
+  def processAddonEvent(self):
+      p = self.getAddonParms()
+      mode = p('mode',None)
+
+      if mode==  None:  
+         self.procDir(self.getAddonMenu,    p('url'), 'files', 'default_view', cache2Disc=False)
+         return(p)
+      else:
+         return super(myAddon, self).processAddonEvent()

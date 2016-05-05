@@ -9,8 +9,7 @@ Put.io Kodi addon.
 - Video resume support
 - Subtitle support
 - Refresh directory
-- Sort files by name
-- Sort files by size
+- Sort files by name/date/size
 - Delete file/directory
 - Localization
 

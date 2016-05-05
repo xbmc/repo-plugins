@@ -58,3 +58,11 @@ msgstr ""
 msgctxt "#32061"
 msgid "Are you sure?"
 msgstr ""
+
+msgctxt "#32062"
+msgid "Payment Reminder"
+msgstr ""
+
+msgctxt "#32063"
+msgid "Your payment has expired. Your files will be listed but you won't be playing them."
+msgstr ""

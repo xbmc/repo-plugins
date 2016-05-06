@@ -27,13 +27,11 @@ class myAddon(t1mAddon):
      html = self.getRequest('http://www.foodnetwork.com/videos/players/food-network-full-episodes.vc.html')
      m = re.compile('<section class="multichannel-component">(.+?)</section', re.DOTALL).search(html)
      a = re.compile('<a href="(.+?)".+?src="(.+?)".+?data-max="35">(.+?)<.+?</div', re.DOTALL).findall(html,m.start(1),m.end(1))
+     infoList={}
      for url,fanart,name in a:
-       infoList={}
        name=name.strip().replace(' Full Episodes','')
        thumb  = self.addonIcon
        fanart = fanart.replace('231x130.jpg','480x360.jpg')
-       infoList['Title'] = name
-       infoList['Studio'] = STUDIO
        ilist = self.addMenuItem(name,'GE', ilist, url, thumb, fanart, infoList, isFolder=True)
      return(ilist)
 

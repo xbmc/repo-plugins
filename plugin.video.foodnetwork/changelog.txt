@@ -1,1 +1,2 @@
+V3.0.3 bumped t1mlib version
 V3.0.2 Cleaned up Isengard

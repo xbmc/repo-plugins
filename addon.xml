@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.magaritv"
+version="0.0.2"
+name="MagariTV"
+provider-name="Orazio Giliberti">
+<requires>
+  <import addon="xbmc.python" version="2.14.0"/>
+</requires>
+<extension point="xbmc.python.pluginsource" library="main.py">
+  <provides>video</provides>
+</extension>
+<extension point="xbmc.addon.metadata">
+  <summary lang="en">Magari TV Video Plugin</summary>
+  <description lang="en">MagariTV Streaming from Rome.</description>
+  <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws.</disclaimer>
+<license>GPL 3.0</license>
+<platform>all</platform>
+<language>en</language>
+<email>ogiliberti@gmail.com</email>
+<website>http://www.magari.tv</website>
+</extension>
+</addon>

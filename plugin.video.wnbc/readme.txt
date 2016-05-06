@@ -1,1 +1,2 @@
+Version 3.0.4 bumped t1mlib version, fix SNL
 Version 3.0.2 Isengard version

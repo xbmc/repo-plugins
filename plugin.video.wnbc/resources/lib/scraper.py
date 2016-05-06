@@ -65,7 +65,9 @@ class myAddon(t1mAddon):
         if not b['requiresAuth']:
            url = b['videoURL']
         else:
-           url    = b['videoURL'].split('?',1)[0]+'?format=preview'
+           url    = b['videoURL'].split('?',1)[0]
+           if url == '': continue
+           url   += '?format=preview'
            html   = self.getRequest(url)
            c = json.loads(html)
            catQuoted  = urllib.quote(c['categories'][0]['name'])

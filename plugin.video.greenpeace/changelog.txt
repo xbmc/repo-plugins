@@ -1,3 +1,7 @@
+1.1.8 (2016.05.07)
+- Updated Vimeo scraper due to Vimeo website changes.
+- Updated language files from Transifex.
+- Fixed list of supported languages (credits: razzeee).
 1.1.7 (2014.08.11)
 - Removed the Vimeo add-on dependency due to a problem found running on Gotham.
 - Added custom Vimeo scraper to support the Vimeo videos again.

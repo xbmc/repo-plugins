@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: Greenpeace videos
 # Addon id: plugin.video.greenpeace
 # Addon Provider: Jose Antonio Montes (jamontes)
@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: XBMC Translation Team\n"
+"Last-Translator: Kodi Translation Team\n"
 "Language-Team: Norwegian (http://www.transifex.com/projects/p/xbmc-addons/language/no/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,6 +16,26 @@ msgstr ""
 "Language: no\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30010"
+msgid "Next Page"
+msgstr "Neste side"
+
+msgctxt "#30011"
+msgid "Video type not supported"
+msgstr "Video typen er ikke støttet"
+
 msgctxt "#30012"
 msgid "Couldn't locate video url"
 msgstr "Kunne ikke finne webadresse til video"
+
+msgctxt "#30101"
+msgid "Location/Language (for videos)"
+msgstr "Sted/språk (for videoer)"
+
+msgctxt "#30102"
+msgid "Debug (enable logs)"
+msgstr "Debugging (slå på logging)"
+
+msgctxt "#30103"
+msgid "Show thumbnails as fanart"
+msgstr "Vis miniatyrbilder som fanart"

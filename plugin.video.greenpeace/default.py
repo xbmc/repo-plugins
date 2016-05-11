@@ -408,15 +408,20 @@ def get_playable_youtube_url(html):
 # This funtion search into the URL link to get the video URL for Vimeo.
 def get_playable_vimeo_url(html):
 
-    video_pattern_sd = '"sd":{.*?,"url":"([^"]*?)"'
-    pattern_vimeo    = '<input type="text" id="linkvideo" value="http://vimeo.com/([0-9]+)'
-    video_id         = lutil.find_first(html, pattern_vimeo)
+    video_quality_pattern = '"profile":[0-9]+,"width":([0-9]+),.*?,"url":"([^"]*?)"'
+    quality_list          = ('640', '480', '1280')
+    pattern_vimeo         = '<input type="text" id="linkvideo" value="http://vimeo.com/([0-9]+)'
+    video_id              = lutil.find_first(html, pattern_vimeo)
 
     if video_id:
         lutil.log("greenpeace.play: We have found this Vimeo video with video_id: %s and let's going to play it!" % video_id)
         video_info_url = 'https://player.vimeo.com/video/' + video_id
         buffer_link    = lutil.carga_web(video_info_url)
-        return lutil.find_first(buffer_link, video_pattern_sd)
+        video_options  = dict((quality, video) for quality, video in lutil.find_multiple(buffer_link, video_quality_pattern))
+        lutil.log("List of video options: "+repr(video_options))
+        for quality in quality_list:
+            if quality in video_options:
+                return video_options.get(quality)
 
     return ""
 

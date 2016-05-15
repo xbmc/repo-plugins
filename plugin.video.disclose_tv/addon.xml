@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.disclose_tv" name="Disclose.tv" version="0.1.6" provider-name="Sphere | Spinalcracker">
+  <requires>
+    <import addon="xbmc.python" version="2.24.0"/>
+    <import addon="script.module.xbmcswift2" version="1.3.0"/>
+    <import addon="script.module.simplejson" version="2.0.10"/>
+    <import addon="script.module.beautifulsoup" version="3.0.8"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <language></language>
+    <platform>all</platform>
+    <website>http://www.disclose.tv/</website>
+    <source>https://github.com/Spinalcracker/repo-plugins/tree/jarvis/plugin.video.disclose_tv</source>
+    <forum>http://forum.xbmc.org/showthread.php?tid=147831</forum>
+    <email>spinal.11@gmail.com</email>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <summary lang="ar">لقد كُشِفَت الحقيقه</summary>
+    <summary lang="be">TRUTH REVEALED</summary>
+    <summary lang="ca">LA VERITAT REVELADA</summary>
+    <summary lang="da">SANDHEDEN AFSLØRET</summary>
+    <summary lang="de">TRUTH REVEALED</summary>
+    <summary lang="el">ΑΠΟΚΑΛΥΨΗ ΤΗΣ ΑΛΗΘΕΙΑΣ</summary>
+    <summary lang="en">TRUTH REVEALED</summary>
+    <summary lang="en_NZ">TRUTH REVEALED</summary>
+    <summary lang="es">LA VERDAD REVELADA</summary>
+    <summary lang="es_AR">REVELACION</summary>
+    <summary lang="fa_IR">حقیقت نشان داده</summary>
+    <summary lang="fr">LA VÉRITÉ REVELÉE</summary>
+    <summary lang="fr_CA">LA VÉRITÉ DÉVOILÉE</summary>
+    <summary lang="gl">A VERDADE REVELADA</summary>
+    <summary lang="he">האמת נחשפה</summary>
+    <summary lang="hi">सच को खोज लिया गया </summary>
+    <summary lang="hr">ISTINA OSLOBAĐA</summary>
+    <summary lang="hu">A FELFEDETT IGAZSÁG</summary>
+    <summary lang="it">Verità Svelata</summary>
+    <summary lang="ko">진실은 밝혀진다</summary>
+    <summary lang="nl">WAARHEID GEOPENBAARD</summary>
+    <summary lang="pl">PRAWDA ZOSTAŁA UJAWNIONA</summary>
+    <summary lang="pt">A VERDADE REVELADA</summary>
+    <summary lang="pt_BR">VERDADE REVELADA</summary>
+    <summary lang="sk">Odhalená pravda</summary>
+    <summary lang="sv">SANNINGEN AVSLÖJAD</summary>
+    <summary lang="zh">真相揭晓</summary>
+    <description lang="ar">اضخم شبكه أخبار بديله عن الاجسام الغريبه، الأسرار القديمه، المؤامرات، أسرار النظام العالمى الجديد الذى يحاولون فرضه علينا. والمزيد !</description>
+    <description lang="be">Largest multimedia hub and alternative news website about UFO Videos, Ancient Mysteries, Conspiracy Theories, Top Secrets, N.W.O. + more!</description>
+    <description lang="ca">El major centre multimèdia i lloc web de notícies alternatives sobre Vídeos d'Ovnis, Misteris Antics, Teories de la Conspiració, Alt Secrets, N.W.O. i Més!</description>
+    <description lang="da">Den største multimediehub og webside med alternative nyheder om UFO-videoer, ældgamle mysterier, konspirationsteorier, tophemmeligt, N.W.O. + mere!</description>
+    <description lang="de">Größte Internet-Nachrichtenseite über UFO Videos, Verschwörungstheorien, Top Secrets, N.W.O. und mehr!</description>
+    <description lang="el">Η μεγαλύτερη πηγή εναλλακτικών πληροφοριών σχετικά με βίντεο ΑΤΙΑ (UFO), Αρχαία Μυστήρια, Θεωρίες Συνωμοσίας, Απόρρητα Μυστικά, Νέα Τάξη Πραγμάτων + πολλά άλλα!</description>
+    <description lang="en">Largest multimedia hub and alternative news website about UFO Videos, Ancient Mysteries, Conspiracy Theories, Top Secrets, N.W.O. + more!</description>
+    <description lang="en_NZ">Largest multimedia hub and alternative news website about UFO Videos, Ancient Mysteries, Conspiracy Theories, Top Secrets, N.W.O. + more!</description>
+    <description lang="es">El mayor centro multimedia y sitio web de noticias alternativas sobre Videos de OVNIs, Misterios Antiguos, Teorías de la Conspiración, Altos Secretos, N.O.M. y más!</description>
+    <description lang="es_AR">El mayor centro multimedia y de noticias alternativas con de videos de OVNIS, misterios antiguos, teorias conspirativas, secretos absolutos, Nuevo Orden Mundial y mas! </description>
+    <description lang="fa_IR">بزرگترین مرکز چند رسانه ای و وب سایت خبری در مورد جایگزین UFO ویدئو ها، اسرار باستانی، تئوری های توطئه، اسرار بالا، NWO + بیشتر!</description>
+    <description lang="fr">Le plus grand hub multimédia et site web alternatif à propos des Vidéos d'OVNIS, de Mystères Anciens, de Théories du Complot, Top Secrets, N.W.O. et plus encore ! </description>
+    <description lang="fr_CA">Le plus grand centre multimédia et site Web de nouvelles alternatives sur les vidéos d'OVNI, les mystères antiques, les théories du complot, les grands secrets, nouvel ordre mondial + plus!</description>
+    <description lang="gl">O maior centro multimedia e sitio web en canto a novas sobre vídeos de OVNIS, Misterios Antigos, Teorías da Conspiración, Top Secrets, Novo Orde Mundial e máis!</description>
+    <description lang="he">פורטל המולטימדיה ואתר חדשות האלטרנטיביות הגדול ביותר בנושא סרטוני עב"מים, תעלומות עתיקות, תיאוריות קונספירציה, מידע מסווג, סדר עולם חדש ועוד!</description>
+    <description lang="hr">Najveće multimedijalno čvorište i stranica sa alternativnim vijestima o UFO video snimkama, drevnim misterijima, teorijama urota, najstrožim tajnama, Novi svjetski poredak i još mnogo toga!</description>
+    <description lang="hu">A legnagyobb multimédia központ és alternatív hírportál UFÓ-videókról, ősi rejtélyekről, összeesküvés-elméletekről, a legsötétebb titkokról, az új világrendről és még sok másról!</description>
+    <description lang="it">Grande hub multimediale e nuovo sito alternativo per Video su UFO, Antichi Misteri, Teorie della Cospirazione, Segreti, N.W.O. e molto di più.</description>
+    <description lang="ko">UFO 비디오, 고대 미스테리, 음모론, 극비, N.W.O 등에 대한 최대의 멀티미디어 허브이며 대안적 뉴스 웹사이트.</description>
+    <description lang="nl">Grootste multimedia hub en alternatieve nieuws website over UFO Video's, Eeuwenoude Mysteries, Complottheorieën, Top geheimen, N.W.O en meer!</description>
+    <description lang="pl">Największy hub z multimediami i alternatywnymi doniesieniami o UFO, starożytnych tajemnicach, teoriach spiskowych, ściśle tajnuch, N.W.O.i więcej!</description>
+    <description lang="pt">O maior depósito de conteúdos multimédia e notícias alternativas sobre vídeos de OVNIS, mistérios da antiguidade, teorias da conspiração, informação confidencial, nova ordem mundial, e ainda mais!</description>
+    <description lang="pt_BR">Maior central multimídia e site de notícias alternativas sobre vídeos de OVNI, Mistérios Ancestrais, Teorias da Conspiração, Ultra-segredos, Nova Ordem Mundial e mais!</description>
+    <description lang="sk">Najväčšie centrum multimédií a alternatívnych správ o UFO videách, starovekých mystériách, konšpiračných teóriách, prísne tajnom, Novom svetovom poriadku a inom!</description>
+    <description lang="sv">Största mediahubben och alternativa nyhetssidan om UFO´n, gamla mysterier, konspirationsteorier, topphemligheter, N.W.O. plus mycket mera! </description>
+    <description lang="zh">最大的多媒体中心和另类新闻网站，包括UFO视频、历史之谜、阴谋论、最高机密、N.W.O. 和更多内容！</description>
+  </extension>
+</addon>

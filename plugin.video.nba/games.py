@@ -5,7 +5,7 @@ import urllib,urllib2
 import xbmc,xbmcplugin,xbmcgui
 from xml.dom.minidom import parseString
 import re
-import sys
+import sys, traceback
 
 from utils import *
 from common import * 
@@ -116,31 +116,47 @@ def getHighlightGameUrl(video_id):
     
     return url
 
-def addGamesLinks(fromDate = '', video_type = "archive"):
+def addGamesLinks(date = '', video_type = "archive"):
     try:
-        schedule = 'http://smb.cdnak.neulion.com/fs/nba/feeds_s2012/schedule/' +fromDate +  '.js?t=' + "%d"  %time.time()
+        schedule = 'http://smb.cdnak.neulion.com/fs/nba/feeds_s2012/schedule/%04d/%d_%d.js?t=%d' % \
+            (date.year, date.month, date.day, time.time())
+
+        #Download the scoreboard file for each day of the week
+        scoreboards_jsons = {}
+        for day_of_week in range(7):
+            scoreboard = 'http://data.nba.com/jsonp/5s/json/cms/noseason/scoreboard/%04d%02d%02d/games.json?callback=ciao' % \
+                (date.year, date.month, date.day+day_of_week)
+            scoreboard_request = urllib2.Request(scoreboard, None);
+            scoreboard_response = str(urllib2.urlopen(scoreboard_request).read())
+            scoreboard_response = scoreboard_response[scoreboard_response.find("{"):scoreboard_response.rfind("}")+1]
+
+            key = "%04d-%02d-%02d" % (date.year, date.month, date.day+day_of_week)
+            scoreboards_jsons[key] = json.loads(scoreboard_response)
+
         log('Requesting %s' % schedule, xbmc.LOGDEBUG)
 
         now_datetime_est = nowEST()
 
         # http://smb.cdnak.neulion.com/fs/nba/feeds_s2012/schedule/2013/10_7.js?t=1381054350000
-        req = urllib2.Request(schedule, None);
-        response = str(urllib2.urlopen(req).read())
-        js = json.loads(response[response.find("{"):])
+        schedule_request = urllib2.Request(schedule, None);
+        schedule_response = str(urllib2.urlopen(schedule_request).read())
+        schedule_json = json.loads(schedule_response[schedule_response.find("{"):])
 
-        for game in js['games']:
-            log(game, xbmc.LOGDEBUG)
-            for details in game:
-                h = details.get('h', '')
-                v = details.get('v', '')
-                game_id = details.get('id', '')
-                game_start_date_est = details.get('d', '')
-                vs = details.get('vs', '')
-                hs = details.get('hs', '')
-                gs = details.get('gs', '')
+        for daily_games in schedule_json['games']:
+            log(daily_games, xbmc.LOGDEBUG)
+
+            for game in daily_games:
+                h = game.get('h', '')
+                v = game.get('v', '')
+                game_id = game.get('id', '')
+                game_start_date_est = game.get('d', '')
+                vs = game.get('vs', '')
+                hs = game.get('hs', '')
+                gs = game.get('gs', '')
+                seo_name = game.get("seoName", "")
 
                 video_has_away_feed = False
-                video_details = details.get('video', {})
+                video_details = game.get('video', {})
                 video_has_away_feed = video_details.get("af", False)
 
                 # Try to convert start date to datetime
@@ -158,6 +174,17 @@ def addGamesLinks(fromDate = '', video_type = "archive"):
                 #guess end date by adding 4 hours to start date
                 game_end_datetime_est = game_start_datetime_est + timedelta(hours=4)
 
+                #Get playoff game number, if available
+                playoff_game_number = 0
+                playoff_status = ""
+                game_date = game_start_datetime_est.strftime('%Y-%m-%d')
+                for game_more_data in scoreboards_jsons[game_date]['sports_content']['games']['game']:
+                    if game_more_data['game_url'] == seo_name and game_more_data.get('playoffs', ''):
+                        playoff_game_number = int(game_more_data['playoffs']['game_number'])
+
+                        if game_more_data['playoffs'].get('home_wins', None) and game_more_data['playoffs'].get('visitor_wins', None):
+                            playoff_status = "%s-%s" % (game_more_data['playoffs']['visitor_wins'], game_more_data['playoffs']['home_wins'])
+
                 if game_id != '':
                     # Get pretty names for the team names
                     if v.lower() in vars.teams:
@@ -169,7 +196,7 @@ def addGamesLinks(fromDate = '', video_type = "archive"):
                     else:
                         host_name = h
 
-                    has_video = "video" in details
+                    has_video = "video" in game
                     future_video = game_start_datetime_est > now_datetime_est and \
                         game_start_datetime_est.date() == now_datetime_est.date()
                     live_video = game_start_datetime_est < now_datetime_est < game_end_datetime_est
@@ -181,8 +208,13 @@ def addGamesLinks(fromDate = '', video_type = "archive"):
 
                     #Add the teams' names and the scores if needed
                     name += ' %s vs %s' % (visitor_name, host_name)
+                    if playoff_game_number != 0:
+                        name += ' (game %d)' % (playoff_game_number)
                     if vars.scores == '1' and not future_video:
                         name += ' %s:%s' % (str(vs), str(hs))
+
+                        if playoff_status:
+                            name += " (series: %s)" % playoff_status
 
                     thumbnail_url = ("http://e1.cdnl3.neulion.com/nba/player-v4/nba/images/teams/%s.png" % h)
 
@@ -212,8 +244,8 @@ def addGamesLinks(fromDate = '', video_type = "archive"):
                             iconimage=thumbnail_url, isfolder=True, customparams=params)
 
     except Exception, e:
-        xbmc.executebuiltin('Notification(NBA League Pass,'+str(e)+',5000,)')
-        log(str(e))
+        littleErrorPopup("Error: %s" % str(e))
+        log(traceback.format_exc(), xbmc.LOGDEBUG)
         pass
 
 def playGame():
@@ -274,32 +306,23 @@ def chooseGameVideoMenu():
 
     xbmcplugin.endOfDirectory(handle = int(sys.argv[1]) )
 
-def chooseGameMenu(mode, url, date2Use = None):
+def chooseGameMenu(mode, video_type, date2Use = None):
     try:
         if mode == "selectdate":
-            tday = getDate()
+            date = getDate()
         elif mode == "oldseason":
-            tday = date2Use
+            date = date2Use
         else:
-            tday = nowEST()
-            log("current date (america timezone) is %s" % str(tday), xbmc.LOGDEBUG)
-
-        # parse the video type
-        video_type = url
-
-        day = tday.isoweekday()
-
-        # starts on mondays
-        tday = tday - timedelta(day -1)
-        now = tday
-        default = "%04d/%d_%d" % (now.year, now.month, now.day)
+            date = nowEST()
+            log("current date (america timezone) is %s" % str(date), xbmc.LOGDEBUG)
         
+        # starts on mondays
+        day = date.isoweekday()
+        date = date - timedelta(day-1)
         if mode == "lastweek":
-            tday = tday - timedelta(7)
-            now = tday
-            default = "%04d/%d_%d" % (now.year, now.month, now.day)
-
-        addGamesLinks(default, video_type)
+            date = date - timedelta(7)
+            
+        addGamesLinks(date, video_type)
 
         # Can't sort the games list correctly because XBMC treats file items and directory
         # items differently and puts directory first, then file items (home/away feeds

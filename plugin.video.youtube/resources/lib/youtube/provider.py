@@ -1,3 +1,4 @@
+from tokenize import group
 __author__ = 'bromix'
 
 from resources.lib.youtube.helper import yt_subscriptions
@@ -8,7 +9,7 @@ from resources.lib.youtube.client import YouTube
 from .helper import v3, ResourceManager, yt_specials, yt_playlist, yt_login, yt_setup_wizard, yt_video, \
     yt_context_menu, yt_play, yt_old_actions, UrlResolver, UrlToItemConverter
 from .youtube_exceptions import LoginException
-import random
+import xbmcaddon
 
 
 class Provider(kodion.AbstractProvider):
@@ -27,6 +28,7 @@ class Provider(kodion.AbstractProvider):
                  'youtube.delete': 30118,
                  'youtube.browse_channels': 30512,
                  'youtube.popular_right_now': 30513,
+                 'youtube.recommendations': 30551,
                  'youtube.related_videos': 30514,
                  'youtube.setting.auto_remove_watch_later': 30515,
                  'youtube.subscribe_to': 30517,
@@ -104,13 +106,17 @@ class Provider(kodion.AbstractProvider):
             self._client = None
             pass
 
-        if not self._client:
+        if not self._client:          
             major_version = context.get_system_version().get_version()[0]
-            youtube_config = random.choice(YouTube.CREDENTIALS_POOL)
+            youtube_config = YouTube.CONFIGS.get('youtube-for-kodi-%d' % major_version, None)
+            if not youtube_config or youtube_config is None:
+                youtube_config = YouTube.CONFIGS['youtube-for-kodi-fallback']
+                pass
 
             context.log_debug('Selecting YouTube config "%s"' % youtube_config['system'])
 
             language = context.get_settings().get_string('youtube.language', 'en-US')
+            region = context.get_settings().get_string('youtube.region', 'US')
 
             # remove the old login.
             if access_manager.has_login_credentials():
@@ -175,11 +181,11 @@ class Provider(kodion.AbstractProvider):
                     access_tokens = ['', '']
                     pass
 
-                self._client = YouTube(language=language, items_per_page=items_per_page, access_token=access_tokens[1],
+                self._client = YouTube(language=language, region=region, items_per_page=items_per_page, access_token=access_tokens[1],
                                        access_token_tv=access_tokens[0], config=youtube_config)
                 self._client.set_log_error(context.log_error)
             else:
-                self._client = YouTube(items_per_page=items_per_page, language=language, config=youtube_config)
+                self._client = YouTube(items_per_page=items_per_page, language=language, region=region, config=youtube_config)
                 self._client.set_log_error(context.log_error)
 
                 # in debug log the login status
@@ -412,7 +418,7 @@ class Provider(kodion.AbstractProvider):
 
     @kodion.RegisterProviderPath('^/sign/(?P<mode>.*)/$')
     def _on_sign(self, context, re_match):
-        mode = re_match.group('mode')
+        mode = re_match.group('mode')            
         yt_login.process(mode, self, context, re_match)
         return True
 
@@ -482,12 +488,25 @@ class Provider(kodion.AbstractProvider):
         if old_action:
             return yt_old_actions.process_old_action(self, context, re_match)
 
+        addon = xbmcaddon.Addon()
+        
+        settings = context.get_settings()
+        
+        if settings.get_string('youtube.api.autologin', '') == '':
+            settings.set_bool('youtube.api.autologin', False) 
+        
+        if settings.get_bool('youtube.api.autologin', True):
+            mode = 'in'
+            yt_login.process(mode, self, context, re_match, False)
+            pass
+
         self.get_client(context)
         resource_manager = self.get_resource_manager(context)
 
         result = []
 
-        settings = context.get_settings()
+        if settings.get_bool('youtube.api.enable', True) and settings.get_bool('youtube.api.autologin', True):
+            settings.set_bool('youtube.api.autologin', False)
 
         # sign in
         if not self.is_logged_in() and settings.get_bool('youtube.folder.sign.in.show', True):
@@ -506,6 +525,16 @@ class Provider(kodion.AbstractProvider):
                 context.create_resource_path('media', 'new_uploads.png'))
             my_subscriptions_item.set_fanart(self.get_fanart(context))
             result.append(my_subscriptions_item)
+            pass
+
+        # Recommendations
+        if self.is_logged_in() and settings.get_bool('youtube.folder.recommendations.show', True):
+            recommendations_item = DirectoryItem(
+                context.localize(self.LOCAL_MAP['youtube.recommendations']),
+                context.create_uri(['special', 'recommendations']),
+                context.create_resource_path('media', 'popular.png'))
+            recommendations_item.set_fanart(self.get_fanart(context))
+            result.append(recommendations_item)
             pass
 
         # what to watch
@@ -634,6 +663,8 @@ class Provider(kodion.AbstractProvider):
             context.set_content_type(content_type)
             context.add_sort_method(kodion.constants.sort_method.UNSORTED,
                                     kodion.constants.sort_method.VIDEO_RUNTIME,
+                                    kodion.constants.sort_method.DATE_ADDED,
+                                    kodion.constants.sort_method.TRACK_NUMBER,
                                     kodion.constants.sort_method.VIDEO_TITLE,
                                     kodion.constants.sort_method.DATE)
             pass

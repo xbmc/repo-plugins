@@ -29,6 +29,7 @@ class myAddon(t1mAddon):
       shows.append(('/shows/cbs_evening_news/', 'CBS Evening News', self.addonIcon))
       for url, name, thumb in shows:
          url = 'http://www.cbs.com%svideo' % url
+         infoList['mediatype'] = 'tvshow'
          ilist = self.addMenuItem(name.decode(UTF8),'GE', ilist, url, thumb, fanart, infoList, isFolder=True)
       return(ilist)
 
@@ -37,7 +38,7 @@ class myAddon(t1mAddon):
       self.defaultVidStream['width']  = 848
       self.defaultVidStream['height'] = 480
       gcurl = uqp(url)
-      if not gcurl.startswith('http'): gcurl = 'http://www.cbs.com%s' % gsurl
+      if not gcurl.startswith('http'): gcurl = 'http://www.cbs.com%s' % gcurl
       html = self.getRequest(gcurl)
       catid = re.compile('video.section_ids = \[(.+?)\]',re.DOTALL).search(html).group(1)
       catid = catid.split(',',1)[0]
@@ -77,6 +78,7 @@ class myAddon(t1mAddon):
            dur = dur.strip()
            for d in dur.split(':'): duration = duration*60+int(d)
            infoList['duration'] = duration
+           infoList['mediatype'] = 'episode'
            ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False)
          ostart += 100
       return(ilist)
@@ -103,30 +105,29 @@ class myAddon(t1mAddon):
       finalurl = '%s playpath=%s%s swfurl=%s timeout=20' % (frtmp, pphdr, fplay, swfurl)
       liz = xbmcgui.ListItem(path = finalurl)
 
-      subfile = ""
+      subfile = None
       if (suburl != None) and ('xml' in suburl):
          profile = self.addon.getAddonInfo('profile').decode(UTF8)
-         subfile = xbmc.translatePath(os.path.join(profile, 'subtitles.srt'))
          prodir  = xbmc.translatePath(os.path.join(profile))
          if not os.path.isdir(prodir):
             os.makedirs(prodir)
          pg = self.getRequest(suburl)
          if pg != "":
-            ofile = open(subfile, 'w+')
-            captions = re.compile('<p begin="(.+?)" end="(.+?)"(.+?)/p>',re.DOTALL).findall(pg)
-            for idx, (cstart, cend, caption) in list(enumerate(captions, start=1)):
+           subfile = xbmc.translatePath(os.path.join(profile, 'subtitles.srt'))
+           with open(subfile, 'w+') as ofile:
+              captions = re.compile('<p begin="(.+?)" end="(.+?)"(.+?)/p>',re.DOTALL).findall(pg)
+              for idx, (cstart, cend, caption) in list(enumerate(captions, start=1)):
                 cstart = cstart.replace('.',',')
                 cend   = cend.replace('.',',').split('"',1)[0]
                 caption = caption.replace('<br/>','\n').replace('<br></br>','\n').replace('&apos;',"'")
                 pieces  = re.compile('>(.+?)<', re.DOTALL).findall(caption)
                 if len(pieces) > 0 :
                   caption = ''
-                  for piece in pieces: caption = caption + piece
+                  for piece in pieces: caption += piece
                 caption = caption.strip() 
                 try:    caption = h.unescape(caption)
                 except: pass
                 ofile.write( '%s\n%s --> %s\n%s\n\n' % (idx, cstart, cend, caption))
-            ofile.close()
 
-      if subfile != "" : liz.setSubtitles([subfile])
+      if subfile is not None: liz.setSubtitles([subfile])
       xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)

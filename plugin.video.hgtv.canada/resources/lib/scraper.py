@@ -23,7 +23,6 @@ UTF8     = 'utf-8'
 class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
-   addonLanguage  = self.addon.getLocalizedString
    url = 'http://common.farm1.smdg.ca/Forms/PlatformVideoFeed?platformUrl=http%3A//feed.theplatform.com/f/dtjsEC/EAlt6FfQ_kCX/categories%3Fpretty%3Dtrue%26byHasReleases%3Dtrue%26range%3D1-1000%26byCustomValue%3D%7Bplayertag%7D%7Bz/HGTVNEWVC%20-%20New%20Video%20Center%7D%26sort%3DfullTitle&callback='
    html = self.getRequest(url)
    a = json.loads(html[1:len(html)-1])['items']
@@ -63,7 +62,6 @@ class myAddon(t1mAddon):
 
 
   def getAddonEpisodes(self,url,ilist):
-    addonLanguage  = self.addon.getLocalizedString
     self.defaultVidStream['width']  = 640
     self.defaultVidStream['height'] = 360
     geurl = uqp(url)
@@ -90,36 +88,41 @@ class myAddon(t1mAddon):
 
     else:  
      for b in a:
-      url     = 'http://hgtv-vh.akamaihd.net/i/,%s.mp4,.csmil/master.m3u8' % b['defaultThumbnailUrl'].rsplit('_',2)[0].split('http://media.hgtv.ca/videothumbnails/',1)[1]
+      url     = b['content'][0]['url'].replace('manifest=f4m','manifest=m3u')
       name    = h.unescape(b['title'])
-      thumb   = b['defaultThumbnailUrl']
+      thumb   = b.get('defaultThumbnailUrl')
       fanart  = self.addonFanart
-
       infoList = {}
-      infoList['Duration']    = int(b['content'][0]['duration'])
-      infoList['Title']       = name
-      try: infoList['Studio']      = b['pl1$network']
-      except: pass
-      infoList['Date']        = datetime.datetime.fromtimestamp(b['pubDate']/1000).strftime('%Y-%m-%d')
-      infoList['Aired']       = infoList['Date']
-      infoList['Year']        = int(infoList['Date'].split('-',1)[0])
-      try:    infoList['MPAA'] = re.compile('ratings="(.+?)"',re.DOTALL).search(html).group(1).split(':',1)[1]
-      except: infoList['MPAA'] = None
-      try:    infoList['Episode'] = int(b['pl1$episode'])
-      except: infoList['Episode'] = None
-      try:    infoList['Season']  = int(b['pl1$season'])
-      except: infoList['Season']  = 1
+      infoList['Duration'] = int(b['content'][0]['duration'])
+      infoList['Title'] = name
+      infoList['Studio'] = b.get('pl1$network')
+      infoList['Date']   = datetime.datetime.fromtimestamp(b['pubDate']/1000).strftime('%Y-%m-%d')
+      infoList['Aired']  = infoList['Date']
+      infoList['Year']   = int(infoList['Date'].split('-',1)[0])
+      mpaa = re.compile('ratings="(.+?)"',re.DOTALL).search(html)
+      if mpaa is not None: infoList['MPAA'] = mpaa.group(1).split(':',1)[1]
+      episode = b.get('pl1$episode')
+      if episode is not None: infoList['Episode'] = int(episode)
+      season = b.get('pl1$season')
+      if season is not None: infoList['Season']  = int(season)
+      else: infoList['Season']  = 1
       infoList['Plot']        = h.unescape(b["description"])
       infoList['TVShowTitle'] = b['pl1$show']
+      infoList['mediatype'] = 'episode'
       ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False)
     return(ilist)
 
 
 
   def getAddonVideo(self,url):
-   url = uqp(url)
-   suburl = 'http://media.hgtv.ca/videothumbnails/%s.vtt' % url.split('/i/,',1)[1].split('.mp4',1)[0]
-   liz = xbmcgui.ListItem(path = url)
-   if suburl != "" : liz.setSubtitles([suburl])
-   xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
+     html = self.getRequest(url) #needs proxy
+     url = re.compile('video src="(.+?)"', re.DOTALL).search(html).group(1)
+     suburl = re.compile('textstream src="(.+?)"', re.DOTALL).search(html)
+     html = self.getRequest(url) #needs proxy
+     url = re.compile('http(.+?)\n', re.DOTALL).search(html).group(0).strip()
+     liz = xbmcgui.ListItem(path = url)
+     if suburl is not None: 
+        suburl=suburl.group(1).replace('.ttml','.vtt')
+        liz.setSubtitles([suburl])
+     xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
 

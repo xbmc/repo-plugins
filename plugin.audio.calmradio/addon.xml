@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.calmradio" name="Calm Radio" version="0.1.4" provider-name="Nir Elbaz">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.module.requests" version="2.8.1"/>
+        <import addon="script.module.xbmcswift2" version="2.4.0"/>
+        <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <language>en</language>
+        <summary>Calm Radio Multimix</summary>
+        <description>Listen to to over 140 incredible channels including Atmosphere channels, specially designed for sleep, concentration and for ringing-in-the-ear sufferers</description>
+        <disclaimer lang="en">This is an official add-on of calmradio.com</disclaimer>
+        <license>GNU GENERAL PUBLIC LICENSE Version 2, June 1991</license>
+        <website>http://calmradio.com/</website>
+        <email>support@calmradio.com</email>
+    </extension>
+</addon>

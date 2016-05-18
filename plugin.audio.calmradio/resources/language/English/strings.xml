@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Plugin name -->
+    <string id="30000">Calm Radio</string>
+
+    <!-- Settings -->
+    <string id="32010">Account Details</string>
+    <string id="32011">Username</string>
+    <string id="32012">Password</string>
+    <string id="32020">Sound Quality</string>
+    <string id="32021">Fair Sound Quality - 32kb/s</string>
+    <string id="32022">Good Sound Quality - 64 kb/s</string>
+    <string id="32023">Better Sound Quality - 192 kb/s</string>
+    <string id="32024">Best Sound Quality - 320 kb/s</string>
+
+    <!-- Menu -->
+    <string id="32100">Channels</string>
+    <string id="32101">Acoustic, Classical, World, Relaxation and Jazz music channels</string>
+    <string id="32102">Atmospheres</string>
+    <string id="32103">Music specially designed for sleep, concentration and for ringing-in-the-ear sufferers</string>
+    <string id="32104">My Channels</string>
+    <string id="32105">Instant access to your favorites channels</string>
+    <string id="32110">This option is for members only</string>
+
+    <!-- Notifications -->
+    <string id="32200">Members Only Channel</string>
+    <string id="32201">
+        To enjoy this channel and many other VIP channels:\n'
+       '1. Open add-on settings and fill in your Calm Radio account details\n'
+       '2. Verify that the account details you enetered are correct.\n'
+       '3. Open http://calmradio.com and purchase a subscription\n\n'
+       'Would you like to open the add-on settings window?
+    </string>
+    <string id="32202">To enjoy high-quality sound and members only channels, open add-on settings and fill in your account details!</string>
+
+    <!-- Favorites -->
+    <string id="32300">Add To My Channels</string>
+    <string id="32301">Remove From My Channels</string>
+    <string id="32302">Channel added successfully to your favorite channels list</string>
+    <string id="32303">Channel removed successfully from your favorite channels list</string>
+    <string id="32304">Channel could not be added to your favorite channels list. Try again later</string>
+    <string id="32305">Channel could not be removed from your favorite channels list. Try again later</string>
+    <string id="32306">Your favorite channels list is empty</string>
+</strings>

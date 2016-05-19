@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="32010">
+        <setting label="32011" type="text" id="username" default=""/>
+        <setting label="32012" type="text" id="password" option="hidden" enable="!eq(-1,)" default=""/>
+    </category>
+    <category label="32020">
+        <setting id="bitrate" type="select" label="32000" default="0" lvalues="32021|32022|32023|32024" />
+    </category>
+</settings>

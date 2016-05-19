@@ -104,6 +104,8 @@ def login():
         littleErrorPopup( xbmcaddon.Addon().getLocalizedString(50022) )
         return ''
 
+    log("Login reponse: %s" % content, xbmc.LOGDEBUG)
+
     # Check the response xml
     xml = parseString(str(content))
     if xml.getElementsByTagName("code")[0].firstChild.nodeValue == "loginlocked":

@@ -1,0 +1,62 @@
+# Kodi Media Center language file
+# Addon Name: Skin Widgets
+# Addon id: service.skin.widgets
+# Addon Provider: Martijn|phil65
+msgid ""
+msgstr ""
+"Project-Id-Version: NBA League pass\n"
+"Report-Msgid-Bugs-To: max.galbusera@gmail.com\n"
+"Last-Translator: maxgalbu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#50000"
+msgid "Main settings"
+msgstr ""
+
+msgctxt "#50001"
+msgid "Username"
+msgstr ""
+
+msgctxt "#50002"
+msgid "Password"
+msgstr ""
+
+msgctxt "#50003"
+msgid "Video Quality"
+msgstr ""
+
+msgctxt "#50004"
+msgid "Scores"
+msgstr ""
+
+msgctxt "#50005"
+msgid "Debug"
+msgstr ""
+
+msgctxt "#50007"
+msgid "Show Live games in local timezone"
+msgstr ""
+
+msgctxt "#50008"
+msgid "next page..."
+msgstr ""
+
+msgctxt "#50020"
+msgid "Failed to get a video URL. Are you logged in?"
+msgstr ""
+
+msgctxt "#50021"
+msgid "Cannot login: invalid username and password, or your account is locked."
+msgstr ""
+
+msgctxt "#50022"
+msgid "Failed to login (response != 200)"
+msgstr ""
+
+msgctxt "#50023"
+msgid "Failed to get video URL (response != 200)"
+msgstr ""

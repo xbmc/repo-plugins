@@ -1,0 +1,37 @@
+0.1.6 (05.15.2016)
+ - fixed playback (Spinalcrack)
+ - defaults to HD Streams (Spinalcrack)
+ - added setting to disable HD default (Spinalcrack)
+ - converted all translation strings from xml to .po (Spinalcrack)
+
+0.1.5 (01.11.2015)
+ - fixed playback
+
+0.1.4 (03.10.2015)
+ - fixed add-on
+
+0.1.3 (07.06.2015)
+ - fixed playback
+
+0.1.2 (27.03.2015)
+ - fixed thumbnails
+
+0.1.1 (24.02.2015)
+ - fixed playback
+
+0.1.0 (14.02.2015)
+ - fixed playback
+
+0.0.4 (21.04.2014)
+ - fixed playback
+ - updated translations
+ - small fixes
+
+0.0.3 (16.03.2014)
+ - updated translations
+
+0.0.2 (25.02.2013)
+ - use stream info for duration
+
+0.0.1 (27.12.2012)
+ - initial release

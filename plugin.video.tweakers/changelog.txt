@@ -1,0 +1,42 @@
+v1.1.2 (2016-05-17)
+- added a setting for choosing the video quality
+
+v1.1.1 (2016-05-14)
+- adjusted due to website changes: getting the video url differently now
+
+v1.1.0 (2016-04-24)
+- added search
+
+v1.0.9 (2016-02-07)
+- changed the listing and playing of videos
+- The contextual menu item 'Play from here' is available now, it queues all the videos in the list from a certain point
+- updated to latest requirements for a Kodi-addon
+
+v1.0.8 (2016-01-14)
+- added blurred background (kudos to ninovanhooff!)
+- added refresh option (kudos to ninovanhooff!)
+
+v1.0.7 (2015-08-15)
+- added some utf8 stuff
+
+v1.0.6 (2015-06-23)
+- changed fanart
+
+v1.0.5 (2015-06-16)
+- changed icon and fanart due to changes in the website
+
+v1.0.4 (2015-05-08)
+- adjustments due to changes in the website: cookiewall circumvented by adding a cookie to the header (thanks bas lichtjaar)
+
+v1.0.3 (2015-02-25)
+- play the highest video quality that's available (kudos to Amelandbor!)
+
+v1.0.2 (2013-08-03)
+- fixed title bug
+
+v1.0.1 (2013-07-07)
+- added beautiful soup as dependency
+- added dutch strings
+
+v1.0.0 (2013-06-23)
+ - initial version

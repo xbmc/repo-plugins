@@ -1,0 +1,126 @@
+# Kodi Media Center language file
+# Addon Name: Calm Radio
+# Addon id: plugin.audio.calmradio
+# Addon Provider: nire0510
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: nire0510@gmail.com\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Calm Radio"
+msgstr ""
+
+msgctxt "#32010"
+msgid "Account Details"
+msgstr ""
+
+msgctxt "#32011"
+msgid "Username"
+msgstr ""
+
+msgctxt "#32012"
+msgid "Password"
+msgstr ""
+
+msgctxt "#32020"
+msgid "Sound Quality"
+msgstr ""
+
+msgctxt "#32021"
+msgid "Fair Sound Quality - 32kb/s"
+msgstr ""
+
+msgctxt "#32022"
+msgid "Good Sound Quality - 64 kb/s"
+msgstr ""
+
+msgctxt "#32023"
+msgid "Better Sound Quality - 192 kb/s"
+msgstr ""
+
+msgctxt "#32024"
+msgid "Best Sound Quality - 320 kb/s"
+msgstr ""
+
+msgctxt "#32100"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#32101"
+msgid "Acoustic, Classical, World, Relaxation and Jazz music channels"
+msgstr ""
+
+msgctxt "#32102"
+msgid "Atmospheres"
+msgstr ""
+
+msgctxt "#32103"
+msgid "Music specially designed for sleep, concentration and for ringing-in-the-ear sufferers"
+msgstr ""
+
+msgctxt "#32104"
+msgid "My Channels"
+msgstr ""
+
+msgctxt "#32105"
+msgid "Instant access to your favorites channels"
+msgstr ""
+
+msgctxt "#32110"
+msgid "This option is for members only"
+msgstr ""
+
+msgctxt "#32200"
+msgid "Members Only Channel"
+msgstr ""
+
+msgctxt "#32201"
+msgid ""
+"To enjoy this channel and many other VIP channels:\n"
+"1. Open add-on settings and fill in your Calm Radio account details\n"
+"2. Verify that the account details you enetered are correct.\n"
+"3. Open http://calmradio.com and purchase a subscription\n\n"
+"Would you like to open the add-on settings window?"
+msgstr ""
+
+msgctxt "#32202"
+msgid "To enjoy high-quality sound and members only channels, open add-on settings and fill in your account details!"
+msgstr ""
+
+msgctxt "#32300"
+msgid "Add To My Channels"
+msgstr ""
+
+msgctxt "#32301"
+msgid "Remove From My Channels"
+msgstr ""
+
+msgctxt "#32302"
+msgid "Channel added successfully to your favorite channels list"
+msgstr ""
+
+msgctxt "#32303"
+msgid "Channel removed successfully from your favorite channels list"
+msgstr ""
+
+msgctxt "#32304"
+msgid "Channel could not be added to your favorite channels list. Try again later"
+msgstr ""
+
+msgctxt "#32305"
+msgid "Channel could not be removed from your favorite channels list. Try again later"
+msgstr ""
+
+msgctxt "#32306"
+msgid "Your favorite channels list is empty"
+msgstr ""

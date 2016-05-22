@@ -50,3 +50,8 @@ Mobiles: removed The Phone Geeks, removed Voievozii.
 Brands: Sony - content changes, removed Schrack Technik, added Philips TV Romania.
 Videotutorials : Added CreativeMonkeyzArmy tutorials.
 Games: Removed PGLtv, moved CreativeMonkeyzArmy to videotutorials.
+
+v2.0.6
+- Content changes:
+IT: Removed Domo Retail - content changes, removed Unbox Arena - content changes.
+Mobiles: removed Gadged-On - content changes, removed Mobile Trend - content changes.

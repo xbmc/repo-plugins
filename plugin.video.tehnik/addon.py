@@ -4,7 +4,7 @@
 # plugin.video.tehnik: 
 # By: deltha@gmail.com
 #------------------------------------------------------------
-# TehniK - 2.0.5
+# TehniK - 2.0.6
 #------------------------------------------------------------
 
 from xbmcswift2 import Plugin, xbmc
@@ -33,11 +33,6 @@ YOUTUBE_ITNC = (
         'logo': 'altex.png',
         'channel_id': 'UCeKDPIHminC91rxZpdoqLOA',
         'user': 'AltexRomania',
-    }, {
-        'name': 'Domo Retail',
-        'logo': 'domo.png',
-        'channel_id': 'UCj5npmx6-5yiY3pVzQ7v8fg',
-        'user': 'DOdelaDOMO',
     }, {
         'name': 'Emag',
         'logo': 'emag.png',
@@ -69,11 +64,6 @@ YOUTUBE_ITNC = (
         'channel_id': 'UCioQHDZMMkcq4703aNrp9UQ',
         'user': 'PCGarageTV',
     }, {
-        'name': 'Unboxarena',
-        'logo': 'unboxarena.png',
-        'channel_id': 'UCeOc5p84FVjnp3xYO644Fvg',
-        'user': 'Unboxarena',
-    }, {
         'name': 'Z@na IT',
         'logo': 'zonait.png',
         'channel_id': 'UCCUnAfa_A5XR5NyoPgErmlg',
@@ -92,11 +82,6 @@ YOUTUBE_MOBILES = (
         'logo': 'gadgetro.png',
         'channel_id': 'UChFVtLbhlxHlIwFwrK7-1gw',
         'user': 'GadgetRoVideo',
-    }, {
-        'name': 'Gadget On',
-        'logo': 'gadgeton.png',
-        'channel_id': 'UCWuqucT_2eY0zukQoEE7TUw',
-        'user': 'DaniJurma',
     }, {
         'name': 'Gadget-Talk',
         'logo': 'gadget-talk.png',
@@ -122,11 +107,6 @@ YOUTUBE_MOBILES = (
         'logo': 'marketonline.png',
         'channel_id': 'UCJd5DaTI7FVkg4-aAc-tsbA',
         'user': 'MarketOnlineRO',
-    }, {
-        'name': 'Mobile Trend',
-        'logo': 'mobiletrend.jpg',
-        'channel_id': 'UCQXbBUhksPG4HvACxn2D2wg',
-        'user': 'MobileTrendRo',
     }, {
         'name': 'Mobilissimo',
         'logo': 'mobilissimo.png',

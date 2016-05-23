@@ -1,3 +1,38 @@
+5.2.1 (2016-05-12)
+[add] Additional "Recommend for You" section (thanks to anxdpanic)
+
+5.2.0 (2016-05-11)
+[upd] APi-Changer - First login delete old Credentials - New Login Required! Sorry :)
+
+5.1.20.7 (2016-05-03)
+Workaround for the Quota Exceed-Error. 
+[add] API-Changer for a Pool of 6 API-Keys
+[add] Auto-Reauthenticate with Pool-Key on "Quota Exceed" error
+[add] "Use own API"-Button
+[hint] The Message "Invalid Credentials" after Update could be fixed with deleting the Userdata-Settings.xml
+[add] add Recommendations to main listing when logged in [anxdpanic]
+
+5.1.20.6 (2016-04-03)
+[add] Greek Translation from twilight0
+[upd] Fixed italian translation from DjDiabolik
+
+5.1.20.5 (2016-03-20)
+[upd] Ignore if '.apps.googleusercontent.com' entered in API Id string in add-on settings
+
+5.1.20.4 (2016-03-05)
+[add] API Key in add-on settings
+[upd] All string.po for new API Key functionality. New entries in language string.po files not translated from English.
+
+5.1.20.3 (2016-03-04)
+[fix] All Key changed with YouTube TV
+
+5.1.20.2 (2016-03-04)
+[fix] Live streams itag 91 patch
+[add] Kodi 17 Krypton support. Patch by Uukrul
+
+5.1.20 (2016-02-25)
+[fix] Final fix for APIs
+
 5.1.16 (2015-12-24)
 [fix] reverted search order by date
 

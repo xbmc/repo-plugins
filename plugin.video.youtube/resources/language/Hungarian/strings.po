@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: YouTube
 # Addon id: plugin.video.youtube
 # Addon version: 5.1.9~beta1
@@ -225,6 +225,36 @@ msgctxt "#30120"
 msgid "Clear"
 msgstr ""
 
+#YouTube
+#empty strings from id 30121 to 30199
+
+msgctxt "#30200"
+msgid "API Key"
+msgstr ""
+
+msgctxt "#30201"
+msgid "API Key"
+msgstr ""
+
+msgctxt "#30202"
+msgid "API Id"
+msgstr ""
+
+msgctxt "#30203"
+msgid "API Secret"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Enable Personal API Keys"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Autologin on Error enable"
+msgstr ""
+
+#YouTube
+#empty strings from id 30206 to 30499
+
 msgctxt "#30500"
 msgid "Channels"
 msgstr "Csatornák"
@@ -423,4 +453,12 @@ msgstr ""
 
 msgctxt "#30549"
 msgid "No videos streams found"
+msgstr ""
+
+msgctxt "#30550"
+msgid "Region"
+msgstr "Ország"
+
+msgctxt "#30551"
+msgid "Recommendations"
 msgstr ""

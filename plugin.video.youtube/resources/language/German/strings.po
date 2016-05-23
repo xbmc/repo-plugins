@@ -1,4 +1,4 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: YouTube
 # Addon id: plugin.video.youtube
 # Addon version: 5.1.9~beta1
@@ -23,7 +23,7 @@ msgstr "Plugin für YouTube"
 
 msgctxt "Addon Description"
 msgid "YouTube is a one of the biggest video-sharing websites of the world."
-msgstr "YouTube ist ein eines der größten Video-Sharing-Websites der Welt."
+msgstr "YouTube ist eines der größten Video-Sharing-Websites der Welt."
 
 msgctxt "#30000"
 msgid "General"
@@ -75,7 +75,7 @@ msgstr "360p"
 
 msgctxt "#30020"
 msgid "Allow 3D"
-msgstr "Allow 3D"
+msgstr "Erlaube 3D"
 
 msgctxt "#30021"
 msgid "Show Fanart"
@@ -147,7 +147,7 @@ msgstr "Favoriten"
 
 msgctxt "#30101"
 msgid "Add to addon favs"
-msgstr "Zu Addon Favs hinzufügen"
+msgstr "Zu Addon Fav. hinzufügen"
 
 msgctxt "#30102"
 msgid "Search"
@@ -225,6 +225,36 @@ msgctxt "#30120"
 msgid "Clear"
 msgstr "Leeren"
 
+#YouTube
+#empty strings from id 30121 to 30199
+
+msgctxt "#30200"
+msgid "API Key"
+msgstr ""
+
+msgctxt "#30201"
+msgid "API Key"
+msgstr ""
+
+msgctxt "#30202"
+msgid "API Id"
+msgstr ""
+
+msgctxt "#30203"
+msgid "API Secret"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Enable Personal API Keys"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Autologin on Error enable"
+msgstr ""
+
+#YouTube
+#empty strings from id 30206 to 30499
+
 msgctxt "#30500"
 msgid "Channels"
 msgstr "Kanäle"
@@ -259,7 +289,7 @@ msgstr "Mein Kanal"
 
 msgctxt "#30508"
 msgid "Liked Videos"
-msgstr "Liked Videos"
+msgstr "Positiv bewertete Videos"
 
 msgctxt "#30509"
 msgid "History"
@@ -295,7 +325,7 @@ msgstr "Verzeichnisse"
 
 msgctxt "#30517"
 msgid "Subscribe to %s"
-msgstr "%s abonieren"
+msgstr "%s abonnieren"
 
 msgctxt "#30518"
 msgid "Go to '%s'"
@@ -303,7 +333,7 @@ msgstr "Gehen Sie auf '%s'"
 
 msgctxt "#30519"
 msgid "and enter the following code:"
-msgstr "und geben Sie folgenden code ein:"
+msgstr "und geben Sie folgenden Code ein:"
 
 msgctxt "#30520"
 msgid "Add to..."
@@ -355,7 +385,7 @@ msgstr "Alle ansehen"
 
 msgctxt "#30532"
 msgid "Default"
-msgstr "Default"
+msgstr "Standard"
 
 msgctxt "#30533"
 msgid "Reverse"
@@ -379,7 +409,7 @@ msgstr "Ab hier abspielen"
 
 msgctxt "#30538"
 msgid "Disliked Videos"
-msgstr "Disliked Videos"
+msgstr "Negativ bewertete Videos"
 
 msgctxt "#30539"
 msgid "Live"
@@ -395,7 +425,7 @@ msgstr "Kanalnamen in der Beschreibung anzeigen"
 
 msgctxt "#30542"
 msgid "rtmpe streams are not supported"
-msgstr "rtmpe streams werden leider nicht unterstützt"
+msgstr "RTMPE streams werden leider nicht unterstützt"
 
 msgctxt "#30543"
 msgid "Refresh"
@@ -424,3 +454,11 @@ msgstr "Mehr..."
 msgctxt "#30549"
 msgid "No videos streams found"
 msgstr "Keine Video-Streams gefunden"
+
+msgctxt "#30550"
+msgid "Region"
+msgstr "Region"
+
+msgctxt "#30551"
+msgid "Recommendations"
+msgstr ""

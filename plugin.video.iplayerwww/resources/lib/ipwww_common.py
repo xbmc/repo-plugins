@@ -22,8 +22,8 @@ ADDON = xbmcaddon.Addon(id='plugin.video.iplayerwww')
 
 def GetAddonInfo():
     addon_info = {}
-    addon_info["id"] = __addonid__
-    addon_info["addon"] = xbmcaddon.Addon(__addonid__)
+    addon_info["id"] = addonid
+    addon_info["addon"] = xbmcaddon.Addon(addonid)
     addon_info["language"] = addon_info["addon"].getLocalizedString
     addon_info["version"] = addon_info["addon"].getAddonInfo("version")
     addon_info["path"] = addon_info["addon"].getAddonInfo("path")
@@ -31,9 +31,9 @@ def GetAddonInfo():
     return addon_info
 
 
-__addonid__ = "plugin.video.iplayerwww"
-__addoninfo__ = GetAddonInfo()
-DIR_USERDATA = xbmc.translatePath(__addoninfo__["profile"])
+addonid = "plugin.video.iplayerwww"
+addoninfo = GetAddonInfo()
+DIR_USERDATA = xbmc.translatePath(addoninfo["profile"])
 cookie_jar = None
 
 
@@ -42,7 +42,7 @@ if(not os.path.exists(DIR_USERDATA)):
 
 
 def translation(id):
-    return xbmcaddon.Addon(__addonid__).getLocalizedString(id)
+    return xbmcaddon.Addon(addonid).getLocalizedString(id)
 
 
 re_subtitles = re.compile('^\s*<p.*?begin=\"(.*?)(\.([0-9]+))?\"\s+.*?end=\"(.*?)(\.([0-9]+))?\"\s*>(.*?)</p>')

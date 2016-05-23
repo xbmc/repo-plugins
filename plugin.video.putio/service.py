@@ -38,7 +38,7 @@ if __name__ == '__main__':
             continue
 
         video_duration = player.getTotalTime()
-        if not video_duration:
+        if video_duration <= 20:
             continue
 
         # if the player is very close to finish, set the 'start_from' parameter to the send of the video. because our

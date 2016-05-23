@@ -1,11 +1,18 @@
-2016-05-02 Ibrahim Gungor <ibrahim@put.io>
+v2.2.0 (2016-05-02) Ibrahim Gungor <ibrahim@put.io>
+    * Show 'watched' icon if the video is played before
+    * Show video duration next to its title
+    * Sort-by-name sorts files and folders together
+    * Use put.io/kodi endpoint
+    * Several bugfixes regarding video resume
+
+v2.1.0 (2016-05-02) Ibrahim Gungor <ibrahim@put.io>
     * Sort files by date
     * Inform user if payment is expired
     * Don't show delete context for shared files
     * Fix errors dialogs popping up occasionally while watching a video
     * Fix AttributeError where an audio file has no 'start_from' attribute
 
-2016-04-21 Ibrahim Gungor <ibrahim@put.io>
+v2.0.0 (2016-04-21) Ibrahim Gungor <ibrahim@put.io>
     * Video resume support
     * Sort files by name
     * Sort files by size

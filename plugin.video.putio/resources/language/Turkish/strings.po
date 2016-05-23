@@ -35,8 +35,8 @@ msgid "OAuth2 Key Required"
 msgstr "OAuth2 Anahtarı Gerekli"
 
 msgctxt "#32023"
-msgid "Visit put.io/xbmc and enter this code: %s"
-msgstr "put.io/xbmc adresine gidip %s kodunu girin"
+msgid "Visit put.io/kodi and enter this code: %s"
+msgstr "put.io/kodi adresine gidip %s kodunu girin"
 
 msgctxt "#32024"
 msgid "Then click OK"

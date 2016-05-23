@@ -35,7 +35,7 @@ PLUGIN_URL = sys.argv[0]  # base URL ('plugin://plugin.video.putio/')
 PLUGIN_HANDLE = int(sys.argv[1])  # process handle, as a numeric string
 PLUGIN_ARGS = urlparse.parse_qs(sys.argv[2].lstrip('?'))  # query string, ('?action=list&item=3')
 
-PUTIO_KODI_ENDPOINT = 'https://put.io/xbmc'
+PUTIO_KODI_ENDPOINT = 'https://put.io/kodi'
 RESOURCE_PATH = os.path.join(SETTINGS.getAddonInfo('path'), 'resources', 'media')
 
 
@@ -60,32 +60,56 @@ def populate_dir(files):
                               iconImage=thumbnail,
                               thumbnailImage=thumbnail)
 
-        # http://kodi.wiki/view/InfoLabels
-        type_ = 'video' if item.is_video or item.is_folder else 'music'
-        info_labels={
-            'date': item.created_at.strftime('%d.%m.%Y'),
-            'size': item.size,
-            'title': item.name,
-        }
-        if type_ == 'video':
-            info_labels['mediatype'] = type_
-
-        li.setInfo(type=type_, infoLabels=info_labels)
-
         # If known prehand, this can (but does not have to) avoid HEAD requests being sent to HTTP servers to figure out
         # file type.
         # http://mirrors.kodi.tv/docs/python-docs/16.x-jarvis/xbmcgui.html#ListItem-setMimeType
         li.setMimeType(mimetype=item.content_type)
 
-        if item.is_folder:
-            url = build_url(action='list', item=item.id)
-        else:  # video or audio, no other types are available here
+        # http://kodi.wiki/view/InfoLabels
+        info_labels = {
+            'date': item.created_at.strftime('%d.%m.%Y'),
+            'size': item.size,
+            'title': item.name,
+        }
+
+        if item.is_video:
+            item_type = 'video'
             url = build_url(action='play', item=item.id)
-            # resumetime and totaltime are needed for Kodi to decide the file as watched or not.
-            # FIXME: get total-time of the file and set to 'totaltime'
-            if hasattr(item, 'start_from'):
-                li.setProperty(key='resumetime', value=str(item.start_from))
-            li.setProperty(key='totaltime', value=str(20 * 60))
+            li.setProperty(key='IsPlayable', value='true')
+
+            info_labels['mediatype'] = 'video'
+
+            if hasattr(item, 'video_metadata') and item.video_metadata:
+                metadata = item.video_metadata
+
+                duration = metadata['duration']
+                video_offset = item.start_from if hasattr(item, 'start_from') else 0
+
+                if duration:
+                    info_labels['duration'] = duration
+                    # mark the video as watched if there is %20 progress left
+                    if (duration - video_offset) <= (duration * 0.2):
+                        info_labels['playcount'] = 1
+
+                # resumetime and totaltime are the undocumented properties to show resumable icon.
+                if video_offset:
+                    li.setProperty(key='resumetime', value=str(video_offset))
+                if duration:
+                    li.setProperty(key='totaltime', value=str(duration))
+
+        elif item.is_folder:
+            # folder's type can be 'video' if you are passing it to setInfo method. Kodi authors said this. So, who
+            # cares.
+            item_type = 'video'
+            url = build_url(action='list', item=item.id)
+        elif item.is_audio:
+            item_type = 'music'
+            url = build_url(action='play', item=item.id)
+            li.setProperty(key='IsPlayable', value='true')
+        else:  # video or audio, no other types are available here
+            continue
+
+        li.setInfo(type=item_type, infoLabels=info_labels)
 
         context_menu_items = [(I18N(32040), 'Container.Refresh')]
         if not item.is_shared:
@@ -99,40 +123,34 @@ def populate_dir(files):
 
     xbmcplugin.addDirectoryItems(handle=PLUGIN_HANDLE, items=list_items, totalItems=len(list_items))
     xbmcplugin.setContent(handle=PLUGIN_HANDLE, content='files')
-    xbmcplugin.addSortMethod(handle=PLUGIN_HANDLE,
-                             sortMethod=xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
+
+    xbmcplugin.addSortMethod(handle=PLUGIN_HANDLE, sortMethod=xbmcplugin.SORT_METHOD_LABEL_IGNORE_FOLDERS)
     xbmcplugin.addSortMethod(handle=PLUGIN_HANDLE, sortMethod=xbmcplugin.SORT_METHOD_DATE)
     xbmcplugin.addSortMethod(handle=PLUGIN_HANDLE, sortMethod=xbmcplugin.SORT_METHOD_SIZE)
+
     xbmcplugin.endOfDirectory(handle=PLUGIN_HANDLE)
 
 
 def play(item):
     """Plays the given item from where it was left off"""
-    thumbnail = item.screenshot or item.icon
 
+    thumbnail = item.screenshot or item.icon
     li = xbmcgui.ListItem(label=item.name,
                           label2=item.name,
                           iconImage=thumbnail,
                           thumbnailImage=thumbnail)
+
     li.setInfo(type='video',
                infoLabels={
                    'size': item.size,
                    'title': item.name,
                    'mediatype': 'video',
                })
-    # If known prehand, this can (but does not have to) avoid HEAD requests being sent to HTTP servers to figure out
-    # file type.
-    # http://mirrors.kodi.tv/docs/python-docs/16.x-jarvis/xbmcgui.html#ListItem-setMimeType
-    li.setMimeType(mimetype=item.content_type)
 
-    # resume where it was left off
-    if hasattr(item, 'start_from'):
-        li.setProperty(key='startoffset', value=str(item.start_from))
-    li.setProperty(key='IsPlayable', value='true')
-
+    li.setPath(item.stream_url())
     li.setSubtitles([item.subtitles()])
 
-    xbmc.Player().play(item=item.stream_url(), listitem=li)
+    xbmcplugin.setResolvedUrl(PLUGIN_HANDLE, succeeded=True, listitem=li)
 
 
 def delete(item):

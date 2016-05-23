@@ -34,7 +34,7 @@ msgid "OAuth2 Key Required"
 msgstr ""
 
 msgctxt "#32023"
-msgid "Visit put.io/xbmc and enter this code: %s"
+msgid "Visit put.io/kodi and enter this code: %s"
 msgstr ""
 
 msgctxt "#32024"

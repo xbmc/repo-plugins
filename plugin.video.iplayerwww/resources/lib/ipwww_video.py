@@ -647,10 +647,11 @@ def ListHighlights(highlights_url):
             icon = image_match.group(1)
 
         desc = ''
-        # <p class="single-item__overlay__desc">
-        # The remarkable rise of Ngawang Lodup - from BBC Introducing to performing at the O2 Arena</p>
+        # <p class="item-overlay__text__inner typo typo--canary">
+        # A hospital visit reveals devastating news for Jasmin and Dev.
+        # </p>
         desc_match = re.search(
-            r'<.*?class="single-item__overlay__desc.*?>(.*?)<',
+            r'<.*?class="item-overlay__text__inner.*?>(.*?)<',
             single, flags=(re.DOTALL | re.MULTILINE))
         if desc_match:
             desc = desc_match.group(1)
@@ -1065,20 +1066,20 @@ def ParseStreams(stream_id):
             #print m3u8_breakdown
             # print m3u8_url
             m3u8_html = OpenURL(m3u8_url)
-            m3u8_match = re.compile('BANDWIDTH=(.+?),.+?RESOLUTION=(.+?)\n(.+?)\n').findall(m3u8_html)
+            m3u8_match = re.compile('BANDWIDTH=(.+?),.+?RESOLUTION=(.+?)(?:,.+?\n|\n)(.+?)\n').findall(m3u8_html)
             for bandwidth, resolution, stream in m3u8_match:
                 # print bandwidth
                 # print resolution
                 #print stream
                 url = "%s%s%s" % (m3u8_breakdown[0][0], stream, m3u8_breakdown[0][1])
                 #print url
-                if int(bandwidth) == 1012300:
+                if 1000000 <= int(bandwidth) <= 1100000:
                     tmp_br = 2
-                elif int(bandwidth) == 1799880:
+                elif 1790000 <= int(bandwidth) <= 1800000:
                     tmp_br = 4
-                elif int(bandwidth) == 3116400:
+                elif 3100000 <= int(bandwidth) <= 3120000:
                     tmp_br = 6
-                elif int(bandwidth) == 5509880:
+                elif int(bandwidth) >= 5500000:
                     tmp_br = 7
                 retlist.append((tmp_sup, tmp_br, url, resolution))
     # It may be useful to parse these additional streams as a default as they offer additional bandwidths.

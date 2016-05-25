@@ -2,6 +2,7 @@ import os, sys, urllib, requests, re, htmlentitydefs, hashlib, time
 if sys.version < '2.7.3': #If crappy html.parser, use internal version. Using internal version on ATV2 crashes as of XBMC 12.2, so that's why we test version
     import HTMLParser #analysis:ignore
 import bs4  # @UnresolvedImport
+import functools
 
 from xbmcswift2 import Plugin, xbmc
 plugin = Plugin()
@@ -23,7 +24,7 @@ HEADERS = {'User-Agent':USER_AGENT}
 def ERROR(msg):
     plugin.log.error('ERROR: {0}'.format(msg))
     import traceback
-    traceback.print_exc()
+    plugin.log(traceback.format_exc())
 
 charCodeFilter = re.compile('&#(\d{1,5});',re.I)
 charNameFilter = re.compile('&(\w+?);')
@@ -40,6 +41,16 @@ def convertHTMLCodes(html):
         pass
     return html
 
+def content(content_type):
+    def methodWrap(func):
+        @functools.wraps(func)
+        def inner(*args,**kwargs):
+            plugin.set_content(content_type)
+            return func(*args,**kwargs)
+        return inner
+    return methodWrap
+
+@plugin.cached()
 def getPage(url,referer='http://geekandsundry.com'):
     headers = HEADERS.copy()
     headers['referer'] = referer
@@ -71,8 +82,7 @@ def getShowIcon(url):
         with open(outfile,'r') as f: return f.read(), os.path.join(FANART_PATH,outname)
 
     default = 'http://geekandsundry.com/wp-content/themes/Geek_and_Sundry/img/fallbacks/646x538.jpg'
-    html = getCachedHTML('show',url)
-    if not html: html = getPage(url)
+    html = getPage(url)
     soup = getSoup(html)
     iconDiv = soup.select('div.archive-image')
     if not iconDiv: return default, default
@@ -88,18 +98,16 @@ def getShowIcon(url):
     return final, createFanart(final,url)
 
 @plugin.route('/all/')
+@content('tvshows')
+@plugin.cached()
 def showAllShows():
     url = 'http://geekandsundry.com/shows/'
-    html = getCachedHTML('main',url)
-    if not html:
-        try:
-            html = getPage(url)
-            cacheHTML('main', url, html)
-        except:
-            ERROR('Failed getting main page')
-            xbmc.executebuiltin('Notification(%s,%s,%s,%s)' % ('Geek & Sundry',T(32101),3,plugin.addon.getAddonInfo('icon')))  # @UndefinedVariable #For xbmcswift2
-            plugin.set_content('tvshows')
-            return
+    try:
+        html = getPage(url)
+    except:
+        ERROR('Failed getting main page')
+        xbmc.executebuiltin('Notification(%s,%s,%s,%s)' % ('Geek & Sundry',T(32101),3,plugin.addon.getAddonInfo('icon')))  # @UndefinedVariable #For xbmcswift2
+        return
 
     items = []
 
@@ -117,7 +125,12 @@ def showAllShows():
         d.create('Loading shows','Initializing...')
     total = len(anchors)
     for i, a in enumerate(anchors):
-        title = convertHTMLCodes(a.string)
+        try:
+            title = convertHTMLCodes(a.findAll(text=True)[0])
+        except:
+            ERROR('Failed to get show title')
+            continue
+
         surl = a.get('href')
         if first:
             if d.iscanceled(): break
@@ -139,16 +152,14 @@ def showAllShows():
                         }
         )
 
-    plugin.set_content('tvshows')
     return items
 
 @plugin.route('/show/<url>')
+@content('episodes')
+@plugin.cached()
 def showShow(url):
     if not url: return False
-    html = getCachedHTML('show',url)
-    if not html:
-        html = getPage(url)
-        cacheHTML('show', url, html)
+    html = getPage(url)
     soup = getSoup(html)
     pages = soup.select('a.page-numbers')
     lastPage = 1
@@ -162,10 +173,7 @@ def showShow(url):
     for page in range(1,lastPage+1):
         if not soup:
             pageURL = url + 'page/{0}/'.format(page)
-            html = getCachedHTML('show',pageURL)
-            if not html:
-                html = getPage(pageURL,referer=url)
-                cacheHTML('show', pageURL, html)
+            html = getPage(pageURL,referer=url)
             soup = getSoup(html)
 
         for a in soup.select('a.post'):
@@ -190,17 +198,13 @@ def showShow(url):
             )
 
         soup = None
-    plugin.set_content('episodes')
     return items
 
-@plugin.route('/newest/')
+@plugin.cached_route('/newest/')
 def showNewest():
     items = []
     url = 'http://www.youtube.com/user/geekandsundry/videos'
-    html = getCachedHTML('newest',url)
-    if not html:
-        html = getPage(url)
-        cacheHTML('newest', url, html)
+    html = getPage(url)
     soup = getSoup(html)
     results = soup.findAll('h3')
     for i in results:
@@ -229,11 +233,22 @@ def showVideoURL(url):
     try:
         soup = getSoup(html)
         vidDiv = soup.select('div.video-wrapper')[0]
-        vidScript = vidDiv.script
+
+        # Get all the script and iframe tags in this wrapper and check for the one which has the brightcove player script
+        scripts = vidDiv.find_all(['script', 'iframe'])
+        checkForBrightcovePlayer = lambda script: script.get("src") and script.get("src").startswith("//players.brightcove.net")
+        vidScript = filter(checkForBrightcovePlayer, scripts)[0]
+
         if vidScript and vidScript.get('src'):
-            ID = vidDiv.video.get('data-video-id')
-            player = vidDiv.video.get('data-player')
             src = 'http:' + vidScript.get('src')
+
+            if vidScript.name == 'iframe':
+                ID = re.search("videoId=([^&']+)", src).group(1)
+                player = ''
+            else:
+                ID = vidDiv.video.get('data-video-id')
+                player = vidDiv.video.get('data-player')
+
             return showBrightcoveVideo(ID,player,src)
     except IndexError:
         pass
@@ -241,7 +256,7 @@ def showVideoURL(url):
     try:
         ID = re.search('(?is)<iframe.+?src="[^"]+?embed/(?P<id>[^/"]+)".+?</iframe>',html).group(1)
     except:
-        ID = re.search('href="http://youtu.be/(?P<id>\w+)"',html).group(1)
+        ID = re.search('href="http://youtu.be/(?P<id>[^"]+)"',html).group(1)
     showVideo(ID)
 
 @plugin.route('/play/<ID>')
@@ -275,7 +290,7 @@ def showBrightcoveVideo(ID,player,src):
             url = source['src']
             maxHeight = source['height']
     if not url: return
-    print alt
+
     if alt: url = alt
     #rtmp://[wowza-ip-address]:[port]/[application]/[appInstance]/[prefix]:[path1]/[path2]/[streamName]
 
@@ -362,32 +377,6 @@ def extractEpisode(title,url):
     if not test: test = re.search('[_\.]\d*(\d\d)\.',url)
     if test: return test.group(1)
     return ''
-
-def cacheHTML(prefix,url,html):
-    fname = prefix + '.' + hashlib.md5(url).hexdigest()
-    with open(os.path.join(CACHE_PATH,fname),'w') as f:
-        f.write(str(time.time()) + '\n' + html.encode('utf-8'))
-
-def getCachedHTML(prefix,url):
-    fname = prefix + '.' + hashlib.md5(url).hexdigest()
-    path = os.path.join(CACHE_PATH,fname)
-    if not os.path.exists(path): return None
-    with open(path,'r') as f:
-        data = f.read()
-        try:
-            last, html = data.split('\n',1)
-        except:
-            plugin.log.info('Cached file corrupt!')
-    try:
-        if time.time() - float(last) > 3600:
-            plugin.log.info('Cached file expired. Getting new html...')
-            return None
-    except:
-        plugin.log.info('Failed to process file cache time')
-        return None
-
-    plugin.log.info('Using cached HTML')
-    return html.decode('utf-8')
 
 if __name__ == '__main__':
     plugin.run()

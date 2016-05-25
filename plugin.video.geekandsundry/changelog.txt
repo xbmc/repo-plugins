@@ -1,5 +1,10 @@
 Geek & Sundry Changelog
 
+*** 0.1.6 ***
+
+Fixes some show titles not displaying
+Fixes playback errors for some videos
+
 *** 0.1.5 ***
 
 Added icons and fanart for shows

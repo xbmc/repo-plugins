@@ -10,9 +10,6 @@ import urlparse
 import xbmc
 import xbmcaddon
 
-reload(sys)
-sys.setdefaultencoding('utf8')
-
 LIB_DIR = xbmc.translatePath(
     os.path.join(xbmcaddon.Addon(id="plugin.video.tweakers").getAddonInfo('path'), 'resources', 'lib'))
 sys.path.append(LIB_DIR)

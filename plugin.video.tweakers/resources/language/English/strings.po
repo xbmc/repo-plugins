@@ -13,32 +13,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: en\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
-
-msgctxt "Addon Summary"
-msgid "Watch tech videos from Tweakers.net (dutch)"
-msgstr ""
-
-msgctxt "Addon Description"
-msgid "Watch tech videos from Tweakers.net (dutch)"
-msgstr ""
-
-msgctxt "Addon Disclaimer"
-msgid "For bugs, requests or general questions visit the tweakers.net thread on the XBMC forum."
-msgstr ""
-
-#
-     * Main
-
 
 msgctxt "#30000"
 msgid "Videos"
 msgstr ""
-
-#
-     * Settings labels 
-
-#empty strings from id 30001 to 30099
 
 msgctxt "#30100"
 msgid "Version"
@@ -56,8 +34,6 @@ msgctxt "#30103"
 msgid "Search"
 msgstr ""
 
-#empty strings from id 30104 to 30199
-
 msgctxt "#30200"
 msgid "Video player"
 msgstr ""
@@ -73,8 +49,6 @@ msgstr ""
 msgctxt "#30203"
 msgid "MPlayer"
 msgstr ""
-
-#empty strings from id 30204 to 30299
 
 msgctxt "#30300"
 msgid "Preferred Video Quality"
@@ -96,16 +70,9 @@ msgctxt "#30304"
 msgid "Low"
 msgstr ""
 
-#empty strings from id 30305 to 30399
-
 msgctxt "#30400"
 msgid "Debug"
 msgstr ""
-
-#
-	* Texts
-	
-#empty strings from id 30401 to 30500
 
 msgctxt "#30501"
 msgid "%s to %s"

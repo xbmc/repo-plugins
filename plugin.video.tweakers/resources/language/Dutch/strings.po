@@ -13,19 +13,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: nl\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
-
-msgctxt "Addon Summary"
-msgid "Watch tech videos from Tweakers.net (dutch)"
-msgstr "Bekijk technologie videos van Tweakers.net (dutch)"
-
-msgctxt "Addon Description"
-msgid "Watch tech videos from Tweakers.net (dutch)"
-msgstr "Bekijk technologie videos van Tweakers.net (dutch)"
-
-msgctxt "Addon Disclaimer"
-msgid "For bugs, requests or general questions visit the tweakers.net thread on the XBMC forum."
-msgstr "Bugs of andere feedback op deze plugin kan geplaatst worden in de Tweakers.net thread op het XBMC forum."
 
 msgctxt "#30000"
 msgid "Videos"

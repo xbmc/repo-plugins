@@ -13,6 +13,19 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Watch tech videos from Tweakers.net (dutch)"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Watch tech videos from Tweakers.net (dutch)"
+msgstr ""
+
+msgctxt "Addon Disclaimer"
+msgid "For bugs, requests or general questions visit the tweakers.net thread on the XBMC forum."
+msgstr ""
 
 msgctxt "#30000"
 msgid "Videos"

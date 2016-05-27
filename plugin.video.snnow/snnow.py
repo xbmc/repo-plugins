@@ -12,7 +12,7 @@ class SportsnetNow:
         self.CONFIG_URI = 'http://nlmobile.cdnak.neulion.com/sportsnetnow/config/config_ios_r3.xml'
         self.CHANNELS_URI = 'http://now.sportsnet.ca/service/channels?format=json'
         self.AUTHORIZED_MSO_URI = 'https://sp.auth.adobe.com/adobe-services/1.0/config/SportsnetNow'
-        self.PUBLISH_POINT = 'http://now.sportsnet.ca/service/publishpoint?format=json'
+        self.PUBLISH_POINT = 'http://now.sportsnet.ca/service/publishpoint?'
         self.USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 8_3 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12F69 ipad sn now 4.0912'
         self.EPG_PREFIX = 'http://smb.cdnak.nyc.neulion.com/u/smb/sportsnetnow/configs/epg/'
 
@@ -217,11 +217,14 @@ class SportsnetNow:
             print "Invalid MSO"
             return None
 
-
         # Authorize with the MSO
         if not mso.authorize(self, username, password):
             print "Failed to authorize with MSO"
             return False
+
+        channels = self.getChannelResourceMap()
+        if mso.getID() == 'Sportsnet':
+            return True
 
         ap = adobe.AdobePass()
 
@@ -229,9 +232,7 @@ class SportsnetNow:
             print "Session device failed."
             return False
 
-        channels = self.getChannelResourceMap()
         result = ap.preAuthorize(self, channels)
-
         if not result:
             print "Preauthorize failed."
             return False
@@ -253,11 +254,14 @@ class SportsnetNow:
 
         mso_id = mso.getID()
 
-        ap = adobe.AdobePass()
-        if not ap.authorizeDevice(self, mso_id, name):
-            print "Authorize device failed"
-            return None
-        token = ap.deviceShortAuthorize(self, msoName)
+        if mso_id == 'Sportsnet':
+            token = None
+        else:
+            ap = adobe.AdobePass()
+            if not ap.authorizeDevice(self, mso_id, name):
+                print "Authorize device failed"
+                return None
+            token = ap.deviceShortAuthorize(self, msoName)
 
         stream_uri = self.getPublishPoint(id, name, token)
         return stream_uri
@@ -269,11 +273,14 @@ class SportsnetNow:
         @param name the channel name
         @param token the token to authorize the stream
         """
-        values = { 'id' : id,
+        values = { 'format' : 'json',
+                   'id' : id,
                    'type' : 'channel',
-                   'nt' : '1',
-                   'aprid' : name,
-                   'aptoken' : token }
+                   'nt' : '1'}
+
+        if token:
+            values['aprid'] = name
+            values['aptoken'] = token
 
         jar = Cookies.getCookieJar()
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
@@ -283,6 +290,9 @@ class SportsnetNow:
             resp = opener.open(self.PUBLISH_POINT, urllib.urlencode(values))
         except urllib2.URLError, e:
             print e.args
+            return ''
+        except urllib2.HTTPError, e:
+            print e.getcode()
             return ''
         Cookies.saveCookieJar(jar)
 

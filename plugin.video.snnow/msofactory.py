@@ -1,4 +1,4 @@
-import rogers, shawgo, telus, cogeco
+import sportsnet, rogers, shawgo, telus, cogeco
 
 class MSOFactory:
 
@@ -9,7 +9,9 @@ class MSOFactory:
         @name the MSO name (eg: Rogers)
         """
 
-        if name == "Rogers":
+        if name == "Sportsnet":
+            return sportsnet.Sportsnet()
+        elif name == "Rogers":
             return rogers.Rogers()
         elif name == "ShawGo":
             return shawgo.ShawGo()

@@ -1,3 +1,8 @@
+[B]Version 1.0.5[/B]
+
+- Add MSO independant Sportsnet authentication.
+- Fix setting lable bug.
+
 [B]Version 1.0.4[/B]
 
 - Add Cogeco MSO support.

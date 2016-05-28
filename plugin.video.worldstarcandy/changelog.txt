@@ -1,0 +1,2 @@
+v1.0.0 (2016-05-26):
+- initial version

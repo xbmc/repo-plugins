@@ -49,6 +49,19 @@ class Main:
                 ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)),
                      xbmc.LOGNOTICE)
 
+        self.plugin_category = LANGUAGE(30004)
+        self.next_page_possible = "False"
+        # Get the search-string from the user
+        keyboard = xbmc.Keyboard('', LANGUAGE(30004))
+        keyboard.doModal()
+        if keyboard.isConfirmed():
+            self.search_string = keyboard.getText()
+            self.video_list_page_url = self.video_list_page_url % (self.search_string)
+
+        if self.DEBUG == 'true':
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)), xbmc.LOGNOTICE)
+
         if self.next_page_possible == 'True':
             # Determine current item number, next item number, next_url
             # f.e. http://www.gamekings.nl/category/videos/page/001/
@@ -76,9 +89,10 @@ class Main:
         #
         self.getVideos()
 
-    #
-    # Get videos
-    #
+        #
+        # Get videos
+        #
+
     def getVideos(self):
         #
         # Init

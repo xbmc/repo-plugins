@@ -44,5 +44,10 @@ else:
     #
     elif action == 'play':
         import gamekings_play as plugin
+    #
+    # Play
+    #
+    elif action == 'search':
+        import gamekings_search as plugin
 
 plugin.Main()

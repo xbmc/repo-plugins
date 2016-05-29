@@ -52,7 +52,7 @@ class Main:
         # Gamekings Extra
         #
         parameters = {"action": "list", "plugin_category": LANGUAGE(30002),
-                      "url": "http://www.gamekings.nl/category/nieuws/page/001/", "next_page_possible": "True"}
+                      "url": "http://www.gamekings.nl/?s=gamekings+extra", "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30002), iconImage="DefaultFolder.png")
         is_folder = True
@@ -64,7 +64,7 @@ class Main:
         # Trailers
         #
         parameters = {"action": "list", "plugin_category": LANGUAGE(30003),
-                      "url": "http://www.gamekings.nl/tag/Trailer/page/001/", "next_page_possible": "True"}
+                      "url": "http://www.gamekings.nl/?s=trailer", "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30003), iconImage="DefaultFolder.png")
         is_folder = True
@@ -73,10 +73,10 @@ class Main:
         xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
 
         #
-        # E3 2015
+        # Search in Videos
         #
-        parameters = {"action": "list", "plugin_category": LANGUAGE(30004),
-                      "url": "http://www.gamekings.nl/tag/E3-2015/page/001/", "next_page_possible": "True"}
+        parameters = {"action": "search", "plugin_category": LANGUAGE(30004),
+                      "url": "http://www.gamekings.nl/?cat=3&s=%s", "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30004), iconImage="DefaultFolder.png")
         is_folder = True

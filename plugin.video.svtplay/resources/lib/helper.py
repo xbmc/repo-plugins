@@ -152,7 +152,7 @@ def elementExists(html, etype, attrs):
 
 
 def prepareImgUrl(url, baseUrl):
-  if url.startswith("//www.svt.se"):
+  if url.startswith("//"):
     url = url.lstrip("//")
     url = "http://" + url
   elif not url.startswith("http://") and baseUrl:

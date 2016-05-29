@@ -31,7 +31,6 @@ class Main:
         self.plugin_url = sys.argv[0]
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
-        # Get the video_page_url.
 
         # Get plugin settings
         self.DEBUG = SETTINGS.getSetting('debug')
@@ -63,16 +62,14 @@ class Main:
         #
         # Init
         #
-        no_url_found = False
-        unplayable_media_file = False
-        have_valid_url = False
+        video_url = ""
 
         #
         # Get current list item details
         #
-        #title = unicode(xbmc.getInfoLabel("listitem.Title"), "utf-8")
+        # title = unicode(xbmc.getInfoLabel("listitem.Title"), "utf-8")
         thumbnail = xbmc.getInfoImage("list_item.Thumb")
-        #studio = unicode(xbmc.getInfoLabel("list_item.Studio"), "utf-8")
+        # studio = unicode(xbmc.getInfoLabel("list_item.Studio"), "utf-8")
         plot = unicode(xbmc.getInfoLabel("list_item.Plot"), "utf-8")
         genre = unicode(xbmc.getInfoLabel("list_item.Genre"), "utf-8")
 
@@ -87,10 +84,9 @@ class Main:
         http_communicator = HTTPCommunicator()
 
         html_data = ''
-        # Sometimes a page request gets a HTTP Error 500: Internal Server Error
-        # f.e. http://www.gamekings.nl/videos/het-fenomeen-minecraft/
         try:
             html_data = http_communicator.get(self.video_page_url)
+            html_data_str = str(html_data)
         except urllib2.HTTPError, error:
             if self.DEBUG == 'true':
                 xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
@@ -100,131 +96,63 @@ class Main:
             xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30507) % (str(error)))
             exit(1)
 
-        soup = BeautifulSoup(html_data)
-
-        stream_gamekings_tv = False
-        gogo_video = False
-        gogo_youtube_video = False
-        youtube_video = False
-
         # Get the video url
+        # <div class="content  content--page  content--bglight  content--blue">
+        #             <div class="video">
+        #             <div id='videoplayer'></div>
+        #             <script type="text/javascript">
+        #                 jwplayer('videoplayer').setup({
+        #                     file: 'https://player.vimeo.com/external/166503498.hd.mp4?s=c44264eced6082c0789371cb5209af96bc44035b',
+        #                     image: 'http://www.gamekings.nl/wp-content/uploads/20160513_gk1702_splash.jpg',
+        #                     title: 'Gamekings S17E02: De Synergie Aflevering',
+        #                     width: '100%',
+        #                     aspectratio: '16:9',
+        #                     skin: '',
+        #                     primary: 'html5',
+        #                     autostart: 'true',
+        #                     startparam: 'start',
+        #                     ...
+        no_url_found = False
+        have_valid_url = True
+        start_pos_video_url = html_data_str.find("http://player.vimeo.com")
+        if start_pos_video_url == -1:
+            start_pos_video_url = html_data_str.find("https://player.vimeo.com")
+            if start_pos_video_url == -1:
+                start_pos_video_url = html_data_str.find("http://www.youtube.com/")
+                if start_pos_video_url == -1:
+                    start_pos_video_url = html_data_str.find("https://www.youtube.com/")
+                    if start_pos_video_url == -1:
+                        no_url_found = True
+                        have_valid_url = False
 
-        # Is a stream?
-
-        # this is f.e. for Videos
-        # <meta property="og:video" content="http://stream.gamekings.nl/20130306_SpecialForces.mp4"/>
-        # sometimes the content is not (!!) correct and the real link will be "http://stream.gamekings.nl/large/20130529_E3Journaal.mp4" :(
-        # May 2014: videos are vimeo files now:
-        # <meta property="og:video" content="http://stream.gamekings.nl/http://player.vimeo.com/external/111637217.hd.mp4?s=10e5d0efd4d10756b535b115140ebe13"/>
-        video_urls = soup.findAll('meta', attrs={'content': re.compile("^http://stream.gamekings.nl/")}, limit=1)
-        if len(video_urls) == 0:
-            # let's search for something else
-
-            # is it youtube?
-
-            # <iframe src="https://www.youtube.com/embed/8wTWeRg8RGQ" height="315" width="560" allowfullscreen="" frameborder="0"></iframe>
-            video_urls = soup.findAll('iframe', attrs={'src': re.compile("^https://www.youtube.com/embed/")}, limit=1)
-            if len(video_urls) == 0:
-                pos_of_gogo_video = str(html_data).find('gogoVideo')
-                pos_of_youtube_after_gogo_video = str(html_data).find('www.youtube.com/watch?', pos_of_gogo_video)
-
-                # is it gogo video or gogo youtube video?
-
-                if pos_of_gogo_video < 0:
-                    pass
-                else:
-                    if pos_of_youtube_after_gogo_video < 0:
-                        # This is f.e. for Gamekings Extra
-                        # <script type="text/javascript">
-                        #   gogo_video(92091,"MjAxNDExMTNfRXh0cmEubXA0LGh0dHA6Ly93d3cuZ2FtZWtpbmdzLnR2L3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDE0MTExNF9FeHRyYV9zcGxhc2gtMTAyNHg1NzYuanBnLEdhbWVraW5ncyBFeHRyYTogV2Vsa2UgZ2FtZXMgc3BlbGVuIHdpaiBkaXQgbmFqYWFyPw==");
-                        # </script>
-                        # the base86 encode string looks like this decoded:
-                        # 20141113_Extra.mp4,http://www.gamekings.nl/wp-content/uploads/20141114_Extra_splash-1024x576.jpg,Gamekings Extra: Welke games spelen wij dit najaar?
-                        gogo_video = True
-                        # ignore youtube links in the comments
-                    else:
-                        # This is f.e. for Trailers
-                        # gogo_video("http://www.gamekings.nl/wp-content/uploads/nieuws20150723_LifeisStrangeE4-1024x576.jpg","http://www.youtube.com/watch?v=AukgNY6Uxww",pseudo,host);
-                        gogo_youtube_video = True
-            else:
-                youtube_video = True
-        else:
-            stream_gamekings_tv = True
-
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "stream_gamekings_tv", str(stream_gamekings_tv)), xbmc.LOGNOTICE)
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "gogo_video", str(gogo_video)), xbmc.LOGNOTICE)
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "youtube_video", str(youtube_video)), xbmc.LOGNOTICE)
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "gogo_youtube_video", str(gogo_youtube_video)), xbmc.LOGNOTICE)
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(video_urls)", str(len(video_urls))), xbmc.LOGNOTICE)
-
-        if stream_gamekings_tv or gogo_video or youtube_video or gogo_youtube_video:
-            if stream_gamekings_tv:
-                video_url = str(video_urls[0]['content'])
-            elif gogo_video:
-                search_for_string = 'gogoVideo'
-                begin_pos = str(html_data).find(search_for_string)
-                begin_pos_encoded_string = str(html_data).find('"', begin_pos)
-                end_pos_encoded_string = str(html_data).find('"', begin_pos_encoded_string + 1)
-                encoded_string = str(html_data)[begin_pos_encoded_string + 1:end_pos_encoded_string]
-                video_urls_dec = str(base64.b64decode(encoded_string))
-                video_urls_dict = video_urls_dec.split(',')
-                video_url = str(video_urls_dict[0])
-            elif youtube_video:
-                video_url = str(video_urls[0]['src'])
-            elif gogo_youtube_video:
-                search_for_string = 'www.youtube.com/watch?v='
-                begin_pos = str(html_data).find(search_for_string, pos_of_gogo_video) + len('www.youtube.com/watch?v=')
-                end_pos = str(html_data).find('"', begin_pos)
-                youtube_id = str(html_data)[begin_pos:end_pos]
-                video_url = youtube_id
-
-            if self.DEBUG == 'true':
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "video_url", str(video_url)), xbmc.LOGNOTICE)
-
-            # Check if it's a vimeo file
-            if video_url.count("vimeo") > 0:
-                # the vimeo video_url looks like this: http://stream.gamekings.nl/http://player.vimeo.com/external/118907131.hd.mp4?s=486e834bab4dc380743d814653c52050
-                # therefore the stream stuff got to be removed
-                video_url = video_url.replace("http://stream.gamekings.nl/large", "")
-                video_url = video_url.replace("http://stream.gamekings.nl/", "")
-                have_valid_url = True
-            else:
-                if youtube_video:
-                    youtube_id = video_url.replace("https://www.youtube.com/embed/", "")
-                    video_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtube_id
-                    have_valid_url = True
-                else:
-                    if gogo_youtube_video:
-                        video_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtube_id
-                        have_valid_url = True
-                    else:
-                        video_url = "http://stream.gamekings.nl/large/" + video_url
-                        if http_communicator.exists(video_url):
-                            have_valid_url = True
-                        else:
-                            video_url = video_url.replace("http://stream.gamekings.nl/large",
-                                                          "http://stream.gamekings.nl/")
-                            if http_communicator.exists(video_url):
-                                have_valid_url = True
-                            else:
-                                unplayable_media_file = True
-        else:
-            no_url_found = True
-
+        # Make video url
         if have_valid_url:
+            end_pos_video_url = html_data_str.find("'", start_pos_video_url)
+            video_url = html_data_str[start_pos_video_url:end_pos_video_url]
+            if video_url.find("http://www.youtube.com/channel/") >= 0:
+                no_url_found = True
+                have_valid_url = False
+            else:
+                if video_url.find("https://www.youtube.com/channel/") >= 0:
+                    no_url_found = True
+                    have_valid_url = False
+
             if self.DEBUG == 'true':
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "video_url to be played", str(video_url)), xbmc.LOGNOTICE)
+                xbmc.log(
+                    "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "video_url", str(video_url)),
+                    xbmc.LOGNOTICE)
 
         # Play video
         if have_valid_url:
+            if video_url.find("youtube") > 0:
+                youtube_id = str(video_url)
+                youtube_id = youtube_id.replace("http://www.youtube.com/embed/", "")
+                youtube_id = youtube_id.replace("https://www.youtube.com/embed/", "")
+                youtube_id = youtube_id.replace("http://www.youtube.com/watch?v=", "")
+                youtube_id = youtube_id.replace("https://www.youtube.com/watch?v=", "")
+                youtube_id = youtube_id.replace("http://www.youtube.com/", "")
+                youtube_id = youtube_id.replace("https://www.youtube.com/", "")
+                video_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtube_id
             list_item = xbmcgui.ListItem(path=video_url)
             xbmcplugin.setResolvedUrl(self.plugin_handle, True, list_item)
         #
@@ -232,5 +160,3 @@ class Main:
         #
         elif no_url_found:
             xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30505))
-        elif unplayable_media_file:
-            xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30506))

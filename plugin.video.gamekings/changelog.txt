@@ -1,8 +1,16 @@
+v1.2.1 (2016-05-29)
+- using po-files
+
+v1.2.0 (2016-05-20)
+- updated due to website change
+- removed E3
+- added Search in Videos
+
 v1.1.9 (2016-02-20)
-updated to latest requirements for a Kodi-addon
-changed fanart
-added fanart-blurred
-changed icon
+- updated to latest requirements for a Kodi-addon
+- changed fanart
+- added fanart-blurred
+- changed icon
 
 v1.1.8 (2015-09-11) :
 - changes due to website url extension change

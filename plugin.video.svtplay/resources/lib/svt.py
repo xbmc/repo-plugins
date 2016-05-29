@@ -6,8 +6,8 @@ import helper
 import CommonFunctions as common
 
 BASE_URL = "http://svtplay.se"
-API_URL = "http://svtplay.se/api/"
-FORSLAG_JSON_URL = "http://www.svtplay.se/ajax/sok/forslag.json"
+API_URL = "/api/"
+JSON_URL = "/ajax/sok/forslag.json"
 
 URL_A_TO_O = "/program"
 URL_TO_SEARCH = "/sok?q="
@@ -31,7 +31,7 @@ def getAtoO():
   """
   Returns a list of all programs, sorted A-Z.
   """
-  r = requests.get(FORSLAG_JSON_URL)
+  r = requests.get(BASE_URL+JSON_URL)
   if r.status_code != 200:
     common.log("Could not fetch forslag JSON!")
     return None
@@ -48,7 +48,7 @@ def getAtoO():
     item = {}
     item["title"] = common.replaceHTMLCodes(program["title"])
     item["thumbnail"] = helper.prepareThumb(program["thumbnail"], baseUrl=BASE_URL)
-    item["url"] = program["url"]
+    item["url"] = program["url"].replace("/senaste","")
     items.append(item)
 
   return items
@@ -204,7 +204,7 @@ def getProgramsByLetter(letter):
   Returns a list of all program starting with the supplied letter.
   """
   letter = urllib.unquote(letter)
-  url = API_URL+"programs_page"
+  url = BASE_URL+API_URL+"programs_page"
  
   r = requests.get(url)
   if r.status_code != 200:
@@ -236,7 +236,7 @@ def getSearchResults(search_term):
   Returns a list of both clips and programs
   for the supplied search URL.
   """
-  url = API_URL+"search_page;q="+search_term
+  url = BASE_URL+API_URL+"search_page;q="+search_term
   r = requests.get(url)
   if r.status_code != 200:
     common.log("Did not get any response for: "+url)
@@ -287,7 +287,7 @@ def getChannels():
   """
   Returns the live channels from the page "Kanaler".
   """
-  url = API_URL+"channel_page"
+  url = BASE_URL+API_URL+"channel_page"
   r = requests.get(url)
   if r.status_code != 200:
     common.log("Could not get response for: "+url)
@@ -321,7 +321,6 @@ def getEpisodes(url):
   """
   Returns the episodes for a program URL.
   """
-  url = url.replace("/senaste","")
   return getProgramItems(SECTION_EPISODES, url)
 
 def getClips(url):
@@ -399,7 +398,7 @@ def getProgramItems(section_name, url=None):
 def getItems(section_name, page):
   if not page:
     page = 1
-  url = API_URL+section_name+"_page"+";sida="+str(page)
+  url = BASE_URL+API_URL+section_name+"_page"+";sida="+str(page)
   r = requests.get(url)
   if r.status_code != 200:
     common.log("Did not get any response for: "+url)

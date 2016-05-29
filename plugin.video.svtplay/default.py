@@ -340,7 +340,7 @@ def addDirectoryItem(title, params, thumbnail = None, folder = True, live = Fals
 
   if info:
     li.setInfo("Video", info)
-    if "fanart" in info.keys() and helper.getSetting("showfanart"):
+    if "fanart" in info.keys():
       li.setArt({"fanart": info["fanart"]})
 
   xbmcplugin.addDirectoryItem(PLUGIN_HANDLE, sys.argv[0] + '?' + urllib.urlencode(params), li, folder)

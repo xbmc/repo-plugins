@@ -1,3 +1,12 @@
+v1.3.1 (2016-05-30):
+using po-files
+fix in listing shows due to change in website
+add screwattack
+
+v1.3.0 (2016-05-11) (kudos to Abolfazl):
+improved login for the non-rt-websites
+improved and simplified getting of the video-url
+
 v1.2.9 (2016-03-12) :
 changed the listing and playing of videos
 the contextual menu item 'Play from here' is available now, it queues all the videos in the list from a certain point

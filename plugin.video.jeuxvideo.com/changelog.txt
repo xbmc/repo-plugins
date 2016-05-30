@@ -1,12 +1,15 @@
+v1.2.1 (30/05/2016)
+- Fixed: some videos were not played (the thumbnails were not displayed either)
+- Fixed: the label 'Android' was missing
+
 v1.2.0 (26/03/2016)
-- Fixé: utilise les flux RSS comme source, l'ancienne API a été supprimée
-  (merci à Celedhrim)
+- Fixed: the RSS feed is now used as data source, the previous API has been discontinued (thanks to Celedhrim)
 
 v1.1.0 (27/01/2015)
-- Ajout: option pour vider le cache
-- Fixé: lecture des vidéos en 400p et plus (changement de l'API jv.com (merci à Celedhrim)
-- Fixé: certaines résolutions affichées dans le nenu contextuel n'étaient pas dispo
-- Changé: Réduction de la durée du cache
+- Added: option to clear the cache
+- Fixed: videos in resolutions greater than 400p are back (thanks to Celedhrim)
+- Fixed: some resolutions displayed in context menu were not actually available
+- Changed: cache has now a shorter lifespan
 
 v1.0.0 (13/12/2014)
-- Première release
+- First release

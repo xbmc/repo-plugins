@@ -65,7 +65,7 @@ def get_videos(category):
 
     for v in videos:
         enc = v.find('enclosure')
-        data = re.search(r'jeuxvideo.com/(?P<path>(?P<kind>.+?)/(?P<id>.+?))(?:\-\D+)?.mp4', enc.attrib['url']).groupdict()
+        data = re.search(r'jeuxvideo.com/(?P<path>(?P<kind>.+?)/(?P<id>.+?))(?:\-\D+)?.mp4$', enc.attrib['url']).groupdict()
         plugin.log.info('uri=%s data=%s', enc.attrib['url'], repr(data))
         result.append(Video(
             title     = unescape(v.find('title').text),
@@ -135,7 +135,7 @@ def index():
         'label': plugin.get_string(30212),
         'path': plugin.url_for('category_index', category='iphone'),
     }, {
-        'label': plugin.get_string(30013),
+        'label': plugin.get_string(30213),
         'path': plugin.url_for('category_index', category='android'),
     } ]
 

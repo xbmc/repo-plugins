@@ -4,21 +4,20 @@
 #
 # Imports
 #
-import os
 import sys
 import urllib
 import xbmcgui
 import xbmcplugin
 import os
 
-from roosterteeth_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
+from roosterteeth_const import LANGUAGE, IMAGES_PATH
 
 RECENTLYADDEDURL = 'http://roosterteeth.com/episode/recently-added?page=001'
 ROOSTERTEETHSHOWSURL = 'http://www.roosterteeth.com/show/'
-ACHIEVEMENTHUNTERURL = 'http://achievementhunter.com/show/'
-THEKNOWSHOWSURL = 'http://theknow.tv/show'
-FUNHAUSSHOWSURL = 'http://fun.haus/show'
-
+ACHIEVEMENTHUNTERURL = 'http://achievementhunter.roosterteeth.com/show/'
+THEKNOWSHOWSURL = 'http://theknow.roosterteeth.com/show'
+FUNHAUSSHOWSURL = 'http://funhaus.roosterteeth.com/show'
+SCREWATTACKURL = 'http://screwattack.roosterteeth.com/show'
 
 #
 # Main class
@@ -83,6 +82,18 @@ class Main:
                       "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30004))
+        is_folder = True
+        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
+        list_item.setProperty('IsPlayable', 'false')
+        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
+
+        #
+        # Screw Attack
+        #
+        parameters = {"action": "list-shows", "plugin_category": LANGUAGE(30005), "url": SCREWATTACKURL,
+                      "next_page_possible": "False"}
+        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        list_item = xbmcgui.ListItem(LANGUAGE(30005))
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
         list_item.setProperty('IsPlayable', 'false')

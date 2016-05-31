@@ -126,9 +126,14 @@ def addGamesLinks(date = '', video_type = "archive"):
         for day_of_week in range(7):
             scoreboard = 'http://data.nba.com/jsonp/5s/json/cms/noseason/scoreboard/%04d%02d%02d/games.json?callback=ciao' % \
                 (date.year, date.month, date.day+day_of_week)
-            scoreboard_request = urllib2.Request(scoreboard, None);
-            scoreboard_response = str(urllib2.urlopen(scoreboard_request).read())
-            scoreboard_response = scoreboard_response[scoreboard_response.find("{"):scoreboard_response.rfind("}")+1]
+            
+            #Continue trying files when the http request fails (eg: 404)
+            try:
+                scoreboard_request = urllib2.Request(scoreboard, None)
+                scoreboard_response = str(urllib2.urlopen(scoreboard_request).read())
+                scoreboard_response = scoreboard_response[scoreboard_response.find("{"):scoreboard_response.rfind("}")+1]
+            except:
+                continue
 
             key = "%04d-%02d-%02d" % (date.year, date.month, date.day+day_of_week)
             scoreboards_jsons[key] = json.loads(scoreboard_response)
@@ -178,12 +183,13 @@ def addGamesLinks(date = '', video_type = "archive"):
                 playoff_game_number = 0
                 playoff_status = ""
                 game_date = game_start_datetime_est.strftime('%Y-%m-%d')
-                for game_more_data in scoreboards_jsons[game_date]['sports_content']['games']['game']:
-                    if game_more_data['game_url'] == seo_name and game_more_data.get('playoffs', ''):
-                        playoff_game_number = int(game_more_data['playoffs']['game_number'])
+                if game_date in scoreboards_jsons:
+                    for game_more_data in scoreboards_jsons[game_date]['sports_content']['games']['game']:
+                        if game_more_data['game_url'] == seo_name and game_more_data.get('playoffs', ''):
+                            playoff_game_number = int(game_more_data['playoffs']['game_number'])
 
-                        if game_more_data['playoffs'].get('home_wins', None) and game_more_data['playoffs'].get('visitor_wins', None):
-                            playoff_status = "%s-%s" % (game_more_data['playoffs']['visitor_wins'], game_more_data['playoffs']['home_wins'])
+                            if game_more_data['playoffs'].get('home_wins', None) and game_more_data['playoffs'].get('visitor_wins', None):
+                                playoff_status = "%s-%s" % (game_more_data['playoffs']['visitor_wins'], game_more_data['playoffs']['home_wins'])
 
                 if game_id != '':
                     # Get pretty names for the team names

@@ -16,10 +16,9 @@ plugin_handle = int(sys.argv[1])
 ADDON = xbmcaddon.Addon(id='plugin.video.iplayerwww')
 sys.path.insert(0, os.path.join(ADDON.getAddonInfo("path"), 'resources', 'lib'))
 
-
 try:
     import ipwww_common as Common
-    from ipwww_common import utf8_unquote_plus, CreateBaseDirectory
+    from ipwww_common import utf8_unquote_plus, CreateBaseDirectory, KidsMode
     import ipwww_video as Video
     import ipwww_radio as Radio
 except ImportError, error:
@@ -95,10 +94,11 @@ try:
 except:
     pass
 
-
-
 # These are the modes which tell the plugin where to go.
-if mode is None or url is None or len(url) < 1:
+if mode == 1:
+    KidsMode()
+
+elif mode is None or url is None or len(url) < 1:
     CreateBaseDirectory(content_type)
 
 # Modes 101-119 will create a main directory menu entry

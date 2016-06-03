@@ -336,8 +336,54 @@ def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=N
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     return True
 
+def KidsMode():
+    dialog = xbmcgui.Dialog()
+    old_password = ''
+    try:
+        old_password = ADDON.getSetting('kids_password')
+        old_password = old_password.decode('base64', 'strict')
+    except:
+        pass
+    password = ''
+    if old_password:
+        password = dialog.input(translation(30181), type=xbmcgui.INPUT_ALPHANUM)
+    if old_password == password:
+        new_password = dialog.input(translation(30182), type=xbmcgui.INPUT_ALPHANUM)
+        ADDON.setSetting('kids_password',new_password.encode('base64','strict'))
+    quit()
 
 def CreateBaseDirectory(content_type):
+    if ADDON.getSetting('kids_password'):
+        if ADDON.getSetting('streams_autoplay') == 'true':
+            live_mode = 203
+        else:
+            live_mode = 123
+        AddMenuEntry(translation(30329), 'cbeebies_hd', live_mode,
+                     xbmc.translatePath(
+                         'special://home/addons/plugin.video.iplayerwww/media/cbeebies.png'
+                     ),
+                     '', '')
+        AddMenuEntry(translation(30330), 'cbbc_hd', live_mode,
+                     xbmc.translatePath(
+                         'special://home/addons/plugin.video.iplayerwww/media/cbbc.png'
+                     ),
+                     '', '')
+        AddMenuEntry(translation(30331), 'cbeebies', 125,
+                     xbmc.translatePath(
+                         'special://home/addons/plugin.video.iplayerwww/media/cbeebies.png'
+                     ),
+                     '', '')
+        AddMenuEntry(translation(30332), 'cbbc', 125,
+                     xbmc.translatePath(
+                         'special://home/addons/plugin.video.iplayerwww/media/cbbc.png'
+                     ),
+                     '', '')
+        AddMenuEntry(translation(30333), 'p02pnn9d', 131,
+                     xbmc.translatePath(
+                         'special://home/addons/plugin.video.iplayerwww/media/cbeebies.png'
+                     ),
+                     '', '')
+        return
     if content_type == "video":
         AddMenuEntry(translation(30300), 'iplayer', 106, '', '', '')
         AddMenuEntry(translation(30317), 'url', 109, '', '', '')
@@ -397,4 +443,5 @@ def CreateBaseDirectory(content_type):
         AddMenuEntry((translation(30324)+translation(30307)),
                             'url', 117, '', '', '')
         AddMenuEntry(translation(30325), 'url', 119, '', '', '')
+
 

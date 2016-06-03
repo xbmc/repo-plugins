@@ -84,7 +84,19 @@ msgctxt "#30172"
 msgid "All at once"
 msgstr ""
 
+msgctxt "#30180"
+msgid "Switch CBeebies/CBBC only mode on/off"
+msgstr ""
 
+msgctxt "#30181"
+msgid "Enter old password:"
+msgstr ""
+
+msgctxt "#30182"
+msgid "Enter new password (empty to unlock):"
+msgstr ""
+
+msgstr ""
 msgctxt "#30200"
 msgid "Streams"
 msgstr ""
@@ -236,6 +248,26 @@ msgstr ""
 
 msgctxt "#30328"
 msgid "Red Button"
+msgstr ""
+
+msgctxt "#30329"
+msgid "CBeebies Live"
+msgstr ""
+
+msgctxt "#30330"
+msgid "CBBC Live"
+msgstr ""
+
+msgctxt "#30331"
+msgid "CBeebies A-Z"
+msgstr ""
+
+msgctxt "#30332"
+msgid "CBBC A-Z"
+msgstr ""
+
+msgctxt "#30333"
+msgid "CBeebies Radio"
 msgstr ""
 
 

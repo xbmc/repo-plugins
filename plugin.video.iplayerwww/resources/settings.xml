@@ -1,5 +1,10 @@
 <settings>
 <category label="30100">
+    <setting label="30103" type="lsep"  />
+    <setting id="bbc_id_enabled" label="30140" default="false" type="bool" />
+    <setting id="bbc_id_username" label="30141" default="" type="text" enable="eq(-1,true)" subsetting="true"/>
+    <setting id="bbc_id_password" label="30142" default="" type="text" enable="eq(-2,true) + !eq(-1,)" subsetting="true" option="hidden"/>
+    <setting id="kids_mode" label="30180" type="action" action="XBMC.RunPlugin(plugin://plugin.video.iplayerwww?mode=1)"/>
     <setting label="30101" type="lsep"  />
     <setting id="search_signed" label="30110" type="bool" default="false" />
     <setting id="search_ad" label="30120" type="bool" default="false" />
@@ -9,10 +14,6 @@
     <setting id="paginate_episodes" label="30170" type="enum" lvalues="30171|30172" default="1" />
     <setting label="30102" type="lsep"  />
     <setting id="radio_paginate_episodes" label="30170" type="enum" lvalues="30171|30172" default="2" />
-    <setting label="30103" type="lsep"  />
-    <setting id="bbc_id_enabled" label="30140" default="false" type="bool" />
-    <setting id="bbc_id_username" label="30141" default="" type="text" enable="eq(-1,true)" subsetting="true"/>
-    <setting id="bbc_id_password" label="30142" default="" type="text" enable="eq(-2,true) + !eq(-1,)" subsetting="true" option="hidden"/>
 </category>
 <category label="30200">
     <setting label="30103" type="lsep"  />

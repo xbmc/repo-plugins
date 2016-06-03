@@ -3,6 +3,14 @@ plugin.video.hgtv
 
 Kodi Addon for HGTV website
 
+icon.png sourced from public domain : 
+https://commons.wikimedia.org/wiki/File:HGTV_Logo.svg
+
+fanart.jpg sourced from public domain:
+https://commons.wikimedia.org/wiki/File:HGTV_Logo.svg (converted to .jpg)
+
+
+Version 3.0.6 website change, cleanup
 Version 3.0.5 bumped t1mlib version for cacheToDisc problem
 Version 3.0.4 website changes
 Version 3.0.3 website changes

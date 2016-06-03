@@ -20,6 +20,8 @@ msgctxt "#30000"
 msgid "Calm Radio"
 msgstr ""
 
+### SETTINGS ###
+
 msgctxt "#32010"
 msgid "Account Details"
 msgstr ""
@@ -52,6 +54,8 @@ msgctxt "#32024"
 msgid "Best Sound Quality - 320 kb/s"
 msgstr ""
 
+### CATEGORIES ###
+
 msgctxt "#32100"
 msgid "Channels"
 msgstr ""
@@ -76,6 +80,8 @@ msgctxt "#32105"
 msgid "Instant access to your favorites channels"
 msgstr ""
 
+### MEMBERS ###
+
 msgctxt "#32110"
 msgid "This option is for members only"
 msgstr ""
@@ -96,6 +102,12 @@ msgstr ""
 msgctxt "#32202"
 msgid "To enjoy high-quality sound and members only channels, open add-on settings and fill in your account details!"
 msgstr ""
+
+msgctxt "#322023"
+msgid "(VIP)"
+msgstr ""
+
+### MY CHANNELS ###
 
 msgctxt "#32300"
 msgid "Add To My Channels"
@@ -123,4 +135,26 @@ msgstr ""
 
 msgctxt "#32306"
 msgid "Your favorite channels list is empty"
+msgstr ""
+
+### INTRO ###
+
+msgctxt "#32350"
+msgid "My Account"
+msgstr ""
+
+msgctxt "#32351"
+msgid "My Channels"
+msgstr ""
+
+msgctxt "#32352"
+msgid "Exit"
+msgstr ""
+
+msgctxt "#32355"
+msgid "Listen to to over 185"
+msgstr ""
+
+msgctxt "#32356"
+msgid "INCREDIBLE CHANNELS"
 msgstr ""

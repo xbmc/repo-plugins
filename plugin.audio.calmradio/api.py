@@ -1,13 +1,19 @@
+from xbmcaddon import Addon
 from config import config
+from cache import cache
 import requests
 import json
 
 
+ADDON = Addon()
+
+
 class API(object):
-    def __init__(self, addon):
-        self.addon = addon
+    def __init__(self):
+        pass
 
     @staticmethod
+    @cache
     def get_json(url):
         """
         Gets JSON file
@@ -17,32 +23,6 @@ class API(object):
         r = requests.get(url)
         if r.status_code == 200:
             return json.loads(r.text)
-
-    def get_categories(self):
-        """
-        Returns calm radio top level categories
-        :return:
-        """
-        return [
-            {
-                'id': 1,
-                'name': self.addon.getLocalizedString(32100),
-                'image': 'special://home/addons/plugin.audio.calmradio/resources/media/fanart/0.jpg',
-                'description': self.addon.getLocalizedString(32101)
-            },
-            {
-                'id': 3,
-                'name': self.addon.getLocalizedString(32102),
-                'image': 'special://home/addons/plugin.audio.calmradio/resources/media/fanart/3.jpg',
-                'description': self.addon.getLocalizedString(32103)
-            },
-            {
-                'id': 99,
-                'name': self.addon.getLocalizedString(32104),
-                'image': 'special://home/addons/plugin.audio.calmradio/resources/media/fanart/99.jpg',
-                'description': self.addon.getLocalizedString(32105)
-            }
-        ]
 
     def get_all_subcategories(self):
         """
@@ -85,6 +65,8 @@ class API(object):
     def get_favorites(self, username, token):
         """
         Returns users favorites channels
+        :param username: Username
+        :param token: Access token
         :return:
         """
         results = []
@@ -95,6 +77,7 @@ class API(object):
                 for category in self.get_json(config['urls']['calm_channels_api']):
                     for channel in category['channels']:
                         if str(channel['id']) in favorites:
+                            channel['sub_category'] = category['category']
                             results.append(channel)
 
         return results
@@ -102,6 +85,9 @@ class API(object):
     def add_to_favorites(self, username, token, channel_id):
         """
         Returns users favorites channels
+        :param username: Username
+        :param token: Access token
+        :param channel_id: Channel ID
         :return:
         """
         if channel_id > 0 and username and token:
@@ -113,6 +99,9 @@ class API(object):
     def remove_from_favorites(self, username, token, channel_id):
         """
         Returns users favorites channels
+        :param username: Username
+        :param token: Access token
+        :param channel_id: Channel ID
         :return:
         """
         if channel_id > 0 and username and token:
@@ -121,10 +110,13 @@ class API(object):
 
         return False
 
-    def get_url(self, streams, username, token, is_authenticated):
+    def get_streaming_url(self, streams, username, token, is_authenticated):
         """
         Returns the stream URL based on chosen quality
-        :param streams: Chosen quality
+        :param streams: List of available channel streams
+        :param username: Username
+        :param token: Access token
+        :param is_authenticated: Indicates whether user is authenticated
         :return:
         """
         bitrate = {
@@ -132,7 +124,7 @@ class API(object):
             '1': '64',
             '2': '192',
             '3': '320'
-        }[self.addon.getSetting('bitrate') or 0]
+        }[ADDON.getSetting('bitrate') or 0]
 
         if not is_authenticated and 'free' in streams:
             return streams['free']

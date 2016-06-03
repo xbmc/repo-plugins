@@ -1,3 +1,8 @@
+v0.2.0
+- New design
+- Serve images from network
+- Code optimization
+
 v0.1.4
 - Official calmradio.com Kodi add-on
 

@@ -5,6 +5,5 @@
     <setting id="is_sponsor" 	      type="bool"   label="30015" 											default="false"/>
     <setting id="username" 	     	  type="text"   label="30016" 											default="" 							  enable="eq(-1,true)"/>
     <setting id="password" 		      type="text"   label="30017" 											default="" 			option="hidden"   enable="eq(-2,true)"/>
-	<setting id="debug" 		      type="bool"   label="30018"   										default="false"/>
   </category>
 </settings>

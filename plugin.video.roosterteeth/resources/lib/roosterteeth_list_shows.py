@@ -28,22 +28,17 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        # Get plugin settings
-        self.DEBUG = SETTINGS.getSetting('debug')
-
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
+                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
 
         # Parse parameters...
         self.plugin_category = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['plugin_category'][0]
         self.video_list_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['url'][0]
         self.next_page_possible = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                 ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)),
-                     xbmc.LOGNOTICE)
+                     xbmc.LOGDEBUG)
 
         #
         # Get the videos...
@@ -67,6 +62,7 @@ class Main:
         html_source = response.text
         html_source = html_source.encode('utf-8', 'ignore')
 
+        # for roosterteeth
         #       <li>
         #         <a href="http://www.roosterteeth.com/show/red-vs-blue">
         #             <div class="block-container">
@@ -78,39 +74,60 @@ class Main:
         #             <p class="post-stamp">13 seasons | 377 episodes</p>
         #         </a>
         #       </li>
+
+        # for achievementhunter
+        # <li>
+        #   <a href="http://achievementhunter.roosterteeth.com/show/off-topic-the-achievement-hunter-podcast">
+        #     <div class="block-container">
+        #         <div class="image-container">
+        # 	         <img src="//s3.amazonaws.com/cdn.roosterteeth.com/uploads/images/65924ffb-2ca9-407d-bbd9-b717ed944f75/sm/2013912-1446152735286-Off_Topic_1400x_Logo.jpg" alt="Off Topic">
+        # 	      </div>
+        #     </div>
+        #     <p class="name">Off Topic</p>
+        #     <p class="post-stamp">2 seasons | 30 episodes</p>
+        #   </a>
+        # </li>
+
         # Parse response...
         soup = BeautifulSoup(html_source)
 
         shows = soup.findAll('li')
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(shows)", str(len(shows))), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "len(shows)", str(len(shows))), xbmc.LOGDEBUG)
 
         for show in shows:
-            # skip show if it doesn't contain the website show url (https or http)
-            if str(show.a).find(self.video_list_page_url) < 0:
-                video_list_page_url_http = str(self.video_list_page_url).replace("https", "http")
-                if str(show.a).find(video_list_page_url_http) < 0:
-                    if self.DEBUG == 'true':
-                        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                            ADDON, VERSION, DATE, "skipped show that doesn't contain website show url",
-                            str(self.video_list_page_url)), xbmc.LOGNOTICE)
-                        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                            ADDON, VERSION, DATE, "skipped show that doesn't contain website show url",
-                            str(video_list_page_url_http)), xbmc.LOGNOTICE)
-                        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                            ADDON, VERSION, DATE, "skipped show that doesn't contain website show url",
-                            str(show)), xbmc.LOGNOTICE)
-                    continue
+            # Skip the show if it contains /episode/
+            # <li class="upcoming-featured">
+            #         <a href="http://roosterteeth.com/episode/ahwu-2016-memorial-day-ahwu-for-may-30-th-2016-319">
+            #             <div class="block-container">
+            #                 <p class="air-date">Today, 5/30</p>
+            #                 <p class="air-time">2:00 pm CDT</p>
+            #                 <p class="air-countdown">Starting 2 hours from now</p>
+            #                 <div class="image-container">
+            #                     <img src="//s3.amazonaws.com/cdn.roosterteeth.com/uploads/images/3dad2181-68ed-46dc-87dd-3c80bc4bef9e/sm/2013912-1464386396337-ahwu_thumb.jpg">
+            #                 </div>
+            #             <p class="name">
+            #                                             <strong>AHWU:</strong> Memorial Day! – AHWU for May 30th , 2016 (#319)
+            #             </p>
+            #             </div>
+            #         </a>
+            #     </li>
+            if str(show).find("/episode/") < 0 :
+                pass
+            else:
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                        ADDON, VERSION, DATE,
+                        "skipped /episode/ show ",
+                        str(show)), xbmc.LOGDEBUG)
+                continue
 
             # Skip a show if it does not contain class="name"
             pos_classname = str(show).find('class="name"')
             if pos_classname < 0:
-                if self.DEBUG == 'true':
-                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                         ADDON, VERSION, DATE, 'skipped show without class="name"', str(show)),
-                             xbmc.LOGNOTICE)
+                             xbmc.LOGDEBUG)
                 continue
 
             url = show.a['href']
@@ -129,11 +146,11 @@ class Main:
 
             # Add to list...
             list_item = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_url)
-            list_item.setInfo("video", {"title": title, "studio": ADDON})
             list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
                               'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
-            list_item.setProperty('IsPlayable', 'true')
-            parameters = {"action": "list-episodes", "show_name": title, "url": url, "next_page_possible": "False", "title": title}
+            list_item.setProperty('IsPlayable', 'false')
+            parameters = {"action": "list-episodes", "show_name": title, "url": url, "next_page_possible": "False",
+                          "title": title}
             url = self.plugin_url + '?' + urllib.urlencode(parameters)
             is_folder = True
             # Add refresh option to context menu
@@ -149,4 +166,3 @@ class Main:
         xbmcplugin.addSortMethod(handle=self.plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_NONE)
         # Finish creating a virtual folder.
         xbmcplugin.endOfDirectory(self.plugin_handle)
-

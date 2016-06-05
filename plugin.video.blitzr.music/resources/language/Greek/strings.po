@@ -1,0 +1,129 @@
+# Kodi Media Center language file
+# Addon Name: Blitzr Music
+# Addon id: plugin.video.blitzr.music
+# Addon version: 1.0.0
+# Addon Provider: lambda
+
+msgid ""
+msgstr ""
+
+
+msgctxt "#30001"
+msgid "Search"
+msgstr "Αναζήτηση"
+
+msgctxt "#30002"
+msgid "Trending"
+msgstr "Τάσεις"
+
+msgctxt "#30003"
+msgid "Blitzr Radio"
+msgstr "Ράδιο Blitzr"
+
+msgctxt "#30004"
+msgid "Popular Artists"
+msgstr "Δημοφιλείς καλλιτέχνες"
+
+msgctxt "#30005"
+msgid "Recommended Artists"
+msgstr "Προτεινόμενοι καλλιτέχνες"
+
+msgctxt "#30006"
+msgid "Collection: Artists"
+msgstr "Συλλογή: Καλλιτέχνες"
+
+msgctxt "#30007"
+msgid "Collection: Albums"
+msgstr "Συλλογή: ʼλμπουμ"
+
+msgctxt "#30008"
+msgid "Collection: Songs"
+msgstr "Συλλογή: Τραγούδια"
+
+msgctxt "#30009"
+msgid "Collection: Similar"
+msgstr "Συλλογή: Παρόμοια"
+
+msgctxt "#30010"
+msgid "Playlists"
+msgstr "Λίστες"
+
+msgctxt "#30011"
+msgid "History"
+msgstr "Ιστορικό"
+
+msgctxt "#30021"
+msgid "Search Artist"
+msgstr "Αναζήτηση καλλιτέχνη"
+
+msgctxt "#30022"
+msgid "Search Album"
+msgstr "Αναζήτηση άλμπουμ"
+
+msgctxt "#30023"
+msgid "Search Song"
+msgstr "Αναζήτηση τραγουδιού"
+
+msgctxt "#30181"
+msgid "Blitzr account is missing!"
+msgstr "Λογαριασμός Blitzr: Λείπει!"
+
+msgctxt "#30182"
+msgid "Are you sure?"
+msgstr "Είστε σίγουροι;"
+
+msgctxt "#30183"
+msgid "Rename playlist"
+msgstr "Μετονομασία λίστας"
+
+msgctxt "#30184"
+msgid "Add to playlist"
+msgstr "Προσθήκη σε λίστα"
+
+msgctxt "#30185"
+msgid "Add to new playlist"
+msgstr "Προσθήκη σε νεα λίστα"
+
+msgctxt "#30201"
+msgid "Account"
+msgstr "Λογαριασμός"
+
+msgctxt "#30202"
+msgid "Email"
+msgstr "Email"
+
+msgctxt "#30203"
+msgid "Password"
+msgstr "Κωδικός"
+
+msgctxt "#30501"
+msgid "Add to collection"
+msgstr "Προσθήκη στη συλλογή"
+
+msgctxt "#30502"
+msgid "Remove from collection"
+msgstr "Αφαίρεση από συλλογή"
+
+msgctxt "#30503"
+msgid "Remove recommendation"
+msgstr "Αφαίρεση πρότασης"
+
+msgctxt "#30504"
+msgid "Add to playlist"
+msgstr "Προσθήκη σε λίστα"
+
+msgctxt "#30505"
+msgid "Add to new playlist"
+msgstr "Προσθήκη σε νεα λίστα"
+
+msgctxt "#30506"
+msgid "Remove from playlist"
+msgstr "Αφαίρεση από λίστα"
+
+msgctxt "#30507"
+msgid "Rename playlist"
+msgstr "Μετονομασία λίστας"
+
+msgctxt "#30508"
+msgid "Delete playlist"
+msgstr "Διαγραφή λίστας"

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.screenrant.com" version="1.0.0" name="Screen Rant" provider-name="lambda">
+	<requires>
+		<import addon="xbmc.python" version="2.24.0" />
+		<import addon="plugin.video.youtube" optional="true" />
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="addon.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Screen Rant addon for Kodi</summary>
+		<description lang="en">The #1 Independent Movie and TV News Website</description>
+		<disclaimer lang="en">This addon is not published nor endorsed by screenrant.com</disclaimer>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+		<source>https://github.com/lambda81/plugin.video.screenrant.com</source>
+		<website>http://screenrant.com/</website>
+		<platform>all</platform>
+		<language></language>
+		<forum></forum>
+		<email></email>
+	</extension>
+</addon>

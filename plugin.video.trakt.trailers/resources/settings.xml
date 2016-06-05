@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<setting type="lsep" label="30201" />
+	<setting id="trakt.user" type="action" label="30202" option="close" action="RunPlugin(plugin://plugin.video.trakt.trailers/?action=authTrakt)" />
+	<setting id="trakt.token" type="text" option="hidden" visible="false" label="" default="" />
+	<setting id="trakt.refresh" type="text" option="hidden" visible="false" label="" default="" />
+</settings>

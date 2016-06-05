@@ -45,30 +45,29 @@ def rivedi_la7():
     html=BeautifulSoup(page,'html5lib')
     giorno=html.find(id="giorni").find_all('div' ,class_='giorno')
     if giorno is not None:
-        i=0;
-        for div in giorno:
-            if(i>0):
-                dateDay=div.find('div',class_='dateDay')
-                dateMonth=div.find('div',class_='dateMonth')
-                dateRowWeek=div.find('div',class_='dateRowWeek')
-                a=div.a.get('href')
-                liStyle = xbmcgui.ListItem(dateRowWeek.contents[0]+" "+dateDay.contents[0]+" "+dateMonth.contents[0])
-                addDirectoryItem({"mode": "rivedi_la7","giorno": a}, liStyle)
-            else:
-                i=1;
+        for div in giorno[1:]:
+            dateDay=div.find('div',class_='dateDay')
+            dateMonth=div.find('div',class_='dateMonth')
+            dateRowWeek=div.find('div',class_='dateRowWeek')
+            a=div.a.get('href')
+            liStyle = xbmcgui.ListItem(dateRowWeek.contents[0]+" "+dateDay.contents[0]+" "+dateMonth.contents[0])
+            addDirectoryItem({"mode": "rivedi_la7","giorno": a}, liStyle)
         xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
-def get_video_link(url):
+def get_video_link(url,live):
     req = urllib2.Request(url,headers=headers) 
     page=urllib2.urlopen(req)
     html=page.read();
-    res=re.findall('src_mp4 : "(.*?)"', html)
+    res=re.findall('src: "(.*?)"', html)
     if res:
-        return res[0]
-def play_video(video):
+        if live!=True:
+            return res[0]
+        else:
+            return res[1]
+def play_video(video,live):
     if "la7.it" in video:
-        link_video=get_video_link(video)
+        link_video=get_video_link(video,live)
     else:
-        link_video=get_video_link(url_base+video)       
+        link_video=get_video_link(url_base+video,live)       
     listitem =xbmcgui.ListItem(titolo_global)
     listitem.setInfo('video', {'Title': titolo_global})
     if (thumb_global != ""):
@@ -148,7 +147,7 @@ if mode=="rivedi_la7":
         else:
             rivedi_la7_giorno()
     else:
-        play_video(play)
+        play_video(play,False)
 #elif mode=="tutti_programmi":
 #    if link_global=="":
 #        if lettera_global=="":
@@ -160,6 +159,6 @@ if mode=="rivedi_la7":
 elif mode=="diretta_live":
     titolo_global=language(32002)
     thumb_global=""
-    play_video(url_live)
+    play_video(url_live,True)
 else:
     show_root_menu()

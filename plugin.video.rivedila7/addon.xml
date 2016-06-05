@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.rivedila7" name="RivediLa7" version="0.0.5" provider-name="Luivit">
+<addon id="plugin.video.rivedila7" name="RivediLa7" version="0.0.6" provider-name="Luivit">
   <requires>
     <import addon="xbmc.python" version="2.24.0"/>
 	<import addon="script.module.beautifulsoup4" version="4.3.2"/>
@@ -9,10 +9,10 @@
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en_gb">The latest 7 days of programming of La7 and live streaming (italian television)</summary>
-    <description lang="en_gb">The latest 7 days of programming of La7 and live streaming (italian television)</description>
-	<summary lang="it_it">Ultimi 7 giorni di programmazione di La7 e Diretta Tv</summary>
-    <description lang="it_it">Ultimi 7 giorni di programmazione di La7 e Diretta Tv</description>
+    <summary lang="en">The latest 7 days of programming of La7 and live streaming (italian television)</summary>
+    <description lang="en">The latest 7 days of programming of La7 and live streaming (italian television)</description>
+	<summary lang="it">Ultimi 7 giorni di programmazione di La7 e Diretta Tv</summary>
+    <description lang="it">Ultimi 7 giorni di programmazione di La7 e Diretta Tv</description>
     <language>it</language>
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>

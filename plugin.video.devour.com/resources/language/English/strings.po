@@ -1,0 +1,45 @@
+# Kodi Media Center language file
+# Addon Name: Devour
+# Addon id: plugin.video.devour.com
+# Addon version: 1.0.0
+# Addon Provider: lambda
+
+msgid ""
+msgstr ""
+
+
+msgctxt "#30001"
+msgid "Latest"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Popular"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Leftovers"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Bookmarks"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30500"
+msgid "Next..."
+msgstr ""
+
+msgctxt "#30501"
+msgid "Add to bookmarks"
+msgstr ""
+
+msgctxt "#30502"
+msgid "Remove from bookmarks"
+msgstr ""

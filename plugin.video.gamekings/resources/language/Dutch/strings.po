@@ -59,6 +59,22 @@ msgctxt "#30102"
 msgid "Website"
 msgstr "Website"
 
+msgctxt "#30103"
+msgid "Base Url"
+msgstr "Basis Url"
+
+msgctxt "#30104"
+msgid "Gamekings Premium Member"
+msgstr "Gamekings Premium Lid"
+
+msgctxt "#30105"
+msgid "User Name"
+msgstr "Gebruikers Naam"
+
+msgctxt "#30106"
+msgid "Password"
+msgstr "Wachtwoord"
+
 msgctxt "#30200"
 msgid "Video player"
 msgstr "Video player"
@@ -80,16 +96,16 @@ msgid "Episode"
 msgstr "Aflevering"
 
 msgctxt "#30300"
-msgid "Video quality"
-msgstr "Video kwaliteit"
+msgid "Maximum Video quality"
+msgstr "Mamimum Video kwaliteit"
 
 msgctxt "#30301"
 msgid "Standard"
 msgstr "Standaard"
 
 msgctxt "#30302"
-msgid "High Definition (if available)"
-msgstr "High Definition (indien beschikbaar)"
+msgid "High"
+msgstr "Hoog"
 
 msgctxt "#30400"
 msgid "Debug"
@@ -120,5 +136,26 @@ msgid "Error playing media file."
 msgstr "Fout bij het afspelen van video."
 
 msgctxt "#30507"
-msgid "Error getting page: %s"
-msgstr "Fout bij ophalen van pagina %s"
+msgid "Error getting page: %s."
+msgstr "Fout bij ophalen van pagina %s."
+
+msgctxt "#30601"
+msgid "Login has failed for this Premium video. In settings "
+msgstr "Login is mislukt voor deze Premium video. In settings"
+
+msgctxt "#30602"
+msgid "enter the correct username and password. Or turn off"
+msgstr "voer de correcte gebruikersnaam en wachtwoord in. Of"
+
+msgctxt "#30603"
+msgid "the Gamekings-Premium-membership-switch if you are not a member."
+msgstr "zet Gameking Premium-lidmaatschap-switch uit als u geen lid bent."
+
+msgctxt "#30604"
+msgid "Login Failed: %s."
+msgstr "Login gefaald: %s"
+
+msgctxt "#30605"
+msgid "Sorry. You must be a Premium member to see this video."
+msgstr "Sorry. Je moet Premium lid zijn om deze video te zien."
+

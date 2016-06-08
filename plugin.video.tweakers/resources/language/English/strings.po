@@ -1,11 +1,11 @@
-# Kodi Media Center language file
-# Addon Name: Tweakers
-# Addon id: plugin.video.tweakers
+# XBMC Media Center language file
+# Addon Name: GameKings
+# Addon id: plugin.video.gamekings
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
-"POT-Creation-Date: 2016-05-22 06:54+0000\n"
+"POT-Creation-Date: 2016-05-29 15:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE\n"
@@ -16,19 +16,35 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 msgctxt "Addon Summary"
-msgid "Watch tech videos from Tweakers.net (dutch)"
+msgid "Watch videos from Gamekings.nl (dutch)"
 msgstr ""
 
 msgctxt "Addon Description"
-msgid "Watch tech videos from Tweakers.net (dutch)"
+msgid "Watch videos from Gamekings.nl (dutch)"
 msgstr ""
 
 msgctxt "Addon Disclaimer"
-msgid "For bugs, requests or general questions visit the tweakers.net thread on the XBMC forum."
+msgid "For bugs, requests or general questions visit the Gamekings.nl thread on the XBMC forum."
 msgstr ""
 
 msgctxt "#30000"
 msgid "Videos"
+msgstr ""
+
+msgctxt "#30001"
+msgid "TV Episodes"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Gamekings Extra"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Trailers"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Search in Videos"
 msgstr ""
 
 msgctxt "#30100"
@@ -44,7 +60,19 @@ msgid "Website"
 msgstr ""
 
 msgctxt "#30103"
-msgid "Search"
+msgid "Base Url"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Gamekings Premium Member"
+msgstr ""
+
+msgctxt "#30105"
+msgid "User Name"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Password"
 msgstr ""
 
 msgctxt "#30200"
@@ -63,24 +91,20 @@ msgctxt "#30203"
 msgid "MPlayer"
 msgstr ""
 
+msgctxt "#30204"
+msgid "Episode"
+msgstr ""
+
 msgctxt "#30300"
-msgid "Preferred Video Quality"
+msgid "Maximum Video quality"
 msgstr ""
 
 msgctxt "#30301"
-msgid "Very High"
+msgid "Standard"
 msgstr ""
 
 msgctxt "#30302"
 msgid "High"
-msgstr ""
-
-msgctxt "#30303"
-msgid "Medium"
-msgstr ""
-
-msgctxt "#30304"
-msgid "Low"
 msgstr ""
 
 msgctxt "#30400"
@@ -100,7 +124,7 @@ msgid "Next page"
 msgstr ""
 
 msgctxt "#30504"
-msgid "Getting video location...."
+msgid "Getting video location..."
 msgstr ""
 
 msgctxt "#30505"
@@ -108,9 +132,30 @@ msgid "No video found."
 msgstr ""
 
 msgctxt "#30506"
-msgid "No media found for:"
+msgid "Error playing media file."
 msgstr ""
 
 msgctxt "#30507"
 msgid "Error getting page: %s"
 msgstr ""
+
+msgctxt "#30601"
+msgid "Login has failed for this Premium video. In settings "
+msgstr ""
+
+msgctxt "#30602"
+msgid "enter the correct username and password. Or turn off"
+msgstr ""
+
+msgctxt "#30603"
+msgid "the Gamekings-Premium-membership-switch if you are not a member."
+msgstr ""
+
+msgctxt "#30604"
+msgid "Login Failed: %s."
+msgstr ""
+
+msgctxt "#30605"
+msgid "Sorry. You must be a Premium member to see this video."
+msgstr ""
+

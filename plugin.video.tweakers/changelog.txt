@@ -1,48 +1,78 @@
-v1.1.3 (2016-05-22)
-- using po files
-- changed user-agent as requested
-- better cookie-wall circumventing
-- removed utf8 reload
+v1.2.3 (2016-06-08)
+- added support for premium content
+- using requests
 
-v1.1.2 (2016-05-17)
-- added a setting for choosing the video quality
+v1.2.2 (2016-06-07)
+- change in base-url due to website change
+- made it possible to overrule the base-url in settings
+- changed addon debugging info to kodi debugging info
 
-v1.1.1 (2016-05-14)
-- adjusted due to website changes: getting the video url differently now
+v1.2.1 (2016-05-29)
+- using po-files
 
-v1.1.0 (2016-04-24)
-- added search
+v1.2.0 (2016-05-20)
+- updated due to website change
+- removed E3
+- added Search in Videos
 
-v1.0.9 (2016-02-07)
-- changed the listing and playing of videos
-- The contextual menu item 'Play from here' is available now, it queues all the videos in the list from a certain point
+v1.1.9 (2016-02-20)
 - updated to latest requirements for a Kodi-addon
+- changed fanart
+- added fanart-blurred
+- changed icon
 
-v1.0.8 (2016-01-14)
-- added blurred background (kudos to ninovanhooff!)
-- added refresh option (kudos to ninovanhooff!)
+v1.1.8 (2015-09-11) :
+- changes due to website url extension change
 
-v1.0.7 (2015-08-15)
+v1.1.7 (2015-08-27) :
+- small fix for gogoVideo (Gamekings Extra)
+
+v1.1.6 (2015-08-15) :
+- added youtube as a dependency
 - added some utf8 stuff
 
-v1.0.6 (2015-06-23)
-- changed fanart
+v1.1.5 (2015-07-20) :
+- added support for youtube files
+- added support for gogoVideo youtube files (odd but true)
 
-v1.0.5 (2015-06-16)
-- changed icon and fanart due to changes in the website
+v1.1.4 (2015-06-25) :
+- minor fixes in category "More E3 2015"
 
-v1.0.4 (2015-05-08)
-- adjustments due to changes in the website: cookiewall circumvented by adding a cookie to the header (thanks bas lichtjaar)
+v1.1.3 (2015-06-20) :
+- added category "More E3 2015"
 
-v1.0.3 (2015-02-25)
-- play the highest video quality that's available (kudos to Amelandbor!)
+v1.1.2 (2015-04-01) :
+- changes in video category due to website changes
+- changed category Gamekings Extra due to due to website changes
+- added category Trailers
 
-v1.0.2 (2013-08-03)
-- fixed title bug
+v1.1.1 (2015-02-14) :
+- small fix for category Gamekings Extra
 
-v1.0.1 (2013-07-07)
+v1.1.0 (2014-11-14) :
+- added category Gamekings Extra (mad props to Amelandbor!)
+- retired category Pc because of lack of updates
+- changed fanart.jpg
+
+v1.0.4 (2014-05-11) :
+- support vimeo files
+
+v1.0.3 (2013-07-07) :
 - added beautiful soup as dependency
 - added dutch strings
 
-v1.0.0 (2013-06-23)
- - initial version
+v1.0.2 (2013-05-29) :
+- sometimes the video-url in the content-tag is not (!) correct, in that case trying with added '/large' in the video-url
+
+v1.0.1 (2013-04-10) :
+- fixed thumbnails for pc category
+- removed repeating episodes in afleveringen category
+- added popup if media file cannnot be played or is not found
+- filled in optional fields in addon.xml
+- used title attribute more if possible
+
+v1.0.0 (2013-04-02) :
+- initial version
+- filled in optional fields in addon.xml
+- added a display of an httperror
+- published it on github 

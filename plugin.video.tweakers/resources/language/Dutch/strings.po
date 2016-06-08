@@ -1,11 +1,11 @@
-# Kodi Media Center language file
-# Addon Name: Tweakers
-# Addon id: plugin.video.tweakers
+# XBMC Media Center language file
+# Addon Name: GameKings
+# Addon id: plugin.video.gamekings
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
-"POT-Creation-Date: 2016-05-22 06:54+0000\n"
+"POT-Creation-Date: 2016-05-29 15:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE\n"
@@ -16,20 +16,36 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 msgctxt "Addon Summary"
-msgid "Watch tech videos from Tweakers.net (dutch)"
-msgstr "Bekijk technologie videos van Tweakers.net (dutch)"
+msgid "Watch videos from Gamekings.nl (dutch)"
+msgstr "Bekijk videos van Gamekings.nl (dutch)"
 
 msgctxt "Addon Description"
-msgid "Watch tech videos from Tweakers.net (dutch)"
-msgstr "Bekijk technologie videos van Tweakers.net (dutch)"
+msgid "Watch videos from Gamekings.nl (dutch)"
+msgstr "Bekijk videos van Gamekings.nl (dutch)"
 
 msgctxt "Addon Disclaimer"
-msgid "For bugs, requests or general questions visit the tweakers.net thread on the XBMC forum."
-msgstr "Bugs of andere feedback op deze plugin kan geplaatst worden in de Tweakers.net thread op het XBMC forum."
+msgid "For bugs, requests or general questions visit the Gamekings.nl thread on the XBMC forum."
+msgstr "Bugs of andere feedback op deze plugin kan geplaatst worden in de Gamekings.nl thread op het XBMC forum."
 
 msgctxt "#30000"
 msgid "Videos"
 msgstr "Videos"
+
+msgctxt "#30001"
+msgid "TV Episodes"
+msgstr "TV Afleveringen"
+
+msgctxt "#30002"
+msgid "Gamekings Extra"
+msgstr "Gamekings Extra"
+
+msgctxt "#30003"
+msgid "Trailers"
+msgstr "Trailers"
+
+msgctxt "#30004"
+msgid "Zoeken in Videos"
+msgstr "Search in Videos"
 
 msgctxt "#30100"
 msgid "Version"
@@ -44,8 +60,20 @@ msgid "Website"
 msgstr "Website"
 
 msgctxt "#30103"
-msgid "Search"
-msgstr "Zoek"
+msgid "Base Url"
+msgstr "Basis Url"
+
+msgctxt "#30104"
+msgid "Gamekings Premium Member"
+msgstr "Gamekings Premium Lid"
+
+msgctxt "#30105"
+msgid "User Name"
+msgstr "Gebruikers Naam"
+
+msgctxt "#30106"
+msgid "Password"
+msgstr "Wachtwoord"
 
 msgctxt "#30200"
 msgid "Video player"
@@ -63,25 +91,21 @@ msgctxt "#30203"
 msgid "MPlayer"
 msgstr "MPlayer"
 
+msgctxt "#30204"
+msgid "Episode"
+msgstr "Aflevering"
+
 msgctxt "#30300"
-msgid "Preferred Video Quality"
-msgstr "Gewenste Video Kwaliteit"
+msgid "Maximum Video quality"
+msgstr "Mamimum Video kwaliteit"
 
 msgctxt "#30301"
-msgid "Very High"
-msgstr "Erg Hoog"
+msgid "Standard"
+msgstr "Standaard"
 
 msgctxt "#30302"
 msgid "High"
 msgstr "Hoog"
-
-msgctxt "#30303"
-msgid "Medium"
-msgstr "Middel"
-
-msgctxt "#30304"
-msgid "Low"
-msgstr "Laag"
 
 msgctxt "#30400"
 msgid "Debug"
@@ -100,7 +124,7 @@ msgid "Next page"
 msgstr "Volgende pagina"
 
 msgctxt "#30504"
-msgid "Getting video location...."
+msgid "Getting video location..."
 msgstr "Video wordt opgehaald..."
 
 msgctxt "#30505"
@@ -108,9 +132,30 @@ msgid "No video found."
 msgstr "Video niet gevonden."
 
 msgctxt "#30506"
-msgid "No media found for:"
+msgid "Error playing media file."
 msgstr "Fout bij het afspelen van video."
 
 msgctxt "#30507"
-msgid "Error getting page: %s"
-msgstr "Fout bij ophalen van pagina %s"
+msgid "Error getting page: %s."
+msgstr "Fout bij ophalen van pagina %s."
+
+msgctxt "#30601"
+msgid "Login has failed for this Premium video. In settings "
+msgstr "Login is mislukt voor deze Premium video. In settings"
+
+msgctxt "#30602"
+msgid "enter the correct username and password. Or turn off"
+msgstr "voer de correcte gebruikersnaam en wachtwoord in. Of"
+
+msgctxt "#30603"
+msgid "the Gamekings-Premium-membership-switch if you are not a member."
+msgstr "zet Gameking Premium-lidmaatschap-switch uit als u geen lid bent."
+
+msgctxt "#30604"
+msgid "Login Failed: %s."
+msgstr "Login gefaald: %s"
+
+msgctxt "#30605"
+msgid "Sorry. You must be a Premium member to see this video."
+msgstr "Sorry. Je moet Premium lid zijn om deze video te zien."
+

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.nrjradio" version="1.0.0" name="NRJ Radio" provider-name="lambda">
+	<requires>
+		<import addon="xbmc.python" version="2.24.0" />
+		<import addon="script.module.lamlib" version="1.0.0" />
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="addon.py">
+		<provides>audio</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">NRJ Radio addon for Kodi</summary>
+		<description lang="en">Hit music only!</description>
+		<disclaimer lang="en">This addon is not published nor endorsed by nrj.fr</disclaimer>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+		<source>https://github.com/lambda81/plugin.audio.nrjradio</source>
+		<website>http://www.nrj.fr/webradios/</website>
+		<platform>all</platform>
+		<language></language>
+		<forum></forum>
+		<email></email>
+	</extension>
+</addon>

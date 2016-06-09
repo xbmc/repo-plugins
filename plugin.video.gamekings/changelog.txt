@@ -1,3 +1,12 @@
+v1.2.3 (2016-06-08)
+- added support for premium content
+- using requests
+
+v1.2.2 (2016-06-07)
+- change in base-url due to website change
+- made it possible to overrule the base-url in settings
+- changed addon debugging info to kodi debugging info
+
 v1.2.1 (2016-05-29)
 - using po-files
 

@@ -59,6 +59,22 @@ msgctxt "#30102"
 msgid "Website"
 msgstr ""
 
+msgctxt "#30103"
+msgid "Base Url"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Gamekings Premium Member"
+msgstr ""
+
+msgctxt "#30105"
+msgid "User Name"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Password"
+msgstr ""
+
 msgctxt "#30200"
 msgid "Video player"
 msgstr ""
@@ -80,7 +96,7 @@ msgid "Episode"
 msgstr ""
 
 msgctxt "#30300"
-msgid "Video quality"
+msgid "Maximum Video quality"
 msgstr ""
 
 msgctxt "#30301"
@@ -88,7 +104,7 @@ msgid "Standard"
 msgstr ""
 
 msgctxt "#30302"
-msgid "High Definition (if available)"
+msgid "High"
 msgstr ""
 
 msgctxt "#30400"
@@ -122,3 +138,24 @@ msgstr ""
 msgctxt "#30507"
 msgid "Error getting page: %s"
 msgstr ""
+
+msgctxt "#30601"
+msgid "Login has failed for this Premium video. In settings "
+msgstr ""
+
+msgctxt "#30602"
+msgid "enter the correct username and password. Or turn off"
+msgstr ""
+
+msgctxt "#30603"
+msgid "the Gamekings-Premium-membership-switch if you are not a member."
+msgstr ""
+
+msgctxt "#30604"
+msgid "Login Failed: %s."
+msgstr ""
+
+msgctxt "#30605"
+msgid "Sorry. You must be a Premium member to see this video."
+msgstr ""
+

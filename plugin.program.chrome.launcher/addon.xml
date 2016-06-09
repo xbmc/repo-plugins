@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon
+    id="plugin.program.chrome.launcher"
+    name="Chrome Launcher"
+    version="1.2.0"
+    provider-name="Jani (@rasjani) Mikkonen">
+    <requires>
+        <import addon="xbmc.python"     version="2.24.0"/>
+        <import addon="xbmc.addon"      version="16.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>executable</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">Launch websites via Chrome in Kiosk-mode</summary>
+        <language></language>
+        <description lang="en">Launch websites via Chrome in Kiosk-mode</description>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <source>https://github.com/rasjani/plugin.program.chrome.launcher</source>
+        <forum>http://forum.kodi.tv/showthread.php?tid=170965</forum>
+        <website>https://www.google.com/chrome</website>
+        <email>jani dot mikkonen at gmail.com</email>
+    </extension>
+</addon>

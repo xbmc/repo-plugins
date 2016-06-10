@@ -1,0 +1,69 @@
+# Kodi Media Center language file
+# Addon Name: ERT Player
+# Addon id: plugin.video.ert.gr
+# Addon version: 1.0.0
+# Addon Provider: lambda
+
+msgid ""
+msgstr ""
+
+
+msgctxt "#30001"
+msgid "Shows"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Categories"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Latest"
+msgstr ""
+
+msgctxt "#30004"
+msgid "News"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Sports"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Weather"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Bookmarks"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Live"
+msgstr ""
+
+msgctxt "#30021"
+msgid "ERT1"
+msgstr ""
+
+msgctxt "#30022"
+msgid "ERT2"
+msgstr ""
+
+msgctxt "#30023"
+msgid "ERT3"
+msgstr ""
+
+msgctxt "#30024"
+msgid "ERT World"
+msgstr ""
+
+msgctxt "#30500"
+msgid "Next..."
+msgstr ""
+
+msgctxt "#30501"
+msgid "Add to bookmarks"
+msgstr ""
+
+msgctxt "#30502"
+msgid "Remove from bookmarks"
+msgstr ""

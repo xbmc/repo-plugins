@@ -1,0 +1,53 @@
+# Kodi Media Center language file
+# Addon Name: ANT1 Player
+# Addon id: plugin.video.antenna.gr
+# Addon version: 1.0.0
+# Addon Provider: lambda
+
+msgid ""
+msgstr ""
+
+
+msgctxt "#30001"
+msgid "Shows"
+msgstr "Εκπομπές"
+
+msgctxt "#30002"
+msgid "Archive"
+msgstr "Αρχείο"
+
+msgctxt "#30003"
+msgid "Latest"
+msgstr "Πρόσφατα"
+
+msgctxt "#30004"
+msgid "News"
+msgstr "Ειδήσεις"
+
+msgctxt "#30005"
+msgid "Sports"
+msgstr "Αθλητικά"
+
+msgctxt "#30006"
+msgid "Weather"
+msgstr "Καιρός"
+
+msgctxt "#30007"
+msgid "Bookmarks"
+msgstr "Σελιδοδείκτες"
+
+msgctxt "#30008"
+msgid "Live"
+msgstr "Ζωντανά"
+
+msgctxt "#30500"
+msgid "Next..."
+msgstr "Επόμενα..."
+
+msgctxt "#30501"
+msgid "Add to bookmarks"
+msgstr "Προσθήκη στους σελιδοδείκτες"
+
+msgctxt "#30502"
+msgid "Remove from bookmarks"
+msgstr "Αφαίρεση από σελιδοδείκτες"

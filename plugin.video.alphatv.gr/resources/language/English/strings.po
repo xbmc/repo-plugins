@@ -8,46 +8,46 @@ msgid ""
 msgstr ""
 
 
-msgctxt "#30001"
+msgctxt "#32001"
 msgid "Shows"
 msgstr ""
 
-msgctxt "#30002"
+msgctxt "#32002"
 msgid "Archive"
 msgstr ""
 
-msgctxt "#30003"
+msgctxt "#32003"
 msgid "Latest Shows"
 msgstr ""
 
-msgctxt "#30004"
+msgctxt "#32004"
 msgid "Latest Episodes"
 msgstr ""
 
-msgctxt "#30005"
+msgctxt "#32005"
 msgid "News (GR)"
 msgstr ""
 
-msgctxt "#30006"
+msgctxt "#32006"
 msgid "News (CY)"
 msgstr ""
 
-msgctxt "#30007"
+msgctxt "#32007"
 msgid "Bookmarks"
 msgstr ""
 
-msgctxt "#30008"
+msgctxt "#32008"
 msgid "Live"
 msgstr ""
 
-msgctxt "#30500"
+msgctxt "#32500"
 msgid "Next..."
 msgstr ""
 
-msgctxt "#30501"
+msgctxt "#32501"
 msgid "Add to bookmarks"
 msgstr ""
 
-msgctxt "#30502"
+msgctxt "#32502"
 msgid "Remove from bookmarks"
 msgstr ""

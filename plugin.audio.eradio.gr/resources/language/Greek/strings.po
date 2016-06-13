@@ -8,34 +8,34 @@ msgid ""
 msgstr ""
 
 
-msgctxt "#30001"
+msgctxt "#32001"
 msgid "All"
 msgstr "Όλα"
 
-msgctxt "#30002"
+msgctxt "#32002"
 msgid "Bookmarks"
 msgstr "Σελιδοδείκτες"
 
-msgctxt "#30003"
+msgctxt "#32003"
 msgid "Trending"
 msgstr "Τάσεις"
 
-msgctxt "#30004"
+msgctxt "#32004"
 msgid "Popular"
 msgstr "Δημοφιλή"
 
-msgctxt "#30005"
+msgctxt "#32005"
 msgid "Latest"
 msgstr "Πρόσφατα"
 
-msgctxt "#30500"
+msgctxt "#32500"
 msgid "Next..."
 msgstr "Επόμενα..."
 
-msgctxt "#30501"
+msgctxt "#32501"
 msgid "Add to bookmarks"
 msgstr "Προσθήκη στους σελιδοδείκτες"
 
-msgctxt "#30502"
+msgctxt "#32502"
 msgid "Remove from bookmarks"
 msgstr "Αφαίρεση από σελιδοδείκτες"

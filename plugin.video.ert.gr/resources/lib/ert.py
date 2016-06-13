@@ -43,49 +43,49 @@ class indexer:
     def root(self):
         self.list = [
         {
-        'title': 30001,
+        'title': 32001,
         'action': 'tvshows',
         'icon': 'tvshows.png'
         },
 
         {
-        'title': 30002,
+        'title': 32002,
         'action': 'categories',
         'icon': 'categories.png'
         },
 
         {
-        'title': 30003,
+        'title': 32003,
         'action': 'popular',
         'icon': 'popular.png'
         },
 
         {
-        'title': 30004,
+        'title': 32004,
         'action': 'news',
         'icon': 'news.png'
         },
 
         {
-        'title': 30005,
+        'title': 32005,
         'action': 'sports',
         'icon': 'sports.png'
         },
 
         {
-        'title': 30006,
+        'title': 32006,
         'action': 'weather',
         'icon': 'weather.png'
         },
 
         {
-        'title': 30007,
+        'title': 32007,
         'action': 'bookmarks',
         'icon': 'bookmarks.png'
         },
 
         {
-        'title': 30008,
+        'title': 32008,
         'action': 'channels',
         'icon': 'channels.png'
         }
@@ -98,33 +98,33 @@ class indexer:
     def channels(self):
         self.list = [
         {
-        'title': 30021,
+        'title': 32021,
         'action': 'live',
-        'url': self.ert1_link,
+        'url': 'ert1',
         'isFolder': 'False',
         'icon': 'live1.png'
         },
 
         {
-        'title': 30022,
+        'title': 32022,
         'action': 'live',
-        'url': self.ert2_link,
+        'url': 'ert2',
         'isFolder': 'False',
         'icon': 'live2.png'
         },
 
         {
-        'title': 30023,
+        'title': 32023,
         'action': 'live',
-        'url': self.ert3_link,
+        'url': 'ert3',
         'isFolder': 'False',
         'icon': 'live3.png'
         },
 
         {
-        'title': 30024,
+        'title': 32024,
         'action': 'live',
-        'url': self.ertw_link,
+        'url': 'ertw',
         'isFolder': 'False',
         'icon': 'livew.png'
         }
@@ -142,7 +142,7 @@ class indexer:
         for i in self.list:
             bookmark = dict((k,v) for k, v in i.iteritems() if not k == 'next')
             bookmark['delbookmark'] = i['url']
-            i.update({'cm': [{'title': 30502, 'query': {'action': 'deleteBookmark', 'url': json.dumps(bookmark)}}]})
+            i.update({'cm': [{'title': 32502, 'query': {'action': 'deleteBookmark', 'url': json.dumps(bookmark)}}]})
 
         self.list = sorted(self.list, key=lambda k: k['title'].lower())
 
@@ -160,7 +160,7 @@ class indexer:
         for i in self.list:
             bookmark = dict((k,v) for k, v in i.iteritems() if not k == 'next')
             bookmark['bookmark'] = i['url']
-            i.update({'cm': [{'title': 30501, 'query': {'action': 'addBookmark', 'url': json.dumps(bookmark)}}]})
+            i.update({'cm': [{'title': 32501, 'query': {'action': 'addBookmark', 'url': json.dumps(bookmark)}}]})
 
         self.list = sorted(self.list, key=lambda k: k['title'].lower())
 
@@ -240,7 +240,7 @@ class indexer:
         for i in self.list:
             bookmark = dict((k,v) for k, v in i.iteritems() if not k == 'next')
             bookmark['bookmark'] = i['url']
-            i.update({'cm': [{'title': 30501, 'query': {'action': 'addBookmark', 'url': json.dumps(bookmark)}}]})
+            i.update({'cm': [{'title': 32501, 'query': {'action': 'addBookmark', 'url': json.dumps(bookmark)}}]})
 
         directory.add(self.list)
         return self.list
@@ -253,7 +253,7 @@ class indexer:
 
         for i in self.list: i.update({'action': 'play', 'isFolder': 'False'})
 
-        for i in self.list: i.update({'nextlabel': 30500, 'nextaction': 'episodes'})
+        for i in self.list: i.update({'nextlabel': 32500, 'nextaction': 'episodes'})
 
         directory.add(self.list, content='files')
         return self.list
@@ -437,6 +437,15 @@ class indexer:
 
     def resolve_live(self, url):
         try:
+            if url == 'ert1':
+                url = self.ert1_link
+            elif url == 'ert2':
+                url = self.ert2_link
+            elif url == 'ert3':
+                url = self.ert3_link
+            elif url == 'ertw':
+                url = self.ertw_link
+
             result = client.request(url)
 
             result = re.findall('(?:youtube.com|youtu.be)/(?:embed/|.+?\?v=|.+?\&v=|v/)([0-9A-Za-z_\-]+)', result)

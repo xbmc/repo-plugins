@@ -8,62 +8,62 @@ msgid ""
 msgstr ""
 
 
-msgctxt "#30001"
+msgctxt "#32001"
 msgid "Shows"
 msgstr "Εκπομπές"
 
-msgctxt "#30002"
+msgctxt "#32002"
 msgid "Categories"
 msgstr "Κατηγορίες"
 
-msgctxt "#30003"
+msgctxt "#32003"
 msgid "Latest"
 msgstr "Πρόσφατα"
 
-msgctxt "#30004"
+msgctxt "#32004"
 msgid "News"
 msgstr "Ειδήσεις"
 
-msgctxt "#30005"
+msgctxt "#32005"
 msgid "Sports"
 msgstr "Αθλητικά"
 
-msgctxt "#30006"
+msgctxt "#32006"
 msgid "Weather"
 msgstr "Καιρός"
 
-msgctxt "#30007"
+msgctxt "#32007"
 msgid "Bookmarks"
 msgstr "Σελιδοδείκτες"
 
-msgctxt "#30008"
+msgctxt "#32008"
 msgid "Live"
 msgstr "Ζωντανά"
 
-msgctxt "#30021"
+msgctxt "#32021"
 msgid "ERT1"
 msgstr "ΕΡΤ1"
 
-msgctxt "#30022"
+msgctxt "#32022"
 msgid "ERT2"
 msgstr "ΕΡΤ2"
 
-msgctxt "#30023"
+msgctxt "#32023"
 msgid "ERT3"
 msgstr "ΕΡΤ3"
 
-msgctxt "#30024"
+msgctxt "#32024"
 msgid "ERT World"
 msgstr "ΕΡΤ World"
 
-msgctxt "#30500"
+msgctxt "#32500"
 msgid "Next..."
 msgstr "Επόμενα..."
 
-msgctxt "#30501"
+msgctxt "#32501"
 msgid "Add to bookmarks"
 msgstr "Προσθήκη στους σελιδοδείκτες"
 
-msgctxt "#30502"
+msgctxt "#32502"
 msgid "Remove from bookmarks"
 msgstr "Αφαίρεση από σελιδοδείκτες"

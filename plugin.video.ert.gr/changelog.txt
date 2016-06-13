@@ -1,2 +1,6 @@
+[B]1.0.1[/B]
+- Tweaked ERT live channels
+- Code cosmetics
+
 [B]1.0.0[/B]
 - Initial version

@@ -20,18 +20,12 @@ import urlparse,sys
 
 from resources.lib import ert
 
+
 params = dict(urlparse.parse_qsl(sys.argv[2].replace('?','')))
 
+action = params.get('action')
 
-try:
-    action = params['action']
-except:
-    action = None
-try:
-    url = params['url']
-except:
-    url = None
-
+url = params.get('url')
 
 
 if action == None:

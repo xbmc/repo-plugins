@@ -42,49 +42,49 @@ class indexer:
     def root(self):
         self.list = [
         {
-        'title': 30001,
+        'title': 32001,
         'action': 'tvshows',
         'icon': 'tvshows.png'
         },
 
         {
-        'title': 30002,
+        'title': 32002,
         'action': 'archive',
         'icon': 'archive.png'
         },
 
         {
-        'title': 30003,
+        'title': 32003,
         'action': 'popularShows',
         'icon': 'popular.png'
         },
 
         {
-        'title': 30004,
+        'title': 32004,
         'action': 'popularEpisodes',
         'icon': 'popular.png'
         },
 
         {
-        'title': 30005,
+        'title': 32005,
         'action': 'news',
         'icon': 'news.png'
         },
 
         {
-        'title': 30006,
+        'title': 32006,
         'action': 'cynews',
         'icon': 'news.png'
         },
 
         {
-        'title': 30007,
+        'title': 32007,
         'action': 'bookmarks',
         'icon': 'bookmarks.png'
         },
 
         {
-        'title': 30008,
+        'title': 32008,
         'action': 'live',
         'isFolder': 'False',
         'icon': 'live.png'
@@ -103,7 +103,7 @@ class indexer:
         for i in self.list:
             bookmark = dict((k,v) for k, v in i.iteritems() if not k == 'next')
             bookmark['delbookmark'] = i['url']
-            i.update({'cm': [{'title': 30502, 'query': {'action': 'deleteBookmark', 'url': json.dumps(bookmark)}}]})
+            i.update({'cm': [{'title': 32502, 'query': {'action': 'deleteBookmark', 'url': json.dumps(bookmark)}}]})
 
         self.list = sorted(self.list, key=lambda k: k['title'].lower())
 
@@ -123,7 +123,7 @@ class indexer:
         for i in self.list:
             bookmark = dict((k,v) for k, v in i.iteritems() if not k == 'next')
             bookmark['bookmark'] = i['url']
-            i.update({'cm': [{'title': 30501, 'query': {'action': 'addBookmark', 'url': json.dumps(bookmark)}}]})
+            i.update({'cm': [{'title': 32501, 'query': {'action': 'addBookmark', 'url': json.dumps(bookmark)}}]})
 
         directory.add(self.list)
         return self.list
@@ -161,7 +161,7 @@ class indexer:
         for i in self.list:
             bookmark = dict((k,v) for k, v in i.iteritems() if not k == 'next')
             bookmark['bookmark'] = i['url']
-            i.update({'cm': [{'title': 30501, 'query': {'action': 'addBookmark', 'url': json.dumps(bookmark)}}]})
+            i.update({'cm': [{'title': 32501, 'query': {'action': 'addBookmark', 'url': json.dumps(bookmark)}}]})
 
         self.list = sorted(self.list, key=lambda k: k['title'].lower())
 
@@ -220,7 +220,7 @@ class indexer:
             filter = [x for y,x in enumerate(filter) if x not in filter[:y]]
 
             threads = []
-            for i in range(0, 6):
+            for i in range(0, 7):
                 threads.append(workers.Thread(self.thread, self.tvshows_link_2 % str(i), i))
                 self.data.append('')
             [i.start() for i in threads]
@@ -311,7 +311,7 @@ class indexer:
                 title = client.parseDOM(t, 'span')
                 if title: title = title[0]
                 else: title = t
-                if title == '': raise Exception()
+                if title == '' or 'sneak preview' in title.lower(): raise Exception()
                 title = client.replaceHTMLCodes(title)
                 title = title.encode('utf-8')
 

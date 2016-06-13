@@ -1,2 +1,6 @@
+[B]1.0.1[/B]
+- Filter previews of episodes
+- Code cosmetics
+
 [B]1.0.0[/B]
 - Initial version

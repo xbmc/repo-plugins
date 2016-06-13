@@ -8,22 +8,22 @@ msgid ""
 msgstr ""
 
 
-msgctxt "#30001"
+msgctxt "#32001"
 msgid "Radios"
 msgstr ""
 
-msgctxt "#30002"
+msgctxt "#32002"
 msgid "Bookmarks"
 msgstr ""
 
-msgctxt "#30500"
+msgctxt "#32500"
 msgid "Next..."
 msgstr ""
 
-msgctxt "#30501"
+msgctxt "#32501"
 msgid "Add to bookmarks"
 msgstr ""
 
-msgctxt "#30502"
+msgctxt "#32502"
 msgid "Remove from bookmarks"
 msgstr ""

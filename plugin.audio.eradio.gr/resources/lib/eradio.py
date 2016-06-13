@@ -43,34 +43,34 @@ class indexer:
     def root(self):
         radios = [
         {
-        'title': 30001,
+        'title': 32001,
         'action': 'radios',
         'url': self.all_link,
         'icon': 'all.png'
         },
 
         {
-        'title': 30002,
+        'title': 32002,
         'action': 'bookmarks',
         'icon': 'bookmarks.png'
         },
 
         {
-        'title': 30003,
+        'title': 32003,
         'action': 'radios',
         'url': self.trending_link,
         'icon': 'trending.png'
         },
 
         {
-        'title': 30004,
+        'title': 32004,
         'action': 'radios',
         'url': self.popular_link,
         'icon': 'popular.png'
         },
 
         {
-        'title': 30005,
+        'title': 32005,
         'action': 'radios',
         'url': self.new_link,
         'icon': 'new.png'
@@ -103,7 +103,7 @@ class indexer:
         for i in self.list:
             bookmark = dict((k,v) for k, v in i.iteritems() if not k == 'next')
             bookmark['delbookmark'] = i['url']
-            i.update({'cm': [{'title': 30502, 'query': {'action': 'deleteBookmark', 'url': json.dumps(bookmark)}}]})
+            i.update({'cm': [{'title': 32502, 'query': {'action': 'deleteBookmark', 'url': json.dumps(bookmark)}}]})
 
         self.list = sorted(self.list, key=lambda k: k['title'].lower())
 
@@ -121,7 +121,7 @@ class indexer:
         for i in self.list:
             bookmark = dict((k,v) for k, v in i.iteritems() if not k == 'next')
             bookmark['bookmark'] = i['url']
-            i.update({'cm': [{'title': 30501, 'query': {'action': 'addBookmark', 'url': json.dumps(bookmark)}}]})
+            i.update({'cm': [{'title': 32501, 'query': {'action': 'addBookmark', 'url': json.dumps(bookmark)}}]})
 
         directory.add(self.list, infotype='Music')
         return self.list

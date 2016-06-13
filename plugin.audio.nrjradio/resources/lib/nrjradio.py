@@ -35,12 +35,12 @@ class indexer:
     def root(self):
         self.list = [
         {
-        'title': 30001,
+        'title': 32001,
         'action': 'radios'
         },
 
         {
-        'title': 30002,
+        'title': 32002,
         'action': 'bookmarks'
         }
         ]
@@ -57,7 +57,7 @@ class indexer:
         for i in self.list:
             bookmark = dict((k,v) for k, v in i.iteritems() if not k == 'next')
             bookmark['delbookmark'] = i['url']
-            i.update({'cm': [{'title': 30502, 'query': {'action': 'deleteBookmark', 'url': json.dumps(bookmark)}}]})
+            i.update({'cm': [{'title': 32502, 'query': {'action': 'deleteBookmark', 'url': json.dumps(bookmark)}}]})
 
         self.list = sorted(self.list, key=lambda k: k['title'].lower())
 
@@ -75,7 +75,7 @@ class indexer:
         for i in self.list:
             bookmark = dict((k,v) for k, v in i.iteritems() if not k == 'next')
             bookmark['bookmark'] = i['url']
-            i.update({'cm': [{'title': 30501, 'query': {'action': 'addBookmark', 'url': json.dumps(bookmark)}}]})
+            i.update({'cm': [{'title': 32501, 'query': {'action': 'addBookmark', 'url': json.dumps(bookmark)}}]})
 
         directory.add(self.list, infotype='Music')
         return self.list

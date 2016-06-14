@@ -163,7 +163,7 @@ msgid "Watching"
 msgstr ""
 
 msgctxt "#30307"
-msgid "Favourites"
+msgid "Added"
 msgstr ""
 
 msgctxt "#30308"

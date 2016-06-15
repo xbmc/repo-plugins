@@ -158,13 +158,13 @@ class _File(_BaseResource):
 
     @classmethod
     def get(cls, id):
-        d = cls.client.request('/files/%i' % id, method='GET')
+        d = cls.client.request('/files/%i?video_metadata=1' % id, method='GET')
         t = d['file']
         return cls(t)
 
     @classmethod
     def list(cls, parent_id=0):
-        d = cls.client.request('/files/list', params={'parent_id': parent_id})
+        d = cls.client.request('/files/list?video_metadata=1', params={'parent_id': parent_id})
         files = d['files']
         return [cls(f) for f in files]
 

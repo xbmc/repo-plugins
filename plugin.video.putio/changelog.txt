@@ -1,3 +1,6 @@
+v2.2.1 (2016-06-15) Ibrahim Gungor <ibrahim@put.io>
+    * Update client to sync with Put.io servers
+
 v2.2.0 (2016-05-02) Ibrahim Gungor <ibrahim@put.io>
     * Show 'watched' icon if the video is played before
     * Show video duration next to its title

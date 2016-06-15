@@ -7,6 +7,7 @@ Put.io Kodi addon.
 - Walk files
 - Play audios and videos
 - Video resume support
+- Watched status support
 - Subtitle support
 - Refresh directory
 - Sort files by name/date/size

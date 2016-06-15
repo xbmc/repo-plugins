@@ -957,11 +957,19 @@ def ListFavourites(logged_in):
         return
 
     """Scrapes all episodes of the favourites page."""
-    html = OpenURL('http://www.bbc.co.uk/iplayer/usercomponents/favourites/programmes.json')
+    identity_cookie = None
+    cookie_jar = None
+    cookie_jar = GetCookieJar()
+    for cookie in cookie_jar:
+        if (cookie.name == 'IDENTITY'):
+            identity_cookie = cookie.value
+            break
+    url = "https://ibl.api.bbci.co.uk/ibl/v1/user/added?identity_cookie=%s" % identity_cookie
+    html = OpenURL(url)
     json_data = json.loads(html)
-    # favourites = json_data.get('favourites')
-    programmes = json_data.get('programmes')
-    for programme in programmes:
+    favourites_list = json_data.get('added').get('elements')
+    for favourite in favourites_list:
+        programme = favourite.get('programme')
         id = programme.get('id')
         url = "http://www.bbc.co.uk/iplayer/brand/%s" % (id)
         title = programme.get('title')

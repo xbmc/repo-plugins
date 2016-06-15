@@ -1,0 +1,101 @@
+# Kodi Media Center language file
+# Addon Name: Trakt Trailers
+# Addon id: plugin.video.trakt.trailers
+# Addon version: 1.0.0
+# Addon Provider: lambda
+
+msgid ""
+msgstr ""
+
+
+msgctxt "#32001"
+msgid "Anticipated"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Trending"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Popular"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Played"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Watched"
+msgstr ""
+
+msgctxt "#32006"
+msgid "TV Shows"
+msgstr ""
+
+msgctxt "#32181"
+msgid "A Trakt account already exists"
+msgstr ""
+
+msgctxt "#32182"
+msgid "Do you want to remove it?"
+msgstr ""
+
+msgctxt "#32183"
+msgid "1) Visit : "
+msgstr ""
+
+msgctxt "#32184"
+msgid "2) When prompted enter : "
+msgstr ""
+
+msgctxt "#32185"
+msgid "Add to new list"
+msgstr ""
+
+msgctxt "#32186"
+msgid "Add to list"
+msgstr ""
+
+msgctxt "#32187"
+msgid "Item already added"
+msgstr ""
+
+msgctxt "#32188"
+msgid "Do you want to remove it?"
+msgstr ""
+
+msgctxt "#32189"
+msgid "Success"
+msgstr ""
+
+msgctxt "#32190"
+msgid "Failed"
+msgstr ""
+
+msgctxt "#32201"
+msgid "Account"
+msgstr ""
+
+msgctxt "#32202"
+msgid "Authorization..."
+msgstr ""
+
+msgctxt "#32500"
+msgid "Next..."
+msgstr ""
+
+msgctxt "#32501"
+msgid "Add to collection"
+msgstr ""
+
+msgctxt "#32502"
+msgid "Add to watchlist"
+msgstr ""
+
+msgctxt "#32503"
+msgid "Add to new list"
+msgstr ""
+
+msgctxt "#32504"
+msgid "Add to list"
+msgstr ""

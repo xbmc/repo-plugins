@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.trakt.trailers" version="1.0.0" name="Trakt Trailers" provider-name="lambda">
+	<requires>
+		<import addon="xbmc.python" version="2.24.0" />
+		<import addon="script.module.lamlib" version="1.0.0" />
+		<import addon="plugin.video.youtube" version="5.2.1" optional="true" />
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="addon.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Trakt Trailers addon for Kodi</summary>
+		<description lang="en">- Watch Trailers from Trakt[CR]- Add Movies or TV Shows to your Trakt account</description>
+		<disclaimer lang="en">This addon is not published nor endorsed by trakt.tv</disclaimer>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+		<source>https://github.com/lambda81/plugin.video.trakt.trailers</source>
+		<website>https://trakt.tv/</website>
+		<platform>all</platform>
+		<language></language>
+		<forum></forum>
+		<email></email>
+	</extension>
+</addon>

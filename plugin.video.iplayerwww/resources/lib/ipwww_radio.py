@@ -169,7 +169,7 @@ def AddAvailableLiveStreamItem(name, channelname, iconimage):
         max_quality = min(len(qualities),max_quality)
         qualities = qualities[0:max_quality]
         qualities.reverse()
-        for quality in qualities: 
+        for quality in qualities:
             url = 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/%s/%s/%s/%s.m3u8' % (location, quality, provider_url, channelname)
 
             PlayStream(name, url, iconimage, '', '')
@@ -399,56 +399,59 @@ def ListFavourites(logged_in):
     """Scrapes all episodes of the favourites page."""
     html = OpenURL('http://www.bbc.co.uk/radio/favourites')
 
-    programmes = html.split('<li class="my-item" data-appid="radio" ')
+    programmes = html.split('<div class="favourites favourite ')
     for programme in programmes:
 
-        if not programme.startswith('data-type="tlec"'):
+        if not programme.startswith('media'):
             continue
 
+        series_name = ''
         series_id = ''
-        series_id_match = re.search(r'data-id="(.*?)"', programme)
+        series_id_match = re.search(r'<a aria-label="(.*?)" class="favourites__brand-image-link" href="/programmes/(.*?)">',programme)
         if series_id_match:
-            series = series_id_match.group(1)
+            series_name = series_id_match.group(1)
+            series_id = series_id_match.group(2)
 
-        programme_id = ''
-        programme_id_match = re.search(r'<a href="http://www.bbc.co.uk/programmes/(.*?)"', programme)
-        if programme_id_match:
-            programme_id = programme_id_match.group(1)
+        episode_name = ''
+        episode_id = ''
+        episode_id_match = re.search(r'<a aria-label="(.*?) Duration: (.*?)" class="favourites__brand-link(.*?)" href="/programmes/(.*?)#play">',programme)
+        if episode_id_match:
+            episode_name = episode_id_match.group(1)
+            episode_id = episode_id_match.group(4)
 
-        name = ''
-        name_match = re.search(r'<span class="my-episode-brand" itemprop="name">(.*?)</span>', programme)
-        if name_match:
-            name = name_match.group(1)
+        episode_image = ''
+        episode_image_match = re.search(r'<img class="favourites__brand-image media__image " src="(.*?)"',programme)
+        if episode_image_match:
+            episode_image = "http:%s" % episode_image_match.group(1)
 
-        episode = ''
-        episode_match = re.search(r'<span class="my-episode" itemprop="name">(.*?)</span>', programme)
-        if episode_match:
-            episode = "(%s)" % episode_match.group(1)
-
-        image = ''
-        image_match = re.search(r'itemprop="image" src="(.*?)"', programme)
-        if image_match:
-            image = image_match.group(1)
-
-        synopsis = ''
-        synopsis_match = re.search(r'<span class="my-item-info">(.*?)</span>', programme)
-        if synopsis_match:
-            synopsis = synopsis_match.group(1)
+        series_image = ''
+        series_image_match = re.search(r'<img class="media__image avatar-image--small" src="(.*?)">',programme)
+        if series_image_match:
+            series_image = "http:%s" % series_image_match.group(1)
+            series_image = re.sub(r'96x96','640x360',series_image)
 
         station = ''
-        station_match = re.search(r'<span class="my-episode-broadcaster" itemprop="name">(.*?)\.</span>', programme)
+        station_match = re.search(r'<span class="favourites__network-name.*?<a href="(.*?)" class="clr-light-grey">\s+?(.*?)\s+?<',programme, flags=(re.DOTALL | re.MULTILINE))
         if station_match:
-            station = station_match.group(1).strip()
+            station = station_match.group(2).strip()
 
-        title = "[B]%s - %s[/B]" % (station, name)
-        episode_title = "[B]%s[/B] - %s %s" % (station, name, episode)
+        description = ''
+        description_match = re.search(r'<p class="favourites__description media__meta-row size-f clr-white">\s+?(.*?)\s+?</p>',programme, flags=(re.DOTALL | re.MULTILINE))
+        if description_match:
+            description = description_match.group(1).strip()
 
-        if series:
-            AddMenuEntry(title, series, 131, image, synopsis, '')
+        if series_id:
+            series_title = "[B]%s - %s[/B]" % (station, series_name)
+            AddMenuEntry(series_title, series_id, 131, series_image, description, '')
 
-        if programme_id:
-            url = "http://www.bbc.co.uk/programmes/%s" % programme_id
-            CheckAutoplay(episode_title, url, image, ' ', '')
+        if episode_id:
+            if series_name:
+                episode_title = "[B]%s[/B] - %s - %s" % (station, series_name, episode_name)
+            else:
+                episode_title = "[B]%s[/B] - %s" % (station, episode_name)
+            episode_url = "http://www.bbc.co.uk/programmes/%s" % episode_id
+            xbmc.log(episode_url)
+            CheckAutoplay(episode_title, episode_url, episode_image, ' ', '')
 
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)

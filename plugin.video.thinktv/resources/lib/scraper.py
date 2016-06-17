@@ -16,31 +16,35 @@ import HTMLParser
 import sys
 
 h = HTMLParser.HTMLParser()
-
 UTF8 = 'utf-8'
 showsPerPage = 24 # number of shows returned per page by PBS
 
 class myAddon(t1mAddon):
 
  def doPBSLogin(self):
-   if self.addon.getSetting('enable_login') != 'true' : return
-   profile = self.addon.getAddonInfo('profile').decode(UTF8)
-   pdir  = xbmc.translatePath(os.path.join(profile))
-   if not os.path.isdir(pdir): os.makedirs(pdir)
-   cjFile = xbmc.translatePath(os.path.join(profile, 'PBSCookies.dat'))
-   cj = cookielib.LWPCookieJar()
-   badCookie = True
-   try: cj.load(cjFile)
-   except: cj=[]
-   for cookie in cj:
-       if cookie.name == 'sessionid':
-          badCookie = cookie.is_expired()
+    if self.addon.getSetting('enable_login') != 'true':
+        return
 
-   if badCookie:
+    profile = self.addon.getAddonInfo('profile').decode(UTF8)
+    pdir  = xbmc.translatePath(profile).decode(UTF8)
+    if not os.path.isdir(pdir):
+        os.makedirs(pdir)
+    cjFile = xbmc.translatePath(os.path.join(profile, 'PBSCookies.dat')).decode(UTF8)
+    cj = cookielib.LWPCookieJar()
+    badCookie = True
+    try:
+        cj.load(cjFile)
+    except:
+        cj=[]
+    for cookie in cj:
+        if cookie.name == 'sessionid':
+            badCookie = cookie.is_expired()
+    if self.addon.getSetting('first_run_done') != 'true':
+        badCookie = True
+    if badCookie:
        cj = cookielib.LWPCookieJar(cjFile)
        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
        urllib2.install_opener(opener)
-
        html = self.getRequest('http://www.pbs.org/shows/')
        clientId = re.compile('sign-in__link--pbs.+?client_id=(.+?)"', re.DOTALL).search(html).group(1)
        html = self.getRequest('https://account.pbs.org/oauth2/login/')
@@ -48,59 +52,61 @@ class myAddon(t1mAddon):
        username = self.addon.getSetting('login_name')
        password = self.addon.getSetting('login_pass')
        if username !='' and password !='':
-          url1  = ('https://account.pbs.org/oauth2/login/')
-          xheaders = self.defaultHeaders.copy()
-          xheaders["Referer"]      = "https://account.pbs.org/oauth2/login/"
-          xheaders["Host"]         = "account.pbs.org"
-          xheaders["Origin"]       = "https://account.pbs.org"
-          xheaders["Connection"]   = "keep-alive"
-          xheaders["Accept"]       = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
-          xheaders["Content-Type"] = "application/x-www-form-urlencoded"
-          udata = urllib.urlencode({'csrfmiddlewaretoken' : lcsr, 'next' : lnext, 'email' : username, 'password' : password})
-          html = self.getRequest(url1, udata, xheaders)
-          html = self.getRequest('https://account.pbs.org/oauth2/authorize/?scope=account&redirect_uri=http://www.pbs.org/login/&response_type=code&client_id=%s&confirmed=1' % clientId)
-          for cookie in cj:
-             if cookie.name == 'pbsol.station':
-               self.addon.setSetting('pbsol', cookie.value)
-          cj.save()
-   else:
-       opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-       urllib2.install_opener(opener)
-       return
+           url1  = ('https://account.pbs.org/oauth2/login/')
+           xheaders = self.defaultHeaders.copy()
+           xheaders["Referer"] = "https://account.pbs.org/oauth2/login/"
+           xheaders["Host"] = "account.pbs.org"
+           xheaders["Origin"] = "https://account.pbs.org"
+           xheaders["Connection"] = "keep-alive"
+           xheaders["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
+           xheaders["Content-Type"] = "application/x-www-form-urlencoded"
+           udata = urllib.urlencode({'csrfmiddlewaretoken' : lcsr, 'next' : lnext, 'email' : username, 'password' : password})
+           html = self.getRequest(url1, udata, xheaders)
+           html = self.getRequest('https://account.pbs.org/oauth2/authorize/?scope=account&redirect_uri=http://www.pbs.org/login/&response_type=code&client_id=%s&confirmed=1' % clientId)
+           for cookie in cj:
+               if cookie.name == 'pbsol.station':
+                   self.addon.setSetting('pbsol', cookie.value)
+               elif cookie.name == 'pbs_uid':
+                   self.addon.setSetting('pbs_uid', cookie.value)
+           self.addon.setSetting('first_run_done', 'true')
+           cj.save()
+    else:
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+        urllib2.install_opener(opener)
+        return
 
 
  def getAddonMenu(self,url,ilist):
-   addonLanguage  = self.addon.getLocalizedString
-   self.doPBSLogin()
-   html = self.getRequest('http://www.pbs.org/shows-page/0/?genre=&title=&callsign=')
-   a = json.loads(html)
-   for b in a['genres'][1:]:
-       ilist = self.addMenuItem(b['title'],'GS', ilist, str(b['id'])+'|0', self.addonIcon, self.addonFanart, None, isFolder=True)
-
-   if self.addon.getSetting('enable_login') == 'true':
-       pbsol = self.addon.getSetting('pbsol')
-       if pbsol != '':
-          xheaders = self.defaultHeaders.copy()
-          xheaders['X-Requested-With'] = 'XMLHttpRequest'
-          html = self.getRequest('http://www.pbs.org/shows-page/0/?genre=&title=&callsign=%s' % pbsol, None, xheaders)
-          if len(html) > 0:
-             a = json.loads(html)
-             if len(a['results']['content']) > 0:
-                ilist = self.addMenuItem(addonLanguage(30048) ,'GS', ilist, 'localpbs' , self.addonIcon, self.addonFanart, None, isFolder=True)
-   html = self.getRequest('http://www.pbs.org/favorite-shows-page/1/')
-   if len(html) > 0:
-       a = json.loads(html)
-       if a['totalResults'] > 0:
-          ilist = self.addMenuItem(addonLanguage(30004),'GS', ilist, 'favorites' , self.addonIcon, self.addonFanart, None, isFolder=True)
-   xheaders = self.defaultHeaders.copy()
-   xheaders['X-Requested-With'] = 'XMLHttpRequest'
-   html = self.getRequest('http://www.pbs.org/watchlist/page/1/', None, xheaders)
-   if len(html) > 0:
-       a = json.loads(html)
-       if a.get('videos') is not None:
-          if len(a['videos']) > 0:
-             ilist = self.addMenuItem(addonLanguage(30005) ,'GM', ilist, 'pbswatchlist' , self.addonIcon, self.addonFanart, None, isFolder=True)
-   return ilist
+    addonLanguage  = self.addon.getLocalizedString
+    self.doPBSLogin()
+    html = self.getRequest('http://www.pbs.org/shows-page/0/?genre=&title=&callsign=')
+    a = json.loads(html)
+    for b in a['genres'][1:]:
+        ilist = self.addMenuItem(b['title'],'GS', ilist, str(b['id'])+'|0', self.addonIcon, self.addonFanart, None, isFolder=True)
+    if self.addon.getSetting('enable_login') == 'true':
+        pbsol = self.addon.getSetting('pbsol')
+        if pbsol != '':
+           xheaders = self.defaultHeaders.copy()
+           xheaders['X-Requested-With'] = 'XMLHttpRequest'
+           html = self.getRequest('http://www.pbs.org/shows-page/0/?genre=&title=&callsign=%s' % pbsol, None, xheaders)
+           if len(html) > 0:
+               a = json.loads(html)
+               if len(a['results']['content']) > 0:
+                   ilist = self.addMenuItem(addonLanguage(30048) ,'GS', ilist, 'localpbs' , self.addonIcon, self.addonFanart, None, isFolder=True)
+    html = self.getRequest('http://www.pbs.org/favorite-shows-page/1/')
+    if len(html) > 0:
+        a = json.loads(html)
+        if a['totalResults'] > 0:
+            ilist = self.addMenuItem(addonLanguage(30004),'GS', ilist, 'favorites' , self.addonIcon, self.addonFanart, None, isFolder=True)
+    xheaders = self.defaultHeaders.copy()
+    xheaders['X-Requested-With'] = 'XMLHttpRequest'
+    html = self.getRequest('http://www.pbs.org/watchlist/page/1/', None, xheaders)
+    if len(html) > 0:
+        a = json.loads(html)
+        if a.get('videos') is not None:
+            if len(a['videos']) > 0:
+                ilist = self.addMenuItem(addonLanguage(30005) ,'GM', ilist, 'pbswatchlist' , self.addonIcon, self.addonFanart, None, isFolder=True)
+    return ilist
 
 
  def getAddonShows(self,url,ilist):
@@ -130,35 +136,44 @@ class myAddon(t1mAddon):
         url = b['id']
         name   = b['title']
         thumb  = b['image']
-        if thumb == None : thumb = self.addonIcon
+        if thumb == None :
+            thumb = self.addonIcon
         fanart = b['image']
-        if fanart == None: fanart = self.addonFanart
+        if fanart == None:
+            fanart = self.addonFanart
         infoList = {}
         infoList['TVShowTitle'] = name
         infoList['Title']       = name
         infoList['Studio'] = b.get('producer')
         genres = b.get('genre_titles')
-        if genres != [] and genres is not None: infoList['Genre'] = genres[0]
+        if genres != [] and genres is not None:
+            infoList['Genre'] = genres[0]
         infoList['Episode'] = b.get('video_count')
         infoList['Plot'] = b.get('description')
         if self.addon.getSetting('enable_login') == 'true':
-           if gsurl == 'favorites': contextMenu = [(addonLanguage(30006),'XBMC.Container.Update(%s?mode=DF&url=RF%s)' % (sys.argv[0], url))]
-           else:           contextMenu = [(addonLanguage(30007),'XBMC.RunPlugin(%s?mode=DF&url=AF%s)' % (sys.argv[0], url))]
-        else: contextMenu = None
+            if gsurl == 'favorites':
+                contextMenu = [(addonLanguage(30006),'XBMC.Container.Update(%s?mode=DF&url=RF%s)' % (sys.argv[0], url))]
+            else:
+                contextMenu = [(addonLanguage(30007),'XBMC.RunPlugin(%s?mode=DF&url=AF%s)' % (sys.argv[0], url))]
+        else:
+            contextMenu = None
         ilist = self.addMenuItem(name,'GC', ilist, url, thumb, fanart, infoList, isFolder=True, cm=contextMenu)
-    if pgNum != '': ilist = self.addMenuItem('[COLOR blue]%s[/COLOR]' % addonLanguage(30050),'GS', ilist, genreUrl+'|'+str(int(pgNum)+1), self.addonIcon, self.addonFanart, None, isFolder=True)
+    if pgNum != '':
+        ilist = self.addMenuItem('[COLOR blue]%s[/COLOR]' % addonLanguage(30050),'GS', ilist, genreUrl+'|'+str(int(pgNum)+1), self.addonIcon, self.addonFanart, None, isFolder=True)
     return(ilist)
 
 
  def getAddonCats(self,url,ilist):
     addonLanguage  = self.addon.getLocalizedString
     self.doPBSLogin()
-    thumb  = xbmc.getInfoLabel('ListItem.Art(thumb)')
+    thumb = xbmc.getInfoLabel('ListItem.Art(thumb)')
     fanart = xbmc.getInfoLabel('ListItem.Art(fanart)')
     html = self.getRequest('http://www.pbs.org/show/%s/episodes/' % url)
     cnts = re.compile('<ul class="video-catalog-nav">.+?<strong>(.+?)<.+?<strong>(.+?)<.+?<strong>(.+?)<', re.DOTALL).search(html)
-    if cnts is not None:   ecnt, ccnt, pcnt = cnts.groups()
-    else: ecnt, ccnt, pcnt = ('0','0','0')
+    if cnts is not None:
+        ecnt, ccnt, pcnt = cnts.groups()
+    else:
+        ecnt, ccnt, pcnt = ('0','0','0')
     infoList = {}
     infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
     infoList['Title'] = infoList['TVShowTitle']
@@ -171,15 +186,13 @@ class myAddon(t1mAddon):
 
  def getAddonEpisodes(self,url,ilist):
     self.doPBSLogin()
-    addonLanguage  = self.addon.getLocalizedString
-
+    addonLanguage = self.addon.getLocalizedString
     url, stype, pageNum = url.split('|',2)
     sname = url
     html = self.getRequest('http://www.pbs.org/show/%s/%s/?page=%s' % (url, stype, pageNum))
     epis = re.compile('<article class="video-summary">.+?href="/video/(.+?)/.+?data-srcset="(.+?)".+?alt="(.+?)".+?class="description">(.+?)<.+?class="video-popover__duration">(.+?)<',re.DOTALL).findall(html)
     if len(epis) == 0:
         epis = re.compile('<div class="video-summary">.+?href="/video/(.+?)/.+?data-srcset="(.+?)".+?alt="(.+?)".+?class="description">(.+?)<.+?class="video-popover__duration">(.+?)<',re.DOTALL).findall(html)
-
     for i, (url, imgs, name, plot, duration)  in list(enumerate(epis, start=1)):
         name = h.unescape(name.decode(UTF8))
         name = name.replace('Video thumbnail: ','',1)
@@ -188,21 +201,23 @@ class myAddon(t1mAddon):
         infoList = {}
         t = 0
         for dur in duration.split(':'):
-           if dur.strip().isdigit(): 
-               t = t*60 + int(dur.strip())
+            if dur.strip().isdigit(): 
+                t = t*60 + int(dur.strip())
         if t != 0: infoList['duration'] = t
         imgs = imgs.split(',')
-        thumb  = '%s.jpg' % (imgs[2].split('.jpg',1)[0].strip())
+        thumb = '%s.jpg' % (imgs[2].split('.jpg',1)[0].strip())
         fanart = '%s.jpg' % (imgs[len(imgs)-1].split('.jpg',1)[0].strip())
-        infoList['Title']       = name
+        infoList['Title'] = name
         infoList['Plot'] = h.unescape(plot.decode(UTF8))
         infoList['mediatype'] = 'episode'
         infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
         if self.addon.getSetting('enable_login') == 'true': 
-           contextMenu = [(addonLanguage(30008),'XBMC.RunPlugin(%s?mode=DF&url=AW%s)' % (sys.argv[0], url))]
-        else: contextMenu = None
+            contextMenu = [(addonLanguage(30008),'XBMC.RunPlugin(%s?mode=DF&url=AW%s)' % (sys.argv[0], url))]
+        else:
+            contextMenu = None
         ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False, cm=contextMenu)
-        if i >= showsPerPage: ilist = self.addMenuItem('[COLOR blue]%s[/COLOR]' % addonLanguage(30050),'GE', ilist, '%s|%s|%s' %(sname, stype, str(int(pageNum)+1)), self.addonIcon, self.addonFanart, None, isFolder=True)
+        if i >= showsPerPage:
+            ilist = self.addMenuItem('[COLOR blue]%s[/COLOR]' % addonLanguage(30050),'GE', ilist, '%s|%s|%s' %(sname, stype, str(int(pageNum)+1)), self.addonIcon, self.addonFanart, None, isFolder=True)
     return(ilist)
 
 
@@ -222,10 +237,11 @@ class myAddon(t1mAddon):
         duration = b['duration']
         t = 0
         for dur in duration.split(':'):
-           if dur.strip().isdigit(): 
-               t = t*60 + int(dur.strip())
-        if t != 0: infoList['duration'] = t
-        thumb  = b['image']
+            if dur.strip().isdigit(): 
+                t = t*60 + int(dur.strip())
+        if t != 0:
+            infoList['duration'] = t
+        thumb = b['image']
         fanart = b['image']
         infoList['TVShowTitle'] = b['show']['title']
         infoList['Title'] = name
@@ -255,8 +271,9 @@ class myAddon(t1mAddon):
        
 
  def getAddonVideo(self,url):
-    addonLanguage  = self.addon.getLocalizedString
-    pg = self.getRequest('http://player.pbs.org/viralplayer/%s' % (url))
+    addonLanguage = self.addon.getLocalizedString
+    pbs_uid = self.addon.getSetting('pbs_uid')
+    pg = self.getRequest('http://player.pbs.org/viralplayer/%s/?uid=%s' % (url, pbs_uid))
     urls = re.compile("PBS.videoData =.+?recommended_encoding.+?'url'.+?'(.+?)'.+?'closed_captions_url'.+?'(.+?)'", re.DOTALL).search(pg)
     if urls is not None:
         url,suburl = urls.groups()
@@ -266,12 +283,13 @@ class myAddon(t1mAddon):
         xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( self.addonName, addonLanguage(30049) , 4000) )
         return
 
-    if 'mp4:' in url: url = 'http://ga.video.cdn.pbs.org/%s' % url.split('mp4:',1)[1]
+    if 'mp4:' in url:
+        url = 'http://ga.video.cdn.pbs.org/%s' % url.split('mp4:',1)[1]
     elif ('.m3u8' in url) and self.addon.getSetting('vid_res') >= '1': 
         url = url.replace('800k','2500k')
         if ('hd-1080p' in url) and self.addon.getSetting('vid_res') == '2': 
-           url = url.split('-hls-',1)[0]
-           url = url+'-hls-6500k.m3u8'
+            url = url.split('-hls-',1)[0]
+            url = url+'-hls-6500k.m3u8'
     liz = xbmcgui.ListItem(path = url)
     subfile = self.procConvertSubtitles(suburl)
     liz.setSubtitles([(subfile)])

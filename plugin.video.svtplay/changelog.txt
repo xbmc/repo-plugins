@@ -1,3 +1,9 @@
+Version 4.0.29
+-------------
+- Fix broken listing and playback
+
+Please note that category "Barn" is still broken
+
 Version 4.0.28
 -------------
 - Fix broken thumbnails

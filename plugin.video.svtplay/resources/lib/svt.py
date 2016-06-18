@@ -57,55 +57,27 @@ def getCategories():
   """
   Returns a list of all categories.
   """
-  html = getPage(URL_A_TO_O)
-
-  container = parseDOM(html,
-                       "div",
-                       attrs = { "class": "[^\"']*play_promotion-grid[^\"']*"})
-  if not container:
-    helper.errorMsg("Could not find container")
-    return None
-
-  titles = parseDOM(container,
-                    "span",
-                    attrs={"class": "[^\"']*play_promotion-item__caption_inner[^\"']*"})
-  if not titles:
-    helper.errorMsg("Could not find titles")
-    return None
-
-  thumbs = parseDOM(container,
-                    "img",
-                    attrs = { "class": "[^\"']*play_promotion-item__image[^\"']*" },
-                    ret = "src")
-  if not thumbs:
-    helper.errorMsg("Could not find thumbnails")
-    return None
-
-  hrefs = parseDOM(container,
-                   "a",
-                    attrs={"class": "[^\"']*play_promotion-item__link[^\"']*"},
-                    ret="href")
-  if not hrefs:
-    helper.errorMsg("Could not find hrefs")
+  r = requests.get(BASE_URL+API_URL+"programs_page")
+  if r.status_code != 200:
+    common.log("Could not fetch JSON!")
     return None
 
   categories = []
 
-  for index, title in enumerate(titles):
+  for item in r.json()["categories"]:
     category = {}
-    category["url"] = hrefs[index]
+    category["url"] = item["url"]
 
-    if category["url"].endswith("oppetarkiv"):
-      # Skip the "Oppetarkiv" category
+    if category["url"].endswith("oppetarkiv") or category["url"].endswith("barn"):
+      # Skip the "Oppetarkiv" and "Barn" category
       continue
-    elif category["url"].startswith("/genre"):
-      # No support for /genre yet TODO: Add support
-      continue
+
+    if not category["url"].startswith("genre"):
+      category["url"] = "genre/" + category["url"]
 
     # One ugly hack for the React generated HTML
-    title = parseDOM(title, "span")[0]
-    category["title"] = common.replaceHTMLCodes(title)
-    category["thumbnail"] = helper.prepareThumb(thumbs[index], baseUrl=BASE_URL)
+    category["title"] = item["name"]
+    category["thumbnail"] = item["posterImageUrl"]
     categories.append(category)
 
   return categories
@@ -145,32 +117,33 @@ def getLatestNews():
 
 def getProgramsForCategory(url):
   """
-  Returns a list of programs for a specific category URL.
+  Returns a list of programs for a specific category.
   """
-  html = getPage(url)
-
-  container = parseDOM(html, "div", attrs = { "id" : "[^\"']*playJs-alphabetic-list[^\"']*" })
-
-  if not container:
-    helper.errorMsg("Could not find container for URL "+url)
+  if url.startswith("genre/"):
+    return getProgramsForGenre(url.split("/")[1])
+  else:
     return None
 
-  articles = parseDOM(container, "article", attrs = { "class" : "[^\"']*play_videolist-element[^\"']*" })
-
-  if not articles:
-    helper.errorMsg("Could not find program links for URL "+url)
+def getProgramsForGenre(genre):
+  url = BASE_URL+API_URL+"cluster_page;cluster="+genre
+  r = requests.get(url)
+  if r.status_code != 200:
+    common.log("Could not get JSON for url: "+url)
     return None
 
   programs = []
-  for index, article in enumerate(articles):
-    url = parseDOM(article, "a", ret="href")[0]
-    title = parseDOM(article, "span", attrs= { "class" : "play_videolist-element__title-text" })[0]
-    title = common.replaceHTMLCodes(title)
-    thumbnail = parseDOM(article, "img", ret="src")[0]
-    program = { "title": title, "url": url, "thumbnail": helper.prepareThumb(thumbnail, baseUrl=BASE_URL)}
+  for item in r.json()["contents"]:
+    url = item["contentUrl"]
+    title = item["title"]
+    plot = ""
+    try:
+      plot = item["description"]
+    except KeyError:
+      pass
+    info = {"plot": plot}
+    program = { "title": title, "url": url, "thumbnail": helper.prepareThumb(item["thumbnailLarge"], baseUrl=BASE_URL), "info": info}
     programs.append(program)
   return programs
-
 
 def getAlphas():
   """
@@ -317,17 +290,64 @@ def getChannels():
 
   return items
 
-def getEpisodes(url):
+def getEpisodes(title):
   """
   Returns the episodes for a program URL.
   """
-  return getProgramItems(SECTION_EPISODES, url)
+  url = BASE_URL+API_URL+"video_title_page;title="+title
+  r = requests.get(url)
+  if r.status_code != 200:
+    common.log("Could not get JSON for "+url)
+    return None
+  programs = []
+  for item in r.json()["relatedVideos"]["episodes"]:
+    program = {}
+    program["title"] = item["title"]
+    program["url"] = "video/" + str(item["id"])
+    program["thumbnail"] = helper.prepareThumb(item["thumbnailMedium"], BASE_URL)
+    info = {}
+    try:
+      info["plot"] = item["description"]
+    except KeyError:
+      info["plot"] = ""
+    program["info"] = info
+    programs.append(program)
+  return programs
 
-def getClips(url):
+def getClips(title):
   """
   Returns the clips for a program URL.
   """
-  return getProgramItems(SECTION_LATEST_CLIPS, url)
+  url = BASE_URL+API_URL+"video_title_page;title="+title
+  r = requests.get(url)
+  if r.status_code != 200:
+    common.log("Could not get JSON for "+url)
+    return None
+  clips = []
+  for item in r.json()["relatedVideos"]["clipsResult"]["entries"]:
+    clip = {}
+    clip["title"] = item["title"]
+    clip["url"] = "klipp/" + str(item["id"])
+    try:
+      clip["thumbnail"] = helper.prepareThumb(item["thumbnailMedium"], BASE_URL)
+    except KeyError:
+      clip["thumbnail"] = ""
+    info = {}
+    try:
+      info["plot"] = item["description"]
+    except KeyError:
+      info["plot"] = ""
+    clip["info"] = info
+    clips.append(clip)
+  return clips
+
+def getVideoJSON(video_url):
+  url = BASE_URL + API_URL + "title_page;title=" + video_url
+  r = requests.get(url)
+  if r.status_code != 200:
+    common.log("Failed to get JSON for "+url)
+    return None
+  return r.json()
 
 def getProgramItems(section_name, url=None):
   """

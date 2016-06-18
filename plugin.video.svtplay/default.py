@@ -156,7 +156,7 @@ def viewCategory(url):
   if not programs:
     return
   for program in programs:
-    addDirectoryItem(program["title"], { "mode" : MODE_PROGRAM, "url" : program["url"] }, thumbnail=program["thumbnail"])
+    addDirectoryItem(program["title"], { "mode" : MODE_PROGRAM, "url" : program["url"] }, thumbnail=program["thumbnail"], info=program["info"])
 
 def viewEpisodes(url):
   """
@@ -262,17 +262,10 @@ def addNextPageItem(nextPage, section):
                       "mode": section})
 
 def startVideo(url):
-  """
-  Starts the XBMC player if a valid video URL is
-  found for the given page URL.
-  """
   if not "m3u8" in url:
-    if not url.startswith("/"):
-      url = "/" + url
-    url = svt.BASE_URL + url + svt.JSON_SUFFIX
-
+    json = svt.getVideoJSON(url)
     try:
-      show_obj = helper.resolveShowURL(url)
+      show_obj = helper.resolveShowJSON(json)
     except ValueError:
       common.log("Could not decode JSON for "+url)
       return

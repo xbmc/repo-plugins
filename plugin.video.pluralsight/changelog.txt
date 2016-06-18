@@ -1,3 +1,6 @@
+v1.1.4
+- updated requests library to continue working with pluralsight servers upgrade (https SNI support)
+  (Dimitri)
 v1.1.0
 - Added support for Bookmarks & Recently Watched (thanks papersackpuppet)
 - Fixed up error handling around invalid logins

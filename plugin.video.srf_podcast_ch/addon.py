@@ -36,12 +36,20 @@ numberOfEpisodesPerPage = str(addon.getSetting("numberOfShowsPerPage"))
 
 #'this method list all SRF-channel when SRF-Podcast was selected in the main menu'
 def chooseChannel():
-    addChannel('srf', 'SRF', 'listTvShows')
-    addChannel('rts', 'RTS', 'listTvShows')
-    addChannel('rsi', 'RSI', 'listTvShows')
-    addChannel('rtr', 'RTR', 'listTvShows')
+    addChannel('srf', 'SRF', 'chooseOptions')
+    addChannel('rts', 'RTS', 'chooseOptions')
+    addChannel('rsi', 'RSI', 'chooseOptions')
+    addChannel('rtr', 'RTR', 'chooseOptions')
     xbmcplugin.endOfDirectory(handle=pluginhandle, succeeded=True)
 
+def chooseOptions(channel):
+	addOption('dummy',addon.getLocalizedString(30008), 'listTvShows',channel,1)
+	addOption('dummy',addon.getLocalizedString(30005), 'newestTvShows',channel,1)
+	addOption('dummy',addon.getLocalizedString(30007), 'mostClickedTvShows',channel,1)
+	addOption('dummy',addon.getLocalizedString(30006), 'recommendedTvShows',channel,1)
+#	addOption('c49c1d73-2f70-0001-138a-15e0c4ccd3d0','Live', 'liveTvShows',channel,1)
+	xbmcplugin.endOfDirectory(handle=pluginhandle, succeeded=True)
+	
 #'this method list all TV shows from SRF when SRF-Podcast was selected in the main menu'
 def listTvShows(channel):
 	url = 'http://il.srf.ch/integrationlayer/1.0/ue/' + channel + '/tv/assetGroup/editorialPlayerAlphabetical.json'
@@ -72,11 +80,102 @@ def listTvShows(channel):
 	if forceViewMode:
 		xbmc.executebuiltin('Container.SetViewMode('+viewModeShows+')')
 
+#'this method list all TV shows from SRF when SRF-Podcast was selected in the main menu'
+def listVideosByMode(channel,mode,page):
+	url = ''
+	if mode == 'recommendedTvShows':
+		url = 'http://il.srf.ch/integrationlayer/1.0/ue/' + channel + '/video/editorialPlayerPicks.json'
+	elif mode == 'newestTvShows':
+		url = 'http://il.srf.ch/integrationlayer/1.0/ue/' + channel + '/video/editorialPlayerLatest.json?pageNumber='+str(page)+'&pageSize='+str(numberOfEpisodesPerPage)
+	elif mode == 'mostClickedTvShows':
+		url = 'http://il.srf.ch/integrationlayer/1.0/ue/' + channel + '/video/mostClicked.json?pageSize='+str(numberOfEpisodesPerPage)
+	
+	response = json.load(open_srf_url(url))
+	videos =  response["Videos"]["Video"]
+	title = ''
+	desc = ''
+	picture = ''
+	mode = 'playepisode'
+	for video in videos:
+		try:
+			title = video['AssetMetadatas']['AssetMetadata'][0]['title']
+		except:
+			title = 'No Title'
+		try:
+			desc = video['AssetMetadatas']['AssetMetadata'][0]['description']
+		except:
+			desc = 'No Description'
+		try:
+			picture = video['Image']['ImageRepresentations']['ImageRepresentation'][0]['url']
+		except:
+			picture = ''
+		try:
+			length = int(video['duration']) / 1000 / 60
+		except:
+			length = 0
+		try:
+			pubdate = video['AssetSet']['publishedDate']
+		except:
+			pubdate = ''		
+		addLink(title, video['id'], 'playepisode', desc, picture, length, pubdate,showbackground,channel)
+			
+	xbmcplugin.addSortMethod(pluginhandle,1)
+	xbmcplugin.endOfDirectory(pluginhandle)
+	if forceViewMode:
+		xbmc.executebuiltin('Container.SetViewMode('+viewModeShows+')')
+
+#'this method plays the channel live'
+#def playlivechannel(channel,episodeid):
+#	besturl = ''
+#	downloadflag = 0
+#	
+#	try:
+#		url = 'http://il.srf.ch/integrationlayer/1.0/ue/' + channel + '/video/play/'+episodeid+'.json'
+#		response = json.load(open_srf_url(url))
+#		print 'url works'
+#		urls =  response["Video"]["Playlists"]["Playlist"]["@protocol=HTTP-HDS"]["url"]
+#		print 'response works'
+#		besturl = ''
+#		if urls.__len__() > 1:
+#			for tempurl in urls:
+#				if tempurl['@quality'] == 'HD':
+#					besturl = tempurl['text']
+#		else:
+#			besturl = urls[0]['text']
+#		downloadflag = 1
+#	except:
+#		print "not for download"
+#
+#	if downloadflag == 0:
+#		try:
+#			url = 'http://il.srf.ch/integrationlayer/1.0/ue/' + channel + '/video/play/'+episodeid+'.json'
+#			response = json.load(open_srf_url(url))
+#			urls =  response["Video"]["Playlists"]['Playlist'][1]['url']
+#			besturl = ''
+#			if urls.__len__() > 1:
+#				for tempurl in urls:
+#					if tempurl['@quality'] == 'HD':
+#						besturl = tempurl['text']
+#			else:
+#				besturl = urls[0]['text']
+#			
+#			downloadflag = 0
+#		except:
+#			print "not for download"  
+#	listitem = xbmcgui.ListItem(path=besturl)
+#	xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
+
+		
 #'this method list all episodes of the selected show'
 def listEpisodes(channel,showid,showbackground,page):
 	url = 'http://il.srf.ch/integrationlayer/1.0/ue/' + channel + '/assetSet/listByAssetGroup/'+showid+'.json?pageNumber='+str(page)+"&pageSize="+str(numberOfEpisodesPerPage)
 	response = json.load(open_srf_url(url))
-	maxpage = response["AssetSets"]["@maxPageNumber"]
+	maxpage = 1
+	try:
+		maxpage = response["AssetSets"]["@maxPageNumber"]
+	except:
+		maxpage = 1
+
 	show =  response["AssetSets"]["AssetSet"]
 		
 	for episode in show:
@@ -103,20 +202,25 @@ def listEpisodes(channel,showid,showbackground,page):
 			url = episode['Assets']['Video'][0]['id']
 		except:
 			url = 'no url'
-		addLink(title, url, 'playepisode', desc, picture, length, pubdate,showbackground,channel)
+		try:
+			titleextended = ' - ' + episode['Assets']['Video'][0]['AssetMetadatas']['AssetMetadata'][0]['title']
+		except:
+			titleextended = ''
+	
+		addLink(title+titleextended, url, 'playepisode', desc, picture, length, pubdate,showbackground,channel)
 
 	# check if another page is available
 	page = int(page)
 	maxpage = int(maxpage)
 	if page < maxpage:
 		page = page + 1
-		addnextpage(addon.getLocalizedString(33001), showid, 'listEpisodes', '', showbackground,page,channel)
+		addnextpage(addon.getLocalizedString(33001).format(page,maxpage), showid, 'listEpisodes', '', showbackground,page,channel)
 	
 	xbmcplugin.endOfDirectory(pluginhandle)
 	if forceViewMode:
 		xbmc.executebuiltin('Container.SetViewMode('+viewModeShows+')')
     
-	#'this method plays the selected episode'    
+#'this method plays the selected episode'    
 def playepisode(channel,episodeid):
 	besturl = ''
 	downloadflag = 0
@@ -139,7 +243,7 @@ def playepisode(channel,episodeid):
 	if downloadflag == 0:
 		try:
 			url = 'http://il.srf.ch/integrationlayer/1.0/ue/' + channel + '/video/play/'+episodeid+'.json'
-			response = json.load(urllib2.urlopen(url))
+			response = json.load(open_srf_url(url))
 			urls =  response["Video"]["Playlists"]['Playlist'][1]['url']
 			besturl = ''
 			if urls.__len__() > 1:
@@ -159,6 +263,13 @@ def playepisode(channel,episodeid):
 def addChannel(id, name, mode):
     ok = True
     directoryurl = sys.argv[0]+"?channel="+urllib.quote_plus(id)+"&mode="+str(mode)
+    liz = xbmcgui.ListItem(name)
+    ok = xbmcplugin.addDirectoryItem(pluginhandle, url=directoryurl, listitem=liz, isFolder=True)
+    return ok
+	
+def addOption(url, name, mode,channel,page):
+    ok = True
+    directoryurl = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&channel="+str(channel)+"&page="+str(page)
     liz = xbmcgui.ListItem(name)
     ok = xbmcplugin.addDirectoryItem(pluginhandle, url=directoryurl, listitem=liz, isFolder=True)
     return ok
@@ -224,7 +335,7 @@ def open_srf_url(urlstring):
         if response.info().get('Content-Encoding') == 'gzip': 
             buf = StringIO( response.read()) 
             f = gzip.GzipFile(fileobj=buf) 
-            response = f.read()
+            response = StringIO(f.read())
     except Exception as e:
         print traceback.format_exc()
         dialog = xbmcgui.Dialog().ok('xStream Error',str(e.__class__.__name__),str(e))
@@ -246,6 +357,16 @@ page = params.get('page', '')
 
 if mode == 'chooseChannel':
     chooseChannel()
+elif mode == 'chooseOptions':
+    chooseOptions(channel)
+elif mode == 'recommendedTvShows':
+    listVideosByMode(channel,mode,page)	
+elif mode == 'newestTvShows':
+    listVideosByMode(channel,mode,page)	
+elif mode == 'mostClickedTvShows':
+    listVideosByMode(channel,mode,page)	
+#elif mode == 'liveTvShows':
+#	playlivechannel(channel,url)
 elif mode == 'listTvShows':
     listTvShows(channel)
 elif mode == 'listEpisodes':

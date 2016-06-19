@@ -1,0 +1,45 @@
+# Kodi Media Center language file
+# Addon Name: Radio Browser
+# Addon id: plugin.audio.radiobrowser
+# Addon Provider: segler_alex
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: segler_alex@web.de\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: segler_alex\n"
+"Language-Team: German (http://www.transifex.com/projects/p/xbmc-addons/language/de/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Top 100 clicked stations"
+msgstr "Top 100 Stationen nach Klicks"
+
+msgctxt "#32001"
+msgid "Top 100 voted stations"
+msgstr "Top 100 Stationen nach Abstimmung"
+
+msgctxt "#32002"
+msgid "Last 100 changed stations"
+msgstr "100 letzt-geänderte Stationen"
+
+msgctxt "#32003"
+msgid "Last 100 clicked stations"
+msgstr "100 letzt-geklickte Stationen"
+
+msgctxt "#32004"
+msgid "Tags"
+msgstr "Kategorien"
+
+msgctxt "#32005"
+msgstr "Länder"
+msgid "Countries"
+
+msgctxt "#32006"
+msgid "All"
+msgstr "Alle"

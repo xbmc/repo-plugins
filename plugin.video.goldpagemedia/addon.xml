@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon
-	id="plugin.video.goldpagemedia"
-	version="1.1.2"
-	name="GoldPageMedia"
-	provider-name="GoldPageMedia">
-	<requires>
-		<import addon="xbmc.python" version="2.1.0"/>
-		<import addon="script.module.beautifulsoup" version="3.0.8"/>
-	</requires>
-	<extension point="xbmc.python.pluginsource" library="main.py">
-		<provides>video</provides>
-	</extension>
-	<extension point="xbmc.addon.metadata">
-		<platform>all</platform>
-		<language>en vi</language>
-		<summary lang="en">GoldPageMedia Channel</summary>
-		<summary lang="vi">GoldPageMedia Channel</summary>
-		<description lang="en">This is free plugin, used for XBMC to watching so much of online TV channels. Website: www.goldpagemedia.com</description>
-		<description lang="vi">This is free plugin, used for XBMC to watching so much of online TV channels. Website: www.goldpagemedia.com</description>
-		<disclaimer lang="en"></disclaimer>
-		<disclaimer lang="vi"></disclaimer>
-	</extension>
+<addon id="plugin.video.espn_3"
+       name="ESPN 3"
+       version="2.9.4"
+       provider-name="awaters1,locomot1f,MetalChris,BlueCop,Romans I XVI">
+    <requires>
+        <import addon="xbmc.python" version="2.14.0"/>
+        <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+        <import addon="script.module.elementtree" version="1.2.8"/>
+        <import addon="script.module.simplejson" version="3.3.0"/>
+        <import addon="script.module.m3u8" version="0.2.2"/>
+        <import addon="script.module.dateutil" version="2.4.2"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <language/>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+        <summary lang="en">ESPN 3</summary>
+        <description lang="en">Unofficial addon to Watch ESPN. Watch full live streaming sporting events and replays on
+            ESPN 3 (and premium channels with a valid cable provider), including football, baseball, cricket, soccer,
+            and basketball events. NOT SUPPORTED BY ESPN OR DISNEY OR ANYONE ELSE
+        </description>
+        <forum>http://forum.kodi.tv/showthread.php?tid=230418</forum>
+        <source>https://github.com/kodi-addons/plugin.video.espn_3</source>
+        <email>bgunteriv@gmail.com</email>
+    </extension>
 </addon>

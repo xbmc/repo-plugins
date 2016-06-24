@@ -2,7 +2,7 @@
 <addon
   id="plugin.video.myjamtv"
   name="My Jam TV"
-  version="0.0.1"
+  version="1.1.0"
   provider-name="My Jam TV">
     <requires>
         <import addon="xbmc.python" version="2.20.0"/>
@@ -12,7 +12,7 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <summary lang="en">The Revolutionary 24-Hour Music Network</summary>
-        <description lang="en">Welcome to My Jam TV, a comprehensive music and entertainment network to promote and further artists in their careers. Here artists and bands will have a unique forum to share their music with millions around the world through television for a nominal fee. The music video will receive a fresh face and renewed vigor venturing away from the saturated and fragmented you tube corner. An added feature will include cutting-edge entertainment news to educate and empower individuals with their careers. Thus, we are the new best friend for aspiring entertainers!</description>
+        <description lang="en">Welcome to My Jam TV, a comprehensive music and entertainment network to promote and further artists in their careers. Here, artists and bands will have a unique forum to share their music with millions around the world through television for a nominal fee. The music video will receive a fresh face and renewed vigor, venturing away from the saturated and fragmented YouTube corner. An added feature will include cutting-edge entertainment news to educate and empower individuals with their careers. We are the new best friend for aspiring entertainers!</description>
         <disclaimer lang="en"></disclaimer>
         <language>en</language>
         <platform>all</platform>

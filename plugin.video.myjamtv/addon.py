@@ -14,11 +14,12 @@
 
 # -*- coding: utf-8 -*-
 
+import urllib2
 import xbmc
 import xbmcgui
 
 # Stream URL here
-url = "http://108.61.159.243:1935/XStreamEngine-243/smil:MyJamTV.smil/playlist.m3u8"
+url = urllib2.urlopen("http://myjamtv.com/stream_url.txt").readline().strip()
 # Fake List Item for Stream Name
 listitem = xbmcgui.ListItem("My Jam TV")
 listitem.setInfo('video', {'Title': 'My Jam TV', 'Genre': 'Music Video'})

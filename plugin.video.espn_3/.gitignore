@@ -1,0 +1,7 @@
+*.pyc
+*.pyo
+*.project
+*.pydevproject
+bugs/
+providers.xml
+.idea/

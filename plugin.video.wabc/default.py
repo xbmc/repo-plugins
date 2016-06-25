@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # KodiAddon 
 #
-from lib.scraper import myAddon
+from resources.lib.scraper import myAddon
 import re
 import sys
 

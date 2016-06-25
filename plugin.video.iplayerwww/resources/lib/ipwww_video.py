@@ -1186,6 +1186,7 @@ def ParseRedButtonStreams(channelname, providers):
     for i in range(len(streams)):
         streams[i][1] = round(int(streams[i][1])/1000.0, 1)
         streams[i][0] = re.sub('.f4m$', '.m3u8', streams[i][0])
+        streams[i][0] = re.sub('pa3%3d96000', 'pa4%3d128000', streams[i][0])
 
     # Return list sorted by bitrate
     return sorted(streams, key=lambda x: (x[1]), reverse=True)

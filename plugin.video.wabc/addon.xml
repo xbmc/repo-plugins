@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.wabc"
        name="WABC Programs"
-       version="3.0.3"
+       version="3.0.4"
        provider-name="t1m">
   <requires>
     <import addon="xbmc.python" version="2.20.0"/>
-    <import addon="script.module.t1mlib" version="1.0.14"/>
+    <import addon="script.module.t1mlib" version="1.0.15"/>
   </requires>
   <extension point="xbmc.python.pluginsource"
             library="default.py">
@@ -13,7 +13,7 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary lang="en">WABC Programs</summary>
-    <description lang="en">WABC Programs in 1080 from the flagship ABC station in New York. </description>
+    <description lang="en">WABC Programs in 1080 from the flagship ABC station in New York.</description>
     <disclaimer lang="en">Feel free to use this script. For information visit the wiki.</disclaimer>
     <platform>all</platform>
     <language>en</language>
@@ -21,6 +21,6 @@
     <forum>http://forum.kodi.tv/showthread.php?tid=234448</forum>
     <website>www.abc.com</website>
     <email></email>
-    <source>https://github.com/learningit/plugin.video.wabc/</source>
+    <source>https://github.com/learningit/Kodi-plugins-source</source>
   </extension>
 </addon>

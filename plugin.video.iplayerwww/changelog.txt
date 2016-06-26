@@ -1,3 +1,10 @@
+v2.3.4
+Moved to different, hopefully more stable, source for Red Button streams.
+Red Button now uses the same code as Watch Live.
+
+v2.3.3
+Fixed high quality Red Button streams.
+
 v2.3.2
 Fixed Radio Favourites and renamed to Added, as on the website.
 

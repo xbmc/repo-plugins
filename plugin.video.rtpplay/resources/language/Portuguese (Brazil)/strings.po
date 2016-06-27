@@ -1,0 +1,170 @@
+# Kodi Media Center language file
+# Addon Name: RTP Play
+# Addon id: plugin.video.rtpplay
+# Addon Provider: enen92
+msgid ""
+msgstr ""
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt-br\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30001"
+msgid "RTP Play"
+msgstr "RTP Play"
+
+msgctxt "#30002"
+msgid "Live channels"
+msgstr "Ao Vivo"
+
+msgctxt "#30004"
+msgid "Broadcasts"
+msgstr "Emissoes"
+
+msgctxt "#30005"
+msgid "Recent"
+msgstr "Recentes"
+
+msgctxt "#30006"
+msgid "Popular"
+msgstr "Populares"
+
+msgctxt "#30007"
+msgid "Lists"
+msgstr "Listas"
+
+msgctxt "#30008"
+msgid "Search"
+msgstr "Pesquisar"
+
+msgctxt "#30009"
+msgid "Shows"
+msgstr "Programas"
+
+msgctxt "#30010"
+msgid "Favourites"
+msgstr "Favoritos"
+
+msgctxt "#30011"
+msgid "A-Z listing"
+msgstr "Listas A-Z"
+
+msgctxt "#30012"
+msgid "RTP Archive"
+msgstr "Arquivo RTP"
+
+msgctxt "#30014"
+msgid "TV broadcasts"
+msgstr "Emissoes de TV"
+
+msgctxt "#30015"
+msgid "Radio broadcasts"
+msgstr "Emissoes de Radio"       
+
+msgctxt "#30016"
+msgid "By channel"
+msgstr "Por canal"
+
+msgctxt "#30017"
+msgid "By genre"
+msgstr "Por Tema"
+
+msgctxt "#30018"
+msgid "Couldn't open URL / Check your connection"
+msgstr "Não foi possivel abrir o URL / Verifique a sua conexao"
+
+msgctxt "#30019"
+msgid "Remove show from favourites"
+msgstr "Remover serie dos favoritos"
+ 
+msgctxt "#30020"
+msgid "Add show to favourites"
+msgstr "Adicionar serie aos favoritos"
+ 
+msgctxt "#30021"
+msgid "Remove watched status"
+msgstr "Remover visto"
+
+msgctxt "#30022"
+msgid "Mark as watched"
+msgstr "Marcar como visto"
+
+msgctxt "#30023"
+msgid "Added to addon favourites"
+msgstr "Adicionar aos favoritos do addon"  
+
+msgctxt "#30024"
+msgid "You have no show favourites"
+msgstr "Nao tem favoritos"  
+
+msgctxt "#30025"
+msgid "Removed from addon favourites"
+msgstr "Removido dos favoritos do addon"
+
+msgctxt "#30026"
+msgid "Information not available."
+msgstr "Informacao nao disponivel"
+
+msgctxt "#30027"
+msgid "Page "
+msgstr "Pagina "
+
+msgctxt "#30028"
+msgid "Next >>"
+msgstr "Proximo >>"
+
+msgctxt "#30030"
+msgid "No broadcasts"
+msgstr "Sem emissoes"
+
+msgctxt "#30031"
+msgid "Enter search string"
+msgstr "Introduza parametro de pesquisa"
+
+msgctxt "#30032"
+msgid "No shows have been found"
+msgstr "Nao foram encontradas series"
+
+msgctxt "#30033"
+msgid "Getting videos..."
+msgstr "A obter videos..."
+
+msgctxt "#30034"
+msgid "Marked as watched"
+msgstr "Marcado como visto"
+
+msgctxt "#30035"
+msgid "Removed watched status"
+msgstr "Visto removido"
+
+msgctxt "#30036"
+msgid "Live"
+msgstr "Ao vivo"
+
+msgctxt "#30038"
+msgid "On demand"
+msgstr "On demand"
+
+msgctxt "#30039"
+msgid "Show posters and plot"
+msgstr "Mostrar posters e descricao"
+
+msgctxt "#30040"
+msgid "[B][COLOR blue]View settings:[/B][/COLOR]"
+msgstr "[B][COLOR blue]Definicoes de vista:[/B][/COLOR]"
+
+msgctxt "#30041"
+msgid "View - TvShows"
+msgstr "Vista - Programas"
+
+msgctxt "#30042"
+msgid "View - Episodes"
+msgstr "Vista - Episódios"
+
+msgctxt "#30043"
+msgid "Could not resolve stream url"
+msgstr "Nao conseguiu resolver endereço da stream"
+

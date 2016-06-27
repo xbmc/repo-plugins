@@ -70,10 +70,11 @@ def list_episodes(name,url,plot):
 	if ('recent' not in url) and ('popular' not in url) and ('procura?' not in url):
 		url='http://www.rtp.pt/play/bg_l_ep/?listDate=&listQuery=&listProgram='+prog_id[0]+'&listcategory=&listchannel=&listtype=recent&page='+current_page+'&type=all'
 	else:pass
-	print url
 	try:
 		source = abrir_url(url)
-	except: source=''; msgok(translate(30001),translate(30018))
+	except: 
+		source=''
+		msgok(translate(30001),translate(30018))
 	if source:
 		match_geral = re.findall('<div class="lazy(.*?)</i></span>',source,re.DOTALL)
 		if match_geral:
@@ -85,9 +86,12 @@ def list_episodes(name,url,plot):
 				if titulo_array: 
 					if 'itemprop' not in titulo_array[0]:
 						titulo = title_clean_up(titulo_array[0])
-				img_tmp = re.compile('itemprop="thumbnail" src="(.+?)\?.+?" alt').findall(match)
-				if img_tmp: img = img_tmp[0]
-				else: img = ''
+				img = ''
+				img_tmp = re.compile('itemprop="thumbnail" src="(.+?)" alt').findall(match)
+				if img_tmp:
+					img_tmp = re.compile("src=(.+?)&").findall(img_tmp[0])
+					if img_tmp:
+						img = img_base_url + img_tmp[0]
 				if data and lnk:
 					information = { "Title": titulo,"plot":plot,"aired":format_data(data[0]) }
 					addepisode('[B]' + titulo + '[COLOR blue] (' + title_clean_up(data[0]) +')' + '[/B][/COLOR]',base_url + lnk[0],17,img,totalit,information)
@@ -97,7 +101,7 @@ def list_episodes(name,url,plot):
 			except: source_next = ''
 			if source_next:
 				if re.findall('itemtype="http://schema.org/VideoObject"',source_next):
-					addDir('[B][COLOR blue]'+translate(30028)+'|[/B][/COLOR] '+titulo,next_url,16,os.path.join(artfolder,'next.png'),1,pasta=True,informacion=information)
+					addDir('[B][COLOR blue]'+translate(30028)+'|[/B][/COLOR] '+titulo,next_url,16,os.path.join(artfolder,'next.png'),1,pasta=True,information=information)
 		except: pass
 	xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
 	setview('episodes-view')
@@ -194,8 +198,6 @@ def get_show_episode_parts(name,url,iconimage):
 		url_video_list = []
 		video_list = []
 		match = re.compile('href="(.+?)" title="Parte.+?" rel="nofollow"').findall(source)
-		print match
-		#match = re.compile("<a.+?href='(.+?)'><b>Parte</b>(.+?)</a>").findall(source)
 		if not match: url_video_list.append(url)
 		else:
 			for urlsbase in match:
@@ -224,8 +226,6 @@ def get_show_episode_parts(name,url,iconimage):
 			liz.setProperty('mimetype', 'video')
 			playlist.add(video, liz)
 
-		xbmcPlayer = xbmc.Player()
-		xbmcPlayer.play(playlist)
 		player = RTPPlayer(videoarray=video_list,mainurl=url)
 		player.play(playlist)
 		while player._playbackLock:

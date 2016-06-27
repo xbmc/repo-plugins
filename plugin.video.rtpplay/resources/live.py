@@ -32,15 +32,14 @@ def radiotv_channels(url):
 		page_source = ''
 		msgok(translate(30001),translate(30018))
 	if page_source:
-		match=re.compile('<a title="(.+?)" href="(.+?)" class="mask-live"><img alt="(.+?)" src="(.+?)\?.+?" c').findall(page_source)
+		match=re.compile('<a title="(.+?)" href="(.+?)" class="mask-live"><img alt="(.+?)" src="(.*?)"').findall(page_source)
 		totaltv = len(match)
 		for titulo,url2,prog,img_old in match:
 			try:
 				titulo = title_clean_up(titulo)
 				stream_url = base_url + url2
 				img = img_old
-				addDir('[B][COLOR blue]' + titulo + '[/COLOR]' +' - ' + title_clean_up(prog)+ '[/B]',stream_url,23,img,totaltv,pasta=False,informacion=None)
-				#addLink(,stream_url,img,totaltv)
+				addDir('[B][COLOR blue]' + titulo + '[/COLOR]' +' - ' + title_clean_up(prog)+ '[/B]',stream_url,23,img,totaltv,pasta=False,information={"Title":titulo,"plot":prog})
 			except: pass
 	else:
 		sys.exit(0)
@@ -54,48 +53,33 @@ def grab_live_stream_url(url):
 		msgok(translate(30001),translate(30018))
 	if page_source:
 		if re.search('mms:', page_source):
-        		match=re.compile('\"file\": \"(.+?)\",\"streamer\": \"(.+?)\"').findall(page_source)
-        		try:
-        			url2 = match[0][1] + match[0][0]
-        			return url2
-        		except: pass
-    		else:	
-    			#Heuristic rules to automatically find the best stream type for each platform    		
-			type_stream=selfAddon.getSetting('tipostr')		
-			if type_stream == '0':
-				if xbmc.getCondVisibility('system.platform.OSX'): versao = 'rtmp'
-				elif xbmc.getCondVisibility('system.platform.IOS'): versao = 'm3u8'
-				elif xbmc.getCondVisibility('system.platform.ATV2'): versao = 'm3u8'		
-				elif xbmc.getCondVisibility('system.platform.Windows'): versao = 'rtmp'
-				elif xbmc.getCondVisibility('system.platform.Android'): versao = 'm3u8'
-				elif xbmc.getCondVisibility('system.platform.linux'):
-					if 'armv6' in os.uname()[4]: versao = 'm3u8'
-					else: versao = 'rtmp'
-			elif type_stream == '1': versao = 'rtmp'
-			elif type_stream == '2': versao = 'm3u8'
+			match=re.compile('\"file\": \"(.+?)\",\"streamer\": \"(.+?)\"').findall(page_source)
+			try:
+				url2 = match[0][1] + match[0][0]
+				return url2
+			except: pass
+		else:	
 			#Scrape the page source for each type of stream	
 			match = re.compile('"stream_wma" : "(.+?)"').findall(page_source)
 			if match:
 				url2=match[0]
 				return url2
-			if versao == 'rtmp':
-				id_ = re.compile('live.+?file = live.+?\.(.+?);').findall(page_source)
-				file_ = re.compile('"'+id_[0]+'": "(.+?)"').findall(page_source)
-				streamer = re.compile('"streamer": "(.+?)"').findall(page_source)
-				application = re.compile('"application": "(.+?)"').findall(page_source)
-        			url2 = 'rtmp://' + streamer[0] +'/' + application[0] + '/'+file_[0]+' swfVfy=1 pageUrl='+url +' swfUrl=' + player + linkpart
-        			return url2
+			#Grab HLS stream
+			smil_ = re.compile('liveo.smil = liveo\.(.+?);').findall(page_source)
+			file_ = re.compile('"'+smil_[0]+'":"(.+?)"').findall(page_source)
+			if file_:
+				return file_[0]+'|User-Agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36'
 			else:
-				smil_ = re.compile('liveo.smil = liveo\.(.+?);').findall(page_source)
-				file_ = re.compile('"'+smil_[0]+'":"(.+?)"').findall(page_source)
-				if file_:
-					return file_[0]+'|User-Agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36'
+				msgok(translate(30001),translate(30018))
 	else:
 		return None
 
-def play_live(url):
+def play_live(url,name,iconimage):
 	stream_url = grab_live_stream_url(url)
-	xbmc.Player().play(stream_url)
+	listitem = xbmcgui.ListItem(path=stream_url,label=name)
+	listitem.setArt({"thumb":iconimage})
+	listitem.setProperty('IsPlayable', 'true')
+	xbmc.Player().play(stream_url,listitem)
 		
 def play_from_outside(name):
 	url = 'http://www.rtp.pt/play/direto/' + name

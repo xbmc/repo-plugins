@@ -22,7 +22,7 @@ from common_variables import *
 
 def title_clean_up(title):
 	title=title.replace('\xc3', "Ã").replace('\xd3', "Ó").replace('\xda', "Ú").replace('\xca', "Ê").replace('\xc9', "É").replace('\xc7', "Ç").replace('\xcd', "Í").replace('\xc2', "Â").replace('\xc1', "Á").replace('\xc0', "À").replace('\xe9', "é").replace('\xed', "í").replace('\xf3', "ó").replace('\xe7', "ç").replace('\xe3', "ã").replace('\xe2', "â").replace('\xea', "ê").replace('\xe1', "á").replace('\xfa', "ú").replace('\xe0', "à").replace('&uacute;', "ú").replace('&ccedil;', "ç").replace('&atilde;', "ã").replace('&acirc;', "â").replace('&ecirc;', "ê").replace('&oacute;', "ó").replace('&Oacute;', "Ó").replace('&Aacute;', "Á").replace('&aacute;', "á").replace('&eacute;', "é").replace('\xf5','õ').replace('Emissão em direto ','').replace('<span>','')
-	return title
+	return title.rstrip().lstrip()
 	
 def removeNonAscii(s): return "".join(filter(lambda x: ord(x)<128, s))
 

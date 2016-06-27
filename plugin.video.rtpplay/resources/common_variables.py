@@ -25,7 +25,7 @@ player = 'http://programas.rtp.pt/play/player.swf?v3'
 linkpart = ' live=true timeout=15'
 addon_id = 'plugin.video.rtpplay'
 
-selfAddon = xbmcaddon.Addon(id=addon_id)
+selfAddon = xbmcaddon.Addon(addon_id)
 datapath = xbmc.translatePath(selfAddon.getAddonInfo('profile')).decode('utf-8')
 addonfolder = xbmc.translatePath(selfAddon.getAddonInfo('path')).decode('utf-8')
 artfolder = os.path.join(addonfolder,'resources','img')

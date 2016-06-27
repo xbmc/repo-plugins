@@ -28,27 +28,16 @@ def rtp_resolver(url):
 	except: source = ''
 	if source:
 		try:
-			if re.search('mms:', source):
-				match=re.compile('\"file\": \"(.+?)\",\"streamer\": \"(.+?)\"').findall(source)
-				return match[0][1] + match[0][0]
-			elif re.search('.mp3',source):
-				match=re.compile('"file": "(.+?)".+?"application": "(.+?)".+?"streamer": "(.+?)"').findall(source)
-				if match: return 'rtmp://' + match[0][2] +'/' + match[0][1] + ' playpath=mp3:' + match[0][0]
+			match = re.compile('"hls_url": "(.+?)"').findall(source)
+			if match:
+				return match[0]
+			else:
+				match = re.compile("streamer.+?file:'(.+?)'").findall(source)
+				if match:
+					return "http://cdn-ondemand-rtp.dcp.adaptive.level3.net/" + match[0] + ".m3u8"
 				else:
-					match = re.compile("streamer:'(.+?)',application:'(.+?)',file:'(.+?)'").findall(source)
-					return 'rtmp://' + match[0][0] +'/' + match[0][1] + ' playpath=mp3:' + match[0][2]
-			elif re.search('.flv', source):
-				match=re.compile('"file": "(.+?)".+?"image": "(.+?)".+?"application": "(.+?)".+?"streamer": "(.+?)"').findall(source)
-				return 'rtmp://' + match[0][3] +'/' + match[0][2] + ' playpath=flv:' + match[0][0]
-			elif re.search('.mp4', source):
-				match=re.compile('"file": "(.+?)".+?"image": "(.+?)".+?"application": "(.+?)".+?"streamer": "(.+?)"').findall(source)
-				if match: return 'rtmp://' + match[0][3] +'/' + match[0][2] + ' playpath=mp4:' + match[0][0]
-				else:
-					match = re.compile("streamer:'(.+?)',application:'(.+?)',file:'(.+?)'").findall(source)
-					return 'rtmp://' + match[0][0] +'/' + match[0][1] + ' playpath=mp4:' + match[0][2]
-			else:return ''
+					return ''
 		except: return ''
 	else:
 		msgok(translate(30001),translate(30018))
 		sys.exit(0)
-		

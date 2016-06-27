@@ -34,19 +34,20 @@ if not os.path.isdir(datapath):
 	os.makedirs(datapath)
 
 def main_menu():
-	addDir('[COLOR blue][B]'+ translate(30002) +'[/B][/COLOR]','rtp.pt/play','', os.path.join(artfolder,'live.png'),1)
-	addDir('[B]'+translate(30003)+'[/B]','http://www.rtp.pt/play/direto',1,os.path.join(artfolder,'tvradio_icon.png'),1)
-	addDir('[COLOR blue][B]'+translate(30004)+'[/B][/COLOR]','rtp.pt/play','', os.path.join(artfolder,'broadcast.png'),1)
+	addDir('[COLOR blue][B]'+ translate(30002) +'[/B][/COLOR]','http://www.rtp.pt/play/direto',1,os.path.join(artfolder,'tvradio_icon.png'),1)
+	addDir('[COLOR blue][B]'+translate(30004)+'[/B][/COLOR]','rtp.pt/play',24, os.path.join(artfolder,'broadcast.png'),1)
+	addDir('[COLOR blue][B]'+translate(30009)+'[/B][/COLOR]','rtp.pt/play',25, os.path.join(artfolder,'tvshow.png'),1)
+	addDir('[COLOR blue][B]'+translate(30012)+'[/B][/COLOR]','http://www.rtp.pt/arquivo/colecoes',9, os.path.join(artfolder,'archive.png'),1)
+
+def boadcasts_menu():
 	addDir('[B]'+translate(30005)+'[/B]','http://www.rtp.pt/play/ondemand',2, os.path.join(artfolder,'maisrecentes.png'),1)
 	addDir('[B]'+translate(30006)+'[/B]','http://www.rtp.pt/play/bg_l_pg/?listDate=&listQuery=&listProgram=&listcategory=&listchannel=&listtype=popular&page=1&type=all',3,os.path.join(artfolder,'maispopulares.png'),11)
 	addDir('[B]'+translate(30008)+'[/B]','http://www.rtp.pt/play/ondemand',5,os.path.join(artfolder,'pesquisa.png'),1)
-	addDir('[COLOR blue][B]'+translate(30009)+'[/B][/COLOR]','rtp.pt/play','', os.path.join(artfolder,'tvshow.png'),1)
+
+def shows_menu():
 	addDir('[B]'+translate(30010)+'[/B]','http://www.rtp.pt/play/ondemand',6,os.path.join(artfolder,'favourite.png'),1)
 	addDir('[B]'+translate(30011)+'[/B]','http://www.rtp.pt/play/ondemand',7,os.path.join(artfolder,'az.png'),1)
 	addDir('[B]'+translate(30008)+'[/B]','rtpplay',8,os.path.join(artfolder,'pesquisa.png'),1)
-	addDir('[COLOR blue][B]'+translate(30012)+'[/B][/COLOR]','rtp.pt/play','', os.path.join(artfolder,'archive.png'),1)
-	addDir('[B]'+translate(30013)+'[/B]','http://www.rtp.pt/arquivo/colecoes',9,os.path.join(artfolder,'arquivo.png'),1)
-	xbmc.executebuiltin("Container.SetViewMode(501)")
 
 def radio_tv_menu(name):
 	if ('R' in name) or ('r' in name):
@@ -161,7 +162,9 @@ elif mode==19: add_favourite(name,url,iconimage,plot)
 elif mode==20: remove_favourite(name)
 elif mode==21: mark_as_watched(url)
 elif mode==22: remove_watched_mark(url)
-elif mode==23: play_live(url)
+elif mode==23: play_live(url,name,iconimage)
+elif mode==24: boadcasts_menu()
+elif mode==25: shows_menu()
 elif mode == "resolve_and_play": play_from_outside(name)
 
 if (mode != 12) and (mode != 8) and (mode !=5) and (mode !=19) and (mode !=20) and (mode !=21) and (mode !=22) and (mode != "resolve_and_play"):

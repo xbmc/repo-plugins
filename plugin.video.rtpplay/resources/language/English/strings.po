@@ -1,0 +1,171 @@
+# Kodi Media Center language file
+# Addon Name: RTP Play
+# Addon id: plugin.video.rtpplay
+# Addon Provider: enen92
+msgid ""
+msgstr ""
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#settings labels
+
+msgctxt "#30001"
+msgid "RTP Play"
+""
+
+msgctxt "#30002"
+msgid "Live channels"
+""
+
+msgctxt "#30004"
+msgid "Broadcasts"
+""
+
+msgctxt "#30005"
+msgid "Recent"
+""
+
+msgctxt "#30006"
+msgid "Popular"
+""
+
+msgctxt "#30007"
+msgid "Lists"
+""
+
+msgctxt "#30008"
+msgid "Search"
+""
+
+msgctxt "#30009"
+msgid "Shows"
+""
+
+msgctxt "#30010"
+msgid "Favourites"
+""
+
+msgctxt "#30011"
+msgid "A-Z listing"
+""
+
+msgctxt "#30012"
+msgid "RTP Archive"
+""      
+
+msgctxt "#30014"
+msgid "TV broadcasts"
+""  
+
+msgctxt "#30015"
+msgid "Radio broadcasts"
+""       
+
+msgctxt "#30016"
+msgid "By channel"
+""    
+
+msgctxt "#30017"
+msgid "By genre"
+""      
+
+msgctxt "#30018"
+msgid "Couldn't open URL / Check your connection"
+""
+
+msgctxt "#30019"
+msgid "Remove show from favourites"
+""
+ 
+msgctxt "#30020"
+msgid "Add show to favourites"
+""   
+ 
+msgctxt "#30021"
+msgid "Remove watched status"
+""
+
+msgctxt "#30022"
+msgid "Mark as watched"
+""  
+
+msgctxt "#30023"
+msgid "Added to addon favourites"
+""  
+
+msgctxt "#30024"
+msgid "You have no show favourites"
+""  
+
+msgctxt "#30025"
+msgid "Removed from addon favourites"
+"" 
+
+msgctxt "#30026"
+msgid "Information not available."
+"" 
+
+msgctxt "#30027"
+msgid "Page "
+"" 
+
+msgctxt "#30028"
+msgid "Next >>"
+"" 
+
+msgctxt "#30030"
+msgid "No broadcasts"
+"" 
+
+msgctxt "#30031"
+msgid "Enter search string"
+"" 
+
+msgctxt "#30032"
+msgid "No shows have been found"
+"" 
+
+msgctxt "#30033"
+msgid "Getting videos..."
+"" 
+
+msgctxt "#30034"
+msgid "Marked as watched"
+"" 
+
+msgctxt "#30035"
+msgid "Removed watched status"
+"" 
+
+msgctxt "#30036"
+msgid "Live"
+"" 
+
+msgctxt "#30038"
+msgid "On demand"
+"" 
+
+msgctxt "#30039"
+msgid "Show posters and plot"
+"" 
+
+msgctxt "#30040"
+msgid "[B][COLOR blue]View settings:[/B][/COLOR]"
+"" 
+
+msgctxt "#30041"
+msgid "View - TvShows"
+"" 
+
+msgctxt "#30042"
+msgid "View - Episodes"
+"" 
+
+msgctxt "#30043"
+msgid "Could not resolve stream url"
+"" 

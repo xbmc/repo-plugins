@@ -6,7 +6,7 @@ from BeautifulSoup import BeautifulStoneSoup
 
 
 class PopcornTV:
-    __USERAGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:32.0) Gecko/20100101 Firefox/32.0"
+    __USERAGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0"
 
     def __init__(self):
         opener = urllib2.build_opener()
@@ -103,34 +103,13 @@ class PopcornTV:
         
         data = urllib2.urlopen(pageUrl).read()
         htmlTree = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
-        
+        metadata["url"] = htmlTree.find("meta", {"property": "og:url"})['content']
+        if metadata["url"] != pageUrl:
+            return self.getVideoMetadata(metadata["url"])
+
         metadata["title"] = htmlTree.find("header","video-heading").text.strip()
         metadata["thumb"] = htmlTree.find("meta", {"property": "og:image"})['content']
-        
-        match=re.compile('\("vplayerPopcorn","1020","550","(.+?)"').findall(data)
-        metadata["smilUrl"] = match[0]
-        # Remove spaces from smil URL
-        metadata["smilUrl"] = metadata["smilUrl"].replace(" ","")
+        metadata["videoUrl"] = re.search(r'\("vplayerPopcorn","1020","550","(.+?)"', data).group(1)
         
         return metadata
-        
-    def getVideoURL(self, smilUrl, quality=1200):
-        data = urllib2.urlopen(smilUrl).read()
-        htmlTree=BeautifulStoneSoup(data, convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
-        
-        base = htmlTree.find('meta')['base']
 
-        # Get the best available bitrate
-        hbitrate = -1
-        sbitrate = int(quality) * 1024
-        for item in htmlTree.findAll('video'):
-            try:
-                bitrate = int(item['system-bitrate'])
-            except KeyError:
-                bitrate = 0
-            if bitrate > hbitrate and bitrate <= sbitrate:
-                hbitrate = bitrate
-                filepath = item['src']
-
-        url = base + " playpath=" + filepath
-        return url

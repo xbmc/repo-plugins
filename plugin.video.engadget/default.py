@@ -111,6 +111,8 @@ def resolve_item(embed_url, url):
     retrievers = {
         "on.aol.com": retrieve_url_for_aol,
         "www.youtube.com": retrieve_url_for_youtube,
+        #TODO: Taking the easy way out, this should be more robust.
+        "": retrieve_url_for_vidible
 
     }
     retriever = retrievers.get(domain, nothing)
@@ -123,6 +125,23 @@ def resolve_item(embed_url, url):
 def nothing(embed_url, url):
     xbmcgui.Dialog().ok(addon_name, "The video source is not playable")
     return None
+
+def retrieve_url_for_vidible(embed_url, url):
+    javascript_embed_tag = BeautifulSoup(embed_url, 'html.parser')
+    addon_log("embed tag: " + str(javascript_embed_tag))
+    javascript_source = javascript_embed_tag.find('script').get('src')
+    addon_log("javascript source from embed code" + str(javascript_source))
+    javascript_blob = make_request("http:" + javascript_source)
+    pattern = re.compile('"videoUrls":\[".*?"\]')
+    # Necessary dirty step, it's actually javascript, which happens to be JSON.
+    s_urls = pattern.findall(javascript_blob)[0]
+    # pre and post pend curly brace, to make it valid JSON
+    s_urls_with_curly = "{" + s_urls + "}"
+
+    addon_log("url strings retrieved from javascript blob: " + s_urls_with_curly)
+    json_urls = json.loads(s_urls_with_curly)
+    addon_log("Sending url to Kodi: " + json_urls['videoUrls'][0])
+    return json_urls['videoUrls'][1]
 
 
 def retrieve_url_for_aol(embed_url, url):
@@ -148,7 +167,7 @@ def retrieve_url_for_youtube(embed_url, url):
     qs = parse_qs(urlparse(url).query)
     video_id = qs['v'][0]
     addon_log("Youtube videoId:" + video_id)
-    return "plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid={0}".format(video_id)
+    return "plugin://plugin.video.youtube/play/?video_id={0}".format(video_id)
 
 
 def add_dir(name, embed_url, url, icon_image, dir_mode, is_folder=True):
@@ -180,7 +199,7 @@ def main():
 
     elif mode == 'resolve_url':
         success = False
-        resolved_url = resolve_item(params['embed_url'], params['url'])
+        resolved_url = resolve_item(params.get('embed_url', ""), params.get('url', ""))
         if resolved_url:
             success = True
         else:

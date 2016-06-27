@@ -163,16 +163,20 @@ def prepareThumb(thumbUrl, baseUrl):
   """
   Returns a thumbnail with size THUMB_SIZE
   """
+  if not thumbUrl:
+    return ""
   thumbUrl = prepareImgUrl(thumbUrl, baseUrl)
-  thumbUrl = re.sub(r"small|medium|large|extralarge", THUMB_SIZE, thumbUrl)
+  thumbUrl = re.sub(r"\{format\}|small|medium|large|extralarge", THUMB_SIZE, thumbUrl)
   return thumbUrl
 
 def prepareFanart(fanartUrl, baseUrl):
   """
   Returns a fanart image URL.
   """
+  if not fanartUrl:
+    return ""
   fanartUrl = prepareImgUrl(fanartUrl, baseUrl)
-  fanartUrl = re.sub(r"small|medium|large|extralarge", "extralarge_imax", fanartUrl)
+  fanartUrl = re.sub(r"\{format\}|small|medium|large|extralarge", "extralarge_imax", fanartUrl)
   return fanartUrl
 
 

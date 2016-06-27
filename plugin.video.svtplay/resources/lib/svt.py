@@ -47,7 +47,7 @@ def getAtoO():
   for program in programs:
     item = {}
     item["title"] = common.replaceHTMLCodes(program["title"])
-    item["thumbnail"] = helper.prepareThumb(program["thumbnail"], baseUrl=BASE_URL)
+    item["thumbnail"] = helper.prepareThumb(program.get("thumbnail", ""), baseUrl=BASE_URL)
     item["url"] = program["url"].replace("/senaste","")
     items.append(item)
 
@@ -75,9 +75,8 @@ def getCategories():
     if not category["url"].startswith("genre"):
       category["url"] = "genre/" + category["url"]
 
-    # One ugly hack for the React generated HTML
     category["title"] = item["name"]
-    category["thumbnail"] = item["posterImageUrl"]
+    category["thumbnail"] = item.get("posterImageUrl", "")
     categories.append(category)
 
   return categories
@@ -135,13 +134,10 @@ def getProgramsForGenre(genre):
   for item in r.json()["contents"]:
     url = item["contentUrl"]
     title = item["title"]
-    plot = ""
-    try:
-      plot = item["description"]
-    except KeyError:
-      pass
+    plot = item.get("description", "")
     info = {"plot": plot}
-    program = { "title": title, "url": url, "thumbnail": helper.prepareThumb(item["thumbnailLarge"], baseUrl=BASE_URL), "info": info}
+    thumbnail = helper.prepareThumb(item.get("thumbnail", ""), BASE_URL)
+    program = { "title": title, "url": url, "thumbnail": thumbnail, "info": info}
     programs.append(program)
   return programs
 
@@ -198,7 +194,7 @@ def getProgramsByLetter(letter):
     item = {}
     item["url"] = "/"+program["urlFriendlyTitle"]
     item["title"] = common.replaceHTMLCodes(program["title"])
-    item["thumbnail"] = helper.prepareThumb(program["thumbnailLarge"], baseUrl=BASE_URL)
+    item["thumbnail"] = helper.prepareThumb(program.get("thumbnail", ""), baseUrl=BASE_URL)
     items.append(item)
 
   return items
@@ -222,36 +218,27 @@ def getSearchResults(search_term):
     item = {}
     item["title"] = common.replaceHTMLCodes(program["title"])
     item["url"] = program["contentUrl"]
-    item["thumbnail"] = helper.prepareThumb(program["thumbnailLarge"], baseUrl=BASE_URL)
+    item["thumbnail"] = helper.prepareThumb(program.get("thumbnail", ""), baseUrl=BASE_URL)
     item["info"] = {}
-    try:
-      item["info"]["plot"] = program["description"]
-    except KeyError:
-      item["info"]["plot"] = ""
+    item["info"]["plot"] = program.get("description", "")
     items.append({"item": item, "type" : "program"})
 
   for video in contents["episodes"]["videoItems"]:
     item = {}
     item["title"] = common.replaceHTMLCodes(video["title"])
     item["url"] = video["contentUrl"]
-    item["thumbnail"] = helper.prepareThumb(video["thumbnailLarge"], baseUrl=BASE_URL)
+    item["thumbnail"] = helper.prepareThumb(video.get("thumbnail", ""), baseUrl=BASE_URL)
     item["info"] = {}
-    try:
-      item["info"]["plot"] = video["description"]
-    except KeyError:
-      item["info"]["plot"] = ""
+    item["info"]["plot"] = video.get("description", "")
     items.append({"item": item, "type": "video"})
 
   for clip in contents["clips"]["videoItems"]:
     item = {}
     item["title"] = common.replaceHTMLCodes(clip["title"])
     item["url"] = clip["contentUrl"]
-    item["thumbnail"] = helper.prepareThumb(clip["thumbnailLarge"], baseUrl=BASE_URL)
+    item["thumbnail"] = helper.prepareThumb(clip.get("thumbnail", ""), baseUrl=BASE_URL)
     item["info"] = {}
-    try:
-      item["info"]["plot"] = clip["description"]
-    except KeyError:
-      item["info"]["plot"] = ""
+    item["info"]["plot"] = clip.get("description", "")
     items.append({"item": item, "type": "video"})
 
   return items
@@ -304,12 +291,10 @@ def getEpisodes(title):
     program = {}
     program["title"] = item["title"]
     program["url"] = "video/" + str(item["id"])
-    program["thumbnail"] = helper.prepareThumb(item["thumbnailMedium"], BASE_URL)
+    program["thumbnail"] = helper.prepareThumb(item.get("thumbnail", ""), BASE_URL)
     info = {}
-    try:
-      info["plot"] = item["description"]
-    except KeyError:
-      info["plot"] = ""
+    info["plot"] = item.get("description", "")
+    info["fanart"] = helper.prepareFanart(item.get("poster", ""), BASE_URL)
     program["info"] = info
     programs.append(program)
   return programs
@@ -328,15 +313,9 @@ def getClips(title):
     clip = {}
     clip["title"] = item["title"]
     clip["url"] = "klipp/" + str(item["id"])
-    try:
-      clip["thumbnail"] = helper.prepareThumb(item["thumbnailMedium"], BASE_URL)
-    except KeyError:
-      clip["thumbnail"] = ""
+    clip["thumbnail"] = helper.prepareThumb(item.get("thumbnailMedium", ""), BASE_URL)
     info = {}
-    try:
-      info["plot"] = item["description"]
-    except KeyError:
-      info["plot"] = ""
+    info["plot"] = item.get("description", "")
     clip["info"] = info
     clips.append(clip)
   return clips
@@ -430,7 +409,7 @@ def getItems(section_name, page):
     item = {}
     item["title"] = video["programTitle"]
     item["url"] = video["contentUrl"]
-    item["thumbnail"] = helper.prepareThumb(video["thumbnailLarge"], baseUrl=BASE_URL)
+    item["thumbnail"] = helper.prepareThumb(video.get("thumbnail", ""), baseUrl=BASE_URL)
     info = {}
     info["title"] = item["title"]
     try:
@@ -445,10 +424,9 @@ def getItems(section_name, page):
       # Some programs are missing duration, default to 0
       info["duration"] = 0
     try:
-      info["fanart"] = helper.prepareFanart(video["posterXL"], baseUrl=BASE_URL)
+      info["fanart"] = helper.prepareFanart(video["poster"], baseUrl=BASE_URL)
     except KeyError:
-      # Some programs do not have posters
-      info["fanart"] = ""
+      pass
     item["info"] = info
     returned_items.append(item)
 

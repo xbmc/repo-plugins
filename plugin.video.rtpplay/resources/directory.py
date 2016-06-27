@@ -76,13 +76,15 @@ def addLink(name,url,iconimage,number_of_items):
 	return ok
 
 #Function to add a regular directory
-def addDir(name,url,mode,iconimage,number_of_items,pasta=True,informacion=None):
+def addDir(name,url,mode,iconimage,number_of_items,pasta=True,information=None):
 	u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
-	try: u +="&plot="+urllib.quote_plus(informacion["plot"])
+	try: u +="&plot="+urllib.quote_plus(information["plot"])
 	except: pass
 	ok=True
 	liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
 	liz.setProperty('fanart_image', os.path.join(artfolder,'fanart.png'))
-	liz.setInfo( type="Video", infoLabels={ "Title": name })
+	if not information:
+		information = { "Title": name }
+	liz.setInfo( type="Video", infoLabels=information)
 	ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=pasta,totalItems=number_of_items)
 	return ok

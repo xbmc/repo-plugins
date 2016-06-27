@@ -52,4 +52,11 @@
     <string id="30049">Loading %s items in this folder, please wait...</string>
     <string id="30050">Loading %s items from search, please wait...</string>
     <string id="30051">When playing videos, set the subtitle file located next to the video (.srt)</string>
+    <string id="30052">Files</string>
+    <string id="30053">Recent</string>
+    <string id="30054">Documents</string>
+    <string id="30055">Photos</string>
+    <string id="30056">Music</string>
+    <string id="30057">Shared By Me</string>
+    <string id="30058">Shared With Me</string>
 </strings>

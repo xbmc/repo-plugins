@@ -58,6 +58,7 @@ class OneDrive:
         self.addonname = self.addon.getAddonInfo('name')
         self.progress_dialog_bg = xbmcgui.DialogProgressBG()
         self.pg_bg_created = False
+        self.do_not_clean_counter = False
         
     def cancelOperation(self):
         return self.monitor.abortRequested()
@@ -125,7 +126,8 @@ class OneDrive:
                     response = urllib2.urlopen(url).read()
                 else:
                     response = urllib2.urlopen(url, url_params).read()
-            self.retry_times = 0
+            if not self.do_not_clean_counter:
+                self.retry_times = 0
             if not self.cancelOperation():
                 return json.loads(response)
             return {}
@@ -133,7 +135,9 @@ class OneDrive:
             if self.retry_times < self.retry_target and retry:
                 self.retry_times += 1
                 if isinstance(e, urllib2.HTTPError) and (e.code == 401 or e.code == 404):
+                    self.do_not_clean_counter = True
                     self.login()
+                    self.do_not_clean_counter = False
                 else:
                     again = ' again'
                     attempt = self.addon.getLocalizedString(30045) % (str(self.retry_times), str(self.retry_target))

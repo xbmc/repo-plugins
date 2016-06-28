@@ -37,6 +37,7 @@ from resources.lib.api.onedrive import OneDrive, OneDriveException
 from resources.lib.api import utils
 import threading
 import time
+import json
 
 base_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
@@ -75,6 +76,7 @@ if not os.path.exists(addon_data_path):
         os.makedirs(addon_data_path)
 
 config_path = addon_data_path + '/onedrive.ini'
+shared_json_path = addon_data_path + '/shared.json'
 old_config_path = xbmc.translatePath('special://home/onedrive.ini')
 if os.path.exists(old_config_path) and not os.path.exists(config_path):
     try:
@@ -139,6 +141,7 @@ def process_files(files, driveid, child_count, child_loaded, big_folder):
     if '@odata.nextLink' in files and (child_loaded+201) >= child_count:
         child_count += 200
     for f in files['value']:
+        f = utils.Utils.get_safe_value(f, 'remoteItem', f)
         item_id = f['id']
         file_name = utils.Utils.unicode(f['name'])
         is_folder = 'folder' in f
@@ -167,7 +170,8 @@ def process_files(files, driveid, child_count, child_loaded, big_folder):
             set_info(list_item, f)
             list_item.setProperty('IsPlayable', 'true')
         elif ('image' in f or 'photo' in f) and content_type == 'image' and extension != 'mp4':
-            url = f['@content.downloadUrl']
+            params = {'access_token' : onedrive.access_token}
+            url = f['@content.downloadUrl'] + '?' + urllib.urlencode(params)
             list_item.setInfo('pictures', {'size': f['size']})
             list_item.setProperty('mimetype', utils.Utils.get_safe_value(f['file'], 'mimeType'))
             if 'thumbnails' in f and len(f['thumbnails']) > 0:
@@ -285,9 +289,8 @@ def export_folder(name, item_id, driveid, destination_folder, directLink=None):
         elif (('video' in f or extension in ext_videos) and content_type == 'video') or ('audio' in f and content_type == 'audio'):
             params = {'action':'play', 'content_type': content_type, 'item_id': f['id'], 'driveid': driveid}
             url = base_url + '?' + urllib.urlencode(params)
-            fo = open(os.path.join(parent_folder, name + '.strm'), 'wb')
-            fo.write(url)
-            fo.close()
+            with open(os.path.join(parent_folder, name + '.strm'), 'wb') as fo:
+                fo.write(url)
         onedrives[driveid].exporting_count += 1
         p = int(onedrive.exporting_count/float(onedrive.exporting_target)*100)
         if onedrive.exporting_percent < p:
@@ -349,12 +352,12 @@ try:
         if dialog.yesno(addonname, addon.getLocalizedString(30009),addon.getLocalizedString(30010) % pin, '', addon.getLocalizedString(30011), addon.getLocalizedString(30012)):
             progress_dialog.create(addonname, addon.getLocalizedString(30013))
             pg_created = True
-            json = onedrive.finish_signin(pin)
-            if json['success']:
+            json_result = onedrive.finish_signin(pin)
+            if json_result['success']:
                 loginFailed = False
                 try:
                     progress_dialog.update(30, addon.getLocalizedString(30014))
-                    onedrive.login(json['code']);
+                    onedrive.login(json_result['code']);
                 except Exception as e:
                     dialog.ok(addonname, addon.getLocalizedString(30015), utils.Utils.unicode(e), addon.getLocalizedString(30016))
                     report_error(e)
@@ -400,8 +403,39 @@ try:
         xbmc.executebuiltin('Container.Refresh')
     elif action[0] == 'open_drive':
         driveid = args.get('driveid')[0]
+        list_item = xbmcgui.ListItem(addon.getLocalizedString(30052))
+        params = {'action':'open_drive_folder', 'folder':'root', 'content_type': content_type, 'driveid': driveid}
+        url = base_url + '?' + urllib.urlencode(params)
+        xbmcplugin.addDirectoryItem(addon_handle, url, list_item, True)
+        list_item = xbmcgui.ListItem(addon.getLocalizedString(30053))
+        params['action'] = 'open_simple_folder'
+        params['folder'] = 'view.recent'
+        url = base_url + '?' + urllib.urlencode(params)
+        xbmcplugin.addDirectoryItem(addon_handle, url, list_item, True)
+        list_item = xbmcgui.ListItem(addon.getLocalizedString(30055))
+        params['action'] = 'open_drive_folder'
+        params['folder'] = 'special/photos'
+        url = base_url + '?' + urllib.urlencode(params)
+        xbmcplugin.addDirectoryItem(addon_handle, url, list_item, True)
+        list_item = xbmcgui.ListItem(addon.getLocalizedString(30056))
+        params['folder'] = 'special/music'
+        url = base_url + '?' + urllib.urlencode(params)
+        xbmcplugin.addDirectoryItem(addon_handle, url, list_item, True)
+        list_item = xbmcgui.ListItem(addon.getLocalizedString(30057))
+        params['action'] = 'open_simple_folder'
+        params['folder'] = 'shared'
+        url = base_url + '?' + urllib.urlencode(params)
+        xbmcplugin.addDirectoryItem(addon_handle, url, list_item, True)
+        list_item = xbmcgui.ListItem(addon.getLocalizedString(30058))
+        params['action'] = 'open_shared_with_me'
+        url = base_url + '?' + urllib.urlencode(params)
+        xbmcplugin.addDirectoryItem(addon_handle, url, list_item, True)
+        xbmcplugin.endOfDirectory(addon_handle)
+    elif action[0] == 'open_drive_folder':
+        driveid = args.get('driveid')[0]
         onedrive = onedrives[driveid]
-        root = onedrive.get('/drive/root', params=extra_parameters)
+        folder = args.get('folder')[0]
+        root = onedrive.get('/drive/' + folder, params=extra_parameters)
         if not cancelOperation(onedrive):
             child_count = int(root['folder']['childCount'])
             big_folder = child_count > big_folder_min
@@ -411,7 +445,7 @@ try:
                 progress_dialog_bg.create(addonname, addon.getLocalizedString(30049) % str(child_count))
                 pg_bg_created = True
                 progress_dialog_bg.update(0)
-            files = onedrive.get('/drive/root/children', params=extra_parameters)
+            files = onedrive.get('/drive/' + folder + '/children', params=extra_parameters)
             if not cancelOperation(onedrive):
                 process_files(files, driveid, child_count, 0, big_folder)
             if not cancelOperation(onedrive):
@@ -419,6 +453,50 @@ try:
                 if big_folder:
                     progress_dialog_bg.close()
                     pg_bg_created = False
+    elif action[0] == 'open_simple_folder':
+        driveid = args.get('driveid')[0]
+        onedrive = onedrives[driveid]
+        folder = args.get('folder')[0]
+        extra_parameters['select'] = 'id,name,size,file,folder,audio,video,image,photo,@content.downloadUrl,@odata.nextLink,remoteItem'
+        if folder == 'view.recent':
+            extra_parameters['expand'] = ''
+        files = onedrive.get('/drive/' + folder, params = extra_parameters)
+        if not cancelOperation(onedrive):
+            process_files(files, driveid, 0, 0, False)
+        if not cancelOperation(onedrive):
+            xbmcplugin.endOfDirectory(addon_handle)
+    elif action[0] == 'open_shared_with_me':
+        driveid = args.get('driveid')[0]
+        onedrive = onedrives[driveid]
+        files = onedrive.get('/drive/view.sharedWithMe')
+        user_dic = {}
+        if not cancelOperation(onedrive):
+            for f in files['value']:
+                remote_user = utils.Utils.get_safe_value(utils.Utils.get_safe_value(utils.Utils.get_safe_value(f['remoteItem'], 'shared', {}), 'owner', {}), 'user');
+                if remote_user is not None:
+                    remote_user_id = utils.Utils.unicode(remote_user['id'])
+                    if remote_user_id not in user_dic:
+                        user_dic[remote_user_id] = [f]
+                        list_item = xbmcgui.ListItem(utils.Utils.unicode(remote_user['displayName']))
+                        params = {'action':'open_shared_by', 'content_type': content_type, 'remote_user_id': remote_user_id, 'driveid': driveid}
+                        url = base_url + '?' + urllib.urlencode(params)
+                        xbmcplugin.addDirectoryItem(addon_handle, url, list_item, True)
+                    else:
+                        user_dic[remote_user_id].append(f)
+            with open(shared_json_path, 'wb') as fo:
+                fo.write(json.dumps(user_dic))
+        if not cancelOperation(onedrive):
+            xbmcplugin.endOfDirectory(addon_handle)
+    elif action[0] == 'open_shared_by':
+        driveid = args.get('driveid')[0]
+        onedrive = onedrives[driveid]
+        remote_user_id = args.get('remote_user_id')[0]
+        with open(shared_json_path, 'rb') as fo:
+            files = json.loads(fo.read())
+        if not cancelOperation(onedrive):
+            process_files({'value' : files[remote_user_id]}, driveid, 0, 0, False)
+        if not cancelOperation(onedrive):
+            xbmcplugin.endOfDirectory(addon_handle)
     elif action[0] == 'open_folder':
         driveid = args.get('driveid')[0]
         item_id = args.get('item_id')[0]

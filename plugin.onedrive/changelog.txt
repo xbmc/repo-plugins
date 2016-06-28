@@ -1,3 +1,7 @@
+v1.1.8 released - June 26, 2016:
+- Special folders support
+- Shared folder support
+-------------------------- 
 v1.1.7 released - February 6, 2016:
 - Add support to play ISO video files 
 - Minor changes 

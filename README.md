@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ![Kodi logo](https://raw.githubusercontent.com/xbmc/xbmc/master/media/banner.png)
 # Kodi Home Theater Software
 
@@ -22,3 +23,10 @@ This branch is not used for public. Please use one of the other branches availab
 * [Kodi website](http://kodi.tv)
 
 **Enjoy Kodi and help us improve it today. :)**
+=======
+### PureRadio Audio Plugin.
+
+This plugin enables the playback of the PureRadio audio stream, which can be set in different qualities using different bitrates. Also a selection of podcast, hosted on Spreaker, are available for instant playback.
+
+Visit us at PureRadio (http://www.pureradio.one) or Facebook (https://facebook/pureradio.one).
+>>>>>>> 3047e205b... initial version

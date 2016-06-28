@@ -58,16 +58,22 @@ class Scraper:
         tree = self.__get_tree(url)
         div = tree.find('div', {'id': 'videos-media-box-list'})
         videos = []
-        for li in div.findAll('li', {'class': 'clearfix '}):
+        for li in div.findAll('li', {'class': ['clearfix  first', 'clearfix ', 'clearfix  divide']}):
             a = li.find('a')
             title = li.find('img')['alt']
             video_id = '/'.join((a['href'].split('/')[3:5]))
             span_content = li.find('span', {'class': 'types typeV'}).contents
             duration = span_content[0].strip()
+            thumbData = li.find({'img' : True})
+            thumbData = str(thumbData)
+            #plugin.log.info(u'SPINALRaw: %s' % thumbData) ###uncomment to see raw image url in logfile
+            thumbImg = re.search(r"src=\"(.*?)\"", thumbData)
+            thumbImg = str(thumbImg.group(1))
+            #plugin.log.info(u'SPINALClean: %s' % thumbImg) ###uncomment to see clean image url in logfile
 
             videos.append({
                 'id': video_id,
-                'thumbnail': self.__img(li.find('img')['src'] or li.find('img')['data-src']),
+                'thumbnail': self.__img(thumbImg),
                 'title': title,
                 'duration': self.__secs_from_duration(duration)
             })
@@ -76,14 +82,21 @@ class Scraper:
     def get_video_url(self, video_id):
         url = MAIN_URL + 'action/viewvideo/%s/' % video_id
         data = self.__get_url(url)
+       
         if plugin.get_setting('Disable_HD_Default') == 'false':
-            hdcheck = re.search(r"(http://video.*?\.flv)", data)
+            hdcheck = re.search(r"https://www.youtube.com/embed/(.*?)\"", data)
             if hdcheck:
-                match=hdcheck
+                match = hdcheck
             else:
-                match = re.search(r"(https?://video.*?\.(flv|mp4|webm))", data)
+                hdcheck = re.search(r"(http://video.*?\.flv)", data)
+                if hdcheck:
+                    match = hdcheck
+                else:
+                    match = re.search(r"(https?://video.*?\.(flv|mp4|webm))", data)
         else:
-            match = re.search(r"(https?://video.*?\.(flv|mp4|webm))", data)
+            match = re.search(r"https://www.youtube.com/embed/(.*?)\"", data)
+            if not match:
+                match = re.search(r"(https?://video.*?\.(flv|mp4|webm))", data)
         if match:
             return match.group(1).replace('http://', 'https://')
 

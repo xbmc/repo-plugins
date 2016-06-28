@@ -80,7 +80,11 @@ def show_videos(topic_id, page):
 @plugin.route('/video/<video_id>')
 def play_video(video_id):
     video_url = scraper.get_video_url(video_id)
-    return plugin.set_resolved_url(video_url)
+    if video_url.find('video') > 0:
+	    return plugin.set_resolved_url(video_url)
+    else:
+        play_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % video_url
+        return plugin.set_resolved_url(play_url)
 
 
 def __format_videos(videos):

@@ -1,2 +1,2 @@
-Version 1.0.1 Initial release
+Version 3.0.2 Added 'Add to Library'
 Version 3.0.1 Isengard - separate scraper

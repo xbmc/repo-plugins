@@ -2,6 +2,7 @@ plugin.video.popcornflix================
 
 Kodi Addon for popcornflix website
 
+Version 6.0.3 Added "Add to Library"
 Version 6.0.1 Isengard version - separate scraper
 Version 5.0.10 fix for unicode in url
 Version 5.0.9 Added metadata and view select, version bump

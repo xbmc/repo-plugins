@@ -84,7 +84,7 @@ class Scraper:
         data = self.__get_url(url)
        
         if plugin.get_setting('Disable_HD_Default') == 'false':
-            hdcheck = re.search(r"https://www.youtube.com/embed/(.*?)\"", data)
+            hdcheck = re.search(r"div class=\"youtube-player\" data-id=\"(.*?)\"", data)
             if hdcheck:
                 match = hdcheck
             else:
@@ -94,7 +94,7 @@ class Scraper:
                 else:
                     match = re.search(r"(https?://video.*?\.(flv|mp4|webm))", data)
         else:
-            match = re.search(r"https://www.youtube.com/embed/(.*?)\"", data)
+            match = re.search(r"div class=\"youtube-player\" data-id=\"(.*?)\"", data)
             if not match:
                 match = re.search(r"(https?://video.*?\.(flv|mp4|webm))", data)
         if match:

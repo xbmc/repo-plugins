@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.disclose_tv" name="Disclose.tv" version="0.1.7" provider-name="Sphere | Spinalcracker">
+<addon id="plugin.video.disclose_tv" name="Disclose.tv" version="0.1.8" provider-name="Sphere | Spinalcracker">
   <requires>
     <import addon="xbmc.python" version="2.24.0"/>
 	<import addon="plugin.video.youtube" version="5.2.1"/>

@@ -1,0 +1,58 @@
+<settings>
+    <category label="30100">
+        <setting id="itemsPerPage"          type="enum"   label="30101" values="10|25|50|75|100" default="2"/>
+        <setting id="TitleAddtlInfo"        type="bool"   label="30102" default="false"/>
+        <setting type="lsep"                              label="30103" enable="false" />
+        <setting id="HideImagePostsOnVideo" type="bool"   label="30104" default="true"/>
+        <setting type="sep" />
+    	<setting id="ShowCommentsWithlink"  type="bool"   label="30105" default="true"/>
+    	<setting id="CommentTreshold"       type="select" label="30106" values="All|0|5|10|50|100"/>
+        <setting type="sep" />
+        <setting label="30107"         type="action" action="RunPlugin(plugin://plugin.video.reddit_viewer/?mode=toggleNSFW)"/>
+        <setting type="sep" />
+        <setting id="forceViewMode"         type="bool"   label="30108" default="true"/>
+        <setting id="viewMode"              type="number" label="30109" default="504"/>
+    </category>
+    <category label="30120">
+        <setting id="showAllNewest"         type="bool" label="30121" default="false"/>
+        <setting id="showUnwatchedNewest"   type="bool" label="30122" default="true"/>
+        <setting id="showUnfinishedNewest"  type="bool" label="30123" default="false"/>
+        <setting type="sep" />
+        <setting id="showAll"               type="bool" label="30124" default="false"/>
+        <setting id="showUnwatched"         type="bool" label="30125" default="false"/>
+        <setting id="showUnfinished"        type="bool" label="30126" default="false"/>
+    </category>
+    <category label="30300">
+        <setting id="show_youtube"       type="bool" label="30301" default="true"/>
+        <setting id="show_vimeo"         type="bool" label="30302" default="true"/>
+        <setting id="show_liveleak"      type="bool" label="30303" default="true"/>
+        <setting id="show_dailymotion"   type="bool" label="30304" default="true"/>
+        <setting id="show_gfycat"        type="bool" label="30305" default="true"/>
+        <setting id="show_giphy"         type="bool" label="30306" default="true"/>
+        <setting id="show_vine"          type="bool" label="30307" default="true"/>
+        <setting id="show_streamable"    type="bool" label="30308" default="true"/>
+        <setting id="show_vidme"         type="bool" label="30309" default="true"/>
+        <setting id="show_pornsites"     type="bool" label="30310" default="false"/>
+        <setting id="show_ytdl_misc"     type="bool" label="30313" default="true"/>
+        <setting id="use_ytdl_for_yt"    type="bool" label="30312" default="false"/>
+    </category>
+    <category label="30350">
+        <setting id="show_imgur"         type="bool" label="30351" default="true"/>
+        <setting id="show_i_redd_it"     type="bool" label="30352" default="true"/>
+        <setting id="show_reddituploads" type="bool" label="30353" default="true"/>
+        <setting id="show_reddit_com"    type="bool" label="30354" default="false"/>
+        <setting id="show_instagram"     type="bool" label="30355" default="true"/>
+        <setting id="show_blogspot"      type="bool" label="30356" default="true"/>
+        <setting id="show_tumblr"        type="bool" label="30357" default="true"/>
+    </category>
+
+    <category label="30150">
+        <setting                  type="action"      label="30151" action="RunPlugin(plugin://plugin.video.reddit_tv/?mode=openSettings&url=youtube)"/>
+        <setting                  type="action"      label="30152" action="RunPlugin(plugin://plugin.video.reddit_tv/?mode=openSettings&url=vimeo)"/>
+        <setting                  type="action"      label="30153" action="RunPlugin(plugin://plugin.video.reddit_tv/?mode=openSettings&url=dailymotion)"/>
+        <setting id="ll_qualiy"   type="enum"        label="30154" values="480p|720p" default="1"/>
+        <setting id="ll_downDir"  type="folder"      label="30155" default=""/>
+        <setting id="gfy_downDir" type="folder"      label="30156" default=""/>
+        <setting id="streamable_quality" type="enum" label="30157" values="full|mobile" default="1" />
+    </category>
+</settings>

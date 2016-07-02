@@ -1,0 +1,154 @@
+1.0.0
+- Initial release
+1.0.1
+- Added support for browsing all videos by hoster
+- Added selectable categories via add-on settings
+- Added autoplay modes: Randomly play all/unwatched/unfinished
+1.0.2
+- Some small improvements
+1.0.3
+- Added hoster: Liveleak.com
+1.0.4
+- Added search
+- Added context menu "Queue video"
+1.0.5
+- Changed User-Agent
+- Changed reddit requests to list only supported content
+1.0.6
+- Small bugfix
+1.0.7
+- Added category: Comments
+- Added setting: Items per page
+- Implemented functionality to search for reddits
+1.0.8
+- Added autoplay modes: Play latest all/unwatched/unfinished
+1.0.9
+- Fixed bug when adding/removing reddits
+1.1.0
+- Added setting: Show NSFW content
+- Added context menu: Add to Addon favourites
+- Added context menu: Show comments via Browser
+1.1.1
+- Fixed video search bug (urlencoding)
+1.1.2
+- Added download function
+- Fixed bug with NSFW content
+1.1.3
+- Added NSFW age check
+1.1.4
+- Some small fixes
+1.1.5
+- Fixed bug with mysql dbs
+1.1.6
+- Fixed bug with Chrome Launcher
+1.2.0
+- Upgrade to kodi
+- youtube upgrade / fix
+- deprecate xbox support
+- vimeo upgrade / fix
+- Finnish translation
+- disabled downloads for youtube/vimeo
+1.3.0
+- added support for gfycat.com
+- changed mantainer to rasjani after no replies from addonscriptorde
+1.3.1
+- user can now enable/disable videoservices to show videos from.
+
+2.0.0 -gedisony fork
+- some internal changes (for learning python)
+- added support for youtu.be
+- changed the video description to include host site(hoster), subreddit, user_who_posted and video title. Removed %votes 
+- added reddit default sort (reddit website has a default sort that can't be replicated when you specify sort order and time)
+- added a setting to bypass the sorting screen and go directly to reddit content using default sort order(above)
+- added relevance sorting in addition to top,new&comments (not that useful)
+- added imgur support and setting. (image preview only need to add actual support for imgur links)
+- nsfw posts have a red '*', will have [NSFW] tag in description and an mpaa "R" rating 
+2.3.0 -
+- more internal changes
+- add support for Imgur pictures, album, galleries
+- add setting for 2 lines on title
+- remove karma points filter 
+2.3.3
+- update logic for selecting links not to display if addon is running as a video addon
+- genre=subreddit director=posted by studio=hoster
+ 2.3.4
+ - image imgur post will now show up on video addon mode
+ - use slideshow workaround to show image imgur posts when on video addon mode 
+ 2.3.5
+ - remove query string from imgur posts
+ - add [IMG] tag on imgur posts that are images 
+ 2.3.6
+ - swap creation of data folder/cache folder
+ - removed slideshow workaround for other oses except windows (only works on windows). imgur image posts will not show up on other oses unless it is pictures addon mode.
+ 2.3.7
+ - unicode error bugfix
+ 2.4.0
+ - added context menu to show post comments and related settings
+ - add setting to show/hide image posts on video addon
+ - various internal coding changes
+ 2.5.0
+ - more internal changes
+ - update thumbnail generating code, added gfycat thumbnail 
+ - improve show comments link handling
+ 2.5.1
+ - add support to handle redd.it, reddituploads(not working),vine and streamable posts
+ - bugfix on show comments
+ 2.5.2 (5/28/2016)
+ - add setting to show/hide vine,streamable.com, redd.it and reddituploads posts
+ - add setting to choose streamable.com video quality
+ 2.5.3
+ - minor bugfix on showing comments
+ 2.6.0
+ - add youtube_dl plugin play function. 
+ - add vidme, instagram blogspot support
+ - add porn sites setting  
+ 2.6.1
+ - add 'go to subreddit' context menu 
+ - add 'edit subreddit' context menu
+ - add a few more nsfw sites that works on youtube_dl
+ 2.6.2
+ - autoplay now includes the newly added sites
+ 2.6.3
+ - fix bug in albums (handle different json reply) 
+ - show links in comment now also looks for links in the post text and post comments 
+ - add support for reddit.com text posts (to get playable links from them)  -disabled by default
+ - first page filter like [vimeo.com] changed to use "www.reddit.com/domain/vimeo.com" query instead of "www.reddit.com/search?q=site%3Avimeo.com"  
+ - update dailymotion regex (some video id weren't parsed properly)
+ - user can now specify domain as shortcut. i.e.: create a subreddit shortcut, subreddit+subreddit, multireddit or domain 
+ - add other sites supported by youtube_dl (funnyclips.me)|(engagemedia.org)|(videosift.com)|(break.com)|(veoh.com)|(viddler.com)|(schooltube.com)|(videos.sapo.pt)|(funnyordie.com) 
+ - add default subreddits, multihub and domain on first page for first run. 
+ 2.6.4
+ - update tumblr support
+ - use custom xml to view image.
+ - update album viewing to use custom xml.  
+ - remove domain filters on first page
+ - remove categories screen hot:month, new:hour, new:week etc.
+ - credit to LazyTv and The Big Picture addons for some assets 
+ - change name to reddit viewer
+ 2.6.5
+ - update streamable stream extraction routine
+ - remove 'streaming' popup when showing blogspot images
+ - fix reddituploads 'unauthorized' message 
+ 2.6.6
+ - update instagram handling routine to process images
+ 2.6.7
+ - update the youtube videoid hunting regex
+ - add setting to have youtube_dl addon handle youtube videos (no age restriction)
+ 2.6.8
+ - add ability to alias subreddits. e.g.: music+listentothis[cool sounds] will show up as "cool sounds" on listing
+ - redditmedia support
+ 2.6.9  (2016-06-22)
+ - replace photo album viewer routine with a simpler one that shows one picture at a time. ( photo album worked on jarvis but not on krypton)
+ - redo code for processing tumblr links 
+ - minor cleanups
+ 2.7.0  (2016-06-25)
+ - revise search functionality
+ - get larger thumbnail for imgur and tumblr posts
+ 2.7.1  (2016-06-26)
+ - minor fix on getting imgur media 
+ - add giphy support
+ 2.7.2  (2016-07-01)
+ - cleanup strings and convert strings.xml to strings.po
+ - fix autoplay bug
+ - small update in imgur id & vid.me parsing
+ - additional infolabels (estuary) 

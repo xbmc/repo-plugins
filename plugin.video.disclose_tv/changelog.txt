@@ -1,3 +1,6 @@
+0.1.8 (07.02.2016)
+ - fixed playback (Spinalcrack)
+
 0.1.7 (06.26.2016)
  - fixed playback (Spinalcrack)
  - fixed videos not showing in the list (Spinalcrack)

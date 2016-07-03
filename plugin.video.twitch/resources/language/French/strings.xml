@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Next available: 30096 -->
+    <!-- main menu -->
+    <string id="30001">Jeux</string>
+    <string id="30002">Chaines Suivies</string>
+    <string id="30066">Jeux Suivis</string>
+    <string id="30003">Rechercher</string>
+    <string id="30004">Paramètre</string>
+    <string id="30005">Chaines en vedette</string>
+    <string id="30006">Équipes</string>
+    <string id="30008">Chaines</string>
+
+    <!--search -->
+    <string id="30007">Rechercher d'une chaine</string>
+
+    <!--general -->
+    <string id="30010">TwitchTV</string>
+    <string id="30011">page suivante...</string>
+    <string id="30012">-- Chaines en Direct --</string>
+    <string id="30013">-- Chaines Suivit --</string>
+
+    <string id="30078">Rediffusion</string>
+    <string id="30079">Video en vedette</string>
+
+    <!--notifications -->
+    <string id="30020">Erreur HTTP</string>
+    <string id="30021">Pas de données trouvées</string>
+    <string id="30022">Pas d'archive trouvées pour </string>
+    <string id="30023">Problème avec le token utilisateur</string>
+    <string id="30024">Paramètres vidéo modifiés</string>
+    <string id="30025">Les paramètres vidéo sélectionnés ne sont pas disponibles</string>
+    <string id="30026">Problème avec l'API Twitch.tv</string>
+    <string id="30027">Erreur JSON</string>
+    <string id="30028">Échec de l'analyse des résultats</string>
+    <string id="30029">S'il vous plaît vérifier votre connexion Internet</string>
+    <string id="30080">Impossible de trouver des urls lisibles</string>
+    <string id="30095">Le nom d'utilisateur est nécessaire</string>
+
+    <!--settings -->
+    <string id="30040">Qualité vidéo</string>
+    <string id="30041">Meilleur</string>
+    <string id="30042">720p</string>
+    <string id="30043">480p</string>
+    <string id="30044">360p</string>
+    <string id="30063">226p (Mobile)</string>
+    <string id="30045">Afficher le titre</string>
+    <string id="30046">Chaine - Titre</string>
+    <string id="30047">Spectateur - Chaine - Titre</string>
+    <string id="30048">Titre</string>
+    <string id="30049">Chaine</string>
+    <string id="30051">Chaine - Titre du jeu - Titre</string>
+    <string id="30067">Titre du jeu Spectateur | Chaine - Titre</string>
+    <string id="30052">Activer</string>
+    <string id="30053">Mot de passe (OAuth Token)</string>
+    <string id="30068">Type de contenus</string>
+    <string id="30069">Fichier</string>
+    <string id="30070">Émission</string>
+    <string id="30071">Film</string>
+    <string id="30072">Épisodes</string>
+    <string id="30073">Vidéos musicales</string>
+    <string id="30074">Actualiser automatiquement le cache</string>
+    <string id="30075">Installer IrcChat (script.ircchat)</string>
+    <string id="30076">General</string>
+    <string id="30081">Chat IRC</string>
+    <string id="30082">Aperçus en direct</string>
+    <string id="30083">Paramètre d'Aperçus en direct</string>
+    <string id="30084">Supprimer le cache des aperçus</string>
+    <string id="30085">***** ATTENTION *****</string>
+    <string id="30086">Ces paramètres peuvent permettre à cet add-on de supprimer des informations et des images de la base de données pour les aperçus</string>
+    <string id="30087">Notifications</string>
+    <string id="30094">intervalle d'actualisation automatique (minutes)</string>
+
+    <string id="30050">Nom d'utilisateur</string>
+
+    <!--contextmenu-->
+    <string id="30077">Visionner (Choix de la qualité)</string>
+
+    <!--stream info-->
+    <string id="30088">Jeu</string>
+    <string id="30089">Spectateur</string>
+    <string id="30090">Langue</string>
+    <string id="30091">Mature</string>
+    <string id="30092">Partenaire</string>
+    <string id="30093">Delais</string>
+
+    <!--title-->
+    <string id="30060">Chaine anonyme</string>
+    <string id="30061">Titre inconnu</string>
+    <string id="30062">Nombre de spectateurs inconnus</string>
+    <string id="30064">Jeu inconnu</string>
+
+    <string id="30065">Tronquer les titres</string>
+
+</strings>

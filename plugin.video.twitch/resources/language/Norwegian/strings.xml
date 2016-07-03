@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!-- main menu -->
+  <string id="30001">Spill</string>
+  <string id="30002">Følger</string>
+  <string id="30066">Fulgte spill</string>
+  <string id="30003">Søk</string>
+  <string id="30004">Innstillinger</string>
+  <string id="30005">Fremhevede spill</string>
+  <string id="30006">Lag</string>
+  <string id="30008">Kanaler</string>
+  
+  <!--search -->
+  <string id="30007">Søk etter kanaler</string>
+  
+  <!--general -->
+  <string id="30010">TwitchTV</string>
+  <string id="30011">neste side...</string>
+  <string id="30012">-- Nåværende direktestrømmer --</string>
+  <string id="30013">-- Fulgte kanaler --</string>
+
+  <string id="30078">Tidligere kringkastinger</string>
+  <string id="30079">Video høydepunkt</string>
+
+  <!--notifications -->
+  <string id="30020">HTTP-feil</string>
+  <string id="30021">Ingen data fra direktesending funnet</string>
+  <string id="30022">Ingen arkiver funnet for</string>
+  <string id="30023">Bruker-Token Feil</string>
+  <string id="30024">Skiftet videoinnstillinger</string>
+  <string id="30025">Valgte videoinnstillinger er ikke tilgjengelige</string>
+  <string id="30026">TwitchAPI-feil</string>
+  <string id="30027">JSON-feil</string>
+  <string id="30028">Kan ikke dekode resultatsettet</string>
+  <string id="30029">Skjekk internettforbindelsen din</string>
+  <string id="30080">Kunne ikke finne noen spillbar urler</string>
+  <string id="30095">Brukernavn er nødvendig</string>
+  
+  <!--settings -->
+  <string id="30040">Videovalitet</string>
+  <string id="30041">Best mulig</string>
+  <string id="30042">720p</string>
+  <string id="30043">480p</string>
+  <string id="30044">360p</string>
+  <string id="30063">226p (Mobil)</string>
+  <string id="30045">Vis titler</string>
+  <string id="30046">Strømmer - Stream Tittel</string>
+  <string id="30047">Seere - Strømmer - Tittel til strøm</string>
+  <string id="30048">Tittel til strøm</string>
+  <string id="30049">Strømmer</string>
+  <string id="30051">Strømmer - Spilltittel - Tittel til strøm</string>
+  <string id="30067">Spilltittel Seere | Strømmer - Tittel til strøm</string>
+  <string id="30052">Aktiver</string>
+  <string id="30053">Adgangskode (OAuth Token)</string>
+  <string id="30068">Innholdstype</string>
+  <string id="30069">Filer</string>
+  <string id="30070">TV-serier</string>
+  <string id="30071">Filmer</string>
+  <string id="30072">Episoder</string>
+  <string id="30073">Musikkvideoer</string>
+  <string id="30074">Automatically refresh live preview cache</string>
+  <string id="30075">Installer IrcChat (script.ircchat)</string>
+  <string id="30076">Generell</string>
+  <string id="30081">IRC Chat</string>
+  <string id="30082">Forhåndsvisning av direktesending</string>
+  <string id="30083">Innstillinger for forhåndsvisning av direktesendinger</string>
+  <string id="30084">Rens mellomlagring av forhåndsvisning av direktesendinger</string>
+  <string id="30085">***** ADVARSEL *****</string>
+  <string id="30086">These settings may allow this add-on to delete database entries and images[CR]for cached live previews.</string>
+  <string id="30087">Varslinger</string>
+  <string id="30094">Intervall for automatisk oppfriskning (minutter)</string>
+  <string id="30096">API</string>
+  <string id="30097">OAuth Klient-id</string>
+
+  <string id="30050">Brukernavn</string>
+
+  <!--contextmenu-->
+  <string id="30077">Spill (Velg Kvalitet)</string>
+
+  <!--stream info-->
+  <string id="30088">Spill</string>
+  <string id="30089">Seere</string>
+  <string id="30090">Språk</string>
+  <string id="30091">Voksent</string>
+  <string id="30092">Partner</string>
+  <string id="30093">Forsinkelse</string>
+
+  <!--title-->
+  <string id="30060">Ikke navngitt Streamer</string>
+  <string id="30061">Ikke titulert Stream</string>
+  <string id="30062">Ukjent antall Seere</string>
+  <string id="30064">Ukjent Spill</string>
+
+  <string id="30065">Forkort viste titler</string>
+
+</strings>

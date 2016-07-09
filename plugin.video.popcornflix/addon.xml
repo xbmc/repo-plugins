@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.popcornflix"
        name="Popcornflix"
-       version="6.0.2"
+       version="6.0.3"
        provider-name="t1m">
   <requires>
     <import addon="xbmc.python" version="2.20.0"/>
-    <import addon="script.module.t1mlib" version="1.0.14"/>
+    <import addon="script.module.t1mlib" version="1.0.15"/>
   </requires>
   <extension point="xbmc.python.pluginsource"
             library="default.py">
@@ -21,6 +21,6 @@
     <forum>http://forum.xbmc.org/showthread.php?tid=198931</forum>
     <website>http://www.popcornflix.com</website>
     <email></email>
-    <source>https://github.com/learningit/plugin.video.popcornflix</source>
+    <source>https://github.com/learningit/Kodi-plugins-source</source>
   </extension>
 </addon>

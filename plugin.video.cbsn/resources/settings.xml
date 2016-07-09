@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-  <category label="30000">
-    <setting id="bselect" type="enum" label="30002" lvalues="30003|30004|30005|30006|30007|30008|30009" default="6" />
-  </category>
-</settings>

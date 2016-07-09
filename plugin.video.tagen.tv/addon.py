@@ -42,7 +42,7 @@ def scheduler():
 @plugin.route('/')
 def index():
 
-    url = "rtmp://stream.tagen.tv:80/live/ playpath=glowna live=true"
+    url = "rtmp://stream.tagen.tv:80/live/ playpath=glowna-sd live=true"
     li = ListItem(addon.getLocalizedString(30001))
     li.setProperty('isplayable', 'true')
     li.addStreamInfo('video', {'codec': 'h264', 'width': 854, 'height': 480})

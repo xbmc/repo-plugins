@@ -64,8 +64,8 @@ msgid "MPlayer"
 msgstr "MPlayer"
 
 msgctxt "#30300"
-msgid "Preferred Video Quality"
-msgstr "Gewenste Video Kwaliteit"
+msgid "Maximum Video Quality"
+msgstr "Maximum Video Kwaliteit"
 
 msgctxt "#30301"
 msgid "Very High"

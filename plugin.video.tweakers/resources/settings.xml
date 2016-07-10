@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
 	<!--the number after default indicates the index, index 0 is the first lvalue, index 1 is the second lvalue and so on-->
-	<setting id="preferred-video-quality" label="30300" type="enum"   lvalues="30304|30303|30302|30301"       default="3"/>
-	<setting id="debug" 		          label="30400" type="bool"                                           default="false"/>
+	<setting id="maximum-video-quality" label="30300" type="enum"   lvalues="30304|30303|30302|30301"       default="3"/>
 </settings>

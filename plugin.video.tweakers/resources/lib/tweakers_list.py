@@ -6,6 +6,7 @@
 #
 import os
 import re
+import requests
 import sys
 import urllib
 import urlparse
@@ -15,7 +16,6 @@ import xbmcplugin
 from BeautifulSoup import BeautifulSoup
 
 from tweakers_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
-from tweakers_utils import HTTPCommunicator
 
 
 #
@@ -32,12 +32,8 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        # Get plugin settings
-        self.DEBUG = SETTINGS.getSetting('debug')
-
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
+                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
 
         # Parse parameters
         if len(sys.argv[2]) == 0:
@@ -51,9 +47,8 @@ class Main:
             self.video_list_page_url = str(self.video_list_page_url)
             self.next_page_possible = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)), xbmc.LOGDEBUG)
 
         if self.next_page_possible == "True":
             # Determine current item number, next item number, next_url
@@ -72,9 +67,8 @@ class Main:
                     page_number_next_str = '00' + str(page_number_next)
                 self.next_url = self.video_list_page_url.replace(page_number_str, page_number_next_str)
 
-                if self.DEBUG == 'true':
-                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                        ADDON, VERSION, DATE, "self.next_url", str(urllib.unquote_plus(self.next_url))), xbmc.LOGNOTICE)
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                        ADDON, VERSION, DATE, "self.next_url", str(urllib.unquote_plus(self.next_url))), xbmc.LOGDEBUG)
 
         #
         # Get the videos
@@ -95,7 +89,20 @@ class Main:
         #
         # Get HTML page
         #
-        html_source = HTTPCommunicator().get(self.video_list_page_url)
+        # Make the headers
+        xbmc_version = xbmc.getInfoLabel("System.BuildVersion")
+        user_agent = "Kodi Mediaplayer %s / Tweakers Addon %s" % (xbmc_version, VERSION)
+        headers = {"User-Agent": user_agent,
+                   "Accept-Encoding": "gzip",
+                   "X-Cookies-Accepted": "1"}
+        # Disable ssl logging (this is needed for python version < 2.7.9 (SNIMissingWarning))
+        import logging
+        logging.captureWarnings(True)
+        # Get HTML page
+        response = requests.get(self.video_list_page_url, headers=headers)
+        # response.status
+        html_source = response.text
+        html_source = html_source.encode('utf-8', 'ignore')
 
         # Parse response
         soup = BeautifulSoup(html_source)
@@ -104,19 +111,17 @@ class Main:
         # <img src="http://ic.tweakimg.net/img/accountid=1/externalid=7515/size=124x70/image.jpg" width=124 height=70 alt="">
         thumbnail_urls = soup.findAll('img', attrs={'src': re.compile("^http://ic.tweakimg.net/")})
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(thumbnail_urls)", str(len(thumbnail_urls))), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "len(thumbnail_urls)", str(len(thumbnail_urls))), xbmc.LOGDEBUG)
 
         # Get the video page urls
         # <td class="video-image">
-        #	<a href="http://tweakers.net/video/7517/showcase-trailer-van-cryengine-3-van-gdc-2013.html" class="thumb video" title="Showcase-trailer van CryEngine 3 van GDC 2013">
+        #	<a href="https://tweakers.net/video/7517/showcase-trailer-van-cryengine-3-van-gdc-2013.html" class="thumb video" title="Showcase-trailer van CryEngine 3 van GDC 2013">
         #   <img src="http://ic.tweakimg.net/img/accountid=1/externalid=7517/size=124x70/image.jpg" width=124 height=70 alt=""><span class="playtime">04:00</span></a>
         # </td>
         video_page_url_in_tds = soup.findAll('td', attrs={'class': re.compile("video-image")})
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(video_page_url_in_tds)", str(len(video_page_url_in_tds))), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "len(video_page_url_in_tds)", str(len(video_page_url_in_tds))), xbmc.LOGDEBUG)
 
         # Add Search item
         video_page_url = ""
@@ -147,9 +152,8 @@ class Main:
             except:
                 pass
 
-            if self.DEBUG == 'true':
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "title", str(title)),
-                         xbmc.LOGNOTICE)
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "title", str(title)),
+                         xbmc.LOGDEBUG)
 
             if thumbnail_urls_index >= len(thumbnail_urls):
                 thumbnail_url = ''

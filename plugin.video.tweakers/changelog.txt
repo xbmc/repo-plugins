@@ -1,3 +1,9 @@
+v1.1.4 (2016-07-10):
+- using requests
+- suppress ssl warnings
+- changed to https
+- changed addon debugging info to kodi debugging info
+
 v1.1.3 (2016-05-22)
 - using po files
 - changed user-agent as requested

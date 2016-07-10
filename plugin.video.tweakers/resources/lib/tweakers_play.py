@@ -5,6 +5,7 @@
 # Imports
 #
 import sys
+import requests
 import urllib2
 import urlparse
 import re
@@ -15,7 +16,7 @@ import xbmcplugin
 from BeautifulSoup import BeautifulSoup
 
 from tweakers_const import ADDON, SETTINGS, LANGUAGE, DATE, VERSION
-from tweakers_utils import HTTPCommunicator
+
 
 
 #
@@ -39,12 +40,10 @@ class Main:
         self.title = str(self.title)
 
         # Get plugin settings
-        self.DEBUG = SETTINGS.getSetting('debug')
-        self.PREFERRED_VIDEO_QUALITY = SETTINGS.getSetting('preferred-video-quality')
+        self.MAXIMUM_VIDEO_QUALITY = SETTINGS.getSetting('maximum-video-quality')
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
+                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
 
         #
         # Play video
@@ -63,18 +62,29 @@ class Main:
         # Wait 1 second
         xbmc.sleep(1000)
 
-        # Video_page_url will be something like this: http://tweakers.net/video/7893/world-of-tanks-86-aankondiging.html
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.video_page_url", str(self.video_page_url)), xbmc.LOGNOTICE)
+        # Video_page_url will be something like this: https://tweakers.net/video/7893/world-of-tanks-86-aankondiging.html
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "self.video_page_url", str(self.video_page_url)), xbmc.LOGDEBUG)
+
+
+        # Make the headers
+        xbmc_version = xbmc.getInfoLabel("System.BuildVersion")
+        user_agent = "Kodi Mediaplayer %s / Tweakers Addon %s" % (xbmc_version, VERSION)
+        headers = {"User-Agent": user_agent,
+                   "Accept-Encoding": "gzip",
+                   "X-Cookies-Accepted": "1"}
+        # Disable ssl logging (this is needed for python version < 2.7.9 (SNIMissingWarning))
+        import logging
+        logging.captureWarnings(True)
 
         html_source = ''
         try:
-            html_source = HTTPCommunicator().get(self.video_page_url)
+            response = requests.get(self.video_page_url, headers=headers)
+            html_source = response.text
+            html_source = html_source.encode('utf-8', 'ignore')
         except urllib2.HTTPError, error:
-            if self.DEBUG == 'true':
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "HTTPError", str(error)),
-                         xbmc.LOGNOTICE)
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "HTTPError", str(error)),
+                         xbmc.LOGDEBUG)
             dialog_wait.close()
             del dialog_wait
             xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30507) % (str(error)))
@@ -90,18 +100,18 @@ class Main:
         real_video_page_url = iframes[0]['src']
         real_video_page_url = "http:" + real_video_page_url
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "real_video_page_url", str(real_video_page_url)),
-                     xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "real_video_page_url", str(real_video_page_url)),
+                     xbmc.LOGDEBUG)
 
         html_source = ''
         try:
-            html_source = HTTPCommunicator().get(real_video_page_url)
+            response = requests.get(real_video_page_url, headers=headers)
+            html_source = response.text
+            html_source = html_source.encode('utf-8', 'ignore')
         except urllib2.HTTPError, error:
-            if self.DEBUG == 'true':
-                xbmc.log(
+            xbmc.log(
                     "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "HTTPError", str(error)),
-                    xbmc.LOGNOTICE)
+                    xbmc.LOGDEBUG)
             dialog_wait.close()
             del dialog_wait
             xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30507) % (str(error)))
@@ -136,30 +146,29 @@ class Main:
         json_string = soup_str[start_pos_json_block:end_pos_json_block]
         parsed_json = json.loads(json_string)
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "json_string", json_string),
-                 xbmc.LOGNOTICE)
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "json_string", json_string),
-                 xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "json_string", json_string),
+                 xbmc.LOGDEBUG)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "json_string", json_string),
+                 xbmc.LOGDEBUG)
 
         # Determine what quality the video should be
-        if self.PREFERRED_VIDEO_QUALITY == "0":
-            preferred_video_label = "270p"
-        elif self.PREFERRED_VIDEO_QUALITY == "1":
-            preferred_video_label = "360p"
-        elif self.PREFERRED_VIDEO_QUALITY == "2":
-            preferred_video_label = "720p"
-        elif self.PREFERRED_VIDEO_QUALITY == "3":
-            preferred_video_label = "1080p"
+        if self.MAXIMUM_VIDEO_QUALITY == "0":
+            maximum_video_label = "270p"
+        elif self.MAXIMUM_VIDEO_QUALITY == "1":
+            maximum_video_label = "360p"
+        elif self.MAXIMUM_VIDEO_QUALITY == "2":
+            maximum_video_label = "720p"
+        elif self.MAXIMUM_VIDEO_QUALITY == "3":
+            maximum_video_label = "1080p"
         else:
-            preferred_video_label = "1080p"
+            maximum_video_label = "1080p"
 
-        # Find the source with the preferred video quality
+        # Find the source with the maximum video quality
         sources_index = 0
         label_found = False
         while label_found == False:
             try:
-                if parsed_json[sources_index]["label"] == preferred_video_label:
+                if parsed_json[sources_index]["label"] == maximum_video_label:
                     label_found = True
                 else:
                     sources_index += 1
@@ -167,11 +176,11 @@ class Main:
                 sources_index = 0
                 break
 
-        # Find the json block containing the video-url with the preferred video quality
+        # Find the json block containing the video-url with the maximum video quality
         try:
             json_string = str(parsed_json[sources_index]["sources"])
         except:
-            # If the preferred quality is not available, use the best available quality
+            # If the maximum quality is not available, use the best available quality
             json_string = str(parsed_json[0]["sources"])
         json_string = json_string.strip("[")
         json_string = json_string.strip("]")
@@ -180,20 +189,16 @@ class Main:
         parsed_json = json.loads(json_string)
         video_url = str(parsed_json["src"])
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            ADDON, VERSION, DATE, "video_url", str(video_url)), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+            ADDON, VERSION, DATE, "video_url", str(video_url)), xbmc.LOGDEBUG)
 
         no_url_found = False
-        unplayable_media_file = False
         have_valid_url = False
+
         if len(video_url) == 0:
             no_url_found = True
         else:
-            if HTTPCommunicator().exists(video_url):
-                have_valid_url = True
-            else:
-                unplayable_media_file = True
+            have_valid_url = True
 
         # Play video
         if have_valid_url:
@@ -204,5 +209,3 @@ class Main:
         #
         elif no_url_found:
             xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30505))
-        elif unplayable_media_file:
-            xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30506))

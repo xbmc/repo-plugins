@@ -2,7 +2,7 @@
 <addon 
 	id="plugin.video.tweakers" 
 	name="Tweakers" 
-	version="1.1.4"
+	version="1.1.5"
 	provider-name="Skipmode A1,Amelandbor,ninovanhooff">
   <requires>
     <import addon="xbmc.python"                 version="2.14.0"/>

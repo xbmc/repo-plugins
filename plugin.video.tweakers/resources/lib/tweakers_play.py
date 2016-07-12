@@ -93,12 +93,10 @@ class Main:
         soup = BeautifulSoup(html_source)
 
         # Find the real video page url
-        # < iframe name = "s1_soc_1" id = "s1_soc_1" style = "border:0" frameborder = 0 width = 620 height = 349
-        # src = "//tweakers.net/video/player/12193/pitch-2e-inspiratiesessie-carefree.html?expandByResize=1&amp;width=620&amp;height=349&amp;zone=30"
-        # allowfullscreen mozallowfullscreen webkitallowfullscreen > < / iframe >
-        iframes = soup.findAll('iframe', attrs={'src': re.compile("^//tweakers.net/video")}, limit=1)
+        #<div class="video-container">
+        # <iframe name="s1_soc_1" id="s1_soc_1" style="border:0" frameborder="0" width="620" height="349" src="https://tweakers.net/video/player/12875/pre-alpha-gameplay-van-system-shock-remake.html?expandByResize=1&amp;width=620&amp;height=349&amp;zone=30" allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen" webkitallowfullscreen="webkitallowfullscreen"></iframe></div>
+        iframes = soup.findAll('iframe', attrs={'src': re.compile("^https://tweakers.net/video")}, limit=1)
         real_video_page_url = iframes[0]['src']
-        real_video_page_url = "http:" + real_video_page_url
 
         xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "real_video_page_url", str(real_video_page_url)),
                      xbmc.LOGDEBUG)
@@ -123,19 +121,19 @@ class Main:
         # .....})('video', {"skin": "https:\/\/tweakimg.net\/x\/video\/skin\/default\/streamone.css?1459246513", "playlist": {
         #        "items": [{"id": "gY8Cje0JOwmQ", "title": "Hyperloop One voert eerste test succesvol uit",
         #        "description": "Hyperloop One heeft in de woestijn in Nevada de eerste succesvolle test van het aandrijfsysteem uitgevoerd. De Hyperloop-slede kwam tijdens de test op de rails binnen 1,1 seconde tot een snelheid van 187km\/u.",
-        #        "poster": "http:\/\/ic.tweakimg.net\/img\/account=s7JeEm\/item=gY8Cje0JOwmQ\/size=980x551\/image.jpg",
+        #        "poster": "https:\/\/ic.tweakimg.net\/img\/account=s7JeEm\/item=gY8Cje0JOwmQ\/size=980x551\/image.jpg",
         #        "duration": 62, "locations": {"progressive": [{"label": "1080p", "height": 1080, "width": 1920,
         #                                                       "sources": [{"type": "video\/mp4",
-        #                                                                    "src": "http:\/\/media.tweakers.tv\/progressive\/account=s7JeEm\/item=gY8Cje0JOwmQ\/file=nhsKnukbVci0\/account=s7JeEm\/gY8Cje0JOwmQ.mp4"}]},
+        #                                                                    "src": "https:\/\/media.tweakers.tv\/progressive\/account=s7JeEm\/item=gY8Cje0JOwmQ\/file=nhsKnukbVci0\/account=s7JeEm\/gY8Cje0JOwmQ.mp4"}]},
         #                                                      {"label": "720p", "height": 720, "width": 1280,
         #                                                       "sources": [{"type": "video\/mp4",
-        #                                                                    "src": "http:\/\/media.tweakers.tv\/progressive\/account=s7JeEm\/item=gY8Cje0JOwmQ\/file=jC0LmugZVMCU\/account=s7JeEm\/gY8Cje0JOwmQ.mp4"}]},
+        #                                                                    "src": "https:\/\/media.tweakers.tv\/progressive\/account=s7JeEm\/item=gY8Cje0JOwmQ\/file=jC0LmugZVMCU\/account=s7JeEm\/gY8Cje0JOwmQ.mp4"}]},
         #                                                      {"label": "360p", "height": 360, "width": 640,
         #                                                       "sources": [{"type": "video\/mp4",
-        #                                                                    "src": "http:\/\/media.tweakers.tv\/progressive\/account=s7JeEm\/item=gY8Cje0JOwmQ\/file=lwkDiMAZOVO0\/account=s7JeEm\/gY8Cje0JOwmQ.mp4"}]},
+        #                                                                    "src": "https:\/\/media.tweakers.tv\/progressive\/account=s7JeEm\/item=gY8Cje0JOwmQ\/file=lwkDiMAZOVO0\/account=s7JeEm\/gY8Cje0JOwmQ.mp4"}]},
         #                                                      {"label": "270p", "height": 270, "width": 480,
         #                                                       "sources": [{"type": "video\/mp4",
-        #                                                                    "src": "http:\/\/media.tweakers.tv\/progressive\/account=s7JeEm\/item=gY8Cje0JOwmQ\/file=BT1DiI2bOFuU\/account=s7JeEm\/gY8Cje0JOwmQ.mp4"}]}],
+        #                                                                    "src": "http:s\/\/media.tweakers.tv\/progressive\/account=s7JeEm\/item=gY8Cje0JOwmQ\/file=BT1DiI2bOFuU\/account=s7JeEm\/gY8Cje0JOwmQ.mp4"}]}],
         #                                      "adaptive": []}, "audioonly": false, "live": false, ...
 
         # Find the json block containing all the video-urls

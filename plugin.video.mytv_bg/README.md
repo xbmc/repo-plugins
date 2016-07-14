@@ -4,6 +4,7 @@ Addon for kodi/xbmc
 ### Welcome to MyTV.bg Addon Pages.
 # plugin.video.mytv_bg
 Addon for kodi/xbmc
+In kodi website: **http://addons.kodi.tv/show/plugin.video.mytv_bg/**
 
 ### Как да инсталираме адона за kodi/xbmc
 1. Свалете адона Download ZIP.

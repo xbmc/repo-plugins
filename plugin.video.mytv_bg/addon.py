@@ -284,18 +284,20 @@ class login:
 
     def writeInFile(self):
         fopen = open(__token_filepath__, "w+")
-        fopen.write(self.token)
+        fopen.write(self.token + " " + plugin.get_setting('username'))
         fopen.close()
 
     def openReadFile(self):
         if os.path.isfile(__token_filepath__):
             fopen = open(__token_filepath__, "r")
-            temp_token = fopen.read()        
+            temp_token = fopen.read()
             fopen.close()
             if temp_token:
-                self.token = temp_token
-                temp_token = ''
-            
+				arr = temp_token.partition(" ")
+				self.token = arr[0]
+				if arr[1] and arr[1] != plugin.get_setting('username'):
+					self.token = '';
+				temp_token = ''
         else:
             self.writeInFile()
         

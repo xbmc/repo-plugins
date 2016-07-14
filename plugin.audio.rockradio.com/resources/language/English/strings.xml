@@ -8,11 +8,12 @@
 	<string id="30030">Use first stream for each channel (starts playing faster)</string>
 	<string id="30012">Stream cache expiration in days (0 = never)</string>
 	<string id="30010">Force cache refresh (use when changing settings)</string>
-    <string id="30031">Download random stream from each channel (faster after caching)</string>
+  <string id="30031">Download random stream from each channel (faster after caching)</string>
 
 	<string id="30001">Stream source</string>
 
-	<string id="30002">Premium</string>
+  <string id="30183">Login</string>
+	<string id="30002">Use premium streams</string>
 	<string id="30003">E-mail/username</string>
 	<string id="30004">Password</string>
 	<string id="30005">Use 'My favorites' playlist</string>
@@ -24,7 +25,7 @@
 	<string id="30009">Homepage</string>
 
 	<string id="30015">Get HQ 320k streams with ROCKRADIO Premium at http://www.rockradio.com</string>
-	<string id="30016">Version:  3.0.0</string>
+	<string id="30016">Version:  3.0.1</string>
 	<string id="30017">Author:  Tim C. 'Bitcrusher' Steinmetz</string>
 	<string id="30018">Homepage:  http://qualisoft.dk</string>
 	<string id="30019">E-mail:  timcst@gmail.com</string>
@@ -43,7 +44,7 @@
 	<string id="30100">Connection error</string>
 	<string id="30101">Could not connect to rockradio.com</string>
 	<string id="30102">Check your internet connection</string>
-    <string id="30103">and the website in your browser</string>
+  <string id="30103">and the website in your browser</string>
 
 	<string id="30110">No streams found</string>
 	<string id="30111">Maybe your ROCKRADIO.com Premium membership expired?</string>
@@ -68,18 +69,18 @@
 	<string id="30152"> piece(s) of channelart missing</string>
 	<string id="30153">You should refresh your cache</string>
 	<string id="30154">Disable using 'My Favorites' to get new channelart</string>
-	
+
 	<string id="30160">Problem downloading channelart</string>
 	<string id="30161">There was a problem downloading channelart for: </string>
 	<string id="30162">From URL: </string>
 
-    <string id="30170">Login failed</string>
-    <string id="30171">Invalid Username or Password</string>
-    <string id="30172">Has your account perhaps expired?</string>
+  <string id="30170">Login failed</string>
+  <string id="30171">Invalid Username or Password</string>
+  <string id="30172">Has your account perhaps expired?</string>
 
-    <string id="30180">No favorites found</string>
-    <string id="30181">Login to ROCKRADIO.com in your browser and go to 'Manage favorites'</string>
-    <string id="30182">or uncheck 'Use my favorites' from this plugins settings</string>
+  <string id="30180">No favorites found</string>
+  <string id="30181">Login to ROCKRADIO.com in your browser and go to 'Manage favorites'</string>
+  <string id="30182">or uncheck 'Use my favorites' from this plugins settings</string>
 
 
 </strings>

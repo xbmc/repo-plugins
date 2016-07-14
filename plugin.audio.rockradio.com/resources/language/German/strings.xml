@@ -8,11 +8,12 @@
 	<string id="30030">Benutze ersten Stream jedes Senders (Abspielen beginnt schneller)</string>
 	<string id="30012">Ablaufdauer des Stream Cache in Tagen (0 = nie)</string>
 	<string id="30010">Erzwinge Cache Aktualisierung (nach Verändern der Einstellungen)</string>
-    <string id="30031">Verbinde mit zufälligem Stream eines Senders (schneller bei Caching)</string>
+  <string id="30031">Verbinde mit zufälligem Stream eines Senders (schneller bei Caching)</string>
 
 	<string id="30001">Stream Quelle</string>
 
-	<string id="30002">Premium</string>
+  <string id="30183">Login</string>
+	<string id="30002">Benutze Premium Streams</string>
 	<string id="30003">E-Mail/Benutzername</string>
 	<string id="30004">Passwort</string>
 	<string id="30005">Benutze 'Meine Favoriten'-Playlist</string>
@@ -24,7 +25,7 @@
 	<string id="30009">Homepage</string>
 
 	<string id="30015">Höre HQ 320k Streams mit ROCKRADIO Premium unter http://www.rockradio.com</string>
-	<string id="30016">Version:  3.0.0</string>
+	<string id="30016">Version:  3.0.1</string>
 	<string id="30017">Author:  Tim C. 'Bitcrusher' Steinmetz</string>
 	<string id="30018">Homepage:  http://qualisoft.dk</string>
 	<string id="30019">E-mail:  timcst@gmail.com</string>
@@ -43,7 +44,7 @@
 	<string id="30100">Verbindungsfehler</string>
 	<string id="30101">Verbindung mit ROCKRADIO.com nicht möglich</string>
 	<string id="30102">Überprüfen Sie Ihre Internetverbindung</string>
-    <string id="30103">und die Website in Ihrem Browser</string>
+  <string id="30103">und die Website in Ihrem Browser</string>
 
 	<string id="30110">Keine Streams gefunden</string>
 	<string id="30111">Vielleicht ist Ihre ROCKRADIO.com Premium Mitgliedschaft ausgelaufen?</string>
@@ -68,7 +69,7 @@
 	<string id="30152"> Senderbilder</string>
 	<string id="30153">Sie sollten den Cache aktualisieren</string>
 	<string id="30154">Deaktivieren Sie 'Meine Favoriten', um neue Senderbilder zu erhalten</string>
-	
+
 	<string id="30160">Problem beim Herunterladen von Senderbildern</string>
 	<string id="30161">Es gab ein Problem beim Herunterladen von Senderbildern für: </string>
 	<string id="30162">Von URL: </string>

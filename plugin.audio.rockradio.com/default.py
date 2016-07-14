@@ -144,7 +144,7 @@ class musicAddonXbmc:
             html = ""
 
             # if username is set, try to login and go for premium channels
-            if ADDON.getSetting('username') != "":
+            if ADDON.getSetting('username') != "" and ADDON.getSetting('usepremium') == "true":
                 loginData = urllib.urlencode({'member_session[username]': ADDON.getSetting('username'),
                                               'member_session[password]': ADDON.getSetting('password')})
 
@@ -193,10 +193,14 @@ class musicAddonXbmc:
 
             # go for free/public channels
             else:
-                html = self.curler.request(pluginConfig.get('urls', 'frontpage'), 'get')
+                loginData = urllib.urlencode({'member_session[username]': ADDON.getSetting('username'),
+                                              'member_session[password]': ADDON.getSetting('password')})
+
+                # post login info and get frontpage html
+                html = self.curler.request(pluginConfig.get('urls', 'login'), 'post', loginData)
 
                 # if we could not reach rockradio.com at all
-                if not html:
+                if not bool(html):
                     xbmc.log(u'rockradio.com could not be reached', xbmc.LOGWARNING)
                     xbmcgui.Dialog().ok(ADDON.getLocalizedString(30100),
                                         ADDON.getLocalizedString(30101),
@@ -208,6 +212,12 @@ class musicAddonXbmc:
                 # put each playlist in a worker queue for threading
                 channels = json.loads(self.curler.request(pluginConfig.get('streams', 'public'), 'get'))
                 channelMeta = self.getChannelMetadata(html)
+
+                premiumConfig = self.getPremiumConfig()
+
+                # add listenkey to playlist urls
+                for channel in channels:
+                    channel['playlist'] = '%s' % (channel['playlist'])
 
             for channel in channels:
                 self.workQueue.put(channel)
@@ -270,7 +280,7 @@ class musicAddonXbmc:
         # Will get JSON with all channel metadata
 	# rockradio.com uses the same javascript app
         re_channelMeta = re.compile(r"di.app.start\(({.+(?!\}\)))\)", re.M | re.I)
-        
+
         channelMeta = re_channelMeta.findall(html)[0]
 
         # removes those pesky \u2019 and what not
@@ -291,6 +301,8 @@ class musicAddonXbmc:
     def addChannel(self, channel, channelMeta, channelCount):
         # set to true if new channelart is downloaded
         isNew = 0
+        agent = pluginConfig.get('plugin', 'agent')
+        referer = pluginConfig.get('urls', 'frontpage')
 
         # if channel asset does not exist, download it
         if not os.path.exists(self.addonProfilePath + str(channel['key']) + '.png'):
@@ -302,7 +314,7 @@ class musicAddonXbmc:
         if ADDON.getSetting('randomstream') == "true":
             playlist = self.curler.request(channel['playlist'] + self.listenKey, 'get')
             playlistStreams = self.re_playlistStreams.findall(playlist)
-            streamUrl = playlistStreams[randrange(len(playlistStreams))][0]
+            streamUrl = playlistStreams[randrange(len(playlistStreams))][0] + '|User-Agent=' + agent + '&Referer=' + referer
         else:
             streamUrl = channel['playlist'] + self.listenKey
 

@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<!-- The strings 30000 to 30999 is reserved for plug-in parameters -->
+	<!--GENERAL STRINGS -->
+
+	<string id="30014">Allgemein</string>
+	<string id="30011">Sortierung A-Z (betrifft auch 'Meine Favoriten')</string>
+	<string id="30030">Benutze ersten Stream jedes Senders (Abspielen beginnt schneller)</string>
+	<string id="30012">Ablaufdauer des Stream Cache in Tagen (0 = nie)</string>
+	<string id="30010">Erzwinge Cache Aktualisierung (nach Verändern der Einstellungen)</string>
+    <string id="30031">Verbinde mit zufälligem Stream eines Senders (schneller bei Caching)</string>
+
+	<string id="30001">Stream Quelle</string>
+
+    <string id="30183">Login</string>
+	<string id="30002">Benutze Premium Streams</string>
+	<string id="30003">E-Mail/Benutzername</string>
+	<string id="30004">Passwort</string>
+	<string id="30005">Benutze 'Meine Favoriten'-Playlist</string>
+	<string id="30013">Stream Bitrate</string>
+
+	<string id="30006">Über</string>
+	<string id="30007">Version</string>
+	<string id="30008">Autor</string>
+	<string id="30009">Homepage</string>
+
+	<string id="30015">Höre HQ 320k Streams mit DI Premium unter http://www.di.fm</string>
+	<string id="30016">Version:  3.1.2</string>
+	<string id="30017">Author:  Tim C. 'Bitcrusher' Steinmetz</string>
+	<string id="30018">Homepage:  http://qualisoft.dk</string>
+	<string id="30019">E-mail:  timcst@gmail.com</string>
+
+	<string id="30020">Statistiken</string>
+	<string id="30021">Erlaube das Übermitteln von Statistiken</string>
+	<string id="30022">Ich dachte, es wäre interessant zu wissen wie viele aktive</string>
+	<string id="30023">Installationen des Addons es gibt. Zukünftig soll es</string>
+	<string id="30024">graphische Darstellungen auf http://stats.qualisoft.dk geben.</string>
+	<string id="30025">Das Addon versucht alle 24 Stunden diese Daten zu übertragen.</string>
+	<string id="30026">Übermittelte Daten:</string>
+	<string id="30027">Kontotyp (Öffentlich/Premium), Addon Version, Land.</string>
+	<string id="30028">Ich weiß, dass es ein bisschen unverschämt ist, dass die Option standardmäßig aktiviert ist ;)</string>
+	<string id="30029">-Tim</string>
+
+	<string id="30100">Verbindungsfehler</string>
+	<string id="30101">Verbindung mit di.fm nicht möglich</string>
+	<string id="30102">Überprüfen Sie Ihre Internetverbindung</string>
+    <string id="30103">und die Website in Ihrem Browser</string>
+
+	<string id="30110">Keine Streams gefunden</string>
+	<string id="30111">Vielleicht ist Ihre DI Premium Mitgliedschaft ausgelaufen?</string>
+	<string id="30112">oder das Addon funktioniert nicht mehr (das HTML-Layout könnte sich verändert haben)</string>
+
+	<string id="30120">Zeitüberschreitung bei der Verbindung</string>
+	<string id="30121">Konnte die Playlist nicht von dieser URL holen:</string>
+
+	<string id="30130">Neue Sender gefunden</string>
+	<string id="30131">Es wurden </string>
+	<string id="30132"> neue Senderbilder gefunden.</string>
+	<string id="30133">Das bedeutet, dass es neue Sender geben könnte.</string>
+	<string id="30134">Diese werden blau markiert.</string>
+
+	<string id="30140">Cache-Dateien fehlen</string>
+	<string id="30141">Mindestens eine Cache-Datei fehlt</string>
+	<string id="30142">bitte gehen Sie in die Addon-Einstellungen und</string>
+	<string id="30143">wählen Sie "Erzwinge Cache Aktualisierung"</string>
+
+	<string id="30150">Senderbild(er) fehl(t/en)</string>
+	<string id="30151">Es fehlen </string>
+	<string id="30152"> Senderbilder</string>
+	<string id="30153">Sie sollten den Cache aktualisieren</string>
+	<string id="30154">Deaktivieren Sie 'Meine Favoriten', um neue Senderbilder zu erhalten</string>
+
+	<string id="30160">Problem beim Herunterladen von Senderbildern</string>
+	<string id="30161">Es gab ein Problem beim Herunterladen von Senderbildern für: </string>
+	<string id="30162">Von URL: </string>
+
+    <string id="30170">Einloggen fehlgeschlagen</string>
+    <string id="30171">Ungültiger Benutzername oder Passwort</string>
+    <string id="30172">Ist Ihr Konto vielleicht abgelaufen?</string>
+
+    <string id="30180">Keine Favoriten gefunden</string>
+    <string id="30181">Loggen Sie sich mit Ihrem Browser bei di.fm ein und gehen Sie zu 'Verwalte Favoriten'</string>
+    <string id="30182">oder deaktivieren Sie 'Benutze meine Favoriten' in den Einstellungen des Addons</string>
+
+
+</strings>

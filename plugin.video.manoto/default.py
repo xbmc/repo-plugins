@@ -78,7 +78,7 @@ def fetch():
 	html_data = resp.read()
 
 	soup = BeautifulSoup(html_data)
-	stream = soup.find('source', type='video/mp4');	
+	stream = soup.find('source', type='application/x-mpegURL');	
 	
 	if stream is None or stream['src'] is None:
                 xbmcplugin.endOfDirectory(handle=int(sys.argv[1]))

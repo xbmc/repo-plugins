@@ -1,0 +1,8 @@
+﻿2016.07.24 v1.0.1
++ Bug fix: kids category showed sports category
++ base_url changed so that more content is available
++ SSL is now enabled by default. An option to disable it is available.
++ Code cleanup
+
+2016.07.18 v1.0.0
++ Initial release

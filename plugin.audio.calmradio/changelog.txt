@@ -1,0 +1,19 @@
+v0.2.0
+- New design
+- Serve images from network
+- Code optimization
+
+v0.1.4
+- Official calmradio.com Kodi add-on
+
+v0.1.1
+- Calm Radio authentication
+- Integration with Calm Radio API
+- User favorites channel
+
+v0.0.5
+- Links update
+- Add-on settings
+
+v0.0.2
+- Initial version

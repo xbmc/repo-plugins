@@ -1,0 +1,53 @@
+# Kodi Media Center language file
+# Addon Name: ALPHA Player
+# Addon id: plugin.video.alphatv.gr
+# Addon version: 1.0.0
+# Addon Provider: lambda
+
+msgid ""
+msgstr ""
+
+
+msgctxt "#32001"
+msgid "Shows"
+msgstr "Εκπομπές"
+
+msgctxt "#32002"
+msgid "Archive"
+msgstr "Αρχείο"
+
+msgctxt "#32003"
+msgid "Latest Shows"
+msgstr "Πρόσφατες εκπομπές"
+
+msgctxt "#32004"
+msgid "Latest Episodes"
+msgstr "Πρόσφατα επεισόδια"
+
+msgctxt "#32005"
+msgid "News (GR)"
+msgstr "Ειδήσεις (GR)"
+
+msgctxt "#32006"
+msgid "News (CY)"
+msgstr "Ειδήσεις (CY)"
+
+msgctxt "#32007"
+msgid "Bookmarks"
+msgstr "Σελιδοδείκτες"
+
+msgctxt "#32008"
+msgid "Live"
+msgstr "Ζωντανά"
+
+msgctxt "#32500"
+msgid "Next..."
+msgstr "Επόμενα..."
+
+msgctxt "#32501"
+msgid "Add to bookmarks"
+msgstr "Προσθήκη στους σελιδοδείκτες"
+
+msgctxt "#32502"
+msgid "Remove from bookmarks"
+msgstr "Αφαίρεση από σελιδοδείκτες"

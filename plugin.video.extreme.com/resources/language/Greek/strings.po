@@ -1,0 +1,69 @@
+# Kodi Media Center language file
+# Addon Name: Extreme Sports
+# Addon id: plugin.video.extreme.com
+# Addon version: 1.0.0
+# Addon Provider: lambda
+
+msgid ""
+msgstr ""
+
+
+msgctxt "#32001"
+msgid "Videos"
+msgstr "Βίντεο"
+
+msgctxt "#32002"
+msgid "MTB"
+msgstr "MTB"
+
+msgctxt "#32003"
+msgid "BMX"
+msgstr "BMX"
+
+msgctxt "#32004"
+msgid "Skate"
+msgstr "Skate"
+
+msgctxt "#32005"
+msgid "Snowboard"
+msgstr "Snowboard"
+
+msgctxt "#32006"
+msgid "Freeski"
+msgstr "Freeski"
+
+msgctxt "#32007"
+msgid "FMX"
+msgstr "FMX"
+
+msgctxt "#32008"
+msgid "MX"
+msgstr "MX"
+
+msgctxt "#32009"
+msgid "Surf"
+msgstr "Surf"
+
+msgctxt "#32010"
+msgid "Auto Sports"
+msgstr "Auto Sports"
+
+msgctxt "#32011"
+msgid "Kayak"
+msgstr "Kayak"
+
+msgctxt "#32012"
+msgid "Kitesurf"
+msgstr "Kitesurf"
+
+msgctxt "#32013"
+msgid "Outdoor"
+msgstr "Outdoor"
+
+msgctxt "#32014"
+msgid "Wake"
+msgstr "Wake"
+
+msgctxt "#32015"
+msgid "Windsurf"
+msgstr "Windsurf"

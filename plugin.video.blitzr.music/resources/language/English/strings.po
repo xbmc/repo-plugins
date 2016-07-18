@@ -1,0 +1,129 @@
+# Kodi Media Center language file
+# Addon Name: Blitzr Music
+# Addon id: plugin.video.blitzr.music
+# Addon version: 1.0.0
+# Addon Provider: lambda
+
+msgid ""
+msgstr ""
+
+
+msgctxt "#32001"
+msgid "Search"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Trending"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Blitzr Radio"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Popular Artists"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Recommended Artists"
+msgstr ""
+
+msgctxt "#32006"
+msgid "Collection: Artists"
+msgstr ""
+
+msgctxt "#32007"
+msgid "Collection: Albums"
+msgstr ""
+
+msgctxt "#32008"
+msgid "Collection: Songs"
+msgstr ""
+
+msgctxt "#32009"
+msgid "Collection: Similar"
+msgstr ""
+
+msgctxt "#32010"
+msgid "Playlists"
+msgstr ""
+
+msgctxt "#32011"
+msgid "History"
+msgstr ""
+
+msgctxt "#32021"
+msgid "Search Artist"
+msgstr ""
+
+msgctxt "#32022"
+msgid "Search Album"
+msgstr ""
+
+msgctxt "#32023"
+msgid "Search Song"
+msgstr ""
+
+msgctxt "#32181"
+msgid "Blitzr account is missing!"
+msgstr ""
+
+msgctxt "#32182"
+msgid "Are you sure?"
+msgstr ""
+
+msgctxt "#32183"
+msgid "Rename playlist"
+msgstr ""
+
+msgctxt "#32184"
+msgid "Add to playlist"
+msgstr ""
+
+msgctxt "#32185"
+msgid "Add to new playlist"
+msgstr ""
+
+msgctxt "#32201"
+msgid "Account"
+msgstr ""
+
+msgctxt "#32202"
+msgid "Email"
+msgstr ""
+
+msgctxt "#32203"
+msgid "Password"
+msgstr ""
+
+msgctxt "#32501"
+msgid "Add to collection"
+msgstr ""
+
+msgctxt "#32502"
+msgid "Remove from collection"
+msgstr ""
+
+msgctxt "#32503"
+msgid "Remove recommendation"
+msgstr ""
+
+msgctxt "#32504"
+msgid "Add to playlist"
+msgstr ""
+
+msgctxt "#32505"
+msgid "Add to new playlist"
+msgstr ""
+
+msgctxt "#32506"
+msgid "Remove from playlist"
+msgstr ""
+
+msgctxt "#32507"
+msgid "Rename playlist"
+msgstr ""
+
+msgctxt "#32508"
+msgid "Delete playlist"
+msgstr ""

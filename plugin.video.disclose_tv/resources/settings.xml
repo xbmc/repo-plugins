@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<setting id="force_viewmode" type="bool" label="30100" default="true"/>
+	<setting type="sep"/>
+	<setting id="Disable_HD_Default" type="bool" label="30200" default="false"/>
+</settings>

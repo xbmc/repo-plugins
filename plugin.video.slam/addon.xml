@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.slam" name="SLAM!" version="1.0.2" provider-name="Jester">
+  <requires>
+    <import addon="xbmc.python" version="2.24.0"/>
+    <import addon="script.module.xbmcswift2" version="2.4.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+     <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">SLAM! Live streams</summary>
+	<summary lang="nl">SLAM! Live streams</summary>
+    <description lang="en">Streams the slam.nl SLAM! TV and Webcam Live Streams</description>
+	<description lang="nl">Streamt de slam.nl SLAM! TV en Webcam Live Streams</description>
+    <platform>all</platform>
+    <language>nl</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+    <website>http://www.slam.nl/</website>
+  </extension>
+</addon>

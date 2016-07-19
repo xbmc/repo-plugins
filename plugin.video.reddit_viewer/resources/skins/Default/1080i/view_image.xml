@@ -1,18 +1,13 @@
 ﻿<window id="129">
     
-    <coordinates>
-        <system>1</system>
-        <left>0</left>
-        <top>0</top>
-    </coordinates>
-
     
     <controls>
         <control type="image">
             <description>Black Background</description>
             <left>0</left>
             <top>0</top>
-            <texture>FullBackground.png</texture>
+            <texture>FullBackground.jpg</texture>
+            <aspectratio>scale</aspectratio>
         </control>
 
         <control type="image" id=3000>

@@ -33,11 +33,12 @@ class myAddon(t1mAddon):
           infoList['TVShowTitle'] = name
           infoList['Title'] = name
           infoList['mediatype'] = 'tvshow'
-          ilist = self.addMenuItem(name,'GE', ilist, url, thumb, fanart, infoList, isFolder=True)
+          contextMenu = [('Add To Library','XBMC.RunPlugin(%s?mode=DF&url=AL%s)' % (sys.argv[0], url))]
+          ilist = self.addMenuItem(name,'GE', ilist, url, thumb, fanart, infoList, isFolder=True, cm=contextMenu)
       return(ilist)
 
 
-  def getAddonEpisodes(self,url,ilist):
+  def getAddonEpisodes(self,url,ilist, getFileData = False):
       self.defaultVidStream['width'] = 1920
       self.defaultVidStream['height'] = 1080
       epiHTML = self.getRequest(url)
@@ -51,6 +52,9 @@ class myAddon(t1mAddon):
               purl = purl.group(1)
           else:
               continue
+          purl = 'http:'+purl+'&format=script'
+          html = self.getRequest(purl)
+          purl = re.compile('name="twitter:player" content="(.+?)"', re.DOTALL).search(html).group(1)
           purl = 'http://link.theplatform.com/s'+(purl.replace('/bravo_vod_p3/embed/select','').split('.com/p')[1]).split('?',1)[0]+'?mbr=true&player=Bravo%20VOD%20Player%20%28Phase%203%29&format=Script&height=576&width=1024'
           url = purl.split('?',1)[0]
           html = self.getRequest(purl)
@@ -71,8 +75,32 @@ class myAddon(t1mAddon):
           thumb = a['defaultThumbnailUrl']
           name = name.encode(UTF8)
           infoList['mediatype'] = 'episode'
-          ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False)
+          if getFileData == False:
+              ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False)
+          else:
+              ilist.append((infoList.get('Season',''), infoList.get('Episode',''), url))
       return(ilist)
+
+  def doFunction(self, url):
+      func = url[0:2]
+      url  = url[2:]
+      if func == 'AL':
+          name  = xbmc.getInfoLabel('ListItem.Title')
+          profile = self.addon.getAddonInfo('profile').decode(UTF8)
+          moviesDir  = xbmc.translatePath(os.path.join(profile,'TV Shows'))
+          movieDir  = xbmc.translatePath(os.path.join(moviesDir, name))
+          if not os.path.isdir(movieDir):
+              os.makedirs(movieDir)
+          ilist = []
+          ilist = self.getAddonEpisodes(url, ilist, getFileData = True)
+          for season, episode, url in ilist:
+              se = 'S%sE%s' % (str(season), str(episode))
+              xurl = '%s?mode=GV&url=%s' % (sys.argv[0], url)
+              strmFile = xbmc.translatePath(os.path.join(movieDir, se+'.strm'))
+              with open(strmFile, 'w') as outfile:
+                  outfile.write(xurl)         
+      json_cmd = '{"jsonrpc":"2.0","method":"VideoLibrary.Scan", "params": {"directory":"%s/"},"id":1}' % movieDir.replace('\\','/')
+      jsonRespond = xbmc.executeJSONRPC(json_cmd)
 
 
   def getAddonVideo(self,url):
@@ -94,6 +122,19 @@ class myAddon(t1mAddon):
       except:
           u = gvu2 % (url, str(unow), str(unow+60))
       liz = xbmcgui.ListItem(path = u)
-      subfile = self.procConvertSubtitles(suburl)
-      if subfile != "" : liz.setSubtitles([subfile])
+      infoList ={}
+      infoList['mediatype'] = xbmc.getInfoLabel('ListItem.DBTYPE')
+      infoList['Title'] = xbmc.getInfoLabel('ListItem.Title')
+      infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
+      infoList['Year'] = xbmc.getInfoLabel('ListItem.Year')
+      infoList['Premiered'] = xbmc.getInfoLabel('Premiered')
+      infoList['Plot'] = xbmc.getInfoLabel('ListItem.Plot')
+      infoList['Studio'] = xbmc.getInfoLabel('ListItem.Studio')
+      infoList['Genre'] = xbmc.getInfoLabel('ListItem.Genre')
+      infoList['Duration'] = xbmc.getInfoLabel('ListItem.Duration')
+      infoList['MPAA'] = xbmc.getInfoLabel('ListItem.Mpaa')
+      infoList['Aired'] = xbmc.getInfoLabel('ListItem.Aired')
+      infoList['Season'] = xbmc.getInfoLabel('ListItem.Season')
+      infoList['Episode'] = xbmc.getInfoLabel('ListItem.Episode')
+      liz.setInfo('video', infoList)
       xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)

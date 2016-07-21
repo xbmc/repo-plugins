@@ -8,5 +8,20 @@ config = {
         'calm_auth_api': 'https://api.calmradio.com/get_token?user={0}&pass={1}',
         'calm_sua_api': 'http://api.calmradio.com/check?user={0}&pass={1}',
         'calm_favorites_api': 'http://test.calmradio.com/player/favorites.php?login={0}&token={1}&action={2}&id={3}'
+    },
+    'viewmodes': {
+        'thumbnail': {
+            'skin.confluence': 500,
+            'skin.aeon.nox': 551,
+            'skin.confluence-vertical': 500,
+            'skin.jx720': 52,
+            'skin.pm3-hd': 53,
+            'skin.rapier': 50,
+            'skin.simplicity': 500,
+            'skin.slik': 53,
+            'skin.touched': 500,
+            'skin.transparency': 53,
+            'skin.xeebo': 55,
+        }
     }
 }

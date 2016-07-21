@@ -1,3 +1,4 @@
+Version 3.0.3 website change, ability to add TV shows to library
 Version 3.0.2 website change & cleanup
 Version 3.0.1 separate scraping routines for future functions
 Version 2.0.1 Initial v2 release

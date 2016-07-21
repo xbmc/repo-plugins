@@ -1,3 +1,12 @@
+v0.2.2
+- rename categories and sub categories to sections and categories
+- close windows on "BACK"
+- add player controls to artwork window
+    - volume
+    - close
+- fix bug which opens multiple intro windows upon system notifications (eminence)
+- animations
+
 v0.2.0
 - New design
 - Serve images from network

@@ -24,24 +24,24 @@ class API(object):
         if r.status_code == 200:
             return json.loads(r.text)
 
-    def get_all_subcategories(self):
+    def get_all_categories(self):
         """
-        Returns a list of all sub categories
+        Returns a list of all categories
         :return:
         """
         results = []
-        for category in self.get_json(config['urls']['calm_categories_api']):
-            results += category['categories']
+        for section in self.get_json(config['urls']['calm_categories_api']):
+            results += section['categories']
         return results
 
-    def get_subcategories(self, category_id):
+    def get_categories(self, section_id):
         """
-        Returns a list of sub categories which belongs to specific category
-        :param category_id: Category ID
+        Returns a list of categories which belongs to specific section
+        :param section_id: Section ID
         :return:
         """
         return [item['categories'] for item in self.get_json(config['urls']['calm_categories_api'])
-                if item['id'] == category_id][0]
+                if item['id'] == section_id][0]
 
     def get_all_channels(self):
         """
@@ -53,14 +53,14 @@ class API(object):
             results += category['channels']
         return results
 
-    def get_channels(self, subcategory_id):
+    def get_channels(self, category_id):
         """
         Returns a list of playable channels which belongs to specific category
-        :param subcategory_id: Sub category ID
+        :param category_id: Category ID
         :return:
         """
         return [item['channels'] for item in self.get_json(config['urls']['calm_channels_api'])
-                if item['category'] == subcategory_id][0]
+                if item['category'] == category_id][0]
 
     def get_favorites(self, username, token):
         """
@@ -77,7 +77,7 @@ class API(object):
                 for category in self.get_json(config['urls']['calm_channels_api']):
                     for channel in category['channels']:
                         if str(channel['id']) in favorites:
-                            channel['sub_category'] = category['category']
+                            channel['category'] = category['category']
                             results.append(channel)
 
         return results
@@ -119,15 +119,25 @@ class API(object):
         :param is_authenticated: Indicates whether user is authenticated
         :return:
         """
-        bitrate = {
-            '0': '32',
-            '1': '64',
-            '2': '192',
-            '3': '320'
-        }[ADDON.getSetting('bitrate') or 0]
+        # datafix:
+        if ADDON.getSetting('bitrate') == '3':
+            ADDON.setSetting('bitrate', '2')
 
-        if not is_authenticated and 'free' in streams:
-            return streams['free']
+        if not is_authenticated:
+            bitrate = {
+                '0': 'free',
+                '1': 'free_56',
+                '3': 'free_128'
+            }[ADDON.getSetting('bitrate') or '0']
+        else:
+            bitrate = {
+                '0': '64',
+                '1': '192',
+                '2': '320'
+            }[ADDON.getSetting('bitrate') or '0']
+
+        if not is_authenticated and bitrate in streams:
+            return streams[bitrate]
         elif is_authenticated:
             return streams[bitrate].replace('http://', 'http://{0}:{1}@'.format(
                 username,

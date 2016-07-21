@@ -39,19 +39,15 @@ msgid "Sound Quality"
 msgstr ""
 
 msgctxt "#32021"
-msgid "Fair Sound Quality - 32kb/s"
+msgid "Good Sound Quality (56kb/s or 64kb/s for members only)"
 msgstr ""
 
 msgctxt "#32022"
-msgid "Good Sound Quality - 64 kb/s"
+msgid "Better Sound Quality (56kb/s or 192kb/s for members only)"
 msgstr ""
 
 msgctxt "#32023"
-msgid "Better Sound Quality - 192 kb/s"
-msgstr ""
-
-msgctxt "#32024"
-msgid "Best Sound Quality - 320 kb/s"
+msgid "Best Sound Quality (128kb/s or 320kb/s for members only)"
 msgstr ""
 
 ### CATEGORIES ###

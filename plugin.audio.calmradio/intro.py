@@ -51,10 +51,10 @@ class IntroWindow(xbmcgui.WindowDialog):
                 'height': 50
             }
         }
-        sub_categories = api.get_subcategories(1)
+        categories = api.get_categories(1)
 
         # add favorites & atmospheres:
-        sub_categories += [
+        categories += [
             {
                 'id': 3,
                 'name': ADDON.getLocalizedString(32102),
@@ -139,7 +139,7 @@ class IntroWindow(xbmcgui.WindowDialog):
                           self.btn_exit, self.btn_account, self.btn_my_channels))
 
         # add categories:
-        for idx, item in enumerate(sub_categories):
+        for idx, item in enumerate(categories):
             x = dimensions['window']['x1'] + dimensions['sidebar']['width'] + dimensions['spacing']['normal'] + \
                 ((idx % dimensions['thumbnail']['per_row']) * (
                     dimensions['thumbnail']['width'] + dimensions['spacing']['normal']))
@@ -204,7 +204,8 @@ class IntroWindow(xbmcgui.WindowDialog):
         self.setFocus(self.controls['buttons'][0])
 
     def onAction(self, action):
-        if action == ACTION_PREVIOUS_MENU or action == ACTION_PARENT_DIR:
+        if action == xbmcgui.ACTION_BACKSPACE or action == xbmcgui.ACTION_PARENT_DIR or \
+                        action == xbmcgui.ACTION_PREVIOUS_MENU or action == xbmcgui.ACTION_NAV_BACK:
             self.close()
 
     def onControl(self, control):
@@ -213,14 +214,14 @@ class IntroWindow(xbmcgui.WindowDialog):
         elif control == self.btn_account:
             xbmc.executebuiltin('Addon.OpenSettings({0})'.format(ADDON_ID))
         elif control == self.btn_my_channels:
-            self.setProperty('category', '99')
-            self.setProperty('sub_category', '0')
+            self.setProperty('section', '99')
+            self.setProperty('category', '0')
             self.close()
         else:
             if control.getLabel() == '3':
-                self.setProperty('category', '3')
-                self.setProperty('sub_category', '0')
+                self.setProperty('section', '3')
+                self.setProperty('category', '0')
             else:
-                self.setProperty('category', '1')
-                self.setProperty('sub_category', control.getLabel())
+                self.setProperty('section', '1')
+                self.setProperty('category', control.getLabel())
             self.close()

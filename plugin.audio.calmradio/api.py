@@ -124,11 +124,7 @@ class API(object):
             ADDON.setSetting('bitrate', '2')
 
         if not is_authenticated:
-            bitrate = {
-                '0': 'free',
-                '1': 'free_56',
-                '3': 'free_128'
-            }[ADDON.getSetting('bitrate') or '0']
+            bitrate = 'free_128'
         else:
             bitrate = {
                 '0': '64',

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="0" type="select" default="Toronto" label="30001" values="Kamloops|Kelowna|Prince George|Vancouver|Victoria|Whitehorse|Calgary|Edmonton|Regina|Saskatoon|Winnipeg|Iqaluit|Kitchener-Waterloo|London|Ottawa|Sudbury|Thunder Bay|Toronto|Windsor|Montréal|Nord Quebec|Québec City|Fredericton|Moncton|Saint John|Charlottetown|Cape Breton|Halifax|Corner Brook|Grand Falls/Gander|Labrador|St. John's|Inuvik|"/>
+    <setting id="1" type="select" default="Eastern" label="30002" values="Atlantic|Eastern|Central|Mountain|Pacific|Pacific (International)|Eastern (International)|"/>
+    <setting id="2" type="labelenum" default="30004" label="30003" lvalues="30004|30005"/>
+    <setting id="3" type="bool" default="true" label="First time launch" visible="false" />
+</settings>

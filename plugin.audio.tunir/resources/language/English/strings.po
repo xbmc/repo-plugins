@@ -1,0 +1,151 @@
+# Kodi Media Center language file
+# Addon Name: Tunir
+# Addon id: plugin.audio.tunir
+# Addon Provider: nire0510
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: nire0510@gmail.com\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Tunir"
+msgstr ""
+
+### MODES ###
+
+msgctxt "#30010"
+msgid "Genres"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Locations"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Languages"
+msgstr ""
+
+msgctxt "#30013"
+msgid "My Stations"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Editor's Choice"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Search"
+msgstr ""
+
+### CATEGORIES (TYPE) ###
+
+msgctxt "#30020"
+msgid "Music"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Talk"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Television"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Webcam"
+msgstr ""
+
+### CATEGORIES (LOCATION) ###
+
+msgctxt "#30030"
+msgid "Africa"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Asia"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Caribbean"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Central America"
+msgstr ""
+
+msgctxt "#30034"
+msgid "Europe"
+msgstr ""
+
+msgctxt "#30035"
+msgid "Internet Only"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Middle East"
+msgstr ""
+
+msgctxt "#30037"
+msgid "North America"
+msgstr ""
+
+msgctxt "#30038"
+msgid "United States"
+msgstr ""
+
+msgctxt "#30039"
+msgid "Oceania"
+msgstr ""
+
+msgctxt "#30040"
+msgid "South America"
+msgstr ""
+
+### MISC ###
+
+msgctxt "#30100"
+msgid "stations found"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Back to first page"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Go to next page"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Search for stations and broadcasts"
+msgstr ""
+
+### FAVORITES ###
+
+msgctxt "#30120"
+msgid "Add to my stations"
+msgstr ""
+
+msgctxt "#30121"
+msgid "Remove from my stations"
+msgstr ""
+
+msgctxt "#30122"
+msgid "Station successfully added to your stations list"
+msgstr ""
+
+msgctxt "#30123"
+msgid "Station successfully removed from your stations list"
+msgstr ""
+
+msgctxt "#30124"
+msgid "Station is already in your stations list"
+msgstr ""

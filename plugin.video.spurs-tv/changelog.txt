@@ -1,87 +1,90 @@
-2.8.0
+v2.9.0 (2016-07-31)
+ - Added stadium build live streams
+ - Fixed Tour 2016 category
+
+v2.8.0 (2016-03-19)
  - Fixed YouTube playlists
  - Updated fanart
 
-2.7.0
+v2.7.0 (2016-02-28)
  - Kodi Krypton is now a requirement
  - Use Rollbar for automatically reporting errors
  - Fixed incorrect characters for some menu items introduced in version 2.6.0
 
-2.6.0
+v2.6.0 (2016-02-19)
  - Use ElementTree to parse the playlist xml
 
-2.5.0
+v2.5.0 (2016-02-18)
  - Use the built-in parser instead of html5lib
 
-2.4.0
+v2.4.0 (2016-01-25)
  - Fixed the categories 'The Vault' and 'A Question of Spurs'
 
-2.3.2
+v2.3.2 (2016-01-23)
  - Fixed an error on the main index page caused by changes to Live Audio Commentary
 
-2.3.1
+v2.3.1 (2015-08-27)
  - Fixed an error when playing videos on Android/iOS/Mac OS X
 
-2.3.0
+v2.3.0 (2015-08-13)
  - Added a Stadium TV category
 
-2.2.0
+v2.2.0 (2015-08-13)
  - Fixed problems caused by changes to the official site video hosting
  - Removed the option to choose the stream protocol
 
-2.1.0
+v2.1.0 (2015-05-28)
  - Enabled the Tour 2015 category
 
-2.0.1
+v2.0.1 (2015-04-04)
  - Fixed Live Audio Commentary
 
-2.0.0
+v2.0.0 (2015-03-30)
  - Reorganised the menu
  - Added settings to control the stream protocol and video resolution
  - Added a shortcut to change the YouTube plugin settings
 
-1.5.0
+v1.5.0 (2015-03-05)
  - Fixed the Capital One Cup category
 
-1.4.0
+v1.4.0 (2015-02-05)
  - Fixed playback problems
  - Added a debug setting
 
-1.3.3
+v1.3.3 (2014-12-18)
  - Fixed another script error with Official Site video lists
 
-1.3.2
+v1.3.2 (2014-12-18)
  - Fixed a script error with Official Site video lists
 
-1.3.1
+v1.3.1
  - Fixed compatibility with Android
 
-1.3.0
+v1.3.0
  - Localized hard-coded strings
 
-1.2.1
+v1.2.1
  - Fixed a script error with some Official Site search results
 
-1.2.0
+v1.2.0
  - The YouTube plugin now only installs when required
 
-1.1.0
+v1.1.0
  - Added caching for some views which will rarely change
 
-1.0.0
+v1.0.0
  - Added support for the Spurs TV YouTube channel
 
-0.3.0
+v0.3.0
  - Added Live Audio Commentary support
 
-0.2.1
+v0.2.1
  - Fixed a broken dependency
 
-0.2.0
+v0.2.0
  - Added Tour 2014 video categories
  - Added Highlights subcategories
  - Added Ledley King Testimonial videos 
 
-0.1.0
+v0.1.0
  - Initial release
- 

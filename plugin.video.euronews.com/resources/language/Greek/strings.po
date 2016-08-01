@@ -1,0 +1,101 @@
+# Kodi Media Center language file
+# Addon Name: Euronews
+# Addon id: plugin.video.euronews.com
+# Addon version: 1.0.0
+# Addon Provider: lambda
+
+msgid ""
+msgstr ""
+
+
+msgctxt "#32001"
+msgid "Live"
+msgstr "Ζωντανά"
+
+msgctxt "#32002"
+msgid "Top Stories"
+msgstr "Κορυφαία νέα"
+
+msgctxt "#32003"
+msgid "News"
+msgstr "Ειδήσεις"
+
+msgctxt "#32004"
+msgid "Sport"
+msgstr "Αθλητισμός"
+
+msgctxt "#32005"
+msgid "Business"
+msgstr "Οικονομία"
+
+msgctxt "#32006"
+msgid "Europe"
+msgstr "Ευρώπη"
+
+msgctxt "#32007"
+msgid "Culture"
+msgstr "Πολιτισμός"
+
+msgctxt "#32008"
+msgid "Sci-tech"
+msgstr "Τεχνολογία"
+
+msgctxt "#32009"
+msgid "Environment"
+msgstr "Περιβάλλον"
+
+msgctxt "#32010"
+msgid "Programmes"
+msgstr "Προγράμματα"
+
+msgctxt "#32200"
+msgid "Language"
+msgstr "Γλώσσα"
+
+msgctxt "#32201"
+msgid "Automatic"
+msgstr "Αυτόματο"
+
+msgctxt "#32202"
+msgid "English"
+msgstr "Αγγλικά"
+
+msgctxt "#32203"
+msgid "French"
+msgstr "Γαλλικά"
+
+msgctxt "#32204"
+msgid "German"
+msgstr "Γερμανικά"
+
+msgctxt "#32205"
+msgid "Greek"
+msgstr "Ελληνικά"
+
+msgctxt "#32206"
+msgid "Hungarian"
+msgstr "Ουγγρικά"
+
+msgctxt "#32207"
+msgid "Italian"
+msgstr "Ιταλικά"
+
+msgctxt "#32208"
+msgid "Portuguese"
+msgstr "Πορτογαλικά"
+
+msgctxt "#32209"
+msgid "Russian"
+msgstr "Ρωσικά"
+
+msgctxt "#32210"
+msgid "Spanish"
+msgstr "Ισπανικά"
+
+msgctxt "#32211"
+msgid "Turkish"
+msgstr "Τουρκικά"
+
+msgctxt "#32212"
+msgid "Ukrainian"
+msgstr "Ουκρανικά"

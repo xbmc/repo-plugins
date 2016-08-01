@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.tunir" name="Tunir" version="0.0.5" provider-name="Nir Elbaz">
+<addon id="plugin.audio.tunir" name="Tunir" version="0.0.6" provider-name="Nir Elbaz">
   <requires>
     <import addon="xbmc.python" version="2.24.0"/>
     <import addon="script.module.requests" version="2.8.1"/>

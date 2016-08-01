@@ -236,7 +236,7 @@ class API(object):
             links = soup.find('img', src='../../images/{0}.gif'.format(category)).parent.parent.find_next(
                 'tr').find_all('a')
             for item in links:
-                matches = re.search('^([\w\-&() ]+) \((\d+)\)$', item.get_text())
+                matches = re.search('^([\w\-&()., ]+) \((\d+)\)$', item.get_text())
                 items.append({
                     'label': matches.group(1),
                     'icon': config['icons'][mode],

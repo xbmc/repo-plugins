@@ -16,7 +16,7 @@
 '''
 
 
-import urlparse,urllib,json,re,random
+import urlparse,urllib,json,re
 
 from lamlib import bookmarks
 from lamlib import directory
@@ -30,13 +30,14 @@ class indexer:
         self.list = [] ; self.data = []
         self.base_link = 'http://www.alphatv.gr'
         self.tvshows_link = 'http://www.alphatv.gr/shows'
-        self.tvshows_link_2 = 'http://www.alphatv.gr/views/ajax?view_name=alpha_shows_category_view&view_display_id=page_3&view_path=shows&view_base_path=shows&page=%s'
+        self.tvshows_link_2 = 'http://www.alphatv.gr/views/ajax'
+        self.tvshows_link_3 = 'view_name=alpha_shows_category_view&view_display_id=page_3&view_path=shows&view_base_path=shows&page=%s'
         self.popular_link = 'http://www.alphatv.gr/webtv/all/shows/populars'
         self.popular_link_2 = 'http://www.alphatv.gr/webtv/all/episodes/populars'
         self.news_link = 'http://www.alphatv.gr/shows/informative/news'
         self.cynews_link = 'http://www.alphacyprus.com.cy/shows/informative/news/webtv/news'
         self.live_link = 'http://www.alphatv.gr/webtv/live'
-        self.live_link_2 = 'http://www.alphatv.gr/page/live'
+        self.live_link_2 = 'http://www.alphacyprus.com.cy/webtv/live'
 
 
     def root(self):
@@ -112,7 +113,7 @@ class indexer:
 
 
     def archive(self):
-        self.list = cache.get(self.item_list_1, 24)
+        self.list = cache.get(self.item_list_11, 24)
 
         if self.list == None: return
 
@@ -130,7 +131,7 @@ class indexer:
 
 
     def tvshows(self):
-        self.list = cache.get(self.item_list_1, 24)
+        self.list = cache.get(self.item_list_11, 24)
 
         if self.list == None: return
 
@@ -210,7 +211,7 @@ class indexer:
         directory.resolve(self.resolve_live(), meta={'title': 'ALPHA'})
 
 
-    def item_list_1(self):
+    def item_list_11(self):
         try:
             result = client.request(self.tvshows_link)
 
@@ -221,7 +222,7 @@ class indexer:
 
             threads = []
             for i in range(0, 7):
-                threads.append(workers.Thread(self.thread, self.tvshows_link_2 % str(i), i))
+                threads.append(workers.Thread(self.thread, i, self.tvshows_link_2, self.tvshows_link_3 % str(i)))
                 self.data.append('')
             [i.start() for i in threads]
             [i.join() for i in threads]
@@ -275,7 +276,7 @@ class indexer:
             url = '%s/webtv/%s?page=%s' % (url, result.lower(), '%s')
 
             self.data.append('')
-            self.thread(url % '0', 0)
+            self.thread(0, url % '0', None)
 
             try:
                 result = client.parseDOM(self.data[0], 'div', attrs = {'role': 'main'})[0]
@@ -289,7 +290,7 @@ class indexer:
                 threads = []
                 for i in range(1, num):
                     self.data.append('')
-                    threads.append(workers.Thread(self.thread, url % str(i), i))
+                    threads.append(workers.Thread(self.thread, i, url % str(i), None))
                 [i.start() for i in threads]
                 [i.join() for i in threads]
             except:
@@ -375,13 +376,21 @@ class indexer:
 
 
     def resolve_live(self):
-        result = ''
-        result += str(client.request(self.live_link))
-        result += str(client.request(self.live_link_2))
-
         links = []
 
         try:
+            result = client.request(self.live_link)
+
+            url = re.findall('(?:\"|\')(http(?:s|)://.+?\.m3u8(?:.+?|))(?:\"|\')', result)[-1]
+            url = client.request(url, output='geturl')
+
+            links.append(url)
+        except:
+            pass
+
+        try:
+            result = client.request(self.live_link_2)
+
             url = re.findall('(?:youtube.com|youtu.be)/(?:embed/|.+?\?v=|.+?\&v=|v/)([0-9A-Za-z_\-]+)', result)[0]
             url = 'http://www.youtube.com/watch?v=%s' % url
 
@@ -401,22 +410,14 @@ class indexer:
         except:
             pass
 
-        try:
-            url = re.findall('(?:\"|\')(http(?:s|)://.+?\.m3u8(?:.+?|))(?:\"|\')', result)[-1]
-            url = client.request(url, output='geturl')
-
-            links.append(url)
-        except:
-            pass
-
         if links == []: return
 
-        return random.choice(links)
+        return links[0]
 
 
-    def thread(self, url, i):
+    def thread(self, i, url, post):
         try:
-            result = client.request(url)
+            result = client.request(url, post=post)
             self.data[i] = result
         except:
             return

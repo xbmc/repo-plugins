@@ -1,3 +1,8 @@
+[B]1.0.2[/B]
+- Fixed issue with tv shows
+- Fixed issue with archive
+- Tweaked live stream
+
 [B]1.0.1[/B]
 - Filter previews of episodes
 - Code cosmetics

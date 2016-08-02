@@ -25,24 +25,24 @@ class GamestarWeb(object):
     self.shortName = "GS";
 
     ##setup regular expressions
-    self._regEx_extractVideoID = re.compile("/videos/.*?,(\\d*?)\\.html");
-    self._regEx_extractVideoLink = re.compile("http.*(mp4|flv)");
-    self._regEx_extractPictureLink = re.compile("(http://|//).*.jpg");
-    self._regEx_extractTitle = re.compile("<videoname>\\d*?\\.(.*)\\.embed</videoname>");
+    self.regexVideoObject = re.compile("<a href=\"(/videos/.*?,\\d*?\\.html)\" title=\"(.*?)\">\\s*<img src=\"(.*?)\"");
+    self.regexLink = re.compile("/videos/media,\\d+?(,(\\d)){0,1}\\.html");
     ##end setup
     
     linkRoot = self.rootLink+"videos/";
     imageRoot = "http://images.gamestar.de/images/idgwpgsgp/bdb/";    
-
     ##setup categories
     self.categories = {
-      30001:GalleryObject(linkRoot+"latest", imageRoot+"/2018270/b144x81.jpg"),
+      30001:GalleryObject(linkRoot+"alle-videos,9100,newest/", imageRoot+"/2018270/b144x81.jpg"),
       30002:GalleryObject(linkRoot+"tests,17/",imageRoot+"2018272/b144x81.jpg"),
       30003:GalleryObject(linkRoot+"previews,18/",imageRoot+"bdb/2018269/b144x81.jpg"),
       30004:GalleryObject(linkRoot+"specials,20/",imageRoot+"2018270/b144x81.jpg"),
       30011:GalleryObject(linkRoot+"trailer,3","http://images.cgames.de/images/idgwpgsgp/bdb/2017073/b144x81.jpg"),
       30009:GalleryObject(linkRoot+"candyland,102/","http://images.cgames.de/images/idgwpgsgp/bdb/2557236/b144x81.jpg"),
+      30104:GalleryObject(linkRoot+"was-ist-,96/","http://2images.cgames.de/images/idgwpgsgp/bdb/2764163/446x251.jpg"),
       30010:GalleryObject(linkRoot+"boxenstop,2",imageRoot+"2018274/b144x81.jpg"),
+      30105:GalleryObject(linkRoot+"videos/frisch-gestrichen,104/","http://1images.cgames.de/images/idgwpgsgp/bdb/2740413/446x251.jpg"),
+      30106:GalleryObject(linkRoot+"videos/news,100/","http://4images.cgames.de/images/idgwpgsgp/bdb/2764165/446x251.jpg"),
       }
     ##endregion
     
@@ -60,27 +60,39 @@ class GamestarWeb(object):
       rootDocument = self.loadPage(categorie.url);
       
       videoIds = set();
-      for match in self._regEx_extractVideoID.finditer(rootDocument):       
-        videoId = match.group(1);
-        if(videoId not in videoIds):
-          videoIds.add(videoId);
-          
-      for videoId in videoIds:        
-        try:
-          videoObjects.append(self.loadVideoPage(videoId));
-        except:
-          self.gui.log("something goes wrong while processing "+videoId);
-          self.gui.log("Exception: ");
-          traceback.print_exc();
-          self.gui.log("Stacktrace: ");
-          traceback.print_stack();
+      
+      for match in self.regexVideoObject.finditer(rootDocument):      
+        
+        title = match.group(2);
+        thumbnailLink = match.group(3);
+        if(not thumbnailLink.startswith('http://')):
+          thumbnailLink = thumbnailLink.replace("//",'http://');
+        videoPageLink = self.rootLink+match.group(1);
+        self.gui.log(videoPageLink);
+        videoPage=self.loadPage(videoPageLink);
+        matches= list(self.regexLink.finditer(videoPage));
+        if len(matches) == 0: 
+          continue;
+        if len(matches) == 1:
+          link = self.rootLink+matches[0].group(0);
+        else:
+          links = {}
+          for match in self.regexLink.finditer(videoPage):
+            quality = match.group(1);
+            link = self.rootLink+match.group(0);
+            self.gui.log("Quality %s: %s"%(quality,link));
+            links[quality]=link
+          qualitiy = sorted(links.keys(),reverse = True)[0];
+          link=links[qualitiy]
+        videoObjects.append(VideoObject(title, link, thumbnailLink, self.shortName));
     return videoObjects;
 
 
-  def loadVideoPage(self, videoID):
-    self.gui.log(self.rootLink+"/emb/getVideoData.cfm?vid="+videoID);
-    configDoc = self.loadPage(self.rootLink+"/emb/getVideoData.cfm?vid="+videoID);
-    videoLink = unicode(self._regEx_extractVideoLink.search(configDoc).group());
+  def loadVideoObject(self, videoID):
+    link = self.configPage%videoID;
+    self.gui.log(link);
+    configDoc = self.loadPage(link).decode('utf-8');
+    videoLink = self._regEx_extractVideoLink.search(configDoc).group();
     videoLink = self.replaceXmlEntities(videoLink);
     thumbnailLink = self._regEx_extractPictureLink.search(configDoc).group();
     title = self._regEx_extractTitle.search(configDoc).group(1);
@@ -88,9 +100,9 @@ class GamestarWeb(object):
     
     if(not thumbnailLink.startswith('http://')):
       thumbnailLink = thumbnailLink.replace("//",'http://');
-    thumbnailLink = unicode(thumbnailLink);
+    thumbnailLink = thumbnailLink;
     
-    return VideoObject(title, videoLink, thumbnailLink, self.shortName);
+    return VideoObject(title, videoLink, thumbnailLink, self.shortName)
   
   def replaceXmlEntities(self, link):
     entities = (

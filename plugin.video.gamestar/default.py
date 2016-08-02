@@ -59,7 +59,7 @@ if(action == "list"):
   if(displayGamestar):
     website = GamestarWeb(gui);
     videoObjects.extend(website.getVideoLinkObjects(cat))
-  if(displayGamepro):
+  if(displayGamepro and False):
     website = GameproWeb(gui);
     videoObjects.extend(website.getVideoLinkObjects(cat))
   gui.buildVideoLink(videoObjects);

@@ -1,3 +1,13 @@
+2016.07.29 v0.9.1 -- Bart Starr Edition
++ Shows are now acquired dynamically (BaumSchorle)
++  This means new shows will be available immediately. However, Game Pass has
++  many ways of providing shows, so new shows may not always /work/ right away.
++ Game Pass Resource URLs (most of them) are now acquired dynamically (kaileu)
++  This means the addon should be more resilient to Game Pass service changes.
++ UI Fix: Blacked-Out games are now marked as non-playable (BaumSchorle)
++ Bug Fix: an empty season crashes the add-on (BaumSchorle)
++ Assorted small improvements (Alexqw)
+
 2015.12.02 v0.9.0 -- Charles Woodson Edition
 + Add support for Jarvis; drop Helix and Isengard
 

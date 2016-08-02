@@ -6,6 +6,7 @@ import cookielib
 import hashlib
 import random
 import m3u8
+import re
 import sys
 import urllib
 from traceback import format_exc
@@ -22,32 +23,13 @@ class pigskin(object):
         self.debug = debug
         self.base_url = 'https://gamepass.nfl.com/nflgp'
         self.servlets_url = 'http://gamepass.nfl.com/nflgp/servlets'
-        self.non_seasonal_shows = {'Super Bowl Archives': '117'}
-        self.seasonal_shows = {
-            'A Football Life': {'2015': '249', '2014': '218', '2013': '186', '2012': '154'},
-            'NFL Gameday': {'2015': '252', '2014': '212', '2013': '179', '2012': '146', '2011': '113', '2010': '85'},
-            'Hard Knocks': {'2015': '251', '2014': '220', '2013': '223'},
-            'Sound FX': {'2015': '256', '2014': '215', '2013': '183', '2012': '150', '2011': '118'},
-            'Top 100 Players': {'2015': '257', '2014': '217', '2013': '185', '2012': '153', '2011': '121'}
-        }
-        self.boxscore_url = 'http://neulionms-a.akamaihd.net/fs/nfl/nfl/edl/nflgr'
-
-        if subscription == 'international':
-            self.seasonal_shows.update({
-                'Playbook': {'2015': '255', '2014': '213', '2013': '180', '2012': '147', '2011': '114', '2010': '86'},
-                'NFL Total Access': {'2015': '254', '2014': '214'},
-                'NFL RedZone Archives': {'2015': '248', '2014': '221', '2013': '182', '2012': '149'},
-                'Coaches Show': {'2014': '216', '2013': '184', '2012': '151'},
-                'NFL Films Presents': {'2014': '219', '2013': '187'},
-                'Hall of Fame': {'2015': '250', '2014': '222'},
-                'NFL Honors': {'2015': '253', '2014': '224'}
-            })
-        elif subscription == 'domestic':
-            self.seasonal_shows.update({
-                'America\'s Game': {}
-            })
-        else:
-            raise ValueError('"%s" is not a supported subscription.' % subscription)
+        self.simpleconsole_url = self.servlets_url + '/simpleconsole'
+        self.boxscore_url=''
+        self.image_url=''
+        self.locEDLBaseUrl=''
+        self.non_seasonal_shows = {}
+        self.seasonal_shows = {}
+        self.nflnSeasons = []
 
         self.http_session = requests.Session()
         if proxy_config is not None:
@@ -63,6 +45,23 @@ class pigskin(object):
         except IOError:
             pass
         self.http_session.cookies = self.cookie_jar
+
+        # get needed URLs from simpleconsole
+        # no auth needed, so we can get this info without invoking a login
+        url = self.simpleconsole_url
+        post_data = {'isFlex': 'true'}
+        sc_data = self.make_request(url=url, method='post', payload=post_data)
+        try:
+            url_dict = xmltodict.parse(sc_data)
+            self.boxscore_url  = url_dict['result']['pbpFeedPrefix']
+            self.image_url     = url_dict['result']['config']['locProgramImage']
+            self.locEDLBaseUrl = url_dict['result']['config']['locEDL'].replace('/edl/nflgp/', '')
+
+            self.log('boxscore url: %s' % self.boxscore_url)
+            self.log('image url: %s' % self.image_url)
+            self.log('locEDLBaseUrl: %s' % self.locEDLBaseUrl)
+        except xmltodict.expat.ExpatError:
+            return False
 
         if self.debug:
             self.log('Debugging enabled.')
@@ -145,7 +144,7 @@ class pigskin(object):
     def check_for_subscription(self):
         """Return whether a subscription and user name are detected. Determines
         whether a login was successful."""
-        url = self.servlets_url + '/simpleconsole'
+        url = self.simpleconsole_url
         post_data = {'isFlex': 'true'}
         sc_data = self.make_request(url=url, method='post', payload=post_data)
 
@@ -203,13 +202,48 @@ class pigskin(object):
 
     def get_current_season_and_week(self):
         """Return the current season and week_code (e.g. 210) in a dict."""
-        url = self.servlets_url + '/simpleconsole'
+        url = self.simpleconsole_url
         post_data = {'isFlex': 'true'}
         sc_data = self.make_request(url=url, method='post', payload=post_data)
 
         sc_dict = xmltodict.parse(sc_data)['result']
         current_s_w = {sc_dict['currentSeason']: sc_dict['currentWeek']}
         return current_s_w
+
+    def parse_shows(self, sc_dict):
+        """Parse return from /simpleconsole request to build shows list dynamically"""
+        try:
+            show_dict = {}
+            for show in sc_dict['nflnShows']['show']:
+                name = show['name']
+                season_dict = {}
+
+                for season in show['seasons']['season']:
+                    if isinstance(season, dict):
+                        season_id    = season['@catId']
+                        season_name  = season['#text']
+                    else:
+                        season_id    = show['seasons']['season']['@catId']
+                        season_name  = show['seasons']['season']['#text']
+
+                    # Trim season name to just the year if year is present
+                    # Common season names: '2014', 'Season 2014', and 'Archives'
+                    try:
+                        season_name = re.findall(r"\d{4}(?!\d)",season_name)[0]
+                    except IndexError:
+                        pass
+
+                    season_dict[season_name] = season_id
+
+                    if season_name not in self.nflnSeasons:
+                        self.nflnSeasons.append(season_name)
+
+                show_dict[name] = season_dict
+
+            self.seasonal_shows.update(show_dict)
+        except KeyError:
+            self.log('Parsing shows failed')
+            raise
 
     def get_publishpoint_streams(self, video_id, stream_type=None, game_type=None):
         """Return the URL for a stream."""
@@ -298,7 +332,7 @@ class pigskin(object):
         seasons_and_weeks = {}
 
         try:
-            url = 'http://smb.cdnak.neulion.com/fs/nfl/nfl/mobile/weeks_v2.xml'
+            url = self.locEDLBaseUrl + '/mobile/weeks_v2.xml'
             s_w_data = self.make_request(url=url, method='get')
             s_w_data_dict = xmltodict.parse(s_w_data)
         except:
@@ -415,11 +449,16 @@ class pigskin(object):
 
     def redzone_on_air(self):
         """Return whether RedZone Live is currently broadcasting."""
-        url = self.servlets_url + '/simpleconsole'
+        url = self.simpleconsole_url
         post_data = {'isFlex': 'true'}
         sc_data = self.make_request(url=url, method='post', payload=post_data)
 
         sc_dict = xmltodict.parse(sc_data)['result']
+
+        # Dynamically parse NFL-Network shows
+        self.parse_shows(sc_dict)
+
+        # Check if RedZone is Live
         if sc_dict['rzPhase'] in ('pre', 'in'):
             self.log('RedZone is on air.')
             return True

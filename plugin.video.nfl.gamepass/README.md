@@ -1,10 +1,11 @@
 # NFL Game Pass Kodi Plugin #
-**version 0.9.0 — Charles Woodson Edition**
+**version 0.9.1 — Bart Starr Edition**
 
-Before reading any further, please understand that while this addon does work,
-not all features are supported (or fully tested) and it should be forever
-regarded as a beta release. It may crash, spay your puppy, and/or cause your
-oven to not heat to 400° F properly.
+Before reading any further, please understand that this addon is unofficial and
+is not endorsed or supported by the NFL in any way. Thus, not all features are
+supported (see below) and it should be forever regarded as a beta release. It
+may crash, spay your puppy, and/or cause your oven to not heat to 400°F
+properly.
 
 If you're interested in helping out, just drop us an email or send a pull
 request. Patches and (constructive) input are always welcome.
@@ -12,12 +13,12 @@ request. Patches and (constructive) input are always welcome.
 ## Any Dependencies? ##
 
 This addon requires Kodi Jarvis or later. XBMC Helix and Isengard will be
-supported for awhile in the the "Isengard" branch.
+supported for awhile in the "Isengard" branch.
 
 This addon is part of the official Kodi repository, thus all dependencies are
 installed automatically. However, if you're installing straight from source,
 make sure the following two dependencies are installed:
- * xmltodict (http://mirrors.kodi.tv/addons/gotham/script.module.xmltodict/)
+ * xmltodict (http://mirrors.kodi.tv/addons/jarvis/script.module.xmltodict/)
  * Requests 2.x (http://mirrors.kodi.tv/addons/jarvis/script.module.requests/)
 
 ## What is NFL Game Pass? ##
@@ -30,19 +31,23 @@ fix.
 
 ## What is Game Pass Domestic? ##
 
-NFL Game Pass Domestic is the USA version of Game Pass, but the service is
-blacked out during live games. Previously it lacked other features, but with the
-recent revamping (mid-2015) of their service, we have yet to find a side-by-side
-comparison of the two services. Testing, bug reports, and patches from Game Pass
-Domestic users would be most appreciated.
+NFL Game Pass Domestic is the USA (and parts of Canada and UK) version of Game
+Pass, but the service is blacked out during live games. Previously it lacked
+other features, but with the mid-2015 revamping of their service, it seems the
+two services have mostly converged (though we have yet to find a side-by-side
+comparison).
+
+As most/all of the current developers are located outside of the Domestic
+regions, testing, bug reports, and patches from Game Pass Domestic subscribers
+is most appreciated.
 
 ## Why write a plugin for Kodi? ##
 
-First off, we love Kodi and like consuming media through its interface.
+First off, we love Kodi and prefer consuming media through its interface.
 Secondly, while there is a nice Flash interface, it's... well... written in
-Flash. The client is a resource hog, the interface is frequently buggy, and it
-includes a bunch of bells and whistles (social media, for example) that are
-simply distracting. We're here to watch a game, nothing else.
+Flash. It's heavy, has limited browser support, and includes a bunch of bells
+and whistles (social media, for example) that are simply distracting. We're here
+to watch a game, nothing else.
 
 ## What features are currently supported? ##
 
@@ -78,6 +83,7 @@ flattery, etc), and we'll gladly name a future release after them.
 
 A rough roadmap follows:
 
+* Kodi v17 (Krypton) Support
 * Continue work towards feature completeness
 * Stabilize Game Pass Domestic support
 * Code cleanup

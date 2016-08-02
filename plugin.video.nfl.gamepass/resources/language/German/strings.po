@@ -106,7 +106,7 @@ msgid "Logging into NFL Game Pass failed. Make sure that your account informatio
 msgstr ""
 
 msgctxt "#30024"
-msgid "Some bad jujumagumbo just went down. Please enable debuging, and submit a bug report."
+msgid "Unexpected error ='(. Please enable debuging for both the addon and Kodi, and submit a bug report."
 msgstr ""
 
 msgctxt "#30025"

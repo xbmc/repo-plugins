@@ -106,8 +106,8 @@ msgid "Logging into NFL Game Pass failed. Make sure that your account informatio
 msgstr "Inloggen in NFL Game Pass mislukt. Zorg ervoor dat uw account informatie correct zijn en uw abonnement geldig is."
 
 msgctxt "#30024"
-msgid "Some bad jujumagumbo just went down. Please enable debuging, and submit a bug report."
-msgstr "Slechte jujumagumbo is niet beschikbaar. Schakel debugging in, en stuur een bug verslag."
+msgid "Unexpected error ='(. Please enable debuging for both the addon and Kodi, and submit a bug report."
+msgstr ""
 
 msgctxt "#30025"
 msgid "Hide game length"

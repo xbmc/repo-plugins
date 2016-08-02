@@ -130,8 +130,18 @@ class GamepassGUI(xbmcgui.WindowXML):
         self.season_items = []
         for season in sorted(self.seasons_and_weeks.keys(), reverse=True):
             listitem = xbmcgui.ListItem(season)
-
             self.season_items.append(listitem)
+
+        self.season_list.addItems(self.season_items)
+
+    def display_nfln_seasons(self):
+        """List seasons"""
+        self.season_items = []
+        # sort so that years are first (descending) followed by text
+        for season in sorted(gpr.nflnSeasons, key=lambda x: (x[0].isdigit(), x), reverse=True):
+            listitem = xbmcgui.ListItem(season)
+            self.season_items.append(listitem)
+
         self.season_list.addItems(self.season_items)
 
     def display_nfl_network_archive(self):
@@ -158,6 +168,7 @@ class GamepassGUI(xbmcgui.WindowXML):
             game_id = game['id']
             game_versions = []
             isPlayable = 'true'
+            isBlackedOut = 'false'
             home_team = game['homeTeam']
             away_team = game['awayTeam']
 
@@ -213,6 +224,14 @@ class GamepassGUI(xbmcgui.WindowXML):
                         game_name_full = self.coloring(game_name_full, "disabled")
                         game_name_shrt = self.coloring(game_name_shrt, "disabled")
                         game_info = self.coloring(game_info, "disabled-info")
+                    if game['blocked'] == 'true':
+                        isPlayable = 'false'
+                        isBlackedOut = 'true'
+                        game_info =  '» Blacked Out «'
+                        game_name_full = self.coloring(game_name_full, "disabled")
+                        game_name_shrt = self.coloring(game_name_shrt, "disabled")
+                        game_info = self.coloring(game_info, "disabled-info")
+
                 except:
                     game_datetime = game['date'].split('T')
                     game_info = game_datetime[0] + '[CR]' + game_datetime[1].split('.')[0] + ' ET'
@@ -224,6 +243,7 @@ class GamepassGUI(xbmcgui.WindowXML):
             listitem.setProperty('is_game', 'true')
             listitem.setProperty('is_show', 'false')
             listitem.setProperty('isPlayable', isPlayable)
+            listitem.setProperty('isBlackedOut', isBlackedOut)
             listitem.setProperty('game_id', game_id)
             listitem.setProperty('game_date', game['date'].split('T')[0])
             listitem.setProperty('game_versions', ' '.join(game_versions))
@@ -260,12 +280,11 @@ class GamepassGUI(xbmcgui.WindowXML):
         self.games_items = []
         items = gpr.get_shows_episodes(show_name, season)
 
-        image_path = 'http://smb.cdn.neulion.com/u/nfl/nfl/thumbs/'
         for i in items:
             try:
                 listitem = xbmcgui.ListItem('[B]%s[/B]' % show_name)
                 listitem.setProperty('game_info', i['name'])
-                listitem.setProperty('away_thumb', image_path + i['image'])
+                listitem.setProperty('away_thumb', gpr.image_url + i['image'])
                 listitem.setProperty('url', i['publishPoint'])
                 listitem.setProperty('id', i['id'])
                 listitem.setProperty('type', i['type'])
@@ -407,9 +426,13 @@ class GamepassGUI(xbmcgui.WindowXML):
                     cur_s_w = gpr.get_current_season_and_week()
                     self.selected_season = cur_s_w.keys()[0]
                     self.selected_week = cur_s_w.values()[0]
+                    self.display_seasons()
 
-                    self.display_seasons_weeks()
-                    self.display_weeks_games()
+                    try:
+                       self.display_seasons_weeks()
+                       self.display_weeks_games()
+                    except:
+                       addon_log('Error while reading seasons weeks and games')
                 elif controlId == 130:
                     self.main_selection = 'NFL Network'
                     self.window.setProperty('NW_clicked', 'true')
@@ -422,8 +445,8 @@ class GamepassGUI(xbmcgui.WindowXML):
                             self.live_items.append(listitem)
 
                     self.live_list.addItems(self.live_items)
+                    self.display_nfln_seasons()
 
-                self.display_seasons()
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 return
 

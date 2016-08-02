@@ -2,7 +2,7 @@
 <addon
   id="plugin.video.mediathek"
   name="Mediathek"
-  version="0.7.1"
+  version="0.7.2"
   provider-name="Raptor 2101">
   <requires>
    <import addon="xbmc.python" version="2.1.0"/>
@@ -15,6 +15,7 @@
   <extension point="xbmc.addon.metadata">
     <summary lang="de">Ermöglicht den Zugriff auf alle deutschen Mediatheken der öffentlich Rechtlichen</summary>
     <summary lang="en">Gives access to most video-platforms from German public service broadcasters</summary>
+    <summary lang="it">Fornisce l'accesso a gran parte delle piattaforme video operate dalle emittenti pubbliche tedesche</summary>
     <description lang="de">Ermöglicht den Zugriff auf alle deutschen Mediatheken der öffentlich Rechtlichen.
 Aktuell implementiert sind:
   3Sat, ARD, ZDF, ARTE, ORF, NDR, KiKa (ohne Kikaninchen)
@@ -23,6 +24,10 @@ Aktuell implementiert sind:
 Currently implemented:
   3Sat, ARD, ZDF, ARTE, ORF, NDR, KiKa (without Kikaninchen)
 </description>
+    <description lang="it">Fornisce l'accesso a gran parte delle piattaforme video operate dalle emittenti pubbliche tedesche.
+Al momento sono supportate le seguenti emittenti:
+  3Sat, ARD, ZDF, ARTE, ORF, NDR, KiKa (senza Kikaninchen)
+    </description>
     <language>de</language>
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>

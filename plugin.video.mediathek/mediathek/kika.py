@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 import re, time;
+import lxml.html
+from lxml.etree import tostring
 from mediathek import *
 
 class KIKA(Mediathek):
@@ -56,8 +58,13 @@ class KIKA(Mediathek):
         )
       )
           
-    self.regex_videoPages=re.compile("<a href=\"(.*?sendereihe\\d+.html)\" class=\"linkAll\" title=\"(.*?)\">");
+    self.regex_extractLink=re.compile("href=\"(.*?\\d+.html)\".*title=\"(.*?)\"");
+    self.regex_videoPages=re.compile("((<p class=\"teasertext \"></p>)|(</span>\\s*?</div>))\\s*?<a href=\"(.*?\\d+.html)\" class=\"linkAll\" title=\"(.*?)\">");
     self.regex_videoLinks=re.compile("<a href=\"(.*?/videos/video\\d+?)\\.html\"");
+    self.regex_configLinks=re.compile("{dataURL:'http://www.kika.de(/.*?-avCustom.xml)'}");
+    
+    self.xpath_videoPages = "//div[contains(@class,'mod')]/div[@class='box']/div[contains(@class,'teaser')]/a[@class='linkAll']";
+    self.xpath_seriesPages = "//div[contains(@class,'modCon')]/div[contains(@class,'mod')]/div[contains(@class,'boxCon')]/div[contains(@class,'boxBroadcastSeries')]/div[contains(@class,'teaser')]/a[@class='linkAll']";
     
     self.regex_xml_channel=re.compile("<channelName>(.*?)</channelName>");
     self.regex_xml_title=re.compile("<title>(.*?)</title>");
@@ -104,30 +111,55 @@ class KIKA(Mediathek):
       return DisplayObject(title,"",image,"",links,True, None);
   
   def buildPageMenu(self, link, initCount):
-    mainPage = self.loadPage(link);
+    pageContent = self.loadPage(link);
+    htmlPage =  lxml.html.fromstring(pageContent);
+    htmlElements = htmlPage.xpath(self.xpath_videoPages);
+    videoLinks = set()
     
-    
-    videoLinks = list(self.regex_videoLinks.finditer(mainPage));
-    count = initCount + len(videoLinks)
-    if(len(videoLinks) > 0):
-      for match in videoLinks:
+    for item in htmlElements:
+      link = self.rootLink+item.attrib.get('href');
+      videoPage = self.loadPage(link);
+      for match in self.regex_videoLinks.finditer(videoPage):
         link=match.group(1)+"-avCustom.xml";
-        
-        displayObject = self.buildVideoLink(link);
-        self.gui.buildVideoLink(displayObject,self, count);
-    else:  
-      videoPages = list(self.regex_videoPages.finditer(mainPage));
-      count = initCount + len(videoPages)
-      for match in videoPages:
-        link=match.group(1);
-        
-        if(not link.startswith(self.rootLink)):
-          link = self.rootLink+link;
-          
-        subPage = self.loadPage(link);
-        linkFound = self.regex_videoLinks.search(subPage);
-        if(linkFound):
-          title = unicode(match.group(2),"UTF-8");
-          displayObject = DisplayObject(title,"",None,"",link,False, None);
-          self.gui.buildVideoLink(displayObject,self, count);
+        if(link not in videoLinks):
+          videoLinks.add(link)
+    directLinks = list(self.regex_configLinks.finditer(pageContent));      
+    for match in directLinks:
+      link = match.group(1);
+      if(link not in videoLinks):
+        videoLinks.add(link)      
+    self.gui.log("found %d video links"%len(videoLinks))
+    count = initCount + len(videoLinks)
+    for link in videoLinks:
+      displayObject = self.buildVideoLink(link);
+      self.gui.buildVideoLink(displayObject,self, count);
+      
+    if(len(videoLinks) > 0):
+      return;
+    
+    htmlElements = htmlPage.xpath(self.xpath_seriesPages);
+    count = count + len(htmlElements)
+    self.gui.log("found %d page links"%len(htmlElements))
+    for item in htmlElements:
+      self.gui.log(tostring(item));
+      link = self.rootLink+item.attrib.get('href');
+      title = item.attrib.get('title');
+      displayObject = DisplayObject(title,"",None,"",link,False, None);
+      self.gui.buildVideoLink(displayObject,self, count);
+##    else:  
+##      videoPages = list(self.regex_videoPages.finditer(mainPage));
+##     count = initCount + len(videoPages)
+##      for match in videoPages:
+##        match= self.regex_extractLink.search(match.group(0));
+#        link=match.group(1);
+#        
+#        if(not link.startswith(self.rootLink)):
+#          link = self.rootLink+link;
+#          
+        #subPage = self.loadPage(link);
+        #linkFound = self.regex_videoLinks.search(subPage);
+#        if(True):
+#          title = unicode(match.group(2),"UTF-8");
+#          displayObject = DisplayObject(title,"",None,"",link,False, None);
+#          self.gui.buildVideoLink(displayObject,self, count);
     

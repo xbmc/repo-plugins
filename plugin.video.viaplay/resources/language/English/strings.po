@@ -88,3 +88,15 @@ msgstr ""
 msgctxt "#30019"
 msgid "Disable SSL (not recommended)"
 msgstr ""
+
+msgctxt "#30020"
+msgid "Your account is not authorized to watch this content. You will find information on how to upgrade your package on the Viaplay website."
+msgstr ""
+
+msgctxt "#30021"
+msgid "You need to purchase this movie on the Viaplay website before playing it."
+msgstr ""
+
+msgctxt "#30022"
+msgid "You're not allowed to watch content from this region."
+msgstr ""

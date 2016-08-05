@@ -1,4 +1,11 @@
-﻿2016.07.24 v1.0.1
+﻿2016.08.05 v1.0.2
++ Store support
++ Bug fix: some categories failed to load due to unavailable artwork
++ Better info messages when playback fails
++ Fix episode/sports thumbnails
++ Code cleanup
+
+2016.07.24 v1.0.1
 + Bug fix: kids category showed sports category
 + base_url changed so that more content is available
 + SSL is now enabled by default. An option to disable it is available.

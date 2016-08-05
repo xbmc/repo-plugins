@@ -85,22 +85,27 @@ def addon_log(string):
 
 
 def url_parser(url):
-    """Sometimes, Viaplay adds some weird templated stuff to the end of the URL.
-    Example: https://content.viaplay.se/androiddash-se/serier{?dtg}"""
+    """Sometimes, Viaplay adds some weird templated stuff to the end of the URL
+    we need to get rid of. Example: https://content.viaplay.se/androiddash-se/serier{?dtg}"""
     if disable_ssl:
         url = url.replace('https', 'http')  # http://forum.kodi.tv/showthread.php?tid=270336
-    parsed_url = re.match('[^{]+', url).group()
-    return parsed_url
+    template = re.search('\{.+?\}', url)
+    if template is not None:
+        url = url.replace(template.group(), '')
+    return url
 
 
 def make_request(url, method, payload=None, headers=None):
     """Make an HTTP request. Return the response as JSON."""
-    addon_log('Original URL: %s' % url)
-    addon_log('Request & parsed URL: %s' % url_parser(url))
+    parsed_url = url_parser(url)
+    addon_log('URL: %s' % url)
+    if parsed_url != url:
+        addon_log('Parsed URL: %s' % parsed_url)
+
     if method == 'get':
-        req = http_session.get(url_parser(url), params=payload, headers=headers, allow_redirects=False, verify=False)
+        req = http_session.get(parsed_url, params=payload, headers=headers, allow_redirects=False, verify=False)
     else:
-        req = http_session.post(url_parser(url), data=payload, headers=headers, allow_redirects=False, verify=False)
+        req = http_session.post(parsed_url, data=payload, headers=headers, allow_redirects=False, verify=False)
     addon_log('Response code: %s' % req.status_code)
     addon_log('Response: %s' % req.content)
     cookie_jar.save(ignore_discard=True, ignore_expires=False)
@@ -136,14 +141,16 @@ def validate_session():
         return True
 
 
-def check_loginstatus(data):
+def verify_login(data):
     try:
         if data['name'] == 'MissingSessionCookieError':
-            session = validate_session()
-            if session is False:
+            login_success = validate_session()
+            if login_success is False:
                 login_success = login(username, password)
-            else:
-                login_success = True
+                if login_success is False:
+                    dialog = xbmcgui.Dialog()
+                    dialog.ok(language(30005),
+                              language(30006))
         else:
             login_success = True
     except KeyError:
@@ -164,22 +171,23 @@ def get_streams(guid):
     }
 
     data = make_request(url=url, method='get', payload=payload)
-    login_status = check_loginstatus(data)
+    login_status = verify_login(data)
     if login_status is True:
         try:
             m3u8_url = data['_links']['viaplay:playlist']['href']
-            status = True
+            success = True
         except KeyError:
             # we might have to request the stream again after logging in
             if data['name'] == 'MissingSessionCookieError':
                 data = make_request(url=url, method='get', payload=payload)
             try:
                 m3u8_url = data['_links']['viaplay:playlist']['href']
-                status = True
+                success = True
             except KeyError:
                 if data['success'] is False:
-                    status = data['message']
-        if status is True:
+                    display_auth_message(data)
+                    success = False
+        if success is True:
             if subtitles:
                 try:
                     subtitle_urls = data['_links']['viaplay:sami']
@@ -189,16 +197,19 @@ def get_streams(guid):
                 except KeyError:
                     addon_log('No subtitles found for guid %s' % guid)
             return m3u8_url
-        else:
-            dialog = xbmcgui.Dialog()
-            dialog.ok(language(30005),
-                      status)
-            return False
+
+
+def display_auth_message(data):
+    if data['name'] == 'UserNotAuthorizedForContentError':
+        message = language(30020)
+    elif data['name'] == 'PurchaseConfirmationRequiredError':
+        message = language(30021)
+    elif data['name'] == 'UserNotAuthorizedRegionBlockedError':
+        message = language(30022)
     else:
-        dialog = xbmcgui.Dialog()
-        dialog.ok(language(30005),
-                  language(30006))
-        return False
+        message = data['message']
+    dialog = xbmcgui.Dialog()
+    dialog.ok(language(30017), message)
 
 
 def get_categories(url):
@@ -232,7 +243,7 @@ def root_menu(url):
             list_item.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
             if videotype == 'series':
                 parameters = {'action': 'series', 'url': category['href']}
-            elif videotype == 'movie':
+            elif videotype == 'movie' or videotype == 'rental':
                 parameters = {'action': 'movie', 'url': category['href']}
             elif videotype == 'sport':
                 parameters = {'action': 'sport', 'url': category['href']}
@@ -240,7 +251,7 @@ def root_menu(url):
                 parameters = {'action': 'kids', 'url': category['href']}
             else:
                 addon_log('Unsupported videotype found: %s' % videotype)
-                parameters = {'action': 'showmessage', 'message': 'This type (%s) is not supported yet.' % videotype}
+                parameters = {'action': 'showmessage', 'message': 'This type (%s) is not yet supported.' % videotype}
             recursive_url = _url + '?' + urllib.urlencode(parameters)
             is_folder = True
             listing.append((recursive_url, list_item, is_folder))
@@ -354,7 +365,6 @@ def get_letters(url):
 
 
 def alphabetical_menu(url):
-    url = url_parser(url)  # needed to get rid of {&letter}
     letters = get_letters(url)
     listing = []
 
@@ -362,14 +372,14 @@ def alphabetical_menu(url):
         title = letter.encode('utf-8')
         if letter == '0-9':
             # 0-9 needs to be sent as a pound-sign
-            letter = urllib.quote('#')
+            letter = '#'
         else:
-            letter = urllib.quote(title.lower())
+            letter = title.lower()
         list_item = xbmcgui.ListItem(label=title)
         list_item.setProperty('IsPlayable', 'false')
         list_item.setArt({'icon': os.path.join(addon_path, 'icon.png')})
         list_item.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
-        parameters = {'action': 'listproducts', 'url': url + '&letter=' + letter}
+        parameters = {'action': 'listproducts', 'url': url + '&letter=' + urllib.quote(letter)}
         recursive_url = _url + '?' + urllib.urlencode(parameters)
         is_folder = True
         listing.append((recursive_url, list_item, is_folder))
@@ -410,7 +420,7 @@ def list_products(url, *display):
             as it always provides more detailed data about each product."""
             playid = item['_links']['self']['href']
             streamtype = 'url'
-        parameters = {'action': 'play', 'playid': playid, 'streamtype': streamtype}
+        parameters = {'action': 'play', 'playid': playid.encode('utf-8'), 'streamtype': streamtype}
         recursive_url = _url + '?' + urllib.urlencode(parameters)
 
         if type == 'episode':
@@ -458,6 +468,8 @@ def list_products(url, *display):
 
         elif type == 'movie':
             title = '%s (%s)' % (item['content']['title'].encode('utf-8'), str(item['content']['production']['year']))
+            if item['system']['availability']['planInfo']['isRental'] is True:
+                title = title + ' *'  # mark rental products with an asterisk
             is_folder = False
             is_playable = 'true'
             list_item = xbmcgui.ListItem(label=title)
@@ -535,7 +547,7 @@ def list_seasons(url):
 
 
 def item_information(item):
-    """Return the product information in a xbmcgui.setInfo friendly tuple.
+    """Return the product information in a xbmcgui.setInfo friendly dict.
     Supported content types: episode, series, movie, sport"""
     type = item['type']
     mediatype = None
@@ -616,7 +628,7 @@ def item_information(item):
         mediatype = 'video'
         title = item['content']['title'].encode('utf-8')
         plot = item['content']['synopsis'].encode('utf-8')
-        xbmcplugin.setContent(_handle, 'movies')
+        xbmcplugin.setContent(_handle, 'episodes')
     info = {
         'mediatype': mediatype,
         'title': title,
@@ -638,15 +650,37 @@ def item_information(item):
 
 
 def art(item):
-    """Return the available art in a xbmcgui.setArt friendly tuple."""
+    """Return the available art in a xbmcgui.setArt friendly dict."""
     type = item['type']
-    thumbnail = item['content']['images']['boxart']['url'].split('.jpg')[0] + '.jpg'
-    fanart = item['content']['images']['hero169']['template'].split('.jpg')[0] + '.jpg'
     try:
-        cover = item['content']['images']['coverart23']['template'].split('.jpg')[0] + '.jpg'
+        boxart = item['content']['images']['boxart']['url'].split('.jpg')[0] + '.jpg'
     except KeyError:
-        cover = None
-    banner = item['content']['images']['landscape']['url'].split('.jpg')[0] + '.jpg'
+        boxart = None
+    try:
+        hero169 = item['content']['images']['hero169']['template'].split('.jpg')[0] + '.jpg'
+    except KeyError:
+        hero169 = None
+    try:
+        coverart23 = item['content']['images']['coverart23']['template'].split('.jpg')[0] + '.jpg'
+    except KeyError:
+        coverart23 = None
+    try:
+        coverart169 = item['content']['images']['coverart23']['template'].split('.jpg')[0] + '.jpg'
+    except KeyError:
+        coverart169 = None
+    try:
+        landscape = item['content']['images']['landscape']['url'].split('.jpg')[0] + '.jpg'
+    except KeyError:
+        landscape = None
+        
+    if type == 'episode' or type == 'sport':    
+        thumbnail = landscape
+    else:
+        thumbnail = boxart
+    fanart = hero169
+    banner = landscape
+    cover = coverart23
+        
     art = {
         'thumb': thumbnail,
         'fanart': fanart,
@@ -673,15 +707,15 @@ def get_userinput(title):
     keyboard.doModal()
     if keyboard.isConfirmed():
         query = keyboard.getText()
-    addon_log('User input string: %s' % query)
+        addon_log('User input string: %s' % query)
     return query
 
 
 def search(url):
     try:
-        query = urllib.quote(get_userinput(language(30015)))
+        query = get_userinput(language(30015))
         if len(query) > 0:
-            url = '%s?query=%s' % (url_parser(url), query)
+            url = '%s?query=%s' % (url, urllib.quote(query))
             list_products(url)
     except TypeError:
         pass

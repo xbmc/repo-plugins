@@ -16,8 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 import re, time;
-import lxml.html
-from lxml.etree import tostring
+from bs4 import BeautifulSoup 
 from mediathek import *
 
 class KIKA(Mediathek):
@@ -58,13 +57,11 @@ class KIKA(Mediathek):
         )
       )
           
-    self.regex_extractLink=re.compile("href=\"(.*?\\d+.html)\".*title=\"(.*?)\"");
-    self.regex_videoPages=re.compile("((<p class=\"teasertext \"></p>)|(</span>\\s*?</div>))\\s*?<a href=\"(.*?\\d+.html)\" class=\"linkAll\" title=\"(.*?)\">");
     self.regex_videoLinks=re.compile("<a href=\"(.*?/videos/video\\d+?)\\.html\"");
     self.regex_configLinks=re.compile("{dataURL:'http://www.kika.de(/.*?-avCustom.xml)'}");
     
-    self.xpath_videoPages = "//div[contains(@class,'mod')]/div[@class='box']/div[contains(@class,'teaser')]/a[@class='linkAll']";
-    self.xpath_seriesPages = "//div[contains(@class,'modCon')]/div[contains(@class,'mod')]/div[contains(@class,'boxCon')]/div[contains(@class,'boxBroadcastSeries')]/div[contains(@class,'teaser')]/a[@class='linkAll']";
+    self.selector_videoPages = "div.mod > div.box > div.teaser > a.linkAll";
+    self.selector_seriesPages = "div.modCon > div.mod > div.boxCon > div.boxBroadcastSeries > div.teaser > a.linkAll";
     
     self.regex_xml_channel=re.compile("<channelName>(.*?)</channelName>");
     self.regex_xml_title=re.compile("<title>(.*?)</title>");
@@ -112,12 +109,12 @@ class KIKA(Mediathek):
   
   def buildPageMenu(self, link, initCount):
     pageContent = self.loadPage(link);
-    htmlPage =  lxml.html.fromstring(pageContent);
-    htmlElements = htmlPage.xpath(self.xpath_videoPages);
+    htmlPage =  BeautifulSoup(pageContent, 'html.parser')
+    htmlElements = htmlPage.select(self.selector_videoPages)
     videoLinks = set()
     
     for item in htmlElements:
-      link = self.rootLink+item.attrib.get('href');
+      link = self.rootLink+item['href'];
       videoPage = self.loadPage(link);
       for match in self.regex_videoLinks.finditer(videoPage):
         link=match.group(1)+"-avCustom.xml";
@@ -137,29 +134,13 @@ class KIKA(Mediathek):
     if(len(videoLinks) > 0):
       return;
     
-    htmlElements = htmlPage.xpath(self.xpath_seriesPages);
+    htmlElements = htmlPage.select(self.selector_seriesPages);
     count = count + len(htmlElements)
     self.gui.log("found %d page links"%len(htmlElements))
     for item in htmlElements:
-      self.gui.log(tostring(item));
-      link = self.rootLink+item.attrib.get('href');
-      title = item.attrib.get('title');
+      self.gui.log(item.prettify());
+      link = self.rootLink+item['href'];
+      title = item['title'];
       displayObject = DisplayObject(title,"",None,"",link,False, None);
       self.gui.buildVideoLink(displayObject,self, count);
-##    else:  
-##      videoPages = list(self.regex_videoPages.finditer(mainPage));
-##     count = initCount + len(videoPages)
-##      for match in videoPages:
-##        match= self.regex_extractLink.search(match.group(0));
-#        link=match.group(1);
-#        
-#        if(not link.startswith(self.rootLink)):
-#          link = self.rootLink+link;
-#          
-        #subPage = self.loadPage(link);
-        #linkFound = self.regex_videoLinks.search(subPage);
-#        if(True):
-#          title = unicode(match.group(2),"UTF-8");
-#          displayObject = DisplayObject(title,"",None,"",link,False, None);
-#          self.gui.buildVideoLink(displayObject,self, count);
     

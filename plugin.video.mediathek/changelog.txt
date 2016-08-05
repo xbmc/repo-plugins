@@ -1,3 +1,4 @@
+0.7.2 - Change to BeautifulSoup instead of lxml
 0.7.2 - FIX: Multiple bugfixes for ard (by p-friedrich)
 0.7.1 - FIX: Minor bugfixes for ard
 0.7.0 - FIX: Minor bugfixes for arte,Kika,ZDF

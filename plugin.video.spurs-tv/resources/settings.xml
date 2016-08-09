@@ -8,5 +8,6 @@
     </category>
     <category label="30100">
         <setting label="30101" type="bool" id="debug" default="false"/>
+        <setting label="30102" type="bool" id="send_error_reports" default="false"/>
     </category>
 </settings>

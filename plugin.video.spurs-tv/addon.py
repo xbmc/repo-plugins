@@ -24,8 +24,10 @@ from urlparse import urlparse, urlunparse, urljoin
 from datetime import timedelta
 from functools import partial
 import xml.etree.ElementTree as ET
+import traceback
+import json
 
-from xbmcswift2 import Plugin, xbmc
+from xbmcswift2 import Plugin, xbmc, xbmcgui
 from bs4 import BeautifulSoup
 import requests
 import livestreamer
@@ -61,6 +63,9 @@ PAGINATION_FMT = "Pagination1${}"
 
 SEARCH_NAV_FMT = FIELD_NAME_ROOT_FMT.format(0) + PAGINATION_FMT
 
+PLAYER_VARS_RE = re.compile("kWidget.embed\((.*?)\)", re.MULTILINE|re.DOTALL)
+STADIUM_THUMB = HOST + ("/uploadedImages/Shared_Assets/Images/News_images/SEASON_16-17/"
+                        "July_2016/NDP_update/west_elevation_instory.jpg")
 
 plugin = Plugin()
 
@@ -71,6 +76,10 @@ debug = plugin.get_setting('debug', bool)
 def log(msg):
     if debug:
         plugin.log.info(msg)
+
+def error_report_yes(exc):
+    return xbmcgui.Dialog().yesno(plugin.get_string(30130), plugin.get_string(30131),
+                                  "[COLOR=red]{}[/COLOR]".format(exc), plugin.get_string(30133))
 
 def get_soup(url, data=None):
     if not url.endswith('/'):
@@ -87,9 +96,12 @@ def get_viewstate(soup):
     return soup.find('input', id='__VIEWSTATE')['value']
 
 def get_media_url(entry_id):
-    hls_url = 'hlsvariant://' + HLS_URL_FMT.format(entry_id)
+    hls_url = HLS_URL_FMT.format(entry_id)
+    livestreamer_url = 'hlsvariant://' + hls_url
+    log("Retrieving streams from {}".format(hls_url))
     resolution = plugin.get_setting('resolution')
-    streams = livestreamer.streams(hls_url, sorting_excludes=[">{}".format(resolution)])
+    streams = livestreamer.streams(livestreamer_url, sorting_excludes=[">{}".format(resolution)])
+    log("Available streams: {}".format(' '.join(streams)))
 
     media_url = streams['best'].url
     log("Playing URL {}".format(media_url))
@@ -190,13 +202,30 @@ def get_search_result_videos(soup, query):
         yield video_item(entry_id, title, date_str, date_format="%d %b %Y")
         
     form_data['viewstate'] = get_viewstate(soup)
+
+def get_stadium_cams():
+    soup = get_soup(urljoin(HOST, "/new-scheme/stadium-tv/"))
+    for video in soup('div', 'video-new'):
+        title = video.find_previous('h2').get_text()
+        entry_id = json.loads(PLAYER_VARS_RE.search(video('script')[-1].string).group(1))['entry_id']
+        yield title, entry_id
+
+def get_stadium_index():
+    for title, entry_id in get_stadium_cams():
+        yield {'label': title,
+               'path': plugin.url_for('play_video', entry_id=entry_id),
+               'is_playable': True}
+
+    yield {'label': plugin.get_string(30019),
+           'path': plugin.url_for('show_playlist', playlist_id='0_n8hezta2')}
         
 def get_categories(path):
     yield {'label': "[B]{}[/B]".format(plugin.get_string(30010)),
            'path': plugin.url_for('show_video_list', path=path)}
 
-    yield {'label': "Stadium TV",
-           'path': plugin.url_for('show_playlist', playlist_id='0_n8hezta2')}
+    yield {'label': plugin.get_string(30017),
+           'path': plugin.url_for('show_stadium_index'),
+           'thumbnail': STADIUM_THUMB}
 
     url = urljoin(HOST, path)
     soup = get_soup(url)
@@ -208,9 +237,7 @@ def get_categories(path):
 
         href = a['href'].strip('/')
         playable = False
-        if href.endswith("spurs-tv"):
-            plugin_path = plugin.url_for('show_categories', path=href)
-        elif title == "Ledley King Testimonial":
+        if title == "Ledley King Testimonial":
             plugin_path = plugin.url_for('show_playlist', playlist_id='0_2nmzot3u')
         elif title == "The Vault":
             plugin_path = plugin.url_for('show_playlist', playlist_id='0_32nxk7s7')
@@ -299,6 +326,10 @@ def show_categories(path):
 @plugin.cached_route('/path/<path>/subcategories')
 def show_subcategories(path):
     return list(get_subcategories(path))
+
+@plugin.cached_route('/stadium')
+def show_stadium_index():
+    return list(get_stadium_index())
     
 @plugin.route('/videos/path/<path>')
 def show_video_list(path):
@@ -395,9 +426,10 @@ def youtube_search_result(query):
 
 if __name__ == '__main__':
     rollbar.init('45541e2cb1e24f95b9c6311c2e931a11')
-
     try:
         plugin.run()
-    except Exception:
-        rollbar.report_exc_info()
-        raise
+    except Exception as exc:
+        if plugin.get_setting('send_error_reports', bool) or error_report_yes(exc):
+            rollbar.report_exc_info(extra_data={'url': plugin.request.url})
+            xbmcgui.Dialog().notification(plugin.name, plugin.get_string(30134))
+        plugin.log.error(traceback.format_exc)

@@ -1,0 +1,253 @@
+# Kodi Media Center language file
+# Addon Name: OneDrive
+# Addon id: plugin.onedrive
+# Addon Provider: Carlos Guzman (cguZZman)
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Account"
+msgstr ""
+
+msgctxt "#32001"
+msgid "Video Library Export Folder"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Music Library Export Folder"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Before export to library, remove previous files and folders"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Add to library (export .strm)..."
+msgstr ""
+
+msgctxt "#32005"
+msgid "Show Picture"
+msgstr ""
+
+msgctxt "#32006"
+msgid "Add an account..."
+msgstr ""
+
+msgctxt "#32007"
+msgid "Remove Account..."
+msgstr ""
+
+msgctxt "#32008"
+msgid "Connecting with server, please wait..."
+msgstr ""
+
+msgctxt "#32009"
+msgid "Open your browser and go to: http://onedrive.daro.mx"
+msgstr ""
+
+msgctxt "#32010"
+msgid "Enter this code and follow instructions: %s"
+msgstr ""
+
+msgctxt "#32011"
+msgid "Cancel"
+msgstr ""
+
+msgctxt "#32012"
+msgid "Done. Sign me in!"
+msgstr ""
+
+msgctxt "#32013"
+msgid "Verifying authentication..."
+msgstr ""
+
+msgctxt "#32014"
+msgid "Retrieving credentials..."
+msgstr ""
+
+msgctxt "#32015"
+msgid "Unable to login:"
+msgstr ""
+
+msgctxt "#32016"
+msgid "Please try again."
+msgstr ""
+
+msgctxt "#32017"
+msgid "Retrieving drive information..."
+msgstr ""
+
+msgctxt "#32018"
+msgid "Unable to retrieve the drive information:"
+msgstr ""
+
+msgctxt "#32019"
+msgid "This account already exist."
+msgstr ""
+
+msgctxt "#32020"
+msgid "Adding account..."
+msgstr ""
+
+msgctxt "#32021"
+msgid "Unable to add account:"
+msgstr ""
+
+msgctxt "#32022"
+msgid "Looks like you did not complete the sign-in process."
+msgstr ""
+
+msgctxt "#32023"
+msgid "Account '%s' will be removed. Are you sure?"
+msgstr ""
+
+msgctxt "#32024"
+msgid "exporting"
+msgstr ""
+
+msgctxt "#32025"
+msgid "Starting, please wait..."
+msgstr ""
+
+msgctxt "#32026"
+msgid "A valid folder is required"
+msgstr ""
+
+msgctxt "#32027"
+msgid "Unknown error:"
+msgstr ""
+
+msgctxt "#32028"
+msgid "Unable to move your previous accounts information file. Please move it manually to %s or add your accounts again."
+msgstr ""
+
+msgctxt "#32029"
+msgid "Need help? e-mail me: carlosguzmang@hotmail.com"
+msgstr ""
+
+msgctxt "#32030"
+msgid "Collaboration"
+msgstr ""
+
+msgctxt "#32031"
+msgid "Report errors automatically to help resolve them quickly"
+msgstr ""
+
+msgctxt "#32032"
+msgid "Auto-Refreshed slideshow"
+msgstr ""
+
+msgctxt "#32033"
+msgid "Refresh interval in minutes"
+msgstr ""
+
+msgctxt "#32034"
+msgid "'%s' is not a folder"
+msgstr ""
+
+msgctxt "#32035"
+msgid "OneDrive is temporary unavailable for this operation."
+msgstr ""
+
+msgctxt "#32036"
+msgid "Something went wrong with this operation."
+msgstr ""
+
+msgctxt "#32037"
+msgid "File or folder not found. Make sure is still in your drive or try removing and adding your account again to Kodi."
+msgstr ""
+
+msgctxt "#32038"
+msgid "Please try again later."
+msgstr ""
+
+msgctxt "#32039"
+msgid "Search in OneDrive..."
+msgstr ""
+
+msgctxt "#32040"
+msgid "Searching '%s', please wait..."
+msgstr ""
+
+msgctxt "#32041"
+msgid "Processing results, please wait..."
+msgstr ""
+
+msgctxt "#32042"
+msgid "Enter text to search:"
+msgstr ""
+
+msgctxt "#32043"
+msgid "Something happened with the request%s."
+msgstr ""
+
+msgctxt "#32044"
+msgid "Will try in %s seconds."
+msgstr ""
+
+msgctxt "#32045"
+msgid "Attempt %s of %s."
+msgstr ""
+
+msgctxt "#32046"
+msgid "Your credentials are no longer valid. You need to sign in again.%sDo you want to start the process?"
+msgstr ""
+
+msgctxt "#32047"
+msgid "%s of %s items loaded in this folder, please wait..."
+msgstr ""
+
+msgctxt "#32048"
+msgid "%s of %s items loaded from search, please wait..."
+msgstr ""
+
+msgctxt "#32049"
+msgid "Loading %s items in this folder, please wait..."
+msgstr ""
+
+msgctxt "#32050"
+msgid "Loading %s items from search, please wait..."
+msgstr ""
+
+msgctxt "#32051"
+msgid "When playing videos, set the subtitle file located next to the video (.srt)"
+msgstr ""
+
+msgctxt "#32052"
+msgid "Files"
+msgstr ""
+
+msgctxt "#32053"
+msgid "Recent"
+msgstr ""
+
+msgctxt "#32054"
+msgid "Documents"
+msgstr ""
+
+msgctxt "#32055"
+msgid "Photos"
+msgstr ""
+
+msgctxt "#32056"
+msgid "Music"
+msgstr ""
+
+msgctxt "#32057"
+msgid "Shared By Me"
+msgstr ""
+
+msgctxt "#32058"
+msgid "Shared With Me"
+msgstr ""

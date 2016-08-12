@@ -82,7 +82,7 @@ if os.path.exists(old_config_path) and not os.path.exists(config_path):
     try:
         shutil.move(old_config_path, config_path)
     except Exception as e:
-        dialog.ok(addonname, addon.getLocalizedString(30028) % config_path)
+        dialog.ok(addonname, addon.getLocalizedString(32028) % config_path)
 
 onedrives = {}
 login_url = ''
@@ -90,7 +90,8 @@ login_url = ''
 config = ConfigParser.ConfigParser()
 config.read(config_path)
 
-ext_videos = ['mkv', 'iso']
+ext_videos = ['mkv', 'iso', 'nut', 'ogg', 'vivo', 'pva', 'nuv', 'nsv', 'nsa', 'fli', 'flc', 'wtv']
+ext_audio = ['flac', 'alac', 'aiff', 'amr', 'ape', 'shn', 's3m', 'nsf', 'spc']
 
 def cancelOperation(onedrive):
     return monitor.abortRequested() or (pg_created and progress_dialog.iscanceled()) or (pg_bg_created and progress_dialog_bg.isFinished()) or onedrive.cancelOperation()
@@ -143,7 +144,7 @@ def process_files(files, driveid, child_count, child_loaded, big_folder):
     for f in files['value']:
         f = utils.Utils.get_safe_value(f, 'remoteItem', f)
         item_id = f['id']
-        file_name = utils.Utils.unicode(f['name'])
+        file_name = utils.Utils.unicode(utils.Utils.get_safe_value(f, 'name', 'No name found: ' + utils.Utils.str(item_id)))
         is_folder = 'folder' in f
         url = None
         list_item = xbmcgui.ListItem(file_name)
@@ -154,16 +155,16 @@ def process_files(files, driveid, child_count, child_loaded, big_folder):
             context_options = []
             if content_type == 'audio' or content_type == 'video':
                 params['action'] = 'export_folder'
-                context_options.append((addon.getLocalizedString(30004), 'RunPlugin('+base_url + '?' + urllib.urlencode(params)+')'))
+                context_options.append((addon.getLocalizedString(32004), 'RunPlugin('+base_url + '?' + urllib.urlencode(params)+')'))
             elif content_type == 'image':
                 params['action'] = 'slideshow'
-                context_options.append((addon.getLocalizedString(30032), 'RunPlugin('+base_url + '?' + urllib.urlencode(params)+')'))
+                context_options.append((addon.getLocalizedString(32032), 'RunPlugin('+base_url + '?' + urllib.urlencode(params)+')'))
             params['action'] = 'search'
             params['c'] = time.time()
             cmd = 'ActivateWindow(%d,%s?%s,return)' % (xbmcgui.getCurrentWindowId(), base_url, urllib.urlencode(params))
-            context_options.append((addon.getLocalizedString(30039), cmd))
+            context_options.append((addon.getLocalizedString(32039), cmd))
             list_item.addContextMenuItems(context_options)
-        elif (('video' in f or extension in ext_videos) and content_type == 'video') or ('audio' in f and content_type == 'audio'):
+        elif (('video' in f or extension in ext_videos) and content_type == 'video') or (('audio' in f or extension in ext_audio) and content_type == 'audio'):
             params = {'action':'play', 'content_type': content_type, 'item_id': item_id, 'driveid': driveid}
             url = base_url + '?' + urllib.urlencode(params)
             set_info = set_audio_info if content_type == 'audio' else set_video_info
@@ -183,7 +184,7 @@ def process_files(files, driveid, child_count, child_loaded, big_folder):
         if big_folder and not cancelOperation(onedrive):
             p = int(round(float(child_loaded)/child_count*100))
             counter = (str(child_loaded) , str(child_count))
-            msg = 30048 if action[0] == 'search' else 30047
+            msg = 32048 if action[0] == 'search' else 32047
             progress_dialog_bg.update(p, addonname, addon.getLocalizedString(msg) % counter)
         if cancelOperation(onedrive):
             break;
@@ -254,7 +255,7 @@ def start_auto_refreshed_slideshow(driveid, item_id, oldchild_count):
         t.setDaemon(True)
         t.start()
     else:
-        dialog.ok(addonname, addon.getLocalizedString(30034) % utils.Utils.unicode(f['name']))
+        dialog.ok(addonname, addon.getLocalizedString(32034) % utils.Utils.unicode(f['name']))
 
 def export_folder(name, item_id, driveid, destination_folder, directLink=None):
     onedrive = onedrives[driveid]
@@ -330,46 +331,46 @@ try:
             params = {'action':'open_drive', 'content_type': content_type, 'driveid': onedrives[driveid].driveid}
             url = base_url + '?' + urllib.urlencode(params)
             params = {'action':'remove_account', 'content_type': content_type, 'driveid': onedrives[driveid].driveid}
-            context_options = [(addon.getLocalizedString(30007), 'RunPlugin('+base_url + '?' + urllib.urlencode(params)+')')]
+            context_options = [(addon.getLocalizedString(32007), 'RunPlugin('+base_url + '?' + urllib.urlencode(params)+')')]
             params['action'] = 'search'
             params['c'] = time.time()
             cmd = 'ActivateWindow(%d,%s?%s,return)' % (xbmcgui.getCurrentWindowId(), base_url, urllib.urlencode(params))
-            context_options.append((addon.getLocalizedString(30039), cmd))
+            context_options.append((addon.getLocalizedString(32039), cmd))
             list_item.addContextMenuItems(context_options)
             xbmcplugin.addDirectoryItem(addon_handle, url, list_item, True)
-        list_item = xbmcgui.ListItem(addon.getLocalizedString(30006))
+        list_item = xbmcgui.ListItem(addon.getLocalizedString(32006))
         params = {'action':'add_account', 'content_type': content_type}
         url = base_url + '?' + urllib.urlencode(params)
         xbmcplugin.addDirectoryItem(addon_handle, url, list_item)
         xbmcplugin.endOfDirectory(addon_handle, True)
     elif action[0] == 'add_account':
-        progress_dialog.create(addonname, addon.getLocalizedString(30008))
+        progress_dialog.create(addonname, addon.getLocalizedString(32008))
         pg_created = True
         onedrive = OneDrive(addon.getSetting('client_id'))
         pin = onedrive.begin_signin()
         progress_dialog.close()
         pg_created = False
-        if dialog.yesno(addonname, addon.getLocalizedString(30009),addon.getLocalizedString(30010) % pin, '', addon.getLocalizedString(30011), addon.getLocalizedString(30012)):
-            progress_dialog.create(addonname, addon.getLocalizedString(30013))
+        if dialog.yesno(addonname, addon.getLocalizedString(32009),addon.getLocalizedString(32010) % pin, '', addon.getLocalizedString(32011), addon.getLocalizedString(32012)):
+            progress_dialog.create(addonname, addon.getLocalizedString(32013))
             pg_created = True
             json_result = onedrive.finish_signin(pin)
             if json_result['success']:
                 loginFailed = False
                 try:
-                    progress_dialog.update(30, addon.getLocalizedString(30014))
+                    progress_dialog.update(30, addon.getLocalizedString(32014))
                     onedrive.login(json_result['code']);
                 except Exception as e:
-                    dialog.ok(addonname, addon.getLocalizedString(30015), utils.Utils.unicode(e), addon.getLocalizedString(30016))
+                    dialog.ok(addonname, addon.getLocalizedString(32015), utils.Utils.unicode(e), addon.getLocalizedString(32016))
                     report_error(e)
                     loginFailed = True
                 if not loginFailed:
                     try:
-                        progress_dialog.update(70, addon.getLocalizedString(30017))
+                        progress_dialog.update(70, addon.getLocalizedString(32017))
                         info = onedrive.get('/drive')
                     except Exception as e:
                         if not cancelOperation(onedrive):
                             info = None
-                            dialog.ok(addonname, addon.getLocalizedString(30018), utils.Utils.unicode(e), addon.getLocalizedString(30016))
+                            dialog.ok(addonname, addon.getLocalizedString(32018), utils.Utils.unicode(e), addon.getLocalizedString(32016))
                             report_error(e)
                     if not cancelOperation(onedrive):
                         if info is None:
@@ -377,7 +378,7 @@ try:
                             pg_created = False
                         else:
                             try:
-                                progress_dialog.update(90, addon.getLocalizedString(30020))
+                                progress_dialog.update(90, addon.getLocalizedString(32020))
                                 onedrive.driveid = info['id']
                                 onedrive.name = utils.Utils.ascii(info['owner']['user']['displayName'])
                                 if info['id'] not in onedrives:
@@ -387,46 +388,46 @@ try:
                                 pg_created = False
                             except Exception as e:
                                 print e
-                                dialog.ok(addonname, addon.getLocalizedString(30021), utils.Utils.unicode(e), addon.getLocalizedString(30016))
+                                dialog.ok(addonname, addon.getLocalizedString(32021), utils.Utils.unicode(e), addon.getLocalizedString(32016))
                                 report_error(e)
                 xbmc.executebuiltin('Container.Refresh')
             else:
                 progress_dialog.close()
                 pg_created = False
-                dialog.ok(addonname, addon.getLocalizedString(30022), addon.getLocalizedString(30016), addon.getLocalizedString(30029))
+                dialog.ok(addonname, addon.getLocalizedString(32022), addon.getLocalizedString(32016), addon.getLocalizedString(32029))
     elif action[0] == 'remove_account':
         driveid = args.get('driveid')[0]
-        if dialog.yesno(addonname, addon.getLocalizedString(30023) % utils.Utils.unicode(config.get(driveid, 'name')), None):
+        if dialog.yesno(addonname, addon.getLocalizedString(32023) % utils.Utils.unicode(config.get(driveid, 'name')), None):
             config.remove_section(driveid)
             with open(config_path, 'wb') as configfile:
                 config.write(configfile)
         xbmc.executebuiltin('Container.Refresh')
     elif action[0] == 'open_drive':
         driveid = args.get('driveid')[0]
-        list_item = xbmcgui.ListItem(addon.getLocalizedString(30052))
+        list_item = xbmcgui.ListItem(addon.getLocalizedString(32052))
         params = {'action':'open_drive_folder', 'folder':'root', 'content_type': content_type, 'driveid': driveid}
         url = base_url + '?' + urllib.urlencode(params)
         xbmcplugin.addDirectoryItem(addon_handle, url, list_item, True)
-        list_item = xbmcgui.ListItem(addon.getLocalizedString(30053))
+        list_item = xbmcgui.ListItem(addon.getLocalizedString(32053))
         params['action'] = 'open_simple_folder'
         params['folder'] = 'view.recent'
         url = base_url + '?' + urllib.urlencode(params)
         xbmcplugin.addDirectoryItem(addon_handle, url, list_item, True)
-        list_item = xbmcgui.ListItem(addon.getLocalizedString(30055))
+        list_item = xbmcgui.ListItem(addon.getLocalizedString(32055))
         params['action'] = 'open_drive_folder'
         params['folder'] = 'special/photos'
         url = base_url + '?' + urllib.urlencode(params)
         xbmcplugin.addDirectoryItem(addon_handle, url, list_item, True)
-        list_item = xbmcgui.ListItem(addon.getLocalizedString(30056))
+        list_item = xbmcgui.ListItem(addon.getLocalizedString(32056))
         params['folder'] = 'special/music'
         url = base_url + '?' + urllib.urlencode(params)
         xbmcplugin.addDirectoryItem(addon_handle, url, list_item, True)
-        list_item = xbmcgui.ListItem(addon.getLocalizedString(30057))
+        list_item = xbmcgui.ListItem(addon.getLocalizedString(32057))
         params['action'] = 'open_simple_folder'
         params['folder'] = 'shared'
         url = base_url + '?' + urllib.urlencode(params)
         xbmcplugin.addDirectoryItem(addon_handle, url, list_item, True)
-        list_item = xbmcgui.ListItem(addon.getLocalizedString(30058))
+        list_item = xbmcgui.ListItem(addon.getLocalizedString(32058))
         params['action'] = 'open_shared_with_me'
         url = base_url + '?' + urllib.urlencode(params)
         xbmcplugin.addDirectoryItem(addon_handle, url, list_item, True)
@@ -442,7 +443,7 @@ try:
             if big_folder:
                 if pg_bg_created:
                     progress_dialog_bg.close()
-                progress_dialog_bg.create(addonname, addon.getLocalizedString(30049) % str(child_count))
+                progress_dialog_bg.create(addonname, addon.getLocalizedString(32049) % str(child_count))
                 pg_bg_created = True
                 progress_dialog_bg.update(0)
             files = onedrive.get('/drive/' + folder + '/children', params=extra_parameters)
@@ -506,7 +507,7 @@ try:
         if big_folder:
             if pg_bg_created:
                 progress_dialog_bg.close()
-            progress_dialog_bg.create(addonname, addon.getLocalizedString(30049) % str(child_count))
+            progress_dialog_bg.create(addonname, addon.getLocalizedString(32049) % str(child_count))
             pg_bg_created = True
             progress_dialog_bg.update(0)
         files = onedrive.get('/drive/items/'+item_id+'/children', params=extra_parameters )
@@ -521,13 +522,13 @@ try:
         driveid = args.get('driveid')[0]
         item_id = args.get('item_id')[0]
         onedrive = onedrives[driveid]
-        string_id = 30002 if content_type == 'audio' else 30001
+        string_id = 32002 if content_type == 'audio' else 32001
         string_config = 'music_library_folder' if content_type == 'audio' else 'video_library_folder'
         path = addon.getSetting(string_config)
         if path is None or path == '' or not os.path.exists(path):  
             path = dialog.browse(0, addon.getLocalizedString(string_id), 'files', '', False, False, '')
         if os.path.exists(path):
-            progress_dialog.create(addonname + ' ' + addon.getLocalizedString(30024), addon.getLocalizedString(30025))
+            progress_dialog.create(addonname + ' ' + addon.getLocalizedString(32024), addon.getLocalizedString(32025))
             pg_created = True
             progress_dialog.update(0)
             addon.setSetting(string_config, path)
@@ -546,7 +547,7 @@ try:
                 export_folder(name, item_id, driveid, path)
                 onedrive.exporting_count += 1
         else:
-            dialog.ok(addonname, addon.getLocalizedString(30026))
+            dialog.ok(addonname, addon.getLocalizedString(32026))
     elif action[0] == 'show_image':
         url = args.get('url')[0]
         xbmc.executebuiltin('ShowPicture('+url+')')
@@ -564,16 +565,16 @@ try:
             url += '/items/'+item_id
         else:
             url += '/root'
-        d = dialog.input(addonname + ' - ' + addon.getLocalizedString(30042))
+        d = dialog.input(addonname + ' - ' + addon.getLocalizedString(32042))
         if d != '':
-            progress_dialog.create(addonname, addon.getLocalizedString(30040) % d)
+            progress_dialog.create(addonname, addon.getLocalizedString(32040) % d)
             pg_created = True
             progress_dialog.update(50)
             extra_parameters['q'] = d
             extra_parameters['filter'] = 'file ne null'
             files = onedrive.get(url+'/view.search', params=extra_parameters )
             if not cancelOperation(onedrive):
-                progress_dialog.update(75, addon.getLocalizedString(30041))
+                progress_dialog.update(75, addon.getLocalizedString(32041))
                 size = 0
                 if '@search.approximateCount' in files:
                     size = int(files['@search.approximateCount'])
@@ -625,25 +626,28 @@ except Exception as e:
         requested_url = e.url
     if isinstance(ex, urllib2.HTTPError):
         if ex.code >= 500:
-            dialog.ok(addonname, addon.getLocalizedString(30035), addon.getLocalizedString(30038))
+            dialog.ok(addonname, addon.getLocalizedString(32035), addon.getLocalizedString(32038))
         if ex.code >= 400:
             if requested_url is not None and requested_url == login_url:
                 selection = False
-                if dialog.yesno(addonname, addon.getLocalizedString(30046) % '\n'):
+                if dialog.yesno(addonname, addon.getLocalizedString(32046) % '\n'):
                     xbmc.executebuiltin('RunPlugin('+base_url + '?' + urllib.urlencode({'action':'add_account', 'content_type': content_type})+')')
                     selection = True
             else:
                 if ex.code == 404:
-                    dialog.ok(addonname, addon.getLocalizedString(30037))
+                    dialog.ok(addonname, addon.getLocalizedString(32037))
+                    report = False
                 elif ex.code == 401:
                     selection = False
-                    if dialog.yesno(addonname, addon.getLocalizedString(30046) % '\n'):
+                    if dialog.yesno(addonname, addon.getLocalizedString(32046) % '\n'):
                         xbmc.executebuiltin('RunPlugin('+base_url + '?' + urllib.urlencode({'action':'add_account', 'content_type': content_type})+')')
                         selection = True
+                elif ex.code == 403 and requested_url is not None and ('view.sharedWithMe' in requested_url or 'view.recent' in requested_url):
+                    report = False
                 else:
-                    dialog.ok(addonname, addon.getLocalizedString(30036), addon.getLocalizedString(30038))
+                    dialog.ok(addonname, addon.getLocalizedString(32036), addon.getLocalizedString(32038))
     else:
-        dialog.ok(addonname, addon.getLocalizedString(30027), utils.Utils.unicode(ex), addon.getLocalizedString(30016))
+        dialog.ok(addonname, addon.getLocalizedString(32027), utils.Utils.unicode(ex), addon.getLocalizedString(32016))
     if report:
         if isinstance(e, OneDriveException):
             e.body += '\n--selection: --\n' + utils.Utils.str(selection)

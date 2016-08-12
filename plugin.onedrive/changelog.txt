@@ -1,3 +1,8 @@
+v1.1.9 released - Aug 13, 2016:
+- List of valid video and audio format expanded
+- Conversion to strings.po
+- Minor fix
+--------------------------
 v1.1.8 released - June 26, 2016:
 - Special folders support
 - Shared folder support

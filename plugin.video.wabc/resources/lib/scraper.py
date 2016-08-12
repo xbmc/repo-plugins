@@ -10,6 +10,7 @@ import xbmcgui
 import HTMLParser
 import sys
 import os
+import json
 
 h = HTMLParser.HTMLParser()
 qp  = urllib.quote_plus
@@ -20,20 +21,16 @@ UTF8     = 'utf-8'
 class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
-      ihtml = self.getRequest('http://abc.go.com/shows')
-      html = self.getRequest('http://abc.go.com/shows/abc-updates/news/insider/143-for-free-watch-abc-watch-full-episodes-with-no-sign-in-042715?cid=abchp_143_for_free')
-      html = re.compile('<section class="m-blog_detail-body(.+?)</section', re.DOTALL).search(html).group(1)
-      a = re.compile('<p align="center".+?<a.+?name="(.+?)".+?<a href="(.+?)">(.+?)</a>',re.DOTALL).findall(html)
-      for id, url, name in a:
-          name = name.replace('<strong>','').replace('</strong>','').replace('<b>','').replace('</b>','')
-          name=h.unescape(name.decode(UTF8))
-          thumb = re.compile('<main class="content">.+?<a href="'+url.replace('http://abc.go.com','')+'".+?class="tablet-source".+?srcset="(.+?) ',re.DOTALL).search(ihtml)
-          if thumb is not None:
-              thumb = thumb.group(1)
-              fanart = thumb
-          else:
-              thumb = self.addonIcon
-              fanart = self.addonFanart
+      urls = {}
+      html = self.getRequest('http://abc.go.com/shows')
+      html = re.compile('<main class="content(.+?)<section  data-m-id="1904281', re.DOTALL).search(html).group(1)
+      a = re.compile('data-sm-id="".+?href="(.+?)".+?class="tablet-source.+?srcset="(.+?) ',re.DOTALL).findall(html)
+      for url, thumb in a:
+        if urls.get(url,None) is None:
+          urls[url] = url
+          name = url.rsplit('/',1)[1]
+          name = name.replace('-',' ').title()
+          fanart = thumb
           infoList ={}
           infoList['Title'] = name
           infoList['TVShowTitle'] = name
@@ -44,14 +41,15 @@ class myAddon(t1mAddon):
 
 
   def getAddonEpisodes(self,url,ilist, getFileData = False):
-      self.defaultVidStream['width']  = 1920
-      self.defaultVidStream['height'] = 1080
+      if not url.startswith('http:'):
+          url = 'http://abc.go.com'+url
       if not url.endswith('/episode-guide'):
           url = url+'/episode-guide'
       html = self.getRequest(url)
       vids = re.compile('data-videoid="VDKA(.+?)".+?data-title="(.+?)".+?data-background="(.+?)".+?class="tablet-source".+?srcset="(.+?) .+?class="season-number(.+?)<.+?class="episode-number(.+?)<.+?class="m-episode-summary.+?<p>(.+?)</p>.+?<div class="m-episode-meta(.+?)</div',re.DOTALL).findall(html)
       for url, name, fanart, thumb, season, episode, plot, meta in vids:
           name = h.unescape(name.decode(UTF8))
+          name = h.unescape(name) # get rid of &apos; as well
           plot = h.unescape(plot.decode(UTF8))
           thumb = thumb.strip()
           infoList = {}
@@ -79,14 +77,16 @@ class myAddon(t1mAddon):
               infoList['Date'] = '%s-%s-%s' % ( str(year), mo, day)
               infoList['Aired'] = infoList['Date']
               infoList['Year'] = int(infoList['Aired'].split('-',1)[0])
-              infoList['MPAA'] = meta[2]
+              if len(meta)>2:
+                  infoList['MPAA'] = meta[2]
           infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
           infoList['Studio'] = 'ABC'
           infoList['mediatype'] = 'episode'
           if getFileData == False:
               ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False)
           else:
-              ilist.append((infoList['Season'], infoList['Episode'], url))
+              if infoList.get('Season') is not None and infoList.get('Episode') is not None:
+                  ilist.append((infoList['Season'], infoList['Episode'], url))
       return(ilist)
 
   def doFunction(self, url):
@@ -110,20 +110,39 @@ class myAddon(t1mAddon):
     json_cmd = '{"jsonrpc":"2.0","method":"VideoLibrary.Scan", "params": {"directory":"%s/"},"id":1}' % movieDir.replace('\\','/')
     jsonRespond = xbmc.executeJSONRPC(json_cmd)
 
-
   def getAddonVideo(self,url):
       vd = uqp(url)
-      url = 'http://cdnapi.kaltura.com//api_v3/index.php?service=multirequest&action=null&ignoreNull=1&2%3Aaction=getContextData&3%3Aaction=list&2%3AcontextDataParams%3AflavorTags=uplynk&2%3AentryId='+vd+'&apiVersion=3%2E1%2E5&1%3Aversion=-1&2%3AcontextDataParams%3AstreamerType=http&3%3Afilter%3AentryIdEqual='+vd+'&clientTag=kdp%3Av3%2E9%2E2&1%3AentryId='+vd+'&2%3AcontextDataParams%3AobjectType=KalturaEntryContextDataParams&3%3Afilter%3AobjectType=KalturaCuePointFilter&2%3Aservice=baseentry&1%3Aservice=baseentry&1%3Aaction=get'
-      html = self.getRequest(url)
-      if '<error>' in html or 'Missing KS' in html:
+      url = 'https://api.entitlement.watchabc.go.com/vp2/ws-secure/entitlement/2020/authorize.json'
+      udata = 'video%5Fid=VDKA'+str(vd)+'&device=001&video%5Ftype=lf&brand=001'
+      uheaders = self.defaultHeaders.copy()
+      uheaders['Content-Type'] = 'application/x-www-form-urlencoded'
+      uheaders['Accept'] = 'application/json'
+      uheaders['X-Requested-With'] = 'ShockwaveFlash/22.0.0.209'
+      uheaders['Origin'] = 'http://cdn1.edgedatg.com'
+      html = self.getRequest(url, udata, uheaders)
+      a = json.loads(html)
+      if a.get('uplynkData', None) is None:
           xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s, "%s")' % (self.addonName, self.addon.getLocalizedString(30001), 5000, self.addonIcon))
           return
-      url = re.compile('<dataUrl>(.+?)</dataUrl>',re.DOTALL).search(html).group(1)
+
+      sessionKey = a['uplynkData']['sessionKey']
+      if not '&cid=' in sessionKey:
+          oid, eid = re.compile('&oid=(.+?)&eid=(.+?)&', re.DOTALL).search(sessionKey).groups()
+          url = 'http://content.uplynk.com/ext/%s/%s.m3u8?%s' % (oid, eid, sessionKey)
+      else:
+          cid = re.compile('&cid=(.+?)&', re.DOTALL).search(sessionKey).group(1)
+          url = 'http://content.uplynk.com/%s.m3u8?%s' % (cid, sessionKey)
+      html = self.getRequest(url)
+      url = re.compile('#UPLYNK-MEDIA0.+?http(.+?)\n',re.DOTALL).search(html).group(1)
+      url = 'http'+url
       liz = xbmcgui.ListItem(path = url.strip())
-# No need to process subtitles, all videos have closed captions
-      infoList ={}
+# No need to process subtitles, all shows have closed captions
+      infoList={}
+      infoList['mediatype'] = xbmc.getInfoLabel('ListItem.DBTYPE')
       infoList['Title'] = xbmc.getInfoLabel('ListItem.Title')
+      infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
       infoList['Year'] = xbmc.getInfoLabel('ListItem.Year')
+      infoList['Premiered'] = xbmc.getInfoLabel('Premiered')
       infoList['Plot'] = xbmc.getInfoLabel('ListItem.Plot')
       infoList['Studio'] = xbmc.getInfoLabel('ListItem.Studio')
       infoList['Genre'] = xbmc.getInfoLabel('ListItem.Genre')
@@ -133,7 +152,6 @@ class myAddon(t1mAddon):
       infoList['Season'] = xbmc.getInfoLabel('ListItem.Season')
       infoList['Episode'] = xbmc.getInfoLabel('ListItem.Episode')
       liz.setInfo('video', infoList)
-
       xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
 
 

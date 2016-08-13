@@ -140,7 +140,7 @@ class OneDrive:
                     self.do_not_clean_counter = False
                 else:
                     again = ' again'
-                    attempt = self.addon.getLocalizedString(30045) % (str(self.retry_times), str(self.retry_target))
+                    attempt = self.addon.getLocalizedString(32045) % (str(self.retry_times), str(self.retry_target))
                     seconds = self.retry_times*5
                     if self.retry_times == 1:
                         again = ''
@@ -153,7 +153,7 @@ class OneDrive:
                         remaining = round(max_waiting_time-current_time)
                         p = int(remaining/seconds*100) if remaining > 0 else 0
                         p = 100 if p > 100 else p
-                        self.progress_dialog_bg.update(p, self.addon.getLocalizedString(30043) % again + ' ' + self.addon.getLocalizedString(30044) % str(int(remaining)), attempt)
+                        self.progress_dialog_bg.update(p, self.addon.getLocalizedString(32043) % again + ' ' + self.addon.getLocalizedString(32044) % str(int(remaining)), attempt)
                         if self.monitor.waitForAbort(1):
                             break
                         current_time = time.time()

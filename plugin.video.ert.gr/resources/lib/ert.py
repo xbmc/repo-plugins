@@ -34,10 +34,10 @@ class indexer:
         self.sports_link = 'http://webtv.ert.gr/?cat=87'
         self.weather_link = 'http://webtv.ert.gr/?cat=374'
         self.popular_link = 'http://webtv.ert.gr/feed/'
-        self.ert1_link = 'http://webtv.ert.gr/webtv/ert/tv/ytb/ert1_ipinfo-geo.html'
-        self.ert2_link = 'http://webtv.ert.gr/webtv/ert/tv/ytb/ert2_ipinfo-geo.html'
-        self.ert3_link = 'http://webtv.ert.gr/webtv/ert/tv/ytb/ert3_ipinfo-geo.html'
-        self.ertw_link = 'http://webtv.ert.gr/webtv/ert/tv/ytb/ertworld.html'
+        self.ert1_link = 'http://webtv.ert.gr/ert1/'
+        self.ert2_link = 'http://webtv.ert.gr/ert2/'
+        self.ert3_link = 'http://webtv.ert.gr/ert3/'
+        self.ertw_link = 'http://webtv.ert.gr/ertworld/'
 
 
     def root(self):
@@ -436,41 +436,51 @@ class indexer:
 
 
     def resolve_live(self, url):
+        if url == 'ert1':
+            url = self.ert1_link
+        elif url == 'ert2':
+            url = self.ert2_link
+        elif url == 'ert3':
+            url = self.ert3_link
+        elif url == 'ertw':
+            url = self.ertw_link
+
         try:
-            if url == 'ert1':
-                url = self.ert1_link
-            elif url == 'ert2':
-                url = self.ert2_link
-            elif url == 'ert3':
-                url = self.ert3_link
-            elif url == 'ertw':
-                url = self.ertw_link
-
             result = client.request(url)
-
-            result = re.findall('(?:youtube.com|youtu.be)/(?:embed/|.+?\?v=|.+?\&v=|v/)([0-9A-Za-z_\-]+)', result)
-
-            for r in result:
-                try:
-                    url = 'http://www.youtube.com/watch?v=%s' % r
-
-                    url = client.request(url)
-                    url = re.findall('"hlsvp"\s*:\s*"(.+?)"', url)[0]
-                    url = urllib.unquote(url).replace('\\/', '/')
-
-                    url = client.request(url)
-                    url = url.replace('\n','')
-                    url = re.findall('RESOLUTION\s*=\s*(\d*)x\d{1}.+?(http.+?\.m3u8)', url)
-
-                    url = [(int(i[0]), i[1]) for i in url]
-                    url.sort()
-                    url = url[-1][1]
-
-                    return url
-                except:
-                    pass
-
+            result = client.parseDOM(result, 'iframe', ret='src')[0]
+            result = client.request(result)
         except:
-            return
+            pass
+
+        try:
+            url = re.findall('(?:\"|\')(http(?:s|)://.+?\.m3u8(?:.+?|))(?:\"|\')', result)[-1]
+            url = client.request(url, output='geturl')
+
+            if not url == None: return url
+        except:
+            pass
+
+
+        result = re.findall('(?:youtube.com|youtu.be)/(?:embed/|.+?\?v=|.+?\&v=|v/)([0-9A-Za-z_\-]+)', result)
+
+        for r in result:
+            try:
+                url = 'http://www.youtube.com/watch?v=%s' % r
+
+                url = client.request(url)
+                url = re.findall('"hlsvp"\s*:\s*"(.+?)"', url)[0]
+                url = urllib.unquote(url).replace('\\/', '/')
+
+                url = client.request(url)
+                url = url.replace('\n','')
+                url = re.findall('RESOLUTION\s*=\s*(\d*)x\d{1}.+?(http.+?\.m3u8)', url)
+
+                url = [(int(i[0]), i[1]) for i in url]
+                url.sort()
+                url = url[-1][1]
+
+                return url
+            except:
+                pass
 
 

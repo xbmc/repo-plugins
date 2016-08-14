@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.wowtv.com" version="1.0.0" name="WOWtv" provider-name="lambda">
+	<requires>
+		<import addon="xbmc.python" version="2.24.0" />
+		<import addon="script.module.lamlib" version="1.0.0" />
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="addon.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">WOWtv addon for Kodi</summary>
+		<description lang="en">Immerse yourself with the daily celebrity entertainment news all the way from Hollywood and UK.[CR]Get spoilt for choice with the selection of Movies and Cartoon series.[CR]Get Fashion tips from Top Designers, dig out the truth behind Headlines News and explore the Paranormal world.</description>
+		<disclaimer lang="en">This addon is not published nor endorsed by wowtv.com</disclaimer>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+		<source>https://github.com/lambda81/plugin.video.wowtv.com</source>
+		<website>http://www.wowtv.com/</website>
+		<platform>all</platform>
+		<language></language>
+		<forum></forum>
+		<email></email>
+	</extension>
+</addon>

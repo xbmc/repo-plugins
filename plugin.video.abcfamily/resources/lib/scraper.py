@@ -16,7 +16,7 @@ import sys
 h = HTMLParser.HTMLParser()
 qp  = urllib.quote_plus
 uqp = urllib.unquote_plus
-UTF8     = 'utf-8'
+UTF8 = 'utf-8'
 
 
 class myAddon(t1mAddon):
@@ -39,14 +39,12 @@ class myAddon(t1mAddon):
       return(ilist)
 
   def getAddonEpisodes(self,url,ilist, getFileData=False):
-      self.defaultVidStream['width']  = 1920
-      self.defaultVidStream['height'] = 1080
       if not url.startswith('http'):
          url = 'http://freeform.go.com'+url
       if not url.endswith('/episode-guide'):
           url = url+'/episode-guide'
       html = self.getRequest(url)
-      vids = re.compile('data-videoid="VDKA(.+?)".+?data-title="(.+?)".+?data-background="(.+?)".+?class="tablet-source".+?srcset="(.+?) .+?class="season-number(.+?)<.+?class="episode-number(.+?)<.+?class="m-episode-summary.+?<p>(.+?)</p>.+?<div class="m-episode-meta(.+?)</div',re.DOTALL).findall(html)
+      vids = re.compile('data-video-id="VDKA(.+?)".+?data-title="(.+?)".+?data-background="(.+?)".+?class="tablet-source".+?srcset="(.+?) .+?class="season-number(.+?)<.+?class="episode-number(.+?)<.+?class="m-episode-summary.+?<p>(.+?)</p>.+?<div class="m-episode-meta(.+?)</div',re.DOTALL).findall(html)
       for url, name, fanart, thumb, season, episode, plot, meta in vids:
           name = h.unescape(name.decode(UTF8))
           plot = h.unescape(plot.decode(UTF8))
@@ -109,17 +107,33 @@ class myAddon(t1mAddon):
 
   def getAddonVideo(self,url):
       vd = uqp(url)
-      url = 'http://cdnapi.kaltura.com//api_v3/index.php?service=multirequest&action=null&ignoreNull=1&2%3Aaction=getContextData&3%3Aaction=list&2%3AcontextDataParams%3AflavorTags=uplynk&2%3AentryId='+vd+'&apiVersion=3%2E1%2E5&1%3Aversion=-1&2%3AcontextDataParams%3AstreamerType=http&3%3Afilter%3AentryIdEqual='+vd+'&clientTag=kdp%3Av3%2E9%2E2&1%3AentryId='+vd+'&2%3AcontextDataParams%3AobjectType=KalturaEntryContextDataParams&3%3Afilter%3AobjectType=KalturaCuePointFilter&2%3Aservice=baseentry&1%3Aservice=baseentry&1%3Aaction=get'
-      html = self.getRequest(url)
-      if '<error>' in html or 'Missing KS' in html:
+      url = 'https://api.entitlement.watchabc.go.com/vp2/ws-secure/entitlement/2020/authorize.json'
+      udata = 'video%5Fid=VDKA'+str(vd)+'&device=001&video%5Ftype=lf&brand=002'
+      uheaders = self.defaultHeaders.copy()
+      uheaders['Content-Type'] = 'application/x-www-form-urlencoded'
+      uheaders['Accept'] = 'application/json'
+      uheaders['X-Requested-With'] = 'ShockwaveFlash/22.0.0.209'
+      uheaders['Origin'] = 'http://cdn1.edgedatg.com'
+      html = self.getRequest(url, udata, uheaders)
+      a = json.loads(html)
+      if a.get('uplynkData', None) is None:
           xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s, "%s")' % (self.addonName, self.addon.getLocalizedString(30001), 5000, self.addonIcon))
           return
-      url = re.compile('<dataUrl>(.+?)</dataUrl>',re.DOTALL).search(html).group(1)
+
+      sessionKey = a['uplynkData']['sessionKey']
+      oid, eid = re.compile('&oid=(.+?)&eid=(.+?)&', re.DOTALL).search(sessionKey).groups()
+      url = 'http://content.uplynk.com/ext/%s/%s.m3u8?%s' % (oid, eid, sessionKey)
+      html = self.getRequest(url)
+      url = re.compile('#UPLYNK-MEDIA0.+?http(.+?)\n',re.DOTALL).search(html).group(1)
+      url = 'http'+url
       liz = xbmcgui.ListItem(path = url.strip())
 # No need to process subtitles, all shows have closed captions
-      infoList ={}
+      infoList={}
+      infoList['mediatype'] = xbmc.getInfoLabel('ListItem.DBTYPE')
       infoList['Title'] = xbmc.getInfoLabel('ListItem.Title')
+      infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
       infoList['Year'] = xbmc.getInfoLabel('ListItem.Year')
+      infoList['Premiered'] = xbmc.getInfoLabel('Premiered')
       infoList['Plot'] = xbmc.getInfoLabel('ListItem.Plot')
       infoList['Studio'] = xbmc.getInfoLabel('ListItem.Studio')
       infoList['Genre'] = xbmc.getInfoLabel('ListItem.Genre')

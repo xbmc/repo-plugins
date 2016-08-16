@@ -2,10 +2,10 @@
 <addon
   id="plugin.video.mediathek"
   name="Mediathek"
-  version="0.7.3"
+  version="0.7.4"
   provider-name="Raptor 2101">
   <requires>
-   <import addon="xbmc.python" version="2.24.0"/>
+   <import addon="xbmc.python" version="2.1.0"/>
    <import addon="script.module.beautifulsoup4" version="4.3.2"/>
   </requires>
   <extension 

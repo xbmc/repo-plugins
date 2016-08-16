@@ -239,47 +239,14 @@ class NDRMediathek(Mediathek):
         searchText = urllib.urlencode({"query": searchText})
         self.buildPageMenu(self.searchLink+searchText, 0)
 
-# UNUSED
-#     def extractVideoInformation(self, videoInfo, pubDate, nodeCount):
-#         # Basis-Infos extrahieren
-#         _regex_videoInfo = re.compile("<a href=\"(.*?)\".*?>.*?<img.*?src=\"(.*?)\".*?/>.*?<span class=\"runtime\" title=\"Spieldauer\">(.*?)</span>.*?<h4><a href=\".*?\".*?>(.*?)</a>", re.DOTALL)
-#         videoInfoRE = _regex_videoInfo.search(videoInfo)
-#
-#         if videoInfoRE is not None:
-#             videoLink = self.rootLink+videoInfoRE.group(1)
-#             title = videoInfoRE.group(4).decode('utf-8')
-#             # unused variables
-#             # duration = videoInfoRE.group(3)
-#             # picture = self.rootLink+videoInfoRE.group(2)
-#             description = ""
-#
-#             # Bei der Suche ist bei den links ein http://www.ndr.de vorangestellt
-#             if videoLink[0:18] == "http://www.ndr.deh":
-#                 videoLink = videoLink[17:]
-#
-#             # Titel Bereinigen bei Suchergebnissen
-#             title = title.replace('<span class="result">', '').replace('</span>', '')
-#
-#             videoPage = self.loadPage(videoLink)
-#
-#             # Bei "Sendung verpasst" wird keine (Kurz)Beschreibung ausgegeben, deswegen wird sie von der Detailseite geladen
-#             _regex_videoInfo2 = re.compile("<div class=\"mplayer_textcontent\">.*?<p>(.*?)</p>", re.DOTALL)
-#             videoInfoRE2 = _regex_videoInfo2.search(videoPage)
-#
-#             if videoInfoRE2 is not None:
-#                 description = videoInfoRE2.group(1).decode('utf-8')
-#
-#             # Video Link extrahieren
-#             _regex_extractVideoLink = re.compile("{src:'(.*?)', type:\"video/mp4\"},")
-
     def extractVideoInformation(self, videoLink, pubDate, nodeCount):
 
         regexFindVideoLink = re.compile("http://.*(hq.mp4|hi.mp4|lo.flv)")
         regexFindImageLink = re.compile("/.*v-ardgalerie.jpg")
         regexFindMediaData = re.compile(
-            "<div class=\"padding group\">\\s*?<div class=\"textinfo\">\\s*?<h2.*?>"
+            "<div class=\"padding group\">\\s*?<div class=\"textinfo\">\\s*?<h\\d.*?>"
             "(.*?)"
-            "</h2>\\s*?.*?<div class=\"subline\">.*?</div>\\s*?<p.*?>"
+            "</h\\d>\\s*?.*?<div class=\"subline\">.*?</div>\\s*?<p.*?>"
             "(.*?)"
             "</p>", re.DOTALL
         )
@@ -287,7 +254,7 @@ class NDRMediathek(Mediathek):
             videoLink = self.rootLink+videoLink
         videoPage = self.loadPage(videoLink)
 
-        print "videolink: {0}".format(videoLink)
+        self.gui.log("videolink: {0}".format(videoLink))
         videoLink = {}
         videoLink[0] = SimpleLink(regexFindVideoLink.search(videoPage).group(0), 0)
 

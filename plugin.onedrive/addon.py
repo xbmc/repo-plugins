@@ -117,16 +117,17 @@ for driveid in config.sections():
     login_url = onedrives[driveid]._login_url
 
 def set_audio_info(list_item, data):
-    list_item.setInfo('music', {
-        'tracknumber' : utils.Utils.get_safe_value(data['audio'], 'track'), \
-        'discnumber' : utils.Utils.get_safe_value(data['audio'], 'disc'), \
-        'duration' : int(utils.Utils.get_safe_value(data['audio'], 'duration') or '0')/1000, \
-        'year' : utils.Utils.get_safe_value(data['audio'], 'year'), \
-        'genre' : utils.Utils.get_safe_value(data['audio'], 'genre'), \
-        'album': utils.Utils.get_safe_value(data['audio'], 'album'), \
-        'artist': utils.Utils.get_safe_value(data['audio'], 'artist'), \
-        'title': utils.Utils.get_safe_value(data['audio'], 'title') \
-    })
+    if 'audio' in data:
+        list_item.setInfo('music', {
+            'tracknumber' : utils.Utils.get_safe_value(data['audio'], 'track'), \
+            'discnumber' : utils.Utils.get_safe_value(data['audio'], 'disc'), \
+            'duration' : int(utils.Utils.get_safe_value(data['audio'], 'duration') or '0')/1000, \
+            'year' : utils.Utils.get_safe_value(data['audio'], 'year'), \
+            'genre' : utils.Utils.get_safe_value(data['audio'], 'genre'), \
+            'album': utils.Utils.get_safe_value(data['audio'], 'album'), \
+            'artist': utils.Utils.get_safe_value(data['audio'], 'artist'), \
+            'title': utils.Utils.get_safe_value(data['audio'], 'title') \
+        })
 
 def set_video_info(list_item, data):
     if 'video' in data:

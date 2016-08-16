@@ -1,0 +1,126 @@
+# XBMC Media Center language file
+# Addon Name: Remote Control Browser
+# Addon id: plugin.program.remote.control.browser
+# Addon version: 1.0.3
+# Addon Provider: Chad Parry
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: Chad Parry <github@chad.parry.org>\n"
+"POT-Creation-Date: 2016-06-06 16:47-0700\n"
+"PO-Revision-Date: 2016-11-06 10:29-0800\n"
+"Last-Translator: Chad Parry <github@chad.parry.org>\n"
+"Language-Team: Remote Control Browser Translation\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt_BR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgctxt "#30001"
+msgid "Add Bookmark"
+msgstr "Adicionar Marcador"
+
+msgctxt "#30002"
+msgid "Remove Bookmark"
+msgstr "Remover Marcador"
+
+msgctxt "#30003"
+msgid "Title"
+msgstr "Título"
+
+msgctxt "#30004"
+msgid "URL"
+msgstr "URL"
+
+msgctxt "#30005"
+msgid "Browser not found!"
+msgstr "Navegador não encontrado!"
+
+msgctxt "#30006"
+msgid "Edit Bookmark"
+msgstr "Editar Marcador"
+
+msgctxt "#30007"
+msgid "Thumbnail"
+msgstr "Miniatura"
+
+msgctxt "#30018"
+msgid "Dependencies"
+msgstr "Dependências"
+
+msgctxt "#30019"
+msgid "Browser Path"
+msgstr "Caminho do Navegador"
+
+msgctxt "#30020"
+msgid "Browser Arguments"
+msgstr "Argumentos do Navegador"
+
+msgctxt "#30021"
+msgid "“xdotool” Path"
+msgstr "Caminho do “xdotool”"
+
+msgctxt "#30022"
+msgid "Warning: Missing Python package “psutil”"
+msgstr "Atenção: Faltando pacote Python “psutil”"
+
+msgctxt "#30023"
+msgid "Warning: Missing Python package “pyalsaaudio”"
+msgstr "Atenção: Faltando pacote Python “pyalsaaudio”"
+
+msgctxt "#30024"
+msgid "Warning: Missing Python package “pylirc2”"
+msgstr "Atenção: Faltando pacote Python “pylirc2”"
+
+msgctxt "#30025"
+msgid "Launch Bookmark"
+msgstr "Iniciar Marcador"
+
+msgctxt "#30027"
+msgid "Edit Keymap"
+msgstr "Editar Keymap"
+
+msgctxt "#30028"
+msgid "LIRC Configuration File"
+msgstr "Arquivo de Configuração do LIRC"
+
+msgctxt "#30029"
+msgid "Loading Webpage"
+msgstr "Carregando Página Web"
+
+msgctxt "#30030"
+msgid "Enable Linkcast"
+msgstr "Ativar Linkcast"
+
+msgctxt "#30031"
+msgid "Linkcast Port"
+msgstr "Porta do Linkcast"
+
+msgctxt "#30032"
+msgid "Kodi Linkcast"
+msgstr "Kodi Linkcast"
+
+msgctxt "#30033"
+msgid "Remote Control Browser Addon"
+msgstr "Remote Control Browser Add-on"
+
+msgctxt "#30034"
+msgid "The link was sent to Kodi."
+msgstr "O link foi enviado para Kodi."
+
+msgctxt "#30035"
+msgid "Linkcast"
+msgstr "Linkcast"
+
+msgctxt "#30036"
+msgid "Drag this bookmarklet to the bookmarks bar and then you can use it to linkcast your current webpage:"
+msgstr "Arraste este bookmarklet para a barra de marcadores e então você pode usá-lo para linkcast sua página web atual:"
+
+msgctxt "#30037"
+msgid "Kodi Linkcast does not support the scheme: %(url)s"
+msgstr "O Kodi Linkcast não suporta o esquema: %(url)s"
+
+msgctxt "#30038"
+msgid "Browser already running!"
+msgstr "Navegador já em execução!"

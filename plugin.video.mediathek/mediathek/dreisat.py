@@ -150,7 +150,10 @@ class DreiSatMediathek(Mediathek):
     nodes = rssFeed.getElementsByTagName("item");
     nodeCount = initCount + len(nodes)
     for itemNode in nodes:
-      self.extractVideoInformation(itemNode,nodeCount);
+      try:
+        self.extractVideoInformation(itemNode,nodeCount);
+      except:
+        pass
   
   def parseDate(self,dateString):
     dateString = regex_dateString.search(dateString).group();

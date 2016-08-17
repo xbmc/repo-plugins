@@ -1,3 +1,6 @@
+v1.1.10 released - Aug 16, 2016:
+- Minor fix when an audio file has no metadata
+--------------------------
 v1.1.9 released - Aug 13, 2016:
 - List of valid video and audio format expanded
 - Conversion to strings.po

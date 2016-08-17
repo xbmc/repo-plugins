@@ -1,3 +1,6 @@
+v1.1.6 (2016-08-09):
+- try to suppress ssl warnings. If suppressing gives an error (on iOS f.e.), continue with the rest of the program.
+
 v1.1.5 (2016-07-12):
 - fixed getting video filename due to website changes
 - only using https now

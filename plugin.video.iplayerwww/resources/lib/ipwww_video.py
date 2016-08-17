@@ -22,10 +22,13 @@ ADDON = xbmcaddon.Addon(id='plugin.video.iplayerwww')
 
 
 def RedButtonDialog():
-    dialog = xbmcgui.Dialog()
-    ret = dialog.yesno(translation(30405), translation(30406), '',
-                       translation(30407), translation(30409), translation(30408))
-    if ret:
+    if ADDON.getSetting('redbutton_warning') == 'true':
+        dialog = xbmcgui.Dialog()
+        ret = dialog.yesno(translation(30405), translation(30406), '',
+                           translation(30407), translation(30409), translation(30408))
+        if ret:
+            ListRedButton()
+    else:
         ListRedButton()
 
 
@@ -55,12 +58,37 @@ def ListRedButton():
         ('sport_stream_22', 'BBC Red Button 22'),
         ('sport_stream_23', 'BBC Red Button 23'),
         ('sport_stream_24', 'BBC Red Button 24'),
+        ('sport_stream_01b', 'BBC Red Button 1b'),
+        ('sport_stream_02b', 'BBC Red Button 2b'),
+        ('sport_stream_03b', 'BBC Red Button 3b'),
+        ('sport_stream_04b', 'BBC Red Button 4b'),
+        ('sport_stream_05b', 'BBC Red Button 5b'),
+        ('sport_stream_06b', 'BBC Red Button 6b'),
+        ('sport_stream_07b', 'BBC Red Button 7b'),
+        ('sport_stream_08b', 'BBC Red Button 8b'),
+        ('sport_stream_09b', 'BBC Red Button 9b'),
+        ('sport_stream_10b', 'BBC Red Button 10b'),
+        ('sport_stream_11b', 'BBC Red Button 11b'),
+        ('sport_stream_12b', 'BBC Red Button 12b'),
+        ('sport_stream_13b', 'BBC Red Button 13b'),
+        ('sport_stream_14b', 'BBC Red Button 14b'),
+        ('sport_stream_15b', 'BBC Red Button 15b'),
+        ('sport_stream_16b', 'BBC Red Button 16b'),
+        ('sport_stream_17b', 'BBC Red Button 17b'),
+        ('sport_stream_18b', 'BBC Red Button 18b'),
+        ('sport_stream_19b', 'BBC Red Button 19b'),
+        ('sport_stream_20b', 'BBC Red Button 20b'),
+        ('sport_stream_21b', 'BBC Red Button 21b'),
+        ('sport_stream_22b', 'BBC Red Button 22b'),
+        ('sport_stream_23b', 'BBC Red Button 23b'),
+        ('sport_stream_24b', 'BBC Red Button 24b'),        
     ]
+    iconimage = xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/red_button.png')
     for id, name in channel_list:
         if ADDON.getSetting('streams_autoplay') == 'true':
-            AddMenuEntry(name, id, 203, '', '', '')
+            AddMenuEntry(name, id, 203, iconimage, '', '')
         else:
-            AddMenuEntry(name, id, 123, '', '', '')
+            AddMenuEntry(name, id, 123, iconimage, '', '')
 
 
 # ListLive creates menu entries for all live channels.
@@ -82,6 +110,20 @@ def ListLive():
         ('bbc_two_scotland', 'bbc_two', 'BBC Two Scotland'),
         ('bbc_two_northern_ireland_digital', 'bbc_two', 'BBC Two Northern Ireland'),
         ('bbc_two_wales_digital', 'bbc_two', 'BBC Two Wales'),
+        ('bbc_two_england',         'bbc_two',           'BBC Two England',),
+        ('bbc_one_cambridge',       'bbc_one',         'BBC One Cambridge',),
+        ('bbc_one_channel_islands', 'bbc_one',   'BBC One Channel Islands',),
+        ('bbc_one_east',            'bbc_one',              'BBC One East',),
+        ('bbc_one_east_midlands',   'bbc_one',     'BBC One East Midlands',),
+        ('bbc_one_east_yorkshire',  'bbc_one',    'BBC One East Yorkshire',),
+        ('bbc_one_north_east',      'bbc_one',        'BBC One North East',),
+        ('bbc_one_north_west',      'bbc_one',        'BBC One North West',),
+        ('bbc_one_oxford',          'bbc_one',            'BBC One Oxford',),
+        ('bbc_one_south',           'bbc_one',             'BBC One South',),
+        ('bbc_one_south_east',      'bbc_one',        'BBC One South East',),
+        ('bbc_one_west',            'bbc_one',              'BBC One West',),
+        ('bbc_one_west_midlands',   'bbc_one',     'BBC One West Midlands',),
+        ('bbc_one_yorks',           'bbc_one',             'BBC One Yorks',),
     ]
     for id, img, name in channel_list:
         iconimage = xbmc.translatePath(
@@ -1060,6 +1102,42 @@ def ParseStreams(stream_id):
             elif int(bandwidth) <= 2410000:
                 tmp_br = 5
             retlist.append((tmp_sup, tmp_br, url, resolution))
+    # Some events have special live streams which show up as normal programmes.
+    # They need to be parsed separately.
+    match = re.compile(
+        'connection.+?href="(.+?)".+?supplier="(.+?)".+?transferFormat="(.+?)"'
+        ).findall(html)
+    # print match
+    unique = []
+    [unique.append(item) for item in match if item not in unique]
+    # print unique
+    for m3u8_url, supplier, transfer_format in unique:
+        tmp_sup = 0
+        tmp_br = 0
+        if transfer_format == 'hls':
+            if supplier == 'akamai_hls_live':
+                tmp_sup = 1
+            elif supplier == 'll_hls_live':
+                tmp_sup = 2
+            html = OpenURL(m3u8_url)
+            match = re.compile('#EXT-X-STREAM-INF:PROGRAM-ID=(.+?),BANDWIDTH=(.+?),CODECS="(.*?)",RESOLUTION=(.+?)\s*(.+?.m3u8)').findall(html)
+            for stream_id, bandwidth, codecs, resolution, url in match:
+                # Note: This is not entirely correct as these bandwidths relate to live programmes, not catchup.
+                if int(bandwidth) <= 801000:
+                    tmp_br = 1
+                elif int(bandwidth) <= 1100000:
+                    tmp_br = 2
+                elif int(bandwidth) <= 1510000:
+                    tmp_br = 3
+                elif int(bandwidth) <= 1800000:
+                    tmp_br = 4
+                elif int(bandwidth) <= 2410000:
+                    tmp_br = 5
+                elif int(bandwidth) <= 3120000:
+                    tmp_br = 6
+                elif int(bandwidth) >= 5500000:
+                    tmp_br = 7
+                retlist.append((tmp_sup, tmp_br, url, resolution))
     match = re.compile('service="captions".+?connection href="(.+?)"').findall(html)
     # print "Subtitle URL: %s"%match
     # print retlist
@@ -1083,7 +1161,21 @@ def ParseLiveStreams(channelname, providers):
     for provider_url, provider_name in providers:
         # First we query the available streams from this website
         if channelname in ['bbc_parliament', 'bbc_alba', 's4cpbs', 'bbc_one_london',
-                           'bbc_two_wales_digital', 'bbc_two_northern_ireland_digital', 'bbc_two_scotland']:
+                           'bbc_two_wales_digital', 'bbc_two_northern_ireland_digital', 'bbc_two_scotland',
+        'bbc_one_cambridge',
+        'bbc_one_channel_islands',
+        'bbc_one_east',
+        'bbc_one_east_midlands',
+        'bbc_one_east_yorkshire',
+        'bbc_one_north_east',
+        'bbc_one_north_west',
+        'bbc_one_oxford',
+        'bbc_one_south',
+        'bbc_one_south_east',
+        'bbc_one_west',
+        'bbc_one_west_midlands',
+        'bbc_one_yorks',
+        ]:
             device = 'hls_tablet'
         else:
             device = 'abr_hdtv'

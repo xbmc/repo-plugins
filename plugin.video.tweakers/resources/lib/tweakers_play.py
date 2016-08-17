@@ -75,7 +75,13 @@ class Main:
                    "X-Cookies-Accepted": "1"}
         # Disable ssl logging (this is needed for python version < 2.7.9 (SNIMissingWarning))
         import logging
-        logging.captureWarnings(True)
+        # On iOS the following logging command throws an exception. If that happens, ignore the exception...
+        try:
+            logging.captureWarnings(True)
+        except Exception:
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "logging exception occured (and ignored)", str(Exception)), xbmc.LOGDEBUG)
+            pass
 
         html_source = ''
         try:

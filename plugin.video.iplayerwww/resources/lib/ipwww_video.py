@@ -34,30 +34,30 @@ def RedButtonDialog():
 
 def ListRedButton():
     channel_list = [
-        ('sport_stream_01', 'BBC Red Button 1'),
-        ('sport_stream_02', 'BBC Red Button 2'),
-        ('sport_stream_03', 'BBC Red Button 3'),
-        ('sport_stream_04', 'BBC Red Button 4'),
-        ('sport_stream_05', 'BBC Red Button 5'),
-        ('sport_stream_06', 'BBC Red Button 6'),
-        ('sport_stream_07', 'BBC Red Button 7'),
-        ('sport_stream_08', 'BBC Red Button 8'),
-        ('sport_stream_09', 'BBC Red Button 9'),
-        ('sport_stream_10', 'BBC Red Button 10'),
-        ('sport_stream_11', 'BBC Red Button 11'),
-        ('sport_stream_12', 'BBC Red Button 12'),
-        ('sport_stream_13', 'BBC Red Button 13'),
-        ('sport_stream_14', 'BBC Red Button 14'),
-        ('sport_stream_15', 'BBC Red Button 15'),
-        ('sport_stream_16', 'BBC Red Button 16'),
-        ('sport_stream_17', 'BBC Red Button 17'),
-        ('sport_stream_18', 'BBC Red Button 18'),
-        ('sport_stream_19', 'BBC Red Button 19'),
-        ('sport_stream_20', 'BBC Red Button 20'),
-        ('sport_stream_21', 'BBC Red Button 21'),
-        ('sport_stream_22', 'BBC Red Button 22'),
-        ('sport_stream_23', 'BBC Red Button 23'),
-        ('sport_stream_24', 'BBC Red Button 24'),
+        ('sport_stream_01',  'BBC Red Button 1'),
+        ('sport_stream_02',  'BBC Red Button 2'),
+        ('sport_stream_03',  'BBC Red Button 3'),
+        ('sport_stream_04',  'BBC Red Button 4'),
+        ('sport_stream_05',  'BBC Red Button 5'),
+        ('sport_stream_06',  'BBC Red Button 6'),
+        ('sport_stream_07',  'BBC Red Button 7'),
+        ('sport_stream_08',  'BBC Red Button 8'),
+        ('sport_stream_09',  'BBC Red Button 9'),
+        ('sport_stream_10',  'BBC Red Button 10'),
+        ('sport_stream_11',  'BBC Red Button 11'),
+        ('sport_stream_12',  'BBC Red Button 12'),
+        ('sport_stream_13',  'BBC Red Button 13'),
+        ('sport_stream_14',  'BBC Red Button 14'),
+        ('sport_stream_15',  'BBC Red Button 15'),
+        ('sport_stream_16',  'BBC Red Button 16'),
+        ('sport_stream_17',  'BBC Red Button 17'),
+        ('sport_stream_18',  'BBC Red Button 18'),
+        ('sport_stream_19',  'BBC Red Button 19'),
+        ('sport_stream_20',  'BBC Red Button 20'),
+        ('sport_stream_21',  'BBC Red Button 21'),
+        ('sport_stream_22',  'BBC Red Button 22'),
+        ('sport_stream_23',  'BBC Red Button 23'),
+        ('sport_stream_24',  'BBC Red Button 24'),
         ('sport_stream_01b', 'BBC Red Button 1b'),
         ('sport_stream_02b', 'BBC Red Button 2b'),
         ('sport_stream_03b', 'BBC Red Button 3b'),
@@ -94,36 +94,36 @@ def ListRedButton():
 # ListLive creates menu entries for all live channels.
 def ListLive():
     channel_list = [
-        ('bbc_one_hd', 'bbc_one', 'BBC One'),
-        ('bbc_two_hd', 'bbc_two', 'BBC Two'),
-        ('bbc_four_hd', 'bbc_four', 'BBC Four'),
-        ('cbbc_hd', 'cbbc', 'CBBC'),
-        ('cbeebies_hd', 'cbeebies', 'CBeebies'),
-        ('bbc_news24', 'bbc_news24', 'BBC News Channel'),
-        ('bbc_parliament', 'bbc_parliament', 'BBC Parliament'),
-        ('bbc_alba', 'bbc_alba', 'Alba'),
-        ('s4cpbs', 's4c', 'S4C'),
-        ('bbc_one_london', 'bbc_one', 'BBC One London'),
-        ('bbc_one_scotland_hd', 'bbc_one_scotland', 'BBC One Scotland'),
-        ('bbc_one_northern_ireland_hd', 'bbc_one_northern_ireland', 'BBC One Northern Ireland'),
-        ('bbc_one_wales_hd', 'bbc_one_wales', 'BBC One Wales'),
-        ('bbc_two_scotland', 'bbc_two', 'BBC Two Scotland'),
-        ('bbc_two_northern_ireland_digital', 'bbc_two', 'BBC Two Northern Ireland'),
-        ('bbc_two_wales_digital', 'bbc_two', 'BBC Two Wales'),
-        ('bbc_two_england',         'bbc_two',           'BBC Two England',),
-        ('bbc_one_cambridge',       'bbc_one',         'BBC One Cambridge',),
-        ('bbc_one_channel_islands', 'bbc_one',   'BBC One Channel Islands',),
-        ('bbc_one_east',            'bbc_one',              'BBC One East',),
-        ('bbc_one_east_midlands',   'bbc_one',     'BBC One East Midlands',),
-        ('bbc_one_east_yorkshire',  'bbc_one',    'BBC One East Yorkshire',),
-        ('bbc_one_north_east',      'bbc_one',        'BBC One North East',),
-        ('bbc_one_north_west',      'bbc_one',        'BBC One North West',),
-        ('bbc_one_oxford',          'bbc_one',            'BBC One Oxford',),
-        ('bbc_one_south',           'bbc_one',             'BBC One South',),
-        ('bbc_one_south_east',      'bbc_one',        'BBC One South East',),
-        ('bbc_one_west',            'bbc_one',              'BBC One West',),
-        ('bbc_one_west_midlands',   'bbc_one',     'BBC One West Midlands',),
-        ('bbc_one_yorks',           'bbc_one',             'BBC One Yorks',),
+        ('bbc_one_hd',                       'bbc_one',                                   'BBC One'),
+        ('bbc_two_hd',                       'bbc_two',                                   'BBC Two'),
+        ('bbc_four_hd',                      'bbc_four',                                 'BBC Four'),
+        ('cbbc_hd',                          'cbbc',                                         'CBBC'),
+        ('cbeebies_hd',                      'cbeebies',                                 'CBeebies'),
+        ('bbc_news24',                       'bbc_news24',                       'BBC News Channel'),
+        ('bbc_parliament',                   'bbc_parliament',                     'BBC Parliament'),
+        ('bbc_alba',                         'bbc_alba',                                     'Alba'),
+        ('s4cpbs',                           's4c',                                           'S4C'),
+        ('bbc_one_london',                   'bbc_one',                            'BBC One London'),
+        ('bbc_one_scotland_hd',              'bbc_one_scotland',                 'BBC One Scotland'),
+        ('bbc_one_northern_ireland_hd',      'bbc_one_northern_ireland', 'BBC One Northern Ireland'),
+        ('bbc_one_wales_hd',                 'bbc_one_wales',                       'BBC One Wales'),
+        ('bbc_two_scotland',                 'bbc_two',                          'BBC Two Scotland'),
+        ('bbc_two_northern_ireland_digital', 'bbc_two',                  'BBC Two Northern Ireland'),
+        ('bbc_two_wales_digital',            'bbc_two',                             'BBC Two Wales'),
+        ('bbc_two_england',                  'bbc_two',                          'BBC Two England',),
+        ('bbc_one_cambridge',                'bbc_one',                        'BBC One Cambridge',),
+        ('bbc_one_channel_islands',          'bbc_one',                  'BBC One Channel Islands',),
+        ('bbc_one_east',                     'bbc_one',                             'BBC One East',),
+        ('bbc_one_east_midlands',            'bbc_one',                    'BBC One East Midlands',),
+        ('bbc_one_east_yorkshire',           'bbc_one',                   'BBC One East Yorkshire',),
+        ('bbc_one_north_east',               'bbc_one',                       'BBC One North East',),
+        ('bbc_one_north_west',               'bbc_one',                       'BBC One North West',),
+        ('bbc_one_oxford',                   'bbc_one',                           'BBC One Oxford',),
+        ('bbc_one_south',                    'bbc_one',                            'BBC One South',),
+        ('bbc_one_south_east',               'bbc_one',                       'BBC One South East',),
+        ('bbc_one_west',                     'bbc_one',                             'BBC One West',),
+        ('bbc_one_west_midlands',            'bbc_one',                    'BBC One West Midlands',),
+        ('bbc_one_yorks',                    'bbc_one',                            'BBC One Yorks',),
     ]
     for id, img, name in channel_list:
         iconimage = xbmc.translatePath(
@@ -1119,21 +1119,21 @@ def ParseStreams(stream_id):
                 tmp_sup = 1
             elif supplier == 'll_hls_live':
                 tmp_sup = 2
+            else:
+                # This is not a live stream, skip code to avoid unnecessary loading of playlists.
+                continue
             html = OpenURL(m3u8_url)
             match = re.compile('#EXT-X-STREAM-INF:PROGRAM-ID=(.+?),BANDWIDTH=(.+?),CODECS="(.*?)",RESOLUTION=(.+?)\s*(.+?.m3u8)').findall(html)
             for stream_id, bandwidth, codecs, resolution, url in match:
-                # Note: This is not entirely correct as these bandwidths relate to live programmes, not catchup.
-                if int(bandwidth) <= 801000:
+                # Note: This is not entirely correct as these bandwidths relate to live programmes,
+                # not catchup.
+                if int(bandwidth) <= 1000000:
                     tmp_br = 1
                 elif int(bandwidth) <= 1100000:
                     tmp_br = 2
-                elif int(bandwidth) <= 1510000:
-                    tmp_br = 3
-                elif int(bandwidth) <= 1800000:
+                elif 1700000 <= int(bandwidth) <= 1900000:
                     tmp_br = 4
-                elif int(bandwidth) <= 2410000:
-                    tmp_br = 5
-                elif int(bandwidth) <= 3120000:
+                elif 3100000 <= int(bandwidth) <= 3120000:
                     tmp_br = 6
                 elif int(bandwidth) >= 5500000:
                     tmp_br = 7
@@ -1161,21 +1161,12 @@ def ParseLiveStreams(channelname, providers):
     for provider_url, provider_name in providers:
         # First we query the available streams from this website
         if channelname in ['bbc_parliament', 'bbc_alba', 's4cpbs', 'bbc_one_london',
-                           'bbc_two_wales_digital', 'bbc_two_northern_ireland_digital', 'bbc_two_scotland',
-        'bbc_one_cambridge',
-        'bbc_one_channel_islands',
-        'bbc_one_east',
-        'bbc_one_east_midlands',
-        'bbc_one_east_yorkshire',
-        'bbc_one_north_east',
-        'bbc_one_north_west',
-        'bbc_one_oxford',
-        'bbc_one_south',
-        'bbc_one_south_east',
-        'bbc_one_west',
-        'bbc_one_west_midlands',
-        'bbc_one_yorks',
-        ]:
+                           'bbc_two_wales_digital', 'bbc_two_northern_ireland_digital',
+                           'bbc_two_scotland', 'bbc_one_cambridge', 'bbc_one_channel_islands',
+                           'bbc_one_east', 'bbc_one_east_midlands', 'bbc_one_east_yorkshire',
+                           'bbc_one_north_east', 'bbc_one_north_west', 'bbc_one_oxford',
+                           'bbc_one_south', 'bbc_one_south_east', 'bbc_one_west',
+                           'bbc_one_west_midlands', 'bbc_one_yorks']:
             device = 'hls_tablet'
         else:
             device = 'abr_hdtv'

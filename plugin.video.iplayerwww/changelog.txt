@@ -1,3 +1,7 @@
+v2.4.1
+Fixed problem which caused too many playlists to be loaded.
+Tidied up some code.
+
 v2.4.0
 Added more Red Button streams.
 Added more regional Live TV.

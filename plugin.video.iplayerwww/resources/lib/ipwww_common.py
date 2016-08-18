@@ -35,6 +35,7 @@ addonid = "plugin.video.iplayerwww"
 addoninfo = GetAddonInfo()
 DIR_USERDATA = xbmc.translatePath(addoninfo["profile"])
 cookie_jar = None
+user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:48.0) Gecko/20100101 Firefox/48.0'
 
 
 if(not os.path.exists(DIR_USERDATA)):
@@ -212,7 +213,7 @@ def CheckLogin(logged_in):
 
 
 def OpenURL(url):
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:38.0) Gecko/20100101 Firefox/43.0'}
+    headers = {'User-Agent': user_agent}
     try:
         r = requests.get(url, headers=headers, cookies=cookie_jar)
     except requests.exceptions.RequestException as e:
@@ -233,7 +234,7 @@ def OpenURL(url):
 def OpenURLPost(url, post_data):
 
     headers = {
-               'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:38.0) Gecko/20100101 Firefox/43.0',
+               'User-Agent': user_agent,
                'Host':'ssl.bbc.co.uk',
                'Accept':'*/*',
                'Referer':'https://ssl.bbc.co.uk/id/signin',

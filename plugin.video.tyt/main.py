@@ -14,7 +14,6 @@ addon_folder = os.path.join(xbmc.translatePath( "special://profile/addon_data/" 
 settings = xbmcaddon.Addon(id=PLUGIN_ID)
 user_name = settings.getSetting("username")
 user_pwd = settings.getSetting("password")
-COOKIE_FILE = 'special://home/addons/{0}/resources/cookie.txt'.format(PLUGIN_ID)
 cookie = {}
 hour1url  = "/category/membership/main-show-hour-1/"
 hour2url  = "/category/membership/main-show-hour-2/"
@@ -47,8 +46,7 @@ def sendResponse(cookies, pagename):
     
 def login():
     loggedin, cookies = logon.logon(user_name, user_pwd)
-    print loggedin
-    print ('Logon Successful' if loggedin == 302 else 'Logon Failed')
+    xbmc.log('Logon Successful' if loggedin == 302 else 'Logon Failed')
     global cookie 
     cookie = cookies
     with open(addon_folder + '/cookies.txt', 'w') as f:

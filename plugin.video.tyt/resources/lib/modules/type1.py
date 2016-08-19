@@ -13,17 +13,17 @@ def get_links(html_page):
         match = re.search("""<a href=""", html_page[e:len(html_page)])        
         match2 = re.search("""" title="Permalink""", html_page[match.end()+e+1:len(html_page)])
         link = html_page[match.end()+e+1: e+1+match.end()+match2.start()]
-        print link
+        #print link
         e = e + 1 + match.end() + match2.start()
         match = re.search(">", html_page[e:len(html_page)])        
         match2 = re.search("</a>", html_page[match.end()+e+1:len(html_page)])
         title = html_page[match.end()+e: e+1+match.end()+match2.start()]
-        print title
+        #print title
         e = e + 1 + match.end() + match2.start()
         match = re.search("<p>", html_page[e:len(html_page)])        
         match2 = re.search("</p>", html_page[match.end()+e+1:len(html_page)])
         des = html_page[match.end()+e: e+1+match.end()+match2.start()]        
-        #print des
+        ##print des
         #import HTMLParser
         #des = HTMLParser.HTMLParser().unescape(des.encode('utf-8))     
         videos.append({'name': title, 'description' : des, 'thumb': 'thethumb', 'video': link, 'genre': 'News', 'plot': des, 'mediatype': 'tvshow'})

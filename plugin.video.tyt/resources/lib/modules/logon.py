@@ -33,8 +33,3 @@ def logon(username, password):
 	response = conn.getresponse()
 	conn.close()	
 	return response.status, processCookie(response.getheader('Set-Cookie'))
-
-
-	
-
-

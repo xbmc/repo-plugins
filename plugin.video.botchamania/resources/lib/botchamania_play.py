@@ -35,13 +35,10 @@ class Main:
         self.plugin_handle = int(sys.argv[1])
 
         # Get plugin settings
-        self.DEBUG = SETTINGS.getSetting('debug')
         self.VIDEO = SETTINGS.getSetting('video')
 
-        if self.DEBUG == 'true':
-            print 'Python Version: ' + sys.version
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
+                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
 
         # Parse parameters...
         self.video_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['video_page_url'][0]
@@ -49,9 +46,8 @@ class Main:
         self.title = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['title'][0]
         self.title = str(self.title)
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.video_page_url", str(self.video_page_url)), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "self.video_page_url", str(self.video_page_url)), xbmc.LOGDEBUG)
 
         #
         # Play video...
@@ -97,16 +93,14 @@ class Main:
             try:
                 html_data = http_communicator.get(self.video_page_url)
             except urllib2.HTTPError, error:
-                if self.DEBUG == 'true':
-                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                        ADDON, VERSION, DATE, "first HTTPError", str(error)), xbmc.LOGNOTICE)
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                        ADDON, VERSION, DATE, "first HTTPError", str(error)), xbmc.LOGDEBUG)
                 # Retry to (hopefully) get rid of a time-out http error
                 try:
                     html_data = http_communicator.get(self.video_page_url)
                 except urllib2.HTTPError, error:
-                    if self.DEBUG == 'true':
-                        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                            ADDON, VERSION, DATE, "second HTTPError", str(error)), xbmc.LOGNOTICE)
+                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                            ADDON, VERSION, DATE, "second HTTPError", str(error)), xbmc.LOGDEBUG)
                     dialog_wait.close()
                     del dialog_wait
                     xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30507) % (str(error)))
@@ -140,9 +134,8 @@ class Main:
                     else:
                         video_url = "http://" + video_url
 
-                    if self.DEBUG == 'true':
-                        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                            ADDON, VERSION, DATE, "video_url", str(video_url)), xbmc.LOGNOTICE)
+                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                            ADDON, VERSION, DATE, "video_url", str(video_url)), xbmc.LOGDEBUG)
                     try:
                         vid = YDStreamExtractor.getVideoInfo(video_url, quality=int(
                             self.VIDEO))  # quality is 0=SD, 1=720p, 2=1080p and is a maximum
@@ -153,9 +146,23 @@ class Main:
                     except:
                         unplayable_media_file = True
                 else:
-                    # Skipping the first video as this one usually isn't working
-                    video_urls_index = video_urls_index + 1
-                    video_url = video_urls[video_urls_index]['src']
+                    # Let the user choose a video
+                    video_nr = 0
+                    video_urls_list = []
+                    video_urls_title_list = []
+                    for vid in video_urls:
+                        video_nr += 1
+                        video_urls_list.append(vid)
+                        video_urls_title_list.append(LANGUAGE(30509) + str(video_nr))
+
+                    result = xbmcgui.Dialog().select(LANGUAGE(30508), video_urls_title_list)
+                    if result == -1:
+                        # Let's choose the second video
+                        video_urls_index = video_urls_index + 1
+                        video_url = video_urls[video_urls_index]['src']
+                    else:
+                        video_url = video_urls_list[result]['src']
+
                     # eventually fix video-url
                     video_url = str(video_url)
                     if video_url.startswith("http"):
@@ -167,9 +174,8 @@ class Main:
                     else:
                         video_url = "http://" + video_url
 
-                    if self.DEBUG == 'true':
-                        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                            ADDON, VERSION, DATE, "video_url", str(video_url)), xbmc.LOGNOTICE)
+                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                            ADDON, VERSION, DATE, "video_url", str(video_url)), xbmc.LOGDEBUG)
                     try:
                         vid = YDStreamExtractor.getVideoInfo(video_url, quality=int(
                             self.VIDEO))  # quality is 0=SD, 1=720p, 2=1080p and is a maximum
@@ -189,11 +195,10 @@ class Main:
             except:
                 unplayable_media_file = True
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "have_valid_url", str(have_valid_url)), xbmc.LOGNOTICE)
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "video_url", str(video_url)), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "have_valid_url", str(have_valid_url)), xbmc.LOGDEBUG)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "video_url", str(video_url)), xbmc.LOGDEBUG)
 
         if have_valid_url:
             video_url = stream_video_url

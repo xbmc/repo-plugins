@@ -32,22 +32,17 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        # Get plugin settings
-        self.DEBUG = SETTINGS.getSetting('debug')
-
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
+                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
 
         # Parse parameters...
         self.plugin_category = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['plugin_category'][0]
         self.video_list_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['url'][0]
         self.next_page_possible = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                 ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)),
-                     xbmc.LOGNOTICE)
+                     xbmc.LOGDEBUG)
 
         # Determine base_url
         # find last slash
@@ -59,9 +54,8 @@ class Main:
         # add last slash
         self.video_list_page_url = str(self.video_list_page_url) + "/"
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.base_url", str(self.base_url)), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "self.base_url", str(self.base_url)), xbmc.LOGDEBUG)
 
         #
         # Get the videos...
@@ -95,9 +89,8 @@ class Main:
         # <a href="http://www.botchamaniaarchive.com/category/51-100/">51-100</a></li>
         categories = soup.findAll('a', attrs={'href': re.compile("^http://www.botchamaniaarchive.com/category/")})
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(categories)", str(len(categories))), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "len(categories)", str(len(categories))), xbmc.LOGDEBUG)
 
         max_category_number = 0
         max_category = ""
@@ -113,9 +106,8 @@ class Main:
                     max_category_number = category_number
                     max_category = category
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "max_category['href']", str(max_category['href'])), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "max_category['href']", str(max_category['href'])), xbmc.LOGDEBUG)
 
         #
         # Get HTML page...
@@ -129,9 +121,8 @@ class Main:
         video_page_urls = soup.findAll('a',
                                        attrs={'href': re.compile("^http://www.botchamaniaarchive.com/botchamania-")})
 
-        if (self.DEBUG) == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(video_page_urls)", str(len(video_page_urls))), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "len(video_page_urls)", str(len(video_page_urls))), xbmc.LOGDEBUG)
 
         max_video_page_url_number = 0
         max_video_page_url = ""
@@ -149,9 +140,8 @@ class Main:
                     max_video_page_url_number = video_page_url_number
                     max_video_page_url = video_page_url
 
-        if (self.DEBUG) == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "max_video_page_url_number", str(max_video_page_url_number)), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "max_video_page_url_number", str(max_video_page_url_number)), xbmc.LOGDEBUG)
 
         # http://www.botchamaniaarchive.com/botchamania-27/">
         BASE_URL = "http://www.botchamaniaarchive.com/botchamania-"
@@ -169,9 +159,8 @@ class Main:
                 title = str(BASE_TITLE) + str(num)
                 video_page_url = str(BASE_URL) + str(num)
 
-            if self.DEBUG == 'true':
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "video_page_url", str(video_page_url)), xbmc.LOGNOTICE)
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                    ADDON, VERSION, DATE, "video_page_url", str(video_page_url)), xbmc.LOGDEBUG)
 
             # Add to list...
             list_item = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_url)
@@ -203,9 +192,8 @@ class Main:
             # Add our item to the listing as a 3-element tuple.
             listing.append((url, list_item, is_folder))
 
-        if self.DEBUG == 'true':
             xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "next url", str(url)), xbmc.LOGNOTICE)
+                ADDON, VERSION, DATE, "next url", str(url)), xbmc.LOGDEBUG)
 
         # Add our listing to Kodi.
         # Large lists and/or slower systems benefit from adding all items at once via addDirectoryItems

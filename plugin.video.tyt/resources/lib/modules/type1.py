@@ -2,6 +2,8 @@ import re
 
 def get_video(html_page):
     match = re.search("<div id='premium-video'", html_page)
+    if match is None: 
+        return 
     match2 = re.search("<source src='", html_page[match.end():len(html_page)])
     match3 = re.search("' type=", html_page[match.end()+match2.end():len(html_page)])
     return html_page[match.end()+match2.end():match3.start()+match.end()+match2.end()]

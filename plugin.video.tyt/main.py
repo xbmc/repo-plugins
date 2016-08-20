@@ -173,7 +173,11 @@ def router(paramstring):
             list_videos(params['category'])
         elif params['action'] == 'play':              
             vid = params['video'].split("https://tytnetwork.com",1)[1]     
-            play_video(type1.get_video(sendResponse(cookie, vid)))      
+            video_url = type1.get_video(sendResponse(cookie,vid))
+            if video_url is not None:
+                play_video(type1.get_video(sendResponse(cookie, vid)))
+            else:
+                popup("Video doesn't exist on website")      
     else:
 
         login()

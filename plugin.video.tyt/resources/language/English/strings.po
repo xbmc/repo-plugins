@@ -1,0 +1,15 @@
+msgid ""
+msgstr ""
+
+msgctxt "#3000"
+msgid "General"
+msgstr ""
+
+msgctxt "#3001"
+msgid "Username"
+msgstr ""
+
+msgctxt "#3002"
+msgid "Password"
+msgstr ""
+

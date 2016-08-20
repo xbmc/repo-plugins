@@ -32,23 +32,17 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        # Get plugin settings
-        self.DEBUG = SETTINGS.getSetting('debug')
-
-        if self.DEBUG == 'true':
-            print 'Python Version: ' + sys.version
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
+            ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
 
         # Parse parameters
         self.plugin_category = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['plugin_category'][0]
         self.video_list_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['url'][0]
         self.next_page_possible = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)),
-                     xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+            ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)),
+                 xbmc.LOGDEBUG)
 
         if self.next_page_possible == 'True':
             # Determine current page number and base_url
@@ -63,14 +57,14 @@ class Main:
             # add last slash
             self.video_list_page_url = str(self.video_list_page_url) + "/"
 
-            if self.DEBUG == 'true':
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "self.base_url", str(self.base_url)), xbmc.LOGNOTICE)
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "self.base_url", str(self.base_url)), xbmc.LOGDEBUG)
 
         #
         # Get the videos...
         #
         self.getVideos()
+
 
     #
     # Get videos...
@@ -128,27 +122,24 @@ class Main:
         # </ li>
         titles_thumbnail_videopage_urls = soup.findAll('li')
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(titles_thumbnail_videopage_urls)",
-                str(len(titles_thumbnail_videopage_urls))), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+            ADDON, VERSION, DATE, "len(titles_thumbnail_videopage_urls)",
+            str(len(titles_thumbnail_videopage_urls))), xbmc.LOGDEBUG)
 
         for titles_thumbnail_videopage_url in titles_thumbnail_videopage_urls:
             if str(titles_thumbnail_videopage_url).__contains__("article id"):
                 pass
             else:
                 # skip this one
-                if self.DEBUG == 'true':
-                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                        ADDON, VERSION, DATE, "skipping this video_page_url", str(titles_thumbnail_videopage_url)),
-                             xbmc.LOGNOTICE)
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                    ADDON, VERSION, DATE, "skipping this video_page_url", str(titles_thumbnail_videopage_url)),
+                         xbmc.LOGDEBUG)
                 continue
 
             video_page_url = titles_thumbnail_videopage_url.a['href']
 
-            if self.DEBUG == 'true':
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "video_page_url", str(video_page_url)), xbmc.LOGNOTICE)
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "video_page_url", str(video_page_url)), xbmc.LOGDEBUG)
 
             title = ''
             # Make title
@@ -172,10 +163,9 @@ class Main:
             title = title.replace('&#8220;', '"')
             title = title.replace('&#8221;', '"')
 
-            if self.DEBUG == 'true':
-                xbmc.log(
-                    "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "title", str(title)),
-                    xbmc.LOGNOTICE)
+            xbmc.log(
+                "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "title", str(title)),
+                xbmc.LOGDEBUG)
 
             thumbnail_url = ""
             try:
@@ -191,9 +181,8 @@ class Main:
                 except (TypeError, KeyError):
                     pass
 
-            if self.DEBUG == 'true':
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "thumbnail_url", str(thumbnail_url)), xbmc.LOGNOTICE)
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "thumbnail_url", str(thumbnail_url)), xbmc.LOGDEBUG)
 
             # Add to list...
             list_item = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_url)
@@ -225,9 +214,8 @@ class Main:
             # Add our item to the listing as a 3-element tuple.
             listing.append((url, list_item, is_folder))
 
-            if self.DEBUG == 'true':
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "next url", str(url)), xbmc.LOGNOTICE)
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "next url", str(url)), xbmc.LOGDEBUG)
 
         # Add our listing to Kodi.
         # Large lists and/or slower systems benefit from adding all items at once via addDirectoryItems

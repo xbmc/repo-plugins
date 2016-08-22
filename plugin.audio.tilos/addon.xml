@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.tilos" name="Radio Tilos" version="0.0.5" provider-name="Gabor Boros">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+	<import addon="xbmc.json" version="6.0.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Browse archive episodes and listen to Radio Tilos</summary>
+    <description lang="en">Tilos Rádió is a community, non-profit, listener supported radio station in Budapest, Hungary.</description>
+    <disclaimer lang="en"></disclaimer>
+    <language>en hu</language>
+    <platform>all</platform>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum></forum>
+    <website>https://github.com/g-boros/plugin.audio.tilos</website>
+    <email>to.gabor.boros@gmail.com</email>
+    <source></source>
+  </extension>
+</addon>

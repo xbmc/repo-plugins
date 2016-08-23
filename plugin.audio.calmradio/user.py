@@ -16,8 +16,8 @@ class User(object):
         self.token = None
 
     @staticmethod
-    def get_json(url):
-        r = requests.get(url)
+    def get_json(url, verify=False):
+        r = requests.get(url, verify=verify)
         if r.status_code == 200:
             return json.loads(r.text)
 

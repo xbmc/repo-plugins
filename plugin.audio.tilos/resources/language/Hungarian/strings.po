@@ -1,0 +1,169 @@
+# XBMC Media Center language file
+# Addon Name: Tilos
+# Addon id: plugin.audio.tilos
+# Addon Provider: Gabor Boros
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.audio.tilos\n"
+"Report-Msgid-Bugs-To: to.gabor.boros@gmail.com\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Gabor Boros\n"
+"Language-Team: Gabor Boros\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: hu\n"
+
+msgctxt "#30001"
+msgid "Talk Shows"
+msgstr "Beszélgetős műsorok"
+
+msgctxt "#30002"
+msgid "Music Shows"
+msgstr "Zenés műsorok"
+
+msgctxt "#30003"
+msgid "Failed to reach server!"
+msgstr "Szerver nem elérhető!"
+
+msgctxt "#30004"
+msgid "Reason: "
+msgstr "Ok: "
+
+msgctxt "#30005"
+msgid "The server couldn\'t fulfill the request!"
+msgstr "Szerver nem válaszol!"
+
+msgctxt "#30006"
+msgid "Error code: "
+msgstr "Hiba kód: "
+
+msgctxt "#30007"
+msgid "Live Stream 256kbit"
+msgstr "Online adás 256kbit"
+
+msgctxt "#30008"
+msgid "Live Stream 128kbit"
+msgstr "Online adás 128kbit"
+
+msgctxt "#30009"
+msgid "Shows by Date"
+msgstr "Műsorok dátum szerint"
+
+msgctxt "#30010"
+msgid "Today"
+msgstr "Mai nap"
+
+msgctxt "#30011"
+msgid "Yesterday"
+msgstr "Tegnap"
+
+msgctxt "#30012"
+msgid "Sound Store"
+msgstr "Hangtár"
+
+msgctxt "#30013"
+msgid "December"
+msgstr "December"
+
+msgctxt "#30014"
+msgid "November"
+msgstr "November"
+
+msgctxt "#30015"
+msgid "October"
+msgstr "Október"
+
+msgctxt "#30016"
+msgid "September"
+msgstr "Szeptember"
+
+msgctxt "#30017"
+msgid "August"
+msgstr "Augusztus"
+
+msgctxt "#30018"
+msgid "July"
+msgstr "Július"
+
+msgctxt "#30019"
+msgid "June"
+msgstr "Június"
+
+msgctxt "#30020"
+msgid "May"
+msgstr "Május"
+
+msgctxt "#30021"
+msgid "April"
+msgstr "Április"
+
+msgctxt "#30022"
+msgid "March"
+msgstr "Március"
+
+msgctxt "#30023"
+msgid "February"
+msgstr "Február"
+
+msgctxt "#30024"
+msgid "January"
+msgstr "Január"
+
+msgctxt "#30025"
+msgid "Monday"
+msgstr "Hétfő"
+
+msgctxt "#30026"
+msgid "Tuesday"
+msgstr "Kedd"
+
+msgctxt "#30027"
+msgid "Wednesday"
+msgstr "Szerda"
+
+msgctxt "#30028"
+msgid "Thursday"
+msgstr "Csütörtök"
+
+msgctxt "#30029"
+msgid "Friday"
+msgstr "Péntek"
+
+msgctxt "#30030"
+msgid "Saturday"
+msgstr "Szombat"
+
+msgctxt "#30031"
+msgid "Sunday"
+msgstr "Vasárnap"
+
+msgctxt "#30032"
+msgid "Tilos Tale"
+msgstr "Tilos Mese"
+
+msgctxt "#30033"
+msgid "Tilos DJ Mix"
+msgstr "Tilos DJ Mix"
+
+msgctxt "#30034"
+msgid "Guest DJ Mix"
+msgstr "Vendég DJ Mix"
+
+msgctxt "#30035"
+msgid "Shows"
+msgstr "Műsorok"
+
+msgctxt "#30036"
+msgid "Party"
+msgstr "Party"
+
+msgctxt "#30037"
+msgid "Please wait.."
+msgstr "Kérem várjon.."
+
+msgctxt "#30038"
+msgid "Opening stream"
+msgstr "Adatfolyam letöltése"
+

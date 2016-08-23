@@ -1,3 +1,6 @@
+v0.2.4
+- add verify flag to requests
+
 v0.2.3
 - set default bit rate to 128kb
 

@@ -37,6 +37,7 @@ class BaseSession(object):
     API_HOST = "api.dropbox.com"
     WEB_HOST = "www.dropbox.com"
     API_CONTENT_HOST = "api-content.dropbox.com"
+    API_NOTIFICATION_HOST = "api-notify.dropbox.com"
 
     def __init__(self, consumer_key, consumer_secret, access_type="auto", locale=None, rest_client=rest.RESTClient):
         """Initialize a DropboxSession object.
@@ -100,9 +101,9 @@ class BaseSession(object):
             params['locale'] = self.locale
 
         if params:
-            return "/%d%s?%s" % (self.API_VERSION, target_path, urllib.urlencode(params))
+            return "/%s%s?%s" % (self.API_VERSION, target_path, urllib.urlencode(params))
         else:
-            return "/%d%s" % (self.API_VERSION, target_path)
+            return "/%s%s" % (self.API_VERSION, target_path)
 
     def build_url(self, host, target, params=None):
         """Build an API URL.

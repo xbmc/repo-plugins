@@ -1,3 +1,10 @@
+[B]0.9.5:[/B]
+- Fixed issue were plugin doesn't start on OpenElec (pkg_resources isn't available) 
+
+[B]0.9.4:[/B]
+- Use new Dropbox API, required to be able to access Dropbox after 1 August 2016
+- Fixed unicode bug in browsing drobox folders in folder dialog
+
 [B]0.9.3:[/B]
 - Fix caching photo's problem on OSMC (OSCM skin not complete)
 

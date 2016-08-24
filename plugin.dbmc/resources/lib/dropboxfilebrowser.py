@@ -107,7 +107,7 @@ class DropboxFileBrowser(xbmcgui.WindowXMLDialog):
     def onClick(self, controlId):
         if controlId == self.DIRECTORY_LIST:
             #update with new selected path
-            newPath = self.getControl(controlId).getSelectedItem().getLabel2()
+            newPath = path_from(self.getControl(controlId).getSelectedItem().getLabel2())
             self.showFolders(newPath)
         elif controlId == self.OK_BUTTON:
             self.selectedFolder = path_from(self._currentPath)

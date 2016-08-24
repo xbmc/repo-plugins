@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.tyt"
-version="1.0.0"
-name="TYT Members Kodi Plugin"
+version="2.0.0"
+name="TYT Network - The Young Turks"
 provider-name="Brian P. Soucy">
 <requires>
   <import addon="xbmc.python" version="2.24.0"/>
+  <import addon="plugin.video.youtube" version="5.2.1"/>
 </requires>
 <extension point="xbmc.python.pluginsource" library="main.py">
   <provides>video</provides>
 </extension>
 <extension point="xbmc.addon.metadata">
-  <summary lang="en">The Young Turks Kodi Plugin for members.</summary>
+  <summary lang="en">TYT Network - The Young Turks</summary>
   <description lang="en">Make Sure to set your username and password in addon settings.  All videos that are accessible from the website are playable.  If there is an error, the website hasn't migrated the video from GBox, and won't play on the website either.  Change the view setting in left tab to media info to get video summaries.</description>
   <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license> 
   <website>https://www.tytnetwork.com</website>

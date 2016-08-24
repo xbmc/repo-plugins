@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+   <category label="General">
+     <setting label="30011" type="labelenum" id="service1" lvalues="30042|30021|30022|30023|30024|30025|30026|30027|30028|30029|30030|30031|30032|30033|30034|30035|30036" enable="!eq(-1,false)"/>
+     <setting label="30041" type="labelenum" id="service2" lvalues="30042|30043|30044" enable="!eq(-1,false)"/>
+     <setting label="30051" type="labelenum" id="service3" lvalues="30052|30053|30054" enable="!eq(-1,false)"/>
+     <setting label="30007" type="bool" id="service4" default="false"/>
+     <setting label="30061" type="lsep"/>
+     <setting label="30062" type="text" id="flightno" />
+     <setting label="30063" type="text" id="adcity" />
+   </category>
+</settings>

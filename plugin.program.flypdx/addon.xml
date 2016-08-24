@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.program.flypdx" name="Fly PDX" version="0.0.6" provider-name="Troy Scott">
+    <requires>
+        <import addon="xbmc.python" version="2.24.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>executable</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <disclaimer>Tested on Kodi under Linux Mint 17.3 and OpenELEC 6.0.3</disclaimer>
+        <summary lang="en">Display flight details for Portland International Airport (PDX)</summary>
+        <description lang="en">The flypdx add-on for Kodi displays a table of arrival and departure flight details by airline.</description>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <language/>
+        <website>http://troypdx.github.io</website>
+        <email>troy_pdx@fastmail.fm</email>
+    </extension>
+</addon>

@@ -1,3 +1,6 @@
+[B]0.9.6 :[/B]
+- Update (kodi)python version 
+
 [B]0.9.5:[/B]
 - Fixed issue were plugin doesn't start on OpenElec (pkg_resources isn't available) 
 

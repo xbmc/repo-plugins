@@ -1,3 +1,17 @@
+2016.08.25 v0.9.2 -- Jimmy Johnson Edition
++ New Translation: Japanese (David Maiorino)
++ UI Fix: "Upcoming" game text overlapped with the game time (Alexqw)
++ The Rams are now correctly shown as the LA Rams (kaileu)
++ Autodetect subscription type; merge Domestic/International settings (emilsvennesson)
++ Show more informative dialogs in common error situations (emilsvennesson and Alexqw)
++ Bug fix: Game time wasn't localizing (Alexqw)
++ Removed last of the "Sans Login" setting; hasn't been used in two years (Alexqw)
++ Unbundle m3u8 as a dependency; use the one in the Kodi repos (Alexqw, emilsvennesson)
++ Slightly higher res team logos (kaileu)
++ Canceling bitrate/gametype dialogs will now (correctly) cancel and return to
++   the UI rather than start playing a game (emilsvennesson)
++ Assorted small improvements (Alexqw)
+
 2016.07.29 v0.9.1 -- Bart Starr Edition
 + Shows are now acquired dynamically (BaumSchorle)
 +  This means new shows will be available immediately. However, Game Pass has
@@ -13,7 +27,7 @@
 
 2015.12.02 v0.8.1 -- Brett Favre Edition
 + Add NFL Honors and some old seasons (2010-2011) of other shows
-+ Dropped non-fuctioning old (< 2014) NFL Total Access seasons
++ Dropped non-functioning old (< 2014) NFL Total Access seasons
 + Make RedZone button show even when in "pre" mode
 + Fix proxy protocol selection (thanks to maguire for reporting)
 + Cleanup method to detect running games (kaileu)
@@ -157,7 +171,8 @@ Credit goes to divingmule for most of the features added below.
 + New Feature: A Football Life
 + New Translation: Dutch (thanks to Vulpecula-nl!)
 + New fanart (thanks to dahlSTROM!)
-+ Modified Setting: 'Always use best bitrate" is now "Preferred Stream Quality," which lists possible stream values.
++ Modified Setting: 'Always use best bitrate" is now "Preferred Stream Quality,"
++   which lists possible stream values.
 + Untested Features: Superbowl Archives, Top 100 Players, Coaches Show
 + Future games now have date and time listed
 + Live games are noted as such in the interface

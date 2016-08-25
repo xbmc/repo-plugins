@@ -37,7 +37,6 @@ __icon__ = xbmc.translatePath(os.path.join(__path__, 'resources', 'lib', 'media'
 
 WINDOW = xbmcgui.Window(10000)
 OSD = xbmcgui.Dialog()
-RSSURL = 'http://www.rtv.de/rss/filmtipps.xml'
 
 # Helpers
 
@@ -297,7 +296,7 @@ def scrapeGTOPage(enabled=__enableinfo__):
     i = 1
     content.pop(0)
 
-    blobs = WINDOW.getProperty('GTO.blobs')
+    blobs = WINDOW.getProperty('GTO.blobs') or '0'
 
     for idx in range(1, int(blobs) + 1, 1):
         WINDOW.clearProperty('GTO.%s' % (idx))

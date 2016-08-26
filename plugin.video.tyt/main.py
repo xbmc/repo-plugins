@@ -133,13 +133,12 @@ def list_categories(menu):
 def popup(text):
   xbmcgui.Dialog().ok(PLUGIN_ID, text)
     
-def list_videos(category):
+def list_videos(category, url=None):
   listing = []
   try:
     page = sendResponse(cookie, members_cat[category]['url'])
   except:
-    page = sendResponse(cookie, category['url'])
-    category = 'Hour 1'
+    page = sendResponse(cookie, url)
   videos = type1.get_links(page)
   MEDIA_URL = 'special://home/addons/{0}/resources/images/'.format(PLUGIN_ID)
   thumb = (MEDIA_URL + members_cat[category]['thumb'])        
@@ -149,7 +148,7 @@ def list_videos(category):
     # Create a list item with a text label and a thumbnail image.
     list_item = xbmcgui.ListItem(label=video['name'])
     # Set additional info for the list item.
-    list_item.setInfo('video', {'title': video['name'], 'genre': video['genre'], 'plot': video['plot'], 'mediatype': video['mediatype']})
+    list_item.setInfo('video', {'title': video['name'], 'genre': video['genre'], 'aired': video['aired'], 'plot': video['plot'], 'mediatype': video['mediatype']})
     list_item.setArt({'thumb': thumb, 'icon': thumb, 'fanart': thumb})
     list_item.setProperty('IsPlayable', 'true')
     # Create a URL for the plugin recursive callback.
@@ -159,12 +158,12 @@ def list_videos(category):
     listing.append((url, list_item, is_folder))
   list_item = xbmcgui.ListItem(label='Next')
   list_item.setProperty('IsPlayable', 'false')
-  url = '{0}?action=listing&category={1}'.format(_url, type1.page_info(page))
+  url = '{0}?action=listing&category={1}&url={2}'.format(_url, category, type1.page_info(page))
   is_folder = True
   listing.append((url, list_item, is_folder))
   
   # Large lists and/or slower systems benefit from adding all items at once via addDirectoryItems
-  # instead of adding one by ove via addDirectoryItem.
+  # instead of adding one by ove via addDirectoryItem
   xbmcplugin.addDirectoryItems(_handle, listing, len(listing))
   xbmcplugin.addSortMethod(_handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
   xbmcplugin.endOfDirectory(_handle)
@@ -182,8 +181,11 @@ def router(paramstring):
   params = dict(parse_qsl(paramstring))
   if params:
     get_cookie()
-    if params['action'] == 'listing':
-      list_videos(params['category'])
+    if params['action'] == 'listing':      
+      if 'url' in params.keys():
+        list_videos(params['category'], params['url'])
+      else:
+        list_videos(params['category'])
     if params['action'] == 'menu':
       if params['menu'] == 'members':
         if login():

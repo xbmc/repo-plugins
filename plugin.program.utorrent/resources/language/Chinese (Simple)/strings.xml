@@ -15,6 +15,8 @@
 	<string id="30102">用户名：</string>
 	<string id="30103">密码：</string>
 	<string id="30104">种子文件夹：</string>
+	<string id="30105">使用HTTPS：</string>
+	<string id="30106">路径：</string>
 	<!-- dialog.select -->
 	<string id="32001">提供功能:</string>
 	<string id="32002">暂停</string>

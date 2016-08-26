@@ -51,9 +51,10 @@ def MultiPart(fields,files,ftype) :
     return content_type, post
 
 class Client(object):
-    def __init__(self, address='localhost', port='8080', user=None, password=None):
-        base_url = 'http://' + address + ':' + port
-        self.url = base_url + '/gui/'
+    def __init__(self, address='localhost', port='8080', user=None, password=None, path='/gui/', https=False):
+        PROTO = 'https://' if https else 'http://'
+        base_url = PROTO + address + ':' + port
+        self.url = base_url + path
         if user:
             password_manager = urllib2.HTTPPasswordMgrWithDefaultRealm()
             password_manager.add_password(realm=None, uri=self.url, user=user, passwd=password)
@@ -62,6 +63,7 @@ class Client(object):
             opener = urllib2.build_opener(
                 urllib2.HTTPCookieProcessor(self.MyCookies)
                 , urllib2.HTTPBasicAuthHandler(password_manager)
+                , urllib2.HTTPDigestAuthHandler(password_manager)
                 )
             opener.addheaders = [('User-Agent', 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) chromeframe/4.0')]
             urllib2.install_opener(opener)

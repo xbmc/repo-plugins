@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <settings>
 	<setting id="ip" type="text" label="30100" default="192.168.1.1" />
+	<setting id="use_https" type="bool" label="30105" default="false" />
 	<setting id="port" type="text" label="30101" default="8080" />
+	<setting id="path" type="text" label="30106" default="/gui/" />
 	<setting id="usr" type="text" label="30102" default="admin" />
 	<setting id="pwd" type="text" label="30103" default="" option="hidden" />
 	<setting id="tdir" type="folder" source="files" label="30104" default="special://profile/torrents/" />

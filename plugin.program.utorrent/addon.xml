@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.utorrent"
        name="uTorrent"
-       version="1.1.5"
+       version="1.1.6"
        provider-name="Taxigps">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
@@ -14,8 +14,8 @@
         <platform>all</platform>
         <summary lang="en">uTorrent Control Plugin</summary>
         <summary lang="zh">uTorrent控制插件</summary>
-        <description lang="en">Manages your uTorrent queue from within XBMC![CR][CR]Install:[CR]1. Enable WebUI for uTorrent[CR]2. Enable Token Authentication for uTorrent[CR]3. Install the plug-in[CR]4. Enter username and password of uTorrent via 'Plug-in Settings'[CR]5. Enjoy!</description>
-        <description lang="zh">在XBMC中控制你的uTorrent下载队列。[CR][CR]安装说明：[CR]1. 起用uTorrent的WebUI[CR]2. 启用uTorrent的Token认证[CR]3. 安装本插件[CR]4. 在扩展功能设置界面输入uTorrent用户名和密码[CR]5. 祝你使用愉快！</description>
+        <description lang="en">Manages your uTorrent queue from within XBMC![CR][CR]Install:[CR]1. Enable WebUI for uTorrent[CR]2. Enable Token Authentication for uTorrent[CR]3. Install the plug-in[CR]4. Plug-in Settings: 1)Include use https or not, 2)WebUI port, 3)url path (default is /gui/ and some uTorrent server use path /torrent/), 4)username and password of uTorrent[CR]5. Enjoy!</description>
+        <description lang="zh">在XBMC中控制你的uTorrent下载队列。[CR][CR]安装说明：[CR]1. 起用uTorrent的WebUI[CR]2. 启用uTorrent的Token认证[CR]3. 安装本插件[CR]4. 设置插件：1）是否使用https协议；2）WebUI访问端口；3）网络访问路径（默认路径/gui/某些uTorrent服务器使用路径/torrent/）；4）uTorrent用户名和密码[CR]5. 祝你使用愉快！</description>
         <platform>all</platform>
         <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
         <forum>http://forum.xbmc.org/showthread.php?tid=89380</forum>

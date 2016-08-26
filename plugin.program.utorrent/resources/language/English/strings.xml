@@ -15,6 +15,8 @@
 	<string id="30102">User:</string>
 	<string id="30103">Password:</string>
 	<string id="30104">Torrent Path:</string>
+	<string id="30105">Use HTTPS:</string>
+	<string id="30106">Path:</string>
 	<!-- dialog.select -->
 	<string id="32001">Perform function:</string>
 	<string id="32002">Pause</string>

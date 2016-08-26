@@ -20,7 +20,12 @@ UT_PORT = __addon__.getSetting('port')
 UT_USER = __addon__.getSetting('usr')
 UT_PASSWORD = __addon__.getSetting('pwd')
 UT_TDIR = xbmc.translatePath( __addon__.getSetting('tdir') )
-baseurl = 'http://'+UT_ADDRESS+':'+UT_PORT+'/gui/?token='
+UT_HTTPS = __addon__.getSetting('use_https')
+UT_PATH = '/' + __addon__.getSetting('path').strip('/') + '/'
+if UT_PATH != __addon__.getSetting('path'):
+    __addon__.setSetting('path', UT_PATH)
+PROTO = 'https://' if UT_HTTPS else 'http://'
+baseurl = PROTO+UT_ADDRESS+':'+UT_PORT+UT_PATH+'?token='
 
 from utilities import *
 
@@ -28,12 +33,14 @@ params = {
     'address': UT_ADDRESS,
     'port': UT_PORT,
     'user': UT_USER,
-    'password': UT_PASSWORD
+    'password': UT_PASSWORD,
+    'path': UT_PATH,
+    'https': UT_HTTPS
 }
 myClient = Client(**params)
 
 def getToken():
-    tokenUrl = 'http://'+UT_ADDRESS+':'+UT_PORT+'/gui/token.html'
+    tokenUrl = PROTO+UT_ADDRESS+':'+UT_PORT+UT_PATH+'token.html'
 
     try:
         data = myClient.HttpCmd(tokenUrl)
@@ -148,9 +155,9 @@ def performAction(selection,sid):
     if sel == 7:
         files = getFiles(selection)
         if len(files) > 1: 
-             xbmc.Player().play('http://'+UT_USER+':'+UT_PASSWORD+'@'+UT_ADDRESS+':'+UT_PORT+'/proxy?sid='+sid+'&file='+str(dialog.select(__language__(32202),files)))
+             xbmc.Player().play(PROTO+UT_USER+':'+UT_PASSWORD+'@'+UT_ADDRESS+':'+UT_PORT+'/proxy?sid='+sid+'&file='+str(dialog.select(__language__(32202),files)))
         else:
-             xbmc.Player().play('http://'+UT_USER+':'+UT_PASSWORD+'@'+UT_ADDRESS+':'+UT_PORT+'/proxy?sid='+sid+'&file=0')
+             xbmc.Player().play(PROTO+UT_USER+':'+UT_PASSWORD+'@'+UT_ADDRESS+':'+UT_PORT+'/proxy?sid='+sid+'&file=0')
     xbmc.executebuiltin('Container.Refresh')
 
 def pauseAll():

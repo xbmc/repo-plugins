@@ -4,20 +4,15 @@ A Kodi plugin for Viaplay
 """
 import sys
 import os
-import cookielib
 import urllib
 import urlparse
 from datetime import datetime
 import time
-import re
-import json
-import uuid
-from collections import defaultdict
-import HTMLParser
 
 import dateutil.parser
 from dateutil import tz
-import requests
+
+from resources.lib.vialib import vialib
 
 import xbmc
 import xbmcaddon
@@ -28,44 +23,32 @@ import xbmcplugin
 addon = xbmcaddon.Addon()
 addon_path = xbmc.translatePath(addon.getAddonInfo('path'))
 addon_profile = xbmc.translatePath(addon.getAddonInfo('profile'))
+tempdir = os.path.join(addon_profile, 'tmp')
 language = addon.getLocalizedString
 logging_prefix = '[%s-%s]' % (addon.getAddonInfo('id'), addon.getAddonInfo('version'))
 
 if not xbmcvfs.exists(addon_profile):
     xbmcvfs.mkdir(addon_profile)
+if not xbmcvfs.exists(tempdir):
+    xbmcvfs.mkdir(tempdir)
 
-# Get the plugin url in plugin:// notation.
-_url = sys.argv[0]
-# Get the plugin handle as an integer number.
-_handle = int(sys.argv[1])
-
-http_session = requests.Session()
-cookie_file = os.path.join(addon_profile, 'viaplay_cookies')
-cookie_jar = cookielib.LWPCookieJar(cookie_file)
-try:
-    cookie_jar.load(ignore_discard=True, ignore_expires=True)
-except IOError:
-    pass
-http_session.cookies = cookie_jar
+_url = sys.argv[0]  # get the plugin url in plugin:// notation
+_handle = int(sys.argv[1])  # get the plugin handle as an integer number
 
 username = addon.getSetting('email')
 password = addon.getSetting('password')
-subdict = defaultdict(list)
+cookie_file = os.path.join(addon_profile, 'cookie_file')
+deviceid_file = os.path.join(addon_profile, 'deviceId')
 
-if addon.getSetting('ssl') == 'false':
-    disable_ssl = False
+if addon.getSetting('disable_ssl') == 'true':
+    ssl = False
 else:
-    disable_ssl = True
+    ssl = True
 
 if addon.getSetting('debug') == 'false':
     debug = False
 else:
     debug = True
-
-if addon.getSetting('subtitles') == 'false':
-    subtitles = False
-else:
-    subtitles = True
 
 if addon.getSetting('country') == '0':
     country = 'se'
@@ -76,7 +59,7 @@ elif addon.getSetting('country') == '2':
 else:
     country = 'fi'
 
-base_url = 'https://content.viaplay.%s/pc-%s' % (country, country)
+vp = vialib(username, password, cookie_file, deviceid_file, tempdir, country, ssl, debug)
 
 
 def addon_log(string):
@@ -84,320 +67,182 @@ def addon_log(string):
         xbmc.log("%s: %s" % (logging_prefix, string))
 
 
-def url_parser(url):
-    """Sometimes, Viaplay adds some weird templated stuff to the end of the URL.
-    Example: https://content.viaplay.se/androiddash-se/serier{?dtg}"""
-    if disable_ssl:
-        url = url.replace('https', 'http')  # http://forum.kodi.tv/showthread.php?tid=270336
-    parsed_url = re.match('[^{]+', url).group()
-    return parsed_url
-
-
-def make_request(url, method, payload=None, headers=None):
-    """Make an HTTP request. Return the response as JSON."""
-    addon_log('Original URL: %s' % url)
-    addon_log('Request & parsed URL: %s' % url_parser(url))
-    if method == 'get':
-        req = http_session.get(url_parser(url), params=payload, headers=headers, allow_redirects=False, verify=False)
+def display_auth_message(error):
+    if error.value == 'UserNotAuthorizedForContentError':
+        message = language(30020)
+    elif error.value == 'PurchaseConfirmationRequiredError':
+        message = language(30021)
+    elif error.value == 'UserNotAuthorizedRegionBlockedError':
+        message = language(30022)
     else:
-        req = http_session.post(url_parser(url), data=payload, headers=headers, allow_redirects=False, verify=False)
-    addon_log('Response code: %s' % req.status_code)
-    addon_log('Response: %s' % req.content)
-    cookie_jar.save(ignore_discard=True, ignore_expires=False)
-    return json.loads(req.content)
+        message = error.value
+    dialog = xbmcgui.Dialog()
+    dialog.ok(language(30017), message)
 
 
-def login(username, password):
-    """Login to Viaplay. Return True/False based on the result."""
-    url = 'https://login.viaplay.%s/api/login/v1' % country
-    payload = {
-        'deviceKey': 'pc-%s' % country,
-        'username': username,
-        'password': password,
-        'persistent': 'true'
-    }
-    data = make_request(url=url, method='get', payload=payload)
-    if data['success'] is False:
-        return False
-    else:
-        return True
-
-
-def validate_session():
-    """Check if our session cookies are still valid."""
-    url = 'https://login.viaplay.%s/api/persistentLogin/v1' % country
-    payload = {
-        'deviceKey': 'pc-%s' % country
-    }
-    data = make_request(url=url, method='get', payload=payload)
-    if data['success'] is False:
-        return False
-    else:
-        return True
-
-
-def check_loginstatus(data):
-    try:
-        if data['name'] == 'MissingSessionCookieError':
-            session = validate_session()
-            if session is False:
-                login_success = login(username, password)
-            else:
-                login_success = True
-        else:
-            login_success = True
-    except KeyError:
-        login_success = True
-    return login_success
-
-
-def get_streams(guid):
-    """Return the URL for a stream. Append all available SAMI subtitle URL:s in the dict subguid."""
-    url = 'https://play.viaplay.%s/api/stream/byguid' % country
-    payload = {
-        'deviceId': uuid.uuid4(),
-        'deviceName': 'web',
-        'deviceType': 'pc',
-        'userAgent': 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0',
-        'deviceKey': 'pchls-%s' % country,
-        'guid': guid
-    }
-
-    data = make_request(url=url, method='get', payload=payload)
-    login_status = check_loginstatus(data)
-    if login_status is True:
-        try:
-            m3u8_url = data['_links']['viaplay:playlist']['href']
-            status = True
-        except KeyError:
-            # we might have to request the stream again after logging in
-            if data['name'] == 'MissingSessionCookieError':
-                data = make_request(url=url, method='get', payload=payload)
-            try:
-                m3u8_url = data['_links']['viaplay:playlist']['href']
-                status = True
-            except KeyError:
-                if data['success'] is False:
-                    status = data['message']
-        if status is True:
-            if subtitles:
-                try:
-                    subtitle_urls = data['_links']['viaplay:sami']
-                    for sub in subtitle_urls:
-                        suburl = sub['href']
-                        subdict[guid].append(suburl)
-                except KeyError:
-                    addon_log('No subtitles found for guid %s' % guid)
-            return m3u8_url
-        else:
-            dialog = xbmcgui.Dialog()
-            dialog.ok(language(30005),
-                      status)
-            return False
-    else:
-        dialog = xbmcgui.Dialog()
-        dialog.ok(language(30005),
-                  language(30006))
-        return False
-
-
-def get_categories(url):
-    data = make_request(url=url, method='get')
-    pageType = data['pageType']
-    try:
-        sectionType = data['sectionType']
-    except KeyError:
-        sectionType = None
-    if sectionType == 'sportPerDay':
-        categories = data['_links']['viaplay:days']
-    elif pageType == 'root':
-        categories = data['_links']['viaplay:sections']
-    elif pageType == 'section':
-        categories = data['_links']['viaplay:categoryFilters']
-    return categories
-
-
-def root_menu(url):
-    categories = get_categories(url)
+def root_menu():
+    data = vp.make_request(url=vp.base_url, method='get')
+    categories = vp.get_categories(input=data, method='data')
     listing = []
 
     for category in categories:
         categorytype = category['type']
         videotype = category['name']
         title = category['title']
-        if categorytype == 'vod':
-            list_item = xbmcgui.ListItem(label=title)
-            list_item.setProperty('IsPlayable', 'false')
-            list_item.setArt({'icon': os.path.join(addon_path, 'icon.png')})
-            list_item.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
+        if categorytype != 'editorial':
+            listitem = xbmcgui.ListItem(label=title)
+            listitem.setProperty('IsPlayable', 'false')
+            listitem.setArt({'icon': os.path.join(addon_path, 'icon.png')})
+            listitem.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
             if videotype == 'series':
-                parameters = {'action': 'series', 'url': category['href']}
-            elif videotype == 'movie':
-                parameters = {'action': 'movie', 'url': category['href']}
+                parameters = {'action': 'series_menu', 'url': category['href']}
+            elif videotype == 'movie' or videotype == 'rental':
+                parameters = {'action': 'movies_menu', 'url': category['href']}
             elif videotype == 'sport':
-                parameters = {'action': 'sport', 'url': category['href']}
+                parameters = {'action': 'sports_menu', 'url': category['href']}
             elif videotype == 'kids':
-                parameters = {'action': 'kids', 'url': category['href']}
+                parameters = {'action': 'kids_menu', 'url': category['href']}
             else:
                 addon_log('Unsupported videotype found: %s' % videotype)
-                parameters = {'action': 'showmessage', 'message': 'This type (%s) is not supported yet.' % videotype}
+                parameters = {'action': 'showmessage', 'message': 'This type (%s) is not yet supported.' % videotype}
             recursive_url = _url + '?' + urllib.urlencode(parameters)
             is_folder = True
-            listing.append((recursive_url, list_item, is_folder))
+            listing.append((recursive_url, listitem, is_folder))
     xbmcplugin.addDirectoryItems(_handle, listing, len(listing))
-    list_search()
+    list_search(data)
     xbmcplugin.endOfDirectory(_handle)
 
 
-def movie_menu(url):
-    categories = get_categories(url)
+def movies_menu(url):
+    categories = vp.get_categories(url)
     listing = []
 
     for category in categories:
         title = category['title']
-        list_item = xbmcgui.ListItem(label=title)
-        list_item.setProperty('IsPlayable', 'false')
-        list_item.setArt({'icon': os.path.join(addon_path, 'icon.png')})
-        list_item.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
-        parameters = {'action': 'sortby', 'url': category['href']}
+        listitem = xbmcgui.ListItem(label=title)
+        listitem.setProperty('IsPlayable', 'false')
+        listitem.setArt({'icon': os.path.join(addon_path, 'icon.png')})
+        listitem.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
+        parameters = {'action': 'sortings_menu', 'url': category['href']}
         recursive_url = _url + '?' + urllib.urlencode(parameters)
         is_folder = True
-        listing.append((recursive_url, list_item, is_folder))
+        listing.append((recursive_url, listitem, is_folder))
     xbmcplugin.addDirectoryItems(_handle, listing, len(listing))
     xbmcplugin.endOfDirectory(_handle)
 
 
 def series_menu(url):
-    categories = get_categories(url)
+    categories = vp.get_categories(url)
     listing = []
 
     for category in categories:
         title = category['title']
-        list_item = xbmcgui.ListItem(label=title)
-        list_item.setProperty('IsPlayable', 'false')
-        list_item.setArt({'icon': os.path.join(addon_path, 'icon.png')})
-        list_item.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
-        parameters = {'action': 'sortby', 'url': category['href']}
+        listitem = xbmcgui.ListItem(label=title)
+        listitem.setProperty('IsPlayable', 'false')
+        listitem.setArt({'icon': os.path.join(addon_path, 'icon.png')})
+        listitem.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
+        parameters = {'action': 'sortings_menu', 'url': category['href']}
         recursive_url = _url + '?' + urllib.urlencode(parameters)
         is_folder = True
-        listing.append((recursive_url, list_item, is_folder))
+        listing.append((recursive_url, listitem, is_folder))
     xbmcplugin.addDirectoryItems(_handle, listing, len(listing))
     xbmcplugin.endOfDirectory(_handle)
 
 
 def kids_menu(url):
-    categories = get_categories(url)
+    categories = vp.get_categories(url)
     listing = []
 
     for category in categories:
         title = '%s: %s' % (category['group']['title'].title(), category['title'])
-        list_item = xbmcgui.ListItem(label=title)
-        list_item.setProperty('IsPlayable', 'false')
-        list_item.setArt({'icon': os.path.join(addon_path, 'icon.png')})
-        list_item.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
-        parameters = {'action': 'listproducts', 'url': category['href']}
+        listitem = xbmcgui.ListItem(label=title)
+        listitem.setProperty('IsPlayable', 'false')
+        listitem.setArt({'icon': os.path.join(addon_path, 'icon.png')})
+        listitem.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
+        parameters = {'action': 'list_products', 'url': category['href']}
         recursive_url = _url + '?' + urllib.urlencode(parameters)
         is_folder = True
-        listing.append((recursive_url, list_item, is_folder))
+        listing.append((recursive_url, listitem, is_folder))
     xbmcplugin.addDirectoryItems(_handle, listing, len(listing))
     xbmcplugin.endOfDirectory(_handle)
 
 
-def get_sortings(url):
-    data = make_request(url=url, method='get')
-    sorttypes = data['_links']['viaplay:sortings']
-    return sorttypes
-
-
-def sort_by(url):
-    sortings = get_sortings(url)
+def sortings_menu(url):
+    sortings = vp.get_sortings(url)
     listing = []
 
     for sorting in sortings:
         title = sorting['title']
-        list_item = xbmcgui.ListItem(label=title)
-        list_item.setProperty('IsPlayable', 'false')
-        list_item.setArt({'icon': os.path.join(addon_path, 'icon.png')})
-        list_item.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
+        listitem = xbmcgui.ListItem(label=title)
+        listitem.setProperty('IsPlayable', 'false')
+        listitem.setArt({'icon': os.path.join(addon_path, 'icon.png')})
+        listitem.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
         try:
             if sorting['id'] == 'alphabetical':
-                parameters = {'action': 'listalphabetical', 'url': sorting['href']}
+                parameters = {'action': 'alphabetical_letters_menu', 'url': sorting['href']}
             else:
-                parameters = {'action': 'listproducts', 'url': sorting['href']}
+                parameters = {'action': 'list_products', 'url': sorting['href']}
         except TypeError:
-            parameters = {'action': 'listproducts', 'url': sorting['href']}
+            parameters = {'action': 'list_products', 'url': sorting['href']}
         recursive_url = _url + '?' + urllib.urlencode(parameters)
         is_folder = True
-        listing.append((recursive_url, list_item, is_folder))
+        listing.append((recursive_url, listitem, is_folder))
 
-    # show all products in alphabetical order
-    list_all_item = xbmcgui.ListItem(label=language(30013))
-    list_all_item.setArt({'icon': os.path.join(addon_path, 'icon.png')})
-    list_all_item.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
-    parameters = {'action': 'listproducts', 'url': url + '?sort=alphabetical'}
-    recursive_url = _url + '?' + urllib.urlencode(parameters)
-    is_folder = True
-
-    xbmcplugin.addDirectoryItem(_handle, recursive_url, list_all_item, is_folder)
+    list_products_alphabetical(url)
     xbmcplugin.addDirectoryItems(_handle, listing, len(listing))
     xbmcplugin.endOfDirectory(_handle)
 
 
-def get_letters(url):
-    letters = []
-    products = get_products(make_request(url=url, method='get'))
-    for item in products:
-        letter = item['group']
-        if letter not in letters:
-            letters.append(letter)
-    return letters
+def list_products_alphabetical(url):
+    """List all products in alphabetical order."""
+    listitem = xbmcgui.ListItem(label=language(30013))
+    listitem.setArt({'icon': os.path.join(addon_path, 'icon.png')})
+    listitem.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
+    parameters = {'action': 'list_products', 'url': url + '?sort=alphabetical'}
+    recursive_url = _url + '?' + urllib.urlencode(parameters)
+    is_folder = True
+    xbmcplugin.addDirectoryItem(_handle, recursive_url, listitem, is_folder)
 
 
-def alphabetical_menu(url):
-    url = url_parser(url)  # needed to get rid of {&letter}
-    letters = get_letters(url)
+def alphabetical_letters_menu(url):
+    letters = vp.get_letters(url)
     listing = []
 
     for letter in letters:
         title = letter.encode('utf-8')
         if letter == '0-9':
             # 0-9 needs to be sent as a pound-sign
-            letter = urllib.quote('#')
+            letter = '#'
         else:
-            letter = urllib.quote(title.lower())
-        list_item = xbmcgui.ListItem(label=title)
-        list_item.setProperty('IsPlayable', 'false')
-        list_item.setArt({'icon': os.path.join(addon_path, 'icon.png')})
-        list_item.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
-        parameters = {'action': 'listproducts', 'url': url + '&letter=' + letter}
+            letter = title.lower()
+        listitem = xbmcgui.ListItem(label=title)
+        listitem.setProperty('IsPlayable', 'false')
+        listitem.setArt({'icon': os.path.join(addon_path, 'icon.png')})
+        listitem.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
+        parameters = {'action': 'list_products', 'url': url + '&letter=' + urllib.quote(letter)}
         recursive_url = _url + '?' + urllib.urlencode(parameters)
         is_folder = True
-        listing.append((recursive_url, list_item, is_folder))
+        listing.append((recursive_url, listitem, is_folder))
     xbmcplugin.addDirectoryItems(_handle, listing, len(listing))
     xbmcplugin.endOfDirectory(_handle)
 
 
-def next_page(data):
-    """Return next page if the current page is less than the total page count."""
-    try:
-        currentPage = data['_embedded']['viaplay:blocks'][0]['currentPage']
-        pageCount = data['_embedded']['viaplay:blocks'][0]['pageCount']
-    except KeyError:
-        currentPage = data['currentPage']
-        pageCount = data['pageCount']
-    if pageCount > currentPage:
-        try:
-            return data['_embedded']['viaplay:blocks'][0]['_links']['next']['href']
-        except KeyError:
-            return data['_links']['next']['href']
+def list_next_page(data):
+    if vp.get_next_page(data):
+        listitem = xbmcgui.ListItem(label=language(30018))
+        listitem.setArt({'icon': os.path.join(addon_path, 'icon.png')})
+        listitem.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
+        parameters = {'action': 'list_products', 'url': vp.get_next_page(data)}
+        recursive_url = _url + '?' + urllib.urlencode(parameters)
+        is_folder = True
+        xbmcplugin.addDirectoryItem(_handle, recursive_url, listitem, is_folder)
 
 
 def list_products(url, *display):
-    data = make_request(url=url, method='get')
-    products = get_products(data)
+    data = vp.make_request(url=url, method='get')
+    products = vp.get_products(input=data, method='data')
     listing = []
     sort = None
-    list_next_page = next_page(data)
 
     for item in products:
         type = item['type']
@@ -410,24 +255,25 @@ def list_products(url, *display):
             as it always provides more detailed data about each product."""
             playid = item['_links']['self']['href']
             streamtype = 'url'
-        parameters = {'action': 'play', 'playid': playid, 'streamtype': streamtype}
+        parameters = {'action': 'play_video', 'playid': playid.encode('utf-8'), 'streamtype': streamtype,
+                      'content': type}
         recursive_url = _url + '?' + urllib.urlencode(parameters)
 
         if type == 'episode':
             title = item['content']['series']['episodeTitle']
             is_folder = False
             is_playable = 'true'
-            list_item = xbmcgui.ListItem(label=title)
-            list_item.setProperty('IsPlayable', is_playable)
-            list_item.setInfo('video', item_information(item))
-            list_item.setArt(art(item))
-            listing.append((recursive_url, list_item, is_folder))
+            listitem = xbmcgui.ListItem(label=title)
+            listitem.setProperty('IsPlayable', is_playable)
+            listitem.setInfo('video', item_information(item))
+            listitem.setArt(art(item))
+            listing.append((recursive_url, listitem, is_folder))
 
         if type == 'sport':
             local_tz = tz.tzlocal()
             startdate_utc = dateutil.parser.parse(item['epg']['start'])
             startdate_local = startdate_utc.astimezone(local_tz)
-            status = sports_status(item)
+            status = vp.get_sports_status(item)
             if status == 'archive':
                 title = 'Archive: %s' % item['content']['title'].encode('utf-8')
                 is_playable = 'true'
@@ -440,102 +286,81 @@ def list_products(url, *display):
                 recursive_url = _url + '?' + urllib.urlencode(parameters)
                 is_playable = 'false'
             is_folder = False
-            list_item = xbmcgui.ListItem(label=title)
-            list_item.setProperty('IsPlayable', is_playable)
-            list_item.setInfo('video', item_information(item))
-            list_item.setArt(art(item))
+            listitem = xbmcgui.ListItem(label=title)
+            listitem.setProperty('IsPlayable', is_playable)
+            listitem.setInfo('video', item_information(item))
+            listitem.setArt(art(item))
             if 'live' in display:
                 if status == 'live':
-                    listing.append((recursive_url, list_item, is_folder))
+                    listing.append((recursive_url, listitem, is_folder))
             elif 'upcoming' in display:
                 if status == 'upcoming':
-                    listing.append((recursive_url, list_item, is_folder))
+                    listing.append((recursive_url, listitem, is_folder))
             elif 'archive' in display:
                 if status == 'archive':
-                    listing.append((recursive_url, list_item, is_folder))
+                    listing.append((recursive_url, listitem, is_folder))
             else:
-                listing.append((recursive_url, list_item, is_folder))
+                listing.append((recursive_url, listitem, is_folder))
 
         elif type == 'movie':
             title = '%s (%s)' % (item['content']['title'].encode('utf-8'), str(item['content']['production']['year']))
+            if item['system']['availability']['planInfo']['isRental'] is True:
+                title = title + ' *'  # mark rental products with an asterisk
             is_folder = False
             is_playable = 'true'
-            list_item = xbmcgui.ListItem(label=title)
-            list_item.setProperty('IsPlayable', is_playable)
-            list_item.setInfo('video', item_information(item))
-            list_item.setArt(art(item))
-            listing.append((recursive_url, list_item, is_folder))
+            listitem = xbmcgui.ListItem(label=title)
+            listitem.setProperty('IsPlayable', is_playable)
+            listitem.setInfo('video', item_information(item))
+            listitem.setArt(art(item))
+            listing.append((recursive_url, listitem, is_folder))
 
         elif type == 'series':
             title = item['content']['series']['title'].encode('utf-8')
             self_url = item['_links']['viaplay:page']['href']
-            parameters = {'action': 'seasons', 'url': self_url}
+            parameters = {'action': 'list_seasons', 'url': self_url}
             recursive_url = _url + '?' + urllib.urlencode(parameters)
             is_folder = True
             is_playable = 'false'
-            list_item = xbmcgui.ListItem(label=title)
-            list_item.setProperty('IsPlayable', is_playable)
-            list_item.setInfo('video', item_information(item))
-            list_item.setArt(art(item))
-            listing.append((recursive_url, list_item, is_folder))
+            listitem = xbmcgui.ListItem(label=title)
+            listitem.setProperty('IsPlayable', is_playable)
+            listitem.setInfo('video', item_information(item))
+            listitem.setArt(art(item))
+            listing.append((recursive_url, listitem, is_folder))
+
     xbmcplugin.addDirectoryItems(_handle, listing, len(listing))
     if sort is True:
         xbmcplugin.addSortMethod(_handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
-    if list_next_page is not None:
-        list_nextpage = xbmcgui.ListItem(label=language(30018))
-        parameters = {'action': 'nextpage', 'url': list_next_page}
-        recursive_url = _url + '?' + urllib.urlencode(parameters)
-        is_folder = True
-        xbmcplugin.addDirectoryItem(_handle, recursive_url, list_nextpage, is_folder)
+    list_next_page(data)
     # xbmc.executebuiltin("Container.SetViewMode(500)") - force media view
     xbmcplugin.endOfDirectory(_handle)
 
 
-def get_products(data):
-    if data['type'] == 'season-list' or data['type'] == 'list':
-        products = data['_embedded']['viaplay:products']
-    elif data['type'] == 'product':
-        products = data['_embedded']['viaplay:product']
-    else:
-        try:
-            products = data['_embedded']['viaplay:blocks'][0]['_embedded']['viaplay:products']
-        except KeyError:
-            products = data['_embedded']['viaplay:blocks'][1]['_embedded']['viaplay:products']
-    return products
-
-
-def get_seasons(url):
-    """Return all available seasons as a list."""
-    data = make_request(url=url, method='get')
-    seasons = []
-
-    items = data['_embedded']['viaplay:blocks']
-    for item in items:
-        if item['type'] == 'season-list':
-            seasons.append(item)
-    return seasons
-
-
 def list_seasons(url):
-    seasons = get_seasons(url)
-    listing = []
-    for season in seasons:
-        title = '%s %s' % (language(30014), season['title'])
-        list_item = xbmcgui.ListItem(label=title)
-        list_item.setProperty('IsPlayable', 'false')
-        list_item.setArt({'icon': os.path.join(addon_path, 'icon.png')})
-        list_item.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
-        parameters = {'action': 'listproducts', 'url': season['_links']['self']['href']}
-        recursive_url = _url + '?' + urllib.urlencode(parameters)
-        is_folder = True
-        listing.append((recursive_url, list_item, is_folder))
-    xbmcplugin.addDirectoryItems(_handle, listing, len(listing))
-    xbmcplugin.addSortMethod(_handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
-    xbmcplugin.endOfDirectory(_handle)
+    """List all series seasons."""
+    seasons = vp.get_seasons(url)
+    if len(seasons) == 1:
+        # list products if there's only one season
+        season_url = seasons[0]['_links']['self']['href']
+        list_products(season_url)
+    else:
+        listing = []
+        for season in seasons:
+            season_url = season['_links']['self']['href']
+            title = '%s %s' % (language(30014), season['title'])
+            listitem = xbmcgui.ListItem(label=title)
+            listitem.setProperty('IsPlayable', 'false')
+            listitem.setArt({'icon': os.path.join(addon_path, 'icon.png')})
+            listitem.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
+            parameters = {'action': 'list_products', 'url': season_url}
+            recursive_url = _url + '?' + urllib.urlencode(parameters)
+            is_folder = True
+            listing.append((recursive_url, listitem, is_folder))
+        xbmcplugin.addDirectoryItems(_handle, listing, len(listing))
+        xbmcplugin.endOfDirectory(_handle)
 
 
 def item_information(item):
-    """Return the product information in a xbmcgui.setInfo friendly tuple.
+    """Return the product information in a xbmcgui.setInfo friendly dict.
     Supported content types: episode, series, movie, sport"""
     type = item['type']
     mediatype = None
@@ -616,7 +441,7 @@ def item_information(item):
         mediatype = 'video'
         title = item['content']['title'].encode('utf-8')
         plot = item['content']['synopsis'].encode('utf-8')
-        xbmcplugin.setContent(_handle, 'movies')
+        xbmcplugin.setContent(_handle, 'episodes')
     info = {
         'mediatype': mediatype,
         'title': title,
@@ -634,37 +459,62 @@ def item_information(item):
         'mpaa': mpaa,
         'cast': cast
     }
+
     return info
 
 
 def art(item):
-    """Return the available art in a xbmcgui.setArt friendly tuple."""
+    """Return the available art in a xbmcgui.setArt friendly dict."""
     type = item['type']
-    thumbnail = item['content']['images']['boxart']['url'].split('.jpg')[0] + '.jpg'
-    fanart = item['content']['images']['hero169']['template'].split('.jpg')[0] + '.jpg'
     try:
-        cover = item['content']['images']['coverart23']['template'].split('.jpg')[0] + '.jpg'
+        boxart = item['content']['images']['boxart']['url'].split('.jpg')[0] + '.jpg'
     except KeyError:
-        cover = None
-    banner = item['content']['images']['landscape']['url'].split('.jpg')[0] + '.jpg'
+        boxart = None
+    try:
+        hero169 = item['content']['images']['hero169']['template'].split('.jpg')[0] + '.jpg'
+    except KeyError:
+        hero169 = None
+    try:
+        coverart23 = item['content']['images']['coverart23']['template'].split('.jpg')[0] + '.jpg'
+    except KeyError:
+        coverart23 = None
+    try:
+        coverart169 = item['content']['images']['coverart23']['template'].split('.jpg')[0] + '.jpg'
+    except KeyError:
+        coverart169 = None
+    try:
+        landscape = item['content']['images']['landscape']['url'].split('.jpg')[0] + '.jpg'
+    except KeyError:
+        landscape = None
+
+    if type == 'episode' or type == 'sport':
+        thumbnail = landscape
+    else:
+        thumbnail = boxart
+    fanart = hero169
+    banner = landscape
+    cover = coverart23
+    poster = boxart
+
     art = {
         'thumb': thumbnail,
         'fanart': fanart,
         'banner': banner,
-        'cover': cover
+        'cover': cover,
+        'poster': poster
     }
+
     return art
 
 
-def list_search():
-    data = make_request(base_url, 'get')
-    list_search = xbmcgui.ListItem(label=data['_links']['viaplay:search']['title'])
-    list_search.setArt({'icon': os.path.join(addon_path, 'icon.png')})
-    list_search.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
+def list_search(data):
+    listitem = xbmcgui.ListItem(label=data['_links']['viaplay:search']['title'])
+    listitem.setArt({'icon': os.path.join(addon_path, 'icon.png')})
+    listitem.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
     parameters = {'action': 'search', 'url': data['_links']['viaplay:search']['href']}
     recursive_url = _url + '?' + urllib.urlencode(parameters)
     is_folder = True
-    xbmcplugin.addDirectoryItem(_handle, recursive_url, list_search, is_folder)
+    xbmcplugin.addDirectoryItem(_handle, recursive_url, listitem, is_folder)
 
 
 def get_userinput(title):
@@ -673,156 +523,149 @@ def get_userinput(title):
     keyboard.doModal()
     if keyboard.isConfirmed():
         query = keyboard.getText()
-    addon_log('User input string: %s' % query)
+        addon_log('User input string: %s' % query)
     return query
 
 
 def search(url):
     try:
-        query = urllib.quote(get_userinput(language(30015)))
+        query = get_userinput(language(30015))
         if len(query) > 0:
-            url = '%s?query=%s' % (url_parser(url), query)
+            url = '%s?query=%s' % (url, urllib.quote(query))
             list_products(url)
     except TypeError:
         pass
 
 
-def play_video(playid, streamtype):
-    # Create a playable item with a path to play.
+def play_video(input, streamtype, content):
     if streamtype == 'url':
-        data = make_request(playid, 'get')
-        guid = get_products(data)['system']['guid']
+        url = input
+        guid = vp.get_products(input=url, method='url')['system']['guid']
     else:
-        guid = playid
-    stream = get_streams(guid)
-    if stream is not False:
-        play_item = xbmcgui.ListItem(path=stream)
-        play_item.setProperty('IsPlayable', 'true')
-        if subtitles:
-            play_item.setSubtitles(get_subtitles(subdict[guid]))
-        # Pass the item to the Kodi player.
-        xbmcplugin.setResolvedUrl(_handle, True, listitem=play_item)
+        guid = input
 
+    try:
+        video_urls = vp.get_video_urls(guid)
+    except vp.AuthFailure as error:
+        video_urls = False
+        display_auth_message(error)
+    except vp.LoginFailure:
+        video_urls = False
+        dialog = xbmcgui.Dialog()
+        dialog.ok(language(30005),
+                  language(30006))
 
-def get_subtitles(subdict):
-    """Download the SAMI subtitles, decode the HTML entities and save to addon profile.
-    Return a list of the path to the subtitles."""
-    subtitle_paths = []
-    for samiurl in subdict:
-        req = requests.get(samiurl)
-        sami = req.content.decode('utf-8', 'ignore').strip()
-        htmlparser = HTMLParser.HTMLParser()
-        subtitle = htmlparser.unescape(sami).encode('utf-8')
-        subtitle = subtitle.replace('  ', ' ')  # replace two spaces with one
-
-        if '_sv' in samiurl:
-            path = os.path.join(addon_profile, 'swe.smi')
-        elif '_no' in samiurl:
-            path = os.path.join(addon_profile, 'nor.smi')
-        elif '_da' in samiurl:
-            path = os.path.join(addon_profile, 'dan.smi')
-        elif '_fi' in samiurl:
-            path = os.path.join(addon_profile, 'fin.smi')
-        f = open(path, 'w')
-        f.write(subtitle)
-        f.close()
-        subtitle_paths.append(path)
-    return subtitle_paths
+    if video_urls:
+        if content == 'sport':
+            # sports uses HLS v4 so we can't parse the manifest as audio is supplied externally
+            stream_url = video_urls['manifest_url']
+            playitem = xbmcgui.ListItem(path=stream_url)
+            playitem.setProperty('IsPlayable', 'true')
+            xbmcplugin.setResolvedUrl(_handle, True, listitem=playitem)
+        else:
+            bitrate = select_bitrate(video_urls['bitrates'].keys())
+            if bitrate:
+                stream_url = video_urls['bitrates'][bitrate]
+                playitem = xbmcgui.ListItem(path=stream_url)
+                playitem.setProperty('IsPlayable', 'true')
+                if addon.getSetting('subtitles') == 'true':
+                    playitem.setSubtitles(vp.download_subtitles(video_urls['subtitle_urls']))
+                xbmcplugin.setResolvedUrl(_handle, True, listitem=playitem)
 
 
 def sports_menu(url):
-    # URL is hardcoded for now as the sports date listing is not available on all platforms
-    if country == 'fi':
-        live_url = 'https://content.viaplay.fi/androiddash-fi/urheilu2'
-    else:
-        live_url = 'https://content.viaplay.%s/androiddash-%s/sport2' % (country, country)
     listing = []
-    categories = get_categories(live_url)
+    categories = vp.get_categories(url)
     now = datetime.now()
 
     for category in categories:
         date_object = datetime(
             *(time.strptime(category['date'], '%Y-%m-%d')[0:6]))  # http://forum.kodi.tv/showthread.php?tid=112916
         title = category['date']
-        list_item = xbmcgui.ListItem(label=title)
-        list_item.setProperty('IsPlayable', 'false')
-        list_item.setArt({'icon': os.path.join(addon_path, 'icon.png')})
-        list_item.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
+        listitem = xbmcgui.ListItem(label=title)
+        listitem.setProperty('IsPlayable', 'false')
+        listitem.setArt({'icon': os.path.join(addon_path, 'icon.png')})
+        listitem.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
         if date_object.date() == now.date():
-            parameters = {'action': 'sportstoday', 'url': category['href']}
+            parameters = {'action': 'sports_today_menu', 'url': category['href']}
         else:
-            parameters = {'action': 'listsports', 'url': category['href']}
+            parameters = {'action': 'list_products', 'url': category['href']}
         recursive_url = _url + '?' + urllib.urlencode(parameters)
         is_folder = True
-        listing.append((recursive_url, list_item, is_folder))
+        listing.append((recursive_url, listitem, is_folder))
     xbmcplugin.addDirectoryItems(_handle, listing, len(listing))
     xbmcplugin.endOfDirectory(_handle)
 
 
-def sports_status(item):
-    now = datetime.utcnow()
-    producttime_start = dateutil.parser.parse(item['epg']['start'])
-    producttime_start = producttime_start.replace(tzinfo=None)
-    producttime_end = dateutil.parser.parse(item['epg']['end'])
-    producttime_end = producttime_end.replace(tzinfo=None)
-    if 'isLive' in item['system']['flags']:
-        status = 'live'
-    elif producttime_start > now:
-        status = 'upcoming'
-    elif producttime_end < now:
-        status = 'archive'
-    return status
-
-
-def sports_today(url):
+def sports_today_menu(url):
     types = ['live', 'upcoming', 'archive']
     listing = []
     for type in types:
-        list_item = xbmcgui.ListItem(label=type.title())
-        list_item.setProperty('IsPlayable', 'false')
-        list_item.setArt({'icon': os.path.join(addon_path, 'icon.png')})
-        list_item.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
-        parameters = {'action': 'listsportstoday', 'url': url, 'display': type}
+        listitem = xbmcgui.ListItem(label=type.title())
+        listitem.setProperty('IsPlayable', 'false')
+        listitem.setArt({'icon': os.path.join(addon_path, 'icon.png')})
+        listitem.setArt({'fanart': os.path.join(addon_path, 'fanart.jpg')})
+        parameters = {'action': 'list_products_sports_today', 'url': url, 'display': type}
         recursive_url = _url + '?' + urllib.urlencode(parameters)
         is_folder = True
-        listing.append((recursive_url, list_item, is_folder))
+        listing.append((recursive_url, listitem, is_folder))
     xbmcplugin.addDirectoryItems(_handle, listing, len(listing))
     xbmcplugin.endOfDirectory(_handle)
 
 
+def ask_bitrate(bitrates):
+    """Presents a dialog for user to select from a list of bitrates.
+    Returns the value of the selected bitrate."""
+    options = []
+    for bitrate in bitrates:
+        options.append(bitrate + ' Kbps')
+    dialog = xbmcgui.Dialog()
+    ret = dialog.select(language(30026), options)
+    if ret > -1:
+        return bitrates[ret]
+
+
+def select_bitrate(manifest_bitrates=None):
+    """Returns a bitrate while honoring the user's preference."""
+    bitrate_setting = int(addon.getSetting('preferred_bitrate'))
+    if bitrate_setting == 0:
+        preferred_bitrate = 'highest'
+    else:
+        preferred_bitrate = 'ask'
+
+    manifest_bitrates.sort(key=int, reverse=True)
+    if preferred_bitrate == 'highest':
+        return manifest_bitrates[0]
+    else:
+        return ask_bitrate(manifest_bitrates)
+
+
 def router(paramstring):
-    """Router function that calls other functions depending on the provided paramstring"""
-    # Parse a URL-encoded paramstring to the dictionary of
-    # {<parameter>: <value>} elements
+    """Router function that calls other functions depending on the provided paramstring."""
     params = dict(urlparse.parse_qsl(paramstring))
-    # Check the parameters passed to the plugin
     if params:
-        if params['action'] == 'movie':
-            movie_menu(params['url'])
-        elif params['action'] == 'kids':
+        if params['action'] == 'movies_menu':
+            movies_menu(params['url'])
+        elif params['action'] == 'kids_menu':
             kids_menu(params['url'])
-        elif params['action'] == 'series':
+        elif params['action'] == 'series_menu':
             series_menu(params['url'])
-        elif params['action'] == 'sport':
+        elif params['action'] == 'sports_menu':
             sports_menu(params['url'])
-        elif params['action'] == 'seasons':
+        elif params['action'] == 'list_seasons':
             list_seasons(params['url'])
-        elif params['action'] == 'nextpage':
+        elif params['action'] == 'list_products':
             list_products(params['url'])
-        elif params['action'] == 'listsports':
-            list_products(params['url'])
-        elif params['action'] == 'sportstoday':
-            sports_today(params['url'])
-        elif params['action'] == 'listsportstoday':
+        elif params['action'] == 'sports_today_menu':
+            sports_today_menu(params['url'])
+        elif params['action'] == 'list_products_sports_today':
             list_products(params['url'], params['display'])
-        elif params['action'] == 'play':
-            play_video(params['playid'], params['streamtype'])
-        elif params['action'] == 'sortby':
-            sort_by(params['url'])
-        elif params['action'] == 'listproducts':
-            list_products(params['url'])
-        elif params['action'] == 'listalphabetical':
-            alphabetical_menu(params['url'])
+        elif params['action'] == 'play_video':
+            play_video(params['playid'], params['streamtype'], params['content'])
+        elif params['action'] == 'sortings_menu':
+            sortings_menu(params['url'])
+        elif params['action'] == 'alphabetical_letters_menu':
+            alphabetical_letters_menu(params['url'])
         elif params['action'] == 'search':
             search(params['url'])
         elif params['action'] == 'showmessage':
@@ -830,12 +673,8 @@ def router(paramstring):
             dialog.ok(language(30017),
                       params['message'])
     else:
-        # If the plugin is called from Kodi UI without any parameters,
-        # display the list of video categories
-        root_menu(base_url)
+        root_menu()
 
 
 if __name__ == '__main__':
-    # Call the router function and pass the plugin call parameters to it.
-    # We use string slicing to trim the leading '?' from the plugin call paramstring
-    router(sys.argv[2][1:])
+    router(sys.argv[2][1:])  # trim the leading '?' from the plugin call paramstring

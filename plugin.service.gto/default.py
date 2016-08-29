@@ -245,7 +245,7 @@ def clearInfoProperties():
 
 def refreshWidget(handle=None, enabled=__enableinfo__):
 
-    blobs = WINDOW.getProperty('GTO.blobs')
+    blobs = WINDOW.getProperty('GTO.blobs') or '0'
     if blobs == '0': return 0
 
     notifyOSD(__LS__(30010), __LS__(30109) % (__shortname__), icon=__icon__, enabled=enabled)

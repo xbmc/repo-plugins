@@ -1,5 +1,9 @@
 picasaPhotos Changelog
 
+*** 1.0.19 ***
+
+Marked as broken. The Picasa Web API has been deprecated and no longer functions.
+
 *** 1.0.18 ***
 
 Set content type to images when displaying images

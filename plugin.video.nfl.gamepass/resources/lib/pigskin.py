@@ -18,15 +18,15 @@ import xmltodict
 
 
 class pigskin(object):
-    def __init__(self, subscription, proxy_config, cookie_file, debug=False):
-        self.subscription = subscription
+    def __init__(self, proxy_config, cookie_file, debug=False):
         self.debug = debug
+        self.subscription = ''
         self.base_url = 'https://gamepass.nfl.com/nflgp'
         self.servlets_url = 'http://gamepass.nfl.com/nflgp/servlets'
         self.simpleconsole_url = self.servlets_url + '/simpleconsole'
-        self.boxscore_url=''
-        self.image_url=''
-        self.locEDLBaseUrl=''
+        self.boxscore_url = ''
+        self.image_url = ''
+        self.locEDLBaseUrl = ''
         self.non_seasonal_shows = {}
         self.seasonal_shows = {}
         self.nflnSeasons = []
@@ -63,9 +63,16 @@ class pigskin(object):
         except xmltodict.expat.ExpatError:
             return False
 
-        if self.debug:
-            self.log('Debugging enabled.')
-            self.log('Python Version: %s' % sys.version)
+        # get subscription type
+        if '<isGPDomestic>' in sc_data:
+            self.subscription = 'domestic'
+            self.log('NFL Game Pass Domestic detected.')
+        else:
+            self.subscription = 'international'
+            self.log('NFL Game Pass International detected.')
+
+        self.log('Debugging enabled.')
+        self.log('Python Version: %s' % sys.version)
 
     class LoginFailure(Exception):
         def __init__(self, value):
@@ -229,7 +236,7 @@ class pigskin(object):
                     # Trim season name to just the year if year is present
                     # Common season names: '2014', 'Season 2014', and 'Archives'
                     try:
-                        season_name = re.findall(r"\d{4}(?!\d)",season_name)[0]
+                        season_name = re.findall(r"\d{4}(?!\d)", season_name)[0]
                     except IndexError:
                         pass
 
@@ -267,16 +274,26 @@ class pigskin(object):
 
         m3u8_url = m3u8_dict['path'].replace('_ipad', '')
         m3u8_param = m3u8_url.split('?', 1)[-1]
-        # I hate lying with User-Agent. Points to anyone who can make this work without lying.
-        m3u8_header = {'Cookie': 'nlqptid=' + m3u8_param, 'User-Agent': 'Safari/537.36 Mozilla/5.0 AppleWebKit/537.36 Chrome/31.0.1650.57', 'Accept-encoding': 'identity, gzip, deflate', 'Connection': 'keep-alive'}
+        # I /hate/ lying with User-Agent.
+        # Huge points for making this work without lying.
+        m3u8_header = {'Cookie': 'nlqptid=' + m3u8_param,
+                       'User-Agent': 'Safari/537.36 Mozilla/5.0 AppleWebKit/537.36 Chrome/31.0.1650.57',
+                       'Accept-encoding': 'identity, gzip, deflate',
+                       'Connection': 'keep-alive'}
 
-        m3u8_obj = m3u8.load(m3u8_url)
-        if m3u8_obj.is_variant:  # if this m3u8 contains links to other m3u8s
-            for playlist in m3u8_obj.playlists:
-                bitrate = str(int(playlist.stream_info.bandwidth[:playlist.stream_info.bandwidth.find(' ')])/100)
-                streams[bitrate] = m3u8_url[:m3u8_url.rfind('/') + 1] + playlist.uri + '?' + m3u8_url.split('?')[1] + '|' + urllib.urlencode(m3u8_header)
-        else:
-            streams['only available'] = m3u8_url
+        try:
+            m3u8_manifest = self.make_request(url=m3u8_url, method='get')
+        except:
+            m3u8_manifest = False
+
+        if m3u8_manifest:
+            m3u8_obj = m3u8.loads(m3u8_manifest)
+            if m3u8_obj.is_variant:  # if this m3u8 contains links to other m3u8s
+                for playlist in m3u8_obj.playlists:
+                    bitrate = int(playlist.stream_info.bandwidth) / 1000
+                    streams[str(bitrate)] = m3u8_url[:m3u8_url.rfind('/') + 1] + playlist.uri + '?' + m3u8_url.split('?')[1] + '|' + urllib.urlencode(m3u8_header)
+            else:
+                streams['sole available'] = m3u8_url
 
         return streams
 
@@ -392,8 +409,6 @@ class pigskin(object):
                 elif self.subscription == 'domestic' and self.service_blackout():
                     raise self.LoginFailure('Game Pass Domestic Blackout')
             else:
-                # might need sans-login check here for Game Pass, though as of
-                # 2014, there /may/ no longer be any sans-login regions.
                 self.log('No username and password supplied.')
                 raise self.LoginFailure('No username and password supplied.')
 
@@ -418,12 +433,23 @@ class pigskin(object):
                 req = self.http_session.get(url, params=payload, headers=headers, allow_redirects=False)
             else:  # post
                 req = self.http_session.post(url, data=payload, headers=headers, allow_redirects=False)
+            req.raise_for_status()
             self.log('Response code: %s' % req.status_code)
             self.log('Response: %s' % req.content)
             self.cookie_jar.save(ignore_discard=True, ignore_expires=False)
             return req.content
+        except requests.exceptions.HTTPError as error:
+            self.log('An HTTP error occurred: %s' % error)
+            raise
+        except requests.exceptions.ProxyError:
+            self.log('Error connecting to proxy server')
+            raise
+        except requests.exceptions.ConnectionError as error:
+            self.log('Connection Error: - %s' % error.message)
+            raise
         except requests.exceptions.RequestException as error:
             self.log('Error: - %s' % error.value)
+            raise
 
     def parse_manifest(self, manifest):
         """Return a dict of the supplied XML manifest. Builds and adds
@@ -469,7 +495,7 @@ class pigskin(object):
     def service_blackout(self):
         """Return whether Game Pass is blacked out."""
         url = self.base_url + '/secure/schedule'
-        blackout_message = ('Due to broadcast restrictions, NFL Game Pass Domestic is currently unavailable.'
+        blackout_message = ('Due to broadcast restrictions, NFL Game Pass is currently unavailable.'
                             ' Please check back later.')
         service_data = self.make_request(url=url, method='get')
 

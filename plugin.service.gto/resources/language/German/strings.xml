@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<strings>
+    <string id="30010">TV Filmtipps</string>
+    <string id="30011">TV Highlights Rubrik</string>
+    <string id="30018">Beziehe Programminfos von %s</string>
+
+    <string id="30100">TV Information zur Sendung</string>
+    <string id="30101">Genre:</string>
+    <string id="30102">Rating:</string>
+    <string id="30103">Beschreibung:</string>
+    <string id="30104">TV Highlights des Tages</string>
+    <string id="30105">Rubriken</string>
+    <string id="30106">Dienst gestartet</string>
+    <string id="30107">Umschalttimer setzen</string>
+    <string id="30108">Jetzt umschalten</string>
+    <string id="30109">Aktualisiere Widget von %s</string>
+    <string id="30119">Abbrechen</string>
+
+    <string id="30110">Allgemein</string>
+    <string id="30111">Wähle TV Scraper aus</string>
+    <string id="30113">Bevorzuge HD Sendungen</string>
+    <string id="30114">Info bei Systemstart und Refresh</string>
+    <string id="30115">Anzahl max. Einträge pro Rubrik bei Mehrfachauswahl</string>
+    <string id="30116">voreingestellte Rubriken</string>
+    <string id="30117">Laufzeit:</string>
+
+    <string id="30126">Zeige nur Sender, die in PVR-Senderliste vorhanden sind</string>
+    <string id="30127">Aktualisierungsintervall Inhalte</string>
+    <string id="30128">Aktualisierungsintervall Anzeige</string>
+    <string id="30129">Scraper Website nicht erreichbar</string>
+
+    <string id="30130">Der Aktualisierungszyklus für den Inhalt muss größer sein als der Aktualisierungszyklus für die Anzeige (empfohlen 120/5).</string>
+    <string id="30131">Scraper zeitverzögert starten</string>
+
+    <string id="30140">Es liegen leider keine weiteren Informationen vor.</string>
+
+    <string id="30150">aus</string>
+    <string id="30151">5 min</string>
+    <string id="30152">10 min</string>
+    <string id="30153">15 min</string>
+    <string id="30154">30 min</string>
+    <string id="30155">45 min</string>
+    <string id="30156">60 min</string>
+    <string id="30157">90 min</string>
+    <string id="30158">120 min</string>
+    <string id="30159">150 min</string>
+    <string id="30160">180 min</string>
+    <string id="30161">210 min</string>
+    <string id="30162">240 min</string>
+    <string id="30163">720 min</string>
+    <string id="30164">1440 min</string>
+
+    <string id="30170">5 sec</string>
+    <string id="30171">10 sec</string>
+    <string id="30172">15 sec</string>
+    <string id="30173">30 sec</string>
+    <string id="30174">45 sec</string>
+    <string id="30175">60 sec</string>
+</strings>
+

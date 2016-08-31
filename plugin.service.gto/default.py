@@ -80,12 +80,14 @@ def entity2unicode(text):
 
 def getUnicodePage(url, container=None):
     try:
-        req = urllib2.urlopen(url.encode('utf-8'))
+        req = urllib2.urlopen(url.encode('utf-8'), timeout=30)
     except UnicodeDecodeError:
         req = urllib2.urlopen(url)
     except ValueError:
         return False
     except urllib2.HTTPError:
+        return False
+    except socket.timeout:
         return False
 
     encoding = 'utf-8'
@@ -291,12 +293,13 @@ def scrapeGTOPage(enabled=__enableinfo__):
 
     notifyOSD(__LS__(30010), __LS__(30018) % (__shortname__), icon=__icon__, enabled=enabled)
     writeLog('Start scraping from %s' % (data.rssurl), level=xbmc.LOGDEBUG)
+    blobs = WINDOW.getProperty('GTO.blobs') or '0'
 
     content = getUnicodePage(data.rssurl, container=data.selector)
+    if not content: return
+
     i = 1
     content.pop(0)
-
-    blobs = WINDOW.getProperty('GTO.blobs') or '0'
 
     for idx in range(1, int(blobs) + 1, 1):
         WINDOW.clearProperty('GTO.%s' % (idx))

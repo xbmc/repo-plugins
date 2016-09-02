@@ -315,3 +315,7 @@ msgctxt "#30409"
 msgid "Disagree"
 msgstr ""
 
+msgctxt "#30410"
+msgid "To watch iPlayer TV content legally, you need a UK TV Licence."
+msgstr ""
+

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import os
 import re
 from operator import itemgetter
 from ipwww_common import translation, AddMenuEntry, OpenURL, \
@@ -384,10 +385,12 @@ def ListLive():
         ('bbc_radio_york', 'BBC Radio York'),
     ]
     for id, name in channel_list:
+        iconimage = xbmc.translatePath(
+            os.path.join('special://home/addons/plugin.video.iplayerwww/media', id + '.png'))
         if ADDON.getSetting('streams_autoplay') == 'true':
-            AddMenuEntry(name, id, 213, '', '', '')
+            AddMenuEntry(name, id, 213, iconimage, '', '')
         else:
-            AddMenuEntry(name, id, 133, '', '', '')
+            AddMenuEntry(name, id, 133, iconimage, '', '')
 
 
 def ListFavourites(logged_in):

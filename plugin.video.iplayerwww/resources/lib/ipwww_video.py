@@ -94,40 +94,40 @@ def ListRedButton():
 # ListLive creates menu entries for all live channels.
 def ListLive():
     channel_list = [
-        ('bbc_one_hd',                       'bbc_one',                                   'BBC One'),
-        ('bbc_two_hd',                       'bbc_two',                                   'BBC Two'),
-        ('bbc_four_hd',                      'bbc_four',                                 'BBC Four'),
-        ('cbbc_hd',                          'cbbc',                                         'CBBC'),
-        ('cbeebies_hd',                      'cbeebies',                                 'CBeebies'),
-        ('bbc_news24',                       'bbc_news24',                       'BBC News Channel'),
-        ('bbc_parliament',                   'bbc_parliament',                     'BBC Parliament'),
-        ('bbc_alba',                         'bbc_alba',                                     'Alba'),
-        ('s4cpbs',                           's4c',                                           'S4C'),
-        ('bbc_one_london',                   'bbc_one',                            'BBC One London'),
-        ('bbc_one_scotland_hd',              'bbc_one_scotland',                 'BBC One Scotland'),
-        ('bbc_one_northern_ireland_hd',      'bbc_one_northern_ireland', 'BBC One Northern Ireland'),
-        ('bbc_one_wales_hd',                 'bbc_one_wales',                       'BBC One Wales'),
-        ('bbc_two_scotland',                 'bbc_two',                          'BBC Two Scotland'),
-        ('bbc_two_northern_ireland_digital', 'bbc_two',                  'BBC Two Northern Ireland'),
-        ('bbc_two_wales_digital',            'bbc_two',                             'BBC Two Wales'),
-        ('bbc_two_england',                  'bbc_two',                          'BBC Two England',),
-        ('bbc_one_cambridge',                'bbc_one',                        'BBC One Cambridge',),
-        ('bbc_one_channel_islands',          'bbc_one',                  'BBC One Channel Islands',),
-        ('bbc_one_east',                     'bbc_one',                             'BBC One East',),
-        ('bbc_one_east_midlands',            'bbc_one',                    'BBC One East Midlands',),
-        ('bbc_one_east_yorkshire',           'bbc_one',                   'BBC One East Yorkshire',),
-        ('bbc_one_north_east',               'bbc_one',                       'BBC One North East',),
-        ('bbc_one_north_west',               'bbc_one',                       'BBC One North West',),
-        ('bbc_one_oxford',                   'bbc_one',                           'BBC One Oxford',),
-        ('bbc_one_south',                    'bbc_one',                            'BBC One South',),
-        ('bbc_one_south_east',               'bbc_one',                       'BBC One South East',),
-        ('bbc_one_west',                     'bbc_one',                             'BBC One West',),
-        ('bbc_one_west_midlands',            'bbc_one',                    'BBC One West Midlands',),
-        ('bbc_one_yorks',                    'bbc_one',                            'BBC One Yorks',),
+        ('bbc_one_hd',                       'BBC One'),
+        ('bbc_two_hd',                       'BBC Two'),
+        ('bbc_four_hd',                      'BBC Four'),
+        ('cbbc_hd',                          'CBBC'),
+        ('cbeebies_hd',                      'CBeebies'),
+        ('bbc_news24',                       'BBC News Channel'),
+        ('bbc_parliament',                   'BBC Parliament'),
+        ('bbc_alba',                         'Alba'),
+        ('s4cpbs',                           'S4C'),
+        ('bbc_one_london',                   'BBC One London'),
+        ('bbc_one_scotland_hd',              'BBC One Scotland'),
+        ('bbc_one_northern_ireland_hd',      'BBC One Northern Ireland'),
+        ('bbc_one_wales_hd',                 'BBC One Wales'),
+        ('bbc_two_scotland',                 'BBC Two Scotland'),
+        ('bbc_two_northern_ireland_digital', 'BBC Two Northern Ireland'),
+        ('bbc_two_wales_digital',            'BBC Two Wales'),
+        ('bbc_two_england',                  'BBC Two England',),
+        ('bbc_one_cambridge',                'BBC One Cambridge',),
+        ('bbc_one_channel_islands',          'BBC One Channel Islands',),
+        ('bbc_one_east',                     'BBC One East',),
+        ('bbc_one_east_midlands',            'BBC One East Midlands',),
+        ('bbc_one_east_yorkshire',           'BBC One East Yorkshire',),
+        ('bbc_one_north_east',               'BBC One North East',),
+        ('bbc_one_north_west',               'BBC One North West',),
+        ('bbc_one_oxford',                   'BBC One Oxford',),
+        ('bbc_one_south',                    'BBC One South',),
+        ('bbc_one_south_east',               'BBC One South East',),
+        ('bbc_one_west',                     'BBC One West',),
+        ('bbc_one_west_midlands',            'BBC One West Midlands',),
+        ('bbc_one_yorks',                    'BBC One Yorks',),
     ]
-    for id, img, name in channel_list:
+    for id, name in channel_list:
         iconimage = xbmc.translatePath(
-            os.path.join('special://home/addons/plugin.video.iplayerwww/media', img + '.png'))
+            os.path.join('special://home/addons/plugin.video.iplayerwww/media', id + '.png'))
         if ADDON.getSetting('streams_autoplay') == 'true':
             AddMenuEntry(name, id, 203, iconimage, '', '')
         else:
@@ -167,16 +167,16 @@ def ListChannelAtoZ():
     Only creates the corresponding directories for each channel.
     """
     channel_list = [
-        ('bbcone', 'bbc_one', 'BBC One'),
-        ('bbctwo', 'bbc_two', 'BBC Two'),
-        ('tv/bbcthree', 'bbc_three', 'BBC Three'),
-        ('bbcfour', 'bbc_four', 'BBC Four'),
-        ('tv/cbbc', 'cbbc', 'CBBC'),
-        ('tv/cbeebies', 'cbeebies', 'CBeebies'),
-        ('tv/bbcnews', 'bbc_news24', 'BBC News Channel'),
-        ('tv/bbcparliament', 'bbc_parliament', 'BBC Parliament'),
-        ('tv/bbcalba', 'bbc_alba', 'Alba'),
-        ('tv/s4c', 's4c', 'S4C'),
+        ('bbcone',           'bbc_one_hd',              'BBC One'),
+        ('bbctwo',           'bbc_two_hd',              'BBC Two'),
+        ('tv/bbcthree',      'bbc_three_hd',          'BBC Three'),
+        ('bbcfour',          'bbc_four_hd',            'BBC Four'),
+        ('tv/cbbc',          'cbbc_hd',                    'CBBC'),
+        ('tv/cbeebies',      'cbeebies_hd',            'CBeebies'),
+        ('tv/bbcnews',       'bbc_news24',     'BBC News Channel'),
+        ('tv/bbcparliament', 'bbc_parliament',   'BBC Parliament'),
+        ('tv/bbcalba',       'bbc_alba',                   'Alba'),
+        ('tv/s4c',           's4cpbs',                      'S4C'),
     ]
     for id, img, name in channel_list:
         iconimage = xbmc.translatePath(
@@ -478,16 +478,16 @@ def GetFilteredCategory(url):
 def ListChannelHighlights():
     """Creates a list directories linked to the highlights section of each channel."""
     channel_list = [
-        ('bbcone', 'bbc_one', 'BBC One'),
-        ('bbctwo', 'bbc_two', 'BBC Two'),
-        ('tv/bbcthree', 'bbc_three', 'BBC Three'),
-        ('bbcfour', 'bbc_four', 'BBC Four'),
-        ('tv/cbbc', 'cbbc', 'CBBC'),
-        ('tv/cbeebies', 'cbeebies', 'CBeebies'),
-        ('tv/bbcnews', 'bbc_news24', 'BBC News Channel'),
-        ('tv/bbcparliament', 'bbc_parliament', 'BBC Parliament'),
-        ('tv/bbcalba', 'bbc_alba', 'Alba'),
-        ('tv/s4c', 's4c', 'S4C'),
+        ('bbcone',           'bbc_one_hd',              'BBC One'),
+        ('bbctwo',           'bbc_two_hd',              'BBC Two'),
+        ('tv/bbcthree',      'bbc_three_hd',          'BBC Three'),
+        ('bbcfour',          'bbc_four_hd',            'BBC Four'),
+        ('tv/cbbc',          'cbbc_hd',                    'CBBC'),
+        ('tv/cbeebies',      'cbeebies_hd',            'CBeebies'),
+        ('tv/bbcnews',       'bbc_news24',     'BBC News Channel'),
+        ('tv/bbcparliament', 'bbc_parliament',   'BBC Parliament'),
+        ('tv/bbcalba',       'bbc_alba',                   'Alba'),
+        ('tv/s4c',           's4cpbs',                      'S4C'),
     ]
     for id, img, name in channel_list:
         iconimage = xbmc.translatePath(

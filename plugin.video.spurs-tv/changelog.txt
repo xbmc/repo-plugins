@@ -1,3 +1,6 @@
+v2.11.0 (2016-08-31)
+ - Fixed stadium camera streams
+
 v2.10.0 (2016-08-06)
  - Added all stadium build live streams with descriptions
  - Made error reporting optional

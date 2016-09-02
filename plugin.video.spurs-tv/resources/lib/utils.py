@@ -1,3 +1,4 @@
+import _strptime
 import time
 from datetime import date
 

@@ -192,8 +192,7 @@ def router(paramstring):
   # {<parameter>: <value>} elements  
   params = dict(parse_qsl(paramstring))
   if params:
-    get_cookie()
-    if params['action'] == 'listing':      
+    if params['action'] == 'listing':
       if 'url' in params.keys():
         list_videos(params['category'], params['url'])
       else:

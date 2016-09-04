@@ -20,13 +20,12 @@ def get_links(html_page):
   return videos
 
 def get_live(html_page):
-#  match = re.compile('TYT BETA STREAM.+?embed/(.+?)" frame',re.DOTALL).findall(html_page)
   match = re.compile('class="x-video embed.+?embed/(.+?)" frameborder=',re.DOTALL).findall(html_page)
   for link in match:
     return link
         
 def page_info(html_page):
-  match = re.compile('<div class="x-pagination.+?href="(.+?)" class=',re.DOTALL).findall(html_page)
+  match = re.compile('<div class="x-pagination.+?Last Page".+?href="(.+?)" class=',re.DOTALL).findall(html_page)
   for link in match: 
     link = link.split("https://tytnetwork.com",1)[1]
     return link

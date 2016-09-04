@@ -4,8 +4,7 @@ http://www.xunitytalk.com/
 Thanks to the get_iplayer project. Their code helped to sort out live streams more than once.
 https://github.com/get-iplayer/get_iplayer
 
-Channel Icons by b_balthasar
-http://xbmc.org/forum/showpost.php?p=293163&postcount=902
+Channel icons by primaeval
 
 The functions used for downloading subtitles are based on the latest version
 of the (currently defunct) iPlayer plugin.

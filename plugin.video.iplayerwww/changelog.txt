@@ -1,3 +1,7 @@
+v2.5.0
+New channel icons for TV and Radio by primaeval. Now all channels have dedicated icons.
+Added warning regarding new TV Licence legislation.
+
 v2.4.1
 Fixed problem which caused too many playlists to be loaded.
 Tidied up some code.

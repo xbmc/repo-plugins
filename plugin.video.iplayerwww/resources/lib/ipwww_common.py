@@ -353,6 +353,14 @@ def KidsMode():
         ADDON.setSetting('kids_password',new_password.encode('base64','strict'))
     quit()
 
+def ShowLicenceWarning():
+    if not (ADDON.getSetting("licence_warning_shown") == 'true'):
+        dialog = xbmcgui.Dialog()
+        ok = dialog.ok(translation(30405), translation(30410))
+        if ok:
+            ADDON.setSetting("licence_warning_shown", 'true')
+
+
 def CreateBaseDirectory(content_type):
     if ADDON.getSetting('kids_password'):
         if ADDON.getSetting('streams_autoplay') == 'true':
@@ -387,6 +395,7 @@ def CreateBaseDirectory(content_type):
         return
 
     if content_type == "video":
+        ShowLicenceWarning()
         AddMenuEntry(translation(30300), 'iplayer', 106, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/top_rated.png'), '', '')
         AddMenuEntry(translation(30317), 'url', 109, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/top_rated.png'), '', '')
         AddMenuEntry(translation(30301), 'url', 105, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/popular.png'), '', '')
@@ -409,6 +418,7 @@ def CreateBaseDirectory(content_type):
         AddMenuEntry(translation(30307), 'url', 117, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/favourites.png'), '', '')
         AddMenuEntry(translation(30325), 'url', 119, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/settings.png'), '', '')
     else:
+        ShowLicenceWarning()
         AddMenuEntry((translation(30323)+translation(30300)),
                             'iplayer', 106, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/top_rated.png'), '', '')
         AddMenuEntry((translation(30323)+translation(30317)),

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.funimationnow" version="1.0.0" name="FunimationNOW" provider-name="Protocol-X">
+    <requires>
+        <import addon="xbmc.python" version="2.19.0" />
+        <import addon="script.module.dateutil" version="2.4.2"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Funimation|Now - Watch Anime Episodes Streaming Online</summary>
+        <website>https://github.com/Protocol-X/plugin.video.funimationnow</website>
+        <source>https://github.com/Protocol-X/plugin.video.funimationnow</source>
+        <email></email>
+        <description lang="en">You should be watching!
+
+Balance out the new with some of our best.
+With FunimationNow, the newest shows are just the beginning. Our library also features a wide variety of classic anime series
+        </description>
+        <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+        <platform>all</platform>
+        <language />
+    </extension>
+</addon>

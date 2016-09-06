@@ -1,0 +1,82 @@
+msgid ""
+msgstr ""
+
+msgctxt "#30001"
+msgid "Number of lines"
+msgstr "Sorok száma"
+
+msgctxt "#30002"
+msgid "Last Movies"
+msgstr "Utoljára megtekintett Filmek"
+
+msgctxt "#30003"
+msgid "Last Episodes"
+msgstr "Utoljára megtekintett Epizódok"
+
+msgctxt "#30004"
+msgid "Last Music Videos"
+msgstr "Utoljára megtekintett Zenei videók"
+
+msgctxt "#30005"
+msgid "Last Songs"
+msgstr "Utoljára meghallgatott Dalok"
+
+msgctxt "#30006"
+msgid "Last from Addons"
+msgstr "Utoljára megtekintett Kiegészítő tartalmak"
+
+msgctxt "#30007"
+msgid "Show Non-Library"
+msgstr "Nem helyi tartalmak megjelenítése"
+
+msgctxt "#30008"
+msgid "Remove from list"
+msgstr "Eltávolítás a listából"
+
+msgctxt "#30009"
+msgid "Group all Addons on single list"
+msgstr "Kiegészítők csoportosítása egy listába"
+
+msgctxt "#30010"
+msgid "Show Date"
+msgstr "Dátum megjelenítése"
+
+msgctxt "#30011"
+msgid "Show Time"
+msgstr "Idő megjelenítése"
+
+msgctxt "#30012"
+msgid "Other sources"
+msgstr "Egyéb források"
+
+msgctxt "#30013"
+msgid "Enable debug"
+msgstr "Debug engedélyezése"
+
+msgctxt "#30014"
+msgid "Show Addon History List"
+msgstr "Kiegészítő Előzmények listájának mutatása"
+
+msgctxt "#30015"
+msgid "Delete Addon History List"
+msgstr "Kiegészítő Előzmények listájának törlése"
+
+msgctxt "#30016"
+msgid "*** There is no Addon History ***"
+msgstr "*** Nincsenek Kiegészítő Előzmények ***"
+
+msgctxt "#30017"
+msgid "Show Library Movies and Episodes"
+msgstr "Filmek és Epizódok megjelenítése"
+
+msgctxt "#30018"
+msgid "Show Music Videos and Songs"
+msgstr "Zenei videók és Dalok megjelenítése"
+
+msgctxt "#30019"
+msgid "Store list in a custom path"
+msgstr "Lista tárolása saját mappában"
+
+msgctxt "#30020"
+msgid "List location"
+msgstr "Lista helye"

@@ -206,8 +206,10 @@ def router(paramstring):
       else:
         list_categories(menus[params['menu']])
     elif params['action'] == 'play':              
-      vid = params['video'].split("https://tytnetwork.com",1)[1]     
-      video_url = type1.get_video(sendResponse(cookie,vid))
+      vid = params['video'].split("https://tytnetwork.com",1)[1]
+      get_cookie()
+      page = sendResponse(cookie,vid)
+      video_url = type1.get_video(page)
       if video_url is not None:
         play_video(type1.get_video(sendResponse(cookie, vid)))
       else:

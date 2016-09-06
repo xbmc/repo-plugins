@@ -4,6 +4,7 @@ def popup(text):
   xbmcgui.Dialog().ok('plugin.video.tyt', text)
 
 def get_video(html_page):
+
   try:
     match = re.compile("<div id='premium-video'.+?src='(.+?)' type", re.DOTALL).findall(html_page)
   except:

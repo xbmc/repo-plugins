@@ -1,3 +1,6 @@
+2.0.6 (2016-09-08)
+[fix] Cover (thumbs) missing (done by SLiX, bromix still 'afk')
+
 2.0.5 (2015-12-07)
 [add] Bulgarian (thx 2 NEOhidra)
 [upd] addon.xml (thx 2 NEOhidra)

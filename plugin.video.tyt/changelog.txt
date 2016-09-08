@@ -1,3 +1,5 @@
 [B]2.0.1[/B]
 - Fixed bug viewing members area
 - Fixed bug viewing past page 2 in members area.
+[B]2.0.2[/B]
+- Fixed bug with members area

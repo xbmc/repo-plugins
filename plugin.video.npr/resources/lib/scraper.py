@@ -52,7 +52,7 @@ class myAddon(t1mAddon):
                  try:
                     (url, thumb, name, dt, plot) = re.compile('<a href="(.+?)".+?src="(.+?)".+?title="(.+?)".+?<time datetime="(.+?)".+?</time>(.+?)</p',re.DOTALL).search(blob).groups()
                  except:
-                    (url, thumb, name) = re.compile('<a href="(.+?)".+?src="(.+?)".+?title="(.+?)"',re.DOTALL).search(blob).groups()
+                    (url, thumb, name) = re.compile('<a href="(.+?)".+?src="(.+?)".+?alt="(.+?)"',re.DOTALL).search(blob).groups()
                     plot = name
                     dt   = ''
                  name = h.unescape(name)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.npr"
        name="NPR Music Videos"
-       version="3.0.1"
+       version="3.0.2"
        provider-name="t1m">
   <requires>
     <import addon="xbmc.python" version="2.20.0"/>
@@ -22,6 +22,6 @@
     <forum>http://forum.xbmc.org/showthread.php?tid=197118</forum>
     <website>http://www.npr.org/music/</website>
     <email></email>
-    <source>https://github.com/learningit/plugin.video.npr/</source>
+    <source>https://github.com/learningit/Kodi-plugins-source</source>
   </extension>
 </addon>

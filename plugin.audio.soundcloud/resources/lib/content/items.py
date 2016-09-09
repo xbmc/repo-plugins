@@ -7,7 +7,7 @@ from resources.lib.nightcrawler.exception import ProviderException
 
 
 def _get_hires_image(url):
-    return re.sub('(.*)(-large.jpg\.*)(\?.*)?', r'\1-t300x300.jpg', url)
+    return re.sub('(.*)(-\{size\}.jpg\.*)(\?.*)?', r'\1-t300x300.jpg', url)
 
 
 def _get_thumbnail(json_data):
@@ -24,7 +24,7 @@ def _get_thumbnail(json_data):
             return _get_thumbnail(tracks[0])
 
         # fall back is the user avatar (at least)
-        image_url = json_data.get('user', {}).get('avatar_url', '')
+        image_url = json_data.get('artwork_url_template', '')
         pass
 
     return _get_hires_image(image_url)

@@ -79,7 +79,7 @@ class myAddon(t1mAddon):
  def getAddonMenu(self,url,ilist):
     addonLanguage  = self.addon.getLocalizedString
     self.doPBSLogin()
-    html = self.getRequest('http://www.pbs.org/shows-page/0/?genre=&title=&callsign=')
+    html = self.getRequest('http://www.pbs.org/shows-page/0/?genre=&title=&callsign=&alphabetically=true')
     a = json.loads(html)
     for b in a['genres'][1:]:
         ilist = self.addMenuItem(b['title'],'GS', ilist, str(b['id'])+'|0', self.addonIcon, self.addonFanart, None, isFolder=True)
@@ -88,7 +88,7 @@ class myAddon(t1mAddon):
         if pbsol != '':
            xheaders = self.defaultHeaders.copy()
            xheaders['X-Requested-With'] = 'XMLHttpRequest'
-           html = self.getRequest('http://www.pbs.org/shows-page/0/?genre=&title=&callsign=%s' % pbsol, None, xheaders)
+           html = self.getRequest('http://www.pbs.org/shows-page/0/?genre=&title=&callsign=%s&alphabetically=true' % pbsol, None, xheaders)
            if len(html) > 0:
                a = json.loads(html)
                if len(a['results']['content']) > 0:
@@ -129,7 +129,7 @@ class myAddon(t1mAddon):
         genreUrl, pgNum = url.split('|',1) 
         xheaders = self.defaultHeaders.copy()
         xheaders['X-Requested-With'] = 'XMLHttpRequest'
-        html = self.getRequest('http://www.pbs.org/shows-page/%s/?genre=%s&title=&callsign=' % (pgNum, genreUrl), None, xheaders)
+        html = self.getRequest('http://www.pbs.org/shows-page/%s/?genre=%s&title=&callsign=&alphabetically=true' % (pgNum, genreUrl), None, xheaders)
         a = json.loads(html)
         cats = a['results']['content']
     for i, (b) in list(enumerate(cats, start=1)):

@@ -8,7 +8,8 @@ import xml.etree.ElementTree as ET
 import util
 import player_config
 import adobe_activate_api
-from globals import selfAddon, defaultlive, defaultreplay, defaultupcoming, defaultimage, defaultfanart, translation, pluginhandle
+from globals import selfAddon, defaultlive, defaultreplay, defaultupcoming, \
+    defaultimage, defaultfanart, translation, pluginhandle
 from addon_util import *
 from menu_listing import *
 from register_mode import RegisterMode
@@ -145,8 +146,9 @@ class AppleTV(MenuListing):
             index_video(video)
 
     # Items can play as is and do not need authentication
-    def index_item_shelf(self, stash_json, item):
+    def index_item_shelf(self, stash_json):
         description = stash_json['description']
+        item = stash_json['internal_item']
         description = description + '\n\n' + self.get_metadata(item)
 
         index_item({
@@ -181,7 +183,8 @@ class AppleTV(MenuListing):
             'description' : description,
             'eventId' : stash_json['eventId'],
             'sessionUrl': stash_json['sessionUrl'],
-            'guid': stash_json['guid']
+            'guid': stash_json['guid'],
+            'channelResourceId': stash_json['channelResourceId']
         })
 
     def process_item_list(self, item_list):
@@ -232,7 +235,7 @@ class AppleTV(MenuListing):
             elif 'sessionUrl' in stash_json:
                 self.index_tv_shelf(stash_json, False)
             else:
-                self.index_item_shelf(stash_json, item)
+                self.index_item_shelf(stash_json)
 
     def get_metadata(self, item):
         metadataKeysElement = item.find('.//metadataKeys')
@@ -243,7 +246,7 @@ class AppleTV(MenuListing):
             valueLabels = metadataValuesElement.findall('.//label')
             for i in range(0, min(len(keyLabels), len(valueLabels))):
                 if valueLabels[i].text is not None:
-                    description = description + '%s: %s\n' % (keyLabels[i].text, valueLabels[i].text)
+                    description += '%s: %s\n' % (keyLabels[i].text, valueLabels[i].text)
         return description
 
     def check_blackout(self, item):

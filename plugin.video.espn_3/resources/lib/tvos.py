@@ -141,9 +141,10 @@ class TVOS(MenuListing):
         if 'adobeRSS' in content:
             networkId = content['tracking']['network'] if 'network' in content['tracking'] else ''
             networkName = content['source']
+        league = content['tracking']['league']
         index_item({
             'sport': content['tracking']['sport'],
-            'eventName': content['name'],
+            'eventName': content['name'] + ' (' + league + ')',
             'subcategory': content['subtitle'] if 'subtitle' in content else content['tracking']['sport'],
             'imageHref': content['imageHref'],
             'parentalRating': 'U',

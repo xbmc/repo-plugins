@@ -1,5 +1,7 @@
-import os, sys
-import xbmc, xbmcaddon
+import os
+import sys
+import xbmc
+import xbmcaddon
 
 selfAddon = xbmcaddon.Addon()
 addon_data_path = xbmc.translatePath(selfAddon.getAddonInfo('path')).decode('utf-8')
@@ -8,14 +10,14 @@ defaultimage = os.path.join(addon_data_path, 'icon.png')
 defaultfanart = os.path.join(addon_data_path, 'fanart.jpg')
 defaultlive = os.path.join(addon_data_path, 'resources/media/new_live.png')
 defaultreplay = os.path.join(addon_data_path, 'resources/media/new_replay.png')
-defaultupcoming =os.path.join( addon_data_path, 'resources/media/new_upcoming.png')
+defaultupcoming = os.path.join(addon_data_path, 'resources/media/new_upcoming.png')
 pluginhandle = int(sys.argv[1])
 
 ADDON_PATH_PROFILE = xbmc.translatePath(selfAddon.getAddonInfo('profile')).decode('utf-8')
 if not os.path.exists(ADDON_PATH_PROFILE):
         os.makedirs(ADDON_PATH_PROFILE)
 
-#User Agents
+# User Agents
 UA_PC = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.81 Safari/537.36'
 UA_ATV = 'AppleCoreMedia/1.0.0.13Y234 (Apple TV; U; CPU OS 9_2 like Mac OS X; en_us)'
 

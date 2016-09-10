@@ -19,6 +19,7 @@ ID = 'ID'
 
 MIN_THUMBNAIL_WIDTH = 500
 
+
 class Roku(MenuListing):
     @RegisterMode(PLACE)
     def __init__(self):
@@ -67,9 +68,9 @@ class Roku(MenuListing):
     @RegisterMode(URL_MODE)
     def url_mode(self, args):
         url = args.get(URL)[0]
-        id = args.get(ID)
-        if id:
-            id = id[0]
+        category_id = args.get(ID)
+        if category_id:
+            category_id = category_id[0]
         json_data = util.get_url_as_json_cache(get_url(url))
         if 'listings' in json_data:
             json_data['listings'].sort(cmp=compare_roku)
@@ -82,7 +83,7 @@ class Roku(MenuListing):
             xbmcplugin.setContent(pluginhandle, 'episodes')
         if 'categories' in json_data:
             for category in json_data['categories']:
-                if id is None:
+                if category_id is None:
                     if 'api' in category['links'] and 'subcategories' not in category:
                         addDir(category['name'],
                                dict(URL=category['links']['api']['video']['href'], MODE=self.make_mode(URL_MODE)),
@@ -95,7 +96,7 @@ class Roku(MenuListing):
                                        dict(URL=subcategory['links']['api']['video']['href'],
                                             MODE=self.make_mode(URL_MODE)),
                                        self.get_thumbnail(category))
-                elif id == str(category['id']):
+                elif category_id == str(category['id']):
                     if 'api' in category['links']:
                         addDir(category['name'] + ' - Clips',
                                dict(URL=category['links']['api']['video']['href'], MODE=self.make_mode(URL_MODE)),
@@ -104,7 +105,8 @@ class Roku(MenuListing):
                         for subcategory in category['subcategories']:
                             if 'api' in subcategory['links']:
                                 addDir(subcategory['name'],
-                                       dict(URL=subcategory['links']['api']['video']['href'], MODE=self.make_mode(URL_MODE)),
+                                       dict(URL=subcategory['links']['api']['video']['href'],
+                                            MODE=self.make_mode(URL_MODE)),
                                        self.get_thumbnail(category))
         if 'clients' in json_data:
             for client in json_data['clients']:
@@ -114,11 +116,13 @@ class Roku(MenuListing):
                            self.get_thumbnail(channel))
         xbmcplugin.endOfDirectory(pluginhandle)
 
+
 def get_time(listing):
     if 'startTime' in listing:
         time_format = '%Y-%m-%dT%H:%M:%S'
         return time.strptime(listing['startTime'][:-3], time_format)
     return None
+
 
 def compare_roku(l, r):
     lnetwork = l['broadcasts'][0]['name'] if 'broadcasts' in l else None

@@ -18,6 +18,8 @@
         <setting id="ShowSecPlus" type="bool" label="30997" default="true"/>
         <setting id="ShowLonghorn" type="bool" label="30998" default="true"/>
         <setting id="ShowBuzzerBeater" type="bool" label="30999" default="true"/>
+        <setting id="ShowAccExtra" type="bool" label="30989" default="true"/>
+        <setting id="ShowGoalLine" type="bool" label="30988" default="true"/>
     </category>
     <category label="30870">
         <setting id="ShowAppleTVMenu" type="bool" label="30800" default="true"/>

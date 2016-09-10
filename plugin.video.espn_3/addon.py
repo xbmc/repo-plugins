@@ -88,11 +88,15 @@ def PLAY_TV(args):
         event_name = args.get(EVENT_NAME)[0]
         event_guid = args.get(EVENT_GUID)[0]
         event_parental_rating = args.get(EVENT_PARENTAL_RATING)[0]
-        resource = adobe_activate_api.get_resource(network_name, event_name, event_guid, event_parental_rating)
+        channel_resource_id = args.get(CHANNEL_RESOURCE_ID)[0]
+        resource = adobe_activate_api.get_resource(channel_resource_id, event_name, event_guid, event_parental_rating)
     else:
         resource = resource[0]
 
     requires_auth = does_requires_auth(network_name)
+    if not requires_auth:
+        xbmc.log(TAG + ' Forcing auth', xbmc.LOGDEBUG)
+        requires_auth = adobe_activate_api.is_authenticated()
 
     if requires_auth:
         if not adobe_activate_api.is_authenticated():
@@ -101,15 +105,17 @@ def PLAY_TV(args):
             return
         try:
             # testing code raise urllib2.HTTPError(url='test', code=403, msg='no', hdrs=dict(), fp=None)
+            xbmc.log(TAG + ' getting media token for resource %s' % resource, xbmc.LOGDEBUG)
             media_token = adobe_activate_api.get_short_media_token(resource)
-        except urllib2.HTTPError as exception:
-            if exception.code == 410:
+        except urllib2.HTTPError as http_exception:
+            xbmc.log(TAG + ' error getting media token %s' % http_exception, xbmc.LOGDEBUG)
+            if http_exception.code == 410 or http_exception.code == 404:
                 dialog = xbmcgui.Dialog()
                 dialog.ok(translation(30037), translation(30840))
                 adobe_activate_api.deauthorize()
                 xbmcplugin.endOfDirectory(pluginhandle, succeeded=False, updateListing=True)
                 return
-            elif exception.code == 403:
+            elif http_exception.code == 403:
                 # Check for blackout
                 dialog = xbmcgui.Dialog()
                 ok = dialog.yesno(translation(30037), translation(30900))
@@ -119,7 +125,7 @@ def PLAY_TV(args):
                         selfAddon.setSetting(setting, 'false')
                 return
             else:
-                raise exception
+                raise http_exception
 
         token_type = 'ADOBEPASS'
     else:
@@ -148,6 +154,8 @@ def PLAY_TV(args):
         if exception.code == 403:
             session_json = json.load(exception)
             xbmc.log(TAG + 'checking for errors in %s' % session_json)
+        else:
+            raise exception
 
     if check_error(session_json):
         return
@@ -188,7 +196,7 @@ def PLAY_TV(args):
                 bandwidth = int(stream_info[bandwidth_key]) / 1024
                 if bandwidth <= bitrate_limit:
                     break
-                stream_index = stream_index + 1
+                stream_index += 1
         elif '2' == stream_quality: #Ask everytime
             should_ask = True
         if should_ask:

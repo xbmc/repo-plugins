@@ -96,6 +96,14 @@ msgctxt "#30201"
 msgid "SECPlus (%d event)"
 msgstr ""
 
+msgctxt "#30202"
+msgid "ACCExtra (%d events)"
+msgstr ""
+
+msgctxt "#30203"
+msgid "ACCExtra (%d event)"
+msgstr ""
+
 msgctxt "#30300"
 msgid "Authenticate with provider to access premium content"
 msgstr ""
@@ -287,6 +295,14 @@ msgstr ""
 msgctxt "#30910"
 msgid "There was an SSL certificate verification failure would you like to disable this verification? (configured in settings)"
 
+msgctxt "#30988"
+msgid "Goal Line"
+msgstr ""
+
+msgctxt "#30989"
+msgid "ACCExtra"
+msgstr ""
+
 msgctxt "#30990"
 msgid "ESPN"
 msgstr ""
@@ -326,3 +342,4 @@ msgstr ""
 msgctxt "#30999"
 msgid "Buzzer Beater"
 msgstr ""
+

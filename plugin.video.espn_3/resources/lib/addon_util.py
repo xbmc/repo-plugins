@@ -67,7 +67,7 @@ def check_error(session_json):
 
 def does_requires_auth(network_name):
     xbmc.log(TAG + 'Checking auth of ' + network_name, xbmc.LOGDEBUG)
-    requires_auth = not (network_name == 'espn3' or network_name.find('free') >= 0 or network_name == '')
+    requires_auth = not (network_name == 'espn3' or network_name == 'accextra' or network_name.find('free') >= 0 or network_name == '')
     if not requires_auth:
         free_content_check = player_config.can_access_free_content()
         if not free_content_check:
@@ -95,7 +95,9 @@ CHANNEL_SETTINGS = {
     'ShowSec': 'sec',
     'ShowSecPlus': 'secplus',
     'ShowLonghorn': 'longhorn',
-    'ShowBuzzerBeater': 'buzzerbeater'
+    'ShowBuzzerBeater': 'buzzerbeater',
+    'ShowAccExtra': 'accextra',
+    'ShowGoalLine': 'goalline'
 }
 NETWORK_ID_TO_NETWORK_NAME = {
     'espn1': 30990,
@@ -105,7 +107,10 @@ NETWORK_ID_TO_NETWORK_NAME = {
     'espnews': 30994,
     'espndeportes': 30995,
     'sec': 30996,
-    'longhorn': 30998
+    'longhorn': 30998,
+    'accextra': 30989,
+    'goalline': 30988,
+    'secplus': 30997
 }
 
 def get_setting_from_channel(channel):
@@ -175,12 +180,15 @@ def index_item(args):
         channel_color = 'BF5700'
     elif network_id == 'sec' or network_id == 'secplus':
         channel_color = '004C8D'
+    elif network_id == 'accextra':
+        channel_color = '013ca6'
     else:
         channel_color = 'CC0000'
     if 'networkName' in args:
         network = args['networkName']
     else:
         network = network_id
+    xbmc.log(TAG + 'network_id ' + network_id, xbmc.LOGDEBUG)
     if network_id in NETWORK_ID_TO_NETWORK_NAME:
         network = translation(NETWORK_ID_TO_NETWORK_NAME[network_id])
     blackout = args['blackout'] if 'blackout' in args else False
@@ -232,6 +240,7 @@ def index_item(args):
                 authurl[EVENT_NAME] = args['eventName'].encode('iso-8859-1')
                 authurl[EVENT_GUID] = args['guid'].encode('iso-8859-1')
                 authurl[EVENT_PARENTAL_RATING] = mpaa
+                authurl[CHANNEL_RESOURCE_ID] = args['channelResourceId']
     fanart = args['imageHref']
 
     if include_item(network_id):
@@ -296,13 +305,15 @@ def index_listing(listing):
         'starttime': starttime,
         'duration': duration,
         'type': listing['type'],
-        'networkId': listing['broadcasts'][0]['adobeResource'],
+        'networkId': listing['broadcasts'][0]['abbreviation'],
         'networkName': listing['broadcasts'][0]['name'],
         'blackout': check_json_blackout(listing),
         'description': listing['keywords'],
         'eventId': listing['eventId'],
         'sessionUrl': listing['links']['source']['hls']['default']['href'],
-        'guid': listing['guid']
+        'guid': listing['guid'],
+        'channelResourceId': listing['broadcasts'][0]['adobeResource']
+
     })
 
 

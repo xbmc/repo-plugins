@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.espn_3"
        name="ESPN 3"
-       version="2.9.14"
+       version="2.9.21"
        provider-name="awaters1,locomot1f,MetalChris,BlueCop,Romans I XVI">
     <requires>
         <import addon="xbmc.python" version="2.20.0"/>

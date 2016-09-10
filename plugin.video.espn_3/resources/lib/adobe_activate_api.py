@@ -19,12 +19,14 @@ SETTINGS_FILE = 'adobe.json'
 UA_ATV = 'AppleCoreMedia/1.0.0.13Y234 (Apple TV; U; CPU OS 9_2 like Mac OS X; en_us)'
 TAG = 'ESPN3-adobe-api: '
 
+
 # Fixes an issue with 32bit systems not supporting times after 2038
 def save_cookies(cj):
     for cookie in cj:
         if cookie.expires > 2000000000:
             cookie.expires = 2000000000
     cj.save(os.path.join(ADDON_PATH_PROFILE, 'adobe-cookies.lwp'), ignore_discard=True, ignore_expires=True)
+
 
 def get_cookie_jar():
     cj = cookielib.LWPCookieJar()
@@ -34,13 +36,16 @@ def get_cookie_jar():
         cj.load(os.path.join(ADDON_PATH_PROFILE, 'adobe-cookies.lwp'), ignore_discard=True)
     return cj
 
+
 def reset_settings():
     save_settings(dict())
+
 
 def save_settings(settings):
     settings_file = os.path.join(ADDON_PATH_PROFILE, SETTINGS_FILE)
     with open(settings_file, 'w') as fp:
         json.dump(settings, fp, sort_keys=False, indent=4)
+
 
 def load_settings():
     settings_file = os.path.join(ADDON_PATH_PROFILE, SETTINGS_FILE)
@@ -49,12 +54,14 @@ def load_settings():
     with open(settings_file, 'r') as fp:
         return json.load(fp)
 
+
 def get_device_id():
     settings = load_settings()
     if 'device_id' not in settings:
         settings['device_id'] = str(uuid.uuid1())
         save_settings(settings)
     return settings['device_id']
+
 
 def read_response(resp):
     if resp.info().get('Content-Encoding') == 'gzip':
@@ -65,8 +72,10 @@ def read_response(resp):
         content = resp.read()
     return json.loads(content)
 
+
 def is_expired(expiration):
     return (time.time() * 1000) >= int(expiration)
+
 
 def get_url_response(url, message, body = None, method = None):
     # xbmc.log(TAG + 'url %s message %s' % (url, message), xbmc.LOGDEBUG)
@@ -89,6 +98,7 @@ def get_url_response(url, message, body = None, method = None):
     save_cookies(cj)
     return resp
 
+
 def generate_message(method, path):
     nonce = str(uuid.uuid4())
     today = str(int(time.time() * 1000))
@@ -98,6 +108,7 @@ def generate_message(method, path):
     signature = base64.b64encode(signature.digest())
     message = message + ', public_key=yKpsHYd8TOITdTMJHmkJOVmgbb2DykNK, signature=' + signature
     return message
+
 
 def is_reg_code_valid():
     settings = load_settings()
@@ -111,9 +122,12 @@ def is_reg_code_valid():
         return False
     return True
 
+
 # Gets called when the user wants to authorize this device, it returns a registration code to enter
 # on the activation website page
-# Sample : '{"id":"","code":"","requestor":"ESPN","generated":1463616806831,"expires":1463618606831,"info":{"deviceId":"","deviceType":"appletv","deviceUser":null,"appId":null,"appVersion":null,"registrationURL":null}}'
+# Sample : '{"id":"","code":"","requestor":"ESPN","generated":1463616806831,
+# "expires":1463618606831,"info":{"deviceId":"","deviceType":"appletv","deviceUser":null,
+# "appId":null,"appVersion":null,"registrationURL":null}}'
 # (generateRegCode)
 def get_regcode():
     if is_reg_code_valid():
@@ -139,6 +153,7 @@ def get_regcode():
     save_settings(settings)
     return resp['code']
 
+
 # Authenticates the user after they have been authenticated on the activation website (authenticateRegCode)
 # Sample: '{"mvpd":"","requestor":"ESPN","userId":"","expires":"1466208969000"}'
 def authenticate():
@@ -162,6 +177,7 @@ def authenticate():
     settings['authenticateRegCode'] = resp
     save_settings(settings)
 
+
 # Get authn token (re-auth device after it expires), getAuthnToken
 def re_authenticate():
     params = urllib.urlencode({'requestor': 'ESPN',
@@ -181,8 +197,10 @@ def re_authenticate():
         del settings['authorize']
     save_settings(settings)
 
+
 def get_resource(channel, event_name, event_guid, event_parental_rating):
     return '<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title><![CDATA[' + channel + "]]></title><item><title><![CDATA[" + event_name + "]]></title><guid><![CDATA[" + event_guid + ']]></guid><media:rating scheme="urn:v-chip"><![CDATA[' + event_parental_rating + "]]></media:rating></item></channel></rss>"
+
 
 # Sample '{"resource":"resource","mvpd":"","requestor":"ESPN","expires":"1463621239000"}'
 def authorize(resource):
@@ -208,9 +226,9 @@ def authorize(resource):
     settings['authorize'][resource.decode('iso-8859-1').encode('utf-8')] = resp
     save_settings(settings)
 
+
 def deauthorize():
     params = urllib.urlencode({'deviceId': get_device_id()})
-
 
     path = '/logout'
     url = urlparse.urlunsplit(['https', 'api.auth.adobe.com',
@@ -227,8 +245,10 @@ def deauthorize():
         del settings['authenticateRegCode']
     save_settings(settings)
 
+
 # getShortMediaToken
-# Sample '{"mvpdId":"","expires":"1463618218000","serializedToken":"+++++++=","userId":"","requestor":"ESPN","resource":" resource"}'
+# Sample '{"mvpdId":"","expires":"1463618218000","serializedToken":"+++++++=","userId":"",
+# "requestor":"ESPN","resource":" resource"}'
 def get_short_media_token(resource):
     if has_to_reauthenticate():
         xbmc.log(TAG + 're-authenticating device', xbmc.LOGDEBUG)
@@ -245,24 +265,36 @@ def get_short_media_token(resource):
 
     message = generate_message('GET', path)
 
-    resp = get_url_response(url, message)
+    try:
+        resp = get_url_response(url, message)
+    except urllib2.HTTPError as exception:
+        if exception.code == 401:
+            xbmc.log(TAG + 'Unauthorized exception, trying again', xbmc.LOGDEBUG)
+            re_authenticate()
+            resp = get_url_response(url, message)
+        else:
+            raise exception
     settings = load_settings()
     settings['getShortMediaToken'] = resp
     save_settings(settings)
     return resp['serializedToken']
 
+
 def is_authenticated():
     settings = load_settings()
     return 'authenticateRegCode' in settings
+
 
 def has_to_reauthenticate():
     settings = load_settings()
     return is_expired(settings['authenticateRegCode']['expires'])
 
+
 def is_authorized(resource):
     settings = load_settings()
     if 'authorize' in settings and resource.decode('iso-8859-1').encode('utf-8') in settings['authorize']:
         return not is_expired(settings['authorize'][resource.decode('iso-8859-1').encode('utf-8')]['expires'])
+
 
 def get_expires_time(key):
     settings = load_settings()
@@ -270,11 +302,14 @@ def get_expires_time(key):
     expires_time = time.localtime(int(expires) / 1000)
     return time.strftime('%Y-%m-%d %H:%M', expires_time)
 
+
 def get_authentication_expires():
     return get_expires_time('authenticateRegCode')
 
+
 def get_authorization_expires():
     return get_expires_time('authorize')
+
 
 def clean_up_authorization_tokens():
     settings = load_settings()
@@ -289,6 +324,7 @@ def clean_up_authorization_tokens():
     for key in keys_to_delete:
         del settings['authorize'][key]
     save_settings(settings)
+
 
 def get_user_metadata():
     params = urllib.urlencode({'requestor': 'ESPN',

@@ -1,0 +1,126 @@
+msgid ""
+msgstr ""
+
+msgctxt "#30001"
+msgid "Number of lines"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Library Movies"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Library Episodes"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Library Music Videos"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Group by"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Store list in a custom path"
+msgstr ""
+
+msgctxt "#30007"
+msgid "List location"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Remove from list"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Single list"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Show Date"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Show Time"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Keep history at 5 Star Movies"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Enable debug"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Show Addon History List"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Delete Addon History List"
+msgstr ""
+
+msgctxt "#30016"
+msgid "*** There is no Addon History ***"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Source"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Type"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Addon List (old format)"
+msgstr ""
+
+msgctxt "#30020"
+msgid "theMovieDb user"
+msgstr ""
+
+msgctxt "#30021"
+msgid "theMovieDb password"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Library Videos"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#30024"
+msgid "TV"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Videos"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Number of lines on top from all sources and types"
+msgstr ""
+
+msgctxt "#30027"
+msgid "General"
+msgstr ""
+
+msgctxt "#30028"
+msgid "5 Star"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Advanced"
+msgstr ""
+
+msgctxt "#30030"
+msgid "New install. Start watching and it will display here."
+msgstr ""
+
+msgctxt "#30031"
+msgid "Play with "
+msgstr ""

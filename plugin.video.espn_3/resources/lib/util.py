@@ -14,6 +14,7 @@ from globals import ADDON_PATH_PROFILE
 
 TAG = 'ESPN3 util: '
 
+
 def is_file_valid(cache_file, timeout):
     if os.path.isfile(cache_file):
         modified_time = os.path.getmtime(cache_file)
@@ -25,8 +26,6 @@ def is_file_valid(cache_file, timeout):
 def fetch_file(url, cache_file):
     urllib.urlretrieve(url, cache_file)
 
-def load_file(cache_file):
-    return open(cache_file, mode='r')
 
 def clear_cache(url):
     cache_file = hashlib.sha224(url).hexdigest()
@@ -35,6 +34,7 @@ def clear_cache(url):
         os.remove(cache_file)
     except:
         pass
+
 
 def get_url_as_xml_soup_cache(url, cache_file = None, timeout = 300):
     if cache_file is None:
@@ -45,14 +45,15 @@ def get_url_as_xml_soup_cache(url, cache_file = None, timeout = 300):
         fetch_file(url, cache_file)
     else:
         xbmc.log(TAG + 'Using cache %s for %s' % (cache_file, url), xbmc.LOGDEBUG)
-    xml_file = open(cache_file)
-    xml_data = xml_file.read()
-    xml_file.close()
-    return load_element_tree(xml_data)
+    with open(cache_file) as xml_file:
+        xml_data = xml_file.read()
+        return load_element_tree(xml_data)
+
 
 def get_url_as_xml_soup(url):
     config_data = urllib2.urlopen(url).read()
     return load_element_tree(config_data)
+
 
 # ESPN files are in iso-8859-1 and sometimes do not have the xml preamble
 def load_element_tree(data):
@@ -78,9 +79,11 @@ def load_element_tree(data):
 
     return data_tree
 
+
 def get_url_as_json(url):
     response = urllib2.urlopen(url)
     return json.load(response)
+
 
 def get_url_as_json_cache(url, cache_file = None, timeout = 300):
     if cache_file is None:
@@ -91,13 +94,14 @@ def get_url_as_json_cache(url, cache_file = None, timeout = 300):
         fetch_file(url, cache_file)
     else:
         xbmc.log(TAG + 'Using cache %s for %s' % (cache_file, url), xbmc.LOGDEBUG)
-    json_file = open(cache_file)
-    json_data = json_file.read()
-    json_file.close()
-    if json_data.startswith('ud='):
-        json_data = json_data.replace('ud=', '')
-        json_data = json_data.replace('\'', '"')
-    return json.loads(json_data)
+    with open(cache_file) as json_file:
+        json_data = json_file.read()
+        json_file.close()
+        if json_data.startswith('ud='):
+            json_data = json_data.replace('ud=', '')
+            json_data = json_data.replace('\'', '"')
+        return json.loads(json_data)
+
 
 # espn.page.loadSportPage('url');
 # -> url

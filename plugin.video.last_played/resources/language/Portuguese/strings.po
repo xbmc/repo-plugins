@@ -104,3 +104,23 @@ msgstr "Videos"
 msgctxt "#30026"
 msgid "Number of lines on top from all sources and types"
 msgstr "Numero de linhas no topo de todas as fontes e tipos"
+
+msgctxt "#30027"
+msgid "General"
+msgstr "Geral"
+
+msgctxt "#30028"
+msgid "5 Star"
+msgstr "5 Star"
+
+msgctxt "#30029"
+msgid "Advanced"
+msgstr "Avançado"
+
+msgctxt "#30030"
+msgid "New install. Start watching and it will display here."
+msgstr "Nova instalação. Os próximos filems vistos surgirão aqui."
+
+msgctxt "#30031"
+msgid "Play with "
+msgstr "Tocar com "

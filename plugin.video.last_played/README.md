@@ -27,20 +27,21 @@ Enable Debug: Display an extra menu option allowing to clear the full list, and 
 
 Installation
 ------------
-a) It can be found in several of third party repos
-
-b) Or install it manually following these steps
- - Download the add-on as a ZIP file
- - Open Kodi
- - Go to `System -> Settings -> Add-ons -> Install from zip file`
- - Enjoy :)
+- Download the 5 star repo
+https://github.com/5-star/repository.5st...p?raw=true
+- Open Kodi
+- Go to `System -> Settings -> Add-ons
+- Select Install from zip file` -> Select the downloaded zip file
+- Then select -> Install from repository -> Last played addon and Install
+- Enjoy Smile
  
 Release history
 ---------------
+1.0.8 - New replay method and some minor improvements<br />
 1.0.7 - New list format and add 5star-movies<br />
 1.0.6 - Configuration options<br />
 1.0.5 - Add debug options<br />
-1.0.4 - New options: Split by addon and display date and time<br />
+1.0.4 - New options: Split by addon and display date and time<br /> 
 1.0.3 - Improve metadata info. Aloow item removal. Make it kodi repo compliant<br />
 1.0.2 - Set media type on list items<br />
 1.0.1 - Initial Release<br />

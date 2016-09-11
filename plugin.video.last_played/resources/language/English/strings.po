@@ -104,3 +104,23 @@ msgstr ""
 msgctxt "#30026"
 msgid "Number of lines on top from all sources and types"
 msgstr ""
+
+msgctxt "#30027"
+msgid "General"
+msgstr ""
+
+msgctxt "#30028"
+msgid "5 Star"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Advanced"
+msgstr ""
+
+msgctxt "#30030"
+msgid "New install. Start watching and it will display here."
+msgstr ""
+
+msgctxt "#30031"
+msgid "Play with "
+msgstr ""

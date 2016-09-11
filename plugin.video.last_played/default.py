@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os, time
 import json
 import urllib, urllib2
@@ -16,12 +17,11 @@ else:
 txtfile = txtpath + "lastPlayed.json"
 fivestar = addon.getSetting('fivestar')
 enable_debug = addon.getSetting('enable_debug')
-newline={}
 lang = addon.getLocalizedString
 
 # Builds JSON request with provided json data
 def buildRequest(method, params, jsonrpc='2.0', rid='1'):
-	request = { 'jsonrpc' : jsonrpc, 'method' : method, 'params' : params, 'id' : rid, }
+	request = { 'jsonrpc' : jsonrpc, 'method' : method, 'params' : params, 'id' : rid }
 	return request
 
 # Checks JSON response and returns boolean result
@@ -54,7 +54,7 @@ def JSquery(request):
 	return (result, data, error)
 
 def send2fivestar(line):
-	wid = line["id"]
+	wid = int(line["id"])
 	if line["type"]=="movie": typ="M"
 	elif line["type"]=="episode": typ="S"
 	else: typ="V"
@@ -66,9 +66,11 @@ def send2fivestar(line):
 	imdbId = ""
 	tvdbId = ""
 	orgTitle = ""
-	showTitle = ""
-	season = ""
-	episode = ""
+	showTitle = line["show"]
+	season = line["season"]
+	episode = line["episode"]
+	thumbnail = line["thumbnail"]
+	fanart = line["fanart"]
 	if wid>0:
 		if typ=="M":
 			request = buildRequest('VideoLibrary.GetMovieDetails', {'movieid' : wid, 'properties' : ['imdbnumber', 'originaltitle']})
@@ -89,6 +91,8 @@ def send2fivestar(line):
 					orgTitle = data['tvshowdetails']["originaltitle"]
 					tvdbId = data['tvshowdetails']["imdbnumber"]
 
+	xvideo = line["file"]
+	if "video" in line and line["video"]!="": xvideo = line["video"]
 	url = "http://www.5star-movies.com/WebService.asmx/kodiWatch?tmdbId="
 	url = url + "&tvdbId=" + tvdbId
 	url = url + "&imdbId=" + imdbId
@@ -98,64 +102,65 @@ def send2fivestar(line):
 	url = url + "&year=" + str(line["year"])
 	url = url + "&source=" + urllib.quote(line["source"].encode("utf-8"))
 	url = url + "&type=" + typ
-	url = url + "&usr=" + urllib.quote(addon.getSetting('TMDBusr'))
+	url = url + "&usr=" + urllib.quote(addon.getSetting('TMDBusr').encode("utf-8"))
 	url = url + "&pwd=" + addon.getSetting('TMDBpwd')
-	url = url + "&link=" + urllib.quote(line["file"].encode("utf-8"))
+	url = url + "&link=" + urllib.quote(xvideo.encode("utf-8"))
 	url = url + "&thumbnail=" + urllib.quote(line["thumbnail"].encode("utf-8"))
 	url = url + "&fanart=" + urllib.quote(line["fanart"].encode("utf-8"))
 	url = url + "&showtitle=" + urllib.quote(showTitle.encode("utf-8"))
 	url = url + "&season=" + str(season)
 	url = url + "&episode=" + str(episode)
-	url = url + "&version=1.07"
+	url = url + "&version=1.08"
 	url = url + "&date=" + line["date"]
-
-	request = urllib2.Request(url)
-	urllib2.urlopen(request)
-
-def videoStart():
-	request = buildRequest('Player.GetItem', {'playerid' : 1, 'properties' : ['file', 'title', 'year', 'thumbnail', 'fanart']})
-	result, data = JSquery(request)[:2]
-	if enable_debug	== "true": xbmc.log("<<<plugin.video.last_played (start play) "+str(data), 3)
-	global newline
-	newline = {}
-	if ( result and 'item' in data and data['item'] ):
-		item = data['item']
-		getTitle=item['title']
-		if getTitle=='': getTitle=item['label']
-		thumbnail = item['thumbnail'].strip().rstrip('/').replace('image://','')
-		thumbnail = urllib.unquote(thumbnail)
-		fanart = item['fanart'].strip().rstrip('/').replace('image://','')
-		fanart = urllib.unquote(fanart)
-		typ = item['type']
-		if typ=='unknown': typ = 'video'
-		newline = {"title":getTitle,"year":item['year'],"file":item['file'].strip(), "id":item.get('id', 0), "type":typ,"thumbnail":thumbnail, "fanart":fanart}
-		if enable_debug	== "true": xbmc.log("<<<plugin.video.last_played (start line) "+str(newline), 3)
+	try:
+		request = urllib2.Request(url)
+		urllib2.urlopen(request)
+	except:
+		pass
 
 def videoEnd():
-	global newline
-	if enable_debug	== "true": xbmc.log("<<<plugin.video.last_played (end) "+str(newline), 3)
-	if newline != {}:
-		retry=1
-		source=''
-		while source=='' and retry<50:
-			source = xbmc.getInfoLabel('ListItem.Path')
-			retry=retry+1
-			time.sleep(0.1)
-		if newline["id"]>0:
-			if newline["type"]=="movie": source=lang(30002)
-			elif newline["type"]=="episode": source=lang(30003)
-			elif newline["type"]=="musicvideo": source=lang(30004)
-			else: source=lang(30022)
-		if enable_debug	== "true": xbmc.log("<<<plugin.video.last_played (end source) "+source, 3)
+	retry=1
+	xsource=''
+	while xsource=='' and retry<50:
+		xsource = xbmc.getInfoLabel('ListItem.Path').decode("utf-8")
+		retry=retry+1
+		time.sleep(0.1)
+
+	if xsource!='':
+		xtitle = xbmc.getInfoLabel('ListItem.Title').decode("utf-8").strip()
+		xyear = xbmc.getInfoLabel('ListItem.Year')
+		xfile = xbmc.getInfoLabel('ListItem.FileNameAndPath').decode("utf-8").strip()
+		xid = xbmc.getInfoLabel('ListItem.DBID')
+		xtype = xbmc.getInfoLabel('ListItem.DBTYPE')
+		xthumb = xbmc.getInfoLabel('ListItem.Art(thumb)').decode("utf-8")
+		xfanart = xbmc.getInfoLabel('ListItem.Art(fanart)').decode("utf-8")
+		xshow = xbmc.getInfoLabel('ListItem.TVShowTitle').decode("utf-8").strip()
+		xseason = xbmc.getInfoLabel('ListItem.Season')
+		xepisode = xbmc.getInfoLabel('ListItem.Episode')
+		xvideo = player_monitor.video
+		
+		if int(xid)>0:
+			if xtype=="movie": xsource=lang(30002)
+			elif xtype=="episode": xsource=lang(30003)
+			elif xtype=="musicvideo": xsource=lang(30004)
+			else: xsource=lang(30022)
+		else:
+			ads = xsource.split("/")
+			if len(ads) > 2: xsource = ads[2]
+	
+		if enable_debug	== "true": xbmc.log("<<<plugin.video.last_played (end source) "+xsource, 3)
 		if xbmcvfs.exists(txtfile):
 			f = xbmcvfs.File(txtfile)
-			lines = json.load(f)
+			try: lines = json.load(f)
+			except: lines = []
 			f.close()
 		else: lines = []
 
 		replay = "N"
 		for line in lines:
-			if newline["file"]==line["file"]:
+			if xfile==line["file"]: replay = "S"
+			if "video" in line and xvideo==line["video"]: replay = "S"
+			if replay == "S":
 				lines.remove(line)
 				line.update({"date": time.strftime("%Y-%m-%d")})
 				line.update({"time": time.strftime("%H:%M:%S")})
@@ -166,9 +171,7 @@ def videoEnd():
 				break
 
 		if replay=="N":
-			newline.update({"source": source})
-			newline.update({"date": time.strftime("%Y-%m-%d")})
-			newline.update({"time": time.strftime("%H:%M:%S")})
+			newline = {"source":xsource, "title":xtitle, "year":xyear, "file":xfile, "video": xvideo, "id":xid, "type":xtype,"thumbnail":xthumb, "fanart":xfanart, "show":xshow, "season":xseason, "episode":xepisode, "date":time.strftime("%Y-%m-%d"), "time":time.strftime("%H:%M:%S")}
 			lines.insert(0, newline)
 			if enable_debug	== "true": xbmc.log("<<<plugin.video.last_played (end final play) "+str(newline), 3)
 			if fivestar	== "true": send2fivestar(newline)
@@ -179,15 +182,10 @@ def videoEnd():
 			f = xbmcvfs.File(txtfile, 'w')
 			json.dump(lines, f)
 			f.close()
-	newline={}
 
 class KodiPlayer(xbmc.Player):
 	def __init__(self, *args, **kwargs):
 		xbmc.Player.__init__(self)
-
-	@classmethod
-	def onPlayBackStarted(self):
-		videoStart()
 
 	@classmethod
 	def onPlayBackEnded(self):
@@ -197,6 +195,9 @@ class KodiPlayer(xbmc.Player):
 	def onPlayBackStopped(self):
 		videoEnd()
 
+	def onPlayBackStarted(self):
+		player_monitor.video = player_monitor.getPlayingFile()
+				
 player_monitor = KodiPlayer()
 
 while not xbmc.abortRequested:

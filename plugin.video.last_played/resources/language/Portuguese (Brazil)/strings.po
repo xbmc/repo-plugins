@@ -1,0 +1,126 @@
+msgid ""
+msgstr ""
+
+msgctxt "#30001"
+msgid "Number of lines"
+msgstr "Numero de linhas da lista"
+
+msgctxt "#30002"
+msgid "Library Movies"
+msgstr "Filmes da Biblioteca"
+
+msgctxt "#30003"
+msgid "Library Episodes"
+msgstr "Episódios da Biblioteca"
+
+msgctxt "#30004"
+msgid "Library Music Videos"
+msgstr "Videos de Música da Biblioteca"
+
+msgctxt "#30005"
+msgid "Group by"
+msgstr "Agrupar por"
+
+msgctxt "#30006"
+msgid "Store list in a custom path"
+msgstr "Colocar lista em pasta escolhida"
+
+msgctxt "#30007"
+msgid "List location"
+msgstr "Localização da Lista"
+
+msgctxt "#30008"
+msgid "Remove from list"
+msgstr "Remover da lista"
+
+msgctxt "#30009"
+msgid "Single list"
+msgstr "Lista simples"
+
+msgctxt "#30010"
+msgid "Show Date"
+msgstr "Mostrar Data"
+
+msgctxt "#30011"
+msgid "Show Time"
+msgstr "Mostrar Hora"
+
+msgctxt "#30012"
+msgid "Keep history at 5 Star Movies"
+msgstr "Manter histórico em 5 Start Movies"
+
+msgctxt "#30013"
+msgid "Enable debug"
+msgstr "Ativar debug"
+
+msgctxt "#30014"
+msgid "Show Addon History List"
+msgstr "Mostrar Lista de Histórico de Addons"
+
+msgctxt "#30015"
+msgid "Delete Addon History List"
+msgstr "Apagar Lista de Histórico de Addons"
+
+msgctxt "#30016"
+msgid "*** There is no Addon History ***"
+msgstr "*** Não existe Histórico de Addons ***"
+
+msgctxt "#30017"
+msgid "Source"
+msgstr "Fonte"
+
+msgctxt "#30018"
+msgid "Type"
+msgstr "Tipo"
+
+msgctxt "#30019"
+msgid "Addon List (old format)"
+msgstr "Lista de Addons (formato antigo)"
+
+msgctxt "#30020"
+msgid "theMovieDb user"
+msgstr "theMovieDb - utilizador"
+
+msgctxt "#30021"
+msgid "theMovieDb password"
+msgstr "theMovieDb - palavra passe"
+
+msgctxt "#30022"
+msgid "Library Videos"
+msgstr "Video da Biblioteca"
+
+msgctxt "#30023"
+msgid "Movies"
+msgstr "Filmes"
+
+msgctxt "#30024"
+msgid "TV"
+msgstr "TV"
+
+msgctxt "#30025"
+msgid "Videos"
+msgstr "Videos"
+
+msgctxt "#30026"
+msgid "Number of lines on top from all sources and types"
+msgstr "Numero de linhas no topo de todas as fontes e tipos"
+
+msgctxt "#30027"
+msgid "General"
+msgstr "Geral"
+
+msgctxt "#30028"
+msgid "5 Star"
+msgstr "5 Star"
+
+msgctxt "#30029"
+msgid "Advanced"
+msgstr "Avançado"
+
+msgctxt "#30030"
+msgid "New install. Start watching and it will display here."
+msgstr "Nova instalação. Os próximos filems vistos surgirão aqui."
+
+msgctxt "#30031"
+msgid "Play with "
+msgstr "Tocar com "

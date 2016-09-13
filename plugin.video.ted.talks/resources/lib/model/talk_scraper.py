@@ -43,18 +43,4 @@ def get(html, video_quality='320kbps'):
         return url, title, speaker, plot, talk_json
 
     else:
-        # Vimeo fallback
-        headline = xbmc_common.parseDOM(html, 'span', attrs={'id':'altHeadline'})[0].split(':', 1)
-        # Note: maybe no ':' in title.
-        title = headline[0].strip() if len(headline) == 1 else headline[1].strip()
-        speaker = "Unknown" if len(headline) == 1 else headline[0].strip()
-        plot = xbmc_common.parseDOM(html, 'p', attrs={'id':'tagline'})[0]
-
-        vimeo_re = re.compile('https?://.*?vimeo.com/.*?/([^/?]+)')
-        for link in xbmc_common.parseDOM(html, 'iframe', ret='src'):  # Can't get attrs regex to work properly with parseDOM :(
-            match = vimeo_re.match(link)
-            if match:
-                url = 'plugin://plugin.video.vimeo?action=play_video&videoid=%s' % (match.group(1))
-                break
-
-        return url, title, speaker, plot, None
+        raise Exception('Could not parse HTML:\n%s' % (html))

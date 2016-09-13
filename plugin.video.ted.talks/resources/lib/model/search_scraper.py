@@ -36,13 +36,12 @@ class Search:
             yield title, url, img
 
     def results_remaining(self, html):
-        search_results = xbmc_common.parseDOM(html, 'div', {'class': 'heading search__results__heading'})
-        if search_results:
-            results_count_matches = __results_count_re__.findall(search_results[0])
-            if results_count_matches:
-                match = results_count_matches[0]
-                return int(match[1]) - int(match[0])
-            if __result_count_re__.findall(search_results[0]):
-                return 0  # All results on this page
+        results_count_matches = __results_count_re__.findall(html)
+        if results_count_matches:
+            match = results_count_matches[0]
+            return int(match[1]) - int(match[0])
+
+        if __result_count_re__.findall(html):
+            return 0  # All results on this page
         # We don't know so just make sure that it is positive so that we keep paging.
         return 1

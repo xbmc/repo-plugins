@@ -145,11 +145,11 @@ class Action(object):
 class PlayVideoAction(Action):
 
     def __init__(self, ui, *args, **kwargs):
-        super(PlayVideoAction, self).__init__('playVideo', ['url', 'icon'], *args, **kwargs)
+        super(PlayVideoAction, self).__init__('playVideo', ['url'], *args, **kwargs)
         self.ui = ui
 
     def run_internal(self, args):
-        self.ui.playVideo(args['url'], args['icon'])
+        self.ui.playVideo(args['url'], args['icon'] if 'icon' in args else None)
 
 
 class NewTalksAction(Action):

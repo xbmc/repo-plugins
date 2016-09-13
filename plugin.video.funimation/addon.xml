@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.funimation" name="Funimation" version="1.2.0" provider-name="Aaron Frase">
+<addon id="plugin.video.funimation" name="Funimation" version="1.2.1" provider-name="Aaron Frase">
   <requires>
     <import addon="xbmc.python" version="2.1.0" />
   </requires>
@@ -14,6 +14,7 @@
     <description lang="en">You should be watching anime and Asian drama episodes on FUNimation.com available in English dubs and subtitles.</description>
     <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
     <platform>all</platform>
+    <broken>Doesn't fully work due to website changes</broken>
     <language />
   </extension>
 </addon>

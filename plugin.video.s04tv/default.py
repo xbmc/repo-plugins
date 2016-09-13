@@ -20,7 +20,7 @@ import xml.etree.ElementTree as ET
 
 PLUGINNAME = 'S04tv'
 PLUGINID = 'plugin.video.s04tv'
-BASE_URL = 'http://www.s04.tv'
+BASE_URL = 'http://www.s04.tv/de/'
 
 # Shared resources
 addonPath = ''
@@ -74,14 +74,16 @@ def buildHomeDir(url, doc):
         #first tag is our ul
         if(type(navitem) == Tag):
             for ulitem in navitem.contents:
-                if(type(ulitem) == Tag):
-                    if(ulitem.name == 'li'):
-                        a = ulitem.find('a')
-                        if(not a):
-                            xbmc.log(missingelementtext%'a')
-                            continue
-                        url = BASE_URL + a['href']
-                        addDir(a.text, url, 2, '')
+                if(type(ulitem) == Tag):                    
+                    if(ulitem.name == 'li'):                        
+                        if not ulitem.has_key('class'):
+                            a = ulitem.find('a')
+                            if(not a):
+                                xbmc.log(missingelementtext%'a')
+                                continue
+                                                                    
+                            url = BASE_URL + a['href']
+                            addDir(a.text, url, 2, '')
             break
         
 
@@ -180,81 +182,14 @@ def buildVideoDir(url, doc):
                 continue
         except:
             pass
-                
-        div = article.find('div')
-        if(not div):
-            xbmc.log(missingelementtext%'div')
-            continue
         
-        flag = div['class']
-        
-        #for some reason findNextSibling does not work here and contents is not set properly
-        date = ''
-        if(origUrl.find('home') < 0):
-            p = div.findAllNext('p', limit=1)
-            if(not p):
-                xbmc.log(missingelementtext%'p')
-            else:
-                date = p[0].text
-                
-        img = div.findAllNext('img', limit=1)
-        if(not img):
-            xbmc.log(missingelementtext%'img')
-            continue
-        imageUrl = img[0]['src']
-        
-        #HACK: this is only required on home page
-        h2 = img[0].findAllNext('h2', limit=1)
-        if(h2):
-            a = h2[0].findAllNext('a', limit=1)
-            if(not a):
-                xbmc.log(missingelementtext%'a')
-                continue
-            url = a[0]['href']
-            span = a[0].find('span')
+        if(origUrl.find('home') > 0):
+            buildVideoDirHome(article, hidedate, hideexclusive, hideflag)
         else:
-            a = img[0].findAllNext('a', limit=1)
-            if(not a):
-                xbmc.log(missingelementtext%'a')
-                continue
-            url = a[0]['href']
-            span = a[0].find('span')
+            buildVideoDirElse(article, hidedate, hideexclusive, hideflag)
         
-        if(not span):
-            xbmc.log(missingelementtext%'span')
-            continue
+                
         
-        title = ''
-        for text in span.contents:
-            if(type(text) != Tag):
-                if(title != ''):
-                    title = title +': '
-                title = title +text
-                
-        #only required for homescreen
-        span2 = span.nextSibling
-        if(span2):
-            title = title +': ' +span2.text
-                
-        if(not hidedate and date != ''):
-            title = title + ' (%s)'%date
-                
-        extraInfo = {}
-        if(flag == 'flag_free'):
-            if(not hideflag):
-                title = '[FREE] ' +title
-            extraInfo['IsFreeContent'] = 'True'
-        elif(flag == 'flag_excl'):
-            if(hideexclusive):
-                #don't add exclusive videos to list
-                continue
-            if(not hideflag):
-                title = '[EXCL] ' +title
-            extraInfo['IsFreeContent'] = 'False'
-        
-        if(not url.startswith("http")):
-            url = BASE_URL + url
-        addLink(title, url, 4, imageUrl, date, extraInfo)
     
     #paging
     pageid = 0
@@ -274,6 +209,132 @@ def buildVideoDir(url, doc):
             addDir(__language__(30003), 'http://www.s04.tv/cache/TV/pages/videoverteil_%s_%s.html'%(pageid, 2), 3, '')
         
 
+def buildVideoDirHome(article, hidedate, hideexclusive, hideflag):
+    
+    div = article.find('div')
+    if(not div):
+        xbmc.log(missingelementtext%'div')
+        return
+    
+    flag = div['class']
+    
+    #TODO get date
+    date = ''
+    
+    img = div.findAllNext('img', limit=1)
+    if(not img):
+        xbmc.log(missingelementtext%'img')
+        return
+    imageUrl = img[0]['src']
+    
+    #HACK: this is only required on home page
+    h2 = img[0].findAllNext('h2', limit=1)
+    if(h2):
+        a = h2[0].findAllNext('a', limit=1)
+        if(not a):
+            xbmc.log(missingelementtext%'a')
+            return
+        url = a[0]['href']
+        span = a[0].find('span')
+    else:
+        a = img[0].findAllNext('a', limit=1)
+        if(not a):
+            xbmc.log(missingelementtext%'a')
+            return
+        url = a[0]['href']
+        span = a[0].find('span')
+    
+    if(not span):
+        xbmc.log(missingelementtext%'span')
+        return
+    
+    title = ''
+    for text in span.contents:
+        if(type(text) != Tag):
+            if(title != ''):
+                title = title +': '
+            title = title +text
+            
+    #only required for homescreen
+    span2 = span.nextSibling
+    if(span2):
+        title = title +': ' +span2.text
+            
+    if(not hidedate and date != ''):
+        title = title + ' (%s)'%date
+            
+    extraInfo = {}
+    if(flag == 'flag_free'):
+        if(not hideflag):
+            title = '[FREE] ' +title
+        extraInfo['IsFreeContent'] = 'True'
+    elif(flag == 'flag_excl'):
+        if(hideexclusive):
+            #don't add exclusive videos to list
+            return
+        if(not hideflag):
+            title = '[EXCL] ' +title
+        extraInfo['IsFreeContent'] = 'False'
+    
+    if(not url.startswith("http")):
+        url = BASE_URL + url
+    addLink(title, url, 4, imageUrl, date, extraInfo)
+
+
+def buildVideoDirElse(article, hidedate, hideexclusive, hideflag):
+    
+    #TODO get date
+    date = ''
+    #TODO get flag
+    flag = ''
+    
+    a = article.findAllNext('a', limit=1)
+    if(not a):
+        xbmc.log(missingelementtext%'a')
+        return
+    url = a[0]['href']
+    
+    div = a[0].find('div')
+    if(not div):
+        xbmc.log(missingelementtext%'div')
+        return
+            
+    img = div.findAllNext('img', limit=1)
+    if(not img):
+        xbmc.log(missingelementtext%'img')
+        return
+    imageUrl = img[0]['src']
+        
+    span = a[0].find('span', attrs={'class': 'title'})
+    if(not span):
+        xbmc.log(missingelementtext%'span')
+        return
+    
+    title = ''
+    for text in span.contents:
+        if(type(text) != Tag):
+            if(title != ''):
+                title = title +' '
+            title = title +text
+            
+            
+    extraInfo = {}
+    if(flag == 'flag_free'):
+        if(not hideflag):
+            title = '[FREE] ' +title
+        extraInfo['IsFreeContent'] = 'True'
+    elif(flag == 'flag_excl'):
+        if(hideexclusive):
+            #don't add exclusive videos to list
+            return
+        if(not hideflag):
+            title = '[EXCL] ' +title
+        extraInfo['IsFreeContent'] = 'False'
+    
+    if(not url.startswith("http")):
+        url = BASE_URL + url
+    addLink(title, url, 4, imageUrl, date, extraInfo)
+
 
 def getVideoUrl(url, doc):
     xbmc.log('getVideoUrl: url=' +url)
@@ -286,11 +347,11 @@ def getVideoUrl(url, doc):
         return xbmcplugin.setResolvedUrl(thisPlugin, True, listitem)
 	
     #check if we need to login
-    isFreeContent = xbmc.getInfoLabel( "ListItem.Property(IsFreeContent)" ) == 'True'
-    if(not isFreeContent):
-        success = login()
-        if(not success):
-            return
+    #isFreeContent = xbmc.getInfoLabel( "ListItem.Property(IsFreeContent)" ) == 'True'
+    #if(not isFreeContent):
+    success = login()
+    if(not success):
+        return
     
     soup = BeautifulSoup(''.join(doc))   
     iframe = soup.find('iframe', attrs={'class': 'videoframe'})

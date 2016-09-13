@@ -131,7 +131,7 @@ def tvList(type):
 
     menulist=[]
     items=[]
-
+	
     dialog = xbmcgui.Dialog()
 
     if (not plugin.get_setting('username')) or (not plugin.get_setting('password')):
@@ -156,8 +156,14 @@ def tvList(type):
             dialog.ok(__lang__(30003), signin.data['msg'])
             return
         else:
-            tvPlay(signin.data['key'])
-            return
+			if 'quality_urls' in signin.data and len(signin.data['quality_urls']) > 1:
+				for key,val in enumerate(signin.data['quality_urls']):
+					items.append(val['title'])
+				ret = dialog.select(__lang__(30006), items)
+				tvPlay(signin.data['quality_urls'][ret]['key'])
+				return
+			tvPlay(signin.data['key'])
+			return
 
     else:
         menulist = signin.data['menu']

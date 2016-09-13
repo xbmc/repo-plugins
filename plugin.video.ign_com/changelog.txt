@@ -41,3 +41,7 @@
 - New Experimental Feature: Show IGN1 24 hour live stream in main directory. Has to be activated via settings.
 2.2.2
 - Fixed problem when there was only 1 page available
+2.3.0
+- Dynamically load all available podcasts
+- Removed Ign1 as experimental option since the service was shut down
+- Fixed problem with page counter

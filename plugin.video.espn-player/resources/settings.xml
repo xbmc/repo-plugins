@@ -1,0 +1,12 @@
+﻿<settings>
+  <category label="30003">
+    <setting id="email" type="text" label="30001" default=""/>
+    <setting id="password" type="text" label="30002" option="hidden"  enable="!eq(-1,)" default=""/>
+    <setting id="preferred_bitrate" type="enum" label="30007" lvalues="30008|30011|30009" default="0"/>
+    <setting id="max_bitrate_allowed" type="number" label="30012" default="5000" subsetting="true" visible="eq(-1,1)"/>
+  </category>
+  <category label="30004">
+    <setting id="debug" type="bool" label="Add-on debugging" default="false"/>
+    <setting id="verify_ssl" type="bool" label="30014" default="true"/>
+  </category>
+</settings>

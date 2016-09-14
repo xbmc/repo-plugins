@@ -94,9 +94,65 @@ msgid "Your account is not authorized to watch this content. You will find infor
 msgstr ""
 
 msgctxt "#30021"
-msgid "You need to purchase this movie on the Viaplay website before playing it."
+msgid "You need to rent/purchase this movie on the Viaplay website before playing it."
 msgstr ""
 
 msgctxt "#30022"
 msgid "You're not allowed to watch content from this region."
+msgstr ""
+
+msgctxt "#30023"
+msgid "Preferred stream quality (movies & TV)"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Always use highest bitrate"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Ask"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Select stream quality"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Today"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Upcoming days"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Previous days"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Upcoming events"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Archived events"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Enter your PIN code"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Parental control"
+msgstr ""
+
+msgctxt "#30034"
+msgid "The PIN code you have entered is incorrect."
+msgstr ""
+
+msgctxt "#30035"
+msgid "Limit bitrate"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Max bitrate allowed (Kbps)"
 msgstr ""

@@ -1,0 +1,137 @@
+# Kodi Media Center language file
+# Addon Name: Vice
+# Addon id: plugin.video.vice
+# Addon version: 1.1.0
+# Addon Provider: Damon Toumbourou, lambda
+
+msgid ""
+msgstr ""
+
+
+msgctxt "#32001"
+msgid "Featured Videos"
+msgstr ""
+
+msgctxt "#32002"
+msgid "More Videos"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Featured Shows"
+msgstr ""
+
+msgctxt "#32004"
+msgid "More Shows"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Bookmarks"
+msgstr ""
+
+msgctxt "#32200"
+msgid "Country"
+msgstr ""
+
+msgctxt "#32201"
+msgid "Australia"
+msgstr ""
+
+msgctxt "#32202"
+msgid "Austria"
+msgstr ""
+
+msgctxt "#32203"
+msgid "Belgium"
+msgstr ""
+
+msgctxt "#32204"
+msgid "Brazil"
+msgstr ""
+
+msgctxt "#32205"
+msgid "Canada"
+msgstr ""
+
+msgctxt "#32206"
+msgid "Czech Republic"
+msgstr ""
+
+msgctxt "#32207"
+msgid "Colombia"
+msgstr ""
+
+msgctxt "#32208"
+msgid "Denmark"
+msgstr ""
+
+msgctxt "#32209"
+msgid "France"
+msgstr ""
+
+msgctxt "#32210"
+msgid "Germany"
+msgstr ""
+
+msgctxt "#32211"
+msgid "Greece"
+msgstr ""
+
+msgctxt "#32212"
+msgid "Italy"
+msgstr ""
+
+msgctxt "#32213"
+msgid "Mexico"
+msgstr ""
+
+msgctxt "#32214"
+msgid "Netherlands"
+msgstr ""
+
+msgctxt "#32215"
+msgid "Poland"
+msgstr ""
+
+msgctxt "#32216"
+msgid "Portugal"
+msgstr ""
+
+msgctxt "#32217"
+msgid "Romania"
+msgstr ""
+
+msgctxt "#32218"
+msgid "Russia"
+msgstr ""
+
+msgctxt "#32219"
+msgid "Serbia"
+msgstr ""
+
+msgctxt "#32220"
+msgid "Spain"
+msgstr ""
+
+msgctxt "#32221"
+msgid "Sweden"
+msgstr ""
+
+msgctxt "#32222"
+msgid "United Kingdom"
+msgstr ""
+
+msgctxt "#32223"
+msgid "United States"
+msgstr ""
+
+msgctxt "#32500"
+msgid "Next..."
+msgstr ""
+
+msgctxt "#32501"
+msgid "Add to bookmarks"
+msgstr ""
+
+msgctxt "#32502"
+msgid "Remove from bookmarks"
+msgstr ""

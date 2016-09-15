@@ -1,31 +1,34 @@
 [{
-	"name": "Discovery Channel",
+	"name": ["Discovery Channel"],
 	"pvrname": "Discovery HD"
 }, {
-	"name": "National Geographic Channel",
+	"name": ["National Geographic Channel"],
 	"pvrname": "NatGeo HD"
 }, {
-	"name": "BR",
+	"name": ["BR"],
 	"pvrname": "BR Süd HD"
 }, {
-	"name": "RTL II",
+	"name": ["RTL II", "RTL 2", "RTL2"],
 	"pvrname": "RTLII"
 }, {
-	"name": "RTL 2",
-	"pvrname": "RTLII"
+	"name": ["RTL Nitro"],
+	"pvrname": "RTLNITRO"
 }, {
-        "name": "RTL Nitro",
-        "pvrname": "RTLNITRO"
-}, {
-	"name": "NDR",
+	"name": ["NDR"],
 	"pvrname": "NDR FS MV HD"
 }, {
-        "name": "ZDFkultur",
-        "pvrname": "zdf.kultur"
+	"name": ["SWR/SR", "SWR", "SR"],
+	"pvrname": "SWR"
 }, {
-        "name": "ZDF neo",
-        "pvrname": "zdf_neo"
+	"name": ["ZDFkultur"],
+	"pvrname": "zdf.kultur"
 }, {
-        "name": "ARD",
-        "pvrname": "Das Erste"
+	"name": ["ZDF neo", "ZDFneo"],
+	"pvrname": "zdf_neo"
+}, {
+	"name": ["ARD"],
+	"pvrname": "Das Erste"
+}, {
+	"name": ["Zee.One"],
+	"pvrname": "Zee One"
 }]

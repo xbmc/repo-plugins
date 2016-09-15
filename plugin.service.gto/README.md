@@ -71,3 +71,6 @@ Debugging:
 
 Das Plugin wird gesprächig, wenn in den Einstellungen von Kodi unter System, Logging das Debug-Logging aktiviert wird.
 
+----------------------------------------------------------------------------------------------------------------------
+![Screenshot](resources/lib/media/screenshots/screenshot.jpg)
+

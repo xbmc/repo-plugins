@@ -172,20 +172,22 @@ def channelName2channelId(channelname):
     # translate via json if necessary
     trans = json.loads(str(ChannelTranslate))
     for tr in trans:
-        if channelname.upper() == tr['name'].upper():
-            writeLog("Translating %s to %s" % (channelname,tr['pvrname']), level=xbmc.LOGDEBUG)
-            channelname = tr['pvrname']
+        for names in tr['name']:
+            if channelname.lower() == names.lower():
+                writeLog("Translating %s to %s" % (channelname, tr['pvrname']), level=xbmc.LOGDEBUG)
+                channelname = tr['pvrname']
+                break
     
     if 'result' in res and 'channels' in res['result']:
         res = res['result'].get('channels')
         for channels in res:
 
             # prefer HD Channel if available
-            if __prefer_hd__ and  (channelname + " HD").lower() in channels['label'].lower():
+            if __prefer_hd__ and  (channelname + " HD").lower() == channels['label'].lower():
                 writeLog("GTO found HD priorized channel %s" % (channels['label']), level=xbmc.LOGDEBUG)
                 return channels['channelid']
 
-            if channelname.lower() in channels['label'].lower():
+            if channelname.lower() == channels['label'].lower():
                 writeLog("GTO found channel %s" % (channels['label']), level=xbmc.LOGDEBUG)
                 return channels['channelid']
     return False

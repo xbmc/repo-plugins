@@ -1,3 +1,7 @@
+2.0.4
+- Improved channel comparsion and selection
+- Improved ChannelTranslate.json
+
 2.0.3
 - Language files converted into Transifex
 

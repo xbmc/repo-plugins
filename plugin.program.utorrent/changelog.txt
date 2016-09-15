@@ -1,4 +1,8 @@
-﻿[B]1.1.6 (2016.8.26)[/B]
+﻿[B]1.1.7 (2016.9.15)[/B]
+added: support labels. thanks petslane
+fixed: bug in 1.1.6 that can't use http protocal
+
+[B]1.1.6 (2016.8.26)[/B]
 added: Support https, custom path and authentication using MD5 Digest Authentication. thanks petslane
 
 [B]1.1.5 (2015.10.8)[/B]

@@ -3,3 +3,6 @@
 - Fixed bug viewing past page 2 in members area.
 [B]2.0.2[/B]
 - Fixed bug with members area
+[B]2.0.3[/B]
+- Fixed bug in im members area video description
+- Added All Star Tuesdays

@@ -57,13 +57,15 @@ tytlive_url       = "/live/"
 tytlive_thumb     = "tytlive.jpg"
 tyt_get_live      = "/live/"
 tyt_get_live_thumb = "tytlive.jpg"
-
+allstar_url       = "/category/membership/all-star-tuesdays/"
+allstar_thumb     = "allstar.jpg"
 members_cat = {"Hour 1":            {"url":hour1_url, "thumb":hour1_thumb, "type":"members"},
                "Hour 2":            {"url":hour2_url, "thumb":hour2_thumb, "type":"members"},
                "Aggressive Progressives" : {"url":ap_url, "thumb":ap_thumb, "type":"members"},
                "Post Game":         {"url":pg_url, "thumb":pg_thumb, "type":"members"},
                "Old School":        {"url":oldschool_url, "thumb":oldschool_thumb, "type":"members"},
                "TYT Classics":      {"url":tytclassics_url, "thumb":tytclassics_thumb, "type":"members"},
+               "All Star Tuesdays": {"url":allstar_url, "thumb":allstar_thumb, "type":"members"},
                "Behind The Scenes": {"url":bts_url, "thumb":bts_thumb, "type":"members"}}
               
 
@@ -195,7 +197,8 @@ def router(paramstring):
     if params['action'] == 'listing':
       if 'url' in params.keys():
         list_videos(params['category'], params['url'])
-      else:
+      else: #list videos in member section
+        get_cookie()
         list_videos(params['category'])
     elif params['action'] == 'menu':
       if params['menu'] == 'members':

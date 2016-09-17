@@ -8,7 +8,7 @@ FAQ
 
 * I can't find the Twitch.tv add-on in the Kodi add-on manager!
 
-> Make sure you are using at least Kodi 14 (Helix), Kodi 15 (Isengard), Kodi 16 (Jarvis).
+> Make sure you are using at least Kodi 15 (Isengard), Kodi 16 (Jarvis).
 
 * I'm having issues with the playback of streams (buffering, dropping, stuttering).
 

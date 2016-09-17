@@ -196,16 +196,16 @@ def channelVideosList(name, index, past):
 @managedTwitchExceptions
 def createListForSelectedVideo():
     def extractVideoID(url):
-        _id = url                         # http://twitch.tv/a/v/12345678?t=9m1s
+        _id = url  # http://twitch.tv/a/v/12345678?t=9m1s
         idx = _id.find('?')
         if idx >= 0:
-            _id = _id[:idx]               # https://twitch.tv/a/v/12345678
+            _id = _id[:idx]  # https://twitch.tv/a/v/12345678
         idx = _id.rfind('/')
         if idx >= 0:
-            _id = _id[:idx] + _id[idx+1:] # https://twitch.tv/a/v12345678
+            _id = _id[:idx] + _id[idx + 1:]  # https://twitch.tv/a/v12345678
         idx = _id.rfind('/')
         if idx >= 0:
-            _id = _id[idx+1:]             # v12345678
+            _id = _id[idx + 1:]  # v12345678
         return _id
 
     items = []
@@ -225,8 +225,7 @@ def playVideo(_id, quality):
     """
     :param _id: string: video id
     :param quality: string: qualities[quality]
-    qualities = {'-1': -1, '0': 0, '1': 1, '2': 2, '3': 3, '4': 4}
-    0 = Best, 1 = 720, 2 = 480, 3 = 360, 4 = 226,
+    0 = Source, 1 = 1080p60, 2 = 1080p30, 3 = 720p60, 4 = 720p30, 5 = 540p30, 6 = 480p30, 7 = 360p30, 8 = 240p30, 9 = 144p30
     -1 = Choose quality dialog
     * any other value for quality will use addon setting
     """
@@ -243,6 +242,12 @@ def playVideo(_id, quality):
             utils.play(listItem.get('path', ''), listItem)
         else:
             raise TwitchException(TwitchException.NO_PLAYABLE)
+
+
+@PLUGIN.route('/playVideo/<_id>/')
+@managedTwitchExceptions
+def oldplayVideo(_id):
+    playVideo(_id, -2)
 
 
 @PLUGIN.route('/search/')
@@ -279,8 +284,7 @@ def playLive(name, quality):
     """
     :param name: string: stream/channel name
     :param quality: string: qualities[quality]
-    qualities = {'-1': -1, '0': 0, '1': 1, '2': 2, '3': 3, '4': 4}
-    0 = Best, 1 = 720, 2 = 480, 3 = 360, 4 = 226,
+    0 = Source, 1 = 1080p60, 2 = 1080p30, 3 = 720p60, 4 = 720p30, 5 = 540p30, 6 = 480p30, 7 = 360p30, 8 = 240p30, 9 = 144p30
     -1 = Choose quality dialog
     * any other value for quality will use addon setting
     """
@@ -291,6 +295,12 @@ def playLive(name, quality):
         stream['path'] = TWITCHTV.getLiveStream(name, videoQuality)
         utils.play(stream['path'], stream)
         utils.execIrcPlugin(name)
+
+
+@PLUGIN.route('/playLive/<name>/')
+@managedTwitchExceptions
+def oldplayLive(name):
+    playLive(name, -2)
 
 
 @PLUGIN.route('/createListOfTeams/<index>/')

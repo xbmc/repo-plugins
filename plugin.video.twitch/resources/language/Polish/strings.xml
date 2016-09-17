@@ -40,11 +40,7 @@
 
     <!--settings -->
     <string id="30040">Jakość video</string>
-    <string id="30041">Najlepsza możliwa</string>
-    <string id="30042">720p</string>
-    <string id="30043">480p</string>
-    <string id="30044">360p</string>
-    <string id="30063">226p (Mobile)</string>
+
     <string id="30045">Schemat wyświetlania tytułów</string>
     <string id="30046">Kanał - Tytuł</string>
     <string id="30047">Liczba oglądających - Kanał - Tytuł</string>

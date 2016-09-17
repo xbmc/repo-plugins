@@ -34,11 +34,7 @@
   
     <!--settings -->
   <string id="30040">Video-Qualität</string>
-  <string id="30041">Bestmöglich</string>
-  <string id="30042">720p</string>
-  <string id="30043">480p</string>
-  <string id="30044">360p</string>
-  <string id="30063">226p (Mobil)</string>
+
   <string id="30045">Zeige Stream-Namen</string>
   <string id="30046">Streamer - Stream-Name</string>
   <string id="30047">Zuschauer - Streamer - Stream-Name</string>

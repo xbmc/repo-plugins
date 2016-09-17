@@ -4,10 +4,13 @@
     <category label="30076">
         <!-- Username -->
         <setting id="username" type="text" label="30050" default=""/>
-        <!-- Oauth Token -->
-        <setting id="oauth_token" type="text" label="31230" default=""/>
+        <!-- OAuth Token -->
+        <setting id="oauth_token" type="text" label="30099" default="67ebpfhyoicab5kr0y7pzocsfohs7ty"/>
+        <setting label="30101" type="lsep"/>
         <!-- Video Quality -->
-        <setting id="video" type="enum" label="30040" lvalues="30041|30042|30043|30044|30063" default="0"/>
+        <setting id="video" type="enum" label="30040"
+                 lvalues="30102|30103|30104|30105|30106|30107|30108|30109|30110|30111" default="3"/>
+        <setting label="30112" type="lsep"/>
         <!-- Title Display -->
         <setting id="titledisplay" type="enum" label="30045" lvalues="30046|30047|30048|30049|30051|30067" default="0"/>
         <!-- Truncate titles -->
@@ -43,7 +46,8 @@
         <!-- Username -->
         <setting id="irc_username" type="text" label="30050" default="" enable="eq(-1,true)"/>
         <!-- OAuth Token -->
-        <setting id="oauth_token" type="text" option="hidden" label="30053" default="SAME AS OAUTH TOKEN IN GENERAL" enable="eq(-2,true)"/>
+        <setting id="oauth_token" type="text" label="30053" default="67ebpfhyoicab5kr0y7pzocsfohs7ty" enable="eq(-2,true)"/>
+        <setting label="30101" type="lsep"/>
         <setting label="30075" id="install_ircscript" type="action" action="RunPlugin(plugin://script.ircchat/)"
                  enable="!System.HasAddon(script.ircchat)" visible="!System.HasAddon(script.ircchat)"/>
     </category>
@@ -51,5 +55,6 @@
     <category label="30096">
         <!-- OAUTH Client ID -->
         <setting id="oauth_client_id" type="text" label="30097" default="67ebpfhyoicab5kr0y7pzocsfohs7ty"/>
+        <setting label="30100" type="lsep"/>
     </category>
 </settings>

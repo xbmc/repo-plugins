@@ -139,7 +139,11 @@ class TwitchTV(object):
             access_token[Keys.TOKEN],
             access_token[Keys.SIG])
         playlistQualitiesData = self.scraper.downloadWebData(playlistQualitiesUrl)
-        playlistQualities = M3UPlaylist(playlistQualitiesData)
+
+        qualityList = Keys.QUALITY_LIST_STREAM
+        if 'NAME="360p30"' not in playlistQualitiesData:
+            qualityList = Keys.OLD_QUALITY_LIST_STREAM
+        playlistQualities = M3UPlaylist(playlistQualitiesData, qualityList)
 
         vodUrl = playlistQualities.getQuality(maxQuality)
         playlist += [(vodUrl, ())]
@@ -194,7 +198,10 @@ class TwitchTV(object):
         try:
             hls_url = Urls.HLS_PLAYLIST.format(channelName, channelsig, channeltoken)
             data = self.scraper.downloadWebData(hls_url)
-            playlist = M3UPlaylist(data)
+            qualityList = Keys.QUALITY_LIST_STREAM
+            if 'NAME="360p30"' not in data:
+                qualityList = Keys.OLD_QUALITY_LIST_STREAM
+            playlist = M3UPlaylist(data, qualityList)
             return playlist.getQuality(maxQuality)
 
         except TwitchException:

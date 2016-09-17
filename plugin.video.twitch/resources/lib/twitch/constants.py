@@ -61,8 +61,12 @@ class Keys(object):
     DESCRIPTION = 'description'
     CREATED_AT = 'created_at'
 
-    QUALITY_LIST_STREAM = ['Source', 'High', 'Medium', 'Low', 'Mobile']
-    QUALITY_LIST_VIDEO = ['live', '720p', '480p', '360p', '226p']
+    OLD_QUALITY_LIST_STREAM = ['Source', 'High', 'Medium', 'Low', 'Mobile']
+    OLD_QUALITY_LIST_VIDEO = ['live', '720p', '480p', '360p', '226p']
+    QUALITY_LIST_STREAM = ['Source', '1080p60', '1080p30', '720p60', '720p30', '540p30', '480p30', '360p30', '240p30',
+                           '144p30']
+    QUALITY_LIST_VIDEO = ['live', '1080p60', '1080p30', '720p60', '720p30', '540p30', '480p30', '360p30', '240p30',
+                          '144p30']
 
     ACCEPT = 'Accept'
     REFERER = 'Referer'
@@ -70,7 +74,8 @@ class Keys(object):
     USER_AGENT_STRING = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0'
     API_VERSION = 'application/vnd.twitchtv.v{0}+json'.format(str(TWITCH_API_VERSION))
     CLIENT_ID_HEADER = 'Client-ID'
-    CLIENT_ID = ''  # base64 encoded Client ID
+    CLIENT_ID = 'NjdlYnBmaHlvaWNhYjVrcjB5N3B6b2NzZm9oczd0eQ=='
+
 
 class Urls(object):
     '''

@@ -32,11 +32,7 @@
   
   <!--settings -->
   <string id="30040">Beeldkwaliteit</string>
-  <string id="30041">Beste mogelijk</string>
-  <string id="30042">720p</string>
-  <string id="30043">480p</string>
-  <string id="30044">360p</string>
-  <string id="30063">226p (Mobile)</string>
+
   <string id="30045">Titels weergeven</string>
   <string id="30046">Streamer - Stream Titel</string>
   <string id="30047">Kijkers - Streamer - Stream Titel</string>

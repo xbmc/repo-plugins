@@ -28,11 +28,7 @@
 <string id="30029">Por favor, comprueba tu conexión a Internet</string>
 <!--settings -->
 <string id="30040">Calidad de vídeo</string>
-<string id="30041">La mejor posible</string>
-<string id="30042">720p</string>
-<string id="30043">480p</string>
-<string id="30044">360p</string>
-<string id="30063">226p (Móvil)</string>
+
 <string id="30045">Mostrar títulos</string>
 <string id="30046">Streamer - Título del Stream </string>
 <string id="30047">Espectadores - Streamer - Título del Stream</string>

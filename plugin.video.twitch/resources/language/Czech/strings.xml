@@ -32,11 +32,7 @@
   
   <!--settings -->
   <string id="30040">Video kvalita</string>
-  <string id="30041">Nejlepší</string>
-  <string id="30042">720p</string>
-  <string id="30043">480p</string>
-  <string id="30044">360p</string>
-  <string id="30063">226p (mobilní)</string>
+
   <string id="30045">Zobrazení titulku</string>
   <string id="30046">Streamer - Název streamu</string>
   <string id="30047">Sledující - Streamer - Název streamu</string>

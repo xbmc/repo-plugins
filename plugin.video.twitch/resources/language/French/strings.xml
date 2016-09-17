@@ -39,11 +39,7 @@
 
     <!--settings -->
     <string id="30040">Qualité vidéo</string>
-    <string id="30041">Meilleur</string>
-    <string id="30042">720p</string>
-    <string id="30043">480p</string>
-    <string id="30044">360p</string>
-    <string id="30063">226p (Mobile)</string>
+
     <string id="30045">Afficher le titre</string>
     <string id="30046">Chaine - Titre</string>
     <string id="30047">Spectateur - Chaine - Titre</string>

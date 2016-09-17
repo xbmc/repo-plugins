@@ -57,12 +57,14 @@ def get_video_link(url,live):
     req = urllib2.Request(url,headers=headers) 
     page=urllib2.urlopen(req)
     html=page.read();
-    res=re.findall('src: "(.*?)"', html)
-    if res:
-        if live!=True:
+    if live!=True:
+        res=re.findall('mp4" : "(.*?)"', html)
+        if res:
             return res[0]
-        else:
-            return res[1]
+    else:
+        res=re.findall('src: "(.*?)"', html)
+        if res:
+            return res[0]
 def play_video(video,live):
     if "la7.it" in video:
         link_video=get_video_link(video,live)

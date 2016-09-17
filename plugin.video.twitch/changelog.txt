@@ -1,3 +1,7 @@
+1.4.3
+- various fixes to coincide with issues caused by evolving Twitch API
+1.4.2
+- Fixed incorrect default oauth value in settings
 1.4.1
 - Changes/updates to API calls in line with changes made by Twitch.
 1.4.0

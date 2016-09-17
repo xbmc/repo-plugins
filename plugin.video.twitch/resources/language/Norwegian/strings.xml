@@ -4,6 +4,7 @@
   <string id="30001">Spill</string>
   <string id="30002">Følger</string>
   <string id="30066">Fulgte spill</string>
+  <string id="30098">Velg video etter ID eller URL</string>
   <string id="30003">Søk</string>
   <string id="30004">Innstillinger</string>
   <string id="30005">Fremhevede spill</string>
@@ -37,12 +38,8 @@
   <string id="30095">Brukernavn er nødvendig</string>
   
   <!--settings -->
-  <string id="30040">Videovalitet</string>
-  <string id="30041">Best mulig</string>
-  <string id="30042">720p</string>
-  <string id="30043">480p</string>
-  <string id="30044">360p</string>
-  <string id="30063">226p (Mobil)</string>
+  <string id="30040">Videokvalitet</string>
+
   <string id="30045">Vis titler</string>
   <string id="30046">Strømmer - Stream Tittel</string>
   <string id="30047">Seere - Strømmer - Tittel til strøm</string>
@@ -73,6 +70,8 @@
   <string id="30097">OAuth Klient-id</string>
 
   <string id="30050">Brukernavn</string>
+  <string id="30099">OAuth Token</string>
+
 
   <!--contextmenu-->
   <string id="30077">Spill (Velg Kvalitet)</string>

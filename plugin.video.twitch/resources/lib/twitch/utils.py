@@ -1,17 +1,11 @@
 # -*- coding: utf-8 -*-
 import sys
 import json
+import requests
 from base64 import b64decode
 from xbmcaddon import Addon
-from urllib2 import Request, urlopen, URLError
 from constants import Keys
 from exception import TwitchException
-
-
-if sys.version_info >= (2, 7, 9):
-    import ssl
-    ssl._create_default_https_context = ssl._create_unverified_context
-
 
 MAX_RETRIES = 5
 
@@ -35,22 +29,15 @@ class JSONScraper(object):
     def downloadWebData(self, url, headers=None):
         for _ in range(MAX_RETRIES):
             try:
-                req = Request(url)
-                req.add_header(Keys.USER_AGENT, Keys.USER_AGENT_STRING)
                 if headers:
-                    for key, value in headers.iteritems():
-                        req.add_header(key, value)
-                response = urlopen(req)
-                if sys.version_info < (3, 0):
-                    data = response.read().decode('utf-8')
+                    headers[Keys.USER_AGENT] = Keys.USER_AGENT_STRING
                 else:
-                    data = response.readall().decode('utf-8')
-                response.close()
+                    headers = {Keys.USER_AGENT: Keys.USER_AGENT_STRING}
+
+                response = requests.get(url, headers=headers, verify=False)
+                data = response.content
                 break
             except Exception as err:
-                if not isinstance(err, URLError):
-                    self.logger.debug("Error %s during HTTP Request, abort", repr(err))
-                    raise  # propagate non-URLError
                 self.logger.debug("Error %s during HTTP Request, retrying", repr(err))
         else:
             raise TwitchException(TwitchException.HTTP_ERROR)
@@ -110,7 +97,7 @@ class M3UPlaylist(object):
         lines = data.splitlines()
         linesIterator = iter(lines)
         for line in linesIterator:
-            if line.startswith('#EXT-X-MEDIA'):
+            if line.startswith('#EXT-X-MEDIA:TYPE=VIDEO'):
                 quality, url = parseQuality(line, next(linesIterator), next(linesIterator))
                 qualityInt = self.qualityList.index(quality)
                 self.playlist[qualityInt] = url
@@ -120,13 +107,27 @@ class M3UPlaylist(object):
 
     # returns selected quality or best match if not available
     def getQuality(self, selectedQuality):
-        if selectedQuality in self.playlist.keys():
+        bestDistance = len(self.qualityList) + 1
+
+        if (selectedQuality in self.playlist.keys()) and (bestDistance == len(Keys.QUALITY_LIST_STREAM) + 1):
             # selected quality is available
             return self.playlist[selectedQuality]
         else:
             # not available, calculate differences to available qualities
             # return lowest difference / lower quality if same distance
             bestDistance = len(self.qualityList) + 1
+            # if not using standard list, adjust selected quality to appropriate old quality
+            if bestDistance != len(Keys.QUALITY_LIST_STREAM) + 1:
+                if selectedQuality <= 2:
+                    selectedQuality = 0
+                elif selectedQuality <= 4:
+                    selectedQuality = 1
+                elif selectedQuality <= 6:
+                    selectedQuality = 2
+                elif selectedQuality <= 7:
+                    selectedQuality = 3
+                else:
+                    selectedQuality = 4
             bestMatch = None
 
             for quality in sorted(self.playlist, reverse=True):

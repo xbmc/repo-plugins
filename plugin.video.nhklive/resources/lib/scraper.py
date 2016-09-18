@@ -33,6 +33,8 @@ class myAddon(t1mAddon):
       nw_api_prefix, nw_api_key = re.compile("nw_api_prefix = '(.+?)'.+?nw_api_key = '(.+?)'", re.DOTALL).search(html).groups()
       nw_region = 'world'
       url = nw_api_prefix + 'epg/v3/' + nw_region + '/now.json' + '?apikey=' + nw_api_key
+      if not url.startswith('http'):
+         url = 'http:' + url
       html = self.getRequest(url)
       b = json.loads(html)
       for a in b['channel']['item']:
@@ -62,7 +64,7 @@ class myAddon(t1mAddon):
       mode = p('mode',None)
 
       if mode==  None:  
-         self.procDir(self.getAddonMenu,    p('url'), 'files', 'default_view', cache2Disc=False)
+         self.procDir(self.getAddonMenu, p('url'), 'files', 'default_view', cache2Disc=False)
          return(p)
       else:
          return super(myAddon, self).processAddonEvent()

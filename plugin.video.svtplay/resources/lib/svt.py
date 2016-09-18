@@ -397,7 +397,7 @@ def getProgramItems(section_name, url=None):
 def getItems(section_name, page):
   if not page:
     page = 1
-  url = BASE_URL+API_URL+section_name+"_page"+";sida="+str(page)
+  url = BASE_URL+API_URL+section_name+"_page?page="+str(page)
   r = requests.get(url)
   if r.status_code != 200:
     common.log("Did not get any response for: "+url)

@@ -274,7 +274,7 @@ class Main:
         else:
             self.listNodes( targetDir, nodes )
         self.PATH = urllib.quote( self.PATH )
-        for key in nodes:
+        for key in sorted( nodes ):
             # 0 = Label
             # 1 = Icon
             # 2 = Path
@@ -480,7 +480,7 @@ class Main:
                 # Add component
                 xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=%s&type=pathRule&actionPath=%s&rule=%d" % ( ltype, self.PATH, x + 1 ), xbmcgui.ListItem( label=LANGUAGE(30009) ), isFolder = True )
             # Manually edit path
-            xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=%s&type=editPath&actionPath=" % ltype + self.PATH + "&value=" + rule[ 1 ], xbmcgui.ListItem( label=LANGUAGE(30010) ), isFolder = True )
+            xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=%s&type=editPath&actionPath=" % ltype + self.PATH + "&value=" + urllib.quote( rule[ 1 ] ), xbmcgui.ListItem( label=LANGUAGE(30010) ), isFolder = True )
         xbmcplugin.setContent(int(sys.argv[1]), 'files')
         xbmcplugin.endOfDirectory(handle=int(sys.argv[1]))
 

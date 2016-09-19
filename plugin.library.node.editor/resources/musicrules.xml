@@ -228,6 +228,7 @@
 		<type label="132" name="musicdb://albums"/>
 		<type label="1050" name="musicdb://singles"/>
 		<type label="134" name="musicdb://songs"/>
+		<type label="29994" name="musicdb://roles"/>
 		<type label="271" name="musicdb://top100">
 			<type label="134" name="songs"/>
 			<type label="132" name="albums"/>

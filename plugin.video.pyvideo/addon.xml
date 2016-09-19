@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
     id="plugin.video.pyvideo"
-    version="2.1.0"
+    version="2.1.1"
     name="PyVideo"
     provider-name="nevermore, beenje">
   <requires>
-    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="xbmc.python" version="2.14.0"/>
     <import addon="script.module.xbmcswift2" version="2.4.0"/>
     <import addon="script.module.requests" version="2.3.0"/>
     <import addon="script.module.beautifulsoup4" version="4.3.2"/>
@@ -26,5 +26,6 @@
     <forum></forum>
     <summary lang="en">Access all Python-related videos indexed at pyvideo.org.</summary>
     <description lang="en">pyvideo.org is a video index of Python-related video on the Internet. Each video is packaged with a variety of metadata making it the best place to find videos about the Python Programming Language.</description>
+    <broken>Add-on is broken due to site change</broken>
   </extension>
 </addon>

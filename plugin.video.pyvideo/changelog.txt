@@ -1,3 +1,7 @@
+[B]version 2.1.1[/B]
+
+- Add-on broken due to site change. See http://pyvideo.org/pages/thanks-will-and-sheila.html
+
 [B]version 2.1.0[/B]
 
 - Use new v2 API to retrieve categories and videos

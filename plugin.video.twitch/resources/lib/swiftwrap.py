@@ -84,6 +84,8 @@ class ListItem(swiftListItem):
             listitem.select(selected)
 
         if info:
+            if ('mediatype' not in info) and (info_type == 'video'):
+                info['mediatype'] = 'video'
             listitem.set_info(info_type, info)
 
         if is_playable:

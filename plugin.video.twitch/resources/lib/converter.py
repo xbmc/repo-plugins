@@ -3,7 +3,7 @@ import xbmc
 import xbmcgui
 from twitch.constants import Keys
 from constants import Images
-from utils import theArt, TitleBuilder
+from utils import theArt, TitleBuilder, getMediaType
 
 
 class PlaylistConverter(object):
@@ -17,7 +17,8 @@ class PlaylistConverter(object):
             if url:
                 if details != ():
                     (title, image) = details
-                playbackItem = xbmcgui.ListItem(label=title, thumbnailImage=image, path=url)
+                playbackItem = xbmcgui.ListItem(label=title, path=url)
+                playbackItem.setArt(theArt({'poster': image, 'thumb': image}))
                 playbackItem.setProperty('IsPlayable', 'true')
                 playlist.add(url, playbackItem)
                 if not initialItem and url:
@@ -100,7 +101,7 @@ class JsonListItemConverter(object):
                 'icon': image,
                 'thumbnail': image,
                 'info': {'duration': str(duration), 'plot': plot, 'plotoutline': plot, 'tagline': plot,
-                         'year': year, 'date': date, 'premiered': date},
+                         'year': year, 'date': date, 'premiered': date, 'mediatype': getMediaType()},
                 'art': theArt({'poster': image, 'thumb': image}),
                 'stream_info': {'video': {'duration': duration}}}
 
@@ -116,6 +117,7 @@ class JsonListItemConverter(object):
         image = preview if preview else logo
         title = self.getTitleForStream(stream)
         info = self.getPlotForStream(stream)
+        info['mediatype'] = getMediaType()
         return {'label': title,
                 'path': self.plugin.url_for(endpoint='playLive', name=channel[Keys.NAME], quality='-2'),
                 'context_menu': [(self.plugin.get_string(30077), 'RunPlugin(%s)' %

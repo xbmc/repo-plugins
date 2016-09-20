@@ -74,8 +74,8 @@ def play(item, listItem):
     withPlayer = int(sys.argv[1]) == -1
     if withPlayer or not fromAddon:
         playbackItem = xbmcgui.ListItem(label=listItem.get('label', ''),
-                                        thumbnailImage=listItem.get('thumbnail', Images.VIDEOTHUMB),
                                         path=listItem.get('path', item))
+        playbackItem.setArt(theArt({'thumb': listItem.get('thumbnail', Images.VIDEOTHUMB)}))
         playbackItem.setProperty('IsPlayable', 'true')
         xbmc.Player().play(item, playbackItem)
     else:
@@ -98,6 +98,12 @@ def getContentType():
     chosenType = PLUGIN.get_setting('contenttypes', unicode)
     contentTypes = {'0': 'files', '1': 'tvshows', '2': 'movies', '3': 'episodes', '4': 'musicvideos'}
     return contentTypes.get(chosenType, 'files')
+
+
+def getMediaType():
+    chosenType = PLUGIN.get_setting('contenttypes', unicode)
+    mediaTypes = {'0': 'video', '1': 'tvshow', '2': 'movie', '3': 'episode', '4': 'musicvideo'}
+    return mediaTypes.get(chosenType, 'video')
 
 
 def linkToNextPage(target, currentIndex, **kwargs):

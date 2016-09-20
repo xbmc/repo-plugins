@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
 import sys
 import json
-import requests
+
 from base64 import b64decode
 from xbmcaddon import Addon
+from urllib2 import Request, urlopen, URLError
 from constants import Keys
 from exception import TwitchException
+
+if sys.version_info >= (2, 7, 9):		
+     import ssl		
+     ssl._create_default_https_context = ssl._create_unverified_context
+
 
 MAX_RETRIES = 5
 
@@ -29,15 +35,22 @@ class JSONScraper(object):
     def downloadWebData(self, url, headers=None):
         for _ in range(MAX_RETRIES):
             try:
+                req = Request(url)		
+                req.add_header(Keys.USER_AGENT, Keys.USER_AGENT_STRING)     
                 if headers:
-                    headers[Keys.USER_AGENT] = Keys.USER_AGENT_STRING
+                    for key, value in headers.iteritems():
+                        req.add_header(key, value)		
+                response = urlopen(req)		
+                if sys.version_info < (3, 0):		
+                    data = response.read().decode('utf-8')
                 else:
-                    headers = {Keys.USER_AGENT: Keys.USER_AGENT_STRING}
-
-                response = requests.get(url, headers=headers, verify=False)
-                data = response.content
+                    data = response.readall().decode('utf-8')
+                response.close()
                 break
             except Exception as err:
+                if not isinstance(err, URLError):		
+                    self.logger.debug("Error %s during HTTP Request, abort", repr(err))		
+                    raise  # propagate non-URLError
                 self.logger.debug("Error %s during HTTP Request, retrying", repr(err))
         else:
             raise TwitchException(TwitchException.HTTP_ERROR)

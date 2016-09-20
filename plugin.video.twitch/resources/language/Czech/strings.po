@@ -1,0 +1,351 @@
+
+msgid ""
+msgstr ""
+
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-09-18 00:54+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: cs\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2\n"
+
+msgctxt "#30001"
+msgid "Games"
+msgstr "Hry"
+
+msgctxt "#30002"
+msgid "Following"
+msgstr "Sledované"
+
+msgctxt "#30003"
+msgid "Search"
+msgstr "Hledat"
+
+msgctxt "#30004"
+msgid "Settings"
+msgstr "Nastavení"
+
+msgctxt "#30005"
+msgid "Featured Streams"
+msgstr "Nejlepší streamy"
+
+msgctxt "#30006"
+msgid "Teams"
+msgstr "Týmy"
+
+msgctxt "#30007"
+msgid "Search for channels"
+msgstr "Hledat kanál"
+
+msgctxt "#30008"
+msgid "Channels"
+msgstr "Kanály"
+
+msgctxt "#30010"
+msgid "TwitchTV"
+msgstr "TwitchTV"
+
+msgctxt "#30011"
+msgid "next page..."
+msgstr "další stránka..."
+
+msgctxt "#30012"
+msgid "-- Currently Live Streams --"
+msgstr "-- Živé streamy --"
+
+msgctxt "#30013"
+msgid "-- Followed Channels --"
+msgstr "-- Sledované kanály --"
+
+msgctxt "#30020"
+msgid "Http error"
+msgstr "Http chyba"
+
+msgctxt "#30021"
+msgid "No Live Data Found"
+msgstr "Živé data nenalezeny"
+
+msgctxt "#30022"
+msgid "No archives found for"
+msgstr "Archivy nenalezeny"
+
+msgctxt "#30023"
+msgid "User Token Error"
+msgstr "Chyba v uživatelském tokenu"
+
+msgctxt "#30024"
+msgid "Changed video settings"
+msgstr "Nastavení videa bylo změněno"
+
+msgctxt "#30025"
+msgid "Selected video settings are not available"
+msgstr "Zvolené nastavení videa není dostupné"
+
+msgctxt "#30026"
+msgid "TwitchApi error"
+msgstr "TwitchApi chyba"
+
+msgctxt "#30027"
+msgid "JSON error"
+msgstr "JSON chyba"
+
+msgctxt "#30028"
+msgid "Failed to parse the result set"
+msgstr "Nepodařilo se naparsovat výsledky"
+
+msgctxt "#30029"
+msgid "Please check your internet connection"
+msgstr "Zkontrolujte prosím internetové připojení"
+
+msgctxt "#30040"
+msgid "Video Quality"
+msgstr "Video kvalita"
+
+msgctxt "#30045"
+msgid "Display titles"
+msgstr "Zobrazení titulku"
+
+msgctxt "#30046"
+msgid "Streamer - Stream Title"
+msgstr "Streamer - Název streamu"
+
+msgctxt "#30047"
+msgid "Viewers - Streamer - Stream Title"
+msgstr "Sledující - Streamer - Název streamu"
+
+msgctxt "#30048"
+msgid "Stream Title"
+msgstr "Název streamu"
+
+msgctxt "#30049"
+msgid "Streamer"
+msgstr "Streamer"
+
+msgctxt "#30050"
+msgid "Username"
+msgstr "Uživatelské jméno"
+
+msgctxt "#30051"
+msgid "Streamer - Game Title - Stream Title"
+msgstr "Streamer - Název hry - Název streamu"
+
+msgctxt "#30052"
+msgid "Enable"
+msgstr ""
+
+msgctxt "#30053"
+msgid "Password (OAuth Token)"
+msgstr ""
+
+msgctxt "#30060"
+msgid "Unnamed Streamer"
+msgstr "Bezejmenný Streamer"
+
+msgctxt "#30061"
+msgid "Untitled Stream"
+msgstr "Stream bez názvu"
+
+msgctxt "#30062"
+msgid "Unknown Number of Viewers"
+msgstr "Neznámý počet sledujících"
+
+msgctxt "#30064"
+msgid "Unknown Game"
+msgstr "Neznámá hra"
+
+msgctxt "#30065"
+msgid "Truncate displayed titles"
+msgstr "Zkrátit zobrazené tituly"
+
+msgctxt "#30066"
+msgid "Followed Games"
+msgstr ""
+
+msgctxt "#30067"
+msgid "Game Title Viewers | Streamer - Stream Title"
+msgstr ""
+
+msgctxt "#30068"
+msgid "Content Type"
+msgstr ""
+
+msgctxt "#30069"
+msgid "Files"
+msgstr ""
+
+msgctxt "#30070"
+msgid "TV Shows"
+msgstr ""
+
+msgctxt "#30071"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#30072"
+msgid "Episodes"
+msgstr ""
+
+msgctxt "#30073"
+msgid "Music Videos"
+msgstr ""
+
+msgctxt "#30074"
+msgid "Automatically refresh live preview cache"
+msgstr ""
+
+msgctxt "#30075"
+msgid "Install IrcChat (script.ircchat)"
+msgstr ""
+
+msgctxt "#30076"
+msgid "General"
+msgstr ""
+
+msgctxt "#30077"
+msgid "Play (Choose Quality)"
+msgstr ""
+
+msgctxt "#30078"
+msgid "Past Broadcasts"
+msgstr ""
+
+msgctxt "#30079"
+msgid "Video Highlights"
+msgstr ""
+
+msgctxt "#30080"
+msgid "Could not find any playable urls"
+msgstr ""
+
+msgctxt "#30081"
+msgid "IRC Chat"
+msgstr ""
+
+msgctxt "#30082"
+msgid "Live Previews"
+msgstr ""
+
+msgctxt "#30083"
+msgid "Live Preview Settings"
+msgstr ""
+
+msgctxt "#30084"
+msgid "Clear live preview cache"
+msgstr ""
+
+msgctxt "#30085"
+msgid "***** WARNING *****"
+msgstr ""
+
+msgctxt "#30086"
+msgid "These settings may allow this add-on to delete database entries and images[CR]for cached live previews."
+msgstr ""
+
+msgctxt "#30087"
+msgid "Notifications"
+msgstr ""
+
+msgctxt "#30088"
+msgid "Game"
+msgstr ""
+
+msgctxt "#30089"
+msgid "Viewers"
+msgstr ""
+
+msgctxt "#30090"
+msgid "Language"
+msgstr ""
+
+msgctxt "#30091"
+msgid "Mature"
+msgstr ""
+
+msgctxt "#30092"
+msgid "Partner"
+msgstr ""
+
+msgctxt "#30093"
+msgid "Delay"
+msgstr ""
+
+msgctxt "#30094"
+msgid "Automatic refresh interval (minutes)"
+msgstr ""
+
+msgctxt "#30095"
+msgid "Username is required"
+msgstr ""
+
+msgctxt "#30096"
+msgid "API"
+msgstr ""
+
+msgctxt "#30097"
+msgid "OAuth Client ID"
+msgstr ""
+
+msgctxt "#30098"
+msgid "Select Video by ID or URL"
+msgstr ""
+
+msgctxt "#30099"
+msgid "OAuth Token"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Visit www.twitch.tv/settings/connections and [CR]'Register your application' for an OAuth Client-ID"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Visit www.twitchapps.com/tmi to generate an OAuth token"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Source"
+msgstr ""
+
+msgctxt "#30103"
+msgid "1080p60"
+msgstr ""
+
+msgctxt "#30104"
+msgid "1080p30"
+msgstr ""
+
+msgctxt "#30105"
+msgid "720p60"
+msgstr ""
+
+msgctxt "#30106"
+msgid "720p30"
+msgstr ""
+
+msgctxt "#30107"
+msgid "540p30"
+msgstr ""
+
+msgctxt "#30108"
+msgid "480p30"
+msgstr ""
+
+msgctxt "#30109"
+msgid "360p30"
+msgstr ""
+
+msgctxt "#30110"
+msgid "240p30"
+msgstr ""
+
+msgctxt "#30111"
+msgid "144p30"
+msgstr ""
+
+msgctxt "#30112"
+msgid "Quality may result in best match"
+msgstr ""

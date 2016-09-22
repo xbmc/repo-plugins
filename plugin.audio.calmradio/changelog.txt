@@ -1,3 +1,6 @@
+v0.2.5
+- fix missing bg image bug
+
 v0.2.4
 - add verify flag to requests
 

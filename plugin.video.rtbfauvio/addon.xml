@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.rtbf.auvio"
+       name="RTBF Auvio"
+       version="0.0.1"
+       provider-name="Gaet">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.elementtree" version="1.2.7"/>
+    <import addon="script.module.simplejson" version="2.0.10"/>
+    <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+    <import addon="script.module.m3u8" version="0.2.2"/>
+    
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="addon.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary>replay TV and Radio Shows from French Belgian Public broadcaster</summary>
+    <description>Find all replay TV/Radio shows (mainly limited to Belgium due to geo limitation)</description>
+    <platform>all</platform>
+    <license>WTFPL</license>
+  </extension>
+</addon>

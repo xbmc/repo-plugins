@@ -12,7 +12,7 @@ class SportsnetNow:
         self.CONFIG_URI = 'http://nlmobile.cdnak.neulion.com/sportsnetnow/config/config_ios_r3.xml'
         self.CHANNELS_URI = 'http://now.sportsnet.ca/service/channels?format=json'
         self.AUTHORIZED_MSO_URI = 'https://sp.auth.adobe.com/adobe-services/1.0/config/SportsnetNow'
-        self.PUBLISH_POINT = 'http://now.sportsnet.ca/service/publishpoint?'
+        self.PUBLISH_POINT = 'https://now.sportsnet.ca/service/publishpoint?'
         self.USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 8_3 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12F69 ipad sn now 4.0912'
         self.EPG_PREFIX = 'http://smb.cdnak.nyc.neulion.com/u/smb/sportsnetnow/configs/epg/'
 
@@ -169,10 +169,16 @@ class SportsnetNow:
                 except:
                     title = curr_item.attributes['e']
                 episode = curr_item.attributes['e']
-                description = curr_item.attributes['ed']
+                
+                try:
+                    description = curr_item.attibutes['ed']
+                    show['plot'] = description.value.encode('utf-8').strip().decode('utf-8')
+                except:
+                    show['plot'] = 'No description found'
+                
                 show['tvshowtitle'] = title.value.encode('utf-8').strip().decode('utf-8')
                 show['title'] = episode.value.encode('utf-8').strip().decode('utf-8')
-                show['plot'] = description.value.encode('utf-8').strip().decode('utf-8')
+                
                 guide[cid] = show
 
         return guide

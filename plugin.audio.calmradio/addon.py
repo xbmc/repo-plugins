@@ -299,7 +299,7 @@ def update_artwork(channel, recent_tracks_url):
     last_album_cover = ''
 
     # update now playing fanart, channel name & description:
-    artwork.overlay.setImage('{0}{1}'.format(config['urls']['calm_blurred_arts_host'], channel['image']))
+    artwork.overlay.setImage('special://home/addons/plugin.audio.calmradio/resources/media/000000-1.png')
     artwork.channel.setLabel('[B]' + channel['title'] + '[/B]')
     artwork.description.setText(channel['description'])
     artwork.show()

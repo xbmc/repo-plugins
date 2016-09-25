@@ -1,28 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-##############################################################################
-#
-# WorldStarHipHop - Addon for XBMC
-# http://worldstarhiphop.com/
-#
-# Coding by Skipmode A1
-# 
-# Credits:
-#   * Dan Dar3                                   - Gamespot xbmc plugin [http://dandar3.blogspot.com]
-#   * Worldstarhiphop                                                   [http://worldstarhiphop.com/]
-#   * Team XBMC @ XBMC.org                                              [http://xbmc.org/]
-#   * Leonard Richardson <leonardr@segfault.org> - BeautifulSoup 3.0.7a [http://www.crummy.com/software/BeautifulSoup/]
-#
-
-# 
-# Constants
-#
-# also in ..._const
-__addon__ = "plugin.video.worldstarhiphop"
-__date__ = "5 september 2015"
-__version__ = "1.0.5"
-
 #
 # Imports
 #
@@ -36,23 +14,21 @@ import xbmcaddon
 import xbmcgui
 import xbmcplugin
 
-BASEURL = "http://www.worldstarhiphop.com"
-
-LIB_DIR = xbmc.translatePath(os.path.join(xbmcaddon.Addon(id=__addon__).getAddonInfo('path'), 'resources', 'lib'))
+LIB_DIR = xbmc.translatePath(
+    os.path.join(xbmcaddon.Addon(id="plugin.video.worldstarhiphop").getAddonInfo('path'), 'resources', 'lib'))
 sys.path.append(LIB_DIR)
 
-# Get plugin settings
-DEBUG = xbmcaddon.Addon(id='plugin.video.worldstarhiphop').getSetting('debug')
+from worldstarhiphop_const import ADDON, DATE, VERSION
 
-if (DEBUG) == 'true':
-    xbmc.log("[ADDON] %s v%s (%s) is starting, ARGV = %s" % (__addon__, __version__, __date__, repr(sys.argv)),
-             xbmc.LOGNOTICE)
+BASEURL = "http://www.worldstarhiphop.com"
 
 # Parse parameters...
 if len(sys.argv[2]) == 0:
     #
     # Main menu
     #
+    xbmc.log("[ADDON] %s, Python Version %s" % (ADDON, str(sys.version)), xbmc.LOGDEBUG)
+    xbmc.log("[ADDON] %s v%s (%s) is starting, ARGV = %s" % (ADDON, VERSION, DATE, repr(sys.argv)), xbmc.LOGDEBUG)
     import worldstarhiphop_list as plugin
 else:
     action = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['action'][0]

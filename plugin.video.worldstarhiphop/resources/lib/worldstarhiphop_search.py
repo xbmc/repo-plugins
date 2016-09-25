@@ -35,12 +35,10 @@ class Main:
         self.plugin_handle = int(sys.argv[1])
 
         # Get plugin settings
-        self.DEBUG = SETTINGS.getSetting('debug')
         self.VIDEO = SETTINGS.getSetting('video')
 
-        if (self.DEBUG) == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-            ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
+            ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
 
         try:
             self.plugin_category = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['plugin_category'][0]
@@ -56,8 +54,6 @@ class Main:
                 self.search_string = keyboard.getText()
                 self.video_list_page_url = "http://www.worldstarhiphop.com/videos/search.php?s=%s&start=001" % (
                 self.search_string)
-
-        xbmc.log('DDDD' + str(self.next_page_possible ))
 
         if self.next_page_possible == 'True':
             # Determine current item number, next item number, next_url
@@ -75,10 +71,9 @@ class Main:
                     page_number_next_str = '00' + str(page_number_next)
                 self.next_url = str(self.video_list_page_url).replace(page_number_str, page_number_next_str)
 
-                if (self.DEBUG) == 'true':
-                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                     ADDON, VERSION, DATE, "self.next_url", str(urllib.unquote_plus(self.next_url))),
-                             xbmc.LOGNOTICE)
+                             xbmc.LOGDEBUG)
 
         #
         # Get the videos...
@@ -119,9 +114,8 @@ class Main:
 
         items = soup.findAll('section', attrs={'class': re.compile("^box")})
 
-        if (self.DEBUG) == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            ADDON, VERSION, DATE, "len(items)", str(len(items))), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+            ADDON, VERSION, DATE, "len(items)", str(len(items))), xbmc.LOGDEBUG)
 
         for item in items:
             item_string = str(item)
@@ -137,9 +131,8 @@ class Main:
             video_url = item_string[start_pos_url1 + 1:end_pos_url1]
             video_page_url = BASEURL + video_url
 
-            if (self.DEBUG) == 'true':
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "video_page_url", str(video_page_url)), xbmc.LOGNOTICE)
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "video_page_url", str(video_page_url)), xbmc.LOGDEBUG)
 
             # Get thumbnail url
             item_string = str(item)
@@ -147,9 +140,8 @@ class Main:
             end_pos_url = item_string.find('"', start_pos_url)
             thumbnail_url = item_string[start_pos_url:end_pos_url]
 
-            if (self.DEBUG) == 'true':
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "thumbnail_url", str(thumbnail_url)), xbmc.LOGNOTICE)
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "thumbnail_url", str(thumbnail_url)), xbmc.LOGDEBUG)
 
             # Get title
             start_pos_url2 = item_string.find('"/videos/video.php?v=', end_pos_url1 + 1)
@@ -213,10 +205,9 @@ class Main:
             title = title.replace('&rsquo;', "'")
             title = title.replace('&ndash;', "/")
 
-            if (self.DEBUG) == 'true':
-                xbmc.log(
+            xbmc.log(
                     "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "title", str(title)),
-                    xbmc.LOGNOTICE)
+                    xbmc.LOGDEBUG)
 
             # Add to list...
             list_item = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_url)
@@ -254,30 +245,3 @@ class Main:
         xbmcplugin.addSortMethod(handle=self.plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_NONE)
         # Finish creating a virtual folder.
         xbmcplugin.endOfDirectory(self.plugin_handle)
-
-
-
-
-        #     # Add to list...
-        #     parameters = {"action": "play", "video_page_url": video_page_url}
-        #     url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-        #     listitem = xbmcgui.ListItem(title, iconImage="DefaultVideo.png", thumbnailImage=thumbnail_url)
-        #     listitem.setInfo("video", {"Title": title, "Studio": "WorldWideHipHop"})
-        #     folder = False
-        #
-        #     xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=listitem, isFolder=folder)
-        #
-        # # Next page entry...
-        # if self.next_page_possible == 'True':
-        #     parameters = {"action": "search", "plugin_category": self.plugin_category, "url": str(self.next_url),
-        #                   "next_page_possible": self.next_page_possible}
-        #     url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-        #     listitem = xbmcgui.ListItem(LANGUAGE(30503), iconImage="DefaultFolder.png", thumbnailImage=os.path.join(IMAGES_PATH, 'next-page.png'))
-        #     folder = True
-        #     xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=listitem, isFolder=folder)
-        #
-        # # Disable sorting...
-        # xbmcplugin.addSortMethod(handle=int(sys.argv[1]), sortMethod=xbmcplugin.SORT_METHOD_NONE)
-        #
-        # # End of directory...
-        # xbmcplugin.endOfDirectory(handle=int(sys.argv[1]), succeeded=True)

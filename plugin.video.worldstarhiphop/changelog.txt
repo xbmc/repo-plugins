@@ -1,3 +1,9 @@
+v1.0.7 (2016-09-21):
+- added support for youtube videos
+- changed addon debugging info to kodi debugging info
+- using po-files
+  
+
 v1.0.6 (2016-03-12):
 - changed the listing and playing of videos
 - the contextual menu item 'Play from here' is available now, it queues all the videos in the list from a certain point

@@ -33,12 +33,10 @@ class Main:
         self.plugin_handle = int(sys.argv[1])
 
         # Get plugin settings
-        self.DEBUG = SETTINGS.getSetting('debug')
         self.VIDEO = SETTINGS.getSetting('video')
 
-        if (self.DEBUG) == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
+                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
 
         # Parse parameters...
         if len(sys.argv[2]) == 0:
@@ -66,10 +64,9 @@ class Main:
                     page_number_next_str = '00' + str(page_number_next)
                 self.next_url = str(self.video_list_page_url).replace(page_number_str, page_number_next_str)
 
-                if self.DEBUG == 'true':
-                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                         ADDON, VERSION, DATE, "self.next_url", str(urllib.unquote_plus(self.next_url))),
-                             xbmc.LOGNOTICE)
+                             xbmc.LOGDEBUG)
 
         #
         # Get the videos...
@@ -110,9 +107,8 @@ class Main:
 
         items = soup.findAll('section', attrs={'class': re.compile("^box")})
 
-        if (self.DEBUG) == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(items)", str(len(items))), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "len(items)", str(len(items))), xbmc.LOGDEBUG)
 
         # Add Search item
         video_page_url = ""
@@ -139,9 +135,8 @@ class Main:
             video_url = item_string[start_pos_url1 + 1:end_pos_url1]
             video_page_url = BASEURL + video_url
 
-            if (self.DEBUG) == 'true':
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "video_page_url", str(video_page_url)), xbmc.LOGNOTICE)
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                    ADDON, VERSION, DATE, "video_page_url", str(video_page_url)), xbmc.LOGDEBUG)
 
             # Get thumbnail url
             item_string = str(item)
@@ -149,9 +144,8 @@ class Main:
             end_pos_url = item_string.find('"', start_pos_url)
             thumbnail_url = item_string[start_pos_url:end_pos_url]
 
-            if (self.DEBUG) == 'true':
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "thumbnail_url", str(thumbnail_url)), xbmc.LOGNOTICE)
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                    ADDON, VERSION, DATE, "thumbnail_url", str(thumbnail_url)), xbmc.LOGDEBUG)
 
             # Get title
             start_pos_url2 = item_string.find('"/videos/video.php?v=', end_pos_url1 + 1)
@@ -215,10 +209,9 @@ class Main:
             title = title.replace('&rsquo;', "'")
             title = title.replace('&ndash;', "/")
 
-            if (self.DEBUG) == 'true':
-                xbmc.log(
+            xbmc.log(
                     "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "title", str(title)),
-                    xbmc.LOGNOTICE)
+                    xbmc.LOGDEBUG)
 
             # Add to list...
             list_item = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_url)

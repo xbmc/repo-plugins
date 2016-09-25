@@ -1,3 +1,8 @@
+[B]Version 1.0.6[/B]
+
+- Modify publish point URL to use secure http (github.com/portse).
+- Fix for KeyError when not able to get description (github.com/mfallone).
+
 [B]Version 1.0.5[/B]
 
 - Add MSO independant Sportsnet authentication.

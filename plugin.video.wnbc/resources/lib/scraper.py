@@ -31,8 +31,8 @@ class myAddon(t1mAddon):
           infoList['Plot'] = b['description']
           if (b['seasons'] != []):
               infoList['Season'] = int(b['seasons'][0]['number'])
-          fanart = b['images'][0]['images']['featured_large_3']
-          thumb  = b['images'][0]['images']['show_tile']
+          fanart = b['images'][0]['images'].get('featured_large_3')
+          thumb  = b['images'][0]['images'].get('show_tile')
           mode = 'GE'
           if (b['seasons'] != []):
               if (b['seasons'][0]['hasClips']):
@@ -142,9 +142,11 @@ class myAddon(t1mAddon):
               url  = re.compile('ref src="(.+?)"', re.DOTALL).search(html).group(1)
       liz = xbmcgui.ListItem(path = url)
       infoList ={}
+      infoList['mediatype'] = xbmc.getInfoLabel('ListItem.DBTYPE')
       infoList['Title'] = xbmc.getInfoLabel('ListItem.Title')
       infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
       infoList['Year'] = xbmc.getInfoLabel('ListItem.Year')
+      infoList['Premiered'] = xbmc.getInfoLabel('Premiered')
       infoList['Plot'] = xbmc.getInfoLabel('ListItem.Plot')
       infoList['Studio'] = xbmc.getInfoLabel('ListItem.Studio')
       infoList['Genre'] = xbmc.getInfoLabel('ListItem.Genre')

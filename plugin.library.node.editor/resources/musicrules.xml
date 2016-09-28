@@ -250,11 +250,13 @@
 			<value>integer</value>
 			<content>artists</content>
 			<content>albums</content>
+			<browse>musicdb://roles/</browse>
 		</rule>
 		<rule name="role" label="38033">
 			<value>string</value>
 			<content>artists</content>
 			<content>albums</content>
+			<browse>musicdb://roles/</browse>
 		</rule>
 		<rule name="artistid" label="30508">
 			<value>integer</value>

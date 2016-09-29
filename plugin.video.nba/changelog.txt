@@ -1,3 +1,6 @@
+0.8.3   (29/09/2016)
+        Download single scoreboard file for each week
+        Fixes for the new publishpoing URLs
 0.8.2   (30/05/2016)
         Fixed 404 on request for scoreboard json
 0.8.1   (16/05/2016)

@@ -65,7 +65,7 @@ class LiveTV:
         if not vars.cookies:
             return
 
-        url = 'http://watch.nba.com/nba/servlets/publishpoint'
+        url = 'https://watch.nba.com/service/publishpoint'
         headers = { 
             'Cookie': vars.cookies, 
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -119,7 +119,7 @@ class LiveTV:
 
         failsafe = True;
 
-        url = 'http://watch.nba.com/nba/servlets/publishpoint'
+        url = 'https://watch.nba.com/service/publishpoint'
         headers = { 
             'Cookie': vars.cookies, 
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -127,7 +127,7 @@ class LiveTV:
                 else "Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/12.0",
         }
         body = {
-            'id': "0", 
+            'id': "1", 
             'type': 'channel',
             'ppid': vars.player_id,
         }

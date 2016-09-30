@@ -1,10 +1,9 @@
 import _strptime
 import time
-from datetime import date
+from datetime import datetime, date
 
 def date_from_str(date_str, date_format):
-    return date(*(time.strptime(date_str, date_format)[0:3]))
-
-def add_item_info(item, title, item_date):
-    item['info'] = {'title': title,
-                    'date': item_date.strftime("%d.%m.%Y")}
+    try:
+        return datetime.strptime(date_str, date_format).date()
+    except TypeError:
+        return date(*(time.strptime(date_str, date_format)[0:3]))

@@ -1,3 +1,7 @@
+v2.12.0 (2016-09-30)
+ - Fixed KANE50 category
+ - Added thumbnails for some categories
+
 v2.11.0 (2016-08-31)
  - Fixed stadium camera streams
 

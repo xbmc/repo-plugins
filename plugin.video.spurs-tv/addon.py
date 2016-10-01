@@ -26,6 +26,7 @@ from functools import partial
 import xml.etree.ElementTree as ET
 import traceback
 import json
+import platform
 
 from xbmcswift2 import Plugin, xbmc, xbmcgui
 from bs4 import BeautifulSoup
@@ -47,6 +48,17 @@ PAGE_RE = re.compile("page +(\d+) +of +(\d+)")
 MEDIA_SCHEME = "http"
 MEDIA_HOST = "open.http.mp.streamamg.com"
 MEDIA_URL_ROOT = urlunparse((MEDIA_SCHEME, MEDIA_HOST, "/p/{}/".format(PARTNER_ID), None, None, None))
+
+THUMBS = {
+    'KANE50':
+        HOST + "/uploadedImages/Segments/Testing_Area/HARRY50/KANE50-16-17.jpg",
+    'The Vault':
+        HOST + ("/uploadedImages/Shared_Assets/Images/The_Vault/"
+                "Top_20_Premier_League/the-vault-video-image.jpg"),
+    'Ledley King Testimonial':
+        HOST + ("/uploadedImages/Shared_Assets/Images/News_images/SEASON_13-14/"
+                "All_matches/1st_team_matches/Ledley_Testimonial_12_May/leds730.jpg"),
+}
 
 THUMB_URL_FMT = MEDIA_URL_ROOT + "thumbnail/entry_id/{}/height/720"
 
@@ -73,6 +85,14 @@ form_data = plugin.get_storage('form_data')
 debug = plugin.get_setting('debug', bool)
 
 
+def kodi_version():
+    query = dict(jsonrpc='2.0',
+                 method='Application.GetProperties',
+                 params=dict(properties=['version', 'name']),
+                 id=1)
+    response = json.loads(xbmc.executeJSONRPC(json.dumps(query)))
+    return response['result']['version']
+
 def log(msg):
     if debug:
         plugin.log.info(msg)
@@ -80,6 +100,14 @@ def log(msg):
 def error_report_yes(exc):
     return xbmcgui.Dialog().yesno(plugin.get_string(30130), plugin.get_string(30131),
                                   "[COLOR=red]{}[/COLOR]".format(exc), plugin.get_string(30133))
+
+def report_error():
+    data = {'version': plugin.addon.getAddonInfo('version'),
+            'platform': platform.system(),
+            'machine': platform.machine(),
+            'url': plugin.request.url,
+            'kodi': kodi_version()}
+    rollbar.report_exc_info(extra_data=data)
 
 def get_soup(url, data=None):
     if not url.endswith('/'):
@@ -135,14 +163,16 @@ def get_page_links(soup, endpoint, **kwargs):
 
     return page, links
 
-def video_item(entry_id, title, date_str, date_format="%d %B %Y", duration_str=None, duration=None):
+def video_item(entry_id, title, date_str=None, date_format="%d %B %Y", duration_str=None, duration=None):
     item = {'label': title,
             'thumbnail': THUMB_URL_FMT.format(entry_id),
             'path': plugin.url_for('play_video', entry_id=entry_id),
             'is_playable': True}
 
-    video_date = utils.date_from_str(date_str, date_format)
-    utils.add_item_info(item, title, video_date)
+    info = {'title': title}
+    if date_str is not None:
+        info['date'] = utils.date_from_str(date_str, date_format).strftime("%d.%m.%Y")
+    item['info'] = info
 
     if duration is not None:
         item['stream_info'] = {'video': {'duration': duration}}
@@ -165,8 +195,9 @@ def get_videos(soup, path):
             title = featured_video['data-title']
             duration_str = featured_video.find_next('span', 'duration').string
             featured_date = featured_video.find_previous('p', 'featured-date')
-            date_str = " ".join(featured_date.string.replace(u'\xa0', u' ').split()[2:5])
-            yield video_item(featured_entry_id, title, date_str, duration_str=duration_str)
+            if featured_date is not None:
+                date_str = ' '.join(featured_date.string.replace(u'\xa0', u' ').split()[2:5])
+                yield video_item(featured_entry_id, title, date_str, duration_str=duration_str)
 
     for card in soup(class_='card'):
         entry_id = ENTRY_ID_RE.search(card.a['style']).group(1)
@@ -253,7 +284,10 @@ def get_categories(path):
         else:
             plugin_path = plugin.url_for('show_video_list', path=href)
 
-        yield {'label': title, 'path': plugin_path, 'is_playable': playable}
+        yield {'label': title,
+               'path': plugin_path,
+               'is_playable': playable,
+               'thumbnail': THUMBS.get(title)}
 
 def get_subcategories(path):
     yield {'label': plugin.get_string(30014), 'path': plugin.url_for('show_video_list', path=path)}
@@ -431,11 +465,6 @@ if __name__ == '__main__':
         plugin.run()
     except Exception as exc:
         if plugin.get_setting('send_error_reports', bool) or error_report_yes(exc):
-            import platform
-            data = {'version': plugin.addon.getAddonInfo('version'),
-                    'platform': platform.system(),
-                    'machine': platform.machine(),
-                    'url': plugin.request.url}
-            rollbar.report_exc_info(extra_data=data)
+            report_error()
             xbmcgui.Dialog().notification(plugin.name, plugin.get_string(30134))
-        plugin.log.error(traceback.format_exc)
+        plugin.log.error(traceback.format_exc())

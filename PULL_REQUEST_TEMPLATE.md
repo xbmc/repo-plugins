@@ -1,12 +1,7 @@
 ### Description
 <!--- Provide a short summary of submitted add-on in case it's a new addition. -->
 <!--- If it's plugin update only highlight biggest changes if needed. -->
- 
- 
- 
- 
- 
- 
+<!--- Make sure you follow the checklist below before finalising your pull-request. -->
 ### Checklist:
 <!--- Go over all the following points, and put an `x` in all the boxes that apply like this: [X] -->
 <!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->

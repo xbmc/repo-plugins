@@ -15,7 +15,7 @@
 - [ ] Each add-on submission should be a sinlge commit with using the following style: [plugin.video.foo] v1.0.0
 
 Addtional information :
-- By submitting your add-on to this specific branch makes it available to any Kodi version equal or higher than the branch name with the applicable Kodi dependencies limits.
+- Submitting your add-on to this specific branch makes it available to any Kodi version equal or higher than the branch name with the applicable Kodi dependencies limits.
 - [add-on development](http://kodi.wiki/view/Add-on_development) wiki page.
 - Kodi [pydocs](http://kodi.wiki/view/PyDocs) provide information about the Python API
 - [PEP8](https://www.python.org/dev/peps/pep-0008/) codingstyle which is considered best practise but not mandatory.

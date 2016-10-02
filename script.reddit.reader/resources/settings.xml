@@ -1,0 +1,64 @@
+<settings>
+    <category label="32100">
+        <setting id="itemsPerPage"          type="enum"   label="32101" values="10|25|50|75|100" default="2"/>
+        <setting id="no_index_page"         type="bool"   label="32103" default="true" />
+        <setting id="default_frontpage"     type="text"   label="32102" values="" default=""/>
+        <!-- setting id="TitleAddtlInfo"        type="bool"   label="30102" default="false"/-->
+        <!-- setting type="lsep"                              label="32103" enable="false" /-->
+        <!-- setting id="HideImagePostsOnVideo" type="bool"   label="30104" default="false"/-->
+        <setting type="sep" />
+    	<setting id="CommentTreshold"          type="select" label="32106" values="All|0|5|10|50|100"/>
+        <!-- setting id="comments_viewMode"    type="number" label="30110" default="0"/-->
+        <setting type="sep" />
+        <setting id="show_nsfw"                type="bool"   label="32107" default="false"/>
+        <setting type="sep" />
+    	<setting id="domain_filter"            type="text" label="32104" default=""/>
+        <setting id="subreddit_filter"         type="text" label="32105" default=""/>
+        <setting id="main_gui_skin"            type="text" label="32108" default="main_list01.xml"/>
+    </category>
+
+    <category label="32200">
+    	<setting id="slideshow_mode"           type="enum"   label="32201" lvalues="32202|32203|32204" default="1"/>
+    	
+        <setting id="slideshow_speed"          type="slider" label="32221" default="1" range="0.20,0.20,2.0" option="float"/>
+        <setting id="use_slideshow_for_album"  type="bool"   label="32222" default="true"/>
+        <setting id="include_albums"           type="bool"   label="32223" default="true"/>
+        <setting id="use_reddit_preview"       type="bool"   label="32224" default="true"/>
+        <setting id="show_title"               type="bool"   label="32225" default="false"/>
+        <setting id="random_post_order"        type="bool"   label="32226" default="false"/>
+        <setting id="random_image_order"       type="bool"   label="32227" default="false"/>
+    </category>
+    <category label="32300">
+    	<setting id="screensaver_subreddit"    type="text"   label="32301" values="" default=""/>
+    </category>
+
+    <category label="32150">
+        <!-- setting                                   type="action"      label="30151" action="RunAddon(script.reddit.reader,?mode=openSettings&url=youtube)"/-->
+        <!-- setting                                   type="action"      label="30152" action="RunAddon(script.reddit.reader,?mode=openSettings&url=vimeo)"/-->
+        <!-- setting                                   type="action"      label="30153" action="RunAddon(script.reddit.reader,?mode=openSettings&url=dailymotion)"/-->
+        <setting id="ll_qualiy"                        type="enum"        label="32154" values="480p|720p" default="1"/>
+        <!-- setting id="ll_downDir"                   type="folder"      label="30155" default=""/-->
+        <!-- setting id="gfy_downDir"                  type="folder"      label="30156" default=""/-->
+        <setting id="streamable_quality"               type="enum" label="32157" values="full|mobile" default="1" />
+        <!-- setting id="use_ytdl_for_yt"                  type="bool" label="32112" default="false"/-->
+        <setting id="use_ytdl_for_unknown"             type="bool" label="32113" default="false"/>
+        <setting id="use_ytdl_for_unknown_in_comments" type="bool" label="32114" default="false"/>
+    </category>
+    <category label="32400"> 
+    	<setting                              type="lsep"        label="32401"               enable="true"   />
+		<setting type="sep" />
+        <setting id="reddit_code"             type="text"        label="32402"  default=""                   />
+        <setting                              type="action"      label="32403"  action="RunAddon(script.reddit.reader,?mode=get_refresh_token)"/>
+        <setting id="reddit_refresh_token"    type="text"        label="32404"  default=""   enable="false"  />
+    	<setting                              type="lsep"        label="32405"               enable="true"   />
+        <setting type="sep" />
+		<setting                              type="action"      label="32406"  action="RunAddon(script.reddit.reader,?mode=get_access_token)"/>
+		<setting id="reddit_access_token"     type="text"        label="32407"  default=""   enable="false"  />
+		<setting id="reddit_access_token_scope"   type="text"    label="32408"  default=""   enable="false"  />
+		<setting id="reddit_access_token_expires" type="text"    label="32409"  default=""   enable="false"  />
+        <setting type="sep" />
+		<setting                              type="action"      label="32410"  action="RunAddon(script.reddit.reader,?mode=revoke_refresh_token)"/>
+    	
+        
+    </category>
+</settings>

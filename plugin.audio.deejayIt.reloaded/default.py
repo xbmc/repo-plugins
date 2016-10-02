@@ -67,6 +67,10 @@ elif MODE[0] == 'reloaded':
             str(e_urllib2.reason))
     else:
         for idx, prog in enumerate(LISTA):
+            xbmc.log(msg='###############', level=xbmc.LOGDEBUG)
+            xbmc.log(msg=str(idx), level=xbmc.LOGDEBUG)
+            for pr in prog:
+                xbmc.log(msg=pr, level=xbmc.LOGDEBUG)
             url = build_url({'mode': 'reloadedEpList',
                              'progName': prog[0],
                              'lastReloadedUrl': prog[2],
@@ -138,7 +142,7 @@ elif MODE[0] in ('reloadedEpList', 'podcastEpList'):
 elif MODE[0] in ('playReloaded', 'playPodcast'):
     try:
         URL = deejay.get_epfile(ARGS['epUrl'][0])
-    #urllib2 errors are a subclass of IOError
+    # urllib2 errors are a subclass of IOError
     except IOError as e_urllib2:
         xbmcgui.Dialog().ok(
             __language__(30002),

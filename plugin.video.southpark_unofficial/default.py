@@ -54,7 +54,7 @@ def index():
     addDir(translation(30005), "Featured", 'list', icon)
     addLink(translation(30006), "Random", 'list', icon)
     addLink(translation(30013), "Search", 'list', icon)
-    for i in range(1, 20):
+    for i in range(1, 21):
         addDir(translation(30007)+" "+str(i), str(i), 'list', defaultImgDir+str(i)+".jpg")
     xbmcplugin.endOfDirectory(pluginhandle)
 

@@ -45,3 +45,5 @@
 - Fixed DE/EN/ES and carousel
 0.4.2
 - Fixed DE language (thanks to JinJin @kodi forums)
+0.4.3
+- Added Season 20

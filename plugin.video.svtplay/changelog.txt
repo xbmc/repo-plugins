@@ -1,3 +1,7 @@
+Version 4.0.32
+-------------
+- Fix broken news playback
+
 Version 4.0.31
 -------------
 - Fix broken listing (jelofsson)

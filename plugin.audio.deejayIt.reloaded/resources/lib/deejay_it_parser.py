@@ -141,7 +141,7 @@ def get_reloaded_list_in_page(url, reloaded_list):
             url_immagine = 'http://www.deejay.it/wp-content/themes/deejay/images/logo.png'
 
         reloaded_list.append(
-            (prog.a['title'],
+            (prog.a['title'].encode('utf-8').strip(),
                 url_immagine,
                 prog.a['href'],
                 translate_date(prog.hgroup.span.string))

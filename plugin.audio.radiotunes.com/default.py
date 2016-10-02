@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 ########################################
-#  RadioTunes.com XBMC plugin
+#  Radiotunes Kodi plugin
 #  by Tim C. 'Bitcrusher' Steinmetz
 #  http://qualisoft.dk
 #  Github: https://github.com/Bitcrusher/Radiotunes-XBMC-plugin
@@ -18,15 +18,13 @@
 #  GNU General Public License for more details.
 #
 #  You should have received a copy of the GNU General Public License
-#  along with XBMC; see the file COPYING.  If not, write to
+#  along with KODI; see the file COPYING.  If not, write to
 #  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 #  http://www.gnu.org/copyleft/gpl.html
 #
 
-
 import os
 import pickle
-from pprint import pprint
 import sys
 import re
 import string
@@ -99,8 +97,7 @@ class musicAddonXbmc:
     # regex used to find all streams in a .pls
     re_playlistStreams = re.compile("File\d=([^\n]+)\s*Title\d=([^\n]+)", re.M | re.I)
 
-    #dictBitrate = {1: 40, 2: 64, 3: 128, 4: 256}
-    dictBitrate = [40, 64, 128, 256]
+    dictBitrate = [40, 64, 128, 320]
 
     # list of channels used when caching and retrieving from cache
     channelsList = []
@@ -136,10 +133,10 @@ class musicAddonXbmc:
         threads = []
 
         # check if cache has expired
-        if not ADDON.getSetting("forceupdate") == "true"\
-            and not int(ADDON.getSetting("cacheexpire_days")) == 0\
-            and self.checkFileTime(pluginConfig.get('cache', 'cacheChannels'),
-                                   ADDON.getSetting("cacheexpire_days")):
+        if not ADDON.getSetting("forceupdate") == "true" \
+                and not int(ADDON.getSetting("cacheexpire_days")) == 0 \
+                and self.checkFileTime(pluginConfig.get('cache', 'cacheChannels'),
+                                       ADDON.getSetting("cacheexpire_days")):
             ADDON.setSetting(id="forceupdate", value="true")
 
         if ADDON.getSetting("forceupdate") == "true":
@@ -147,16 +144,16 @@ class musicAddonXbmc:
             html = ""
 
             # if username is set, try to login and go for premium channels
-            if ADDON.getSetting('username') != "":
+            if ADDON.getSetting('username') != "" and ADDON.getSetting('usepremium') == "true":
                 loginData = urllib.urlencode({'member_session[username]': ADDON.getSetting('username'),
                                               'member_session[password]': ADDON.getSetting('password')})
 
                 # post login info and get frontpage html
                 html = self.curler.request(pluginConfig.get('urls', 'login'), 'post', loginData)
 
-                # if we could not reach radiotunes.com at all
+                # if we could not reach di.fm at all
                 if not bool(html):
-                    xbmc.log(u'RadioTunes.com could not be reached', xbmc.LOGWARNING)
+                    xbmc.log('di.fm could not be reached', xbmc.LOGWARNING)
                     xbmcgui.Dialog().ok(ADDON.getLocalizedString(30100),
                                         ADDON.getLocalizedString(30101),
                                         ADDON.getLocalizedString(30102),
@@ -165,6 +162,7 @@ class musicAddonXbmc:
                     return True
 
                 channels = json.loads(self.curler.request(pluginConfig.get('streams', 'premium%sk' % self.dictBitrate[int(ADDON.getSetting('bitrate'))]), 'get'))
+                channelMeta = self.getChannelMetadata(html)
 
                 premiumConfig = self.getPremiumConfig()
 
@@ -177,11 +175,11 @@ class musicAddonXbmc:
                     xbmcplugin.endOfDirectory(HANDLE, succeeded=True)
                     return True
 
-                self.listenKey = premiumConfig['listenKey']
-
                 # if we should get the favorites or all channels
                 if ADDON.getSetting("usefavorites") == 'true':
-                    channels = self.getFavoriteChannels(html, channels)
+                    favplaylist = self.curler.request(pluginConfig.get('streams', 'favorites%sk' % self.dictBitrate[int(ADDON.getSetting('bitrate'))]) + '?' + premiumConfig['listenKey'], 'get')
+
+                    channels = self.getFavoriteChannels(channels, favplaylist)
                     if len(channels) == 0:
                         xbmcgui.Dialog().ok(ADDON.getLocalizedString(30180),
                                             ADDON.getLocalizedString(30181),
@@ -195,11 +193,15 @@ class musicAddonXbmc:
 
             # go for free/public channels
             else:
-                html = self.curler.request(pluginConfig.get('urls', 'frontpage'), 'get')
+                loginData = urllib.urlencode({'member_session[username]': ADDON.getSetting('username'),
+                                              'member_session[password]': ADDON.getSetting('password')})
 
-                # if we could not reach radiotunes.com at all
-                if not html:
-                    xbmc.log('RadioTunes.com could not be reached', xbmc.LOGWARNING)
+                # post login info and get frontpage html
+                html = self.curler.request(pluginConfig.get('urls', 'login'), 'post', loginData)
+
+                # if we could not reach di.fm at all
+                if not bool(html):
+                    xbmc.log(u'di.fm could not be reached', xbmc.LOGWARNING)
                     xbmcgui.Dialog().ok(ADDON.getLocalizedString(30100),
                                         ADDON.getLocalizedString(30101),
                                         ADDON.getLocalizedString(30102),
@@ -207,12 +209,16 @@ class musicAddonXbmc:
                     xbmcplugin.endOfDirectory(HANDLE, succeeded=True)
                     return True
 
+                # put each playlist in a worker queue for threading
                 channels = json.loads(self.curler.request(pluginConfig.get('streams', 'public'), 'get'))
+                channelMeta = self.getChannelMetadata(html)
 
-            re_channelData = re.compile("NS\('AudioAddict.API.Config'\).channels\s*=\s*([^\n]+);", re.M | re.I)
-            channelMeta = json.loads(re_channelData.findall(html)[0])
+                premiumConfig = self.getPremiumConfig()
 
-            # put each playlist in a worker queue for threading
+                # add listenkey to playlist urls
+                for channel in channels:
+                    channel['playlist'] = '%s' % (channel['playlist'])
+
             for channel in channels:
                 self.workQueue.put(channel)
 
@@ -220,10 +226,10 @@ class musicAddonXbmc:
             while not self.workQueue.empty():
                 xbmc.log('Worker queue size is %s' % (str(self.workQueue.qsize())), xbmc.LOGNOTICE)
 
-                if threading.activeCount() < self.threadMax and not self.workQueue.empty():
+                if threading.activeCount() < self.threadMax and not self.workQueue.empty(): # checks if max threads are started
                     threads.append(scraperThread(self, self.workQueue.get(), channelMeta, len(channels)))
                     threads[-1].start()
-                else:
+                else: # else wait for 0.1 second
                     time.sleep(0.1)
 
             # wait for all threads to finish before continuing
@@ -235,6 +241,14 @@ class musicAddonXbmc:
                 pickle.dump(self.channelsList, open(os.path.join(self.addonProfilePath, pluginConfig.get('cache', 'cacheChannels')), "w"), protocol=0)
                 ADDON.setSetting(id="forceupdate", value="false")
 
+            if self.newChannels > 0:
+                xbmcgui.Dialog().ok(ADDON.getLocalizedString(30130),
+                                    ADDON.getLocalizedString(30131) + str(self.newChannels) + ADDON.getLocalizedString(30132),
+                                    ADDON.getLocalizedString(30133),
+                                    ADDON.getLocalizedString(30134))
+
+
+
         # else load channels from cache file
         else:
             self.channelsList = pickle.load(open(os.path.join(self.addonProfilePath, pluginConfig.get('cache', 'cacheChannels')), "r"))
@@ -242,11 +256,12 @@ class musicAddonXbmc:
             for channel in self.channelsList:
                 self.addItem(channel['name'],
                              channel['streamUrl'],
-                             channel['name'],
+                             channel['description'],
                              channel['bitrate'],
                              channel['asset'],
                              channel['isNew'],
                              len(self.channelsList))
+
 
         # Should channels be sorted A-Z?
         if ADDON.getSetting('sortaz') == "true":
@@ -255,13 +270,29 @@ class musicAddonXbmc:
         # tell XMBC there are no more items to list
         xbmcplugin.endOfDirectory(HANDLE, succeeded=True)
 
-        if self.newChannels > 0:
-            xbmcgui.Dialog().ok(ADDON.getLocalizedString(30130),
-                                ADDON.getLocalizedString(30131) + str(self.newChannels) + ADDON.getLocalizedString(30132),
-                                ADDON.getLocalizedString(30133),
-                                ADDON.getLocalizedString(30134))
-
         return True
+
+    """
+    Gets channel metadata from site html and cleans it up
+    """
+    def getChannelMetadata(self, html):
+
+        # Will get JSON with all channel metadata
+        re_channelMeta = re.compile(r"di.app.start\(({.+(?!\}\)))\)", re.M | re.I)
+
+        channelMeta = re_channelMeta.findall(html)[0]
+
+        # removes those pesky \u2019 and what not
+        channelMeta = re.sub(r'\\u[\d\w]{4}','', channelMeta)
+        # TODO proper handling of \uxxxx characters - en-/decoding issue
+
+        channelMeta = json.loads(channelMeta) # parse the json
+        channelMeta_sorted = {}
+        for cMeta in channelMeta['channels']: # loop through meta data, using each channel ID as key instead
+            channelMeta_sorted[cMeta['key']] = cMeta
+
+        return channelMeta_sorted
+
 
     """
      Parses a playlist (if needed) and calls the function that adds it to the GUI
@@ -269,21 +300,20 @@ class musicAddonXbmc:
     def addChannel(self, channel, channelMeta, channelCount):
         # set to true if new channelart is downloaded
         isNew = 0
+        agent = pluginConfig.get('plugin', 'agent')
+        referer = pluginConfig.get('urls', 'frontpage')
 
-        if not os.path.exists(self.addonProfilePath + str(channel['id']) + '.png'):
+        # if channel asset does not exist, download it
+        if not os.path.exists(self.addonProfilePath + str(channel['key']) + '.png'):
             isNew = 1
             self.newChannels += 1
-            for c in channelMeta:
-                if c['channel']['type'] == 'channel' and c['channel']['id'] == channel['id']:
-                    asset = "http:" + c['channel']['asset_url']
-            self.getChannelAsset(str(channel['id']), asset)
+            self.getChannelAsset(str(channel['key']), "http:" + channelMeta[channel['key']]['asset_url'])
 
+        # gets a random stream from the channels playlist if set in config (is on by default)
         if ADDON.getSetting('randomstream') == "true":
-            playlist = self.curler.request(channel['playlist'], 'get')
+            playlist = self.curler.request(channel['playlist'] + self.listenKey, 'get')
             playlistStreams = self.re_playlistStreams.findall(playlist)
-
-            # gets a random stream from the channels playlist
-            streamUrl = playlistStreams[randrange(len(playlistStreams))][0]
+            streamUrl = playlistStreams[randrange(len(playlistStreams))][0] + '|User-Agent=' + agent + '&Referer=' + referer
         else:
             streamUrl = channel['playlist'] + self.listenKey
 
@@ -295,17 +325,17 @@ class musicAddonXbmc:
         # stores channel in list to be cached later
         co = {'name': channel['name'],
               'streamUrl': streamUrl,
-              'description': channel['name'],
+              'description': channelMeta[channel['key']]['description'],
               'bitrate': bitrate,
-              'asset': self.addonProfilePath + str(channel['id']) + '.png',
+              'asset': self.addonProfilePath + str(channel['key']) + '.png',
               'isNew': isNew}
         self.channelsList.append(dict(co))
 
         self.addItem(channel['name'],
                      streamUrl,
-                     channel['name'],
+                     channelMeta[channel['key']]['description'],
                      bitrate,
-                     self.addonProfilePath + str(channel['id']) + '.png',
+                     self.addonProfilePath + str(channel['key']) + '.png',
                      isNew,
                      channelCount)
 
@@ -317,12 +347,12 @@ class musicAddonXbmc:
         # tart it up a bit if it's a new channel
         if isNewChannel:
             li = xbmcgui.ListItem(label="[COLOR FF007EFF]" + channelTitle + "[/COLOR]", thumbnailImage=icon)
-            xbmc.log(u"New channel found: %s" % channelTitle.encode('ascii', 'xmlcharrefreplace'), xbmc.LOGNOTICE)
+            xbmc.log(u"New channel found: %s" % channelTitle.encode('ascii', 'xmlcharrefreplace'), xbmc.LOGERROR)
         else:
             li = xbmcgui.ListItem(label=channelTitle, thumbnailImage=icon)
 
-        # 256kb/sec is MP3
-        if bitrate == 256 and ADDON.getSetting('username') != "":
+        # 320kb/sec is MP3
+        if bitrate == 320 and ADDON.getSetting('username') != "":
             li.setProperty("mimetype", 'audio/mpeg')
         else:
             li.setProperty("mimetype", 'audio/aac')
@@ -345,7 +375,7 @@ class musicAddonXbmc:
             data = self.curler.request(assetUrl, 'get')
             filepath = self.addonProfilePath + channelId + '.png'
             open(filepath, 'wb').write(data)
-            xbmc.log(u'Found new channel art for with ID %s' % str(channelId), xbmc.LOGINFO)
+            xbmc.log('Found new channel art for with ID %s' % str(channelId), xbmc.LOGINFO)
         except Exception:
             sys.exc_clear() # Clears all exceptions so the script will continue to run
             xbmcgui.Dialog().ok(ADDON.getLocalizedString(30160), ADDON.getLocalizedString(30161),
@@ -360,24 +390,20 @@ class musicAddonXbmc:
     """ Return a list containing a dictonary
      Filters out all channels that are not in the favorites list
     """
-    def getFavoriteChannels(self, html, allChannels):
+    def getFavoriteChannels(self, allchannels, favplaylist):
         channels = []
-        re_favoriteData = re.compile("NS\('AudioAddict.API.Config.member'\).favorites\s*=\s*([^;]+);", re.M | re.I)
-        m = re_favoriteData.findall(html)
+        re_favchannels = re.compile(r"File\d+=.+/([a-zA-Z0-9]+)", re.M | re.I)
+        favchannelkeys = re_favchannels.findall(favplaylist)
 
         # if favorites list is empty, return empty list
-        if m[0] == '[]':
+        if int(len(favchannelkeys)) == 0:
             return channels
-        else:
-            favorites = json.loads(re_favoriteData.findall(html)[0])
 
-        # sort favorites after user selected positions
-        favorites = sorted(favorites, key=lambda k: k['channel']['favorite_position'])
-
-        for fav in favorites:
-            for channel in allChannels:
-                if fav['channel']['id'] == channel['id']:
+        for fav in favchannelkeys:
+            for channel in allchannels:
+                if fav == channel['key']:
                     channels.append(dict(channel))
+                    break
 
         return channels
 
@@ -401,6 +427,7 @@ class musicAddonXbmc:
 
                 # Load needed data into premiumConfig
                 premiumConfig = {'listenKey' : jsonData['listen_key']}
+
             else:
                 # Load data from local cache
 

@@ -23,8 +23,8 @@
 	<string id="30008">Author</string>
 	<string id="30009">Homepage</string>
 
-	<string id="30015">Get HQ 256kb/sec streams with RadioTunes Premium at http://www.radiotunes.com</string>
-	<string id="30016">Version:  3.0.0</string>
+	<string id="30015">Get HQ 320kb streams with RadioTunes Premium at http://www.radiotunes.com</string>
+	<string id="30016">Version:  3.0.1</string>
 	<string id="30017">Author:  Tim C. 'Bitcrusher' Steinmetz</string>
 	<string id="30018">Homepage:  http://qualisoft.dk</string>
 	<string id="30019">E-mail:  timcst@gmail.com</string>
@@ -68,7 +68,7 @@
 	<string id="30152"> piece(s) of channelart missing</string>
 	<string id="30153">You should refresh your cache</string>
 	<string id="30154">Disable using 'My Favorites' to get new channelart</string>
-	
+
 	<string id="30160">Problem downloading channelart</string>
 	<string id="30161">There was a problem downloading channelart for: </string>
 	<string id="30162">From URL: </string>

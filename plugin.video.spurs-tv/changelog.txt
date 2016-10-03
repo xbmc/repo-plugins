@@ -1,3 +1,6 @@
+v2.12.1 (2016-10-03)
+ - Fixed YouTube channel
+
 v2.12.0 (2016-09-30)
  - Fixed KANE50 category
  - Added thumbnails for some categories

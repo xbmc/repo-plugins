@@ -315,9 +315,8 @@ def get_youtube_playlists():
     for playlist_id, title, thumbnail, published_at in youtube.get_playlists():
         item = {'label': title,
                 'thumbnail': thumbnail,
+                'info': {'title': title, 'date': published_at.strftime("%d.%m.%Y")},
                 'path': plugin.url_for('show_youtube_list', playlist=playlist_id)}
-
-        utils.add_item_info(item, title, published_at)
 
         yield item
 
@@ -325,10 +324,9 @@ def get_youtube_video_items(generator):
     for video_id, title, thumbnail, published_at in generator():
         item = {'label': title,
                 'thumbnail': thumbnail,
+                'info': {'title': title, 'date': published_at.strftime("%d.%m.%Y")},
                 'path': "plugin://plugin.video.youtube/play/?video_id={}".format(video_id),
                 'is_playable': True}
-
-        utils.add_item_info(item, title, published_at)
 
         yield item
 

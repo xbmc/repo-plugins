@@ -376,7 +376,7 @@ def cleanUrl(video_url):
         # Clean out subtitle parameters for iOS
         # causing playback issues in xbmc.
         pass
-      if para.startswith("alt"):
+      elif para.startswith("alt"):
         # Web player specific parameter that
         # Kodi doesn't need.
         pass

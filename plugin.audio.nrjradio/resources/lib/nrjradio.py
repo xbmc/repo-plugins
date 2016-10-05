@@ -116,7 +116,7 @@ class indexer:
                 uid.append(item['url_triton_128k_mp3'])
                 uid.append(item['url_128k_mp3'])
                 uid.append(item['url_hls'])
-                uid = [i for i in uid if '//' in i][0]
+                uid = [i for i in uid if '//' in i and not '.flv' in i][0]
                 uid = uid.encode('utf-8')
 
                 image = item['logo'].strip()
@@ -136,6 +136,8 @@ class indexer:
             item = [i for i in item if url == i['url']][0]
 
             title, url, image = item['title'], item['uid'], item['image']
+
+            url = client.request(url, output='geturl')
 
             return (title, url, image)
         except:

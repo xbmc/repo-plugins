@@ -1,0 +1,23 @@
+<?xml version="1.0.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.rtk"
+       name="RTK"
+       version="1.0.0"
+       provider-name="RTK">
+  <requires>
+    <import addon="xbmc.python" version="1.0.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <language>sq</language>
+    <summary lang="en">Watch RTK channels and radio stations</summary>
+    <summary lang="sq">Shikoni kanalet e RTK-së si dhe radio stacionet</summary>
+    <description lang="en"> RTK offers two radio stations broadcasting a diverse programming of news and music and four 24-hour television services broadcasting on terrestrial and satellite networks.</description>
+    <description lang="nb"> RTK ofron transmetimin e llojllojshmërisë së programeve muzikore dhe lajmeve përmes dy radiostacioneve sidhe shërbimin e transmetimit të kanaleve televizive 24 orë në rrjetin tokësor dhe satelitor.</description>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum></forum>
+    <source></source>
+  </extension>
+</addon>

@@ -1,3 +1,6 @@
+[B]1.0.2[/B]
+- Fixed issue with streams
+
 [B]1.0.1[/B]
 - Code cosmetics
 

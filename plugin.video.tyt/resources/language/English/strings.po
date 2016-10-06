@@ -6,7 +6,7 @@ msgid "General"
 msgstr ""
 
 msgctxt "#30001"
-msgid "Username"
+msgid "TYT E-Mail"
 msgstr ""
 
 msgctxt "#30002"

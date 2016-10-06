@@ -1,13 +1,13 @@
-[B]2.0.1[/B]
-- Fixed bug viewing members area
-- Fixed bug viewing past page 2 in members area.
-[B]2.0.2[/B]
-- Fixed bug with members area
-[B]2.0.3[/B]
-- Fixed bug in im members area video description
-- Added All Star Tuesdays
 [B]2.0.4[/B]
 - Updated URL for All Star Tuesdays and Old School
 - Added Members TYT Live
 - Added Members Specials
 - Changed username in config to user-email, as people were getting confused with login info
+[B]2.0.3[/B]
+- Fixed bug in im members area video description
+- Added All Star Tuesdays
+[B]2.0.2[/B]
+- Fixed bug with members area
+[B]2.0.1[/B]
+- Fixed bug viewing members area
+- Fixed bug viewing past page 2 in members area.

@@ -89,24 +89,11 @@ main_cat = {   "Members Only":      {"menu":"members", "thumb":hour1_thumb, "typ
 menus = {"main":main_cat,"members":members_cat}
 
 def show_changelog():
-
   with open(settings.getAddonInfo('changelog')) as f:
     text = f.read()
+  dialog = xbmcgui.Dialog()
   label = '%s - %s' % (xbmc.getLocalizedString(24054), settings.getAddonInfo('name'))
-  id = 10147
-  xbmc.executebuiltin('ActivateWindow(%d)' % id)
-  xbmc.sleep(100)
-  win = xbmcgui.Window(id)
-  retry = 50
-  while (retry > 0):
-    try:
-      xbmc.sleep(10)
-      win.getControl(1).setLabel(label)
-      win.getControl(5).setText(text)
-      retry = 0
-    except:
-      retry -= 1
-  return '1'
+  dialog.textviewer(label, text)
 
 def sendResponse(cookies, pagename): 
   conn = httplib.HTTPSConnection("tytnetwork.com")

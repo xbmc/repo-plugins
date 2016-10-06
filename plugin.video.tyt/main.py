@@ -17,6 +17,7 @@ addon_folder = os.path.join(xbmc.translatePath( "special://profile/addon_data/" 
 settings = xbmcaddon.Addon(id=PLUGIN_ID)
 user_name = settings.getSetting("username")
 user_pwd = settings.getSetting("password")
+
 cookie = {}
 
 ap_url            = "/category/membership/aggressive-progressives-membership/"
@@ -27,7 +28,7 @@ hour2_url         = "/category/membership/main-show-hour-2/"
 hour2_thumb       = "hour2.png"
 pg_url            = "/category/membership/post-game/"
 pg_thumb          = "pg.png"
-oldschool_url     = "/category/membership/oldschool/"
+oldschool_url     = "/category/membership/oldschool-membership/"
 oldschool_thumb   = "oldschool.png"
 bts_url           = "/category/membership/behind-the-scenes/"
 bts_thumb         = "bts.png"
@@ -55,9 +56,11 @@ point_url         = "plugin://plugin.video.youtube/user/townsquare/"
 point_thumb       = "point.jpg"
 tytlive_url       = "/live/"
 tytlive_thumb     = "tytlive.jpg"
-tyt_get_live      = "/live/"
-tyt_get_live_thumb = "tytlive.jpg"
-allstar_url       = "/category/membership/all-star-tuesdays/"
+members_live_url  = "/memberslive/"
+members_live_thumb = "tytlive.jpg"
+special_events_url = "/category/membership/specialevents/"
+special_events_thumb = "tytlive.jpg"
+allstar_url       = "/category/membership/all-star-tuesdays-membership/"
 allstar_thumb     = "allstar.jpg"
 members_cat = {"Hour 1":            {"url":hour1_url, "thumb":hour1_thumb, "type":"members"},
                "Hour 2":            {"url":hour2_url, "thumb":hour2_thumb, "type":"members"},
@@ -66,6 +69,8 @@ members_cat = {"Hour 1":            {"url":hour1_url, "thumb":hour1_thumb, "type
                "Old School":        {"url":oldschool_url, "thumb":oldschool_thumb, "type":"members"},
                "TYT Classics":      {"url":tytclassics_url, "thumb":tytclassics_thumb, "type":"members"},
                "All Star Tuesdays": {"url":allstar_url, "thumb":allstar_thumb, "type":"members"},
+               "Special Events":    {"url":special_events_url, "thumb":special_events_thumb, "type":"members"},
+               "Members LIVE show": {"url":members_live_url, "thumb":members_live_thumb, "type":"members_live"},
                "Behind The Scenes": {"url":bts_url, "thumb":bts_thumb, "type":"members"}}
               
 
@@ -82,6 +87,13 @@ main_cat = {   "Members Only":      {"menu":"members", "thumb":hour1_thumb, "typ
                "TYT Live Stream":   {"url":tytlive_url, "thumb":tytlive_thumb, "type":"youtube_video"},
                "ThinkTank":         {"url":thinktank_url, "thumb":thinktank_thumb, "type":"youtube_channel"}}
 menus = {"main":main_cat,"members":members_cat}
+
+def show_changelog():
+  with open(settings.getAddonInfo('changelog')) as f:
+    text = f.read()
+  dialog = xbmcgui.Dialog()
+  label = '%s - %s' % (xbmc.getLocalizedString(24054), settings.getAddonInfo('name'))
+  dialog.textviewer(label, text)
 
 def sendResponse(cookies, pagename): 
   conn = httplib.HTTPSConnection("tytnetwork.com")
@@ -136,6 +148,13 @@ def list_categories(menu):
       url = '{0}?action=listing&category={1}'.format(_url, category)
       is_folder = True
 
+    elif menu[category]['type'] is 'members_live':
+      scrape = sendResponse(cookie, members_live_url)
+      link = type1.get_members_live(scrape)
+      url = 'plugin://plugin.video.youtube/play/?video_id=%s' % (link)
+      list_item.setProperty('IsPlayable', 'true')
+      is_folder = False
+    
     elif menu[category]['type'] is 'youtube_channel':                         #If selection is a youtube channel
       url = main_cat[category]['url'] 
       is_folder = True
@@ -192,6 +211,9 @@ def play_video(path):
 def router(paramstring):
   # Parse a URL-encoded paramstring to the dictionary of
   # {<parameter>: <value>} elements  
+  if settings.getSetting("version") != settings.getAddonInfo('version'):
+    show_changelog()
+    settings.setSetting(id="version", value=settings.getAddonInfo('version'))
   params = dict(parse_qsl(paramstring))
   if params:
     if params['action'] == 'listing':

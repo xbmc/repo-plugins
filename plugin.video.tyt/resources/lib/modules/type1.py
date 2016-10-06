@@ -25,6 +25,11 @@ def get_live(html_page):
   for link in match:
     return link
         
+def get_members_live(html_page):
+  match = re.compile('entry-content content.+?x-video-inner"><iframe width.+?youtube.com/embed/(.+?)"',re.DOTALL).findall(html_page)
+  for link in match:
+    return link
+
 def page_info(html_page):
   match = re.compile('<div class="x-pagination.+?Last Page".+?href="(.+?)" class=',re.DOTALL).findall(html_page)
   for link in match: 

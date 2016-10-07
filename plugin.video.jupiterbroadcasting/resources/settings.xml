@@ -22,6 +22,6 @@
                         type="enum"
                         label="30106"
                         lvalues="30301|30302|30303|30304"
-                        default="0" />
+                        default="1" />
         </category>
 </settings>

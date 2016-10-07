@@ -1,3 +1,20 @@
+[B]Version 3.3.0 October 6th, 2016[/B]
+- New Show: User Error
+  - By @Xmetalfanx, @rickyphewitt, and @rikai
+- Archived Shows Folder
+  - By @rickyphewitt
+
+[B]Version 3.2.4 May 2nd, 2016[/B]
+- Update BeautifulSoup to 3.2.1
+
+[B]Version 3.2.3 May 2nd, 2016[/B]
+- Updated documentation to reference Kodi, rather than XBMC
+- Updated default live stream setting to be RTMP
+  - By @Rikai
+
+[B]Version 3.2.2 December 24th, 2015[/B]
+- Fix Women's Tech Radio logo
+
 [B]Version 3.2.1 February 7th, 2015[/B]
 - Add ability to change Live Stream type
 

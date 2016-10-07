@@ -1,7 +1,8 @@
-# Jupiter Broadcasting XBMC Addon
+# Jupiter Broadcasting Kodi Addon
 
-Watch shows from the [Jupiter Broadcasting](http://jupiterbroadcasting.com) network in [XBMC](http://xbmc.org/).
+Watch shows from the [Jupiter Broadcasting](http://jupiterbroadcasting.com) network in [Kodi](http://kodi.tv).
 
+![Jupiter Broadcasting Kodi Addon Screenshot](resources/media/screenshot.jpg)
 
 ## Shows
 
@@ -17,6 +18,7 @@ Watch shows from the [Jupiter Broadcasting](http://jupiterbroadcasting.com) netw
 * [TechSNAP](http://www.jupiterbroadcasting.com/show/techsnap/)
 * [Unfilter](http://www.jupiterbroadcasting.com/show/unfilter/)
 * [Women's Tech Radio](http://www.jupiterbroadcasting.com/show/wtr/)
+* [User Error](http://www.jupiterbroadcasting.com/show/error/)
 
 ## Archive
 
@@ -43,7 +45,7 @@ Watch shows from the [Jupiter Broadcasting](http://jupiterbroadcasting.com) netw
 ### Environment
 
 ```bash
-$ cd ~/.xbmc/addons/
+$ cd ~/.kodi/addons/
 $ git clone git@github.com:RobLoach/plugin.video.jupiterbroadcasting.git
 ```
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Jupiter Broadcasting XBMC Addon
+Jupiter Broadcasting Kodi Addon
 http://github.com/robloach/plugin.video.jupiterbroadcasting
 """
 
@@ -26,6 +26,7 @@ def get_shows():
         'image': 'most-recent.jpg',
         'plot': __language__(30206),
         'genre': 'Technology',
+        'archived': False,
         'count': 0
     }
 
@@ -36,7 +37,8 @@ def get_shows():
         'feed-audio': feedburner + 'TheLinuxActionShowOGG?format=xml',
         'image': 'linux-action-show.jpg',
         'plot': __language__(30200),
-        'genre': 'Technology'
+        'genre': 'Technology',
+        'archived': False
     }
 
     # STOked
@@ -46,7 +48,8 @@ def get_shows():
         'feed-audio': feedburner + 'stoked-ogg?format=xml',
         'image':'stoked.png',
         'plot': __language__(30202),
-        'genre': 'Technology'
+        'genre': 'Technology',
+        'archived': True
     }
 
     # TechSnap
@@ -56,7 +59,8 @@ def get_shows():
         'feed-audio': feedburner + 'techsnapogg?format=xml',
         'image': 'techsnap.jpg',
         'plot': __language__(30208),
-        'genre': 'Technology'
+        'genre': 'Technology',
+        'archived': False
     }
 
     # SCIbyte
@@ -66,7 +70,8 @@ def get_shows():
         'feed-audio': feedburner + 'scibyteaudio?format=xml',
         'image': 'scibyte.jpg',
         'plot': __language__(30209),
-        'genre': 'Science'
+        'genre': 'Science',
+        'archived': False
     }
 
     # In Depth Look
@@ -76,7 +81,8 @@ def get_shows():
         'feed-audio': jupiter + 'feeds/indepthlookmp3.xml?format=xml',
         'image': 'in-depth-look.jpg',
         'plot': __language__(30214),
-        'genre': 'Technology'
+        'genre': 'Technology',
+        'archived': True
     }
 
     # Unfilter
@@ -86,7 +92,8 @@ def get_shows():
         'feed-audio': jupiter + 'feeds/unfilterogg.xml',
         'image': 'unfilter.jpg',
         'plot': __language__(30216),
-        'genre': 'Technology'
+        'genre': 'Technology',
+        'archived': False
     }
 
     # FauxShow
@@ -96,7 +103,8 @@ def get_shows():
         'feed-audio': jupiter + 'feeds/FauxShowMP3.xml',
         'image': 'faux-show.jpg',
         'plot': __language__(30211),
-        'genre': 'Comedy'
+        'genre': 'Comedy',
+        'archived': False
     }
 
     # Jupiter@Nite
@@ -106,7 +114,8 @@ def get_shows():
         'feed-audio': feedburner + 'jupiternitemp3?format=xml',
         'image': 'jupiter-at-nite.jpg',
         'plot': __language__(30204),
-        'genre': 'Technology'
+        'genre': 'Technology',
+        'archived': True
     }
 
     # MMOrgue
@@ -116,7 +125,8 @@ def get_shows():
         'feed-audio': jupiter + 'feeds/AllJupiterBroadcastingShowsOGG.xml',
         'image': 'mmorgue.jpg',
         'plot': __language__(30207),
-        'genre': 'Technology'
+        'genre': 'Technology',
+        'archived': True
     }
 
     # LOTSO
@@ -126,7 +136,8 @@ def get_shows():
         'feed-audio': feedburner + 'lotsomp3?format=xml',
         'image': 'lotso.jpg',
         'plot': __language__(30203),
-        'genre': 'Technology'
+        'genre': 'Technology',
+        'archived': True
     }
 
     # Beer is Tasty
@@ -136,7 +147,8 @@ def get_shows():
         'feed-audio': feedburner + 'BeerIsTasty?format=xml',
         'image': 'beer-is-tasty.png',
         'plot': __language__(30201),
-        'genre': 'Technology'
+        'genre': 'Technology',
+        'archived': True
     }
 
     # Jupiter Files
@@ -146,7 +158,8 @@ def get_shows():
         'feed-audio': feedburner + 'ldf-mp3?format=xml',
         'image': 'jupiter-files.jpg',
         'plot': __language__(30205),
-        'genre': 'Technology'
+        'genre': 'Technology',
+        'archived': True
     }
 
     # TORked
@@ -156,7 +169,8 @@ def get_shows():
         'feed-audio': feedburner + 'TorkedMp3?format=xml',
         'image': 'torked.jpg',
         'plot': __language__(30215),
-        'genre': 'Technology'
+        'genre': 'Technology',
+        'archived': True
     }
 
     # Coder Radio
@@ -166,7 +180,8 @@ def get_shows():
         'feed-audio': jupiter + 'feeds/coderradioogg.xml',
         'image': 'coder-radio.jpg',
         'plot': __language__(30217),
-        'genre': 'Technology'
+        'genre': 'Technology',
+        'archived': False
     }
 
     # Plan B
@@ -176,7 +191,8 @@ def get_shows():
         'feed-audio': feedburner + 'planbogg?format=xml',
         'image': 'planb.jpg',
         'plot': __language__(30218),
-        'genre': 'Technology'
+        'genre': 'Technology',
+        'archived': False
     }
 
     # Linux Unplugged
@@ -186,7 +202,8 @@ def get_shows():
         'feed-audio': feedburner + 'linuxunogg?format=xml',
         'image': 'linux-unplugged.jpg',
         'plot': __language__(30219),
-        'genre': 'Technology'
+        'genre': 'Technology',
+        'archived': False
     }
 
     # BSD Now
@@ -196,7 +213,8 @@ def get_shows():
         'feed-audio': feedburner + 'BsdNowOgg?format=xml',
         'image': 'bsd-now.jpg',
         'plot': __language__(30220),
-        'genre': 'Technology'
+        'genre': 'Technology',
+        'archived': False
     }
     # HowTo Linux
     shows[__language__(30021)] = {
@@ -205,7 +223,8 @@ def get_shows():
         'feed-audio': feedburner + 'HowtoLinuxOgg?format=xml',
         'image': 'howto-linux.jpg',
         'plot': __language__(30221),
-        'genre': 'Technology'
+        'genre': 'Technology',
+        'archived': True
     }
 
     # Tech Talk Today
@@ -215,7 +234,8 @@ def get_shows():
         'feed-audio': 'http://feedpress.me/t3ogg',
         'image': 'tech-talk-today.png',
         'plot': __language__(30222),
-        'genre': 'Technology'
+        'genre': 'Technology',
+        'archived': False
     }
 
     # Women's Tech Radio
@@ -223,67 +243,87 @@ def get_shows():
         'feed': feedburner + 'wtrmobile?format=xml',
         'feed-low': feedburner + 'wtrogg?format=xml',
         'feed-audio': feedburner + 'wtrmp3?format=xml',
-        'image': 'womens-talk-radio.png',
+        'image': 'womens-tech-radio.png',
         'plot': __language__(30223),
-        'genre': 'Technology'
+        'genre': 'Technology',
+        'archived': False
     }
+
+    # Meta Archive show
+    shows[__language__(30025)] = {
+        'image': 'icon.png',
+        'plot': __language__(30225),
+        'genre': 'Technology',
+        'archived': False
+    }
+
+    # User Error
+    shows[__language__(30024)] = {
+        'feed': 'http://feedpress.me/uevideo',
+        'feed-low': 'http://feedpress.me/usererror',
+        'feed-audio': 'http://feedpress.me/usererror',
+        'image': 'usererror.png',
+        'plot': __language__(30224),
+        'genre': 'Technology',
+        'archived': False
+        }
+
 
     return shows
 
-def categories():
+def categories(show_archived=False):
     """
     Load the available categories for Jupiter Broadcasting.
     """
     # List all the shows.
     shows = get_shows()
+
+    #sorts shows by lowercase name
+    sorted_shows = sorted(shows.items(), key=__getKey)
+
     quality = int(__settings__.getSetting("video_quality"))
 
-    # Add the Live Stream
-    livestream = int(__settings__.getSetting("live_stream"))
-    live_url = ''
-    if livestream == 0: # RTSP
-        live_url = 'rtsp://jblive.videocdn.scaleengine.net/jb-live/play/jblive.stream'
-    if livestream == 1: # RTMP
-        live_url = 'rtmp://jblive.videocdn.scaleengine.net/jb-live/play/jblive.stream'
-    elif livestream == 2: # HLS
-        live_url = 'http://jblive.videocdn.scaleengine.net/jb-live/play/jblive.stream/playlist.m3u8'
-    elif livestream == 3: # Audio
-        live_url = 'http://jblive.fm'
-
-    add_link(
-        name=__language__(30010),
-        url=live_url,
-        date='',
-        iconimage=os.path.join(
-            __settings__.getAddonInfo('path'),
-            'resources',
-            'media',
-            'jblive-tv.jpg'),
-        info={
-            'title': __language__(30010),
-            'plot': __language__(30210),
-            'genre': 'Technology',
-            'count': 1
-        }
-    )
+    # Add the Live Stream if not showing archived shows
+    if not show_archived:
+        add_livestream()
 
     # Loop through each of the shows and add them as directories.
     iterator = 2
-    for item_name, data in shows.iteritems():
+    for show in sorted_shows:
+        item_name = show[0]
+        data = show[1]
+
+        # short circuit on archived shows
+        if show_archived and not data['archived']:
+            continue
+        elif not show_archived and data['archived']:
+            continue
+
         data['count'] = iterator
         iterator += 1
+
+        # check if show is meta archive show
+        if item_name == __language__(30025):
+            add_archive(item_name, data)
+            continue
+
+
         # Check whether to use the high or low quality feed.
         feed = data['feed'] # High by default.
         if quality == 1:
             feed = data['feed-low']
         elif quality == 2:
             feed = data['feed-audio']
-        data['image'] = os.path.join(
-            __settings__.getAddonInfo('path'),
-            'resources',
-            'media',
-            data['image'])
+        data['image'] = __get_show_image_path(data)
         add_dir(item_name, feed, 1, data['image'], data)
+
+
+def __getKey(show):
+    """
+    Sets the key for sorting to be the lowercase show name
+    """
+    return show[0].lower()
+
 
 def index(name, url, page):
     """
@@ -366,6 +406,10 @@ def index(name, url, page):
             mediathumbnail = item.findAll('media:thumbnail')
             if mediathumbnail:
                 thumbnail = mediathumbnail[0]['url']
+            elif name != __language__(30300):
+                # Fall back to episode image
+                shows = get_shows()
+                thumbnail = __get_show_image_path(shows[name])
 
             # Add the episode link.
             add_link(info['title'], video, date, thumbnail, info)
@@ -373,6 +417,50 @@ def index(name, url, page):
         pass
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+def add_livestream():
+        livestream = int(__settings__.getSetting("live_stream"))
+        live_url = ''
+        if livestream == 0: # RTSP
+            live_url = 'rtsp://jblive.videocdn.scaleengine.net/jb-live/play/jblive.stream'
+        if livestream == 1: # RTMP
+            live_url = 'rtmp://jblive.videocdn.scaleengine.net/jb-live/play/jblive.stream'
+        elif livestream == 2: # HLS
+            live_url = 'http://jblive.videocdn.scaleengine.net/jb-live/play/jblive.stream/playlist.m3u8'
+        elif livestream == 3: # Audio
+            live_url = 'http://jblive.fm'
+
+        add_link(
+            name=__language__(30010),
+            url=live_url,
+            date='',
+            iconimage=os.path.join(
+                __settings__.getAddonInfo('path'),
+                'resources',
+                'media',
+                'jblive-tv.jpg'),
+            info={
+                'title': __language__(30010),
+                'plot': __language__(30210),
+                'genre': 'Technology',
+                'count': 1
+            }
+        )
+
+def add_archive(name, info):
+    info['Title'] = name
+    info['image'] = os.path.join(
+        __settings__.getAddonInfo('path'), info['image'])
+    uri = sys.argv[0] + '?url=' + urllib.quote_plus('archiveFolder') + '&mode=' + str(2)
+    uri += '&name=' + urllib.quote_plus(name) + '&page=' + str(0)
+
+    liz = xbmcgui.ListItem(name, iconImage=info['image'], thumbnailImage=info['image'])
+    liz.setInfo(type='video', infoLabels=info)
+    xbmcplugin.addDirectoryItem(
+        handle=int(sys.argv[1]),
+        url=uri,
+        listitem=liz,
+        isFolder=True)
 
 def get_item_description(item, info):
     description = item.find('description')
@@ -449,6 +537,18 @@ def add_dir(name, url, mode, iconimage, info, page=0):
         listitem=liz,
         isFolder=True)
 
+def __get_show_image_path(data):
+    """
+    Returns os path for show image
+    """
+    image_path = os.path.join(
+        __settings__.getAddonInfo('path'),
+        'resources',
+        'media',
+        data['image'])
+
+    return image_path
+
 PARAMS = get_params()
 URL = None
 NAME = None
@@ -476,5 +576,7 @@ if MODE == None or URL == None or len(URL) < 1:
     categories()
 elif MODE == 1:
     index(NAME, URL, PAGE)
+elif MODE == 2:
+    categories(show_archived=True)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!-- Shows -->
+  <string id="30000">Linux Action Show</string>
+  <string id="30200">Linux Action Show обхваща новите касаещи безплатния софтуер, отворения код и особено Linux.</string>
+
+  <string id="30001">Beer Is Tasty</string>
+  <string id="30201">Намерете интересни комбинации храна - бира.</string>
+
+  <string id="30002">STOked</string>
+  <string id="30202">Всички новини относно Star Trek Online от които се нуждаете.</string>
+
+  <string id="30003">LOTSO</string>
+  <string id="30203">Всичко за видео игри.</string>
+
+  <string id="30004">Jupiter@Nite</string>
+  <string id="30204">Вечерното шоу на Jupiter Broadcasting. Излъчва се на живо.</string>
+
+  <string id="30005">Jupiter Files</string>
+  <string id="30205">Bryan е по следите на извънземни форми на живот.</string>
+
+  <string id="30006">[ Най-скорошни ]</string>
+  <string id="30206">Списък на последните епизоди от мрежата на Jupiter Broading.</string>
+
+  <string id="30007">The MMOrgue</string>
+  <string id="30207">Предаването MMOrgue, с домакин Jeremy, е с основна тематика Massively Multiplayer Online (MMO) игри.</string>
+
+  <string id="30008">TechSNAP</string>
+  <string id="30208">TechSNAP е предаване посветено на сферата на технологиите и последните новини, с водещи Chris Fisher и Allan Jude. Записва се на живо всеки четвъртък и се излъчва следващия понеделник.</string>
+
+  <string id="30009">SciByte</string>
+  <string id="30209">SciByte е предаване на научна тематика, а водещи са Heather и Jeremy.</string>
+
+  <string id="30010">[ JBLive.TV ]</string>
+  <string id="30210">Гледайте Jupiter Broadcasting на живо.</string>
+
+  <string id="30011">FauxShow</string>
+  <string id="30211">FauxShow е социален експеримент. За разлика от останалите предавания от мрежата на Jupiter Broadcasting няма определена сфера върху която се фокусира - всяка седмица темата е различна.</string>
+
+  <string id="30014">In Depth Look</string>
+  <string id="30214">In Depth Look разнищва по един важен въпрос. Всяка седмица Chris представя нова тема - от екстремни хардуерни конфигурации до видео упътвания за начинаещи.</string>
+
+  <string id="30015">TORked</string>
+  <string id="30215">Star Wars: The Old Republic podcast засяга в подробности мрежата TOR - актуализации и функционалности.</string>
+
+  <string id="30016">Unfilter</string>
+  <string id="30216">Живеете в историческа епоха. Не си губете времето с телевизионни предавания. Отърсете се от пропагандата и информацията целяща да отклони вниманието ви!</string>
+
+  <string id="30017">Coder Radio</string>
+  <string id="30217">Предаването предоставя прагматичен поглед върху изкуството и бизнеса свързан с разработването на софтуер и свързаните технологии.</string>
+
+  <string id="30018">Plan B</string>
+  <string id="30218">Ежеседмично предаване посветено на Bitcoin. Интересни подробности за незапознатите с виртуалните валути, полезна информация за експерти и любопитни дискусии на тема Bitcoin за всеки интересуващ се от виртуални валути.</string>
+
+  <string id="30019">Linux Unplugged</string>
+  <string id="30219">Идеално продължение на Linux Action Show.</string>
+
+  <string id="30020">BSD Now!</string>
+  <string id="30220">За всичко свързано с BSD.</string>
+
+  <string id="30021">HowTo Linux</string>
+  <string id="30221">HowTo Linux ви напътства в удивителния свят на Linux. От първи стъпки с Linux до изграждане на върховна система за домашно кино, защитна стена, файлов сървър за офиса и всичко останало.</string>
+
+  <string id="30022">Tech Talk Today</string>
+  <string id="30222">Ежедневно отразяване на водещи заглавия по технологични теми.</string>
+
+  <string id="30023">Women's Tech Radio</string>
+  <string id="30223">Women's Tech Radio извежда на преден план гласа жените. Домакини на това предаване са Angela и Paige.</string>
+
+  <!-- Settings -->
+  <string id="30100">Основни</string>
+  <string id="30101">Качество</string>
+  <string id="30102">Високо</string>
+  <string id="30103">Ниско</string>
+  <string id="30104">Брой епизоди на една страница</string>
+  <string id="30105">Аудио</string>
+  <string id="30106">Тип на потока</string>
+
+  <!-- Misc -->
+  <string id="30300">По-стари епизоди</string>
+  <string id="30301">RTSP</string>
+  <string id="30302">RTMP</string>
+  <string id="30303">HLS</string>
+  <string id="30304">Аудио</string>
+
+</strings>

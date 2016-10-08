@@ -1,6 +1,0 @@
-0.0.2 (25.11.2012)
- - fixed Plugin (add clientID)
- - updated translations
-
-0.0.1 (11.11.2012)
- - Initial Release

@@ -1,5 +1,0 @@
-[B]2.0[/B]
-- Version bump and minor compatibility changes for Eden branch
-
-[B]1.0[/B]
-- Initial release

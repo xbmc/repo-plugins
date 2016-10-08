@@ -1,7 +1,0 @@
-<settings>
-   <setting id="language" type="enum" label="30101" values="DE|FR"/>
-   <setting id="maxVideoQuality" type="enum" label="30106" values="480p|720p" default="1"/>
-   <setting id="useThumbAsFanart" type="bool" label="30107" default="true"/>
-   <setting id="forceViewMode" type="bool" label="30104" default="true"/>
-   <setting id="viewMode" type="number" label="30105" default="500"/>
-</settings>

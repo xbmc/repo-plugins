@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<settings>
-    <category label="39900">
-        <setting type="sep" />
-        <setting label="39901" id="download_path" type="folder" default="" />
-        <setting label="39902" type="bool" id="use_show_path" default="false"/>
-    </category>
-</settings>

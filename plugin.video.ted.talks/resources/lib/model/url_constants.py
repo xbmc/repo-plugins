@@ -1,6 +1,0 @@
-URLTED = 'http://www.ted.com'
-URLPROFILES = URLTED + '/profiles'
-URLFAVORITES = URLPROFILES + '/favorites/id/'
-URLADDREMFAV = URLPROFILES + '/%sfavorites'
-URLSPEAKERS = URLTED + '/speakers?orderedby=TALKPOSTED&page=%s&alphabylastname=%s'
-URLTHEMES = 'http://www.ted.com/themes'

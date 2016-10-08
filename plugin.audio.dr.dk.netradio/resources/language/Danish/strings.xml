@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<strings>
-    <string id="100">DRs radio stationer</string>
-    <string id="101">Andre danske stationer</string>
-
-    <string id="900">Det var ikke muligt at indlæse listen over kanaler.</string>
-    <string id="901">Fejlbeskeden er:</string>
-</strings>

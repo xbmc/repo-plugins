@@ -1,2 +1,0 @@
-Version 1.0.2
-fix - earth-touch.com is now earthtouch.tv

@@ -1,8 +1,0 @@
-Version 1.0.2
-fix script error when selecting some shows
-
-Version 1.0.1
-we now scrape the main show list from http://www.diynetwork.com/full-episodes/package/index.html and then hard-code other shows in the 'More' directory.
-
-Version 1.0.0
-initial for eden

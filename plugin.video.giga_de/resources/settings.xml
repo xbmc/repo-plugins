@@ -1,5 +1,0 @@
-<settings>
-   <setting id="maxVideoQuality" type="enum" label="30101" values="360p|720p" default="1"/>
-   <setting id="forceViewMode" type="bool" label="30102" default="false"/>
-   <setting id="viewMode" type="number" label="30103" default="500"/>
-</settings>

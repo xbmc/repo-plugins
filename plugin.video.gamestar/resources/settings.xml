@@ -1,6 +1,0 @@
-<settings>
-   <setting id="gamestar"         type="bool" label="30100" option="writeable" default="true"/>
-   <setting id="gamepro"          type="bool" label="30101" option="writeable" default="true"/>
-   <setting id="youtube"          type="bool" label="30102" option="writeable" default="true"/>
-   <setting id="show_shortname"   type="bool" label="30103" option="writeable" default="true"/>
-</settings>

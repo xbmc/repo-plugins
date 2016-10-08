@@ -1,5 +1,0 @@
-<settings>
-   <setting id="sort_by" type="select" lvalues="30009|30010|30011|30012" label="30008" default=""/>
-   <setting id="download" type="folder" source="files" label="30019"  option="writeable" default=""/>
-   <setting id="debug" type="bool" label="30018" default="false"/>
-</settings>

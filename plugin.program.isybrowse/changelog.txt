@@ -1,6 +1,0 @@
-0.1.1 - Fixed bug regarding missing strings
-0.1.0 - First Release to XBMC Repository
-0.0.1 - Alpha Release
-
-Images Courtesy Of http://openclipart.org
-               And warszawianka

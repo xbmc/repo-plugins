@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <setting id="api_key" type="text" default="" option="hidden" label="API Key" visible="false" />
-    <setting id="quality" type="enum" values="Auto|Low|High" default="0" label="Quality" />
-</settings>

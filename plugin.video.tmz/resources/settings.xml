@@ -1,5 +1,0 @@
-<settings>
-	<setting id="quality" type="enum" label="30004" lvalues="30005|30006" default="1"/>
-	<setting id="playall" type="bool" label="30032" default="false"/>
-	<setting id="view" type="bool" label="30055" default="true"/>
-</settings>

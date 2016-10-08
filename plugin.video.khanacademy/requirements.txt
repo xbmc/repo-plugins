@@ -1,3 +1,0 @@
-xbmcswift2
-# Match the version of requests packaged for XBMC Eden
-requests==0.13.2

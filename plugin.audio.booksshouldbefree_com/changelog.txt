@@ -1,4 +1,0 @@
-1.0.0
-- First Try
-1.0.1 / 2.0.1
-- Small code changes

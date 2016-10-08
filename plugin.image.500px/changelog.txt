@@ -1,4 +1,0 @@
-Version 0.1.2 - March 3, 2012
-- Dropped requires elements from addon.xml
-Version 0.1.0 - February 26, 2012
-- Begin project

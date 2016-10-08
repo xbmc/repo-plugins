@@ -1,6 +1,0 @@
-1.0.0
-- First Try
-1.0.1
-- Changed multipart playback mode to stack://
-1.0.2 / 2.0.2
-- Fixed site changes

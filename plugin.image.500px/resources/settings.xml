@@ -1,7 +1,0 @@
-<?xml version ="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-  <category label="30000">
-    <setting id="feature" type="enum" label="30001" lvalues="30002|30003|30004|30005|30006|30007" default="0"/>
-    <setting id="quantity" type="enum" label="30008" values="20|40|60|80|100" default="0"/>
-  </category>
-</settings>

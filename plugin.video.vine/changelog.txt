@@ -1,2 +1,0 @@
-Version 1.0.0 (13 Mar 2013)
-- Initial version

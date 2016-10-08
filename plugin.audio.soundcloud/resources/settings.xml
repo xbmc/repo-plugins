@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<settings>
-<category label="SoundCloud">
-	<setting label="22" id="login_to_soundcloud" type="bool" default="false"/>
-	<setting label="23" id="username" type="text" enable="eq(-1,true)"/>
-	<setting label="24" id="password" option="hidden" type="text" enable="eq(-2,true)"/>
-</category>
-</settings>

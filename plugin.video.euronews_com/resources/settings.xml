@@ -1,5 +1,0 @@
-<settings>
-   <setting id="language" type="enum" label="30100" values="English|Greek|French|German|Italian|Spanish|Portuguese|Polish|Russian|Ukrainian|Turkish|Arabic|Persian" default="0"/>
-   <setting id="forceViewMode" type="bool" label="30101" default="false"/>
-   <setting id="viewMode" type="number" label="30102" default="500"/>
-</settings>

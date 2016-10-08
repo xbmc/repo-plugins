@@ -1,9 +1,0 @@
-[B]1.0.0:[/B]
-Initial version
-
-[B]2.0.0:[/B]
-Version bump for Eden
-
-[B]2.1.0:[/B]
-Fix laatste journaals
-Disable broken rss feeds

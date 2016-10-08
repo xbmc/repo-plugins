@@ -1,5 +1,0 @@
-<settings>
-   <setting id="autoPlay" type="number" label="30103" default="5"/>
-   <setting id="forceViewMode" type="bool" label="30101" default="true"/>
-   <setting id="viewMode" type="number" label="30102" default="500"/>
-</settings>

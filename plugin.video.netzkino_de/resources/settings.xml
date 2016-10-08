@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-	<setting id="force_viewmode" type="bool" label="30100" default="true"/>
-	<setting id="use_rtmp" type="bool" label="30101" default="true"/>
-</settings>

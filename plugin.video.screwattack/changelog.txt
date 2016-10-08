@@ -1,6 +1,0 @@
-[B]Version 1.0.0[/B]
-- Initial release.
-
-[B]Version 1.0.1[/B]
-- Added missing language string.
-- Resolve url rather than force the player to open it.

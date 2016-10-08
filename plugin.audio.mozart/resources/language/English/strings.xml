@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<strings>	
-	<!--General-->
-	<string id="30090">Initializing...</string>
-	<string id="30091">Downloading files...</string>
-        <string id="30092">Unpacking files...</string>
-        <string id="30093">Done!</string>
-</strings>

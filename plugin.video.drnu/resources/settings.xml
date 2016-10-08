@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<settings>
-	<category label="30500">
-		<setting id="enable.chapters" label="30501" type="bool" default="false" />
-        <setting id="show.stream.selector" label="30502" type="bool" default="false" />
-	</category>
-</settings>
-

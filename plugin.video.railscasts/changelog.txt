@@ -1,9 +1,0 @@
-Version 0.1
------------
-
-* Initial version
-
-Version 0.2
------------
-
-* Added support for indvidual thumbnails for episodes

@@ -1,8 +1,0 @@
-﻿<settings>
-  <category label="General">
-    <setting id="playback" type="enum" lvalues="30015|30016|30017|30018" label="30014" default="1" />
-    <setting id="debug" type="bool" label="30019" default="false" />
-    <setting id="view_mode" type="enum" label="30025" lvalues="30026|30027|30028|30029|30030|30031|30032|30033|30034" default="8" />
-    <setting id="twit_live" label="30001" type="enum" lvalues="30003|30004|30005|30006|30007|30008|30009|30010|30011|30012|30013" default="8" />
-  </category>
-</settings>

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
-<strings>
-	<!-- error -->
-	<string id="32100">No videos found in the selected category!</string>
-	<string id="32200">Live broadcast</string>
-	<string id="32300">Next page</string>
-</strings>

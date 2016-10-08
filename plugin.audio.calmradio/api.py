@@ -14,13 +14,13 @@ class API(object):
 
     @staticmethod
     @cache
-    def get_json(url):
+    def get_json(url, verify=False):
         """
         Gets JSON file
         :param url: Link to JSON
         :return: Object
         """
-        r = requests.get(url)
+        r = requests.get(url, verify=verify)
         if r.status_code == 200:
             return json.loads(r.text)
 

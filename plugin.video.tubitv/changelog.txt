@@ -1,8 +1,0 @@
-Version 1.0.1 Initial release
-Version 1.0.2 Added SD/HD and subtitles
-Version 1.0.4 website change
-Version 1.0.5 website change
-Version 1.0.6 website change
-Version 1.0.7 website change, added views
-Version 1.0.8 website change
-Version 1.0.9 website change

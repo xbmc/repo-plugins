@@ -1,5 +1,0 @@
-1.0.1
-* Better tests and Travis integration
-
-1.0.0
-* Port RSA Animate plugin to support entire RSA website

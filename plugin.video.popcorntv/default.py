@@ -83,7 +83,7 @@ def show_video_files(url):
 def play_video(url):
     popcorntv = PopcornTV()
     metadata = popcorntv.getVideoMetadata(url)
-    liStyle=xbmcgui.ListItem(metadata["title"], path=metadata["videoUrl"])
+    liStyle=xbmcgui.ListItem(path=metadata["videoUrl"])
     xbmcplugin.setResolvedUrl(handle=handle, succeeded=True, listitem=liStyle)
     
 # parameter values

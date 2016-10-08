@@ -1,7 +1,0 @@
-[B]Version 1.1.0[/B]
-
-- updated for latest Kodi
-
-[B]Version 1.0.0[/B]
-
-- initial version

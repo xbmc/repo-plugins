@@ -1,9 +1,0 @@
-Version 1.0.1 Initial release
-Version 1.0.3 Website changes
-Version 1.0.4 Website changes
-Version 1.0.5 Added Subtitle, Metadata, fixed views
-Version 1.0.6 Added User Select Views
-Version 1.0.7 Added Sort Methods
-Version 1.0.8 Website change
-Version 1.0.9 Better fix for Website change
-Version 1.0.10 Website change

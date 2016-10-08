@@ -1,5 +1,0 @@
-Version 0.8.3
-* Add language tag to addon.xml
-
-Version 0.8.2
-* Use youtube addon for playback

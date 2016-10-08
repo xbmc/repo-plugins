@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-	<setting id="cache_time" type="enum" values="12 hours|1 day|2 days|1 week" label="30000" default="1" />
-</settings>

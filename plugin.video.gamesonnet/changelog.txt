@@ -1,9 +1,0 @@
-0.1.2 - 20/02/2011
-* Added video URL retrieval progress update
-* Updated icon to meet XBMC guidelines
-
-0.1.1 - 20/02/2011
-* Now using built-in BeautifulSoup XBMC module 
-* Converted to XBMC Addon format
-* Replaced old os.getcwd() method
-* Fixed playback url errors with some files

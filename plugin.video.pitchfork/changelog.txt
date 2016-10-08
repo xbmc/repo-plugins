@@ -1,5 +1,0 @@
-[B]Version 1.1.0[/B]
-- Made compatible with the official XBMC repo specifications
-
-[B]Version 1.0.0[/B]
-- Initial release

@@ -1,8 +1,0 @@
-<settings>
-   <setting id="username" type="text" label="30000" default=""/>
-   <setting id="password" type="text" option="hidden" label="30001" default=""/>
-   <setting type="sep" />
-   <setting id="bitrate" type="enum" label="30003" values="300 kbps iTunes|1 Mbps Flash|2 Mbps MPEG4|8 Mbps Pro" default="1 Mbps Flash"/>
-   <setting type="lsep" label="30006" />
-   <setting type="lsep" label="30007" />
-</settings>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<strings>
-	<string id="30000">Latest show: %s</string>
-    <string id="30001">Games tested:</string>
-
-    <string id="30010">Reviews</string>
-    <string id="30011">Retro</string>
-    <string id="30012">Stunts</string>
-</strings>

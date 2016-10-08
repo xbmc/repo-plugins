@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-	<!-- General -->
-	<category label="31000">
-		<setting id="login_name" type="text" label="30000"/>
-		<setting id="login_pass" type="text" option="hidden" label="30001"/>
-		<setting type="sep"/>
-	</category>
-</settings>

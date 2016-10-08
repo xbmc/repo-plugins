@@ -1,4 +1,0 @@
-[B]1.0.0[/B]
-Initial Release, r1 conversions to newer xbmc 'Add-ons'
-[B]1.1.0[/B]
-Subsubquent Release to conform to Yahoo's new Trailer page

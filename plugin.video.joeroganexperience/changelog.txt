@@ -1,8 +1,0 @@
-Version 0.1
-* Initial working version.
-
-Version 0.2.1
-* Removed the broken live link (will add it in future releases, working
-properly)
-* Changed the behaviour to scrape the joerogan.net page for links, using Vimeo
-where available

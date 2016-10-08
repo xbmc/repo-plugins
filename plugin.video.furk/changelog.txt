@@ -1,8 +1,0 @@
-[B]1.0.0[/B]
-- Initial version
-
-[B]1.0.5[/B]
-- The plugin was broken because resources/__init__.py was missed in git
-respository
-- Small text changes, added note about ability download torrents from RSS
-feeds

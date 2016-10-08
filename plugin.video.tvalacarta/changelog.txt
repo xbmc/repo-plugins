@@ -1,7 +1,0 @@
-2.5
-
-- First addon repository version (Dharma)
-
-For more info visit http://blog.tvalacarta.info/plugin-xbmc/tvalacarta
-
-__________________

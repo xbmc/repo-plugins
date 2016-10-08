@@ -1,4 +1,0 @@
-<settings>
-   <setting id="res" type="labelenum" label="30000" values="720_3Mbps|720_2Mbps|1080|480" default="720_2Mbps"/>
-   <setting id="zip" type="text" label="30001" default="90210" />
-</settings>

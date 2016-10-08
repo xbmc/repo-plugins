@@ -1,9 +1,0 @@
-[B]1.0.2[/B]
-- Changed domain name for website, since the old domain doesn't work any more
-
-[B]1.0.1[/B]
-- Added note about this plugin is not working on Windows machines on Dharma
-- Corrected some meta data for the plugin which was wrong
-
-[B]1.0.0[/B]
-- Initial version

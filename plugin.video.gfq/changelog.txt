@@ -1,2 +1,0 @@
-[B]0.0.1[/B]
-- Initial release for dharma, derived from the TWiT addon made by divingmule and Adam B

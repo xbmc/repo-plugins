@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-	<!-- General -->
-	<category label="30001">
-		<setting id="hd_videos" type="enum" label="30100" lvalues="30110|30120" default="1" />
-	</category>
-</settings>

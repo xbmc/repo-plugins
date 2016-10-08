@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <!--General-->
-    <category>
-        <setting id="archivePath" type="folder" source="auto" default="" option="writeable" label="30001" />
-        <setting id="sortMethod" type="enum" label="30010" default="0" lvalues="30011|30012|30013" />
-    </category>
-</settings>

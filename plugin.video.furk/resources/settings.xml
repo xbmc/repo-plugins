@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-	<setting id="login" type="text" label="20001" default=""/>
-	<setting id="password" type="text" label="20002" default="" option="hidden"/>
-	<setting type="sep" />
-	<setting id="recent_queries" type="text" label="20003" default=""/>
-</settings>
-

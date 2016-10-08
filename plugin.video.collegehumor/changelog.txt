@@ -1,6 +1,0 @@
-0.0.2
- dharma released version
- Fixed a small typo
-
-0.0.1
- First Version

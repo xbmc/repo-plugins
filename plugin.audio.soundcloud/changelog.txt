@@ -1,2 +1,0 @@
-0.1.4
-- Fixed bug where tracks wouldn't play because of a 401 authentication error.

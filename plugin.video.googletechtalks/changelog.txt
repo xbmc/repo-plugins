@@ -1,5 +1,0 @@
-version 0.1.0:
-  - initial version, supports simple browsing
-  - added icon (Thank you, anarchintosh)
-
-

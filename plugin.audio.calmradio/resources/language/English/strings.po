@@ -154,3 +154,13 @@ msgstr ""
 msgctxt "#32356"
 msgid "INCREDIBLE CHANNELS"
 msgstr ""
+
+### ARTWORK ###
+
+msgctxt "#32400"
+msgid "Next Song"
+msgstr ""
+
+msgctxt "#32401"
+msgid "Recent Songs"
+msgstr ""

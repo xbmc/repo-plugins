@@ -35,11 +35,11 @@ class ArtworkWindow(xbmcgui.WindowDialog):
         self.description = xbmcgui.ControlTextBox(810, 200, 1060, 350, 'Channel Description')
 
         # next song
-        next = xbmcgui.ControlLabel(810, 580, 950, 30, '[B]Next Song:[/B]')
+        next = xbmcgui.ControlLabel(810, 580, 950, 30, '[B]{0}:[/B]'.format(ADDON.getLocalizedString(32400)))
         self.next_1 = xbmcgui.ControlLabel(810, 630, 950, 30, 'Song 1', textColor='0xffcccccc', font='font12')
 
         # recent songs
-        recent = xbmcgui.ControlLabel(810, 710, 950, 30, '[B]Recent Songs:[/B]')
+        recent = xbmcgui.ControlLabel(810, 710, 950, 30, '[B]{0}:[/B]'.format(ADDON.getLocalizedString(32401)))
         self.recent_1 = xbmcgui.ControlLabel(810, 760, 950, 30, 'Song 1', textColor='0xffcccccc', font='font12')
         self.recent_2 = xbmcgui.ControlLabel(810, 800, 950, 30, 'Song 2', textColor='0xffcccccc', font='font12')
         self.recent_3 = xbmcgui.ControlLabel(810, 840, 950, 30, 'Song 3', textColor='0xffcccccc', font='font12')

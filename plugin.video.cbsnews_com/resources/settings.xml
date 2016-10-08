@@ -1,5 +1,0 @@
-<settings>
-   <setting id="useThumbAsFanart" type="bool" label="30103" default="false"/>
-   <setting id="forceView" type="bool" label="30101" default="true"/>
-   <setting id="viewIDNew" type="number" label="30102" enable="eq(-1,true)" default="51"/>
-</settings>

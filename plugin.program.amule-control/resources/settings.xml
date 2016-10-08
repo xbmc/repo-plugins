@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <setting type="lsep" label="30010" />
-    <setting label="30011" type="text"   id="password" option="hidden" default=""/>
-</settings>

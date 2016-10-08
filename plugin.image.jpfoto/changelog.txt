@@ -1,8 +1,0 @@
-[B]Version 1.1.0 - 2013-06-02[/B]
-- Updated for Frodo
-
-[B]Version 1.0.1 - 2012-12-30[/B]
-- Fixed support for Eden
-
-[B]Version 1.0.0 - 2012-11-09[/B]
-- Initial release

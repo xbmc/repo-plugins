@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <setting id="provider" type="action" label="30304" action="RunPlugin(plugin://plugin.programm.xbmcmail/settings/set_provider)" default="Custom" />
-    <setting id="username" type="text" label="30300" />
-    <setting id="password" type="text" label="30301" option="hidden" />
-    <setting id="imap_host" type="text" label="30302" />
-    <setting id="use_ssl" type="bool" label="30303" default="true" />
-</settings>

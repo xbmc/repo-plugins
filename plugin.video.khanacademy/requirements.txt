@@ -1,3 +1,0 @@
-xbmcswift2
-# Match requests version in XBMC Frodo
-requests=>1.0.4

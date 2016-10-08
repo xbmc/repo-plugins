@@ -1,7 +1,0 @@
-1.0.0
- - First released version
- - Connect to Enigma-TV Server
- - Retrieve Providers / Channels and Medias lists
- - Stream selected channel / media from Enigma-TV server to XBMC
- - User settings panel to specify Enigma-TV Server IP, Web & Stream Ports, Password, Video settings
- - English and French language pack

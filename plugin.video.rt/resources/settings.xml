@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<settings>
-  <category label="30020">
-    <setting id="rt_res" type="enum" label="30021" lvalues="30023|30024|30025|30026|30027" default="0" />
-    <setting id="auto_play" type="bool" label="30022" default="false" />
-  </category>
-</settings>

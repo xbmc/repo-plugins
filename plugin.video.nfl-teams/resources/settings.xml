@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <category label="30000">
-        <setting label="30001" type="slider" id="max_bitrate" range="1,5" option="int" default="5" />
-    </category>
-</settings>

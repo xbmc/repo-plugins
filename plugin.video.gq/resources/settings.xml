@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <setting id="high_res" type="bool" label="30000" default="true" />
-</settings>

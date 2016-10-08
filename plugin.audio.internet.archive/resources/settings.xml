@@ -1,4 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-   <setting id="download" type="folder" source="files" label="30011"  option="writeable" default=""/>
-</settings>

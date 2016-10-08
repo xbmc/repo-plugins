@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <setting id="site_id" type="enum" label="30101" values="International (English)|Africa - Congo (Français)|Africa - Senegal (Français)|Africa - South Africa (English)|Argentina (Español)|Australia (English)|Austria (Deutsch)|Belgium (Français)|Belgium (Nederlands)|Brazil (Português)|Bulgaria (български)|Canada (English)|Canada (Français)|Chile (Español)|China Mainland (简体中文)|Colombia (Español)|Czech Republic (Česky)|Denmark (Dansk)|East Asia (English)|Fiji (English)|Finland (Suomea)|Greece (Ελληνικά)|Hong Kong (繁體中文)|India (English)|India (Hindi)|Indonesia (Indonesia)|Israel (עברית)|Italy (Italiano)|Japan (日本語)|Korea (한국어)|Lebanon (العربية)|Mexico (Español)|Netherlands (Nederlands)|New Zealand (English)|Norway (Norsk)|Papua New Guinea (English)|Philippines (English)|Portugal (Português)|Romania (Român)|Russia (Русский)|Slovenia (Slovenjia)|Southeast Asia (English)|Spain (Español)|Sweden (Svenska)|Switzerland (Deutsch)|Switzerland (Français)|Taiwan (正體中文)|Thailand (ไทย)|Turkey (Türk)|USA (English)" default="International (English)"/>
-   <setting id="show_fanart" type="bool" label="30103" default="false"/>
-   <setting id="debug" type="bool" label="30102" default="false"/>
-</settings>

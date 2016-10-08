@@ -1,5 +1,0 @@
-1.0.4 Added required elements to addon.xml
-1.0.3 Proper handling of broadcast date
-1.0.2 Added changelog.txt and fanart.jpg
-1.0.1 Only show programs with available ondemand content.
-1.0.0 Initial rewrite using Sveriges Radio's v2 JSON API.

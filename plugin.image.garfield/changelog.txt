@@ -1,2 +1,0 @@
-0.X.Y initial development versions
-1.0.0 first release

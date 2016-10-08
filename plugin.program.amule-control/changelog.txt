@@ -1,8 +1,0 @@
-1.00.XX initial development version (should be 0.99.xx)
-
-1.01.00 initial attempted relase version (march 2013)
-
-1.1.1 (april 2013) minor changes in order to adhere to standard coding
-guidelines
-
-1.2.0 (september 2013) improved password check

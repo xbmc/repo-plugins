@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-	<category label="30000">
-		<setting id="cherrymusichost" type="text" label="30001" default=""/>
-		<setting label="30004" type="lsep"/>
-		<setting id="cherrymusicuser" type="text" label="30002" default=""/>
-		<setting id="cherrymusicpass" type="text" label="30003" default="" option="hidden"/>
-	</category>
-</settings>

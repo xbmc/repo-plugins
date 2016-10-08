@@ -1,9 +1,0 @@
-v1.0.0 (Friday, 10 may 2013) :
-- initial version
-
-v1.0.1 (Sunday, 23 june 2013) :
-- removed videos menu so it goes directly to the video listing
-
-v1.0.2 (Saturday, 7 July 2013) :
-- added beautiful soup as dependency
-- added dutch strings

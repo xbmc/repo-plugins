@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<strings>
-    <string id="30100">DRs radio stations</string>
-    <string id="30101">Other danish stations</string>
-
-    <string id="30900">It was not possible to load the channel list.</string>
-    <string id="30901">The error message is:</string>
-</strings>

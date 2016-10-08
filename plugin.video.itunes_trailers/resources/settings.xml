@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <setting id="source" type="enum" label="30010" default="0" lvalues="30011|30012|30013|30014"/>
-    <setting id="limit" type="enum" label="30020" default="0" lvalues="30021|30022|30023"/>
-    <setting id="force_viewmode_trailers" type="bool" label="30051" default="false"/>
-    <setting id="trailer_quality" type="enum" label="30030" default="1" lvalues="30031|30032|30033"/>
-    <setting id="trailer_quality_download" type="enum" label="30040" default="0" lvalues="30041|30031|30032|30033"/>
-    <setting id="trailer_download_path" type="folder" label="30050" source="auto" option="writeable"/>
-</settings>

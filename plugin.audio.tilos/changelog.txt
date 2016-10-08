@@ -1,5 +1,0 @@
-v0.0.2
-- Ability to list shows by type (talk vs music)
-
-v0.0.1
-- Initial version

@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-	<category label="General">
-	<setting id="thumbnailviewmode" type="bool" label="Thumbnail View" default="true" /></category>
-</settings>

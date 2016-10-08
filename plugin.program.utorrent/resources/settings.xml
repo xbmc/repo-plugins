@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf8" standalone="yes"?>
-<settings>
-	<setting id="ip" type="text" label="30100" default="192.168.1.1" />
-	<setting id="port" type="text" label="30101" default="8080" />
-	<setting id="usr" type="text" label="30102" default="admin" />
-	<setting id="pwd" type="text" label="30103" default="" />
-	<setting id="tdir" type="folder" source="files" label="30104" default="special://profile/torrents/" />
-</settings>

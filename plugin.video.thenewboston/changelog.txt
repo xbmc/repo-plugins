@@ -1,9 +1,0 @@
-1.1.1
-- Fixed deps
-
-1.1.0
-- Fixed scraper
-- Migrated to xbmcswift
-
-1.0.4
-- Fixed bug preventing certain topics from loading

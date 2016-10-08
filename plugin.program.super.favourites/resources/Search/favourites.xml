@@ -1,6 +1,0 @@
-<favourites>
-	<favourite name="Global Search" thumb="special://home\addons\script.globalsearch\icon.png">RunScript(&quot;script.globalsearch&quot;,searchstring:[%SF%])?sf_fanart=special%3A%2F%2Fhome%2Faddons%5Cscript.globalsearch%5Cfanart.jpg_&quot;)</favourite>
-	<favourite name="YouTube" thumb="special://home\addons\plugin.video.youtube\icon.png">ActivateWindow(10025,&quot;plugin://plugin.video.youtube/?feed=search&amp;path=%2froot%2fsearch&amp;search=[%SF%]&quot;)</favourite>
-	<favourite name="iPlayer" thumb="special://home\addons\plugin.video.iplayer\resources\media\search.png">ActivateWindow(10025,&quot;plugin://plugin.video.iplayer/?label=[%SF%]&amp;listing=search&amp;tvradio=tv&quot;)</favourite>
-	<favourite name="Funnier Moments" thumb="special://home/addons\plugin.video.funniermoments\resources\artwork\search.png">ActivateWindow(10025,&quot;plugin://plugin.video.funniermoments/?image=C%3a%5cDocuments%20and%20Settings%5cSeanP%5cApplication%20Data%5cXBMC%5caddons%5cplugin.video.funniermoments%5cresources%5cartwork%5csearch.png&amp;mode=800&amp;page=1&amp;title=Search%20Moments&amp;keyword=[%SF%]&amp;sf_fanart=_&quot;)</favourite>
-</favourites>

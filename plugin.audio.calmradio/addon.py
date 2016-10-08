@@ -299,7 +299,6 @@ def update_artwork(channel, recent_tracks_url):
     last_album_cover = ''
 
     # update now playing fanart, channel name & description:
-    artwork.overlay.setImage('special://home/addons/plugin.audio.calmradio/resources/media/000000-1.png')
     artwork.channel.setLabel('[B]' + channel['title'] + '[/B]')
     artwork.description.setText(channel['description'])
     artwork.show()
@@ -319,16 +318,20 @@ def update_artwork(channel, recent_tracks_url):
             artwork.album.setLabel('[B]Album[/B]: ' + (recent_tracks['now_playing']['album']
                                                        if recent_tracks['now_playing']['album'] else 'N/A'))
             artwork.artist.setLabel('[B]Artist[/B]: ' + recent_tracks['now_playing']['artist'])
+            # next track:
+            artwork.next_1.setLabel('- [B]{0}[/B] by {1}'.format(
+                recent_tracks['next_playing']['title'], recent_tracks['next_playing']['artist']
+            ))
             # recent tracks:
-            # artwork.recent_1.setLabel('[B]{0}[/B] by {1}'.format(
-            #     recent_tracks['recently_played'][0]['title'], recent_tracks['recently_played'][0]['artist']
-            # ))
-            # artwork.recent_2.setLabel('[B]{0}[/B] by {1}'.format(
-            #     recent_tracks['recently_played'][1]['title'], recent_tracks['recently_played'][1]['artist']
-            # ))
-            # artwork.recent_3.setLabel(' - [B]{0}[/B] by {1}'.format(
-            #     recent_tracks['recently_played'][2]['title'], recent_tracks['recently_played'][2]['artist']
-            # ))
+            artwork.recent_1.setLabel('- [B]{0}[/B] by {1}'.format(
+                recent_tracks['recently_played'][0]['title'], recent_tracks['recently_played'][0]['artist']
+            ))
+            artwork.recent_2.setLabel('- [B]{0}[/B] by {1}'.format(
+                recent_tracks['recently_played'][1]['title'], recent_tracks['recently_played'][1]['artist']
+            ))
+            artwork.recent_3.setLabel('- [B]{0}[/B] by {1}'.format(
+                recent_tracks['recently_played'][2]['title'], recent_tracks['recently_played'][2]['artist']
+            ))
         sleep(5000)
 
     log('Artwork closed')

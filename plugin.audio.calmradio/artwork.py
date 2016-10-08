@@ -14,8 +14,11 @@ class ArtworkWindow(xbmcgui.WindowDialog):
         self.setCoordinateResolution(0)  # 1920x1080
 
         # overlay
-        self.overlay = xbmcgui.ControlImage(0, 0, 1920, 1080,
-                                            'special://home/addons/plugin.audio.calmradio/resources/media/000000-0.8.png')
+        clouds = xbmcgui.ControlImage(0, 0, 1920, 1080,
+                                            'special://home/addons/plugin.audio.calmradio/fanart.jpg')
+
+        overlay = xbmcgui.ControlImage(0, 0, 1920, 1080,
+                                            'special://home/addons/plugin.audio.calmradio/resources/media/000000-0.5.png')
 
         # top bar
         topbar = xbmcgui.ControlImage(0, 0, 1920, 100,
@@ -29,13 +32,17 @@ class ArtworkWindow(xbmcgui.WindowDialog):
         self.channel = xbmcgui.ControlLabel(810, 160, 1060, 30, 'Channel Name', textColor='0xff18b0e2')
 
         # channel description
-        self.description = xbmcgui.ControlTextBox(810, 200, 1060, 800, 'Channel Description')
+        self.description = xbmcgui.ControlTextBox(810, 200, 1060, 350, 'Channel Description')
+
+        # next song
+        next = xbmcgui.ControlLabel(810, 580, 950, 30, '[B]Next Song:[/B]')
+        self.next_1 = xbmcgui.ControlLabel(810, 630, 950, 30, 'Song 1', textColor='0xffcccccc', font='font12')
 
         # recent songs
-        # recent = xbmcgui.ControlLabel(840, 730, 950, 30, '[B]Recent Songs:[/B]')
-        # self.recent_1 = xbmcgui.ControlLabel(840, 860, 950, 30, 'Song 1')
-        # self.recent_2 = xbmcgui.ControlLabel(840, 890, 950, 30, 'Song 2')
-        # self.recent_3 = xbmcgui.ControlLabel(840, 920, 950, 30, 'Song 3')
+        recent = xbmcgui.ControlLabel(810, 710, 950, 30, '[B]Recent Songs:[/B]')
+        self.recent_1 = xbmcgui.ControlLabel(810, 760, 950, 30, 'Song 1', textColor='0xffcccccc', font='font12')
+        self.recent_2 = xbmcgui.ControlLabel(810, 800, 950, 30, 'Song 2', textColor='0xffcccccc', font='font12')
+        self.recent_3 = xbmcgui.ControlLabel(810, 840, 950, 30, 'Song 3', textColor='0xffcccccc', font='font12')
 
         self.btn_volume = xbmcgui.ControlButton(1760, 20, 60, 60, '',
                                                 focusTexture='special://home/addons/plugin.audio.calmradio/resources/media/volume.png',
@@ -86,8 +93,9 @@ class ArtworkWindow(xbmcgui.WindowDialog):
         # artist
         self.artist = xbmcgui.ControlLabel(70, 975, 660, 30, 'Artist Name', font='font12')
         # add all controls:
-        self.addControls((self.overlay, topbar, calmradio, self.channel, self.description,
-                          # recent, self.recent_1, self.recent_2, self.recent_3,
+        self.addControls((clouds, overlay, topbar, calmradio, self.channel, self.description,
+                          next, self.next_1,
+                          recent, self.recent_1, self.recent_2, self.recent_3,
                           self.btn_mute, self.btn_volume, self.btn_close,
                           cover_shadow, spinner, self.cover, self.song, self.album, self.artist))
 

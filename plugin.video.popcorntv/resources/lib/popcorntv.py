@@ -4,7 +4,6 @@ import re
 from BeautifulSoup import BeautifulSoup
 from BeautifulSoup import BeautifulStoneSoup
 
-
 class PopcornTV:
     __USERAGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0"
 
@@ -21,12 +20,12 @@ class PopcornTV:
         categories = []
         list = tree.findAll("div", "megamenu")
         for item in list:
-            link = item.parent.find("a")
             category = {}
-            category["title"] = link.text.strip()
-            category["url"] = link["href"]
-            categories.append(category)
-       
+            category["title"] = item.findPreviousSibling("a").text.strip()
+            if category["title"] not in ("Intrattenimento", "Primafila", ""):
+                category["url"] = item.find("li", "bold").find("a")["href"]
+                categories.append(category)
+        
         return categories
 
     def getSubCategories(self, pageUrl):
@@ -36,9 +35,12 @@ class PopcornTV:
         urlSite = urlParsed.scheme + "://" + urlParsed.netloc
 
         subcategories = []
-        list = htmlTree.findAll("div", "lista-serie")
+        list = htmlTree.findAll("div", "async_box")
         for item in list:
             link = item.find("a")
+            if link is None:
+                # Anime section
+                link = item.parent
             subcategory = {}
             subcategory["title"] = link.text.strip()
             subcategory["url"] = link["href"]
@@ -57,12 +59,12 @@ class PopcornTV:
         videoList = []
         
         if pageUrl.startswith("http://cinema.popcorntv.it"):
-            # Show video in "Altri fim"
-            items = htmlTree.find(text="Altri film").parent.findNextSiblings("a")
+            # Show video in "Lista film"
+            items = htmlTree.find("div", "row lista-episodi").findAll("a")
         else:
             # Show video in "Tutti gli episodi"
-            items = htmlTree.find(text="Tutti gli episodi").parent.findNextSibling("div").findAll("a")
-        
+            items = htmlTree.find("div", {"role": "tabpanel", "id": "all"}).findAll("a", "episodio-link")
+
         for item in items:
             video = {}
             video["title"] = item["title"].strip()
@@ -99,17 +101,19 @@ class PopcornTV:
         return page
 
     def getVideoMetadata(self, pageUrl):
-        metadata = {}
-        
         data = urllib2.urlopen(pageUrl).read()
         htmlTree = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
-        metadata["url"] = htmlTree.find("meta", {"property": "og:url"})['content']
-        if metadata["url"] != pageUrl:
-            return self.getVideoMetadata(metadata["url"])
 
-        metadata["title"] = htmlTree.find("header","video-heading").text.strip()
+        link = htmlTree.find("link", {"itemprop": "contentUrl"})
+        if link is None:
+            # Cinema section
+            url = htmlTree.find("div", "container main ").find("a")["href"]
+            return self.getVideoMetadata(url)
+
+        metadata = {}
+        metadata["videoUrl"] = link['href']
+        metadata["title"] = htmlTree.find("meta", {"property": "og:title"})['content']
         metadata["thumb"] = htmlTree.find("meta", {"property": "og:image"})['content']
-        metadata["videoUrl"] = re.search(r'\("vplayerPopcorn","1020","550","(.+?)"', data).group(1)
         
         return metadata
 

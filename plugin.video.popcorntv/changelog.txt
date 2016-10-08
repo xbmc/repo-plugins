@@ -1,3 +1,6 @@
+[B]1.0.13[/B]
+- Updated page parsing because of upstream HTML changes.
+
 [B]1.0.12[/B]
 - Updated page parsing because of upstream HTML changes.
 

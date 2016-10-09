@@ -28,7 +28,7 @@ class myAddon(t1mAddon):
           name = b['title']
           infoList['Title'] = name
           infoList['TVShowTitle'] = name
-          infoList['Plot'] = b['description']
+          infoList['Plot'] = b.get('description')
           if (b['seasons'] != []):
               infoList['Season'] = int(b['seasons'][0]['number'])
           fanart = b['images'][0]['images'].get('featured_large_3')
@@ -116,7 +116,7 @@ class myAddon(t1mAddon):
       func = url[0:2]
       url  = url[2:]
       if func == 'AL':
-          name  = xbmc.getInfoLabel('ListItem.Title')
+          name  = xbmc.getInfoLabel('ListItem.Title').replace(':','')
           profile = self.addon.getAddonInfo('profile').decode(UTF8)
           moviesDir  = xbmc.translatePath(os.path.join(profile,'TV Shows'))
           movieDir  = xbmc.translatePath(os.path.join(moviesDir, name))

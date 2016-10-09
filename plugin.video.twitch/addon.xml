@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-<addon id='plugin.video.twitch' version='1.4.0' name='Twitch' provider-name='StateOfTheArt and ccaspers'>
+<addon id='plugin.video.twitch' version='1.4.1' name='Twitch' provider-name='StateOfTheArt and ccaspers'>
     <requires>
         <import addon='xbmc.python' version='2.20.0'/>
         <import addon="script.module.xbmcswift2" version="1.2.0"/>
@@ -26,5 +26,6 @@
         <description lang='nl'>Bekijk je favoriete gaming-streams!</description>
         <summary lang='pl'>Twitch video plugin</summary>
         <description lang='pl'>Oglądaj ulubione programy TwitchTV!</description>
+        <broken>Please upgrade to a newer Kodi version to continue using this add-on</broken>
     </extension>
 </addon>

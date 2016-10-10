@@ -24,9 +24,6 @@ SECTION_LATEST_CLIPS = "play_js-tabpanel-more-clips"
 SECTION_EPISODES = "play_js-tabpanel-more-episodes"
 SECTION_LIVE_PROGRAMS = "live-channels"
 
-# Using Python magic to create shortcut
-parseDOM = common.parseDOM 
-
 def getAtoO():
   """
   Returns a list of all programs, sorted A-Z.
@@ -85,34 +82,30 @@ def getLatestNews():
   """
   Returns a list of latest news programs.
   """
-  html = getPage("/nyheter")
-
-  container = parseDOM(html, "section", attrs = { "class" : "[^\"']*play_category__latest-list[^\"']*" })
-  if not container:
-    helper.errorMsg("Could not find container!")
+  url = BASE_URL+API_URL+"cluster_latest;cluster=nyheter"
+  r = requests.get(url)
+  if r.status_code != 200:
+    common.log("Could not get JSON for url: "+url)
     return None
 
-  articles = parseDOM(container, "article")
-  if not articles:
-    helper.errorMsg("Could not find articles!")
-    return None
-
-  titles = parseDOM(container, "article", ret = "data-title")
-  airtimes = parseDOM(container, "article", ret = "data-broadcasted")
-  durations = parseDOM(container, "article", ret = "data-length")
-  urls = parseDOM(container, "a", attrs = { "class" : "[^\"']*play_js-videolist-element-link[^\"']*"}, ret = "href")
-  thumbnails = parseDOM(container, "img", attrs = { "class" : "[^\"']*play_videolist-element__thumbnail-image[^\"']*"}, ret = "src")
-
-  items = []
-  for index, article in enumerate(articles):
-     item = {
-        "title" : common.replaceHTMLCodes(titles[index]),
-        "thumbnail" : helper.prepareThumb(thumbnails[index], baseUrl=BASE_URL),
-        "url" : urls[index]
+  programs = []
+  for item in r.json()["data"]:
+    item = item["attributes"]
+    live_str = ""
+    thumbnail = ""
+    if item["images"]["thumbnail"]:
+      thumbnail = item["images"]["thumbnail"]["attributes"]["alternates"]["small"]["href"]
+    if item["images"]["poster"]:
+      thumbnail = item["images"]["poster"]["attributes"]["alternates"]["small"]["href"]
+    if item["live"]["liveNow"]:
+      live_str = " " + "[COLOR red](Live)[/COLOR]"
+    program = {
+        "title" : common.replaceHTMLCodes(item["officialProgramTitle"] + " " + item["legacyEpisodeTitle"] + live_str),
+        "thumbnail" : helper.prepareThumb(thumbnail, baseUrl=BASE_URL),
+        "url" : "video/" + str(item["articleId"])
         }
-     items.append(item)
-
-  return items
+    programs.append(program)
+  return programs
 
 def getProgramsForCategory(url):
   """
@@ -145,28 +138,20 @@ def getAlphas():
   """
   Returns a list of all letters in the alphabet that has programs.
   """
-  html = getPage(URL_A_TO_O)
-  container = parseDOM(html, "ul", attrs = { "class" : "[^\"']*play_alphabetic-skiplinks[^\"']*" })
-
-  if not container:
-    helper.errorMsg("No container found!")
-    return None
-
-  letters = parseDOM(container[0], "a", attrs = { "class" : "[^\"']*play_alphabetic-skiplinks__link[^\"']*" })
-
-  if not letters:
-    helper.errorMsg("Could not find any letters!")
+  url = BASE_URL+API_URL+"programs_page"
+  r = requests.get(url)
+  if r.status_code != 200:
+    common.log("Could not get JSON for url: "+url)
     return None
 
   alphas = []
-
-  for letter in letters:
+  for letter in r.json()["letters"]:
     alpha = {}
     alpha["title"] = common.replaceHTMLCodes(letter).encode("utf-8")
     alpha["char"] =  letter.encode("utf-8")
     alphas.append(alpha)
 
-  return alphas
+  return sorted(alphas, key=lambda letter: letter["char"])
 
 def getProgramsByLetter(letter):
   """
@@ -327,72 +312,6 @@ def getVideoJSON(video_url):
     common.log("Failed to get JSON for "+url)
     return None
   return r.json()
-
-def getProgramItems(section_name, url=None):
-  """
-  Returns a list of program items for a show.
-  Program items have 'title', 'thumbnail', 'url' and 'info' keys.
-  """
-  if not url:
-    url = "/"
-  html = getPage(url + "?sida=2")
-
-  video_list_class = "[^\"']*play_videolist[^\"']*"
-
-  container = parseDOM(html, "div", attrs = { "id" : section_name })
-  if not container:
-    helper.errorMsg("No container found for section "+section_name+"!")
-    return None
-  container = container[0]
-
-  item_class = "[^\"']*play_vertical-list__item[^\"']*"
-  items = parseDOM(container, "li", attrs = { "class" : item_class })
-  if not items:
-    helper.errorMsg("No items found in container \""+section_name+"\"")
-    return None
-  new_articles = []
-
-
-  for index, item in enumerate(items):
-    live_item = False
-    if "play_live-countdown" in item:
-      live_item = True
-      helper.infoMsg("Skipping live item!")
-      continue
-    info = {}
-    new_article = {}
-    title = parseDOM(item, "a",
-                            attrs = { "class" : "[^\"']*play_vertical-list__header-link[^\"']*" })[0]
-    plot = parseDOM(item, "p",
-                            attrs = { "class" : "[^\"']*play_vertical-list__description-text[^\"']*" })[0]
-    new_article["url"] = parseDOM(item, "a",
-                            attrs = { "class": "[^\"']*play_vertical-list__header-link[^\"']*" },
-                            ret = "href")[0]
-    thumbnail = parseDOM(item,
-                                "img",
-                                attrs = { "class": "[^\"']*play_vertical-list__image[^\"']*" },
-                                ret = "src")[0]
-    new_article["thumbnail"] = helper.prepareThumb(thumbnail, baseUrl=BASE_URL)
-    duration = parseDOM(item, "time", attrs = {}, )[0]
-    aired = parseDOM(item, "p", attrs = { "class" : "[^\"']*play_vertical-list__meta-info[^\"']*" })
-    if aired:
-      aired = aired[0].replace("Publicerades ", "")
-    else:
-      # Some items do not contain this meta data
-      aired = ""
-
-    title = common.replaceHTMLCodes(title)
-    plot = common.replaceHTMLCodes(plot)
-    new_article["title"] = title
-    info["title"] = title
-    info["plot"] = plot
-    info["aired"] = helper.convertDate(aired) 
-    info["duration"] = helper.convertDuration(duration)
-    info["fanart"] = helper.prepareFanart(thumbnail, baseUrl=BASE_URL)
-    new_article["info"] = info
-    new_articles.append(new_article)
-
-  return new_articles
 
 def getItems(section_name, page):
   if not page:

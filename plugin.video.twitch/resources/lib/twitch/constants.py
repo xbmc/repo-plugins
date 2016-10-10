@@ -63,10 +63,14 @@ class Keys(object):
 
     OLD_QUALITY_LIST_STREAM = ['Source', 'High', 'Medium', 'Low', 'Mobile']
     OLD_QUALITY_LIST_VIDEO = ['live', '720p', '480p', '360p', '226p']
-    QUALITY_LIST_STREAM = ['Source', '1080p60', '1080p30', '720p60', '720p30', '540p30', '480p30', '360p30', '240p30',
-                           '144p30']
-    QUALITY_LIST_VIDEO = ['live', '1080p60', '1080p30', '720p60', '720p30', '540p30', '480p30', '360p30', '240p30',
-                          '144p30']
+
+    # if additional exceptions are required, do this by adding coercion to
+    # one of these qualities in twitch.utils.M3UPlaylist
+    QUALITY_LIST_STREAM = ['Source', '1080p60', '1080p30', '720p60', '720p30', '540p30',
+                           '480p30', '360p30', '240p30', '144p30']
+    QUALITY_LIST_VIDEO = ['live', '1080p60', '1080p30', '720p60', '720p30', '540p30',
+                          '480p30', '360p30', '240p30', '144p30']
+
 
     ACCEPT = 'Accept'
     REFERER = 'Referer'
@@ -100,7 +104,7 @@ class Urls(object):
     HLS_PLAYLIST = 'https://usher.twitch.tv/api/channel/hls/{0}.m3u8?sig={1}&token={2}&allow_source=true'
     VOD_PLAYLIST = 'https://usher.twitch.tv/vod/{0}?nauth={1}&nauthsig={2}&allow_source=true'
 
-    CHANNEL_VIDEOS = 'https://api.twitch.tv/kraken/channels/{0}/videos?limit=8&offset={1}&broadcasts={2}'
+    CHANNEL_VIDEOS = 'https://api.twitch.tv/kraken/channels/{0}/videos?limit=8&offset={1}&broadcast_type={2}'
     VIDEO_PLAYLIST = 'https://api.twitch.tv/api/videos/{0}'
     VIDEO_INFO = 'https://api.twitch.tv/kraken/videos/{0}'
     FOLLOWED_GAMES = 'https://api.twitch.tv/api/users/{0}/follows/games'

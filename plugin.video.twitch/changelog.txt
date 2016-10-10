@@ -1,5 +1,7 @@
+1.4.5
+- Added compatibility for new Twitch encoder names.
 1.4.4
-- HTTPS fix for Linux users + Kodi Official repository compatibility fixes.
+- HTTPS fix for Linux users + Kodi Offical repository compatibility fixes.
 1.4.3
 - various fixes to coincide with issues caused by evolving Twitch API
 1.4.2

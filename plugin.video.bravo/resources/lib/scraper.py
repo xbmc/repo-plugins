@@ -55,7 +55,9 @@ class myAddon(t1mAddon):
           purl = 'http:'+purl+'&format=script'
           html = self.getRequest(purl)
           purl = re.compile('name="twitter:player" content="(.+?)"', re.DOTALL).search(html).group(1)
-          purl = 'http://link.theplatform.com/s'+(purl.replace('/bravo_vod_p3/embed/select','').split('.com/p')[1]).split('?',1)[0]+'?mbr=true&player=Bravo%20VOD%20Player%20%28Phase%203%29&format=Script&height=576&width=1024'
+          purl = purl.split('?',1)[0]
+          purl = purl.rsplit('/',1)[1]
+          purl = 'http://link.theplatform.com/s/HNK2IC/media/%s?format=script' % purl
           url = purl.split('?',1)[0]
           html = self.getRequest(purl)
           a = json.loads(html)

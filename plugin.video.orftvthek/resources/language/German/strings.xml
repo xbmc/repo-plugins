@@ -45,4 +45,6 @@
     <string id="30041">von der Liste entfernen #</string>
     <string id="30042">ausblenden #</string>
     <string id="30043">"Sendungen ausblenden" aktivieren</string>
+    <string id="30045">Die ServiceAPI ist zurzeit Offline</string>
+    <string id="30046">Deaktivieren Sie die Option in den Einstellungen</string>
 </strings>

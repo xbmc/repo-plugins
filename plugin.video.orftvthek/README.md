@@ -5,7 +5,7 @@ ORF TVthek is an addon that gives you access to the ORF TVthek Video Platform.
 
 Requirements
 ------------
-Tested on XBMC Frodo/Gotham and KODI 14.2
+Tested on KODI Jarvis
 
 
 Supported platforms
@@ -24,9 +24,10 @@ Current Features
 * Blacklist Shows
 
 
+
 Known Issues
 ------------
-* you tell me
+* ServiceAPI is offline for now. Disable the option in the Addon Settings Menu
 
 
 Legal

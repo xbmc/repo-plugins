@@ -23,25 +23,21 @@ def createListItem(title,banner,description,duration,date,channel,videourl,playa
     liz.setProperty('IsPlayable', playable)
         
     if not folder:
+        videoStreamInfo = {'codec': 'h264', 'aspect': 1.78}
         try:
-            if videourl.lower().endswith('_q8c.mp4') or '_q8c' in videourl:
-                liz.addStreamInfo('video', { 'codec': 'h264','duration':int(duration) ,"aspect": 1.78, "width": 1280, "height": 720})            
-            elif videourl.lower().endswith('_q6a.mp4') or '_q6a' in videourl:
-                liz.addStreamInfo('video', { 'codec': 'h264','duration':int(duration) ,"aspect": 1.78, "width": 960, "height": 540})            
-            elif videourl.lower().endswith('_q4a.mp4') or '_q4a' in videourl:
-                liz.addStreamInfo('video', { 'codec': 'h264','duration':int(duration) ,"aspect": 1.78, "width": 640, "height": 360})
-            else:
-                liz.addStreamInfo('video', { 'codec': 'h264','duration':int(duration) ,"aspect": 1.78, "width": 320, "height": 180})
+            videoStreamInfo.update({'duration': int(duration)})
         except:
-            if videourl.lower().endswith('_q8c.mp4') or '_q8c' in videourl:
-                liz.addStreamInfo('video', { 'codec': 'h264',"aspect": 1.78, "width": 1280, "height": 720})            
-            elif videourl.lower().endswith('_q6a.mp4') or '_q6a' in videourl:
-                liz.addStreamInfo('video', { 'codec': 'h264',"aspect": 1.78, "width": 960, "height": 540})            
-            elif videourl.lower().endswith('_q4a.mp4') or '_q4a' in videourl:
-                liz.addStreamInfo('video', { 'codec': 'h264' ,"aspect": 1.78, "width": 640, "height": 360})
-            else:
-                liz.addStreamInfo('video', { 'codec': 'h264' ,"aspect": 1.78, "width": 320, "height": 180})
-                
+            pass
+        if videourl.lower().endswith('_q8c.mp4') or '_q8c' in videourl.lower():
+            videoStreamInfo.update({'width': 1280, 'height': 720})
+        elif videourl.lower().endswith('_q6a.mp4') or '_q6a' in videourl.lower():
+            videoStreamInfo.update({'width': 960, 'height': 540})
+        elif videourl.lower().endswith('_q4a.mp4') or '_q4a' in videourl.lower():
+            videoStreamInfo.update({'width': 640, 'height': 360})
+        else:
+            videoStreamInfo.update({'width': 320, 'height': 180})
+        liz.addStreamInfo('video', videoStreamInfo)
+
         liz.addStreamInfo('audio', {"codec": "aac", "language": "de", "channels": 2})
         if subtitles != None:
             if subtitles[0].endswith('.srt'):

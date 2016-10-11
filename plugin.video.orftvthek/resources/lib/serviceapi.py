@@ -4,8 +4,14 @@ import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64,socket,datetime
 import CommonFunctions as common
 
 from base import *
-    
-class serviceAPI:
+from Scraper import *
+
+class serviceAPI(Scraper):
+
+    UrlMostViewed = 'http://tvthek.orf.at/service_api/token/%s/teaser_content/most_viewed'
+    UrlNewest     = 'http://tvthek.orf.at/service_api/token/%s/teaser_content/newest'
+    UrlTip        = 'http://tvthek.orf.at/service_api/token/%s/teaser_content/recommendations'
+
     # serviceAPI Settings
     serviceAPItoken         = 'ef97318c84d4e8'
 
@@ -21,10 +27,7 @@ class serviceAPI:
     serviceAPITrailers      = 'http://tvthek.orf.at/service_api/token/%s/episodes/trailers?page=0&entries_per_page=1000'
 
     serviceAPILive          = 'http://tvthek.orf.at/service_api/token/%s/livestreams/from/%s/till/%s/detail?page=0&entries_per_page=%i'
-    serviceAPITip           = 'http://tvthek.orf.at/service_api/token/%s/teaser_content/recommendations'
     serviceAPIHighlights    = 'http://tvthek.orf.at/service_api/token/%s/teaser_content/highlights'
-    serviceAPIRecent        = 'http://tvthek.orf.at/service_api/token/%s/teaser_content/newest'
-    serviceAPIViewed        = 'http://tvthek.orf.at/service_api/token/%s/teaser_content/most_viewed'
 
     
     def __init__(self,xbmc,settings,pluginhandle,quality,protocol,delivery,defaultbanner,defaultbackdrop,useSubtitles,defaultViewMode):
@@ -38,7 +41,6 @@ class serviceAPI:
         self.defaultbanner = defaultbanner
         self.defaultbackdrop = defaultbackdrop
         self.useSubtitles = useSubtitles
-        self.disableGeoblock = settings.getSetting("disableGeoblock") == "true"
         self.xbmc.log(msg='ServiceAPI  - Init done', level=xbmc.LOGDEBUG);
         
     def getTableResults(self, urlAPI):
@@ -76,6 +78,7 @@ class serviceAPI:
                 createListItem(title, image, description, duration, time.strftime('%Y-%m-%d', date), '', u, 'false', True,self.translation,self.defaultbackdrop,self.pluginhandle,None)
         else:
             self.xbmc.log(msg='ServiceAPI no available ... switch back to HTML Parsing in the Addon Settings', level=xbmc.LOGDEBUG);
+            xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
             
             
     # Useful  Methods for JSON Parsing
@@ -165,7 +168,9 @@ class serviceAPI:
                 parameters = {'mode' : 'openProgram', 'link': link}
                 u = sys.argv[0] + '?' + urllib.urlencode(parameters)
                 createListItem(title, image, description, "", "", '', u, 'false', True,self.translation,self.defaultbackdrop,self.pluginhandle,None)
-        
+        else:
+            xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
+
     
     # list all Episodes for the given Date
     def getDate(self, date, dateFrom = None):
@@ -226,7 +231,8 @@ class serviceAPI:
 
             for episode in episodes:
                 self.JSONEpisode2ListItem(episode, 'teaser')
-
+        else:
+            xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
             
 
 
@@ -255,16 +261,8 @@ class serviceAPI:
             return
 
         if len(result.get('segments')) == 1:
-            for segment in result.get('segments'):
-                image        = self.JSONImage(segment.get('images'))
-                streamingURL = self.JSONStreamingURL(segment.get('videos'))
-                if segment.get('subtitlesSrtFileUrl') and self.useSubtitles:
-                    subtitles = [segment.get('subtitlesSrtFileUrl')]
-                else:
-                    subtitles = None
-
-            listItem = createListItem(title, image, description, duration, time.strftime('%Y-%m-%d', date), '', streamingURL, 'true', False,self.translation,self.defaultbackdrop,self.pluginhandle,subtitles)
-            playlist.add(streamingURL, listItem)
+            listItem = self.JSONSegment2ListItem(result.get('segments')[0], date)
+            playlist.add(listItem[0], listItem[1])
             self.xbmc.Player().play(playlist)
 
         else:
@@ -298,7 +296,8 @@ class serviceAPI:
                 link        = topic.get('topicId')
 
                 addDirectory(title, image, self.defaultbackdrop,self.translation, description, link, 'openTopic',self.pluginhandle)
-
+        else:
+            xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
             
     # Plays the given Segment, if it is included in the given Episode
     def getSegment(self,episodeID, segmentID,playlist):
@@ -316,15 +315,29 @@ class serviceAPI:
                     listItem = self.JSONSegment2ListItem(segment, date)
                     playlist.add(listItem[0], listItem[1])
                     self.xbmc.Player().play(playlist)
-                    return                  
+                    return    
+        else:
+            xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
+
                     
     # list all Trailers for further airings
     def getTrailers(self):
         url = self.serviceAPITrailers % self.serviceAPItoken
-        response = urllib2.urlopen(url)
-
-        for episode in json.loads(response.read())['episodeShorts']:
-            self.JSONEpisode2ListItem(episode)
+        try: 
+            response = urllib2.urlopen(url)
+            responseCode = response.getcode()
+        except ValueError, error:
+            responseCode = 404
+            pass
+        except urllib2.HTTPError, error:
+            responseCode = error.getcode()
+            pass
+            
+        if responseCode == 200:
+            for episode in json.loads(response.read())['episodeShorts']:
+                self.JSONEpisode2ListItem(episode)    
+        else:
+            xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
 
     
     # lists archiv overview (date listing)
@@ -371,6 +384,10 @@ class serviceAPI:
             results = json.loads(response.read())['episodeDetails']
             for result in results:
 
+                # ignore canceled live streams
+                if time.mktime(time.strptime(result.get('killdate'), '%d.%m.%Y %H:%M:%S')) - time.mktime(time.localtime()) < 0:
+                    continue
+
                 description     = self.JSONDescription(result.get('descriptions'))
                 program         = result.get('channel').get('reel').upper()
                 programName     = result.get('channel').get('name')
@@ -399,9 +416,7 @@ class serviceAPI:
                 livestreamStreamingURLs.sort()
 				
                 link = livestreamStreamingURLs[len(livestreamStreamingURLs) - 1].replace('q4a', self.videoQuality)
-                
-                if self.disableGeoblock:
-                    link = link.replace('/playlist.m3u8','?wowzasessionid=1')
+               
 				
                 title = "[%s] %s (%s)" % (programName, result.get('title'), time.strftime('%H:%M', livestreamStart))
 
@@ -411,7 +426,9 @@ class serviceAPI:
                     banner = ''
 
                 createListItem(title, banner, description, duration, time.strftime('%Y-%m-%d', livestreamStart), program, link, 'True', False,self.translation,self.defaultbackdrop,self.pluginhandle,None)
-    
+        else:
+            xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
+
     def getLiveNotOnline(self,link):
         url = self.serviceAPIEpisode % (self.serviceAPItoken, link)
         response = urllib2.urlopen(url)

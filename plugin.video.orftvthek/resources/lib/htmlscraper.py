@@ -4,15 +4,18 @@ import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64,socket,datetime
 import CommonFunctions as common
 from resources.lib.helpers import *
 from base import *
+from Scraper import *
 
-class htmlScraper:
+class htmlScraper(Scraper):
+
+    UrlMostViewed = 'http://tvthek.orf.at/most_viewed'
+    UrlNewest     = 'http://tvthek.orf.at/newest'
+    UrlTip        = 'http://tvthek.orf.at/tips'
+
     base_url        = 'http://tvthek.orf.at'
     
     schedule_url    = 'http://tvthek.orf.at/schedule'
-    recent_url      = 'http://tvthek.orf.at/newest'
     live_url        = "http://tvthek.orf.at/live"
-    mostviewed_url  = 'http://tvthek.orf.at/most_viewed'
-    tip_url         = 'http://tvthek.orf.at/tips'
     search_base_url = 'http://tvthek.orf.at/search'
     topic_url       = 'http://tvthek.orf.at/topics'
 
@@ -27,7 +30,6 @@ class htmlScraper:
         self.defaultbanner = defaultbanner
         self.defaultbackdrop = defaultbackdrop
         self.useSubtitles = useSubtitles
-        self.disableGeoblock = settings.getSetting("disableGeoblock") == "true"
         self.enableBlacklist = settings.getSetting("enableBlacklist") == "true"
         self.xbmc.log(msg='HTML Scraper - Init done', level=xbmc.LOGDEBUG)
         
@@ -88,7 +90,7 @@ class htmlScraper:
             
     	
     def openArchiv(self,url):
-        url =  urllib.unquote(url)
+        url = self.base_url + urllib.unquote(url)
         html = common.fetchPage({'link': url})
         teasers = common.parseDOM(html.get("content"),name='a',attrs={'class': 'item_inner.clearfix'})
         teasers_href = common.parseDOM(html.get("content"),name='a',attrs={'class': 'item_inner.clearfix'},ret="href")
@@ -111,11 +113,8 @@ class htmlScraper:
                 description = common.replaceHTMLCodes(description[0])
             else:
                 description = self.translation(30008).encode('UTF-8')
-                
-            banner = common.parseDOM(teaser,name='img',ret='src')
-            banner = common.replaceHTMLCodes(banner[1]).encode("utf-8")
-            
-            banner = common.parseDOM(teaser,name='img',ret='src')
+
+            banner = common.parseDOM(teaser.replace('>"', '"'), name='img', ret='src')
             banner = common.replaceHTMLCodes(banner[1]).encode("utf-8")
             
             parameters = {"link" : link,"title" : title,"banner" : banner,"backdrop" : self.defaultbackdrop, "mode" : "openSeries"}
@@ -414,17 +413,10 @@ class htmlScraper:
     def getLiveStreams(self):
         liveurls = {}
         
-        
-        if self.disableGeoblock == True:
-            liveurls['ORF1'] = "http://apasfiisl.apa.at/ipad/orf1_"+self.videoQuality.lower()+"/orf.sdp?wowzasessionid=1"
-            liveurls['ORF2'] = "http://apasfiisl.apa.at/ipad/orf2_"+self.videoQuality.lower()+"/orf.sdp?wowzasessionid=1"
-            liveurls['ORF3'] = "http://apasfiisl.apa.at/ipad/orf3_"+self.videoQuality.lower()+"/orf.sdp?wowzasessionid=1"
-            liveurls['ORFS'] = "http://apasfiisl.apa.at/ipad/orfs_"+self.videoQuality.lower()+"/orf.sdp?wowzasessionid=1"
-        else:
-            liveurls['ORF1'] = "http://apasfiisl.apa.at/ipad/orf1_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8"
-            liveurls['ORF2'] = "http://apasfiisl.apa.at/ipad/orf2_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8"
-            liveurls['ORF3'] = "http://apasfiisl.apa.at/ipad/orf3_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8"
-            liveurls['ORFS'] = "http://apasfiisl.apa.at/ipad/orfs_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8"
+        liveurls['ORF1'] = "http://apasfiisl.apa.at/ipad/orf1_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8"
+        liveurls['ORF2'] = "http://apasfiisl.apa.at/ipad/orf2_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8"
+        liveurls['ORF3'] = "http://apasfiisl.apa.at/ipad/orf3_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8"
+        liveurls['ORFS'] = "http://apasfiisl.apa.at/ipad/orfs_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8"
             
         html = common.fetchPage({'link': self.live_url})
         wrapper = common.parseDOM(html.get("content"),name='div',attrs={'class': 'base_list_wrapper.*mod_epg'})
@@ -450,11 +442,11 @@ class htmlScraper:
             else:
                 state = (self.translation(30020)).encode("utf-8")
                 state_short = "Offline"
-
-            link = liveurls[program]
+            if program in liveurls:
+                link = liveurls[program]
                 
-            title = "[%s] - %s (%s)" % (program,title,time)
-            liz = self.html2ListItem(title,banner,"",state,time,program,program,link,None,False,'true')
+                title = "[%s] - %s (%s)" % (program,title,time)
+                liz = self.html2ListItem(title,banner,"",state,time,program,program,link,None,False,'true')
     
     # Helper for Livestream Listing - Returns if Stream is currently running
     def getBroadcastState(self,time):

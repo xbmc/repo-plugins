@@ -1,3 +1,9 @@
+0.5.4
+- Fixed Errors caused by changes on the TVThek Website
+- Added Error Message for ServiceAPI Offline Status
+- Disable the ServiceAPI for now. All known urls are offline
+- Removed 'Disable GeoBlock' Option - doesnt seem to work anymore 
+
 0.5.3
 - Added HD Stream Option (720p)
 

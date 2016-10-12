@@ -28,7 +28,7 @@ class myAddon(t1mAddon):
     html = self.getRequest('http://www.snagfilms.com/categories/')
     html = re.compile('Snag.page.data = (.+?);',re.DOTALL).search(html).group(1)
     a = json.loads(html)
-    a = a[3]['data']['items']
+    a = a[4]['data']['items']
     for item in a:
        url  = item['permalink']
        name = item['title']
@@ -41,7 +41,7 @@ class myAddon(t1mAddon):
     html = re.compile('Snag.page.data = (.+?)];',re.DOTALL).search(html).group(1)
     html += ']'
     a = json.loads(html)
-    for b in a[2:]:
+    for b in a[3:]:
       try: c = b['data']['items']
       except: break
       for item in c:

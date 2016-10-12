@@ -27,6 +27,8 @@ class myAddon(t1mAddon):
       a = re.compile('data-sm-id="".+?href="(.+?)".+?class="tablet-source.+?srcset="(.+?) ',re.DOTALL).findall(html)
       for url, thumb in a:
         if urls.get(url,None) is None:
+          if url.endswith('/index'):
+              url = url.replace('/index','',1)
           urls[url] = url
           name = url.rsplit('/',1)[1]
           name = name.replace('-',' ').title()
@@ -46,7 +48,7 @@ class myAddon(t1mAddon):
       if not url.endswith('/episode-guide'):
           url = url+'/episode-guide'
       html = self.getRequest(url)
-      vids = re.compile('data-videoid="VDKA(.+?)".+?data-title="(.+?)".+?data-background="(.+?)".+?class="tablet-source".+?srcset="(.+?) .+?class="season-number(.+?)<.+?class="episode-number(.+?)<.+?class="m-episode-summary.+?<p>(.+?)</p>.+?<div class="m-episode-meta(.+?)</div',re.DOTALL).findall(html)
+      vids = re.compile('data-video-id="VDKA(.+?)".+?data-title="(.+?)".+?data-background="(.+?)".+?class="tablet-source".+?srcset="(.+?) .+?class="season-number(.+?)<.+?class="episode-number(.+?)<.+?class="m-episode-summary.+?<p>(.+?)</p>.+?<div class="m-episode-meta(.+?)</div',re.DOTALL).findall(html)
       for url, name, fanart, thumb, season, episode, plot, meta in vids:
           name = h.unescape(name.decode(UTF8))
           name = h.unescape(name) # get rid of &apos; as well
@@ -61,14 +63,17 @@ class myAddon(t1mAddon):
               infoList['Episode'] = int(episode[1])
           infoList['Title'] = name
           infoList['Plot'] = plot
-          meta = re.compile('<span class="m-episode-meta-item">(.+?)</span>', re.DOTALL).findall(meta)
-          if meta is not None:
+          meta1 = re.compile('<span class="m-episode-meta-item m-episode-meta-duration">(.+?)</span>', re.DOTALL).findall(meta)
+          if meta1 is not None:
               duration = 0
-              tmp = meta[0].split(':')
+              tmp = meta1[0].split(':')
               for dur in tmp:
                   duration = duration*60 + int(dur) 
               infoList['Duration'] = duration
-              mo, day, year = meta[1].split('/')
+
+          meta1 = re.compile('<span class="m-episode-meta-item">(.+?)</span>', re.DOTALL).findall(meta)
+          if meta1 is not None:
+              mo, day, year = meta1[0].split('/')
               year = int(year)
               if year < 55:
                   year = year + 2000
@@ -77,8 +82,8 @@ class myAddon(t1mAddon):
               infoList['Date'] = '%s-%s-%s' % ( str(year), mo, day)
               infoList['Aired'] = infoList['Date']
               infoList['Year'] = int(infoList['Aired'].split('-',1)[0])
-              if len(meta)>2:
-                  infoList['MPAA'] = meta[2]
+              if len(meta1)>1:
+                  infoList['MPAA'] = meta1[1]
           infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
           infoList['Studio'] = 'ABC'
           infoList['mediatype'] = 'episode'

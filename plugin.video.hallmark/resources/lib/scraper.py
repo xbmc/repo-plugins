@@ -78,7 +78,7 @@ class myAddon(t1mAddon):
 
   def getAddonMovies(self,url,ilist):
       html = self.getRequest(uqp(url))
-      c = re.compile('<div class="imageviewitem">.+?src="(.+?)".+?class="commontitle" href="(.+?)">(.+?)<.+?fwmediaid = \'(.+?)\'.+?</script>',re.DOTALL).findall(html)
+      c = re.compile('<div class="imageviewitem">.+?src="(.+?)".+?class="commontitle" href="(.+?)".+?">(.+?)<.+?fwmediaid = \'(.+?)\'.+?</script>',re.DOTALL).findall(html)
       for thumb, murl, name, url in c:
           html = self.getRequest(HALLMARKBASE % murl.replace('&amp;','&'))
           genre,mpaa,cast,plot=re.compile('<div class="moviesubtitle">(.+?)<.+?</span>(.+?)<.+?">(.+?)<.+?<div id="imageDetail">.+?</div>(.+?)<', re.DOTALL).search(html).groups()
@@ -113,7 +113,6 @@ class myAddon(t1mAddon):
               os.makedirs(movieDir)
           ilist = []
           ilist = self.getAddonEpisodes(url, ilist, getFileData = True)
-          print "ilist = "+str(ilist)
           for season, episode, url in ilist:
               se = 'S%sE%s' % (str(season), str(episode))
               xurl = '%s?mode=GV&url=%s' % (sys.argv[0], qp(url))
@@ -149,6 +148,7 @@ class myAddon(t1mAddon):
               rate = c['encodingRate']
               u = c['defaultURL']
       subfile = 'http://www.hallmarkchanneleverywhere.com/medias/closedcaption/hd_vod_%s.vtt' % a.get('referenceId')
+      u = u.strip()
       liz = xbmcgui.ListItem(path = u)
       liz.setSubtitles([subfile])
       infoList ={}

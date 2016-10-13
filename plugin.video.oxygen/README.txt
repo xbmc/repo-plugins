@@ -3,6 +3,7 @@ plugin.video.oxygen
 
 Kodi Addon for Oxygen Channel website
 
+Version 3.0.3 website changes
 Version 3.0.1 Isengard - separate scraper
 Version 1.0.7 website fix
 Version 1.0.6 cache fix

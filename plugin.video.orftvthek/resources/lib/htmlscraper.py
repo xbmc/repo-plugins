@@ -357,7 +357,10 @@ class htmlScraper(Scraper):
         try:
             current_title_prefix = data.get("selected_video")["title_prefix"]
             current_title = data.get("selected_video")["title"]
-            current_desc = data.get("selected_video")["description"].encode('UTF-8')
+            if data.get("selected_video")["description"]:
+                current_desc = data.get("selected_video")["description"].encode('UTF-8')
+            else:
+                current_desc = ""
             current_duration = data.get("selected_video")["duration"]
             current_preview_img = data.get("selected_video")["preview_image_url"]
             if self.useSubtitles:
@@ -372,6 +375,7 @@ class htmlScraper(Scraper):
             current_id = data.get("selected_video")["id"]
             current_videourl = self.getVideoUrl(data.get("selected_video")["sources"]);
         except Exception, e:
+            print e
             current_subtitles = None
 
         if len(video_items) > 1:

@@ -1,3 +1,6 @@
+0.5.5
+- Fixed error caused by playlist change on the TVThek Website
+
 0.5.4
 - Fixed Errors caused by changes on the TVThek Website
 - Added Error Message for ServiceAPI Offline Status

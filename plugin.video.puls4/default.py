@@ -4,7 +4,7 @@
 import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64,socket,datetime,time,os,os.path,urlparse,json
 import CommonFunctions as common
 
-version = "0.2.1"
+version = "0.2.2"
 plugin = "Puls 4 -" + version
 author = "sofaking"
 
@@ -27,9 +27,9 @@ thumbViewMode = 'Container.SetViewMode(500)'
 smallListViewMode = 'Container.SetViewMode(51)'
 
 #urls
-base_url = "http://m.puls4.com/"
+base_url = "http://m.puls4.com"
 file_base_url = "http://files.puls4.com/"
-top_url = "http://m.puls4.com/api/teaser/top"
+top_url = "http://www.puls4.com/api/json-fe/page/"
 highlight_url = "http://m.puls4.com/api/teaser/highlight"
 highlight_view_url = "http://m.puls4.com/api/teaser/highlight-view"
 show_url = "http://m.puls4.com/api/channel/"
@@ -37,8 +37,8 @@ video_url = "http://m.puls4.com/api/video/"
 
 #paths
 logopath = os.path.join(media_path,"logos")
-defaultlogo = defaultbanner = os.path.join(logopath,"Default.png")
-defaultbackdrop = "http://goo.gl/XWnTc"
+defaultlogo = defaultbanner = os.path.join(logopath,"DefaultV2.png")
+defaultbackdrop = ""
 
 #urlib init
 opener = urllib2.build_opener()
@@ -48,19 +48,35 @@ opener.addheaders = [('User-agent', 'Mozilla/5.0 (iPad; CPU OS 7_0 like Mac OS X
 def getMainMenu():
     addDirectory((translation(30000)).encode("utf-8"),defaultlogo,"","","getHighlights")
     addDirectory((translation(30001)).encode("utf-8"),defaultlogo,"","","getSendungen")
-    addDirectory((translation(30002)).encode("utf-8"),defaultlogo,"","","getTopVideos")
-                
+    #addDirectory((translation(30002)).encode("utf-8"),defaultlogo,"","","getTopVideos")
+    
+
+def getPageTopItems():
+    html = common.fetchPage({'link': top_url})
+    data = json.loads(html.get("content"))    
+    for video in data['content']:
+        section_url = base_url+video['url']
+        html_section = common.fetchPage({'link': section_url})
+        data_section = json.loads(html_section.get("content"))
+        if data_section.has_key("slides"):
+            for item in data_section['slides']:
+                print item['title'].encode('UTF-8')
+        else:
+            print data_section
+    
 def getJSONVideos(url):
+    print url
     html = common.fetchPage({'link': url})
     data = json.loads(html.get("content"))   
     if data.has_key("videos"):
         for video in data['videos']:
             image = video["picture"]["orig"].encode('UTF-8')
+            id = video['id']
             desc = cleanText(video["description"].encode('UTF-8'))
             duration = video["duration"]
             date = video["broadcast_date"].encode('UTF-8')
             time = video["broadcast_time"].encode('UTF-8')
-            utime = video["broadcast_datetime"].encode('UTF-8')
+            utime = video["broadcast_datetime"]
             
             day = datetime.datetime.fromtimestamp(float(utime)).strftime('%d').lstrip('0')
             
@@ -75,15 +91,7 @@ def getJSONVideos(url):
             channel = video["channel"]["name"].encode('UTF-8')
             title = cleanText(video["title"].encode('UTF-8'))
             videourl = ""
-            if video["files"]["h3"]:
-                if video["files"]["h3"]["url"]:
-                    videourl = video["files"]["h3"]["url"]
-            if videourl == "":
-                if video["files"]["h1"]:
-                    if video["files"]["h1"]["url"]:
-                        videourl = video["files"]["h1"]["url"]
-            if videourl != "":
-                createListItem(title,image,channel+"\n"+aired+"\n"+desc,duration,date,channel,videourl,"True",False,None)
+            addDirectory(title,image,channel+"\n"+aired+"\n"+desc,id,"getShowByID")
 
 def translateDay(day):  
     if day == "Monday":
@@ -125,7 +133,7 @@ def getShowByID(id):
         duration = video["duration"]
         date = video["broadcast_date"].encode('UTF-8')
         time = video["broadcast_time"].encode('UTF-8')
-        utime = video["broadcast_datetime"].encode('UTF-8')
+        utime = video["broadcast_datetime"]
            
         day = datetime.datetime.fromtimestamp(float(utime)).strftime('%d').lstrip('0')
             
@@ -161,7 +169,7 @@ def listCallback(sort,viewMode=defaultViewMode):
     xbmcplugin.endOfDirectory(pluginhandle)
     xbmc.executebuiltin(viewMode)
 
-def createListItem(title,banner,description,duration,date,channel,videourl,playable,folder,subtitles=None,width=640,height=360): 
+def createListItem(title,banner,description,duration,date,channel,videourl,playable,folder,subtitles=None,width=1280,height=720): 
     if banner == '':
         banner = defaultbanner
     if description == '':
@@ -184,7 +192,7 @@ def createListItem(title,banner,description,duration,date,channel,videourl,playa
             if subtitles != None:
                 liz.addStreamInfo('subtitle', {"language": "de"})
         except:
-            liz.addStreamInfo('video', { 'codec': 'h264',"aspect": 1.78, "width": width, "height": 360})
+            liz.addStreamInfo('video', { 'codec': 'h264',"aspect": 1.78, "width": width, "height": height})
             liz.addStreamInfo('audio', {"codec": "aac", "language": "de", "channels": 2})
             if subtitles != None:
                 liz.addStreamInfo('subtitle', {"language": "de"})
@@ -230,7 +238,7 @@ if mode == 'getHighlights':
     getJSONVideos(highlight_view_url)
     listCallback(False,defaultViewMode)
 if mode == 'getTopVideos':
-    getJSONVideos(top_url)
+    getPageTopItems()
     listCallback(False,defaultViewMode)
 if mode == 'getShowByID':
     getShowByID(link)

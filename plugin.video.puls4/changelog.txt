@@ -1,4 +1,9 @@
 0.2.1
+* Fixed Errors caused by API Change
+* Added new Logo and App Icon
+* Removed "Top Shows" because its gone in the API
+
+0.2.1
 * Fixed Error on "Sendungen" caused by empty show logo
 
 0.2.0

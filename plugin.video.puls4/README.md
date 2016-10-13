@@ -5,7 +5,7 @@ Puls4 is an addon that gives you access to the Puls4 Video Platform.
 
 Requirements
 ------------
-Tested on Gotham and KODI
+Tested on Jarvis
 
 
 Supported platforms
@@ -17,7 +17,6 @@ Current Features
 ----------------
 * All Shows
 * H264 Stream (HD/SD)
-* Top Videos
 * Highlights
 
 

@@ -62,10 +62,10 @@ def createListItem(title,banner,description,duration,date,channel,videourl,playa
         commands.append(( '%s %s %s' % (translation(30038).encode("utf-8"),bl_title,translation(30042).encode("utf-8")), 'XBMC.RunPlugin(%s)' % blurl ))
         liz.addContextMenuItems( commands )
         if not checkBlacklist(bl_title):
-            xbmcplugin.addDirectoryItem(handle=pluginhandle, url=videourl, listitem=liz, isFolder=folder)
+            xbmcplugin.addDirectoryItem(pluginhandle, url=videourl, listitem=liz, isFolder=folder)
             return liz
     else:
-        xbmcplugin.addDirectoryItem(handle=pluginhandle, url=videourl, listitem=liz, isFolder=folder)
+        xbmcplugin.addDirectoryItem(pluginhandle, url=videourl, listitem=liz, isFolder=folder)
         return liz
 
 def checkBlacklist(title):

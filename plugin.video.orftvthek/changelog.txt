@@ -1,3 +1,12 @@
+0.5.7
+- Fixed Error on Playlist Views
+- Removed Service API Option for now
+- Removed AutoPlay Option - caused endless loop on video playlist
+- Fixed Invalid Handle on Playlist View
+
+0.5.6
+- Changed "Shows" scraper
+
 0.5.5
 - Fixed error caused by playlist change on the TVThek Website
 

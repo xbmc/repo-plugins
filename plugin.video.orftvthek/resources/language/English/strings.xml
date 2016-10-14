@@ -47,4 +47,6 @@
     <string id="30043">Use Blacklist Feature</string>
     <string id="30045">The ServiceAPI is currently offline</string>
     <string id="30046">Switch back to HTML Parsing in the Addon Settings</string>
+    <string id="30047">Play Video</string>
+    <string id="30048">Do you want the playlist to start immediately?</string>
 </strings>

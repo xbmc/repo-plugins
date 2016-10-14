@@ -18,7 +18,7 @@ except:
 socket.setdefaulttimeout(30) 
 cache = StorageServer.StorageServer("plugin.video.orftvthek", 999999)
 
-version = "0.5.5"
+version = "0.5.7"
 plugin = "ORF-TVthek-" + version
 author = "sofaking,Rechi"
 
@@ -32,8 +32,10 @@ translation = settings.getLocalizedString
 current_skin = xbmc.getSkinDir();
 
 if 'confluence' in current_skin:
+   debugLog("Confluence Found - Setting View","Info")
    defaultViewMode = 'Container.SetViewMode(503)'
 else:
+   debugLog("Confluence Not Found - Setting Fallback View","Info")
    defaultViewMode = 'Container.SetViewMode(518)'
 
 thumbViewMode = 'Container.SetViewMode(500)'
@@ -64,8 +66,7 @@ defaultbackdrop = os.path.join(media_path,"fanart.jpg")
 
 #load settings
 forceView = settings.getSetting("forceView") == "true"
-useServiceAPI = settings.getSetting("useServiceAPI") == "true"
-autoPlay = settings.getSetting("autoPlay") == "true"
+useServiceAPI = False
 useSubtitles = settings.getSetting("useSubtitles") == "true"
 videoQuality = settings.getSetting("videoQuality")
 enableBlacklist = settings.getSetting("enableBlacklist") == "true"
@@ -76,6 +77,8 @@ except:
     videoQuality = video_quality_list[2]
     
 
+#init player
+tvthekplayer = xbmc.Player()
 
 #init scrapers
 if useServiceAPI:
@@ -83,8 +86,31 @@ if useServiceAPI:
 else:
     htmlScraper = htmlScraper(xbmc,settings,pluginhandle,videoQuality,videoProtocol,videoDelivery,defaultbanner,defaultbackdrop,useSubtitles,defaultViewMode)
 
+#parameters
+params=parameters_string_to_dict(sys.argv[2])
+mode=params.get('mode')
+link=params.get('link')
+title=params.get('title')
+banner=params.get('banner')
+videourl=params.get('videourl')
+url=params.get('url')
+
+scraper = jsonScraper if useServiceAPI else htmlScraper
+
+if mode:
+    debugLog("Mode: %s" % mode,'Info')
+if link:
+    debugLog("Link: %s" % urllib.unquote(link),'Info')
+if url:
+    debugLog("Url: %s" % urllib.unquote(url),'Info')
+if videourl:
+    debugLog("Videourl: %s" % urllib.unquote(videourl),'Info')
+if title:
+    debugLog("Title: %s" % title.encode('UTF-8'),'Info')
+    
 
 def getMainMenu():
+    debugLog("Building Main Menu","Info")
     addDirectory((translation(30001)).encode("utf-8"),news_banner,defaultbackdrop,translation,"","","getAktuelles",pluginhandle)
     addDirectory((translation(30000)).encode("utf-8"),recently_added_banner,defaultbackdrop,translation,"","","getNewShows",pluginhandle)
     addDirectory((translation(30002)).encode("utf-8"),shows_banner,defaultbackdrop,translation,"","","getSendungen",pluginhandle)
@@ -96,7 +122,6 @@ def getMainMenu():
     addDirectory((translation(30007)).encode("utf-8"),search_banner,defaultbackdrop,translation,"","","getSearchHistory",pluginhandle)
     if useServiceAPI:
         addDirectory((translation(30027)).encode("utf-8"),trailer_banner,defaultbackdrop,translation,"","","openTrailers",pluginhandle)
-    #blacklist
     if enableBlacklist:
         addDirectory((translation(30037)).encode("utf-8"),blacklist_banner,defaultbackdrop,translation,"","","openBlacklist",pluginhandle)
     listCallback(False,thumbViewMode,pluginhandle)
@@ -108,55 +133,28 @@ def listCallback(sort,viewMode,pluginhandle):
         xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
     xbmcplugin.endOfDirectory(pluginhandle)
     if forceView:
-        xbmc.executebuiltin(viewMode)
+        xbmc.executebuiltin(viewMode)     
     
-		
-def search():
-    addDirectory((translation(30007)).encode("utf-8")+" ...",defaultbanner,defaultbackdrop,translation,' ',"","searchNew",pluginhandle)
-    cache.table_name = "searchhistory"
-    some_dict = cache.get("searches").split("|")
-    for str in reversed(some_dict):
-        if str.strip() != '':
-            addDirectory(str.encode('UTF-8'),defaultbanner,defaultbackdrop,translation," ",str.replace(" ","+"),"searchNew",pluginhandle)
-    listCallback(False,defaultViewMode,pluginhandle)
-	
-def searchTV():
-    keyboard = xbmc.Keyboard('')
-    keyboard.doModal()
-    if (keyboard.isConfirmed()):
-      cache.table_name = "searchhistory"
-      keyboard_in = keyboard.getText()
-      some_dict = cache.get("searches") + "|"+keyboard_in
-      cache.set("searches",some_dict);
-      searchurl = "%s/search?q=%s"%(base_url,keyboard_in.replace(" ","+").replace("Ö","O").replace("ö","o").replace("Ü","U").replace("ü","u").replace("Ä","A").replace("ä","a"))
-      searchurl = searchurl
-      getTableResults(searchurl,cache)
-    else:
-      addDirectory((translation(30014)).encode("utf-8"),defaultbanner,defaultbackdrop,translation,"","","",pluginhandle)
-    listCallback(False,defaultViewMode,pluginhandle)
-
-    
-def startPlaylist():
+def startPlaylist(player,playlist):
     if playlist != None:
-        xbmc.Player().play(playlist)
+        player.play(playlist)
     else:
         d = xbmcgui.Dialog()
         d.ok('VIDEO QUEUE EMPTY', 'The XBMC video queue is empty.','Add more links to video queue.')
-    	
-#parameters
-params=parameters_string_to_dict(sys.argv[2])
-mode=params.get('mode')
-link=params.get('link')
-banner=params.get('banner')
 
-scraper = jsonScraper if useServiceAPI else htmlScraper
-
+    
 #modes
 if mode == 'openSeries':
+    playlist.clear()
     playlist = htmlScraper.getLinks(link,banner,playlist)
-    if autoPlay and playlist != None:
-        xbmc.Player().play(playlist)
-    listCallback(False,defaultViewMode,pluginhandle)
+    if playlist != None:
+        ok = xbmcgui.Dialog().yesno((translation(30047)).encode("utf-8"),(translation(30048)).encode("utf-8"))
+        if ok:
+            debugLog("Starting Playlist for %s" % urllib.unquote(link),'Info')
+            tvthekplayer.play(playlist)
+            xbmc.executebuiltin(defaultViewMode) 
+    else:
+        listCallback(False,defaultViewMode,pluginhandle)
 elif mode == 'unblacklistShow':
     title=params.get('title')
     unblacklistItem(title)
@@ -233,8 +231,8 @@ elif mode == 'openTopic':
     listCallback(False,defaultViewMode,pluginhandle)
 elif mode == 'openEpisode':
     jsonScraper.getEpisode(link,playlist)
-    if autoPlay and playlist != None:
-        xbmc.Player().play(playlist)
+    if playlist != None:
+        tvthekplayer.play(playlist)
     listCallback(False,defaultViewMode,pluginhandle)
 elif mode == 'openSegment':
     jsonScraper.getSegment(link, params.get('segmentID'),playlist)
@@ -243,6 +241,8 @@ elif mode == 'liveStreamNotOnline':
     jsonScraper.getLiveNotOnline(link)
     listCallback(False,defaultViewMode,pluginhandle)
 elif mode == 'playlist':
-    startPlaylist()
-else:
+    startPlaylist(playlist)
+elif sys.argv[2] == '':
     getMainMenu()
+else:
+    listCallback(False,defaultViewMode,pluginhandle)

@@ -9,6 +9,7 @@
 	<string id="30006">小时</string>
 	<string id="30007">分钟</string>
 	<string id="30008">∞分钟</string>
+	<string id="30009">(无标签)</string>
 	<!-- Settings labels -->
 	<string id="30100">IP地址：</string>
 	<string id="30101">端口号：</string>

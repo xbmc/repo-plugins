@@ -79,12 +79,12 @@ def listLabels():
 
         label_text = label
         if not label:
-            label_text = '(no label)'
+            label_text = __language__(30009).encode('utf8')
         text = label_text + " [COLOR FFFF0000]" + str(labels[label]) + "[/COLOR]"
 
         u = urllib.urlencode({
             'mode': App.MODE_LIST,
-            'label': str(label),
+            'label': label.encode('utf8'),
             'no_label': '1' if not label else ''
         })
         u = sys.argv[0] + '?' + u
@@ -100,6 +100,7 @@ def listTorrents():
     updateList()
 
     selected_label = app.get_param('label')
+    if selected_label: selected_label=selected_label.decode('utf8')
     if app.get_param('no_label'):
         selected_label = ''
     labels = torrentList.get_labels()
@@ -288,8 +289,8 @@ def addDir(tor, selected_label):
     def action(mode):
         return "XBMC.RunPlugin(" + sys.argv[0] + "?" + urllib.urlencode({
             'mode': mode,
-            'label': str(selected_label),
-            'no_label': '1' if selected_label == '' else ''
+            'label': selected_label.encode('utf8'),
+            'no_label': '1' if not selected_label else ''
         }) + ")"
 
     point.addContextMenuItems([

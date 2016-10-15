@@ -1,4 +1,8 @@
-﻿[B]1.1.7 (2016.9.15)[/B]
+﻿[B]1.1.8 (2016.10.15)[/B]
+added: language translate for (no label)
+fixed: coding error
+
+[B]1.1.7 (2016.9.15)[/B]
 added: support labels. thanks petslane
 fixed: bug in 1.1.6 that can't use http protocal
 

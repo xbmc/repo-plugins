@@ -1,3 +1,9 @@
+v2.5.1
+Fix for broken BBC iD functionality.
+COMPATIBILITY NOTE:
+Users need to sign in on the website once and provide additional data, e.g. their
+postcode before using the updated BBC iD functionality in the add-on.
+
 v2.5.0
 New channel icons for TV and Radio by primaeval. Now all channels have dedicated icons.
 Added warning regarding new TV Licence legislation.

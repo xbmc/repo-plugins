@@ -7,4 +7,5 @@
 	<setting id="usr" type="text" label="30102" default="admin" />
 	<setting id="pwd" type="text" label="30103" default="" option="hidden" />
 	<setting id="tdir" type="folder" source="files" label="30104" default="special://profile/torrents/" />
+	<setting id="use_label" type="bool" label="30010" default="false" />
 </settings>

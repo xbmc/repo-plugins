@@ -24,6 +24,7 @@ UT_HTTPS = __addon__.getSetting('use_https') == 'true'
 UT_PATH = '/' + __addon__.getSetting('path').strip('/') + '/'
 if UT_PATH != __addon__.getSetting('path'):
     __addon__.setSetting('path', UT_PATH)
+UT_LABEL = __addon__.getSetting('use_label') == 'true'
 
 from utilities import *
 
@@ -67,7 +68,6 @@ def updateList():
     for torrent in json_response['torrents']:
         torrentList.append(TorItem(torrent))
 
-
 def listLabels():
     """
     List torrent labels
@@ -92,7 +92,6 @@ def listLabels():
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=point, isFolder=True, totalItems=labels[label])
     xbmcplugin.endOfDirectory(int(sys.argv[1]),cacheToDisc=False)
 
-
 def listTorrents():
     """
     List torrents, if label selected, then list torrents in label
@@ -100,23 +99,24 @@ def listTorrents():
     updateList()
 
     selected_label = app.get_param('label')
-    if selected_label: selected_label=selected_label.decode('utf8')
+    if selected_label:
+        selected_label = selected_label.decode('utf8')
     if app.get_param('no_label'):
         selected_label = ''
     labels = torrentList.get_labels()
 
     # list labels if label not selected and we have labels (ome then one empty one)
-    if selected_label == None and len(labels.keys()) > 1:
+    if UT_LABEL and selected_label == None and len(labels.keys()) > 1:
         listLabels()
         return
 
     # label does not exist or does not have any torrents anymore
-    if selected_label and (selected_label not in labels.keys() or not labels[selected_label]):
+    if UT_LABEL and selected_label and (selected_label not in labels.keys() or not labels[selected_label]):
         listLabels()
         return
 
     for tor in torrentList.items:
-        if selected_label != None and selected_label != tor.label:
+        if UT_LABEL and selected_label != None and selected_label != tor.label:
             continue
         addDir(tor, selected_label)
     xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=False)
@@ -167,10 +167,12 @@ def pauseAll():
     updateList()
     token = getToken()
     selected_label = app.get_param('label')
+    if selected_label:
+        selected_label = selected_label.decode('utf8')
     if app.get_param('no_label'):
         selected_label = ''
     for tor in torrentList.items:
-        if selected_label != tor.label:
+        if UT_LABEL and selected_label != tor.label:
             continue
         myClient.HttpCmd(baseurl.getActionUrl('pause', tor.hashnum))
     time.sleep(1)
@@ -180,10 +182,12 @@ def resumeAll():
     updateList()
     token = getToken()
     selected_label = app.get_param('label')
+    if selected_label:
+        selected_label = selected_label.decode('utf8')
     if app.get_param('no_label'):
         selected_label = ''
     for tor in torrentList.items:
-        if selected_label != tor.label:
+        if UT_LABEL and selected_label != tor.label:
             continue
         myClient.HttpCmd(baseurl.getActionUrl('unpause', tor.hashnum))
     time.sleep(1)
@@ -193,10 +197,12 @@ def stopAll():
     updateList()
     token = getToken()
     selected_label = app.get_param('label')
+    if selected_label:
+        selected_label = selected_label.decode('utf8')
     if app.get_param('no_label'):
         selected_label = ''
     for tor in torrentList.items:
-        if selected_label != tor.label:
+        if UT_LABEL and selected_label != tor.label:
             continue
         myClient.HttpCmd(baseurl.getActionUrl('stop', tor.hashnum))
     time.sleep(1)
@@ -206,10 +212,12 @@ def startAll():
     updateList()
     token = getToken()
     selected_label = app.get_param('label')
+    if selected_label:
+        selected_label = selected_label.decode('utf8')
     if app.get_param('no_label'):
         selected_label = ''
     for tor in torrentList.items:
-        if selected_label != tor.label:
+        if UT_LABEL and selected_label != tor.label:
             continue
         myClient.HttpCmd(baseurl.getActionUrl('start', tor.hashnum))
     time.sleep(1)
@@ -268,6 +276,8 @@ def getThumbByStatus(status):
 
 
 def addDir(tor, selected_label):
+    if selected_label:
+        selected_label = selected_label.encode('utf8')
     thumb = getThumbByStatus(tor.status)
 
     label = tor.name+" [COLOR FFFF0000]" \
@@ -289,7 +299,7 @@ def addDir(tor, selected_label):
     def action(mode):
         return "XBMC.RunPlugin(" + sys.argv[0] + "?" + urllib.urlencode({
             'mode': mode,
-            'label': selected_label.encode('utf8'),
+            'label': selected_label,
             'no_label': '1' if not selected_label else ''
         }) + ")"
 

@@ -10,6 +10,7 @@
 	<string id="30007">m</string>
 	<string id="30008">¡Þm</string>
 	<string id="30009">(no label)</string>
+	<string id="30010">Group by label</string>
 	<!-- Settings labels -->
 	<string id="30100">IP Address:</string>
 	<string id="30101">Port:</string>

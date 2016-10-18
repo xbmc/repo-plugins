@@ -145,7 +145,10 @@ elif mode == 116:
     Radio.ListMostPopular()
 
 elif mode == 117:
-    Radio.ListFavourites(logged_in)
+    Radio.ListListenList(logged_in)
+
+elif mode == 199:
+    Radio.ListFollwing(logged_in)
 
 elif mode == 118:
     Video.RedButtonDialog()

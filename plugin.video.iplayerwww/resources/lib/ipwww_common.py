@@ -36,6 +36,7 @@ addoninfo = GetAddonInfo()
 DIR_USERDATA = xbmc.translatePath(addoninfo["profile"])
 cookie_jar = None
 user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:48.0) Gecko/20100101 Firefox/48.0'
+headers = {'User-Agent': user_agent}
 
 
 if(not os.path.exists(DIR_USERDATA)):
@@ -164,20 +165,56 @@ def SignInBBCiD():
     password=ADDON.getSetting('bbc_id_password')
 
     post_data={
-               'unique': username,
+               'username': username,
                'password': password,
-               'rememberme':'0'}
-    r = OpenURLPost(sign_in_url, post_data)
-    if (r.status_code == 302):
-        xbmcgui.Dialog().notification(translation(30308), translation(30309))
-    else:
-        xbmcgui.Dialog().notification(translation(30308), translation(30310))
+               'attempts':'0'}
+    
+    #Regular expression to get 'nonce' from login page
+    p = re.compile('form method="post" action="([^""]*)"')
+    
+    with requests.Session() as s:
+        resp = s.get('https://www.bbc.com/', headers=headers)
+
+        # Call the login page to get a 'nonce' for actual login
+        signInUrl = 'https://www.bbc.com/session'
+        resp = s.get(signInUrl, headers=headers)
+        m = p.search(resp.text)
+        url = m.group(1)
+
+        url = "https://www.bbc.com%s" % url
+        resp = s.post(url, data=post_data, headers=headers)
+    
+        for cookie in s.cookies:
+            cookie_jar.set_cookie(cookie)
+        cookie_jar.save(ignore_discard=True)
+    
+    with requests.Session() as s:
+        resp = s.get('https://www.bbc.co.uk/iplayer', headers=headers)
+
+        # Call the login page to get a 'nonce' for actual login
+        signInUrl = 'https://www.bbc.co.uk/session'
+        resp = s.get(signInUrl, headers=headers)
+        m = p.search(resp.text)
+        url = m.group(1)
+
+        url = "https://www.bbc.com%s" % url
+        resp = s.post(url, data=post_data, headers=headers)
+    
+        for cookie in s.cookies:
+            cookie_jar.set_cookie(cookie)
+        cookie_jar.save(ignore_discard=True)
+
+    #if (r.status_code == 302):
+    #    xbmcgui.Dialog().notification(translation(30308), translation(30309))
+    #else:
+    #    xbmcgui.Dialog().notification(translation(30308), translation(30310))
 
 
 def SignOutBBCiD():
     sign_out_url="https://ssl.bbc.co.uk/id/signout"
     OpenURL(sign_out_url)
-    cookie_jar.clear_session_cookies()
+    cookie_jar.clear()
+    cookie_jar.save()
     if (StatusBBCiD()):
         xbmcgui.Dialog().notification(translation(30326), translation(30310))
     else:
@@ -185,11 +222,11 @@ def SignOutBBCiD():
 
 
 def StatusBBCiD():
-    status_url="https://ssl.bbc.co.uk/id/status"
-    html=OpenURL(status_url)
-    if("You are signed in" in html):
+    r = requests.head("https://www.bbc.com/account", cookies=cookie_jar, allow_redirects=False)
+    if r.status_code == 200:
         return True
-    return False
+    else: 
+        return False
 
 
 def CheckLogin(logged_in):
@@ -213,7 +250,6 @@ def CheckLogin(logged_in):
 
 
 def OpenURL(url):
-    headers = {'User-Agent': user_agent}
     try:
         r = requests.get(url, headers=headers, cookies=cookie_jar)
     except requests.exceptions.RequestException as e:
@@ -233,14 +269,15 @@ def OpenURL(url):
 
 def OpenURLPost(url, post_data):
 
-    headers = {
-               'User-Agent': user_agent,
-               'Host':'ssl.bbc.co.uk',
-               'Accept':'*/*',
-               'Referer':'https://ssl.bbc.co.uk/id/signin',
-               'Content-Type':'application/x-www-form-urlencoded'}
+    headers_ssl = {
+                   'User-Agent': user_agent,
+                   'Host':'ssl.bbc.co.uk',
+                   'Accept':'*/*',
+                   'Referer':'https://ssl.bbc.co.uk/id/signin',
+                   'Content-Type':'application/x-www-form-urlencoded'}
     try:
-        r = requests.post(url, headers=headers, data=post_data, allow_redirects=False, cookies=cookie_jar)
+        r = requests.post(url, headers=headers_ssl, data=post_data, allow_redirects=False,
+                          cookies=cookie_jar)
     except requests.exceptions.RequestException as e:
         dialog = xbmcgui.Dialog()
         dialog.ok(translation(30400), "%s" % e)
@@ -407,7 +444,6 @@ def CreateBaseDirectory(content_type):
         AddMenuEntry(translation(30328), 'url', 118, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/tv.png'), '', '')
         AddMenuEntry(translation(30306), 'url', 107, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/favourites.png'), '', '')
         AddMenuEntry(translation(30307), 'url', 108, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/favourites.png'), '', '')
-
         AddMenuEntry(translation(30325), 'url', 119, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/settings.png'),  '', '')
     elif content_type == "audio":
         AddMenuEntry(translation(30321), 'url', 113, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/live.png'), '', '')
@@ -416,6 +452,7 @@ def CreateBaseDirectory(content_type):
         AddMenuEntry(translation(30304), 'url', 115, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/search.png'), '', '')
         AddMenuEntry(translation(30301), 'url', 116, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/popular.png'), '', '')
         AddMenuEntry(translation(30307), 'url', 117, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/favourites.png'), '', '')
+        AddMenuEntry(translation(30334), 'url', 199, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/favourites.png'), '', '')
         AddMenuEntry(translation(30325), 'url', 119, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/settings.png'), '', '')
     else:
         ShowLicenceWarning()
@@ -454,6 +491,8 @@ def CreateBaseDirectory(content_type):
                             'url', 116, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/popular.png'), '', '')
         AddMenuEntry((translation(30324)+translation(30307)),
                             'url', 117, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/favourites.png'), '', '')
+        AddMenuEntry((translation(30324)+translation(30334)),
+                            'url', 199, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/favourites.png'), '', '')
         AddMenuEntry(translation(30325), 'url', 119, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/settings.png'), '', '')
 
 

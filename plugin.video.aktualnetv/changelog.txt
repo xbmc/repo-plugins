@@ -1,0 +1,74 @@
+[B]V plánu[/B]
+— Již nic, občasná údržba
+
+[B]1.2.1[/B]
+— Pořady jsou aktualizovány automaticky
+— Odebrána sekce Témata
+— Převod na TLS (HTTPS)
+
+[B]1.1.23[/B]
+— Aktualizace pořadů
+
+[B]1.1.22[/B]
+— Aktualizace pořadů
+
+[B]1.1.21[/B]
+— Úklid před uspáním projektu
+
+[B]1.1.20[/B]
+— Aktuálně.TV 2015 promo
+
+[B]1.1.19[/B]
+— Aktualizace pořadů
+
+[B]1.1.18[/B]
+— Aktualizace pořadů
+
+[B]1.1.17[/B]
+— Čistě ajťácké věci…
+
+[B]1.1.16[/B]
+— Aktualizace dokumentace
+— Aktualizace zobrazení Pořadů
+
+[B]1.1.15[/B]
+— Aktualizace pořadů
+
+[B]1.1.14[/B]
+— Odstraněn fanart
+— Úklid v kódu
+— Přeskupeny pořady
+
+[B]1.1.13[/B]
+— Přidán pořad Face to Face
+- Odebrán pořad Barvy moci
+
+[B]1.1.11[/B]
+— Přidán pořad Právní rádce
+
+[B]1.1.10[/B]
+— Přidán pořad Barvy moci
+
+[B]1.1.9[/B]
+— Přidán pořad Respektování
+
+[B]1.1.8[/B]
+— Optimalizace, optimalizace, optimalizace…
+— Metadata jsou z webu stahována v komprimované podobě
+— Dlouhodobé cachování náhledů
+— GPLv2
+— Implementováno hledání
+
+[B]1.1.5[/B]
+— Pozadí a náhledy ve vyšší kvalitě
+— DVTV přidáno na titulní obrazovku modulu
+— Přidána pozadí a rozšířena metadata pořadu
+
+[B]1.1.0[/B]
+— První produkční release
+— Integrace souhrnu videí, tématických okruhů, pořadů
+— Správné zpracování playlistů
+— Automatické aktualizace z Github repositáře
+
+[B]1.0.*[/B]
+- Vývoj a testování

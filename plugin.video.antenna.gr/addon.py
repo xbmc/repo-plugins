@@ -57,11 +57,11 @@ elif action == 'reverseEpisodes':
 elif action == 'popular':
     antenna.indexer().popular()
 
+elif action == 'recommended':
+    antenna.indexer().recommended()
+
 elif action == 'news':
     antenna.indexer().news()
-
-elif action == 'sports':
-    antenna.indexer().sports()
 
 elif action == 'weather':
     antenna.indexer().weather()

@@ -21,11 +21,11 @@ msgid "Latest"
 msgstr ""
 
 msgctxt "#32004"
-msgid "News"
+msgid "Recommended"
 msgstr ""
 
 msgctxt "#32005"
-msgid "Sports"
+msgid "News"
 msgstr ""
 
 msgctxt "#32006"

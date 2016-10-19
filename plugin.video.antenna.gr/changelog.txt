@@ -1,3 +1,7 @@
+[B]1.0.2[/B]
+- Re-work of addon (new API)
+- Re-work of artwork (new indent)
+
 [B]1.0.1[/B]
 - Code cosmetics
 

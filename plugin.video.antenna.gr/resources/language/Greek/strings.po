@@ -21,12 +21,12 @@ msgid "Latest"
 msgstr "Πρόσφατα"
 
 msgctxt "#32004"
-msgid "News"
-msgstr "Ειδήσεις"
+msgid "Recommended"
+msgstr "Προτεινόμενα"
 
 msgctxt "#32005"
-msgid "Sports"
-msgstr "Αθλητικά"
+msgid "News"
+msgstr "Ειδήσεις"
 
 msgctxt "#32006"
 msgid "Weather"

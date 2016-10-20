@@ -34,3 +34,5 @@
 - Fanart added
 0.7.6
 - Dauer bei Lifestream besser
+0.7.8
+- Typo Fehler

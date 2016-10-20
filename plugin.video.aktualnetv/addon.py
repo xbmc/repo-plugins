@@ -18,9 +18,6 @@ else:
 
 
 plugin = Plugin()
-FANART = 'special://home/addons/%s/fanart.jpg' % plugin.id
-ICON = 'special://home/addons/%s/icon.png' % plugin.id
-
 
 def _get_file(url, referer = None):
     req = urllib2.Request(url)
@@ -96,20 +93,20 @@ def menu():
     items = [{
             'label': plugin.get_string(30011),
             'path': plugin.url_for('menu_playlist_short', path='index'),
-            'thumbnail': ICON
+            'thumbnail': plugin.addon.getAddonInfo('icon')
             },
         {
             'label': plugin.get_string(30012),
             'path': plugin.url_for('menu_shows'),
-            'thumbnail': ICON
+            'thumbnail': plugin.addon.getAddonInfo('icon')
             },
         {
             'label': plugin.get_string(30014),
             'path': plugin.url_for('menu_search_dialog'),
-            'thumbnail': ICON
+            'thumbnail': plugin.addon.getAddonInfo('icon')
             }
         ]
-    plugin.set_content('movies')
+    plugin.set_content('videos')
     return items
 
 

@@ -4,7 +4,6 @@
         <setting id="priority_quality" type="enum" label="32001" lvalues="32910|32911|32912|32913" default="2"/>
         <setting id="priority_format" type="enum" label="32002" lvalues="32920|32921|32922|32923" default="1"/>
         <setting type="sep"/>
-        <setting id="firewall" type="bool" label="32003" default="false"/>
         <setting id="donate" type="lsep" label="32009"/>
     </category>
     <category label="32006">

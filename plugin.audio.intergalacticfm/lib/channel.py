@@ -28,7 +28,7 @@ class Channel(object):
                     shutil.rmtree(self.cache_dir, True)
 
     def __init__(self, handle, cache_dir, source=ElementTree.Element("channel"), quality_priority=None,
-                 format_priority=None, firewall_mode=False):
+                 format_priority=None):
         self.handle = handle
         self.source = source
         self.cache_dir = os.path.join(cache_dir, self.getid())
@@ -41,7 +41,6 @@ class Channel(object):
             self.format_priority = ['mp3', 'aac']
         if not self.quality_priority:
             self.quality_priority = ['fastpls', 'highestpls', 'slowpls']
-        self.firewall_mode = firewall_mode
 
     def get_simple_element(self, *tags):
         for tag in tags:
@@ -50,8 +49,8 @@ class Channel(object):
                 return element.text
 
     def __repr__(self):
-        return "{}: {} ({}, {}, {})".format(self.__class__.__name__, self.getid(),
-                                            self.quality_priority, self.format_priority, self.firewall_mode)
+        return "{}: {} ({}, {})".format(self.__class__.__name__, self.getid(),
+                                            self.quality_priority, self.format_priority)
 
     def get_prioritized_playlists(self):
         playlists = []
@@ -92,11 +91,7 @@ class Channel(object):
             streams = []
             for i in range(0, play_list.size()):
                 stream_url = play_list.__getitem__(i).getfilename()
-                if (urlparse.urlparse(stream_url).port is None) == self.firewall_mode:
-                    streams.append(stream_url)
-                    print("Accepting " + stream_url)
-                else:
-                    print("Rejecting " + stream_url)
+                streams.append(stream_url)
             if len(streams) > 0:
                 return random.choice(streams)
 

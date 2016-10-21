@@ -18,10 +18,6 @@ msgctxt "#32002"
 msgid "Format"
 msgstr "Format"
 
-msgctxt "#32003"
-msgid "Firewall friendly"
-msgstr "Firewallfreundlich"
-
 msgctxt "#32004"
 msgid "Intergalactic FM"
 msgstr "Intergalactic FM"
@@ -43,8 +39,8 @@ msgid "Refresh channel list from server"
 msgstr "Senderliste vom Server laden"
 
 msgctxt "#32009"
-msgid "Please consider donating to keep Intergalactic FM in orbit.\nVisit http://intergalacticfm.com"
-msgstr "Bitte erhalte Intergalactic FM mit Deiner Spende in der Umlaufbahn.\nBesuche http://intergalacticfm.com"
+msgid "Please consider donating to keep Intergalactic FM in orbit.\nVisit https://intergalactic.fm"
+msgstr "Bitte erhalte Intergalactic FM mit Deiner Spende in der Umlaufbahn.\nBesuche https://intergalactic.fm"
 
 #enums
 

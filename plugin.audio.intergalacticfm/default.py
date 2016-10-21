@@ -30,7 +30,7 @@ def log(msg):
 
 log(sys.argv)
 
-rootURL = "http://intergalacticfm.com/"
+rootURL = "https://intergalactic.fm/"
 tempdir = xbmc.translatePath("special://home/userdata/addon_data/%s" % __addonid__)
 xbmcvfs.mkdirs(tempdir)
 
@@ -48,6 +48,7 @@ except:
 
 def fetch_remote_channel_data():
     response = urllib2.urlopen(rootURL + CHANNELS_FILE_NAME)
+#    response = urllib2.urlopen('https://raw.githubusercontent.com/intergalacticfm/online-radio-channels/master/examples/intergalacticfm.xml')
     channel_data = response.read()
     response.close()
     with open(LOCAL_CHANNELS_FILE_PATH, 'w') as local_channels_xml:
@@ -113,10 +114,6 @@ def build_directory():
     xbmcplugin.addSortMethod(handle, SORT_METHOD_GENRE)
 
 
-def firewall_mode():
-    return xbmcplugin.getSetting(handle, "firewall") == 'true'
-
-
 def format_priority():
     setting = xbmcplugin.getSetting(handle, "priority_format")
     result = [["mp3"], ["mp3", "aac"], ["aac", "mp3"], ["aac"], ][int(setting)]
@@ -146,10 +143,10 @@ def play(item_to_play):
     xml_data = ET.fromstring(channel_data)
     try:
         channel_data = xml_data.find(".//channel[@id='" + item_to_play + "']")
-        channel = Channel(handle, tempdir, channel_data, quality_priority(), format_priority(), firewall_mode())
+        channel = Channel(handle, tempdir, channel_data, quality_priority(), format_priority())
     except:
         for element in xml_data.findall(".//channel"):
-            channel = Channel(handle, tempdir, element, quality_priority(), format_priority(), firewall_mode())
+            channel = Channel(handle, tempdir, element, quality_priority(), format_priority())
             if channel.getid() == item_to_play:
                 break
 

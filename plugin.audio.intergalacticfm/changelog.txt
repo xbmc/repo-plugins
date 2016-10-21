@@ -1,3 +1,14 @@
+[B]Version 1.0.6 - 2016-10-10[/B]
+
+- Upgraded icon
+- Upgraded image urls
+- Upgraded site urls
+- Upgraded stream urls
+- Upgraded url channels.xml
+- Improved texts
+
+
+
 [B]Version 1.0.5 - 2016-02-25[/B]
 
 - Fixed icon

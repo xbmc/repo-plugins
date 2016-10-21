@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.aktualnetv" version="1.2.1" name="Aktuálně TV" provider-name="Petr Kutalek (petr@kutalek.cz)">
+  <requires>
+    <import addon="xbmc.python" version="2.24.0"/>
+    <import addon="script.module.xbmcswift2" version="2.4.0"/>
+  </requires>
+
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">This addon provides access to videos published on Aktualne TV</summary>
+    <summary lang="cs">Tento doplněk zpřístupňuje videa publikovaná na Aktuálně TV</summary>
+    <description lang="en">Aktualne.cz — covering all aspects of life in the Czech Republic, from political, social, economic and sports news to arts and culture</description>
+    <description lang="cs">Aktuálně.cz — kompletní zpravodajství, zprávy z domova i ze světa</description>
+    <disclaimer lang="en">This is an unofficial addon and is in no way affiliated with publisher Economia, a. s. It was created and is maintained by an independent developer. It is provided for reference only and may contain errors.</disclaimer>
+    <disclaimer lang="cs">Toto je neoficiální doplněk a není, žel, žádným způsobem spojen s vydavatelstvím Economia, a. s. Byl vytvořen a je udržovan nezávislým vývojářem. Doplněk je poskytnut pouze jako ukázka a může obsahovat chyby.</disclaimer>
+    <platform>all</platform>
+    <language>cs</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <website>https://video.aktualne.cz/</website>
+    <forum>https://github.com/petrkutalek/plugin.video.aktualnetv/issues</forum>
+    <email>petr@kutalek.cz</email>
+    <source>https://github.com/petrkutalek/plugin.video.aktualnetv/</source>
+  </extension>
+</addon>

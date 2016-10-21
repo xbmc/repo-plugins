@@ -1,0 +1,21 @@
+﻿0.1 
+- Initial Source
+0.2 
+- Bug Fix
+0.3
+- Bug Fix
+0.4.0
+- Beschreibungs text verbessert
+0.4.1
+- Bad Login Meldung
+0.4.2
+- Fix Fuer Filme
+0.4.3
+- Fix bei einigen Serien
+0.4.4
+- Debugging eingebaut wegen Filmen
+0.4.5
+- Fix fuer Filme
+0.4.13
+- Many Fixes
+- HTML5 Videos

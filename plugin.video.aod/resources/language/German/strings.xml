@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30101">Qualität von Flash</string>
+  <string id="30102">Username</string> 
+  <string id="30103">Password</string> 
+  <string id="30104">A-Z</string> 
+  <string id="30105">Categorie</string> 
+  <string id="30106">Sprache</string> 
+  <string id="30107">All</string> 
+  <string id="30108">Einstellungen</string>  
+ <string id="30109">Filme</string>  
+  <string id="30110">User oder Password falsch</string>  
+  <string id="30111">Naechste mal neu Einloggen</string> 
+  <string id="30112">Qualität HTML5</string>
+  <string id="30113">Neue Folgen</string>
+  <string id="30114">Neue Simulcasts</string>
+  <string id="30115">Neue Anime-Titel</string>
+  <string id="30116">Anime Top 10</string>
+  
+</strings>

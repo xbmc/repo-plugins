@@ -9,6 +9,7 @@ import re
 import sys
 import urllib2
 
+
 if sys.version_info < (3, 0):
     import HTMLParser
     unescape = HTMLParser.HTMLParser().unescape
@@ -16,8 +17,8 @@ else:
     import html
     unescape = html.unescape
 
-
 plugin = Plugin()
+
 
 def _get_file(url, referer = None):
     req = urllib2.Request(url)

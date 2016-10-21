@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <string id="30001">Gestern</string>
+  <string id="30001">Yesterday</string>
   <string id="30002">Vorgestern</string>
   <string id="30003">Live TV</string>
   <string id="30006">Add to queue</string>
@@ -8,4 +8,5 @@
   <string id="30102">Force View</string>
   <string id="30103">ViewID</string>
   <string id="30105">Debgging</string>
+  <string id="30106">Today</string>  
 </strings>

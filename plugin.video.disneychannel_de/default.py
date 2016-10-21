@@ -26,8 +26,19 @@ urlMain = "http://disneychannel.de"
 opener = urllib2.build_opener()
 opener.addheaders = [('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:25.0) Gecko/20100101 Firefox/25.0')]
 
+def debug(content):
+    log(content, xbmc.LOGDEBUG)
+    
+def notice(content):
+    log(content, xbmc.LOGNOTICE)
 
+def log(msg, level=xbmc.LOGNOTICE):
+    addon = xbmcaddon.Addon()
+    addonID = addon.getAddonInfo('id')
+    xbmc.log('%s: %s' % (addonID, msg), level) 
+    
 def index():
+    addDir(translation(30106), urlMain+"/_fta_stream/search.json?q=video&filter[type]=Video&filter[start_date_s]="+(datetime.date.today()-datetime.timedelta(days=0)).strftime("%Y-%m-%d")+"&limit=50&offset=0", 'listVideos', icon)
     addDir(translation(30001), urlMain+"/_fta_stream/search.json?q=video&filter[type]=Video&filter[start_date_s]="+(datetime.date.today()-datetime.timedelta(days=1)).strftime("%Y-%m-%d")+"&limit=50&offset=0", 'listVideos', icon)
     addDir(translation(30002), urlMain+"/_fta_stream/search.json?q=video&filter[type]=Video&filter[start_date_s]="+(datetime.date.today()-datetime.timedelta(days=2)).strftime("%Y-%m-%d")+"&limit=50&offset=0", 'listVideos', icon)
     addDir((datetime.date.today()-datetime.timedelta(days=3)).strftime("%b %d, %Y"), urlMain+"/_fta_stream/search.json?q=video&filter[type]=Video&filter[start_date_s]="+(datetime.date.today()-datetime.timedelta(days=3)).strftime("%Y-%m-%d")+"&limit=50&offset=0", 'listVideos', icon)
@@ -55,11 +66,15 @@ def listVideos(url):
 
 
 def playVideo(url):
+    debug("playVideo URL : "+url)
     content = opener.open(url).read()
     match = re.compile('embedURL":"(.+?)",', re.DOTALL).findall(content)
+    debug("Playvideo URL2 : "+match[0])
     content = opener.open(match[0]).read()
-    match2 = re.compile('url":"https://once-eu.unicornmedia.com(.+?)"', re.DOTALL).findall(content)
-    finalURL = 'http://once-eu.unicornmedia.com' + match2[0]
+    match2 = re.compile('"downloadUrl":"(.+?)"', re.DOTALL).findall(content)
+    debug("Playvideo URL3 : "+match2[0])
+    finalURL = match2[0]
+    finalURL=finalURL.replace("https","http")
     listitem = xbmcgui.ListItem(path=finalURL)
     xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 

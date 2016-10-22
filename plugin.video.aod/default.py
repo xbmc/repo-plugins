@@ -89,7 +89,7 @@ def addLink(name, url, mode, iconimage, duration="", desc="", genre='',csrftoken
   ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz)
   return ok
   
-def all(url=""):
+def alles(url=""):
    debug ("###Start ALL" + url)   
    content=geturl(url)   
    kurz_inhalt = content[content.find('<div class="three-box-container">')+1:]
@@ -368,7 +368,7 @@ def category() :
       addDir(name=ersetze(name), url=baseurl+link, mode="catall",iconimage="", desc="")
   xbmcplugin.endOfDirectory(addon_handle,succeeded=True,updateListing=False,cacheToDisc=True)
  
-def lanuage() :
+def language() :
   global opener
   global cj
   global username
@@ -386,6 +386,7 @@ def lanuage() :
   kurz_inhalt = kurz_inhalt[:kurz_inhalt.find('</ul>')]  
   match=re.compile('<a href="([^"]+)">([^<]+)</a>', re.DOTALL).findall(kurz_inhalt)
   for link,name in match:
+     if not "HTML5" in name:
       addDir(name=ersetze(name), url=baseurl+link, mode="catall",iconimage="", desc="")
   xbmcplugin.endOfDirectory(addon_handle,succeeded=True,updateListing=False,cacheToDisc=True)
  
@@ -454,7 +455,7 @@ else:
           addon.openSettings()
   # Wenn Kategory ausgewählt wurde
   if mode == 'All':
-          all(baseurl+"/animes")
+          alles(baseurl+"/animes")
   if mode == 'Serie':
           Serie(url) 
   if mode == 'Folge':
@@ -462,9 +463,9 @@ else:
   if mode == 'cat':
           category()  
   if mode == 'lang':
-          lanuage()  
+          language()  
   if mode == 'catall':
-          all(url)
+          alles(url)
   if mode == 'AZ':
           abisz()
   if mode == 'cookies':

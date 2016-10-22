@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.tv5monde" name="tv5monde" version="1.1.2" provider-name="jamontes">
+<addon id="plugin.video.tv5monde" name="tv5monde" version="1.1.3" provider-name="jamontes">
     <requires>
         <!-- FRODO version -->
         <import addon="xbmc.python" version="2.1.0"/>
@@ -16,5 +16,6 @@
         <summary lang="fr">TV5MONDE médiathèque</summary>
         <description lang="fr">Ce plugin permet de regarder TV5MONDE médiathèque qui se trouve sur le site web de TV5MONDE+</description>
         <language>fr</language>
+        <broken>Add-on is no longer maintained</broken>
     </extension>
 </addon>

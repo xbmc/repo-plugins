@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.filmarkivet"
        name="Filmarkivet"
-       version="2.0.0"
+       version="2.0.1"
        provider-name="Anders Karlsson (pugo@pugo.org)">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -20,5 +20,6 @@
     <summary lang="se">Se filmer från Svenska Filminstitutets Filmarkivet</summary>
     <description lang="en">Filmarkivet is an archive of historical Swedish films, provided by the Swedish Film Institute.</description>
     <description lang="se">Filmarkivet är ett arkiv med historiska svenska filmer, publicerade av Svenska Filminstitutet.</description>
+    <broken>Add-on not working due to website changes. Fixed version might be submitted in the future.</broken>
   </extension>
 </addon>

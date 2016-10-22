@@ -188,21 +188,32 @@ elif mode[0] == 'search_audio':
     content = readURL('http://www.newgrounds.com/audio/search/title/' + urllib.quote_plus(name) + '/' + args['page'][0])
     #xbmcgui.Dialog().ok('DEBUG', content)
 
-    grabContent = re.compile('<li class="audio"(.*?)<\/li>', re.DOTALL).findall(content)
+    grabContent = re.compile('<li><div class="audio-wrapper">(.*?)<\/li>', re.DOTALL).findall(content)
     #xbmcgui.Dialog().ok('DEBUG', grabContent[0])
     nextPage = int(args['page'][0]) + 1
 
     for newContent in grabContent:
         #xbmcgui.Dialog().ok('DEBUG', newContent)
-        image = re.compile('\<img src="([^"]+)"').findall(newContent)
-        audioID = re.compile('<a href="\/audio\/listen\/([^"]+)">').findall(newContent)
-        artist = re.compile('<strong>([^"]+).<\/strong>').findall(newContent)
-        title = re.compile('alt="([^"]*)"').findall(newContent)
+        image = re.compile('\img src="([^"]+)"').findall(newContent)
+        audioID = re.compile('href="\/audio\/listen\/([^"]+)"').findall(newContent)
+        artist = re.compile('<strong>([^"]*)<\/strong>').findall(newContent)
+        title = re.compile('<h4>([^"]*)<\/h4>').findall(newContent)
+
+        theTitle = title[0]
+        try:
+		    theArtist = artist[0]
+        except IndexError:
+		    theArtist = "N/A"
+
+        try:
+		    theImage = image[0]
+        except IndexError:
+		    theImage = "http://img.ngfiles.com/defaults/icon-audio-smaller.png"
 
         for aID in audioID:
             url = build_url({'mode': 'audio_info', 'audioID': aID})
-            li = xbmcgui.ListItem(title[0] + ' by ' + artist[0], iconImage=image[0])
-            li.setInfo('audio', { 'title': title })
+            li = xbmcgui.ListItem(theTitle + ' by ' + theArtist, iconImage=theImage)
+            li.setInfo('audio', { 'title': title[0] })
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
             break
 
@@ -424,21 +435,22 @@ elif mode[0] == 'audio_list':
     content = readURL('http://www.newgrounds.com/audio/browse/genre/' + args['cat'][0] + '/page/' + args['page'][0])
     #xbmcgui.Dialog().ok('DEBUG', content)
 
-    grabContent = re.compile('<td style="background-image: url(.*?)<\/div>', re.DOTALL).findall(content)
+    grabContent = re.compile('<li><div class="audio-wrapper">(.*?)<\/div><\/li>', re.DOTALL).findall(content)
     #xbmcgui.Dialog().ok('DEBUG', grabContent[0])
     nextPage = int(args['page'][0]) + 1
 
     for newContent in grabContent:
         #xbmcgui.Dialog().ok('DEBUG', newContent)
-        image = re.compile('\(([^"]+)\)').findall(newContent)
-        audioID = re.compile('<a href="http:\/\/www.newgrounds.com\/audio\/listen\/([^"]+)">([^"]+)<\/a>').findall(newContent)
-        artist = re.compile('<div>\n<a href="http://([^"]+).newgrounds.com"').findall(newContent)
-        category = re.compile('</td>\n<td>([^"]+)</td>\n<td>').findall(newContent)
+        image = re.compile('src="([^"]+)"').findall(newContent)
+        title = re.compile('<span>([^"]*) <\/span>').findall(newContent)
+        audioID = re.compile('href="\/audio\/listen\/([^"]+)"').findall(newContent)
+        artist = re.compile('<strong>([^"]+)<\/strong>').findall(newContent)
+        category = re.compile('<div class="detail-genre">([^"]*) <\/div>').findall(newContent)
 
-        for aID,title in audioID:
+        for aID in audioID:
             url = build_url({'mode': 'audio_info', 'audioID': aID})
-            li = xbmcgui.ListItem(title + ' by ' + artist[0] + ' [' + category[0] + ']', iconImage=image[0])
-            li.setInfo('audio', { 'title': title })
+            li = xbmcgui.ListItem(re.sub('[^A-Za-z0-9 {}()-]+', '', title[0]) + ' by ' + artist[0] + ' [' + re.sub('[^A-Za-z0-9 ]+', '', category[0]) + ']', iconImage=image[0])
+            li.setInfo('audio', { 'title': title[0] })
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
 
     url = build_url({'mode': 'audio_list', 'foldername': 'Audio', 'cat': args['cat'][0], 'page': nextPage})

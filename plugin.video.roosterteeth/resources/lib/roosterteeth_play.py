@@ -17,10 +17,13 @@ from BeautifulSoup import BeautifulSoup
 from roosterteeth_const import ADDON, SETTINGS, LANGUAGE, DATE, VERSION
 
 LOGINURL_RT = 'http://roosterteeth.com/login'
-LOGINURL_AH = 'http://achievementhunter.com/login'
-LOGINURL_FH = 'http://fun.haus/login'
-LOGINURL_TK = 'http://theknow.tv/login'
+LOGINURL_AH = 'http://achievementhunter.roosterteeth.com/login'
+LOGINURL_FH = 'http://funhaus.roosterteeth.com/login'
 LOGINURL_SA = 'http://screwattack.roosterteeth.com/login'
+LOGINURL_GA = 'http://gameattack.roosterteeth.com/login'
+LOGINURL_TK = 'http://theknow.roosterteeth.com/login'
+LOGINURL_CC = 'http://cowchop.roosterteeth.com/login'
+
 NEWHLS = 'NewHLS-'
 VQ1080P = '1080P'
 VQ720P = '720P'
@@ -105,14 +108,18 @@ class Main:
                         session = requests.Session()
 
                         # get the LOGIN-page
-                        if 'achievementhunter.com' in reply.url:
+                        if 'achievementhunter' in reply.url:
                             reply = session.get(LOGINURL_AH)
-                        elif 'fun.haus' in reply.url:
+                        elif 'funhaus' in reply.url:
                             reply = session.get(LOGINURL_FH)
-                        elif 'theknow.tv' in reply.url:
-                            reply = session.get(LOGINURL_TK)
                         elif 'screwattack' in reply.url:
                             reply = session.get(LOGINURL_SA)
+                        elif 'gameattack' in reply.url:
+                            reply = session.get(LOGINURL_GA)
+                        elif 'theknow' in reply.url:
+                            reply = session.get(LOGINURL_TK)
+                        elif 'cowchop' in reply.url:
+                            reply = session.get(LOGINURL_CC)
                         else:
                             reply = session.get(LOGINURL_RT)
 
@@ -139,15 +146,19 @@ class Main:
                         payload = {'_token': token, 'username': SETTINGS.getSetting('username'),
                                    'password': SETTINGS.getSetting('password')}
                         # post the LOGIN-page with the LOGIN-data, to actually login this session
-                        if 'achievementhunter.com' in reply.url:  # AH Login
+                        if 'achievementhunter' in reply.url:
                             reply = session.post(LOGINURL_AH, data=payload)
-                        elif 'fun.haus' in reply.url:  # FH Login
+                        elif 'funhaus' in reply.url:
                             reply = session.post(LOGINURL_FH, data=payload)
-                        elif 'theknow.tv' in reply.url:  # TK Login
-                            reply = session.post(LOGINURL_TK, data=payload)
-                        elif 'screwattack' in reply.url:  # SA Login
+                        elif 'screwattack' in reply.url:
                             reply = session.post(LOGINURL_SA, data=payload)
-                        else:  # RT Login
+                        elif 'gameattack' in reply.url:
+                            reply = session.post(LOGINURL_GA, data=payload)
+                        elif 'theknow' in reply.url:
+                            reply = session.post(LOGINURL_TK, data=payload)
+                        elif 'cowchop' in reply.url:
+                            reply = session.post(LOGINURL_CC, data=payload)
+                        else:
                             reply = session.post(LOGINURL_RT, data=payload)
 
                         xbmc.log('post login page response, status_code:' + str(reply.status_code))

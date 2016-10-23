@@ -23,17 +23,13 @@ sys.path.append(LIB_DIR)
 
 from roosterteeth_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
 
-# Get plugin settings
-DEBUG = xbmcaddon.Addon(id=ADDON).getSetting('debug')
-
 # Parse parameters...
 if len(sys.argv[2]) == 0:
     #
     # Main menu
     #
-    if DEBUG == 'true':
-        xbmc.log("[ADDON] %s, Python Version %s" % (ADDON, str(sys.version)), xbmc.LOGDEBUG)
-        xbmc.log("[ADDON] %s v%s (%s) is starting, ARGV = %s" % (ADDON, VERSION, DATE, repr(sys.argv)),
+    xbmc.log("[ADDON] %s, Python Version %s" % (ADDON, str(sys.version)), xbmc.LOGDEBUG)
+    xbmc.log("[ADDON] %s v%s (%s) is starting, ARGV = %s" % (ADDON, VERSION, DATE, repr(sys.argv)),
                  xbmc.LOGDEBUG)
     import roosterteeth_main as plugin
 else:

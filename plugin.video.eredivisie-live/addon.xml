@@ -1,22 +1,27 @@
-﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.eredivisie-live"
-       name="Eredivisie Live"
-       version="3.0.1"
-       provider-name="ErwinJunge">
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.eredivisie-live" name="FOX Sports NL" version="4.0.0" provider-name="Erwin Junge">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.xbmcswift2" version="2.4.0"/>
+    <import addon="script.module.requests" version="2.9.1"/>
+    <import addon="script.module.beautifulsoup" version="3.2.1"/>
   </requires>
-  <extension point="xbmc.python.pluginsource"
-             provides="video"
-             library="default.py">
+  <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en">Watch videos from Eredivisie Live (Dutch football)</summary>
-    <summary lang="nl">Bekijk videos van Eredivisie Live</summary>
-    <description lang="en">Watch videos from Eredivisie Live. For feature requests and bug reports: erwin@junge.nl</description>
-    <description lang="nl">Bekijk videos van Eredivisie Live. Voor functie verzoeken en het rapporteren van bugs: erwin@junge.nl</description>
+    <news>v4.0.0 (2016-10-09)
+    - First release for FOX Sports</news>
     <platform>all</platform>
     <language>nl</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <source>https://github.com/ErwinJunge/plugin.video.foxsportsnl</source>
+    <email>erwin@junge.nl</email>
+    <assets>
+      <icon>resources/icon.png</icon>
+    </assets>
+    <summary>FOX Sports NL</summary>
+    <description lang="en">FOX Sports NL videos (no support for live broadcasts)</description>
+    <description lang="nl">FOX Sports NL video's (geen live uitzendingen)</description>
   </extension>
 </addon>

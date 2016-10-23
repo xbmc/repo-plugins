@@ -16,9 +16,6 @@ from BeautifulSoup import BeautifulSoup
 
 from roosterteeth_const import ADDON, LANGUAGE, IMAGES_PATH, DATE, VERSION
 
-RECENTLYADDEDURL = 'http://roosterteeth.com/episode/recently-added'
-
-
 #
 # Main class
 #
@@ -116,8 +113,8 @@ class Main:
 
         for episode in episodes:
             # Only display episodes of a season
-            # The recently added page doesn't have a 'tab-episode'
-            if str(self.video_list_page_url).find(RECENTLYADDEDURL) >= 0:
+            # The recently added pages don't have a 'tab-episode'
+            if str(self.video_list_page_url).find('episode/recently-added') >= 0:
                 pass
             else:
                 # Only display episodes of a season
@@ -127,15 +124,21 @@ class Main:
                     after_tab_episodes = True
                 # Skip if the episode isn't a season episode
                 if not after_tab_episodes:
+                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                        ADDON, VERSION, DATE, "skipped episode before tab-episodes", str(episode)), xbmc.LOGDEBUG)
                     continue
 
             # Skip the recently-added url
             if str(episode).find('recently-added') >= 0:
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                    ADDON, VERSION, DATE, "skipped episode recently-added", str(episode)), xbmc.LOGDEBUG)
                 continue
 
             # Skip an episode if it does not contain class="name"
             pos_classname = str(episode).find('class="name"')
             if pos_classname == -1:
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                    ADDON, VERSION, DATE, "skipped episode without class=name", str(episode)), xbmc.LOGDEBUG)
                 continue
 
             video_page_url = episode.a['href']
@@ -145,6 +148,8 @@ class Main:
 
             # Skip the episode if it does not contain /episode/
             if str(video_page_url).find("/episode/") < 0:
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                    ADDON, VERSION, DATE, "skipped episode without /episode/", str(episode)), xbmc.LOGDEBUG)
                 continue
             else:
                 xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
@@ -155,6 +160,8 @@ class Main:
 
             # Skip a video_page_url is empty
             if video_page_url == '':
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                    ADDON, VERSION, DATE, "skipped episode with empty video_page_url", str(episode)), xbmc.LOGDEBUG)
                 continue
 
             # Skip episode if it's the same as the previous one
@@ -210,7 +217,6 @@ class Main:
             title = title.replace(' xxviii ', ' XXVIII ')
             title = title.replace(' xxix ', ' XXIX ')
             title = title.replace(' xxx ', ' XXX ')
-            title = title.replace('  ', ' ')
             title = title.replace('  ', ' ')
             # welcome to characterset-hell
             title = title.replace('&amp;#039;', "'")

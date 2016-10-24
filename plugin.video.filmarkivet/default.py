@@ -15,96 +15,28 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import os, sys, time
+import os, sys
 import xbmc, xbmcaddon, xbmcgui, xbmcplugin
-import data
-
-from itertools import repeat
-from plugin import plugin
+from lib.filmarkivet import Filmarkivet
+import urlparse, urllib
 
 addon = xbmcaddon.Addon()
 ADDON_PATH = addon.getAddonInfo('path')
 __translation = addon.getLocalizedString
 
 
-@plugin.route('/')
-def view_top():
-	text_categories = __translation(30010)
-	text_years = __translation(30011)
-	text_provinces = __translation(30012)
-	text_cities = __translation(30013)
-	text_themes = __translation(30020)
-	text_popular = __translation(30021)
-	text_latest = __translation(30022)
-	text_search = __translation(30023)
+def view_menu(menu):
+	for item in menu:
+		title = u'{} | {}'.format(item.title, item.description) if item.description else item.title
+		li = xbmcgui.ListItem(title, iconImage=item.icon)
+		li.setInfo('video', {'title': item.title, 'year': item.year, 'duration': item.duration})
+		if item.playable:
+			li.setProperty('isplayable', 'true')
+			li.setInfo('video', {'plot': item.description})
+		xbmcplugin.addDirectoryItem(info.handle, item.url, li, not item.playable)
+	xbmcplugin.endOfDirectory(info.handle)
 
-	xbmcplugin.addDirectoryItem(plugin.handle, plugin.url_for("/categories/categories"), xbmcgui.ListItem(text_categories), True)
-	xbmcplugin.addDirectoryItem(plugin.handle, plugin.url_for("/categories/years"), xbmcgui.ListItem(text_years), True)
-	xbmcplugin.addDirectoryItem(plugin.handle, plugin.url_for("/categories/provinces"), xbmcgui.ListItem(text_provinces), True)
-	xbmcplugin.addDirectoryItem(plugin.handle, plugin.url_for("/categories/cities"), xbmcgui.ListItem(text_cities), True)
-	xbmcplugin.addDirectoryItem(plugin.handle, plugin.url_for("/themes"), xbmcgui.ListItem(text_themes), True)
-	xbmcplugin.addDirectoryItem(plugin.handle, plugin.url_for("/popular"), xbmcgui.ListItem(text_popular), True)
-	xbmcplugin.addDirectoryItem(plugin.handle, plugin.url_for("/recent"), xbmcgui.ListItem(text_latest), True)
-	xbmcplugin.addDirectoryItem(plugin.handle, plugin.url_for("/search"), xbmcgui.ListItem(text_search), True)
-	xbmcplugin.endOfDirectory(plugin.handle)
-
-
-@plugin.route('/categories/<subcat>')
-def categories(subcat):
-	view(data.parse_categories(subcat))
-
-
-@plugin.route('/category/<arg>/<page>')
-def category(arg, page="1"):
-	films, next_url = data.parse_category(arg, int(page))
-	view(films, next_url=next_url)
-
-
-@plugin.route('/themes')
-def themes():
-	view(data.parse_themes())
-
-
-@plugin.route('/theme/<theme_id>')
-@plugin.route('/theme/<theme_id>/<page>')
-def theme(theme_id, page="1"):
-	films, next_url = data.parse_theme(theme_id, int(page))
-	view(films, next_url=next_url)
-
-
-@plugin.route('/popular')
-@plugin.route('/popular/<page>')
-def popular(page="1"):
-	films, next_url = data.parse_popular(int(page))
-	view(films, next_url=next_url)
-
-
-@plugin.route('/recent')
-@plugin.route('/recent/<page>')
-def recent(page="1"):
-	films, next_url = data.parse_recent(int(page))
-	view(films, next_url=next_url)
-
-
-@plugin.route('/search')
-@plugin.route('/search/<search_string>')
-@plugin.route('/search/<search_string>/<page>')
-def search(search_string=None, page="1"):
-	if search_string == None:
-		search_string = unikeyboard("", "")
-
-	films, next_url = data.parse_search(search_string, int(page))
-	view(films, next_url=next_url)
-
-
-@plugin.route('/film/<video_id>')
-def play(video_id):
-	url = data.parse_media_url(video_id)
-	xbmcplugin.setResolvedUrl(plugin.handle, True, xbmcgui.ListItem(path=url))
-
-
-# Show keyboard with given message as instructions. Return result string or None.
-def unikeyboard(default, message):
+def keyboard_get_string(default, message):
 	keyboard = xbmc.Keyboard(default, message)
 	keyboard.doModal()
 	if (keyboard.isConfirmed()):
@@ -112,46 +44,78 @@ def unikeyboard(default, message):
 	else:
 		return None
 
-
-# Show a list of data.
-def view(elements, next_url=None):
-	if not elements:
-		error_title = __translation(30002)
-		error_message1 = __translation(30003)
-		error_message2 = __translation(30004)
-		dialog = xbmcgui.Dialog()
-		dialog.ok(error_title, error_message1, error_message2)
-		return
-
-	total = len(elements)
-	for title, url, descr, thumb in elements:
-		descr = descr() if callable(descr) else descr
-		thumb = thumb() if callable(thumb) else thumb
-
-		li = xbmcgui.ListItem(title, thumbnailImage=thumb)
-		playable = plugin.route_for(url) == play
-		li.setProperty('isplayable', str(playable))
-		if playable:
-			li.setInfo('video', {'plot':descr})
-		xbmcplugin.addDirectoryItem(plugin.handle, plugin.url_for(url), li, not playable, total)
-
-	if next_url:
-		text_next_page = __translation(30001)
-		addPager(text_next_page, next_url, '', total)
-	xbmcplugin.endOfDirectory(plugin.handle)
+def show_error():
+	error_title = __translation(30002)
+	error_message1 = __translation(30003)
+	error_message2 = __translation(30004)
+	xbmcgui.Dialog().ok(error_title, error_message1, error_message2)
 
 
-# Add pager line at bottom of a list.
-def addPager(title, url, thumb, total):
-	li = xbmcgui.ListItem(title, thumbnailImage=thumb)
-	playable = plugin.route_for(url) == play
-	li.setProperty('isplayable', str(playable))
-	if playable:
-		li.setInfo('video', {'plot':descr})
-	xbmcplugin.addDirectoryItem(plugin.handle, plugin.url_for(url), li, not playable, total)
+class AddonInfo(object):
+	def __init__(self):
+		self.name = addon.getAddonInfo('name')
+		self.id = addon.getAddonInfo('id')
+		self.handle = int(sys.argv[1])
+		self.path = sys.argv[0]
+		self.icon = os.path.join(addon.getAddonInfo('path'), 'icon.png')
+		self.fanart = os.path.join(addon.getAddonInfo('path'), 'fanart.jpg')
+		self.cache = xbmc.translatePath(addon.getAddonInfo("Profile"))
+		self.trans = addon.getLocalizedString
+		self.do_cache = True
+
+		if not os.path.exists(self.cache):
+			try:
+				os.makedirs(self.cache)
+			except:
+				self.do_cache = False
 
 
- 
 if ( __name__ == "__main__" ):
-	plugin.run()
+	info = AddonInfo()
+	params = urlparse.parse_qs(sys.argv[2][1:])
+	print ('PARAMS:', params)
+	print ('ARGV:', sys.argv)
+
+	if 'content_type' in params:
+		content_type = params['content_type'][0]
+
+
+	fa = Filmarkivet(info)
+	if 'mode' in params:
+		try:
+			mode = params['mode'][0]
+			page = int(params['page'][0]) if 'page' in params else 1
+			url = params['url'][0] if 'url' in params else None
+
+			if mode == 'categories':
+				view_menu(fa.get_categories())
+			if mode == 'category' and url:
+				movies = fa.get_url_movies(url, mode='category', page=page, limit=True)
+				view_menu(movies)
+
+			if mode == 'letters':
+				view_menu(fa.get_letters())
+			if mode == 'letter':
+				if 'l' in params:
+					view_menu(fa.get_letter_movies(params['l'][0]))
+
+			if mode == 'themes':
+				view_menu(fa.get_themes())
+			if mode == 'theme' and url:
+				movies = fa.get_url_movies(url, mode='theme', page=page, limit=True)
+				view_menu(movies)
+
+			if mode == 'watch':
+				media_url = fa.get_media_url(urllib.unquote(url))
+				xbmcplugin.setResolvedUrl(info.handle, True, xbmcgui.ListItem(path=media_url))
+
+			if mode == 'search':
+				key = params['key'][0] if 'key' in params else keyboard_get_string('', info.trans(30023))
+				movies = fa.get_url_movies('/sokresultat/?q={}'.format(key), mode='search&key={}'.format(key), page=page, limit=True)
+				view_menu(movies)
+		except:
+			show_error()
+	else:
+		view_menu(fa.get_mainmenu())
+
 

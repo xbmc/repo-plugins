@@ -12,10 +12,10 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
-    <language>sv en de</language>
+    <language>sv</language>
     <email>pugo@pugo.org</email>
     <license>GNU General Public License, v3</license>
-    <source>https://github.com/search?q=filmarkivet</source>
+    <source>https://github.com/pugo/filmarkivet-xbmc</source>
     <forum></forum>
     <website></website>
     <summary lang="en">Watch movies from the Swedish Film Institute film archive</summary>
@@ -24,8 +24,6 @@
     <description lang="en">Filmarkivet is an archive of historical Swedish films, provided by the Swedish Film Institute.</description>
     <description lang="sv">Filmarkivet är ett arkiv med historiska svenska filmer, publicerade av Svenska Filminstitutet.</description>
     <description lang="de">Filmarkivet ist ein Archiv von historischen schwedischen Filmen, veröffentlicht bei Svenska Filminstitutet.</description>
-    <news>v3.0.0 (2016-10-24)
-   - Total rewrite to match new Filmarkivet site.
-   - Caching gives huge speed-up.</news>
+    <news>v3.0.0 (2016-10-24)[CR]- Total rewrite to match new Filmarkivet site.[CR]- Caching gives huge speed-up.</news>
   </extension>
 </addon>

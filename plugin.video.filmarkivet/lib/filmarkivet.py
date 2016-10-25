@@ -79,7 +79,7 @@ class Filmarkivet(object):
 			get_url += '{}limit={}&pg={}'.format('?' if url.rfind('?') < 0 else '&', self.MOVIES_PER_PAGE, page)
 		html = self.webget.getURL(get_url)
 		soup = BeautifulSoup(html, 'html.parser')
-		range, range_max = self.__get_range(soup)
+		_range, range_max = self.__get_range(soup)
 		soup = soup.find('div', {'id': 'list'})
 		movies = soup.find_all('a', {'class': 'item'})
 		result = []
@@ -100,7 +100,7 @@ class Filmarkivet(object):
 			except:
 				pass
 			result.append(li)
-		if range[1] < range_max:
+		if _range[1] < range_max:
 			next_url = '{}&url={}&page={}'.format(self.mode_url(mode), urllib.quote(url), page + 1)
 			result.append(self.ListItem(self.info.trans(30001), next_url, None, None))
 		return result

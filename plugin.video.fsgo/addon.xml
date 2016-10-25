@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.fsgo"
-       version="1.1.1"
+       version="1.1.2"
        name="FOX Sports GO"
        provider-name="emilsvennesson">
   <requires>
@@ -13,8 +13,8 @@
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <description lang="en">Watch live sports and shows from FOX Sports GO.[CR][CR]Please note that this add-on requires you to have a subscription to one of FOX Sports GO's participating TV providers.</description>
-    <news>2016.10.24 v1.1.1[CR]+ Ensure our session is always valid (heartbeat)[CR]+ Various small fixes</news>
+    <description lang="en">Watch live sports and shows from FOX Sports GO.[CR][CR]Please note that this add-on requires you to authenticate to one of FOX Sports GO's participating TV providers.</description>
+    <news>2016.10.25 v1.1.2[CR]+ Critical bug fix: session wouldn't always refresh on time</news>
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
     <source>https://github.com/emilsvennesson/kodi-fsgo</source>

@@ -29,7 +29,7 @@ class fsgolib(object):
         except IOError:
             pass
         self.http_session.cookies = self.cookie_jar
-        self.valid_session = self.heartbeat()
+        self.logged_in = self.heartbeat()
 
     class LoginFailure(Exception):
         def __init__(self, value):
@@ -138,11 +138,14 @@ class fsgolib(object):
                 errors.append(error)
             errors = ', '.join(errors)
             self.log('Unable to register session. Error(s): %s' % errors)
+            self.save_credentials(logged_in=False)
             return False
         else:
             session_id = session_dict['id']
             auth_header = req.headers['Authorization']
-            self.save_credentials(session_id=session_id, auth_header=auth_header, heartbeat=heartbeat, logged_in=True)
+            session_expires = session_dict['expires_on']
+            reg_expires = session_dict['user']['registration']['expires_on']
+            self.save_credentials(session_id=session_id, auth_header=auth_header, session_expires=session_expires, reg_expires=reg_expires, logged_in=True)
             self.log('Successfully registered session.')
             return True
 
@@ -168,16 +171,19 @@ class fsgolib(object):
                     errors.append(error)
                 errors = ', '.join(errors)
                 self.log('Unable to refresh session. Error(s): %s' % errors)
+                self.save_credentials(logged_in=False)
                 return False
             else:
                 session_id = session_dict['id']
                 auth_header = req.headers['Authorization']
-                self.save_credentials(session_id, auth_header)
+                session_expires = session_dict['expires_on']
+                reg_expires = session_dict['user']['registration']['expires_on']
+                self.save_credentials(session_id=session_id, auth_header=auth_header, session_expires=session_expires, reg_expires=reg_expires, logged_in=True)
                 return session_dict
         else:
             return False
 
-    def save_credentials(self, session_id=None, auth_header=None, access_token=None, heartbeat=None, logged_in=False):
+    def save_credentials(self, session_id=None, auth_header=None, access_token=None, session_expires=None, reg_expires=None, logged_in=False):
         credentials = {}
         if not session_id:
             session_id = self.get_credentials()['session_id']
@@ -185,15 +191,18 @@ class fsgolib(object):
             auth_header = self.get_credentials()['auth_header']
         if not access_token:
             access_token = self.get_credentials()['access_token']
-        if not heartbeat:
-            heartbeat = self.get_credentials()['heartbeat']
+        if not session_expires:
+            session_expires = self.get_credentials()['session_expires']
+        if not reg_expires:
+            reg_expires = self.get_credentials()['reg_expires']
         if not logged_in:
             logged_in = self.get_credentials()['logged_in']
 
         credentials['session_id'] = session_id
         credentials['auth_header'] = auth_header
         credentials['access_token'] = access_token
-        credentials['heartbeat'] = heartbeat
+        credentials['session_expires'] = session_expires
+        credentials['reg_expires'] = reg_expires
         credentials['logged_in'] = logged_in
 
         with open(self.credentials_file, 'w') as fh_credentials:
@@ -205,7 +214,8 @@ class fsgolib(object):
         credentials['session_id'] = None
         credentials['auth_header'] = None
         credentials['access_token'] = None
-        credentials['heartbeat'] = utcnow.isoformat()
+        credentials['session_expires'] = utcnow.isoformat()
+        credentials['reg_expires'] = utcnow.isoformat()
         credentials['logged_in'] = False
 
         with open(self.credentials_file, 'w') as fh_credentials:
@@ -221,13 +231,17 @@ class fsgolib(object):
                 return json.loads(fh_credentials.read())
 
     def heartbeat(self):
-        """Keep our authentication tokens valid by re-registring every 12 hours."""
+        """Keep session valid by re-registring/resetting credentials when session/registration expires."""
         try:
             utcnow = datetime.utcnow()
-            last_heartbeat = self.parse_datetime(self.get_credentials()['heartbeat'])
-            next_heartbeat = last_heartbeat + timedelta(hours=12)
-            next_heartbeat = next_heartbeat.replace(tzinfo=None)
-            if utcnow > next_heartbeat and self.get_credentials()['logged_in']:
+            session_expires = self.parse_datetime(self.get_credentials()['session_expires'])
+            session_expires = session_expires.replace(tzinfo=None)
+            reg_expires = self.parse_datetime(self.get_credentials()['reg_expires'])
+            reg_expires = reg_expires.replace(tzinfo=None)
+            if utcnow >= reg_expires and self.get_credentials()['logged_in']:
+                self.reset_credentials()
+                return False
+            elif utcnow >= session_expires and self.get_credentials()['logged_in']:
                 self.login(heartbeat=True)
                 return True
             elif self.get_credentials()['logged_in']:

@@ -1,3 +1,6 @@
+2016.10.25 v1.1.2
++ Critical bug fix: session wouldn't always refresh on time
+
 2016.10.24 v1.1.1
 + Ensure our session is always valid (heartbeat)
 + Various small fixes

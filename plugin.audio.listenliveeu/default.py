@@ -10,22 +10,17 @@ from shutil import rmtree, copy
 import traceback
 from pprint import pprint
 
-__plugin__ = "ListenLiveEU"
-__version__ = '0.4.6'
-__author__ = 'bootsy, xycl'
-__date__ = '2013-01-16'
-
-
 BASE_URL = 'http://www.listenlive.eu'
 URL_INDEX = '/'.join( [BASE_URL, 'index.html'] )
 URL_NEW = '/'.join( [BASE_URL, 'new.html'] )
 
-addon = xbmcaddon.Addon(id='plugin.audio.listenliveeu')
-DIR_HOME = addon.getAddonInfo('path').decode('utf-8')
-DIR_HOME = xbmc.translatePath(DIR_HOME).decode('utf-8')
-FILE_INDEX_PAGE = os.path.join(DIR_HOME, 'index.html')
-DIR_SETTINGS = addon.getAddonInfo('profile').decode('utf-8')
+ADDON = xbmcaddon.Addon()
+ADDONNAME = ADDON.getAddonInfo('name')
+ADDONVERSION = ADDON.getAddonInfo('version')
+LANGUAGE = ADDON.getLocalizedString
+DIR_SETTINGS = ADDON.getAddonInfo('profile').decode('utf-8')
 DIR_SETTINGS = xbmc.translatePath(DIR_SETTINGS).decode('utf-8')
+FILE_INDEX_PAGE = os.path.join(DIR_SETTINGS, 'index.html')
 FILE_FAVS = os.path.join(DIR_SETTINGS, 'favorites.xml')
 
 dialogProgress = xbmcgui.DialogProgress()
@@ -33,18 +28,18 @@ dialog = xbmcgui.Dialog()
 
 def log(msg):
     if type(msg) not in (str, unicode):
-        xbmc.log("[%s]: %s" % (__plugin__, type(msg)))
+        xbmc.log("[%s]: %s" % (ADDONNAME, type(msg)))
         pprint (msg)
     else:
         if type(msg) in (unicode,):
             msg = msg.encode('utf-8')
-        xbmc.log("[%s]: %s" % (__plugin__, msg))
+        xbmc.log("[%s]: %s" % (ADDONNAME, msg))
 
 def errorOK(title="", msg=""):
     e = str( sys.exc_info()[ 1 ] )
     log(e)
     if not title:
-        title = __plugin__ + ' v' + __version__
+        title = ADDONNAME + ' v' + ADDONVERSION
     if not msg:
         msg = "ERROR!"
     dialog.ok( title, msg, e )
@@ -74,14 +69,14 @@ def addFav(url):
             text = doc.read().decode('utf-8')
             doc.close()
             if nameurl in text:
-                dialog.ok( __plugin__ + ' v' + __version__, __language__(30015), '', urllib.unquote_plus(name).decode('utf-8') )
+                dialog.ok( ADDONNAME + ' v' + ADDONVERSION, LANGUAGE(30015), '', urllib.unquote_plus(name).decode('utf-8') )
             else:
                 doc = open(FILE_FAVS, "a+")
                 doc.write(nameurl)
                 doc.close()                
-                dialog.ok( __plugin__ + ' v' + __version__, __language__(30007), '', urllib.unquote_plus(name).decode('utf-8') )
+                dialog.ok( ADDONNAME + ' v' + ADDONVERSION, LANGUAGE(30007), '', urllib.unquote_plus(name).decode('utf-8') )
         except:
-            dialog.ok( __plugin__ + ' v' + __version__, __language__(30008), '', urllib.unquote_plus(name).decode('utf-8') )
+            dialog.ok( ADDONNAME + ' v' + ADDONVERSION, LANGUAGE(30008), '', urllib.unquote_plus(name).decode('utf-8') )
     return True
 
 #######################################################################################################################    
@@ -97,7 +92,7 @@ def remFav(url):
                 name = favorite[0]
                 url = favorite[1]
             nameurl = 'name=%s&url=%s%s' % (name, url, '\n')
-            if dialog.yesno( __plugin__ + ' v' + __version__, __language__(30009), '', urllib.unquote_plus(name).decode('utf-8') ):
+            if dialog.yesno( ADDONNAME + ' v' + ADDONVERSION, LANGUAGE(30009), '', urllib.unquote_plus(name).decode('utf-8') ):
                 doc = open(FILE_FAVS, "rU")
                 text = doc.read().decode('utf-8')
                 doc.close()
@@ -105,12 +100,12 @@ def remFav(url):
                 doc.write(text.replace(nameurl, ''))
                 doc.close()    
                 xbmc.executebuiltin('Container.Refresh')
-                dialog.ok( __plugin__ + ' v' + __version__, __language__(30010), '', urllib.unquote_plus(name).decode('utf-8') )
+                dialog.ok( ADDONNAME + ' v' + ADDONVERSION, LANGUAGE(30010), '', urllib.unquote_plus(name).decode('utf-8') )
                 doc = open(FILE_FAVS).read().decode('utf-8')
                 if doc == 'This is your favorites file.\n':
-                    dialog.ok( __plugin__ + ' v' + __version__, __language__(30016) )
+                    dialog.ok( ADDONNAME + ' v' + ADDONVERSION, LANGUAGE(30016) )
         except:
-            dialog.ok( __plugin__ + ' v' + __version__, __language__(30011), '', urllib.unquote_plus(name).decode('utf-8') )
+            dialog.ok( ADDONNAME + ' v' + ADDONVERSION, LANGUAGE(30011), '', urllib.unquote_plus(name).decode('utf-8') )
     return True
 
 #######################################################################################################################    
@@ -118,18 +113,18 @@ def remFav(url):
 ######################################################################################################
 def remallFavs(url):
     log("> remallFavs()")
-    if dialog.yesno(__plugin__ + ' v' + __version__, __language__(30012) ):
+    if dialog.yesno(ADDONNAME + ' v' + ADDONVERSION, LANGUAGE(30012) ):
         try:
             doc = open(FILE_FAVS).read().decode('utf-8')
             if doc == 'This is your favorites file.\n':
-                dialog.ok( __plugin__ + ' v' + __version__, __language__(30017) )
+                dialog.ok( ADDONNAME + ' v' + ADDONVERSION, LANGUAGE(30017) )
             else:
                 deleteFile(FILE_FAVS)
-                dialog.ok( __plugin__ + ' v' + __version__, __language__(30013) )
+                dialog.ok( ADDONNAME + ' v' + ADDONVERSION, LANGUAGE(30013) )
                 xbmc.executebuiltin('Container.Refresh')
                 writeFavs()
         except:
-            dialog.ok( __plugin__ + ' v' + __version__, __language__(30014) )
+            dialog.ok( ADDONNAME + ' v' + ADDONVERSION, LANGUAGE(30014) )
     return True
         
 #######################################################################################################################    
@@ -160,9 +155,9 @@ def getRootCats():
     log("> getRootCats()")    
     doc = open(FILE_FAVS).read().decode('utf-8')
     if doc == 'This is your favorites file.\n':
-        items = ( (__language__(30000), "new"), (__language__(30001),"country"), (__language__(30002),"genre"), )
+        items = ( (LANGUAGE(30000), "new"), (LANGUAGE(30001),"country"), (LANGUAGE(30002),"genre"), )
     else:
-        items = ( (__language__(30000), "new"), (__language__(30003),"favorites"), (__language__(30001),"country"), (__language__(30002),"genre"), )
+        items = ( (LANGUAGE(30000), "new"), (LANGUAGE(30003),"favorites"), (LANGUAGE(30001),"country"), (LANGUAGE(30002),"genre"), )
 
     for title, url in items:
         addDirectoryItem(title, url, 0)
@@ -183,7 +178,7 @@ def getCats(byCountry):
         log("getCats() parsing ...")
         try:
             # get section
-            baseRE = '<p>Browse by $SECTION.*?</div>(.+?)</tr></tbody></table></div><br />'
+            baseRE = '<p>Stations by $SECTION.*?</div>(.+?)</tr></tbody></table></div><br />'
             if byCountry:
                 sectionRE = baseRE.replace('$SECTION','country')
             else:
@@ -337,6 +332,19 @@ def getURL(url, fn=''):
         return None
 
 ######################################################################################################
+# get redirect url for mms streams
+######################################################################################################
+def getRedirect(url):
+    import requests
+    url = url.replace('mms:', 'http:')
+    response = requests.get(url, allow_redirects=False)
+    try:
+        redir = response.headers['Location']
+    except:
+        redir = ''
+    return redir
+
+######################################################################################################
 def get_params():
     """ extract params from argv[2] to make a dict (key=value) """
     paramDict = {}
@@ -363,35 +371,30 @@ def addDirectoryItem(name, url, mode, label2='', infoType="Music", infoLabels = 
     action2 = 'XBMC.RunPlugin(plugin://plugin.audio.listenliveeu/?remfav%s%s)' % (v, '\n')
     action3 = 'XBMC.RunPlugin(plugin://plugin.audio.listenliveeu/?removeall)'
     
+    u = "%s?url=%s&mode=%s&name=%s" % (sys.argv[0], urllib.quote_plus(url), mode, urllib.quote_plus(name.encode('utf-8')), )
+
     if mode==2:
         try:
-            liz.addContextMenuItems([(__language__(30004), action1), (__language__(30006), action3)])
+            liz.addContextMenuItems([(LANGUAGE(30004), action1), (LANGUAGE(30006), action3)])
+            if url.startswith('mms'):
+                liz.setProperty('IsPlayable', 'true')
+            else:
+                u = url
         except:
             errorOK("addDirectoryItem()")
         
     elif mode==3:
         try:
-            liz.addContextMenuItems([(__language__(30005), action2), (__language__(30006), action3)])
+            liz.addContextMenuItems([(LANGUAGE(30005), action2), (LANGUAGE(30006), action3)])
+            if url.startswith('mms'):
+                liz.setProperty('IsPlayable', 'true')
+            else:
+                u = url
         except:
             errorOK("addDirectoryItem()")
 
-    u = "%s?url=%s&mode=%s&name=%s" % (sys.argv[0], urllib.quote_plus(url), mode, urllib.quote_plus(name.encode('utf-8')), )
     log("%s" % u)
     return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=isFolder)
-
-######################################################################################################
-def playStream(url, title=" "):
-    try:
-        log("> playStream() " + url)
-        log("> playStream() " + title)
-        plyr = xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER)
-        plyr.play( url )
-        isPlaying = plyr.isPlaying()
-        log("< playStream() isPlaying=%s" % isPlaying)
-        return isPlaying
-    except:
-        errorOK("playStream()")
-        return False
 
 ######################################################################################################
 def deleteFile(fn):
@@ -405,7 +408,7 @@ def deleteFile(fn):
 #######################################################################################################################
 try:
     __settings__ = xbmcaddon.Addon(id='plugin.audio.listenliveeu')
-    __language__ = __settings__.getLocalizedString
+    LANGUAGE = __settings__.getLocalizedString
 except:
     errorOK()
 
@@ -465,8 +468,12 @@ if not "?add" in sys.argv[ 2 ] and not "?remfav" in sys.argv[ 2 ] and not "?remo
     elif mode==1:
         ok = getStreams(url)
         xbmcplugin.endOfDirectory(int(sys.argv[1]), ok)
-    elif mode==2:
-        ok = playStream(url, name)
-    elif mode==3:
-        ok = playStream(url, name)
-    
+    elif mode==2 or mode==3:
+        newurl = getRedirect(url)
+        if newurl:
+            item = xbmcgui.ListItem(path=newurl)
+            succes = True
+        else:
+            item = xbmcgui.ListItem()
+            succes = False
+        xbmcplugin.setResolvedUrl(int(sys.argv[1]), succes, listitem=item)

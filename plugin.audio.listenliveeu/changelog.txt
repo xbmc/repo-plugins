@@ -1,3 +1,9 @@
+[B]Version 1.2.0[/B]
+- Fixes due to site changes
+- Krypton changes
+- Drop xbmc.Player class
+- Properly redirect mms streams
+
 [B]Version 1.1.0[/B]
 - Fix:    Adding bookmarks fixed
 - Update: Language files from Transifex

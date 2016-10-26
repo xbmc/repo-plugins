@@ -7,10 +7,10 @@
         <provides>video</provides>
     </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en">Videos von http://www.anime-on-demand.de/</summary>
-    <summary lang="de">Videos of http://www.anime-on-demand.de/</summary>
-    <description lang="en">Videos der Mediathek von http://www.anime-on-demand.de/ (Die erste Folge ist Kostenlos. Ein Account wird benoetigt)</description>
-    <description lang="de">Video From http://www.anime-on-demand.de/ (Die First Episode is Free. Accound is Required)</description>
+    <summary lang="de">Videos von http://www.anime-on-demand.de/</summary>
+    <summary lang="en">Videos of http://www.anime-on-demand.de/</summary>
+    <description lang="de">Videos der Mediathek von http://www.anime-on-demand.de/ (Die erste Folge ist Kostenlos. Ein Account wird benoetigt)</description>
+    <description lang="en">Video From http://www.anime-on-demand.de/ (Die First Episode is Free. Accound is Required)</description>
     <website></website>
     <source>https://github.com/kodinerds/repo/tree/master/addons/plugin.video.aod</source>
     <forum>http://www.kodinerds.net/index.php/Thread/46939-Repo-Lost-Found/</forum>

@@ -48,7 +48,7 @@ class Sportsnet:
                    't' : str(int(time.time())) }
 
         try:
-            resp = opener.open('http://now.sportsnet.ca/mvpd?',
+            resp = opener.open('https://now.sportsnet.ca/mvpd?',
                                urllib.urlencode(values))
         except:
             print "Unable to login with mvpd"

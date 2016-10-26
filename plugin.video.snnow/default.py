@@ -110,9 +110,9 @@ def createLiveMenu(values):
 
 
 def playChannel(values):
-    sn = snnow.SportsnetNow()
     mso = __settings__.getSetting("mso")
-    stream = sn.getChannel(values['id'][0], values['abbr'][0], mso)
+    stream = getChannelStream(values['id'][0], values['abbr'][0], mso)
+
     if not stream:
         dialog = xbmcgui.Dialog()
         dialog.ok(__language__(30004), __language__(30005))
@@ -129,6 +129,18 @@ def playChannel(values):
         li.setInfo(type="Video", infoLabels=labels)
         p = xbmc.Player()
         p.play(stream, li)
+
+
+def getChannelStream(channelId, channelName, msoName):
+    sn = snnow.SportsnetNow()
+    stream = sn.getChannel(channelId, channelName, msoName)
+    if not stream:
+        # auth token may have expired - attempt re-auth first
+        print('Auth token may have expired. Attempting re-auth.')
+        creds = getAuthCredentials()
+        if sn.authorize(creds['u'], creds['p'], creds['m']):
+            return sn.getChannel(channelId, channelName, msoName)
+    return stream
 
 
 if len(sys.argv[2]) == 0:

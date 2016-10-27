@@ -7,6 +7,21 @@ import vars
 def littleErrorPopup(error, seconds=5000):
     xbmc.executebuiltin('Notification(NBA League Pass,%s,%d,)' % (error, seconds))
 
+def logHttpException(exception, url, body=""):
+    log_string = ""
+    if hasattr(exception, 'reason'):
+        log_string = "Failed to get video url: %s. The url was %s" % (exception.reason, url)
+    elif hasattr(exception, 'code'):
+        log_string = "Failed to get video url: code %d. The url was %s" % (exception.code, url)
+    else:
+        log_string = "Failed to get video url. The url was %s" % (url)
+
+    log(body)
+    if body != "":
+        log_string += " - The body was: %s" % body
+
+    log(log_string)
+
 #Get the current date and time in EST timezone
 def nowEST():
     if hasattr(nowEST, "datetime"):

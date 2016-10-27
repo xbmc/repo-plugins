@@ -20,7 +20,7 @@ def getGameUrl(video_id, video_type, video_ishomefeed):
 
     gt = 1
     if not video_ishomefeed:
-        gt = 2
+        gt = 4
     if video_type == "condensed":
         gt = 8
 
@@ -32,12 +32,12 @@ def getGameUrl(video_id, video_type, video_ishomefeed):
             else "AppleCoreMedia/1.0.0.8C148a (iPad; U; CPU OS 6_2_1 like Mac OS X; en_us)",
     }
     body = { 
-        'extid': str(video_id), 
+        'extid': str(video_id),
+        'format': "xml",
         'gt': gt, 
-        'gs': 3,
+        'gs': vars.params.get("game_state", "3"),
         'type': 'game',
         'plid': vars.player_id,
-        'nt': '1'
     }
     if video_type != "live":
         body['format'] = 'xml'
@@ -50,13 +50,7 @@ def getGameUrl(video_id, video_type, video_ishomefeed):
         response = urllib2.urlopen(request)
         content = response.read()
     except urllib2.HTTPError as e:
-        if hasattr(e, 'reason'):
-            log("Failed to get video url: %s. The url was %s" % (e.reason, url))
-        elif hasattr(e, 'code'):
-            log("Failed to get video url: code %d. The url was %s" % (e.code, url))
-        else:
-            log("Failed to get video url. The url was %s" % (url))
-
+        logHttpException(e, url)
         littleErrorPopup( xbmcaddon.Addon().getLocalizedString(50020) )
         return ''
 
@@ -95,18 +89,16 @@ def getGameUrl(video_id, video_type, video_ishomefeed):
 def getHighlightGameUrl(video_id):
     url = 'https://watch.nba.com/service/publishpoint'
     headers = {
-        'Cookie': vars.cookies, 
         'Content-Type': 'application/x-www-form-urlencoded',
         'User-Agent': "AppleCoreMedia/1.0.0.8C148a (iPad; U; CPU OS 6_2_1 like Mac OS X; en_us)",
     }
     
     body = urllib.urlencode({ 
-        'id': str(video_id), 
-        'gt': "recapf", 
-        'type': 'game',
+        'extid': str(video_id),
         'plid': vars.player_id,
-        'isFlex': "true",
-        'bitrate': "1600" # forced bitrate
+        'gt': "64",
+        'type': 'game',
+        'bitrate': "1600"
     })
 
     log("the body of publishpoint request is: %s" % body, xbmc.LOGDEBUG)
@@ -115,7 +107,8 @@ def getHighlightGameUrl(video_id):
         request = urllib2.Request(url, body, headers)
         response = urllib2.urlopen(request)
         content = response.read()
-    except urllib2.HTTPError:
+    except urllib2.HTTPError as ex:
+        log("Highlight url not found. Error: %s - body: %s" % (str(ex), ex.read()), xbmc.LOGERROR)
         return ''
 
     xml = parseString(str(content))
@@ -174,6 +167,7 @@ def addGamesLinks(date = '', video_type = "archive"):
                 hs = game.get('hs', '')
                 gs = game.get('gs', '')
                 seo_name = game.get("seoName", "")
+                has_condensed_video = game.get("video", {}).get("c", False)
 
                 video_has_away_feed = False
                 video_details = game.get('video', {})
@@ -256,7 +250,9 @@ def addGamesLinks(date = '', video_type = "archive"):
                         params = {
                             'video_id': game_id,
                             'video_type': video_type,
-                            'video_hasawayfeed': 1 if video_has_away_feed else 0
+                            'video_hasawayfeed': 1 if video_has_away_feed else 0,
+                            'has_condensed_game': 1 if has_condensed_video else 0,
+                            'game_state': gs
                         }
 
                         # Add a directory item that contains home/away/condensed items
@@ -288,39 +284,47 @@ def playGame():
         xbmcplugin.setResolvedUrl(handle=int(sys.argv[1]), succeeded=True, listitem=item) 
 
 def chooseGameVideoMenu():
-    currentvideo_id = vars.params.get("video_id")
-    currentvideo_type  = vars.params.get("video_type")
-    currentvideo_hasawayfeed = vars.params.get("video_hasawayfeed", "0")
-    currentvideo_hasawayfeed = currentvideo_hasawayfeed == "1"
+    video_id = vars.params.get("video_id")
+    video_type = vars.params.get("video_type")
+    video_hasawayfeed = vars.params.get("video_hasawayfeed", "0")
+    video_hasawayfeed = video_hasawayfeed == "1"
+    game_state = vars.params.get("game_state")
+    has_condensed_game = vars.params.get("has_condensed_game", "0")
+    has_condensed_game = has_condensed_game == "1"
 
-    if currentvideo_hasawayfeed:
+    if video_hasawayfeed:
         # Create the "Home" and "Away" list items
         for ishomefeed in [True, False]:
             listitemname = "Full game, " + ("away feed" if not ishomefeed else "home feed")
             params = {
-                'video_id': currentvideo_id,
-                'video_type': currentvideo_type,
-                'video_ishomefeed': 1 if ishomefeed else 0
+                'video_id': video_id,
+                'video_type': video_type,
+                'video_ishomefeed': 1 if ishomefeed else 0,
+                'game_state': game_state
             }
             addListItem(listitemname, url="", mode="playgame", iconimage="", customparams=params)
     else:
         #Add a "Home" list item
         params = {
-            'video_id': currentvideo_id,
-            'video_type': currentvideo_type
+            'video_id': video_id,
+            'video_type': video_type,
+            'game_state': game_state
         }
         addListItem("Full game", url="", mode="playgame", iconimage="", customparams=params)
 
-    # Create the "Condensed" list item
-    if currentvideo_type != "live":
-        params = {
-            'video_id': currentvideo_id,
-            'video_type': 'condensed'
-        }
-        addListItem("Condensed game", url="", mode="playgame", iconimage="", customparams=params)
+    #Live games have no condensed or highlight link
+    if video_type != "live":
+        # Create the "Condensed" list item
+        if has_condensed_game:
+            params = {
+                'video_id': video_id,
+                'video_type': 'condensed',
+                'game_state': game_state
+            }
+            addListItem("Condensed game", url="", mode="playgame", iconimage="", customparams=params)
 
         # Get the highlights video if available
-        highlights_url = getHighlightGameUrl(currentvideo_id)
+        highlights_url = getHighlightGameUrl(video_id)
         if highlights_url:
             addVideoListItem("Highlights", highlights_url, iconimage="")
 

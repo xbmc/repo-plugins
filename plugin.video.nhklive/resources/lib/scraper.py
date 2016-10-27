@@ -30,9 +30,10 @@ class myAddon(t1mAddon):
       nhkurl = a['tv_url']['wstrm']
 
       html = self.getRequest('http://www3.nhk.or.jp/nhkworld/common/js/common.js')
-      nw_api_prefix, nw_api_key = re.compile("nw_api_prefix = '(.+?)'.+?nw_api_key = '(.+?)'", re.DOTALL).search(html).groups()
+      nw_api_prefix, nw_api_key = re.compile("nw_api_prefix \|\| '(.+?)'.+?nw_api_key \|\| '(.+?)'", re.DOTALL).search(html).groups()
       nw_region = 'world'
-      url = nw_api_prefix + 'epg/v3/' + nw_region + '/now.json' + '?apikey=' + nw_api_key
+      nw_api_prefix = nw_api_prefix.replace('nhkworldstg','nhkworld')
+      url = nw_api_prefix + 'epg/v6/' + nw_region + '/now.json' + '?apikey=' + nw_api_key
       if not url.startswith('http'):
          url = 'http:' + url
       html = self.getRequest(url)

@@ -97,7 +97,4 @@ class PlayVideo(listitem.PlayMedia):
 		import re
 		
 		# Search sourceCode
-		test = re.findall("<param name=\"flashvars\" value='(.+?)'>", sourceCode)[0]
-		values = _plugin.parse_qs(test)
-		if values["type"] == "rtmp": return "%s/mp4:%s" % (values["streamer"], values["file"])
-		else: return values["file"]
+		return re.findall('<source src="(.+?\.mp4)" type="video/mp4" />', sourceCode)[0]

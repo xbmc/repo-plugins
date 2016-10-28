@@ -1,10 +1,13 @@
+[B]Version 2.0.1[/B]
+- Fix video url scraper after site changed to html5
+
 [B]Version 2.0.0[/B] 2015-02-20
 - Removed set_content call
 - Removed unneeded set_sort_methods
 - Removed xbmcutil.cleanup try finally catch
 - Removed results.append from Next_Page (Not needed anymore)
 - Removed download support
-- Change to return a generator instead of a list
+- Changed to return a generator instead of a list
 - Changed settings.xml to use new methods for setting view mode
 - Some small method renames
 - Switch to using with statement

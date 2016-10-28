@@ -1,3 +1,11 @@
+0.8.4   (27/10/2016)
+        General fixes for game playability
+        Fixed highlights url that was no longer available from game menu
+        Fixed away game feed in game menu
+        Restore availability of 60fps
+        Fixed videos not playing
+        Fixed date parsing for videos, nba has two different formats
+        Check if condensed game is available insteam of showing it broken
 0.8.3   (29/09/2016)
         Download single scoreboard file for each week
         Fixes for the new publishpoing URLs

@@ -11,7 +11,7 @@ from utils import *
 def getGameUrlWithBitrate(url, video_type):
     # Force the bitrate by modifying the HLS url and adding the bitrate
     available_bitrates = [
-        (72060, 4500),
+        (72060, 6000),
         (720, 3000),
         (540, 1600),
         (432, 1200),

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.aod" name="Anime on Demand" version="0.4.16" provider-name="L0RE">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="de">Videos von http://www.anime-on-demand.de/</summary>
+    <summary lang="en">Videos of http://www.anime-on-demand.de/</summary>
+    <description lang="de">Videos der Mediathek von http://www.anime-on-demand.de/ (Die erste Folge ist Kostenlos. Ein Account wird benoetigt)</description>
+    <description lang="en">Video From http://www.anime-on-demand.de/ (Die First Episode is Free. Accound is Required)</description>
+    <website></website>
+    <source>https://github.com/kodinerds/repo/tree/master/addons/plugin.video.aod</source>
+    <forum>http://www.kodinerds.net/index.php/Thread/46939-Repo-Lost-Found/</forum>
+    <email>andreas at vogler dot name</email>
+    <platform>all</platform>
+    <language>de</language>
+  </extension>
+</addon>

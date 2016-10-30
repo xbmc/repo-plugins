@@ -1,0 +1,90 @@
+# XBMC Media Center language file
+# Addon Name: Anime on Demand
+# Addon id: c
+# Addon version: 0.4.13
+# Addon Provider: L0RE
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2016-10-22 19:44+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Videos von http://www.anime-on-demand.de/"
+msgstr "Videos of http://www.anime-on-demand.de/"
+
+msgctxt "Addon Description"
+msgid "Videos der Mediathek von http://www.anime-on-demand.de/ (Die erste Folge ist Kostenlos. Ein Account wird benoetigt)"
+msgstr "Video From http://www.anime-on-demand.de/ (Die First Episode is Free. Accound is Required)"
+
+msgctxt "#30101"
+msgid "Quality Flash"
+msgstr "Qualität von Flash"
+
+msgctxt "#30102"
+msgid "Username"
+msgstr "Username"
+
+msgctxt "#30103"
+msgid "Password"
+msgstr "Password"
+
+msgctxt "#30104"
+msgid "A-Z"
+msgstr "A-Z"
+
+msgctxt "#30105"
+msgid "Category"
+msgstr "Categorie"
+
+msgctxt "#30106"
+msgid "Language"
+msgstr "Sprache"
+
+msgctxt "#30107"
+msgid "All"
+msgstr "All"
+
+msgctxt "#30108"
+msgid "Settings"
+msgstr "Einstellungen"
+
+msgctxt "#30109"
+msgid "Films"
+msgstr "Filme"
+
+msgctxt "#30110"
+msgid "User or Password Incorrect"
+msgstr "User oder Password falsch"
+
+msgctxt "#30111"
+msgid "Next time New Login"
+msgstr "Naechste mal neu Einloggen"
+
+msgctxt "#30112"
+msgid "Quality HTML5"
+msgstr "Qualität HTML5"
+
+msgctxt "#30113"
+msgid "New Episodes"
+msgstr "Neue Folgen"
+
+msgctxt "#30114"
+msgid "New Simulcasts"
+msgstr "Neue Simulcasts"
+
+msgctxt "#30115"
+msgid "New Anime"
+msgstr "Neue Anime-Titel"
+
+msgctxt "#30116"
+msgid "Anime Top 10"
+msgstr "Anime Top 10"

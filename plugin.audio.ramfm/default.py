@@ -17,34 +17,50 @@
 #  http://www.gnu.org/copyleft/gpl.html
 #
 
-
-import urllib
-import urllib2
-import re
 import xbmc
 import xbmcaddon
 import xbmcplugin
 import xbmcgui
+
+import urllib
+import urllib2
+
+import re
+
 import datetime
 import time
+
 import os
-import common
+
+import quicknet
+
 
 ADDONID  = 'plugin.audio.ramfm'
-ADDON    = xbmcaddon.Addon(ADDONID)
-HOME     = ADDON.getAddonInfo('path')
-TITLE    = 'RAM FM Eighties Hits'
+ADDON    =  xbmcaddon.Addon(ADDONID)
+HOME     =  ADDON.getAddonInfo('path')
+TITLE    =  ADDON.getAddonInfo('name')
 VERSION  =  ADDON.getAddonInfo('version')
-URL_HI   = 'http://ramfm.org/ram.pls'
-URL_LO   = 'http://webcast-connect.net/value/usa3/8018/listen.pls'
 PODCASTS = 'http://www.spreaker.com/show/816525/episodes/feed'
 ICON     =  os.path.join(HOME, 'icon.png')
 FANART   =  os.path.join(HOME, 'fanart.jpg')
-GETTEXT  = ADDON.getLocalizedString
+GETTEXT  =  ADDON.getLocalizedString
+
+URL   = 'http://ramfm.org/ram.pls'
+
+#Pls file
+#NumberOfEntries=3
+#File1=http://usa3-vn.mixstream.net:8018
+#File2=http://uk2-vn.webcast-server.net:8018
+#File3=http://uk1-vn.mixstream.net:9866
+#Title1=RAM FM Eighties Hit Radio 64kbps AACP
+#Title2=RAM FM Eighties Hit Radio 128kbps MP3
+#Title3=RAM FM Eighties Hit Radio 192kbps MP3
+#Version=2
 
 
-_PLAYNOW_HI  = 100
-_PLAYNOW_LO  = 150
+_PLAYNOW_HI  = 192
+_PLAYNOW_MED = 128
+_PLAYNOW_LO  = 64
 _REQUEST     = 200
 _LETTER      = 300
 _TRACK       = 400
@@ -132,16 +148,12 @@ def Record():
     dest = GetRecordPath()
     if dest == None or dest == '':
         return
-
-    pls  = urllib2.urlopen(getURL()).read().replace('\n','')
-    info = re.compile('File1=(.+?)Title1=(.+?)Length1=').findall(pls)
-    url  = info[0][0]
     
     dp = xbmcgui.DialogProgress()
     dp.create(TITLE)
 
     try:
-        DownloaderClass(url, dest, dp)
+        DownloaderClass(getURL(), dest, dp)
     except Exception as e:
         if str(e) == 'Canceled':
             pass   
@@ -179,7 +191,7 @@ def ShowPodcasts():
     match = re.compile('<item><title>(.+?)</title><link>.+?</link>.+?<enclosure url="(.+?)</enclosure>').findall(response)
 
     for name, link in match:
-        AddPodcast(name, link.split('?')[0])
+        AddPodcast(clean(name), link.split('?')[0])
 
 
 def AddPodcast(name, link):
@@ -211,24 +223,30 @@ def Request():
 
 
 def IsLive():
-    return False
     try:
-        if not xbmc.Player().isPlayingAudio():
-            return False
+        #for live show titles see : http://ramfm.org/momentum/cyan/guide.php
+        title = xbmc.Player().getMusicInfoTag().getTitle().lower()
+    except:
+        title = '' 
+   
+    shows = []
+    shows.append('Eighties Flash Back') #Monday
+    shows.append('Ladies Night')        #Monday - Verified
+    shows.append('Big Eighties Show')   #Tuesday
+    shows.append('Night Show')          #Wednesday / Sunday - Verified
+    shows.append('Dancing Dave')        #Thursday - Verified
+    shows.append('Eighties Wonderland') #Friday
+    shows.append('Happy Hour')          #Saturday
+    shows.append('Eighties Request')    #Sunday - Verified
+    shows.append('Chat Request')        #
 
-        count = 10 
-        genre = xbmc.getInfoLabel('MusicPlayer.Genre')
-        while not genre and count > 0:
-            xbmc.sleep(100)
-            genre = xbmc.getInfoLabel('MusicPlayer.Genre')
-            count -= 1
-            
-        if xbmc.getInfoLabel('MusicPlayer.Genre').upper() == '80S':
-            return False
+    #genre = xbmc.getInfoLabel('MusicPlayer.Genre')
+    #xbmc.log('Genre = %s' % genre)
 
-    except Exception, e:
-        pass
-
+    for show in shows:
+        if show.lower() in title:
+            return True
+ 
     return False
    
 
@@ -237,18 +255,21 @@ def IsPlayingRAM():
         if not xbmc.Player().isPlayingAudio():
             return False
 
-        pl = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)[0]
- 
-        if 'RAM FM' in pl.getLabel().upper():  #expect: 'RAM FM EIGHTIES HIT RADIO'
-            return True
+        pl   = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)[0]
+        resp = quicknet.getURL(URL, 1800)
 
-        if pl.getfilename() == 'http://usa3-vn.webcast-server.net:8018/':
+        if pl.getfilename()[:-1] in resp:
             return True
 
     except:
         pass
 
     return False
+
+
+def Exit():
+    import sys
+    sys.exit()
     
 
 def IsPlaying(message):
@@ -257,6 +278,7 @@ def IsPlaying(message):
 
     dialog = xbmcgui.Dialog()
     if dialog.yesno(TITLE, message,  GETTEXT(30027), '', GETTEXT(30028), GETTEXT(30029)) == 1:
+        Exit()
         return False    
 
     Play()
@@ -272,51 +294,96 @@ def RequestLetter(letter):
     else:
         url = 'http://ramfm.org/momentum/cyan/playlist%s.php' % letter
 
-    response = common.GetHTML(url)
+    response = quicknet.getURL(url, 1800)
 
     hide = ADDON.getSetting('HIDE').lower() == 'true'
+
+    images = {}
+    tracks = []
 
     items = response.split('<!-- start')[1:]
     for item in items:
         item = item.replace(' (& ', ' (& ')
+
+        while '&nbsp;&nbsp;' in item:
+            item = item.replace('&nbsp;&nbsp;', '&nbsp;')
+
+        item = item.replace('&nbsp;', ' ')
+
         mode = MODE_FREE
+
         if '<i>song recently played</i>' in item:
             mode = MODE_IGNORE if hide else MODE_SONG
         if '<i>artist recently played</i>' in item:
             mode = MODE_IGNORE if hide else MODE_ARTIST
 
+        title = None
 
-        if mode == MODE_FREE:
-            match = re.compile('<a href="javascript:request\((.+?)\)" title="(.+?)">.+?<img src="http://ramfm.org/artistpic/(.+?)".+?alt="(.+?)">').findall(item)[0]
-            request = match[0]
-            title   = match[1]
-            image   = match[2]
-            artist  = match[3]
-            addAvailable(title, artist, image, request)
-
+        if mode == MODE_FREE:                      
+            match     = re.compile('.+?<a href="javascript:request\((.+?)\)" title="(.+?)">.+?<h2>(.+?)</h2>.+?-->').findall(item)[0]
+            info      = match[0]
+            title     = match[1]
+            artist    = match[2].split('-', 1)[0].strip()
+            image     = ''
+            available = True
+            
         if mode == MODE_ARTIST or mode == MODE_SONG:
-            item   = item.replace('&nbsp;', ' ')
-            match  = re.compile('title="(.+?)".+?<p><img src="http://ramfm.org/artistpic/(.+?)".+?alt="(.+?)">(.+?)\(<i>').findall(item)[0]
-            reason = match[0]
-            title  = match[3].split('  ')[2]
-            image  = match[1]
-            artist = match[2]
-            addUnavailable(title, artist, image, reason)
+            match     = re.compile('.+?title="(.+?)">.+?<p>(.+?)</p></header></a></section><!-- end song recently played / artists recently played -->').findall(item)[0]
+            info      = match[0]
+            title     = match[1].rsplit('(', 1)[0].strip()
+            artist    = match[1].split('-', 1)[0].strip()
+            image     = ''
+            available = False
+
+        if not title:
+            continue
+
+        if image != 'na.gif':
+            images[artist] = image
+
+        tracks.append([artist, title, image, info, available])
+
+    titles = ['']
+
+    tracks.sort()
+
+    for track in tracks:
+        artist    = track[0]
+        title     = track[1]
+        image     = track[2]
+        info      = track[3]
+        available = track[4]
+
+        if title in titles:
+            continue
+
+        titles.append(title)
+
+        if image == 'na.gif':
+            try:    image = images[artist]
+            except: pass
+       
+        if available:
+            addAvailable(title, artist, image, info)
+        else:
+            addUnavailable(title, artist, image, info)
 
 
 def clean(name):
     name = name.replace('&#233;', 'e')
+    name = name.replace('&amp;',  '&')
 
     return name.strip()
 
 
 
 def addAvailable(title, artist, image, request):
-    image = 'http://ramfm.org/artistpic/%s' % image.replace(' ', '%20')   
+    #image = 'http://ramfm.org/artistpic/%s' % image.replace(' ', '%20')
+    image = ICON   
     name  = title
 
     if name.startswith('Request'):
-        name  = name.replace('Request ', '')
+        name  = name.split('Request', 1)[-1]
 
     name = clean(name)
     
@@ -333,8 +400,13 @@ def addAvailable(title, artist, image, request):
 
 
 def addUnavailable(title, artist, image, reason):
-    image  = 'http://ramfm.org/artistpic/%s' % image.replace(' ', '%20')
-    name   = artist + ' - ' + title + '[I] (%s)[/I]' % reason
+    xbmc.log('title %s'  % title)
+    xbmc.log('artist %s' % artist)
+    xbmc.log('image %s'  % image)
+    xbmc.log('reason %s' % reason)
+    #image  = 'http://ramfm.org/artistpic/%s' % image.replace(' ', '%20')
+    image = ICON   
+    name   = title + '[I] (%s)[/I]' % reason
     name   = '[COLOR=FFFF0000]' + name + '[/COLOR]'
     name   = clean(name)  
         
@@ -346,24 +418,56 @@ def addUnavailable(title, artist, image, reason):
 
 
 def getURL():
-    if ADDON.getSetting('STREAM') == 'true':
-        return URL_HI
+    kbps = ADDON.getSetting('STREAM')
+    if kbps == 'true': # for backward compatible
+        kbps = '192'
+    if kbps == 'false': # for backward compatible
+        kbps = '64'
 
-    return URL_LO
+    try:
+        lines = urllib2.urlopen(URL).readlines()
+
+        for line in lines:
+            try:
+                items = line.split('=', 1)
+                attr  = items[0].lower()
+
+                if attr.startswith('title') and kbps in items[1]:
+                    attr = attr.replace('title', 'file')
+                    for line in lines:
+                        if line.lower().startswith(attr):
+                            return line.split('=', 1)[-1].strip()                
+
+            except:
+                pass
+
+    except:
+        pass
+
+    return URL
+
 
 
 def RequestURL(url):  
     if not IsPlaying(GETTEXT(30030)):
         return
 
-    response = urllib2.urlopen(url).read()  
+    try:    response = urllib2.urlopen(url).read()
+    except: return ShowError(GETTEXT(30050))
+
     
     failed = 'SongRequester Fail' in response
 
     if failed:
-        match = re.compile('reason given:<br />(.+?)</font>').findall(response)
-        ShowError(match[0])
-        return        
+        text = re.compile('reason given:<br />(.+?)</font>').findall(response)[0]
+        if 'please wait about' in response:
+            try:
+                wait  = re.compile('about (.+?) minutes').findall(response)[0]
+                text += '[CR]' + GETTEXT(30049)  % str(int(wait))
+            except:
+                pass
+
+        return ShowError(text)
 
     DialogOK(GETTEXT(30031), GETTEXT(30032), GETTEXT(30033), GETTEXT(30031))
 
@@ -375,11 +479,12 @@ def ShowError(text):
 def Main():   
     CheckVersion()
 
-    addDir(GETTEXT(30036), _PLAYNOW_HI,  False)
-    addDir(GETTEXT(30045), _PLAYNOW_LO,  False)
-    addDir(GETTEXT(30037), _RECORD,      False)
-    addDir(GETTEXT(30031), _REQUEST,     True)
-    addDir(GETTEXT(30040), _PODCASTS,    True)
+    addDir(GETTEXT(30051), _PLAYNOW_HI,   False)
+    addDir(GETTEXT(30052), _PLAYNOW_MED,  False)
+    addDir(GETTEXT(30053), _PLAYNOW_LO,   False)
+    addDir(GETTEXT(30037), _RECORD,       False)
+    addDir(GETTEXT(30031), _REQUEST,      True)
+    addDir(GETTEXT(30040), _PODCASTS,     True)
 
     play = ADDON.getSetting('PLAY')=='true'
     if play and not xbmc.Player().isPlayingAudio():
@@ -424,12 +529,12 @@ def get_params(path):
 params = get_params(sys.argv[2])
 mode   = None
 
-try:    mode=int(params['mode'])
+try:    mode = int(params['mode'])
 except: pass
 
 
-if mode == _PLAYNOW_LO or mode == _PLAYNOW_HI:
-    ADDON.setSetting('STREAM', str(mode == _PLAYNOW_HI).lower())
+if mode == _PLAYNOW_HI or mode == _PLAYNOW_MED or mode == _PLAYNOW_LO:
+    ADDON.setSetting('STREAM', str(mode))
     Play()
 
 
@@ -442,18 +547,21 @@ elif mode == _REQUEST:
         xbmc.sleep(500)
         if IsLive():
             DialogOK(GETTEXT(30031), GETTEXT(30046), GETTEXT(30047), GETTEXT(30048))
+            #xbmc.executebuiltin('Container.Update(%s,replace)' % sys.argv[0])
+            Exit()
         else:
             Request()
 
 
 elif mode == _LETTER:
-    try:    RequestLetter(params['letter'])
-    except: pass
+    if 'letter' in params:
+        RequestLetter(params['letter'])
+    else:
+        Exit()
 
 
 elif mode == _TRACK:    
-    try:    RequestURL(params['url'])
-    except: pass
+    RequestURL(params['url'])
 
 
 elif mode == _PODCASTS:

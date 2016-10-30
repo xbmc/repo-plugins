@@ -1,3 +1,11 @@
+v2.0.5:
+  - Fixed requestor due to changes on the website
+  - Removed duplicate tracks
+  - Ensure artists are listed alphabetically, rather than RAM FM order
+  - Improved detection of live shows (requestor is disabled during live shows)
+  - Improved stream selection
+  - When request limit is reached, the time required to wait is now displayed
+
 v2.0.4:
   - Fixed detection of medium quality RAM FM stream
 

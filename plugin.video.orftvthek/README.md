@@ -22,12 +22,13 @@ Current Features
 * Search Function
 * Missed Shows
 * Blacklist Shows
+* JSON(Service API V3) or HTML Scraper
 
 
 
 Known Issues
 ------------
-* ServiceAPI is offline for now. Disable the option in the Addon Settings Menu
+* you tell me
 
 
 Legal

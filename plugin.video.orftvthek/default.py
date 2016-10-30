@@ -18,7 +18,7 @@ except:
 socket.setdefaulttimeout(30) 
 cache = StorageServer.StorageServer("plugin.video.orftvthek", 999999)
 
-version = "0.5.7"
+version = "0.5.9"
 plugin = "ORF-TVthek-" + version
 author = "sofaking,Rechi"
 
@@ -66,10 +66,11 @@ defaultbackdrop = os.path.join(media_path,"fanart.jpg")
 
 #load settings
 forceView = settings.getSetting("forceView") == "true"
-useServiceAPI = False
+useServiceAPI = settings.getSetting('useServiceAPI') == 'true'
 useSubtitles = settings.getSetting("useSubtitles") == "true"
 videoQuality = settings.getSetting("videoQuality")
 enableBlacklist = settings.getSetting("enableBlacklist") == "true"
+autoPlayPrompt = settings.getSetting("autoPlayPrompt") == "true"
 
 try:
     videoQuality = video_quality_list[int(videoQuality)]
@@ -81,10 +82,8 @@ except:
 tvthekplayer = xbmc.Player()
 
 #init scrapers
-if useServiceAPI:
-    jsonScraper = serviceAPI(xbmc,settings,pluginhandle,videoQuality,videoProtocol,videoDelivery,defaultbanner,defaultbackdrop,useSubtitles,defaultViewMode)
-else:
-    htmlScraper = htmlScraper(xbmc,settings,pluginhandle,videoQuality,videoProtocol,videoDelivery,defaultbanner,defaultbackdrop,useSubtitles,defaultViewMode)
+jsonScraper = serviceAPI(xbmc, settings, pluginhandle, videoQuality, videoProtocol, videoDelivery, defaultbanner, defaultbackdrop, useSubtitles, defaultViewMode)
+htmlScraper = htmlScraper(xbmc, settings, pluginhandle, videoQuality, videoProtocol, videoDelivery, defaultbanner, defaultbackdrop, useSubtitles, defaultViewMode)
 
 #parameters
 params=parameters_string_to_dict(sys.argv[2])
@@ -111,19 +110,19 @@ if title:
 
 def getMainMenu():
     debugLog("Building Main Menu","Info")
-    addDirectory((translation(30001)).encode("utf-8"),news_banner,defaultbackdrop,translation,"","","getAktuelles",pluginhandle)
-    addDirectory((translation(30000)).encode("utf-8"),recently_added_banner,defaultbackdrop,translation,"","","getNewShows",pluginhandle)
-    addDirectory((translation(30002)).encode("utf-8"),shows_banner,defaultbackdrop,translation,"","","getSendungen",pluginhandle)
-    addDirectory((translation(30003)).encode("utf-8"),topics_banner,defaultbackdrop,translation,"","","getThemen",pluginhandle)
-    addDirectory((translation(30004)).encode("utf-8"),live_banner,defaultbackdrop,translation,"","","getLive",pluginhandle)
-    addDirectory((translation(30005)).encode("utf-8"),tips_banner,defaultbackdrop,translation,"","","getTipps",pluginhandle)
-    addDirectory((translation(30006)).encode("utf-8"),most_popular_banner,defaultbackdrop,translation,"","","getMostViewed",pluginhandle)
-    addDirectory((translation(30018)).encode("utf-8"),archive_banner,defaultbackdrop,translation,"","","getArchiv",pluginhandle)
-    addDirectory((translation(30007)).encode("utf-8"),search_banner,defaultbackdrop,translation,"","","getSearchHistory",pluginhandle)
+    addDirectory((translation(30001)).encode("utf-8"),news_banner,defaultbackdrop, "","","getAktuelles",pluginhandle)
+    addDirectory((translation(30000)).encode("utf-8"),recently_added_banner,defaultbackdrop, "","","getNewShows",pluginhandle)
+    addDirectory((translation(30002)).encode("utf-8"),shows_banner,defaultbackdrop, "","","getSendungen",pluginhandle)
+    addDirectory((translation(30003)).encode("utf-8"),topics_banner,defaultbackdrop, "","","getThemen",pluginhandle)
+    addDirectory((translation(30004)).encode("utf-8"),live_banner,defaultbackdrop, "","","getLive",pluginhandle)
+    addDirectory((translation(30005)).encode("utf-8"),tips_banner,defaultbackdrop, "","","getTipps",pluginhandle)
+    addDirectory((translation(30006)).encode("utf-8"),most_popular_banner,defaultbackdrop, "","","getMostViewed",pluginhandle)
+    addDirectory((translation(30018)).encode("utf-8"),archive_banner,defaultbackdrop, "","","getArchiv",pluginhandle)
+    addDirectory((translation(30007)).encode("utf-8"),search_banner,defaultbackdrop, "","","getSearchHistory",pluginhandle)
     if useServiceAPI:
-        addDirectory((translation(30027)).encode("utf-8"),trailer_banner,defaultbackdrop,translation,"","","openTrailers",pluginhandle)
+        addDirectory((translation(30027)).encode("utf-8"),trailer_banner,defaultbackdrop, "","","openTrailers",pluginhandle)
     if enableBlacklist:
-        addDirectory((translation(30037)).encode("utf-8"),blacklist_banner,defaultbackdrop,translation,"","","openBlacklist",pluginhandle)
+        addDirectory((translation(30037)).encode("utf-8"),blacklist_banner,defaultbackdrop, "","","openBlacklist",pluginhandle)
     listCallback(False,thumbViewMode,pluginhandle)
     
     
@@ -147,7 +146,9 @@ def startPlaylist(player,playlist):
 if mode == 'openSeries':
     playlist.clear()
     playlist = htmlScraper.getLinks(link,banner,playlist)
-    if playlist != None:
+    if not autoPlayPrompt:
+        listCallback(False,defaultViewMode,pluginhandle)
+    elif playlist != None:
         ok = xbmcgui.Dialog().yesno((translation(30047)).encode("utf-8"),(translation(30048)).encode("utf-8"))
         if ok:
             debugLog("Starting Playlist for %s" % urllib.unquote(link),'Info')
@@ -155,10 +156,11 @@ if mode == 'openSeries':
             xbmc.executebuiltin(defaultViewMode) 
     else:
         listCallback(False,defaultViewMode,pluginhandle)
+        
 elif mode == 'unblacklistShow':
     title=params.get('title')
     unblacklistItem(title)
-    addDirectory(">> %s <<" % (translation(30039)).encode("utf-8"),defaultbanner,defaultbackdrop,translation,"","","",pluginhandle)
+    addDirectory(">> %s <<" % (translation(30039)).encode("utf-8"),defaultbanner,defaultbackdrop, "","","",pluginhandle)
     printBlacklist(defaultbanner,defaultbackdrop,translation,pluginhandle)
     xbmcplugin.endOfDirectory(pluginhandle)
 elif mode == 'blacklistShow':
@@ -166,29 +168,26 @@ elif mode == 'blacklistShow':
     blacklistItem(title)
     xbmc.executebuiltin('Container.Refresh')
 if mode == 'openBlacklist':
-    addDirectory(">> %s <<" % (translation(30039)).encode("utf-8"),defaultbanner,defaultbackdrop,translation,"","","",pluginhandle)
+    addDirectory(">> %s <<" % (translation(30039)).encode("utf-8"),defaultbanner,defaultbackdrop, "","","",pluginhandle)
     printBlacklist(defaultbanner,defaultbackdrop,translation,pluginhandle)
     xbmcplugin.endOfDirectory(pluginhandle)
 elif mode == 'getSendungen':
     scraper.getCategories()
     listCallback(True,thumbViewMode,pluginhandle)
 elif mode == 'getAktuelles':
-    if useServiceAPI:
-        jsonScraper.getTableResults(jsonScraper.serviceAPIHighlights)
-    else:
-        htmlScraper.getRecentlyAdded(htmlScraper.base_url)
+    scraper.getHighlights()
     listCallback(False,defaultViewMode,pluginhandle)
 elif mode == 'getLive':
     scraper.getLiveStreams()
     listCallback(False,smallListViewMode,pluginhandle)
 elif mode == 'getTipps':
-    scraper.getTableResults(scraper.UrlTip)
+    scraper.getTips()
     listCallback(False,defaultViewMode,pluginhandle)
 elif mode == 'getNewShows':
-    scraper.getTableResults(scraper.UrlNewest)
+    scraper.getNewest()
     listCallback(False,defaultViewMode,pluginhandle)
 elif mode == 'getMostViewed':
-    scraper.getTableResults(scraper.UrlMostViewed)
+    scraper.getMostViewed()
     listCallback(False,defaultViewMode,pluginhandle)
 elif mode == 'getThemen':
     scraper.getThemen()
@@ -200,10 +199,7 @@ elif mode == 'getThemenDetail':
     htmlScraper.getThemenDetail(link)
     listCallback(False,defaultViewMode,pluginhandle)
 elif mode == 'getArchiv':
-    if useServiceAPI:
-        jsonScraper.getArchiv()
-    else:
-        htmlScraper.getArchiv(htmlScraper.schedule_url)
+    scraper.getArchiv()
     listCallback(False,defaultViewMode,pluginhandle)
 elif mode == 'getArchivDetail':
     htmlScraper.openArchiv(link)
@@ -231,17 +227,12 @@ elif mode == 'openTopic':
     listCallback(False,defaultViewMode,pluginhandle)
 elif mode == 'openEpisode':
     jsonScraper.getEpisode(link,playlist)
-    if playlist != None:
-        tvthekplayer.play(playlist)
-    listCallback(False,defaultViewMode,pluginhandle)
-elif mode == 'openSegment':
-    jsonScraper.getSegment(link, params.get('segmentID'),playlist)
     listCallback(False,defaultViewMode,pluginhandle)
 elif mode == 'liveStreamNotOnline':
     jsonScraper.getLiveNotOnline(link)
     listCallback(False,defaultViewMode,pluginhandle)
 elif mode == 'playlist':
-    startPlaylist(playlist)
+    startPlaylist(tvthekplayer,playlist)
 elif sys.argv[2] == '':
     getMainMenu()
 else:

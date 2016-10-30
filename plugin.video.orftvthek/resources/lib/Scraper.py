@@ -3,20 +3,12 @@ import abc
 class Scraper(object):
 	__metaclass__  = abc.ABCMeta
 
-	@abc.abstractproperty
-	def UrlMostViewed():
-		pass
-
-	@abc.abstractproperty
-	def UrlNewest():
-		pass
-	
-	@abc.abstractproperty
-	def UrlTip():
+	@abc.abstractmethod
+	def getCategories():
 		pass
 
 	@abc.abstractmethod
-	def getCategories():
+	def getHighlights():
 		pass
 
 	@abc.abstractmethod
@@ -24,11 +16,19 @@ class Scraper(object):
 		pass
 
 	@abc.abstractmethod
+	def getMostViewed():
+		pass
+
+	@abc.abstractmethod
+	def getNewest():
+		pass
+
+	@abc.abstractmethod
 	def getThemen():
 		pass
 
 	@abc.abstractmethod
-	def getTableResults(url):
+	def getTips():
 		pass
 
 	@abc.abstractmethod

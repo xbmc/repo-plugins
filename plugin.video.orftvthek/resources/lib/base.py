@@ -2,15 +2,16 @@
 # -*- coding: utf-8 -*-
 import xbmc,xbmcplugin,xbmcgui,sys,urllib,re,os
 import simplejson
+import Settings
 
-def addDirectory(title,banner,backdrop,translation,description,link,mode,pluginhandle):
+def addDirectory(title,banner,backdrop, description,link,mode,pluginhandle):
     parameters = {"link" : link,"title" : title,"banner" : banner,"backdrop" : backdrop, "mode" : mode}
     u = sys.argv[0] + '?' + urllib.urlencode(parameters)
-    createListItem(title,banner,description,'','','',u,'false',True,translation,backdrop,pluginhandle,None)
+    createListItem(title,banner,description,'','','',u,'false',True, backdrop,pluginhandle,None)
 
-def createListItem(title,banner,description,duration,date,channel,videourl,playable,folder,translation,backdrop,pluginhandle,subtitles=None,blacklist=False):
+def createListItem(title,banner,description,duration,date,channel,videourl,playable,folder, backdrop,pluginhandle,subtitles=None,blacklist=False):
     if description == '':
-        description = (translation(30008)).encode("utf-8")
+        description = Settings.localizedString(30008).encode("utf-8")
     liz=xbmcgui.ListItem(title, iconImage=banner, thumbnailImage=banner)
     liz.setInfo( type="Video", infoLabels={ "Title": title } )
     liz.setInfo( type="Video", infoLabels={ "Tvshowtitle": title } )
@@ -59,7 +60,7 @@ def createListItem(title,banner,description,duration,date,channel,videourl,playa
         blparameters = {"mode" : "blacklistShow", "title": bl_title}
         blurl = sys.argv[0] + '?' + urllib.urlencode(blparameters)
         commands = []
-        commands.append(( '%s %s %s' % (translation(30038).encode("utf-8"),bl_title,translation(30042).encode("utf-8")), 'XBMC.RunPlugin(%s)' % blurl ))
+        commands.append(('%s %s %s' % (Settings.localizedString(30038).encode("utf-8"), bl_title, Settings.localizedString(30042).encode("utf-8")), 'XBMC.RunPlugin(%s)' % blurl))
         liz.addContextMenuItems( commands )
         if not checkBlacklist(bl_title):
             xbmcplugin.addDirectoryItem(pluginhandle, url=videourl, listitem=liz, isFolder=folder)

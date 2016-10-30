@@ -3,459 +3,367 @@
 import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64,socket,datetime,time,os,os.path,urlparse,json
 import CommonFunctions as common
 
+import Settings
 from base import *
 from Scraper import *
 
 class serviceAPI(Scraper):
 
-    UrlMostViewed = 'http://tvthek.orf.at/service_api/token/%s/teaser_content/most_viewed'
-    UrlNewest     = 'http://tvthek.orf.at/service_api/token/%s/teaser_content/newest'
-    UrlTip        = 'http://tvthek.orf.at/service_api/token/%s/teaser_content/recommendations'
+	__urlBase       = 'https://api-tvthek.orf.at/api/v3/'
+	__urlLive       = __urlBase + 'livestreams/24hours?limit=1000'
+	__urlMostViewed = __urlBase + 'page/startpage'
+	__urlNewest     = __urlBase + 'page/startpage/newest'
+	__urlSearch     = __urlBase + 'search/%s?limit=1000'
+	__urlShows      = __urlBase + 'profiles?limit=1000'
+	__urlTips       = __urlBase + 'page/startpage/tips'
+	__urlTopics     = __urlBase + 'topics/overview?limit=1000'
 
-    # serviceAPI Settings
-    serviceAPItoken         = 'ef97318c84d4e8'
-
-    serviceAPIEpisode       = 'http://tvthek.orf.at/service_api/token/%s/episode/%s/'
-    serviceAPIDate          = 'http://tvthek.orf.at/service_api/token/%s/episodes/by_date/%s?page=0&entries_per_page=1000'
-    serviceAPIDateFrom      = 'http://tvthek.orf.at/service_api/token/%s/episodes/from/%s0000/till/%s0000?page=0&entries_per_page=1000'
-    serviceAPIProgram       = 'http://tvthek.orf.at/service_api/token/%s/episodes/by_program/%s'
-    serviceAPISearch        = 'http://tvthek.orf.at/service_api/token/%s/search/%s?page=0&entries_per_page=1000'
-    servieAPITopic          = 'http://tvthek.orf.at/service_api/token/%s/topic/%s/'
-
-    serviceAPIPrograms      = 'http://tvthek.orf.at/service_api/token/%s/programs?page=0&entries_per_page=1000'
-    serviceAPITopics        = 'http://tvthek.orf.at/service_api/token/%s/topics?page=0&entries_per_page=1000'
-    serviceAPITrailers      = 'http://tvthek.orf.at/service_api/token/%s/episodes/trailers?page=0&entries_per_page=1000'
-
-    serviceAPILive          = 'http://tvthek.orf.at/service_api/token/%s/livestreams/from/%s/till/%s/detail?page=0&entries_per_page=%i'
-    serviceAPIHighlights    = 'http://tvthek.orf.at/service_api/token/%s/teaser_content/highlights'
-
-    
-    def __init__(self,xbmc,settings,pluginhandle,quality,protocol,delivery,defaultbanner,defaultbackdrop,useSubtitles,defaultViewMode):
-        self.translation = settings.getLocalizedString
-        self.xbmc = xbmc
-        self.defaultViewMode = defaultViewMode
-        self.videoQuality = quality
-        self.videoDelivery = delivery
-        self.videoProtocol = protocol
-        self.pluginhandle = pluginhandle
-        self.defaultbanner = defaultbanner
-        self.defaultbackdrop = defaultbackdrop
-        self.useSubtitles = useSubtitles
-        self.xbmc.log(msg='ServiceAPI  - Init done', level=xbmc.LOGDEBUG);
-        
-    def getTableResults(self, urlAPI):
-        urlAPI = urlAPI % self.serviceAPItoken
-        try:
-            response = urllib2.urlopen(urlAPI)
-            responseCode = response.getcode()
-        except urllib2.HTTPError, error:
-            responseCode = error.getcode()
-            pass
-
-        if responseCode == 200:
-            global time
-            jsonData = json.loads(response.read())
-            if 'teaserItems' in jsonData:
-                results = jsonData['teaserItems']
-            else:
-                results = jsonData['episodeShorts']
-
-            for result in results:
-                title       = result.get('title').encode('UTF-8')
-                image       = self.JSONImage(result.get('images'))
-                if image == '':
-                    image = self.JSONImage(result.get('images'), 'logo')
-                description = self.JSONDescription(result.get('descriptions'))
-                duration    = result.get('duration')
-                date        = time.strptime(result.get('date'), '%d.%m.%Y %H:%M:%S')
-
-                description = '%s %s\n\n%s' % ((self.translation(30009)).encode("utf-8"), time.strftime('%A, %d.%m.%Y - %H:%M Uhr', date), description)
-
-                parameters = {'mode' : 'openEpisode', 'link': result.get('episodeId')}
-                u = sys.argv[0] + '?' + urllib.urlencode(parameters)
-                # Direcotory should be set to False, that the Duration is shown.
-                # But then there is an error with the Pluginhandle
-                createListItem(title, image, description, duration, time.strftime('%Y-%m-%d', date), '', u, 'false', True,self.translation,self.defaultbackdrop,self.pluginhandle,None)
-        else:
-            self.xbmc.log(msg='ServiceAPI no available ... switch back to HTML Parsing in the Addon Settings', level=xbmc.LOGDEBUG);
-            xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
-            
-            
-    # Useful  Methods for JSON Parsing
-    def JSONEpisode2ListItem(self,JSONEpisode, ignoreEpisodeType = None):
-        title        = JSONEpisode.get('title').encode('UTF-8')
-        image        = self.JSONImage(JSONEpisode.get('images'))
-        description  = self.JSONDescription(JSONEpisode.get('descriptions'))
-        duration     = JSONEpisode.get('duration')
-        date         = time.strptime(JSONEpisode.get('date'), '%d.%m.%Y %H:%M:%S')
-        link         = JSONEpisode.get('episodeId')
-
-        if JSONEpisode.get('episodeType') == ignoreEpisodeType:
-            return None
-
-        parameters = {'mode' : 'openEpisode', 'link': link}
-        u = sys.argv[0] + '?' + urllib.urlencode(parameters)
-        # Direcotory should be set to False, that the Duration is shown.
-        # But then there is an error with the Pluginhandle
-        createListItem(title, image, description, duration, time.strftime('%Y-%m-%d', date), '', u, 'false', True,self.translation,self.defaultbackdrop,self.pluginhandle,None)
+	serviceAPIEpisode    = __urlBase + 'episode/%s'
+	serviceAPIDate       = __urlBase + 'schedule/%s?limit=1000'
+	serviceAPIDateFrom   = __urlBase + 'schedule/%s/%d?limit=1000'
+	serviceAPIProgram    = __urlBase + 'profile/%s/episodes'
+	servieAPITopic       = __urlBase + 'topic/%s'
+	serviceAPITrailers   = __urlBase + 'page/preview?limit=100'
+	serviceAPIHighlights = __urlBase + 'page/startpage'
 
 
-    def JSONSegment2ListItem(self,JSONSegment, date):
-        title        = JSONSegment.get('title').encode('UTF-8')
-        image        = self.JSONImage(JSONSegment.get('images'))
-        description  = self.JSONDescription(JSONSegment.get('descriptions'))
-        duration     = JSONSegment.get('duration')
-        streamingURL = self.JSONStreamingURL(JSONSegment.get('videos'))
-        if JSONSegment.get('subtitlesSrtFileUrl') and self.useSubtitles:
-            subtitles = [JSONSegment.get('subtitlesSrtFileUrl')]
-        else:
-            subtitles = None
-        return [streamingURL, createListItem(title, image, description, duration, time.strftime('%Y-%m-%d', date), '', streamingURL, 'true', False,self.translation,self.defaultbackdrop,self.pluginhandle,subtitles)]
-
-    def JSONDescription(self,jsonDescription):
-        desc = ''
-        for description in jsonDescription:
-            if description.get('text') != None:
-                if len(description.get('text')) > len(desc):
-                    desc = description.get('text')
-                if description.get('fieldName') == 'description':
-                    return description.get('text').encode('UTF-8')
-        return desc.encode('UTF-8')
-
-    def JSONImage(self,jsonImages, name = 'image_full'):
-        logo = ''
-        for image in jsonImages:
-            if image.get('name') == name:
-                return image.get('url')
-            elif image.get('name') == 'logo':
-                logo = image.get('url')
-        return logo
-
-    def JSONStreamingURL(self,jsonVideos):
-        for streamingURL in jsonVideos:
-            streamingURL = streamingURL.get('streamingUrl')
-            if 'http' in streamingURL and 'mp4/playlist.m3u8' in streamingURL:
-                return streamingURL.replace('Q4A', self.videoQuality)
-        return ''
-    
-    # list all Categories
-    def getCategories(self):
-        list = []
-        try:
-            response = urllib2.urlopen(self.serviceAPIPrograms % self.serviceAPItoken)
-            responseCode = response.getcode()
-        except urllib2.HTTPError, error:
-            responseCode = error.getcode()
-            pass
-
-        if responseCode == 200:
-            for result in json.loads(response.read())['programShorts']:
-                title       = result.get('name').encode('UTF-8')
-                image       = self.JSONImage(result.get('images'), 'logo')
-                description = ''
-                link        = result.get('programId')
-
-                if result.get('episodesCount') == 0:
-                    continue
-
-                dict = {}
-                dict['title'] = title
-                dict['image'] = image
-                dict['desc'] = description
-                dict['link'] = link
-                dict['mode'] = 'openProgram'
-                
-                parameters = {'mode' : 'openProgram', 'link': link}
-                u = sys.argv[0] + '?' + urllib.urlencode(parameters)
-                createListItem(title, image, description, "", "", '', u, 'false', True,self.translation,self.defaultbackdrop,self.pluginhandle,None)
-        else:
-            xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
-
-    
-    # list all Episodes for the given Date
-    def getDate(self, date, dateFrom = None):
-        if dateFrom == None:
-            url = self.serviceAPIDate % (self.serviceAPItoken, date)
-        else:
-            url = self.serviceAPIDateFrom % (self.serviceAPItoken, dateFrom, date)
-        response = urllib2.urlopen(url)
-
-        if dateFrom == None:
-            episodes = json.loads(response.read())['episodeShorts']
-        else:
-            episodes = reversed(json.loads(response.read())['episodeShorts'])
-
-        for episode in episodes:
-            self.JSONEpisode2ListItem(episode)
+	def __init__(self,xbmc,settings,pluginhandle,quality,protocol,delivery,defaultbanner,defaultbackdrop,useSubtitles,defaultViewMode):
+		self.translation = settings.getLocalizedString
+		self.xbmc = xbmc
+		self.defaultViewMode = defaultViewMode
+		self.videoQuality = quality
+		self.videoDelivery = delivery
+		self.videoProtocol = protocol
+		self.pluginhandle = pluginhandle
+		self.defaultbanner = defaultbanner
+		self.defaultbackdrop = defaultbackdrop
+		self.useSubtitles = useSubtitles
+		self.xbmc.log(msg='ServiceAPI  - Init done', level=xbmc.LOGDEBUG);
 
 
-    # list all Entries for the given Topic
-    def getTopic(self,topicID):
-        url = self.servieAPITopic % (self.serviceAPItoken, topicID)
-        response = urllib2.urlopen(url)
+	def getHighlights(self):
+		try:
+			response = self.__makeRequest(self.serviceAPIHighlights)
+			responseCode = response.getcode()
+		except urllib2.HTTPError, error:
+			responseCode = error.getcode()
+			pass
 
-        for entrie in json.loads(response.read())['topicDetail'].get('entries'):
-            title       = entrie.get('title').encode('UTF-8')
-            image       = self.JSONImage(entrie.get('images'))
-            description = self.JSONDescription(entrie.get('descriptions'))
-            duration    = entrie.get('duration')
-            date        = time.strptime(entrie.get('date'), '%d.%m.%Y %H:%M:%S')
-
-            if entrie.get('teaserItemType') == 'episode':
-                parameters = {'mode' : 'openEpisode', 'link': entrie.get('episodeId')}
-            elif entrie.get('teaserItemType') == 'segment':
-                parameters = {'mode' : 'openSegment', 'link': entrie.get('episodeId'), 'segmentID': entrie.get('segmentId')}
-            else:
-                continue
-
-            u = sys.argv[0] + '?' + urllib.urlencode(parameters)
-            # Direcotory should be set to False, that the Duration is shown.
-            # But then there is an error with the Pluginhandle
-            createListItem(title, image, description, duration, time.strftime('%Y-%m-%d', date), '', u, 'false', True,self.translation,self.defaultbackdrop,self.pluginhandle,None)
-
-        
+		if responseCode == 200:
+			for result in json.loads(response.read()).get('highlight_teasers'):
+				if result.get('target').get('model') == 'Segment':
+					self.JSONSegment2ListItem(result.get('target'))
 
 
-    # list all Episodes for the given Broadcast
-    def getProgram(self,programID,playlist):
-        url = self.serviceAPIProgram % (self.serviceAPItoken, programID)
-        response = urllib2.urlopen(url)
-        responseCode = response.getcode()
+	def getMostViewed(self):
+		try:
+			response = self.__makeRequest(self.__urlMostViewed)
+			responseCode = response.getcode()
+		except urllib2.HTTPError, error:
+			responseCode = error.getcode()
+			pass
 
-        if responseCode == 200:
-            episodes = json.loads(response.read())['episodeShorts']
-            if len(episodes) == 1:
-                for episode in episodes:
-                    self.getEpisode(episode.get('episodeId'),playlist)
-                    return
-
-            for episode in episodes:
-                self.JSONEpisode2ListItem(episode, 'teaser')
-        else:
-            xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
-            
+		if responseCode == 200:
+			for result in json.loads(response.read()).get('most_viewed_segments'):
+				if result.get('model') == 'Segment':
+					self.JSONSegment2ListItem(result)
 
 
-    # listst all Segments for the Episode with the given episodeID
-    # If the Episode only contains one Segment, that get played instantly.
-    def getEpisode(self,episodeID,playlist):
-        playlist.clear()
+	def getNewest(self):
+		self.getTableResults(self.__urlNewest)
 
-        url = self.serviceAPIEpisode % (self.serviceAPItoken, episodeID)
-        response = urllib2.urlopen(url)
-        result = json.loads(response.read())['episodeDetail']
 
-        title       = result.get('title').encode('UTF-8')
-        image       = self.JSONImage(result.get('images'))
-        description = self.JSONDescription(result.get('descriptions'))
-        duration    = result.get('duration')
-        date        = time.strptime(result.get('date'), '%d.%m.%Y %H:%M:%S')
+	def getTips(self):
+		self.getTableResults(self.__urlTips)
 
-        referenceOtherEpisode = False
-        for link in result.get('links'):
-            if link.get('identifier') == 'program':
-                referenceOtherEpisode = True
-                addDirectory(link.get('name').encode('UTF-8'), '',  self.defaultbackdrop,self.translation,'', link.get('id'), 'openProgram',self.pluginhandle)
 
-        if referenceOtherEpisode:
-            return
+	def getTableResults(self, urlAPI):
+		try:
+			response = self.__makeRequest(urlAPI)
+			responseCode = response.getcode()
+		except urllib2.HTTPError, error:
+			responseCode = error.getcode()
+			pass
 
-        if len(result.get('segments')) == 1:
-            listItem = self.JSONSegment2ListItem(result.get('segments')[0], date)
-            playlist.add(listItem[0], listItem[1])
-            self.xbmc.Player().play(playlist)
+		if responseCode == 200:
+			for result in json.loads(response.read()):
+				if result.get('model') == 'Episode':
+					self.__JSONEpisode2ListItem(result)
+				elif result.get('model') == 'Tip':
+					self.__JSONVideoItem2ListItem(result.get('_embedded').get('video_item'))
 
-        else:
-            parameters = {'mode' : 'playlist'}
-            u = sys.argv[0] + '?' + urllib.urlencode(parameters)
-            createListItem('[ '+(self.translation(30015)).encode('UTF-8')+' ]', image, '%s\n%s' % ((self.translation(30015)).encode('UTF-8'), description), duration, time.strftime('%Y-%m-%d', date), '', u, 'false', False,self.translation,self.defaultbackdrop,self.pluginhandle,None)
+		else:
+			self.xbmc.log(msg='ServiceAPI no available ... switch back to HTML Parsing in the Addon Settings', level=xbmc.LOGDEBUG);
+			xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
 
-            for segment in result.get('segments'):
-                listItem = self.JSONSegment2ListItem(segment, date)
-                playlist.add(listItem[0], listItem[1])
-            
-    # Parses the Topic Overview Page
-    def getThemen(self):
-        try: 
-            response = urllib2.urlopen(self.serviceAPITopics % self.serviceAPItoken)
-            responseCode = response.getcode()
-        except ValueError, error:
-            responseCode = 404
-            pass
-        except urllib2.HTTPError, error:
-            responseCode = error.getcode()
-            pass
 
-        if responseCode == 200:
-            for topic in json.loads(response.read())['topicShorts']:
-                if topic.get('parentId') != None or topic.get('isArchiveTopic'):
-                    continue
-                title       = topic.get('name').encode('UTF-8')
-                image       = self.JSONImage(topic.get('images'))
-                description = topic.get('description')
-                link        = topic.get('topicId')
+	# Useful  Methods for JSON Parsing
+	def JSONSegment2ListItem(self,JSONSegment):
+		title        = JSONSegment.get('title').encode('UTF-8')
+		image        = self.JSONImage(JSONSegment.get('_embedded').get('image'))
+		description  = JSONSegment.get('description')
+		duration     = JSONSegment.get('duration_seconds')
+		date         = time.strptime(JSONSegment.get('episode_date')[0:19], '%Y-%m-%dT%H:%M:%S')
+		streamingURL = self.JSONStreamingURL(JSONSegment.get('sources'))
+		return [streamingURL, createListItem(title, image, description, duration, time.strftime('%Y-%m-%d', date), '', streamingURL, 'true', False, self.defaultbackdrop,self.pluginhandle)]
 
-                addDirectory(title, image, self.defaultbackdrop,self.translation, description, link, 'openTopic',self.pluginhandle)
-        else:
-            xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
-            
-    # Plays the given Segment, if it is included in the given Episode
-    def getSegment(self,episodeID, segmentID,playlist):
-        playlist.clear()
 
-        url = self.serviceAPIEpisode % (self.serviceAPItoken, episodeID)
-        response = urllib2.urlopen(url)
-        responseCode = response.getcode()
+	def JSONImage(self,jsonImages, name = 'image_full'):
+		return jsonImages.get('public_urls').get('highlight_teaser').get('url')
 
-        if responseCode == 200:
-            result = json.loads(response.read())['episodeDetail']
-            date = time.strptime(result.get('date'), '%d.%m.%Y %H:%M:%S')
-            for segment in result.get('segments'):
-                if segment.get('segmentId') == int(segmentID):
-                    listItem = self.JSONSegment2ListItem(segment, date)
-                    playlist.add(listItem[0], listItem[1])
-                    self.xbmc.Player().play(playlist)
-                    return    
-        else:
-            xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
+	def JSONStreamingURL(self,jsonVideos):
+		source = None
+		if jsonVideos.get('progressive_download') != None:
+			for streamingUrl in jsonVideos.get('progressive_download'):
+				if streamingUrl.get('quality_key') == self.videoQuality:
+					return streamingUrl.get('src')
+				source = streamingUrl.get('src')
+			
+		for streamingUrl in jsonVideos.get('hls'):
+			if streamingUrl.get('quality_key') == self.videoQuality:
+				return streamingUrl.get('src')
+			source = streamingUrl.get('src')
+		return source
 
-                    
-    # list all Trailers for further airings
-    def getTrailers(self):
-        url = self.serviceAPITrailers % self.serviceAPItoken
-        try: 
-            response = urllib2.urlopen(url)
-            responseCode = response.getcode()
-        except ValueError, error:
-            responseCode = 404
-            pass
-        except urllib2.HTTPError, error:
-            responseCode = error.getcode()
-            pass
-            
-        if responseCode == 200:
-            for episode in json.loads(response.read())['episodeShorts']:
-                self.JSONEpisode2ListItem(episode)    
-        else:
-            xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
+	# list all Categories
+	def getCategories(self):
+		try:
+			response = self.__makeRequest(self.__urlShows)
+			responseCode = response.getcode()
+		except urllib2.HTTPError, error:
+			responseCode = error.getcode()
+			pass
 
-    
-    # lists archiv overview (date listing)
-    def getArchiv(self):
-        for x in xrange(9):
-            date  = datetime.datetime.now() - datetime.timedelta(days=x)
-            title = '%s' % (date.strftime('%A, %d.%m.%Y'))
-            parameters = {'mode' : 'openDate', 'link': date.strftime('%Y%m%d')}
-            if x == 8:
-                title = 'älter als %s' % title
-                parameters = {'mode' : 'openDate', 'link': date.strftime('%Y%m%d'), 'from': (date - datetime.timedelta(days=150)).strftime('%Y%m%d')}
-            u = sys.argv[0] + '?' + urllib.urlencode(parameters)
-            createListItem(title, '', title, '', date.strftime('%Y-%m-%d'), '', u, 'False', True,self.translation,self.defaultbackdrop,self.pluginhandle,None)
-    
-    # Returns Live Stream Listing
-    def getLiveStreams(self):
-        url = self.serviceAPILive % (self.serviceAPItoken, datetime.datetime.now().strftime('%Y%m%d%H%M'), (datetime.datetime.now() + datetime.timedelta(days=1)).strftime('%Y%m%d%H%M'), 25)
-        try: 
-            response = urllib2.urlopen(url)
-            responseCode = response.getcode()
-        except urllib2.HTTPError, error:
-            responseCode = error.getcode()
-            pass
+		if responseCode == 200:
+			for result in json.loads(response.read()).get('_embedded').get('items'):
+				self.__JSONProfile2ListItem(result)
+		else:
+			xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
 
-        if responseCode == 200:
-            global time
 
-            bannerurls = {}
-            bannerurls['ORF1'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779277.png'
-            bannerurls['ORF2'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779281.png'
-            bannerurls['ORF2E'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779281.png'
-            bannerurls['ORF2T'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779281.png'
-            bannerurls['ORF2B'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779281.png'
-            bannerurls['ORF2K'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779281.png'
-            bannerurls['ORF2N'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779281.png'
-            bannerurls['ORF2OOE'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779281.png'
-            bannerurls['ORF2S'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779281.png'
-            bannerurls['ORF2STMK'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779281.png'
-            bannerurls['ORF2V'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779281.png'
-            bannerurls['ORF2W'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779281.png'
-            bannerurls['ORF3'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779305.png'
-            bannerurls['ORFS'] = 'http://tvthek.orf.at/assets/1326810345/orf_channels/logo_color/6779307.png'
+	# list all Episodes for the given Date
+	def getDate(self, date, dateFrom = None):
+		if dateFrom == None:
+			url = self.serviceAPIDate % date
+		else:
+			url = self.serviceAPIDateFrom % (date, 7)
+		response = self.__makeRequest(url)
 
-            results = json.loads(response.read())['episodeDetails']
-            for result in results:
+		episodes = json.loads(response.read()).get('_embedded').get('items')
+		if dateFrom != None:
+			episodes = reversed(episodes)
 
-                # ignore canceled live streams
-                if time.mktime(time.strptime(result.get('killdate'), '%d.%m.%Y %H:%M:%S')) - time.mktime(time.localtime()) < 0:
-                    continue
+		for episode in episodes:
+			self.__JSONEpisode2ListItem(episode)
 
-                description     = self.JSONDescription(result.get('descriptions'))
-                program         = result.get('channel').get('reel').upper()
-                programName     = result.get('channel').get('name')
-                programName     = programName.strip()
-                livestreamStart = time.strptime(result.get('livestreamStart'), '%d.%m.%Y %H:%M:%S')
-                livestreamEnd   = time.strptime(result.get('livestreamEnd'),   '%d.%m.%Y %H:%M:%S')
 
-                # already playing
-                if livestreamStart < time.localtime():
-                    duration = time.mktime(livestreamEnd) - time.mktime(time.localtime())
-                    state = (self.translation(30019)).encode("utf-8")
-                    state_short = 'Online'
+	# list all Entries for the given Topic
+	def getTopic(self,topicID):
+		response = self.__makeRequest(self.servieAPITopic % topicID)
+		for entrie in json.loads(response.read()).get('_embedded').get('video_items'):
+			self.__JSONVideoItem2ListItem(entrie)
 
-                else:
-                    duration = time.mktime(livestreamEnd) - time.mktime(livestreamStart)
-                    state = (self.translation(30020)).encode("utf-8")
-                    state_short = 'Offline'
-                    link = sys.argv[0] + '?' + urllib.urlencode({'mode': 'liveStreamNotOnline', 'link': result.get('episodeId')})
 
-                # find the livestreamStreamingURLs
-                livestreamStreamingURLs = []
-                for streamingURL in result.get('livestreamStreamingUrls'):
-                    if '.m3u' in streamingURL.get('streamingUrl'):
-                        livestreamStreamingURLs.append(streamingURL.get('streamingUrl'))
+	# list all Episodes for the given Broadcast
+	def getProgram(self,programID,playlist):
+		response = self.__makeRequest(self.serviceAPIProgram % programID)
+		responseCode = response.getcode()
 
-                livestreamStreamingURLs.sort()
-				
-                link = livestreamStreamingURLs[len(livestreamStreamingURLs) - 1].replace('q4a', self.videoQuality)
-               
-				
-                title = "[%s] %s (%s)" % (programName, result.get('title'), time.strftime('%H:%M', livestreamStart))
+		if responseCode == 200:
+			episodes = json.loads(response.read()).get('_embedded').get('items')
+			if len(episodes) == 1:
+				for episode in episodes:
+					self.getEpisode(episode.get('id'), playlist)
+					return
 
-                if program in bannerurls:
-                    banner = bannerurls[program]
-                else:
-                    banner = ''
+			for episode in episodes:
+				self.__JSONEpisode2ListItem(episode, 'teaser')
+		else:
+			xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
 
-                createListItem(title, banner, description, duration, time.strftime('%Y-%m-%d', livestreamStart), program, link, 'True', False,self.translation,self.defaultbackdrop,self.pluginhandle,None)
-        else:
-            xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
 
-    def getLiveNotOnline(self,link):
-        url = self.serviceAPIEpisode % (self.serviceAPItoken, link)
-        response = urllib2.urlopen(url)
-        result = json.loads(response.read())['episodeDetail']
+	# listst all Segments for the Episode with the given episodeID
+	# If the Episode only contains one Segment, that get played instantly.
+	def getEpisode(self,episodeID,playlist):
+		playlist.clear()
 
-        title       = result.get('title').encode('UTF-8')
-        image       = self.JSONImage(result.get('images'))
-        description = self.JSONDescription(result.get('descriptions'))
-        duration    = result.get('duration')
-        date        = time.strptime(result.get('date'), '%d.%m.%Y %H:%M:%S')
-        subtitles   = None # result.get('subtitlesSrtFileUrl')
+		response = self.__makeRequest(self.serviceAPIEpisode % episodeID)
+		result = json.loads(response.read())
 
-        dialog = xbmcgui.Dialog()
-        if dialog.yesno((self.translation(30030)).encode("utf-8"), (self.translation(30031)).encode("utf-8")+" %s.\n "+(self.translation(30032)).encode("utf-8") % time.strftime('%H:%M', date)):
-            sleepTime = int(time.mktime(date) - time.mktime(time.localtime()))
-            dialog.notification((self.translation(30033)).encode("utf-8"), '%s %s' % ((self.translation(30034)).encode("utf-8"),sleepTime))
-            self.xbmc.sleep(sleepTime * 1000)
-            if dialog.yesno('', (self.translation(30035)).encode("utf-8")):
-                self.xbmc.Player().play(urllib.unquote(link))
+		title       = result.get('title').encode('UTF-8')
+		image       = self.JSONImage(result.get('_embedded').get('image'))
+		description = result.get('description').encode('UTF-8') if result.get('description') != None else result.get('description')
+		duration    = result.get('duration_seconds')
+		date        = time.strptime(result.get('date')[0:19], '%Y-%m-%dT%H:%M:%S')
 
-                # find the livestreamStreamingURL
-                livestreamStreamingURLs = []
-                for streamingURL in result.get('livestreamStreamingUrls'):
-                    if '.m3u' in streamingURL.get('streamingUrl'):
-                        livestreamStreamingURLs.append(streamingURL.get('streamingUrl'))
+		if len(result.get('_embedded').get('segments')) == 1:
+			listItem = self.JSONSegment2ListItem(result.get('_embedded').get('segments')[0])
+			playlist.add(listItem[0], listItem[1])
 
-                livestreamStreamingURLs.sort()
-                streamingURL = livestreamStreamingURLs[len(livestreamStreamingURLs) - 1].replace('q4a', self.videoQuality)
-                listItem = createListItem(title, image, description, duration, time.strftime('%Y-%m-%d', date), '', streamingURL, 'true', False,self.translation,self.defaultbackdrop,self.pluginhandle,subtitles)
-                self.xbmc.Player().play(streamingURL, listItem)
+		else:
+			parameters = {'mode' : 'playlist'}
+			u = sys.argv[0] + '?' + urllib.urlencode(parameters)
+			createListItem('[ '+(self.translation(30015)).encode('UTF-8')+' ]', image, '%s\n%s' % ((self.translation(30015)).encode('UTF-8'), description), duration, time.strftime('%Y-%m-%d', date), result.get('_embedded').get('channel').get('name'), u, 'false', False, self.defaultbackdrop,self.pluginhandle)
+
+			for segment in result.get('_embedded').get('segments'):
+				listItem = self.JSONSegment2ListItem(segment)
+				playlist.add(listItem[0], listItem[1])
+
+	# Parses the Topic Overview Page
+	def getThemen(self):
+		try:
+			response = self.__makeRequest(self.__urlTopics)
+			responseCode = response.getcode()
+		except ValueError, error:
+			responseCode = 404
+			pass
+		except urllib2.HTTPError, error:
+			responseCode = error.getcode()
+			pass
+
+		if responseCode == 200:
+			for topic in json.loads(response.read()).get('_embedded').get('items'):
+				title       = topic.get('title').encode('UTF-8')
+				description = topic.get('description')
+				link        = topic.get('id')
+				addDirectory(title, None, self.defaultbackdrop, description, link, 'openTopic', self.pluginhandle)
+
+		else:
+			xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
+
+
+	# list all Trailers for further airings
+	def getTrailers(self):
+		try:
+			response = self.__makeRequest(self.serviceAPITrailers)
+			responseCode = response.getcode()
+		except ValueError, error:
+			responseCode = 404
+			pass
+		except urllib2.HTTPError, error:
+			responseCode = error.getcode()
+			pass
+
+		if responseCode == 200:
+			for episode in json.loads(response.read())['_embedded']['items']:
+				self.__JSONEpisode2ListItem(episode)
+		else:
+			xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
+
+
+	# lists archiv overview (date listing)
+	def getArchiv(self):
+		for x in xrange(9):
+			date  = datetime.datetime.now() - datetime.timedelta(days=x)
+			title = '%s' % (date.strftime('%A, %d.%m.%Y'))
+			parameters = {'mode' : 'openDate', 'link': date.strftime('%Y-%m-%d')}
+			if x == 8:
+				title = 'älter als %s' % title
+				parameters = {'mode' : 'openDate', 'link': date.strftime('%Y-%m-%d'), 'from': (date - datetime.timedelta(days=150)).strftime('%Y-%m-%d')}
+			u = sys.argv[0] + '?' + urllib.urlencode(parameters)
+			createListItem(title, None, None, None, date.strftime('%Y-%m-%d'), '', u, 'False', True, self.defaultbackdrop,self.pluginhandle)
+
+	# Returns Live Stream Listing
+	def getLiveStreams(self):
+		try:
+			response = self.__makeRequest(self.__urlLive)
+			responseCode = response.getcode()
+		except urllib2.HTTPError, error:
+			responseCode = error.getcode()
+			pass
+
+		if responseCode == 200:
+			for result in json.loads(response.read()).get('_embedded').get('items'):
+				description     = result.get('description')
+				program         = result.get('_embedded').get('channel').get('reel').upper()
+				programName     = result.get('_embedded').get('channel').get('name')
+				livestreamStart = time.strptime(result.get('start')[0:19], '%Y-%m-%dT%H:%M:%S')
+				livestreamEnd   = time.strptime(result.get('end')[0:19],   '%Y-%m-%dT%H:%M:%S')
+				duration        = max(time.mktime(livestreamEnd) - max(time.mktime(livestreamStart), time.mktime(time.localtime())), 1)
+
+				# already playing
+				if livestreamStart < time.localtime():
+					link = self.JSONStreamingURL(result.get('sources'))
+				else:
+					link = sys.argv[0] + '?' + urllib.urlencode({'mode': 'liveStreamNotOnline', 'link': result.get('id')})
+
+				title = "[%s] %s (%s)" % (programName, result.get('title'), time.strftime('%H:%M', livestreamStart))
+
+				banner = self.JSONImage(result.get('_embedded').get('image'))
+
+				createListItem(title, banner, description, duration, time.strftime('%Y-%m-%d', livestreamStart), programName, link, 'True', False, self.defaultbackdrop, self.pluginhandle)
+		else:
+			xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
+
+	def getLiveNotOnline(self,link):
+		try:
+			response = self.__makeRequest(self.__urlBase + 'livestream/' + link)
+			responseCode = response.getcode()
+		except urllib2.HTTPError, error:
+			responseCode = error.getcode()
+			pass
+
+		if responseCode == 200:
+			result = json.loads(response.read())
+
+			title       = result.get('title').encode('UTF-8')
+			image       = self.JSONImage(result.get('_embedded').get('image'))
+			description = result.get('description')
+			duration    = result.get('duration_seconds')
+			date        = time.strptime(result.get('start')[0:19], '%Y-%m-%dT%H:%M:%S')
+
+			dialog = xbmcgui.Dialog()
+			if dialog.yesno((self.translation(30030)).encode("utf-8"), ((self.translation(30031)).encode("utf-8")+" %s.\n"+(self.translation(30032)).encode("utf-8")) % time.strftime('%H:%M', date)):
+				sleepTime = int(time.mktime(date) - time.mktime(time.localtime()))
+				dialog.notification((self.translation(30033)).encode("utf-8"), '%s %s' % ((self.translation(30034)).encode("utf-8"),sleepTime))
+				self.xbmc.sleep(sleepTime * 1000)
+				if dialog.yesno('', (self.translation(30035)).encode("utf-8")):
+					streamingURL = link = self.JSONStreamingURL(result.get('sources'))
+					listItem = createListItem(title, image, description, duration, time.strftime('%Y-%m-%d', date), result.get('_embedded').get('channel').get('name'), streamingURL, 'true', False, self.defaultbackdrop, self.pluginhandle)
+					self.xbmc.Player().play(streamingURL, listItem)
+
+
+	def __makeRequest(self, url):
+		request = urllib2.Request(url)
+		request.add_header('Authorization', 'Basic %s' % 'cHNfYW5kcm9pZF92Mzo2YTYzZDRkYTI5YzcyMWQ0YTk4NmZkZDMxZWRjOWU0MQ==')
+		return urllib2.urlopen(request)
+
+
+	def __JSONEpisode2ListItem(self, JSONEpisode, ignoreEpisodeType = None):
+		# Direcotory should be set to False, that the Duration is shown, but then there is an error with the Pluginhandle
+		createListItem(
+			JSONEpisode.get('title'),
+			self.JSONImage(JSONEpisode.get('_embedded').get('image')),
+			JSONEpisode.get('description'),
+			JSONEpisode.get('duration_seconds'),
+			time.strftime('%Y-%m-%d', time.strptime(JSONEpisode.get('date')[0:19], '%Y-%m-%dT%H:%M:%S')),
+			JSONEpisode.get('_embedded').get('channel').get('name') if JSONEpisode.get('_embedded').get('channel') != None else None,
+			sys.argv[0] + '?' + urllib.urlencode({'mode' : 'openEpisode', 'link': JSONEpisode.get('id')}),
+			'False',
+			True,
+			self.defaultbackdrop,
+			self.pluginhandle,
+		)
+
+
+	def __JSONProfile2ListItem(self, jsonProfile):
+		createListItem(
+			jsonProfile.get('title'),
+			self.JSONImage(jsonProfile.get('_embedded').get('image')),
+			jsonProfile.get('description'),
+			None,
+			None,
+			None,
+			sys.argv[0] + '?' + urllib.urlencode({'mode' : 'openProgram', 'link': jsonProfile.get('id')}),
+			'False',
+			True,
+			self.defaultbackdrop,
+			self.pluginhandle
+		)
+
+
+	def __JSONVideoItem2ListItem(self, jsonVideoItem):
+		if jsonVideoItem.get('_embedded').get('episode') != None:
+			self.__JSONEpisode2ListItem(jsonVideoItem.get('_embedded').get('episode'))
+		elif jsonVideoItem.get('_embedded').get('segment') != None:
+			self.JSONSegment2ListItem(jsonVideoItem.get('_embedded').get('segment'))

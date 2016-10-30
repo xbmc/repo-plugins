@@ -1,3 +1,11 @@
+0.5.9
+- Service API V3
+- fixed runtime display for htmlscraper
+- added Autplay Prompt Option - only working for htmlscraper
+
+0.5.8
+- fix playlist errors caused by missing parameter
+
 0.5.7
 - Fixed Error on Playlist Views
 - Removed Service API Option for now

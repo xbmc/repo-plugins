@@ -16,7 +16,7 @@
 '''
 
 
-import urlparse,json,zlib,re,os,sys
+import urlparse,json,zlib,hashlib,time,re,os,sys
 
 from lamlib import bookmarks
 from lamlib import cache
@@ -33,8 +33,9 @@ class indexer:
         self.latest_link = '/%s/ajax/getlatestvideos?limit=500'
         self.episode_link = '/%s/ajax/getseriesepisodes?limit=500&series_id='
         self.img_link = 'http://vice-images.vice.com/%s%s'
-        self.resolve_link = 'http://player.ooyala.com/player/ipad/%s.m3u8'
-        self.nuplayer_link = 'https://player.ooyala.com/nuplayer?embedCode=%s'
+        self.ooyala_link = 'http://player.ooyala.com/player/ipad/%s.m3u8'
+        self.ooyala_subtitle_link = 'https://player.ooyala.com/nuplayer?embedCode=%s'
+        self.uplynk_link = 'https://video.vice.com/en_us/preplay/%s?tvetoken=&rn=&exp=%s&sign=%s'
 
 
     def root(self):
@@ -116,7 +117,12 @@ class indexer:
 
 
     def topshows(self):
-        self.list = cache.get(self.item_list_2, 24, self.country)
+        items = cache.get(self.item_list_2, 24, self.country)
+
+        if not items:
+            items = cache.get(self.item_list_4, 24, self.country)
+
+        self.list = items
 
         if self.list == None: return
 
@@ -127,7 +133,13 @@ class indexer:
 
 
     def shows(self):
-        self.list = cache.get(self.item_list_3, 24, self.country)
+        items = cache.get(self.item_list_3, 24, self.country)
+
+        if not items:
+            items = cache.get(self.item_list_4, 24, self.country)
+
+        self.list = items
+        self.list = sorted(self.list, key=lambda k: k['title'])
 
         if self.list == None: return
 
@@ -138,7 +150,11 @@ class indexer:
 
 
     def play(self, url):
-        url, subtitle = self.resolve(url)
+        data = self.resolve(url)
+
+        if data == None: return
+
+        url, subtitle = data
 
         item = control.item(path=url)
 
@@ -164,7 +180,11 @@ class indexer:
 
             result = client.request(url)
 
-            result = json.loads(result)
+            try:
+                result = json.loads(result)
+            except:
+                result = '%s}]}' % result.rsplit('}', 1)[0]
+                result = json.loads(result)
 
             items = result['items']
         except:
@@ -288,24 +308,93 @@ class indexer:
         return self.list
 
 
+    def item_list_4(self, country):
+        try:
+            url = urlparse.urljoin(self.base_link, self.latest_link)
+            url = url % country
+
+            result = client.request(url)
+
+            try:
+                result = json.loads(result)
+            except:
+                result = '%s}]}' % result.rsplit('}', 1)[0]
+                result = json.loads(result)
+
+            items = result['items']
+
+            series = [(i['series_id'], i['series']) for i in items if 'series_id' in i and 'series' in i]
+
+            items = [i['series_id'] for i in items if 'series_id' in i]
+            items = [x for y,x in enumerate(items) if x not in items[:y]]
+        except:
+            pass
+
+        for item in items:
+            try:
+                title = [i for i in series if item == i[0]][0][1]['title']
+                title = re.sub('<.+?>|</.+?>', '', title).strip()
+                title = client.replaceHTMLCodes(title)
+                title = title.encode('utf-8')
+
+                url = self.episode_link + item
+                url = url.encode('utf-8')
+
+                self.list.append({'title': title, 'url': url})
+            except:
+                pass
+
+        return self.list
+
+
     def resolve(self, url):
         try:
             url = urlparse.urljoin(self.base_link, url)
 
             result = client.request(url)
 
+
             yid = client.parseDOM(result, 'div', ret='data-youtube-id', attrs = {'class': 'youtube-video'})
 
             if yid:
                 return ('plugin://plugin.video.youtube/play/?video_id=%s' % yid[0], None)
 
-            pid = re.findall('embedCode=(.+?)(?:\&|\n)', result)[0]
 
-            url = self.resolve_link % pid
+            upid = client.parseDOM(result, 'link', ret='href', attrs = {'id': 'iframely-link'})
 
-            subtitle = self.subtitle_resolve(pid)
+            if upid:
+                upid = upid[0].strip('/').rsplit('/', 1)[-1]
 
-            return (url, subtitle)
+                exp = int(time.time()) + 14400
+                sig = '%s:GET:%d' % (upid, exp)
+                sig = hashlib.sha512(sig.encode()).hexdigest()
+                url = self.uplynk_link % (upid, exp, sig)
+
+                url = client.request(url, error=True)
+                url = json.loads(url)
+                if 'err' in url and 'details' in url:
+                    control.infoDialog(url['details'])
+                    return
+                url = url['preplayURL']
+
+                url = client.request(url)
+                url = json.loads(url)['playURL']
+
+                url = client.request(url).splitlines()
+                url = [i for i in url if '.m3u8' in i][0]
+                url = url.replace(url.strip('/').rsplit('/', 1)[-1].rsplit('.m3u8', 1)[0] + '.m3u8', 'master.m3u8')
+
+                return (url, None)
+
+
+            ooid = re.findall('embedCode=(.+?)(?:\&|\n)', result)
+
+            if ooid:
+                url = self.ooyala_link % ooid[0]
+
+                subtitle = self.subtitle_resolve(ooid[0])
+
+                return (url, subtitle)
         except:
             pass
 
@@ -314,7 +403,7 @@ class indexer:
         try:
             import pyaes,timer
 
-            result = client.request(self.nuplayer_link % pid)
+            result = client.request(self.ooyala_subtitle_link % pid)
 
             iv = '00020406080a0c0ea0a2a4a6a8aaacae'.decode('hex')
 

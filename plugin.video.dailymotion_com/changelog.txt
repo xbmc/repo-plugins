@@ -1,3 +1,5 @@
+2.2.3
+- Changes for kodi.tv
 2.2.2
 - Fix
 - Up to Know Mainainer was until 2.2 AddonscriptorDE,new Maintainer L0RE

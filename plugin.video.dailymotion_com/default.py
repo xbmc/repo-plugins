@@ -28,7 +28,7 @@ cookie_file = xbmc.translatePath("special://profile/addon_data/"+addonID+"/cooki
 if os.path.exists(familyFilterFile):
     familyFilter = "0"
 
-while (not os.path.exists(xbmc.translatePath("special://profile/addon_data/"+addonID+"/settings.xml"))):
+if not os.path.exists(xbmc.translatePath("special://profile/addon_data/"+addonID+"/settings.xml")):
     addon.openSettings()
 
 forceViewModeNew = addon.getSetting("forceViewModeNew") == "true"
@@ -112,12 +112,12 @@ def showPlaylist(id):
 def favouriteUsers():
     xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_LABEL)
     if os.path.exists(channelFavsFile):
-        fh = open(channelFavsFile, 'r')
-        content = fh.read()
-        match = re.compile('###USER###=(.+?)###THUMB###=(.*?)###END###', re.DOTALL).findall(content)
-        for user, thumb in match:
+       with open(channelFavsFile, 'r') as fh:
+          content = fh.read()
+          match = re.compile('###USER###=(.+?)###THUMB###=(.*?)###END###', re.DOTALL).findall(content)
+          for user, thumb in match:
             addUserFavDir(user, 'owner:'+user, 'sortVideos1', thumb)
-        fh.close()
+       fh.close()
     xbmcplugin.endOfDirectory(pluginhandle)
 
 

@@ -8,6 +8,7 @@ from urlparse import urlparse, parse_qs
 import feedparser
 import SimpleDownloader as downloader
 from resources import shows
+from bs4 import BeautifulSoup
 
 import xbmcplugin
 import xbmcgui
@@ -29,10 +30,11 @@ def addon_log(string):
     except:
         log_message = 'addonException: addon_log: %s' %format_exc()
     xbmc.log("[%s-%s]: %s" %(addon_id, addon_version, log_message),
-                             level=xbmc.LOGNOTICE)
+                             level=xbmc.LOGDEBUG)
 
 
 def make_request(url):
+    addon_log('Make Request: %s' %url)
     try:
         req = urllib2.Request(url)
         response = urllib2.urlopen(req)
@@ -90,16 +92,30 @@ def get_rss_feed(url, show_name, iconimage):
         else:
             art = iconimage
         info = {}
-        info['duration'] = duration_to_seconds(i['itunes_duration'])
-        info['aired'] = time.strftime('%Y/%m/%d', i['published_parsed'])
-        info['plot'] = i['content'][0]['value'].encode('utf-8')
+        try:
+            info['duration'] = duration_to_seconds(i['itunes_duration'])
+            info['aired'] = time.strftime('%Y/%m/%d', i['published_parsed'])
+            soup = BeautifulSoup(i['content'][0]['value'], 'html.parser')
+            info['plot'] = soup.get_text().encode('utf-8')
+        except:
+            addon_log(format_exc())
         stream_url = i['id'].encode('utf-8')
         add_dir(title, stream_url, art, 'resolved_url', info, iconimage)
 
 
 def duration_to_seconds(duration_string):
-    d = duration_string.split(':')
-    seconds = (((int(d[0]) * 60) + int(d[1])) * 60) + int(d[2])
+    seconds = None
+    if duration_string and len(duration_string.split(':')) >= 2:
+        d = duration_string.split(':')
+        if len(d) == 3:
+            seconds = (((int(d[0]) * 60) + int(d[1])) * 60) + int(d[2])
+        else:
+            seconds = (int(d[0]) * 60) + int(d[1])
+    elif duration_string:
+        try:
+            seconds = int(duration_string)
+        except:
+            addon_log(format_exc())
     return seconds
 
 
@@ -126,8 +142,8 @@ def resolve_playback_type(media_urls):
         if ret >= 0:
             resolved_url = media_urls.values()[ret]
     return resolved_url
-    
-    
+
+
 def download_file(stream_url, title):
     ''' thanks/credit to TheCollective for SimpleDownloader module'''
     path = addon.getSetting('download')
@@ -159,8 +175,8 @@ def twit_live():
          'twit/live/low/playlist.m3u8'),
         'http://bglive-a.bitgravity.com/twit/live/high?noprefix',
         'http://bglive-a.bitgravity.com/twit/live/low?noprefix',
-        ('http://iphone-streaming.ustream.tv/ustreamVideo/1524/'
-         'streams/live/playlist.m3u8'),
+        ('http://iphone-streaming.ustream.tv/uhls/1524/streams/live/'
+        'iphone/playlist.m3u8'),
         ('http://hls.twit.tv/flosoft/smil:twitStreamAll.smil/'
          'playlist.m3u8'),
         'http://hls.twit.tv/flosoft/mp4:twitStream_720/playlist.m3u8',

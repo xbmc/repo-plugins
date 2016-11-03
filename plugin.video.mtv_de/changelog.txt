@@ -72,5 +72,5 @@
 3.3.9
 - Fix
 3.3.10
-- Language Files Changed to *.pyo
+- Language Files Changed to *.po
 - Changed Python Version

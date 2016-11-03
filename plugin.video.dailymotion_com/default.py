@@ -54,8 +54,7 @@ def index():
     else:
         addFavDir(translation(30024), "", "favouriteUsers", "")
     addDir(translation(30006), "", 'listChannels', "")
-    addDir(translation(30007), "", 'sortUsers1', "")
-    addDir(translation(30042), "ALL", 'listGroups', "")
+    addDir(translation(30007), "", 'sortUsers1', "")    
     addDir(translation(30002), "", 'search', "")
     addDir(translation(30003), urlMain+"/videos?fields=id,thumbnail_large_url%2Ctitle%2Cviews_last_hour&filters=live&sort=visited-hour&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listLive', "")
     addDir(translation(30039), '3D:ALL', 'sortVideos1', '', '')
@@ -67,8 +66,7 @@ def personalMain():
     addDir(translation(30035), urlMain+"/user/"+dmUser+"/following?fields=username,avatar_large_url,videos_total,views_total&sort=popular&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listUsers', "")
     addDir(translation(30036), urlMain+"/user/"+dmUser+"/subscriptions?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listVideos', "")
     addDir(translation(30037), urlMain+"/user/"+dmUser+"/favorites?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listVideos', "")
-    addDir(translation(30038), urlMain+"/user/"+dmUser+"/playlists?fields=id,name,videos_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listUserPlaylists', "")
-    addDir(translation(30042), urlMain+"/user/"+dmUser+"/groups?fields=id,name,description&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listGroups', "")
+    addDir(translation(30038), urlMain+"/user/"+dmUser+"/playlists?fields=id,name,videos_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listUserPlaylists', "")   
     xbmcplugin.endOfDirectory(pluginhandle)
 
 
@@ -87,22 +85,6 @@ def listUserPlaylists(url):
     xbmcplugin.endOfDirectory(pluginhandle)
 
 
-def listGroups(url):
-    if url == "ALL":
-        url = urlMain+"/groups?fields=id,name,description&sort=recent&filters=featured&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1"
-    content = getUrl(url)
-    content = json.loads(content)
-    for item in content['list']:
-        id = item['id']
-        title = item['name'].encode('utf-8')
-        desc = item['description'].encode('utf-8')
-        addDir(title, "group:"+id, 'sortVideos1', '', desc)
-    if content['has_more']:
-        currentPage = content['page']
-        nextPage = currentPage+1
-        addDir(translation(30001)+" ("+str(nextPage)+")", url.replace("page="+str(currentPage), "page="+str(nextPage)), 'listGroups', "")
-    xbmcplugin.endOfDirectory(pluginhandle)
-
 
 def showPlaylist(id):
     url = urlMain+"/playlist/"+id+"/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1"
@@ -117,7 +99,6 @@ def favouriteUsers():
           match = re.compile('###USER###=(.+?)###THUMB###=(.*?)###END###', re.DOTALL).findall(content)
           for user, thumb in match:
             addUserFavDir(user, 'owner:'+user, 'sortVideos1', thumb)
-       fh.close()
     xbmcplugin.endOfDirectory(pluginhandle)
 
 
@@ -368,10 +349,9 @@ def downloadVideo(id):
     content = getUrl2("http://www.dailymotion.com/embed/video/"+id)
     match = re.compile('<title>(.+?)</title>', re.DOTALL).findall(content)
     global downloadDir
-    while not downloadDir:
+    if not downloadDir:
         xbmc.executebuiltin('XBMC.Notification(Download:,'+translation(30110)+'!,5000)')
-        addon.openSettings()
-        downloadDir = addon.getSetting("downloadDir")
+        return    
     url = getStreamUrl(id)
     filename = ""
     try:
@@ -419,18 +399,15 @@ def addFav():
     if keyboard.isConfirmed() and keyboard.getText():
         user = keyboard.getText()
         channelEntry = "###USER###="+user+"###THUMB###=###END###"
-        if os.path.exists(channelFavsFile):
-            fh = open(channelFavsFile, 'r')
-            content = fh.read()
-            fh.close()
+        if os.path.exists(channelFavsFile):         
+            with open(channelFavsFile, 'r') as fh:
+              content = fh.read()            
             if content.find(channelEntry) == -1:
-                fh = open(channelFavsFile, 'a')
-                fh.write(channelEntry+"\n")
-                fh.close()
-        else:
-            fh = open(channelFavsFile, 'a')
-            fh.write(channelEntry+"\n")
-            fh.close()
+                with open(channelFavsFile, 'a') as fh:
+                    fh.write(channelEntry+"\n")                
+        else:            
+            with open(channelFavsFile, 'a') as fh:
+              fh.write(channelEntry+"\n")            
         xbmc.executebuiltin('XBMC.Notification(Info:,'+translation(30030)+'!,5000)')
 
 
@@ -439,29 +416,25 @@ def favourites(param):
     mode = mode[:mode.find("###")]
     channelEntry = param[param.find("###USER###="):]
     if mode == "ADD":
-        if os.path.exists(channelFavsFile):
-            fh = open(channelFavsFile, 'r')
-            content = fh.read()
-            fh.close()
+        if os.path.exists(channelFavsFile):            
+            with open(channelFavsFile, 'r') as fh:
+              content = fh.read()            
             if content.find(channelEntry) == -1:
-                fh = open(channelFavsFile, 'a')
-                fh.write(channelEntry+"\n")
-                fh.close()
+                with open(channelFavsFile, 'a') as fh:
+                  fh.write(channelEntry+"\n")                
         else:
-            fh = open(channelFavsFile, 'a')
-            fh.write(channelEntry+"\n")
+            with open(channelFavsFile, 'a') as fh:
+                fh.write(channelEntry+"\n")
             fh.close()
         xbmc.executebuiltin('XBMC.Notification(Info:,'+translation(30030)+'!,5000)')
     elif mode == "REMOVE":
         refresh = param[param.find("###REFRESH###=")+14:]
         refresh = refresh[:refresh.find("###USER###=")]
-        fh = open(channelFavsFile, 'r')
-        content = fh.read()
-        fh.close()
+        with open(channelFavsFile, 'r') as fh:
+          content = fh.read()        
         entry = content[content.find(channelEntry):]
-        fh = open(channelFavsFile, 'w')
-        fh.write(content.replace(channelEntry+"\n", ""))
-        fh.close()
+        with open(channelFavsFile, 'w') as fh:
+          fh.write(content.replace(channelEntry+"\n", ""))        
         if refresh == "TRUE":
             xbmc.executebuiltin("Container.Refresh")
 
@@ -587,8 +560,6 @@ elif mode == 'listUsers':
     listUsers(url)
 elif mode == 'listChannels':
     listChannels()
-elif mode == 'listGroups':
-    listGroups(url)
 elif mode == 'favourites':
     favourites(url)
 elif mode == 'addFav':

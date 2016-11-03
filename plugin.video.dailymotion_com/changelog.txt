@@ -1,3 +1,7 @@
+2.2.4
+- Changes Fileopening
+- pyo Files for Language
+- Killed Groups, because it was droped in the Api
 2.2.3
 - Changes for kodi.tv
 2.2.2

@@ -1,3 +1,12 @@
+0.6.1
+- cleaned image resources
+- renamed "getArchiv" to "getSchedule"
+- prepare new "Archive" Main Menu Option
+
+0.6.0
+- fixed faulty liveurl from htmlscraper
+- livestreams with the same timestamp are playable now using the htmlscraper(Bundesland Heute)
+
 0.5.9
 - Service API V3
 - fixed runtime display for htmlscraper

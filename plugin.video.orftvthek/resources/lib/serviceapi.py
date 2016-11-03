@@ -250,9 +250,11 @@ class serviceAPI(Scraper):
 		else:
 			xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
 
-
-	# lists archiv overview (date listing)
 	def getArchiv(self):
+		pass
+
+	# lists schedule overview (date listing)
+	def getSchedule(self):
 		for x in xrange(9):
 			date  = datetime.datetime.now() - datetime.timedelta(days=x)
 			title = '%s' % (date.strftime('%A, %d.%m.%Y'))

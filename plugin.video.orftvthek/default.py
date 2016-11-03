@@ -18,7 +18,7 @@ except:
 socket.setdefaulttimeout(30) 
 cache = StorageServer.StorageServer("plugin.video.orftvthek", 999999)
 
-version = "0.5.9"
+version = "0.6.1"
 plugin = "ORF-TVthek-" + version
 author = "sofaking,Rechi"
 
@@ -50,17 +50,18 @@ videoDelivery = "progressive"
 #media resources
 resource_path = os.path.join( basepath, "resources" )
 media_path = os.path.join( resource_path, "media" )
-defaultbanner =  os.path.join(media_path,"default_banner_v2.jpg")
-news_banner =  os.path.join(media_path,"news_banner_v2.jpg")
-recently_added_banner =  os.path.join(media_path,"recently_added_banner_v2.jpg")
-shows_banner =  os.path.join(media_path,"shows_banner_v2.jpg")
-topics_banner =  os.path.join(media_path,"topics_banner_v2.jpg")
-live_banner =  os.path.join(media_path,"live_banner_v2.jpg")
-tips_banner =  os.path.join(media_path,"tips_banner_v2.jpg")
-most_popular_banner =  os.path.join(media_path,"most_popular_banner_v2.jpg")
-archive_banner =  os.path.join(media_path,"archive_banner_v2.jpg")
-search_banner =  os.path.join(media_path,"search_banner_v2.jpg")
-trailer_banner =  os.path.join(media_path,"trailer_banner_v2.jpg")
+defaultbanner =  os.path.join(media_path,"default_banner.jpg")
+news_banner =  os.path.join(media_path,"news_banner.jpg")
+recently_added_banner =  os.path.join(media_path,"recently_added_banner.jpg")
+shows_banner =  os.path.join(media_path,"shows_banner.jpg")
+topics_banner =  os.path.join(media_path,"topics_banner.jpg")
+live_banner =  os.path.join(media_path,"live_banner.jpg")
+tips_banner =  os.path.join(media_path,"tips_banner.jpg")
+most_popular_banner =  os.path.join(media_path,"most_popular_banner.jpg")
+schedule_banner =  os.path.join(media_path,"schedule_banner.jpg")
+archive_banner =  os.path.join(media_path,"archive_banner.jpg")
+search_banner =  os.path.join(media_path,"search_banner.jpg")
+trailer_banner =  os.path.join(media_path,"trailer_banner.jpg")
 blacklist_banner =  os.path.join(media_path,"blacklist_banner.jpg")
 defaultbackdrop = os.path.join(media_path,"fanart.jpg")
 
@@ -117,10 +118,11 @@ def getMainMenu():
     addDirectory((translation(30004)).encode("utf-8"),live_banner,defaultbackdrop, "","","getLive",pluginhandle)
     addDirectory((translation(30005)).encode("utf-8"),tips_banner,defaultbackdrop, "","","getTipps",pluginhandle)
     addDirectory((translation(30006)).encode("utf-8"),most_popular_banner,defaultbackdrop, "","","getMostViewed",pluginhandle)
-    addDirectory((translation(30018)).encode("utf-8"),archive_banner,defaultbackdrop, "","","getArchiv",pluginhandle)
+    addDirectory((translation(30018)).encode("utf-8"),schedule_banner,defaultbackdrop, "","","getSchedule",pluginhandle)
+    if not useServiceAPI:
+        addDirectory((translation(30049)).encode("utf-8"),schedule_banner,defaultbackdrop, "","","getArchiv",pluginhandle)
     addDirectory((translation(30007)).encode("utf-8"),search_banner,defaultbackdrop, "","","getSearchHistory",pluginhandle)
-    if useServiceAPI:
-        addDirectory((translation(30027)).encode("utf-8"),trailer_banner,defaultbackdrop, "","","openTrailers",pluginhandle)
+    addDirectory((translation(30027)).encode("utf-8"),trailer_banner,defaultbackdrop, "","","openTrailers",pluginhandle)
     if enableBlacklist:
         addDirectory((translation(30037)).encode("utf-8"),blacklist_banner,defaultbackdrop, "","","openBlacklist",pluginhandle)
     listCallback(False,thumbViewMode,pluginhandle)
@@ -198,10 +200,16 @@ elif mode == 'getSendungenDetail':
 elif mode == 'getThemenDetail':
     htmlScraper.getThemenDetail(link)
     listCallback(False,defaultViewMode,pluginhandle)
+elif mode == 'getArchiveDetail':
+    htmlScraper.getArchiveDetail(link)
+    listCallback(False,defaultViewMode,pluginhandle)
+elif mode == 'getSchedule':
+    scraper.getSchedule()
+    listCallback(False,defaultViewMode,pluginhandle)
 elif mode == 'getArchiv':
     scraper.getArchiv()
     listCallback(False,defaultViewMode,pluginhandle)
-elif mode == 'getArchivDetail':
+elif mode == 'getScheduleDetail':
     htmlScraper.openArchiv(link)
     listCallback(True,defaultViewMode,pluginhandle)
 elif mode == 'openTrailers':

@@ -32,5 +32,9 @@ class Scraper(object):
 		pass
 
 	@abc.abstractmethod
+	def getSchedule():
+		pass
+        
+	@abc.abstractmethod
 	def getArchiv():
 		pass

@@ -60,7 +60,8 @@ def index():
            
            addDir(translation(30001),"http://www.mtv.de/charts/5-hitlist-germany-top-100?expanded=true",'listVideos_old',"")
            addDir(translation(30004),"http://www.mtv.de/charts/8-mtv-de-videocharts?expanded=true",'listVideos_old',"")
-           addDir(translation(30003),"http://www.mtv.de/charts/199-top-100-single-jahrescharts-2013?expanded=true",'listVideos_old',"")
+           addDir(translation(30003),"http://ww.mtv.de/charts/241-top-100-jahrescharts-2014?expanded=true",'listVideos_old',"")
+           addDir(translation(30002),"http://www.mtv.de/charts/199-top-100-single-jahrescharts-2013?expanded=true",'listVideos_old',"")
            addDir(translation(30212),"http://www.mtv.de/charts/9-deutsche-black-charts?expanded=true",'listVideos_old',"")
            addDir(translation(30211),"http://www.mtv.de/charts/6-dance-charts?expanded=true",'listVideos_old',"")        
            addDir(translation(30217),"http://www.mtv.ch/musik",'listVideos_old',"")
@@ -299,8 +300,10 @@ def listVideos_old(url):
         riptide_image_id=[]
         jsonlist = content[content.find("window.pagePlaylist ="):]
         jsonlist = jsonlist[jsonlist.find("["):]
-        jsonlist = jsonlist[:jsonlist.find(";")]
+        jsonlist = jsonlist[:jsonlist.find("];")+1]
         jsonlist=jsonlist.replace("\/","/")
+        debug("_-----")
+        debug (jsonlist)
         struktur = json.loads(jsonlist)
         anzahl=len(struktur)
         for element in range (0,anzahl):

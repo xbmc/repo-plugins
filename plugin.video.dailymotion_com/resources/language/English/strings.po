@@ -1,0 +1,239 @@
+# XBMC Media Center language file
+# Addon Name: DailyMotion.com
+# Addon id: plugin.video.dailymotion_com
+# Addon version: 2.2.3
+# Addon Provider: L0RE
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2016-11-03 00:21+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Movies, TV, Music, User-Clips, 3D and Livestreams"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Movies, TV, Music, User-Clips, 3D and Livestreams"
+msgstr ""
+
+msgctxt "Addon Disclaimer"
+msgid "Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing."
+msgstr ""
+
+
+msgctxt "#30001"
+msgid "Next Page"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Live"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Popular"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Users"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Most Recent"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Most Viewed"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Best Rated"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Today"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Week"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Month"
+msgstr ""
+
+msgctxt "#30014"
+msgid "All Time"
+msgstr ""
+
+msgctxt "#30015"
+msgid "All Users"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Featured"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Official"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Creative"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Most Popular"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Most Commented"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Top Rated"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Video not available"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Added"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Favourites"
+msgstr ""
+
+#empty strings from id 30025 to 30027
+
+msgctxt "#30028"
+msgid "Add user to favourites"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Remove from favourites"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Added user to favourites"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Are you over 18 and would like to turn off the family filter?"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Turn the family filter on?"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Add user"
+msgstr ""
+
+msgctxt "#30034"
+msgid "My stuff"
+msgstr ""
+
+msgctxt "#30035"
+msgid "Contacts"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Following"
+msgstr ""
+
+msgctxt "#30037"
+msgid "Favourites"
+msgstr ""
+
+msgctxt "#30038"
+msgid "Playlists"
+msgstr ""
+
+msgctxt "#30039"
+msgid "3D"
+msgstr ""
+
+msgctxt "#30040"
+msgid "All"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Videos"
+msgstr ""
+
+msgctxt "#30042"
+msgid "Groups"
+msgstr ""
+
+msgctxt "#30043"
+msgid "Add to queue"
+msgstr ""
+
+msgctxt "#30044"
+msgid "Download video"
+msgstr ""
+
+#empty strings from id 30045 to 30100
+
+msgctxt "#30101"
+msgid "Country"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Force View"
+msgstr ""
+
+msgctxt "#30103"
+msgid "ViewID"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Toggle Family Filter"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Maximum resolution"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Dailymotion Username"
+msgstr ""
+
+msgctxt "#30107"
+msgid "Items per page"
+msgstr ""
+
+msgctxt "#30108"
+msgid "Download directory"
+msgstr ""
+
+msgctxt "#30109"
+msgid "File already exists"
+msgstr ""
+
+msgctxt "#30110"
+msgid "Choose download directory in Settings"
+msgstr ""

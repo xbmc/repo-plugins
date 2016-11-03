@@ -1,0 +1,202 @@
+# XBMC Media Center language file
+# Addon Name: MTV.de
+# Addon id: plugin.video.mtv_de
+# Addon version: 3.3.9
+# Addon Provider: L0RE
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2016-11-03 13:58+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "TV-Shows, german charts, clip search, playlists, favorites"
+msgstr "TV-Shows, Deutsche Charts, Videosuche, Playlisten, Favoriten"
+
+msgctxt "Addon Description"
+msgid "TV-Shows, German charts, clip search, playlists, favorites"
+msgstr "TV-Shows, Deutsche Charts, Videosuche, Playlisten, Favoriten"
+
+msgctxt "Addon Disclaimer"
+msgid "Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing."
+msgstr ""
+
+msgctxt "#30001"
+msgid "Hitlist Germany TOP 100"
+msgstr "Hitlist Germany TOP 100"
+
+msgctxt "#30002"
+msgid "Single Jahrescharts 2013 TOP100"
+msgstr "Single Jahrescharts 2013 TOP100"
+
+msgctxt "#30003"
+msgid "Single Jahrescharts 2014 TOP100"
+msgstr "Single Jahrescharts 2014 TOP100"
+
+msgctxt "#30004"
+msgid "MTV.de Video Charts TOP100"
+msgstr "MTV.de Video Charts TOP100"
+
+msgctxt "#30005"
+msgid "Search: Artist"
+msgstr "Suche: Interpret"
+
+msgctxt "#30006"
+msgid "Search: Title"
+msgstr "Suche: Titel"
+
+msgctxt "#30007"
+msgid "Latest Music Clips"
+msgstr "Neue Musikvideos"
+
+msgctxt "#30008"
+msgid "Artists A-Z"
+msgstr "Interpreten A-Z"
+
+msgctxt "#30009"
+msgid "Artist-Favorites"
+msgstr "Interpreten-Favoriten"
+
+msgctxt "#30010"
+msgid "Title-Collection"
+msgstr "Titel-Sammlung"
+
+msgctxt "#30011"
+msgid "Playlists"
+msgstr "Playlisten"
+
+msgctxt "#30012"
+msgid "Next Page"
+msgstr "Nächste Seite"
+
+msgctxt "#30100"
+msgid "Playlist 01"
+msgstr "Playlist 01"
+
+msgctxt "#30101"
+msgid "Playlist 02"
+msgstr "Playlist 02"
+
+msgctxt "#30102"
+msgid "Playlist 03"
+msgstr "Playlist 03"
+
+msgctxt "#30103"
+msgid "Playlist 04"
+msgstr "Playlist 04"
+
+msgctxt "#30104"
+msgid "Playlist 05"
+msgstr "Playlist 05"
+
+msgctxt "#30105"
+msgid "Playlist 06"
+msgstr "Playlist 06"
+
+msgctxt "#30106"
+msgid "Playlist 07"
+msgstr "Playlist 07"
+
+msgctxt "#30107"
+msgid "Playlist 08"
+msgstr "Playlist 08"
+
+msgctxt "#30108"
+msgid "Playlist 09"
+msgstr "Playlist 09"
+
+msgctxt "#30109"
+msgid "Playlist 10"
+msgstr "Playlist 10"
+
+msgctxt "#30110"
+msgid "Force View"
+msgstr "View erzwingen"
+
+msgctxt "#30111"
+msgid "ViewID"
+msgstr ""
+
+msgctxt "#30112"
+msgid "Use thumb as fanart"
+msgstr "Thumb als Fanart nutzen"
+
+msgctxt "#30201"
+msgid "Filter \"All Eyes On\" and \"Interviews\""
+msgstr "Filter \"All Eyes On\" und \"Interviews\""
+
+msgctxt "#30202"
+msgid "Add to Playlist"
+msgstr "Zu Playlist hinzufügen"
+
+msgctxt "#30203"
+msgid "Remove from Playlist"
+msgstr "Aus Playlist entfernen"
+
+msgctxt "#30204"
+msgid "Add to Blacklist"
+msgstr "Zu Blacklist hinzufügen"
+
+msgctxt "#30205"
+msgid "Add to Artist Favs"
+msgstr "Zu Artist Favs hinzufügen"
+
+msgctxt "#30206"
+msgid "Remove from Artist Favs"
+msgstr "Aus Artist Favs entfernen"
+
+msgctxt "#30207"
+msgid "Clear Title-Collection"
+msgstr "Titel-Sammlung löschen"
+
+msgctxt "#30208"
+msgid "Delete all titles from Title-Collection?"
+msgstr "Alle Titel aus Titel-Sammlung löschen?"
+
+msgctxt "#30209"
+msgid "Video is not available!"
+msgstr "Video ist nicht verfuegbar!"
+
+msgctxt "#30210"
+msgid "Album Top 100"
+msgstr "Album Top 100"
+
+msgctxt "#30211"
+msgid "Dance Charts"
+msgstr "Dance Charts"
+
+msgctxt "#30212"
+msgid "German Blackcharts"
+msgstr "Deutsche Blackcharts"
+
+msgctxt "#30213"
+msgid "Country"
+msgstr "Land"
+
+msgctxt "#30214"
+msgid "German"
+msgstr "Deutsch"
+
+msgctxt "#30215"
+msgid "Switzerland"
+msgstr "Schweiz"
+
+msgctxt "#30216"
+msgid "Single Charts Switzerland"
+msgstr "Single Charts Schweiz"
+
+msgctxt "#30217"
+msgid "Neu bei MTV"
+msgstr "Neu bei MTV"
+
+msgctxt "#30218"
+msgid "Video Charts Switzerland"
+msgstr "Video Charts Schweiz"

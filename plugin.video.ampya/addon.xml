@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.ampya" name="Ampya" version="0.1.8" provider-name="L0RE">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Musicvideos from the German Webpage http://ampya.com/</summary>
+    <summary lang="de">Musicvideos der Seite http://ampya.com/</summary>
+    <description lang="en">Musicvideos from the German Webpage http://ampya.com/</description>
+    <description lang="de">Musicvideos der Seite http://ampya.com/</description>
+    <website></website>
+    <source>https://github.com/kodinerds/repo/tree/master/addons/plugin.video.ampya</source>
+    <forum>http://www.kodinerds.net/</forum>
+    <email>andreas at vogler dot name</email>
+    <platform>all</platform>
+  </extension>
+</addon>

@@ -50,7 +50,7 @@ msgid "Login to TV provider"
 msgstr ""
 
 msgctxt "#30010"
-msgid "Go to [B]foxsportsgo.com/activate[/B] and login to your provider using the following activation code: "
+msgid "Go to [B]foxsportsgo.com/activate[/B] and login to your TV provider using the following activation code:"
 msgstr ""
 
 msgctxt "#30011"
@@ -62,7 +62,7 @@ msgid "Authentication failed"
 msgstr ""
 
 msgctxt "#30013"
-msgid "Unable to login to your TV provider.[CR][CR]Please make sure that you successfully activate your code before clicking OK."
+msgid "Unable to login to your TV provider.[CR][CR]Please make sure that you successfully activated the code before you clicked OK."
 msgstr ""
 
 msgctxt "#30014"
@@ -94,7 +94,7 @@ msgid "Error"
 msgstr ""
 
 msgctxt "#30021"
-msgid "Unable to find a valid stream URL. Please see the log for more information."
+msgid "An error occurred while attempting to play this channel.[CR][CR]It's possible that the channel is currently off-the-air or that your credentials have expired."
 msgstr ""
 
 msgctxt "#30022"
@@ -150,7 +150,7 @@ msgid "Log out"
 msgstr ""
 
 msgctxt "#30035"
-msgid "Are you sure you want to log out? This will reload the add-on and force you to re-authenticate."
+msgid "Are you sure you want to log out? This will force you to re-authenticate to your TV provider."
 msgstr ""
 
 msgctxt "#30036"
@@ -159,4 +159,8 @@ msgstr ""
 
 msgctxt "#30037"
 msgid "Search for an event/program/channel."
+msgstr ""
+
+msgctxt "#30038"
+msgid "Add channel to favourites"
 msgstr ""

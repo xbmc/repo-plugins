@@ -6,7 +6,6 @@
     <setting id="show_deportes" type="bool" label="30022" default="true"/>
   </category>
   <category label="30007">
-    <setting id="debug" type="bool" label="Add-on debugging" default="false"/>
     <setting id="verify_ssl" type="bool" label="30008" default="true"/>
   </category>
 </settings>

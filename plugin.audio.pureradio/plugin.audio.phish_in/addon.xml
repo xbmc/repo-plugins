@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon
+    id="plugin.audio.phish_in"
+    version="1.0.3"
+    name="Phish.in"
+    provider-name="izilly/fenningenarius">
+  <requires>
+    <import addon="xbmc.python" version="2.20.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Play any Phish show avilable at www.phish.in</summary>
+    <description lang="en">Play any Phish show avilable at www.phish.in. Uses the phish.in public api (http://phish.in/api-docs)</description>
+    <language></language>
+    <platform>all</platform>
+    <license>Modified BSD License</license>
+    <forum>http://forum.kodi.tv/showthread.php?tid=251005</forum>
+    <website>https://github.com/izilly/plugin.audio.phish_in</website>
+    <source>https://github.com/izilly/plugin.audio.phish_in</source>
+    <email></email>
+  </extension>
+</addon>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.giga_de" name="GIGA.de" version="2.2.1" provider-name="L0RE">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="de">Technik, Games und Entertainment Videos</summary>
+        <summary lang="en">Technical, Games and Entertainment Videos</summary>
+        <language>de</language>
+        <description lang="de">Technik, Games und Entertainment Videos</description>
+        <description lang="en">Technical, Games and Entertainment Videos</description>
+        <website></website>
+        <source>http://repo.l0re.com/data/plugin.video.giga_de/</source>
+        <forum>http://www.kodinerds.net/index.php/Thread/11527-AddonScriptorDE-s-Addon-Sammlung/</forum>
+        <email>andreas at vogler dot name</email>
+    </extension>
+</addon>

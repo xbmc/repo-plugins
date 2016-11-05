@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30001">All Shows</string>
+  <string id="30002">Search</string>
+  <string id="30003">News</string>
+  <string id="30004">Videos by Topic</string>
+  <string id="30005">Tips</string>
+  <string id="30006">New</string>
+  <string id="30007">Most Viewed</string>
+  <string id="30008">Shows</string>
+  <string id="30009">Topics</string>
+  <string id="30010">Favorites</string>
+  <string id="30011">Next Page</string>
+  <string id="30012">Add to queue</string>
+  <string id="30013">Shows by date</string>
+  <string id="30028">Add to addon favs</string>
+  <string id="30029">Remove from addon favs</string>
+  <string id="30030">Channels</string>
+  <string id="30031">Columns</string>
+  <string id="30101">Force View</string>
+  <string id="30102">ViewID (Videos)</string>
+  <string id="30103">Minimum video length in minutes</string>
+  <string id="30104">Use thumb as fanart</string>
+  <string id="30105">Activate subtitles (if available)</string>
+  <string id="30106">ViewID (Shows)</string>
+</strings>

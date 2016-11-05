@@ -1,0 +1,2 @@
+v1.1.0 - Version bump to match Roku channel version, switch from a static stream URL to a dynamic changing one
+v0.0.1 - Initial version

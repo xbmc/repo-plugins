@@ -1,0 +1,177 @@
+# Kodi Media Center language file
+# Addon Name: Library Node Editor
+# Addon id: plugin.library.node.editor
+# Addon Provider: Unfledged, Team-Kodi
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Romanian (http://www.transifex.com/projects/p/xbmc-addons/language/ro/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ro\n"
+"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
+
+msgctxt "#30000"
+msgid "Add content..."
+msgstr "Adăugare conținut..."
+
+msgctxt "#30001"
+msgid "Add path..."
+msgstr "Adăugare cale..."
+
+msgctxt "#30002"
+msgid "Add order..."
+msgstr "Adăugare ordonare..."
+
+msgctxt "#30003"
+msgid "Add limit..."
+msgstr "Adăugare limită..."
+
+msgctxt "#30004"
+msgid "Add grouping..."
+msgstr "Adăugare grupare..."
+
+msgctxt "#30005"
+msgid "Add rule..."
+msgstr "Adăugare regulă..."
+
+msgctxt "#30006"
+msgid "New node..."
+msgstr "Nod nou..."
+
+msgctxt "#30007"
+msgid "New parent node..."
+msgstr "Nod părinte nou..."
+
+msgctxt "#30091"
+msgid "Video Library"
+msgstr "Mediatecă video"
+
+msgctxt "#30092"
+msgid "Music Library"
+msgstr "Mediatecă audio"
+
+msgctxt "#30100"
+msgid "Delete"
+msgstr "Șterge"
+
+msgctxt "#30101"
+msgid "Edit label"
+msgstr "Modificare etichetă"
+
+msgctxt "#30102"
+msgid "Edit icon"
+msgstr "Modificare pictogramă"
+
+msgctxt "#30103"
+msgid "Browse for icon"
+msgstr "Răsfoire după pictogramă"
+
+msgctxt "#30104"
+msgid "Edit order"
+msgstr "Modificare ordonare"
+
+msgctxt "#30105"
+msgid "Edit visibility"
+msgstr "Modificare vizibilitate"
+
+msgctxt "#30106"
+msgid "Add to main menu"
+msgstr "Adaugă la meniul principal"
+
+msgctxt "#30107"
+msgid "Browse for value"
+msgstr "Răsfoire după valoare"
+
+msgctxt "#30200"
+msgid "Content"
+msgstr "Conținut"
+
+msgctxt "#30201"
+msgid "Order"
+msgstr "Ordonare"
+
+msgctxt "#30202"
+msgid "Grouping"
+msgstr "Grupare"
+
+msgctxt "#30203"
+msgid "Limit"
+msgstr "Limită"
+
+msgctxt "#30204"
+msgid "Path"
+msgstr "Cale"
+
+msgctxt "#30205"
+msgid "Rule"
+msgstr "Regulă"
+
+msgctxt "#30300"
+msgid "Set name"
+msgstr "Definire nume"
+
+msgctxt "#30303"
+msgid "Name of new parent node"
+msgstr "Numele noului nod părinte"
+
+msgctxt "#30304"
+msgid "Start with defaults"
+msgstr "Pornește cu cele implicite"
+
+msgctxt "#30305"
+msgid "Field"
+msgstr "Câmp"
+
+msgctxt "#30306"
+msgid "Operator"
+msgstr "Operator"
+
+msgctxt "#30307"
+msgid "Value"
+msgstr "Valoare"
+
+msgctxt "#30308"
+msgid "Content type"
+msgstr "Tip conținut"
+
+msgctxt "#30309"
+msgid "Content"
+msgstr "Conținut"
+
+msgctxt "#30310"
+msgid "Group"
+msgstr "Grup"
+
+msgctxt "#30311"
+msgid "Limit"
+msgstr "Limită"
+
+msgctxt "#30312"
+msgid "Path"
+msgstr "Cale"
+
+msgctxt "#30313"
+msgid "Icon"
+msgstr "Pictogramă"
+
+msgctxt "#30314"
+msgid "Order by"
+msgstr "Ordonează după"
+
+msgctxt "#30315"
+msgid "Direction"
+msgstr "Direcție"
+
+msgctxt "#30316"
+msgid "Name of new node"
+msgstr "Numele noului nod"
+
+msgctxt "#30405"
+msgid "Are you sure you want to delete this rule?"
+msgstr "Sigur doriți să ștergeți această regulă?"

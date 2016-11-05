@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.rco" name="Het Koninklijk Concertgebouworkest" version="1.0.0" provider-name="bosel">
+  <requires>
+      <import addon="xbmc.python" version="2.14.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="rco.py">
+      <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+      <summary lang="en">The Royal Concertgebouw Orchestra</summary>
+      <summary lang="nl">Het Koninklijk Concertgebouworkest</summary>
+      <description lang="en">The Royal Concertgebouw Orchestra is a symphony orchestra that gives orchestral performances of the highest calibre in the world’s leading concert halls under the direction of the very best conductors. The activities it carries out in Amsterdam form the basis of its role as the Netherlands’ ambassador for international excellence. The Royal Concertgebouw Orchestra offers audiences emotional and intellectual enrichment, generating involvement and active loyalty.</description>
+      <description lang="nl">Het Koninklijk Concertgebouworkest is het symfonieorkest dat wereldwijd op de belangrijkste podia, onder leiding van de beste dirigenten en op het allerhoogste niveau uitvoeringen geeft van orkestmuziek. Zijn activiteiten in Amsterdam vormen de basis voor zijn rol als Nederlands ambassadeur van internationale excellentie. Het Concertgebouworkest biedt zijn publiek emotionele en intellectuele verrijking en verleidt tot betrokkenheid en actieve loyaliteit.</description>
+      <platform>all</platform>
+      <language>nl en</language>
+      <license>GPLv3</license>
+      <forum></forum>
+      <website>https://github.com/bosel/plugin.audio.rco</website>
+      <email></email>
+      <source>https://github.com/bosel/plugin.audio.rco</source>
+      <disclaimer lang="en">Copyright 2015 bosel.This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</disclaimer>
+  </extension>
+</addon>

@@ -1,0 +1,8 @@
+Version 1.0.1 Initial release
+
+Version 1.0.2 Website change
+Version 1.0.3 Website change
+
+Version 2.0.1 Isengard Version website fixes
+
+Version 3.0.1 Separate scraper for future functions

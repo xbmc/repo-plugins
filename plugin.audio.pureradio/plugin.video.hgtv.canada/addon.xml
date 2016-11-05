@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.hgtv.canada"
+       name="HGTV Canada"
+       version="3.0.2"
+       provider-name="t1m">
+  <requires>
+    <import addon="xbmc.python" version="2.20.0"/>
+    <import addon="script.module.t1mlib" version="1.0.15"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">HGTV Canada Video Addon</summary>
+    <description lang="en">Play videos from the HGTV Canada Network</description>
+    <disclaimer lang="en">Feel free to use this script. For information visit the wiki.</disclaimer>
+    <platform>all</platform>
+    <language>en</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum>http://forum.kodi.tv/showthread.php?tid=232755</forum>
+    <website>www.hgtv.ca</website>
+    <email></email>
+    <source>https://github.com/learningit/Kodi-plugins-source</source>
+  </extension>
+</addon>

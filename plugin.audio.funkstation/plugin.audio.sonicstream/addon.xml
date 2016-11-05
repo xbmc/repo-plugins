@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.sonicstream" name="Sonic Stream Radio" version="1.0.1" provider-name="spoyser">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+   <extension point="xbmc.python.script" library="default.py">
+        <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Sonic Stream Radio</summary>
+    <description lang="en">A new independent metropolitan radio station, showcasing unfiltered, innovative cutting edge music from within the global melting pot. Sonic Stream’s programs consist of non-commercial music, cultural news and social dialogue to provide you with the deepest inroads of global musical trends. Each show is hosted by musical sommeliers who independently curate their own program in a traditional personalized radio style.[CR]
+Sonic Stream emphasis is based on experimental and intergenerational content to celebrate the groundbreaking music of the past, present and the future. Sonic Stream encompasses a grassroots approach for pushing boundaries to showcase future cutting edge music. Thus, wherever you reside around the globe, you are guaranteed to be with fellow passionate great minds on a musical adventure.[CR]
+Independent music for the free spirited soul</description>
+    <platform>all</platform>
+    <language>en</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum></forum>
+    <website></website>
+    <source></source>
+    <email>seanpoyser at gmail dot com</email>
+  </extension>
+</addon>

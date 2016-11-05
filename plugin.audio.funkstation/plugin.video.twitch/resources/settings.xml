@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <!-- General -->
+    <category label="30076">
+        <!-- Username -->
+        <setting id="username" type="text" label="30050" default=""/>
+        <!-- OAuth Token -->
+        <setting id="oauth_token" type="text" label="30099" default="67ebpfhyoicab5kr0y7pzocsfohs7ty"/>
+        <setting label="30101" type="lsep"/>
+        <!-- Video Quality -->
+        <setting id="video" type="enum" label="30040"
+                 lvalues="30102|30103|30104|30105|30106|30107|30108|30109|30110|30111" default="3"/>
+        <setting label="30112" type="lsep"/>
+        <!-- Title Display -->
+        <setting id="titledisplay" type="enum" label="30045" lvalues="30046|30047|30048|30049|30051|30067" default="0"/>
+        <!-- Truncate titles -->
+        <setting id="titletruncate" type="bool" label="30065" default="true"/>
+        <!-- Content Types -->
+        <setting id="contenttypes" type="enum" label="30068" lvalues="30069|30070|30071|30072|30073" default="0"/>
+    </category>
+    <!-- Live Previews -->
+    <category label="30082">
+        <!-- Live Preview Settings -->
+        <setting id="live_previews_enable" type="bool" label="30083" default="false"/>
+        <!-- Live Preview Settings WARNING LABELS -->
+        <setting label="30085" type="lsep" enable="eq(-1,false)" visible="eq(-1,false)"/>
+        <setting label="30086" type="lsep" enable="eq(-2,false)" visible="eq(-2,false)"/>
+        <!-- Remove Live Previews -->
+        <setting id="clear_previews" label="30084" type="action"
+                 action="RunPlugin(plugin://plugin.video.twitch/clearLivePreviews/true/)"
+                 enable="eq(-3,true)" visible="eq(-3,true)"/>
+        <!-- Automaticall Refresh Live Previews -->
+        <setting id="refresh_previews" type="bool" label="30074" default="false"
+                 enable="eq(-4,true)" visible="eq(-4,true)"/>
+        <!-- Automatic refresh interval -->
+        <setting label="30094" type="slider" id="refresh_interval" default="10" range="0,1,180" option="int"
+                 enable="eq(-1,true)" visible="eq(-1,true)"/>
+        <!-- Notifications when refreshing -->
+        <setting id="notify_refresh" type="bool" label="30087" default="true"
+                 enable="eq(-6,true)" visible="eq(-6,true)"/>
+    </category>
+    <!-- IRC -->
+    <category label="30081">
+        <!-- Enable IRC Chat -->
+        <setting id="irc_enable" type="bool" label="30052" default="false" enable="System.HasAddon(script.ircchat)"/>
+        <!-- Username -->
+        <setting id="irc_username" type="text" label="30050" default="" enable="eq(-1,true)"/>
+        <!-- OAuth Token -->
+        <setting id="oauth_token" type="text" label="30053" default="67ebpfhyoicab5kr0y7pzocsfohs7ty" enable="eq(-2,true)"/>
+        <setting label="30101" type="lsep"/>
+        <setting label="30075" id="install_ircscript" type="action" action="RunPlugin(plugin://script.ircchat/)"
+                 enable="!System.HasAddon(script.ircchat)" visible="!System.HasAddon(script.ircchat)"/>
+    </category>
+    <!-- API -->
+    <category label="30096">
+        <!-- OAUTH Client ID -->
+        <setting id="oauth_client_id" type="text" label="30097" default="67ebpfhyoicab5kr0y7pzocsfohs7ty"/>
+        <setting label="30100" type="lsep"/>
+    </category>
+</settings>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.image.photoapp" name="Photo App" version="1.0.3" provider-name="stonebug.com">
+    <requires>
+	<import addon="xbmc.python" version="2.1.0"/>
+	<import addon="script.module.simplejson" version="2.0.10"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+	<provides>image</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+	<summary lang="de">Zeigt die OS X Photo App - Bibliothek in Kodi.</summary>
+	<summary lang="en">Shows the OS X Photo App library in Kodi.</summary>
+	<summary lang="en_US">Shows the OS X Photo App library in Kodi.</summary>
+	<description lang="de">Zeigt Fotos aus den Kategorien 'Momente', 'Album' und 'Diashow' der OS X Photo App - Bibliothek in Kodi. [CR][CR]Für mehr Informationen, siehe README unter https://github.com/PhotoAppPlugin/plugin.image.photoapp</description>
+	<description lang="en">Shows pictures of 'moments', 'albums' and 'slideshows' from the OS X Photo App library in Kodi.[CR][CR]For more information, see the README at https://github.com/PhotoAppPlugin/plugin.image.photoapp</description>
+	<description lang="en_US">Shows pictures of 'moments', 'albums' and 'slideshows' from the OS X Photo App library in Kodi.[CR][CR]For more information, see the README at https://github.com/PhotoAppPlugin/plugin.image.photoapp</description>
+	<language></language>
+	<platform>all</platform>
+	<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+	<forum>http://forum.kodi.tv/showthread.php?tid=245721</forum>
+	<email>PhotoApp.KodiPlugin@stonebug.com</email>
+	<source>https://github.com/PhotoAppPlugin/plugin.image.photoapp</source>
+    </extension>
+</addon>

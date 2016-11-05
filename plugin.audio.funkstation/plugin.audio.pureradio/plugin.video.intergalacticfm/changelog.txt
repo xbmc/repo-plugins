@@ -1,0 +1,9 @@
+v0.0.5 - Changed URL to new machine and use hostname, not IP anmore
+
+v0.0.4 - Changed URL to live tv, changed icon, minor documentaion
+
+v0.0.3 - Renamed to Intergalactic FM TV
+
+v0.0.2 - Fork from My Jam TV for Intergalacti FM
+
+v0.0.1 - Initial version

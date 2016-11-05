@@ -1,0 +1,61 @@
+# Kodi Media Center language file
+# Addon Name: Library Node Editor
+# Addon id: plugin.library.node.editor
+# Addon Provider: Unfledged, Team-Kodi
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Icelandic (http://www.transifex.com/projects/p/xbmc-addons/language/is/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: is\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30091"
+msgid "Video Library"
+msgstr "Myndbandasafn"
+
+msgctxt "#30092"
+msgid "Music Library"
+msgstr "Tónlistarsafn"
+
+msgctxt "#30100"
+msgid "Delete"
+msgstr "Eyða"
+
+msgctxt "#30101"
+msgid "Edit label"
+msgstr "Breyta nafni"
+
+msgctxt "#30103"
+msgid "Browse for icon"
+msgstr "Fletta eftir táknmynd"
+
+msgctxt "#30204"
+msgid "Path"
+msgstr "Slóð"
+
+msgctxt "#30307"
+msgid "Value"
+msgstr "Gildi"
+
+msgctxt "#30310"
+msgid "Group"
+msgstr "Hópur"
+
+msgctxt "#30312"
+msgid "Path"
+msgstr "Slóð"
+
+msgctxt "#30313"
+msgid "Icon"
+msgstr "Tákn"
+
+msgctxt "#30314"
+msgid "Order by"
+msgstr "Raða eftir"

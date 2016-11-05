@@ -1,0 +1,12 @@
+0.0.4
+- cosmetics
+- language update
+
+0.0.3
+- fix studio node creation
+
+0.0.2
+- updated language files from Transifex
+
+0.0.1
+- initial release

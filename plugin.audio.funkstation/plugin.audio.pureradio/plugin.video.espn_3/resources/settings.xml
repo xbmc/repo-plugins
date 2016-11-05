@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30860">
+        <setting id="StreamQuality" type="enum" label="30460" default="0" lvalues="30470|30480|30490"/>
+        <!-- Only shown when setting is Best -->
+        <setting id="BitrateLimit" type="number" label="30540" default="10000" subsetting="true" visible="eq(-1,0)"/>
+        <!-- Only shown when setting is Ask Once -->
+        <setting id="StreamQualityIndex" type="number" default="-1" label="30520" subsetting="true" visible="eq(-2,1)"/>
+    </category>
+    <category label="30890">
+        <setting id="ShowEspn1" type="bool" label="30990" default="true"/>
+        <setting id="ShowEspn2" type="bool" label="30991" default="true"/>
+        <setting id="ShowEspn3" type="bool" label="30992" default="true"/>
+        <setting id="ShowEspnu" type="bool" label="30993" default="true"/>
+        <setting id="ShowEspnews" type="bool" label="30994" default="true"/>
+        <setting id="ShowEspnDeportes" type="bool" label="30995" default="true"/>
+        <setting id="ShowSec" type="bool" label="30996" default="true"/>
+        <setting id="ShowSecPlus" type="bool" label="30997" default="true"/>
+        <setting id="ShowLonghorn" type="bool" label="30998" default="true"/>
+        <setting id="ShowBuzzerBeater" type="bool" label="30999" default="true"/>
+        <setting id="ShowAccExtra" type="bool" label="30989" default="true"/>
+        <setting id="ShowGoalLine" type="bool" label="30988" default="true"/>
+    </category>
+    <category label="30870">
+        <setting id="ShowAppleTVMenu" type="bool" label="30800" default="true"/>
+        <setting id="ShowRokuMenu" type="bool" label="30810" default="true"/>
+        <setting id="ShowTVOSMenu" type="bool" label="30820" default="true"/>
+        <setting id="ShowAndroidTVMenu" type="bool" label="30830" default="true"/>
+        <setting id="ShowLegacyMenu" type="bool" label="30530" default="true"/>
+        <setting type="sep" visible="eq(-1,true)"/>
+        <setting id="upcoming" type="enum" label="30021" values="1|2|3|4|5|6|7|8|9|10" default="2" visible="eq(-2,true)"/>
+        <setting id="replays1" type="enum" label="30022" values="5|10|15|20|25" default="0" visible="eq(-3,true)"/>/>
+        <setting id="replays2" type="enum" label="30023" values="10|20|30|40|50" default="0" visible="eq(-4,true)"/>/>
+        <setting id="replays3" type="enum" label="30024" values="30|60|90|120" default="0" visible="eq(-5,true)"/>/>
+        <setting id="replays4" type="enum" label="30025" values="60|90|120|240" default="0" visible="eq(-6,true)"/>/>
+    </category>
+    <category label="30880">
+        <setting id="NoColors" type="bool" label="30770" default="false"/>
+        <setting id="ClearData" type="bool" label="30170" default="false"/>
+        <setting id="DisableSSL" type="bool" label="30180" default="false"/>
+    </category>
+</settings>

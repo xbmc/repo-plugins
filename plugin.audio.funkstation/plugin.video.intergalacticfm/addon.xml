@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.intergalacticfm"
+       name="Intergalactic FM TV"
+       version="0.0.5"
+       provider-name="Pander">
+    <requires>
+        <import addon="xbmc.python" version="2.20.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">No Station Such Dedication</summary>
+        <summary lang="de">No Station Such Dedication</summary>
+        <summary lang="nl">No Station Such Dedication</summary>
+        <description lang="en"><![CDATA[
+Video channel of listener-supported, commercial-free, underground/alternative radio broadcasting from Intergalacic FM.
+
+See also the audio plugin.
+
+Please consider donating at http://intergalacticfm.com to keep Intergalactic FM in orbit. No Station Such Dedication!
+        ]]></description>
+        <description lang="de"><![CDATA[
+Videosender vom hörergetragenen, werbefreien, underground / alternative Radio von Intergalactic FM.
+
+Siehe auch die Audio-Plugin.
+
+Bitte denk über eine Spende auf http://intergalacticfm.com nach, um Intergalactic FM in der Umlaufbahn zu erhalte. No Station Such Dedication!
+        ]]></description>
+        <description lang="nl"><![CDATA[
+Videokanaal van luisteraarondersteunde, reclamevrije, alternatieve radiouitzendingen van Intergalactic FM.
+
+Zie ook de audioplugin.
+
+Overweeg a.u.b. een donatie te doen op http://intergalacticfm.com om Intergalactic FM in haar baan te houden. No Station Such Dedication!
+        ]]></description>
+        <license>The Apache License, Version 2.0</license>
+        <website>http://intergalacticfm.com</website>
+        <forum>http://forum.kodi.tv/showthread.php?tid=257201</forum>
+        <source>https://github.com/intergalacticfm/plugin.video.intergalacticfm</source>
+    </extension>
+</addon>

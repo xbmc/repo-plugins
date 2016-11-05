@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon
+  id="plugin.video.myjamtv"
+  name="My Jam TV"
+  version="1.1.0"
+  provider-name="My Jam TV">
+    <requires>
+        <import addon="xbmc.python" version="2.20.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">The Revolutionary 24-Hour Music Network</summary>
+        <description lang="en">Welcome to My Jam TV, a comprehensive music and entertainment network to promote and further artists in their careers. Here, artists and bands will have a unique forum to share their music with millions around the world through television for a nominal fee. The music video will receive a fresh face and renewed vigor, venturing away from the saturated and fragmented YouTube corner. An added feature will include cutting-edge entertainment news to educate and empower individuals with their careers. We are the new best friend for aspiring entertainers!</description>
+        <disclaimer lang="en"></disclaimer>
+        <language>en</language>
+        <platform>all</platform>
+        <license>The Apache License, Version 2.0</license>
+        <forum></forum>
+        <website>http://myjamtv.com</website>
+        <email></email>
+        <source>https://github.com/myjamtv/kodi</source>
+    </extension>
+</addon>

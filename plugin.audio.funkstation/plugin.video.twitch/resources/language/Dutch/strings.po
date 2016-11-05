@@ -1,0 +1,351 @@
+
+msgid ""
+msgstr ""
+
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-09-18 00:54+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "#30001"
+msgid "Games"
+msgstr "Games"
+
+msgctxt "#30002"
+msgid "Following"
+msgstr "Volgers"
+
+msgctxt "#30003"
+msgid "Search"
+msgstr "Zoeken"
+
+msgctxt "#30004"
+msgid "Settings"
+msgstr "Instellingen"
+
+msgctxt "#30005"
+msgid "Featured Streams"
+msgstr "Streams"
+
+msgctxt "#30006"
+msgid "Teams"
+msgstr "Teams"
+
+msgctxt "#30007"
+msgid "Search for channels"
+msgstr "Zoeken naar kanalen"
+
+msgctxt "#30008"
+msgid "Channels"
+msgstr "Kanalen"
+
+msgctxt "#30010"
+msgid "TwitchTV"
+msgstr "TwitchTV"
+
+msgctxt "#30011"
+msgid "next page..."
+msgstr "volgende pagina..."
+
+msgctxt "#30012"
+msgid "-- Currently Live Streams --"
+msgstr "-- Huidige Live Streams --"
+
+msgctxt "#30013"
+msgid "-- Followed Channels --"
+msgstr "-- Gevolgde Kanalen --"
+
+msgctxt "#30020"
+msgid "Http error"
+msgstr "HTTP-fout"
+
+msgctxt "#30021"
+msgid "No Live Data Found"
+msgstr "Geen live data gevonden"
+
+msgctxt "#30022"
+msgid "No archives found for"
+msgstr "Geen archieven gevonden voor"
+
+msgctxt "#30023"
+msgid "User Token Error"
+msgstr "User Token Error"
+
+msgctxt "#30024"
+msgid "Changed video settings"
+msgstr "Video-instellingen gewijzigd"
+
+msgctxt "#30025"
+msgid "Selected video settings are not available"
+msgstr "De geselecteerde video-instellingen zijn niet beschikbaar"
+
+msgctxt "#30026"
+msgid "TwitchApi error"
+msgstr "TwitchApi error"
+
+msgctxt "#30027"
+msgid "JSON error"
+msgstr "JSON error"
+
+msgctxt "#30028"
+msgid "Failed to parse the result set"
+msgstr "Kon de resultaten niet inlezen"
+
+msgctxt "#30029"
+msgid "Please check your internet connection"
+msgstr "Gelieve je internetverbinding na te kijken"
+
+msgctxt "#30040"
+msgid "Video Quality"
+msgstr "Beeldkwaliteit"
+
+msgctxt "#30045"
+msgid "Display titles"
+msgstr "Titels weergeven"
+
+msgctxt "#30046"
+msgid "Streamer - Stream Title"
+msgstr "Streamer - Stream Titel"
+
+msgctxt "#30047"
+msgid "Viewers - Streamer - Stream Title"
+msgstr "Kijkers - Streamer - Stream Titel"
+
+msgctxt "#30048"
+msgid "Stream Title"
+msgstr "Stream Titel"
+
+msgctxt "#30049"
+msgid "Streamer"
+msgstr "Streamer"
+
+msgctxt "#30050"
+msgid "Username"
+msgstr "Gebruikersnaam"
+
+msgctxt "#30051"
+msgid "Streamer - Game Title - Stream Title"
+msgstr "Streamer - Game Title - Stream Title"
+
+msgctxt "#30052"
+msgid "Enable"
+msgstr ""
+
+msgctxt "#30053"
+msgid "Password (OAuth Token)"
+msgstr ""
+
+msgctxt "#30060"
+msgid "Unnamed Streamer"
+msgstr "Naamloze Streamer"
+
+msgctxt "#30061"
+msgid "Untitled Stream"
+msgstr "Naamloze Stream"
+
+msgctxt "#30062"
+msgid "Unknown Number of Viewers"
+msgstr "Onbekend Aantal Kijkers"
+
+msgctxt "#30064"
+msgid "Unknown Game"
+msgstr "Onbekend Spel"
+
+msgctxt "#30065"
+msgid "Truncate displayed titles"
+msgstr "Afkappen weergegeven titels"
+
+msgctxt "#30066"
+msgid "Followed Games"
+msgstr ""
+
+msgctxt "#30067"
+msgid "Game Title Viewers | Streamer - Stream Title"
+msgstr ""
+
+msgctxt "#30068"
+msgid "Content Type"
+msgstr ""
+
+msgctxt "#30069"
+msgid "Files"
+msgstr ""
+
+msgctxt "#30070"
+msgid "TV Shows"
+msgstr ""
+
+msgctxt "#30071"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#30072"
+msgid "Episodes"
+msgstr ""
+
+msgctxt "#30073"
+msgid "Music Videos"
+msgstr ""
+
+msgctxt "#30074"
+msgid "Automatically refresh live preview cache"
+msgstr ""
+
+msgctxt "#30075"
+msgid "Install IrcChat (script.ircchat)"
+msgstr ""
+
+msgctxt "#30076"
+msgid "General"
+msgstr ""
+
+msgctxt "#30077"
+msgid "Play (Choose Quality)"
+msgstr ""
+
+msgctxt "#30078"
+msgid "Past Broadcasts"
+msgstr ""
+
+msgctxt "#30079"
+msgid "Video Highlights"
+msgstr ""
+
+msgctxt "#30080"
+msgid "Could not find any playable urls"
+msgstr ""
+
+msgctxt "#30081"
+msgid "IRC Chat"
+msgstr ""
+
+msgctxt "#30082"
+msgid "Live Previews"
+msgstr ""
+
+msgctxt "#30083"
+msgid "Live Preview Settings"
+msgstr ""
+
+msgctxt "#30084"
+msgid "Clear live preview cache"
+msgstr ""
+
+msgctxt "#30085"
+msgid "***** WARNING *****"
+msgstr ""
+
+msgctxt "#30086"
+msgid "These settings may allow this add-on to delete database entries and images[CR]for cached live previews."
+msgstr ""
+
+msgctxt "#30087"
+msgid "Notifications"
+msgstr ""
+
+msgctxt "#30088"
+msgid "Game"
+msgstr ""
+
+msgctxt "#30089"
+msgid "Viewers"
+msgstr ""
+
+msgctxt "#30090"
+msgid "Language"
+msgstr ""
+
+msgctxt "#30091"
+msgid "Mature"
+msgstr ""
+
+msgctxt "#30092"
+msgid "Partner"
+msgstr ""
+
+msgctxt "#30093"
+msgid "Delay"
+msgstr ""
+
+msgctxt "#30094"
+msgid "Automatic refresh interval (minutes)"
+msgstr ""
+
+msgctxt "#30095"
+msgid "Username is required"
+msgstr ""
+
+msgctxt "#30096"
+msgid "API"
+msgstr ""
+
+msgctxt "#30097"
+msgid "OAuth Client ID"
+msgstr ""
+
+msgctxt "#30098"
+msgid "Select Video by ID or URL"
+msgstr ""
+
+msgctxt "#30099"
+msgid "OAuth Token"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Visit www.twitch.tv/settings/connections and [CR]'Register your application' for an OAuth Client-ID"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Visit www.twitchapps.com/tmi to generate an OAuth token"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Source"
+msgstr ""
+
+msgctxt "#30103"
+msgid "1080p60"
+msgstr ""
+
+msgctxt "#30104"
+msgid "1080p30"
+msgstr ""
+
+msgctxt "#30105"
+msgid "720p60"
+msgstr ""
+
+msgctxt "#30106"
+msgid "720p30"
+msgstr ""
+
+msgctxt "#30107"
+msgid "540p30"
+msgstr ""
+
+msgctxt "#30108"
+msgid "480p30"
+msgstr ""
+
+msgctxt "#30109"
+msgid "360p30"
+msgstr ""
+
+msgctxt "#30110"
+msgid "240p30"
+msgstr ""
+
+msgctxt "#30111"
+msgid "144p30"
+msgstr ""
+
+msgctxt "#30112"
+msgid "Quality may result in best match"
+msgstr ""

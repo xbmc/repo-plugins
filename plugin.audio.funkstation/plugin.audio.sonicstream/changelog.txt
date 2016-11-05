@@ -1,0 +1,7 @@
+v1.0.1:
+  - changed to be a script rather than an addon
+  - added artwork
+  - added description in addon.xml
+
+v1.0.0:
+  - initial release

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.program.video.node.editor" name="Video Node Editor" version="1.0.2" provider-name="Unfledged">
+    <requires>
+		<import addon="xbmc.python" version="2.20.0"/>
+		<import addon="script.module.simplejson" version="3.3.0"/>
+		<import addon="script.module.unidecode" version="0.4.14"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="addon.py">
+		<provides>executable</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<summary lang="en">Manage custom video nodes.</summary>
+		<description lang="en">Create and edit custom video nodes.</description>
+		<license>GNU General Public License, v2</license>
+		<language></language>
+		<forum>http://forum.xbmc.org/showthread.php?tid=204515</forum>
+		<source>https://github.com/unfledged/plugin.program.video.node.editor</source>
+		<email></email>
+		<broken>Replaced by Library Node Editor</broken>
+	</extension>
+</addon>

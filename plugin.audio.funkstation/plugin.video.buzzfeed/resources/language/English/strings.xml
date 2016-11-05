@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!-- Buzz Feed -->
+  <string id="30000">BuzzFeedVideo</string>
+  <string id="30001">BuzzFeedFood</string>
+  <string id="30002">BuzzFeedYellow</string>
+  <string id="30003">BuzzFeedViolet</string>
+  <string id="30004">BuzzFeedBlue</string>
+</strings>

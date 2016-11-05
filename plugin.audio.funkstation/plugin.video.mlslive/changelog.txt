@@ -1,0 +1,72 @@
+[B]Version 1.16.0[/B]
+
+- update to work with 2016 API
+
+[B]Version 1.15.3[/B]
+
+- show date for games that are final
+- fix bug that shows final games in the live menu
+
+[B]Version 1.15.2[/B]
+
+- don't show past months when viewing live matches
+
+[B]Version 1.15.1[/B]
+
+- separate live and completed games
+
+[B]Version 1.15.0[/B]
+
+- update for the 2015 API
+- update to the new MLS logo
+
+[B]Version 1.0.10[/B]
+
+- fix game start times
+- fix game encoding glitch that prevents certain nations from displaying properly in the list of games
+
+[B]Version 1.0.9[/B]
+
+- don't preload live or upcoming match URIs (should be faster)
+- add error when no stream can be found for live or preloaded matches
+- add state for half-time in the game title
+
+[B]Version 1.0.8[/B]
+
+- don't simplify m3u8 URL because it causes problems with authentication
+
+[B]Version 1.0.7[/B]
+
+- fix early week roll-over in timezones larger than GMT-5 (eg: Australia)
+- remove useless call to configuration webservice
+
+[B]Version 1.0.6[/B]
+
+- fix use of undefined variable
+
+[B]Version 1.0.5[/B]
+
+- include last week of the season in the list of completed games
+
+[B]Version 1.0.4[/B]
+
+- fix bug when there were no games played in a prior week
+- list weeks using the season bounds specified in the service configuration
+- improve speed of prior week menu (remove call to web request)
+
+[B]Version 1.0.3[/B]
+
+- fix crash with invalid home or away team abbreviations
+
+[B]Version 1.0.2[/B]
+
+- improve live and replay match menu layout
+- add video channels
+
+[B]Version 1.0.1[/B]
+
+- fix the live stream WS calls. Now all live games work.
+
+[B]Version 1.0.0[/B]
+
+- initial revision. Plays live and on-demand matches from the MLS Live service.

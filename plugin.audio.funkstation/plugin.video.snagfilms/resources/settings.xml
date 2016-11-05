@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<settings>
+    <setting id="bitrate" type="enum" lvalues="30005|30006|30007" label="30004" default="1"/>
+</settings>

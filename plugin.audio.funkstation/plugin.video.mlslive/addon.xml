@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.mlslive" name="MLS Live" version="1.16.0" provider-name="Micah Galizia">
+  <requires>
+    <import addon="xbmc.python"   version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+	<provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary>MLS Live XBMC plugin</summary>
+    <description>Stream Major League Soccer games from MLS Live service.</description>
+    <platform>all</platform>
+    <language>en</language>
+    <disclaimer>For bugs, requests or general questions visit the MLS Live thread on the XBMC forum.</disclaimer>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum>http://forum.xbmc.org/showthread.php?tid=158142</forum>
+    <website>http://wiki.xbmc.org/index.php?title=Add-on:MLS_Live</website>
+    <source>https://github.com/micahg/plugin.video.mlslive</source>
+  </extension>
+</addon>

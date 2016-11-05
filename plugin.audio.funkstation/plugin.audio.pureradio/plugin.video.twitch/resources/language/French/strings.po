@@ -1,0 +1,351 @@
+
+msgid ""
+msgstr ""
+
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-09-18 00:54+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+
+msgctxt "#30001"
+msgid "Games"
+msgstr "Jeux"
+
+msgctxt "#30002"
+msgid "Following"
+msgstr "Chaines Suivies"
+
+msgctxt "#30003"
+msgid "Search"
+msgstr "Rechercher"
+
+msgctxt "#30004"
+msgid "Settings"
+msgstr "Paramètre"
+
+msgctxt "#30005"
+msgid "Featured Streams"
+msgstr "Chaines en vedette"
+
+msgctxt "#30006"
+msgid "Teams"
+msgstr "Équipes"
+
+msgctxt "#30007"
+msgid "Search for channels"
+msgstr "Rechercher d'une chaine"
+
+msgctxt "#30008"
+msgid "Channels"
+msgstr "Chaines"
+
+msgctxt "#30010"
+msgid "TwitchTV"
+msgstr "TwitchTV"
+
+msgctxt "#30011"
+msgid "next page..."
+msgstr "page suivante..."
+
+msgctxt "#30012"
+msgid "-- Currently Live Streams --"
+msgstr "-- Chaines en Direct --"
+
+msgctxt "#30013"
+msgid "-- Followed Channels --"
+msgstr "-- Chaines Suivit --"
+
+msgctxt "#30020"
+msgid "Http error"
+msgstr "Erreur HTTP"
+
+msgctxt "#30021"
+msgid "No Live Data Found"
+msgstr "Pas de données trouvées"
+
+msgctxt "#30022"
+msgid "No archives found for"
+msgstr "Pas d'archive trouvées pour "
+
+msgctxt "#30023"
+msgid "User Token Error"
+msgstr "Problème avec le token utilisateur"
+
+msgctxt "#30024"
+msgid "Changed video settings"
+msgstr "Paramètres vidéo modifiés"
+
+msgctxt "#30025"
+msgid "Selected video settings are not available"
+msgstr "Les paramètres vidéo sélectionnés ne sont pas disponibles"
+
+msgctxt "#30026"
+msgid "TwitchApi error"
+msgstr "Problème avec l'API Twitch.tv"
+
+msgctxt "#30027"
+msgid "JSON error"
+msgstr "Erreur JSON"
+
+msgctxt "#30028"
+msgid "Failed to parse the result set"
+msgstr "Échec de l'analyse des résultats"
+
+msgctxt "#30029"
+msgid "Please check your internet connection"
+msgstr "S'il vous plaît vérifier votre connexion Internet"
+
+msgctxt "#30040"
+msgid "Video Quality"
+msgstr "Qualité vidéo"
+
+msgctxt "#30045"
+msgid "Display titles"
+msgstr "Afficher le titre"
+
+msgctxt "#30046"
+msgid "Streamer - Stream Title"
+msgstr "Chaine - Titre"
+
+msgctxt "#30047"
+msgid "Viewers - Streamer - Stream Title"
+msgstr "Spectateur - Chaine - Titre"
+
+msgctxt "#30048"
+msgid "Stream Title"
+msgstr "Titre"
+
+msgctxt "#30049"
+msgid "Streamer"
+msgstr "Chaine"
+
+msgctxt "#30050"
+msgid "Username"
+msgstr "Nom d'utilisateur"
+
+msgctxt "#30051"
+msgid "Streamer - Game Title - Stream Title"
+msgstr "Chaine - Titre du jeu - Titre"
+
+msgctxt "#30052"
+msgid "Enable"
+msgstr "Activer"
+
+msgctxt "#30053"
+msgid "Password (OAuth Token)"
+msgstr "Mot de passe (OAuth Token)"
+
+msgctxt "#30060"
+msgid "Unnamed Streamer"
+msgstr "Chaine anonyme"
+
+msgctxt "#30061"
+msgid "Untitled Stream"
+msgstr "Titre inconnu"
+
+msgctxt "#30062"
+msgid "Unknown Number of Viewers"
+msgstr "Nombre de spectateurs inconnus"
+
+msgctxt "#30064"
+msgid "Unknown Game"
+msgstr "Jeu inconnu"
+
+msgctxt "#30065"
+msgid "Truncate displayed titles"
+msgstr "Tronquer les titres"
+
+msgctxt "#30066"
+msgid "Followed Games"
+msgstr "Jeux Suivis"
+
+msgctxt "#30067"
+msgid "Game Title Viewers | Streamer - Stream Title"
+msgstr "Titre du jeu Spectateur | Chaine - Titre"
+
+msgctxt "#30068"
+msgid "Content Type"
+msgstr "Type de contenus"
+
+msgctxt "#30069"
+msgid "Files"
+msgstr "Fichier"
+
+msgctxt "#30070"
+msgid "TV Shows"
+msgstr "Émission"
+
+msgctxt "#30071"
+msgid "Movies"
+msgstr "Film"
+
+msgctxt "#30072"
+msgid "Episodes"
+msgstr "Épisodes"
+
+msgctxt "#30073"
+msgid "Music Videos"
+msgstr "Vidéos musicales"
+
+msgctxt "#30074"
+msgid "Automatically refresh live preview cache"
+msgstr "Actualiser automatiquement le cache"
+
+msgctxt "#30075"
+msgid "Install IrcChat (script.ircchat)"
+msgstr "Installer IrcChat (script.ircchat)"
+
+msgctxt "#30076"
+msgid "General"
+msgstr "General"
+
+msgctxt "#30077"
+msgid "Play (Choose Quality)"
+msgstr "Visionner (Choix de la qualité)"
+
+msgctxt "#30078"
+msgid "Past Broadcasts"
+msgstr "Rediffusion"
+
+msgctxt "#30079"
+msgid "Video Highlights"
+msgstr "Video en vedette"
+
+msgctxt "#30080"
+msgid "Could not find any playable urls"
+msgstr "Impossible de trouver des urls lisibles"
+
+msgctxt "#30081"
+msgid "IRC Chat"
+msgstr "Chat IRC"
+
+msgctxt "#30082"
+msgid "Live Previews"
+msgstr "Aperçus en direct"
+
+msgctxt "#30083"
+msgid "Live Preview Settings"
+msgstr "Paramètre d'Aperçus en direct"
+
+msgctxt "#30084"
+msgid "Clear live preview cache"
+msgstr "Supprimer le cache des aperçus"
+
+msgctxt "#30085"
+msgid "***** WARNING *****"
+msgstr "***** ATTENTION *****"
+
+msgctxt "#30086"
+msgid "These settings may allow this add-on to delete database entries and images[CR]for cached live previews."
+msgstr "Ces paramètres peuvent permettre à cet add-on de supprimer des informations et des images de la base de données pour les aperçus"
+
+msgctxt "#30087"
+msgid "Notifications"
+msgstr "Notifications"
+
+msgctxt "#30088"
+msgid "Game"
+msgstr "Jeu"
+
+msgctxt "#30089"
+msgid "Viewers"
+msgstr "Spectateur"
+
+msgctxt "#30090"
+msgid "Language"
+msgstr "Langue"
+
+msgctxt "#30091"
+msgid "Mature"
+msgstr "Mature"
+
+msgctxt "#30092"
+msgid "Partner"
+msgstr "Partenaire"
+
+msgctxt "#30093"
+msgid "Delay"
+msgstr "Delais"
+
+msgctxt "#30094"
+msgid "Automatic refresh interval (minutes)"
+msgstr "intervalle d'actualisation automatique (minutes)"
+
+msgctxt "#30095"
+msgid "Username is required"
+msgstr "Le nom d'utilisateur est nécessaire"
+
+msgctxt "#30096"
+msgid "API"
+msgstr ""
+
+msgctxt "#30097"
+msgid "OAuth Client ID"
+msgstr ""
+
+msgctxt "#30098"
+msgid "Select Video by ID or URL"
+msgstr ""
+
+msgctxt "#30099"
+msgid "OAuth Token"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Visit www.twitch.tv/settings/connections and [CR]'Register your application' for an OAuth Client-ID"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Visit www.twitchapps.com/tmi to generate an OAuth token"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Source"
+msgstr ""
+
+msgctxt "#30103"
+msgid "1080p60"
+msgstr ""
+
+msgctxt "#30104"
+msgid "1080p30"
+msgstr ""
+
+msgctxt "#30105"
+msgid "720p60"
+msgstr ""
+
+msgctxt "#30106"
+msgid "720p30"
+msgstr ""
+
+msgctxt "#30107"
+msgid "540p30"
+msgstr ""
+
+msgctxt "#30108"
+msgid "480p30"
+msgstr ""
+
+msgctxt "#30109"
+msgid "360p30"
+msgstr ""
+
+msgctxt "#30110"
+msgid "240p30"
+msgstr ""
+
+msgctxt "#30111"
+msgid "144p30"
+msgstr ""
+
+msgctxt "#30112"
+msgid "Quality may result in best match"
+msgstr ""

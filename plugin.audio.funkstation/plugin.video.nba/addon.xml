@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.nba"
+       name="NBA League Pass"
+       version="0.8.4"
+       provider-name="maxgalbu, ptsampoukas, robla">
+  <requires>
+    <import addon="xbmc.python" version="2.20.0"/>
+    <import addon="script.common.plugin.cache" version="0.9.1"/>
+    <import addon="script.module.pytz" version="2014.2"/>
+    <import addon="script.module.six" version="1.9.0"/>
+    <import addon="script.module.dateutil" version="2.4.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="leaguepass.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary>Watch NBA League Pass games.</summary>
+    <description>Features: Live, archive and condensed games for the current NBA season, highlights, top plays and other videos, previous seasons starting from 2012/2013. Fanart and thumbnails. Requires a subscription to the NBA International League Pass.</description>
+    <license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>
+    <forum>http://forum.kodi.tv/showthread.php?tid=124716</forum>
+    <website>https://github.com/maxgalbu/xbmc.plugin.video.nba</website>
+    <email></email>
+    <source>https://github.com/maxgalbu/xbmc.plugin.video.nba</source>
+  </extension>
+</addon>

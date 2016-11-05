@@ -1,0 +1,345 @@
+# Kodi Media Center language file
+# Addon Name: ESPN 3
+# Addon id: plugin.video.espn_3
+# Addon Provider: awaters1,locomot1f,MetalChris,BlueCop,Romans I XVI
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30021"
+msgid "Upcoming Days"
+msgstr ""
+
+msgctxt "#30022"
+msgid "1st Replay Days"
+msgstr ""
+
+msgctxt "#30023"
+msgid "2nd Replay Days"
+msgstr ""
+
+msgctxt "#30024"
+msgid "3rd Replay Days"
+msgstr ""
+
+msgctxt "#30025"
+msgid "4th Replay End"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Live"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Upcoming"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Replay "
+msgstr ""
+
+msgctxt "#30032"
+msgid "Replay All"
+msgstr ""
+
+msgctxt "#30034"
+msgid "(All)"
+msgstr ""
+
+msgctxt "#30035"
+msgid "Upcoming Event"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Event has not started."
+msgstr ""
+
+msgctxt "#30037"
+msgid "Error"
+msgstr ""
+
+msgctxt "#30040"
+msgid "Blacked Out"
+msgstr ""
+
+msgctxt "#30170"
+msgid "Clear cached data"
+msgstr ""
+
+msgctxt "#30180"
+msgid "Disable SSL Certificate checks (Unsafe)"
+msgstr ""
+
+msgctxt "#30190"
+msgid "ESPN3 (%d events)"
+msgstr ""
+
+msgctxt "#30191"
+msgid "ESPN3 (%d event)"
+msgstr ""
+
+msgctxt "#30200"
+msgid "SECPlus (%d events)"
+msgstr ""
+
+msgctxt "#30201"
+msgid "SECPlus (%d event)"
+msgstr ""
+
+msgctxt "#30202"
+msgid "ACCExtra (%d events)"
+msgstr ""
+
+msgctxt "#30203"
+msgid "ACCExtra (%d event)"
+msgstr ""
+
+msgctxt "#30300"
+msgid "Authenticate with provider to access premium content"
+msgstr ""
+
+msgctxt "#30310"
+msgid "Authentication Process"
+msgstr ""
+
+msgctxt "#30320"
+msgid "1. Go to https://es.pn/appletv"
+msgstr ""
+
+msgctxt "#30330"
+msgid "2. Enter %s as the activation code"
+msgstr ""
+
+msgctxt "#30340"
+msgid "3. Press Continue when it says your device is activated on the website"
+msgstr ""
+
+msgctxt "#30350"
+msgid "Continue"
+msgstr ""
+
+msgctxt "#30360"
+msgid "Cancel"
+msgstr ""
+
+msgctxt "#30370"
+msgid "Your device has been authenticated."
+msgstr ""
+
+msgctxt "#30380"
+msgid "Authentication Details"
+msgstr ""
+
+msgctxt "#30390"
+msgid "Authentication Expires: %s"
+msgstr ""
+
+msgctxt "#30410"
+msgid "This device isn't authorized, choose to authenticate from the main menu"
+msgstr ""
+
+msgctxt "#30420"
+msgid "Unable to authenticate device %s"
+msgstr ""
+
+msgctxt "#30430"
+msgid "De-authorize device"
+msgstr ""
+
+msgctxt "#30440"
+msgid "Choose Stream Quality"
+msgstr ""
+
+msgctxt "#30450"
+msgid "[B]%s[/B] @ %s %sk"
+msgstr ""
+
+msgctxt "#30460"
+msgid "Stream Quality"
+msgstr ""
+
+msgctxt "#30470"
+msgid "Best"
+msgstr ""
+
+msgctxt "#30480"
+msgid "Ask Once"
+msgstr ""
+
+msgctxt "#30490"
+msgid "Ask Every Time"
+msgstr ""
+
+msgctxt "#30500"
+msgid "Error playing channel, %s"
+msgstr ""
+
+msgctxt "#30520"
+msgid "Index of stream to choose in the playlist"
+msgstr ""
+
+msgctxt "#30530"
+msgid "Show the Old Style Menu (Legacy)"
+msgstr ""
+
+msgctxt "#30540"
+msgid "Bit rate limit (e.x. 10000k)"
+msgstr ""
+
+msgctxt "#30550"
+msgid "Sports"
+msgstr ""
+
+msgctxt "#30560"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30570"
+msgid "Load More"
+msgstr ""
+
+msgctxt "#30580"
+msgid "[BLACKOUT]"
+msgstr ""
+
+msgctxt "#30680"
+msgid "Featured"
+msgstr ""
+
+msgctxt "#30700"
+msgid "DMA: %s Timezone: %s"
+msgstr ""
+
+msgctxt "#30710"
+msgid "Can SSO: %s SSO Abuse: %s"
+msgstr ""
+
+msgctxt "#30730"
+msgid "AppleTV"
+msgstr ""
+
+msgctxt "#30740"
+msgid "Legacy"
+msgstr ""
+
+msgctxt "#30750"
+msgid "tvOS"
+msgstr ""
+
+msgctxt "#30760"
+msgid "Roku"
+msgstr ""
+
+msgctxt "#30770"
+msgid "Turn off all colors"
+msgstr ""
+
+msgctxt "#30780"
+msgid "AndroidTV"
+msgstr ""
+
+msgctxt "#30800"
+msgid "Show the AppleTV menu"
+msgstr ""
+
+msgctxt "#30810"
+msgid "Show the Roku menu"
+msgstr ""
+
+msgctxt "#30820"
+msgid "Show the tvOS menu"
+msgstr ""
+
+msgctxt "#30830"
+msgid "Show the AndroidTV menu"
+msgstr ""
+
+msgctxt "#30840"
+msgid "Unable to re-authenticate, this device has been de-authorized."
+msgstr ""
+
+msgctxt "#30850"
+msgid "Refresh Content (Generated at %s)"
+msgstr ""
+
+msgctxt "#30860"
+msgid "Playback"
+msgstr ""
+
+msgctxt "#30870"
+msgid "Device Menu"
+msgstr ""
+
+msgctxt "#30880"
+msgid "Advanced"
+msgstr ""
+
+msgctxt "#30890"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30900"
+msgid "This channel may not be supported by your provider would you like to hide this channel? (configured in settings)"
+msgstr ""
+
+msgctxt "#30910"
+msgid "There was an SSL certificate verification failure would you like to disable this verification? (configured in settings)"
+
+msgctxt "#30988"
+msgid "Goal Line"
+msgstr ""
+
+msgctxt "#30989"
+msgid "ACCExtra"
+msgstr ""
+
+msgctxt "#30990"
+msgid "ESPN"
+msgstr ""
+
+msgctxt "#30991"
+msgid "ESPN2"
+msgstr ""
+
+msgctxt "#30992"
+msgid "ESPN3"
+msgstr ""
+
+msgctxt "#30993"
+msgid "ESPNU"
+msgstr ""
+
+msgctxt "#30994"
+msgid "ESPNews"
+msgstr ""
+
+msgctxt "#30995"
+msgid "ESPN Deportes"
+msgstr ""
+
+msgctxt "#30996"
+msgid "SEC"
+msgstr ""
+
+msgctxt "#30997"
+msgid "SEC+"
+msgstr ""
+
+msgctxt "#30998"
+msgid "Longhorn"
+msgstr ""
+
+msgctxt "#30999"
+msgid "Buzzer Beater"
+msgstr ""
+

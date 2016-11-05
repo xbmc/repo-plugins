@@ -1,0 +1,31 @@
+1.0.0
+- Initial release
+1.0.1
+- Various fixes and optical optimizations
+1.0.2
+- Fixed site changes for "next page"
+1.0.3
+- Added site changes (new categories)
+1.0.4
+- Fixed small bug
+1.0.5 / 2.0.5
+- Fixed site changes
+- Added context menu "Add to queue"
+2.0.6
+- Fixed site changes
+2.0.7
+- Fixed site changes
+2.0.8
+- Fixed site changes
+2.0.9
+- Fixed video playback
+2.1.1
+- Change for Official Release
+- Corrected for Playback
+- Orginal Source from AddonScriptorDE'
+- New Version from L0RE
+2.1.7
+- Patch
+2.2.1
+- Patch
+

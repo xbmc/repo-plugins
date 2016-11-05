@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.c31" name="Channel 31" version="1.0.0" provider-name="Damon Toumbourou">
+  <requires>
+    <import addon="xbmc.python"                     version="2.20.0"/>
+    <import addon="script.module.xbmcswift2"        version="2.4.0"/>
+    <import addon="script.module.beautifulsoup4"    version="4.3.1"/>
+    <import addon="script.module.requests"          version="2.5.3"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <language></language>
+    <summary lang="en">C31 Melbourne and Geelong - the Melbourne Community Television Consortium.
+    </summary>
+    <description lang="en">C31 Melbourne and Geelong - the Melbourne Community Television Consortium is Victoria's not-for-profit community television service providing locally-based entertainment, education and information. Transmitted from Mount Dandenong, C31 provides access and representation to the many diverse communities within Victoria. You can find faces, voices and issues which are not present in mainstream television. We broadcast over 90 new locally-made programs every week. These programs are produced by community television volunteers and independent television makers.
+    </description>
+    <license>The MIT License (MIT)</license>
+    <forum>http://forum.xbmc.org/showthread.php?tid=184904</forum>
+    <email>dtoumbourou@gmail.com</email>
+    <source>https://github.com/DamonToumbourou/plugin.video.c31.git</source>
+    <website></website>
+  </extension>
+</addon>

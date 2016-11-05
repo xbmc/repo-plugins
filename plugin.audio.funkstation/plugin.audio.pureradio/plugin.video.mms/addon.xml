@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.mms" name="Missing Movies" version="4.0.5" provider-name="takoi">
+    <requires>
+        <import addon="xbmc.python" version="2.14.0"/>
+        <import addon="script.module.routing" version="0.2.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Find missing videos</summary>
+        <description lang="en">Scans media sources for movies, TV shows and episodes that got missed during the library scan. This add-on can used to identify, play or manually add missing videos to your media library.</description>
+        <license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>
+        <platform>all</platform>
+        <source>https://github.com/tamland/kodi-missing-movies</source>
+        <forum>http://forum.xbmc.org/showthread.php?tid=118263</forum>
+    </extension>
+</addon>

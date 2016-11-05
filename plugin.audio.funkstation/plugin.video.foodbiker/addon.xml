@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.foodbiker" name="Food Biker" version="1.0.3" provider-name="foodbiker">
+  <requires>
+    <import addon="xbmc.python" version="2.20.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <language></language>
+    <summary lang="en">Food Biker</summary>
+    <description lang="en">Take the fork in the road.™ Join Chef Seth Diamond, as he motorcycles around America to both learn culinary secrets and explore the motoring world. It’s about culinary adventure, the hottest bikes and cars, and the coolest celebrities!</description>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+    <forum></forum>
+    <source>http://foodbiker.com/plugins/plugin.video.foodbiker</source>
+    <website>http://foodbiker.com</website>
+    <platform>all</platform>
+  </extension>
+</addon>

@@ -1,0 +1,23 @@
+[B]4.0.5[/B]
+- Improved detection of bluray companion files.
+
+[B]4.0.4[/B]
+- Fixed detection of stacked files with comma in filename.
+
+[B]4.0.3[/B]
+- Fixed case conversion for blacklists (now case insensitive)
+
+[B]4.0.2[/B]
+- Fixed multi-path sources
+- Fixed bluray backup files detected as missing
+- Added .url files to the default blacklist
+
+[B]4.0.1[/B]
+- Fixed remote paths getting identified as missing on windows
+
+[B]4.0.0[/B]
+- Reworked existing features
+- Added ability to show identify missing TV shows
+- Improved detection of DVD/Bluray files, samples, extras and other false positives
+- Performance improvements
+- Unicode support

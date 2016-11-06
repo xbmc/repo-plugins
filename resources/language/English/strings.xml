@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+	<string id="30025">files</string>
+	<string id="30028">Listen Now</string>
+	<string id="30029">Cancel</string>
+	<string id="30031">Song Requests</string>
+	<string id="30036">Listen to Stream</string>
+	<string id="30040">Podcasts</string>
+	<string id="30043">Song recently played</string>
+	<string id="30044">Artist recently played</string>
+	<string id="30045">Listen to Stream 64kbit/AAC+</string>	
+	<string id="30046">Listen to Stream 128kbit/MP3</string>	
+	<string id="30047">Listen to Stream 192kbit/MP3</string>	
+	
+	<string id="30100">General</string>
+	<string id="30101">Play stream automatically</string>
+	<string id="30102">Hide recently requested artists</string>
+	<string id="30103">Recordings</string>
+	<string id="30104">Default recordings folder</string>
+	<string id="30105">Ask for folder</string>
+	<string id="30106">Ask for filename</string>
+</strings>

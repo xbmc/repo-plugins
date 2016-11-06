@@ -17,162 +17,134 @@
 #  http://www.gnu.org/copyleft/gpl.html
 #
 
-import os
 import urllib
 import urllib2
 import re
-
 import xbmc
 import xbmcaddon
 import xbmcplugin
 import xbmcgui
+import os
+import json
 
 ADDONID  = 'plugin.audio.pureradio'
 TITLE    = 'PureRadio.One'
-
-# urls
-URLPLS   = 'http://listento.pureradio.one/pureradio.pls'
-URL064   = 'http://listento.pureradio.one/8000/'
+URL      = 'http://listento.pureradio.one/pureradio.pls'
+URL64    = 'http://listento.pureradio.one:8000'
 URL128   = 'http://listento.pureradio.one:8000/pure_128'
 URL192   = 'http://listento.pureradio.one:8000/pure_192'
-PODCASTS = 'http://www.spreaker.com/show/1757189/episodes/feed'
+PODCASTS = 'http://www.spreaker.com/show/{0}/episodes/feed'
 
-
-# addon information
 ADDON    = xbmcaddon.Addon(ADDONID)
 HOME     = ADDON.getAddonInfo('path')
 VERSION  = ADDON.getAddonInfo('version')
 GETTEXT  = ADDON.getLocalizedString
+
 ICON     =  os.path.join(HOME, 'icon.png')
 FANART   =  os.path.join(HOME, 'fanart.jpg')
 
-# modes
 _PLAYNOW  = 100
-_PODCASTS = 110
-_PLAYPODCAST = 111
+_PLAY128  = 101
+_PLAY192  = 102
+_PODCASTS = 103
+
+_PLAYPODCAST = 200
 
 
 def DialogOK(title, line1, line2, line3):
     xbmcgui.Dialog().ok(title, line1, line2, line3)
 
-
-def checkVersion():
-    # check previous version
+	
+def CheckVersion():
     prev = ADDON.getSetting('VERSION')
     curr = VERSION
-            
-    # version update for future usage
     if prev != curr:
-        ADDON.setSetting('VERSION', curr)
-
-
-def getURL(stream):
-    # convert selection box items into urls    
-    if stream=="64kbps":
-        return URL064
-    if stream=="128kbps":
-        return URL128
-    elif stream=="192kbps":
-        return URL192
-    else: 
-        return URLPLS
-    
-    
-def clean(name):
+		ADDON.setSetting('VERSION', curr)
+	
+	
+def getURL(url):
+	if url==1:
+		return URL64
+	elif url==2:
+		return URL128
+	elif url==3:
+		return URL192
+	else:
+		return URL
+	
+	
+def clean(name):	
     name = name.replace('&#233;', 'e')
     return name.strip()
+	
 
-
-def Play():
-    # retrieve preferred quality
-    stm = ADDON.getSetting('STREAM')
-    # retrieve url
-    url = getURL(stm)
-    
-    # create playlist
+def Play(url=0):
     pl = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
-    pl.clear()
-    pl.add(url)
-
+    pl.clear()    
+    pl.add(getURL(url))
     xbmc.Player().play(pl)
 
-
-def autoPlay():
-    # auto play option
-    if ADDON.getSetting('PLAY')=='true':
-        if not xbmc.Player().isPlayingAudio():
-          Play()
-
-
-def createMenu():
-    # add menu items
-    addDir(GETTEXT(30001), _PLAYNOW, False)
-    addDir(GETTEXT(30002), _PODCASTS, True)
-
-
+	
 def addDir(name, mode, isFolder):
-    # add item to directory list
-    name = clean(name)
-    thumbnail = ICON
-
-    u = sys.argv[0] + '?mode=' + str(mode)        
-
-    li = xbmcgui.ListItem(name, iconImage=thumbnail, thumbnailImage=thumbnail)
-    li.setProperty('Fanart_Image', FANART)
-    
-    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=li, isFolder=isFolder)
-
-
-    
+	name = clean(name)
+	thumbnail = ICON
+	u         = sys.argv[0] + '?mode=' + str(mode)        
+	liz       = xbmcgui.ListItem(name, iconImage=thumbnail, thumbnailImage=thumbnail)
+	liz.setProperty('Fanart_Image', FANART)
+	xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=isFolder)
+	
+	
 def AddPodcast(name, link):
-    # add podcast item to directory list
     thumbnail = ICON#'DefaultPlaylist.png'
 
     u   = sys.argv[0]
     u  += '?url='  + urllib.quote_plus(link)
     u  += '&mode=' + str(_PLAYPODCAST)
     u  += '&name=' + urllib.quote_plus(name)
-    
-    li = xbmcgui.ListItem(name, iconImage=thumbnail, thumbnailImage=thumbnail)
-    
-    xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = li, isFolder = False)
+    liz = xbmcgui.ListItem(name, iconImage=thumbnail, thumbnailImage=thumbnail)
 
-
+    xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = liz, isFolder = False)
+	
 def ShowPodcasts():
-    # show podcast from spreaker
-    response = urllib2.urlopen(PODCASTS).read()   
-    response = response.replace('\n','')
+	shows = (1721942,1757189)
+	for show in shows:
+		response = urllib2.urlopen(PODCASTS.format(show)).read()   
+		response = response.replace('\n','')
 
-    match = re.compile('<item><title>(.+?)</title><link>.+?</link>.+?<enclosure url="(.+?)</enclosure>').findall(response)
+		match = re.compile('<item><title>(.+?)</title><link>.+?</link>.+?<enclosure url="(.+?)</enclosure>').findall(response)
 
-    for name, link in match:
-        AddPodcast(name, link.split('?')[0])
-
+	for name, link in match:
+		AddPodcast(name, link.split('?')[0])
 
 def PlayPodcast(name, link):
-    # play selected podcast
     link = link.split('"')[0]
 
     thumbnail = ICON#'DefaultPlaylist.png'
         
-    li = xbmcgui.ListItem(name, iconImage = thumbnail, thumbnailImage = thumbnail)
-    li.setInfo('music', {'Title': name})
-    li.setProperty('mimetype', 'audio/mpeg')
-    li.setProperty('IsPlayable', 'true')
+    liz = xbmcgui.ListItem(name, iconImage = thumbnail, thumbnailImage = thumbnail)
+    liz.setInfo('music', {'Title': name})
+    liz.setProperty('mimetype', 'audio/mpeg')
+    liz.setProperty('IsPlayable', 'true')
 
     pl = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
     pl.clear()   
-    pl.add(link, li)
+    pl.add(link, liz)
 
     xbmc.Player().play(pl)
-    
-
-def Main():
-    checkVersion()
-    createMenu()
-    autoPlay()
-
-
+					
+					
+def Main():   
+	CheckVersion()
+	addDir(GETTEXT(30045), _PLAYNOW,     False)
+	addDir(GETTEXT(30046), _PLAY128,     False)
+	addDir(GETTEXT(30047), _PLAY192,     False)
+	#   addDir(GETTEXT(30031), _REQUEST,     True)
+	addDir(GETTEXT(30040), _PODCASTS,    True)
+	# auto play option
+	play = ADDON.getSetting('PLAY')=='true'
+	if play and not xbmc.Player().isPlayingAudio():
+		Play()
+		
 def get_params(path):
     params = {}
     path   = path.split('?', 1)[-1]
@@ -189,15 +161,20 @@ def get_params(path):
 params = get_params(sys.argv[2])
 mode   = None
 
-try:
-    mode=int(params['mode'])
-except:
-    pass
+try:    mode=int(params['mode'])
+except: pass
 
 if mode == _PLAYNOW:
+    ADDON.setSetting('STREAM', str(mode == _PLAYNOW).lower())
     Play()
+elif mode == _PLAY128:
+    ADDON.setSetting('STREAM', str(mode == _PLAY128).lower())
+    Play(2)
+elif mode == _PLAY192:
+    ADDON.setSetting('STREAM', str(mode == _PLAY192).lower())
+    Play(3)
 elif mode == _PODCASTS:
-    ShowPodcasts()
+	ShowPodcasts()
 elif mode == _PLAYPODCAST:
     try:
         name = params['name']
@@ -207,5 +184,6 @@ elif mode == _PLAYPODCAST:
         pass
 else:
     Main()
+
     
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

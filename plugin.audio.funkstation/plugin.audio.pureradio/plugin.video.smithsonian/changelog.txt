@@ -1,7 +1,0 @@
-Version 1.0.1 Initial release
-Version 1.0.3 Added Proxy and Subtitle support
-Version 1.0.4 Fix for 1080 and audio only choices (website change)
-Version 1.0.6 Added metadata and views
-Version 1.0.7 Added select content type
-Version 1.0.8 Added show caching - should load faster
-Version 3.0.1 Isengard version - separate scraper

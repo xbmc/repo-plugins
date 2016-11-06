@@ -1,1 +1,0 @@
-# kodi.plugin.video.pluralsight

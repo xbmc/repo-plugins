@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.zdf_de_lite" name="ZDF Mediathek" version="3.1.0" provider-name="membrane">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+		<!--<import addon="script.module.libZdf" version="1.0.6"/>-->
+		<import addon="script.module.libMediathek2" version="1.2.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">Watch videos on demand from the ZDF Mediathek.</summary>
+        <description lang="en">Watch videos on demand from the ZDF Mediathek.</description>
+        <summary lang="de">Videos aus der Mediathek des ZDF</summary>
+        <description lang="de">Dieses Add-on bietet Zugriff auf die Inhalte der ZDF Mediathek. Vergangene Serien, Filme und Nachrichten der Sender 3sat, ZDF, ZDF Info und ZDF Neo können hier abgerufen werden.</description>
+    </extension>
+</addon>

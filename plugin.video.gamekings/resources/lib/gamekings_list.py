@@ -158,11 +158,6 @@ class Main:
                         str(video_page_url)), xbmc.LOGDEBUG)
                     continue
 
-            if str(video_page_url).lower().find('premium') >= 0:
-                premium_video = True
-            else:
-                premium_video = False
-
             # Make title
             try:
                 title = item['title']
@@ -231,8 +226,6 @@ class Main:
             title = str(title).replace("Gamekings Extra: ", "")
             title = str(title).replace("Gamekings Extra over ", "")
             title = title.capitalize()
-            if premium_video:
-                title = title + " (Premium video)"
 
             xbmc.log(
                     "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "title", str(title)),

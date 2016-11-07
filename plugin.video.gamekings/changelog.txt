@@ -1,3 +1,8 @@
+v1.2.4 (2016-07-11)
+- fixed premium videos (!!!!) by using the vimeo plugin (big kudo's to bromix for the plugin)
+- don't change titles anymore for premium video's
+- small fix for checking if the login was successful
+
 v1.2.3 (2016-06-08)
 - added support for premium content
 - using requests

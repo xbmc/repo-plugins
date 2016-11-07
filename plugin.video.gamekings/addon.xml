@@ -2,13 +2,14 @@
 <addon 
 	id="plugin.video.gamekings" 
 	name="GameKings" 
-	version="1.2.3"
+	version="1.2.4"
 	provider-name="Skipmode A1, Amelandbor">
   <requires>
     <import addon="xbmc.python"                 version="2.14.0"/>
 	<import addon="script.module.beautifulsoup" version="3.0.8"/>
 	<import addon="plugin.video.youtube"        version="5.1.7"/>
     <import addon="script.module.requests"      version="2.4.3"/>
+    <import addon="plugin.video.vimeo"          version="4.1.4"/>
   </requires>
   <extension point="xbmc.python.pluginsource" 	library="addon.py">
     <provides>video</provides>

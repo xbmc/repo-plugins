@@ -12,6 +12,7 @@ import resources.lib.deejay_it_parser as deejay
 import xbmcgui
 import xbmcplugin
 import xbmcaddon
+import xbmc
 
 
 __settings__ = xbmcaddon.Addon(id='plugin.audio.deejayIt.reloaded')
@@ -23,13 +24,13 @@ ADDON_HANDLE = int(sys.argv[1])
 ARGS = urlparse.parse_qs(sys.argv[2][1:])
 xbmcplugin.setContent(ADDON_HANDLE, 'episodes')
 xbmcplugin.addSortMethod(ADDON_HANDLE,
-    sortMethod=xbmcplugin.SORT_METHOD_UNSORTED)
+                         sortMethod=xbmcplugin.SORT_METHOD_UNSORTED)
 xbmcplugin.addSortMethod(ADDON_HANDLE,
-    sortMethod=xbmcplugin.SORT_METHOD_DATE)
+                         sortMethod=xbmcplugin.SORT_METHOD_DATE)
 xbmcplugin.addSortMethod(ADDON_HANDLE,
-    sortMethod=xbmcplugin.SORT_METHOD_LABEL)
+                         sortMethod=xbmcplugin.SORT_METHOD_LABEL)
 xbmcplugin.addSortMethod(ADDON_HANDLE,
-    sortMethod=xbmcplugin.SORT_METHOD_PROGRAM_COUNT)
+                         sortMethod=xbmcplugin.SORT_METHOD_PROGRAM_COUNT)
 
 
 def build_url(query):
@@ -48,18 +49,18 @@ if MODE is None:
         url=build_url({'mode': 'reloaded'}),
         listitem=LI,
         isFolder=True
-        )
+    )
     LI = xbmcgui.ListItem('PODCAST')
     xbmcplugin.addDirectoryItem(
         handle=ADDON_HANDLE,
         url=build_url({'mode': 'podcast'}),
         listitem=LI,
         isFolder=True
-        )
+    )
 elif MODE[0] == 'reloaded':
     try:
         LISTA = deejay.get_reloaded_list()
-    #urllib2 errors are a subclass of IOError
+    # urllib2 errors are a subclass of IOError
     except IOError as e_urllib2:
         xbmcgui.Dialog().ok(
             __language__(30002),
@@ -75,8 +76,8 @@ elif MODE[0] == 'reloaded':
                              'progName': prog[0],
                              'lastReloadedUrl': prog[2],
                              'showThumb': prog[1]})
-            #showThumb, carried by LISTA, must be used in 'play' mode. It is
-            #thus propagated through the calls
+            # showThumb, carried by LISTA, must be used in 'play' mode. It is
+            # thus propagated through the calls
             li = xbmcgui.ListItem(prog[0], iconImage=prog[1])
             li.setInfo('music', {'date': prog[3], 'count': idx})
             xbmcplugin.addDirectoryItem(handle=ADDON_HANDLE,
@@ -99,7 +100,7 @@ elif MODE[0] in ('reloadedEpList', 'podcastEpList'):
                 url=LAST_RELOADED_URL,
                 oldimg=FAN_ART)
             MODO = 'playPodcast'
-    #urllib2 errors are a subclass of IOError
+    # urllib2 errors are a subclass of IOError
     except IOError as e_urllib2:
         xbmcgui.Dialog().ok(
             __language__(30002),
@@ -107,9 +108,9 @@ elif MODE[0] in ('reloadedEpList', 'podcastEpList'):
             str(e_urllib2.reason))
     else:
         for idx, ep in enumerate(EPISODI):
-            #('http://www.deejay.it/audio/20071120-2/278354/',
-            #   '20071120',
-            #   'Puntata del 20 Novembre 2007')
+            # ('http://www.deejay.it/audio/20071120-2/278354/',
+            #  '20071120',
+            #  'Puntata del 20 Novembre 2007')
             URL = build_url({'mode': MODO,
                              'epUrl': ep[0],
                              'showThumb': SHOW_THUMB,
@@ -118,22 +119,22 @@ elif MODE[0] in ('reloadedEpList', 'podcastEpList'):
             LI = xbmcgui.ListItem(ep[2],
                                   iconImage='DefaultAudio.png')
             LI.setProperty('IsPlayable', 'true')
-            #Setting fanArt
-            #not using setArt to keep Frodo's compatibility
-            #LI.setArt({'fanart' : img})
+            # Setting fanArt
+            # not using setArt to keep Frodo's compatibility
+            # LI.setArt({'fanart' : img})
             LI.setProperty('fanart_image', IMG)
             LI.setInfo('music', {'date': ep[1], 'count': idx})
             xbmcplugin.addDirectoryItem(handle=ADDON_HANDLE,
                                         url=URL,
                                         listitem=LI)
         if NEXTPAGE:
-            #Questo aggiunge la prossima pagina
+            # Questo aggiunge la prossima pagina
             URL = build_url({'mode': MODE[0],
                              'progName': PROG_NAME,
                              'lastReloadedUrl': NEXTPAGE,
                              'showThumb': SHOW_THUMB,
                              'fanArt': IMG})
-            LI = xbmcgui.ListItem('>>> '+__language__(30001)+' >>>')
+            LI = xbmcgui.ListItem('>>> ' + __language__(30001) + ' >>>')
             xbmcplugin.addDirectoryItem(handle=ADDON_HANDLE,
                                         url=URL,
                                         listitem=LI,
@@ -152,14 +153,14 @@ elif MODE[0] in ('playReloaded', 'playPodcast'):
         LI = xbmcgui.ListItem(path=URL)
         LI.setThumbnailImage(ARGS['showThumb'][0])
         LI.setInfo('music', {'title': ARGS['title'][0],
-                               'album': ARGS['progName'][0],
-                               'artist': 'Deejay '+MODE[0][4:]})
+                             'album': ARGS['progName'][0],
+                             'artist': 'Deejay ' + MODE[0][4:]})
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, LI)
 
 elif MODE[0] == 'podcast':
     try:
         LISTA = deejay.get_podcast_list()
-    #urllib2 errors are a subclass of IOError
+    # urllib2 errors are a subclass of IOError
     except IOError as e_urllib2:
         xbmcgui.Dialog().ok(
             __language__(30002),
@@ -168,7 +169,7 @@ elif MODE[0] == 'podcast':
     else:
         for idx, prog in enumerate(LISTA):
             url = build_url({'mode': 'podcastEpList',
-                             'progName': prog[0],
+                             'progName': prog[0].encode('ascii', 'ignore'),
                              'lastReloadedUrl': prog[2],
                              'showThumb': prog[1]})
             li = xbmcgui.ListItem(prog[0], iconImage=prog[1])
@@ -179,17 +180,18 @@ elif MODE[0] == 'podcast':
                                         isFolder=True)
             for ep in prog[4]:
                 URL = build_url({'mode': 'playPodcast',
-                    'epUrl': ep[1],
-                    'showThumb': prog[1],
-                    'title': ep[0].encode('ascii', 'ignore'),
-                    'progName': prog[0]})
-                LI = xbmcgui.ListItem(u"\u2022"+' '+ep[0], iconImage=prog[1])
+                                 'epUrl': ep[1],
+                                 'showThumb': prog[1],
+                                 'title': ep[0].encode('ascii', 'ignore'),
+                                 'progName': prog[0].encode('ascii', 'ignore')})
+                LI = xbmcgui.ListItem(u"\u2022 " + ep[0],
+                                      iconImage=prog[1])
                 # bullet list for episodes
                 LI.setProperty('IsPlayable', 'true')
                 LI.setInfo('music', {'date': prog[3], 'count': idx})
                 xbmcplugin.addDirectoryItem(handle=ADDON_HANDLE,
-                    url=URL,
-                    listitem=LI)
+                                            url=URL,
+                                            listitem=LI)
 
 # e chiudiamo la lista per tutti i modi
 xbmcplugin.endOfDirectory(ADDON_HANDLE)

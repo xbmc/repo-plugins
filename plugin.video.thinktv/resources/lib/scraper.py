@@ -169,7 +169,7 @@ class myAddon(t1mAddon):
     thumb = xbmc.getInfoLabel('ListItem.Art(thumb)')
     fanart = xbmc.getInfoLabel('ListItem.Art(fanart)')
     html = self.getRequest('http://www.pbs.org/show/%s/episodes/' % url)
-    cnts = re.compile('<ul class="video-catalog-nav">.+?<strong>(.+?)<.+?<strong>(.+?)<.+?<strong>(.+?)<', re.DOTALL).search(html)
+    cnts = re.compile('<ul class="title-nav video-catalog-nav">.+?<strong>(.+?)<.+?<strong>(.+?)<.+?<strong>(.+?)<', re.DOTALL).search(html)
     if cnts is not None:
         ecnt, ccnt, pcnt = cnts.groups()
     else:

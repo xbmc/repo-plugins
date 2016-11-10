@@ -42,8 +42,8 @@ ADDON    = xbmcaddon.Addon(ADDONID)
 HOME     = ADDON.getAddonInfo('path')
 VERSION  = ADDON.getAddonInfo('version')
 GETTEXT  = ADDON.getLocalizedString
-ICON     =  os.path.join(HOME, 'icon.png')
-FANART   =  os.path.join(HOME, 'fanart.jpg')
+ICON     =  getAddonInfo("icon")
+FANART   =  getAddonInfo("fanart")
 
 # modes
 _PLAYNOW  = 100

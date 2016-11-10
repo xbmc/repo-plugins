@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.audio.pureradio" name="PureRadio.One" version="1.0.0" provider-name="cubitus">
 	<requires>
-		<import addon="xbmc.python" version="2.1.0"/>
+		<import addon="xbmc.python" version="2.24.0"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="default.py">
 		<provides>audio</provides>
@@ -16,6 +16,6 @@
 		<forum></forum>
 		<website>http://pureradio.one</website>
 		<email>pureradio.one@gmail.com</email>
-		<source></source>
+		<source>https://github.com/bdommel/plugin.audio.pureradio</source>
 	</extension>
 </addon>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+
+  <!-- General -->
+  <category label="General">
+    <setting id="quality" type="enum" label="30001" lvalues="30002|30003|30004|30005|30006" default="2" />    
+    <setting id="preferedStreamType" type="enum" label="30020" lvalues="30021|30022|30023|30024" default="1" />
+  </category>
+</settings>
+ 

@@ -1,3 +1,6 @@
+0.7.5 - CHG: reimplement ZDF Mediathak (important: ZDF enforces TLSv1 with SNI enabled, what is only supported by python 2.7.9. -> Wich leads te Plugin to be broken on pre Krypton Kodi)
+        Temporaily fix ARTE
+        
 0.7.4 - CHG: Repearing NDR und 3SAT
 0.7.3 - CHG: Change to BeautifulSoup instead of lxml
 0.7.2 - FIX: Multiple bugfixes for ard (by p-friedrich)

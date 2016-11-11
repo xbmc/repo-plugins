@@ -69,7 +69,7 @@ class ARTEMediathek(Mediathek):
     self.regex_VideoPageLinksHTML = re.compile("href=[\"'](http:\\\\/\\\\/www\\.arte\\.tv\\\\/guide\\\\/de\\\\/\d{6}-\d{3}/.+?)[\"']");
     self.regex_VideoPageLinksJSON = re.compile("\"url\":\"((http:\\\\/\\\\/www\\.arte\\.tv){0,1}\\\\/guide\\\\/de\\\\/\d{6}-\d{3}\\\\/.+?)\"");
     
-    self.regex_findVideoIds = re.compile("\"id\":\"(\d{6}-\d{3})(-A)\"");
+    self.regex_findVideoIds = re.compile("(\d{6}-\d{3})(-A)");
     
     self.regex_JSONPageLink = re.compile("http://arte.tv/papi/tvguide/videos/stream/player/D/\d{6}-\d{3}.+?/ALL/ALL.json");
     self.regex_JSON_VideoLink = re.compile("\"HTTP_MP4_.+?\":{.*?\"bitrate\":(\d+),.*?\"url\":\"(http://.*?.mp4)\".*?\"versionShortLibelle\":\"([a-zA-Z]{2})\".*?}");

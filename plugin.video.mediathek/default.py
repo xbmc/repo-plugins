@@ -16,12 +16,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 
-import urllib,xbmc,os
+import urllib,xbmc,os,xbmcaddon
 from simplexbmc import SimpleXbmcGui
 from mediathek.factory import MediathekFactory
 __plugin__ = "mediathek"
 
-gui = SimpleXbmcGui();
+settings = xbmcaddon.Addon(id='plugin.video.mediathek');
+
+gui = SimpleXbmcGui(settings);
 
 def get_params():
   paramDict = {}
@@ -41,6 +43,10 @@ def get_params():
 params = get_params();
 mediathekName = params.get("type", "")
 action=params.get("action", "")
+
+DIR_HOME = xbmc.translatePath(settings.getAddonInfo("profile"))
+if not os.path.exists(DIR_HOME):
+  os.mkdir(DIR_HOME);
 
 gui.log("Quality: %s"%gui.quality);
 gui.log("argv[0]: %s"%sys.argv[0]);
@@ -89,6 +95,13 @@ else:
       mediathek.searchVideo(searchText);
     else:
       gui.back();
+  elif(action == "openJsonPath"):
+    path = params.get("path", "0");
+    callhash = params.get("callhash", "0");
+    mediathek.buildJsonMenu(path,callhash,0)
+  elif(action == "openJsonLink"):
+    link = urllib.unquote_plus(params.get("link", ""));
+    mediathek.playVideoFromJsonLink(link);
   else:
     if(mediathek.isSearchable()):
       gui.addSearchButton(mediathek);

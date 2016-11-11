@@ -26,7 +26,7 @@ def getPluginPath( location = None ):
     else:
         # If no location, build default
         if location is None:
-            if ltype == "video":
+            if ltype.startswith( "video" ):
                 location = "addons://sources/video"
             else:
                 location = "addons://sources/audio"

@@ -163,7 +163,7 @@ class Main:
                     root = tree.getroot()
                     subtree = xmltree.SubElement( root, "label" ).text = newNode
                     # Ask user if they want to import defaults
-                    if ltype == "video":
+                    if ltype.startswith( "video" ):
                         defaultNames = [ xbmc.getLocalizedString( 231 ), xbmc.getLocalizedString( 342 ), xbmc.getLocalizedString( 20343 ), xbmc.getLocalizedString( 20389 ) ]
                         defaultValues = [ "", "movies", "tvshows", "musicvideos" ]
                         selected = xbmcgui.Dialog().select( LANGUAGE( 30304 ), defaultNames )
@@ -785,6 +785,17 @@ class Main:
             text = text.replace('-', separator)
         return text
 
+def getVideoLibraryLType():
+    json_query = xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "id": 0, "method": "Settings.GetSettingValue", "params": {"setting": "myvideos.flatten"}}')
+    json_query = unicode(json_query, 'utf-8', errors='ignore')
+    json_response = json.loads(json_query)
+
+    if json_response.has_key('result') and json_response['result'].has_key('value'):
+        if json_response['result']['value']:
+            return "video_flat"
+
+    return "video"
+
 if ( __name__ == "__main__" ):
     log('script version %s started' % ADDONVERSION)
     # Profiling
@@ -797,7 +808,8 @@ if ( __name__ == "__main__" ):
     # No profiling
     ltype = ''
     if sys.argv[2] == '':
-        xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=video", xbmcgui.ListItem( label=LANGUAGE(30091) ), isFolder=True )
+        videoltype = getVideoLibraryLType()
+        xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=%s" %( videoltype ), xbmcgui.ListItem( label=LANGUAGE(30091) ), isFolder=True )
         xbmcplugin.addDirectoryItem( int( sys.argv[ 1 ] ), "plugin://plugin.library.node.editor?ltype=music", xbmcgui.ListItem( label=LANGUAGE(30092) ), isFolder=True )
         xbmcplugin.setContent(int(sys.argv[1]), 'files')
         xbmcplugin.endOfDirectory(handle=int(sys.argv[1]))

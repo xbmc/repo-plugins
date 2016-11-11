@@ -27,7 +27,7 @@ class ViewAttribFunctions():
         pass
 
     def _load_rules( self ):
-        if ltype == 'video':
+        if ltype.startswith('video'):
             overridepath = os.path.join( DEFAULTPATH , "videorules.xml" )
         else:
             overridepath = os.path.join( DEFAULTPATH , "musicrules.xml" )

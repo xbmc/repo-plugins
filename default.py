@@ -42,8 +42,8 @@ ADDON    = xbmcaddon.Addon(ADDONID)
 HOME     = ADDON.getAddonInfo('path')
 VERSION  = ADDON.getAddonInfo('version')
 GETTEXT  = ADDON.getLocalizedString
-ICON     =  getAddonInfo("icon")
-FANART   =  getAddonInfo("fanart")
+ICON     = ADDON.getAddonInfo("icon")
+FANART   = ADDON.getAddonInfo("fanart")
 
 # modes
 _PLAYNOW  = 100
@@ -135,13 +135,13 @@ def AddPodcast(name, link):
 
 
 def ShowPodcasts():
-	response = urllib2.urlopen(PODCASTS.format(1757189)).read()   
-	response = response.replace('\n','')
+    response = urllib2.urlopen(PODCASTS.format(1757189)).read()   
+    response = response.replace('\n','')
 
-	match = re.compile('<item><title>(.+?)</title><link>.+?</link>.+?<enclosure url="(.+?)</enclosure>').findall(response)
+    match = re.compile('<item><title>(.+?)</title><link>.+?</link>.+?<enclosure url="(.+?)</enclosure>').findall(response)
 
-	for name, link in match:
-		AddPodcast(name, link.split('?')[0])
+    for name, link in match:
+        AddPodcast(name, link.split('?')[0])
 
 
 def PlayPodcast(name, link):

@@ -1,0 +1,2 @@
+1.0.0
+- Initial version after relaunch of zdf.de end of October 2016

@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 import time
 import cookielib
 import base64
-#import string, random
+
 from resources.globals import *
 from resources.providers.adobe import ADOBE
 from resources.providers.charter import CHARTER
@@ -22,23 +22,26 @@ from resources.providers.cable_one import CABLE_ONE
 from resources.providers.optimum import OPTIMUM
 from resources.providers.cox import COX
 from resources.providers.bright_house import BRIGHT_HOUSE
+from resources.providers.frontier import FRONTIER
+from resources.providers.playstation_vue import PLAYSTATION_VUE
+from resources.providers.summit_broadband import SUMMIT_BROADBAND
 
 
 def CATEGORIES():           
-    addDir('Live & Upcoming','/live',1,ICON,FANART)
-    addDir('Featured',ROOT_URL+'mcms/prod/nbc-featured.json',2,ICON,FANART)
-    addDir('On NBC Sports','/replays',3,ICON,FANART)
-
-
-def LIVE_AND_UPCOMING():      
-    #LIVE        
-    SCRAPE_VIDEOS(ROOT_URL+'mcms/prod/nbc-live-ios.json')
-    #UPCOMING
-    SCRAPE_VIDEOS(ROOT_URL+'mcms/prod/nbc-upcoming-ios.json')
+    req = urllib2.Request('http://stream.nbcsports.com/data/mobile/apps/NBCSports/configuration-ios.json')        
+    response = urllib2.urlopen(req)   
+    json_source = json.load(response)                       
+    response.close()   
+    xbmc.log(str(json_source))
+    for item in json_source['brands'][0]['sub-nav']:
+        display_name = item['display-name']
+        url = item['feed-url']
+        addDir(display_name,url,4,ICON,FANART)
 
 
 def GET_ALL_SPORTS():    
-    req = urllib2.Request(ROOT_URL+'configuration-liveextra-ios.json')    
+    req = urllib2.Request(ROOT_URL+'apps/NBCSports/configuration-ios.json')    
+    #http://stream.nbcsports.com/data/mobile/apps/NBCSports/configuration-ios.json
     response = urllib2.urlopen(req)   
     json_source = json.load(response)                       
     response.close()    
@@ -52,86 +55,69 @@ def GET_ALL_SPORTS():
         pass
 
 
-def FEATURED(url):
-    addDir('Full Replays',url,4,ICON,FANART,"replay")
-    addDir('Showcase',url,4,ICON,FANART,"showCase")
-    addDir('Spotlight',url,4,ICON,FANART,"spotlight") 
-
-
 def SCRAPE_VIDEOS(url,scrape_type=None):
-    #print url
+    xbmc.log(url)
     req = urllib2.Request(url)
-    #req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36')
     req.add_header('Connection', 'keep-alive')
     req.add_header('Accept', '*/*')
     req.add_header('User-Agent', UA_NBCSN)
     req.add_header('Accept-Language', 'en-us')
-    req.add_header('Accept-Encoding', 'gzip, deflate')
+    req.add_header('Accept-Encoding', 'deflate')
     
 
     response = urllib2.urlopen(req)    
     json_source = json.load(response)                           
     response.close()                
-    
-    if scrape_type == None:
-        #LIVE
-        #try:       
-            #Sort By Start Time
-            json_source = sorted(json_source,key=lambda x:x['start'])
-            for item in json_source:        
-                if not item['title'].startswith('CSN'):
-                    BUILD_VIDEO_LINK(item)
-        #except:
-            #pass
 
-    elif scrape_type == "ALL":
-        try:
-            for item in json_source['replay']:        
-                BUILD_VIDEO_LINK(item)
-        except:
-            pass
-        try:
-            for item in json_source['showCase']:        
-                BUILD_VIDEO_LINK(item)
-        except:
-            pass
-        try:
-            for item in json_source['spotlight']:        
-                BUILD_VIDEO_LINK(item)
-        except:
-            pass
+    if 'featured' in url:
+        json_source = json_source['showCase']
 
+    if 'live-upcoming' not in url:
+        json_source = sorted(json_source, key=lambda k: k['start'], reverse = True)
     else:
-        try:
-            if scrape_type == 'replay':
-                for item in reversed(json_source[scrape_type]):        
-                    BUILD_VIDEO_LINK(item)    
-            else:
-                for item in json_source[scrape_type]:        
-                    BUILD_VIDEO_LINK(item)
-        except:
-            pass
+        json_source = sorted(json_source, key=lambda k: k['start'], reverse = False)
+
+    for item in json_source:        
+      BUILD_VIDEO_LINK(item)
+    
 
 
 def BUILD_VIDEO_LINK(item):
     url = ''    
+    #Use the ottStreamUrl (v3) until sound is fixed for newer (v4) streams in kodi
     try:      
-        url = item['iosStreamUrl']  
+        #url = item['iosStreamUrl']          
+        url = item['ottStreamUrl']  
+        if url == '' and item['iosStreamUrl'] != '':
+            url = item['iosStreamUrl']          
+        '''
         if CDN == 1 and item['backupUrl'] != '':
             url = item['backupUrl']
+        '''
     except:
         try:
-            if item['videoSources']:
+            if item['videoSources']:                
+                '''
                 if 'iosStreamUrl' in item['videoSources'][0]:
                     url =  item['videoSources'][0]['iosStreamUrl']
                     if CDN == 1 and item['videoSources'][0]['backupUrl'] != '':
                         url = item['backupUrl']
+                '''
+                if 'ottStreamUrl' in item['videoSources'][0]:
+                    url =  item['videoSources'][0]['ottStreamUrl']
+                    
+                    if url == '' and item['iosStreamUrl'] != '':
+                        url = item['iosStreamUrl']    
+                    '''
+                    if CDN == 1 and item['videoSources'][0]['backupUrl'] != '':
+                        url = item['backupUrl']
+                    '''
         except:
             pass
         pass
     
     #Set quality level based on user settings    
-    #url = SET_STREAM_QUALITY(url)                      
+    #url = SET_STREAM_QUALITY(url)                    
     
     
     menu_name = item['title']
@@ -144,10 +130,18 @@ def BUILD_VIDEO_LINK(item):
     # Highlight active streams   
     start_time = item['start']
     pattern = "%Y%m%d-%H%M"
-    current_time =  datetime.utcnow().strftime(pattern) 
-    my_time = int(time.mktime(time.strptime(current_time, pattern)))     
-
+    print "Start Time"
+    print start_time
+    #current_time =  datetime.utcnow().strftime(pattern) 
+    #my_time = int(time.mktime(time.strptime(current_time, pattern)))         
+    '''
+    try:
+        my_time = datetime.strptime(current_time,pattern)
+    except TypeError:
+        my_time = datetime.fromtimestamp(time.mktime(time.strptime(current_time, pattern)))
+    '''
     #string (2008-12-07)
+    #20160304-1800
     aired = start_time[0:4]+'-'+start_time[4:6]+'-'+start_time[6:8]
     genre = item['sportName']
     
@@ -158,21 +152,29 @@ def BUILD_VIDEO_LINK(item):
     except:        
         pass
     
-
-    event_start = int(time.mktime(time.strptime(start_time, pattern)))
+    
+    #event_start = int(time.mktime(time.strptime(start_time, pattern)))  
+    #event_start = datetime.strptime(start_time,pattern)
+    '''
+    try:
+        event_start = datetime.strptime(start_time,pattern)
+    except TypeError:
+        event_start = datetime.fromtimestamp(time.mktime(time.strptime(start_time, pattern)))
+    '''
+    #event_start = 0
+    '''
     if length != 0:
         event_end = int(event_start + length)
     else:
         #Default to 24 hours if length not provided        
         event_end = int(event_start + 86400)
-
+    '''
     #Allow access to stream 10 minutes early
-    event_start = event_start - (10*60)
+    #event_start = event_start - (10*60)
 
     #Allow access to stream an hour after it's supposed to end
-    event_end = event_end + (60*60)
-    
-    
+    #event_end = event_end + (60*60)
+        
     #print url
     #print name + str(length) + " " + str(event_start) + " " + str(my_time) + " " + str(event_end) + " " + url + " FREE:" + str(free)
         
@@ -182,14 +184,19 @@ def BUILD_VIDEO_LINK(item):
     menu_name = filter(lambda x: x in string.printable, menu_name)
     #and (mode != 1 or (my_time >= event_start and my_time <= event_end) or 'Watch Golf Channel LIVE' in name)
     #if url != '' and (mode != 1 or (my_time >= event_start and my_time <= event_end) or 'Watch Golf Channel LIVE' in name):           
+    ''' 
     try:
         start_date = datetime.strptime(start_time, "%Y%m%d-%H%M")
-    except TypeError:
-        start_date = datetime.fromtimestamp(time.mktime(time.strptime(start_time, "%Y%m%d-%H%M")))
-
+        #start_date = datetime.strftime(utc_to_local(start_date),xbmc.getRegion('dateshort')+' '+xbmc.getRegion('time').replace('%H%H','%H').replace(':%S',''))       
+        start_date = datetime.strftime(start_date,"%Y-%m-%d %h:%M")       
+        info['plot'] = 'Starting at: '+start_date+'\n\n'+info['plot']
+    except:
+        start_date = 'Unavailable'        
+        #start_date = datetime.fromtimestamp(time.mktime(time.strptime(start_time, "%Y%m%d-%H%M")))
+    '''
+    start_date = stringToDate(start_time, "%Y%m%d-%H%M")
     start_date = datetime.strftime(utc_to_local(start_date),xbmc.getRegion('dateshort')+' '+xbmc.getRegion('time').replace('%H%H','%H').replace(':%S',''))       
     info['plot'] = 'Starting at: '+start_date+'\n\n'+info['plot']
-
     
     if url != '':
         if free:
@@ -205,8 +212,9 @@ def BUILD_VIDEO_LINK(item):
                 addPremiumLink(menu_name,url,imgurl,FANART,None,info)             
             else:
                 addDir(menu_name,url,5,imgurl,FANART,None,True,info)             
-
-    elif my_time < event_start:
+    
+    else:
+        #elif my_time < event_start:
         if free:
             menu_name = '[COLOR='+FREE_UPCOMING+']'+menu_name + '[/COLOR]'            
             if str(PLAY_MAIN) == 'true':
@@ -217,7 +225,6 @@ def BUILD_VIDEO_LINK(item):
         elif FREE_ONLY == 'false':
             menu_name = '[COLOR='+UPCOMING+']'+menu_name + '[/COLOR]'            
             addDir(menu_name + ' ' + start_date,'/disabled',999,imgurl,FANART,None,False,info)
-
         
     
 
@@ -245,8 +252,15 @@ def SIGN_STREAM(stream_url, stream_name, stream_icon):
         provider = COX()
     elif MSO_ID == 'Brighthouse':
         provider = BRIGHT_HOUSE()
+    elif MSO_ID == 'FRONTIER':
+        provider = FRONTIER()
+    elif MSO_ID == 'sony_auth-gateway_net':
+        provider = PLAYSTATION_VUE()
+    elif MSO_ID == 'summit-broadband':
+        provider = SUMMIT_BROADBAND()
 
     #provider = SET_PROVIDER()
+    xbmc.log("PROVIDER ="+str(PROVIDER))
 
     if provider != None:
         #stream_url = AUTHORIZE_STREAM(provider)
@@ -259,9 +273,9 @@ def SIGN_STREAM(stream_url, stream_name, stream_icon):
             
             for cookie in cj:                
                 if cookie.name == 'BIGipServerAdobe_Pass_Prod':
-                    print cookie.name
-                    print cookie.expires
-                    print cookie.is_expired()
+                    xbmc.log(str(cookie.name))
+                    xbmc.log(str(cookie.expires))
+                    xbmc.log(str(cookie.is_expired()))
                     expired_cookies = cookie.is_expired()
         except:
             pass
@@ -274,10 +288,10 @@ def SIGN_STREAM(stream_url, stream_name, stream_icon):
             last_provider = provider_file.readline()
             provider_file.close()
 
-        print "Did cookies expire? " + str(expired_cookies)
-        print "Does the auth token file exist? " + str(os.path.isfile(auth_token_file))
-        print "Does the last provider match the current provider? " + str(last_provider == MSO_ID)
-        print "Who was the last provider? " +str(last_provider)
+        xbmc.log("Did cookies expire? " + str(expired_cookies))
+        xbmc.log("Does the auth token file exist? " + str(os.path.isfile(auth_token_file)))
+        xbmc.log("Does the last provider match the current provider? " + str(last_provider == MSO_ID))
+        xbmc.log("Who was the last provider? " +str(last_provider))
                 
         resource_id = GET_RESOURCE_ID()    
         signed_requestor_id = GET_SIGNED_REQUESTOR_ID() 
@@ -291,11 +305,12 @@ def SIGN_STREAM(stream_url, stream_name, stream_icon):
             var_3 = HTMLParser.HTMLParser().unescape(var_3)
             saml_response, relay_state = provider.LOGIN(var_1, var_2, var_3)
             #Error logging in. Abort! Abort!
-            print "SAML RESPONSE:"
-            print saml_response
-            print "RELAY STATE:"
-            print relay_state
+            xbmc.log("SAML RESPONSE:")
+            xbmc.log(saml_response)
+            xbmc.log("RELAY STATE:")
+            xbmc.log(relay_state)
 
+            
             if saml_response == '' and relay_state == '':
                 msg = "Please verify that your username and password are correct"
                 dialog = xbmcgui.Dialog() 
@@ -307,7 +322,7 @@ def SIGN_STREAM(stream_url, stream_name, stream_icon):
                 ok = dialog.ok('Captcha Found', msg)
                 return
 
-            adobe.POST_ASSERTION_CONSUMER_SERVICE(saml_response,relay_state)
+            adobe.POST_ASSERTION_CONSUMER_SERVICE(saml_response,relay_state)            
             adobe.POST_SESSION_DEVICE(signed_requestor_id)    
 
 

@@ -60,7 +60,7 @@ class ADOBE():
                             "Accept-Encoding": "gzip, deflate",
                             "Accept-Language": "en-us",
                             "Content-Type": "application/x-www-form-urlencoded",
-                            "Proxy-Connection": "keep-alive",
+                            #"Proxy-Connection": "keep-alive",
                             "Connection": "keep-alive",
                             "Origin": ORIGIN,
                             "Referer": REFERER,
@@ -74,12 +74,12 @@ class ADOBE():
 
         
         response, content = http.request(url, 'POST', headers=headers, body=body)        
-        print 'POST_ASSERTION_CONSUMER_SERVICE------------------------------------------------'
-        print headers
-        print body
-        print response
-        print content
-        print '-------------------------------------------------------------------------------'
+        xbmc.log('POST_ASSERTION_CONSUMER_SERVICE------------------------------------------------')
+        xbmc.log(str(headers))
+        xbmc.log(str(body))
+        xbmc.log(str(response))
+        xbmc.log(str(content))
+        xbmc.log('-------------------------------------------------------------------------------')
         
     
 
@@ -90,15 +90,14 @@ class ADOBE():
         cj = cookielib.LWPCookieJar()
         cj.load(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'),ignore_discard=True)
         
+        
         cookies = ''
-        for cookie in cj:
-            #Possibly two JSESSION cookies being passed, may need to fix
-            #if cookie.name == "BIGipServerAdobe_Pass_Prod" or cookie.name == "client_type" or cookie.name == "client_version" or cookie.name == "JSESSIONID" or cookie.name == "redirect_url":
+        for cookie in cj:            
             if (cookie.name == "BIGipServerAdobe_Pass_Prod" or cookie.name == "client_type" or cookie.name == "client_version" or cookie.name == "JSESSIONID" or cookie.name == "redirect_url") and cookie.path == "/":
                 cookies = cookies + cookie.name + "=" + cookie.value + "; "
-
         
-        url = 'https://sp.auth.adobe.com//adobe-services/1.0/sessionDevice'
+        
+        url = 'https://sp.auth.adobe.com//adobe-services/1.0/sessionDevice'        
         http = httplib2.Http()
         http.disable_ssl_certificate_validation=True    
         headers = { "Accept": "*/*",
@@ -109,30 +108,31 @@ class ADOBE():
                     "Connection": "keep-alive",                                                
                     "Cookie": cookies,
                     "User-Agent": UA_ADOBE_PASS}
-
+        
         data = urllib.urlencode({'requestor_id' : 'nbcsports',
                                  '_method' : 'GET',
                                  'signed_requestor_id' : signed_requestor_id,
                                  'device_id' : DEVICE_ID
                                 })
         
-       
+                
         response, content = http.request(url, 'POST', headers=headers, body=data)
-        print 'POST_SESSION_DEVICE------------------------------------------------------------'
-        print headers
-        print data
-        print response
-        print content
-        print '-------------------------------------------------------------------------------'
+        xbmc.log('POST_SESSION_DEVICE------------------------------------------------------------')
+        xbmc.log(str(headers))
+        xbmc.log(str(data))
+        xbmc.log(str(response))
+        xbmc.log(str(content))
+        xbmc.log('-------------------------------------------------------------------------------')
         
+        xbmc.log(content)
         auth_token = FIND(content,'<authnToken>','</authnToken>')
-        print "AUTH TOKEN"        
-        print auth_token
+        xbmc.log("AUTH TOKEN")
+        xbmc.log(str(auth_token))
         auth_token = auth_token.replace("&lt;", "<")
         auth_token = auth_token.replace("&gt;", ">")
         # this has to be last:
         auth_token = auth_token.replace("&amp;", "&")
-        print auth_token
+        xbmc.log(auth_token)
 
         #Save auth token to file for         
         fname = os.path.join(ADDON_PATH_PROFILE, 'auth.token')

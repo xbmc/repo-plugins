@@ -1,3 +1,37 @@
+2016.10.21
+- Added Summit Broadband to the available providers
+
+2016.10.20
+- Attempt to fix no audio in streams (legacy streams are used if available)
+- Added Playstation Vue to the providers list
+
+2016.10.19.2
+- Fixed repo bug
+
+2016.10.19
+- Fixed Comcast (xfinity) login
+- Updated user agents
+- Improved sorting of list items
+
+2016.10.17
+- Fixed appending cookie to stream issue
+- Fixed featured, replays, and highlight items
+
+2016.10.7
+- Fixed broken urls
+
+2016.4.19
+- Added Frontier support
+
+2016.3.9
+- Fix for time error attempt #3
+
+2016.3.8
+- Fix for time error attempt #2
+
+2016.3.7
+- Fix for mktime error
+
 v2016.2.3.2
 - Fixed new bugs released in prev version
 

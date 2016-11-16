@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.odeon"
-       name="Odeon" version="0.0.8"
+       name="Odeon" version="1.2.0"
        provider-name="ARSAT">
     <requires>
         <import addon="xbmc.python" version="2.24.0"/>
@@ -21,7 +21,7 @@ Odeón es la plataforma de video a demanda del Cine Argentino donde encontrarás
         <platform>all</platform>
         <license>GNU General Public License, Version 3</license>
         <source>https://github.com/arsat/odeon-kodi</source>
-        <forum>https://www.facebook.com/OdeonVOD</forum>
+        <forum>http://forum.kodi.tv/showthread.php?tid=296742</forum>
         <website>https://www.odeon.com.ar</website>
         <email>consultas@odeon.com.ar</email>
     </extension>

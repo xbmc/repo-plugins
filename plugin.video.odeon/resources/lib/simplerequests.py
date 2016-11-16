@@ -20,7 +20,7 @@
 
 import json as jsonr
 import urllib2
-import utils
+import zlib
 
 class response():
 
@@ -36,10 +36,12 @@ class response():
             self.headers = info.dict.copy()
             self.status_code = self.r.code
 
-            if info.get('Content-Encoding') == 'gzip':
-                self.content = utils.unzip(self.r.read())
-            else:
+            try:
                 self.content = self.r.read()
+                if info.get('Content-Encoding') == 'gzip':
+                    self.content = zlib.decompress(self.content, zlib.MAX_WBITS + 16)
+            except:
+                pass
 
         elif self.e:
             self.status_code = self.e.code

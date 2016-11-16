@@ -32,8 +32,6 @@ from resources.lib import utils
 PLUGIN_NAME = 'plugin.video.odeon'
 API_URL     = 'https://www.odeon.com.ar/api/v1.4'
 ID_URL      = 'https://id.odeon.com.ar/v1.3'
-#API_URL    = 'https://odeon.desa.dcarsat.com.ar/api/v1.4'
-#ID_URL     = 'https://id.desa.dcarsat.com.ar/v1.3'
 
 addon_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
@@ -146,13 +144,12 @@ def root_menu(params):
 
 def list_tiras(params):
     """ Explorar por tiras """
-    # Destacados / Banner
+    # primero los destacados, aka banner
     add_directory_item(translation(30015), 'list_prods&url=%s' % quote('tira/banner'), 'folder-movies.png')
 
-    home = json_request('home?perfil={0}'.format(PID))
-    for tira in home['tiras']:
-        if tira['conte']:
-            add_directory_item(tira['titulo'], 'list_prods&url=%s' % quote('tira/' + str(tira['id'])), 'folder-movies.png')
+    # tiras dinámicas
+    for tira in json_request('tiras?perfil={0}'.format(PID)):
+        add_directory_item(tira['titulo'], 'list_prods&url=%s' % quote('tira/' + str(tira['id'])), 'folder-movies.png')
 
     xbmcplugin.endOfDirectory(addon_handle)
 
@@ -382,8 +379,8 @@ def show_info(params):
 
 def sort(params):
     # ordenar los ítems
-    order_names = [x['nom'] for x in META['order']]
-    order_ids = [x['id'] for x in META['order']]
+    order_names = [ord['nom'] for ord in META['order']]
+    order_ids = [ord['id'] for ord in META['order']]
     index = xbmcgui.Dialog().select(translation(30026), order_names)
     if index == -1: return
     query = '{0}?action={1}&pid={2}&url={3}&orden={4}'.format(addon_url, 'list_prods', PID, quote(params['url']), order_ids[index])
@@ -519,6 +516,7 @@ def decode_json(response):
 
 def json_request(path, params=None):
     """ Emula el comportamiento de un browser """
+    min_max_age = 300 # mínimo que valga la pena usar el cache
     token = addon.getSetting('token')
     cache = odeoncache.OdeonCache(PLUGIN_NAME)
     url = make_url(path, params)
@@ -552,7 +550,8 @@ def json_request(path, params=None):
     newEtag = r.headers.get('etag')
     ttl = time_to_live(r.headers.get('cache-control'))
     if r.status_code == 304 and fromCache:
-        cache.refresh_ttl(url, fromCache, ttl)
+        if ttl > min_max_age:
+            cache.refresh_ttl(url, fromCache, ttl)
         return fromCache['data']
 
     if not r.content: return None
@@ -562,11 +561,7 @@ def json_request(path, params=None):
         xbmcgui.Dialog().ok('Error ({0})'.format(r.status_code), errmsg)
         sys.exit(0)
 
-    if newEtag or ttl > 0:
-        # hasta que curi suba un servicio de reemplazo, aligeramos la respuesta
-        if path.startswith('home'):
-            for key in ['prods', 'gens', 'tipos', 'banner']:
-                if key in data: del data[key]
+    if newEtag or ttl > min_max_age:
         cache.put(url, data, newEtag, ttl)
     return data
 
@@ -576,8 +571,7 @@ def get_metadata(refresh=False):
         metadata = json_request('metadata')
         addon.setSetting('metadata', json.dumps(metadata))
 
-    mdjs = addon.getSetting('metadata')
-    return json.loads(mdjs)
+    return json.loads(addon.getSetting('metadata'))
 
 
 if __name__ == '__main__':

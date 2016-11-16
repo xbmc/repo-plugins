@@ -18,37 +18,27 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import gzip
-import StringIO
 import base64
 import json
+import zlib
 import hashlib
 
 
-def comp(data):
-    out = StringIO.StringIO()
-    f = gzip.GzipFile(fileobj=out, mode='w', compresslevel=5)
-    js = json.dumps(data, ensure_ascii=True, encoding='utf-8')
-    f.write(js)
-    f.close()
-    return base64.b64encode(out.getvalue())
+def comp(js):
+    data = json.dumps(js, ensure_ascii=True, encoding='utf-8')
+    deflated = zlib.compress(data)
+    return base64.b64encode(deflated)
 
 
 def decomp(b64):
-    gzipData = base64.b64decode(b64)
-    stream = StringIO.StringIO(gzipData)
-    f = gzip.GzipFile(fileobj=stream, mode='r')
-    txt = f.read()
-    f.close()
-    return json.loads(txt, encoding='utf-8')
+    try:
+        deflated = base64.b64decode(b64)
+        data = zlib.decompress(deflated)
+        return json.loads(data, encoding='utf-8')
+    except:
+        return None
 
 
 def digest(data):
     digest = hashlib.md5(data).digest()
     return base64.b64encode(digest)
-
-
-def unzip(zipped):
-    stream = StringIO.StringIO(zipped)
-    f = gzip.GzipFile(fileobj=stream, mode='r')
-    return f.read()

@@ -18,5 +18,5 @@ Odeón es la plataforma de video a demanda del Cine Argentino donde encontrarás
 ### Addtional information
 - https://www.odeon.com.ar
 - https://arsat.github.io/odeon-kodi/
+- http://forum.kodi.tv/showthread.php?tid=296742
 - Contact: dev@odeon.com.ar
-

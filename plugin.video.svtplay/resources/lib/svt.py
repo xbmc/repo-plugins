@@ -60,21 +60,28 @@ def getCategories():
     return None
 
   categories = []
+  all_clusters = r.json()["allClusters"]
 
-  for item in r.json()["categories"]:
-    category = {}
-    category["url"] = item["url"]
+  for letters in all_clusters.itervalues():
+    for letter_list in letters:
+      for item in letter_list:
+        category = {}
+        try:
+          category["genre"] = item["term"]
+        except KeyError as e:
+          common.log(e.message)
+          continue
 
-    if category["url"].endswith("oppetarkiv") or category["url"].endswith("barn"):
-      # Skip the "Oppetarkiv" and "Barn" category
-      continue
+        if category["genre"].endswith("oppetarkiv") or category["genre"].endswith("barn"):
+          # Skip the "Oppetarkiv" and "Barn" category
+          continue
 
-    if not category["url"].startswith("genre"):
-      category["url"] = "genre/" + category["url"]
-
-    category["title"] = item["name"]
-    category["thumbnail"] = item.get("posterImageUrl", "")
-    categories.append(category)
+        category["title"] = item["name"]
+        try:
+          category["thumbnail"] = helper.prepareThumb(item["metaData"].get("thumbnail", ""), BASE_URL)
+        except KeyError as e:
+          category["thumbnail"] = ""
+        categories.append(category)
 
   return categories
 
@@ -89,34 +96,23 @@ def getLatestNews():
     return None
 
   programs = []
-  for item in r.json()["data"]:
-    item = item["attributes"]
+  for item in r.json():
     live_str = ""
-    thumbnail = ""
-    if item["images"]["thumbnail"]:
-      thumbnail = item["images"]["thumbnail"]["attributes"]["alternates"]["small"]["href"]
-    if item["images"]["poster"]:
-      thumbnail = item["images"]["poster"]["attributes"]["alternates"]["small"]["href"]
-    if item["live"]["liveNow"]:
+    thumbnail = item["imageMedium"]
+    if item["broadcastedNow"]:
       live_str = " " + "[COLOR red](Live)[/COLOR]"
     program = {
-        "title" : common.replaceHTMLCodes(item["officialProgramTitle"] + " " + item["legacyEpisodeTitle"] + live_str),
+        "title" : common.replaceHTMLCodes(item["programTitle"] + " " + item["title"] + live_str),
         "thumbnail" : helper.prepareThumb(thumbnail, baseUrl=BASE_URL),
-        "url" : "video/" + str(item["articleId"])
+        "url" : "video/" + str(item["versions"][0]["articleId"])
         }
     programs.append(program)
   return programs
 
-def getProgramsForCategory(url):
-  """
-  Returns a list of programs for a specific category.
-  """
-  if url.startswith("genre/"):
-    return getProgramsForGenre(url.split("/")[1])
-  else:
-    return None
-
 def getProgramsForGenre(genre):
+  """
+  Returns a list of all programs for a genre.
+  """
   url = BASE_URL+API_URL+"cluster_page;cluster="+genre
   r = requests.get(url)
   if r.status_code != 200:
@@ -126,7 +122,7 @@ def getProgramsForGenre(genre):
   programs = []
   for item in r.json()["contents"]:
     url = item["contentUrl"]
-    title = item["title"]
+    title = item["programTitle"]
     plot = item.get("description", "")
     info = {"plot": plot}
     thumbnail = helper.prepareThumb(item.get("thumbnail", ""), BASE_URL)
@@ -145,7 +141,8 @@ def getAlphas():
     return None
 
   alphas = []
-  for letter in r.json()["letters"]:
+  for item in r.json()["alphabeticList"]:
+    letter = item["letter"]
     alpha = {}
     alpha["title"] = common.replaceHTMLCodes(letter).encode("utf-8")
     alpha["char"] =  letter.encode("utf-8")
@@ -169,9 +166,11 @@ def getProgramsByLetter(letter):
   items = []
   
   programs = []
-  try:
-    programs = contents["letters"][letter]
-  except KeyError:
+  for item in contents["alphabeticList"]:
+    if item["letter"] == letter:
+      programs = item["titles"]
+
+  if not programs:
     common.log("Could not find letter \""+letter+"\"")
     return None
 
@@ -199,29 +198,29 @@ def getSearchResults(search_term):
   items = []
   contents = r.json()
 
-  for program in contents["titles"]["videoItems"]:
+  for program in contents["titles"]:
     item = {}
     item["title"] = common.replaceHTMLCodes(program["title"])
     item["url"] = program["contentUrl"]
-    item["thumbnail"] = helper.prepareThumb(program.get("thumbnail", ""), baseUrl=BASE_URL)
+    item["thumbnail"] = helper.prepareThumb(program.get("imageMedium", ""), baseUrl=BASE_URL)
     item["info"] = {}
     item["info"]["plot"] = program.get("description", "")
     items.append({"item": item, "type" : "program"})
 
-  for video in contents["episodes"]["videoItems"]:
+  for video in contents["episodes"]:
     item = {}
     item["title"] = common.replaceHTMLCodes(video["title"])
     item["url"] = video["contentUrl"]
-    item["thumbnail"] = helper.prepareThumb(video.get("thumbnail", ""), baseUrl=BASE_URL)
+    item["thumbnail"] = helper.prepareThumb(video.get("imageMedium", ""), baseUrl=BASE_URL)
     item["info"] = {}
     item["info"]["plot"] = video.get("description", "")
     items.append({"item": item, "type": "video"})
 
-  for clip in contents["clips"]["videoItems"]:
+  for clip in contents["clips"]:
     item = {}
     item["title"] = common.replaceHTMLCodes(clip["title"])
     item["url"] = clip["contentUrl"]
-    item["thumbnail"] = helper.prepareThumb(clip.get("thumbnail", ""), baseUrl=BASE_URL)
+    item["thumbnail"] = helper.prepareThumb(clip.get("imageMedium", ""), baseUrl=BASE_URL)
     item["info"] = {}
     item["info"]["plot"] = clip.get("description", "")
     items.append({"item": item, "type": "video"})
@@ -275,6 +274,11 @@ def getEpisodes(title):
   for item in r.json()["relatedVideos"]["episodes"]:
     program = {}
     program["title"] = item["title"]
+    try:
+      program["title"] = program["title"] + "[COLOR green] (S%sE%s)[/COLOR]" % (str(item["season"]), str(item["episodeNumber"]))
+    except KeyError as e:
+      # Supress
+      pass
     program["url"] = "video/" + str(item["id"])
     program["thumbnail"] = helper.prepareThumb(item.get("thumbnail", ""), BASE_URL)
     info = {}
@@ -349,7 +353,7 @@ def getItems(section_name, page):
     item["info"] = info
     returned_items.append(item)
 
-  return (returned_items, contents["hasNextPage"])
+  return (returned_items, contents["paginationData"]["totalPages"] > contents["paginationData"]["currentPage"])
 
 def getPage(url):
   """

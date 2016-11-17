@@ -1,3 +1,8 @@
+Version 4.0.35
+-------------
+- Fix broken everything...
+- Add season and episode number to a program's episode list
+
 Version 4.0.34
 -------------
 - Fix broken latest news listing

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.livelite" name="LiveLite" version="2.0.0" provider-name="Twilight0">
+    <requires>
+        <import addon="xbmc.python" version="2.24.0"/>
+        <import addon="script.module.youtube.dl" version="16.1026.0" optional="true"/>
+        <import addon="script.module.urlresolver" version="3.0.24" optional="true"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">LiveLite addon</summary>
+        <description lang="en">LiveLite is an addon capable of loading custom m3u playlists with live tv channels and playing them. Can utilize youtube-dl or urlresolver for streams that need resolving.</description>
+        <summary lang="el">Πρόσθετο LiveLite</summary>
+        <description lang="el">Το πρόσθετο LiveLite έχει την δυνατότητα αναπαραγωγής ζωντανών καναλιών μέσω λιστών αναπαραγωγής, της μορφής m3u. Χρησιμοποιεί τα πρόσθετα youtube-dl ή urlresolver όπου χρειαστεί.</description>
+        <license>GNU GPL, version 2 or later</license>
+    </extension>
+</addon>

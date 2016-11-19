@@ -106,7 +106,7 @@ def viewCategories():
 
   for category in categories:
     addDirectoryItem(category["title"],
-                {"mode": MODE_CATEGORY, "url": category["url"] },
+                {"mode": MODE_CATEGORY, "url": category["genre"] },
                 thumbnail=category["thumbnail"])
 
 def viewAlphaDirectories():
@@ -145,14 +145,8 @@ def viewLatestNews():
     for item in items:
       createDirItem(item, MODE_VIDEO)
 
-def viewCategory(url):
-  if url == svt.URL_TO_OA:
-    dialog = xbmcgui.Dialog()
-    dialog.ok("SVT Play", localize(30107))
-    viewStart()
-    return
-
-  programs = svt.getProgramsForCategory(url)
+def viewCategory(genre):
+  programs = svt.getProgramsForGenre(genre)
   if not programs:
     return
   for program in programs:

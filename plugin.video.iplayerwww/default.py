@@ -148,7 +148,7 @@ elif mode == 117:
     Radio.ListListenList(logged_in)
 
 elif mode == 199:
-    Radio.ListFollwing(logged_in)
+    Radio.ListFollowing(logged_in)
 
 elif mode == 118:
     Video.RedButtonDialog()

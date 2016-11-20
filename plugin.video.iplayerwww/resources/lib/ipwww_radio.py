@@ -463,7 +463,7 @@ def ListListenList(logged_in):
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
 
 
-def ListFollwing(logged_in):
+def ListFollowing(logged_in):
     if(CheckLogin(logged_in) == False):
         CreateBaseDirectory('audio')
         return

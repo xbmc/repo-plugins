@@ -306,7 +306,7 @@ def ScrapeEpisodes(page_url):
 
             # <li class="list-item unavailable"  data-ip-id="b06sq9xj">
             unavailable_match = re.search(
-                '<li class="list-item.*?unavailable.*?"',
+                'data-timeliness-type="unavailable"',
                 li, flags=(re.DOTALL | re.MULTILINE))
             if unavailable_match:
                 continue
@@ -351,19 +351,26 @@ def ScrapeEpisodes(page_url):
                     name = name + " - " + subtitle
 
             icon = ''
+            # <source srcset="http://ichef.bbci.co.uk/images/ic/336x189/p04cd999.jpg"
+            icon_match = re.search(
+                r'<source.*?srcset="http://ichef.bbci.co.uk/images/ic/336x189/(.*?)\.jpg"',
+                li, flags=(re.DOTALL | re.MULTILINE))
+            if icon_match:
+                image = icon_match.group(1)
+                if image:
+                    icon = "http://ichef.bbci.co.uk/images/ic/832x468/" + image + ".jpg"
+
+
             type = None
             # <div class="r-image"  data-ip-type="episode"
             # data-ip-src="http://ichef.bbci.co.uk/images/ic/336x189/p026vl1q.jpg">
             # <div class="r-image"  data-ip-type="group"
             # data-ip-src="http://ichef.bbci.co.uk/images/ic/336x189/p037ty9z.jpg">
             image_match = re.search(
-                r'<div class="r-image".+?data-ip-type="(.*?)".+?data-ip-src="http://ichef.bbci.co.uk/images/ic/336x189/(.*?)\.jpg"',
+                r'<div class="r-image".+?data-ip-type="(.*?)"',
                 li, flags=(re.DOTALL | re.MULTILINE))
             if image_match:
                 type = image_match.group(1)
-                image = image_match.group(2)
-                if image:
-                    icon = "http://ichef.bbci.co.uk/images/ic/832x468/" + image + ".jpg"
 
             synopsis = ''
             # <p class="synopsis">What was it like to be a top fashion model 30 years ago? (1978)</p>
@@ -741,7 +748,7 @@ def ListHighlights(highlights_url):
     # < a\nhref="/iplayer/episode/p036gq3z/bbc-music-introducing-from-buddhist-monk-to-rock-star"\n
     # class="single-item stat"
     singles = [a for a in inner_anchors if re.search(
-        r'class="single-item',
+        r'class="thumbnail-item',
         a, flags=(re.DOTALL | re.MULTILINE))]
 
     for single in singles:
@@ -775,7 +782,7 @@ def ListHighlights(highlights_url):
         name = ''
         # <h3 class="single-item__title typo typo--skylark"><strong>BBC Music Introducing</strong></h3>
         title_match = re.search(
-            r'<.*?class="single-item__title.*?<strong>(.*?)</strong>',
+            r'<.*?class="thumbnail-item__title.*?<strong>(.*?)</strong>',
             single, flags=(re.DOTALL | re.MULTILINE))
         if title_match:
             name = title_match.group(1)
@@ -783,26 +790,36 @@ def ListHighlights(highlights_url):
 
         # <p class="single-item__subtitle typo typo--canary">From Buddhist Monk to Rock Star</p>
         subtitle_match = re.search(
-            r'<.*?class="single-item__subtitle.*?>(.*?)<',
+            r'<.*?class="thumbnail-item__subtitle.*?>(.*?)<',
             single, flags=(re.DOTALL | re.MULTILINE))
         if subtitle_match:
             name = name + ' - ' + subtitle_match.group(1)
 
         icon = ''
-        # <div class="r-image"  data-ip-type="episode"
-        # data-ip-src="http://ichef.bbci.co.uk/images/ic/406x228/p036gtc5.jpg">
+        # <div class="rs-image">
+        #    <picture>
+        #        <!--[if IE 9]><video style="display:none;"><![endif]-->
+        #            <source media="(min-width: 1008px)" srcset="http://ichef.bbci.co.uk/images/ic/234x131/p04g9wkg.jpg 234w,http://ichef.bbci.co.uk/images/ic/352x198/p04g9wkg.jpg 352w" sizes="232px">
+        #            <source media="(min-width: 400px) and (max-width: 1007px)" srcset="http://ichef.bbci.co.uk/images/ic/234x131/p04g9wkg.jpg 234w,http://ichef.bbci.co.uk/images/ic/352x198/p04g9wkg.jpg 352w,http://ichef.bbci.co.uk/images/ic/640x360/p04g9wkg.jpg 640w" sizes="calc(50vw - 16px)">
+        #            <source media="(max-width: 399px)" srcset="http://ichef.bbci.co.uk/images/ic/176x99/p04g9wkg.jpg 176w,http://ichef.bbci.co.uk/images/ic/272x153/p04g9wkg.jpg 272w" sizes="calc(50vw - 12px)">
+        #        <!--[if IE 9]></video><![endif]-->
+        #        <img srcset="http://static.bbci.co.uk/tviplayer/img/episode_placeholder.jpg" alt="">
+        #    </picture>
+        # </div>
         image_match = re.search(
-            r'<.*?class="r-image.*?data-ip-src="(.*?)"',
+            r'<picture>.*?srcset="http://ichef.bbci.co.uk/images/ic/234x131/(.*?)\.jpg',
             single, flags=(re.DOTALL | re.MULTILINE))
         if image_match:
-            icon = image_match.group(1)
+            image = image_match.group(1)
+            if image:
+                icon = "http://ichef.bbci.co.uk/images/ic/832x468/" + image + ".jpg"
 
         desc = ''
         # <p class="item-overlay__text__inner typo typo--canary">
         # A hospital visit reveals devastating news for Jasmin and Dev.
         # </p>
         desc_match = re.search(
-            r'<.*?class="item-overlay__text__inner.*?>(.*?)<',
+            r'<.*?class="overlay__text__inner.*?>(.*?)<',
             single, flags=(re.DOTALL | re.MULTILINE))
         if desc_match:
             desc = desc_match.group(1)

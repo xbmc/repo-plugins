@@ -1,7 +1,6 @@
 # Kodi Media Center language file
 # Addon Name: YouTube
 # Addon id: plugin.video.youtube
-# Addon version: 5.1.9~beta1
 # Addon Provider: bromix
 msgid ""
 msgstr ""
@@ -25,6 +24,8 @@ msgctxt "Addon Description"
 msgid "YouTube is a one of the biggest video-sharing websites of the world."
 msgstr "Данное дополнение позволяет находить и смотреть видео на всеми любимом сайте."
 
+#Kodion Settings
+
 msgctxt "#30000"
 msgid "General"
 msgstr "Общие"
@@ -36,6 +37,8 @@ msgstr "Имя пользователя"
 msgctxt "#30002"
 msgid "Password"
 msgstr "Пароль"
+
+#empty strings from id 30003 to 30008
 
 msgctxt "#30009"
 msgid "Always ask for the video quality"
@@ -72,6 +75,12 @@ msgstr "240p"
 msgctxt "#30017"
 msgid "360p"
 msgstr "360p"
+
+msgctxt "#30018"
+msgid "1080p Live / 720p (HD)"
+msgstr ""
+
+#empty strings 30019
 
 msgctxt "#30020"
 msgid "Allow 3D"
@@ -140,6 +149,17 @@ msgstr "Вид: Альбомы"
 msgctxt "#30036"
 msgid "Support alternative player"
 msgstr "Поддержка альтернативного проигрывателя"
+
+msgctxt "#30037"
+msgid "Custom Watch Later Playlist ID"
+msgstr ""
+
+msgctxt "#30038"
+msgid "Custom History Playlist ID"
+msgstr ""
+
+#Kodion Common
+#empty strings from id 30037 to 30099
 
 msgctxt "#30100"
 msgid "Favorites"
@@ -230,26 +250,26 @@ msgstr "Очистить"
 
 msgctxt "#30200"
 msgid "API Key"
-msgstr ""
+msgstr "API Key"
 
 msgctxt "#30201"
 msgid "API Key"
-msgstr ""
+msgstr "API Key"
 
 msgctxt "#30202"
 msgid "API Id"
-msgstr ""
+msgstr "API Id"
 
 msgctxt "#30203"
 msgid "API Secret"
-msgstr ""
+msgstr "API Secret"
 
 msgctxt "#30204"
 msgid "Enable Personal API Keys"
-msgstr ""
+msgstr "Использовать персональный API Key"
 
 msgctxt "#30205"
-msgid "Autologin on Error enable"
+msgid "Use preset API key set"
 msgstr ""
 
 #YouTube
@@ -461,4 +481,116 @@ msgstr "регион"
 
 msgctxt "#30551"
 msgid "Recommendations"
+msgstr "Рекомендации"
+
+msgctxt "#30552"
+msgid "Maintenance"
+msgstr ""
+
+msgctxt "#30553"
+msgid "Delete function cache database"
+msgstr ""
+
+msgctxt "#30554"
+msgid "Delete search history database"
+msgstr ""
+
+msgctxt "#30555"
+msgid "Clear function cache"
+msgstr ""
+
+msgctxt "#30556"
+msgid "Clear search history"
+msgstr ""
+
+msgctxt "#30557"
+msgid "function cache"
+msgstr ""
+
+msgctxt "#30558"
+msgid "search history"
+msgstr ""
+
+msgctxt "#30559"
+msgid "Delete settings.xml"
+msgstr ""
+
+msgctxt "#30560"
+msgid "Subtitle language(s) to download"
+msgstr ""
+
+msgctxt "#30561"
+msgid "None"
+msgstr ""
+
+msgctxt "#30562"
+msgid "All"
+msgstr ""
+
+msgctxt "#30563"
+msgid "Setting"
+msgstr ""
+
+msgctxt "#30564"
+msgid "Setting, English"
+msgstr ""
+
+msgctxt "#30565"
+msgid "English"
+msgstr ""
+
+msgctxt "#30566"
+msgid "Prompt"
+msgstr ""
+
+msgctxt "#30567"
+msgid "Set as Watch Later"
+msgstr ""
+
+msgctxt "#30568"
+msgid "Remove as Watch Later"
+msgstr ""
+
+msgctxt "#30569"
+msgid "Are you sure you want to remove '%s' as your Watch Later list?"
+msgstr ""
+
+msgctxt "#30570"
+msgid "Are you sure you want to replace your current Watch Later list with '%s'?"
+msgstr ""
+
+msgctxt "#30571"
+msgid "Set as History"
+msgstr ""
+
+msgctxt "#30572"
+msgid "Remove as History"
+msgstr ""
+
+msgctxt "#30573"
+msgid "Are you sure you want to remove '%s' as your History list?"
+msgstr ""
+
+msgctxt "#30574"
+msgid "Are you sure you want to replace your current History list with '%s'?"
+msgstr ""
+
+msgctxt "#30575"
+msgid "Succeeded"
+msgstr ""
+
+msgctxt "#30576"
+msgid "Failed"
+msgstr ""
+
+msgctxt "#30577"
+msgid "Settings"
+msgstr ""
+
+msgctxt "#30578"
+msgid "Force SSL Certificate verification"
+msgstr ""
+
+msgctxt "#30579"
+msgid "MPEG-DASH is enabled in the YouTube settings, however inputstream.adaptive appears to be disabled. Would you like to enable inputstream.adaptive now?"
 msgstr ""

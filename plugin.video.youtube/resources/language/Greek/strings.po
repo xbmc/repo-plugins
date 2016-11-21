@@ -1,7 +1,6 @@
 # Kodi Media Center language file
 # Addon Name: YouTube
 # Addon id: plugin.video.youtube
-# Addon version: 5.1.20.6
 # Addon Provider: bromix
 msgid ""
 msgstr ""
@@ -40,6 +39,12 @@ msgid "Password"
 msgstr "Κωδικός"
 
 #empty strings from id 30003 to 30008
+msgctxt "#30007"
+msgid "Use MPEG-DASH"
+msgstr "Χρησιμοποίησε το MPEG-DASH"
+msgctxt "#30008"
+msgid "Configure inputstream.adaptive"
+msgstr "Ρύθμιση πελάτη MPEG-DASH Inputstream"
 
 msgctxt "#30009"
 msgid "Always ask for the video quality"
@@ -77,7 +82,11 @@ msgctxt "#30017"
 msgid "360p"
 msgstr "360p"
 
-#empty strings from id 30018 to 30019
+msgctxt "#30018"
+msgid "1080p Live / 720p (HD)"
+msgstr "1080p Ζωντανά / 720p (ΥΕ)"
+
+#empty strings 30019
 
 msgctxt "#30020"
 msgid "Allow 3D"
@@ -105,23 +114,23 @@ msgstr "Επιτρέψτε τον οδηγό ρυθμίσεων"
 
 msgctxt "#30026"
 msgid "Override View"
-msgstr "Εναλλαγή Οθόνης"
+msgstr "Επιβολή τρόπου απεικόνισης"
 
 msgctxt "#30027"
 msgid "View: Default"
-msgstr "Οθόνη: Προκαθορισμένη"
+msgstr "Απεικόνιση: Προκαθορισμένη"
 
 msgctxt "#30028"
 msgid "View: Episodes"
-msgstr "Οθόνη: Επεισόδια"
+msgstr "Απεικόνιση: Επεισόδια"
 
 msgctxt "#30029"
 msgid "View: Movies"
-msgstr "Οθόνη: Ταινίες"
+msgstr "Απεικόνιση: Ταινίες"
 
 msgctxt "#30030"
 msgid "Execute setup-wizard?"
-msgstr "Εκτέλεση οδηγού ρυθμίσεων;"
+msgstr "Εκτέλεση οδηγού ρυθμίσεων?"
 
 msgctxt "#30031"
 msgid "Advanced"
@@ -129,23 +138,31 @@ msgstr "Για προχωρημένους"
 
 msgctxt "#30032"
 msgid "View: TV Shows"
-msgstr "Οθόνη: Εκπομπές TV"
+msgstr "Απεικόνιση: Εκπομπές TV"
 
 msgctxt "#30033"
 msgid "View: Songs"
-msgstr "Οθόνη: Τραγούδια"
+msgstr "Απεικόνιση: Τραγούδια"
 
 msgctxt "#30034"
 msgid "View: Artists"
-msgstr "Οθόνη: Καλλιτέχνες"
+msgstr "Απεικόνιση: Καλλιτέχνες"
 
 msgctxt "#30035"
 msgid "View: Albums"
-msgstr "Οθόνη: Άλμπουμ"
+msgstr "Απεικόνιση: Άλμπουμ"
 
 msgctxt "#30036"
 msgid "Support alternative player"
 msgstr "Υποστήριξη εναλλακτικού αναπαραγωγέα"
+
+msgctxt "#30037"
+msgid "Custom Watch Later Playlist ID"
+msgstr "Τροποποιημένη λίστα αναπαραγωγής παρακολούθησης αργότερα"
+
+msgctxt "#30038"
+msgid "Custom History Playlist ID"
+msgstr "Τροποποιημένο ID λίστας αναπαραγωγής"
 
 #Kodion Common
 #empty strings from id 30037 to 30099
@@ -238,8 +255,8 @@ msgstr "Καθαρισμός"
 #empty strings from id 30121 to 30199
 
 msgctxt "#30200"
-msgid "API Key"
-msgstr "Κλειδί API"
+msgid "API"
+msgstr "API"
 
 msgctxt "#30201"
 msgid "API Key"
@@ -255,11 +272,11 @@ msgstr "Μυστικό API"
 
 msgctxt "#30204"
 msgid "Enable Personal API Keys"
-msgstr ""
+msgstr "Ενεργοποίηση προσωπικών κλειδιών API"
 
 msgctxt "#30205"
-msgid "Autologin on Error enable"
-msgstr ""
+msgid "Use preset API key set"
+msgstr "Χρησιμοποίησε το προκαθορισμένο σετ κλειδιών API"
 
 #YouTube
 #empty strings from id 30206 to 30499
@@ -466,8 +483,120 @@ msgstr "Δεν βρέθηκαν άλλες ροές"
 
 msgctxt "#30550"
 msgid "Region"
-msgstr "περιοχή"
+msgstr "Περιοχή"
 
 msgctxt "#30551"
 msgid "Recommendations"
-msgstr ""
+msgstr "Συστάσεις"
+
+msgctxt "#30552"
+msgid "Maintenance"
+msgstr "Συντήρηση"
+
+msgctxt "#30553"
+msgid "Delete function cache database"
+msgstr "Λειτουργία διαγραφής βάσης δεδομένων λανθάνουσας μνήμης"
+
+msgctxt "#30554"
+msgid "Delete search history database"
+msgstr "Διαγραφή βάσης δεδομένων ιστορικού αναζήτησης"
+
+msgctxt "#30555"
+msgid "Clear function cache"
+msgstr "Λειτουργία διαγραφής λανθάνουσας μνήμης"
+
+msgctxt "#30556"
+msgid "Clear search history"
+msgstr "Διαγραφή ιστορικού αναζήτησης"
+
+msgctxt "#30557"
+msgid "function cache"
+msgstr "λειτουργίας λανθάνουσας μνήμης"
+
+msgctxt "#30558"
+msgid "search history"
+msgstr "ιστορικό αναζήτησης"
+
+msgctxt "#30559"
+msgid "Delete settings.xml"
+msgstr "Διαγραφή του settings.xml"
+
+msgctxt "#30560"
+msgid "Subtitle language(s) to download"
+msgstr "Γλώσσα-ες υποτίτλων διαθέσιμη-ες για μεταφόρτωση"
+
+msgctxt "#30561"
+msgid "None"
+msgstr "Κενό"
+
+msgctxt "#30562"
+msgid "All"
+msgstr "Όλα"
+
+msgctxt "#30563"
+msgid "Setting"
+msgstr "Ρύθμιση"
+
+msgctxt "#30564"
+msgid "Setting, English"
+msgstr "Ρύθμιση, Αγγλικά"
+
+msgctxt "#30565"
+msgid "English"
+msgstr "Αγγλικά"
+
+msgctxt "#30566"
+msgid "Prompt"
+msgstr "Προτροπή"
+
+msgctxt "#30567"
+msgid "Set as Watch Later"
+msgstr "Τοποθέτηση στο Δείτε Αργότερα"
+
+msgctxt "#30568"
+msgid "Remove as Watch Later"
+msgstr "Αφαίρεση από το Δείτε Αργότερα"
+
+msgctxt "#30569"
+msgid "Are you sure you want to remove '%s' as your Watch Later list?"
+msgstr "Είστε βέβαιοι ότι θέλετε να αφαιρέσετε το '%s' από το Δείτε Αργότερα?"
+
+msgctxt "#30570"
+msgid "Are you sure you want to replace your current Watch Later list with '%s'?"
+msgstr "Είστε βέβαιοι ότι θέλετε να αντικαταστήσετε την τρέχουσα λίστα Δείτε Αργότερα με το '%s'?"
+
+msgctxt "#30571"
+msgid "Set as History"
+msgstr "Θέσε ως Ιστορικό"
+
+msgctxt "#30572"
+msgid "Remove as History"
+msgstr "Αφαίρεση ως ιστορικό"
+
+msgctxt "#30573"
+msgid "Are you sure you want to remove '%s' as your History list?"
+msgstr "Είστε βέβαιοι ότι θέλετε να αφαιρέσετε το '%s' ως την λίστα ιστορικού σας?"
+
+msgctxt "#30574"
+msgid "Are you sure you want to replace your current History list with '%s'?"
+msgstr "Είστε βέβαιοι ότι θέλετε να αντικαταστήσετε την τρέχουσα λίστα ιστορικού με το '%s'?"
+
+msgctxt "#30575"
+msgid "Succeeded"
+msgstr "Επιτυχία"
+
+msgctxt "#30576"
+msgid "Failed"
+msgstr "Αποτυχία"
+
+msgctxt "#30577"
+msgid "Settings"
+msgstr "Ρυθμίσεις"
+
+msgctxt "#30578"
+msgid "Force SSL Certificate verification"
+msgstr "Επιβολή επιβεβαίωσης πιστοποιητικού SSL"
+
+msgctxt "#30579"
+msgid "MPEG-DASH is enabled in the YouTube settings, however inputstream.adaptive appears to be disabled. Would you like to enable inputstream.adaptive now?"
+msgstr "Το MPEG-DASH είναι ενεργοποιημένο στις ρυθμίσεις, αλλά το inputstream.adaptive φαίνεται να είναι απενεργοποιημένο. Επιθυμείτε την ενεργοποίησή του inputstream.adaptive τώρα;"

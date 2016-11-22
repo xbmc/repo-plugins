@@ -1,32 +1,13 @@
 ﻿# Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2016-11-16
+### Changed
+- Use of zlib instead of gzip.
+- Better cache for short max-age responses.
+- Replacement for /home API call.
+
 ## [0.0.8] - 2016-11-11
 ### Added
-- Nueva versión del backend
-- Internacionalización
-- Bug fixes
-
-## [0.0.5] - 2016-10-28
-### Added
-- Agregado de licencia
-- Compresión gzip en http.
-- Metadata y optimización del Player.
-- Control de progreso de la reproducción.
-
-## [0.0.2] - 2016-10-06
-### Added
-- Login con usuario y contraseña.
-- Verificación de aceptación de Términos y Condiciones.
-- Selección de perfil e ingreso de pin.
-- Navegación de la página de inicio de ODEON.
-- Selección por género, y tipo de producción.
-- Búsquedas por título, director, actor.
-- Ordenamiento de búsquedas.
-- Detalle de producción (para series y compilados).
-- Agregar a mi sala, marcar como vista y calificar.
-
-## [0.0.1] - 2016-09-30
-### Added
-- Versión inicial.
+- Initial version.
 

@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<settings>
+    <category label="30018">
+        <setting id="browserPath" label="30019" type="executable" />
+        <setting id="browserArgs" label="30020" type="text" />
+        <setting id="xdotoolPath" label="30021" type="executable" />
+        <setting id="linkcastEnabled" label="30030" type="bool" default="false" />
+        <setting id="linkcastPort" label="30031" type="number" subsetting="true" enable="eq(-1,true)" default="49029" />
+        <setting id="psutilInstalled" type="bool" visible="false" default="true" />
+        <setting label="30022" type="lsep" visible="eq(-1,false)" />
+        <setting id="alsaaudioInstalled" type="bool" visible="false" default="true" />
+        <setting label="30023" type="lsep" visible="eq(-1,false)" />
+        <setting id="pylircInstalled" type="bool" visible="false" default="true" />
+        <setting label="30024" type="lsep" visible="eq(-1,false)" />
+    </category>
+</settings>

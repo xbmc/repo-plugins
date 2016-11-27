@@ -1,0 +1,6 @@
+begin
+    flags = startup_mode
+    mode = netflix
+end
+
+include "browser.lirc"

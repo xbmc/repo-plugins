@@ -1,0 +1,434 @@
+begin netflix
+
+begin
+    remote = mceusb
+    prog = browser
+    button = More
+    config = KEY Ctrl+Shift+Alt+D
+    repeat = 0
+    delay = 0
+    flags = quit
+end
+
+end netflix
+
+
+begin youtubetv
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_UP
+    config = KEY Up
+    repeat = 2
+    delay = 5
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_DOWN
+    config = KEY Down
+    repeat = 2
+    delay = 5
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_OK
+    config = KEY Return
+    repeat = 0
+    delay = 0
+    flags = quit
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_LEFT
+    config = KEY Left
+    repeat = 2
+    delay = 5
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_RIGHT
+    config = KEY Right
+    repeat = 2
+    delay = 5
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_AGAIN
+    config = KEY H
+    repeat = 0
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_NEXT
+    config = KEY L
+    repeat = 2
+    delay = 5
+    flags = quit
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_REWIND
+    config = KEY J
+    repeat = 2
+    delay = 5
+    flags = quit
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_FORWARD
+    config = KEY L
+    repeat = 2
+    delay = 5
+    flags = quit
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_STOP
+    config = KEY Escape
+    repeat = 0
+    delay = 0
+    flags = quit
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_HOME
+    config = KEY S
+    repeat = 0
+    delay = 0
+    flags = quit
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = Guide
+    config = KEY G
+    repeat = 0
+    delay = 0
+    flags = quit
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = More
+    config = KEY G
+    repeat = 0
+    delay = 0
+    flags = quit
+end
+
+# Suppress the regular mouse controls.
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_UP
+    repeat = 1
+    delay = 0
+    flags = quit
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_DOWN
+    repeat = 1
+    delay = 0
+    flags = quit
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_LEFT
+    repeat = 1
+    delay = 0
+    flags = quit
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_RIGHT
+    repeat = 1
+    delay = 0
+    flags = quit
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_AGAIN
+    repeat = 1
+    delay = 0
+    flags = quit
+end
+
+end youtubetv
+
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_UP
+    config = MOUSE 0 -1
+    repeat = 1
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_DOWN
+    config = MOUSE 0 1
+    repeat = 1
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_OK
+    config = CLICK
+    repeat = 0
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_LEFT
+    config = MOUSE -1 0
+    repeat = 1
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_RIGHT
+    config = MOUSE 1 0
+    repeat = 1
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_BACK
+    config = EXIT
+    repeat = 0
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_VOLUMEUP
+    config = VOLUME_UP
+    repeat = 1
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_VOLUMEDOWN
+    config = VOLUME_DOWN
+    repeat = 1
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_MUTE
+    config = MUTE
+    repeat = 0
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_PLAY
+    config = KEY space
+    repeat = 0
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_PAUSE
+    config = KEY space
+    repeat = 0
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_AGAIN
+    config = KEY Left
+    repeat = 2
+    delay = 5
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_NEXT
+    config = KEY Right
+    repeat = 2
+    delay = 5
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_REWIND
+    config = KEY Left
+    repeat = 2
+    delay = 5
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_FORWARD
+    config = KEY Right
+    repeat = 2
+    delay = 5
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_1
+    config = MULTITAP 1
+    repeat = 0
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_2
+    config = MULTITAP A B C 2
+    repeat = 5
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_3
+    config = MULTITAP D E F 3
+    repeat = 5
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_4
+    config = MULTITAP G H I 4
+    repeat = 5
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_5
+    config = MULTITAP J K L 5
+    repeat = 5
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_6
+    config = MULTITAP M N O 6
+    repeat = 5
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_7
+    config = MULTITAP P Q R S 7
+    repeat = 5
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_8
+    config = MULTITAP T U V 8
+    repeat = 5
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_9
+    config = MULTITAP W X Y Z 9
+    repeat = 5
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_0
+    config = MULTITAP space 0
+    repeat = 5
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_CLEAR
+    config = KEY BackSpace
+    repeat = 1
+    delay = 5
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = KEY_ENTER
+    config = KEY Return
+    repeat = 0
+    delay = 0
+end

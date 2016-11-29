@@ -113,7 +113,6 @@ class fsgolib(object):
 
     def register_session(self):
         """Register FS GO session. Write session_id and authentication header to file."""
-        utcnow = datetime.utcnow()
         url = self.base_url + '/sessions/registered'
         session = {}
         session['device'] = {}
@@ -275,7 +274,7 @@ class fsgolib(object):
     def get_stream_url(self, channel_id, airing_id=None):
         """Return the stream URL for an event."""
         stream_url = {}
-        url = self.base_url + '/platform/ios-tablet~3.0.3/channel/%s' % channel_id
+        url = self.base_url + '/platform/ios-tablet~3.1.1/channel/%s' % channel_id
         if airing_id:
             url = url + '/airing/%s' % airing_id
 
@@ -302,7 +301,10 @@ class fsgolib(object):
         """Return the stream URL along with its bitrate."""
         streams = {}
         m3u8_manifest = self.make_request(manifest_url, 'get')
-        m3u8_header = {'Cookie': 'Authorization=' + self.get_credentials()['auth_header']}
+        m3u8_header = {
+            'Authorization': self.get_credentials()['auth_header'],
+            'User-Agent': 'FOX Sports GO/2836 CFNetwork/711.1.16 Darwin/14.0.0'
+        }
         m3u8_obj = m3u8.loads(m3u8_manifest)
         for playlist in m3u8_obj.playlists:
             bitrate = int(playlist.stream_info.bandwidth) / 1000

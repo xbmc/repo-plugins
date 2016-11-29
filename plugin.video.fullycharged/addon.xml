@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.fullycharged"
+	name="Fully Charged"
+	version="1.0.2"
+	provider-name="zag">
+  <requires>
+    <import addon="xbmc.python" version="2.14.0"/>
+    <import addon="script.module.addon.common" version="2.0.0"/>
+    <import addon="plugin.video.youtube" version="5.0.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Fully Charged Youtube video Add-on</summary>
+    <description lang="en">Fully Charged is an online show hosted by Robert Llewellyn (Red Dwarf, Scrapheap Challenge, Carpool), which looks at why we need to change how we think about energy consumption now. From looking behind the myths of renewable energy, to seeking the truth about electric cars, Robert Llewellyn demonstrates what the future could have in store for us all.</description>
+    <platform>all</platform>
+    <forum>http://forum.kodi.tv/showthread.php?tid=254203</forum>
+    <source>https://github.com/zag2me/plugin.video.fullycharged</source>
+    <website>http://kodi.tv</website>
+    <email>zag@kodi.tv</email>
+    <license>GPL v2.0</license>
+    <assets>
+        <icon>icon.png</icon>
+        <fanart>fanart.jpg</fanart>
+        <screenshot>resources/screenshot-01.jpg</screenshot>
+        <screenshot>resources/screenshot-02.jpg</screenshot>
+        <screenshot>resources/screenshot-03.jpg</screenshot>
+    </assets>
+    <news>Updated with new artwork resources</news>
+  </extension>
+</addon>

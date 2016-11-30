@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.pureradio" name="PureRadio.One" version="1.0.0" provider-name="cubitus">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>audio</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">PureRadio.One.</summary>
+		<description lang="en">PureRadio is an internet station with just good music. We love music and like to share it with our listeners.<br /><br />Tune in, join us on Facebook and get involved.</description>
+		<disclaimer lang="en"></disclaimer>
+		<language>en</language>
+		<platform>all</platform>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<forum></forum>
+		<website>http://pureradio.one</website>
+		<email>pureradio.one@gmail.com</email>
+		<source></source>
+	</extension>
+</addon>

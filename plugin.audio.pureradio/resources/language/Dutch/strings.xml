@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+	<string id="30025">bestanden</string>
+	<string id="30028">Nu luisteren</string>
+	<string id="30029">Annuleren</string>
+	<string id="30031">Verzoek</string>
+	<string id="30036">Afspelen</string>
+	<string id="30040">Opgenomen programma</string>
+	<string id="30043">Track recent afgespeeld</string>
+	<string id="30044">Artiest recent afgespeeld</string>
+	<string id="30045">Open stream 64kbit/AAC+ (standaard)</string>	
+	<string id="30046">Open stream 128kbit/MP3</string>	
+	<string id="30047">Open stream 192kbit/MP3</string>	
+	
+	<string id="30100">Algemeen</string>
+	<string id="30101">Automatisch afspelen</string>
+	<string id="30102">Hide recently requested artists</string>
+	<string id="30103">Opnames</string>
+	<string id="30104">Opname folder</string>
+	<string id="30105">Folder</string>
+	<string id="30106">Bestandsnaam</string>
+</strings>

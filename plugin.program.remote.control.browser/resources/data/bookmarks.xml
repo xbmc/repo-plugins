@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bookmarks version="1.0">
+    <bookmark id="5ae72e76-8c04-4e78-a899-2716b1471d88" title="Netflix" url="https://www.netflix.com/browse" lircrc="special://home/addons/plugin.program.remote.control.browser/resources/data/lircd/netflix.lirc" thumb="e84a1b9c-661e-4e08-81e5-e0c5413c4863"/>
+    <bookmark id="bdb98d30-274d-11e6-8e16-5ce0c5bd9859" title="YouTube TV" url="https://www.youtube.com/tv" lircrc="special://home/addons/plugin.program.remote.control.browser/resources/data/lircd/youtubetv.lirc" thumb="68c7e150-274d-11e6-a98e-5ce0c5bd9859"/>
+    <bookmark id="fad15f96-4f36-425e-a1b3-9b3c6bca1a80" title="Amazon Instant Video" url="https://www.amazon.com/gp/video/library" lircrc="special://home/addons/plugin.program.remote.control.browser/resources/data/lircd/browser.lirc" thumb="52484fe9-a535-4161-b164-0cadf467cf9f"/>
+</bookmarks>

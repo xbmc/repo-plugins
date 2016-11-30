@@ -8,7 +8,7 @@
 	</extension>
 	<extension point="xbmc.addon.metadata">
 		<summary lang="en">PureRadio.One.</summary>
-		<description lang="en">PureRadio is an internet station with just good music. We love music and like to share it with our listeners.<br /><br />Tune in, join us on Facebook and get involved.</description>
+		<description lang="en">PureRadio is an internet station with just good music from the 70s till the 90s. We love music and like to share it with our listeners.&#13;&#10;Tune in, join us on Facebook and get involved.</description>
 		<disclaimer lang="en"></disclaimer>
 		<language>en</language>
 		<platform>all</platform>

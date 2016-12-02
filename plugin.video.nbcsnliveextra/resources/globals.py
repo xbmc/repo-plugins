@@ -11,18 +11,16 @@ import cookielib
 import base64
 from StringIO import StringIO
 import gzip
+from datetime import datetime, timedelta
 
 
-#Provider Files
-#from resources.providers.twc import TWC
-#from resources.providers.dish import DISH
-#from resources.providers.adobe import ADOBE
-#from resources.providers.comcast import COMCAST
+def stringToDate(string, date_format):
+    try:
+        date = datetime.strptime(str(string), date_format)
+    except TypeError:
+        date = datetime(*(time.strptime(str(string), date_format)[0:6]))                
 
-
-
-
-
+    return date
 
 def FIND(source,start_str,end_str):    
     start = source.find(start_str)
@@ -64,6 +62,7 @@ def GET_SIGNED_REQUESTOR_ID():
     ##################################################
     """
     GET http://stream.nbcsports.com/data/mobile/configuration-2014-RSN-Sections.json HTTP/1.1
+    http://stream.nbcsports.com/data/mobile/apps/NBCSports/configuration-ios.json
     Host: stream.nbcsports.com
     Connection: keep-alive
     Accept: */*
@@ -72,7 +71,7 @@ def GET_SIGNED_REQUESTOR_ID():
     Accept-Encoding: gzip, deflate
     Connection: keep-alive
     """
-    req = urllib2.Request(ROOT_URL+'configuration-2014-RSN-Sections.json')  
+    req = urllib2.Request(ROOT_URL+'apps/NBCSports/configuration-ios.json')  
     req.add_header('User-Agent',  UA_NBCSN)
     response = urllib2.urlopen(req)        
 
@@ -87,7 +86,7 @@ def GET_SIGNED_REQUESTOR_ID():
     return signed_requestor_id
 
 def SET_STREAM_QUALITY(url):
-    print url
+    xbmc.log(url)
     '''
     if QUALITY == 0:
         q_lvl = "200000"
@@ -135,8 +134,8 @@ def SET_STREAM_QUALITY(url):
             cookies = cookies + "; "
         cookies = cookies + cookie.name + "=" + cookie.value
     
-    print master
-    print cookies
+    xbmc.log(master)
+    xbmc.log(cookies)
     line = re.compile("(.+?)\n").findall(master)  
     
     xplayback = ''.join([random.choice('0123456789ABCDEF') for x in range(32)])
@@ -161,8 +160,10 @@ def SET_STREAM_QUALITY(url):
             temp_url = url.replace(replace_url_chunk,temp_url)              
             temp_url = temp_url.rstrip() + "|User-Agent=" + UA_NBCSN
             
-            #if cookies != '':                
-            #temp_url = temp_url + "&Cookie=" + cookies
+            
+            if '_alid_=' in cookies:                
+                temp_url = temp_url + "&Cookie=" + cookies
+            
             
             stream_title.append(desc)
             stream_url.update({desc:temp_url})
@@ -251,63 +252,6 @@ def CLEAR_SAVED_DATA():
     ADDON.setSetting(id='clear_data', value='false')   
 
 
-"""
-def SET_PROVIDER():
-    provider = None
-    if MSO_ID == 'Dish':
-        provider = DISH()
-    elif MSO_ID == 'TWC':
-        provider = TWC()
-    elif MSO_ID == 'Comcast_SSO':
-        provider = COMCAST()
-
-    return provider
-
-def AUTHORIZE_STREAM(provider):    
-    adobe = ADOBE()
-    expired_cookies = True
-    try:
-        cj = cookielib.LWPCookieJar()
-        cj.load(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'),ignore_discard=True)
-        
-        for cookie in cj:
-            #print cookie.name
-            #print cookie.expires
-            #print cookie.is_expired()
-            if cookie.name == 'BIGipServerAdobe_Pass_Prod':
-                expired_cookies = cookie.is_expired()
-    except:
-        pass
-
-    resource_id = GET_RESOURCE_ID()    
-    signed_requestor_id = GET_SIGNED_REQUESTOR_ID() 
-    auth_token_file = os.path.join(ADDON_PATH_PROFILE, 'auth.token')        
-    
-    last_provider = ''
-    fname = os.path.join(ADDON_PATH_PROFILE, 'provider.info')
-    if os.path.isfile(fname):                
-        provider_file = open(fname,'r') 
-        last_provider = provider_file.readline()
-        provider_file.close()
-
-    #If cookies are expired or auth token is not present run login or provider has changed
-    if expired_cookies or not os.path.isfile(auth_token_file) or (last_provider != MSO_ID):
-        #saml_request, relay_state, saml_submit_url = adobe.GET_IDP()            
-        var_1, var_2, var_3 = provider.GET_IDP()            
-        saml_response, relay_state = provider.LOGIN(var_1, var_2, var_3)
-        adobe.POST_ASSERTION_CONSUMER_SERVICE(saml_response,relay_state)
-        adobe.POST_SESSION_DEVICE(signed_requestor_id)    
-
-
-    authz = adobe.POST_AUTHORIZE_DEVICE(resource_id,signed_requestor_id)        
-    media_token = adobe.POST_SHORT_AUTHORIZED(signed_requestor_id,authz)
-    stream_url = adobe.TV_SIGN(media_token,resource_id, stream_url)
-
-    return stream_url
-    """
-
-
-
 
 # KODI ADDON GLOBALS
 ADDON_HANDLE = int(sys.argv[1])
@@ -341,41 +285,33 @@ PLAY_BEST = str(settings.getSetting(id="play_best"))
 if CLEAR == 'true':
    CLEAR_SAVED_DATA()
 
-print 'PROVIDER!!!'
-print PROVIDER
-MSO_ID = ''
-if PROVIDER == 'Cable One':
-    MSO_ID = 'auth_cableone_net'
-elif PROVIDER == 'Charter':    
-    MSO_ID = 'Charter_Direct'  
-elif PROVIDER == 'Comcast (xfinity)':    
-    MSO_ID = 'Comcast_SSO'  
-elif PROVIDER == 'Cox':
-    MSO_ID = 'Cox' 
-elif PROVIDER == 'Dish Network':
-    MSO_ID = 'Dish' 
-elif PROVIDER == 'Direct TV':
-    MSO_ID = 'DTV'    
-elif PROVIDER == 'Optimum':
-    MSO_ID = 'Cablevision'
-elif PROVIDER == 'Time Warner Cable':
-    MSO_ID = 'TWC'
-elif PROVIDER == 'Verizon':
-    MSO_ID = 'Verizon'
-elif PROVIDER == 'Bright House':
-    MSO_ID = 'Brighthouse'
+provider_dictionary = { "Bright House" : "Brighthouse",
+                        "Cable One" : "auth_cableone_net",
+                        "Charter" : "Charter_Direct",
+                        "Comcast (xfinity)" : "Comcast_SSO",
+                        "Cox" : "Cox",
+                        "Dish Network" : "Dish",
+                        "Direct TV" : "DTV",
+                        "Frontier" : "FRONTIER",    
+                        "Optimum" : "Cablevision",
+                        "Playstation Vue" : "sony_auth-gateway_net",
+                        "Summit Broadband" : "summit-broadband",
+                        "Time Warner Cable" : "TWC",
+                        "Verizon" : "Verizon"
+                    }
 
 
-IDP_URL = 'https://sp.auth.adobe.com/adobe-services/1.0/authenticate/saml?domain_name=adobe.com&noflash=true&mso_id='+MSO_ID+'&requestor_id=nbcsports&no_iframe=true&client_type=iOS&client_version=1.9.2&redirect_url=http://adobepass.ios.app/'           
+MSO_ID = provider_dictionary[PROVIDER]
+IDP_URL = 'https://sp.auth.adobe.com/adobe-services/authenticate/saml?domain_name=adobe.com&noflash=true&mso_id='+MSO_ID+'&requestor_id=nbcsports&no_iframe=true&client_type=iOS&client_version=1.10.1&redirect_url=http://adobepass.ios.app/'
 ORIGIN = ''
 REFERER = ''
 
 
 #User Agents
-UA_IPHONE = 'Mozilla/5.0 (iPhone; CPU iPhone OS 8_4 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12H143'
+UA_IPHONE = 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_0_2 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) Mobile/14A456'
 UA_PC = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.81 Safari/537.36'
-UA_ADOBE_PASS = 'AdobePassNativeClient/1.9 (iPhone; U; CPU iPhone OS 8.4 like Mac OS X; en-us)'
-UA_NBCSN = 'AppleCoreMedia/1.0.0.12H143 (iPhone; U; CPU OS 8_4 like Mac OS X; en_us)'
+UA_ADOBE_PASS = 'AdobePassNativeClient/1.10.1 (iPhone; U; CPU iPhone OS 10.0.2 like Mac OS X; en-us)'
+UA_NBCSN = 'AppleCoreMedia/1.0.0.14A456 (iPhone; U; CPU OS 10_0_2 like Mac OS X; en_us)'
 
 
 #Create Random Device ID and save it to a file

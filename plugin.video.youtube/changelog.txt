@@ -1,3 +1,25 @@
+5.3.5
+[add] MPEG-DASH support for Kodi 17 w/ inputstream.adaptive Add-on
+[add] optional History and Watch Later custom playlist to Settings -> Folders, or (My)Playlists context menu to set/remove
+[add] Maintenance section to Settings
+[add] 'Subtitle language(s) to download' selection to Settings -> General
+[add] 'Force SSL Certificate verification' to Settings -> Advanced
+[upd] API key set switching from Settings -> API (this will log you out)
+[upd] Dual login only required if My Subscriptions folder is enabled at sign-in
+[upd] setting content type from episodes, now videos
+[del] override view options
+[upd] Norwegian strings [torstehu]
+[upd] Greek strings [twilight0]
+[upd] Portuguese strings [Wanilton]
+[upd] Dutch strings [flemlion]
+[fix/upd] API tweaking and various other updates
+
+5.2.2 (2016-05-28)
+[upd] Insert old API-Keys from Bromix because of Quota-Exceed-Error
+[add] Dutch strings (thanks to Guilouz)
+[upd] French strings (thanks to royreinders)
+[upd] Greek strings (thanks to Twilight0)
+
 5.2.1 (2016-05-12)
 [add] Additional "Recommend for You" section (thanks to anxdpanic)
 

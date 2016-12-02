@@ -75,7 +75,7 @@ class ViewManager(object):
                 {'name': 'InfoWall', 'id': 51}
             ]
         },
-        'skin.1080xf': {
+        'skin.xperience1080+': {
             'default': [
                 {'name': 'List', 'id': 50},
                 {'name': 'Thumbnail', 'id': 500},
@@ -104,6 +104,19 @@ class ViewManager(object):
                 {'name': 'Thumbnail', 'id': 500},
                 {'name': 'Banner', 'id': 60}
             ],
+        },
+        'skin.estuary': {
+            'default': [
+                {'name': 'Icon Wall', 'id': 52},
+                {'name': 'WideList', 'id': 55},
+            ],
+            'episodes': [
+                {'name': 'List', 'id': 50},
+                {'name': 'Shift', 'id': 53},
+                {'name': 'InfoWall', 'id': 54},
+                {'name': 'Wall', 'id': 500},
+                {'name': 'Fanart', 'id': 502}
+            ]
         }
     }
 

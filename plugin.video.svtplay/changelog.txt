@@ -1,3 +1,8 @@
+Version 4.0.37
+-------------
+- Fix broken listings due to site change
+- Add sorted favorites (allwi290)
+
 Version 4.0.36
 -------------
 - Fix broken category listing

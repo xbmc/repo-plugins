@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import urllib
+import re
 import requests
 
 import helper
@@ -7,7 +8,6 @@ import CommonFunctions as common
 
 BASE_URL = "http://svtplay.se"
 API_URL = "/api/"
-JSON_URL = "/ajax/sok/forslag.json"
 
 URL_A_TO_O = "/program"
 URL_TO_SEARCH = "/sok?q="
@@ -26,29 +26,23 @@ SECTION_LIVE_PROGRAMS = "live-channels"
 
 def getAtoO():
   """
-  Returns a list of all programs, sorted A-Z.
+  Returns a list of all items, sorted A-Z.
   """
-  r = requests.get(BASE_URL+JSON_URL)
+  r = requests.get(BASE_URL+API_URL+"all_titles")
   if r.status_code != 200:
-    common.log("Could not fetch forslag JSON!")
+    common.log("Could not fetch JSON!")
     return None
   
   items = []
-  programs = []
-  for json_item in r.json():
-    if json_item["isGenre"] != "genre":
-      programs.append(json_item)
 
-  programs = sorted(programs, key=lambda program: program["title"])
-
-  for program in programs:
+  for program in r.json():
     item = {}
-    item["title"] = common.replaceHTMLCodes(program["title"])
-    item["thumbnail"] = helper.prepareThumb(program.get("thumbnail", ""), baseUrl=BASE_URL)
-    item["url"] = program["url"].replace("/senaste","")
+    item["title"] = common.replaceHTMLCodes(program["programTitle"])
+    item["thumbnail"] = ""
+    item["url"] = program["contentUrl"]
     items.append(item)
 
-  return items
+  return sorted(items, key=lambda item: item["title"])
 
 def getCategories():
   """
@@ -98,7 +92,9 @@ def getLatestNews():
   programs = []
   for item in r.json():
     live_str = ""
-    thumbnail = item["imageMedium"]
+    thumbnail = item.get("poster", "")
+    if not thumbnail:
+      thumbnail = item.get("thumbnail", "")
     if item["broadcastedNow"]:
       live_str = " " + "[COLOR red](Live)[/COLOR]"
     program = {
@@ -113,14 +109,14 @@ def getProgramsForGenre(genre):
   """
   Returns a list of all programs for a genre.
   """
-  url = BASE_URL+API_URL+"cluster_page;cluster="+genre
+  url = BASE_URL+API_URL+"cluster_titles_and_episodes/?cluster="+genre
   r = requests.get(url)
   if r.status_code != 200:
     common.log("Could not get JSON for url: "+url)
     return None
 
   programs = []
-  for item in r.json()["contents"]:
+  for item in r.json():
     url = item["contentUrl"]
     title = item["programTitle"]
     plot = item.get("description", "")
@@ -133,53 +129,68 @@ def getProgramsForGenre(genre):
 def getAlphas():
   """
   Returns a list of all letters in the alphabet that has programs.
+
+  Hard coded as the API can't return a list.
   """
-  url = BASE_URL+API_URL+"programs_page"
-  r = requests.get(url)
-  if r.status_code != 200:
-    common.log("Could not get JSON for url: "+url)
-    return None
-
   alphas = []
-  for item in r.json()["alphabeticList"]:
-    letter = item["letter"]
-    alpha = {}
-    alpha["title"] = common.replaceHTMLCodes(letter).encode("utf-8")
-    alpha["char"] =  letter.encode("utf-8")
-    alphas.append(alpha)
-
-  return sorted(alphas, key=lambda letter: letter["char"])
+  alphas.append("A")
+  alphas.append("B")
+  alphas.append("C")
+  alphas.append("D")
+  alphas.append("E")
+  alphas.append("F")
+  alphas.append("G")
+  alphas.append("H")
+  alphas.append("I")
+  alphas.append("J")
+  alphas.append("K")
+  alphas.append("L")
+  alphas.append("M")
+  alphas.append("N")
+  alphas.append("O")
+  alphas.append("P")
+  alphas.append("Q")
+  alphas.append("R")
+  alphas.append("S")
+  alphas.append("T")
+  alphas.append("U")
+  alphas.append("V")
+  alphas.append("W")
+  alphas.append("X")
+  alphas.append("Y")
+  alphas.append("Z")
+  alphas.append("Å")
+  alphas.append("Ä")
+  alphas.append("Ö")
+  alphas.append("0-9")
+  return alphas
 
 def getProgramsByLetter(letter):
   """
   Returns a list of all program starting with the supplied letter.
   """
   letter = urllib.unquote(letter)
-  url = BASE_URL+API_URL+"programs_page"
+  url = BASE_URL+API_URL+"all_titles"
  
   r = requests.get(url)
   if r.status_code != 200:
     common.log("Did not get any response for: "+url)
     return None
 
-  contents = r.json()
+  letter = letter.decode("utf-8")
+  pattern = "[%s]" % letter.upper()
+
+  titles = r.json()
   items = []
   
   programs = []
-  for item in contents["alphabeticList"]:
-    if item["letter"] == letter:
-      programs = item["titles"]
-
-  if not programs:
-    common.log("Could not find letter \""+letter+"\"")
-    return None
-
-  for program in programs:
-    item = {}
-    item["url"] = "/"+program["urlFriendlyTitle"]
-    item["title"] = common.replaceHTMLCodes(program["title"])
-    item["thumbnail"] = helper.prepareThumb(program.get("thumbnail", ""), baseUrl=BASE_URL)
-    items.append(item)
+  for title in titles:
+    if re.search(pattern, title["programTitle"][0].upper()):
+      item = {}
+      item["url"] = "/" + title["contentUrl"]
+      item["title"] = common.replaceHTMLCodes(title["programTitle"])
+      item["thumbnail"] = ""
+      items.append(item)
 
   return items
 

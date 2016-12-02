@@ -114,7 +114,7 @@ def viewAlphaDirectories():
   if not alphas:
     return
   for alpha in alphas:
-    addDirectoryItem(alpha["title"], { "mode": MODE_LETTER, "letter": alpha["char"] })
+    addDirectoryItem(alpha, { "mode": MODE_LETTER, "letter": alpha})
 
 def viewProgramsByLetter(letter):
   programs = svt.getProgramsByLetter(letter)

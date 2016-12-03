@@ -49,7 +49,7 @@ class ShawGo:
 
         saml = re.search('<input.*?name=\"SAMLRequest\".*?value=\"(.*?)\"', html, re.MULTILINE)
         if not saml:
-            print "Unable to find SAML requst."
+            print "Unable to find SAMLRequest."
             return None
         saml = saml.group(1)
 
@@ -87,23 +87,11 @@ class ShawGo:
 
         html = resp.read()
 
-        action = re.search('<form.*?action=\"(.*?)"', html, re.MULTILINE)
+        action = re.search('<form.*?action=\"(.*?)".*?id=\"form3">', html, re.MULTILINE)
         if not action:
             print "Unable to find action form"
             return None
         action = action.group(1)
-
-        saml = re.search('<input.*?name=\"adobeRequestSaml\".*?value=\"(.*?)\"', html, re.MULTILINE)
-        if not saml:
-            print "Unable to find SAML requst."
-            return None
-        saml = saml.group(1)
-
-        relay = re.search('<input.*?name=\"relayState\".*?value=\"(.*?)\"', html, re.MULTILINE)
-        if not relay:
-            print "Unable to find relay state."
-            return None
-        relay = relay.group(1)
 
         # ooc is username, email is shawemail, account number is shawdirect
         idp = 'shawocc'
@@ -116,7 +104,7 @@ class ShawGo:
         o = urlparse(url)
         newurl = o.scheme + "://" + o.netloc + action
 
-        return ShawGo.getEntitlement(username, password, saml, relay, idp, newurl)
+        return ShawGo.getEntitlement(username.translate(None, "-"), password, saml, relay, idp, newurl)
 
 
     @staticmethod
@@ -133,11 +121,11 @@ class ShawGo:
         jar = Cookies.getCookieJar()
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
 
-        values = {'adobeRequestSaml' : saml,
-                  'relayState' : relay,
-                  'username' : username,
-                  'password' : password,
-                  'IdpAdapterid' : idp }
+        values = {'pf.username' : username,
+                  'selectedPCV': 'ShawDirect',
+                  'pf.pass' : password,
+                  'pf.ok' : '',
+                  'pf.cancel': ''}
 
         try:
             resp = opener.open(url, urllib.urlencode(values))

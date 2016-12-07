@@ -83,6 +83,7 @@ class Main:
         # Init
         #
         thumbnail_urls_index = 0
+        plot_index = 0
         # Create a list for our items.
         listing = []
 
@@ -95,6 +96,7 @@ class Main:
         headers = {"User-Agent": user_agent,
                    "Accept-Encoding": "gzip",
                    "X-Cookies-Accepted": "1"}
+
         # Disable ssl logging (this is needed for python version < 2.7.9 (SNIMissingWarning))
         import logging
         # On iOS the following logging command throws an exception. If that happens, ignore the exception...
@@ -104,6 +106,7 @@ class Main:
             xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                 ADDON, VERSION, DATE, "logging exception occured (and ignored)", str(Exception)), xbmc.LOGDEBUG)
             pass
+
         # Get HTML page
         response = requests.get(self.video_list_page_url, headers=headers)
         # response.status
@@ -120,12 +123,20 @@ class Main:
         xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                 ADDON, VERSION, DATE, "len(thumbnail_urls)", str(len(thumbnail_urls))), xbmc.LOGDEBUG)
 
+        # Get the plots
+        # <p class="lead"><span class="date">24-11</span> - Eind oktober kondigde Apple drie nieuwe MacBooks aan. Twee daarvan, met schermdiagonalen van 13,3 en 15,4 inch, zijn&nbsp;voorzien van een oledstrook boven het toetsenbord, waarover al...</p>
+        plots = soup.findAll('p', attrs={'class': re.compile("^lead")})
+
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "len(plots)", str(len(plots))), xbmc.LOGDEBUG)
+
         # Get the video page urls
         # <td class="video-image">
         #	<a href="https://tweakers.net/video/7517/showcase-trailer-van-cryengine-3-van-gdc-2013.html" class="thumb video" title="Showcase-trailer van CryEngine 3 van GDC 2013">
         #   <img src="https://ic.tweakimg.net/img/accountid=1/externalid=7517/size=124x70/image.jpg" width=124 height=70 alt=""><span class="playtime">04:00</span></a>
         # </td>
         video_page_url_in_tds = soup.findAll('td', attrs={'class': re.compile("video-image")})
+
         xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                 ADDON, VERSION, DATE, "len(video_page_url_in_tds)", str(len(video_page_url_in_tds))), xbmc.LOGDEBUG)
 
@@ -161,14 +172,43 @@ class Main:
             xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "title", str(title)),
                          xbmc.LOGDEBUG)
 
+            # Determine the url of the thumbnail
             if thumbnail_urls_index >= len(thumbnail_urls):
                 thumbnail_url = ''
             else:
                 thumbnail_url = thumbnail_urls[thumbnail_urls_index]['src']
+                thumbnail_url_str = str(thumbnail_url)
+                start_pos_size = thumbnail_url_str.find('size=')
+                if start_pos_size >= 0:
+                    end_pos_size = thumbnail_url_str.find('/', start_pos_size)
+                    # Let's use the thumbnail itself instead of a scaled down version of it by removing "/size=...x.../"
+                    thumbnail_url_new = thumbnail_url_str[0:start_pos_size - 1] + thumbnail_url_str[end_pos_size:]
+                    thumbnail_url = thumbnail_url_new
+
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "thumbnail_url", str(thumbnail_url)),
+                         xbmc.LOGDEBUG)
+
+            # Determine video duration in seconds
+            try:
+                duration_in_mm_ss = video_page_url_in_td.span.text
+                m, s = duration_in_mm_ss.split(':')
+                duration_in_seconds = int(m) * 60 + int(s)
+            except:
+                duration_in_seconds = 0
+
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "duration_in_seconds", str(duration_in_seconds)),
+                         xbmc.LOGDEBUG)
+
+            # Determine the plot
+            if plot_index >= len(plots):
+                plot = ''
+            else:
+                plot = plots[plot_index].text
+
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "plot", str(plot)), xbmc.LOGDEBUG)
 
             list_item = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_url)
-            list_item.setInfo("video", {"title": title, "studio": ADDON})
-            list_item.setInfo("mediatype", "video")
+            list_item.setInfo("video", {"title": title, "studio": "Tweakers", "mediatype": "video", "plot": plot, "duration": duration_in_seconds})
             list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
                               'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'true')
@@ -181,6 +221,7 @@ class Main:
             listing.append((url, list_item, is_folder))
 
             thumbnail_urls_index = thumbnail_urls_index + 1
+            plot_index = plot_index + 1
 
         # Next page entry
         if self.next_page_possible == 'True':

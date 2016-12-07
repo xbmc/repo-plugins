@@ -66,13 +66,13 @@ class Main:
         xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                 ADDON, VERSION, DATE, "self.video_page_url", str(self.video_page_url)), xbmc.LOGDEBUG)
 
-
         # Make the headers
         xbmc_version = xbmc.getInfoLabel("System.BuildVersion")
         user_agent = "Kodi Mediaplayer %s / Tweakers Addon %s" % (xbmc_version, VERSION)
         headers = {"User-Agent": user_agent,
                    "Accept-Encoding": "gzip",
                    "X-Cookies-Accepted": "1"}
+
         # Disable ssl logging (this is needed for python version < 2.7.9 (SNIMissingWarning))
         import logging
         # On iOS the following logging command throws an exception. If that happens, ignore the exception...

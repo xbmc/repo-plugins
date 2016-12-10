@@ -121,7 +121,7 @@ msgid "Starting, please wait..."
 msgstr ""
 
 msgctxt "#32026"
-msgid "A valid folder is required"
+msgid "A valid export folder is required"
 msgstr ""
 
 msgctxt "#32027"
@@ -251,3 +251,8 @@ msgstr ""
 msgctxt "#32058"
 msgid "Shared With Me"
 msgstr ""
+
+msgctxt "#32059"
+msgid "Exporting task already in progress."
+msgstr ""
+

@@ -65,6 +65,8 @@ progress_dialog = xbmcgui.DialogProgress()
 pg_created = False
 progress_dialog_bg = xbmcgui.DialogProgressBG()
 pg_bg_created = False 
+export_progress_dialog_bg = xbmcgui.DialogProgressBG()
+export_pg_bg_created = False 
 big_folder_min = 0
 
 addon_data_path = utils.Utils.unicode(xbmc.translatePath(addon.getAddonInfo('profile')))
@@ -90,8 +92,8 @@ login_url = ''
 config = ConfigParser.ConfigParser()
 config.read(config_path)
 
-ext_videos = ['mkv', 'iso', 'nut', 'ogg', 'vivo', 'pva', 'nuv', 'nsv', 'nsa', 'fli', 'flc', 'wtv']
-ext_audio = ['flac', 'alac', 'aiff', 'amr', 'ape', 'shn', 's3m', 'nsf', 'spc']
+ext_videos = ['mkv', 'mp4', 'avi', 'iso', 'nut', 'ogg', 'vivo', 'pva', 'nuv', 'nsv', 'nsa', 'fli', 'flc', 'wtv']
+ext_audio = ['mp3', 'wav', 'flac', 'alac', 'aiff', 'amr', 'ape', 'shn', 's3m', 'nsf', 'spc']
 
 def cancelOperation(onedrive):
     return monitor.abortRequested() or (pg_created and progress_dialog.iscanceled()) or (pg_bg_created and progress_dialog_bg.isFinished()) or onedrive.cancelOperation()
@@ -258,7 +260,16 @@ def start_auto_refreshed_slideshow(driveid, item_id, oldchild_count):
     else:
         dialog.ok(addonname, addon.getLocalizedString(32034) % utils.Utils.unicode(f['name']))
 
-def export_folder(name, item_id, driveid, destination_folder, directLink=None):
+def close_dialog_timeout(dialog, timeout):
+    current_time = time.time()
+    target_time = current_time + timeout
+    while not cancelOperation(onedrive) and target_time > current_time:
+        if monitor.waitForAbort(1):
+            break
+        current_time = time.time()
+    dialog.close()
+
+def export_folder(name, item_id, driveid, destination_folder, base_folder, directLink=None):
     onedrive = onedrives[driveid]
     parent_folder = os.path.join(destination_folder, name)
     if not os.path.exists(parent_folder):
@@ -287,7 +298,7 @@ def export_folder(name, item_id, driveid, destination_folder, directLink=None):
         extension = utils.Utils.get_extension(f['name']);
         name = utils.Utils.ascii(f['name'])
         if is_folder:
-            export_folder(name, f['id'], driveid, parent_folder)
+            export_folder(name, f['id'], driveid, parent_folder, base_folder)
         elif (('video' in f or extension in ext_videos) and content_type == 'video') or ('audio' in f and content_type == 'audio'):
             params = {'action':'play', 'content_type': content_type, 'item_id': f['id'], 'driveid': driveid}
             url = base_url + '?' + urllib.urlencode(params)
@@ -297,9 +308,10 @@ def export_folder(name, item_id, driveid, destination_folder, directLink=None):
         p = int(onedrive.exporting_count/float(onedrive.exporting_target)*100)
         if onedrive.exporting_percent < p:
             onedrive.exporting_percent = p
-        progress_dialog.update(onedrive.exporting_percent, parent_folder, name)
+        file_path = os.path.join(parent_folder, name)
+        export_progress_dialog_bg.update(onedrive.exporting_percent, addonname + ' ' + addon.getLocalizedString(32024), file_path[len(base_folder):])
     if '@odata.nextLink' in files and not cancelOperation(onedrive):
-        export_folder(os.path.basename(parent_folder), item_id, driveid, destination_folder, files['@odata.nextLink'])
+        export_folder(os.path.basename(parent_folder), item_id, driveid, destination_folder, base_folder, files['@odata.nextLink'])
 
 def remove_readonly(fn, path, excinfo):
     if fn is os.rmdir:
@@ -520,35 +532,39 @@ try:
                 progress_dialog_bg.close()
                 pg_bg_created = False
     elif action[0] == 'export_folder':
-        driveid = args.get('driveid')[0]
-        item_id = args.get('item_id')[0]
-        onedrive = onedrives[driveid]
-        string_id = 32002 if content_type == 'audio' else 32001
-        string_config = 'music_library_folder' if content_type == 'audio' else 'video_library_folder'
-        path = addon.getSetting(string_config)
-        if path is None or path == '' or not os.path.exists(path):  
-            path = dialog.browse(0, addon.getLocalizedString(string_id), 'files', '', False, False, '')
-        if os.path.exists(path):
-            progress_dialog.create(addonname + ' ' + addon.getLocalizedString(32024), addon.getLocalizedString(32025))
-            pg_created = True
-            progress_dialog.update(0)
-            addon.setSetting(string_config, path)
-            f = onedrive.get('/drive/items/'+item_id)
-            if not cancelOperation(onedrive):
-                onedrive.exporting_target = int(f['folder']['childCount']) + 1
-                name = utils.Utils.unicode(f['name']).encode('ascii', 'ignore')
-                if addon.getSetting('clean_folder') == 'true':
-                    root = os.path.join(path, name)
-                    if os.path.exists(root):
-                        try:
-                            shutil.rmtree(root, onerror=remove_readonly)
-                        except:
-                            monitor.waitForAbort(3)
-                            shutil.rmtree(root, onerror=remove_readonly)
-                export_folder(name, item_id, driveid, path)
-                onedrive.exporting_count += 1
+        if addon.getSetting('exporting') == 'true':
+            dialog.ok(addonname, addon.getLocalizedString(32059) + ' ' + addon.getLocalizedString(32038))
         else:
-            dialog.ok(addonname, addon.getLocalizedString(32026))
+            driveid = args.get('driveid')[0]
+            item_id = args.get('item_id')[0]
+            onedrive = onedrives[driveid]
+            string_id = 32002 if content_type == 'audio' else 32001
+            string_config = 'music_library_folder' if content_type == 'audio' else 'video_library_folder'
+            path = addon.getSetting(string_config)
+            if path is None or path == '' or not os.path.exists(path):  
+                path = dialog.browse(0, addon.getLocalizedString(string_id), 'files', '', False, False, '')
+            if os.path.exists(path):
+                export_progress_dialog_bg.create(addonname + ' ' + addon.getLocalizedString(32024), addon.getLocalizedString(32025))
+                export_pg_bg_created = True
+                export_progress_dialog_bg.update(0)
+                addon.setSetting(string_config, path)
+                f = onedrive.get('/drive/items/'+item_id)
+                if not cancelOperation(onedrive):
+                    onedrive.exporting_target = int(f['folder']['childCount']) + 1
+                    name = utils.Utils.unicode(f['name']).encode('ascii', 'ignore')
+                    if addon.getSetting('clean_folder') == 'true':
+                        root = os.path.join(path, name)
+                        if os.path.exists(root):
+                            try:
+                                shutil.rmtree(root, onerror=remove_readonly)
+                            except:
+                                monitor.waitForAbort(3)
+                                shutil.rmtree(root, onerror=remove_readonly)
+                    onedrive.exporting = True
+                    addon.setSetting('exporting','true')
+                    export_folder(name, item_id, driveid, path, os.path.join(path, name))
+            else:
+                dialog.ok(addonname, addon.getLocalizedString(32026))
     elif action[0] == 'show_image':
         url = args.get('url')[0]
         xbmc.executebuiltin('ShowPicture('+url+')')
@@ -609,13 +625,22 @@ try:
             if addon.getSetting('set_subtitle') == 'true' and content_type == 'video' and 'parentReference' in f:
                 file_name = utils.Utils.unicode(f['name'])
                 parent_path = utils.Utils.get_safe_value(f['parentReference'], 'path', '')
-                subtitle_path = parent_path+'/'+utils.Utils.replace_extension(file_name, 'srt')
+                subtitle_name = utils.Utils.replace_extension(file_name, 'srt')
+                subtitle_path = parent_path+'/'+urllib.quote_plus(subtitle_name)
+                progress_dialog_bg.create(addonname, addon.getLocalizedString(32060) % subtitle_name)
+                pg_bg_created = True
+                progress_dialog_bg.update(50)
                 try:
                     subtitle = onedrive.get(subtitle_path, retry=False)
                     if not cancelOperation(onedrive):
                         list_item.setSubtitles([subtitle['@content.downloadUrl']])
-                except:
-                    None
+                    progress_dialog_bg.update(100, addonname, addon.getLocalizedString(32061))
+                except Exception as e:
+                    progress_dialog_bg.update(100, addonname, addon.getLocalizedString(32062))
+                t = threading.Thread(target=close_dialog_timeout, args=(progress_dialog_bg, 4))
+                t.setDaemon(True)
+                t.start()
+                pg_bg_created = False
             xbmcplugin.setResolvedUrl(addon_handle, True, list_item)
 except Exception as e:
     ex = e
@@ -654,6 +679,9 @@ except Exception as e:
             e.body += '\n--selection: --\n' + utils.Utils.str(selection)
         report_error(e)
 finally:
+    addon.setSetting('exporting','false')
+    if export_pg_bg_created:
+        export_progress_dialog_bg.close()
     if pg_bg_created:
         progress_dialog_bg.close()
     if pg_created:

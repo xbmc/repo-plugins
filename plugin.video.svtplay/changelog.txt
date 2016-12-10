@@ -1,3 +1,7 @@
+Version 4.0.38
+-------------
+- Fix broken favorites lisitng on some platforms (#175)
+
 Version 4.0.37
 -------------
 - Fix broken listings due to site change

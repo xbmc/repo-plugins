@@ -1,3 +1,8 @@
+v1.1.11 released - Dec 10, 2016:
+- Blank settings text fixed
+- Subtitle load message 
+- Export process set to background
+--------------------------
 v1.1.10 released - Aug 16, 2016:
 - Minor fix when an audio file has no metadata
 --------------------------

@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings >
-	<category label="3000">
+	<category label="32000">
 		<setting type="text" id="client_id" default="0000000048145120" option="hidden" visible="false"/>
-		<setting label="30001" type="folder" id="video_library_folder" option="writeable"/>
-		<setting label="30002" type="folder" id="music_library_folder" option="writeable"/>
-		<setting label="30003" type="bool" id="clean_folder" default="true" value="true"/>
-		<setting label="30051" type="bool" id="set_subtitle" default="true" value="true"/>
+		<setting type="bool" id="exporting" default="false" option="hidden" visible="false"/>
+		<setting label="32001" type="folder" id="video_library_folder" option="writeable"/>
+		<setting label="32002" type="folder" id="music_library_folder" option="writeable"/>
+		<setting label="32003" type="bool" id="clean_folder" default="true" value="true"/>
+		<setting label="32051" type="bool" id="set_subtitle" default="true" value="true"/>
     </category>
-	<category label="30032">
-		<setting label="30033" type="number" id="slideshow_refresh_interval" default="5" value="true"/>
+	<category label="32032">
+		<setting label="32033" type="number" id="slideshow_refresh_interval" default="5" value="true"/>
     </category>
-	<category label="30030">
-		<setting label="30031" type="bool" id="report_error" default="true" value="true"/>
+	<category label="32030">
+		<setting label="32031" type="bool" id="report_error" default="true" value="true"/>
     </category>
 </settings>

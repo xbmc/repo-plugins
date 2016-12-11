@@ -8,7 +8,6 @@
     <setting id="max_bitrate_allowed" type="number" label="30036" default="5000" subsetting="true" visible="eq(-1,1)"/>
   </category>
   <category label="30004">
-    <setting id="debug" type="bool" label="Add-on debugging" default="false"/>
     <setting id="disable_ssl" type="bool" label="30019" default="false"/>
   </category>
 </settings>

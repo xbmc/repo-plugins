@@ -1,3 +1,6 @@
+1.0.5
+- replace edit order with move node
+
 1.0.4
 - support for flat video library
 

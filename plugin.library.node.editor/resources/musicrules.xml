@@ -151,12 +151,15 @@
 		</match>
 		<match name="path">
 			<label>573</label>
+			<albums>True</albums>
+			<artists>True</artists>
 			<songs>True</songs>
 			<operator>string</operator>
 			<browse>True</browse>
 		</match>
 		<match name="lastplayed">
 			<label>568</label>
+			<albums>True</albums>
 			<songs>True</songs>
 			<operator>date</operator>
 		</match>

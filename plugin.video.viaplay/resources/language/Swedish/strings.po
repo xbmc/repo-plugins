@@ -58,7 +58,7 @@ msgid "Finland"
 msgstr "Finland"
 
 msgctxt "#30012"
-msgid "Download subtitles if available"
+msgid "Download available subtitles"
 msgstr "Ladda ner tillgängliga undertexter"
 
 msgctxt "#30013"
@@ -74,7 +74,7 @@ msgid "Search"
 msgstr "Sök"
 
 msgctxt "#30016"
-msgid "This event starts at"
+msgid "This event starts"
 msgstr "Detta event startar"
 
 msgctxt "#30017"
@@ -90,19 +90,19 @@ msgid "Disable SSL (not recommended)"
 msgstr "Inaktivera SSL (inte rekommenderat)"
 
 msgctxt "#30020"
-msgid "Your account is not authorized to watch this content. You will find information on how to upgrade your package on the Viaplay website."
+msgid "Your account is not authorized to watch this content. You find information on how to upgrade your package on the Viaplay website."
 msgstr "Ditt konto har inte tillgång till det här innehållet. Du hittar information om hur du uppgraderar ditt paket på Viaplays hemsida."
 
 msgctxt "#30021"
-msgid "You need to purchase this movie on the Viaplay website before playing it."
+msgid "You need to rent/purchase this movie on the Viaplay website before playing it."
 msgstr "Du måste hyra/köpa filmen på Viaplays hemsida innan du spelar upp den."
 
 msgctxt "#30022"
 msgid "You're not allowed to watch content from this region."
-msgstr "Du har inte tillåtelse att spela upp innehåll från regionen du befinner dig i."
+msgstr "Det går inte att spela upp innehåll från regionen du befinner dig i."
 
 msgctxt "#30023"
-msgid "Preferred stream quality"
+msgid "Preferred stream quality (movies & TV)"
 msgstr "Föredragen strömkvalitet (filmer & TV)"
 
 msgctxt "#30024"
@@ -126,12 +126,8 @@ msgid "Upcoming days"
 msgstr "Kommande dagar"
 
 msgctxt "#30029"
-msgid "Archived days"
+msgid "Previous days"
 msgstr "Föregående dagar"
-
-msgctxt "#30030"
-msgid "Upcoming events"
-msgstr "Kommande evenemang"
 
 msgctxt "#30031"
 msgid "Archived events"
@@ -139,7 +135,7 @@ msgstr "Arkiverade evenemang"
 
 msgctxt "#30032"
 msgid "Enter your PIN code"
-msgstr "Skriv din PIN-kod"
+msgstr "Ange din PIN-kod"
 
 msgctxt "#30033"
 msgid "Parental control"
@@ -155,4 +151,8 @@ msgstr "Begränsa bitrate"
 
 msgctxt "#30036"
 msgid "Max bitrate allowed (Kbps)"
-msgstr "Max tillåtna bitrate (Kbps)"
+msgstr "Högsta tillåtna bitrate (Kbps)"
+
+msgctxt "#30037"
+msgid "Live & upcoming events"
+msgstr "Live & kommande evenemang"

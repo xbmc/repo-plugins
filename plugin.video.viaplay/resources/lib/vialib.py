@@ -126,8 +126,6 @@ class vialib(object):
                 if not self.login(self.username, self.password):
                     raise self.LoginFailure('login failed')
 
-        return True
-
     def get_video_urls(self, guid, pincode=None):
         """Return a dict with the stream URL:s and available subtitle URL:s."""
         video_urls = {}
@@ -148,6 +146,9 @@ class vialib(object):
         if 'MissingSessionCookieError' in data.values():
             data = self.make_request(url=url, method='get', payload=payload)
         self.check_for_subscription(data)
+        if 'viaplay:encryptedPlaylist' in data['_links'].keys():
+            payload['deviceKey'] = 'iphone-%s' % self.country
+            data = self.make_request(url=url, method='get', payload=payload)
         manifest_url = data['_links']['viaplay:playlist']['href']
         video_urls['manifest_url'] = manifest_url
         video_urls['bitrates'] = self.parse_m3u8_manifest(manifest_url)
@@ -156,7 +157,7 @@ class vialib(object):
         return video_urls
 
     def check_for_subscription(self, data):
-        """Check if the user is authorized to watch the requested stream. 
+        """Check if the user is authorized to watch the requested stream.
         Raise errors as AuthFailure."""
         try:
             if data['success'] is False:
@@ -164,7 +165,7 @@ class vialib(object):
                 raise self.AuthFailure(subscription_error)
         except KeyError:
             # 'success' won't be in response if it's successful
-            return True
+            pass
 
     def get_categories(self, input, method=None):
         if method == 'data':
@@ -186,6 +187,7 @@ class vialib(object):
         except KeyError:
             self.log('No sortings available for this category.')
             sorttypes = None
+
         return sorttypes
 
     def get_letters(self, url):
@@ -201,35 +203,36 @@ class vialib(object):
 
     def get_products(self, input, method=None, filter_event=False):
         """Return a list of all available products."""
-        products = []
-
         if method == 'data':
             data = input
         else:
             data = self.make_request(url=input, method='get')
 
         if 'list' in data['type']:
-            products_dict = data['_embedded']['viaplay:products']
+            products = data['_embedded']['viaplay:products']
         elif data['type'] == 'product':
-            products_dict = data['_embedded']['viaplay:product']
+            products = data['_embedded']['viaplay:product']
         else:
-            products_dict = self.get_products_block(data)['_embedded']['viaplay:products']
+            products = self.get_products_block(data)['_embedded']['viaplay:products']
 
         try:
             # try adding additional info to sports dict
-            for product in products_dict:
+            aproducts = []
+            for product in products:
                 if product['type'] == 'sport':
-                    product['event_date'] = self.parse_time(product['epg']['start'], localize=True)
+                    product['event_date'] = self.parse_datetime(product['epg']['start'], localize=True)
                     product['event_status'] = self.get_event_status(product)
-                products.append(product)
+                aproducts.append(product)
+            products = aproducts
         except TypeError:
-            products = products_dict
+            pass
 
         if filter_event:
             fproducts = []
             for product in products:
-                if filter_event == product['event_status']:
-                    fproducts.append(product)
+                for event in filter_event:
+                    if event == product['event_status']:
+                        fproducts.append(product)
             products = fproducts
 
         return products
@@ -296,7 +299,7 @@ class vialib(object):
     def get_event_status(self, data):
         """Return whether the event is live/upcoming/archive."""
         now = datetime.utcnow()
-        producttime_start = self.parse_time(data['epg']['start'])
+        producttime_start = self.parse_datetime(data['epg']['start'])
         producttime_start = producttime_start.replace(tzinfo=None)
         if 'isLive' in data['system']['flags']:
             status = 'live'
@@ -331,6 +334,7 @@ class vialib(object):
     def parse_m3u8_manifest(self, manifest_url):
         """Return the stream URL along with its bitrate."""
         streams = {}
+        auth_cookie = None
         req = requests.get(manifest_url)
         m3u8_manifest = req.content
         self.log('HLS manifest: \n %s' % m3u8_manifest)
@@ -341,14 +345,16 @@ class vialib(object):
                 hdntl_cookie = req.cookies['hdntl']
                 hdnts_cookie = req.cookies['hdnts']
                 auth_cookie = 'hdntl=%s; hdnts=%s' % (hdntl_cookie, hdnts_cookie)
+            elif 'hdntl' in req.cookies.keys():
+                hdntl_cookie = req.cookies['hdntl']
+                auth_cookie = 'hdntl=%s' % hdntl_cookie
             elif 'lvlt_tk' in req.cookies.keys():
                 lvlt_tk_cookie = req.cookies['lvlt_tk']
                 auth_cookie = 'lvlt_tk=%s' % lvlt_tk_cookie
             else:
-                hdntl_cookie = req.cookies['hdntl']
-                auth_cookie = 'hdntl=%s' % hdntl_cookie
+                self.log('No auth cookie found.')
         else:
-            auth_cookie = None
+            self.log('Stream request didn\'t contain any cookies.')
 
         m3u8_header = {'Cookie': auth_cookie}
         m3u8_obj = m3u8.loads(m3u8_manifest)
@@ -388,9 +394,10 @@ class vialib(object):
         assert utc_dt.resolution >= timedelta(microseconds=1)
         return local_dt.replace(microsecond=utc_dt.microsecond)
 
-    def parse_time(self, iso8601_string, localize=False):
+    def parse_datetime(self, iso8601_string, localize=False):
         """Parse ISO8601 string to datetime object."""
         datetime_obj = iso8601.parse_date(iso8601_string)
         if localize:
-            datetime_obj = self.utc_to_local(datetime_obj)
-        return datetime_obj
+            return self.utc_to_local(datetime_obj)
+        else:
+            return datetime_obj

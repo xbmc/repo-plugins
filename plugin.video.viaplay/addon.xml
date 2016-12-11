@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.viaplay"
-       version="1.0.5"
+       version="1.0.6"
        name="Viaplay"
        provider-name="emilsvennesson">
   <requires>
@@ -15,6 +15,7 @@
   <extension point="xbmc.addon.metadata">
     <description lang="en">Watch content from Viaplay.</description>
     <description lang="sv">Titta på innehåll från Viaplay.</description>
+    <news>2016.12.11 v1.0.6[CR]+ Improve sports section[CR]+ Fix broken playback for new content[CR]+ Remove add-on debugging setting and automatically detect it instead[CR]+ Code cleanup</news>
     <platform>all</platform>
     <language>sv dk no fi en</language>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>

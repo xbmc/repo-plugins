@@ -58,7 +58,7 @@ msgid "Finland"
 msgstr ""
 
 msgctxt "#30012"
-msgid "Download subtitles if available"
+msgid "Download available subtitles"
 msgstr ""
 
 msgctxt "#30013"
@@ -74,7 +74,7 @@ msgid "Search"
 msgstr ""
 
 msgctxt "#30016"
-msgid "This event starts at"
+msgid "This event starts"
 msgstr ""
 
 msgctxt "#30017"
@@ -90,7 +90,7 @@ msgid "Disable SSL (not recommended)"
 msgstr ""
 
 msgctxt "#30020"
-msgid "Your account is not authorized to watch this content. You will find information on how to upgrade your package on the Viaplay website."
+msgid "Your account is not authorized to watch this content. You find information on how to upgrade your package on the Viaplay website."
 msgstr ""
 
 msgctxt "#30021"
@@ -129,10 +129,6 @@ msgctxt "#30029"
 msgid "Previous days"
 msgstr ""
 
-msgctxt "#30030"
-msgid "Upcoming events"
-msgstr ""
-
 msgctxt "#30031"
 msgid "Archived events"
 msgstr ""
@@ -155,4 +151,8 @@ msgstr ""
 
 msgctxt "#30036"
 msgid "Max bitrate allowed (Kbps)"
+msgstr ""
+
+msgctxt "#30037"
+msgid "Live & upcoming events"
 msgstr ""

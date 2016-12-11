@@ -1,7 +1,6 @@
 import hashlib
 import json
 import os
-from collections import OrderedDict
 
 import xbmc
 import xbmcaddon
@@ -75,7 +74,7 @@ def __load_from_disk():
   FAVORITES = {}
   if os.path.exists(FILE_PATH) and os.stat(FILE_PATH).st_size != 0:
     with open(FILE_PATH, "r") as file_handle:
-        FAVORITES = json.load(file_handle, object_pairs_hook=OrderedDict)
+        FAVORITES = json.load(file_handle)
   helper.infoMsg("Load from disk: "+str(FAVORITES))
 
 def __save_to_disk():
@@ -84,7 +83,7 @@ def __save_to_disk():
   if not os.path.exists(directory):
     os.makedirs(directory)
   with open(FILE_PATH, "w") as file_handle:
-    file_handle.write(json.dumps(OrderedDict(sorted(FAVORITES.items(), key=lambda f: f[1]["title"]))))
+    file_handle.write(json.dumps(FAVORITES))
 
 # To support XBMC.RunScript
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-<!--- Subject of the issue created should be like the line below: -->
+<!--- Title/subject of the issue created should be like the line below: -->
 <!--- [Update] plugin.video.youtube -->
 
 ### Add-on details:

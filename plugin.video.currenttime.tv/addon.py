@@ -45,17 +45,6 @@ tvshows = ([
     [30049, 30050, 'lastvids+archive',  'unknownrus',   '/z/20331.html'],
     [30051, 30052, 'lastvids+archive',  'guests', 	    '/z/20330.html']
 ])
-default_view = {
-    'skin.confluence':
-        {'main_menu': '50', 'tvshows': '500', 'lastvids+next': '515', 'lastvids+archive': '515',
-         'allvids_archive': '51', 'video': '515'},
-    'skin.aeon.nox.5':
-        {'main_menu':'50', 'tvshows': '50', 'lastvids+next': '510', 'lastvids+archive': '510',
-         'allvids_archive': '50', 'video': '510'},
-    'skin.estuary':
-        {'main_menu': '55', 'tvshows': '500', 'lastvids+next': '502', 'lastvids+archive': '502',
-         'allvids_archive': '55', 'video': '502'}
-}
 
 NUM_OF_PARALLEL_REQ = 6    #queue size
 MAX_REQ_TRIES = 3
@@ -76,7 +65,7 @@ addon_name = 'plugin.video.currenttime.tv'
 addon = xbmcaddon.Addon(addon_name)
 addon_icon = addon.getAddonInfo('icon')
 
-xbmcplugin.setContent(addon_handle, 'tvshows')  # !!!
+xbmcplugin.setContent(addon_handle, 'videos')  # !!!
 
 
 def build_url(query):
@@ -105,7 +94,7 @@ def add_dir(arg):
         isFolder = False
         li.setProperty("IsPlayable", "true")  # !!!
     info = {
-        'mediatype': 'tvshow',                 # !!!
+        'mediatype': 'video',                 # !!!
         'plot': arg['plot']
     }
     li.setInfo('video', info)
@@ -209,7 +198,7 @@ try:
             'thumb':    img_link('live', 'thumb'),
             'fanart':   img_link('live', 'fanart'),
             'mode':     'play',
-            'title':    '[COLOR blue]' + addon.getLocalizedString(30001).encode('utf-8') + '[/COLOR]',
+            'title':    '[B]' + addon.getLocalizedString(30001).encode('utf-8') + '[/B]',
             'plot':     addon.getLocalizedString(30002).encode('utf-8'),
             'url':      stream_url[xbmcplugin.getSetting(addon_handle, 'res_stream')],
         })
@@ -248,8 +237,8 @@ try:
                 'thumb':    img_link('folder', 'thumb'),
                 'fanart':   img_link(folder_name, 'fanart'),
                 'mode':     'lastvids+next',
-                'title':    '[B][COLOR blue]>> ' + addon.getLocalizedString(30101).encode('utf-8')
-                            + '... (' + str(folder_level + 1) + ')[/COLOR][/B]',  # Next
+                'title':    '[B]>> ' + addon.getLocalizedString(30101).encode('utf-8')
+                            + '... (' + str(folder_level + 1) + ')[/B]',  # Next
                 'plot':     addon.getLocalizedString(30102),
                 'url':      folder_url
             })
@@ -279,8 +268,8 @@ try:
             'thumb':    img_link('folder', 'thumb'),
             'fanart':   img_link(folder_name, 'fanart'),
             'mode':     'allvids_archive',
-            'title':    '[B][COLOR blue]' + addon.getLocalizedString(30103).encode('utf-8') + ' "' + folder_title
-                        + '"[/COLOR][/B]',  # Archive
+            'title':    '[B]' + addon.getLocalizedString(30103).encode('utf-8') + ' "' + folder_title
+                        + '"[/B]',  # Archive
             'plot':     addon.getLocalizedString(30104).encode('utf-8'),
             'url':      folder_url
         })
@@ -309,13 +298,7 @@ try:
         add_dir(get_video_dir(read_page(site_url + folder_url)))
         xbmcplugin.endOfDirectory(addon_handle)
 
-    #### Set default view
-    if xbmcplugin.getSetting(addon_handle, 'default_view') == 'true':
-        try:
-            xbmc.executebuiltin('Container.SetViewMode(' + default_view[xbmc.getSkinDir()][mode] + ')')
-        except:
-            pass
 
-except Exception as e:
+except Exception:
     msg = addon.getLocalizedString(30801)
     xbmcgui.Dialog().notification(addon_name, msg, addon_icon)

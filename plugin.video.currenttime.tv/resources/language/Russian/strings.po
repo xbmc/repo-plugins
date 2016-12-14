@@ -17,40 +17,40 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 msgctxt "#30001"
-msgid "[B]Live Stream[/B]"
-msgstr "[B]Прямой эфир[/B]"
+msgid "Live Stream"
+msgstr "Прямой эфир"
 
 msgctxt "#30002"
 msgid "Current Time TV channel - live stream online"
 msgstr "Круглосуточный телеканал \"Настоящее Время\" - прямая трасляция онлайн"
 
 msgctxt "#30003"
-msgid "[B]Broadcasts[/B]"
-msgstr "[B]Эфиры[/B]"
+msgid "Broadcasts"
+msgstr "Эфиры"
 
 msgctxt "#30004"
 msgid "TV Programmes Broadcasts"
 msgstr "Эфиры телепередач"
 
 msgctxt "#30005"
-msgid "[B]TV Programmes[/B]"
-msgstr "[B]Телепередачи[/B]"
+msgid "TV Programmes"
+msgstr "Телепередачи"
 
 msgctxt "#30006"
 msgid "All TV Programmes"
 msgstr "Все телепередачи""
 
 msgctxt "#30007"
-msgid "[B]All Videos[/B]"
-msgstr "[B]Все видео[/B]"
+msgid "All Videos"
+msgstr "Все видео"
 
 msgctxt "#30008"
 msgid "All Videos"
 msgstr "Все видео"
 
 msgctxt "#30009"
-msgid "[B]Videos: Daily Shoots[/B]"
-msgstr "[B]Видео: Кадры дня[/B]"
+msgid "Videos: Daily Shoots"
+msgstr "Видео: Кадры дня"
 
 msgctxt "#30010"
 msgid "Daily Shoots"
@@ -58,16 +58,16 @@ msgstr "Кадры дня"
 
 
 msgctxt "#30011"
-msgid "[B]Videos: Reportages[/B]"
-msgstr "[B]Видео: Репортажи[/B]"
+msgid "Videos: Reportages"
+msgstr "Видео: Репортажи"
 
 msgctxt "#30012"
 msgid "Reportages"
 msgstr "Репортажи"
 
 msgctxt "#30013"
-msgid "[B]Videos: Interviews[/B]"
-msgstr "[B]Видео: Интервью[/B]"
+msgid "Videos: Interviews"
+msgstr "Видео: Интервью"
 
 msgctxt "#30014"
 msgid "Opinions"
@@ -201,14 +201,10 @@ msgid "Archive Videos Quality"
 msgstr "Качестово воспроизведения архива"
 
 msgctxt "#30904"
-msgid "Use Default Views in Сonfluence, Estuary, AeonNox5"
-msgstr "Виды по умолчанию в Сonfluence, Estuary, AeonNox5"
-
-msgctxt "#30905"
 msgid "Download Fanart"
 msgstr "Загружать фанарты"
 
-msgctxt "#30906"
+msgctxt "#30905"
 msgid "Download Thumbnails"
 msgstr "Загружать эскизы"
 

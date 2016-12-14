@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30901">
+        <setting id="res_stream" type="select" label="30902" values="1080p|720p|540p|404p|288p" default="1080p"/>
+        <setting id="res_video" type="select" label="30903" values="720p|360p|270p" default="720p"/>
+        <setting id="download_fanart"  label="30904" type="bool" default="true"/>
+        <setting id="download_thumbnails"  label="30905" type="bool" default="true"/>
+ 
+    </category>
+</settings>

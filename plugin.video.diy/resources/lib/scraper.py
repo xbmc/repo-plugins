@@ -25,16 +25,24 @@ class myAddon(t1mAddon):
      addonLanguage  = self.addon.getLocalizedString
      html = self.getRequest('http://www.diynetwork.com/shows/full-episodes')
      html = re.compile('<div class="capsule editorialPromo parbase section">(.+?)<div class="container-aside">', re.DOTALL).search(html).group(1)
-     a = re.compile('m-MediaBlock">.+?href="(.+?)".+?data-src="(.+?)".+?HeadlineText">(.+?)<.+?AssetInfo">(.+?)<', re.DOTALL).findall(html)
+     a = re.compile('m-MediaBlock--playlist">.+?href="(.+?)".+?data-src="(.+?)".+?HeadlineText">(.+?)<.+?AssetInfo">(.+?)<', re.DOTALL).findall(html)
      fanart = self.addonFanart
      for i, (url, thumb, name, vidcnt) in list(enumerate(a[1:], start=1)):
+       infoList = {}
        name=name.strip()
        vidcnt = vidcnt.strip()
+       epinum = vidcnt.split(' ',1)[0]
+       if epinum.isdigit():
+           if int(epinum) == 0:
+               continue
+           infoList['Episode'] = int(epinum)
+       else:
+           continue
+
        html = self.getRequest(url.rsplit('/',1)[0])
        plot = re.compile('"og:description" content="(.+?)"',re.DOTALL).search(html)
        if plot is not None: plot = plot.group(1)
        else: plot = name
-       infoList = {}
        infoList['TVShowTitle'] = name
        infoList['Title']       = name
        infoList['Studio']      = 'DIY'
@@ -80,7 +88,7 @@ class myAddon(t1mAddon):
            epinum = re.compile('"episodeNumber" value=".(.+?)H"',re.DOTALL).search(html)
            if epinum is not None: infoList['Episode'] = int(epinum.group(1).replace('M',''), 16)
            seanum  = re.compile('"episodeNumber" value="(.+?)H"',re.DOTALL).search(html)
-           if seanum is not None: infoList['Season']  = int(seanum.group(1).replace('M',''),16)/256
+           if seanum is not None: infoList['Season']  = int(seanum.group(1).replace('M','').replace('S',''),16)/256
            infoList['Plot']        = h.unescape(b["description"])
            infoList['TVShowTitle'] = showName
            infoList['mediatype'] = 'episode'

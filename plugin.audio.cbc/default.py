@@ -47,6 +47,8 @@ def build_stream_list(streams):
     for city, station in sorted(streams.items()):
         # create a list item for the label
         li = xbmcgui.ListItem(label=city)
+        # set list item mediatype
+        li.setInfo('video', { 'studio': 'cbc' })
         # set the list item to playable
         li.setProperty('IsPlayable', 'true')
         # build the plugin url for Kodi
@@ -57,7 +59,7 @@ def build_stream_list(streams):
     # add list to Kodi per Martijn
     xbmcplugin.addDirectoryItems(addon_handle, stream_list, len(stream_list))
     # set the content of the directory
-    xbmcplugin.setContent(addon_handle, 'streams')
+    xbmcplugin.setContent(addon_handle, 'videos')
     xbmcplugin.endOfDirectory(addon_handle)
     
 def play_stream(url):

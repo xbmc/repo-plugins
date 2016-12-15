@@ -48,7 +48,7 @@ def build_stream_list(streams):
         # create a list item for the label
         li = xbmcgui.ListItem(label=city)
         # set list item mediatype
-        li.setInfo('video', { 'studio': 'cbc' })
+        li.setInfo('video', { 'studio': 'cbc', 'mediatype': 'video' })
         # set the list item to playable
         li.setProperty('IsPlayable', 'true')
         # build the plugin url for Kodi

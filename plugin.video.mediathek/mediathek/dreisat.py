@@ -14,7 +14,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import re,time
 from mediathek import *
 from xml.dom import minidom;
@@ -34,7 +34,6 @@ month_replacements = {
     "Oct":"10",
     "Nov":"11",
     "Dec":"12",
-    
   };
 
 class DreiSatMediathek(Mediathek):
@@ -45,7 +44,6 @@ class DreiSatMediathek(Mediathek):
     return True;
   def __init__(self, simpleXbmcGui):
     self.gui = simpleXbmcGui;
-    
     if(self.gui.preferedStreamTyp == 0):
       self.baseType = "video/x-ms-asf";
     elif (self.gui.preferedStreamTyp == 1):  
@@ -54,8 +52,6 @@ class DreiSatMediathek(Mediathek):
       self.baseType ="video/x-ms-asf";
     else:
       self.baseType ="video/quicktime";
-    
-    
     self.webEmType = "video/webm";
     self.menuTree = (
       TreeNode("0","Bauerfeind","http://www.3sat.de/mediathek/rss/mediathek_bauerfeind.xml",True),
@@ -82,7 +78,7 @@ class DreiSatMediathek(Mediathek):
       TreeNode("21","Theater","http://www.3sat.de/mediathek/rss/mediathek_theater.xml",True),
       TreeNode("22","vivo","http://www.3sat.de/mediathek/rss/mediathek_vivo.xml",True),
       );
-      
+
     self.rootLink = "http://www.3sat.de"
     self.searchLink = 'http://www.3sat.de/mediathek/mediathek';
     link = "/mediathek/mediathek.php\\?obj=\\d+";
@@ -94,12 +90,11 @@ class DreiSatMediathek(Mediathek):
     self.regex_searchDate = re.compile("\\d{2}.\\d{2}.\\d{4}");
     self.regex_searchImage = re.compile("(/dynamic/mediathek/stills/|/mediaplayer/stills/)\\d*_big\\.jpg");
     self.replace_html = re.compile("<.*?>");
-    
+
   def buildPageMenu(self, link, initCount):
     self.gui.log("buildPageMenu: "+link);
     rssFeed = self.loadConfigXml(link);
     self.extractVideoObjects(rssFeed, initCount);
-    
   def searchVideo(self, searchText):
     values ={'mode':'search',
              'query':searchText,
@@ -116,7 +111,6 @@ class DreiSatMediathek(Mediathek):
       infoPage = self.loadPage(infoLink);
       title = self.regex_searchTitle.search(infoPage).group();
       detail = self.regex_searchDetail.search(infoPage).group();
-      
       image = self.regex_searchImage.search(infoPage).group();
       title = self.replace_html.sub("", title);
       detail = self.replace_html.sub("", detail);
@@ -125,7 +119,6 @@ class DreiSatMediathek(Mediathek):
         pubDate = time.strptime(dateString,"%d.%m.%Y");
       except:
         pubDate = time.gmtime();
-      
       videoLink = self.rootLink+objectLink+"&mode=play";
       videoPage = self.loadPage(videoLink);
       video = self.regex_searchLink.search(videoPage).group();
@@ -133,19 +126,16 @@ class DreiSatMediathek(Mediathek):
       links = {}
       links[2] = SimpleLink(video,0)
       self.gui.buildVideoLink(DisplayObject(title,"",self.rootLink + image,detail,links,True, pubDate),self,len(results));
-      
   def readText(self,node,textNode):
     try:
       node = node.getElementsByTagName(textNode)[0].firstChild;
       return unicode(node.data);
     except:
       return "";
-  
   def loadConfigXml(self, link):
     self.gui.log("load:"+link)
     xmlPage = self.loadPage(link);
     return minidom.parseString(xmlPage);  
-    
   def extractVideoObjects(self, rssFeed, initCount):
     nodes = rssFeed.getElementsByTagName("item");
     nodeCount = initCount + len(nodes)
@@ -154,39 +144,34 @@ class DreiSatMediathek(Mediathek):
         self.extractVideoInformation(itemNode,nodeCount);
       except:
         pass
-  
+
   def parseDate(self,dateString):
     dateString = regex_dateString.search(dateString).group();
     for month in month_replacements.keys():
       dateString = dateString.replace(month,month_replacements[month]);
     return time.strptime(dateString,"%d %m %Y");
-    
+
   def extractVideoInformation(self, itemNode, nodeCount):
     title = self.readText(itemNode,"title");
-    
+    self.gui.log(title)
     dateString = self.readText(itemNode,"pubDate");
     pubDate = self.parseDate(dateString);
-    
     descriptionNode = itemNode.getElementsByTagName("description")[0].firstChild.data;
     description = unicode(descriptionNode);
-    
-    pictureNode = itemNode.getElementsByTagName("media:thumbnail")[0];
-    picture = pictureNode.getAttribute("url");
+    picture = "";
+    pictureNodes = itemNode.getElementsByTagName("media:thumbnail");
+    if(len(pictureNodes) > 0):
+      picture = pictureNodes[0].getAttribute("url");
     links = {};
     for contentNode in itemNode.getElementsByTagName("media:content"):
-      mediaType = contentNode.getAttribute("type");
-      if(not (self.baseType == mediaType or mediaType == self.webEmType)):
-        continue;
-      
       height = int(contentNode.getAttribute("height"));
       url = contentNode.getAttribute("url");
       size = int(contentNode.getAttribute("fileSize"));
-      if(height < 150):
+      if(height < 300):
         links[0] = SimpleLink(url, size);
-      elif (height < 300):
+      elif (height < 480):
         links[1] = SimpleLink(url, size);
       else:
         links[2] = SimpleLink(url, size);
     if links:
       self.gui.buildVideoLink(DisplayObject(title,"",picture,description,links,True, pubDate),self,nodeCount);
-      

@@ -20,9 +20,7 @@ from mediathek.ard import *
 from mediathek.zdf import *
 from mediathek.arte import *
 from mediathek.dreisat import *
-from mediathek.bayerisches import *
 from mediathek.orf import *
-from mediathek.bralpha import *
 from mediathek.ndr import *
 from mediathek.kika import *
 
@@ -33,10 +31,7 @@ class MediathekFactory(object):
        ZDFMediathek.name():ZDFMediathek,
        ARTEMediathek.name():ARTEMediathek,
        DreiSatMediathek.name():DreiSatMediathek,
-       #BayerischesFSMediathek.name():BayerischesFSMediathek,
        ORFMediathek.name():ORFMediathek,
-       #WDRMediathek.name():WDRMediathek,
-       #BRAlphaMediathek.name():BRAlphaMediathek,
        NDRMediathek.name():NDRMediathek,
        KIKA.name():KIKA
       }
@@ -45,4 +40,3 @@ class MediathekFactory(object):
 
   def getMediathek(self,mediathekName, gui):
     return self.avaibleMediathekes[mediathekName](gui);
-    

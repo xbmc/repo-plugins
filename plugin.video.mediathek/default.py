@@ -60,7 +60,7 @@ factory = MediathekFactory();
 if(mediathekName == ""):
   if(action == ""):
     gui.addSearchButton(None);
-    gui.listAvaibleMediathekes(factory.getAvaibleMediathekTypes());
+    gui.listAvailableMediathekes(factory.getAvaibleMediathekTypes());
   else:
     result = gui.keyboardInput();
     if (result.isConfirmed()):

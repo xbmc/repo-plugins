@@ -14,7 +14,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import re, time, datetime;
 from mediathek import *
 
@@ -76,57 +76,57 @@ class ARDMediathek(Mediathek):
     self.regex_CategoryPageLink = re.compile("<a href=\"(.*(?:Sendung|Thema)\?.*?documentId=\d+.*?)\" class=\"textLink\">(?:.|\n)+?<h4 class=\"headline\">(.*?)<\/h4>")
     self.pageSelectString = "&mcontent%s=page.%s"
     self.regex_DetermineSelectedPage = re.compile("&mcontents{0,1}=page.(\d+)");
-    
+
     self.regex_videoLinks = re.compile("\"_quality\":(\d).*?\"_stream\":\[?\"(.*?)\"");
     self.regex_pictureLink = re.compile("_previewImage\":\"(.*?)\"");
-    
-    
+
+
     self.regex_Date = re.compile("\\d{2}\\.\\d{2}\\.\\d{2}");
-    
-    
+
+
     self.replace_html = re.compile("<.*?>");
-    
+
   @classmethod
   def name(self):
     return "ARD";
   def isSearchable(self):
     return False;
-    
+
   def buildPageMenu(self, link, initCount, subLink = False):
     self.gui.log("Build Page Menu: %s SubLink: %d"%(link,subLink));    
     mainPage = self.loadPage(link);
-    
+
     elementCount = 0;
-    
+
     elementCount = self.extractElements(mainPage);
-    
-    
+
+
     self.generateNextPageElement(link, elementCount);
     return elementCount;
   def generateNextPageElement(self, link, elementCount):
     marker = "";
     if("Sendung?documentId" in link):
       marker = "s";
-      
+
     numberElement = self.regex_DetermineSelectedPage.search(link);  
     if(numberElement is not None):
       oldNumber = int(numberElement.group(1));
       newNumber = oldNumber + 1;
       link = link.replace(self.pageSelectString%(marker,oldNumber),self.pageSelectString%(marker,newNumber));
-      
+
       self.gui.buildVideoLink(DisplayObject("Weiter","","","",link,False),self,elementCount);
     else:
       link += self.pageSelectString%(marker,2)
-      
+
       self.gui.buildVideoLink(DisplayObject("Weiter","","","",link,False),self,elementCount);
-      
+
   def extractElements(self,mainPage):
     videoElements = list(self.regex_VideoPageLink.finditer(mainPage));
     if len(videoElements) == 0:
       linkElements = list(self.regex_CategoryPageLink.finditer(mainPage));
     else:
       linkElements = []
-    
+
     counter = len(videoElements) + len(linkElements);
     for element in linkElements:
       link = self.rootLink+element.group(1);
@@ -146,11 +146,8 @@ class ARDMediathek(Mediathek):
       durationstring = element.group(5).decode('utf-8');
       duration = int(durationstring) * 60;
       self.decodeVideoInformation(videoId, title, subTitle, counter, date, duration);
-    
-    
-    
     return counter;
-    
+
   def decodeVideoInformation(self, videoId, title, subTitle, nodeCount, date, duration):
     link = self.configLink%videoId;
     self.gui.log("VideoLink: "+link);
@@ -159,7 +156,7 @@ class ARDMediathek(Mediathek):
     for match in self.regex_videoLinks.finditer(videoPage):
       quality = int(match.group(1));
       link = SimpleLink(match.group(2),0);
-      
+
       if(quality > 0):
        quality -= 1
       videoLinks[quality] = link

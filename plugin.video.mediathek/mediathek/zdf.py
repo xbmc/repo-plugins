@@ -19,13 +19,13 @@ import re,math,traceback,time
 from mediathek import *
 from datetime import datetime,timedelta
 import json
-    
+
 class ZDFMediathek(Mediathek):
   def __init__(self, simpleXbmcGui):
     self.gui = simpleXbmcGui;
-    
+
     today = datetime.today();
-    
+
     self.menuTree = (
       TreeNode("0","Startseite","https://zdf-cdn.live.cellular.de/mediathekV2/start-page",True),
       TreeNode("1","Kategorien","https://zdf-cdn.live.cellular.de/mediathekV2/categories",True),
@@ -45,23 +45,23 @@ class ZDFMediathek(Mediathek):
   @classmethod
   def name(self):
     return "ZDF";
-    
+
   def isSearchable(self):
     return False;
-  
+
   def searchVideo(self, searchText):
     return;
-    
+
   def buildPageMenu(self, link, initCount):
     self.gui.log("buildPageMenu: "+link);
     jsonObject = json.loads(self.loadPage(link));
     callhash = self.gui.storeJsonFile(jsonObject);
-    
+
     if("stage" in jsonObject):
       for stageObject in jsonObject["stage"]:
         if(stageObject["type"]=="video"):
           self.buildVideoLink(stageObject,initCount);
-    
+
     if("cluster" in jsonObject):
       for counter, clusterObject in enumerate(jsonObject["cluster"]):
         if "teaser" in clusterObject and "name" in clusterObject:
@@ -76,22 +76,18 @@ class ZDFMediathek(Mediathek):
       for epgObject in jsonObject["epgCluster"]:
         if("liveStream" in epgObject and len(epgObject["liveStream"])>0):
           self.buildVideoLink(epgObject["liveStream"], initCount);
-    
-          
-        
+
   def buildJsonMenu(self, path,callhash, initCount):
     jsonObject=self.gui.loadJsonFile(callhash);
     jsonObject=self.walkJson(path,jsonObject);
-   
     categoriePages=[];
     videoObjects=[];
-    
+
     for entry in jsonObject:
       if entry["type"] == "brand":
         categoriePages.append(entry);
       if entry["type"] == "video":
         videoObjects.append(entry);  
-    
     self.gui.log("CategoriePages: %d"%len(categoriePages));
     self.gui.log("VideoPages: %d"%len(videoObjects));  
     for categoriePage in categoriePages:
@@ -103,17 +99,14 @@ class ZDFMediathek(Mediathek):
           imageLink=imageObject["url"];
       url = categoriePage["url"];
       self.gui.buildVideoLink(DisplayObject(title,subTitle,imageLink,"",url,False),self,initCount);
-    
-    
-    
+
     for videoObject in videoObjects:
       self.buildVideoLink(videoObject,initCount);
-      
-      
+
   def buildVideoLink(self,videoObject,counter):
     title=videoObject["headline"];
     subTitle=videoObject["titel"];
-    
+
     if(len(title)==0):
       title = subTitle;
       subTitle = "";
@@ -130,7 +123,7 @@ class ZDFMediathek(Mediathek):
     else:
       link = videoObject["url"];
       self.gui.buildVideoLink(DisplayObject(title,subTitle,imageLink,description,link,"JsonLink",None,videoObject.get('length')),self,counter);
-    
+
   def playVideoFromJsonLink(self,link):
     jsonObject = json.loads(self.loadPage(link));
     links = self.extractLinks(jsonObject["document"]);
@@ -156,9 +149,4 @@ class ZDFMediathek(Mediathek):
         if quality == "auto":
           links[3] = SimpleLink(url, -1);
     return links;
-    
-      
-    
 
-    
-    

@@ -36,7 +36,6 @@ class NDRMediathek(Mediathek):
 
         self.rootLink = "http://www.ndr.de"
 
-        # self.searchLink = self.rootLink+"/mediathek/mediatheksuche101.html?pagenumber=1&search_video=true&"
         self.searchLink = self.rootLink+"/suche10.html?search_mediathek=1&"
 
         # Hauptmenue
@@ -59,11 +58,8 @@ class NDRMediathek(Mediathek):
         ]
 
     def buildPageMenuSendungVerpasst(self, action):
-        # Bis 2008
-        # htmlPage = self.loadPage("http://www.ndr.de/mediathek/dropdown105-extapponly.html")
         htmlPage = self.loadPage("http://www.ndr.de/mediathek/sendung_verpasst/epg1490_display-onlyvideo.html")
 
-        # regex_verpasstNow = re.compile("<input type=\"hidden\" name=\"verpasstNow\" id =\"verpasstNow\" value=\"(\\d{2}\.\\d{2}\.\\d{4})\" />")
         regex_verpasstNow = re.compile(
             '<h1 class="viewdate">\n.*?(\\d{2})\.(\\d{2})<span class="notbelow30em">\.(\\d{4})</span>'
         )
@@ -82,7 +78,6 @@ class NDRMediathek(Mediathek):
             dateTimeTmp = dateTimeTmp-datetime.timedelta(1)
             verpasstVorGestern = dateTimeTmp.strftime("%Y-%m-%d")
 
-            # self.gui.buildVideoLink(DisplayObject("Heute", "", "", "description", self.rootLink + "/mediathek/verpasst109-extapponly_date-" + verpasstHeute + "_branding-ndrtv.html", False), self, 1)
             self.gui.buildVideoLink(DisplayObject("Heute", "", "", "description", self.rootLink + "/mediathek/sendung_verpasst/epg1490_date-" + verpasstHeute + "_display-onlyvideo.html", False), self, 1)
             self.gui.buildVideoLink(DisplayObject("Gestern", "", "", "description", self.rootLink + "/mediathek/sendung_verpasst/epg1490_date-" + verpasstGestern + "_display-onlyvideo.html", False), self, 2)
             self.gui.buildVideoLink(DisplayObject("Vorgestern", "", "", "description", self.rootLink + "/mediathek/sendung_verpasst/epg1490_date-" + verpasstVorGestern + "_display-onlyvideo.html", False), self, 3)

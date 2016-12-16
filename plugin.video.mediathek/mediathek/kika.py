@@ -14,9 +14,9 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import re, time;
-from bs4 import BeautifulSoup 
+from bs4 import BeautifulSoup;
 from mediathek import *
 
 class KIKA(Mediathek):
@@ -56,29 +56,26 @@ class KIKA(Mediathek):
           )
         )
       )
-          
+
     self.regex_videoLinks=re.compile("<a href=\"(.*?/videos/video\\d+?)\\.html\"");
     self.regex_configLinks=re.compile("{dataURL:'http://www.kika.de(/.*?-avCustom.xml)'}");
-    
     self.selector_videoPages = "div.mod > div.box > div.teaser > a.linkAll";
     self.selector_seriesPages = "div.modCon > div.mod > div.boxCon > div.boxBroadcastSeries > div.teaser > a.linkAll";
-    
     self.regex_xml_channel=re.compile("<channelName>(.*?)</channelName>");
     self.regex_xml_title=re.compile("<title>(.*?)</title>");
     self.regex_xml_image=re.compile("<teaserimage>\\s*?<url>(.*?)</url>");
     self.regex_xml_videoLink=re.compile("<asset>\\s*?<profileName>(.*?)</profileName>.*?<progressiveDownloadUrl>(.*?)</progressiveDownloadUrl>\\s*?</asset>",re.DOTALL)
-    
     self.regex_videoLink=re.compile("rtmp://.*?\.mp4");
   @classmethod
   def name(self):
     return "KI.KA";
-  
+
   def isSearchable(self):
     return False;
-    
+
   def searchVideo(self, searchText):
     return;
-  
+
   def buildVideoLink(self,pageLink):
     xmlPage = self.loadPage(self.rootLink+pageLink);
     channel = self.regex_xml_channel.search(xmlPage);
@@ -86,7 +83,7 @@ class KIKA(Mediathek):
       channel = unicode(channel.group(1),"UTF-8");
     title = unicode(self.regex_xml_title.search(xmlPage).group(1),"UTF-8");
     image = self.regex_xml_image.search(xmlPage).group(1).replace("**aspectRatio**","tlarge169").replace("**width**","1472");
-    
+
     self.gui.log("%s %s"%(title,image));
     links = {};
     for match in self.regex_xml_videoLink.finditer(xmlPage):
@@ -101,18 +98,18 @@ class KIKA(Mediathek):
         links[2] = SimpleLink(directLink, 0);
       if("MP4 Web XL" in profile):
         links[3] = SimpleLink(directLink, 0);
-    
+
     if(channel is not None):
       return DisplayObject(channel,title,image,"",links,True, None);
     else:
       return DisplayObject(title,"",image,"",links,True, None);
-  
+
   def buildPageMenu(self, link, initCount):
     pageContent = self.loadPage(link);
     htmlPage =  BeautifulSoup(pageContent, 'html.parser')
     htmlElements = htmlPage.select(self.selector_videoPages)
     videoLinks = set()
-    
+
     for item in htmlElements:
       link = self.rootLink+item['href'];
       videoPage = self.loadPage(link);
@@ -130,10 +127,8 @@ class KIKA(Mediathek):
     for link in videoLinks:
       displayObject = self.buildVideoLink(link);
       self.gui.buildVideoLink(displayObject,self, count);
-      
     if(len(videoLinks) > 0):
       return;
-    
     htmlElements = htmlPage.select(self.selector_seriesPages);
     count = count + len(htmlElements)
     self.gui.log("found %d page links"%len(htmlElements))
@@ -143,4 +138,3 @@ class KIKA(Mediathek):
       title = item['title'];
       displayObject = DisplayObject(title,"",None,"",link,False, None);
       self.gui.buildVideoLink(displayObject,self, count);
-    

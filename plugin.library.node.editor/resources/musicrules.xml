@@ -151,12 +151,15 @@
 		</match>
 		<match name="path">
 			<label>573</label>
+			<albums>True</albums>
+			<artists>True</artists>
 			<songs>True</songs>
 			<operator>string</operator>
 			<browse>True</browse>
 		</match>
 		<match name="lastplayed">
 			<label>568</label>
+			<albums>True</albums>
 			<songs>True</songs>
 			<operator>date</operator>
 		</match>
@@ -228,6 +231,7 @@
 		<type label="132" name="musicdb://albums"/>
 		<type label="1050" name="musicdb://singles"/>
 		<type label="134" name="musicdb://songs"/>
+		<type label="29994" name="musicdb://roles"/>
 		<type label="271" name="musicdb://top100">
 			<type label="134" name="songs"/>
 			<type label="132" name="albums"/>
@@ -249,11 +253,13 @@
 			<value>integer</value>
 			<content>artists</content>
 			<content>albums</content>
+			<browse>musicdb://roles/</browse>
 		</rule>
 		<rule name="role" label="38033">
 			<value>string</value>
 			<content>artists</content>
 			<content>albums</content>
+			<browse>musicdb://roles/</browse>
 		</rule>
 		<rule name="artistid" label="30508">
 			<value>integer</value>

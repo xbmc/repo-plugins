@@ -91,7 +91,7 @@ msgid "Browse for icon"
 msgstr ""
 
 msgctxt "#30104"
-msgid "Edit order"
+msgid "Move node"
 msgstr ""
 
 msgctxt "#30105"

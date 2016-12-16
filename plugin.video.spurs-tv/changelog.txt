@@ -1,3 +1,13 @@
+v2.12.1 (2016-10-03)
+ - Fixed YouTube channel
+
+v2.12.0 (2016-09-30)
+ - Fixed KANE50 category
+ - Added thumbnails for some categories
+
+v2.11.0 (2016-08-31)
+ - Fixed stadium camera streams
+
 v2.10.0 (2016-08-06)
  - Added all stadium build live streams with descriptions
  - Made error reporting optional

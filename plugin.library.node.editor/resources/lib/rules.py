@@ -27,7 +27,7 @@ class RuleFunctions():
         self.nodeRules = None
 
     def _load_rules( self ):
-        if ltype == 'video':
+        if ltype.startswith('video'):
             overridepath = os.path.join( DEFAULTPATH , "videorules.xml" )
         else:
             overridepath = os.path.join( DEFAULTPATH , "musicrules.xml" )
@@ -179,7 +179,7 @@ class RuleFunctions():
             if actionPath.endswith( "index.xml" ):
                 ( filePath, fileName ) = os.path.split( actionPath )
                 # Load the rules file
-                if ltype == 'video':
+                if ltype.startswith('video'):
                     tree = xmltree.parse( os.path.join( DATAPATH, "videorules.xml" ) )
                 else:
                     tree = xmltree.parse( os.path.join( DATAPATH, "musicrules.xml" ) )
@@ -394,7 +394,7 @@ class RuleFunctions():
         ( filePath, fileName ) = os.path.split( actionPath )
         try:
             # Load the rules file
-            if ltype == 'video':
+            if ltype.startswith('video'):
                 tree = xmltree.parse( os.path.join( DATAPATH, "videorules.xml" ) )
             else:
                 tree = xmltree.parse( os.path.join( DATAPATH, "musicrules.xml" ) )
@@ -460,7 +460,7 @@ class RuleFunctions():
         # Split the actionPath, to make things easier
         ( filePath, fileName ) = os.path.split( actionPath )
         # Open the rules file if it exists, else create it
-        if ltype == 'video':
+        if ltype.startswith('video'):
             rulesfile = 'videorules.xml'
         else:
             rulesfile = 'musicrules.xml'
@@ -532,7 +532,7 @@ class RuleFunctions():
     def editNodeRule( self, actionPath, ruleNum, match, operator, value ):
         ( filePath, fileName ) = os.path.split( actionPath )
         # Update the rule in the rules file
-        if ltype == 'video':
+        if ltype.startswith('video'):
             rulesfile = 'videorules.xml'
         else:
             rulesfile = 'musicrules.xml'
@@ -624,7 +624,7 @@ class RuleFunctions():
     def deleteNodeRule( self, actionPath, ruleNum ):
         ( filePath, fileName ) = os.path.split( actionPath )
         # Delete the rule from the rules file
-        if ltype == 'video':
+        if ltype.startswith('video'):
             rulesfile = 'videorules.xml'
         else:
             rulesfile = 'musicrules.xml'
@@ -689,7 +689,7 @@ class RuleFunctions():
                     print_exc()
 
     def deleteAllNodeRules( self, actionPath ):
-        if ltype == 'video':
+        if ltype.startswith('video'):
             rulesfile = 'videorules.xml'
         else:
             rulesfile = 'musicrules.xml'
@@ -753,7 +753,7 @@ class RuleFunctions():
         self.nodeRules = []
         # Load all the node rules for current directory
         #actionPath = os.path.join( actionPath, "index.xml" )
-        if ltype == 'video':
+        if ltype.startswith('video'):
             filename = os.path.join( DATAPATH, "videorules.xml" )
         else:
             filename = os.path.join( DATAPATH, "musicrules.xml" )
@@ -792,7 +792,7 @@ class RuleFunctions():
         #BETA2 ONLY CODE
         # This function will move any parent node rules out of the index.xml, and into the rules file in the plugins appdata folder
         # Open the rules file if it exists, else create it
-        if ltype == 'video':
+        if ltype.startswith('video'):
             rulesfile = 'videorules.xml'
         else:
             rulesfile = 'musicrules.xml'
@@ -874,7 +874,7 @@ class RuleFunctions():
                 matches = {}
                 for elem in elems:
                     if elem.attrib.get( "name" ) == match:
-                        if ltype == 'video':
+                        if ltype.startswith('video'):
                             matches["movies"] = elem.find( "movies" )
                             matches["tvshows"] = elem.find( "tvshows" )
                             matches["episodes"] = elem.find( "episodes" )

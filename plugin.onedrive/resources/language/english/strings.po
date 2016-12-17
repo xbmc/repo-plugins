@@ -267,3 +267,7 @@ msgstr ""
 msgctxt "#32062"
 msgid "Subtitle not found for this video"
 msgstr ""
+
+msgctxt "#32063"
+msgid "This account doesn't exist anymore.%sDo you want to add an account?"
+msgstr ""

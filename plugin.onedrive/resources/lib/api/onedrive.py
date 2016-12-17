@@ -196,4 +196,6 @@ class OneDriveException(Exception):
 class OneDriveHttpException(urllib2.HTTPError):
     def __init__(self, origin):
         self.code = origin.code
-        
+
+class AccountNotFoundException(Exception):
+    pass

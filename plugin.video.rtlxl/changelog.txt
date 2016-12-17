@@ -1,4 +1,7 @@
-﻿Version 1.1.4
+﻿Version 1.1.5
+When no choices in addon setting is maded. An error occurred
+
+Version 1.1.4
 New rtlxl protocol used
 
 Version 1.1.2

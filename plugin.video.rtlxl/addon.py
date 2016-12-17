@@ -20,7 +20,12 @@ PLUGIN_ID = 'plugin.video.rtlxl'
 plugin = Plugin(PLUGIN_NAME, PLUGIN_ID, __file__)
 
 rtlxl = resources.lib.rtlxl.RtlXL()
-videotype = plugin.get_setting('videotype', choices=('adaptive', 'progressive', 'smooth'))
+try:
+    videotype = plugin.get_setting('videotype', choices=('adaptive', 'progressive', 'smooth'))
+except ValueError:
+    videotype = 'adaptive'
+except IndexError:
+    videotype = 'adaptive'
 
 @plugin.route('/')
 def index():

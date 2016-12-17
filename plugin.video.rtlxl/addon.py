@@ -20,7 +20,7 @@ PLUGIN_ID = 'plugin.video.rtlxl'
 plugin = Plugin(PLUGIN_NAME, PLUGIN_ID, __file__)
 
 rtlxl = resources.lib.rtlxl.RtlXL()
-mp4low = plugin.get_setting( "mp4low",bool )
+videotype = plugin.get_setting('videotype', choices=('adaptive', 'progressive', 'smooth'))
 
 @plugin.route('/')
 def index():
@@ -45,12 +45,12 @@ def show_keuze(url):
 @plugin.route('/keuze/afleveringen/<url>/')
 def show_afleveringen(url):
     ##alleen afleveringen weergeven
-    return show_items(rtlxl.get_items(url, False, mp4low))
+    return show_items(rtlxl.get_items(url, False, videotype))
 
 @plugin.route('/keuze/alles/<url>/')
 def show_alles(url):    
     ##alles weergeven
-    return show_items(rtlxl.get_items(url, True, mp4low))
+    return show_items(rtlxl.get_items(url, True, videotype))
     
 def show_items(opgehaaldeitemsclass):
     items = [{

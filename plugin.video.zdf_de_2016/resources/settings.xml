@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+
+  <!-- General -->
+  <category label="32014">
+    <setting label="32018" id="loadAllSearchResults" type="bool" default="true"/>
+    <setting label="32019" id="showOnlyPlayableSearchResults" type="bool" default="false"/>
+    <setting label="32028" id="searchHistorySize" type="number" default="10"/>
+    <!--setting label="32016" id="itemPattern" type="text" default="{$date }{[$genre | $category]}{($playable) }{$label }{$title}"/-->
+  </category>
+
+  <!-- Labeling -->
+  <category label="32023">
+    <setting label="32024" id="showDateInTitle" type="bool" default="false"/>
+    <setting label="32025" id="showGenreInTitle" type="bool" default="false"/>
+    <setting label="32015" id="mergeCategoryAndTitle" type="bool" default="true" subsetting="true" enable="eq(-1,true)"/>
+    <setting label="32026" id="showPlayableInTitle" type="bool" default="true"/>
+    <setting label="32027" id="showTagsInTitle" type="bool" default="true"/>
+  </category>
+</settings>
+ 

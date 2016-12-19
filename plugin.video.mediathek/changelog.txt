@@ -1,3 +1,4 @@
+0.8.0 - CHG: Version pump to seperate pre-krypton version and krypton version
 0.7.5 - CHG: reimplement ZDF Mediathak (important: ZDF enforces TLSv1 with SNI enabled, what is only supported by python 2.7.9.)
         Temporaily fix ARTE
 0.7.4 - CHG: Repearing NDR und 3SAT

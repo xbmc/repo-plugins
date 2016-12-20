@@ -120,3 +120,16 @@ class Mediathek(object):
         self.gui.buildMenuLink(treeNode,self,len(self.menuTree)) 
     else:
       self.buildPageMenu(self.menuTree[0].link, 0);
+      
+  def walkJson(self, path, jsonObject):
+    path = path.split('.');
+    i = 0
+    while(i < len(path)):
+      if(type(jsonObject) is list):
+        index = int(path.pop(0));
+      else:
+        index = path.pop(0);
+      jsonObject = jsonObject[index];
+      
+    return jsonObject;
+      

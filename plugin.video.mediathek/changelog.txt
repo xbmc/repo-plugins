@@ -1,4 +1,4 @@
-0.7.5 - CHG: reimplement ZDF Mediathak (important: ZDF enforces TLSv1 with SNI enabled, what is only supported by python 2.7.9. -> Wich leads te Plugin to be broken on pre Krypton Kodi)
+0.7.5 - CHG: reimplement ZDF Mediathak (important: ZDF enforces TLSv1 with SNI enabled, what is only supported by python 2.7.9. -> Wich leads te Plugin to be broken on pre Krypton Kodi). Please Switch to Kodi Krypton or maintain python and the plugin manually.
         Temporaily fix ARTE
         
 0.7.4 - CHG: Repearing NDR und 3SAT

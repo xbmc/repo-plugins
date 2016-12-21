@@ -1,3 +1,10 @@
+v1.1.2 (2016-12-20) (kudos to MartijnKaiser):
+- Use higher resolution thumbnails 
+- Set content to video so skins can set correct view 
+- Set video duration when available 
+- using po-files (Skipmode A1)
+- changed addon debugging info to kodi debugging info (Skipmode A1)
+
 v1.1.1 (2016-03-20) (kudos to Sparkline):
 - added NSFW option (default the NSFW option is turned OFF)
 - added Floppers page

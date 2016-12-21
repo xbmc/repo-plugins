@@ -34,12 +34,10 @@ class Main:
         self.plugin_handle = int(sys.argv[1])
 
         # Get plugin settings
-        self.DEBUG = SETTINGS.getSetting('debug')
         self.VIDEO = SETTINGS.getSetting('video')
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
+                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
 
         # Parse parameters...
         self.video_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['video_page_url'][0]
@@ -47,9 +45,8 @@ class Main:
         self.title = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['title'][0]
         self.title = str(self.title)
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.video_page_url", str(self.video_page_url)), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "self.video_page_url", str(self.video_page_url)), xbmc.LOGDEBUG)
 
         #
         # Play video...
@@ -93,9 +90,8 @@ class Main:
 
             html_source = response.text
         except urllib2.HTTPError, error:
-            if self.DEBUG == 'true':
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "HTTPError", str(error)), xbmc.LOGNOTICE)
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                    ADDON, VERSION, DATE, "HTTPError", str(error)), xbmc.LOGDEBUG)
             dialog_wait.close()
             del dialog_wait
             xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30507) % (str(error)))
@@ -116,9 +112,8 @@ class Main:
             # or
             # {"embed":"youtube:U89fl5fZETE","still":"http:\/\/static.dumpert.nl\/stills\/6650228_24eed546.jpg"}
 
-            if self.DEBUG == 'true':
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "video_url_dec", str(video_url_dec)), xbmc.LOGNOTICE)
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                    ADDON, VERSION, DATE, "video_url_dec", str(video_url_dec)), xbmc.LOGDEBUG)
 
             # convert string to dictionary
             video_url_dec_dict = ast.literal_eval(video_url_dec)
@@ -137,9 +132,8 @@ class Main:
                 youtube_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtube_id
                 video_url = youtube_url
                 have_valid_url = True
-                if self.DEBUG == 'true':
-                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                        ADDON, VERSION, DATE, "video_url1", str(video_url)), xbmc.LOGNOTICE)
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                        ADDON, VERSION, DATE, "video_url1", str(video_url)), xbmc.LOGDEBUG)
             else:
                 # matching the desired and available quality
                 if self.VIDEO == '0':
@@ -171,9 +165,8 @@ class Main:
                     pass
                 else:
                     video_url = video_url.replace('\/', '/')
-                    if self.DEBUG == 'true':
-                        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                            ADDON, VERSION, DATE, "video_url2", str(video_url)), xbmc.LOGNOTICE)
+                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                            ADDON, VERSION, DATE, "video_url2", str(video_url)), xbmc.LOGDEBUG)
 
                     # The need for speed: let's guess that the video-url exists
                     have_valid_url = True

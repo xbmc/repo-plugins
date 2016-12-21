@@ -48,34 +48,19 @@ def getCategories():
   """
   Returns a list of all categories.
   """
-  r = requests.get(BASE_URL+API_URL+"programs_page")
+  r = requests.get(BASE_URL+API_URL+"active_clusters")
   if r.status_code != 200:
     common.log("Could not fetch JSON!")
     return None
 
   categories = []
-  all_clusters = r.json()["allClusters"]
 
-  for letters in all_clusters.itervalues():
-    for letter_list in letters:
-      for item in letter_list:
-        category = {}
-        try:
-          category["genre"] = item["term"]
-        except KeyError as e:
-          common.log(e.message)
-          continue
-
-        if category["genre"].endswith("oppetarkiv") or category["genre"].endswith("barn"):
-          # Skip the "Oppetarkiv" and "Barn" category
-          continue
-
-        category["title"] = item["name"]
-        try:
-          category["thumbnail"] = helper.prepareThumb(item["metaData"].get("thumbnail", ""), BASE_URL)
-        except KeyError as e:
-          category["thumbnail"] = ""
-        categories.append(category)
+  for cluster in r.json():
+    category = {}
+    category["title"] = cluster["name"]
+    category["url"] = cluster["contentUrl"]
+    category["genre"] = cluster["slug"]
+    categories.append(category)
 
   return categories
 
@@ -120,8 +105,10 @@ def getProgramsForGenre(genre):
     url = item["contentUrl"]
     title = item["programTitle"]
     plot = item.get("description", "")
-    info = {"plot": plot}
     thumbnail = helper.prepareThumb(item.get("thumbnail", ""), BASE_URL)
+    if not thumbnail:
+      thumbnail = helper.prepareThumb(item.get("poster", ""), BASE_URL)
+    info = {"plot": plot, "thumbnail": thumbnail, "fanart": thumbnail}
     program = { "title": title, "url": url, "thumbnail": thumbnail, "info": info}
     programs.append(program)
   return programs

@@ -444,50 +444,6 @@ def getFavTeamColor():
 
     return fav_team_color
 
-    '''
-    #Hex code taken from http://teamcolors.arc90.com/        
-    team_colors = {"Anaheim":"FF91764B",
-                "Arizona":"FF841F27",
-                "Boston":"FFFFC422",
-                "Buffalo":"FF002E62",
-                "Calgary":"FFE03A3E",
-                "Carolina":"FFE03A3E",
-                "Chicago":"FFE3263A",
-                "Colorado":"FF8B2942",
-                "Columbus":"FF00285C",
-                "Dallas":"FF006A4E",
-                "Detroit":"FFEC1F26",
-                "Edmonton":"FF003777",
-                "Florida":"FFC8213F",
-                "Los Angeles":"FFAFB7BA",
-                "Minnesota":"FF025736",
-                "Montréal":"FFBF2F38",
-                "Nashville":"FFFDBB2F",
-                "New Jersey":"FFE03A3E",
-                "New York Islanders":"FF00529B",
-                "New York Rangers":"FF0161AB",
-                "Philadelphia":"FFF47940",
-                "Pittsburgh":"FFD1BD80",
-                "Ottawa":"FFE4173E",
-                "San Jose":"FF05535D",
-                "St. Louis":"FF0546A0",
-                "Tampa Bay":"FF013E7D",
-                "Toronto":"FF003777",
-                "Vancouver":"FF07346F",
-                "Washington":"FFCF132B",
-                "Winnipeg":"FF002E62"}
-    
-    # Default to red
-    #fav_team_color = "FFFF0000"                
-    #try:
-    print FAV_TEAM
-    fav_team_color = team_colors[FAV_TEAM]
-    print fav_team_color
-    #except:
-    #pass
-    '''
-    return  fav_team_color
-
 
 def getFavTeamLogo():
     logo_url = ''

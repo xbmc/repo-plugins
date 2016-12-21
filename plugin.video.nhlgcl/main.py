@@ -392,22 +392,7 @@ def createFullGameStream(stream_url, media_auth, media_state):
 
     xbmc.log("STREAM URL: "+stream_url)
     return stream_url
-    
-                
-def getAuthCookie():
-    authorization = ''    
-    try:
-        cj = cookielib.LWPCookieJar(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'))     
-        cj.load(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'),ignore_discard=True)    
-
-        #If authorization cookie is missing or stale, perform login    
-        for cookie in cj:            
-            if cookie.name == "Authorization" and not cookie.is_expired():            
-                authorization = cookie.value 
-    except:
-        pass
-
-    return authorization
+  
 
 
 def checkArchiveType(stream_url, media_auth):
@@ -490,8 +475,7 @@ def fetchStream(game_id, content_id,event_id):
             elif json_source['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['blackout_status']['status'] == 'BlackedOutStatus': break
             elif CDN == 'No Preference': break
         except:
-            i = i + 1
-            pass
+            i = i + 1            
        
 
     if json_source['status_code'] == 1:

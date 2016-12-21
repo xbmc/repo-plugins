@@ -19,18 +19,14 @@ sys.path.append(LIB_DIR)
 
 from dumpert_const import ADDON, DATE, VERSION
 
-# Get plugin settings
-DEBUG = xbmcaddon.Addon(id=ADDON).getSetting('debug')
-
 # Parse parameters...
 if len(sys.argv[2]) == 0:
     #
     # Main menu
     #
-    if DEBUG == 'true':
-        xbmc.log("[ADDON] %s, Python Version %s" % (ADDON, str(sys.version)), xbmc.LOGNOTICE)
-        xbmc.log("[ADDON] %s v%s (%s) is starting, ARGV = %s" % (ADDON, VERSION, DATE, repr(sys.argv)),
-                 xbmc.LOGNOTICE)
+    xbmc.log("[ADDON] %s, Python Version %s" % (ADDON, str(sys.version)), xbmc.LOGDEBUG)
+    xbmc.log("[ADDON] %s v%s (%s) is starting, ARGV = %s" % (ADDON, VERSION, DATE, repr(sys.argv)),
+                 xbmc.LOGDEBUG)
     import dumpert_main as plugin
 else:
     action = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['action'][0]

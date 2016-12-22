@@ -106,8 +106,7 @@ def viewCategories():
 
   for category in categories:
     addDirectoryItem(category["title"],
-                {"mode": MODE_CATEGORY, "url": category["genre"] },
-                thumbnail=category["thumbnail"])
+                {"mode": MODE_CATEGORY, "url": category["genre"] })
 
 def viewAlphaDirectories():
   alphas = svt.getAlphas()

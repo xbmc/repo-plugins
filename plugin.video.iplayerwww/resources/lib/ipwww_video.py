@@ -303,7 +303,6 @@ def ScrapeEpisodes(page_url):
         list_item_num = 1
 
         for li in list_items:
-
             # <li class="list-item unavailable"  data-ip-id="b06sq9xj">
             unavailable_match = re.search(
                 'data-timeliness-type="unavailable"',
@@ -353,12 +352,12 @@ def ScrapeEpisodes(page_url):
             icon = ''
             # <source srcset="http://ichef.bbci.co.uk/images/ic/336x189/p04cd999.jpg"
             icon_match = re.search(
-                r'<source.*?srcset="http://ichef.bbci.co.uk/images/ic/336x189/(.*?)\.jpg"',
+                r'<source.*?srcset="https://ichef.bbci.co.uk/images/ic/.*?/(.*?)\.jpg"',
                 li, flags=(re.DOTALL | re.MULTILINE))
             if icon_match:
                 image = icon_match.group(1)
                 if image:
-                    icon = "http://ichef.bbci.co.uk/images/ic/832x468/" + image + ".jpg"
+                    icon = "https://ichef.bbci.co.uk/images/ic/832x468/" + image + ".jpg"
 
 
             type = None
@@ -457,7 +456,6 @@ def ScrapeMarkup(markup):
     list_item_num = 1
 
     for li in list_items:
-
         main_url = None
         # <a href="/iplayer/episode/p026gmw9/world-of-difference-the-models"
         # title="World of Difference, The Models" class="list-item-link stat"
@@ -493,13 +491,13 @@ def ScrapeMarkup(markup):
         # data-ip-src="https://ichef.bbci.co.uk/images/ic/336x189/p033s1dh.jpg">
 
         image_match = re.search(
-            r'<div class="r-image".+?data-ip-type="(.*?)".+?data-ip-src="https://ichef.bbci.co.uk/images/ic/336x189/(.*?)\.jpg"',
+            r'<div class="r-image".+?data-ip-type="(.*?)".+?data-ip-src="https://ichef.bbci.co.uk/images/ic/.*?/(.*?)\.jpg"',
             li, flags=(re.DOTALL | re.MULTILINE))
         if image_match:
             type = image_match.group(1)
             image = image_match.group(2)
             if image:
-                icon = "http://ichef.bbci.co.uk/images/ic/832x468/" + image + ".jpg"
+                icon = "https://ichef.bbci.co.uk/images/ic/832x468/" + image + ".jpg"
 
         synopsis = ''
         # <p class="synopsis">What was it like to be a top fashion model 30 years ago? (1978)</p>
@@ -807,7 +805,7 @@ def ListHighlights(highlights_url):
         #    </picture>
         # </div>
         image_match = re.search(
-            r'<picture>.*?srcset="http://ichef.bbci.co.uk/images/ic/234x131/(.*?)\.jpg',
+            r'<picture>.*?srcset="https://ichef.bbci.co.uk/images/ic/.*?/(.*?)\.jpg',
             single, flags=(re.DOTALL | re.MULTILINE))
         if image_match:
             image = image_match.group(1)

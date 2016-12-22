@@ -1,3 +1,6 @@
+v2.5.3
+New image urls.
+
 v2.5.2
 Fixed typo.
 Adapted to latest changes on the website.

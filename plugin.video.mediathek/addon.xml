@@ -2,7 +2,7 @@
 <addon
   id="plugin.video.mediathek"
   name="Mediathek"
-  version="0.8.0"
+  version="0.8.1"
   provider-name="Raptor 2101">
   <requires>
    <import addon="xbmc.python" version="2.25.0"/>

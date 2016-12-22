@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
-import re,math,traceback,time
+import re,traceback,time
 from mediathek import *
 from datetime import datetime,timedelta
 import json
@@ -87,9 +87,9 @@ class ZDFMediathek(Mediathek):
       if entry["type"] == "brand":
         categoriePages.append(entry);
       if entry["type"] == "video":
-        videoObjects.append(entry);  
+        videoObjects.append(entry);
     self.gui.log("CategoriePages: %d"%len(categoriePages));
-    self.gui.log("VideoPages: %d"%len(videoObjects));  
+    self.gui.log("VideoPages: %d"%len(videoObjects));
     for categoriePage in categoriePages:
       title=categoriePage["titel"];
       subTitle=categoriePage["beschreibung"];
@@ -117,12 +117,16 @@ class ZDFMediathek(Mediathek):
       for width,imageObject in videoObject["teaserBild"].iteritems():
         if int(width)<=840:
           imageLink=imageObject["url"];
+    if("visibleFrom" in videoObject):
+      date = time.strptime(videoObject["visibleFrom"],"%d.%m.%Y %H:%M");
+    else:
+      date = time.gmtime();
     if("formitaeten" in videoObject):
       links = self.extractLinks(videoObject);
-      self.gui.buildVideoLink(DisplayObject(title,subTitle,imageLink,description,links,True,None,videoObject.get('length')),self,counter);
+      self.gui.buildVideoLink(DisplayObject(title,subTitle,imageLink,description,links,True,date,videoObject.get('length')),self,counter);
     else:
       link = videoObject["url"];
-      self.gui.buildVideoLink(DisplayObject(title,subTitle,imageLink,description,link,"JsonLink",None,videoObject.get('length')),self,counter);
+      self.gui.buildVideoLink(DisplayObject(title,subTitle,imageLink,description,link,"JsonLink",date,videoObject.get('length')),self,counter);
 
   def playVideoFromJsonLink(self,link):
     jsonObject = json.loads(self.loadPage(link));
@@ -139,11 +143,11 @@ class ZDFMediathek(Mediathek):
         links[4] = SimpleLink(url, -1); 
       else:
         if quality == "low":
-          links[0] = SimpleLink(url, -1); 
+          links[0] = SimpleLink(url, -1);
         if quality == "med":
-          links[1] = SimpleLink(url, -1); 
+          links[1] = SimpleLink(url, -1);
         if quality == "high":
-          links[2] = SimpleLink(url, -1); 
+          links[2] = SimpleLink(url, -1);
         if quality == "veryhigh":
           links[3] = SimpleLink(url, -1);
         if quality == "auto":

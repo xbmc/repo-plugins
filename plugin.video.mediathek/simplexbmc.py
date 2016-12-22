@@ -14,7 +14,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import xbmc, xbmcgui, xbmcplugin,xbmcaddon, sys, urllib, os, time, re
 from bs4 import BeautifulSoup;
 import json
@@ -45,60 +45,58 @@ class SimpleXbmcGui(object):
       xbmc.log("[%s]: %s" % (__plugin__, msg.encode('utf8')))
 
   def buildVideoLink(self, displayObject, mediathek, objectCount):
-    if(displayObject.subTitle == "" or displayObject.subTitle == displayObject.title):
-      title = self.transformHtmlCodes(displayObject.title);
-    else:
-      title = self.transformHtmlCodes(displayObject.title +" - "+ displayObject.subTitle);
-    if displayObject.date is not None:
-      title = "(%s) %s"%(time.strftime("%d.%m",displayObject.date),title);  
+    metaData = self.BuildMeteData(displayObject)
     if displayObject.picture is not None:
-      listItem=xbmcgui.ListItem(title, iconImage="DefaultFolder.png", thumbnailImage=displayObject.picture)
+      listItem=xbmcgui.ListItem(metaData["title"], iconImage="DefaultFolder.png", thumbnailImage=displayObject.picture)
     else:
-      listItem=xbmcgui.ListItem(title, iconImage="DefaultFolder.png")
+      listItem=xbmcgui.ListItem(metaData["title"], iconImage="DefaultFolder.png")
+    listItem.setInfo("video",metaData);
+
     if(displayObject.isPlayable):
       if(displayObject.isPlayable == "PlayList"):
         link = displayObject.link[0]
         url = "%s?type=%s&action=openPlayList&link=%s" % (sys.argv[0],mediathek.name(), urllib.quote_plus(link.basePath))
         listItem.setProperty('IsPlayable', 'true');
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listItem,isFolder=False,totalItems = objectCount)
+        xbmcplugin.addDirectoryItem(int(sys.argv[1]),url,listItem,False,objectCount)
       elif(displayObject.isPlayable == "JsonLink"):
         link = displayObject.link
         url = "%s?type=%s&action=openJsonLink&link=%s" % (sys.argv[0],mediathek.name(), urllib.quote_plus(link))
         listItem.setProperty('IsPlayable', 'true');
-        listItem.setInfo("video", {
-          "mediatype":"video",
-          "title": title,
-          "plot":  self.transformHtmlCodes(displayObject.description),
-          "duration": displayObject.duration
-        })
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listItem,isFolder=False,totalItems = objectCount)
+        xbmcplugin.addDirectoryItem(int(sys.argv[1]),url,listItem, False, objectCount)
       else:
-        self.log(displayObject.title);
         link = self.extractLink(displayObject.link);
         if(isinstance(link,ComplexLink)):
           self.log("PlayPath:"+ link.playPath);
           listItem.setProperty("PlayPath", link.playPath);
-
-        self.log("URL:"+ link.basePath);
-
-        metaData = {
-          "mediatype":"video",
-          "size": link.size,
-          "title": title,
-          "plot": self.transformHtmlCodes(displayObject.description),
-          "duration": displayObject.duration
-        }
-
-        if(displayObject.date is not None):
-          metaData["date"] =time.strftime("%d.%m.%Y",displayObject.date);
-          metaData["year"] =int(time.strftime("%Y",displayObject.date));
-
-        listItem.setInfo("video",metaData);
         listItem.setProperty('IsPlayable', 'true');
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=link.basePath,listitem=listItem,isFolder=False,totalItems = objectCount)
+        xbmcplugin.addDirectoryItem(int(sys.argv[1]),link.basePath,listItem,False,objectCount)
     else:
       url = "%s?type=%s&action=openTopicPage&link=%s" % (sys.argv[0],mediathek.name(), urllib.quote_plus(displayObject.link))
-      xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listItem,isFolder=True,totalItems = objectCount)
+      xbmcplugin.addDirectoryItem(int(sys.argv[1]),url,listItem,True,objectCount)
+
+  def BuildMeteData(self, displayObject):
+    if(displayObject.subTitle is None or displayObject.subTitle == "" or displayObject.subTitle == displayObject.title):
+      title = self.transformHtmlCodes(displayObject.title.rstrip());
+    else:
+      title = self.transformHtmlCodes(displayObject.title.rstrip() +" - "+ displayObject.subTitle.rstrip());
+    if displayObject.date is not None:
+      title = "(%s) %s"%(time.strftime("%d.%m",displayObject.date),title.rstrip());
+
+    metaData = {
+      "mediatype":"video",
+      "title": title,
+      "plotoutline":  self.transformHtmlCodes(displayObject.description)
+    }
+
+    if(displayObject.duration is not None):
+      metaData["duration"] = int(displayObject.duration);
+
+    if(displayObject.date is not None):
+          self.log(time.strftime("%d.%m.%Y",displayObject.date));
+          self.log(time.strftime("%Y",displayObject.date));
+          metaData["date"] =time.strftime("%d.%m.%Y",displayObject.date);
+          metaData["year"] =int(time.strftime("%Y",displayObject.date));
+    return metaData;
 
   def transformHtmlCodes(self, content):
     return BeautifulSoup(content).prettify(formatter=None);
@@ -119,7 +117,7 @@ class SimpleXbmcGui(object):
     with open(storedJsonFile, 'wb') as output:
       json.dump(jsonObject,output);
     return callhash;
- 
+
   def loadJsonFile(self,callhash):
     storedJsonFile = os.path.join(self.plugin_profile_dir,"%s.json"%callhash);
     with open(storedJsonFile,"rb") as input:

@@ -1,3 +1,9 @@
+[B]Version 1.0.7 - 2016-12-22[/B]
+
+- Upgraded channels url to http, no https
+
+
+
 [B]Version 1.0.6 - 2016-10-10[/B]
 
 - Upgraded icon

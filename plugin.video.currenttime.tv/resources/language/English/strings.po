@@ -25,11 +25,11 @@ msgid "Current Time TV channel - live stream online"
 msgstr ""
 
 msgctxt "#30003"
-msgid "Broadcasts"
+msgid "Last Broadcasts"
 msgstr ""
 
 msgctxt "#30004"
-msgid "TV Programmes Broadcasts"
+msgid "Last TV Programmes Broadcasts"
 msgstr ""
 
 msgctxt "#30005"

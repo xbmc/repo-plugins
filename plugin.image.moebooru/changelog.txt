@@ -1,4 +1,6 @@
 ## Version history ##
+### 0.95 Beta ###
+	2016-12-27	Quickfix to adapt to konachan API changes
 ### 0.9 Beta ###
     2013-07-30  Bugfixes
     2013-10-29	Changed language IDs to fulfill the official requirements

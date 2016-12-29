@@ -15,7 +15,7 @@ print sys.argv
 settings = xbmcaddon.Addon(id='plugin.video.beergeeks')
 
 #Main settings
-QUALITY = int(settings.getSetting(id="quality"))
+#QUALITY = int(settings.getSetting(id="quality"))
 AUTO_PLAY = str(settings.getSetting(id="auto_play"))
 
 #Localisation
@@ -374,7 +374,7 @@ if mode==None or url==None or len(url)<1:
 elif mode==100:
     #print "GET_YEAR MODE!"
     #GET_VIDEO(name,url,img_url)
-    GET_STREAM_QUALITIES(url,img_url)
+    GET_STREAM_QUALITIES(url)
 
 elif mode==101:    
     STREAM_SELECT(url)    

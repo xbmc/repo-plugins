@@ -9,20 +9,7 @@ import CommonFunctions as common
 BASE_URL = "http://svtplay.se"
 API_URL = "/api/"
 
-URL_A_TO_O = "/program"
-URL_TO_SEARCH = "/sok?q="
-URL_TO_OA = "/kategorier/oppetarkiv"
-URL_TO_CHANNELS = "/kanaler"
-URL_TO_NEWS = "/nyheter"
-
 JSON_SUFFIX = "?output=json"
-
-SECTION_POPULAR = "popular-videos"
-SECTION_LATEST_VIDEOS = "latest-videos"
-SECTION_LAST_CHANCE = "last-chance-videos"
-SECTION_LATEST_CLIPS = "play_js-tabpanel-more-clips"
-SECTION_EPISODES = "play_js-tabpanel-more-episodes"
-SECTION_LIVE_PROGRAMS = "live-channels"
 
 def getAtoO():
   """
@@ -263,7 +250,7 @@ def getEpisodes(title):
   """
   Returns the episodes for a program URL.
   """
-  url = BASE_URL+API_URL+"video_title_page;title="+title
+  url = BASE_URL+API_URL+"title_page;title="+title
   r = requests.get(url)
   if r.status_code != 200:
     common.log("Could not get JSON for "+url)
@@ -290,7 +277,7 @@ def getClips(title):
   """
   Returns the clips for a program URL.
   """
-  url = BASE_URL+API_URL+"video_title_page;title="+title
+  url = BASE_URL+API_URL+"title_page;title="+title
   r = requests.get(url)
   if r.status_code != 200:
     common.log("Could not get JSON for "+url)

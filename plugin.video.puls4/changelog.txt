@@ -1,0 +1,25 @@
+0.2.3
+* Implemented new API Calls
+* Code Cleanup
+
+0.2.1
+* Fixed Errors caused by API Change
+* Added new Logo and App Icon
+* Removed "Top Shows" because its gone in the API
+
+0.2.1
+* Fixed Error on "Sendungen" caused by empty show logo
+
+0.2.0
+* Fixed the Addon
+* All Shows
+* H264 Stream (HD/SD)
+* Top Videos
+* Highlights
+* Fast & Light (JSON Datasource);)
+
+0.1.0
+* All Shows
+* Search
+* H264 Stream
+* Top Shows and Most Popular

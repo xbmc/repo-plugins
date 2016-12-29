@@ -135,6 +135,7 @@ def list(url):
     xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def playEpisode(url, title, thumbnail):
+	print url, title, thumbnail
 	if url == "banned":
 		notifyText(translation(30011), 7000)
 		return
@@ -147,7 +148,7 @@ def playEpisode(url, title, thumbnail):
 		return
 	notifyText(translation(30009) + " " + encode(title), 3000)
 	rtmp = ""
-	pageUrl = "http://media.mtvnservices.com/player/prime/mediaplayerprime.2.11.3.swf?uri=mgid:arc:episode:"+pageurl_geo[audio_pos]+":"+url
+	pageUrl = "http://media.mtvnservices.com/player/prime/mediaplayerprime.2.12.5.swf?uri=mgid:arc:episode:"+pageurl_geo[audio_pos]+":"+url
 	pageUrl += "&type=network&ref=southpark.cc.com&geo="+ geolocation +"&group=entertainment&network=None&device=Other&networkConnectionType=None"
 	pageUrl += "&CONFIG_URL=http://media.mtvnservices.com/pmt-arc/e1/players/mgid:arc:episode:"+pageurl_geo[audio_pos]+":/context4/config.xml"
 	pageUrl += "?uri=mgid:arc:episode:"+pageurl_geo[audio_pos]+":"+url+"&type=network&ref="+mainweb_geo[audio_pos]+"&geo="+ geolocation
@@ -178,6 +179,9 @@ def playEpisode(url, title, thumbnail):
 		if "viacomccstrm" in rtmpe[best]:
 			playpath = "mp4:"+rtmpe[best].split('viacomccstrm/')[1]
 			rtmp = rtmp_geo[0]#rtmpe[best].split('viacomccstrm/')[0]+'viacomccstrm/'
+		elif "cp9950.edgefcs.net" in rtmpe[best]:
+			playpath = "mp4:"+rtmpe[best].split('mtvnorigin/')[1]
+			rtmp = rtmp_geo[0]#rtmpe[best].split('viacomccstrm/')[0]+'viacomccstrm/'
 		videoname = title + " (" + str(i+1) + " of " + parts +")"
 		li = xbmcgui.ListItem(videoname, iconImage=thumbnail, thumbnailImage=thumbnail)
 		li.setInfo('video', {'Title': videoname})
@@ -186,7 +190,7 @@ def playEpisode(url, title, thumbnail):
 			li.setProperty('PlayPath', playpath)
 		li.setProperty('flashVer', "WIN 19,0,0,185")
 		li.setProperty('pageUrl', pageUrl)
-		li.setProperty('SWFPlayer', "http://media.mtvnservices.com/player/prime/mediaplayerprime.2.11.3.swf")
+		li.setProperty('SWFPlayer', "http://media.mtvnservices.com/player/prime/mediaplayerprime.2.12.5.swf")
 		li.setProperty("SWFVerify", "true")
 		if cc != "" and cc_settings:
 			fname = os.path.join(addonpath, "subtitle_"+str(i)+"_"+str(parts)+".vtt")
@@ -238,6 +242,7 @@ def notifyText(text, time=5000):
 
 def getUrl(url):
 	link = ""
+	print url
 	try:
 		req = urllib2.Request(url)
 		req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:25.0) Gecko/20100101 Firefox/25.0')
@@ -287,10 +292,11 @@ def getCarousel():
 #	carousel = data_url.split("{resultsPerPage}/{currentPage}/json/{sort}")[0]
 #	carousel += "14/1/json/airdate"
 #	carousel += data_url.split("{resultsPerPage}/{currentPage}/json/{sort}")[1]
-	return "http://southpark.cc.com/feeds/carousel/video/351c1323-0b96-402d-a8b9-40d01b2e9bde/30/1/json/!airdate/promotion-0?lang="+audio
+	return "http://southpark.cc.com/feeds/carousel/video/2b6c5ab4-d717-4e84-9143-918793a3b636/14/2/json/!airdate/?lang="+audio
 
 def getMediagen(id):
 	feed = ""
+	print "http://"+mainweb_geo[audio_pos]+"/feeds/video-player/mrss/mgid:arc:episode:"+pageurl_geo[audio_pos]+":"+id+"?lang="+audio
 	feed = getUrl("http://"+mainweb_geo[audio_pos]+"/feeds/video-player/mrss/mgid:arc:episode:"+pageurl_geo[audio_pos]+":"+id+"?lang="+audio)
 	root = ET.fromstring(feed)
 	mediagen = []
@@ -309,7 +315,7 @@ def getVideoData(mediagen):
 	if audio == "de":
 		mediagen += "&deviceOsVersion=4.4.4&acceptMethods=hls";
 		mediagen = mediagen.replace('{device}', 'Android')
-	print mediagen
+	print "MEDIAGEN: " + mediagen
 	xml = getUrl(mediagen)
 	root = ET.fromstring(xml)
 	rtmpe = []

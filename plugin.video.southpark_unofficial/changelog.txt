@@ -47,3 +47,5 @@
 - Fixed DE language (thanks to JinJin @kodi forums)
 0.4.3
 - Added Season 20
+0.4.4
+- Fixed EN/DE/ES streams.

@@ -1,9 +1,13 @@
-v1.0.0 (2016-12-01)
+v1.0.2 (2016-12-23)
+- Fixed video archive playback with selected quality (due to provider api changes)
+- Исправлено воспроизведение видео архива с заданным качеством (в связи с изменениями api провайдера)
 
 v1.0.1 (2016-12-08)
-<en>
 - Faster video folders download
 - New options added for disabling fanart and thumbnails download
-<ru>
 - Увеличена скорость загрузка папок видео
 - Добавлены новые установки для отключения загрузки фанарта и эскизов
+
+v1.0.0 (2016-12-01)
+- Initial version
+- Первая проба

@@ -25,12 +25,12 @@ msgid "Current Time TV channel - live stream online"
 msgstr "Круглосуточный телеканал \"Настоящее Время\" - прямая трасляция онлайн"
 
 msgctxt "#30003"
-msgid "Broadcasts"
-msgstr "Эфиры"
+msgid "Last Broadcasts"
+msgstr "Последние эфиры"
 
 msgctxt "#30004"
-msgid "TV Programmes Broadcasts"
-msgstr "Эфиры телепередач"
+msgid "Last TV Programmes Broadcasts"
+msgstr "Последние эфиры телепередач"
 
 msgctxt "#30005"
 msgid "TV Programmes"
@@ -38,7 +38,7 @@ msgstr "Телепередачи"
 
 msgctxt "#30006"
 msgid "All TV Programmes"
-msgstr "Все телепередачи""
+msgstr "Все телепередачи"
 
 msgctxt "#30007"
 msgid "All Videos"

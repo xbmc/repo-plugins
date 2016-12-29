@@ -20,9 +20,9 @@ stream_url = {
     '288p': 'http://rfe-lh.akamaihd.net/i/rfe_tvmc5@383630/index_0288_av-p.m3u8'
 }
 video_url = {
-    '720p': '/index_2_av.m3u8',
-    '360p': '/index_1_av.m3u8',
-    '270p': '/index_0_av.m3u8'
+    '720p': '_hq.mp4',
+    '360p': '.mp4',
+    '270p': '_mobile.mp4'
 }
 main_menu = ([
     [30003, 30004, 'lastvids+next', 	'folder',       '/z/17317.html'],   #Broadcasts
@@ -127,7 +127,7 @@ def get_video_dir(page):
             'mode':     'play',
             'title':    re.sub('&.{0,5};', clean_txt, match_title[0]),
             'plot':     re.sub('&.{0,5};', clean_txt, match_plot[0]),
-            'url':      re.sub('/master.m3u8', video_url[xbmcplugin.getSetting(addon_handle, 'res_video')], match[0][0])
+            'url':      re.sub('.mp4', video_url[xbmcplugin.getSetting(addon_handle, 'res_video')], match[0][0])
         }
     except:
         return None

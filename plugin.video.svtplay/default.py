@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 import json
+import os
 import sys
 import time
 import urllib
@@ -48,6 +49,10 @@ PLUGIN_HANDLE = int(sys.argv[1])
 addon = xbmcaddon.Addon("plugin.video.svtplay")
 localize = addon.getLocalizedString
 xbmcplugin.setContent(PLUGIN_HANDLE, "tvshows")
+
+DEFAULT_FANART = os.path.join(
+  xbmc.translatePath(addon.getAddonInfo("path")+"/resources/images/").decode("utf-8"),
+  "background.png")
 
 common.plugin = addon.getAddonInfo('name') + ' ' + addon.getAddonInfo('version')
 common.dbg = helper.getSetting(S_DEBUG)
@@ -324,16 +329,20 @@ def addDirectoryItem(title, params, thumbnail = None, folder = True, live = Fals
          )
       ], replaceItems=True)
 
+  fanart = DEFAULT_FANART
   if info:
     li.setInfo("Video", info)
-    if "fanart" in info.keys():
-      li.setArt({"fanart": info["fanart"]})
+    if "fanart" in info:
+      fanart = info["fanart"]
+
+  li.setArt({"fanart": fanart})
+  common.log("fanart: "+fanart)
 
   xbmcplugin.addDirectoryItem(PLUGIN_HANDLE, sys.argv[0] + '?' + urllib.urlencode(params), li, folder)
 
 # Main segment of script
 ARG_PARAMS = helper.getUrlParameters(sys.argv[2])
-common.log(ARG_PARAMS)
+common.log("params: " + str(ARG_PARAMS))
 ARG_MODE = ARG_PARAMS.get("mode")
 ARG_URL = urllib.unquote_plus(ARG_PARAMS.get("url", ""))
 ARG_PAGE = ARG_PARAMS.get("page")

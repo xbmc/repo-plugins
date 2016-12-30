@@ -1,3 +1,8 @@
+Version 4.0.40
+-------------
+- Fix broken episode listing
+- Update visuals
+
 Version 4.0.39
 -------------
 - Fix broken category listing

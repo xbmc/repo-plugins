@@ -46,7 +46,7 @@ class myAddon(t1mAddon):
        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
        urllib2.install_opener(opener)
        html = self.getRequest('http://www.pbs.org/shows/')
-       clientId = re.compile('sign-in__link--pbs.+?client_id=(.+?)"', re.DOTALL).search(html).group(1)
+       clientId = re.compile('id="signInServiceList".+?client_id=(.+?)"', re.DOTALL).search(html).group(1)
        html = self.getRequest('https://account.pbs.org/oauth2/login/')
        lcsr, lnext = re.compile("name='csrfmiddlewaretoken'.+?value='(.+?)'.+?"+'name="next".+?value="(.+?)"', re.DOTALL).search(html).groups()
        username = self.addon.getSetting('login_name')

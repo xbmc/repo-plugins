@@ -33,11 +33,11 @@ def makeRequest(url):
             return data
         except urllib2.URLError, e:
             if hasattr(e, 'code'):
-                print 'We failed with error code - %s.' % e.code
+                xbmc.log('We failed with error code - %s.' % e.code)
                 xbmc.executebuiltin("XBMC.Notification(BlanketFort,We failed with error code - "+str(e.code)+",10000,"+icon+")")
             elif hasattr(e, 'reason'):
-                print 'We failed to reach a server.'
-                print 'Reason: ', e.reason
+                xbmc.log('We failed to reach a server.')
+                xbmc.log('Reason: ', e.reason)
                 xbmc.executebuiltin("XBMC.Notification(BlanketFort,We failed to reach a server. - "+str(e.reason)+",10000,"+icon+")")
 
 
@@ -52,11 +52,11 @@ def getSoup(url):
                         data = open( xbmc.translatePath(os.path.join(profile, 'temp', 'sorce_temp.txt')), "r").read()
                         xbmcvfs.delete( xbmc.translatePath(os.path.join(profile, 'temp', 'sorce_temp.txt')) )
                     else:
-                        print "--- failed to copy from smb: ----"
+                        xbmc.log("--- failed to copy from smb: ----")
                 else:
                     data = open(url, 'r').read()
             else:
-                print "---- Soup Data not found! ----"
+                xbmc.log("---- Soup Data not found! ----")
                 return
         soup = BeautifulSOAP(data, convertEntities=BeautifulStoneSoup.XML_ENTITIES)
         return soup
@@ -108,7 +108,7 @@ def getData(url,fanart):
                 try:
                     addDir(name.encode('utf-8', 'ignore'),url.encode('utf-8'),2,thumbnail,fanArt,desc,genre,date)
                 except:
-                    print 'There was a problem adding directory from getData(): '+name.encode('utf-8', 'ignore')
+                    xbmc.log('There was a problem adding directory from getData(): '+name.encode('utf-8', 'ignore'))
         else:
             getItems(soup('item'),fanart)
 
@@ -164,7 +164,7 @@ def getChannelItems(name,url,fanart):
             try:
                 addDir(name.encode('utf-8', 'ignore'),url.encode('utf-8'),3,thumbnail,fanArt,desc,genre,date)
             except:
-                print 'There was a problem adding directory - '+name.encode('utf-8', 'ignore')
+                xbmc.log('There was a problem adding directory - '+name.encode('utf-8', 'ignore'))
         getItems(items,fanArt)
 
 
@@ -180,23 +180,15 @@ def getItems(items,fanart):
             try:
                 name = item('title')[0].string
             except:
-                print '-----Name Error----'
+                xbmc.log('-----Name Error----')
                 name = ''
-            try:
-                if item('epg'):
-                    if item('epg')[0].string > 1:
-                        name += getepg(item('epg')[0].string)
-                else:
-                    pass
-            except:
-                print '----- EPG Error ----'
 
             try:
                 url = []
                 for i in item('link'):
                     url.append(i.string)
             except:
-                print '---- URL Error Passing ----'+name
+                xbmc.log('---- URL Error Passing ----'+name)
                 continue
 
             try:
@@ -237,19 +229,7 @@ def getItems(items,fanart):
                     raise
             except:
                 date = ''
-            try:
-                if len(url) > 1:
-                    alt = 0
-                    playlist = []
-                    for i in url:
-                        playlist.append(i)
-                    for i in url:
-                        alt += 1
-                        addLink(i,'%s) %s' %(str(alt), name.encode('utf-8', 'ignore')),thumbnail,fanArt,desc,genre,date,True,playlist)
-                else:
-                    addLink(url[0],name.encode('utf-8', 'ignore'),thumbnail,fanArt,desc,genre,date,True)
-            except:
-                print 'There was a problem adding link - '+name.encode('utf-8', 'ignore')
+
 
 
 def get_params():
@@ -287,34 +267,7 @@ def getFavorites():
             addLink(url,name,iconimage,fanArt,'','','')
 
 
-def addFavorite(name,url,iconimage,fanart):
-        favList = []
-        if os.path.exists(favorites)==False:
-            print 'Making Favorites File'
-            favList.append((name,url,iconimage,fanart))
-            a = open(favorites, "w")
-            a.write(json.dumps(favList))
-            a.close()
-        else:
-            print 'Appending Favorites'
-            a = open(favorites).read()
-            data = json.loads(a)
-            data.append((name,url,iconimage,fanart))
-            b = open(favorites, "w")
-            b.write(json.dumps(data))
-            b.close()
 
-
-def rmFavorite(name):
-        a = open(favorites).read()
-        data = json.loads(a)
-        for index in range(len(data)):
-            if data[index][0]==name:
-                del data[index]
-                b = open(favorites, "w")
-                b.write(json.dumps(data))
-                b.close()
-                return
 
 
 def play_playlist(name, list):
@@ -436,31 +389,31 @@ try:
 except:
     pass
 
-print "Mode: "+str(mode)
+xbmc.log("Mode: "+str(mode))
 if not url is None:
-    print "URL: "+str(url.encode('utf-8'))
-print "Name: "+str(name)
+    xbmc.log("URL: "+str(url.encode('utf-8')))
+xbmc.log("Name: "+str(name))
 
 
 if mode==None:
-    print "getData"
+    xbmc.log("getData")
     data = 'http://pastebin.com/raw/Cnm4FeBJ' 
     getData(data, fanart)
 
 elif mode==2:
-    print "getChannelItems"
+    xbmc.log("getChannelItems")
     getChannelItems(name,url,fanart)
 
 elif mode==3:
-    print ""
+    xbmc.log("")
     getSubChannelItems(name,url,fanart)
 
 elif mode==4:
-    print ""
+    xbmc.log("")
     getFavorites()
 
 elif mode==5:
-    print ""
+    xbmc.log("")
     try:
         name = name.split('\\ ')[1]
     except:
@@ -472,7 +425,7 @@ elif mode==5:
     addFavorite(name,url,iconimage,fanart)
 
 elif mode==6:
-    print "rmFavorite"
+    xbmc.log("rmFavorite")
     try:
         name = name.split('\\ ')[1]
     except:
@@ -484,32 +437,32 @@ elif mode==6:
     rmFavorite(name)
 
 elif mode==7:
-    print "addSource"
+    xbmc.log("addSource")
     addSource(url)
 
 elif mode==8:
-    print "rmSource"
+    xbmc.log("rmSource")
     rmSource(name)
 
 elif mode==9:
-    print "getUpdate"
+    xbmc.log("getUpdate")
     getUpdate()
 
 elif mode==10:
-    print "getCommunitySources"
+    xbmc.log("getCommunitySources")
     getCommunitySources()
 
 elif mode==11:
-    print "addSource"
+    xbmc.log("addSource")
     addSource(url)
 
 elif mode==12:
-    print "setResolvedUrl"
+    xbmc.log("setResolvedUrl")
     item = xbmcgui.ListItem(path=url)
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
 
 elif mode==13:
-    print "play_playlist"
+    xbmc.log("play_playlist")
     play_playlist(name, playlist)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

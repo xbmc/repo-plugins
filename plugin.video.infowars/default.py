@@ -596,7 +596,7 @@ def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
 def Nightly_News_Sub_Menu(title='',dialog=''): #The Main Menu
     #https://www.youtube.com/user/ConspiracyScope 
     WhereAmI('@ Nightly News')
-    url = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLgnGBrg8NoiWIMb2IrHIssoddopwp4KgT'
+    url = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLs5CVvsn63q6yyzN7r5p4jLpgj_qqVL2L'
     response = urllib2.urlopen(url)
     if response and response.getcode() == 200:
         content = response.read()
@@ -620,7 +620,7 @@ def Nightly_News_Sub_Menu(title='',dialog=''): #The Main Menu
 def Historic_Shows_Sub_Menu(title=''): #The Main Menu
     #https://www.youtube.com/user/ConspiracyScope 
     WhereAmI('@ Historic Shows Video')
-    url = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLgnGBrg8NoiWrQlff2beHEiyXPeIUAfnq'
+    url = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLs5CVvsn63q7E0_m7ICoUTuz3bHk3npMc'
     response = urllib2.urlopen(url)
     if response and response.getcode() == 200:
         content = response.read()

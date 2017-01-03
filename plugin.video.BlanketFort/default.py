@@ -44,20 +44,6 @@ def makeRequest(url):
 def getSoup(url):
         if url.startswith('http://'):
             data = makeRequest(url)
-        else:
-            if xbmcvfs.exists(url):
-                if url.startswith("smb://"):
-                    copy = xbmcvfs.copy( url, xbmc.translatePath(os.path.join(profile, 'temp', 'sorce_temp.txt')))
-                    if copy:
-                        data = open( xbmc.translatePath(os.path.join(profile, 'temp', 'sorce_temp.txt')), "r").read()
-                        xbmcvfs.delete( xbmc.translatePath(os.path.join(profile, 'temp', 'sorce_temp.txt')) )
-                    else:
-                        xbmc.log("--- failed to copy from smb: ----")
-                else:
-                    data = open(url, 'r').read()
-            else:
-                xbmc.log("---- Soup Data not found! ----")
-                return
         soup = BeautifulSOAP(data, convertEntities=BeautifulStoneSoup.XML_ENTITIES)
         return soup
 
@@ -182,6 +168,14 @@ def getItems(items,fanart):
             except:
                 xbmc.log('-----Name Error----')
                 name = ''
+            try:
+                if item('epg'):
+                    if item('epg')[0].string > 1:
+                        name += getepg(item('epg')[0].string)
+                else:
+                    pass
+            except:
+                xbmc.log('----- EPG Error ----')
 
             try:
                 url = []
@@ -229,7 +223,19 @@ def getItems(items,fanart):
                     raise
             except:
                 date = ''
-
+            try:
+                if len(url) > 1:
+                    alt = 0
+                    playlist = []
+                    for i in url:
+                        playlist.append(i)
+                    for i in url:
+                        alt += 1
+                        addLink(i,'%s) %s' %(str(alt), name.encode('utf-8', 'ignore')),thumbnail,fanArt,desc,genre,date,True,playlist)
+                else:
+                    addLink(url[0],name.encode('utf-8', 'ignore'),thumbnail,fanArt,desc,genre,date,True)
+            except:
+                xbmc.log('There was a problem adding link - '+name.encode('utf-8', 'ignore'))
 
 
 def get_params():
@@ -322,21 +328,7 @@ def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,pl
         return ok
 
 
-  # Thanks to daschacka, an epg scraper for http://i.teleboy.ch/programm/station_select.php - http://forum.xbmc.org/showpost.php?p=936228&postcount=1076
-def getepg(link):
-        url=urllib.urlopen(link)
-        source=url.read()
-        url.close()
-        source2 = source.split("Jetzt")
-        source3 = source2[1].split('programm/detail.php?const_id=')
-        sourceuhrzeit = source3[1].split('<br /><a href="/')
-        nowtime = sourceuhrzeit[0][40:len(sourceuhrzeit[0])]
-        sourcetitle = source3[2].split("</a></p></div>")
-        nowtitle = sourcetitle[0][17:len(sourcetitle[0])]
-        nowtitle = nowtitle.replace("ö","oe")
-        nowtitle = nowtitle.replace("ä","ae")
-        nowtitle = nowtitle.replace("ü","ue")
-        return "  - "+nowtitle+" - "+nowtime
+
 
 
 xbmcplugin.setContent(int(sys.argv[1]), 'movies')

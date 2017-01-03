@@ -1,3 +1,4 @@
+Version 3.0.8 Fix crap in metadata
 Version 3.0.7 Website changes
 Version 3.0.6 Website changes
 Version 3.0.4 Website changes

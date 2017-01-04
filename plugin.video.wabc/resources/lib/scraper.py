@@ -26,6 +26,8 @@ class myAddon(t1mAddon):
       html = re.compile('<main class="content(.+?)<section  data-m-id="1904281', re.DOTALL).search(html).group(1)
       a = re.compile('data-sm-id="".+?href="(.+?)".+?class="tablet-source.+?srcset="(.+?) ',re.DOTALL).findall(html)
       for url, thumb in a:
+        if not '/' in url:
+          continue
         if urls.get(url,None) is None:
           if url.endswith('/index'):
               url = url.replace('/index','',1)

@@ -4,6 +4,7 @@ plugin.video.syfy
 Kodi Addon for Syfy
 For Kodi Isengard and above releases
 
+Version 3.0.3 Fixed multi-season tv shows, added Movies
 Version 3.0.2 Added "Add to Library"
 Version 3.0.1 Separate scraper for future functions
 Version 2.0.4 Skip Spanish versions

@@ -18,11 +18,9 @@ except:
 addon = xbmcaddon.Addon(id='plugin.video.BlanketFort')
 profile = addon.getAddonInfo('profile').decode('utf-8')
 home = addon.getAddonInfo('path').decode('utf-8')
-favorites = xbmc.translatePath(os.path.join(profile, 'favorites' )).decode('utf-8')
 icon = xbmc.translatePath(os.path.join(home, 'icon.png'))
 fanart = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
-if os.path.exists(favorites)==True:
-    FAV = open(favorites).read()
+
 
 def makeRequest(url):
         try:
@@ -55,9 +53,11 @@ def getData(url,fanart):
             for channel in channels:
                 name = channel('name')[0].string
                 thumbnail = channel('thumbnail')[0].string
+
                 if thumbnail == None:
                     thumbnail = ''
-
+				
+				
                 try:
                     if not channel('fanart'):
                         if addon.getSetting('use_thumb') == "true":
@@ -274,32 +274,14 @@ def getFavorites():
 
 
 
-
-
-def play_playlist(name, list):
-        playlist = xbmc.PlayList(1)
-        playlist.clear()
-        item = 0
-        for i in list:
-            item += 1
-            info = xbmcgui.ListItem('%s) %s' %(str(item),name))
-            playlist.add(i, info)
-        xbmc.executebuiltin('playlist.playoffset(video,0)')
-
-
 def addDir(name,url,mode,iconimage,fanart,description,genre,date,showcontext=True):
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&fanart="+urllib.quote_plus(fanart)
         ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": description, "Genre": genre, "Date": date } )
-        liz.setProperty( "Fanart_Image", fanart )
-        # if showcontext == True:
-            # try:
-                # if name in str(SOURCES):
-                    # contextMenu = [('Remove from Sources','XBMC.Container.Update(%s?mode=8&name=%s)' %(sys.argv[0], urllib.quote_plus(name)))]
-                    # liz.addContextMenuItems(contextMenu, True)
-            # except:
-                # pass
+        liz=xbmcgui.ListItem(name)
+        liz.setInfo( type="Video", infoLabels={ "Title": name } )
+        liz.setArt({"thumb": iconimage, "icon": "DefaultFolder.png", "fanart": fanart})
+		
+		
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         return ok
 
@@ -307,19 +289,12 @@ def addDir(name,url,mode,iconimage,fanart,description,genre,date,showcontext=Tru
 def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,playlist=None):
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode=12"
         ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": description, "Genre": genre, "Date": date } )
-        liz.setProperty( "Fanart_Image", fanart )
+        liz=xbmcgui.ListItem(name)
+        liz.setInfo( type="Video", infoLabels={ "Title": name } )
+        liz.setArt({"thumb": iconimage, "icon": "DefaultFolder.png", "fanart": fanart})
         liz.setProperty('IsPlayable', 'true')
-        if showcontext:
-            try:
-                if name in FAV:
-                    contextMenu = [('Remove from BlanketFort Favorites','XBMC.Container.Update(%s?mode=6&name=%s)' %(sys.argv[0], urllib.quote_plus(name)))]
-                else:
-                    contextMenu = [('Add to BlanketFort Favorites','XBMC.Container.Update(%s?mode=5&name=%s&url=%s&iconimage=%s&fanart=%s)' %(sys.argv[0], urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(iconimage), urllib.quote_plus(fanart)))]
-            except:
-                contextMenu = [('Add to BlanketFort Favorites','XBMC.Container.Update(%s?mode=5&name=%s&url=%s&iconimage=%s&fanart=%s)' %(sys.argv[0], urllib.quote_plus(name), urllib.quote_plus(url), urllib.quote_plus(iconimage), urllib.quote_plus(fanart)))]
-            liz.addContextMenuItems(contextMenu)
+		
+
         if not playlist is None:
             playlist_name = name.split(') ')[1]
             contextMenu_ = [('Play '+playlist_name+' PlayList','XBMC.RunPlugin(%s?mode=13&name=%s&playlist=%s)' %(sys.argv[0], urllib.quote_plus(playlist_name), urllib.quote_plus(str(playlist).replace(',','|'))))]
@@ -329,32 +304,13 @@ def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,pl
 
 
 
-
-
-xbmcplugin.setContent(int(sys.argv[1]), 'movies')
-try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
-except:
-    pass
-try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_LABEL)
-except:
-    pass
-try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
-except:
-    pass
-try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_GENRE)
-except:
-    pass
-
 params=get_params()
 
 url=None
 name=None
 mode=None
 playlist=None
+
 
 try:
     url=urllib.unquote_plus(params["url"]).decode('utf-8')
@@ -400,9 +356,6 @@ elif mode==3:
     xbmc.log("")
     getSubChannelItems(name,url,fanart)
 
-elif mode==4:
-    xbmc.log("")
-    getFavorites()
 
 elif mode==5:
     xbmc.log("")
@@ -416,37 +369,8 @@ elif mode==5:
         pass
     addFavorite(name,url,iconimage,fanart)
 
-elif mode==6:
-    xbmc.log("rmFavorite")
-    try:
-        name = name.split('\\ ')[1]
-    except:
-        pass
-    try:
-        name = name.split('  - ')[0]
-    except:
-        pass
-    rmFavorite(name)
 
-elif mode==7:
-    xbmc.log("addSource")
-    addSource(url)
 
-elif mode==8:
-    xbmc.log("rmSource")
-    rmSource(name)
-
-elif mode==9:
-    xbmc.log("getUpdate")
-    getUpdate()
-
-elif mode==10:
-    xbmc.log("getCommunitySources")
-    getCommunitySources()
-
-elif mode==11:
-    xbmc.log("addSource")
-    addSource(url)
 
 elif mode==12:
     xbmc.log("setResolvedUrl")

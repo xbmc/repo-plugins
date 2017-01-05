@@ -36,10 +36,10 @@ def get_replay_events_url(network_names=None):
 def get_live_events(network_names=None):
     if network_names is None:
         network_names = []
-    soup = util.get_url_as_xml_soup_cache(player_config.get_live_event_url())
-    return soup.findall('.//event')
+    et = util.get_url_as_xml_cache(player_config.get_live_event_url(), encoding='ISO-8859-1')
+    return et.findall('.//event')
 
 
 def get_events(url):
-    soup = util.get_url_as_xml_soup_cache(url)
-    return soup.findall('.//event')
+    et = util.get_url_as_xml_cache(url, encoding='ISO-8859-1')
+    return et.findall('.//event')

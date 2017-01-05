@@ -44,7 +44,7 @@ class AppleTV(MenuListing):
     @RegisterMode(FEATURED)
     def featured_menu(self, args):
         featured_url = base64.b64decode('aHR0cDovL2VzcG4uZ28uY29tL3dhdGNoZXNwbi9hcHBsZXR2L2ZlYXR1cmVk')
-        et = util.get_url_as_xml_soup_cache(get_url(featured_url))
+        et = util.get_url_as_xml_cache(get_url(featured_url))
         for showcase in et.findall('.//showcase/items/showcasePoster'):
             name = showcase.get('accessibilityLabel')
             image = showcase.find('./image').get('src')
@@ -68,7 +68,7 @@ class AppleTV(MenuListing):
     def categories_showcase(self, args):
         url = args.get(SHOWCASE_URL)[0]
         selected_nav_id = args.get(SHOWCASE_NAV_ID, None)
-        et = util.get_url_as_xml_soup_cache(get_url(url))
+        et = util.get_url_as_xml_cache(get_url(url))
         navigation_items = et.findall('.//navigation/navigationItem')
         xbmc.log('ESPN3 Found %s items' % len(navigation_items), xbmc.LOGDEBUG)
         if selected_nav_id is None and len(navigation_items) > 0:
@@ -98,7 +98,7 @@ class AppleTV(MenuListing):
     @RegisterMode(CATEGORY_SHELF_MODE)
     def category_shelf(self, args):
         featured_url = base64.b64decode('aHR0cDovL2VzcG4uZ28uY29tL3dhdGNoZXNwbi9hcHBsZXR2L2ZlYXR1cmVk')
-        et = util.get_url_as_xml_soup_cache(get_url(featured_url))
+        et = util.get_url_as_xml_cache(get_url(featured_url))
         for shelf in et.findall('.//shelf'):
             name = shelf.get('id')
             if name == args.get(SHELF_ID)[0]:
@@ -109,7 +109,7 @@ class AppleTV(MenuListing):
     @RegisterMode(CATEGORY_SPORTS_MODE)
     def category_sports(self, args):
         sports_url = base64.b64decode('aHR0cDovL2VzcG4uZ28uY29tL3dhdGNoZXNwbi9hcHBsZXR2L3Nwb3J0cw==')
-        et = util.get_url_as_xml_soup_cache(get_url(sports_url))
+        et = util.get_url_as_xml_cache(get_url(sports_url))
         images = et.findall('.//image')
         sports = et.findall('.//oneLineMenuItem')
         for i in range(0, min(len(images), len(sports))):
@@ -126,7 +126,7 @@ class AppleTV(MenuListing):
     @RegisterMode(CATEGORY_CHANNELS_MODE)
     def category_channels(self, args):
         channels_url = base64.b64decode('aHR0cDovL2VzcG4uZ28uY29tL3dhdGNoZXNwbi9hcHBsZXR2L2NoYW5uZWxz')
-        et = util.get_url_as_xml_soup_cache(get_url(channels_url))
+        et = util.get_url_as_xml_cache(get_url(channels_url))
         for channel in et.findall('.//oneLineMenuItem'):
             name = channel.get('accessibilityLabel')
             image = channel.find('.//image').text
@@ -220,10 +220,11 @@ class AppleTV(MenuListing):
                            dict(SHOWCASE_URL=url, MODE=self.make_mode(CATEGORY_SHOWCASE_MODE)),
                            image, image)
                 else:
-                    stash = stash_element.text.encode('utf-8')
+                    stash = stash_element.text.encode('ISO-8859-1')
+                    xbmc.log(TAG + 'Stash Data %s' % (stash), xbmc.LOGDEBUG)
                     # Some of the json is baddly formatted
                     stash = re.sub(r'\s+"', '"', stash)
-                    stash_json = json.loads(stash, 'utf-8')
+                    stash_json = json.loads(stash) #, 'utf-8')
                     stash_json['internal_item'] = item
                     stashes.append(stash_json)
 

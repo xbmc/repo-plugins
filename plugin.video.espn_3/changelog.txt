@@ -1,4 +1,16 @@
 --------------------------------
+version 2.9.25 (December 2016)
+--------------------------------
+- SSL Fixes
+- Adobe Authentication Fixes
+- Text Encoding Fixes
+
+--------------------------------
+version 2.9.22 (November 2016)
+--------------------------------
+- Registration fixes
+
+--------------------------------
 version 2.9.21 (September 2016)
 --------------------------------
 - Add in support for ACC Extra

@@ -3,14 +3,13 @@
 import xbmc
 import os
 import time
-import urllib
-import urllib2
 import json
 import xml.etree.ElementTree as ET
 import hashlib
 import re
+import codecs
 
-from globals import ADDON_PATH_PROFILE
+from globals import ADDON_PATH_PROFILE, global_session
 
 TAG = 'ESPN3 util: '
 
@@ -23,37 +22,37 @@ def is_file_valid(cache_file, timeout):
     return False
 
 
-def fetch_file(url, cache_file):
-    urllib.urlretrieve(url, cache_file)
+def fetch_file(url, cache_file, encoding):
+    resp = global_session.get(url)
+    with codecs.open(cache_file, 'w', encoding) as file:
+        file.write(resp.text)
 
 
 def clear_cache(url):
     cache_file = hashlib.sha224(url).hexdigest()
-    cache_file = os.path.join(ADDON_PATH_PROFILE, cache_file + '.xml')
     try:
-        os.remove(cache_file)
+        os.remove(os.path.join(ADDON_PATH_PROFILE, cache_file + '.xml'))
+    except:
+        pass
+
+    try:
+        os.remove(os.path.join(ADDON_PATH_PROFILE, cache_file + '.json'))
     except:
         pass
 
 
-def get_url_as_xml_soup_cache(url, cache_file = None, timeout = 300):
+def get_url_as_xml_cache(url, cache_file=None, timeout=300, encoding='utf-8'):
     if cache_file is None:
         cache_file = hashlib.sha224(url).hexdigest()
         cache_file = os.path.join(ADDON_PATH_PROFILE, cache_file + '.xml')
     if not is_file_valid(cache_file, timeout):
         xbmc.log(TAG + 'Fetching config file %s from %s' % (cache_file, url), xbmc.LOGDEBUG)
-        fetch_file(url, cache_file)
+        fetch_file(url, cache_file, encoding)
     else:
         xbmc.log(TAG + 'Using cache %s for %s' % (cache_file, url), xbmc.LOGDEBUG)
     with open(cache_file) as xml_file:
         xml_data = xml_file.read()
         return load_element_tree(xml_data)
-
-
-def get_url_as_xml_soup(url):
-    config_data = urllib2.urlopen(url).read()
-    return load_element_tree(config_data)
-
 
 # ESPN files are in iso-8859-1 and sometimes do not have the xml preamble
 def load_element_tree(data):
@@ -81,26 +80,31 @@ def load_element_tree(data):
 
 
 def get_url_as_json(url):
-    response = urllib2.urlopen(url)
-    return json.load(response)
+    return global_session.get(url).json()
 
 
-def get_url_as_json_cache(url, cache_file = None, timeout = 300):
+def get_url_as_json_cache(url, cache_file=None, timeout=300):
     if cache_file is None:
         cache_file = hashlib.sha224(url).hexdigest()
         cache_file = os.path.join(ADDON_PATH_PROFILE, cache_file + '.json')
     if not is_file_valid(cache_file, timeout):
         xbmc.log(TAG + 'Fetching config file %s from %s' % (cache_file, url), xbmc.LOGDEBUG)
-        fetch_file(url, cache_file)
+        fetch_file(url, cache_file, 'utf-8')
     else:
         xbmc.log(TAG + 'Using cache %s for %s' % (cache_file, url), xbmc.LOGDEBUG)
+
     with open(cache_file) as json_file:
         json_data = json_file.read()
-        json_file.close()
+
         if json_data.startswith('ud='):
             json_data = json_data.replace('ud=', '')
             json_data = json_data.replace('\'', '"')
-        return json.loads(json_data)
+        try:
+            return json.loads(json_data)
+        except Exception as e:
+            clear_cache(url)
+            raise e
+
 
 
 # espn.page.loadSportPage('url');

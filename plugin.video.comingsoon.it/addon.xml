@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.comingsoon.it" name="Comingsoon Trailer" version="1.1.0" provider-name="phate89">
+<addon id="plugin.video.comingsoon.it" name="Comingsoon Trailer" version="1.1.1" provider-name="phate89">
   <requires>
 	<import addon="xbmc.python" version="2.24.0"/>
 	<import addon="script.module.beautifulsoup4" version="4.3.1"/> 
+	<import addon="script.module.phate89" version="1.0.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -19,7 +20,7 @@
     <email></email>
     <source>https://github.com/phate89/plugin.video.comingsoon.it</source>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-    <news>v1.1.0
+    <news>v1.1.1
 Rewrite part of the code to use phate89 library
 Removed previous page item (kodi provide methods to go back)
 Added an option to get more info for the movies (enabled by default)

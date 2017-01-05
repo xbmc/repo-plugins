@@ -84,7 +84,7 @@ class Legacy(MenuListing):
             image = defaultimage
         addDir(translation(30034), dict(ESPN_URL=espn_url, MODE=self.make_mode(LIVE_EVENTS_MODE)), image)
         sports = []
-        sport_elements = util.get_url_as_xml_soup_cache(espn_url).findall('.//sportDisplayValue')
+        sport_elements = util.get_url_as_xml_cache(espn_url, encoding='ISO-8859-1').findall('.//sportDisplayValue')
         for sport in sport_elements:
             sport = sport.text.encode('utf-8')
             if sport not in sports:
@@ -114,7 +114,7 @@ class Legacy(MenuListing):
         if live:
             data = events.get_events(espn_url)
         else:
-            data = util.get_url_as_xml_soup_cache(espn_url).findall(".//event")
+            data = util.get_url_as_xml_cache(espn_url, encoding='ISO-8859-1').findall(".//event")
         num_espn3 = 0
         num_secplus = 0
         num_accextra = 0

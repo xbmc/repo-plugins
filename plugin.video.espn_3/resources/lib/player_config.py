@@ -22,8 +22,8 @@ PROVIDERS_FILE = os.path.join(ADDON_PATH_PROFILE, PROVIDERS_FILE)
 CHECK_RIGHTS_URL = base64.b64decode('aHR0cDovL2Jyb2FkYmFuZC5lc3BuLmdvLmNvbS9lc3BuMy9hdXRoL2VzcG5uZXR3b3Jrcy91c2Vy')
 
 
-def get_config_soup():
-    return util.get_url_as_xml_soup_cache(PLAYER_CONFIG_URL, PLAYER_CONFIG_FILE, TIME_DIFFERENCE)
+def get_config():
+    return util.get_url_as_xml_cache(PLAYER_CONFIG_URL, PLAYER_CONFIG_FILE, TIME_DIFFERENCE)
 
 
 def get_user_data():
@@ -51,16 +51,16 @@ def get_sso_abuse():
 
 
 def get_networks():
-    networks = get_config_soup().findall('.//network')
+    networks = get_config().findall('.//network')
     return networks
 
 
 # Handle elementtree 1.2.8 which doesn't support [@ xpath notation
 def select_feed_by_id(feed_id):
     try:
-        return get_config_soup().find('.//feed[@id=\'' + feed_id + '\']').text
+        return get_config().find('.//feed[@id=\'' + feed_id + '\']').text
     except:
-        feeds = get_config_soup().findall('.//feed')
+        feeds = get_config().findall('.//feed')
         for feed in feeds:
             if feed.get('id') == feed_id:
                 return feed.text

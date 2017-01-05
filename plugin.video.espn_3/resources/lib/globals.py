@@ -2,6 +2,7 @@ import os
 import sys
 import xbmc
 import xbmcaddon
+import requests
 
 selfAddon = xbmcaddon.Addon()
 addon_data_path = xbmc.translatePath(selfAddon.getAddonInfo('path')).decode('utf-8')
@@ -35,6 +36,8 @@ def CLEAR_SAVED_DATA():
             for currentFile in files:
                 if currentFile.lower().endswith('.xml') and not currentFile.lower() == 'settings.xml':
                     os.remove(os.path.join(ADDON_PATH_PROFILE, currentFile))
+                if currentFile.lower().endswith('.json') and not currentFile.lower() == 'adobe.json':
+                    os.remove(os.path.join(ADDON_PATH_PROFILE, currentFile))
     except:
         pass
     selfAddon.setSetting(id='ClearData', value='false')
@@ -42,6 +45,7 @@ def CLEAR_SAVED_DATA():
 if selfAddon.getSetting('ClearData') == 'true':
     CLEAR_SAVED_DATA()
 
+global_session = requests.Session()
+
 if selfAddon.getSetting('DisableSSL') == 'true':
-    import ssl
-    ssl._create_default_https_context = ssl._create_unverified_context
+    global_session.verify = False

@@ -3,8 +3,11 @@ import os
 import sys
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 import json
+import uuid
+import hmac
+import hashlib
 import string, random
-import urllib, urllib2, httplib2
+import urllib, urllib2
 import HTMLParser
 import time
 import cookielib
@@ -12,7 +15,8 @@ import base64
 from StringIO import StringIO
 import gzip
 from datetime import datetime, timedelta
-
+import calendar
+from urllib2 import URLError, HTTPError
 
 def stringToDate(string, date_format):
     try:
@@ -30,6 +34,7 @@ def FIND(source,start_str,end_str):
         return source[start+len(start_str):end]
     else:
         return ''
+
 
 def GET_RESOURCE_ID():
     #########################
@@ -51,9 +56,12 @@ def GET_RESOURCE_ID():
     #resource_id = response.read()
     #response.close() 
     #resource_id = resource_id.replace('\n', ' ').replace('\r', '')
-    resource_id = '<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title>nbcsports</title><item><title>NBC Sports PGA Event</title><guid>123456789</guid><media:rating scheme="urn:vchip">TV-PG</media:rating></item></channel></rss>'
+    #resource_id = '<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title>nbcsports</title><item><title>NBC Sports PGA Event</title><guid>123456789</guid><media:rating scheme="urn:vchip">TV-PG</media:rating></item></channel></rss>'
+    resource_id = '<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title>golf</title><item><title>RSM%20Classic%20-%20Rd%201</title><guid>nbcs_100188</guid><media:rating scheme="urn:v-chip"></media:rating></item></channel></rss>'
+
 
     return resource_id
+
 
 def GET_SIGNED_REQUESTOR_ID():
 
@@ -77,42 +85,15 @@ def GET_SIGNED_REQUESTOR_ID():
 
     json_source = json.load(response)                       
     response.close() 
-
-    print "ADOBE PASS"
+    
     signed_requestor_id = json_source['adobePassSignedRequestorId']
     signed_requestor_id = signed_requestor_id.replace('\n',"")
-    print signed_requestor_id
+    
     
     return signed_requestor_id
 
-def SET_STREAM_QUALITY(url):
-    xbmc.log(url)
-    '''
-    if QUALITY == 0:
-        q_lvl = "200000"
-        q_lvl_golf = "296k"
-    elif QUALITY == 1:
-        q_lvl = "400000"
-        q_lvl_golf = "496k"
-    elif QUALITY == 2:
-        q_lvl = "600000"
-        q_lvl_golf = "796k"
-    elif QUALITY == 3:
-        q_lvl = "900000"
-        q_lvl_golf = "1296k"
-    elif QUALITY == 4:
-        q_lvl = "1400000"
-        q_lvl_golf = "1896k"
-    elif QUALITY == 5:
-        q_lvl = "2200000"
-        q_lvl_golf = "2596k"
-    else:
-        q_lvl = "3450000"
-        #q_lvl = "4296000"
-        q_lvl_golf = "4296k"
-    '''
 
-
+def SET_STREAM_QUALITY(url): 
     stream_url = {}
     stream_title = []
 
@@ -128,19 +109,15 @@ def SET_STREAM_QUALITY(url):
     master = resp.read()
     resp.close()  
 
+    xbmc.log(str(master))
+
     cookies = '' 
     for cookie in cj:                    
         if cookies != '':
             cookies = cookies + "; "
         cookies = cookies + cookie.name + "=" + cookie.value
-    
-    xbmc.log(master)
-    xbmc.log(cookies)
+        
     line = re.compile("(.+?)\n").findall(master)  
-    
-    xplayback = ''.join([random.choice('0123456789ABCDEF') for x in range(32)])
-    xplayback = xplayback[0:7]+'-'+xplayback[8:12]+'-'+xplayback[13:17]+'-'+xplayback[18:22]+'-'+xplayback[23:]
-
     for temp_url in line:
         if '#EXT' not in temp_url:
             temp_url = temp_url.rstrip()
@@ -173,25 +150,36 @@ def SET_STREAM_QUALITY(url):
             if start > 0:
                 start = start + len('BANDWIDTH=')
                 end = temp_url.find(',',start)
-                desc = temp_url[start:end]
+                if end != -1: desc = temp_url[start:end]
+                else: desc = temp_url[start:]
                 try:
                     int(desc)
                     desc = str(int(desc)/1000) + ' kbps'
                 except:
                     pass            
     
-    
+    pref_quality = None    
+    if 'kbit/s' in QUALITY: pref_quality = int(filter(str.isdigit, QUALITY))
+        
     if len(stream_title) > 0:
         ret =-1      
-        stream_title.sort(key=natural_sort_key)  
-        print "PLAY BEST SETTING"
-        print PLAY_BEST
-        if str(PLAY_BEST) == 'true':
-            ret = len(stream_title)-1            
+        stream_title.sort(key=natural_sort_key, reverse=True)          
+        if str(PLAY_BEST) == 'true':            
+            ret = 0
+        elif pref_quality != None:            
+            index = 0
+            dif = 99999999
+            for value in stream_title:                
+                temp_quality = int(filter(str.isdigit, stream_title[index]))    
+                if abs(temp_quality - pref_quality) < dif:
+                    dif = abs(temp_quality - pref_quality)
+                    ret = index
+
+                index = index + 1
         else:
             dialog = xbmcgui.Dialog() 
-            ret = dialog.select('Choose Stream Quality', stream_title)
-            print ret
+            ret = dialog.select('Choose Stream Quality', stream_title)            
+
         if ret >=0:
             url = stream_url.get(stream_title[ret])           
         else:
@@ -200,15 +188,6 @@ def SET_STREAM_QUALITY(url):
         msg = "No playable streams found."
         dialog = xbmcgui.Dialog() 
         ok = dialog.ok('Streams Not Found', msg)
-
-    '''
-    url = url.replace('master.m3u8',q_lvl_golf+'/proge.m3u8')       
-    url = url.replace('manifest(format=m3u8-aapl-v3)','QualityLevels('+q_lvl+')/Manifest(video,format=m3u8-aapl-v3,audiotrack=audio_en_0)')       
-    url = url.replace('manifest(format=m3u8-aapl,filtername=vodcut)','QualityLevels('+q_lvl+')/Manifest(video,format=m3u8-aapl,filtername=vodcut)')
-    url = url.replace('manifest(format=m3u8-aapl-v3,filtername=vodcut)','QualityLevels('+q_lvl+')/Manifest(video,format=m3u8-aapl-v3,audiotrack=audio_en_0,filtername=vodcut)')
-    '''
-    
-    print "STREAM URL === " + url 
 
     return url
 
@@ -219,43 +198,93 @@ def natural_sort_key(s):
             for text in re.split(_nsre, s)] 
 
 
-def SAVE_COOKIE(cj):
-    # Cookielib patch for Year 2038 problem
-    # Possibly wrap this in if to check if device is using a 32bit OS
-    for cookie in cj:
-        # Jan, 1 2038
-        if cookie.expires >= 2145916800:
-            #Jan, 1 2037
-            cookie.expires =  2114380800
-    
-    cj.save(ignore_discard=True);  
+def utc_to_local(utc_dt):
+    # get integer timestamp to avoid precision lost
+    timestamp = calendar.timegm(utc_dt.timetuple())
+    local_dt = datetime.fromtimestamp(timestamp)
+    assert utc_dt.resolution >= timedelta(microseconds=1)
+    return local_dt.replace(microsecond=utc_dt.microsecond)
 
 
-def CLEAR_SAVED_DATA():
-    print "IN CLEAR"
-    try:
-        os.remove(ADDON_PATH_PROFILE+'/device.id')
-    except:
-        pass
-    try:
-        os.remove(ADDON_PATH_PROFILE+'/provider.info')
-    except:
-        pass
-    try:
-        os.remove(ADDON_PATH_PROFILE+'/cookies.lwp')
-    except:
-        pass
-    try:
-        os.remove(ADDON_PATH_PROFILE+'/auth.token')
-    except:
-        pass
-    ADDON.setSetting(id='clear_data', value='false')   
+def addLink(name,url,title,iconimage,fanart,info=None):
+    ok=True
+    liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage,)
+ 
+    liz.setProperty('fanart_image',fanart)
+    liz.setProperty("IsPlayable", "true")
+    liz.setInfo( type="Video", infoLabels={ "Title": title } )
+    if info != None:
+        liz.setInfo( type="Video", infoLabels=info) 
+    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
+    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+    return ok
+
+def addFreeLink(name,link_url,iconimage,fanart=None,scrape_type=None,info=None): 
+    params = get_params()      
+    ok=True
+    u=sys.argv[0]+"?url="+urllib.quote_plus(link_url)+"&mode=6&icon_image="+urllib.quote_plus(iconimage)
+    liz=xbmcgui.ListItem(name, iconImage=ICON, thumbnailImage=iconimage)
+    liz.setProperty("IsPlayable", "true")
+    liz.setInfo( type="Video", infoLabels={ "Title": name } )
+    if info != None:
+        liz.setInfo( type="Video", infoLabels=info)        
+
+    liz.setProperty('fanart_image', fanart)
+    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)    
+    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+    return ok
+
+def addPremiumLink(name,link_url,iconimage,fanart=None,scrape_type=None,info=None): 
+    params = get_params()      
+    ok=True
+    u=sys.argv[0]+"?url="+urllib.quote_plus(link_url)+"&mode=5&icon_image="+urllib.quote_plus(iconimage)
+    liz=xbmcgui.ListItem(name, iconImage=ICON, thumbnailImage=iconimage)
+    liz.setProperty("IsPlayable", "true")
+    liz.setInfo( type="Video", infoLabels={ "Title": name } )
+    if info != None:
+        liz.setInfo( type="Video", infoLabels=info)        
+
+    liz.setProperty('fanart_image', fanart)
+    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)    
+    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+    return ok
 
 
+def addDir(name,url,mode,iconimage,fanart=None,scrape_type=None,isFolder=True,info=None): 
+    params = get_params()      
+    ok=True
+    u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&scrape_type="+urllib.quote_plus(str(scrape_type))+"&icon_image="+urllib.quote_plus(str(iconimage))
+    liz=xbmcgui.ListItem(name, iconImage=ICON, thumbnailImage=iconimage)
+    liz.setInfo( type="Video", infoLabels={ "Title": name } )
+    if info != None:
+        liz.setInfo( type="Video", infoLabels=info)        
+
+    liz.setProperty('fanart_image', fanart)
+    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=isFolder)    
+    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+    return ok
+
+
+def get_params():
+    param=[]
+    paramstring=sys.argv[2]
+    if len(paramstring)>=2:
+            params=sys.argv[2]
+            cleanedparams=params.replace('?','')
+            if (params[len(params)-1]=='/'):
+                    params=params[0:len(params)-2]
+            pairsofparams=cleanedparams.split('&')
+            param={}
+            for i in range(len(pairsofparams)):
+                    splitparams={}
+                    splitparams=pairsofparams[i].split('=')
+                    if (len(splitparams))==2:
+                            param[splitparams[0]]=splitparams[1]
+                            
+    return param
 
 # KODI ADDON GLOBALS
 ADDON_HANDLE = int(sys.argv[1])
-ROOTDIR = xbmcaddon.Addon(id='plugin.video.nbcsnliveextra').getAddonInfo('path')
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo('id')
 ADDON_VERSION = ADDON.getAddonInfo('version')
@@ -263,16 +292,17 @@ ADDON_PATH = xbmc.translatePath(ADDON.getAddonInfo('path'))
 ADDON_PATH_PROFILE = xbmc.translatePath(ADDON.getAddonInfo('profile'))
 KODI_VERSION = float(re.findall(r'\d{2}\.\d{1}', xbmc.getInfoLabel("System.BuildVersion"))[0])
 LOCAL_STRING = ADDON.getLocalizedString
+ROOTDIR = xbmcaddon.Addon(id=ADDON_ID).getAddonInfo('path')
 FANART = ROOTDIR+"/fanart.jpg"
 ICON = ROOTDIR+"/icon.png"
 ROOT_URL = 'http://stream.nbcsports.com/data/mobile/'
 
+
 #Settings file location
-settings = xbmcaddon.Addon(id='plugin.video.nbcsnliveextra')
+settings = xbmcaddon.Addon(id=ADDON_ID)
 
 #Main settings
-#QUALITY = int(settings.getSetting(id="quality"))
-#USER_AGENT = str(settings.getSetting(id="user-agent"))
+QUALITY = str(settings.getSetting(id="quality"))
 CDN = int(settings.getSetting(id="cdn"))
 USERNAME = str(settings.getSetting(id="username"))
 PASSWORD = str(settings.getSetting(id="password"))
@@ -282,36 +312,41 @@ FREE_ONLY = str(settings.getSetting(id="free_only"))
 PLAY_MAIN = str(settings.getSetting(id="play_main"))
 PLAY_BEST = str(settings.getSetting(id="play_best"))
 
-if CLEAR == 'true':
-   CLEAR_SAVED_DATA()
+filter_ids = [ 
+            "show-all",     
+            "nbc-nfl",
+            "nbc-premier-league",
+            "nbc-nascar",
+            "nbc-nhl",
+            "nbc-golf",
+            "nbc-pga",
+            "nbc-nd",
+            "nbc-college-football",
+            "nbc-f1",
+            "nbc-nba",
+            "nbc-mlb",
+            "nbc-rugby",
+            "nbc-horses",
+            "nbc-tennis",
+            "nbc-indy",
+            "nbc-moto",
+            "nbc-olympic-sports",
+            "nbc-csn-bay-area",
+            "nbc-csn-california",
+            "nbc-csn-chicago",
+            "nbc-csn-mid-atlantic",
+            "nbc-csn-new-england",
+            "nbc-csn-philadelphia"
+            ]
 
-provider_dictionary = { "Bright House" : "Brighthouse",
-                        "Cable One" : "auth_cableone_net",
-                        "Charter" : "Charter_Direct",
-                        "Comcast (xfinity)" : "Comcast_SSO",
-                        "Cox" : "Cox",
-                        "Dish Network" : "Dish",
-                        "Direct TV" : "DTV",
-                        "Frontier" : "FRONTIER",    
-                        "Optimum" : "Cablevision",
-                        "Playstation Vue" : "sony_auth-gateway_net",
-                        "Summit Broadband" : "summit-broadband",
-                        "Time Warner Cable" : "TWC",
-                        "Verizon" : "Verizon"
-                    }
-
-
-MSO_ID = provider_dictionary[PROVIDER]
-IDP_URL = 'https://sp.auth.adobe.com/adobe-services/authenticate/saml?domain_name=adobe.com&noflash=true&mso_id='+MSO_ID+'&requestor_id=nbcsports&no_iframe=true&client_type=iOS&client_version=1.10.1&redirect_url=http://adobepass.ios.app/'
-ORIGIN = ''
-REFERER = ''
-
+#Create a filter list
+filter_list = []
+for fid in filter_ids:
+    if str(settings.getSetting(id=fid)) == "true":
+        filter_list.append(fid)
 
 #User Agents
-UA_IPHONE = 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_0_2 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) Mobile/14A456'
-UA_PC = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.81 Safari/537.36'
-UA_ADOBE_PASS = 'AdobePassNativeClient/1.10.1 (iPhone; U; CPU iPhone OS 10.0.2 like Mac OS X; en-us)'
-UA_NBCSN = 'AppleCoreMedia/1.0.0.14A456 (iPhone; U; CPU OS 10_0_2 like Mac OS X; en_us)'
+UA_NBCSN = 'NBCSports_Prod/8616 CFNetwork/808.2.16 Darwin/16.3.0'
 
 
 #Create Random Device ID and save it to a file
@@ -319,7 +354,8 @@ fname = os.path.join(ADDON_PATH_PROFILE, 'device.id')
 if not os.path.isfile(fname):
     if not os.path.exists(ADDON_PATH_PROFILE):
         os.makedirs(ADDON_PATH_PROFILE)
-    new_device_id = ''.join([random.choice('0123456789abcdef') for x in range(64)])
+    #new_device_id = ''.join([random.choice('0123456789abcdef') for x in range(64)])
+    new_device_id =str(uuid.uuid1())
     device_file = open(fname,'w')   
     device_file.write(new_device_id)
     device_file.close()
@@ -328,19 +364,6 @@ fname = os.path.join(ADDON_PATH_PROFILE, 'device.id')
 device_file = open(fname,'r') 
 DEVICE_ID = device_file.readline()
 device_file.close()
-
-#Create a file for storing Provider info
-fname = os.path.join(ADDON_PATH_PROFILE, 'provider.info')
-if os.path.isfile(fname):    
-    provider_file = open(fname,'r')
-    last_provider = provider_file.readline()
-    provider_file.close()
-    if MSO_ID != last_provider:
-        CLEAR_SAVED_DATA()
-
-provider_file = open(fname,'w')   
-provider_file.write(MSO_ID)
-provider_file.close()
 
 
 #Event Colors

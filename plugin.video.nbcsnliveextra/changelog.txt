@@ -1,159 +1,17 @@
-2016.10.21
-- Added Summit Broadband to the available providers
+2016.12.29
+- Add a filter setting to allow users to customize the results shown in each section
+- Removed No longer used httplib2 requirement
+- Cleaned up some code
 
-2016.10.20
-- Attempt to fix no audio in streams (legacy streams are used if available)
-- Added Playstation Vue to the providers list
+2016.11.22
+- Added Preferred Stream Quality Setting
 
-2016.10.19.2
-- Fixed repo bug
+2016.11.18.2
+- Fixed path variables
 
-2016.10.19
-- Fixed Comcast (xfinity) login
-- Updated user agents
-- Improved sorting of list items
+2016.11.18
+- Fixed Play best option
+- Added a deauthorize device option in settings
 
-2016.10.17
-- Fixed appending cookie to stream issue
-- Fixed featured, replays, and highlight items
-
-2016.10.7
-- Fixed broken urls
-
-2016.4.19
-- Added Frontier support
-
-2016.3.9
-- Fix for time error attempt #3
-
-2016.3.8
-- Fix for time error attempt #2
-
-2016.3.7
-- Fix for mktime error
-
-v2016.2.3.2
-- Fixed new bugs released in prev version
-
-v2016.2.3
-- Add setting to automatically play best stream available
-- Bug fix
-
-v2016.1.28
-- Fix for Dish login
-- Minor bug fixes
-
-v2016.1.22
-- Fix for Direct TV login
-
-v2015.12.29
-- Fix video streams dropping
-
-v2015.11.12
-- Bug fix
-
-v2015.11.11
-- Fix video streams dropping
-- Brought back stream quality selection via dialog
-
-v2015.11.6
-- Removed Quality selection for temporary fix for all streams
-
-v2015.11.3
-- Fixed golf channel
-
-v2015.9.17
-- Added Bright House support
-
-v2015.9.4
-- Added Cox support
-- Added General setting to toggle ability to play from main window
-- Code clean up
-
-v2015.8.21
-- Premium links now plays from main window
-
-v2015.8.17
-- Bug fix for mislabeling non-free streams as free
-
-v2015.7.31
-- Added Optimum support
-
-v2015.7.30
-- Added Verizon login support
-- Added Cable One login support
-- Fixed issue where starting at date & time would not always display
-
-v2015.7.28
-- Added Charter login support
-
-v2015.7.20
-- Added additional code to scrape new video url location
-- Changed formating to make any event that has a stream url playable
-
-v2015.7.17
-- List items now display media info (description, air date, etc.)
-- Added color coding for free upcoming events
-
-v2015.7.6
-- Fixed error caused when no profile folder exists.
-- Fixed bug with Direct TV login
-
-v2015.6.29
-- Added ability to uncompress gzip responses
-
-v2015.6.26
-- Re-organized addon settings
-- Added ability to only display FREE content
-
-v2015.6.25
-- Skip login and alert user if no username and password is supplied
-- Allow access to live streams 10 minutes before they are supposed to go live
-- Allow access to live streams up to an hour after event is supposed to end (Overtime protection)
-- Fixed bug that caused provider info file to not be updated
-- Added ability to clear saved data in settings (cookies, device id, auth token provider info)
-- Clear saved data if provider changes
-- Removed Code that was causing live stream drops
-
-v2015.6.24
-- Resurrected
-- Ability to use TV provider login to access premium content
-- Color coding for visual cue of item status
-- Check for valid cookies and skip login if not expired
-- Improved the accuracy of deciding whether a stream is live or not
-- Brought golf channel live back to live section.
-
-v2015.6.11
-- Moved login code to class in providers folder. Each provider may need its own class / file
-- Color coded events (Orange = Requires Login & On later, Green = Free (both Live & On Later), Cyan = Requires Login & Live)
-- Can now select a video from list and login will be ran if necessary
-
-v2015.6.10
-- Able to login with TWC account
-
-v1.0.1
-- Fixed bug with CDN selection
-v1.0.0
-- Added ability to select CDN server location (if applicable)
-- Added ability to set the user-agent in the addon settings
-- Code clean up
-v0.0.8
-- Fix stream User-Agent issue round 2
-- Changed location where user-agent was appended to prevent incorrect highlighting
-v0.0.7
-- Fix stream User-Agent issue
-v0.0.6
-- Fixed Live & Upcoming section after upstream changes
-v0.0.5
--Fixed addon.xml
-v0.0.4
-- Improved accuracy of highlighting active streams
-v0.0.3
-- Added ability to set stream quality under settings
-- Changed Full Replay order from newest to oldest
-- Highlight active stream with cyan under Live & Upcoming
-v0.0.2
-- Remove httplib2 unneeded and was causing errors
-v0.0.1
-- Initial version
-
+2016.11.17
+- Initial Release

@@ -1,22 +1,52 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-  <!--Provider-->
+  <!--Provider
   <category label="100">
     <setting id="provider" type="labelenum" label="110" values="Bright House|Cable One|Charter|Comcast (xfinity)|Cox|Dish Network|Direct TV|Frontier|Optimum|Playstation Vue|Summit Broadband|Time Warner Cable|Verizon" sort="yes"/>   
     <setting id="username" type="text" label="140" default=""/>
     <setting id="password" type="text" label="150" option="hidden" default=""/>
   </category>
+  -->
   <!-- General -->
   <category label="200">
     <setting id="clear_data" type="bool" label="210" default="false"/>
-    <setting id="free_only" type="bool" label="220" default="false" />  
-    
+    <setting id="free_only" type="bool" label="220" default="false" />          
   </category>
   <!-- Visual -->
   <category label="300">
-    <!--<setting id="quality" type="enum" label="310" values="SD (200 kbit/s)|SD (400 kbit/s)|SD (600 kbit/s)|SD (900 kbit/s)|SD (1400 kbit/s)|HD (2200 kbit/s)|HD (3450 kbit/s)" default="6" />-->
+    <setting id="quality" type="labelenum" label="310" values="SD (508 kbit/s)|SD (906 kbit/s)|SD (1296 kbit/s)|SD (1937 kbit/s)|SD (2947 kbit/s)|HD (5172 kbit/s)|HD (8801 kbit/s)|None" default="None" />
     <setting id="cdn" type="enum" label="320" values="East|West" default="0" />	      
     <setting id="play_main" type="bool" label="230" default="true" />  
     <setting id="play_best" type="bool" label="240" default="true" />  
   </category>
+  <category label="400">
+    <setting type="lsep" label="Filter by Sport and Category"/>
+    <!--<setting id="filter" type="select" label="410" default="Show All" values="Show All|NFL|Premier League|NASCAR|NHL|Golf|PGA|Notre Dame|College Football|F1|NBA|MLB|Rugby|Horse racing|Tennis|IndyCar|Pro Motocross|Olympic Sports|CSN Bay Area|CSN California|CSN Chicago|CSN Mid-Atlantic|CSN New England|CSN Philadelphia"  /> -->
+    <setting id="show-all" type="bool" label="410" default="true" />
+    <setting id="nbc-nfl" type="bool" label="411" default="false" />
+    <setting id="nbc-premier-league" type="bool" label="412" default="false" />
+    <setting id="nbc-nascar" type="bool" label="413" default="false" />
+    <setting id="nbc-nhl" type="bool" label="414" default="false" />
+    <setting id="nbc-golf" type="bool" label="415" default="false" />
+    <setting id="nbc-pga" type="bool" label="416" default="false" />
+    <setting id="nbc-nd" type="bool" label="417" default="false" />
+    <setting id="nbc-college-football" type="bool" label="418" default="false" />
+    <setting id="nbc-f1" type="bool" label="419" default="false" />
+    <setting id="nbc-nba" type="bool" label="420" default="false" />
+    <setting id="nbc-mlb" type="bool" label="421" default="false" />
+    <setting id="nbc-rugby" type="bool" label="422" default="false" />
+    <setting id="nbc-horses" type="bool" label="423" default="false" />
+    <setting id="nbc-tennis" type="bool" label="424" default="false" />
+    <setting id="nbc-indy" type="bool" label="425" default="false" />
+    <setting id="nbc-moto" type="bool" label="426" default="false" />
+    <setting id="nbc-olympic-sports" type="bool" label="427" default="false" />
+    <setting id="nbc-csn-bay-area" type="bool" label="428" default="false" />
+    <setting id="nbc-csn-california" type="bool" label="429" default="false" />
+    <setting id="nbc-csn-chicago" type="bool" label="430" default="false" />
+    <setting id="nbc-csn-mid-atlantic" type="bool" label="431" default="false" />
+    <setting id="nbc-csn-new-england" type="bool" label="432" default="false" />
+    <setting id="nbc-csn-philadelphia" type="bool" label="433" default="false" />
+    
+
+ </category>
 </settings>

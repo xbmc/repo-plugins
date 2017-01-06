@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30110">
+		<setting id="bitrate" type="enum" label="30111" values="mp3-128|AAC-64|mp3-48" default="0" />
+    </category>
+</settings>

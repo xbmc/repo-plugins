@@ -28,6 +28,10 @@ msgctxt "#32005"
 msgid "Bookmarks"
 msgstr "Σελιδοδείκτες"
 
+msgctxt "#32006"
+msgid "VICE on HBO"
+msgstr "VICE στο HBO"
+
 msgctxt "#32200"
 msgid "Country"
 msgstr "Χώρα"

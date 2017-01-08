@@ -28,11 +28,11 @@ from lamlib import directory
 class indexer:
     def __init__(self):
         self.list = [] ; self.settings()
-        self.base_link = 'http://www.vice.com'
-        self.main_link = '/%s/videos'
-        self.latest_link = '/%s/ajax/getlatestvideos?limit=500'
-        self.episode_link = '/%s/ajax/getseriesepisodes?limit=500&series_id='
-        self.img_link = 'http://vice-images.vice.com/%s%s'
+
+        self.base_link = 'https://video.vice.com'
+        self.shows_link = '/%s/shows/'
+        self.episode_link = '/%s/playlists/%s/tab1?page=1'
+        self.hbo_link = '/en_us/playlists/5783df3f40bad38e1a87edbf/tab1?page=1'
         self.ooyala_link = 'http://player.ooyala.com/player/ipad/%s.m3u8'
         self.ooyala_subtitle_link = 'https://player.ooyala.com/nuplayer?embedCode=%s'
         self.uplynk_link = 'https://video.vice.com/en_us/preplay/%s?tvetoken=&rn=&exp=%s&sign=%s'
@@ -41,9 +41,16 @@ class indexer:
     def root(self):
         self.list = [
         {
+        'title': 32006,
+        'action': 'videos',
+        'url': self.hbo_link,
+        'icon': 'videos.png'
+        },
+
+        {
         'title': 32001,
         'action': 'videos',
-        'url': self.latest_link,
+        'url': self.shows_link % self.country,
         'icon': 'topvideos.png'
         },
 
@@ -72,7 +79,7 @@ class indexer:
         }
         ]
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -86,12 +93,14 @@ class indexer:
             bookmark['delbookmark'] = i['url']
             i.update({'cm': [{'title': 32502, 'query': {'action': 'deleteBookmark', 'url': json.dumps(bookmark)}}]})
 
-        directory.add(self.list, content='files', mediatype='episode')
+        self.list = [i for i in self.list if self.base_link in i['url']]
+
+        directory.add(self.list, content='videos', mediatype='episode')
         return self.list
 
 
     def videos(self, url):
-        self.list = cache.get(self.item_list_1, 1, url, self.country)
+        self.list = cache.get(self.item_list_5, 1, url, self.country)
 
         if self.list == None: return
 
@@ -102,25 +111,27 @@ class indexer:
             bookmark['bookmark'] = i['url']
             i.update({'cm': [{'title': 32501, 'query': {'action': 'addBookmark', 'url': json.dumps(bookmark)}}]})
 
-        directory.add(self.list, content='files', mediatype='episode')
+        for i in self.list: i.update({'nextlabel': 32500, 'nextaction': 'videos'})
+
+        directory.add(self.list, content='videos', mediatype='episode')
         return self.list
 
 
     def countries(self):
         for i in self.countryDict: 
-            self.list.append({'title': i['title'], 'url': self.latest_link % i['code']})
+            self.list.append({'title': i['title'], 'url': self.shows_link % i['code']})
 
         for i in self.list: i.update({'action': 'videos'})
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
     def topshows(self):
-        items = cache.get(self.item_list_2, 24, self.country)
+        items = cache.get(self.item_list_6, 24, self.country)
 
         if not items:
-            items = cache.get(self.item_list_4, 24, self.country)
+            items = cache.get(self.item_list_7, 24, self.country)
 
         self.list = items
 
@@ -128,15 +139,12 @@ class indexer:
 
         for i in self.list: i.update({'action': 'videos'})
 
-        directory.add(self.list, mediatype='tvshow')
+        directory.add(self.list, content='videos')
         return self.list
 
 
     def shows(self):
-        items = cache.get(self.item_list_3, 24, self.country)
-
-        if not items:
-            items = cache.get(self.item_list_4, 24, self.country)
+        items = cache.get(self.item_list_7, 24, self.country)
 
         self.list = items
         self.list = sorted(self.list, key=lambda k: k['title'])
@@ -145,7 +153,7 @@ class indexer:
 
         for i in self.list: i.update({'action': 'videos'})
 
-        directory.add(self.list, mediatype='tvshow')
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -164,54 +172,64 @@ class indexer:
         control.resolve(int(sys.argv[1]), True, item)
 
 
-    def item_list_1(self, url, country):
+    def item_list_5(self, url, country):
         try:
-            if not '/ajax/' in url:
+            if '/shows/' in url:
                 url = urlparse.urljoin(self.base_link, url)
-
                 url = client.request(url)
-                url = re.findall('data-series-id\s*=\s*(?:"|\')(.+?)(?:"|\')', url)[0]
-                url = self.episode_link + url
+                url = re.findall('latest-link\s*=\s*(.+)', url)[0]
+                u = [i for i in urlparse.urlparse(url).path.strip('/').split('/')]
+                q = urlparse.urlparse(url).query
+                url = self.episode_link % (u[0], u[-1]) + '&%s' % q
+
+            elif '/show/' in url:
+                url = urlparse.urljoin(self.base_link, url)
+                url = client.request(url)
+                url = client.parseDOM(url, 'a', ret='href', attrs = {'class': 'cta'})[0]
+                u = [i for i in urlparse.urlparse(url).path.strip('/').split('/')]
+                url = self.episode_link % (u[0], u[-1])
+
 
             url = urlparse.urljoin(self.base_link, url)
 
-            if '%s' in url:
-                url = url % country
-
             result = client.request(url)
+            result = json.loads(result)
 
-            try:
-                result = json.loads(result)
-            except:
-                result = '%s}]}' % result.rsplit('}', 1)[0]
-                result = json.loads(result)
-
-            items = result['items']
+            items = result['data']
+            items = items.values()
         except:
-            return
+            pass
+
+        try:
+            next = result['next_page_url']
+            if next == None: raise Exception()
+            next = client.replaceHTMLCodes(next)
+            next = next.encode('utf-8')
+        except:
+            next = ''
 
         for item in items:
             try:
-                title = item['info']['title']
+                title = item['base']['display_title']
                 title = client.replaceHTMLCodes(title)
                 title = title.encode('utf-8')
 
-                try: tvshowtitle = item['series']['title']
+                try: tvshowtitle = item['show']['base']['display_title']
                 except: tvshowtitle = '0'
                 tvshowtitle = client.replaceHTMLCodes(tvshowtitle)
                 tvshowtitle = tvshowtitle.encode('utf-8')
 
-                url = item['url']
+                url = item['relative_url']
+                url = urlparse.urljoin(self.base_link, url)
+                url = client.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
 
-                try: image = self.img_link % (item['info']['image_path'], item['info']['image_file_name'])
+                try: image = item['lede_image']['image_url']
                 except: image = '0'
+                image = client.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
 
-                premiered = item['publish_date'].split()[0] if 'publish_date' in item else '0'
-                premiered = premiered.encode('utf-8')
-
-                d = str(item['video_duration_visual']) if 'video_duration_visual' in item else 0
+                d = str(item['video_duration']) if 'video_duration' in item else 0
                 d = re.findall('(\d+)', d)
 
                 duration = 0
@@ -221,73 +239,70 @@ class indexer:
                 except: pass
                 duration = str(duration)
 
-                plot = item['excerpt'] if 'excerpt' in item else '0'
+                try: plot = item['base']['body']
+                except: plot = '0'
                 plot = re.sub('<.+?>|</.+?>', '', plot)
+                plot = plot.replace('\n','')
                 plot = client.replaceHTMLCodes(plot)
                 plot = plot.encode('utf-8')
 
-                self.list.append({'title': title, 'tvshowtitle': tvshowtitle, 'url': url, 'image': image, 'fanart': image, 'premiered': premiered, 'duration': duration, 'plot': plot})
+                self.list.append({'title': title, 'tvshowtitle': tvshowtitle, 'url': url, 'image': image, 'fanart': image, 'duration': duration, 'plot': plot, 'next': next})
             except:
                 pass
 
         return self.list
 
 
-    def item_list_2(self, country):
+    def item_list_6(self, country):
         try:
-            url = urlparse.urljoin(self.base_link, self.main_link)
+            url = urlparse.urljoin(self.base_link, self.shows_link)
             url = url % country
 
             result = client.request(url)
 
-            items = client.parseDOM(result, 'div', attrs = {'class': '[^"]*featured-shows'})
+            items = client.parseDOM(result, 'body', attrs = {'class': 'shows-index'})[0]
 
-            items = client.parseDOM(items, 'article', attrs = {'class': 'item'})
+            items = client.parseDOM(items, 'article', attrs = {'class': '[^"]*show'})
         except:
             return
 
         for item in items:
             try:
-                title = client.parseDOM(item, 'div', attrs = {'class': 'title.+?'})[0]
+                title = client.parseDOM(item, 'h3', attrs = {'class': '.+?'})[0]
                 title = re.sub('<.+?>|</.+?>', '', title).strip()
                 title = client.replaceHTMLCodes(title)
                 title = title.encode('utf-8')
 
                 url = client.parseDOM(item, 'a', ret='href')[0]
-                url = re.findall('(?://.+?|)(/.+)', url)[0]
-                url = client.replaceHTMLCodes(url)
+                url = [i for i in url.strip('/').split('/')][-1]
+                url = self.episode_link % (country, url)
                 url = url.encode('utf-8')
 
                 image = client.parseDOM(item, 'img', ret='data.+?')[0]
-                image = re.sub('-crop_.+?\.', '.', image)
-                image = image.split('?')[0].replace('/crops/', '/meta/')
+                image = image.split('?')[0]
                 image = client.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
 
-                plot = client.parseDOM(item, 'p', attrs = {'class': 'item-description'})[0]
-                plot = re.sub('<.+?>|</.+?>', '', plot).strip()
-                plot = client.replaceHTMLCodes(plot)
-                plot = plot.encode('utf-8')
-
-                self.list.append({'title': title, 'url': url, 'image': image, 'fanart': image, 'plot': plot})
+                self.list.append({'title': title, 'url': url, 'image': image})
             except:
                 pass
 
         return self.list
 
 
-    def item_list_3(self, country):
+    def item_list_7(self, country):
         try:
-            url = urlparse.urljoin(self.base_link, self.main_link)
+            url = urlparse.urljoin(self.base_link, self.shows_link)
             url = url % country
 
             result = client.request(url)
 
-            items = client.parseDOM(result, 'div', attrs = {'class': '[^"]*all-shows[^"]*'})
+            items = client.parseDOM(result, 'body', attrs = {'class': 'shows-index'})[0]
+            items = client.parseDOM(result, 'div', attrs = {'class': 'content'})[0]
 
-            items = client.parseDOM(items, 'li')
+            items = client.parseDOM(items, 'h3')
         except:
-            return
+            pass
 
         for item in items:
             try:
@@ -297,47 +312,7 @@ class indexer:
                 title = title.encode('utf-8')
 
                 url = client.parseDOM(item, 'a', ret='href')[0]
-                url = re.findall('(?://.+?|)(/.+)', url)[0]
                 url = client.replaceHTMLCodes(url)
-                url = url.encode('utf-8')
-
-                self.list.append({'title': title, 'url': url})
-            except:
-                pass
-
-        return self.list
-
-
-    def item_list_4(self, country):
-        try:
-            url = urlparse.urljoin(self.base_link, self.latest_link)
-            url = url % country
-
-            result = client.request(url)
-
-            try:
-                result = json.loads(result)
-            except:
-                result = '%s}]}' % result.rsplit('}', 1)[0]
-                result = json.loads(result)
-
-            items = result['items']
-
-            series = [(i['series_id'], i['series']) for i in items if 'series_id' in i and 'series' in i]
-
-            items = [i['series_id'] for i in items if 'series_id' in i]
-            items = [x for y,x in enumerate(items) if x not in items[:y]]
-        except:
-            pass
-
-        for item in items:
-            try:
-                title = [i for i in series if item == i[0]][0][1]['title']
-                title = re.sub('<.+?>|</.+?>', '', title).strip()
-                title = client.replaceHTMLCodes(title)
-                title = title.encode('utf-8')
-
-                url = self.episode_link + item
                 url = url.encode('utf-8')
 
                 self.list.append({'title': title, 'url': url})

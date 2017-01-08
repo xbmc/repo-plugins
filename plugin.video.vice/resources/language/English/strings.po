@@ -28,6 +28,10 @@ msgctxt "#32005"
 msgid "Bookmarks"
 msgstr ""
 
+msgctxt "#32006"
+msgid "VICE on HBO"
+msgstr ""
+
 msgctxt "#32200"
 msgid "Country"
 msgstr ""

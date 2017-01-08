@@ -1,0 +1,7 @@
+0.X.Y initial development versions - Many thanks to roberto@ilpiola.it for sample code I used from rpcalendar
+0.0.1 first release
+0.0.2 added search for flight# and city to add-on settings, added direct access to addon settings from interface
+0.0.3 fixed appending of flight data
+0.0.4 fixed rollover when paging in the previous direction
+0.0.5 added addon.xml requires import requests and removed unnecessary requirement for lxml
+0.0.6 updated addon.xml for python 2.24.0 and removed unnecessary module dependencies

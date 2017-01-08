@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30000">Fly PDX Flight Table</string>
+    <string id="30001">Today is</string>
+    <string id="30002">Schedule</string>
+    <string id="30003">Close</string>
+    <string id="30004">Previous</string>
+    <string id="30005">Next</string>
+    <string id="30006">No Arrivals or Departures for this flight at this time. Please check back later.</string>
+    <string id="30007">View Delayed or Canceled Flights</string>
+    <string id="30008">Showing flights for</string>
+    <string id="30009">City</string>
+    <string id="30010">Settings</string>
+
+    <string id="30011">Airline</string>
+    <string id="30012">Type</string>
+    <string id="30013">Arriving-Departing</string>
+    <string id="30014">Status</string>
+    <string id="30015">Flight#</string>
+    <string id="30016">Gate</string>
+    <string id="30017">Bag Carousel</string>
+
+    <string id="30021">Air Canada</string>
+    <string id="30022">Alaska Airlines</string>
+    <string id="30023">Condor</string>
+    <string id="30024">Delta</string>
+    <string id="30025">Frontier</string>
+    <string id="30026">Hawaiian Airlines</string>
+    <string id="30027">Icelandair</string>
+    <string id="30028">jetBlue</string>
+    <string id="30029">PenAir</string>
+    <string id="30030">SeaPort</string>
+    <string id="30031">Southwest</string>
+    <string id="30032">Spirit</string>
+    <string id="30033">Suncountry Airlines</string>
+    <string id="30034">United Airlines</string>
+    <string id="30035">Virgin America</string>
+    <string id="30036">Volaris</string>
+
+    <string id="30041">Type</string>
+    <string id="30042">All</string>
+    <string id="30043">Arrival</string>
+    <string id="30044">Departure</string>
+
+    <string id="30051">Date</string>
+    <string id="30052">Today</string>
+    <string id="30053">Tomorrow</string>
+    <string id="30054">Yesterday</string>
+
+    <string id="30061">Optional Fields</string>
+    <string id="30062">Flight#:</string>
+    <string id="30063">City Arriving From/Departing To:</string>
+
+</strings>

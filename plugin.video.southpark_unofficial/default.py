@@ -135,7 +135,9 @@ def list(url):
     xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def playEpisode(url, title, thumbnail):
-	print url, title, thumbnail
+	xbmc.log("sp.addon: " + url, xbmc.LOGDEBUG)
+	xbmc.log("sp.addon: " + title, xbmc.LOGDEBUG)
+	xbmc.log("sp.addon: " + thumbnail, xbmc.LOGDEBUG)
 	if url == "banned":
 		notifyText(translation(30011), 7000)
 		return
@@ -176,22 +178,24 @@ def playEpisode(url, title, thumbnail):
 			rtmpgeo = 0
 		playpath = ""
 		rtmp = rtmpe[best]
-		if "viacomccstrm" in rtmpe[best]:
-			playpath = "mp4:"+rtmpe[best].split('viacomccstrm/')[1]
-			rtmp = rtmp_geo[0]#rtmpe[best].split('viacomccstrm/')[0]+'viacomccstrm/'
-		elif "cp9950.edgefcs.net" in rtmpe[best]:
-			playpath = "mp4:"+rtmpe[best].split('mtvnorigin/')[1]
-			rtmp = rtmp_geo[0]#rtmpe[best].split('viacomccstrm/')[0]+'viacomccstrm/'
+		xbmc.log("sp.addon: " + rtmp, xbmc.LOGDEBUG)
 		videoname = title + " (" + str(i+1) + " of " + parts +")"
 		li = xbmcgui.ListItem(videoname, iconImage=thumbnail, thumbnailImage=thumbnail)
 		li.setInfo('video', {'Title': videoname})
 		li.setProperty('conn', "B:0")
-		if playpath != "":
-			li.setProperty('PlayPath', playpath)
-		li.setProperty('flashVer', "WIN 19,0,0,185")
-		li.setProperty('pageUrl', pageUrl)
-		li.setProperty('SWFPlayer', "http://media.mtvnservices.com/player/prime/mediaplayerprime.2.12.5.swf")
-		li.setProperty("SWFVerify", "true")
+		if not "http" in rtmp:
+			if "viacomccstrm" in rtmpe[best]:
+				playpath = "mp4:"+rtmpe[best].split('viacomccstrm/')[1]
+				rtmp = rtmp_geo[0]#rtmpe[best].split('viacomccstrm/')[0]+'viacomccstrm/'
+			elif "cp9950.edgefcs.net" in rtmpe[best]:
+				playpath = "mp4:"+rtmpe[best].split('mtvnorigin/')[1]
+				rtmp = rtmp_geo[1]#rtmpe[best].split('viacomccstrm/')[0]+'viacomccstrm/'
+			if playpath != "":
+				li.setProperty('PlayPath', playpath)
+			li.setProperty('flashVer', "WIN 24,0,0,186")
+			li.setProperty('pageUrl', pageUrl)
+			li.setProperty('SWFPlayer', "http://media.mtvnservices.com/player/prime/mediaplayerprime.2.12.5.swf")
+			li.setProperty("SWFVerify", "true")
 		if cc != "" and cc_settings:
 			fname = os.path.join(addonpath, "subtitle_"+str(i)+"_"+str(parts)+".vtt")
 			subname = saveSubs(fname, cc)
@@ -214,7 +218,7 @@ def playEpisode(url, title, thumbnail):
 			player.setSubtitles(ccs[pos])
 			player.showSubtitles(cc_settings)
 		else:
-			print "["+addonID+"] missing some vtt subs..."
+			xbmc.log("sp.addon: " + "["+addonID+"] missing some vtt subs...", xbmc.LOGERROR)
 
 	while pos < playlist.size() and player.isPlaying():
 		while player.isPlaying():
@@ -225,7 +229,7 @@ def playEpisode(url, title, thumbnail):
 					player.setSubtitles(ccs[pos])
 					player.showSubtitles(cc_settings)
 				else:
-					print "["+addonID+"] missing some vtt subs..."
+					xbmc.log("sp.addon: " + "["+addonID+"] missing some vtt subs...", xbmc.LOGERROR)
 		time.sleep(10)
 	return
 
@@ -242,7 +246,7 @@ def notifyText(text, time=5000):
 
 def getUrl(url):
 	link = ""
-	print url
+	xbmc.log("sp.addon: " + url, xbmc.LOGDEBUG)
 	try:
 		req = urllib2.Request(url)
 		req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:25.0) Gecko/20100101 Firefox/25.0')
@@ -296,8 +300,9 @@ def getCarousel():
 
 def getMediagen(id):
 	feed = ""
-	print "http://"+mainweb_geo[audio_pos]+"/feeds/video-player/mrss/mgid:arc:episode:"+pageurl_geo[audio_pos]+":"+id+"?lang="+audio
-	feed = getUrl("http://"+mainweb_geo[audio_pos]+"/feeds/video-player/mrss/mgid:arc:episode:"+pageurl_geo[audio_pos]+":"+id+"?lang="+audio)
+	comp = "http://"+mainweb_geo[audio_pos]+"/feeds/video-player/mrss/mgid:arc:episode:"+pageurl_geo[audio_pos]+":"+id+"?lang="+audio
+	xbmc.log("sp.addon: " + comp, xbmc.LOGDEBUG)
+	feed = getUrl(comp)
 	root = ET.fromstring(feed)
 	mediagen = []
 	if sys.version_info >=  (2, 7):
@@ -312,10 +317,9 @@ def getMediagen(id):
 
 def getVideoData(mediagen):
 	xml = ""
-	if audio == "de":
-		mediagen += "&deviceOsVersion=4.4.4&acceptMethods=hls";
-		mediagen = mediagen.replace('{device}', 'Android')
-	print "MEDIAGEN: " + mediagen
+	mediagen += "&deviceOsVersion=4.4.4&acceptMethods=hls";
+	mediagen = mediagen.replace('{device}', 'Android')
+	xbmc.log("sp.addon: " + mediagen, xbmc.LOGDEBUG)
 	xml = getUrl(mediagen)
 	root = ET.fromstring(xml)
 	rtmpe = []

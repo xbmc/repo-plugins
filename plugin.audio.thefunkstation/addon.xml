@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.thefunkstation" name="The Funk Station" version="1.0.0" provider-name="cubitus">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>audio</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">TheFunkStation.com</summary>
+		<description lang="en">The FunkStation presents you with a mix of Funk, Soul &amp; Disco 24/7  - 365 days a year. Join us through the Shoutbox on the site or play your favourite song within 15 minutes by using the Song Requester.Please like us on Facebook ( The-Funkstation ) so that we can continue this stream.</description>
+		<disclaimer lang="en"></disclaimer>
+		<language>en</language>
+		<platform>all</platform>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<forum></forum>
+		<website>http://thefunkstation.com</website>
+		<email></email>
+		<source></source>
+	</extension>
+</addon>

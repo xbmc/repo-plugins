@@ -1,3 +1,12 @@
+[B]Version 1.3.0 - 2017-01-08[/B]
+- Fixed bugs related to non-ASCII characters in video titles and descriptions.
+- Renamed St. Louis Rams to Los Angeles Rams.
+- Fixed bug related to category names which contains characters with special meaning in URLs.
+- Made the "All Videos" entry bold to make it clearer that it's special.
+- Added "All Videos" category for the NFLC teams: Chargers, Cowboys, Patriots, Seahawks.
+- Added caching for all requests to the teams websites, they are cached for one hour.
+- Updated categories for all teams.
+
 [B]Version 1.2.0 - 2015-08-27[/B]
 - Added support for new metadata layout used by four teams so far.
 - Updated categories for all teams.

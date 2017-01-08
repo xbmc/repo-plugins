@@ -6,26 +6,21 @@ class Team(resources.lib.nflcs.NFLCS):
     _cdaweb_url = "http://www.49ers.com/cda-web/"
     _categories = [
         "Video - 1on1",
+        "Video - 49ers Live",
         "Video - 49ers Press Pass",
         "Video - 49ers Studios",
-        "Video - 49ers Total Access",
         "Video - Action Cam",
-        "Video - Coming Soon",
         "Video - Community",
-        "Video - Cover 2",
         "Video - Draft",
         "Video - Forty Niner Way",
         "Video - Game Highlights",
         "Video - Gold Rush",
-        "Video - Levis Stadium",
-        "Video - Locker Room Speech",
         "Video - Micd Up",
         "Video - NFL Network",
         "Video - Niner Talk",
         "Video - The Faithful",
-        "Video - The Joe Show",
-        "Video - The Remix",
-        "Video - Top 10 Moments",
+        # "Video - Top 10 Moments", - Empty (2017-01-08)
+        "Video - Training Camp",
     ]
 
     def __init__(self, parameters):

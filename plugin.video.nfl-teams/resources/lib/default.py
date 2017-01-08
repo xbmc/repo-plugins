@@ -23,6 +23,7 @@ class Default(object):
         {"short": "colts", "long": "Indianapolis Colts"},
         {"short": "jaguars", "long": "Jacksonville Jaguars"},
         {"short": "chiefs", "long": "Kansas City Chiefs"},
+        {"short": "rams", "long": "Los Angeles Rams"},
         {"short": "dolphins", "long": "Miami Dolphins"},
         {"short": "vikings", "long": "Minnesota Vikings"},
         {"short": "patriots", "long": "New England Patriots"},
@@ -35,7 +36,6 @@ class Default(object):
         {"short": "chargers", "long": "San Diego Chargers"},
         {"short": "fourtyniners", "long": "San Francisco 49ers"},
         {"short": "seahawks", "long": "Seattle Seahawks"},
-        {"short": "rams", "long": "St. Louis Rams"},
         {"short": "buccaneers", "long": "Tampa Bay Buccaneers"},
         {"short": "titans", "long": "Tennessee Titans"},
         {"short": "redskins", "long": "Washington Redskins"}

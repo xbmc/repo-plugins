@@ -5,7 +5,6 @@ class Team(resources.lib.nflcs.NFLCS):
     _short = "redskins"
     _cdaweb_url = "http://www.redskins.com/cda-web/"
     _categories = [
-        "Channel 10",
         "Cheerleaders",
         "Comcast SportsNet",
         "Community",

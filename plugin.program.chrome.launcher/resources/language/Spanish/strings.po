@@ -1,0 +1,64 @@
+# Addon Name: Chrome Launcher
+# Addon id: plugin.program.chrome.launcher
+# Addon Provider: rasjani
+# Translators: rasjani
+msgid ""
+msgstr ""
+"Project-Id-Version: Chrome Launcher"
+"PO-Revision-Date: 2015-10-05 02:21+0000"
+"Last-Translator: rasjani"
+"MIME-Version: 1.0"
+"Content-Type: text/plain; charset=UTF-8"
+"Content-Transfer-Encoding: 8bit"
+"Language: es"
+"Plural-Forms: nplurals=2; plural=(n != 1);"
+
+
+msgctxt "#30001"
+msgid "Add Website"
+msgstr "Añadir sitio web"
+
+msgctxt "#30002"
+msgid "Remove Website"
+msgstr "Eliminar sitio Web"
+
+msgctxt "#30003"
+msgid "Title"
+msgstr "Titulo"
+
+msgctxt "#30004"
+msgid "URL"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Chrome not found"
+msgstr "Chrome no encontrado"
+
+msgctxt "#30006"
+msgid "Edit Website Settings"
+msgstr "Editar ajustes del sitio web"
+
+msgctxt "#30007"
+msgid "Thumbnail"
+msgstr "Miniatura"
+
+msgctxt "#30009"
+msgid "Stop XBMC playback?"
+msgstr "¿Parar la reproducción de XBMC?"
+
+msgctxt "#30010"
+msgid "Use custom Chrome/script path"
+msgstr "Usar ruta Chrome/script personalizada"
+
+msgctxt "#30011"
+msgid "Chrome/script path"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Use own user profile (Could take some time on first start)"
+msgstr "Use su propio perfil de usuario (podría tomar algún tiempo en el primer inicio )"
+
+msgctxt "#30016"
+msgid "Use kiosk mode?"
+msgstr "¿Usar modo Kiosco?"
+

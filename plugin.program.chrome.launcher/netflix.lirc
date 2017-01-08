@@ -1,0 +1,54 @@
+#### BEGIN CurrentWindow - NETFLIX CONTROLS
+begin
+    prog = irxevent
+    button = KEY_PAUSE
+    repeat = 0
+    config = Key space Focus CurrentWindow
+end
+begin
+    prog = irxevent
+    button = KEY_PLAY
+    repeat = 0
+    config = Key space Focus CurrentWindow
+end
+begin
+    prog = irxevent
+    button = KEY_UP
+    config = Key Up Focus CurrentWindow
+end
+begin
+    prog = irxevent
+    button = KEY_DOWN
+    config = Key Down Focus CurrentWindow
+end
+begin
+    prog = irxevent
+    button = KEY_LEFT
+    config = Key Left Focus CurrentWindow
+end
+begin
+    prog = irxevent
+    button = KEY_RIGHT
+    config = Key Right Focus CurrentWindow
+end
+begin
+    prog = irxevent
+    button = KEY_STOP
+    repeat = 0
+    config = Key ctrl-w Focus CurrentWindow
+end
+begin
+    prog = irxevent
+    button = KEY_REWIND
+    repeat = 0
+    config = Key shift-left Focus CurrentWindow
+end
+begin
+    prog = irxevent
+    button = KEY_FORWARD
+    repeat = 0
+    config = Key shift-right Focus CurrentWindow
+end
+
+#### END CurrentWindow - NETFLIX CONTROLS
+

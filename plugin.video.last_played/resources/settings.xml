@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+
+<category label="30027">
+    <setting id="list_size" label="30001" type="number" default=10 />
+    <setting id="single_list" label="30009" type="bool" default="true" />
+    <setting id="group_source" enable="eq(-1,false)" label="30005" type="labelenum" lvalues="30017|30018" default="30018" />
+    <setting id="top_size" visible="eq(-2,false)" label="30026" type="number" default=0 />
+    <setting id="show_date" label="30010" type="bool" default="false" />
+    <setting id="show_time" label="30011" type="bool" default="false" />
+</category>
+
+<category label="30028">
+    <setting id="fivestar" label="30012" type="bool" default="false" />
+    <setting id="TMDBusr" visible="eq(-1,true)" subsetting="true" type="text" label="30020" default=""/>
+    <setting id="TMDBpwd" visible="eq(-2,true)" subsetting="true" type="text" label="30021" default="" option="hidden" />
+    <setting id="movies" visible="eq(-3,true)" label="30023" type="bool" default="true" />
+    <setting id="tv" visible="eq(-4,true)" label="30024" type="bool" default="true" />
+    <setting id="videos" visible="eq(-5,true)" label="30025" type="bool" default="true" />
+</category>
+
+<category label="30029">
+	<setting id="custom_path_enable" type="bool" label="30006" default="false"/>
+	<setting id="custom_path" enable="eq(-1,true)" visible="eq(-1,true)" subsetting="true" type="folder" label="30007" default="" />
+    <setting id="enable_debug" label="30013" type="bool" default="false" />
+</category>
+
+</settings>

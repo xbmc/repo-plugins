@@ -1,3 +1,5 @@
+import json
+from hashlib import sha1
 from os import path
 
 import requests
@@ -5,6 +7,11 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 from resources.lib.menu import Menu
+
+try:
+    from StorageServer import StorageServer
+except:
+    from resources.lib.storageserverdummy import StorageServer
 
 
 class NFLCS(object):
@@ -17,6 +24,7 @@ class NFLCS(object):
         "Videos - ",
     ]
     _parameters = list()
+    _cache = StorageServer("plugin.video.nfl-teams", timeout=1)
 
     def go(self):
         if "id" in self._parameters:
@@ -26,10 +34,20 @@ class NFLCS(object):
         else:
             self.list_categories()
 
+    def _get_cached_response(self, url, parameters={}):
+        cache_key = sha1(url + repr(parameters)).hexdigest()
+
+        cache_response = self._cache.get(cache_key)
+        if cache_response:
+            return json.loads(cache_response)
+        else:
+            response = requests.get(url, params=parameters)
+            self._cache.set(cache_key, response.text.encode("utf-8"))
+            return response.json()
+
     def play_video(self):
         parameters = {"id": self._parameters["id"]}
-        response = requests.get("{0}audio-video-content.htm".format(self._cdaweb_url), params=parameters)
-        data = response.json()
+        data = self._get_cached_response("{0}audio-video-content.htm".format(self._cdaweb_url), parameters)
 
         title = data["headline"]
         thumbnail = data["imagePaths"]["xl"]
@@ -65,14 +83,13 @@ class NFLCS(object):
         else:
             parameters = {"type": "VIDEO", "channelKey": self._parameters["category"]}
 
-        response = requests.get("{0}audio-video-channel.htm".format(self._cdaweb_url), params=parameters)
-        data = response.json()
+        data = self._get_cached_response("{0}audio-video-channel.htm".format(self._cdaweb_url), parameters)
 
         with Menu(["date", "alpha"]) as menu:
             for video in data["gallery"]["clips"]:
                 menu.add_item({
                     "url_params": {"team": self._short, "id": video["id"]},
-                    "name": video["title"],
+                    "name": video["title"].encode("utf-8"),
                     "folder": False,
                     "thumbnail": video["thumb"],
                     "raw_metadata": video
@@ -82,7 +99,7 @@ class NFLCS(object):
         with Menu(["none"]) as menu:
             menu.add_item({
                 "url_params": {"team": self._short, "category": "all"},
-                "name": "All Videos",
+                "name": "[B]All Videos[/B]",
                 "folder": True,
                 "thumbnail": path.join("resources", "images", "{0}.png".format(self._short))
             })

@@ -16,7 +16,7 @@ class Team(resources.lib.nflcs.NFLCS):
         "NFL Network",
         "Press Conference",
         "Prospect Primer",
-        # "Sights & Sounds",  # Does not return any videos, neither in Kodi or on the website
+        # "Sights & Sounds", - Empty (2017-01-08)
         "Tailgate Tour",
         "The McCarren Report",
         "Training Camp",

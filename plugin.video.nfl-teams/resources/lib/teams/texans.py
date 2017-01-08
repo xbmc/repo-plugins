@@ -8,7 +8,7 @@ class Team(resources.lib.nflcs.NFLCS):
     _categories = [
         "Cheerleaders",
         "Community",
-        # "Español",  # Does not return any videos, neither in Kodi or on the website
+        "Espanol",
         "Football",
         "Friday Facebook Mailbag",
         "Gameday",
@@ -21,7 +21,8 @@ class Team(resources.lib.nflcs.NFLCS):
         "Texans Huddle",
         "Texans TV",
         "TORO",
-        "Training Camp presented by PC",
+        "Training Camp presented by Academy",
+        "XFINITY TC video",
     ]
 
     def __init__(self, parameters):

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="script.100fm" name="100FM Radius Digital" version="0.2.0" provider-name="Nir Elbaz">
+  <requires>
+    <import addon="xbmc.python" version="2.24.0"/>
+    <import addon="script.module.requests" version="2.9.1"/>
+    <import addon="script.module.elementtree" version="1.2.8"/>
+  </requires>
+  <extension point="xbmc.python.script" library="addon.py">
+        <provides>audio</provides>
+    </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">100FM Radius Digital - Music, that's all</summary>
+    <summary lang="he">100FM רדיוס דיגיטל - מוזיקה זה הכל</summary>
+    <description lang="en">100FM radio station Kodi add-on. The add-on offers live listening to dozens different musical genres: 80's, 90's, Rock, Pop, Oldies and many more</description>
+    <description lang="he">תוסף קודי של תחנת הרדיו רדיוס FM100. התוסף מציע עשרות תחנות רדיו המנגנות מוזיקה לפי ז׳אנרים: שנות ה- 80, 90, ישראלי, להיטים ועוד</description>
+    <disclaimer lang="en">This is the official 100FM Radius Digital Kodi add-on</disclaimer>
+    <language></language>
+    <platform>all</platform>
+    <license>GNU GENERAL PUBLIC LICENSE Version 2, June 1991</license>
+    <website>http://digital.100fm.co.il/</website>
+    <email>nir@nirelbaz.com</email>
+    <source>https://github.com/nire0510/plugin.audio.100fm</source>
+  </extension>
+</addon>

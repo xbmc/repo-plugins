@@ -135,9 +135,9 @@ def list(url):
     xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def playEpisode(url, title, thumbnail):
-	xbmc.log("sp.addon: " + url, xbmc.LOGFATAL)
-	xbmc.log("sp.addon: " + title, xbmc.LOGFATAL)
-	xbmc.log("sp.addon: " + thumbnail, xbmc.LOGFATAL)
+	xbmc.log("sp.addon: " + url, xbmc.LOGDEBUG)
+	xbmc.log("sp.addon: " + title, xbmc.LOGDEBUG)
+	xbmc.log("sp.addon: " + thumbnail, xbmc.LOGDEBUG)
 	if url == "banned":
 		notifyText(translation(30011), 7000)
 		return

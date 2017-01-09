@@ -21,6 +21,7 @@
 import os
 import re
 from urlparse import urlparse, urlunparse, urljoin
+from urllib import urlencode
 from datetime import timedelta
 from functools import partial
 import xml.etree.ElementTree as ET
@@ -36,6 +37,7 @@ import rollbar
 
 from resources.lib import utils
 from resources.lib import youtube
+from resources.lib import new_stadium
 
 HOST = "http://www.tottenhamhotspur.com"
 BASE_URL = HOST
@@ -234,22 +236,12 @@ def get_search_result_videos(soup, query):
 
     form_data['viewstate'] = get_viewstate(soup)
 
-def get_stadium_cams():
-    soup = get_soup(urljoin(HOST, "/new-scheme/stadium-tv/"))
-    js = requests.get(urljoin(HOST, "/components/js/stadium-tv.js")).text
-    entry_ids = re.findall('"entry_id":\s+"(\w+)"', js)
-    for entry_id, video in zip(entry_ids, soup('div', 'video-new')):
-        title = video.find_previous('h2').get_text().strip()
-        yield title, entry_id
-
 def get_stadium_index():
-    for title, entry_id in get_stadium_cams():
-        yield {'label': title,
-               'path': plugin.url_for('play_video', entry_id=entry_id),
-               'is_playable': True}
+    for title, entry_id in new_stadium.get_cams():
+        yield video_item(entry_id, title)
 
     yield {'label': plugin.get_string(30019),
-           'path': plugin.url_for('show_playlist', playlist_id='0_n8hezta2')}
+           'path': plugin.url_for('show_stadium_video_gallery')}
 
 def get_categories(path):
     yield {'label': "[B]{}[/B]".format(plugin.get_string(30010)),
@@ -273,12 +265,9 @@ def get_categories(path):
             plugin_path = plugin.url_for('show_playlist', playlist_id='0_2nmzot3u')
         elif title == "The Vault":
             plugin_path = plugin.url_for('show_playlist', playlist_id='0_32nxk7s7')
-        elif title == "A Question of Spurs":
-            playable = True
-            plugin_path = plugin.url_for('play_video', entry_id='0_52u0px90')
         elif title == "Live Audio Commentary":
             playable = True
-            plugin_path = plugin.url_for('play_video', entry_id='0_7nqzdt52')
+            plugin_path = plugin.url_for('play_live_audio_commentary')
         elif 'children' in a.parent['class']:
             plugin_path = plugin.url_for('show_subcategories', path=href)
         else:
@@ -298,6 +287,17 @@ def get_subcategories(path):
         yield {'label': li.a['title'],
                'path': plugin.url_for('show_video_list', path=li.a['href'].strip('/'))}
 
+def live_audio_commentary_id():
+    url = urljoin(HOST, "audio-commentary/live/")
+    RE_EMBED = re.compile(r'kWidget\.embed\((.*?)\)', re.MULTILINE|re.DOTALL)
+    video_vars = json.loads(RE_EMBED.search(requests.get(url).text).group(1))
+    return video_vars['entry_id']
+
+def is_live(entry_id):
+    qs = urlencode(dict(id=entry_id, service='liveStream', action='islive',
+                        protocol='applehttp', partnerId=PARTNER_ID, format=1))
+    url = urlunparse((MEDIA_SCHEME, MEDIA_HOST, "/api_v3/index.php", None, qs, None))
+    return requests.get(url).text == 'true'
 
 def get_youtube_index():
     for playlist, stringid in (("latest", 30010),
@@ -334,11 +334,6 @@ def get_youtube_video_items(generator):
 
 @plugin.route('/')
 def show_index():
-    try:
-        youtube_icon = Plugin(addon_id="plugin.video.youtube").addon.getAddonInfo('icon')
-    except:
-        youtube_icon = None
-
     categories = list(get_categories("spurs-tv"))
 
     search = {'label': "[B]{}[/B]".format(plugin.get_string(30011)),
@@ -346,9 +341,9 @@ def show_index():
     categories.insert(1, search)
 
     youtube = {'label': "[B]{}[/B]".format(plugin.get_string(30001)),
-               'thumbnail': youtube_icon,
+               'thumbnail': "https://www.youtube.com/yt/brand/media/image/YouTube-logo-light.png",
                'path': plugin.url_for('show_youtube_index')}
-    categories.append(youtube)
+    categories.insert(2, youtube)
 
     return categories
 
@@ -363,6 +358,21 @@ def show_subcategories(path):
 @plugin.cached_route('/stadium')
 def show_stadium_index():
     return list(get_stadium_index())
+
+@plugin.route('/stadium/video-gallery')
+def show_stadium_video_gallery():
+    return (video_item(entry_id, title)
+            for title, entry_id in new_stadium.get_video_gallery())
+
+@plugin.route('/live-audio-commentary')
+def play_live_audio_commentary():
+    entry_id = live_audio_commentary_id()
+    if is_live(entry_id):
+        url = get_media_url(entry_id)
+    else:
+        xbmcgui.Dialog().ok('Live Audio Commentary', plugin.get_string(30050))
+        url = None
+    return plugin.set_resolved_url(url)
 
 @plugin.route('/videos/path/<path>')
 def show_video_list(path):

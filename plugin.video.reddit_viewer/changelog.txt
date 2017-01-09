@@ -147,3 +147,39 @@
  2.7.1  (2016-06-26)
  - minor fix on getting imgur media 
  - add giphy support
+ 2.7.2  (2016-07-01)
+ - cleanup strings and convert strings.xml to strings.po
+ - fix autoplay bug
+ - small update in imgur id & vid.me parsing
+ - additional infolabels (estuary) 
+ 2.7.3  (2016-07-07)
+ - move comment count on context menu to description
+ - replace display of '# points' to '# comments' 
+ - add directly linked media (images and video)
+ - add flickr images and album 
+ - add devour.com 
+ - speedup addon startup time
+ 2.7.4  (2016-07-12)
+ - "Show comments" and "Show comment links" now available on context menu -mac1202
+ - context menu for comments won't show up if reddit reports 0 comments
+ - setting to specify view id for albums
+ - specify view ID for each subreddit  e.g.: earthporn(500)
+ - gui skin files moved to 1080i instead of 720p
+ - fix int ValueError: on startup  -fashric
+ 2.7.5  (2016-07-13)
+ - fix android syntax error on startup  -Paranoidjack
+ - context menu for comments will show "No comments" instead of nothing
+ 2.7.6  (2016-07-15)
+ - user can now authorize the add-on to Access posts and comments through their account. (visit private subs they are members to)
+ 2.7.7  (2016-07-22)
+ - add more sites supported by youtube-dl 
+ - reorganize classes and functions
+ - add custom ui for albums
+ - update custom ui for comments
+ 2.7.8  (2016-07-27)
+ - addon was mis-named during testing (script.reddit.viewer). fix.
+ 2.7.9  (2016-08-18)
+ - remove custom gui components
+ - get reddit preview image and use if needed
+  
+ 

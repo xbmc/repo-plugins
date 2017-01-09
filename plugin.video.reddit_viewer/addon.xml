@@ -2,7 +2,7 @@
 <addon
     id="plugin.video.reddit_viewer"
     name="Reddit Viewer"
-    version="2.7.1"
+    version="2.7.9"
     provider-name="gedisony">
     <requires>
         <import addon="xbmc.python"                     version="2.14.0"                />
@@ -15,17 +15,19 @@
 	    <import addon="script.module.requests"          version="1.1.0"/>
 	    <import addon="script.module.youtube.dl"        version="16.521.0"/>
     </requires>
-    <extension point="xbmc.python.pluginsource" library="default.py">
-        <provides>video</provides>
-    </extension>
+
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>    
+    
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
         <summary lang="en">Reddit viewer for Kodi</summary>
         <language></language>
-        <description lang="en">View Reddit video and images on Kodi[CR][CR]Add a subreddit (videos)[CR] - Multiple subreddits (music+listentothis)[CR] - Multireddit (/user/.../m/video)[CR] - Domain (/domain/vimeo.com/new)[CR][CR]Credits to:[CR]  LazyTV addon[CR]  The Big Picture addons[CR]  Original by: addonscriptorDE and Jani (@rasjani) Mikkonen[CR]Forked from https://github.com/rasjani/plugin.video.reddit_tv[CR]</description>
+        <description lang="en">Reddit is a social news and entertainment website where users share and vote on content they find funny and interesting.[CR]View Reddit video and images on Kodi[CR][CR]Original by: AddonscriptorDE and rasjani [CR]Forked from https://github.com/rasjani/plugin.video.reddit_tv[CR]</description>
         <website>http://www.reddit.com</website>
         <source>https://github.com/gedisony/plugin.video.reddit_viewer</source>
-        <forum>http://forum.kodi.tv/showthread.php?tid=170603</forum>
+        <forum>http://forum.kodi.tv/showthread.php?tid=280388</forum>
         <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
         <email>gediso+ny at gmail dot com</email>
 		

@@ -1,3 +1,8 @@
+[B]1.2.0[/B]
+- Fixed all sections (web site change)
+- Added VICE on HBO on main menu
+- Added new add-on screenshots
+
 [B]1.1.1[/B]
 - Fixed issue with regional videos
 - Fixed issue with UK/USA shows

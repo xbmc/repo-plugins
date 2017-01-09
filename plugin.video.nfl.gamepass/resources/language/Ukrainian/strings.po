@@ -1,0 +1,174 @@
+# Kodi NFL Game Pass language file
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-GamePass\n"
+"Report-Msgid-Bugs-To: https://github.com/aqw/xbmc-gamepass\n"
+"POT-Creation-Date: 2013-11-18 16:15+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Igor Davydenko <iam@igordavydenko.com>\n"
+"Language-Team: Ukrainian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: uk\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgctxt "#30001"
+msgid "Username/E-Mail"
+msgstr "Ім'я користувача/E-Mail"
+
+msgctxt "#30002"
+msgid "Password"
+msgstr "Пароль"
+
+msgctxt "#30003"
+msgid "Preferred Stream Quality"
+msgstr "Переважна якість"
+
+msgctxt "#30004"
+msgid "Always Use Highest Bitrate"
+msgstr "Найвищий бітрейт"
+
+msgctxt "#30005"
+msgid "1280x720 Bitrate 4.5 Mbps"
+msgstr "1280х720, бітрейт 4.5 Мб/с"
+
+msgctxt "#30006"
+msgid "1280x720 Bitrate 3.0 Mbps"
+msgstr "1280х720, бітрейт 3.0 Мб/с"
+
+msgctxt "#30007"
+msgid "960x540 Bitrate 2.4 Mbps"
+msgstr "960х540, бітрейт 2.4 Мб/с"
+
+msgctxt "#30008"
+msgid "960x540 Bitrate 1.6 Mbps"
+msgstr "960х540, бітрейт 1.6 Мб/с"
+
+msgctxt "#30009"
+msgid "640x360 Bitrate 1.2 Mbps"
+msgstr "640х360, бітрейт 1.2 Мб/с"
+
+msgctxt "#30010"
+msgid "640x360 Bitrate 800 Kbps"
+msgstr "640х360, бітрейт 800 кб/с"
+
+msgctxt "#30011"
+msgid "400x224 Bitrate 400 Kbps"
+msgstr "400х224, бітрейт 400 кб/с"
+
+msgctxt "#30012"
+msgid "Ask"
+msgstr "Завжди питати"
+
+msgctxt "#30013"
+msgid "Preferred Game Version"
+msgstr "Переважна версія гри"
+
+msgctxt "#30014"
+msgid "Full"
+msgstr "Повна"
+
+msgctxt "#30015"
+msgid "Condensed"
+msgstr "Скорочена"
+
+msgctxt "#30016"
+msgid "Choose a game version"
+msgstr "Вибирати версію гри"
+
+msgctxt "#30020"
+msgid "Localize Game Date/Time"
+msgstr "Локалізувати час гри"
+
+msgctxt "#30021"
+msgid "Error"
+msgstr "Помилка"
+
+msgctxt "#30022"
+msgid "Due to broadcast restrictions, NFL Game Pass Domestic is currently unavailable. Please try again later."
+msgstr "NFL Game Pass Domestic зараз недоступний через обмеження мовлення. Будь ласка спробуйте ще раз пізніше."
+
+msgctxt "#30023"
+msgid "Logging into NFL Game Pass failed. Make sure that your account information is correct and your subscription is valid."
+msgstr "Неможливо увійти до NFL Game Pass. Переконайтесь що інформація про аккаунт корректа і ваша підписка дійсна."
+
+msgctxt "#30024"
+msgid "Unexpected error ='(. Please enable debuging for both the addon and Kodi, and submit a bug report."
+msgstr "Неочікувана помилка ='(. Будь ласка ввімкніть дебаг для аддону та Kodi і відправте баг репорт."
+
+msgctxt "#30025"
+msgid "Hide game length"
+msgstr "Сховати тривалість гри"
+
+msgctxt "#30026"
+msgid "No"
+msgstr "Ні"
+
+msgctxt "#30027"
+msgid "Yes, with 12-hour clock (AM/PM)"
+msgstr "Так, 12г (AM/PM)"
+
+msgctxt "#30028"
+msgid "Yes, with 24-hour clock"
+msgstr "Так, 24г"
+
+msgctxt "#30029"
+msgid "General"
+msgstr "Загальні"
+
+msgctxt "#30030"
+msgid "Display/Video"
+msgstr "Відображення/Відео"
+
+msgctxt "#30031"
+msgid "Advanced"
+msgstr "Просунуті"
+
+msgctxt "#30032"
+msgid "Coaches Film"
+msgstr "Тренерська версія"
+
+msgctxt "#30033"
+msgid "Proxy Settings"
+msgstr "Налаштування проксі"
+
+msgctxt "#30034"
+msgid "Use an HTTP proxy to access Game Pass"
+msgstr "Використовувати HTTP проксі для доступу до Game Pass"
+
+msgctxt "#30035"
+msgid "Protocol"
+msgstr "Протокол"
+
+msgctxt "#30036"
+msgid "Server"
+msgstr "Сервер"
+
+msgctxt "#30037"
+msgid "Port"
+msgstr "Порт"
+
+msgctxt "#30038"
+msgid "Username"
+msgstr "Ім'я користувача"
+
+msgctxt "#30039"
+msgid "Password"
+msgstr "Пароль"
+
+msgctxt "#30042"
+msgid "Enable 'Basic' Authentication"
+msgstr "Увімкнути 'Basic' аутентифікацію"
+
+msgctxt "#30043"
+msgid "There was a problem playing that stream"
+msgstr "Неможливо відобразити вибраний потік"
+
+msgctxt "#30044"
+msgid "Some shows are known to not work. Please file a bug if the show is available and works in the official app."
+msgstr "Деякі шоу можуть не працювати. Будь ласка сповістіть нас, якщо шоу доступне і працює в офіційній аплікації."
+
+msgctxt "#30045"
+msgid "No valid stream URL was found."
+msgstr "Неможливо знайти URL для потоку."

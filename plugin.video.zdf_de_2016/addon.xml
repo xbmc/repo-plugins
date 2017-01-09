@@ -39,7 +39,7 @@ Siehe auch https://github.com/generia/plugin.video.zdf_de_2016
     <assets>
         <icon>icon.png</icon>
         <fanart>fanart.png</fanart>
-        <screenshot>icon-mm.png</screenshot>
+        <screenshot>icon.png</screenshot>
     </assets>
   </extension>
 </addon>

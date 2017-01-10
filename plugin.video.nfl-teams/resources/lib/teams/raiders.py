@@ -12,7 +12,7 @@ class Team(resources.lib.nflcs.NFLCS):
         "Press Conferences",
         "Raiderettes",
         "Raiders Report",
-        "Silver and Black",
+        # "Silver and Black", - Empty (2017-01-08)
         "Viva",
     ]
 

@@ -8,15 +8,16 @@ class Team(resources.lib.nflcs.NFLCS):
         "Beyond The Gridiron",
         "Cheerleaders",
         "Community",
+        "Draft 2011",
         "Game Day",
         "NFL Network",
         "Press Conferences",
         "Stadium",
+        "Training Camp",
         "VEN Channel",
         "Vikings Connected",
         "Vikings GamePlan",
         "Vikings Wired",
-        "Viktor the Viking",
     ]
 
     def __init__(self, parameters):

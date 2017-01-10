@@ -5,28 +5,44 @@ class Team(resources.lib.nflcs.NFLCS):
     _short = "steelers"
     _cdaweb_url = "http://www.steelers.com/cda-web/"
     _categories = [
+        # "#HereWeGo", - Empty (2017-01-08)
         "Agree to Disagree",
+        "Around the Locker Room",
+        # "Back to Work", - Empty (2017-01-08)
         "Chalk Talk",
         "Combine",
         "Community",
         "Draft",
         "Espanol",
-        "Features",
+        "Fashion",
+        "Field Report",
         "Gameday",
+        "Hall of Fame",
         "Highlights",
+        "Holidays",
         "In a Minute",
         "Interviews",
-        "Kid Zone",
+        "Junior Reporter",
+        "Keys to the Game",
+        "Mike Tomlin Press Conference",
+        "Mike Tomlin Show",
         "News Conferences",
         "NFL Network",
-        "Off the Field",
+        # "Player Spotlight", - Empty (2017-01-08)
+        "Sights and Sounds",
         "Steelers By Position",
-        "Steelers.com LIVE",
+        "Steelers History",
+        "Steelers Late Night",
+        "Steelers Legends",
+        "Steelers LIVE",
+        "Steelers Nation Unite",
+        # "Steelers Saturday Night", - Empty (2017-01-08)
+        "Steelers Time Machine",
         "Steelers.com Update",
-        "SteelersTV",
         "Super Bowl",
         "Training Camp",
         "What It Is",
+        "Youth Football Show",
         "Youth Football",
     ]
 

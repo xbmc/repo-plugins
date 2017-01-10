@@ -7,21 +7,19 @@ class Team(resources.lib.nflcs.NFLCS):
     _categories = [
         "Videos - All Access",
         "Videos - Cheerleaders",
-        "Videos - Combine",
+        "Videos - Classic Jags",
         "Videos - Community",
-        "Videos - Draft",
         "Videos - Film Room",
+        "Videos - Gameday Grub",
         "Videos - Gameday",
         "Video - Inside the Jaguars",
         "Videos - Interviews",
         "Videos - Jags Wired",
+        "Videos - Jaguars.com Features",
         "Videos - Jaguars.com LIVE",
-        "Videos - Kickin It With Scobee",
         "Videos - O-Zone",
         "Videos - ROAR Calendar",
-        "Videos - Senior Bowl",
-        "Videos - Special Features",
-        "Videos - Top 10",
+        "Videos - Union Jax",
     ]
 
     def __init__(self, parameters):

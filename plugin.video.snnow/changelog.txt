@@ -1,3 +1,7 @@
+[B]Version 1.0.9[/B
+
+- Fix Cogeco authentication (github.com/portse)
+
 [B]Version 1.0.8[/B
 
 - Fix Shaw GO authentication.

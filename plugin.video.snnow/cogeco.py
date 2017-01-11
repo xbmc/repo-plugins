@@ -48,7 +48,7 @@ class Cogeco:
 
         saml = re.search('<input.*?name=\"SAMLRequest\".*?value=\"(.*?)\"', html, re.MULTILINE)
         if not saml:
-            print "Unable to find SAML requst."
+            print "Unable to find SAML request."
             return None
         saml = saml.group(1)
 
@@ -86,7 +86,7 @@ class Cogeco:
             print "Unable to find action form"
             return None
 
-        action = "https://www.cogeco.ca" + action.group(1)
+        action = "https://customer-services.cogeco.com" + action.group(1)
 
         return Cogeco.postLogin(username, password, action)
 

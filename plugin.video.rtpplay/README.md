@@ -7,3 +7,4 @@ RTP Play video addon for Kodi Entertainment Center. Watch Live and On-Demand bro
 *This plugin is open-source and not endorsed by RTP.*
 
 
+

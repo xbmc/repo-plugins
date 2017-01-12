@@ -42,7 +42,7 @@ msgid "Top 50 Videos"
 msgstr ""
 
 msgctxt "#30103"
-msgid "Random Videos"
+msgid "Party Mode"
 msgstr ""
 
 msgctxt "#30104"

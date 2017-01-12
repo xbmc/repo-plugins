@@ -17,8 +17,14 @@
 """
 
 # Call Necessary Imports
-import HTMLParser
+import HTMLParser, urlparse
 from xbmcutil import listitem, plugin
+
+def fetch_query(url, key):
+	"""Parses a url and return the vid parameter"""
+	href = urlparse.urlsplit(url)
+	return urlparse.parse_qs(href.query)[key][0]
+
 
 class WatchingParser(HTMLParser.HTMLParser):
 	""" Parses video from http://metalvideo.com/index.html """
@@ -46,6 +52,7 @@ class WatchingParser(HTMLParser.HTMLParser):
 	def reset_lists(self):
 		# Reset List for Next Run
 		self.item = listitem.ListItem()
+		self.item.setVideoFlags()
 		self.item.urlParams["action"] = "PlayVideo"
 	
 	def handle_starttag(self, tag, attrs):
@@ -73,7 +80,8 @@ class WatchingParser(HTMLParser.HTMLParser):
 						self.item.urlParams["url"] = value
 						
 						# Add Context item to link to related videos
-						self.item.addRelatedContext(url=value[value.rfind(u"_")+1:value.rfind(u".")])
+						vid = fetch_query(value, "vid")
+						self.item.addRelatedContext(url=vid)
 			
 			# Search for image url
 			elif tag == u"img":
@@ -126,6 +134,7 @@ class VideosParser(HTMLParser.HTMLParser):
 	def reset_lists(self):
 		# Reset List for Next Run
 		self.item = listitem.ListItem()
+		self.item.setVideoFlags()
 		self.item.urlParams["action"] = "PlayVideo"
 		self.artist = self.song = ""
 	
@@ -169,7 +178,8 @@ class VideosParser(HTMLParser.HTMLParser):
 						self.item.urlParams["url"] = value
 						
 						# Add Context item to link to related videos
-						self.item.addRelatedContext(url=value[value.rfind(u"_")+1:value.rfind(u".")])
+						vid = fetch_query(value, "vid")
+						self.item.addRelatedContext(url=vid)
 						break
 			
 			# Fetch Artist & Song Name

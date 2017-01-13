@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.ted.talks" name="TED Talks" version="4.2.10" provider-name="rwparris2, moreginger">
   <requires>
-    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="xbmc.python" version="2.24.0"/>
     <import addon="script.module.elementtree" version="1.2.7"/>
     <import addon="script.module.parsedom" version="0.9.1"/>
   </requires>

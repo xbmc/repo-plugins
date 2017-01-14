@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.ampya" name="Ampya" version="0.1.10" provider-name="L0RE">
+<addon id="plugin.video.ampya" name="Ampya" version="0.1.11" provider-name="L0RE">
     <requires>
         <import addon="xbmc.python" version="2.24.0"/>
     </requires>
@@ -11,6 +11,7 @@
     <summary lang="de">Musicvideos der Seite http://ampya.com/</summary>
     <description lang="en">Musicvideos from the German Webpage http://ampya.com/</description>
     <description lang="de">Musicvideos der Seite http://ampya.com/</description>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
     <website></website>
     <source>https://github.com/kodinerds/repo/tree/master/addons/plugin.video.ampya</source>
     <forum>http://www.kodinerds.net/</forum>

@@ -56,3 +56,19 @@ msgstr "Suche"
 msgctxt "#30108"
 msgid "Settings"
 msgstr "Settings"
+
+msgctxt "#30109"
+msgid "Mehr vom Künstler"
+msgstr "Mehr vom Künstler"
+
+msgctxt "#30110"
+msgid "Ähnliche Lieder"
+msgstr "Ähnliche Lieder"
+
+msgctxt "#30111"
+msgid "Künstler"
+msgstr "Künstler"
+
+msgctxt "#30112"
+msgid "Lieder"
+msgstr "Lieder"

@@ -81,8 +81,7 @@ def addDir(name, url, mode, iconimage, desc=""):
       iconimage = defaultBackground    
     liz.setArt({ 'fanart': iconimage })
   else:
-    liz.setArt({ 'fanart': defaultBackground })  
-  xbmcplugin.setContent(int(sys.argv[1]), 'musicvideos')
+    liz.setArt({ 'fanart': defaultBackground })    
   ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
   return ok
   
@@ -94,13 +93,12 @@ def addLink(name, url, mode, iconimage, duration="", desc="",artist_id="",genre=
   liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc, "Genre": genre,"Sorttitle":shortname,"Dateadded":zeit,"year":production_year })
   liz.setProperty('IsPlayable', 'true')
   liz.addStreamInfo('video', { 'duration' : duration })
-  liz.setArt({ 'fanart': iconimage }) 
-  xbmcplugin.setContent(int(sys.argv[1]), 'musicvideos')
+  liz.setArt({ 'fanart': iconimage })   
   commands = []
-  listatrist = "plugin://plugin.video.ampya/?mode=songs_from_artist&url="+urllib.quote_plus(str(artist_id))  
-  listsimiliar = "plugin://plugin.video.ampya/?mode=list_similiar&url="+urllib.quote_plus(str(liedid))  
-  commands.append(( "Mehr vom Künstler" , 'ActivateWindow(Videos,'+ listatrist +')'))
-  commands.append(( "Ähnliche Lieder" , 'ActivateWindow(Videos,'+ listsimiliar +')'))
+  listartist = "plugin://plugin.video.ampya/?mode=songs_from_artist&url="+urllib.quote_plus(str(artist_id))  
+  listsimilar = "plugin://plugin.video.ampya/?mode=list_similar&url="+urllib.quote_plus(str(liedid))  
+  commands.append(( translation(30109) , 'ActivateWindow(Videos,'+ listartist +')'))
+  commands.append(( translation(30110) , 'ActivateWindow(Videos,'+ listsimilar +')'))
   liz.addContextMenuItems( commands )  
   ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz)
   return ok
@@ -278,9 +276,9 @@ def Search():
      videos=result["music_videos"]  
      artists=result["artists"]     
      if len(artists)>0:
-       addDir("Künstler",d, "list_artists", "")           
+       addDir(translation(30111),d, "list_artists", "")           
      if len(videos)>0:
-        addDir("Lieder",d, "list_songs", "")    
+        addDir(translation(30112),d, "list_songs", "")    
      xbmcplugin.endOfDirectory(addon_handle,succeeded=True,updateListing=False,cacheToDisc=True)  
      
 def list_songs(url):     
@@ -312,7 +310,7 @@ def list_artists(url):
     xbmcplugin.endOfDirectory(addon_handle,succeeded=True,updateListing=False,cacheToDisc=True)   
 def songs_from_artist(id):
     ListeVideos("https://www.putpat.tv/ws.json?method=Artist.assetsByArtistId&artistId="+id+"&client=android_phone&player_id=2")
-def list_similiar(id):
+def list_similar(id):
     ListeVideos("https://www.putpat.tv/ws.json?method=Asset.similarAssets&limit=50&assetId="+id+"&client=android_phone&player_id=2")    
 
 params = parameters_string_to_dict(sys.argv[2])
@@ -354,5 +352,5 @@ if mode == 'list_songs':
           list_songs(url) 
 if mode == 'songs_from_artist':     
      songs_from_artist(url)
-if mode == 'list_similiar':     
-     list_similiar(url)     
+if mode == 'list_similar':     
+     list_similar(url)     

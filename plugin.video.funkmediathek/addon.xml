@@ -9,8 +9,9 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
+		<language>de</language>
 		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-		<source>http://github.com/someone/myaddon</source>
+		<source>https://github.com/prof-membrane/plugin.video.funkmediathek</source>
         <summary lang="en">This is an add-on for www.funk.net</summary>
         <description lang="en">This add-on provides access to the German VOD platform www.funk.net. The content is only accessable from Germany.</description>
         <summary lang="de">Serien und Videos von www.funk.net</summary>

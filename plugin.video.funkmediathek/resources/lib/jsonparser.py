@@ -39,13 +39,14 @@ def _parseSeries(j,type):
 	d['_thumb'] = j['attributes']['thumbnail']
 	if type == 'series':
 		d['_fanart'] = fanart
+		d['_fanart'] = fanart
 	if 'description' in j['attributes']:
 		d['_plot'] = _cleanPlot(j['attributes']['description'])
 	d['_airedISO8601'] = j['attributes']['createdAt']
 	d['url'] = base + '/content/series/' + j['id'] + '?should_filter=false'#
 	d['_rating'] = str(j['attributes']['kickKeepRatio'] * 10)
 	d['mode'] = 'listDir'
-	d['_type'] = 'shows'
+	d['_type'] = 'season'
 	return d
 
 def _parseVideo(j):
@@ -63,6 +64,9 @@ def _parseVideo(j):
 		d['_season'] = j['attributes']['season']
 	if 'episode' in j['attributes']:
 		d['_episode'] = j['attributes']['episode']
+		d['_type'] = 'episode'
+	else:
+		d['_type'] = 'video'
 	
 	if 'fsk' in j['attributes']:
 		d['_mpaa'] = 'FSK ' + j['attributes']['fsk']
@@ -74,7 +78,6 @@ def _parseVideo(j):
 	
 	d['entryId'] = j['attributes']['rootEntryId']
 	d['mode'] = 'play'
-	d['_type'] = 'video'
 	return d
 	
 def _cleanPlot(plot):
@@ -84,6 +87,6 @@ def _cleanPlot(plot):
 	plot = plot.replace('</h4>','')
 	while '  ' in plot:
 		plot = plot.replace('  ',' ')
-	plot = plot.replace('\n ','')
+	#plot = plot.replace('\n ','')
 	return plot
 	

@@ -20,9 +20,51 @@ uqp = urllib.unquote_plus
 UTF8 = 'utf-8'
 
 
+USERAGENT   = 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36'
+
+httpHeaders = {         'Pragma':'no-cache',
+                        'Accept-Encoding':'gzip, deflate, sdch',
+                        'Host':'v.watch.cbc.ca',
+                        'Accept-Language':'en-US,en;q=0.8',
+                        'Upgrade-Insecure-Requests' : '1',
+                        'User-Agent': USERAGENT,
+                        'Accept':"application/json, text/javascript, text/html,*/*",
+                        'Cache-Control':'no-cache',
+                        'Cookie':'AMCV_951720B3535680CB0A490D45%40AdobeOrg=793872103%7CMCIDTS%7C17031%7CMCMID%7C14784403900623197833646426667143476287%7CMCAID%7CNONE%7CMCAAMLH-1472055468%7C9%7CMCAAMB-1472055468%7Chmk_Lq6TPIBMW925SPhw3Q',
+                        'Proxy-Connection':'keep-alive'
+                       }
+
+
 class myAddon(t1mAddon):
 
+ def getRequest(self, url, udata=None, headers = httpHeaders, dopost = False, rmethod = None):
+    self.log("getRequest URL:"+str(url))
+    req = urllib2.Request(url.encode(UTF8), udata, headers)  
+    if dopost == True:
+       rmethod = "POST"
+    if rmethod is not None: req.get_method = lambda: rmethod
+    try:
+      response = urllib2.urlopen(req)
+      page = response.read()
+      if response.info().getheader('Content-Encoding') == 'gzip':
+         self.log("Content Encoding == gzip")
+         page = zlib.decompress(page, zlib.MAX_WBITS + 16)
+    except:
+      page = ""
+    return(page)
+
+
  def getAddonMenu(self,url,ilist):
+
+   url1 = 'http://v.watch.cbc.ca/p//38e815a-00a13d30f10//CBC_WHEN_CALLS_HEART_SEASON_02_S02E07-v2-9236559/CBC_WHEN_CALLS_HEART_SEASON_02_S02E07-v2-9236559__desktop.m3u8?cbcott=st=1470969187~exp=1471055587~acl=/*~hmac=8e39bfa332ba15db3bdff139d9206e4012c4b249ab03af9ff8365553b6ed5c64'
+   html = self.getRequest(url1)
+   print "html 1 = "+str(html)
+
+   url2 = 'http://v.watch.cbc.ca/p//38e815a-00a13d30f10//CBC_WHEN_CALLS_HEART_SEASON_02_S02E07-v2-9236559/segments/CBC_WHEN_CALLS_HEART_SEASON_02_S02E07_v7/prog_index.m3u8?cbcott=st=1470969187~exp=1471055587~acl=/*~hmac=8e39bfa332ba15db3bdff139d9206e4012c4b249ab03af9ff8365553b6ed5c64'
+   html = self.getRequest(url2)
+   print "html 2 = "+str(html)
+
+
    infoList = {}
    html = self.getRequest('http://www.cbc.ca/player/tv')
    html = re.compile('<section class="section-cats full">(.+?)</section>', re.DOTALL).search(html).group(1)

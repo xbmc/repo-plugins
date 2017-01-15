@@ -1,0 +1,38 @@
+v1.2
+- Fixed localization, changelog in correct order
+
+v1.1
+- Added Yellowknife station, localization added for French, French (Canada)
+
+v1.0
+- Can set region and quality via settings. All channels are available
+
+v0.2
+- Removed unavailable channels
+
+v0.1.1
+- Stream links directly from menu item, without navigating .pls file
+
+v0.1.0
+- First working version with links, directory structure
+
+v0.0.8
+- Multi-level directory should work this time
+
+v0.0.7
+- Attempting to create driectory structure
+
+v0.0.6
+- Created additional structure and added a link
+
+v0.0.5
+- Added Fanart, and attempted to fix directory structure
+
+v0.0.3
+- Had to change version number after minor change since for some reason the add-on structure was deemed incorrect
+
+v0.0.2
+- Again following wiki, created hierarchy of folders, added some ListItem Info
+
+v0.0.1
+- Created initial plugin and added link to single stream, following wiki tutorial

@@ -1,0 +1,30 @@
+[
+    {
+        "url": "http://playerservices.streamtheworld.com/pls/CBC_R2_HFX_H.pls", 
+        "region": "Atlantic"
+    }, 
+    {
+        "url": "http://playerservices.streamtheworld.com/pls/CBC_R2_TOR_H.pls", 
+        "region": "Eastern"
+    }, 
+    {
+        "url": "http://playerservices.streamtheworld.com/pls/CBC_R2_WPG_H.pls", 
+        "region": "Central"
+    }, 
+    {
+        "url": "http://playerservices.streamtheworld.com/pls/CBC_R2_EDM_H.pls", 
+        "region": "Mountain"
+    }, 
+    {
+        "url": "http://playerservices.streamtheworld.com/pls/CBC_R2_VCR_H.pls", 
+        "region": "Pacific"
+    }, 
+    {
+        "url": "http://playerservices.streamtheworld.com/pls/CBC_R2_IPT_H.pls", 
+        "region": "Pacific (International)"
+    }, 
+    {
+        "url": "http://playerservices.streamtheworld.com/pls/CBC_R2_IET_H.pls", 
+        "region": "Eastern (International)"
+    } 
+]

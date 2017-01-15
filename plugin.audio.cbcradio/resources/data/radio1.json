@@ -1,0 +1,172 @@
+[
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_KAM_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_KAM_L.pls", 
+        "region": "Kamloops"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_KEL_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_KEL_L.pls", 
+        "region": "Kelowna"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_PRG_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_PRG_L.pls", 
+        "region": "Prince George"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_VCR_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_VCR_L.pls", 
+        "region": "Vancouver"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_VIC_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_VIC_L.pls", 
+        "region": "Victoria"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_WHS_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_WHS_L.pls", 
+        "region": "Whitehorse"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_CGY_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_CGY_L.pls", 
+        "region": "Calgary"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_EDM_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_EDM_L.pls", 
+        "region": "Edmonton"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_REG_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_REG_L.pls", 
+        "region": "Regina"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_SSK_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_SSK_L.pls", 
+        "region": "Saskatoon"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_WPG_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_WPG_L.pls", 
+        "region": "Winnipeg"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_IQA_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_IQA_L.pls", 
+        "region": "Iqaluit"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_EKW_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_EKW_L.pls", 
+        "region": "Kitchener-Waterloo"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_LDN_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_LDN_L.pls", 
+        "region": "London"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_OTT_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_OTT_L.pls", 
+        "region": "Ottawa"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_SUD_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_SUD_L.pls", 
+        "region": "Sudbury"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_TBA_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_TBA_L.pls", 
+        "region": "Thunder Bay"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_TOR_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_TOR_L.pls", 
+        "region": "Toronto"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_WDR_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_WDR_L.pls", 
+        "region": "Windsor"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_MTL_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_MTL_L.pls", 
+        "region": "Montréal"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_N_MTL_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_N_MTL_L.pls", 
+        "region": "Nord Quebec"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_QQU_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_QQU_L.pls", 
+        "region": "Québec City"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_FRD_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_FRD_L.pls", 
+        "region": "Fredericton"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_MCT_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_MCT_L.pls", 
+        "region": "Moncton"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_SNB_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_SNB_L.pls", 
+        "region": "Saint John"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_CHR_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_CHR_L.pls", 
+        "region": "Charlottetown"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_SYD_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_SYD_L.pls", 
+        "region": "Cape Breton"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_HFX_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_HFX_L.pls", 
+        "region": "Halifax"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_COR_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_COR_L.pls", 
+        "region": "Corner Brook"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_GFA_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_GFA_L.pls", 
+        "region": "Grand Falls/Gander"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_GBA_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_GBA_L.pls", 
+        "region": "Labrador"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_SNF_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_SNF_L.pls", 
+        "region": "St. John's"
+    }, 
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_INK_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_INK_L.pls", 
+        "region": "Inuvik"
+    },
+    {
+        "high_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_YKN_H.pls", 
+        "low_quality_url": "http://playerservices.streamtheworld.com/pls/CBC_R1_YKN_L.pls", 
+        "region": "Yellowknife"
+    }
+]

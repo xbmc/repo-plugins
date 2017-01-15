@@ -1,3 +1,9 @@
+[B]1.0.5[/B]
+- Fix plugin id on addon.xml
+[B]1.0.4[/B]
+- First version published on Kodi repository
+[B]1.0.3[/B]
+- Test version
 [B]1.0.2[/B]
 - Nothing changed yet.
 

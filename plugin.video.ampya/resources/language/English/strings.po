@@ -1,0 +1,75 @@
+# XBMC Media Center language file
+# Addon Name: Ampya
+# Addon id: plugin.video.ampya
+# Addon version: 0.1.8
+# Addon Provider: L0RE
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2016-11-03 18:34+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Ampya"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Ampya"
+msgstr ""
+
+
+msgctxt "#30101"
+msgid "Bitrate"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Home"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Top"
+msgstr ""
+
+msgctxt "#30104"
+msgid "New"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Empfehlungen"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Kanaele"
+msgstr ""
+
+msgctxt "#30107"
+msgid "Suche"
+msgstr ""
+
+msgctxt "#30108"
+msgid "Settings"
+msgstr ""
+
+msgctxt "#30109"
+msgid "More from this Artist"
+msgstr "More from this Artist"
+
+msgctxt "#30110"
+msgid "Similiar Songs"
+msgstr "Similiar Songs"
+
+msgctxt "#30111"
+msgid "Artists"
+msgstr "Artists"
+
+msgctxt "#30112"
+msgid "Songs"
+msgstr "Songs"

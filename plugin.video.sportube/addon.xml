@@ -22,5 +22,6 @@
     <website>https://github.com/nightflyer73/plugin.video.sportube</website>
     <email></email>
     <source>https://github.com/nightflyer73/plugin.video.sportube</source>
+    <broken>This addon is broken. Sportube.tv has become a pay service.</broken>
   </extension>
 </addon>

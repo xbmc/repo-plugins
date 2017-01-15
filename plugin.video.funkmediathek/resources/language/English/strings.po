@@ -1,0 +1,20 @@
+# KODI Media Center language file
+# Addon Name: funkmediathek
+# Addon id: script.module.funkmediathek
+# Addon version: 1.2.0
+# Addon Provider: membrane
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Main\n"
+
+msgctxt "#30003"
+msgid "Skip to series (hide formats)"
+msgstr "Skip to series (hide formats)"
+
+msgctxt "#30503"
+msgid "Formats"
+msgstr "Formats"
+
+msgctxt "#30504"
+msgid "Series"
+msgstr "Series"

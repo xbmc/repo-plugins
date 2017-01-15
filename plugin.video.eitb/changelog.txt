@@ -1,0 +1,10 @@
+[B]1.0.2[/B]
+- Nothing changed yet.
+
+[B]1.0.1[/B]
+- Add install information and improve readme. [erral]
+
+- Fixed python3 string formatting compatibility that created issues in Android [erral]
+
+[B]1.0.0[/B]
+- Initial release. [erral]

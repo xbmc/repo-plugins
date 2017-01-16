@@ -15,7 +15,7 @@ try:
 except:
     import simplejson as json
 
-addon = xbmcaddon.Addon('plugin.video.BlanketFort')
+addon = xbmcaddon.Addon()
 profile = addon.getAddonInfo('profile').decode('utf-8')
 home = addon.getAddonInfo('path').decode('utf-8')
 icon = xbmc.translatePath(os.path.join(home, 'icon.png'))

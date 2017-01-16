@@ -15,7 +15,7 @@ try:
 except:
     import simplejson as json
 
-addon = xbmcaddon.Addon(id='plugin.video.BlanketFort')
+addon = xbmcaddon.Addon('plugin.video.BlanketFort')
 profile = addon.getAddonInfo('profile').decode('utf-8')
 home = addon.getAddonInfo('path').decode('utf-8')
 icon = xbmc.translatePath(os.path.join(home, 'icon.png'))
@@ -24,20 +24,11 @@ fanart = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
 
 def makeRequest(url):
 
-        try:
             req = urllib2.Request(url, headers={'User-Agent' : "Magic Browser"}) 
             response = urllib2.urlopen(req)
             data = response.read()
             response.close()
             return data
-        except urllib2.URLError, e:
-            if hasattr(e, 'code'):
-                xbmc.log('We failed with error code - %s.' % e.code)
-                xbmc.executebuiltin("XBMC.Notification(BlanketFort,We failed with error code - "+str(e.code)+",10000,"+icon+")")
-            elif hasattr(e, 'reason'):
-                xbmc.log('We failed to reach a server.')
-                xbmc.log('Reason: ', e.reason)
-                xbmc.executebuiltin("XBMC.Notification(BlanketFort,We failed to reach a server. - "+str(e.reason)+",10000,"+icon+")")
 
 
 def getSoup(url):

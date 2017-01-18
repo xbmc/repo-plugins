@@ -96,9 +96,9 @@ class ShawGo:
         # ooc is username, email is shawemail, account number is shawdirect
         idp = 'shawocc'
         if username.isdigit():
-            idp = 'shawdirect'
+            idp = 'ShawDirect'
         elif "@" in username:
-            idp = 'shawemail'
+            idp = 'ShawEmail'
 
         # rejig the URL
         o = urlparse(url)
@@ -122,7 +122,7 @@ class ShawGo:
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
 
         values = {'pf.username' : username,
-                  'selectedPCV': 'ShawDirect',
+                  'selectedPCV': idp,
                   'pf.pass' : password,
                   'pf.ok' : '',
                   'pf.cancel': ''}

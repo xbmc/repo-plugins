@@ -47,7 +47,7 @@ class supercross():
         finally:
             pass
     
-    def getLiveStream(self,owner_id,event_id):
+    def getLiveStream(self,name,owner_id,event_id):
         #url = 'https://livestream.com/accounts/'+owner_id+'/events/'+event_id+'/viewing_info'
         url = 'https://livestream.com/api/accounts/'+owner_id+'/events/'+event_id+'/'
         
@@ -69,10 +69,9 @@ class supercross():
                 pass
 
             line = re.compile("(.+?)\n").findall(master)  
-
+            desc = ''
             for temp_url in line:
-                if '.m3u8' in temp_url:
-                    name = 'blah'            
+                if '.m3u8' in temp_url:                              
                     temp_url = temp_url+'|User-Agent='+USER_AGENT
                     if cookie != '':
                         temp_url = temp_url + '&Cookie='+cookie           

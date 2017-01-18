@@ -3,7 +3,7 @@
   <requires>
     <import addon="xbmc.python" version="2.24.0"/>
 	<import addon="script.module.beautifulsoup" version="3.0.8"/>
-    <import addon="script.module.simplejson" />
+    <import addon="script.module.simplejson"  version="3.4.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>

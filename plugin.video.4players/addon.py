@@ -144,7 +144,7 @@ def __format_videos(videos):
             'count': i,
             'plot': '[CR]'.join((
                 'Date: %s' % video['date'],
-                'Size: %d MB' % (video['streams'][quality]['size'] / 1048576),
+                'Size: %d MB' % (int(video['streams'][quality]['size']) / 1048576),
                 'Length: %s' % video['duration_str'],
             )),
         },

@@ -10,10 +10,7 @@ import xbmcgui
 import xbmcaddon
 import xbmcvfs
 from BeautifulSoup import BeautifulStoneSoup, BeautifulSoup, BeautifulSOAP
-try:
-    import json
-except:
-    import simplejson as json
+
 
 addon = xbmcaddon.Addon()
 profile = addon.getAddonInfo('profile').decode('utf-8')

@@ -38,7 +38,6 @@ if xbmcvfs.exists(temp):
   shutil.rmtree(temp)
 xbmcvfs.mkdirs(temp)
 cookie=os.path.join( temp, 'cookie.jar')
-print "Cookie= "+cookie
 cj = cookielib.LWPCookieJar();
 
 if xbmcvfs.exists(cookie):
@@ -70,13 +69,13 @@ def ersetze(inhalt):
    return inhalt
 
 def imagereplace(icon):   
-  print "ICON :"+icon
+  debug ("ICON :"+icon)
   try:
     quelle  = re.compile('(_[0-9]+_[0-9]+)/', re.DOTALL).findall(icon) [0]
   except:
         quelle="XXXXXXXXXXXXXXX"
   icon=icon.replace(quelle,"_1200_1600")
-  print "ICON :"+icon
+  debug( "ICON :"+icon)
   return icon
   
 def addDir(name, url, mode, thump, desc="",page=1,xtype="",datum=""):
@@ -106,7 +105,7 @@ def addLink(name, url, mode, thump, duration="", desc="", genre='',director="",b
      icon="http://de.web.img1.acsta.net/r_1200_1600/seriesposter/"+id+"/poster_large.jpg"
   except:
      icon=thump  
-  print icon  
+  debug( icon  )
   u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
   ok = True
   liz = xbmcgui.ListItem(name,thumbnailImage=thump)
@@ -147,7 +146,7 @@ def decodeurl(url):
     
 def geturl(url,data="x",header=""):
         global cj
-        print("Get Url: " +url)
+        debug("Get Url: " +url)
         for cook in cj:
           debug(" Cookie :"+ str(cook))
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))        
@@ -162,7 +161,7 @@ def geturl(url,data="x",header=""):
           else:
              content=opener.open(url).read()
         except urllib2.HTTPError as e:
-             #print e.code   
+             #debug( e.code )  
              cc=e.read()  
              debug("Error : " +cc)
        

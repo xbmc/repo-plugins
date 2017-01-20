@@ -91,7 +91,7 @@ class indexer:
 
         self.list = radios + categories + regions
 
-        directory.add(self.list)
+        directory.add(self.list, content='files')
         return self.list
 
 

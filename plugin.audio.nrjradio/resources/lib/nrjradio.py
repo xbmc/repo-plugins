@@ -16,7 +16,7 @@
 '''
 
 
-import json
+import json,urllib
 
 from lamlib import bookmarks
 from lamlib import directory
@@ -45,7 +45,7 @@ class indexer:
         }
         ]
 
-        directory.add(self.list)
+        directory.add(self.list, content='files')
         return self.list
 
 
@@ -110,12 +110,12 @@ class indexer:
                 url = url.encode('utf-8')
 
                 uid = []
-                uid.append(item['url_hd_aac'])
                 uid.append(item['url_triton_64k_aac'])
                 uid.append(item['url_64k_aac'])
                 uid.append(item['url_triton_128k_mp3'])
                 uid.append(item['url_128k_mp3'])
                 uid.append(item['url_hls'])
+                uid.append(item['url_hd_aac'])
                 uid = [i for i in uid if '//' in i and not '.flv' in i][0]
                 uid = uid.encode('utf-8')
 
@@ -132,12 +132,14 @@ class indexer:
 
     def resolve(self, url):
         try:
+            headers = {'User-Agent': 'NSPlayer/12.00.14393.0693 WMFSDK/12.00.14393.0693'}
             item = cache.get(self.item_list, 24, self.player_link)
             item = [i for i in item if url == i['url']][0]
 
             title, url, image = item['title'], item['uid'], item['image']
 
-            url = client.request(url, output='geturl')
+            url = client.request(url, headers=headers, output='geturl')
+            url += '|%s' % urllib.urlencode(headers)
 
             return (title, url, image)
         except:

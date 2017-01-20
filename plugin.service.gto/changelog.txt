@@ -1,3 +1,16 @@
+2.0.8
+- Cosmetics. Copy 'script-gto.xml' to Confluence folder to take effect.
+  See integration/README.md within the zip/addon folder
+
+2.0.7
+- handle exceptions while scraping with exception handler URLError instead of HTTPError.
+
+2.0.6
+- Scrape delay at startup removed. This is now handled dynamically.
+
+2.0.5
+- Scraper modifications
+
 2.0.4
 - Improved channel comparsion and selection
 - Improved ChannelTranslate.json

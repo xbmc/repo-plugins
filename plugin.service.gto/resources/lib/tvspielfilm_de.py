@@ -33,7 +33,7 @@ class Scraper():
         self.err404 = 'tvspielfilm_dummy.jpg'
 
     def checkResource(self, resource, fallback):
-        if not resource: return fallback
+        if not resource or resource == '': return fallback
         _req = urllib2.Request(resource)
         try:
             _res = urllib2.urlopen(_req, timeout=5)
@@ -88,8 +88,9 @@ class Scraper():
                 try:
                     self.thumb = re.compile('<div class="gallery-box">(.+?)</div', re.DOTALL).findall(content)[0]
                     self.thumb = re.compile('href="(.+?)"', re.DOTALL).findall(self.thumb)[0]
+
                 except IndexError:
-                    pass
+                    self.thumb = 'image://%s' % (self.err404)
 
                 self.thumb = self.checkResource(self.thumb, self.err404)
 

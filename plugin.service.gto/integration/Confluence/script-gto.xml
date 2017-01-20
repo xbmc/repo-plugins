@@ -25,7 +25,7 @@
                                         <top>300</top>
                                         <height>20</height>
                                         <width>480</width>
-                                        <label>$ADDON[plugin.service.gto 30104]</label>
+                                        <label>$INFO[Window(Home).Property(GTO.provider)]: $ADDON[plugin.service.gto 30104]</label>
                                         <align>center</align>
                                         <aligny>center</aligny>
                                         <font>font12_title</font>
@@ -296,7 +296,7 @@
                                         <top>300</top>
                                         <height>20</height>
                                         <width>480</width>
-                                        <label>$ADDON[plugin.service.gto 30104]</label>
+                                        <label>$INFO[Window(Home).Property(GTO.provider)]: $ADDON[plugin.service.gto 30104]</label>
                                         <align>center</align>
                                         <aligny>center</aligny>
                                         <font>font12_title</font>

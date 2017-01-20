@@ -65,6 +65,7 @@ Beispiel 'onclick' für TV Highlights Element - Öffnet Popup generiert vom Plug
 
 #### Info-Window (werden als Properties in Window(Home) gesetzt) / Info windows (resides as properties in Window(Home)):
 
+    - GTO.provider                    Provider/Anbieter (scraper.shortname)
     - GTO.Info.Title                  Titel der Sendung / title
     - GTO.Info.Picture                Screenshot aus dem Titel der Sendung / screenshot
     - GTO.Info.Description            Beschreibung des Inhaltes / description

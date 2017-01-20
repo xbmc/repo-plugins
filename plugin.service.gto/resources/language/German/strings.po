@@ -148,27 +148,3 @@ msgstr "720 min"
 msgctxt "#30164"
 msgid "1440 mins"
 msgstr "1440 min"
-
-msgctxt "#30170"
-msgid "5 secs"
-msgstr "5 sec"
-
-msgctxt "#30171"
-msgid "10 secs"
-msgstr "10 sec"
-
-msgctxt "#30172"
-msgid "15 secs"
-msgstr "15 sec"
-
-msgctxt "#30173"
-msgid "30 secs"
-msgstr "30 sec"
-
-msgctxt "#30174"
-msgid "45 secs"
-msgstr "45 sec"
-
-msgctxt "#30175"
-msgid "60 secs"
-msgstr "60 sec"

@@ -88,7 +88,7 @@ class Scraper():
                         try:
                             self.thumb = re.compile('<img class="kalooga_12730" src="(.+?)"', re.DOTALL).findall(content)[0]
                         except IndexError:
-                            pass
+                            self.thumb = 'image://%s' % (self.err404)
                     self.thumb = self.checkResource(self.thumb, self.err404)
 
                 # Broadcast Info (stop)

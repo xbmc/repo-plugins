@@ -16,24 +16,22 @@
 '''
 
 
-import urllib,urlparse,json,re
+import urlparse,json,re
 
 from lamlib import bookmarks
 from lamlib import cache
 from lamlib import client
-from lamlib import control
 from lamlib import directory
 
 
 class indexer:
     def __init__(self):
         self.list = []
-        self.base_link = 'http://devour.com'
-        self.channels_link = '/channels/'
-        self.latest_link = '/1/'
-        self.popular_link = '/popular/1/'
-        self.leftovers_link = '/leftovers/1/'
-        self.search_link = '/search/%s/1/'
+        self.base_link = 'http://uncrate.com'
+        self.channels_link = '/tv/channels/'
+        self.latest_link = '/tv/1/'
+        self.popular_link = '/tv/popular/1/'
+        self.leftovers_link = '/tv/leftovers/1/'
 
 
     def root(self):
@@ -69,16 +67,10 @@ class indexer:
         'title': 32005,
         'action': 'bookmarks',
         'icon': 'bookmarks.png'
-        },
-
-        {
-        'title': 32006,
-        'action': 'search',
-        'icon': 'search.png'
         }
         ]
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -94,7 +86,7 @@ class indexer:
 
         for i in self.list: i.update({'genre': i['plot']})
 
-        directory.add(self.list, content='files')
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -105,20 +97,8 @@ class indexer:
 
         for i in self.list: i.update({'action': 'videos'})
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
-
-
-    def search(self):
-        t = control.lang(32006).encode('utf-8')
-        k = control.keyboard('', t) ; k.doModal()
-        query = k.getText() if k.isConfirmed() else None
-
-        if (query == None or query == ''): return
-
-        url = self.search_link % urllib.quote_plus(query.lower())
-
-        self.videos(url)
 
 
     def videos(self, url):
@@ -137,7 +117,7 @@ class indexer:
 
         for i in self.list: i.update({'genre': i['plot']})
 
-        directory.add(self.list, content='files')
+        directory.add(self.list, content='videos')
         return self.list
 
 

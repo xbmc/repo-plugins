@@ -9,11 +9,9 @@ class MockContextUI(AbstractContextUI):
     def __init__(self):
         AbstractContextUI.__init__(self)
         self._view_mode = None
-        pass
 
     def set_view_mode(self, view_mode):
         self._view_mode = view_mode
-        pass
 
     def create_progress_dialog(self, heading, text=None, background=False):
         return MockProgressDialog(heading, text)
@@ -40,16 +38,13 @@ class MockContextUI(AbstractContextUI):
         log('header   : %s' % header)
         log('image_uri: %s' % image_uri)
         log('Time     : %d' % time_milliseconds)
-        log('==========================')
-        pass
+        log('==========================')        
 
     def open_settings(self):
-        log("called 'open_settings'")
-        pass
+        log("called 'open_settings'")        
 
     def refresh_container(self):
-        log("called 'refresh_container'")
-        pass
+        log("called 'refresh_container'")        
 
     pass
 

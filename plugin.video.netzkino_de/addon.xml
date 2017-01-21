@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.netzkino_de" name="Netzkino" version="2.2.3" provider-name="L0RE">
+<addon id="plugin.video.netzkino_de" name="Netzkino" version="2.2.4" provider-name="L0RE">
 	<requires>
 		<import addon="xbmc.python" version="2.24.0"/>
         <import addon="plugin.video.youtube" version="5.0.0" />
@@ -16,9 +16,9 @@
 		<language>de</language>
 		<platform>all</platform>
 		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-		<forum>https://www.kodinerds.net</forum>
+		<forum>http://forum.kodi.tv/showthread.php?tid=225197</forum>
 		<website>http://www.netzkino.de</website>
-		<email>andreas at vogler dot name</email>
-		<source>https://github.com/kodinerds/repo/tree/master/plugin.video.netzkino_de</source>
+		<email>bromix at gmx dot net</email>
+		<source>https://github.com/bromix/plugin.video.netzkino_de</source>
 	</extension>
 </addon>

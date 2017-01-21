@@ -54,15 +54,6 @@ class XbmcRunner(AbstractProviderRunner):
             xbmcplugin.endOfDirectory(
                 context.get_handle(), succeeded=True,
                 cacheToDisc=options.get(AbstractProvider.RESULT_CACHE_TO_DISC, True))
-
-            # set alternative view mode
-            if context.get_settings().is_override_view_enabled():
-                view_mode = context.get_ui().get_view_mode()
-                if view_mode is not None:
-                    context.log_debug('Override view mode to "%d"' % view_mode)
-                    xbmc.executebuiltin('Container.SetViewMode(%d)' % view_mode)
-                    pass
-                pass
             pass
         else:
             # handle exception

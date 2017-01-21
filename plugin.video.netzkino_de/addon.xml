@@ -16,9 +16,9 @@
 		<language>de</language>
 		<platform>all</platform>
 		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-		<forum>http://forum.kodi.tv/showthread.php?tid=225197</forum>
+		<forum>https://www.kodinerds.net</forum>
 		<website>http://www.netzkino.de</website>
-		<email>bromix at gmx dot net</email>
-		<source>https://github.com/bromix/plugin.video.netzkino_de</source>
+		<email>andreas at vogler dot name</email>
+		<source>https://github.com/kodinerds/repo/tree/master/plugin.video.netzkino_de</source>
 	</extension>
 </addon>

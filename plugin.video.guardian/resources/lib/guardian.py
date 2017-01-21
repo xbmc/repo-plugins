@@ -1,13 +1,16 @@
 import urllib2
+import urlparse
 from xml.dom import minidom
 import time
 import datetime
+import re
+import json
 from email.utils import parsedate_tz
 from email.utils import mktime_tz
 from BeautifulSoup import BeautifulSoup
 
 class GuardianTV:
-    __USERAGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0"
+    __USERAGENT = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0"
     
     def __init__(self):
         opener = urllib2.build_opener()
@@ -59,10 +62,11 @@ class GuardianTV:
                     mimeType = ""
                 
                 imageUrl = mediaContent.attributes["url"].value
-                imageExt = imageUrl[imageUrl.rfind(".")+1:]
+                scheme, netloc, path, params, query, fragment = urlparse.urlparse(imageUrl)
+                imageExt = path[path.rfind(".")+1:]
                 imageWidth = mediaContent.attributes["width"].value
                 
-                if (mimeType == "image/jpeg" or imageExt == "jpg" or imageExt == "jpeg") and imageWidth > width:
+                if (mimeType == "image/jpeg" or mimeType == "image/png" or imageExt == "jpg" or imageExt == "jpeg" or imageExt == "png" ) and imageWidth > width:
                     video["thumb"] = imageUrl
                     width = imageWidth
             
@@ -84,12 +88,27 @@ class GuardianTV:
         
         videoNode = tree.find("video")
         if videoNode is not None:
-            video["url"]  = videoNode.find("source", {"type": "video/mp4"})["src"]
+            video["url"] = videoNode.find("source", {"type": "video/mp4"})["src"]
         else:
-            # Youtube
-            iframe = tree.find("iframe")
-            if iframe is not None:
-                videoId = iframe["id"].replace("ytplayer-","")
-                video["url"] = "plugin://plugin.video.youtube/?action=play_video&videoid=%s" % videoId
-        
+            # Docs on YouTube
+            figure = tree.find("figure")
+            if figure is not None:
+                dataInteractiveUrl = figure["data-interactive"]
+                
+                dataInteractive = urllib2.urlopen(dataInteractiveUrl).read()
+                match = re.search(r"interactiveConfig = ({[^\}]+});", dataInteractive, re.DOTALL)
+                string = match.group(1)
+                # Convert to JSON
+                string = string.replace("'", '"')
+                
+                interactiveConfig = json.loads(string)
+                sheetName = interactiveConfig["sheetName"]
+                sheetId = interactiveConfig["sheetId"]
+
+                sheetUrl = "https://interactive.guim.co.uk/docsdata/%s.json" % sheetId
+                sheets = json.load(urllib2.urlopen(sheetUrl))
+                youTubeId = sheets["sheets"][sheetName][0]["youTubeId"]
+
+                video["url"] = "plugin://plugin.video.youtube/play/?video_id=%s" % youTubeId
+         
         return video

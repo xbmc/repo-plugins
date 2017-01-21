@@ -44,55 +44,55 @@ class indexer:
         self.list = [
         {
         'title': 32001,
+        'action': 'live',
+        'isFolder': 'False',
+        'icon': 'live.png'
+        },
+
+        {
+        'title': 32002,
         'action': 'tvshows',
         'icon': 'tvshows.png'
         },
 
         {
-        'title': 32002,
+        'title': 32003,
         'action': 'podcasts',
         'icon': 'podcasts.png'
         },
 
         {
-        'title': 32003,
+        'title': 32004,
         'action': 'archive',
         'icon': 'archive.png'
         },
 
         {
-        'title': 32004,
+        'title': 32005,
         'action': 'popular',
         'icon': 'popular.png'
         },
 
         {
-        'title': 32005,
+        'title': 32006,
         'action': 'news',
         'icon': 'news.png'
         },
 
         {
-        'title': 32006,
+        'title': 32007,
         'action': 'sports',
         'icon': 'sports.png'
         },
 
         {
-        'title': 32007,
+        'title': 32008,
         'action': 'bookmarks',
         'icon': 'bookmarks.png'
-        },
-
-        {
-        'title': 32008,
-        'action': 'live',
-        'isFolder': 'False',
-        'icon': 'live.png'
         }
         ]
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -108,7 +108,7 @@ class indexer:
 
         self.list = sorted(self.list, key=lambda k: k['title'].lower())
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -124,7 +124,7 @@ class indexer:
             bookmark['bookmark'] = i['url']
             i.update({'cm': [{'title': 32501, 'query': {'action': 'addBookmark', 'url': json.dumps(bookmark)}}]})
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -142,7 +142,7 @@ class indexer:
 
         self.list = sorted(self.list, key=lambda k: k['title'].lower())
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -160,7 +160,7 @@ class indexer:
 
         self.list = sorted(self.list, key=lambda k: k['title'].lower())
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -174,7 +174,7 @@ class indexer:
         if reverse == True:
             self.list = self.list[::-1]
 
-        directory.add(self.list, content='files')
+        directory.add(self.list, content='videos')
         return self.list
 
 

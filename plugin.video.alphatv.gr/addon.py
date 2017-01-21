@@ -39,14 +39,17 @@ elif action == 'deleteBookmark':
     from lamlib import bookmarks
     bookmarks.delete(url)
 
+elif action == 'channels':
+    alphatv.indexer().channels()
+
 elif action == 'bookmarks':
     alphatv.indexer().bookmarks()
 
 elif action == 'tvshows':
-    alphatv.indexer().tvshows()
+    alphatv.indexer().tvshows(url)
 
 elif action == 'archive':
-    alphatv.indexer().archive()
+    alphatv.indexer().archive(url)
 
 elif action == 'episodes':
     alphatv.indexer().episodes(url)
@@ -67,7 +70,7 @@ elif action == 'cynews':
     alphatv.indexer().cynews()
 
 elif action == 'live':
-    alphatv.indexer().live()
+    alphatv.indexer().live(url)
 
 elif action == 'play':
     alphatv.indexer().play(url)

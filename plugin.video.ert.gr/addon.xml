@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.ert.gr" version="1.0.2" name="ERT Player" provider-name="lambda">
+<addon id="plugin.video.ert.gr" version="1.1.0" name="ERT Player" provider-name="lambda">
 	<requires>
 		<import addon="xbmc.python" version="2.24.0" />
 		<import addon="script.module.lamlib" version="1.0.0" />
@@ -17,6 +17,14 @@
 		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
 		<source>https://github.com/lambda81/plugin.video.ert.gr</source>
 		<website>http://www.ert.gr/</website>
+		<news>- Re-work of main menu[CR]- Fixed issue with geoblocked videos (failed everywhere)[CR]- Added new artwork and screenshots</news>
+		<assets>
+			<icon>icon.png</icon>
+			<fanart>fanart.jpg</fanart>
+			<screenshot>resources/screenshots/screenshot-01.jpg</screenshot>
+			<screenshot>resources/screenshots/screenshot-02.jpg</screenshot>
+			<screenshot>resources/screenshots/screenshot-03.jpg</screenshot>
+		</assets>
 		<platform>all</platform>
 		<language>el</language>
 		<forum></forum>

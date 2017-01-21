@@ -28,11 +28,15 @@ class indexer:
     def __init__(self):
         self.list = []
         self.base_link = 'http://webtv.ert.gr'
-        self.base_image = 'http://www.ert.gr/wp-content/uploads/2015/12/ERT-logo-864x400_c.jpg'
         self.episodes_link = 'http://webtv.ert.gr/?cat=%s'
-        self.news_link = 'http://webtv.ert.gr/?cat=38'
         self.sports_link = 'http://webtv.ert.gr/?cat=87'
+        self.news_link = 'http://webtv.ert.gr/?cat=38'
+        self.info_link = 'http://webtv.ert.gr/?cat=39'
         self.weather_link = 'http://webtv.ert.gr/?cat=374'
+        self.documentary_link = 'http://webtv.ert.gr/?cat=224'
+        self.culture_link = 'http://webtv.ert.gr/?cat=63'
+        self.cartoons_link = 'http://webtv.ert.gr/?cat=76'
+        self.entertainment_link = 'http://webtv.ert.gr/?cat=40'
         self.popular_link = 'http://webtv.ert.gr/feed/'
         self.ert1_link = 'http://webtv.ert.gr/ert1/'
         self.ert2_link = 'http://webtv.ert.gr/ert2/'
@@ -44,54 +48,86 @@ class indexer:
         self.list = [
         {
         'title': 32001,
-        'action': 'tvshows',
-        'icon': 'tvshows.png'
+        'action': 'channels',
+        'icon': 'channels.png'
         },
 
         {
         'title': 32002,
-        'action': 'categories',
-        'icon': 'categories.png'
-        },
-
-        {
-        'title': 32003,
         'action': 'popular',
         'icon': 'popular.png'
         },
 
         {
+        'title': 32003,
+        'action': 'episodes',
+        'url': self.sports_link,
+        'icon': 'sports.png'
+        },
+
+        {
         'title': 32004,
-        'action': 'news',
+        'action': 'episodes',
+        'url': self.news_link,
         'icon': 'news.png'
         },
 
         {
         'title': 32005,
-        'action': 'sports',
-        'icon': 'sports.png'
+        'action': 'episodes',
+        'url': self.info_link,
+        'icon': 'info.png'
         },
 
         {
         'title': 32006,
-        'action': 'weather',
+        'action': 'episodes',
+        'url': self.weather_link,
         'icon': 'weather.png'
         },
 
         {
         'title': 32007,
-        'action': 'bookmarks',
-        'icon': 'bookmarks.png'
+        'action': 'episodes',
+        'url': self.documentary_link,
+        'icon': 'documentary.png'
         },
 
         {
         'title': 32008,
-        'action': 'channels',
-        'icon': 'channels.png'
+        'action': 'episodes',
+        'url': self.culture_link,
+        'icon': 'culture.png'
+        },
+
+        {
+        'title': 32009,
+        'action': 'episodes',
+        'url': self.cartoons_link,
+        'icon': 'cartoons.png'
+        },
+
+        {
+        'title': 32010,
+        'action': 'episodes',
+        'url': self.entertainment_link,
+        'icon': 'entertainment.png'
+        },
+
+        {
+        'title': 32011,
+        'action': 'categories',
+        'icon': 'categories.png'
+        },
+
+        {
+        'title': 32012,
+        'action': 'bookmarks',
+        'icon': 'bookmarks.png'
         }
         ]
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -130,7 +166,7 @@ class indexer:
         }
         ]
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -146,11 +182,11 @@ class indexer:
 
         self.list = sorted(self.list, key=lambda k: k['title'].lower())
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
-    def tvshows(self):
+    def categories(self):
         self.list = cache.get(self.item_list_1, 24)
 
         if self.list == None: return
@@ -164,85 +200,7 @@ class indexer:
 
         self.list = sorted(self.list, key=lambda k: k['title'].lower())
 
-        directory.add(self.list)
-        return self.list
-
-
-    def categories(self):
-        self.list = [
-        {
-        'title': 'ÁÈËÇÔÉÊÁ'.decode('iso-8859-7').encode('utf-8'),
-        'url': '87'
-        },
-
-        {
-        'title': 'ÁÌÅÁ'.decode('iso-8859-7').encode('utf-8'),
-        'url': '2076'
-        },
-
-        {
-        'title': 'ÄÅËÔÉÁ ÅÉÄÇÓÅÙÍ'.decode('iso-8859-7').encode('utf-8'),
-        'url': '38'
-        },
-
-        {
-        'title': 'ÅÊĞÁÉÄÅÕÓÇ'.decode('iso-8859-7').encode('utf-8'),
-        'url': '1055'
-        },
-
-        {
-        'title': 'ÅËËÇÍÉÊÅÓ ÓÅÉÑÅÓ'.decode('iso-8859-7').encode('utf-8'),
-        'url': '4188'
-        },
-
-        {
-        'title': 'ÅÍÇÌÅÑÙÓÇ'.decode('iso-8859-7').encode('utf-8'),
-        'url': '39'
-        },
-
-        {
-        'title': 'ÊÁÉÑÏÓ'.decode('iso-8859-7').encode('utf-8'),
-        'url': '374'
-        },
-
-        {
-        'title': 'ÍÔÏÊÉÌÁÍÔÅÑ'.decode('iso-8859-7').encode('utf-8'),
-        'url': '4686'
-        },
-
-        {
-        'title': 'ÎÅÍÅÓ ÓÅÉÑÅÓ'.decode('iso-8859-7').encode('utf-8'),
-        'url': '1575'
-        },
-
-        {
-        'title': 'ĞÁÉÄÉÊÁ'.decode('iso-8859-7').encode('utf-8'),
-        'url': '4794'
-        },
-
-        {
-        'title': 'ĞÏËÉÔÉÓÌÏÓ'.decode('iso-8859-7').encode('utf-8'),
-        'url': '63'
-        },
-
-        {
-        'title': 'ØÕ×ÁÃÙÃÉÁ'.decode('iso-8859-7').encode('utf-8'),
-        'url': '40'
-        }
-        ]
-
-        for i in self.list: i.update({'image': self.base_image})
-
-        for i in self.list: i.update({'url': self.episodes_link % i['url']})
-
-        for i in self.list: i.update({'action': 'episodes'})
-
-        for i in self.list:
-            bookmark = dict((k,v) for k, v in i.iteritems() if not k == 'next')
-            bookmark['bookmark'] = i['url']
-            i.update({'cm': [{'title': 32501, 'query': {'action': 'addBookmark', 'url': json.dumps(bookmark)}}]})
-
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -255,7 +213,7 @@ class indexer:
 
         for i in self.list: i.update({'nextlabel': 32500, 'nextaction': 'episodes'})
 
-        directory.add(self.list, content='files')
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -266,20 +224,8 @@ class indexer:
 
         for i in self.list: i.update({'action': 'play', 'isFolder': 'False'})
 
-        directory.add(self.list, content='files')
+        directory.add(self.list, content='videos')
         return self.list
-
-
-    def news(self):
-        self.episodes(self.news_link)
-
-
-    def sports(self):
-        self.episodes(self.sports_link)
-
-
-    def weather(self):
-        self.episodes(self.weather_link)
 
 
     def play(self, url):
@@ -310,9 +256,7 @@ class indexer:
                 url = client.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
 
-                image = self.base_image
-
-                self.list.append({'title': title, 'url': url, 'image': image})
+                self.list.append({'title': title, 'url': url})
             except:
                 pass
 
@@ -416,18 +360,18 @@ class indexer:
 
             try:
                 url = url.replace(' ', '%20')
-                url = url.replace('geo=true', 'geo=false')
 
                 url = client.request(url, referer=referer)
 
                 url = re.findall('(?:\"|\')(http.+?)(?:\"|\')', url)
-                url = [i for i in url if '.m3u8' in i][-1]
-                url = url.replace(' ', '%20')
+                url = [i for i in url if '.m3u8' in i]
+                url = [i.replace(' ', '%20') for i in url]
 
-                r = client.request(url, output='geturl')
-                if r == None: url = re.sub('nerithd\d*', 'nerithd1', url)
+                u = client.request(url[0], output='geturl')
+                if u == None and len(url) > 1:
+                    u = client.request(url[1], output='geturl')
 
-                return url
+                return u
             except:
                 pass
 

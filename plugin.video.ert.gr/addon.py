@@ -45,9 +45,6 @@ elif action == 'channels':
 elif action == 'bookmarks':
     ert.indexer().bookmarks()
 
-elif action == 'tvshows':
-    ert.indexer().tvshows()
-
 elif action == 'categories':
     ert.indexer().categories()
 
@@ -56,15 +53,6 @@ elif action == 'episodes':
 
 elif action == 'popular':
     ert.indexer().popular()
-
-elif action == 'news':
-    ert.indexer().news()
-
-elif action == 'sports':
-    ert.indexer().sports()
-
-elif action == 'weather':
-    ert.indexer().weather()
 
 elif action == 'live':
     ert.indexer().live(url)

@@ -9,36 +9,36 @@ msgstr ""
 
 
 msgctxt "#32001"
+msgid "Live"
+msgstr "Ζωντανά"
+
+msgctxt "#32002"
 msgid "Shows"
 msgstr "Εκπομπές"
 
-msgctxt "#32002"
+msgctxt "#32003"
 msgid "Archive"
 msgstr "Αρχείο"
 
-msgctxt "#32003"
+msgctxt "#32004"
 msgid "Latest"
 msgstr "Πρόσφατα"
 
-msgctxt "#32004"
+msgctxt "#32005"
 msgid "Recommended"
 msgstr "Προτεινόμενα"
 
-msgctxt "#32005"
+msgctxt "#32006"
 msgid "News"
 msgstr "Ειδήσεις"
 
-msgctxt "#32006"
+msgctxt "#32007"
 msgid "Weather"
 msgstr "Καιρός"
 
-msgctxt "#32007"
+msgctxt "#32008"
 msgid "Bookmarks"
 msgstr "Σελιδοδείκτες"
-
-msgctxt "#32008"
-msgid "Live"
-msgstr "Ζωντανά"
 
 msgctxt "#32500"
 msgid "Next..."

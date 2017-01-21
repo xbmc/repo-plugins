@@ -1,3 +1,7 @@
+[B]1.1.0[/B]
+- Tweaked sections
+- Added new add-on screenshots
+
 [B]1.0.2[/B]
 - Re-work of addon (new API)
 - Re-work of artwork (new indent)

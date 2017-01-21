@@ -43,55 +43,55 @@ class indexer:
         self.list = [
         {
         'title': 32001,
+        'action': 'live',
+        'isFolder': 'False',
+        'icon': 'live.png'
+        },
+
+        {
+        'title': 32002,
         'action': 'tvshows',
         'icon': 'tvshows.png'
         },
 
         {
-        'title': 32002,
+        'title': 32003,
         'action': 'archive',
         'icon': 'archive.png'
         },
 
         {
-        'title': 32003,
+        'title': 32004,
         'action': 'popular',
         'icon': 'popular.png'
         },
 
         {
-        'title': 32004,
+        'title': 32005,
         'action': 'recommended',
         'icon': 'recommended.png'
         },
 
         {
-        'title': 32005,
+        'title': 32006,
         'action': 'news',
         'icon': 'news.png'
         },
 
         {
-        'title': 32006,
+        'title': 32007,
         'action': 'weather',
         'icon': 'weather.png'
         },
 
         {
-        'title': 32007,
+        'title': 32008,
         'action': 'bookmarks',
         'icon': 'bookmarks.png'
-        },
-
-        {
-        'title': 32008,
-        'action': 'live',
-        'isFolder': 'False',
-        'icon': 'live.png'
         }
         ]
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -108,7 +108,7 @@ class indexer:
         self.list = sorted(self.list, key=lambda k: k['title'].lower())
         self.list = [i for i in self.list if 'url' in i and self.episodes_link in i['url']]
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -126,7 +126,7 @@ class indexer:
 
         self.list = sorted(self.list, key=lambda k: k['title'].lower())
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -144,7 +144,7 @@ class indexer:
 
         self.list = sorted(self.list, key=lambda k: k['title'].lower())
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -158,7 +158,7 @@ class indexer:
         if reverse == True:
             self.list = self.list[::-1]
 
-        directory.add(self.list, content='files')
+        directory.add(self.list, content='videos')
         return self.list
 
 

@@ -9,35 +9,35 @@ msgstr ""
 
 
 msgctxt "#32001"
-msgid "Shows"
+msgid "Live"
 msgstr ""
 
 msgctxt "#32002"
-msgid "Archive"
+msgid "Shows"
 msgstr ""
 
 msgctxt "#32003"
-msgid "Latest"
+msgid "Archive"
 msgstr ""
 
 msgctxt "#32004"
-msgid "Recommended"
+msgid "Latest"
 msgstr ""
 
 msgctxt "#32005"
-msgid "News"
+msgid "Recommended"
 msgstr ""
 
 msgctxt "#32006"
-msgid "Weather"
+msgid "News"
 msgstr ""
 
 msgctxt "#32007"
-msgid "Bookmarks"
+msgid "Weather"
 msgstr ""
 
 msgctxt "#32008"
-msgid "Live"
+msgid "Bookmarks"
 msgstr ""
 
 msgctxt "#32500"

@@ -54,7 +54,7 @@ class indexer:
         }
         ]
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -68,7 +68,7 @@ class indexer:
             bookmark['delbookmark'] = i['url']
             i.update({'cm': [{'title': 32502, 'query': {'action': 'deleteBookmark', 'url': json.dumps(bookmark)}}]})
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -79,7 +79,7 @@ class indexer:
 
         for i in self.list: i.update({'action': 'playlist'})
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -97,7 +97,7 @@ class indexer:
 
         for i in self.list: i.update({'nextlabel': 32500, 'nextaction': 'videos'})
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -115,7 +115,7 @@ class indexer:
 
         for i in self.list: i.update({'nextlabel': 32500, 'nextaction': 'playlist'})
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 

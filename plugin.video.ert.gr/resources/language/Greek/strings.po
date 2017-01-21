@@ -9,36 +9,52 @@ msgstr ""
 
 
 msgctxt "#32001"
-msgid "Shows"
-msgstr "Εκπομπές"
+msgid "Live"
+msgstr "Ζωντανά"
 
 msgctxt "#32002"
-msgid "Categories"
-msgstr "Κατηγορίες"
-
-msgctxt "#32003"
 msgid "Latest"
 msgstr "Πρόσφατα"
+
+msgctxt "#32003"
+msgid "Sports"
+msgstr "Αθλητικά"
 
 msgctxt "#32004"
 msgid "News"
 msgstr "Ειδήσεις"
 
 msgctxt "#32005"
-msgid "Sports"
-msgstr "Αθλητικά"
+msgid "Information"
+msgstr "Ενημέρωση"
 
 msgctxt "#32006"
 msgid "Weather"
 msgstr "Καιρός"
 
 msgctxt "#32007"
-msgid "Bookmarks"
-msgstr "Σελιδοδείκτες"
+msgid "Documentary"
+msgstr "Ντοκιμαντέρ"
 
 msgctxt "#32008"
-msgid "Live"
-msgstr "Ζωντανά"
+msgid "Culture"
+msgstr "Πολιτισμός"
+
+msgctxt "#32009"
+msgid "Cartoons"
+msgstr "Παιδικά"
+
+msgctxt "#32010"
+msgid "Entertainment"
+msgstr "Ψυχαγωγία"
+
+msgctxt "#32011"
+msgid "Categories"
+msgstr "Κατηγορίες"
+
+msgctxt "#32012"
+msgid "Bookmarks"
+msgstr "Σελιδοδείκτες"
 
 msgctxt "#32021"
 msgid "ERT1"

@@ -28,7 +28,8 @@ def addDirectoryItem(parameters, li):
     return xbmcplugin.addDirectoryItem(handle=handle, url=url, 
         listitem=li, isFolder=True)
 
-def addLinkItem(url, li):
+def addLinkItem(parameters, li):
+    url = sys.argv[0] + '?' + urllib.urlencode(parameters)
     return xbmcplugin.addDirectoryItem(handle=handle, url=url, 
         listitem=li, isFolder=False)
 
@@ -36,32 +37,42 @@ def addLinkItem(url, li):
 def show_root_folder():
     floptv = FlopTV()
     items = floptv.getShows()
-
+    
     for item in items:
         liStyle=xbmcgui.ListItem(item["title"], thumbnailImage=item["thumb"])
-        addDirectoryItem({"showid": item["id"]}, liStyle)
+        addDirectoryItem({"mode": "video_files", "url": item["pageUrl"]}, liStyle)
+    xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_LABEL)
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
-def show_video_files(showId):
+def show_video_files(pageUrl):
+    xbmc.log("Show URL: " + pageUrl)
     floptv = FlopTV()
-    items = floptv.getVideoByShow(showId)
+    items = floptv.getVideoByShow(pageUrl)
+    
     for item in items:
         liStyle=xbmcgui.ListItem(item["title"], thumbnailImage=item["thumb"])
-        liStyle.setInfo(type="video",
-            infoLabels={"Tvshowtitle": item["tvshowtitle"], 
-                        "Title": item["title"],
-                        "Plot": item["description"]
-                        })
-        addLinkItem(item["url"], liStyle)
+        liStyle.setProperty('IsPlayable', 'true')
+        addLinkItem({"mode": "play", "url": item["pageUrl"]}, liStyle)
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
-
+def play(pageUrl):
+    xbmc.log("Page URL: " + pageUrl)
+    
+    floptv = FlopTV()
+    videoUrl = floptv.getVideoUrl(pageUrl)
+    xbmc.log("Video URL: " + videoUrl)
+        
+    liStyle=xbmcgui.ListItem(path=videoUrl)
+    xbmcplugin.setResolvedUrl(handle=handle, succeeded=True, listitem=liStyle)
+    
 # parameter values
 params = parameters_string_to_dict(sys.argv[2])
-showid = str(params.get("showid", ""))
+mode = str(params.get("mode", ""))
+url = str(params.get("url", ""))
 
-if showid == "":
+if mode == "" and url == "":
     show_root_folder()
+elif mode == "video_files":
+    show_video_files(url)
 else:
-    show_video_files(showid)
-
+    play(url)

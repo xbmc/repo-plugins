@@ -1,52 +1,78 @@
-import sys
 import re
-import urllib
 import urllib2
-import httplib
-from xml.dom import minidom
-from xml.parsers import expat
+import json
+from BeautifulSoup import BeautifulSoup
 
 class FlopTV:
-    def getShows(self):
-        url = "http://www.floptv.tv/feeds/iphone/GetShows.ashx"
-        xmldata = urllib2.urlopen(url).read()
-        dom = minidom.parseString(xmldata)
+    __USERAGENT = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0"
+    __BASEURL = "http://www.floptv.tv"
+    
+    def __init__(self):
+        opener = urllib2.build_opener()
+        # Use Firefox User-Agent
+        opener.addheaders = [('User-Agent', self.__USERAGENT)]
+        urllib2.install_opener(opener)
 
+    def getShows(self):
+        pageUrl = "http://www.floptv.tv/show/"
+        data = urllib2.urlopen(pageUrl).read()
+        tree = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
+        
         shows = []
-        for showNode in dom.getElementsByTagName('show'):
-            show = {}
-            show["id"] = showNode.getElementsByTagName('id')[0].childNodes[0].data
-            show["title"] = showNode.getElementsByTagName('titolo')[0].childNodes[0].data
-            show["thumb"] = showNode.getElementsByTagName('thumb')[0].childNodes[0].data
-            shows.append(show)
+        sections = tree.find("div", "all-shows").findAll("section")
+        for section in sections:
+            items = section.findAll("li")
+            for item in items:
+                show = {}
+                show["title"] = item.text
+                show["thumb"] = item.find("img")["src"]
+                show["pageUrl"] = self.__BASEURL + item.find("a")["href"]
+                shows.append(show)
        
         return shows
 
-    def getVideoByShow(self, showId):
-        url = "http://www.floptv.tv/feeds/iphone/GetVideoByShow.ashx?id=%s" % showId
-        xmldata = urllib2.urlopen(url).read()
-        dom = minidom.parseString(xmldata)
+    def getVideoByShow(self, pageUrl):
+        data = urllib2.urlopen(pageUrl).read()
+        tree = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
 
         videos = []
-        for videoNode in dom.getElementsByTagName('video'):
-            video = {}
-            videoId = videoNode.getElementsByTagName('id')[0].childNodes[0].data
-            video["tvshowtitle"] = videoNode.getElementsByTagName('show')[0].childNodes[0].data
-            video["title"] = videoNode.getElementsByTagName('titolo')[0].childNodes[0].data
-            # description can be empty
-            try:
-                video["description"] = videoNode.getElementsByTagName('descrizione')[0].childNodes[0].data.strip()
-            except IndexError:
-               video["description"] = ""
-            # [TODO] parse duration
-            # [TODO] pubdate missing
-            thumb = videoNode.getElementsByTagName('thumb')[0].childNodes[0].data
-            match = re.compile("img=(.+?)&").findall(thumb)
-            if match:
-                video["thumb"] = match[0]
-            else:
-                video["thumb"] = None
-            video["url"] = videoNode.getElementsByTagName('url3g')[0].childNodes[0].data
-            videos.append(video)
+        sections = tree.findAll("section", "tabella")
+        for section in sections:
+            items = section.find("tbody").findAll("tr")
+            for item in items:
+                video = {}
+                data = item.findAll("td")
+                video["title"] = data[0].text + " " + data[2].text
+                video["thumb"] = item.find("img")["src"].replace("-62x36.jpg", "-307x173.jpg")
+                video["pageUrl"] = self.__BASEURL + item.find("a")["href"]
+                videos.append(video)
             
         return videos
+
+    def getVideoUrl(self, pageUrl):
+        # Parse the HTML page to get the Video URL
+        data = urllib2.urlopen(pageUrl).read()
+        tree = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
+        
+        iframeUrl = "http:" + tree.find("iframe", {"id": "player"})["src"]
+        req = urllib2.Request(iframeUrl)
+        req.add_header('Referer', pageUrl)
+        data = urllib2.urlopen(req).read()
+        tree = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
+        
+        script = tree.find("script", text=re.compile("playerConfig"))
+        match = re.search(r'sources\s*:\s*(\[[^\]]+\])', script, re.DOTALL)
+        string = match.group(1)
+        
+        # Convert to JSON
+        string = string.replace('file:','"file":')
+        string = string.replace('type:','"type":')
+        
+        sources = json.loads(string)
+        for source in sources:
+            if source["type"] == "hls":
+                videoUrl = source["file"]
+                break
+        
+        return videoUrl
+        

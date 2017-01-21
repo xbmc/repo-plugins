@@ -66,7 +66,7 @@ class indexer:
         }
         ]
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -79,7 +79,7 @@ class indexer:
 
         for i in self.list: i.update({'action': 'videos'})
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -94,7 +94,7 @@ class indexer:
 
         for i in self.list: i.update({'action': 'competitions'})
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -107,7 +107,7 @@ class indexer:
 
         for i in self.list: i.update({'action': 'videos'})
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -120,7 +120,7 @@ class indexer:
 
         for i in self.list: i.update({'action': 'videos'})
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -131,7 +131,7 @@ class indexer:
 
         for i in self.list: i.update({'action': 'play', 'isFolder': 'False'})
 
-        directory.add(self.list, content='files')
+        directory.add(self.list, content='videos')
         return self.list
 
 

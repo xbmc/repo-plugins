@@ -154,7 +154,7 @@ class indexer:
         }
         ]
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -165,7 +165,7 @@ class indexer:
 
         for i in self.list: i.update({'action': 'play', 'isFolder': 'False'})
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -216,6 +216,11 @@ class indexer:
 
         self.list = [i for i in self.list if i['check'] == False]
 
+        threads = []
+        for i in range(0, len(self.list)): threads.append(workers.Thread(self.item_list_worker_2, i))
+        [i.start() for i in threads]
+        [i.join() for i in threads]
+
         return self.list
 
 
@@ -230,6 +235,16 @@ class indexer:
             url = 'plugin://plugin.video.youtube/play/?video_id=%s' % url
 
             self.list[i].update({'url': url, 'check': False})
+        except:
+            pass
+
+
+    def item_list_worker_2(self, i):
+        try:
+            image = re.sub('/\d+x\d+/', '/405x227/', self.list[i]['image'])
+            image = client.request(image, output='geturl')
+            if image == None: raise Exception()
+            self.list[i].update({'image': image})
         except:
             pass
 

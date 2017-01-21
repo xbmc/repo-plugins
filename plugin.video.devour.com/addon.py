@@ -18,7 +18,7 @@
 
 import urlparse,sys
 
-from resources.lib import devour
+from resources.lib import uncrate
 
 
 params = dict(urlparse.parse_qsl(sys.argv[2].replace('?','')))
@@ -29,7 +29,7 @@ url = params.get('url')
 
 
 if action == None:
-    devour.indexer().root()
+    uncrate.indexer().root()
 
 elif action == 'addBookmark':
     from lamlib import bookmarks
@@ -40,18 +40,15 @@ elif action == 'deleteBookmark':
     bookmarks.delete(url)
 
 elif action == 'bookmarks':
-    devour.indexer().bookmarks()
+    uncrate.indexer().bookmarks()
 
 elif action == 'channels':
-    devour.indexer().channels()
-
-elif action == 'search':
-    devour.indexer().search()
+    uncrate.indexer().channels()
 
 elif action == 'videos':
-    devour.indexer().videos(url)
+    uncrate.indexer().videos(url)
 
 elif action == 'play':
-    devour.indexer().play(url)
+    uncrate.indexer().play(url)
 
 

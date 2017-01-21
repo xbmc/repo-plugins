@@ -6,9 +6,9 @@ About
 -----
 Devour scours the web for awesome videos, the ones actually worth watching
 
-Kodi Addon for http://devour.com
+Kodi Addon for http://uncrate.com
 
-This addon is not published nor endorsed by devour.com
+This addon is not published nor endorsed by uncrate.com
 
 
 Artwork

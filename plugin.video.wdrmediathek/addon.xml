@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.wdrmediathek" name="WDR Mediathek" version="1.0.0" provider-name="membrane">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+		<import addon="script.module.libwdr" version="1.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+		<language>de</language>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<source>https://github.com/prof-membrane/plugin.video.wdrmediathek</source>
+        <summary lang="en">View videos from the German tv broadcaster "WDR".</summary>
+        <description lang="en">This add-on lists the videos of the WDR Mediathek (www1.wdr.de/mediathek/video). Videos may be geolocked.</description>
+        <summary lang="de">Die Mediathek des WDR.</summary>
+        <description lang="de">Dieses Add-on bietet Zugriff auf die Mediathek des WDR. Hier gibt es Nachrichten, Dokumentationen und andere Beiträge.</description>
+        <disclaimer lang="de">Dieses Add-on wird von keiner Sendeanstalt unterstützt und ist daher inoffiziell.</disclaimer>
+    </extension>
+</addon>

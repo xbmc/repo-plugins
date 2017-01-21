@@ -1,0 +1,51 @@
+
+2.2.3 (2015-12-02)
+- Bugfix
+- Until 2.2.2 Maintained by Bromix, Now Maintained by L0RE
+
+2.2.2 (2015-12-02)
+[upd] addon.xml (thx 2 NEOhidra)
+
+2.2.1 (2015-04-28)
+UPD: name update
+UPD: changed server for content
+
+2.2.0 (2015-04-23)
+ADD: dependency for YouTube 5.0.0
+ADD: support for DZANGO.TV
+
+2.1.0 (2015-03-27)
+UPD: improved support for Gotham, Helix and Isengard
+
+2.0.5 (2015-01-25)
+UPD: dropped dependency of 'requests'-module because of performance issues
+
+2.0.4 (2014-12-15)
+FIX: correct url quoting/escaping
+
+2.0.3 (2014-12-07)
+UPD: switched to requests
+
+2.0.2 (2014-11-27)
+FIX: skins call '/extrafanart/'
+UPD: improved performance thanks to kodion
+UPD: kodion tests
+
+2.0.1 (2014-11-12)
+FIX: import xbmc.python 2.1.0
+
+2.0.0 (2014-11-09)
+DEL: stable
+UPD: changed ID and moved to stable
+UPD: kodimon
+UPD: testing sqlite for caching, watch later and search
+ADD: missing second fanart
+FIX: added missing source file
+UPD: kodimon framework
+ADD: setting for caching size (1-25 MB / default 5 MB)
+FIX: crash while using dumdb for caching under android
+UPD: internal testing
+UPD: moved to kodimon (framework)
+
+1.0.0
+- initial version for tests

@@ -1,0 +1,231 @@
+# XBMC Media Center language file
+# Addon Name: Netzkino
+# Addon id: plugin.video.netzkino_de
+# Addon version: 2.2.3
+# Addon Provider: L0RE
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2017-01-19 19:20+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Netzkino movies"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "With Netzkino you can watch movies free and legal."
+msgstr ""
+
+#Kodion Settings
+
+msgctxt "#30000"
+msgid "General"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Username"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Password"
+msgstr ""
+
+#empty strings from id 30003 to 30009
+
+msgctxt "#30010"
+msgid "Video Quality"
+msgstr ""
+
+msgctxt "#30011"
+msgid "480p"
+msgstr ""
+
+msgctxt "#30012"
+msgid "720p (HD)"
+msgstr ""
+
+msgctxt "#30013"
+msgid "1080p (HD)"
+msgstr ""
+
+msgctxt "#30014"
+msgid "2160p (4k)"
+msgstr ""
+
+msgctxt "#30015"
+msgid "4320p (8k)"
+msgstr ""
+
+msgctxt "#30016"
+msgid "240p"
+msgstr ""
+
+msgctxt "#30017"
+msgid "360p"
+msgstr ""
+
+#empty strings from id 30018 to 30019
+
+msgctxt "#30020"
+msgid "Allow 3D"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Show Fanart"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Items per page"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Search History Size"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Cache Size (MB)"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Enable setup-wizard"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Override View"
+msgstr ""
+
+msgctxt "#30027"
+msgid "View: Default"
+msgstr ""
+
+msgctxt "#30028"
+msgid "View: Episodes"
+msgstr ""
+
+msgctxt "#30029"
+msgid "View: Movies"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Execute setup-wizard?"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Advanced"
+msgstr ""
+
+msgctxt "#30032"
+msgid "View: TV Shows"
+msgstr ""
+
+msgctxt "#30033"
+msgid "View: Songs"
+msgstr ""
+
+msgctxt "#30034"
+msgid "View: Artists"
+msgstr ""
+
+msgctxt "#30035"
+msgid "View: Albums"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Support alternative player"
+msgstr ""
+
+#Kodion Common
+#empty strings from id 30037 to 30099
+
+msgctxt "#30100"
+msgid "Favorites"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Add to addon favs"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Library"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Highlights"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Archive"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Next Page (%d)"
+msgstr ""
+
+msgctxt "#30107"
+msgid "Watch Later"
+msgstr ""
+
+msgctxt "#30108"
+msgid "Remove"
+msgstr ""
+
+msgctxt "#30109"
+msgid "Latest Videos"
+msgstr ""
+
+msgctxt "#30110"
+msgid "New Search"
+msgstr ""
+
+msgctxt "#30111"
+msgid "Sign In"
+msgstr ""
+
+msgctxt "#30112"
+msgid "Sign Out"
+msgstr ""
+
+msgctxt "#30113"
+msgid "Rename"
+msgstr ""
+
+msgctxt "#30114"
+msgid "Confirm delete"
+msgstr ""
+
+msgctxt "#30115"
+msgid "Confirm remove"
+msgstr ""
+
+msgctxt "#30116"
+msgid "Delete \"%s\"?"
+msgstr ""
+
+msgctxt "#30117"
+msgid "Remove \"%s\"?"
+msgstr ""
+
+msgctxt "#30118"
+msgid "Delete"
+msgstr ""
+
+msgctxt "#30119"
+msgid "Please wait..."
+msgstr ""
+
+msgctxt "#30120"
+msgid "Clear"
+msgstr ""

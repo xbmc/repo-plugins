@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.funimationnow" version="0.0.3" name="FunimationNOW" provider-name="Protocol-X">
+<addon id="plugin.video.funimationnow" version="0.0.4" name="FunimationNOW" provider-name="Protocol-X">
     <requires>
         <import addon="xbmc.python" version="2.19.0" />
         <import addon="script.module.dateutil" version="2.4.2"/>
@@ -12,6 +12,7 @@
         <website>https://github.com/Protocol-X/plugin.video.funimationnow</website>
         <source>https://github.com/Protocol-X/plugin.video.funimationnow</source>
         <email></email>
+        <broken>deprecated</broken>
         <description lang="en">You should be watching!
 
 Balance out the new with some of our best.

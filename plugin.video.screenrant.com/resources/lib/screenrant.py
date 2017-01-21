@@ -65,7 +65,7 @@ class indexer:
         }
         ]
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -79,7 +79,7 @@ class indexer:
             bookmark['delbookmark'] = i['url']
             i.update({'cm': [{'title': 32502, 'query': {'action': 'deleteBookmark', 'url': json.dumps(bookmark)}}]})
 
-        directory.add(self.list, content='files')
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -97,12 +97,12 @@ class indexer:
 
         for i in self.list: i.update({'nextlabel': 32500, 'nextaction': 'youtube'})
 
-        directory.add(self.list, content='files')
+        directory.add(self.list, content='videos')
         return self.list
 
 
     def videos(self, url):
-        self.list = cache.get(self.item_list, 1, url)
+        self.list = cache.get(self.item_list, 0, url)
 
         if self.list == None: return
 
@@ -115,7 +115,7 @@ class indexer:
 
         for i in self.list: i.update({'nextlabel': 32500, 'nextaction': 'videos'})
 
-        directory.add(self.list, content='files')
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -147,7 +147,7 @@ class indexer:
 
         for item in items:
             try:
-                title = client.parseDOM(item, 'span', ret='data-alt')[0]
+                title = client.parseDOM(item, 'a', attrs = {'class': 'link'})[0]
                 title = client.replaceHTMLCodes(title)
                 title = title.encode('utf-8')
 
@@ -155,7 +155,7 @@ class indexer:
                 url = client.replaceHTMLCodes(url)
                 url = url.encode('utf-8')
 
-                image = client.parseDOM(item, 'img', ret='src')[0]
+                image = client.parseDOM(item, 'source', ret='srcset')[0]
                 image = client.replaceHTMLCodes(image)
                 image = image.encode('utf-8')
 
@@ -174,31 +174,37 @@ class indexer:
 
             result = client.request(url)
 
-            netloc = ['brightcove', 'youtube', 'soundcloud', 'podcasts.screenrant', 'media.blubrry']
+            netloc1 = ['brightcove', 'youtube', 'soundcloud', 'podcasts.screenrant', 'media.blubrry']
+            netloc2 = ['screenrant.com']
 
             src = client.parseDOM(result, 'iframe', ret='src')
             src += client.parseDOM(result, 'audio', ret='src')
+            src = [i.replace('\\', '') for i in src]
             src = [(i, urlparse.urlparse(i).netloc) for i in src]
-            src = [i[0] for i in src if any(x in i[1] for x in netloc)][0]
-            src = client.replaceHTMLCodes(src)
+            src = [i for i in src if any(x in i[1] for x in netloc1)] + [i for i in src if any(x in i[1] for x in netloc2)]
+            src = [client.replaceHTMLCodes(i[0]) for i in src]
 
             try:
-                url = re.findall('(?:youtube.com|youtu.be)/(?:embed/|.+?\?v=|.+?\&v=|v/)([0-9A-Za-z_\-]+)', src)[0]
+                url = re.findall('(?:youtube.com|youtu.be)/(?:embed/|.+?\?v=|.+?\&v=|v/)([0-9A-Za-z_\-]+)', src[0])[0]
                 url = 'plugin://plugin.video.youtube/play/?video_id=%s' % url
                 return url
             except:
                 pass
 
             try:
-                if not 'brightcove' in src: raise Exception()
+                if not 'brightcove' in src[-1]: raise Exception()
 
-                pk = client.request('http:' + re.findall('(//.+)', src)[0])
-                pk = re.findall('policyKey\s*:\s*(?:[\\\]"|"|[\\\]\'|\')(.+?)(?:[\\\]"|"|[\\\]\'|\')', pk)[0]
+                vid = urlparse.parse_qs(urlparse.urlparse(src[-1]).query)['videoId'][0]
 
-                headers = {'Accept': 'application/json;pk=%s' % pk}
+                url = client.request(src[-1])
+                url = re.findall('http(?:s|)://players.brightcove.net/\d+/.+?/.+?\.js', url)[0]
+                url = client.request(url)
 
-                url = re.findall('(?:brightcove).+?/(.+?)/.+?videoId=([0-9A-Za-z_\-]+)', src)[0]
-                url = 'https://edge.api.brightcove.com/playback/v1/accounts/%s/videos/%s' % url
+                pok = re.findall('policyKey\s*:\s*(?:[\\\]"|"|[\\\]\'|\')(.+?)(?:[\\\]"|"|[\\\]\'|\')', url)[0]
+                aid = re.findall('accountId\s*:\s*(?:"|\')(.+?)(?:"|\')', url)[0]
+
+                headers = {'Accept': 'application/json;pk=%s' % pok}
+                url = 'https://edge.api.brightcove.com/playback/v1/accounts/%s/videos/%s' % (aid, vid)
 
                 url = client.request(url, headers=headers)
                 url = json.loads(url)['sources']
@@ -211,7 +217,7 @@ class indexer:
                 pass
 
             try:
-                url = re.findall('soundcloud.+?/tracks/([0-9A-Za-z_\-]+)', src)[0]
+                url = re.findall('soundcloud.+?/tracks/([0-9A-Za-z_\-]+)', src[0])[0]
                 url = 'https://api.soundcloud.com:443/tracks/%s/stream?client_id=cUa40O3Jg3Emvp6Tv4U6ymYYO50NUGpJ' % url
 
                 url = client.request(url, output='geturl')
@@ -220,8 +226,8 @@ class indexer:
                 pass
 
             try:
-                if not ('podcasts.screenrant' in src or 'media.blubrry' in src): raise Exception()
-                return src
+                if not ('podcasts.screenrant' in src[0] or 'media.blubrry' in src[0]): raise Exception()
+                return src[0]
             except:
                 pass
 

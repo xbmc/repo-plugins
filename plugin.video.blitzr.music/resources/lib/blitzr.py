@@ -33,7 +33,7 @@ class indexer:
         self.email = control.setting('blitzr.email')
         self.password = control.setting('blitzr.password')
         self.key_link = '&key=%s' % self.key
-        self.popular_link = '/top/50/?&start=0'
+        self.popular_link = '/top/artists/?limit=50&start=0'
         self.trending_link = '/top/listens/?limit=50&start=0'
         self.radio_link = '/radio/tag/?limit=50&slug=%s'
         self.recommended_link = '/user/profile/recommendations/?limit=50'
@@ -129,7 +129,7 @@ class indexer:
         }
         ]
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -154,7 +154,7 @@ class indexer:
         }
         ]
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -273,7 +273,7 @@ class indexer:
 
         for i in self.list: i.update({'icon': 'radio.png'})
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 
@@ -342,7 +342,7 @@ class indexer:
                 ]})
 
 
-        directory.add(self.list, infotype='Music')
+        directory.add(self.list, content='videos', infotype='Music')
         return self.list
 
 
@@ -376,7 +376,7 @@ class indexer:
                 ]})
 
 
-        directory.add(self.list, infotype='Music')
+        directory.add(self.list, content='videos', infotype='Music')
         return self.list
 
 
@@ -394,7 +394,7 @@ class indexer:
             {'title': 32502, 'query': {'action': 'uncollectArtist', 'url': i['uuid']}}
             ]})
 
-        directory.add(self.list, infotype='Music')
+        directory.add(self.list, content='videos', infotype='Music')
         return self.list
 
 
@@ -418,7 +418,7 @@ class indexer:
                 ]})
 
 
-        directory.add(self.list, infotype='Music')
+        directory.add(self.list, content='videos', infotype='Music')
         return self.list
 
 
@@ -435,7 +435,7 @@ class indexer:
             {'title': 32505, 'query': {'action': 'newPlaylist', 'url': i['uuid']}}
             ]})
 
-        directory.add(self.list, content='files', infotype='Music')
+        directory.add(self.list, content='videos', infotype='Music')
         return self.list
 
 
@@ -452,7 +452,7 @@ class indexer:
             {'title': 32505, 'query': {'action': 'newPlaylist', 'url': i['uuid']}}
             ]})
 
-        directory.add(self.list, content='files', infotype='Music')
+        directory.add(self.list, content='videos', infotype='Music')
         return self.list
 
 
@@ -470,7 +470,7 @@ class indexer:
             {'title': 32506, 'query': {'action': 'leavePlaylist', 'url': i['uuid']}}
             ]})
 
-        directory.add(self.list, content='files', infotype='Music')
+        directory.add(self.list, content='videos', infotype='Music')
         return self.list
 
 
@@ -491,7 +491,7 @@ class indexer:
 
         self.list = sorted(self.list, key=lambda k: k['title'].lower())
 
-        directory.add(self.list)
+        directory.add(self.list, content='videos')
         return self.list
 
 

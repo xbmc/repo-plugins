@@ -34,7 +34,7 @@ msgstr "Συλλογή: Καλλιτέχνες"
 
 msgctxt "#32007"
 msgid "Collection: Albums"
-msgstr "Συλλογή: ʼλμπουμ"
+msgstr "Συλλογή: Άλμπουμ"
 
 msgctxt "#32008"
 msgid "Collection: Songs"

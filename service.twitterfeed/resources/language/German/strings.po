@@ -1,0 +1,178 @@
+# XBMC Media Center language file
+# Addon Name: Twitter Feed
+# Addon id: service.twitterfeed
+# Addon version: 0.8.28
+# Addon Provider: L0RE
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2017-01-22 21:57+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Shows Twitter Messages in Kodi"
+msgstr "Zeigt Twitter Nachrichten in Kodi an"
+
+msgctxt "Addon Description"
+msgid "Shows Hastags from \"TV Shows and Sender\" or \"Timline\" or a \"defined search word\""
+msgstr "Zeigt Hashtags aus dem Fernsehen an oder die Timeline oder ein Suchbegriff an"
+
+msgctxt "#30001"
+msgid "Filter(words seperated with ,)"
+msgstr "Filter(Komma getrennt)"
+
+msgctxt "#30002"
+msgid "Conent"
+msgstr "Welche Art von Tweets"
+
+msgctxt "#30003"
+msgid "Countrycode (Exampe DE)"
+msgstr "Ländercode (z.b. DE)"
+
+msgctxt "#30004"
+msgid "Initial Tweets"
+msgstr "Initial Tweets"
+
+msgctxt "#30005"
+msgid "Authentificate"
+msgstr "Authentifizieren"
+
+msgctxt "#30006"
+msgid "Show Twets Always"
+msgstr "Tweets überall anzeigen"
+
+msgctxt "#30007"
+msgid "Search for"
+msgstr "Suchwort"
+
+msgctxt "#30008"
+msgid "Avatar Picture"
+msgstr "Avatar Bild"
+
+msgctxt "#30009"
+msgid "generel"
+msgstr "Generell"
+
+msgctxt "#30010"
+msgid "Filter"
+msgstr "Filter"
+
+msgctxt "#30011"
+msgid "Filter Urls"
+msgstr "Filter Urls"
+
+msgctxt "#30012"
+msgid "Reading Time"
+msgstr "Reading Time"
+
+msgctxt "#30013"
+msgid "Grey Out"
+msgstr "Grey Out"
+
+msgctxt "#30014"
+msgid "TV Tags"
+msgstr "TV Tags"
+
+msgctxt "#30015"
+msgid "Video Tags"
+msgstr "Video Tags"
+
+msgctxt "#30016"
+msgid "Alias List Type"
+msgstr "Alias List Type"
+
+msgctxt "#30017"
+msgid "Url"
+msgstr "Url"
+
+msgctxt "#30018"
+msgid "File"
+msgstr "File"
+
+msgctxt "#30019"
+msgid "Twitter Auth in Local Browser?"
+msgstr "Twitter Auth im Lokalen  Browser?"
+
+msgctxt "#30020"
+msgid "Show Auth URL in Kodi for externel Browser"
+msgstr "Twitter Auth im Externen Brwoser?"
+
+msgctxt "#30021"
+msgid "Cancel"
+msgstr "Abbrechen"
+
+msgctxt "#30022"
+msgid "Twitter: Enter the Pin"
+msgstr "Twitter: Pin Eingeben"
+
+msgctxt "#30023"
+msgid "Please enter this URL in a Browser"
+msgstr "Please enter this URL in a Browser"
+
+msgctxt "#30024"
+msgid "New Configuration"
+msgstr "Neu Configuration"
+
+msgctxt "#30025"
+msgid "After Leaving the Settings, Twitteraddon will Authentificate again"
+msgstr "Nach verlassen des Einstellungen wird Twitter neu Configuriert"
+
+msgctxt "#30026"
+msgid "Design"
+msgstr "Design"
+
+msgctxt "#30027"
+msgid "Font"
+msgstr "Schrift"
+
+msgctxt "#30028"
+msgid "Message Start X"
+msgstr "Meldung Start X"
+
+msgctxt "#30029"
+msgid "Message Start Y"
+msgstr "Meldung Start Y"
+
+msgctxt "#30030"
+msgid "Meldung Height"
+msgstr "Meldung Höhe"
+
+msgctxt "#30031"
+msgid "Meldung Length"
+msgstr "Meldung Breite"
+
+msgctxt "#30032"
+msgid "Picture Height"
+msgstr "Bild Höhe"
+
+msgctxt "#30033"
+msgid "Picture Length"
+msgstr "Bild Breit"
+
+msgctxt "#30034"
+msgid "Advanced (Only If you know what you are doing)"
+msgstr "Advanced (Nur wenn du weißt was du tust)"
+
+msgctxt "#30035"
+msgid "Fontcolor"
+msgstr "Schriftfarbe"
+
+msgctxt "#30036"
+msgid "TimeLine"
+msgstr "TimeLine"
+
+msgctxt "#30037"
+msgid "Hashtag"
+msgstr "Hashtag"
+
+msgctxt "#30038"
+msgid "Video Tags"
+msgstr "Video Tags"

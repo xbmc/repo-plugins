@@ -16,14 +16,14 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 #addon = xbmcaddon.Addon()
-#addonID = addon.getAddonInfo('id')
-addonID = 'plugin.video.tele5_de'
-addon = xbmcaddon.Addon(id=addonID)
+
+#addonID = 'plugin.video.tele5_de'
+addon = xbmcaddon.Addon()
+addonID = addon.getAddonInfo('id')
 socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
 xbmcplugin.setContent(pluginhandle, 'movies')
 translation = addon.getLocalizedString
-xbox = xbmc.getCondVisibility("System.Platform.xbox")
 icon = xbmc.translatePath('special://home/addons/'+addonID+'/icon.png')
 baseUrl = "http://www.tele5.de"
 opener = urllib2.build_opener()
@@ -189,7 +189,9 @@ def parameters_string_to_dict(parameters):
 def addLink(name, url, mode, iconimage, desc="", duration="",count=0,dadd=0,genre="",episode=0,season=0):
     u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&count="+str(count)
     ok = True
-    liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+    liz = xbmcgui.ListItem(name)
+    liz.setArt({ 'fanart': iconimage })
+    liz.setArt({ 'thumb': iconimage })
     liz.setInfo(type="Video", infoLabels={"title": name, "plot": desc, "duration": duration ,"lastplayed": dadd,"genre":genre,"episode":episode,"season":season })
     liz.setProperty('IsPlayable', 'true')
     liz.addContextMenuItems([(translation(30004), 'RunPlugin(plugin://'+addonID+'/?mode=queueVideo&url='+urllib.quote_plus(u)+'&name='+str(name)+'&thumb='+urllib.quote_plus(iconimage)+')',)])
@@ -200,7 +202,9 @@ def addLink(name, url, mode, iconimage, desc="", duration="",count=0,dadd=0,genr
 def addDir(name, url, mode, iconimage, desc="", duration=""):
     u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
     ok = True
-    liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+    liz = xbmcgui.ListItem(name)
+    liz.setArt({ 'fanart': iconimage })
+    liz.setArt({ 'thumb': iconimage })
     liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc, "Duration": duration})
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
     return ok

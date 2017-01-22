@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.wdrrockpalast" name="WDR Rockpalast" version="1.0.0" provider-name="membrane">
+    <requires>
+		<import addon="xbmc.python" version="2.25.0"/>
+		<import addon="script.module.libmediathek3" version="1.3.1"/>
+		<import addon="script.module.libwdr" version="1.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+		<language>de</language>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<source>https://github.com/prof-membrane/plugin.video.wdrrockpalast</source>
+        <summary lang="en">This add-on lists all videos of the WDR Rockpalast.</summary>
+        <description lang="en">This is a video add-on for the WDR Rockpalast (www1.wdr.de/mediathek/video/sendungen/rockpalast/rockpalast-106.html). The content may be geolocked.</description>
+        <summary lang="de">Dies ist ein Video Add-on für den WDR Rockpalast.</summary>
+        <description lang="de">Dieses Add-on listet alle Videos vom WDR Rockpalast (www1.wdr.de/mediathek/video/sendungen/rockpalast/rockpalast-106.html). Die Inhalte sind unter Umständen nur aus Deutschland erreichbar.</description>
+        <disclaimer lang="de">Dieses Add-on wird von keiner Sendeanstalt unterstützt und ist daher inoffiziell.</disclaimer>
+    </extension>
+</addon>

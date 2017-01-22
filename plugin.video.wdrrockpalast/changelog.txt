@@ -1,0 +1,4 @@
+1.0.0
+- Added Fanart
+- Added icon
+- Added description

@@ -1,217 +1,102 @@
-# Kodi Media Center language file
-# Addon Name: CURRENTTIME.TV
-# Addon id: plugin.video.currenttime.tv
-# Addon Provider: dicoka@ukr.net
+# XBMC Media Center language file
+# Addon Name: Aktuálně TV
+# Addon id: plugin.video.aktualnetv
+# Addon version: 1.3.2
+# Addon Provider: Petr Kutalek
 msgid ""
 msgstr ""
-"Project-Id-Version: Kodi Addons\n"
-"Report-Msgid-Bugs-To: dicoka@ukr.net\n"
-"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: dicoka@ukr.net\n"
-"Language-Team: dicoka@ukr.net\n"
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2017-01-22 17:33+0000\n"
+"PO-Revision-Date: 2017-01-22 18:33+0100\n"
+"Last-Translator: Petr Kutalek <petr@kutalek.cz>\n"
+"Language-Team: LANGUAGE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: en\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "This addon provides access to videos published on Aktualne TV"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Aktualne.cz — covering all aspects of life in the Czech Republic, from political, social, economic and sports news to arts and culture"
+msgstr ""
+
+msgctxt "Addon Disclaimer"
+msgid "This is an unofficial addon and is in no way affiliated with publisher Economia, a. s. It was created and is maintained by an independent developer. It is provided for reference only and may contain errors."
+msgstr ""
+
+msgctxt "#30000"
+msgid "Aktualne TV"
+msgstr ""
 
 msgctxt "#30001"
-msgid "Live Stream"
+msgid "Economia"
 msgstr ""
 
-msgctxt "#30002"
-msgid "Current Time TV channel - live stream online"
-msgstr ""
-
-msgctxt "#30003"
-msgid "Last Broadcasts"
-msgstr ""
-
-msgctxt "#30004"
-msgid "Last TV Programmes Broadcasts"
-msgstr ""
-
-msgctxt "#30005"
-msgid "TV Programmes"
-msgstr ""
-
-msgctxt "#30006"
-msgid "All TV Programmes"
-msgstr ""
-
-msgctxt "#30007"
-msgid "All Videos"
-msgstr ""
-
-msgctxt "#30008"
-msgid "All Videos"
-msgstr ""
-
-msgctxt "#30009"
-msgid "Videos: Daily Shoots"
-msgstr ""
-
-msgctxt "#30010"
-msgid "Daily Shoots"
-msgstr ""
-
+#empty strings from id 30002 to 30010
 
 msgctxt "#30011"
-msgid "Videos: Reportages"
-msgstr ""
-
-msgctxt "#30012"
-msgid "Reportages"
-msgstr ""
-
-msgctxt "#30013"
-msgid "Videos: Interviews"
-msgstr ""
-
-msgctxt "#30014"
-msgid "Opinions"
-msgstr ""
-
-
-
-msgctxt "#30031"
-msgid "Час Тимура Олевского"
-msgstr ""
-
-msgctxt "#30032"
-msgid "Ежедневная телепередача Час Тимура Олевского"
-msgstr ""
-
-msgctxt "#30033"
-msgid "Настоящее Время - Европа"
-msgstr ""
-
-msgctxt "#30034"
-msgid "Ежедневная телепередача Настоящее Время"
-msgstr ""
-
-msgctxt "#30035"
-msgid "Настоящее Время – Азия"
-msgstr ""
-
-msgctxt "#30036"
-msgid "Ежедневная телепередача Настоящее Время – Азия"
-msgstr ""
-
-msgctxt "#30037"
-msgid "Настоящее Время – Америка"
-msgstr ""
-
-msgctxt "#30038"
-msgid "Ежедневная телепередача Настоящее Время – Америка"
-msgstr ""
-
-msgctxt "#30039"
-msgid "Смотри в оба"
-msgstr ""
-
-msgctxt "#30040"
-msgid "Еженедельная передача Смотри в оба"
-msgstr ""
-
-msgctxt "#30041"
-msgid "Итоги"
-msgstr ""
-
-msgctxt "#30042"
-msgid "Еженедельная итоговая телепередача Итоги (по субботам)"
-msgstr ""
-
-msgctxt "#30043"
-msgid "Неделя"
-msgstr ""
-
-msgctxt "#30044
-msgid "Еженедельная итоговая телепередача Неделя (по воскресеньям)"
-msgstr ""
-
-msgctxt "#30045"
-msgid "Балтия. Неделя"
-msgstr ""
-
-msgctxt "#30046"
-msgid "Еженедельная итоговая передача Балтия. Неделя (по субботам)"
-msgstr ""
-
-msgctxt "#30047"
-msgid "Бизнес-план"
-msgstr ""
-
-msgctxt "#30048"
-msgid "Еженедельная передача Бизнес-план"
-msgstr ""
-
-msgctxt "#30049"
-msgid "Неизвестная Россия"
-msgstr ""
-
-msgctxt "#30050"
-msgid "Цикл Неизвестная Россия"
-msgstr ""
-
-msgctxt "#30051"
-msgid "Ждем в гости"
-msgstr ""
-
-msgctxt "#30052"
-msgid "Ждем в гости с Зурабом Двали"
-msgstr ""
-
-
-msgctxt "#30101"
-msgid "Next"
-msgstr ""
-
-msgctxt "#30102"
-msgid "More videos"
-msgstr ""
-
-
-msgctxt "#30103"
 msgid "Archive"
 msgstr ""
 
-msgctxt "#30104"
-msgid "All dates video archive"
+msgctxt "#30012"
+msgid "Shows"
 msgstr ""
 
+#empty string with id 30013
 
-msgctxt "#30801"
-msgid "Connection Error"
+msgctxt "#30014"
+msgid "Search"
 msgstr ""
 
+#empty strings from id 30015 to 30019
 
-msgctxt "#30901"
-msgid "General"
+msgctxt "#30020"
+msgid "Next…"
 msgstr ""
 
-msgctxt "#30902"
-msgid "Live Stream Quality"
+#empty strings from id 30021 to 30100
+
+msgctxt "#30101"
+msgid "Playback"
 msgstr ""
 
-msgctxt "#30903"
-msgid "Archive Videos Quality"
+msgctxt "#30102"
+msgid "Other"
 msgstr ""
 
-msgctxt "#30904"
-msgid "Download Fanart"
+#empty strings from id 30103 to 30109
+
+msgctxt "#30110"
+msgid "Quality"
 msgstr ""
 
-msgctxt "#30905"
-msgid "Download Thumbnails"
+msgctxt "#30111"
+msgid "LQ (180p)"
 msgstr ""
 
+msgctxt "#30112"
+msgid "SD (360p)"
+msgstr ""
 
+msgctxt "#30113"
+msgid "HD (720p)"
+msgstr ""
 
+#empty strings from id 30114 to 30119
 
+msgctxt "#30120"
+msgid "Format"
+msgstr ""
 
+msgctxt "#30121"
+msgid "H.264 (hardware-accelerated)"
+msgstr ""
 
-
-
-
+msgctxt "#30122"
+msgid "VP8 (libre)"
+msgstr ""

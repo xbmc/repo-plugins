@@ -27,6 +27,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
     <language>de</language>
+    <broken>Deprecated. The addon original author has not updated the addon in the while. Membrane is the new maintainer. The updated version is available for Krypton and above versions.</broken>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
     <website>https://github.com/fisch42/xbmc-plugin-sportschau</website>
     <source>https://github.com/fisch42/xbmc-plugin-sportschau</source>

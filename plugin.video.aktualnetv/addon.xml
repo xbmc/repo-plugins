@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.aktualnetv" version="1.2.1" name="Aktuálně TV" provider-name="Petr Kutalek (petr@kutalek.cz)">
+<addon id="plugin.video.aktualnetv" version="1.3.2" name="Aktuálně TV" provider-name="Petr Kutalek">
   <requires>
     <import addon="xbmc.python" version="2.24.0"/>
     <import addon="script.module.xbmcswift2" version="2.4.0"/>
@@ -18,10 +18,34 @@
     <disclaimer lang="cs">Toto je neoficiální doplněk a není, žel, žádným způsobem spojen s vydavatelstvím Economia, a. s. Byl vytvořen a je udržovan nezávislým vývojářem. Doplněk je poskytnut pouze jako ukázka a může obsahovat chyby.</disclaimer>
     <platform>all</platform>
     <language>cs</language>
+
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
     <website>https://video.aktualne.cz/</website>
     <forum>https://github.com/petrkutalek/plugin.video.aktualnetv/issues</forum>
     <email>petr@kutalek.cz</email>
     <source>https://github.com/petrkutalek/plugin.video.aktualnetv/</source>
+
+    <assets>
+      <icon>icon.png</icon>
+      <fanart>fanart.jpg</fanart>
+      <screenshot>resources/screenshot-1.jpg</screenshot>
+      <screenshot>resources/screenshot-2.jpg</screenshot>
+      <screenshot>resources/screenshot-3.jpg</screenshot>
+      <screenshot>resources/screenshot-4.jpg</screenshot>
+    </assets>
+
+    <news><![CDATA[[B]1.3.2[/B]
+— Fixed compatibility for KODI v16/v17
+
+[B]1.3.1[/B]
+— Fixed JSON parsing, now it is more robust and tolerant
+
+[B]1.2.3 — 1.2.4[/B]
+— Fixed missing Shows thumbnail issue
+
+[B]1.2.2[/B]
+— Build for Kodi v17
+]]></news>
+
   </extension>
 </addon>

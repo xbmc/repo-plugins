@@ -5,6 +5,7 @@ from urllib import urlencode
 import gzip
 import io
 import json
+from resources.lib import demjson
 import re
 import sys
 import urllib2
@@ -37,34 +38,8 @@ def _get_file(url, referer = None):
     return content
 
 
-def _js_to_json(code):
-    def fix_kv(m):
-        v = m.group(0)
-        if v in ('true', 'false', 'null'):
-            return v
-        if v.startswith('"'):
-            return v
-        if v.startswith("'"):
-            v = v[1:-1]
-            v = re.sub(r"\\\\|\\'|\"", lambda m: {
-                '\\\\': '\\\\',
-                "\\'": "'",
-                '"': '\\"',
-                }[m.group(0)], v)
-        return '"%s"' % v
-
-    res = re.sub(r'''(?x)
-        "(?:[^"\\]*(?:\\\\|\\")?)*"|
-        '(?:[^'\\]*(?:\\\\|\\')?)*'|
-        [a-zA-Z_][.a-zA-Z_0-9]*
-        ''', fix_kv, code
-        )
-    res = re.sub(r',(\s*\])', lambda m: m.group(1), res)
-    return res
-
-
 def _js_to_obj(code):
-    return json.loads(_js_to_json(code))
+    return demjson.decode(code)
 
 
 def _decode_entities(s):
@@ -113,13 +88,15 @@ def menu():
 
 @plugin.route('/shows')
 def menu_shows():
+    csspage = get_webpage('https://i0.cz/bbx/video/css/videohub.css')
+    cssimgs = dict(re.findall(u'ul\\.porady li\\.uzky a\\.([a-z0-9-]+)\\{background:url\\(\\.\\./img/video/(.+?)\\)', csspage, re.DOTALL))
     page = get_webpage('https://video.aktualne.cz/')
     page = re.findall(u'<h2 id="porady">Pořady</h2>(.+?)</ul>', page, re.DOTALL)[0]
     matches = re.findall(u'<a class="(.+?)" href="/(.+?)/">.+?<span class="nazev">(.+?)</span>.+?</a>', page, re.DOTALL)
     items = [{
         'label': _decode_entities(re.sub('<.+?>', ' ', m[2])),
         'path': plugin.url_for('menu_playlist_short', path=m[1]),
-        'thumbnail': 'https://i0.cz/bbx/video/img/video/porad-d-%s-uzky.jpg' % m[0]
+        'thumbnail': ('https://i0.cz/bbx/video/img/video/%s' % cssimgs[m[0]]) if m[0] in cssimgs else plugin.addon.getAddonInfo('icon')
         } for m in matches]
     return plugin.finish(items, view_mode='thumbnail')
 
@@ -161,7 +138,6 @@ def menu_playlist(path, offset):
 def play_video(token):
     url = 'https://video.aktualne.cz/-/r~%s/' % token
     page = get_webpage(url)
-
     s1 = re.search(u'(?s)embedData[0-9a-f]{32}\\[\'asset\'\\]\s*=\\s*(\\{.+?\\});', page, re.DOTALL)
     if s1:
         metadata = _js_to_obj(s1.group(1))
@@ -174,10 +150,8 @@ def play_video(token):
         prefered_quality = plugin.get_setting('quality', choices=('180p', '360p', '720p'))
         preference = '%s@%s' % (prefered_format, prefered_quality)
         format = preference if preference in formats else formats.keys()[0]
-
         plot = re.search(u'(?s)<p class="popis".+?\\| (.+?)</p>', page, re.DOTALL).group(1)
         show = re.search(u'(?s)\'GA\': htmldeentitize\\(\'(.+?)\'\\)', page, re.DOTALL).group(1)
-
         return [{
             'label': _decode_entities(metadata['title']),
             'is_playable': True,

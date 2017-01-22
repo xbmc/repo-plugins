@@ -1,13 +1,11 @@
-v1.0.2 (2016-12-23)
-- Fixed video archive playback with selected quality (due to provider api changes)
-- Исправлено воспроизведение видео архива с заданным качеством (в связи с изменениями api провайдера)
+[B]1.3.2[/B]
+— Fixed compatibility for KODI v16/v17
 
-v1.0.1 (2016-12-08)
-- Faster video folders download
-- New options added for disabling fanart and thumbnails download
-- Увеличена скорость загрузка папок видео
-- Добавлены новые установки для отключения загрузки фанарта и эскизов
+[B]1.3.1[/B]
+— Fixed JSON parsing, now it is more robust and tolerant
 
-v1.0.0 (2016-12-01)
-- Initial version
-- Первая проба
+[B]1.2.3 — 1.2.4[/B]
+— Fixed missing Shows thumbnail issue
+
+[B]1.2.2[/B]
+— Build for Kodi v17

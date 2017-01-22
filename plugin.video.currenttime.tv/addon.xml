@@ -1,29 +1,51 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.currenttime.tv" name="CurrentTime.TV" version="1.0.2" provider-name="dicoka@ukr.net">
+<addon id="plugin.video.aktualnetv" version="1.3.2" name="Aktuálně TV" provider-name="Petr Kutalek">
   <requires>
     <import addon="xbmc.python" version="2.24.0"/>
+    <import addon="script.module.xbmcswift2" version="2.4.0"/>
   </requires>
+
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
   </extension>
+
   <extension point="xbmc.addon.metadata">
-	<summary lang="en">Current Time TV channel - live stream, video and tv programmes archive</summary>
-    <summary lang="ru">ТВ канал "Настоящее Время - архив телепрограмм, видео и прямой эфир</summary>
-    <description lang="ru">Настоящее Время – это 24-часовое телевизионное и интернет вещание, ориентированное на русскоязычную аудиторию в России, странах Центральной и Восточной Европы, а также по всему миру.Настоящее Время – совместный медиапроект Радио Свобода/Свободная Европа и "Голоса Америки".</description>
-	<description lang="en">"Current Time" is an international TV channel for Russian-speaking audiences covering important events for people worldwide. Current Time is a joint production of Radio Free Europe/Radio Liberty and the Voice of America.</description>
-	<disclaimer lang="ru"></disclaimer>
-	<disclaimer lang="en"></disclaimer>
+    <summary lang="en">This addon provides access to videos published on Aktualne TV</summary>
+    <summary lang="cs">Tento doplněk zpřístupňuje videa publikovaná na Aktuálně TV</summary>
+    <description lang="en">Aktualne.cz — covering all aspects of life in the Czech Republic, from political, social, economic and sports news to arts and culture</description>
+    <description lang="cs">Aktuálně.cz — kompletní zpravodajství, zprávy z domova i ze světa</description>
+    <disclaimer lang="en">This is an unofficial addon and is in no way affiliated with publisher Economia, a. s. It was created and is maintained by an independent developer. It is provided for reference only and may contain errors.</disclaimer>
+    <disclaimer lang="cs">Toto je neoficiální doplněk a není, žel, žádným způsobem spojen s vydavatelstvím Economia, a. s. Byl vytvořen a je udržovan nezávislým vývojářem. Doplněk je poskytnut pouze jako ukázka a může obsahovat chyby.</disclaimer>
     <platform>all</platform>
-	<language></language>
-	<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-	<news lang="en">Fixed video archive playback with selected quality</news>
-	<news lang="ru">Исправлено воспроизведение видео архива с заданным качеством</news>
-	<assets>
-        <icon>icon.png</icon>
-        <fanart>fanart.jpg</fanart>
-        <screenshot>resources\media\screenshoot1.jpg</screenshot>
-        <screenshot>resources\media\screenshoot2.jpg</screenshot>
-        <screenshot>resources\media\screenshoot3.jpg</screenshot>
+    <language>cs</language>
+
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <website>https://video.aktualne.cz/</website>
+    <forum>https://github.com/petrkutalek/plugin.video.aktualnetv/issues</forum>
+    <email>petr@kutalek.cz</email>
+    <source>https://github.com/petrkutalek/plugin.video.aktualnetv/</source>
+
+    <assets>
+      <icon>icon.png</icon>
+      <fanart>fanart.jpg</fanart>
+      <screenshot>resources/screenshot-1.jpg</screenshot>
+      <screenshot>resources/screenshot-2.jpg</screenshot>
+      <screenshot>resources/screenshot-3.jpg</screenshot>
+      <screenshot>resources/screenshot-4.jpg</screenshot>
     </assets>
+
+    <news><![CDATA[[B]1.3.2[/B]
+— Fixed compatibility for KODI v16/v17
+
+[B]1.3.1[/B]
+— Fixed JSON parsing, now it is more robust and tolerant
+
+[B]1.2.3 — 1.2.4[/B]
+— Fixed missing Shows thumbnail issue
+
+[B]1.2.2[/B]
+— Build for Kodi v17
+]]></news>
+
   </extension>
 </addon>

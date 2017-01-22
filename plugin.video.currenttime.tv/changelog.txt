@@ -1,3 +1,7 @@
+v1.0.3 (2017-01-23)
+- Added "TV Listing" with schedule for today
+- Добавлена "Телепрограмма" на текущие сутки
+
 v1.0.2 (2016-12-23)
 - Fixed video archive playback with selected quality (due to provider api changes)
 - Исправлено воспроизведение видео архива с заданным качеством (в связи с изменениями api провайдера)

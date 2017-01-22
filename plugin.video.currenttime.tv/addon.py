@@ -13,7 +13,7 @@ import xbmcaddon
 import xbmcplugin
 
 stream_url = {
-    '1080p': 'http://rfe-lh.akamaihd.net/i/rfe_tvmc5@383630/index_1080_av-p.m3u8',
+    '1080p':'http://rfe-lh.akamaihd.net/i/rfe_tvmc5@383630/index_1080_av-p.m3u8',
     '720p': 'http://rfe-lh.akamaihd.net/i/rfe_tvmc5@383630/index_0720_av-p.m3u8',
     '540p': 'http://rfe-lh.akamaihd.net/i/rfe_tvmc5@383630/index_0540_av-p.m3u8',
     '404p': 'http://rfe-lh.akamaihd.net/i/rfe_tvmc5@383630/index_0404_av-p.m3u8',
@@ -30,7 +30,8 @@ main_menu = ([
     [30007, 30008, 'lastvids+next', 	'folder',       '/z/17192.html'],   #All Videos
     [30009, 30010, 'lastvids+next', 	'folder',       '/z/17226.html'],   #Daily Shoots
     [30011, 30012, 'lastvids+next', 	'folder',       '/z/17318.html'],   #Reportages
-    [30013, 30014, 'lastvids+next', 	'folder',       '/z/17319.html']    #Interviews
+    [30013, 30014, 'lastvids+next', 	'folder',       '/z/17319.html'],   #Interviews
+    [30015, 30016, 'schedule',          'folder',       '/schedule/tv.html#live-now']   # TV Listing
 ])
 tvshows = ([
     [30031, 30032, 'lastvids+archive',  'olevski',	    '/z/20333.html'],
@@ -114,16 +115,10 @@ def get_video_dir(page):
         match_plot = re.compile('<meta name="description" content="(.+?)" />', re.DOTALL).findall(page)
         if len(match_plot) < 1:
             match_plot = [' ']
-        thumb = ''
-        fanart = ''
-        if xbmcplugin.getSetting(addon_handle, 'download_thumbnails') == 'true':
-            thumb = re.sub(r'_w\w+', '_w512_r1.jpg', match[0][1])
-        if xbmcplugin.getSetting(addon_handle, 'download_fanart') == 'true':
-            fanart = re.sub(r'_w\w+', '_w1280_r1.jpg', match[0][1])
         return {
             'name':     folder_name,
-            'thumb':    thumb,
-            'fanart':   fanart,
+            'thumb':    make_thumb_url(match[0][1]),
+            'fanart':   make_fanart_url(match[0][1]),
             'mode':     'play',
             'title':    re.sub('&.{0,5};', clean_txt, match_title[0]),
             'plot':     re.sub('&.{0,5};', clean_txt, match_plot[0]),
@@ -174,7 +169,7 @@ def read_page(page_url, tries=MAX_REQ_TRIES):
     return None
 
 
-def show_menu(menu):
+def generate_menu(menu):
     """generates menu with dir items' parameters stored in 'menu' list"""
     for title, plot, mode, name, url in menu:
         add_dir({
@@ -189,6 +184,27 @@ def show_menu(menu):
     xbmcplugin.endOfDirectory(addon_handle)
 
 
+def get_stream_url():
+    """generates online stream url"""
+    return stream_url[xbmcplugin.getSetting(addon_handle, 'res_stream')]
+
+
+def make_thumb_url(url):
+    """generates url to thumbnail pic"""
+    thumb = ''
+    if xbmcplugin.getSetting(addon_handle, 'download_thumbnails') == 'true':
+        thumb = re.sub(r'_w\w+', '_w512_r1.jpg', url)
+    return thumb
+
+
+def make_fanart_url(url):
+    """generates url to fanart pic"""
+    fanart = ''
+    if xbmcplugin.getSetting(addon_handle, 'download_fanart') == 'true':
+        fanart = re.sub(r'_w\w+', '_w1920_r1.jpg', url)
+    return fanart
+
+
 try:
     ### Main menu
     if mode is None:
@@ -200,13 +216,13 @@ try:
             'mode':     'play',
             'title':    '[B]' + addon.getLocalizedString(30001).encode('utf-8') + '[/B]',
             'plot':     addon.getLocalizedString(30002).encode('utf-8'),
-            'url':      stream_url[xbmcplugin.getSetting(addon_handle, 'res_stream')],
+            'url':      get_stream_url(),
         })
-        show_menu(main_menu)
+        generate_menu(main_menu)
 
     ### TV Programmes menu
     elif mode == 'tvshows':
-        show_menu(tvshows)
+        generate_menu(tvshows)
 
     ### List videos with NEXT link
     elif mode == 'lastvids+next':
@@ -298,6 +314,43 @@ try:
         add_dir(get_video_dir(read_page(site_url + folder_url)))
         xbmcplugin.endOfDirectory(addon_handle)
 
+    ### TV Listing for today
+    elif mode == 'schedule':
+        page = read_page(site_url + folder_url)
+        match = re.compile(
+            '<div class="time-stamp">\n'
+            '<span class="time" >(.+?)</span>\n'
+            '</div>\n'
+            '<div class="img-wrapper">\n'
+            '<div class="thumb listThumb thumb16_9">\n'
+            '<img data-src="(.+?)" src="">\n'
+            '.+?'
+            '<div class="content">\n'
+            '<h4>\n'
+            '(.+?)\n'
+            '</h4>\n'
+            '<p>(.+?)</p>\n', re.DOTALL).findall(page)
+        for time, img_url, name, descrip in match:
+            online = re.match('<span class="badge badge-live" >.+?</span>\n', name)
+            url = ''
+            mode = 'folder'
+            if online is None:
+                title = '[B]' + time + '[/B]  ' + name
+            else:
+                title = '[B][COLOR red][UPPERCASE]' + addon.getLocalizedString(30001).encode('utf-8') \
+                        + '[/UPPERCASE][COLOR blue]   ' + name[online.span()[1]:] + '[/COLOR][/B]'
+                url = get_stream_url()
+                mode = 'play'
+            add_dir({
+                'name':     folder_name,
+                'thumb':    make_thumb_url(img_url),
+                'fanart':   make_fanart_url(img_url),
+                'mode':     mode,
+                'title':    title,
+                'plot':     descrip,
+                'url':      url
+            })
+        xbmcplugin.endOfDirectory(addon_handle)
 
 except Exception:
     msg = addon.getLocalizedString(30801)

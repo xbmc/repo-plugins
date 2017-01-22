@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.currenttime.tv" name="CurrentTime.TV" version="1.0.2" provider-name="dicoka@ukr.net">
+<addon id="plugin.video.currenttime.tv" name="CurrentTime.TV" version="1.0.3" provider-name="dicoka@ukr.net">
   <requires>
     <import addon="xbmc.python" version="2.24.0"/>
   </requires>
@@ -16,8 +16,8 @@
     <platform>all</platform>
 	<language></language>
 	<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-	<news lang="en">Fixed video archive playback with selected quality</news>
-	<news lang="ru">Исправлено воспроизведение видео архива с заданным качеством</news>
+	<news lang="en">Added "TV Listing" with schedule for today</news>
+	<news lang="ru">Добавлена "Телепрограмма" на текущие сутки</news>
 	<assets>
         <icon>icon.png</icon>
         <fanart>fanart.jpg</fanart>

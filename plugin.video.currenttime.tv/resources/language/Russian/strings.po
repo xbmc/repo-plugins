@@ -73,6 +73,13 @@ msgctxt "#30014"
 msgid "Opinions"
 msgstr "Мнения"
 
+msgctxt "#30015"
+msgid "TV Listing"
+msgstr "Телепрограмма"
+
+msgctxt "#30016"
+msgid "TV listing - schedule for today"
+msgstr "Телевизионная программа на сегодня"
 
 
 msgctxt "#30031"

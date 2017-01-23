@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="script.module.requests_oauthlib" name="requests_oauthlib" version="0.7.0" provider-name="L0RE">
+	<requires>
+		<import addon="xbmc.python" version="2.24.0"/>
+    <import addon="script.module.oauthlib" version="2.0.1"/>    
+	</requires>
+	<extension point="xbmc.python.module" library="lib" />
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<language></language>
+		<summary lang="en">This project provides first-class OAuth library support for Requests.</summary>
+		<description lang="en">This project provides first-class OAuth library support for Requests.</description>
+		<disclaimer lang="en">This project provides first-class OAuth library support for Requests.</disclaimer>
+		<license>ISC</license>
+		<website>https://pypi.python.org/pypi/oauthlib</website>
+		<source>https://pypi.python.org/pypi/oauthlib</source>
+	</extension>
+</addon>

@@ -9,7 +9,6 @@ import socket, cookielib
 from datetime import datetime
 
 
-
 __addon__ = xbmcaddon.Addon()
 __addonname__ = __addon__.getAddonInfo('name')
 __addondir__    = xbmc.translatePath( __addon__.getAddonInfo('path') )

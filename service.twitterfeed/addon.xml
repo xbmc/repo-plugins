@@ -2,8 +2,13 @@
 <addon id="service.twitterfeed" name="Twitter Feed" version="0.8.28" provider-name="L0RE">
     <requires>
         <import addon="xbmc.python" version="2.19.0"/>
-	<import addon="script.module.requests" version="2.9.1"/>	
-	<import addon="service.popwindow" version="0.2.7"/>	
+        <import addon="script.module.requests" version="2.9.1"/>	
+        <import addon="service.popwindow" version="0.2.7"/>	
+        <import addon="script.module.future" version="0.16.0"/>	
+        <import addon="script.module.lib2to3" version="3.7.0"/>	
+        <import addon="script.module.libfuturize" version="0.16.0"/>
+        <import addon="script.module.requests_oauthlib" version="0.7.0"/>
+        <import addon="script.module.past" version="0.16.0"/>
     </requires>
     <extension point="xbmc.service" library="service.py" start="login" />
 	<extension point="xbmc.python.pluginsource" library="service.py" >

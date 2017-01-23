@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="script.module.past" name="past" version="0.16.0" provider-name="L0RE">
+	<requires>
+		<import addon="xbmc.python" version="2.24.0"/>
+	</requires>
+	<extension point="xbmc.python.module" library="lib" />
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<language></language>
+		<summary lang="en">Part of python-future</summary>
+		<description lang="en">Part of python-future</description>
+		<disclaimer lang="en">Part of python-future</disclaimer>
+		<license>OAuthLib is yours to use and abuse according to the terms of the BSD license. Check the LICENSE file for full details.</license>
+		<website>https://http://python-future.org/</website>
+		<source>https://github.com/PythonCharmers/python-future/tree/master/src/past</source>
+	</extension>
+</addon>

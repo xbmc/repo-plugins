@@ -46,7 +46,7 @@ _datapath 	=xbmc.translatePath(_addon.get_profile());
 _artIcon		=_addon.get_icon(); 
 _artFanart	=_addon.get_fanart()
 __plugin__ = "Infowars"
-__authors__ = "Prafit"
+__authors__ = "Prafit | Spinalcracker"
 __plugin__= "Infowars"
 __credits__= ""
 _addon_id="plugin.video.infowars"
@@ -303,7 +303,7 @@ _param['subfav']=addpr('subfav',''); _param['episodetitle']=addpr('episodetitle'
 ### ############################################################################################################
 ##### Player Functions #####
 def PlayURL(url):
-	play=xbmc.Player(xbmc.PLAYER_CORE_AUTO) ### xbmc.PLAYER_CORE_AUTO | xbmc.PLAYER_CORE_DVDPLAYER | xbmc.PLAYER_CORE_MPLAYER | xbmc.PLAYER_CORE_PAPLAYER
+	play=xbmc.Player() ### xbmc.PLAYER_CORE_AUTO | xbmc.PLAYER_CORE_DVDPLAYER | xbmc.PLAYER_CORE_MPLAYER | xbmc.PLAYER_CORE_PAPLAYER
 	try: _addon.resolve_url(url)
 	except: t=''
 	try: play.play(url)
@@ -335,8 +335,9 @@ def Menu_MainMenu(): #The Main Menu
     #_addon.add_directory({'mode': 'NightlyNewsSubMenu','title':'Infowars Nightly News'},{'title':  cFL_('Infowars Nightly News','red')},is_folder=True,img=_artIcon,fanart=_artFanart)
     _addon.add_directory({'mode': 'ClipsSubMenu','title':'Infowars Nightly News'},{'title':  cFL_('Infowars Clips','red')},is_folder=True,img=_artIcon,fanart=_artFanart)
     _addon.add_directory({'mode': 'DocSubMenu','title':'Acclaimed Documentaries'},{'title':  cFL_('Acclaimed Documentaries','blanchedalmond')},is_folder=True,img=_artIcon,fanart=_artFanart)
-    _addon.add_directory({'mode': 'HistoricShowsSubMenu','title':'Historic Shows(video)'},{'title':  cFL_('Historic Shows(Video)','yellow')},is_folder=True,img=_artIcon,fanart=_artFanart)
-    _addon.add_directory({'mode': 'HistoricShowsAudioSubMenu','title':'Historic Shows(video)'},{'title':  cFL_('Historic Shows(Audio)','yellow')},is_folder=True,img=_artIcon,fanart=_artFanart)
+    _addon.add_directory({'mode': 'HistoricShowsSubMenu','title':'Past Alex Jones Shows(video)'},{'title':  cFL_('Past Alex Jones Shows (Video)','yellow')},is_folder=True,img=_artIcon,fanart=_artFanart)
+    _addon.add_directory({'mode': 'HistoricShowsAudioSubMenu','title':'Past Alex Jones Shows(video)'},{'title':  cFL_('Past Alex Jones (Audio)','yellow')},is_folder=True,img=_artIcon,fanart=_artFanart)
+    _addon.add_directory({'mode': 'PaulJosephWatsonSubMenu','title':'Paul Joseph Watson (Video)'},{'title':  cFL_('Paul Joseph Watson (Video)','blue')},is_folder=True,img=_artIcon,fanart=_artFanart)
     eod()
 
 
@@ -594,9 +595,9 @@ def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
     eod() #Ends the directory listing and prints it to the screen.  if you dont use eod() or something like it, the menu items won't be put to the screen.
 
 def Nightly_News_Sub_Menu(title='',dialog=''): #The Main Menu
-    #https://www.youtube.com/user/ConspiracyScope 
+    #https://www.youtube.com/user/RonGibsonCF
     WhereAmI('@ Nightly News')
-    url = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLs5CVvsn63q6yyzN7r5p4jLpgj_qqVL2L'
+    url = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLs5CVvsn63q4kI41GLAa-1BCHsPQ1eZrk'
     response = urllib2.urlopen(url)
     if response and response.getcode() == 200:
         content = response.read()
@@ -616,11 +617,11 @@ def Nightly_News_Sub_Menu(title='',dialog=''): #The Main Menu
         util.showError(ADDON_ID, 'Could not open URL %s to create menu' % (url))
     eod()
 
-	
+
 def Historic_Shows_Sub_Menu(title=''): #The Main Menu
-    #https://www.youtube.com/user/ConspiracyScope 
+    #https://www.youtube.com/user/RonGibsonCF
     WhereAmI('@ Historic Shows Video')
-    url = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLs5CVvsn63q7E0_m7ICoUTuz3bHk3npMc'
+    url = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLs5CVvsn63q5-cWWrqXo0nhWQCBVWcT8Z'
     response = urllib2.urlopen(url)
     if response and response.getcode() == 200:
         content = response.read()
@@ -631,7 +632,7 @@ def Historic_Shows_Sub_Menu(title=''): #The Main Menu
             thumbnail = find_single_match(entry,"<media\:thumbnail url=\"(.*?)\"")
             video_id = find_single_match(entry,"<yt\:videoId>([^<]+)</yt\:videoId>")
             url = "plugin://plugin.video.youtube/play/?video_id=%s" % video_id
-            if title.find('AJ Show') > -1:
+            if title.find('Alex Jones (FULL SHOW Commercial Free)') > -1:
                 add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False )
                 #if title.find('Podcast') > -1:
                 #    add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False )
@@ -639,7 +640,7 @@ def Historic_Shows_Sub_Menu(title=''): #The Main Menu
         util.showError(ADDON_ID, 'Could not open URL %s to create menu' % (url))
 
     eod()	
-	
+
 def Clips_Sub_Menu(title=''): #The Main Menu
     #https://www.youtube.com/user/TheAlexJonesChannel
     WhereAmI('@ Clips')
@@ -661,9 +662,9 @@ def Clips_Sub_Menu(title=''): #The Main Menu
     eod()
 
 def Historic_Shows_Audio_Sub_Menu(title=''): #The Main Menu
-    #https://www.youtube.com/user/ConspiracyScope 
+    #https://www.youtube.com/user/RonGibsonCF
     WhereAmI('@ Nightly News')
-    url = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLgnGBrg8NoiUBYKleRdLSFFZgtsWTuwTa'
+    url = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLs5CVvsn63q4r4b-RXs4QAaC-Eoc53NgP'
     response = urllib2.urlopen(url)
     if response and response.getcode() == 200:
         content = response.read()
@@ -682,7 +683,26 @@ def Historic_Shows_Audio_Sub_Menu(title=''): #The Main Menu
         util.showError(ADDON_ID, 'Could not open URL %s to create menu' % (url))
 
     eod()
-    
+
+def Paul_Joseph_Watson_Sub_Menu(title=''): #The Main Menu
+    #https://www.youtube.com/user/PrisonPlanetLive
+    WhereAmI('@ Paul Joseph Watson')
+    url = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCittVh8imKanO_5KohzDbpg'
+    response = urllib2.urlopen(url)
+    if response and response.getcode() == 200:
+        content = response.read()
+        videos= find_multiple_matches(content,"<entry>(.*?)</entry>")
+        for entry in videos:
+            title = find_single_match(entry,"<titl[^>]+>([^<]+)</title>")
+            plot = find_single_match(entry,"<media\:descriptio[^>]+>([^<]+)</media\:description>")
+            thumbnail = find_single_match(entry,"<media\:thumbnail url=\"(.*?)\"")
+            video_id = find_single_match(entry,"<yt\:videoId>([^<]+)</yt\:videoId>")
+            url = "plugin://plugin.video.youtube/play/?video_id=%s" % video_id
+            add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False )
+    else:
+        util.showError(ADDON_ID, 'Could not open URL %s to create menu' % (url))
+
+    eod()    
     
 def check_mode(mode=''):
     mode = _addon.queries.get('mode', None)
@@ -716,6 +736,7 @@ def check_mode(mode=''):
     elif (mode=='NightlyNewsSubMenu'): 						Nightly_News_Sub_Menu(_param['title'], dialog) ## Play Video
     elif (mode=='HistoricShowsSubMenu'): 						Historic_Shows_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='HistoricShowsAudioSubMenu'): 						Historic_Shows_Audio_Sub_Menu(_param['title']) ## Play Video
+    elif (mode=='PaulJosephWatsonSubMenu'): 						Paul_Joseph_Watson_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='Settings'): 							_addon.addon.openSettings() # Another method: _plugin.openSettings() ## Settings for this addon.
     elif (mode=='ResolverSettings'): 			urlresolver.display_settings()  ## Settings for UrlResolver script.module.
     elif (mode == 'add_to_library'):

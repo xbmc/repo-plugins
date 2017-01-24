@@ -1,3 +1,10 @@
+2016.1.24
+- Updated addon icon and fanart images
+- Updated favorite team image
+- Added player mugshot to goal notifications
+- Fixed Cache issue with adding favorite team link to the Kodi home screen
+- Fixed addon.xml forum link
+
 2016.11.18
 - Added option to disabled goal description in scoring notifications
 - Fixed logout not clearing cookies

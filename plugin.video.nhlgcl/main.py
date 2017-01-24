@@ -7,6 +7,7 @@ def categories():
     addDir('Yesterday\'s Games','/live',105,ICON,FANART)     
     if FAV_TEAM != 'None' and FAV_TEAM != '':
         #'https://www.nhl.com/site-core/images/team/logo/current/'+FAV_TEAM_ID+'_light.svg'
+        #http://nhl.bamcontent.com/images/logos/600x600/pit.png
         addFavToday(FAV_TEAM+'\'s Game Today', 'Today\'s ' +  FAV_TEAM + ' Game', FAV_TEAM_LOGO, FANART)
         addDir(FAV_TEAM+'\'s Recent Games','favteam',500, FAV_TEAM_LOGO,FANART)
     addDir('Goto Date','/date',200,ICON,FANART)
@@ -50,6 +51,7 @@ def todaysGames(game_day):
     try:
         for game in json_source['dates'][0]['games']:        
             createGameListItem(game, game_day)
+    
     except:
         pass
     
@@ -64,7 +66,6 @@ def createGameListItem(game, game_day):
     #icon = 'http://nhl.cdn.neulion.net/u/nhlgc_roku/images/HD/'+away['abbreviation']+'_at_'+home['abbreviation']+'.jpg'
     #icon = 'http://raw.githubusercontent.com/eracknaphobia/game_images/master/square_black/'+away['abbreviation']+'vs'+home['abbreviation']+'.png'    
     icon = getGameIcon(home['abbreviation'],away['abbreviation'])    
-
 
     
     if TEAM_NAMES == "1":
@@ -151,14 +152,17 @@ def createGameListItem(game, game_day):
         name = game_time + ' ' + away_team + ' ' + colorString(str(game['teams']['away']['score']),SCORE_COLOR) + ' at ' + home_team + ' ' + colorString(str(game['teams']['home']['score']),SCORE_COLOR)         
         
 
-    fanart = None   
+    #fanart = None   
+    fanart = 'http://nhl.bamcontent.com/images/arena/default/'+str(home['id'])+'@2x.jpg' 
     try:        
         if game_day < localToEastern():
-            fanart = str(game['content']['media']['epg'][3]['items'][0]['image']['cuts']['1136x640']['src'])
+            #fanart = str(game['content']['media']['epg'][3]['items'][0]['image']['cuts']['1136x640']['src'])
             if hide_spoilers == 0:
-                soup = BeautifulSoup(str(game['content']['editorial']['recap']['items'][0]['preview']))
-                desc = soup.get_text()
-        else:  
+                #soup = BeautifulSoup(str(game['content']['editorial']['recap']['items'][0]['preview']))
+                #desc = soup.get_text()
+                desc = str(game['content']['media']['epg'][3]['items'][0]['description'])                
+        else: 
+
             if PREVIEW_INFO == 'true':          
                 url = 'http://statsapi.web.nhl.com/api/v1/game/'+str(game['gamePk'])+'/content?site=en_nhl'
                 req = urllib2.Request(url)    
@@ -175,6 +179,13 @@ def createGameListItem(game, game_day):
                 except HTTPError as e:
                     xbmc.log('The server couldn\'t fulfill the request.')
                     xbmc.log('Error code: ', e.code)            
+            elif hide_spoilers == 0:                
+                for play in game['scoringPlays']:
+                    scorer = play['result']['description']
+                    scorer = scorer[0:scorer.find(",")]
+                    when = play['about']['periodTime'] + ' ' +play['about']['ordinalNum']
+                    game_score = '('+str(play['about']['goals']['away'])+' - '+str(play['about']['goals']['home'])+')'
+                    desc +=  colorString(when,LIVE) + ' ' + scorer + ' ' + game_score + '\n'
     except:
         pass
 
@@ -337,8 +348,11 @@ def createHighlightStream(stream_url):
     bandwidth = find(QUALITY,'(',' kbps)') 
     #Switch to ipad master file
     stream_url = stream_url.replace('master_wired.m3u8', MASTER_FILE_TYPE)
-    xbmc.log("bandwidth")
-    xbmc.log(str(bandwidth))
+    '''
+    if QUALITY.upper() == 'ALWAYS ASK':
+        #stream_url = selectStreamQualty(stream_url)
+        bandwidth = getStreamQuality(stream_url)
+    '''
     if bandwidth != '':
         stream_url = stream_url.replace(MASTER_FILE_TYPE, 'asset_'+bandwidth+'k.m3u8')
 
@@ -353,7 +367,11 @@ def createFullGameStream(stream_url, media_auth, media_state):
     bandwidth = ''
     bandwidth = find(QUALITY,'(',' kbps)')
 
-    #Only set bandwidth if it's explicitly set
+    #Only set bandwidth if it's explicitly set in add-on settings
+    if QUALITY.upper() == 'ALWAYS ASK':
+        #stream_url = selectStreamQualty(stream_url)
+        bandwidth = getStreamQuality(stream_url)
+
     if bandwidth != '':
         #Reduce convert bandwidth if composite video selected   
         if ('COMPOSITE' in stream_url or 'ISO' in stream_url) :
@@ -393,21 +411,7 @@ def createFullGameStream(stream_url, media_auth, media_state):
     xbmc.log("STREAM URL: "+stream_url)
     return stream_url
     
-                
-def getAuthCookie():
-    authorization = ''    
-    try:
-        cj = cookielib.LWPCookieJar(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'))     
-        cj.load(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'),ignore_discard=True)    
-
-        #If authorization cookie is missing or stale, perform login    
-        for cookie in cj:            
-            if cookie.name == "Authorization" and not cookie.is_expired():            
-                authorization = cookie.value 
-    except:
-        pass
-
-    return authorization
+              
 
 
 def checkArchiveType(stream_url, media_auth):
@@ -499,10 +503,12 @@ def fetchStream(game_id, content_id,event_id):
             msg = "You do not have access to view this content. To watch live games and learn more about blackout restrictions, please visit NHL.TV"
             dialog = xbmcgui.Dialog() 
             ok = dialog.ok('Game Blacked Out', msg) 
+            sys.exit()
         elif json_source['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['auth_status'] == 'NotAuthorizedStatus':
             msg = "You do not have an active NHL.TV subscription. To access this content please purchase at www.NHL.TV or call customer support at 800-559-2333"
             dialog = xbmcgui.Dialog() 
             ok = dialog.ok('Account Not Authorized', msg) 
+            sys.exit()
         else:
             stream_url = json_source['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['url']    
             media_auth = str(json_source['session_info']['sessionAttributes'][0]['attributeName']) + "=" + str(json_source['session_info']['sessionAttributes'][0]['attributeValue'])
@@ -514,7 +520,7 @@ def fetchStream(game_id, content_id,event_id):
         msg = json_source['status_message']
         dialog = xbmcgui.Dialog() 
         ok = dialog.ok('Error Fetching Stream', msg)
-       
+        sys.exit()
     
     return stream_url, media_auth    
    
@@ -641,7 +647,7 @@ def login():
 
 
 def logout(display_msg=None):    
-    from resources.lib.globals import *
+    #from resources.lib.globals import *
     cj = cookielib.LWPCookieJar(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'))   
     try:  
         cj.load(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'),ignore_discard=True)
@@ -951,12 +957,11 @@ elif mode == 500:
 elif mode == 510:
     playTodaysFavoriteTeam()
 
-elif mode == 515:
+elif mode == 515:    
     getThumbnails()
 
 elif mode == 900:
     playAllHighlights()
-    
 
 elif mode == 999:
     sys.exit()
@@ -971,7 +976,7 @@ xbmc.log("My view mode " + VIEW_MODE)
 
 if mode == 100:
     xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
-elif mode == 101:
+elif mode == 101 or mode == 500 or mode == 501 or mode == 510:
     xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False, updateListing=True)
 else:
     xbmcplugin.endOfDirectory(addon_handle)

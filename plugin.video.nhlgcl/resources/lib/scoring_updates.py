@@ -20,6 +20,7 @@ def localToEastern():
     local_to_eastern = local_to_utc.astimezone(eastern).strftime('%Y-%m-%d')
     return local_to_eastern
 
+
 def getScoreBoard(date):     
     url = 'http://statsapi.web.nhl.com/api/v1/schedule?teamId=&date='+date+'&expand=schedule.teams,schedule.linescore,schedule.game.content.media.epg,schedule.broadcasts,schedule.scoringplays,team.leaders,leaders.person,schedule.ticket,schedule.game.content.highlights.scoreboard,schedule.ticket&leaderCategories=points'         
     req = urllib2.Request(url)    
@@ -36,24 +37,42 @@ def getScoreBoard(date):
     return json_source
 
 
+def startScoringUpdatesTEST():
+    dialog = xbmcgui.Dialog()  
+    title = "Score Notifications"  
+    dialog.notification(title, 'Starting...', '', 5000, False)     
+   
+    wait = 5
+    monitor = xbmc.Monitor()    
+
+    while True:        
+        xbmc.log("**************Running**********************")     
+
+        if monitor.waitForAbort(wait):       
+            xbmc.log("**************Abort Called**********************")     
+            break
+
+    sys.exit()
+
+
 def startScoringUpdates():
+    dialog = xbmcgui.Dialog()  
+    title = "Score Notifications"  
+    dialog.notification(title, 'Starting...', nhl_logo, 5000, False)  
+    ADDON.setSetting(id='score_updates', value='true')
         
     FIRST_TIME_THRU = 1  
     OLD_GAME_STATS = []              
     todays_date = localToEastern() 
     wait = 30
-    
-    while ADDON.getSetting(id="score_updates") == 'true':  
+    monitor = xbmc.Monitor()    
+
+    while ADDON.getSetting(id="score_updates") == 'true' and not monitor.abortRequested():        
         video_playing = ''
-        try:   
-            #Get the url of the video that is currently playing
-            if xbmc.Player().isPlayingVideo():
-                video_playing = xbmc.Player().getPlayingFile()                                                    
-                video_playing = video_playing.lower()
-        except:
-            pass
+        if xbmc.Player().isPlayingVideo():
+            video_playing = xbmc.Player().getPlayingFile()                                                    
+            video_playing = video_playing.lower()
         
-        #try:
         json_source = getScoreBoard(todays_date)   
         NEW_GAME_STATS = []
         #wait = json_source['wait']            
@@ -80,8 +99,17 @@ def startScoringUpdates():
                 pass
             
             desc = ''
+            headshot = ''
             try:
                 desc = game['scoringPlays'][-1]['result']['description']
+                
+                #Remove Assists if there are none
+                if ', assists: none' in desc: desc = desc[:desc.find(', assists: none')]
+
+                player_id = game['scoringPlays'][-1]['players'][0]['player']['link']
+                #/api/v1/people/8474034
+                player_id = player_id[player_id.rfind('/')+1:]                
+                headshot = 'http://nhl.bamcontent.com/images/headshots/current/60x60/'+player_id+'@2x.png'                
             except:
                 pass
 
@@ -91,7 +119,7 @@ def startScoringUpdates():
             
             #Disable spoiler by not showing score notifications for the game the user is currently watching
             if video_playing.find(atcommon.lower()) == -1 and video_playing.find(htcommon.lower()) == -1:
-                NEW_GAME_STATS.append([gid,ateam,hteam,ascore,hscore,gameclock,current_period,desc])
+                NEW_GAME_STATS.append([gid,ateam,hteam,ascore,hscore,gameclock,current_period,desc,headshot])
                 
 
         if FIRST_TIME_THRU != 1:
@@ -130,6 +158,7 @@ def startScoringUpdates():
                         # 5 = game clock
                         # 6 = current period
                         # 7 = goal description
+                        # 8 = headshot img url
                         #--------------------------
                         
                         #If the score for either team has changed and is greater than zero.                                                       #Or if the game has just ended show the final score                  #Or the current peroid has changed
@@ -142,16 +171,17 @@ def startScoringUpdates():
                             gameclock = new_item[5]             
                             current_period = new_item[6]      
                             desc = new_item[7]
+                            headshot = new_item[8]
                             
 
 
-                            #Highlight goal(s) or the winning team
+                            #Highlight score of the winning team
                             if new_item[5].upper().find('FINAL') != -1:
                                 title = 'Final Score'
                                 if int(ascore) > int(hscore):
-                                    message1 = '[COLOR='+SCORE_COLOR+']' + ateam + ' ' + ascore + '[/COLOR]    ' + hteam + ' ' + hscore + '    [COLOR='+GAMETIME_COLOR+']' + gameclock + '[/COLOR]'
+                                    message = '[COLOR='+SCORE_COLOR+']' + ateam + ' ' + ascore + '[/COLOR]    ' + hteam + ' ' + hscore + '    [COLOR='+GAMETIME_COLOR+']' + gameclock + '[/COLOR]'
                                 else:
-                                    message1 = ateam + ' ' + ascore + '    [COLOR='+SCORE_COLOR+']' + hteam + ' ' + hscore + '[/COLOR]    [COLOR='+GAMETIME_COLOR+']' + gameclock  + '[/COLOR]'
+                                    message = ateam + ' ' + ascore + '    [COLOR='+SCORE_COLOR+']' + hteam + ' ' + hscore + '[/COLOR]    [COLOR='+GAMETIME_COLOR+']' + gameclock  + '[/COLOR]'
 
                             elif new_item[6] != old_item[6]:                                    
                                 #Notify user that the game has started / period has changed
@@ -170,10 +200,12 @@ def startScoringUpdates():
                                     title = ateam + ' ' + ascore + '    ' + hteam + ' ' + hscore + '    [COLOR='+GAMETIME_COLOR+']' + gameclock + '[/COLOR]'
                                     message = desc
 
-                            if ADDON.getSetting(id="score_updates") != 'false':                                       
-                                #print message                   
+                            if ADDON.getSetting(id="score_updates") != 'false':                                                                                      
                                 dialog = xbmcgui.Dialog()
-                                dialog.notification(title, message, nhl_logo, display_milliseconds, False)
+                                img = nhl_logo
+                                #Get goal scorers head shot if notification is a score update
+                                if ADDON.getSetting(id="goal_desc") == 'true' and (new_item[3] != old_item[3] or new_item[4] != old_item[4]) and headshot != '': img = headshot
+                                dialog.notification(title, message, img, display_milliseconds, False)
                                 sleep(display_seconds+5)
 
             #if all games have finished for the night kill the thread
@@ -187,22 +219,23 @@ def startScoringUpdates():
 
         OLD_GAME_STATS = []
         OLD_GAME_STATS = NEW_GAME_STATS 
-        '''
-        except:
-            pass
-        '''
+        
                     
         FIRST_TIME_THRU = 0          
         #sleep(int(60))   
-        sleep(int(wait))
+        #sleep(int(wait))
+        #If kodi exits break out of loop
+        if monitor.waitForAbort(wait):       
+            xbmc.log("**************Abort Called**********************")     
+            break
+   
     
-
 dialog = xbmcgui.Dialog()  
 title = "Score Notifications"  
 #Toggle the setting
 if ADDON.getSetting(id="score_updates") == 'false':        
+    ADDON.setSetting(id='score_updates', value='true')   
     dialog.notification(title, 'Starting...', nhl_logo, 5000, False)  
-    ADDON.setSetting(id='score_updates', value='true')
     startScoringUpdates()    
 else:    
     ADDON.setSetting(id='score_updates', value='false')    

@@ -26,7 +26,8 @@
 		<string id ="2000">12 Hour Clock (ex: 6:00 pm)</string>
 		<string id ="2001">24 Hour Clock (ex: 18:00)</string>
 	<string id ="250">Download Game Preview Info (Today's Games)</string>
-	<string id ="251">Regenerate Thumbnails</string>
+	<string id ="251">Generate Game Thumbnails</string>
+
 	<!-- Scoring Updates -->
 	<string id='300'>Score Notifications</string>
 	<string id='320'>Start/Stop Score Notifications</string>

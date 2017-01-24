@@ -42,7 +42,6 @@ def list_favourites():
 				addprograma(data[0],data[1],mode,data[2],totalit,information)
 			except: pass
 		xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
-		setview('show-view')
 	else: msgok(translate(30001),translate(30024));sys.exit(0)
 			
 	

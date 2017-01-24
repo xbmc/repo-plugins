@@ -47,24 +47,3 @@ def format_data(data):
 		return data[0][2]+'/'+mes+'/'+data[0][0]
 	except: return '00/00/00'
 	
-def setview(setting_name):
-    setting = selfAddon.getSetting(setting_name)
-    if setting == "0": xbmc.executebuiltin("Container.SetViewMode(50)")
-    elif setting == "1": xbmc.executebuiltin("Container.SetViewMode(51)")
-    elif setting == "2": xbmc.executebuiltin("Container.SetViewMode(500)")
-    elif setting == "3":
-        if "nox" in xbmc.getSkinDir(): xbmc.executebuiltin("Container.SetViewMode(56)")
-        else: xbmc.executebuiltin("Container.SetViewMode(501)")
-    elif setting == "4":
-        if "nox" in xbmc.getSkinDir(): xbmc.executebuiltin("Container.SetViewMode(57)")
-        else: xbmc.executebuiltin("Container.SetViewMode(508)")
-    elif setting == "5": 
-        if "nox" in xbmc.getSkinDir(): xbmc.executebuiltin("Container.SetViewMode(55)")
-        else: xbmc.executebuiltin("Container.SetViewMode(504)")
-    elif setting == "6":
-        if "nox" in xbmc.getSkinDir(): xbmc.executebuiltin("Container.SetViewMode(51)")        
-        else:xbmc.executebuiltin("Container.SetViewMode(503)")
-    elif setting == "7":
-        if "nox" in xbmc.getSkinDir(): xbmc.executebuiltin("Container.SetViewMode(501)")
-        else: xbmc.executebuiltin("Container.SetViewMode(515)")
-    return

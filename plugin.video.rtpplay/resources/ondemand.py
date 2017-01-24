@@ -54,7 +54,6 @@ def list_tv_shows(name,url):
 				thumbnail = ''
 				addprograma(titulo,base_url + urlsbase,15,thumbnail,totalit,information)
 		xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
-		setview('show-view')
 	else:
 		sys.exit(0)
 		
@@ -104,7 +103,6 @@ def list_episodes(name,url,plot):
 					addDir('[B][COLOR blue]'+translate(30028)+'|[/B][/COLOR] '+titulo,next_url,16,os.path.join(artfolder,'next.png'),1,pasta=True,information=information)
 		except: pass
 	xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
-	setview('episodes-view')
 	
 def list_emissoes(urltmp):
 	try:
@@ -131,7 +129,6 @@ def list_emissoes(urltmp):
 					else: information={ "Title": title_clean_up(titulo),"plot":translate(30026) };thumbnail=''
 					addepisode(title_clean_up(titulo),base_url + urlsbase,17,thumbnail,totalit,information)
 				xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
-				setview('episodes-view')
 		else: msgok(translate(30001),translate(30032));sys.exit(0)
 		
 def pesquisa_emissoes():
@@ -187,7 +184,6 @@ def list_show_search(url):
 					else: information={ "Title": title_clean_up(titulo),"plot":translate(30026) };thumbnail=''
 					addprograma(title_clean_up(titulo),base_url + urlsbase,16,thumbnail,totalit,information)
 				xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
-				setview('show-view')
 		else: msgok(translate(30001),translate(30032));sys.exit(0)
 		
 def get_show_episode_parts(name,url,iconimage):

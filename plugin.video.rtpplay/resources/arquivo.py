@@ -49,7 +49,6 @@ def listar_programas_arquivo(url):
 			information = { "Title": titulo,"plot":title_clean_up(descricao) }
 			addprograma(titulo,(url_base + urlsbase).replace('&amp;','&'),11,thumbnail,totalit,information)
 		xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
-		setview('show-view')
 		
 def listar_episodios_arquivo(url):
 	try: source=abrir_url(url)
@@ -69,5 +68,4 @@ def listar_episodios_arquivo(url):
 					addepisode(title_clean_up(match[0][1]),title_clean_up(match[0][0]).replace('&amp;','&'),17,match[0][2].replace('&amp;','&').replace(';',''),totalit,information)
 				except: pass
 		xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
-		setview('episodes-view')
 

@@ -95,35 +95,6 @@ def find(source,start_str,end_str):
     else:
         return ''
 
-def getGameIcon(home,away):
-    #Check if game image already exists
-    image_path = ROOTDIR+'/resources/images/'+away+'vs'+home+'.png'
-    file_name = os.path.join(image_path)
-    if not os.path.isfile(file_name):
-        image_path = ICON
-    '''
-    try:
-        createGameIcon(home,away,image_path)
-    except:
-        pass
-    '''
-
-    return image_path
-
-def createGameIcon(home,away,image_path):    
-    bg = Image.new('RGB', (400,225), (255,255,255))    
-    img_file = urllib.urlopen('http://nhl.bamcontent.com/images/logos/132x132/'+home.lower()+'.png ')
-    im = StringIO(img_file.read())
-    home_image = Image.open(im)
-
-    img_file = urllib.urlopen('http://nhl.bamcontent.com/images/logos/132x132/'+away.lower()+'.png ')    
-    im = StringIO(img_file.read())
-    away_image = Image.open(im)
-
-    bg.paste(away_image, (40,46), away_image)
-    bg.paste(home_image, (228,46), home_image)
-    bg.save(image_path)        
-    
 
 def colorString(string, color):
     return '[COLOR='+color+']'+string+'[/COLOR]'
@@ -226,7 +197,7 @@ def addStream(name,link_url,title,game_id,epg,icon=None,fanart=None,info=None,vi
         liz.addStreamInfo('audio', audio_info)
 
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
-    xbmcplugin.setContent(addon_handle, 'episodes')
+    xbmcplugin.setContent(addon_handle, 'tvshows')    
     
     return ok
 
@@ -256,7 +227,7 @@ def addFavToday(name,title,icon,fanart=None):
         liz.addStreamInfo('audio', audio_info)
 
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=False)
-    xbmcplugin.setContent(addon_handle, 'episodes')
+    xbmcplugin.setContent(addon_handle, 'tvshows')
     
     return ok
 
@@ -285,7 +256,7 @@ def addLink(name,url,title,iconimage,info=None,video_info=None,audio_info=None,f
         liz.setProperty('fanart_image', FANART)
 
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
-    xbmcplugin.setContent(addon_handle, 'episodes')
+    xbmcplugin.setContent(addon_handle, 'tvshows')
     return ok
 
 
@@ -317,7 +288,7 @@ def addDir(name,url,mode,iconimage,fanart=None,game_day=None):
 
 
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)    
-    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+    xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
     return ok
 
 
@@ -379,7 +350,66 @@ def getFavTeamId():
     return fav_team_id
 
 
+def getGameIcon(home,away):
+    #Check if game image already exists
+    image_path = ROOTDIR+'/resources/images/'+away.lower()+'vs'+home.lower()+'.png'
+    file_name = os.path.join(image_path)
+    if not os.path.isfile(file_name):
+        image_path = ICON
+
+    '''
+    Hold off until PIL is fixed for Android OS
+    try:
+        createGameIcon(home,away,image_path)
+    except:
+        image_path = ICON
+        pass
+    '''
+
+    return image_path
+
+
+def createGameIcon(home,away,image_path): 
+    try:
+        from PIL import Image
+    except:
+        try:
+            from pil import Image
+        except:
+            xbmc.log("PIL not available")
+            sys.exit()
+
+    #Arena backgrounds
+    #http://nhl.bamcontent.com/images/arena/scoreboard/52.jpg
+    #http://nhl.bamcontent.com/images/arena/scoreboard/52@2x.jpg
+   
+    bg =  Image.open(ROOTDIR+'/resources/bg_dark.png')
+    #bg_url = urllib.urlopen('http://nhl.bamcontent.com/images/arena/scoreboard/52.jpg')
+    #bg_img = StringIO(bg_url.read())
+    #bg = Image.open(bg_img)
+
+    size = 256, 256
+
+    logo_root = 'http://nhl.bamcontent.com/images/logos/600x600/'
+    img_file = urllib.urlopen(logo_root+home.lower()+'.png ')
+    im = StringIO(img_file.read())
+    home_image = Image.open(im)
+    home_image.thumbnail(size, Image.ANTIALIAS)
+    home_image = home_image.convert("RGBA")
+
+    img_file = urllib.urlopen(logo_root+away.lower()+'.png ')    
+    im = StringIO(img_file.read())
+    away_image = Image.open(im)
+    away_image.thumbnail(size, Image.ANTIALIAS)
+    away_image = away_image.convert("RGBA")
+
+    bg.paste(away_image, (0,0), away_image)
+    bg.paste(home_image, (256,256), home_image)
+    bg.save(image_path)        
+
+
 def getThumbnails():        
+    xbmc.log("Attempting to get thumbnails")            
     try:
         from PIL import Image
     except:
@@ -400,23 +430,60 @@ def getThumbnails():
     for team in json_source['teams']:
         team_list.append(team['abbreviation'].lower())
 
-    img_url = 'http://nhl.bamcontent.com/images/logos/132x132/'
+    logo_url = 'http://nhl.bamcontent.com/images/logos/132x132/'
+    #logo_url = 'http://nhl.bamcontent.com/images/logos/600x600/'
+    #size = 256, 256
+    #size = 132, 132
+
+    #steps = number of teams * (number of teams -1)
+    steps = len(team_list) * (len(team_list) - 1)
+    progress = xbmcgui.DialogProgress()
+    progress.create('NHL TV™')    
+    progress.update( 0, 'Generating Thumbnails...') 
+    
+    i = 1
     for home_team in team_list:
+        if (progress.iscanceled()): break
+
         for away_team in team_list:
+            if (progress.iscanceled()): break
+        
             if home_team != away_team:
                 image_path = ROOTDIR+'/resources/images/'+away_team+'vs'+home_team+'.png'
-                bg = Image.new('RGB', (400,225), (255,255,255))    
-                img_file = urllib.urlopen('http://nhl.bamcontent.com/images/logos/132x132/'+home_team+'.png ')
+                #bg =  Image.open(ROOTDIR+'/resources/bg_dark.png')
+                bg = Image.new('RGB', (400,225), (255,255,255))
+
+                #home team
+                img_file = urllib.urlopen(logo_url+home_team+'.png ')
                 im = StringIO(img_file.read())
                 home_image = Image.open(im)
+                #home_image.thumbnail(size, Image.ANTIALIAS)
+                #home_image = home_image.convert("RGBA")
 
-                img_file = urllib.urlopen('http://nhl.bamcontent.com/images/logos/132x132/'+away_team+'.png ')    
+                #away team
+                img_file = urllib.urlopen(logo_url+away_team+'.png ')    
                 im = StringIO(img_file.read())
                 away_image = Image.open(im)
+                #away_image.thumbnail(size, Image.ANTIALIAS)
+                #away_image = away_image.convert("RGBA")
 
+                #create image
+                #bg.paste(away_image, (0,0), away_image.split()[3])
+                #bg.paste(home_image, (256,256), home_image)
                 bg.paste(away_image, (40,46), away_image)
                 bg.paste(home_image, (228,46), home_image)
                 bg.save(image_path)
+
+
+                #progress bar message
+                message = away_team.upper()+' vs '+home_team.upper()
+                percent = int((float(i) / steps ) * 100)
+                progress.update( percent, message)                     
+                i+=1
+    
+    progress.close()
+
+
 
         
 
@@ -444,50 +511,6 @@ def getFavTeamColor():
 
     return fav_team_color
 
-    '''
-    #Hex code taken from http://teamcolors.arc90.com/        
-    team_colors = {"Anaheim":"FF91764B",
-                "Arizona":"FF841F27",
-                "Boston":"FFFFC422",
-                "Buffalo":"FF002E62",
-                "Calgary":"FFE03A3E",
-                "Carolina":"FFE03A3E",
-                "Chicago":"FFE3263A",
-                "Colorado":"FF8B2942",
-                "Columbus":"FF00285C",
-                "Dallas":"FF006A4E",
-                "Detroit":"FFEC1F26",
-                "Edmonton":"FF003777",
-                "Florida":"FFC8213F",
-                "Los Angeles":"FFAFB7BA",
-                "Minnesota":"FF025736",
-                "Montréal":"FFBF2F38",
-                "Nashville":"FFFDBB2F",
-                "New Jersey":"FFE03A3E",
-                "New York Islanders":"FF00529B",
-                "New York Rangers":"FF0161AB",
-                "Philadelphia":"FFF47940",
-                "Pittsburgh":"FFD1BD80",
-                "Ottawa":"FFE4173E",
-                "San Jose":"FF05535D",
-                "St. Louis":"FF0546A0",
-                "Tampa Bay":"FF013E7D",
-                "Toronto":"FF003777",
-                "Vancouver":"FF07346F",
-                "Washington":"FFCF132B",
-                "Winnipeg":"FF002E62"}
-    
-    # Default to red
-    #fav_team_color = "FFFF0000"                
-    #try:
-    print FAV_TEAM
-    fav_team_color = team_colors[FAV_TEAM]
-    print fav_team_color
-    #except:
-    #pass
-    '''
-    return  fav_team_color
-
 
 def getFavTeamLogo():
     logo_url = ''
@@ -506,7 +529,8 @@ def getFavTeamLogo():
             break
 
     if fav_team_abbr != '':        
-        logo_url = 'http://nhl.bamcontent.com/images/logos/250x250/'+fav_team_abbr+'.png'
+        logo_url = 'http://nhl.bamcontent.com/images/logos/600x600/'+fav_team_abbr+'.png'
+
         
     return logo_url
 
@@ -571,6 +595,46 @@ def getAuthCookie():
 
     return authorization
 
+
+def getStreamQuality(stream_url):    
+    stream_title = []         
+    req = urllib2.Request(stream_url)
+    response = urllib2.urlopen(req)                    
+    master = response.read()
+    response.close()
+            
+    xbmc.log(stream_url)
+    xbmc.log(master)
+
+    line = re.compile("(.+?)\n").findall(master)  
+
+    for temp_url in line:
+        if '.m3u8' in temp_url:
+            temp_url = temp_url
+            match = re.search(r'(\d.+?)K', temp_url, re.IGNORECASE)
+            if match:
+                bandwidth = match.group()
+                if 0 < len(bandwidth) < 6:
+                    bandwidth = bandwidth.replace('k',' kbps')    
+                    bandwidth = bandwidth.replace('K',' kbps')                    
+                    stream_title.append(bandwidth)                           
+    
+
+    stream_title.sort(key=natural_sort_key,reverse=True) 
+    dialog = xbmcgui.Dialog() 
+    ret = dialog.select('Choose Stream Quality', stream_title)    
+    if ret >=0:        
+        bandwidth = find(stream_title[ret],'',' kbps')
+    else:
+        sys.exit()
+
+    return bandwidth
+
+
+def natural_sort_key(s):
+    _nsre = re.compile('([0-9]+)')
+    return [int(text) if text.isdigit() else text.lower()
+            for text in re.split(_nsre, s)] 
 
 #Refresh Fav team info if fav team changed
 if FAV_TEAM != str(settings.getSetting(id="fav_team_name")):

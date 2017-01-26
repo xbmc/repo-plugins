@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import re
-import json
 import os
 import sys
 import time
@@ -13,7 +12,6 @@ import CommonFunctions as common
 import resources.lib.bestofsvt as bestof
 import resources.lib.helper as helper
 import resources.lib.svt as svt
-import resources.lib.PlaylistManager as PlaylistManager
 import resources.lib.FavoritesManager as FavoritesManager
 from resources.lib.PlaylistDialog import PlaylistDialog
 
@@ -60,18 +58,18 @@ common.dbg = helper.getSetting(S_DEBUG)
 
 def viewStart():
 
-  addDirectoryItem(localize(30009), { "mode": MODE_POPULAR })
-  addDirectoryItem(localize(30003), { "mode": MODE_LATEST })
-  addDirectoryItem(localize(30004), { "mode": MODE_LATEST_NEWS })
-  addDirectoryItem(localize(30010), { "mode": MODE_LAST_CHANCE })
-  addDirectoryItem(localize(30002), { "mode": MODE_LIVE_PROGRAMS })
-  addDirectoryItem(localize(30008), { "mode": MODE_CHANNELS })
-  addDirectoryItem(localize(30000), { "mode": MODE_A_TO_O })
-  addDirectoryItem(localize(30001), { "mode": MODE_CATEGORIES })
-  addDirectoryItem(localize(30007), { "mode": MODE_BESTOF_CATEGORIES })
-  addDirectoryItem(localize(30006), { "mode": MODE_SEARCH })
-  addDirectoryItem(localize(30405), { "mode": MODE_FAVORITES })
-  addDirectoryItem(localize(30400), { "mode": MODE_PLAYLIST_MANAGER }, folder=False)
+  addDirectoryItem(localize(30009), {"mode": MODE_POPULAR})
+  addDirectoryItem(localize(30003), {"mode": MODE_LATEST})
+  addDirectoryItem(localize(30004), {"mode": MODE_LATEST_NEWS})
+  addDirectoryItem(localize(30010), {"mode": MODE_LAST_CHANCE})
+  addDirectoryItem(localize(30002), {"mode": MODE_LIVE_PROGRAMS})
+  addDirectoryItem(localize(30008), {"mode": MODE_CHANNELS})
+  addDirectoryItem(localize(30000), {"mode": MODE_A_TO_O})
+  addDirectoryItem(localize(30001), {"mode": MODE_CATEGORIES})
+  addDirectoryItem(localize(30007), {"mode": MODE_BESTOF_CATEGORIES})
+  addDirectoryItem(localize(30006), {"mode": MODE_SEARCH})
+  addDirectoryItem(localize(30405), {"mode": MODE_FAVORITES})
+  addDirectoryItem(localize(30400), {"mode": MODE_PLAYLIST_MANAGER}, folder=False)
 
 def viewFavorites():
   favorites = FavoritesManager.get_all()
@@ -111,28 +109,28 @@ def viewCategories():
 
   for category in categories:
     addDirectoryItem(category["title"],
-                {"mode": MODE_CATEGORY, "url": category["genre"] })
+                {"mode": MODE_CATEGORY, "url": category["genre"]})
 
 def viewAlphaDirectories():
   alphas = svt.getAlphas()
   if not alphas:
     return
   for alpha in alphas:
-    addDirectoryItem(alpha, { "mode": MODE_LETTER, "letter": alpha})
+    addDirectoryItem(alpha, {"mode": MODE_LETTER, "letter": alpha})
 
 def viewProgramsByLetter(letter):
   programs = svt.getProgramsByLetter(letter)
 
   for program in programs:
-    addDirectoryItem(program["title"], { "mode": MODE_PROGRAM, "url": program["url"] }, thumbnail=program["thumbnail"])
+    addDirectoryItem(program["title"], {"mode": MODE_PROGRAM, "url": program["url"]}, thumbnail=program["thumbnail"])
 
 def viewSection(section, page):
-  (items, moreItems) = svt.getItems(section, page)
+  (items, more_items) = svt.getItems(section, page)
   if not items:
     return
   for item in items:
     createDirItem(item, MODE_VIDEO)
-  if moreItems:
+  if more_items:
     addNextPageItem(page+1, section)
 
 def viewChannels():
@@ -154,7 +152,7 @@ def viewCategory(genre):
   if not programs:
     return
   for program in programs:
-    addDirectoryItem(program["title"], { "mode" : MODE_PROGRAM, "url" : program["url"] }, thumbnail=program["thumbnail"], info=program["info"])
+    addDirectoryItem(program["title"], {"mode" : MODE_PROGRAM, "url" : program["url"]}, thumbnail=program["thumbnail"], info=program["info"])
 
 def viewEpisodes(url):
   """
@@ -240,7 +238,7 @@ def createDirItem(article, mode):
   Given an article and a mode; create directory item
   for the article.
   """
-  if not helper.getSetting(S_HIDE_SIGN_LANGUAGE) or (article["title"].lower().endswith("teckentolkad") == False and article["title"].lower().find("teckenspråk".decode("utf-8")) == -1):
+  if not helper.getSetting(S_HIDE_SIGN_LANGUAGE) or (not article["title"].lower().endswith("teckentolkad") and article["title"].lower().find("teckenspråk".decode("utf-8")) == -1):
 
     params = {}
     params["mode"] = mode
@@ -254,16 +252,16 @@ def createDirItem(article, mode):
       info = article["info"]
     addDirectoryItem(article["title"], params, article["thumbnail"], folder, False, info)
 
-def addNextPageItem(nextPage, section):
+def addNextPageItem(next_page, section):
   addDirectoryItem("Next page",
-                   {  "page": nextPage,
-                      "mode": section})
+                   {"page": next_page,
+                    "mode": section})
 
 def startVideo(url):
-  if not "m3u8" in url:
-    json = svt.getVideoJSON(url)
+  if "m3u8" not in url:
+    video_json = svt.getVideoJSON(url)
     try:
-      show_obj = helper.resolveShowJSON(json)
+      show_obj = helper.resolveShowJSON(video_json)
     except ValueError:
       common.log("Could not decode JSON for "+url)
       return
@@ -278,12 +276,12 @@ def startVideo(url):
 
 def playVideo(show_obj):
   player = xbmc.Player()
-  startTime = time.time()
+  start_time = time.time()
 
   xbmcplugin.setResolvedUrl(PLUGIN_HANDLE, True, xbmcgui.ListItem(path=show_obj["videoUrl"]))
 
   if show_obj["subtitleUrl"]:
-    while not player.isPlaying() and time.time() - startTime < 10:
+    while not player.isPlaying() and time.time() - start_time < 10:
       time.sleep(1.)
 
     player.setSubtitles(show_obj["subtitleUrl"])
@@ -292,25 +290,25 @@ def playVideo(show_obj):
       player.showSubtitles(False)
 
 
-def addDirectoryItem(title, params, thumbnail = None, folder = True, live = False, info = None):
+def addDirectoryItem(title, params, thumbnail=None, folder=True, live=False, info=None):
 
-  li = xbmcgui.ListItem(title)
+  list_item = xbmcgui.ListItem(title)
 
   if thumbnail:
-    li.setThumbnailImage(thumbnail)
+    list_item.setThumbnailImage(thumbnail)
 
   if live:
-    li.setProperty("IsLive", "true")
+    list_item.setProperty("IsLive", "true")
 
   if not folder:
     if params["mode"] == MODE_VIDEO:
-      li.setProperty("IsPlayable", "true")
+      list_item.setProperty("IsPlayable", "true")
       # Add context menu item for adding a video to playlist
       plm_script = "special://home/addons/plugin.video.svtplay/resources/lib/PlaylistManager.py"
       plm_action = "add"
       if not thumbnail:
         thumbnail = ""
-      li.addContextMenuItems(
+      list_item.addContextMenuItems(
         [
           (
             localize(30404),
@@ -321,7 +319,7 @@ def addDirectoryItem(title, params, thumbnail = None, folder = True, live = Fals
     # Add context menu item for adding programs as favorites
     fm_script = "special://home/addons/plugin.video.svtplay/resources/lib/FavoritesManager.py"
     fm_action = "add"
-    li.addContextMenuItems(
+    list_item.addContextMenuItems(
       [
         (
           localize(30406),
@@ -331,14 +329,12 @@ def addDirectoryItem(title, params, thumbnail = None, folder = True, live = Fals
 
   fanart = DEFAULT_FANART
   if info:
-    li.setInfo("Video", info)
+    list_item.setInfo("Video", info)
     if "fanart" in info:
       fanart = info["fanart"]
 
-  li.setArt({"fanart": fanart})
-  common.log("fanart: "+fanart)
-
-  xbmcplugin.addDirectoryItem(PLUGIN_HANDLE, sys.argv[0] + '?' + urllib.urlencode(params), li, folder)
+  list_item.setArt({"fanart": fanart})
+  xbmcplugin.addDirectoryItem(PLUGIN_HANDLE, sys.argv[0] + '?' + urllib.urlencode(params), list_item, folder)
 
 # Main segment of script
 ARG_PARAMS = helper.getUrlParameters(sys.argv[2])

@@ -1,12 +1,16 @@
-[B]Version 1.0.10[/B
+[B]Version 1.0.11[/B]
+
+- Fix Cogeco authentication (github.com/graterje)
+
+[B]Version 1.0.10[/B]
 
 - Fix Shaw GO authentication (github.com/dwaynez)
 
-[B]Version 1.0.9[/B
+[B]Version 1.0.9[/B]
 
 - Fix Cogeco authentication (github.com/portse)
 
-[B]Version 1.0.8[/B
+[B]Version 1.0.8[/B]
 
 - Fix Shaw GO authentication.
 

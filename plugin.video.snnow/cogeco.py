@@ -40,7 +40,7 @@ class Cogeco:
         html = resp.read()
 
         # TODO: this could be made a function to to parse and return the value based on an expression
-        action = re.search('<form.*?action=\"(.*?)"', html, re.MULTILINE)
+        action = re.search('<form.*?action=\"(.*?)\"', html, re.MULTILINE)
         if not action:
             print "Unable to find action form"
             return None
@@ -81,7 +81,7 @@ class Cogeco:
 
         html = resp.read()
 
-        action = re.search('<form.*?action=\"(.*?)"', html, re.MULTILINE)
+        action = re.search('<form.*?action=\"(.*?)\"', html, re.MULTILINE)
         if not action:
             print "Unable to find action form"
             return None
@@ -109,7 +109,7 @@ class Cogeco:
 
         html = resp.read()
 
-        action = re.search('<form.*?action=\"(.*?)"', html, re.MULTILINE)
+        action = re.search('<form.*?action=\"(.*?)\"', html, re.MULTILINE)
         if not action:
             print "Unable to find action form"
             return None

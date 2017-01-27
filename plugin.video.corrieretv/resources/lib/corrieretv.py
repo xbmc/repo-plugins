@@ -1,10 +1,12 @@
 import urllib2
-import time
-from xml.dom import minidom
+import json
+import re
 from BeautifulSoup import BeautifulSoup
 
 class CorriereTV:
-    __USERAGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:18.0) Gecko/20100101 Firefox/18.0"
+    __USERAGENT = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0"
+    __BaseUrl = "http://video.corriere.it"
+    __noThumb = "http://images2.corriereobjects.it/methode_image/placeholder/320x240_A1.jpg"
 
     def __init__(self):
         opener = urllib2.build_opener()
@@ -13,55 +15,74 @@ class CorriereTV:
         urllib2.install_opener(opener)
 
     def getChannels(self):
-        pageUrl = "http://www.corriere.it/rss/"
+        pageUrl = self.__BaseUrl
         data = urllib2.urlopen(pageUrl).read()
         tree = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
         
-        links = tree.find("div", {"id": "rss"}).findAll("a")
+        list = tree.find("ul", {"id": "menu-v"}).findAll("li", recursive=False)
         channels = []
-        for link in links:
+        for item in list:
             channel = {}
+            link = item.find("a")
             channel["title"] = link.text
             channel["url"] = link["href"]
-            if channel["url"].find("http://static.video.corriereobjects.it/widget/content/playlist/xml/") == -1:
+            
+            if channel["url"][0] == "/":
+                channel["url"] = self.__BaseUrl + channel["url"]
+            if channel["url"][-1:] != "/":
+                channel["url"] = channel["url"] + "/"
+            if channel["url"] == "http://video.corriere.it/archivio/":
                 continue
-            channel["url"] = channel["url"].replace("http://static.video.corriereobjects.it/widget/content/playlist/xml/playlist_",
-                "http://static.video.corriereobjects.it/widget/content/playlist/playlist_")
-            channel["url"] = channel["url"].replace("_dateDesc.xml", "_dateDesc.rss")
+            
             channels.append(channel)
         
         return channels
 
-    def getVideoByChannel(self, url):
-        # RSS 2.0 only
-        xmldata = urllib2.urlopen(url).read()
-        dom = minidom.parseString(xmldata)
-
+    def getVideoByChannel(self, pageUrl):
+        data = urllib2.urlopen(pageUrl).read()
+        tree = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
+        
+        script = tree.find("script", text=re.compile("channel"))
+        match = re.search(r'channel\s*=\s*({[^;]+});', script, re.DOTALL)
+        string = match.group(1)
+        channel = json.loads(string)
+        playlistId = channel["hierarchicalAssetProperties"]["playlistId"]
+        
+        pageUrl = self.__BaseUrl + "/p/" + playlistId
+        data = urllib2.urlopen(pageUrl).read()
+        tree = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
+        
+        articles = tree.findAll("article")
         videos = []
-        for videoNode in dom.getElementsByTagName('item'):
+        for article in articles:
             video = {}
-            videoId = videoNode.getElementsByTagName('guid')[0].firstChild.data
-            video["title"] = videoNode.getElementsByTagName('title')[0].firstChild.data.strip()
-            # print video["title"].encode('utf-8')
+            video["videoId"] = article["class"][-36:]
             
-            try:
-                video["description"] = videoNode.getElementsByTagName('description')[0].firstChild.data
-            except:
-                video["description"] = ""
-            dt = videoNode.getElementsByTagName('pubDate')[0].firstChild.data
-            t = time.strptime(dt, '%Y-%m-%dT%H:%M:%S.%fZ')
-            video["date"] = t
-
-            video["url"] = videoNode.getElementsByTagName('media:content')[0].attributes["url"].value
-            video["url"] = video["url"].replace("/z/", "/i/").replace("manifest.f4m","master.m3u8")
-            thumbs = videoNode.getElementsByTagName('media:thumbnail')
-            video["thumb"] = ""
-            for thumb in thumbs:
-                width = thumb.attributes["width"].value
-                if width == "298" or width == "367" or width == "480":
-                    video["thumb"] = thumb.attributes["url"].value
-                    break
+            thumb = article.find("img")
+            if thumb is not None:
+                video["thumb"] = thumb["data-original"]
+            else:
+                video["thumb"] = self.__noThumb
+            
+            # DIRTY ROTTEN HTML
+            figcaption = article.find("figcaption")
+            if figcaption is None:
+                figcaption = article.findNextSibling("figcaption")
+            
+            video["title"] = figcaption.find("h4").text
+            video["date"] = figcaption.find("h3").text
 
             videos.append(video)
             
         return videos
+
+    def getVideoUrl(self, videoId):
+        url = "http://video.corriere.it/fragment-includes/video-includes/%s/%s/%s.json" % (videoId[:2], videoId[2:4], videoId)
+        response = json.load(urllib2.urlopen(url))
+        
+        for mediaFile in response["mediaProfile"]["mediaFile"]:
+            if mediaFile["mimeType"] == "application/vnd.apple.mpegurl":
+                videoUrl = mediaFile["value"]
+                break
+        return videoUrl
+        

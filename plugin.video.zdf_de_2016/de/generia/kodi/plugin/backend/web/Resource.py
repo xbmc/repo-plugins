@@ -2,6 +2,8 @@ import urllib
 import urllib2
 import ssl
 
+from urlparse import urlparse
+
 class Resource(object):
 
     def __init__(self, url, accept):
@@ -18,7 +20,12 @@ class Resource(object):
         self.content = self._getUrl();
         if log is not None:
             log.info("[{}] - Timer - loading url='{}' ... done. [{} ms]", type(self).__name__, self.url, log.stop(start))
-    
+
+    def _getBaseUrl(self):
+        parts = urlparse(self.url)
+        baseUrl = parts.scheme + "://" + parts.hostname
+        return baseUrl
+        
     def _getUrl(self):
         #print "_getUrl: " + self.url
         request = self._createRequest()

@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 DATE_FORMAT = "%d.%m.%Y"
@@ -25,6 +26,7 @@ class SearchHistory(object):
         self.log = log
         self.storeFile = storeFile
         self.searchHistorySize = searchHistorySize
+        self._checkStorePath()
                     
     def getEntries(self):
         entries = self._loadEntries()
@@ -91,3 +93,14 @@ class SearchHistory(object):
             file.close()
         except IOError, e:
             self.log.error(LOG_PREFIX + "caught exception while saving search history using store-file '{}', exception: {}", self.storeFile, e)
+
+    def _checkStorePath(self):
+        storeDir = os.path.dirname(self.storeFile)
+        if os.path.exists(storeDir):
+            return
+        try:
+            os.makedirs(storeDir)
+        except IOError, e:
+            self.log.error(LOG_PREFIX + "caught exception while creating store-dir '{}', exception: {}", storeDir, e)
+            return
+        

@@ -169,7 +169,7 @@ def getSearchResults(search_term):
 
   for program in json_data["titles"]:
     item = {}
-    item["title"] = common.replaceHTMLCodes(program["title"])
+    item["title"] = common.replaceHTMLCodes(program["programTitle"])
     item["url"] = program["contentUrl"]
     item["thumbnail"] = helper.prepareThumb(program.get("imageMedium", ""), baseUrl=BASE_URL)
     item["info"] = {}

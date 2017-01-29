@@ -1,3 +1,7 @@
+Version 4.0.42
+-------------
+- Fix broken search
+
 Version 4.0.41
 -------------
 - Fix broken program listing

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30000">Empty User Name</string>
+  <string id="30001">Please add your user name to the settings</string>
+  <string id="30002">Empty Password</string>
+  <string id="30003">Please add your password to the settings</string>
+  <string id="30004">Authorisation Failed</string>
+  <string id="30005">Unable to authorise channel</string>
+
+  <string id="30010">Live</string>
+
+  <string id="30050">Username</string>
+  <string id="30051">Password</string>
+  <string id="30052">Cable Provider</string>
+</strings>

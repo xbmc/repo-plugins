@@ -1,0 +1,13 @@
+4.0.0
+- Re-release
+3.1.2
+- Added option to disable SSL checks
+3.1.1
+- Moved to external libzdf
+3.1.0
+- Integrated the libZdf for now
+- Added a proper description of the add-on
+3.0.1
+- Added subtitle option
+3.0.0
+- Re-release

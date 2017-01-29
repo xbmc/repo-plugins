@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.svtplay"
        name="SVT Play"
-       version="4.0.41"
+       version="4.0.42"
        provider-name="nilzen">
   <requires>
     <import addon="script.module.parsedom" version="1.2.0"/>
@@ -23,5 +23,7 @@
     <website>https://github.com/nilzen/xbmc-svtplay</website>
     <source>https://github.com/nilzen/xbmc-svtplay</source>
     <forum>http://forum.xbmc.org/showthread.php?tid=67110</forum>
+    <news>Version 4.0.42
+    - Fix broken search</news>
   </extension>
 </addon>

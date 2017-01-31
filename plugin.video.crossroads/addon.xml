@@ -4,7 +4,7 @@ version="1.0.0"
 name="Crossroads Church"
 provider-name="CRDS">
 <requires>
-  <import addon="xbmc.python" version="2.24.0"/>
+  <import addon="xbmc.python" version="2.25.0"/>
   <import addon="script.module.urlresolver" version="2.10.0" />
   <import addon="script.module.metahandler" version="1.0.0" />
   <import addon="script.module.requests" version="2.7.0" />
@@ -25,6 +25,8 @@ We present biblical truths and show how they apply to our everyday lives. And we
   <website>https://www.crossroads.net</website>
   <email>support@crossroads.net</email>
   <source>https://github.com/crdschurch/plugin.video.crossroads</source>
+  <platform>all</platform>
+  <language>en</language>
   <assets>
     <icon>icon.png</icon>
     <fanart>fanart.jpg</fanart>
@@ -37,6 +39,7 @@ We present biblical truths and show how they apply to our everyday lives. And we
   <news>v1.0.0  (2017-1-27)
 - First version of Crossroads Stream Addon!
 - Added ability to stream live service if there is a stream active
-- Added ability to watch previous services</news>
+- Added ability to watch previous services
+  </news>
 </extension>
 </addon>

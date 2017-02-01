@@ -1,7 +1,8 @@
-import urllib, urllib2, random, time, datetime, adobe, json, xml.dom.minidom
+import urllib, urllib2, random, time, datetime, adobe, json, xml.dom.minidom, re
 from msofactory import MSOFactory
 from cookies import Cookies
 from settings import Settings
+from urlparse import urlparse
 
 class SportsnetNow:
 
@@ -305,3 +306,44 @@ class SportsnetNow:
         result = json.loads(resp.read())
         return result['path']
 
+    def parsePlaylist(self, url):
+        """
+        Parse the playlist and split it by bitrate.
+        """
+        streams = {}
+        jar = Cookies.getCookieJar()
+        opener = urllib2.build_opener()
+        opener.addheaders = [('User-Agent', urllib.quote(self.USER_AGENT))]
+
+        try:
+            resp = opener.open(url)
+        except urllib2.URLError, e:
+            print e.args
+            return streams
+        except urllib2.HTTPError, e:
+            print e.getcode()
+            return streams
+        Cookies.saveCookieJar(jar)
+
+        m3u8 = resp.read();
+
+        url = urlparse(url)
+        prefix = url.scheme + "://" + url.netloc + url.path[:url.path.rfind('/')+1]
+        suffix = '?' + url.params + url.query + url.fragment
+        lines = m3u8.split('\n')
+
+        bandwidth = ""
+        for line in lines:
+            if line == "#EXTM3U":
+                continue
+            if line[:17] == '#EXT-X-STREAM-INF':
+                bandwidth = re.search(".*,?BANDWIDTH\=(.*),?", line)
+                if bandwidth:
+                    bandwidth = bandwidth.group(1)
+                else:
+                    print "Unable to parse bandwidth"
+            elif line[-5:] == ".m3u8":
+                
+                streams[bandwidth] = prefix + line + suffix
+
+        return streams

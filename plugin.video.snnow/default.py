@@ -111,7 +111,20 @@ def createLiveMenu(values):
 
 def playChannel(values):
     mso = __settings__.getSetting("mso")
-    stream = getChannelStream(values['id'][0], values['abbr'][0], mso)
+    streams = getChannelStream(values['id'][0], values['abbr'][0], mso)
+
+    # here get the streams
+    bitrates = [int(x) for x in streams.keys()]
+    bitrates = [str(x) for x in reversed(sorted(bitrates)) ]
+
+    index = xbmcgui.Dialog().select("Select Bitrate", bitrates)
+
+    if index < 0:
+        dialog = xbmcgui.Dialog()
+        dialog.ok(__language__(30004), __language__(30005))
+        return
+
+    stream = streams[bitrates[index]]
 
     if not stream:
         dialog = xbmcgui.Dialog()
@@ -140,8 +153,7 @@ def getChannelStream(channelId, channelName, msoName):
         creds = getAuthCredentials()
         if sn.authorize(creds['u'], creds['p'], creds['m']):
             return sn.getChannel(channelId, channelName, msoName)
-    return stream
-
+    return sn.parsePlaylist(stream)
 
 if len(sys.argv[2]) == 0:
 

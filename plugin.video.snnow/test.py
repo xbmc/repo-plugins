@@ -45,8 +45,11 @@ if abbr:
         sys.exit(1)
     print "Authorization Complete."
     stream = sn.getChannel(options.id, abbr, options.mso)
-    if stream:
-        print stream
-    else:
+    if not stream:
         print "Unable to get stream"
-    
+        sys.exit(0)
+
+    streams = sn.parsePlaylist(stream)
+    bitrates = [int(x) for x in streams.keys()]
+    for bitrate in reversed(sorted(bitrates)):
+        print str(bitrate) + ':' + streams[str(bitrate)]

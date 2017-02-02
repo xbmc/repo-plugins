@@ -18,4 +18,4 @@ Author: **Ivan Georgiev**
 Email: **sasbass@targovishte.com**
 
 ### Support or Contact
-Ако имате нужда от помощ или просто желаете да се свържите с нас jordan@mytv.bg или на support@mytv.bg
+Ако имате нужда от помощ или просто желаете да се свържите с нас i.georgiev@mytv.bg или на support@mytv.bg

@@ -4,6 +4,7 @@
 #imports
 from xbmcswift import Plugin, xbmc, xbmcaddon, xbmcplugin, xbmcgui, clean_dict
 from urllib2 import urlopen, HTTPError
+import urlparse
 import xbmcgui
 from pyxbmct.addonwindow import *
 import sys
@@ -13,32 +14,19 @@ from urllib2 import Request
 import urllib
 import urllib2
 
-__addon_name__		= xbmcaddon.Addon().getAddonInfo('name')
-__id__				= xbmcaddon.Addon().getAddonInfo('id')
-__lang__			= xbmcaddon.Addon().getLocalizedString
 __addon__ 			= xbmcaddon.Addon()
+__addon_name__		= __addon__.getAddonInfo('name')
+__id__				= __addon__.getAddonInfo('id')
+__lang__			= __addon__.getLocalizedString
 __version__ 		= __addon__.getAddonInfo('version')
 __profile_path__ 	= xbmc.translatePath( __addon__.getAddonInfo('profile') ).decode("utf-8")
 __token_filepath__	= __profile_path__ + '/token.txt'
 
 
-THUMBNAIL_VIEW_IDS = {'skin.confluence': 500,
-                      'skin.aeon.nox': 551,
-                      'skin.confluence-vertical': 500,
-                      'skin.jx720': 52,
-                      'skin.pm3-hd': 53,
-                      'skin.rapier': 50,
-                      'skin.simplicity': 500,
-                      'skin.slik': 53,
-                      'skin.touched': 500,
-                      'skin.transparency': 53,
-                      'skin.xeebo': 55}
-
 # BEGIN # Plugin
 class Plugin_mod(Plugin):
 
-    def add_items(self, iterable, is_update=False, sort_method_ids=[],
-                  override_view_mode=False):
+    def add_items(self, iterable, is_update=False, sort_method_ids=[]):
         items = []
         urls = []
         for i, li_info in enumerate(iterable):
@@ -53,12 +41,6 @@ class Plugin_mod(Plugin):
                 urls.append(li_info.get('url'))
 
         if self._mode is 'xbmc':
-            if override_view_mode:
-                skin = xbmc.getSkinDir()
-                thumbnail_view = THUMBNAIL_VIEW_IDS.get(skin)
-                if thumbnail_view:
-                    cmd = 'Container.SetViewMode(%s)' % thumbnail_view
-                    xbmc.executebuiltin(cmd)
             xbmcplugin.addDirectoryItems(self.handle, items, len(items))
             for id in sort_method_ids:
                 xbmcplugin.addSortMethod(self.handle, id)
@@ -66,26 +48,18 @@ class Plugin_mod(Plugin):
 
         return urls
 
-    def _make_listitem(self, label, label2='', iconImage='', thumbnail='',
-                       path='', **options):
+    def _make_listitem(self, label, path='', **options):
         
-        li = xbmcgui.ListItem(label, label2=label2, iconImage=iconImage, thumbnailImage=thumbnail, path=path)
+        li = xbmcgui.ListItem(label, path=path)
         cleaned_info = clean_dict(options.get('info'))        
         
-        li.setArt({ 'poster': options.get('thumb')})
+        li.setArt({ 'poster': options.get('thumb'), 'thumb': options.get('thumb')})
         li.setInfo('video', {
             'originaltitle': label,
             'title': label,
             'sorttitle': options.get('key')
         })
         
-        if cleaned_info:
-            li.setInfo('video', cleaned_info)
-        if options.get('is_playable'):
-            li.setProperty('IsPlayable', 'true')
-        if options.get('context_menu'):
-            li.addContextMenuItems(options['context_menu'])
-
         return options['url'], li, options.get('is_folder', True)
 
 # END  # Plugin
@@ -117,199 +91,217 @@ def main_menu():
     menulist = dataNew['menu']
     items = []
     for (key, val) in enumerate(menulist):
+        label = val['title'].encode('utf-8')
         items.append({
-            "label": u"{0}".format(val['title']),
-            "key": u"{0}".format(key),
-            'url': plugin.url_for('tvList',type=val['key']),
+            'label': label,
+            'key': u"{0}".format(key),
+            'url': plugin.url_for('tvList', url=val['key'], title=label),
             'thumb': "{0}".format(val["thumb"])})
 
     return plugin.add_items(items, False, [xbmcplugin.SORT_METHOD_VIDEO_SORT_TITLE, xbmcplugin.SORT_METHOD_VIDEO_TITLE])
 
 
-@plugin.route('/tvlist/<type>')
-def tvList(type):
-
-    menulist=[]
-    items=[]
+@plugin.route('/tvlist/<url>')
+def tvList(url):
+	args = urlparse.parse_qs(sys.argv[2][1:])
+	title_tmp = args.get('title', None)
+	if title_tmp is None:
+		title = ''
+	else:
+		title = title_tmp[0].decode('utf-8').encode('utf-8');
 	
-    dialog = xbmcgui.Dialog()
+	show_title_tmp = args.get('show_title', None)
+	if show_title_tmp is None:
+		show_title = ''
+	else:
+		show_title = show_title_tmp[0].decode('utf-8').encode('utf-8');
 
-    if (not plugin.get_setting('username')) or (not plugin.get_setting('password')):
-        dialog.ok(__lang__(30003), __lang__(30005))
-        return
-    
-    signin = login(
-        plugin.get_setting('username'), 
-        plugin.get_setting('password'),
-        type
-    )
-    
-    if (not signin) or (not signin.token):
-        return
+	menulist=[]
+	items=[]
 
-    
-    if not signin.data:
-        return
-    
-    if 'menu' not in signin.data:
-        if 'key' not in signin.data:
-            dialog.ok(__lang__(30003), signin.data['msg'])
-            return
-        else:
+	dialog = xbmcgui.Dialog()
+	
+	if(not plugin.get_setting('username')) or (not plugin.get_setting('password')):
+		dialog.ok(__lang__(30003), __lang__(30005))
+		return
+
+	signin = login(
+		plugin.get_setting('username'), 
+		plugin.get_setting('password'),
+		url
+	)
+
+	if (not signin) or (not signin.token):
+		return
+
+	if not signin.data:
+		return
+	
+	if 'menu' not in signin.data:
+		if 'key' not in signin.data:
+			dialog.ok(__lang__(30003), signin.data['msg'])
+			return
+		else:
 			if 'quality_urls' in signin.data and len(signin.data['quality_urls']) > 1:
 				for key,val in enumerate(signin.data['quality_urls']):
 					items.append(val['title'])
 				ret = dialog.select(__lang__(30006), items)
-				tvPlay(signin.data['quality_urls'][ret]['key'])
+				tvPlay(signin.data['quality_urls'][ret]['key'], title, show_title)
 				return
-			tvPlay(signin.data['key'])
+			tvPlay(signin.data['key'], title, show_title)
 			return
 
-    else:
-        menulist = signin.data['menu']
-        if not menulist:
-            dialog.ok(__lang__(30003), __lang__(30004))
-        if menulist:
-            for (key, val) in enumerate(menulist):
-                if val['type'] == 'item':
-                    items.append({
-                        "label": u"{0}".format(val['title']),
-                        "key": u"{0}".format(key),
-                        'url': plugin.url_for('tvPlay',type=val['key']),
-                        'thumb': "{0}".format(val["thumb"])})
-                elif val['type'] == 'menu':
-                    items.append({
-                        "label": u"{0}".format(val['title']),
-                        "key": u"{0}".format(key),
-                        'url': plugin.url_for('tvList',type=val['key']),
-                        'thumb': "{0}".format(val["thumb"])})
+	else:
+		menulist = signin.data['menu']
+		_show_title = signin.data.get('title_prev', '').encode('utf-8')
+		if not menulist:
+			dialog.ok(__lang__(30003), __lang__(30004))
+		if menulist:
+			for (key, val) in enumerate(menulist):
+				if val['type'] == 'item':
+					items.append({
+						'label': u"{0}".format(val['title']),
+						'key': u"{0}".format(key),
+						'url': plugin.url_for('tvPlay', url=val['key']),
+						'thumb': "{0}".format(val["thumb"])})
+				elif val['type'] == 'menu':
+					label = val['title'].encode('utf-8')
+					items.append({
+						'label': label,
+						'key': u"{0}".format(key),
+						'url': plugin.url_for('tvList', url=val['key'], title=label, show_title=_show_title),
+						'thumb': "{0}".format(val["thumb"])})
 
 
-    return plugin.add_items(items, False, [xbmcplugin.SORT_METHOD_VIDEO_SORT_TITLE, xbmcplugin.SORT_METHOD_VIDEO_TITLE])
+	return plugin.add_items(items, False, [xbmcplugin.SORT_METHOD_VIDEO_SORT_TITLE, xbmcplugin.SORT_METHOD_VIDEO_TITLE])
 
-@plugin.route('/tvPlay/<type>')
-def tvPlay(type):
-    xbmc.Player().play(type)
-    return
+@plugin.route('/tvPlay/<url>')
+def tvPlay(url, title, show_title):
+	if title:
+		li = xbmcgui.ListItem(label=show_title + ' ' + title)
+		xbmc.Player().play(url, li)
+	else:
+		xbmc.Player().play(url)
+	return
 
 
 # START # Login and using token for getting data.
 class login:
 
-    token = ""
-    data = ""
-    request = ""
-    login_iteration = 0
-    
-    def __init__(self, username, password, type):
-        self.usr = username
-        self.pas = password
-        self.type = type
-        
-        self.openReadFile()
-        
-        if not self.token:
-            self.logIN()
-            if not self.token:
-                return
-        
-        self.data=self.getLive()
-        self.data=self.getData(SITE_PATH + type)
+	token = ""
+	data = ""
+	request = ""
+	login_iteration = 0
+	
+	def __init__(self, username, password, url):
+		self.usr = username
+		self.pas = password
+		self.url = url
+		
+		self.openReadFile()
+		
+		if not self.token:
+			self.logIN()
+			if not self.token:
+				return
+		
+		self.data=self.getLive()
+		self.data=self.getData(SITE_PATH + url)
+	
+	def logIN(self):
+		self.data = self.makeUserPass()
+		self.token = self.getData(SITE_LOGIN_PAGE)
+		if self.token:
+			self.writeInFile()
+		
+		return
+	
+	def getData(self, url):
+		send = urllib.urlencode(self.data)
+		self.request = urllib2.Request(url, send, headers={"User-Agent" : "XBMC/Kodi MyTV Addon " + str(__version__)})
+		
+		try:
+			response = urllib2.urlopen(self.request)
+		except HTTPError, e:
+			dialog = xbmcgui.Dialog()
+			dialog.ok(__lang__(30003), e.code)
+			return
+		
+		data_result = response.read()
+		
+		try:
+			res = json.loads(data_result)
+		except Exception, e:
+			xbmc.log('%s addon: %s' % (__addon_name__, e))
+			return
+		
+		if 'token' in res:
+			return res['token']
+		
+		if 'status' in res:
+			if res['login'] == 'yes':
+	
+				if self.login_iteration > 0:
+					self.login_iteration = 0
+					return
+				
+				self.logIN()
+				self.data=self.getLive()
+				data_new=self.getData(url)
+				self.login_iteration += 1
+				
+				return data_new
+	
+			else:
+	
+				dialog = xbmcgui.Dialog()
+				dialog.ok(__lang__(30003), res['msg'])
+				return
+		
+		return res
+	
+	def getLive(self):
+		return {'token': self.token}
+	
+	def makeUserPass(self):
+		return {
+			"usr":self.usr,
+			"pwd":self.pas,
+			"access_type": "xbmc_kodi",
+			"device_info": json.dumps({
+				"board":xbmc.getInfoLabel("System.BuildVersion"),
+				"brand":"xbmc/kodi " + xbmc.getInfoLabel("System.ProfileName"),
+				"device":xbmc.getInfoLabel("System.KernelVersion"),
+				"display":xbmc.getInfoLabel("System.FriendlyName"),
+				"model":xbmc.getInfoLabel("System.BuildDate"),
+				"product":"",
+				"push_id":"",
+				"uuid":""
+			})
+		}
 
-    def logIN(self):
-        self.data = self.makeUserPass()
-        self.token = self.getData(SITE_LOGIN_PAGE)
-        if self.token:
-            self.writeInFile()
-        
-        return
-    
-    def getData(self, url):
-        send = urllib.urlencode(self.data)
-        self.request = urllib2.Request(url, send, headers={"User-Agent" : "XBMC/Kodi MyTV Addon " + str(__version__)})
-        
-        try:
-            response = urllib2.urlopen(self.request)
-        except HTTPError, e:
-            dialog = xbmcgui.Dialog()
-            dialog.ok(__lang__(30003), e.code)
-            return
-        
-        data_result = response.read()
-        
-        try:
-            res = json.loads(data_result)
-        except Exception, e:
-            xbmc.log('%s addon: %s' % (__addon_name__, e))
-            return
-        
-        if 'token' in res:
-            return res['token']
-        
-        if 'status' in res:
-            if res['login'] == 'yes':
+	def writeInFile(self):
+		fopen = open(__token_filepath__, "w+")
+		fopen.write(self.token + " " + plugin.get_setting('username'))
+		fopen.close()
 
-                if self.login_iteration > 0:
-                    self.login_iteration = 0
-                    return
-                
-                self.logIN()
-                self.data=self.getLive()
-                data_new=self.getData(url)
-                self.login_iteration += 1
-                
-                return data_new
-
-            else:
-
-                dialog = xbmcgui.Dialog()
-                dialog.ok(__lang__(30003), res['msg'])
-                return
-        
-        return res
-
-    def getLive(self):
-        return {'token': self.token}
-
-    def makeUserPass(self):
-        return {
-            "usr":self.usr,
-            "pwd":self.pas,
-            "access_type":"xbmc_kodi",
-            "device_info": json.dumps({
-                "board":xbmc.getInfoLabel("System.BuildVersion"),
-                "brand":"xbmc/kodi " + xbmc.getInfoLabel("System.ProfileName"),
-                "device":xbmc.getInfoLabel("System.KernelVersion"),
-                "display":xbmc.getInfoLabel("System.FriendlyName"),
-                "model":xbmc.getInfoLabel("System.BuildDate"),
-                "product":"",
-                "push_id":"",
-                "uuid":""
-            })
-        }
-
-    def writeInFile(self):
-        fopen = open(__token_filepath__, "w+")
-        fopen.write(self.token + " " + plugin.get_setting('username'))
-        fopen.close()
-
-    def openReadFile(self):
-        if os.path.isfile(__token_filepath__):
-            fopen = open(__token_filepath__, "r")
-            temp_token = fopen.read()
-            fopen.close()
-            if temp_token:
+	def openReadFile(self):
+		if os.path.isfile(__token_filepath__):
+			fopen = open(__token_filepath__, "r")
+			temp_token = fopen.read()
+			fopen.close()
+			if temp_token:
 				arr = temp_token.partition(" ")
 				self.token = arr[0]
 				if arr[2] and arr[2] != plugin.get_setting('username'):
 					self.token = '';
 				temp_token = ''
-        else:
-            self.writeInFile()
-        
-        
-    def __log(self, text):
-        xbmc.log('%s addon: %s' % (__addon_name__, text))
+		else:
+			self.writeInFile()
+		
+		
+	def __log(self, text):
+		xbmc.log('%s addon: %s' % (__addon_name__, text))
 
 # END # LOGIN
 

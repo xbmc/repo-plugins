@@ -13,3 +13,6 @@ v1.1
 
 v1.2
 - improved localisation
+
+v1.4
+- fixed bug that crashed the addon under Krypton

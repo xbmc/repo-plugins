@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nrwision" name="nrwision" version="1.2.0" provider-name="nrwision / TU Dortmund">
+<addon id="plugin.video.nrwision" name="nrwision" version="1.4.0" provider-name="nrwision / TU Dortmund">
     <requires>
-        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="xbmc.python" version="2.19.0"/>
         <import addon="script.module.xbmcswift" version="0.2.0"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">

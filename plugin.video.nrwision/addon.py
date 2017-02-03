@@ -101,7 +101,7 @@ def orte2(url):
 @plugin.route('/live/')
 def live():
     li = xbmcgui.ListItem('Live', iconImage='/kodi_live.png')
-    xbmc.Player(xbmc.PLAYER_CORE_AUTO).play('rtmp://fms.nrwision.de/live playpath=livestream swfUrl=http://www.nrwision.de/typo3conf/ext/user_pxcontent/res/player5.swf pageUrl=https://www.nrwision.de/programm/livestream.html swfVfy=true live=true', li)
+    xbmc.Player().play('rtmp://fms.nrwision.de/live playpath=livestream swfUrl=http://www.nrwision.de/typo3conf/ext/user_pxcontent/res/player5.swf pageUrl=https://www.nrwision.de/programm/livestream.html swfVfy=true live=true', li)
     return []
 
 # Suche
@@ -133,7 +133,8 @@ def view():
     title = args['title'][0]
     icon = args['icon'][0]
     li = xbmcgui.ListItem(title, iconImage=icon)
-    xbmc.Player(xbmc.PLAYER_CORE_AUTO).play(url, li)
+    #xbmc.Player(xbmc.PLAYER_CORE_AUTO).play(url, li)
+    xbmc.Player().play(url, li)
     return []
 
 # Menüeintrag hinzufügen

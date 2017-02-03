@@ -1,0 +1,6 @@
+4.9.3
+- Moved to libard
+4.9.2
+- Added fanart and icon (thanks slix)
+4.9.0
+- Re-release

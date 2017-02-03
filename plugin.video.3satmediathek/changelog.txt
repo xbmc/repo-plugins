@@ -1,0 +1,10 @@
+1.1.0
+- Misc changes
+1.0.1
+- Misc changes
+1.0.0
+- Added fanart
+- Added icon
+- Added description
+0.0.1
+- Initial commit

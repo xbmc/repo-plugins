@@ -446,7 +446,6 @@ def ScrapeMarkup(markup):
     """Creates a list of programmes of a markup response.
 
     """
-
     pDialog = xbmcgui.DialogProgressBG()
     pDialog.create(translation(30319))
 
@@ -491,11 +490,10 @@ def ScrapeMarkup(markup):
         # data-ip-src="https://ichef.bbci.co.uk/images/ic/336x189/p033s1dh.jpg">
 
         image_match = re.search(
-            r'<div class="r-image".+?data-ip-type="(.*?)".+?data-ip-src="https://ichef.bbci.co.uk/images/ic/.*?/(.*?)\.jpg"',
+            r'srcset="https://ichef.bbci.co.uk/images/ic/.*?/(.*?).jpg"',
             li, flags=(re.DOTALL | re.MULTILINE))
         if image_match:
-            type = image_match.group(1)
-            image = image_match.group(2)
+            image = image_match.group(1)
             if image:
                 icon = "https://ichef.bbci.co.uk/images/ic/832x468/" + image + ".jpg"
 
@@ -1086,7 +1084,7 @@ def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
         # print subtitles_url
     else:
         subtitles_url = ''
-    suppliers = ['', 'Akamai', 'Limelight', 'Level3']
+    suppliers = ['', 'Akamai', 'Limelight', 'Bidi']
     bitrates = [0, 800, 1012, 1500, 1800, 2400, 3116, 5510]
     for supplier, bitrate, url, resolution in sorted(streams[0], key=itemgetter(1), reverse=True):
         if bitrate in (5, 7):
@@ -1120,6 +1118,8 @@ def ParseStreams(stream_id):
                 tmp_sup = 1
             elif supplier == 'limelight_uk_hls':
                 tmp_sup = 2
+            elif supplier == 'bidi_uk_hls':
+                tmp_sup = 3
             m3u8_breakdown = re.compile('(.+?)iptv.+?m3u8(.+?)$').findall(m3u8_url)
             #print m3u8_breakdown
             # print m3u8_url

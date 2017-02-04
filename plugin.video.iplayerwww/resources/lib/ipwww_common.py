@@ -35,7 +35,7 @@ addonid = "plugin.video.iplayerwww"
 addoninfo = GetAddonInfo()
 DIR_USERDATA = xbmc.translatePath(addoninfo["profile"])
 cookie_jar = None
-user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:48.0) Gecko/20100101 Firefox/48.0'
+user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:51.0) Gecko/20100101 Firefox/51.0'
 headers = {'User-Agent': user_agent}
 
 
@@ -433,66 +433,239 @@ def CreateBaseDirectory(content_type):
 
     if content_type == "video":
         ShowLicenceWarning()
-        AddMenuEntry(translation(30300), 'iplayer', 106, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/top_rated.png'), '', '')
-        AddMenuEntry(translation(30317), 'url', 109, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/top_rated.png'), '', '')
-        AddMenuEntry(translation(30301), 'url', 105, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/popular.png'), '', '')
-        AddMenuEntry(translation(30302), 'url', 102, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/lists.png'), '', '')
-        AddMenuEntry(translation(30327), 'url', 120, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/lists.png'), '', '')
-        AddMenuEntry(translation(30303), 'url', 103, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/lists.png'), '', '')
-        AddMenuEntry(translation(30304), 'url', 104, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/search.png'), '', '')
-        AddMenuEntry(translation(30305), 'url', 101, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/tv.png'), '', '')
-        AddMenuEntry(translation(30328), 'url', 118, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/tv.png'), '', '')
-        AddMenuEntry(translation(30306), 'url', 107, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/favourites.png'), '', '')
-        AddMenuEntry(translation(30307), 'url', 108, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/favourites.png'), '', '')
-        AddMenuEntry(translation(30325), 'url', 119, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/settings.png'),  '', '')
+        if ADDON.getSetting("menu_video_highlights") == 'true':
+            AddMenuEntry(translation(30300), 'url', 106,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/top_rated.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_video_channel_highlights") == 'true':
+            AddMenuEntry(translation(30317), 'url', 109,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/top_rated.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_video_most_popular") == 'true':
+            AddMenuEntry(translation(30301), 'url', 105,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/popular.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_video_az") == 'true':
+            AddMenuEntry(translation(30302), 'url', 102,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/lists.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_video_channel_az") == 'true':
+            AddMenuEntry(translation(30327), 'url', 120,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/lists.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_video_categories") == 'true':
+            AddMenuEntry(translation(30303), 'url', 103,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/lists.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_video_search") == 'true':
+            AddMenuEntry(translation(30304), 'url', 104,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/search.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_video_live") == 'true':
+            AddMenuEntry(translation(30305), 'url', 101,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/tv.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_video_red_button") == 'true':
+            AddMenuEntry(translation(30328), 'url', 118,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/tv.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_video_watching") == 'true':
+            AddMenuEntry(translation(30306), 'url', 107,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_video_added") == 'true':
+            AddMenuEntry(translation(30307), 'url', 108,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
+                                            ),
+                         '', '')
+        AddMenuEntry(translation(30325), 'url', 119,
+                     xbmc.translatePath(
+                       'special://home/addons/plugin.video.iplayerwww/media/settings.png'
+                                        ), 
+                     '', '')
     elif content_type == "audio":
-        AddMenuEntry(translation(30321), 'url', 113, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/live.png'), '', '')
-        AddMenuEntry(translation(30302), 'url', 112, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/lists.png'), '', '')
-        AddMenuEntry(translation(30303), 'url', 114, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/lists.png'), '', '')
-        AddMenuEntry(translation(30304), 'url', 115, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/search.png'), '', '')
-        AddMenuEntry(translation(30301), 'url', 116, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/popular.png'), '', '')
-        AddMenuEntry(translation(30307), 'url', 117, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/favourites.png'), '', '')
-        AddMenuEntry(translation(30334), 'url', 199, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/favourites.png'), '', '')
-        AddMenuEntry(translation(30325), 'url', 119, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/settings.png'), '', '')
+        if ADDON.getSetting("menu_radio_live") == 'true':
+            AddMenuEntry(translation(30321), 'url', 113,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/live.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_radio_az") == 'true':
+            AddMenuEntry(translation(30302), 'url', 112,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/lists.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_radio_categories") == 'true':
+            AddMenuEntry(translation(30303), 'url', 114,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/lists.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_radio_search") == 'true':
+            AddMenuEntry(translation(30304), 'url', 115,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/search.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_radio_most_popular") == 'true':
+            AddMenuEntry(translation(30301), 'url', 116,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/popular.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_radio_added") == 'true':
+            AddMenuEntry(translation(30307), 'url', 117,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_radio_following") == 'true':
+            AddMenuEntry(translation(30334), 'url', 199,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
+                                            ),
+                         '', '')
+        AddMenuEntry(translation(30325), 'url', 119,
+                     xbmc.translatePath(
+                       'special://home/addons/plugin.video.iplayerwww/media/settings.png'
+                                        ),
+                     '', '')
     else:
         ShowLicenceWarning()
-        AddMenuEntry((translation(30323)+translation(30300)),
-                            'iplayer', 106, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/top_rated.png'), '', '')
-        AddMenuEntry((translation(30323)+translation(30317)),
-                            'url', 109, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/top_rated.png'), '', '')
-        AddMenuEntry((translation(30323)+translation(30301)),
-                            'url', 105, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/popular.png'), '', '')
-        AddMenuEntry((translation(30323)+translation(30302)),
-                            'url', 102, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/lists.png'), '', '')
-        AddMenuEntry((translation(30323)+translation(30327)),
-                            'url', 120, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/lists.png'), '', '')
-        AddMenuEntry((translation(30323)+translation(30303)),
-                            'url', 103, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/lists.png'), '', '')
-        AddMenuEntry((translation(30323)+translation(30304)),
-                            'url', 104, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/search.png'), '', '')
-        AddMenuEntry((translation(30323)+translation(30305)),
-                            'url', 101, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/tv.png'), '', '')
-        AddMenuEntry((translation(30323)+translation(30328)),
-                            'url', 118, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/tv.png'), '', '')
-        AddMenuEntry((translation(30323)+translation(30306)),
-                            'url', 107, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/favourites.png'), '', '')
-        AddMenuEntry((translation(30323)+translation(30307)),
-                            'url', 108, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/favourites.png'), '', '')
+        if ADDON.getSetting("menu_video_highlights") == 'true':
+            AddMenuEntry((translation(30323)+translation(30300)), 'url', 106,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/top_rated.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_video_channel_highlights") == 'true':
+            AddMenuEntry((translation(30323)+translation(30317)), 'url', 109,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/top_rated.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_video_most_popular") == 'true':
+            AddMenuEntry((translation(30323)+translation(30301)), 'url', 105,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/popular.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_video_az") == 'true':
+            AddMenuEntry((translation(30323)+translation(30302)), 'url', 102,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/lists.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_video_channel_az") == 'true':
+            AddMenuEntry((translation(30323)+translation(30327)), 'url', 120,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/lists.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_video_categories") == 'true':
+            AddMenuEntry((translation(30323)+translation(30303)), 'url', 103,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/lists.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_video_search") == 'true':
+            AddMenuEntry((translation(30323)+translation(30304)), 'url', 104,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/search.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_video_live") == 'true':
+            AddMenuEntry((translation(30323)+translation(30305)), 'url', 101,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/tv.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_video_red_button") == 'true':
+            AddMenuEntry((translation(30323)+translation(30328)), 'url', 118,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/tv.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_video_watching") == 'true':
+            AddMenuEntry((translation(30323)+translation(30306)), 'url', 107,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_video_added") == 'true':
+            AddMenuEntry((translation(30323)+translation(30307)), 'url', 108,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
+                                            ),
+                         '', '')
 
-        AddMenuEntry((translation(30324)+translation(30321)),
-                            'url', 113, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/live.png'), '', '')
-        AddMenuEntry((translation(30324)+translation(30302)),
-                            'url', 112, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/lists.png'), '', '')
-        AddMenuEntry((translation(30324)+translation(30303)),
-                            'url', 114, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/lists.png'), '', '')
-        AddMenuEntry((translation(30324)+translation(30304)),
-                            'url', 115, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/search.png'), '', '')
-        AddMenuEntry((translation(30324)+translation(30301)),
-                            'url', 116, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/popular.png'), '', '')
-        AddMenuEntry((translation(30324)+translation(30307)),
-                            'url', 117, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/favourites.png'), '', '')
-        AddMenuEntry((translation(30324)+translation(30334)),
-                            'url', 199, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/favourites.png'), '', '')
-        AddMenuEntry(translation(30325), 'url', 119, xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/settings.png'), '', '')
-
+        if ADDON.getSetting("menu_radio_live") == 'true':
+            AddMenuEntry((translation(30324)+translation(30321)), 'url', 113,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/live.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_radio_az") == 'true':
+            AddMenuEntry((translation(30324)+translation(30302)), 'url', 112,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/lists.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_radio_categories") == 'true':
+            AddMenuEntry((translation(30324)+translation(30303)), 'url', 114,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/lists.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_radio_search") == 'true':
+            AddMenuEntry((translation(30324)+translation(30304)), 'url', 115,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/search.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_radio_most_popular") == 'true':
+            AddMenuEntry((translation(30324)+translation(30301)), 'url', 116,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/popular.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_radio_added") == 'true':
+            AddMenuEntry((translation(30324)+translation(30307)), 'url', 117,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
+                                            ),
+                         '', '')
+        if ADDON.getSetting("menu_radio_following") == 'true':
+            AddMenuEntry((translation(30324)+translation(30334)), 'url', 199,
+                         xbmc.translatePath(
+                           'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
+                                            ),
+                         '', '')
+        AddMenuEntry(translation(30325), 'url', 119,
+                     xbmc.translatePath(
+                       'special://home/addons/plugin.video.iplayerwww/media/settings.png'
+                                        ),
+                     '', '')
 

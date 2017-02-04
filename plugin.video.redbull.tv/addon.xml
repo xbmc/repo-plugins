@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.redbull.tv" name="Red Bull TV" version="1.2.1" provider-name="bromix">
+<addon id="plugin.video.redbull.tv" name="Red Bull TV" version="1.2.2" provider-name="bromix">
 	<requires>
 		<import addon="xbmc.python" version="2.14.0"/>
 	</requires>
@@ -19,5 +19,6 @@
 		<website>http://www.redbull.tv/</website>
 		<email>bromix at gmx dot net</email>
 		<source>https://github.com/bromix/plugin.video.redbull.tv/</source>
+		<broken>When launched, throws a Exception in ContentProvider, Unknown response type 'MediaBaseClient::UnAuthorized Error'</broken>
 	</extension>
 </addon>

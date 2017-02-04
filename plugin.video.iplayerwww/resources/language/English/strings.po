@@ -322,3 +322,83 @@ msgctxt "#30410"
 msgid "To watch iPlayer TV content legally, you need a UK TV Licence."
 msgstr ""
 
+msgctxt "#30500"
+msgid "Display"
+msgstr ""
+
+msgctxt "#30510"
+msgid "Select main menu entries"
+msgstr ""
+
+msgctxt "#30511"
+msgid "iPlayer: Highlights"
+msgstr ""
+
+msgctxt "#30512"
+msgid "iPlayer: Channel Highlights"
+msgstr ""
+
+msgctxt "#30513"
+msgid "iPlayer: Most Popular"
+msgstr ""
+
+msgctxt "#30514"
+msgid "iPlayer: Programme List A-Z"
+msgstr ""
+
+msgctxt "#30515"
+msgid "iPlayer: Channel A-Z"
+msgstr ""
+
+msgctxt "#30516"
+msgid "iPlayer: Categories"
+msgstr ""
+
+msgctxt "#30517"
+msgid "iPlayer: Search"
+msgstr ""
+
+msgctxt "#30518"
+msgid "iPlayer: Watch Live"
+msgstr ""
+
+msgctxt "#30519"
+msgid "iPlayer: Red Button"
+msgstr ""
+
+msgctxt "#30520"
+msgid "iPlayer: Watching"
+msgstr ""
+
+msgctxt "#30521"
+msgid "iPlayer: Added"
+msgstr ""
+
+msgctxt "#30522"
+msgid "Radio: Listen Live"
+msgstr ""
+
+msgctxt "#30523"
+msgid "Radio: Programme List A-Z"
+msgstr ""
+
+msgctxt "#30524"
+msgid "Radio: Categories"
+msgstr ""
+
+msgctxt "#30525"
+msgid "Radio: Search"
+msgstr ""
+
+msgctxt "#30526"
+msgid "Radio: Most Popular"
+msgstr ""
+
+msgctxt "#30527"
+msgid "Radio: Added"
+msgstr ""
+
+msgctxt "#30528"
+msgid "Radio: Following"
+msgstr ""
+

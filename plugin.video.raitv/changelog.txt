@@ -1,3 +1,16 @@
+[B]2.0.0[/B]
+- Updated live tv, replay, on demand sections to new Raiplay API.
+- Updated live radio to new API.
+- Updated search to new API.
+- Cache TV and radio stations for 1 hour.
+- Updated addon icon.
+- Unavailable programmes in RAI Replay section are now written in italics.
+- Changed the User Agent in the relinker to Chrome. Thus the relinker returns higher bitrate HLS streams.
+- Log geolocation.
+- Better log messages.
+- Clean up.
+- Minor fixes.
+
 [B]1.0.13[/B]
 - Fix relinker. Now all live streams are playable again - including RAI1.
 - Some clean up.

@@ -47,9 +47,3 @@ class TGR:
                     items.append(item)
                 
         return items
-
-        
-#tgr = TGR()
-#programmes = tgr.getProgrammes()
-#regions = tgr.getList(programmes[0]["url"])
-#print tgr.getList(regions[0]["url"])

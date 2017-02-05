@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <setting id="forceView" type="bool" label="30021" default="true" />
-    <setting id="autoPlayPrompt" type="bool" label="30028" default="true" />
+    <setting id="autoPlayPrompt" type="bool" label="30028" default="false" />
     <setting id="useSubtitles" type="bool" label="30029" default="false" />
     <setting id="useServiceAPI" type="bool" label="30026" default="false" />
-    <setting id="enableBlacklist" type="bool" label="30043" default="true" />
-    <setting id="videoQuality" type="enum"  label="30022" lvalues="30023|30024|30025|30044" default="30044"/>
+    <setting id="enableBlacklist" type="bool" label="30043" default="false" />
+    <setting id="videoQuality" type="enum"  label="30022" lvalues="30044|30025|30024|30023" default="30044"/>
 </settings>

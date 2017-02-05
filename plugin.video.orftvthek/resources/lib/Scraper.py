@@ -4,37 +4,37 @@ class Scraper(object):
 	__metaclass__  = abc.ABCMeta
 
 	@abc.abstractmethod
-	def getCategories():
+	def getCategories(self):
 		pass
 
 	@abc.abstractmethod
-	def getHighlights():
+	def getHighlights(self):
 		pass
 
 	@abc.abstractmethod
-	def getLiveStreams():
+	def getLiveStreams(self):
 		pass
 
 	@abc.abstractmethod
-	def getMostViewed():
+	def getMostViewed(self):
 		pass
 
 	@abc.abstractmethod
-	def getNewest():
+	def getNewest(self):
 		pass
 
 	@abc.abstractmethod
-	def getThemen():
+	def getThemen(self):
 		pass
 
 	@abc.abstractmethod
-	def getTips():
+	def getTips(self):
 		pass
 
 	@abc.abstractmethod
-	def getSchedule():
+	def getSchedule(self):
 		pass
-        
+
 	@abc.abstractmethod
-	def getArchiv():
+	def getArchiv(self):
 		pass

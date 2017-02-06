@@ -1,3 +1,8 @@
+v2.5.5
+Fixed broken Highlights.
+Added option to automatically sign in with BBCiD.
+NOTE: If this option is enabled, users will always be signed in.
+
 v2.5.4
 Fixed missing icon image when using BBCiD.
 Properly added new CDN Bidi (worked before just by chance).

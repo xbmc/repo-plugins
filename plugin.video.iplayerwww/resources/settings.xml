@@ -4,6 +4,7 @@
     <setting id="bbc_id_enabled" label="30140" default="false" type="bool" />
     <setting id="bbc_id_username" label="30141" default="" type="text" enable="eq(-1,true)" subsetting="true"/>
     <setting id="bbc_id_password" label="30142" default="" type="text" enable="eq(-2,true) + !eq(-1,)" subsetting="true" option="hidden"/>
+    <setting id="bbc_id_autologin" label="30143" default="false" type="bool" subsetting="true" />
     <setting id="kids_mode" label="30180" type="action" action="XBMC.RunPlugin(plugin://plugin.video.iplayerwww?mode=1)"/>
     <setting label="30101" type="lsep"  />
     <setting id="search_signed" label="30110" type="bool" default="false" />

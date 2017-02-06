@@ -56,6 +56,10 @@ msgctxt "#30142"
 msgid "BBC Password"
 msgstr ""
 
+msgctxt "#30143"
+msgid "Sign in automatically"
+msgstr ""
+
 msgctxt "#30150"
 msgid "Suppress programmes with incomplete information in Highlights"
 msgstr ""

@@ -1,9 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64,socket,datetime,time,os,os.path,urlparse,json
-import CommonFunctions as common
+import urllib,urllib2,re,xbmcgui,sys,xbmcaddon,datetime,time,os,os.path,urlparse,json
 
-import Settings
 from base import *
 from Scraper import *
 
@@ -27,17 +25,15 @@ class serviceAPI(Scraper):
 	serviceAPIHighlights = __urlBase + 'page/startpage'
 
 
-	def __init__(self,xbmc,settings,pluginhandle,quality,protocol,delivery,defaultbanner,defaultbackdrop,useSubtitles,defaultViewMode):
+	def __init__(self, xbmc, settings, pluginhandle, quality, protocol, delivery, defaultbanner, defaultbackdrop):
 		self.translation = settings.getLocalizedString
 		self.xbmc = xbmc
-		self.defaultViewMode = defaultViewMode
 		self.videoQuality = quality
 		self.videoDelivery = delivery
 		self.videoProtocol = protocol
 		self.pluginhandle = pluginhandle
 		self.defaultbanner = defaultbanner
 		self.defaultbackdrop = defaultbackdrop
-		self.useSubtitles = useSubtitles
 		self.xbmc.log(msg='ServiceAPI  - Init done', level=xbmc.LOGDEBUG);
 
 
@@ -47,7 +43,6 @@ class serviceAPI(Scraper):
 			responseCode = response.getcode()
 		except urllib2.HTTPError, error:
 			responseCode = error.getcode()
-			pass
 
 		if responseCode == 200:
 			for result in json.loads(response.read()).get('highlight_teasers'):
@@ -61,7 +56,6 @@ class serviceAPI(Scraper):
 			responseCode = response.getcode()
 		except urllib2.HTTPError, error:
 			responseCode = error.getcode()
-			pass
 
 		if responseCode == 200:
 			for result in json.loads(response.read()).get('most_viewed_segments'):
@@ -94,18 +88,21 @@ class serviceAPI(Scraper):
 
 		else:
 			self.xbmc.log(msg='ServiceAPI no available ... switch back to HTML Parsing in the Addon Settings', level=xbmc.LOGDEBUG);
-			xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
+			xbmcgui.Dialog().notification(self.translation(30045).encode('UTF-8'), self.translation(30046).encode('UTF-8'), xbmcaddon.Addon().getAddonInfo('icon'))
 
 
 	# Useful  Methods for JSON Parsing
 	def JSONSegment2ListItem(self,JSONSegment):
+		if JSONSegment.get('killdate') != None and time.strptime(JSONSegment.get('killdate')[0:19], '%Y-%m-%dT%H:%M:%S') < time.localtime():
+			return
 		title        = JSONSegment.get('title').encode('UTF-8')
 		image        = self.JSONImage(JSONSegment.get('_embedded').get('image'))
 		description  = JSONSegment.get('description')
 		duration     = JSONSegment.get('duration_seconds')
 		date         = time.strptime(JSONSegment.get('episode_date')[0:19], '%Y-%m-%dT%H:%M:%S')
 		streamingURL = self.JSONStreamingURL(JSONSegment.get('sources'))
-		return [streamingURL, createListItem(title, image, description, duration, time.strftime('%Y-%m-%d', date), '', streamingURL, 'true', False, self.defaultbackdrop,self.pluginhandle)]
+		subtitles    = map(lambda x: x.get('src'), JSONSegment.get('playlist').get('subtitles'))
+		return [streamingURL, createListItem(title, image, description, duration, time.strftime('%Y-%m-%d', date), '', streamingURL, True, False, self.defaultbackdrop,self.pluginhandle, subtitles)]
 
 
 	def JSONImage(self,jsonImages, name = 'image_full'):
@@ -118,7 +115,7 @@ class serviceAPI(Scraper):
 				if streamingUrl.get('quality_key') == self.videoQuality:
 					return streamingUrl.get('src')
 				source = streamingUrl.get('src')
-			
+
 		for streamingUrl in jsonVideos.get('hls'):
 			if streamingUrl.get('quality_key') == self.videoQuality:
 				return streamingUrl.get('src')
@@ -138,7 +135,7 @@ class serviceAPI(Scraper):
 			for result in json.loads(response.read()).get('_embedded').get('items'):
 				self.__JSONProfile2ListItem(result)
 		else:
-			xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
+			xbmcgui.Dialog().notification(self.translation(30045).encode('UTF-8'), self.translation(30046).encode('UTF-8'), xbmcaddon.Addon().getAddonInfo('icon'))
 
 
 	# list all Episodes for the given Date
@@ -179,7 +176,7 @@ class serviceAPI(Scraper):
 			for episode in episodes:
 				self.__JSONEpisode2ListItem(episode, 'teaser')
 		else:
-			xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
+			xbmcgui.Dialog().notification(self.translation(30045).encode('UTF-8'), self.translation(30046).encode('UTF-8'), xbmcaddon.Addon().getAddonInfo('icon'))
 
 
 	# listst all Segments for the Episode with the given episodeID
@@ -190,7 +187,6 @@ class serviceAPI(Scraper):
 		response = self.__makeRequest(self.serviceAPIEpisode % episodeID)
 		result = json.loads(response.read())
 
-		title       = result.get('title').encode('UTF-8')
 		image       = self.JSONImage(result.get('_embedded').get('image'))
 		description = result.get('description').encode('UTF-8') if result.get('description') != None else result.get('description')
 		duration    = result.get('duration_seconds')
@@ -203,7 +199,7 @@ class serviceAPI(Scraper):
 		else:
 			parameters = {'mode' : 'playlist'}
 			u = sys.argv[0] + '?' + urllib.urlencode(parameters)
-			createListItem('[ '+(self.translation(30015)).encode('UTF-8')+' ]', image, '%s\n%s' % ((self.translation(30015)).encode('UTF-8'), description), duration, time.strftime('%Y-%m-%d', date), result.get('_embedded').get('channel').get('name'), u, 'false', False, self.defaultbackdrop,self.pluginhandle)
+			createListItem('[ '+(self.translation(30015)).encode('UTF-8')+' ]', image, '%s\n%s' % ((self.translation(30015)).encode('UTF-8'), description), duration, time.strftime('%Y-%m-%d', date), result.get('_embedded').get('channel').get('name'), u, False, True, self.defaultbackdrop,self.pluginhandle)
 
 			for segment in result.get('_embedded').get('segments'):
 				listItem = self.JSONSegment2ListItem(segment)
@@ -229,7 +225,7 @@ class serviceAPI(Scraper):
 				addDirectory(title, None, self.defaultbackdrop, description, link, 'openTopic', self.pluginhandle)
 
 		else:
-			xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
+			xbmcgui.Dialog().notification(self.translation(30045).encode('UTF-8'), self.translation(30046).encode('UTF-8'), xbmcaddon.Addon().getAddonInfo('icon'))
 
 
 	# list all Trailers for further airings
@@ -248,7 +244,7 @@ class serviceAPI(Scraper):
 			for episode in json.loads(response.read())['_embedded']['items']:
 				self.__JSONEpisode2ListItem(episode)
 		else:
-			xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
+			xbmcgui.Dialog().notification(self.translation(30045).encode('UTF-8'), self.translation(30046).encode('UTF-8'), xbmcaddon.Addon().getAddonInfo('icon'))
 
 	def getArchiv(self):
 		pass
@@ -263,7 +259,7 @@ class serviceAPI(Scraper):
 				title = 'älter als %s' % title
 				parameters = {'mode' : 'openDate', 'link': date.strftime('%Y-%m-%d'), 'from': (date - datetime.timedelta(days=150)).strftime('%Y-%m-%d')}
 			u = sys.argv[0] + '?' + urllib.urlencode(parameters)
-			createListItem(title, None, None, None, date.strftime('%Y-%m-%d'), '', u, 'False', True, self.defaultbackdrop,self.pluginhandle)
+			createListItem(title, None, None, None, date.strftime('%Y-%m-%d'), '', u, False, True, self.defaultbackdrop,self.pluginhandle)
 
 	# Returns Live Stream Listing
 	def getLiveStreams(self):
@@ -277,7 +273,6 @@ class serviceAPI(Scraper):
 		if responseCode == 200:
 			for result in json.loads(response.read()).get('_embedded').get('items'):
 				description     = result.get('description')
-				program         = result.get('_embedded').get('channel').get('reel').upper()
 				programName     = result.get('_embedded').get('channel').get('name')
 				livestreamStart = time.strptime(result.get('start')[0:19], '%Y-%m-%dT%H:%M:%S')
 				livestreamEnd   = time.strptime(result.get('end')[0:19],   '%Y-%m-%dT%H:%M:%S')
@@ -293,9 +288,9 @@ class serviceAPI(Scraper):
 
 				banner = self.JSONImage(result.get('_embedded').get('image'))
 
-				createListItem(title, banner, description, duration, time.strftime('%Y-%m-%d', livestreamStart), programName, link, 'True', False, self.defaultbackdrop, self.pluginhandle)
+				createListItem(title, banner, description, duration, time.strftime('%Y-%m-%d', livestreamStart), programName, link, True, False, self.defaultbackdrop, self.pluginhandle)
 		else:
-			xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( (self.translation(30045)).encode("utf-8"), (self.translation(30046)).encode("utf-8"), "") )
+			xbmcgui.Dialog().notification(self.translation(30045).encode('UTF-8'), self.translation(30046).encode('UTF-8'), xbmcaddon.Addon().getAddonInfo('icon'))
 
 	def getLiveNotOnline(self,link):
 		try:
@@ -321,7 +316,7 @@ class serviceAPI(Scraper):
 				self.xbmc.sleep(sleepTime * 1000)
 				if dialog.yesno('', (self.translation(30035)).encode("utf-8")):
 					streamingURL = link = self.JSONStreamingURL(result.get('sources'))
-					listItem = createListItem(title, image, description, duration, time.strftime('%Y-%m-%d', date), result.get('_embedded').get('channel').get('name'), streamingURL, 'true', False, self.defaultbackdrop, self.pluginhandle)
+					listItem = createListItem(title, image, description, duration, time.strftime('%Y-%m-%d', date), result.get('_embedded').get('channel').get('name'), streamingURL, True, False, self.defaultbackdrop, self.pluginhandle)
 					self.xbmc.Player().play(streamingURL, listItem)
 
 
@@ -332,6 +327,9 @@ class serviceAPI(Scraper):
 
 
 	def __JSONEpisode2ListItem(self, JSONEpisode, ignoreEpisodeType = None):
+		if JSONEpisode.get('killdate') != None and time.strptime(JSONEpisode.get('killdate')[0:19], '%Y-%m-%dT%H:%M:%S') < time.localtime():
+			return
+
 		# Direcotory should be set to False, that the Duration is shown, but then there is an error with the Pluginhandle
 		createListItem(
 			JSONEpisode.get('title'),
@@ -341,7 +339,7 @@ class serviceAPI(Scraper):
 			time.strftime('%Y-%m-%d', time.strptime(JSONEpisode.get('date')[0:19], '%Y-%m-%dT%H:%M:%S')),
 			JSONEpisode.get('_embedded').get('channel').get('name') if JSONEpisode.get('_embedded').get('channel') != None else None,
 			sys.argv[0] + '?' + urllib.urlencode({'mode' : 'openEpisode', 'link': JSONEpisode.get('id')}),
-			'False',
+			False,
 			True,
 			self.defaultbackdrop,
 			self.pluginhandle,
@@ -357,7 +355,7 @@ class serviceAPI(Scraper):
 			None,
 			None,
 			sys.argv[0] + '?' + urllib.urlencode({'mode' : 'openProgram', 'link': jsonProfile.get('id')}),
-			'False',
+			False,
 			True,
 			self.defaultbackdrop,
 			self.pluginhandle

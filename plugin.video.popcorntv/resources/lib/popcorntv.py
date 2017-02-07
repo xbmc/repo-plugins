@@ -5,7 +5,7 @@ from BeautifulSoup import BeautifulSoup
 from BeautifulSoup import BeautifulStoneSoup
 
 class PopcornTV:
-    __USERAGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0"
+    __USERAGENT = "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:51.0) Gecko/20100101 Firefox/51.0"
 
     def __init__(self):
         opener = urllib2.build_opener()
@@ -44,7 +44,7 @@ class PopcornTV:
             subcategory = {}
             subcategory["title"] = link.text.strip()
             subcategory["url"] = link["href"]
-            if not subcategory["url"].startswith("http"):
+            if subcategory["url"].startswith("/"):
                 subcategory["url"] = urlSite + subcategory["url"]
             # Don't insert duplicate items
             if subcategory not in subcategories:
@@ -55,10 +55,11 @@ class PopcornTV:
     def getVideoBySubCategories(self, pageUrl):
         data = urllib2.urlopen(pageUrl).read()
         htmlTree = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
+        urlParsed = urlparse.urlsplit(pageUrl)
         
         videoList = []
         
-        if pageUrl.startswith("http://cinema.popcorntv.it"):
+        if urlParsed.netloc == "cinema.popcorntv.it":
             # Show video in "Lista film"
             items = htmlTree.find("div", "row lista-episodi").findAll("a")
         else:
@@ -70,6 +71,8 @@ class PopcornTV:
             video["title"] = item["title"].strip()
             video["url"] = item["href"]
             video["thumb"] = item.find("img")["src"]
+            if video["thumb"].startswith("//"):
+                video["thumb"] = urlParsed.scheme +":" + video["thumb"]
             videoList.append(video)
             
         # Get pagination URLs

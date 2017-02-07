@@ -44,6 +44,7 @@ def show_root_folder():
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
 def show_category_folder(url):
+    xbmc.log("Category URL: " + url)
     popcorntv = PopcornTV()
     items = popcorntv.getSubCategories(url)
 
@@ -54,6 +55,7 @@ def show_category_folder(url):
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
     
 def show_video_files(url):
+    xbmc.log("Subcategory URL: " + url)
     popcorntv = PopcornTV()
     page = popcorntv.getVideoBySubCategories(url)
     
@@ -81,6 +83,7 @@ def show_video_files(url):
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
 def play_video(url):
+    xbmc.log("Video URL: " + url)
     popcorntv = PopcornTV()
     metadata = popcorntv.getVideoMetadata(url)
     liStyle=xbmcgui.ListItem(path=metadata["videoUrl"])

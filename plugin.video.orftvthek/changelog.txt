@@ -1,3 +1,6 @@
+0.7.0
+- Bugfixes & Code Cleanup
+
 0.6.1
 - cleaned image resources
 - renamed "getArchiv" to "getSchedule"

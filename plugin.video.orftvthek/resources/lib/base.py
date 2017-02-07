@@ -4,15 +4,15 @@ import xbmc,xbmcplugin,xbmcgui,sys,urllib,re,os
 import simplejson
 import Settings
 
+from helpers import *
+
 def addDirectory(title,banner,backdrop, description,link,mode,pluginhandle):
-    parameters = {"link" : link,"title" : title,"banner" : banner,"backdrop" : backdrop, "mode" : mode}
+    parameters = {"link" : link,"title" : title,"banner" : banner, "mode" : mode}
     u = sys.argv[0] + '?' + urllib.urlencode(parameters)
-    createListItem(title,banner,description,'','','',u,'false',True, backdrop,pluginhandle,None)
+    createListItem(title,banner,description,'','','',u, False,True, backdrop,pluginhandle,None)
 
 def createListItem(title,banner,description,duration,date,channel,videourl,playable,folder, backdrop,pluginhandle,subtitles=None,blacklist=False):
-    if description == '':
-        description = Settings.localizedString(30008).encode("utf-8")
-    liz=xbmcgui.ListItem(title, iconImage=banner, thumbnailImage=banner)
+    liz=xbmcgui.ListItem(title)
     liz.setInfo( type="Video", infoLabels={ "Title": title } )
     liz.setInfo( type="Video", infoLabels={ "Tvshowtitle": title } )
     liz.setInfo( type="Video", infoLabels={ "Sorttitle": title } )
@@ -21,14 +21,15 @@ def createListItem(title,banner,description,duration,date,channel,videourl,playa
     liz.setInfo( type="Video", infoLabels={ "Aired": date } )
     liz.setInfo( type="Video", infoLabels={ "Studio": channel } )
     liz.setProperty('fanart_image',backdrop)
-    liz.setProperty('IsPlayable', playable)
-        
+    liz.setProperty('IsPlayable', str(playable))
+
     if not folder:
+        liz.setInfo( type="Video", infoLabels={ "mediatype" : 'video'})
         videoStreamInfo = {'codec': 'h264', 'aspect': 1.78}
         try:
             videoStreamInfo.update({'duration': int(duration)})
         except:
-            pass
+            debugLog("No Duration found in Video",'Info')
         if videourl.lower().endswith('_q8c.mp4') or '_q8c' in videourl.lower():
             videoStreamInfo.update({'width': 1280, 'height': 720})
         elif videourl.lower().endswith('_q6a.mp4') or '_q6a' in videourl.lower():
@@ -40,11 +41,16 @@ def createListItem(title,banner,description,duration,date,channel,videourl,playa
         liz.addStreamInfo('video', videoStreamInfo)
 
         liz.addStreamInfo('audio', {"codec": "aac", "language": "de", "channels": 2})
-        if subtitles != None:
-            if subtitles[0].endswith('.srt'):
+        if subtitles != None and Settings.subtitles():
+            if len(subtitles) > 0 and subtitles[0].endswith('.srt'):
                 subtitles.pop(0)
             liz.addStreamInfo('subtitle', {"language": "de"})
-            liz.setSubtitles(subtitles)   
+            try:
+                liz.setSubtitles(subtitles)
+            except AttributeError:
+                # setSubtitles was introduced in Helix (v14)
+                # catch the error in Gotham (v13)
+                pass
     
     if blacklist:
         match = re.search(r'( - \w\w, \d\d.\d\d.\d\d\d\d)',title)
@@ -105,7 +111,7 @@ def printBlacklist(banner,backdrop,translation,pluginhandle):
                 description = "%s %s %s" % ((translation(30040)).encode("utf-8"),item,(translation(30041)).encode("utf-8"))
                 link = item
                 mode = "unblacklistShow"
-                addDirectory(item,banner,backdrop,translation,description,link,mode,pluginhandle)
+                addDirectory(item,banner,backdrop, description,link,mode,pluginhandle)
 
 
 def setBlacklist(data,file):
@@ -147,7 +153,5 @@ def blacklistItem(title):
         
         
 def unblacklistItem(title):
-    addonUserDataFolder = xbmc.translatePath("special://profile/addon_data/plugin.video.orftvthek");
-    bl_json_file = os.path.join(addonUserDataFolder, 'blacklist.json')
     title = urllib.unquote(title).replace("+"," ").strip()
     removeBlacklist(title)

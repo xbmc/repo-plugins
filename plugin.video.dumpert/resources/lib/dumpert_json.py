@@ -33,22 +33,17 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        # Get plugin settings
-        self.DEBUG = SETTINGS.getSetting('debug')
-
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
+                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
 
         # Parse parameters
         self.plugin_category = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['plugin_category'][0]
         self.video_list_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['url'][0]
         self.next_page_possible = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                 ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)),
-                     xbmc.LOGNOTICE)
+                     xbmc.LOGDEBUG)
 
         # Determine current page number and base_url
         # http://www.dumpert.nl/toppers/
@@ -65,10 +60,9 @@ class Main:
         # add last slash
         self.video_list_page_url = str(self.video_list_page_url) + "/"
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                 ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)),
-                     xbmc.LOGNOTICE)
+                     xbmc.LOGDEBUG)
 
         #
         # Get the videos...
@@ -97,7 +91,10 @@ class Main:
         for item in data['items']:
             title = item['title']
             description = item['description']
-            thumbnail_url = item['thumbnail']
+            thumbnail_url = item['stills']['still-large']
+            for i in item['media']:
+                duration = i.get('duration',False)
+
             nsfw = item['nsfw']
             if not nsfw or shownsfw:
                 # {"id":"6737324_36df9881","title":"Hardcore brei-oma","thumbnail":"http:\/\/media.dumpert.nl\/sq_thumbs\/6737324_36df9881.jpg",
@@ -114,7 +111,7 @@ class Main:
                 if item['media'][0]['mediatype'] == 'VIDEO' and item['media'][0]['variants'][0]['version'] != 'embed':
                     url = item['media'][0]['variants'][0]['uri']
                     list_item = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_url)
-                    list_item.setInfo("video", {"title": title, "studio": ADDON, "plot": description})
+                    list_item.setInfo("video", {"title": title, "studio": "Dumpert", "mediatype": "video", "plot": description, "duration": duration})
                     list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
                                       'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
                     list_item.setProperty('IsPlayable', 'true')
@@ -142,7 +139,7 @@ class Main:
 
         # Add our listing to Kodi.
         # Large lists and/or slower systems benefit from adding all items at once via addDirectoryItems
-        # instead of adding one by ove via addDirectoryItem.
+        # instead of adding one by one via addDirectoryItem.
         xbmcplugin.addDirectoryItems(self.plugin_handle, listing, len(listing))
         # Disable sorting
         xbmcplugin.addSortMethod(handle=self.plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_NONE)

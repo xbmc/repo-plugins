@@ -147,7 +147,7 @@ def retrieve_url_for_vidible(embed_url, url):
     addon_log("url strings retrieved from javascript blob: " + s_urls_with_curly)
     json_urls = json.loads(s_urls_with_curly)
     addon_log("Sending url to Kodi: " + json_urls['videoUrls'][0])
-    return json_urls['videoUrls'][1]
+    return json_urls['videoUrls'][0]
 
 
 def retrieve_url_for_aol(embed_url, url):

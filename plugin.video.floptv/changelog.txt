@@ -1,3 +1,8 @@
+[B]2.0.0[/B]
+- parsing upstream HTML pages to retrieve the shows beccause the old XML feeds are no longer available.
+- HLS is used for streaming.
+- updated icon.
+
 [B]1.0.3[/B]
 - updated required python API version to 2.1.0. This addon should now work with both XBMC 12 (Frodo) and XBMC 13 (Gotham).
 

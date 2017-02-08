@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.image.moebooru"
        name="Moebooru"
-       version="0.9.0"
+       version="0.9.5"
        provider-name="Markus Koch">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -17,7 +17,7 @@
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
     <language>en</language>
-    <email>CClassicVideos at aol dot com</email>
+    <email>markus at notsyncing net</email>
     <website>https://bitbucket.org/C_Classic/xbmc.plugin.image.moebooru/wiki</website>
     <forum>https://bitbucket.org/C_Classic/xbmc.plugin.image.moebooru/issues</forum>
     <source>https://bitbucket.org/C_Classic/xbmc.plugin.image.moebooru</source>

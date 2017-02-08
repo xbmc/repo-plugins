@@ -32,22 +32,17 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        # Get plugin settings
-        self.DEBUG = SETTINGS.getSetting('debug')
-
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
+                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
 
         # Parse parameters
         self.plugin_category = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['plugin_category'][0]
         self.video_list_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['url'][0]
         self.next_page_possible = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                 ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)),
-                     xbmc.LOGNOTICE)
+                     xbmc.LOGDEBUG)
 
         # Determine current page number and base_url
         # http://www.dumpert.nl/toppers/
@@ -64,9 +59,8 @@ class Main:
         # add last slash
         self.video_list_page_url = str(self.video_list_page_url) + "/"
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.base_url", str(self.base_url)), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "self.base_url", str(self.base_url)), xbmc.LOGDEBUG)
 
         #
         # Get the videos...
@@ -101,19 +95,17 @@ class Main:
         # titles_and_thumbnail_urls = soup.findAll('img', attrs={'src': re.compile("^http://static.dumpert.nl/")} )
         titles_and_thumbnail_urls = soup.findAll('img', attrs={'src': re.compile("thumb")})
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                 ADDON, VERSION, DATE, "len(titles_and_thumbnail_urls)",
                 str(len(titles_and_thumbnail_urls))),
-                     xbmc.LOGNOTICE)
+                     xbmc.LOGDEBUG)
 
         # Find video page urls
         # <a href="http://www.dumpert.nl/mediabase/2245331/272bd4c3/turnlulz.html" class="dumpthumb" title="Turnlulz">
         video_page_urls = soup.findAll('a', attrs={'class': re.compile("dumpthumb")})
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(video_page_urls)", str(len(video_page_urls))), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "len(video_page_urls)", str(len(video_page_urls))), xbmc.LOGDEBUG)
 
         # in thema pages the first thumbnail is a thumbnail of the thema itself and not of a video
         # if that's the case: skip the first thumbnail
@@ -126,27 +118,24 @@ class Main:
                 pass
             else:
                 # skip video page url without a video
-                if self.DEBUG == 'true':
-                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                         ADDON, VERSION, DATE, "skipped video_page_url without video", str(video_page_url)),
-                             xbmc.LOGNOTICE)
+                             xbmc.LOGDEBUG)
                 titles_and_thumbnail_urls_index = titles_and_thumbnail_urls_index + 1
                 continue
 
             video_page_url = video_page_url['href']
 
-            if self.DEBUG == 'true':
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "video_page_url", str(video_page_url)), xbmc.LOGNOTICE)
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                    ADDON, VERSION, DATE, "video_page_url", str(video_page_url)), xbmc.LOGDEBUG)
 
             # if link doesn't contain 'html': skip the link ('continue')
             if video_page_url.find('html') >= 0:
                 pass
             else:
-                if self.DEBUG == 'true':
-                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                         ADDON, VERSION, DATE, "skipped video_page_url without html", str(video_page_url)),
-                             xbmc.LOGNOTICE)
+                             xbmc.LOGDEBUG)
                 titles_and_thumbnail_urls_index = titles_and_thumbnail_urls_index + 1
                 continue
 
@@ -189,18 +178,16 @@ class Main:
             title = title.replace('/', ' ')
             title = title.replace('_', ' ')
 
-            if self.DEBUG == 'true':
-                xbmc.log(
-                    "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "title", str(title)),
-                    xbmc.LOGNOTICE)
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "title", str(title)),
+                     xbmc.LOGDEBUG)
 
             if titles_and_thumbnail_urls_index >= len(titles_and_thumbnail_urls):
                 thumbnail_url = ''
             else:
-                thumbnail_url = titles_and_thumbnail_urls[titles_and_thumbnail_urls_index]['src']
+                thumbnail_url = titles_and_thumbnail_urls[titles_and_thumbnail_urls_index]['src'].replace("sq_thumbs","stills/large")
 
             list_item = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_url)
-            list_item.setInfo("video", {"title": title, "studio": ADDON, "plot": description})
+            list_item.setInfo("video", {"title": title, "studio": "Dumpert", "mediatype": "video", "plot": description})
             list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
                               'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'true')

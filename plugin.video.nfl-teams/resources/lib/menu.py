@@ -3,6 +3,7 @@ import sys
 import time
 from datetime import datetime
 from os import path
+from urllib import quote
 
 import xbmcaddon
 import xbmcgui
@@ -45,7 +46,7 @@ class Menu(object):
         info = {"title": item.get("name")}
 
         if item.get("raw_metadata"):
-            info["plot"] = item.get("raw_metadata").get("description", "No description was given for the video.")
+            info["plot"] = item.get("raw_metadata").get("description", "No description was given for the video.").encode("utf-8").replace("&hellip;", "...")
             date = self.parse_video_date(item.get("raw_metadata").get("date"))
             if date:
                 info["date"] = date.strftime("%d.%m.%Y")
@@ -53,7 +54,7 @@ class Menu(object):
 
         listitem.setInfo("video", info)
 
-        url = "{0}?{1}".format(self._plugin_url, json.dumps(item.get("url_params")))
+        url = "{0}?{1}".format(self._plugin_url, quote(json.dumps(item.get("url_params"))))
         if item.get("folder"):
             xbmcplugin.addDirectoryItem(self._handle, url, listitem, isFolder=item.get("folder"))
         else:

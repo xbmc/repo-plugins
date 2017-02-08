@@ -1,3 +1,12 @@
+[B]1.2.1[/B]
+- Retrieve sheetName and sheetId from interactiveConfig via JSON.
+
+[B]1.2.0[/B]
+- Fixed videos in "documentaries" section.
+- Fixed thumbnail handling.
+- Added log messages.
+- Minor changes.
+
 [B]1.1.1[/B]
 - Added thumbnails in video lists.
 

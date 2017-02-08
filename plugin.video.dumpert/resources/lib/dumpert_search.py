@@ -32,12 +32,8 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        # Get plugin settings
-        self.DEBUG = SETTINGS.getSetting('debug')
-
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
+                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
 
         # Parse parameters
         # urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['url'][0]
@@ -46,10 +42,9 @@ class Main:
         args = urlparse.parse_qs(query)
         url = args['url'][0]
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                 ADDON, VERSION, DATE, "self.video_list_page_url", str(url)),
-                     xbmc.LOGNOTICE)
+                     xbmc.LOGDEBUG)
 
         # Get query
         q = ''

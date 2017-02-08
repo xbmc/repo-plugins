@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.myspass_de" name="MySpass.de" version="2.0.3" provider-name="AddonScriptorDE">
+<addon id="plugin.video.myspass_de" name="MySpass.de" version="2.0.4" provider-name="AddonScriptorDE">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>
@@ -13,5 +13,6 @@
         <language>de</language>
         <description lang="de">Schlag den Raab/Star, TV total, Elton vs. Simon, Pastewka, Dr. Psycho, Stromberg, South Park, Spongebob und vieles mehr...</description>
         <description lang="en">Schlag den Raab/Star, TV total, Elton vs. Simon, Pastewka, Dr. Psycho, Stromberg, South Park, Spongebob and much more...</description>
+        <broken>broken due to website changes</broken>
     </extension>
 </addon>

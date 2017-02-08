@@ -9,33 +9,19 @@ import CommonFunctions as common
 BASE_URL = "http://svtplay.se"
 API_URL = "/api/"
 
-URL_A_TO_O = "/program"
-URL_TO_SEARCH = "/sok?q="
-URL_TO_OA = "/kategorier/oppetarkiv"
-URL_TO_CHANNELS = "/kanaler"
-URL_TO_NEWS = "/nyheter"
-
 JSON_SUFFIX = "?output=json"
-
-SECTION_POPULAR = "popular-videos"
-SECTION_LATEST_VIDEOS = "latest-videos"
-SECTION_LAST_CHANCE = "last-chance-videos"
-SECTION_LATEST_CLIPS = "play_js-tabpanel-more-clips"
-SECTION_EPISODES = "play_js-tabpanel-more-episodes"
-SECTION_LIVE_PROGRAMS = "live-channels"
 
 def getAtoO():
   """
   Returns a list of all items, sorted A-Z.
   """
-  r = requests.get(BASE_URL+API_URL+"all_titles")
-  if r.status_code != 200:
-    common.log("Could not fetch JSON!")
+  json_data = __get_json("all_titles_and_singles")
+  if json_data is None:
     return None
-  
+
   items = []
 
-  for program in r.json():
+  for program in json_data:
     item = {}
     item["title"] = common.replaceHTMLCodes(program["programTitle"])
     item["thumbnail"] = ""
@@ -48,34 +34,18 @@ def getCategories():
   """
   Returns a list of all categories.
   """
-  r = requests.get(BASE_URL+API_URL+"programs_page")
-  if r.status_code != 200:
-    common.log("Could not fetch JSON!")
+  json_data = __get_json("active_clusters")
+  if json_data is None:
     return None
 
   categories = []
-  all_clusters = r.json()["allClusters"]
 
-  for letters in all_clusters.itervalues():
-    for letter_list in letters:
-      for item in letter_list:
-        category = {}
-        try:
-          category["genre"] = item["term"]
-        except KeyError as e:
-          common.log(e.message)
-          continue
-
-        if category["genre"].endswith("oppetarkiv") or category["genre"].endswith("barn"):
-          # Skip the "Oppetarkiv" and "Barn" category
-          continue
-
-        category["title"] = item["name"]
-        try:
-          category["thumbnail"] = helper.prepareThumb(item["metaData"].get("thumbnail", ""), BASE_URL)
-        except KeyError as e:
-          category["thumbnail"] = ""
-        categories.append(category)
+  for cluster in json_data:
+    category = {}
+    category["title"] = cluster["name"]
+    category["url"] = cluster["contentUrl"]
+    category["genre"] = cluster["slug"]
+    categories.append(category)
 
   return categories
 
@@ -83,14 +53,12 @@ def getLatestNews():
   """
   Returns a list of latest news programs.
   """
-  url = BASE_URL+API_URL+"cluster_latest;cluster=nyheter"
-  r = requests.get(url)
-  if r.status_code != 200:
-    common.log("Could not get JSON for url: "+url)
+  json_data = __get_json("cluster_latest;cluster=nyheter")
+  if json_data is None:
     return None
 
   programs = []
-  for item in r.json():
+  for item in json_data:
     live_str = ""
     thumbnail = item.get("poster", "")
     if not thumbnail:
@@ -98,7 +66,7 @@ def getLatestNews():
     if item["broadcastedNow"]:
       live_str = " " + "[COLOR red](Live)[/COLOR]"
     program = {
-        "title" : common.replaceHTMLCodes(item["programTitle"] + " " + item["title"] + live_str),
+        "title" : common.replaceHTMLCodes(item["programTitle"] + " " + (item["title"] or "") + live_str),
         "thumbnail" : helper.prepareThumb(thumbnail, baseUrl=BASE_URL),
         "url" : "video/" + str(item["versions"][0]["articleId"])
         }
@@ -109,21 +77,20 @@ def getProgramsForGenre(genre):
   """
   Returns a list of all programs for a genre.
   """
-  url = BASE_URL+API_URL+"cluster_titles_and_episodes/?cluster="+genre
-  r = requests.get(url)
-  if r.status_code != 200:
-    common.log("Could not get JSON for url: "+url)
+  json_data = __get_json("cluster_titles_and_episodes/?cluster="+genre)
+  if json_data is None:
     return None
 
   programs = []
-  for item in r.json():
+  for item in json_data:
     url = item["contentUrl"]
     title = item["programTitle"]
     plot = item.get("description", "")
-    info = {"plot": plot}
     thumbnail = helper.prepareThumb(item.get("thumbnail", ""), BASE_URL)
-    program = { "title": title, "url": url, "thumbnail": thumbnail, "info": info}
-    programs.append(program)
+    if not thumbnail:
+      thumbnail = helper.prepareThumb(item.get("poster", ""), BASE_URL)
+    info = {"plot": plot, "thumbnail": thumbnail, "fanart": thumbnail}
+    programs.append({"title": title, "url": url, "thumbnail": thumbnail, "info": info})
   return programs
 
 def getAlphas():
@@ -170,21 +137,15 @@ def getProgramsByLetter(letter):
   Returns a list of all program starting with the supplied letter.
   """
   letter = urllib.unquote(letter)
-  url = BASE_URL+API_URL+"all_titles"
- 
-  r = requests.get(url)
-  if r.status_code != 200:
-    common.log("Did not get any response for: "+url)
+  json_data = __get_json("all_titles_and_singles")
+  if json_data is None:
     return None
 
   letter = letter.decode("utf-8")
   pattern = "[%s]" % letter.upper()
 
-  titles = r.json()
   items = []
-  
-  programs = []
-  for title in titles:
+  for title in json_data:
     if re.search(pattern, title["programTitle"][0].upper()):
       item = {}
       item["url"] = "/" + title["contentUrl"]
@@ -200,25 +161,22 @@ def getSearchResults(search_term):
   Returns a list of both clips and programs
   for the supplied search URL.
   """
-  url = BASE_URL+API_URL+"search_page;q="+search_term
-  r = requests.get(url)
-  if r.status_code != 200:
-    common.log("Did not get any response for: "+url)
+  json_data = __get_json("search_page;q="+search_term)
+  if json_data is None:
     return None
 
   items = []
-  contents = r.json()
 
-  for program in contents["titles"]:
+  for program in json_data["titles"]:
     item = {}
-    item["title"] = common.replaceHTMLCodes(program["title"])
+    item["title"] = common.replaceHTMLCodes(program["programTitle"])
     item["url"] = program["contentUrl"]
     item["thumbnail"] = helper.prepareThumb(program.get("imageMedium", ""), baseUrl=BASE_URL)
     item["info"] = {}
     item["info"]["plot"] = program.get("description", "")
     items.append({"item": item, "type" : "program"})
 
-  for video in contents["episodes"]:
+  for video in json_data["episodes"]:
     item = {}
     item["title"] = common.replaceHTMLCodes(video["title"])
     item["url"] = video["contentUrl"]
@@ -227,7 +185,7 @@ def getSearchResults(search_term):
     item["info"]["plot"] = video.get("description", "")
     items.append({"item": item, "type": "video"})
 
-  for clip in contents["clips"]:
+  for clip in json_data["clips"]:
     item = {}
     item["title"] = common.replaceHTMLCodes(clip["title"])
     item["url"] = clip["contentUrl"]
@@ -242,16 +200,12 @@ def getChannels():
   """
   Returns the live channels from the page "Kanaler".
   """
-  url = BASE_URL+API_URL+"channel_page"
-  r = requests.get(url)
-  if r.status_code != 200:
-    common.log("Could not get response for: "+url)
+  json_data = __get_json("channel_page")
+  if json_data is None:
     return None
-  contents = r.json()
 
   items = []
-
-  for channel in contents["channels"]:
+  for channel in json_data["channels"]:
     item = {}
     program_title = channel["schedule"][0]["title"]
     item["title"] = channel["name"]+" - "+program_title
@@ -262,12 +216,12 @@ def getChannels():
       item["info"]["plot"] = channel["schedule"][0]["titlePage"]["description"]
       item["info"]["fanart"] = channel["schedule"][0]["titlePage"]["thumbnailLarge"]
       item["info"]["title"] = channel["schedule"][0]["titlePage"]["title"]
-    except KeyError as e:
+    except KeyError:
       # Some items are missing titlePage, skip them
       pass
-    for videoRef in channel["videoReferences"]:
-      if videoRef["playerType"] == "ios":
-        item["url"] = videoRef["url"]
+    for video_ref in channel["videoReferences"]:
+      if video_ref["playerType"] == "ios":
+        item["url"] = video_ref["url"]
     items.append(item)
 
   return items
@@ -276,18 +230,17 @@ def getEpisodes(title):
   """
   Returns the episodes for a program URL.
   """
-  url = BASE_URL+API_URL+"video_title_page;title="+title
-  r = requests.get(url)
-  if r.status_code != 200:
-    common.log("Could not get JSON for "+url)
+  json_data = __get_json("title_page;title="+title)
+  if json_data is None:
     return None
+
   programs = []
-  for item in r.json()["relatedVideos"]["episodes"]:
+  for item in json_data["relatedVideos"]["episodes"]:
     program = {}
     program["title"] = item["title"]
     try:
       program["title"] = program["title"] + "[COLOR green] (S%sE%s)[/COLOR]" % (str(item["season"]), str(item["episodeNumber"]))
-    except KeyError as e:
+    except KeyError:
       # Supress
       pass
     program["url"] = "video/" + str(item["id"])
@@ -303,13 +256,12 @@ def getClips(title):
   """
   Returns the clips for a program URL.
   """
-  url = BASE_URL+API_URL+"video_title_page;title="+title
-  r = requests.get(url)
-  if r.status_code != 200:
-    common.log("Could not get JSON for "+url)
+  json_data = __get_json("title_page;title="+title)
+  if json_data is None:
     return None
+
   clips = []
-  for item in r.json()["relatedVideos"]["clipsResult"]["entries"]:
+  for item in json_data["relatedVideos"]["clipsResult"]["entries"]:
     clip = {}
     clip["title"] = item["title"]
     clip["url"] = "klipp/" + str(item["id"])
@@ -321,25 +273,17 @@ def getClips(title):
   return clips
 
 def getVideoJSON(video_url):
-  url = BASE_URL + API_URL + "title_page;title=" + video_url
-  r = requests.get(url)
-  if r.status_code != 200:
-    common.log("Failed to get JSON for "+url)
-    return None
-  return r.json()
+  return __get_json("title_page;title=" + video_url)
 
 def getItems(section_name, page):
   if not page:
     page = 1
-  url = BASE_URL+API_URL+section_name+"_page?page="+str(page)
-  r = requests.get(url)
-  if r.status_code != 200:
-    common.log("Did not get any response for: "+url)
+  json_data = __get_json(section_name+"_page?page="+str(page))
+  if json_data is None:
     return None
 
   returned_items = []
-  contents = r.json()
-  for video in contents["videos"]:
+  for video in json_data["videos"]:
     item = {}
     item["title"] = video["programTitle"]
     item["url"] = video["contentUrl"]
@@ -364,10 +308,19 @@ def getItems(section_name, page):
     item["info"] = info
     returned_items.append(item)
 
-  return (returned_items, contents["paginationData"]["totalPages"] > contents["paginationData"]["currentPage"])
+  return (returned_items, json_data["paginationData"]["totalPages"] > json_data["paginationData"]["currentPage"])
 
-def getPage(url):
+def __get_json(api_action):
   """
-  Wrapper, calls helper.getPage with SVT's base URL
+  Returns the JSON for 'api_action'.
+  BASE_URL + API_URL is assumed to be the prefix of 'api_action'.
+  If the server responds with status code != 200
+  the function returns None.
   """
-  return helper.getPage(BASE_URL + url)
+  url = BASE_URL+API_URL+api_action
+  response = requests.get(url)
+  if response.status_code != 200:
+    common.log("ERROR: Failed to get JSON for "+url)
+    return None
+  else:
+    return response.json()

@@ -13,6 +13,8 @@ def addDirectory(title,banner,backdrop, description,link,mode,pluginhandle):
 
 def createListItem(title,banner,description,duration,date,channel,videourl,playable,folder, backdrop,pluginhandle,subtitles=None,blacklist=False):
     liz=xbmcgui.ListItem(title)
+    liz.setIconImage(banner)
+    liz.setThumbnailImage(banner)
     liz.setInfo( type="Video", infoLabels={ "Title": title } )
     liz.setInfo( type="Video", infoLabels={ "Tvshowtitle": title } )
     liz.setInfo( type="Video", infoLabels={ "Sorttitle": title } )

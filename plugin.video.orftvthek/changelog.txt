@@ -1,3 +1,7 @@
+0.7.1
+- Fixed missing thumbnails/banners after 0.7.0 Update
+- Fixed bad default value in settings.xml
+
 0.7.0
 - Bugfixes & Code Cleanup
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.qobuz" name="Qobuz" version="1.2.1"
+<addon id="plugin.audio.qobuz" name="Qobuz" version="1.2.2"
 	provider-name="d@corp">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />

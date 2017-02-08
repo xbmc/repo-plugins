@@ -33,7 +33,7 @@ class QobuzPlayer(xbmc.Player):
 
     def __init__(self, **ka):
         """Constructor"""
-        ka['type'] = xbmc.PLAYER_CORE_AUTO
+        ka['type'] = 0
         super(QobuzPlayer, self).__init__()
         self.track_id = None
         self.total = None

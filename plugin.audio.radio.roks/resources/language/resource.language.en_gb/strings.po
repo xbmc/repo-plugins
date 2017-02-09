@@ -1,0 +1,74 @@
+# Kodi Media Center language file
+# Addon Name: Radio Roks online
+# Addon id: plugin.audio.radio.roks
+# Addon Provider: Eugene Kuzin
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: kuzin2006@gmail.com\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Eugene Kuzin\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Settings"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Low bitrate (Enable for slow internet connection)"
+msgstr ""
+
+# 30100-30200 reserved for channel names
+msgctxt "#30100"
+msgid "Radio ROKS Live"
+msgstr ""
+
+msgctxt "#30101"
+msgid "AC/DC"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Rock Ballads"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Beatles"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Rock Concert"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Ukrainian Rock"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Hard'n'Heavy"
+msgstr ""
+
+msgctxt "#30107"
+msgid "[KAMTYGEZA]"
+msgstr ""
+
+msgctxt "#30108"
+msgid "New Rock"
+msgstr ""
+
+msgctxt "#30109"
+msgid "Okean Elzy"
+msgstr ""
+
+msgctxt "#30110"
+msgid "Queen"
+msgstr ""
+
+msgctxt "#30111"
+msgid "Scorpions"
+msgstr ""

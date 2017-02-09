@@ -43,7 +43,7 @@ class myAddon(t1mAddon):
       self.defaultVidStream['height'] = 1080
       epiHTML = self.getRequest(url)
       (tvshow,  fanart) = re.compile('og:title" content="(.+?)".+?"og:image" content="(.+?)"',re.DOTALL).search(epiHTML).groups()
-      epis = re.compile('class="watch__title.+?href="(.+?)".+?</ul>',re.DOTALL).findall(epiHTML)
+      epis = re.compile('full-episode-teaser.+?href="(.+?)".+?</article>',re.DOTALL).findall(epiHTML)
       for url in epis:
           burl = BRAVOBASE % url
           html = self.getRequest(burl)
@@ -51,7 +51,12 @@ class myAddon(t1mAddon):
           if purl is not None:
               purl = purl.group(1)
           else:
-              continue
+              purl = re.compile('"player_base_url":"(.+?)"',re.DOTALL).search(html)
+              if purl is not None:
+                  purl = purl.group(1)
+                  purl = purl.replace('\\/', '/').decode('unicode-escape')
+              else:
+                  continue
           purl = 'http:'+purl+'&format=script'
           html = self.getRequest(purl)
           purl = re.compile('name="twitter:player" content="(.+?)"', re.DOTALL).search(html).group(1)
@@ -62,19 +67,20 @@ class myAddon(t1mAddon):
           html = self.getRequest(purl)
           a = json.loads(html)
           infoList = {}
-          infoList['Date'] = datetime.datetime.fromtimestamp(a['pubDate']/1000).strftime('%Y-%m-%d')
+          infoList['Date'] = datetime.datetime.fromtimestamp(a.get('pubDate',0)/1000).strftime('%Y-%m-%d')
           infoList['Aired'] = infoList['Date']
-          infoList['MPAA'] = a['ratings'][0]['rating']
-          infoList['Studio'] = a['provider']
-          infoList['Genre'] = (a['nbcu$advertisingGenre']).replace('and','/')
+          ratings = a.get('ratings',[])  # server also may return []
+          infoList['MPAA'] = ratings[0]['rating'] if ratings else 'N/A'
+          infoList['Studio'] = a.get('provider','N/A')
+          infoList['Genre'] = a.get('nbcu$advertisingGenre','N/A').replace(' and ',' / ')
           infoList['Episode'] = int(a.get('pl1$episodeNumber',-1))
           infoList['Season'] = int(a.get('pl1$seasonNumber',0))
           infoList['Year'] = int(infoList['Aired'].split('-',1)[0])
-          infoList['Plot'] = h.unescape(a['description'])
+          infoList['Plot'] = h.unescape(a.get('description','N/A'))
           infoList['TVShowTitle'] = tvshow
-          infoList['Title'] = a['title']
-          name = a['title']
-          thumb = a['defaultThumbnailUrl']
+          infoList['Title'] = a.get('title','N/A')
+          thumb = a.get('defaultThumbnailUrl','')
+          name = infoList['Title']
           name = name.encode(UTF8)
           infoList['mediatype'] = 'episode'
           if getFileData == False:
@@ -106,23 +112,33 @@ class myAddon(t1mAddon):
 
 
   def getAddonVideo(self,url):
-      gvu1 = 'https://tvebravo-vh.akamaihd.net/i/prod/video/%s_,40,25,18,12,7,4,2,00.mp4.csmil/master.m3u8?b=&__b__=1000&hdnea=st=%s~exp=%s'
-      gvu2 = 'https://tvebravo-vh.akamaihd.net/i/prod/video/%s_,1696,1296,896,696,496,240,306,.mp4.csmil/master.m3u8?b=&__b__=1000&hdnea=st=%s~exp=%s'
+      videoUrls = [
+        'https://tvebravo-vh.akamaihd.net/i/prod/video/%s_,40,25,18,12,7,4,2,00.mp4.csmil/master.m3u8?b=&__b__=1000&hdnea=st=%s~exp=%s',
+        'https://tvebravo-vh.akamaihd.net/i/prod/video/%s_,1696,1296,896,696,496,240,306,.mp4.csmil/master.m3u8?b=&__b__=1000&hdnea=st=%s~exp=%s',
+        'http://bravovod-vh.akamaihd.net/i/NBCU_Bravo/%s_,40,25,18,12,7,4,2,00.mp4.csmil/master.m3u8?b=&__b__=1000&hdnea=st=%s~exp=%s',
+      ]
       url = uqp(url)
       url = url+'?mbr=true&player=Bravo%20VOD%20Player%20%28Phase%203%29&format=Script&height=576&width=1024'
       html = self.getRequest(url)
       a = json.loads(html)
-      suburl = a["captions"][0]["src"]
-      url = suburl.split('/caption/',1)[1]
+      try:
+          suburl = a['captions'][0]['src']
+      except:
+          suburl = a.get('defaultThumbnailUrl','') # in case no 'captions'
+
+      url = re.compile('(?:/caption/|/NBCU_Bravo/)').split(suburl,1)[1]  # need non-capturing group, for [1] to work here!
       url = url.split('.',1)[0]
       td = (datetime.datetime.utcnow()- datetime.datetime(1970,1,1))
       unow = int((td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6)
-      u = gvu1 % (url, str(unow), str(unow+60))
-      req = urllib2.Request(u.encode(UTF8), None, self.defaultHeaders)
-      try:
-          response = urllib2.urlopen(req, timeout=20) # check to see if video file exists
-      except:
-          u = gvu2 % (url, str(unow), str(unow+60))
+      for vu in videoUrls:
+          u = vu % (url, str(unow), str(unow+60))
+          req = urllib2.Request(u.encode(UTF8), None, self.defaultHeaders)
+          try:
+              response = urllib2.urlopen(req, timeout=20) # check to see if video file exists
+          except:
+              pass  # keep looping
+          else:
+              break
       liz = xbmcgui.ListItem(path = u)
       infoList ={}
       infoList['mediatype'] = xbmc.getInfoLabel('ListItem.DBTYPE')

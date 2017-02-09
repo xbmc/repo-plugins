@@ -10,6 +10,7 @@ https://commons.wikimedia.org/wiki/File:Bravo_TV.svg
 fanart.jpg sourced from public domain:
 https://commons.wikimedia.org/wiki/File:Bravo_TV.svg (converted to .jpg)
 
+Version 3.0.5 on-line episodes added by Chris Prince. website changes
 Version 3.0.4 website change
 Version 3.0.3 website change, ability to add TV shows to library
 Version 3.0.2 website change & cleanup

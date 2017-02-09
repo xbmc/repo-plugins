@@ -80,7 +80,8 @@ class WatchingParser(HTMLParser.HTMLParser):
 						self.item.urlParams["url"] = value
 						
 						# Add Context item to link to related videos
-						vid = fetch_query(value, "vid")
+						#vid = fetch_query(value, "vid")
+						vid = value[value.rfind("_") + 1:value.rfind(".")]
 						self.item.addRelatedContext(url=vid)
 			
 			# Search for image url
@@ -178,7 +179,8 @@ class VideosParser(HTMLParser.HTMLParser):
 						self.item.urlParams["url"] = value
 						
 						# Add Context item to link to related videos
-						vid = fetch_query(value, "vid")
+						#vid = fetch_query(value, "vid")
+						vid = value[value.rfind("_")+1:value.rfind(".")]
 						self.item.addRelatedContext(url=vid)
 						break
 			

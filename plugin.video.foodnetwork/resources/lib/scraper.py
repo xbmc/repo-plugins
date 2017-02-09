@@ -1,75 +1,84 @@
 # -*- coding: utf-8 -*-
-# Food Network Kodi Video Addon
+# Food Networsk Kodi Video Addon
 #
 from t1mlib import t1mAddon
 import json
 import re
 import os
-import datetime
 import urllib
-import urllib2
 import xbmc
 import xbmcplugin
 import xbmcgui
+import HTMLParser
 import sys
 
+h = HTMLParser.HTMLParser()
 qp  = urllib.quote_plus
 uqp = urllib.unquote_plus
 UTF8     = 'utf-8'
 
-STUDIO = 'Food Network'
-
 
 class myAddon(t1mAddon):
 
-
   def getAddonMenu(self,url,ilist):
-     html = self.getRequest('http://www.foodnetwork.com/videos/players/food-network-full-episodes.vc.html')
-     m = re.compile('<section class="multichannel-component">(.+?)</section', re.DOTALL).search(html)
-     a = re.compile('<a href="(.+?)".+?src="(.+?)".+?data-max="35">(.+?)<.+?</div', re.DOTALL).findall(html,m.start(1),m.end(1))
-     infoList={}
-     for url,fanart,name in a:
-       name=name.strip().replace(' Full Episodes','')
-       thumb  = self.addonIcon
-       fanart = fanart.replace('231x130.jpg','480x360.jpg')
-       ilist = self.addMenuItem(name,'GE', ilist, url, thumb, fanart, infoList, isFolder=True)
-     return(ilist)
+      html = self.getRequest('http://www.foodnetwork.com/videos/players/food-network-full-episodes.vc.html')
+      a = re.compile('<div class="m-MediaBlock o-Capsule__m-MediaBlock m-MediaBlock--playlist">.+?href="(.+?)".+?data-src="(.+?)".+?HeadlineText">(.+?)<.+?AssetInfo">(.+?) .+?</div',re.DOTALL).findall(html)
+      for (url, thumb, name, vidcnt) in a:
+          name=name.strip()
+          fanart  = thumb.split('.rend.',1)[0]
+          infoList = {}
+          infoList['TVShowTitle'] = name
+          infoList['Title'] = name
+          infoList['Studio'] = 'Food Network'
+          infoList['Plot'] = h.unescape(name)
+          infoList['MPAA'] = 'TV-PG'
+          infoList['mediatype'] = 'tvshow'
+          ilist = self.addMenuItem(name,'GE', ilist, url, thumb, fanart, infoList, isFolder=True)
+      return(ilist)
 
 
   def getAddonEpisodes(self,url,ilist):
-        url = uqp(url)
-        html  = self.getRequest('http://www.foodnetwork.com%s' % url)
-        m  = re.compile('"channels".+?\[(.+?)\]\},', re.DOTALL).search(html)
-        a = json.loads(m.group(1))
-        for b in a['videos']:
-           url     = b['releaseUrl'].split('?',1)[0]+'?MBR=true&format=SMIL&manifest=m3u'
-           name    = b['title']
-           thumb   = b['thumbnailUrl16x9'].replace('126x71.jpg','480x360.jpg')
-           fanart  = thumb
-           infoList = {}
-           infoList['Duration']    = b['length']
-           infoList['Title']       = b['title']
-           infoList['Studio']      = STUDIO
-           infoList['Plot']        = b["description"]
-           infoList['TVShowTitle'] = b["showName"]
-           infoList['MPAA']        = 'TV-PG'
-           infoList['mediatype']   = 'episode'
-           ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False)
-        return(ilist)
+      self.defaultVidStream['width']  = 1280
+      self.defaultVidStream['height'] = 720
+      html = self.getRequest(url)
+      vids  = re.compile('"videos"\: \[(.+?)\]',re.DOTALL).search(html).group(1)
+      vids = '['+vids+']'
+      vids = eval(vids)
+      for c in vids:
+          b = dict(c)
+          url = b['releaseUrl']
+          name = h.unescape(b['title'])
+          thumb = b['thumbnailUrl']
+          if not thumb.startswith('http'):
+              thumb = 'http://www.foodnetwork.com'+thumb
+          fanart = thumb
+          infoList = {}
+          infoList['Duration'] = b['length']
+          infoList['Title'] = h.unescape(b['title'])
+          infoList['Studio'] = b['publisherId']
+          infoList['Plot'] = h.unescape(b["description"])
+          infoList['TVShowTitle'] = b['showTitle']
+          infoList['MPAA'] = 'TV-PG'
+          infoList['mediatype'] = 'episode'
+          ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False)
+      return(ilist)
 
 
   def getAddonVideo(self,url):
-   html   = self.getRequest(uqp(url))
-   m    = re.compile('<video src="(.+?)"',re.DOTALL).search(html)
-   url = m.group(1)
+   html = self.getRequest(uqp(url))
    suburl = None
-   subs   = re.compile('<textstream src="(.+?)"',re.DOTALL).findall(html[m.start(1):])
+   subs = re.compile('<textstream src="(.+?)"',re.DOTALL).findall(html)
    for st in subs:
-      if '.srt' in st:
-         suburl = st
-         break
-
+       if '.srt' in st:
+           suburl = st
+           break
+   url = re.compile('<video src="(.+?)"',re.DOTALL).search(html).group(1)
+   if url is None:
+       url, msg = re.compile('<ref src="(.+?)".+?abstract="(.+?)"',re.DOTALL).search(html).groups()
+       xbmcgui.Dialog().notification(self.addonName, msg , self.addonIcon, 5000)
+       return
    liz = xbmcgui.ListItem(path = url)
-   if suburl: liz.setSubtitles([suburl])
+   if suburl is not None :
+       liz.setSubtitles([suburl])
    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
 

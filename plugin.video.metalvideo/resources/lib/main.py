@@ -30,7 +30,8 @@ class Initialize(listitem.VirtualFS):
 	@plugin.error_handler
 	def scraper(self):
 		# Fetch html source
-		url = u"http://metalvideo.com/topvideos.php"
+		#url = u"http://metalvideo.com/topvideos.php"
+		url = u"http://metalvideo.com/topvideos.html"
 		sourceCode = urlhandler.urlread(url, 604800) # TTL = 1 Week
 		
 		# Add Extra Items
@@ -38,11 +39,15 @@ class Initialize(listitem.VirtualFS):
 		_add_item = self.add_item
 		self.icon = icon = _plugin.getIcon()
 		_thumb = (icon,0)
-		_add_item(label=_plugin.getuni(30104), thumbnail=_thumb, url={"action":"PlayVideo", "url":u"http://metalvideo.com/index.php"}, isPlayable=True)
-		_add_item(label=_plugin.getuni(30105), thumbnail=_thumb, url={"action":"Watching", "url":u"http://metalvideo.com/index.php"}, isPlayable=False)
+		#_add_item(label=_plugin.getuni(30104), thumbnail=_thumb, url={"action":"PlayVideo", "url":u"http://metalvideo.com/index.php"}, isPlayable=True)
+		_add_item(label=_plugin.getuni(30104), thumbnail=_thumb, url={"action":"PlayVideo", "url":u"http://metalvideo.com/index.html"}, isPlayable=True)
+		#_add_item(label=_plugin.getuni(30105), thumbnail=_thumb, url={"action":"Watching", "url":u"http://metalvideo.com/index.php"}, isPlayable=False)
+		_add_item(label=_plugin.getuni(30105), thumbnail=_thumb, url={"action":"Watching", "url":u"http://metalvideo.com/index.html"}, isPlayable=False)
 		_add_item(label=_plugin.getuni(30103), thumbnail=_thumb, url={"action":"PlayVideo", "url":u"http://metalvideo.com/randomizer.php"}, isPlayable=True)
-		_add_item(label=_plugin.getuni(30102), thumbnail=_thumb, url={"action":"TopVideos", "url":u"http://metalvideo.com/topvideos.php"}, isPlayable=False)
-		_add_item(label=_plugin.getuni(32941), thumbnail=("recent.png",2), url={"action":"NewVideos", "url":u"http://metalvideo.com/newvideos.php"}, isPlayable=False)
+		#_add_item(label=_plugin.getuni(30102), thumbnail=_thumb, url={"action":"TopVideos", "url":u"http://metalvideo.com/topvideos.php"}, isPlayable=False)
+		_add_item(label=_plugin.getuni(30102), thumbnail=_thumb, url={"action":"TopVideos", "url":u"http://metalvideo.com/topvideos.html"}, isPlayable=False)
+		#_add_item(label=_plugin.getuni(32941), thumbnail=("recent.png",2), url={"action":"NewVideos", "url":u"http://metalvideo.com/newvideos.php"}, isPlayable=False)
+		_add_item(label=_plugin.getuni(32941), thumbnail=("recent.png",2), url={"action":"NewVideos", "url":u"http://metalvideo.com/newvideos.html"}, isPlayable=False)
 		self.add_search("VideoList", "http://metalvideo.com/search.php?keywords=%s")
 		
 		# Fetch and Return VideoItems
@@ -52,15 +57,16 @@ class Initialize(listitem.VirtualFS):
 		# Loop and display each Video
 		icon = self.icon
 		localListitem = listitem.ListItem
-		search_pattern = '<li class=""><a\s+href="(http:\/\/metalvideo.com\/category.php\?cat=\S+?)"\S*>(.+?)</a><\/li>'
-		for url, title in re.findall(search_pattern, sourceCode):
+		#search_pattern = '<li class=""><a\s+href="(http:\/\/metalvideo.com\/category.php\?cat=\S+?)"\S*>(.+?)</a><\/li>'
+		search_pattern = '<li class=""><a\s+href="http:\/\/metalvideo.com\/browse-(\S+?)-videos-1-date.html">(.+?)</a><\/li>'
+		for cat, title in re.findall(search_pattern, sourceCode):
 			# Create listitem of Data
 			item = localListitem()
 			item.setThumb(icon)
 			item.setLabel(title)
 
 			# Fetch vategory url query
-			cat = fetch_query(url, "cat")
+			#cat = fetch_query(url, "cat")
 			item.setParamDict(action="VideoList", cat=cat)
 			
 			# Store Listitem data
@@ -207,7 +213,8 @@ class VideoList(listitem.VirtualFS):
 			url = _plugin["url"]
 		else:
 			sortby = {u"0": u"date", u"1": u"artist", u"2": u"rating", u"3": u"views"}[_plugin.getSetting("sort")]
-			url = u"http://metalvideo.com/category.php?cat=%s&sortby=%s" % (_plugin["cat"], sortby)
+			#url = u"http://metalvideo.com/category.php?cat=%s&sortby=%s" % (_plugin["cat"], sortby)
+			url = u"http://metalvideo.com/browse-%s-videos-1-%s.html" % (_plugin["cat"], sortby)
 		
 		# Set Content Properties
 		self.set_sort_methods(self.sort_method_unsorted)

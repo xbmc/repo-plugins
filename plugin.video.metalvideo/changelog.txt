@@ -1,3 +1,6 @@
+[B]Version 2.0.3[/B] 2017-02-09
+- Fix addon after site reverted back to old url structure
+
 [B]Version 2.0.2[/B] 2017-01-12
 - Fixed category parsing
 - Fixed the urls after site changed format

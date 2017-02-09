@@ -5,7 +5,6 @@ from t1mlib import t1mAddon
 import json
 import re
 import os
-import datetime
 import urllib
 import xbmc
 import xbmcplugin
@@ -22,18 +21,14 @@ UTF8 = 'utf-8'
 class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
-      ihtml = self.getRequest('http://freeform.go.com/shows')
-      html = re.compile('<main(.+?)</main', re.DOTALL).search(ihtml).group(1)
-      a = re.compile('<li.+?<a href="(.+?)".+?class="background-link(.+?)".+?class="tablet-source.+?srcset="(.+?) .+?</li',re.DOTALL).findall(html)
-      for url, bg, thumb in a:
-          if not 'bg-gradient' in bg:
-              continue
-          name = url.rsplit('/',1)[1]
-          name = name.replace('-',' ').title()
+      html = self.getRequest('http://freeform.go.com/shows')
+      a = re.compile('<div class="col-xs-4 shows-grid">.+?href="(.+?)".+?img src="(.+?)".+?<h3>(.+?)<',re.DOTALL).findall(html)
+      for url, thumb, name in a:
           fanart = thumb
           infoList ={}
           infoList['Title'] = name
           infoList['TVShowTitle'] = name
+          infoList['mediatype'] = 'tvshow'
           contextMenu = [('Add To Library','XBMC.RunPlugin(%s?mode=DF&url=AL%s)' % (sys.argv[0], url))]
           ilist = self.addMenuItem(name,'GE', ilist, url, thumb, fanart, infoList, isFolder=True, cm=contextMenu)
       return(ilist)
@@ -41,40 +36,25 @@ class myAddon(t1mAddon):
   def getAddonEpisodes(self,url,ilist, getFileData=False):
       if not url.startswith('http'):
          url = 'http://freeform.go.com'+url
-      if not url.endswith('/episode-guide'):
-          url = url+'/episode-guide'
       html = self.getRequest(url)
-      vids = re.compile('data-video-id="VDKA(.+?)".+?data-title="(.+?)".+?data-background="(.+?)".+?class="tablet-source".+?srcset="(.+?) .+?class="season-number(.+?)<.+?class="episode-number(.+?)<.+?class="m-episode-summary.+?<p>(.+?)</p>.+?<div class="m-episode-meta(.+?)</div',re.DOTALL).findall(html)
-      for url, name, fanart, thumb, season, episode, plot, meta in vids:
+      vids = re.compile('<hr />.+?href="(.+?)".+?requires-sign-in="(.+?)".+?src="(.+?)".+?m-y-0">.+?S(.+?) E(.+?) (.+?)<.+?"m-t-1">(.+?)<', re.DOTALL).findall(html)
+      for url, elock, thumb, season, episode, name,plot in vids:
+          if elock != 'False':
+              continue
           name = h.unescape(name.decode(UTF8))
+          name = name.strip()
           plot = h.unescape(plot.decode(UTF8))
+          plot = plot.strip()
           thumb = thumb.strip()
+          fanart = thumb
           infoList = {}
-          season = season.split('>S',1)
-          if len(season) > 1 and season[1].strip().isdigit():
-              infoList['Season'] = int(season[1])
-          episode = episode.split('>E',1)
-          if len(season) > 1 and episode[1].strip().isdigit():
-              infoList['Episode'] = int(episode[1])
+          if len(season) > 0 and season.strip().isdigit():
+              infoList['Season'] = int(season)
+          if len(episode) > 0 and episode.strip().isdigit():
+              infoList['Episode'] = int(episode)
           infoList['Title'] = name
           infoList['Plot'] = plot
-          meta = re.compile('<span class="m-episode-meta-item.+?>(.+?)</span>', re.DOTALL).findall(meta)
-          if meta is not None:
-              duration = 0
-              tmp = meta[0].split(':')
-              for dur in tmp:
-                  duration = duration*60 + int(dur) 
-              infoList['Duration'] = duration
-              mo, day, year = meta[1].split('/')
-              year = int(year)
-              if year < 55:
-                  year = year + 2000
-              else:
-                  year = year + 1900
-              infoList['Date'] = '%s-%s-%s' % ( str(year), mo, day)
-              infoList['Aired'] = infoList['Date']
-              infoList['Year'] = int(infoList['Aired'].split('-',1)[0])
-              infoList['MPAA'] = meta[3]
+          infoList['MPAA'] = 'TV-PG'
           infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
           infoList['Studio'] = 'ABC'
           infoList['mediatype'] = 'episode'
@@ -106,18 +86,26 @@ class myAddon(t1mAddon):
       jsonRespond = xbmc.executeJSONRPC(json_cmd)
 
   def getAddonVideo(self,url):
-      vd = uqp(url)
+      if not url.startswith('http'):
+          url = 'http://freeform.go.com'+url
+      html = self.getRequest(url)
+      vd = re.compile("VDKA(.+?)'").search(html).group(1)
       url = 'https://api.entitlement.watchabc.go.com/vp2/ws-secure/entitlement/2020/authorize.json'
       udata = 'video%5Fid=VDKA'+str(vd)+'&device=001&video%5Ftype=lf&brand=002'
       uheaders = self.defaultHeaders.copy()
       uheaders['Content-Type'] = 'application/x-www-form-urlencoded'
       uheaders['Accept'] = 'application/json'
-      uheaders['X-Requested-With'] = 'ShockwaveFlash/22.0.0.209'
+      uheaders['X-Requested-With'] = 'ShockwaveFlash/24.0.0.194'
       uheaders['Origin'] = 'http://cdn1.edgedatg.com'
+      uheaders['DNT'] = '1'
+      uheaders['Referer'] = 'http://cdn1.edgedatg.com/aws/apps/datg/web-player-unity/1.0.6.13/swf/player_vod.swf'
+      uheaders['Pragma'] = 'no-cache'
+      uheaders['Connection'] = 'keep-alive'
+      uheaders['Cache-Control'] = 'no-cache'
       html = self.getRequest(url, udata, uheaders)
       a = json.loads(html)
       if a.get('uplynkData', None) is None:
-          xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s, "%s")' % (self.addonName, self.addon.getLocalizedString(30001), 5000, self.addonIcon))
+          xbmcgui.Dialog().notification(self.addonName, self.addon.getLocalizedString(30001), self.addonIcon)
           return
 
       sessionKey = a['uplynkData']['sessionKey']

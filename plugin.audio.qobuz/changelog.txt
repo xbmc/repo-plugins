@@ -1,3 +1,7 @@
+1.2.2
+-----
+Remove deprecated enum
+
 1.2.1
 -----
 * Feature: Playing HiRes purchased tracks (setting and hires property on track)

@@ -34,6 +34,7 @@ def rtp_resolver(url):
 			else:
 				match = re.compile('file: "(.+?)",').findall(source)
 				if match:
+					if "http" not in match[0]: return "http:"+match[0]
 					return match[0]
 				else:
 					return ''

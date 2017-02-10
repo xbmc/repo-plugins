@@ -10,6 +10,7 @@ https://commons.wikimedia.org/wiki/File:CBS_classic_logo.svg (converted to .jpg)
 
 Change Log
 =====================
+V3.0.5 Added M3U8 support for "new" videos
 V3.0.4 Added 'Add to Library'
 V3.0.3 more cleanup
 V3.0.2 fix for more than 100 shows; add evening news

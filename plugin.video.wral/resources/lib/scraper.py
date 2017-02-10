@@ -123,33 +123,43 @@ class myAddon(t1mAddon):
   def getAddonVideo(self,url):
       html = self.getRequest('http://www.cbs.com%s' % uqp(url))
       foundpid = re.compile("cbsplayer.pid = '(.+?)'", re.DOTALL).search(html).group(1)
-      pg = self.getRequest('http://link.theplatform.com/s/dJ5BDC/%s?format=SMIL&mbr=true' % foundpid)
+      headers = self.defaultHeaders.copy()
+      headers['User-Agent']= 'Mozilla/5.0 (Linux; U; en-US) AppleWebKit/528.5+ (KHTML, like Gecko, Safari/528.5+) Version/4.0 Kindle/3.0 (screen 600X800; rotate)'
+      pg = self.getRequest('http://link.theplatform.com/s/dJ5BDC/%s?format=SMIL&manifest=m3u&mbr=true' % foundpid, None, headers)
+      url = re.compile('<video src="(.+?)"', re.DOTALL).search(pg).group(1)
+      if url.startswith('http'):
+          finalurl = url +'|User-Agent='+urllib.quote(headers['User-Agent'])
+      else:
+          pg = self.getRequest('http://link.theplatform.com/s/dJ5BDC/%s?format=SMIL&mbr=true' % foundpid)
+          frtmp,fplay = re.compile('<meta base="(.+?)".+?<video src="(.+?)"',re.DOTALL).search(pg).groups()
+          swfurl='http://canstatic.cbs.com/chrome/canplayer.swf swfvfy=true'
+          if '.mp4' in fplay:
+              pphdr = 'mp4:'
+              frtmp = frtmp.replace('&amp;','&')
+              fplay = fplay.replace('&amp;','&')
+          else:
+              pphdr = ''
+              frtmp = frtmp.replace('rtmp:','rtmpe:')
+              frtmp = frtmp.replace('.net','.net:1935')
+              frtmp = frtmp.replace('?auth=','?ovpfv=2.1.9-internal&?auth=')
+              swfurl = 'http://vidtech.cbsinteractive.com/player/3_3_2/CBSI_PLAYER_HD.swf swfvfy=true pageUrl=http://www.cbs.com/shows'
+          finalurl = '%s playpath=%s%s swfurl=%s timeout=90' % (frtmp, pphdr, fplay, swfurl)
+          xbmcgui.Dialog().notification(self.addonName, self.addon.getLocalizedString(30001), self.addonIcon, 5000, False)
+
+      liz = xbmcgui.ListItem(path = finalurl)
       suburl = re.compile('"ClosedCaptionURL" value="(.+?)"',re.DOTALL).search(pg)
       if suburl != None:
           suburl = suburl.group(1)
-      frtmp,fplay = re.compile('<meta base="(.+?)".+?<video src="(.+?)"',re.DOTALL).search(pg).groups()
-      swfurl='http://canstatic.cbs.com/chrome/canplayer.swf swfvfy=true'
-      if '.mp4' in fplay:
-          pphdr = 'mp4:'
-          frtmp = frtmp.replace('&amp;','&')
-          fplay = fplay.replace('&amp;','&')
-      else:
-          pphdr = ''
-          frtmp = frtmp.replace('rtmp:','rtmpe:')
-          frtmp = frtmp.replace('.net','.net:1935')
-          frtmp = frtmp.replace('?auth=','?ovpfv=2.1.9-internal&?auth=')
-          swfurl = 'http://vidtech.cbsinteractive.com/player/3_3_2/CBSI_PLAYER_HD.swf swfvfy=true pageUrl=http://www.cbs.com/shows'
-      finalurl = '%s playpath=%s%s swfurl=%s timeout=20' % (frtmp, pphdr, fplay, swfurl)
-      liz = xbmcgui.ListItem(path = finalurl)
-      subfile = ""
-      if (suburl != None) and ('xml' in suburl):
-          subfile = self.procConvertSubtitles(suburl)
-          if subfile != "":
-              liz.setSubtitles([subfile])
+          if ('xml' in suburl):
+              subfile = self.procConvertSubtitles(suburl)
+              if subfile != "":
+                  liz.setSubtitles([subfile])
       infoList ={}
+      infoList['mediatype'] = xbmc.getInfoLabel('ListItem.DBTYPE')
       infoList['Title'] = xbmc.getInfoLabel('ListItem.Title')
       infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
       infoList['Year'] = xbmc.getInfoLabel('ListItem.Year')
+      infoList['Premiered'] = xbmc.getInfoLabel('Premiered')
       infoList['Plot'] = xbmc.getInfoLabel('ListItem.Plot')
       infoList['Studio'] = xbmc.getInfoLabel('ListItem.Studio')
       infoList['Genre'] = xbmc.getInfoLabel('ListItem.Genre')

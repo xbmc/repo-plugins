@@ -28,73 +28,44 @@ class Initialize(listitem.VirtualFS):
 		_plugin = plugin
 		icon = (_plugin.getIcon(),0)
 		self.add_youtube_videos("UUaWd5_7JhbQBe4dknZhsHJg")
-		self.add_item(_plugin.getuni(32941), thumbnail=icon, url={"action":"Videos", "url":"/video/cat/home/1"})
-		self.add_item(_plugin.getuni(30101), thumbnail=icon, url={"action":"Themes", "url":"/video/theme/"})
-		
+		self.add_item(_plugin.getuni(32941), thumbnail=icon, url={"action":"Videos", "url":"/videos/1"})
+		self.add_item(_plugin.getuni(30102), thumbnail=icon, url={"action":"Videos", "url":"/msmojo/"})
+		self.add_item(_plugin.getuni(30101), thumbnail=icon, url={"action":"Shows"})
+
 		# Fetch Video Content
-		url = u"%s/video/theme/" % BASEURL
-		with urlhandler.urlopen(url, 604800) as sourceObj: # TTL = 1 Week
+		with urlhandler.urlopen(BASEURL, 604800) as sourceObj: # TTL = 1 Week
 			return parsers.CategorysParser().parse(sourceObj)
 
-class Themes(listitem.VirtualFS):
-	@plugin.error_handler
-	def scraper(self):
-		# Fetch Video Content
-		url = BASEURL + plugin["url"]
-		with urlhandler.urlopen(url, 604800) as sourceObj: # TTL = 1 Week
-			return parsers.ThemesParser().parse(sourceObj)
 
-class SubCat(listitem.VirtualFS):
+class Shows(listitem.VirtualFS):
 	@plugin.error_handler
 	def scraper(self):
 		# Fetch Video Content
-		url = u"%s/video/theme/" % BASEURL
-		sourceCode = urlhandler.urlread(url, 604800) # TTL = 1 Week
-		
-		# Fetch and Return VideoItems
-		return self.regex_scraper(sourceCode)
-	
-	def regex_scraper(self, sourceCode):
-		# Create Speed vars
-		_plugin = plugin
-		localListitem = listitem.ListItem
-		mainTitle = _plugin["title"]
-		import re
-		
-		# Add Current Category
-		self.add_item(label=u"-%s" % mainTitle, url={"action":"Videos", "url":_plugin["url"]})
-		mainTitle = mainTitle.lower()
-		
-		for catID in _plugin["idlist"].split(u","):
-			# Fetch Title and Set url & action
-			url = u"/video/id/%s/1" % catID
-			title = re.findall('<a href="%s">(.+?)</a>' % url, sourceCode)[0]
-			if title.lower() == mainTitle: continue
-			
-			# Create listitem of Data
-			item = localListitem()
-			item.setLabel(title)
-			item.setParamDict(action="Videos", url=url)
-			
-			# Store Listitem data
-			yield item.getListitemTuple(False)
+		with urlhandler.urlopen(BASEURL, 14400) as sourceObj: # TTL = 4 Hours
+			return parsers.CategorysParser().parse(sourceObj, showmode=True)
+
 
 class Videos(listitem.VirtualFS):
 	@plugin.error_handler
 	def scraper(self):
 		# Fetch Video Content
-		url = BASEURL + plugin["url"].replace(u" ",u"%20")
+		if "videoid" in plugin:
+			url = "http://www.watchmojo.com/video/id/%s/" % plugin["videoid"]
+		else:
+			url = BASEURL + plugin["url"].replace(u" ",u"%20")
+
 		with urlhandler.urlopen(url, 14400) as sourceObj: # TTL = 4 Hours
-			return parsers.VideosParser().parse(sourceObj)
+			return parsers.VideosParser().parse(sourceObj, related_mode=True if "related" in plugin else False)
+
 
 class PlayVideo(listitem.PlayMedia):
 	@plugin.error_handler
 	def resolve(self):
 		# Create url for oembed api
-		_plugin = plugin
-		url = BASEURL + _plugin["url"]
+		url = "http://www.watchmojo.com/video/id/%s/" % plugin["videoid"]
 		sourceCode = urlhandler.urlread(url, 14400, stripEntity=False)# TTL = 4 Hours
 		import re
-		
+
 		# Search sourceCode
-		return re.findall('<source src="(.+?\.mp4)" type="video/mp4" />', sourceCode)[0]
+		search_str = '<source\s*src=["\'](.+?\.mp4)["\']\s+type=["\']video/mp4["\']\s*/>'
+		return re.findall(search_str, sourceCode)[0]

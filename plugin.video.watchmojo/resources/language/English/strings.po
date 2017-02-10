@@ -30,5 +30,13 @@ msgstr ""
 ###############################
 
 msgctxt "#30101"
-msgid "Video Themes"
+msgid "Shows"
+msgstr ""
+
+msgctxt "#30102"
+msgid "MsMojo"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Most Recent"
 msgstr ""

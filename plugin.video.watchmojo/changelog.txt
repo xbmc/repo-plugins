@@ -1,4 +1,7 @@
-[B]Version 2.0.1[/B]
+[B]Version 2.1.0[/B] 2017-02-10
+- Fix addon after site redesign
+
+[B]Version 2.0.1[/B] 2016-10-28
 - Fix video url scraper after site changed to html5
 
 [B]Version 2.0.0[/B] 2015-02-20

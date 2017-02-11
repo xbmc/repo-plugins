@@ -1,7 +1,0 @@
-[B]1.1.0[/B]
-- Tweaked sections
-- Tweaked images
-- Added add-on screenshots
-
-[B]1.0.0[/B]
-- Initial version

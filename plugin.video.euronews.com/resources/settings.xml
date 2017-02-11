@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-	<setting id="language" type="select" label="32200" lvalues="32201|32202|32203|32204|32205|32206|32207|32208|32209|32210|32211|32212" default="0" />
-</settings>

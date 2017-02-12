@@ -453,8 +453,13 @@ def playVideo(url):
                 playVideoMain(urlNew)               
         except:                
           content=content.replace("\n"," ")        
-          match=re.compile("<src>([^<]+)</src>", re.DOTALL).findall(content)
-          playurl=match[0]
+          debug("CONTENT playVideo: "+ content)
+          try:
+              match=re.compile("<src>([^<]+)</src>", re.DOTALL).findall(content)
+              playurl=match[0]
+          except:
+              match=re.compile("player url='(.+?)'", re.DOTALL).findall(content)
+              playurl=match[0]
           debug("-----> "+ playurl)
           #playurl=playurl.replace("video:mtvni.com","video:mtv.de")     
           playVideoMain(playurl)        
@@ -469,6 +474,7 @@ def SearchUrl(url):
          playVideo(video)
          
 def playVideoMain(url):
+            url=url.replace("rtmpe","rtmp")
             listitem = xbmcgui.ListItem(path=url+" swfVfy=1 swfUrl=http://media.mtvnservices.com/player/prime/mediaplayerprime.1.8.1.swf")
             return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 

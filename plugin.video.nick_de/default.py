@@ -20,7 +20,6 @@ pluginhandle = int(sys.argv[1])
 jrOnly = addon.getSetting("jrOnly") == "true"
 
 useThumbAsFanart = addon.getSetting("useThumbAsFanart") == "true"
-viewMode = str(addon.getSetting("viewID"))
 translation = addon.getLocalizedString
 icon = xbmc.translatePath('special://home/addons/'+addonID+'/icon.png')
 iconJr = xbmc.translatePath('special://home/addons/'+addonID+'/iconJr.png')

@@ -9,7 +9,7 @@ import os
 import random
 import xbmcplugin
 import xbmcgui
-import xbmcaddon
+import xbmcaddon,json,requests,cookielib,xbmcvfs
 
 #addon = xbmcaddon.Addon()
 #addonID = addon.getAddonInfo('id')
@@ -18,7 +18,7 @@ addon = xbmcaddon.Addon(id=addonID)
 socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
 jrOnly = addon.getSetting("jrOnly") == "true"
-forceViewMode = addon.getSetting("forceView") == "true"
+
 useThumbAsFanart = addon.getSetting("useThumbAsFanart") == "true"
 viewMode = str(addon.getSetting("viewID"))
 translation = addon.getLocalizedString
@@ -28,8 +28,27 @@ iconNight = xbmc.translatePath('special://home/addons/'+addonID+'/iconnight.png'
 urlMain = "http://www.nick.de"
 urlMainJR = "http://www.nickjr.de"
 urlMainnight ="http://www.nicknight.de"
+
+
+
+profile    = xbmc.translatePath( addon.getAddonInfo('profile') ).decode("utf-8")
+temp       = xbmc.translatePath( os.path.join( profile, 'temp', '') ).decode("utf-8")
+
+    
+    
 opener = urllib2.build_opener()
 opener.addheaders = [('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:25.0) Gecko/20100101 Firefox/25.0')]
+
+
+profile    = xbmc.translatePath( addon.getAddonInfo('profile') ).decode("utf-8")
+temp       = xbmc.translatePath( os.path.join( profile, 'temp', '') ).decode("utf-8")
+
+if not xbmcvfs.exists(temp):       
+       xbmcvfs.mkdirs(temp)
+
+cookie= os.path.join(temp,"cookie.jar")
+cj = cookielib.LWPCookieJar();
+
 
 def debug(content):
     log(content, xbmc.LOGDEBUG)
@@ -41,7 +60,7 @@ def log(msg, level=xbmc.LOGNOTICE):
     addon = xbmcaddon.Addon()
     addonID = addon.getAddonInfo('id')
     xbmc.log('%s: %s' % (addonID, msg), level) 
-
+    
 def index():
     if jrOnly:
         nickJrMain()
@@ -51,27 +70,52 @@ def index():
         addDir(translation(30007), "", 'nightMain', iconNight)
         xbmcplugin.endOfDirectory(pluginhandle)
 
+  
+def getUrl(url,data="x",header="",cookies=1):
+   
+        try:
+            cj.load(cookie,ignore_discard=True, ignore_expires=True)        
+        except:
+            pass        
+        debug("Get Url: " +url)
+        for cook in cj:
+            debug(" Cookie :"+ str(cook))
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))        
+        userAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:49.0) Gecko/20100101 Firefox/49.0"
+        if header=="":
+          opener.addheaders = [('User-Agent', userAgent)]        
+        else:
+          opener.addheaders = header        
+        try:
+          if data!="x" :
+             content=opener.open(url,data=data).read()
+          else:
+             content=opener.open(url).read()
+        except urllib2.HTTPError as e:
+             #debug( e.code   )
+             cc=e.read()  
+             debug("Error : " +cc)
+       
+        opener.close()
+        cj.save(cookie,ignore_discard=True, ignore_expires=True)
+        return content
+        
 
 def nickMain():
     addDir(translation(30003), urlMain+"/videos", 'listVideos', icon)
     addDir(translation(30004), urlMain+"/videos", 'listShows', icon)
     xbmcplugin.endOfDirectory(pluginhandle)
-    if forceViewMode:
-        xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
-
+    
 
 def nickJrMain():
-    addDir(translation(30003), urlMainJR+"/videos", 'listVideosJR', iconJr)
-    addDir(translation(30004), urlMainJR+"/videos", 'listShowsJR', iconJr)
+    addDir(translation(30003), "http://www.nickjr.de/data/videosStreamPage.json?&urlKey=&apiKey=de_global_Nickjr_web&adfree=&excludeIds=", 'listVideosJR', iconJr,page=1)
+    addDir(translation(30004), urlMainJR+"/data/nav.json?propKey=paw-patrol&urlKey=pups-and-the-big-freeze-pups-save-a-basketbal&apiKey=de_global_Nickjr_web", 'listShowsJR', iconJr)
     xbmcplugin.endOfDirectory(pluginhandle)
-    if forceViewMode:
-        xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
+    
 
 def nightMain():
     addDir(translation(30004), urlMainnight, 'listShowsNight', iconNight)
     xbmcplugin.endOfDirectory(pluginhandle)
-    if forceViewMode:
-        xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideos(url):
     debug("listVideos URL: "+ url)
@@ -93,8 +137,7 @@ def listVideos(url):
           url=urlMain+url
         addLink(title, url, 'playVideo', thumb)
     xbmcplugin.endOfDirectory(pluginhandle)
-    if forceViewMode:
-        xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
+    
 
 
 def listShows(url):
@@ -106,29 +149,42 @@ def listShows(url):
             title = cleanTitle(title)
             addDir(title, urlMain+url, 'listVideos', thumb)
     xbmcplugin.endOfDirectory(pluginhandle)
-    if forceViewMode:
-        xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
+
 
 
 def listShowsJR(url):
     debug ("listShowsJR :" +url)
-    content = opener.open(url).read()
-    content = content[content.find("<ul class='carouFredSel'>"):]
-    spl = content.split("<li class='item'>")
-    for i in range(1, len(spl), 1):
-        entry = spl[i]
-        match = re.compile('alt="([^-]+)-', re.DOTALL).findall(entry)
-        title = match[0]
-        title = cleanTitle(title)
-        match = re.compile('src="(.+?)"', re.DOTALL).findall(entry)
-        thumb = match[0]
-        match = re.compile('href="(.+?)"', re.DOTALL).findall(entry)
-        url = urlMainJR+match[0]
-        debug("listShowsJR Showurl: "+ url)
-        addDir(title, url, 'listVideosJR', thumb)
+    content = getUrl(url)
+    struktur = json.loads(content)
+    debug("---------")
+    debug(struktur)
+    for serie in struktur["main"]["propertyCarousel"]["sprites"]:
+      urln=serie["url"]
+      title=serie["title"]
+      addDir(title, urlMainJR+urln, 'listSeriesJr', "")
     xbmcplugin.endOfDirectory(pluginhandle)
-    if forceViewMode:
-        xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
+
+def listSeriesJr(url):
+   content = getUrl(url)
+   elemente=content.split('<b class="tooltip-title">')
+   for element in elemente:
+     if not "games" in element:
+        try:
+          element='<b class="tooltip-title">'+element
+          debug("------")
+          debug(element)
+          title = re.compile('<b class="tooltip-title">(.+?)</b>', re.DOTALL).findall(element)[0]
+          desc=re.compile('<p class="tooltip-description">(.+?)</p>', re.DOTALL).findall(element)[0]
+          urln=urlMainJR+re.compile('<a href="(.+?)"', re.DOTALL).findall(element)[0]
+          img=re.compile('<source srcset="(.+?)"', re.DOTALL).findall(element)[0]
+          if "tile-episode-flag" in element:
+            adding=" (Episode)"
+          else:
+            adding=""
+          addLink(title+adding, urln, 'playVideoJR', img)
+        except:
+          pass
+   xbmcplugin.endOfDirectory(pluginhandle)
 
 def listShowsNight(url):
     xbmc.log("NICK :listShowsNight "+ url) 
@@ -136,35 +192,52 @@ def listShowsNight(url):
     content = content[content.find("<ul class='carouFredSel'>"):]
     content = content[:content.find("</ul>")]
     match = re.compile('<li class=\'item\'><a href="([^"]+)" target=""><img alt="([^"]+)" src="([^"]+)" title="" /></a></li>', re.DOTALL).findall(content)
-    for element in match:
+    for element in match:        
         title = element[1]
         thumb = element[2]
         url = urlMainnight+element[0]
-        addDir(title, url, 'listVideosnight', thumb)
+        addDir(title, url, 'playVideoJR', thumb)
     xbmcplugin.endOfDirectory(pluginhandle)
-    if forceViewMode:
-        xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
-def listVideosJR(url):
-    debug("listVideosJR URL: "+ url)
-    content = opener.open(url).read()
-    if "<div class='video-container_playlist'>" in content:
-        content = content[content.find("<div class='video-container_playlist'>"):]
-        content = content[:content.find("</div>")]
-    spl = content.split("class='fullepisode playlist-item'")
-    for i in range(1, len(spl), 1):
-        entry = spl[i]
-        match = re.compile('title="(.+?)"', re.DOTALL).findall(entry)
-        title = match[0]
-        title = cleanTitle(title)
-        match = re.compile('src="(.+?)"', re.DOTALL).findall(entry)
-        thumb = match[0]
-        match = re.compile("href='(.+?)'", re.DOTALL).findall(entry)
-        url = match[0]
-        addLink(title, url, 'playVideo', thumb)
-    xbmcplugin.endOfDirectory(pluginhandle)
-    if forceViewMode:
-        xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
+
+def listVideosJR(url,page=1):
+    urln=url+"&page="+str(page)
+    debug("listVideosJR URL: "+ urln)
+    content=getUrl(urln)
+    struktur = json.loads(content)
+    for element in  struktur["stream"]:
+        for element2 in element["items"]:
+          try:
+             mediatype=element2["data"]["mediaType"]
+             url3=urlMainJR+element2["data"]["url"]
+             img=element2["data"]["images"]["thumbnail"]["r1-1"]
+             title=element2["data"]["title"]
+             addLink(title, url3, 'playVideoJR', img)
+          except:
+             pass 
+    addDir("Next", url, 'listVideosJR', "",page=int(page)+1)
+    xbmcplugin.endOfDirectory(pluginhandle)             
+    
+def playVideoJR(url):
+    content = getUrl(url)
+    id = re.compile('data-contenturi="(.+?)"', re.DOTALL).findall(content)[0]
+    url2="http://media.mtvnservices.com/pmt/e1/access/index.html?uri="+id+"&configtype=edge"
+    header=[]
+    header.append (('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:25.0) Gecko/20100101 Firefox/25.0'))    
+    header.append (('Referer', url))    
+    content = getUrl(url2,header=header)
+    debug("++++++++++")
+    debug(content)
+    debug("++++++++++")
+    struktur = json.loads(content)
+    streamurl=struktur["feed"]["items"][0]["group"]["content"]   
+    content = getUrl(streamurl)
+    video = re.compile('<src>(.+?)</src>', re.DOTALL).findall(content)[-1]
+    video=video.replace("rtmpe","rtmp")
+    listitem = xbmcgui.ListItem(path=video+" swfVfy=1 swfUrl=http://media.mtvnservices.com/edge/polyfill/polyfill-1.4.14.swf")
+    xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
+    debug(content)
+
 
 def listVideosnight(url):
     xbmc.log("NICK :listVideosnight url "+ url)
@@ -185,9 +258,7 @@ def listVideosnight(url):
         url = match[0]
         addLink(title, url, 'playVideo', thumb)
     xbmcplugin.endOfDirectory(pluginhandle)
-    if forceViewMode:
-        xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
-
+    
 
 def playVideo(url):
     xbmc.log("NICK : "+ url) 
@@ -196,7 +267,14 @@ def playVideo(url):
     match1 = re.compile('data-mrss="([^"]+)"', re.DOTALL).findall(content)
     #mrss     : 'http://api.mtvnn.com/v2/mrss?uri=mgid:sensei:video:mtvnn.com:local_playlist-a3dff586129cb4d17dc5',
     match2 = re.compile('mrss[\s]*: \'([^\']+)\'', re.DOTALL).findall(content)                        
-    match3 = re.compile('mrss"[\s]*: "([^\"]+)"', re.DOTALL).findall(content)
+    match3 = re.compile("mrss[\s]*:[^']*'([^']+?)'", re.DOTALL).findall(content)
+    debug("------+++++-----")
+    debug(content)
+    #swf = re.compile('"(.+?.swf)[?|"]', re.DOTALL).findall(content)[0]
+    swf = re.compile('"(/[^"]+?.swf)[\?"]', re.DOTALL).findall(content)[0]
+    debug ("SWF :: "+swf)
+    if not "http" in swf:
+      swf="http://www.nicknight.de"+ swf
     if urlMain in url:
         content = opener.open(match1[0]).read()
     elif urlMainJR in url :
@@ -211,7 +289,7 @@ def playVideo(url):
         if int(br) > bitrate:
             bitrate = int(br)
             finalUrl = urlTemp
-    listitem = xbmcgui.ListItem(path=finalUrl+" swfVfy=1 swfUrl=http://player.mtvnn.com/assets/footer/mediaplayer/g2player_2.2.4.swf")
+    listitem = xbmcgui.ListItem(path=finalUrl+" swfVfy=1 swfUrl="+swf)
     xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 
@@ -250,8 +328,8 @@ def addLink(name, url, mode, iconimage, desc="", duration=""):
     return ok
 
 
-def addDir(name, url, mode, iconimage):
-    u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
+def addDir(name, url, mode, iconimage,page=1):
+    u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&page="+str(page)
     ok = True
     liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"Title": name})
@@ -264,11 +342,12 @@ mode = urllib.unquote_plus(params.get('mode', ''))
 url = urllib.unquote_plus(params.get('url', ''))
 name = urllib.unquote_plus(params.get('name', ''))
 thumb = urllib.unquote_plus(params.get('thumb', ''))
+page = urllib.unquote_plus(params.get('page', ''))
 
 if mode == 'listVideos':
     listVideos(url)
 elif mode == 'listVideosJR':
-    listVideosJR(url)
+    listVideosJR(url,page)
 elif mode == 'listVideosnight':
     listVideosnight(url)    
 elif mode == 'listShowsNight':
@@ -286,6 +365,10 @@ elif mode == 'nickMain':
 elif mode == 'nickJrMain':
     nickJrMain()
 elif mode == 'nightMain':
-    nightMain()    
+    nightMain()  
+elif mode == 'playVideoJR':
+    playVideoJR(url)
+elif mode == 'listSeriesJr':
+    listSeriesJr(url)    
 else:
     index()

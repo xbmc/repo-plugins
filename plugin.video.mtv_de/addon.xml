@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.mtv_de" name="MTV.de" version="3.3.10" provider-name="L0RE">
+<addon id="plugin.video.mtv_de" name="MTV.de" version="3.3.11" provider-name="L0RE">
 
     <requires>
         <import addon="xbmc.python" version="2.19.0"/>

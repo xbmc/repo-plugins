@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.crossroads"
-version="1.0.0"
+version="1.0.1"
 name="Crossroads Church"
 provider-name="CRDS">
 <requires>
@@ -30,11 +30,9 @@ We present biblical truths and show how they apply to our everyday lives. And we
   <assets>
     <icon>icon.png</icon>
     <fanart>fanart.jpg</fanart>
-    <icon>resources\media\pastseries.png</icon>
-    <icon>resources\media\streaming.png</icon>
-    <screenshot>resources\screenshot-01.jpg</screenshot>
-    <screenshot>resources\screenshot-02.jpg</screenshot>
-    <screenshot>resources\screenshot-03.jpg</screenshot>  
+    <screenshot>resources/screenshot-01.jpg</screenshot>
+    <screenshot>resources/screenshot-02.jpg</screenshot>
+    <screenshot>resources/screenshot-03.jpg</screenshot>  
   </assets>
   <news>v1.0.0  (2017-1-27)
 - First version of Crossroads Stream Addon!

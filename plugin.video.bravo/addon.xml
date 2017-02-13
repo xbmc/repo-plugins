@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.bravo"
        name="Bravo"
-       version="3.0.5"
+       version="3.0.6"
        provider-name="t1m">
   <requires>
     <import addon="xbmc.python" version="2.20.0"/>
@@ -13,7 +13,7 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary lang="en">Bravo TV Video Addon</summary>
-    <description lang="en">Bravo TV Video Addon.  On-line episodes added by Chris Prince.</description>
+    <description lang="en">Bravo TV Video Addon.</description>
     <disclaimer lang="en">Feel free to use this script. For information visit the wiki.</disclaimer>
     <platform>all</platform>
     <language>en</language>

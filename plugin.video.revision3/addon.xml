@@ -10,7 +10,7 @@
     <extension point="xbmc.addon.metadata">
         <summary lang="en_GB">Revision3: The Best TV Shows on the Internet</summary>
         <description lang="en_GB">The leading independent free online video service.</description>
-        <language></language>
+        <language>en</language>
         <platform>all</platform>
         <license>GPL-2.0</license>
         <forum>http://forum.kodi.tv/showthread.php?tid=307022</forum>

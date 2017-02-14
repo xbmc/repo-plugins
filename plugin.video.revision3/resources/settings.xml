@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<setting id="format" type="enum" lvalues="32001|32002|32003" label="32000" default="0"/>
+    <setting id="download" type="bool" label="32004" default="false"/>
+    <setting id="downloadPath" type="folder" enable="eq(-1,true)" label="32005" default="" /> 
+    <setting id="folder" type="bool" enable="eq(-2,true)" label="32008" default="true"/>
+</settings>
+

@@ -1,0 +1,203 @@
+# Kodi Media Center language file
+# Addon Name: Revision3
+# Addon id: plugin.video.revision
+# Addon Provider: enen92,stacked
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#This is a comment
+
+msgctxt "#32000"
+msgid "Video Quality"
+msgstr ""
+
+msgctxt "#32001"
+msgid "HD"
+msgstr ""
+
+msgctxt "#32002"
+msgid "High"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Low"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Enable Video Download"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Download Location"
+msgstr ""
+
+msgctxt "#32008"
+msgid "Show Downloads Folder"
+msgstr ""
+
+msgctxt "#32009"
+msgid "No videos found. Please check your spelling"
+msgstr ""
+
+msgctxt "#32010"
+msgid "or try again using different search words."
+msgstr ""
+
+msgctxt "#32011"
+msgid "Please set a Download Location."
+msgstr ""
+
+msgctxt "#32012"
+msgid "Downloads"
+msgstr ""
+
+msgctxt "#32013"
+msgid "Most Recent"
+msgstr ""
+
+msgctxt "#32014"
+msgid "Archived Shows"
+msgstr ""
+
+msgctxt "#32015"
+msgid "Search"
+msgstr ""
+
+msgctxt "#32016"
+msgid "Next Page"
+msgstr ""
+
+msgctxt "#32017"
+msgid "Video Type"
+msgstr ""
+
+msgctxt "#32018"
+msgid "Get the latest episodes across all current Revision3 shows"
+msgstr ""
+
+msgctxt "#32019"
+msgid "Take a step back into the past of Revision3. Watch some of the shows that are no longer in production."
+msgstr ""
+
+msgctxt "#32020"
+msgid "Enter search term."
+msgstr ""
+
+msgctxt "#32021"
+msgid "Enable default view for Confluence skin"
+msgstr ""
+
+msgctxt "#32022"
+msgid "Play downloaded shows"
+msgstr ""
+
+msgctxt "#32023"
+msgid "Featured"
+msgstr ""
+
+msgctxt "#32024"
+msgid "Get a list of episodes chosen to be featured by Revision3"
+msgstr ""
+
+msgctxt "#32025"
+msgid "Lmpzb24/YXBpX2tleT1iMGY2OTZmZjM0M2JlYTUzZGI1NjRiNGY1NGQ0N2YxOTg4OWFiZWFm"
+msgstr ""
+
+msgctxt "#32026"
+msgid "There are no videos available for"
+msgstr ""
+
+msgctxt "#32027"
+msgid "Networks"
+msgstr ""
+
+msgctxt "#32028"
+msgid "Whether you're a gamer, tech enthusiast, or just like to know what's hot right now you can't miss Revision3's newest networks! Tune in for all the best content plus bonus clips you won't see anywhere else."
+msgstr ""
+
+msgctxt "#32029"
+msgid "Please update your Revision3 favorites."
+msgstr ""
+
+msgctxt "#32030"
+msgid "Play All"
+msgstr ""
+
+msgctxt "#32031"
+msgid "Play all episodes on the current page."
+msgstr ""
+
+msgctxt "#32032"
+msgid "Enable Play All option"
+msgstr ""
+
+msgctxt "#32033"
+msgid "Enable Daily/Extra Shows"
+msgstr ""
+
+msgctxt "#32050"
+msgid "There was a connection error:"
+msgstr ""
+
+msgctxt "#32051"
+msgid "If this problem persists, please submit the error report."
+msgstr ""
+
+msgctxt "#32052"
+msgid "Retry"
+msgstr ""
+
+msgctxt "#32053"
+msgid "Quit"
+msgstr ""
+
+msgctxt "#32054"
+msgid "There was an index error."
+msgstr ""
+
+msgctxt "#32055"
+msgid "Delete"
+msgstr ""
+
+msgctxt "#32056"
+msgid "File deleted!"
+msgstr ""
+
+msgctxt "#32057"
+msgid "Not allowed to delete the file!"
+msgstr ""
+
+msgctxt "#32058"
+msgid "Revision3"
+msgstr ""
+
+msgctxt "#32059"
+msgid "Starting download..."
+msgstr ""
+
+msgctxt "#32060"
+msgid "downloaded"
+msgstr ""
+
+msgctxt "#32061"
+msgid "Time left: "
+msgstr ""
+
+msgctxt "#32062"
+msgid "Download"
+msgstr ""
+
+msgctxt "#32063"
+msgid "View info"
+msgstr ""

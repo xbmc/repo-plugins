@@ -1,0 +1,140 @@
+# Kodi Media Center language file
+# Addon Name: Catch-up TV & More
+# Addon id: plugin.video.catchuptvandmore
+# Addon Provider: SylvainCecchetto
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: SylvainCecchetto\n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+# Settings categories (from 30000 to 30009)
+msgctxt "#30000"
+msgid "Main menu"
+msgstr "Menu principal"
+
+msgctxt "#30001"
+msgid "Channels"
+msgstr "Chaînes"
+
+msgctxt "#30002"
+msgid "Quality and content"
+msgstr "Qualité et contenu"
+
+
+# Settings line separators (from 30010 to 30019)
+msgctxt "#30010"
+msgid "Hide main menu categories"
+msgstr "Masquer des catégories du menu principal"
+
+msgctxt "#30011"
+msgid "Hide channels from categories"
+msgstr "Masquer des chaînes des catégories"
+
+
+# Main categories (from 30020 to 30039)
+msgctxt "#30020"
+msgid "French channels"
+msgstr "Chaînes françaises"
+
+msgctxt "#30021"
+msgid "Belgian channels"
+msgstr "Chaînes belges"
+
+
+# Context menu (from 30040 to 30049)
+msgctxt "#30040"
+msgid "Move down"
+msgstr "Descendre"
+
+msgctxt "#30041"
+msgid "Move up"
+msgstr "Monter"
+
+msgctxt "#30042"
+msgid "Hide"
+msgstr "Masquer"
+
+
+# Dialog boxes (from 30050 to 30069)
+msgctxt "#30050"
+msgid "Information"
+msgstr "Information"
+
+msgctxt "#30051"
+msgid "To re-enable hidden items go to the plugin settings"
+msgstr "Pour réactiver les éléments masqués rendez-vous dans les réglages du plugin"
+
+
+# Settings quality and content (from 30070 to 30099)
+msgctxt "#30070"
+msgid "TF1: Show bonus videos"
+msgstr "TF1 : Afficher les vidéos bonus"
+
+msgctxt "#30071"
+msgid "France 2: Video quality"
+msgstr "France 2 : Qualité vidéo"
+
+msgctxt "#30072"
+msgid "France 3: Video quality"
+msgstr "France 3 : Qualité vidéo"
+
+msgctxt "#30073"
+msgid "France 4: Video quality"
+msgstr "France 4 : Qualité vidéo"
+
+msgctxt "#30074"
+msgid "France 5: Video quality"
+msgstr "France 5 : Qualité vidéo"
+
+msgctxt "#30075"
+msgid "France Ô: Video quality"
+msgstr "France Ô : Qualité vidéo"
+
+msgctxt "#30076"
+msgid "M6: Video quality"
+msgstr "M6 : Qualité vidéo"
+
+msgctxt "#30077"
+msgid "W9: Video quality"
+msgstr "W9 : Qualité vidéo"
+
+msgctxt "#30078"
+msgid "6ter: Video quality"
+msgstr "6ter : Qualité vidéo"
+
+msgctxt "#30079"
+msgid "Arte: Video quality"
+msgstr "Arte : Qualité vidéo"
+
+msgctxt "#30080"
+msgid "Arte: Language"
+msgstr "Arte : Langue"
+
+msgctxt "#30081"
+msgid "BFM TV: Video quality"
+msgstr "BFM TV : Qualité vidéo"
+
+
+# Others (from 30100 to 30140)
+msgctxt "#30100"
+msgid "More videos..."
+msgstr "Plus de vidéos..."
+
+msgctxt "#30101"
+msgid "All videos"
+msgstr "Toutes les vidéos"
+
+msgctxt "#30102"
+msgid "DRM protected video"
+msgstr "Vidéo protégée par DRM"
+
+

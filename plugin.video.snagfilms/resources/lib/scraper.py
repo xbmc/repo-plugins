@@ -28,7 +28,7 @@ class myAddon(t1mAddon):
     html = self.getRequest('http://www.snagfilms.com/categories/')
     html = re.compile('Snag.page.data = (.+?);',re.DOTALL).search(html).group(1)
     a = json.loads(html)
-    a = a[4]['data']['items']
+    a = a[5]['data']['items']
     for item in a:
        url  = item['permalink']
        name = item['title']
@@ -41,7 +41,7 @@ class myAddon(t1mAddon):
     html = re.compile('Snag.page.data = (.+?)];',re.DOTALL).search(html).group(1)
     html += ']'
     a = json.loads(html)
-    for b in a[3:]:
+    for b in a[4:]:
       try: c = b['data']['items']
       except: break
       for item in c:
@@ -57,7 +57,7 @@ class myAddon(t1mAddon):
        infoList['Season'] = -1
        infoList['Episode'] = item['no_of_episodes']
        infoList['mediatype'] = 'tvshow'
-       contextMenu = [('Add To Library','XBMC.RunPlugin(%s?mode=DF&url=AL%s)' % (sys.argv[0], url))]
+       contextMenu = [(self.addon.getLocalizedString(30003),'XBMC.RunPlugin(%s?mode=DF&url=AL%s)' % (sys.argv[0], url))]
        ilist = self.addMenuItem(name, 'GE', ilist, url, thumb, fanart, infoList , isFolder=True, cm=contextMenu)
     return(ilist)
 
@@ -141,7 +141,7 @@ class myAddon(t1mAddon):
           thumb  = item['images']['poster']
           fanart = item['images']['landscape']
           infoList['mediatype'] = 'movie'
-          contextMenu = [('Add To Library','XBMC.RunPlugin(%s?mode=DF&url=AM%s)' % (sys.argv[0], url))]
+          contextMenu = [(self.addon.getLocalizedString(30003),'XBMC.RunPlugin(%s?mode=DF&url=AM%s)' % (sys.argv[0], url))]
           ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False, cm=contextMenu)
       return(ilist)
 

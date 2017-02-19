@@ -7,6 +7,7 @@ class StreamInfoResource(ApiResource):
         super(StreamInfoResource, self).__init__(url, apiToken)
                     
     def parse(self):
+        # get stream-url
         super(StreamInfoResource, self).parse()
         priorityList = self.content.get('priorityList')
         priority = priorityList[0]
@@ -22,4 +23,12 @@ class StreamInfoResource(ApiResource):
         track = tracks[0]
         
         self.streamUrl = track.get('uri')
-
+        
+        # get subtitles url
+        self.subTitlesUrl = None
+        captions = self.content.get('captions')
+        for caption in captions:
+            format = caption.get('format')
+            if format is not None and format == 'webvtt':
+                self.subTitlesUrl = caption.get('uri')
+                break

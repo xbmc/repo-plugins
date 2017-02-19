@@ -10,13 +10,16 @@ end of October 2016 and updates of the existing plugin were not yet available my
 *Features*
 - combined search function over multiple result pages
 - optimized for fast HTML parsing of the zdf.de website
+- video sub-titles, if provided on zdf.de 
 
 
 *Compatibility*
 
 This addon was tested with 
 - Kodi 16.1 "Jarvis", Confluence Skin, MacOS
-- Kode 17.0 "Krypton" beta 5, Estouchy Skin, MacOS/Linux 
+- Kodi 17.0 "Krypton" beta 5, Estouchy Skin, MacOS/Linux 
 
+This addon is known to work with
+- XBMC 13.2 "Gotham", see issue #4
 
 Have fun.

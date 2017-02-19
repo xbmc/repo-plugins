@@ -1,7 +1,0 @@
-[B]1.1.0[/B]
-- Fixed trailers (web site change)
-- Fixed podcasts (web site change)
-- Added add-on screenshots
-
-[B]1.0.0[/B]
-- Initial version

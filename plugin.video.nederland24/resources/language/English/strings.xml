@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!--Category-->
+    <string id="30100">Channels</string>
+    <string id="30200">Visual Radio</string>
+    <string id="30300">General</string>
+    <!--Channels-->
+    <string id="30101">NPO 101</string>
+    <string id="30104">NPO Cultura</string>
+    <string id="30105">NPO Zapp Xtra</string>
+    <string id="30109">NPO Nieuws</string>
+    <string id="30110">NPO Politiek</string>
+    <string id="30111">NPO 1</string>
+    <string id="30112">NPO 2</string>
+    <string id="30113">NPO 3</string>
+    <string id="30151">Achtuurjournaal, number of previous episodes</string>
+    <string id="30152">Jeugdjournaal, number of previous episodes</string>
+    <!--Radio-->
+    <string id="30215">NPO Radio 1</string>
+    <string id="30216">NPO Radio 2</string>
+    <string id="30217">NPO 3FM</string>
+    <string id="30218">NPO Radio 4</string>
+    <!--<string id="30219">NPO Radio 5</string>-->
+    <!--<string id="30220">NPO Radio 6</string>-->
+    <string id="30221">NPO FunX</string>
+    <!--Miscellaneous-->
+    <string id="30303">Show subtitled programmes if available</string>
+    <string id="30304">Show Eventchannels</string>
+</strings>

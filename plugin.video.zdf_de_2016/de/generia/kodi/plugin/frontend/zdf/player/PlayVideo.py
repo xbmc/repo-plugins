@@ -70,10 +70,25 @@ class PlayVideo(Pagelet):
                 image = videoContent.image
                 if image is not None:
                     item.setArt({'poster': image, 'banner': image, 'thumb': image, 'icon': image, 'fanart': image})
+
+                # set subtitles
+                self.setSubTitles(item, streamInfo.subTitlesUrl)
                 
                 dialog.update(percent=90, message=self._(32010))
                 self.info("setting resolved url='{1}' ...", url)
                 xbmcplugin.setResolvedUrl(response.handle, True, item)
             finally:
                 dialog.close();
+            
+        
+    def setSubTitles(self, item, subTitlesUrl):            
+        if subTitlesUrl is not None:
+            try:
+                item.addStreamInfo('subtitle', {'language': 'de'})
+                item.setSubtitles([subTitlesUrl])
+                self.info("setting sub-titles-url='{1}' ...", subTitlesUrl)
+            except AttributeError:
+                self.info("no sub-titles supported before Kodi 14.x 'Helix', skipping subtitles ...")
+        else:
+            self.info("no sub-titles-url available in stream-info, skipping subtitles ...")
             

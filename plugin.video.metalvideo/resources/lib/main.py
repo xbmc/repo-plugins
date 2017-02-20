@@ -256,8 +256,12 @@ class PlayVideo(listitem.PlaySource):
 		sourceCode = urlhandler.urlread(plugin["url"], TTL, stripEntity=False)
 		
 		# Look for Youtube Video First
-		try: videoId = [part for part in re.findall('src="(http://www.youtube.com/embed/\S+?)"|file:\s+\'(\S+?)\'', sourceCode)[0] if part][0]
+		search = '<param.+?value=["\'](http[s]*://www.youtube.com/\S+?)["\'].*>|src="(http://www.youtube.com/' \
+				 'embed/\S+?)"|file:\s+\'(\S+?)\''
+		try: videoId = [part for part in re.findall(search, sourceCode)[0] if part][0]
 		except: return None
 		else:
-			if u"metalvideo.com" in videoId: return videoId
-			elif u"youtube.com" in videoId: return self.sourceType(videoId, "youtube_com")
+			if u"metalvideo.com" in videoId:
+				return videoId
+			elif u"youtube.com" in videoId:
+				return self.sourceType(videoId, "youtube_com")

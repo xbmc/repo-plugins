@@ -3,6 +3,7 @@ plugin.video.si
 
 XBMC Addon for Sports Illustrated
 
+Version 3.0.2 website changes
 version 3.0.1 Isengard version - separate scraper
 version 1.4.5 cleanup of brightcove and website changes
 version 1.1.0 initial release

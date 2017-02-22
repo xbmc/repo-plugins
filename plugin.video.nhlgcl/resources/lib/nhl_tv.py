@@ -495,7 +495,6 @@ def fetchStream(game_id, content_id,event_id):
             elif CDN == 'No Preference': break
         except:
             i = i + 1
-            pass
        
 
     if json_source['status_code'] == 1:

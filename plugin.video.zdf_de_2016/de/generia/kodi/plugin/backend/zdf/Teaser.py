@@ -68,7 +68,7 @@ class Teaser(object):
         return "<Teaser '%s' url='%s'>" % (self.title, self.url)
         
 
-    def parse(self, string, pos=0, teaserMatch=None):
+    def parse(self, string, pos=0, baseUrl=None, teaserMatch=None):
         if teaserMatch is None:
             teaserMatch = teaserPattern.search(string, pos)
         if teaserMatch is None:
@@ -83,7 +83,7 @@ class Teaser(object):
         pos = self.parseImage(article, pos)
         pos = self.parseLabel(article, pos)
         pos = self.parseCategory(article, pos)
-        pos = self.parseTitle(article, pos)
+        pos = self.parseTitle(article, pos, baseUrl)
         pos = self.parseText(article, pos)
         pos = self.parseDate(article, pos)
 
@@ -139,7 +139,7 @@ class Teaser(object):
         self.category = stripHtml(category)
         return pos
         
-    def parseTitle(self, article, pos):
+    def parseTitle(self, article, pos, baseUrl):
         aMatch = aPattern.search(article, pos)
         title = None
         url = None
@@ -169,6 +169,8 @@ class Teaser(object):
         self.playable = playable
         self.contentName = None
         if url is not None:
+            if baseUrl is not None and url[0:len(baseUrl)] == baseUrl:
+                self.url = url[len(baseUrl):]
             i = url.rfind('.')
             if i != -1:
                 j = url.rfind('/')

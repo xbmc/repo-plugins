@@ -25,26 +25,26 @@ video_url = {
     '270p': '_mobile.mp4'
 }
 main_menu = ([
-    [30003, 30004, 'lastvids+next', 	'folder',       '/z/17317.html'],   #Broadcasts
+    [30003, 30004, 'lastvids+next', 	'folder',       '/z/17317'],   #Broadcasts
     [30005, 30006, 'tvshows',			'folder',       ''],			    #TV Shows
-    [30007, 30008, 'lastvids+next', 	'folder',       '/z/17192.html'],   #All Videos
-    [30009, 30010, 'lastvids+next', 	'folder',       '/z/17226.html'],   #Daily Shoots
-    [30011, 30012, 'lastvids+next', 	'folder',       '/z/17318.html'],   #Reportages
-    [30013, 30014, 'lastvids+next', 	'folder',       '/z/17319.html'],   #Interviews
+    [30007, 30008, 'lastvids+next', 	'folder',       '/z/17192'],   #All Videos
+    [30009, 30010, 'lastvids+next', 	'folder',       '/z/17226'],   #Daily Shoots
+    [30011, 30012, 'lastvids+next', 	'folder',       '/z/17318'],   #Reportages
+    [30013, 30014, 'lastvids+next', 	'folder',       '/z/17319'],   #Interviews
     [30015, 30016, 'schedule',          'folder',       '/schedule/tv.html#live-now']   # TV Listing
 ])
 tvshows = ([
-    [30031, 30032, 'lastvids+archive',  'olevski',	    '/z/20333.html'],
-    [30033, 30034, 'lastvids+archive',  'nveurope',     '/z/18657.html'],
-    [30035, 30036, 'lastvids+archive',  'nvasia', 	    '/z/17642.html'],
-    [30037, 30038, 'lastvids+archive',  'nvamerica',    '/z/20347.html'],
-    [30039, 30040, 'lastvids+archive',  'oba', 		    '/z/20366.html'],
-    [30041, 30042, 'lastvids+archive',  'itogi', 	    '/z/17499.html'],
-    [30043, 30044, 'lastvids+archive',  'week',		    '/z/17498.html'],
-    [30045, 30046, 'lastvids+archive',  'baltia', 	    '/z/20350.html'],
-    [30047, 30048, 'lastvids+archive',  'bisplan', 	    '/z/20354.html'],
-    [30049, 30050, 'lastvids+archive',  'unknownrus',   '/z/20331.html'],
-    [30051, 30052, 'lastvids+archive',  'guests', 	    '/z/20330.html']
+    [30031, 30032, 'lastvids+archive',  'olevski',	    '/z/20333'],
+    [30033, 30034, 'lastvids+archive',  'nveurope',     '/z/18657'],
+    [30035, 30036, 'lastvids+archive',  'nvasia', 	    '/z/17642'],
+    [30037, 30038, 'lastvids+archive',  'nvamerica',    '/z/20347'],
+    [30039, 30040, 'lastvids+archive',  'oba', 		    '/z/20366'],
+    [30041, 30042, 'lastvids+archive',  'itogi', 	    '/z/17499'],
+    [30043, 30044, 'lastvids+archive',  'week',		    '/z/17498'],
+    [30045, 30046, 'lastvids+archive',  'baltia', 	    '/z/20350'],
+    [30047, 30048, 'lastvids+archive',  'bisplan', 	    '/z/20354'],
+    [30049, 30050, 'lastvids+archive',  'unknownrus',   '/z/20331'],
+    [30051, 30052, 'lastvids+archive',  'guests', 	    '/z/20330']
 ])
 
 NUM_OF_PARALLEL_REQ = 6    #queue size
@@ -109,20 +109,20 @@ def get_video_dir(page):
     try:
         if page is None:
             raise Exception
-        match = re.compile('<a class="html5PlayerImage" href="(.+?)">\n'
-                           '<img src="(.+?)"').findall(page)
-        match_title = re.compile('<meta name="title" content="(.+?)" />').findall(page)
-        match_plot = re.compile('<meta name="description" content="(.+?)" />', re.DOTALL).findall(page)
+        match_url = re.compile('<a class="html5PlayerImage" href="(.+?)"').findall(page)
+        match_img = re.compile('<video poster="(.+?)"').findall(page)
+        match_title = re.compile('<meta name="title" content="(.+?)"').findall(page)
+        match_plot = re.compile('<div class="intro">\n<p>(.+?)</p>', re.DOTALL).findall(page)
         if len(match_plot) < 1:
             match_plot = [' ']
         return {
             'name':     folder_name,
-            'thumb':    make_thumb_url(match[0][1]),
-            'fanart':   make_fanart_url(match[0][1]),
+            'thumb':    make_thumb_url(match_img[0]),
+            'fanart':   make_fanart_url(match_img[0]),
             'mode':     'play',
             'title':    re.sub('&.{0,5};', clean_txt, match_title[0]),
             'plot':     re.sub('&.{0,5};', clean_txt, match_plot[0]),
-            'url':      re.sub('.mp4', video_url[xbmcplugin.getSetting(addon_handle, 'res_video')], match[0][0])
+            'url':      re.sub('.mp4', video_url[xbmcplugin.getSetting(addon_handle, 'res_video')], match_url[0])
         }
     except:
         return None
@@ -226,9 +226,10 @@ try:
 
     ### List videos with NEXT link
     elif mode == 'lastvids+next':
-        page = read_page(site_url + re.sub(r'.html', '/pc30.html', folder_url))
-        match_url = re.compile('<span class="date" >.+</span>\n'
-                           '<a href="(.+?)"').findall(page)
+        page = read_page(site_url + folder_url + '?p=30')
+        match_url = re.compile('</a>\n<div class="content">\n'
+                               '<span class="date" >.+?</span>\n'
+                               '<a href="(.+?)" >\n<h4>\n').findall(page)
 
         queue = Queue.Queue(NUM_OF_PARALLEL_REQ)
         llast = folder_level * MAX_ITEMS_TO_SHOW
@@ -263,8 +264,9 @@ try:
     ### List videos with ARCHIVE link
     elif mode == 'lastvids+archive':
         page = read_page(site_url + folder_url)
-        match_url = re.compile('<span class="date" >.+</span>\n'
-                           '<a href="(.+?)"').findall(page)
+        match_url = re.compile('</a>\n<div class="content">\n'
+                               '<span class="date" >.+?</span>\n'
+                               '<a href="(.+?)" >\n<h4>\n').findall(page)
         queue = Queue.Queue(NUM_OF_PARALLEL_REQ)
         i = 0
         for url in match_url:
@@ -293,7 +295,7 @@ try:
 
     ### List ARCHIVE
     elif mode == 'allvids_archive':
-        page = read_page(site_url + re.sub(r'.html', '/pc1000.html', folder_url))
+        page = read_page(site_url + folder_url + '?p=1000')
         match = re.compile('</a>\n<div class="content">\n'
                            '<span class="date" >(.+?)</span>\n'
                            '<a href="(.+?)" >\n<h4>\n').findall(page)

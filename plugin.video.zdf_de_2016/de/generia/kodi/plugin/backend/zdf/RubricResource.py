@@ -94,7 +94,7 @@ class RubricResource(HtmlResource):
             teaser = Teaser()
             p = teaser.parseLabel(item, 0)
             p = teaser.parseCategory(item, p)
-            p = teaser.parseTitle(item, p)
+            p = teaser.parseTitle(item, p, self._getBaseUrl())
             p = teaser.parseText(item, p, moduleItemTextPattern)
             p = teaser.parseDate(item, p, moduleItemDatePattern)
             if teaser.valid():
@@ -112,12 +112,12 @@ class RubricResource(HtmlResource):
         titleMatch = titlePattern.search(self.content, pos)
         cluster = None
         title = fallbackTitle
-        if titleMatch is not None:
-            title = stripHtml(titleMatch.group(1))
-            pos = titleMatch.end(0)
-        elif class_.find('x-notitle') != -1:
+        if class_.find('x-notitle') != -1:
             if len(self.clusters) > 0:
                 cluster = self.clusters[len(self.clusters)-1]
+        elif titleMatch is not None:
+            title = stripHtml(titleMatch.group(1))
+            pos = titleMatch.end(0)
 
         if cluster is None:
             cluster = Cluster(title, listType, pos)
@@ -139,8 +139,10 @@ class RubricResource(HtmlResource):
         itemMatch = itemPattern.search(self.content, pos)
         while pos < cluster.listEnd and itemMatch is not None:
             teaser = Teaser()
-            pos = teaser.parse(self.content, pos, itemMatch)
+            pos = teaser.parse(self.content, pos, self._getBaseUrl(), itemMatch)
             if teaser.valid():
                 cluster.teasers.append(teaser)
 
             itemMatch = itemPattern.search(self.content, pos)
+            if itemMatch is not None:
+                pos = itemMatch.start(0)

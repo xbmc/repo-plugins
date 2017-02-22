@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-	<setting type="lsep" label="32201" />
-	<setting id="wowtv.email" type="text" label="32202" default="" />
-	<setting id="wowtv.password" type="text" option="hidden" label="32203" default="" />
-	<setting type="lsep" label="[CR]" />
-	<setting type="lsep" label="32204" />
-	<setting type="lsep" label="32205" />
-</settings>

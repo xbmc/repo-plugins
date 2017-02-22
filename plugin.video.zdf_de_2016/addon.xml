@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.zdf_de_2016" name="ZDF Mediathek 2016" version="1.0.1" provider-name="Generia">
+<addon id="plugin.video.zdf_de_2016" name="ZDF Mediathek 2016" version="1.0.3" provider-name="Generia">
   <requires>
-    <import addon="xbmc.python" version="2.24.0"/>
+    <import addon="xbmc.python" version="2.14.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
@@ -25,6 +25,15 @@ Siehe auch https://github.com/generia/plugin.video.zdf_de_2016
 	<website>http://www.zdf.de</website>
     <platform>all</platform>
     <news>
+1.0.3 (2017-02-19)
+- provide sub-titles for video, if available on zdf.de (see https://github.com/generia/plugin.video.zdf_de_2016/issues/3)
+- Gotham support, lowered xbmc.python version to '2.14.0' (see https://github.com/generia/plugin.video.zdf_de_2016/issues/4)
+
+1.0.2 (2017-01-28)
+- fix for github issue#2 ('Meistgesehen' is empty) after ZDF website update
+- make sure that search-history store-path exists
+- minor fixes for parsing teaser-lists
+
 1.0.1 (2016-12-03)
 - added rubrics: Live-TV, Shows A-Z
 - added search history
@@ -40,6 +49,7 @@ Siehe auch https://github.com/generia/plugin.video.zdf_de_2016
         <icon>icon.png</icon>
         <fanart>fanart.png</fanart>
         <screenshot>icon.png</screenshot>
+        <screenshot>icon-mm.png</screenshot>
     </assets>
   </extension>
 </addon>

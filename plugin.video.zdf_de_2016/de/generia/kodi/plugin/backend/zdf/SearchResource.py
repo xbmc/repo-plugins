@@ -34,7 +34,7 @@ class SearchResource(HtmlResource):
         while pos != -1:
             teaser = Teaser()
             prevPos = pos
-            pos = teaser.parse(self.content, pos)
+            pos = teaser.parse(self.content, pos, self._getBaseUrl())
             if teaser.valid():
                 self.teasers.append(teaser)
         

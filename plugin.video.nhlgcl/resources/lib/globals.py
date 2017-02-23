@@ -4,7 +4,7 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 import re, os, time
 import calendar
 import pytz
-import urllib, urllib2
+import urllib, urllib2, ssl
 import json
 import cookielib
 import time
@@ -13,6 +13,9 @@ from datetime import date, datetime, timedelta
 from urllib2 import URLError, HTTPError
 #from PIL import Image
 from cStringIO import StringIO
+
+#Disable all verification for https calls
+ssl._create_default_https_context = ssl._create_unverified_context
 
 addon_handle = int(sys.argv[1])
 
@@ -59,8 +62,8 @@ ROOTDIR = xbmcaddon.Addon(id='plugin.video.nhlgcl').getAddonInfo('path')
 #Images
 ICON = ROOTDIR+"/icon.png"
 FANART = ROOTDIR+"/fanart.jpg"
-#PREV_ICON = ROOTDIR+"/resources/images/prev.png"
-#NEXT_ICON = ROOTDIR+"/resources/images/next.png"
+#PREV_ICON = ROOTDIR+"/resources/media/prev.png"
+#NEXT_ICON = ROOTDIR+"/resources/media/next.png"
 PREV_ICON = ROOTDIR+"/icon.png"
 NEXT_ICON = ROOTDIR+"/icon.png"
 
@@ -77,9 +80,9 @@ PLATFORM = "IPHONE"
 UA_GCL = 'NHL1415/5.0925 CFNetwork/711.4.6 Darwin/14.0.0'
 UA_IPHONE = 'Mozilla/5.0 (iPhone; CPU iPhone OS 8_4 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12H143 iphone nhl 5.0925'
 UA_IPAD = 'Mozilla/5.0 (iPad; CPU OS 8_4 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12H143 ipad nhl 5.0925'
-UA_NHL = 'NHL/2542 CFNetwork/758.2.8 Darwin/15.0.0'
+UA_NHL = 'NHL/8486 CFNetwork/808.3 Darwin/16.3.0'
 UA_PC = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36'
-UA_PS4 = 'PS4Application libhttp/1.000 (PS4) libhttp/3.15 (PlayStation 4)'
+UA_PS4 = 'PS4Application libhttp/1.000 (PS4) libhttp/4.07 (PlayStation 4)'
 
 #Playlists
 RECAP_PLAYLIST = xbmc.PlayList(0)
@@ -352,7 +355,7 @@ def getFavTeamId():
 
 def getGameIcon(home,away):
     #Check if game image already exists
-    image_path = ROOTDIR+'/resources/images/'+away.lower()+'vs'+home.lower()+'.png'
+    image_path = ROOTDIR+'/resources/media/'+away.lower()+'vs'+home.lower()+'.png'
     file_name = os.path.join(image_path)
     if not os.path.isfile(file_name):
         image_path = ICON
@@ -449,7 +452,7 @@ def getThumbnails():
             if (progress.iscanceled()): break
         
             if home_team != away_team:
-                image_path = ROOTDIR+'/resources/images/'+away_team+'vs'+home_team+'.png'
+                image_path = ROOTDIR+'/resources/media/'+away_team+'vs'+home_team+'.png'
                 #bg =  Image.open(ROOTDIR+'/resources/bg_dark.png')
                 bg = Image.new('RGB', (400,225), (255,255,255))
 

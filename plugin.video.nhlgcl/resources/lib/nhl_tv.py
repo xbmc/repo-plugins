@@ -495,12 +495,11 @@ def fetchStream(game_id, content_id,event_id):
             elif CDN == 'No Preference': break
         except:
             i = i + 1
-            pass
        
 
     if json_source['status_code'] == 1:
         if json_source['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['blackout_status']['status'] == 'BlackedOutStatus':
-            msg = "You do not have access to view this content. To watch live games and learn more about blackout restrictions, please visit NHL.TV"
+            msg = "The game you are trying to access is not currently available due to local or national blackout restrictions.\n Full game archives will be available 48 hours after completion of this game."
             dialog = xbmcgui.Dialog() 
             ok = dialog.ok('Game Blacked Out', msg) 
             sys.exit()
@@ -551,7 +550,7 @@ def getSessionKey(game_id,event_id,content_id,authorization):
         xbmc.log("REQUESTED SESSION KEY")
         if json_source['status_code'] == 1:      
             if json_source['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['blackout_status']['status'] == 'BlackedOutStatus':
-                msg = "You do not have access to view this content. To watch live games and learn more about blackout restrictions, please visit NHL.TV"
+                msg = "The game you are trying to access is not currently available due to local or national blackout restrictions.\n Full game archives will be available 48 hours after completion of this game."
                 session_key = 'blackout'
             else:    
                 session_key = str(json_source['session_key'])
@@ -838,10 +837,12 @@ def gotoDate():
     else:
         sys.exit()
 
-def nhlVideos():    
-    url = 'http://nhl.bamcontent.com/nhl/en/section/v1/video/nhl/ios-tablet-v1.json'    
+def nhlVideos(selected_topic=None):    
+    #url = 'http://nhl.bamcontent.com/nhl/en/section/v1/video/nhl/ios-tablet-v1.json'    
+    url = 'http://nhl.bamcontent.com/nhl/en/nav/v1/video/connectedDevices/nhl/playstation-v1.json'
     req = urllib2.Request(url)   
-    req.add_header('User-Agent', UA_IPAD)
+    #req.add_header('User-Agent', UA_IPAD)
+    req.add_header('User-Agent', UA_PS4)
     
     try:    
         response = urllib2.urlopen(req)    
@@ -849,134 +850,33 @@ def nhlVideos():
         response.close()                
     except HTTPError as e:
         xbmc.log('The server couldn\'t fulfill the request.')
-        xbmc.log('Error code: ', e.code)
+        xbmc.log('Error code: ', e.code)    
         sys.exit()
-    
-    for video in json_source['videosLongList']:
-        title = video['headline']
-        name = title
-        icon = video['image']['1136x640']
-        url = video['mediaPlaybackURL']
-        desc = video['blurb']
-        release_date = video['date'][0:10]
-        duration = video['duration']
-
-        bandwidth = find(QUALITY,'(',' kbps)')
-        if bandwidth != '':
-            url = url.replace('master_tablet60.m3u8', 'asset_'+bandwidth+'k.m3u8')
-        url = url + '|User-Agent='+UA_IPAD
-
-        audio_info, video_info = getAudioVideoInfo()
-        info = {'plot':desc,'tvshowtitle':'NHL','title':name,'originaltitle':name,'duration':'','aired':release_date}
-        addLink(name,url,title,icon,info,video_info,audio_info,icon)
 
     
-params=get_params()
-url=None
-name=None
-mode=None
-game_day=None
-game_id=None
-epg=None
-teams_stream=None
-stream_date=None
+    if selected_topic == None or 'topic=' not in selected_topic:
+        for topic in json_source['topics']:
+            addDir(topic['title'],'/topic='+topic['title']+'&',300,ICON,FANART)
+    else:
+        topic = find(selected_topic,'topic=','&')
 
-try:
-    url=urllib.unquote_plus(params["url"])
-except:
-    pass
-try:
-    name=urllib.unquote_plus(params["name"])
-except:
-    pass
-try:
-    mode=int(params["mode"])
-except:
-    pass
-try:
-    game_day=urllib.unquote_plus(params["game_day"])
-except:    
-    pass
-try:
-    game_id=urllib.unquote_plus(params["game_id"])
-except:
-    pass
-try:
-    epg=urllib.unquote_plus(params["epg"])
-except:
-    pass
-try:
-    teams_stream=urllib.unquote_plus(params["teams_stream"])
-except:
-    pass
-try:
-    stream_date=urllib.unquote_plus(params["stream_date"])
-except:
-    pass
+        for main_topic in json_source['topics']:
+            if topic == main_topic['title']:
+                for video in main_topic['list']:
+                    title = video['title']
+                    name = title
+                    icon = video['image']['cuts']['1136x640']['src']
+                    url = video['playbacks'][4]['url']
+                    desc = video['description']
+                    release_date = video['date'][0:10]
+                    duration = video['duration']
 
+                    bandwidth = find(QUALITY,'(',' kbps)')
+                    if bandwidth != '':
+                        url = url.replace('master_wired60.m3u8', 'asset_'+bandwidth+'k.m3u8')
+                    url = url + '|User-Agent='+UA_PS4
 
-xbmc.log("Mode: "+str(mode))
-#xbmc.log("URL: "+str(url))
-xbmc.log("Name: "+str(name))
+                    audio_info, video_info = getAudioVideoInfo()
+                    info = {'plot':desc,'tvshowtitle':'NHL','title':name,'originaltitle':name,'duration':'','aired':release_date}
+                    addLink(name,url,title,icon,info,video_info,audio_info,icon)
 
-
-
-if mode==None or url==None:        
-    categories()  
-
-elif mode == 100:      
-    #Todays Games            
-    todaysGames(None)
-
-elif mode == 101:
-    #Prev and Next 
-    todaysGames(game_day)    
-
-elif mode == 104:    
-    streamSelect(game_id, epg, teams_stream, stream_date)
-
-elif mode == 105:
-    #Yesterday's Games
-    game_day = localToEastern()
-    display_day = stringToDate(game_day, "%Y-%m-%d")            
-    prev_day = display_day - timedelta(days=1)                
-    todaysGames(prev_day.strftime("%Y-%m-%d"))
-
-elif mode == 200:    
-    gotoDate()
-
-elif mode == 300:
-    nhlVideos()
-
-elif mode == 400:    
-    logout('true')
-
-elif mode == 500:
-    myTeamsGames()
-
-elif mode == 510:
-    playTodaysFavoriteTeam()
-
-elif mode == 515:    
-    getThumbnails()
-
-elif mode == 900:
-    playAllHighlights()
-
-elif mode == 999:
-    sys.exit()
-
-xbmc.log(str(mode))
-if mode==100 or mode==101 or mode==104 or mode==105 or mode==200 or mode==300 or mode==500 or mode==510: 
-    setViewMode()
-elif mode==None:
-    getViewMode()
-    
-xbmc.log("My view mode " + VIEW_MODE)
-
-if mode == 100:
-    xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
-elif mode == 101 or mode == 500 or mode == 501 or mode == 510:
-    xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False, updateListing=True)
-else:
-    xbmcplugin.endOfDirectory(addon_handle)

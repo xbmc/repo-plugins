@@ -1,4 +1,10 @@
-2016.1.24
+2017.2.22
+- Added Classic Games Section under Featured Videos
+- Renamed "No Spoilers" to "Hide Scores"
+- Bumped the xbmc.python version
+- Restructered the addon as per the Kodi addon structure wiki
+
+2017.1.24
 - Updated addon icon and fanart images
 - Updated favorite team image
 - Added player mugshot to goal notifications

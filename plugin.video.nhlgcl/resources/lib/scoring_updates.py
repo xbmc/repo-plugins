@@ -175,21 +175,26 @@ def startScoringUpdates():
                             
 
 
-                            #Highlight score of the winning team
+                            
+                            notify_mode = ''
                             if new_item[5].upper().find('FINAL') != -1:
+                                #Highlight score of the winning team
+                                notify_mode = 'final'
                                 title = 'Final Score'
                                 if int(ascore) > int(hscore):
                                     message = '[COLOR='+SCORE_COLOR+']' + ateam + ' ' + ascore + '[/COLOR]    ' + hteam + ' ' + hscore + '    [COLOR='+GAMETIME_COLOR+']' + gameclock + '[/COLOR]'
                                 else:
                                     message = ateam + ' ' + ascore + '    [COLOR='+SCORE_COLOR+']' + hteam + ' ' + hscore + '[/COLOR]    [COLOR='+GAMETIME_COLOR+']' + gameclock  + '[/COLOR]'
 
-                            elif new_item[6] != old_item[6]:                                    
+                            elif new_item[6] != old_item[6]:
                                 #Notify user that the game has started / period has changed
+                                notify_mode = 'game'
                                 title = "Game Update"
                                 message = ateam + ' ' + ascore + '    ' + hteam + ' ' + hscore + '   [COLOR='+GAMETIME_COLOR+']' + current_period + ' has started[/COLOR]'
                             
                             else:                                                                
-                                #Highlight if changed
+                                #Highlight score for the team that just scored a goal
+                                notify_mode = 'score'
                                 if new_item[3] != old_item[3]: ascore = '[COLOR='+SCORE_COLOR+']'+new_item[3]+'[/COLOR]'                                                                
                                 if new_item[4] != old_item[4]: hscore = '[COLOR='+SCORE_COLOR+']'+new_item[4]+'[/COLOR]'
                                                                 
@@ -204,7 +209,7 @@ def startScoringUpdates():
                                 dialog = xbmcgui.Dialog()
                                 img = nhl_logo
                                 #Get goal scorers head shot if notification is a score update
-                                if ADDON.getSetting(id="goal_desc") == 'true' and (new_item[3] != old_item[3] or new_item[4] != old_item[4]) and headshot != '': img = headshot
+                                if ADDON.getSetting(id="goal_desc") == 'true' and notify_mode == 'score' and headshot != '': img = headshot
                                 dialog.notification(title, message, img, display_milliseconds, False)
                                 sleep(display_seconds+5)
 

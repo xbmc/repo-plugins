@@ -1,3 +1,6 @@
+2017.2.24
+- Patched bug released in previous version that affected Kodi 16.x users
+
 2017.2.22
 - Added Classic Games Section under Featured Videos
 - Renamed "No Spoilers" to "Hide Scores"

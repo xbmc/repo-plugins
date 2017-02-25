@@ -1,6 +1,6 @@
 import os, sys, xbmcgui, xbmcplugin, xbmcaddon, json
 import httplib
-
+import urllib2
 from resources.lib.modules import logon
 from resources.lib.modules import type1
 from urlparse import parse_qsl
@@ -13,13 +13,15 @@ _url = sys.argv[0]
 __language__ = addon.getLocalizedString
 xbmcplugin.setContent(_handle, 'tvshows')
 addon_folder = os.path.join(xbmc.translatePath( "special://profile/addon_data/" ), PLUGIN_ID)
-
+changelog = os.path.join(xbmc.translatePath( "special://home/addons/" ), PLUGIN_ID + "/changelog.txt")
 settings = xbmcaddon.Addon(id=PLUGIN_ID)
 user_name = settings.getSetting("username")
 user_pwd = settings.getSetting("password")
 
 cookie = {}
 
+murder_url        = "/category/murder-with-friends/"
+murder_thumb      = "murder.jpg"
 ap_url            = "/category/membership/aggressive-progressives-membership/"
 ap_thumb          = "ap.png"
 hour1_url         = "/category/membership/main-show-hour-1/"
@@ -68,7 +70,7 @@ members_cat = {"Hour 1":            {"url":hour1_url, "thumb":hour1_thumb, "type
                "Post Game":         {"url":pg_url, "thumb":pg_thumb, "type":"members"},
                "Old School":        {"url":oldschool_url, "thumb":oldschool_thumb, "type":"members"},
                "TYT Classics":      {"url":tytclassics_url, "thumb":tytclassics_thumb, "type":"members"},
-               "All Star Tuesdays": {"url":allstar_url, "thumb":allstar_thumb, "type":"members"},
+               "Murder with Friends": {"url":murder_url, "thumb":murder_thumb, "type":"members"},
                "Special Events":    {"url":special_events_url, "thumb":special_events_thumb, "type":"members"},
                "Members LIVE show": {"url":members_live_url, "thumb":members_live_thumb, "type":"members_live"},
                "Behind The Scenes": {"url":bts_url, "thumb":bts_thumb, "type":"members"}}
@@ -89,12 +91,17 @@ main_cat = {   "Members Only":      {"menu":"members", "thumb":hour1_thumb, "typ
 menus = {"main":main_cat,"members":members_cat}
 
 def show_changelog():
-  with open(settings.getAddonInfo('changelog')) as f:
+  #with open(settings.getAddonInfo('changelog')) as f:
+  with open(changelog) as f:
     text = f.read()
   dialog = xbmcgui.Dialog()
   label = '%s - %s' % (xbmc.getLocalizedString(24054), settings.getAddonInfo('name'))
   dialog.textviewer(label, text)
 
+def jw_website(page):
+  f = urllib2.urlopen(page)
+  return f.read()
+  
 def sendResponse(cookies, pagename): 
   conn = httplib.HTTPSConnection("tytnetwork.com")
   conn.request("GET", pagename, "", cookies)
@@ -236,7 +243,11 @@ def router(paramstring):
       page = sendResponse(cookie,vid)
       video_url = type1.get_video(page)
       if video_url is not None:
-        play_video(type1.get_video(sendResponse(cookie, vid)))
+        #play_video(type1.get_video(sendResponse(cookie, vid)))
+        if video_url[0] == "/":
+          page = jw_website("http:" + video_url)
+          video_url = type1.get_jw(page)
+        play_video(video_url)
       else:
         popup(__language__(30004)) # "Video doesn't exist on website."
   else:

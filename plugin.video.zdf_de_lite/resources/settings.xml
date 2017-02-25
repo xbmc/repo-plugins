@@ -1,0 +1,8 @@
+<settings>
+	<setting id="subtitle" type="bool" label="30300" default="false"/>
+	<!--<setting id="description" type="bool" label="30201" default="false"/>
+	<setting id="debug" type="bool" label="30200" default="false"/>
+	<setting id="back_hidden" type="bool" label="30202" default="false"/>
+	<setting id="firstrun" option="hidden" type="bool" visible="false" default="true" />
+	<setting id="view" type="enum" lvalues="30211|30212|30213|30214|30215" label="30210" default="0" />-->
+</settings>

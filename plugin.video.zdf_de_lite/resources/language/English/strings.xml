@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<!-- Category strings -->
+	<string id="30001">Next Site</string>
+
+	<string id="30002">Search</string>
+	<string id="30003">Team channels</string>
+	<string id="30004">Watch the latest videos of you favourite team</string>
+
+	<string id="30100">This month</string>
+	<string id="30101">January</string>
+	<string id="30102">February</string>
+	<string id="30103">March</string>
+	<string id="30104">April</string>
+	<string id="30105">May</string>
+	<string id="30106">June</string>
+	<string id="30107">July</string>
+	<string id="30108">August</string>
+	<string id="30109">September</string>
+	<string id="30110">October</string>
+	<string id="30111">November</string>
+	<string id="30112">December</string>
+
+	
+	<!-- Plugin settings strings -->
+	<string id="30200">Debug</string>
+	<string id="30201">Add Description to title</string>
+	
+	<string id="30202">Back button hidden</string>
+
+	<string id="30210">View mode presets</string>
+	<string id="30211">Confluence 1</string>
+	<string id="30212">Confluence 2</string>
+	<string id="30213">Confluence 3</string>
+	<string id="30214">Aeon MQ 1</string>
+	<string id="30215">Default</string>
+	
+	
+	<string id="30300">Enable subtitles</string>
+
+	
+	<!-- messages -->
+</strings>

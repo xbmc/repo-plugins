@@ -1,0 +1,7 @@
+3.1.0
+- Integrated the libZdf for now
+- Added a proper description of the add-on
+3.0.1
+- Added subtitle option
+3.0.0
+- Re-release

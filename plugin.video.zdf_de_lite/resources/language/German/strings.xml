@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<!-- Category strings -->
+	<string id="30001">Nächste Seite</string>
+
+	<string id="30002">Suche</string>
+
+	<string id="30100">Dieser Monat</string>
+	<string id="30101">Januar</string>
+	<string id="30102">Februar</string>
+	<string id="30103">März</string>
+	<string id="30104">April</string>
+	<string id="30105">Mai</string>
+	<string id="30106">Juni</string>
+	<string id="30107">Juli</string>
+	<string id="30108">August</string>
+	<string id="30109">September</string>
+	<string id="30110">Oktober</string>
+	<string id="30111">November</string>
+	<string id="30112">Dezember</string>
+
+	
+	<!-- Plugin settings strings -->
+	<string id="30200">Debug</string>
+	<string id="30201">Beschreibung zu Titel hinzufügen</string>
+
+
+	<string id="30300">Untertitel</string>	
+	<!-- messages -->
+</strings>

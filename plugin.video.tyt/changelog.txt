@@ -1,3 +1,8 @@
+[B]2.1.0[/B]
+- Fixed to work with Kodi v17
+- Added support to TYT's new JWplayer method of video hosting
+- Fixed bug that sometimes required opening a video multiple times before it was viewable.
+- Added Murder with Friends, removed allstar Tuesday
 [B]2.0.4[/B]
 - Updated URL for All Star Tuesdays and Old School
 - Added Members TYT Live

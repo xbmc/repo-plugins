@@ -4,14 +4,17 @@ def popup(text):
   xbmcgui.Dialog().ok('plugin.video.tyt', text)
 
 def get_video(html_page):
-
-  try:
-    match = re.compile("<div id='premium-video'.+?src='(.+?)' type", re.DOTALL).findall(html_page)
-  except:
+  match = re.compile("<div id='premium-video'.+?src='(.+?)' type", re.DOTALL).findall(html_page)
+  if not match:
     match = re.compile('<div id="premium-video".+?src="(.+?)" type', re.DOTALL).findall(html_page)
-    
+  if not match:
+    match = re.compile('<script src="(.+?)"></script', re.DOTALL).findall(html_page)      
   for link in match: return link 
     
+def get_jw(html_page):
+  match = re.compile('406p.+?"file": "(.+?)",\n          "height": 720', re.DOTALL).findall(html_page)  
+  for link in match: return "http:" + link
+
 def get_links(html_page):
   videos = []
   info = re.compile('<header class="entry-header.+?href="(.+?)".+?title="Permalink to: "(.+?)".+?datetime="(.+?)T.+?<p>(.+?)<',re.DOTALL).findall(html_page)

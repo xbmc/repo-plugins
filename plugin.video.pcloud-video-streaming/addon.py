@@ -87,75 +87,92 @@ mode = args.get("mode", None)
 if mode is None:
 	mode = [ "folder" ]
 	
-if mode[0] == "folder":
+if mode[0] in ("folder", "myshares"):
 	if IsAuthMissing():
 		authResult = AuthenticateToPCloud()
 		if authResult == False:
 			exit()
-	folderID = args.get("folderID", None)
-	if folderID is None:
-		# if starting up, retrieve last used folder ID from settings (default is 0, which is the root folder)
-		folderID = int(myAddon.getSetting("lastUsedFolderID"))
+	if mode[0] == "folder":
+		isMyShares = False
+		folderID = args.get("folderID", None)
+		if folderID is None:
+			# if starting up, retrieve last used folder ID from settings (default is 0, which is the root folder)
+			folderID = int(myAddon.getSetting("lastUsedFolderID"))
+		else:
+			folderID = int(folderID[0])
 	else:
-		folderID = int(folderID[0])
+		# If mode is "myshares", there's no folder ID
+		isMyShares = True
+		folderID = None
+		
 	try:
-		folderContents = pcloud.ListFolderContents(folderID)
+		folderContents = pcloud.ListFolderContents(folderID, isMyShares)
 	except LoginFailedException as lfEx:
 		authResult = AuthenticateToPCloud()
 		if authResult == False:
 			exit()
 		# try again
-		folderContents = pcloud.ListFolderContents(folderID)
+		folderContents = pcloud.ListFolderContents(folderID, isMyShares)
 	
 	# Collect all file IDs in order to get thhumbnails
-	allFileIDs = [ oneItem["fileid"] for oneItem in folderContents["metadata"]["contents"] if not oneItem["isfolder"] ]
+	if not isMyShares:
+		allFileIDs = [ oneItem["fileid"] for oneItem in folderContents["metadata"]["contents"] if not oneItem["isfolder"] ]
+		allFileAndFolderItems = folderContents["metadata"]["contents"]
+	else:
+		allFileIDs = [ oneItem["metadata"]["fileid"] for oneItem in folderContents["publinks"] if not oneItem["metadata"]["isfolder"] ]
+		allFileAndFolderItems = folderContents["publinks"]
 	thumbs = pcloud.GetThumbnails(allFileIDs)
 	# Then iterate through all the files in order to populate the GUI
-	for oneItem in folderContents["metadata"]["contents"]:
-		if oneItem["isfolder"] == True:
-			li = xbmcgui.ListItem(oneItem["name"], iconImage='DefaultFolder.png')
+	
+	for oneItem in allFileAndFolderItems:
+		if not isMyShares:
+			oneFileOrFolderItem = oneItem
+		else:
+			oneFileOrFolderItem = oneItem["metadata"]
+		if oneFileOrFolderItem["isfolder"]:
+			li = xbmcgui.ListItem(oneFileOrFolderItem["name"], iconImage='DefaultFolder.png')
 			# Add context menu item for "delete folder"
 			deleteActionMenuText = myAddon.getLocalizedString(30114) # "Delete from PCloud..."
-			deleteActionUrl = base_url + "?mode=delete&folderID=" + `oneItem["folderid"]` + "&filename=" + urllib.quote(oneItem["name"].encode("utf-8"))
+			deleteActionUrl = base_url + "?mode=delete&folderID=" + `oneFileOrFolderItem["folderid"]` + "&filename=" + urllib.quote(oneFileOrFolderItem["name"].encode("utf-8"))
 			li.addContextMenuItems(
 				[(deleteActionMenuText, "RunPlugin(" + deleteActionUrl + ")")])
 			# Finally add the list item to the directory
-			url = base_url + "?mode=folder&folderID=" + `oneItem["folderid"]`
+			url = base_url + "?mode=folder&folderID=" + `oneFileOrFolderItem["folderid"]`
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
 									listitem=li, isFolder=True)
 		else:
-			contentType = oneItem["contenttype"]
+			contentType = oneFileOrFolderItem["contenttype"]
 			xbmc.log ("contentType is: ")
 			xbmc.log (contentType)
 			if not contentType.startswith("video/"
 				) and not contentType.startswith("audio/"
 				) and not contentType.startswith("application/x-iso9660-image"):
 				continue
-			thumbnailUrl = thumbs.get(oneItem["fileid"], None)
+			thumbnailUrl = thumbs.get(oneFileOrFolderItem["fileid"], None)
 			if thumbnailUrl is None:
 				if contentType[:6] == "video/":
 					thumbnailUrl = "DefaultVideo.png"
 				elif contentType[:6] == "audio/":
 					thumbnailUrl = "DefaultAlbumCover.png"
-			li = xbmcgui.ListItem(oneItem["name"], iconImage=thumbnailUrl)
+			li = xbmcgui.ListItem(oneFileOrFolderItem["name"], iconImage=thumbnailUrl)
 			if contentType[:6] == "video/":
 				li.addStreamInfo(
 					"video", 
-					{ 	"duration": int(float(oneItem["duration"])),
-						"codec": oneItem["videocodec"],
-						"width": oneItem["width"],
-						"height": oneItem["height"]
+					{ 	"duration": int(float(oneFileOrFolderItem["duration"])),
+						"codec": oneFileOrFolderItem["videocodec"],
+						"width": oneFileOrFolderItem["width"],
+						"height": oneFileOrFolderItem["height"]
 					}
 				)
 				li.addStreamInfo(
 					"audio",
-					{ "codec": oneItem["audiocodec"] }
+					{ "codec": oneFileOrFolderItem["audiocodec"] }
 				)
 			# The below is necessary in order for xbmcplugin.setResolvedUrl() to work properly
 			li.setProperty("IsPlayable", "true")
 			# Add context menu item for delete file
 			deleteActionMenuText = myAddon.getLocalizedString(30114) # "Delete from PCloud..."
-			deleteActionUrl = base_url + "?mode=delete&fileID=" + `oneItem["fileid"]` + "&filename=" + urllib.quote(oneItem["name"].encode("utf-8"))
+			deleteActionUrl = base_url + "?mode=delete&fileID=" + `oneFileOrFolderItem["fileid"]` + "&filename=" + urllib.quote(oneFileOrFolderItem["name"].encode("utf-8"))
 			# Add context menu item for mark as watched
 			markAsWatchedMenuText = myAddon.getLocalizedString(30121) # "Mark as watched"
 			li.addContextMenuItems(
@@ -163,16 +180,36 @@ if mode[0] == "folder":
 				(markAsWatchedMenuText, "Action(ToggleWatched)")]
 				)
 			# Finally add the list item to the directory
-			fileUrl = base_url + "?mode=file&fileID=" + `oneItem["fileid"]`
+			fileUrl = base_url + "?mode=file&fileID=" + `oneFileOrFolderItem["fileid"]`
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=fileUrl, listitem=li)
-	# now add "go up one level" fake directory, unless we're in the root folder
-	if folderContents["metadata"].has_key("parentfolderid"):
-		parentFolderID = folderContents["metadata"]["parentfolderid"]
-		url = base_url + "?mode=folder&folderID=" + `parentFolderID`
-		# "Back to parent folder"
-		parentFolderText = myAddon.getLocalizedString(30113)
+	
+	# Now add the "virtual" entries ("go to parent folder", "my shares", and "go to root folder") where necessary
+	if not isMyShares:
+		thisIsTheRootFolder = not folderContents["metadata"].has_key("parentfolderid")
+		if thisIsTheRootFolder:
+			# In the root folder, add the virtual "My Shares" folder
+			url = base_url + "?mode=myshares"
+			# "My Shares" (in a different color)
+			mySharesFolderText = "[COLOR blue]{0}[/COLOR]".format(myAddon.getLocalizedString(30122))
+			li = xbmcgui.ListItem(mySharesFolderText, iconImage="DefaultFolder.png")
+			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
+		else:
+			# now add "go up one level" fake directory if we're NOT in the root folder
+			parentFolderID = folderContents["metadata"]["parentfolderid"]
+			url = base_url + "?mode=folder&folderID=" + `parentFolderID`
+			# "Back to parent folder"
+			parentFolderText = myAddon.getLocalizedString(30113)
+			li = xbmcgui.ListItem(parentFolderText, iconImage="DefaultFolder.png")
+			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
+	else:
+		# if we're in the "My Shares" folder, add "go to my pCloud (root folder)" virtual directory
+		rootFolderID = 0
+		url = base_url + "?mode=folder&folderID={0}".format(rootFolderID)
+		# "Back to My pCloud"
+		parentFolderText = myAddon.getLocalizedString(30123)
 		li = xbmcgui.ListItem(parentFolderText, iconImage="DefaultFolder.png")
 		xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
+	
 	xbmcplugin.endOfDirectory(addon_handle)
 	myAddon.setSetting("lastUsedFolderID", `folderID`)
 	

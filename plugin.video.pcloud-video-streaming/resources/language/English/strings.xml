@@ -22,4 +22,7 @@
   <string id="30119">Error during delete (see log)</string>
   <string id="30120">ERROR: cannot delete file or folder from PCloud</string>
   <string id="30121">Mark as watched</string>
+  <string id="30122">My Shares</string>
+  <string id="30123">Back to My pCloud</string>
 </strings>
+

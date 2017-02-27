@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.ign_com" name="IGN.com" version="2.3.1" provider-name="Twister">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Game and Movie trailers/reviews/news</summary>
+        <description lang="en">Game and Movie trailers/reviews/news.</description>
+        <platform>all</platform>
+        <language>en</language>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <forum>http://forum.kodi.tv/showthread.php?tid=136353</forum>
+        <website></website>
+        <source>https://github.com/twister-kodi/plugin.video.ign_com</source>
+        <email></email>
+        <disclaimer>Original code by AddonScriptorDE</disclaimer>
+    <platform>all</platform>
+    </extension>
+</addon>

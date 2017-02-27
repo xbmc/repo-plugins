@@ -94,10 +94,13 @@ if mode[0] in ("folder", "myshares"):
 			exit()
 	if mode[0] == "folder":
 		isMyShares = False
-		folderID = args.get("folderID", None)
+		folderID = args.get("folderID", None) # first try and get it from the command line
 		if folderID is None:
 			# if starting up, retrieve last used folder ID from settings (default is 0, which is the root folder)
-			folderID = int(myAddon.getSetting("lastUsedFolderID"))
+			folderID = myAddon.getSetting("lastUsedFolderID")
+			if folderID is None or folderID == "None":
+				folderID = "0"
+			folderID = int(folderID)
 		else:
 			folderID = int(folderID[0])
 	else:
@@ -158,15 +161,15 @@ if mode[0] in ("folder", "myshares"):
 			if contentType[:6] == "video/":
 				li.addStreamInfo(
 					"video", 
-					{ 	"duration": int(float(oneFileOrFolderItem["duration"])),
-						"codec": oneFileOrFolderItem["videocodec"],
-						"width": oneFileOrFolderItem["width"],
-						"height": oneFileOrFolderItem["height"]
+					{ 	"duration": int(float(oneFileOrFolderItem["duration"] if "duration" in oneFileOrFolderItem else "0")),
+						"codec": oneFileOrFolderItem["videocodec"] if "videocodec" in oneFileOrFolderItem else "",
+						"width": oneFileOrFolderItem["width"] if "width" in oneFileOrFolderItem else "0",
+						"height": oneFileOrFolderItem["height"] if "height" in oneFileOrFolderItem else "0"
 					}
 				)
 				li.addStreamInfo(
 					"audio",
-					{ "codec": oneFileOrFolderItem["audiocodec"] }
+					{ "codec": oneFileOrFolderItem["audiocodec"] if "audiocodec" in oneFileOrFolderItem else "" }
 				)
 			# The below is necessary in order for xbmcplugin.setResolvedUrl() to work properly
 			li.setProperty("IsPlayable", "true")
@@ -198,7 +201,7 @@ if mode[0] in ("folder", "myshares"):
 			parentFolderID = folderContents["metadata"]["parentfolderid"]
 			url = base_url + "?mode=folder&folderID=" + `parentFolderID`
 			# "Back to parent folder"
-			parentFolderText = myAddon.getLocalizedString(30113)
+			parentFolderText = "[I]{0}[/I]".format(myAddon.getLocalizedString(30113))
 			li = xbmcgui.ListItem(parentFolderText, iconImage="DefaultFolder.png")
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
 	else:
@@ -206,7 +209,7 @@ if mode[0] in ("folder", "myshares"):
 		rootFolderID = 0
 		url = base_url + "?mode=folder&folderID={0}".format(rootFolderID)
 		# "Back to My pCloud"
-		parentFolderText = myAddon.getLocalizedString(30123)
+		parentFolderText = "[I]{0}[/I]".format(myAddon.getLocalizedString(30123))
 		li = xbmcgui.ListItem(parentFolderText, iconImage="DefaultFolder.png")
 		xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
 	

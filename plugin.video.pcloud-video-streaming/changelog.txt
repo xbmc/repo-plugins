@@ -1,3 +1,6 @@
+v1.2.5 -- 27-Feb-2017
+- Fixed a problem occurring when a video stream was missing the "duration" attribute or other attributes.
+
 v1.2.4 -- 26-Feb-2017
 - Added support for My Shares. Now shared folders are shown as an extra item (labeled "My Shares") in the root folder.
 

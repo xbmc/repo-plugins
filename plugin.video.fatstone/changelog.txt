@@ -1,3 +1,6 @@
+[B]1.0.2[/B]
+- Updated stream source address
+
 [B]1.0.1[/B]
 - Removed .gitignore and .gitattribute files
 - Removed unused translation data

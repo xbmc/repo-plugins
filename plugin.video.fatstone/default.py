@@ -37,7 +37,7 @@ def root():
     li.setInfo('video', {'title': "Fatstone Live"})
     li.addStreamInfo('video', {'codec': 'h264', 'width': 1024, 'height': 576})
     li.addStreamInfo('audio', {'codec': 'aac', 'channels': 2})
-    addDirectoryItem(plugin.handle, "http://bgo1.cdn.trippelm.tv/fs/live/ngrp:live_all/manifest.m3u8", li, False)
+    addDirectoryItem(plugin.handle, "http://usa1.cdn.trippelm.tv/fs/live/ngrp:live_all/manifest.m3u8", li, False)
 
     endOfDirectory(plugin.handle)
 

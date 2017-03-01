@@ -70,41 +70,19 @@ class Uzg:
             
         def get_play_url(self, whatson_id):
             ##token aanvragen
-            data = self.__get_data_from_url('http://ida.omroep.nl/npoplayer/i.js')
-            token = re.compile('.token\s*=\s*"(.*?)"', re.DOTALL + re.IGNORECASE).search(str(data)).group(1)
+            data = self.__get_data_from_url('http://ida.omroep.nl/app.php/auth')
+            token = re.search(r'token\":"(.*?)"', data).group(1)
             ##video lokatie aanvragen
-            data = self.__get_data_from_url('http://ida.omroep.nl/odi/?prid='+whatson_id+'&puboptions=adaptive&adaptive=yes&part=1&token='+self.__get_newtoken(token))
+            data = self.__get_data_from_url('http://ida.omroep.nl/app.php/'+whatson_id+'?adaptive&adaptive=yes&part=1&token='+token)
             json_data = json.loads(data)
             ##video file terug geven vanaf json antwoord
-            streamdataurl = json_data['streams'][0]
+            streamdataurl = json_data['items'][0][0]['url']
             streamurl = str(streamdataurl.split("?")[0]) + '?extension=m3u8'
             data = self.__get_data_from_url(streamurl)
             json_data = json.loads(data)
             url_play = json_data['url']
             return url_play
             
-        def __get_newtoken(self, token):
-            # site change, token invalid, needs to be reordered. Thanks to rieter for figuring this out very quickly.
-            first = -1
-            last = -1
-            for i in range(5, len(token) - 5, 1):	
-                if token[i].isdigit():
-                    if first < 0:
-                        first = i                
-                    elif last < 0:
-                        last = i                
-                        break
-
-            newtoken = list(token)
-            if first < 0 or last < 0:
-                first = 12
-                last = 13
-            newtoken[first] = token[last]
-            newtoken[last] = token[first]
-            newtoken = ''.join(newtoken)    
-            return newtoken            
-
-
         def get_overzicht(self):
             self.items = 'leeg' ##items weer leeg maken
             if (self.overzichtcache == 'leeg'):

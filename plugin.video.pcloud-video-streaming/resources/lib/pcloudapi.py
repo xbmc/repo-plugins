@@ -81,15 +81,20 @@ class PCloudApi:
 		self.auth = response["auth"]
 		return self.auth
 
-	def ListFolderContents(self, folderNameOrID):
+	def ListFolderContents(self, folderNameOrID, isMyShares = False):
 		self.CheckIfAuthPresent()
 		tryAgain = True
 		while tryAgain:
-			url = self.PCLOUD_BASE_URL + "listfolder?auth=" + self.auth
-			if isinstance (folderNameOrID, Number):
-				url += "&folderid=" + `folderNameOrID` # string coercion
+			if not isMyShares:
+				# This is for regular folders, i.e. anything else than the "My Shares" folder
+				url = self.PCLOUD_BASE_URL + "listfolder?auth=" + self.auth
+				if isinstance (folderNameOrID, Number):
+					url += "&folderid=" + `folderNameOrID` # string coercion
+				else:
+					url += "&path=" + folderNameOrID
 			else:
-				url += "&path=" + folderNameOrID
+				# This is ONLY for the "My Shares" folder
+				url = self.PCLOUD_BASE_URL + "listpublinks?auth=" + self.auth
 			outputStream = urllib2.urlopen(url)
 			response = json.load(outputStream)
 			outputStream.close()
@@ -104,7 +109,7 @@ class PCloudApi:
 				tryAgain = False
 				if errCode != 0:
 					errorMessage = self.GetErrorMessage(errCode)
-					raise Exception("Error calling listfolder: {0} ({1})".format(errorMessage, errCode))
+					raise Exception("Error calling listfolder or listpublinks: {0} ({1})".format(errorMessage, errCode))
 		return response
 
 	def GetStreamingUrl(self, fileID):

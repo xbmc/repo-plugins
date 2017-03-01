@@ -121,6 +121,7 @@ def ListLive():
         ('bbc_one_oxford',                   'BBC One Oxford',),
         ('bbc_one_south',                    'BBC One South',),
         ('bbc_one_south_east',               'BBC One South East',),
+        ('bbc_one_south_west',               'BBC One South West',),
         ('bbc_one_west',                     'BBC One West',),
         ('bbc_one_west_midlands',            'BBC One West Midlands',),
         ('bbc_one_yorks',                    'BBC One Yorks',),
@@ -1239,8 +1240,8 @@ def ParseLiveStreams(channelname, providers):
                            'bbc_two_scotland', 'bbc_one_cambridge', 'bbc_one_channel_islands',
                            'bbc_one_east', 'bbc_one_east_midlands', 'bbc_one_east_yorkshire',
                            'bbc_one_north_east', 'bbc_one_north_west', 'bbc_one_oxford',
-                           'bbc_one_south', 'bbc_one_south_east', 'bbc_one_west',
-                           'bbc_one_west_midlands', 'bbc_one_yorks']:
+                           'bbc_one_south', 'bbc_one_south_east', 'bbc_one_south_west',
+                           'bbc_one_west', 'bbc_one_west_midlands', 'bbc_one_yorks']:
             device = 'hls_tablet'
         else:
             device = 'abr_hdtv'

@@ -1,3 +1,8 @@
+v1.2.6 -- 02-Mar-2017
+- Fixed issue #4, occurring with files whose internal pCloud ID ('fileID') was larger than a given threshold.
+- Updated Python dependency to 2.19.0 to match Helix.
+- Changed language files from .XML to .PO format.
+
 v1.2.5 -- 27-Feb-2017
 - Fixed a problem occurring when a video stream was missing the "duration" attribute or other attributes.
 

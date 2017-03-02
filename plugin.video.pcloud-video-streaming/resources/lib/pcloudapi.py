@@ -1,9 +1,11 @@
 import urllib2
 import xbmc
+import xbmcaddon
 import json
 import hashlib
 from numbers import Number 	# to check whether a certain variable is numeric
 from loginfailedexception import LoginFailedException
+import os
 
 class PCloudApi:
 	PCLOUD_BASE_URL = 'https://api.pcloud.com/'
@@ -64,7 +66,7 @@ class PCloudApi:
 			raise Exception("Error calling getdigest: " + errorMessage)
 		
 		authUrl = self.PCLOUD_BASE_URL + "userinfo?getauth=1&logout=1&username=" + username + "&digest=" + response["digest"] + \
-					"&authexpire=" + `self.TOKEN_EXPIRATION_SECONDS` # this backtick affair is a to-string conversion
+					"&authexpire=" + str(self.TOKEN_EXPIRATION_SECONDS) # this backtick affair is a to-string conversion
 		sha1 = hashlib.sha1()
 		sha1.update(username)
 		usernameDigest = sha1.hexdigest() # hexdigest outputs hex-encoded bytes
@@ -89,7 +91,7 @@ class PCloudApi:
 				# This is for regular folders, i.e. anything else than the "My Shares" folder
 				url = self.PCLOUD_BASE_URL + "listfolder?auth=" + self.auth
 				if isinstance (folderNameOrID, Number):
-					url += "&folderid=" + `folderNameOrID` # string coercion
+					url += "&folderid=" + str(folderNameOrID) # string coercion
 				else:
 					url += "&path=" + folderNameOrID
 			else:
@@ -114,7 +116,7 @@ class PCloudApi:
 
 	def GetStreamingUrl(self, fileID):
 		self.CheckIfAuthPresent()
-		url = self.PCLOUD_BASE_URL + "getfilelink?auth=" + self.auth + "&fileid=" + `fileID`
+		url = self.PCLOUD_BASE_URL + "getfilelink?auth=" + self.auth + "&fileid=" + str(fileID)
 		outputStream = urllib2.urlopen(url)
 		response = json.load(outputStream)
 		outputStream.close()
@@ -126,7 +128,7 @@ class PCloudApi:
 
 	def GetThumbnails (self, fileIDSequence):
 		self.CheckIfAuthPresent()
-		commaSeparated = ",".join(`oneFileID` for oneFileID in fileIDSequence) # coerce to string before comma-joining
+		commaSeparated = ",".join(str(oneFileID) for oneFileID in fileIDSequence) # coerce to string before comma-joining
 		url = self.PCLOUD_BASE_URL + "getthumbslinks?auth=" + self.auth + "&fileids=" + commaSeparated + "&size=256x256&format=png"
 		outputStream = urllib2.urlopen(url)
 		response = json.load(outputStream)
@@ -146,7 +148,7 @@ class PCloudApi:
 
 	def DeleteFile(self, fileID):
 		self.CheckIfAuthPresent()
-		url = self.PCLOUD_BASE_URL + "deletefile?auth=" + self.auth + "&fileid=" + `fileID`
+		url = self.PCLOUD_BASE_URL + "deletefile?auth=" + self.auth + "&fileid=" + str(fileID)
 		outputStream = urllib2.urlopen(url)
 		response = json.load(outputStream)
 		outputStream.close()
@@ -156,7 +158,7 @@ class PCloudApi:
 		
 	def DeleteFolder(self, folderID):
 		self.CheckIfAuthPresent()
-		url = self.PCLOUD_BASE_URL + "deletefolderrecursive?auth=" + self.auth + "&folderid=" + `folderID`
+		url = self.PCLOUD_BASE_URL + "deletefolderrecursive?auth=" + self.auth + "&folderid=" + str(folderID)
 		outputStream = urllib2.urlopen(url)
 		response = json.load(outputStream)
 		outputStream.close()
@@ -171,3 +173,6 @@ class PCloudApi:
 #folderContents = ListFolderContents("/Vcast")
 #for oneItem in folderContents["metadata"]["contents"]:
 #	print oneItem["name"]
+#tempFilename = os.path.join(xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile')).decode('utf-8'), 'pippo.json')
+#with open(tempFilename, 'w') as f:
+#	f.write(json.dumps(response))

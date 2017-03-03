@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.fatstone"
        name="Fatstone.TV"
-       version="1.0.2"
+       version="1.0.3"
        provider-name="trippel-m">
   <requires>
     <import addon="xbmc.python" version="2.20.0"/>
     <import addon="script.module.requests" version="1.0.4"/>
     <import addon="script.module.routing" version="0.1.0"/>
+    <import addon="script.module.m3u8" version="0.2.2"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>

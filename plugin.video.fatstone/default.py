@@ -19,26 +19,39 @@ import time
 import xbmc
 import xbmcplugin
 import xbmcaddon
+import xbmcgui
 from xbmcplugin import addDirectoryItem
 from xbmcplugin import addDirectoryItems
 from xbmcplugin import endOfDirectory
-from xbmcgui import ListItem
 import routing
+import m3u8
+
+__settings__   = xbmcaddon.Addon(id='plugin.video.fatstone')
+__language__ = __settings__.getLocalizedString
 
 plugin = routing.Plugin()
 
+M3U_ERROR_TITLE = 30007
+M3U_ERROR_MESSAGE = 30008
 
 @plugin.route('/')
 def root():
-    li = ListItem("Fatstone Live")
-    li.setProperty('mimetype', "application/vnd.apple.mpegurl")
-    li.setProperty('isplayable', 'true')
-    li.setArt({'thumb': "http://dump.no/files/ea040880feb3/fatstonethumb.png"})
-    li.setInfo('video', {'title': "Fatstone Live"})
-    li.addStreamInfo('video', {'codec': 'h264', 'width': 1024, 'height': 576})
-    li.addStreamInfo('audio', {'codec': 'aac', 'channels': 2})
-    addDirectoryItem(plugin.handle, "http://usa1.cdn.trippelm.tv/fs/live/ngrp:live_all/manifest.m3u8", li, False)
-
+    url = 'http://usa1.cdn.trippelm.tv/fs/live/ngrp:live_all/'
+    m3u8_obj = m3u8.load(url + 'manifest.m3u8')
+    if m3u8_obj.is_variant:
+        for playlist in m3u8_obj.playlists:
+            width, height = playlist.stream_info.resolution
+            li = xbmcgui.ListItem("Fatstone Live (" + repr(playlist.stream_info.bandwidth / 1024) + " kbps) " + repr(height) + 'p')
+            li.setProperty('mimetype', "application/vnd.apple.mpegurl")
+            li.setProperty('isplayable', 'true')
+            li.setArt({'thumb': "http://dump.no/files/ea040880feb3/fatstonethumb.png"})
+            li.setInfo('video', {'title': "Fatstone Live" })
+            li.addStreamInfo('video', {'codec': 'h264', 'width': int(width), 'height': int(height) })
+            li.addStreamInfo('audio', {'codec': 'aac', 'channels': 2})
+            addDirectoryItem(plugin.handle, url + playlist.uri, li, False)
+    else:
+        xbmcgui.Dialog().notification(__language__(M3U_ERROR_TITLE), __language__(M3U_ERROR_MESSAGE), xbmcgui.NOTIFICATION_ERROR)
+    
     endOfDirectory(plugin.handle)
 
 if __name__ == '__main__':

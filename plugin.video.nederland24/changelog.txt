@@ -1,3 +1,7 @@
+[B]4.5.3[/B]
+-Fixes following site change
+-Disable subtitles and event channels for now
+
 [B]4.5.2[/B]
 -Fix journaal channels
 -Remove cancelled channels

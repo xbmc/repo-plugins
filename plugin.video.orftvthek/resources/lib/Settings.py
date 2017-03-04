@@ -18,12 +18,12 @@ def subtitles():
 	return __addon__.getSetting('useSubtitles') == 'true'
 
 def videoQuality(quality_list):
-    default_return_index = 2
-    videoQuality = int(__addon__.getSetting('videoQuality'))
-    try:
-        return quality_list[int(videoQuality)]
-    except:
-        return quality_list[default_return_index]
-	 
+	default_return_index = 2
+	videoQuality = __addon__.getSetting('videoQuality')
+	try:
+		return quality_list[int(videoQuality)]
+	except (IndexError, ValueError):
+		return quality_list[default_return_index]
+
 def autoPlayPrompt():
 	return __addon__.getSetting("autoPlayPrompt") == "true"

@@ -77,7 +77,6 @@ class serviceAPI(Scraper):
 			responseCode = response.getcode()
 		except urllib2.HTTPError, error:
 			responseCode = error.getcode()
-			pass
 
 		if responseCode == 200:
 			for result in json.loads(response.read()):
@@ -101,11 +100,12 @@ class serviceAPI(Scraper):
 		duration     = JSONSegment.get('duration_seconds')
 		date         = time.strptime(JSONSegment.get('episode_date')[0:19], '%Y-%m-%dT%H:%M:%S')
 		streamingURL = self.JSONStreamingURL(JSONSegment.get('sources'))
-		subtitles    = map(lambda x: x.get('src'), JSONSegment.get('playlist').get('subtitles'))
+		subtitles    = [x.get('src') for x in JSONSegment.get('playlist').get('subtitles')]
 		return [streamingURL, createListItem(title, image, description, duration, time.strftime('%Y-%m-%d', date), '', streamingURL, True, False, self.defaultbackdrop,self.pluginhandle, subtitles)]
 
 
-	def JSONImage(self,jsonImages, name = 'image_full'):
+	@staticmethod
+	def JSONImage(jsonImages, name = 'image_full'):
 		return jsonImages.get('public_urls').get('highlight_teaser').get('url')
 
 	def JSONStreamingURL(self,jsonVideos):
@@ -129,7 +129,6 @@ class serviceAPI(Scraper):
 			responseCode = response.getcode()
 		except urllib2.HTTPError, error:
 			responseCode = error.getcode()
-			pass
 
 		if responseCode == 200:
 			for result in json.loads(response.read()).get('_embedded').get('items'):
@@ -212,10 +211,8 @@ class serviceAPI(Scraper):
 			responseCode = response.getcode()
 		except ValueError, error:
 			responseCode = 404
-			pass
 		except urllib2.HTTPError, error:
 			responseCode = error.getcode()
-			pass
 
 		if responseCode == 200:
 			for topic in json.loads(response.read()).get('_embedded').get('items'):
@@ -235,10 +232,8 @@ class serviceAPI(Scraper):
 			responseCode = response.getcode()
 		except ValueError, error:
 			responseCode = 404
-			pass
 		except urllib2.HTTPError, error:
 			responseCode = error.getcode()
-			pass
 
 		if responseCode == 200:
 			for episode in json.loads(response.read())['_embedded']['items']:
@@ -268,7 +263,6 @@ class serviceAPI(Scraper):
 			responseCode = response.getcode()
 		except urllib2.HTTPError, error:
 			responseCode = error.getcode()
-			pass
 
 		if responseCode == 200:
 			for result in json.loads(response.read()).get('_embedded').get('items'):
@@ -280,7 +274,7 @@ class serviceAPI(Scraper):
 
 				# already playing
 				if livestreamStart < time.localtime():
-					link = self.JSONStreamingURL(result.get('sources'))
+					link = self.JSONStreamingURL(result.get('sources')) + '|User-Agent=Mozilla'
 				else:
 					link = sys.argv[0] + '?' + urllib.urlencode({'mode': 'liveStreamNotOnline', 'link': result.get('id')})
 
@@ -298,7 +292,6 @@ class serviceAPI(Scraper):
 			responseCode = response.getcode()
 		except urllib2.HTTPError, error:
 			responseCode = error.getcode()
-			pass
 
 		if responseCode == 200:
 			result = json.loads(response.read())
@@ -320,7 +313,8 @@ class serviceAPI(Scraper):
 					self.xbmc.Player().play(streamingURL, listItem)
 
 
-	def __makeRequest(self, url):
+	@staticmethod
+	def __makeRequest(url):
 		request = urllib2.Request(url)
 		request.add_header('Authorization', 'Basic %s' % 'cHNfYW5kcm9pZF92Mzo2YTYzZDRkYTI5YzcyMWQ0YTk4NmZkZDMxZWRjOWU0MQ==')
 		return urllib2.urlopen(request)

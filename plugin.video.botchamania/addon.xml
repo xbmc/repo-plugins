@@ -2,7 +2,7 @@
 <addon
 	id="plugin.video.botchamania"
 	name="Botchamania"
-	version="1.1.4"
+	version="1.1.5"
 	provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                 version="2.14.0"/>
@@ -25,6 +25,6 @@
     <forum>http://forum.xbmc.org/showthread.php?tid=203209</forum>
     <website>http://botchamania.com</website>
     <email></email>
-    <source>git://github.com/skipmodea1/plugin.video.botchamania.git</source>
+    <source>https://github.com/skipmodea1/plugin.video.botchamania</source>
   </extension>
 </addon>

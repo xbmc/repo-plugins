@@ -1,3 +1,6 @@
+v1.1.5 (2017-03-03):
+- fixed url in addon.xml as per request
+
 v1.1.4 (2016-08-20):
 - using po-files
 - changed addon debugging info to kodi debugging info

@@ -25,5 +25,5 @@ THEKNOWRECENTLYADDEDURL = 'http://theknow.roosterteeth.com/episode/recently-adde
 THEKNOWSHOWSURL = 'http://theknow.roosterteeth.com/show'
 COWCHOPRECENTLYADDEDURL = 'http://cowchop.roosterteeth.com/episode/recently-added?page=001'
 COWCHOPSHOWSURL = 'http://cowchop.roosterteeth.com/show'
-DATE = "2016-10-23"
-VERSION = "1.3.2"
+DATE = "2017-03-03"
+VERSION = "1.3.3"

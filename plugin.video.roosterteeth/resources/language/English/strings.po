@@ -132,7 +132,7 @@ msgid "Screw Attack Recently Added Episodes"
 msgstr ""
 
 msgctxt "#30308"
-msgid "Screw Atack Shows"
+msgid "Screw Attack Shows"
 msgstr ""
 
 msgctxt "#30309"
@@ -140,7 +140,7 @@ msgid "Game Attack Recently Added Episodes"
 msgstr ""
 
 msgctxt "#30310"
-msgid "Game Atack Shows"
+msgid "Game Attack Shows"
 msgstr ""
 
 msgctxt "#30311"

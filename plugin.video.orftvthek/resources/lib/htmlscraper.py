@@ -203,7 +203,7 @@ class htmlScraper(Scraper):
             if len(showname) > 0:
                 current_title = "%s - %s" % (showname,current_date)
                 try:
-                    current_desc = (self.translation(30009)).encode("utf-8")+' %s - %s\n'+(self.translation(30011)).encode("utf-8")+': %s' % (current_date,current_time,current_duration)
+                    current_desc = '%s %s - %s\n%s: %s' % (self.translation(30009), current_date, current_time[0], self.translation(30011), current_duration[0])
                 except:
                     current_desc = None
                 parameters = {"link" :  current_link,"title" :current_title,"banner" : banner,"mode" : "openSeries"}
@@ -228,7 +228,7 @@ class htmlScraper(Scraper):
                 title = "%s - %s" % (title,date)
                 link = common.parseDOM(item,name='a',ret="href");
                 try:
-                    desc = (self.translation(30009)).encode("utf-8")+" %s - %s\n"+(self.translation(30011)).encode("utf-8")+": %s" % (date,time,duration)
+                    desc = '%s %s - %s\n%s: %s' % (self.translation(30009), date, time[0], self.translation(30011), duration[0])
                 except:
                     desc = None
                 parameters = {"link" :  link[0],"title" :title,"banner" : banner, "mode" : "openSeries"}
@@ -346,14 +346,12 @@ class htmlScraper(Scraper):
         items_href = common.parseDOM(items,name='a',attrs={},ret="href")
         items_title = common.parseDOM(items,name='h4')
         
-        i = 0
-        for item in items:
+        for i in range(len(items)):
             link = common.replaceHTMLCodes(items_href[i]).encode('UTF-8')
             title = items_title[i].encode('UTF-8')
             parameters = {"link" : link,"title" : title,"banner" : image, "mode" : "getSendungenDetail"}
             url = sys.argv[0] + '?' + urllib.urlencode(parameters)
             self.html2ListItem(title,image,"", None,"","","",url,None,True, False);
-            i = i + 1
         
     # Parses a Video Page and extracts the Playlist/Description/...
     def getLinks(self,url,banner,playlist):
@@ -448,12 +446,12 @@ class htmlScraper(Scraper):
     # Returns Live Stream Listing
     def getLiveStreams(self):
         liveurls = {}
-        
-        liveurls['ORF1'] = "http://apasfiisl.apa.at/ipad/orf1_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8"
-        liveurls['ORF2'] = "http://apasfiisl.apa.at/ipad/orf2_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8"
-        liveurls['ORF3'] = "http://apasfiisl.apa.at/ipad/orf3_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8"
-        liveurls['ORFS'] = "http://apasfiisl.apa.at/ipad/orfs_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8"
-        
+
+        liveurls['ORF1'] = "http://apasfiisl.apa.at/ipad/orf1_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8|User-Agent=Mozilla"
+        liveurls['ORF2'] = "http://apasfiisl.apa.at/ipad/orf2_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8|User-Agent=Mozilla"
+        liveurls['ORF3'] = "http://apasfiisl.apa.at/ipad/orf3_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8|User-Agent=Mozilla"
+        liveurls['ORFS'] = "http://apasfiisl.apa.at/ipad/orfs_"+self.videoQuality.lower()+"/orf.sdp/playlist.m3u8|User-Agent=Mozilla"
+
         channelnames = {}
         channelnames['ORF1'] = "ORF 1"
         channelnames['ORF2'] = "ORF 2"
@@ -495,12 +493,13 @@ class htmlScraper(Scraper):
                     child_list_time = common.parseDOM(child_list_item,name='span',attrs={'class': 'meta.meta_time'})
                     child_list_time = common.replaceHTMLCodes(child_list_time[0]).encode('UTF-8').replace("Uhr","").replace(".",":").strip()
                     if child_list_time == time and child_list_title != title:
-                        child_list_streaming_url = self.getLivestreamUrl(child_list_link,self.videoQuality)
+                        child_list_streaming_url = self.getLivestreamUrl(child_list_link,self.videoQuality) + '|User-Agent=Mozilla'
                         child_list_final_title = "[%s] - %s (%s)" % (channelnames[program],child_list_title,child_list_time)
                         self.html2ListItem(child_list_final_title,banner,"",state,time,program,program,child_list_streaming_url,None,False, True)
      
 
-    def getLivestreamUrl(self,url,quality):
+    @staticmethod
+    def getLivestreamUrl(url,quality):
         html = common.fetchPage({'link': url})
         container = common.parseDOM(html.get("content"),name='div',attrs={'class': "player_viewport.*?"})
         data_sets = common.parseDOM(container[0],name='div',attrs={},ret="data-jsb")
@@ -517,7 +516,8 @@ class htmlScraper(Scraper):
                 debugLog("Error getting Livestream","Info")
     
     # Helper for Livestream Listing - Returns if Stream is currently running
-    def getBroadcastState(self,time):
+    @staticmethod
+    def getBroadcastState(time):
         time_probe = time.split(":")
             
         current_hour = datetime.datetime.now().strftime('%H')
@@ -611,7 +611,8 @@ class htmlScraper(Scraper):
                 u = sys.argv[0] + '?' + urllib.urlencode(parameters)
                 createListItem(str_val.encode('UTF-8'), self.defaultbanner, "", "", "", '', u, False, True, self.defaultbackdrop,self.pluginhandle,None)
 
-    def removeUmlauts(self,str_val):
+    @staticmethod
+    def removeUmlauts(str_val):
         return str_val.replace("Ö","O").replace("ö","o").replace("Ü","U").replace("ü","u").replace("Ä","A").replace("ä","a")
                 
     def getSearchResults(self,link,cache):

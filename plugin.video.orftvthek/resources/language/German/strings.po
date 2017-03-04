@@ -150,12 +150,8 @@ msgid "# Blacklist"
 msgstr "# "
 
 msgctxt "#30040"
-msgid "# Remove"
-msgstr "# "
-
-msgctxt "#30041"
-msgid "from the Blacklist #"
-msgstr "von der Liste entfernen #"
+msgid "# Remove %s from the Blacklist #"
+msgstr "# %s von der Liste entfernen #"
 
 msgctxt "#30042"
 msgid " #"

@@ -30,7 +30,7 @@ def createListItem(title,banner,description,duration,date,channel,videourl,playa
         videoStreamInfo = {'codec': 'h264', 'aspect': 1.78}
         try:
             videoStreamInfo.update({'duration': int(duration)})
-        except:
+        except (TypeError, ValueError):
             debugLog("No Duration found in Video",'Info')
         if videourl.lower().endswith('_q8c.mp4') or '_q8c' in videourl.lower():
             videoStreamInfo.update({'width': 1280, 'height': 720})
@@ -110,10 +110,8 @@ def printBlacklist(banner,backdrop,translation,pluginhandle):
             data = getBlacklist(bl_json_file)
             for item in data:
                 item = item.encode('UTF-8')
-                description = "%s %s %s" % ((translation(30040)).encode("utf-8"),item,(translation(30041)).encode("utf-8"))
-                link = item
-                mode = "unblacklistShow"
-                addDirectory(item,banner,backdrop, description,link,mode,pluginhandle)
+                description = translation(30040).encode('UTF-8') % item
+                createListItem(item, banner, description, None, None, None, sys.argv[0] + '?' + urllib.urlencode({'link': item, 'mode': 'unblacklistShow'}), True, False, backdrop, pluginhandle)
 
 
 def setBlacklist(data,file):

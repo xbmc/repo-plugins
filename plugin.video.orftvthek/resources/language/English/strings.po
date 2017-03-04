@@ -164,11 +164,7 @@ msgstr ""
 #empty string with id 30039
 
 msgctxt "#30040"
-msgid "# Remove"
-msgstr ""
-
-msgctxt "#30041"
-msgid "from the Blacklist #"
+msgid "# Remove %s from the Blacklist #"
 msgstr ""
 
 msgctxt "#30042"

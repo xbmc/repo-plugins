@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-    <string id="30005">Bitrate can be selected in Settings->System-></string>
-    <string id="30006">Internet access->Internet connection bandwidth limitation</string>
+		<string id="30007">Download error</string>
+		<string id="30008">Could not connect to server. Please try again later.</string>
 </strings>

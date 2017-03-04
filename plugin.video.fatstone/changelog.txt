@@ -1,3 +1,6 @@
+[B]1.0.3[/B]
+- Now lets user choose bitrate
+
 [B]1.0.2[/B]
 - Updated stream source address
 

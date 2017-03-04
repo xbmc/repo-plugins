@@ -1,3 +1,7 @@
+v1.1.3 (2017-03-03)
+using po-files
+fixed url in addon.xml as per request
+
 v1.1.2 (2016-02-20)
 added some utf-8 stuff
 updated to latest requirements for a Kodi-addon

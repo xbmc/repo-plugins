@@ -14,6 +14,7 @@ START_URL               = 'http://deredactie.be/cm/vrtnieuws/videozone?mode=atom
 
 # TODO Expose as preference
 USE_HLS = 1
+USE_HTTPS = 0
 
 class Item(object):
     def __init__(self, title, date, url, mime_type):
@@ -29,7 +30,14 @@ class VideoItem(Item):
         self.thumbnail_url = thumbnail_url
         self.thumbnail_mime_type = thumbnail_mime_type
 
+def normalize_url(url):
+    if url is None:
+        return url
+    protocol = 'https://' if USE_HTTPS else 'http://'
+    return re.sub(r'.*?//', protocol, url)
+
 def parse_feed(url):
+    url = normalize_url(url)
     return parse_feed_xml(_get_url(url))
 
 def parse_feed_xml(xml):
@@ -70,9 +78,12 @@ def parse_entry(entry_elem):
     date_str = entry_elem.getElementsByTagName('published')[0].firstChild.data
     date = time.strptime(date_str[:18], '%Y-%m-%dT%H:%M:%S')
     if video_url is not None:
+        video_url = normalize_url(video_url)
+        thumbnail_url = normalize_url(thumbnail_url)
         return VideoItem(title, date, video_url, video_mime_type,
             thumbnail_url, THUMBNAIL_MIME_TYPE)
     else:
+        feed_url = normalize_url(feed_url)
         return Item(title, date, feed_url, ATOM_MIME_TYPE)
 
 def _get_url(url):

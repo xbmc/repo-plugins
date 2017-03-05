@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.deredactie"
        name="deredactie.be Videozone"
-       version="0.5.0"
+       version="0.6.0"
        provider-name="timdp">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -23,6 +23,6 @@
     <forum></forum>
     <website>https://github.com/timdp/plugin.video.deredactie</website>
     <email>hi at tmdpw dot eu</email>
-    <source>git://github.com/timdp/plugin.video.deredactie.git</source>
+    <source>https://github.com/timdp/plugin.video.deredactie</source>
   </extension>
 </addon>

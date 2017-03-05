@@ -42,23 +42,26 @@ class myAddon(t1mAddon):
     html += ']'
     a = json.loads(html)
     for b in a[4:]:
-      try: c = b['data']['items']
-      except: break
+      c = b.get('data')
+      if not c is None:
+         c = c.get('items')
+      if c is None:
+         break
       for item in c:
-       url  = item['permalink']
-       name = item['title']
-       thumb  = item['images']['poster']
-       fanart = item['images']['landscape']
-       infoList ={}
-       infoList['TVShowTitle'] = name
-       infoList['Title'] = name
-       infoList['MPAA'] = item.get('rating',None)
-       infoList['Plot'] = h.unescape(item['description'])
-       infoList['Season'] = -1
-       infoList['Episode'] = item['no_of_episodes']
-       infoList['mediatype'] = 'tvshow'
-       contextMenu = [(self.addon.getLocalizedString(30003),'XBMC.RunPlugin(%s?mode=DF&url=AL%s)' % (sys.argv[0], url))]
-       ilist = self.addMenuItem(name, 'GE', ilist, url, thumb, fanart, infoList , isFolder=True, cm=contextMenu)
+         url  = item['permalink']
+         name = item['title']
+         thumb  = item['images']['poster']
+         fanart = item['images']['landscape']
+         infoList ={}
+         infoList['TVShowTitle'] = name
+         infoList['Title'] = name
+         infoList['MPAA'] = item.get('rating',None)
+         infoList['Plot'] = h.unescape(item['description'])
+         infoList['Season'] = -1
+         infoList['Episode'] = item['no_of_episodes']
+         infoList['mediatype'] = 'tvshow'
+         contextMenu = [(self.addon.getLocalizedString(30003),'XBMC.RunPlugin(%s?mode=DF&url=AL%s)' % (sys.argv[0], url))]
+         ilist = self.addMenuItem(name, 'GE', ilist, url, thumb, fanart, infoList , isFolder=True, cm=contextMenu)
     return(ilist)
 
   def getAddonEpisodes(self,url,ilist, getFileData = False):
@@ -179,17 +182,10 @@ class myAddon(t1mAddon):
 
   def getAddonVideo(self,url):
       html = self.getRequest('http://www.snagfilms.com/embed/player?filmId=%s' % uqp(url))
-      url = re.compile('file: "(.+?)"', re.DOTALL).findall(html)
-      u = ''
-      for x in url: 
-          if '6912k' in x: u = x
-      if u == '' :
-          u = url[-1]
-      bspeed = self.addon.getSetting('bitrate')
-      if bspeed == '0':
-          u = url[0]
-      elif bspeed == '2':
-          u = url[-1]
+      u = re.compile('src: "(.+?)"', re.DOTALL).search(html)
+      if u is None:
+          return
+      u = u.group(1)
       liz = xbmcgui.ListItem(path=u)
       infoList ={}
       infoList['mediatype'] = xbmc.getInfoLabel('ListItem.DBTYPE')

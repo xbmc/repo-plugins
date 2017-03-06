@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<!-- Login -->
+	<string id="100">Login</string>
+	<string id="140">Username</string>
+	<string id="150">Password</string>
+	<string id="151">Single Team / Free Game Subscription</string>
+	<string id="156">Logout</string>
+	<!-- Visual Settings -->
+	<string id="159">Visual</string>		
+	<string id="160">Stream Quality</string>
+	<string id="170">No Spoilers</string>
+		<string id="1700">Off</string>
+		<string id="1701">On</string>
+		<string id="1702">Only Favorite Team</string>
+		<string id="1703">Only Live Games</string>
+		<string id="1704">Only Archive Games</string>
+	<string id ="180">Favorite Team</string>
+	<string id ="190">Display Team Name as</string>
+		<!--<string id ="1900">City (ex: Pittsburgh)</string>-->
+		<string id ="1901">Team (ex: Pirates)</string>
+		<!--<string id ="1902">Full (ex: Pittsburgh Pirates)</string>-->
+		<string id ="1903">Abbreviated (ex: PIT)</string>
+	<string id ="200">Time Format</string>
+		<string id ="2000">12 Hour Clock (ex: 6:00 pm)</string>
+		<string id ="2001">24 Hour Clock (ex: 18:00)</string>
+	<!-- Scoring Updates -->
+	<string id='300'>Score Notifications</string>
+	<string id='320'>Start/Stop Score Notifications</string>
+	<string id='330'>Number of Seconds to Display Score Notifications</string>
+</strings>
+

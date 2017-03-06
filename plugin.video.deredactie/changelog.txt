@@ -1,3 +1,6 @@
+v0.6.0
+- Disabled SSL to avoid certificate-related issues with some versions of Kodi
+
 v0.5.0
 - Renamed to plugin.video.deredactie
 - Better plugin structure

@@ -1,4 +1,4 @@
-Copyright (c) 2014 Tim De Pauw <http://tmdpw.eu/>
+Copyright (c) 2017 Tim De Pauw <https://tmdpw.eu/>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -1,3 +1,6 @@
+v0.6.1
+- Updated xbmc.python dependency to match Gotham
+
 v0.6.0
 - Disabled SSL to avoid certificate-related issues with some versions of Kodi
 

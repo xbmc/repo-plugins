@@ -14,7 +14,7 @@
         <summary lang="de">Fernsehkritik</summary>
         <description lang="de">TV-Magazin von fernsehkritik.tv</description>
         <website>https://github.com/cdwertmann/plugin.video.fernsehkritik</website>
-        <source>git://github.com/cdwertmann/plugin.video.fernsehkritik.git</source>
+        <source>http://github.com/cdwertmann/plugin.video.fernsehkritik</source>
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
     </extension>
 </addon>

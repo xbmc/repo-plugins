@@ -34,7 +34,7 @@ class ITTests(unittest.TestCase):
 
     def test_3_video_items(self):
         video_items = api.get_video_items()
-        self.assertTrue(len(video_items.get('video_list', '')) > 15)
+        self.assertTrue(len(video_items.get('video_list', '')) > 10)
 
     def test_4_video_sec(self):
         menu_url = 'http://latelelibre.fr/emissions/thibault-o-tour-du-monde/'

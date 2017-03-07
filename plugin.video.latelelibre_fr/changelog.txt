@@ -1,3 +1,13 @@
+1.0.2 (2017.03.07)
+- Sanitize thumbnail URLs (credits: andersonvom).
+- Fix playable video URL pattern (credits: andersonvom).
+- Undesired whitespace code cleaning (credits: andersonvom).
+- Updated test case code (credits: andersonvom).
+- Added support for preferred video quality option from add-on settings menu.
+- Updated logging system.
+- Improved video patterns.
+- Improved special character translations from description fields.
+- Code refactored.
 1.0.1 (2015.08.10)
 - Quick fix on scraper due to Dailymotion website changes.
 - Improved parser for Vimeo videos.

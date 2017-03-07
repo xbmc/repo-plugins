@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <!--Login-->
+  <category label="100">    
+    <setting id="username" type="text" label="140" default=""/>
+    <setting id="password" type="text" label="150" option="hidden" default=""/>	
+    <setting id="single_team" type="bool" label="151" default="false"/> 
+    <setting label="156" type="action" action="RunPlugin(plugin://plugin.video.mlbtv/?url=junk&mode=400)" option="close" />
+    <!-- <setting label="156" type="action" action="RunScript(special://home/addons/plugin.video.nhlgcl/resources/lib/logout.py)" option="close" /> -->
+  </category>
+  <category label="159">
+    <setting id="quality" type="labelenum" label="160" values="SD (450 kbps)|SD (800 kbps)|SD (1200 kbps)|SD (1800 kbps)|HD (2500 kbps)|HD (3500 kbps)|HD (5000 kbps)|Best Available|Always Ask" default="HD (5000 kbps)" />
+    <setting id="no_spoilers" type="enum" label="170" lvalues="1700|1701|1702|1703|1704" />  
+    <setting id="fav_team" type="labelenum" label="180" default="None" values="None|Washington Nationals|Toronto Blue Jays|Texas Rangers|Tampa Bay Rays|St. Louis Cardinals|Seattle Mariners|San Francisco Giants|San Diego Padres|Pittsburgh Pirates|Philadelphia Phillies|Oakland Athletics|New York Yankees|New York Mets|Minnesota Twins|Milwaukee Brewers|Los Angeles Dodgers|Los Angeles Angels|Kansas City Royals|Miami Marlins|Houston Astros|Detroit Tigers|Colorado Rockies|Cleveland Indians|Cincinnati Reds|Chicago White Sox|Chicago Cubs|Boston Red Sox|Baltimore Orioles|Atlanta Braves|Arizona Diamondbacks" />
+
+    <setting id="team_names" type="select" label="1901" lvalues="1901|1903" default="0" />
+    <setting id="time_format" type="select" label="200" lvalues="2000|2001" default="0" />
+
+    <setting id="stream_date" type="text" label="900" default="" visible="false"/>    
+    <setting id="session_key" type="text" label="902" default="" visible="false"/>
+    <setting id="media_auth" type="text" label="903" default="" visible="false"/>    
+    
+    <setting id="old_username" type="text" label="" default="" visible="false"/>
+    <setting id="old_password" type="text" label="" default="" visible="false"/>
+  </category>  
+</settings>
+

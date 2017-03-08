@@ -12,9 +12,9 @@
   </extension>  
   <extension point="xbmc.addon.metadata">    
     <platform>all</platform>
-    <summary lang="en">Watch every out-of-market regular season game in the office or on the go. The #1 LIVE Streaming Sports Service</summary>
-    <description lang="en">Watch every out-of-market regular season game in the office or on the go. The #1 LIVE Streaming Sports Service</description>
-    <disclaimer lang="en"></disclaimer>
+    <summary lang="en_GB">Watch every out-of-market regular season game in the office or on the go. The #1 LIVE Streaming Sports Service</summary>
+    <description lang="en_GB">Watch every out-of-market regular season game in the office or on the go. The #1 LIVE Streaming Sports Service</description>
+    <disclaimer lang="en_GB"></disclaimer>
     <news>
 - Bumped xbmc python version
 - Converted xml strings file to po file

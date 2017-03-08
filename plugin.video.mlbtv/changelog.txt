@@ -1,0 +1,61 @@
+2017.3.7
+- Bumped xbmc python version
+- Converted xml strings file to po file
+- Code clean up
+
+2016.7.28
+- Fixed view all recap / condensed for date
+- Fixed play all highlights skipping first highlight video
+
+2016.7.13
+- Fixed error loading MLB plus games
+- Fixed error when single or no games for day (thanks bontibon)
+- Fixed issue when game is only aired nationally
+
+2016.4.29.1
+- Fixed choose stream bug
+
+2016.4.29
+- Changed Full Games selection to use the teams abbreviated name instead of Home/Away
+- Highlights option now avaiable for Live and Archive games (no MLB tv account required)
+- Play individual highlights or select Play All to watch all highlights of the selected game
+- Display recap / condensed game not available message instead of erroring out
+- Added check for invalid username/password
+
+2016.4.19
+- Free games are now highlighted green
+- Changed wording on single team subscription to include free game subscription
+- Added not authorized message when user attempts to request a stream their account is not authorized to access
+- Added blackout lift time in blackout message if game has finished
+- Added logic to catch a username or password change and perform a fresh login
+
+2016.4.12
+- Added Single Team Subscription setting
+- Fixed Full Game not obeying the stream quality setting
+
+2016.4.11
+- Fixed recap, condensed not using stream quality setting
+
+2016.4.7.2
+- Fixed Recap and Condensed switched in single game selection
+
+2016.4.7
+- Replaced Highlights option with Recap (~3 min) and Condensed (~15 min) options for archive games
+- The date menu item can now be selected in order to watch the entire days recaps or condensed clips
+- Reversed stream quality selection dialog so better streams are on top
+- Fixed blackout message not displaying bug
+- Greatly reduced the size of the plugin string
+
+2016.3.24
+- Updated stream qualities values to match newer masterfiles
+- Added "Always Ask" stream quality selection
+
+2016.3.16
+- Added Logout feature in add-on settings
+- Added Highlights (60fps supported)
+
+2016.3.7
+- Added live audio support
+
+2016.3.4
+- Beta released

@@ -11,7 +11,7 @@
         <summary lang="en">Rainymood.com</summary>
         <description lang="en">Listen to the soothing sound of rain</description>
         <website>https://github.com/cdwertmann/plugin.audio.rainymood.com</website>
-        <source>git://github.com/cdwertmann/plugin.audio.rainymood.com.git</source>
+        <source>https://github.com/cdwertmann/plugin.audio.rainymood.com</source>
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
         <disclaimer>Rainymood.com has not endorsed this addon</disclaimer>
     </extension>

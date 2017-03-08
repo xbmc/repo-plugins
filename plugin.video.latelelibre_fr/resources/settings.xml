@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
+    <setting id="quality" type="enum" label="30102" values="1080|720|480" default="2"/>
     <setting id="debug" type="bool" label="30101" default="false"/>
 </settings>

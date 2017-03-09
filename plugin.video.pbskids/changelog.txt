@@ -1,1 +1,2 @@
+Version 3.0.2 fixed metadata issues
 Version 3.0.1 separate scraper for future functions

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
   <!-- range of strings for plugins is 30000 to 30999 -->
-  <string id="30000">Empty User Name</string>
-  <string id="30001">Please add your user name to the settings</string>
+  <string id="30000">Empty Email</string>
+  <string id="30001">Please add your Email to the settings</string>
   <string id="30002">Empty Password</string>
   <string id="30003">Please add your password to the settings</string>
   <string id="30004">Authentication Error</string>
@@ -14,24 +14,12 @@
   <string id="30010">Live Games</string>
   <string id="30011">Full Game</string>
   <string id="30012">Condensed Game</string>
-  <string id="30013">User Name</string>
+  <string id="30013">Email</string>
   <string id="30014">Password</string>
   <string id="30015">Playback failure</string>
   <string id="30016">Unable to get stream address</string>
   <string id="30017">There are no live games available</string>
   <string id="30018">No Games</string>
   <string id="30019">Unable to get list of games</string>
-
-  
-  <string id="30102">February</string>
-  <string id="30103">March</string>
-  <string id="30104">April</string>
-  <string id="30105">May</string>
-  <string id="30106">June</string>
-  <string id="30107">July</string>
-  <string id="30108">August</string>
-  <string id="30109">September</string>
-  <string id="30110">October</string>
-  <string id="30111">November</string>
-  <string id="30112">December</string>
+  <string id="30020">Previous</string>
 </strings>

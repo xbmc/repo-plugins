@@ -1,5 +1,7 @@
 '''
 @author: Micah Galizia <micahgalizia@gmail.com>
+@todo Don't login every time. Add a login/logout configuration and login
+      automatically when there is no token or the token has expired.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License version 2 as
@@ -14,14 +16,15 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 '''
-import xbmc, xbmcplugin, xbmcgui, xbmcaddon, os, urllib, urlparse, datetime, mlslive
+import xbmc, xbmcplugin, xbmcgui, xbmcaddon
+import os, urllib, urlparse, time, datetime, mlslive
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.mlslive')
 __language__ = __settings__.getLocalizedString
 
-
-GAME_IMAGE_PREFIX = 'http://e2.cdnl3.neulion.com/mls/ced/images/roku/HD/'
-MONTH_OFFSET = 30100
+xff = __settings__.getSetting("xff")
+if len(xff) == 0:
+    xff = None
 
 
 def createMainMenu():
@@ -42,33 +45,19 @@ def createMainMenu():
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
-def createMonthsMenu(complete = False):
-
-    key = 'compmonth' if complete else 'month'
-
-    # For live games, don't show past months
-    start_month = 2
-    if not complete:
-        start_month = datetime.datetime.now().month
-
-    # add each month in the season
-    for i in range(start_month,13):
-        values = { key : str(i) }
-        li = xbmcgui.ListItem(__language__(MONTH_OFFSET + i))
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
-                                    url=sys.argv[0] + '?' + urllib.urlencode(values),
-                                    listitem = li,
-                                    isFolder = True)
-
-    # signal the end of the directory
-    xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
-
-def createMonthMenu(month, complete = False):
-
+def createGamesMenu(complete = False, offset = None):
+    """
+    Create the list of game.
+    @param complete flag to indicate if we're showing completed games
+    @param offset from the current date for which completed games will be shown
+    """
     mls = mlslive.MLSLive()
 
-    games = mls.getGames(month)
+    dt = datetime.datetime.now();
+    if not offset == None:
+        dt = datetime.datetime.fromtimestamp(time.mktime(time.strptime(offset, "%c")))
+
+    games = mls.getGames(dt, xff)
     if games == None:
         dialog = xbmcgui.Dialog()
         dialog.ok(__language__(30018), __language__(30019))
@@ -78,54 +67,32 @@ def createMonthMenu(month, complete = False):
 
     for game in games:
 
-        final = False
-        if 'result' in game.keys():
-            if game['result'].upper() == 'F':
-                final = True
-
-        # skip any finished games if showing live or upcomming
-        if final and not complete:
+        # Skip completed games in the live menu
+        if complete == False and game['period'] == 'FullTime':
             continue
-
-        # skip if showing completed and live or upcomming
-        if complete and not final:
+        elif complete and game['period'] != 'FullTime':
             continue
 
         title = mls.getGameString(game, __language__(30008))
         li = xbmcgui.ListItem(title)
-        values = {'game' : game['id'],
+        values = {'game' : game['optaId'],
                   'title' : title}
-
-        # if the game has a result pass it along
-        if 'result' in game.keys():
-            values['result'] = game['result']
 
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
                                     url=sys.argv[0] + '?' + urllib.urlencode(values),
                                     listitem = li,
                                     isFolder = True)
+    
+    if complete:
+        delta = datetime.timedelta(days=7);
+        values = {'id' : 'complete',
+                  'offset' : (dt - delta).strftime('%c')}
+        li = xbmcgui.ListItem(__language__(30020))
+        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
+                                    url=sys.argv[0] + '?' + urllib.urlencode(values),
+                                    listitem = li,
+                                    isFolder = True)
 
-    # signal the end of the directory
-    xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
-
-def createFinalMenu(game, title):
-
-    # full game replay
-    li = xbmcgui.ListItem(__language__(30011))
-    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
-                                url=sys.argv[0] + '?' + urllib.urlencode({'game' : game,
-                                                                          'title' : title}),
-                                listitem = li,
-                                isFolder = True)
-
-    #condensed game replay
-    li = xbmcgui.ListItem(__language__(30012))
-    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
-                                url=sys.argv[0] + '?' + urllib.urlencode({'condensed' : game,
-                                                                          'title' : title}),
-                                listitem = li,
-                                isFolder = True)
 
     # signal the end of the directory
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
@@ -162,7 +129,7 @@ def authenticate():
     if os.path.isfile(cookie_file):
         os.remove(cookie_file)
 
-    if not my_mls.login(username, password):
+    if not my_mls.login(username, password, xff):
         dialog = xbmcgui.Dialog()
         dialog.ok(__language__(30004), __language__(30005))
         xbmcplugin.endOfDirectory(handle = int(sys.argv[1]),
@@ -172,47 +139,48 @@ def authenticate():
     return my_mls
 
 
-def playGame(value_string):
-    values = urlparse.parse_qs(value_string)
+def playGame(values):
+    """
+    @TODO add new language keys
+    """
     title = values['title'][0]
-    condensed = False
-    if 'condensed' in values.keys():
-        game = values['condensed'][0]
-        condensed = True
-    else:
-        game = values['game'][0]
-
-    if 'result' in values.keys():
-        if values['result'][0] == 'F':
-            createFinalMenu(game, title)
-            return
+    game = values['game'][0]
 
     mls = mlslive.MLSLive()
-    stream = mls.getGameLiveStream(game, condensed)
-    if stream == '':
+    streams = mls.getStreams(game, xff)
+
+    if streams == None:
         dialog = xbmcgui.Dialog()
         dialog.ok(__language__(30015), __language__(30016))
-    else:
-        li = xbmcgui.ListItem(title)
-        li.setInfo( type="Video", infoLabels={"Title" : title})
-        p = xbmc.Player()
-        p.play(stream, li)
+        xbmcplugin.endOfDirectory(handle = int(sys.argv[1]),
+                                  succeeded=False)
+        return None
+
+    bitrates = [int(x) for x in streams.keys()]
+    bitrates = [str(x) for x in reversed(sorted(bitrates)) ]
+
+    index = xbmcgui.Dialog().select("Select Bitrate", bitrates)
+
+    stream = streams[bitrates[index]]
+
+    li = xbmcgui.ListItem(title)
+    li.setInfo( type="Video", infoLabels={"Title" : title})
+    p = xbmc.Player()
+    p.play(stream, li)
 
 
-if len(sys.argv[2]) == 0:
+values = urlparse.parse_qs(sys.argv[2][1:])
+if 'game' in values.keys():
+    playGame(values)
+elif 'id' in values.keys():
+    id = values['id'][0]
+    if id == 'live':
+        createGamesMenu()
+    elif id == 'complete':
+        dt = None
+        if 'offset' in values.keys():
+            dt = values['offset'][0]
+        createGamesMenu(complete=True, offset=dt)
+else:
     if not authenticate() == None:
         createMainMenu()
-elif sys.argv[2] == '?id=live':
-    createMonthsMenu()
-elif sys.argv[2] == '?id=complete':
-    createMonthsMenu(complete = True)
-elif sys.argv[2][:7] == '?month=':
-    values = urlparse.parse_qs(sys.argv[2][1:])
-    createMonthMenu(values['month'][0])
-elif sys.argv[2][:11] == '?compmonth=':
-    values = urlparse.parse_qs(sys.argv[2][1:])
-    createMonthMenu(values['compmonth'][0], complete = True)
-elif sys.argv[2][:10] == "?condensed":
-    playGame(sys.argv[2][1:])
-elif sys.argv[2][:5] == "?game":
-    playGame(sys.argv[2][1:])

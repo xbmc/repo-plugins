@@ -14,8 +14,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import urllib, urllib2, xml.dom.minidom, cookielib, time, datetime
-import _strptime
+import os, re, urllib, urllib2, json, cookielib, datetime, uuid
+from urlparse import urlparse
 
 
 class MLSLive:
@@ -25,26 +25,36 @@ class MLSLive:
         Initialize the MLSLive class.
         """
 
-        self.CED_CONFIG = 'http://static.mlsdigital.net/mobile/v20/config.json'
-        self.PUBLISH_POINT = 'http://live.mlssoccer.com/mlsmdl/servlets/publishpoint'
-        self.LOGIN_PAGE = 'https://live.mlssoccer.com/mlsmdl/secure/login'
-        self.GAMES_PAGE_PREFIX = 'http://mobile.cdn.mlssoccer.com/iphone/v5/prod/games_for_week_'
+        self.BEARER = 'Bearer 94vDO2IN1y963U8NO9Jw8omaG5q94Rht1ERjD6AEnKna90x04lf5Ty6brFsbYs8V'
+        self.USER_AGENT = 'BAMSDK/1.0.4 (mlsoccer-F73A6101; 1.0.0; google; handset) google Nexus 9 (N4F26Q; Linux; 7.1.1; API 25)'
+        self.TOKEN_PAGE = 'https://global-api.live-svcs.mlssoccer.com/token'
+        self.LOGIN_PAGE = 'https://global-api.live-svcs.mlssoccer.com/v2/user/identity'
+        self.MATCHES_PAGE = 'https://api.mlsdigital.net/www.mlssoccer.com/matches?'
+        self.GRAPHGL_PAGE = 'https://cops-prod.live-svcs.mlssoccer.com/graphql'
+        self.GRAPHGL_QUERY= '?query={{%0A%20%20Schedule(gamePks:%20%22{0}%22)%20{{%0A%20%20%20%20dates%20{{%0A%20%20%20%20%20%20games%20{{%0A%20%20%20%20%20%20%20%20media%20{{%0A%20%20%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%20%20%20%20videos%20{{%0A%20%20%20%20%20%20%20%20%20%20%20%20contentId%0A%20%20%20%20%20%20%20%20%20%20%20%20runTime%0A%20%20%20%20%20%20%20%20%20%20%20%20type%0A%20%20%20%20%20%20%20%20%20%20%20%20...on%20Video%20{{%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20media%20{{%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20mediaId%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20mediaState%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20playbackUrls%20{{%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20href%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20}}%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20}}%0A%20%20%20%20%20%20%20%20%20%20%20%20}}%0A%20%20%20%20%20%20%20%20%20%20%20%20...on%20Airing%20{{%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20mediaId%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20eventId%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20linear%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20playbackUrls%20{{%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20href%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20}}%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20mediaConfig%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20{{%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20state%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20productType%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20type%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20}}%0A%20%20%20%20%20%20%20%20%20%20%20%20}}%0A%20%20%20%20%20%20%20%20%20%20}}%0A%20%20%20%20%20%20%20%20}}%0A%20%20%20%20%20%20}}%0A%20%20%20%20}}%0A%20%20}}%0A}}'
 
-        self.GAME_PREFIX = 'http://live.mlssoccer.com/mlsmdl/schedule?'
+    def total_seconds(self, dt):
+        # Keep backward compatibility with Python 2.6 which doesn't have
+        # this method
+        if hasattr(dt, 'total_seconds'):
+            return dt.total_seconds()
+        else:
+            return (dt.microseconds + (dt.seconds + dt.days * 24 * 3600) * 10**6) / 10**6
+ 
 
-        # resolution for images
-        self.RES = '560x320'
-        self.timeOffset = None
-
-
-    def getCookieFile(self):
-        import os
+    def getAddonFolder(self):
         try:
             import xbmc, xbmcaddon
-            base = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile'))
+            return xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile'))
         except:
-            base = os.getcwd()
-        return os.path.join(base, 'cookies.lwp')
+            return os.getcwd()
+
+
+    def getSettingsFile(self):
+        return os.path.join(self.getAddonFolder(), 'settings.json') 
+
+    def getCookieFile(self):
+        return os.path.join(self.getAddonFolder(), 'cookies.lwp')
 
 
     def createCookieJar(self):
@@ -58,8 +68,150 @@ class MLSLive:
         jar.load(cookie_file,ignore_discard=True)
         return jar
 
-    
-    def login(self, username, password):
+    def postToken(self, xff, token=None):
+        """
+        Get the token from MLBAM for MLS soccer.
+        @param token if specified, the toke to use for token authentication
+        """
+        jar = self.createCookieJar()
+        #urllib2.HTTPHandler(debuglevel=1),urllib2.HTTPSHandler(debuglevel=1)
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
+        opener.addheaders = [('Authorization', self.BEARER),
+                             ('User-Agent', urllib.quote(self.USER_AGENT))]
+        if not xff == None:
+            opener.addheaders.append(('X-Forwarded-For', xff))
+
+        values = { 'platform' : 'android',
+                   'latitude' : '61.172110800000000',
+                   'longitude' : '149.83626080000000',
+                   'grant_type' : 'client_credentials',
+                   'token' : 'BAMSDK_mlsoccer-F73A6101_prod_'}
+
+        if token == None:
+            values['token'] += str(uuid.uuid4())
+        else:
+            values['grant_type'] = 'urn:mlbam:params:oauth:grant_type:token'
+            values['token'] = token
+
+        try:
+            resp = opener.open(self.TOKEN_PAGE, urllib.urlencode(values))
+        except:
+            print "Unable to login"
+            return None
+        jar.save(filename=self.getCookieFile(), ignore_discard=True, ignore_expires=True)
+
+        resp_json = resp.read()
+        jsobj = json.loads(resp_json)
+
+        return jsobj
+
+
+    def postIdentity(self, xff, username, password, token):
+        """
+        Post the user credentials to the identiy service.
+        @param username The username
+        @param password The password
+        @param token The token generated from the token service
+        """
+        js_obj = {'email': {'address': username},
+                  'password':{'value': password},
+                  'type':'email-password'}
+        js_data = json.dumps(js_obj)
+
+        jar = self.createCookieJar()
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
+
+        rq_headers = {'Authorization': token,
+                      'User-Agent': self.USER_AGENT,
+                      'Content-Type': 'application/json',
+                      'Accept': 'application/vnd.identity-service+json; version=1.0',
+                      'Content-Length': len(js_data)}
+        if not xff == None:
+            rq_headers['X-Forwarded-For'] = xff
+
+        
+        req = urllib2.Request(self.LOGIN_PAGE, data=js_data, headers=rq_headers)
+        
+
+        try:
+            resp = opener.open(req)
+        except:
+            print "Unable to POST identify"
+            return False
+        jar.save(filename=self.getCookieFile(), ignore_discard=True, ignore_expires=True)
+
+        js_obj = json.loads(resp.read())
+        return js_obj['code']
+
+
+    def getMatches(self, start, end, xff):
+        """
+        Get the matches within a time frame
+        """
+        jar = self.createCookieJar()
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
+        opener.addheaders = [('accept-version', '2.0.1'),
+                             ('Authorization', 'Basic bWF0Y2hkYXlfYW5kcm9pZDpKN3Q4dzhiRUJUYVVHWDJMZzJaTlZ5WXk=')]
+        if not xff == None:
+            opener.addheaders.append(('X-Forwarded-For', xff))
+
+        url = self.MATCHES_PAGE + urllib.urlencode({ 'startdate' : start, 'enddate' : end })
+        try:
+            resp = opener.open(url)
+        except:
+            print "Unable to get matches"
+            return None
+        jar.save(filename=self.getCookieFile(), ignore_discard=True, ignore_expires=True)
+        js_str = resp.read()
+        js_obj = json.loads(js_str)
+
+        return js_obj
+
+
+    def postGraphql(self, opta_id, token, xff):
+        query = self.GRAPHGL_QUERY.format(opta_id)
+        uri = self.GRAPHGL_PAGE + query
+
+        jar = self.createCookieJar()
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
+        opener.addheaders = [('Authorization', token),
+                             ('Accept', 'application/json'),
+                             ('User-Agent', urllib.quote(self.USER_AGENT))]
+        if not xff == None:
+            opener.addheaders.append(('X-Forwarded-For', xff))
+
+        try:
+            resp = opener.open(uri)
+        except:
+            print "Unable to get stream metadata"
+            return False
+        jar.save(filename=self.getCookieFile(), ignore_discard=True, ignore_expires=True)
+
+        return json.loads(resp.read())
+
+
+    def getEvents(self, uri, token, xff):
+        jar = self.createCookieJar()
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
+        opener.addheaders = [('Authorization', token),
+                             ('Accept', 'application/vnd.media-service+json; version=1'),
+                             ('x-mlbam-player-adapter', 'exoplayer-2.0.x'),
+                             ('User-Agent', urllib.quote(self.USER_AGENT))]
+        if not xff == None:
+            opener.addheaders.append(('X-Forwarded-For', xff))
+
+        try:
+            resp = opener.open(uri)
+        except:
+            print "Unable to get stream details"
+            return None
+        jar.save(filename=self.getCookieFile(), ignore_discard=True, ignore_expires=True)
+
+        js_str = resp.read()
+        return json.loads(js_str)
+
+
+    def login(self, username, password, xff = None):
         """
         Login to the MLS Live streaming service.
         
@@ -68,138 +220,57 @@ class MLSLive:
         @return: True if authentication is successful, otherwise, False.
         """
 
-        # setup the login values        
-        values = { 'username' : username,
-                   'password' : password }
-
-        jar = self.createCookieJar()
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))#,
-        #urllib2.HTTPSHandler(debuglevel=1))
-        try:
-            resp = opener.open(self.LOGIN_PAGE, urllib.urlencode(values))
-        except:
-            print "Unable to login"
-            return False
-        jar.save(ignore_discard=True)
-
-        resp_xml = resp.read()
-        dom = xml.dom.minidom.parseString(resp_xml)
-
-        result_node = dom.getElementsByTagName('result')[0]
-        code_node = result_node.getElementsByTagName('code')[0]
-        
-        if code_node.firstChild.nodeValue == 'loginsuccess':
-            return True
-
-        return False
-
-
-    def getTimeOffset(self, games_xml):
-
-        # there are no games in the first month, but it still returns the time
-        now = datetime.datetime.now()
-
-        # parse the xml for the server time
-        dom = xml.dom.minidom.parseString(games_xml)
-        result_node = dom.getElementsByTagName('result')[0]
-        cur_date_node = result_node.getElementsByTagName('currentDate')[0]
-        cur_date = cur_date_node.firstChild.nodeValue
-
-        try:
-            t = time.strptime(cur_date, '%a %b %d %H:%M:%S EST %Y')
-            server = datetime.datetime.fromtimestamp(time.mktime(t))
-        except ValueError:
-            print "ERROR: Unable to get server time"
+        token = self.postToken(xff)
+        if token == None:
+            print "No token returned"
+            return None
+        token = token['access_token']
+        if token == None:
+            print "Unable to get token."
             return None
 
-        # calculate the time delta between the server and the local time zone
-        # accommodating for network delay
-        td = server - now
-        seconds = td.seconds
-        modsecs = seconds % 100
-        if modsecs < 100:
-            seconds += (100 - modsecs)
-        self.timeOffset = datetime.timedelta(days = td.days, seconds = seconds)
-
-        return None
-
-
-    def getGamesXML(self, month, year = '2016'):
-
-        values = {'format' : 'xml',
-                  'year' : year,
-                  'month' : month,
-                  'checksubscription' : 'true' }
-
-        jar = self.loadCookieJar()
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
-        try:
-            resp = opener.open(self.GAME_PREFIX, urllib.urlencode(values))
-        except:
-            print "Unable get games xml"
+        code = self.postIdentity(xff, username, password, token)
+        if code == None:
+            print "Unable to get code from identify"
             return None
-        jar.save(filename=self.getCookieFile(), ignore_discard=True)
 
-        xml_data = resp.read()
+        js_obj = self.postToken(xff, code)
 
-        return xml_data
+        # store of the tokens
+        fp = open(self.getSettingsFile(), 'w')
+        json.dump(js_obj, fp)
+        fp.close()
+
+        return True
 
 
-    def getGames(self, month):
+    def getWeekRange(self, dt):
+        """
+        Get the epoch values of monday morning at midnight to the following
+        monday at 11:59:59PM
+        """
+        #roll back to the first day of the week (monday)
+        start = dt - datetime.timedelta(days=dt.weekday(), hours=dt.hour,
+                                 minutes=dt.minute, seconds=dt.second)
+        end = start + datetime.timedelta(days=8, seconds=-1)
+        epoch = datetime.datetime(1970,1,1)
+
+        return (int(self.total_seconds(start - epoch)),
+                int(self.total_seconds(end - epoch)))
+
+
+    def getGames(self, dt = None, xff = None):
         """
         Get the list of games.
-        
-        @param games_url the url of the weeks games
+
         @return json game data
         """
+        # if no datetime specified just assume now
+        if dt == None:
+            dt = datetime.datetime.now()
 
-        games_xml = self.getGamesXML(month)
-        if games_xml == None:
-            return None
-
-        self.getTimeOffset(games_xml)
-
-        dom = xml.dom.minidom.parseString(games_xml)
-
-        result_node = dom.getElementsByTagName('result')[0]
-        games_node = result_node.getElementsByTagName('games')[0]
-
-        games = []
-        for game_node in games_node.getElementsByTagName('game'):
-            game = {}
-
-            # parse each element we'll need
-            for str in ['gid', 'type', 'id', 'gameTimeGMT', 'awayTeam',
-                        'homeTeam', 'awayTeamName', 'homeTeamName', 'programId',
-                        'gs', 'result', 'isLive']:
-                nodes = game_node.getElementsByTagName(str)
-                if len(nodes) > 0:
-                    game[str] = nodes[0].firstChild.nodeValue
-
-            games.append(game)
-
-        return games
-
-    def getGameDateTimeStr(self, game_date_time):
-        """
-        Convert the date time stamp from GMT to local time
-        @param game_date_time the game time (in GMT)
-        @return a string containing the local game date and time.
-        """
-
-        try:
-            game_t = time.strptime(game_date_time, "%Y-%m-%d %H:%M:%S.%f")
-        except ValueError:
-            return None
-
-        game = datetime.datetime.fromtimestamp(time.mktime(game_t))
-
-        # attempt to calculate the local time
-        if not self.timeOffset == None:
-            game -= self.timeOffset
-
-        # return a nice string
-        return game.strftime("%m/%d %H:%M")
+        week_range = self.getWeekRange(dt)
+        return self.getMatches(week_range[0], week_range[1], xff)
 
 
     def getGameString(self, game, separator):
@@ -211,98 +282,98 @@ class MLSLive:
         @return the game title
         """
 
-        # create the base string
-        game_str = game['awayTeamName'] + ' ' + separator + ' ' + \
-                   game['homeTeamName']
+        game_dt = datetime.datetime.fromtimestamp(game['date'])
+        dt_str = game_dt.strftime("%m/%d %H:%M")
 
-        if 'isLive' in game.keys():
-            if game['isLive'] == 'true':
-                game_str = '[I]' + game_str + '[/I]'
-
-        # if we can get the date/time of the game add it
-        dt = self.getGameDateTimeStr(game['gameTimeGMT'])
-        if not dt == None:
-            game_str += ' ([B]' + dt + '[/B])'
+        game_str = '{1} {2} {0} [I]{3}[/I]  [B]{4}[/B]'\
+        .format(game['home']['name']['full'], game['away']['name']['full'],
+                separator, game['period'], dt_str) 
 
         return game_str.encode('utf-8').strip()
 
 
-    def getFinalStreams(self, game_id):
+    def parsePlaylist(self, uri, token, xff):
         """
-        Get the streams for matches that have ended.
-        @param game_id the game id
-        @return a dictionary containing the streams with keys for the stream
-                type
+        Parse the playlist and split it by bitrate.
         """
-        game_xml = self.getGameXML(game_id)
-        try:
-            dom = xml.dom.minidom.parseString(game_xml)
-        except:
-            return None
-
-        rss_node = dom.getElementsByTagName('rss')[0]
-        chan_node = rss_node.getElementsByTagName('channel')[0]
-        games = {}
-        for item in chan_node.getElementsByTagName('item'):
-            # get the game type
-            game_type = item.getElementsByTagName('nl:type')[0].firstChild.nodeValue
-
-            # get the group list and make sure its valid
-            group_list = item.getElementsByTagName('media:group')
-            if group_list == None or len(group_list) == 0:
-                continue
-
-            # get the content node and then the URL
-            content_node = group_list[0].getElementsByTagName('media:content')[0]
-            games[game_type] = content_node.getAttribute('url')
-
-        return games
-
-    def getStream(self, adaptive):
-
-        return None
-
-
-    def getGameLiveStream(self, game_id, condensed = False):
-        """
-        Get the game streams. This method will parse the game XML for the
-        HLS playlist, and then parse that playlist for the different bitrate
-        streams.
-
-        @param game_id the game id
-        @return the live stream
-        """
-        values = { 'type' : 'game',
-                   'gt' : 'condensed' if condensed else 'live',
-                   'id' : game_id,
-                   'nt' : '1'}
-
-        uri = self.PUBLISH_POINT + '?' + urllib.urlencode(values)
-        jar = self.loadCookieJar()
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar),
-                                      urllib2.HTTPHandler(debuglevel=1),
-                                      urllib2.HTTPSHandler(debuglevel=1))
-
-        # set the user agent to get the HLS stream
-        opener.addheaders = [('User-Agent', urllib.quote('PS3Application libhttp/4.5.5-000 (CellOS)'))]
+        streams = {}
+        jar = self.createCookieJar()
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
+        cookie = 'Authorization={0}'.format(token)
+        opener.addheaders = [('Cookie', cookie),
+                             ('User-Agent', urllib.quote(self.USER_AGENT))]
+        if not xff == None:
+            opener.addheaders.append(('X-Forwarded-For', xff))
 
         try:
             resp = opener.open(uri)
-        except urllib2.URLError as error:
-            print 'ERROR: ' + error.reason + '(' + uri + ')'
-            return ""
-
-        jar.save(filename=self.getCookieFile(), ignore_discard=True)
-        game_xml = resp.read()
-
-        try:
-            dom = xml.dom.minidom.parseString(game_xml)
         except:
-            print "Unable to parse game XML for game " + game_id
-            return ""
+            print "Unable to get stream metadata"
+            return False
+        jar.save(filename=self.getCookieFile(), ignore_discard=True, ignore_expires=True)
 
-        result_node = dom.getElementsByTagName('result')[0]
-        path_node = result_node.getElementsByTagName('path')[0]
-        stream_url = path_node.firstChild.nodeValue
+        m3u8 = resp.read();
 
-        return stream_url
+        url = urlparse(uri)
+        prefix = url.scheme + "://" + url.netloc + url.path[:url.path.rfind('/')+1]
+        suffix = '?' + url.params + url.query + url.fragment
+        lines = m3u8.split('\n')
+
+        bandwidth = ""
+        for line in lines:
+            if line == "#EXTM3U":
+                continue
+            if line[:17] == '#EXT-X-STREAM-INF':
+                bandwidth = re.search(".*,?BANDWIDTH\=(.*?),.*", line)
+                if bandwidth:
+                    bandwidth = bandwidth.group(1)
+                else:
+                    print "Unable to parse bandwidth"
+            elif line[-5:] == ".m3u8":
+                stream = '{0}{1}|User-Agent={2}&Cookie={3}&{4}'.format(prefix,
+                            line, urllib.quote(self.USER_AGENT), urllib.quote(cookie),
+                            cookie)
+                if not xff == None:
+                    stream += '&X-Forwarded-For={0}'.format(urllib.quote(xff))
+                streams[bandwidth] = stream
+
+        return streams
+
+
+    def getStreams(self, opta_id, xff=None):
+        """
+        Get the stream
+        @param opta_id the optaId from the games list
+        @TODO check expiry on the token
+        """
+        try:
+            fp = open(self.getSettingsFile(), 'r')
+            settings = json.load(fp)
+            fp.close()
+        except:
+            print "Unable to load settings so couldn't get access_token"
+            return None
+
+        token = settings['access_token']
+
+        js_obj = self.postGraphql(opta_id, token, xff)
+        if js_obj == None:
+            return None
+        print js_obj
+        dates = js_obj['data']['Schedule']['dates']
+        if len(dates) == 0:
+            print "Unable to load stream metadata. No dates"
+            return None
+
+        media = dates[0]['games'][0]['media'][0]
+        uri = media['videos'][0]['playbackUrls'][0]['href']
+        uri = uri.replace('{scenario}', 'android')
+
+        js_obj = self.getEvents(uri, token, xff)
+        if js_obj == None:
+            return None
+        playlist = js_obj['stream']['complete']
+
+        streams = self.parsePlaylist(playlist, token, xff)
+
+        return streams

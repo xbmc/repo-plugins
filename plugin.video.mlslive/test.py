@@ -12,37 +12,31 @@ parser.add_option('-g', '--game', type='string', dest='game',
                   help="Game to display")
 parser.add_option('-m', '--month', type='string', dest='month',
                   help="List games of the month")
+parser.add_option('-x', '--x-forward-for', type='string', dest='xff',
+                  help="X-Forward-For header value")
 
 (options, args) = parser.parse_args()
-
-if options.user == None:
-    print "ERROR: please specify a username (call with -h for help)"
-    sys.exit(1)
-elif options.password == None:
-    print "ERROR: please specify a password (call with -h for help)"
-    sys.exit(1)
 
 
 my_mls = mlslive.MLSLive()
 
-if not my_mls.login(options.user, options.password):
-    print "*** Unable to authenticte with MLS live. please set username and password."
-    sys.exit(1)
+if options.user != None and options.password != None:
+    if not my_mls.login(options.user, options.password, options.xff):
+        print "*** Unable to authenticte with MLS live. please set username and password."
+        sys.exit(1)
+    else:
+        print "Logon successful..."
+
+if options.game == None:
+    games = my_mls.getGames(xff = options.xff)
+    for game in games:
+        game_str = my_mls.getGameString(game, 'at')
+        print '\t{0}) {1}'.format(game['optaId'], game_str) 
 else:
-    print "*** Logon successful"
-
-if options.month:
-    # print the months games
-    for game in my_mls.getGames(options.month):
-        print game['id'] + ') ' + my_mls.getGameString(game, "at")
-        if 'cpp' in game.keys():
-            print '\t' + game['cpp']
-elif options.game != None:
-    # get the games again :( (in the plugin we don't actually do this)
-    print my_mls.getGameLiveStream(options.game)
-
-
-    sys.exit(0)
-
-
+    streams = my_mls.getStreams(options.game, options.xff)
+    if streams == None:
+        print "Unable to get streams..."
+        sys.exit(1)
+    for stream in streams.keys():
+        print stream + ' ' + streams[stream]
 sys.exit(0)

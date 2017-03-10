@@ -13,14 +13,14 @@
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-   
+
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-   
+
    This is the first trial of the attactv plugin for XBMC.
    This plugins gets the videos from ATTAC TV web site and shows them ordered by appearance.
    This plugin depends on the lutil library functions.
-   This plugins depends as well of external plugins: youtube, vimeo and bliptv from TheCreative.
+   This plugin depends as well of the external youtube plugin.
 '''
 
 import lutil
@@ -60,22 +60,22 @@ lutil.log("attactv.main language selected for videos: %s" % language)
 entry_url = {   'es' : 'http://www.attac.tv/todos-los-videos',
                 'en' : 'http://www.attac.tv/en/all-videos',
                 'fr' : 'http://www.attac.tv/fr/toutes-les-videos',
-                'de' : 'http://www.attac.tv/de/alle-videos' } 
+                'de' : 'http://www.attac.tv/de/alle-videos' }
 
 
 # Entry point
 def run():
     lutil.log("attactv.run")
-    
+
     # Get params
     params = lutil.get_plugin_parms()
-    
+
     if params.get("action") is None:
         create_index(params)
     else:
         action = params.get("action")
         exec action+"(params)"
-    
+
 
 # Main index menu
 def create_index(params):
@@ -134,7 +134,7 @@ def main_list(params):
         lutil.log("attactv.main_list We have found an empty search result page page_url: %s" % page_url)
         lutil.close_dir(pluginhandle)
         return
-        
+
     # We must setup the previous page entry from the second page onwards.
     prev_page_url  = lutil.find_first(buffer_web, pattern_prevpage)
     if prev_page_url:
@@ -161,11 +161,11 @@ def main_list(params):
     for url, title, thumbnail in videolist:
         title = title.replace('&quot;', '"').replace('&#039;', '´').replace('&amp;', '&').strip()  # Cleanup the title.
         lutil.log('Videolist: URL: "%s" Title: "%s" Thumbnail: "%s"' % (url, title, thumbnail))
-        
+
         plot = title # The description only appears when we load the link, so a this point we copy the description with the title content.
         # Appends a new item to the xbmc item list
         lutil.addLink(action="play_video", title=title, plot=plot, url=url,thumbnail=thumbnail)
- 
+
     # Here we get the next page URL to add it at the end of the current video list page.
     next_page_url = lutil.find_first(buffer_web, pattern_nextpage)
     if next_page_url:
@@ -222,7 +222,7 @@ def get_playable_youtube_url(html):
 # This function try to get a Vimeo playable URL from the weblink and returns it ready to play it.
 def get_playable_vimeo_url(html):
     video_quality_pattern = '"profile":[0-9]+,"width":([0-9]+),.*?,"url":"([^"]*?)"'
-    quality_list          = ('640', '480', '1280')
+    quality_list          = ('640', '720', '480', '320', '960', '1280', '1920')
     vimeo_video_patterns  = (
         (' value="[htps:]*?//vimeo.com/moogaloop.swf\?clip_id=([0-9]+)', 'vimeo1'),
         ('<a href="[htps:]*?//vimeo.com/([0-9]+)">',                     'vimeo2'),
@@ -241,14 +241,18 @@ def get_playable_vimeo_url(html):
                 if quality in video_options:
                     return video_options.get(quality)
             else:
-                return False
+                if len(video_options):
+                    lutil.log("attactv.play: this Vimeo video hasn't got an standard resolution!")
+                    return video_options.get(video_options.keys()[0])
+                else:
+                    return False
 
     return ""
 
 
 # This function try to get a KontextTV playable URL from the weblink and returns it ready to play it directly.
 def get_playable_kontexttv_url(html):
-    pattern_kontexttv = '[htp:]*?(//www.kontext-tv.de/sites/default/files/.*?flv)'
+    pattern_kontexttv = '[htp:]*?(//kontext-tv.org/videos/.*?mp4)'
 
     video_url = lutil.find_first(html, pattern_kontexttv)
     if video_url:
@@ -282,9 +286,9 @@ def get_playable_wsftv_url(html):
 
 # This function try to get a Dailymotion playable URL from the weblink and returns it ready to play it directly.
 def get_playable_dailymotion_url(html):
-    pattern_dailymotion   = ' src="[htp:]*?(//www.dailymotion.com/embed/video/[^"]*?)"'
-    video_quality_pattern = '"([0-9]+)":\[{"type":"video\\\/mp4","url":"(.+?)"'
-    quality_list          = ('480', '720', '380', '240') 
+    pattern_dailymotion   = ' src="[htp:]*?(//www.dailymotion.com/embed/video/[0-9a-zA-Z]+)'
+    video_quality_pattern = '"([0-9]+)":\[[^]]*?{"type":"video\\\/mp4","url":"([^"]+?)"'
+    quality_list          = ('480', '720', '380', '240')
 
     daily_url = lutil.find_first(html, pattern_dailymotion)
     if daily_url:

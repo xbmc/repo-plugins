@@ -50,7 +50,7 @@ class Main:
         # Afleveringen
         #
         parameters = {"action": "list", "plugin_category": LANGUAGE(30001),
-                      "url": self.BASE_URL + "category/tv-afleveringen/page/001/", "next_page_possible": "True"}
+                      "url": self.BASE_URL + "page/001/?cat=3&s=gamekings+s", "next_page_possible": "True"}
         url = self.plugin_url + '?' + urllib.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30001), iconImage="DefaultFolder.png")
         is_folder = True

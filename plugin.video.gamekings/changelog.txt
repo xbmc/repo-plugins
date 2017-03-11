@@ -1,3 +1,7 @@
+v1.2.5 (2017-03-11)
+- small fix for tv-episodes
+- added twitch 'Gamekings live' stream support by using the twitch plugin (much respect to authors of the plugin)
+
 v1.2.4 (2016-07-11)
 - fixed premium videos (!!!!) by using the vimeo plugin (big kudo's to bromix for the plugin)
 - don't change titles anymore for premium video's

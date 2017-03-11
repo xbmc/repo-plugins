@@ -15,6 +15,7 @@ import xbmcplugin
 from gamekings_const import ADDON, SETTINGS, LANGUAGE, DATE, VERSION
 
 LOGINURL = 'http://www.gamekings.tv/wp-login.php'
+TWITCHURL =  'plugin://plugin.video.twitch/playLive/gamekings/'
 
 #
 # Main class
@@ -270,6 +271,14 @@ class Main:
                 vimeo_id = vimeo_id.replace("https://player.vimeo.com/video/", "")
                 vimeo_id = vimeo_id[0:vimeo_id.find("?")]
                 video_url = 'plugin://plugin.video.vimeo/play/?video_id=%s' % vimeo_id
+
+            list_item = xbmcgui.ListItem(path=video_url)
+            xbmcplugin.setResolvedUrl(self.plugin_handle, True, list_item)
+        #
+        # Check if it's a twitch live stream
+        #
+        elif str(html_source).find("twitch") > 0:
+            video_url = TWITCHURL
 
             list_item = xbmcgui.ListItem(path=video_url)
             xbmcplugin.setResolvedUrl(self.plugin_handle, True, list_item)

@@ -1,3 +1,10 @@
+1.1.13 (2017.03.10)
+- Fixed scraper due to Dailymotion website changes.
+- Fixed scraper due to KontextTV website changes.
+- Improved Vimeo scraper to support non standard video resolutions.
+- Updated logging system.
+- Improved video patterns.
+- Code refactored and cleaned.
 1.1.12 (2016.04.03)
 - Quick fix on scraper due to Vimeo website changes.
 - Code refactoring and cleaning.

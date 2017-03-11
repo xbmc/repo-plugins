@@ -167,6 +167,8 @@ def prepareThumb(thumbUrl, baseUrl):
     return ""
   thumbUrl = prepareImgUrl(thumbUrl, baseUrl)
   thumbUrl = re.sub(r"\{format\}|small|medium|large|extralarge", THUMB_SIZE, thumbUrl)
+  # Kodi has issues fetching images over SSL
+  thumbUrl = thumbUrl.replace("https", "http")
   return thumbUrl
 
 def prepareFanart(fanartUrl, baseUrl):
@@ -177,6 +179,8 @@ def prepareFanart(fanartUrl, baseUrl):
     return ""
   fanartUrl = prepareImgUrl(fanartUrl, baseUrl)
   fanartUrl = re.sub(r"\{format\}|small|medium|large|extralarge", "extralarge_imax", fanartUrl)
+  # Kodi has issues fetching images over SSL
+  fanartUrl = fanartUrl.replace("https", "http")
   return fanartUrl
 
 
@@ -317,9 +321,8 @@ def getVideoURL(json_obj):
   Returns the video URL from a SVT JSON object.
   """
   video_url = None
-
-  for video in json_obj["video"]["videoReferences"]:
-    if video["playerType"] == "ios":
+  for video in json_obj["videoReferences"]:
+    if video["format"] == "hls":
       video_url = video["url"]
 
   return video_url
@@ -329,7 +332,7 @@ def getSubtitleUrl(json_obj):
   Returns a subtitleURL from a SVT JSON object.
   """
   url = None
-  for subtitle in json_obj["video"]["subtitles"]:
+  for subtitle in json_obj["subtitleReferences"]:
     if subtitle["url"].endswith(".wsrt"):
       url = subtitle["url"]
     else:
@@ -403,7 +406,7 @@ def getSetting(setting):
   return True if addon.getSetting(setting) == "true" else False
 
 def errorMsg(msg):
-  common.log("Error: "+msg)
+  common.log("ERROR: "+msg)
 
 def infoMsg(msg):
-  common.log("Info: "+msg)
+  common.log("INFO: "+msg)

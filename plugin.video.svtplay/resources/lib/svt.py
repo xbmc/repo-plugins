@@ -8,6 +8,7 @@ import CommonFunctions as common
 
 BASE_URL = "http://svtplay.se"
 API_URL = "/api/"
+VIDEO_API_URL="http://api.svt.se/videoplayer-api/video/"
 
 JSON_SUFFIX = "?output=json"
 
@@ -60,15 +61,14 @@ def getLatestNews():
   programs = []
   for item in json_data:
     live_str = ""
-    thumbnail = item.get("poster", "")
-    if not thumbnail:
-      thumbnail = item.get("thumbnail", "")
+    thumbnail = item.get("thumbnail", "")
     if item["broadcastedNow"]:
       live_str = " " + "[COLOR red](Live)[/COLOR]"
     program = {
         "title" : common.replaceHTMLCodes(item["programTitle"] + " " + (item["title"] or "") + live_str),
         "thumbnail" : helper.prepareThumb(thumbnail, baseUrl=BASE_URL),
-        "url" : "video/" + str(item["versions"][0]["articleId"])
+        "url" : "video/" + item["id"],
+        "info" : { "duration" : item.get("materialLength", 0), "fanart" : helper.prepareFanart(item.get("poster", ""), baseUrl=BASE_URL) }
         }
     programs.append(program)
   return programs
@@ -83,14 +83,19 @@ def getProgramsForGenre(genre):
 
   programs = []
   for item in json_data:
-    url = item["contentUrl"]
+    if item.get("titleType", "") == "MOVIE":
+      url = "video/" + item["id"]
+      content_type = "video"
+    else:
+      url = item["contentUrl"]
+      content_type = "program"
     title = item["programTitle"]
     plot = item.get("description", "")
     thumbnail = helper.prepareThumb(item.get("thumbnail", ""), BASE_URL)
     if not thumbnail:
       thumbnail = helper.prepareThumb(item.get("poster", ""), BASE_URL)
     info = {"plot": plot, "thumbnail": thumbnail, "fanart": thumbnail}
-    programs.append({"title": title, "url": url, "thumbnail": thumbnail, "info": info})
+    programs.append({"title": title, "url": url, "thumbnail": thumbnail, "info": info, "type" : content_type})
   return programs
 
 def getAlphas():
@@ -148,7 +153,7 @@ def getProgramsByLetter(letter):
   for title in json_data:
     if re.search(pattern, title["programTitle"][0].upper()):
       item = {}
-      item["url"] = "/" + title["contentUrl"]
+      item["url"] = title["contentUrl"]
       item["title"] = common.replaceHTMLCodes(title["programTitle"])
       item["thumbnail"] = ""
       items.append(item)
@@ -161,7 +166,7 @@ def getSearchResults(search_term):
   Returns a list of both clips and programs
   for the supplied search URL.
   """
-  json_data = __get_json("search_page;q="+search_term)
+  json_data = __get_json("search?q="+search_term)
   if json_data is None:
     return None
 
@@ -178,7 +183,7 @@ def getSearchResults(search_term):
 
   for video in json_data["episodes"]:
     item = {}
-    item["title"] = common.replaceHTMLCodes(video["title"])
+    item["title"] = video["programTitle"] + " - " + common.replaceHTMLCodes(video["title"])
     item["url"] = video["contentUrl"]
     item["thumbnail"] = helper.prepareThumb(video.get("imageMedium", ""), baseUrl=BASE_URL)
     item["info"] = {}
@@ -230,18 +235,22 @@ def getEpisodes(title):
   """
   Returns the episodes for a program URL.
   """
-  json_data = __get_json("title_page;title="+title)
+  article_id = __get_article_id_for_title(title)
+  if article_id is None:
+    return None
+
+  json_data = __get_json("title_episodes_by_article_id?articleId=%s" % (str(article_id)))
   if json_data is None:
     return None
 
   programs = []
-  for item in json_data["relatedVideos"]["episodes"]:
+  for item in json_data:
     program = {}
     program["title"] = item["title"]
     try:
-      program["title"] = program["title"] + "[COLOR green] (S%sE%s)[/COLOR]" % (str(item["season"]), str(item["episodeNumber"]))
+      program["title"] = program["title"] + "[COLOR gray] (S%sE%s)[/COLOR]" % (str(item["season"]), str(item["episodeNumber"]))
     except KeyError:
-      # Supress
+      # Suppress
       pass
     program["url"] = "video/" + str(item["id"])
     program["thumbnail"] = helper.prepareThumb(item.get("thumbnail", ""), BASE_URL)
@@ -256,37 +265,52 @@ def getClips(title):
   """
   Returns the clips for a program URL.
   """
-  json_data = __get_json("title_page;title="+title)
+  article_id = __get_article_id_for_title(title)
+  if article_id is None:
+    return None
+
+  json_data = __get_json("title_clips_by_title_article_id?articleId=%s" % (str(article_id)))
   if json_data is None:
     return None
 
   clips = []
-  for item in json_data["relatedVideos"]["clipsResult"]["entries"]:
+  for item in json_data:
     clip = {}
     clip["title"] = item["title"]
     clip["url"] = "klipp/" + str(item["id"])
-    clip["thumbnail"] = helper.prepareThumb(item.get("thumbnailMedium", ""), BASE_URL)
+    clip["thumbnail"] = helper.prepareThumb(item.get("thumbnail", ""), BASE_URL)
     info = {}
+    info["title"] = clip["title"]
     info["plot"] = item.get("description", "")
     clip["info"] = info
     clips.append(clip)
   return clips
 
 def getVideoJSON(video_url):
-  return __get_json("title_page;title=" + video_url)
+  video_id = video_url.replace("video/", "")
+  return __get_video_json_for_video_id(video_id)
 
 def getItems(section_name, page):
   if not page:
     page = 1
-  json_data = __get_json(section_name+"_page?page="+str(page))
+  json_data = __get_json(section_name+"?page="+str(page))
   if json_data is None:
     return None
 
+  current_page = json_data["currentPage"]
+  total_pages = json_data["totalPages"]
+
   returned_items = []
-  for video in json_data["videos"]:
+  for video in json_data["data"]:
+    is_program = video.get("hasEpisodes", False)
     item = {}
     item["title"] = video["programTitle"]
-    item["url"] = video["contentUrl"]
+    if is_program:
+      item["url"] = video["contentUrl"]
+      item["type"] = "program"
+    else:
+      item["url"] = video["id"]
+      item["type"] = "video"
     item["thumbnail"] = helper.prepareThumb(video.get("thumbnail", ""), baseUrl=BASE_URL)
     info = {}
     info["title"] = item["title"]
@@ -295,7 +319,7 @@ def getItems(section_name, page):
     except KeyError:
       # Some videos do not have description (Rapport etc)
       info["plot"] = ""
-    info["aired"] = video["broadcastDate"]
+    info["aired"] = video.get("broadcastDate", "")
     try:
       info["duration"] = video["materialLength"]
     except KeyError:
@@ -306,9 +330,42 @@ def getItems(section_name, page):
     except KeyError:
       pass
     item["info"] = info
+    if not item["thumbnail"] and info["fanart"]:
+      item["thumbnail"] = info["fanart"]
+    if video.get("broadcastedNow", False):
+      item["title"] = item["title"] + " [COLOR red](Live)[/COLOR]"
     returned_items.append(item)
 
-  return (returned_items, json_data["paginationData"]["totalPages"] > json_data["paginationData"]["currentPage"])
+  return (returned_items, total_pages > current_page)
+
+def __get_article_id_for_title(title):
+  # Convert contentUrl to slug
+  title = title.strip("/")
+  url = "title?slug="+title
+  json_data = __get_json(url)
+  if json_data is None:
+    return None
+  else:
+    return json_data["articleId"]
+
+def __get_video_id_for_video_title(video_title):
+  article_id = video_title.replace("video/", "")
+  json_data = __get_json("episode?id=%s" % article_id)
+  if json_data is None:
+    return None
+  return json_data["id"]
+
+def __get_video_json_for_video_id(video_id):
+  # Magic, ID should end with "A"
+  if not video_id.endswith("A"):
+    video_id = video_id + "A"
+  url = VIDEO_API_URL + str(video_id)
+  common.log("Fetching video data for URL %s" % url)
+  response = requests.get(url)
+  if response.status_code != 200:
+    common.log("ERROR: Could not fetch video data for URL %s" % url)
+    return None
+  return response.json() 
 
 def __get_json(api_action):
   """
@@ -318,6 +375,8 @@ def __get_json(api_action):
   the function returns None.
   """
   url = BASE_URL+API_URL+api_action
+  # For debug purposes
+  #common.log("Request for %s" % url)
   response = requests.get(url)
   if response.status_code != 200:
     common.log("ERROR: Failed to get JSON for "+url)

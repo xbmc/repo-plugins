@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 '''
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
-import os, urllib, urlparse, time, datetime, mlslive
+import sys, os, urllib, urlparse, time, datetime, mlslive
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.mlslive')
 __language__ = __settings__.getLocalizedString
@@ -52,6 +52,7 @@ def createGamesMenu(complete = False, offset = None):
     @param offset from the current date for which completed games will be shown
     """
     mls = mlslive.MLSLive()
+    fav = mls.getFavoriteClub()
 
     dt = datetime.datetime.now();
     if not offset == None:
@@ -73,8 +74,21 @@ def createGamesMenu(complete = False, offset = None):
         elif complete and game['period'] != 'FullTime':
             continue
 
+        plot = mls.getDescription(game, __language__(30021))
+        infos = { 'genre' : game['competition']['name'],
+                  'title' : mls.getFullTitle(game, __language__(30008)),
+                  'tvshowtitle' : game['competition']['name'],
+                  'plot' : plot,
+                  'plotoutline' : plot }
         title = mls.getGameString(game, __language__(30008))
         li = xbmcgui.ListItem(title)
+        li.setInfo('video', infos)
+
+        # if an image is available, use it
+        img = mls.getImage(game, fav)
+        if not img == None:
+            li.setIconImage(img)
+
         values = {'game' : game['optaId'],
                   'title' : title}
 
@@ -147,14 +161,29 @@ def playGame(values):
     game = values['game'][0]
 
     mls = mlslive.MLSLive()
-    streams = mls.getStreams(game, xff)
+    medias = mls.getStreams(game, xff)
 
-    if streams == None:
+    if medias == None:
         dialog = xbmcgui.Dialog()
         dialog.ok(__language__(30015), __language__(30016))
         xbmcplugin.endOfDirectory(handle = int(sys.argv[1]),
                                   succeeded=False)
         return None
+
+    names = []
+    for media in medias:
+        names.append(media['name'])
+
+    if len(names) > 1:
+        index = xbmcgui.Dialog().select("Select Stream", names)
+        if index < 0:
+            xbmcplugin.endOfDirectory(int(sys.argv[1]))
+            return
+        media = medias[index]
+    else:
+        media = medias[0]
+    
+    streams = mls.getStreamURIs(media, xff)
 
     bitrates = [int(x) for x in streams.keys()]
     bitrates = [str(x) for x in reversed(sorted(bitrates)) ]
@@ -169,6 +198,29 @@ def playGame(values):
     p.play(stream, li)
 
 
+def favoriteTeam():
+    mls = mlslive.MLSLive()
+    clubs = mls.getClubs(xff)
+
+    mls_clubs = {}
+    for club in clubs:
+        if club['isMLS']:
+            mls_clubs[club['name']['full']] = club['id']
+
+    names = sorted(mls_clubs.keys())
+    index = xbmcgui.Dialog().select("Select Favorite Team", names)
+    if index < 0:
+        return
+
+    mls.setFavoriteClub(mls_clubs[names[index]])
+    return
+
+# handle favorite teams from the configuration
+if sys.argv[1] == 'favorite':
+    favoriteTeam()
+    sys.exit(0)
+
+# handle normal plugin operations
 values = urlparse.parse_qs(sys.argv[2][1:])
 if 'game' in values.keys():
     playGame(values)

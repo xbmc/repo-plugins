@@ -26,9 +26,11 @@ class MLSLive:
         """
 
         self.BEARER = 'Bearer 94vDO2IN1y963U8NO9Jw8omaG5q94Rht1ERjD6AEnKna90x04lf5Ty6brFsbYs8V'
+        self.BASIC = 'Basic bWF0Y2hkYXlfYW5kcm9pZDpKN3Q4dzhiRUJUYVVHWDJMZzJaTlZ5WXk='
         self.USER_AGENT = 'BAMSDK/1.0.4 (mlsoccer-F73A6101; 1.0.0; google; handset) google Nexus 9 (N4F26Q; Linux; 7.1.1; API 25)'
         self.TOKEN_PAGE = 'https://global-api.live-svcs.mlssoccer.com/token'
         self.LOGIN_PAGE = 'https://global-api.live-svcs.mlssoccer.com/v2/user/identity'
+        self.CLUBS_PAGE = 'https://api.mlsdigital.net/www.mlssoccer.com/clubs?'
         self.MATCHES_PAGE = 'https://api.mlsdigital.net/www.mlssoccer.com/matches?'
         self.GRAPHGL_PAGE = 'https://cops-prod.live-svcs.mlssoccer.com/graphql'
         self.GRAPHGL_QUERY= '?query={{%0A%20%20Schedule(gamePks:%20%22{0}%22)%20{{%0A%20%20%20%20dates%20{{%0A%20%20%20%20%20%20games%20{{%0A%20%20%20%20%20%20%20%20media%20{{%0A%20%20%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%20%20%20%20videos%20{{%0A%20%20%20%20%20%20%20%20%20%20%20%20contentId%0A%20%20%20%20%20%20%20%20%20%20%20%20runTime%0A%20%20%20%20%20%20%20%20%20%20%20%20type%0A%20%20%20%20%20%20%20%20%20%20%20%20...on%20Video%20{{%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20media%20{{%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20mediaId%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20mediaState%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20playbackUrls%20{{%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20href%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20}}%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20}}%0A%20%20%20%20%20%20%20%20%20%20%20%20}}%0A%20%20%20%20%20%20%20%20%20%20%20%20...on%20Airing%20{{%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20mediaId%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20eventId%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20linear%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20playbackUrls%20{{%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20href%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20}}%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20mediaConfig%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20{{%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20state%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20productType%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20type%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20}}%0A%20%20%20%20%20%20%20%20%20%20%20%20}}%0A%20%20%20%20%20%20%20%20%20%20}}%0A%20%20%20%20%20%20%20%20}}%0A%20%20%20%20%20%20}}%0A%20%20%20%20}}%0A%20%20}}%0A}}'
@@ -151,11 +153,35 @@ class MLSLive:
         jar = self.createCookieJar()
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
         opener.addheaders = [('accept-version', '2.0.1'),
-                             ('Authorization', 'Basic bWF0Y2hkYXlfYW5kcm9pZDpKN3Q4dzhiRUJUYVVHWDJMZzJaTlZ5WXk=')]
+                             ('Authorization', self.BASIC)]
         if not xff == None:
             opener.addheaders.append(('X-Forwarded-For', xff))
 
         url = self.MATCHES_PAGE + urllib.urlencode({ 'startdate' : start, 'enddate' : end })
+        try:
+            resp = opener.open(url)
+        except:
+            print "Unable to get matches"
+            return None
+        jar.save(filename=self.getCookieFile(), ignore_discard=True, ignore_expires=True)
+        js_str = resp.read()
+        js_obj = json.loads(js_str)
+
+        return js_obj
+
+
+    def getClubs(self, xff = None):
+        """
+        Get the list of clubs
+        """
+        jar = self.createCookieJar()
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
+        opener.addheaders = [('accept-version', '2.0.1'),
+                             ('Authorization', self.BASIC)]
+        if not xff == None:
+            opener.addheaders.append(('X-Forwarded-For', xff))
+
+        url = self.CLUBS_PAGE + urllib.urlencode({ 'ttl' : 7200, 'pagesize' : 300 })
         try:
             resp = opener.open(url)
         except:
@@ -187,7 +213,8 @@ class MLSLive:
             return False
         jar.save(filename=self.getCookieFile(), ignore_discard=True, ignore_expires=True)
 
-        return json.loads(resp.read())
+        js_str = resp.read()
+        return json.loads(js_str)
 
 
     def getEvents(self, uri, token, xff):
@@ -236,6 +263,18 @@ class MLSLive:
 
         js_obj = self.postToken(xff, code)
 
+        try:
+            fp = open(self.getSettingsFile(), 'r')
+            settings = json.load(fp)
+            fp.close()
+
+            # update the auth settings
+            for key in js_obj.keys():
+                settings[key] = js_obj[key]
+            js_obj=settings
+        except:
+            pass
+
         # store of the tokens
         fp = open(self.getSettingsFile(), 'w')
         json.dump(js_obj, fp)
@@ -273,6 +312,39 @@ class MLSLive:
         return self.getMatches(week_range[0], week_range[1], xff)
 
 
+    def getTitle(self, game, fmt):
+        """
+        Get the title string
+        @param game the game json
+        @param separator text to separate the teams
+        """
+        return fmt.format(game['home']['name']['short'],
+                          game['away']['name']['short'])
+
+
+    def getFullTitle(self, game, fmt):
+        """
+        Get the title string
+        @param game the game json
+        @param separator text to separate the teams
+        """
+        return fmt.format(game['home']['name']['full'],
+                          game['away']['name']['full'])
+
+
+    def getDescription(self, game, fmt):
+        if not game['blackouts'] == None:
+            blackouts = ''
+            for blackout in game['blackouts']:
+                blackouts += blackout + ', '
+        else:
+            blackouts = 'None  '
+
+        return fmt.format(game['home']['name']['full'],
+                          game['away']['name']['full'],
+                          game['venue']['name'], blackouts[0:-2])
+
+
     def getGameString(self, game, separator):
         """
         Get the game title string
@@ -284,12 +356,34 @@ class MLSLive:
 
         game_dt = datetime.datetime.fromtimestamp(game['date'])
         dt_str = game_dt.strftime("%m/%d %H:%M")
-
-        game_str = '{1} {2} {0} [I]{3}[/I]  [B]{4}[/B]'\
-        .format(game['home']['name']['full'], game['away']['name']['full'],
-                separator, game['period'], dt_str) 
+        title = self.getTitle(game, separator)
+        game_str = '{0} [I]{1}[/I]  [B]{2}[/B]'.format(title, game['period'],
+                                                       dt_str) 
 
         return game_str.encode('utf-8').strip()
+
+
+    def getImage(self, game, fav = None):
+        """
+        Get the team image for the game. If the favorite is set and they are one
+        of the teams in the game, their image will be used, otherwise, the home
+        team's image will be used.
+
+        @param game The game
+        @param fav the [optional] favorite team
+        @return the game image or None if something went wrong.
+        """
+
+        # use the home team unless the away team if the favorite
+        team = game['home']
+        if fav and game['away']['id'] == fav:
+            team = game['away']
+
+        if 'logo' in team:
+            if 'original' in team['logo']:
+                return team['logo']['original']
+
+        return None
 
 
     def parsePlaylist(self, uri, token, xff):
@@ -299,8 +393,7 @@ class MLSLive:
         streams = {}
         jar = self.createCookieJar()
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
-        cookie = 'Authorization={0}'.format(token)
-        opener.addheaders = [('Cookie', cookie),
+        opener.addheaders = [('Authorization', token),
                              ('User-Agent', urllib.quote(self.USER_AGENT))]
         if not xff == None:
             opener.addheaders.append(('X-Forwarded-For', xff))
@@ -330,9 +423,8 @@ class MLSLive:
                 else:
                     print "Unable to parse bandwidth"
             elif line[-5:] == ".m3u8":
-                stream = '{0}{1}|User-Agent={2}&Cookie={3}&{4}'.format(prefix,
-                            line, urllib.quote(self.USER_AGENT), urllib.quote(cookie),
-                            cookie)
+                stream = '{0}{1}|User-Agent={2}&Authorization={3}'.format(prefix,
+                            line, urllib.quote(self.USER_AGENT), token)
                 if not xff == None:
                     stream += '&X-Forwarded-For={0}'.format(urllib.quote(xff))
                 streams[bandwidth] = stream
@@ -349,24 +441,38 @@ class MLSLive:
         try:
             fp = open(self.getSettingsFile(), 'r')
             settings = json.load(fp)
+            token = settings['access_token']
             fp.close()
         except:
             print "Unable to load settings so couldn't get access_token"
             return None
 
-        token = settings['access_token']
 
         js_obj = self.postGraphql(opta_id, token, xff)
         if js_obj == None:
             return None
-        print js_obj
         dates = js_obj['data']['Schedule']['dates']
         if len(dates) == 0:
             print "Unable to load stream metadata. No dates"
             return None
 
-        media = dates[0]['games'][0]['media'][0]
-        uri = media['videos'][0]['playbackUrls'][0]['href']
+        return dates[0]['games'][0]['media']
+
+
+    def getStreamURIs(self, media, xff=None):
+        try:
+            fp = open(self.getSettingsFile(), 'r')
+            settings = json.load(fp)
+            token = settings['access_token']
+            fp.close()
+        except:
+            print "Unable to load settings so couldn't get access_token"
+            return None
+        videos = media['videos'][0]
+        if 'media' in videos:
+            videos = videos['media'][0]
+        print videos
+        uri = videos['playbackUrls'][0]['href']
         uri = uri.replace('{scenario}', 'android')
 
         js_obj = self.getEvents(uri, token, xff)
@@ -377,3 +483,32 @@ class MLSLive:
         streams = self.parsePlaylist(playlist, token, xff)
 
         return streams
+
+    def setFavoriteClub(self, id):
+        try:
+            fp = open(self.getSettingsFile(), 'r')
+            settings = json.load(fp)
+            fp.close()
+        except:
+            settings = {}
+
+        settings['id'] = id;
+        fp = open(self.getSettingsFile(), 'w')
+        json.dump(settings, fp)
+        fp.close()
+
+
+    def getFavoriteClub(self):
+        try:
+            fp = open(self.getSettingsFile(), 'r')
+            settings = json.load(fp)
+            fp.close()
+        except:
+            print "Unable to load settings so couldn't get favorite club"
+            return None
+
+        # if the id was specified return it
+        if 'id' in settings.keys():
+            return settings['id']
+
+        return None

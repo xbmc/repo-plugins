@@ -11,5 +11,5 @@ ADDON = "plugin.video.gamegurumania"
 SETTINGS = xbmcaddon.Addon(id=ADDON)
 LANGUAGE = SETTINGS.getLocalizedString
 IMAGES_PATH = os.path.join(xbmcaddon.Addon(id=ADDON).getAddonInfo('path'), 'resources', 'images')
-DATE = "2016-03-12"
-VERSION = "1.0.4"
+DATE = "2017-03-12"
+VERSION = "1.0.5"

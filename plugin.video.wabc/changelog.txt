@@ -1,3 +1,4 @@
+Version 3.0.10 website change
 Version 3.0.9 bump t1mlib version to fix timeout request on Kodi 17.0 Android
 Version 3.0.8 Fix crap in metadata
 Version 3.0.7 Website changes

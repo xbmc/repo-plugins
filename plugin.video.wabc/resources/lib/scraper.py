@@ -23,7 +23,7 @@ class myAddon(t1mAddon):
   def getAddonMenu(self,url,ilist):
       urls = {}
       html = self.getRequest('http://abc.go.com/shows')
-      html = re.compile('<main class="content(.+?)<section  data-m-id="1904281', re.DOTALL).search(html).group(1)
+      html = re.compile('<main class="content(.+?)class="footer-modules"', re.DOTALL).search(html).group(1)
       a = re.compile('data-sm-id="".+?href="(.+?)".+?class="tablet-source.+?srcset="(.+?) ',re.DOTALL).findall(html)
       for url, thumb in a:
         if not '/' in url:

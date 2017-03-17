@@ -2,7 +2,7 @@
 import xbmcvfs
 import re
 import HTMLParser
-from resources.lib.kodion import simple_requests as requests
+import requests
 
 
 class Subtitles(object):
@@ -19,6 +19,7 @@ class Subtitles(object):
 
     def __init__(self, context, video_id):
         self.context = context
+        self._verify = context.get_settings().get_bool('simple.requests.ssl.verify', False)
         self.video_id = video_id
         self.language = context.get_settings().get_string('youtube.language', 'en_US').replace('_', '-')
         self.headers = {'Host': 'www.youtube.com',
@@ -59,6 +60,17 @@ class Subtitles(object):
             self.context.log_debug('File write failed for: %s' % _file)
             return False
 
+    def _unescape(self, text):
+        try:
+            text = text.decode('utf8', 'ignore')
+        except:
+            self.context.log_debug('Subtitle unescape: failed to decode utf-8')
+        try:
+            text = HTMLParser.HTMLParser().unescape(text)
+        except:
+            self.context.log_debug('Subtitle unescape: failed to unescape text')
+        return text
+
     def _get_subtitles(self):
         languages = self._languages()
         if languages == self.LANG_NONE:
@@ -66,7 +78,7 @@ class Subtitles(object):
 
         subtitle_list_url = self.SUBTITLE_LIST_URL % self.video_id
         result = requests.get(subtitle_list_url, headers=self.headers,
-                              verify=False, allow_redirects=True)
+                              verify=self._verify, allow_redirects=True)
         if result.text:
             if languages == self.LANG_ALL:
                 return self._get_all(result.text)
@@ -97,11 +109,10 @@ class Subtitles(object):
                 return_list.append(fname)
                 continue
             result = requests.get(self.subtitle_url(language), headers=self.headers,
-                                  verify=False, allow_redirects=True)
+                                  verify=self._verify, allow_redirects=True)
             if result.text:
                 self.context.log_debug('Subtitle found for: %s' % language)
-                result = self._write_file(fname, bytearray(HTMLParser.HTMLParser().unescape(result.text.decode('utf8')),
-                                          encoding='utf8', errors='ignore'))
+                result = self._write_file(fname, bytearray(self._unescape(result.text), encoding='utf8', errors='ignore'))
                 if result:
                     return_list.append(fname)
                 continue
@@ -121,11 +132,10 @@ class Subtitles(object):
             return [fname]
         if xml_contents.find('lang_code="%s"' % language) > -1:
             result = requests.get(self.subtitle_url(language), headers=self.headers,
-                                  verify=False, allow_redirects=True)
+                                  verify=self._verify, allow_redirects=True)
             if result.text:
                 self.context.log_debug('Subtitle found for: %s' % language)
-                result = self._write_file(fname, bytearray(HTMLParser.HTMLParser().unescape(result.text.decode('utf8')),
-                                          encoding='utf8', errors='ignore'))
+                result = self._write_file(fname, bytearray(self._unescape(result.text), encoding='utf8', errors='ignore'))
                 if result:
                     return [fname]
                 else:
@@ -144,11 +154,10 @@ class Subtitles(object):
                 return [fname]
             if xml_contents.find('lang_code="%s"' % language) > -1:
                 result = requests.get(self.subtitle_url(language), headers=self.headers,
-                                      verify=False, allow_redirects=True)
+                                      verify=self._verify, allow_redirects=True)
                 if result.text:
                     self.context.log_debug('Subtitle found for: %s' % language)
-                    result = self._write_file(fname, bytearray(HTMLParser.HTMLParser().unescape(result.text.decode('utf8')),
-                                          encoding='utf8', errors='ignore'))
+                    result = self._write_file(fname, bytearray(self._unescape(result.text), encoding='utf8', errors='ignore'))
                     if result:
                         return [fname]
                     else:
@@ -185,11 +194,10 @@ class Subtitles(object):
                 self.context.log_debug('Subtitle exists for: %s, filename: %s' % (language, fname))
                 return [fname]
             result = requests.get(self.subtitle_url(language), headers=self.headers,
-                                  verify=False, allow_redirects=True)
+                                  verify=self._verify, allow_redirects=True)
             if result.text:
                 self.context.log_debug('Subtitle found for: %s' % language)
-                result = self._write_file(fname, bytearray(HTMLParser.HTMLParser().unescape(result.text.decode('utf8')),
-                                          encoding='utf8', errors='ignore'))
+                result = self._write_file(fname, bytearray(self._unescape(result.text), encoding='utf8', errors='ignore'))
                 if result:
                     return [fname]
                 else:

@@ -4,7 +4,7 @@ import urllib
 import urlparse
 import re
 
-from resources.lib.kodion import simple_requests as requests
+import requests
 from ..youtube_exceptions import YouTubeException
 from .signature.cipher import Cipher
 from subtitles import Subtitles
@@ -329,6 +329,7 @@ class VideoInfo(object):
 
     def __init__(self, context, access_token='', language='en-US'):
         self._context = context
+        self._verify = context.get_settings().get_bool('simple.requests.ssl.verify', False)
         self._language = language.replace('-', '_')
         self.language = context.get_settings().get_string('youtube.language', 'en_US').replace('-', '_')
         self.region = context.get_settings().get_string('youtube.region', 'US')
@@ -359,7 +360,7 @@ class VideoInfo(object):
 
         url = 'https://www.youtube.com/watch'
 
-        result = requests.get(url, params=params, headers=headers, verify=False, allow_redirects=True)
+        result = requests.get(url, params=params, headers=headers, verify=self._verify, allow_redirects=True)
         html = result.text
 
         """
@@ -482,7 +483,7 @@ class VideoInfo(object):
                    'Referer': 'https://www.youtube.com/watch?v=%s' % video_id,
                    'Accept-Encoding': 'gzip, deflate',
                    'Accept-Language': 'en-US,en;q=0.8,de;q=0.6'}
-        result = requests.get(url, headers=headers, verify=False, allow_redirects=True)
+        result = requests.get(url, headers=headers, verify=self._verify, allow_redirects=True)
         lines = result.text.splitlines()
         _meta_info = {'video': {},
                       'channel': {},
@@ -538,7 +539,7 @@ class VideoInfo(object):
 
         url = 'https://www.youtube.com/get_video_info'
 
-        result = requests.get(url, params=params, headers=headers, verify=False, allow_redirects=True)
+        result = requests.get(url, params=params, headers=headers, verify=self._verify, allow_redirects=True)
 
         stream_list = []
 
@@ -550,8 +551,13 @@ class VideoInfo(object):
                      'images': {},
                      'subtitles': []}
         meta_info['video']['id'] = params.get('vid', params.get('video_id', ''))
-        meta_info['video']['title'] = params.get('title', '').decode('utf-8')
-        meta_info['channel']['author'] = params.get('author', '').decode('utf-8')
+        meta_info['video']['title'] = params.get('title', '')
+        meta_info['channel']['author'] = params.get('author', '')
+        try:
+            meta_info['video']['title'] = meta_info['video']['title'].decode('utf-8')
+            meta_info['channel']['author'] = meta_info['channel']['author'].decode('utf-8')
+        except:
+            pass
         meta_info['channel']['id'] = 'UC%s' % params.get('uid', '')
         image_data_list = [
             {'from': 'iurlhq', 'to': 'high'},

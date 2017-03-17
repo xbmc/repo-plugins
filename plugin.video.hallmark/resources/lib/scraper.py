@@ -49,7 +49,7 @@ class myAddon(t1mAddon):
       self.defaultVidStream['width']  = 1280
       self.defaultVidStream['height'] = 720
       html = self.getRequest(url)
-      c = re.compile('<div class="commoneptitle".+?<span.+?">(.+?)<.+?Season (.+?) .+?Episode (.+?)\n.+?"epsynopsis">(.+?)<.+?bc="(.+?)"',re.DOTALL).findall(html)
+      c = re.compile('<div class="commoneptitle".+?<span.+?">(.+?)<.+?Season (.+?) .+?Episode (.+?)\n.+?"epsynopsis">(.+?)<.+?bccode.+?href="(.+?)"',re.DOTALL).findall(html)
       for name, season, episode, plot, vid in c:
           infoList ={}
           infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
@@ -59,17 +59,9 @@ class myAddon(t1mAddon):
           infoList['Season'] = int(season)
           infoList['Studio'] = 'Hallmark'
           infoList['mediatype'] = 'episode'
-          infoURL = 'https://secure.brightcove.com/services/viewer/htmlFederated?&width=859&height=482&flashID=BrightcoveExperience&bgcolor=%23FFFFFF&playerID=3811967664001&playerKey=&isVid=true&isUI=true&dynamicStreaming=true&%40videoPlayer='+vid+'&secureConnections=true&secureHTMLConnections=true'
-          html = self.getRequest(infoURL)
-          m = re.compile('experienceJSON = (.+?)\};',re.DOTALL).search(html)
-          a = json.loads(html[m.start(1):m.end(1)+1])
-          if a['data']['programmedContent']['videoPlayer']['mediaDTO'] is not None:
-              thumb = a['data']['programmedContent']['videoPlayer']['mediaDTO'].get('videoStillURL')
-              fanart = thumb
-          else:
-              thumb = self.addonIcon
-              fanart = self.addonFanart
-          url = vid
+          thumb = self.addonIcon
+          fanart = self.addonFanart
+          url = HALLMARKBASE % vid
           if getFileData == False:
               ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False)
           else:
@@ -133,22 +125,28 @@ class myAddon(t1mAddon):
       jsonRespond = xbmc.executeJSONRPC(json_cmd)
 
   def getAddonVideo(self,url):
-      url = 'https://secure.brightcove.com/services/viewer/htmlFederated?&width=859&height=482&flashID=BrightcoveExperience&bgcolor=%23FFFFFF&playerID=3811967664001&playerKey=&isVid=true&isUI=true&dynamicStreaming=true&%40videoPlayer='+url+'&secureConnections=true&secureHTMLConnections=true'
-      html = self.getRequest(url)
-      m = re.compile('experienceJSON = (.+?)\};',re.DOTALL).search(html)
-      a = json.loads(html[m.start(1):m.end(1)+1])
-      u = ''
-      rate = 0
-      a = a['data']['programmedContent']['videoPlayer']['mediaDTO']
-      if a is None:
-          return
-      b = a.get('renditions')
-      for c in b:
-          if c['encodingRate'] > rate:
-              rate = c['encodingRate']
-              u = c['defaultURL']
-      subfile = 'http://www.hallmarkchanneleverywhere.com/medias/closedcaption/hd_vod_%s.vtt' % a.get('referenceId')
-      u = u.strip()
+      if url.startswith('http:'):
+          html = self.getRequest(url)
+          suburl, u = re.compile('captionsrc = (.+?);.+?src: "(.+?)"', re.DOTALL).search(html).groups()
+          suburl = eval(suburl)
+          subfile = HALLMARKBASE % suburl.replace('.xml','.vtt')
+      else:
+          url = 'https://secure.brightcove.com/services/viewer/htmlFederated?&width=859&height=482&flashID=BrightcoveExperience&bgcolor=%23FFFFFF&playerID=3811967664001&playerKey=&isVid=true&isUI=true&dynamicStreaming=true&%40videoPlayer='+url+'&secureConnections=true&secureHTMLConnections=true'
+          html = self.getRequest(url)
+          m = re.compile('experienceJSON = (.+?)\};',re.DOTALL).search(html)
+          a = json.loads(html[m.start(1):m.end(1)+1])
+          u = ''
+          rate = 0
+          a = a['data']['programmedContent']['videoPlayer']['mediaDTO']
+          if a is None:
+              return
+          b = a.get('renditions')
+          for c in b:
+              if c['encodingRate'] > rate:
+                  rate = c['encodingRate']
+                  u = c['defaultURL']
+          subfile = 'http://www.hallmarkchanneleverywhere.com/medias/closedcaption/hd_vod_%s.vtt' % a.get('referenceId')
+          u = u.strip()
       liz = xbmcgui.ListItem(path = u)
       liz.setSubtitles([subfile])
       infoList ={}

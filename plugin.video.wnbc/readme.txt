@@ -1,3 +1,4 @@
+Version 3.0.9 website change
 Version 3.0.8 bump version for t1mlib for request timeout fix in Kodi 17.0 android
 Version 3.0.7 Bug fix for TV Shows with ':' in title
 Version 3.0.6 Bug fix for no fanart image

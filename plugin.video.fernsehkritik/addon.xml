@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.fernsehkritik" name="Fernsehkritik TV" version="1.0.2" provider-name="cdwertmann">
+<addon id="plugin.video.fernsehkritik" name="Fernsehkritik TV" version="1.0.3" provider-name="cdwertmann">
     <requires>
         <import addon="xbmc.python" version="2.14.0"/>
         <import addon="script.common.plugin.cache" version="0.9.1"/>
@@ -14,7 +14,7 @@
         <summary lang="de">Fernsehkritik</summary>
         <description lang="de">TV-Magazin von fernsehkritik.tv</description>
         <website>https://github.com/cdwertmann/plugin.video.fernsehkritik</website>
-        <source>git://github.com/cdwertmann/plugin.video.fernsehkritik.git</source>
+        <source>https://github.com/cdwertmann/plugin.video.fernsehkritik</source>
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
     </extension>
 </addon>

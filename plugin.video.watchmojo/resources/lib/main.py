@@ -58,7 +58,7 @@ class Videos(listitem.VirtualFS):
 			return parsers.VideosParser().parse(sourceObj, related_mode=True if "related" in plugin else False)
 
 
-class PlayVideo(listitem.PlayMedia):
+class PlayVideo(listitem.PlaySource):
 	@plugin.error_handler
 	def resolve(self):
 		# Create url for oembed api
@@ -66,6 +66,13 @@ class PlayVideo(listitem.PlayMedia):
 		sourceCode = urlhandler.urlread(url, 14400, stripEntity=False)# TTL = 4 Hours
 		import re
 
-		# Search sourceCode
+		# Search sourceCode for old style player
 		search_str = '<source\s*src=["\'](.+?\.mp4)["\']\s+type=["\']video/mp4["\']\s*/>'
-		return re.findall(search_str, sourceCode)[0]
+		videos = re.findall(search_str, sourceCode)
+		if videos:
+			return videos[0]
+
+		# Attempt to find the video url using the videoResolver
+		sources = self.videoResolver.VideoParser()
+		sources.parse(sourceCode)
+		return self.intResolver(sources.get_processed())

@@ -72,6 +72,8 @@ class CategorysParser(HTMLParser.HTMLParser):
 					for key, value in attrs:
 						if key == u"href":
 							url = value
+							if "www.watchmojo.com" in url:
+								url = url[url.find("www.watchmojo.com")+17:]
 							self.item.urlParams["url"] = url
 
 							title = url[url.rfind("/") + 1:].title()

@@ -1,3 +1,6 @@
+[B]Version 3.1.0 - 2017-03-18[/B]
+- Updated addon to match website changes
+
 [B]Version 3.0.3 - 2014-12-23[/B]
 - Fix video playback on Kodi Helix
 

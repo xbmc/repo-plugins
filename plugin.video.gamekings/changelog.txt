@@ -1,3 +1,7 @@
+v1.2.6 (2017-03-12)
+- added twitch as a dependency
+- fixed url in addon.xml as per request
+
 v1.2.5 (2017-03-11)
 - small fix for tv-episodes
 - added twitch 'Gamekings live' stream support by using the twitch plugin (much respect to authors of the plugin)

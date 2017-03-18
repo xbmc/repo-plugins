@@ -1,3 +1,7 @@
+Version 4.0.43
+-------------
+- Fix all broken listing and playback
+
 Version 4.0.42
 -------------
 - Fix broken search

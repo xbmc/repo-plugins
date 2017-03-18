@@ -2,7 +2,7 @@
 <addon 
 	id="plugin.video.gamekings" 
 	name="GameKings" 
-	version="1.2.5"
+	version="1.2.6"
 	provider-name="Skipmode A1, Amelandbor">
   <requires>
     <import addon="xbmc.python"                 version="2.14.0"/>
@@ -10,6 +10,7 @@
 	<import addon="plugin.video.youtube"        version="5.1.7"/>
     <import addon="script.module.requests"      version="2.4.3"/>
     <import addon="plugin.video.vimeo"          version="4.1.4"/>
+    <import addon="plugin.video.twitch"         version="1.4.5"/>
   </requires>
   <extension point="xbmc.python.pluginsource" 	library="addon.py">
     <provides>video</provides>
@@ -28,6 +29,6 @@
     <forum>http://forum.xbmc.org/showthread.php?tid=161375</forum>
     <website>http://www.gamekings.nl</website>
     <email></email>
-    <source>git://github.com/skipmodea1/plugin.video.gamekings.git</source>
+    <source>https://github.com/skipmodea1/plugin.video.gamekings</source>
   </extension>
 </addon>

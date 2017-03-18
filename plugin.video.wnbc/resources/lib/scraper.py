@@ -20,8 +20,8 @@ UTF8 = 'utf-8'
 class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
-      html = self.getRequest('http://tve-atcnbce.nbcuni.com/live/3/nbce/containers/iPad')
-      a = json.loads(html)
+      html = self.getRequest('http://tveatc-usa.nbcuni.com/awe3/live/5/nbce/containers/iPadRetina')
+      a = json.loads(html)['results']
       for b in a:
           infoList ={}
           url  = b['assetID']
@@ -31,8 +31,10 @@ class myAddon(t1mAddon):
           infoList['Plot'] = b.get('description')
           if (b['seasons'] != []):
               infoList['Season'] = int(b['seasons'][0]['number'])
-          fanart = b['images'][0]['images'].get('featured_large_3')
-          thumb  = b['images'][0]['images'].get('show_tile')
+          fanart = b['images'][0]['images'].get('featured_full_screen_landscape')
+          if fanart is None:
+              fanart = b['images'][0]['images'].get('featured_large_6')
+          thumb  = b['images'][0]['images'].get('show_thumbnail_16_by_9')
           mode = 'GE'
           if (b['seasons'] != []):
               if (b['seasons'][0]['hasClips']):
@@ -57,14 +59,19 @@ class myAddon(t1mAddon):
 
   def getAddonEpisodes(self,url,ilist, dtype='episode', getFileData = False):
       url = uqp(url)
-      html = self.getRequest('http://tve-atcnbce.nbcuni.com/live/3/nbce/containers/%s/iPad' % url)
+      html = self.getRequest('http://tveatc-usa.nbcuni.com/awe3/live/5/nbce/containers/iPadRetina/%s' % url)
       a = json.loads(html)
       for b in a['results']:
        if b['subtype'] == dtype:
            infoList = {}
            name = b['title']
-           fanart = b['images'][0]['images'].get('featured_large_5')
-           thumb  = b['images'][0]['images'].get('episode_tile')
+           fanart = b['images'][0]['images'].get('featured_full_screen_landscape')
+           if fanart is None:
+               fanart = b['images'][0]['images'].get('featured_large_6')
+               if fanart is None:
+                   fanart = b['images'][0]['images'].get('cast_full_screen_landscape')
+
+           thumb  = b['images'][0]['images'].get('video_thumbnail_16_by_9')
            if not b['requiresAuth']:
                url = b['videoURL']
            else:

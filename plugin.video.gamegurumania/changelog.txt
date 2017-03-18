@@ -1,3 +1,8 @@
+v1.0.5 (2017-03-12):
+- using po-files
+- changed addon debugging info to kodi debugging info
+- fixed url in addon.xml as per request
+
 v1.0.4 (2016-03-12)
 - changed the listing and playing of videos
 - the contextual menu item 'Play from here' is available now, it queues all the videos in the list from a certain point

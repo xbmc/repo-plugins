@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.vice.com" version="1.0.0" name="VICE+" provider-name="lambda">
+	<requires>
+		<import addon="xbmc.python" version="2.24.0" />
+		<import addon="script.module.lamlib" version="1.0.0" />
+		<import addon="plugin.video.youtube" version="5.2.1" optional="true" />
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="addon.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">VICE+ addon for Kodi</summary>
+		<description lang="en">VICE changes the way people think about culture, crime, technology, art, sex, music, fashion, sports, and more.[CR]Available countries: Australia, Austria, Belgium, Brazil, Canada, Czech Republic, Colombia, Denmark, France, Germany, Greece, Italy, Mexico, Netherlands, Poland, Portugal, Romania, Russia, Serbia, Spain, Sweden, United Kingdom and United States</description>
+		<disclaimer lang="en">This addon is not published nor endorsed by vice.com</disclaimer>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+		<source>https://github.com/lambda81/plugin.video.vice.com</source>
+		<website>http://www.vice.com/</website>
+		<platform>all</platform>
+		<language></language>
+		<forum></forum>
+		<email></email>
+	</extension>
+</addon>

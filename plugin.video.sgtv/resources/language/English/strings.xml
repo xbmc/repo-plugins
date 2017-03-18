@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <strings>
-    <string id="30000">Newest</string>
+    <string id="29999">LIVE</string>
+    <string id="30000">Search</string>
     <string id="30001">Channel 5</string>
     <string id="30002">Channel 8</string>
     <string id="30003">Channel U</string>
@@ -12,8 +13,11 @@
     <string id="30009">WahBanana</string>
     <string id="31000">Next Page</string>
     <string id="31001">Previous Page</string>
-	<string id="31002">Finding Link</string>
-	<string id="31003">Processing</string>
-	<string id="31004">Ready to Play</string>
-	<string id="32000">Sorry the server seems to be down</string>
+	  <string id="31002">Finding Link</string>
+	  <string id="31003">Processing</string>
+	  <string id="31004">Ready to Play</string>
+    <string id="31005">SEARCH</string>
+    <string id="31006">CLEAR SEARCH HISTORY</string>
+    <string id="31007">CLEARED</string>   
+	  <string id="32000">Sorry the server seems to be down</string>
 </strings>

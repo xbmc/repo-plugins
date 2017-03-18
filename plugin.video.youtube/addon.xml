@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.youtube" name="YouTube" version="5.3.10" provider-name="jdf76, bromix">
+<addon id="plugin.video.youtube" name="YouTube" version="5.3.12" provider-name="jdf76, bromix">
 	<requires>
 		<import addon="xbmc.python" version="2.19.0"/>
+        <import addon="script.module.requests" version="2.12.4"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="default.py">
 		<provides>video</provides>
@@ -9,9 +10,9 @@
     <extension point="xbmc.service" library="startup.py" start="startup" />
 	<extension point="xbmc.addon.metadata">
         <news>
-[fix/upd] resolve 'No video streams found' for age-gated content and other minor.
-[fix/upd] unescaping HTML entities in subtitles [mdmdmdmdmd]
-[upd] Polish strings [Etharr]
+[fix/upd] replace custom simple_requests with script.module.requests to resolve ssl and cross-platform issues
+[add] 'Reset access manager' added to Maintenance section, sign out process(available when logged out) to clean up tokens in settings.xml
+[upd] set default for SSL certificate verification to 'true'
         </news>
         <assets>
             <icon>icon.png</icon>

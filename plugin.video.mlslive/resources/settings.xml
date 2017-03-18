@@ -2,4 +2,5 @@
 <settings>
    <setting id="username" type="text" label="30013"/>
    <setting id="password" type="text" label="30014" option="hidden"/>
+   <setting label="30022" type="action" action="RunScript(plugin.video.mlslive, favorite)"/>
 </settings>

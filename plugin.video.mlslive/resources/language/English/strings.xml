@@ -9,7 +9,7 @@
   <string id="30005">Unable to authenticate with MLS Live</string>
   <string id="30006">Please contact the plugin author</string>
   <string id="30007">Unable to get games list</string>
-  <string id="30008">at</string>
+  <string id="30008">{1} at {0}</string>
   <string id="30009">Completed Games</string>
   <string id="30010">Live Games</string>
   <string id="30011">Full Game</string>
@@ -22,4 +22,8 @@
   <string id="30018">No Games</string>
   <string id="30019">Unable to get list of games</string>
   <string id="30020">Previous</string>
+  <string id="30021">{1} travel to {2} to face {0}.
+
+Blackouts: {3}</string>
+  <string id="30022">Favorite Team</string>
 </strings>

@@ -1,3 +1,11 @@
+[B]Version 1.17.1[/B]
+
+- Fix authorization issues
+- Add graphics
+- Add game description
+- Condensed matches
+- Favorite team function
+
 [B]Version 1.17.0[/B]
 
 - update to work with 2017 API

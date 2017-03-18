@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.engineeringtv" name="Engineering TV" provider-name="willforde" version="2.0.1">
+<addon id="plugin.video.engineeringtv" name="Engineering TV" provider-name="willforde" version="2.0.2">
 	<requires>
 		<import addon="xbmc.python" version="2.19.0"/>
 		<import addon="script.module.xbmcutil" version="3.0.0"/>
@@ -18,5 +18,6 @@
 		<forum>http://forum.kodi.tv/showthread.php?tid=178795</forum>
 		<source>https://github.com/willforde/plugin.video.engineeringtv</source>
 		<website>http://www.engineeringtv.com</website>
+		<broken>Broken due to website changes. Site no longer hosts videos</broken>
 	</extension>
 </addon>

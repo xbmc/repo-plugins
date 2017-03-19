@@ -69,9 +69,9 @@ CHANNELS = [
 
 EVENTCHANNELS = [
 
-  ["NPO Event 1", "npo_placeholder.png", "tvlive/mcr1/mcr1.isml/mcr1.m3u8", "NPO Evenementkanaal 1."],
-  ["NPO Event 2", "npo_placeholder.png", "tvlive/mcr2/mcr2.isml/mcr2.m3u8", "NPO Evenementkanaal 2."],
-  ["NPO Event 3", "npo_placeholder.png", "tvlive/mcr3/mcr3.isml/mcr3.m3u8", "NPO Evenementkanaal 3."],
+  ["NPO Event 1", "npo_placeholder.png", "LI_NEDERLAND1_221709", "NPO Evenementkanaal 1."],
+  ["NPO Event 2", "npo_placeholder.png", "LI_NEDERLAND2_221711", "NPO Evenementkanaal 2."],
+  ["NPO Event 3", "npo_placeholder.png", "LI_NEDERLAND3_221713", "NPO Evenementkanaal 3."],
 ]
 
 def index():
@@ -88,7 +88,7 @@ def index():
         url = 'http://feeds.nos.nl/vodcast_jeugdjournaal'
         depth = int(settings.getSetting("Depth_Jeugd"))
         additionalChannels(url, depth)
-    if settings.getSetting("EVENT") == 'TODO: disabled':
+    if settings.getSetting("EVENT") == 'true':
         for channel in EVENTCHANNELS:
             # if settings.getSetting(channel[0]) == 'true':
                 addLink(channel[0], channel[2], "playVideo", os.path.join(IMG_DIR, channel[1]), channel[3])
@@ -103,11 +103,11 @@ def prefer_clca():
     if settings.getSetting("CLCA") == 'true':
         for channel in CHANNELS:
             if channel[0] == "NPO 1":
-                channel[2] = "tvlive/npo1cc/npo1cc.isml/npo1cc.m3u8"
+                channel[2] = "LI_NL1_824154"
             elif channel[0] == "NPO 2":
-                channel[2] = "tvlive/npo2cc/npo2cc.isml/npo2cc.m3u8"
+                channel[2] = "LI_NL2_824153"
             elif channel[0] == "NPO 3":
-                channel[2] = "tvlive/npo3cc/npo3cc.isml/npo3cc.m3u8"
+                channel[2] = "LI_NL3_824151"
 
 
 def resolve_http_redirect(url, depth=0):
@@ -209,7 +209,10 @@ def playVideo(url):
         videopre = re.search(r'(http.*?)\"', page).group(1)
         prostream = (videopre.replace('\/', '/'))
         xbmc.log("plugin.video.nederland24:: final URL %s" % str(prostream))
-        finalUrl = resolve_http_redirect(prostream)
+        #no longer required
+        #finalUrl = resolve_http_redirect(prostream)
+        #TODO: this is a workaround for unplayable https urls (might be due to some sort of kodi bug on linux, on osx these play fine)
+        finalUrl = (prostream.replace('https', 'http'))
     if finalUrl:
         listitem = xbmcgui.ListItem(path=finalUrl)
         xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
@@ -229,8 +232,7 @@ def parameters_string_to_dict(parameters):
 params = parameters_string_to_dict(sys.argv[2])
 mode = urllib.unquote_plus(params.get('mode', ''))
 url = urllib.unquote_plus(params.get('url', ''))
-# disabled for now
-# prefer_clca()
+prefer_clca()
 
 
 if mode == "playVideo":

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nederland24" name="Nederland 24" version="4.5.4" provider-name="bosel">
+<addon id="plugin.video.nederland24" name="Nederland 24" version="4.5.5" provider-name="bosel">
   <requires>
       <import addon="xbmc.python" version="2.24.0"/>
       <import addon="script.module.beautifulsoup" version="3.0.8"/>
@@ -20,6 +20,6 @@
       <email></email>
       <source>https://github.com/bosel/plugin.video.nederland24</source>
       <disclaimer lang="en_GB">Copyright 2011-2017 bosel.This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</disclaimer>
-      <news>Another update to deal with changes to the NPO website 2017-03-07</news>
+      <news>Workaround for unplayable https urls 2017-03-15</news>
   </extension>
 </addon>

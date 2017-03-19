@@ -31,12 +31,8 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        # Get plugin settings
-        self.DEBUG = SETTINGS.getSetting('debug')
-
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
+                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
 
         # Parse parameters...
         if len(sys.argv[2]) == 0:
@@ -64,10 +60,9 @@ class Main:
                     page_number_next_str = '00' + str(page_number_next)
                 self.next_url = str(self.video_list_page_url).replace(page_number_str, page_number_next_str)
 
-                if self.DEBUG == 'true':
-                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                         ADDON, VERSION, DATE, "self.next_url", str(urllib.unquote_plus(self.next_url))),
-                             xbmc.LOGNOTICE)
+                             xbmc.LOGDEBUG)
 
         #
         # Get the videos...
@@ -107,12 +102,10 @@ class Main:
         # </item>
         items = soup.findAll('item')
 
-        if self.DEBUG == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(items)", str(len(items))), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "len(items)", str(len(items))), xbmc.LOGDEBUG)
 
         for item in items:
-
             # Get the 4 enclosure url's in the item
             # There must be a better way to do this with beautiful soup, but it'll have to do for now
             item_string = str(item)
@@ -138,27 +131,24 @@ class Main:
             end_pos_of_enclosure_url_4 = item_string.find('"', start_pos_of_enclosure_url_4)
             enclosure_url_4 = item_string[start_pos_of_enclosure_url_4:end_pos_of_enclosure_url_4]
 
-            if self.DEBUG == 'true':
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "enclosure_url_3", str(enclosure_url_3)), xbmc.LOGNOTICE)
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "enclosure_url_4", str(enclosure_url_4)), xbmc.LOGNOTICE)
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                    ADDON, VERSION, DATE, "enclosure_url_3", str(enclosure_url_3)), xbmc.LOGDEBUG)
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                    ADDON, VERSION, DATE, "enclosure_url_4", str(enclosure_url_4)), xbmc.LOGDEBUG)
 
             # Get youtube_id
             # http://youtube.com/watch?v=GCnXAEdPDSo
             youtube_id = enclosure_url_4[len("http://youtube.com/watch?v="):]
             youtube_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtube_id
 
-            if self.DEBUG == 'true':
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "youtube_url", str(youtube_url)), xbmc.LOGNOTICE)
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                    ADDON, VERSION, DATE, "youtube_url", str(youtube_url)), xbmc.LOGDEBUG)
 
             # Get thumbnail url
             thumbnail_url = enclosure_url_3
 
-            if self.DEBUG == 'true':
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "thumbnail_url", str(thumbnail_url)), xbmc.LOGNOTICE)
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                    ADDON, VERSION, DATE, "thumbnail_url", str(thumbnail_url)), xbmc.LOGDEBUG)
 
             # Get title
             title = item.title.string
@@ -204,10 +194,9 @@ class Main:
             # in the title of the item a single-quote "'" is represented as "&#039;" for some reason . Therefore this replace is needed to fix that.
             title = title.replace("&#039;", "'")
 
-            if self.DEBUG == 'true':
-                xbmc.log(
+            xbmc.log(
                     "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "title", str(title)),
-                    xbmc.LOGNOTICE)
+                    xbmc.LOGDEBUG)
 
             # Add to list...
             list_item = xbmcgui.ListItem(title, thumbnailImage=thumbnail_url)

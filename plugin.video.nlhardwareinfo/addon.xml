@@ -2,7 +2,7 @@
 <addon 
 	id="plugin.video.nlhardwareinfo" 
 	name="Hardware.Info TV" 
-	version="1.0.5"
+	version="1.0.6"
 	provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                 version="2.14.0"/>
@@ -15,17 +15,17 @@
   <extension point="xbmc.addon.metadata">
 	<platform>all</platform>
 	<summary lang="en">Hardware.Info TV is a webcast in which the editors of Hardware.Info discuss the latest hardware, gadgets and consumer electronics. (Dutch)</summary>
-    <description lang="en">Hardware.Info TV is a webcast in which the editors of Hardware.Info discuss the latest hardware, gadgets and consumer electronics. This plugin lets you view Hardware.Info TV episodes in HD quality via XBMC.</description>
-    <disclaimer lang="en">For bugs, requests or general questions visit the Hardware.Info thread on the XBMC forum.</disclaimer>
+    <description lang="en">Hardware.Info TV is a webcast in which the editors of Hardware.Info discuss the latest hardware, gadgets and consumer electronics. This plugin lets you view Hardware.Info TV episodes in HD quality via Kodi.</description>
+    <disclaimer lang="en">For bugs, requests or general questions visit the Hardware.Info thread on the Kodi forum.</disclaimer>
     <summary lang="nl">Hardware.Info TV is een webcast waarin de redactie van Hardware.Info de nieuwste hardware, gadgets en consumentenelektronica bespreekt.</summary>
-    <description lang="nl">Hardware.Info TV is een webcast waarin de redactie van Hardware.Info de nieuwste hardware, gadgets en consumentenelektronica bespreekt. Via deze plugin kun je de afleveringen van Hardware.Info TV eenvoudig in HD-kwaliteit via XBMC bekijken.</description>
-    <disclaimer lang="nl">Bugs of andere feedback op deze plugin kan geplaatst worden in de Hardware.Info thread op het XBMC forum.</disclaimer>
+    <description lang="nl">Hardware.Info TV is een webcast waarin de redactie van Hardware.Info de nieuwste hardware, gadgets en consumentenelektronica bespreekt. Via deze plugin kun je de afleveringen van Hardware.Info TV eenvoudig in HD-kwaliteit via Kodi bekijken.</description>
+    <disclaimer lang="nl">Bugs of andere feedback op deze plugin kan geplaatst worden in de Hardware.Info thread op het Kodi forum.</disclaimer>
     <language>nl</language>
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
-    <forum>http://forum.xbmc.org/showthread.php?tid=162123</forum>
+    <forum>http://forum.kodi.tv/showthread.php?tid=162123</forum>
     <website>http://nl.hardware.info/</website>
     <email></email>
-    <source>git://github.com/skipmodea1/plugin.video.nlhardwareinfo.git</source>
+    <source>https://github.com/skipmodea1/plugin.video.nlhardwareinfo</source>
   </extension>
 </addon>

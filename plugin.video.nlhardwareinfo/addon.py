@@ -18,13 +18,9 @@ sys.path.append(LIB_DIR)
 
 from nlhardwareinfo_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
 
-# Get plugin settings
-DEBUG = xbmcaddon.Addon(id=ADDON).getSetting('debug')
-
-if DEBUG == 'true':
-    xbmc.log("[ADDON] %s, Python Version %s" % (ADDON, str(sys.version)), xbmc.LOGNOTICE)
-    xbmc.log("[ADDON] %s v%s (%s) is starting, ARGV = %s" % (ADDON, VERSION, DATE, repr(sys.argv)),
-             xbmc.LOGNOTICE)
+xbmc.log("[ADDON] %s, Python Version %s" % (ADDON, str(sys.version)), xbmc.LOGDEBUG)
+xbmc.log("[ADDON] %s v%s (%s) is starting, ARGV = %s" % (ADDON, VERSION, DATE, repr(sys.argv)),
+             xbmc.LOGDEBUG)
 
 import nlhardwareinfo_list_play as plugin
 

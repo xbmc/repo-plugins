@@ -332,12 +332,15 @@ def getSubtitleUrl(json_obj):
   Returns a subtitleURL from a SVT JSON object.
   """
   url = None
-  for subtitle in json_obj["subtitleReferences"]:
-    if subtitle["url"].endswith(".wsrt"):
-      url = subtitle["url"]
-    else:
-      if len(subtitle["url"]) > 0:
-        common.log("Skipping unknown subtitle: " + subtitle["url"])
+  try:
+    for subtitle in json_obj["subtitleReferences"]:
+      if subtitle["url"].endswith(".wsrt"):
+        url = subtitle["url"]
+      else:
+        if len(subtitle["url"]) > 0:
+          common.log("Skipping unknown subtitle: " + subtitle["url"])
+  except KeyError as e:
+    pass
   return url
 
 def resolveShowJSON(json_obj):

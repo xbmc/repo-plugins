@@ -287,7 +287,15 @@ def getClips(title):
   return clips
 
 def getVideoJSON(video_url):
-  video_id = video_url.replace("video/", "")
+  video_id = ""
+  if "video" in video_url:
+    # ID should end with "A" for primary video source.
+    # That is, not texted or sign interpreted.
+    if not video_url.endswith("A"):
+      video_url = video_url + "A"
+    video_id = video_url.replace("video/", "")
+  if "klipp" in video_url:
+    video_id = video_url.replace("klipp/", "")
   return __get_video_json_for_video_id(video_id)
 
 def getItems(section_name, page):
@@ -348,17 +356,7 @@ def __get_article_id_for_title(title):
   else:
     return json_data["articleId"]
 
-def __get_video_id_for_video_title(video_title):
-  article_id = video_title.replace("video/", "")
-  json_data = __get_json("episode?id=%s" % article_id)
-  if json_data is None:
-    return None
-  return json_data["id"]
-
 def __get_video_json_for_video_id(video_id):
-  # Magic, ID should end with "A"
-  if not video_id.endswith("A"):
-    video_id = video_id + "A"
   url = VIDEO_API_URL + str(video_id)
   common.log("Fetching video data for URL %s" % url)
   response = requests.get(url)

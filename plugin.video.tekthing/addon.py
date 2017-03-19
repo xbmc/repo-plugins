@@ -14,14 +14,13 @@ import xbmcaddon
 import xbmcgui
 import xbmcplugin
 
-__addon__       = "plugin.video.tekthing"
-__settings__    = xbmcaddon.Addon(id=__addon__ )
-__language__    = __settings__.getLocalizedString
-__images_path__ = os.path.join( xbmcaddon.Addon(id=__addon__ ).getAddonInfo('path'), 'resources', 'images' )
-__date__        = "6 august 2015"
-__version__     = "1.0.0"
+ADDON       = "plugin.video.tekthing"
+SETTINGS    = xbmcaddon.Addon()
+LANGUAGE    = SETTINGS.getLocalizedString
+IMAGES_PATH = os.path.join( xbmcaddon.Addon().getAddonInfo('path'), 'resources', 'images' )
+DATE        = "2017-03-12"
+VERSION     = "1.0.1"
 
-DEBUG = __settings__.getSetting('debug')
 RSS_URL = "http://feeds.feedburner.com/Tekthing"
 
 
@@ -73,15 +72,13 @@ def getVideos() :
 #<title>TekThing 31: Epson WorkForce ET-4550 Means Cheap Ink! New Intel Skylake Core i7-6700K, Turn On Windows 10 Privacy!</title>    
     titles = soup.findAll('title')
     
-    if (DEBUG) == 'true':
-        xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "len(titles):", str(len(titles)) ), xbmc.LOGNOTICE )
+    xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( ADDON, VERSION, DATE, "len(titles):", str(len(titles)) ), xbmc.LOGDEBUG )
 
 # <content:encoded><![CDATA[&lt;iframe scrolling="no" allowfullscreen="" src="//www.youtube.com/embed/hA4MUWYEsHo?wmode=opaque&amp;enablejsapi=1" width="854" frameborder="0" height="480"&gt;
 # ... an&gt;Download the&nbsp;&lt;/span&gt;&lt;a href="http://tekthing.podbean.com/mf/web/gbjpky/tekthing--0031--epson-ecotank-means-cheap-ink-new-intel-skylake-corei7-6700k-cpu-more.mp4"&gt;video&l...
     shows = soup.findAll('content:encoded')
     
-    if (DEBUG) == 'true':
-        xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "len(shows):", str(len(shows)) ), xbmc.LOGNOTICE )
+    xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( ADDON, VERSION, DATE, "len(shows):", str(len(shows)) ), xbmc.LOGDEBUG )
     
     for show in shows:
         youtube_id = findString('//www.youtube.com/embed/', str(show), '?')
@@ -93,8 +90,7 @@ def getVideos() :
         youtube_plugin_url = makeYouTubePluginUrl(youtube_id)
         url = youtube_plugin_url
    
-        if (DEBUG) == 'true':
-            xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "url:", str(url) ), xbmc.LOGNOTICE )
+        xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( ADDON, VERSION, DATE, "url:", str(url) ), xbmc.LOGDEBUG )
 
         try:
             title = str(titles[title_index])
@@ -103,8 +99,7 @@ def getVideos() :
         except:
             title = 'Unknown title'
             
-        if (DEBUG) == 'true':
-            xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "title:", str(title) ), xbmc.LOGNOTICE )            
+        xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( ADDON, VERSION, DATE, "title:", str(title) ), xbmc.LOGDEBUG )
             
         thumbnail_url = ''
 
@@ -147,8 +142,7 @@ try:
 except:
     mode = 'list'
 
-if (DEBUG) == 'true':
-    xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "mode:", str(mode) ), xbmc.LOGNOTICE )
+xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( ADDON, VERSION, DATE, "mode:", str(mode) ), xbmc.LOGDEBUG )
  
 if mode == 'list':
     getVideos()

@@ -1,5 +1,10 @@
-v1.1.7 (2017-12-07): 
-(kudos to MartijnKaijser for these improvement-suggestions)
+v1.1.8 (2017-03-12):
+- fixed url in addon.xml as per request
+- changed 'xbmc' to 'kodi' in some text
+- not using addon-name in xbmcaddon.Addon() anymore (thanks enen92)
+
+v1.1.7 (2016-12-07):
+(kudos to Martijn for these improvement-suggestions)
 - improved adding info to the video
 - using higher res thumbnail if available
 - added the brief version of the plot to the video

@@ -1,3 +1,9 @@
+v1.0.6 (2017-03-12) :
+- changed addon debugging info to kodi debugging info
+- using po-files
+- fixed url in addon.xml as per request
+- changed text from xbmc to kodi
+
 v1.0.5 (2016-03-12) :
 - changed the listing and playing of videos
 - the contextual menu item 'Play from here' is available now, it queues all the videos in the list from a certain point

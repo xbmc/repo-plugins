@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
   <category label="General">
-	<setting id="debug" 		      type="bool"   label="30010"   									default="false"/>
+
   </category>
 </settings>

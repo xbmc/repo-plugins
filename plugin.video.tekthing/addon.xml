@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.tekthing"
        name="Tekthing"
-       version="1.0.0"
+       version="1.0.1"
        provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                 version="2.1.0"/>
     <import addon="xbmc.addon"                  version="12.0.0"/>
 	<import addon="script.module.beautifulsoup" version="3.0.8"/>
 	<import addon="script.module.requests"      version="2.4.3"/>
-    <import addon="plugin.video.youtube"        version="4.4.8"/>
+    <import addon="plugin.video.youtube"        version="5.1.7"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
@@ -20,9 +20,9 @@
     <language>en</language>
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
-    <forum></forum>
+    <forum>http://forum.kodi.tv/showthread.php?tid=235175</forum>
     <website>http://tekthing.com</website>
     <email></email>
-    <source>git://github.com/skipmodea1/plugin.video.tekthing.git</source>
+    <source>https://github.com/skipmodea1/plugin.video.tekthing</source>
   </extension>
 </addon>

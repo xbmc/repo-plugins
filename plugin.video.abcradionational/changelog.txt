@@ -1,14 +1,8 @@
-1.0.5
-- Make scraper more resilient to website updates
+v1.0.1 (2017-03-12):
+- changed addon debugging info to kodi debugging info
+- using po-files
+- fixed url in addon.xml as per request
+- Removed lib directory
 
-1.0.4
-- Updates to website scraper code.
-
-1.0.3
-- Rectify issue with the thumbs scraper.
-
-1.0.2
-- Fix index out of range error. 
-
-0.0.1
-- Initial working version.
+Version 1.0.0 (2015-08-06):
+- Initial version 

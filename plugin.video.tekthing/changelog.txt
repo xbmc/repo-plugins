@@ -1,2 +1,8 @@
-Version 1.0.0 (6 august 2015)
+v1.0.1 (2017-03-12):
+- changed addon debugging info to kodi debugging info
+- using po-files
+- fixed url in addon.xml as per request
+- Removed lib directory
+
+Version 1.0.0 (2015-08-06):
 - Initial version 

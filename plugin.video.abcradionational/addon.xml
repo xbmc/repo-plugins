@@ -1,25 +1,28 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.abcradionational" name="RNTV - Radio National TV" version="1.0.5" provider-name="Damon Toumbourou">
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.tekthing"
+       name="Tekthing"
+       version="1.0.1"
+       provider-name="Skipmode A1">
   <requires>
-    <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.xbmcswift2" version="2.4.0"/>
-    <import addon="script.module.beautifulsoup" version="3.0.8"/>
-    <import addon="script.module.requests" version="1.1.0"/>
+    <import addon="xbmc.python"                 version="2.1.0"/>
+    <import addon="xbmc.addon"                  version="12.0.0"/>
+	<import addon="script.module.beautifulsoup" version="3.0.8"/>
+	<import addon="script.module.requests"      version="2.4.3"/>
+    <import addon="plugin.video.youtube"        version="5.1.7"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
+	<summary lang="en">You'll find something useful in every episode of TekThing: product reviews, how-to's, breakdowns on the big stories, and interviews with best experts around!</summary>
+	<description lang="en">Whether tech is a passion, or something you deal with because you have to, you'll find something useful in every episode of TekThing: product reviews, how-to's, breakdowns on the big stories, and interviews with best experts around!</description>
+	<disclaimer lang="en">For bugs, requests or general questions visit the Tekthing.com thread on the Kodi.tv forum</disclaimer>
+    <language>en</language>
     <platform>all</platform>
-    <language></language>
-    <summary lang="en">Stream video content avaliable from ABC Radio National TV - RNTV.
-    </summary>
-    <description lang="en">With 60 distinct programs each week, the Australian Broadcasting Corporation's Radio National is unique. It has become known as the Ideas Network, where people can hear the latest in science, books and publishing, religion, social history, the arts and current affairs. Most programs are podcast, and many are transcribed. There's a growing archive of past programs in transcript and downloadable audio format, free on our website. All programs are thoroughly researched and lovingly presented by some of Australia's leading broadcasters.
-    </description>
-    <license>The MIT License (MIT)</license>
-    <forum>http://forum.xbmc.org/showthread.php?tid=184904</forum>
-    <email>dtoumbourou@gmail.com</email>
-    <source>https://github.com/DamonToumbourou/plugin.video.abcradionational.git</source>
-    <website></website>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+    <forum>http://forum.kodi.tv/showthread.php?tid=235175</forum>
+    <website>http://tekthing.com</website>
+    <email></email>
+    <source>https://github.com/skipmodea1/plugin.video.tekthing</source>
   </extension>
 </addon>

@@ -1,11 +1,11 @@
 # XBMC Media Center language file
-# Addon Name: World Star Candy
-# Addon id: plugin.video.worldstarcandy
+# Addon Name: World Star Hip Hop
+# Addon id: plugin.video.worldstarhiphop
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
-"POT-Creation-Date: 2016-05-28 05:41+0000\n"
+"POT-Creation-Date: 2017-03-19 16:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE\n"
@@ -16,19 +16,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 msgctxt "Addon Summary"
-msgid "WorldstarCandy is a site that features videos of some of the most beautiful women on the planet"
+msgid "Worldstarhiphop is home to everything entertainment and hip hop"
 msgstr ""
 
 msgctxt "Addon Description"
-msgid "WorldstarCandy is a site that features videos of some of the most beautiful women on the planet"
+msgid "Worldstarhiphop is home to everything entertainment and hip hop"
 msgstr ""
 
 msgctxt "Addon Disclaimer"
-msgid "For bugs, requests or general questions visit the WorldstarCandy thread on the XBMC forum"
+msgid "For bugs, requests or general questions visit the Worldstarhiphop thread on the Kodi forum"
 msgstr ""
 
 msgctxt "#30000"
-msgid "WorldStarCandy.com"
+msgid "WorldStarHipHop.com"
 msgstr ""
 
 msgctxt "#30100"
@@ -68,19 +68,15 @@ msgid "Video quality"
 msgstr ""
 
 msgctxt "#30301"
-msgid "Low (if available)"
+msgid "Low"
 msgstr ""
 
 msgctxt "#30302"
-msgid "Medium (if available)"
+msgid "Medium"
 msgstr ""
 
 msgctxt "#30303"
 msgid "High (if available)"
-msgstr ""
-
-msgctxt "#30400"
-msgid "Debug"
 msgstr ""
 
 msgctxt "#30501"

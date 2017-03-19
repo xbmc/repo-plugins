@@ -15,7 +15,7 @@ import xbmcgui
 import xbmcplugin
 
 LIB_DIR = xbmc.translatePath(
-    os.path.join(xbmcaddon.Addon(id="plugin.video.worldstarhiphop").getAddonInfo('path'), 'resources', 'lib'))
+    os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources', 'lib'))
 sys.path.append(LIB_DIR)
 
 from worldstarhiphop_const import ADDON, DATE, VERSION

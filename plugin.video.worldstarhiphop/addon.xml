@@ -2,7 +2,7 @@
 <addon 
 	id="plugin.video.worldstarhiphop" 
 	name="World Star Hip Hop" 
-	version="1.0.7"
+	version="1.0.8"
 	provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                 version="2.14.0"/>
@@ -17,13 +17,13 @@
 	<platform>all</platform>
 	<summary lang="en">Worldstarhiphop is home to everything entertainment and hip hop</summary>
     <description lang="en">Worldstarhiphop is home to everything entertainment and hip hop</description>
-    <disclaimer lang="en">For bugs, requests or general questions visit the Worldstarhiphop thread on the XBMC forum</disclaimer>
+    <disclaimer lang="en">For bugs, requests or general questions visit the Worldstarhiphop thread on the Kodi forum</disclaimer>
     <language>en</language>
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
     <forum>http://forum.kodi.tv/showthread.php?tid=229385</forum>
     <website>http://worldstarhiphop.com/</website>
     <email></email>
-    <source>git://github.com/skipmodea1/plugin.video.worldstarhiphop.git</source>
+    <source>https://github.com/skipmodea1/plugin.video.worldstarhiphop</source>
   </extension>
 </addon>

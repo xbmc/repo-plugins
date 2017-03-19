@@ -1,8 +1,13 @@
+v1.0.8 (2017-03-12):
+- fixed url in addon.xml as per request
+- changed 'xbmc' to 'kodi' in some text
+- not using addon-name in xbmcaddon.Addon() anymore (thanks enen92)
+- fixed po-file
+
 v1.0.7 (2016-09-21):
 - added support for youtube videos
 - changed addon debugging info to kodi debugging info
 - using po-files
-  
 
 v1.0.6 (2016-03-12):
 - changed the listing and playing of videos

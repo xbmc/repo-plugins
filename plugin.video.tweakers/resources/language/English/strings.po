@@ -24,7 +24,7 @@ msgid "Watch tech videos from Tweakers.net (dutch)"
 msgstr ""
 
 msgctxt "Addon Disclaimer"
-msgid "For bugs, requests or general questions visit the tweakers.net thread on the XBMC forum."
+msgid "For bugs, requests or general questions visit the tweakers.net thread on the Kodi forum."
 msgstr ""
 
 msgctxt "#30000"

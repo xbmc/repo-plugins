@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-  <!--Provider-->
-   
   <!-- Visual -->
-  <category label="300">
-  
-    <setting id="no_spoilers" type="enum" label="170" lvalues="1700|1701|1702|1703" default="1700" /> 
+  <category label="30000">  
+    <setting id="no_spoilers" type="enum" label="30100" lvalues="30101|30102|30103|30104" default="30101" /> 
   </category>
 </settings>

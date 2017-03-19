@@ -337,13 +337,14 @@ def getAuthCookie():
 def addStream(name,link_url,title,game_id,icon=None,fanart=None):
     ok=True
     u=sys.argv[0]+"?url="+urllib.quote_plus(link_url)+"&mode="+str(104)+"&name="+urllib.quote_plus(name)+"&game_id="+urllib.quote_plus(str(game_id))    
-    
-    liz=xbmcgui.ListItem(name, iconImage=ICON, thumbnailImage=ICON)     
-    
-    if fanart != None:
-        liz.setProperty('fanart_image', fanart)       
-    else:
-        liz.setProperty('fanart_image', FANART)
+        
+    liz=xbmcgui.ListItem(name)
+    liz.setArt({'icon': ICON, 'thumb': ICON})
+
+    if fanart != None:        
+        liz.setArt({'fanart': fanart})      
+    else:        
+        liz.setArt({'fanart': FANART})      
 
     liz.setProperty("IsPlayable", "true")
     liz.setInfo( type="Video", infoLabels={ "Title": title } )    
@@ -352,42 +353,36 @@ def addStream(name,link_url,title,game_id,icon=None,fanart=None):
     xbmcplugin.setContent(addon_handle, 'episodes')    
     return ok
 
-def addDir(name,url,mode,iconimage,fanart=None):       
+def addDir(name,url,mode,icon,fanart=None):       
     ok=True    
     u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
     
-    if iconimage != None:
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage) 
-    else:
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=ICON) 
-
+    liz=xbmcgui.ListItem(name)
+    liz.setArt({'icon': icon, 'thumb': icon})
     liz.setInfo( type="Video", infoLabels={ "Title": name } )
 
-    if fanart != None:
-        liz.setProperty('fanart_image', fanart)
-    else:
-        liz.setProperty('fanart_image', FANART)
-
+    if fanart != None:        
+        liz.setArt({'fanart': fanart})      
+    else:        
+        liz.setArt({'fanart': FANART})      
 
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)    
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     return ok
 
 
-def addLink(name,url,iconimage,fanart=None):
+def addLink(name,url,icon,fanart=None):
     ok=True            
-    if iconimage != None:
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage) 
-    else:
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=ICON) 
-
+    
+    liz=xbmcgui.ListItem(name)
+    liz.setArt({'icon': icon, 'thumb': icon})
     liz.setInfo( type="Video", infoLabels={ "Title": name } )
     liz.setProperty("IsPlayable", "true")
-
-    if fanart != None:
-        liz.setProperty('fanart_image', fanart)
-    else:
-        liz.setProperty('fanart_image', FANART)
+        
+    if fanart != None:        
+        liz.setArt({'fanart': fanart})      
+    else:        
+        liz.setArt({'fanart': FANART})      
 
 
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)    
@@ -397,8 +392,8 @@ def addLink(name,url,iconimage,fanart=None):
 
 # KODI ADDON GLOBALS
 ADDON_HANDLE = int(sys.argv[1])
-ROOTDIR = xbmcaddon.Addon(id='plugin.video.mmlive').getAddonInfo('path')
 ADDON = xbmcaddon.Addon()
+ROOTDIR = ADDON.getAddonInfo('path')
 ADDON_ID = ADDON.getAddonInfo('id')
 ADDON_VERSION = ADDON.getAddonInfo('version')
 ADDON_PATH = xbmc.translatePath(ADDON.getAddonInfo('path'))
@@ -408,11 +403,8 @@ LOCAL_STRING = ADDON.getLocalizedString
 FANART = ROOTDIR+"/fanart.jpg"
 ICON = ROOTDIR+"/icon.png"
 
-#Settings file location
-settings = xbmcaddon.Addon(id='plugin.video.mmlive')
-
 #Main settings
-NO_SPOILERS = str(settings.getSetting(id="no_spoilers"))
+NO_SPOILERS = str(ADDON.getSetting(id="no_spoilers"))
 
 #User Agents
 UA_IPHONE = 'Mozilla/5.0 (iPhone; CPU iPhone OS 8_4 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12H143'

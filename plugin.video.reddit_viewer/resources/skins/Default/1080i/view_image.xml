@@ -1,21 +1,23 @@
 ﻿<window id="129">
     
-    <coordinates>
-        <system>1</system>
-        <left>0</left>
-        <top>0</top>
-    </coordinates>
-
     
     <controls>
         <control type="image">
             <description>Black Background</description>
             <left>0</left>
             <top>0</top>
-            <texture>FullBackground.png</texture>
+            <texture>srr_blackbg.jpg</texture>
+            <aspectratio>scale</aspectratio>
+        </control>
+        <control type="image">
+        	<top>-100</top>
+            <description>The spinning animation in the background</description>
+            <aspectratio align="center" aligny="center" >center</aspectratio>
+            <texture>srr_busy.gif</texture>
+            <animation effect="fade" time="200" delay="500" reversible="false">Visible</animation>
         </control>
 
-        <control type="image" id=3000>
+        <control type="image" id="3000">
             <description>image to view</description>
             <texture></texture>
             <aspectratio scalediffuse="true"  aligny="top">keep</aspectratio>
@@ -24,17 +26,17 @@
               <effect type="slide" start="0,0" end="0,-500" time="2000" delay="3000"/>
             </animation-->
         </control>
-        <control type="image" id=3100>
+        <control type="image" id="3100">
             <description>image zoom top</description>
             <texture></texture>
             <aspectratio scalediffuse="true"  aligny="top">scale</aspectratio>
         </control>
-        <control type="image" id=3200>
+        <control type="image" id="3200">
             <description>image zoom middle</description>
             <texture></texture>
             <aspectratio scalediffuse="true"  aligny="center">scale</aspectratio>
         </control>
-        <control type="image" id=3300>
+        <control type="image" id="3300">
             <description>image zoom bottom</description>
             <texture></texture>
             <aspectratio scalediffuse="true"  aligny="bottom">scale</aspectratio>

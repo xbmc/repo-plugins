@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-	<setting id="debug" 		label="30400" type="bool"   default="false"/>
+
 </settings>

@@ -1,6 +1,7 @@
 import sys, xbmc, xbmcgui, xbmcplugin, urllib, urllib2, urlparse, re, string, os, traceback, time, datetime, xbmcaddon, collections, pickle
 import simplejson as json
 
+
 # GadgetReactor
 # http://www.gadgetreactor.com/portfolio/sgtv
 
@@ -9,6 +10,9 @@ __addonname__ = __addon__.getAddonInfo('name')
 __language__  = __addon__.getLocalizedString
 __thumbpath__ = os.path.join( __addon__.getAddonInfo( 'path' ), 'resources', 'media')
 __resources__ = os.path.join( __addon__.getAddonInfo( 'path' ), 'resources')
+__profile__ = xbmc.translatePath(__addon__.getAddonInfo('profile')).decode('utf-8')
+if not os.path.exists(__profile__):
+    os.makedirs(__profile__)
 
 def openUrl(url):
 	retries = 0
@@ -63,7 +67,6 @@ def main():
 	addXBMCItem (__language__(30007), os.path.join(__thumbpath__, 'vasantham.jpg'), "?mode=loadChannel&channel=vasantham", True)
 	addXBMCItem (__language__(30008), os.path.join(__thumbpath__, 'viddsee.png'), "?mode=loadViddsee&page=0&type=popular", True)
 	addXBMCItem (__language__(30009), os.path.join(__thumbpath__, 'wahbanana.jpg'), "?mode=loadYoutube&user=wahbanana", True)
-	xbmc.executebuiltin("Container.SetViewMode(500)")
 
 def addXBMCItem(name, thumbnail, action_url, isFolder, Fanart_Image=None, infoLabels=None):
 	if isFolder:
@@ -107,7 +110,6 @@ def channelShows(channel, page=0):
 	if current_page < max_page:
 		page = str(current_page + 1)
 		addXBMCItem (__language__(31000), "", "?mode=loadChannel&channel="+channel+"&page="+page, True)
-	xbmc.executebuiltin("Container.SetViewMode(500)")
 
 def getLiveFeeds():
 	show_ids = []
@@ -132,8 +134,6 @@ def getLiveFeeds():
 		image = os.path.join(__thumbpath__, channels[channel])
 		u=sys.argv[0]+"?mode=resolveMSN&url="+urllib.quote_plus(base_url + '/' + channel + '/' + show_id)
 		addXBMCItem (channel.replace('-', ' '), image, u, False, infoLabels="")
-
-	xbmc.executebuiltin("Container.SetViewMode(500)")
 
 def channelYoutube(user):
 	if user == "channelnewsasia":
@@ -227,8 +227,6 @@ def getEpisodes(channel, show, tab, page):
 		page = str(current_page + 1)
 		addXBMCItem (__language__(31000), "", "?mode=getEpisodes&channel="+channel+"&show="+show+"&tab="+tab+"&page="+page, True)
 
-	xbmc.executebuiltin("Container.SetViewMode(500)")
-
 def htmlParse(str):
 	str=str.replace('\\x3a', ':')
 	str=str.replace('\\x2f', '/')
@@ -302,14 +300,14 @@ def doSearch(option="", query=""):
 		except:
 			return False
 	elif option == "CLEAR":
-		searchpath = os.path.join(__resources__, 'search.xml')
+		searchpath = os.path.join(__profile__, 'search.xml')
 		itemlist = []
 		with open(searchpath, 'w+') as fp:
 			pickle.dump(itemlist, fp)
 		addXBMCItem ("[B][I]"+__language__(31005)+"[/I][/B]", "", "", False)
 	else:
 		addXBMCItem ("[B][I]"+__language__(31005)+"[/I][/B]", "", "?mode=search&option=SEARCH", True)
-		searchpath = os.path.join(__resources__, 'search.xml')
+		searchpath = os.path.join(__profile__, 'search.xml')
 		try:
 			with open (searchpath, 'rb') as fp:
 				itemlist = pickle.load(fp)
@@ -335,7 +333,7 @@ def newSearch(query=""):
 	searchUrl = searchUrl1 + title + searchUrl2
 	data = openJson(searchUrl)
 	if query == "":
-		searchpath = os.path.join(__resources__, 'search.xml')
+		searchpath = os.path.join(__profile__, 'search.xml')
 		with open (searchpath, 'rb') as fp:
 			itemlist = pickle.load(fp)
 		itemlist.append(vq)

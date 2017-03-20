@@ -1,4 +1,11 @@
-v1.0.4 (2016-03-12) :
+v1.0.5 (2017-03-13):
+- changed addon debugging info to kodi debugging info
+- using po-files
+- fixed url in addon.xml as per request
+- changed 'xbmc' to 'kodi' in some text
+- not using addon-name in xbmcaddon.Addon() anymore (thanks enen92)
+
+v1.0.4 (2016-03-12):
 - changed the listing and playing of videos
 - the contextual menu item 'Play from here' is available now, it queues all the videos in the list from a certain point
 - updated to latest requirements for a Kodi-addon
@@ -6,7 +13,7 @@ v1.0.4 (2016-03-12) :
 - added 'refresh' in contextual menu
 - added requests as requirement
 
-v1.0.3 (2015-08-15) :
+v1.0.3 (2015-08-15):
 - updated youtube dependency version
 - added some utf8 stuff
 
@@ -18,5 +25,5 @@ v1.0.1 (2014-09-06):
 - added youtube as dependency
 - added forum link
 
-v1.0.0 (2014-08-28) :
+v1.0.0 (2014-08-28):
 - initial version 

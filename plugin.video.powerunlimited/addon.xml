@@ -2,7 +2,7 @@
 <addon 
 	id="plugin.video.powerunlimited" 
 	name="PowerUnlimited Tv" 
-	version="1.0.4"
+	version="1.0.5"
 	provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                 version="2.14.0"/>
@@ -27,6 +27,6 @@
     <forum>http://forum.xbmc.org/showthread.php?tid=203211</forum>
     <website>http://www.pu.nl/</website>
     <email></email>
-    <source></source>
+    <source>https://github.com/skipmodea1/plugin.video.powerunlimited</source>
   </extension>
 </addon>

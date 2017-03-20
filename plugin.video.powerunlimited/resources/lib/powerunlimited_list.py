@@ -31,22 +31,17 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        # Get plugin settings
-        self.DEBUG = SETTINGS.getSetting('debug')
-
-        if (self.DEBUG) == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
+                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
 
         # Parse parameters...
         self.plugin_category = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['plugin_category'][0]
         self.video_list_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['url'][0]
         self.next_page_possible = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
 
-        if (self.DEBUG) == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                 ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)),
-                     xbmc.LOGNOTICE)
+                     xbmc.LOGDEBUG)
 
         if self.next_page_possible == 'True':
             # Determine current item number, next item number, next_url
@@ -66,10 +61,9 @@ class Main:
                     page_number_next_str = '00' + str(page_number_next)
                 self.next_url = str(self.video_list_page_url).replace(page_number_str, page_number_next_str)
 
-                if (self.DEBUG) == 'true':
-                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                         ADDON, VERSION, DATE, "self.next_url", str(urllib.unquote_plus(self.next_url))),
-                             xbmc.LOGNOTICE)
+                             xbmc.LOGDEBUG)
 
         #
         # Get the videos...
@@ -102,52 +96,46 @@ class Main:
         # <img src='http://cdn.pu.nl/thumbnails/144x123/00fa0/hqdefault.jpg' alt='' title='' />
         thumbnail_urls = soup.findAll('img', attrs={'src': re.compile("/thumbnails/")})
 
-        if (self.DEBUG) == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(thumbnail_urls)", str(len(thumbnail_urls))), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "len(thumbnail_urls)", str(len(thumbnail_urls))), xbmc.LOGDEBUG)
 
         # Get video-page-urls
         # <a class='article pu-tv featured' href='/media/video/pu-tv/parodie-replacer/'>
         # and not <a class='article' href='/games/briquid/'>
         video_page_urls = soup.findAll('a', attrs={'class': re.compile("^article")})
 
-        if (self.DEBUG) == 'true':
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(video_page_urls)", str(len(video_page_urls))), xbmc.LOGNOTICE)
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "len(video_page_urls)", str(len(video_page_urls))), xbmc.LOGDEBUG)
 
         for video_page_url in video_page_urls:
             href = video_page_url['href']
             # skip video link if starts with '/games/'
             if str(href).startswith("/games/"):
-                if (self.DEBUG) == 'true':
-                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                        ADDON, VERSION, DATE, "skipped video_page_url with /games/", str(href)), xbmc.LOGNOTICE)
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                        ADDON, VERSION, DATE, "skipped video_page_url with /games/", str(href)), xbmc.LOGDEBUG)
                 thumbnail_urls_index = thumbnail_urls_index + 1
                 continue
 
             # skip video link if starts with '/media/gallery/'
             if str(href).startswith("/media/gallery/"):
-                if (self.DEBUG) == 'true':
-                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                         ADDON, VERSION, DATE, "skipped video_page_url with /media/gallery/", str(href)),
-                             xbmc.LOGNOTICE)
+                             xbmc.LOGDEBUG)
                 thumbnail_urls_index = thumbnail_urls_index + 1
                 continue
 
             # skip video link if starts with '/artikelen/'
             if str(href).startswith("/artikelen/"):
-                if (self.DEBUG) == 'true':
-                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                         ADDON, VERSION, DATE, "skipped video_page_url with /artikelen/", str(href)),
-                             xbmc.LOGNOTICE)
+                             xbmc.LOGDEBUG)
                 thumbnail_urls_index = thumbnail_urls_index + 1
                 continue
 
             video_page_url = "http://www.pu.nl/media/video%s" % href
 
-            if (self.DEBUG) == 'true':
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "video_page_url", str(video_page_url)), xbmc.LOGNOTICE)
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                    ADDON, VERSION, DATE, "video_page_url", str(video_page_url)), xbmc.LOGDEBUG)
 
             # Make title
             # /media/video/pu-tv/parodie-replacer/
@@ -191,10 +179,9 @@ class Main:
             title = title.replace(' xxix ', ' XXIX ')
             title = title.replace(' xxx ', ' XXX ')
 
-            if (self.DEBUG) == 'true':
-                xbmc.log(
+            xbmc.log(
                     "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "title", str(title)),
-                    xbmc.LOGNOTICE)
+                    xbmc.LOGDEBUG)
 
             # if thumbnail_urls_index + 1 >= len(thumbnail_urls):
             if thumbnail_urls_index >= len(thumbnail_urls):
@@ -213,7 +200,6 @@ class Main:
             is_folder = False
             # Add refresh option to context menu
             list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])
-            xbmc.log("zzzz" + str(url))
             # Add our item to the listing as a 3-element tuple.
             listing.append((url, list_item, is_folder))
 
@@ -243,32 +229,3 @@ class Main:
         xbmcplugin.addSortMethod(handle=self.plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_NONE)
         # Finish creating a virtual folder.
         xbmcplugin.endOfDirectory(self.plugin_handle)
-
-
-
-        #
-        #     # Add to list...
-        #     parameters = {"action": "play", "video_page_url": video_page_url, "title": title}
-        #     url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-        #     listitem = xbmcgui.ListItem(title, iconImage="DefaultVideo.png", thumbnailImage=thumbnail_url)
-        #     listitem.setInfo("video", {"Title": title, "Studio": "Powerunlimited"})
-        #     folder = False
-        #     xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=listitem, isFolder=folder)
-        #
-        #     thumbnail_urls_index = thumbnail_urls_index + 1
-        #
-        # # Next page entry...
-        # if self.next_page_possible == 'True':
-        #     parameters = {"action": "list", "plugin_category": self.plugin_category, "url": str(self.next_url),
-        #                   "next_page_possible": self.next_page_possible}
-        #     url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-        #     listitem = xbmcgui.ListItem(LANGUAGE(30503), iconImage="DefaultFolder.png",
-        #                                 thumbnailImage=os.path.join(IMAGES_PATH, 'next-page.png'))
-        #     folder = True
-        #     xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=listitem, isFolder=folder)
-        #
-        # # Disable sorting...
-        # xbmcplugin.addSortMethod(handle=int(sys.argv[1]), sortMethod=xbmcplugin.SORT_METHOD_NONE)
-        #
-        # # End of directory...
-        # xbmcplugin.endOfDirectory(handle=int(sys.argv[1]), succeeded=True)

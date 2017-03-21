@@ -1,3 +1,10 @@
+v2.5.7
+Optimized selection of catchup CDN internally.
+COMPATIBILITY NOTE: Users need to set catchup source to "Any" when Autoplay is switched off
+to get a choice of all CDNs.
+Additional programme properties for better shortcut handling within Kodi.
+Fixed Channel A-Z.
+
 v2.5.6
 Added live TV channel BBC One South West.
 

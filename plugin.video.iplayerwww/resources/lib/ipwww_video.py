@@ -81,7 +81,7 @@ def ListRedButton():
         ('sport_stream_21b', 'BBC Red Button 21b'),
         ('sport_stream_22b', 'BBC Red Button 22b'),
         ('sport_stream_23b', 'BBC Red Button 23b'),
-        ('sport_stream_24b', 'BBC Red Button 24b'),        
+        ('sport_stream_24b', 'BBC Red Button 24b'),
     ]
     iconimage = xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/red_button.png')
     for id, name in channel_list:
@@ -183,7 +183,7 @@ def ListChannelAtoZ():
         iconimage = xbmc.translatePath(
             os.path.join('special://home/addons/plugin.video.iplayerwww/media', img + '.png'))
         url = "http://www.bbc.co.uk/%s/a-z" % id
-        AddMenuEntry(name, url, 128, iconimage, '', '')
+        AddMenuEntry(name, url, 134, iconimage, '', '')
 
 
 def GetAtoZPage(url):
@@ -435,6 +435,195 @@ def ScrapeEpisodes(page_url):
         if current_page < next_page:
             page_url = 'http://www.bbc.co.uk' + page_base_url + str(next_page)
             AddMenuEntry(" [COLOR ffffa500]%s >>[/COLOR]" % translation(30320), page_url, 128, '', '', '')
+
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
+
+    pDialog.close()
+
+
+def ScrapeAtoZEpisodes(page_url):
+    """Creates a list of programmes on one standard HTML page.
+
+    ScrapeEpisodes contains a number of special treatments, which are only needed for
+    specific pages, e.g. Search, but allows to use a single function for all kinds
+    of pages.
+    """
+
+    pDialog = xbmcgui.DialogProgressBG()
+    pDialog.create(translation(30319))
+
+    html = OpenURL(page_url)
+
+    total_pages = 1
+    current_page = 1
+    page_range = range(1)
+    paginate = re.search(r'<ul class="pagination.*?</ul>', html, re.DOTALL)
+    next_page = 1
+    if paginate:
+        page_base_url_match = re.search(r'(.+?)page=', page_url)
+        if page_base_url_match:
+            page_base_url = page_base_url_match.group(0)
+        else:
+            page_base_url = page_url+"?page="
+        if int(ADDON.getSetting('paginate_episodes')) == 0:
+            current_page_match = re.search(r'page=(\d*)', page_url)
+            if current_page_match:
+                current_page = int(current_page_match.group(1))
+            page_base_url_match = re.search(r'(.+?)page=', page_url)
+            if page_base_url_match:
+                page_base_url = page_base_url_match.group(0)
+            else:
+                page_base_url = page_url+"?page="
+            page_range = range(current_page, current_page+1)
+            next_page_match = re.search(r'pagination__item--next">\n.+?<a href="\?page=(.*?)"',
+                                        paginate.group(0),
+                                        re.DOTALL)
+            if next_page_match:
+                next_page = int(next_page_match.group(1))
+            else:
+                next_page = current_page
+            page_range = range(current_page, current_page+1)
+        else:
+            pages = re.findall(r'pagination__item--page">.+?<a href=".+?"',paginate.group(0),re.DOTALL)
+            if pages:
+                last = pages[-1]
+                last_page = re.search(r'<a href="\?page=(.*?)"',last)
+                total_pages = int(last_page.group(1))
+            page_range = range(1, total_pages+1)
+
+    for page in page_range:
+
+        if page > current_page:
+            page_url = page_base_url + str(page)
+            html = OpenURL(page_url)
+
+        # NOTE remove inner li to match outer li
+
+        # <li data-version-type="hd">
+        html = re.compile(r'<li data-version-type.*?</li>',
+                          flags=(re.DOTALL | re.MULTILINE)).sub('', html)
+
+        # <li class="list-item programme"  data-ip-id="p026f2t4">
+        list_items = re.findall(r'<li class="list-item.*?</li>', html, flags=(re.DOTALL | re.MULTILINE))
+
+        list_item_num = 1
+
+        for li in list_items:
+
+            search_group = False
+
+            main_url = None
+            # <a href="/iplayer/episode/b08jny1j/antiques-road-trip-series-13-reversions-episode-10"
+            # title="Antiques Road Trip, Series 13 Reversions: Episode 10" class="list-item__main-link">
+            url_match = re.search(
+                r'<a.*?href="(.*?)".*?list-item__main-link.*?>',
+                li, flags=(re.DOTALL | re.MULTILINE))
+            if url_match:
+                url = url_match.group(1)
+                if url:
+                    main_url = 'http://www.bbc.co.uk' + url
+
+            name = ''
+            title = ''
+            #<h1 class="list-item__title typo typo--bold typo--goose">Antiques Road Trip</h1>
+            title_match = re.search(
+                r'<h1 class="list-item__title.+?">\s*(.*?)\s*</h1>',
+                li, flags=(re.DOTALL | re.MULTILINE))
+            if title_match:
+                title = title_match.group(1)
+                name = title
+
+            subtitle = None
+            # <h2 class="list-item__programme-info__subtitle typo typo--skylark">
+            # Series 39: 14. Burton Constable 2</h2>
+            subtitle_match = re.search(
+                r'<h2 class="list-item__programme-info__subtitle.+?">\s*(.*?)\s*</h2>',
+                li, flags=(re.DOTALL | re.MULTILINE))
+            if subtitle_match:
+                subtitle = subtitle_match.group(1)
+                if subtitle:
+                    name = name + " - " + subtitle
+
+            icon = ''
+            # <source srcset="http://ichef.bbci.co.uk/images/ic/336x189/p04cd999.jpg"
+            icon_match = re.search(
+                r'<source.*?srcset="https://ichef.bbci.co.uk/images/ic/.*?/(.*?)\.jpg',
+                li, flags=(re.DOTALL | re.MULTILINE))
+            if icon_match:
+                image = icon_match.group(1)
+                if image:
+                    icon = "https://ichef.bbci.co.uk/images/ic/832x468/" + image + ".jpg"
+
+
+            type = None
+            synopsis = ''
+            # <p class="list-item__programme-info__synopsis">
+            # Take an exclusive first look at this year’s candidates.
+            # </p>
+            synopsis_match = re.search(
+                r'<p class="list-item__programme-info__synopsis">\s*(.*?)\s*</p>',
+                li, flags=(re.DOTALL | re.MULTILINE))
+            if synopsis_match:
+                synopsis = synopsis_match.group(1)
+
+            aired = ''
+            # <p class="metadata__item typo typo--bullfinch">First shown: 10 Jun 2016</p>
+            release_match = re.search(
+                r'<p class="metadata__item.*?>First shown:\s*(.*?)</p>',
+                li, flags=(re.DOTALL | re.MULTILINE))
+            if release_match:
+                release = release_match.group(1)
+                if release:
+                    aired = FirstShownToAired(release)
+
+            episodes = None
+            # <div class="list-item__episodes-button
+            # list-item__episodes-button--only-bp3 gel-layout__item">
+            # <a href="/iplayer/episodes/b07gx71q"
+            # class="button button--with-link button--left-align button--full-width ">
+            episodes_match = re.search(
+                r'<div class="list-item__episodes-button.+?href="(.*?)"',
+                li, flags=(re.DOTALL | re.MULTILINE))
+            if episodes_match:
+                episodes = episodes_match.group(1)
+
+            more = None
+            # <span class="button__text typo typo--bullfinch typo--bold">12 available episodes</span>
+            more_match = re.search(
+                r'<span class="button__text.+?">(.*?) available episodes</span>',
+                li, flags=(re.DOTALL | re.MULTILINE))
+            if more_match:
+                more = more_match.group(1)
+
+            if episodes:
+                episodes_url = 'http://www.bbc.co.uk' + episodes
+                if search_group:
+                    AddMenuEntry('[B]%s[/B] - %s' % (title, translation(30318)),
+                                 episodes_url, 128, icon, '', '')
+                else:
+                    AddMenuEntry('[B]%s[/B] - %s %s' % (title, more, translation(30313)),
+                                 episodes_url, 128, icon, '', '')
+            elif more:
+                AddMenuEntry('[B]%s[/B] - %s %s' % (title, more, translation(30313)),
+                             main_url, 128, icon, '', '')
+
+            if type != "group":
+                CheckAutoplay(name , main_url, icon, synopsis, aired)
+
+            percent = int(100*(page+list_item_num/len(list_items))/total_pages)
+            pDialog.update(percent,translation(30319),name)
+
+            list_item_num += 1
+
+        percent = int(100*page/total_pages)
+        pDialog.update(percent,translation(30319))
+
+    if int(ADDON.getSetting('paginate_episodes')) == 0:
+        if current_page < next_page:
+            page_url = page_base_url + str(next_page)
+            AddMenuEntry(" [COLOR ffffa500]%s >>[/COLOR]" % translation(30320), page_url, 134, '', '', '')
 
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
@@ -865,6 +1054,12 @@ def ListMostPopular():
 def AddAvailableStreamItem(name, url, iconimage, description):
     """Play a streamm based on settings for preferred catchup source and bitrate."""
     stream_ids = ScrapeAvailableStreams(url)
+    if stream_ids['name']:
+        name = stream_ids['name']
+    if not iconimage or iconimage == u"DefaultVideo.png" and stream_ids['image']:
+        iconimage = stream_ids['image']
+    if stream_ids['description']:
+        description = stream_ids['description']
     if stream_ids['stream_id_ad']:
         streams_all = ParseStreams(stream_ids['stream_id_ad'])
     elif stream_ids['stream_id_sl']:
@@ -926,6 +1121,12 @@ def GetAvailableStreams(name, url, iconimage, description):
     """Calls AddAvailableStreamsDirectory based on user settings"""
     #print url
     stream_ids = ScrapeAvailableStreams(url)
+    if stream_ids['name']:
+        name = stream_ids['name']
+    if stream_ids['image']:
+        iconimage = stream_ids['image']
+    if stream_ids['description']:
+        description = stream_ids['description']
     AddAvailableStreamsDirectory(name, stream_ids['stream_id_st'], iconimage, description)
     # If we searched for Audio Described programmes and they have been found, append them to the list.
     if stream_ids['stream_id_ad']:
@@ -1111,16 +1312,19 @@ def ParseStreams(stream_id):
     match = re.compile(
         'connection authExpires=".+?href="(.+?)".+?supplier="mf_(.+?)".+?transferFormat="(.+?)"'
         ).findall(html)
+    source = int(ADDON.getSetting('catchup_source'))
     for m3u8_url, supplier, transfer_format in match:
         tmp_sup = 0
         tmp_br = 0
         if transfer_format == 'hls':
-            if supplier == 'akamai_uk_hls':
+            if supplier == 'akamai_uk_hls' and source in [0,1]:
                 tmp_sup = 1
-            elif supplier == 'limelight_uk_hls':
+            elif supplier == 'limelight_uk_hls' and source in [0,2]:
                 tmp_sup = 2
-            elif supplier == 'bidi_uk_hls':
+            elif supplier == 'bidi_uk_hls' and source in [0,3]:
                 tmp_sup = 3
+            else:
+                continue
             m3u8_breakdown = re.compile('(.+?)iptv.+?m3u8(.+?)$').findall(m3u8_url)
             #print m3u8_breakdown
             # print m3u8_url
@@ -1153,10 +1357,12 @@ def ParseStreams(stream_id):
         tmp_sup = 0
         tmp_br = 0
         if transfer_format == 'hls':
-            if supplier == 'akamai_hls_open':
+            if supplier == 'akamai_hls_open' and source in [0,1]:
                 tmp_sup = 1
-            elif supplier == 'limelight_hls_open':
+            elif supplier == 'limelight_hls_open' and source in [0,2]:
                 tmp_sup = 2
+            else:
+                continue
             m3u8_breakdown = re.compile('.+?master.m3u8(.+?)$').findall(m3u8_url)
         # print m3u8_url
         # print m3u8_breakdown
@@ -1270,6 +1476,18 @@ def ParseLiveStreams(channelname, providers):
 def ScrapeAvailableStreams(url):
     # Open page and retrieve the stream ID
     html = OpenURL(url)
+    name = None
+    match = re.search(r'<meta property="og:title" content="(.*?)"', html, re.DOTALL)
+    if match:
+        name = match.group(1)
+    image = None
+    match = re.search(r'<meta property="og:image" content="(.*?)"', html, re.DOTALL)
+    if match:
+        image = match.group(1)
+    description = None
+    match = re.search(r'<meta property="og:description" content="(.*?)"', html, re.DOTALL)
+    if match:
+        description = match.group(1)
     # Search for standard programmes.
     stream_id_st = re.compile('"vpid":"(.+?)"').findall(html)
     # Optionally, Signed programmes can be searched for. These have a different ID.
@@ -1286,7 +1504,7 @@ def ScrapeAvailableStreams(url):
         # print stream_id_ad
     else:
         stream_id_ad = []
-    return {'stream_id_st': stream_id_st, 'stream_id_sl': stream_id_sl, 'stream_id_ad': stream_id_ad}
+    return {'stream_id_st': stream_id_st, 'stream_id_sl': stream_id_sl, 'stream_id_ad': stream_id_ad, 'name': name, 'image':image, 'description': description}
 
 
 def CheckAutoplay(name, url, iconimage, plot, aired=None):

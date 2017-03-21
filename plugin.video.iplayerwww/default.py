@@ -196,6 +196,9 @@ elif mode == 132:
 elif mode == 133:
     Radio.AddAvailableLiveStreamsDirectory(name, url, iconimage)
 
+elif mode == 134:
+    Video.ScrapeAtoZEpisodes(url)
+
 elif mode == 136:
     Radio.GetPage(url)
 

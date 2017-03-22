@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.iplayerwww" name="iPlayer WWW" version="3.0.0" provider-name="CaptainT, Cas, ihurst, primaeval">
+<addon id="plugin.video.iplayerwww" name="iPlayer WWW" version="3.0.1" provider-name="CaptainT, Cas, ihurst, primaeval">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.requests" version="2.7.0"/>
@@ -23,6 +23,13 @@
         <fanart>resources/fanart.jpg</fanart>
     </assets>
     <news>
+v3.0.1
+Optimized selection of catchup CDN internally.
+COMPATIBILITY NOTE: Users need to set catchup source to "Any" when Autoplay is switched off
+to get a choice of all CDNs.
+Additional programme properties for better shortcut handling within Kodi.
+Fixed Channel A-Z.
+
 v3.0.0
 Initial release for Kodi Krypton.
 Support for DASH streams if inputstream.adaptive add-on is available.

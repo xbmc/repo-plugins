@@ -117,7 +117,7 @@ class Mediaset(rutils.RUtils):
     def get_stream(self, id):
         self.log('Trying to get the stream with id ' + str(id), 4)
 
-        url = "http://cdnselector.xuniplay.fdnames.com/GetCDN.aspx?streamid={id}&format=json".format(id=id)
+        url = "http://cdnsel01.mediaset.net/GetCdn.aspx?streamid={id}&format=json".format(id=id)
 
         jsn = self.getJson(url)
 
@@ -126,9 +126,9 @@ class Mediaset(rutils.RUtils):
             stream = {}
             for vlist in jsn["videoList"]:
                 self.log( "videomediaset: streams {url}".format(url=vlist))
-                if ( vlist.find("/wmv2/") > 0): stream["wmv"] = vlist
-                if ( vlist.find("/mp4/") > 0): stream["mp4"] = vlist
-                if ( vlist.find("/mp4/") > 0): stream["f4v"] = vlist
-                if ( vlist.find("/mp4/") > 0): stream["smoothstream"] = vlist
+                if ( vlist.find(".wmv") > 0): stream["wmv"] = vlist
+                if ( vlist.find(".mp4") > 0): stream["mp4"] = vlist
+                if ( vlist.find(".f4v") > 0): stream["f4v"] = vlist
+                if ( vlist.find(".ism") > 0): stream["smoothstream"] = vlist
             return stream
         return False

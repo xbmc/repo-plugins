@@ -46,7 +46,10 @@ class myAddon(t1mAddon):
       if not gcurl.startswith('http'):
           gcurl = 'http://www.cbs.com%s' % gcurl
       html = self.getRequest(gcurl)
-      catid = re.compile('video.section_ids = \[(.+?)\]',re.DOTALL).search(html).group(1)
+      catid = re.compile('video.section_ids = \[(.+?)\]',re.DOTALL).search(html)
+      if catid is None:
+          catid = re.compile('"section_ids"\:\[(.+?)\]',re.DOTALL).search(html)
+      catid = catid.group(1)
       catid = catid.split(',',1)[0]
       if not catid.isdigit():
           return(ilist)
@@ -121,30 +124,41 @@ class myAddon(t1mAddon):
 
 
   def getAddonVideo(self,url):
+      signature = None
       html = self.getRequest('http://www.cbs.com%s' % uqp(url))
-      foundpid = re.compile("cbsplayer.pid = '(.+?)'", re.DOTALL).search(html).group(1)
+      foundpid = re.compile("cbsplayer.pid = '(.+?)'", re.DOTALL).search(html)
+      if foundpid is None:
+          a = re.compile('var \$module = (.+?)\;', re.DOTALL).search(html).group(1)
+          a = json.loads(a)
+          foundpid = a['video']['pid']
+          signature = a['video']['signature']
+      else:
+          foundpid = foundpid.group(1)
       headers = self.defaultHeaders.copy()
       headers['User-Agent']= 'Mozilla/5.0 (Linux; U; en-US) AppleWebKit/528.5+ (KHTML, like Gecko, Safari/528.5+) Version/4.0 Kindle/3.0 (screen 600X800; rotate)'
-      pg = self.getRequest('http://link.theplatform.com/s/dJ5BDC/%s?format=SMIL&manifest=m3u&mbr=true' % foundpid, None, headers)
+      purl = 'http://link.theplatform.com/s/dJ5BDC/%s?format=SMIL&manifest=m3u&mbr=true' % foundpid
+      if not signature is None:
+          purl += '&signature=%s' % signature
+      pg = self.getRequest(purl, None, headers)
       url = re.compile('<video src="(.+?)"', re.DOTALL).search(pg).group(1)
       if url.startswith('http'):
           finalurl = url +'|User-Agent='+urllib.quote(headers['User-Agent'])
       else:
-          pg = self.getRequest('http://link.theplatform.com/s/dJ5BDC/%s?format=SMIL&mbr=true' % foundpid)
-          frtmp,fplay = re.compile('<meta base="(.+?)".+?<video src="(.+?)"',re.DOTALL).search(pg).groups()
-          swfurl='http://canstatic.cbs.com/chrome/canplayer.swf swfvfy=true'
-          if '.mp4' in fplay:
-              pphdr = 'mp4:'
-              frtmp = frtmp.replace('&amp;','&')
-              fplay = fplay.replace('&amp;','&')
-          else:
-              pphdr = ''
-              frtmp = frtmp.replace('rtmp:','rtmpe:')
-              frtmp = frtmp.replace('.net','.net:1935')
-              frtmp = frtmp.replace('?auth=','?ovpfv=2.1.9-internal&?auth=')
-              swfurl = 'http://vidtech.cbsinteractive.com/player/3_3_2/CBSI_PLAYER_HD.swf swfvfy=true pageUrl=http://www.cbs.com/shows'
-          finalurl = '%s playpath=%s%s swfurl=%s timeout=90' % (frtmp, pphdr, fplay, swfurl)
-          xbmcgui.Dialog().notification(self.addonName, self.addon.getLocalizedString(30001), self.addonIcon, 5000, False)
+              pg = self.getRequest('http://link.theplatform.com/s/dJ5BDC/%s?format=SMIL&mbr=true' % foundpid)
+              frtmp,fplay = re.compile('<meta base="(.+?)".+?<video src="(.+?)"',re.DOTALL).search(pg).groups()
+              swfurl='http://canstatic.cbs.com/chrome/canplayer.swf swfvfy=true'
+              if '.mp4' in fplay:
+                  pphdr = 'mp4:'
+                  frtmp = frtmp.replace('&amp;','&')
+                  fplay = fplay.replace('&amp;','&')
+              else:
+                  pphdr = ''
+                  frtmp = frtmp.replace('rtmp:','rtmpe:')
+                  frtmp = frtmp.replace('.net','.net:1935')
+                  frtmp = frtmp.replace('?auth=','?ovpfv=2.1.9-internal&?auth=')
+                  swfurl = 'http://vidtech.cbsinteractive.com/player/3_3_2/CBSI_PLAYER_HD.swf swfvfy=true pageUrl=http://www.cbs.com/shows'
+              finalurl = '%s playpath=%s%s swfurl=%s timeout=90' % (frtmp, pphdr, fplay, swfurl)
+              xbmcgui.Dialog().notification(self.addonName, self.addon.getLocalizedString(30001), self.addonIcon, 5000, False)
 
       liz = xbmcgui.ListItem(path = finalurl)
       suburl = re.compile('"ClosedCaptionURL" value="(.+?)"',re.DOTALL).search(pg)

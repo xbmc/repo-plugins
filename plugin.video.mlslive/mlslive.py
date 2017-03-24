@@ -332,17 +332,20 @@ class MLSLive:
                           game['away']['name']['full'])
 
 
-    def getDescription(self, game, fmt):
+    def getDescription(self, game, fmt, def_blackouts, def_venue):
+        blackouts = def_blackouts
         if not game['blackouts'] == None:
             blackouts = ''
             for blackout in game['blackouts']:
                 blackouts += blackout + ', '
-        else:
-            blackouts = 'None  '
+
+        venue = def_venue
+        if game['venue'] != None:
+            venue = game['venue']['name']
 
         return fmt.format(game['home']['name']['full'],
                           game['away']['name']['full'],
-                          game['venue']['name'], blackouts[0:-2])
+                          venue, blackouts[0:-2])
 
 
     def getGameString(self, game, separator):

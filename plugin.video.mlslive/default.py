@@ -74,7 +74,8 @@ def createGamesMenu(complete = False, offset = None):
         elif complete and game['period'] != 'FullTime':
             continue
 
-        plot = mls.getDescription(game, __language__(30021))
+        plot = mls.getDescription(game, __language__(30021),
+                                  __language__(30023), __language__(30024))
         infos = { 'genre' : game['competition']['name'],
                   'title' : mls.getFullTitle(game, __language__(30008)),
                   'tvshowtitle' : game['competition']['name'],

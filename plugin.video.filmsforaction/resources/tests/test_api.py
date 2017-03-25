@@ -26,7 +26,7 @@ class ITTests(unittest.TestCase):
         self.assertTrue(len(video_items['video_list'][0]['title']) > 1)
 
     def test_list_category(self):
-        url='http://www.filmsforaction.org/watch_activism_videos/?p=2'
+        url='http://www.filmsforaction.org/library/2/?quality=all&category=all+videos&topic=1562&sort=new'
         video_items = api.get_videolist(url)
         self.assertTrue(len(video_items['video_list']) == 52)
 

@@ -45,12 +45,12 @@ translation = p.get_plugin_translation()
 debug_flag = settings.getSetting("debug") == "true"
 
 p.set_debug_mode(debug_flag)
-api.set_debug(debug_flag)
+api.set_debug(debug_flag, p.log)
 
 # By default, both, the website and the add-on are setup to show only the best videos.
-all_filter = '?c=all' if settings.getSetting("show_best") == "false" else ''
+all_filter = '&quality=all' if settings.getSetting("show_best") == "false" else '&quality=best'
 
-if all_filter:
+if all_filter == '&quality=all':
     p.log("ffa.main: 'all videos' filter is explicit setup.")
 
 def get_located_string(string_name):
@@ -86,7 +86,7 @@ def create_index(params):
                 'title': menu_entry,
                 'genre': menu_entry,
             },
-            'path': p.get_plugin_path(url = 'http://www.filmsforaction.org/films/' + all_filter, action = action, category = menu_entry),
+            'path': p.get_plugin_path(url = 'http://www.filmsforaction.org/library/?category=all+videos&sort=new' + all_filter, action = action, category = menu_entry),
             'IsPlayable' : False
             }
 
@@ -153,7 +153,7 @@ def search_videos(params):
 
     search_string = p.get_keyboard_text(get_located_string('Search'))
     if search_string:
-         params['url'] = api.get_search_url(search_string) + all_filter.replace('?', '&')
+         params['url'] = api.get_search_url(search_string) + all_filter
          p.log("ffa.search Value of search url: %s" % params['url'])
          return main_list(params)
 

@@ -16,6 +16,9 @@ GadgetReactor
 Changelog
 =================
 
+V1.8.1 - 2016-03-25
+Fixed support for Kodi 16 (Android)
+
 V1.8.0 - 2016-03-17
 Added search functions - allows better finding of shows
 Code cleanup

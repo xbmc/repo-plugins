@@ -113,7 +113,7 @@ def channelShows(channel, page=0):
 
 def getLiveFeeds():
 	show_ids = []
-	channels = collections.OrderedDict()
+	channels = {} # collections.OrderedDict() not suppored on Kodi 16.1 Android
 	channels['Channel 5'] = 'channel5.jpg'
 	channels['Channel 8'] = 'channel8.jpg'
 	channels['Channel-U'] = 'channelu.jpg'
@@ -130,6 +130,7 @@ def getLiveFeeds():
 			if show_id:
 				show_ids.append((channel, show_id[0]))
 
+	show_ids.sort(key=lambda show:show[0])
 	for channel, show_id in show_ids:
 		image = os.path.join(__thumbpath__, channels[channel])
 		u=sys.argv[0]+"?mode=resolveMSN&url="+urllib.quote_plus(base_url + '/' + channel + '/' + show_id)

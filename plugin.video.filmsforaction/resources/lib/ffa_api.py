@@ -3,17 +3,17 @@
 '''
    Films For Action API lib: library functions for Films For Action add-on.
    Copyright (C) 2014 José Antonio Montes (jamontes)
-   
+
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
-   
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-   
+
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -27,23 +27,24 @@ import lutil as l
 
 root_url = 'http://www.filmsforaction.org'
 
-def set_debug(debug_flag):
+def set_debug(debug_flag, func_log=l.local_log):
     """This function is a wrapper to setup the debug flag into the lutil module"""
-    l.set_debug_mode(debug_flag)
+    l.set_debug_mode(debug_flag, func_log)
 
 
 def get_categories():
     """This function gets the categories list from the FFA website."""
-    catalog_pattern  = '<div class="DarkGray clearfix">(.*?)</div>'
-    category_pattern = '<a href="([^"]*?)">([^<]*?)</a>'
-    category_url = 'http://www.filmsforaction.org/films/'
+    category_pattern = "'topic', '([0-9]+)'[^>]+?>([^<]+?)</a>"
+    category_url = 'http://www.filmsforaction.org/library/?category=all+videos&topic=%s&sort=new'
 
-    buffer_url = l.carga_web(category_url)
-    catalog = l.find_first(buffer_url, catalog_pattern)
+    buffer_url = l.carga_web(root_url)
     category_list = []
-    for category_url, category_name in l.find_multiple(catalog, category_pattern):
-        url = root_url + category_url
-        category_list.append((url, category_name))
+    topic_list = []
+    for topic, category_name in l.find_multiple(buffer_url, category_pattern):
+        if topic not in topic_list:
+            url = category_url % topic
+            category_list.append((url, category_name))
+            topic_list.append(topic)
 
     return category_list
 
@@ -60,9 +61,9 @@ def get_videolist(url, cat_menu=""):
     video_rating_pattern   = '([0-9.]+[ ]+[Ss]tars)'
     video_views_pattern    = '([0-9,]+[ ]+[Vv]iews)'
     video_author_pattern   = '([Aa]dded by).*?<a href=["\']/[^/]*?/["\'][ ]*?>([^<]*?)</a>'
-    page_num_pattern       = 'href=["\'][^"\']*?p=([0-9]+)'
-    page_num_url_pattern   = 'href=["\']([^"\']*?p=%d[^"\']*?)["\']'
-    page_num_cur_pattern   = 'p=([0-9]+)'
+    page_num_pattern       = 'href=["\']/library/([0-9]+)/'
+    page_num_url_pattern   = 'href=["\'](/library/%d/[^"\']*?)["\']'
+    page_num_cur_pattern   = '/library/([0-9]+)/'
 
     buffer_url = l.carga_web(url)
 
@@ -74,9 +75,7 @@ def get_videolist(url, cat_menu=""):
 
     if current_page_num != 1:
         prev_page_num = current_page_num - 1
-        previous_page_url = l.find_first(buffer_url, page_num_url_pattern % prev_page_num)
-        if not "http" in previous_page_url:
-            previous_page_url = root_url + previous_page_url
+        previous_page_url = root_url + l.find_first(buffer_url, page_num_url_pattern % prev_page_num)
         video_entry = { 'url': previous_page_url, 'title': '<< %s (%d)' % (cat_menu, prev_page_num), 'IsPlayable': False }
         video_list.append(video_entry)
         reset_cache = True
@@ -117,9 +116,7 @@ def get_videolist(url, cat_menu=""):
 
     if current_page_num < last_page_num:
         next_page_num = current_page_num + 1
-        next_page_url = l.find_first(buffer_url, page_num_url_pattern % next_page_num)
-        if not "http" in next_page_url:
-            next_page_url = root_url + next_page_url
+        next_page_url = root_url + l.find_first(buffer_url, page_num_url_pattern % next_page_num)
         video_entry = { 'url': next_page_url, 'title': '>> %s (%d/%d)' % (cat_menu, next_page_num, last_page_num), 'IsPlayable': False }
         video_list.append(video_entry)
 
@@ -128,26 +125,27 @@ def get_videolist(url, cat_menu=""):
 
 def get_search_url(search_string):
     """This function returns the search encoded URL to find the videos from the input search string"""
-    return 'http://www.filmsforaction.org/search/?s=' + l.get_url_encoded(search_string)
+    return 'http://www.filmsforaction.org/library/?search=' + l.get_url_encoded(search_string)
 
 
 def get_playable_url(url):
     """This function returns a playable URL parsing the different video sources available from the iframe link"""
     video_patterns = (
-            ('vimeo1', 'vimeo.com/video/([0-9]+)', 'vimeo'),
-            ('vimeo2', 'vimeo.com%2Fvideo%2F([0-9]+)', 'vimeo'),
-            ('youtube1', 'videoId: "([0-9A-Za-z_-]{11})', 'youtube'),
-            ('youtube2', 'youtube.com%2Fembed%2F([0-9A-Za-z_-]{11})', 'youtube'),
-            ('youtube3', 'youtube.com/embed/([0-9A-Za-z_-]{11})', 'youtube'),
-            ('dailymotion1', ' src="[htp:]*?//www.dailymotion.com/embed/video/([^"]*?)"', 'dailymotion'),
-            ('dailymotion2', 'www.dailymotion.com%2Fembed%2Fvideo%2F(.*?)%', 'dailymotion'),
-            ('archiveorg1', ' src="(https://archive.org/embed/[^"]*?)"', 'archiveorg'),
-            ('snagfilms1', ' src="http://embed.snagfilms.com/embed/player\?filmId=([^"]*?)"', 'snagfilms'),
-            ('kickstarter1', ' src="(https://www.kickstarter.com/[^"]*?)"', 'kickstarter'),
-            ('tagtele1', ' src="(http://www.tagtele.com/embed/[^"]*?)"', 'tagtele'),
-            ('disclosetv1', ' src="http://www.disclose.tv/embed/([^"]*?)"', 'disclosetv'),
+            ('vimeo1',       'vimeo.com/video/([0-9]+)',                                        'vimeo'),
+            ('vimeo2',       'vimeo.com%2Fvideo%2F([0-9]+)',                                    'vimeo'),
+            ('youtube1',     'videoId: "([0-9A-Za-z_-]{11})',                                   'youtube'),
+            ('youtube2',     'youtube.com%2Fwatch%3Fv%3D([0-9A-Za-z_-]{11})',                   'youtube'),
+            ('youtube3',     'youtube.com%2Fembed%2F([0-9A-Za-z_-]{11})',                       'youtube'),
+            ('youtube4',     'youtube.com/embed/([0-9A-Za-z_-]{11})',                           'youtube'),
+            ('dailymotion1', ' src="[htp:]*?//www.dailymotion.com/embed/video/([0-9a-zA-Z]+)',  'dailymotion'),
+            ('dailymotion2', 'www.dailymotion.com%2Fembed%2Fvideo%2F(.*?)%',                    'dailymotion'),
+            ('archiveorg1',  ' src="(https://archive.org/embed/[^"]*?)"',                       'archiveorg'),
+            ('snagfilms1',   ' src="http://embed.snagfilms.com/embed/player\?filmId=([^"]*?)"', 'snagfilms'),
+            ('kickstarter1', ' src="(https://www.kickstarter.com/[^"]*?)"',                     'kickstarter'),
+            ('tagtele1',     ' src="(http://www.tagtele.com/embed/[^"]*?)"',                    'tagtele'),
+            ('disclosetv1',  ' src="http://www.disclose.tv/embed/([^"]*?)"',                    'disclosetv'),
             )
-    
+
     buffer_url = l.carga_web(url)
 
     for pattern_name, pattern, source in video_patterns:
@@ -166,7 +164,7 @@ def get_playable_url(url):
 def get_playable_vimeo_url(video_id):
     """This function returns the playable URL for the Vimeo embedded video from the video_id retrieved."""
     video_quality_pattern = '"profile":[0-9]+,"width":([0-9]+),.*?,"url":"([^"]*?)"'
-    quality_list          = ('640', '480', '1280')
+    quality_list          = ('640', '720', '480', '320', '960', '1280', '1920')
 
     video_info_url   = 'https://player.vimeo.com/video/' + video_id
     buffer_link = l.carga_web(video_info_url)
@@ -175,6 +173,10 @@ def get_playable_vimeo_url(video_id):
     for quality in quality_list:
         if quality in video_options:
             return video_options.get(quality)
+    else:
+        if len(video_options):
+            # This quality isn't normalized.
+            return video_options.get(video_options.keys()[0])
 
     return ""
 
@@ -186,15 +188,18 @@ def get_playable_youtube_url(video_id):
 
 def get_playable_dailymotion_url(video_id):
     """This function returns the playable URL for the Dalymotion embedded video from the video_id retrieved."""
-    daily_video_pattern = '"%s":\[{"type":"video\\\/mp4","url":"(.+?)"'
+    daily_video_pattern   = '"([0-9]+)":\[[^]]*?{"type":"video\\\/mp4","url":"([^"]+?)"'
     daily_video_qualities = ('480', '720', '380', '240')
 
     daily_url = 'http://www.dailymotion.com/embed/video/' + video_id
     buffer_link = l.carga_web(daily_url)
-    for video_quality in daily_video_qualities:
-        video_url = l.find_first(buffer_link, daily_video_pattern % video_quality)
-        if video_url:
-            return video_url.replace('\\', '')
+    video_options  = dict((quality, video) for quality, video in l.find_multiple(buffer_link, daily_video_pattern))
+    l.log("List of video options: "+repr(video_options))
+    for quality_option in daily_video_qualities:
+        if quality_option in video_options:
+            video_url = video_options.get(quality_option).replace('\\','')
+            return video_url
+
     return ""
 
 

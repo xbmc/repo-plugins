@@ -7,7 +7,7 @@
   <string id="30003">Please add your password to the settings</string>
   <string id="30004">Authentication Error</string>
   <string id="30005">Unable to authenticate with MLS Live</string>
-  <string id="30006">Please contact the plugin author</string>
+  <string id="30006">Playlist failure</string>
   <string id="30007">Unable to get games list</string>
   <string id="30008">{1} at {0}</string>
   <string id="30009">Completed Games</string>
@@ -26,4 +26,12 @@
 
 Blackouts: {3}</string>
   <string id="30022">Favorite Team</string>
+  <string id="30023">None  </string>
+  <string id="30024">parts unknown</string>
+  <string id="30025">This game is blacked out</string>
+  <string id="30026">Authenticating...</string>
+  <string id="30027">Logging in with MLS Live</string>
+  <string id="30028">Unable to get clubs</string>
+  <string id="30029">Logout</string>
+  <string id="30030">Access token deleted</string>
 </strings>

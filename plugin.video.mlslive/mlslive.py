@@ -17,6 +17,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import os, re, urllib, urllib2, json, cookielib, datetime, uuid
 from urlparse import urlparse
 
+def log(msg, error = False):
+    try:
+        import xbmc
+        full_msg = "plugin.video.mlslive: {0}".format(msg)
+        xbmc.log(full_msg, level=xbmc.LOGERROR if error else xbmc.LOGINFO)
+    except:
+        print msg
+
 
 class MLSLive:
 
@@ -97,9 +105,13 @@ class MLSLive:
 
         try:
             resp = opener.open(self.TOKEN_PAGE, urllib.urlencode(values))
-        except:
-            print "Unable to login"
+        except urllib2.HTTPError as err:
+            log("postToken {0}: '{1}'".format(err.code, err.reason), True)
             return None
+        except urllib2.URLError as err:
+            log("postToken: '{0}'".format(err.reason), True)
+            return None
+
         jar.save(filename=self.getCookieFile(), ignore_discard=True, ignore_expires=True)
 
         resp_json = resp.read()
@@ -131,15 +143,16 @@ class MLSLive:
         if not xff == None:
             rq_headers['X-Forwarded-For'] = xff
 
-        
         req = urllib2.Request(self.LOGIN_PAGE, data=js_data, headers=rq_headers)
-        
 
         try:
             resp = opener.open(req)
-        except:
-            print "Unable to POST identify"
-            return False
+        except urllib2.HTTPError as err:
+            log("postIdentity {0}: '{1}'".format(err.code, err.reason), True)
+            return None
+        except urllib2.URLError as err:
+            log("postIdentity: '{0}'".format(err.reason), True)
+            return None
         jar.save(filename=self.getCookieFile(), ignore_discard=True, ignore_expires=True)
 
         js_obj = json.loads(resp.read())
@@ -160,8 +173,11 @@ class MLSLive:
         url = self.MATCHES_PAGE + urllib.urlencode({ 'startdate' : start, 'enddate' : end })
         try:
             resp = opener.open(url)
-        except:
-            print "Unable to get matches"
+        except urllib2.HTTPError as err:
+            log("getMatches {0}: '{1}'".format(err.code, err.reason), True)
+            return None
+        except urllib2.URLError as err:
+            log("getMatches: '{0}'".format(err.reason), True)
             return None
         jar.save(filename=self.getCookieFile(), ignore_discard=True, ignore_expires=True)
         js_str = resp.read()
@@ -184,8 +200,11 @@ class MLSLive:
         url = self.CLUBS_PAGE + urllib.urlencode({ 'ttl' : 7200, 'pagesize' : 300 })
         try:
             resp = opener.open(url)
-        except:
-            print "Unable to get matches"
+        except urllib2.HTTPError as err:
+            log("getClubs {0}: '{1}'".format(err.code, err.reason), True)
+            return None
+        except urllib2.URLError as err:
+            log("getClubs: '{0}'".format(err.reason), True)
             return None
         jar.save(filename=self.getCookieFile(), ignore_discard=True, ignore_expires=True)
         js_str = resp.read()
@@ -208,9 +227,12 @@ class MLSLive:
 
         try:
             resp = opener.open(uri)
-        except:
-            print "Unable to get stream metadata"
-            return False
+        except urllib2.HTTPError as err:
+            log("postGraphql {0}: '{1}'".format(err.code, err.reason), True)
+            return None
+        except urllib2.URLError as err:
+            log("postGraphql: '{0}'".format(err.reason), True)
+            return None
         jar.save(filename=self.getCookieFile(), ignore_discard=True, ignore_expires=True)
 
         js_str = resp.read()
@@ -229,9 +251,24 @@ class MLSLive:
 
         try:
             resp = opener.open(uri)
-        except:
-            print "Unable to get stream details"
+        except urllib2.HTTPError as err:
+            log("getEvents {0}: '{1}'".format(err.code, err.reason), True)
+            log("Unable to get stream details")
+
+            try:
+                js_obj = json.loads(err.read())
+            except:
+                raise RuntimeError("Something went wrong parsing event resposne.")
+
+            if not 'errors' in js_obj:
+                raise RuntimeError("No errors in HTTP error")
+
+            raise RuntimeError(js_obj['errors'][0])
+
             return None
+        except urllib2.URLError as err:
+            log("Url error: {0}".format(err.reason()), True)
+            raise RuntimeError("URL Error")
         jar.save(filename=self.getCookieFile(), ignore_discard=True, ignore_expires=True)
 
         js_str = resp.read()
@@ -249,17 +286,17 @@ class MLSLive:
 
         token = self.postToken(xff)
         if token == None:
-            print "No token returned"
-            return None
+            log("No token returned")
+            return False
         token = token['access_token']
         if token == None:
-            print "Unable to get token."
-            return None
+            log("Unable to get token.", True)
+            return False
 
         code = self.postIdentity(xff, username, password, token)
         if code == None:
-            print "Unable to get code from identify"
-            return None
+            log("Unable to get code from identify", True)
+            return False
 
         js_obj = self.postToken(xff, code)
 
@@ -332,17 +369,20 @@ class MLSLive:
                           game['away']['name']['full'])
 
 
-    def getDescription(self, game, fmt):
+    def getDescription(self, game, fmt, def_blackouts, def_venue):
+        blackouts = def_blackouts
         if not game['blackouts'] == None:
             blackouts = ''
             for blackout in game['blackouts']:
                 blackouts += blackout + ', '
-        else:
-            blackouts = 'None  '
+
+        venue = def_venue
+        if game['venue'] != None:
+            venue = game['venue']['name']
 
         return fmt.format(game['home']['name']['full'],
                           game['away']['name']['full'],
-                          game['venue']['name'], blackouts[0:-2])
+                          venue, blackouts[0:-2])
 
 
     def getGameString(self, game, separator):
@@ -400,9 +440,12 @@ class MLSLive:
 
         try:
             resp = opener.open(uri)
-        except:
-            print "Unable to get stream metadata"
-            return False
+        except urllib2.HTTPError as err:
+            log("parsePlaylist {0}: '{1}'".format(err.code, err.reason), True)
+            return None
+        except urllib2.URLError as err:
+            log("parsePlaylist: '{0}'".format(err.reason), True)
+            return None
         jar.save(filename=self.getCookieFile(), ignore_discard=True, ignore_expires=True)
 
         m3u8 = resp.read();
@@ -421,7 +464,7 @@ class MLSLive:
                 if bandwidth:
                     bandwidth = bandwidth.group(1)
                 else:
-                    print "Unable to parse bandwidth"
+                    log("Unable to parse bandwidth")
             elif line[-5:] == ".m3u8":
                 stream = '{0}{1}|User-Agent={2}&Authorization={3}'.format(prefix,
                             line, urllib.quote(self.USER_AGENT), token)
@@ -436,7 +479,6 @@ class MLSLive:
         """
         Get the stream
         @param opta_id the optaId from the games list
-        @TODO check expiry on the token
         """
         try:
             fp = open(self.getSettingsFile(), 'r')
@@ -444,7 +486,7 @@ class MLSLive:
             token = settings['access_token']
             fp.close()
         except:
-            print "Unable to load settings so couldn't get access_token"
+            log("Unable to load settings so couldn't get access_token", True)
             return None
 
 
@@ -453,7 +495,7 @@ class MLSLive:
             return None
         dates = js_obj['data']['Schedule']['dates']
         if len(dates) == 0:
-            print "Unable to load stream metadata. No dates"
+            log("Unable to load stream metadata. No dates", True)
             return None
 
         return dates[0]['games'][0]['media']
@@ -466,12 +508,12 @@ class MLSLive:
             token = settings['access_token']
             fp.close()
         except:
-            print "Unable to load settings so couldn't get access_token"
+            log("Unable to load settings so couldn't get access_token", True)
             return None
         videos = media['videos'][0]
         if 'media' in videos:
             videos = videos['media'][0]
-        print videos
+
         uri = videos['playbackUrls'][0]['href']
         uri = uri.replace('{scenario}', 'android')
 
@@ -504,11 +546,51 @@ class MLSLive:
             settings = json.load(fp)
             fp.close()
         except:
-            print "Unable to load settings so couldn't get favorite club"
+            log("Unable to load settings so couldn't get favorite club")
+            return None
+
+        if settings == None:
+            log("No settings")
             return None
 
         # if the id was specified return it
         if 'id' in settings.keys():
             return settings['id']
 
+        return None
+
+    def getAccessToken(self):
+        """
+        Get the local access token
+        """
+        try:
+            fp = open(self.getSettingsFile(), 'r')
+            settings = json.load(fp)
+            token = settings['access_token']
+            fp.close()
+        except:
+            return None
+        return token
+    
+    def deleteAccesstoken(self):
+        """
+        Remove the local access token to force logging in
+        """
+        try:
+            # load the settings
+            filename = self.getSettingsFile()
+            fp = open(filename, 'r')
+            settings = json.load(fp)
+            fp.close()
+
+            #delete the access token
+            settings.pop('access_token')
+            log(settings, True)
+
+            # save the settings without the access token
+            fp = open(filename, 'w')
+            json.dump(settings, fp)
+            fp.close()
+        except:
+            return None
         return None

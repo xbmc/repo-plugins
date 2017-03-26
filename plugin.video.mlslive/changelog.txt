@@ -1,3 +1,13 @@
+[B]Version 1.17.2[/B]
+
+- Fix international game issues
+- Format test stream output for ffmpeg
+- Show login progress with DialogProgress
+- Only login when auth token is not present, or becomes invalid
+- Enable logout from settings
+- Use proper XBMC logging
+- Improved error handling (and logging)
+
 [B]Version 1.17.1[/B]
 
 - Fix authorization issues

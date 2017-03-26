@@ -1,7 +1,5 @@
 '''
 @author: Micah Galizia <micahgalizia@gmail.com>
-@todo Don't login every time. Add a login/logout configuration and login
-      automatically when there is no token or the token has expired.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License version 2 as
@@ -62,8 +60,6 @@ def createGamesMenu(complete = False, offset = None):
     if games == None:
         dialog = xbmcgui.Dialog()
         dialog.ok(__language__(30018), __language__(30019))
-        # signal the end of the directory
-        xbmcplugin.endOfDirectory(int(sys.argv[1]))
         return None
 
     for game in games:
@@ -74,7 +70,8 @@ def createGamesMenu(complete = False, offset = None):
         elif complete and game['period'] != 'FullTime':
             continue
 
-        plot = mls.getDescription(game, __language__(30021))
+        plot = mls.getDescription(game, __language__(30021),
+                                  __language__(30023), __language__(30024))
         infos = { 'genre' : game['competition']['name'],
                   'title' : mls.getFullTitle(game, __language__(30008)),
                   'tvshowtitle' : game['competition']['name'],
@@ -112,50 +109,60 @@ def createGamesMenu(complete = False, offset = None):
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
-def authenticate():
+def authenticate(mls):
     """
     Authenticate with the MLS service. This method pops up an error if
     authentication fails
     @return an MLS Live object
     """
+    progress = xbmcgui.DialogProgress()
+    progress.create(__language__(30026), __language__(30027))
+    
     # get the user name
     username = __settings__.getSetting("username")
     if len(username) == 0:
+        progress.close()
         dialog = xbmcgui.Dialog()
         dialog.ok(__language__(30000), __language__(30001))
         xbmcplugin.endOfDirectory(handle = int(sys.argv[1]),
                                   succeeded=False)
-        return None
+        return False
 
     # get the password
     password = __settings__.getSetting("password")
     if len(password) == 0:
+        progress.close()
         dialog = xbmcgui.Dialog()
         dialog.ok(__language__(30002), __language__(30003))
         xbmcplugin.endOfDirectory(handle = int(sys.argv[1]),
                                   succeeded=False)
-        return None
+        return False
 
-    # authenticate with MLS live
-    my_mls = mlslive.MLSLive()
-
-    cookie_file = my_mls.getCookieFile()
+    cookie_file = mls.getCookieFile()
     if os.path.isfile(cookie_file):
         os.remove(cookie_file)
 
-    if not my_mls.login(username, password, xff):
+    progress.update(50)
+    auth_res = mls.login(username, password, xff)
+    progress.close()
+ 
+    if not auth_res:
+        progress.close()
         dialog = xbmcgui.Dialog()
         dialog.ok(__language__(30004), __language__(30005))
         xbmcplugin.endOfDirectory(handle = int(sys.argv[1]),
                                   succeeded=False)
-        return None
+        return False
 
-    return my_mls
+    return True
 
 
-def playGame(values):
+def playGame(values, selected_media = None):
     """
-    @TODO add new language keys
+    Play a game.
+    @param values the dictionary containing game details
+    @param selected_media used to recursively call playGame on reauthentication.
+           prevents user from having to reselect condensed or full match.
     """
     title = values['title'][0]
     game = values['game'][0]
@@ -166,24 +173,39 @@ def playGame(values):
     if medias == None:
         dialog = xbmcgui.Dialog()
         dialog.ok(__language__(30015), __language__(30016))
-        xbmcplugin.endOfDirectory(handle = int(sys.argv[1]),
-                                  succeeded=False)
-        return None
+        return False
 
     names = []
     for media in medias:
         names.append(media['name'])
 
-    if len(names) > 1:
+    if not selected_media == None:
+        media = selected_media 
+    elif len(names) > 1:
         index = xbmcgui.Dialog().select("Select Stream", names)
         if index < 0:
-            xbmcplugin.endOfDirectory(int(sys.argv[1]))
-            return
+            return False
         media = medias[index]
     else:
         media = medias[0]
-    
-    streams = mls.getStreamURIs(media, xff)
+
+    try:
+        streams = mls.getStreamURIs(media, xff)
+    except RuntimeError as ex:
+        err = str(ex)
+        print "Error getting stream URIs: '{0}'".format(err)
+        if err == 'blackout':
+            xbmcgui.Dialog().ok(__language__(30016), __language__(30025))
+            return False
+        elif err[:12] == 'access-token':
+            if authenticate(mls):
+                return playGame(values, media)
+            else:
+                return False
+
+    if streams == None:
+        xbmcgui.Dialog().ok(__language__(30016), __language__(30006))
+        return False
 
     bitrates = [int(x) for x in streams.keys()]
     bitrates = [str(x) for x in reversed(sorted(bitrates)) ]
@@ -201,6 +223,9 @@ def playGame(values):
 def favoriteTeam():
     mls = mlslive.MLSLive()
     clubs = mls.getClubs(xff)
+    if clubs == None:
+        xbmcgui.Dialog().ok(__language__(30028),__language__(30028))
+        return
 
     mls_clubs = {}
     for club in clubs:
@@ -215,24 +240,38 @@ def favoriteTeam():
     mls.setFavoriteClub(mls_clubs[names[index]])
     return
 
+def logout():
+    mls = mlslive.MLSLive()
+    mls.deleteAccesstoken()
+    xbmcgui.Dialog().notification(__language__(30029),__language__(30030),
+                                  xbmcgui.NOTIFICATION_INFO)
 # handle favorite teams from the configuration
 if sys.argv[1] == 'favorite':
     favoriteTeam()
+    sys.exit(0)
+if sys.argv[1] == 'logout':
+    logout()
     sys.exit(0)
 
 # handle normal plugin operations
 values = urlparse.parse_qs(sys.argv[2][1:])
 if 'game' in values.keys():
-    playGame(values)
+    if not playGame(values):
+        sys.exit(0)
 elif 'id' in values.keys():
-    id = values['id'][0]
-    if id == 'live':
+    game_id = values['id'][0]
+    if game_id == 'live':
         createGamesMenu()
-    elif id == 'complete':
+    elif game_id == 'complete':
         dt = None
         if 'offset' in values.keys():
             dt = values['offset'][0]
         createGamesMenu(complete=True, offset=dt)
 else:
-    if not authenticate() == None:
-        createMainMenu()
+    mls = mlslive.MLSLive()
+    token = mls.getAccessToken()
+    if token == None:
+        if not authenticate(mls):
+            sys.exit(0)
+
+    createMainMenu()

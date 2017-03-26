@@ -13,10 +13,10 @@
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-   
+
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-   
+
    This is the first trial of the ESO video add-on for XBMC.
    This add-on gets the videos from ESO web site and shows them properly ordered.
    You can choose the preferred subtitled language for the videos, if it is available.
@@ -48,7 +48,7 @@ elif st_release != current_release:
     if update_settings:
         settings.openSettings()
     settings.setSetting('version', current_release)
-                
+
 # Gets the quality for videos from settings
 try:
     quality = int(settings.getSetting('quality'))
@@ -64,16 +64,16 @@ space_url = 'http://www.spacetelescope.org'
 # Entry point
 def run():
     lutil.log("eso.run")
-    
+
     # Get params
     params = lutil.get_plugin_parms()
-    
+
     if params.get("action") is None:
         create_index(params)
     else:
         action = params.get("action")
         exec action+"(params)"
-    
+
 
 # Main menu
 def create_index(params):
@@ -135,7 +135,7 @@ def main_list(params):
     root_url = (eso_url, space_url)[array_index]
 
     buffer_web = lutil.carga_web(page_url)
-    
+
     # Extract video items from the html content
     pattern_nextpage    = '<a href="([^"]*?)">Next</a>'
     pattern_prevpage    = '<a href="([^"]*?)">Previous</a>'
@@ -162,7 +162,7 @@ def main_list(params):
     for thumbnail, title, video_link in lutil.find_multiple(buffer_web, pattern_videos):
         video_info     = {}
         url            = '%s%s' % (root_url, video_link)
-        if not 'http:' in thumbnail:
+        if not thumbnail.startswith('http'):
             thumbnail  = '%s%s' % (root_url, thumbnail)
         title          = title.strip().replace('&quot;', '"').replace('&#39;', '´').replace('&amp;', '&')  # Cleanup the title.
         video_info['Genre']   = genre

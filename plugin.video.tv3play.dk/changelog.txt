@@ -1,3 +1,6 @@
+[B]Version 3.1.0 - 2017-03-27[/B]
+- Added subtitles support
+
 [B]Version 3.0.2 - 2016-04-04[/B]
 - Fixed crash on Android caused by limited format string support
 

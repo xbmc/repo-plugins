@@ -1,4 +1,4 @@
-[B]Version 3.0.3 - 2017-03-27[/B]
+[B]Version 3.1.0 - 2017-03-27[/B]
 - Added subtitles support
 
 [B]Version 3.0.2 - 2016-04-04[/B]

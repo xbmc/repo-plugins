@@ -76,7 +76,7 @@ class myAddon(t1mAddon):
 
   def getAddonVideo(self,url):
       pg = self.getRequest(METVBASE % uqp(url))
-      url = re.compile('div class="hlsvideo-wrapper clearfix">.+?src="(.+?)"',re.DOTALL).search(pg).group(1)
+      url = re.compile('div class="hlsvideo-wrapper clearfix".+?src="(.+?)"',re.DOTALL).search(pg).group(1)
       url = url.replace('captions-en.vtt','hls_index.m3u8',1)
       liz = xbmcgui.ListItem(path = url)
       subfile = url.replace('hls_index.m3u8','captions-en.vtt',1)

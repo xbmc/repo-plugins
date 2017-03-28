@@ -54,7 +54,7 @@ def getLatestNews():
   """
   Returns a list of latest news programs.
   """
-  json_data = __get_json("cluster_latest;cluster=nyheter")
+  json_data = __get_json("cluster_latest?cluster=nyheter")
   if json_data is None:
     return None
 
@@ -77,7 +77,7 @@ def getProgramsForGenre(genre):
   """
   Returns a list of all programs for a genre.
   """
-  json_data = __get_json("cluster_titles_and_episodes/?cluster="+genre)
+  json_data = __get_json("cluster_titles_and_episodes?cluster="+genre)
   if json_data is None:
     return None
 
@@ -322,17 +322,9 @@ def getItems(section_name, page):
     item["thumbnail"] = helper.prepareThumb(video.get("thumbnail", ""), baseUrl=BASE_URL)
     info = {}
     info["title"] = item["title"]
-    try:
-      info["plot"] = video["description"]
-    except KeyError:
-      # Some videos do not have description (Rapport etc)
-      info["plot"] = ""
+    info["plot"] = video.get("description", "")
     info["aired"] = video.get("broadcastDate", "")
-    try:
-      info["duration"] = video["materialLength"]
-    except KeyError:
-      # Some programs are missing duration, default to 0
-      info["duration"] = 0
+    info["duration"] = video.get("materialLength", 0)
     try:
       info["fanart"] = helper.prepareFanart(video["poster"], baseUrl=BASE_URL)
     except KeyError:
@@ -358,7 +350,6 @@ def __get_article_id_for_title(title):
 
 def __get_video_json_for_video_id(video_id):
   url = VIDEO_API_URL + str(video_id)
-  common.log("Fetching video data for URL %s" % url)
   response = requests.get(url)
   if response.status_code != 200:
     common.log("ERROR: Could not fetch video data for URL %s" % url)

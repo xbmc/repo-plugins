@@ -317,7 +317,7 @@ def getItems(section_name, page):
       item["url"] = video["contentUrl"]
       item["type"] = "program"
     else:
-      item["url"] = video["id"]
+      item["url"] = "video/" + str(video["id"])
       item["type"] = "video"
     item["thumbnail"] = helper.prepareThumb(video.get("thumbnail", ""), baseUrl=BASE_URL)
     info = {}

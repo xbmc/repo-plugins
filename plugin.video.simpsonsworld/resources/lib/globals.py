@@ -8,10 +8,12 @@ from adobepass.adobe import ADOBE
 
 
 addon_handle = int(sys.argv[1])
-ADDON = xbmcaddon.Addon(id='plugin.video.simpsonsworld')
+ADDON = xbmcaddon.Addon()
 ROOTDIR = ADDON.getAddonInfo('path')
-FANART = ROOTDIR+"/resources/media/fanart.jpg"
-ICON = ROOTDIR+"/resources/media/icon.png"
+
+FANART = os.path.join(ROOTDIR,"resources/media/fanart.jpg")
+ICON = os.path.join(ROOTDIR,"resources/media/icon.png")
+
 
 #Addon Settings 
 RATIO = str(ADDON.getSetting(id="ratio"))
@@ -63,7 +65,7 @@ season_art = {'1':'71663-1-16.jpg',
             }
 
 
-def listSeasons():   
+def listSeasons():       
     for x in range(1, 29):
         title = "Season "+str(x)
         url = str(x)
@@ -89,7 +91,8 @@ def listEpisodes(season):
     json_source = json.load(response)                       
     response.close() 
     
-    for episode in reversed(json_source['videos']):            
+    #for episode in reversed(json_source['videos']):            
+    for episode in sorted(json_source['videos'], key=lambda k: k['episode']):
         title = episode['name']
         #Default video type is 16x9
         url = episode['video_urls']['16x9']['en_US']['video_url']         
@@ -157,11 +160,11 @@ def addEpisode(name,link_url,title,iconimage,fanart,info=None):
     liz=xbmcgui.ListItem(name)
     liz.setArt({'icon': ICON, 'thumb': iconimage, 'fanart': fanart})    
     liz.setProperty("IsPlayable", "true")
-    liz.setInfo( type="Video", infoLabels={ "Title": title } )
+    liz.setInfo( type="Video", infoLabels={ "Title": title, 'mediatype': 'episode' } )
     if info != None:
         liz.setInfo( type="Video", infoLabels=info) 
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
-    xbmcplugin.setContent(addon_handle, 'episodes')    
+    xbmcplugin.setContent(addon_handle, 'tvshows')    
     return ok
 
 
@@ -171,7 +174,7 @@ def addSeason(name,url,mode,iconimage,fanart=None,info=None):
     u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
     liz=xbmcgui.ListItem(name)
     liz.setArt({'icon': ICON, 'thumb': iconimage, 'fanart': fanart})
-    liz.setInfo( type="Video", infoLabels={ "Title": name, 'tvdb_id': '71663' } )
+    liz.setInfo( type="Video", infoLabels={ 'Title': name, 'tvdb_id': '71663', 'mediatype': 'season' } )
     if info != None:
         liz.setInfo( type="Video", infoLabels=info)     
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)    

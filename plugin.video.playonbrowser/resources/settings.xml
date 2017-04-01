@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="42001">
+        <setting label="42002" type="lsep"/>
+        <setting label="42003" type="text"   id="playonserver" default="http://localhost:54479"/>
+        <setting label="42005" type="lsep"/>
+        <setting label="42006" type="folder" source="video" id="playonUPNPid" default=""/>
+        <setting label="42004" type="lsep"/>
+        <setting label="44002" type="bool"  id="useUPNP" default="true"/>
+        <setting label="44003" type="bool"  id="playDirect" default="true"/>
+        <setting label="42009" type="bool"  id="meta" default="false"/>
+        <setting label="42008" type="bool"  id="cache" default="true"/>
+        <setting label="42007" type="bool"  id="debug" default="false"/>
+        <setting id="TMDB_API_KEY"  label="" visible="false" enable="false" option="hidden" type="text" default="9c47d05a3f5f3a00104f6586412306af" />
+        
+    </category>
+    <category label="42097">   
+        <setting id=""  enable="false" option="hidden" type="text" default="Coming Soon!" />
+    </category> 
+    <setting id="TMDB_API_KEY" visible="false" enable="false" option="hidden" type="text" default="9c47d05a3f5f3a00104f6586412306af" /> 
+    <!-- <category label="43001"> -->
+    <!-- </category> -->
+</settings>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <!-- General -->
+  <category label="30001">  
+    <setting id="ratio" type="labelenum" label="30010" lvalues="16x9|4x3" default="16x9" /> 
+    <setting id="commentary" type="bool" label="30020" default="false" /> 
+    <setting id="deauthorize" type="action" label="30900" action="RunPlugin(plugin://plugin.video.simpsonsworld/?url=junk&mode=999)" option="close" />     
+  </category>
+</settings>

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #
-#     Copyright (C) 2015 Jester
+#     Copyright (C) 2017 Jester
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -25,15 +25,22 @@ plugin = Plugin()
 def show_tmos_list():
     items = [
 
-  {'label': 'TMOS Episodes',
-   'thumbnail': 'special://home/addons/plugin.video.tmos/icon.png',
+  {'label': 'TMOS Episodes on YouTube',
+   'icon': 'special://home/addons/plugin.video.tmos/icon.png',
    'path': 'plugin://plugin.video.youtube/channel/UCtO6jOECGV2FQHj4RGOXyDA/?page=1',
+   'selected': True,
   },
 
   {'label': 'TMOS Live Ustream (Mon. through Fri. 09:00am EST)',
-   'thumbnail': 'special://home/addons/plugin.video.tmos/icon.png',
+   'icon': 'special://home/addons/plugin.video.tmos/icon.png',
    'path': 'http://iphone-streaming.ustream.tv/uhls/4443605/streams/live/iphone/playlist.m3u8',
-   'is_playable': True,
+   'is_playable': True,'selected': True,
+  },
+  
+  {'label': 'TMOS 24/7 Audio Stream',
+   'icon': 'special://home/addons/plugin.video.tmos/icon.png',
+   'path': 'http://playerservices.streamtheworld.com/api/livestream-redirect/TMOS.mp3',
+   'is_playable': True,'selected': True,
   },
 ]
     return plugin.finish(items)

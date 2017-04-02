@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.tmos" name="TMOS" version="1.0.5" provider-name="Jester">
+<addon id="plugin.video.tmos" name="TMOS" version="1.0.6" provider-name="Jester">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.xbmcswift2" version="2.4.0"/>
-    <import addon="plugin.video.youtube" version="5.1.17"/>
+    <import addon="plugin.video.youtube" version="5.3.12"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
      <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en">TMOS Podcasts and Live Stream</summary>
-    <description lang="en">Streams The Mike O'Meara Show (TMOS) podcasts on YouTube and the Live Ustream.</description>
+    <summary lang="en">TMOS Podcasts and Live Streams</summary>
+    <description lang="en">Streams The Mike O'Meara Show (TMOS) podcasts from YouTube, 24-7 Audio and Ustream.</description>
+	<news>v1.0.6 (26-03-2017)
+	- Update youtube version requirement, add 24-7 audio stream</news>
     <platform>all</platform>
     <language>en</language>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
     <source>https://github.com/jester-xbmc/plugin.video.tmos</source>
     <forum>http://forum.kodi.tv/showthread.php?tid=215704</forum>
     <website>http://mikeomearashow.com/</website>
+	<assets>
+     <icon>icon.png</icon>
+     <fanart>fanart.jpg</fanart>
+    </assets>
   </extension>
 </addon>

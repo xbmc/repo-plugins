@@ -71,3 +71,8 @@ msgstr ""
 msgctxt "#42007"
 msgid "Enable Debugging [Log errors]"
 msgstr ""
+
+msgctxt "#42010"
+msgid 'Select Playon: Server, Click "OK"'
+msgstr ""
+

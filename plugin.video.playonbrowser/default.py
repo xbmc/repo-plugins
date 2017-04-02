@@ -38,6 +38,7 @@ ADDON_PATH = REAL_SETTINGS.getAddonInfo('path').decode('utf-8')
 ADDON_VERSION = REAL_SETTINGS.getAddonInfo('version')
 ICON = os.path.join(ADDON_PATH, 'icon.png')
 FANART = os.path.join(ADDON_PATH, 'fanart.jpg')
+LANGUAGE = REAL_SETTINGS.getLocalizedString
 
 # Playon Info
 MEDIA_PATH = ADDON_PATH + '/resources/media/'
@@ -54,13 +55,14 @@ ITEM_TYPES = ['genre','country','year','episode','season','sortepisode','sortsea
 socket.setdefaulttimeout(TIMEOUT)
     
 # User Settings
-DEBUG = True#REAL_SETTINGS.getSetting("debug") == "true"
+DEBUG =  REAL_SETTINGS.getSetting("debug") == "true"
 KODILIBRARY   = False #todo strm contextMenu
 useUPNP = REAL_SETTINGS.getSetting("useUPNP") == "true"
 cache = REAL_SETTINGS.getSetting('cache') == "true"
 incMeta = REAL_SETTINGS.getSetting('meta') == "true"
 playDirect = REAL_SETTINGS.getSetting("playDirect") == "true"
-TMDB_API_KEY = REAL_SETTINGS.getSetting("TMDB_API_KEY") 
+TMDB_API_KEY = REAL_SETTINGS.getSetting("TMDB_API_KEY")
+
 if xbmcgui.Window(10000).getProperty('PseudoTVRunning') == "True":
     playDirect   = False
  
@@ -222,7 +224,7 @@ class Playon:
                     if (item['label']).lower().startswith('playon'):
                         REAL_SETTINGS.setSetting("playonUPNPid",item['file'].rstrip('/'))
                         return item['file']
-            upnpID = xbmcgui.Dialog().browse(0, 'Select Playon: Server, Click "OK"', 'files', '', False, False, 'upnp://')
+            upnpID = xbmcgui.Dialog().browse(0, LANGUAGE(42010), 'files', '', False, False, 'upnp://')
             if upnpID != -1:
                 REAL_SETTINGS.setSetting("playonUPNPid",upnpID.rstrip('/'))
                 return upnpID

@@ -1,0 +1,78 @@
+# Playon Browser Media Center language file
+# Addon Name: Playon Browser
+# Addon id: plugin.video.playonbrowser
+# Addon Provider: Lunatixz
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.playonbrowser Addons\n"
+"Report-Msgid-Bugs-To: http://forum.kodi.tv/showthread.php?tid=233136\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Lunatixz Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#45001"
+msgid "Debugging"
+msgstr ""
+
+msgctxt "#44001"
+msgid "Playback"
+msgstr ""
+
+msgctxt "#44002"
+msgid "Play using UPNP"
+msgstr ""
+
+msgctxt "#42004"
+msgid "Options:"
+msgstr ""
+
+msgctxt "#44003"
+msgid "Play Direct Link [Faster playback but tokens expire]"
+msgstr ""
+
+msgctxt "#42009"
+msgid "Enable Metadata w/Trakt scrobbling [Slower navigation]"
+msgstr ""
+
+msgctxt "#42008"
+msgid "Enable Cache [Fast navigation]"
+msgstr ""
+
+msgctxt "#42097"
+msgid "Library Integration"
+msgstr ""
+
+msgctxt "#42001"
+msgid "General"
+msgstr ""
+
+msgctxt "#42002"
+msgid "Navigate to m.playon.tv in a browser to get the resolved ip."
+msgstr ""
+
+msgctxt "#42003"
+msgid "Playon Server and port"
+msgstr ""
+
+msgctxt "#42005"
+msgid "Browse UPNP and select 'Playon:' folder"
+msgstr ""
+
+msgctxt "#42006"
+msgid "PlayOn UPNP ID"
+msgstr ""
+
+msgctxt "#42007"
+msgid "Enable Debugging [Log errors]"
+msgstr ""
+
+msgctxt "#42010"
+msgid "Select 'Playon: Server', Click (OK)"
+msgstr ""
+

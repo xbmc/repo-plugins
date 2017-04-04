@@ -1,6 +1,3 @@
-import sys
-import os
-import urllib
 import xbmc
 import xbmcgui
 import xbmcplugin

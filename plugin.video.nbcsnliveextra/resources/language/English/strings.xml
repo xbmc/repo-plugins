@@ -1,44 +1,40 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-	<!-- Provider -->
-	<string id="100">Login</string>
-	<string id="110">Service Provider</string>
-	<string id="140">Username</string>
-	<string id="150">Password</string>
 	<!-- General Settings -->
-	<string id="200">General</string>
-	<string id="210">Deauthorize Device</string>
-	<string id="220">Only Display FREE Content</string>	
-	<string id="230">Filter by Sport and Category</string>	
-	<string id="240">Automatically Play Best Stream Available</string>	
+	<string id="30200">General</string>
+	<string id="30210">Deauthorize Device</string>
+	<string id="30220">Only Display FREE Content</string>	
+	<string id="30230">Play Stream From Main Menu</string>	
+	<string id="30240">Automatically Play Best Stream Available</string>	
     <!-- Stream settings -->
-    <string id="300">Stream</string>   
-    <string id="310">Stream Quality Preference</string>		
-	<string id="320">CDN Server Location</string>	
+    <string id="30300">Stream</string>   
+    <string id="30310">Stream Quality Preference</string>		
+	<string id="30320">CDN Server Location</string>	
 	<!-- Filter settings -->
-    <string id="400">Filter</string>   	
-    <string id="410">Show All</string>
-    <string id="411">NFL</string>
-    <string id="412">Premier League</string>
-    <string id="413">NASCAR</string>
-    <string id="414">NHL</string>
-    <string id="415">Golf</string>
-    <string id="416">PGA</string>
-    <string id="417">Notre Dame</string>
-    <string id="418">College Football</string>
-    <string id="419">F1</string>
-    <string id="420">NBA</string>
-    <string id="421">MLB</string>
-    <string id="422">Rugby</string>
-    <string id="423">Horse Racing</string>
-    <string id="424">Tennis</string>
-    <string id="425">IndyCar</string>
-    <string id="426">Pro Motocross</string>
-    <string id="427">Olympic Sports</string>
-    <string id="428">CSN Bay Area</string>
-    <string id="429">CSN California</string>
-    <string id="430">CSN Chicago</string>
-    <string id="431">CSN Mid-Atlantic</string>
-    <string id="432">CSN New England</string>
-    <string id="433">CSN Philadelphia</string>    
+    <string id="30400">Filter</string>   	
+    <string id="30410">Show All</string>
+    <string id="30411">NFL</string>
+    <string id="30412">Premier League</string>
+    <string id="30413">NASCAR</string>
+    <string id="30414">NHL</string>
+    <string id="30415">Golf</string>
+    <string id="30416">PGA</string>
+    <string id="30417">Notre Dame</string>
+    <string id="30418">College Football</string>
+    <string id="30419">F1</string>
+    <string id="30420">NBA</string>
+    <string id="30421">MLB</string>
+    <string id="30422">Rugby</string>
+    <string id="30423">Horse Racing</string>
+    <string id="30424">Tennis</string>
+    <string id="30425">IndyCar</string>
+    <string id="30426">Pro Motocross</string>
+    <string id="30427">Olympic Sports</string>
+    <string id="30428">CSN Bay Area</string>
+    <string id="30429">CSN California</string>
+    <string id="30430">CSN Chicago</string>
+    <string id="30431">CSN Mid-Atlantic</string>
+    <string id="30432">CSN New England</string>
+    <string id="30433">CSN Philadelphia</string>    
+    <string id="30434">Sportsnet New York</string>  
 </strings>

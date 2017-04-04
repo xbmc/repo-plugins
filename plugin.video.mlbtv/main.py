@@ -47,6 +47,7 @@ def todaysGames(game_day):
     RECAP_PLAYLIST.clear()
     EXTENDED_PLAYLIST.clear()
 
+    
     try:
         itr = json_source['data']['games']['game']            
         if not isinstance(itr, list):
@@ -62,7 +63,8 @@ def todaysGames(game_day):
 
 
 def createGameListItem(game, game_day):
-    icon = getGameIcon(game['home_team_id'],game['away_team_id'])
+    #icon = getGameIcon(game['home_team_id'],game['away_team_id'])
+    icon = ICON
     #http://mlb.mlb.com/mlb/images/devices/ballpark/1920x1080/2681.jpg
     #B&W
     #fanart = 'http://mlb.mlb.com/mlb/images/devices/ballpark/1920x1080/'+game['venue_id']+'.jpg'   
@@ -179,7 +181,7 @@ def createGameListItem(game, game_day):
     info = {'plot':desc,'tvshowtitle':'MLB','title':title,'originaltitle':title,'aired':game_day,'genre':LOCAL_STRING(700),'mediatype':'video'}
 
     #Create Playlist for the days recaps and condensed
-    '''
+    
     try:         
         recap_url, condensed_url = getHighlightLinks(teams_stream, stream_date)
         global RECAP_PLAYLIST            
@@ -193,7 +195,7 @@ def createGameListItem(game, game_day):
         EXTENDED_PLAYLIST.add(condensed_url, listitem)
     except:
         pass
-    '''
+    
     addStream(name,title,event_id,gid,icon,fanart,info,video_info,audio_info,teams_stream,stream_date)
 
 
@@ -633,7 +635,20 @@ def fetchStream(content_id,event_id,playback_scenario):
     #Reload Cookies
     cj = cookielib.LWPCookieJar(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'))     
     cj.load(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'),ignore_discard=True)
-    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))        
+
+    if PROXY_ENABLED != 'true':
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))        
+    else:
+        proxy_url = 'http://'+PROXY_SERVER+':'+PROXY_PORT
+        proxy_support = urllib2.ProxyHandler({ 'http': proxy_url, 'https': proxy_url })
+        if PROXY_USER != '' and PROXY_PWD != '':
+            auth_handler = urllib2.ProxyBasicAuthHandler()
+            auth_handler.add_password(None, proxy_url, PROXY_USER, PROXY_PWD)
+            opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj), proxy_support, auth_handler)
+        else:
+            opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj), proxy_support)
+
+        urllib2.install_opener(opener)
 
     if session_key == '':
         return stream_url, media_auth
@@ -643,36 +658,8 @@ def fetchStream(content_id,event_id,playback_scenario):
         ok = dialog.ok('Game Blacked Out', msg) 
         return stream_url, media_auth
 
-   
-    #epoch_time_now = str(int(round(time.time()*1000)))
-
-    #-------------------------
-    #Playback Scenario's
-    #-------------------------
-    '''
-    HTTP_CLOUD_WIRED
-    HTTP_CLOUD_WIRED_ADS
-    HTTP_CLOUD_WIRED_IRDETO
-    HTTP_CLOUD_WIRED_WEB
-    HTTP_CLOUD_TABLET
-    FMS_CLOUD
-    HTTP_CLOUD_WIRED_60
-    HTTP_CLOUD_WIRED_ADS_60
-    HTTP_CLOUD_WIRED_IRDETO_60
-    FLASH_500K_400X224
-    HTTP_CLOUD_AUDIO
-    AUDIO_FMS_32K
-    HTTP_CLOUD_AUDIO_TS
-
-    PS4 Calls
-    "MF": "https://mlb-ws-mf.media.mlb.com/pubajaxws/bamrest/MediaService2_0/op-findUserVerifiedEvent/v-2.3?",
-    "mfPlay": "playbackScenario={playbackScenario}&platform={platform}&contentId={contentID}&identityPointId={identityPointID}&fingerprint={fingerprint}&format=json&auth=cookie",
-    "mfCatalog": "platform={platform}&subject=LIVE_EVENT_COVERAGE&format=json&eventId={eventId}&fingerprint={fingerprint}&identityPointId={identityPointId}&auth=cookie",
-    '''
-
-    #https://mlb-ws.mlb.com/pubajaxws/bamrest/MediaService2_0/op-findUserVerifiedEvent/v-2.3?identityPointId=31998790&fingerprint=dUVQMTF5bjRrd1N4Rnp0NlVTUk5wR1NMV0E4PXwxNDU3Mzc0NjI0MDU1fGlwdD1lbWFpbC1wYXNzd29yZA==&eventId=14-469489-2016-03-07&platform=WIN8&playbackScenario=HTTP_CLOUD_AUDIO&contentId=546192183&sessionKey=&subject=LIVE_EVENT_COVERAGE
-    url = 'https://mlb-ws-mf.media.mlb.com/pubajaxws/bamrest/MediaService2_0/op-findUserVerifiedEvent/v-2.3'
-    #url = 'https://mlb-ws.mlb.com/pubajaxws/bamrest/MediaService2_0/op-findUserVerifiedEvent/v-2.3'
+      
+    url = 'https://mlb-ws-mf.media.mlb.com/pubajaxws/bamrest/MediaService2_0/op-findUserVerifiedEvent/v-2.3'   
     url = url + '?identityPointId='+identity_point_id
     url = url + '&fingerprint='+fingerprint
     url = url + '&contentId='+content_id    
@@ -681,9 +668,7 @@ def fetchStream(content_id,event_id,playback_scenario):
     url = url + '&subject=LIVE_EVENT_COVERAGE'
     url = url + '&sessionKey='+urllib.quote_plus(session_key)
     url = url + '&platform=PS4'
-    url = url + '&format=json'
-    #url = url + '&frameworkURL=https%3A%2F%2Fmlb-ws-mf.media.mlb.com&frameworkEndPoint=%2Fpubajaxws%2Fbamrest%2FMediaService2_0%2Fop-findUserVerifiedEvent%2Fv-2.3'
-    #url = url + '&_='+epoch_time_now
+    url = url + '&format=json'    
     req = urllib2.Request(url)       
     req.add_header("Accept", "*/*")
     req.add_header("Accept-Encoding", "deflate")

@@ -40,7 +40,6 @@ FANART = os.path.join(ADDON_PATH, 'fanart.jpg')
 LANGUAGE = REAL_SETTINGS.getLocalizedString
 
 # Playon Info
-PLAYON_ICON = '/images/play_720.png'
 PLAYON_DATA = '/data/data.xml'
 BASE_URL = sys.argv[0]
 BASE_HANDLE = int(sys.argv[1])

@@ -99,7 +99,7 @@ class SimpleXbmcGui(object):
     return metaData;
 
   def transformHtmlCodes(self, content):
-    return BeautifulSoup(content).prettify(formatter=None);
+    return BeautifulSoup(content,"html.parser").prettify(formatter=None);
 
   def buildMenuLink(self,menuObject,mediathek,objectCount):
     title = menuObject.name;

@@ -37,12 +37,6 @@ class Clip:
         self.duration = duration
         self.title = title
 
-    def get_url(self, username, quality="1024x768mp4"):
-        return "http://www.pluralsight.com/metadata/live/users/{username}/" \
-               "viewclip/{courseName}/{authorHandle}/{moduleName}/{clipIndex}" \
-               "/{quality}".format(username=username, courseName=self.course_name, authorHandle=self.author_handle,
-                                     moduleName=self.module_name, clipIndex=self.index, quality=quality)
-
 
 class Catalogue:
     def __init__(self, database_path):

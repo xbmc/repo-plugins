@@ -37,15 +37,17 @@ packages = [
     'requests',
     'requests.packages',
     'requests.packages.chardet',
+    'requests.packages.idna',
     'requests.packages.urllib3',
     'requests.packages.urllib3.packages',
     'requests.packages.urllib3.contrib',
     'requests.packages.urllib3.util',
     'requests.packages.urllib3.packages.ssl_match_hostname',
+    'requests.packages.urllib3.packages.backports',
 ]
 
 requires = []
-test_requirements = ['pytest>=2.8.0', 'pytest-httpbin==0.0.7', 'pytest-cov']
+test_requirements = ['pytest>=2.8.0', 'pytest-httpbin==0.0.7', 'pytest-cov', 'pytest-mock']
 
 with open('requests/__init__.py', 'r') as fd:
     version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
@@ -86,13 +88,15 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy'
     ),
     cmdclass={'test': PyTest},
     tests_require=test_requirements,
     extras_require={
-        'security': ['pyOpenSSL>=0.13', 'ndg-httpsclient', 'pyasn1'],
-        'socks': ['PySocks>=1.5.6'],
+        'security': ['pyOpenSSL>=0.14', 'cryptography>=1.3.4', 'idna>=2.0.0'],
+        'socks': ['PySocks>=1.5.6, !=1.5.7'],
     },
 )
+

@@ -336,7 +336,8 @@ filter_ids = [
             "nbc-csn-chicago",
             "nbc-csn-mid-atlantic",
             "nbc-csn-new-england",
-            "nbc-csn-philadelphia"
+            "nbc-csn-philadelphia",
+            "nbc-sny"
             ]
 
 #Create a filter list

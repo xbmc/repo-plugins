@@ -99,3 +99,27 @@ msgstr ""
 msgctxt "#700"
 msgid "Sports"
 msgstr ""
+
+msgctxt "#30200"
+msgid "Proxy Settings"
+msgstr ""
+
+msgctxt "#30210"
+msgid "Enabled"
+msgstr ""
+
+msgctxt "#30220"
+msgid "Server"
+msgstr ""
+
+msgctxt "#30230"
+msgid "Port"
+msgstr ""
+
+msgctxt "#30240"
+msgid "Username"
+msgstr ""
+
+msgctxt "#30250"
+msgid "Password"
+msgstr ""

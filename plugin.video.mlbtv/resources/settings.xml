@@ -23,5 +23,13 @@
     <setting id="old_username" type="text" label="" default="" visible="false"/>
     <setting id="old_password" type="text" label="" default="" visible="false"/>
   </category>  
+  <!--Proxy-->
+  <category label='30200'>
+    <setting id='use_proxy' type='bool' label='30210' default='false'/>
+    <setting id='proxy_server' type='text' label='30220' default=''/>
+    <setting id='proxy_port' type='number' label='30230' default=''/>
+    <setting id='proxy_user' type='text' label='30240' default=''/>
+    <setting id='proxy_pwd' type='text' label='30250' option='hidden' default=''/>
+  </category>
 </settings>
 

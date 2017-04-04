@@ -1,3 +1,7 @@
+2017.4.4
+- Added Sportsnet New York to filter list
+- Moved label ids to correct range
+
 2016.12.29
 - Add a filter setting to allow users to customize the results shown in each section
 - Removed No longer used httplib2 requirement

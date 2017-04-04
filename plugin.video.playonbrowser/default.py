@@ -32,7 +32,6 @@ else:
 # Plugin Info
 ADDON_ID = 'plugin.video.playonbrowser'
 REAL_SETTINGS = xbmcaddon.Addon(id=ADDON_ID)
-ADDON_ID = REAL_SETTINGS.getAddonInfo('id')
 ADDON_NAME = REAL_SETTINGS.getAddonInfo('name')
 ADDON_PATH = REAL_SETTINGS.getAddonInfo('path').decode('utf-8')
 ADDON_VERSION = REAL_SETTINGS.getAddonInfo('version')
@@ -41,13 +40,11 @@ FANART = os.path.join(ADDON_PATH, 'fanart.jpg')
 LANGUAGE = REAL_SETTINGS.getLocalizedString
 
 # Playon Info
-MEDIA_PATH = ADDON_PATH + '/resources/media/'
 PLAYON_ICON = '/images/play_720.png'
 PLAYON_DATA = '/data/data.xml'
 BASE_URL = sys.argv[0]
 BASE_HANDLE = int(sys.argv[1])
 args = urlparse.parse_qs(sys.argv[2][1:])
-REAL_SETTINGS = xbmcaddon.Addon(id=ADDON_ID)
 TIMEOUT = 15
 JSON_ART = ["thumb","poster","fanart","banner","landscape","clearart","clearlogo"]
 ITEM_TYPES = ['genre','country','year','episode','season','sortepisode','sortseason','episodeguide','showlink','top250','setid','tracknumber','rating','userrating','watched','playcount','overlay','director','mpaa','plot','plotoutline','title','originaltitle','sorttitle','duration','studio','tagline','writer','tvshowtitle','premiered','status','set','setoverview','tag','imdbnumber','code','aired','credits','lastplayed','album','artist','votes','path','trailer','dateadded','mediatype','dbid']
@@ -379,7 +376,7 @@ class Playon:
                             
                     elif group.attrib.get('type') == 'video':
                         if group.attrib.get('art') == None:
-                            image = (playonInternalUrl + PLAYON_ICON)
+                            image = os.path.join(playonInternalUrl,'images','play_720.png')
                         else:
                             image = (playonInternalUrl + group.attrib.get('art')).replace('&size=tiny','&size=large')
 
@@ -433,7 +430,7 @@ class Playon:
                             image = (playonInternalUrl + group.attrib.get('art')).replace('&size=tiny','&size=large')
                     elif group.attrib.get('type') == 'video':
                         if group.attrib.get('art') == None:
-                            image = playonInternalUrl + PLAYON_ICON
+                            image = os.path.join(playonInternalUrl,'images','play_720.png')
                         else:
                             image = (playonInternalUrl + group.attrib.get('art')).replace('&size=tiny','&size=large') 
 
@@ -479,7 +476,7 @@ class Playon:
                         
                 elif group.attrib.get('type') == 'video':
                     if group.attrib.get('art') == None:
-                        image = playonInternalUrl + PLAYON_ICON
+                        image = os.path.join(playonInternalUrl,'images','play_720.png')
                     else:
                         image = ((playonInternalUrl + group.attrib.get('art')).replace('&size=tiny','&size=large')).replace('&size=tiny','&size=large')
                     

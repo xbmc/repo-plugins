@@ -89,7 +89,7 @@ class ARTEMediathek(Mediathek):
     link = self.serachLink%searchText;
     pageContent = self.loadPage(link).decode('UTF-8');
     content = self.searchContent.search(pageContent).group(1);
-    content = BeautifulSoup(content);
+    content = BeautifulSoup(content,"html.parser");
     jsonContent = json.loads(content.prettify(formatter=None));
     linkCount = len(jsonContent["programs"]);
     for jsonObject in jsonContent["programs"]:
@@ -138,7 +138,7 @@ class ARTEMediathek(Mediathek):
     for name,regex in self.categories.iteritems():
       match = regex.search(pageContent);
       if(match is not None):
-        content = BeautifulSoup(match.group(1));
+        content = BeautifulSoup(match.group(1),"html.parser");
         jsonContent = json.loads(content.prettify(formatter=None))
         if(isinstance(jsonContent,list)):
           self.buildJsonLink(name,jsonContent)
@@ -154,7 +154,7 @@ class ARTEMediathek(Mediathek):
       match = regex.search(htmlPage);
       if(match is not None):
         someMatch = True;
-        content = BeautifulSoup(match.group(1));
+        content = BeautifulSoup(match.group(1),"html.parser");
         self.gui.log(content.prettify(formatter=None));
         jsonContent = json.loads(content.prettify(formatter=None))
         self.extractVideoLinksFromJson(jsonContent)
@@ -167,14 +167,14 @@ class ARTEMediathek(Mediathek):
 
   def showCluster(self):
     pageContent = self.loadPage(self.basePage).decode('UTF-8');
-    content = BeautifulSoup(self.regex_cluster.search(pageContent).group(1));
+    content = BeautifulSoup(self.regex_cluster.search(pageContent).group(1),"html.parser");
     jsonContent = json.loads(content.prettify(formatter=None))
     for menuItem in jsonContent:
       self.buildMenuEntry(menuItem);
 
   def showCategories(self):
     pageContent = self.loadPage(self.basePage).decode('UTF-8');
-    content = BeautifulSoup(self.regex_categories.search(pageContent).group(1));
+    content = BeautifulSoup(self.regex_categories.search(pageContent).group(1),"html.parser");
     jsonContent = json.loads(content.prettify(formatter=None))
     for jsonObject in jsonContent:
       jsonCategorie = jsonObject["category"]

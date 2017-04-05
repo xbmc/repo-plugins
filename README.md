@@ -34,7 +34,7 @@ This branch is used for add-ons that are coded for Kodi v16 Jarvis builds and hi
 
 ## Status
 
-* New add-on additions: **Accepted**
+* New add-on additions: **Denied**
 * Updating already present add-ons: **Accepted**
 
 ## Disclaimer ##

@@ -41,9 +41,16 @@ class Main:
 
         # Parse parameters...
         self.video_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['video_page_url'][0]
-        # Get the title.
-        self.title = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['title'][0]
-        self.title = str(self.title)
+        # Try and get the title.
+        # When starting a video with a browser (f.e. in chrome the 'send to kodi'-extension) the url will be
+        # something like this:
+        # plugin://plugin.video.dumpert/?action=play&video_page_url=http%3A%2F%2Fwww.dumpert.nl%2Fmediabase%2F7095997%2F1f72985c%2Fmevrouw_heeft_internetje_thuis.html
+        # and there won't be a title available.
+        try:
+            self.title = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['title'][0]
+            self.title = str(self.title)
+        except KeyError:
+            self.title = ""
 
         xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                 ADDON, VERSION, DATE, "self.video_page_url", str(self.video_page_url)), xbmc.LOGDEBUG)

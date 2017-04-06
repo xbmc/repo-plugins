@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<window type="window">
+	<!-- onload>ClearProperty(foo,10000)</onload-->
+	<onload>SetProperty(foox,barsddsd,10000)</onload>
+
+	
+	<backgroundcolor></backgroundcolor>
+
+	<menucontrol>9000</menucontrol>
+	<!-- No includes and no $PARAM for xml guis. we gotta do this the hard way -->
+    <controls>
+
+		<control type="image" id="100">
+			<description>background</description>
+			<aspectratio>scale</aspectratio>
+			<texture>srr_blackbg.jpg</texture>
+		</control>
+		
+		<control type="image" id="101">
+			<left>0</left>		<top>0</top>
+			<width>10</width>	<height>10</height>
+			<aspectratio aligny="top">keep</aspectratio>
+			<texture></texture>
+		</control>
+
+		<control type="image" id="102">
+			<left>20</left>		<top>0</top>
+			<width>10</width>	<height>10</height>
+			<aspectratio aligny="top">keep</aspectratio>
+			<texture></texture>
+		</control>
+		<control type="image" id="103">
+			<left>40</left>		<top>0</top>
+			<width>10</width>	<height>10</height>
+			<aspectratio aligny="top">keep</aspectratio>
+			<texture></texture>
+		</control>
+		<control type="image" id="104">
+			<left>60</left>		<top>0</top>
+			<width>10</width>	<height>10</height>
+			<aspectratio aligny="top">keep</aspectratio>
+			<texture></texture>
+		</control>
+		<control type="image" id="105">
+			<left>80</left>		<top>0</top>
+			<width>10</width>	<height>10</height>
+			<aspectratio aligny="top">keep</aspectratio>
+			<texture></texture>
+		</control>
+
+
+		<control type="image" id="151">
+			<left>0</left>		<top>0</top>
+			<width>10</width>	<height>10</height>
+			<aspectratio aligny="center">keep</aspectratio>
+			<texture></texture>
+		</control>
+
+		<control type="image" id="152">
+			<left>20</left>		<top>0</top>
+			<width>10</width>	<height>10</height>
+			<aspectratio aligny="center">keep</aspectratio>
+			<texture></texture>
+		</control>
+		<control type="image" id="153">
+			<left>40</left>		<top>0</top>
+			<width>10</width>	<height>10</height>
+			<aspectratio aligny="center">keep</aspectratio>
+			<texture></texture>
+		</control>
+		<control type="image" id="154">
+			<left>60</left>		<top>0</top>
+			<width>10</width>	<height>10</height>
+			<aspectratio aligny="center">keep</aspectratio>
+			<texture></texture>
+		</control>
+		<control type="image" id="155">
+			<left>80</left>		<top>0</top>
+			<width>10</width>	<height>10</height>
+			<aspectratio aligny="center">keep</aspectratio>
+			<texture></texture>
+		</control>
+
+		<control type="group" id="200">
+				<control type="textbox" >
+					<description>this works!</description>
+					<left>20</left>
+					<top>80</top>
+					<width>100</width>
+					<height>100</height>
+					<visible>false</visible>
+					<!-- visible>!String.IsEmpty(Control.GetLabel(201))</visible-->
+					<label>$INFO[Control.GetLabel(201)]</label>
+					<align>center</align>
+					<font>font30</font>
+				</control>
+
+			
+			<control type="grouplist" >
+				<left>0</left>
+				<top>400</top>
+				<width>1280</width>
+				<height>320</height>
+				<orientation>vertical</orientation>
+				<usecontrolcoords>true</usecontrolcoords>
+				<itemgap>0</itemgap>
+				<align>bottom</align>
+				
+			    <control type="image" id="199">
+			    	<top>0</top>
+			    	<bottom>0</bottom>
+			        <width>100%</width>
+			        <height>auto</height><!-- height doesn't work. need to use animation zoom -->
+			        <texture>srr_dlg-bg.png</texture>
+			        <aspectratio>stretch</aspectratio>
+			        <animation condition="true" effect="zoom" start="0" end="100,800" time="0">Conditional</animation>
+			    </control>
+    				
+				<control type="textbox" id="201">
+					<left>10</left>
+					<width>1260</width>
+					<height>auto</height>
+					<visible>!String.IsEmpty(Control.GetLabel(201))</visible>
+					<label></label>
+					<align>center</align>
+					<font>font16</font>
+				</control>
+
+
+				<control type="textbox" id="202">
+					<left>10</left>
+					<width>1260</width>
+					<height>auto</height>
+					<visible>!String.IsEmpty(Control.GetLabel(202))</visible>
+					<label></label>
+					<align>justify</align>
+					<font>font14</font>
+				</control>
+			</control>
+			
+			
+		</control>
+
+		
+    </controls>
+</window>

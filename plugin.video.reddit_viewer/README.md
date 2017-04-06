@@ -1,34 +1,33 @@
-# plugin.video.reddit_viewer
-Reddit addon for KODI 
+# Reddit
+Reddit is a social news and entertainment website. It is organized into areas of interest called "subreddits" where users share, vote and talk about content they find funny, interesting and/or relevant to the subreddit at hand.
 
-View image and video media posted on reddit.com
+## Kodi addon for reddit.com
+This is a video addon for viewing reddit content on Kodi. See also my program version, [__reddit_reader__](https://github.com/gedisony/script.reddit.reader).  
+This addon is inspired by the original [reddit addon](https://github.com/rasjani/plugin.video.reddit_tv) by AddonscriptorDE and maintained by rasjani.
 
-- support multihub and /domain/ filters
-- view comments and play links in comments
-- subreddit, host site and description detail shown as movie 'plot'
-- view albums on r/diy etc.
+- Create shortcuts to your favorite subreddits
+  - Combine subreddits into one shortcut ([documentaries+artisanvideos](https://www.reddit.com/r/ArtisanVideos+Documentaries/))
+  - Multireddit ([/user/sallyyy19/m/video](https://www.reddit.com/user/sallyyy19/m/video/))
+  - Show posts by domain ([domain:youtube.com](https://www.reddit.com/domain/youtube.com/))
+- Play video links supported by the [__youtube_dl__](https://github.com/ruuk/script.module.youtube.dl) addon
+- View images and image albums
+- Reddit OAuth support
+  - Access to your private subreddits
+  - Add shortcut to your saved posts ([/user/yourredditusername/saved](https://www.reddit.com/user/me/saved))
+  - Add and remove posts from your saved posts
+- Explore other subreddits
+- Hide posts by subreddit or from certain sites
+- Read user comments
+  - Play or view links posted in comments
 
+## Installation
+- Download zip
+- [Install from zip file](http://kodi.wiki/view/HOW-TO:Install_add-ons_from_zip_files)
 
-
+## Remote support (Feature needs to be implemented by kore) 
+reddit_viewer can receive links from your android phone and play.
+- Watch media supported by reddit viewer
+- No longer limited to youtube and vimeo
 
 ---
-supported media from sites:
-- YouTube      (via youtube addon)
-- Vimeo        (via vimeo addon)
-- DailyMotion  (via dailymotion addon)
-- LiveLeak     
-- Gfycat      
-- Imgur        
-- Redd.it
-- Vine
-- Vidme    
-- Instagram
-- Blogspot     
-- Reddit.com text posts
-- Tumblr    
-
-Media from these sites supported via the [__youtube_dl__](https://github.com/ruuk/script.module.youtube.dl) addon:
-
-*funnyclips.me, engagemedia.org, videosift.com, break.com, veoh.com, viddler.com, schooltube.com, videos.sapo.pt, funnyordie.com*
-
-*3movs.com, anysex.com, cliphunter.com, crocotube.com, cutegirlsgifs.info, daporn.com, drtuber.com, efukt.com, eroshare.com, faapy.com, fapality.com, faptube.xyz, gyazo.com, hclips.com, hotgoo.com, japan-whores.com, mofosex.com, mylust.com, onlypron.com, panapin.com, porndoe.com, porneq.com, pornfun.com, pornhd.com, pornhub.com, porntrex.com, pussy.com, redclip.xyz, redtube.com, secret.sex, sendvid.com, sex24open.com, sexfactor.com, shameless.com, smotri.com, spankbang.com, stickyxxx.com, submityourflicks.com, teenfucktory.com, thisvid.com, tnaflix.com, tube8.com, txxx.com, vporn.com, worldsex.com, xbabe.com, xbabe.com, xcafe.com, xcum.com, xhamster.com, xnxx.com, xtube.com, xvideos.com, xvids.us, xxxymovies.com, xxxyours.com, youporn.com, zedporn.com*
+This addon is not published nor endorsed by reddit inc. 

@@ -147,3 +147,157 @@
  2.7.1  (2016-06-26)
  - minor fix on getting imgur media 
  - add giphy support
+ 2.7.2  (2016-07-01)
+ - cleanup strings and convert strings.xml to strings.po
+ - fix autoplay bug
+ - small update in imgur id & vid.me parsing
+ - additional infolabels (estuary) 
+ 2.7.3  (2016-07-07)
+ - move comment count on context menu to description
+ - replace display of '# points' to '# comments' 
+ - add directly linked media (images and video)
+ - add flickr images and album 
+ - add devour.com 
+ - speedup addon startup time
+ 2.7.4  (2016-07-12)
+ - "Show comments" and "Show comment links" now available on context menu -mac1202
+ - context menu for comments won't show up if reddit reports 0 comments
+ - setting to specify view id for albums
+ - specify view ID for each subreddit  e.g.: earthporn(500)
+ - gui skin files moved to 1080i instead of 720p
+ - fix int ValueError: on startup  -fashric
+ 2.7.5  (2016-07-13)
+ - fix android syntax error on startup  -Paranoidjack
+ - context menu for comments will show "No comments" instead of nothing
+ 2.7.6  (2016-07-15)
+ - user can now authorize the add-on to Access posts and comments through their account. (visit private subs they are members to)
+ 2.7.7  (2016-07-22)
+ - add more sites supported by youtube-dl 
+ - reorganize classes and functions
+ - add custom ui for albums
+ - update custom ui for comments
+ 2.7.8  (2016-07-27)
+ - addon was mis-named during testing (script.reddit.viewer). fix.
+ 2.7.9  (2016-08-18)
+ - remove custom gui components
+ - get reddit preview image and use if needed
+  
+ 3.0.0 (2016-12-14)
+ - import code from script.reddit.reader
+ 
+ 3.0.1
+ - change autoplay step
+ 
+ 3.0.2
+ - remove liveleak quality setting (no longer needed)
+ 
+ 3.0.3
+ - add support for handling links sent via:
+      videoUrl = "plugin://plugin.video.reddit_viewer/?mode=play&url=" + URLEncoder.encode(videoUri.toString(), "UTF-8");
+      (custom kore remote)
+      
+ 3.0.4
+ - custom kore remote support 
+ 
+ 3.0.5
+ - add URLResolver to check links
+ 
+ 3.0.6
+ - add loading indicator
+ 
+ 3.0.7
+ - add option to repeat gif playback
+ 
+ 3.0.8
+ - add option to resolve links only when clicked (faster listing but boggy image viewing)
+ 
+ 3.0.9
+ - add fanart
+ - rearrange settings
+ - add option to hide posts by domain or subreddit
+ 
+ 3.1.0
+ - update fanart
+ - fix nsfw filter
+ - remove thumbnail preview on view_450_slideshow
+ 
+ 3.1.1
+ - add subreddit info cache
+ - fix time info on reddit post not showing up
+ 
+ 3.1.2
+ - update logic concerning which subreddit icon to pick
+ 3.1.3
+ - add context menu item to add subreddit to shortcuts
+ - default subreddit r/all changed to r/popular
+ - context menu entry to show new posts has correct text  
+ 3.1.4 (2017-02-20)
+ - add imgFlip parsing
+ 3.1.5 (2017-02-22)
+ - strip emoji characters from posts
+ 3.1.6 (2017-02-23)
+ - fix video playback on album posts
+ 3.1.7 (2017-02-24)
+ - fix view tall image bug
+ 3.1.8
+ - update correct path for view tall image xml file
+ 3.1.9
+ - reduce the ar requirement to trigger view tall image
+ 3.2.0
+ - Context menu changes:
+   - Add open in web browser option
+   - Setting to hide context menu elements
+   - Add hide subreddit option
+   - Add hide domain option
+ 3.2.1
+ - Imgur bugfix
+ - Ability to customize command to run the open link in browser context menu 
+ 3.2.2 (2017-02-27)
+ - remove urlresolver parsing during subreddit listing
+ - add gallery parsing for designyoutrust.com
+ - add giphy.com short url support
+ 3.2.3 (2017-03-01)
+ - removed vine.co parsing
+ - add video parsing to some domain
+ - error notification when link is 404 or has error in parsing
+ 3.2.4 (2017-03-03)
+ - fix imgur parsing bug. Thanks to mac1202
+ 3.2.5
+ - add supload.com parsing
+ - reorganize parsing code
+ 3.2.6
+ - update supload.com parsing(gif)
+ - reorganize code
+ 3.2.7 (2017-03-11)
+ - use ruuk's youtubedl wrapper directly
+ - add acidcow.com album parsing
+ - codacity recommended cleanups
+ - ability to update youtube-dl in settings
+ 3.2.8
+ - recognize youtube timeskip tags  
+ - add custom patch to ytdl update routine
+ 3.3.0 (2017-03-19)
+ - add ruuk's patch to youtubedl wrapper
+ - major code reorganize
+ 
+ 3.3.1 (2017-03-21)
+ - user can now use their reddit saved posts similar to entering a multireddit
+   - provided they have given reddit_viewer permission for it 
+ - copy over reddit.reader changes/cleanup
+ 3.3.2 (2017-03-21)
+ - save/unsave posts on reddit account
+ 3.3.3 (2017-03-26)
+ - use threads to parse each reddit post
+ 3.3.4
+ - more accurate loading indicator
+ - cleanup
+ 3.3.5
+ - update imgur parsing
+ - cleanup
+ 3.3.6 (2017-04-03)
+ - use liveleak addon for liveleak videos
+ - reorganize settings
+ 3.3.7 (2017-04-05)
+ - add dash and resolution setting for youtube_dl
+ - gfycat error message notified to user
+ - don't follow redirects if just getting thumbnail

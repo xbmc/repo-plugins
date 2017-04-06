@@ -1,3 +1,6 @@
+v1.8.3
+- Fixed subtitles
+
 v1.8.2
 - Added context menu item for adding videos to the playlist
 - Confirmed Isengard compatibility

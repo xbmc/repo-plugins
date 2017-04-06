@@ -1,0 +1,71 @@
+# Kodi Media Center language file
+# Addon Name: <%= props.scriptname %>
+# Addon id: <%= props.scriptid %>
+# Addon Provider: <%= props.authors %>
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: jondemarks+jwtv-kodi@gmail.com\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Jonathan DeMarks\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#This is a comment
+
+msgctxt "#30000"
+msgid "Video Resolution"
+msgstr ""
+
+msgctxt "#30001"
+msgid "720p"
+msgstr ""
+
+msgctxt "#30002"
+msgid "480p"
+msgstr ""
+
+msgctxt "#30003"
+msgid "360p"
+msgstr ""
+
+msgctxt "#30004"
+msgid "240p"
+msgstr ""
+
+msgctxt "#30005"
+msgid "-- Set Language --"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Watch Multiple"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Queueing videos..."
+msgstr ""
+
+msgctxt "#30008"
+msgid " Problem "
+msgstr ""
+
+msgctxt "#30009"
+msgid " None of the videos are available. "
+msgstr ""
+
+msgctxt "#30010"
+msgid "Watch All Starting Here"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Add to Playlist"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Display subtitles when available"
+msgstr ""

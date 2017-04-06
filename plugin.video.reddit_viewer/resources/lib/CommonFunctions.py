@@ -333,6 +333,11 @@ def extractJS(data, function=False, variable=False, match=False, evaluate=False,
             log("Removing item: " + repr(lst[i]), 10)
             del lst[i]
         else:
+            log("Cleaning item: " + repr(lst[i]), 4)
+            if lst[i][0] == u"\n":
+                lst[i] == lst[i][1:]
+            if lst[i][len(lst) -1] == u"\n":
+                lst[i] == lst[i][:len(lst)- 2]
             lst[i] = lst[i].strip()
 
     if values or evaluate:

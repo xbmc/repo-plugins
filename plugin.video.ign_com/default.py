@@ -22,10 +22,10 @@ live_stream_setting = bool(addon.getSetting("LiveStream"))
 
 viewMode = str(addon.getSetting("viewMode"))
 
-max_video_height = [360, 540, 720, 1080][int(max_video_quality)]
-max_video_bitrate = [500000, 1500000, 2500000, 5000000][int(max_video_quality)]
-max_video_quality = [640, 960, 1280, 1920][int(max_video_quality)]
-
+video_height = [360, 480, 540, 720, 1080]
+max_video_height = video_height[int(max_video_quality)]
+max_video_bitrate = [347000, 724000, 1129000, 1910000, 3906000]
+max_video_quality = [640, 853, 960, 1280, 1920]
 
 def index():
     if live_stream_setting:
@@ -189,11 +189,8 @@ def list_search_results(url):
 
 def play_video(page_url):
     match = re.compile(base_url + "(.+)", re.DOTALL).findall(page_url)
-    xbmc.log("match[0] " + match[0])
     vid = Video(match[0])
-    final_url = vid.get_url(max_video_height)
-    xbmc.log("final_url: " + final_url)
-
+    final_url = vid.get_vid_url(max_video_height)
     list_item = xbmcgui.ListItem(path=final_url)
     return xbmcplugin.setResolvedUrl(pluginhandle, True, list_item)
 
@@ -212,9 +209,12 @@ class Video:
             has_video_url = True;
             self._get_data_settings(content)
 
+        if "hero-unit-container" in content:
+            has_video_url = True;
+            self._get_hero_unit_container(content)
+
         if not has_video_url:
-            dialog = xbmcgui.Dialog()
-            dialog.ok("Unknown Video", "The IGN-Plugin does not know how to handle the selected video. "
+            show_dialog("Unknown Video", "The IGN-Plugin does not know how to handle the selected video. "
                                        "Please report the name of the video on the Kodi-Forums so it can be fixed. "
                                        "http://forum.kodi.tv/showthread.php?tid=136353")
 
@@ -224,13 +224,44 @@ class Video:
         for res in match:
             self.urls[res[0]] = res[1].replace("\\", "")
 
-    def get_url(self, res):
+    def _get_hero_unit_container(self, content):
+        match = re.compile('class="hero-poster instant-play hidden"\n\s.+?\n\s.+?data-id="(.+?)"', re.DOTALL)\
+            .findall(content)
+        config = get_url("/videos/configs/id/" + match[0] + ".config").replace("\\", "")
+        temp_matches = re.compile('"url":"(.+?)/zencoder/(.+?)/(.+?)/(.+?)/(.+?)/(.+?)-(.+?)-(.+?)"', re.DOTALL)\
+            .findall(config)
+        start_url = temp_matches[0][0]
+        date = temp_matches[0][1] + "/" + temp_matches[0][2] + "/" + temp_matches[0][3]
+        resolution = int(temp_matches[0][4])
+        vid_id = temp_matches[0][5]
+        bitrate = temp_matches[0][6]
+        ext = temp_matches[0][7]
+
+        for i in range(0, len(video_height), 1):
+
+            temp_url = start_url + "/zencoder/" + date + "/" + str(max_video_quality[i]) + "/" + vid_id + "-" + str(
+                max_video_bitrate[i]) + "-" + ext
+            try:
+                ret = urllib2.urlopen(temp_url)
+                if ret.code == 200:
+                    self.urls[video_height[i]] = temp_url
+            except urllib2.HTTPError, e:
+                xbmc.log('HTTPError: ' + temp_url)
+            except urllib2.URLError, e:
+                xbmc.log('URLError: ' + temp_url)
+
+    def get_vid_url(self, res):
         self._detect()
         final_url = ""
         for u in self.urls.keys():
             if int(u) >= res:
                 final_url = self.urls[u]
         return final_url
+
+
+def show_dialog(title, text):
+    dialog = xbmcgui.Dialog()
+    dialog.ok(title, text)
 
 
 def play_live_stream(url):

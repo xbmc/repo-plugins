@@ -48,3 +48,6 @@
 2.3.1
 - Adjusted video detection to new page structure
 - Code clean up
+2.3.2 // 2017-04-06
+- Adjusted video detection to new page structure
+- Added detection for new different video implementation

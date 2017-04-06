@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.netzkino_de" name="Netzkino" version="2.2.4" provider-name="L0RE">
+	<requires>
+		<import addon="xbmc.python" version="2.24.0"/>
+        <import addon="plugin.video.youtube" version="5.0.0" />
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Netzkino movies</summary>
+		<summary lang="de">Filme von Netzkino</summary>
+		<description lang="en">With Netzkino you can watch movies free and legal.</description>
+		<description lang="de">Mit Netzkino kannst du kostenlos und legal Spielfilme schauen.</description>
+		<disclaimer lang="en"></disclaimer>
+		<language>de</language>
+		<platform>all</platform>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<forum>http://forum.kodi.tv/showthread.php?tid=225197</forum>
+		<website>http://www.netzkino.de</website>
+		<email>bromix at gmx dot net</email>
+		<source>https://github.com/bromix/plugin.video.netzkino_de</source>
+	</extension>
+</addon>

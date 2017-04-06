@@ -1,0 +1,90 @@
+﻿# Kodi ESPN Player language file
+msgid ""
+msgstr ""
+"Project-Id-Version: kodi-espnplayer\n"
+"Report-Msgid-Bugs-To: https://github.com/emilsvennesson/kodi-espnplayer\n"
+"POT-Creation-Date: 2016-07-05 14:30+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "#30001"
+msgid "Email/Username"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30003"
+msgid "General"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Advanced"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Error"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Login failed. Please make sure that your account information is correct and that you have a valid subscription to ESPN Player."
+msgstr ""
+
+msgctxt "#30007"
+msgid "Preferred stream quality"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Always use highest bitrate"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Ask"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Select stream quality"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Limit bitrate"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Max bitrate allowed (Kbps)"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Unable to find a valid stream URL. Please see the log for more information."
+msgstr ""
+
+msgctxt "#30014"
+msgid "Verify SSL certificate"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Live"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Upcoming"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Archive"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Today"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Channels"
+msgstr ""

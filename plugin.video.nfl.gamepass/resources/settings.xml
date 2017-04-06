@@ -1,0 +1,24 @@
+<settings>
+  <category label="30029">
+    <setting id="email" type="text" label="30001" default=""/>
+    <setting id="password" type="text" label="30002" default="" option="hidden" visible="!eq(-1,)" enable="!eq(-1,)"/>
+  </category>
+  <category label="30030">
+    <setting id="preferred_bitrate" type="select" label="30003" lvalues="30004|30005|30006|30007|30008|30009|30010|30011|30012" default="8"/>
+    <setting id="preferred_game_version" type="select" label="30013" lvalues="30014|30015|30012" default="0"/>
+    <setting id="local_tz" type="enum" label="30020" lvalues="30026|30027|30028" default="0"/>
+    <setting id="hide_game_length" type="bool" label="30025" default="false"/>
+  </category>
+  <category label="30033">
+    <setting id="proxy_enabled" type="bool" label="30034" default="false"/>
+    <setting id="proxy_scheme" type="labelenum" label="30035" values="http|https" default="http" enable="eq(-1,true)"/>
+    <setting id="proxy_host" type="text" label="30036" default="" enable="eq(-2,true)"/>
+    <setting id="proxy_port" type="number" label="30037" default="" enable="eq(-3,true)"/>
+    <setting id="proxy_auth" type="bool" label="30042" default="false" enable="eq(-4,true)"/>
+    <setting id="proxy_username" type="text" label="30038" default="" enable="eq(-1,true)"/>
+    <setting id="proxy_password" type="text" label="30039" default="" option="hidden" enable="eq(-2,true)"/>
+  </category>
+  <category label="30031">
+    <setting id="debug" type="bool" label="Add-on debugging" default="false"/>
+  </category>
+</settings>

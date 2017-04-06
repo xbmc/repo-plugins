@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+		<setting id="PreferHD" type="bool" label="32001" default="true"/>
+		<setting id="loadAll" type="bool" label="32002" default="false"/>
+		<setting id="parseSubs" type="bool" label="32004" default="false"/>
+		<setting id="elPerPage" type="select" label="32003" values="10|25|50|100" default="10"/>
+</settings>

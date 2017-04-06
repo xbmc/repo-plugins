@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.odeon"
+       name="Odeon" version="1.2.0"
+       provider-name="ARSAT">
+    <requires>
+        <import addon="xbmc.python" version="2.24.0"/>
+        <import addon="script.common.plugin.cache" version="2.5.8"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="odeon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">ODEON, a window to the stories of Argentina.</summary>
+        <description lang="en">Welcome to ODEON!
+Odeon is the video-on-demand platform of Argentine Cinema where you will find the best local content: films, series, documentaries and shorts for all likes.</description>
+        <summary lang="es">ODEON, una ventana a las historias de tu país.</summary>
+        <description lang="es">¡Bienvenidos a ODEÓN!
+Odeón es la plataforma de video a demanda del Cine Argentino donde encontrarás el mejor contenido nacional: películas, series, documentales y cortos para todos los gustos.</description>
+        <disclaimer lang="es">Los contenidos audiovisuales de la plataforma ODEON pueden contener escenas no aptas para todo público. Se recomienda la supervisión de un mayor. El uso de ODEON y de este sitio web implica la aceptación de nuestros Términos de uso y de nuestra Política de privacidad. Todos los derechos reservados 2003–2015. República Argentina, Instituto Nacional de Cine y Artes Audiovisuales. Lima 319; Código Postal: C1073AAG, Buenos Aires; República Argentina.</disclaimer>
+        <language>es</language>
+        <platform>all</platform>
+        <license>GNU General Public License, Version 3</license>
+        <source>https://github.com/arsat/odeon-kodi</source>
+        <forum>http://forum.kodi.tv/showthread.php?tid=296742</forum>
+        <website>https://www.odeon.com.ar</website>
+        <email>consultas@odeon.com.ar</email>
+    </extension>
+</addon>

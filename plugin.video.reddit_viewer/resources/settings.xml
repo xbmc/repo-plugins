@@ -1,0 +1,86 @@
+<settings>
+    <category label="30100">
+        <setting id="itemsPerPage"          type="enum"   label="30101" values="10|25|50|75|100" default="2"/>
+        <setting type="lsep"                              label="30103" enable="false" />
+        <setting id="TitleAddtlInfo"        type="bool"   label="30102" default="false"/>
+        <setting type="lsep"                              label="30112" enable="false" />
+        <setting id="DoNotResolveLinks"     type="bool"   label="30111" default="false"/>
+        
+        <!-- setting id="HideImagePostsOnVideo" type="bool"   label="30104" default="true"/>
+        <setting type="sep" />
+    	<setting id="CommentTreshold"       type="select" label="30106" values="All|0|5|10|50|100"/>
+        <setting id="comments_viewMode"     type="number" label="30110" default="0"/-->
+        <setting type="sep" />
+        <setting id="use_ytdl_for_yt"      type="bool" label="30350" default="false"/>
+        <setting id="repeat_gif_video"     type="enum" label="30351" values="0|1|3|10|100" default="0"/>
+        <setting type="sep" />
+    	<setting id="album_viewMode"        type="number" label="30105" default="0"/>
+        <setting id="forceViewMode"         type="bool"   label="30108" default="false"/>
+        <setting id="viewMode"              type="number" label="30109" default="504"/>
+    </category>
+    <category label="30120">
+        <setting id="autoplayAll"               type="bool" label="30124" default="false"/>
+        <setting id="autoplayUnwatched"         type="bool" label="30125" default="false"/>
+        <!--setting id="autoplayUnfinished"        type="bool" label="30126" default="false"/-->
+        <setting type="sep" />
+        <setting id="autoplayRandomize"         type="bool" label="30121" default="false"/>
+    </category>
+    <category label="30300">
+        <setting id="hide_video"           type="bool" label="30301" default="false"/>
+        <setting id="hide_IMG"             type="bool" label="30302" default="false"/>
+        <setting id="hide_reddit"          type="bool" label="30303" default="false"/>
+        <setting id="hide_undetermined"    type="bool" label="30304" default="false"/>
+        <!-- setting id="resolve_undetermined" type="bool" label="30305" default="false"/-->
+
+        <setting type="sep" />
+        <setting id="hide_nsfw"             type="bool" label="30308" default="true"/>
+    	<setting id="domain_filter"         type="text" label="30306" default=""/>
+        <setting id="subreddit_filter"      type="text" label="30307" default=""/>
+    </category>
+
+    <category label="30500">
+        <setting type="lsep"                                label="30508" enable="true" />
+        <setting id="cxm_show_open_browser"     type="bool" label="30509" default="true"/>
+        <setting id="cxm_show_comment_link"     type="bool" label="30501" default="true"/>
+        <setting id="cxm_show_comments"         type="bool" label="30502" default="true"/>
+        <setting id="cxm_show_go_to"            type="bool" label="30503" default="true"/>
+        <setting id="cxm_show_new_from"         type="bool" label="30504" default="true"/>
+        <setting id="cxm_show_add_shortcuts"    type="bool" label="30505" default="true"/>
+        <setting id="cxm_show_filter_subreddit" type="bool" label="30506" default="true"/>
+        <setting id="cxm_show_filter_domain"    type="bool" label="30507" default="true"/>
+    </category>
+
+    <category label="30600">
+        <setting type="lsep"                                label="30601" enable="true" />
+        <setting type="lsep"                                label="30602" enable="true" />
+        <setting id="custom_link_command"       type="text" label=""      default=""/>
+    </category>
+
+
+    <!-- category label="30150">
+        <setting                  type="action"      label="30151" action="RunPlugin(plugin://plugin.video.reddit_tv/?mode=openSettings&url=youtube)"/>
+        <setting                  type="action"      label="30152" action="RunPlugin(plugin://plugin.video.reddit_tv/?mode=openSettings&url=vimeo)"/>
+        <setting                  type="action"      label="30153" action="RunPlugin(plugin://plugin.video.reddit_tv/?mode=openSettings&url=dailymotion)"/>
+        <setting id="ll_qualiy"   type="enum"        label="30154" values="480p|720p" default="1"/>
+        <setting id="ll_downDir"  type="folder"      label="30155" default=""/>
+        <setting id="gfy_downDir" type="folder"      label="30156" default=""/>
+        <setting id="streamable_quality" type="enum" label="30157" values="full|mobile" default="1" />
+    </category-->
+    <category label="30400"> 
+    	<setting                              type="lsep"        label="30401"               enable="true"   />
+		<setting type="sep" />
+        <setting id="reddit_code"             type="text"        label="30402"  default=""                   />
+        <setting                              type="action"      label="30403"  action="RunPlugin(plugin://plugin.video.reddit_viewer/?mode=get_refresh_token)"/>
+        <setting id="reddit_refresh_token"    type="text"        label="30404"  default=""   enable="false"  />
+    	<setting                              type="lsep"        label="30405"               enable="true"   />
+        <setting type="sep" />
+		<setting                              type="action"      label="30406"  action="RunPlugin(plugin://plugin.video.reddit_viewer/?mode=get_access_token)"/>
+		<setting id="reddit_access_token"     type="text"        label="30407"  default=""   enable="false"  />
+		<setting id="reddit_access_token_scope"   type="text"    label="30408"  default=""   enable="false"  />
+		<setting id="reddit_access_token_expires" type="text"    label="30409"  default=""   enable="false"  />
+        <setting type="sep" />
+		<setting                              type="action"      label="30410"  action="RunPlugin(plugin://plugin.video.reddit_viewer/?mode=revoke_refresh_token)"/>
+    	
+        
+    </category>
+</settings>

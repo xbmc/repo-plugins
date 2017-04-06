@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.tunir" name="Tunir" version="0.0.6" provider-name="Nir Elbaz">
+  <requires>
+    <import addon="xbmc.python" version="2.24.0"/>
+    <import addon="script.module.requests" version="2.8.1"/>
+    <import addon="script.module.xbmcswift2" version="2.4.0"/>
+    <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+    <import addon="script.module.html5lib" version="0.999.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <language>en</language>
+    <summary lang="en">Listen to more than 35000 international radio broadcasts</summary>
+    <description lang="en">Browse a huge collection of radio stations and broadcasts from all around the world and listen the music you like!</description>
+    <disclaimer lang="en">The credit for the content goes to the great vTuner online service. This is an unofficial add-on.</disclaimer>
+    <license>GNU GENERAL PUBLIC LICENSE Version 2, June 1991</license>
+    <website>http://www.vtuner.com/</website>
+    <email>nir[at]nirelbaz.com</email>
+    <source>https://github.com/nire0510/plugin.audio.tunir</source>
+  </extension>
+</addon>

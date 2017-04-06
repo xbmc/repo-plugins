@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+#  Copyright 2017 Eugene Kuzin
+#
+#  This file is part of the radio.roks Kodi plugin.
+#
+#  This plugin is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This plugin is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this plugin.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<channels>
+    <channel>
+        <!--Radio ROKS Live-->
+        <name_id>30100</name_id>
+        <url>http://online-radioroks.tavrmedia.ua/RadioROKS</url>
+        <url32>http://online-radioroks.tavrmedia.ua/RadioROKS_32</url32>
+        <icon>icon_live.png</icon>
+        <fanart>fanart_live_01.jpg</fanart>
+        <fanart>fanart_live_02.jpg</fanart>
+        <fanart>fanart_live_03.jpg</fanart>
+        <fanart>fanart_live_04.jpg</fanart>
+    </channel>
+    <channel>
+        <!--AC/DC-->
+        <name_id>30101</name_id>
+        <url>http://online-radioroks2.tavrmedia.ua/RadioROKS_ACDC</url>
+        <url32>http://online-radioroks2.tavrmedia.ua/RadioROKS_ACDC_32</url32>
+        <icon>icon_acdc.png</icon>
+        <fanart>fanart_acdc_01.jpg</fanart>
+        <fanart>fanart_acdc_02.jpg</fanart>
+        <fanart>fanart_acdc_03.jpg</fanart>
+    </channel>
+    <channel>
+        <!--Rock Ballads-->
+        <name_id>30102</name_id>
+        <url>http://online-radioroks2.tavrmedia.ua/RadioROKS_Ballads</url>
+        <url32>http://online-radioroks2.tavrmedia.ua/RadioROKS_Ballads_32</url32>
+        <icon>icon_ballads.png</icon>
+        <fanart>fanart_ballads_01.jpg</fanart>
+        <fanart>fanart_ballads_02.jpg</fanart>
+        <fanart>fanart_ballads_03.jpg</fanart>
+    </channel>
+    <channel>
+        <!--Beatles-->
+        <name_id>30103</name_id>
+        <url>http://online-radioroks2.tavrmedia.ua/RadioROKS_Beatles</url>
+        <url32>http://online-radioroks2.tavrmedia.ua/RadioROKS_Beatles_32</url32>
+        <icon>icon_beatles.png</icon>
+        <fanart>fanart_beatles_01.jpg</fanart>
+        <fanart>fanart_beatles_02.jpg</fanart>
+        <fanart>fanart_beatles_03.jpg</fanart>
+    </channel>
+    <channel>
+        <!--Rock Concert-->
+        <name_id>30104</name_id>
+        <url>http://online-radioroks2.tavrmedia.ua/RadioROKS_Concert</url>
+        <url32>http://online-radioroks2.tavrmedia.ua/RadioROKS_Concert_32</url32>
+        <icon>icon_concert.png</icon>
+        <fanart>fanart_concert_01.jpg</fanart>
+        <fanart>fanart_concert_02.jpg</fanart>
+        <fanart>fanart_concert_03.jpg</fanart>
+    </channel>
+    <channel>
+        <!--Ukrainian Rock-->
+        <name_id>30105</name_id>
+        <url>http://online-radioroks2.tavrmedia.ua/RadioROKS_Ukr</url>
+        <url32>http://online-radioroks2.tavrmedia.ua/RadioROKS_Ukr_32</url32>
+        <icon>icon_uarock.png</icon>
+        <fanart>fanart_ukraine_01.jpg</fanart>
+        <fanart>fanart_ukraine_02.jpg</fanart>
+        <fanart>fanart_ukraine_03.jpg</fanart>
+    </channel>
+    <channel>
+        <!--Hard'n'Heavy-->
+        <name_id>30106</name_id>
+        <url>http://online-radioroks2.tavrmedia.ua/RadioROKS_HardnHeavy</url>
+        <url32>http://online-radioroks2.tavrmedia.ua/RadioROKS_HardnHeavy_32</url32>
+        <icon>icon_hardnheavy.png</icon>
+        <fanart>fanart_hardnheavy_01.jpg</fanart>
+        <fanart>fanart_hardnheavy_02.jpg</fanart>
+        <fanart>fanart_hardnheavy_03.jpg</fanart>
+    </channel>
+    <channel>
+        <!--[KAMTYGEZA]-->
+        <name_id>30107</name_id>
+        <url>http://online-radioroks2.tavrmedia.ua/RadioROKS_KAMTUGEZA</url>
+        <url32>http://online-radioroks2.tavrmedia.ua/RadioROKS_KAMTUGEZA_32</url32>
+        <icon>icon_kamtygeza.png</icon>
+        <fanart>fanart_kamtygeza_01.jpg</fanart>
+        <fanart>fanart_kamtygeza_02.jpg</fanart>
+        <fanart>fanart_kamtygeza_03.jpg</fanart>
+        <fanart>fanart_kamtygeza_04.jpg</fanart>
+    </channel>
+    <channel>
+        <!--New Rock-->
+        <name_id>30108</name_id>
+        <url>http://online-radioroks2.tavrmedia.ua/RadioROKS_NewRock</url>
+        <url32>http://online-radioroks2.tavrmedia.ua/RadioROKS_NewRock_32</url32>
+        <icon>icon_newrock.png</icon>
+        <fanart>fanart_newrock_01.jpg</fanart>
+        <fanart>fanart_newrock_02.jpg</fanart>
+        <fanart>fanart_newrock_03.jpg</fanart>
+    </channel>
+    <channel>
+        <!--Okean Elzy-->
+        <name_id>30109</name_id>
+        <url>http://online-radioroks2.tavrmedia.ua/RadioROKS_OE</url>
+        <url32>http://online-radioroks2.tavrmedia.ua/RadioROKS_OE_32</url32>
+        <icon>icon_oe.png</icon>
+        <fanart>fanart_oe_01.jpg</fanart>
+        <fanart>fanart_oe_02.jpg</fanart>
+        <fanart>fanart_oe_03.jpg</fanart>
+    </channel>
+    <channel>
+        <!--Queen-->
+        <name_id>30110</name_id>
+        <url>http://roks.ipfm.net:80/RadioROKS_Queen</url>
+        <url32>http://roks.ipfm.net:80/RadioROKS_Queen_32</url32>
+        <icon>icon_queen.png</icon>
+        <fanart>fanart_queen_01.jpg</fanart>
+        <fanart>fanart_queen_02.jpg</fanart>
+        <fanart>fanart_queen_03.jpg</fanart>
+    </channel>
+    <channel>
+        <!--Scorpions-->
+        <name_id>30111</name_id>
+        <url>http://online-radioroks2.tavrmedia.ua/RadioROKS_Scorpions</url>
+        <url32>http://online-radioroks2.tavrmedia.ua/RadioROKS_Scorpions_32</url32>
+        <icon>icon_scorpions.png</icon>
+        <fanart>fanart_scorpions_01.jpg</fanart>
+        <fanart>fanart_scorpions_02.jpg</fanart>
+        <fanart>fanart_scorpions_03.jpg</fanart>
+    </channel>
+</channels>

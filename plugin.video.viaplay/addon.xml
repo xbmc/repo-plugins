@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.viaplay"
+       version="1.0.7"
+       name="Viaplay"
+       provider-name="emilsvennesson">
+  <requires>
+    <import addon="xbmc.python" version="2.24.0"/>
+    <import addon="script.module.requests" version="2.9.1"/>
+    <import addon="script.module.iso8601" version="0.1.11"/>
+    <import addon="script.module.m3u8" version="0.2.10"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <description lang="en">Watch content from Viaplay.</description>
+    <description lang="sv">Titta på innehåll från Viaplay.</description>
+    <news>2016.12.11 v1.0.6[CR]+ Improve sports section[CR]+ Fix broken playback for new content[CR]+ Remove add-on debugging setting and automatically detect it instead[CR]+ Code cleanup</news>
+    <platform>all</platform>
+    <broken>This version is deprecated. New versions are available for Kodi Krypton or later.</broken>
+    <language>sv dk no fi en</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+    <source>https://github.com/emilsvennesson/kodi-viaplay</source>
+    <forum>http://forum.kodi.tv/showthread.php?tid=286387</forum>
+    <disclaimer>This addon requires you to have a subscription to Viaplay.[CR]This addon is completely unofficial and is not endorsed by Viaplay in any way.</disclaimer>
+  </extension>
+</addon>

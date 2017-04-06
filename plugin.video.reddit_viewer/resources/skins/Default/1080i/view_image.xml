@@ -1,0 +1,63 @@
+﻿<window id="129">
+    
+    
+    <controls>
+        <control type="image">
+            <description>Black Background</description>
+            <left>0</left>
+            <top>0</top>
+            <texture>srr_blackbg.jpg</texture>
+            <aspectratio>scale</aspectratio>
+        </control>
+        <control type="image">
+        	<top>-100</top>
+            <description>The spinning animation in the background</description>
+            <aspectratio align="center" aligny="center" >center</aspectratio>
+            <texture>srr_busy.gif</texture>
+            <animation effect="fade" time="200" delay="500" reversible="false">Visible</animation>
+        </control>
+
+        <control type="image" id="3000">
+            <description>image to view</description>
+            <texture></texture>
+            <aspectratio scalediffuse="true"  aligny="top">keep</aspectratio>
+            <!--animation type="WindowOpen">
+              <effect type="zoom" start="100,100" end="200,200" center="100,100" time="2000" delay="1000"/>
+              <effect type="slide" start="0,0" end="0,-500" time="2000" delay="3000"/>
+            </animation-->
+        </control>
+        <control type="image" id="3100">
+            <description>image zoom top</description>
+            <texture></texture>
+            <aspectratio scalediffuse="true"  aligny="top">scale</aspectratio>
+        </control>
+        <control type="image" id="3200">
+            <description>image zoom middle</description>
+            <texture></texture>
+            <aspectratio scalediffuse="true"  aligny="center">scale</aspectratio>
+        </control>
+        <control type="image" id="3300">
+            <description>image zoom bottom</description>
+            <texture></texture>
+            <aspectratio scalediffuse="true"  aligny="bottom">scale</aspectratio>
+        </control>
+
+        <control type="textbox" id="3200">
+           <description>Image description text box</description>
+           <posx>0</posx>
+           <posy>-150</posy>
+           <width>400</width>
+           <height>300</height>
+           <visible>false</visible>
+           <colordiffuse>FFFFFFFF</colordiffuse>
+           <font>font13</font>
+           <textcolor>FFFFFFFF</textcolor>
+           <pulseonselect></pulseonselect>
+           <pagecontrol>13</pagecontrol>
+           <scrolltime>200</scrolltime>
+           <autoscroll delay="3000" time="1000" repeat="10000">!Control.HasFocus(13)</autoscroll>
+           <label>Text to display goes here [CR] next line...[CR]aasfdas dasdf alsdf asdlfjk hasdf s</label>
+           <align>center</align>
+        </control>
+    </controls>
+</window>

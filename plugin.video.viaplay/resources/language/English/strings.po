@@ -1,0 +1,158 @@
+﻿# Kodi Viaplay language file
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi-Viaplay\n"
+"Report-Msgid-Bugs-To: https://github.com/emilsvennesson/kodi-viaplay\n"
+"POT-Creation-Date: 2016-07-05 14:30+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "#30001"
+msgid "Email"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30003"
+msgid "General"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Advanced"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Error"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Login failed. Please make sure that your account information is correct."
+msgstr ""
+
+msgctxt "#30007"
+msgid "Country"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Sweden"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Denmark"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Norway"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Finland"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Download available subtitles"
+msgstr ""
+
+msgctxt "#30013"
+msgid "List all in alphabetical order"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Season"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30016"
+msgid "This event starts"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Information"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Next Page"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Disable SSL (not recommended)"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Your account is not authorized to watch this content. You find information on how to upgrade your package on the Viaplay website."
+msgstr ""
+
+msgctxt "#30021"
+msgid "You need to rent/purchase this movie on the Viaplay website before playing it."
+msgstr ""
+
+msgctxt "#30022"
+msgid "You're not allowed to watch content from this region."
+msgstr ""
+
+msgctxt "#30023"
+msgid "Preferred stream quality (movies & TV)"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Always use highest bitrate"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Ask"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Select stream quality"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Today"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Upcoming days"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Previous days"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Archived events"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Enter your PIN code"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Parental control"
+msgstr ""
+
+msgctxt "#30034"
+msgid "The PIN code you have entered is incorrect."
+msgstr ""
+
+msgctxt "#30035"
+msgid "Limit bitrate"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Max bitrate allowed (Kbps)"
+msgstr ""
+
+msgctxt "#30037"
+msgid "Live & upcoming events"
+msgstr ""

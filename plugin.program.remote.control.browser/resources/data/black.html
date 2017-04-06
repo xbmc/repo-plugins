@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <style>
+            body {
+                /* Flashing a white screen looks bad, but it is improved with
+                   this black interstitial page. */
+                background-color: black;
+            }
+        </style>
+        <title>Chrome Remote Control Browser: Redirect</title>
+        <script>
+            // This implements an open redirect. In some contexts that
+            // constitutes a security hole. Since this one is on the local
+            // file system, where privileges are already high, it does not
+            // create any new threats.
+            var query = window.location.search.substring(1);
+            var url = window.decodeURIComponent(query.replace(/\+/g, '%20'))
+            if (url) {
+                // Allow the page to render before redirecting.
+                window.setTimeout(
+                    function() {
+                        window.location.href = url;
+                    });
+            }
+        </script>
+    </head>
+    <body />
+</html>

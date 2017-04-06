@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <!-- http://www.cyberciti.biz/python-tutorials/securely-hash-passwords-in-python/ -->
+    <!-- Accounts -->
+    <category label="32200">
+        <setting type="lsep" label="32201" />
+        <setting id="trakt.user" type="action" label="32202" option="close" action="RunPlugin(plugin://plugin.video.funimationnow/?action=authTrakt)" />
+        <setting id="trakt.token" type="text" label="32203" option="hidden" visible="false" />
+        <setting id="trakt.refresh" type="text" label="32204" option="hidden" visible="false" />
+        <setting type="lsep" label="32205" />
+        <setting id="fn.uid" type="text" label="32206" />
+        <setting id="fn.pwd" type="text" label="32207" option="hidden" />
+        <setting type="lsep" label="32208" />
+        <setting id="fn.country" type="text" label="32209" enable="false" default="" />
+        <setting id="fn.user_id" type="text" label="32210" visible="false" enable="false" default="" />
+        <setting id="fn.user_type" type="text" label="32211" visible="false" enable="false" default="" />
+        <setting id="fn.ut" type="text" label="32212" visible="false" enable="false" default="FunimationUser" />
+        <setting id="fn.subscriber_status" type="text" label="32213" enable="false" default="Non-Subscriber" />
+        <setting id="fn.user_role" type="text" label="32214" enable="false" default="Unregistered" />
+        <setting id="fn.user_agent" type="text" label="32215" visible="false" enable="false" default="Sony-PS4" />
+        <setting id="fn.cookie_experation" type="text" label="32216" visible="false" enable="false" default="" />
+
+    </category>
+
+    <!-- General -->
+    <category label="32241">
+        <setting id="fn.content_type" type="enum" label="32242" lvalues="32243|32244" default="0" />
+        <setting id="fn.video_quality" type="enum" label="32245" lvalues="32246|32247|32248" default="2" />
+        <setting id="fn.image_quality" type="enum" label="32249" lvalues="32250|32251|32252" default="2" />
+        <setting id="fn.poster_type" type="enum" label="32253" lvalues="32254|32255" default="0" />
+        <setting id="fn.result_count" type="slider" label="32256" default="0" range="0,25,100" option="int" />
+        <setting id="fn.flatten_seasons" type="bool" label="32257" default="false" />
+        <setting id="fn.display_extras" type="bool" label="32258" default="true" />
+        <setting id="fn.display_simular" type="bool" label="32259" default="true" />
+        <setting id="fn.display_movies" type="bool" label="32260" default="true" />
+    </category>
+
+    <!-- Advanced -->
+    <category label="32261">
+        <setting id="loglvl" type="enum" label="32262" lvalues="32263|32264|32265|32266" default="1" />
+        <setting type="sep" />
+        <setting label="32267" type="action" action="RunPlugin(plugin://plugin.video.funimationnow/?action=clearCookies)"/>
+        <setting type="lsep" label="32268" />
+        <setting id="provider.afdah" type="bool" label="32269" default="false" />
+        <setting type="lsep" label="[CR]" />
+        <setting type="lsep" label="32270" />
+        <setting type="lsep" label="32271" />
+        <setting type="lsep" label="32272" />
+        <setting type="lsep" label="32273" />
+    </category>
+
+</settings>

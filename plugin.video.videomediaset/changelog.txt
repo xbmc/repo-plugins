@@ -1,0 +1,45 @@
+[B]1.2.1[/B]
+- fixed the addon after website changes
+
+[B]1.2.0[/B]
+- fixed the addon after website changes
+- added images to program lists
+- refactored the code
+
+[B]1.1.0[/B]
+- added section "Canali Live"
+
+[B]1.0.9[/B]
+- updated plugin to work with the new videomediaset website
+
+[B]1.0.8[/B]
+- added section <season> in Episode List to show old episodes
+
+[B]1.0.7[/B]
+- updated all sections "Ultime puntate" and "Ultime Sport Mediaset" to work with latest change in videomediaset website
+
+[B]1.0.6[/B]
+- updated plugin to work with the latest change in videomediaset website
+
+[B]1.0.5[/B]
+- updated plugin to work with the new videomediaset website
+
+[B]1.0.4[/B]
+- fix error "Remote share: Could not connect to network server" with XBMC 13 Gotham
+
+[B]1.0.3[/B]
+- moved previous root into "Elenco programmi"
+- general speed optimization for section "Elenco programmi"
+- added sections with shortcuts to the latest full videos
+- added sections with shortcuts to the most viewed clips
+- added sections with shortcuts to latest clips of SportMediaset
+- cleanup code
+
+[B]1.0.2[/B]
+- added search text
+
+[B]1.0.1[/B]
+- added import addon beautifulsoup in requires
+
+[B]1.0[/B]
+- first release

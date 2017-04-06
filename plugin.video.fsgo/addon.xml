@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.fsgo"
+       version="1.1.5"
+       name="FOX Sports GO"
+       provider-name="emilsvennesson">
+  <requires>
+    <import addon="xbmc.python" version="2.24.0"/>
+    <import addon="script.module.requests" version="2.9.1"/>
+    <import addon="script.module.m3u8" version="0.2.10"/>
+    <import addon="script.module.iso8601" version="0.1.11"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <description lang="en">Watch live sports and shows from FOX Sports GO.[CR][CR]Please note that this add-on requires you to authenticate to one of FOX Sports GO's participating TV providers.</description>
+    <news>2016.11.29 v1.1.4[CR]+ Fix broken stream playback</news>
+    <platform>all</platform>
+    <broken>This version is deprecated. New versions are available for Kodi Krypton or later.</broken>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+    <source>https://github.com/emilsvennesson/kodi-fsgo</source>
+    <forum>http://forum.kodi.tv/showthread.php?tid=293178</forum>
+    <language>en</language>
+    <disclaimer>This addon is completely unofficial and is not endorsed by FOX in any way.</disclaimer>
+  </extension>
+</addon>

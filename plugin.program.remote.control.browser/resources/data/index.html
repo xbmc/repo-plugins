@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{{TITLE_HTML}}</title>
+        <style>
+            body {
+                background-color: black;
+                color: #CCC;
+            }
+            div {
+                margin: 2em 0;
+            }
+            #status {
+                color: black;
+                background-color: #CCC;
+                padding: 0.5em 1em;
+            }
+            #url {
+                width: 20em;
+            }
+            #placeholder {
+                display: none;
+            }
+            #bookmarklet {
+                text-decoration: inherit;
+                color: black;
+                background-color: #CCC;
+                padding: 0.5em 1em;
+                border: 0.5ex outset white;
+                border-radius: 1ex;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>{{TITLE_HTML}}</h1>
+        <h2>{{SUBTITLE_HTML}}</h2>
+
+{{STATUS}}
+        <div>
+            <form action="/linkcast.html" method="POST">
+            <input id="url" type="url" name="url" value="{{URL_ATTR}}" />
+            <input type="submit" value="{{SUBMIT_ATTR}}" />
+            </form>
+        </div>
+
+        <div id="placeholder">
+            <p>{{INSTRUCTIONS_HTML}}</p>
+            <div><a id="bookmarklet">{{TITLE_HTML}}</a></div>
+        </div>
+
+        <script type="text/template" id="template">
+            void((function(params) {
+                var query = 'url=' + window.encodeURIComponent(window.document.location.href);
+                switch (window.location.protocol) {
+                case 'http:':
+                case 'ftp:':
+                    var request = new XMLHttpRequest();
+                    var url = params.origin + '/linkcast.xhp';
+                    request.open('POST', url, true);
+                    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    request.send(query);
+                    break;
+                case 'https:':
+                    /* A CORS request does not work from a secure page, so a self-closing window is the fallback. */
+                    var url = params.origin + '/linkcast.close';
+                    var nonce = Math.floor(Math.random() * Math.pow(2, 64)).toString(16);
+                    var location = url + '?nonce=' + nonce + '&' + query;
+                    window.open(location);
+                    break;
+                default:
+                    var message = {{UNSUPPORTED_SCHEME_CSTR}}.replace(/%(%|\(url\)s)/g,
+                        function(match, p1) {
+                            return (p1 === '%') ? '%' : window.document.location.href;
+                        });
+                    window.alert(message);
+                    break;
+                }
+            })({{LEFT_CURLY_BRACKET}}PARAMS{{RIGHT_CURLY_BRACKET}}))
+        </script>
+
+        <script>
+            var template = window.document.getElementById('template').innerHTML;
+            var params = JSON.stringify({'origin': window.location.origin});
+            var expanded = template.replace(/{{LEFT_CURLY_BRACKET}}PARAMS{{RIGHT_CURLY_BRACKET}}/g, params);
+
+            var bookmarklet = window.document.getElementById('bookmarklet');
+            bookmarklet.href = 'javascript:' + expanded;
+
+            var placeholder = window.document.getElementById('placeholder');
+            placeholder.style.display = 'block';
+        </script>
+
+    </body>
+</html>

@@ -1,0 +1,13 @@
+﻿# Change Log
+All notable changes to this project will be documented in this file.
+
+## [1.2.0] - 2016-11-16
+### Changed
+- Use of zlib instead of gzip.
+- Better cache for short max-age responses.
+- Replacement for /home API call.
+
+## [0.0.8] - 2016-11-11
+### Added
+- Initial version.
+

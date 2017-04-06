@@ -1,0 +1,2 @@
+[B]0.0.1[/B] (2016-09-04)
+- First version of the Frikanalen Nett-TV plugin.

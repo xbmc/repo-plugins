@@ -1,0 +1,264 @@
+1.0.0
+- Initial release
+1.0.1
+- Added support for browsing all videos by hoster
+- Added selectable categories via add-on settings
+- Added autoplay modes: Randomly play all/unwatched/unfinished
+1.0.2
+- Some small improvements
+1.0.3
+- Added hoster: Liveleak.com
+1.0.4
+- Added search
+- Added context menu "Queue video"
+1.0.5
+- Changed User-Agent
+- Changed reddit requests to list only supported content
+1.0.6
+- Small bugfix
+1.0.7
+- Added category: Comments
+- Added setting: Items per page
+- Implemented functionality to search for reddits
+1.0.8
+- Added autoplay modes: Play latest all/unwatched/unfinished
+1.0.9
+- Fixed bug when adding/removing reddits
+1.1.0
+- Added setting: Show NSFW content
+- Added context menu: Add to Addon favourites
+- Added context menu: Show comments via Browser
+1.1.1
+- Fixed video search bug (urlencoding)
+1.1.2
+- Added download function
+- Fixed bug with NSFW content
+1.1.3
+- Added NSFW age check
+1.1.4
+- Some small fixes
+1.1.5
+- Fixed bug with mysql dbs
+1.1.6
+- Fixed bug with Chrome Launcher
+1.2.0
+- Upgrade to kodi
+- youtube upgrade / fix
+- deprecate xbox support
+- vimeo upgrade / fix
+- Finnish translation
+- disabled downloads for youtube/vimeo
+1.3.0
+- added support for gfycat.com
+- changed mantainer to rasjani after no replies from addonscriptorde
+1.3.1
+- user can now enable/disable videoservices to show videos from.
+
+2.0.0 -gedisony fork
+- some internal changes (for learning python)
+- added support for youtu.be
+- changed the video description to include host site(hoster), subreddit, user_who_posted and video title. Removed %votes 
+- added reddit default sort (reddit website has a default sort that can't be replicated when you specify sort order and time)
+- added a setting to bypass the sorting screen and go directly to reddit content using default sort order(above)
+- added relevance sorting in addition to top,new&comments (not that useful)
+- added imgur support and setting. (image preview only need to add actual support for imgur links)
+- nsfw posts have a red '*', will have [NSFW] tag in description and an mpaa "R" rating 
+2.3.0 -
+- more internal changes
+- add support for Imgur pictures, album, galleries
+- add setting for 2 lines on title
+- remove karma points filter 
+2.3.3
+- update logic for selecting links not to display if addon is running as a video addon
+- genre=subreddit director=posted by studio=hoster
+ 2.3.4
+ - image imgur post will now show up on video addon mode
+ - use slideshow workaround to show image imgur posts when on video addon mode 
+ 2.3.5
+ - remove query string from imgur posts
+ - add [IMG] tag on imgur posts that are images 
+ 2.3.6
+ - swap creation of data folder/cache folder
+ - removed slideshow workaround for other oses except windows (only works on windows). imgur image posts will not show up on other oses unless it is pictures addon mode.
+ 2.3.7
+ - unicode error bugfix
+ 2.4.0
+ - added context menu to show post comments and related settings
+ - add setting to show/hide image posts on video addon
+ - various internal coding changes
+ 2.5.0
+ - more internal changes
+ - update thumbnail generating code, added gfycat thumbnail 
+ - improve show comments link handling
+ 2.5.1
+ - add support to handle redd.it, reddituploads(not working),vine and streamable posts
+ - bugfix on show comments
+ 2.5.2 (5/28/2016)
+ - add setting to show/hide vine,streamable.com, redd.it and reddituploads posts
+ - add setting to choose streamable.com video quality
+ 2.5.3
+ - minor bugfix on showing comments
+ 2.6.0
+ - add youtube_dl plugin play function. 
+ - add vidme, instagram blogspot support
+ - add porn sites setting  
+ 2.6.1
+ - add 'go to subreddit' context menu 
+ - add 'edit subreddit' context menu
+ - add a few more nsfw sites that works on youtube_dl
+ 2.6.2
+ - autoplay now includes the newly added sites
+ 2.6.3
+ - fix bug in albums (handle different json reply) 
+ - show links in comment now also looks for links in the post text and post comments 
+ - add support for reddit.com text posts (to get playable links from them)  -disabled by default
+ - first page filter like [vimeo.com] changed to use "www.reddit.com/domain/vimeo.com" query instead of "www.reddit.com/search?q=site%3Avimeo.com"  
+ - update dailymotion regex (some video id weren't parsed properly)
+ - user can now specify domain as shortcut. i.e.: create a subreddit shortcut, subreddit+subreddit, multireddit or domain 
+ - add other sites supported by youtube_dl (funnyclips.me)|(engagemedia.org)|(videosift.com)|(break.com)|(veoh.com)|(viddler.com)|(schooltube.com)|(videos.sapo.pt)|(funnyordie.com) 
+ - add default subreddits, multihub and domain on first page for first run. 
+ 2.6.4
+ - update tumblr support
+ - use custom xml to view image.
+ - update album viewing to use custom xml.  
+ - remove domain filters on first page
+ - remove categories screen hot:month, new:hour, new:week etc.
+ - credit to LazyTv and The Big Picture addons for some assets 
+ - change name to reddit viewer
+ 2.6.5
+ - update streamable stream extraction routine
+ - remove 'streaming' popup when showing blogspot images
+ - fix reddituploads 'unauthorized' message 
+ 2.6.6
+ - update instagram handling routine to process images
+ 2.6.7
+ - update the youtube videoid hunting regex
+ - add setting to have youtube_dl addon handle youtube videos (no age restriction)
+ 2.6.8
+ - add ability to alias subreddits. e.g.: music+listentothis[cool sounds] will show up as "cool sounds" on listing
+ - redditmedia support
+ 2.6.9  (2016-06-22)
+ - replace photo album viewer routine with a simpler one that shows one picture at a time. ( photo album worked on jarvis but not on krypton)
+ - redo code for processing tumblr links 
+ - minor cleanups
+ 2.7.0  (2016-06-25)
+ - revise search functionality
+ - get larger thumbnail for imgur and tumblr posts
+ 2.7.1  (2016-06-26)
+ - minor fix on getting imgur media 
+ - add giphy support
+ 2.7.2  (2016-07-01)
+ - cleanup strings and convert strings.xml to strings.po
+ - fix autoplay bug
+ - small update in imgur id & vid.me parsing
+ - additional infolabels (estuary) 
+ 2.7.3  (2016-07-07)
+ - move comment count on context menu to description
+ - replace display of '# points' to '# comments' 
+ - add directly linked media (images and video)
+ - add flickr images and album 
+ - add devour.com 
+ - speedup addon startup time
+ 2.7.4  (2016-07-12)
+ - "Show comments" and "Show comment links" now available on context menu -mac1202
+ - context menu for comments won't show up if reddit reports 0 comments
+ - setting to specify view id for albums
+ - specify view ID for each subreddit  e.g.: earthporn(500)
+ - gui skin files moved to 1080i instead of 720p
+ - fix int ValueError: on startup  -fashric
+ 2.7.5  (2016-07-13)
+ - fix android syntax error on startup  -Paranoidjack
+ - context menu for comments will show "No comments" instead of nothing
+ 2.7.6  (2016-07-15)
+ - user can now authorize the add-on to Access posts and comments through their account. (visit private subs they are members to)
+ 2.7.7  (2016-07-22)
+ - add more sites supported by youtube-dl 
+ - reorganize classes and functions
+ - add custom ui for albums
+ - update custom ui for comments
+ 2.7.8  (2016-07-27)
+ - addon was mis-named during testing (script.reddit.viewer). fix.
+ 2.7.9  (2016-08-18)
+ - remove custom gui components
+ - get reddit preview image and use if needed
+  
+ 3.0.0 (2016-12-14)
+ - import code from script.reddit.reader
+ 
+ 3.0.1
+ - change autoplay step
+ 
+ 3.0.2
+ - remove liveleak quality setting (no longer needed)
+ 
+ 3.0.3
+ - add support for handling links sent via:
+      videoUrl = "plugin://plugin.video.reddit_viewer/?mode=play&url=" + URLEncoder.encode(videoUri.toString(), "UTF-8");
+      (custom kore remote)
+      
+ 3.0.4
+ - custom kore remote support 
+ 
+ 3.0.5
+ - add URLResolver to check links
+ 
+ 3.0.6
+ - add loading indicator
+ 
+ 3.0.7
+ - add option to repeat gif playback
+ 
+ 3.0.8
+ - add option to resolve links only when clicked (faster listing but boggy image viewing)
+ 
+ 3.0.9
+ - add fanart
+ - rearrange settings
+ - add option to hide posts by domain or subreddit
+ 
+ 3.1.0
+ - update fanart
+ - fix nsfw filter
+ - remove thumbnail preview on view_450_slideshow
+ 
+ 3.1.1
+ - add subreddit info cache
+ - fix time info on reddit post not showing up
+ 
+ 3.1.2
+ - update logic concerning which subreddit icon to pick
+ 3.1.3
+ - add context menu item to add subreddit to shortcuts
+ - default subreddit r/all changed to r/popular
+ - context menu entry to show new posts has correct text  
+ 3.1.4 (2017-02-20)
+ - add imgFlip parsing
+ 3.1.5 (2017-02-22)
+ - strip emoji characters from posts
+ 3.1.6 (2017-02-23)
+ - fix video playback on album posts
+ 3.1.7 (2017-02-24)
+ - fix view tall image bug
+ 3.1.8
+ - update correct path for view tall image xml file
+ 3.1.9
+ - reduce the ar requirement to trigger view tall image
+ 3.2.0
+ - Context menu changes:
+   - Add open in web browser option
+   - Setting to hide context menu elements
+   - Add hide subreddit option
+   - Add hide domain option
+ 3.2.1
+ - Imgur bugfix
+ - Ability to customize command to run the open link in browser context menu 
+ 3.2.2 (2017-02-27)
+ - remove urlresolver parsing during subreddit listing
+ - add gallery parsing for designyoutrust.com
+ - add giphy.com short url support
+ 3.2.3 (2017-03-01)
+ - removed vine.co parsing
+ - add video parsing to some domain
+ - error notification when link is 404 or has error in parsing
+ 
+  

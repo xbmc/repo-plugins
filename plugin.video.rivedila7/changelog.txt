@@ -1,0 +1,15 @@
+0.0.7 (2016-09-17)
+- bugfix to site change
+0.0.6 (2016-06-03)
+- bugfix to site change
+0.0.5 (2016-04-24)
+- bugfix
+0.0.4 (2016-04-07)
+- fixed lib on android
+0.0.3 (2016-03-08)
+- added localized language
+0.0.2 (2016-03-08)
+- bugfix
+- add live streaming
+0.0.1 (2016-03-07)
+- Initial Release

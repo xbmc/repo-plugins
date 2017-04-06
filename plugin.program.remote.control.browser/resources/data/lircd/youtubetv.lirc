@@ -1,0 +1,6 @@
+begin
+    flags = startup_mode
+    mode = youtubetv
+end
+
+include "browser.lirc"

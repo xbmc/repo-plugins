@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.currenttime.tv" name="CurrentTime.TV" version="1.0.4" provider-name="dicoka@ukr.net">
+  <requires>
+    <import addon="xbmc.python" version="2.24.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+	<summary lang="en">Current Time TV channel - live stream, video and tv programmes archive</summary>
+    <summary lang="ru">ТВ канал "Настоящее Время - архив телепрограмм, видео и прямой эфир</summary>
+    <description lang="ru">Настоящее Время – это 24-часовое телевизионное и интернет вещание, ориентированное на русскоязычную аудиторию в России, странах Центральной и Восточной Европы, а также по всему миру.Настоящее Время – совместный медиапроект Радио Свобода/Свободная Европа и "Голоса Америки".</description>
+	<description lang="en">"Current Time" is an international TV channel for Russian-speaking audiences covering important events for people worldwide. Current Time is a joint production of Radio Free Europe/Radio Liberty and the Voice of America.</description>
+	<disclaimer lang="ru"></disclaimer>
+	<disclaimer lang="en"></disclaimer>
+    <platform>all</platform>
+	<language></language>
+	<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+	<news lang="en">Provider api changes applied</news>
+	<news lang="ru">Корректировки в связи с изменениеями api</news>
+	<assets>
+        <icon>icon.png</icon>
+        <fanart>fanart.jpg</fanart>
+        <screenshot>resources/media/screenshoot1.jpg</screenshot>
+        <screenshot>resources/media/screenshoot2.jpg</screenshot>
+        <screenshot>resources/media/screenshoot3.jpg</screenshot>
+    </assets>
+  </extension>
+</addon>

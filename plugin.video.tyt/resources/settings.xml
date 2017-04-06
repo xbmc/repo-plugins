@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30000">
+        <setting label="30001" type="text"   id="username" default=""/>
+        <setting label="30002" type="text"   id="password" option="hidden"  enable="!eq(-1,)" default=""/>
+        <setting label="version" type="text" id="firstrun" visible="false" default=""/>
+    </category>
+</settings>

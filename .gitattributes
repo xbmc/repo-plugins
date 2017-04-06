@@ -1,0 +1,9 @@
+# This ensures that all files that git considers to be text will have
+# normalized (LF) line endings in the repository
+* text=auto
+
+# Make sure those files will not be modified
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.tbn binary

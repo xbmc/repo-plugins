@@ -1,0 +1,46 @@
+[B]Version 2.0.4[/B]
+- Updated links (Spinalcracker)
+- Added Paul Joseph Watson section
+- Fixed random bugs with Krypton
+
+[B]Version 2.0.3[/B]
+- Updated links (Spinalcracker)
+
+[B]Version 2.0.2[/B]
+- Updated all links (Spinalcracker)
+- Switched everything over to HD sources (Spinalcracker)
+  (except live streams - only SD from source)
+- Fixed thumbnail for each link (Spinalcracker)
+- Updated Icon and Fanart (Spinalcracker)
+
+[B]Version 2.0.1[/B]
+- Update for Youtube now forcing people over to api v3
+
+[B]Version 2.0.0[/B]
+- Update for Kodi, removed many unncessary dependencies
+
+[B]Version 1.0.1[/B]
+- Added License.txt(open source license)
+- Removed colors from nightly news, caused issues on some devices when added to library.
+
+[B]Version 1.0.0[/B]
+- Added More Documentaries
+- Added Add to Library Feature for Documentaries
+- Added Add to Library Feature for Infowars Nightly News
+- Cleaned up the settings for the app so only items pertent to end user listed.
+
+[B]Version 0.1.4[/B]
+- Added Infowars Live Audio
+- Added Infowars Historic Live Audio
+- Added Infowars Historic Live Video
+- Added Infowars Clips
+- Added Infowars Nightly News
+
+[B]Version 0.1.3[/B]
+- Added Alex Jones Documentaries
+
+[B]Version 0.1.2[/B]
+- Corrected Issues with device compatibility
+
+[B]Version 0.1.0[/B]
+- initial build

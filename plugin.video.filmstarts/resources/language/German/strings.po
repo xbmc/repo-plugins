@@ -1,0 +1,190 @@
+# XBMC Media Center language file
+# Addon Name: Filmstarts
+# Addon id: plugin.video.filmstarts
+# Addon version: 0.6.4
+# Addon Provider: L0RE
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2017-01-18 23:05+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Film an Series Information from http://www.filmstarts.de/"
+msgstr "Film und Serien Informationen von http://www.filmstarts.de/"
+
+msgctxt "Addon Description"
+msgid "Film an Series Information from http://www.filmstarts.de/"
+msgstr "Film und Serien Informationen von http://www.filmstarts.de/"
+
+msgctxt "#30001"
+msgid "Settings"
+msgstr "Einstellungen"
+
+msgctxt "#30002"
+msgid "Trailer"
+msgstr "Trailer"
+
+msgctxt "#30003"
+msgid "Series"
+msgstr "Serien"
+
+msgctxt "#30004"
+msgid "Cinema"
+msgstr "Kino"
+
+msgctxt "#30005"
+msgid "News"
+msgstr "News"
+
+msgctxt "#30006"
+msgid "Next"
+msgstr "Next"
+
+msgctxt "#30007"
+msgid "All Videos"
+msgstr "Alle Videos"
+
+msgctxt "#30008"
+msgid "Most Wanted Trailer"
+msgstr "Beliebteste Trailer"
+
+msgctxt "#30009"
+msgid "Now in Cinema"
+msgstr "Aktuell im Kino"
+
+msgctxt "#30010"
+msgid "Commic soon to Cinema"
+msgstr "Demnächst im Kino"
+
+msgctxt "#30011"
+msgid "Neweset Trailer"
+msgstr "Neueste Trailer"
+
+msgctxt "#30012"
+msgid "Video-Archiv"
+msgstr "Video-Archiv"
+
+msgctxt "#30013"
+msgid "Actual Cinema Films"
+msgstr "Aktuelle Kino Filme"
+
+msgctxt "#30014"
+msgid "New Film This Week"
+msgstr "Neustart der Woche"
+
+msgctxt "#30015"
+msgid "Best Film in Cinema"
+msgstr "Die Besten Filme im Kino"
+
+msgctxt "#30016"
+msgid "Cinema Films for Children"
+msgstr "Kinderfilme im Kino"
+
+msgctxt "#30017"
+msgid "Cinema Film Per Week"
+msgstr "Starttermin nach Wochen"
+
+msgctxt "#30018"
+msgid "Best Films"
+msgstr "Besten Filme"
+
+msgctxt "#30019"
+msgid "Worst Films"
+msgstr "Schlechtesten Filme"
+
+msgctxt "#30020"
+msgid "Children Films"
+msgstr "Kinder Filme"
+
+msgctxt "#30021"
+msgid "Best Series"
+msgstr "Beliebteste Serien"
+
+msgctxt "#30022"
+msgid "Best Voted"
+msgstr "Best Bewertete"
+
+msgctxt "#30023"
+msgid "Most Wanted Series"
+msgstr "Populaerste Serien"
+
+msgctxt "#30024"
+msgid "Most wanted Series"
+msgstr "Meisterwartete Staffeln"
+
+msgctxt "#30025"
+msgid "New Started Series"
+msgstr "Neueste Gestartete Serien"
+
+msgctxt "#30026"
+msgid "New Series Trailer"
+msgstr "Neue Serien Trailer"
+
+msgctxt "#30027"
+msgid "Video-Archiv"
+msgstr "Video-Archiv"
+
+msgctxt "#30028"
+msgid "5 Stars"
+msgstr "5 Sterne"
+
+msgctxt "#30029"
+msgid "Film Errors"
+msgstr "Fehlerteufel"
+
+msgctxt "#30030"
+msgid "Interviews"
+msgstr "Interviews"
+
+msgctxt "#30031"
+msgid "My Most Loved Filmscene"
+msgstr "Meine Lieblings Filmscene"
+
+msgctxt "#30032"
+msgid "Germany"
+msgstr "Deutschland"
+
+msgctxt "#30033"
+msgid "USA"
+msgstr "USA"
+
+msgctxt "#30034"
+msgid "Filter Genres"
+msgstr "Filter nach Genre"
+
+msgctxt "#30035"
+msgid "Filter Years"
+msgstr "Filter nach Jahre"
+
+msgctxt "#30036"
+msgid "Filter Country"
+msgstr "Filter nach Laender"
+
+msgctxt "#30037"
+msgid "Show Videos"
+msgstr "Zeige Videos"
+
+msgctxt "#30038"
+msgid "Filter Language"
+msgstr "Filter nach Sprache"
+
+msgctxt "#30039"
+msgid "Filter Format"
+msgstr "Filter nach Format"
+
+msgctxt "#30040"
+msgid "Next Week"
+msgstr "Nächste woche"
+
+msgctxt "#30041"
+msgid "Last Week"
+msgstr "Vorhärige WOche"

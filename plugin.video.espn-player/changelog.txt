@@ -1,0 +1,7 @@
+2016.09.16 v1.0.1
++ Display game time first (easier to see when team names are long)
++ Use language file on some strings instead of hardcoding them
+
+2016.09.14 v1.0.0
++ Initial release
++ Thanks to eriksoderblom for icon and fanart!

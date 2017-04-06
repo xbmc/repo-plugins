@@ -1,0 +1,8 @@
+v1.0.2
+- Removed script.module.simplejson
+
+v1.0.1
+- Fix "dependencies not met" error caused by wrong version number for script.module.simplejson
+
+v1.0.0
+- Initial version

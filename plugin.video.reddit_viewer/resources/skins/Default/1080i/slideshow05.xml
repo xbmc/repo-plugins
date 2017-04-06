@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<window type="window">
+	
+	<backgroundcolor>gray</backgroundcolor>
+
+	<menucontrol>9000</menucontrol>
+	<!-- No includes and no $PARAM for xml guis. we gotta do this the hard way -->
+    <controls>
+
+		<control type="image">
+			<description>background</description>
+			<aspectratio>scale</aspectratio>
+			<texture></texture>
+			<visible>false</visible>
+		</control>
+		
+		<control type="group" id="100">
+			<left>-32</left>
+			<top>-70</top>
+			<control type="image" id="101">
+				<left>0</left>	<top>1000</top>	<width>320</width>	<height>320</height>
+				<aspectratio aligny="center">keep</aspectratio>
+				<texture diffuse="gdx_diffuse.png">test.png</texture>
+			</control>
+			<control type="image" id="102">
+				<left>0</left>	<top>1000</top>	<width>320</width>	<height>320</height>
+				<aspectratio aligny="center">keep</aspectratio>
+				<texture diffuse="gdx_diffuse.png">test.png</texture>
+			</control>
+			<control type="image" id="103">
+				<left>0</left>	<top>1000</top>	<width>320</width>	<height>320</height>
+				<aspectratio aligny="center">keep</aspectratio>
+				<texture diffuse="gdx_diffuse.png">test.png</texture>
+			</control>
+			<control type="image" id="104">
+				<left>0</left>	<top>1000</top>	<width>320</width>	<height>320</height>
+				<aspectratio aligny="center">keep</aspectratio>
+				<texture diffuse="gdx_diffuse.png">test.png</texture>
+			</control>
+			<control type="image" id="105">
+				<left>0</left>	<top>1000</top>	<width>320</width>	<height>320</height>
+				<aspectratio aligny="center">keep</aspectratio>
+				<texture diffuse="gdx_diffuse.png">test.png</texture>
+			</control>
+			<control type="image" id="106">
+				<left>0</left>	<top>1000</top>	<width>320</width>	<height>320</height>
+				<aspectratio aligny="center">keep</aspectratio>
+				<texture diffuse="gdx_diffuse.png">test.png</texture>
+			</control>
+			<control type="image" id="107">
+				<left>0</left>	<top>1000</top>	<width>320</width>	<height>320</height>
+				<aspectratio aligny="center">keep</aspectratio>
+				<texture diffuse="gdx_diffuse.png">test.png</texture>
+			</control>
+			<control type="image" id="108">
+				<left>0</left>	<top>1000</top>	<width>320</width>	<height>320</height>
+				<aspectratio aligny="center">keep</aspectratio>
+				<texture diffuse="gdx_diffuse.png">test.png</texture>
+			</control>
+			<control type="image" id="109">
+				<left>0</left>	<top>1000</top>	<width>320</width>	<height>320</height>
+				<aspectratio aligny="center">keep</aspectratio>
+				<texture diffuse="gdx_diffuse.png">test.png</texture>
+			</control>
+			<control type="image" id="110">
+				<left>0</left>	<top>1000</top>	<width>320</width>	<height>320</height>
+				<aspectratio aligny="center">keep</aspectratio>
+				<texture diffuse="gdx_diffuse.png">test.png</texture>
+			</control>
+			<control type="image" id="111">
+				<left>0</left>	<top>1000</top>	<width>320</width>	<height>320</height>
+				<aspectratio aligny="center">keep</aspectratio>
+				<texture diffuse="gdx_diffuse.png">test.png</texture>
+			</control>
+			<control type="image" id="112">
+				<left>0</left>	<top>1000</top>	<width>320</width>	<height>320</height>
+				<aspectratio aligny="center">keep</aspectratio>
+				<texture diffuse="gdx_diffuse.png">test.png</texture>
+			</control>
+			<control type="image" id="113">
+				<left>0</left>	<top>1000</top>	<width>320</width>	<height>320</height>
+				<aspectratio aligny="center">keep</aspectratio>
+				<texture diffuse="gdx_diffuse.png">test.png</texture>
+			</control>
+			<control type="image" id="114">
+				<left>0</left>	<top>1000</top>	<width>320</width>	<height>320</height>
+				<aspectratio aligny="center">keep</aspectratio>
+				<texture diffuse="gdx_diffuse.png">test.png</texture>
+			</control>
+			<control type="image" id="115">
+				<left>0</left>	<top>1000</top>	<width>320</width>	<height>320</height>
+				<aspectratio aligny="center">keep</aspectratio>
+				<texture diffuse="gdx_diffuse.png">test.png</texture>
+			</control>
+			<control type="image" id="116">
+				<left>0</left>	<top>1000</top>	<width>320</width>	<height>320</height>
+				<aspectratio aligny="center">keep</aspectratio>
+				<texture diffuse="gdx_diffuse.png">test.png</texture>
+			</control>
+			<control type="image" id="117">
+				<left>0</left>	<top>1000</top>	<width>320</width>	<height>320</height>
+				<aspectratio aligny="center">keep</aspectratio>
+				<texture diffuse="gdx_diffuse.png">test.png</texture>
+			</control>
+			<control type="image" id="118">
+				<left>0</left>	<top>1000</top>	<width>320</width>	<height>320</height>
+				<aspectratio aligny="center">keep</aspectratio>
+				<texture diffuse="gdx_diffuse.png">test.png</texture>
+			</control>
+			<control type="image" id="119">
+				<left>0</left>	<top>1000</top>	<width>320</width>	<height>320</height>
+				<aspectratio aligny="center">keep</aspectratio>
+				<texture diffuse="gdx_diffuse.png">test.png</texture>
+			</control>
+			<control type="image" id="120">
+				<left>0</left>	<top>1000</top>	<width>320</width>	<height>320</height>
+				<aspectratio aligny="center">keep</aspectratio>
+				<texture diffuse="gdx_diffuse.png">test.png</texture>
+			</control>
+		</control>
+
+		<control type="group" id="200"><description>Title, title2 and Description</description>
+			
+			<top>0</top>
+			<left>260</left>
+				<control type="textbox" >
+					<description>this works!</description>
+					<left>20</left>
+					<top>80</top>
+					<width>100</width>
+					<height>100</height>
+					<visible>false</visible>
+					<!-- visible>!String.IsEmpty(Control.GetLabel(201))</visible-->
+					<label>$INFO[Control.GetLabel(201)]</label>
+					<align>center</align>
+					<font>font30</font>
+				</control>
+				
+			<control type="grouplist" >
+				<left>0</left>
+				<top>10</top>
+				<width>800</width>
+				<height>700</height>
+				<orientation>vertical</orientation>
+				<usecontrolcoords>true</usecontrolcoords>
+				<itemgap>1</itemgap>
+				<align>center</align>
+
+				<control type="textbox" id="201">
+					<description>Title</description>
+					<left>20</left>
+					<width>720</width>
+					<height>auto</height>
+					<visible>!String.IsEmpty(Control.GetLabel(201))</visible>
+					<shadowcolor>77000000</shadowcolor>
+					<label></label>
+					<align>center</align>
+					<font>font35_title</font>
+				</control>
+
+				<control type="textbox" id="203">
+					<description>Title2</description>
+					<left>20</left>
+					<width>720</width>
+					<height>auto</height>
+					<visible>!String.IsEmpty(Control.GetLabel(203))</visible>
+					<shadowcolor>77000000</shadowcolor>
+					<label></label>
+					<align>center</align>
+					<font>font16</font>
+				</control>
+				<control type="textbox" id="204">
+					<description>Title3</description>
+					<left>20</left>
+					<width>720</width>
+					<height>auto</height>
+					<visible>!String.IsEmpty(Control.GetLabel(204))</visible>
+					<shadowcolor>77000000</shadowcolor>
+					<label></label>
+					<align>justify</align>
+					<font>font16</font>
+				</control>
+				
+				<control type="textbox" id="202">
+					<description>description</description>
+					<left>20</left>
+					<width>720</width>
+					<height>auto</height>
+					<visible>true</visible>
+					<label></label>
+					<align>justify</align>
+					<font>font16</font>
+				</control>
+			</control>
+		</control>
+
+
+
+				
+
+				
+				
+
+				
+
+
+
+
+
+		
+    </controls>
+</window>

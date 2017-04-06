@@ -18,15 +18,10 @@
 
 # -*- coding: utf-8 -*-
 import os, re, sys, time, datetime, traceback
-import urllib, urllib2, base64, HTMLParser, socket
+import urllib, urllib2, base64, HTMLParser, socket, json
 import xbmc, xbmcgui, xbmcplugin, xbmcvfs, xbmcaddon
 
 from simplecache import use_cache, SimpleCache
-
-if sys.version_info < (2, 7):
-    import simplejson as json
-else:
-    import json
 
 ## GLOBALS ##
 baseurl='https://www.ispot.tv/'

@@ -16,11 +16,11 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgctxt "#42001"
+msgctxt "#30000"
 msgid "Enable Debugging [Log errors]"
 msgstr ""
 
-msgctxt "#42002"
+msgctxt "#30001"
 msgid "Preferred Stream Type"
 msgstr ""
 

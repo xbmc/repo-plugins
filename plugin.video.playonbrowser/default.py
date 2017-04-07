@@ -20,7 +20,6 @@ import sys, os, re, random, traceback
 import urlparse, urllib, urllib2, socket
 import xbmc, xbmcplugin, xbmcaddon, xbmcgui
 import xml.etree.ElementTree as ElementTree 
-from simplecache import use_cache, SimpleCache
 
 if sys.version_info < (2, 7):
     import simplejson as json
@@ -69,12 +68,12 @@ except Exception,e:
     incMeta = False
     xbmc.log("metahandler Import failed! " + str(e), xbmc.LOGERROR)    
 
-try:
-    from artutils import ArtUtils
-    artutils = ArtUtils()
-except Exception,e:  
-    incMeta = False
-    xbmc.log("artworkUtils Import failed! " + str(e), xbmc.LOGERROR)   
+# try:
+    # from metadatautils import MetadataUtils
+    # artutils = MetadataUtils()
+# except Exception,e:  
+    # incMeta = False
+    # xbmc.log("artworkUtils Import failed! " + str(e), xbmc.LOGERROR)   
      
 displayCategories = {'MoviesAndTV': 3,
                     'Comedy': 128,
@@ -188,7 +187,6 @@ def folderIcon(val):
          
 class Playon:
     def __init__(self):
-        self.cache = SimpleCache()
         random.seed()
 
     
@@ -540,12 +538,12 @@ class Playon:
             except Exception,e:
                 log('parseMissingMeta, get_meta(tvshow) failed! ' + str(e))
                 meta  = {}
-            try:
-                meta  = artutils.get_extended_artwork(meta.get('imdb_id',''), '', type.replace('episode','episodes'))
-                items = mergeItems(meta,items)
-            except Exception,e:
-                log('parseMissingMeta, get_extended_artwork(tvshow) failed! ' + str(e))
-                meta  = {}
+            # try:
+                # meta  = artutils.get_extended_artwork(meta.get('imdb_id',''), '', type.replace('episode','episodes'))
+                # items = mergeItems(meta,items)
+            # except Exception,e:
+                # log('parseMissingMeta, get_extended_artwork(tvshow) failed! ' + str(e))
+                # meta  = {}
                 
             if (int(items.get('season','0')) + int(items.get('season','0'))) > 0:
                 try:
@@ -562,20 +560,20 @@ class Playon:
             except Exception,e:
                 log('parseMissingMeta, get_meta(movie) failed! ' + str(e))
                 meta  = {}
-            try:
-                meta  = artutils.get_extended_artwork(meta.get('imdb_id',''), '', type)
-                items = mergeItems(meta,items)
-            except Exception,e:
-                log('parseMissingMeta, get_extended_artwork(movie) failed! ' + str(e))
-                meta  = {}
+            # try:
+                # meta  = artutils.get_extended_artwork(meta.get('imdb_id',''), '', type)
+                # items = mergeItems(meta,items)
+            # except Exception,e:
+                # log('parseMissingMeta, get_extended_artwork(movie) failed! ' + str(e))
+                # meta  = {}
   
-        elif type in ['songs','albums','artists','music']:
-            try:
-                meta  = artutils.get_music_artwork(artist='', album="", track="", disc="")
-                items = mergeItems(meta,items)
-            except Exception,e:
-                log('parseMissingMeta, get_music_artwork failed! ' + str(e))
-                meta  = {}
+        # elif type in ['songs','albums','artists','music']:
+            # try:
+                # meta  = artutils.get_music_artwork(artist='', album="", track="", disc="")
+                # items = mergeItems(meta,items)
+            # except Exception,e:
+                # log('parseMissingMeta, get_music_artwork failed! ' + str(e))
+                # meta  = {}
         if meta:
             items['art']['poster'] = meta.get('cover_url_url',items['art']['icon'])
             items['art']['fanart'] = meta.get('backdrop_url',items['art']['icon'])

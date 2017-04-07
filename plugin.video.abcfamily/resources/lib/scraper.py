@@ -38,6 +38,17 @@ class myAddon(t1mAddon):
          url = 'http://freeform.go.com'+url
       html = self.getRequest(url)
       vids = re.compile('<hr />.+?href="(.+?)".+?requires-sign-in="(.+?)".+?src="(.+?)".+?m-y-0">.+?S(.+?) E(.+?) (.+?)<.+?"m-t-1">(.+?)<', re.DOTALL).findall(html)
+      if vids == []:
+          html = re.compile('<div class="swiper-container"(.+?)<div class="swiper-nav swiper-next', re.DOTALL).search(html)
+          if html is None:
+              return(ilist)
+          html = html.group(1)
+          vids = re.compile('<a href="(.+?)".+?url\((.+?)\).+?requires-sign-in="(.+?)".+?<span class="heavy">    <span class="heavy">.+?S(.+?) E(.+?) .+?class="card-title">(.+?)<', re.DOTALL).findall(html)
+          vids1 = []
+          for url, thumb, elock, season, episode, name in vids:
+              thumb = thumb.strip("'")
+              vids1.append([url, elock, thumb, season, episode, name, ''])
+          vids = vids1
       for url, elock, thumb, season, episode, name,plot in vids:
           if elock != 'False':
               continue

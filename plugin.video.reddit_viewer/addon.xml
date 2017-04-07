@@ -2,10 +2,10 @@
 <addon
 	id="plugin.video.reddit_viewer"
 	name="Reddit Viewer"
-	version="3.2.3"
+	version="3.3.8"
 	provider-name="gedisony">
 	<requires>
-		<import addon="xbmc.python"                     version="2.24.0"                />
+		<import addon="xbmc.python"                     version="2.14.0"                />
 		<import addon="script.module.requests"          version="1.1.0"/>
 		<import addon="script.module.youtube.dl"        version="16.521.0"/>
 		<import addon="script.module.urlresolver" />
@@ -26,6 +26,10 @@
 		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 		<email>gediso+ny at gmail dot com</email>
 		<news>
+v3.3.3  (2017-3-26)
+    - Multi-threaded parsing of reddit posts
+v3.3.2  (2017-3-22)
+    - Save/Unsave posts to your reddit account
 v3.2.0  (2017-2-25)
     - Open link in default os web browser
     - Customize context menu

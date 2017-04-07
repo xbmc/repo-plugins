@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.tviplayer" name="TVI Kodi Player" version="0.2.0" provider-name="darksky83">
+<addon id="plugin.video.tviplayer" name="TVI Kodi Player" version="0.2.1" provider-name="darksky83">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>

@@ -221,6 +221,7 @@ def get_show_episode_parts(name, url, iconimage):
 
         if match and match[0]:
             link = match[0][0] + tvi_resolver(match[0][0] + 'playlist.m3u8?' + match[0][1]).replace("%3D", "=")
+            abrir_url(link)
             playlist = xbmc.PlayList(1)
             playlist.clear()
             liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
@@ -243,16 +244,23 @@ def tvi_resolver(url):
     if source:
         try:
             tipostr = selfAddon.getSetting('tipostr')
-            tipostr_b = 'b1000000'
-            if tipostr == '977kbps':
-                tipostr_b = 'b1000000'
-            elif tipostr == '488kbps':
-                tipostr_b = 'b500000'
-            elif tipostr == '195kbps':
-                tipostr_b = 'b200000'
+            tipostr_b = 'b(15|10)00000'
+            if tipostr == '0':
+                tipostr_b = 'b(15|10)00000'
+            elif tipostr == '1':
+                tipostr_b = 'b(75|50)0000'
+            elif tipostr == '2':
+                tipostr_b = 'b(25|20)0000'
+            elif tipostr == '3':
+                tipostr_b = 'b(64|48)000_ao'
+            xbmc.log("tipostr="+tipostr +" tipostr_b="+tipostr_b)
             match = re.compile('(chunklist.*_' + tipostr_b + '\.m3u8\?[^\\n]*)').findall(source)
-            if match[0][0]:
-                return match[0]
+            if match and match[0]:
+                return match[0][0]
+            else:
+                match = re.compile('(chunklist.*\.m3u8\?[^\\n]*)').findall(source)
+                if match and match[0]:
+                  return match[0]
         except:
             xbmc.log('Unexpected error: {0:s} :{1:s}'.format(sys.exc_info()[0], sys.exc_info()[1]))
             return ''

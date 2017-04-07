@@ -18,7 +18,7 @@
  
 """
 
-import xbmcvfs
+import xbmc, xbmcvfs
 from common_variables import *
 from net import Net
 
@@ -36,6 +36,7 @@ def abrir_url(url ,referer = base_url):
         net.save_cookies(cookie_TviFile)
         return html
     except:
+        xbmc.log("abrir_url fail ="+url)
         return ''
 
 
@@ -49,4 +50,5 @@ def post_url(actionUrl,data = {},referer= base_url):
         net.save_cookies(cookie_TviFile)
         return html
     except:
+        xbmc.log("post_url fail ="+url)
         return ''

@@ -1,0 +1,125 @@
+# Kodi Media Center language file
+# Addon Name: MLB.TV
+# Addon id: plugin.video.mlbtv
+# Addon Provider: eracknaphobia
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#100"
+msgid "Login"
+msgstr ""
+
+msgctxt "#140"
+msgid "Username"
+msgstr ""
+
+msgctxt "#150"
+msgid "Password"
+msgstr ""
+
+msgctxt "#151"
+msgid "Single Team / Free Game Subscription"
+msgstr ""
+
+msgctxt "#156"
+msgid "Logout"
+msgstr ""
+
+msgctxt "#159"
+msgid "Visual"
+msgstr ""
+
+msgctxt "#160"
+msgid "Stream Quality"
+msgstr ""
+
+msgctxt "#170"
+msgid "Hide Scores"
+msgstr ""
+
+msgctxt "#1700"
+msgid "Off"
+msgstr ""
+
+msgctxt "#1701"
+msgid "On"
+msgstr ""
+
+msgctxt "#1702"
+msgid "Favorite Team Only"
+msgstr ""
+
+msgctxt "#1703"
+msgid "Live Games Only"
+msgstr ""
+
+msgctxt "#1704"
+msgid "Archive Games Only"
+msgstr ""
+
+msgctxt "#180"
+msgid "Favorite Team"
+msgstr ""
+
+msgctxt "#190"
+msgid "Display Team Name as"
+msgstr ""
+
+msgctxt "#1901"
+msgid "Team (ex. Pirates)"
+msgstr ""
+
+msgctxt "#1903"
+msgid "Abbreviated (ex. PIT)"
+msgstr ""
+
+msgctxt "#200"
+msgid "Time Format"
+msgstr ""
+
+msgctxt "#2000"
+msgid "12 Hour Clock (ex. 6:00 pm)"
+msgstr ""
+
+msgctxt "#2001"
+msgid "24 Hour Clock (ex. 18:00)"
+msgstr ""
+
+msgctxt "#700"
+msgid "Sports"
+msgstr ""
+
+msgctxt "#30200"
+msgid "Proxy Settings"
+msgstr ""
+
+msgctxt "#30210"
+msgid "Enabled"
+msgstr ""
+
+msgctxt "#30220"
+msgid "Server"
+msgstr ""
+
+msgctxt "#30230"
+msgid "Port"
+msgstr ""
+
+msgctxt "#30240"
+msgid "Username"
+msgstr ""
+
+msgctxt "#30250"
+msgid "Password"
+msgstr ""

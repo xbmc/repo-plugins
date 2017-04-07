@@ -1,0 +1,26 @@
+2017.3.19
+- Bumped python version for Krypton
+
+2017.3.18
+- Fixed completed games not showing final
+- Fixed some stream parameter issues
+- Code clean up
+
+2017.3.17
+- Added a deauthorize option
+- Added seed number to team name
+- Archive games are ~2min Recaps (for now)
+- Removed httplib2 requirement
+
+2017.3.16
+- Added Classic Games Section
+- Switched to registration code login
+
+2016.3.18.3
+- Fix Cox cable login
+
+2016.3.18.2
+- Fix settings bug
+
+2016.3.18
+- Beta released

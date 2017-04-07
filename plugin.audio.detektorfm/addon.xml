@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon
+	id="plugin.audio.detektorfm"
+	name="detektor.fm"
+	version="1.2.1"
+	provider-name="sorax">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0" />
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="addon.py">
+		<provides>audio</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en_GB">detektor.fm | Internet radio with journalism and alternative pop music</summary>
+		<summary lang="de_DE">detektor.fm | Internetradio mit Journalismus und alternativer Popmusik</summary>
+		<description lang="en_GB">German internet radio</description>
+		<description lang="de_DE">Deutsches Internetradio</description>
+		<disclaimer lang="en_GB"></disclaimer>
+		<disclaimer lang="de_DE"></disclaimer>
+		<language>de</language>
+		<platform>all</platform>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+		<forum></forum>
+		<website></website>
+		<email></email>
+		<source>https://github.com/sorax/plugin.audio.detektorfm</source>
+		<news>
+v1.2.1  (2016-01-03)
+- Added settings for choosing bitrate
+v1.2.0  (2016-12-27)
+- Plugin completely rewritten for Kodi v17 Krypton
+		</news>
+		<assets>
+			<icon>icon.png</icon>
+			<fanart></fanart>
+			<screenshot></screenshot>
+		</assets>
+	</extension>
+</addon>

@@ -1,0 +1,6 @@
+1.0.0
+- Added description
+- Added fanart
+- Added thumbnail
+0.0.1
+- Initial release

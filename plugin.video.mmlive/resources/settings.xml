@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <!-- Visual -->
+  <category label="30000">  
+    <setting id="no_spoilers" type="enum" label="30100" lvalues="30101|30102|30103|30104" default="30101" /> 
+  </category>
+</settings>

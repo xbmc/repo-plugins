@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.simpsonsworld" name="Simpsons World" version="2017.4.5" provider-name="eracknaphobia">
+  <requires>
+   <import addon="xbmc.python" version="2.25.0"/>             
+   <import addon="script.module.adobepass" version="2017.3.20"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="simpsons.py">
+        <provides>video</provides>
+  </extension>   
+  <extension point="xbmc.addon.metadata">    
+    <platform>all</platform>
+    <summary lang="en_GB">Simpsons World</summary>
+    <description lang="en_GB">Simpsons World has every episode of the series accessible to authenticated FX subscribers</description>
+    <disclaimer lang="en_GB"></disclaimer>
+    <news>
+- Fixed Icon / Fanart not displaying
+    </news>
+    <language>en</language>
+    <platform>all</platform>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum>http://forum.kodi.tv/showthread.php?tid=310272</forum>    
+    <source>https://github.com/eracknaphobia/plugin.video.simpsonsworld</source>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

@@ -1,0 +1,6 @@
+<settings>
+	<setting id="skipToSeries" type="bool" label="30003" default="false"/>
+	<!--<setting id="disablessl" type="bool" label="30301" default="false"/>
+	<setting id="squashShows" type="bool" label="30001" default="false"/>
+	<setting id="preferOV" type="bool" label="30002" default="false" enable="!eq(-1,false)" subsetting="true"/>-->
+</settings>

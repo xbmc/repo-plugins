@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.3satmediathek" name="3sat Mediathek" version="1.2.0" provider-name="membrane">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+		<import addon="script.module.lib3sat" version="1.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<source>https://github.com/prof-membrane/plugin.video.3satmediathek</source>
+        <summary lang="en">Videos from the 3sat Mediathek.</summary>
+        <description lang="en">This add-on provides access to the 3sat Mediathek (www.3sat.de/mediathek/). Videos may be geolocked to Germany.</description>
+        <summary lang="de">Sendungen und Beiträge aus der 3sat Mediathek.</summary>
+        <description lang="de">Dieses Add-on bietet Zugriff auf die Mediathek von 3sat. Hier gibt es Sendungen und Dokumentationen zum Abruf.</description>
+        <disclaimer lang="de">Dieses Add-on wird von keiner Sendeanstalt unterstützt und ist daher inoffiziell.</disclaimer>
+    </extension>
+</addon>

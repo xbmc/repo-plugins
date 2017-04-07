@@ -1,0 +1,68 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.mediathek\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=1; plural=0\n" 
+
+msgctxt "#30001"
+msgid "Quality"
+msgstr "Qualität"
+
+msgctxt "#30002"
+msgid "Low"
+msgstr "Niedrig"
+
+msgctxt "#30003"
+msgid "Medium"
+msgstr "Normal"
+
+msgctxt "#30004"
+msgid "High"
+msgstr "Hoch"
+
+msgctxt "#30005"
+msgid "Very High"
+msgstr "Sehr Hoch"
+
+msgctxt "#30006"
+msgid "HD"
+msgstr "HD"
+
+msgctxt "#30010"
+msgid "Access Method"
+msgstr "Zugriffsmethode"
+
+msgctxt "#30011"
+msgid "Online"
+msgstr "Online"
+
+msgctxt "#30012"
+msgid "Local cache"
+msgstr "Lokaler Cache"
+
+msgctxt "#30020"
+msgid "Prefered stream type"
+msgstr "Bevorzugter Streamtyp"
+
+msgctxt "#30021"
+msgid "HTTP"
+msgstr "HTTP"
+
+msgctxt "#30022"
+msgid "RTMP"
+msgstr "RTMP"
+
+msgctxt "#30023"
+msgid "MMS"
+msgstr "MMS"
+
+msgctxt "#30024"
+msgid "MOV"
+msgstr "MOV"
+
+msgctxt "#30100"
+msgid "Search"
+msgstr "Suchen"

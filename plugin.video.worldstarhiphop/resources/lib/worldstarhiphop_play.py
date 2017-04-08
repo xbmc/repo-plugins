@@ -93,13 +93,19 @@ class Main:
             # Get HTML page...
             #
             html_source = HTTPCommunicator().get(video_url)
+
+            # xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+            #     ADDON, VERSION, DATE, "html_source:", str(html_source)), xbmc.LOGDEBUG)
+
             # A bit of a dirty hack, but let's try it anyway...
             # so.addVariable("file","http://hw-videos.worldstarhiphop.com/u/vid/2015/09/SAWGSqGpaohk.mp4");
-            if str(html_source).find("file") >= 0:
-                # Seems like it's an 18+ video
-                begin_pos_video_file = str(html_source).find("http", str(html_source).find("file"))
-                end_pos_video_file = str(html_source).find('"', begin_pos_video_file)
-                video_url = html_source[begin_pos_video_file:end_pos_video_file]
+            # or
+            # <source src="http://hw-videos.worldstarhiphop.com/u/vid/2017/04/Gtlg3yKHNNqP.mp4" type="video/mp4">
+            pos_vid_url = str(html_source).find("hw-videos.worldstarhiphop.com/")
+            if pos_vid_url >= 0:
+                pos_start_quote = str(html_source).rfind('"', 0, pos_vid_url)
+                pos_end_quote = str(html_source).find('"', pos_start_quote + 1)
+                video_url = html_source[pos_start_quote + 1: pos_end_quote]
                 have_valid_url = True
             else:
                 # Maybe it's a youtube video then ?!

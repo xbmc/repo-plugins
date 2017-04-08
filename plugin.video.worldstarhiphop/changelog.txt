@@ -1,3 +1,6 @@
+v1.0.9 (2017-04-08):
+- adjusted video detection to website changes
+
 v1.0.8 (2017-03-12):
 - fixed url in addon.xml as per request
 - changed 'xbmc' to 'kodi' in some text

@@ -8,13 +8,16 @@ from xbmcgui import ControlImage, WindowDialog, WindowXMLDialog, Window, Control
 
 #autoSlideshow
 
-from default import addon, log, translation, addon_path, addonID, reddit_request
-from domains import sitesManager, sitesBase, parse_reddit_link, listAlbum
+from default import addon, addon_path, addonID
+from utils import log, translation
+from reddit import reddit_request
+from domains import sitesBase, parse_reddit_link
+from actions import listAlbum
 
-from utils import unescape, post_excluded_from, determine_if_video_media_from_reddit_json, remove_duplicates, remove_dict_duplicates
+from utils import unescape, post_excluded_from, remove_duplicates, remove_dict_duplicates
 
 import threading
-from Queue import Queue, Empty
+from Queue import Queue
 
 ADDON_NAME = addonID      #addon.getAddonInfo('name')  <--changed to id
 ADDON_PATH = addon_path   #addon.getAddonInfo('path')
@@ -82,19 +85,19 @@ def slideshowAlbum(dictlist, name):
 
     try:
         s.start_loop()
-    except Exception as e:
-        log("  EXCEPTION slideshowAlbum:="+ str( sys.exc_info()[0]) + "  " + str(e) )
+    except Exception as ex:
+        log("  EXCEPTION slideshowAlbum:="+ str( sys.exc_info()[0]) + "  " + str(ex) )
 
     return
 
 
-def autoSlideshow(url, name, type):
+def autoSlideshow(url, name, type_):
 
     log('starting slideshow '+ url)
     ev=threading.Event()
 
     entries = []
-    watchdog_counter=0
+    #watchdog_counter=0
     preview_w=0
     preview_h=0
     image=''
@@ -106,7 +109,7 @@ def autoSlideshow(url, name, type):
     #content = json.loads(content.replace('\\"', '\''))
     content = json.loads(content)
 
-    log("slideshow %s:Parsing %d items: %s" %( type, len(content['data']['children']), 'random' if random_post_order else 'normal order' )    )
+    log("slideshow %s:Parsing %d items: %s" %( type_, len(content['data']['children']), 'random' if random_post_order else 'normal order' )    )
 
     data_children = content['data']['children']
 
@@ -180,6 +183,7 @@ def autoSlideshow(url, name, type):
 
         except Exception as e:
             log( '  autoPlay exception:' + str(e) )
+
     #log( repr(entries))
 
     entries = remove_dict_duplicates( entries, 'DirectoryItem_url')
@@ -327,7 +331,7 @@ class ScreensaverBase(object):
 
     def init_cycle_controls(self):
         #self.log('  init_cycle_controls start')
-        for i in xrange(self.IMAGE_CONTROL_COUNT):
+        for _ in xrange(self.IMAGE_CONTROL_COUNT):
             img_control = ControlImage(0, 0, 0, 0, '', aspectRatio=2)  #(values 0 = stretch (default), 1 = scale up (crops), 2 = scale down (black bars)
             txt_control = ControlTextBox(0, 0, 0, 0, font='font16')
 #                     xbfont_left = 0x00000000
@@ -424,7 +428,8 @@ class ScreensaverBase(object):
         images = []
 
         if source == 'image_folder':
-            path = SlideshowCacheFolder  #addon.getSetting('image_path')
+            #image folder source not used
+            path = '' #SlideshowCacheFolder  #addon.getSetting('image_path')
             if path:
                 images = self._get_folder_images(path)
         elif source == 'q':
@@ -446,7 +451,7 @@ class ScreensaverBase(object):
 
     def _get_folder_images(self, path):
         self.log('_get_folder_images started with path: %s' % repr(path))
-        dirs, files = xbmcvfs.listdir(path)
+        _, files = xbmcvfs.listdir(path)
         images = [
             xbmc.validatePath(path + f) for f in files
             if f.lower()[-3:] in ('jpg', 'png')
@@ -476,7 +481,7 @@ class ScreensaverBase(object):
         )])
         self.background_control.setImage(bg_img)
 
-    def process_image(self, image_control, image_url):
+    def process_image(self, image_control, desc_and_image):
         # Needs to be implemented in sub class
         raise NotImplementedError
 

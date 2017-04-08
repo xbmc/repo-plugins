@@ -1,3 +1,8 @@
+Version 4.0.47
+-------------
+- Fix broken channel playback
+- Fix broken playback of movie items in "Program A-O"
+
 Version 4.0.46
 -------------
 - Fix broken playback of some items

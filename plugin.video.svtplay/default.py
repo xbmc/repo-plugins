@@ -100,9 +100,14 @@ def viewAtoO():
   programs = svt.getAtoO()
 
   for program in programs:
+    folder = True
+    mode = MODE_PROGRAM
+    if program["type"] == "video":
+      mode = MODE_VIDEO
+      folder = False
     addDirectoryItem(program["title"],
-                {"mode": MODE_PROGRAM, "url": program["url"]},
-                thumbnail=program["thumbnail"])
+                {"mode": mode, "url": program["url"]},
+                thumbnail=program["thumbnail"], folder=folder)
 
 def viewCategories():
   categories = svt.getCategories()

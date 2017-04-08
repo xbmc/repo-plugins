@@ -2,6 +2,7 @@
 import urllib
 import re
 import requests
+import time
 
 import helper
 import CommonFunctions as common
@@ -27,6 +28,9 @@ def getAtoO():
     item["title"] = common.replaceHTMLCodes(program["programTitle"])
     item["thumbnail"] = ""
     item["url"] = program["contentUrl"]
+    item["type"] = program
+    if "/video/" in item["url"]:
+      item["type"] = "video"
     items.append(item)
 
   return sorted(items, key=lambda item: item["title"])
@@ -83,7 +87,7 @@ def getProgramsForGenre(genre):
 
   programs = []
   for item in json_data:
-    if item.get("titleType", "") == "MOVIE":
+    if item.get("titleType", "") == "MOVIE" or item.get("titleType", "") == "SERIES_OR_TV_SHOW":
       url = "video/" + item["id"]
       content_type = "video"
     else:
@@ -184,7 +188,7 @@ def getSearchResults(search_term):
   for video in json_data["episodes"]:
     item = {}
     item["title"] = video["programTitle"] + " - " + common.replaceHTMLCodes(video["title"])
-    item["url"] = video["contentUrl"]
+    item["url"] = "video/" + video["id"]
     item["thumbnail"] = helper.prepareThumb(video.get("imageMedium", ""), baseUrl=BASE_URL)
     item["info"] = {}
     item["info"]["plot"] = video.get("description", "")
@@ -193,7 +197,7 @@ def getSearchResults(search_term):
   for clip in json_data["clips"]:
     item = {}
     item["title"] = common.replaceHTMLCodes(clip["title"])
-    item["url"] = clip["contentUrl"]
+    item["url"] = "klipp/" + clip["id"]
     item["thumbnail"] = helper.prepareThumb(clip.get("imageMedium", ""), baseUrl=BASE_URL)
     item["info"] = {}
     item["info"]["plot"] = clip.get("description", "")
@@ -205,28 +209,31 @@ def getChannels():
   """
   Returns the live channels from the page "Kanaler".
   """
-  json_data = __get_json("channel_page")
+  json_data = __get_json("channel_page?now=" + time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime()))
   if json_data is None:
     return None
 
   items = []
-  for channel in json_data["channels"]:
+  for channel in json_data["hits"]:
     item = {}
-    program_title = channel["schedule"][0]["title"]
-    item["title"] = channel["name"]+" - "+program_title
-    item["thumbnail"] = \
-      "http://svtplay.se//public/images/channels/posters/%s.png" % channel["title"]
+    program_title = channel["programmeTitle"]
+    item["title"] = channel["channel"]+" - "+program_title
     item["info"] = {}
     try:
-      item["info"]["plot"] = channel["schedule"][0]["titlePage"]["description"]
-      item["info"]["fanart"] = channel["schedule"][0]["titlePage"]["thumbnailLarge"]
-      item["info"]["title"] = channel["schedule"][0]["titlePage"]["title"]
+      item["info"]["plot"] = channel["longDescription"]
+      item["info"]["title"] = channel["programmeTitle"]
     except KeyError:
       # Some items are missing titlePage, skip them
       pass
-    for video_ref in channel["videoReferences"]:
-      if video_ref["playerType"] == "ios":
-        item["url"] = video_ref["url"]
+    ch_url = ""
+    if channel["channel"] == "SVTK":
+      ch_url="kunskapskanalen"
+    elif channel["channel"] == "SVTB":
+      ch_url="barnkanalen"
+    else:
+      ch_url = channel["channel"].lower()
+    item["url"] = "ch-" + ch_url
+    item["thumbnail"] = ""
     items.append(item)
 
   return items
@@ -287,14 +294,22 @@ def getClips(title):
   return clips
 
 def getVideoJSON(video_url):
+  common.log("Getting video JSON for URL " + video_url)
   video_id = ""
-  if "video" in video_url:
+  if "ch" in video_url:
+    video_id = video_url
+  elif "video" in video_url:
+    if len(video_url.split("/")) > 2:
+      # This is a content url with episode ID
+      # "/video/12345/some-text/moar-text" 1234 is the episode ID
+      video_id = __get_video_id_for_episode_id(video_url.split("/")[2])
+    else:
+      video_id = video_url.replace("video/", "")
     # ID should end with "A" for primary video source.
     # That is, not texted or sign interpreted.
-    if not video_url.endswith("A"):
-      video_url = video_url + "A"
-    video_id = video_url.replace("video/", "")
-  if "klipp" in video_url:
+    if not video_id.endswith("A"):
+      video_id = video_id + "A"
+  elif "klipp" in video_url:
     video_id = video_url.replace("klipp/", "")
   return __get_video_json_for_video_id(video_id)
 
@@ -347,6 +362,14 @@ def __get_article_id_for_title(title):
     return None
   else:
     return json_data["articleId"]
+
+def __get_video_id_for_episode_id(episode_id):
+  url = "episode?id=" + episode_id
+  json_data = __get_json(url)
+  if json_data is None:
+    return None
+  else:
+    return json_data["id"]
 
 def __get_video_json_for_video_id(video_id):
   url = VIDEO_API_URL + str(video_id)

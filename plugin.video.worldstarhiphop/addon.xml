@@ -2,13 +2,13 @@
 <addon 
 	id="plugin.video.worldstarhiphop" 
 	name="World Star Hip Hop" 
-	version="1.0.8"
+	version="1.0.9"
 	provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                 version="2.14.0"/>
 	<import addon="script.module.beautifulsoup" version="3.0.8"/>
-  	<import addon="plugin.video.youtube"        version="5.1.7"/>
-	<import addon="script.module.youtube.dl"    version="14.810.0"/>
+    <import addon="plugin.video.youtube"        version="5.1.7"/>
+    <import addon="script.module.youtube.dl"    version="14.810.0"/>
   </requires>
 	<extension point="xbmc.python.pluginsource" library="addon.py">
 		<provides>video</provides>

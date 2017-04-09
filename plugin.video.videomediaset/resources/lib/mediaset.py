@@ -15,43 +15,44 @@ class Mediaset(rutils.RUtils):
     def get_url_groupList(self,url):
         self.log('Trying to get the groups from program url ' + url, 4)
         if not url.startswith("http"):
-            url="http://www.video.mediaset.it"+url
+          url="http://www.video.mediaset.it"+url
         url=url.replace("archivio-news.shtml","archivio-video.shtml")
         soup=self.getSoup(url)
-        container=soup.find("div", class_="main-container")
+        container=soup.find("div", class_="page brandpage")
         subparts=container.find_all('section')
         elements = []
         for subpart in subparts:
-            name = subpart.find('h2')
-            if name and name.text.strip():
-                data=subpart.find('div')
-                if data:
-                    elements.append({'title': name.text.strip(), 
-                                     'url': "http://www.video.mediaset.it/{type}/{area}/{box}.shtml".format(type=data['data-type'],area=data['data-area'],box=data['data-box'])})
+          name=subpart.find('h2', class_="title")
+          if name and name.text.strip():
+            elements.append({'title': name.text.strip().encode('utf-8'), 'url': url })
         return elements
 
-    def get_prog_epList(self,url):
+    def get_prog_epList(self,url,title):
         self.log('Trying to get the episodes from group url ' + url, 4)
         totres = 0
         count = 0
         page = 1
         arrdata=[]
         maxpage = 200
-        while (page < maxpage):
-            nurl = "{url}?page={page}".format(url=url,page=page)
-            soup = self.getSoup(nurl)
-            videos = soup.find_all('div',class_='box')
-            if videos:
-                for video in videos:
-                    if totres == 0 and video.has_attr('data-maxitem'):
-                        totres = float(video['data-maxitem'])
-                        maxpage = totres
-                        totpage = math.ceil(totres / 2)
-                    img = video.find('img')
-                    p = video.find('p')
-                    arrdata.append({'id': video['data-id'],'title':img['alt'].encode('utf-8'),'thumbs':img['data-src'].replace("176x99","640x360"),'plot':p.text.strip().encode('utf-8')});
-            page = page + 1
-
+       	if not url.startswith("http"):
+       		url="http://www.video.mediaset.it"+url
+        url=url.replace("archivio-news.shtml","archivio-video.shtml")
+        soup=self.getSoup(url)
+        container=soup.find("div", class_="page brandpage")
+        subparts=container.find_all('section')
+        elements = []
+        for subpart in subparts:
+          name=subpart.find('h2')
+          if name and name.text.strip() == title:
+            slider=subpart.find("div", class_="slider")
+            if slider:
+              clips=slider.find_all("div", class_="clip")
+              for clip in clips:				
+                data0=clip.find("div", class_="clip__info")
+                data1=data0.find('a')
+                data2=clip.find('img')
+                data3=data0.find('p')
+                arrdata.append({'id': data1['data-vid'],'title': data1['title'], 'thumbs': data2['data-lazy'].replace("310x175","640x360"), 'plot': data3.text.strip().encode('utf-8'), 'url': data1['href'] })
         return arrdata
 
     def get_prog_seasonList(self,url):
@@ -63,11 +64,12 @@ class Mediaset(rutils.RUtils):
         arrdata = []
         container=soup.find("li", class_="season clearfix")
         if container:
-            links = container.find_all("a")
-            if links:
-                for link in links:
-                    if not link.has_attr("class"):
-                        arrdata.append({"title": link.text.strip().encode('utf-8'), "url": link['href']})
+          container=container.find("ul")
+          ullis=container.find_all("li")
+          if ullis:
+            for ulli in ullis:
+              link=ulli.find("a")
+              arrdata.append({"title": link.text.strip().encode('utf-8'), "url": link['href']})
         return arrdata
 
     def get_global_epList(self,mode,range=0):

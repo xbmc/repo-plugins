@@ -80,14 +80,14 @@ def elenco_programmi_list(progId):
 
 def elenco_programmi_groupList(progUrl):
     for group in mediaset.get_url_groupList(progUrl):
-        kodiutils.addListItem(group["title"], {'mode':'elenco_programmi', 'group_url': group["url"]})
+        kodiutils.addListItem(group["title"], {'mode':'elenco_programmi', 'group_url': group["url"], 'group_title': group["title"]})
     for season in mediaset.get_prog_seasonList(progUrl):
         kodiutils.addListItem(season["title"],{'mode':'elenco_programmi','prog_url':season["url"]})
     kodiutils.endScript()
 
-def elenco_programmi_epList(groupUrl):
+def elenco_programmi_epList(groupUrl,groupTitle):
     kodiutils.setContent('videos')
-    for ep in mediaset.get_prog_epList(groupUrl):
+    for ep in mediaset.get_prog_epList(groupUrl,groupTitle):
         stamp_ep(ep)
     kodiutils.endScript()
 
@@ -160,7 +160,7 @@ if 'mode' in params:
         elif 'prog_url' in params:
             elenco_programmi_groupList(params['prog_url'])
         elif 'group_url' in params:
-            elenco_programmi_epList(params['group_url'])
+            elenco_programmi_epList(params['group_url'],params['group_title'])
         else:
             elenco_programmi_root()
     elif params['mode'] == "sportmediaset":

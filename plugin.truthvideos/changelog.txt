@@ -1,0 +1,9 @@
+v2.0.0 - Apr 9, 2017
+- Now has 25 different alternative news sources
+
+v1.0.1 - Aug 19, 2015
+- Some minor bug fixes
+
+v1.0.0 - Aug 10, 2015
+- First release
+

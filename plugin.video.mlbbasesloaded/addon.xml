@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.mlbbasesloaded" name="MLB BasesLoaded" version="0.2" provider-name="Jake Kramer">
+  <requires>
+    <import addon="xbmc.python" version="2.25.0"/>
+    <import addon="script.module.xbmcswift2" version="2.4.0"/>
+    <import addon="script.module.requests" version="2.9.1"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <language></language>
+    <summary lang="en_GB">Redzone for MLB.tv</summary>
+    <description lang="en_GB">Automatically shows you the best MLB game on. It will switch games at commercial breaks and will cut to a different game if it's significantly better than the current game.</description>
+  </extension>
+
+  <news>
+    v0.1  (2017-03-27)
+    - Initial version.
+
+    v0.2  (2017-04-04)
+    - Better synchronization between MLB.tv data and the stream.
+  </news>
+
+  <license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>
+  <source>http://github.com/jakecar/plugin.video.mlbbasesloaded</source>
+
+  <assets>
+    <icon>resources/icon.png</icon>
+    <fanart>resources/fanart.png</fanart>
+  </assets>
+</addon>

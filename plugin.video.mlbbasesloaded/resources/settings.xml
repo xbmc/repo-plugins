@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
   <!--Login-->
-  <category label="100">
-    <setting id="username" type="text" label="101" default=""/>
-    <setting id="password" type="text" label="102" option="hidden" default=""/>
-    <setting id="session_key" type="text" label="103" default="" visible="false"/>
+  <category label="30000">
+    <setting id="username" type="text" label="30001" default=""/>
+    <setting id="password" type="text" label="30002" option="hidden" default=""/>
+    <setting id="session_key" type="text" label="30003" default="" visible="false"/>
   </category>
 </settings>
 

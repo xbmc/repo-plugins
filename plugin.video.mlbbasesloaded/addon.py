@@ -5,7 +5,6 @@ import mlbtv_stream_api
 import mlb_exceptions
 from globals import *
 from mlb_games_queue import MlbGamesQueue
-import sys
 
 plugin = Plugin()
 
@@ -37,7 +36,7 @@ def play_basesloaded():
 
     curr_game = None
     streams_not_found = set([])
-    while True:
+    while not monitor.abortRequested():
         # TODO encapsulate all this logic in an object
         if not games:
             # TODO better UX for this situation
@@ -96,7 +95,7 @@ def play_basesloaded():
                 continue
 
         if monitor.waitForAbort(refresh_sec) or not player.isPlayingVideo():
-            sys.exit()
+            break
 
         # Update games
         games = games_queue.get()

@@ -12,7 +12,7 @@
     <platform>all</platform>
     <language></language>
     <summary lang="en_GB">Redzone for MLB.tv</summary>
-    <description>Automatically shows you the best MLB game on. It will switch games at commercial breaks and will cut to a different game if it's significantly better than the current game.</description>
+    <description lang="en_GB">Automatically shows you the best MLB game on. It will switch games at commercial breaks and will cut to a different game if it's significantly better than the current game.</description>
   </extension>
 
   <news>
@@ -25,4 +25,9 @@
 
   <license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>
   <source>http://github.com/jakecar/plugin.video.mlbbasesloaded</source>
+
+  <assets>
+    <icon>resources/icon.png</icon>
+    <fanart>resources/fanart.png</fanart>
+  </assets>
 </addon>

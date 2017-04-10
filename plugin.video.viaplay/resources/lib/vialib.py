@@ -16,7 +16,6 @@ from datetime import datetime, timedelta
 
 import iso8601
 import requests
-import m3u8
 
 
 class vialib(object):
@@ -158,7 +157,6 @@ class vialib(object):
             return False
 
         video_urls['manifest_url'] = manifest_url
-        video_urls['bitrates'] = self.parse_m3u8_manifest(manifest_url)
         video_urls['subtitle_urls'] = self.get_subtitle_urls(data)
 
         return video_urls
@@ -337,43 +335,6 @@ class vialib(object):
                 dates.append(date)
 
         return dates
-
-    def parse_m3u8_manifest(self, manifest_url):
-        """Return the stream URL along with its bitrate."""
-        streams = {}
-        auth_cookie = None
-        req = requests.get(manifest_url)
-        m3u8_manifest = req.content
-        self.log('HLS manifest: \n %s' % m3u8_manifest)
-        if req.cookies:
-            self.log('Cookies: %s' % req.cookies)
-            # the auth cookie differs depending on the CDN
-            if 'hdntl' and 'hdnts' in req.cookies.keys():
-                hdntl_cookie = req.cookies['hdntl']
-                hdnts_cookie = req.cookies['hdnts']
-                auth_cookie = 'hdntl=%s; hdnts=%s' % (hdntl_cookie, hdnts_cookie)
-            elif 'hdntl' in req.cookies.keys():
-                hdntl_cookie = req.cookies['hdntl']
-                auth_cookie = 'hdntl=%s' % hdntl_cookie
-            elif 'lvlt_tk' in req.cookies.keys():
-                lvlt_tk_cookie = req.cookies['lvlt_tk']
-                auth_cookie = 'lvlt_tk=%s' % lvlt_tk_cookie
-            else:
-                self.log('No auth cookie found.')
-        else:
-            self.log('Stream request didn\'t contain any cookies.')
-
-        m3u8_header = {'Cookie': auth_cookie}
-        m3u8_obj = m3u8.loads(m3u8_manifest)
-        for playlist in m3u8_obj.playlists:
-            bitrate = int(playlist.stream_info.bandwidth) / 1000
-            if playlist.uri.startswith('http'):
-                stream_url = playlist.uri
-            else:
-                stream_url = manifest_url[:manifest_url.rfind('/') + 1] + playlist.uri
-            streams[str(bitrate)] = stream_url + '|' + urlencode(m3u8_header)
-
-        return streams
 
     def get_next_page(self, data):
         """Return the URL to the next page if the current page count is less than the total page count."""

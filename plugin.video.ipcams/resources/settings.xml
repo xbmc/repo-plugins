@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="numcams" type="labelenum" label="30020" values="1|2|3" default="1"/>
+    <setting type="sep" />
+    <setting id="cam1" type="text" label="30021" value="" default="" />
+    <setting id="loc1" type="text" label="30025" value="" default="" />
+    <setting id="cam2" type="text" label="30022" value="" default="" visible="gt(-4,0)" />
+    <setting id="loc2" type="text" label="30026" value="" default="" visible="gt(-5,0)" />
+    <setting id="cam3" type="text" label="30023" value="" default="" visible="gt(-6,1)" />
+    <setting id="loc3" type="text" label="30027" value="" default="" visible="gt(-7,1)" />
+</settings>

@@ -13,7 +13,7 @@
 	<extension point="xbmc.addon.metadata">
 		<summary lang="en_GB">detektor.fm | German online radio combining journalism with alternative pop music</summary>
 		<summary lang="de_DE">detektor.fm | Internetradio mit Journalismus und alternativer Popmusik</summary>
-		<description lang="en_GB">German online radio combining journalism with alternative pop music</description>
+		<description lang="en_GB">detektor.fm focuses on in-depth-journalism and is a platform for high-quality audio-journalism on the German speaking internet. The nationwide approach is based on a editorial code of ethics. Users can listen to content live and on-demand as the prefer.</description>
 		<description lang="de_DE">detektor.fm konzentriert sich auf die Vermittlung hintergründiger Informationen und ist somit eine Plattform für anspruchsvollen Hörfunk-Journalismus im Internet. Die national relevanten Themen werden von etablierten Journalisten nach einem eigens verfassten Kodex aufgearbeitet. So kann man im Internet ein lineares Programm anbieten und zugleich zeitsouverän Inhalte abrufen.</description>
 		<disclaimer lang="en_GB"></disclaimer>
 		<disclaimer lang="de_DE"></disclaimer>

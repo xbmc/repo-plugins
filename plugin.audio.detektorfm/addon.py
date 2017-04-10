@@ -33,6 +33,9 @@ addon = xbmcaddon.Addon()
 addonname = addon.getAddonInfo('name')
 addonpath = addon.getAddonInfo('path')
 
+addonDir = xbmc.translatePath(addon.getAddonInfo('path'))
+defaultFanart = os.path.join(addonDir, 'fanart.jpg')
+
 
 #base_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
@@ -58,7 +61,10 @@ streams = [
 
 def main():
 	li_stream1 = xbmcgui.ListItem(label=addon.getLocalizedString(30011), thumbnailImage=addonpath + "/resources/media/wort.png")
+	li_stream1.setProperty("fanart_image", defaultFanart)
+
 	li_stream2 = xbmcgui.ListItem(label=addon.getLocalizedString(30012), thumbnailImage=addonpath + "/resources/media/musik.png")
+	li_stream2.setProperty("fanart_image", defaultFanart)
 
 	xbmcplugin.addDirectoryItem(handle=addon_handle, url=streams[bitrate]['wort'], listitem=li_stream1, isFolder=False)
 	xbmcplugin.addDirectoryItem(handle=addon_handle, url=streams[bitrate]['musik'], listitem=li_stream2, isFolder=False)

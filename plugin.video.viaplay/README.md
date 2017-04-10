@@ -9,7 +9,6 @@ Feedback and constructive input are of course always welcome.
 This add-on is available in the official Kodi repository and all dependencies will be installed automatically when installed from there. However, if you're installing straight from git, please make sure you've got the following modules installed:
  * Requests >= 2.9.1 (http://mirrors.kodi.tv/addons/jarvis/script.module.requests)
  * iso8601 (http://mirrors.kodi.tv/addons/jarvis/script.module.iso8601)
- * m3u8 >= 0.2.10 (http://mirrors.kodi.tv/addons/jarvis/script.module.m3u8)
 
 This add-on supports Kodi Krypton or later. While it may work fine on older versions as well, it is unsupported and you're encouraged to upgrade.
 

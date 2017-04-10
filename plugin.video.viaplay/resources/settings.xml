@@ -4,7 +4,5 @@
     <setting id="email" type="text" label="30001" default=""/>
     <setting id="password" type="text" label="30002" option="hidden"  enable="!eq(-1,)" default=""/>
     <setting id="subtitles" type="bool" label="30012" default="true"/>
-    <setting id="preferred_bitrate" type="enum" label="30023" lvalues="30024|30035|30025" default="0"/>
-    <setting id="max_bitrate_allowed" type="number" label="30036" default="5000" subsetting="true" visible="eq(-1,1)"/>
   </category>
 </settings>

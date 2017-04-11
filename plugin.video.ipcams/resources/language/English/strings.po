@@ -1,0 +1,79 @@
+# XBMC Media Center language file
+# Addon Name: Surveillance Cameras
+# Addon id: plugin.video.ipcams
+# Addon version: 0.0.2
+# Addon Provider: brat, BJ1
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2017-04-10 07:08+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Shows streams of surveillance cameras"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Take a look to the pictures of your installed surveillance cameras. You are able to select one of a maximum number of three cameras."
+msgstr ""
+
+msgctxt "Addon Disclaimer"
+msgid "Use at your own risk. This is not a replacement for professional equipment."
+msgstr ""
+
+
+msgctxt "#30010"
+msgid "Surveillance Cameras"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Camera %s"
+msgstr ""
+
+#Error messages
+#empty strings from id 30012 to 30014
+
+msgctxt "#30015"
+msgid "There ar no stream urls defined in settings. Please define at least one url."
+msgstr ""
+
+#Settings
+#empty strings from id 30016 to 30019
+
+msgctxt "#30020"
+msgid "Number of Cameras"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Stream URL Camera 1"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Stream URL Camera 2"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Stream URL Camera 3"
+msgstr ""
+
+#empty string with id 30024
+
+msgctxt "#30025"
+msgid "Location Camera 1"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Location Camera 2"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Location Camera 3"
+msgstr ""

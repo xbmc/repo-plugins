@@ -744,7 +744,7 @@ def ListCategories():
     """
     html = OpenURL('http://www.bbc.co.uk/iplayer')
     match = re.compile(
-        '<a href="/iplayer/categories/(.+?)" class="stat">(.+?)</a>'
+        '<a href="/iplayer/categories/(.+?)".+?>(.+?)</a>'
         ).findall(html)
     for url, name in match:
         AddMenuEntry(name, url, 125, '', '', '')

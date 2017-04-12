@@ -1,3 +1,6 @@
+v2.5.8
+Fixed broken Categories.
+
 v2.5.7
 Optimized selection of catchup CDN internally.
 COMPATIBILITY NOTE: Users need to set catchup source to "Any" when Autoplay is switched off

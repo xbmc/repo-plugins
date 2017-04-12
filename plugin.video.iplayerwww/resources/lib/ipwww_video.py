@@ -745,7 +745,7 @@ def ListCategories():
     """
     html = OpenURL('http://www.bbc.co.uk/iplayer')
     match = re.compile(
-        '<a href="/iplayer/categories/(.+?)" class="stat">(.+?)</a>'
+        '<a href="/iplayer/categories/(.+?)".+?>(.+?)</a>'
         ).findall(html)
     for url, name in match:
         AddMenuEntry(name, url, 125, '', '', '')
@@ -1565,7 +1565,7 @@ def ParseLiveDASHStreams(channelname):
     html = OpenURL(url)
     # Parse the different streams and add them as new directory entries.
     match = re.compile(
-          'connection.+?href="(.+?)".+?supplier="(.+?)_live".+?transferFormat="(.+?)"'
+          'connection.+?href="(.+?)".+?supplier="(.+?)".+?transferFormat="(.+?)"'
         ).findall(html)
     unique = []
     [unique.append(item) for item in match if item not in unique]
@@ -1573,9 +1573,9 @@ def ParseLiveDASHStreams(channelname):
         tmp_sup = 0
         tmp_br = 0
         if transfer_format == 'dash':
-            if supplier in ['akamai_dash']:
+            if supplier.startswith('akamai_dash'):
                 tmp_sup = 1
-            elif supplier in ['ll_dash']:
+            elif supplier.startswith('ll_dash'):
                 tmp_sup = 2
             streams.append((tmp_sup, 1, mpd_url, '1280x720'))
 

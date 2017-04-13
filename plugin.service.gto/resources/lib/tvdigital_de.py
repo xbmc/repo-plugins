@@ -24,7 +24,9 @@ class Scraper():
 
         # Properties
 
-        self.rssurl = 'http://www.tvdigital.de/rss/tipp/spielfilm/'
+        self.enabled = True
+        self.baseurl = 'https://www.digital.de'
+        self.rssurl = 'https://www.tvdigital.de/rss/tipp/spielfilm/'
         self.friendlyname = 'TV Digital Spielfilm Highlights'
         self.shortname = 'TV Digital'
         self.icon = 'tvd.png'
@@ -49,7 +51,7 @@ class Scraper():
 
         try:
             self.channel = re.compile('<title>(.+?)</title>', re.DOTALL).findall(content)[0].split(' | ')[2]
-            self.detailURL = re.compile('<guid>(.+?)</guid>', re.DOTALL).findall(content)[0]
+            self.detailURL = self.baseurl + re.compile('<guid>(.+?)</guid>', re.DOTALL).findall(content)[0]
             self.title = re.compile('<title>(.+?)</title>', re.DOTALL).findall(content)[0].split(' | ')[0][:-3]
         except IndexError:
             pass

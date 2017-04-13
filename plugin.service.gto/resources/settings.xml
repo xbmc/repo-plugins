@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <setting id="setscraper" type="action" label="30111" action="RunScript(plugin.service.gto,action=change_scraper)" default="resources.lib.rtv_de" />
+    <setting id="setscraper" type="action" label="30111" action="RunScript(plugin.service.gto,action=change_scraper)" default="klack.de" />
     <setting id="enableinfo" type="bool" label="30114" default="true"/>
     <setting type="sep" />
-    <setting id="mdelay" type="labelenum" label="30127" lvalues="30154|30156|30157|30158|30159|30160|30161|30162|30163|30164" default="30160"/>
-    <setting id="screenrefresh" type="labelenum" label="30128" lvalues="30151|30152|30153|30154|30155|30156" default="30151"/>
-    <setting id="pvronly" type="bool" label="30126" default="true" />
+    <setting id="mdelay" type="labelenum" label="30127" lvalues="30154|30156|30157|30158|30159|30160|30161|30162|30163|30164" default="30160" />
+    <setting id="screenrefresh" type="labelenum" label="30128" lvalues="30151|30152|30153|30154|30155|30156" default="30153" />
+    <setting id="pvronly" type="bool" label="30126" default="false" />
     <setting id="prefer_hd" type="bool" label="30113" default="true" />
-    <setting id="scraper" value="resources.lib.rtv_de" default="resources.lib.rtv_de" />
+    <setting id="scraper" value="resources.lib.rtv_de" default="resources.lib.klack_de" />
 </settings>

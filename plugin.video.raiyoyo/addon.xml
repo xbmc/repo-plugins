@@ -16,6 +16,7 @@
         <description lang="en_GB">All your favorite shows are available to you the day after the airing Tv. Last night you missed your favorite cartoon? No problem, you can finally see her comfortably on KODI whenever you want.</description>
         <assets>
           <icon>icon.png</icon>
+          <fanart>fanart.jpg</fanart>
         </assets>
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
         <forum>http://forum.kodi.tv/showthread.php?tid=312158</forum>

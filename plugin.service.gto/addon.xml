@@ -9,15 +9,15 @@
 
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
-        <summary lang="en">Fetch todays TV Offers from different scrapers</summary>
-        <summary lang="de">Holt die TV Tipps des Tages aus den RSS-Feeds diverser Webseiten</summary>
+        <summary lang="en_GB">Fetch todays TV Offers from different scrapers</summary>
+        <summary lang="de_DE">Holt die TV Tipps des Tages aus den RSS-Feeds diverser Webseiten</summary>
         <language>de</language>
-        <description lang="en">Fetch todays TV Offers from different scrapers
+        <description lang="en_GB">Fetch todays TV Offers from different scrapers
 
 This plugin needs a integration into the skin!
 Please refer to the README.txt into the folder named 'integration'.
         </description>
-        <description lang="de">Holt die TV Tipps des Tages aus den RSS-Feeds diverser Webseiten.
+        <description lang="de_DE">Holt die TV Tipps des Tages aus den RSS-Feeds diverser Webseiten.
 
 Dieses Plugin benoetigt eine Skin-Integration!
 Hierfür bitte README.txt im Ordner 'integration' beachten.

@@ -87,6 +87,10 @@ def get_url(identity_point_id, fingerprint, content_id, session_key, event_id):
             raise mlb_exceptions.SignOnRestrictionException()
         raise mlb_exceptions.StreamNotFoundException()
     else:
+        # Check if blacked out
+        if r['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['blackout_status'] != 'SuccessStatus':
+            raise mlb_exceptions.StreamNotFoundException()
+
         xbmc.log("get_url cookies response {0}".format(s.cookies))
         session.save_cookies(s.cookies)
 

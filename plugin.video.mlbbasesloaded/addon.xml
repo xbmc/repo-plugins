@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mlbbasesloaded" name="MLB BasesLoaded" version="0.2" provider-name="Jake Kramer">
+<addon id="plugin.video.mlbbasesloaded" name="MLB BasesLoaded" version="0.3.0" provider-name="Jake Kramer">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.xbmcswift2" version="2.4.0"/>
@@ -16,11 +16,15 @@
   </extension>
 
   <news>
-    v0.1  (2017-03-27)
+    v0.1.0  (2017-03-27)
     - Initial version.
 
-    v0.2  (2017-04-04)
+    v0.2.0  (2017-04-04)
     - Better synchronization between MLB.tv data and the stream.
+
+    v0.3.0  (2017-04-13)
+    - Critical bug fix: the plugin would fail when a blacked out game
+      was selected, resulting in the plugin not switching between games.
   </news>
 
   <license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>

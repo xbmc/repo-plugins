@@ -42,7 +42,7 @@ class MlbTvSession():
         username = str(settings.getSetting(id="username"))
         password = str(settings.getSetting(id="password"))
         if not username or not password:
-            msg = "Please set your username and password"
+            msg = "Please set your username and password in the settings"
             dialog = xbmcgui.Dialog()
             ok = dialog.ok('Invalid Login', msg)
             sys.exit()

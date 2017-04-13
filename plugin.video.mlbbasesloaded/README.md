@@ -1,6 +1,6 @@
 MLB Basesloaded is the MLB.tv Redzone for Kodi.
 
-Please add an Issue on GitHub if you find a bug. Pull requests are always welcomed.
+Please add an Issue on [GitHub](https://github.com/jakecar/plugin.video.mlbbasesloaded) if you find a bug. Pull requests are always welcomed.
 
 # Credits
 * Dan Brooks for his original MLB.tv Redzone: http://www.brooksbaseball.net/hilev/redzone.php

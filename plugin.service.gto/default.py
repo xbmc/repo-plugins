@@ -20,10 +20,11 @@ __addonID__ = __addon__.getAddonInfo('id')
 __addonname__ = __addon__.getAddonInfo('name')
 __version__ = __addon__.getAddonInfo('version')
 __path__ = __addon__.getAddonInfo('path')
+__profiles__ = __addon__.getAddonInfo('profile')
 __LS__ = __addon__.getLocalizedString
 
 
-__usertranslations__ = xbmc.translatePath(os.path.join('special://userdata', 'addon_data', __addonID__, 'ChannelTranslate.json'))
+__usertranslations__ = xbmc.translatePath(os.path.join(__profiles__, 'ChannelTranslate.json'))
 
 __prefer_hd__ = True if __addon__.getSetting('prefer_hd').upper() == 'TRUE' else False
 __enableinfo__ = True if __addon__.getSetting('enableinfo').upper() == 'TRUE' else False
@@ -138,6 +139,9 @@ def changeScraper():
         mod = __import__('resources.lib.%s' % (module[:-3]), locals(), globals(), fromlist=['Scraper'])
         ScraperClass = getattr(mod, 'Scraper')
         Scraper = ScraperClass()
+
+        if not Scraper.enabled: continue
+
         _scrapers.append(Scraper.friendlyname)
         _scraperdict.append({'name': Scraper.friendlyname, 'shortname': Scraper.shortname, 'module': 'resources.lib.%s' % (module[:-3])})
 
@@ -312,7 +316,7 @@ def scrapeGTOPage(enabled=__enableinfo__):
         HOME.clearProperty('GTO.%s' % (idx))
 
     HOME.setProperty('GTO.blobs', '0')
-    HOME.setProperty('GTO.provider', __shortname__)
+    HOME.setProperty('GTO.provider', data.shortname)
 
     for container in content:
 
@@ -329,14 +333,15 @@ def scrapeGTOPage(enabled=__enableinfo__):
         channel = pvrchannelid2channelname(pvrchannelID, data.channel)
         details = getUnicodePage(data.detailURL)
 
+        writeLog('Scraping details from %s' % (data.detailURL), level=xbmc.LOGDEBUG)
         data.scrapeDetailPage(details, data.detailselector)
 
         # calculate runtime
 
         start = datetime.timedelta(hours=int(data.starttime[0:2]), minutes=int(data.starttime[3:5])).seconds
         end = datetime.timedelta(hours=int(data.endtime[0:2]), minutes=int(data.endtime[3:5])).seconds
+        if end < start: end += 86400
         data.runtime = (end - start)/60
-        if data.runtime < 0: data.runtime += 1440
 
         now = datetime.datetime.now()
         now_secs = (now - now.replace(hour=0, minute=0, second=0, microsecond=0)).total_seconds()

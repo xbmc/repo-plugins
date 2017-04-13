@@ -24,6 +24,8 @@ class Scraper():
 
         # Properties
 
+        self.enabled = False
+        self.baseurl = 'http://www.rtv.de'
         self.rssurl = 'http://www.rtv.de/rss/filmtipps.xml'
         self.friendlyname = 'rtv Highlights'
         self.shortname = 'rtv'

@@ -208,6 +208,9 @@ class Main:
         html_source = reply.text
         html_source = html_source.encode('utf-8', 'ignore')
 
+        # xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+        #     ADDON, VERSION, DATE, "html_source:", str(html_source)), xbmc.LOGDEBUG)
+
         # Get the video url
         # <div class="content  content--page  content--bglight  content--blue">
         #             <div class="video">
@@ -237,20 +240,24 @@ class Main:
                         no_url_found = True
                         have_valid_url = False
 
-        # Make video url
+        # Try to make a valid video url
         if have_valid_url:
             end_pos_video_url = html_source.find("'", start_pos_video_url)
             video_url = html_source[start_pos_video_url:end_pos_video_url]
-            if video_url.find("http://www.youtube.com/channel/") >= 0:
+            if video_url.find("target=") >= 0:
                 no_url_found = True
                 have_valid_url = False
-            else:
-                if video_url.find("https://www.youtube.com/channel/") >= 0:
-                    no_url_found = True
-                    have_valid_url = False
+                video_url = ""
+            elif video_url.find("http://www.youtube.com/channel/") >= 0:
+                no_url_found = True
+                have_valid_url = False
+                video_url = ""
+            elif video_url.find("https://www.youtube.com/channel/") >= 0:
+                no_url_found = True
+                have_valid_url = False
+                video_url = ""
 
-            xbmc.log(
-                    "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "video_url", str(video_url)),
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "video_url", str(video_url)),
                     xbmc.LOGDEBUG)
 
         # Play video

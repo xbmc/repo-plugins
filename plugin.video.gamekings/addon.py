@@ -14,7 +14,7 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 LIB_DIR = xbmc.translatePath(
-    os.path.join(xbmcaddon.Addon(id="plugin.video.gamekings").getAddonInfo('path'), 'resources', 'lib'))
+    os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources', 'lib'))
 sys.path.append(LIB_DIR)
 
 from gamekings_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION

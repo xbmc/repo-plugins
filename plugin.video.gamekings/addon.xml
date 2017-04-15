@@ -2,7 +2,7 @@
 <addon 
 	id="plugin.video.gamekings" 
 	name="GameKings" 
-	version="1.2.6"
+	version="1.2.7"
 	provider-name="Skipmode A1, Amelandbor">
   <requires>
     <import addon="xbmc.python"                 version="2.14.0"/>
@@ -19,10 +19,10 @@
 	<platform>all</platform>
 	<summary lang="en">Watch videos from Gamekings.nl (dutch)</summary>
 	<description lang="en">Watch videos from Gamekings.nl (dutch)</description>
-	<disclaimer lang="en">For bugs, requests or general questions visit the Gamekings.nl thread on the XBMC forum.</disclaimer>
+	<disclaimer lang="en">For bugs, requests or general questions visit the Gamekings.nl thread on the Kodi forum.</disclaimer>
 	<summary lang="nl">Bekijk videos van Gamekings.nl (dutch)</summary>
 	<description lang="nl">Bekijk videos van Gamekings.nl (dutch)</description>
-	<disclaimer lang="nl">Bugs of andere feedback op deze plugin kan geplaatst worden in de Gamekings.nl thread op het XBMC forum.</disclaimer>
+	<disclaimer lang="nl">Bugs of andere feedback op deze plugin kan geplaatst worden in de Gamekings.nl thread op het Kodi forum.</disclaimer>
     <language>nl</language>
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>

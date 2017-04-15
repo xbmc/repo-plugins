@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.raiyoyo" name="RAI YoYo" provider-name="codingkoala" version="1.0.0">
     <requires>
-        <import addon="xbmc.python" version="2.24.0" />
+        <import addon="xbmc.python" version="2.25.0" />
         <import addon="script.module.phate89" version="1.0.0"/>
     </requires>
     <extension library="default.py" point="xbmc.python.pluginsource">

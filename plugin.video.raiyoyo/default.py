@@ -38,8 +38,8 @@ def elenco_puntate(id):
 
 def playRaiyoyo(streamUrl):
     kodiutils.setResolvedUrl(streamUrl)
-    kodiutils.setResolvedUrl(solved=False)
-    xbmc.executebuiltin('XBMC.PlayerControl(Play)')
+#    kodiutils.setResolvedUrl(solved=False)
+#    xbmc.executebuiltin('XBMC.PlayerControl(Play)')
   
 
 # parameter values

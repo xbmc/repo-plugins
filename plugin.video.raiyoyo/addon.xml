@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.raiyoyo" name="RAI YoYo" provider-name="codingkoala" version="1.0.0">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0" />
+        <import addon="script.module.phate89" version="1.0.0"/>
+    </requires>
+    <extension library="default.py" point="xbmc.python.pluginsource">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <language>it</language>
+        <platform>all</platform>
+        <summary lang="it_IT">I programmi di RAI YoYo</summary>
+        <description lang="it_IT">Tutti i tuoi programmi preferiti sono disponibili per te il giorno dopo la messa in onda Tv. Ieri sera ti sei perso il tuo cartone preferito? Nessun problema finalmente puoi rivederla comodamente su KODI ogni volta che vuoi.</description>
+        <summary lang="en_GB">The broadcasts of RAI YoYo</summary>
+        <description lang="en_GB">All your favorite shows are available to you the day after the airing Tv. Last night you missed your favorite cartoon? No problem, you can finally see her comfortably on KODI whenever you want.</description>
+        <assets>
+          <icon>icon.png</icon>
+          <fanart>fanart.jpg</fanart>
+        </assets>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+        <forum>http://forum.kodi.tv/showthread.php?tid=312158</forum>
+        <source>https://github.com/codingkoala/plugin.video.raiyoyo</source>
+        <news>v1.0.0
+- First Release</news>
+    </extension>
+</addon>

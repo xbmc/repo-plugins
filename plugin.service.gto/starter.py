@@ -11,105 +11,100 @@ __LS__ = __addon__.getLocalizedString
 __icon__ = xbmc.translatePath(os.path.join(__path__, 'icon.png'))
 
 HOME = xbmcgui.Window(10000)
-DELAY = 15
+DELAY = 15                      # wait for PVR content
+CYCLE = 60                      # poll cycle
 OSD = xbmcgui.Dialog()
+
+__screenrefresh__ = 0
+__refreshratio__ = 0
 
 # Helpers #
 
-def notifyOSD(header, message, icon=xbmcgui.NOTIFICATION_INFO, disp=4000, enabled=True):
-    if enabled:
-        OSD.notification(header.encode('utf-8'), message.encode('utf-8'), icon, disp)
-
-def writeLog(message, level=xbmc.LOGNOTICE):
+def writeLog(message, level=xbmc.LOGDEBUG):
         xbmc.log('[%s %s]: %s' % (__addonID__, __version__,  message.encode('utf-8')), level)
 
 # End Helpers #
 
+def getNumVals(setting, multiplicator):
+    try:
+        return int(re.match('\d+', __addon__.getSetting(setting)).group()) * multiplicator
+    except AttributeError:
+        return 0
+
+def getSettings():
+    global __screenrefresh__
+    global __refreshratio__
+
+    __enableinfo__ = True if __addon__.getSetting('enableinfo').upper() == 'TRUE' else False
+    __prefer_hd__ = True if __addon__.getSetting('prefer_hd').upper() == 'TRUE' else False
+    __mdelay__ = getNumVals('mdelay', 60)
+    __screenrefresh__ = getNumVals('screenrefresh', 60)
+    __refreshratio__ = __mdelay__ / __screenrefresh__
+    __scrapermodule__ = __addon__.getSetting('scraper')
+
+    writeLog('Settings (re)loaded')
+    writeLog('preferred scraper module: %s' % (__scrapermodule__))
+    writeLog('Show notifications:       %s' % (__enableinfo__))
+    writeLog('Prefer HD channel:        %s' % (__prefer_hd__))
+    writeLog('Refresh interval content: %s secs' % (__mdelay__))
+    writeLog('Refresh interval screen:  %s secs' % (__screenrefresh__))
+    writeLog('Refreshing ratio:         %s' % (__refreshratio__))
+
+    xbmc.executebuiltin('XBMC.RunScript(plugin.service.gto,action=scrape)')
+
+
 class MyMonitor(xbmc.Monitor):
+
     def __init__(self, *args, **kwargs ):
         xbmc.Monitor.__init__(self)
         self.settingsChanged = False
 
     def onSettingsChanged(self):
         self.settingsChanged = True
-        xbmc.executebuiltin('XBMC.RunScript(plugin.service.gto)')
+        getSettings()
+        xbmc.executebuiltin('XBMC.RunScript(plugin.service.gto,action=scrape)')
+
 
 class Starter():
 
     def __init__(self):
-        self.enableinfo = False
-        self.prefer_hd = True
-        self.mdelay = 0
-        self.screenrefresh = 0
-
-    def getNumVals(self, setting, multiplicator):
-        try:
-            return int(re.match('\d+', __addon__.getSetting(setting)).group()) * multiplicator
-        except AttributeError:
-            return 0
-
-    def getSettings(self):
-        self.enableinfo = True if __addon__.getSetting('enableinfo').upper() == 'TRUE' else False
-        self.prefer_hd = True if __addon__.getSetting('prefer_hd').upper() == 'TRUE' else False
-        self.mdelay = self.getNumVals('mdelay', 60)
-        self.screenrefresh = self.getNumVals('screenrefresh', 60)
-        self.refreshcontent = self.mdelay/self.screenrefresh
-        self.mincycle = int(re.match('\d+', __LS__(30151)).group()) * 60
-        self.poll = self.screenrefresh/self.mincycle
-
-        writeLog('Settings (re)loaded')
-        writeLog('Show notifications:       %s' % (self.enableinfo), level=xbmc.LOGDEBUG)
-        writeLog('Prefer HD channel:        %s' % (self.prefer_hd), level=xbmc.LOGDEBUG)
-        writeLog('Refresh interval content: %s secs' % (self.mdelay), level=xbmc.LOGDEBUG)
-        writeLog('Refresh interval screen:  %s secs' % (self.screenrefresh), level=xbmc.LOGDEBUG)
-        writeLog('Refreshing multiplicator: %s' % (self.refreshcontent), level=xbmc.LOGDEBUG)
-        writeLog('Poll cycles:              %s' % (self.poll), level=xbmc.LOGDEBUG)
-
-        HOME.setProperty('waitForPVR', 'yes')
-
-        xbmc.executebuiltin('XBMC.RunScript(plugin.service.gto,action=scrape)')
+        pass
 
     def start(self):
-        writeLog('Starting %s V.%s' % (__addonname__, __version__))
-        notifyOSD(__LS__(30010), __LS__(30106), __icon__, enabled=self.enableinfo)
-        self.getSettings()
+        writeLog('Starting %s V.%s' % (__addonname__, __version__), level=xbmc.LOGNOTICE)
+        getSettings()
+
+        HOME.setProperty('PVRisReady', 'no')
 
         _c = 0
-        _pc = 0
         _attempts = 4
-        
+
         monitor = MyMonitor()
+
         while not monitor.abortRequested():
 
             if monitor.settingsChanged:
                 _c = 0
-                _pc = 0
-                self.getSettings()
+                _attempts = 4
                 monitor.settingsChanged = False
 
-            if HOME.getProperty('waitForPVR') == 'no':
-                if monitor.waitForAbort(self.mincycle):
-                    break
-            else:
-                if _attempts > 0:
-                    writeLog('Wait for PVR access (%s attempts remainig...)' % (_attempts), xbmc.LOGDEBUG)
-                    if monitor.waitForAbort(DELAY):
-                        break
-                    _attempts -= 1
-                else:
-                    HOME.setProperty('waitForPVR', 'no')
-            _pc += 1
-            if _pc < self.poll and HOME.getProperty('waitForPVR') == 'no':
-                continue
+            while HOME.getProperty('PVRisReady') == 'no' and _attempts > 0:
+                if monitor.waitForAbort(DELAY): return
+                if HOME.getProperty('PVRisReady') == 'yes': break
+                xbmc.executebuiltin('XBMC.RunScript(plugin.service.gto,action=refresh)')
+                _attempts -= 1
+
+            writeLog('Remaining next action in %s seconds' % (__screenrefresh__))
+            if monitor.waitForAbort(__screenrefresh__): break
             _c += 1
-            _pc = 0
-            if _c >= self.refreshcontent:
-                writeLog('Scraping feeds', level=xbmc.LOGDEBUG)
+
+            if _c >= __refreshratio__:
+                writeLog('Scraping feeds')
                 xbmc.executebuiltin('XBMC.RunScript(plugin.service.gto,action=scrape)')
                 _c = 0
-            else:
-                writeLog('Refresh content on home screen', level=xbmc.LOGDEBUG)
-                xbmc.executebuiltin('XBMC.RunScript(plugin.service.gto,action=refresh)')
+
+            writeLog('Refresh content')
+            xbmc.executebuiltin('XBMC.RunScript(plugin.service.gto,action=refresh)')
 
 if __name__ == '__main__':
     starter = Starter()

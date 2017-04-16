@@ -39,6 +39,12 @@ The service for updating content and widgets (starter.py) calls the actual plugi
 #### Öffnet eine Liste vorhandener Scraper und speichert den ausgewählten Scraper als Standardscraper / Opens a scraper list and stores the selected scraper as default:
 
     XBMC.RunScript(plugin.service.gto,action=change_scraper)
+    
+#### Schreibt zusätzliche Informationen zur ausgewählten Sendung als Properties nach Window(Home) / writes additional Properties of the selected broadcast to Window(Home)
+
+    <onclick>
+        RunScript(plugin.service.gto,action=sethomecontent&blob=$INFO[ListItem.Property(BlobID))
+    </onclick>
 
 #### Öffnet ein Fenster mit zusätzlichen Informationen zur ausgewählten Sendung / Opens a window with additional details of the selected broadcast:
 
@@ -72,7 +78,7 @@ Beispiel 'onclick' für TV Highlights Element - Öffnet Popup generiert vom Plug
     - GTO.Info.Genre
     - GTO.Info.Channel                PVR Kanalname / PVR channel name
     - GTO.Info.Logo                   PVR Kanallogo / PVR channel logo
-    - GTO.Info.PVRID                  PVR Channel ID / PVR channel id
+    - GTO.Info.ChannelID              PVR Channel ID / PVR channel id
     - GTO.Info.Date                   Datum und Uhrzeit 'dd.mm.yy hh:mm', wird benötigt für Switchtimer / datetime in format 'dd.mm.yy hh:mm'
     - GTO.Info.StartTime              Startzeit (hh:mm) / start time
     - GTO.Info.EndTime                Endzeit (hh:mm) / end time

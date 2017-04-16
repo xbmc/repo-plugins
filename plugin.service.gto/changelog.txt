@@ -1,3 +1,11 @@
+2.0.10
+- Improvements for the plugin service
+- Ready for Krypton, skin integration sheet added
+- Scraper updates
+
+2.0.9
+- Scraper updates
+
 2.0.8
 - Cosmetics. Copy 'script-gto.xml' to Confluence folder to take effect.
   See integration/README.md within the zip/addon folder

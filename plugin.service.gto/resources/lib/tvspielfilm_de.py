@@ -72,8 +72,7 @@ class Scraper():
                 try:
                     self.extrainfos = re.compile('<div class="description-text">(.+?)</p>', re.DOTALL).findall(content)[0].split('<p>')[1]
                     self.genre = re.compile('<span class="genre">(.+?)</span>', re.DOTALL).findall(content)[0].split(', ')[0]
-                    endtime = re.compile('<span class="time">(.+?)</span>', re.DOTALL).findall(content)
-                    self.endtime = endtime[2].split(' - ')[1]
+                    self.endtime = re.compile('<span class="time">%s - (.+?)</span>' % self.starttime, re.DOTALL).findall(content)[0]
                 except IndexError:
                     pass
 

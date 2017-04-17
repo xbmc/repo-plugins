@@ -1,0 +1,154 @@
+# XBMC Media Center language file
+# Addon Name: resource.language.de_de Telecast Offers
+# Addon id: plugin.service.gto
+# Addon version: 2.0.2
+# Addon Provider: Birger Jesch
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2016-09-06 08:37+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Fetch todays TV Offers from different scrapers"
+msgstr "Holt die TV Tipps des Tages aus den RSS-Feeds diverser Webseiten"
+
+msgctxt "Addon Description"
+msgid "Fetch todays TV Offers from different scrapers\n\nThis plugin needs a integration into the skin!\nPlease refer to the README.txt into the folder named 'integration'.\n        "
+msgstr "Holt die TV Tipps des Tages aus den RSS-Feeds diverser Webseiten.\n\nDieses Plugin benoetigt eine Skin-Integration!\nHierfür bitte README.txt im Ordner 'integration' beachten.\n        "
+
+msgctxt "#30010"
+msgid "TV Offers"
+msgstr "TV Filmtipps"
+
+msgctxt "#30018"
+msgid "Get Infos from %s"
+msgstr "Beziehe Programminfos von %s"
+
+msgctxt "#30104"
+msgid "Highlights of the day"
+msgstr "TV Highlights des Tages"
+
+msgctxt "#30106"
+msgid "Service started"
+msgstr "Dienst gestartet"
+
+msgctxt "#30107"
+msgid "Set Switchtimer"
+msgstr "Umschalttimer setzen"
+
+msgctxt "#30108"
+msgid "Switch Now"
+msgstr "Jetzt umschalten"
+
+msgctxt "#30109"
+msgid "Refreshing Widget of %s"
+msgstr "Aktualisiere Widget von %s"
+
+msgctxt "#30110"
+msgid "TV Scraper"
+msgstr "TV Scraper"
+
+msgctxt "#30111"
+msgid "Select TV Scraper"
+msgstr "Wähle TV Scraper aus"
+
+msgctxt "#30113"
+msgid "Prefer HD Broadcasts"
+msgstr "Bevorzuge HD Sendungen"
+
+msgctxt "#30114"
+msgid "Info at system start and refresh"
+msgstr "Info bei Systemstart und Refresh"
+
+msgctxt "#30119"
+msgid "Cancel"
+msgstr "Abbrechen"
+
+msgctxt "#30126"
+msgid "Show stations only available in PVR Channel List"
+msgstr "Zeige nur Sender, die in PVR-Senderliste vorhanden sind"
+
+msgctxt "#30127"
+msgid "Refresh interval content"
+msgstr "Aktualisierungsintervall Inhalte"
+
+msgctxt "#30128"
+msgid "Refresh interval screen"
+msgstr "Aktualisierungsintervall Anzeige"
+
+msgctxt "#30131"
+msgid "Start Scraper with delay"
+msgstr "Scraper zeitverzögert starten"
+
+msgctxt "#30140"
+msgid "Oh sorry! Details are not accessible at this time."
+msgstr "Es liegen leider keine weiteren Informationen vor."
+
+msgctxt "#30150"
+msgid "0 (off)"
+msgstr "aus"
+
+msgctxt "#30151"
+msgid "5 mins"
+msgstr "5 min"
+
+msgctxt "#30152"
+msgid "10 mins"
+msgstr "10 min"
+
+msgctxt "#30153"
+msgid "15 mins"
+msgstr "15 min"
+
+msgctxt "#30154"
+msgid "30 mins"
+msgstr "30 min"
+
+msgctxt "#30155"
+msgid "45 mins"
+msgstr "45 min"
+
+msgctxt "#30156"
+msgid "60 mins"
+msgstr "60 min"
+
+msgctxt "#30157"
+msgid "90 mins"
+msgstr "90 min"
+
+msgctxt "#30158"
+msgid "120 mins"
+msgstr "120 min"
+
+msgctxt "#30159"
+msgid "150 mins"
+msgstr "150 min"
+
+msgctxt "#30160"
+msgid "180 mins"
+msgstr "180 min"
+
+msgctxt "#30161"
+msgid "210 mins"
+msgstr "210 min"
+
+msgctxt "#30162"
+msgid "240 mins"
+msgstr "240 min"
+
+msgctxt "#30163"
+msgid "720 mins"
+msgstr "720 min"
+
+msgctxt "#30164"
+msgid "1440 mins"
+msgstr "1440 min"

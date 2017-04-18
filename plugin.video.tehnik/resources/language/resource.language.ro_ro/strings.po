@@ -1,0 +1,64 @@
+# Kodi Media Center language file
+# Addon Name: TehniK_ro
+# Addon id: plugin.video.tehnik
+# Addon Provider: deltha
+msgid ""
+msgstr ""
+"Project-Id-Version: KODI Main\n"
+"Report-Msgid-Bugs-To: http://trac.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Romanian (Romania) (http://www.transifex.com/projects/p/kodi-main/language/ro_RO/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ro_RO\n"
+"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
+
+msgctxt "#30001"
+msgid "Pagina"
+msgstr ""
+
+msgctxt "#30100"
+msgid "IT"
+msgstr ""
+
+msgctxt "#30101"
+msgid Mobile"
+msgstr ""
+
+msgctxt "#30102"
+msgid Foto Video"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Videotutoriale"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Branduri"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Telecom"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Jocuri"
+msgstr ""
+
+msgctxt "#30400"
+msgid "Debug"
+msgstr ""
+
+msgctxt "#Cautare Videoclipuri"
+msgid "Done"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Titlu"
+msgstr ""
+
+
+

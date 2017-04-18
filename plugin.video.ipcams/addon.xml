@@ -8,12 +8,12 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
-    <summary lang="en">Shows streams of surveillance cameras</summary>
-    <summary lang="de">Zeigt Streams Deiner Überwachungskameras an</summary>
-    <description lang="en">Take a look to the pictures of your installed surveillance cameras. You are able to select one of a maximum number of three cameras.</description>
-    <description lang="de">Schau' Dir die Bilder Deiner installierten Überwachungskameras an. Du kannst eine von maximal drei Kameras auswählen.</description>
-    <disclaimer lang="en">Use at your own risk. This is not a replacement for professional equipment.</disclaimer>
-    <disclaimer lang="de">Benutzung auf eigene Gefahr. Ersetzt keine professionelle Ausrüstung.</disclaimer>
+    <summary lang="en_GB">Shows streams of surveillance cameras</summary>
+    <summary lang="de_DE">Zeigt Streams Deiner Überwachungskameras an</summary>
+    <description lang="en_GB">Take a look to the pictures of your installed surveillance cameras. You are able to select one of a maximum number of three cameras.</description>
+    <description lang="de_DE">Schau' Dir die Bilder Deiner installierten Überwachungskameras an. Du kannst eine von maximal drei Kameras auswählen.</description>
+    <disclaimer lang="en_GB">Use at your own risk. This is not a replacement for professional equipment.</disclaimer>
+    <disclaimer lang="de_DE">Benutzung auf eigene Gefahr. Ersetzt keine professionelle Ausrüstung.</disclaimer>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
     <forum></forum>
     <website></website>

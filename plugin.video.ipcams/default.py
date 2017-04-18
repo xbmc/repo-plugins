@@ -47,8 +47,9 @@ if mode is '':
     _atleast = False
     for i in range(int(__addon__.getSetting('numcams'))):
         icon = xbmc.translatePath(os.path.join( __path__,'resources', 'lib', 'media', 'ipcam_%s.png' % (i + 1)))
-        _listitem = '%s - %s' %(item[i], loc[i]) if loc[i] != '' else item[i]
-        li = xbmcgui.ListItem(_listitem, iconImage =icon)
+        _listitem = '%s - %s' % (item[i].encode('utf-8'), loc[i]) if loc[i] != '' else item[i]
+        li = xbmcgui.ListItem(_listitem)
+        li.setArt({'icon': icon})
         li.setProperty('isPlayable', 'true')
 
         if cam[i] != '':

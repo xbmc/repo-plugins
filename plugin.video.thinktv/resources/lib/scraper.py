@@ -79,7 +79,10 @@ class myAddon(t1mAddon):
  def getAddonMenu(self,url,ilist):
     addonLanguage  = self.addon.getLocalizedString
     self.doPBSLogin()
-    html = self.getRequest('http://www.pbs.org/shows-page/0/?genre=&title=&callsign=&alphabetically=true')
+    xheaders = self.defaultHeaders.copy()
+    xheaders["Referer"] = "http://www.pbs.org/shows/?genre=All&title=&station=false&alphabetically=true&layout=grid"
+    xheaders["X-Requested-With"] = "XMLHttpRequest"
+    html = self.getRequest('http://www.pbs.org/shows-page/0/?genre=&title=&callsign=&alphabetically=true', None, xheaders)
     a = json.loads(html)
     for b in a['genres'][1:]:
         ilist = self.addMenuItem(b['title'],'GS', ilist, str(b['id'])+'|0', self.addonIcon, self.addonFanart, None, isFolder=True)
@@ -106,6 +109,7 @@ class myAddon(t1mAddon):
         if a.get('videos') is not None:
             if len(a['videos']) > 0:
                 ilist = self.addMenuItem(addonLanguage(30005) ,'GM', ilist, 'pbswatchlist' , self.addonIcon, self.addonFanart, None, isFolder=True)
+    ilist = self.addMenuItem(addonLanguage(30051) ,'GS', ilist, 'pbssearch' , self.addonIcon, self.addonFanart, None, isFolder=True)
     return ilist
 
 
@@ -125,6 +129,20 @@ class myAddon(t1mAddon):
         html = self.getRequest('http://www.pbs.org/shows-page/0/?genre=&title=&callsign=%s&alphabetically=true' % (pbsol), None, xheaders)
         a = json.loads(html)
         cats = a['results']['content']
+    elif gsurl == 'pbssearch':
+        keyb = xbmc.Keyboard(self.addon.getSetting('last_search'), addonLanguage(30051))
+        keyb.doModal()
+        if (keyb.isConfirmed()):
+           answer = keyb.getText()
+           if len(answer) == 0: 
+              return (ilist)
+        self.addon.setSetting('last_search', answer)
+        answer = answer.replace(' ','+')
+        xheaders = self.defaultHeaders.copy()
+        xheaders['X-Requested-With'] = 'XMLHttpRequest'
+        html = self.getRequest('http://www.pbs.org/search-videos/?callsign=WNET&page=1&q=%s&rank=relevance' % (answer), None, xheaders)
+        a = json.loads(html)
+        cats = a['results']['articles']
     else:
         genreUrl, pgNum = url.split('|',1) 
         xheaders = self.defaultHeaders.copy()
@@ -157,7 +175,12 @@ class myAddon(t1mAddon):
                 contextMenu = [(addonLanguage(30007),'XBMC.RunPlugin(%s?mode=DF&url=AF%s)' % (sys.argv[0], url))]
         else:
             contextMenu = None
-        ilist = self.addMenuItem(name,'GC', ilist, url, thumb, fanart, infoList, isFolder=True, cm=contextMenu)
+        if gsurl == 'pbssearch':
+            infoList['mediatype'] = 'episode'
+            ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False)
+        else:
+            infoList['mediatype'] = 'tvshow'
+            ilist = self.addMenuItem(name,'GC', ilist, url, thumb, fanart, infoList, isFolder=True, cm=contextMenu)
     if pgNum != '':
         ilist = self.addMenuItem('[COLOR blue]%s[/COLOR]' % addonLanguage(30050),'GS', ilist, genreUrl+'|'+str(int(pgNum)+1), self.addonIcon, self.addonFanart, None, isFolder=True)
     return(ilist)

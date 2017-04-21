@@ -2,7 +2,7 @@
 <addon
 	id="plugin.audio.detektorfm"
 	name="detektor.fm"
-	version="1.2.1"
+	version="1.2.3"
 	provider-name="sorax">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />
@@ -11,28 +11,32 @@
 		<provides>audio</provides>
 	</extension>
 	<extension point="xbmc.addon.metadata">
-		<summary lang="en_GB">detektor.fm | Internet radio with journalism and alternative pop music</summary>
+		<summary lang="en_GB">detektor.fm | German online radio combining journalism with alternative pop music</summary>
 		<summary lang="de_DE">detektor.fm | Internetradio mit Journalismus und alternativer Popmusik</summary>
-		<description lang="en_GB">German internet radio</description>
-		<description lang="de_DE">Deutsches Internetradio</description>
+		<description lang="en_GB">detektor.fm focuses on in-depth-journalism and is a platform for high-quality audio-journalism on the German speaking internet. The nationwide approach is based on a editorial code of ethics. Users can listen to content live and on-demand as the prefer.</description>
+		<description lang="de_DE">detektor.fm konzentriert sich auf die Vermittlung hintergründiger Informationen und ist somit eine Plattform für anspruchsvollen Hörfunk-Journalismus im Internet. Die national relevanten Themen werden von etablierten Journalisten nach einem eigens verfassten Kodex aufgearbeitet. So kann man im Internet ein lineares Programm anbieten und zugleich zeitsouverän Inhalte abrufen.</description>
 		<disclaimer lang="en_GB"></disclaimer>
 		<disclaimer lang="de_DE"></disclaimer>
-		<language>de</language>
+		<language>de en</language>
 		<platform>all</platform>
 		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
-		<forum></forum>
-		<website></website>
-		<email></email>
+		<!--<forum></forum>
+		<email></email>-->
+		<website>https://detektor.fm</website>
 		<source>https://github.com/sorax/plugin.audio.detektorfm</source>
 		<news>
-v1.2.1  (2016-01-03)
+v1.2.3  (2017-04-12)
+- Minor code cleanup
+v1.2.2  (2017-04-10)
+- Updated icons and descriptions
+v1.2.1  (2017-01-03)
 - Added settings for choosing bitrate
 v1.2.0  (2016-12-27)
 - Plugin completely rewritten for Kodi v17 Krypton
 		</news>
 		<assets>
 			<icon>icon.png</icon>
-			<fanart></fanart>
+			<fanart>fanart.jpg</fanart>
 			<screenshot></screenshot>
 		</assets>
 	</extension>

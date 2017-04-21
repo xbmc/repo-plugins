@@ -102,7 +102,7 @@ class VideoContent(object):
             tsformatted = str(None)      
         s = "VideoContent(tsid=" + self.tsid + ", title='" + self.title + "', timestamp=" + tsformatted + ", "\
             "duration=" + str(self.duration) + ", videourl=" + str(self.video_url('L')) + ", "\
-            "imageurl=" + str(self.image_url()) + ", description='" + str(self.description) + "')"
+            "imageurl=" + str(self.image_url()) + ", description='" + unicode(self.description) + "')"
         return s.encode('utf-8', 'ignore')
 
 

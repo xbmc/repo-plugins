@@ -1,3 +1,6 @@
+v2.5.9
+Fixed broken Categories (again).
+
 v2.5.8
 Fixed broken Categories.
 

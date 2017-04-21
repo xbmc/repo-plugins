@@ -4,14 +4,13 @@ import collections
 import json
 import os
 import re
-import subprocess
-import sys
 import threading
 import urllib
 import urlparse
+import xml.etree.ElementTree
+
 import xbmc
 import xbmcaddon
-import xml.etree.ElementTree
 
 
 # These libraries must be installed manually instead of through a Kodi module
@@ -35,6 +34,7 @@ except ImportError:
 
 
 DEFAULT_LINKCAST_PORT = 49029
+MINIMUM_RAM_REQUIREMENT = 1.5 * 2**30  # 1.5 GB
 
 
 DetectedDefaults = collections.namedtuple(
@@ -86,7 +86,7 @@ class LinkcastRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         if contentType is None:
             self.send_error(400, 'Missing content type: {}')
             return
-        (ctype, pdict) = cgi.parse_header(contentType)
+        (ctype, _) = cgi.parse_header(contentType)
         if ctype != 'application/x-www-form-urlencoded':
             self.send_error(400, 'Unsupported content type: {}'.format(ctype))
             return
@@ -110,7 +110,7 @@ class LinkcastRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
         if url is None:
             url = ''
-            status = ''
+            status = u''
         else:
             status = u'<div id="status">{}</div>\n'.format(
                 cgi.escape(self.server.addon.getLocalizedString(30034)))
@@ -201,13 +201,13 @@ class LinkcastRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             'LEFT_CURLY_BRACKET': u'{{',
             'RIGHT_CURLY_BRACKET': u'}}',
         }
-        vars = dict(META_VARIABLES.items() + params.items())
+        template_vars = dict(META_VARIABLES.items() + params.items())
 
         def repl(match):
-            return vars[match.group(1)]
+            return template_vars[match.group(1)]
 
-        with open(path) as file:
-            template = file.read()
+        with open(path) as template_file:
+            template = template_file.read()
         expanded = re.sub(u'{{([^{}]+)}}', repl, template)
         self.wfile.write(expanded.encode('utf_8'))
 
@@ -217,8 +217,8 @@ class LinkcastRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         xbmc.log('Running plugin: ' + plugin)
         xbmc.executebuiltin('RunPlugin({})'.format(plugin))
 
-    def log_message(self, format, *args):
-        xbmc.log('Linkcast server log: ' + (format % args), xbmc.LOGDEBUG)
+    def log_message(self, log_format, *args):
+        xbmc.log('Linkcast server log: ' + (log_format % args), xbmc.LOGDEBUG)
 
     INDEX_PATH = '/'
     LINKCAST_CLOSE_PATH = '/linkcast.close'
@@ -294,6 +294,10 @@ class RemoteControlBrowserService(xbmcaddon.Addon):
                 break
         return DetectedDefaults(browserPath, browserArgs, xdotoolPath)
 
+    def isMemorySufficient(self):
+        return (psutil is None or
+                psutil.virtual_memory().total >= MINIMUM_RAM_REQUIREMENT)
+
     def marshalBool(self, val):
         BOOL_ENCODING = {False: 'false', True: 'true'}
         return BOOL_ENCODING[bool(val)]
@@ -307,12 +311,14 @@ class RemoteControlBrowserService(xbmcaddon.Addon):
 
     def storeDefaults(self):
         xbmc.log('Generating default addon settings')
+        self.setSetting(
+            'memorySufficient',
+            self.marshalBool(self.isMemorySufficient()))
         self.setSetting('psutilInstalled', self.marshalBool(psutil))
         self.setSetting('alsaaudioInstalled', self.marshalBool(alsaaudio))
         self.setSetting('pylircInstalled', self.marshalBool(pylirc))
 
         browserPath = self.getSetting('browserPath').decode('utf_8')
-        browserArgs = self.getSetting('browserArgs').decode('utf_8')
         xdotoolPath = self.getSetting('xdotoolPath').decode('utf_8')
         if not browserPath or not xdotoolPath:
             defaults = self.getDefaults()

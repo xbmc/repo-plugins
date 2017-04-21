@@ -6,6 +6,10 @@
         <setting id="xdotoolPath" label="30021" type="executable" />
         <setting id="linkcastEnabled" label="30030" type="bool" default="false" />
         <setting id="linkcastPort" label="30031" type="number" subsetting="true" enable="eq(-1,true)" default="49029" />
+        <setting id="suspendKodi" label="30041" type="bool" default="false" />
+        <setting id="alsaControl" type="text" visible="false" default="Master" />
+        <setting id="memorySufficient" type="bool" visible="false" default="true" />
+        <setting label="30039" type="lsep" visible="eq(-1,false)" />
         <setting id="psutilInstalled" type="bool" visible="false" default="true" />
         <setting label="30022" type="lsep" visible="eq(-1,false)" />
         <setting id="alsaaudioInstalled" type="bool" visible="false" default="true" />

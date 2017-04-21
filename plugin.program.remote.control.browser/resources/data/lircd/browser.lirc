@@ -418,6 +418,24 @@ end
 begin
     remote = mceusb
     prog = browser
+    button = Star
+    config = MULTITAP asterisk period
+    repeat = 5
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
+    button = Hash
+    config = KEY numbersign
+    repeat = 5
+    delay = 0
+end
+
+begin
+    remote = mceusb
+    prog = browser
     button = KEY_CLEAR
     config = KEY BackSpace
     repeat = 1

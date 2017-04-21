@@ -1,14 +1,14 @@
 # XBMC Media Center language file
 # Addon Name: Remote Control Browser
 # Addon id: plugin.program.remote.control.browser
-# Addon version: 1.0.3
+# Addon version: 1.1.0
 # Addon Provider: Chad Parry
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
 "Report-Msgid-Bugs-To: Chad Parry <github@chad.parry.org>\n"
 "POT-Creation-Date: 2016-05-25 22:19+0000\n"
-"PO-Revision-Date: 2016-11-06 10:29-0800\n"
+"PO-Revision-Date: 2017-04-02 10:46-0700\n"
 "Last-Translator: Chad Parry <github@chad.parry.org>\n"
 "Language-Team: Remote Control Browser Translation\n"
 "MIME-Version: 1.0\n"
@@ -124,3 +124,15 @@ msgstr "Kodi Linkcast does not support the scheme: %(url)s"
 msgctxt "#30038"
 msgid "Browser already running!"
 msgstr "Browser already running!"
+
+msgctxt "#30039"
+msgid "Warning: Insufficient memory"
+msgstr "Warning: Insufficient memory"
+
+msgctxt "#30040"
+msgid "Browser reported an error!"
+msgstr "Browser reported an error!"
+
+msgctxt "#30041"
+msgid "Suspend Kodi During Browsing"
+msgstr "Suspend Kodi During Browsing"

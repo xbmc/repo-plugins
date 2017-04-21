@@ -1,3 +1,6 @@
+version 2.2.2
+ * Fix unicode error (thanks to jgibbon)
+
 version 2.2.1
  * Fixed issue where subtitles did not work (thanks to Mikel)
 

@@ -1,3 +1,6 @@
+[B]1.0.1[/B]
+- Fixed broken streaming URLs
+
 [B]1.0.0[/B]
 - Improved integration with Kodi features
   (bookmarks, media infos, favorites, playlists, ...)

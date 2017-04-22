@@ -1,0 +1,70 @@
+
+INSTALL
+=======
+
+
+EN:
+
+INSTALLING TehniK 
+
+Zip archives required:
+
+script.module.xbmcswift2-2.4.0.zip
+plugin.video.tehnik-2.0.7.zip
+
+The TehniK plugin depends on the xbmcswift2 module.
+First you will need install xbmcswift2 and then install TehniK.
+
+Steps:
+
+1. Files will be download locally to the storage device where KODI is installed.
+2. These files will be installed:
+
+Supplements will select menu -> Install from zip files.
+It will select and install the first file
+script.module.xbmcswift2-2.4.0.zip
+and then
+plugin.video.tehnik-2.0.7.zip
+
+In the bottom right of the screen installer will
+return a message about the completion of the installation
+for each module.
+
+3. Return to the main menu.
+
+From the main menu select video -> addons
+where you will be able to run the new icon "TehniK".
+
+
+RO:
+
+INSTALAREA PLUGINULUI TehniK
+
+Arhive zip necesare:
+
+script.module.xbmcswift2-2.4.0.zip
+plugin.video.tehnik-2.0.7.zip
+
+Pluginul TehniK depinde de modului xbmcswift2.
+Prima data se va instala xbmcswift2 iar apoi se va instala modulul TehniK.
+
+Pasi:
+
+1. Fisierele se vor descarca pe dispozitivul de stocare al KODI-ului.
+2. Se vor instala aceste fisiere
+
+Se va selecta meniul suplimente -> instalare din fisiere zip.
+Se va selecta si instala prima data fisierul
+script.module.xbmcswift2-2.4.0.zip
+iar apoi 
+plugin.video.tehnik-2.0.7.zip
+
+In partea din dreapta jos a ecranului installer-ul va 
+returna cate un mesaj despre rezultatul instalarii
+pentru fiecare modul instalat.
+
+3. Revenire in meniul principal.
+
+Din meniul principal se va selecta meniul video -> suplimente
+de unde se va putea executa noua icoana TehniK.
+

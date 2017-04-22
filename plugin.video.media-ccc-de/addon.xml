@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.media-ccc-de" name="CCC-TV (media.ccc.de)" version="0.0.5" provider-name="Tobias Gruetzmacher">
+<addon id="plugin.video.media-ccc-de" name="CCC-TV (media.ccc.de)" version="0.0.6" provider-name="Tobias Gruetzmacher">
   <requires>
     <import addon="xbmc.python" version="2.14.0"/>
     <import addon="script.module.simplejson" version="3.3.0"/>
@@ -20,6 +20,7 @@
     <license>MIT License</license>
     <website>http://media.ccc.de/</website>
     <email>tobias-xbmc@23.gs</email>
+    <broken>Using this plugin in Kodi &lt; 16 is not supported any more.</broken>
     <source>http://github.com/cccc/plugin.video.media-ccc-de</source>
   </extension>
 </addon>

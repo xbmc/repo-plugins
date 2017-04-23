@@ -1,3 +1,7 @@
+v2.14.0 (2017-04-23)
+ - Fixed New Stadium category after new YouTube streams were added
+ - Update icon again, to match the video logo
+
 v2.13.0 (2017-01-08)
  - Fixed New Stadium category after new site launch
  - Fixed error when Live Audio Commentary is offline

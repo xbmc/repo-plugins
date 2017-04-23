@@ -29,7 +29,7 @@ import traceback
 import json
 import platform
 
-from xbmcswift2 import Plugin, xbmc, xbmcgui
+from kodiswift import Plugin, xbmc, xbmcgui
 from bs4 import BeautifulSoup
 import requests
 import livestreamer
@@ -237,8 +237,12 @@ def get_search_result_videos(soup, query):
     form_data['viewstate'] = get_viewstate(soup)
 
 def get_stadium_index():
-    for title, entry_id in new_stadium.get_cams():
-        yield video_item(entry_id, title)
+    for title, youtube_id in new_stadium.get_cams():
+        yield {'label': title,
+               'thumbnail': 'https://i.ytimg.com/vi/{}/sddefault_live.jpg'.format(youtube_id),
+               'info': {'title': title},
+               'path': "plugin://plugin.video.youtube/play/?video_id={}".format(youtube_id),
+               'is_playable': True}
 
     yield {'label': plugin.get_string(30019),
            'path': plugin.url_for('show_stadium_video_gallery')}

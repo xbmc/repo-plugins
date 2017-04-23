@@ -1,0 +1,31 @@
+v1.1.2 [13-Apr-2017]
+- Added disclaimer
+- made code Kodi style compliant
+  - replaced whitespace indents with tabs
+  - Fixed language definition in addon.xml
+  - removed use of deprecated Kodi functions (listitem -> iconimage)
+  - added with statement to IO
+
+v1.1 [10-Apr-2017]
+- redid random pages and introduced cache to not lose the list after showing a random strip
+- removed reload button in random date menu
+
+v1.0.1 [06-Apr-2017]
+- Corrections for making the repo ready for pull
+  - addon.xml: changed language id from en to en_GB to be Krypton compliant
+  - removed fanart.jpg and icon.png in resources folder as they are not used
+  - removed all .pyo files 
+
+v1.0.0 [05-Apr-2017]
+- Initial release
+- Changes:
+  - Changed to not pre-fetching due to performance reasons. This disables right/left arrow key browsing
+  - Cleaned up script structure. Introduced global variables
+  - Simplified subroutines
+  - Introduced caching of URL-scraping-results to improve performance when hitting already seen comic strips
+- Features:
+  - Direct todays Dilbert access
+  - Recent Dilberts by list
+  - Random Dilberts, reloadable
+  - Browse Dilberts by date
+  - Get Dilbert from specific Date

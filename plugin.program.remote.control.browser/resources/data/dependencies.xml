@@ -5,6 +5,7 @@
         <browser path="/usr/bin/google-chrome" args="--start-maximized --disable-session-crashed-bubble --disable-infobars --disable-translate --no-default-browser-check --no-first-run --kiosk"/>
         <browser path="/usr/bin/firefox" args="-no-remote -new-window"/>
         <browser path="/usr/bin/chromium-browser" args="--start-maximized --disable-session-crashed-bubble --disable-infobars --disable-translate --no-default-browser-check --no-first-run --kiosk"/>
+        <browser path="/usr/bin/epiphany-browser" args="--application-mode --profile=/tmp"/>
     </platform>
     <platform id="System.Platform.OSX">
         <xdotool path="/opt/local/bin/xdotool"/>

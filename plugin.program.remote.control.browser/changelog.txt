@@ -1,3 +1,12 @@
+v1.2.0 (2017-04-20)
+- Support star and hash remote buttons
+
+v1.1.0 (2017-04-02)
+- Workaround for underpowered hosts
+
+v1.0.6 (2017-01-22)
+- Detect Epiphany browsers
+
 v1.0.5 (2016-11-27)
 - Dynamically adjust settings values but not the settings schema
 

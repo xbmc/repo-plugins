@@ -1,3 +1,6 @@
+v0.0.6
+- Deprecate old version for Kodi < 16.
+
 v0.0.5
 - The everything-was-broken release
 - Fix route to capture complete path (fixes #5).

@@ -21,7 +21,7 @@ msgid "Live-Stream"
 msgstr "Live-Stream"
 
 msgctxt "#30011"
-msgid "Talk-Stream"
+msgid "Word-Stream"
 msgstr "Wort-Stream"
 
 msgctxt "#30012"

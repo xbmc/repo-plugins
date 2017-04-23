@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<language locale="ro">
+  <regions>
+    <region name="România" locale="RO">
+      <dateshort>DD.MM.YYYY</dateshort>
+      <datelong>D MMMM YYYY</datelong>
+      <time symbolAM="AM" symbolPM="PM">HH:mm xx</time>
+      <tempunit>C</tempunit>
+      <speedunit>kmh</speedunit>
+      <timezone>EET</timezone>
+    </region>
+    
+    <region name="Republica Moldova" locale="RO">
+      <dateshort>DD.MM.YYYY</dateshort>
+      <datelong>D MMMM YYYY</datelong>
+      <time symbolAM="AM" symbolPM="PM">HH:mm xx</time>
+      <tempunit>C</tempunit>
+      <speedunit>kmh</speedunit>
+      <timezone>EET</timezone>
+    </region>
+  </regions>
+</language>

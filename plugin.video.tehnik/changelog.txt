@@ -1,0 +1,66 @@
+v1.0.1
+- Initial version featuring only the mobile branch.
+
+v1.0.2
+- Adding IT&C Information.
+
+v1.0.2
+- Adding Photo&Video Information.
+
+v1.0.3
+- Adding Videotutoriale Information.
+
+v1.0.4
+- Adding Branduri Information.
+
+v2.0.0
+- Migration to xbmcswift2
+
+v2.0.1
+- Using the language atribute in addon.xml
+- Fixing a parse error in
+plugin.video.tehnik/resources/language/English/strings.xml: not
+well-formed (invalid token): line 5, column 27
+- Fixing a parse error in
+plugin.video.tehnik/resources/language/Romanian/strings.xml: not
+well-formed (invalid token): line 5, column 27
+
+v2.0.2
+- Removed en from the language tag from <language>en ro</language> 
+to <language>ro</language> 
+
+v2.0.3
+Changes:
+- Added a gaming section.
+- Fixed the image naming.
+- Content changes: 
+IT: removed Lab501, Now Tech Ro, added Unboxarena.
+Mobiles: added Voievozii, Gadget.ro and Lab501.
+Brands: added Asus, Bit Defenter, HP Romania, Nokia, Schrack Technik and Sony.
+Games: added CreativeMonkeyzArmy, GamaGanda, Gamextv, GamingHD, PGLtv, Tiranianu Gaming and War Arena Gaming.
+
+v2.0.4
+- Fixing a parse error and adding identities in order to access the Kodi's youtube plugin.
+- Content changes.
+
+v2.0.5
+- Content changes:
+IT: Domo Retail - content changes, Magazinele Flanco - content changes, PC Garage - content changes, added PC Garage TV, added Media Galaxy, removed ProStore, removed NowTechRo.
+Mobiles: removed The Phone Geeks, removed Voievozii.
+Brands: Sony - content changes, removed Schrack Technik, added Philips TV Romania.
+Videotutorials : Added CreativeMonkeyzArmy tutorials.
+Games: Removed PGLtv, moved CreativeMonkeyzArmy to videotutorials.
+
+v2.0.6
+- Content changes:
+IT: Removed Domo Retail - content changes, removed Unbox Arena - content changes.
+Mobiles: removed Gadged-On - content changes, removed Mobile Trend - content changes.
+
+v2.0.7
+- Content changes:
+IT: Removed Axel Tech - content changes.
+Mobiles: Added George Buhnici - content changes.
+Games: Removed Tiranianu Gaming.
+- Changed the xbmc.python version in addon.xml to 2.25.0.
+- Changed the lang and lang's description in addon.xml to en_gb.
+- Migrated strings from strings.xml to strings.po.

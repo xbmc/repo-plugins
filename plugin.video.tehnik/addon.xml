@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.tehnik" name="TehniK.ro" version="2.0.7" provider-name="Rujinschi Remus (deltha@gmail.com)">
+  <requires>
+    <import addon="xbmc.python" version="2.25.0"/>
+    <import addon="script.module.xbmcswift2" version="2.4.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <language>en</language>
+    <summary lang="en_gb">IT and Consumer electronics news and trends in Romania</summary>
+    <summary lang="ro_ro">Tendinte IT si echipamente electronice de larg consum in Romania</summary>
+    <description lang="en_gb">IT and Consumer electronics news and trends in Romania.</description>
+    <description lang="ro_ro">Noutati, tendinte IT si echipamente electronice de larg consum in Romania.</description>
+    <platform>all</platform>
+    <source>https://github.com/deltha/plugin.video.tehnik</source>
+    <email>deltha@gmail.com</email>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+  </extension>
+</addon>

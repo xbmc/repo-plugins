@@ -159,7 +159,7 @@ cookie_jar = InitialiseCookieJar()
 
 
 def SignInBBCiD():
-    sign_in_url="https://ssl.bbc.co.uk/id/signin"
+    sign_in_url="https://account.bbc.com/signin"
 
     username=ADDON.getSetting('bbc_id_username')
     password=ADDON.getSetting('bbc_id_password')
@@ -176,12 +176,12 @@ def SignInBBCiD():
         resp = s.get('https://www.bbc.com/', headers=headers)
 
         # Call the login page to get a 'nonce' for actual login
-        signInUrl = 'https://www.bbc.com/session'
+        signInUrl = 'https://session.bbc.com/session'
         resp = s.get(signInUrl, headers=headers)
         m = p.search(resp.text)
         url = m.group(1)
 
-        url = "https://www.bbc.com%s" % url
+        url = "https://account.bbc.com%s" % url
         resp = s.post(url, data=post_data, headers=headers)
     
         for cookie in s.cookies:
@@ -197,7 +197,7 @@ def SignInBBCiD():
         m = p.search(resp.text)
         url = m.group(1)
 
-        url = "https://www.bbc.com%s" % url
+        url = "https://account.bbc.com%s" % url
         resp = s.post(url, data=post_data, headers=headers)
     
         for cookie in s.cookies:
@@ -211,7 +211,7 @@ def SignInBBCiD():
 
 
 def SignOutBBCiD():
-    sign_out_url="https://ssl.bbc.co.uk/id/signout"
+    sign_out_url="https://account.bbc.com/signout"
     OpenURL(sign_out_url)
     cookie_jar.clear()
     cookie_jar.save()
@@ -222,7 +222,8 @@ def SignOutBBCiD():
 
 
 def StatusBBCiD():
-    r = requests.head("https://www.bbc.com/account", cookies=cookie_jar, allow_redirects=False)
+    r = requests.head("https://account.bbc.com/account", cookies=cookie_jar,
+                      headers=headers, allow_redirects=False)
     if r.status_code == 200:
         return True
     else: 

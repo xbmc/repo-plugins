@@ -1,3 +1,6 @@
+v2.5.10
+Fixed broken BBC iD functionality.
+
 v2.5.9
 Fixed broken Categories (again).
 

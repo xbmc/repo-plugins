@@ -58,7 +58,7 @@ def _hq_img(addr):
     return addr
 
 
-@plugin.cached(TTL=35)
+@plugin.cached(TTL=30)
 def get_webpage(url):
     page = _get_file(url, 'https://video.aktualne.cz/').decode('utf-8')
     return page
@@ -98,7 +98,7 @@ def menu_shows():
         'path': plugin.url_for('menu_playlist_short', path=m[1]),
         'thumbnail': ('https://i0.cz/bbx/video/img/video/%s' % cssimgs[m[0]]) if m[0] in cssimgs else plugin.addon.getAddonInfo('icon')
         } for m in matches]
-    return plugin.finish(items, view_mode='thumbnail')
+    return items
 
 
 def _create_playlist_menuitem(label, href, img):
@@ -141,21 +141,30 @@ def play_video(token):
     s1 = re.search(u'(?s)embedData[0-9a-f]{32}\\[\'asset\'\\]\s*=\\s*(\\{.+?\\});', page, re.DOTALL)
     if s1:
         metadata = _js_to_obj(s1.group(1))
-        formats = {}
-        for i in metadata['sources']:
-            f = '%s@%s' % (i['type'], i['label'])
-            formats[f] = i['file']
-            #formats[f] = re.sub('^http://', 'https://', i['file'])
-        prefered_format = plugin.get_setting('format', choices=('video/mp4', 'video/webm'))
-        prefered_quality = plugin.get_setting('quality', choices=('180p', '360p', '720p'))
-        preference = '%s@%s' % (prefered_format, prefered_quality)
-        format = preference if preference in formats else formats.keys()[0]
+        file = None
+        live = False
+        s2 = re.search(u'(?s)embedData[0-9a-f]{32}\\.asset\\.liveStarter\s*=\\s*(\\{.+?\\});', page, re.DOTALL)
+        if s2:
+            livemetadata = _js_to_obj(s2.group(1))
+            file = livemetadata['sources'][0]['file']
+            live = True
+        else:
+            formats = {}
+            for i in metadata['sources']:
+                f = '%s@%s' % (i['type'], i['label'])
+                formats[f] = i['file']
+            prefered_format = plugin.get_setting('format', choices=('video/mp4', 'video/webm'))
+            prefered_quality = plugin.get_setting('quality', choices=('180p', '360p', '720p'))
+            preference = '%s@%s' % (prefered_format, prefered_quality)
+            format = preference if preference in formats else formats.keys()[0]
+            file = formats[format]
         plot = re.search(u'(?s)<p class="popis".+?\\| (.+?)</p>', page, re.DOTALL).group(1)
         show = re.search(u'(?s)\'GA\': htmldeentitize\\(\'(.+?)\'\\)', page, re.DOTALL).group(1)
         return [{
             'label': _decode_entities(metadata['title']),
+            'label2': plugin.get_string(30030) if live else None,
             'is_playable': True,
-            'path': formats[format],
+            'path': file,
             'thumbnail': _hq_img(metadata['image']) if 'image' in metadata else None,
             'info_type': 'video',
             'info': {
@@ -167,7 +176,7 @@ def play_video(token):
                 },
             'stream_info': {
                 'video': {
-                    'duration': metadata['duration']
+                    'duration': metadata['duration'] if not live else None
                     }
                 }
             }]

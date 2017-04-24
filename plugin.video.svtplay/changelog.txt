@@ -1,3 +1,10 @@
+Version 4.0.48
+-------------
+- Fix broken search
+- Remove FavoritesManager. Use Kodi's built-in instead
+- Remove PlaylistManager. Use Kodi's built-in instead
+- Remove avc1.77 codec filtering
+
 Version 4.0.47
 -------------
 - Fix broken channel playback

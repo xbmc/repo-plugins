@@ -75,9 +75,6 @@ def start():
         title="Cinema",
         url="plugin://plugin.video.youtube/channel/UCWzaMLuoZUNjsrCrTirABQA/")
     addDir(
-        title="Cinema",
-        url="plugin://plugin.video.youtube/channel/UCWzaMLuoZUNjsrCrTirABQA/")
-    addDir(
         title="Fear",
         url="plugin://plugin.video.youtube/channel/UCCT0cBYnHaDXZwuPz-V14hg/")
     addDir(

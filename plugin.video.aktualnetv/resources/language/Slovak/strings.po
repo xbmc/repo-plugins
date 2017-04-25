@@ -14,95 +14,81 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Language: sk\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2\n"
 
 msgctxt "Addon Summary"
 msgid "This addon provides access to videos published on Aktualne TV"
-msgstr ""
+msgstr "Tento doplnok sprístupňuje videa publikovaná na Aktuálně TV"
 
 msgctxt "Addon Description"
 msgid "Aktualne.cz — covering all aspects of life in the Czech Republic, from political, social, economic and sports news to arts and culture"
-msgstr ""
+msgstr "Aktuálně.cz — kompletné spravodajstvo, správy z domova i zo sveta"
 
 msgctxt "Addon Disclaimer"
 msgid "This is an unofficial addon and is in no way affiliated with publisher Economia, a. s. It was created and is maintained by an independent developer. It is provided for reference only and may contain errors."
-msgstr ""
+msgstr "Toto je neoficiálny doplnok a nie je, žiaľ, žiadnym spôsobom spojený s vydavateľstvom Economia, a. s. Bol vytvorený a je udržiavaný nezávislým vývojárom. Doplnok je poskytnutý len ako ukážka a môže obsahovať chyby."
 
 msgctxt "#30000"
 msgid "Aktualne TV"
-msgstr ""
+msgstr "Aktuálně TV"
 
 msgctxt "#30001"
 msgid "Economia"
-msgstr ""
-
-#empty strings from id 30002 to 30010
+msgstr "Economia"
 
 msgctxt "#30011"
 msgid "Archive"
-msgstr ""
+msgstr "Archív"
 
 msgctxt "#30012"
 msgid "Shows"
-msgstr ""
-
-#empty string with id 30013
+msgstr "Relácie"
 
 msgctxt "#30014"
 msgid "Search"
-msgstr ""
-
-#empty strings from id 30015 to 30019
+msgstr "Hľadať"
 
 msgctxt "#30020"
 msgid "Next…"
-msgstr ""
-
-#empty strings from id 30021 to 30029
+msgstr "Ďalšie…"
 
 msgctxt "#30030"
 msgid "Live Stream"
-msgstr ""
-
-#empty strings from id 30031 to 30100
+msgstr "Priamy prenos"
 
 msgctxt "#30101"
 msgid "Playback"
-msgstr ""
+msgstr "Prehrávanie"
 
 msgctxt "#30102"
 msgid "Other"
-msgstr ""
-
-#empty strings from id 30103 to 30109
+msgstr "Ostatné"
 
 msgctxt "#30110"
 msgid "Quality"
-msgstr ""
+msgstr "Kvalita"
 
 msgctxt "#30111"
 msgid "LQ (180p)"
-msgstr ""
+msgstr "LQ (180p)"
 
 msgctxt "#30112"
 msgid "SD (360p)"
-msgstr ""
+msgstr "SD (360p)"
 
 msgctxt "#30113"
 msgid "HD (720p)"
-msgstr ""
-
-#empty strings from id 30114 to 30119
+msgstr "HD (720p)"
 
 msgctxt "#30120"
 msgid "Format"
-msgstr ""
+msgstr "Formát"
 
 msgctxt "#30121"
 msgid "H.264 (hardware-accelerated)"
-msgstr ""
+msgstr "H.264 (hardwarovo akcelerovaný)"
 
 msgctxt "#30122"
 msgid "VP8 (libre)"
-msgstr ""
+msgstr "VP8 (otvorený formát)"

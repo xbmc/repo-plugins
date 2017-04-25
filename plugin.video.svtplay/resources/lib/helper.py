@@ -220,45 +220,6 @@ def mp4Handler(jsonObj):
   common.log("Info: bitrate="+str(bitrate)+" url="+url)
   return url
 
-
-def hlsStrip(video_url):
-    """
-    Extracts the stream that supports the
-    highest bandwidth and is not using the avc1.77.30 codec.
-    """
-    common.log("Stripping file: " + video_url)
-
-    ufile = urllib.urlopen(video_url)
-    lines = ufile.readlines()
-
-    hls_url = ""
-    bandwidth = 0
-    foundhigherquality = False
-
-    for line in lines:
-      if foundhigherquality:
-        # The stream url is on the line proceeding the header
-        foundhigherquality = False
-        hls_url = line
-      if "EXT-X-STREAM-INF" in line: # The header
-        if not "avc1.77.30" in line:
-          match = re.match(r'.*BANDWIDTH=(\d+).+', line)
-          if match:
-            if bandwidth < int(match.group(1)):
-              foundhigherquality = True
-              bandwidth = int(match.group(1))
-          continue
-
-    if bandwidth == 0:
-      return None
-
-    ufile.close()
-    hls_url = hls_url.rstrip()
-    return_url = urlparse.urljoin(video_url, hls_url)
-    common.log("Returned stream url : " + return_url)
-    return return_url
-
-
 def getStreamForBW(url):
   """
   Returns a stream URL for the set bandwidth,
@@ -323,9 +284,22 @@ def getVideoURL(json_obj):
   video_url = None
   for video in json_obj["videoReferences"]:
     if video["format"] == "hls":
-      video_url = video["url"]
+      alt = getAltUrl(video["url"])
+      if alt is None:
+        video_url = video["url"]
+      else:
+        video_url = alt
 
   return video_url
+
+def getAltUrl(video_url):
+  o = urlparse.urlparse(video_url)
+  query = urlparse.parse_qs(o.query)
+  try:
+    alt = query["alt"][0]
+  except KeyError, e:
+    alt = None
+  return alt
 
 def getSubtitleUrl(json_obj):
   """
@@ -358,9 +332,7 @@ def resolveShowJSON(json_obj):
     errormsg = None
 
     if extension == "HLS":
-      if getSetting("hlsstrip"):
-        video_url = hlsStrip(video_url)
-      elif getSetting("bwselect"):
+      if getSetting("bwselect"):
         (video_url, errormsg) = getStreamForBW(video_url)
     video_url = cleanUrl(video_url)
   return {"videoUrl": video_url, "subtitleUrl": subtitle_url}

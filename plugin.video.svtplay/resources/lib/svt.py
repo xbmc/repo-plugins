@@ -7,7 +7,7 @@ import time
 import helper
 import CommonFunctions as common
 
-BASE_URL = "http://svtplay.se"
+BASE_URL = "https://www.svtplay.se"
 API_URL = "/api/"
 VIDEO_API_URL="http://api.svt.se/videoplayer-api/video/"
 
@@ -176,32 +176,28 @@ def getSearchResults(search_term):
 
   items = []
 
-  for program in json_data["titles"]:
+  for result in json_data["videosAndTitles"]:
+    result_type = result.get("titleType", "PROGRAM")
     item = {}
-    item["title"] = common.replaceHTMLCodes(program["programTitle"])
-    item["url"] = program["contentUrl"]
-    item["thumbnail"] = helper.prepareThumb(program.get("imageMedium", ""), baseUrl=BASE_URL)
-    item["info"] = {}
-    item["info"]["plot"] = program.get("description", "")
-    items.append({"item": item, "type" : "program"})
-
-  for video in json_data["episodes"]:
-    item = {}
-    item["title"] = video["programTitle"] + " - " + common.replaceHTMLCodes(video["title"])
-    item["url"] = "video/" + video["id"]
-    item["thumbnail"] = helper.prepareThumb(video.get("imageMedium", ""), baseUrl=BASE_URL)
-    item["info"] = {}
-    item["info"]["plot"] = video.get("description", "")
-    items.append({"item": item, "type": "video"})
-
-  for clip in json_data["clips"]:
-    item = {}
-    item["title"] = common.replaceHTMLCodes(clip["title"])
-    item["url"] = "klipp/" + clip["id"]
-    item["thumbnail"] = helper.prepareThumb(clip.get("imageMedium", ""), baseUrl=BASE_URL)
-    item["info"] = {}
-    item["info"]["plot"] = clip.get("description", "")
-    items.append({"item": item, "type": "video"})
+    if result_type == "PROGRAM":
+      item["title"] = common.replaceHTMLCodes(result["programTitle"])
+      item["url"] = result["contentUrl"]
+      item["thumbnail"] = helper.prepareThumb(result.get("poster", ""), baseUrl=BASE_URL)
+      item["info"] = {}
+      item["info"]["plot"] = result.get("description", "")
+      items.append({"item": item, "type" : "program"})
+    else:
+      if result_type == "CLIP":
+        item["title"] = common.replaceHTMLCodes(result["title"])
+        item["url"] = "klipp/" + result["id"]
+        item["thumbnail"] = helper.prepareThumb(result.get("thumbnail", ""), baseUrl=BASE_URL)
+      else:
+        item["title"] = result["programTitle"] + " - " + common.replaceHTMLCodes(result["title"])
+        item["url"] = "video/" + result["id"]
+        item["thumbnail"] = helper.prepareThumb(result.get("poster", ""), baseUrl=BASE_URL)
+      item["info"] = {}
+      item["info"]["plot"] = result.get("description", "")
+      items.append({"item": item, "type": "video"})
 
   return items
 

@@ -744,7 +744,7 @@ def ListCategories():
     """
     html = OpenURL('http://www.bbc.co.uk/iplayer')
     match = re.compile(
-        '<a href="http://www.bbc.co.uk/iplayer/categories/(.+?)".*?>(.+?)</a>'
+        '<a href=".*?/iplayer/categories/([^{}]*?)".*?>(.+?)</a>'
         ).findall(html)
     for url, name in match:
         AddMenuEntry(name, url, 125, '', '', '')
@@ -1304,9 +1304,9 @@ def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
 
 def ParseStreams(stream_id):
     retlist = []
-    # print "Parsing streams for PID: %s"%stream_id[0]
+    # print "Parsing streams for PID: %s"%stream_id
     # Open the page with the actual strem information and display the various available streams.
-    NEW_URL = "http://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/iptv-all/vpid/%s" % stream_id[0]
+    NEW_URL = "http://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/iptv-all/vpid/%s" % stream_id
     html = OpenURL(NEW_URL)
     # Parse the different streams and add them as new directory entries.
     match = re.compile(
@@ -1317,25 +1317,19 @@ def ParseStreams(stream_id):
         tmp_sup = 0
         tmp_br = 0
         if transfer_format == 'hls':
-            if supplier == 'akamai_uk_hls' and source in [0,1]:
+            if supplier.startswith('akamai') and source in [0,1]:
                 tmp_sup = 1
-            elif supplier == 'limelight_uk_hls' and source in [0,2]:
+            elif supplier.startswith('limelight') and source in [0,2]:
                 tmp_sup = 2
-            elif supplier == 'bidi_uk_hls' and source in [0,3]:
+            elif supplier.startswith('bidi') and source in [0,3]:
                 tmp_sup = 3
             else:
                 continue
             m3u8_breakdown = re.compile('(.+?)iptv.+?m3u8(.+?)$').findall(m3u8_url)
-            #print m3u8_breakdown
-            # print m3u8_url
             m3u8_html = OpenURL(m3u8_url)
             m3u8_match = re.compile('BANDWIDTH=(.+?),.+?RESOLUTION=(.+?)(?:,.+?\n|\n)(.+?)\n').findall(m3u8_html)
             for bandwidth, resolution, stream in m3u8_match:
-                # print bandwidth
-                # print resolution
-                #print stream
                 url = "%s%s%s" % (m3u8_breakdown[0][0], stream, m3u8_breakdown[0][1])
-                #print url
                 if 1000000 <= int(bandwidth) <= 1100000:
                     tmp_br = 2
                 elif 1790000 <= int(bandwidth) <= 1800000:
@@ -1349,31 +1343,22 @@ def ParseStreams(stream_id):
     match = re.compile(
         'kind="video".+?connection href="(.+?)".+?supplier="(.+?)".+?transferFormat="(.+?)"'
         ).findall(html)
-    # print match
     unique = []
     [unique.append(item) for item in match if item not in unique]
-    # print unique
     for m3u8_url, supplier, transfer_format in unique:
         tmp_sup = 0
         tmp_br = 0
         if transfer_format == 'hls':
-            if supplier == 'akamai_hls_open' and source in [0,1]:
+            if supplier.startswith('akamai_hls_open') and source in [0,1]:
                 tmp_sup = 1
-            elif supplier == 'limelight_hls_open' and source in [0,2]:
+            elif supplier.startswith('limelight_hls_open') and source in [0,2]:
                 tmp_sup = 2
             else:
                 continue
             m3u8_breakdown = re.compile('.+?master.m3u8(.+?)$').findall(m3u8_url)
-        # print m3u8_url
-        # print m3u8_breakdown
         m3u8_html = OpenURL(m3u8_url)
-        # print m3u8_html
         m3u8_match = re.compile('BANDWIDTH=(.+?),RESOLUTION=(.+?),.+?\n(.+?)\n').findall(m3u8_html)
-        # print m3u8_match
         for bandwidth, resolution, stream in m3u8_match:
-            # print bandwidth
-            # print resolution
-            # print stream
             url = "%s%s" % (stream, m3u8_breakdown[0][0])
             # This is not entirely correct, displayed bandwidth may be higher or lower than actual bandwidth.
             if int(bandwidth) <= 801000:
@@ -1388,10 +1373,8 @@ def ParseStreams(stream_id):
     match = re.compile(
         'connection.+?href="(.+?)".+?supplier="(.+?)".+?transferFormat="(.+?)"'
         ).findall(html)
-    # print match
     unique = []
     [unique.append(item) for item in match if item not in unique]
-    # print unique
     for m3u8_url, supplier, transfer_format in unique:
         tmp_sup = 0
         tmp_br = 0
@@ -1477,33 +1460,43 @@ def ScrapeAvailableStreams(url):
     # Open page and retrieve the stream ID
     html = OpenURL(url)
     name = None
-    match = re.search(r'<meta property="og:title" content="(.*?)"', html, re.DOTALL)
-    if match:
-        name = match.group(1)
     image = None
-    match = re.search(r'<meta property="og:image" content="(.*?)"', html, re.DOTALL)
-    if match:
-        image = match.group(1)
     description = None
-    match = re.search(r'<meta property="og:description" content="(.*?)"', html, re.DOTALL)
+    stream_id_st = []
+    stream_id_sl = []
+    stream_id_ad = []
+
+    match = re.search(r'mediator.bind\((.*?), document\.getElementById\(\'tviplayer\'\)\);', html, re.DOTALL)
     if match:
-        description = match.group(1)
-    # Search for standard programmes.
-    stream_id_st = re.compile('"vpid":"(.+?)"').findall(html)
-    # Optionally, Signed programmes can be searched for. These have a different ID.
-    if ADDON.getSetting('search_signed') == 'true':
-        stream_id_sl = re.compile('data-download-sl="bbc-ipd:download/.+?/(.+?)/sd/').findall(html)
-    else:
-        stream_id_sl = []
-    # Optionally, Audio Described programmes can be searched for. These have a different ID.
-    if ADDON.getSetting('search_ad') == 'true':
-        url_ad = re.compile('<a href="(.+?)" class="version link watch-ad-on"').findall(html)
-        url_tmp = "http://www.bbc.co.uk%s" % url_ad[0]
-        html = OpenURL(url_tmp)
-        stream_id_ad = re.compile('"vpid":"(.+?)"').findall(html)
-        # print stream_id_ad
-    else:
-        stream_id_ad = []
+        data = match.group(1)
+        json_data = json.loads(data)
+        # print json.dumps(json_data, indent=2, sort_keys=True)
+        if 'title' in json_data['episode']:
+            name = json_data['episode']['title']
+        if 'synopses' in json_data['episode']:
+            synopses = json_data['episode']['synopses']
+            if 'large' in synopses:
+                description = synopses['large']
+            elif 'medium' in synopses:
+                description = synopses['medium']
+            elif 'small' in synopses:
+                description = synopses['small']
+            elif 'editorial' in synopses:
+                description = synopses['editorial']
+        if 'standard' in json_data['episode']['images']:
+            image = json_data['episode']['images']['standard'].replace('{recipe}','832x468')
+        for stream in json_data['episode']['versions']:
+            if ((stream['kind'] == 'original') or
+               (stream['kind'] == 'iplayer-version') or
+               (stream['kind'] == 'editorial')):
+                stream_id_st = stream['id']
+            elif ((stream['kind'] == 'signed') and
+                 (ADDON.getSetting('search_signed') == 'true')):
+                stream_id_sl = stream['id']
+            elif ((stream['kind'] == 'audio-described') and
+                 (ADDON.getSetting('search_ad') == 'true')):
+                stream_id_ad = stream['id']
+
     return {'stream_id_st': stream_id_st, 'stream_id_sl': stream_id_sl, 'stream_id_ad': stream_id_ad, 'name': name, 'image':image, 'description': description}
 
 

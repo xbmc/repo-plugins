@@ -291,7 +291,7 @@ def ListAtoZ():
         ('Y', 'y'), ('Z', 'z'), ('0-9', '@')]
 
     for name, url in characters:
-        url = 'http://www.bbc.co.uk/radio/programmes/a-z/by/%s/current' % url
+        url = 'http://www.bbc.co.uk/programmes/a-z/by/%s/player' % url
         AddMenuEntry(name, url, 136, '', '', '')
 
 

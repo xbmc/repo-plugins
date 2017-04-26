@@ -89,6 +89,3 @@ msgctxt "#30018"
 msgid "VEVO Login"
 msgstr ""
 
-msgctxt "#30019"
-msgid "Choose a playlist"
-msgstr ""

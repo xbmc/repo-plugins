@@ -24,20 +24,20 @@ class myAddon(t1mAddon):
       if self.addon.getSetting('login_name') != '':
           vevoName = self.addon.getSetting('login_name')
           vevoPswd = self.addon.getSetting('login_pass')
-          udata = urllib.urlencode({'username': vevoName, 'password':vevoPswd, 'grant_type':'password'})
+          udata = urllib.urlencode({'username': vevoName, 'password':vevoPswd, 'grant_type':'password', 'client_id':'SPupX1tvqFEopQ1YS6SS'})
       else:
           udata = ' '
       uheaders = self.defaultHeaders.copy()
       uheaders['X-Requested-With'] = 'XMLHttpRequest'
       uheaders['Connection'] = 'keep-alive'
-      html  = self.getRequest('http://www.vevo.com/auth', udata , uheaders)
+      html  = self.getRequest('https://accounts.vevo.com/token', udata , uheaders)
       a = json.loads(html)
       if not getMe:
-          return a['access_token']
+          return a['legacy_token']
       uheaders['Authorization'] = 'Bearer %s' % a['access_token']
-      html = self.getRequest(VEVOAPI+'/me', None, uheaders)
+      html = self.getRequest('https://users.vevo.com/user/me', None, uheaders)
       b = json.loads(html)
-      return (a['access_token'], b.get('id'))
+      return (a['legacy_token'], b.get('vevo_user_id'))
 
 
   def getAPI(self,url):
@@ -165,7 +165,6 @@ class myAddon(t1mAddon):
           infoList ={}
           infoList['Title'] = name
           infoList['Plot'] = b.get("description")
-          infoList['mediatype'] = 'file'
           contextMenu = [(addonLanguage(30009),'XBMC.Container.Refresh(%s?mode=GS&url=DP%s)' % (sys.argv[0], b["playlistId"])),
                          (addonLanguage(30010),'XBMC.Container.Refresh(%s?mode=GS&url=RL%s)' % (sys.argv[0], b["playlistId"]))]
           ilist = self.addMenuItem(name, 'GE', ilist, url, thumb, self.addonFanart, infoList, isFolder=True, cm=contextMenu)
@@ -298,7 +297,6 @@ class myAddon(t1mAddon):
 
 
   def doFunction(self, url):
-      addonLanguage = self.addon.getLocalizedString
       func = url[0:2]
       url = url[2:]
       if func == 'DP':
@@ -314,7 +312,7 @@ class myAddon(t1mAddon):
               nlist.append(b['name'])
               ilist.append(b['playlistId'])
           dialog = xbmcgui.Dialog()
-          choice = dialog.select(addonLanguage(30019), nlist)
+          choice = dialog.select('Choose a playlist', nlist)
           pid = ilist[choice]
           self.updateList(pid = pid, token = token, cmd = 'ADDITEM', isrc = url)
       elif func == 'AL':
@@ -344,8 +342,7 @@ class myAddon(t1mAddon):
                   url = b['url']
                   break
       thumb = xbmc.getInfoLabel('ListItem.Art(thumb)')
-      liz = xbmcgui.ListItem(path = url)
-      liz.setArt({'thumb': thumb})
+      liz = xbmcgui.ListItem(path = url, thumbnailImage = thumb)
       infoList ={}
       infoList['Artist'] = []
       infoList['Artist'].append(xbmc.getInfoLabel('ListItem.Artist'))

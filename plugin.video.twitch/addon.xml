@@ -1,14 +1,50 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-<addon id='plugin.video.twitch' version='1.4.5' name='Twitch' provider-name='A Talented Community'>
+<addon id='plugin.video.twitch' version='2.0.0' name='Twitch' provider-name='A Talented Community'>
     <requires>
         <import addon='xbmc.python' version='2.20.0'/>
-        <import addon="script.module.xbmcswift2" version="1.2.0"/>
+        <import addon="script.module.python.twitch"/>
+        <import addon="script.module.requests" version="2.9.1"/>
     </requires>
-    <extension point='xbmc.python.pluginsource' library='resources/lib/__run__.py'>
+    <extension point='xbmc.python.pluginsource' library='resources/lib/routes.py'>
         <provides>video</provides>
     </extension>
+    <extension point="xbmc.service" library="resources/lib/service.py"/>
     <extension point='xbmc.addon.metadata'>
         <platform>all</platform>
+        <news>
+*** NOT backwards compatible with v1 (favorites, routes will NOT work)
+*** New OAuth token required, see Settings - Get OAuth token
+- Kodi 17 ready, content/media types set per new official repository requirements
+- remove xbmcswift dependency
+- remove api portion in favor of new module script.module.python.twitch (based on python-twitch by ingwinlu)
+- remove Teams, end-points (no longer available)
+- use Twitch API v5
+- add caching for api calls, cache can be set/cleared from settings
+- add token generation, checking
+- add context menus:
+    - refresh
+    - 'go to' channel videos(display name) for streams
+    - 'go to' game for streams and videos
+- quality selection ask/source/bandwidth (clips excluded from bandwidth)
+- add Live notifications for following
+- add more search options
+- add Communities
+- add Follow/Unfollow
+- add blacklisting of users/games/communities (search excluded)
+- add set default quality for stream/video/clips per channel
+- add Playlists
+- add Collections
+- add Clips
+- add Languages
+- add Change sort by/period/direction
+- add support for timestamp in urls (Search - Video Id/Url)
+- add Attempt reconnection to live streams
+- add/remove menu items to/from the Main Menu
+        </news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.png</fanart>
+        </assets>
         <language>en</language>
         <source>https://github.com/MrSprigster/Twitch-on-Kodi</source>
         <license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.filmrisetv" version="1.0.0" name="FilmRise - YouTube" provider-name="Lunatixz">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="plugin.video.youtube" version="5.3.10"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">FilmRise acquires and distributes movies and TV series for worldwide release in all media.</summary>
+        <description lang="en_GB">FilmRise delivers unlimited FREE instant streaming of popular movies and hit TV shows. Choose from our extensive collection of movies and TV spanning all genres – available absolutely free with no subscription. All FilmRise movies and TV shows are available instantly. For more information and high quality film and TV entertainment, please visit FilmRise.com.</description>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+        <source>https://github.com/Lunatixz/XBMC_Addons/tree/master/plugin.video.filmriseTV</source>
+        <news></news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

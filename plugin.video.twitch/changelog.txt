@@ -1,5 +1,39 @@
+2.0.0
+*** NOT backwards compatible with v1 (favorites, routes will NOT work)
+*** New OAuth token required, see Settings - Get OAuth token
+- Kodi 17 ready, content/media types set per new official repository requirements
+- remove xbmcswift dependency
+- remove api portion in favor of new module script.module.python.twitch (based on python-twitch by ingwinlu)
+- remove Teams, end-points (no longer available)
+- use Twitch API v5
+- add caching for api calls, cache can be set/cleared from settings
+- add token generation, checking
+- add context menus:
+    - refresh
+    - 'go to' channel videos(display name) for streams
+    - 'go to' game for streams and videos
+- quality selection ask/source/bandwidth (clips excluded from bandwidth)
+- add Live notifications for following
+- add more search options
+- add Communities
+- add Follow/Unfollow
+- add blacklisting of users/games/communities (search excluded)
+- add set default quality for stream/video/clips per channel
+- add Playlists
+- add Collections
+- add Clips
+- add Languages
+- add Change sort by/period/direction
+- add support for timestamp in urls (Search - Video Id/Url)
+- add Attempt reconnection to live streams
+- add/remove menu items to/from the Main Menu
+
+1.4.6
+- Added new title formatting option which includes broadcaster language.
+- Added compatibility for new Twitch encoder names.
 1.4.5
 - Added compatibility for new Twitch encoder names.
+- Added Uploads
 1.4.4
 - HTTPS fix for Linux users + Kodi Offical repository compatibility fixes.
 1.4.3

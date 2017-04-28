@@ -19,7 +19,6 @@ import xbmcplugin
 
 ADDON = xbmcaddon.Addon(id='plugin.video.iplayerwww')
 
-
 def GetAddonInfo():
     addon_info = {}
     addon_info["id"] = addonid

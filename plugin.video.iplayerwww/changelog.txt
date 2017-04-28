@@ -1,3 +1,11 @@
+v2.5.13
+Added setting to ignore HTTPS streams.
+This is required to work around a bug in Jarvis and older versions, which prevents HTTPS
+communication when using certain protocols. If you encounter errors like "sslv3 alert
+handshake failure", please try switching this option on.
+Note that you will get less stream options in this case, and possibly not the all quality
+options.
+
 v2.5.12
 Fixed Categories (yet again).
 Adapted to new design of episode pages.

@@ -1314,6 +1314,8 @@ def ParseStreams(stream_id):
         ).findall(html)
     source = int(ADDON.getSetting('catchup_source'))
     for m3u8_url, supplier, transfer_format in match:
+        if m3u8_url.startswith('https') and (ADDON.getSetting('streams_ignore_https') == 'true'):
+            continue
         tmp_sup = 0
         tmp_br = 0
         if transfer_format == 'hls':
@@ -1346,6 +1348,8 @@ def ParseStreams(stream_id):
     unique = []
     [unique.append(item) for item in match if item not in unique]
     for m3u8_url, supplier, transfer_format in unique:
+        if m3u8_url.startswith('https') and (ADDON.getSetting('streams_ignore_https') == 'true'):
+            continue
         tmp_sup = 0
         tmp_br = 0
         if transfer_format == 'hls':
@@ -1376,6 +1380,8 @@ def ParseStreams(stream_id):
     unique = []
     [unique.append(item) for item in match if item not in unique]
     for m3u8_url, supplier, transfer_format in unique:
+        if m3u8_url.startswith('https') and (ADDON.getSetting('streams_ignore_https') == 'true'):
+            continue
         tmp_sup = 0
         tmp_br = 0
         if transfer_format == 'hls':

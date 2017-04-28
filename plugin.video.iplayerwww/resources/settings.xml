@@ -41,6 +41,7 @@
 </category>
 <category label="30200">
     <setting label="30103" type="lsep"  />
+    <setting id="streams_ignore_https" label= "30201" type="bool" default="false" />
     <setting id="streams_autoplay" label="30205" type="bool" default="true" />
     <setting label="30101" type="lsep"  />
     <setting id="catchup_source" label="30210" type="enum" values="Any|Akamai|Limelight|Bidi" default="0" enable="true" />

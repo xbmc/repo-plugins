@@ -109,6 +109,10 @@ msgctxt "#30200"
 msgid "Streams"
 msgstr ""
 
+msgctxt "#30201"
+msgid "Do not use HTTPS streams"
+msgstr ""
+
 msgctxt "#30205"
 msgid "Play stream automatically using these settings"
 msgstr ""

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30100">
+        <setting label="30101" type="text" id="apikey" default="" enable="false"/>
+        <setting label="30102" type="text" id="aai_username" default=""/>
+		<setting label="30104" type="select" id="device_type" lvalues="30105|30106|30107" default="2"/>
+    </category>
+	<category label="30110">
+        <setting label="30111" type="slider" id="num_recommends" subsetting="true" default="20" range="5,5,50" option="int" />
+	<setting label="30112" type="select" id="sort_videos" lvalues="30114|30115|30116|30117" default="2"/>
+        <setting label="30113" type="bool" id="asc_order" default="false"/>
+    </category>
+	<category label="30120">
+        <setting label="30121" type="text" id="first_name" default="" enable="false"/>
+        <setting label="30122" type="text" id="last_name" default="" enable="false"/>
+		<setting label="30123" type="date" id="reg_date" default="2015-11-15" enable="false"/>
+    </category>
+</settings>

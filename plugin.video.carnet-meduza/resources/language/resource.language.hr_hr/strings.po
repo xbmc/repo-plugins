@@ -1,0 +1,171 @@
+# Kodi Media Center language file
+# Addon Name: CARNet Meduza
+# Addon id: plugin.video.carnet-meduza 
+# Addon Provider: CARNet 
+msgid ""
+msgstr ""
+"Project-Id-Version: KODI Main\n"
+"Report-Msgid-Bugs-To: http://trac.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Croatian (http://www.transifex.com/projects/p/xbmc-addons/language/hr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: hr\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+msgctxt "#30100"
+msgid "API & Login Info"
+msgstr "API i informacije za prijavu"
+
+msgctxt "#30101"
+msgid "API key"
+msgstr "API ključ"
+
+msgctxt "#30102"
+msgid "AAI@EduHr Username"
+msgstr "AAI@EduHr korisnička oznaka"
+
+msgctxt "#30104"
+msgid "Device Type"
+msgstr "Tip uređaja"
+
+msgctxt "#30105"
+msgid "Tablet"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Smart Phone"
+msgstr "Pametni telefon"
+
+msgctxt "#30107"
+msgid "Smart TV"
+msgstr ""
+
+msgctxt "#30110"
+msgid "General"
+msgstr "Opće postavke"
+
+msgctxt "#30111"
+msgid "Number of Recommends"
+msgstr "Broj preporučenog sadržaja"
+
+msgctxt "#30112"
+msgid "Sort by"
+msgstr "Sortiraj po"
+
+msgctxt "#30113"
+msgid "Ascending Order"
+msgstr "Uzlazno sortiranje"
+
+msgctxt "#30114"
+msgid "Upload date"
+msgstr "Datum postavljanja"
+
+msgctxt "#30115"
+msgid "View count"
+msgstr "Broj pregleda"
+
+msgctxt "#30116"
+msgid "Title"
+msgstr "Naziv"
+
+msgctxt "#30117"
+msgid "Duration"
+msgstr "Trajanje"
+
+msgctxt "#30120"
+msgid "User Info"
+msgstr "Informacije o korisniku"
+
+msgctxt "#30121"
+msgid "First Name"
+msgstr "Ime"
+
+msgctxt "#30122"
+msgid "Last Name"
+msgstr "Prezime"
+
+msgctxt "#30123"
+msgid "Registered with CM since"
+msgstr "Registriran na CM od"
+
+#: py's string translations
+msgctxt "#30201"
+msgid "Recommended"
+msgstr "Preporuke"
+
+msgctxt "#30202"
+msgid "Categories"
+msgstr "Kategorije"
+
+msgctxt "#30203"
+msgid "Channels"
+msgstr "Kanali"
+
+msgctxt "#30204"
+msgid "Search"
+msgstr "Pretraga"
+
+msgctxt "#30205"
+msgid "Settings"
+msgstr "Postavke"
+
+msgctxt "#30206"
+msgid "Search CARNet Meduza"
+msgstr "Pretraži CARNet Meduza"
+
+msgctxt "#30207"
+msgid "Unable to play video. Inactive live stream?"
+msgstr "Nemoguće reproducirati video. Neaktivni prijenos uživo?"
+
+msgctxt "#30208"
+msgid "There is no videos in this category at the moment."
+msgstr "Trenutno nema video sadržaja u ovoj kategoriji."
+
+msgctxt "#30209"
+msgid "Device registered successfully."
+msgstr "Uređaj uspješno registriran."
+
+msgctxt "#30210"
+msgid "AAI@EduHr password:"
+msgstr "AAI@EduHr zaporka"
+
+msgctxt "#30211"
+msgid "Wrong entry. Please try again!"
+msgstr "Pogrešan unos. Pokušate ponovo!"
+
+msgctxt "#30212"
+msgid "\nYou are good to go!"
+msgstr "\nDodatak spreman za korištenje!"
+
+msgctxt "#30213"
+msgid "Error! Please check your settings or try again latter."
+msgstr "Greška! Molim provjeriti vaše postavke ili pokušati kasnije."
+
+msgctxt "#30214"
+msgid "Set your AAI@EduHr Username!"
+msgstr "Postavite vašu AAI@EduHr korisničku oznaku!"
+
+msgctxt "#30215"
+msgid "Error: UID parameter is missing."
+msgstr "Greška: nedostaje UID parametar."
+
+msgctxt "#30216"
+msgid "Error: User account has expired."
+msgstr "Greška: Korisnički račun je istekao."
+
+msgctxt "#30217"
+msgid "Error: registration was unsuccessful."
+msgstr "Greška: neuspješna registracija."
+
+msgctxt "#30218"
+msgid "Device already registered."
+msgstr "Uređaj je već registriran."
+
+msgctxt "#30219"
+msgid "Authentication error. Please check your username and password."
+msgstr "Greška kod autentifikacije. Molim provjerite vaš korisnički račun i zaporku."
+

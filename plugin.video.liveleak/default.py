@@ -24,14 +24,20 @@ domain_home = "https://www.liveleak.com/"
 
 # --- Helper functions ---
 
-def log(txt):
+def log(txt, level='debug'):
     """
     Write text to Kodi log file.
     :param txt: text to write
     :type txt: str
     """
+    levels = {
+        'notice': xbmc.LOGNOTICE,
+        'error': xbmc.LOGERROR
+        }
+    logLevel = levels.get(level, xbmc.LOGDEBUG)
+    
     message = '%s: %s' % (ADDON_NAME, txt.encode('ascii', 'ignore'))
-    xbmc.log(msg=message, level=xbmc.LOGDEBUG)
+    xbmc.log(msg=message, level=logLevel)
 
 def notify(message):
     """
@@ -40,7 +46,7 @@ def notify(message):
     :type message: str
     """
     command = 'XBMC.Notification("%s", "%s", %s)' % (ADDON_NAME, message , 5000)
-    xbmc.executebuiltin(comman)
+    xbmc.executebuiltin(command)
 
 def httpRequest(url, method = 'get'):
     """
@@ -50,7 +56,7 @@ def httpRequest(url, method = 'get'):
     :param method: currently, 'head' or 'get' (default)
     :type method: str
     """
-    #log( "httpRequest URL: %s" % str(url) )
+    #log("httpRequest URL: %s" % str(url), 'notice' )
 
     user_agent = ['Mozilla/5.0 (Windows NT 6.1; Win64; x64)',
                   'AppleWebKit/537.36 (KHTML, like Gecko)',
@@ -97,6 +103,19 @@ def addDir(name, queryString):
     liz.setInfo(type="Video", infoLabels={"Title": name})
     xbmcplugin.addDirectoryItem(handle=ADDON_HANDLE,url=u,listitem=liz,isFolder=True)
 
+def findAllMediaItems(url):
+    page = httpRequest(url)
+    if page is None:
+        notify("The server is not cooperating")
+        return False
+        
+    # Consolidate liveleak and Youtube video sources
+    liveleakRegexp = r'<source src="(.+?)".*$'
+    youtubeRegexp = r'src="//www.youtube.com/embed/(.+?)\?rel=0.*$'
+    Regexp = r'%s|%s' % (liveleakRegexp, youtubeRegexp)
+
+    return re.findall(Regexp, page, re.MULTILINE)
+
 
 # --- GUI director (Main Event) functions ---
 
@@ -112,6 +131,8 @@ def categories():
     addDir('Entertainment', 'channel_token=51a_1302956523')
     addDir('Search', 'q=')
     
+    xbmcplugin.endOfDirectory(ADDON_HANDLE)
+
 def index(url):
     if url=="browse?q=":
         searchString = addSearch()
@@ -121,11 +142,11 @@ def index(url):
     try:
         appdg = url.split('&')[1] # 'page=X'
         before = url.split('&')[0] # original category path
-        pageNumber = str(int(appdg.split('=')[1]) + 1) # increment page number
-        pagedURL = before + "&page=" + pageNumber # reassemble paged url
+        nextPageNumber = str(int(appdg.split('=')[1]) + 1) # increment page number
+        pagedURL = before + "&page=" + nextPageNumber # reassemble paged url
     except:
-        pageNumber = '2'
-        pagedURL = url + "&page=" + pageNumber
+        nextPageNumber = '2'
+        pagedURL = url + "&page=" + nextPageNumber
 
     url = domain_home + url
     page = httpRequest(url)
@@ -138,13 +159,7 @@ def index(url):
         name = h.unescape(h.unescape(name.strip()))
         name = name.encode('utf-8')
         
-        page = httpRequest(url)
-        # Consolidate liveleak and Youtube video sources
-        liveleakRegexp = r'<source src="(.+?)".*$'
-        youtubeRegexp = r'src="//www.youtube.com/embed/(.+?)\?rel=0.*$'
-        Regexp = r'%s|%s' % (liveleakRegexp, youtubeRegexp)
-
-        match = re.findall(Regexp, page, re.MULTILINE)
+        match = findAllMediaItems(url) # findall match object
         if match:
             for idx, item in enumerate(match):
                 videoNum = ""
@@ -159,15 +174,45 @@ def index(url):
                     item = 'plugin://plugin.video.youtube/play/?video_id=%s' % item
                 
                 # Build list item
-                liz=xbmcgui.ListItem(name)
-                liz.setInfo(type="Video", infoLabels={"Title": name})
+                liz=xbmcgui.ListItem(name + videoNum)
+                liz.setInfo(type="Video", infoLabels={"Title": name + videoNum})
                 liz.addStreamInfo('video', {'codec': 'h264'})
                 liz.setArt( {'thumb': thumbnail, 'icon': thumbnail} )
                 liz.setProperty('IsPlayable', 'true')
                 iList.append((item, liz, False))
 
     xbmcplugin.addDirectoryItems(ADDON_HANDLE, iList, len(iList))
-    addDir("Go To Page " + pageNumber, pagedURL)
+    addDir("Go To Page " + nextPageNumber, pagedURL)
+    liz=xbmcgui.ListItem("Back To Categories")
+    xbmcplugin.addDirectoryItem(handle=ADDON_HANDLE,url=BASE_URL,listitem=liz,isFolder=True)
+
+    xbmcplugin.endOfDirectory(ADDON_HANDLE)
+
+def viewPlay(url):
+    url = uqp(url) # Decode html quoted/encoded url
+    
+    # Acceptable URL patterns
+    url_patterns = [r'liveleak.com/view?', r'liveleak.com/ll_embed?']
+
+    # Verify it's actually a "view" page
+    if not any(x in url for x in url_patterns):
+        notify("Invalid URL format")
+        return
+
+    match = findAllMediaItems(url) # findall match object
+    if match:
+        # Play first matching media item
+        item = match[0]
+        item = reduce( (lambda x, y: x + y), item) # Discard unmatched RE
+        if not 'cdn.liveleak.com' in item:
+            item = 'plugin://plugin.video.youtube/play/?video_id=%s' % item
+        play_item = xbmcgui.ListItem(path=item)
+        # Pass the item to the Kodi player.
+        xbmcplugin.setResolvedUrl(ADDON_HANDLE, True, listitem=play_item)
+        
+    else:
+        notify("Sorry, no playable media found.")
+        return
 
 def playVideo(url, src):
     """
@@ -214,7 +259,7 @@ try:
         try: params[key] = uqp(params[key]).decode('utf-8')
         except: pass
 except:
-    parms = {}
+    params = {}
 
 # What do to?
 mode = params.get('mode', None)
@@ -225,10 +270,12 @@ elif mode == 'indx':
     url = params.get('url', None) # URL of index folder
     if url: index(url)
 
+elif mode == 'view':
+    url = params.get('url', None) # URL of index folder
+    if url: viewPlay(url)
+
 elif mode == 'play':
     url = params.get('url', None) # URL of video source
     src = params.get('src', None) # path of page containing video URL
     if url and src: playVideo(url, src)
 
-
-xbmcplugin.endOfDirectory(ADDON_HANDLE)

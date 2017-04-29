@@ -308,7 +308,7 @@ msgstr ""
 
 msgctxt "#30102"
 msgid "Source"
-msgstr ""
+msgstr "Kilde"
 
 msgctxt "#30103"
 msgid "1080p60"
@@ -348,4 +348,80 @@ msgstr ""
 
 msgctxt "#30112"
 msgid "Quality may result in best match"
+msgstr "Valgt kvalitet vil medføre at beste treff blir valgt"
+
+msgctxt "#30113"
+msgid "Uploads"
+msgstr "Opplastninger"
+
+msgctxt "#30114"
+msgid "Confirm"
+msgstr ""
+
+msgctxt "#30115"
+msgid "Function cache has been reset"
+msgstr ""
+
+msgctxt "#30116"
+msgid "Function cache reset failed"
+msgstr ""
+
+msgctxt "#30117"
+msgid "Reset function cache?"
+msgstr ""
+
+msgctxt "#30118"
+msgid "Developer"
+msgstr ""
+
+msgctxt "#30120"
+msgid "Cache"
+msgstr ""
+
+msgctxt "#30121"
+msgid "Cache expire time (minutes)"
+msgstr ""
+
+msgctxt "#30122"
+msgid "Reset function cache"
+msgstr ""
+
+msgctxt "#30123"
+msgid "Items per page"
+msgstr ""
+
+msgctxt "#30124"
+msgid "Video Id/Url"
+msgstr ""
+
+msgctxt "#30125"
+msgid "Streams"
+msgstr ""
+
+msgctxt "#30126"
+msgid "Refresh"
+msgstr ""
+
+msgctxt "#30127"
+msgid "Login"
+msgstr ""
+
+msgctxt "#30128"
+msgid "OAuth token is required"
+msgstr ""
+
+msgctxt "#30129"
+msgid "Error"
+msgstr ""
+
+msgctxt "#30130"
+msgid "Go to %s"
+msgstr ""
+
+msgctxt "#30131"
+msgid "No results returned"
+msgstr ""
+
+msgctxt "#30132"
+msgid "OAuth token is required for access to authorized user functions."
 msgstr ""

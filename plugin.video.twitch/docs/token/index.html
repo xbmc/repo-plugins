@@ -1,0 +1,126 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>Twitch on Kodi</title>
+    <meta name="description" content="">
+    <meta name="author" content="A Talented Community">
+    <style>
+		body {
+			font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+			font-size: 16px;
+			padding-top: 20px;
+		}
+		div.container {
+			width: 80%
+			margin: 10%
+		}
+		table#response {
+			text-align:center; 
+			margin-left:auto; 
+			margin-right:auto; 
+			width:420px;
+		}
+		tr, td, th {
+			text-align:left; 
+			padding-left: 5px;
+		}
+		th {
+			font-size: 20px;
+			color: white;
+			border-bottom: 3px solid grey;
+			background-color: #6034b1;
+		}
+		ul {
+			margin-top: 0px;
+			margin-bottom: 0px;
+		}		
+		li {
+			list-style-type: none;
+			font-size: 14px;
+		}
+		div.title-head {
+			display: inline-block;
+			margin-right: 10px;
+			font-weight: 600;
+		}
+		#response-token {
+			display: none;
+			width: 280px;
+			font-size: 16px;
+			text-align: center;
+		}
+    </style>
+</head>
+
+<body>
+<div class="body">
+    <div class="container">
+		<table id="response">
+			<tr>
+			<th>Twitch on Kodi</th>
+			</tr>
+			<tr>
+			<td><div class="title-head" id="response-title"></div><input class="readonly-input" type="text" id="response-token" onClick="this.select();" readonly="readonly"></td>
+			</tr>		
+			<tr>
+			<td><div class="info" id="response-additional"></div></td>
+			</tr>
+		</table>		
+    </div>
+</div>
+<script>
+	function get_pairs(pairString) {
+		var fragment = {};
+		var fragments = pairString.split('&');
+		var fragmentPair = [];
+		for (var i in fragments) {
+			fragmentPair = fragments[i].split('=');
+			if (fragmentPair.length !== 2) {
+				continue;
+			}
+			fragment[fragmentPair[0]] = fragmentPair[1];
+		}
+		return fragment;
+	}
+	var response = "";
+	var response_type = "";
+	var response_scopes = null;
+	var fragment = null;
+	var locationHash = location.hash.substr(1);
+	fragment = get_pairs(locationHash);
+	if (typeof fragment["access_token"] != "undefined") {
+		response_type = "OAuth Token";
+		response = fragment["access_token"];
+		if (typeof fragment["scope"] != "undefined") {
+			var temp_scopes = fragment["scope"];
+			temp_scopes = temp_scopes.split("+");
+			response_scopes = "<div class=\"title-head\" id=\"response-scopes-title\">Authorized Scopes</div><ul>";
+			for (i = 0; i < temp_scopes.length; i++) { 
+				response_scopes += "<li>" + temp_scopes[i] + "</li>";
+			}
+			response_scopes += "</ul>";
+		}
+		document.getElementById('response-title').innerHTML = response_type;
+		document.getElementById('response-token').value = response;
+		document.getElementById('response-additional').innerHTML = response_scopes;
+		document.getElementById('response-token').style.display = "inline";
+	}
+	else {
+		var getParameters = location.search.substr(1);
+		fragment = get_pairs(getParameters);
+		if (typeof fragment["error"] != "undefined") {
+			response_type = "Error";
+			response = fragment["error"];
+			if (typeof fragment["error_description"] != "undefined") {
+				response += ": " + decodeURIComponent(fragment["error_description"].replace(/\+/g, " "));
+			}
+			document.getElementById('response-title').innerHTML = response_type;
+			document.getElementById('response-additional').innerHTML = response;
+		}
+	}
+</script>
+</body>
+</html>

@@ -1,22 +1,86 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
+    <!-- Login -->
+    <category label="30127">
+        <setting id="oauth_token" type="text" label="30099" default=""/>
+        <setting label="30135" id="show_token_url" type="action" action="RunPlugin(plugin://$ID/?mode=get_token_url)" option="close"/>
+        <setting label="30132" type="lsep"/>
+        <setting label="30138" type="lsep"/>
+    </category>
+    <!-- Main Menu -->
+    <category label="30219">
+        <setting label="30005" id="menu_featured" type="bool" default="true"/>
+        <setting label="30002" id="menu_following" type="bool" default="true"/>
+        <setting label="30172" id="menu_browse" type="bool" default="true"/>
+        <setting label="30003" id="menu_search" type="bool" default="true"/>
+        <setting label="30004" id="menu_settings" type="bool" default="true"/>
+        <setting label="30002" type="lsep"/>
+        <setting label="30009" id="menu_following_live" type="bool" default="false"/>
+        <setting label="30170" id="menu_following_playlists" type="bool" default="false"/>
+        <setting label="30008" id="menu_following_channels" type="bool" default="false"/>
+        <setting label="30001" id="menu_following_games" type="bool" default="false"/>
+        <setting label="30176" id="menu_following_clips" type="bool" default="false"/>
+        <setting label="30172" type="lsep"/>
+        <setting label="30009" id="menu_browse_live" type="bool" default="false"/>
+        <setting label="30170" id="menu_browse_playlists" type="bool" default="false"/>
+        <setting label="30173" id="menu_browse_xbox_one" type="bool" default="false"/>
+        <setting label="30174" id="menu_browse_ps4" type="bool" default="false"/>
+        <setting label="30175" id="menu_browse_videos" type="bool" default="false"/>
+        <setting label="30176" id="menu_browse_clips" type="bool" default="false"/>
+        <setting label="30137" id="menu_browse_communities" type="bool" default="false"/>
+        <setting label="30001" id="menu_browse_games" type="bool" default="false"/>
+        <setting label="30003" type="lsep"/>
+        <setting label="30125" id="menu_search_streams" type="bool" default="false"/>
+        <setting label="30008" id="menu_search_channels" type="bool" default="false"/>
+        <setting label="30001" id="menu_search_games" type="bool" default="false"/>
+        <setting label="30124" id="menu_search_url" type="bool" default="false"/>
+    </category>
     <!-- General -->
     <category label="30076">
-        <!-- Username -->
-        <setting id="username" type="text" label="30050" default=""/>
-        <!-- OAuth Token -->
-        <setting id="oauth_token" type="text" label="30099" default="67ebpfhyoicab5kr0y7pzocsfohs7ty"/>
-        <setting label="30101" type="lsep"/>
         <!-- Video Quality -->
-        <setting id="video" type="enum" label="30040"
-                 lvalues="30102|30103|30104|30105|30106|30107|30108|30109|30110|30111" default="3"/>
-        <setting label="30112" type="lsep"/>
+        <setting id="video_quality" type="enum" label="30040" lvalues="30102|30136|30201" default="0"/>
+        <setting id="bandwidth" type="number" label="30201" default="2500000" enable="eq(-1,2)" visible="eq(-1,2)"/>
         <!-- Title Display -->
-        <setting id="titledisplay" type="enum" label="30045" lvalues="30046|30047|30048|30049|30051|30067" default="0"/>
+        <setting id="title_display" type="enum" label="30045" lvalues="30046|30047|30048|30049|30051|30067|30054" default="0"/>
         <!-- Truncate titles -->
-        <setting id="titletruncate" type="bool" label="30065" default="true"/>
-        <!-- Content Types -->
-        <setting id="contenttypes" type="enum" label="30068" lvalues="30069|30070|30071|30072|30073" default="0"/>
+        <setting id="title_truncate" type="bool" label="30065" default="true"/>
+        <setting label="30123" type="slider" id="items_per_page" default="25" range="10,100" option="int"/>
+
+        <setting label="30210" id="live_reconnect" type="bool" default="false"/>
+
+        <setting label="30204" type="lsep"/>
+        <setting label="30211" id="live_notify" type="bool" default="false"/>
+        <setting label="30205" id="live_notify_audible" type="bool" default="false" enable="eq(-1,true)" visible="eq(-1,true)"/>
+
+        <setting label="30090" type="lsep"/>
+        <setting label="30189" id="add_language" type="action" action="RunPlugin(plugin://$ID/?mode=edit_languages&amp;action=add)"/>
+        <setting label="30190" id="remove_language" type="action" action="RunPlugin(plugin://$ID/?mode=edit_languages&amp;action=remove)"/>
+    </category>
+    <!-- Lists -->
+    <category label="30167">
+        <setting label="30191" id="remove_default_stream_quality" type="action" action="RunPlugin(plugin://$ID/?mode=edit_qualities&amp;remove=true&amp;content_type=stream)"/>
+        <setting label="30192" id="remove_default_video_quality" type="action" action="RunPlugin(plugin://$ID/?mode=edit_qualities&amp;remove=true&amp;content_type=video)"/>
+        <setting label="30193" id="remove_default_clip_quality" type="action" action="RunPlugin(plugin://$ID/?mode=edit_qualities&amp;remove=true&amp;content_type=clip)"/>
+
+        <setting label="30194" id="clear_default_stream_qualities" type="action" action="RunPlugin(plugin://$ID/?mode=clear_list&amp;list_type=stream&amp;list_name=qualities)"/>
+        <setting label="30195" id="clear_default_video_qualities" type="action" action="RunPlugin(plugin://$ID/?mode=clear_list&amp;list_type=video&amp;list_name=qualities)"/>
+        <setting label="30196" id="clear_default_clip_qualities" type="action" action="RunPlugin(plugin://$ID/?mode=clear_list&amp;list_type=clip&amp;list_name=qualities)"/>
+    </category>
+    <category label="30153">
+        <setting id="blacklist_confirm_toggle" type="bool" label="30197" default="true"/>
+        <setting label="30154" id="remove_user_blacklist" type="action" action="RunPlugin(plugin://$ID/?mode=edit_blacklist&amp;list_type=user&amp;remove=true)"/>
+        <setting label="30155" id="remove_game_blacklist" type="action" action="RunPlugin(plugin://$ID/?mode=edit_blacklist&amp;list_type=game&amp;remove=true)"/>
+        <setting label="30182" id="remove_community_blacklist" type="action" action="RunPlugin(plugin://$ID/?mode=edit_blacklist&amp;list_type=community&amp;remove=true)"/>
+        <setting label="30156" id="clear_user_blacklist" type="action" action="RunPlugin(plugin://$ID/?mode=clear_list&amp;list_type=user&amp;list_name=blacklist)"/>
+        <setting label="30157" id="clear_game_blacklist" type="action" action="RunPlugin(plugin://$ID/?mode=clear_list&amp;list_type=game&amp;list_name=blacklist)"/>
+        <setting label="30183" id="clear_community_blacklist" type="action" action="RunPlugin(plugin://$ID/?mode=clear_list&amp;list_type=community&amp;list_name=blacklist)"/>
+    </category>
+    <!-- IRC -->
+    <category label="30081">
+        <!-- Enable IRC Chat -->
+        <setting id="irc_enable" type="bool" label="30052" default="false" enable="System.HasAddon(script.ircchat)"/>
+        <setting label="30075" id="install_ircscript" type="action" action="RunPlugin(plugin://$ID/?mode=install_ircchat)"
+                 enable="!System.HasAddon(script.ircchat)" visible="!System.HasAddon(script.ircchat)" option="close"/>
     </category>
     <!-- Live Previews -->
     <category label="30082">
@@ -27,7 +91,7 @@
         <setting label="30086" type="lsep" enable="eq(-2,false)" visible="eq(-2,false)"/>
         <!-- Remove Live Previews -->
         <setting id="clear_previews" label="30084" type="action"
-                 action="RunPlugin(plugin://plugin.video.twitch/clearLivePreviews/true/)"
+                 action="RunPlugin(plugin://$ID/?mode=clear_live_previews&amp;notify=true)"
                  enable="eq(-3,true)" visible="eq(-3,true)"/>
         <!-- Automaticall Refresh Live Previews -->
         <setting id="refresh_previews" type="bool" label="30074" default="false"
@@ -39,22 +103,15 @@
         <setting id="notify_refresh" type="bool" label="30087" default="true"
                  enable="eq(-6,true)" visible="eq(-6,true)"/>
     </category>
-    <!-- IRC -->
-    <category label="30081">
-        <!-- Enable IRC Chat -->
-        <setting id="irc_enable" type="bool" label="30052" default="false" enable="System.HasAddon(script.ircchat)"/>
-        <!-- Username -->
-        <setting id="irc_username" type="text" label="30050" default="" enable="eq(-1,true)"/>
-        <!-- OAuth Token -->
-        <setting id="oauth_token" type="text" label="30053" default="67ebpfhyoicab5kr0y7pzocsfohs7ty" enable="eq(-2,true)"/>
-        <setting label="30101" type="lsep"/>
-        <setting label="30075" id="install_ircscript" type="action" action="RunPlugin(plugin://script.ircchat/)"
-                 enable="!System.HasAddon(script.ircchat)" visible="!System.HasAddon(script.ircchat)"/>
+    <!-- Cache -->
+    <category label="30120">
+        <setting label="30121" type="slider" id="cache_expire_time" default="3" range="0,60" option="int"/>
+        <setting label="30122" id="reset_cache" type="action" action="RunPlugin(plugin://$ID/?mode=reset_cache)"/>
     </category>
-    <!-- API -->
-    <category label="30096">
-        <!-- OAUTH Client ID -->
-        <setting id="oauth_client_id" type="text" label="30097" default="67ebpfhyoicab5kr0y7pzocsfohs7ty"/>
-        <setting label="30100" type="lsep"/>
+    <!-- Developer -->
+    <category label="30118">
+        <!-- OAuth Client ID -->
+        <setting id="oauth_clientid" type="text" label="30097" default=""/>
+        <setting id="oauth_redirecturi" type="text" label="30142" default=""/>
     </category>
 </settings>

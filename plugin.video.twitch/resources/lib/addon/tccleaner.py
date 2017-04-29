@@ -11,6 +11,8 @@
 
     Copyright (C) 2016 anxdpanic
 
+    Modified by Twitch-on-Kodi/plugin.video.twitch Dec. 12, 2016
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -54,6 +56,7 @@ class TextureCacheCleaner(object):
             connection.isolation_level = None
             cursor = connection.cursor()
             dialog = None
+            thumbnails = list()
             if notify:
                 dialog = xbmcgui.DialogProgressBG()
                 dialog.create(self.NAME + ' Cache Removal', 'Removing cached items ...')
@@ -62,51 +65,56 @@ class TextureCacheCleaner(object):
                 cursor.execute('SELECT id, cachedurl FROM texture WHERE url LIKE "{0}"'.format(pattern))
                 rows_list = cursor.fetchall()
                 row_count = len(rows_list)
-                percent = 100 / (row_count + 6)
+                percent = 100 / (row_count + 5)
                 if row_count > 0:
                     for index, row in enumerate(rows_list):
                         if dialog:
-                            dialog.update(percent * (index + 1), message='Deleting cached item ... {0}'.format(row[1]))
+                            dialog.update(percent * (index + 1), message='Removing cached item ... {0}'.format(row[1]))
                         thumbnail_path = xbmc.translatePath("special://thumbnails/{0}".format(row[1]))
                         cursor.execute('DELETE FROM sizes WHERE idtexture LIKE "{0}"'.format(row[0]))
                         if xbmcvfs.exists(thumbnail_path):
-                            try:
-                                xbmcvfs.delete(thumbnail_path)
-                            except:
-                                try:
-                                    os.remove(thumbnail_path)
-                                except:
-                                    raise OSError
+                            thumbnails.append(thumbnail_path)
                     if dialog:
                         dialog.update(percent * (row_count + 1), message='Removing cached items from texture ...')
                     cursor.execute('DELETE FROM texture WHERE url LIKE "{0}"'.format(pattern))
                 if dialog:
                     dialog.update(percent * (row_count + 2), message='Committing ...')
                     cursor.execute('COMMIT')
-                    dialog.update(percent * (row_count + 3), message='Recovering free space from texture ...')
-                    cursor.execute('VACUUM texture')
-                    dialog.update(percent * (row_count + 4), message='Recovering free space from sizes ...')
-                    cursor.execute('VACUUM sizes')
-                    dialog.update(percent * (row_count + 5), message='Committing ...')
+                    dialog.update(percent * (row_count + 3), message='Recovering free space ...')
+                    cursor.execute('VACUUM')
+                    dialog.update(percent * (row_count + 4), message='Committing ...')
                     connection.commit()
                     dialog.update(100, message='Cached items removed')
                 else:
                     cursor.execute('COMMIT')
-                    cursor.execute('VACUUM texture')
-                    cursor.execute('VACUUM sizes')
+                    cursor.execute('VACUUM')
                     connection.commit()
             except:
                 if dialog:
                     dialog.close()
+                thumbnails = list()
                 message = 'Error removing cached items, rolling back ...'
                 self.notification(message, sound=True)
                 xbmc.log(message, xbmc.LOGDEBUG)
                 connection.rollback()
             finally:
-                if dialog:
-                    dialog.close()
                 cursor.close()
                 connection.close()
+                if thumbnails:
+                    percent = 100 / len(thumbnails)
+                    for index, thumb in enumerate(thumbnails):
+                        if dialog:
+                            dialog.update(percent * (index + 1), message='Deleting cached item ... {0}'.format(thumb))
+                        try:
+                            xbmcvfs.delete(thumb)
+                        except:
+                            try:
+                                os.remove(thumb)
+                            except:
+                                message = 'Failed to delete |{0}|'.format(thumb)
+                                xbmc.log(message, xbmc.LOGERROR)
+                if dialog:
+                    dialog.close()
         else:
             message = 'Database not found ({0})'.format(self.DATABASE)
             self.notification(message)

@@ -26,6 +26,8 @@ __LS__ = __addon__.getLocalizedString
 HOME = xbmcgui.Window(10000)
 OSD = xbmcgui.Dialog()
 
+__xml__ = xbmc.translatePath('special://skin').split(os.sep)[-2] + '.script-gto-info.xml'
+
 __usertranslations__ = xbmc.translatePath(os.path.join(__profiles__, 'ChannelTranslate.json'))
 
 __prefer_hd__ = True if __addon__.getSetting('prefer_hd').upper() == 'TRUE' else False
@@ -287,7 +289,7 @@ def refreshWidget(handle=None, notify=__enableinfo__):
 
     if handle is not None:
         xbmcplugin.endOfDirectory(handle=handle, updateListing=True)
-    xbmc.executebuiltin('Container.Refresh')
+    xbmc.executebuiltin('Container.Update')
     HOME.setProperty('GTO.timestamp', str(int(time.time())))
 
 def scrapeGTOPage(enabled=__enableinfo__):
@@ -427,8 +429,9 @@ def showInfoWindow(blobId, showWindow=True):
     HOME.setProperty("GTO.Info.Cast", blob['cast'])
 
     if showWindow:
-        Popup = xbmcgui.WindowXMLDialog('script-rtv-Info.xml', __path__, 'Default', '720p')
+        Popup = xbmcgui.WindowXMLDialog(__xml__, __path__)
         Popup.doModal()
+        del Popup
 
 # _______________________________
 #

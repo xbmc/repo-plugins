@@ -81,7 +81,7 @@ msgstr ""
 #empty strings from id 30115 to 30118
 
 msgctxt "#30119"
-msgid "Cancel"
+msgid "Close"
 msgstr ""
 
 #empty strings from id 30120 to 30125

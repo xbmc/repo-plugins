@@ -1,3 +1,6 @@
+2.0.11
+- Info window on Krypton integrated, skin integration updated
+
 2.0.10
 - Improvements for the plugin service
 - Ready for Krypton, skin integration sheet added

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.service.gto" name="German Telecast Offers" version="2.0.10" provider-name="Birger Jesch">
+<addon id="plugin.service.gto" name="German Telecast Offers" version="2.0.11" provider-name="Birger Jesch">
     <requires>
         <import addon="xbmc.python" version="2.20.0"/>
     </requires>
@@ -28,9 +28,7 @@ Hierfür bitte README.txt im Ordner 'integration' beachten.
         <email>birger.jesch@gmail.com</email>
         <website>http://vdr4bj1.no-ip.org/index.php?action=list&amp;item=addon</website>
         <news>
-            - Improvements for the plugin service
-            - Ready for Krypton, skin integration sheet added
-            - Scraper updates
+            Info window on Krypton integrated, skin integration updated
         </news>
         <assets>
             <icon>icon.png</icon>
@@ -41,6 +39,7 @@ Hierfür bitte README.txt im Ordner 'integration' beachten.
             <screenshot>resources/lib/media/screenshots/screenshot_3.jpg</screenshot>
             <screenshot>resources/lib/media/screenshots/screenshot_4.jpg</screenshot>
             <screenshot>resources/lib/media/screenshots/screenshot_5.jpg</screenshot>
+            <screenshot>resources/lib/media/screenshots/screenshot_6.jpg</screenshot>
         </assets>
     </extension>
 </addon>

@@ -29,6 +29,7 @@ Hierfür bitte README.txt im Ordner 'integration' beachten.
         <website>http://vdr4bj1.no-ip.org/index.php?action=list&amp;item=addon</website>
         <news>
             Info window on Krypton integrated, skin integration updated
+        </news>
         <assets>
             <icon>icon.png</icon>
             <fanart>fanart.jpg</fanart>

@@ -1,0 +1,65 @@
+# XBMC Media Center language file
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"POT-Creation-Date: 2017-02-25 15:08+0001\n"
+"Last-Translator: Martijn"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Credentials"
+msgstr "Username"
+
+msgctxt "#32001"
+msgid "Username"
+msgstr "Username"
+
+msgctxt "#32002"
+msgid "Password"
+msgstr "Password"
+
+msgctxt "#32010"
+msgid "Subtitles"
+msgstr "Subtitles"
+
+msgctxt "#32011"
+msgid "Show subtitles if available"
+msgstr "Show subtitles if available"
+
+msgctxt "#32051"
+msgid "Could not login!"
+msgstr "could not login"
+
+msgctxt "#32052"
+msgid "Only VRT logins are supported no Google or Facebook login!"
+msgstr "Only VRT logins are supported no Google or Facebook login "
+
+msgctxt "#32091"
+msgid "A-Z"
+msgstr "A-Z"
+
+msgctxt "#32092"
+msgid "Categories"
+msgstr "Categories"
+
+msgctxt "#32100"
+msgid "Livestreams"
+msgstr "Livestreams"
+
+msgctxt "#32101"
+msgid "één"
+msgstr "één"
+
+msgctxt "#32102"
+msgid "Canvas"
+msgstr "Canvas"
+
+msgctxt "#32103"
+msgid "Ketnet"
+msgstr "Ketnet"

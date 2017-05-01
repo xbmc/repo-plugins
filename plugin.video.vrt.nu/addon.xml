@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.vrtnu"
+       name="VRT Nu"
+       version="0.0.1"
+       provider-name="Martijn Moreel">
+
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+		<import addon="script.module.requests" version="2.12.4"/>
+		<import addon="script.module.beautifulsoup4" version="4.3.2"/>
+    </requires>
+
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+
+    <extension point="xbmc.addon.metadata">
+        <summary lang="nl">Met dit programma kan je alle streams van vrt.nu bekijken.</summary>
+        <description lang="nl">Met dit programma kan je alle streams van vrt.nu bekijken. Alsook de livestreams van één, Canvas en Ketnet!</description>
+        <language>nl</language>
+        <platform>all</platform>
+        <license>GNU General Public License, v3</license>
+        <news>v0.0.1  (2017-5-01)
+		- Initial working release</news>
+        <website>https://github.com/pietje666/plugin.video.vrt.nu</website>
+		<assets>
+			<icon>resources/icon.png</icon>
+			<fanart>resources/fanart.jpg</fanart>
+			<!--<screenshot>resources/screenshot-01.jpg</screenshot>-->
+		</assets>
+    </extension>
+</addon>

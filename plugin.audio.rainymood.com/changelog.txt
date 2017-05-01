@@ -1,0 +1,11 @@
+[B]Version 1.2.0[/B]
+
+- updated streaming URL
+
+[B]Version 1.1.0[/B]
+
+- updated for latest Kodi
+
+[B]Version 1.0.0[/B]
+
+- initial version

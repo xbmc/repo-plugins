@@ -70,8 +70,8 @@ msgid "Info at system start and refresh"
 msgstr "Info bei Systemstart und Refresh"
 
 msgctxt "#30119"
-msgid "Cancel"
-msgstr "Abbrechen"
+msgid "Close"
+msgstr "Schliessen"
 
 msgctxt "#30126"
 msgid "Show stations only available in PVR Channel List"

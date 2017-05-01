@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    
+    <!-- Main menu -->
+    <category label="30000">
+        <!-- Hide main menu categories -->
+        <setting label="30010" type="lsep"/>
+            <setting label="30020" type="bool" id="main_menu.fr" default="true"/>
+            <!-- <setting label="30021" type="bool" id="main_menu.be" default="true"/> -->
+    </category>
+
+
+    <!-- Channels -->
+    <category label="30001">
+        <!-- Hide channels from categories -->
+        <setting label="30011" type="lsep"/>
+        <setting label="30020" type="lsep" subsetting="true" visible="eq(1,true)"/>
+        <setting label="30020" type="bool" id="main_menu.fr" default="true" visible="false"/>
+
+            <setting label="TF1" type="bool" id="channels.fr.tf1.tf1" default="true" visible="eq(-1,true)"/>
+            <setting label="" type="number" visible="false" id="channels.fr.tf1.tf1.order" default="1"/>
+            
+            <setting label="France 2" type="bool" id="channels.fr.pluzz.france2" default="true" visible="eq(-3,true)"/>
+            <setting label="" type="number" visible="false" id="channels.fr.pluzz.france2.order" default="2"/>
+            
+            <setting label="France 3" type="bool" id="channels.fr.pluzz.france3" default="true" visible="eq(-5,true)"/>
+            <setting label="" type="number" visible="false" id="channels.fr.pluzz.france3.order" default="3"/>
+            
+            <setting label="Canal +" type="bool" id="channels.fr.canalplus.canalplus" default="true" visible="eq(-7,true)"/>
+            <setting label="" type="number" visible="false" id="channels.fr.canalplus.canalplus.order" default="4"/>
+            
+            <setting label="France 5" type="bool" id="channels.fr.pluzz.france5" default="true" visible="eq(-9,true)"/>
+            <setting label="" type="number" visible="false" id="channels.fr.pluzz.france5.order" default="5"/>
+            
+            <setting label="M6" type="bool" id="channels.fr.6play.m6" default="true" visible="eq(-11,true)"/>
+            <setting label="" type="number" visible="false" id="channels.fr.6play.m6.order" default="6"/>
+            
+            <setting label="Arte" type="bool" id="channels.fr.arte.arte" default="true" visible="eq(-13,true)"/>
+            <setting label="" type="number" visible="false" id="channels.fr.arte.arte.order" default="7"/>
+            
+            <setting label="C8" type="bool" id="channels.fr.c.c8" default="true" visible="eq(-15,true)"/>
+            <setting label="" type="number" visible="false" id="channels.fr.c.c8.order" default="8"/>
+            
+            <setting label="W9" type="bool" id="channels.fr.6play.w9" default="true" visible="eq(-17,true)"/>
+            <setting label="" type="number" visible="false" id="channels.fr.6play.w9.order" default="9"/>
+            
+            <setting label="TMC" type="bool" id="channels.fr.tf1.tmc" default="true" visible="eq(-19,true)"/>
+            <setting label="" type="number" visible="false" id="channels.fr.tf1.tmc.order" default="10"/>
+            
+            <setting label="NT1" type="bool" id="channels.fr.tf1.nt1" default="true" visible="eq(-21,true)"/>
+            <setting label="" type="number" visible="false" id="channels.fr.tf1.nt1.order" default="11"/>
+            
+            <setting label="NRJ 12" type="bool" id="channels.fr.nrj.nrj12" default="true" visible="eq(-23,true)"/>
+            <setting label="" type="number" visible="false" id="channels.fr.nrj.nrj12.order" default="12"/>
+            
+            <setting label="France 4" type="bool" id="channels.fr.pluzz.france4" default="true" visible="eq(-25,true)"/>
+            <setting label="" type="number" visible="false" id="channels.fr.pluzz.france4.order" default="14"/>
+            
+            <setting label="BFM TV" type="bool" id="channels.fr.bfmtv.bfmtv" default="true" visible="eq(-27,true)"/>
+            <setting label="" type="number" visible="false" id="channels.fr.bfmtv.bfmtv.order" default="15"/>
+            
+            <setting label="i-Télé" type="bool" id="channels.fr.itele.itele" default="true" visible="eq(-29,true)"/>
+            <setting label="" type="number" visible="false" id="channels.fr.itele.itele.order" default="16"/>
+            
+            <setting label="CStar" type="bool" id="channels.fr.c.cstar" default="true" visible="eq(-31,true)"/>
+            <setting label="" type="number" visible="false" id="channels.fr.c.cstar.order" default="17"/>
+            
+            <setting label="Gulli" type="bool" id="channels.fr.gulli.gulli" default="true" visible="eq(-33,true)"/>
+            <setting label="" type="number" visible="false" id="channels.fr.gulli.gulli.order" default="18"/>
+            
+            <setting label="France Ô" type="bool" id="channels.fr.pluzz.franceo" default="true" visible="eq(-35,true)"/>
+            <setting label="" type="number" visible="false" id="channels.fr.pluzz.franceo.order" default="19"/>
+
+            <setting label="HD1" type="bool" id="channels.fr.tf1.hd1" default="true" visible="eq(-37,true)"/>
+            <setting label="" type="number" visible="false" id="channels.fr.tf1.hd1.order" default="20"/>
+         
+            <setting label="L'Équipe" type="bool" id="channels.fr.lequipe.lequipe" default="true" visible="eq(-39,true)"/>
+            <setting label="" type="number" visible="false" id="channels.fr.lequipe.lequipe.order" default="21"/>
+
+            <setting label="6ter" type="bool" id="channels.fr.6play.6ter" default="true" visible="eq(-41,true)"/>
+            <setting label="" type="number" visible="false" id="channels.fr.6play.6ter.order" default="22"/>
+
+            <setting label="Numéro 23" type="bool" id="channels.fr.numero23.numero23" default="true" visible="eq(-43,true)"/>
+            <setting label="" type="number" visible="false" id="channels.fr.numero23.numero23.order" default="23"/>
+            
+            <setting label="Chérie 25" type="bool" id="channels.fr.nrj.cherie25" default="true" visible="eq(-45,true)"/>
+            <setting label="" type="number" visible="false" id="channels.fr.nrj.cherie25.order" default="25"/>
+<!--         <setting label="30021" type="lsep" subsetting="true" visible="eq(1,true)"/>
+        <setting label="30021" type="bool" id="main_menu.be" default="true" visible="false"/>
+            <setting label="RTBF" type="bool" id="channels.be.rtbf.rtbf" default="true" visible="eq(-1,true)"/> -->
+
+    </category>
+
+
+    <!-- Quality and content (and also hidden settings) -->
+    <category label="30002">
+        
+        <setting label="30020" type="lsep" subsetting="true" visible="eq(1,true)"/>
+        <setting label="30020" type="bool" id="main_menu.fr" default="true" visible="false"/>
+            
+            <setting label="TF1" type="bool" id="channels.fr.tf1.tf1" default="true" visible="false"/>
+                <!-- <setting label="30070" type="bool" id="channels.fr.tf1.tf1.bonus" default="true" visible="eq(-1,true) + eq(-2,true)"/> -->
+                <setting label="30070" type="bool" id="channels.fr.tf1.tf1.bonus" default="true" visible="false"/>
+                <setting label="30087" type="labelenum" id="channels.fr.tf1.tf1.quality" visible="eq(-2,true) + eq(-3,true)" values="Force HD|Auto"/>  
+
+            <setting label="France 2" type="bool" id="channels.fr.pluzz.france2" default="true" visible="false"/>
+                <setting label="30071" type="labelenum" id="channels.fr.pluzz.france2.quality" visible="eq(-1,true) + eq(-5,true)" values="HD|SD"/>
+
+            <setting label="France 3" type="bool" id="channels.fr.pluzz.france3" default="true" visible="false"/>
+                <setting label="30072" type="labelenum" id="channels.fr.pluzz.france3.quality" visible="eq(-1,true) + eq(-7,true)" values="HD|SD"/>
+
+            <setting label="France 5" type="bool" id="channels.fr.pluzz.france5" default="true" visible="false"/>
+                <setting label="30074" type="labelenum" id="channels.fr.pluzz.france5.quality" visible="eq(-1,true) + eq(-9,true)" values="HD|SD"/>
+            
+            <setting label="M6" type="bool" id="channels.fr.6play.m6" default="true" visible="false"/>
+                <setting label="30076" type="labelenum" id="channels.fr.6play.m6.quality" visible="eq(-1,true) + eq(-11,true)" values="Auto|Force HD|Force SD"/>  
+            
+            <setting label="Arte" type="bool" id="channels.fr.arte.arte" default="true" visible="false"/>
+                <setting label="30079" type="labelenum" id="channels.fr.arte.arte.quality" visible="eq(-1,true) + eq(-13,true)" values="Auto|HD+|HD|SD|SD-"/>
+
+            <setting label="30080" type="labelenum" id="channels.fr.arte.arte.language" visible="eq(-2,true) + eq(-14,true)" values="Auto|fr|de"/>
+
+            <setting label="W9" type="bool" id="channels.fr.6play.w9" default="true" visible="false"/>
+                <setting label="30077" type="labelenum" id="channels.fr.6play.W9.quality" visible="eq(-1,true) + eq(-16,true)" values="Auto|Force HD|Force SD"/>
+            
+            <setting label="TMC" type="bool" id="channels.fr.tf1.tmc" default="true" visible="false"/>
+                <setting label="30082" type="bool" id="channels.fr.tf1.tmc.bonus" default="true" visible="eq(-1,true) + eq(-18,true)"/>
+
+            <setting label="NT1" type="bool" id="channels.fr.tf1.nt1" default="true" visible="false"/>
+                <setting label="30083" type="bool" id="channels.fr.tf1.nt1.bonus" default="true" visible="eq(-1,true) + eq(-20,true)"/>
+
+            <setting label="NRJ 12" type="bool" id="channels.fr.nrj.nrj12" default="true" visible="false"/>
+                <setting label="30085" type="labelenum" id="channels.fr.nrj.nrj12.quality" visible="eq(-1,true) + eq(-22,true)" values="Auto|Force HD|Force SD"/>
+
+            <setting label="France 4" type="bool" id="channels.fr.pluzz.france4" default="true" visible="false"/>
+                <setting label="30073" type="labelenum" id="channels.fr.pluzz.france4.quality" visible="eq(-1,true) + eq(-24,true)" values="HD|SD"/>
+
+            <setting label="BFM TV" type="bool" id="channels.fr.bfmtv.bfmtv" default="true" visible="false"/>
+                <setting label="30081" type="labelenum" id="channels.fr.bfmtv.bfmtv.quality" visible="eq(-1,true) + eq(-26,true)" values="HD+|HD|SD|SD-"/>
+
+            <setting label="France Ô" type="bool" id="channels.fr.pluzz.franceo" default="true" visible="false"/>
+                <setting label="30075" type="labelenum" id="channels.fr.pluzz.franceo.quality" visible="eq(-1,true) + eq(-28,true)" values="HD|SD"/> 
+
+            <setting label="HD1" type="bool" id="channels.fr.tf1.hd1" default="true" visible="false"/>
+                <setting label="30084" type="bool" id="channels.fr.tf1.hd1.bonus" default="true" visible="eq(-1,true) + eq(-30,true)"/>
+
+            <setting label="6ter" type="bool" id="channels.fr.6play.6ter" default="true" visible="false"/>
+                <setting label="30078" type="labelenum" id="channels.fr.6play.6ter.quality" visible="eq(-1,true) + eq(-32,true)" values="Auto|Force HD|Force SD"/>
+
+            <setting label="L'Équipe" type="bool" id="channels.fr.lequipe.lequipe" default="true" visible="false"/>
+                <setting label="30086" type="labelenum" id="channels.fr.lequipe.lequipe.quality" visible="eq(-1,true) + eq(-34,true)" values="HD+|HD|SD"/>
+
+            <setting label="Numéro 23" type="bool" id="channels.fr.numero23.numero23" default="true" visible="false"/>
+                <setting label="30088" type="labelenum" id="channels.fr.numero23.numero23.quality" visible="eq(-1,true) + eq(-36,true)" values="HD+|HD|SD"/>
+
+        <setting label="" type="bool" id="show_hidden_items_information" default="true" visible="false"/>
+    </category>
+    
+
+</settings>

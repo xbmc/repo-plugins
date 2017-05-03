@@ -9,6 +9,7 @@ import sys, traceback
 
 from utils import *
 from common import * 
+from request import Request
 import vars
 
 def getGameUrl(video_id, video_type, video_ishomefeed):
@@ -24,7 +25,7 @@ def getGameUrl(video_id, video_type, video_ishomefeed):
     if video_type == "condensed":
         gt = 8
 
-    url = 'https://watch.nba.com/service/publishpoint'
+    url = vars.config['publish_endpoint']
     headers = { 
         'Cookie': vars.cookies, 
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -39,6 +40,8 @@ def getGameUrl(video_id, video_type, video_ishomefeed):
         'type': 'game',
         'plid': vars.player_id,
     }
+    if vars.params.get("camera_number"):
+        body['cam'] = vars.params.get("camera_number")
     if video_type != "live":
         body['format'] = 'xml'
     body = urllib.urlencode(body)
@@ -74,7 +77,7 @@ def getGameUrl(video_id, video_type, video_ishomefeed):
         url = "http://%s/%s?%s" % (domain, arguments, querystring)
         url = getGameUrlWithBitrate(url, video_type)
 
-        selected_video_url = "%s|Cookie=%s" % (url, livecookiesencoded)
+        selected_video_url = "%s&Cookie=%s" % (url, livecookiesencoded)
     else:
         # Archive and condensed flow: We now work with HLS. 
         # The cookies are already in the URL and the server will supply them to ffmpeg later.
@@ -121,7 +124,7 @@ def getHighlightGameUrl(video_id):
     
     return url
 
-def downloadScoreboardJson(date):
+def downloadPlayoffJson(date):
     #Download the scoreboard file for all playoffs
     scoreboard = 'http://data.nba.com/data/5s/json/cms/noseason/scoreboard/%d/playoff_all_games.json' % \
         (date.year-1)
@@ -142,7 +145,7 @@ def downloadScoreboardJson(date):
 
 def addGamesLinks(date = '', video_type = "archive"):
     try:
-        scoreboards_json = downloadScoreboardJson(date)
+        playoff_json = downloadPlayoffJson(date)
 
         now_datetime_est = nowEST()
 
@@ -165,13 +168,12 @@ def addGamesLinks(date = '', video_type = "archive"):
                 game_start_date_est = game.get('d', '')
                 vs = game.get('vs', '')
                 hs = game.get('hs', '')
-                gs = game.get('gs', '')
                 seo_name = game.get("seoName", "")
                 has_condensed_video = game.get("video", {}).get("c", False)
 
-                video_has_away_feed = False
+                has_away_feed = False
                 video_details = game.get('video', {})
-                video_has_away_feed = video_details.get("af", False)
+                has_away_feed = bool(video_details.get("af", {}))
 
                 # Try to convert start date to datetime
                 try:
@@ -191,8 +193,8 @@ def addGamesLinks(date = '', video_type = "archive"):
                 #Get playoff game number, if available
                 playoff_game_number = 0
                 playoff_status = ""
-                if scoreboards_json:
-                    for game_more_data in scoreboards_json['sports_content']['games']['game']:
+                if playoff_json:
+                    for game_more_data in playoff_json['sports_content']['games']['game']:
                         if game_more_data['game_url'] == seo_name and game_more_data.get('playoffs', ''):
                             playoff_game_number = int(game_more_data['playoffs']['game_number'])
 
@@ -201,12 +203,12 @@ def addGamesLinks(date = '', video_type = "archive"):
 
                 if game_id != '':
                     # Get pretty names for the team names
-                    if v.lower() in vars.teams:
-                        visitor_name = vars.teams[v.lower()]
+                    if v.lower() in vars.config['teams']:
+                        visitor_name = vars.config['teams'][v.lower()]
                     else:
                         visitor_name = v
-                    if h.lower() in vars.teams:
-                        host_name = vars.teams[h.lower()]
+                    if h.lower() in vars.config['teams']:
+                        host_name = vars.config['teams'][h.lower()]
                     else:
                         host_name = h
 
@@ -230,7 +232,7 @@ def addGamesLinks(date = '', video_type = "archive"):
                         if playoff_status:
                             name += " (series: %s)" % playoff_status
 
-                    thumbnail_url = ("http://e1.cdnl3.neulion.com/nba/player-v4/nba/images/teams/%s.png" % h)
+                    thumbnail_url = ("http://i.cdn.turner.com/nba/nba/.element/img/1.0/teamsites/logos/teamlogos_500x500/%s.png" % h.lower())
 
                     if video_type == "live":
                         if future_video:
@@ -250,9 +252,9 @@ def addGamesLinks(date = '', video_type = "archive"):
                         params = {
                             'video_id': game_id,
                             'video_type': video_type,
-                            'video_hasawayfeed': 1 if video_has_away_feed else 0,
+                            'seo_name': seo_name,
+                            'has_away_feed': 1 if has_away_feed else 0,
                             'has_condensed_game': 1 if has_condensed_video else 0,
-                            'game_state': gs
                         }
 
                         # Add a directory item that contains home/away/condensed items
@@ -286,13 +288,22 @@ def playGame():
 def chooseGameVideoMenu():
     video_id = vars.params.get("video_id")
     video_type = vars.params.get("video_type")
-    video_hasawayfeed = vars.params.get("video_hasawayfeed", "0")
-    video_hasawayfeed = video_hasawayfeed == "1"
-    game_state = vars.params.get("game_state")
-    has_condensed_game = vars.params.get("has_condensed_game", "0")
-    has_condensed_game = has_condensed_game == "1"
+    seo_name = vars.params.get("seo_name")
+    has_away_feed = vars.params.get("has_away_feed", "0") == "1"
+    has_condensed_game = vars.params.get("has_condensed_game", "0") == "1"
 
-    if video_hasawayfeed:
+    game_data_json = Request.getJson(vars.config['game_data_endpoint'] % seo_name)
+    game_state = game_data_json['gameState']
+    game_cameras = []
+    if game_data_json['multiCameras']:
+        game_cameras = game_data_json['multiCameras'].split(",")
+
+    nba_config = Request.getJson(vars.config['config_endpoint'])
+    nba_cameras = {}
+    for camera in nba_config['content']['cameras']:
+        nba_cameras[ camera['number'] ] = camera['name']
+
+    if has_away_feed:
         # Create the "Home" and "Away" list items
         for ishomefeed in [True, False]:
             listitemname = "Full game, " + ("away feed" if not ishomefeed else "home feed")
@@ -311,6 +322,24 @@ def chooseGameVideoMenu():
             'game_state': game_state
         }
         addListItem("Full game", url="", mode="playgame", iconimage="", customparams=params)
+
+    #Add all the cameras available
+    for camera_number in game_cameras:
+        #Skip camera number 0 (broadcast?) - the full game links are the same
+        camera_number = int(camera_number)
+        if camera_number == 0:
+            continue
+
+        params = {
+            'video_id': video_id,
+            'video_type': video_type,
+            'game_state': game_state,
+            'camera_number': camera_number
+        }
+
+        name = "Camera %d: %s" % (camera_number, nba_cameras[camera_number])
+        addListItem(name
+            , url="", mode="playgame", iconimage="", customparams=params)
 
     #Live games have no condensed or highlight link
     if video_type != "live":

@@ -1,3 +1,11 @@
+1.0.0   (02/05/2017)
+        Added background service to allow NBA TV live (not episodes, currently) to play endlessly without interruptions
+        Added favorite team (thanks @rikware)
+        Added higher resolution logos (thanks @Miss80)
+        Added ability to watch different "cameras"
+        Fixed games no longer playing because of user-agent
+        Fix charlotte team name
+        Fix for utf8 chars in path
 0.8.4   (27/10/2016)
         General fixes for game playability
         Fixed highlights url that was no longer available from game menu

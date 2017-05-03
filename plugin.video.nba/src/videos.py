@@ -155,7 +155,7 @@ def videoListMenu():
 def videoPlay():
     video_id = vars.params.get("url")
 
-    url = 'https://watch.nba.com/service/publishpoint'
+    url = vars.config['publish_endpoint']
     headers = { 
         'Cookie': vars.cookies, 
         'Content-type': 'application/x-www-form-urlencoded',

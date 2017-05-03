@@ -6,6 +6,7 @@ import re
 
 from common import *
 from utils import *
+from shareddata import SharedData
 import vars
  
 class LiveTV:
@@ -55,29 +56,60 @@ class LiveTV:
             }
 
             name = "%s - %s (%s)" % (entry['start'], entry['title'], entry['duration'])
-            addListItem(name, url="", mode="nbatvliveepisode", 
+            addListItem(name, url="", mode="nbatvliveepisode",
                 iconimage=entry['image'], customparams=params)
 
     @staticmethod
+    def playLive():
+        video_url = LiveTV.getLiveUrl()
+        if video_url:
+            shared_data = SharedData()
+            shared_data.set("playing", {
+                "what": "nba_tv_live",
+            })
+
+            item = xbmcgui.ListItem(path=video_url)
+            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+
+    @staticmethod
     def playEpisode():
+        start_timestamp = vars.params.get("start_timestamp")
+        duration = vars.params.get("duration")
+
+        video_url = LiveTV.getEpisodeUrl(start_timestamp, duration)
+        if video_url:
+            # shared_data = SharedData()
+            # shared_data.set("playing", {
+            #     "what": "nba_tv_episode",
+            #     "data": {
+            #         "start_timestamp": start_timestamp,
+            #         "duration": duration,
+            #     }
+            # })
+
+            item = xbmcgui.ListItem(path=video_url)
+            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+
+    @staticmethod
+    def getEpisodeUrl(start_timestamp, duration):
         if not vars.cookies:
             login()
         if not vars.cookies:
-            return
+            return ""
 
-        url = 'https://watch.nba.com/service/publishpoint'
-        headers = { 
-            'Cookie': vars.cookies, 
+        url = vars.config['publish_endpoint']
+        headers = {
+            'Cookie': vars.cookies,
             'Content-Type': 'application/x-www-form-urlencoded',
             'User-Agent': 'iPad'
         }
         body = urllib.urlencode({
-            'id': "1", 
+            'id': "1",
             'type': 'channel',
             'ppid': vars.player_id,
             'nt': "1",
-            'st': vars.params.get("start_timestamp"),
-            'dur': vars.params.get("duration"),
+            'st': start_timestamp,
+            'dur': duration,
         })
 
         log("nba tv live: the body of publishpoint request is: %s" % body, xbmc.LOGDEBUG)
@@ -89,7 +121,7 @@ class LiveTV:
         except urllib2.HTTPError as e:
             log("nba live tv: failed getting url: %s %s" % (url, e.read()), xbmc.LOGDEBUG)
             littleErrorPopup( xbmcaddon.Addon().getLocalizedString(50020) )
-            return
+            return ""
 
         # Get the adaptive video url
         xml = parseString(str(content))
@@ -106,28 +138,27 @@ class LiveTV:
         livecookiesencoded = urllib.quote(livecookies)
         log("live cookie: %s %s" % (querystring, livecookies), xbmc.LOGDEBUG)
 
-        video_url = "http://%s/%s?%s|Cookie=%s" % (domain, arguments, querystring, livecookiesencoded)
-        item = xbmcgui.ListItem(path=video_url)
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+        video_url = "http://%s/%s?%s|User-Agent=%s&Cookie=%s" % (domain, arguments, querystring, vars.useragent, livecookiesencoded)
+        return video_url
 
     @staticmethod
-    def playLive():
-        if not vars.cookies:
+    def getLiveUrl(force_login=False):
+        if not vars.cookies or force_login:
             login()
         if not vars.cookies:
-            return
+            return ""
 
         failsafe = True;
 
-        url = 'https://watch.nba.com/service/publishpoint'
-        headers = { 
-            'Cookie': vars.cookies, 
+        url = vars.config['publish_endpoint']
+        headers = {
+            'Cookie': vars.cookies,
             'Content-Type': 'application/x-www-form-urlencoded',
-            'User-Agent': 'iPad' if failsafe 
+            'User-Agent': 'iPad' if failsafe
                 else "Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/12.0",
         }
         body = {
-            'id': "1", 
+            'id': "1",
             'type': 'channel',
             'ppid': vars.player_id,
         }
@@ -146,7 +177,7 @@ class LiveTV:
         except urllib2.HTTPError as e:
             log("nba live tv: failed getting url: %s %s" % (url, e.read()), xbmc.LOGDEBUG)
             littleErrorPopup( xbmcaddon.Addon().getLocalizedString(50020) )
-            return
+            return ""
 
         # Get the adaptive video url
         xml = parseString(str(content))
@@ -165,7 +196,7 @@ class LiveTV:
             livecookiesencoded = urllib.quote(livecookies)
             log("live cookie: %s %s" % (querystring, livecookies), xbmc.LOGDEBUG)
 
-            video_url = "http://%s/%s?%s|Cookie=%s" % (domain, arguments, querystring, livecookiesencoded)
+            video_url = "http://%s/%s?%s|User-Agent=%s&Cookie=%s" % (domain, arguments, querystring, vars.useragent, livecookiesencoded)
         else:
             # Transform the link from adaptive://domain/url?querystring to
             # http://domain/play?url=url&querystring
@@ -228,8 +259,7 @@ class LiveTV:
                         # break from the video quality loop
                         break
 
-            # Add the cookies in the format "videourl|Cookie=[cookies]""
-            video_url = "%s?%s|Cookie=%s" % (video_url, querystring, video_cookies_encoded)
+            # Add the cookies in the format "videourl|User-Agent=[useragent]&Cookie=[cookies]""
+            video_url = "%s?%s|User-Agent=%s&Cookie=%s" % (video_url, querystring, vars.useragent, video_cookies_encoded)
 
-        item = xbmcgui.ListItem(path=video_url)
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+        return video_url

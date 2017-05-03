@@ -1,12 +1,23 @@
 import json
 import datetime
 import urllib,urllib2
-import xbmc
+import xbmc,xbmcaddon
 import re
 from xml.dom.minidom import parseString
 
 import vars
 from utils import *
+
+def updateFavTeam():
+    vars.fav_team = None
+
+    settings = xbmcaddon.Addon( id=vars.__addon_id__)
+    fav_team_name = settings.getSetting( id="fav_team")
+    if fav_team_name:
+        for abbr, name in vars.config['teams'].items():
+            if fav_team_name == name:
+                vars.fav_team = abbr
+                xbmc.log(msg="fav_team set to %s" % (vars.fav_team), level=xbmc.LOGWARNING)
 
 def getGameUrlWithBitrate(url, video_type):
     # Force the bitrate by modifying the HLS url and adding the bitrate
@@ -56,7 +67,7 @@ def getGameUrlWithBitrate(url, video_type):
 
         log("video of bitrate %d not found, trying with next height" % target_bitrate, xbmc.LOGDEBUG)
 
-    return selected_video_url
+    return "%s|User-Agent=%s" % (selected_video_url, vars.useragent)
 
 def getFanartImage():
     # get the feed url
@@ -90,13 +101,15 @@ def getDate( default= '', heading='Please enter date (YYYY/MM/DD)', hidden=False
     return ret
 
 def login():
-    url = 'https://watch.nba.com/nba/secure/login?'
-    body = {'username': vars.settings.getSetting( id="username"), 'password': vars.settings.getSetting( id="password")}
-    body = urllib.urlencode(body)
     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
 
     try:
-        request = urllib2.Request(url, body, headers)
+        body = urllib.urlencode({
+            'username': vars.settings.getSetting( id="username"), 
+            'password': vars.settings.getSetting( id="password")
+        })
+
+        request = urllib2.Request(vars.config['login_endpoint'], body, headers)
         response = urllib2.urlopen(request)
         content = response.read()
     except urllib2.HTTPError as e:
@@ -104,13 +117,33 @@ def login():
         littleErrorPopup( xbmcaddon.Addon().getLocalizedString(50022) )
         return ''
 
-    log("Login reponse: %s" % content, xbmc.LOGDEBUG)
-
     # Check the response xml
     xml = parseString(str(content))
     if xml.getElementsByTagName("code")[0].firstChild.nodeValue == "loginlocked":
         littleErrorPopup( xbmcaddon.Addon().getLocalizedString(50021) )
+        return ''
     else:
         # logged in
         vars.cookies = response.info().getheader('Set-Cookie').partition(';')[0]
+
+    """try:
+        body = urllib.urlencode({
+            'format': 'json'
+        })
+
+        request = urllib2.Request('https://watch.nba.com/account/subscriptions?', body, headers)
+        subscriptions = urllib2.urlopen(request).read()
+    except urllib2.HTTPError as e:
+        log("Login failed with code: %d and content: %s" % (e.getcode(), e.read()))
+        littleErrorPopup( xbmcaddon.Addon().getLocalizedString(50022) )
+        return ''
+
+    subscription_json = json.loads(subscriptions)
+    log("Subscription json: %s" % (subscription_json), xbmc.LOGNOTICE)
+    if subscription_json['code'] != "noaccess":
+        subscription_sku = subscription_json["subs"][0]["sku"]
+        log("Subscription sku: %s" % (subscription_sku), xbmc.LOGNOTICE)
+        if subscription_sku == "LPP2015":
+            vars.subscriptions = ["season", "playoffs", "nbatvlive"]"""
+
     return vars.cookies

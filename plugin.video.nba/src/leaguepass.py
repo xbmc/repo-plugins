@@ -9,6 +9,7 @@ from games import *
 from common import *
 from videos import *
 from nbatvlive import LiveTV
+from favteam import *
 import vars
 
 log("Chosen quality_id %s and target_video_height %d" % (vars.quality_id, vars.target_video_height))
@@ -20,6 +21,7 @@ def mainMenu():
     if isLiveUsable():
         addListItem('NBA TV Live', '', 'nbatvlivemenu','', True)
     addListItem('Video', '', 'video', '', True)
+    addListItem('Favourite team\'s games', '', 'favteam', '', True)
 
 def archiveMenu():
     addListItem('This week', "archive", 'thisweek' ,'', True)
@@ -99,6 +101,11 @@ elif mode == "nbatvliveepisodemenu":
     LiveTV.episodeMenu()
 elif mode == "nbatvliveepisode":
     LiveTV.playEpisode()
+elif mode == "favteam":
+    if url == "older":
+        favTeamOlderMenu()
+    else:
+        favTeamMenu()
 else:
     chooseGameMenu(mode, url)
 

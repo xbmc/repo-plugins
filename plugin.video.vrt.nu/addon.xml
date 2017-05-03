@@ -15,14 +15,16 @@
     </extension>
 
     <extension point="xbmc.addon.metadata">
-        <summary lang="nl">Met dit programma kan je alle streams van vrt.nu bekijken.</summary>
-        <description lang="nl">Met dit programma kan je alle streams van vrt.nu bekijken. Alsook de livestreams van één, Canvas en Ketnet!</description>
+<summary lang="en_GB">Addon to watch vrt.nu</summary>
+		<description lang="en_GB">This addon can be used to watch all streams from vrt.nu. And also offers livestreams from Ã©Ã©n, Canvas and Ketnet!</description>
+		<summary lang="nl_NL">Addon om vrt.nu te bekijken.</summary>
+		<description lang="nl_NL">Met deze addon kan je alle streams van vrt.nu bekijken. Alsook de livestreams van Ã©Ã©n, Canvas en Ketnet!</description>
         <language>nl</language>
         <platform>all</platform>
         <license>GNU General Public License, v3</license>
         <news>v0.0.1  (2017-5-01)
 		- Initial working release</news>
-        <website>https://github.com/pietje666/plugin.video.vrt.nu</website>
+        <source>https://github.com/pietje666/plugin.video.vrt.nu</source>
 		<assets>
 			<icon>resources/icon.png</icon>
 			<fanart>resources/fanart.jpg</fanart>

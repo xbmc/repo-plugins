@@ -73,48 +73,60 @@ def index():
 
 
 def listcat(url,type="listVideos"):
-    content = getUrl(url)
-    content = content[content.find('<a id="skipNavigation22" class="invisible">&nbsp;</a>'):]
-    content = content[:content.find('<div class="ce_tvprogramme first last block">')]
-    spl = content.split('ce_teaserelemen')     
-    debug("Length :"+str(len(spl)))
-    if len(spl)==2:
-       listVideos(url)
-    else:
+      starturl=url
+      content = getUrl(url)
+      content = content[content.find('<a id="skipNavigation22" class="invisible">&nbsp;</a>'):]
+      content = content[:content.find('<div class="ce_tvprogramme first last block">')]      
+      spl = content.split('ce_teaserelemen')  
+      anz=0
       for i in range(0, len(spl), 1):
         element=spl[i]
         try:
           url=re.compile('href="(.+?)"', re.DOTALL).findall(element)[0]
+          if not "http" in url:
+              url=baseUrl+"/"+url
           title=re.compile('<h2>(.+?)</h2>', re.DOTALL).findall(element)[0]
           thumb=re.compile('srcset="(.+?)"', re.DOTALL).findall(element)[0]    
-          debug("URL :"+url)   
+          debug("listcat URL :"+url)   
+          debug("listcat type :"+type)   
           if "WWE RAW" in  title:      
-            addLink(title, baseUrl+"/"+url, type, baseUrl+"/"+thumb)
-          else:
-            addDir(title, baseUrl+"/"+url, type, baseUrl+"/"+thumb)
+            addLink(title, url, type, baseUrl+"/"+thumb)
+            anz=anz+1
+          else:             
+            addDir(title, url, type, baseUrl+"/"+thumb)
+            anz=anz+1
         except:
            pass
-    xbmcplugin.endOfDirectory(pluginhandle)
+      if anz==0:
+        listVideos(starturl)
+      xbmcplugin.endOfDirectory(pluginhandle)
 
 
 def listVideos(url):
-          debug("URL :"+ url)
+          debug("listVideos URL :"+ url)
           content=getUrl(url)
           #http://tele5.flowcenter.de/gg/play/l/17:pid=vplayer_1560&tt=1&se=1&rpl=1&ssd=1&ssp=1&sst=1&lbt=1&
+          #<div class="fwlist" lid="14" pid="vplayer_3780" tt="1" ssp="1" sst="1" lbt="1" ></div>		</div>
           y=0
-          try:
-              lid,pid,tt,se,rpl,ssd,ssp,sst,lbt=re.compile('<div class="fwlist" lid="(.+?)" pid="(.+?)" tt="(.+?)" se="(.+?)" rpl="(.+?)" ssd="(.+?)" ssp="(.+?)" sst="(.+?)" lbt="(.+?)" >', re.DOTALL).findall(content)[0]
-              url="http://tele5.flowcenter.de/gg/play/l/"+lid+":pid="+ pid +"&tt="+ tt +"&se="+ se +"&rpl="+ rpl +"&ssd="+ ssd +"&ssp="+ ssp +"&sst="+ sst +"&lbt="+lbt +"&"
+          try:                                  
+              divtag=re.compile('(<div class="fwlist".+?>)', re.DOTALL).findall(content)[0]
+              debug("DIVTAG :"+divtag)
+              lid=re.compile('lid="(.+?)"', re.DOTALL).findall(divtag)[0]
+              debug("LID :"+lid)
+              all=re.compile('(.+?)="(.+?)"', re.DOTALL).findall(divtag)
+              url="http://tele5.flowcenter.de/gg/play/l/"+lid+":"
+              for type,inhalt in all:
+               if not type=="lod":
+                  url=url+type+"="+inhalt                                    
+              #url="http://tele5.flowcenter.de/gg/play/l/"+lid+":pid="+ pid +"&tt="+ tt +"&se="+ se +"&rpl="+ rpl +"&ssd="+ ssd +"&ssp="+ ssp +"&sst="+ sst +"&lbt="+lbt +"&"
+              debug("URL: "+url)
+          
           except:
-              try:
-                  lid,pid,se,rpl,ssd,ssp,sst,lbt,oh=re.compile('<div class="fwlist" lid="(.+?)" pid="(.+?)" se="(.+?)" rpl="(.+?)" ssd="(.+?)" ssp="(.+?)" sst="(.+?)" lbt="(.+?) oh="(.+?)" >', re.DOTALL).findall(content)[0]                  
-                  url="http://tele5.flowcenter.de/gg/play/l/"+lid+":pid="+ pid +"&oh="+ oh +"&se="+ se +"&rpl="+ rpl +"&ssd="+ ssd +"&ssp="+ ssp +"&sst="+ sst +"&lbt="+lbt +"&"
-              except:
-                  cid=re.compile('<div class="fwplayer" cid="(.+?)" >', re.DOTALL).findall(content)[0]
-                  img=re.compile('<img style="width:100%;" src="(.+?)"', re.DOTALL).findall(content)[0]                                    
-                  addLink(translation(30002), str(cid), 'playVideo', img)    
-                  #playVideo(cid)
-                  y=1
+              cid=re.compile('<div class="fwplayer" cid="(.+?)" >', re.DOTALL).findall(content)[0]
+              img=re.compile('<img style="width:100%;" src="(.+?)"', re.DOTALL).findall(content)[0]                                    
+              addLink(translation(30002), str(cid), 'playVideo', img)    
+              #playVideo(cid)
+              y=1
           if y==0:                                                                                    
             debug("NEWURL: "+url)
             content=getUrl(url)
@@ -143,8 +155,8 @@ def listVideos(url):
               addLink(name, str(id), 'playVideo', image,dadd=data,genre=genre,episode=folge,season=staffel)          
               #addLink("Folge :"+ folge , str(id), 'playVideo', image)          
           
-              #   addLink(h.unescape(title[i]), url, 'playVideo', thumb[i])
-            xbmcplugin.endOfDirectory(pluginhandle)
+              #   addLink(h.unescape(title[i]), url, 'playVideo', thumb[i])          
+          xbmcplugin.endOfDirectory(pluginhandle)
 
 
 def playVideo(url):

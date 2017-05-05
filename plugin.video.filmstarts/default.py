@@ -78,7 +78,7 @@ def imagereplace(icon):
   debug( "ICON :"+icon)
   return icon
   
-def addDir(name, url, mode, thump, desc="",page=1,xtype="",datum=""):
+def addDir(name, url, mode, thump, desc="",page=1,xtype="",datum=""):  
   thump=imagereplace(thump)  
   try:
      id  = re.compile('serien/(.+?)/videos/', re.DOTALL).findall(url) [0]
@@ -490,6 +490,7 @@ def serienvideos(url,page=1):
 def kinovideos(url,page=1,datum=""):   
    debug("Start serienvideos")   
    page=int(page)
+   debug("Page : "+ str(page))
    debug("serienvideos URL :"+url)
    if page >1:
     getu=url+"?page="+str(page)
@@ -647,19 +648,28 @@ def playVideo(url):
     if ul and ul.startswith("http://"):
         finalUrl=ul
     else:
-        match = re.compile('"refmedia":(.+?),', re.DOTALL).findall(content)
-        media = match[0]
-        match = re.compile('"relatedEntityId":(.+?),', re.DOTALL).findall(content)
-        ref = match[0]
-        match = re.compile('"relatedEntityType":"(.+?)"', re.DOTALL).findall(content)
-        typeRef = match[0]
-        content = geturl(baseurl + '/ws/AcVisiondataV4.ashx?media='+media+'&ref='+ref+'&typeref='+typeRef)
-        finalUrl = ""
-        match = re.compile('hd_path="(.+?)"', re.DOTALL).findall(content)
-        finalUrl = match[0]
-        if finalUrl.startswith("youtube:"):
+        try:
+          match = re.compile('"refmedia":(.+?),', re.DOTALL).findall(content)
+          media = match[0]
+          match = re.compile('"relatedEntityId":(.+?),', re.DOTALL).findall(content)
+          ref = match[0]
+          match = re.compile('"relatedEntityType":"(.+?)"', re.DOTALL).findall(content)
+          typeRef = match[0]
+          content = geturl(baseurl + '/ws/AcVisiondataV4.ashx?media='+media+'&ref='+ref+'&typeref='+typeRef)
+          finalUrl = ""
+          match = re.compile('hd_path="(.+?)"', re.DOTALL).findall(content)
+          finalUrl = match[0]
+          if finalUrl.startswith("youtube:"):
             finalUrl = getYoutubeUrl(finalUrl.split(":")[1])
+        except:
+           contentx=content.replace("\/","/").replace("&quot;",'"')
+           try:
+              teil = re.compile('"high":"(.+?)"', re.DOTALL).findall(contentx)[0]
+           except:
+             teil = re.compile('"medium":"(.+?)"', re.DOTALL).findall(contentx)[0]   
+           finalUrl="http:"+teil
     if finalUrl:
+        debug("Finalurl :"+finalUrl)
         listitem = xbmcgui.ListItem(path=finalUrl)
         xbmcplugin.setResolvedUrl(addon_handle, True, listitem)
    
@@ -684,7 +694,7 @@ def trailerpage(url,page=1) :
     getu=url     
    content=geturl(getu)  
    kurz_inhalt = content[content.find('<!-- /titlebar_01 -->')+1:]
-   kurz_inhalt = kurz_inhalt[:kurz_inhalt.find('</section>')]   
+   #kurz_inhalt = kurz_inhalt[:kurz_inhalt.find('</section>')]   
    debug("--------------------------------------------")
    debug(kurz_inhalt)
    elemente=kurz_inhalt.split('article data-block')
@@ -755,7 +765,7 @@ else:
   if mode == 'kino':                          
           kino()
   if mode == 'kinovideos':                          
-          kinovideos(url,datum=datum)          
+          kinovideos(url,page,datum=datum)          
   if mode == 'selectwoche':                            
           selectwoche(url)
   if mode == 'filterkino':                            

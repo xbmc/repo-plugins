@@ -1,0 +1,179 @@
+# XBMC Media Center language file
+# Addon Name: Twitter Feed
+# Addon id: service.twitterfeed
+# Addon version: 0.8.28
+# Addon Provider: L0RE
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2017-01-22 21:57+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Shows Twitter Messages in Kodi"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Shows Hastags from \"TV Shows and Sender\" or \"Timline\" or a \"defined search word\""
+msgstr ""
+
+
+msgctxt "#30001"
+msgid "Filter(words seperated with ,)"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Conent"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Countrycode (Exampe DE)"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Initial Tweets"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Authentificate"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Show Twets Always"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Search for"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Avatar Picture"
+msgstr ""
+
+msgctxt "#30009"
+msgid "generel"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Filter"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Filter Urls"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Reading Time"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Grey Out"
+msgstr ""
+
+msgctxt "#30014"
+msgid "TV Tags"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Video Tags"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Alias List Type"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Url"
+msgstr ""
+
+msgctxt "#30018"
+msgid "File"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Twitter Auth in Local Browser?"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Show Auth URL in Kodi for externel Browser"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Cancel"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Twitter: Enter the Pin"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Please enter this URL in a Browser"
+msgstr ""
+
+msgctxt "#30024"
+msgid "New Configuration"
+msgstr ""
+
+msgctxt "#30025"
+msgid "After Leaving the Settings, Twitteraddon will Authentificate again"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Design"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Font"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Message Start X"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Message Start Y"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Meldung Height"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Meldung Length"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Picture Height"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Picture Length"
+msgstr ""
+
+msgctxt "#30034"
+msgid "Advanced (Only If you know what you are doing)"
+msgstr ""
+
+msgctxt "#30035"
+msgid "Fontcolor"
+msgstr ""
+
+msgctxt "#30036"
+msgid "TimeLine"
+msgstr ""
+
+msgctxt "#30037"
+msgid "Hashtag"
+msgstr ""
+
+msgctxt "#30038"
+msgid "Video Tags"
+msgstr ""

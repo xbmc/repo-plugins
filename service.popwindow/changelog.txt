@@ -1,0 +1,60 @@
+0.8.6
+- Removed Some Modules
+0.8.5 
+- Fix for Shows Replacement
+0.8.3
+- Changes for official release
+0.8.2
+- Bugfix
+0.8.0
+- Alias Via URL or file
+0.7.1
+- Cut - or : on Videos
+0.7.0
+- Code Complett umgeschrieben. damit er wartbarer und lesbarer ist
+- Vorbereitet das ich später externe Alias Listen einbaun Kann
+- Twitter Feeds von Videos eingefuegt
+0.6.17
+- Added Sky Bundesliga Alias
+0.6.11
+- Fix
+0.6.10
+- New Tags
+0.6.9 
+- Fix for Sat1
+0.6.8
+- Pro7
+- Simpson
+0.6.7
+- Patch
+0.6.6
+-Patch wegen Zeit Einstellung
+0.6.5
+- Patch
+0.6.4
+- Hash Tags bei einigen Tags vergessen
+- Alles Was zaehlt verschieben
+0.6.3
+- Added Abdunkeln
+0.6.2
+- Added Lesezeit
+0.6.1
+- Bugfix
+- Added Url Filter
+0.6.0
+- Bugfix
+0.5.8
+- Match fuer zulange zeilen
+0.5.6
+- Patch
+0.5.5
+- Patch
+0.5.4
+- Patches
+- New Logo Thanks Barney Stinsen
+0.5
+- Complete Redesign
+0.3.2
+* Added GZSZ
+0.1
+* Initial Release

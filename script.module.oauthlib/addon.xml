@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="script.module.oauthlib" name="oauthlib" version="2.0.1" provider-name="L0RE">
+	<requires>
+		<import addon="xbmc.python" version="2.24.0"/>
+	</requires>
+	<extension point="xbmc.python.module" library="lib" />
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<language></language>
+		<summary lang="en">A generic, spec-compliant, thorough implementation of the OAuth request-signing logic</summary>
+		<description lang="en">A generic, spec-compliant, thorough implementation of the OAuth request-signing logic</description>
+		<disclaimer lang="en">A generic, spec-compliant, thorough implementation of the OAuth request-signing logic</disclaimer>
+		<license>OAuthLib is yours to use and abuse according to the terms of the BSD license. Check the LICENSE file for full details</license>
+		<website>https://pypi.python.org/pypi/oauthlib</website>
+		<source>https://pypi.python.org/pypi/oauthlib</source>
+	</extension>
+</addon>

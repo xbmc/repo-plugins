@@ -1,0 +1,37 @@
+<settings>
+   <category label="3009">
+        <setting label="30005" type="action" action="RunPlugin(plugin://service.twitterfeed/?mode=clear)"/>				
+		<setting label="30036" type="bool" id="Timeline_s" default="false"  />
+		<setting label="30037" type="bool" id="Hash_s" default="false" />
+		<setting label="30038" type="bool" id="Video_s" default="true"  />
+		<setting label="30014" type="bool" id="tv" default="true" visible='eq(-1,true)' />
+		<setting label="30015" type="bool" id="video" default="false" visible='eq(-2,true)' />
+		<setting label="30006" type="bool" id="alles_anzeige" default="false"  />
+		<setting label="30007" type="text" id="hashtag" default="" visible='eq(-5,true)' />
+		<setting label="30004" type="slider" id="limit" default="2" range="1,1,20" option="int" />
+		<setting label="30012" type="slider" id="lesezeit" default="6" range="1,1,60" option="int" />
+		<setting id="listtype" type="select" label="30016" default="File" values="Url|File" />
+		<setting id="listurl" type="text" label="30017" default="https://raw.githubusercontent.com/kodinerds/repo/master/service.twitterfeed/filter.txt" visible='eq(-1,Url)'/>
+		<setting id="listfile" type="file" label="30018"  default="" visible='eq(-2,File)'/>	    
+		<setting label="dummy" type="text" id="clear" visible="false" />		
+   </category>
+   <category label="30010">	
+        <setting label="30001" type="text" id="blacklist" />   
+        <setting label="30003" type="text" id="country" />        
+        <setting label="30011" type="bool" id="urls" default="false"  />
+    </category>
+   <category label="30026">
+      <setting label="30013" type="bool" id="greyout" default="true"  />
+	  <setting label="30008" type="bool" id="bild" default="true"  />	 
+	  <setting label="30034" type="bool" id="custom" default="false" />
+	  <setting label="30027" type="text" id="font" default="font13" enable='eq(-1,true)'/>
+	  <setting label="30035" type="text" id="fontcolor" default="FFFFFFFF" enable='eq(-2,true)'/>
+	  <setting label="30028" type="number" id="x-message" default="5" enable='eq(-3,true)'/>        
+	  <setting label="30029" type="number" id="y-message" default="5" enable='eq(-4,true)'/>        	  
+	  <setting label="30031" type="number" id="breite-message" default="1280" enable='eq(-5,true)'/>
+      <setting label="30030" type="number" id="hoehe-message" default="100" enable='eq(-6,true)'/>        	  	  
+	  <setting label="30033" type="number" id="breite-bild" default="100" enable='eq(-7,true)' />        
+	  <setting label="30032" type="number" id="hoehe-bild" default="100" enable='eq(-8,true)'/>        
+	</category>
+</settings>
+ 

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="service.popwindow" name="Pupup Windows" version="0.2.8" provider-name="L0RE">
+    <requires>
+        <import addon="xbmc.python" version="2.24.0"/>
+	<import addon="script.module.requests" version="2.9.1"/>	
+    </requires>
+    <extension point="xbmc.service" library="service.py" start="login" />
+	<extension point="xbmc.python.module" library="lib" />
+    <extension point="xbmc.addon.metadata">
+    <summary lang="en">Shows Popup  Windows</summary>
+    <summary lang="de">Shows Popup  Windows</summary>
+    <description lang="en">Shows Popup  Windows</description>
+    <description lang="de">Shows Popup  Windows</description>
+    <website></website>
+    <source>https://github.com/kodinerds/repo/tree/master/addons/service.popwindow</source>
+    <forum>http://www.kodinerds.net/index.php/Thread/46939-Repo-Lost-Found</forum>
+    <email>andreas at vogler dot name</email>
+    <platform>all</platform>
+  </extension>
+</addon>

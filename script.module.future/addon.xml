@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="script.module.future" name="future" version="0.16.0" provider-name="Ed Schofield">
+	<requires>
+		<import addon="xbmc.python" version="2.24.0"/>
+	</requires>
+	<extension point="xbmc.python.module" library="lib" />
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<language></language>
+		<summary lang="en">future is the missing compatibility layer between Python 2 and Python 3. It allows you to use a single, clean Python 3.x-compatible codebase to support both Python 2 and Python 3 with minimal overhead.</summary>
+		<description lang="en">future is the missing compatibility layer between Python 2 and Python 3. It allows you to use a single, clean Python 3.x-compatible codebase to support both Python 2 and Python 3 with minimal overhead.</description>
+		<disclaimer lang="en">Code taken from https://pypi.python.org/pypi/future</disclaimer>
+		<license>Copyright 2013-2016 Python Charmers Pty Ltd, Australia. The software is distributed under an MIT licence. See LICENSE.txt</license>
+		<website>https://pypi.python.org/pypi/future</website>
+		<source>https://pypi.python.org/pypi/future/</source>
+	</extension>
+</addon>

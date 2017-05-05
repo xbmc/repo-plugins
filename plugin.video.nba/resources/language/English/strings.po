@@ -45,6 +45,10 @@ msgctxt "#50008"
 msgid "next page..."
 msgstr ""
 
+msgctxt "#50009"
+msgid "Favourite Team"
+msgstr ""
+
 msgctxt "#50020"
 msgid "Failed to get a video URL. Are you logged in?"
 msgstr ""
@@ -60,3 +64,128 @@ msgstr ""
 msgctxt "#50023"
 msgid "Failed to get video URL (response != 200)"
 msgstr ""
+
+msgctxt "#50100"
+msgid "None"
+msgstr ""
+
+msgctxt "#50101"
+msgid "Nets"
+msgstr ""
+
+msgctxt "#50102"
+msgid "Knicks"
+msgstr ""
+
+msgctxt "#50103"
+msgid "Hawks"
+msgstr ""
+
+msgctxt "#50104"
+msgid "Wizards"
+msgstr ""
+
+msgctxt "#50105"
+msgid "Sixers"
+msgstr ""
+
+msgctxt "#50106"
+msgid "Celtics"
+msgstr ""
+
+msgctxt "#50107"
+msgid "Bulls"
+msgstr ""
+
+msgctxt "#50108"
+msgid "Timberwolves"
+msgstr ""
+
+msgctxt "#50109"
+msgid "Bucks"
+msgstr ""
+
+msgctxt "#50110"
+msgid "Bobcats"
+msgstr ""
+
+msgctxt "#50111"
+msgid "Mavericks"
+msgstr ""
+
+msgctxt "#50112"
+msgid "Clippers"
+msgstr ""
+
+msgctxt "#50113"
+msgid "Lakers"
+msgstr ""
+
+msgctxt "#50114"
+msgid "Spurs"
+msgstr ""
+
+msgctxt "#50115"
+msgid "Thunder"
+msgstr ""
+
+msgctxt "#50116"
+msgid "Pelicans"
+msgstr ""
+
+msgctxt "#50117"
+msgid "Blazers"
+msgstr ""
+
+msgctxt "#50118"
+msgid "Grizzlies"
+msgstr ""
+
+msgctxt "#50119"
+msgid "Heat"
+msgstr ""
+
+msgctxt "#50120"
+msgid "Magic"
+msgstr ""
+
+msgctxt "#50121"
+msgid "Kings"
+msgstr ""
+
+msgctxt "#50122"
+msgid "Raptors"
+msgstr ""
+
+msgctxt "#50123"
+msgid "Pacers"
+msgstr ""
+
+msgctxt "#50124"
+msgid "Pistons"
+msgstr ""
+
+msgctxt "#50125"
+msgid "Cavaliers"
+msgstr ""
+
+msgctxt "#50126"
+msgid "Nuggets"
+msgstr ""
+
+msgctxt "#50127"
+msgid "Jazz"
+msgstr ""
+
+msgctxt "#50128"
+msgid "Suns"
+msgstr ""
+
+msgctxt "#50129"
+msgid "Warriors"
+msgstr ""
+
+msgctxt "#50130"
+msgid "Rockets"
+msgstr ""
+

@@ -1,5 +1,5 @@
 import xbmc,xbmcplugin,xbmcgui,xbmcaddon
-import urllib,datetime,json,sys,pytz
+import urllib,urlparse,datetime,json,sys,pytz
 from dateutil.tz import tzlocal
 
 import vars
@@ -79,28 +79,23 @@ def log(txt, severity=xbmc.LOGINFO):
             xbmc.log(msg=message, level=xbmc.LOGWARNING)
 
 def getParams():
-    param={}
-    paramstring=sys.argv[2]
-    if len(paramstring)>=2:
-            params=sys.argv[2]
-            cleanedparams=params.replace('?','')
-            if (params[len(params)-1]=='/'):
-                    params=params[0:len(params)-2]
-            pairsofparams=cleanedparams.split('&')
-            param={}
-            for i in range(len(pairsofparams)):
-                    splitparams={}
-                    splitparams=pairsofparams[i].split('=')
-                    if (len(splitparams))==2:
-                            param[splitparams[0]]=splitparams[1]
-    return param
+    params = {}
+    paramstring = sys.argv[2]
+    paramstring = paramstring.replace('?','')
+    if len(paramstring) > 0:
+        if paramstring[len(paramstring)-1] == '/':
+            paramstring = paramstring[0:len(paramstring)-2]
+
+        params = urlparse.parse_qsl(paramstring)
+        params = dict(params)
+    return params
 
 def addVideoListItem(name, url, iconimage):
     return addListItem(name,url,"",iconimage,False,True)
 
 def addListItem(name, url, mode, iconimage, isfolder=False, usefullurl=False, customparams={}):
     if not hasattr(addListItem, "fanart_image"):
-        settings = xbmcaddon.Addon( id="plugin.video.nba")
+        settings = xbmcaddon.Addon( id=vars.__addon_id__)
         addListItem.fanart_image = settings.getSetting("fanart_image")
 
     params = {

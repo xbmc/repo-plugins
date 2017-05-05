@@ -1,4 +1,5 @@
-import xbmc,xbmcplugin,xbmcgui,xbmcaddon
+import xbmc,xbmcaddon
+import json
 import os,binascii
 
 try:
@@ -7,12 +8,14 @@ except:
     import storageserverdummy as StorageServer
 
 __addon_name__ = "NBA League Pass"
+__addon_id__ = "plugin.video.nba"
 
 # global variables
-settings = xbmcaddon.Addon( id="plugin.video.nba")
+settings = xbmcaddon.Addon( id=__addon_id__)
 scores = settings.getSetting( id="scores")
 debug = settings.getSetting( id="debug")
 use_local_timezone = settings.getSetting( id="local_timezone") == "0"
+useragent = "iTunes-AppleTV/4.1"
 
 # map the quality_id to a video height
 # Ex: 720p
@@ -32,8 +35,8 @@ if cache.get("target_video_height") != str(target_video_height):
 cookies = ''
 player_id = binascii.b2a_hex(os.urandom(16))
 media_dir = os.path.join(
-    xbmc.translatePath("special://home/" ), 
-    "addons", "plugin.video.nba"
+    xbmc.translatePath("special://home/").decode('utf-8'),
+    "addons", __addon_id__
     # "resources", "media"
 )
 
@@ -43,42 +46,8 @@ setting_fanart_image = settings.getSetting("fanart_image")
 if setting_fanart_image != '':
     fanart_image = setting_fanart_image
 
+config_path = os.path.join(media_dir, "config", "config.json")
+config_json = open(config_path).read()
+config = json.loads(config_json)
 
-teams = {
-    "bkn" : "Nets",
-    "nyk" : "Knicks",
-    "njn" : "Nets",
-    "atl" : "Hawks",
-    "was" : "Wizards",
-    "phi" : "Sixers",
-    "bos" : "Celtics",
-    "chi" : "Bulls",
-    "min" : "Timberwolves",
-    "mil" : "Bucks",
-    "cha" : "Bobcats",
-    "dal" : "Mavericks",
-    "lac" : "Clippers",
-    "lal" : "Lakers",
-    "sas" : "Spurs",
-    "okc" : "Thunder",
-    "nop" : "Pelicans",
-    "por" : "Blazers",
-    "mem" : "Grizzlies",
-    "mia" : "Heat",
-    "orl" : "Magic",
-    "sac" : "Kings",
-    "tor" : "Raptors",
-    "ind" : "Pacers",
-    "det" : "Pistons",
-    "cle" : "Cavaliers",
-    "den" : "Nuggets",
-    "uta" : "Jazz",
-    "phx" : "Suns",
-    "gsw" : "Warriors",
-    "hou" : "Rockets",
-    # non nba
-    "fbu" : "Fenerbahce",
-    "ubb" : "Bilbao",
-    'mos' : "UCKA Moscow",
-    'mac' : "Maccabi Haifa",
-}
+fav_team = None

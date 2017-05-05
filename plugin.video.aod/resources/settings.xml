@@ -1,7 +1,8 @@
 <settings>
    <setting id="quality" type="select" label="30101" default="Max" values="sd|hd" />
-   <setting id="qualityhtml" type="select" label="30112" default="" values="MAX|MIN|Select" />
+   <setting id="qualityhtml1" type="enum" label="30112" default="6" values="1920X1081|1920X1080|1280X720|1024X576|856X450|640X360|Select" />
    <setting id="user" type="text" label="30102" default=""/>
    <setting id="pass" type="text" label="30103" default=""/>
    <setting id="movies" type="bool" label="30109" default="false"/>
+   <setting id="filtertype" type="enum" label="30123" default="2" lvalues="30124|30125|30126"/>
 </settings>

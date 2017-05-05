@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.ipcams" name="Surveillance Cameras" version="0.0.3" provider-name="Birger Jesch">
+  <requires>
+    <import addon="xbmc.python" version="2.24.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary lang="en">Shows streams of surveillance cameras</summary>
+    <summary lang="de">Zeigt Streams Deiner Überwachungskameras an</summary>
+    <description lang="en">Take a look to the pictures of your installed surveillance cameras. You are able to select one of a maximum number of three cameras.</description>
+    <description lang="de">Schau' Dir die Bilder Deiner installierten Überwachungskameras an. Du kannst eine von maximal drei Kameras auswählen.</description>
+    <disclaimer lang="en">Use at your own risk. This is not a replacement for professional equipment.</disclaimer>
+    <disclaimer lang="de">Benutzung auf eigene Gefahr. Ersetzt keine professionelle Ausrüstung.</disclaimer>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+    <forum></forum>
+    <website></website>
+    <email>birger.jesch@gmail.com</email>
+    <source>https://github.com/b-jesch/plugin.video.ipcams</source>
+  </extension>
+</addon>

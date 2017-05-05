@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="32000">
+        <setting label="32001" type="text" id="username" />
+        <setting label="32002" type="text" id="password" option="hidden"/>
+    </category>
+    <category label="32010">
+        <setting label="32011" type="bool" id="showsubtitles" default="true" />
+    </category>
+</settings>

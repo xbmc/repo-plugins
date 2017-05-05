@@ -57,18 +57,11 @@ def index():
         if country=="0":
            addDir("TV-Shows","http://www.mtv.de/shows/async_data.json?sort=playable",'listShows',"")
            addDir(translation(30007),"http://www.mtv.de/musik?expanded=true",'listVideos_old',"")
-           
-           addDir(translation(30001),"http://www.mtv.de/charts/5-hitlist-germany-top-100?expanded=true",'listVideos_old',"")
-           addDir(translation(30004),"http://www.mtv.de/charts/8-mtv-de-videocharts?expanded=true",'listVideos_old',"")
-           addDir(translation(30003),"http://ww.mtv.de/charts/241-top-100-jahrescharts-2014?expanded=true",'listVideos_old',"")
-           addDir(translation(30002),"http://www.mtv.de/charts/199-top-100-single-jahrescharts-2013?expanded=true",'listVideos_old',"")
-           addDir(translation(30212),"http://www.mtv.de/charts/9-deutsche-black-charts?expanded=true",'listVideos_old',"")
-           addDir(translation(30211),"http://www.mtv.de/charts/6-dance-charts?expanded=true",'listVideos_old',"")        
+           addDir(translation(30222),"",'charts',"")      
            addDir(translation(30217),"http://www.mtv.ch/musik",'listVideos_old',"")
         if country=="1":
              addDir("TV-Shows","http://www.mtv.ch/shows/async_data.json?sort=playable",'listShows',"")
-             addDir(translation(30007),"http://www.mtv.ch/musik?expanded=true",'listVideos_old',"")
-           
+             addDir(translation(30007),"http://www.mtv.ch/musik?expanded=true",'listVideos_old',"")                          
              addDir(translation(30216),"http://www.mtv.ch/charts/11-single-top-50",'listVideos_old',"")
              addDir(translation(30217),"http://www.mtv.ch/news/72401",'listVideos_old',"")
              addDir(translation(30218),"http://www.mtv.ch/charts/206-mtv-ch-videocharts",'listVideos_old',"")             
@@ -81,6 +74,33 @@ def index():
         addDir(translation(30011),"PLAYLISTMAIN",'playlistMain',"")
         xbmcplugin.endOfDirectory(pluginhandle)
 
+def charts():
+          
+           addDir(translation(30232),"",'jahrescharts',"")
+           addDir(translation(30233),"",'top100charts',"")
+           addDir(translation(30234),"",'themenchart',"")                                     
+           addDir(translation(30227),"http://www.mtv.de/charts/302-single-top-20",'listVideos_old',"")                                                                     
+           addDir(translation(30230),"http://www.mtv.de/charts/296-most-wanted-2000-s",'listVideos_old',"")  
+           addDir(translation(30231),"http://www.mtv.de/charts/295-most-wanted-90-s",'listVideos_old',"")             
+           
+           xbmcplugin.endOfDirectory(pluginhandle)
+def  top100charts():
+           addDir(translation(30001),"http://www.mtv.de/charts/288-single-top-100?expanded=true",'listVideos_old',"")
+           addDir(translation(30004),"http://www.mtv.de/charts/8-mtv-de-videocharts?expanded=true",'listVideos_old',"") 
+           addDir(translation(30228),"http://www.mtv.de/charts/287-midweek-single-top-100?expanded=true"  ,'listVideos_old',"")
+           xbmcplugin.endOfDirectory(pluginhandle)
+           
+def jahrescharts():           
+           addDir(translation(30003),"http://ww.mtv.de/charts/241-top-100-jahrescharts-2014?expanded=true",'listVideos_old',"")
+           addDir(translation(30220),"http://www.mtv.de/charts/275-top-100-jahrescharts-2015?expanded=true",'listVideos_old',"")          
+           addDir(translation(30219),"http://www.mtv.de/charts/274-top-100-jahrescharts-2016?expanded=true",'listVideos_old',"")
+           xbmcplugin.endOfDirectory(pluginhandle)
+def themenchart():           
+           addDir(translation(30211),"http://www.mtv.de/charts/293-dance-charts?expanded=true",'listVideos_old',"")    
+           addDir(translation(30229),"http://www.mtv.de/charts/289-download-charts-single?expanded=true",'listVideos_old',"")            
+           addDir(translation(30226),"http://www.mtv.de/charts/286-top-100-music-streaming?expanded=true",'listVideos_old',"") 
+           xbmcplugin.endOfDirectory(pluginhandle)
+           
 def cleanTitle(title):
         return title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#x27;","'").replace("&#039;","\\").replace("&quot;","\"").strip()
 
@@ -666,5 +686,13 @@ elif mode == 'playlist':
     playlist(url)
 elif mode == 'playlistMain':
     playlistMain()
+elif mode == 'charts':
+    charts()    
+elif mode == 'jahrescharts':
+    jahrescharts()        
+elif mode == 'top100charts':
+    top100charts()
+elif mode == 'themenchart':
+    themenchart()    
 else:
     index()

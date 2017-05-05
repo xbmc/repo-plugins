@@ -33,10 +33,6 @@ msgctxt "#30001"
 msgid "Hitlist Germany TOP 100"
 msgstr "Hitlist Germany TOP 100"
 
-msgctxt "#30002"
-msgid "Single Jahrescharts 2013 TOP100"
-msgstr "Single Jahrescharts 2013 TOP100"
-
 msgctxt "#30003"
 msgid "Single Jahrescharts 2014 TOP100"
 msgstr "Single Jahrescharts 2014 TOP100"
@@ -173,10 +169,6 @@ msgctxt "#30211"
 msgid "Dance Charts"
 msgstr "Dance Charts"
 
-msgctxt "#30212"
-msgid "German Blackcharts"
-msgstr "Deutsche Blackcharts"
-
 msgctxt "#30213"
 msgid "Country"
 msgstr "Land"
@@ -200,3 +192,70 @@ msgstr "Neu bei MTV"
 msgctxt "#30218"
 msgid "Video Charts Switzerland"
 msgstr "Video Charts Schweiz"
+
+msgctxt "#30219"
+msgid "Single Jahrescharts 2016 TOP100"
+msgstr ""
+
+msgctxt "#30220"
+msgid "Single Jahrescharts 2015 TOP100"
+msgstr ""
+
+msgctxt "#30221"
+msgid "Single Top 20 Charts"
+msgstr ""
+
+msgctxt "#30222"
+msgid "Charts"
+msgstr ""
+
+
+msgctxt "#30223"
+msgid "Throwback Charts"
+msgstr ""
+
+msgctxt "#30224"
+msgid "Official weekly Charts"
+msgstr ""
+
+msgctxt "#30225"
+msgid "Ddp Charts"
+msgstr ""
+
+msgctxt "#30226"
+msgid "Streaming Charts"
+msgstr ""
+
+msgctxt "#30227"
+msgid "Single Top 20"
+msgstr ""
+
+msgctxt "#30228"
+msgid "Midweek Top 100"
+msgstr ""
+
+msgctxt "#30229"
+msgid "Download Chart"
+msgstr ""
+
+msgctxt "#30230"
+msgid "Most Wanted 2000"
+msgstr ""
+
+msgctxt "#30231"
+msgid "Most Wanted 90ger"
+msgstr ""
+
+msgctxt "#30232"
+msgid "Jahres Charts"
+msgstr ""
+
+
+msgctxt "#30233"
+msgid "Top 100 Charts"
+msgstr ""
+
+
+msgctxt "#30234"
+msgid "Themen Charts"
+msgstr ""

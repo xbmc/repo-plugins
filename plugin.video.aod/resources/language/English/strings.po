@@ -89,3 +89,76 @@ msgstr ""
 msgctxt "#30116"
 msgid "Anime Top 10"
 msgstr ""
+
+msgctxt "#30117"
+msgid "New Stuff"
+msgstr "New Stuff"
+
+msgctxt "#30118"
+msgid "News"
+msgstr "News"
+
+msgctxt "#30119"
+msgid "AoD News"
+msgstr "AoD aktuell"
+
+msgctxt "#30120"
+msgid "Anime Germany"
+msgstr "Anime Deutschland"
+
+msgctxt "#30121"
+msgid "Anime Japan"
+msgstr "Anime Japan"
+
+msgctxt "#30122"
+msgid "Games"
+msgstr "Games"
+
+msgctxt "#30123"
+msgid "Show Type"
+msgstr "Show Type"
+
+msgctxt "#30124"
+msgid "Subtitel Only"
+msgstr "ubtitel Only"
+
+msgctxt "#30125"
+msgid "Syncro Only"
+msgstr "Syncro Only"
+
+msgctxt "#30126"
+msgid "All"
+msgstr "All"
+
+
+msgctxt "#30127"
+msgid "Show Similiar Series"
+msgstr "Show Similiar Series"
+
+msgctxt "#30128"
+msgid "Add to Favorite"
+msgstr "Add to Favorite"
+
+msgctxt "#30129"
+msgid "Del from Favorite"
+msgstr "Del from Favorite"
+
+msgctxt "#30130
+msgid "Favorites"
+msgstr "Favorites"
+
+msgctxt "#30131
+msgid "Added"
+msgstr "Added"
+
+msgctxt "#30132
+msgid "Series added"
+msgstr "Series added"
+
+msgctxt "#30133
+msgid "Deleted"
+msgstr "Deleted"
+
+msgctxt "#30134
+msgid "Series deleted"
+msgstr "Series deleted"

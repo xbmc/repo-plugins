@@ -82,9 +82,81 @@ msgid "New Simulcasts"
 msgstr "Neue Simulcasts"
 
 msgctxt "#30115"
-msgid "New Anime"
+msgid "New Animes"
 msgstr "Neue Anime-Titel"
 
 msgctxt "#30116"
 msgid "Anime Top 10"
 msgstr "Anime Top 10"
+
+msgctxt "#30117"
+msgid "New Stuff"
+msgstr "Neues Matrial"
+
+msgctxt "#30118"
+msgid "News"
+msgstr "News"
+
+msgctxt "#30119"
+msgid "AoD aktuell"
+msgstr "AoD aktuell"
+
+msgctxt "#30120"
+msgid "Anime Deutschland"
+msgstr "Anime Deutschland"
+
+msgctxt "#30121"
+msgid "Anime Japan"
+msgstr "Anime Japan"
+
+msgctxt "#30122"
+msgid "Games"
+msgstr "Games"
+
+msgctxt "#30123"
+msgid "Anzeige Type"
+msgstr "Anzeige Type"
+
+msgctxt "#30124"
+msgid "Nur Untertitel"
+msgstr "Nur Untertitel"
+
+msgctxt "#30125"
+msgid "Nur Syncro"
+msgstr "Nur Syncro"
+
+msgctxt "#30126"
+msgid "Alles"
+msgstr "Alles"
+
+msgctxt "#30127"
+msgid "Änliche Serien"
+msgstr "Änliche Serien"
+
+msgctxt "#30128"
+msgid "Favoriten hinzufügen"
+msgstr "Favoriten hinzufügene"
+
+msgctxt "#30129"
+msgid "Löschen Favoriten"
+msgstr "Löschen Favoriten"
+
+msgctxt "#30130
+msgid "Favoriten"
+msgstr "Favoriten"
+
+msgctxt "#30131
+msgid "Hinzugefügt"
+msgstr "Hinzugefügt"
+
+msgctxt "#30132
+msgid "Serie Hinzugefügt"
+msgstr "Serie Hinzugefügt"
+
+msgctxt "#30133
+msgid "Gelöscht"
+msgstr "Gelöscht"
+
+msgctxt "#30134
+msgid "Serie gelöscht"
+msgstr "Serie gelöscht"

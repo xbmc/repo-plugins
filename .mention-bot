@@ -1,0 +1,18 @@
+{
+  "maxReviewers": 3, 
+  "numFilesToCheck": 5, 
+  "message": "@pullRequester, thank you for submitting your add-on to the official Kodi repository. Please give us some time to review your add-on code to make sure it's following our guideliness according to http://kodi.wiki/view/Add-on_rules Should you make any changes to the pull-request always squash the commits and force push to your branch.",
+  "findPotentialReviewers": false, 
+  "userBlacklist": [ "FernetMenta" ],
+  "userBlacklistForPR": [], 
+  "requiredOrgs": [], 
+  "actions": ["opened"], 
+  "skipAlreadyAssignedPR": true, 
+  "skipAlreadyMentionedPR": true, 
+  "assignToReviewer": false, 
+  "skipTitle": "", 
+  "withLabel": "", 
+  "delayed": false, 
+  "delayedUntil": "1h", 
+  "skipCollaboratorPR": false
+}

@@ -24,6 +24,7 @@
 import json
 from resources.lib import utils
 from resources.lib import common
+import ast
 
 
 url_auth = 'http://service.mycanal.fr/authenticate.json/iphone/' \
@@ -51,33 +52,183 @@ def get_token():
 
 @common.plugin.cached(common.cache_time)
 def list_shows(params):
-    # Create categories list
     shows = []
-
     if params.next == 'list_shows_1':
+        if 'url_page' not in params:
+            params.url_page = url_categories % get_token()
+        if 'title' not in params:
+            params.title = 'root'
+        if 'fanart' in params:
+            fanart = params.fanart
+        else:
+            fanart = ''
+
         file_path = utils.download_catalog(
-            url_categories % get_token(),
-            '%s.json' % (params.channel_name))
-        file_categories = open(file_path).read()
-        json_categories = json.loads(file_categories)
+            params.url_page,
+            '%s_%s_%s.json' % (
+                params.channel_name,
+                params.title,
+                common.sp.md5(params.url_page).hexdigest()))
+        file_shows = open(file_path).read()
+        shows_json = json.loads(file_shows)
+        if 'strates' in shows_json:
+            strates = shows_json['strates']
+            if len(strates) == 1 and 'textList_like' not in params:
+                params['title'] = strates[0]['title'].encode('utf-8')
+                params['next'] = 'list_shows_2'
+                return list_shows(params)
+            elif len(strates) == 2 and 'textList_like' not in params:
+                for strate in strates:
+                    if strate['type'].encode('utf-8') != 'carrousel':
+                        params['title'] = strate['title'].encode('utf-8')
+                        params['next'] = 'list_shows_2'
+                        return list_shows(params)
 
-        for strate in json_categories['strates']:
-            if strate['type'] == 'textList':
-                for content in strate['contents']:
-                    title = content['title'].encode('utf-8')
-                    url_page = content['onClick']['URLPage'].encode('utf-8')
+            for strate in strates:
+                if strate['type'] == 'carrousel':
+                    for content in strate['contents']:
+                        fanart = content['URLImage'].encode('utf-8')
+                # Main categories e.g. Séries, Humour, Sport
+                if 'textList_like' in params and params.textList_like is True:
+                    if 'title' in strate and \
+                            strate['title'].encode('utf-8') == params.title:
+                        for content in strate['contents']:
+                            title = content['title'].encode('utf-8')
+                            url_page = content[
+                                'onClick']['URLPage'].encode('utf-8')
+                            try:
+                                subtitle = content['subtitle'].encode('utf-8')
+                            except:
+                                subtitle = ''
+                            try:
+                                img = content['URLImage'].encode('utf-8')
+                            except:
+                                img = ''
 
-                    shows.append({
-                        'label': title,
-                        'url': common.plugin.get_url(
-                            action='channel_entry',
-                            url_page=url_page,
-                            next='list_shows_2',
-                            title=title
-                        )
-                    })
+                            info = {
+                                'video': {
+                                    'title': title,
+                                    'plot': subtitle,
+                                }
+                            }
 
-        shows = common.plugin.create_listing(
+                            shows.append({
+                                'label': title,
+                                'thumb': img,
+                                'url': common.plugin.get_url(
+                                    action='channel_entry',
+                                    url_page=url_page,
+                                    next='list_shows_1',
+                                    title=title,
+                                    window_title=title,
+                                    fanart=fanart
+                                ),
+                                'info': info
+                            })
+                else:
+                    if strate['type'] == 'textList':
+                        for content in strate['contents']:
+                            title = content['title'].encode('utf-8')
+                            url_page = content[
+                                'onClick']['URLPage'].encode('utf-8')
+                            try:
+                                subtitle = content['subtitle'].encode('utf-8')
+                            except:
+                                subtitle = ''
+                            try:
+                                img = content['URLImage'].encode('utf-8')
+                            except:
+                                img = ''
+
+                            info = {
+                                'video': {
+                                    'title': title,
+                                    'plot': subtitle,
+                                }
+                            }
+
+                            shows.append({
+                                'label': title,
+                                'thumb': img,
+                                'url': common.plugin.get_url(
+                                    action='channel_entry',
+                                    url_page=url_page,
+                                    next='list_shows_1',
+                                    title=title,
+                                    window_title=title,
+                                    fanart=fanart
+                                ),
+                                'info': info
+                            })
+                    # Videos, e.g. "Ne manquez pas"
+                    elif strate['type'] == 'contentGrid':
+                        title = strate['title'].encode('utf-8')
+                        shows.append({
+                            'label': title,
+                            'url': common.plugin.get_url(
+                                action='channel_entry',
+                                url_page=params.url_page,
+                                next='list_shows_2',
+                                title=title,
+                                window_title=title,
+                            )
+                        })
+                    # Other levels (subcategories, ...) e.g. "Top emissions"
+                    elif strate['type'] == 'contentRow':
+                        title = strate['title'].encode('utf-8')
+                        shows.append({
+                            'label': title,
+                            'url': common.plugin.get_url(
+                                action='channel_entry',
+                                url_page=params.url_page,
+                                next='list_shows_2',
+                                title=title,
+                                window_title=title,
+                            )
+                        })
+        elif 'textList_like' not in params:
+            for content in shows_json['contents']:
+                title = content['title'].encode('utf-8')
+                params['title'] = title
+                params['next'] = 'list_shows_2'
+                return list_shows(params)
+
+        else:
+            for content in shows_json['contents']:
+                title = content['title'].encode('utf-8')
+                url_page = content[
+                    'onClick']['URLPage'].encode('utf-8')
+                try:
+                    subtitle = content['subtitle'].encode('utf-8')
+                except:
+                    subtitle = ''
+                try:
+                    img = content['URLImage'].encode('utf-8')
+                except:
+                    img = ''
+
+                info = {
+                    'video': {
+                        'title': title,
+                        'plot': subtitle,
+                    }
+                }
+
+                shows.append({
+                    'label': title,
+                    'thumb': img,
+                    'url': common.plugin.get_url(
+                        action='channel_entry',
+                        url_page=url_page,
+                        next='list_shows_1',
+                        title=title,
+                        window_title=title,
+                        fanart=fanart
+                    ),
+                    'info': info
+                })
+
+        return common.plugin.create_listing(
             shows,
             sort_methods=(
                 common.sp.xbmcplugin.SORT_METHOD_UNSORTED,
@@ -86,133 +237,103 @@ def list_shows(params):
         )
 
     elif params.next == 'list_shows_2':
-        # Create category's programs list
         file_path = utils.download_catalog(
             params.url_page,
-            '%s.json' % (params.title))
+            '%s_%s_%s.json' % (
+                params.channel_name,
+                params.title,
+                common.sp.md5(params.url_page).hexdigest()))
         file_shows = open(file_path).read()
         shows_json = json.loads(file_shows)
 
-        for strate in shows_json['strates']:
-            if strate['type'] == 'contentGrid':
-                for content in strate['contents']:
-                    title = content['title'].encode('utf-8')
-                    try:
-                        subtitle = content['subtitle'].encode('utf-8')
-                    except:
-                        subtitle = ''
-                    img = content['URLImage'].encode('utf-8')
-                    url_page = content['onClick']['URLPage'].encode('utf-8')
-
-                    info = {
-                        'video': {
-                            'title': title,
-                            'plot': subtitle,
-                        }
-                    }
-                    shows.append({
-                        'label': title,
-                        'thumb': img,
-                        'url': common.plugin.get_url(
-                            action='channel_entry',
-                            next='list_shows_3',
-                            url_page=url_page,
-                            title=title
-                        ),
-                        'info': info
-                    })
-
-        shows = common.plugin.create_listing(
-            shows,
-            sort_methods=(
-                common.sp.xbmcplugin.SORT_METHOD_UNSORTED,
-                common.sp.xbmcplugin.SORT_METHOD_LABEL
-            )
-        )
-
-    elif params.next == 'list_shows_3':
-        # Check if there is any folder for this program
-        file_path = utils.download_catalog(
-            params.url_page,
-            '%s.json' % (params.title))
-        file_shows = open(file_path).read()
-        shows_json = json.loads(file_shows)
-
-        if 'strates' not in shows_json or len(shows_json['strates']) <= 2:
-            params.next = 'list_videos'
-            params.title = 'none'
-            params.index_page = 1
-            return list_videos(params)
+        if 'strates' in shows_json:
+            strates = shows_json['strates']
+            for strate in strates:
+                if 'title' in strate and \
+                        strate['title'].encode('utf-8') == params.title:
+                    contents = strate['contents']
         else:
-            fanart = ''
-            for strate in shows_json['strates']:
-                if strate['type'] == 'carrousel':
-                    for content in strate['contents']:
-                        fanart = content['URLImage'].encode('utf-8')
-                elif strate['type'] == 'contentRow':
-                    title = strate['title'].encode('utf-8')
-
-                    info = {
-                        'video': {
-                            'title': title,
-                        }
-                    }
-
-                    shows.append({
-                        'label': title,
-                        'fanart': fanart,
-                        'url': common.plugin.get_url(
-                            action='channel_entry',
-                            next='list_videos',
-                            url_page=params.url_page,
-                            title=title,
-                            index_page=1
-                        ),
-                        'info': info
-                    })
-
-            shows = common.plugin.create_listing(
-                shows,
-                sort_methods=(
-                    common.sp.xbmcplugin.SORT_METHOD_UNSORTED,
-                    common.sp.xbmcplugin.SORT_METHOD_LABEL
-                )
-            )
-
-    return shows
+            contents = shows_json['contents']
+        for content in contents:
+            if 'type' in content and \
+                    content['type'].encode('utf-8') == 'quicktime':
+                return list_videos(params)
+            else:
+                params['textList_like'] = True
+                params['title'] = params.title
+                params['next'] = 'list_shows_1'
+                return list_shows(params)
 
 
 @common.plugin.cached(common.cache_time)
 def list_videos(params):
     videos = []
+    if 'previous_listing' in params:
+        videos = ast.literal_eval(params['previous_listing'])
     file_path = utils.download_catalog(
         params.url_page,
-        '%s.json' % (params.url_page))
+        '%s_%s_%s.json' % (
+            params.channel_name,
+            params.title,
+            common.sp.md5(params.url_page).hexdigest()))
     file_videos = open(file_path).read()
     videos_json = json.loads(file_videos)
-
-    more_videos = False
-    no_strates = False
+    more_videos = True
     fanart = ''
 
-    if 'strates' not in videos_json:
-        no_strates = True
-    else:
+    if 'strates' in videos_json:
         for strate in videos_json['strates']:
             if strate['type'] == 'carrousel':
                 for content in strate['contents']:
                     fanart = content['URLImage'].encode('utf-8')
-            if strate['type'] == 'contentRow' or strate['type'] == 'contentGrid':
-                if strate['title'].encode('utf-8') == params.title or params.title == 'none':
-                    if 'URLPage' in strate['paging']:
-                        url = strate['paging']['URLPage'].encode('utf-8')
-                        url = url + '&indexPage=' + params.index_page
-                        params.index_page = int(params.index_page) + 1
-                        more_videos = True
-                        file_videos = utils.get_webcontent(url)
-                        videos_json = json.loads(file_videos)
 
-    if more_videos or no_strates:
+            # Check if we are in the correct cotegory
+            if 'title' in strate and \
+                    strate['title'].encode('utf-8') == params.title:
+
+                # If we have lot of videos ...
+                if 'URLPage' in strate['paging']:
+                    url = strate['paging']['URLPage'].encode('utf-8')
+                    url = url + '&indexPage=1'
+                    params['url_page'] = url
+                    params['fanart'] = fanart
+                    return list_videos(params)
+
+                # Else show only this videos
+                else:
+                    for content in strate['contents']:
+                        title = content['title'].encode('utf-8')
+                        try:
+                            subtitle = content['subtitle'].encode('utf-8')
+                        except:
+                            subtitle = ''
+                        img = content['URLImage'].encode('utf-8')
+                        url_media = content['onClick']['URLPage'].encode('utf-8')
+
+                        info = {
+                            'video': {
+                                'title': title,
+                                'plot': subtitle,
+                                'mediatype': 'tvshow'
+
+                            }
+                        }
+
+                        videos.append({
+                            'label': title,
+                            'thumb': img,
+                            'fanart': fanart,
+                            'url': common.plugin.get_url(
+                                action='channel_entry',
+                                next='play',
+                                url_media=url_media,
+                                url_page=params.url_page,
+                                title=title
+                            ),
+                            'info': info,
+                            'is_playable': True
+                        })
+    else:
         if len(videos_json['contents']) == 0:
             more_videos = False
         for content in videos_json['contents']:
@@ -229,85 +350,53 @@ def list_videos(params):
                     'title': title,
                     'plot': subtitle,
                     'mediatype': 'tvshow'
+
                 }
             }
 
             videos.append({
                 'label': title,
                 'thumb': img,
-                'fanart': fanart,
+                'fanart': params.fanart,
                 'url': common.plugin.get_url(
                     action='channel_entry',
                     next='play',
                     url_media=url_media,
-                    url_page=params.url_page,
                     title=title,
-                    index_page=params.index_page
+                    fanart=params.fanart
                 ),
                 'info': info,
                 'is_playable': True
             })
-    else:
-        for strate in videos_json['strates']:
-            if strate['type'] == 'contentRow' or strate['type'] == 'contentGrid':
-                if strate['title'].encode('utf-8') == params.title or params.title == 'none':
-                    for content in strate['contents']:
-                        title = content['title'].encode('utf-8')
-                        try:
-                            subtitle = content['subtitle'].encode('utf-8')
-                        except:
-                            subtitle = ''
-                        img = content['URLImage'].encode('utf-8')
-                        url_media = content['onClick']['URLPage'].encode('utf-8')
 
-                        info = {
-                            'video': {
-                                'title': title,
-                                'plot': subtitle,
-                                'mediatype': 'tvshow'
-                            }
-                        }
+        if more_videos is True:
+            # More videos...
+            current_index_page = int(params.url_page[-1])
+            videos.append({
+                'fanart': params.fanart,
+                'label': common.addon.get_localized_string(30100),
+                'url': common.plugin.get_url(
+                    action='channel_entry',
+                    next='list_videos',
+                    title=params.title,
+                    url_page=params.url_page[:-1] + str(
+                        current_index_page + 1),
+                    update_listing=True,
+                    previous_listing=str(videos),
+                    fanart=params.fanart
+                ),
 
-                        videos.append({
-                            'label': title,
-                            'thumb': img,
-                            'fanart': fanart,
-                            'url': common.plugin.get_url(
-                                action='channel_entry',
-                                next='play',
-                                url_media=url_media,
-                                url_page=params.url_page,
-                                title=title,
-                                index_page=params.index_page
-                            ),
-                            'info': info,
-                            'is_playable': True
-                        })
+            })
 
-    if more_videos:
-        videos.append({
-            'label': common.addon.get_localized_string(30100),
-            'url': common.plugin.get_url(
-                action='channel_entry',
-                next='list_videos',
-                url_media=url_media,
-                title=params.title,
-                url_page=params.url_page,
-                index_page=params.index_page
-            ),
-
-        })
-
-    videos = common.plugin.create_listing(
+    return common.plugin.create_listing(
         videos,
         content='tvshows',
         sort_methods=(
             common.sp.xbmcplugin.SORT_METHOD_UNSORTED,
             common.sp.xbmcplugin.SORT_METHOD_LABEL
-        )
+        ),
+        update_listing='update_listing' in params
     )
-
-    return videos
 
 
 @common.plugin.cached(common.cache_time)

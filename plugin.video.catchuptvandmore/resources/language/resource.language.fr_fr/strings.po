@@ -123,6 +123,34 @@ msgctxt "#30081"
 msgid "BFM TV: Video quality"
 msgstr "BFM TV : Qualité vidéo"
 
+msgctxt "#30082"
+msgid "TMC: Show bonus videos"
+msgstr "TMC : Afficher les vidéos bonus"
+
+msgctxt "#30083"
+msgid "NT1: Show bonus videos"
+msgstr "NT1 : Afficher les vidéos bonus"
+
+msgctxt "#30084"
+msgid "HD1: Show bonus videos"
+msgstr "HD1 : Afficher les vidéos bonus"
+
+msgctxt "#30085"
+msgid "NRJ 12: Video quality"
+msgstr "NRJ 12 : Qualité vidéo"
+
+msgctxt "#30086"
+msgid "L'Équipe: Video quality"
+msgstr "L'Équipe : Qualité vidéo"
+
+msgctxt "#30087"
+msgid "TF1: Video quality"
+msgstr "TF1 : Qualité vidéo"
+
+msgctxt "#30088"
+msgid "Numéro 23: Video quality"
+msgstr "Numéro 23 : Qualité vidéo"
+
 
 # Others (from 30100 to 30140)
 msgctxt "#30100"
@@ -136,5 +164,29 @@ msgstr "Toutes les vidéos"
 msgctxt "#30102"
 msgid "DRM protected video"
 msgstr "Vidéo protégée par DRM"
+
+msgctxt "#30103"
+msgid "Search"
+msgstr "Rechercher"
+
+msgctxt "#30104"
+msgid "Last videos"
+msgstr "Dernières vidéos"
+
+msgctxt "#30105"
+msgid "From A to Z"
+msgstr "De A à Z"
+
+msgctxt "#30106"
+msgid "Ascending"
+msgstr "Ascendant"
+
+msgctxt "#30107"
+msgid "Descending"
+msgstr "Descendant"
+
+msgctxt "#30108"
+msgid "More programs..."
+msgstr "Plus de programes..."
 
 

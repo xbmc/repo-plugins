@@ -28,3 +28,12 @@ addon = sp.Addon()
 cache_time = 10
 
 plugin_name = 'Catch-up TV & More'
+
+
+def get_window_title():
+    query = sp.sys.argv[2][1:]
+    params = plugin.get_params(query)
+    if 'window_title' in params:
+        return params.window_title
+    else:
+        return plugin_name

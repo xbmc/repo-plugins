@@ -106,7 +106,8 @@ def list_shows(params):
                     action='channel_entry',
                     category_id=category_id,
                     next='list_shows_2',
-                    title=category_name
+                    title=category_name,
+                    window_title=category_name
                 )
             })
 
@@ -155,7 +156,8 @@ def list_shows(params):
                     program_img=program_img,
                     program_fanart=program_fanart,
                     program_desc=program_desc,
-                    title=program_title
+                    title=program_title,
+                    window_title=program_title
                 ),
                 'info': info
             })
@@ -193,7 +195,8 @@ def list_shows(params):
                     action='channel_entry',
                     next='list_videos',
                     program_id=params.program_id,
-                    sub_category_id=sub_category_id
+                    sub_category_id=sub_category_id,
+                    window_title=sub_category_title
                 ),
                 'info': info
             })
@@ -212,7 +215,8 @@ def list_shows(params):
                 action='channel_entry',
                 next='list_videos',
                 program_id=params.program_id,
-                sub_category_id='null'
+                sub_category_id='null',
+                window_title=params.window_title
 
             ),
             'info': info

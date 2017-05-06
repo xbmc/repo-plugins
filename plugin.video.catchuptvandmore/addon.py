@@ -56,6 +56,7 @@ def root(params):
     for category_id, string_id in skeleton.categories.iteritems():
         if common.plugin.get_setting(category_id):
             last_category_id = category_id
+            last_window_title = _(string_id)
             context_menu = []
             hide = (
                 _('Hide'),
@@ -68,13 +69,16 @@ def root(params):
                 'label': _(string_id),
                 'url': common.plugin.get_url(
                     action='list_channels',
-                    category_id=category_id),
+                    category_id=category_id,
+                    window_title=_(string_id)
+                ),
                 'context_menu': context_menu
             })
 
     # If only one category is present, directly open this category
     if len(listing) == 1:
         params['category_id'] = last_category_id
+        params['window_title'] = last_window_title
         return list_channels(params)
 
     return common.plugin.create_listing(
@@ -178,7 +182,8 @@ def list_channels(params):
                 channel_name=channel_name,
                 channel_module=channel_module,
                 channel_id=channel_id,
-                channel_country=channel_country
+                channel_country=channel_country,
+                window_title=title
             ),
             'context_menu': context_menu
         })
@@ -273,4 +278,5 @@ def hide(params):
 
 
 if __name__ == '__main__':
-    common.plugin.run(common.plugin_name)
+    window_title = common.get_window_title()
+    common.plugin.run(window_title)

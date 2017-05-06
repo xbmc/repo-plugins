@@ -102,7 +102,7 @@ def download_catalog(
             r = requests.get(url, headers=headers, params=params)
 
         elif request_type == 'post':
-            r = requests.get(
+            r = requests.post(
                 url, headers=headers, data=post_dic, params=params)
 
         with open(file_path, 'wb') as f:
@@ -141,7 +141,7 @@ def get_webcontent(
         r = requests.get(url, headers=headers, params=params)
 
     elif request_type == 'post':
-        r = requests.get(url, headers=headers, data=post_dic, params=params)
+        r = requests.post(url, headers=headers, data=post_dic, params=params)
 
     return r.content
 

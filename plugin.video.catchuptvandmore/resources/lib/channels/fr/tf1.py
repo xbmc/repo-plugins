@@ -24,13 +24,24 @@
 from bs4 import BeautifulSoup as bs
 from resources.lib import utils
 from resources.lib import common
+import json
 
 url_root = "http://www.tf1.fr/"
+url_time = 'http://www.wat.tv/servertime2/'
+url_token = 'http://api.wat.tv/services/Delivery'
+
+secret_key = 'W3m0#1mFI'
+app_name = 'sdk/Iphone/1.0'
+version = '2.1.3'
+hosting_application_name = 'com.tf1.applitf1'
+hosting_application_version = '7.0.4'
 
 
 def channel_entry(params):
     if 'list_shows' in params.next:
         return list_shows(params)
+    elif 'list_videos_categories' in params.next:
+        return list_videos_categories(params)
     elif 'list_videos' in params.next:
         return list_videos(params)
     elif 'play' in params.next:
@@ -66,15 +77,10 @@ def list_shows(params):
                 'url': common.plugin.get_url(
                     action='channel_entry',
                     category=category_url,
-                    next='list_shows_2')})
-
-        sort_methods = (
-            common.sp.xbmcplugin.SORT_METHOD_UNSORTED,
-            common.sp.xbmcplugin.SORT_METHOD_LABEL)
-
-        shows = common.plugin.create_listing(
-            shows,
-            sort_methods=sort_methods)
+                    next='list_shows_2',
+                    window_title=category_name
+                )
+            })
 
     elif params.next == 'list_shows_2':
         programs_soup = root_soup.find(
@@ -104,17 +110,54 @@ def list_shows(params):
                     'url': common.plugin.get_url(
                         action='channel_entry',
                         program_url=program_url,
-                        next='list_videos')})
+                        next='list_videos_categories',
+                        window_title=program_name
+                    )
+                })
 
-        sort_methods = (
+    return common.plugin.create_listing(
+        shows,
+        sort_methods=(
             common.sp.xbmcplugin.SORT_METHOD_UNSORTED,
-            common.sp.xbmcplugin.SORT_METHOD_LABEL)
+            common.sp.xbmcplugin.SORT_METHOD_LABEL
+        )
+    )
 
-        shows = common.plugin.create_listing(
-            shows,
-            sort_methods=sort_methods)
 
-    return shows
+@common.plugin.cached(common.cache_time)
+def list_videos_categories(params):
+    videos_categories = []
+    url = ''.join((
+        url_root,
+        params.program_url,
+        '/videos'))
+    program_html = utils.get_webcontent(url)
+    program_soup = bs(program_html, 'html.parser')
+
+    filters_1_soup = program_soup.find(
+        'ul',
+        class_='filters_1')
+    for li in filters_1_soup.find_all('li'):
+        category_title = li.get_text().encode('utf-8')
+        category_id = li.find('a')['data-filter'].encode('utf-8')
+        videos_categories.append({
+                    'label': category_title,
+                    'url': common.plugin.get_url(
+                        action='channel_entry',
+                        program_url=params.program_url,
+                        next='list_videos',
+                        window_title=category_title,
+                        category_id=category_id
+                    )
+                })
+    return common.plugin.create_listing(
+        videos_categories,
+        sort_methods=(
+            common.sp.xbmcplugin.SORT_METHOD_UNSORTED,
+            common.sp.xbmcplugin.SORT_METHOD_LABEL
+        )
+    )
+
 
 
 @common.plugin.cached(common.cache_time)
@@ -124,7 +167,9 @@ def list_videos(params):
     url = ''.join((
         url_root,
         params.program_url,
-        '/videos'))
+        '/videos/',
+        '?filter=',
+        params.category_id))
     program_html = utils.get_webcontent(url)
     program_soup = bs(program_html, 'html.parser')
 
@@ -133,91 +178,85 @@ def list_videos(params):
         class_='grid')
 
     for li in grid.find_all('li'):
-        video_type_string = li.find('strong').get_text().encode('utf-8')
-        video_type = video_type_string.lower()
+        video_type_string = li.find('div', class_='description').find('a')['data-xiti-libelle'].encode('utf-8')
+        video_type_string = video_type_string.split('-')[0]
 
-        if 'playlist' not in video_type:
-            if 'replay' in video_type or \
-               'video' in video_type or \
-               common.plugin.get_setting(params.channel_id + '.bonus'):
+        if 'Playlist' not in video_type_string:
+            title = li.find(
+                'p',
+                class_='title').get_text().encode('utf-8')
 
-                title = li.find(
+            try:
+                stitle = li.find(
                     'p',
-                    class_='title').get_text().encode('utf-8')
+                    class_='stitle').get_text().encode('utf-8')
+            except:
+                stitle = ''
 
-                try:
-                    stitle = li.find(
-                        'p',
-                        class_='stitle').get_text().encode('utf-8')
-                except:
-                    stitle = ''
-
-                try:
-                    duration = li.find(
-                        'span',
-                        attrs={'data-format': 'duration'})
-                    duration = int(duration.get_text().encode('utf-8'))
-                except:
-                    duration = 0
-
-                img = li.find('img')
-                try:
-                    img = img['data-srcset'].encode('utf-8')
-                except:
-                    img = img['srcset'].encode('utf-8')
-
-                img = 'http:' + img.split(',')[-1].split(' ')[0]
-
-                aired = li.find(
+            try:
+                duration = li.find(
                     'span',
-                    attrs={'data-format': None, 'class': 'momentDate'})
-                aired = aired.get_text().encode('utf-8')
-                aired = aired.split('T')[0]
+                    attrs={'data-format': 'duration'})
+                duration = int(duration.get_text().encode('utf-8'))
+            except:
+                duration = 0
 
-                day = aired.split('-')[2]
-                mounth = aired.split('-')[1]
-                year = aired.split('-')[0]
-                date = '.'.join((day, mounth, year))
-                # date : string (%d.%m.%Y / 01.01.2009)
-                # aired : string (2008-12-07)
-                program_id = li.find('a')['href'].encode('utf-8')
+            img = li.find('img')
+            try:
+                img = img['data-srcset'].encode('utf-8')
+            except:
+                img = img['srcset'].encode('utf-8')
 
-                if 'replay' not in video_type and 'video' not in video_type:
-                    title = title + ' - [I]' + video_type_string + '[/I]'
+            img = 'http:' + img.split(',')[-1].split(' ')[0]
 
-                info = {
-                    'video': {
-                        'title': title,
-                        'plot': stitle,
-                        'aired': aired,
-                        'date': date,
-                        'duration': duration,
-                        'year': int(aired[:4]),
-                        'mediatype': 'tvshow'
-                    }
+            # aired = li.find(
+            #     'span',
+            #     attrs={'data-format': None, 'class': 'momentDate'})
+            # aired = aired.get_text().encode('utf-8')
+            # aired = aired.split('T')[0]
+            aired = ''
+
+            # day = aired.split('-')[2]
+            # mounth = aired.split('-')[1]
+            # year = aired.split('-')[0]
+            # date = '.'.join((day, mounth, year))
+            date =''
+            # date : string (%d.%m.%Y / 01.01.2009)
+            # aired : string (2008-12-07)
+            program_id = li.find('a')['href'].encode('utf-8')
+
+            info = {
+                'video': {
+                    'title': title,
+                    'plot': stitle,
+                    'aired': aired,
+                    'date': date,
+                    'duration': duration,
+                    #'year': int(aired[:4]),
+                    'mediatype': 'tvshow'
                 }
+            }
 
-                videos.append({
-                    'label': title,
-                    'thumb': img,
-                    'url': common.plugin.get_url(
-                        action='channel_entry',
-                        next='play',
-                        program_id=program_id,
-                    ),
-                    'is_playable': True,
-                    'info': info
-                })
+            videos.append({
+                'label': title,
+                'thumb': img,
+                'url': common.plugin.get_url(
+                    action='channel_entry',
+                    next='play',
+                    program_id=program_id,
+                ),
+                'is_playable': True,
+                'info': info
+            })
 
-    sort_methods = (
-        common.sp.xbmcplugin.SORT_METHOD_DATE,
-        common.sp.xbmcplugin.SORT_METHOD_DURATION,
-        common.sp.xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE,
-        common.sp.xbmcplugin.SORT_METHOD_UNSORTED
-    )
     return common.plugin.create_listing(
         videos,
-        sort_methods=sort_methods,
+        sort_methods=(
+            common.sp.xbmcplugin.SORT_METHOD_DATE,
+            common.sp.xbmcplugin.SORT_METHOD_DURATION,
+            common.sp.xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE,
+            common.sp.xbmcplugin.SORT_METHOD_UNSORTED
+        ),
         content='tvshows')
 
 
@@ -235,4 +274,43 @@ def get_video_url(params):
 
     video_id = data_src[-8:]
 
-    return 'http://wat.tv/get/ipad/' + video_id + '.m3u8'
+    timeserver = str(utils.get_webcontent(url_time))
+
+    auth_key = '%s-%s-%s-%s-%s' % (
+        video_id,
+        secret_key,
+        app_name,
+        secret_key,
+        timeserver
+    )
+
+    auth_key = common.sp.md5(auth_key).hexdigest()
+    auth_key = auth_key + '/' + timeserver
+
+    post_data = {
+        'appName': app_name,
+        'method': 'getUrl',
+        'mediaId': video_id,
+        'authKey': auth_key,
+        'version': version,
+        'hostingApplicationName': hosting_application_name,
+        'hostingApplicationVersion': hosting_application_version
+    }
+
+    url_video = utils.get_webcontent(
+        url=url_token,
+        request_type='post',
+        post_dic=post_data)
+    url_video = json.loads(url_video)
+    url_video = url_video['message'].replace('\\', '')
+
+    desired_quality = common.plugin.get_setting(
+        params.channel_id + '.quality')
+
+    if desired_quality == 'Force HD':
+        try:
+            url_video = url_video.split('&bwmax')[0]
+        except:
+            pass
+
+    return url_video

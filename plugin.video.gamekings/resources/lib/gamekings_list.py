@@ -173,14 +173,14 @@ class Main:
 
             # this is category Gamekings Extra
             if self.plugin_category == LANGUAGE(30002):
-                if str(title).lower().find('gamekings extra') >= 0:
+                if str(title).lower().find('extra') >= 0:
                     pass
-                elif str(title).lower().find('gamekings-extra') >= 0:
+                elif str(title).lower().find('extra') >= 0:
                     pass
                 else:
                     # skip the url
                     xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                            ADDON, VERSION, DATE, "skipped non-gamekings-extra title in gamekings extra category",
+                            ADDON, VERSION, DATE, "skipped non-extra title in gamekings extra category",
                             str(video_page_url)), xbmc.LOGDEBUG)
                     continue
 
@@ -225,6 +225,8 @@ class Main:
             title = str(title).replace("Aflevering", str(LANGUAGE(30204)))
             title = str(title).replace("Gamekings Extra: ", "")
             title = str(title).replace("Gamekings Extra over ", "")
+            title = str(title).replace("Extra: ", "")
+            title = str(title).replace("Extra over ", "")
             title = title.capitalize()
 
             xbmc.log(

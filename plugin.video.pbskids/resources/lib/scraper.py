@@ -24,7 +24,10 @@ class myAddon(t1mAddon):
       for b in a:
           name = b.get('title','no title')
           url = 'http://pbskids.org/pbsk/video/api/getVideos/?startindex=1&endindex=200&program=%s&type=episode&category=&group=&selectedID=&status=available&player=flash&flash=true' % (urllib.quote(name))
-          thumb = b.get('images',{'x':None}).get('program-kids-square',{'x':None}).get('url', self.addonIcon)
+          thumb = b.get('images',{'x':None})
+          if thumb == []:
+              continue
+          thumb = thumb.get('program-kids-square',{'x':None}).get('url', self.addonIcon)
           infoList = {}
           infoList['Title'] = name
           infoList['TVShowTitle'] = name
@@ -45,7 +48,11 @@ class myAddon(t1mAddon):
               name = b.get('title','no title')
               thumb  = b.get('images',{'x':None}).get('kids-mezzannine-16x9',{'x':None}).get('url', self.addonIcon)
               fanart  = b.get('images',{'x':None}).get('kids-mezzannine-16x9',{'x':None}).get('url', self.addonFanart)
-              captions = b.get('captions',{'x':None}).get('srt',{'x':None}).get('url','')
+              captions = b.get('captions',{'x':None})
+              if captions != []:
+                  captions = captions.get('srt',{'x':None}).get('url','')
+              else:
+                  captions = ''
               infoList={}
               infoList['Title'] = name
               infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')

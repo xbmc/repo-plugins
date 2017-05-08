@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.edltv" name="eDLTV" version="1.0.0" provider-name="Kritsana-Punyaporn">
+ <requires>
+  <import addon="xbmc.python" version="2.14.0"/>
+ </requires>
+ <extension point="xbmc.python.pluginsource" library="default.py">
+  <provides>video</provides>
+ </extension>
+ <extension point="xbmc.addon.metadata">
+  <platform>all</platform>
+  <summary lang="th">eDLTV Media Center Application</summary>
+  <description lang="th">การพัฒนาระบบ eDLTV ในรูปแบบของ Media Player หรือ entertainment hub สำหรับนำเสนอองค์ความรู้ผ่านสื่อของการศึกษาทางไกลผ่านดาวเทียม ในระดับประถมศึกษาและมัธยมศึกษาในอีกรูปแบบหนึ่งในชั้นเรียน ช่วยให้ครูและนักเรียนสามารถเข้าถึงความรู้และเนื้อหาบทเรียนได้อย่างง่ายผ่านอุปกรณ์ในห้องเรียน เช่น คอมพิวเตอร์ สมาร์ททีวี โทรศัพท์สมาร์ทโฟน
+
+
+โปรแกรมถูกพัฒนาฟังก์ชั่นการทำงานเพิ่มเติม (Add-ons) บน Kodi media Center ซึ่งเป็นซอฟต์แวร์ Open source cross-platform ที่ปัจจุบันสามารถใช้งานได้หลากหลาย platform อาทิเช่น Windows, Linux, Mac OS, Android และ IOS</description>
+  <license>GNU General Public License, v3</license>
+  <assets>
+   <icon>icon.png</icon>
+   <fanart>fanart.jpg</fanart>
+   <screenshot>resources/screenshot-01.png</screenshot>
+   <screenshot>resources/screenshot-02.png</screenshot>
+   <screenshot>resources/screenshot-03.png</screenshot>
+  </assets>
+ </extension>
+</addon>

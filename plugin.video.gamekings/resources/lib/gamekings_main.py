@@ -62,7 +62,7 @@ class Main:
         # Gamekings Extra
         #
         parameters = {"action": "list", "plugin_category": LANGUAGE(30002),
-                      "url": self.BASE_URL + "?s=gamekings+extra", "next_page_possible": "False"}
+                      "url": self.BASE_URL + "?s=extra", "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30002), iconImage="DefaultFolder.png")
         is_folder = True

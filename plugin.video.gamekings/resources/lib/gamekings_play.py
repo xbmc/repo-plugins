@@ -229,30 +229,47 @@ class Main:
         #                     ...
         no_url_found = False
         have_valid_url = True
-        start_pos_video_url = html_source.find("http://player.vimeo.com")
+        start_pos_video_url = html_source.find("http://player.vimeo.com/external")
         if start_pos_video_url == -1:
-            start_pos_video_url = html_source.find("https://player.vimeo.com")
+            start_pos_video_url = html_source.find("https://player.vimeo.com/external")
             if start_pos_video_url == -1:
-                start_pos_video_url = html_source.find("http://www.youtube.com/")
+                start_pos_video_url = html_source.find("http://player.vimeo.com/video")
                 if start_pos_video_url == -1:
-                    start_pos_video_url = html_source.find("https://www.youtube.com/")
+                    start_pos_video_url = html_source.find("https://player.vimeo.com/video")
                     if start_pos_video_url == -1:
-                        no_url_found = True
-                        have_valid_url = False
+                        start_pos_video_url = html_source.find("http://www.youtube.com/")
+                        if start_pos_video_url == -1:
+                            start_pos_video_url = html_source.find("https://www.youtube.com/")
+                            if start_pos_video_url == -1:
+                                no_url_found = True
+                                have_valid_url = False
+
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                            ADDON, VERSION, DATE, "start_pos_video_url", str(start_pos_video_url)), xbmc.LOGDEBUG)
+        # xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+        #                     ADDON, VERSION, DATE, "html_source[start_pos_video_url:]",
+        #                     str(html_source[start_pos_video_url:])), xbmc.LOGDEBUG)
 
         # Try to make a valid video url
         if have_valid_url:
-            end_pos_video_url = html_source.find("'", start_pos_video_url)
-            video_url = html_source[start_pos_video_url:end_pos_video_url]
+            # Let's only use the video_url part
+            html_source_split = str(html_source[start_pos_video_url:]).split()
+            video_url = html_source_split[0]
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "video_url after split", str(video_url)),
+                     xbmc.LOGDEBUG)
             if video_url.find("target=") >= 0:
                 no_url_found = True
                 have_valid_url = False
                 video_url = ""
-            elif video_url.find("http://www.youtube.com/channel/") >= 0:
+            elif video_url.find("www.youtube.com/channel/") >= 0:
                 no_url_found = True
                 have_valid_url = False
                 video_url = ""
-            elif video_url.find("https://www.youtube.com/channel/") >= 0:
+            elif video_url.find("player.vimeo.com/api/player.js") >= 0:
+                no_url_found = True
+                have_valid_url = False
+                video_url = ""
+            elif video_url.find("www.youtube.com/user/Gamekingsextra") >= 0:
                 no_url_found = True
                 have_valid_url = False
                 video_url = ""
@@ -262,22 +279,38 @@ class Main:
 
         # Play video
         if have_valid_url:
-            if video_url.find("youtube") > 0:
+            # regular gamekings video's on vimeo look like this: https://player.vimeo.com/external/166503498.hd.mp4?s=c44264eced6082c0789371cb5209af96bc44035b
+            if video_url.find("player.vimeo.com/external/") > 0:
+                vimeo_id = str(video_url)
+                vimeo_id = vimeo_id.replace("http://player.vimeo.com/external/", "")
+                vimeo_id = vimeo_id.replace("https://player.vimeo.com/external/", "")
+                vimeo_id = vimeo_id[0:vimeo_id.find(".")]
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "vimeo_id", str(vimeo_id)),
+                         xbmc.LOGDEBUG)
+                video_url = 'plugin://plugin.video.vimeo/play/?video_id=%s' % vimeo_id
+            # premium video's on vimeo look like this: https://player.vimeo.com/video/190106340?title=0&autoplay=1&portrait=0&badge=0&color=C7152F
+            if video_url.find("player.vimeo.com/video/") > 0:
+                vimeo_id = str(video_url)
+                vimeo_id = vimeo_id.replace("http://player.vimeo.com/video/", "")
+                vimeo_id = vimeo_id.replace("https://player.vimeo.com/video/", "")
+                vimeo_id = vimeo_id[0:vimeo_id.find("?")]
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "vimeo_id", str(vimeo_id)),
+                         xbmc.LOGDEBUG)
+                video_url = 'plugin://plugin.video.vimeo/play/?video_id=%s' % vimeo_id
+            elif video_url.find("youtube") > 0:
                 youtube_id = str(video_url)
                 youtube_id = youtube_id.replace("http://www.youtube.com/embed/", "")
                 youtube_id = youtube_id.replace("https://www.youtube.com/embed/", "")
                 youtube_id = youtube_id.replace("http://www.youtube.com/watch?v=", "")
                 youtube_id = youtube_id.replace("https://www.youtube.com/watch?v=", "")
+                youtube_id = youtube_id.replace("http://www.youtube.com/watch", "")
+                youtube_id = youtube_id.replace("https://www.youtube.com/watch", "")
                 youtube_id = youtube_id.replace("http://www.youtube.com/", "")
                 youtube_id = youtube_id.replace("https://www.youtube.com/", "")
+                youtube_id = youtube_id[0:youtube_id.find("?")]
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "youtube_id", str(youtube_id)),
+                         xbmc.LOGDEBUG)
                 video_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtube_id
-            # premium video's on vimeo look like this: http://player.vimeo.com/video/190106340?title=0&autoplay=1&portrait=0&badge=0&color=C7152F
-            elif video_url.find("player.vimeo.com/video/") > 0:
-                vimeo_id = str(video_url)
-                vimeo_id = vimeo_id.replace("http://player.vimeo.com/video/", "")
-                vimeo_id = vimeo_id.replace("https://player.vimeo.com/video/", "")
-                vimeo_id = vimeo_id[0:vimeo_id.find("?")]
-                video_url = 'plugin://plugin.video.vimeo/play/?video_id=%s' % vimeo_id
 
             list_item = xbmcgui.ListItem(path=video_url)
             xbmcplugin.setResolvedUrl(self.plugin_handle, True, list_item)
@@ -286,6 +319,9 @@ class Main:
         #
         elif str(html_source).find("twitch") > 0:
             video_url = TWITCHURL
+
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "trying twitch channel", str(video_url)),
+                     xbmc.LOGDEBUG)
 
             list_item = xbmcgui.ListItem(path=video_url)
             xbmcplugin.setResolvedUrl(self.plugin_handle, True, list_item)

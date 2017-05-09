@@ -1,3 +1,6 @@
+2.0.12
+- Skin integration for Estuary.Refresh (an Esturay MOD) implemented
+
 2.0.11
 - Info window on Krypton integrated, skin integration updated
 

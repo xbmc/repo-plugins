@@ -5,7 +5,7 @@ Um die TV Highlights des Tages in Estuary zu integrieren sind folgende Schritte 
 
 If You want to use the plugin as widget you have to perfom following steps. The example described here is an example under Linux. All files resides in folder 'integration/Estuary' of the addon:
 
-        cd $HOME/.kodi/addons/plugin.service.gto/integration/Estuary
+        cd $HOME/.kodi/addons/plugin.service.gto/integration/skin.estuary
 
 1. Kopieren des Scraper-Icons und des Widgets in den Skin Ordner / Copy skin icon and widget to Estuary folder:
 
@@ -99,6 +99,33 @@ Beispiel / Example:
                 <thumb>special://skin/extras/icons/newspaper.png</thumb>
                 <visible>System.HasAddon(plugin.service.gto)</visible>
 			</item>
+			
+5. DefaultDialogButton um weiteren Click erweitern / Extend DefaultDialogButton with 2nd click
+
+        sudo nano /usr/share/kodi/addons/skin.estuary/xml/Includes_Buttons.xml
+    
+    nach `<include name="DefaultDialogButton">` suchen / search for `<include name="DefaultDialogButton">`
+    und innerhalb der control-gruppe den `<onclick>$PARAM[onclick]</onclick>` erweitern / extend within the control group the 2nd `<onclick>$PARAM[onclick]</onclick>`:
+      
+            <onclick>$PARAM[onclick_2]</onclick>
+        
+     Beispiel /Example:
+     
+             <control type="button" id="$PARAM[id]">
+                <width>$PARAM[width]</width>
+                <height>$PARAM[height]</height>
+                <label>$PARAM[label]</label>
+                <font>$PARAM[font]</font>
+                <textoffsetx>20</textoffsetx>
+                <onclick>$PARAM[onclick]</onclick>
+                <onclick>$PARAM[onclick_2]</onclick>
+                <wrapmultiline>$PARAM[wrapmultiline]</wrapmultiline>
+                <align>center</align>
+                <texturefocus border="40" colordiffuse="button_focus">buttons/dialogbutton-fo.png</texturefocus>
+                <texturenofocus border="40">buttons/dialogbutton-nofo.png</texturenofocus>
+                <visible>$PARAM[visible]</visible>
+             </control>
+
 			
     Abspeichern und nano beenden. Kodi neu starten / Save and exit nano. Restart Kodi.
     

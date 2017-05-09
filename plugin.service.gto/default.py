@@ -289,8 +289,9 @@ def refreshWidget(handle=None, notify=__enableinfo__):
 
     if handle is not None:
         xbmcplugin.endOfDirectory(handle=handle, updateListing=True)
-    xbmc.executebuiltin('Container.Update')
+
     HOME.setProperty('GTO.timestamp', str(int(time.time())))
+    xbmc.executebuiltin('Container.Refresh')
 
 def scrapeGTOPage(enabled=__enableinfo__):
 
@@ -312,7 +313,7 @@ def scrapeGTOPage(enabled=__enableinfo__):
 
     HOME.setProperty('GTO.blobs', '0')
     HOME.setProperty('GTO.provider', data.shortname)
-
+    
     for container in content:
 
         data.scrapeRSS(container)

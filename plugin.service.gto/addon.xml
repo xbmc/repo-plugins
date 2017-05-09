@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.service.gto" name="German Telecast Offers" version="2.0.11" provider-name="Birger Jesch">
+<addon id="plugin.service.gto" name="German Telecast Offers" version="2.0.12" provider-name="Birger Jesch">
     <requires>
         <import addon="xbmc.python" version="2.20.0"/>
     </requires>

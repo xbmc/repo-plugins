@@ -1,3 +1,4 @@
+0.8.3 - CHG: Reimplement ARTE
 0.8.2 - CHG: Reimplement ORF
 0.8.1 - CHG: Recover ARTE Search and Browsing Functionality
 0.8.0 - CHG: Version pump to seperate pre-krypton version and krypton version

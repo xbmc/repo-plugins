@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <strings>
     <!-- Paramètres -->
     <string id="30001">Authentification</string>
@@ -24,6 +24,8 @@
 
     <!-- Various strings -->
     <string id="30040">Aléatoire</string>
+    <string id="30041">Placer en file d'attente</string>
+    <string id="30042">Placer la liste en file d'attente</string>
 
     <!-- Messages -->
     <string id="30050">Vous DEVEZ fournir un utilisateur et un mot de passe !</string>

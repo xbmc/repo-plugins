@@ -128,6 +128,7 @@ def indexPlaylists():
     token = getToken()
     playlists = [{
         'label': playlist['playlist_title'],
+        'context_menu': [(plugin.get_string('30042'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('queuePlaylist', playlist=playlist['playlist'])))],
         'path': plugin.url_for('indexPlaylist', playlist=playlist['playlist'])
         } for playlist in api.get_playlists(token['token'])]
     return plugin.finish(playlists)
@@ -139,14 +140,7 @@ def indexPlaylist(playlist):
     for video in playlist.split(','):
         v = api.get_videodata(token['token'], video)
         videos.append(getVideoInfos(v))
-    if plugin.get_setting('showseen') == 'true':
-        return plugin.finish(videos)
-    else:
-        vid = []
-        for v in videos:
-            if v['info']['playcount'] == "0":
-                vid.append(v)
-        return vid
+    return plugin.finish(filterSeenVideos(videos))
 
 @plugin.route('/partners/<partner>/themes/<theme>')
 def indexThemes(partner, theme):
@@ -192,20 +186,35 @@ def indexFamType(partner, typename, family):
         videos.insert(0, rand)
     return plugin.finish(videos)
 
+@plugin.route('/queue/<video>')
+def queueVideo(video):
+    token = getToken()
+    quality = getQuality()
+    v = api.get_videodata(token['token'], video)
+    item = getVideoInfos(v)
+    item['path'] = api.get_video(video, token['token'], quality)
+    item.pop('context_menu', None) # removing specific ctx menu (Queue item) from playlist item
+    items = [item]
+    plugin.add_to_playlist(items, 'video')
+
+@plugin.route('/queue/playlist/<playlist>')
+def queuePlaylist(playlist):
+    token = getToken()
+    quality = getQuality()
+    items = []
+    for video in playlist.split(','):
+        v = api.get_videodata(token['token'], video)
+        item = getVideoInfos(v)
+        item['path'] = api.get_video(video, token['token'], quality)
+        item.pop('context_menu', None) # removing specific ctx menu (Queue item) from playlist item
+        items.append(item)
+    items = filterSeenVideos(items)
+    plugin.add_to_playlist(items, 'video')
+
 @plugin.route('/partners/<partner>/families/<family>/<video>')
 def playVideo(partner, family, video):
     token = getToken()
-    quality = plugin.get_setting('quality')
-    if quality == "0": 
-        quality = 'LQ' 
-    if quality == "1": 
-        quality = 'HQ' 
-    if quality == "2": 
-        quality = 'TV' 
-    if quality == "3": 
-        quality = 'HD_720' 
-    if quality == "4": 
-        quality = 'HD_1080' 
+    quality = getQuality()
     if video == 'RANDOM':
         video = api.get_random(partner, family, token['token'], quality)
         if video == None:
@@ -263,6 +272,11 @@ def getVideoInfos(video):
         properties['totaltime']  = totaltime
         properties['resumetime'] = resumetime
     stream_infos = {'video': {'duration': video['duration_ms']/1000 }}
+
+    # Add specific ctx menu for queueing item
+    # XBMC.Action(Queue) doesn't work on Android (tested with Kodi 17.1)
+    ctx_items = [(plugin.get_string('30041'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('queueVideo', video=video['id_show'])))]
+
     v = {
         'label': label.decode("utf-8"),
         'icon': video['screenshot_512x288'],
@@ -271,8 +285,10 @@ def getVideoInfos(video):
         'properties': properties,
         'stream_info': stream_infos,
         'path': plugin.url_for('playVideo', partner=video['partner_key'], family=video['family_TT'].encode('utf-8'), video=video['id_show']),
+        'context_menu': ctx_items,
         'is_playable': True
         }
+
     return v
 
 def getToken():
@@ -286,6 +302,30 @@ def getToken():
     else:
         token['token'], token['expire'], token['renew'] = api.get_token(username, password)
     return token
+
+def getQuality():
+    quality = plugin.get_setting('quality')
+    if quality == "0": 
+        quality = 'LQ' 
+    if quality == "1": 
+        quality = 'HQ' 
+    if quality == "2": 
+        quality = 'TV' 
+    if quality == "3": 
+        quality = 'HD_720' 
+    if quality == "4": 
+        quality = 'HD_1080' 
+    return quality
+
+def filterSeenVideos(videos):
+    if plugin.get_setting('showseen') == 'true':
+        return videos
+    else:
+        vid = []
+        for v in videos:
+            if v['info']['playcount'] == "0":
+                vid.append(v)
+        return vid
 
 if __name__ == '__main__':
     plugin.run()

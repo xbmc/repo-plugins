@@ -24,6 +24,8 @@
 
     <!-- Various strings -->
     <string id="30040">Random</string>
+    <string id="30041">Queue item</string>
+    <string id="30042">Queue playlist</string>
 
     <!-- Messages -->
     <string id="30050">You MUST provide a user and a password !</string>

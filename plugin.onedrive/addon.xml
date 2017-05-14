@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.onedrive" name="OneDrive" version="1.1.12" provider-name="Carlos Guzman (cguZZman)">
+<addon id="plugin.onedrive" name="OneDrive" version="1.2.0" provider-name="Carlos Guzman (cguZZman)">
 	<requires>
 		<import addon="xbmc.python" version="2.19.0" />
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="addon.py">
 		<provides>image audio video</provides>
 	</extension>
+	<extension point="xbmc.service" library="service.py" start="login" />
 	<extension point="xbmc.addon.metadata">
 		<platform>all</platform>
 		<summary lang="en">Microsoft OneDrive for KODI</summary>
 		<description lang="en">
 Play all your media from Microsoft OneDrive including Videos, Music and Pictures.
- - Unlimited number of accounts.
+ - Unlimited number of accounts. Personal or Business.
  - Search over your drive.
  - Auto-Refreshed slideshow.
  - Export your videos to your library (.strm files)
@@ -19,7 +20,6 @@ Play all your media from Microsoft OneDrive including Videos, Music and Pictures
 		</description>
 		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 		<source>https://github.com/cguZZman/onedrive-kodi-addon</source>
-		<email>carlosguzmang@hotmail.com</email>
 		<forum>http://forum.kodi.tv/showthread.php?tid=228443</forum>
 		<website>http://onedrive.daro.mx/</website>
 	</extension>

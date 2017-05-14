@@ -2,17 +2,16 @@
 <strings>
     <!-- Paramètres -->
     <string id="30001">Authentification</string>
-    <string id="30002">Utiliser un compte noco</string>
+    <string id="30002">Mode invité</string>
     <string id="30003">Nom d'utilisateur</string>
     <string id="30004">Mot de passe</string>
     <string id="30005">Voir les extraits des émissions</string>
     <string id="30006">Apparence</string>
     <string id="30007">Classement</string>
     <string id="30008">Afficher toutes les émissions</string>
-    <string id="30009">Nombre d'émissions à afficher</string>
     <string id="30010">Qualité vidéo</string>
     <string id="30011">Afficher les émissions déjà vues</string>
-    <string id="30012">Nombre d'émissions dans les récentes</string>
+    <string id="30012">Nombre d'émissions par page</string>
     <string id="30013">Rafraichir automatiquement les dossiers</string>
     <string id="30024">Afficher les autopromos</string>
     <string id="30025">Afficher les annonces</string>
@@ -21,25 +20,57 @@
     <string id="30028">Afficher les sous titres si disponibles</string>
     <string id="30029">Langue préférée pour les sous titres</string>
     <string id="30030">Afficher un élément aléatoire dans les dossiers</string>
+    <string id="30031">Dossiers</string>
+    <string id="30032">Afficher la liste de lecture noco</string>
+    <string id="30033">Afficher les émissions favorites noco</string>
+    <string id="30034">Afficher l'historique</string>
+    <string id="30035">Afficher le contenu gratuit</string>
+    <string id="30036">Non disponible en mode invité</string>
+    <string id="30037">Afficher Les plus populaires</string>
+    <string id="30038">Afficher Les mieux évalués</string>
 
     <!-- Various strings -->
     <string id="30040">Aléatoire</string>
     <string id="30041">Placer en file d'attente</string>
     <string id="30042">Placer la liste en file d'attente</string>
+    <string id="30043">Page suivante</string>
+    <string id="30044">Page précédente</string>
+    <string id="30045">Entrez votre recherche</string>
+    <string id="30046">Cette semaine</string>
+    <string id="30047">Ce mois</string>
+    <string id="30048">Depuis le début</string>
 
     <!-- Messages -->
-    <string id="30050">Vous DEVEZ fournir un utilisateur et un mot de passe !</string>
+    <string id="30050">Vous DEVEZ fournir un utilisateur et un mot de passe ou alors utiliser le mode invité !</string>
     <string id="30051">La recherche n'a donné aucun résultat</string>
     <string id="30052">Aucun élément non lu trouvé !</string>
 
     <!-- Categories names -->
     <string id="30060">Dernières vidéos</string>
     <string id="30061">Emissions par thème</string>
-    <string id="30065">Emissions par type</string>
     <string id="30062">Les plus populaires</string>
     <string id="30063">Recherche</string>
-    <string id="30064">Entrez votre recherche</string>
+    <string id="30064">Contenu gratuit</string>
+    <string id="30065">Emissions par type</string>
     <string id="30066">Toutes les émissions</string>
-    <string id="30067">Listes de lecture</string>
+    <string id="30067">Listes de lecture noco</string>
+    <string id="30068">Émissions favorites noco</string>
+    <string id="30069">Voir l'historique</string>
+    <string id="30070">Les mieux évalués</string>
     
+    <!-- Noco favorites -->
+    <string id="30080">Ajouter aux émissions favorites</string>
+    <string id="30081">Retirer</string>
+    <string id="30082">Effacer</string>
+
+    <!-- Noco playlist -->
+    <string id="30090">Ajouter à %s (noco)</string>
+    <string id="30091">Retirer</string>
+    <string id="30092">Monter</string>
+    <string id="30093">Descendre</string>
+    <string id="30094">Effacer</string>
+    <string id="30095">Déplacer l'élément</string>
+    <string id="30096">Annuler le déplacement</string>
+    <string id="30097">Déplacer l'élément ici</string>
+
 </strings>

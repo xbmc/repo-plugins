@@ -3,13 +3,13 @@
 
     <!-- Authentication -->
     <category label="30001">
-        <setting id="username" type="text" label="30003" default="" />
-        <setting id="password" type="text" option="hidden" label="30004" default=""/>
+        <setting id="guest" type="bool" label="30002" default="false" />
+        <setting id="username" type="text" label="30003" default="" visible="eq(-1,false)"/>
+        <setting id="password" type="text" option="hidden" label="30004" default="" visible="eq(-2,false)"/>
     </category>
     <!-- Affichage -->
     <category label="30006">
-        <setting id="show_n" subsetting="true" type="slider" label="30009" default="100" range="10,10,1000" option="int"/>
-        <setting id="show_last" subsetting="true" type="slider" label="30012" default="30" range="10,10,100" option="int"/>
+        <setting id="show_per_page" type="slider" label="30012" default="30" range="10,10,100" option="int"/>
         <setting id="showseen" type="bool" label="30011" default="true"/>
         <setting id="quality" type="labelenum" label="30010" values="LQ|HQ|TV|HD_720|HD_1080" default="HD_720"/>
         <setting id="lang" type="labelenum" label="30027" values="fr|ja" default="fr"/>
@@ -18,6 +18,16 @@
         <setting id="subs" type="bool" label="30028" default="False"/>
         <setting id="subs_lang" type="labelenum" label="30029" values="fr|ja" default="fr" enable="eq(-1,true)"/>
         -->
+    </category>
+    <!-- Folders -->
+    <category label="30031">
+        <setting id="folder.playlist" type="bool" label="30032" default="true"/>
+        <setting id="folder.favorite" type="bool" label="30033" default="true"/>
+        <setting id="folder.history" type="bool" label="30034" default="true"/>
+        <setting id="folder.free_content" type="bool" label="30035" default="true"/>
+        <setting id="folder.popular" type="bool" label="30037" default="true"/>
+        <setting id="folder.top_rated" type="bool" label="30038" default="true"/>
+        <setting label="30036" type="lsep"/>
     </category>
 
 </settings>

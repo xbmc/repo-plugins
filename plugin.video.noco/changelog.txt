@@ -26,3 +26,32 @@ v1.0.8
  - Now the plugin only shows subscribed sections (in the menus, still to do in
  search results)
  - Do not show episode number when not set
+
+v1.0.9
+  - Changed requirement from resquests2 to requests
+  - Changed fanart
+
+v1.0.10
+  - Corrected version number on requests
+
+v1.0.11
+  - Corrected a bug in the process to get the "code" from the api (Thanks to Tsukaniki for the solution)
+    http://forum.nolife-tv.com/showpost.php?p=2464647&postcount=447
+   
+v1.0.12
+  - Support for queuing an item on Kodi video playlist
+  - Support for queuing the complete "Noco playlist" (File d'attente) on Kodi video playlist
+
+v1.0.13
+  - Navigation in list of videos now shows N items per page and navigations items (Next page, Previous page)
+  - Add "Free content" entry to see free content of other catalogs (when logged as user) 
+  - Add setting to use in guest mode to see free content without being logged (some recent videos from Nolife catalog)
+  - Adding "History" entry to view previously seen video
+  - "Most popular" entry allows to choose the period of popularity (week, month, all time) 
+  - Adding "Top Rated" entry 
+  - Renaming "Playlists" entry by "Noco playlists" (only "File d'attente" inside atm)
+  - Adding basic support on "Noco playlists" : adding/deleting/moving videos & clear/queue playlist
+  - Adding "Noco favorite shows" entry with basic support (adding/deleting favorite shows, clear favorites)
+  - Already seen videos are now filtered directly within noco api request
+  - Random video is now asked using a noco api request (faster)
+  

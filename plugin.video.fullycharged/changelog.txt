@@ -1,0 +1,5 @@
+- v1.0.2 add icon and fanart to root for backwards compatibility
+
+- v1.0.1 add new resource artwork
+
+- v1.0.0 initial release

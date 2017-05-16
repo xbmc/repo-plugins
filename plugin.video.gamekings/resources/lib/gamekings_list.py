@@ -59,7 +59,7 @@ class Main:
 
         if self.next_page_possible == 'True':
             # Determine current item number, next item number, next_url
-            # f.e. http://www.gamekings.tv/category/videos/page/001/
+            # f.e. https://www.gamekings.tv/category/videos/page/001/
             pos_of_page = self.video_list_page_url.rfind('/page/')
             if pos_of_page >= 0:
                 page_number_str = str(
@@ -103,18 +103,18 @@ class Main:
 
         # Get the items. Each item contains a title, a video page url and a thumbnail url
         # <div class="post post--horizontal">
-        #   <a href="http://www.gamekings.tv/videos/e3-2016-vooruitblik-met-shelly/" title="E3 2016 Vooruitblik met Shelly" class="post__thumb">
-        #     <img width="270" height="170" data-original="http://www.gamekings.tv/wp-content/uploads/20160527_E3vooruitblikShelly-270x170.jpg"
+        #   <a href="https://www.gamekings.tv/videos/e3-2016-vooruitblik-met-shelly/" title="E3 2016 Vooruitblik met Shelly" class="post__thumb">
+        #     <img width="270" height="170" data-original="https://www.gamekings.tv/wp-content/uploads/20160527_E3vooruitblikShelly-270x170.jpg"
         #        alt="E3 2016 Vooruitblik met Shelly" class="post__image  lazy">
         #   </a>
         #   <h3 class="post__title">
-        #     <a href="http://www.gamekings.tv/videos/e3-2016-vooruitblik-met-shelly/" class="post__titlelink">E3 2016 Vooruitblik met Shelly                </a>
+        #     <a href="https://www.gamekings.tv/videos/e3-2016-vooruitblik-met-shelly/" class="post__titlelink">E3 2016 Vooruitblik met Shelly                </a>
         #   </h3>
         #   <p class="post__summary">De regeltante aan het woord in deze vooruitblik!            </p>
         #     <div class="meta">
-        #       <a href="http://www.gamekings.tv/meer-alles/?kings=8284,12375" class="meta__item">Jan &amp; Shelly</a>
+        #       <a href="https://www.gamekings.tv/meer-alles/?kings=8284,12375" class="meta__item">Jan &amp; Shelly</a>
         #         <span class="meta__item">07/06/2016</span>
-        #       <a href="http://www.gamekings.tv/videos/e3-2016-vooruitblik-met-shelly/#comments" class="meta__item  meta--comments  disqus-comment-count" data-disqus-url="http://www.gamekings.tv/videos/e3-2016-vooruitblik-met-shelly/">0</a>
+        #       <a href="https://www.gamekings.tv/videos/e3-2016-vooruitblik-met-shelly/#comments" class="meta__item  meta--comments  disqus-comment-count" data-disqus-url="https://www.gamekings.tv/videos/e3-2016-vooruitblik-met-shelly/">0</a>
         #     </div>
 
         items = soup.findAll('a', attrs={'href': re.compile("^" + self.BASE_URL)})

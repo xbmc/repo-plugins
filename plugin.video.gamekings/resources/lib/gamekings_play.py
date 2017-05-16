@@ -14,7 +14,7 @@ import xbmcplugin
 
 from gamekings_const import ADDON, SETTINGS, LANGUAGE, DATE, VERSION
 
-LOGINURL = 'http://www.gamekings.tv/wp-login.php'
+LOGINURL = 'https://www.gamekings.tv/wp-login.php'
 TWITCHURL =  'plugin://plugin.video.twitch/playLive/gamekings/'
 
 #
@@ -87,13 +87,13 @@ class Main:
             # get the page that contains the video
             reply = session.get(self.video_page_url)
 
-            # is it a premium-only video? (f.e. http://www.gamekings.tv/premium/110853/)
+            # is it a premium-only video? (f.e. https://www.gamekings.tv/premium/110853/)
             # <div class="video__premiumonly">
             #     <div class="video__premiumonlywrapper">
             #         <h3 class="video__notice">Premium <span>Content</span></h3>
             #         <a href="#" class="field__button  js-login">Log in</a>
             #         <span class="video__or-text">of</span>
-            #         <a href="http://www.gamekings.tv/get-premium/" class="field__button  field__button--premium">Word Premium</a>
+            #         <a href="https://www.gamekings.tv/get-premium/" class="field__button  field__button--premium">Word Premium</a>
             #     </div>
             # </div>
 
@@ -116,6 +116,7 @@ class Main:
 
                         payload = {'log': SETTINGS.getSetting('username'),
                                    'pwd': SETTINGS.getSetting('password')}
+
                         # post the LOGIN-page with the LOGIN-data, to actually login this session
                         reply = session.post(LOGINURL, data=payload)
                         html_source = reply.text
@@ -218,7 +219,7 @@ class Main:
         #             <script type="text/javascript">
         #                 jwplayer('videoplayer').setup({
         #                     file: 'https://player.vimeo.com/external/166503498.hd.mp4?s=c44264eced6082c0789371cb5209af96bc44035b',
-        #                     image: 'http://www.gamekings.tv/wp-content/uploads/20160513_gk1702_splash.jpg',
+        #                     image: 'https://www.gamekings.tv/wp-content/uploads/20160513_gk1702_splash.jpg',
         #                     title: 'Gamekings S17E02: De Synergie Aflevering',
         #                     width: '100%',
         #                     aspectratio: '16:9',

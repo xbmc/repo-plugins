@@ -72,7 +72,7 @@ class Main:
 
         if self.next_page_possible == 'True':
             # Determine current item number, next item number, next_url
-            # f.e. http://www.gamekings.tv/category/videos/page/001/
+            # f.e. https://www.gamekings.tv/category/videos/page/001/
             pos_of_page = self.video_list_page_url.rfind('/page/')
             if pos_of_page >= 0:
                 page_number_str = str(
@@ -116,10 +116,10 @@ class Main:
         soup = BeautifulSoup(html_source)
 
         # Get the items. Each item contains a title, a video page url and a thumbnail url
-        # <a href="http://www.gamekings.tv/videos/evdwv-over-assassins-creed-en-pokemon-sun-moon/" title="EvdWV over Assassin&#8217;s Creed en Pokèmon Sun &amp; Moon" class="post__thumb">
-        #     <img width="270" height="170" data-original="http://www.gamekings.tv/wp-content/uploads/20160513_evdwv_splash.jpg" alt="EvdWV over Assassin&#8217;s Creed en Pokèmon Sun &amp; Moon" class="post__image  lazy">
+        # <a href="https://www.gamekings.tv/videos/evdwv-over-assassins-creed-en-pokemon-sun-moon/" title="EvdWV over Assassin&#8217;s Creed en Pokèmon Sun &amp; Moon" class="post__thumb">
+        #     <img width="270" height="170" data-original="https://www.gamekings.tv/wp-content/uploads/20160513_evdwv_splash.jpg" alt="EvdWV over Assassin&#8217;s Creed en Pokèmon Sun &amp; Moon" class="post__image  lazy">
         # </a>
-        items = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.tv/")})
+        items = soup.findAll('a', attrs={'href': re.compile("^https://www.gamekings.tv/")})
 
         xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                 ADDON, VERSION, DATE, "len(items)",

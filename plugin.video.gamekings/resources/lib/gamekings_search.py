@@ -32,22 +32,8 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        # Get plugin settings
-        self.BASE_URL = SETTINGS.getSetting('base-url')
-        if self.BASE_URL == '':
-            self.BASE_URL = BASE_URL_GAMEKINGS_TV
-        else:
-            if self.BASE_URL.endswith("/"):
-                pass
-            else:
-                # Add a slash at the end
-                self.BASE_URL = self.BASE_URL + "/"
-
         xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
             ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            ADDON, VERSION, DATE, "self.BASE_URL", str(self.BASE_URL)),
-                 xbmc.LOGDEBUG)
 
         # Parse parameters
         self.plugin_category = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['plugin_category'][0]
@@ -119,7 +105,7 @@ class Main:
         # <a href="https://www.gamekings.tv/videos/evdwv-over-assassins-creed-en-pokemon-sun-moon/" title="EvdWV over Assassin&#8217;s Creed en Pokèmon Sun &amp; Moon" class="post__thumb">
         #     <img width="270" height="170" data-original="https://www.gamekings.tv/wp-content/uploads/20160513_evdwv_splash.jpg" alt="EvdWV over Assassin&#8217;s Creed en Pokèmon Sun &amp; Moon" class="post__image  lazy">
         # </a>
-        items = soup.findAll('a', attrs={'href': re.compile("^https://www.gamekings.tv/")})
+        items = soup.findAll('a', attrs={'href': re.compile("^" + BASE_URL_GAMEKINGS_TV)})
 
         xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                 ADDON, VERSION, DATE, "len(items)",

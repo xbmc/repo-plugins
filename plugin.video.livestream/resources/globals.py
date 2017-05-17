@@ -369,8 +369,8 @@ def getStreamQuality(m3u8_url):
         
         xbmc.log(master)
 
-        line = re.compile("(.+?)\n").findall(master)  
-
+        line = re.compile("(.+?)\n").findall(master)
+        desc = ''
         for temp_url in line:
             if '.m3u8' in temp_url:
                 temp_url = temp_url+'|User-Agent='+UA_IPHONE              

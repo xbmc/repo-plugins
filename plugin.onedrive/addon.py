@@ -273,7 +273,7 @@ def close_dialog_timeout(dialog, timeout):
 
 def export_folder(basename, item_driveid, item_id, driveid, destination_folder, base_folder, directLink=None):
     onedrive = get_onedrive(driveid)
-    parent_folder = destination_folder + basename + '/'
+    parent_folder = os.path.join(os.path.join(destination_folder, basename), '')
     if not xbmcvfs.exists(parent_folder):
         try:
             xbmcvfs.mkdirs(parent_folder)
@@ -304,7 +304,7 @@ def export_folder(basename, item_driveid, item_id, driveid, destination_folder, 
         elif (('video' in f or extension in ext_videos) and content_type == 'video') or ('audio' in f and content_type == 'audio'):
             params = {'action':'play', 'content_type': content_type, 'item_driveid': item_driveid, 'item_id': f['id'], 'driveid': driveid}
             url = base_url + '?' + urllib.urlencode(params)
-            f = xbmcvfs.File(parent_folder + name + '.strm', 'w')
+            f = xbmcvfs.File(os.path.join(parent_folder, name + '.strm'), 'w')
             f.write(url)
             f.close()
         onedrive.exporting_count += 1

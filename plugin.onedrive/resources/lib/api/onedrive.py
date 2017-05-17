@@ -106,12 +106,12 @@ class OneDrive:
         
     def get_url(self, method, path, params=None):
         url = self._api_url+self._make_path(path)
-        if method == 'get' and params is not None and params != '':
+        if method == 'get' and params:
             url = url + '?' + params
         return url
     
     def request(self, method, path, params=None, raw_url=False, retry=True):
-        url_params = '' if params is None else urllib.urlencode(params)
+        url_params = '' if not params else urllib.urlencode(params)
         url = self.get_url(method, path, url_params) if not raw_url else path
         xbmc.log('URL request: ' + url, xbmc.LOGDEBUG)
         headers = {'Authorization': 'bearer ' + self.access_token}

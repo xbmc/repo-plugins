@@ -12,10 +12,7 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 
-from gamekings_const import ADDON, SETTINGS, LANGUAGE, DATE, VERSION
-
-LOGINURL = 'https://www.gamekings.tv/wp-login.php'
-TWITCHURL =  'plugin://plugin.video.twitch/playLive/gamekings/'
+from gamekings_const import ADDON, SETTINGS, LANGUAGE, DATE, VERSION, LOGIN_URL, TWITCH_URL
 
 #
 # Main class
@@ -118,7 +115,7 @@ class Main:
                                    'pwd': SETTINGS.getSetting('password')}
 
                         # post the LOGIN-page with the LOGIN-data, to actually login this session
-                        reply = session.post(LOGINURL, data=payload)
+                        reply = session.post(LOGIN_URL, data=payload)
                         html_source = reply.text
 
                         # check that the login was technically ok (status_code 200).
@@ -319,7 +316,7 @@ class Main:
         # Check if it's a twitch live stream
         #
         elif str(html_source).find("twitch") > 0:
-            video_url = TWITCHURL
+            video_url = TWITCH_URL
 
             xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "trying twitch channel", str(video_url)),
                      xbmc.LOGDEBUG)

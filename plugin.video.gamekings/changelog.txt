@@ -1,3 +1,6 @@
+v1.2.10 (2017-05-17)
+- removed base url setting
+
 v1.2.9 (2017-05-16)
 - fix for website switch to https
 

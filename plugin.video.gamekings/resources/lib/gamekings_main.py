@@ -24,21 +24,11 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        # Get plugin settings
-        self.BASE_URL = SETTINGS.getSetting('base-url')
-        if self.BASE_URL == '':
-            self.BASE_URL = BASE_URL_GAMEKINGS_TV
-        else:
-            if self.BASE_URL.endswith("/"):
-                pass
-            else:
-                # Add a slash at the end
-                self.BASE_URL = self.BASE_URL + "/"
         #
         # Videos
         #
         parameters = {"action": "list", "plugin_category": LANGUAGE(30000),
-                      "url": self.BASE_URL + "category/videos/page/001/", "next_page_possible": "True"}
+                      "url": BASE_URL_GAMEKINGS_TV + "category/videos/page/001/", "next_page_possible": "True"}
         url = self.plugin_url + '?' + urllib.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30000), iconImage="DefaultFolder.png")
         is_folder = True
@@ -50,7 +40,7 @@ class Main:
         # Afleveringen
         #
         parameters = {"action": "list", "plugin_category": LANGUAGE(30001),
-                      "url": self.BASE_URL + "page/001/?cat=3&s=gamekings+s", "next_page_possible": "True"}
+                      "url": BASE_URL_GAMEKINGS_TV + "page/001/?cat=3&s=gamekings+s", "next_page_possible": "True"}
         url = self.plugin_url + '?' + urllib.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30001), iconImage="DefaultFolder.png")
         is_folder = True
@@ -62,7 +52,7 @@ class Main:
         # Gamekings Extra
         #
         parameters = {"action": "list", "plugin_category": LANGUAGE(30002),
-                      "url": self.BASE_URL + "?s=extra", "next_page_possible": "False"}
+                      "url": BASE_URL_GAMEKINGS_TV + "?s=extra", "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30002), iconImage="DefaultFolder.png")
         is_folder = True
@@ -74,7 +64,7 @@ class Main:
         # Trailers
         #
         parameters = {"action": "list", "plugin_category": LANGUAGE(30003),
-                      "url": self.BASE_URL + "?s=trailer", "next_page_possible": "False"}
+                      "url": BASE_URL_GAMEKINGS_TV + "?s=trailer", "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30003), iconImage="DefaultFolder.png")
         is_folder = True
@@ -86,7 +76,7 @@ class Main:
         # Search in Videos
         #
         parameters = {"action": "search", "plugin_category": LANGUAGE(30004),
-                      "url": self.BASE_URL + "?cat=3&s=%s", "next_page_possible": "False"}
+                      "url": BASE_URL_GAMEKINGS_TV + "?cat=3&s=%s", "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30004), iconImage="DefaultFolder.png")
         is_folder = True

@@ -13,7 +13,7 @@ Languagues:
 - Only Croatian and English (switch using Settings -> Interface -> Regional -> Language)
 
 Platforms:
-- *should* be all. Tested on: Windows 10, Linux Debian 9 (both 64-bit) and Android 4.4 (ARM). 
+- *should* be all. Tested on: Windows 10, Linux Debian 9, macOS 10.12 (all 64-bit arch's) and Android 4.4 (ARM). 
 
 ### Installation 
 Requirements: 

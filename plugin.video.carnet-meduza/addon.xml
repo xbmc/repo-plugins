@@ -4,7 +4,7 @@
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.requests" version="2.12.4"/>
     <import addon="script.module.mechanize" version="0.2.6"/>
-    <import addon="script.module.parsedom" version="2.5.2"/>
+    <import addon="script.module.simplecache" version="1.0.11" />
   </requires>
   <extension point="xbmc.python.pluginsource" library="resources/lib/carnet-meduza.py">
     <provides>video</provides>

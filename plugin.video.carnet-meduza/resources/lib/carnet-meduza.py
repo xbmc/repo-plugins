@@ -1,28 +1,178 @@
 # -*- coding: utf-8 -*-
-import os, sys
+import os, sys, string, random, platform, datetime
 import urllib, urlparse, json
-import xbmcgui, xbmcplugin, xbmcaddon
+import xbmc, xbmcaddon, xbmcplugin, xbmcgui
 import requests
-from register import device
+import mechanize
+from mechanize import Browser
+from simplecache import SimpleCache
+
+class initCheck(object):
+	'''on very first run it will register kodi (device) with the CARNet Meduza (CM) service. On every subseq run or >12h it  will check connectivity with the CM servise
+	when device is registered, api key will be stored for a year
+	
+	Attributes:
+		addon_name: A string represnting plugin name
+	'''
+	
+	def __init__(self, addon_name):
+		'''Return plugin name'''
+		self.addon_name = addon_name 
+
+	def gen_key(self):
+		'''Returns unique 140 char long string that emulates device id - api key'''
+		# ex: Linux
+		os_name = platform.system()
+		# generate 140 char device id (a.k.a. api key)
+		rnd_str = ''.join(random.choice(string.ascii_letters+string.digits) for x in range(140))
+		combo_str = 'kodi' + os_name + rnd_str
+		# remove non alpha-numeric chars and truncate to 140 
+		uniq_key = ''.join(char for char in combo_str if char.isalnum())[:140]
+		return uniq_key
+
+	def store_key(self):
+		'''Persistently keep api key and registration status (not/is) in userdata/storage.pcl file
+		and return stored key and the status'''
+		#gen/set/get uniq key == device_id == api_key
+		key_store = simplecache.get(addon_name + '.key_store')
+		#check if key is stored in simplecache db 
+		if not key_store:
+			uniq_key = self.gen_key() # gen key only if key_store empty (once)
+			simplecache.set(addon_name + '.key_store', uniq_key, expiration=datetime.timedelta(hours=8760)) # store the key and keep it for a year
+			reg_dev_status_flag = 'not_reg'
+			simplecache.set(addon_name + '.reg_dev_status', reg_dev_status_flag, expiration=datetime.timedelta(hours=8760))
+		reg_dev_status = simplecache.get(addon_name + '.reg_dev_status')
+		key = simplecache.get(addon_name + '.key_store')
+		return (key, reg_dev_status)
+
+	# register device
+	def dev_reg(self, device_id):
+		'''Returns the url that server responded with after registration attempt'''
+		# get user info from settings
+		aai_password = self.get_pwd()
+		api_base_url = 'https://meduza.carnet.hr/index.php/login/mobile/?device='
+		# for some reason, it start at 2 {'Tablet':'2', 'Smartphone':'3', 'SmartTV':'4'}
+		device_type = int(addon.getSetting('device_type')) + 2
+		# request target resource, discover IdP and redirect to SSO service
+		request_url = api_base_url + str(device_type) + '&uid=' + device_id
+		r = requests.get(request_url)
+		redirect_cookies = r.cookies
+
+		# identify the user from requested SSO service (login)
+		form_open = r.url.encode('utf-8')
+
+		# set browser
+		br = mechanize.Browser()
+		br.set_cookiejar(redirect_cookies)
+		br.set_handle_equiv(True)
+		br.set_handle_redirect(True)
+		br.set_handle_referer(True)
+		br.set_handle_robots(False)
+		br.set_handle_refresh(mechanize._http.HTTPRefreshProcessor(), max_time=1)
+		# open login page
+		br.open(form_open)
+		br.select_form(name='f')
+		br['username'] = aai_username 
+		br['password'] = aai_password
+		br.method = 'POST'
+		br.submit()
+
+		# submit using responded XHTML form, redirect to requested target resource and get response code
+		submit = br.open(form_open, timeout=5.0)
+		submit.geturl()
+		br.select_form(nr=0)
+		br.method = 'POST'
+		response = br.submit()
+		response_url = response.geturl()
+		return response_url
+
+	# check device registration status
+	def check_reg(self, response, device_id):
+		'''Takes response from reg_dev, along with api key'''
+		response_parsed = urlparse.urlparse(response)
+		# if reponse doesn't return proper status reponse due to wrong usually username/password entry 
+		# catch keyError and pop custom message
+		try:
+			response_code = urlparse.parse_qs(response_parsed.query)['status'][0]
+			# 200 means that 'device' was successfully registered with SP and device UID can be stored in the settings
+			if response_code == '200':
+				addon.setSetting('apikey',device_id)
+				self.user_info(device_id)
+				info_dialog_msg = addon.getLocalizedString(30209) 
+				dialog.notification('CARNet Meduza', info_dialog_msg, xbmcgui.NOTIFICATION_INFO, 4000)
+				userdata_path_special = xbmcaddon.Addon().getAddonInfo('profile').decode('utf-8')
+				userdata_path = xbmc.translatePath(userdata_path_special)
+				reg_dev_status_flag = 'is_reg'
+				simplecache.set(addon_name + '.reg_dev_status', reg_dev_status_flag, expiration=datetime.timedelta(hours=8760))
+			else: 
+				ret_codes = {'100':30215, '300':30216, '400':30217, '401':30218}
+				ret_message = addon.getLocalizedString(ret_codes[response_code])
+				dialog.notification('CARNet Meduza', ret_message, xbmcgui.NOTIFICATION_WARNING, 4000)
+		except KeyError:
+			sso_err_msg = addon.getLocalizedString(30219)
+			dialog.notification('CARNet Meduza', sso_err_msg, xbmcgui.NOTIFICATION_ERROR, 4000)
+
+	def get_pwd(self):
+		'''Storing SSO password is not best way to go, so just get the it, when needed. Returns entered password.'''
+		heading_msg = addon.getLocalizedString(30210) 
+		keyboard = xbmc.Keyboard()
+		keyboard.setHeading(heading_msg)
+		keyboard.setHiddenInput(True) 
+		keyboard.doModal()
+		if (keyboard.isConfirmed()):
+			enter_pwd = keyboard.getText()
+			if enter_pwd is None or len(str(enter_pwd)) == 0:
+				info_dialog_msg = addon.getLocalizedString(30211)
+				dialog.notification('CARNet Meduza', info_dialog_msg, xbmcgui.NOTIFICATION_WARNING, 4000)
+		del keyboard
+		return enter_pwd
+
+	# pre run check (make api requests for content) 
+	def pre_run(self):
+		'''When addon is started, checks if registration status is valid.'''
+		# request target resource, discover IdP and redirect to SSO service
+		request_url = 'https://meduza.carnet.hr/index.php/api/registered/?uid=' + api_key
+		r = requests.get(request_url)
+		registered_status = r.json()['code']
+		if registered_status == 200:
+			success_msg = addon.getLocalizedString(30212)
+			dialog.notification('CARNet Meduza', r.json()['message'] + success_msg, xbmcgui.NOTIFICATION_INFO, 4000)
+		else:
+			error_msg = addon.getLocalizedString(30213)
+			dialog.notification('CARNet Meduza', error_msg, xbmcgui.NOTIFICATION_ERROR, 4000)			
+
+	# get user info and populate the settings.xml
+	def user_info(self, api_key):
+		'''Once more, it takes api key, gets user info from the CM server and stores it to settings.'''
+		# request target resource, discover IdP and redirect to SSO service
+		request_url = 'https://meduza.carnet.hr/index.php/api/user/?uid=' + api_key
+		r = requests.get(request_url)
+		user_details = r.json()
+		first_name = user_details['ime'].encode('utf-8')
+		last_name = user_details['prezime'].encode('utf-8')
+		reg_date = user_details['datum_registracija'].encode('utf-8')
+		addon.setSetting('first_name',first_name)
+		addon.setSetting('last_name',last_name)
+		addon.setSetting('reg_date',reg_date)
 
 def build_url(query):
-	"""Returns builds query url."""
+	'''Returns builds query url.'''
 	return base_url + '?' + urllib.urlencode(query)
 
 def categories():
-	"""Returns list of categories""" 
+	'''Returns list of categories.'''
 	requestCategories = requests.get(api_base_url + 'categories/?lang=en&uid=' + api_key)
 	categories = requestCategories.json()
 	return categories
 
 def channels():
-	"""Returns list of channels"""
+	'''Returns list of channels.'''
 	requestChannels = requests.get(api_base_url + 'channels/?uid=' + api_key)
 	channels = requestChannels.json()
 	return channels
 
 def category_videos(name,current_page_number):
-	"""Returns list of vidoes (25 per page) inside selected category"""
+	'''Returns list of vidoes (25 per page) inside selected category.'''
 	for category in categories:
 		if category[lang_api_prop] == name:
 			skip = int(current_page_number) * 25
@@ -32,7 +182,7 @@ def category_videos(name,current_page_number):
         return videos 
 
 def search_videos():
-	"""Returns search results vidoes"""
+	'''Returns search results vidoes.'''
         search_heading = addon.getLocalizedString(30206)
 	keyboard = xbmc.Keyboard()
         keyboard.setHeading(search_heading)
@@ -50,21 +200,21 @@ def search_videos():
 	return videos 
 
 def category_video_count(category_id):
-	"""Returns total number of videos inside the category"""
+	'''Returns total number of videos inside the category.'''
 	request_category_video_count = requests.get(api_base_url + 'category/count/?id=' + category_id + '&uid=' + api_key)
 	category_video_count = request_category_video_count.json()
 	return category_video_count
 
 def video_url_description(video_id):
-	"""Returns video description"""
+	'''Returns video description.'''
 	request_video_url_description = requests.get(api_base_url + 'video/?id=' + video_id + '&uid=' + api_key).json()
 	extract_keys = ['stream_url', 'opis']
 	video_url_description = dict((k, request_video_url_description[k]) for k in extract_keys if k in request_video_url_description)
 	return video_url_description
 
 def recommended_videos():
-	"""Returns list of recommended videos. The number of videos can be defined inside settings. Default is 20."""
-	num_recommends = xbmcaddon.Addon('plugin.video.carnet-meduza').getSetting('num_recommends')
+	'''Returns list of recommended videos. The number of videos can be defined inside settings. Default is 20.'''
+	num_recommends = xbmcaddon.Addon(addon_name).getSetting('num_recommends')
 	request_recommended_videos = requests.get(api_base_url + 'recommended/?number=' + str(num_recommends) + '&uid=' + api_key)
 	videos = request_recommended_videos.json()
 	return videos 
@@ -91,19 +241,22 @@ def list_search_or_recommended_videos(videos):
 			image = video['slika']
 			li = xbmcgui.ListItem(name)
 			li.setArt({'icon':image})
-			li.setInfo( type="Video", infoLabels={ 
-							"Plot": description, 
-							"Genre": genre,
-							"Duration": duration,
-							"mediatype":"video"
+			li.setInfo( type='Video', infoLabels={ 
+							'Plot': description, 
+							'Genre': genre,
+							'Duration': duration,
+							'mediatype':'video'
 								})
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
 		xbmcplugin.endOfDirectory(addon_handle)
-	
+
+# list videos from selected category	
 def list_category_videos(videos,current_page_number,foldername):
 	if not videos:
+		#category level listitems
 		li_translate = addon.getLocalizedString(30208)
-		li = xbmcgui.ListItem(li_translate, iconImage='DefaultVideo.png')
+		li = xbmcgui.ListItem(li_translate)
+		li.setArt({'icon':'DefaultVideo.png'})
 		xbmcplugin.addDirectoryItem(handle=addon_handle, url='', listitem=li)
 		xbmcplugin.endOfDirectory(addon_handle)
 	else:
@@ -120,10 +273,10 @@ def list_category_videos(videos,current_page_number,foldername):
 			description = video_info['opis'].encode('utf-8')
 			li = xbmcgui.ListItem(name)
 			li.setArt({'icon':image})
-			li.setInfo( type="Video", infoLabels={ 
-								"Plot": description, 
-								"Duration": duration,
-								"mediatype":"video"
+			li.setInfo( type='Video', infoLabels={ 
+								'Plot': description, 
+								'Duration': duration,
+								'mediatype':'video'
 								})
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
 		pages_num = video_num / 25
@@ -132,10 +285,13 @@ def list_category_videos(videos,current_page_number,foldername):
 			int_current_page_number += 1
 			current_page_number = str(int_current_page_number)
 			url = build_url({'mode': 'folder', 'foldername': foldername, 'pagenumber': current_page_number})
-			li = xbmcgui.ListItem('> Next Page (' + str(int_current_page_number + 1) + ')', iconImage="DefaultFolder.png")
+			li = xbmcgui.ListItem('> Next Page (' + str(int_current_page_number + 1) + ')')
+			li.setArt({'icon':'DefaultFolder.png'})
+			li.setInfo('video', { 'mediatype': 'video' })
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)		
 		xbmcplugin.endOfDirectory(addon_handle)
-		
+
+# play playlist of the selected channel with 'current video' + time offset (emulates tv channel) 		
 def start_channel(channel_id,channel_video_count):
 	playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
 	player = xbmc.Player()
@@ -160,13 +316,38 @@ def start_channel(channel_id,channel_video_count):
         player.play(item=playlist,startpos=channel_index)
 	player.seekTime(channel_offset)
 
+addon_name = 'plugin.video.carnet-meduza'
+addon=xbmcaddon.Addon(addon_name)
+# get username/apikey from settings
+aai_username = addon.getSetting('aai_username')
+#get some data from cache
+simplecache = SimpleCache()
+tmp_store = simplecache.get(addon_name + '.tmp_store')
+dialog = xbmcgui.Dialog()
+
+if not tmp_store:
+	initcheck = initCheck(addon_name)
+	api_key, dev_reg_status = initcheck.store_key()
+	addon.setSetting('apikey',api_key)
+	#if aai_username missing open settings, otherwise  start device registration
+	if not aai_username and dev_reg_status == 'not_reg':
+		info_dialog_msg = addon.getLocalizedString(30214)
+		dialog.notification('CARNet Meduza', info_dialog_msg, xbmcgui.NOTIFICATION_INFO, 4000)
+		xbmcaddon.Addon().openSettings()	
+	elif dev_reg_status == 'not_reg':
+		reg_response = initcheck.dev_reg(api_key)
+		initcheck.check_reg(reg_response, api_key)
+	else:
+		initcheck.pre_run()
+		tmp_store_flag = 1
+		simplecache.set( addon_name + '.tmp_store', tmp_store_flag, expiration=datetime.timedelta(hours=12))
+
 base_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
 args = urlparse.parse_qs(sys.argv[2][1:])
 #set as video addon
 xbmcplugin.setContent(addon_handle, 'videos')
 
-addon=xbmcaddon.Addon('plugin.video.carnet-meduza')
 api_base_url = 'https://meduza.carnet.hr/index.php/api/'
 category_image_base_url = 'https://meduza.carnet.hr/uploads/images/categories/'
 # api_key == device_id from register (import) device == uid
@@ -187,6 +368,7 @@ if active_lang == 'Croatian':
 else:
 	lang_api_prop = 'naziv_en'
 
+#category level listitems
 if mode is None:
     url = build_url({'mode': 'folder', 'foldername': dir_recommends})
     li = xbmcgui.ListItem(dir_recommends)
@@ -224,6 +406,7 @@ elif mode[0] == 'folder':
 		categories = categories()
 		categoryGen = (category for category in categories if category['naziv'] != 'YouTube')
 		for category in categoryGen:
+			#category level listitems
 			active_lang = xbmc.getLanguage()
 			name = category[lang_api_prop].encode('utf-8')
 			url = build_url({'mode': 'folder', 'foldername': name})
@@ -241,6 +424,7 @@ elif mode[0] == 'folder':
 			channelImage = channel.get('slika','')
 			li = xbmcgui.ListItem(name)
 			li.setArt({'icon':channelImage})
+			li.setInfo('video', { 'mediatype': 'video' })
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
 		xbmcplugin.endOfDirectory(addon_handle)
 

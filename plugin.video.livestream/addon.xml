@@ -8,8 +8,8 @@
   </extension>  
   <extension point="xbmc.addon.metadata">    
     <platform>all</platform>
-    <summary lang="en_GB">Livestream.com Videos</summary>
-    <description lang="en_GB">Livestream, formerly known as Mogulus, is a live streaming video platform that allows users to view and broadcast video content using a camera and a computer through the internet.</description>    
+    <summary lang="en">Livestream.com Videos</summary>
+    <description lang="en">Livestream, formerly known as Mogulus, is a live streaming video platform that allows users to view and broadcast video content using a camera and a computer through the internet.</description>
     <language>en</language>
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>

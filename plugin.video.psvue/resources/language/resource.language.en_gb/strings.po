@@ -1,6 +1,6 @@
 # Kodi Media Center language file
-# Addon Name: Simpsons World
-# Addon id: plugin.video.simpsonsworld
+# Addon Name: PS Vue
+# Addon id: plugin.video.psvue
 # Addon Provider: eracknaphobia
 msgid ""
 msgstr ""

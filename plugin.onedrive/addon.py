@@ -355,7 +355,7 @@ try:
     elif action[0] == 'add_account':
         progress_dialog.create(addonname, addon.getLocalizedString(32008))
         pg_created = True
-        onedrive = OneDrive(addon.getSetting('client_id'))
+        onedrive = OneDrive(addon.getSetting('client_id_oauth2'))
         pin = utils.Utils.str(onedrive.begin_signin())
         progress_dialog.close()
         pg_created = False

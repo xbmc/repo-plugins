@@ -63,9 +63,10 @@ class OneDrive:
     def cancelOperation(self):
         return self.monitor.abortRequested()
     def begin_signin(self):
-        return self.get(self._signin_url, raw_url=True)['pin']
+        url = self._signin_url + '?' + urllib.urlencode({'version': 2})
+        return self.get(url, raw_url=True)['pin']
     def finish_signin(self, pin):
-        url = self._signin_url + '?' + urllib.urlencode({'action': 'code', 'pin': pin})
+        url = self._signin_url + '?' + urllib.urlencode({'action': 'code', 'pin': pin, 'version': 2})
         return self.get(url, raw_url=True)
     def login(self, code=None):
         if code is None:

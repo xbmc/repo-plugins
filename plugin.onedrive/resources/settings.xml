@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings >
 	<category label="32000">
-		<setting type="text" id="client_id" default="8913898c-1b24-4c09-a5d4-1d19d35690ea" option="hidden" visible="false"/>
+		<setting type="text" id="client_id" default="0000000048145120" option="hidden" visible="false"/>
 		<setting type="text" id="client_id_oauth2" default="8913898c-1b24-4c09-a5d4-1d19d35690ea" option="hidden" visible="false"/>
 		<setting type="bool" id="exporting" default="false" option="hidden" visible="false"/>
 		<setting label="32001" type="folder" id="video_library_folder" option="writeable"/>

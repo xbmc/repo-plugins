@@ -9,14 +9,14 @@ from datetime import date, datetime, timedelta
 
 
 def main_menu():
-    addDir('Timeline', 50, ICON)
-    addDir('My Shows', 100, ICON)
-    addDir('Favorite Channels', 200, ICON)
-    addDir('Live TV', 300, ICON)
-    addDir('Sports', 400, ICON)
-    addDir('Kids', 500, ICON)
-    addDir('Recently Watched', 600, ICON)
-    addDir('Featured', 700, ICON)
+    addDir(LOCAL_STRING(30100), 50, ICON)
+    addDir(LOCAL_STRING(30101), 100, ICON)
+    addDir(LOCAL_STRING(30102), 200, ICON)
+    addDir(LOCAL_STRING(30103), 300, ICON)
+    addDir(LOCAL_STRING(30104), 400, ICON)
+    addDir(LOCAL_STRING(30105), 500, ICON)
+    addDir(LOCAL_STRING(30106), 600, ICON)
+    addDir(LOCAL_STRING(30107), 700, ICON)
 
 
 def timeline():
@@ -172,10 +172,6 @@ def list_episode(show):
 
     info = {'plot': plot, 'tvshowtitle': show_title, 'title': title, 'originaltitle': title, 'genre': genre,
             'aired': airing_date.strftime('%Y-%m-%d'), 'premiered': broadcast_date.strftime('%Y-%m-%d')}
-    """
-    info = {'plot': desc, 'tvshowtitle': LOCAL_STRING(30000), 'season': season, 'episode': episode, 'title': title,
-            'originaltitle': title, 'duration': duration, 'aired': aired, 'genre': LOCAL_STRING(30002)}
-    """
     addStream(title, show_url, title, icon, fanart, info)
 
 
@@ -343,12 +339,12 @@ def login():
         elif 'error_description' in json_source:
             msg = json_source['error_description']
             dialog = xbmcgui.Dialog()
-            ok = dialog.ok('Login Failed', msg)
+            ok = dialog.ok(LOCAL_STRING(30200), msg)
             sys.exit()
         else:
-            msg = "Something went wrong during login"
+            # Something went wrong during login
             dialog = xbmcgui.Dialog()
-            ok = dialog.ok('Login Failed', msg)
+            ok = dialog.ok(LOCAL_STRING(30200), LOCAL_STRING(30201))
             sys.exit()
 
 
@@ -380,12 +376,12 @@ def two_step_verification(ticket_uuid):
     elif 'error_description' in json_source:
         msg = json_source['error_description']
         dialog = xbmcgui.Dialog()
-        ok = dialog.ok('Login Failed', msg)
+        ok = dialog.ok(LOCAL_STRING(30200), msg)
         sys.exit()
     else:
-        msg = "Something went wrong during login"
+        # Something went wrong during login
         dialog = xbmcgui.Dialog()
-        ok = dialog.ok('Login Failed', msg)
+        ok = dialog.ok(LOCAL_STRING(30200), LOCAL_STRING(30201))
         sys.exit()
 
 
@@ -663,6 +659,7 @@ def get_params():
 addon_handle = int(sys.argv[1])
 ADDON = xbmcaddon.Addon()
 ROOTDIR = ADDON.getAddonInfo('path')
+LOCAL_STRING = ADDON.getLocalizedString
 FANART = os.path.join(ROOTDIR, "resources", "fanart.jpg")
 ICON = os.path.join(ROOTDIR, "resources", "icon.png")
 

@@ -36,3 +36,43 @@ msgctxt "#30004"
 msgid "Change Profile"
 msgstr ""
 
+msgctxt "#30100"
+msgid "Timeline"
+msgstr ""
+
+msgctxt "#30101"
+msgid "My Shows"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Favorite Channels"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Live TV"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Sports"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Kids"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Recently Watched"
+msgstr ""
+
+msgctxt "#30107"
+msgid "Featured"
+msgstr ""
+
+
+msgctxt "#30200"
+msgid "Login Failed"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Something went wrong during login"
+msgstr ""

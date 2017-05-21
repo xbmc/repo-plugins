@@ -13,6 +13,16 @@
     <string id="30011">Show already seen videos</string>
     <string id="30012">Number of shows per page</string>
     <string id="30013">Autorefresh directories</string>
+    <string id="30014">Basse</string>
+    <string id="30015">Moyenne</string>
+    <string id="30016">Standard</string>
+    <string id="30017">HD</string>
+    <string id="30018">Full HD</string>
+    <string id="30019">only for chilren below 10</string>
+    <string id="30020">only for chilren below 12</string>
+    <string id="30021">only for chilren below 16</string>
+    <string id="30022">only for chilren below 18</string>
+    <string id="30023">No filter</string>
     <string id="30024">Show autopromos</string>
     <string id="30025">Show announces</string>
     <string id="30026">Hide forbidden videos from age</string>
@@ -28,6 +38,7 @@
     <string id="30036">Not available in guest mode</string>
     <string id="30037">Show Most popular</string>
     <string id="30038">Show Top Rated</string>
+    <string id="30039">CSA advise</string>
 
     <!-- Various strings -->
     <string id="30040">Random</string>
@@ -39,11 +50,15 @@
     <string id="30046">This week</string>
     <string id="30047">This month</string>
     <string id="30048">All time</string>
+    <string id="30049">Rate...</string>
+    <string id="30050">Rating</string>
+    <string id="30051">Your rating</string>
 
     <!-- Messages -->
-    <string id="30050">You MUST provide a user and a password  or use Guest mode !</string>
-    <string id="30051">The search did not return any results</string>
-    <string id="30052">Did not found any not played element</string>
+    <string id="30250">You MUST provide a user and a password  or use Guest mode !</string>
+    <string id="30251">The search did not return any results</string>
+    <string id="30252">Did not found any not played element</string>
+    <string id="30253">This video is not advised for this audience</string>
 
     <!-- Categories names -->
     <string id="30060">Last videos</string>
@@ -65,10 +80,8 @@
 
     <!-- Noco playlist -->
     <string id="30090">Add to %s (noco)</string>
-    <string id="30091">Remove</string>
     <string id="30092">Move up</string>
     <string id="30093">Move down</string>
-    <string id="30094">Clear</string>
     <string id="30095">Move item</string>
     <string id="30096">Cancel move</string>
     <string id="30097">Move item here</string>

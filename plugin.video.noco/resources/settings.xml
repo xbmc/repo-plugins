@@ -11,7 +11,8 @@
     <category label="30006">
         <setting id="show_per_page" type="slider" label="30012" default="30" range="10,10,100" option="int"/>
         <setting id="showseen" type="bool" label="30011" default="true"/>
-        <setting id="quality" type="labelenum" label="30010" values="LQ|HQ|TV|HD_720|HD_1080" default="HD_720"/>
+        <setting id="quality" type="enum" label="30010" lvalues="30014|30015|30016|30017|30018" default="3"/>
+        <setting id="csa" type="enum" label="30039" lvalues="30019|30020|30021|30022|30023" default="4"/>
         <setting id="lang" type="labelenum" label="30027" values="fr|ja" default="fr"/>
         <setting id="random" type="bool" label="30030" default="false"/>
         <!--

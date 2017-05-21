@@ -16,8 +16,9 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-from xbmcswift2 import Plugin
+from xbmcswift2 import Plugin, xbmcgui
 from resources.lib.api import nocoApi
+from datetime import datetime
 import re, time
 
 plugin = Plugin()
@@ -25,11 +26,13 @@ api = nocoApi()
 
 @plugin.route('/')
 def index():
+    plugin.set_content('files')
     guest = isGuestMode()
-    if plugin.get_setting('username') == '' or plugin.get_setting('password') == '' and not guest:
+    if (plugin.get_setting('username') == '' or plugin.get_setting('password') == '') and not guest:
         plugin.open_settings()
-    if plugin.get_setting('username') == '' or plugin.get_setting('password') == '' and not guest:
-        error=plugin.get_string('30050')
+        guest = isGuestMode()
+    if (plugin.get_setting('username') == '' or plugin.get_setting('password') == '') and not guest:
+        error=plugin.get_string('30250')
         plugin.notify(msg=error, delay=10000)
     else:
         token = getToken()
@@ -38,7 +41,7 @@ def index():
             rootMenuItems = [{
                 'label': partner['partner_name'],
                 'icon': partner['icon_1024x576'],
-                'path': plugin.url_for('indexLast', partner=partner['partner_key'], guest_free=True)
+                'path': plugin.url_for('indexLast', partner=partner['partner_key'], guest_free='1')
                 } for partner in GuestPartners()]
         else:        
             if plugin.get_setting('folder.playlist') == "true":
@@ -80,15 +83,16 @@ def index():
 
 @plugin.route('/partners/<partner>')
 def indexPartner(partner):
+    plugin.set_content('files')
     if 'guest_free' in plugin.request.args:
         index = [
             {'label': plugin.get_string('30060'),
-            'path': plugin.url_for('indexLast', partner=partner, guest_free=True)},
+            'path': plugin.url_for('indexLast', partner=partner, guest_free='1')},
             ]
     elif 'user_free' in plugin.request.args:
         index = [
             {'label': plugin.get_string('30060'),
-            'path': plugin.url_for('indexLast', partner=partner, user_free=True)},
+            'path': plugin.url_for('indexLast', partner=partner, user_free='1')},
             ]
     else:
         index = [
@@ -113,35 +117,27 @@ def indexPartner(partner):
 @plugin.route('/partners/<partner>/last')
 @plugin.route('/partners/<partner>/last/<page>', name='last_page')
 def indexLast(partner, page=None):
+    plugin.set_content('videos')
     token = getToken()
     videos = []
+    guest_free='1' if 'guest_free' in plugin.request.args and plugin.request.args['guest_free'][0]=='1' else ''  
+    user_free='1' if 'user_free' in plugin.request.args and plugin.request.args['user_free'][0]=='1' else ''  
     num_page = 0 if page == None else int(page)
     show_per_page = int(plugin.get_setting('show_per_page'))
-    hasNextPage, last = api.get_last(partner, token['token'], show_per_page, num_page, guest_free='guest_free' in plugin.request.args, user_free='user_free' in plugin.request.args)
+    hasNextPage, last = api.get_last(partner, token['token'], show_per_page, num_page, guest_free=(guest_free=='1'), user_free=(user_free=='1'))
     videos = [getVideoInfos(video) for video in last]
     
     UpdateTemporaryCache(videos)
 
     # pagination list items
-    _before = num_page - 1 if num_page > 0 else None 
-    _after = num_page + 1 if hasNextPage else None
-    if not _after == None:
-        videos.append( {
-            'label': u'...' + plugin.get_string('30043') + ' (' + str(_after+1) + ')' + u' \u00BB',
-            'path': plugin.url_for('last_page', partner=partner, page=str(_after)),
-        })
-
-    if not _before == None:
-        videos.insert(0, {
-            'label': u'\u00AB ' + '(' + str(_before+1)  + ') ' + plugin.get_string('30044') + u'...',
-            'path': plugin.url_for('last_page', partner=partner, page=str(_before)),
-        })
+    AddNavigation(videos, num_page, hasNextPage, 'last_page', partner=partner, guest_free=guest_free, user_free=user_free)
 
     update_listing = page is not None
     return plugin.finish(videos, update_listing=update_listing)
 
 @plugin.route('/partners/<partner>/populars')
 def indexPopulars(partner):
+    plugin.set_content('files')
     index = [
         {'label': plugin.get_string('30046'),
         'path': plugin.url_for('indexPopular', partner=partner, period='this_week')},
@@ -155,6 +151,7 @@ def indexPopulars(partner):
 @plugin.route('/partners/<partner>/popular/<period>')
 @plugin.route('/partners/<partner>/popular/<period>/<page>', name='popular_page')
 def indexPopular(partner, period, page=None):
+    plugin.set_content('videos')
     token = getToken()
     videos = []
     num_page = 0 if page == None else int(page)
@@ -165,19 +162,7 @@ def indexPopular(partner, period, page=None):
     UpdateTemporaryCache(videos)
 
     # pagination list items
-    _before = num_page - 1 if num_page > 0 else None 
-    _after = num_page + 1 if hasNextPage else None
-    if not _after == None:
-        videos.append( {
-            'label': u'...' + plugin.get_string('30043') + ' (' + str(_after+1) + ')' +u' \u00BB',
-            'path': plugin.url_for('popular_page', partner=partner, period=period, page=str(_after)),
-        })
-
-    if not _before == None:
-        videos.insert(0, {
-            'label': u'\u00AB ' + '(' + str(_before+1)  + ') ' + plugin.get_string('30044') + u'...',
-            'path': plugin.url_for('popular_page', partner=partner, period=period, page=str(_before)),
-        })
+    AddNavigation(videos, num_page, hasNextPage, 'popular_page', partner=partner, period=period)
 
     update_listing = page is not None
     return plugin.finish(videos, update_listing=update_listing)
@@ -185,6 +170,7 @@ def indexPopular(partner, period, page=None):
 
 @plugin.route('/partners/<partner>/toprateds')
 def indexTopRateds(partner):
+    plugin.set_content('files')
     index = [
         {'label': plugin.get_string('30046'),
         'path': plugin.url_for('indexTopRated', partner=partner, period='this_week')},
@@ -199,6 +185,7 @@ def indexTopRateds(partner):
 @plugin.route('/partners/<partner>/toprated/<period>')
 @plugin.route('/partners/<partner>/toprated/<period>/<page>', name='toprated_page')
 def indexTopRated(partner, period, page=None):
+    plugin.set_content('videos')
     token = getToken()
     videos = []
     num_page = 0 if page == None else int(page)
@@ -209,19 +196,7 @@ def indexTopRated(partner, period, page=None):
     UpdateTemporaryCache(videos)
 
     # pagination list items
-    _before = num_page - 1 if num_page > 0 else None 
-    _after = num_page + 1 if hasNextPage else None
-    if not _after == None:
-        videos.append( {
-            'label': u'...' + plugin.get_string('30043') + ' (' + str(_after+1) + ')' +u' \u00BB',
-            'path': plugin.url_for('toprated_page', partner=partner, period=period, page=str(_after)),
-        })
-
-    if not _before == None:
-        videos.insert(0, {
-            'label': u'\u00AB ' + '(' + str(_before+1)  + ') ' + plugin.get_string('30044') + u'...',
-            'path': plugin.url_for('toprated_page', partner=partner, period=period, page=str(_before)),
-        })
+    AddNavigation(videos, num_page, hasNextPage, 'toprated_page', partner=partner, period=period)
 
     update_listing = page is not None
     return plugin.finish(videos, update_listing=update_listing)
@@ -230,6 +205,7 @@ def indexTopRated(partner, period, page=None):
 @plugin.route('/history')
 @plugin.route('/history/<page>', name='history_page')
 def indexHistory(page=None):
+    plugin.set_content('videos')
     token = getToken()
     videos = []
     num_page = 0 if page == None else int(page)
@@ -240,25 +216,14 @@ def indexHistory(page=None):
     UpdateTemporaryCache(videos)
 
     # pagination list items
-    _before = num_page - 1 if num_page > 0 else None 
-    _after = num_page + 1 if hasNextPage else None
-    if not _after == None:
-        videos.append( {
-            'label': u'...' + plugin.get_string('30043') + ' (' + str(_after+1) + ')' + u' \u00BB',
-            'path': plugin.url_for('history_page', page=str(_after)),
-        })
-
-    if not _before == None:
-        videos.insert(0, {
-            'label': u'\u00AB ' + '(' + str(_before+1)  + ') ' + plugin.get_string('30044') + u'...',
-            'path': plugin.url_for('history_page', page=str(_before)),
-        })
+    AddNavigation(videos, num_page, hasNextPage, 'history_page')
 
     update_listing = page is not None
     return plugin.finish(videos, update_listing=update_listing)
 
 @plugin.route('/partners/<partner>/all')
 def indexAll(partner):
+    plugin.set_content('files')
     token = getToken()
     shows = [{
         'icon': fam['icon_1024x576'],
@@ -270,6 +235,7 @@ def indexAll(partner):
 
 @plugin.route('/partners/<partner>/themes')
 def indexThemes(partner):
+    plugin.set_content('files')
     token = getToken()
     themes = [{
         'icon': theme['icon'],
@@ -280,6 +246,7 @@ def indexThemes(partner):
 
 @plugin.route('/partners/<partner>/types')
 def indexTypes(partner):
+    plugin.set_content('files')
     token = getToken()
     alltypes = [{
         'icon': ty['icon'],
@@ -291,6 +258,7 @@ def indexTypes(partner):
 @plugin.route('/search')
 @plugin.route('/search/<query>/<page>', name='search_page')
 def search(query=None, page=None):
+    plugin.set_content('videos')
     token = getToken()
     videos = []
     num_page = 0 if page == None else int(page)
@@ -303,7 +271,7 @@ def search(query=None, page=None):
     hasNextPage, search = api.search(query, token['token'], show_per_page, num_page)
 
     if num_page == 0 and not len(search):
-        error=plugin.get_string('30051').encode('utf-8')
+        error=plugin.get_string('30251').encode('utf-8')
         plugin.notify(msg=error, delay=5000)
         return
      
@@ -312,19 +280,7 @@ def search(query=None, page=None):
     UpdateTemporaryCache(videos)
 
     # pagination list items
-    _before = num_page - 1 if num_page > 0 else None 
-    _after = num_page + 1 if hasNextPage else None
-    if not _after == None:
-        videos.append( {
-            'label': u'...' + plugin.get_string('30043') + ' (' + str(_after+1) + ')' + u' \u00BB',
-            'path': plugin.url_for('search_page', query=query, page=str(_after)),
-        })
-
-    if not _before == None:
-        videos.insert(0, {
-            'label': u'\u00AB ' + '(' + str(_before+1)  + ') ' + plugin.get_string('30044') + u'...',
-            'path': plugin.url_for('search_page', query=query, page=str(_before)),
-        })
+    AddNavigation(videos, num_page, hasNextPage, 'search_page', query=query)
 
     update_listing = page is not None
     return plugin.finish(videos, update_listing=update_listing)
@@ -332,12 +288,13 @@ def search(query=None, page=None):
 
 @plugin.route('/playlists')
 def indexPlaylists():
+    plugin.set_content('files')
     noco_playlists = plugin.get_storage('noco_playlists')
     token = getToken()
     playlists = [{
         'label': playlist,
         'context_menu': [(plugin.get_string('30042'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('queuePlaylist', playlist=playlist))),
-                         (plugin.get_string('30094'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('clearPlaylist', playlist=playlist)))],
+                         (plugin.get_string('30082'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('clearPlaylist', playlist=playlist)))],
         'path': plugin.url_for('indexPlaylist', playlist=playlist)
         } for playlist in sorted(noco_playlists.keys())]
     return plugin.finish(playlists)
@@ -345,13 +302,18 @@ def indexPlaylists():
 
 @plugin.route('/playlists/<playlist>')
 def indexPlaylist(playlist):
+    plugin.set_content('videos')
     noco_playlists = plugin.get_storage('noco_playlists')
     videos = noco_playlists[playlist]
+
+    UpdateTemporaryCache(videos)
+        
     return plugin.finish(filterSeenVideos(videos))
 
 
 @plugin.route('/favorites')
 def indexFavorites():
+    plugin.set_content('files')
     token = getToken()
     shows = []
     favorites = api.get_favorites(token['token'])
@@ -369,6 +331,7 @@ def indexFavorites():
 
 @plugin.route('/partners/<partner>/themes/<theme>')
 def indexTheme(partner, theme):
+    plugin.set_content('files')
     token = getToken()
     families = [{
         'icon': family['icon_1024x576'],
@@ -381,6 +344,7 @@ def indexTheme(partner, theme):
 
 @plugin.route('/partners/<partner>/types/<typename>')
 def indexByType(partner, typename):
+    plugin.set_content('files')
     token = getToken()
     families = [{
         'icon': family['icon_1024x576'],
@@ -394,6 +358,7 @@ def indexByType(partner, typename):
 @plugin.route('/partners/<partner>/themes/<theme>/families/<family>')
 @plugin.route('/partners/<partner>/themes/<theme>/families/<family>/<page>', name='family_page')
 def indexFamily(partner, theme, family, page=None):
+    plugin.set_content('videos')
     token = getToken()
     videos = []
     num_page = 0 if page == None else int(page)
@@ -404,19 +369,7 @@ def indexFamily(partner, theme, family, page=None):
     UpdateTemporaryCache(videos)
         
     # pagination list items
-    _before = num_page - 1 if num_page > 0 else None 
-    _after = num_page + 1 if hasNextPage else None
-    if not _after == None:
-        videos.append( {
-            'label': u'...' + plugin.get_string('30043') + ' (' + str(_after+1) + ')' +u' \u00BB',
-            'path': plugin.url_for('family_page', partner=partner, theme=theme, family=family, page=str(_after)),
-        })
-
-    if not _before == None:
-        videos.insert(0, {
-            'label': u'\u00AB ' + '(' + str(_before+1)  + ') ' + plugin.get_string('30044') + u'...',
-            'path': plugin.url_for('family_page', partner=partner, theme=theme, family=family, page=str(_before)),
-        })
+    AddNavigation(videos, num_page, hasNextPage, 'family_page', partner=partner, theme=theme, family=family)
 
     if plugin.get_setting('random') == "true":
         rand = { 'label': plugin.get_string('30040'),
@@ -431,6 +384,7 @@ def indexFamily(partner, theme, family, page=None):
 @plugin.route('/partners/<partner>/types/<typename>/families/<family>')
 @plugin.route('/partners/<partner>/types/<typename>/families/<family>/<page>', name='famtype_page')
 def indexFamType(partner, typename, family, page=None):
+    plugin.set_content('videos')
     token = getToken()
     videos = []
     num_page = 0 if page == None else int(page)
@@ -441,19 +395,7 @@ def indexFamType(partner, typename, family, page=None):
     UpdateTemporaryCache(videos)
 
     # pagination list items
-    _before = num_page - 1 if num_page > 0 else None 
-    _after = num_page + 1 if hasNextPage else None
-    if not _after == None:
-        videos.append( {
-            'label': u'...' + plugin.get_string('30043') + ' (' + str(_after+1) + ')' +u' \u00BB',
-            'path': plugin.url_for('famtype_page', partner=partner, typename=typename, family=family, page=str(_after)),
-        })
-
-    if not _before == None:
-        videos.insert(0, {
-            'label': u'\u00AB ' + '(' + str(_before+1)  + ') ' + plugin.get_string('30044') + u'...',
-            'path': plugin.url_for('famtype_page', partner=partner, typename=typename, family=family, page=str(_before)),
-        })
+    AddNavigation(videos, num_page, hasNextPage, 'famtype_page', partner=partner, typename=typename, family=family)
 
     if plugin.get_setting('random') == "true":
         rand = { 'label': plugin.get_string('30040'),
@@ -468,11 +410,15 @@ def indexFamType(partner, typename, family, page=None):
 @plugin.route('/queue/<video>')
 def queueVideo(video):
     token = getToken()
+    guest = isGuestMode()
     quality = getQuality()
     v = api.get_videodata(token['token'], [int(video)])
     item = getVideoInfos(v[0])
     item['path'] = api.get_video(video, token['token'], quality)
-    item.pop('context_menu', None) # removing all addon specific ctx menu (Queue item, Add to ...) from item
+    if not guest:
+        item['context_menu'] = [item['context_menu'][1]] # Keep Rate context item
+    else:
+        item.pop('context_menu', None) # removing specific ctx menu (Queue item) from playlist item
     items = [item]
     plugin.add_to_playlist(items, 'video')
 
@@ -483,7 +429,7 @@ def queuePlaylist(playlist):
     items = []
     noco_playlists = plugin.get_storage('noco_playlists')
     for item in noco_playlists[playlist]:
-        item['path'] = api.get_video(item['properties']['noco_id_show'], token['token'], quality)
+        item['path'] = api.get_video(item['properties']['id_show'], token['token'], quality)
         item.pop('context_menu', None) # removing specific ctx menu (Queue item) from playlist item
         items.append(item)
     items = filterSeenVideos(items)
@@ -502,19 +448,6 @@ def clearFavorite():
     token = getToken()
     api.clear_playlist(token['token'])
 
-@plugin.route('/partners/<partner>/families/<family>/<video>')
-def playVideo(partner, family, video):
-    token = getToken()
-    quality = getQuality()
-    if video == 'RANDOM':
-        video = api.get_random(partner, family, token['token'], quality)
-        if video == None:
-            plugin.notify(msg=plugin.get_string('30052').encode('utf-8'), delay=10000)
-        else:
-            plugin.set_resolved_url(api.get_video(video, token['token'], quality))
-    else: 
-        plugin.set_resolved_url(api.get_video(video, token['token'], quality))
-
 
 @plugin.route('/addtoplaylist/<playlist>/<video>')
 def addtoPlaylist(playlist, video):
@@ -522,12 +455,12 @@ def addtoPlaylist(playlist, video):
     token = getToken()
     temp_items = plugin.get_storage('temp_items')
     temp_item = temp_items[video]
-    temp_item['context_menu'] = [temp_item['context_menu'][0]] # Keep only Queue item
-    temp_item['context_menu'].append((plugin.get_string('30091'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('delfromPlaylist', playlist=playlist, video=video))))
+    temp_item['context_menu'] = temp_item['context_menu'][0:2] # Keep only Queue and Rate item
+    temp_item['context_menu'].append((plugin.get_string('30081'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('delfromPlaylist', playlist=playlist, video=video))))
     temp_item['context_menu'].append((plugin.get_string('30092'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('moveupinPlaylist', playlist=playlist, video=video))))
     temp_item['context_menu'].append((plugin.get_string('30093'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('movedowninPlaylist', playlist=playlist, video=video))))
     temp_item['context_menu'].append((plugin.get_string('30095'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('moveinPlaylist', playlist=playlist, video=video))))
-    playlist_vids = [int(item['properties']['noco_id_show']) for item in noco_playlists[playlist]]
+    playlist_vids = [int(item['properties']['id_show']) for item in noco_playlists[playlist]]
     vid = int(video)
     if not vid in playlist_vids:
         # upd noco queuelist
@@ -543,11 +476,11 @@ def delfromPlaylist(playlist, video):
     noco_playlists = plugin.get_storage('noco_playlists')
     token = getToken()
     # remove matching indexes
-    match_indexes = [idx for idx,item in enumerate(noco_playlists[playlist]) if item['properties']['noco_id_show'] == video]
+    match_indexes = [idx for idx,item in enumerate(noco_playlists[playlist]) if item['properties']['id_show'] == video]
     for i in reversed(match_indexes):
         del noco_playlists[playlist][i]    
 
-    playlist_vids = [int(item['properties']['noco_id_show']) for item in noco_playlists[playlist]]
+    playlist_vids = [int(item['properties']['id_show']) for item in noco_playlists[playlist]]
     api.set_playlist(token['token'], playlist_vids)
     noco_playlists.sync()
     xbmc.executebuiltin('Container.Refresh')
@@ -559,12 +492,12 @@ def moveupinPlaylist(playlist, video):
     token = getToken()
     # search index to move
     for idx,item in enumerate(noco_playlists[playlist]):
-        if item['properties']['noco_id_show'] == video:
+        if item['properties']['id_show'] == video:
             if idx > 0: # do not move up 1st item
                 noco_playlists[playlist][idx-1], noco_playlists[playlist][idx] = noco_playlists[playlist][idx], noco_playlists[playlist][idx-1]
             break
 
-    playlist_vids = [int(item['properties']['noco_id_show']) for item in noco_playlists[playlist]]
+    playlist_vids = [int(item['properties']['id_show']) for item in noco_playlists[playlist]]
     api.set_playlist(token['token'], playlist_vids)
     noco_playlists.sync()
     xbmc.executebuiltin('Container.Refresh')
@@ -576,12 +509,12 @@ def movedowninPlaylist(playlist, video):
     token = getToken()
     # search index to move
     for idx,item in enumerate(noco_playlists[playlist]):
-        if item['properties']['noco_id_show'] == video:
+        if item['properties']['id_show'] == video:
             if idx < len(noco_playlists[playlist])-1: # do not move down last item
                 noco_playlists[playlist][idx+1], noco_playlists[playlist][idx] = noco_playlists[playlist][idx], noco_playlists[playlist][idx+1]
             break
 
-    playlist_vids = [int(item['properties']['noco_id_show']) for item in noco_playlists[playlist]]
+    playlist_vids = [int(item['properties']['id_show']) for item in noco_playlists[playlist]]
     api.set_playlist(token['token'], playlist_vids)
     noco_playlists.sync()
     xbmc.executebuiltin('Container.Refresh')
@@ -593,7 +526,7 @@ def moveinPlaylist(playlist, video):
     noco_playlists = plugin.get_storage('noco_playlists')
     # search index to move
     for idx,item in enumerate(noco_playlists[playlist]):
-        if item['properties']['noco_id_show'] == video:
+        if item['properties']['id_show'] == video:
             idx_from = idx
             break
     # switch context menu to target
@@ -612,9 +545,9 @@ def cancelmoveinPlaylist(playlist):
     noco_playlists = plugin.get_storage('noco_playlists')
     # switch context menu back to normal
     for idx,item in enumerate(noco_playlists[playlist]):
-        vid = item['properties']['noco_id_show']
+        vid = item['properties']['id_show']
         ctx_items = [(plugin.get_string('30041'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('queueVideo', video=vid)))]
-        ctx_items.append((plugin.get_string('30091'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('delfromPlaylist', playlist=playlist, video=vid))))
+        ctx_items.append((plugin.get_string('30081'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('delfromPlaylist', playlist=playlist, video=vid))))
         ctx_items.append((plugin.get_string('30092'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('moveupinPlaylist', playlist=playlist, video=vid))))
         ctx_items.append((plugin.get_string('30093'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('movedowninPlaylist', playlist=playlist, video=vid))))
         ctx_items.append((plugin.get_string('30095'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('moveinPlaylist', playlist=playlist, video=vid))))
@@ -630,14 +563,14 @@ def movehereinPlaylist(playlist, from_idx, to_idx):
     noco_playlists[playlist].insert(int(to_idx), noco_playlists[playlist].pop(int(from_idx)))
     # switch context menu back to normal
     for idx,item in enumerate(noco_playlists[playlist]):
-        vid = item['properties']['noco_id_show']
+        vid = item['properties']['id_show']
         ctx_items = [(plugin.get_string('30041'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('queueVideo', video=vid)))]
-        ctx_items.append((plugin.get_string('30091'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('delfromPlaylist', playlist=playlist, video=vid))))
+        ctx_items.append((plugin.get_string('30081'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('delfromPlaylist', playlist=playlist, video=vid))))
         ctx_items.append((plugin.get_string('30092'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('moveupinPlaylist', playlist=playlist, video=vid))))
         ctx_items.append((plugin.get_string('30093'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('movedowninPlaylist', playlist=playlist, video=vid))))
         ctx_items.append((plugin.get_string('30095'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('moveinPlaylist', playlist=playlist, video=vid))))
         noco_playlists[playlist][idx]['context_menu'] = ctx_items
-    playlist_vids = [int(item['properties']['noco_id_show']) for item in noco_playlists[playlist]]
+    playlist_vids = [int(item['properties']['id_show']) for item in noco_playlists[playlist]]
     api.set_playlist(token['token'], playlist_vids)
     noco_playlists.sync()
     xbmc.executebuiltin('Container.Refresh')
@@ -671,14 +604,59 @@ def delfromFavorites(family):
 
 @plugin.route('/userfreepartners')
 def indexUserFreePartners():
+    plugin.set_content('files')
     token = getToken()
     menu = [{
         'label': partner['partner_name'],
         'icon': partner['icon_1024x576'],
-        'path': plugin.url_for('indexLast', partner=partner['partner_key'], user_free=True)
+        'path': plugin.url_for('indexLast', partner=partner['partner_key'], user_free='1')
         } for partner in UserFreePartners()]
     return plugin.finish(menu)
 
+
+@plugin.route('/rate/<video>')
+def rateVideo(video):
+    temp_items = plugin.get_storage('temp_items')
+    temp_item = temp_items[video]
+    current_rating = 0 if not 'userrating' in temp_item['info'] else int(temp_item['info']['userrating'])
+    rating_items = []
+    for rating in [5, 4, 3, 2, 1]:
+        rating_items.append('[COLOR yellow]' + '*'*rating + '[/COLOR]')
+
+    dialog = xbmcgui.Dialog()
+    result = dialog.select(plugin.get_string('30049'), rating_items)
+    if not result == -1:
+        token = getToken()
+        api.set_rating(token['token'], video, 5-result)
+        if plugin.get_setting('folder.playlist') == "true":
+            UpdateUserRatingInPlaylist(video, 5-result)
+        xbmc.executebuiltin("Container.Refresh")
+
+
+@plugin.route('/partners/<partner>/families/<family>/<video>')
+def playVideo(partner, family, video):
+    token = getToken()
+    quality = getQuality()
+    if video == 'RANDOM':
+        rating_csa, video = api.get_random(partner, family, token['token'], quality)
+        if not len(video):
+            plugin.notify(msg=plugin.get_string('30252').encode('utf-8'), delay=10000)
+        else:
+            csaAdvisedNotfound = True
+            for idx in range(len(video)):
+                if isAdvisedByCSA(rating_csa[idx]):
+                    csaAdvisedNotfound = False
+                    plugin.set_resolved_url(api.get_video(video[idx], token['token'], quality))
+                    break
+            if csaAdvisedNotfound:
+                plugin.notify(msg=plugin.get_string('30253').encode('utf-8'), delay=10000)
+        
+    else:
+        plugin.set_resolved_url(api.get_video(video, token['token'], quality))
+
+@plugin.route('/notadvised/<rate>')
+def notAdvised(rate):
+    plugin.notify(msg=plugin.get_string('30253').encode('utf-8'), delay=10000)
 
 def getVideoInfos(video):
     guest = isGuestMode()
@@ -699,12 +677,13 @@ def getVideoInfos(video):
     elif video['family_resume'] == None and video['show_resume'] != None:
         resume = video['show_resume']
     else:
-        resume =  video['family_resume']+'\n\n'+video['show_resume']
+        resume = video['family_resume']+'\n\n'+video['show_resume']
+
     if not guest and video['mark_read'] == 1:
         read = '1'
     else:
         read = '0'
-    aired = video['online_date_start_utc']
+
     infos = {
         'genre': video['type_name'],
         'episode': video['episode_number'],
@@ -713,16 +692,19 @@ def getVideoInfos(video):
         'studio': video['partner_name'],
         'writer': video['partner_name'],
         'director': video['partner_name'],
-        #'rating': video[''],
         'playcount': read,
         'plot': resume,
         'plotoutline': resume,
         'tvshowtitle': video['family_TT'],
-        'aired': video['online_date_start_utc']
+        'date': datetime(*(time.strptime(video['broadcast_date_utc'], '%Y-%m-%d %H:%M:%S')[0:6])).strftime('%d.%m.%Y'),
+        'aired': video['broadcast_date_utc'],
+        'mpaa': getMpaaFromCSA(video['rating_fr']),
+        'duration': str(video['duration_ms']/1000),
+        'mediatype': 'video'
         }
     properties = {
         'fanart_image': video['banner_family'],
-        'noco_id_show': unicode(video['id_show'])
+        'id_show': unicode(video['id_show']) # this tag is only for this plugin
     }
     if read == '0':
         totaltime  = unicode(video['duration_ms']/1000)
@@ -732,14 +714,25 @@ def getVideoInfos(video):
             resumetime = unicode(0)
         properties['totaltime']  = totaltime
         properties['resumetime'] = resumetime
-    stream_infos = {'video': {'duration': video['duration_ms']/1000 }}
+    stream_infos = {
+        'video': {'duration': video['duration_ms']/1000}}
+
+    if not video['rated_all_time'] is None: 
+        infos['rating'] = float(video['rated_all_time'])*2.0
+
+    if not guest and  not video['rating_user'] is None: 
+        infos['userrating'] = int(video['rating_user'])*2
 
     # Add specific ctx menu for queueing item and adding to Noco playlist
     ctx_items = [(plugin.get_string('30041'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('queueVideo', video=str(video['id_show']))))]
-    if not guest and plugin.get_setting('noco_playlist') == "true":
-        noco_playlists = plugin.get_storage('noco_playlists')
-        ctx_items = ctx_items + [(plugin.get_string('30090') % name, 'XBMC.RunPlugin(%s)' % (plugin.url_for('addtoPlaylist', playlist=name, video=str(video['id_show'])))) for name in noco_playlists.keys()]
+    if not guest:
+        ctx_items = ctx_items + [(plugin.get_string('30049'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('rateVideo', video=str(video['id_show']))))]
+        if plugin.get_setting('folder.playlist') == "true":
+            noco_playlists = plugin.get_storage('noco_playlists')
+            ctx_items = ctx_items + [(plugin.get_string('30090') % name, 'XBMC.RunPlugin(%s)' % (plugin.url_for('addtoPlaylist', playlist=name, video=str(video['id_show'])))) for name in noco_playlists.keys()]
 
+    advised = isAdvisedByCSA(video['rating_fr'])
+    
     v = {
         'label': label.decode("utf-8"),
         'icon': video['screenshot_512x288'],
@@ -747,9 +740,9 @@ def getVideoInfos(video):
         'info': infos,
         'properties': properties,
         'stream_info': stream_infos,
-        'path': plugin.url_for('playVideo', partner=video['partner_key'], family=video['family_TT'].encode('utf-8'), video=video['id_show']),
-        'context_menu': ctx_items,
-        'is_playable': True
+        'path':  plugin.url_for('playVideo', partner=video['partner_key'], family=video['family_TT'].encode('utf-8'), video=video['id_show']) if advised else plugin.url_for('notAdvised', rate=video['rating_fr']), 
+        'context_menu': ctx_items if advised else [],
+        'is_playable': advised
         }
 
     return v
@@ -784,8 +777,8 @@ def initNocoPlaylists():
             vids = api.get_videodata(token['token'], eval('['+str(playlist['playlist'])+']'))
             for video in vids:
                 item = getVideoInfos(video)
-                item['context_menu'] = [item['context_menu'][0]] # Keep only Queue item
-                item['context_menu'].append((plugin.get_string('30091'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('delfromPlaylist', playlist=playlist['playlist_title'], video=video['id_show']))))
+                item['context_menu'] = item['context_menu'][0:2] # Keep only Queue and Rate items
+                item['context_menu'].append((plugin.get_string('30081'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('delfromPlaylist', playlist=playlist['playlist_title'], video=video['id_show']))))
                 item['context_menu'].append((plugin.get_string('30092'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('moveupinPlaylist', playlist=playlist['playlist_title'], video=video['id_show']))))
                 item['context_menu'].append((plugin.get_string('30093'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('movedowninPlaylist', playlist=playlist['playlist_title'], video=video['id_show']))))
                 item['context_menu'].append((plugin.get_string('30095'), 'XBMC.RunPlugin(%s)' % (plugin.url_for('moveinPlaylist', playlist=playlist['playlist_title'], video=video['id_show']))))
@@ -795,14 +788,41 @@ def initNocoPlaylists():
 
 def UpdateTemporaryCache(videos):
     # Each time we show a listing with playable items, we store the items in
-    # temporary storage. Then, if a user add the item to a playlist, we already
+    # temporary storage. Then, if a user add the item to a playlist or rate it, we already
     # have all the metadata available.
     temp_items = plugin.get_storage('temp_items')
     temp_items.clear()
 
     # Need to use the same referenced dict object for the cache, so we call
     # update() instead of assigning to a new dict.
-    temp_items.update((item['properties']['noco_id_show'], item) for item in videos)
+    temp_items.update((item['properties']['id_show'], item) for item in videos)
+
+def UpdateUserRatingInPlaylist(vid, userrating):
+    noco_playlists = plugin.get_storage('noco_playlists')
+    needSync = False
+    for playlist in sorted(noco_playlists.keys()):
+        match_indexes = [idx for idx,item in enumerate(noco_playlists[playlist]) if item['properties']['id_show'] == vid]
+        for i in reversed(match_indexes):
+            needSync = True
+            noco_playlists[playlist][idx]['info']['userrating'] = userrating*2
+    if needSync:
+        noco_playlists.sync()
+            
+
+def AddNavigation(videos, num_page, hasNextPage, endpoint, **items):
+    _before = num_page - 1 if num_page > 0 else None 
+    _after = num_page + 1 if hasNextPage else None
+    if not _after == None:
+        videos.append( {
+            'label': u'...' + plugin.get_string('30043') + ' (' + str(_after+1) + ')' + u' \u00BB',
+            'path': plugin.url_for(endpoint, **dict( items.items() + {'page':str(_after)}.items()))
+        })
+
+    if not _before == None:
+        videos.insert(0, {
+            'label': u'\u00AB ' + '(' + str(_before+1)  + ') ' + plugin.get_string('30044') + u'...',
+            'path': plugin.url_for(endpoint, **dict( items.items() + {'page':str(_before)}.items()))
+        })
 
 # Cache to not always loop on partners and check for free contents (to avoid too many requests)
 def UserFreePartners():
@@ -839,6 +859,37 @@ def getQuality():
     if quality == "4": 
         quality = 'HD_1080' 
     return quality
+
+def getMpaaFromCSA(rating_fr):
+    if not isinstance(rating_fr, int):
+        return "France:U"
+    if rating_fr == 0: 
+        return "France:U"
+    elif rating_fr == 10: 
+        return "France:-10"
+    elif rating_fr == 12: 
+        return "France:-12"
+    elif rating_fr == 16: 
+        return "France:-16"
+    elif rating_fr == 18: 
+        return "France:-18"
+    return "France:U"
+
+def isAdvisedByCSA(rating_fr):
+    if not isinstance(rating_fr, int):
+        return True 
+    csa = plugin.get_setting('csa')
+    if csa == "4": 
+        return True 
+    elif csa == "0" and rating_fr < 10: 
+        return True 
+    elif csa == "1" and rating_fr < 12:
+        return True 
+    elif csa == "2" and rating_fr < 16: 
+        return True 
+    elif csa == "3"  and rating_fr < 18: 
+        return True 
+    return False
 
 def isGuestMode():
     return True if plugin.get_setting('guest') == "true" else False

@@ -54,4 +54,10 @@ v1.0.13
   - Adding "Noco favorite shows" entry with basic support (adding/deleting favorite shows, clear favorites)
   - Already seen videos are now filtered directly within noco api request
   - Random video is now asked using a noco api request (faster)
-  
+
+v1.0.14
+  - Fix the need to enter a username and password for guest mode  
+  - Allow to set the User Rating (1-5 star) for a video from item contextual menu
+  - Setting to block play for not advised content (CSA rating)
+  - write CSA rating string into MPAA info
+  - Sets the plugin content to "videos" when applicable to better show info in skins 

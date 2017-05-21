@@ -218,7 +218,6 @@ class nocoApi():
         if not len(playlist):
             self.clear_playlist(token)
             return          
-        request = {'access_token': token}
         urlparsed = urlparse(mainURL)
         connection = httplib.HTTPSConnection(urlparsed.netloc)
         headers = { 'Authorization': 'Bearer '+ token, 'Content-Type': 'application/x-www-form-urlencoded'}
@@ -238,7 +237,6 @@ class nocoApi():
         if not len(favorite):
             self.clear_favorite(token)
             return          
-        request = {'access_token': token}
         urlparsed = urlparse(mainURL)
         connection = httplib.HTTPSConnection(urlparsed.netloc)
         headers = { 'Authorization': 'Bearer '+ token, 'Content-Type': 'application/x-www-form-urlencoded'}
@@ -259,11 +257,11 @@ class nocoApi():
         hasNextPage = False if len(data) < elements_per_page else True
         return hasNextPage, data
     def get_random(self, partner, family, token, quality):
-        request = {'access_token': token, 'partner_key': partner, 'family_key': family, 'mark_read': None if plugin.get_setting('showseen') == 'true' else '0', 'elements_per_page': '1'}
+        request = {'access_token': token, 'partner_key': partner, 'family_key': family, 'mark_read': None if plugin.get_setting('showseen') == 'true' else '0', 'elements_per_page': '40'}
         data = json.loads(requests.get(mainURL+'shows/rand', params=request).text)
         if not len(data):
             return None
-        return str(data[0]['id_show'])
+        return [item['rating_fr'] for item in data] , [str(item['id_show']) for item in data]
     def get_video(self, show, token, quality):
         show_lang = ''
         subs = None
@@ -280,6 +278,9 @@ class nocoApi():
         request = {'access_token': token, 'sub_lang': subs}
         data = json.loads(requests.get(mainURL+'shows/'+show+'/video/'+quality+'/'+show_lang, params=request).text)
         return data['file']
+    def set_rating(self, token, show, rating):
+        request = {'access_token': token}
+        requests.post(mainURL+"shows/"+show+"/rate/"+str(rating), params=request)
     def __get_json(self, url, items=None):
         if items:
             request = urlencode(items)

@@ -1,3 +1,6 @@
+v2.5.14
+Fixed broken Channel A-Z.
+
 v2.5.13
 Added setting to ignore HTTPS streams.
 This is required to work around a bug in Jarvis and older versions, which prevents HTTPS

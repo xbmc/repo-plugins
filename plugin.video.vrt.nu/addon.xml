@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.vrt.nu"
        name="VRT Nu"
-       version="0.0.2"
+       version="0.0.3"
        provider-name="Martijn Moreel">
 
     <requires>
@@ -23,10 +23,12 @@
         <platform>all</platform>
         <license>GNU General Public License, v3</license>
         <news>
-v0.0.1  (2017-5-01)
+v0.0.1  (01-05-2017)
 - Initial working release
-v0.0.2 (2017-5-07)
-- Fixed installation issue</news>
+v0.0.2 (07-05-2017)
+- Fixed installation issue
+v0.0.3 (22-05-2017)
+- Fixed broken livestreams</news>
         <source>https://github.com/pietje666/plugin.video.vrt.nu</source>
 		<assets>
 			<icon>resources/icon.png</icon>

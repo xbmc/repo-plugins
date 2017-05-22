@@ -22,9 +22,9 @@ from resources.lib.vrtplayer import metadatacreator
 
 class VRTPlayer:
 
-    _VRT_LIVESTREAM_URL = "http://live.stream.vrt.be/vrt_video1_live/smil:vrt_video1_live.smil/playlist.m3u8"
-    _CANVAS_LIVESTREAM_ = "http://live.stream.vrt.be/vrt_video2_live/smil:vrt_video2_live.smil/playlist.m3u8"
-    _KETNET_VRT = "http://live.stream.vrt.be/vrt_events3_live/smil:vrt_events3_live.smil/playlist.m3u8"
+    _VRT_LIVESTREAM_URL = "https://live-w.lwc.vrtcdn.be/groupc/live/d05012c2-6a5d-49ff-a711-79b32684615b/live.isml/.m3u8"
+    _CANVAS_LIVESTREAM_ = "https://live-w.lwc.vrtcdn.be/groupc/live/905b0602-9719-4d14-ae2a-a9b459630653/live.isml/.m3u8"
+    _KETNET_VRT = "https://live-w.lwc.vrtcdn.be/groupc/live/8b898c7d-adf7-4d44-ab82-b5bb3a069989/live.isml/.m3u8"
 
     _VRT_BASE = "https://www.vrt.be/"
     _VRTNU_BASE_URL = urljoin(_VRT_BASE, "/vrtnu/")

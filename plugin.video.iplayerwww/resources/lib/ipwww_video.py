@@ -528,11 +528,12 @@ def ScrapeAtoZEpisodes(page_url):
             name = ''
             title = ''
             #<h1 class="list-item__title typo typo--bold typo--goose">Antiques Road Trip</h1>
+            #<h2 class="list-item__title typo typo--bold typo--goose">A1: Britain's Longest Road</h2>
             title_match = re.search(
-                r'<h1 class="list-item__title.+?">\s*(.*?)\s*</h1>',
+                r'<.+?list-item__title.+?>(.*?)<',
                 li, flags=(re.DOTALL | re.MULTILINE))
             if title_match:
-                title = title_match.group(1)
+                title = title_match.group(1).strip()
                 name = title
 
             subtitle = None

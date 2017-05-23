@@ -2,7 +2,7 @@
 <addon
     id="plugin.video.jupiterbroadcasting"
     name="Jupiter Broadcasting"
-    version="3.3.0"
+    version="3.4.0"
     provider-name="Rob Loach">
     <requires>
         <import addon="xbmc.python" version="2.1.0" />

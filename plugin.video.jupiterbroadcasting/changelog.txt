@@ -1,3 +1,9 @@
+[B]Version 3.4.0 May 19th, 2017[/B]
+- Added a FeedParser class to help in parsing the RSS feeds
+  - By @rickyphewitt
+- Added Ask Noah Show
+- Added Linux Action News
+
 [B]Version 3.3.0 October 6th, 2016[/B]
 - New Show: User Error
   - By @Xmetalfanx, @rickyphewitt, and @rikai

@@ -1,3 +1,4 @@
+0.8.4 - CHG: ARTE JSON link changed
 0.8.3 - CHG: Reimplement ARTE
 0.8.2 - CHG: Reimplement ORF
 0.8.1 - CHG: Recover ARTE Search and Browsing Functionality

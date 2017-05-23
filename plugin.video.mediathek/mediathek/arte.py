@@ -48,7 +48,7 @@ class ARTEMediathek(Mediathek):
     self.gui = simpleXbmcGui;
     self.rootLink = "http://www.arte.tv";
     self.basePage = self.rootLink+"/de/";
-    self.jsonLink = "https://api.arte.tv/api/player/v1/config/de/%s"
+    self.jsonLink = "https://api.arte.tv/api/player/v1/config/de/%s?lifeCycle=1"
     self.serachLink = self.rootLink+"/de/search/?q=%s"
     self.menuTree = (
       TreeNode("0","Arte+7","mainPage",True),
@@ -127,7 +127,6 @@ class ARTEMediathek(Mediathek):
       if(match is not None):
         someMatch = True;
         content = BeautifulSoup(match.group(1),"html.parser");
-        self.gui.log(content.prettify(formatter=None));
         jsonContent = json.loads(content.prettify(formatter=None))
         self.extractVideoLinksFromJson(jsonContent)
     return someMatch;
@@ -157,7 +156,6 @@ class ARTEMediathek(Mediathek):
     self.gui.buildVideoLink(DisplayObject(title,subTitle,"","",link,False,None),self,0);
 
   def buildVideoEntry(self, jsonObject):
-    self.gui.log(json.dumps(jsonObject));
     title = unicode(jsonObject["title"]);
     if(jsonObject["subtitle"] is not None):
       subTitle = unicode(jsonObject["subtitle"]);

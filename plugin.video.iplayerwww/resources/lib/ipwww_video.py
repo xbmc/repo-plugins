@@ -22,6 +22,22 @@ from random import randint
 ADDON = xbmcaddon.Addon(id='plugin.video.iplayerwww')
 
 
+def CheckInputStreamAdaptiveAvailability():
+    # If DASH is selected as stream_protocol, we need to check if inputstream.adaptive
+    # is available and the version is correct.
+    if xbmc.getCondVisibility("System.HasAddon(inputstream.adaptive)"):
+        if (xbmcaddon.Addon(id='inputstream.adaptive').getAddonInfo('version') < "1.0.6"):
+            # Version is smaller than 1.0.6, fall back to HLS
+            ADDON.setSetting('stream_protocol','1')
+            return False
+        else:
+            return True
+    else:
+        # inputstream.adaptive is not available, fall back to HLS
+        ADDON.setSetting('stream_protocol','1')
+        return False
+
+
 def RedButtonDialog():
     if ADDON.getSetting('redbutton_warning') == 'true':
         dialog = xbmcgui.Dialog()
@@ -876,6 +892,59 @@ def ListHighlights(highlights_url):
         AddMenuEntry('[B]%s: %s[/B] - %s %s' % (translation(30314), name, count, translation(30315)),
                      url, 128, '', '', '')
 
+    # New group types for Channel Highlights.
+    groups = [a for a in inner_anchors if re.match(
+        r'<a[^<]*?class="group__title stat.*?data-object-type="group-list-link".*?',
+        a, flags=(re.DOTALL | re.MULTILINE))]
+    for group in groups:
+
+        href = ''
+        href_match = re.match(
+            r'<a[^<]*?href="(.*?)"',
+            group, flags=(re.DOTALL | re.MULTILINE))
+        if href_match:
+            href = href_match.group(1)
+            url = 'http://www.bbc.co.uk' + href
+
+        name = ''
+        name_match = re.search(
+            r'>(.*?)</a>',
+            group, flags=(re.DOTALL | re.MULTILINE))
+        if name_match:
+            name = name_match.group(1)
+
+        # Unfortunately, the group type is not inside the links, so we need to search the whole HTML.
+        group_type = ''
+        group_type_match = re.search(
+            r'data-group-name="'+name+'".+?data-group-type="(.+?)"',
+            html, flags=(re.DOTALL | re.MULTILINE))
+        if group_type_match:
+            group_type = group_type_match.group(1)
+
+        position = ''
+        position_match = re.search(
+            r'data-object-position="(.+?)-ALL"',
+            group, flags=(re.DOTALL | re.MULTILINE))
+        if position_match:
+            group_properties.append(
+                             [position_match.group(1),
+                             name, group_type])
+            group_details = [a for a in inner_anchors if re.match(
+                r'<a[^<]*?class="button.*?group__cta.*?data-object-position="'+
+                re.escape(position_match.group(1))+
+                r'-ALL".*?',
+                a, flags=(re.DOTALL | re.MULTILINE))]
+            for group_detail in group_details:
+                count_match = re.search(
+                    r'>View all ([0-9]*).*?</a>',
+                    group_detail, flags=(re.DOTALL | re.MULTILINE))
+                if count_match:
+                    count = count_match.group(1)
+                    episode_count[href] = count
+
+            AddMenuEntry('[B]%s: %s[/B] - %s %s' % (translation(30314), name, count, translation(30315)),
+                         url, 128, '', '', '')
+
     # Some programmes show up twice in HTML, once inside the groups, once outside.
     # We need to parse both to avoid duplicates and to make sure we get all of them.
     episodelist = []
@@ -976,6 +1045,18 @@ def ListHighlights(highlights_url):
             name = title_match.group(1)
             name = re.compile(r'<.*?>', flags=(re.DOTALL | re.MULTILINE)).sub('', name)
 
+        if object_type == "episode-group":
+            # Assign correct group based on the position of the episode
+            position = ''
+            position_match = re.search(
+                r'data-object-position="(.+?)"',
+                single, flags=(re.DOTALL | re.MULTILINE))
+            if position_match:
+                for n,i in enumerate(group_properties):
+                    if re.match(i[0], position_match.group(1), flags=(re.DOTALL | re.MULTILINE)):
+                        position = i[1]
+                        name = i[1]+': '+name
+
         # <p class="single-item__subtitle typo typo--canary">From Buddhist Monk to Rock Star</p>
         subtitle_match = re.search(
             r'<.*?class="thumbnail-item__subtitle.*?>(.*?)<',
@@ -1047,6 +1128,7 @@ def ListHighlights(highlights_url):
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
+
 
 def ListMostPopular():
     """Scrapes all episodes of the most popular page."""
@@ -1158,7 +1240,11 @@ def AddAvailableLiveStreamItemSelector(name, channelname, iconimage):
         (channelname.startswith('sport_stream_'))):
         return AddAvailableLiveStreamItem(name, channelname, iconimage)
     elif int(ADDON.getSetting('stream_protocol')) == 0:
-        return AddAvailableLiveDASHStreamItem(name, channelname, iconimage)
+        ia_available = CheckInputStreamAdaptiveAvailability()
+        if ia_available:
+            return AddAvailableLiveDASHStreamItem(name, channelname, iconimage)
+        else:
+            return AddAvailableLiveStreamItem(name, channelname, iconimage)
 
 
 def AddAvailableLiveDASHStreamItem(name, channelname, iconimage):
@@ -1245,11 +1331,17 @@ def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
             AddMenuEntry(title, url, 201, iconimage, '', '')
 
     elif int(ADDON.getSetting('stream_protocol')) == 0:
-        streams = ParseLiveDASHStreams(channelname)
-        suppliers = ['', 'Akamai', 'Limelight', 'Bidi']
-        for supplier, bitrate, url, resolution in streams:
-            title = name + ' - [I][COLOR fff1f1f1]%s[/COLOR][/I]' % (suppliers[supplier])
-            AddMenuEntry(title, url, 201, iconimage, '', '')
+        ia_available = CheckInputStreamAdaptiveAvailability()
+        if ia_available:
+            streams = ParseLiveDASHStreams(channelname)
+            suppliers = ['', 'Akamai', 'Limelight', 'Bidi']
+            for supplier, bitrate, url, resolution in streams:
+                title = name + ' - [I][COLOR fff1f1f1]%s[/COLOR][/I]' % (suppliers[supplier])
+                AddMenuEntry(title, url, 201, iconimage, '', '')
+        else:
+            # In this case, we reset the stream_protocol setting and the easiest way is
+            # to call this function recursively to avoid doubling a lot of code.
+            AddAvailableLiveStreamsDirectory(name, channelname, iconimage)
 
 
 def ListWatching(logged_in):
@@ -1347,7 +1439,11 @@ def ParseStreamsHLSDASH(stream_id):
     if int(ADDON.getSetting('stream_protocol')) == 1:
         return ParseStreams(stream_id)
     elif int(ADDON.getSetting('stream_protocol')) == 0:
-        return ParseDASHStreams(stream_id)
+        ia_available = CheckInputStreamAdaptiveAvailability()
+        if ia_available:
+            return ParseDASHStreams(stream_id)
+        else:
+            return ParseStreams(stream_id)
 
 
 def ParseStreams(stream_id):

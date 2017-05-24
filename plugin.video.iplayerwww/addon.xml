@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.iplayerwww" name="iPlayer WWW" version="3.0.6" provider-name="CaptainT, Cas, ihurst, primaeval">
+<addon id="plugin.video.iplayerwww" name="iPlayer WWW" version="3.0.7" provider-name="CaptainT, Cas, ihurst, primaeval">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.requests" version="2.7.0"/>
-    <import addon="inputstream.adaptive" version="1.0.6"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>audio video</provides>
@@ -23,6 +22,11 @@
         <fanart>resources/fanart.jpg</fanart>
     </assets>
     <news>
+v3.0.7
+Fixed Channel Highlights.
+Removed dependency on InputStream Adaptive.
+COMPATIBILITY NOTE: Stream protocol will automatically reset to HLS if InputStream Adaptive is missing.
+
 v3.0.6
 Fixed broken Channel A-Z.
 

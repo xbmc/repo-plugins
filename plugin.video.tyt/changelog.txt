@@ -1,3 +1,5 @@
+[B]2.1.1[/B]
+- Fixed Aggressive Progressives
 [B]2.1.0[/B]
 - Fixed to work with Kodi v17
 - Added support to TYT's new JWplayer method of video hosting

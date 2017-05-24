@@ -875,6 +875,59 @@ def ListHighlights(highlights_url):
         AddMenuEntry('[B]%s: %s[/B] - %s %s' % (translation(30314), name, count, translation(30315)),
                      url, 128, '', '', '')
 
+    # New group types for Channel Highlights.
+    groups = [a for a in inner_anchors if re.match(
+        r'<a[^<]*?class="group__title stat.*?data-object-type="group-list-link".*?',
+        a, flags=(re.DOTALL | re.MULTILINE))]
+    for group in groups:
+
+        href = ''
+        href_match = re.match(
+            r'<a[^<]*?href="(.*?)"',
+            group, flags=(re.DOTALL | re.MULTILINE))
+        if href_match:
+            href = href_match.group(1)
+            url = 'http://www.bbc.co.uk' + href
+
+        name = ''
+        name_match = re.search(
+            r'>(.*?)</a>',
+            group, flags=(re.DOTALL | re.MULTILINE))
+        if name_match:
+            name = name_match.group(1)
+
+        # Unfortunately, the group type is not inside the links, so we need to search the whole HTML.
+        group_type = ''
+        group_type_match = re.search(
+            r'data-group-name="'+name+'".+?data-group-type="(.+?)"',
+            html, flags=(re.DOTALL | re.MULTILINE))
+        if group_type_match:
+            group_type = group_type_match.group(1)
+
+        position = ''
+        position_match = re.search(
+            r'data-object-position="(.+?)-ALL"',
+            group, flags=(re.DOTALL | re.MULTILINE))
+        if position_match:
+            group_properties.append(
+                             [position_match.group(1),
+                             name, group_type])
+            group_details = [a for a in inner_anchors if re.match(
+                r'<a[^<]*?class="button.*?group__cta.*?data-object-position="'+
+                re.escape(position_match.group(1))+
+                r'-ALL".*?',
+                a, flags=(re.DOTALL | re.MULTILINE))]
+            for group_detail in group_details:
+                count_match = re.search(
+                    r'>View all ([0-9]*).*?</a>',
+                    group_detail, flags=(re.DOTALL | re.MULTILINE))
+                if count_match:
+                    count = count_match.group(1)
+                    episode_count[href] = count
+
+            AddMenuEntry('[B]%s: %s[/B] - %s %s' % (translation(30314), name, count, translation(30315)),
+                         url, 128, '', '', '')
+
     # Some programmes show up twice in HTML, once inside the groups, once outside.
     # We need to parse both to avoid duplicates and to make sure we get all of them.
     episodelist = []
@@ -975,6 +1028,18 @@ def ListHighlights(highlights_url):
             name = title_match.group(1)
             name = re.compile(r'<.*?>', flags=(re.DOTALL | re.MULTILINE)).sub('', name)
 
+        if object_type == "episode-group":
+            # Assign correct group based on the position of the episode
+            position = ''
+            position_match = re.search(
+                r'data-object-position="(.+?)"',
+                single, flags=(re.DOTALL | re.MULTILINE))
+            if position_match:
+                for n,i in enumerate(group_properties):
+                    if re.match(i[0], position_match.group(1), flags=(re.DOTALL | re.MULTILINE)):
+                        position = i[1]
+                        name = i[1]+': '+name
+
         # <p class="single-item__subtitle typo typo--canary">From Buddhist Monk to Rock Star</p>
         subtitle_match = re.search(
             r'<.*?class="thumbnail-item__subtitle.*?>(.*?)<',
@@ -1046,6 +1111,7 @@ def ListHighlights(highlights_url):
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
+
 
 def ListMostPopular():
     """Scrapes all episodes of the most popular page."""

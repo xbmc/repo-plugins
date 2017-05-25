@@ -3,15 +3,15 @@
 	<!-- General Settings -->
 	<string id="30200">General</string>
 	<string id="30210">Deauthorize Device</string>
-	<string id="30220">Only Display FREE Content</string>	
-	<string id="30230">Play Stream From Main Menu</string>	
-	<string id="30240">Automatically Play Best Stream Available</string>	
+	<string id="30220">Only Display FREE Content</string>
+	<string id="30230">Play Stream From Main Menu</string>
+	<string id="30240">Automatically Play Best Stream Available</string>
     <!-- Stream settings -->
-    <string id="30300">Stream</string>   
-    <string id="30310">Stream Quality Preference</string>		
-	<string id="30320">CDN Server Location</string>	
+    <string id="30300">Stream</string>
+    <string id="30310">Stream Quality Preference</string>
+	<string id="30320">CDN Server Location</string>
 	<!-- Filter settings -->
-    <string id="30400">Filter</string>   	
+    <string id="30400">Filter</string>
     <string id="30410">Show All</string>
     <string id="30411">NFL</string>
     <string id="30412">Premier League</string>
@@ -35,6 +35,6 @@
     <string id="30430">CSN Chicago</string>
     <string id="30431">CSN Mid-Atlantic</string>
     <string id="30432">CSN New England</string>
-    <string id="30433">CSN Philadelphia</string>    
-    <string id="30434">Sportsnet New York</string>  
+    <string id="30433">CSN Philadelphia</string>
+    <string id="30434">Sportsnet New York</string>
 </strings>

@@ -22,7 +22,7 @@ cookie = {}
 
 murder_url        = "/category/murder-with-friends/"
 murder_thumb      = "murder.jpg"
-ap_url            = "/category/membership/aggressive-progressives-membership/"
+ap_url            = "/category/aggressive-progressives-membership/"
 ap_thumb          = "ap.png"
 hour1_url         = "/category/membership/main-show-hour-1/"
 hour1_thumb       = "hour1.png"

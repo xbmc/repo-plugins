@@ -1,0 +1,69 @@
+0.5.7  (09-23-2016)
+ - update flickr photoset id extraction routine
+ - cleanup
+0.5.6  (09-13-2016)
+ - screensaver addon included
+ - show description in slideshow (for r/diy etc. )
+ - fade and horizontal slideshow: info button toggles shows/hide of title and description
+ - added option to randomize slideshow images 
+0.5.5  (09-09-2016)
+ - add fade and random direction to horizontal slideshow
+ - slideshow no longer disables system screensaver
+ - fix slideshow text poking up if 2 lines
+0.5.4  (09-08-2016)
+ - interface adjustment
+ - add alternate(main_list03.xml) skin for main gui
+0.5.3  (09-07-2016)
+ - add fade slideshow
+ - add random slide slideshow
+ - option to show 1 line of image title/description on slideshow
+0.5.2  (09-01-2016)
+ - add album slideshow
+ - add slideshow options
+0.5.1  (09-01-2016)
+ - add kindgirls.com
+ - add 500px.com
+ 0.5.0  (09-01-2016)
+ - reorganize how modules are called to parse links
+ 0.4.5  (08-25-2016)
+ - add vidble.com scraping image/album
+0.4.4  (08-25-2016)
+ - add eroshare.com scraping image/album/videos
+0.4.3  (08-23-2016)
+ - have ytdl addon handle all unsupported links
+ - setting to enable/disable above feature
+ - add mouse support for left slide panel
+ - slideshow and play all bugfix affecting single subreddit
+ 
+0.4.2  (08-22-2016)
+ - reorganize code
+ - add play all video
+ - add image slideshow 
+0.4.1
+ - adjust size for larger font
+ - add setting to choose xml file for main gui
+ - rename assets to not conflict with skin
+0.4.0 (08-17-2016)
+ - reorganize code
+ - support flickr galleries/groups
+ - filter posts by subreddit or domain
+ - kodi 16 compatibility 
+0.3.0
+ - add zoom and scroll down if image is very tall
+ - not open comments screen if no comments on link
+ - use thumbnail as loading image when viewing imgur album
+ - selftext posts show on preview 
+ - android compatibility fix 
+ - follow subreddit links in comment
+ - button to arrange links in comments at top of list
+0.2.1  (2016-08-08)
+ changes from reddit_viewer:
+ - different user interface
+ - removed supported sites filter. (all reddit links shown)
+ - removed play all/play/random
+ - no context menus
+ - add to favorites not yet supported
+ - list only links in comments not yet supported
+0.1.1  (2016-07-27)
+ - convert to script.reddit.reader from plugin.video.reddit_viewer
+ 

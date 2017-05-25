@@ -1,0 +1,380 @@
+# Kodi Media Center language file
+# Addon Name: Reddit Reader
+# Addon id: script.reddit.reader
+msgid ""
+msgstr ""
+
+msgctxt "#32001"
+msgid "Add a new Subreddit, Multireddit or Domain"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Remove selected subreddit"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Edit selected subreddit"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Next Page"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Search reddit"
+msgstr ""
+
+msgctxt "#32006"
+msgid "Customize this list with your favorite subreddit"
+msgstr ""
+
+msgctxt "#32007"
+msgid "Custom Multireddit"
+msgstr ""
+
+#Show youtube.com links //Show vimeo.com links
+msgctxt "#32008"
+msgid "Show %s links"
+msgstr ""
+
+#failed to retrieve link for xbmc
+msgctxt "#32009"
+msgid "Cannot retrieve URL"
+msgstr ""
+
+#error message popup when youtube-dl can't get playable url 
+msgctxt "#32010"
+msgid "Could not get a playable url"
+msgstr ""
+
+#cannot parse ID from url
+msgctxt "#32011"
+msgid "Cannot parse ID from link"
+msgstr ""
+
+
+msgctxt "#30012"
+msgid "Randomly play all"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Automatically play videos"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Randomly play unwatched"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Randomly play unfinished"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Play all"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Play unwatched"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Play unfinished"
+msgstr ""
+
+
+#: used in gui to zoom+scroll down a very tall image 
+msgctxt "#32050"
+msgid "Zoom"
+msgstr ""
+
+#: used in context menu. "Go to r/funny". <-- generate new list from r/funny subreddit 
+msgctxt "#32051"
+msgid "Go to"
+msgstr ""
+
+#show links as the first items in the list of comments
+msgctxt "#32052"
+msgid "Sort links on top"
+msgstr ""
+
+#indicates that the post don't not have comments
+msgctxt "#30053"
+msgid "No comments"
+msgstr ""
+
+#used on left sliding panel
+msgctxt "#32054"
+msgid "Play All"
+msgstr ""
+
+msgctxt "#32055"
+msgid "No playable items"
+msgstr ""
+
+#used on left sliding panel
+msgctxt "#32056"
+msgid "Slideshow"
+msgstr ""
+
+#Play all - from here
+msgctxt "#32057"
+msgid "from here"
+msgstr ""
+
+
+#begin strings used in pretty date to indicate how long ago a post is posted (keep these strings short and similar length) 
+msgctxt "#32060"
+msgid "just now"
+msgstr ""
+
+msgctxt "#32061"
+msgid " secs ago"
+msgstr ""
+
+msgctxt "#32062"
+msgid "a min ago"
+msgstr ""
+
+msgctxt "#32063"
+msgid " mins ago"
+msgstr ""
+
+msgctxt "#32064"
+msgid "an hour ago"
+msgstr ""
+
+msgctxt "#32065"
+msgid " hrs ago"
+msgstr ""
+
+msgctxt "#32066"
+msgid "Yesterday"
+msgstr ""
+
+msgctxt "#32067"
+msgid " days ago"
+msgstr ""
+
+msgctxt "#32068"
+msgid " wks ago"
+msgstr ""
+
+msgctxt "#32069"
+msgid " months ago"
+msgstr ""
+
+msgctxt "#32070"
+msgid " years ago"
+msgstr ""
+# end strings used in pretty date to indicate how long ago a post is posted 
+
+# 7 hrs ago [on] r/funny 251 [cmts]
+msgctxt "#32071"
+msgid "on"
+msgstr ""
+
+# 7 hrs ago [on] r/funny 251 [cmts]   
+msgctxt "#32072"
+msgid "cmts"
+msgstr ""
+
+
+
+
+
+#settings screen settings.xml
+
+#setting category
+msgctxt "#32100"
+msgid "General"
+msgstr ""
+
+msgctxt "#32101"
+msgid "Items per query"
+msgstr ""
+
+msgctxt "#32102"
+msgid "Default subreddit on start (leave blank for reddit frontpage)"
+msgstr ""
+
+msgctxt "#32103"
+msgid "Skip subreddit selection screen"
+msgstr ""
+
+msgctxt "#32104"
+msgid "Hide posts by domain (separate by comma)"
+msgstr ""
+
+msgctxt "#32105"
+msgid "Hide posts by subreddit (separate by comma)"
+msgstr ""
+
+msgctxt "#32106"
+msgid "Comments threshold"
+msgstr ""
+
+msgctxt "#32107"
+msgid "Enable NSFW content"
+msgstr ""
+
+msgctxt "#32108"
+msgid "Main GUI skin"
+msgstr ""
+
+#32109-32111 empty
+
+msgctxt "#32112"
+msgid "Use youtube_dl add-on for Youtube videos"
+msgstr ""
+
+msgctxt "#32113"
+msgid "Have the youtube_dl add-on attempt to play unknown/unsupported links"
+msgstr ""
+
+# Have the youtube_dl add-on attempt to play unknown/unsupported links in comments
+msgctxt "#32114"
+msgid "All links in comments are enabled and youtube_dl add-on will attempt to play unsupported types"
+msgstr ""
+
+
+#setting category
+
+
+# settings category
+msgctxt "#32150"
+msgid "Sites"
+msgstr ""
+
+msgctxt "#32154"
+msgid "Liveleak: Quality"
+msgstr ""
+
+msgctxt "#32157"
+msgid "Streamable.com Video Quality"
+msgstr ""
+
+
+
+
+msgctxt "#32200"
+msgid "Slideshow"
+msgstr ""
+
+msgctxt "#32201"
+msgid "Slideshow Type"
+msgstr ""
+
+msgctxt "#32202"
+msgid "Slide horizontal"
+msgstr ""
+
+msgctxt "#32203"
+msgid "Fade"
+msgstr ""
+
+msgctxt "#32204"
+msgid "Slide orthogonal"
+msgstr ""
+
+
+msgctxt "#32221"
+msgid "Slideshow speed"
+msgstr ""
+
+msgctxt "#32222"
+msgid "Use slideshow to display album"
+msgstr ""
+
+msgctxt "#32223"
+msgid "Include album images when playing slideshow"
+msgstr ""
+
+msgctxt "#32224"
+msgid "Use reddit preview if available (faster)"
+msgstr ""
+
+msgctxt "#32225"
+msgid "Show image title/description"
+msgstr ""
+
+msgctxt "#32226"
+msgid "Randomize post order (preserve image album order)"
+msgstr ""
+
+msgctxt "#32227"
+msgid "Totally randomize images (album order not preserved)"
+msgstr ""
+
+#30192-30299 empty
+
+msgctxt "#32300"
+msgid "Screensaver"
+msgstr ""
+
+msgctxt "#32301"
+msgid "Source Subreddit"
+msgstr ""
+
+
+
+
+# settings category
+msgctxt "#32400"
+msgid "Reddit Oauth"
+msgstr ""
+
+msgctxt "#32401"
+msgid "[B]Instructions:[/B] https://github.com/gedisony/plugin.video.reddit_viewer/wiki"
+msgstr ""
+
+msgctxt "#32402"
+msgid "code"
+msgstr ""
+
+msgctxt "#32403"
+msgid "[Click here to get Refresh Token with valid code]"
+msgstr ""
+
+msgctxt "#32404"
+msgid "    Refresh token"
+msgstr ""
+
+msgctxt "#32405"
+msgid "Refresh Token is used to get an Access Token. Access Tokens expires in 1 hour."
+msgstr ""
+
+msgctxt "#32406"
+msgid "[Reddit viewer will automatically get Access Token. Click here to test.]"
+msgstr ""
+
+msgctxt "#32407"
+msgid "Access token (1-hour)"
+msgstr ""
+
+msgctxt "#32408"
+msgid "    Scope"
+msgstr ""
+
+msgctxt "#32409"
+msgid "    Valid until"
+msgstr ""
+
+msgctxt "#32410"
+msgid "[Click here to revoke the Refresh Token]"
+msgstr ""
+
+msgctxt "#32411"
+msgid "Replace reddit refresh token"
+msgstr ""
+
+msgctxt "#32412"
+msgid "You already have a refresh token."
+msgstr ""
+
+msgctxt "#32413"
+msgid "You only need to get this once."
+msgstr ""
+
+msgctxt "#32414"
+msgid "Are you sure you want to replace it?"
+msgstr ""

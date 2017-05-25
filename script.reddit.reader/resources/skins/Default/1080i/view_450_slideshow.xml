@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<window type="window">
+	<!-- onload>ClearProperty(foo,10000)</onload-->
+	<onload>SetProperty(foox,barsddsd,10000)</onload>
+
+	<defaultcontrol always="true">53</defaultcontrol>
+	<backgroundcolor>0xff000000</backgroundcolor>
+
+	<menucontrol>9000</menucontrol>
+	<!-- No includes and no $PARAM for xml guis. we gotta do this the hard way -->
+    <controls>
+		<!--BEGIN include name="DefaultBackground"-->
+			<control type="group">
+
+				<!-- Show thumbnail image while original image still loading. but some thumbnail image stick out to the sides. 
+				could not figure out how to detect when original image still loading. 
+				  Attempt a different method by Hiding the thumbnail image after list changes focus. 
+				  it works but it is hard to guess proper the delay -how long the original image finishes loading. 
+				    -->
+				<control type="image" id="200">
+					<visible>!Container(53).OnNext + !Container(53).OnPrevious</visible>
+					<aspectratio scalediffuse="true" aligny="center">keep</aspectratio>
+					<texture>$INFO[Container(53).ListItem.Art(thumb)]</texture>
+					<!-- animation effect="fade" start="100" end="0" time="1000" delay="0" tween="back" easing="in">visible</animation-->
+				</control>
+
+		        <control type="image">
+		        	<top>-100</top>
+		            <description>The spinning animation in the background</description>
+		            <aspectratio align="center" aligny="center" >center</aspectratio>
+		            <texture>srr_busy.gif</texture>
+		            <visible>!IntegerGreaterThan(Container(53).NumPages,0) | ![Container(53).OnNext | Container(53).OnPrevious]</visible>
+		        </control>
+		            <!-- animation effect="fade" time="200" delay="500" reversible="false">Visible</animation-->
+        
+				<control type="image" id="204">
+					<visible>Control.HasFocus(104)</visible>
+					<aspectratio aligny="bottom">scale</aspectratio>
+					<texture>$INFO[Container(53).ListItem.Art(banner)]</texture>
+					<animation effect="slide" start="0,50" time="50" tween="sine" easing="inout" >Visible</animation>
+				</control>
+
+				<control type="image" id="203">
+					<description>middle zoom, activates only once. because of zoom anmimation. this is done because i cannot make condition=Control.Previous(101) work. conditional probably does not exist</description>
+					<visible>Control.HasFocus(103)</visible>
+					<aspectratio aligny="center">scale</aspectratio>
+					<texture>$INFO[Container(53).ListItem.Art(banner)]</texture>
+					<animation effect="zoom" start="80" center="auto" time="50" tween="sine" easing="inout" >Visible</animation>
+					<!-- animation type="Visible" reversible="true">
+						<effect type="zoom" end="150" center=0 time="1800" />
+						<effect type="slide" end=$INFO[Container(53).ListItem.year]  delay="1800" time="1800" />
+					</animation-->
+				</control>
+
+				<control type="image" id="205">
+					<description>middle zoom</description>
+					<visible>Control.HasFocus(105)</visible>
+					<aspectratio aligny="center">scale</aspectratio>
+					<texture>$INFO[Container(53).ListItem.Art(banner)]</texture>
+				</control>
+				
+				<control type="image" id="202">
+					<visible>Control.HasFocus(102)</visible>
+					<aspectratio aligny="top" >scale</aspectratio>
+					<texture>$INFO[Container(53).ListItem.Art(banner)]</texture>
+					<animation effect="slide" start="0,-50" time="50" tween="sine" easing="inout" >Visible</animation>
+				</control>
+				
+				<control type="image" id="201">
+					<visible>![Control.IsVisible(202)|Control.IsVisible(203)|Control.IsVisible(204)|Control.IsVisible(205)]</visible>
+					<aspectratio scalediffuse="true" aligny="center">keep</aspectratio>
+					<texture>$INFO[Container(53).ListItem.Art(banner)]</texture>
+					<!-- fadetime>200</fadetime-->
+				</control>
+			</control>
+		<!--END include name="DefaultBackground"-->
+
+
+		<control type="group"><description>these hidden buttons control the different views for our images </description>
+			<visible allowhiddenfocus="true">false</visible>
+			<control type="button" id="101">
+				<left>1900</left>
+				<top>500</top>
+				<label>button 101</label>
+				<onup>103</onup>
+				<ondown>53</ondown>
+				<onright>Control.Message(53,moveup)</onright>
+				<onleft>Control.Message(53,movedown)</onleft>
+			</control>
+			<control type="button" id="103">
+				<description>controls middle visibility (once only)</description>
+				<left>1900</left>
+				<top>400</top>
+				<label>$INFO[Container(53).ListItem.year]</label>
+				
+				<onup>102</onup>
+				<ondown>104</ondown>
+				<onright>Control.Message(53,moveup)</onright>
+				<onleft>Control.Message(53,movedown)</onleft>
+			</control>
+			<control type="button" id="102">
+				<description>controls top visibility</description>
+				<left>1900</left>
+				<top>450</top>
+				<label>button 102</label>
+				
+				<onup>53</onup>
+				<ondown>105</ondown>
+				<onright>Control.Message(53,moveup)</onright>
+				<onleft>Control.Message(53,movedown)</onleft>
+			</control>
+			<control type="button" id="105">
+				<description>controls middle visibility</description>
+				<left>1900</left>
+				<top>350</top>
+				<label>button 104</label>
+
+				<onup>102</onup>
+				<ondown>104</ondown>
+				<onright>Control.Message(53,moveup)</onright>
+				<onleft>Control.Message(53,movedown)</onleft>
+			</control>
+			<control type="button" id="104">
+				<description>controls bottom visibility</description>
+				<left>1900</left>
+				<top>350</top>
+				<label>button 104</label>
+
+				<onup>105</onup>
+				<ondown>53</ondown>
+				<onright>Control.Message(53,moveup)</onright>
+				<onleft>Control.Message(53,movedown)</onleft>
+			</control>
+		</control>
+
+		<!--BEGIN include>View_53_Shift</include -->
+		<control type="group">
+			<description>Poster Viewtype</description>
+			<left>0</left>
+			<top>960</top>
+			<height>130</height>
+			<visible allowhiddenfocus="true">! [Control.HasFocus(101)|Control.HasFocus(102)|Control.HasFocus(103)|Control.HasFocus(104)|Control.HasFocus(105)] </visible>
+			<visible allowhiddenfocus="true"> Integer.IsGreater(Container(53).NumItems,1) </visible>
+			<animation effect="slide" start="0,152" time="300" tween="sine" easing="inout" >Visible</animation>
+			<animation effect="slide"   end="0,152"  time="300" tween="sine" easing="inout" >Hidden</animation>
+
+			<control type="image">
+				<description>background bar for lr image lists</description>
+				<left>0</left>
+				<top>-62</top>
+				<!-- width>1720</width-->
+				<height>220</height>
+				<texture border="22">srr_dialog-bg.png</texture>
+			</control>
+
+			<!-- BEGIN include content="LeftRightArrows"-->
+				<control type="group">
+					<control type="image">
+						<left>25</left>
+						<top>70</top>
+						<width>28</width>
+						<height>28</height>
+						<texture flipx="true" colordiffuse="button_focus">overlays/arrowright.png</texture>
+						<animation effect="zoom" start="0,100" end="100,100" center="auto" time="200">VisibleChange</animation>
+						<animation effect="zoom" start="0,100" end="100,100" delay="500" center="auto" time="200">WindowOpen</animation>
+						<animation effect="zoom" start="100,100" end="0,100" center="auto" time="200">WindowClose</animation>
+						<visible>Control.IsVisible(53) + Container(53).HasPrevious</visible>
+					</control>
+					<control type="image">
+						<left>819</left>
+						<top>70</top>
+						<width>28</width>
+						<height>28</height>
+						<texture colordiffuse="button_focus">overlays/arrowright.png</texture>
+						<animation effect="zoom" start="0,100" end="100,100" center="auto" time="200">VisibleChange</animation>
+						<animation effect="zoom" start="0,100" end="100,100" delay="500" center="auto" time="200">WindowOpen</animation>
+						<animation effect="zoom" start="100,100" end="0,100" center="auto" time="200">WindowClose</animation>
+						<visible>Control.IsVisible(53) + Container(53).HasNext</visible>
+					</control>
+					<control type="button" id="53500">
+						<left>25</left>
+						<top>70</top>
+						<width>28</width>
+						<height>28</height>
+						<texturefocus>-</texturefocus>
+						<texturenofocus>-</texturenofocus>
+						<onclick>Control.Move(53,-1)</onclick>
+						<visible allowhiddenfocus="true">Container(53).HasPrevious + [Control.HasFocus(53) | Control.HasFocus(53500)]</visible>
+					</control>
+					<control type="button" id="53501">
+						<left>819</left>
+						<top>70</top>
+						<width>28</width>
+						<height>28</height>
+						<texturefocus>-</texturefocus>
+						<texturenofocus>-</texturenofocus>
+						<onclick>Control.Move(53,1)</onclick>
+						<visible allowhiddenfocus="true">Container(53).HasNext + [Control.HasFocus(53) | Control.HasFocus(53501)]</visible>
+					</control>
+				</control>
+			<!-- END include content="LeftRightArrows"-->
+
+			<control type="fixedlist" id="53">  
+				<description>the main listbox</description>
+				<left>35</left>
+				<bottom>0</bottom>
+				<width>810</width>
+				<height>200</height>
+				<focusposition>2</focusposition>
+				<movement>2</movement>
+				<pagecontrol>5199</pagecontrol>
+				<scrolltime tween="cubic" easing="out">500</scrolltime>
+				<orientation>horizontal</orientation>
+				<visible>true</visible>
+				<onleft>53</onleft>
+				<onup>101</onup>
+				<ondown>5199</ondown>
+				<onright>53</onright>
+				<preloaditems>1</preloaditems>
+				<viewtype label="31100">icon</viewtype>
+				<itemlayout width="200">
+					<control type="group">
+						<control type="image">
+							<left>0</left>
+							<top>13</top>
+							<width>200</width>
+							<height>200</height>
+							<aspectratio aligny="bottom">keep</aspectratio>
+							<texture fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+							<bordertexture border="20">overlays/shadow.png</bordertexture>
+							<bordersize>20</bordersize>
+						</control>
+						<!-- control type="textbox"> 
+							<left>20</left>
+							<top>438</top>
+							<width>300</width>
+							<height>100</height>
+							<align>center</align>
+							<aligny>center</aligny>
+							<label>$INFO[ListItem.Label]</label>
+							<font>font12</font>
+						</control-->
+					</control>
+				</itemlayout>
+				<focusedlayout width="200">
+					<control type="image">
+						<left>10</left>
+						<top>33</top>
+						<width>180</width>
+						<height>180</height>
+						<visible>Control.HasFocus(53)</visible>
+						<animation effect="fade" time="200">VisibleChange</animation>
+						<texture colordiffuse="button_focus">colors/white.png</texture>
+					</control>						
+					<control type="image">
+						<left>0</left>
+						<top>13</top>
+						<width>200</width>
+						<height>200</height>
+						<aspectratio aligny="bottom">keep</aspectratio>
+						<texture fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+						<bordertexture border="20">overlays/shadow.png</bordertexture>
+						<bordersize>20</bordersize>
+					</control>
+					<!-- control type="textbox">  
+						<left>20</left>
+						<top>438</top>
+						<width>300</width>
+						<height>100</height>
+						<align>center</align>
+						<aligny>center</aligny>
+						<label>$INFO[ListItem.Label]</label>
+						<font>font12</font>
+						<autoscroll time="3000" delay="3000" repeat="3000">True</autoscroll>
+					</control-->
+				</focusedlayout>
+			</control>
+
+			<!-- control type="scrollbar" id="5199">
+				<left>0</left>
+				<bottom>0</bottom>
+				<width>1920</width>
+				<height>12</height>
+				<onup>53</onup>
+     				<ondown>53</ondown>
+				<orientation>horizontal</orientation>
+			</control-->
+
+		</control>
+		<!--END include>View_53_Shift</include -->
+
+
+		<control type="group">
+			<description>description box gets hidden when button 101 is in focus</description>
+			<top>910</top>
+			<left>830</left>
+			<width>1100</width>
+			<height>220</height>
+			
+			
+			<visible>! [Control.HasFocus(101)|Control.HasFocus(102)|Control.HasFocus(103)|Control.HasFocus(104)|Control.HasFocus(105)]</visible>
+
+			<animation effect="fade" time="200" start="0" end="100" >Visible</animation>
+			<animation effect="fade" time="200" start="100" end="0" >Hidden</animation>
+
+			<animation effect="fade" time="200" start="0" end="100" condition="!String.IsEmpty(Container(53).ListItem.Plot)">Conditional</animation>
+			<animation effect="fade" time="200" start="100" end="0" condition="String.IsEmpty(Container(53).ListItem.Plot)">Conditional</animation>
+			 
+			<!--  BEGIN include content="ShiftTextbox" -->
+					<!-- control type="image">
+						<visible>! [String.IsEmpty(Container(53).ListItem.Plot)]</visible>
+						<texture>srr_dialog-bg.png</texture>
+					</control-->
+					<control type="textbox" id="65591">
+						<top>12</top>
+						<left>30</left>
+						<width>1038</width>
+						<height>160</height>
+						
+						<autoscroll delay="10000" time="2000" repeat="15000">true</autoscroll>
+						<label>$INFO[Container(53).ListItem.Plot]</label>
+						<font>font12</font>
+						<shadowcolor>text_shadow</shadowcolor>
+					</control>
+			<!-- END include content="ShiftTextbox" -->
+			
+		</control>
+
+
+
+		<!--BEGIN include name="TopBar"-->
+			<control type="group">
+				<visible>false</visible>
+				<animation effect="slide" start="0,-90" time="300" tween="sine" easing="inout" >Visible</animation>
+				<animation effect="slide" end="0,-90"   time="300" tween="sine" easing="inout" >Hidden</animation>
+				<depth>DepthBars</depth>
+				<animation effect="fade" start="0" end="100" time="300" condition="[Window.Previous(fullscreenvideo) | Window.Previous(startup)] + !Window.IsVisible(1109)">WindowOpen</animation>
+				<control type="image">
+					<left>0</left>
+					<top>0</top>
+					<width>2000</width>
+					<height>83</height>
+					<texture>srr_InfoBar.png</texture>
+					<animation effect="fade" start="100" end="0" time="300" condition="Window.Next(screencalibration)">WindowClose</animation>
+				</control>
+				<control type="image"><description>little icon on Left of top bar </description>
+					<top>0</top>
+					<width>80</width>
+					<height>80</height>
+					<animation effect="fade" start="0" end="100" time="300">WindowOpen</animation>
+					<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
+					<texture colordiffuse="button_focus">DefaultAddonImages.png</texture>
+				</control>
+				<control type="grouplist"><description>text Left side of top bar next to icon</description>
+					<top>18</top>
+					<left>85</left>
+					<width>1200</width>
+					<height>100</height>
+					<orientation>horizontal</orientation>
+					<usecontrolcoords>true</usecontrolcoords>
+					<animation effect="fade" start="0" end="100" time="300">WindowOpen</animation>
+					<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
+					<animation effect="slide" end="0,12" time="200" reversible="true" condition="String.IsEmpty(Container.SortMethod)">Conditional</animation>
+					<control type="label" id="1">
+						<!-- label>$INFO[Window(10000).Property(view_450_slideshow_title)]</label-->
+						<label></label>
+						<!-- include>BreadcrumbsLabel</include -->
+					</control>
+				</control>
+				<control type="label"><description>fine text under the bigger text on Left side of top bar</description>
+					<top>40</top>
+					<label>$INFO[Container.SortMethod,$LOCALIZE[31022]: ]</label>
+					<font>font10</font>
+					<left>85</left>
+					<shadowcolor>text_shadow</shadowcolor>
+					<height>100</height>
+					<width>auto</width>
+					<visible>false</visible>
+					<!--visible>!String.IsEmpty(Container.SortMethod)</visible-->
+					<animation effect="fade" time="150">VisibleChange</animation>
+					<animation effect="fade" start="0" end="100" time="300">WindowOpen</animation>
+					<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
+				</control>
+				
+				<control type="group"><description>Right side of top bar</description>
+					<visible>!Window.IsVisible(extendedprogressdialog)</visible>
+					<animation effect="fade" time="150">VisibleChange</animation>
+					<animation effect="fade" start="100" end="0" time="300" condition="Window.Next(screencalibration)">WindowClose</animation>
+					<control type="grouplist">
+						<right>85</right>
+						<width>500</width>
+						<height>100</height>
+						<align>right</align>
+						<orientation>horizontal</orientation>
+						<usecontrolcoords>true</usecontrolcoords>
+						<include condition="Skin.HasSetting(show_weatherinfo) | Window.IsActive(skinsettings)">TopWeatherIcon</include>
+						<control type="label">
+							<!-- include>BreadcrumbsLabel</include-->
+							<label>$INFO[System.Time]</label>
+						</control>
+					</control>
+					<control type="group">
+						<control type="image">
+							<right>25</right>
+							<top>20</top>
+							<height>40</height>
+							<width>40</width>
+							<texture colordiffuse="button_focus">frame/srr_clock.png</texture>
+							<animation effect="fade" time="300">Visible</animation>
+							<animation effect="fade" time="150">Hidden</animation>
+							<aspectratio>keep</aspectratio>
+							<visible>!Window.IsActive(volumebar)</visible>
+						</control>
+						<control type="label">
+							<top>40</top>
+							<label>$INFO[System.Date]</label>
+							<font>font10</font>
+							<left>1340</left>
+							<shadowcolor>text_shadow</shadowcolor>
+							<height>100</height>
+							<width>500</width>
+							<align>right</align>
+						</control>
+					</control>
+				</control>
+			</control>
+		<!--END include name="TopBar"-->
+
+		
+    </controls>
+</window>

@@ -1,3 +1,6 @@
+v2.5.15
+Fixed Channel Highlights.
+
 v2.5.14
 Fixed broken Channel A-Z.
 

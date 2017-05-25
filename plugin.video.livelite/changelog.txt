@@ -1,0 +1,45 @@
+2.0.0 (17-11-2016)
+- Addon id was change to lowercase
+- Added several localized strings
+- Removed default playlist (android greek tv). Setting is now completely blank.
+- Implemented group switcher (can choose up to 75 different groups)
+- Some new and some changed icons
+- More improvements to regex patterns
+  > It can handle now some incorrectly placed parameters
+  > Improvement was also done to accommodate the group function
+  > Accepts non-ascii (unicode) characters in title
+- Group switcher is not visible when only one group is used.
+
+1.2.0 (14-11-2016)
+- Improved regex pattern when icon or tvg-logo parameter not present.
+- Made youtube-dl & urlresolver optional resolvers. Install through the settings menu.
+- Added settings shortcut on top of LiveLite's playlist.
+- Added context menu item for refreshing playlists. Useful when choosing another playlist.
+
+1.1.0.1 (07-11-2016)
+- Minor bug fix for icon parameter
+
+1.1.0 (03-11-2016)
+- Greatly improved regex pattern and strings stripping
+ > It is possible to now use parameter 'icon' along with 'tvg-logo'
+- Implemented ability to load local playlists
+
+1.0.4 (30-Oct-2016)
+- Random user agent function
+- Minor other insignificant changes
+
+1.0.3 (28-Oct-2016)
+- Fix ListItem replace
+- Removed 'playthis' (urlloader) dependency and urlresolver with it
+- Youtube-dl is now utilized for all kinds of streams
+- Playlist field in settings is now empty for easier input
+
+1.0.2 (25-Oct-2016)
+- More bulletproof than ever, it can now load any kind of url that urlresolver supports
+- For youtube streams, youtube-dl is now used for faster resolving
+
+1.0.1 (11-Oct-2016)
+- Added youtu.be replace method
+
+1.0.0 (08-Oct-2016)
+- Initial version

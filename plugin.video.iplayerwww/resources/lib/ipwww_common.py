@@ -316,6 +316,7 @@ def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=N
     """Adds a new line to the Kodi list of playables.
     It is used in multiple ways in the plugin, which are distinguished by modes.
     """
+
     if not iconimage:
         iconimage="DefaultFolder.png"
     listitem_url = (sys.argv[0] + "?url=" + utf8_quote_plus(url) + "&mode=" + str(mode) +

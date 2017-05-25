@@ -1,0 +1,99 @@
+# Addon Name: LiveLite
+# Addon id: plugin.video.LiveLite
+# Addon Provider: Thgiliwt
+msgid ""
+msgstr ""
+"Project-Id-Version: Thgiliwt\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2016-10-08 11:29+0000\n"
+"Last-Translator: twilight0\n"
+"Language-Team: English (http://www.domain.com)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30001"
+msgid "General"
+msgstr "Γενικά"
+
+msgctxt "#30002"
+msgid "Playlist"
+msgstr "Λίστα αναπαραγωγής"
+
+msgctxt "#30003"
+msgid "Local"
+msgstr "Τοπική"
+
+msgctxt "#30004"
+msgid "Remote"
+msgstr "Απομακρυσμένη"
+
+msgctxt "#30005"
+msgid "Local/Remote Playlist Selector"
+msgstr "Επιλογέας τοπικής/απομακρυσμένης λίστας αναπαραγωγής"
+
+msgctxt "#30006"
+msgid "Local Path (include Local Network)"
+msgstr "Τοπική Διαδρομή (περιλαμβάνεται το Τοπικό Δίκτυο)"
+
+msgctxt "#30007"
+msgid "Remote Path (Internet address)"
+msgstr "Απομακρυσμένη Διαδρομή (διαδίκτυο)"
+
+msgctxt "#30008"
+msgid "Resolvers"
+msgstr "Επιλυτές"
+
+msgctxt "#30009"
+msgid "Install youtube-dl"
+msgstr "Εγκατάσταση youtube-dl"
+
+msgctxt "#30010"
+msgid "Install urlresolver"
+msgstr "Εγκατάσταση urlresolver"
+
+msgctxt "#30011"
+msgid "Settings"
+msgstr "Ρυθμίσεις"
+
+msgctxt "#30012"
+msgid "Refresh Playlist"
+msgstr "Ανανέωση λίστας αναπαραγωγής"
+
+msgctxt "#30013"
+msgid "Wrong link/file, playlist format or no connection"
+msgstr "Λανθασμένος σύνδεσμος/αρχείο, μορφή λίστας αναπαραγωγής ή απουσία δικτύου"
+
+msgctxt "#30014"
+msgid "Use alternative method for youtube plugin call"
+msgstr "Χρησιμοποίησε εναλλακτική μέθοδο για την κλήση του πρόσθετου youtube"
+
+msgctxt "#30015"
+msgid "Group switcher, current group '{0}'"
+msgstr "Εναλλάκτης ομάδων, τρέχουσα ομάδα '{0}'"
+
+msgctxt "#30016"
+msgid "ALL"
+msgstr "ΟΛΑ"
+
+msgctxt "#30017"
+msgid "Select the group of your choice"
+msgstr "Επιλογή ομάδας αρεσκείας"
+
+msgctxt "#30018"
+msgid "Plugin call methods"
+msgstr "Μεθόδοι κλήσης άλλων προσθέτων"
+
+msgctxt "#30019"
+msgid "Cancel"
+msgstr "Ακύρωση"
+
+msgctxt "#30020"
+msgid "Group list is loading"
+msgstr "Φόρτωση λίστας ομάδων"
+
+msgctxt "#30021"
+msgid "All groups"
+msgstr "Όλες οι ομάδες"

@@ -8,31 +8,31 @@ SERVICE_VARS = {'requestor_id':'nbcsports',
                 'activate_url':'activate.nbcsports.com'
                }
 
-def categories():     
-    req = urllib2.Request(ROOT_URL+'apps/NBCSports/configuration-ios.json')  
-    req.add_header("User-Agent", UA_NBCSN)      
-    response = urllib2.urlopen(req)   
-    json_source = json.load(response)                       
-    response.close()   
-    
+def categories():
+    req = urllib2.Request(ROOT_URL+'apps/NBCSports/configuration-ios.json')
+    req.add_header("User-Agent", UA_NBCSN)
+    response = urllib2.urlopen(req)
+    json_source = json.load(response)
+    response.close()
+
     for item in json_source['brands'][0]['sub-nav']:
         display_name = item['display-name']
         url = item['feed-url']
         addDir(display_name,url,4,ICON,FANART)
 
 
-def scrapeVideos(url,scrape_type=None):    
+def scrapeVideos(url,scrape_type=None):
     req = urllib2.Request(url)
     req.add_header('Connection', 'keep-alive')
     req.add_header('Accept', '*/*')
     req.add_header('User-Agent', UA_NBCSN)
     req.add_header('Accept-Language', 'en-us')
     req.add_header('Accept-Encoding', 'deflate')
-    
 
-    response = urllib2.urlopen(req)    
-    json_source = json.load(response)                           
-    response.close()                
+
+    response = urllib2.urlopen(req)
+    json_source = json.load(response)
+    response.close()
 
     if 'featured' in url:
         json_source = json_source['showCase']
@@ -43,27 +43,27 @@ def scrapeVideos(url,scrape_type=None):
         json_source = sorted(json_source, key=lambda k: k['start'], reverse = False)
 
 
-    for item in json_source:            
+    for item in json_source:
       if 'show-all' in filter_list or item['sport'] in filter_list:
         buildVideoLink(item)
-    
+
 
 
 def buildVideoLink(item):
-    url = ''    
+    url = ''
     #Use the ottStreamUrl (v3) until sound is fixed for newer (v4) streams in kodi
-    try:      
-        #url = item['iosStreamUrl']          
-        url = item['ottStreamUrl']  
+    try:
+        #url = item['iosStreamUrl']
+        url = item['ottStreamUrl']
         if url == '' and item['iosStreamUrl'] != '':
-            url = item['iosStreamUrl']          
+            url = item['iosStreamUrl']
         '''
         if CDN == 1 and item['backupUrl'] != '':
             url = item['backupUrl']
         '''
     except:
         try:
-            if item['videoSources']:                
+            if item['videoSources']:
                 '''
                 if 'iosStreamUrl' in item['videoSources'][0]:
                     url =  item['videoSources'][0]['iosStreamUrl']
@@ -72,9 +72,9 @@ def buildVideoLink(item):
                 '''
                 if 'ottStreamUrl' in item['videoSources'][0]:
                     url =  item['videoSources'][0]['ottStreamUrl']
-                    
+
                     if url == '' and item['iosStreamUrl'] != '':
-                        url = item['iosStreamUrl']    
+                        url = item['iosStreamUrl']
                     '''
                     if CDN == 1 and item['videoSources'][0]['backupUrl'] != '':
                         url = item['backupUrl']
@@ -84,94 +84,93 @@ def buildVideoLink(item):
         pass
 
     menu_name = item['title']
-    name = menu_name                
-    desc = item['info']     
-    free = int(item['free'])
-    if 'Watch Golf Channel LIVE' in name: free = 1
+    name = menu_name
+    desc = item['info']
+    free = int(item['free'])    
 
-    # Highlight active streams   
+    # Highlight active streams
     start_time = item['start']
     pattern = "%Y%m%d-%H%M"
 
     aired = start_time[0:4]+'-'+start_time[4:6]+'-'+start_time[6:8]
     genre = item['sportName']
-    
+
 
     length = 0
     try:
         length = int(item['length'])
-    except:        
+    except:
         pass
-    
-        
+
+
     info = {'plot':desc,'tvshowtitle':'NBCSN','title':name,'originaltitle':name,'duration':length,'aired':aired,'genre':genre}
-    
-    imgurl = "http://hdliveextra-pmd.edgesuite.net/HD/image_sports/mobile/"+item['image']+"_m50.jpg"    
+
+    imgurl = "http://hdliveextra-pmd.edgesuite.net/HD/image_sports/mobile/"+item['image']+"_m50.jpg"
     menu_name = filter(lambda x: x in string.printable, menu_name)
-   
+
     start_date = stringToDate(start_time, "%Y%m%d-%H%M")
-    start_date = datetime.strftime(utc_to_local(start_date),xbmc.getRegion('dateshort')+' '+xbmc.getRegion('time').replace('%H%H','%H').replace(':%S',''))       
+    start_date = datetime.strftime(utc_to_local(start_date),xbmc.getRegion('dateshort')+' '+xbmc.getRegion('time').replace('%H%H','%H').replace(':%S',''))
     info['plot'] = 'Starting at: '+start_date+'\n\n'+info['plot']
-    
+
     if url != '':
         if free:
             menu_name = '[COLOR='+FREE+']'+menu_name + '[/COLOR]'
-            #addLink(menu_name,url,name,imgurl,FANART,info) 
+            #addLink(menu_name,url,name,imgurl,FANART,info)
             if str(PLAY_MAIN) == 'true':
-                addFreeLink(menu_name,url,imgurl,FANART,None,info)              
+                addFreeLink(menu_name,url,imgurl,FANART,None,info)
             else:
-                addDir(menu_name,url,6,imgurl,FANART,None,True,info)             
-        elif FREE_ONLY == 'false':                        
+                addDir(menu_name,url,6,imgurl,FANART,None,True,info)
+        elif FREE_ONLY == 'false':
             menu_name = '[COLOR='+LIVE+']'+menu_name + '[/COLOR]'
             if str(PLAY_MAIN) == 'true':
-                addPremiumLink(menu_name,url,imgurl,FANART,None,info)             
+                addPremiumLink(menu_name,url,imgurl,FANART,None,info)
             else:
-                addDir(menu_name,url,5,imgurl,FANART,None,True,info)             
-    
+                addDir(menu_name,url,5,imgurl,FANART,None,True,info)
+
     else:
         #elif my_time < event_start:
         if free:
-            menu_name = '[COLOR='+FREE_UPCOMING+']'+menu_name + '[/COLOR]'            
+            menu_name = '[COLOR='+FREE_UPCOMING+']'+menu_name + '[/COLOR]'
             if str(PLAY_MAIN) == 'true':
-                addPremiumLink(menu_name,url,imgurl,FANART,None,info)             
+                addPremiumLink(menu_name,url,imgurl,FANART,None,info)
             else:
                 addDir(menu_name + ' ' + start_date,'/disabled',999,imgurl,FANART,None,False,info)
-            
-        elif FREE_ONLY == 'false':
-            menu_name = '[COLOR='+UPCOMING+']'+menu_name + '[/COLOR]'            
-            addDir(menu_name + ' ' + start_date,'/disabled',999,imgurl,FANART,None,False,info)
-        
-    
 
-    
-def signStream(stream_url, stream_name, stream_icon):       
+        elif FREE_ONLY == 'false':
+            menu_name = '[COLOR='+UPCOMING+']'+menu_name + '[/COLOR]'
+            addDir(menu_name + ' ' + start_date,'/disabled',999,imgurl,FANART,None,False,info)
+
+
+
+
+def signStream(stream_url, stream_name, stream_icon):
     adobe = ADOBE(SERVICE_VARS)
     #1. Authorize device
     #2. Get media token
     #3. Sign stream (TV sign)
     #--------------------------
-    #http://stream.nbcsports.com/data/mobile/Requestor_ID_Lookup_doc.csv    
+    #http://stream.nbcsports.com/data/mobile/Requestor_ID_Lookup_doc.csv
     #--------------------------
-    resource_id = GET_RESOURCE_ID()      
+    resource_id = GET_RESOURCE_ID()
     adobe.authorizeDevice(resource_id)
-    media_token = adobe.mediaToken(resource_id)          
+    media_token = adobe.mediaToken(resource_id)
     stream_url = adobe.tvSign(media_token, resource_id, stream_url)
 
-    #Set quality level based on user settings    
-    stream_url = SET_STREAM_QUALITY(stream_url)   
-    
+    #Set quality level based on user settings
+    stream_url = SET_STREAM_QUALITY(stream_url)
+
     listitem = xbmcgui.ListItem(path=stream_url)
-       
+
 
     if str(PLAY_MAIN) == 'true':
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem)
     else:
-        addLink(stream_name, stream_url, stream_name, stream_icon, FANART) 
+        addLink(stream_name, stream_url, stream_name, stream_icon, FANART)
 
-def logout():  
+def logout():
     adobe = ADOBE(SERVICE_VARS)
-    adobe.deauthorizeDevice()    
-    ADDON.setSetting(id='clear_data', value='false')  
+    adobe.deauthorizeDevice()
+    ADDON.setSetting(id='clear_data', value='false')
 
 
 
@@ -208,16 +207,16 @@ except:
 
 
 
-if mode==None or url==None or len(url)<1:        
-        categories()        
+if mode==None or url==None or len(url)<1:
+        categories()
 elif mode==4:
         scrapeVideos(url,scrape_type)
-elif mode==5:        
+elif mode==5:
         signStream(url, name, icon_image)
-        
+
 elif mode==6:
-    #Set quality level based on user settings    
-    stream_url = SET_STREAM_QUALITY(url) 
+    #Set quality level based on user settings
+    stream_url = SET_STREAM_QUALITY(url)
     listitem = xbmcgui.ListItem(path=stream_url)
 
     if str(PLAY_MAIN) == 'true':

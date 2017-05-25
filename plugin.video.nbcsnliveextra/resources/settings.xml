@@ -3,14 +3,14 @@
   <!-- General -->
   <category label="30200">
     <setting id="clear_data" type="bool" label="30210" default="false"/>
-    <setting id="free_only" type="bool" label="30220" default="false" />          
+    <setting id="free_only" type="bool" label="30220" default="false" />
   </category>
   <!-- Visual -->
   <category label="30300">
     <setting id="quality" type="labelenum" label="30310" values="SD (508 kbit/s)|SD (906 kbit/s)|SD (1296 kbit/s)|SD (1937 kbit/s)|SD (2947 kbit/s)|HD (5172 kbit/s)|HD (8801 kbit/s)|None" default="None" />
-    <setting id="cdn" type="enum" label="30320" values="East|West" default="0" />	      
-    <setting id="play_main" type="bool" label="30230" default="true" />  
-    <setting id="play_best" type="bool" label="30240" default="true" />  
+    <setting id="cdn" type="enum" label="30320" values="East|West" default="0" />
+    <setting id="play_main" type="bool" label="30230" default="true" />
+    <setting id="play_best" type="bool" label="30240" default="true" />
   </category>
   <category label="30400">
     <setting type="lsep" label="Filter by Sport / Category"/>
@@ -38,7 +38,7 @@
     <setting id="nbc-csn-chicago" type="bool" label="30430" default="false" />
     <setting id="nbc-csn-mid-atlantic" type="bool" label="30431" default="false" />
     <setting id="nbc-csn-new-england" type="bool" label="30432" default="false" />
-    <setting id="nbc-csn-philadelphia" type="bool" label="30433" default="false" />    
+    <setting id="nbc-csn-philadelphia" type="bool" label="30433" default="false" />
     <setting id="nbc-sny" type="bool" label="30434" default="false" />
  </category>
 </settings>

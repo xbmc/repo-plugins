@@ -22,15 +22,15 @@ def stringToDate(string, date_format):
     try:
         date = datetime.strptime(str(string), date_format)
     except TypeError:
-        date = datetime(*(time.strptime(str(string), date_format)[0:6]))                
+        date = datetime(*(time.strptime(str(string), date_format)[0:6]))
 
     return date
 
-def FIND(source,start_str,end_str):    
+def FIND(source,start_str,end_str):
     start = source.find(start_str)
     end = source.find(end_str,start+len(start_str))
 
-    if start != -1:        
+    if start != -1:
         return source[start+len(start_str):end]
     else:
         return ''
@@ -50,11 +50,11 @@ def GET_RESOURCE_ID():
     Accept-Encoding: gzip, deflate
     Connect
     """
-    #req = urllib2.Request(ROOT_URL+'passnbc.xml')  
+    #req = urllib2.Request(ROOT_URL+'passnbc.xml')
     #req.add_header('User-Agent',  UA_NBCSN)
-    #response = urllib2.urlopen(req)        
+    #response = urllib2.urlopen(req)
     #resource_id = response.read()
-    #response.close() 
+    #response.close()
     #resource_id = resource_id.replace('\n', ' ').replace('\r', '')
     #resource_id = '<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title>nbcsports</title><item><title>NBC Sports PGA Event</title><guid>123456789</guid><media:rating scheme="urn:vchip">TV-PG</media:rating></item></channel></rss>'
     resource_id = '<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title>golf</title><item><title>RSM%20Classic%20-%20Rd%201</title><guid>nbcs_100188</guid><media:rating scheme="urn:v-chip"></media:rating></item></channel></rss>'
@@ -79,21 +79,21 @@ def GET_SIGNED_REQUESTOR_ID():
     Accept-Encoding: gzip, deflate
     Connection: keep-alive
     """
-    req = urllib2.Request(ROOT_URL+'apps/NBCSports/configuration-ios.json')  
+    req = urllib2.Request(ROOT_URL+'apps/NBCSports/configuration-ios.json')
     req.add_header('User-Agent',  UA_NBCSN)
-    response = urllib2.urlopen(req)        
+    response = urllib2.urlopen(req)
 
-    json_source = json.load(response)                       
-    response.close() 
-    
+    json_source = json.load(response)
+    response.close()
+
     signed_requestor_id = json_source['adobePassSignedRequestorId']
     signed_requestor_id = signed_requestor_id.replace('\n',"")
-    
-    
+
+
     return signed_requestor_id
 
 
-def SET_STREAM_QUALITY(url): 
+def SET_STREAM_QUALITY(url):
     stream_url = {}
     stream_title = []
 
@@ -102,22 +102,22 @@ def SET_STREAM_QUALITY(url):
     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
     opener.addheaders = [ ("Accept", "*/*"),
                         ("Accept-Encoding", "deflate"),
-                        ("Accept-Language", "en-us"),                                                                                                              
+                        ("Accept-Language", "en-us"),
                         ("User-Agent", UA_NBCSN)]
 
     resp = opener.open(url)
     master = resp.read()
-    resp.close()  
+    resp.close()
 
     xbmc.log(str(master))
 
-    cookies = '' 
-    for cookie in cj:                    
+    cookies = ''
+    for cookie in cj:
         if cookies != '':
             cookies = cookies + "; "
         cookies = cookies + cookie.name + "=" + cookie.value
-        
-    line = re.compile("(.+?)\n").findall(master)  
+
+    line = re.compile("(.+?)\n").findall(master)
     for temp_url in line:
         if '#EXT' not in temp_url:
             temp_url = temp_url.rstrip()
@@ -126,22 +126,22 @@ def SET_STREAM_QUALITY(url):
                 if 'master' in url:
                     start = url.find('master')
                 elif 'manifest' in url:
-                    start = url.find('manifest')                
-            
+                    start = url.find('manifest')
+
             if url.find('?') != -1:
-                replace_url_chunk = url[start:url.find('?')]    
+                replace_url_chunk = url[start:url.find('?')]
             else:
-                replace_url_chunk = url[start:]    
-            
-            
-            temp_url = url.replace(replace_url_chunk,temp_url)              
+                replace_url_chunk = url[start:]
+
+
+            temp_url = url.replace(replace_url_chunk,temp_url)
             temp_url = temp_url.rstrip() + "|User-Agent=" + UA_NBCSN
-            
-            
-            if '_alid_=' in cookies:                
+
+
+            if '_alid_=' in cookies:
                 temp_url = temp_url + "&Cookie=" + cookies
-            
-            
+
+
             stream_title.append(desc)
             stream_url.update({desc:temp_url})
         else:
@@ -156,37 +156,37 @@ def SET_STREAM_QUALITY(url):
                     int(desc)
                     desc = str(int(desc)/1000) + ' kbps'
                 except:
-                    pass            
-    
-    pref_quality = None    
+                    pass
+
+    pref_quality = None
     if 'kbit/s' in QUALITY: pref_quality = int(filter(str.isdigit, QUALITY))
-        
+
     if len(stream_title) > 0:
-        ret =-1      
-        stream_title.sort(key=natural_sort_key, reverse=True)          
-        if str(PLAY_BEST) == 'true':            
+        ret =-1
+        stream_title.sort(key=natural_sort_key, reverse=True)
+        if str(PLAY_BEST) == 'true':
             ret = 0
-        elif pref_quality != None:            
+        elif pref_quality != None:
             index = 0
             dif = 99999999
-            for value in stream_title:                
-                temp_quality = int(filter(str.isdigit, stream_title[index]))    
+            for value in stream_title:
+                temp_quality = int(filter(str.isdigit, stream_title[index]))
                 if abs(temp_quality - pref_quality) < dif:
                     dif = abs(temp_quality - pref_quality)
                     ret = index
 
                 index = index + 1
         else:
-            dialog = xbmcgui.Dialog() 
-            ret = dialog.select('Choose Stream Quality', stream_title)            
+            dialog = xbmcgui.Dialog()
+            ret = dialog.select('Choose Stream Quality', stream_title)
 
         if ret >=0:
-            url = stream_url.get(stream_title[ret])           
+            url = stream_url.get(stream_title[ret])
         else:
             sys.exit()
     else:
         msg = "No playable streams found."
-        dialog = xbmcgui.Dialog() 
+        dialog = xbmcgui.Dialog()
         ok = dialog.ok('Streams Not Found', msg)
 
     return url
@@ -195,7 +195,7 @@ def SET_STREAM_QUALITY(url):
 def natural_sort_key(s):
     _nsre = re.compile('([0-9]+)')
     return [int(text) if text.isdigit() else text.lower()
-            for text in re.split(_nsre, s)] 
+            for text in re.split(_nsre, s)]
 
 
 def utc_to_local(utc_dt):
@@ -209,58 +209,58 @@ def utc_to_local(utc_dt):
 def addLink(name,url,title,iconimage,fanart,info=None):
     ok=True
     liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage,)
- 
+
     liz.setProperty('fanart_image',fanart)
     liz.setProperty("IsPlayable", "true")
     liz.setInfo( type="Video", infoLabels={ "Title": title } )
     if info != None:
-        liz.setInfo( type="Video", infoLabels=info) 
+        liz.setInfo( type="Video", infoLabels=info)
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     return ok
 
-def addFreeLink(name,link_url,iconimage,fanart=None,scrape_type=None,info=None): 
-    params = get_params()      
+def addFreeLink(name,link_url,iconimage,fanart=None,scrape_type=None,info=None):
+    params = get_params()
     ok=True
     u=sys.argv[0]+"?url="+urllib.quote_plus(link_url)+"&mode=6&icon_image="+urllib.quote_plus(iconimage)
     liz=xbmcgui.ListItem(name, iconImage=ICON, thumbnailImage=iconimage)
     liz.setProperty("IsPlayable", "true")
     liz.setInfo( type="Video", infoLabels={ "Title": name } )
     if info != None:
-        liz.setInfo( type="Video", infoLabels=info)        
+        liz.setInfo( type="Video", infoLabels=info)
 
     liz.setProperty('fanart_image', fanart)
-    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)    
+    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     return ok
 
-def addPremiumLink(name,link_url,iconimage,fanart=None,scrape_type=None,info=None): 
-    params = get_params()      
+def addPremiumLink(name,link_url,iconimage,fanart=None,scrape_type=None,info=None):
+    params = get_params()
     ok=True
     u=sys.argv[0]+"?url="+urllib.quote_plus(link_url)+"&mode=5&icon_image="+urllib.quote_plus(iconimage)
     liz=xbmcgui.ListItem(name, iconImage=ICON, thumbnailImage=iconimage)
     liz.setProperty("IsPlayable", "true")
     liz.setInfo( type="Video", infoLabels={ "Title": name } )
     if info != None:
-        liz.setInfo( type="Video", infoLabels=info)        
+        liz.setInfo( type="Video", infoLabels=info)
 
     liz.setProperty('fanart_image', fanart)
-    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)    
+    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     return ok
 
 
-def addDir(name,url,mode,iconimage,fanart=None,scrape_type=None,isFolder=True,info=None): 
-    params = get_params()      
+def addDir(name,url,mode,iconimage,fanart=None,scrape_type=None,isFolder=True,info=None):
+    params = get_params()
     ok=True
     u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&scrape_type="+urllib.quote_plus(str(scrape_type))+"&icon_image="+urllib.quote_plus(str(iconimage))
     liz=xbmcgui.ListItem(name, iconImage=ICON, thumbnailImage=iconimage)
     liz.setInfo( type="Video", infoLabels={ "Title": name } )
     if info != None:
-        liz.setInfo( type="Video", infoLabels=info)        
+        liz.setInfo( type="Video", infoLabels=info)
 
     liz.setProperty('fanart_image', fanart)
-    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=isFolder)    
+    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=isFolder)
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     return ok
 
@@ -280,7 +280,7 @@ def get_params():
                     splitparams=pairsofparams[i].split('=')
                     if (len(splitparams))==2:
                             param[splitparams[0]]=splitparams[1]
-                            
+
     return param
 
 # KODI ADDON GLOBALS
@@ -312,8 +312,8 @@ FREE_ONLY = str(settings.getSetting(id="free_only"))
 PLAY_MAIN = str(settings.getSetting(id="play_main"))
 PLAY_BEST = str(settings.getSetting(id="play_best"))
 
-filter_ids = [ 
-            "show-all",     
+filter_ids = [
+            "show-all",
             "nbc-nfl",
             "nbc-premier-league",
             "nbc-nascar",
@@ -347,7 +347,7 @@ for fid in filter_ids:
         filter_list.append(fid)
 
 #User Agents
-UA_NBCSN = 'NBCSports_Prod/8616 CFNetwork/808.2.16 Darwin/16.3.0'
+UA_NBCSN = 'NBCSports-iOS/9971 CFNetwork/811.5.4 Darwin/16.6.0'
 
 
 #Create Random Device ID and save it to a file
@@ -357,12 +357,12 @@ if not os.path.isfile(fname):
         os.makedirs(ADDON_PATH_PROFILE)
     #new_device_id = ''.join([random.choice('0123456789abcdef') for x in range(64)])
     new_device_id =str(uuid.uuid1())
-    device_file = open(fname,'w')   
+    device_file = open(fname,'w')
     device_file.write(new_device_id)
     device_file.close()
 
 fname = os.path.join(ADDON_PATH_PROFILE, 'device.id')
-device_file = open(fname,'r') 
+device_file = open(fname,'r')
 DEVICE_ID = device_file.readline()
 device_file.close()
 

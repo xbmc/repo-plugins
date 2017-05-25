@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.addon.cdapl" name="Cda.pl" version="1.0.0" provider-name="avalanchy">
+  <requires>
+    <import addon="xbmc.python" version="2.24.0"/>
+    <import addon="script.module.requests" />
+    <import addon="script.module.beautifulsoup4" />
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="pl">Cda.pl</summary>
+    <summary lang="en">Cda.pl</summary>
+    <description lang="pl">Dodatek pozwala wyszukiwanie i wyświetlanie długich wideo ze strony cda.pl</description>
+    <description lang="en">Addon provides searching and displaying long videos from cda.pl page</description>
+    <disclaimer lang="pl">Autorzy nie przechowują i nie rozpowrzechniają treści wyświetlanych przez ten dodatek. Autorzy nie ma żadnego powiązania z dostawcą treści.</disclaimer>
+    <disclaimer lang="en">The authors does not host or distribute any of the content displayed by this addon. The author does not have any affiliation with the content provider.</disclaimer>
+    <language>pl</language>
+    <platform>all</platform>
+    <license>GPL-2.0</license>
+    <forum>https://github.com/avalanchy/plugin.video.cdapl</forum>
+    <website>https://github.com/avalanchy/plugin.video.cdapl</website>
+    <email></email>
+    <source>https://github.com/avalanchy/plugin.video.cdapl</source>
+    <assets>
+        <icon>icon.png</icon>
+        <fanart></fanart>
+        <screenshot></screenshot>
+    </assets>
+    <news></news>
+  </extension>
+</addon>

@@ -1,3 +1,7 @@
+[B]2.1.2[/B]
+- Fixed Old School
+- It seems that the channel is changing urls frequently, I will address this
+- Issue on the next update.
 [B]2.1.1[/B]
 - Fixed Aggressive Progressives
 [B]2.1.0[/B]

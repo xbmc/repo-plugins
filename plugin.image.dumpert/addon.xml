@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon
+	id="plugin.image.dumpert"
+	name="Dumpert"
+	version="1.0.0"
+	provider-name="Skipmode A1">
+  <requires>
+    <import addon="xbmc.python"    		           	version="2.14.0"/>
+		<import addon="script.module.beautifulsoup" 	version="3.0.8"/>
+		<import addon="script.module.requests"      	version="2.4.3"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>image</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+	<summary lang="en">Watch funny pictures from Dumpert.nl (dutch)</summary>
+	<description lang="en">Watch funny pictures from Dumpert.nl (dutch)</description>
+	<disclaimer lang="en">For bugs, requests or general questions visit the Dumpert.nl thread on the Kodi forum.</disclaimer>
+	<summary lang="nl">Bekijk grappige plaatjes van Dumpert.nl (dutch)</summary>
+	<description lang="nl">Bekijk grappige plaatjes van Dumpert.nl (dutch)</description>
+	<disclaimer lang="nl">Bugs of andere feedback op deze plugin kan geplaatst worden in de Dumpert.nl thread op het Kodi forum.</disclaimer>
+    <language>nl</language>
+    <platform>all</platform>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+    <forum></forum>
+    <website>http://dumpert.nl</website>
+    <email></email>
+    <source>https://github.com/skipmodea1/plugin.image.dumpert</source>
+  </extension>
+</addon>

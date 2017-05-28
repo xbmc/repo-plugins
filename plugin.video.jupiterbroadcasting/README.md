@@ -7,9 +7,11 @@ Watch shows from the [Jupiter Broadcasting](http://jupiterbroadcasting.com) netw
 ## Shows
 
 * [JBLive.TV](http://jblive.tv)
+* [Ask Noah](http://www.jupiterbroadcasting.com/show/asknoah/)
 * [BSD Now](http://www.jupiterbroadcasting.com/show/bsdnow/)
 * [Coder Radio](http://www.jupiterbroadcasting.com/show/coderradio/)
 * [FauxShow](http://www.jupiterbroadcasting.com/show/fauxshow/)
+* [Linux Action News](http://linuxactionnews.com)
 * [Linux Action Show](http://www.jupiterbroadcasting.com/show/linuxactionshow/)
 * [Linux Unplugged](http://www.jupiterbroadcasting.com/show/linuxun/)
 * [Plan B](http://www.jupiterbroadcasting.com/show/planb/)
@@ -43,15 +45,30 @@ Watch shows from the [Jupiter Broadcasting](http://jupiterbroadcasting.com) netw
 ## Development
 
 ### Environment
-
+* Requires make, python pip, and virtualenv
+* Clone plugin into Kodi Addons folder, this is sufficient for use/testing
 ```bash
 $ cd ~/.kodi/addons/
 $ git clone git@github.com:RobLoach/plugin.video.jupiterbroadcasting.git
 ```
+* Setup development environment
+```bash
+$ make venv
+$ source venv/bin/activate
+```
+* Run unit tests
+```bash
+$ make tests
+```
+* Exit virtual env
+```bash
+$ deactivate
+```
+
 
 ### Tools
 
-* [Google Python Style Guide](http://google-styleguide.googlecode.com/svn/trunk/pyguide.html) for consistent styles
+* [Google Python Style Guide](https://google.github.io/styleguide/pyguide.html) for consistent styles
 * [Pylint](http://pylint.org)
 
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.rt"
        name="Russia Today News"
-       version="2.0.1"
+       version="2.0.2"
        provider-name="t1m">
   <requires>
     <import addon="xbmc.python" version="2.20.0"/>
@@ -20,6 +20,6 @@
     <forum>http://forum.kodi.tv/showthread.php?tid=173448</forum>
     <website>http:www.rt.com</website>
     <email></email>
-    <source>https://github.com/learningit/plugin.video.rt</source>
+    <source>https://github.com/learningit/Kodi-plugins-source</source>
   </extension>
 </addon>

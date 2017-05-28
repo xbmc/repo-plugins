@@ -8,16 +8,16 @@ h = HTMLParser.HTMLParser()
 qp  = urllib.quote_plus
 uqp = urllib.unquote_plus
 
-UTF8     = 'utf-8'
-RTBASE_URL    = 'http://www.rt.com'
+UTF8 = 'utf-8'
+RTBASE_URL  = 'http://www.rt.com'
 
-addon         = xbmcaddon.Addon('plugin.video.rt')
+addon = xbmcaddon.Addon('plugin.video.rt')
 addonName = addon.getAddonInfo('name')
 addonLanguage  = addon.getLocalizedString
 
-home          = addon.getAddonInfo('path').decode(UTF8)
-icon          = xbmc.translatePath(os.path.join(home, 'icon.png'))
-addonfanart   = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
+home = addon.getAddonInfo('path').decode(UTF8)
+icon = xbmc.translatePath(os.path.join(home, 'icon.png'))
+addonfanart = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
 
 
 def log(txt):
@@ -51,6 +51,7 @@ def getShows():
        infoList = {}
        name = name.strip()
        infoList['Title'] = name
+       infoList['mediatype'] = 'tvshow'
        infoList['Plot']  = h.unescape(plot.strip().replace('<p>','').replace('</p>','').decode(UTF8))
        u = '%s?url=%s&mode=GE' % (sys.argv[0],qp(url))
        liz=xbmcgui.ListItem(name)
@@ -63,9 +64,9 @@ def getShows():
 
 def getLive():
     ilist=[]
-    rlist = [("https://www.rt.com/static/libs/octoshape/js/streams/news.js", addonLanguage(30005)),
-             ("https://www.rt.com/static/libs/octoshape/js/streams/usa.js", addonLanguage(30006)),
-             ("https://www.rt.com/static/libs/octoshape/js/streams/uk.js", addonLanguage(30007)),
+    rlist = [("https://www.rt.com/static/libs/jwplayer/streams/news.js?v1", addonLanguage(30005)),
+             ("https://www.rt.com/static/libs/jwplayer/streams/usa.js?v1", addonLanguage(30006)),
+             ("https://www.rt.com/static/libs/jwplayer/streams/uk.js?v1", addonLanguage(30007)),
              ("https://rtd.rt.com/s/octoplayer/octoshape/js/streams.js?7", addonLanguage(30008)),
              ("https://arabic.rt.com/static/libs/octoshape/js/streams.js", addonLanguage(30010))]
     res_names  = ["Auto","HD","Hi","Medium","Low"]
@@ -94,6 +95,7 @@ def getEpisodes(url):
        name = name.strip()
        infoList = {}
        infoList['Title'] = name
+       infoList['mediatype'] = 'episode'
        infoList['Plot']  = h.unescape(plot.strip().replace('<p>','').replace('</p>','').decode(UTF8))
        u = '%s?url=%s&mode=GV' % (sys.argv[0],qp(url))
        liz=xbmcgui.ListItem(name)
@@ -120,19 +122,18 @@ def getVideo(url):
         if 'arabic' in url:
             restype = 'Auto'
         html = getRequest(url)
-        streams = re.compile("    \{caption\: '(.+?)'.+?\+ '(.+?)'", re.DOTALL).findall(html)
-        if streams == []:
+        html = re.compile('hls(.+?)\]', re.DOTALL).search(html).group(1)
+        streams = re.compile("\{caption\: '(.+?)'.+?'(.+?)'", re.DOTALL).findall(html)
+        if streams == [] or 'rtd.rt.com' in url:
             streams = re.compile("\{caption\: '(.+?)'.+? \"(.+?)\"", re.DOTALL).findall(html)
-
         url = None
         for res, u in streams:
             if res.startswith(restype):
                url = u
-               break
                
         if url is None:
             return
-        if not url.startswith('http:'):
+        if not url.startswith('http'):
             url = 'http:'+url
     else:
         html=getRequest(RTBASE_URL+url)

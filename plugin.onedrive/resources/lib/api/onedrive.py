@@ -36,9 +36,17 @@ try:
     if hasattr(ssl, '_create_unverified_context'):
         ssl._create_default_https_context = ssl._create_unverified_context
 except:
-    None
+    pass
 
 class OneDrive:
+    monitor = xbmc.Monitor()
+    addon = xbmcaddon.Addon()
+    addonname = addon.getAddonInfo('name')
+    progress_dialog_bg = xbmcgui.DialogProgressBG()
+    pg_bg_created = False
+    do_not_clean_counter = False
+    event_listener = None
+
     _login_url = 'https://login.microsoftonline.com/common/oauth2/v2.0/token'
     _redirect_uri = 'https://login.microsoftonline.com/common/oauth2/nativeclient'
     _api_url = 'https://graph.microsoft.com/v1.0'
@@ -47,24 +55,21 @@ class OneDrive:
     exporting_target = 0
     exporting_percent = 0
     failure_chances = 2
-    
+    failure_count = 0
+    access_token = ''
+    refresh_token = ''
+
     def __init__(self, client_id):
-        self.failure_count = 0
         self.client_id = client_id
-        self.access_token = self.refresh_token = ''
-        self.event_listener = None
-        self.monitor = xbmc.Monitor()
-        self.addon = xbmcaddon.Addon()
-        self.addonname = self.addon.getAddonInfo('name')
-        self.progress_dialog_bg = xbmcgui.DialogProgressBG()
-        self.pg_bg_created = False
-        self.do_not_clean_counter = False
-        
+
     def cancelOperation(self):
         return self.monitor.abortRequested()
     def begin_signin(self):
         url = self._signin_url + '?' + urllib.urlencode({'version': 2})
-        return self.get(url, raw_url=True)['pin']
+        data = self.get(url, raw_url=True)
+        if 'pin' in data:
+            return data['pin']
+        return ''
     def finish_signin(self, pin):
         url = self._signin_url + '?' + urllib.urlencode({'action': 'code', 'pin': pin, 'version': 2})
         return self.get(url, raw_url=True)

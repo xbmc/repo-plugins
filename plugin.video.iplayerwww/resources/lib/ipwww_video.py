@@ -1561,6 +1561,7 @@ def ScrapeAvailableStreams(url):
         for stream in json_data['episode']['versions']:
             if ((stream['kind'] == 'original') or
                (stream['kind'] == 'iplayer-version') or
+               (stream['kind'] == 'technical-replacement') or
                (stream['kind'] == 'editorial')):
                 stream_id_st = stream['id']
             elif ((stream['kind'] == 'signed') and

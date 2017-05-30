@@ -85,7 +85,7 @@ class myAddon(t1mAddon):
    html = self.getRequest(url)
    parms = re.compile('toggle.functions.ajaxEpisodeListingPage\((.+?)\)', re.DOTALL).search(html).group(1)
    parms = parms.split(',')
-   url = 'http://tv.toggle.sg/en/blueprint/servlet/toggle/paginate?pageSize=50&pageIndex=0&contentId=%s&navigationId=%s&isCatchup=1' % (parms[3].strip(), parms[4].strip())
+   url = 'http://tv.toggle.sg/en/blueprint/servlet/toggle/paginate?pageSize=100&pageIndex=0&contentId=%s&navigationId=%s&isCatchup=1' % (parms[3].strip(), parms[4].strip())
    html = self.getRequest(url)
    epis = re.compile('<div class="img-holder">.+?src="(.+?)".+?ref="(.+?)">(.+?)<.+?<p>(.+?)</p', re.DOTALL).findall(html)
    for (thumb,url,name,plot) in epis:
@@ -113,18 +113,30 @@ class myAddon(t1mAddon):
      u =''
      if self.addon.getSetting('vid_res') == '1':
         for b in a:
-           vtype = 'STB Main'
+           vtype = 'HLS_Web'
            if b['Format'] == vtype:
               u = b['URL']
               break
         req = urllib2.Request(u, None, self.defaultHeaders)
-        try:
-           response = urllib2.urlopen(req, timeout=40)
-        except:
-           u = ''
+#        try:
+#           response = urllib2.urlopen(req, timeout=40)
+#        except:
+#           u = ''
      if u == '':
         for b in a:
            vtype = 'iPad Main'
+           if b['Format'] == vtype:
+              u = b['URL']
+              break
+     if u == '':
+        for b in a:
+           vtype = 'STB Main'
+           if b['Format'] == vtype:
+              u = b['URL']
+              break
+     if u == '':
+        for b in a:
+           vtype = 'HLS_Tablet'
            if b['Format'] == vtype:
               u = b['URL']
               break

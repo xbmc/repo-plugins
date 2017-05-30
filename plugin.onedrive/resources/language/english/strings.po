@@ -283,3 +283,23 @@ msgstr ""
 msgctxt "#32066"
 msgid "Unable to remove previous files and folders in %s"
 msgstr ""
+
+msgctxt "#32067"
+msgid "Services"
+msgstr ""
+
+msgctxt "#32068"
+msgid "Allow OneDrive addon to be used as a source"
+msgstr ""
+
+msgctxt "#32069"
+msgid "     Source server port  -  http://localhost:<port>"
+msgstr ""
+
+msgctxt "#32070"
+msgid "There are no accounts added in OneDrive."
+msgstr ""
+
+msgctxt "#32071"
+msgid "Go to [Add-ons > OneDrive > Add an account...] to add one."
+msgstr ""

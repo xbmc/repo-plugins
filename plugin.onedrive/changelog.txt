@@ -1,3 +1,7 @@
+v1.3.0 released - May 29, 2017:
+- Use OneDrive as a source
+- Subtitle fix
+-------------------------- 
 v1.2.0 released - May 14, 2017:
 - Download subtitle fixed
 - Now supporting business accounts

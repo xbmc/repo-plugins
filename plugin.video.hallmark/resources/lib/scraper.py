@@ -72,7 +72,8 @@ class myAddon(t1mAddon):
       html = self.getRequest(uqp(url))
       c = re.compile('<div class="imageviewitem">.+?src="(.+?)".+?class="commontitle" href="(.+?)".+?">(.+?)<.+?fwmediaid = \'(.+?)\'.+?</script>',re.DOTALL).findall(html)
       for thumb, murl, name, url in c:
-          html = self.getRequest(HALLMARKBASE % murl.replace('&amp;','&'))
+          url = HALLMARKBASE % murl.replace('&amp;','&')
+          html = self.getRequest(url)
           genre,mpaa,cast,plot=re.compile('<div class="moviesubtitle">(.+?)<.+?</span>(.+?)<.+?">(.+?)<.+?<div id="imageDetail">.+?</div>(.+?)<', re.DOTALL).search(html).groups()
           genre = genre.strip().replace(';',',')
           mpaa = mpaa.strip()
@@ -125,28 +126,10 @@ class myAddon(t1mAddon):
       jsonRespond = xbmc.executeJSONRPC(json_cmd)
 
   def getAddonVideo(self,url):
-      if url.startswith('http:'):
-          html = self.getRequest(url)
-          suburl, u = re.compile('captionsrc = (.+?);.+?src: "(.+?)"', re.DOTALL).search(html).groups()
-          suburl = eval(suburl)
-          subfile = HALLMARKBASE % suburl.replace('.xml','.vtt')
-      else:
-          url = 'https://secure.brightcove.com/services/viewer/htmlFederated?&width=859&height=482&flashID=BrightcoveExperience&bgcolor=%23FFFFFF&playerID=3811967664001&playerKey=&isVid=true&isUI=true&dynamicStreaming=true&%40videoPlayer='+url+'&secureConnections=true&secureHTMLConnections=true'
-          html = self.getRequest(url)
-          m = re.compile('experienceJSON = (.+?)\};',re.DOTALL).search(html)
-          a = json.loads(html[m.start(1):m.end(1)+1])
-          u = ''
-          rate = 0
-          a = a['data']['programmedContent']['videoPlayer']['mediaDTO']
-          if a is None:
-              return
-          b = a.get('renditions')
-          for c in b:
-              if c['encodingRate'] > rate:
-                  rate = c['encodingRate']
-                  u = c['defaultURL']
-          subfile = 'http://www.hallmarkchanneleverywhere.com/medias/closedcaption/hd_vod_%s.vtt' % a.get('referenceId')
-          u = u.strip()
+      html = self.getRequest(url)
+      suburl, u = re.compile('captionsrc = (.+?);.+?src: "(.+?)"', re.DOTALL).search(html).groups()
+      suburl = eval(suburl)
+      subfile = HALLMARKBASE % suburl.replace('.xml','.vtt')
       liz = xbmcgui.ListItem(path = u)
       liz.setSubtitles([subfile])
       infoList ={}

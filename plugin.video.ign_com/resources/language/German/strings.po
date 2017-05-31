@@ -1,0 +1,62 @@
+msgid ""
+msgstr ""
+
+msgctxt "Addon Summary"
+msgid "Game and Movie trailers/reviews/news"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Game and Movie trailers/reviews/news"
+msgstr ""
+
+msgctxt "Addon Disclaimer"
+msgid "For bugs, requests or general questions visit the ign_com thread on the Kodi forum"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Next Page"
+msgstr "Nächste Seite"
+
+msgctxt "#30002"
+msgid "Latest Videos"
+msgstr "Neue Videos"
+
+msgctxt "#30003"
+msgid "Reviews"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Game Trailers"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Movie Trailers"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Series Updates"
+msgstr ""
+
+msgctxt "#30007"
+msgid "All Series"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Search"
+msgstr "Suchen"
+
+msgctxt "#30101"
+msgid "Maximum video resolution"
+msgstr "Maximale Video Auflösung"
+
+msgctxt "#30102"
+msgid "Force View"
+msgstr "View erzwingen"
+
+msgctxt "#30103
+msgid "View"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Live-Stream Feature"
+msgstr ""

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.ign_com" name="IGN.com" version="2.3.2" provider-name="Twister">
+<addon id="plugin.video.ign_com" name="IGN.com" version="2.3.3" provider-name="Skipmode A1, Twister, AddonScriptorDE">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>
@@ -8,15 +8,15 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <summary lang="en">Game and Movie trailers/reviews/news</summary>
-        <description lang="en">Game and Movie trailers/reviews/news.</description>
+        <description lang="en">Game and Movie trailers/reviews/news</description>
         <platform>all</platform>
         <language>en</language>
         <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
         <forum>http://forum.kodi.tv/showthread.php?tid=136353</forum>
-        <website></website>
-        <source>https://github.com/twister-kodi/plugin.video.ign_com</source>
+        <website>https://www.ign.com</website>
+        <source>https://github.com/skipmodea1/plugin.video.ign_com</source>
         <email></email>
-        <disclaimer>Original code by AddonScriptorDE</disclaimer>
-    <platform>all</platform>
+        <disclaimer>For bugs, requests or general questions visit the ign_com thread on the Kodi forum</disclaimer>
+        <platform>all</platform>
     </extension>
 </addon>

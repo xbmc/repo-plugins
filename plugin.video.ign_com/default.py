@@ -8,19 +8,25 @@ import xbmcgui
 import sys
 import xbmcaddon
 import socket
+import xbmc
+import os
 
+addon = "plugin.video.ign_com"
 socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
-addon = xbmcaddon.Addon(id='plugin.video.ign_com')
-translation = addon.getLocalizedString
+settings = xbmcaddon.Addon()
+translation = settings.getLocalizedString
 base_url = "http://www.ign.com"
+images_path = os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources', 'images')
+date = "2017-05-30"
+version = "2.3.3"
 
-max_video_quality = addon.getSetting("maxVideoQualityRes")
+max_video_quality = settings.getSetting("maxVideoQualityRes")
 
-force_view_mode = bool(addon.getSetting("force_view_mode"))
-live_stream_setting = bool(addon.getSetting("LiveStream"))
+force_view_mode = bool(settings.getSetting("force_view_mode"))
+live_stream_setting = bool(settings.getSetting("LiveStream"))
 
-viewMode = str(addon.getSetting("viewMode"))
+viewMode = str(settings.getSetting("viewMode"))
 
 video_height = [360, 480, 540, 720, 1080]
 max_video_height = video_height[int(max_video_quality)]
@@ -94,7 +100,7 @@ def list_videos(url):
     page_count = re.compile('<a id="moreVideos" href=".+?page=(.+?)\&.+?"', re.DOTALL).findall(content)
     if len(match_page) > 0:
         url_next = match_page[0]
-        add_dir(translation(30001) + " (" + str(page_count[0]) + ")", url_next, 'list_videos', "")
+        add_dir(translation(30001), url_next, 'list_videos', os.path.join(images_path, 'next-page.png'))
     xbmcplugin.endOfDirectory(pluginhandle)
     if force_view_mode:
         xbmc.executebuiltin('Container.SetViewMode(' + viewMode + ')')
@@ -118,8 +124,8 @@ def list_series_episodes(url):
     match_page = re.compile('<a class="next" href="://(.+?)">Next&nbsp;&raquo;</a>', re.DOTALL).findall(content)
     page_count = re.compile('<a class="next" href="://.+?page=(.+?)">Next&nbsp;&raquo;</a>', re.DOTALL).findall(content)
     if len(page_count) > 0:
-        add_dir(translation(30001) + " (" + str(page_count[0]) + ")",
-                match_page[0] + "&category=videos", 'list_series_episodes', "")
+        add_dir(translation(30001),
+                match_page[0] + "&category=videos", 'list_series_episodes', os.path.join(images_path, 'next-page.png'))
     xbmcplugin.endOfDirectory(pluginhandle)
     if force_view_mode:
         xbmc.executebuiltin('Container.SetViewMode(' + viewMode + ')')
@@ -181,7 +187,7 @@ def list_search_results(url):
     max_page = int(int(match[0]) / 10)
     url_next = url_main.replace("page=" + str(page), "page=" + str(page + 1))
     if page < max_page:
-        add_dir(translation(30001), url_next, 'list_search_results', "")
+        add_dir(translation(30001), url_next, 'list_search_results', os.path.join(images_path, 'next-page.png'))
     xbmcplugin.endOfDirectory(pluginhandle)
     if force_view_mode:
         xbmc.executebuiltin('Container.SetViewMode(' + viewMode + ')')
@@ -219,8 +225,8 @@ class Video:
                                        "http://forum.kodi.tv/showthread.php?tid=136353")
 
     def _get_data_settings(self, content):
-        match = re.compile("data-settings='(.+?)'").findall(content)
-        match = re.compile('"(\d+?)":{"url":"(.+?)",.+?}').findall(match[0])
+        match = re.compile('data-settings="(.+?)"').findall(content)
+        match = re.compile('&quot;(\d+?)&quot;:{&quot;url&quot;:&quot;(.+?)&quot;,.+?}').findall(match[0])
         for res in match:
             self.urls[res[0]] = res[1].replace("\\", "")
 
@@ -312,6 +318,8 @@ def add_link(name, url, mode, iconimage, desc="", duration=""):
     liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc, "Duration": duration})
     liz.setProperty('IsPlayable', 'true')
+    # Add refresh option to context menu
+    liz.addContextMenuItems([('Refresh', 'Container.Refresh')])
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz)
     return ok
 
@@ -320,6 +328,8 @@ def add_dir(name, url, mode, iconimage, desc=""):
     u = sys.argv[0] + '?url=' + urllib.quote_plus(url) + '&mode=' + str(mode)
     liz = xbmcgui.ListItem(name, iconImage='DefaultFolder.png', thumbnailImage=iconimage)
     liz.setInfo(type='video', infoLabels={'title': name, 'plot': desc, 'plotoutline': desc})
+    # Add refresh option to context menu
+    liz.addContextMenuItems([('Refresh', 'Container.Refresh')])
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
     return ok
 
@@ -347,4 +357,6 @@ elif mode == 'play_live_stream':
 elif mode == 'search':
     search()
 else:
+    xbmc.log("[ADDON] %s debug mode, Python Version %s" % (addon, str(sys.version)), xbmc.LOGDEBUG)
+    xbmc.log("[ADDON] %s v%s (%s) debug mode, is starting, ARGV = %s" % (addon, version, date, repr(sys.argv)), xbmc.LOGDEBUG)
     index()

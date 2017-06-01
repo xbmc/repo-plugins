@@ -297,6 +297,8 @@ def getAltUrl(video_url):
   query = urlparse.parse_qs(o.query)
   try:
     alt = query["alt"][0]
+    ufile = urllib.urlopen(alt)
+    alt = ufile.geturl()
   except KeyError, e:
     alt = None
   return alt

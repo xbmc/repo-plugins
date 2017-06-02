@@ -76,3 +76,15 @@ msgstr ""
 msgctxt "#30201"
 msgid "Something went wrong during login"
 msgstr ""
+
+msgctxt "#30202"
+msgid "Please enter your username"
+msgstr ""
+
+msgctxt "#30203"
+msgid "Please enter your password"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Please enter your verification code"
+msgstr ""

@@ -39,7 +39,7 @@ def getCategories():
   """
   Returns a list of all categories.
   """
-  json_data = __get_json("active_clusters")
+  json_data = __get_json("clusters")
   if json_data is None:
     return None
 

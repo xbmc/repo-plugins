@@ -23,6 +23,7 @@
 import json
 from resources.lib import utils
 from resources.lib import common
+import time
 
 
 def channel_entry(params):
@@ -34,34 +35,41 @@ def channel_entry(params):
         return get_video_URL(params)
 
 
+secret_key = '19nBVBxv791Xs'
+
+
+def get_api_key():
+    date = time.strftime("%Y%m%d")
+    key = secret_key + date
+    key = common.sp.md5(key).hexdigest()
+    return 'iphoner_' + key
+
+
 categories = {}
 
 categories['Dessins animés'] = 'http://sslreplay.gulli.fr/replay/api?' \
-                               'call=%7B%22api_key%22:%22iphoner_a140e' \
-                               'e8cb4b10fcd8b12a7fe688b34de%22,%22method' \
-                               '%22:%22programme.getLatestEpisodes%22,%' \
-                               '22params%22:%7B%22program_image_thumb%' \
-                               '22:%5B310,230%5D,%22category_id%22:%22' \
-                               'dessins-animes%22%7D%7D'
+                               'call=%%7B%%22api_key%%22:%%22%s%%22,%%22method' \
+                               '%%22:%%22programme.getLatestEpisodes%%22,%%' \
+                               '22params%%22:%%7B%%22program_image_thumb%%' \
+                               '22:%%5B310,230%%5D,%%22category_id%%22:%%22' \
+                               'dessins-animes%%22%%7D%%7D'
 
 categories['Émissions'] = 'https://sslreplay.gulli.fr/replay/api?' \
-                          'call=%7B%22api_key%22:%22iphoner_a140e' \
-                          'e8cb4b10fcd8b12a7fe688b34de%22,%22method' \
-                          '%22:%22programme.getLatestEpisodes%22,%' \
-                          '22params%22:%7B%22program_image_thumb%' \
-                          '22:%5B310,230%5D,%22category_id%22:%22' \
-                          'emissions%22%7D%7D'
+                          'call=%%7B%%22api_key%%22:%%22%s%%22,%%22method' \
+                          '%%22:%%22programme.getLatestEpisodes%%22,%%' \
+                          '22params%%22:%%7B%%22program_image_thumb%%' \
+                          '22:%%5B310,230%%5D,%%22category_id%%22:%%22' \
+                          'emissions%%22%%7D%%7D'
 
 categories['Séries & films'] = 'https://sslreplay.gulli.fr/replay/api?' \
-                               'call=%7B%22api_key%22:%22iphoner_a140e' \
-                               'e8cb4b10fcd8b12a7fe688b34de%22,%22method' \
-                               '%22:%22programme.getLatestEpisodes%22,%' \
-                               '22params%22:%7B%22program_image_thumb%' \
-                               '22:%5B310,230%5D,%22category_id%22:%22' \
-                               'series%22%7D%7D'
+                               'call=%%7B%%22api_key%%22:%%22%s%%22,%%22method' \
+                               '%%22:%%22programme.getLatestEpisodes%%22,%%' \
+                               '22params%%22:%%7B%%22program_image_thumb%%' \
+                               '22:%%5B310,230%%5D,%%22category_id%%22:%%22' \
+                               'series%%22%%7D%%7D'
 
 url_list_show = 'https://sslreplay.gulli.fr/replay/api?call=%%7B%%22api_key' \
-                '%%22:%%22iphoner_a140ee8cb4b10fcd8b12a7fe688b34de%%22,%%22' \
+                '%%22:%%22%s%%22,%%22' \
                 'method%%22:%%22programme.getEpisodesByProgramIds%%22,%%22' \
                 'params%%22:%%7B%%22program_id_list%%22:%%5B%%22%s%%22%%5D' \
                 '%%7D%%7D'
@@ -79,9 +87,10 @@ def list_shows(params):
                 'label': category_title,
                 'url': common.plugin.get_url(
                     action='channel_entry',
-                    category_url=category_url,
+                    category_url=category_url % get_api_key(),
                     next='list_shows_cat',
-                    title=category_title
+                    title=category_title,
+                    window_title=category_title
                 )
             })
 
@@ -114,7 +123,8 @@ def list_shows(params):
                     action='channel_entry',
                     program_id=program_id,
                     next='list_videos',
-                    title=program_title
+                    title=program_title,
+                    window_title=program_title
                 )
             })
 
@@ -132,7 +142,7 @@ def list_videos(params):
     videos = []
 
     file_path = utils.download_catalog(
-        url_list_show % params.program_id,
+        url_list_show % (get_api_key(), params.program_id),
         '%s_%s.json' % (params.channel_name, params.program_id))
     file = open(file_path).read()
     json_show = json.loads(file)
@@ -148,7 +158,7 @@ def list_videos(params):
         episode_number = show['episode_number']
         season_number = show['season_number']
         # total_episodes_in_season = show['total_episodes_in_season']
-        url_ipad = show['url_ipad'].encode('utf-8')
+        url_streaming = show['url_streaming'].encode('utf-8')
         # url_streaming = show['url_streaming'].encode('utf-8')
         short_desc = show['short_desc'].encode('utf-8')
         note = float(show['note'].encode('utf-8')) * 2
@@ -182,7 +192,7 @@ def list_videos(params):
             'url': common.plugin.get_url(
                 action='channel_entry',
                 next='play',
-                url_ipad=url_ipad
+                url_streaming=url_streaming
             ),
             'is_playable': True,
             'info': info
@@ -200,4 +210,12 @@ def list_videos(params):
 
 @common.plugin.cached(common.cache_time)
 def get_video_URL(params):
-    return params.video_urlhd
+    url_root = params.url_streaming.replace('playlist.m3u8', '')
+    m3u8_content = utils.get_webcontent(params.url_streaming)
+    last_url = ''
+
+    for line in m3u8_content.splitlines():
+        if 'm3u8' in line and 'video' in line:
+            last_url = line
+
+    return url_root + last_url

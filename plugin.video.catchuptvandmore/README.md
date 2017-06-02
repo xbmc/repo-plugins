@@ -28,6 +28,12 @@ Catch-Up TV & More est compatible avec la dernière version de Kodi (Kodi 17 Kry
 - i-Télé
 - CStar
 - Gulli
+- France Ô
+- HD1
+- L'Équipe
+- 6ter
+- Numéro 23
+- Chérie 25
 
 ### Belgique — *Belgium*
 - *à venir* — *coming soon*
@@ -38,3 +44,6 @@ Catch-Up TV & More est compatible avec la dernière version de Kodi (Kodi 17 Kry
 ## Bugs et améliorations — *Bugs and improvements*
 Retours de bugs, propositions d'améliorations ou d'ajout de contenus sont les bienvenue ! GitHub ou e-mail.
 *Bug reports, suggestions for improvements or content additions are welcome! GitHub or e-mail.*
+
+## French Forum
+<https://forum.mpdb.tv/index.php/topic,35713.0.html>

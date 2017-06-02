@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.catchuptvandmore"
        name="Catch-up TV &amp; More"
-       version="0.1.0"
+       version="0.1.2"
        provider-name="SylvainCecchetto">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
@@ -26,7 +26,17 @@
     <email>catch.up.tv.and.more [AT] gmail [DOT] com</email>
     <source>https://github.com/SylvainCecchetto/plugin.video.catchuptvandmore</source>
     <news>
-This is the first released with some french channels. More contents will be added, stay tuned!
+[Add channel] RTL-TVI
+[Add channel] 6ter
+[Bug] NRJ 12: No video
+[Improvement] NRJ 12: Add listing for categories and seasons
+[Improvement] France Télévision (pluzz): Add search feature and "last videos" categories
+[Bug] TF1: Video URL failed
+[Bug] Gulli: Doesn't work
+[Add channel] Numéro 23
+[Add channel] Chérie 25
+[Bug] Arte: Doesn't work
+[Bug] Canal+: Bug with subcategories
     </news> 
     <assets>
       <icon>icon.png</icon>

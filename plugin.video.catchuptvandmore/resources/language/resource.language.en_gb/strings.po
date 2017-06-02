@@ -19,7 +19,7 @@ msgstr ""
 # Settings categories (from 30000 to 30009)
 msgctxt "#30000"
 msgid "Main menu"
-msgstr "Menu principal"
+msgstr ""
 
 msgctxt "#30001"
 msgid "Channels"
@@ -28,6 +28,7 @@ msgstr ""
 msgctxt "#30002"
 msgid "Quality and content"
 msgstr ""
+
 
 # Settings line separators (from 30010 to 30019)
 msgctxt "#30010"
@@ -122,6 +123,33 @@ msgctxt "#30081"
 msgid "BFM TV: Video quality"
 msgstr ""
 
+msgctxt "#30082"
+msgid "TMC: Show bonus videos"
+msgstr ""
+
+msgctxt "#30083"
+msgid "NT1: Show bonus videos"
+msgstr ""
+
+msgctxt "#30084"
+msgid "HD1: Show bonus videos"
+msgstr ""
+
+msgctxt "#30085"
+msgid "NRJ 12: Video quality"
+msgstr ""
+
+msgctxt "#30086"
+msgid "L'Équipe: Video quality"
+msgstr ""
+
+msgctxt "#30087"
+msgid "TF1: Video quality"
+msgstr ""
+
+msgctxt "#30088"
+msgid "Numéro 23: Video quality"
+msgstr ""
 
 # Others (from 30100 to 30140)
 msgctxt "#30100"
@@ -134,4 +162,28 @@ msgstr ""
 
 msgctxt "#30102"
 msgid "DRM protected video"
-msgstr "Vidéo protégée par DRM"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Last videos"
+msgstr ""
+
+msgctxt "#30105"
+msgid "From A to Z"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Ascending"
+msgstr ""
+
+msgctxt "#30107"
+msgid "Descending"
+msgstr ""
+
+msgctxt "#30108"
+msgid "More programs..."
+msgstr ""

@@ -24,14 +24,14 @@ import json
 from resources.lib import utils
 from resources.lib import common
 
-authorization_key = 'Bearer OTE3NjJhOTYwNzQzNWY0MGE0OGI5MGQ0YmVm' \
-                    'MWY2Y2JiYzc5NDQzY2IxMmYxYjQ0NDVlYmEyOTBmYjVkMDg3OQ'
+# TODO
+#   List emissions
+#   Most recent
+#   Most viewed
 
-headers = {'Authorization': authorization_key}
-
-url_categories = 'https://api-cdn.arte.tv/api/opa/v2/categories?' \
-                 'language=%s&limit=100&sort=order'
-# Valid languages list : fr|de|en|es|pl
+url_replay = 'https://www.arte.tv/papi/tvguide/videos/' \
+             'ARTE_PLUS_SEVEN/%s.json?includeLongRights=true'
+# Valid languages: F or D
 
 
 def channel_entry(params):
@@ -40,49 +40,82 @@ def channel_entry(params):
     elif 'list_videos' in params.next:
         return list_videos(params)
     elif 'play' in params.next:
-        return get_video_URL(params)
+        return get_video_url(params)
 
 
 @common.plugin.cached(common.cache_time)
 def list_shows(params):
     shows = []
+    emissions_list = []
+    categories = {}
 
-    disered_language = common.plugin.get_setting(
+    desired_language = common.plugin.get_setting(
         params.channel_id + '.language')
 
-    if disered_language == 'Auto':
-        disered_language = params.channel_country
+    if desired_language == 'Auto':
+        if params.channel_country == 'fr':
+            desired_language = 'F'
+        elif params.channel_country == 'de':
+            desired_language = 'D'
+    elif desired_language == 'fr':
+        desired_language = 'F'
+    elif desired_language == 'de':
+        desired_language = 'D'
+    else:
+        desired_language = 'F'
 
     file_path = utils.download_catalog(
-        url_categories % disered_language,
-        '%s.json' % params.channel_name,
-        specific_headers=headers)
-    file_categories = open(file_path).read()
-    json_parser = json.loads(file_categories)
+        url_replay % desired_language,
+        '%s_%s.json' % (params.channel_name, desired_language)
+    )
+    file_replay = open(file_path).read()
+    json_parser = json.loads(file_replay)
 
-    for category in json_parser['categories']:
-        label = category['label'].encode('utf-8')
-        desc = category['description'].encode('utf-8')
-        href = category['links']['videos']['href'].encode('utf-8')
-        code = category['code'].encode('utf-8')
+    for emission in json_parser['paginatedCollectionWrapper']['collection']:
+        emission_dict = {}
+        emission_dict['duration'] = emission['videoDurationSeconds']
+        emission_dict['video_url'] = emission['videoPlayerUrl'].encode('utf-8')
+        emission_dict['image'] = emission['programImage'].encode('utf-8')
+        try:
+            emission_dict['genre'] = emission['genre'].encode('utf-8')
+        except:
+            emission_dict['genre'] = 'Unknown'
+        try:
+            emission_dict['director'] = emission['director'].encode('utf-8')
+        except:
+            emission_dict['director'] = ''
+        emission_dict['production_year'] = emission['productionYear']
+        emission_dict['program_title'] = emission['VTI'].encode('utf-8')
+        try:
+            emission_dict['emission_title'] = emission['VSU'].encode('utf-8')
+        except:
+            emission_dict['emission_title'] = ''
 
-        info = {
-            'video': {
-                'title': label,
-                'plot': desc
-            }
-        }
+        emission_dict['category'] = emission['VCH'][0]['label'].encode('utf-8')
+        categories[emission_dict['category']] = emission_dict['category']
+        emission_dict['aired'] = emission['VDA'].encode('utf-8')
+        emission_dict['playcount'] = emission['VVI']
+
+        try:
+            emission_dict['desc'] = emission['VDE'].encode('utf-8')
+        except:
+            emission_dict['desc'] = ''
+
+        emissions_list.append(emission_dict)
+
+    with common.plugin.get_storage() as storage:
+        storage['emissions_list'] = emissions_list
+
+    for category in categories.keys():
 
         shows.append({
-            'label': label,
+            'label': category,
             'url': common.plugin.get_url(
                 action='channel_entry',
-                code=code,
-                href=href,
-                next='list_videos',
-                title=label
+                next='list_videos_cat',
+                category=category,
+                window_title=category
             ),
-            'info': info
         })
 
     return common.plugin.create_listing(
@@ -97,107 +130,70 @@ def list_shows(params):
 @common.plugin.cached(common.cache_time)
 def list_videos(params):
     videos = []
+    with common.plugin.get_storage() as storage:
+        emissions_list = storage['emissions_list']
 
-    params_url = {
-        'geoblockingZone': 'EUR_DE_FR,ALL,SAT,DE_FR',
-        'imageSize': '1920x1080,625x224,940x530,720x406,400x225',
-        'kind': 'SHOW',
-        'limit': '100',
-        'platform': 'ARTEPLUS7',
-        'sort': '-broadcastBegin',
-        'videoLibrary': 'true'
-    }
-    file_path = utils.download_catalog(
-        params.href,
-        '%s.json' % (params.channel_name + params.code),
-        specific_headers=headers,
-        params=params_url)
-    file_shows = open(file_path).read()
-    json_parser = json.loads(file_shows)
+    if params.next == 'list_videos_cat':
+        for emission in emissions_list:
+            if emission['category'] == params.category:
+                if emission['emission_title']:
+                    title = emission['program_title'] + ' - [I]' + \
+                        emission['emission_title'] + '[/I]'
+                else:
+                    title = emission['program_title']
+                aired = emission['aired'].split(' ')[0]
+                aired_splited = aired.split('/')
+                day = aired_splited[0]
+                mounth = aired_splited[1]
+                year = aired_splited[2]
+                # date : string (%d.%m.%Y / 01.01.2009)
+                # aired : string (2008-12-07)
+                date = '.'.join((day, mounth, year))
+                aired = '-'.join((year, mounth, day))
+                info = {
+                    'video': {
+                        'title': title,
+                        'plot': emission['desc'],
+                        'aired': aired,
+                        'date': date,
+                        'duration': emission['duration'],
+                        'year': emission['production_year'],
+                        'genre': emission['genre'],
+                        'playcount': emission['playcount'],
+                        'director': emission['director'],
+                        'mediatype': 'tvshow'
+                    }
+                }
 
-    for video in json_parser['videos']:
-        title = video['title'].encode('utf-8')
-        subtitle = ''
-        if video['subtitle'] is not None:
-            subtitle = video['subtitle'].encode('utf-8')
+                videos.append({
+                    'label': title,
+                    'thumb': emission['image'],
+                    'url': common.plugin.get_url(
+                        action='channel_entry',
+                        next='play',
+                        url=emission['video_url'],
+                    ),
+                    'is_playable': True,
+                    'info': info
+                })
 
-        original_title = video['originalTitle'].encode('utf-8')
-        plotoutline = ''
-        if video['shortDescription'] is not None:
-            plotoutline = video['shortDescription'].encode('utf-8')
-        plot = ''
-        if video['fullDescription'] is not None:
-            plot = video['fullDescription'].encode('utf-8')
-        duration = video['durationSeconds']
-        year_prod = video['productionYear']
-        genre = video['genrePresse'].encode('utf-8')
-        season = video['season']
-        episode = video['episode']
-        total_episodes = video['totalEpisodes']
-        href = video['links']['videoStreams']['href'].encode('utf-8')
-        views = video['views']
-        director = video['director']
-        aired = video['arteSchedulingDay']  # year-mounth-day
-        day = aired.split('-')[2]
-        mounth = aired.split('-')[1]
-        year = aired.split('-')[0]
-        date = '.'.join((day, mounth, year))
-        fanart = video['mainImage']['url'].encode('utf-8')
-        thumb = video['mainImage']['alternateResolutions'][1]['url'].encode('utf-8')
-
-        if subtitle:
-            title = title + ' - [I]' + subtitle + '[/I]'
-
-        info = {
-            'video': {
-                'title': title,
-                'originaltitle': original_title,
-                'plot': plot,
-                'plotoutline': plotoutline,
-                'aired': aired,
-                'date': date,
-                'duration': duration,
-                'year': year_prod,
-                'genre': genre,
-                'season': season,
-                'episode': episode,
-                'playcount': views,
-                'director': director,
-                'mediatype': 'tvshow'
-            }
-        }
-
-        videos.append({
-            'label': title,
-            'fanart': fanart,
-            'thumb': thumb,
-            'url': common.plugin.get_url(
-                action='channel_entry',
-                next='play',
-                href=href,
+        return common.plugin.create_listing(
+            videos,
+            sort_methods=(
+                common.sp.xbmcplugin.SORT_METHOD_DATE,
+                common.sp.xbmcplugin.SORT_METHOD_DURATION,
+                common.sp.xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE,
+                common.sp.xbmcplugin.SORT_METHOD_GENRE,
+                common.sp.xbmcplugin.SORT_METHOD_PLAYCOUNT,
+                common.sp.xbmcplugin.SORT_METHOD_UNSORTED
             ),
-            'is_playable': True,
-            'info': info
-        })
-
-    return common.plugin.create_listing(
-        videos,
-        sort_methods=(
-            common.sp.xbmcplugin.SORT_METHOD_DATE,
-            common.sp.xbmcplugin.SORT_METHOD_DURATION,
-            common.sp.xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE,
-            common.sp.xbmcplugin.SORT_METHOD_GENRE,
-            common.sp.xbmcplugin.SORT_METHOD_PLAYCOUNT,
-            common.sp.xbmcplugin.SORT_METHOD_UNSORTED
-        ),
-        content='tvshows')
+            content='tvshows')
 
 
 @common.plugin.cached(common.cache_time)
-def get_video_URL(params):
+def get_video_url(params):
     file_medias = utils.get_webcontent(
-        params.href,
-        specific_headers=headers)
+        params.url)
     json_parser = json.loads(file_medias)
 
     url_auto = ''
@@ -205,31 +201,22 @@ def get_video_URL(params):
     url_hd = ''
     url_sd = ''
     url_sd_minus = ''
-    for video_stream in json_parser['videoStreams']:
-        if video_stream['audioSlot'] == 1:
-            if video_stream['quality'] == 'AQ' or \
-                    video_stream['quality'] == 'XQ':
-                url_auto = video_stream['url'].encode('utf-8')
+    video_streams = json_parser['videoJsonPlayer']['VSR']
 
-            elif video_stream['quality'] == 'SQ' and \
-                    video_stream['mediaType'] == 'mp4' and \
-                    video_stream['protocol'] == 'HTTP':
-                url_hd_plus = video_stream['url'].encode('utf-8')
+    if 'HLS_SQ_1' in video_streams:
+        url_auto = video_streams['HLS_SQ_1']['url'].encode('utf-8')
 
-            elif video_stream['quality'] == 'EQ' and \
-                    video_stream['mediaType'] == 'mp4' and \
-                    video_stream['protocol'] == 'HTTP':
-                url_hd = video_stream['url'].encode('utf-8')
+    if 'HTTP_MP4_SQ_1' in video_streams:
+        url_hd_plus = video_streams['HTTP_MP4_SQ_1']['url'].encode('utf-8')
 
-            elif video_stream['quality'] == 'HQ' and \
-                    video_stream['mediaType'] == 'mp4' and \
-                    video_stream['protocol'] == 'HTTP':
-                url_sd = video_stream['url'].encode('utf-8')
+    if 'HTTP_MP4_EQ_1' in video_streams:
+        url_hd = video_streams['HTTP_MP4_EQ_1']['url'].encode('utf-8')
 
-            elif video_stream['quality'] == 'MQ' and \
-                    video_stream['mediaType'] == 'mp4' and \
-                    video_stream['protocol'] == 'HTTP':
-                url_sd_minus = video_stream['url'].encode('utf-8')
+    if 'HTTP_MP4_HQ_1' in video_streams:
+        url_sd = video_streams['HTTP_MP4_HQ_1']['url'].encode('utf-8')
+
+    if 'HTTP_MP4_MQ_1' in video_streams:
+        url_sd_minus = video_streams['HTTP_MP4_MQ_1']['url'].encode('utf-8')
 
     desired_quality = common.plugin.get_setting(
         params.channel_id + '.quality')

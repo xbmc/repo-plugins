@@ -23,7 +23,7 @@
 
 categories = {
     'main_menu.fr': 'French channels'
-#   'main_menu.be': 'Belgian channels'
+    # 'main_menu.be': 'Belgian channels'
 }
 
 channels = {
@@ -39,12 +39,18 @@ channels = {
         'channels.fr.6play.w9': 'W9',
         'channels.fr.tf1.tmc': 'TMC',
         'channels.fr.tf1.nt1': 'NT1',
-        'channels.fr.6play.nrj12': 'NRJ 12',
+        'channels.fr.nrj.nrj12': 'NRJ 12',
         'channels.fr.pluzz.france4': 'France 4',
         'channels.fr.bfmtv.bfmtv': 'BFM TV',
         'channels.fr.itele.itele': 'i-Télé',
         'channels.fr.c.cstar': 'CStar',
-        'channels.fr.gulli.gulli': 'Gulli'
+        'channels.fr.gulli.gulli': 'Gulli',
+        'channels.fr.pluzz.franceo': 'France Ô',
+        'channels.fr.tf1.hd1': 'HD1',
+        'channels.fr.lequipe.lequipe': 'L\'Équipe',
+        'channels.fr.6play.6ter': '6ter',
+        'channels.fr.numero23.numero23': 'Numéro 23',
+        'channels.fr.nrj.cherie25': 'Chérie 25'
 
     }
 

@@ -26,8 +26,8 @@ from simplecache import use_cache, SimpleCache
 # Plugin Info
 ADDON_ID      = 'plugin.video.plutotv'
 REAL_SETTINGS = xbmcaddon.Addon(id=ADDON_ID)
-SETTINGS_LOC  = REAL_SETTINGS.getAddonInfo('profile')
 ADDON_NAME    = REAL_SETTINGS.getAddonInfo('name')
+SETTINGS_LOC  = REAL_SETTINGS.getAddonInfo('profile').decode('utf-8')
 ADDON_PATH    = REAL_SETTINGS.getAddonInfo('path').decode('utf-8')
 ADDON_VERSION = REAL_SETTINGS.getAddonInfo('version')
 ICON          = REAL_SETTINGS.getAddonInfo('icon')
@@ -206,7 +206,7 @@ class PlutoTV():
                 continue
             
             thumb = ICON
-            if 'logo' in channel:
+            if 'thumbnail' in channel:
                 thumb = (channel['thumbnail']['path'] or ICON)
             land = FANART
             if 'featuredImage' in channel:

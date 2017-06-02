@@ -101,8 +101,9 @@ def list_show(show):
             if genre != '': genre += ', '
             genre += item['genre']
 
-        plot = ''
-        if 'synopsis' in show: plot = show['synopsis']
+        plot = get_dict_item('series_synopsis', show)
+        if plot == '': plot = get_dict_item('synopsis', show)
+
 
         # if watched = true look in airing for last time code
         # "last_timecode": "00:10:54",
@@ -120,9 +121,9 @@ def list_episodes(show_id):
 
     json_source = get_json(url)
 
-    # Sort by airing_date
+    # Sort by airing_date newest to oldest
     json_source = json_source['body']['items']
-    json_source = sorted(json_source, key=lambda k: k['airing_date'], reverse=False)
+    json_source = sorted(json_source, key=lambda k: k['airing_date'], reverse=True)
 
     for show in json_source:
         list_episode(show)
@@ -145,23 +146,23 @@ def list_episode(show):
     airing_date = show['airing_date']
     airing_date = stringToDate(airing_date, "%Y-%m-%dT%H:%M:%S.000Z")
     airing_date = UTCToLocal(airing_date)
-    broadcast_date = show['broadcast_date']
-    broadcast_date = stringToDate(broadcast_date, "%Y-%m-%dT%H:%M:%S.000Z")
-    broadcast_date = UTCToLocal(broadcast_date)
+    broadcast_date = ''
+    if 'broadcast_date' in show:
+        broadcast_date = show['broadcast_date']
+        broadcast_date = stringToDate(broadcast_date, "%Y-%m-%dT%H:%M:%S.000Z")
+        broadcast_date = UTCToLocal(broadcast_date)
 
     genre = ''
     for item in show['genres']:
         if genre != '': genre += ', '
         genre += item['genre']
 
-    plot = ''
-    if 'synopsis' in show: plot = show['synopsis']
+    plot = get_dict_item('synopsis', show)
 
     if str(show['playable']).upper() == 'FALSE':
         # Add airing date/time to title
         # airing = airing.strftime('%H:%M')
         title = title + ' ' +  airing_date.strftime('%m/%d/%y') + ' ' + airing_date.strftime('%I:%M %p').lstrip('0')
-
 
 
     # if watched = true look in airing for last time code
@@ -172,6 +173,8 @@ def list_episode(show):
 
     info = {'plot': plot, 'tvshowtitle': show_title, 'title': title, 'originaltitle': title, 'genre': genre,
             'aired': airing_date.strftime('%Y-%m-%d'), 'premiered': broadcast_date.strftime('%Y-%m-%d')}
+
+
     addStream(title, show_url, title, icon, fanart, info)
 
 
@@ -201,15 +204,22 @@ def list_channel(channel):
             if genre != '': genre += ', '
             genre += item['genre']
 
-        plot = ''
-        if 'synopsis' in channel: plot = channel['synopsis']
-        # try: plot = channel['synopsis']
-        # except: pass
+        plot = get_dict_item('synopsis', channel)
+        season = get_dict_item('season_num', channel)
+        episode = get_dict_item('episode_num', channel)
 
         channel_url = CHANNEL_URL + '/' + channel_id
 
-        info = {'plot': plot, 'tvshowtitle': title, 'title': title, 'originaltitle': title, 'genre': genre}
+        info = {'season':season, 'episode':episode, 'plot': plot, 'tvshowtitle': title, 'title': title, 'originaltitle': title, 'genre': genre}
+
         addStream(title, channel_url, title, icon, fanart, info)
+
+
+def get_dict_item(key, dictionary):
+    if key in dictionary:
+        return dictionary[key]
+    else:
+        return ''
 
 
 def get_stream(url):
@@ -262,7 +272,7 @@ def put_resume_time():
     Accept-Language: en-US
     X-Requested-With: com.snei.vue.android
 
-    {"series_id":21188,"program_id":1320750,"channel_id":25039,"tms_id":"EP005544655496","airing_id":14626670,"last_watch_date":"2017-04-28T00:40:43Z","last_timecode":"01:46:29","start_timecode":"00:00:00:00","fully_watched":false,"stream_type":"dvr"}    
+    {"series_id":21188,"program_id":1320750,"channel_id":25039,"tms_id":"EP005544655496","airing_id":14626670,"last_watch_date":"2017-04-28T00:40:43Z","last_timecode":"01:46:29","start_timecode":"00:00:00:00","fully_watched":false,"stream_type":"dvr"}
     """
     url = 'https://sentv-user-action.totsuko.tv/sentv_user_action/ws/v2/watch_history'
     headers = {"Accept": "*/*",
@@ -295,21 +305,19 @@ def login():
     global USERNAME
     if USERNAME == '':
         dialog = xbmcgui.Dialog()
-        USERNAME = dialog.input('Please enter your username', type=xbmcgui.INPUT_ALPHANUM)
+        USERNAME = dialog.input(LOCAL_STRING(30202), type=xbmcgui.INPUT_ALPHANUM)
         if USERNAME != '':
             ADDON.setSetting(id='username', value=USERNAME)
-            USERNAME = json.dumps(USERNAME)
         else:
             sys.exit()
 
     global PASSWORD
     if PASSWORD == '':
         dialog = xbmcgui.Dialog()
-        PASSWORD = dialog.input('Please enter your password', type=xbmcgui.INPUT_ALPHANUM,
+        PASSWORD = dialog.input(LOCAL_STRING(30203), type=xbmcgui.INPUT_ALPHANUM,
                                 option=xbmcgui.ALPHANUM_HIDE_INPUT)
         if PASSWORD != '':
             ADDON.setSetting(id='password', value=PASSWORD)
-            PASSWORD = json.dumps(PASSWORD)
         else:
             sys.exit()
 
@@ -324,7 +332,7 @@ def login():
                    "Connection": "Keep-Alive"
                    }
 
-        payload = 'authentication_type=password&username=' + USERNAME + '&password=' + PASSWORD + '&client_id=' + LOGIN_CLIENT_ID
+        payload = 'authentication_type=password&username='+urllib.quote_plus(USERNAME)+'&password='+urllib.quote_plus(PASSWORD)+'&client_id='+LOGIN_CLIENT_ID
         r = requests.post(url, headers=headers, cookies=load_cookies(), data=payload, verify=VERIFY)
         json_source = r.json()
         save_cookies(r.cookies)
@@ -350,7 +358,7 @@ def login():
 
 def two_step_verification(ticket_uuid):
     dialog = xbmcgui.Dialog()
-    code = dialog.input('Please enter your verification code', type=xbmcgui.INPUT_ALPHANUM)
+    code = dialog.input(LOCAL_STRING(30204), type=xbmcgui.INPUT_ALPHANUM)
     if code == '': sys.exit()
 
     url = 'https://auth.api.sonyentertainmentnetwork.com/2.0/ssocookie'
@@ -448,8 +456,11 @@ def get_reqpayload():
                }
 
     r = requests.get(url, headers=headers, verify=VERIFY)
-    req_payload = str(r.headers['reqPayload'])
-    ADDON.setSetting(id='reqPayload', value=req_payload)
+    if 'reqPayload' in r.headers:
+        req_payload = str(r.headers['reqPayload'])
+        ADDON.setSetting(id='reqPayload', value=req_payload)
+    else:
+        sys.exit()
 
 
 def get_json(url):
@@ -465,7 +476,13 @@ def get_json(url):
 
     if r.status_code != 200:
         dialog = xbmcgui.Dialog()
-        dialog.notification('Error '+str(r.status_code), 'The request could not be completed.', xbmcgui.NOTIFICATION_INFO, 5000)
+        msg = 'The request could not be completed.'
+        try:
+            json_source = r.json()
+            msg = json_source['header']['error']['message']
+        except:
+            pass
+        dialog.notification('Error '+str(r.status_code), msg, xbmcgui.NOTIFICATION_INFO, 5000)
         sys.exit()
 
     return r.json()

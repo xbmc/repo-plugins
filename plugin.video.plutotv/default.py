@@ -309,11 +309,7 @@ class PlutoTV():
      
     def playChannel(self, name, url):
         log('playChannel')
-        origurl = url
-        if PTVL_RUN == False:
-            playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
-            playlist.clear()
-            
+        origurl = url            
         if not 'sched' in url:
             t1   = datetime.datetime.now().strftime('%Y-%m-%dT%H:00:00')
             t2   = (datetime.datetime.now() + datetime.timedelta(hours=8)).strftime('%Y-%m-%dT%H:00:00')
@@ -351,22 +347,12 @@ class PlutoTV():
             if dur_start < ch_timediff and dur_sum > ch_timediff:
                 vid_offset = ch_timediff - dur_start
                 liz.setProperty('ResumeTime', str(vid_offset) )
-            
-            if PTVL_RUN == False:
-                playlist.add(url, liz, idx)
-                
-        if PTVL_RUN == False:
-            xbmc.Player().play(playlist)
-            xbmc.executebuiltin("ActivateWindow(fullscreenvideo)")
-           
-     
+            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
+
+               
     def playContent(self, name, url):
         log('playContent')
         origurl = url
-        if PTVL_RUN == False:
-            playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
-            playlist.clear()
-            
         if not 'sched' in url:
             t1   = datetime.datetime.now().strftime('%Y-%m-%dT%H:00:00')
             t2   = (datetime.datetime.now() + datetime.timedelta(hours=8)).strftime('%Y-%m-%dT%H:00:00')
@@ -408,12 +394,8 @@ class PlutoTV():
             if PTVL_RUN == True or ONDEMAND == True:
                 self.addLink(name, url, 7, infoList, infoArt, len(data))
             else:
-                playlist.add(url, liz, idx)
-                
-        if PTVL_RUN == False and ONDEMAND == False:
-            xbmc.Player().play(playlist)
-            xbmc.executebuiltin("ActivateWindow(fullscreenvideo)")
-           
+                xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
+
            
     def playVideo(self, name, url, list=None):
         log('playVideo')

@@ -9,6 +9,7 @@ https://commons.wikimedia.org/wiki/File:HGTV_Logo.svg
 fanart.jpg sourced from public domain:
 https://commons.wikimedia.org/wiki/File:HGTV_Logo.svg (converted to .jpg)
 
+Version 3.0.8 website change
 Version 3.0.7 website change
 Version 3.0.6 website change, cleanup
 Version 3.0.5 bumped t1mlib version for cacheToDisc problem

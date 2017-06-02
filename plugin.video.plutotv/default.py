@@ -30,8 +30,9 @@ SETTINGS_LOC  = REAL_SETTINGS.getAddonInfo('profile')
 ADDON_NAME    = REAL_SETTINGS.getAddonInfo('name')
 ADDON_PATH    = REAL_SETTINGS.getAddonInfo('path').decode('utf-8')
 ADDON_VERSION = REAL_SETTINGS.getAddonInfo('version')
-ICON          = os.path.join(ADDON_PATH, 'icon.png')
-FANART        = os.path.join(ADDON_PATH, 'fanart.jpg')
+ICON          = REAL_SETTINGS.getAddonInfo('icon')
+FANART        = REAL_SETTINGS.getAddonInfo('fanart')
+
 
 ## GLOBALS ##
 TIMEOUT     = 15

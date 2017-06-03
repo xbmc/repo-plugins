@@ -5,23 +5,19 @@
     <string id="30002">Mode invité</string>
     <string id="30003">Nom d'utilisateur</string>
     <string id="30004">Mot de passe</string>
-    <string id="30005">Voir les extraits des émissions</string>
-    <string id="30006">Apparence</string>
-    <string id="30007">Classement</string>
-    <string id="30008">Afficher toutes les émissions</string>
+    <string id="30005">Tagger les nouvelles vidéos</string>
     <string id="30010">Qualité vidéo</string>
     <string id="30011">Afficher les émissions déjà vues</string>
-    <string id="30012">Nombre d'émissions par page</string>
-    <string id="30013">Rafraichir automatiquement les dossiers</string>
+    <string id="30012">Nombre de vidéos par page</string>
     <string id="30014">Low</string>
     <string id="30015">Medium</string>
     <string id="30016">Standard</string>
     <string id="30017">HD</string>
     <string id="30018">Full HD</string>
-    <string id="30019">mineurs de moins de 10 ans</string>
-    <string id="30020">mineurs de moins de 12 ans</string>
-    <string id="30021">mineurs de moins de 16 ans</string>
-    <string id="30022">mineurs d'âge (18 ans)</string>
+    <string id="30019">non recommandé aux moins de 10 ans</string>
+    <string id="30020">non recommandé aux moins de 12 ans</string>
+    <string id="30021">non recommandé aux moins de 16 ans</string>
+    <string id="30022">non recommandé aux mineurs d'âge (+18 ans)</string>
     <string id="30023">pas de filtrage</string>
     <string id="30024">Afficher les autopromos</string>
     <string id="30025">Afficher les annonces</string>
@@ -38,27 +34,31 @@
     <string id="30036">Non disponible en mode invité</string>
     <string id="30037">Afficher Les plus populaires</string>
     <string id="30038">Afficher Les mieux évalués</string>
-    <string id="30039">Recommendation CSA</string>
+    <string id="30039">Filtrer les videos</string>
+    <string id="30040">Cache</string>
+    <string id="30041">Utiliser le cache</string>
+    <string id="30042">Durée de vie (minutes)</string>
+    <string id="30043">Ré-initialiser le cache</string>
 
     <!-- Various strings -->
-    <string id="30040">Aléatoire</string>
-    <string id="30041">Placer en file d'attente</string>
-    <string id="30042">Placer la liste en file d'attente</string>
-    <string id="30043">Page suivante</string>
-    <string id="30044">Page précédente</string>
-    <string id="30045">Entrez votre recherche</string>
-    <string id="30046">Cette semaine</string>
-    <string id="30047">Ce mois</string>
-    <string id="30048">Depuis le début</string>
-    <string id="30049">Noter...</string>
-    <string id="30050">Note</string>
-    <string id="30051">Votre note</string>
+    <string id="30100">Aléatoire</string>
+    <string id="30101">Placer en file d'attente</string>
+    <string id="30102">Placer la liste en file d'attente</string>
+    <string id="30103">Page suivante</string>
+    <string id="30104">Page précédente</string>
+    <string id="30105">Entrez votre recherche</string>
+    <string id="30106">Cette semaine</string>
+    <string id="30107">Ce mois</string>
+    <string id="30108">Depuis le début</string>
+    <string id="30109">Noter...</string>
 
     <!-- Messages -->
-    <string id="30250">Vous DEVEZ fournir un utilisateur et un mot de passe ou alors utiliser le mode invité !</string>
+    <string id="30250">Utilisez le mode invité ou entrez votre identifiant noco</string>
     <string id="30251">La recherche n'a donné aucun résultat</string>
     <string id="30252">Aucun élément non lu trouvé !</string>
     <string id="30253">Cette vidéo n'est pas conseillée pour ce public</string>
+    <string id="30254">Le cache a été ré-initialisé</string>
+    <string id="30255">Ré-initialiser le cache?</string>
 
     <!-- Categories names -->
     <string id="30060">Dernières vidéos</string>
@@ -72,6 +72,7 @@
     <string id="30068">Émissions favorites noco</string>
     <string id="30069">Voir l'historique</string>
     <string id="30070">Les mieux évalués</string>
+    <string id="30071">Paramètres</string>
     
     <!-- Noco favorites -->
     <string id="30080">Ajouter aux émissions favorites</string>

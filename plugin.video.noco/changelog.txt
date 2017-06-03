@@ -61,3 +61,11 @@ v1.0.14
   - Setting to block play for not advised content (CSA rating)
   - write CSA rating string into MPAA info
   - Sets the plugin content to "videos" when applicable to better show info in skins 
+
+v1.0.15
+  - Fix "Noco favorite shows" issues (cannot add favorite)
+  - Speed enhancement by using cache for most pages (can be parametrized or disabled in settings)
+  - Add a clear cache button in settings  
+  - Add info text for shows and partners when available
+  - Add "Settings" item in root menu
+  - New videos since user last visit have a [N] tag in the "Last videos" directory 

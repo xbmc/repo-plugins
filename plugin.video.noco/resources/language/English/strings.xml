@@ -5,23 +5,19 @@
     <string id="30002">Guest mode</string>
     <string id="30003">Username</string>
     <string id="30004">Password</string>
-    <string id="30005">See previews</string>
-    <string id="30006">Appearance</string>
-    <string id="30007">Order by</string>
-    <string id="30008">Show all videos</string>
+    <string id="30005">Tag new videos</string>
     <string id="30010">Quality</string>
     <string id="30011">Show already seen videos</string>
-    <string id="30012">Number of shows per page</string>
-    <string id="30013">Autorefresh directories</string>
+    <string id="30012">Number of videos per page</string>
     <string id="30014">Basse</string>
     <string id="30015">Moyenne</string>
     <string id="30016">Standard</string>
     <string id="30017">HD</string>
     <string id="30018">Full HD</string>
-    <string id="30019">only for chilren below 10</string>
-    <string id="30020">only for chilren below 12</string>
-    <string id="30021">only for chilren below 16</string>
-    <string id="30022">only for chilren below 18</string>
+    <string id="30019">not advised for chilren below 10</string>
+    <string id="30020">not advised for chilren below 12</string>
+    <string id="30021">not advised for chilren below 16</string>
+    <string id="30022">not advised for chilren below 18</string>
     <string id="30023">No filter</string>
     <string id="30024">Show autopromos</string>
     <string id="30025">Show announces</string>
@@ -38,27 +34,31 @@
     <string id="30036">Not available in guest mode</string>
     <string id="30037">Show Most popular</string>
     <string id="30038">Show Top Rated</string>
-    <string id="30039">CSA advise</string>
+    <string id="30039">Filter videos</string>
+    <string id="30040">Cache</string>
+    <string id="30041">Use cached page</string>
+    <string id="30042">Time To Live (minutes)</string>
+    <string id="30043">Reset cache</string>
 
     <!-- Various strings -->
-    <string id="30040">Random</string>
-    <string id="30041">Queue item</string>
-    <string id="30042">Queue playlist</string>
-    <string id="30043">Next page</string>
-    <string id="30044">Previous page</string>
-    <string id="30045">Enter your search terms</string>
-    <string id="30046">This week</string>
-    <string id="30047">This month</string>
-    <string id="30048">All time</string>
-    <string id="30049">Rate...</string>
-    <string id="30050">Rating</string>
-    <string id="30051">Your rating</string>
+    <string id="30100">Random</string>
+    <string id="30101">Queue item</string>
+    <string id="30102">Queue playlist</string>
+    <string id="30103">Next page</string>
+    <string id="30104">Previous page</string>
+    <string id="30105">Enter your search terms</string>
+    <string id="30106">This week</string>
+    <string id="30107">This month</string>
+    <string id="30108">All time</string>
+    <string id="30109">Rate...</string>
 
     <!-- Messages -->
-    <string id="30250">You MUST provide a user and a password  or use Guest mode !</string>
+    <string id="30250">Use guest mode or provide your noco credential</string>
     <string id="30251">The search did not return any results</string>
     <string id="30252">Did not found any not played element</string>
     <string id="30253">This video is not advised for this audience</string>
+    <string id="30254">Cache has been reset</string>
+    <string id="30255">Reset cache?</string>
 
     <!-- Categories names -->
     <string id="30060">Last videos</string>
@@ -72,6 +72,7 @@
     <string id="30068">Noco favorite shows</string>
     <string id="30069">View history</string>
     <string id="30070">Top Rated</string>
+    <string id="30071">Settings</string>
 
     <!-- Noco favorites -->
     <string id="30080">Add to favorites shows</string>

@@ -42,6 +42,8 @@ def correctByIdOrder(data, order, key):
     as it seems to be reordered by ascending id
     and not ordered in the given input id list order (which is sometimes required)
     '''
+    if not len(order):
+        return []
     # Create a dictionary with id value as only key
     data_dict = {int(item[key]):item for item in data}
     # Now create the ordered list (need a loop to test id that exist in the input list but not existing in the list returned by_id)

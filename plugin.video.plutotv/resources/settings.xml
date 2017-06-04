@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="User_Email"       type="text" label="30001" default="" />
+    <setting id="User_Password"    type="text" label="30002" default="" />
+    <setting id="Hide_Ads"         type="bool" label="30003" default="false" />
+    <setting id="Filter_Region"    type="bool" label="30004" default="false" />
+    <setting id="Enable_Debugging" type="bool" label="30000" default="false" />
+</settings>

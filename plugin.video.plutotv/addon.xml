@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.plutotv" version="1.0.0" name="Pluto.TV" provider-name="Lunatixz">
+<addon id="plugin.video.plutotv" version="1.0.2" name="Pluto.TV" provider-name="Lunatixz">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.requests" version="2.7.0"/>
@@ -19,7 +19,7 @@
         <source>https://github.com/Lunatixz/XBMC_Addons/tree/master/plugin.video.plutotv</source>
         <website>http://pluto.tv/</website>
         <forum>http://forum.kodi.tv/showthread.php?tid=315513</forum>
-        <news></news>
+        <news>v1.0.1[CR]- Fixed login cache issue.[CR]v1.0.2[CR]- Fixed cookie issue on android/rpi devices.[CR]- Updated cache timings (8Hrs).</news>
         <assets>
             <icon>icon.png</icon>
             <fanart>fanart.jpg</fanart>

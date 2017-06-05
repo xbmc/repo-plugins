@@ -44,3 +44,14 @@ msgctxt "#30006"
 msgid "Randomize Playlist"
 msgstr ""
 
+msgctxt "#30007"
+msgid "Enter API-Key"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Enter API-Secret Key"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Use Personal Last.FM API KEY (recommended)"
+msgstr ""

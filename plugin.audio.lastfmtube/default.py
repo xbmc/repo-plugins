@@ -43,8 +43,8 @@ RANDOM_PLAY= REAL_SETTINGS.getSetting('RANDOM_PLAY') == "true"
 YTURL      = 'plugin://plugin.video.youtube/play/?video_id='
 YSSEARCH   = 'plugin://plugin.video.youtube/kodion/search/query/?q=%s'
 DEBUG      = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true' 
-API_KEY    = "c040161c4de4ae8698b35a3f017152fc" #
-API_SECRET = "cbce254adc0584713043966fae0b58a5" #
+API_KEY    = REAL_SETTINGS.getSetting('LASTFM_APIKEY')
+API_SECRET = REAL_SETTINGS.getSetting('LASTFM_APISECRET')
 
 USERLST    = []
 if len(USER1) > 0:

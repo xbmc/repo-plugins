@@ -1,3 +1,6 @@
+v2.5.17
+Fixed Channel A-Z.
+
 v2.5.16
 Add support for 'technical-replacement' stream type.
 

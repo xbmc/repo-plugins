@@ -17,17 +17,16 @@
 # along with PlutoTV.  If not, see <http://www.gnu.org/licenses/>.
 
 # -*- coding: utf-8 -*-
-import os, sys, time, datetime, net, requests, re
+import os, sys, time, datetime, net, requests, re, traceback
 import urllib, socket, json, urlresolver, collections
 import xbmc, xbmcgui, xbmcplugin, xbmcvfs, xbmcaddon
 
-from simplecache import use_cache, SimpleCache
-
+from simplecache import SimpleCache
 # Plugin Info
 ADDON_ID      = 'plugin.video.plutotv'
 REAL_SETTINGS = xbmcaddon.Addon(id=ADDON_ID)
 ADDON_NAME    = REAL_SETTINGS.getAddonInfo('name')
-SETTINGS_LOC  = REAL_SETTINGS.getAddonInfo('profile').decode('utf-8')
+SETTINGS_LOC  = REAL_SETTINGS.getAddonInfo('profile')
 ADDON_PATH    = REAL_SETTINGS.getAddonInfo('path').decode('utf-8')
 ADDON_VERSION = REAL_SETTINGS.getAddonInfo('version')
 ICON          = REAL_SETTINGS.getAddonInfo('icon')
@@ -57,6 +56,8 @@ PLUTO_MENU  = [("Channel Guide"  , BASE_LINEUP, 0),
               
 def log(msg, level=xbmc.LOGDEBUG):
     if DEBUG == True:
+        if level == xbmc.LOGERROR:
+            msg += ' ,' + traceback.format_exc()
         xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + stringify(msg), level)
         
 def stringify(string):
@@ -90,16 +91,15 @@ def getParams():
     return param
                  
 socket.setdefaulttimeout(TIMEOUT)
+
 class PlutoTV():
     def __init__(self):
         log('__init__')
-        self.net          = net.Net()
-        self.cache        = SimpleCache()
+        self.net   = net.Net()
+        self.cache = SimpleCache()
         self.categoryMenu = self.getCategories()
-        self.login()
+
         
-        
-    @use_cache(1)
     def login(self):
         log('login')
         header_dict               = {}
@@ -110,14 +110,21 @@ class PlutoTV():
         header_dict['Origin']     = 'http://pluto.tv'
         header_dict['User-Agent'] = 'Mozilla/5.0 (Windows NT 6.2; rv:24.0) Gecko/20100101 Firefox/24.0'
 
-        if USER_EMAIL != '':
-                    
+        if len(USER_EMAIL) > 0:
+            try:
+                #remove COOKIE_JAR Folder
+                xbmcvfs.rmdir(COOKIE_JAR)
+            except:
+                pass
+                
             if xbmcvfs.exists(COOKIE_JAR) == False:
                 try:
-                    xbmcvfs.mkdirs(COOKIE_JAR)
+                    xbmcvfs.mkdirs(SETTINGS_LOC)
+                    f = xbmcvfs.File(COOKIE_JAR, 'w')
+                    f.close()
                 except:
-                    log('Unable to create the storage directory', xbmc.LOGERROR)
-
+                    log('login, Unable to create the storage directory', xbmc.LOGERROR)
+            
             form_data = ({'optIn': 'true', 'password': PASSWORD,'synced': 'false', 'userIdentity': USER_EMAIL})
             self.net.set_cookies(COOKIE_JAR)
             try:
@@ -127,12 +134,11 @@ class PlutoTV():
                     self.net.save_cookies(COOKIE_JAR)
                     return True
                 else:
-                    raise Exception()
+                    xbmcgui.Dialog().notification(ADDON_NAME, 'Invalid User Credentials', ICON, 4000)
             except Exception,e:
-                xbmcgui.Dialog().notification(ADDON_NAME, 'Invalid User Credentials', ICON, 4000)
-    
-    
-    @use_cache(1)
+                log('login, Unable to create the storage directory ' + str(e), xbmc.LOGERROR)
+
+
     def openURL(self, url):
         log('openURL, url = ' + url)
         try:
@@ -144,29 +150,26 @@ class PlutoTV():
             header_dict['Origin']     = 'http://pluto.tv'
             header_dict['User-Agent'] = 'Mozilla/5.0 (Windows NT 6.2; rv:24.0) Gecko/20100101 Firefox/24.0'
             self.net.set_cookies(COOKIE_JAR)
-            trans_table = ''.join( [chr(i) for i in range(128)] + [' '] * 128 )
-            try:
-                req = self.net.http_GET(url, headers=header_dict).content.encode("utf-8", 'ignore')
-            except:
-                req = self.net.http_GET(url, headers=header_dict).content.translate(trans_table)
-            self.net.save_cookies(COOKIE_JAR)
-            return req
-        except:
-            xbmcgui.Dialog().notification(ADDON_NAME, 'Unable to Connect, Check User Credentials', ICON, 4000)
-            return '{}'
-        
-        
-    def loadJson(self, string):
-        if len(string) == 0:
-            return {}
-        try:
-            return json.loads(stringify(string))
+            trans_table   = ''.join( [chr(i) for i in range(128)] + [' '] * 128 )
+            cacheResponce = self.cache.get(ADDON_NAME + 'openURL, url = %s'%url)
+            if not cacheResponce:
+                try:
+                    req = self.net.http_GET(url, headers=header_dict).content.encode("utf-8", 'ignore')
+                except:
+                    req = self.net.http_GET(url, headers=header_dict).content.translate(trans_table)
+                self.net.save_cookies(COOKIE_JAR)
+                self.cache.set(ADDON_NAME + 'openURL, url = %s'%url, json.loads(stringify(req)), expiration=datetime.timedelta(hours=8))
+            responce = self.cache.get(ADDON_NAME + 'openURL, url = %s'%url)
+            if len(responce) > 0:
+                return responce
         except Exception,e:
-            return {}
+            log('openURL, Unable to open url ' + str(e), xbmc.LOGERROR)
+            xbmcgui.Dialog().notification(ADDON_NAME, 'Unable to Connect, Check User Credentials', ICON, 4000)
+        
 
-            
     def mainMenu(self):
         log('mainMenu')
+        self.login()
         for item in PLUTO_MENU:
             self.addDir(*item)
             
@@ -176,13 +179,12 @@ class PlutoTV():
         for item in self.categoryMenu:
             self.addDir(*item)
             
-        
-    @use_cache(1)
+
     def getCategories(self):
         log('getCategories')
         collect= []
         lineup = []
-        data = self.loadJson(self.openURL(BASE_LINEUP))
+        data = self.openURL(BASE_LINEUP)
         for channel in data:
             collect.append(channel['category'])
         counter = collections.Counter(collect)
@@ -191,12 +193,13 @@ class PlutoTV():
         lineup.insert(0,("Featured"  , BASE_LINEUP, 2))
         lineup.insert(2,("All Channels", BASE_LINEUP, 2))
         del collect[:]
-        return lineup
+        if len(lineup) > 0:
+            return lineup
         
             
     def browse(self, chname, url):
         log('browse, chname = ' + chname)
-        data = self.loadJson(self.openURL(url))
+        data = (self.openURL(url))
         for channel in data:
             id     = channel['_id']
             cat    = channel['category']
@@ -245,7 +248,7 @@ class PlutoTV():
     def browseGuide(self, start=0, end=24):
         log('browseGuide')
         start = 0 if start == BASE_LINEUP else int(start)
-        data  = self.loadJson(self.openURL(BASE_LINEUP))
+        data  = (self.openURL(BASE_LINEUP))
         data  = list(self.pagination(data, end))
         start = 0 if start >= len(data) else start
         for channel in data[start]:
@@ -263,7 +266,7 @@ class PlutoTV():
 
             t1   = datetime.datetime.now().strftime('%Y-%m-%dT%H:00:00')
             t2   = (datetime.datetime.now() + datetime.timedelta(hours=8)).strftime('%Y-%m-%dT%H:00:00')
-            link = self.loadJson(self.openURL(BASE_GUIDE % (t1,t2)))
+            link = (self.openURL(BASE_GUIDE % (t1,t2)))
             item = link[chid][0]
             epid      = (item['episode']['_id'])
             epname    = item['episode']['name']
@@ -306,18 +309,15 @@ class PlutoTV():
         playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
         playlist.clear()
         
-        if not 'sched' in url:
-            t1   = datetime.datetime.now().strftime('%Y-%m-%dT%H:00:00')
-            t2   = (datetime.datetime.now() + datetime.timedelta(hours=8)).strftime('%Y-%m-%dT%H:00:00')
-            link = self.loadJson(self.openURL(BASE_GUIDE % (t1,t2)))
-            item = link[origurl][0]
-            id = item['episode']['_id']
-            ch_start = datetime.datetime.fromtimestamp(time.mktime(time.strptime(item["start"].replace('.000Z','').replace('T',' '), "%Y-%m-%d %H:%M:%S")))
-            ch_timediff = (datetime.datetime.now() - ch_start).seconds
-        else:
-            id = url.replace('sched','')
+        t1   = datetime.datetime.now().strftime('%Y-%m-%dT%H:00:00')
+        t2   = (datetime.datetime.now() + datetime.timedelta(hours=8)).strftime('%Y-%m-%dT%H:00:00')
+        link = (self.openURL(BASE_GUIDE % (t1,t2)))
+        item = link[origurl][0]
+        id = item['episode']['_id']
+        ch_start = datetime.datetime.fromtimestamp(time.mktime(time.strptime(item["start"].replace('.000Z','').replace('T',' '), "%Y-%m-%d %H:%M:%S")))
+        ch_timediff = (datetime.datetime.now() - ch_start).seconds
 
-        data = self.loadJson(self.openURL(BASE_CLIPS %(id)))
+        data = (self.openURL(BASE_CLIPS %(id)))
         dur_sum  = 0
         for idx, field in enumerate(data):
             url       = (field['url'] or field['code'])
@@ -350,21 +350,17 @@ class PlutoTV():
     def playContent(self, name, url):
         log('playContent')
         origurl = url            
-        if not 'sched' in url:
-            t1   = datetime.datetime.now().strftime('%Y-%m-%dT%H:00:00')
-            t2   = (datetime.datetime.now() + datetime.timedelta(hours=8)).strftime('%Y-%m-%dT%H:00:00')
-            link = self.loadJson(self.openURL(BASE_GUIDE % (t1,t2)))
-            item = link[origurl][0]
-            id = item['episode']['_id']
-            ch_start = datetime.datetime.fromtimestamp(time.mktime(time.strptime(item["start"].replace('.000Z','').replace('T',' '), "%Y-%m-%d %H:%M:%S")))
-            ch_timediff = (datetime.datetime.now() - ch_start).seconds
-        else:
-            id = url.replace('sched','')
-
-        data = self.loadJson(self.openURL(BASE_CLIPS %(id)))
+        t1   = datetime.datetime.now().strftime('%Y-%m-%dT%H:00:00')
+        t2   = (datetime.datetime.now() + datetime.timedelta(hours=8)).strftime('%Y-%m-%dT%H:00:00')
+        link = (self.openURL(BASE_GUIDE % (t1,t2)))
+        item = link[origurl][0]
+        id = item['episode']['_id']
+        ch_start = datetime.datetime.fromtimestamp(time.mktime(time.strptime(item["start"].replace('.000Z','').replace('T',' '), "%Y-%m-%d %H:%M:%S")))
+        ch_timediff = (datetime.datetime.now() - ch_start).seconds
+        data = (self.openURL(BASE_CLIPS %(id)))
         dur_sum  = 0
+        
         for idx, field in enumerate(data):
-            print field
             url       = (field['url'] or field['code'])
             name      = field['name']
             thumb     = (field['thumbnail'] or ICON)

@@ -21,7 +21,7 @@ import os, sys, time, datetime, net, requests, re, traceback
 import urllib, socket, json, urlresolver, collections
 import xbmc, xbmcgui, xbmcplugin, xbmcvfs, xbmcaddon
 
-from simplecache import use_cache, SimpleCache
+from simplecache import SimpleCache
 # Plugin Info
 ADDON_ID      = 'plugin.video.plutotv'
 REAL_SETTINGS = xbmcaddon.Addon(id=ADDON_ID)
@@ -179,8 +179,7 @@ class PlutoTV():
         for item in self.categoryMenu:
             self.addDir(*item)
             
-        
-    @use_cache(1)
+
     def getCategories(self):
         log('getCategories')
         collect= []
@@ -300,7 +299,7 @@ class PlutoTV():
                 return VMURL + url.split('/vimeo.com/')[1]
         return urlresolver.resolve(url)
 
-     
+    
     def playChannel(self, name, url):
         log('playChannel')
         if PTVL_RUN == True:
@@ -347,7 +346,7 @@ class PlutoTV():
             playlist.add(url, liz, idx)
             xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
 
-     
+    
     def playContent(self, name, url):
         log('playContent')
         origurl = url            
@@ -387,7 +386,7 @@ class PlutoTV():
                 liz.setProperty('ResumeTime', str(vid_offset) )
             self.addLink(name, url, 7, infoList, infoArt, len(data))
 
-           
+    
     def playVideo(self, name, url, list=None):
         log('playVideo')
         if not list:

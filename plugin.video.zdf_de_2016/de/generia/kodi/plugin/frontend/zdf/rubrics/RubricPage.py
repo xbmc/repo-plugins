@@ -1,3 +1,5 @@
+import xbmcgui
+
 from de.generia.kodi.plugin.backend.zdf.RubricResource import RubricResource       
 from de.generia.kodi.plugin.backend.zdf.api.VideoContentResource import VideoContentResource
 
@@ -21,6 +23,13 @@ class RubricPage(AbstractPage):
 
         rubricResource = RubricResource(Constants.baseUrl + rubricUrl, listType, listStart, listEnd)
         self._parse(rubricResource)
+        
+        if rubricResource.isRedirect:
+            self.info("redirect detected to url='{}', skipping ...", rubricResource.responseLocation)
+            dialog = xbmcgui.Dialog()
+            dialog.ok(self._(32041), self._(32042, rubricUrl, rubricResource.responseLocation))
+            return
+        
         clusters = rubricResource.clusters
         
         if listType is not None:

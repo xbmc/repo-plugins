@@ -20,6 +20,6 @@ This addon was tested with
 - Kodi 17.0 "Krypton" beta 5, Estouchy Skin, MacOS/Linux 
 
 This addon is known to work with
-- XBMC 13.2 "Gotham", see generia/plugin.video.zdf_de_2016#4
+- XBMC 13.2 "Gotham", see issue #4
 
 Have fun.

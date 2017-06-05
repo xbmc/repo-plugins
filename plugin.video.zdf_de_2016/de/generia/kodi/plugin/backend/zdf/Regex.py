@@ -18,3 +18,7 @@ def compile(regex):
 
 def stripTag(tag, string):
     return re.sub(r'<' + tag + '[^>]*>[^<]*</' + tag + '>', '', string)
+
+
+def cleanTags(string):
+    return re.sub(r'</?[^>]*>', '', string)

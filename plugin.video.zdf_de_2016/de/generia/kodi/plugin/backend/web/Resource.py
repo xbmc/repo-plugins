@@ -9,6 +9,7 @@ class Resource(object):
     def __init__(self, url, accept):
         self.url = url
         self.accept = accept
+        self.responseLocation = None
         
     def parse(self):
         log = None
@@ -34,6 +35,9 @@ class Resource(object):
             response = urllib2.urlopen(request, context=ssl._create_unverified_context())
         else:
             response = urllib2.urlopen(request)
+        
+        if response.url is not None:    
+            self.responseLocation = response.url
             
         content = response.read()
         response.close()

@@ -4,6 +4,7 @@ from de.generia.kodi.plugin.backend.zdf import stripHtml
 from de.generia.kodi.plugin.backend.zdf.Regex import getTagPattern
 from de.generia.kodi.plugin.backend.zdf.Regex import getTag
 from de.generia.kodi.plugin.backend.zdf.Regex import stripTag
+from de.generia.kodi.plugin.backend.zdf.Regex import cleanTags
 from de.generia.kodi.plugin.backend.zdf.Regex import compile
 
 teaserPattern = getTagPattern('article', 'b-content-teaser-item')
@@ -155,12 +156,11 @@ class Teaser(object):
 
             j = article.find('</a>', i)
             # check for '<span class="arrowhover ...'
-            k = article.find('<span', i)
+            k = article.find('<span class="arrowhover', i)
             if k != -1 and k < j:
                 j = k
             title = article[i:j]
-            title = title.replace('<strong>', '')
-            title = title.replace('</strong>', '')
+            title = cleanTags(title)
             title = title.strip()
             pos = j + len('</a>') 
     

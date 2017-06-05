@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.audio.mikemassetv" version="1.0.0" name="Mike Masse - YouTube" provider-name="Lunatixz">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="plugin.video.youtube" version="5.3.10"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Awesome rock and alt. rock acoustic covers</summary>
+        <description lang="en_GB">Mike Massé is a former public defender turned full-time musician known for his acoustic covers of some of the best music ever written. His channel features many live performances filmed at the Pie Pizzeria in Salt Lake City. Mike now resides in the Denver area with his family.</description>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+        <source>https://github.com/Lunatixz/XBMC_Addons/tree/master/plugin.audio.mikemassetv</source>
+        <news></news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

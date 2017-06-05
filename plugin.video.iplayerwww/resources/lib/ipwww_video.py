@@ -519,7 +519,7 @@ def ScrapeAtoZEpisodes(page_url):
         # NOTE remove inner li to match outer li
 
         # <li data-version-type="hd">
-        html = re.compile(r'<li data-version-type.*?</li>',
+        html = re.compile(r'<li class="content-flags__item" data-version-type.*?</li>',
                           flags=(re.DOTALL | re.MULTILINE)).sub('', html)
 
         # <li class="list-item programme"  data-ip-id="p026f2t4">
@@ -557,7 +557,7 @@ def ScrapeAtoZEpisodes(page_url):
             # <h2 class="list-item__programme-info__subtitle typo typo--skylark">
             # Series 39: 14. Burton Constable 2</h2>
             subtitle_match = re.search(
-                r'<h2 class="list-item__programme-info__subtitle.+?">\s*(.*?)\s*</h2>',
+                r'<.+?class="list-item__programme-info__subtitle.+?">(.*?)<',
                 li, flags=(re.DOTALL | re.MULTILINE))
             if subtitle_match:
                 subtitle = subtitle_match.group(1)
@@ -574,14 +574,13 @@ def ScrapeAtoZEpisodes(page_url):
                 if image:
                     icon = "https://ichef.bbci.co.uk/images/ic/832x468/" + image + ".jpg"
 
-
             type = None
             synopsis = ''
             # <p class="list-item__programme-info__synopsis">
             # Take an exclusive first look at this year’s candidates.
             # </p>
             synopsis_match = re.search(
-                r'<p class="list-item__programme-info__synopsis">\s*(.*?)\s*</p>',
+                r'<p class="list-item__programme-info__synopsis.*?">\s*(.*?)\s*</p>',
                 li, flags=(re.DOTALL | re.MULTILINE))
             if synopsis_match:
                 synopsis = synopsis_match.group(1)

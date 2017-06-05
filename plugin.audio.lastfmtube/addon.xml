@@ -1,0 +1,24 @@
+<addon id="plugin.audio.lastfmtube" version="1.0.0" name="LastFM Tube" provider-name="Lunatixz">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.simplecache" version="1.0.0"/>
+        <import addon="script.module.pylast" version="0.0.1"/>
+        <import addon="plugin.video.youtube" version="5.3.10"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Play your favorite music videos powered by YouTube and your Last.FM scrobble data.</summary>
+        <description lang="en_GB">The world's largest online music catalogue, powered by your scrobbles and paired with YouTube.</description>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+        <source>https://github.com/Lunatixz/XBMC_Addons/tree/master/plugin.audio.lastfmtube</source>
+        <forum>https://forum.kodi.tv/showthread.php?tid=315688</forum>
+        <news></news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

@@ -1,0 +1,13 @@
+<settings>  
+    <setting id="USER1" type="text" label="30001" default="Enter Username"/>
+    <setting id="PASS1" type="text" label="30002" default="Enter Password" subsetting="true" visible="!eq(-1,Enter Username)"/>
+    <setting id="USER2" type="text" label="30003" default="Enter Username" visible="!eq(-1,Enter Password)"/>
+    <setting id="PASS2" type="text" label="30004" default="Enter Password" subsetting="true" visible="!eq(-1,Enter Username)"/> 
+    <setting id="MEDIA_LIMIT" type="enum" label="30005" values="25|50|100|250" default="0"/>
+    <setting id="RANDOM_PLAY"  type="bool" label="30006" default="false" />
+    <setting id="USER_API" type="bool" label="30009" default="false" />
+    <setting id="LASTFM_APIKEY" type="text"  label="30007" option="hidden" default="c040161c4de4ae8698b35a3f017152fc" visible="eq(-1,true)"/> 
+    <setting id="LASTFM_APISECRET" type="text" label="30008" option="hidden" default="cbce254adc0584713043966fae0b58a5" visible="eq(-2,true)"/> 
+    
+    <setting id="Enable_Debugging" type="bool" label="30000" default="false" />
+</settings>

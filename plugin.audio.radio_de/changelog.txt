@@ -1,3 +1,6 @@
+2.3.2 (07.06.2017)
+    - fixed playback
+
 2.3.1 (15.02.2015)
     - updated translations
 

@@ -36,7 +36,7 @@ CLIPART       = os.path.join(ADDON_PATH,'resources','images','videoclips.jpg')
 
 ## GLOBALS ##
 TIMEOUT     = 15
-DEBUG       = True#REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
+DEBUG       = True
 BASE_URL    = 'http://watchnewson.com/'
 BASE_API    = 'http://watchnewson.com/api/linear/channels'
 USER_REGION = 'US'
@@ -96,16 +96,13 @@ class NewsOn():
                 request.add_header('User-Agent','Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11')
                 page = urllib2.urlopen(request, timeout = 15)
                 self.cache.set(ADDON_NAME + 'openURL, url = %s'%url, json.loads(page.read()), expiration=datetime.timedelta(hours=1))
-            responce = self.cache.get(ADDON_NAME + 'openURL, url = %s'%url)
-            if len(responce) > 0:
-                return responce
+            return self.cache.get(ADDON_NAME + 'openURL, url = %s'%url)
         except urllib2.URLError, e:
             log("openURL Failed! " + str(e), xbmc.LOGERROR)
         except socket.timeout, e:
             log("openURL Failed! " + str(e), xbmc.LOGERROR)
-        return {}
 
-        
+            
     def mainMenu(self):
         log('mainMenu')
         for item in MENU:
@@ -189,8 +186,7 @@ class NewsOn():
                     infoArt    ={"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON} 
                     self.addLink(title, url, 9, infoLabels, infoArt)
                             
-                    
-                    
+                                        
     def pagination(self, seq, rowlen):
         for start in xrange(0, len(seq), rowlen):
             yield seq[start:start+rowlen]

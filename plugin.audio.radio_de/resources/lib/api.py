@@ -116,6 +116,8 @@ class RadioApi():
         path = 'broadcast/getbroadcastembedded'
         param = {'broadcast': str(station_id)}
         station = self.__api_call(path, param)
+        if self.__check_redirect(station['streamURL']):
+            station['streamURL'] = self.__follow_redirect(station['streamURL'])
         if resolve_playlists and self.__check_paylist(station['streamURL']):
             playlist_url = station['streamURL']
             station['streamURL'] = self.__resolve_playlist(station)
@@ -180,6 +182,13 @@ class RadioApi():
             return random.choice(servers)
         return stream_url
 
+    def __follow_redirect(self, url):
+        self.log('__follow_redirect probing url=%s' % url)
+        req = Request(url)
+        req.add_header('User-Agent', self.user_agent)
+        response = urlopen(req)
+        return response.geturl()
+
     def __urlopen(self, url):
         self.log('__urlopen opening url=%s' % url)
         req = Request(url)
@@ -225,6 +234,14 @@ class RadioApi():
         for prefix in RadioApi.PLAYLIST_PREFIXES:
             if stream_url.lower().endswith(prefix):
                 return True
+        return False
+
+    @staticmethod
+    def __check_redirect(stream_url):
+        if 'addrad.io' in stream_url:
+            return True
+        if '.nsv' in stream_url:
+            return True
         return False
 
     @staticmethod

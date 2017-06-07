@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
   <!--Login-->
-  <category label="30000">      
+  <category label="30000">
     <setting id="username" type="text" label="30001" default=""/>
     <setting id="password" type="text" label="30002" option="hidden" default=""/>
     <setting id="logout" type="action" label="30003" action="RunPlugin(plugin://plugin.video.psvue/?mode=999)" option="close" />
@@ -10,6 +10,7 @@
 
   <!-- Hidden -->
   <setting id="reqPayload" type="text" default="" visible="false"/>
+  <setting id="last_auth" type="text" default="" visible="false"/>
   <setting id="deviceId" type="text" default="" visible="false"/>
   <setting id="npsso" type="text" default="" visible="false"/>
   <setting id="default_profile" type="text" default="" visible="false"/>

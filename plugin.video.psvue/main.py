@@ -1,4 +1,4 @@
-from resources.lib.globals import *
+from resources.lib.ps_vue import *
 
 params=get_params()
 url=None
@@ -23,13 +23,17 @@ try:
 except:
     pass
 
-if mode != 900: check_reqpayload()
 
-if mode == None:                        
-    if ADDON.getSetting(id='default_profile') == '':
-        get_profiles()
-    
-    main_menu()    
+sony = SONY()
+if ADDON.getSetting(id='last_auth') != '':
+    last_auth = stringToDate(ADDON.getSetting(id='last_auth'), "%Y-%m-%dT%H:%M:%S.%fZ")
+    if (datetime.now() - last_auth).total_seconds() >= 5400: sony.check_auth()
+else:
+    sony.check_auth()
+
+if mode == None:
+    if ADDON.getSetting(id='default_profile') == '': sony.get_profiles()
+    main_menu()
 
 elif mode == 50:
     timeline()
@@ -59,7 +63,7 @@ elif mode == 700:
     featured()
 
 elif mode == 800:
-    get_profiles()
+    sony.get_profiles()
     main_menu()
 
 elif mode == 900:
@@ -69,7 +73,7 @@ elif mode == 998:
     sys.exit()
 
 elif mode == 999:
-    logout()
+    sony.logout()
     main_menu()
 
 

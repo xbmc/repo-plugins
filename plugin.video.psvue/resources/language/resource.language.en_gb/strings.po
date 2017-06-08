@@ -88,3 +88,28 @@ msgstr ""
 msgctxt "#30204"
 msgid "Please enter your verification code"
 msgstr ""
+
+msgctxt "#30205"
+msgid "Profile Not Found"
+msgstr ""
+
+msgctxt "#30206"
+msgid "Your profile list could not be retrieved"
+msgstr ""
+
+msgctxt "#30207"
+msgid "Authorization Failed"
+msgstr ""
+
+msgctxt "#30208"
+msgid "Could not retrieve grant code"
+msgstr ""
+
+msgctxt "#30209"
+msgid "Could not retrieve the reqpayload"
+msgstr ""
+
+
+msgctxt "#30210"
+msgid "Choose Profile"
+msgstr ""

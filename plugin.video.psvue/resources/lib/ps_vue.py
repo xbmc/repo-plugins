@@ -1,11 +1,12 @@
 import sys, os
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 import random
-import cookielib, urllib, urlparse
+import cookielib, urllib
 import json
 import requests
 import time, calendar
 from datetime import date, datetime, timedelta
+from sony import SONY
 
 
 def main_menu():
@@ -144,12 +145,12 @@ def list_episode(show):
     title = show['display_episode_title']
     airing_id = str(show['airings'][0]['airing_id'])
     airing_date = show['airing_date']
-    airing_date = stringToDate(airing_date, "%Y-%m-%dT%H:%M:%S.000Z")
+    airing_date = stringToDate(airing_date, "%Y-%m-%dT%H:%M:%S.%fZ")
     airing_date = UTCToLocal(airing_date)
     broadcast_date = ''
     if 'broadcast_date' in show:
         broadcast_date = show['broadcast_date']
-        broadcast_date = stringToDate(broadcast_date, "%Y-%m-%dT%H:%M:%S.000Z")
+        broadcast_date = stringToDate(broadcast_date, "%Y-%m-%dT%H:%M:%S.%fZ")
         broadcast_date = UTCToLocal(broadcast_date)
 
     genre = ''
@@ -236,8 +237,6 @@ def get_stream(url):
 
     r = requests.get(url, headers=headers, cookies=load_cookies(), verify=VERIFY)
     json_source = r.json()
-    # save_cookies(r.cookies)
-
     stream_url = json_source['body']['video']
     stream_url = stream_url + '|User-Agent=Dalvik/2.1.0 (Linux; U; Android 6.0.1 Build/MOB31H)&Cookie=reqPayload=' + urllib.quote('"' + ADDON.getSetting(id='reqPayload') + '"')
 
@@ -254,213 +253,6 @@ def get_stream(url):
     if xbmc.Player().isPlayingVideo():
         xbmc.Player().seekTime(600)
     '''
-
-
-def put_resume_time():
-    """
-    PUT https://sentv-user-action.totsuko.tv/sentv_user_action/ws/v2/watch_history HTTP/1.1
-    Host: sentv-user-action.totsuko.tv
-    Connection: keep-alive
-    Content-Length: 247
-    Accept: */*
-    reqPayload: redacted
-    User-Agent: Mozilla/5.0 (Linux; Android 6.0.1; Build/MOB31H; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/44.0.2403.119 Safari/537.36
-    Origin: https://themis.dl.playstation.net
-    Content-Type: application/json
-    Referer: https://themis.dl.playstation.net/themis/zartan/2.2.2b/
-    Accept-Encoding: gzip, deflate
-    Accept-Language: en-US
-    X-Requested-With: com.snei.vue.android
-
-    {"series_id":21188,"program_id":1320750,"channel_id":25039,"tms_id":"EP005544655496","airing_id":14626670,"last_watch_date":"2017-04-28T00:40:43Z","last_timecode":"01:46:29","start_timecode":"00:00:00:00","fully_watched":false,"stream_type":"dvr"}
-    """
-    url = 'https://sentv-user-action.totsuko.tv/sentv_user_action/ws/v2/watch_history'
-    headers = {"Accept": "*/*",
-               "Content-type": "application/json",
-               "Origin": "https://themis.dl.playstation.net",
-               "Accept-Language": "en-US",
-               "Referer": "https://themis.dl.playstation.net/themis/zartan/2.2.2b/",
-               "Accept-Encoding": "gzip, deflate",
-               "User-Agent": UA_ANDROID,
-               "Connection": "Keep-Alive",
-               'reqPayload': ADDON.getSetting(id='reqPayload'),
-               'X-Requested-With': 'com.snei.vue.android'
-               }
-
-    payload = '{"series_id":21188,'
-    payload += '"program_id":1320750,'
-    payload += '"channel_id":25039,'
-    payload += '"tms_id":"EP005544655496",'
-    payload += '"airing_id":14626670,'
-    payload += '"last_watch_date":"2017-04-28T00:40:43Z",'
-    payload += '"last_timecode":"01:46:29",'
-    payload += '"start_timecode":"00:00:00:00",'
-    payload += '"fully_watched":false,'
-    payload += '"stream_type":"dvr"}'
-
-    r = requests.put(url, headers=headers, data=payload, verify=VERIFY)
-
-
-def login():
-    global USERNAME
-    if USERNAME == '':
-        dialog = xbmcgui.Dialog()
-        USERNAME = dialog.input(LOCAL_STRING(30202), type=xbmcgui.INPUT_ALPHANUM)
-        if USERNAME != '':
-            ADDON.setSetting(id='username', value=USERNAME)
-        else:
-            sys.exit()
-
-    global PASSWORD
-    if PASSWORD == '':
-        dialog = xbmcgui.Dialog()
-        PASSWORD = dialog.input(LOCAL_STRING(30203), type=xbmcgui.INPUT_ALPHANUM,
-                                option=xbmcgui.ALPHANUM_HIDE_INPUT)
-        if PASSWORD != '':
-            ADDON.setSetting(id='password', value=PASSWORD)
-        else:
-            sys.exit()
-
-    if USERNAME != '' and PASSWORD != '':
-        url = 'https://auth.api.sonyentertainmentnetwork.com/2.0/ssocookie'
-        headers = {"Accept": "*/*",
-                   "Content-type": "application/x-www-form-urlencoded",
-                   "Origin": "https://id.sonyentertainmentnetwork.com",
-                   "Accept-Language": "en-US,en;q=0.8",
-                   "Accept-Encoding": "deflate",
-                   "User-Agent": UA_ANDROID,
-                   "Connection": "Keep-Alive"
-                   }
-
-        payload = 'authentication_type=password&username='+urllib.quote_plus(USERNAME)+'&password='+urllib.quote_plus(PASSWORD)+'&client_id='+LOGIN_CLIENT_ID
-        r = requests.post(url, headers=headers, cookies=load_cookies(), data=payload, verify=VERIFY)
-        json_source = r.json()
-        save_cookies(r.cookies)
-
-        if 'npsso' in json_source:
-            npsso = json_source['npsso']
-            ADDON.setSetting(id='npsso', value=npsso)
-        elif 'authentication_type' in json_source:
-            if json_source['authentication_type'] == 'two_step':
-                ticket_uuid = json_source['ticket_uuid']
-                two_step_verification(ticket_uuid)
-        elif 'error_description' in json_source:
-            msg = json_source['error_description']
-            dialog = xbmcgui.Dialog()
-            ok = dialog.ok(LOCAL_STRING(30200), msg)
-            sys.exit()
-        else:
-            # Something went wrong during login
-            dialog = xbmcgui.Dialog()
-            ok = dialog.ok(LOCAL_STRING(30200), LOCAL_STRING(30201))
-            sys.exit()
-
-
-def two_step_verification(ticket_uuid):
-    dialog = xbmcgui.Dialog()
-    code = dialog.input(LOCAL_STRING(30204), type=xbmcgui.INPUT_ALPHANUM)
-    if code == '': sys.exit()
-
-    url = 'https://auth.api.sonyentertainmentnetwork.com/2.0/ssocookie'
-    headers = {
-        "Accept": "*/*",
-        "Content-type": "application/x-www-form-urlencoded",
-        "Origin": "https://id.sonyentertainmentnetwork.com",
-        "Accept-Language": "en-US,en;q=0.8",
-        "Accept-Encoding": "deflate",
-        "User-Agent": UA_ANDROID,
-        "Connection": "Keep-Alive",
-        "Referer": "https://id.sonyentertainmentnetwork.com/signin/?service_entity=urn:service-entity:psn&ui=pr&service_logo=ps&response_type=code&scope=psn:s2s&client_id="+REQ_CLIENT_ID+"&request_locale=en_US&redirect_uri=https://io.playstation.com/playstation/psn/acceptLogin&error=login_required&error_code=4165&error_description=User+is+not+authenticated"
-    }
-
-    payload = 'authentication_type=two_step&ticket_uuid='+ticket_uuid+'&code='+code+'&client_id='+LOGIN_CLIENT_ID
-    r = requests.post(url, headers=headers, cookies=load_cookies(), data=payload, verify=VERIFY)
-    json_source = r.json()
-    save_cookies(r.cookies)
-
-    if 'npsso' in json_source:
-        npsso = json_source['npsso']
-        ADDON.setSetting(id='npsso', value=npsso)
-    elif 'error_description' in json_source:
-        msg = json_source['error_description']
-        dialog = xbmcgui.Dialog()
-        ok = dialog.ok(LOCAL_STRING(30200), msg)
-        sys.exit()
-    else:
-        # Something went wrong during login
-        dialog = xbmcgui.Dialog()
-        ok = dialog.ok(LOCAL_STRING(30200), LOCAL_STRING(30201))
-        sys.exit()
-
-
-def logout():
-    url = 'https://auth.api.sonyentertainmentnetwork.com/2.0/ssocookie'
-    headers = {
-        "User-Agent": "com.sony.snei.np.android.sso.share.oauth.versa.USER_AGENT",
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Connection": "Keep-Alive",
-        "Accept-Encoding": "gzip"
-    }
-
-    r = requests.delete(url, headers=headers, cookies=load_cookies(), verify=VERIFY)
-    # Clear addon settings
-    ADDON.setSetting(id='reqPayload', value='')
-    ADDON.setSetting(id='npsso', value='')
-    ADDON.setSetting(id='default_profile', value='')
-
-
-def get_reqpayload():
-    url = 'https://auth.api.sonyentertainmentnetwork.com/2.0/oauth/authorize'
-    url += '?state=209189737'
-    url += '&duid=' + DEVICE_ID
-    url += '&ui=pr'
-    url += '&animation=enable'
-    url += '&client_id=' + REQ_CLIENT_ID
-    url += '&device_base_font_size=10'
-    url += '&device_profile=tablet'
-    url += '&hidePageElements=noAccountSection'
-    url += '&redirect_uri=https%3A%2F%2Fthemis.dl.playstation.net%2Fthemis%2Fzartan%2Fredirect.html'
-    url += '&response_type=code'
-    url += '&scope=psn%3As2s'
-    url += '&service_entity=urn%3Aservice-entity%3Anp'
-    url += '&service_logo=ps'
-    url += '&smcid=android%3Apsvue'
-    url += '&support_scheme=sneiprls'
-
-    headers = {"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-               "X-Requested-With": "com.snei.vue.android",
-               "Accept-Language": "en-US",
-               "Accept-Encoding": "deflate",
-               "User-Agent": UA_ANDROID,
-               "Connection": "Keep-Alive",
-               "Upgrade-Insecure-Requests": "1",
-               "Referer": "https://id.sonyentertainmentnetwork.com/signin/?hidePageElements=noAccountSection&smcid=android%3Apsvue&client_id=" + REQ_CLIENT_ID + "&response_type=code&scope=psn%3As2s&redirect_uri=https%3A%2F%2Fthemis.dl.playstation.net%2Fthemis%2Fzartan%2Fredirect.html&state=209189737&service_entity=urn%3Aservice-entity%3Anp&duid=" + DEVICE_ID + "&ui=pr&support_scheme=sneiprls&device_profile=tablet&device_base_font_size=10&animation=enable&service_logo=ps&error=login_required&error_code=4165&error_description=User+is+not+authenticated"
-               }
-
-    r = requests.get(url, headers=headers, cookies=load_cookies(), verify=VERIFY)
-    last_url = r.url
-    parsed = urlparse.urlparse(last_url)
-    code = urlparse.parse_qs(parsed.query)['code'][0]
-
-    # Get reqPayload
-    url = 'https://sentv-user-auth.totsuko.tv/sentv_user_auth/ws/oauth2/token'
-    url += '?device_type_id=android_tablet'
-    url += '&device_id=' + DEVICE_ID
-    url += '&code=' + code
-    url += '&redirect_uri=https%3A%2F%2Fthemis.dl.playstation.net%2Fthemis%2Fzartan%2Fredirect.html'
-
-    headers = {"Accept": "*/*",
-               "Origin": "https://themis.dl.playstation.net",
-               "Connection": "Keep-Alive",
-               "Accept-Encoding": "gzip"
-               }
-
-    r = requests.get(url, headers=headers, verify=VERIFY)
-    if 'reqPayload' in r.headers:
-        req_payload = str(r.headers['reqPayload'])
-        ADDON.setSetting(id='reqPayload', value=req_payload)
-    else:
-        sys.exit()
 
 
 def get_json(url):
@@ -488,92 +280,6 @@ def get_json(url):
     return r.json()
 
 
-def check_reqpayload():
-    check_login()
-
-    if ADDON.getSetting(id='reqPayload') == '':
-        get_reqpayload()
-
-
-def check_login():
-    expired_cookies = True
-
-    try:
-        cj = cookielib.LWPCookieJar()
-        cj.load(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'), ignore_discard=True)
-        if ADDON.getSetting(id='npsso') != '':
-            for cookie in cj:
-                if cookie.name == 'npsso':
-                    xbmc.log(str(cookie.name))
-                    xbmc.log(str(cookie.expires))
-                    xbmc.log(str(cookie.is_expired()))
-                    expired_cookies = cookie.is_expired()
-    except:
-        pass
-
-    if expired_cookies:
-        login()
-
-
-def get_profiles():
-    url = 'https://sentv-user-ext.totsuko.tv/sentv_user_ext/ws/v2/profile/ids'
-    headers = {
-        'User-Agent': UA_ANDROID,
-        'reqPayload': ADDON.getSetting(id='reqPayload'),
-        'Accept': '*/*',
-        'Origin': 'https://themis.dl.playstation.net',
-        'Host': 'sentv-user-ext.totsuko.tv',
-        'Connection': 'Keep-Alive',
-        'Accept-Encoding': 'gzip'
-    }
-
-    r = requests.get(url, headers=headers, verify=VERIFY)
-    profiles = r.json()['body']['profiles']
-    prof_dict = {}
-    prof_list = []
-    for profile in profiles:
-        xbmc.log(str(profile['profile_id']) + ' ' + str(profile['profile_name']))
-        prof_dict[str(profile['profile_name'])] = str(profile['profile_id'])
-        prof_list.append(str(profile['profile_name']))
-
-    dialog = xbmcgui.Dialog()
-    ret = dialog.select('Choose Profile', prof_list)
-    if ret >= 0:
-        set_profile(prof_dict[prof_list[ret]])
-    else:
-        sys.exit()
-
-
-def set_profile(profile_id):
-    url = 'https://sentv-user-ext.totsuko.tv/sentv_user_ext/ws/v2/profile/' + profile_id
-    headers = {
-        'User-Agent': UA_ANDROID,
-        'reqPayload': ADDON.getSetting(id='reqPayload'),
-        'Accept': '*/*',
-        'Origin': 'https://themis.dl.playstation.net',
-        'Host': 'sentv-user-ext.totsuko.tv',
-        'Connection': 'Keep-Alive',
-        'Accept-Encoding': 'gzip'
-    }
-
-    r = requests.get(url, headers=headers, verify=VERIFY)
-    req_payload = str(r.headers['reqPayload'])
-    ADDON.setSetting(id='reqPayload', value=req_payload)
-    ADDON.setSetting(id='default_profile', value=profile_id)
-
-
-def save_cookies(cookiejar):
-    filename = os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp')
-    lwp_cookiejar = cookielib.LWPCookieJar()
-    for c in cookiejar:
-        args = dict(vars(c).items())
-        args['rest'] = args['_rest']
-        del args['_rest']
-        c = cookielib.Cookie(**args)
-        lwp_cookiejar.set_cookie(c)
-    lwp_cookiejar.save(filename, ignore_discard=True)
-
-
 def load_cookies():
     filename = os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp')
     lwp_cookiejar = cookielib.LWPCookieJar()
@@ -597,8 +303,8 @@ def stringToDate(string, date_format):
 def create_device_id():
     android_id = ''.join(random.choice('0123456789abcdef') for i in range(16))
     android_id = android_id.rjust(30, '0')
-    manufacturer = 'Amazon'
-    model = 'AFTS'  # fire tv gen 2
+    manufacturer = 'ASUS'
+    model = 'Nexus 7'
     manf_model = ":%s:%s" % (manufacturer.rjust(10, ' '), model.rjust(10, ' '))
     manf_model = manf_model.encode("hex")
     zero = '0'
@@ -681,16 +387,17 @@ FANART = os.path.join(ROOTDIR, "resources", "fanart.jpg")
 ICON = os.path.join(ROOTDIR, "resources", "icon.png")
 
 ADDON_PATH_PROFILE = xbmc.translatePath(ADDON.getAddonInfo('profile'))
-USERNAME = ADDON.getSetting(id='username')
-PASSWORD = ADDON.getSetting(id='password')
 DEVICE_ID = ADDON.getSetting(id='deviceId')
+
+amazon_device = 'Amazon'
+amazon_device = amazon_device.encode("hex")
+if amazon_device in DEVICE_ID: DEVICE_ID = ''
+
 if DEVICE_ID == '':
     create_device_id()
     DEVICE_ID = ADDON.getSetting(id='deviceId')
 
 UA_ANDROID = 'Mozilla/5.0 (Linux; Android 6.0.1; Build/MOB31H; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/44.0.2403.119 Safari/537.36'
-LOGIN_CLIENT_ID = '71a7beb8-f21a-47d9-a604-2e71bee24fe0'
-REQ_CLIENT_ID = 'dee6a88d-c3be-4e17-aec5-1018514cee40'
 CHANNEL_URL = 'https://media-framework.totsuko.tv/media-framework/media/v2.1/stream/channel'
 EPG_URL = 'https://epg-service.totsuko.tv/epg_service_sony/service/v2'
 VERIFY = False

@@ -181,7 +181,9 @@ class OneDrive:
                 else:
                     origin = e
                 url_params += '\n--service response: --\n' + utils.Utils.str(response)
-                raise OneDriveException(origin, tb, url, url_params)
+                oex = OneDriveException(origin, tb, url, url_params)
+                oex.onedrive = self
+                raise oex
         
     def get(self, path, **kwargs):
         return self.request('get', path, **kwargs)
@@ -194,6 +196,7 @@ class OneDriveException(Exception):
     tb = None
     url = None
     body = None
+    onedrive = None
     def __init__(self, origin, tb, url, body):
         self.origin = origin
         self.tb = tb

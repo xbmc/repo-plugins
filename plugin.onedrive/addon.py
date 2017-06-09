@@ -75,7 +75,7 @@ account_manager = AccountManager()
 
 shared_json_path = account_manager.addon_data_path + '/shared.json'
 
-ext_videos = ['mkv', 'mp4', 'avi', 'iso', 'nut', 'ogg', 'vivo', 'pva', 'nuv', 'nsv', 'nsa', 'fli', 'flc', 'wtv']
+ext_videos = ['mkv', 'mp4', 'avi', 'iso', 'nut', 'ogg', 'vivo', 'pva', 'nuv', 'nsv', 'nsa', 'fli', 'flc', 'wtv', 'flv']
 ext_audio = ['mp3', 'wav', 'flac', 'alac', 'aiff', 'amr', 'ape', 'shn', 's3m', 'nsf', 'spc']
 
 def cancelOperation(onedrive):
@@ -634,7 +634,9 @@ except Exception as e:
     requested_url = None
     report = True
     selection = None
+    onedrive = None
     if isinstance(ex, OneDriveException):
+        onedrive = ex.onedrive
         ex = ex.origin
         requested_url = e.url
     if isinstance(ex, urllib2.HTTPError):
@@ -642,10 +644,11 @@ except Exception as e:
             dialog.ok(addonname, addon.getLocalizedString(32035), addon.getLocalizedString(32038))
         if ex.code >= 400:
             login_url = OneDrive('')._login_url
+            name = onedrive.name if onedrive else ''
             if requested_url is not None and requested_url == login_url:
                 selection = False
                 report = False
-                if dialog.yesno(addonname, addon.getLocalizedString(32046) % '\n'):
+                if dialog.yesno(addonname, addon.getLocalizedString(32046) % (name, '\n')):
                     xbmc.executebuiltin('RunPlugin('+base_url + '?' + urllib.urlencode({'action':'add_account', 'content_type': content_type})+')')
                     selection = True
             else:
@@ -654,7 +657,7 @@ except Exception as e:
                     report = False
                 elif ex.code == 401:
                     selection = False
-                    if dialog.yesno(addonname, addon.getLocalizedString(32046) % '\n'):
+                    if dialog.yesno(addonname, addon.getLocalizedString(32046) % (name, '\n')):
                         xbmc.executebuiltin('RunPlugin('+base_url + '?' + urllib.urlencode({'action':'add_account', 'content_type': content_type})+')')
                         selection = True
                 elif ex.code == 403 and requested_url is not None and ('sharedWithMe' in requested_url or 'recent' in requested_url):

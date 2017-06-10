@@ -201,7 +201,7 @@ msgid "Attempt %s of %s."
 msgstr ""
 
 msgctxt "#32046"
-msgid "Your credentials are no longer valid. You need to sign in again.%sDo you want to start the process?"
+msgid "The credentials for '%s' are no longer valid. You need to sign in again.%sDo you want to start the process?"
 msgstr ""
 
 msgctxt "#32047"

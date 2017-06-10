@@ -37,7 +37,8 @@ class AccountManager:
     addon_data_path = utils.Utils.unicode(xbmc.translatePath(addon.getAddonInfo('profile')))
     config_file = 'onedrive.ini'
     config_path = os.path.join(addon_data_path, config_file)
-
+    accounts = None
+    
     def __init__(self):
         if not os.path.exists(self.addon_data_path):
             try:
@@ -49,18 +50,20 @@ class AccountManager:
 
     def reload(self):
         self.config.read(self.config_path)
+        self.accounts = None
 
     def map(self):
-        onedrives = {}
-        for driveid in self.config.sections():
-            onedrive = OneDrive(self.addon.getSetting('client_id_oauth2'))
-            onedrive.driveid = driveid
-            onedrive.event_listener = self.event_listener
-            onedrive.name = self.config.get(driveid, 'name')
-            onedrive.access_token = self.config.get(driveid, 'access_token')
-            onedrive.refresh_token = self.config.get(driveid, 'refresh_token')
-            onedrives[driveid] = onedrive
-        return onedrives
+        if not self.accounts:
+            self.accounts = {}
+            for driveid in self.config.sections():
+                onedrive = OneDrive(self.addon.getSetting('client_id_oauth2'))
+                onedrive.driveid = driveid
+                onedrive.event_listener = self.event_listener
+                onedrive.name = self.config.get(driveid, 'name')
+                onedrive.access_token = self.config.get(driveid, 'access_token')
+                onedrive.refresh_token = self.config.get(driveid, 'refresh_token')
+                self.accounts[driveid] = onedrive
+        return self.accounts
     
     def get(self, driveid):
         onedrives = self.map()

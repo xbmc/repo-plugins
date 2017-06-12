@@ -18,9 +18,10 @@
 
 # -*- coding: utf-8 -*-
 import os, sys, time, datetime, re, traceback, feedparser
-import urllib, urllib2, socket, json, collections
+import urllib, urllib2, socket, json, collections, gzip
 import xbmc, xbmcgui, xbmcplugin, xbmcvfs, xbmcaddon
 
+from StringIO import StringIO
 from simplecache import SimpleCache
 # Plugin Info
 ADDON_ID      = 'plugin.video.newson'
@@ -31,15 +32,14 @@ ADDON_PATH    = REAL_SETTINGS.getAddonInfo('path').decode('utf-8')
 ADDON_VERSION = REAL_SETTINGS.getAddonInfo('version')
 ICON          = REAL_SETTINGS.getAddonInfo('icon')
 FANART        = REAL_SETTINGS.getAddonInfo('fanart')
+LANGUAGE      = REAL_SETTINGS.getLocalizedString
 NEWSART       = os.path.join(ADDON_PATH,'resources','images','newscast.jpg')
 CLIPART       = os.path.join(ADDON_PATH,'resources','images','videoclips.jpg')
 
 ## GLOBALS ##
 TIMEOUT     = 30
-DEBUG       = True
-BASE_URL    = 'http://watchnewson.com/'
+DEBUG       = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
 BASE_API    = 'http://watchnewson.com/api/linear/channels'
-USER_REGION = 'US'
 MENU        = [("Newscasts"  , '0', 0, False, {"thumb":NEWSART,"poster":NEWSART,"fanart":FANART,"icon":ICON,"logo":ICON}),
                ("Video Clips", '2', 2, False, {"thumb":CLIPART,"poster":CLIPART,"fanart":FANART,"icon":ICON,"logo":ICON})]
 
@@ -51,9 +51,10 @@ def log(msg, level=xbmc.LOGDEBUG):
         
 def stringify(string):
     if isinstance(string, list):
-        string = stringify(string[0])
+        string = (string[0])
     elif isinstance(string, (int, float, long, complex, bool)):
         string = str(string) 
+    
     if isinstance(string, basestring):
         if not isinstance(string, unicode):
             string = unicode(string, 'utf-8')
@@ -80,11 +81,10 @@ def getParams():
     return param
                  
 socket.setdefaulttimeout(TIMEOUT)
-
 class NewsOn():
     def __init__(self):
         log('__init__')
-        self.cache = SimpleCache()
+        self.cache     = SimpleCache()
         self.stateMenu = self.getStates()
 
         
@@ -93,11 +93,18 @@ class NewsOn():
             cacheResponce = self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
             if not cacheResponce:
                 request = urllib2.Request(url)
+                request.add_header('Accept-encoding', 'gzip')
                 request.add_header('User-Agent','Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)')
-                page = urllib2.urlopen(request, timeout = TIMEOUT)
-                log(page.headers['content-type'])
-                results = json.load(page)
-                page.close()
+                responce = urllib2.urlopen(request, timeout = TIMEOUT)
+                log(responce.headers['content-type'])
+                log(responce.headers['content-encoding'])
+                if responce.info().get('content-encoding') == 'gzip':
+                    buf = StringIO(responce.read())
+                    f = gzip.GzipFile(fileobj=buf)
+                    results = json.loads(f.read())
+                else:
+                    results = json.load(responce)
+                responce.close()
                 self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, results, expiration=datetime.timedelta(hours=1))
             return self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
         except urllib2.URLError, e:
@@ -105,7 +112,7 @@ class NewsOn():
         except socket.timeout, e:
             log("openURL Failed! " + str(e), xbmc.LOGERROR)
         except:            
-            xbmcgui.Dialog().notification(ADDON_NAME, 'Site unreachable, try again later...', ICON, 4000)
+            xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30001), ICON, 4000)
             
         
     def mainMenu(self):
@@ -126,60 +133,55 @@ class NewsOn():
         state     = []
         stateLST  = []
         data = self.openURL(BASE_API)
-        if not data:
-            return []
-        for channel in data:
-            state.append(channel['config']['state'])
-        states = collections.Counter(state)
-        for key, value in sorted(states.iteritems()):
-            stateLST.append(("%s"%(key), key , '{}'))
-        del state[:]
-        return stateLST
+        if data:
+            for channel in data:
+                state.append(channel['config']['state'])
+            states = collections.Counter(state)
+            for key, value in sorted(states.iteritems()):
+                stateLST.append(("%s"%(key), key , '{}'))
+            return stateLST
             
             
     def newsCasts(self, state):
         log('newsCasts, state = ' + state)
         urls = []
         data = self.openURL(BASE_API)
-        if not data:
-            return
-        for channel in data:
-            if state in channel['config']['state']:
-                chid   = channel['identifier']
-                title  = channel['title']
-                icon   = (channel['icon'] or ICON)
-                for idx, stream in enumerate(channel['streams']):
-                    #multiple urls, only and unique.
-                    url = (stream['Url'].split('.m3u8?')[0])+'.m3u8'
-                    offset = stream['OffsetFromNow']
-                    delay  = url+'&delay=%d'
-                    #todo do something with delay option?
-                    if url not in urls:
-                        urls.append(url)
-                        chid = chid+'.%d'%idx if idx > 0 else chid
-                        label      = "%s - %s" % (chid, title)
-                        infoLabels ={"label":label ,"title":label}
-                        infoArt    ={"thumb":icon,"poster":icon,"fanart":FANART,"icon":icon,"logo":icon} 
-                        self.addLink(title, url, 9, infoLabels, infoArt)
-        del urls[:]
+        if data:
+            for channel in data:
+                if state in channel['config']['state']:
+                    chid   = channel['identifier']
+                    title  = channel['title']
+                    icon   = (channel['icon'] or ICON)
+                    for idx, stream in enumerate(channel['streams']):
+                        #multiple urls, only add unique.
+                        url = (stream['Url'].split('.m3u8?')[0])+'.m3u8'
+                        offset = stream['OffsetFromNow']
+                        delay  = url+'&delay=%d'
+                        #todo do something with delay option?
+                        if url not in urls:
+                            urls.append(url)
+                            chid = chid+'.%d'%idx if idx > 0 else chid
+                            label      = "%s - %s" % (chid, title)
+                            infoLabels ={"mediatype":"video","label":label ,"title":label}
+                            infoArt    ={"thumb":icon,"poster":icon,"fanart":FANART,"icon":icon,"logo":icon} 
+                            self.addLink(title, url, 9, infoLabels, infoArt)
         
         
     def videoclips(self, state):
         log('videoclips, state = ' + state)
         data = self.openURL(BASE_API)
-        if not data:
-            return
-        for channel in data:
-            if state in channel['config']['state']:
-                chid   = channel['identifier']
-                title  = channel['title']
-                icon   = (channel['icon'] or ICON)
-                vidURL = channel['config']['localvodfeed']
-                if vidURL:
-                    label      = "%s - %s" % (chid, title)
-                    infoLabels ={"label":label ,"title":label}
-                    infoArt    ={"thumb":icon,"poster":icon,"fanart":FANART,"icon":ICON,"logo":ICON} 
-                    self.addDir(label, vidURL, 4, infoLabels, infoArt)
+        if data:
+            for channel in data:
+                if state in channel['config']['state']:
+                    chid   = channel['identifier']
+                    title  = channel['title']
+                    icon   = (channel['icon'] or ICON)
+                    vidURL = channel['config']['localvodfeed']
+                    if vidURL:
+                        label      = "%s - %s" % (chid, title)
+                        infoLabels ={"mediatype":"video","label":label,"title":label}
+                        infoArt    ={"thumb":icon,"poster":icon,"fanart":FANART,"icon":ICON,"logo":ICON} 
+                        self.addDir(label, vidURL, 4, infoLabels, infoArt)
 
                     
     def parseclips(self, url):
@@ -193,7 +195,7 @@ class NewsOn():
                     url   = vids['url']
                     plot  = item['summary']
                     thumb = item['media_thumbnail'][0]['url']
-                    infoLabels ={"label":title ,"title":title,"plot":plot}
+                    infoLabels ={"mediatype":"video","label":title,"title":title,"plot":plot}
                     infoArt    ={"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON} 
                     self.addLink(title, url, 9, infoLabels, infoArt)
 
@@ -211,7 +213,7 @@ class NewsOn():
         liz=xbmcgui.ListItem(name)
         liz.setProperty('IsPlayable', 'true')
         if infoList == False:
-            liz.setInfo( type="Video", infoLabels={"label":name,"title":name} )
+            liz.setInfo( type="Video", infoLabels={"mediatype":"video","label":name,"title":name})
         else:
             liz.setInfo(type="Video", infoLabels=infoList)
             
@@ -229,7 +231,7 @@ class NewsOn():
         liz=xbmcgui.ListItem(name)
         liz.setProperty('IsPlayable', 'false')
         if infoList == False:
-            liz.setInfo(type="Video", infoLabels={"label":name,"title":name} )
+            liz.setInfo(type="Video", infoLabels={"mediatype":"video","label":name,"title":name})
         else:
             liz.setInfo(type="Video", infoLabels=infoList)
         if infoArt == False:
@@ -265,6 +267,6 @@ elif mode == 3: NewsOn().videoclips(url)
 elif mode == 4: NewsOn().parseclips(url)
 elif mode == 9: NewsOn().playVideo(name, url)
 
-xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_NONE )
-xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_LABEL )
+xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_NONE )
+xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_LABEL )
 xbmcplugin.endOfDirectory(int(sys.argv[1]),cacheToDisc=True)

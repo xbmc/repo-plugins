@@ -164,7 +164,7 @@ class SONY():
         headers = {
             "Accept-Encoding": "gzip",
             "User-Agent": self.ua_sony,
-            "Connection": "Keep-Alive",
+            "Connection": "Keep-Alive"
         }
 
         code = ''

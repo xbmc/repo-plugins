@@ -232,7 +232,7 @@ def get_stream(url):
                "Accept-Encoding": "deflate",
                "User-Agent": UA_ANDROID,
                "Connection": "Keep-Alive",
-               'reqPayload': ADDON.getSetting(id='reqPayload')
+               #'reqPayload': ADDON.getSetting(id='reqPayload')
                }
 
     r = requests.get(url, headers=headers, cookies=load_cookies(), verify=VERIFY)

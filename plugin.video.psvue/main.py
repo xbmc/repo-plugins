@@ -31,6 +31,7 @@ if ADDON.getSetting(id='last_auth') != '':
 else:
     sony.check_auth()
 
+
 if mode == None:
     if ADDON.getSetting(id='default_profile') == '': sony.get_profiles()
     main_menu()

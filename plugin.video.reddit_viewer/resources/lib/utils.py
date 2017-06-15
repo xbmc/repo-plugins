@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import urllib
+import urllib, urlparse
 import xbmc, xbmcgui,xbmcaddon,xbmcplugin
 import re, htmlentitydefs
 import pickle
@@ -7,6 +7,8 @@ import json
 import sys,os #os is used in open_web_browser()
 
 from urllib import urlencode
+
+
 
 addon         = xbmcaddon.Addon()
 addonID       = addon.getAddonInfo('id')  #plugin.video.reddit_viewer
@@ -40,7 +42,7 @@ def xbmc_busy(busy=True):
     else:
         xbmc.executebuiltin( "Dialog.Close(busydialog)" )
 
-def log(message, level=xbmc.LOGNOTICE):
+def log(message, level=xbmc.LOGDEBUG):
     import threading
     t=threading.currentThread()
     xbmc.log("reddit_viewer {0}:{1}".format(t.name, message), level=level)
@@ -67,16 +69,22 @@ def compose_list_item(label,label2,iconImage,property_item_type, onClick_action,
     return liz
 
 
-def build_script( mode, url, name="", type_="", script_to_call=''):
+def build_script( mode, url="", name="", type_="", script_to_call=''):
 
     if script_to_call: #plugin://plugin.video.reddit_viewer/
 
         pass
     else:
 
-        name=name.decode('unicode_escape').encode('ascii','ignore')
+        name='' if name==None else name.decode('unicode_escape').encode('ascii','ignore')
+        url=''  if url==None else url.decode('unicode_escape').encode('ascii','ignore') #causes error in urllib.quote_plus() if None
         script_to_call=addonID
-        return "RunAddon(%s,%s)" %(script_to_call, "mode="+ mode+"&url="+urllib.quote_plus(url)+"&name="+urllib.quote_plus(name)+"&type="+str(type_) )
+
+        return "RunAddon({script_to_call},mode={mode}&url={url}&name={name}&type={type})".format( script_to_call=script_to_call,
+                                                                                                  mode=mode,
+                                                                                                  url=urllib.quote_plus(url),
+                                                                                                  name=urllib.quote_plus(name),
+                                                                                                  type=str(type_)  )
 
 def build_playable_param( mode, url, name="", type_="", script_to_call=addonID):
 
@@ -93,6 +101,8 @@ def ret_info_type_icon(info_type, modecommand, domain=''):
             icon="type_ytdl.png"
         if modecommand==sitesBase.DI_ACTION_URLR:
             icon="type_urlr.png"
+        if any( x in domain for x in ['youtube','youtu.be']):
+            icon="type_youtube.png"
 
 
     elif info_type==sitesBase.TYPE_ALBUM:
@@ -141,10 +151,16 @@ def pretty_datediff(dt1, dt2):
     except:
         pass
 
-def post_excluded_from( filter, str_to_check):
+def is_filtered(filter_csv, str_to_check):
 
-    if filter:
-        filter_list=filter.split(',')
+    filter_list=filter_csv.split(',')
+    if any(word in str_to_check for word in filter_list if word):
+        return True
+
+def post_excluded_from( filter_, str_to_check):
+
+    if filter_:
+        filter_list=filter_.split(',')
         filter_list=[x.lower().strip() for x in filter_list]  #  list comprehensions
 
         if str_to_check.lower() in filter_list:
@@ -263,8 +279,7 @@ def parse_filename_and_ext_from_url(url=""):
     filename=""
     ext=""
 
-    from urlparse import urlparse
-    path = urlparse(url).path
+    path = urlparse.urlparse(url).path
 
     try:
         if '.' in path:
@@ -394,10 +409,24 @@ def markdown_to_bbcode(s):
         s = re.sub(r"(?m)^((?!~).*)$", translate(), s)
 
 
+        s = re.sub(r"<strong>(.*?)<\/strong>$", translate("[B]%s[/B]"), s)                                #<strong></strong>  becomes bold
         return s
     except:
         return s
 
+def format_description(s, hide_text_in_parens=True):
+
+    formatted=unescape(s)  #convert html entities e.g.:(&#39;)
+
+    if hide_text_in_parens:
+        formatted=re.sub(r']\([^)]*\)', ']', formatted)
+    else:
+
+        formatted=s.replace('](', '] (')
+
+    formatted=markdown_to_bbcode(formatted)
+    formatted=strip_emoji(formatted)
+    return formatted
 
 def convert_date(stamp):
 
@@ -442,16 +471,42 @@ def clean_str(dict_obj, keys_list, default=''):
     dd=dict_obj
     try:
         for k in keys_list:
-            dd=dict_obj.get(k)
+            if isinstance(dd, dict):
+                dd=dd.get(k)
+            elif isinstance(dd, list):
+                dd=dd[k]
+
             if dd is None:
                 return default
             else:
                 continue
         return unescape(dd.encode('utf-8'))
-    except AttributeError as e:
+    except (AttributeError,IndexError) as e:
         log( 'clean_str:' + str(e) )
         return default
 
+def get_int(dict_obj, keys_list, default=0):
+    dd=dict_obj
+    try:
+        for k in keys_list:
+            if isinstance(dd, dict):
+
+                dd=dd.get(k)
+            elif isinstance(dd, list):
+
+                dd=dd[k]
+
+            if dd is None:
+                return default
+            else:
+                continue
+        return int(dd)
+    except AttributeError as e:
+        log( 'get_int AttributeError:' + str(e) )
+    except ValueError as e:
+        log( 'get_int ValueError:' + str(e) )
+
+    return default
 
 def xstr(s):
 
@@ -475,9 +530,12 @@ def colored_subreddit(subreddit,color='cadetblue', add_r=True):
 def truncate(string, length, ellipse='...'):
     return (string[:length] + ellipse) if len(string) > length else string
 
-def xbmc_notify(Line1, line2):
-    xbmc.executebuiltin('XBMC.Notification("%s", "%s" )' %( Line1, line2) )
-    log("XBMC.Notification: %s %s" %(Line1, line2) )
+def xbmc_notify(line1, line2, time=2000, icon=''):
+    if icon and os.path.sep not in icon:
+        icon=os.path.join(addon.getAddonInfo('path'), 'resources','skins','Default','media', icon)
+
+    xbmcgui.Dialog().notification( line1, line2, icon, time)  #<-- use this instead of  xbmc.executebuiltin('XBMC.Notification("%s", "%s", %d, %s )' %( Line1, line2, time, icon) )
+    log("User notification: %s: %s" %(line1, line2) )
 
 def open_web_browser(url,name,type_):
 
@@ -571,6 +629,153 @@ def json_query(query, ret):
     except:
         return {}
 
+def nested_lookup(key, document):
+    """Lookup a key in a nested document, return a list of values"""
+    return list(_nested_lookup(key, document))
+
+def _nested_lookup(key, document):
+
+    """Lookup a key in a nested document, yield a value"""
+    if isinstance(document, list):
+        for d in document:
+            for result in _nested_lookup(key, d):
+                yield result
+
+    if isinstance(document, dict):
+        for k, v in dict.items(document): #iteritems(document):
+            if k == key:
+                yield v
+            elif isinstance(v, dict):
+                for result in _nested_lookup(key, v):
+                    yield result
+            elif isinstance(v, list):
+                for d in v:
+                    for result in _nested_lookup(key, d):
+                        yield result
+
+def dictlist_to_listItems(dictlist):
+    from domains import sitesBase
+
+    directory_items=[]
+
+    for idx, d in enumerate(dictlist):
+        label=d.get('li_label')
+        label2=d.get('li_label2')
+
+        ti=d.get('li_thumbnailImage')
+        media_url=d.get('DirectoryItem_url')
+        media_type=d.get('type')
+        isPlayable=d.get('isPlayable')
+        link_action=d.get('link_action')
+        channel_id=d.get('channel_id')
+        video_id=d.get('video_id')
+        infoLabels=d.get('infoLabels')
+
+
+        liz=xbmcgui.ListItem(label=label, label2=label2)
+
+        if media_type==sitesBase.TYPE_IMAGE:
+            liz.setProperty('item_type','script')
+            liz.setProperty('onClick_action', build_script('viewImage', media_url,'',ti) )
+            liz.setArt({"thumb": ti, "banner":media_url })
+        else:  #if media_type==sitesBase.TYPE_VIDEO:
+
+            if not link_action:
+                link_action='playYTDLVideo' #default action is to send link to ytdl
+
+            if isPlayable=='true':
+                liz.setProperty('item_type','playable')
+                liz.setProperty('onClick_action', media_url )
+                liz.setProperty('is_video','true')
+            else:
+                liz.setProperty('item_type','script')
+                liz.setProperty('onClick_action', build_script(link_action, media_url,'','') )
+
+            liz.setArt({"thumb": ti })
+
+        liz.setProperty('link_url', media_url )  #added so we have a way to retrieve the link
+        liz.setProperty('channel_id', channel_id )
+        liz.setProperty('video_id', video_id )   #youtube only for now
+        liz.setProperty('label', label )
+
+        liz.setInfo( type='video', infoLabels=infoLabels ) #this tricks the skin to show the plot. where we stored the picture descriptions
+
+
+        directory_items.append( liz )
+
+    return directory_items
+
+def generator(iterable):
+    for element in iterable:
+        yield element
+
+def setting_entry_is_domain(setting_entry):
+    try:
+        domain=re.findall(r'(?::|\/domain\/)(.+)',setting_entry)[0]
+    except IndexError:
+        domain=''
+    return domain
+
+def get_domain_icon( entry_name, domain ):
+    import requests
+    from CommonFunctions import parseDOM
+    subs_dict={}
+
+    req='http://%s' %domain
+
+    r = requests.get( req )
+
+    if r.status_code == requests.codes.ok:
+        try:og_url=parseDOM(r.text, "meta", attrs = { "property": "og:url" }, ret="content" )[0]  #<meta content="https://www.blogger.com" property="og:url">
+        except:og_url=req
+
+        a=parseDOM(r.text, "meta", attrs = { "property": "og:image" }, ret="content" )
+        b=parseDOM(r.text, "link", attrs = { "rel": "apple-touch-icon" }, ret="href" )
+        c=parseDOM(r.text, "link", attrs = { "rel": "apple-touch-icon-precomposed" }, ret="href" )
+        d=parseDOM(r.text, "link", attrs = { "rel": "icon" }, ret="href" )
+
+        i=next((item for item in [a,b,c,d] if item ), '')
+        if i:
+
+            try:
+                icon=urlparse.urljoin(og_url, i[-1]) #handle relative or absolute
+
+                subs_dict.update( {'entry_name':entry_name,
+                                   'display_name':domain,
+                                   'icon_img': icon,
+
+                                   } )
+
+                return subs_dict
+
+            except IndexError: pass
+        else:
+            log( "    can't parse icon: get_domain_icon (%s)" %(domain) )
+    else:
+        log( '    getting get_domain_icon (%s) info:%s' %(domain, r.status_code) )
+
+def set_query_field(url, field, value, replace=False):
+
+
+    components = urlparse.urlparse(url)
+
+    query_pairs = urlparse.parse_qsl(components.query)
+
+    if replace:
+        query_pairs = [(f, v) for (f, v) in query_pairs if f != field]
+    query_pairs.append((field, value))
+
+    new_query_str = urllib.urlencode(query_pairs)
+
+    new_components = (
+        components.scheme,
+        components.netloc,
+        components.path,
+        components.params,
+        new_query_str,
+        components.fragment
+    )
+    return urlparse.urlunparse(new_components)
 
 if __name__ == '__main__':
     pass

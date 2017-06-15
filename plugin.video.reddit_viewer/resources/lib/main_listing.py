@@ -3,7 +3,7 @@ import xbmc
 import xbmcgui
 import xbmcaddon
 import xbmcplugin
-import urllib
+import urllib, urlparse
 import json
 import threading
 import re
@@ -29,10 +29,11 @@ cxm_show_filter_subreddit = addon.getSetting("cxm_show_filter_subreddit") == "tr
 cxm_show_filter_domain    = addon.getSetting("cxm_show_filter_domain") == "true"
 cxm_show_open_browser     = addon.getSetting("cxm_show_open_browser") == "true"
 cxm_show_reddit_save      = addon.getSetting("cxm_show_reddit_save") == "true"
+cxm_show_youtube_items    = addon.getSetting("cxm_show_youtube_items") == "true"
 
 def index(url,name,type_):
     from utils import xstr, samealphabetic, hassamealphabetic
-    from reddit import load_subredditsFile, parse_subreddit_entry, create_default_subreddits, assemble_reddit_filter_string, ret_sub_info
+    from reddit import load_subredditsFile, parse_subreddit_entry, create_default_subreddits, assemble_reddit_filter_string, ret_sub_info, ret_settings_type_default_icon
 
 
     if not os.path.exists(subredditsFile):  #if not os.path.exists(subredditsFile):
@@ -54,14 +55,16 @@ def index(url,name,type_):
 
         entry_type, subreddit, alias, shortcut_description=parse_subreddit_entry(subreddit_entry)
 
+        icon=default_icon='' #addon_path+"/resources/skins/Default/media/"+ret_settings_type_default_icon(entry_type)
+
         url= assemble_reddit_filter_string("",subreddit, "yes")
 
         if subreddit.lower() in ["all","popular"]:
-            addDir(subreddit, url, next_mode, "", subreddit, { "plot": translation(30009) } )  #Displays the currently most popular content from all of reddit
+            addDir(subreddit, url, next_mode, icon, subreddit, { "plot": translation(30009) } )  #Displays the currently most popular content from all of reddit
         else:
             if addtl_subr_info: #if we have additional info about this subreddit
 
-                title=addtl_subr_info.get('title')+'\n'
+                title=xstr(addtl_subr_info.get('title'))+'\n'
                 display_name=xstr(addtl_subr_info.get('display_name'))
                 if samealphabetic( title, display_name): title=''
 
@@ -73,13 +76,15 @@ def index(url,name,type_):
                 if samealphabetic(title,public_description): public_description=''
 
 
-                shortcut_description='[COLOR cadetblue][B]r/%s[/B][/COLOR]\n%s[I]%s[/I]\n%s' %(display_name,title,header_title,public_description )
+                if entry_type=='subreddit':
+                    display_name='r/'+display_name
+                shortcut_description='[COLOR cadetblue][B]%s[/B][/COLOR]\n%s[I]%s[/I]\n%s' %(display_name,title,header_title,public_description )
 
                 icon=addtl_subr_info.get('icon_img')
                 banner=addtl_subr_info.get('banner_img')
                 header=addtl_subr_info.get('header_img')  #usually the small icon on upper left side on subreddit screen
 
-                icon=next((item for item in [icon,banner,header] if item ), '')
+                icon=next((item for item in [icon,banner,header] if item ), '') or default_icon
 
                 addDirR(alias, url, next_mode, icon,
                         type_=subreddit,
@@ -87,7 +92,7 @@ def index(url,name,type_):
                         file_entry=subreddit_entry,
                         banner_image=banner )
             else:
-                addDirR(alias, url, next_mode, "", subreddit, { "plot": shortcut_description }, subreddit_entry )
+                addDirR(alias, url, next_mode, icon, subreddit, { "plot": shortcut_description }, subreddit_entry )
 
     addDir("[B]- "+translation(30001)+"[/B]", "", 'addSubreddit', "", "", { "plot": translation(30006) } ) #"Customize this list with your favorite subreddit."
     addDir("[B]- "+translation(30005)+"[/B]", "",'searchReddits', "", "", { "plot": translation(30010) } ) #"Search reddit for a particular post or topic
@@ -101,7 +106,7 @@ GCXM_subreddit_key=''
 
 def listSubReddit(url, name, subreddit_key):
     from guis import progressBG
-    from utils import post_is_filtered_out
+    from utils import post_is_filtered_out, set_query_field
     from reddit import has_multiple
     global GCXM_hasmultiplesubreddit,GCXM_hasmultipledomain,GCXM_hasmultipleauthor,GCXM_subreddit_key
     log("listSubReddit subreddit=%s url=%s" %(subreddit_key,url) )
@@ -190,18 +195,30 @@ def listSubReddit(url, name, subreddit_key):
 
     try:
 
-        after=""
-        after = content['data']['after']
-        if "&after=" in currentUrl:
-            nextUrl = currentUrl[:currentUrl.find("&after=")]+"&after="+after
+        after=content['data']['after']
+
+        o = urlparse.urlparse(currentUrl)
+        current_url_query = urlparse.parse_qs(o.query)
+
+        nextUrl=set_query_field(currentUrl, field='after', value=after, replace=True)  #(url, field, value, replace=False):
+
+
+        count=current_url_query.get('count')
+
+        if current_url_query.get('count')==None:
+
+            count=itemsPerPage
         else:
-            nextUrl = currentUrl+"&after="+after
+
+            try: count=int(current_url_query.get('count')[0]) + int(itemsPerPage)
+            except ValueError: count=itemsPerPage
+
+        nextUrl=set_query_field(nextUrl,'count', count, True)
 
         info_label={ "plot": translation(30004) + '[CR]' + page_title}
         addDir(translation(30004), nextUrl, 'listSubReddit', "", subreddit_key,info_label)   #Next Page
-
-    except:
-        pass
+    except Exception as e:
+        log('    Exception: '+ str(e))
 
     subreddit_key=subreddit_key.replace(' ','+')
     viewID=WINDOW.getProperty( "viewid-"+subreddit_key )
@@ -279,7 +296,7 @@ def reddit_post_worker(idx, entry, q_out):
             thumb=clean_str(data,['thumbnail'])
 
 
-            if thumb in ['nsfw','default','self']:  #reddit has a "default" thumbnail (alien holding camera with "?")
+            if not thumb.startswith('http'): #in ['nsfw','default','self']:  #reddit has a "default" thumbnail (alien holding camera with "?")
                 thumb=""
 
             if thumb=="":
@@ -338,7 +355,6 @@ def reddit_post_worker(idx, entry, q_out):
             q_out.put( [idx, tuple_for_addDirectoryItems] )
     except Exception as e:
         log( '  #reddit_post_worker EXCEPTION:' + repr(sys.exc_info()) +'--'+ str(e) )
-
 
 def addLink(title, title_line2, iconimage, previewimage,preview_w,preview_h,domain,description, credate, reddit_says_is_video, commentsUrl, subreddit, media_url, over_18, posted_by="", num_comments=0,post_index=1,post_id=''):
     from domains import parse_reddit_link, build_DirectoryItem_url_based_on_media_type
@@ -401,12 +417,11 @@ def addLink(title, title_line2, iconimage, previewimage,preview_w,preview_h,doma
         if needs_preview and ld:
             queried_preview_image= next((i for i in [ld.poster,ld.thumb] if i ), '')
             previewimage=queried_preview_image
+            iconimage=ld.thumb
 
         arg_name=title
         arg_type=previewimage
-        if ld:
 
-            if iconimage in ["","nsfw", "default"]: iconimage=ld.thumb
 
         DirectoryItem_url, setProperty_IsPlayable, isFolder, title_prefix = build_DirectoryItem_url_based_on_media_type(ld,
                                                                                                                         media_url,
@@ -491,13 +506,23 @@ def build_context_menu_entries(num_comments,commentsUrl, subreddit, domain, link
             entries.append( ( translation(30058) ,
                                   "XBMC.RunPlugin(%s?mode=reddit_save&url=%s&name=%s)" % ( sys.argv[0], '/api/save/', post_id ) ) )
 
+    if cxm_show_youtube_items:
+
+        from domains import ClassYoutube
+        match=re.compile( ClassYoutube.regex, re.I).findall( link_url )  #regex='(youtube.com/)|(youtu.be/)|(youtube-nocookie.com/)|(plugin.video.youtube/play)'
+        if match:
+
+            entries.append( ( translation(30048) ,
+                                "XBMC.Container.Update(%s?path=%s?prl=zaza&mode=listRelatedVideo&url=%s&type=%s)" % ( sys.argv[0], sys.argv[0], urllib.quote_plus(link_url), 'channel' ) ) )
+            entries.append( ( translation(30049) ,
+                                "XBMC.Container.Update(%s?path=%s?prl=zaza&mode=listRelatedVideo&url=%s&type=%s)" % ( sys.argv[0], sys.argv[0], urllib.quote_plus(link_url), 'related' ) ) )
+
     return entries
 
-
-
 def listLinksInComment(url, name, type_):
-    from domains import parse_reddit_link, sitesBase, build_DirectoryItem_url_based_on_media_type
-    from utils import markdown_to_bbcode, unescape, ret_info_type_icon, build_script
+    from domains import parse_reddit_link, build_DirectoryItem_url_based_on_media_type
+    from utils import markdown_to_bbcode, unescape
+    from guis import progressBG
 
     log('listLinksInComment:%s:%s' %(type_,url) )
 
@@ -509,12 +534,21 @@ def listLinksInComment(url, name, type_):
     if type_=='linksOnly':
         ShowOnlyCommentsWithlink=True
 
-    url=urllib.quote_plus(url,safe=':/')
-    url+='.json'
+    url=urllib.quote_plus(url,safe=':/?&')
+    if '?' in url:
+        url=url.split('?', 1)[0]+'.json?'+url.split('?', 1)[1]
+    else:
+        url+= '.json'
+
+    loading_indicator=progressBG(translation(30024))
+    loading_indicator.update(0,'Retrieving comments')
 
     content = reddit_request(url)
-    if not content: return
+    if not content:
+        loading_indicator.end()
+        return
 
+    loading_indicator.update(10,'Parsing')
     content = json.loads(content)
 
     del harvest[:]
@@ -530,6 +564,9 @@ def listLinksInComment(url, name, type_):
     r_linkHunter(content[1]['data']['children'])
 
     comment_score=0
+
+    loading_indicator.set_tick_total(len(harvest))
+
     for i, h in enumerate(harvest):
         try:
 
@@ -563,7 +600,6 @@ def listLinksInComment(url, name, type_):
             plot=h[3].replace('](', '] (')
             plot= markdown_to_bbcode(plot)
             plot=unescape(plot)  #convert html entities e.g.:(&#39;)
-
 
             liz=xbmcgui.ListItem(label=list_title +': '+ desc100)
 
@@ -605,7 +641,8 @@ def listLinksInComment(url, name, type_):
             log('  EXCEPTION:' + str(e) )
 
 
-    log('  comments_view id=%s' %comments_viewMode)
+        loading_indicator.tick(1, desc100)
+    loading_indicator.end()
 
     xbmcplugin.setContent(pluginhandle, "movies")    #files, songs, artists, albums, movies, tvshows, episodes, musicvideos
     xbmcplugin.setPluginCategory(pluginhandle,'Comments')

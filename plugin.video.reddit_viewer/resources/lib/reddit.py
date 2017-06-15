@@ -20,7 +20,6 @@ def reddit_request( url, data=None ):
         url=url.replace('www.reddit.com','oauth.reddit.com' )
         url=url.replace( 'np.reddit.com','oauth.reddit.com' )
         url=url.replace(       'http://',        'https://' )
-        log( "  replaced reqst." + url + " + access token=" + reddit_access_token)
 
     req = urllib2.Request(url)
 
@@ -225,11 +224,12 @@ def reddit_save(api_method, post_id, type_):
 def create_default_subreddits():
 
     with open(subredditsFile, 'a') as fh:
+
         fh.write('/user/sallyyy19/m/video[%s]\n' %(translation(30006)))  # user   http://forum.kodi.tv/member.php?action=profile&uid=134499
         fh.write('Documentaries+ArtisanVideos+lectures+LearnUselessTalents\n')
         fh.write('Stop_Motion+FrameByFrame+Brickfilms+Animation\n')
         fh.write('random\n')
-        #fh.write('randnsfw\n')
+
         fh.write('animemusic+amv+animetrailers\n')
         fh.write('popular\n')
         fh.write('mealtimevideos/new\n')
@@ -240,6 +240,26 @@ def create_default_subreddits():
         fh.write('site:youtube.com\n')
         fh.write('videos\n')
         fh.write('woahdude+interestingasfuck+shittyrobots\n')
+
+def populate_subreddits_pickle():
+    from guis import progressBG
+    loading_indicator=progressBG(translation(30026))   #Gathering icons..
+
+    with open(subredditsFile, 'r') as fh:
+        subreddit_settings = fh.readlines()
+
+    loading_indicator.set_tick_total(len(subreddit_settings))
+    for entry in subreddit_settings:
+        entry=entry.strip()
+        loading_indicator.tick(1,entry)
+        s=convert_settings_entry_into_subreddits_list_or_domain(entry)
+        if s:
+
+            log('processing saved entry:'+repr(entry))
+            get_subreddit_entry_info_thread(s)
+
+    xbmc.sleep(2000)
+    loading_indicator.end()
 
 def format_multihub(multihub):
 
@@ -277,7 +297,7 @@ def parse_subreddit_entry(subreddit_entry_from_file):
         entry_type='domain'
 
         domain=re.findall(r'(?::|\/domain\/)(.+)',subreddit)[0]
-        description=translation(30008) % domain            #"Show %s links"
+        description=translation(30008) + domain            #"Show %s links"
 
     if '+' in subreddit:
         entry_type='combined'
@@ -287,8 +307,27 @@ def parse_subreddit_entry(subreddit_entry_from_file):
         entry_type='multireddit'
         description=translation(30007)  #"Custom Multireddit"
 
+    if subreddit.startswith('?'):
+        entry_type='search'
+        description=translation(32016)  #"Custom Search"
+
 
     return entry_type, subreddit, alias, description
+
+def ret_settings_type_default_icon(entry_type):
+    icon="type_unsupp.png"
+    if entry_type=='subreddit':
+        icon="icon_generic_subreddit.png"
+    elif entry_type=='domain':
+        icon="icon_domain.png"
+    elif entry_type=='combined':
+        icon="icon_multireddit.png"
+    elif entry_type=='multireddit':
+        icon="icon_multireddit.png"
+    elif entry_type=='search':
+        icon="icon_search_subreddit.png"
+
+    return icon
 
 def subreddit_alias( subreddit_entry_from_file ):
 
@@ -349,8 +388,12 @@ def assemble_reddit_filter_string(search_string, subreddit, skip_site_filters=""
 
 
         if search_string:
-            search_string = urllib.unquote_plus(search_string)
-            url+= "/search.json?q=" + urllib.quote_plus(search_string)
+            if 'http' in search_string:
+                url+="/submit.json?url="+ urllib.quote_plus(search_string)
+            else:
+
+                url+= "/search.json?q=" + urllib.quote_plus(search_string)
+
         elif skip_site_filters:
             url+= "/.json?"
         else:
@@ -452,30 +495,32 @@ def get_subreddit_info( subreddit ):
 
     r = requests.get( req, headers=headers, timeout=REQUEST_TIMEOUT )
     if r.status_code == requests.codes.ok:
-        j=r.json()
+        try:
+            j=r.json()
 
-        j=j.get('data')
-        if 'display_name' in j:
-            subs_dict.update( {'entry_name':subreddit.lower(),
-                               'display_name':j.get('display_name'),
-                               'banner_img': j.get('banner_img'),
-                               'icon_img': j.get('icon_img'),
-                               'header_img': j.get('header_img'), #not used? usually similar to with icon_img
-                               'title':j.get('title'),
-                               'header_title':j.get('header_title'),
-                               'public_description':j.get('public_description'),
-                               'subreddit_type':j.get('subreddit_type'),
-                               'subscribers':j.get('subscribers'),
-                               'created':j.get('created'),        #public, private
-                               'over18':j.get('over18'),
-                               } )
+            j=j.get('data')
+            if 'display_name' in j:
+                subs_dict.update( {'entry_name':subreddit.lower(),
+                                   'display_name':j.get('display_name'),
+                                   'banner_img': j.get('banner_img'),
+                                   'icon_img': j.get('icon_img'),
+                                   'header_img': j.get('header_img'), #not used? usually similar to with icon_img
+                                   'title':j.get('title'),
+                                   'header_title':j.get('header_title'),
+                                   'public_description':j.get('public_description'),
+                                   'subreddit_type':j.get('subreddit_type'),
+                                   'subscribers':j.get('subscribers'),
+                                   'created':j.get('created'),        #public, private
+                                   'over18':j.get('over18'),
+                                   } )
 
-            return subs_dict
-
+                return subs_dict
+        except ValueError:
+            log('    ERROR:No data for (%s)'%subreddit)
         else:
-            log('    No data for (%s)'%subreddit)
+            log('    ERROR:No data for (%s)'%subreddit)
     else:
-        log( '    getting subreddit (%s) info:%s' %(subreddit, r.status_code) )
+        log( '    ERROR:getting subreddit (%s) info:%s' %(subreddit, r.status_code) )
 
 subreddits_dlist=[]
 def ret_sub_info( subreddit_entry ):
@@ -488,6 +533,7 @@ def ret_sub_info( subreddit_entry ):
             if os.path.exists(subredditsPickle):
                 subreddits_dlist=load_dict(subredditsPickle)
 
+
         subreddit_search=subreddit_entry.lower()
         if '/' in subreddit_search:
             subreddit_search=subreddit_search.split('/')[0]
@@ -499,9 +545,9 @@ def ret_sub_info( subreddit_entry ):
 
             if sd.get('entry_name')==subreddit_search:
                 return sd
-    except:
+    except Exception as e:
 
-        pass
+        log('**error parsing subredditsPickle (ret_sub_info):'+str(e))
 
 def ret_sub_icon(subreddit):
     sub_info=ret_sub_info(subreddit)
@@ -537,6 +583,66 @@ def subreddit_in_favorites( subreddit ):
             for s in spl:
                 if subreddit.lower() == s.lower():
                     return True
+
+def get_subreddit_entry_info(subreddit):
+    import threading
+
+    s=convert_settings_entry_into_subreddits_list_or_domain(subreddit)
+    if s:
+        t = threading.Thread(target=get_subreddit_entry_info_thread, args=(s,) )
+
+        t.start()
+
+def convert_settings_entry_into_subreddits_list_or_domain(settings_entry):
+    settings_entry=settings_entry.lower().strip()
+    if settings_entry in ['all','random','randnsfw','popular']:
+        return
+
+    if settings_entry.startswith('/user'):#no icon for multireddit or saved posts
+        return
+
+    if settings_entry.startswith('?'):  #no icon for searches
+        return
+
+    s=[]
+
+    if '/' in settings_entry:  #only get "diy" from "diy/top" or "diy/new"
+        settings_entry=settings_entry.split('/')[0]
+
+    if '+' in settings_entry:
+        s.extend(settings_entry.split('+'))
+    else:
+        s.append(settings_entry)
+
+    return s
+
+def get_subreddit_entry_info_thread(sub_list):
+    from utils import load_dict, save_dict, get_domain_icon, setting_entry_is_domain
+
+    global subreddits_dlist #subreddits_dlist=[]
+
+    if not subreddits_dlist:
+        if os.path.exists(subredditsPickle):
+
+            subreddits_dlist=load_dict(subredditsPickle)
+
+    for subreddit in sub_list:
+        subreddit=subreddit.lower().strip()
+
+        subreddits_dlist=[x for x in subreddits_dlist if x.get('entry_name','') != subreddit ]
+        domain=setting_entry_is_domain(subreddit)
+        if domain:
+            log('  getting domain info '+domain)
+            sub_info=get_domain_icon(subreddit,domain)
+
+        else:
+            log('  getting sub info '+subreddit)
+            sub_info=get_subreddit_info(subreddit)
+
+        log('    retrieved subreddit info ' + repr( sub_info ))
+        if sub_info:
+            subreddits_dlist.append(sub_info)
+            save_dict(subreddits_dlist, subredditsPickle)
 
 
 if __name__ == '__main__':

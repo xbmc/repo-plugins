@@ -52,7 +52,7 @@ def getPlayCount(url):
 def autoPlay(url, name, autoPlay_type):
     import random
     from domains import sitesBase, parse_reddit_link, build_DirectoryItem_url_based_on_media_type
-    from utils import unescape, post_is_filtered_out, log
+    from utils import unescape, post_is_filtered_out, log, clean_str
     from actions import setting_gif_repeat_count
     from reddit import reddit_request, determine_if_video_media_from_reddit_json
 
@@ -75,7 +75,7 @@ def autoPlay(url, name, autoPlay_type):
             if post_is_filtered_out( j_entry ):
                 continue
 
-            title = unescape(j_entry['data']['title'].encode('utf-8'))
+            title = clean_str(j_entry, ['data','title'])
 
             try:
                 media_url = j_entry['data']['url']
@@ -117,7 +117,6 @@ def autoPlay_type_entries_append( entries, autoPlay_type, title, playable_url):
     elif autoPlay_type=="UNWATCHED" and getPlayCount(playable_url) <= 0:
 
         entries.append([title,playable_url])
-
 
 
 if __name__ == '__main__':

@@ -32,14 +32,14 @@ msgctxt "#30007"
 msgid "Custom Multireddit"
 msgstr ""
 
-#Show youtube.com links //Show vimeo.com links
+#Posts to  youtube.com  //Posts to  vimeo.com
 msgctxt "#30008"
-msgid "Show %s links"
+msgid "Posts to"
 msgstr ""
 
 #description for the default shortcut 'all'
 msgctxt "#30009"
-msgid "Displays the currently most popular content from all of reddit.[CR]Some subreddits have chosen to exclude themselves from /r/all."
+msgid "Displays the currently most popular content from all of reddit."
 msgstr ""
 
 #description for the 'search reddit' shortcut
@@ -95,6 +95,37 @@ msgctxt "#30021"
 msgid "Parsing error"
 msgstr ""
 
+#YTDL dialogProgressBG message 
+msgctxt "#30022"
+msgid "Checking link..."
+msgstr ""
+
+msgctxt "#30023"
+msgid "Playing"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Loading..."
+msgstr ""
+
+msgctxt "#30025"
+msgid "Parsing multiple videos..."
+msgstr ""
+
+#notification that we're checking websites gathering icons
+msgctxt "#30026"
+msgid "Gathering icons"
+msgstr ""
+
+#: used in context menu.
+msgctxt "#30048"
+msgid "Videos in channel (Youtube)"
+msgstr ""
+
+#: used in context menu.
+msgctxt "#30049"
+msgid "Related videos (Youtube)"
+msgstr ""
 
 #: used in context menu.  (also see "#30500")
 msgctxt "#30050"
@@ -133,6 +164,15 @@ msgstr ""
 #: used in context menu. Hide r/writingprompt posts (do not show posts from r/writingprompt) or (do not show posts from fakenews.com)
 msgctxt "#30057"
 msgid "Hide %s posts"
+msgstr ""
+
+#: used in context menu. 
+msgctxt "#30058"
+msgid "Reddit: Save this post"
+msgstr ""
+
+msgctxt "#30059"
+msgid "Reddit: Unsave this post"
 msgstr ""
 
 #begin strings used in pretty date to indicate how long ago a post is posted (keep these strings short and similar length) 
@@ -200,43 +240,10 @@ msgctxt "#30074"
 msgid "IMG"
 msgstr ""
 
-msgctxt "#30185"
-msgid "File already exists"
-msgstr ""
-
-msgctxt "#30186"
-msgid "Choose download directory"
-msgstr ""
-
-msgctxt "#30187"
-msgid "NSFW content enabled!"
-msgstr ""
-
-msgctxt "#30188"
-msgid "NSFW content disabled!"
-msgstr ""
-
-msgctxt "#30189"
-msgid "Disable NSFW content?"
-msgstr ""
-
-msgctxt "#30190"
-msgid "Enable NSFW content?"
-msgstr ""
-
-msgctxt "#30191"
-msgid "Are you over eighteen and willing to see adult content?"
-msgstr ""
-
-#error message popup when youtube-dl can't get playable url 
-msgctxt "#30192"
-msgid "Failed to get playable url"
-msgstr ""
 
 
 
 #settings screen settings.xml
-
 #setting category
 msgctxt "#30100"
 msgid "General"
@@ -264,6 +271,10 @@ msgstr ""
 
 msgctxt "#30106"
 msgid "Comments threshold"
+msgstr ""
+
+msgctxt "#30107"
+msgid "Repeat gif playback"
 msgstr ""
 
 msgctxt "#30108"
@@ -351,9 +362,43 @@ msgctxt "#30157"
 msgid "Streamable.com Video Quality"
 msgstr ""
 
-#30158-30184 empty
 
-#30192-30299 empty
+
+msgctxt "#30185"
+msgid "File already exists"
+msgstr ""
+
+msgctxt "#30186"
+msgid "Choose download directory"
+msgstr ""
+
+msgctxt "#30187"
+msgid "NSFW content enabled!"
+msgstr ""
+
+msgctxt "#30188"
+msgid "NSFW content disabled!"
+msgstr ""
+
+msgctxt "#30189"
+msgid "Disable NSFW content?"
+msgstr ""
+
+msgctxt "#30190"
+msgid "Enable NSFW content?"
+msgstr ""
+
+msgctxt "#30191"
+msgid "Are you over eighteen and willing to see adult content?"
+msgstr ""
+
+#error message popup when youtube-dl can't get playable url 
+msgctxt "#30192"
+msgid "Failed to get playable url"
+msgstr ""
+
+
+
 
 # settings category
 msgctxt "#30300"
@@ -392,18 +437,55 @@ msgctxt "#30308"
 msgid "Hide posts marked as NSFW"
 msgstr ""
 
+
+
+#setting category
 msgctxt "#30350"
-msgid "Use youtube_dl add-on for Youtube videos"
+msgid "Plugins"
 msgstr ""
 
 msgctxt "#30351"
-msgid "Repeat gif playback"
+msgid "By default, the youtube_dl add-on is used to play all video"
 msgstr ""
+
+msgctxt "#30352"
+msgid "Use Youtube add-on"
+msgstr ""
+
+msgctxt "#30353"
+msgid "Use Liveleak add-on"
+msgstr ""
+
+msgctxt "#30355"
+msgid "Youtube_dl Preferred quality"
+msgstr ""
+
+msgctxt "#30356"
+msgid "480p or less"
+msgstr ""
+
+msgctxt "#30357"
+msgid "720p"
+msgstr ""
+
+msgctxt "#30358"
+msgid "1080p"
+msgstr ""
+
+msgctxt "#30359"
+msgid "Highest Available"
+msgstr ""
+
+msgctxt "#30360"
+msgid "Allow for DASH video if available"
+msgstr ""
+
+
 
 
 # settings category
 msgctxt "#30400"
-msgid "Reddit Oauth"
+msgid "Reddit OAuth"
 msgstr ""
 
 msgctxt "#30401"
@@ -411,11 +493,11 @@ msgid "[B]Instructions:[/B] https://github.com/gedisony/plugin.video.reddit_view
 msgstr ""
 
 msgctxt "#30402"
-msgid "code"
+msgid "code*"
 msgstr ""
 
 msgctxt "#30403"
-msgid "[Click here to get Refresh Token with valid code]"
+msgid "[Get refresh token]"
 msgstr ""
 
 msgctxt "#30404"
@@ -423,15 +505,15 @@ msgid "    Refresh token"
 msgstr ""
 
 msgctxt "#30405"
-msgid "Refresh Token is used to get an Access Token. Access Tokens expires in 1 hour."
+msgid ""
 msgstr ""
 
 msgctxt "#30406"
-msgid "[Reddit viewer will automatically get Access Token. Click here to test.]"
+msgid "[Test refresh token]"
 msgstr ""
 
 msgctxt "#30407"
-msgid "Access token (1-hour)"
+msgid "    Access token (1-hour)"
 msgstr ""
 
 msgctxt "#30408"
@@ -443,8 +525,29 @@ msgid "    Valid until"
 msgstr ""
 
 msgctxt "#30410"
-msgid "[Click here to revoke the Refresh Token]"
+msgid "[Revoke refresh token]"
 msgstr ""
+
+msgctxt "#30411"
+msgid "Replace reddit refresh token"
+msgstr ""
+
+msgctxt "#30412"
+msgid "You already have a refresh token."
+msgstr ""
+
+msgctxt "#30413"
+msgid "You only need to get this once."
+msgstr ""
+
+msgctxt "#30414"
+msgid "Are you sure you want to replace it?"
+msgstr ""
+
+msgctxt "#30415"
+msgid "* Make sure to hit [OK] after entering code"
+msgstr ""
+
 
 #settings category. - customize context menu entries. strings here pair with strings in #30050, #30051, #30052...
 msgctxt "#30500"
@@ -487,6 +590,14 @@ msgctxt "#30509"
 msgid "Open link in browser"
 msgstr ""
 
+msgctxt "#30510"
+msgid "Save/Unsave post on Reddit (needs OAuth)"
+msgstr ""
+
+msgctxt "#30511"
+msgid "Youtube channel/related videos"
+msgstr ""
+
 #settings category. - advanced optins
 msgctxt "#30600"
 msgid "Advanced Options"
@@ -499,3 +610,20 @@ msgstr ""
 msgctxt "#30602"
 msgid "{url} is replaced with the actual link"
 msgstr ""
+
+msgctxt "#30610"
+msgid "youtube-dl"
+msgstr ""
+
+msgctxt "#30611"
+msgid "[Check local version]"
+msgstr ""
+
+msgctxt "#30612"
+msgid "[Update youtube-dl core]"
+msgstr ""
+
+msgctxt "#30613"
+msgid "Youtube API key"
+msgstr ""
+

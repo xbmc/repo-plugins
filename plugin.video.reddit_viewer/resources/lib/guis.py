@@ -26,7 +26,7 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 from xbmcgui import ControlButton
-#import xbmcplugin
+
 
 addon = xbmcaddon.Addon()
 addon_path = addon.getAddonInfo('path')
@@ -41,25 +41,30 @@ class ExitMonitor(xbmc.Monitor):
     def __init__(self, exit_callback):
         self.exit_callback = exit_callback
 
+
     def abortRequested(self):
         self.exit_callback()
 
 
 class cGUI(xbmcgui.WindowXML):
-    # view_461_comments.xml
+
     include_parent_directory_entry=True
     title_bar_text=""
     gui_listbox_SelectedPosition=0
 
+
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXML.__init__(self, *args, **kwargs)
+
         self.subreddits_file = kwargs.get("subreddits_file")
         self.listing = kwargs.get("listing")
         self.main_control_id = kwargs.get("id")
 
+
     def onInit(self):
         xbmc.executebuiltin( "Dialog.Close(busydialog)" )
         self.gui_listbox = self.getControl(self.main_control_id)
+
         self.gui_listbox.reset()
         self.exit_monitor = ExitMonitor(self.close_gui)#monitors for abortRequested and calls close on the gui
 
@@ -69,8 +74,10 @@ class cGUI(xbmcgui.WindowXML):
 
         if self.include_parent_directory_entry:
             back_image='DefaultFolderBackSquare.png'
-            listitem = xbmcgui.ListItem(label='..')
-            listitem.setArt({"thumb": back_image }) #, "poster":back_image, "banner":back_image, "fanart":back_image, "landscape":back_image   })
+            listitem = xbmcgui.ListItem(label='..', label2="")
+
+            listitem.setArt({"icon":back_image, "thumb": back_image }) #, "poster":back_image, "banner":back_image, "fanart":back_image, "landscape":back_image   })
+
             self.gui_listbox.addItem(listitem)
 
         self.gui_listbox.addItems(self.listing)
@@ -94,12 +101,17 @@ class cGUI(xbmcgui.WindowXML):
 
             log( "  clicked on %d IsPlayable=%s  url=%s " %( self.gui_listbox_SelectedPosition, item_type, di_url )   )
             if item_type=='playable':
+
                     pl = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
                     pl.clear()
                     pl.add(di_url, item)
                     xbmc.Player().play(pl, windowed=False)
+
             elif item_type=='script':
+
+
                 self.busy_execute_sleep(di_url, 3000, close=False)   #note: setting close to false seems to cause kodi not to close properly (will wait on this thread)
+
 
         elif controlID == 5:
             pass
@@ -122,12 +134,12 @@ class cGUI(xbmcgui.WindowXML):
                         subreddit = spl[i].strip()
                         entries.append(subreddit )
         entries.sort()
-        #log( '  entries count ' + str( len( entries) ) )
+
 
         for subreddit_entry in entries:
-            #strip out the alias identifier from the subreddit string retrieved from the file so we can process it.
+
             subreddit, alias, shortcut_description=parse_subreddit_entry(subreddit_entry)
-            #log( subreddit + "   " + shortcut_description )
+
 
             reddit_url= assemble_reddit_filter_string("",subreddit, "yes")
 
@@ -139,9 +151,10 @@ class cGUI(xbmcgui.WindowXML):
         return listing
 
     def busy_execute_sleep(self,executebuiltin, sleep=500, close=True):
-        #
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        xbmc.executebuiltin( executebuiltin  )
+
+
+        xbmc.executebuiltin( 'XBMC.RunPlugin(%s)' %executebuiltin  )  #<-- invalid handle -1  error if resolving video
 
         xbmc.Monitor().waitForAbort( int(sleep/1000)   )
 
@@ -155,11 +168,12 @@ class cGUI(xbmcgui.WindowXML):
         self.close()
 
 class indexGui(cGUI):
-    #this is the gui that handles the initial screen.
+
 
     def onInit(self):
-        #cGui.onInit()
+
         self.gui_listbox = self.getControl(self.main_control_id)
+
         self.gui_listbox.reset()
 
         if self.title_bar_text:
@@ -167,6 +181,7 @@ class indexGui(cGUI):
             self.ctl_title_bar.setLabel(self.title_bar_text)
 
         self.gui_listbox.addItems( self.load_subreddits_file_into_a_listitem() )
+
 
         if self.gui_listbox_SelectedPosition > 0:
             self.gui_listbox.selectItem( self.gui_listbox_SelectedPosition )
@@ -190,9 +205,12 @@ class indexGui(cGUI):
                 ACTION_manage_subreddits=item.getProperty('ACTION_manage_subreddits')
                 log( "   left pressed  %d IsPlayable=%s  url=%s " %(  self.gui_listbox_SelectedPosition, item_type, ACTION_manage_subreddits )   )
 
+
+
                 xbmc.executebuiltin( ACTION_manage_subreddits  )
 
                 self.close()
+
 
             if action == xbmcgui.ACTION_MOVE_RIGHT:
                 right_button_action=item.getProperty('right_button_action')
@@ -204,6 +222,7 @@ class listSubRedditGUI(cGUI):
     reddit_query_of_this_gui=''
     SUBREDDITS_LIST=550
     SIDE_SLIDE_PANEL=9000
+
     BTN_GOTO_SUBREDDIT=6052
     BTN_ZOOM_N_SLIDE=6053
     BTN_PLAY_ALL=6054
@@ -227,7 +246,7 @@ class listSubRedditGUI(cGUI):
 
         try:focused_control=self.getFocusId()
         except:focused_control=0
-        #log( "  onAction focused control=" +  str(focused_control) + " " + str( self.a ))
+
 
         if focused_control==self.main_control_id:  #main_control_id is the listbox
 
@@ -240,14 +259,15 @@ class listSubRedditGUI(cGUI):
             item_type   =item.getProperty('item_type').lower()
 
             if action in [ xbmcgui.ACTION_MOVE_LEFT, xbmcgui.ACTION_CONTEXT_MENU ] :
-                #show side menu panel
+
                 self.setFocusId(self.SIDE_SLIDE_PANEL)
+
 
             if action == xbmcgui.ACTION_MOVE_RIGHT:
                 comments_action=item.getProperty('comments_action')
                 log( "   RIGHT(comments) pressed  %d IsPlayable=%s  url=%s " %(  self.gui_listbox_SelectedPosition, item_type, comments_action )   )
                 if comments_action:
-                    #if there are no comments, the comments_action property is not created for this listitem
+
                     self.busy_execute_sleep(comments_action,3000,False )
 
 
@@ -260,39 +280,44 @@ class listSubRedditGUI(cGUI):
                 item = self.subreddits_listbox.getSelectedItem()
                 ACTION_manage_subreddits=item.getProperty('ACTION_manage_subreddits')
 
+
                 self.busy_execute_sleep(ACTION_manage_subreddits, 50, True)
+
 
     def onClick(self, controlID):
         from utils import build_script, assemble_reddit_filter_string
-        #log( ' clicked on control id %d'  %controlID )
+
 
         listbox_selected_item=self.gui_listbox.getSelectedItem()
         subreddits_selected_item=self.subreddits_listbox.getSelectedItem()
 
         if controlID == self.main_control_id:
             self.gui_listbox_SelectedPosition = self.gui_listbox.getSelectedPosition()
-            #item = self.gui_listbox.getSelectedItem()
+
 
             if self.include_parent_directory_entry and self.gui_listbox_SelectedPosition == 0:
                 self.close()  #include_parent_directory_entry means that we've added a ".." as the first item on the list onInit
 
-            #name = item.getLabel()
             try:di_url=listbox_selected_item.getProperty('onClick_action') #this property is created when assembling the kwargs.get("listing") for this class
             except:di_url=""
             item_type=listbox_selected_item.getProperty('item_type').lower()
 
             log( "  clicked on %d IsPlayable=%s  url=%s " %( self.gui_listbox_SelectedPosition, item_type, di_url )   )
             if item_type=='playable':
+
                     pl = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
                     pl.clear()
                     pl.add(di_url, listbox_selected_item)
                     xbmc.Player().play(pl, windowed=False)
+
             elif item_type=='script':
 
                 if 'mode=listSubReddit' in di_url:
                     self.busy_execute_sleep(di_url,500,True )
                 else:
                     self.busy_execute_sleep(di_url,5000,False )
+
+
 
         elif controlID == self.SUBREDDITS_LIST:
             di_url=subreddits_selected_item.getProperty('onClick_action') #this property was created in load_subreddits_file_into_a_listitem
@@ -307,28 +332,35 @@ class listSubRedditGUI(cGUI):
             self.busy_execute_sleep(action, 50,False)
 
         elif controlID == self.BTN_PLAY_ALL:
+
             action=build_script('autoPlay', self.reddit_query_of_this_gui,'','')
+
             self.busy_execute_sleep(action, 10000,False)
 
         elif controlID == self.BTN_PLAY_FROM_HERE:
+
             i  =self.gui_listbox.getSelectedPosition()
             list_item_bs = self.gui_listbox.getListItem(i-1)
             post_id_bs   = list_item_bs.getProperty('post_id')
 
             rq=self.reddit_query_of_this_gui.split('&after=')[0]
+
             if post_id_bs:
                 rq = rq + '&after=' + post_id_bs
+
 
             action=build_script('autoPlay', rq,'','')
             log('  PLAY_FROM_HERE %d %s %s' %( i, post_id_bs, list_item_bs.getLabel() ) )
             self.busy_execute_sleep(action, 10000,False)
 
         elif controlID == self.BTN_SLIDESHOW:
+
             action=build_script('autoSlideshow', self.reddit_query_of_this_gui,'','')
             log('  SLIDESHOW '+ action)
             self.busy_execute_sleep(action, 1000,False)
 
         elif controlID == self.BTN_READ_HTML:
+
             link=listbox_selected_item.getProperty('link_url')
             action=build_script('readHTML', link,'','')
             log('  READ_HTML '+ action)
@@ -338,11 +370,12 @@ class listSubRedditGUI(cGUI):
             action=listbox_selected_item.getProperty('comments_action')
             log('  BTN_COMMENTS '+ action)
             if action:
-                #if there are no comments, the comments_action property is not created for this listitem
+
                 self.busy_execute_sleep(action,3000,False )
 
         elif controlID == self.BTN_SEARCH:
             from default import translation
+
             pos=self.reddit_query_of_this_gui.find('/.json')
             if pos != -1 and pos > 22:
                 pos+=1  #insert 'search' between '/' and '.json'
@@ -361,6 +394,7 @@ class listSubRedditGUI(cGUI):
                         self.busy_execute_sleep(action,3000,False )
 
         elif controlID == self.BTN_RELOAD:
+
             actual_query_of_this_gui=self.getProperty('actual_url_used_to_generate_these_posts')
             action=build_script("listSubReddit", actual_query_of_this_gui )
             log('  BTN_RELOAD '+ action)
@@ -383,7 +417,9 @@ class commentsGUI(cGUI):
                 self.gui_listbox.selectItem( self.gui_listbox_SelectedPosition )
             self.setFocus(self.gui_listbox)
 
+
     def onAction(self, action):
+
         focused_control=self.getFocusId()
         if action in [ xbmcgui.ACTION_MOVE_LEFT ]:
             if focused_control==self.main_control_id:
@@ -405,9 +441,11 @@ class commentsGUI(cGUI):
 
         if controlID == self.BTN_LINKS:
             self.toggle_links_sorting()
+
             self.setFocusId(self.main_control_id)
 
     def getKey(self, li):
+
         if li.getProperty('onClick_action'): return 1
         else:                                return 2
 
@@ -437,3 +475,43 @@ def log(message, level=xbmc.LOGNOTICE):
     xbmc.log("reddit_viewer GUI:"+message, level=level)
 
 
+class progressBG( xbmcgui.DialogProgressBG ):
+    progress=0.00
+    heading='Loading...'
+    tick_increment=1.00
+    def __init__(self,heading):
+        xbmcgui.DialogProgressBG.__init__(self)
+        self.heading=heading
+        xbmcgui.DialogProgressBG.create(self, self.heading)
+
+    def update(self, progress, message=None):
+        if self.progress>=100:
+            self.progress=100
+        else:
+            self.progress+=progress
+
+        if message:
+            super(progressBG, self).update( int(self.progress), self.heading, message )
+        else:
+            super(progressBG, self).update( int(self.progress), self.heading )
+
+    def set_tick_total(self,tick_total):
+        self.tick_total=tick_total
+        remaining=100-self.progress
+        if tick_total==0:tick_total=1
+        self.tick_increment=float(remaining)/tick_total
+
+
+    def tick(self,how_many, message=None):
+
+        self.update(self.tick_increment*how_many, message)
+
+    def end(self):
+        super(progressBG, self).update( 100 )
+        super(progressBG, self).close() #it is important to close xbmcgui.DialogProgressBG
+
+    def getProgress(self):
+        return self.progress
+
+if __name__ == '__main__':
+    pass

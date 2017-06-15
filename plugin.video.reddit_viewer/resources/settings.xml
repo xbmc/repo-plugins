@@ -1,20 +1,18 @@
 <settings>
     <category label="30100">
         <setting id="itemsPerPage"          type="enum"   label="30101" values="10|25|50|75|100" default="2"/>
-        <setting type="lsep"                              label="30103" enable="false" />
+        <setting                            type="lsep"   label="30103" enable="false" />
         <setting id="TitleAddtlInfo"        type="bool"   label="30102" default="false"/>
-        <setting type="lsep"                              label="30112" enable="false" />
+        <setting                            type="lsep"                              label="30112" enable="false" />
         <setting id="DoNotResolveLinks"     type="bool"   label="30111" default="false"/>
-        
-        <!-- setting id="HideImagePostsOnVideo" type="bool"   label="30104" default="true"/>
-        <setting type="sep" />
-    	<setting id="CommentTreshold"       type="select" label="30106" values="All|0|5|10|50|100"/>
+
+        <!-- 
+        <setting id="CommentTreshold"       type="select" label="30106" values="All|0|5|10|50|100"/>
         <setting id="comments_viewMode"     type="number" label="30110" default="0"/-->
         <setting type="sep" />
-        <setting id="use_ytdl_for_yt"      type="bool" label="30350" default="false"/>
-        <setting id="repeat_gif_video"     type="enum" label="30351" values="0|1|3|10|100" default="0"/>
-        <setting type="sep" />
-    	<setting id="album_viewMode"        type="number" label="30105" default="0"/>
+        <setting id="repeat_gif_video"      type="enum" label="30107" values="0|1|3|10|100" default="0"/>
+        <setting                            type="sep" />
+        <setting id="album_viewMode"        type="number" label="30105" default="0"/>
         <setting id="forceViewMode"         type="bool"   label="30108" default="false"/>
         <setting id="viewMode"              type="number" label="30109" default="504"/>
     </category>
@@ -34,8 +32,16 @@
 
         <setting type="sep" />
         <setting id="hide_nsfw"             type="bool" label="30308" default="true"/>
-    	<setting id="domain_filter"         type="text" label="30306" default=""/>
+        <setting id="domain_filter"         type="text" label="30306" default=""/>
         <setting id="subreddit_filter"      type="text" label="30307" default=""/>
+    </category>
+
+    <category label="30350">
+        <setting id="ytdl_quality"           type="enum" label="30355" lvalues="30356|30357|30358|30359" default="1"/>
+        <setting id="ytdl_DASH"              type="bool" label="30360" default="false"/>
+        <setting                             type="lsep" label="30351" enable="true" />
+        <setting id="use_addon_for_youtube"  type="bool" label="30352" default="false"/>
+        <setting id="use_addon_for_Liveleak" type="bool" label="30353" default="true"/>
     </category>
 
     <category label="30500">
@@ -48,14 +54,20 @@
         <setting id="cxm_show_add_shortcuts"    type="bool" label="30505" default="true"/>
         <setting id="cxm_show_filter_subreddit" type="bool" label="30506" default="true"/>
         <setting id="cxm_show_filter_domain"    type="bool" label="30507" default="true"/>
+        <setting id="cxm_show_reddit_save"      type="bool" label="30510" default="true"/>
+        <setting id="cxm_show_youtube_items"    type="bool" label="30511" default="true"/>
     </category>
 
     <category label="30600">
-        <setting type="lsep"                                label="30601" enable="true" />
-        <setting type="lsep"                                label="30602" enable="true" />
-        <setting id="custom_link_command"       type="text" label=""      default=""/>
+        <setting                              type="lsep"   label="30601" enable="true" />
+        <setting                              type="lsep"   label="30602" enable="true" />
+        <setting id="custom_link_command"     type="text"   label=""      default=""/>
+        <setting                              type="lsep"   label="30610" enable="true" />
+        <setting id="ytdl_btn_check_version"  type="action" label="30611"  action="RunPlugin(plugin://plugin.video.reddit_viewer/?mode=update_youtube_dl_core&type=checkversion)"/>
+        <setting id="ytdl_btn_download"       type="action" label="30612"  action="RunPlugin(plugin://plugin.video.reddit_viewer/?mode=update_youtube_dl_core&type=download)"/>
+        <setting                              type="sep" />
+        <setting id="youtube_api_key"         type="text"   label="30613" default="AIzaSyBilnA0h2drOvpnqno24xeVqGy00fp07so"/>
     </category>
-
 
     <!-- category label="30150">
         <setting                  type="action"      label="30151" action="RunPlugin(plugin://plugin.video.reddit_tv/?mode=openSettings&url=youtube)"/>
@@ -67,20 +79,18 @@
         <setting id="streamable_quality" type="enum" label="30157" values="full|mobile" default="1" />
     </category-->
     <category label="30400"> 
-    	<setting                              type="lsep"        label="30401"               enable="true"   />
-		<setting type="sep" />
+        <setting                              type="lsep"        label="30401"               enable="true"   />
+        <setting                              type="sep" />
         <setting id="reddit_code"             type="text"        label="30402"  default=""                   />
+        <setting                              type="lsep"        label="30415"               enable="true"   />
+        <setting                              type="sep" />
         <setting                              type="action"      label="30403"  action="RunPlugin(plugin://plugin.video.reddit_viewer/?mode=get_refresh_token)"/>
         <setting id="reddit_refresh_token"    type="text"        label="30404"  default=""   enable="false"  />
-    	<setting                              type="lsep"        label="30405"               enable="true"   />
-        <setting type="sep" />
-		<setting                              type="action"      label="30406"  action="RunPlugin(plugin://plugin.video.reddit_viewer/?mode=get_access_token)"/>
-		<setting id="reddit_access_token"     type="text"        label="30407"  default=""   enable="false"  />
-		<setting id="reddit_access_token_scope"   type="text"    label="30408"  default=""   enable="false"  />
-		<setting id="reddit_access_token_expires" type="text"    label="30409"  default=""   enable="false"  />
-        <setting type="sep" />
-		<setting                              type="action"      label="30410"  action="RunPlugin(plugin://plugin.video.reddit_viewer/?mode=revoke_refresh_token)"/>
-    	
-        
+        <setting id="reddit_access_token"     type="text"        label="30407"  default=""   enable="false"  />
+        <setting id="reddit_access_token_scope"   type="text"    label="30408"  default=""   enable="false"  />
+        <setting id="reddit_access_token_expires" type="text"    label="30409"  default=""   enable="false"  />
+        <setting                              type="sep" />
+        <setting                              type="action"      label="30406"  action="RunPlugin(plugin://plugin.video.reddit_viewer/?mode=get_access_token)"/>
+        <setting                              type="action"      label="30410"  action="RunPlugin(plugin://plugin.video.reddit_viewer/?mode=revoke_refresh_token)"/>
     </category>
 </settings>

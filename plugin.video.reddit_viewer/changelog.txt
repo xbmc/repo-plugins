@@ -260,5 +260,90 @@
  - removed vine.co parsing
  - add video parsing to some domain
  - error notification when link is 404 or has error in parsing
+ 3.2.4 (2017-03-03)
+ - fix imgur parsing bug. Thanks to mac1202
+ 3.2.5
+ - add supload.com parsing
+ - reorganize parsing code
+ 3.2.6
+ - update supload.com parsing(gif)
+ - reorganize code
+ 3.2.7 (2017-03-11)
+ - use ruuk's youtubedl wrapper directly
+ - add acidcow.com album parsing
+ - codacity recommended cleanups
+ - ability to update youtube-dl in settings
+ 3.2.8
+ - recognize youtube timeskip tags  
+ - add custom patch to ytdl update routine
+ 3.3.0 (2017-03-19)
+ - add ruuk's patch to youtubedl wrapper
+ - major code reorganize
  
-  
+ 3.3.1 (2017-03-21)
+ - user can now use their reddit saved posts similar to entering a multireddit
+   - provided they have given reddit_viewer permission for it 
+ - copy over reddit.reader changes/cleanup
+ 3.3.2 (2017-03-21)
+ - save/unsave posts on reddit account
+ 3.3.3 (2017-03-26)
+ - use threads to parse each reddit post
+ 3.3.4
+ - more accurate loading indicator
+ - cleanup
+ 3.3.5
+ - update imgur parsing
+ - cleanup
+ 3.3.6 (2017-04-03)
+ - use liveleak addon for liveleak videos
+ - reorganize settings
+ 3.3.7 (2017-04-05)
+ - add dash and resolution setting for youtube_dl
+ - gfycat error message notified to user
+ - don't follow redirects if just getting thumbnail
+ 3.3.8 (2017-04-06)
+ - bugfixes
+   - handle error when user enters invalid subreddit
+   - handle error when there is no listing
+   - os error when launching custom webviewer
+ 3.3.9
+   - imgur gallery bugfix
+   - appease codacity
+ 3.4.0 (2017-04-09)
+   - bugfix
+     - url resolver links incorrectly sent to youtube_dl
+     - add progress dialog for urlresolver playback
+     - decode <strong></strong> to [B][/B] in comments
+     - new default subredits
+ 3.4.1 (2017-04-11)
+   - bugfix
+     - json parsing
+     - account for query string in some comment links
+   - add progress dialog for list comments
+   - update get thumbnail routine
+   - get post body for comment posts
+ 3.4.2 (2017-04-21)
+   - update instagram parsing
+   - update get preview image routine
+   - remove url from comment post
+   - reorganize
+ 3.4.3 (2017-04-28)
+   - exclude videos with no audio codec in ytdl
+   - update viewAlbum gui to pre-load next image
+ 3.4.4 (2017-05-03)
+   - add a play icon for video in viewAlbum gui
+ 3.4.5 (2017-05-06)
+   - update youtube link parsing
+ 3.4.6
+   - fix error in eroshare parsing
+ 3.4.7 (2017-05-10)
+   - parse gfycat link manually if api call returns error
+ 3.4.8
+   - add an extra context menu for youtube posts to
+       -show related videos & other videos from channel
+   - update the "Next Page" url call to more closely resemble that from browser
+ 3.4.9
+   - update wording in reddit OAuth settings
+ 3.5.0
+   - add parsing for instagram profile page (album)
+   - parse youtube playlist/channel url (won't play for album custom gui)

@@ -37,6 +37,25 @@ msgid "Filter by Region"
 msgstr ""
 
 msgctxt "#30005"
-msgid "Disable Channel Autoplay, Enable OnDemand Content"
+msgid "Select User Region"
 msgstr ""
 
+msgctxt "#30006"
+msgid "Welcome Back "
+msgstr ""
+
+msgctxt "#30007"
+msgid "Invalid User Credentials"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Have a Pluto.TV account?"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Guest"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Sign-In"
+msgstr ""

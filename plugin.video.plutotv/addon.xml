@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.plutotv" version="1.0.3" name="Pluto.TV" provider-name="Lunatixz">
+<addon id="plugin.video.plutotv" version="1.0.5" name="Pluto.TV" provider-name="Lunatixz">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.requests" version="2.7.0"/>
         <import addon="script.module.simplecache" version="1.0.0"/>
         <import addon="script.module.urlresolver" version="0.0.1"/>
+        <import addon="script.module.pycountry" version="0.0.1"/>
         <import addon="plugin.video.youtube" version="5.1.8" optional="true"/>
         <import addon="plugin.video.vimeo" version="4.1.4" optional="true"/>
     </requires>
@@ -19,7 +20,7 @@
         <source>https://github.com/Lunatixz/XBMC_Addons/tree/master/plugin.video.plutotv</source>
         <website>http://pluto.tv/</website>
         <forum>http://forum.kodi.tv/showthread.php?tid=315513</forum>
-        <news>v1.0.1[CR]- Fixed login cache issue.[CR]v1.0.2[CR]- Fixed cookie issue on android/rpi devices.[CR]- Updated cache timings (8Hrs).[CR]v1.0.3[CR]- Fixed Menu and Tweaked cache</news>
+        <news>v1.0.1[CR]- Fixed login cache issue.[CR]v1.0.2[CR]- Fixed cookie issue on android/rpi devices.[CR]- Updated cache timings (8Hrs).[CR]v1.0.3[CR]- Fixed Menu and Tweaked cache.[CR]v1.0.4[CR]- Added Region Selection and Improved Region Filter[CR]- Added Startup Wizard and Improved Login Verification.[CR]v1.0.5[CR]- Fixed Android Login</news>
         <assets>
             <icon>icon.png</icon>
             <fanart>fanart.jpg</fanart>

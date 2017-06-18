@@ -1,0 +1,20 @@
+{
+    "id": 7,
+    "order": 107,
+    "metadata": {
+        "title": "TonAngeber",
+        "cast": ["Nils Beckmann", "Klaus Kauker"],
+        "country": 30202,
+        "plot": "Das Musikmagazin auf Massengeschmack – aktuelle CD-Kritiken, illustre Live-Gäste und der gnadenlose Blick auf die aktuellen deutschen Album-Charts: Nils Beckmann, Musik-Junkie aus Leidenschaft, entführt uns in alle Musikbereiche von Rap bis Pop, von Jazz bis Rock.",
+        "premiered": "2014-06-17"
+    },
+    "fanart": "fanart-tonangeber-20160220.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ],
+    "active": false
+}

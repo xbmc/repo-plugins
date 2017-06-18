@@ -1,0 +1,39 @@
+{
+    "id": 4,
+    "order": 4,
+    "metadata": {
+        "title": "Pasch-TV",
+        "cast": ["Holger Kreymeier", "Mario Perez", "Nils Beckmann"],
+        "country": 30202,
+        "plot": "In Pasch-TV geht es um die Welt der Brettspiele. Pro Ausgabe wird ein Brettspiel gespielt – und zwar konsequent zu Ende, egal wie schlecht, langweilig oder frustrierend es für die Teilnehmer ist. Und manchmal sind ja auch richtig empfehlenswerte Spiele dabei.",
+        "premiered": "2013-10-10"
+    },
+    "fanart": "fanart-paschtv-20160221.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1, 2],
+            "metadata": {
+                "title": 30300,
+                "plot": 30244
+            }
+        },
+        {
+            "name": "episodes",
+            "ids": [1],
+            "metadata": {
+                "title": 30301,
+                "plot": 30245
+            }
+        },
+        {
+            "name": "extra",
+            "ids": [2],
+            "metadata": {
+                "title": 30303,
+                "plot": 30246
+            }
+        }
+    ]
+}

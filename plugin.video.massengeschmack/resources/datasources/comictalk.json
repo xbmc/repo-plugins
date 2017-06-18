@@ -1,0 +1,19 @@
+{
+    "id": 17,
+    "order": 17,
+    "metadata": {
+        "title": "ComicTalk",
+        "cast": ["Hella von Sinnen", "Volker Robrahn"],
+        "country": 30202,
+        "plot": "Der ComicTalk mit Hella von Sinnen ist das „literarische Quartett für Comics“. Mit kompetenten und prominenten Gästen diskutiert die Entertainerin über aktuell erschienene Werke. Der ComicTalk ist eine Expedition durch die vielfältige Welt der Graphic Novels und Comics, die zeigt, wie viel Schönheit und narrative Kraft in mit Bildern erzählten Geschichten steckt. Mal harmonisch, mal kontrovers.",
+        "premiered": "2017-04-05"
+    },
+    "fanart": "fanart-comictalk.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ]
+}

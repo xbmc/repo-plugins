@@ -1,0 +1,40 @@
+{
+    "id": 9,
+    "order": 109,
+    "metadata": {
+        "title": "Sakura",
+        "cast": ["Volker Robrahn", "Chirley"],
+        "country": 30202,
+        "plot": "Sakura ist das Anime- und Mangamagazin bei Massengeschmack. Jeden Monat werden aktuelle Neuerscheinungen aus der japanischen Comic- und Zeichentrickwelt vorgestellt, dazu gibt es Interviews, Tipps und Besuche auf Fan-Events.",
+        "premiered": "2015-04-21"
+    },
+    "fanart": "fanart-sakura-20160221.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1, 2],
+            "metadata": {
+                "title": 30300,
+                "plot": 30370
+            }
+        },
+        {
+            "name": "episodes",
+            "ids": [1],
+            "metadata": {
+                "title": 30301,
+                "plot": 30371
+            }
+        },
+        {
+            "name": "interviews",
+            "ids": [2],
+            "metadata": {
+                "title": 30302,
+                "plot": 30354
+            }
+        }
+    ],
+	"active": false
+}

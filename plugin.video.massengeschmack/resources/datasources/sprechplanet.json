@@ -1,0 +1,19 @@
+{
+    "id": 15,
+    "order": 15,
+    "metadata": {
+        "title": "Sprechplanet",
+        "cast": ["Julian Schlichting"],
+        "country": 30202,
+        "plot": "Sprechplanet ist die Talkshow mit Julian Schlichting - lockere Plaudereien mit illustren Gästen aus der Kultur- und Medienwelt.",
+        "premiered": "2016-07-12"
+    },
+    "fanart": "fanart-sprechplanet.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ]
+}

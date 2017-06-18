@@ -1,0 +1,20 @@
+{
+    "id": 16,
+    "order": 116,
+    "metadata": {
+        "title": "Die Geisterjäger",
+        "cast": ["Dennis Kaupp", "Jesko Friedrich"],
+        "country": 30202,
+        "plot": "Eine verlassene Lungenklinik im Harz – und der Geist von Anneliese Möllenhoff, der dort immer noch herumspukt. Ulf Bender und Konni Burmeister (Dennis & Jesko) gehen in dieser dreiteiligen „Shockumentary“ der Sache auf die Spur. Eine experimentelle Mischung aus Comedy, Reportage und Gruselfilm.",
+        "premiered": "2016-11-18"
+    },
+    "fanart": "fanart-geisterjaeger.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ],
+    "active": false
+}

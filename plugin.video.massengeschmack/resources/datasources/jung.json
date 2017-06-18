@@ -1,0 +1,20 @@
+{
+    "id": 13,
+    "order": 113,
+    "metadata": {
+        "title": "Jung und Anders",
+        "cast": ["Tilo Jung", "Ryak Anders"],
+        "country": 30202,
+        "plot": "Tilo Jung und Rayk Anders reden gern über Politik – und bei uns tun sie das exklusiv gemeinsam! In „Jung & Anders“ geht es um die übergeordneten Fragen hinter den Meldungen - unabhängig, frei denkend, ohne Tabus!",
+        "premiered": "2016-07-12"
+    },
+    "fanart": "fanart-jungundanders.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ],
+    "active": false
+}

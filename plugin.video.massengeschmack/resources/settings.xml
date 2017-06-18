@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30001">
+        <setting label="30003" type="text" id="account.username" default="" />
+        <setting label="30004" type="text" id="account.password" option="hidden" default="" />
+        <setting label="30002" type="text" id="account.warning" default="" enable="false" />
+    </category>
+    
+    <category label="30050">
+        <setting label="30051" type="enum" id="content.quality" lvalues="30055|30052|30053" enable="eq(1,false)" default="0" />
+        <setting label="30054" type="bool" id="content.audioOnly" default="false" />
+    </category>
+    
+    <category label="30060">
+        <setting label="30061" type="bool" id="advanced.viewmodeFix" default="false" />
+        </category>
+</settings>

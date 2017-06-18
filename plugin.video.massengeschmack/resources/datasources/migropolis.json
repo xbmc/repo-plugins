@@ -1,0 +1,20 @@
+{
+    "id": 10,
+    "order": 110,
+    "metadata": {
+        "title": "Migropolis",
+        "cast": ["Tom Knoll"],
+        "country": 30202,
+        "plot": "Migropolis porträtiert Menschen, die nach Deutschland eingewandert sind. Was bewegt sie? Wie gefällt es ihnen in Deutschland? Und was für ein Leben haben sie vorher gelebt?",
+        "premiered": "2015-10-13"
+    },
+    "fanart": "fanart-migropolis-20160220.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ],
+    "active": false
+}

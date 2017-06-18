@@ -301,3 +301,49 @@
  - add dash and resolution setting for youtube_dl
  - gfycat error message notified to user
  - don't follow redirects if just getting thumbnail
+ 3.3.8 (2017-04-06)
+ - bugfixes
+   - handle error when user enters invalid subreddit
+   - handle error when there is no listing
+   - os error when launching custom webviewer
+ 3.3.9
+   - imgur gallery bugfix
+   - appease codacity
+ 3.4.0 (2017-04-09)
+   - bugfix
+     - url resolver links incorrectly sent to youtube_dl
+     - add progress dialog for urlresolver playback
+     - decode <strong></strong> to [B][/B] in comments
+     - new default subredits
+ 3.4.1 (2017-04-11)
+   - bugfix
+     - json parsing
+     - account for query string in some comment links
+   - add progress dialog for list comments
+   - update get thumbnail routine
+   - get post body for comment posts
+ 3.4.2 (2017-04-21)
+   - update instagram parsing
+   - update get preview image routine
+   - remove url from comment post
+   - reorganize
+ 3.4.3 (2017-04-28)
+   - exclude videos with no audio codec in ytdl
+   - update viewAlbum gui to pre-load next image
+ 3.4.4 (2017-05-03)
+   - add a play icon for video in viewAlbum gui
+ 3.4.5 (2017-05-06)
+   - update youtube link parsing
+ 3.4.6
+   - fix error in eroshare parsing
+ 3.4.7 (2017-05-10)
+   - parse gfycat link manually if api call returns error
+ 3.4.8
+   - add an extra context menu for youtube posts to
+       -show related videos & other videos from channel
+   - update the "Next Page" url call to more closely resemble that from browser
+ 3.4.9
+   - update wording in reddit OAuth settings
+ 3.5.0
+   - add parsing for instagram profile page (album)
+   - parse youtube playlist/channel url (won't play for album custom gui)

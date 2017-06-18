@@ -6,16 +6,12 @@ import sys
 import re
 import requests
 import json
-import xbmc
-import xbmcgui
-import xbmcplugin
+import urlparse
 
 
-from default import addon, addonID, streamable_quality   #,addon_path,pluginhandle,addonID
-from utils import log, translation
-
+from default import addon, streamable_quality   #,addon_path,pluginhandle,addonID
 from default import addon_path, pluginhandle, reddit_userAgent, REQUEST_TIMEOUT
-from utils import parse_filename_and_ext_from_url, image_exts, link_url_is_playable, ret_url_ext, remove_duplicates, safe_cast
+from utils import log, parse_filename_and_ext_from_url, image_exts, link_url_is_playable, ret_url_ext, remove_duplicates, safe_cast, clean_str,pretty_datediff, nested_lookup
 
 use_addon_for_youtube     = addon.getSetting("use_addon_for_youtube") == "true"
 use_addon_for_Liveleak    = addon.getSetting("use_addon_for_Liveleak") == "true"
@@ -36,6 +32,9 @@ keys=[ 'li_label'           #  the text that will show for the list
       ,'width'
       ,'height'
       ,'description'
+      ,'link_action'
+      ,'channel_id'         #used in youtube videos
+      ,'video_id'           #used in youtube videos
       ]
 
 ytdl_sites=[]
@@ -52,6 +51,8 @@ class sitesBase(object):
     original_url=''
     media_w=0
     media_h=0
+    description=None  #additional description gathered from link
+    video_id=''
 
     include_gif_in_get_playable=False   #it is best to parse the link and get the mp4/webm version of a gif media. we can't do this with some sites so we just return the gif media instead of looking for mp4/webm
 
@@ -62,6 +63,7 @@ class sitesBase(object):
     TYPE_VIDS ='vids'
     TYPE_MIXED='mixed'
     TYPE_REDDIT='reddit'
+    TYPE_UNKNOWN='unknown'
     DI_ACTION_PLAYABLE='playable'
     DI_ACTION_YTDL='playYTDLVideo'
     DI_ACTION_URLR='playURLRVideo'
@@ -79,8 +81,10 @@ class sitesBase(object):
 
         return content.text
 
+    @classmethod
     def requests_get(self, link_url, headers=None, timeout=REQUEST_TIMEOUT, allow_redirects=True):
         content = requests.get( link_url, headers=headers, timeout=timeout, allow_redirects=allow_redirects )
+
         if content.status_code==requests.codes.ok:
             return content
         else:
@@ -130,25 +134,51 @@ class sitesBase(object):
 
             return link_url #will a video link resolve to a preview image?
         else:
+            try:
 
-            content = self.requests_get(link_url,headers=None, timeout=(2,2), allow_redirects=False)
-            if content:
-                i=parseDOM(content.text, "meta", attrs = { "property": "og:image" }, ret="content" )
-                if i:
-                    try: return i[0]
-                    except IndexError: pass
-                    else:
-                        log('      %s: cant find <meta property="og:image" '  %(self.__class__.__name__ ) )
+                head=requests.head(link_url, timeout=(4,4),allow_redirects=True)
+
+                if head.status_code==requests.codes.ok:
+                    if 'html' in head.headers.get('content-type') :
+                        r = self.requests_get(link_url,headers=None, timeout=(4,4), allow_redirects=True)
+
+                        if r:
+                            a=parseDOM(r.text, "meta", attrs = { "property": "og:image" }, ret="content" )   #most sites use <meta property="
+                            b=parseDOM(r.text, "meta", attrs = {     "name": "og:image" }, ret="content" )   #boardgamegeek uses <meta name="
+                            i=next((item for item in [a,b] if item ), '')
+
+                            if i:
+                                try:
+                                    return urlparse.urljoin(link_url, i[0]) #handle relative or absolute
+                                except IndexError: pass
+                                else:
+                                    log('      %s: cant find <meta property="og:image" '  %(self.__class__.__name__ ) )
+            except Exception as e:
+                log('request_meta_ogimage_content:'+str(e))
 
 
     def clog(self, error_code, request_url):
         log("    %s error:%s %s" %( self.__class__.__name__, error_code ,request_url) )
+    @classmethod
+    def get_first_url_from(self,string_with_url,return_all_as_list=False):
+        if string_with_url:
+            match = re.compile("(https?://[^\s/$.?#].[^\s]*)['\\\"]?(?:$)?").findall(string_with_url)
 
-    def get_first_url_from(self,string_with_url):
-        match = re.compile("(https?://[^\s/$.?#].[^\s]*)['\\\"]?(?:$)?").findall(string_with_url)
+            if match:
+                if return_all_as_list:
+                    return match
+                else:
+                    return match[0]
 
-        if match:
-            return match[0]
+    @classmethod
+    def split_text_into_links(self,string_with_url):
+        if string_with_url:
+            string_with_url=string_with_url+" \nhttp://blank.padding\n" #imperfect regex: need a padding to make regex work
+
+            match = re.compile("([\s\S]*?(?:(https?://\S*?\.\S*?)(?:[\s)\[\]{},;\"\':<]|$)))").findall(string_with_url) #imperfect regex: this regex needs more work so that we don't need to add the padding above and modify the match to remove the http... later in code.
+            if match:
+
+                return match
 
     def set_media_type_thumb_and_action(self,media_url,default_type=TYPE_VIDEO, default_action=DI_ACTION_YTDL):
         _,ext=parse_filename_and_ext_from_url(media_url)
@@ -201,6 +231,7 @@ class sitesBase(object):
                     thumbnail=item[2]
             elif isinstance(item, dict):  #type(item) is dict:
                 title    =item.get('title') if item.get('title') else ''
+                label2   =item.get('label2','')
                 desc     =item.get('description') if item.get('description') else ''
                 image_url=item.get('url')
                 thumbnail=item.get('thumb')
@@ -208,10 +239,13 @@ class sitesBase(object):
                 height   =item.get('height') if item.get('height') else 0
                 item_type=item.get('type')
                 isPlayable=item.get('isPlayable')
+                link_action=item.get('link_action','')
+                channel_id=item.get('channel_id','')
+                video_id=item.get('video_id','')
 
-            infoLabels={ "Title": title, "plot": desc, "PictureDesc": desc }
+            infoLabels={ "Title": title, "plot": desc }
             e=[ title                   #'li_label'           #  the text that will show for the list (we use description because most albumd does not have entry['type']
-               ,''                      #'li_label2'          #
+               ,label2                  #'li_label2'          #
                ,""                      #'li_iconImage'       #
                ,thumbnail               #'li_thumbnailImage'  #
                ,image_url               #'DirectoryItem_url'  #
@@ -222,7 +256,10 @@ class sitesBase(object):
                ,'none'                  #'context_menu'       # ...
                ,width
                ,height
-               ,desc
+               ,desc                    #'description'
+               ,link_action             #'link_action'
+               ,channel_id              #'channel_id'
+               ,video_id                #'video_id'
                 ]
             self.dictList.append(dict(zip(keys, e)))
 
@@ -239,36 +276,117 @@ def url_resolver_support(link_url):
     return False
 
 class ClassYoutube(sitesBase):
-    regex='(youtube.com/)|(youtu.be/)|(youtube-nocookie.com/)'
+    regex='(youtube.com/)|(youtu.be/)|(youtube-nocookie.com/)|(plugin.video.youtube/play)'
     video_id=''
+    url_type=''
+
+    api_key='AIzaSyBilnA0h2drOvpnqno24xeVqGy00fp07so'
 
     def get_playable_url(self, media_url='', is_probably_a_video=False ):
         if not media_url:
             media_url=self.media_url
 
-        self.get_video_id()
+        o = urlparse.urlparse(media_url)
+        query = urlparse.parse_qs(o.query)
 
+        self.url_type, id_from_url=self.get_video_channel_user_or_playlist_id_from_url( self.media_url )
 
-        if self.video_id:
-            if use_addon_for_youtube:
-                self.link_action=self.DI_ACTION_PLAYABLE
-                return "plugin://plugin.video.youtube/play/?video_id=" + self.video_id, self.TYPE_VIDEO
+        if self.url_type=='video':
+            self.video_id=id_from_url
+            self.get_thumb_url() #there is no request penalty for getting yt thumb url so we do it here
+            self.link_action, playable_url=self.return_action_and_link_tuple_accdg_to_setting_wether_to_use_addon_for_youtube()
+
+            if 't' in query or '#t=' in media_url:
+                return media_url, self.TYPE_VIDEO
             else:
-                self.link_action=self.DI_ACTION_YTDL
-
-                if 't=' in media_url:
-                    return media_url, self.TYPE_VIDEO
-                else:
-                    return "http://youtube.com/v/{0}".format(self.video_id), self.TYPE_VIDEO
+                return playable_url, self.TYPE_VIDEO
+        elif self.url_type in ['channel','playlist','user']:
+            log("    %s_ID=%s <--%s" %( self.url_type, repr(id_from_url), self.media_url) )
+            self.link_action='listRelatedVideo'
+            return media_url, self.TYPE_VIDS
         else:
-            log("    %s cannot get videoID %s" %( self.__class__.__name__, media_url) )
             self.link_action='playYTDLVideo'
             return media_url, self.TYPE_VIDEO
 
-    def get_video_id(self):
-        match = re.compile('(?:youtube(?:-nocookie)?\.com/(?:\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&;]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})', re.DOTALL).findall(self.media_url)
+    @classmethod
+    def get_video_channel_user_or_playlist_id_from_url(self, youtube_url):
+        o = urlparse.urlparse(youtube_url)
+        query = urlparse.parse_qs(o.query)
+
+        video_id=self.get_video_id( youtube_url )
+        if video_id:
+            return 'video', video_id
+        else:
+            channel_id=self.get_channel_id_from_url( youtube_url )
+            user_id=self.get_user_id_from_url( youtube_url )
+            playlist_id=query.get('list','')
+
+            if channel_id:
+                return 'channel', channel_id
+            elif playlist_id:
+                return 'playlist', playlist_id[0]
+            elif user_id:
+                return 'user', user_id
+        return '',''
+
+    def return_action_and_link_tuple_accdg_to_setting_wether_to_use_addon_for_youtube(self, video_id=None):
+        if not video_id:
+            video_id=self.video_id
+        link_actn=''
+        link_=''
+
+        if video_id:
+            if use_addon_for_youtube:
+                link_actn=self.DI_ACTION_PLAYABLE
+                link_="plugin://plugin.video.youtube/play/?video_id=" + video_id
+            else:
+                link_actn=self.DI_ACTION_YTDL
+
+                link_="http://youtube.com/v/{0}".format(video_id)
+
+            return link_actn, link_
+
+    @classmethod
+    def get_video_id(self, yt_url):
+
+        video_id_regex=re.compile('(?:youtube(?:-nocookie)?\.com/(?:\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&;]v=)|youtu\.be\/|plugin:\/\/plugin\.video\.youtube\/play\/\?video_id=)([a-zA-Z0-9_-]{11})', re.DOTALL)
+        video_id=''
+        match = video_id_regex.findall(yt_url)
         if match:
-            self.video_id=match[0]
+            video_id=match[0]
+        else:
+
+            o = urlparse.urlparse(yt_url)
+            query = urlparse.parse_qs(o.query)
+            if 'a' in query and 'u' in query:   #if all (k in query for k in ("a","u")):
+                u=query['u'][0]
+
+                match = video_id_regex.findall('youtube.com'+u)
+                if match:
+                    video_id=match[0]
+                else:
+                    log("    Can't get youtube video id:"+yt_url)
+        return video_id
+
+    @classmethod
+    def get_channel_id_from_url(self, yt_url):
+        channel_id=''
+        channel_id_regex=re.compile('(?:https?:\/\/)?(?:www\.)?youtube\.com\/(?:channel\/)([a-zA-Z0-9\-_]{1,})', re.DOTALL)
+        match = channel_id_regex.findall(yt_url)
+        if match:
+            channel_id=match[0]
+
+        return channel_id
+
+    @classmethod
+    def get_user_id_from_url(self, yt_url):
+        channel_id=''
+        channel_id_regex=re.compile('(?:https?:\/\/)?(?:www\.)?youtube\.com\/(?:user\/)([a-zA-Z0-9\-_]{1,})', re.DOTALL)
+        match = channel_id_regex.findall(yt_url)
+        if match:
+            channel_id=match[0]
+
+        return channel_id
 
     def get_thumb_url(self):
         """
@@ -291,13 +409,225 @@ class ClassYoutube(sitesBase):
         """
         quality0123=1
         if not self.video_id:
-            self.get_video_id()
+            self.video_id=self.get_video_id(self.media_url)
 
         if self.video_id:
             self.thumb_url='http://img.youtube.com/vi/%s/%d.jpg' %(self.video_id,quality0123)
             self.poster_url='http://img.youtube.com/vi/%s/%d.jpg' %(self.video_id,0)
 
         return self.thumb_url
+
+    def get_links_in_description(self, return_channelID_only=False):
+        links=[]
+        self.video_id=self.get_video_id( self.media_url )
+        youtube_api_key=self.ret_api_key()
+        if self.video_id:
+
+            query_params = {
+                'key': youtube_api_key,
+                'id': self.video_id,
+                'fields':'items(snippet(channelId,title,description))',  #use '*' to get all fields
+                'part': 'id,snippet',
+            }
+
+            api_url='https://www.googleapis.com/youtube/v3/videos?'+urllib.urlencode(query_params)
+            r = self.requests_get(api_url)
+
+            j=r.json()   #.loads(r.text)  #j=json.loads(r.text.replace('\\"', '\''))
+            description=clean_str(j, ['items',0,'snippet','description'])
+            channel_id=clean_str(j, ['items',0,'snippet','channelId'])
+            if return_channelID_only:
+                return channel_id
+
+
+            text_and_links_tuple_list=self.split_text_into_links(description)
+
+            if text_and_links_tuple_list:
+                for text, link in text_and_links_tuple_list:
+                    ld=parse_reddit_link(link, assume_is_video=False, needs_preview=False )  #setting needs_preview=True slows things down
+                    if ld:
+                        links.append( {'title': text,
+                                        'type': ld.media_type,
+                                        'description': text,
+                                        'url': ld.playable_url if ld.playable_url else link,
+                                        'thumb':ld.thumb,
+
+                                        'link_action':ld.link_action,
+                                        'video_id':ld.video_id,
+                                        }  )
+                    else:
+                        links.append( {'title': text,
+                                        'type': self.TYPE_UNKNOWN,
+                                        'description': text,
+                                        'url': link,
+                                        }  )
+                self.assemble_images_dictList(links)
+                return self.dictList
+        else:
+            log("  can't get video id")
+            if return_channelID_only:
+                channel_id=self.get_channel_id_from_url( self.media_url )
+                log("    got channel id:"+channel_id)
+                return channel_id
+
+    def ret_api_key(self):
+        youtube_api_key = addon.getSetting("youtube_api_key")
+        if not youtube_api_key:
+            youtube_api_key=self.api_key
+        return youtube_api_key
+
+    def ret_album_list(self, type_='related'):
+        youtube_api_key=self.ret_api_key()
+        links=[]
+        query_params={}
+
+        self.url_type, id_from_url=self.get_video_channel_user_or_playlist_id_from_url( self.media_url )
+
+        if type_=='channel':  #here, user specifically asked to show videos in channel via context menu
+            channel_id=self.get_links_in_description(return_channelID_only=True)
+            if not channel_id:
+                raise ValueError('Could not get channel_id')
+            request_action, query_params = self.build_query_params_for_channel_videos(youtube_api_key,channel_id)
+        else:  #if type_=='related':
+            if self.url_type=='video':
+                self.video_id=id_from_url
+
+                request_action='search'
+                query_params = {    #https://developers.google.com/youtube/v3/docs/search/list#relatedToVideoId
+                    'key': youtube_api_key,
+                    'fields':'items(id(videoId),snippet(publishedAt,channelId,title,description,thumbnails(medium)))',
+                    'type': 'video',
+                    'maxResults': '50',
+                    'part': 'snippet',
+                    'order': 'date',
+                    'relatedToVideoId': self.video_id,
+                }
+
+            elif self.url_type=='channel': #try to see if we were able to parse channel_id from url if no video_id was parsed
+                request_action, query_params = self.build_query_params_for_channel_videos(youtube_api_key,id_from_url)
+            elif  self.url_type=='playlist':
+                request_action, query_params = self.build_query_params_for_playlist_videos(youtube_api_key,id_from_url)
+            elif  self.url_type=='user':
+
+                channel_id,uploads=self.get_id_from_user(id_from_url)
+
+                request_action, query_params = self.build_query_params_for_playlist_videos(youtube_api_key,uploads)    #  2 quota cost
+
+        if query_params:
+            links.extend( self.get_video_list(request_action, query_params) )
+
+            self.assemble_images_dictList(links)
+            return self.dictList
+
+    def build_query_params_for_channel_videos(self,youtube_api_key, channel_id):
+        return  'search', {
+                'key': youtube_api_key,
+                'fields':'items(id(videoId),snippet(publishedAt,channelId,title,description,thumbnails(medium)))',
+                'type': 'video',         #video,channel,playlist.
+
+                'maxResults': '50',      # Acceptable values are 0 to 50
+                'part': 'snippet',
+                'order': 'date',
+                'channelId': channel_id,
+            }
+
+    def build_query_params_for_channel(self, channel_display_name):
+        return  'search', {
+                'key': self.ret_api_key(),
+                'fields':'items(id(videoId),snippet(publishedAt,channelId,title,description,thumbnails(medium)))',
+                'type': 'channel',         #video,channel,playlist.
+                'maxResults': '50',      # Acceptable values are 0 to 50
+                'part': 'snippet',
+                'order': 'date',
+                'q': channel_display_name,
+            }
+    def build_query_params_for_playlist_videos(self,youtube_api_key, playlist_id):
+        return  'playlistItems', {
+                'key': youtube_api_key,
+
+                'type': 'video',         #video,channel,playlist.
+                'maxResults': '50',      # Acceptable values are 0 to 50
+                'part': 'snippet',
+                'playlistId': playlist_id,
+            }
+    def build_query_params_for_user_videos(self,youtube_api_key, user_id):
+        return  'channels', {
+                'key': youtube_api_key,
+                'maxResults': '50',      # Acceptable values are 0 to 50
+                'part': 'snippet,contentDetails',
+                'forUsername': user_id,
+            }
+
+    def get_id_from_user(self,user_id):
+        query_params = {
+            'key': self.ret_api_key(),
+            'part': 'snippet,contentDetails',
+            'forUsername': user_id,
+        }
+        api_url='https://www.googleapis.com/youtube/v3/channels?'+urllib.urlencode(query_params)
+        r = self.requests_get(api_url)
+
+        j=r.json()   #.loads(r.text)  #j=json.loads(r.text.replace('\\"', '\''))
+        channel_id=clean_str(j, ['items',0,'id'])
+        uploads=clean_str(j, ['items',0,'contentDetails','relatedPlaylists','uploads'])
+
+        return channel_id,uploads
+
+    def get_video_list(self, request_action, query_params):
+        links=[]
+        api_url='https://www.googleapis.com/youtube/v3/{0}?{1}'.format(request_action,urllib.urlencode(query_params))
+
+        r = self.requests_get(api_url)
+
+        j=r.json()
+        items=j.get('items')
+        for i in items:
+
+
+            if request_action=='search':
+                videoId=clean_str(i, ['id','videoId'])
+            elif request_action=='playlistItems': #videoId is located somewhere else in the json if using playlistItems
+                videoId=clean_str(i, ['snippet','resourceId','videoId'])
+
+            publishedAt=clean_str(i, ['snippet','publishedAt'])
+            pretty_date=self.pretty_date(publishedAt)
+
+
+            channel_id=clean_str(i, ['snippet','channelId'])
+            title=clean_str(i, ['snippet','title'])
+            description=clean_str(i, ['snippet','description'])
+
+            thumb640=clean_str(i, ['snippet','thumbnails','standard','url']) #640x480
+            thumb480=clean_str(i, ['snippet','thumbnails','high','url'])   #480x360
+            thumb320=clean_str(i, ['snippet','thumbnails','medium','url']) #320x180
+
+            link_action, playable_url=self.return_action_and_link_tuple_accdg_to_setting_wether_to_use_addon_for_youtube(videoId)
+
+            links.append( {'title': title,
+                            'type': self.TYPE_VIDEO,
+                            'label2': pretty_date,
+                            'description': description,
+                            'url': playable_url,
+                            'thumb': next((i for i in [thumb640,thumb480,thumb320] if i ), ''),
+                            'isPlayable': 'true' if link_action==self.DI_ACTION_PLAYABLE else 'false',
+                            'link_action':link_action,
+                            'channel_id':channel_id,
+                            'video_id':videoId,
+                            }  )
+        return links
+
+    def pretty_date(self, yt_date_string):
+        from datetime import datetime
+        import time
+
+        try:
+            date_object = datetime.strptime(yt_date_string,"%Y-%m-%dT%H:%M:%S.000Z")
+        except TypeError:
+            date_object = datetime(*(time.strptime(yt_date_string,"%Y-%m-%dT%H:%M:%S.000Z")[0:6]))
+
+        now_utc = datetime.utcnow()
+
+        return pretty_datediff(now_utc, date_object)
 
 class ClassImgur(sitesBase):
     regex='(imgur.com)'
@@ -368,6 +698,9 @@ class ClassImgur(sitesBase):
 
                     return False
                 else:
+
+                    images=self.ret_images_dict_from_album_json(j)
+                    self.assemble_images_dictList(images)
                     return True
             else:
 
@@ -441,8 +774,7 @@ class ClassImgur(sitesBase):
             self.thumb_url, self.poster_url= self.get_album_thumb(link_url)
             return self.thumb_url
 
-        from urlparse import urlparse
-        o=urlparse(link_url)    #from urlparse import urlparse
+        o=urlparse.urlparse(link_url)
         filename,ext=parse_filename_and_ext_from_url(link_url)
 
         if ext=="":
@@ -1002,9 +1334,7 @@ class ClassBlogspot(sitesBase):
         return '',''
 
     def ret_blog_post_request(self):
-
-        from urlparse import urlparse
-        o=urlparse(self.media_url)   #scheme, netloc, path, params, query, fragment
+        o=urlparse.urlparse(self.media_url)   #scheme, netloc, path, params, query, fragment
 
         blog_path= o.path
 
@@ -1067,7 +1397,6 @@ class ClassInstagram(sitesBase):
 
     def get_playable_url(self, media_url, is_probably_a_video=True):
 
-
         r = self.requests_get(media_url)
 
         jo=re.compile('window._sharedData = ({.*});</script>').findall(r.text)
@@ -1076,35 +1405,115 @@ class ClassInstagram(sitesBase):
             try:
                 j=json.loads(jo[0] )
 
-                if j.get('entry_data'):
-                    post_pages=j.get('entry_data').get('PostPage')
+                entry_data=j.get('entry_data')
+                if entry_data:
+
+                    if 'PostPage' in entry_data.keys():
+                        post_pages=entry_data.get('PostPage')
+
+                        post_page=post_pages[0]
+                        media=post_page.get('media')
+                        if media:
+
+                            display_src=media.get('display_src')
+                        else:
+
+                            media=nested_lookup('shortcode_media',post_page)[0]
+                            display_src=media.get('display_url')
+
+                        is_video=media.get('is_video')
+                        self.media_w=media.get('dimensions').get('width')
+                        self.media_h=media.get('dimensions').get('height')
+
+                        self.thumb_url=display_src
+                        self.poster_url=self.thumb_url
+
+                        if is_video:
+                            self.media_url=media.get('video_url')
+                            self.link_action=sitesBase.DI_ACTION_PLAYABLE
+                            return self.media_url, sitesBase.TYPE_VIDEO
+                        else:
+                            return display_src, sitesBase.TYPE_IMAGE
+                    if 'ProfilePage' in entry_data.keys():
+                        profile_page=entry_data.get('ProfilePage')[0]
 
 
-                    post_page=post_pages[0]
-                    media=post_page.get('media')
+                        self.thumb_url=nested_lookup('profile_pic_url',profile_page)[0]
 
-                    display_src=media.get('display_src')
-                    is_video=media.get('is_video')
-                    self.media_w=media.get('dimensions').get('width')
-                    self.media_h=media.get('dimensions').get('height')
 
-                    self.thumb_url=display_src
-                    self.poster_url=self.thumb_url
+                        images=self.ret_images_dict_from_album_json(profile_page)
 
-                    if is_video:
-                        self.media_url=media.get('video_url')
-                        self.link_action=sitesBase.DI_ACTION_PLAYABLE
-                        return self.media_url, sitesBase.TYPE_VIDEO
-                    else:
-                        return display_src, sitesBase.TYPE_IMAGE
+                        self.assemble_images_dictList(images)
+
+                        return media_url, sitesBase.TYPE_ALBUM
                 else:
                     log("  Could not get 'entry_data' from scraping instagram [window._sharedData = ]")
 
-            except:
-                log('    exception while parsing json')
-                return '',''
+            except (AttributeError,TypeError) as e:
+                log('    exception while parsing json:'+str(e))
 
         return '', ''
+
+    def ret_images_dict_from_album_json(self, j):
+        images=[]
+        album_nodes=j.get('user').get('media').get('nodes') #only returns about 12. we're not getting the rest for now
+
+
+        for entry in album_nodes:
+            is_video=entry.get('is_video')
+            link_action=''
+            if is_video:
+
+                media_url=entry.get('video_url')  #video_url is not in json!
+
+                link_action=sitesBase.DI_ACTION_PLAYABLE
+                media_type=self.TYPE_VIDEO
+                isPlayable='true'
+            else:
+                media_url=entry.get('display_src')
+                media_type=self.TYPE_IMAGE
+                isPlayable='false'
+
+            width    =entry.get('dimensions').get('width')
+            height   =entry.get('dimensions').get('height')
+            title    =entry.get('caption')
+            descrip  =entry.get('caption')
+            thumb_url=entry.get('thumbnail_src')
+
+            images.append( {'title': title,
+                            'type': media_type,
+                            'description': descrip,
+                            'url': media_url,
+                            'thumb': thumb_url,
+                            'width': width,
+                            'height': height,
+                            'isPlayable':isPlayable,
+                            'link_action':link_action,
+                            }  )
+        return images
+
+    def ret_album_list(self,album_url):
+        r = self.requests_get(album_url)
+        jo=re.compile('window._sharedData = ({.*});</script>').findall(r.text)
+        if jo:
+
+            try:
+                j=json.loads(jo[0] )
+                entry_data=j.get('entry_data')
+                if entry_data:
+                    if 'ProfilePage' in entry_data.keys():
+                        profile_page=entry_data.get('ProfilePage')[0]
+
+                        images=self.ret_images_dict_from_album_json(profile_page)
+
+                        self.assemble_images_dictList(images)
+
+                        return self.dictList
+                else:
+                    log("  Could not get 'entry_data' from scraping instagram [window._sharedData = ]")
+
+            except (AttributeError,TypeError) as e:
+                log('    exception while parsing json:'+str(e))
 
     def get_thumb_url(self):
         if self.thumb_url:
@@ -1219,7 +1628,6 @@ class ClassFlickr(sitesBase):
 
         self.fmedia_type="photo"
         ret_url=""
-        photo_id=0
 
         self.fmedia_type=self.flickr_link_type(media_url)
         log( '    media_type='+ self.fmedia_type + "  from:" + media_url)
@@ -1554,9 +1962,20 @@ class ClassGfycat(sitesBase):
 
             request_url="https://gfycat.com/cajax/get/" + self.video_id
 
-            content = self.requests_get(request_url)
 
-            content = content.json()
+            try:
+                content = self.requests_get(request_url)
+
+                content = content.json()
+            except requests.exceptions.HTTPError:
+                log('    Error requesting info via api endpoint. Trying actual link: '+media_url)
+
+                r = self.requests_get(media_url)
+                jo=re.compile('___INITIAL_STATE__=({.*});').findall(r.text)
+                if jo:
+
+                    j=json.loads(jo[0])
+                    content=j.get('detail')
 
             gfyItem=content.get('gfyItem')
             if gfyItem:
@@ -1632,6 +2051,9 @@ class ClassEroshare(sitesBase):
 
                     media_types.append( item.get('type').lower() )
 
+                images=self.ret_images_dict_from_album_json(j)
+                self.assemble_images_dictList(images)
+
                 if all_same(media_types):
                     if media_types[0]==self.TYPE_IMAGE:
                         log('    eroshare link has all images %d' %len(items) )
@@ -1646,7 +2068,7 @@ class ClassEroshare(sitesBase):
 
                 else: #video and images
                     log('    eroshare link has mixed video and images %d' %len(items) )
-
+                    self.link_action=None #sitesBase.DI_ACTION_YTDL
                     self.media_type=self.TYPE_ALBUM
                     return link_url, self.media_type
         else:
@@ -1676,21 +2098,32 @@ class ClassEroshare(sitesBase):
 
     def ret_album_list(self, album_url, thumbnail_size_code=''):
 
-        images=[]
         content = self.requests_get( album_url)
 
         match = re.compile('var album\s=\s(.*)\;').findall(content.text)
 
         if match:
             j = json.loads(match[0])
+            images=self.ret_images_dict_from_album_json(j)
+            self.assemble_images_dictList(images)
 
+
+        else:
+            log('      eroshare:ret_album_list: var album string not found. ')
+
+        return self.dictList
+
+    def ret_images_dict_from_album_json(self,j):
+        images=[]
+        try:
             reddit_submission=j.get('reddit_submission')
+            reddit_submission_title=''
             if reddit_submission:
                 reddit_submission_title=reddit_submission.get('title')
 
             title=j.get('title') if j.get('title') else reddit_submission_title
             items=j.get('items')
-            log( '      %d item(s)' % len(items) )
+
             prefix='https:'
             for s in items:
                 media_type=s.get('type').lower()
@@ -1719,13 +2152,9 @@ class ClassEroshare(sitesBase):
                                     'width': width,
                                     'height': height,
                                     }  )
-            self.assemble_images_dictList(images)
-
-
-        else:
-            log('      eroshare:ret_album_list: var album string not found. ')
-
-        return self.dictList
+        except AttributeError as e:
+            log('  error parsing eroshare album:'+str(e))
+        return images
 
     def get_media(self, j_item):
         h='https:'
@@ -1873,7 +2302,8 @@ class ClassReddit(sitesBase):
 
     def get_playable_url(self, link_url, is_probably_a_video):
         from reddit import assemble_reddit_filter_string
-        self.get_video_id()
+        subreddit=self.get_video_id(link_url)
+        self.video_id=subreddit
 
 
         self.media_type=sitesBase.TYPE_REDDIT
@@ -1883,9 +2313,9 @@ class ClassReddit(sitesBase):
             return link_url, self.media_type
         else:
 
-            if self.video_id:
+            if subreddit:
                 self.link_action='listSubReddit'
-                reddit_url=assemble_reddit_filter_string('',self.video_id)
+                reddit_url=assemble_reddit_filter_string('',subreddit)
                 return reddit_url, self.media_type
             if link_url.startswith('/u/'):
                 author=link_url.split('/u/')[1]
@@ -1894,22 +2324,47 @@ class ClassReddit(sitesBase):
                 reddit_url=assemble_reddit_filter_string("","/user/"+author+'/submitted')
                 return reddit_url, self.media_type
         return '',''
+    @classmethod
+    def get_video_id(self, reddit_url):
 
-    def get_video_id(self):
-
-        self.video_id=''
-        match = re.findall( '^\/?r\/(.+?)(?:\/|$)|https?://.+?\.reddit\.com\/r\/(.+?)(?:\/|$)' , self.media_url)
+        match = re.findall( '^\/?r\/(.+?)(?:\/|$)|https?://.+?\.reddit\.com\/r\/(.+?)(?:\/|$)' , reddit_url)
 
         if match:
             for m in match[0]:
                 if m: #just use the first non-empty match
-                    self.video_id=m
-                    return
+                    return m
 
     def get_thumb_url(self):
+        headers = {'User-Agent': reddit_userAgent}
+        body_text=None
+        from utils import clean_str
+
+        if '/comments/' in self.original_url:
+
+            u=self.original_url
+            if '?' in self.original_url:
+                url=self.original_url.split('?', 1)[0]+'.json?limit=1&'+self.original_url.split('?', 1)[1]
+                u=self.original_url.replace('?','/')
+            else:
+                url=self.original_url+'.json?limit=1'
+                if not self.original_url.endswith('/'):
+                    u=self.original_url+'/'
+
+            s_count=u.count('/')  #very crude way to determine how many id's in the url is to just count the '/' separators
+
+
+            if s_count > 8:#this is a comment (t1)
+                r = self.requests_get( url, headers=headers)
+                j=r.json()
+                body_text=clean_str(j,[1,'data','children',0,'data','body']  )
+            else:  #this is a post (t3)
+
+                pass
+
+            self.description=body_text
+
         if self.video_id:
 
-            headers = {'User-Agent': reddit_userAgent}
             req='https://www.reddit.com/r/%s/about.json' %self.video_id
 
             r = self.requests_get( req, headers=headers)
@@ -1920,7 +2375,7 @@ class ClassReddit(sitesBase):
             banner_img=j.get('banner_img')
             header_img=j.get('header_img')
 
-            icon=next((item for item in [icon_img,banner_img,header_img] if item ), '')
+            icon=next((item for item in [icon_img,header_img,banner_img] if item ), '')
 
             self.thumb_url=icon
             self.poster_url=banner_img
@@ -2015,7 +2470,7 @@ class ClassKindgirls(sitesBase):
 
         if self.is_album(self.original_url):
 
-            dictlist = self.ret_album_list( self.original_url )
+            self.ret_album_list( self.original_url )
             return self.thumb_url
 
 class Class500px(sitesBase):
@@ -2241,9 +2696,6 @@ class ClassImgTrex(sitesBase):
 
             self.set_media_type_thumb_and_action(image[0])
             return self.media_url, self.media_type
-
-    def ret_album_list(self, album_url, thumbnail_size_code=''):
-        return None
 
     def get_thumb_url(self):
         pass
@@ -2525,7 +2977,7 @@ class genericVideo(sitesBase):
 
 
 class LinkDetails():
-    def __init__(self, media_type, link_action, playable_url='', thumb='', poster='', poster_w=0, poster_h=0, dictlist=None  ):
+    def __init__(self, media_type, link_action, playable_url='', thumb='', poster='', poster_w=0, poster_h=0, dictlist=None, description='' , video_id=''):
 
         self.playable_url = playable_url
         self.media_type = media_type
@@ -2535,16 +2987,23 @@ class LinkDetails():
         self.poster_w = poster_w
         self.poster_h = poster_h
         self.dictlist = dictlist #for img albums
+        self.desctiption=description #for text gathered from link to present to the user. (r/bestof comment body for now)
+        self.video_id=video_id   #for youtube video id
 
 def sitesManager( media_url ):
+
+    shorteners=['bit.ly','goo.gl','tinyurl.com']
+    if any(shortener in media_url for shortener in shorteners):
+
+        v = requests.head( media_url, timeout=REQUEST_TIMEOUT, allow_redirects=True )
+        log('  short url(%s)=%s'%(media_url,repr(v.url)))
+        media_url=v.url
 
     for subcls in sitesBase.__subclasses__():
         regex=subcls.regex
         if regex:
             match=re.compile( regex  , re.I).findall( media_url )
-
             if match :
-
                 return subcls( media_url )
 
 def parse_reddit_link(link_url, assume_is_video=True, needs_preview=False, get_playable_url=False, image_ar=0 ):
@@ -2552,7 +3011,7 @@ def parse_reddit_link(link_url, assume_is_video=True, needs_preview=False, get_p
 
     album_dict_list=None
     hoster = sitesManager( link_url )
-    log( '    %s %s %s=> %s' %(hoster.__class__.__name__, link_url, hoster.link_action if hoster else '[No action]', hoster.media_url if hoster else '[Not supported]' ) )
+
 
     try:
         if hoster:
@@ -2562,6 +3021,8 @@ def parse_reddit_link(link_url, assume_is_video=True, needs_preview=False, get_p
 
             prepped_media_url, media_type = hoster.get_playable(link_url, assume_is_video)
 
+            if not prepped_media_url:
+                log("  Failed to parse %s" %(link_url) )
 
             if needs_preview:
                 hoster.get_thumb_url()
@@ -2577,12 +3038,13 @@ def parse_reddit_link(link_url, assume_is_video=True, needs_preview=False, get_p
                     album_dict_list=hoster.dictList
                     hoster.link_action='listAlbum'
 
-            ld=LinkDetails(media_type, hoster.link_action, prepped_media_url, hoster.thumb_url, hoster.poster_url, dictlist=album_dict_list )
+            ld=LinkDetails(media_type, hoster.link_action, prepped_media_url, hoster.thumb_url, hoster.poster_url, dictlist=album_dict_list,description=hoster.description  )
             return ld
 
         else:
             if url_resolver_support(link_url):
                 ld=LinkDetails(sitesBase.TYPE_VIDEO, sitesBase.DI_ACTION_URLR, link_url, '', '')
+                return ld
 
             if False: #resolve_undetermined:  (abandoned, too slow)
                 log('sending undetermined link to ytdl...')
@@ -2634,7 +3096,8 @@ def build_DirectoryItem_url_based_on_media_type(ld, url, arg_name='', arg_type='
     isFolder=True
     DirectoryItem_url=''
     title_prefix=''
-
+    url='' if url==None else url.decode('unicode_escape').encode('ascii','ignore')
+    arg_name=arg_name.encode('utf-8')             #sometimes we pass the title of the post on &name=. need to encode('utf-8') here otherwise we get a keyError
     if ld:
         if ld.media_type==sitesBase.TYPE_IMAGE:
             if addon.getSetting("hide_IMG") == "true": return
@@ -2688,11 +3151,10 @@ def build_DirectoryItem_url_based_on_media_type(ld, url, arg_name='', arg_type='
             isFolder=False
             DirectoryItem_url=ld.playable_url
         else:
-
             DirectoryItem_url=sys.argv[0]\
             +"?url="+ urllib.quote_plus(ld.playable_url) \
             +"&mode="+urllib.quote_plus(ld.link_action) \
-            +"&name="+urllib.quote_plus(arg_name.encode('utf-8')) \
+            +"&name="+urllib.quote_plus(arg_name) \
             +"&type="+urllib.quote_plus(arg_type)
     else:
         if addon.getSetting("hide_undetermined") == "true": return
@@ -2702,8 +3164,41 @@ def build_DirectoryItem_url_based_on_media_type(ld, url, arg_name='', arg_type='
         isFolder=False                 #isFolder=True avoids the WARNING: XFILE::CFileFactory::CreateLoader /  ERROR: InputStream: Error opening, ...
         DirectoryItem_url=sys.argv[0]\
         +"?url="+ urllib.quote_plus(url) \
-        +"&name="+urllib.quote_plus(arg_name.encode('utf-8')) \
+        +"&name="+urllib.quote_plus(arg_name) \
         +"&mode=playYTDLVideo"
 
     return DirectoryItem_url, setProperty_IsPlayable, isFolder, title_prefix
 
+'''
+
+class hosterBase(object):
+
+    def __init__(self, url):
+        self.url = url
+
+    @classmethod
+    def from_url(cls, url):
+        for subclass in cls.__subclasses__():
+            if subclass.recc.match(url):
+                return subclass(url)
+
+
+
+class cVidme(hosterBase):
+    regex = 'https?://vid\.me/(?:e/)?(?P<id>[\da-zA-Z]*)'
+    recc=re.compile(regex)
+
+class b(hosterBase):
+    regex = 'bbb'
+    recc=re.compile(regex)
+
+
+    m = hosterBase.from_url(media_url)
+    log("  "+str(m))
+    if m:
+        a = m.get_playable_url(media_url, assume_is_video)
+        log("  " + a)
+
+
+
+'''

@@ -5,10 +5,11 @@ import xbmcplugin
 
 import sys
 import shutil
+import re, pprint, os
 
 from default import subredditsFile, addon, addon_path, profile_path, ytdl_core_path, pluginhandle, subredditsPickle
 from utils import xbmc_busy, log, translation, xbmc_notify
-import threading
+from reddit import get_subreddit_entry_info
 
 ytdl_quality=addon.getSetting("ytdl_quality")
 try: ytdl_quality=[0, 1, 2, 3][ int(ytdl_quality) ]
@@ -19,9 +20,8 @@ def addSubreddit(subreddit, name, type_):
     from utils import colored_subreddit
     from reddit import this_is_a_multireddit, format_multihub
     alreadyIn = False
-    fh = open(subredditsFile, 'r')
-    content = fh.readlines()
-    fh.close()
+    with open(subredditsFile, 'r') as fh:
+        content = fh.readlines()
     if subreddit:
         for line in content:
             if line.lower()==subreddit.lower():
@@ -50,62 +50,25 @@ def addSubreddit(subreddit, name, type_):
                     alreadyIn = True
 
             if not alreadyIn:
-                fh = open(subredditsFile, 'a')
-                fh.write(subreddit+'\n')
-                fh.close()
+                with open(subredditsFile, 'a') as fh:
+                    fh.write(subreddit+'\n')
+
         xbmc.executebuiltin("Container.Refresh")
 
-def get_subreddit_entry_info(subreddit):
-
-    if subreddit.lower() in ['all','random','randnsfw']:
-        return
-    s=[]
-    if '/' in subreddit:  #we want to get diy from diy/top or diy/new
-        subreddit=subreddit.split('/')[0]
-
-    if '+' in subreddit:
-        s.extend(subreddit.split('+'))
-    else:
-        s.append(subreddit)
-
-    t = threading.Thread(target=get_subreddit_entry_info_thread, args=(s,) )
-
-    t.start()
-
-def get_subreddit_entry_info_thread(sub_list):
-    import os
-    from utils import load_dict, save_dict
-    from reddit import get_subreddit_info
-
-    subreddits_dlist=[]
-
-    if os.path.exists(subredditsPickle):
-
-        subreddits_dlist=load_dict(subredditsPickle)
-
-    for subreddit in sub_list:
-
-        subreddits_dlist=[x for x in subreddits_dlist if x.get('entry_name') != subreddit.lower() ]
-        sub_info=get_subreddit_info(subreddit)
-        log('****sub_info ' + repr( sub_info ))
-        if sub_info:
-
-            subreddits_dlist.append(sub_info)
-            save_dict(subreddits_dlist, subredditsPickle)
-
 def removeSubreddit(subreddit, name, type_):
+    log( 'removeSubreddit ' + subreddit)
 
-    fh = open(subredditsFile, 'r')
-    content = fh.readlines()
-    fh.close()
+    with open(subredditsFile, 'r') as fh:
+        content = fh.readlines()
+
     contentNew = ""
     for line in content:
         if line!=subreddit+'\n':
 
             contentNew+=line
-    fh = open(subredditsFile, 'w')
-    fh.write(contentNew)
-    fh.close()
+    with open(subredditsFile, 'w') as fh:
+        fh.write(contentNew)
+
     xbmc.executebuiltin("Container.Refresh")
 
 def editSubreddit(subreddit, name, type_):
@@ -232,7 +195,8 @@ def viewTallImage(image_url, width, height):
         log("  EXCEPTION viewTallImage:="+ str( sys.exc_info()[0]) + "  " + str(e) )
 
 def display_album_from(dictlist, album_name):
-    from domains import parse_reddit_link, build_DirectoryItem_url_based_on_media_type
+    from domains import parse_reddit_link, build_DirectoryItem_url_based_on_media_type, sitesBase
+    from utils import build_script
     directory_items=[]
 
     album_viewMode=addon.getSetting("album_viewMode")
@@ -242,36 +206,37 @@ def display_album_from(dictlist, album_name):
     else:
         using_custom_gui=False
 
-    for idx, d in enumerate(dictlist):
+    for _, d in enumerate(dictlist):
         ti=d['li_thumbnailImage']
         media_url=d.get('DirectoryItem_url')
 
-        combined = '[B]'+ d['li_label2'] + "[/B][CR]" if d['li_label2'] else ""
-        combined += d['infoLabels'].get('plot') if d['infoLabels'].get('plot') else ""
+        combined = d['infoLabels'].get('plot') if d['infoLabels'].get('plot') else ""
         d['infoLabels']['plot'] = combined
 
-
-        liz=xbmcgui.ListItem(label=d['infoLabels']['plot'],
-                             label2=d['li_label2'])
+        liz=xbmcgui.ListItem(label=d.get('li_label'), label2=d.get('li_label2') )
 
         ld=parse_reddit_link(media_url)
-        DirectoryItem_url, setProperty_IsPlayable, isFolder, title_prefix = build_DirectoryItem_url_based_on_media_type(ld, media_url, '', '', script_to_call="")
+        DirectoryItem_url, setProperty_IsPlayable, isFolder, _ = build_DirectoryItem_url_based_on_media_type(ld, media_url, '', '', script_to_call="")
 
         if using_custom_gui:
             url_for_DirectoryItem=media_url
-            if setProperty_IsPlayable=='true':
-                liz.setProperty('item_type','playable')
+            liz.setProperty('onClick_action',  DirectoryItem_url )
+            liz.setProperty('is_video','true')
 
-                liz.setProperty('onClick_action',  media_url )
+            if ld.link_action == sitesBase.DI_ACTION_PLAYABLE:
+                liz.setProperty('item_type','playable')
+            else:
+
+                liz.setProperty('item_type','script')
         else:
 
+            liz.setProperty('IsPlayable',setProperty_IsPlayable)
             url_for_DirectoryItem=DirectoryItem_url
 
         liz.setInfo( type='video', infoLabels=d['infoLabels'] ) #this tricks the skin to show the plot. where we stored the picture descriptions
         liz.setArt({"thumb": ti,'icon': ti, "poster":media_url, "banner":media_url, "fanart":media_url, "landscape":media_url   })
 
-        directory_items.append( (url_for_DirectoryItem, liz, False,) )
-
+        directory_items.append( (url_for_DirectoryItem, liz, isFolder) )
 
     if using_custom_gui:
         from guis import cGUI
@@ -315,10 +280,18 @@ def listAlbum(album_url, name, type_):
             display_album_from( dictlist, name )
 
 def playURLRVideo(url, name, type_):
+    dialog_progress_title='URL Resolver'
+    dialog_progress_YTDL = xbmcgui.DialogProgressBG()
+    dialog_progress_YTDL.create(dialog_progress_title )
+    dialog_progress_YTDL.update(10,dialog_progress_title,translation(30024)  )
+
     import urlresolver
+
+    dialog_progress_YTDL.update(20,dialog_progress_title,translation(30022)  )
 
     try:
         media_url = urlresolver.resolve(url)
+        dialog_progress_YTDL.update(80,dialog_progress_title,translation(30023)  )
         if media_url:
             log( '  URLResolver stream url=' + repr(media_url ))
 
@@ -328,7 +301,8 @@ def playURLRVideo(url, name, type_):
             log( "  Can't URL Resolve:" + repr(url))
             xbmc_notify('URLresolver',translation(30192))
     except Exception as e:
-        xbmc_notify('URLresolver',str(e))
+        xbmc_notify('URLresolver', str(e) )
+    dialog_progress_YTDL.close()
 
 def loopedPlayback(url, name, type_):
 
@@ -356,54 +330,46 @@ def playVideo(url, name, type_):
         log("playVideo(url) url is blank")
 
 def playYTDLVideo(url, name, type_):
+    if pluginhandle==-1:
+        xbmc_notify("Error","Attempt to use invalid handle -1") #saves the user from waiting
+        return
+
     dialog_progress_title='Youtube_dl'  #.format(ytdl_get_version_info())
     dialog_progress_YTDL = xbmcgui.DialogProgressBG()
     dialog_progress_YTDL.create(dialog_progress_title )
     dialog_progress_YTDL.update(10,dialog_progress_title,translation(30024)  )
 
     from YoutubeDLWrapper import YoutubeDLWrapper, _selectVideoQuality
+    from urlparse import urlparse, parse_qs
     import pprint
 
-    pl = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
-    pl.clear()
+    o = urlparse(url)
+    query = parse_qs(o.query)
+    video_index=0
 
-    dialog_progress_YTDL.update(20,dialog_progress_title,translation(30022)  )
+    if 'index' in query:
+        try:video_index=int(query['index'][0])
+        except (TypeError, ValueError): video_index=0
+
+        dialog_progress_YTDL.update(20,dialog_progress_title,translation(30025)  )
+    else:
+
+        dialog_progress_YTDL.update(20,dialog_progress_title,translation(30022)  )
 
     ytdl=YoutubeDLWrapper()
     try:
         ydl_info=ytdl.extract_info(url, download=False)
 
         video_infos=_selectVideoQuality(ydl_info, quality=ytdl_quality, disable_dash=(not ytdl_DASH))
-        log( "video_infos:\n" + pprint.pformat(video_infos, indent=1, depth=3) )
+
         dialog_progress_YTDL.update(80,dialog_progress_title,translation(30023)  )
 
         if len(video_infos)>1:
-            log('    ***ytdl link resolved to multple streams. playing only the first stream')
+            log('    ***ytdl link resolved to %d streams. playing #%d' %(len(video_infos), video_index))
 
-        video_info=video_infos[0]
-        url=video_info.get('xbmc_url')
-        title=video_info.get('title') or name
 
-        ytdl_format=video_info.get('ytdl_format')
-        if ytdl_format:
-            description=ytdl_format.get('description')
-
-            try:
-                start_time=ytdl_format.get('start_time',0)   #int(float(ytdl_format.get('start_time')))
-                duration=ytdl_format.get('duration',0)
-                StartPercent=(float(start_time)/duration)*100
-            except (ValueError, TypeError, ZeroDivisionError):
-                StartPercent=0
-
-            video_thumbnail=video_info.get('thumbnail')
-            li=xbmcgui.ListItem(label=title,
-                                label2='',
-                                path=url)
-            li.setInfo( type="Video", infoLabels={ "Title": title, "plot": description } )
-            li.setArt( {'icon':video_thumbnail, 'thumb':video_thumbnail} )
-
-            li.setProperty('StartPercent', str(StartPercent))
-            xbmcplugin.setResolvedUrl(pluginhandle, True, li)
+        li=ytdl_video_info_to_listitem(video_infos, video_index, name)
+        xbmcplugin.setResolvedUrl(pluginhandle, True, li)
 
     except Exception as e:
         ytdl_ver=dialog_progress_title+' v'+ytdl_get_version_info('local')
@@ -417,6 +383,39 @@ def playYTDLVideo(url, name, type_):
 
     dialog_progress_YTDL.update(100,dialog_progress_title ) #not sure if necessary to set to 100 before closing dialogprogressbg
     dialog_progress_YTDL.close()
+
+def ytdl_video_info_to_listitem(video_infos, video_index, title=None):
+
+    if video_index > 0 and video_index<len(video_infos):
+        video_info=video_infos[video_index-1]
+    else:
+
+        video_info=video_infos[0]
+
+    url=video_info.get('xbmc_url')
+    title=video_info.get('title') or title
+
+    ytdl_format=video_info.get('ytdl_format')
+    if ytdl_format:
+        description=ytdl_format.get('description')
+
+        try:
+            start_time=ytdl_format.get('start_time',0)   #int(float(ytdl_format.get('start_time')))
+            duration=ytdl_format.get('duration',0)
+            StartPercent=(float(start_time)/duration)*100
+        except (ValueError, TypeError, ZeroDivisionError):
+            StartPercent=0
+
+        video_thumbnail=video_info.get('thumbnail')
+        li=xbmcgui.ListItem(label=title,
+                            label2='',
+                            path=url)
+        li.setInfo( type="Video", infoLabels={ "Title": title, "plot": description } )
+        li.setArt( {'icon':video_thumbnail, 'thumb':video_thumbnail} )
+
+        li.setProperty('StartPercent', str(StartPercent))
+
+        return li
 
 def playYTDLVideoOLD(url, name, type_):
 
@@ -516,7 +515,7 @@ def ytdl_get_version_info(which_one='latest'):
 
 def update_youtube_dl_core(url,name,action_type):
 
-    import os, urllib
+    import urllib
     import tarfile
 
     if action_type=='download':
@@ -565,7 +564,7 @@ def update_youtube_dl_core(url,name,action_type):
                 update_dl_status('    New core copied')
                 xbmc.sleep(1000)
                 update_dl_status('Update complete')
-                xbmc.sleep(2000)
+                xbmc.Monitor().waitForAbort(2.0)
 
                 setSetting('ytdl_btn_check_version', "")
                 setSetting('ytdl_btn_download', "")
@@ -596,6 +595,60 @@ def update_dl_status(message):
 def setSetting(setting_id, value):
     addon.setSetting(setting_id, value)
 
+def delete_setting_file(url,name,action_type):
+
+    if action_type=='requests_cache':
+        file_to_delete=CACHE_FILE+'.sqlite'
+    elif action_type=='icons_cache':
+        file_to_delete=subredditsPickle
+    elif action_type=='subreddits_setting':
+        file_to_delete=subredditsFile
+
+    try:
+        os.remove(file_to_delete)
+        xbmc_notify("Deleting", '..'+file_to_delete[-30:])
+    except OSError as e:
+        xbmc_notify("Error:", str(e))
+
+def listRelatedVideo(url,name,type_):
+
+    from domains import ClassYoutube
+    from domains import parse_reddit_link, build_DirectoryItem_url_based_on_media_type
+
+    match=re.compile( ClassYoutube.regex, re.I).findall( url )
+    if match:
+
+        yt=ClassYoutube(url)
+        links_dictList=yt.ret_album_list(type_)  #returns a list of dict same as one used for albums
+        if links_dictList:
+
+
+            for _, d in enumerate(links_dictList):
+                label=d.get('li_label')
+                label2=d.get('li_label2')
+
+                ti=d.get('li_thumbnailImage')
+                media_url=d.get('DirectoryItem_url')
+
+
+                liz=xbmcgui.ListItem(label,label2)
+                liz.setInfo( type='video', infoLabels=d['infoLabels'] ) #this tricks the skin to show the plot. where we stored the descriptions
+                liz.setArt({"thumb": ti,'icon': ti, "poster":ti, "banner":ti, "fanart":ti, "landscape":ti   })
+
+                ld=parse_reddit_link(media_url)
+                DirectoryItem_url, setProperty_IsPlayable, isFolder, _ = build_DirectoryItem_url_based_on_media_type(ld, media_url, '', '', script_to_call="")
+
+                liz.setProperty('IsPlayable', setProperty_IsPlayable)
+                xbmcplugin.addDirectoryItem(pluginhandle, DirectoryItem_url, liz, isFolder)
+
+            xbmcplugin.endOfDirectory(handle=pluginhandle,
+                              succeeded=True,
+                              updateListing=False,   #setting this to True causes the ".." entry to quit the plugin
+                              cacheToDisc=True)
+        else:
+            xbmc_notify('Nothing to list', url)
+    else:
+        xbmc_notify('cannot identify youtube url', url)
 
 if __name__ == '__main__':
     pass

@@ -21,12 +21,12 @@ import io
 import inspect
 import time
 import HTMLParser
-#import chardet
+
 import json
 
 version = u"1.5.1"
 plugin = u"CommonFunctions Beta-" + version
-#print plugin
+
 
 USERAGENT = u"Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1"
 
@@ -53,13 +53,10 @@ else:
 if hasattr(sys.modules["__main__"], "opener"):
     urllib2.install_opener(sys.modules["__main__"].opener)
 
-
-# This function raises a keyboard for user input
 def getUserInput(title=u"Input", default=u"", hidden=False):
     log("", 5)
     result = None
 
-    # Fix for when this functions is called with default=None
     if not default:
         default = u""
 
@@ -73,13 +70,10 @@ def getUserInput(title=u"Input", default=u"", hidden=False):
     log(repr(result), 5)
     return result
 
-
-# This function raises a keyboard numpad for user input
 def getUserInputNumbers(title=u"Input", default=u""):
     log("", 5)
     result = None
 
-    # Fix for when this functions is called with default=None
     if not default:
         default = u""
 
@@ -101,7 +95,6 @@ def getXBMCVersion():
     log(repr(version))
     return version
 
-# Converts the request url passed on by xbmc to the plugin into a dict of key-value pairs
 def getParameters(parameterString):
     log("", 5)
     commands = {}
@@ -113,7 +106,7 @@ def getParameters(parameterString):
         if (len(command) > 0):
             splitCommand = command.split('=')
             key = splitCommand[0]
-            try: 
+            try:
                 value = splitCommand[1].encode("utf-8")
             except:
                 log("Error utf-8 encoding argument value: " + repr(splitCommand[1]))
@@ -128,7 +121,6 @@ def getParameters(parameterString):
 def replaceHTMLCodes(txt):
     log(repr(txt), 5)
 
-    # Fix missing ; in &#<number>;
     txt = re.sub("(&#[0-9]+)([^;^0-9]+)", "\\1;\\2", makeUTF8(txt))
 
     txt = HTMLParser.HTMLParser().unescape(txt)
@@ -197,11 +189,9 @@ def _getDOMAttributes(match, name, ret):
         if cont_char in "'\"":
             log("Using %s as quotation mark" % cont_char, 3)
 
-            # Limit down to next variable.
             if tmp.find('=' + cont_char, tmp.find(cont_char, 1)) > -1:
                 tmp = tmp[:tmp.find('=' + cont_char, tmp.find(cont_char, 1))]
 
-            # Limit to the last quotation mark
             if tmp.rfind(cont_char, 1) > -1:
                 tmp = tmp[1:tmp.rfind(cont_char)]
         else:
@@ -317,7 +307,7 @@ def extractJS(data, function=False, variable=False, match=False, evaluate=False,
         if function:
             tmp_lst = re.compile(function + '\(.*?\).*?;', re.M | re.S).findall(script)
         elif variable:
-            tmp_lst = re.compile(variable.replace("[", "\[").replace("]", "\]") + '[ ]+=.*?;', re.M | re.S).findall(script)            
+            tmp_lst = re.compile(variable.replace("[", "\[").replace("]", "\]") + '[ ]+=.*?;', re.M | re.S).findall(script)
         else:
             tmp_lst = [script]
         if len(tmp_lst) > 0:
@@ -334,10 +324,7 @@ def extractJS(data, function=False, variable=False, match=False, evaluate=False,
             del lst[i]
         else:
             log("Cleaning item: " + repr(lst[i]), 4)
-            #if lst[i][0] == u"\n":
-            #    lst[i] == lst[i][1:]
-            #if lst[i][len(lst) -1] == u"\n":
-            #    lst[i] == lst[i][:len(lst)- 2]
+
             lst[i] = lst[i].strip()
 
     if values or evaluate:
@@ -351,7 +338,7 @@ def extractJS(data, function=False, variable=False, match=False, evaluate=False,
             elif variable:
                 tlst = re.compile(variable +".*?=.*?;", re.M | re.S).findall(lst[i])
                 data = []
-                for tmp in tlst: # This breaks for some stuff. "ad_tag": "http://ad-emea.doubleclick.net/N4061/pfadx/com.ytpwatch.entertainment/main_563326'' # ends early, must end with } 
+                for tmp in tlst: # This breaks for some stuff. "ad_tag": "http://ad-emea.doubleclick.net/N4061/pfadx/com.ytpwatch.entertainment/main_563326'' # ends early, must end with }
                     cont_char = tmp[0]
                     cont_char = tmp[tmp.find("=") + 1:].strip()
                     cont_char = cont_char[0]
@@ -435,15 +422,14 @@ def fetchPage(params={}):
         ret_obj["new_url"] = con.geturl()
         if get("no-content", "false") == u"false" or get("no-content", "false") == "false":
             inputdata = con.read()
-            #data_type = chardet.detect(inputdata)
-            #inputdata = inputdata.decode(data_type["encoding"])
+
             try:
-                ret_obj["content"] = inputdata.decode("utf-8")                    
+                ret_obj["content"] = inputdata.decode("utf-8")
             except:
                 try:
-                    ret_obj["content"] = inputdata.decode("latin-1")                    
+                    ret_obj["content"] = inputdata.decode("latin-1")
                 except:
-                    raise    
+                    raise
 
         con.close()
 
@@ -493,12 +479,9 @@ def getCookieInfoAsHTML():
     log("Found no cookie", 5)
     return ""
 
-
-# This function implements a horrible hack related to python 2.4's terrible unicode handling.
 def makeAscii(data):
     log(repr(data), 5)
-    #if sys.hexversion >= 0x02050000:
-    #        return data
+
 
     try:
         return data.encode('ascii', "ignore")
@@ -517,26 +500,10 @@ def makeAscii(data):
         log(repr(s), 5)
         return s
 
-
-# This function handles stupid utf handling in python.
 def makeUTF8(data):
     log(repr(data), 5)
     return data
-#    try:
-#        return data.decode('utf8', 'xmlcharrefreplace') # was 'ignore'
-#    except:
-#        log("Hit except on : " + repr(data))
-#        s = u""
-#        for i in data:
-#            try:
-#                i.decode("utf8", "xmlcharrefreplace") 
-#            except:
-#                log("Can't convert character", 4)
-#                continue
-#            else:
-#                s += i
-#        log(repr(s), 5)
-#        return s
+
 
 
 def openFile(filepath, options=u"r"):

@@ -2,7 +2,7 @@
 <addon
 	id="plugin.video.reddit_viewer"
 	name="Reddit Viewer"
-	version="3.3.8"
+	version="3.5.0"
 	provider-name="gedisony">
 	<requires>
 		<import addon="xbmc.python"                     version="2.24.0"                />

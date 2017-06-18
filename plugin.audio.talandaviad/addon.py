@@ -1,6 +1,10 @@
+# coding=utf-8
+
 import sys
+import os
 import urllib
 import urlparse
+import xbmcaddon
 import xbmcgui
 import xbmcplugin
 import requests
@@ -40,9 +44,9 @@ def build_song_list(songs):
     song_list = []
     for song in songs:
         # create a list item using the song filename for the label
-        li = xbmcgui.ListItem(label=songs[song]['title'], thumbnailImage=songs[song]['album_cover'])
+        li = xbmcgui.ListItem(label=songs[song]['title'])
         # set the fanart to the albumc cover
-        li.setProperty('fanart_image', '{0}/{1}'.format(ADDON_FOLDER, 'fanart.jpg'))
+        li.setProperty('fanart_image', os.path.join(ADDON_FOLDER, 'resources/media/fanart.jpg'))
         # set the list item to playable
         li.setProperty('IsPlayable', 'true')
         li.setProperty('ChannelName', 'ECO 99FM')
@@ -55,7 +59,7 @@ def build_song_list(songs):
         li.setArt({
             'thumb': songs[song]['album_cover'],
             'poster': songs[song]['album_cover'],
-            'fanart': '{0}/fanart.jpg'.format(ADDON_FOLDER),
+            'fanart': os.path.join(ADDON_FOLDER, 'resources/media/fanart.jpg'),
         })
         # build the plugin url for Kodi
         url = build_url({'mode': 'stream', 'url': songs[song]['url'], 'title': songs[song]['title'].encode('utf-8')})
@@ -86,7 +90,7 @@ def main():
 
 
 if __name__ == '__main__':
-    ADDON_FOLDER = 'special://home/addons/plugin.audio.talandaviad'
+    ADDON_FOLDER = xbmcaddon.Addon().getAddonInfo("path")
     RSS = 'http://eco99fm.maariv.co.il/rss/'
     addon_handle = int(sys.argv[1])
     main()

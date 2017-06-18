@@ -1,0 +1,39 @@
+{
+    "id": 3,
+    "order": 3,
+    "metadata": {
+        "title": "Pressesch(l)au",
+        "cast": ["Lars Golenia"],
+        "country": 30202,
+        "plot": "Pressesch(l)au taucht ein in die skurrilen Abgründe der Printmedien. Lars Golenia rezensiert Artikel, zeigt unglaubliche Zeitschriften und spottet über Falschmeldungen und schlecht recherchierte Inhalte. Alles garniert mit kabarettistischen Kommentaren. Ein satirischer Rundumschlag mit Comedy-Elementen.",
+        "premiered": "2013-08-01"
+    },
+    "fanart": "fanart-presseschlau-20160221.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1, 2],
+            "metadata": {
+                "title": 30300,
+                "plot": 30224
+            }
+        },
+        {
+            "name": "episodes",
+            "ids": [1],
+            "metadata": {
+                "title": 30301,
+                "plot": 30225
+            }
+        },
+        {
+            "name": "interviews",
+            "ids": [2],
+            "metadata": {
+                "title": 30302,
+                "plot": 30354
+            }
+        }
+    ]
+}

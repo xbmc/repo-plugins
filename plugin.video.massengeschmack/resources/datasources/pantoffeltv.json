@@ -1,0 +1,19 @@
+{
+    "id": 2,
+    "order": 2,
+    "metadata": {
+        "title": "Pantoffel-TV",
+        "cast": ["Holger Kreymeier", "Mario Perez", "Volker Robrahn"],
+        "country": 30202,
+        "plot": "Pantoffel-TV ist das Heimkino-Magazin bei Massengeschmack – aktuelle Neuerscheinungen auf dem DVD- und BluRay-Markt werden in lockerer Runde gesprochen. Volker Robrahn, Mario Perez und Holger Kreymeier begrüßen dazu auch regelmäßig illustre Gäste, die selbst Filmkritiken machen oder im Filmbusiness tätig sind. Außerdem gibt es Rubriken wie etwa „Original vs. Remake“, wo alte Klassiker mit ihren Neuverfilmungen verglichen werden. Und exklusiv für Abonnenten gibt es auch immer ein Gewinnspiel mit Verlosungen aktuell besprochener Filme.",
+        "premiered": "2013-06-17"
+    },
+    "fanart": "fanart-pantoffeltv-20160220.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ]
+}

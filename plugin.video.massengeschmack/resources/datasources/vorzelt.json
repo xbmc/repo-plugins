@@ -1,0 +1,20 @@
+{
+    "id": 12,
+    "order": 112,
+    "metadata": {
+        "title": "Das Vorzelt zur Hölle",
+        "cast": ["Tommy Krappweis"],
+        "country": 30202,
+        "plot": "Tommy Krappweis erinnert sich gemeinsam mit seinem Vater Werner an skurrile Camping-Urlaube im 20. Jahrhundert. Ein nostalgisch-charmanter Rückblick auf naturnahe Ferien im analogen Zeitalter.",
+        "premiered": "2016-06-15"
+    },
+    "fanart": "fanart-vorzelt.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "ids": [1]
+        }
+    ],
+	"active": false
+}

@@ -1,0 +1,17 @@
+{
+    "id": -10,
+    "order": -10,
+    "metadata": {
+        "title": 30150,
+        "plot": 30151
+    },
+    "banner": "banner-massengeschmack-20160220.png",
+    "fanart": "fanart-massengeschmack-20160220.jpg",
+    "qualities": ["best", "hd", "mobile", "audio"],
+    "submodules": [
+        {
+            "name": "all",
+            "feed_name": "main"
+        }
+    ]
+}

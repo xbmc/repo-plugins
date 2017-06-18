@@ -10,6 +10,7 @@ https://commons.wikimedia.org/wiki/File:CBS_classic_logo.svg (converted to .jpg)
 
 Change Log
 =====================
+V3.0.7 fix for subtitle format
 V3.0.6 fix for dynamic metadata
 V3.0.5 Added M3U8 support for "new" videos
 V3.0.4 Added 'Add to Library'

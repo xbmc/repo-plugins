@@ -16,7 +16,7 @@ import sys
 h = HTMLParser.HTMLParser()
 qp  = urllib.quote_plus
 uqp = urllib.unquote_plus
-UTF8     = 'utf-8'
+UTF8 = 'utf-8'
 
 
 class myAddon(t1mAddon):
@@ -141,8 +141,10 @@ class myAddon(t1mAddon):
           purl += '&signature=%s' % signature
       pg = self.getRequest(purl, None, headers)
       url = re.compile('<video src="(.+?)"', re.DOTALL).search(pg).group(1)
-      if url.startswith('http'):
-          finalurl = url +'|User-Agent='+urllib.quote(headers['User-Agent'])
+      if url.startswith('http') :
+          finalurl = url
+          if not ('cbsnews-vh' in url):
+              finalurl += '|User-Agent='+urllib.quote(headers['User-Agent'])
       else:
               pg = self.getRequest('http://link.theplatform.com/s/dJ5BDC/%s?format=SMIL&mbr=true' % foundpid)
               frtmp,fplay = re.compile('<meta base="(.+?)".+?<video src="(.+?)"',re.DOTALL).search(pg).groups()
@@ -159,12 +161,11 @@ class myAddon(t1mAddon):
                   swfurl = 'http://vidtech.cbsinteractive.com/player/3_3_2/CBSI_PLAYER_HD.swf swfvfy=true pageUrl=http://www.cbs.com/shows'
               finalurl = '%s playpath=%s%s swfurl=%s timeout=90' % (frtmp, pphdr, fplay, swfurl)
               xbmcgui.Dialog().notification(self.addonName, self.addon.getLocalizedString(30001), self.addonIcon, 5000, False)
-
       liz = xbmcgui.ListItem(path = finalurl)
       suburl = re.compile('"ClosedCaptionURL" value="(.+?)"',re.DOTALL).search(pg)
       if suburl != None:
           suburl = suburl.group(1)
-          if ('xml' in suburl):
+          if ('xml' in suburl) and not ('adb_xml' in suburl):
               subfile = self.procConvertSubtitles(suburl)
               if subfile != "":
                   liz.setSubtitles([subfile])

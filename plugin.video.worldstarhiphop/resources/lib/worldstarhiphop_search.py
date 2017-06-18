@@ -99,18 +99,17 @@ class Main:
         # Parse response...
         soup = BeautifulSoup(html_source)
 
-        # <section class="box">
-        #                 <a href="/videos/video.php?v=wshhf1jtojJPKCOEOd1n" class="video-box">
-        #                 <img src="http://hw-static.worldstarhiphop.com/u/pic/2015/06/Oe4nzSMG4iuf.jpg" width="222" height="125" alt="">
-        #                 </a>
-        #                 <strong class="title"><a href="/videos/video.php?v=wshhf1jtojJPKCOEOd1n">Blues Version Of &quot;The Fresh Prince Of Bel-Air&quot; Theme!</a></strong>
-        #                 <div>
-        #                         <span class="views">58,847</span>
-        #                         <span class="comments"><a href="http://www.worldstarhiphop.com/videos/video.php?v=wshhf1jtojJPKCOEOd1n#disqus_thread" data-disqus-identifier="83085"></a></span>
-        #                 </div>
+        # <section class="box" itemscope itemtype="http://schema.org/ImageObject">
+        #     <a itemprop="url" href="/videos/video.php?v=wshh2CJS555r6b1C9wYW" class="video-box">
+        #         <img class="lazy" data-original="http://hw-static.worldstarhiphop.com/u/pic/2017/06/RQuaJkNGpDn1.jpg" width="222" height="125" alt="XXXTentacion Punches A Fan In The Face For Touching Him During Salt Lake City Performance!" itemprop="thumbnailUrl">
+        #         <noscript><img src="http://hw-static.worldstarhiphop.com/u/pic/2017/06/RQuaJkNGpDn1.jpg" width="222" height="125" alt="XXXTentacion Punches A Fan In The Face For Touching Him During Salt Lake City Performance!" itemprop="thumbnailUrl"></noscript>
+        #     </a>
+        #     <strong class="title" itemprop="name"><a href="/videos/video.php?v=wshh2CJS555r6b1C9wYW">XXXTentacion Punches A Fan In The Face For Touching Him During Salt Lake City Performance!</a></strong>
+        #     <div>
+        #         <span class="views">104,000</span>
+        #         <span class="comments"><a href="http://www.worldstarhiphop.com/videos/video.php?v=wshh2CJS555r6b1C9wYW#disqus_thread" data-disqus-identifier="108305"></a></span>
+        #     </div>
         # </section>
-
-        # Clean title: Blues Version Of "The Fresh Prince Of Bel-Air" Theme!
 
         items = soup.findAll('section', attrs={'class': re.compile("^box")})
 
@@ -118,37 +117,26 @@ class Main:
             ADDON, VERSION, DATE, "len(items)", str(len(items))), xbmc.LOGDEBUG)
 
         for item in items:
-            item_string = str(item)
-
-            # Get video-page-url
-            start_pos_url1 = item_string.find('"/videos/video.php?v=', 0)
-
-            # skip the item if nothing was found
-            if start_pos_url1 == -1:
-                continue
-
-            end_pos_url1 = item_string.find('"', start_pos_url1 + 1)
-            video_url = item_string[start_pos_url1 + 1:end_pos_url1]
-            video_page_url = BASEURL + video_url
+            video_page_url = BASEURL + str(item.a['href'])
 
             xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                 ADDON, VERSION, DATE, "video_page_url", str(video_page_url)), xbmc.LOGDEBUG)
 
-            # Get thumbnail url
-            item_string = str(item)
-            start_pos_url = item_string.find('http://hw-static.worldstarhiphop.com', 0)
-            end_pos_url = item_string.find('"', start_pos_url)
-            thumbnail_url = item_string[start_pos_url:end_pos_url]
+            # skip the item if the video page url isn't a real video page url
+            if str(video_page_url).find('/videos/video.php?v=') == -1:
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s " % (
+                    ADDON, VERSION, DATE, "skipping item because no video could be found"), xbmc.LOGDEBUG)
+                continue
+
+            try:
+                thumbnail_url = item.img['data-original']
+            except:
+                thumbnail_url = item.img['src']
 
             xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                 ADDON, VERSION, DATE, "thumbnail_url", str(thumbnail_url)), xbmc.LOGDEBUG)
 
-            # Get title
-            start_pos_url2 = item_string.find('"/videos/video.php?v=', end_pos_url1 + 1)
-            end_pos_url2 = item_string.find('"', start_pos_url2 + 1)
-            start_pos_title = item_string.find('>', end_pos_url2 + 1)
-            end_pos_title = item_string.find('<', start_pos_title + 1)
-            title = item_string[start_pos_title + 1:end_pos_title]
+            title = item.img['alt']
 
             # Clean up title
             try:
@@ -190,7 +178,7 @@ class Main:
             title = title.replace(' xxx ', ' XXX ')
             title = title.replace('  ', ' ')
             title = title.replace('  ', ' ')
-            # welcome to characterset-hell
+            # welcome to unescaping-hell
             title = title.replace('&pound;', "Pound Sign")
             title = title.replace('&amp;#039;', "'")
             title = title.replace('&amp;#39;', "'")

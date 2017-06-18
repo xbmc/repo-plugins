@@ -11,5 +11,5 @@ ADDON = "plugin.video.worldstarhiphop"
 SETTINGS = xbmcaddon.Addon()
 LANGUAGE = SETTINGS.getLocalizedString
 IMAGES_PATH = os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources', 'images')
-DATE = "2017-04-08"
-VERSION = "1.0.9"
+DATE = "2017-06-18"
+VERSION = "1.0.10"

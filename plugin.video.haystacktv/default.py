@@ -84,7 +84,7 @@ socket.setdefaulttimeout(TIMEOUT)
 class Haystack():
     def __init__(self):
         log('__init__')
-        self.cache   = SimpleCache()
+        self.cache = SimpleCache()
         self.getCategories()
 
         
@@ -94,12 +94,12 @@ class Haystack():
             if not cacheResponce:
                 request = urllib2.Request(url)
                 request.add_header('User-Agent','Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)')
-                responce = urllib2.urlopen(request, timeout = TIMEOUT)
-                soup = BeautifulSoup(responce.read())
+                response = urllib2.urlopen(request, timeout=TIMEOUT)
+                soup = BeautifulSoup(response.read())
                 data = (soup.find('script').text).rstrip()
                 data = (data.split('window.__INITIAL_STATE__ = ')[1]).replace(';','')
                 results = json.loads(data)
-                responce.close()
+                response.close()
                 self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, results, expiration=datetime.timedelta(hours=1))
             return self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
         except urllib2.URLError, e:

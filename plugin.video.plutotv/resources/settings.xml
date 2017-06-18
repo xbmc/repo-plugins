@@ -2,7 +2,6 @@
 <settings>
     <setting id="User_Email"       type="text"   label="30001" default="" />
     <setting id="User_Password"    type="text"   label="30002" default="" />
-    <setting id="Hide_Ads"         type="bool"   label="30003" default="false" />
     <setting id="Select_Country"   type="action" label="30005" default="US" action="RunScript($CWD/country.py)"/>
     <setting id="Filter_Region"    type="bool"   label="30004" default="true" />
     <setting id="Enable_Debugging" type="bool"   label="30000" default="false" />       

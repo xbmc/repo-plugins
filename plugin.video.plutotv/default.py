@@ -40,9 +40,9 @@ USER_EMAIL  = REAL_SETTINGS.getSetting('User_Email')
 PASSWORD    = REAL_SETTINGS.getSetting('User_Password')
 FIT_REGION  = REAL_SETTINGS.getSetting('Filter_Region') == 'true'
 DEBUG       = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
-HIDE_PLUTO  = REAL_SETTINGS.getSetting("Hide_Ads") == "true"
 COOKIE_JAR  = xbmc.translatePath(os.path.join(SETTINGS_LOC, "cookiejar.lwp"))
 PTVL_RUN    = xbmcgui.Window(10000).getProperty('PseudoTVRunning') == 'True'
+HIDE_PLUTO  = PTVL_RUN
 IGNORE_KEYS = ['pluto.tv','plutotv','pluto tv','promo']
 YTURL       = 'plugin://plugin.video.youtube/play/?video_id='
 VMURL       = 'plugin://plugin.video.vimeo/play/?video_id='
@@ -183,7 +183,8 @@ class PlutoTV():
         except Exception,e:
             log('openURL, Unable to open url ' + str(e), xbmc.LOGERROR)
             xbmcgui.Dialog().notification(ADDON_NAME, 'Unable to Connect, Check User Credentials', ICON, 4000)
-        
+            return []
+            
 
     def mainMenu(self):
         log('mainMenu')

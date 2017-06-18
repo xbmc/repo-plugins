@@ -25,15 +25,16 @@ ADDON_ID      = 'plugin.video.plutotv'
 REAL_SETTINGS = xbmcaddon.Addon(id=ADDON_ID)
 ADDON_NAME    = REAL_SETTINGS.getAddonInfo('name')
 LANGUAGE      = REAL_SETTINGS.getLocalizedString
+COUNTRY_LIST  = list(pycountry.countries)
 
 def getCountryList():
-    for country in list(pycountry.countries):
+    for country in COUNTRY_LIST:
         yield (country.name)
         
 def getAlpha2(idx):
     if idx < 0 or not idx:
         return 'US'
-    return str((list(pycountry.countries)[idx]).alpha_2)
+    return str((COUNTRY_LIST[idx]).alpha_2)
         
 def selectDialog(list, header=ADDON_NAME):
     select = xbmcgui.Dialog().select(LANGUAGE(30005), list)

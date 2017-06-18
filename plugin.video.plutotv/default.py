@@ -171,8 +171,8 @@ class PlutoTV():
             header_dict['User-Agent'] = 'Mozilla/5.0 (Windows NT 6.2; rv:24.0) Gecko/20100101 Firefox/24.0'
             self.net.set_cookies(COOKIE_JAR)
             trans_table   = ''.join( [chr(i) for i in range(128)] + [' '] * 128 )
-            cacheResponce = self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
-            if not cacheResponce:
+            cacheResponse = self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
+            if not cacheResponse:
                 try:
                     req = self.net.http_GET(url, headers=header_dict).content.encode("utf-8", 'ignore')
                 except:

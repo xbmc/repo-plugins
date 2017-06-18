@@ -17,7 +17,7 @@
 # along with PlutoTV.  If not, see <http://www.gnu.org/licenses/>.
 
 # -*- coding: utf-8 -*-
-import pycountry
+import pycountries
 import xbmcgui, xbmcaddon
 
 # Plugin Info
@@ -25,7 +25,7 @@ ADDON_ID      = 'plugin.video.plutotv'
 REAL_SETTINGS = xbmcaddon.Addon(id=ADDON_ID)
 ADDON_NAME    = REAL_SETTINGS.getAddonInfo('name')
 LANGUAGE      = REAL_SETTINGS.getLocalizedString
-COUNTRY_LIST  = list(pycountry.countries)
+COUNTRY_LIST  = list(pycountries.countries)
 
 def getCountryList():
     for country in COUNTRY_LIST:

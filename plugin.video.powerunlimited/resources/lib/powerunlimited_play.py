@@ -96,6 +96,8 @@ class Main:
 
         # Parse video file url
         # <iframe width="967" height="544" src="https://www.youtube.com/embed/-XpoD7OgLFM?feature=oembed" frameborder="0" allowfullscreen>
+        # or
+        # <iframe width="967" height="544" src="https://www.youtube.com/embed/-XpoD7OgLFM" frameborder="0" allowfullscreen>
         video_urls = soup.findAll('iframe', attrs={'src': re.compile("^https://www.youtube.com/embed")}, limit=1)
         if len(video_urls) == 0:
             no_url_found = True
@@ -108,7 +110,8 @@ class Main:
                     have_valid_url = True
                     # make youtube plugin url
                     pos_of_last_question_mark = video_url.rfind("?")
-                    video_url = video_url[0: pos_of_last_question_mark]
+                    if pos_of_last_question_mark >= 0:
+                        video_url = video_url[0: pos_of_last_question_mark]
                     video_url_len = len(video_url)
                     youtubeID = video_url[len("https://www.youtube.com/embed/"):video_url_len]
                     youtube_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtubeID

@@ -1,3 +1,6 @@
+v1.0.6 (2017-06-20):
+- fixed getting video due to website change
+
 v1.0.5 (2017-03-13):
 - changed addon debugging info to kodi debugging info
 - using po-files

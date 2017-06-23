@@ -21,8 +21,8 @@ class pigskin(object):
     def __init__(self, proxy_config, cookie_file, debug=False):
         self.debug = debug
         self.subscription = ''
-        self.base_url = 'https://gamepass.nfl.com/nflgp'
-        self.servlets_url = 'http://gamepass.nfl.com/nflgp/servlets'
+        self.base_url = 'https://gp.nfl.com/nflgp'
+        self.servlets_url = 'https://gp.nfl.com/nflgp/servlets'
         self.simpleconsole_url = self.servlets_url + '/simpleconsole'
         self.boxscore_url = ''
         self.image_url = ''

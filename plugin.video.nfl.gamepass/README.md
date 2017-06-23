@@ -1,5 +1,5 @@
 # NFL Game Pass Kodi Plugin #
-**version 0.10.1 — Barry Sanders Edition**
+**version 0.10.2 — Daunte Culpepper Edition**
 
 Before reading any further, please understand that this addon is unofficial and
 is not endorsed or supported by the NFL in any way. Not all features are
@@ -12,12 +12,13 @@ request. Patches and (constructive) input are always welcome.
 
 ## Any Dependencies? ##
 
-This addon requires Kodi Jarvis or later. XBMC Helix and Isengard will be
-supported for awhile in the "Isengard" branch.
+This addon requires Kodi Krypton or later. The latest version supporting Jarvis
+was 0.9.2.
 
-This addon is in the official Kodi repository, and when installed from there,
-all dependencies are installed automatically. However, if you're installing
-directly from the source, make sure the following dependencies are installed:
+This addon is available from the official Kodi repository, and when installed
+from there, all dependencies are installed automatically. However, if you're
+installing directly from the source, make sure the following dependencies are
+installed:
  * xmltodict (http://mirrors.kodi.tv/addons/jarvis/script.module.xmltodict/)
  * Requests 2.x (http://mirrors.kodi.tv/addons/jarvis/script.module.requests/)
  * m3u8 >= 0.2.10 (http://mirrors.kodi.tv/addons/jarvis/script.module.m3u8/)
@@ -85,7 +86,7 @@ flattery, etc), and we'll gladly name a future release after them.
 
 A rough roadmap follows:
 
-* Kodi v17 (Krypton) Support
 * Continue work towards feature completeness
 * Stabilize Game Pass Domestic support
+* Testing
 * Code cleanup

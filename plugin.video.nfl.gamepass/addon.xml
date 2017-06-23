@@ -5,7 +5,7 @@
      marooned on an old version. -->
 <addon id="plugin.video.nfl.gamepass"
        name="NFL Game Pass"
-       version="0.10.1"
+       version="0.10.2"
        provider-name="Alexqw,divingmule,BaumSchorle,eriksoderblom">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
@@ -26,10 +26,12 @@
     <source>https://github.com/aqw/xbmc-gamepass</source>
     <forum></forum>
     <disclaimer lang="en">This addon requires you to have a subscription to NFL Game Pass.[CR]Please note that these subscriptions are region restricted by the NFL.[CR]This addon is completely unofficial and is /not/ endorsed by the NFL in any way.</disclaimer>
-    <news>2017.01.09 v0.10.1 -- Barry Sanders Edition
-    + Update for Krypton
-    + New Translations: Russian and Ukrainian
-    + Domestic users can now access NFL Network
+    <news>2017.06.23 v0.10.2 -- Daunte Culpepper Edition
+    + Temporarily fix addon crashing (emilsvennesson)
+    +   GamePass is moving to a new streaming partner. The old service will work
+    +   until July 31st. This fix points to the old service, and buys us time to
+    +   update everything for the new service.
+    + Fix fanart not loading (emilsvennesson)
     </news>
     <assets>
       <icon>resources/art/icon.png</icon>

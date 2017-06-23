@@ -1,3 +1,10 @@
+2017.06.23 v0.10.2 -- Daunte Culpepper Edition
++ Temporarily fix addon crashing (emilsvennesson)
++   GamePass is moving to a new streaming partner. The old service will work
++   until July 31st. This fix points to the old service, and buys us time to
++   update everything for the new service.
++ Fix fanart not loading (emilsvennesson)
+
 2017.01.10 v0.10.1 -- Barry Sanders Edition
 + Bug fix caught by Kodi's Pull Request code checks. :-)
 

@@ -7,7 +7,7 @@
             <width>1280</width>
             <height>720</height>
             <aspectratio>scale</aspectratio>
-            <texture>../../../../fanart.jpg</texture>
+            <texture>../../../art/fanart.jpg</texture>
         </control>
         <control type="image">
             <description>Menubar background</description>

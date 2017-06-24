@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.audio.radiotunes.com"
        name="RadioTunes"
-       version="3.0.1"
+       version="3.0.2"
        provider-name="qualisoft.dk - Tim C. Steinmetz">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
@@ -23,5 +23,6 @@
 			RadioTunes.com כולל מגוון רחב של הזרמת ערוצי רדיו באיכות גבוהה. מצא את המועדף שלך בין הטובים ביותר - בין אם זה עידן חדש, שנות ה-80, ג'אז, Top40, היפ הופ, שירים ישנים, שנות ה-70, רגאיי, Lounge ורבים אחרים.
 		</description>
 		<language/>
+		<broken>Add-on is broken due to website changes</broken>
 	</extension>
 </addon>

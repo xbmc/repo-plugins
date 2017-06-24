@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.audio.rockradio.com"
        name="RockRadio.com"
-       version="3.0.1"
+       version="3.0.2"
        provider-name="qualisoft.dk - Tim C. Steinmetz">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
@@ -23,5 +23,6 @@
 		<description lang="de">
 			ROCKRADIO.COM bietet mehr als 30 Rock Musik Sender, die von von unseren Mitarbeitern kuratiert werden. Unser Auftrag besteht darin die vielfältigste Auswahl an Musik ohne Unterbrechungen bereitzustellen.
 		</description>
+		<broken>Add-on is broken due to website changes</broken>
 	</extension>
 </addon>

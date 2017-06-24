@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.audio.di.fm"
        name="Digitally Imported"
-       version="3.1.2"
+       version="3.1.3"
        provider-name="qualisoft.dk - Tim C. Steinmetz">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
@@ -23,5 +23,6 @@
 		<description lang="de">
 			Digitally Imported streamt süchtig machende elektronische Musik. Unsere Sender präsentieren neben Werken der renommiertesten Künstler und DJs der Welt exklusive Shows. Entdecken Sie die Community und die breite Vielfalt elektronischer Musik, welche unter anderem Trance, House, Dance, Techno, Chillout, Breaks, Downtempo und viele mehr umfasst.
 		</description>
+		<broken>Add-on is broken due to website changes</broken>
 	</extension>
 </addon>

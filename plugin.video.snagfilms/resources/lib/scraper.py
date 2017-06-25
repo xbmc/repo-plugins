@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Popcornflix Kodi Video Addon
+# Snag Films Kodi Video Addon
 #
 from t1mlib import t1mAddon
 import json
@@ -24,16 +24,17 @@ UTF8     = 'utf-8'
 class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
-    ilist = self.addMenuItem('TV Shows', 'GS', ilist, 'http://www.snagfilms.com/shows/', self.addonIcon, self.addonFanart, {} , isFolder=True)
-    html = self.getRequest('http://www.snagfilms.com/categories/')
+    ilist = self.addMenuItem('TV Shows', 'GS', ilist, 'http://main.snagfilms.com/shows/', self.addonIcon, self.addonFanart, {} , isFolder=True)
+    html = self.getRequest('http://main.snagfilms.com/categories/')
     html = re.compile('Snag.page.data = (.+?);',re.DOTALL).search(html).group(1)
     a = json.loads(html)
     a = a[5]['data']['items']
     for item in a:
        url  = item['permalink']
        name = item['title']
-       thumb  = item['image']
-       ilist = self.addMenuItem(name, 'GM', ilist, url, thumb, self.addonFanart, {} , isFolder=True)
+       thumb  = item.get('image')
+       if not thumb is None:
+           ilist = self.addMenuItem(name, 'GM', ilist, url, thumb, self.addonFanart, {} , isFolder=True)
     return(ilist)
 
   def getAddonShows(self,url,ilist):
@@ -68,7 +69,7 @@ class myAddon(t1mAddon):
       c_url = uqp(url)
       cat_url = c_url.split('#',1)[0]
       if not (cat_url.startswith('http')):
-          cat_url = 'http://www.snagfilms.com%s' % cat_url
+          cat_url = 'http://main.snagfilms.com%s' % cat_url
       cj = cookielib.CookieJar()
       opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
       urllib2.install_opener(opener)
@@ -79,8 +80,8 @@ class myAddon(t1mAddon):
           showid = showid.group(1)
       else:
           showid = ''
-      url3 = 'http://www.snagfilms.com/apis/show/%s' % (showid)
-      url2 = 'http://www.snagfilms.com/apis/user/incrementPageView'
+      url3 = 'http://main.snagfilms.com/apis/show/%s' % (showid)
+      url2 = 'http://main.snagfilms.com/apis/user/incrementPageView'
       user_data = urllib.urlencode({'url': x_url})
       headers = self.defaultHeaders
       headers['X-Requested-With'] = 'XMLHttpRequest'
@@ -125,7 +126,7 @@ class myAddon(t1mAddon):
       self.defaultVidStream['height'] = 720
       url = uqp(url)
       if not url.startswith('http'):
-          url = 'http://www.snagfilms.com%s' % url
+          url = 'http://main.snagfilms.com%s' % url
       html = self.getRequest(url)
       html = re.compile('Snag.page.data = (.+?)];',re.DOTALL).search(html).group(1)
       html = html + ']'
@@ -181,7 +182,7 @@ class myAddon(t1mAddon):
 
 
   def getAddonVideo(self,url):
-      html = self.getRequest('http://www.snagfilms.com/embed/player?filmId=%s' % uqp(url))
+      html = self.getRequest('http://main.snagfilms.com/embed/player?filmId=%s' % uqp(url))
       u = re.compile('src: "(.+?)"', re.DOTALL).search(html)
       if u is None:
           return

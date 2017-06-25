@@ -1,10 +1,11 @@
 xbmc-plugin.video.ted.talks
 ===========================
-This is a fork of the project started by rwparris, see
+This is a fork of the project started by moreginger, see
+[here](https://github.com/moreginger/xbmc-plugin.video.ted.talks), which in itself is a fork of the project started by rwparris, see
 [here](http://forum.xbmc.org/showthread.php?tid=36866).
 
 For installation instructions see
-[Installing](https://github.com/moreginger/xbmc-plugin.video.ted.talks/wiki/Installing)
+[Installing](https://github.com/skipmodea1/plugin.video.ted.talks/wiki/Installing)
 
 The goal is (_surprise_) to allow watching TED talks in XBMC.
 The currently supported browsing options are:
@@ -31,4 +32,4 @@ which will show subtitles in the first language which matches.
 Bugs
 ----
 Known bugs and enhancement suggestions are tracked
-[here](https://github.com/moreginger/xbmc-plugin.video.ted.talks/issues).
+[here](https://github.com/skipmodea1/plugin.video.ted.talks/issues).

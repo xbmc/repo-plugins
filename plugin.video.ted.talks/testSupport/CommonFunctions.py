@@ -26,7 +26,7 @@ import io
 import inspect
 import time
 import HTMLParser
-#import chardet
+# import chardet
 import json
 
 version = u"1.5.1"
@@ -99,10 +99,10 @@ def getUserInputNumbers(title=u"Input", default=u""):
 
 def getXBMCVersion():
     log("", 3)
-    version = xbmc.getInfoLabel( "System.BuildVersion" )
+    version = xbmc.getInfoLabel("System.BuildVersion")
     log(version, 3)
     for key in ["-", " "]:
-        if version.find(key) -1:
+        if version.find(key) - 1:
             version = version[:version.find(key)]
     version = float(version)
     log(repr(version))
@@ -164,7 +164,7 @@ def _getDOMContent(html, name, match, ret):  # Cleanup
 
     start = html.find(match)
     end = html.find(endstr, start)
-    pos = html.find("<" + name, start + 1 )
+    pos = html.find("<" + name, start + 1)
 
     log(str(start) + " < " + str(end) + ", pos = " + str(pos) + ", endpos: " + str(end), 8)
 
@@ -259,15 +259,15 @@ def _getDOMElements(item, name, attrs):
 def parseDOM(html, name=u"", attrs={}, ret=False):
     log("Name: " + repr(name) + " - Attrs:" + repr(attrs) + " - Ret: " + repr(ret) + " - HTML: " + str(type(html)), 3)
 
-    if isinstance(name, str): # Should be handled
+    if isinstance(name, str):  # Should be handled
         try:
-            name = name #.decode("utf-8")
+            name = name  # .decode("utf-8")
         except:
             log("Couldn't decode name binary string: " + repr(name))
 
     if isinstance(html, str):
         try:
-            html = [html.decode("utf-8")] # Replace with chardet thingy
+            html = [html.decode("utf-8")]  # Replace with chardet thingy
         except:
             log("Couldn't decode html binary string. Data length: " + repr(len(html)))
             html = [html]
@@ -290,7 +290,7 @@ def parseDOM(html, name=u"", attrs={}, ret=False):
         lst = _getDOMElements(item, name, attrs)
 
         if isinstance(ret, str):
-            log("Getting attribute %s content for %s matches " % (ret, len(lst) ), 3)
+            log("Getting attribute %s content for %s matches " % (ret, len(lst)), 3)
             lst2 = []
             for match in lst:
                 lst2 += _getDOMAttributes(match, name, ret)
@@ -343,22 +343,22 @@ def extractJS(data, function=False, variable=False, match=False, evaluate=False,
             log("Cleaning item: " + repr(lst[i]), 4)
             if lst[i][0] == u"\n":
                 lst[i] == lst[i][1:]
-            if lst[i][len(lst) -1] == u"\n":
-                lst[i] == lst[i][:len(lst)- 2]
+            if lst[i][len(lst) - 1] == u"\n":
+                lst[i] == lst[i][:len(lst) - 2]
             lst[i] = lst[i].strip()
 
     if values or evaluate:
         for i in range(0, len(lst)):
             log("Getting values %s" % lst[i])
             if function:
-                if evaluate: # include the ( ) for evaluation
+                if evaluate:  # include the ( ) for evaluation
                     data = re.compile("(\(.*?\))", re.M | re.S).findall(lst[i])
                 else:
                     data = re.compile("\((.*?)\)", re.M | re.S).findall(lst[i])
             elif variable:
-                tlst = re.compile(variable +".*?=.*?;", re.M | re.S).findall(lst[i])
+                tlst = re.compile(variable + ".*?=.*?;", re.M | re.S).findall(lst[i])
                 data = []
-                for tmp in tlst: # This breaks for some stuff. "ad_tag": "http://ad-emea.doubleclick.net/N4061/pfadx/com.ytpwatch.entertainment/main_563326'' # ends early, must end with }
+                for tmp in tlst:  # This breaks for some stuff. "ad_tag": "http://ad-emea.doubleclick.net/N4061/pfadx/com.ytpwatch.entertainment/main_563326'' # ends early, must end with }
                     cont_char = tmp[0]
                     cont_char = tmp[tmp.find("=") + 1:].strip()
                     cont_char = cont_char[0]
@@ -442,8 +442,8 @@ def fetchPage(params={}):
         ret_obj["new_url"] = con.geturl()
         if get("no-content", "false") == u"false" or get("no-content", "false") == "false":
             inputdata = con.read()
-            #data_type = chardet.detect(inputdata)
-            #inputdata = inputdata.decode(data_type["encoding"])
+            # data_type = chardet.detect(inputdata)
+            # inputdata = inputdata.decode(data_type["encoding"])
             try:
                 ret_obj["content"] = inputdata.decode("utf-8")
             except:
@@ -504,7 +504,7 @@ def getCookieInfoAsHTML():
 # This function implements a horrible hack related to python 2.4's terrible unicode handling.
 def makeAscii(data):
     log(repr(data), 5)
-    #if sys.hexversion >= 0x02050000:
+    # if sys.hexversion >= 0x02050000:
     #        return data
 
     try:
@@ -530,7 +530,7 @@ def makeUTF8(data):
     log(repr(data), 5)
     return data
     try:
-        return data.decode('utf8', 'xmlcharrefreplace') # was 'ignore'
+        return data.decode('utf8', 'xmlcharrefreplace')  # was 'ignore'
     except:
         log("Hit except on : " + repr(data))
         s = u""

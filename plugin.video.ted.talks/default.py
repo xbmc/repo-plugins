@@ -6,7 +6,13 @@ import sys
 import resources.lib.plugin as plugin
 import resources.lib.settings as settings
 import resources.lib.model.arguments as arguments
+import os
+import xbmc
+import xbmcaddon
 
+LIB_DIR = xbmc.translatePath(
+    os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources', 'lib'))
+sys.path.append(LIB_DIR)
 
 if __name__ == "__main__":
     plugin.init()

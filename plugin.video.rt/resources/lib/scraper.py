@@ -54,7 +54,9 @@ class myAddon(t1mAddon):
       rlist = [("https://www.rt.com/on-air/", 'Global'),
                ("https://www.rt.com/on-air/rt-america-air", 'US'),
                ("https://www.rt.com/on-air/rt-uk-air", 'UK'),
-               ("https://rtd.rt.com/on-air/", 'Doc')]
+               ("https://rtd.rt.com/on-air/", 'Doc'),
+               ("https://actualidad.rt.com/en_vivo2", 'ESP'),
+               ("https://arabic.rt.com/static/libs/streams/default.js", "ARAB")]
       for url, name in rlist:
           name = name.strip()
           infoList = {}
@@ -78,7 +80,11 @@ class myAddon(t1mAddon):
                if m != None:
                    url = m.group(1)
                else:
-                   return
+                   m = re.compile("url: '(.+?)'",re.DOTALL).search(html)
+                   if m != None:
+                       url = m.group(1)
+                   else:                   
+                       return
       else:
           m = re.compile('streams_hls.+?url: "(.+?)"',re.DOTALL).search(html)
           if m != None:

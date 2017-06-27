@@ -20,7 +20,7 @@ class TestSpeakersScraper(unittest.TestCase):
 
         sample_speaker = [s for s in e_speakers if s[0] == 'Sandra Aamodt'][0]
         self.assertEqual('http://www.ted.com/speakers/sandra_aamodt', sample_speaker[1])
-        self.assertEqual('https://pi.tedcdn.com/r/tedcdnpe-a.akamaihd.net/images/ted/4a37c5ed67bf4d4a1cf7aa643607626b44aee0cc_254x191.jpg?', sample_speaker[2])
+        self.assertEqual('https://pi.tedcdn.com/r/pe.tedcdn.com/images/ted/4a37c5ed67bf4d4a1cf7aa643607626b44aee0cc_254x191.jpg?', sample_speaker[2])
 
     def test_get_speakers_performance(self):
         scraper = Speakers(test_util.CachedHTMLProvider().get_HTML)

@@ -1,3 +1,12 @@
+[B]Version 4.2.11[/B] (Skipmode A1: It seems the developer moreginger isn't active anymore :/. Therefore i made this version.)
+Fixed video playback (json changed in website)
+Fixed subtitles (json changed in website)
+Fixed thumbnails (resizeImage method fubared the thumbs)
+
+[B]Version 4.2.10[/B]
+Correct media type for items (pull#61 thanks to phil65)
+Keep default context menu items (issue#62)
+
 [B]Version 4.2.9[/B]
 Fix topics (issue#60)
 Removed vestiges of Vimeo support

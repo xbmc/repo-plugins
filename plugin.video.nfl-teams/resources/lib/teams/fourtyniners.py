@@ -19,7 +19,7 @@ class Team(resources.lib.nflcs.NFLCS):
         "Video - NFL Network",
         "Video - Niner Talk",
         "Video - The Faithful",
-        # "Video - Top 10 Moments", - Empty (2017-01-08)
+        "Video - Top 10 Moments",
         "Video - Training Camp",
     ]
 

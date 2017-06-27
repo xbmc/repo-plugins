@@ -5,12 +5,11 @@ class Team(resources.lib.nflc.NFLC):
     _short = "cowboys"
     _website_url = "http://www.dallascowboys.com"
     _categories = [
-        (3586, "#AskTheBoys"),
         (3516, "All Talk Shows"),
+        (3586, "AskTheBoys"),
         (19586, "Audio Only"),
         (3571, "Best Of Talkin'"),
         (3576, "Best Of The Draft Show"),
-        (3106, "Blank"),
         (43211, "Blueprint"),
         (3566, "Break Hot Takes"),
         (29541, "cheerleaders"),
@@ -21,7 +20,6 @@ class Team(resources.lib.nflc.NFLC):
         (2606, "Cowboys Break"),
         (2686, "Cowboys Hour"),
         (19691, "Cowboys Insider"),
-        (3441, "Cowboys Legends Radio Show"),
         (43631, "Cowboys Legends Show"),
         (43671, "Cowboys OT Postgame"),
         (30936, "Cowboys Sunday Morning"),
@@ -51,6 +49,7 @@ class Team(resources.lib.nflc.NFLC):
         (3446, "nopreroll"),
         (3231, "On Air"),
         (2611, "Players"),
+        (54106, "Pregame Live"),
         (43651, "Press Conferences"),
         (3136, "Quick Snap"),
         (2616, "Reports"),

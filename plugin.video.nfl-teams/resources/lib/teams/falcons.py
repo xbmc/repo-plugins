@@ -8,16 +8,16 @@ class Team(resources.lib.nflcs.NFLCS):
         "Video - Cheerleaders",
         "Video - Coach's Corner",
         "Video - Community",
-        # "Video - D-Block", - Empty (2017-01-08)
-        # "Video - Draft", - Empty (2017-01-08)
+        "Video - D-Block",
+        "Video - Draft",
         "Video - FalconCast",
-        # "Video - FalconsLIVE", - Empty (2017-01-08)
+        "Video - FalconsLIVE",
         "Video - Features",
         "Video - Gameday",
         "Video - Highlights",
-        # "Video - History", - Empty (2017-01-08)
+        "Video - History",
         "Video - Interviews & Press Conferences",
-        # "Video - New Stadium", - Empty (2017-01-08)
+        "Video - New Stadium",
         "Video - NFL Network",
         "Video - Playoffs",
         "Video - Quick Hits",

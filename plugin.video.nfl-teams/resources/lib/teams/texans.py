@@ -18,6 +18,7 @@ class Team(resources.lib.nflcs.NFLCS):
         "Press Conferences",
         "Season Highlights",
         "Special Segments",
+        "Texans House",
         "Texans Huddle",
         "Texans TV",
         "TORO",

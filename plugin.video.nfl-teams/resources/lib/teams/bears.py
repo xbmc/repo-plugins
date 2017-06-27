@@ -6,6 +6,7 @@ class Team(resources.lib.nflcs.NFLCS):
     _cdaweb_url = "http://www.chicagobears.com/cda-web/"
     _categories = [
         "Bears Talk",
+        "Draft",
         "Features",
         "Football",
         "Highlights",

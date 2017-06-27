@@ -16,7 +16,7 @@ class Team(resources.lib.nflcs.NFLCS):
         "NFL Network",
         "Press Conference",
         "Prospect Primer",
-        # "Sights & Sounds", - Empty (2017-01-08)
+        "Sights & Sounds",
         "Tailgate Tour",
         "The McCarren Report",
         "Training Camp",

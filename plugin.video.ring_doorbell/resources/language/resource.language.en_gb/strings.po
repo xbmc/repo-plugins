@@ -1,0 +1,70 @@
+# Kodi Media Center language file
+# Addon Name: Ring Video Doorbell
+# Addon id: plugin.video.ring_doorbell
+# Addon Provider: jlippold
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Account Info"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Email"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Max Videos"
+msgstr ""
+
+
+msgctxt "#30200"
+msgid "Invalid email address, check addon settings"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Invalid password, check addon settings"
+msgstr ""
+
+msgctxt "#30202"
+msgid "Invalid item count, check addon settings"
+msgstr ""
+
+msgctxt "#30203"
+msgid "Authentication Error: Check your ring.com credentials"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Error playing video, it is possible that the video was not found on Ring.com"
+msgstr ""
+
+msgctxt "#30300"
+msgid "on"
+msgstr ""
+
+msgctxt "#30301"
+msgid "Live View at"
+msgstr ""
+
+msgctxt "#30302"
+msgid "Motion at"
+msgstr ""
+
+msgctxt "#30303"
+msgid "Ring at"
+msgstr ""

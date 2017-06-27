@@ -9,9 +9,10 @@ class Team(resources.lib.nflcs.NFLCS):
         "Cheerleaders",
         "Community",
         "Draft",
+        "Facebook Live",
         "Final Drive",
         "Gameday",
-        # "LIVE", - Empty (2017-01-08)
+        "LIVE",
         "NFL Network",
         "Press Conferences",
         "Ravens Report",

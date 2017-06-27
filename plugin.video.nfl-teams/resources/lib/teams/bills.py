@@ -18,10 +18,7 @@ class Team(resources.lib.nflcs.NFLCS):
         "NFL Network",
         "Off the Field",
         "Press Conferences",
-        "Rex Ryan Show",
-        "Road to the Season",
         "Senior Bowl",
-        "Under Review",
         "Unfiltered",
         "Wired for Sound",
     ]

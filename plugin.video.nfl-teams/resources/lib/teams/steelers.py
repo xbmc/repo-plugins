@@ -5,10 +5,9 @@ class Team(resources.lib.nflcs.NFLCS):
     _short = "steelers"
     _cdaweb_url = "http://www.steelers.com/cda-web/"
     _categories = [
-        # "#HereWeGo", - Empty (2017-01-08)
         "Agree to Disagree",
         "Around the Locker Room",
-        # "Back to Work", - Empty (2017-01-08)
+        "Back to Work",
         "Chalk Talk",
         "Combine",
         "Community",
@@ -18,6 +17,7 @@ class Team(resources.lib.nflcs.NFLCS):
         "Field Report",
         "Gameday",
         "Hall of Fame",
+        "HereWeGo",
         "Highlights",
         "Holidays",
         "In a Minute",
@@ -28,7 +28,8 @@ class Team(resources.lib.nflcs.NFLCS):
         "Mike Tomlin Show",
         "News Conferences",
         "NFL Network",
-        # "Player Spotlight", - Empty (2017-01-08)
+        "Owners Meetings",
+        "Player Spotlight",
         "Sights and Sounds",
         "Steelers By Position",
         "Steelers History",
@@ -36,14 +37,14 @@ class Team(resources.lib.nflcs.NFLCS):
         "Steelers Legends",
         "Steelers LIVE",
         "Steelers Nation Unite",
-        # "Steelers Saturday Night", - Empty (2017-01-08)
+        "Steelers Saturday Night",
         "Steelers Time Machine",
         "Steelers.com Update",
         "Super Bowl",
         "Training Camp",
         "What It Is",
-        "Youth Football Show",
         "Youth Football",
+        "Youth Football Show",
     ]
 
     def __init__(self, parameters):

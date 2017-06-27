@@ -16,7 +16,7 @@ class Team(resources.lib.nflcs.NFLCS):
         "Video - Hy-Vee Chiefs Insider",
         "Video - Play Breakdown",
         "Video - Press Conferences",
-        # "Video - Red and Gold", - Empty (2017-01-08)
+        "Video - Red and Gold",
     ]
 
     def __init__(self, parameters):

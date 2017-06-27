@@ -8,7 +8,7 @@ class Team(resources.lib.nflcs.NFLCS):
         "Camp Dolphins",
         "Community",
         "En Espanol",
-        # "FinsidersTV", - Empty (2017-01-08)
+        "FinsidersTV",
         "Game Day",
         "NFL Network",
         "Official Shows",

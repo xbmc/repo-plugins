@@ -107,9 +107,9 @@ class myAddon(t1mAddon):
      vurl = 'http://toggleplayer-1410100339.ap-southeast-1.elb.amazonaws.com/v0.30/mwEmbed/mwEmbedFrame.php?&wid=_27017&uiconf_id=8413350&entry_id='+vid+'&flashvars[ks]=0&flashvars[logo]=undefined&flashvars[toggle.sgPlus]=false&flashvars[vast]=%7B%22htmlCompanions%22%3A%22video-companion-ad-320-100-in-flash%3A320%3A100%22%7D&flashvars[multiDrm]=%7B%22plugin%22%3Atrue%2C%22isClear%22%3Atrue%7D&flashvars[localizationCode]=en&flashvars[autoPlay]=true&flashvars[proxyData]=%7B%22initObj%22%3A%7B%22Locale%22%3A%7B%22LocaleLanguage%22%3A%22%22%2C%22LocaleCountry%22%3A%22%22%2C%22LocaleDevice%22%3A%22%22%2C%22LocaleUserState%22%3A0%7D%2C%22Platform%22%3A0%2C%22SiteGuid%22%3A0%2C%22DomainID%22%3A%220%22%2C%22UDID%22%3A%22%22%2C%22ApiUser%22%3A%22tvpapi_147%22%2C%22ApiPass%22%3A%2211111%22%7D%2C%22MediaID%22%3A%22'+vid+'%22%2C%22iMediaID%22%3A%22'+vid+'%22%2C%22picSize%22%3A%22640X360%22%7D&playerId=SilverlightContainer&forceMobileHTML5=true&urid=2.29.1.10&callback='
      html = self.getRequest(vurl)
      m = re.compile('kalturaIframePackageData = (.+?)};',re.DOTALL).search(html)
-     a = json.loads(html[m.start(1):m.end(1)+1].replace('\\',''))
-     a = a['entryResult']['meta']
-     a = a['partnerData']['Files']
+     x = html[m.start(1):m.end(1)+1].replace('\\','')
+     x = re.compile('"Files"\:(.+?),"Tags"', re.DOTALL).search(x).group(1)
+     a = json.loads(x)
      u =''
      if self.addon.getSetting('vid_res') == '1':
         for b in a:
@@ -117,11 +117,6 @@ class myAddon(t1mAddon):
            if b['Format'] == vtype:
               u = b['URL']
               break
-        req = urllib2.Request(u, None, self.defaultHeaders)
-#        try:
-#           response = urllib2.urlopen(req, timeout=40)
-#        except:
-#           u = ''
      if u == '':
         for b in a:
            vtype = 'iPad Main'
@@ -141,7 +136,6 @@ class myAddon(t1mAddon):
               u = b['URL']
               break
      if ( u == '' or u.endswith('.wvm')):
-         u=''
          xbmcgui.Dialog().notification(self.addonName, self.addon.getLocalizedString(30003), self.addonIcon, 5000)
          return
      liz = xbmcgui.ListItem(path = u)

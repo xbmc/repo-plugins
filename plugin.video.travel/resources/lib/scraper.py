@@ -21,7 +21,7 @@ class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
    html = self.getRequest('http://www.travelchannel.com/video/full-episodes')
-   a = re.compile('MediaBlock\-\-playlist.+?<a href="(.+?)".+?src="(.+?)".+?HeadlineText">(.+?)<', re.DOTALL).findall(html)
+   a = re.compile('MediaBlock\-\-playlist.+?<a href="(.+?)".+?src="(.+?)".+?HeadlineText".+?>(.+?)<', re.DOTALL).findall(html)
    for url,thumb,name in a:
        plot = name
        fanart = thumb

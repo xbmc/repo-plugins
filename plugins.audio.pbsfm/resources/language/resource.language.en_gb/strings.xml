@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<!-- Plugin name -->
+	<string id="30000">PBS FM Live stream</string>
+	<string id="30001">Ondemand</string>
+</strings>
+
+
+# Kodi Media Center language file
+# Addon Name: pbsfm 
+# Addon id: plugin.audio.pbsfm
+# Addon Provider: anemes
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: http://trac.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: anemes\n"
+"Language-Team: anemes\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30010"
+msgid "PBS FM Live stream"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Ondemand"
+msgstr ""

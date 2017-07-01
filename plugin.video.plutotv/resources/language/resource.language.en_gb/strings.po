@@ -28,15 +28,30 @@ msgctxt "#30002"
 msgid "Enter User Password"
 msgstr ""
 
-msgctxt "#30003"
-msgid "Hide Pluto.TV Ads/Promos"
-msgstr ""
-
 msgctxt "#30004"
-msgid "Filter by Region"
+msgid "Some channels not available in your region"
 msgstr ""
 
 msgctxt "#30005"
-msgid "Disable Channel Autoplay, Enable OnDemand Content"
+msgid "Select User Region"
 msgstr ""
 
+msgctxt "#30006"
+msgid "Welcome Back "
+msgstr ""
+
+msgctxt "#30007"
+msgid "Invalid User Credentials"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Already have a Pluto.TV account?"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Guest"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Sign-In"
+msgstr ""

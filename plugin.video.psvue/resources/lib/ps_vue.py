@@ -61,7 +61,11 @@ def featured():
 
 def list_timeline():
     url = 'https://sentv-user-ext.totsuko.tv/sentv_user_ext/ws/v2/profile/ids'
-    airing_id = get_json(url)['body']['launch_program']['airing_id']
+    json_source = get_json(url)
+    try:
+        airing_id = json_source['body']['launch_program']['airing_id']
+    except:
+        sys.exit()
 
     json_source = get_json(EPG_URL + '/timeline/' + str(airing_id))
 
@@ -172,8 +176,8 @@ def list_episode(show):
     # channel_url = CHANNEL_URL+'/'+show_id
     show_url = 'https://media-framework.totsuko.tv/media-framework/media/v2.1/stream/airing/' + airing_id
 
-    info = {'plot': plot, 'tvshowtitle': show_title, 'title': title, 'originaltitle': title, 'genre': genre,
-            'aired': airing_date.strftime('%Y-%m-%d'), 'premiered': broadcast_date.strftime('%Y-%m-%d')}
+    info = {'plot': plot, 'tvshowtitle': show_title, 'title': title, 'originaltitle': title, 'genre': genre, 'aired': airing_date.strftime('%Y-%m-%d')}
+    if broadcast_date != '': info['premiered'] = broadcast_date.strftime('%Y-%m-%d')
 
 
     addStream(title, show_url, title, icon, fanart, info)
@@ -232,13 +236,15 @@ def get_stream(url):
                "Accept-Encoding": "deflate",
                "User-Agent": UA_ANDROID,
                "Connection": "Keep-Alive",
-               #'reqPayload': ADDON.getSetting(id='reqPayload')
+               'reqPayload': ADDON.getSetting(id='reqPayload')
                }
 
     r = requests.get(url, headers=headers, cookies=load_cookies(), verify=VERIFY)
     json_source = r.json()
     stream_url = json_source['body']['video']
-    stream_url = stream_url + '|User-Agent=Dalvik/2.1.0 (Linux; U; Android 6.0.1 Build/MOB31H)&Cookie=reqPayload=' + urllib.quote('"' + ADDON.getSetting(id='reqPayload') + '"')
+    stream_url += '|User-Agent='
+    stream_url += 'Adobe Primetime/1.4 Dalvik/2.1.0 (Linux; U; Android 6.0.1 Build/MOB31H)'
+    stream_url += '&Cookie=reqPayload=' + urllib.quote('"' + ADDON.getSetting(id='reqPayload') + '"')
 
     listitem = xbmcgui.ListItem(path=stream_url)
     # listitem.setProperty('ResumeTime', '600')
@@ -303,10 +309,10 @@ def stringToDate(string, date_format):
 def create_device_id():
     android_id = ''.join(random.choice('0123456789abcdef') for i in range(16))
     android_id = android_id.rjust(30, '0')
-    manufacturer = 'ASUS'
+    manufacturer = 'Asus'
     model = 'Nexus 7'
     manf_model = ":%s:%s" % (manufacturer.rjust(10, ' '), model.rjust(10, ' '))
-    manf_model = manf_model.encode("hex")
+    manf_model = manf_model.encode("hex").upper()
     zero = '0'
     device_id = "0000%s%s01a8%s%s" % ("0007", "0002", android_id, manf_model + zero.ljust(32, '0'))
 
@@ -378,6 +384,22 @@ def get_params():
 
     return param
 
+def check_device_id():
+    DEVICE_ID = ADDON.getSetting(id='deviceId')
+    amazon_device = 'Amazon'
+    amazon_device = amazon_device.encode("hex")
+    old_asus = 'ASUS'    
+    old_asus = old_asus.encode("hex")
+    if amazon_device in DEVICE_ID or old_asus in DEVICE_ID:
+        sony = SONY()
+        sony.logout()
+        DEVICE_ID = ''
+
+    if DEVICE_ID == '':
+        create_device_id()
+        DEVICE_ID = ADDON.getSetting(id='deviceId')
+
+
 
 addon_handle = int(sys.argv[1])
 ADDON = xbmcaddon.Addon()
@@ -387,16 +409,6 @@ FANART = os.path.join(ROOTDIR, "resources", "fanart.jpg")
 ICON = os.path.join(ROOTDIR, "resources", "icon.png")
 
 ADDON_PATH_PROFILE = xbmc.translatePath(ADDON.getAddonInfo('profile'))
-DEVICE_ID = ADDON.getSetting(id='deviceId')
-
-amazon_device = 'Amazon'
-amazon_device = amazon_device.encode("hex")
-if amazon_device in DEVICE_ID: DEVICE_ID = ''
-
-if DEVICE_ID == '':
-    create_device_id()
-    DEVICE_ID = ADDON.getSetting(id='deviceId')
-
 UA_ANDROID = 'Mozilla/5.0 (Linux; Android 6.0.1; Build/MOB31H; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/44.0.2403.119 Safari/537.36'
 CHANNEL_URL = 'https://media-framework.totsuko.tv/media-framework/media/v2.1/stream/channel'
 EPG_URL = 'https://epg-service.totsuko.tv/epg_service_sony/service/v2'

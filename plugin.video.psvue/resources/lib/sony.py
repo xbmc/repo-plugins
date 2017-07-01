@@ -1,4 +1,4 @@
-import os, xbmc, xbmcaddon, xbmcgui
+import sys, os, xbmc, xbmcaddon, xbmcgui
 import cookielib, requests, urllib
 from datetime import datetime
 
@@ -90,11 +90,11 @@ class SONY():
                     self.two_step_verification(ticket_uuid)
             elif 'error_description' in json_source:
                 msg = json_source['error_description']
-                self.error_msg(self.localized(30200), msg)
+                self.notification_msg(self.localized(30200), msg)
                 sys.exit()
             else:
                 # Something went wrong during login
-                self.error_msg(self.localized(30200), self.localized(30201))
+                self.notification_msg(self.localized(30200), self.localized(30201))
                 sys.exit()
 
 
@@ -125,11 +125,11 @@ class SONY():
             self.addon.setSetting(id='npsso', value=npsso)
         elif 'error_description' in json_source:
             msg = json_source['error_description']
-            self.error_msg(self.localized(30200), msg)
+            self.notification_msg(self.localized(30200), msg)
             sys.exit()
         else:
             # Something went wrong during login
-            self.error_msg(self.localized(30200), self.localized(30201))
+            self.notification_msg(self.localized(30200), self.localized(30201))
             sys.exit()
 
 
@@ -143,6 +143,7 @@ class SONY():
         }
 
         r = requests.delete(url, headers=headers, cookies=self.load_cookies(), verify=self.verify)
+        self.save_cookies(r.cookies)
         # Clear addon settings
         self.addon.setSetting(id='reqPayload', value='')
         self.addon.setSetting(id='last_auth', value='')
@@ -171,8 +172,9 @@ class SONY():
         r = requests.get(url, headers=headers, allow_redirects=False, cookies=self.load_cookies(), verify=self.verify)
         if 'X-NP-GRANT-CODE' in r.headers:
             code = r.headers['X-NP-GRANT-CODE']
+            self.save_cookies(r.cookies)
         else:
-            self.error_msg(self.localized(30207), self.localized(30208))
+            self.notification_msg(self.localized(30207), self.localized(30208))
             sys.exit()
 
         return code
@@ -203,7 +205,7 @@ class SONY():
             auth_time = r.json()['header']['time_stamp']
             self.addon.setSetting(id='last_auth', value=auth_time)
         else:
-            self.error_msg(self.localized(30207), self.localized(30209))
+            self.notification_msg(self.localized(30207), self.localized(30209))
             sys.exit()
 
 
@@ -235,7 +237,7 @@ class SONY():
             else:
                 sys.exit()
         else:
-            self.error_msg(self.localized(30205), self.localized(30206))
+            self.notification_msg(self.localized(30205), self.localized(30206))
             sys.exit()
 
 
@@ -306,29 +308,30 @@ class SONY():
 
     def save_cookies(self, cookiejar):
         addon_profile_path = xbmc.translatePath(self.addon.getAddonInfo('profile'))
-        filename = os.path.join(addon_profile_path, 'cookies.lwp')
-        lwp_cookiejar = cookielib.LWPCookieJar()
+        cookie_file = os.path.join(addon_profile_path, 'cookies.lwp')
+        cj = cookielib.LWPCookieJar()
+        cj.load(cookie_file,ignore_discard=True)
         for c in cookiejar:
             args = dict(vars(c).items())
             args['rest'] = args['_rest']
             del args['_rest']
             c = cookielib.Cookie(**args)
-            lwp_cookiejar.set_cookie(c)
-        lwp_cookiejar.save(filename, ignore_discard=True)
+            cj.set_cookie(c)
+        cj.save(cookie_file, ignore_discard=True)
 
 
     def load_cookies(self):
         addon_profile_path = xbmc.translatePath(self.addon.getAddonInfo('profile'))
-        filename = os.path.join(addon_profile_path, 'cookies.lwp')
-        lwp_cookiejar = cookielib.LWPCookieJar()
+        cookie_file = os.path.join(addon_profile_path, 'cookies.lwp')
+        cj = cookielib.LWPCookieJar()
         try:
-            lwp_cookiejar.load(filename, ignore_discard=True)
+            cj.load(cookie_file, ignore_discard=True)
         except:
             pass
 
-        return lwp_cookiejar
+        return cj
 
 
-    def error_msg(self, title, msg):
+    def notification_msg(self, title, msg):
         dialog = xbmcgui.Dialog()
         dialog.notification(title, msg, xbmcgui.NOTIFICATION_INFO, 5000)

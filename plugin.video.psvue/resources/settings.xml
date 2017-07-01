@@ -6,6 +6,7 @@
     <setting id="password" type="text" label="30002" option="hidden" default=""/>
     <setting id="logout" type="action" label="30003" action="RunPlugin(plugin://plugin.video.psvue/?mode=999)" option="close" />
     <setting id="change_profile" type="action" label="30004" action="RunPlugin(plugin://plugin.video.psvue/?mode=800)" option="close" />
+    <setting id="reset_device_id" type="action" label="30005" action="RunPlugin(plugin://plugin.video.psvue/?mode=1000)" option="close" />
 </category>
 
   <!-- Hidden -->

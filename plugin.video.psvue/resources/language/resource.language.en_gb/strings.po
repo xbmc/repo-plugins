@@ -36,6 +36,18 @@ msgctxt "#30004"
 msgid "Change Profile"
 msgstr ""
 
+msgctxt "#30005"
+msgid "Reset Device ID"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Logout Succesful"
+msgstr ""
+
+msgctxt "#30007"
+msgid "You have been successfully logged out."
+msgstr ""
+
 msgctxt "#30100"
 msgid "Timeline"
 msgstr ""

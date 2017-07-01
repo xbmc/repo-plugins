@@ -24,15 +24,17 @@ except:
     pass
 
 
+check_device_id()
+
 sony = SONY()
-if ADDON.getSetting(id='last_auth') != '':
-    last_auth = stringToDate(ADDON.getSetting(id='last_auth'), "%Y-%m-%dT%H:%M:%S.%fZ")
-    if (datetime.now() - last_auth).total_seconds() >= 5400: sony.check_auth()
-else:
-    sony.check_auth()
+if mode < 998:
+    if ADDON.getSetting(id='last_auth') != '':
+        last_auth = stringToDate(ADDON.getSetting(id='last_auth'), "%Y-%m-%dT%H:%M:%S.%fZ")
+        if (datetime.utcnow() - last_auth).total_seconds() > 900: sony.check_auth()
+    else:
+        sony.check_auth()
 
-
-if mode == None:
+if mode == None and mode < 998:
     if ADDON.getSetting(id='default_profile') == '': sony.get_profiles()
     main_menu()
 
@@ -75,8 +77,13 @@ elif mode == 998:
 
 elif mode == 999:
     sony.logout()
+    sony.notification_msg(LOCAL_STRING(30006), LOCAL_STRING(30007))
     main_menu()
 
+elif mode == 1000:
+    sony.logout()
+    ADDON.setSetting(id='deviceId', value='')
+    sony.notification_msg(LOCAL_STRING(30006), LOCAL_STRING(30007))
 
 if mode != None and mode != 800:
     xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)

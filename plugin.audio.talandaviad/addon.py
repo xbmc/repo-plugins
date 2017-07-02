@@ -91,6 +91,6 @@ def main():
 
 if __name__ == '__main__':
     ADDON_FOLDER = xbmcaddon.Addon().getAddonInfo("path")
-    RSS = 'http://eco99fm.maariv.co.il/rss/'
+    RSS = 'http://eco99fm.maariv.co.il/RSS_With_Segments/'
     addon_handle = int(sys.argv[1])
     main()

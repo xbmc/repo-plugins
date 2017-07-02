@@ -1,18 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.youtube" name="YouTube" version="5.3.12" provider-name="jdf76, bromix">
+<addon id="plugin.video.youtube" name="YouTube" version="5.4.0" provider-name="bromix">
 	<requires>
 		<import addon="xbmc.python" version="2.19.0"/>
         <import addon="script.module.requests" version="2.12.4"/>
 	</requires>
-	<extension point="xbmc.python.pluginsource" library="default.py">
+	<extension point="xbmc.python.pluginsource" library="resources/lib/default.py">
 		<provides>video</provides>
 	</extension>
-    <extension point="xbmc.service" library="startup.py" start="startup" />
+    <extension point="xbmc.service" library="resources/lib/startup.py" start="startup" />
+	<extension point="xbmc.python.module" library="resources/lib/" />
 	<extension point="xbmc.addon.metadata">
         <news>
-[fix/upd] replace custom simple_requests with script.module.requests to resolve ssl and cross-platform issues
-[add] 'Reset access manager' added to Maintenance section, sign out process(available when logged out) to clean up tokens in settings.xml
-[upd] set default for SSL certificate verification to 'true'
+[upd] Greek strings [Twilight0]
+[upd] Polish strings [Etharr]
+[upd] Finnish strings [teemue]
+[upd] Spanish strings [roliverosc]
+[fix/upd] resolve "Error Contents: 'q'" error [horstepipe]
+[fix/upd] resolve Play All/Play from here not starting playback
+[fix/upd] resolve playlists starting on second item
+[fix/upd] allow dash in quality choices
+[fix/upd] set content to files for menus, resolves mouse/scrolling
+[fix/upd] fix cipher
+[fix/upd] increase search history limit to 200
+[fix/upd] storage db
+[add] Safe Search to Settings -> General
+[add] Thumbnail size to Settings -> General
+[add] Auto-play suggested [mehdilauters]
+[add] Automatic subtitles [Uukrull]
+[add] My Subscriptions (Filtered) - whitelist/blacklist version of My Subscriptions [chhe]
+[add] module extension point:
+    add-ons can now add plugin.video.youtube dependency and resolve youtube video id's or make v3 api requests using the youtube plugin
         </news>
         <assets>
             <icon>icon.png</icon>
@@ -27,7 +44,7 @@
 		<summary lang="hu">Kiegészítő  a YouTube-hoz</summary>
         <description lang="hu">A YouTube világ egyik legnagyobb videómegosztó weboldala.</description>
         <summary lang="es">Plugin para YouTube</summary>
-        <description lang="es">YouTube es un uno de los mayores sitios web de intercambio de vídeos del mundo.</description>
+        <description lang="es">YouTube es uno de los mayores sitios web de intercambio de vídeos del mundo.</description>
         <summary lang="ru">Видеодополнение YouTube</summary>
         <description lang="ru">Данное дополнение позволяет находить и смотреть видео на всеми любимом сайте.</description>
         <summary lang="fr">Plugin pour YouTube</summary>

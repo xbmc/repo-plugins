@@ -1,1 +1,1 @@
-__author__ = 'bromix'
+__all__ = ['youtube_plugin']

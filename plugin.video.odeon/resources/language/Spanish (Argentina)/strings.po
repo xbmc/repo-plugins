@@ -140,6 +140,18 @@ msgctxt "#30031"
 msgid "Next..."
 msgstr "Siguiente..."
 
+msgctxt "#30032"
+msgid "My rentals"
+msgstr "Mis alquileres"
+
+msgctxt "#30033"
+msgid "Premieres"
+msgstr "Estrenos"
+
+msgctxt "#30034"
+msgid "To rent a production, please do so from the webpage."
+msgstr "Para alquilar, por favor hágalo desde la web."
+
 msgctxt "#30100"
 msgid "General"
 msgstr "General"

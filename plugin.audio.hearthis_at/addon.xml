@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.hearthis_at" name="Hearthis.at" version="0.1" provider-name="Eike Baran">
+  <requires>
+    <import addon="xbmc.python" version="2.25.0" />
+    <import addon="script.module.kodiswift" version="0.0.1" />
+    <import addon="script.module.requests" />
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+    <source>https://github.com/baranator/plugin.audio.hearthis_at/</source>
+
+    <summary lang="en_GB">Listen to music on Hearthis.at</summary>
+    <summary lang="de_DE">Höre Musik von Hearthis.at</summary>
+    <description lang="en_GB">Hearthis.at is a online audio distribution platform that enables its users to upload, record, promote, and share their originally-created sounds. This addon provides the most important features to access that content.</description>
+    <description lang="de_DE">Hearthis.at ist eine Online-Musikplattform, auf welcher Nutzer ihre Werke hochladen, aufnehmen, bewerben und teilen können. Dieses Addon erlaubt Zugriff auf die wichtigsten Funktionen der Plattform um diese Inhalte abzurufen.</description>
+    <disclaimer lang="en_GB">Use at own risk. Code may be faulty, clog your drain or kill your cat.</disclaimer>
+    <news>v0.1  (2017-07-03)
+- Initial release</news>
+    <assets>
+        <icon>icon.png</icon>
+        <screenshot>resources/screenshot-01.jpg</screenshot>
+        <screenshot>resources/screenshot-02.jpg</screenshot>
+        <screenshot>resources/screenshot-03.jpg</screenshot>
+        <fanart>fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

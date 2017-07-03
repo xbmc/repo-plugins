@@ -1566,6 +1566,40 @@ def ParseDASHStreams(stream_id):
     # Open the page with the actual strem information and display the various available streams.
     NEW_URL = "http://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/iptv-all/vpid/%s" % stream_id
     html = OpenURL(NEW_URL)
+
+    # Check if this is a webcast.
+    check_webcast = re.search('webcast', html)
+    if check_webcast:
+        # This appears to be a webcast. Load PC mediaselector to get DASH streams.
+        NEW_URL = "http://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/pc/vpid/%s" % stream_id
+        html = OpenURL(NEW_URL)
+        # Parse the different streams and add them as new directory entries.
+        match = re.compile(
+              'connection.+?href="(.+?)".+?supplier="(.+?)".+?transferFormat="(.+?)"'
+            ).findall(html)
+        unique = []
+        [unique.append(item) for item in match if item not in unique]
+        for mpd_url, supplier, transfer_format in unique:
+            tmp_sup = 0
+            tmp_br = 0
+            if transfer_format == 'dash':
+                if supplier in ['akamai_dash_live', 'akamai_dash_live_https']:
+                    tmp_sup = 1
+                elif supplier in ['ll_dash_live', 'll_dash_live_https']:
+                    tmp_sup = 2
+                retlist.append((tmp_sup, 1, mpd_url, '1280x720'))
+
+        if not match:
+            # print "No streams found"
+            check_geo = re.search(
+                '<error id="geolocation"/>', html)
+            if check_geo:
+                # print "Geoblock detected, raising error message"
+                dialog = xbmcgui.Dialog()
+                dialog.ok(translation(30400), translation(30401))
+                raise
+        return retlist, []
+
     # Parse the different streams and add them as new directory entries.
     match = re.compile(
           'connection authExpires=".+?href="(.+?)".+?supplier="mf_(.+?)".+?transferFormat="(.+?)"'
@@ -1694,7 +1728,8 @@ def ScrapeAvailableStreams(url):
             if ((stream['kind'] == 'original') or
                (stream['kind'] == 'iplayer-version') or
                (stream['kind'] == 'technical-replacement') or
-               (stream['kind'] == 'editorial')):
+               (stream['kind'] == 'editorial') or
+               (stream['kind'] == 'webcast')):
                 stream_id_st = stream['id']
             elif ((stream['kind'] == 'signed') and
                  (ADDON.getSetting('search_signed') == 'true')):

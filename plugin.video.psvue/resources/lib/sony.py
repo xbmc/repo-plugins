@@ -310,7 +310,10 @@ class SONY():
         addon_profile_path = xbmc.translatePath(self.addon.getAddonInfo('profile'))
         cookie_file = os.path.join(addon_profile_path, 'cookies.lwp')
         cj = cookielib.LWPCookieJar()
-        cj.load(cookie_file,ignore_discard=True)
+        try:
+            cj.load(cookie_file,ignore_discard=True)            
+        except:
+            pass
         for c in cookiejar:
             args = dict(vars(c).items())
             args['rest'] = args['_rest']

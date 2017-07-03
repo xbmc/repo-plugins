@@ -11,13 +11,17 @@
     <extension point="xbmc.addon.metadata">
     <platform>all</platform>
     <language></language>
-    <summary lang="en">Stream and ondemand player for Melbourne music station PBSfm.</summary>
-    <description lang="en">Since 1979, community broadcaster PBS 106.7FM has been an integral player in Melbourne's diverse music community - with more than 80 specialist music programs ranging from soul to garage to country to jazz - PBS is dedicated to nurturing, inspiring and championing Melbourne's diverse music community. 
+    <summary lang="en_GB">Stream and ondemand player for Melbourne music station PBSfm.</summary>
+    <description lang="en_GB">Since 1979, community broadcaster PBS 106.7FM has been an integral player in Melbourne's diverse music community - with more than 80 specialist music programs ranging from soul to garage to country to jazz - PBS is dedicated to nurturing, inspiring and championing Melbourne's diverse music community. 
     </description>
     <license>The MIT License (MIT)</license>
     <email>andras.nemes@gmail.com</email>
     <forum></forum>
     <website></website>
+	<assets>
+		<icon>icon.png</icon>
+		<fanart>fanart.jpg</fanart>
+	</assets>
   </extension>
 </addon>
 

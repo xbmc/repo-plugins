@@ -1561,7 +1561,8 @@ def ScrapeAvailableStreams(url):
             if ((stream['kind'] == 'original') or
                (stream['kind'] == 'iplayer-version') or
                (stream['kind'] == 'technical-replacement') or
-               (stream['kind'] == 'editorial')):
+               (stream['kind'] == 'editorial') or
+               (stream['kind'] == 'webcast')):
                 stream_id_st = stream['id']
             elif ((stream['kind'] == 'signed') and
                  (ADDON.getSetting('search_signed') == 'true')):

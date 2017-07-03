@@ -30,8 +30,8 @@ from resources.lib import odeoncache
 from resources.lib import utils
 
 PLUGIN_NAME = 'plugin.video.odeon'
-API_URL     = 'https://www.odeon.com.ar/api/v1.4'
-ID_URL      = 'https://id.odeon.com.ar/v1.3'
+API_URL     = 'https://www.odeon.com.ar/api/v1.6'
+ID_URL      = 'https://id.odeon.com.ar/v1.4'
 
 addon_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
@@ -105,7 +105,7 @@ def list_profiles():
 
     # arma la lista de perfiles
     for profile in profiles['perfiles']:
-        query = 'root_menu&pid={0}&alias={1}&conclave={2}'.format(profile['id'], profile['alias'], profile.get('conclave'))
+        query = 'root_menu&pid={0}&alias={1}&conclave={2}'.format(profile['id'], profile['alias'].encode('utf-8'), profile.get('conclave'))
         add_directory_item(profile['alias'], query, art={"poster": image_url(profile['avatar'], 'avatar')})
     xbmcplugin.endOfDirectory(addon_handle)
 
@@ -123,7 +123,7 @@ def root_menu(params):
             return
 
     # Home / Inicio
-    add_directory_item(translation(30009), 'list_tiras')
+    add_directory_item(translation(30009), 'list_tiras', 'folder.png')
     # Últimas vistas
     add_directory_item(translation(30010), 'list_prods&url=%s' % quote('tira/histoprods'), 'folder-movies.png')
     # Películas, Series, Cortos, Especiales para perfiles no infantiles
@@ -131,9 +131,11 @@ def root_menu(params):
     for tipo in sorted(categories['tipos'], key=lambda cat: cat['orden']):
         add_directory_item(tipo['text'], 'list_prods&url=%s' % quote('tipo/' + tipo['tag']), 'folder-movies.png')
     # Explorar
-    add_directory_item(translation(30011), 'list_generos')
+    add_directory_item(translation(30011), 'list_generos', 'folder.png')
     # Mi sala
     add_directory_item(translation(30012), 'list_prods&url=%s' % quote('tira/misala'), 'folder-movies.png')
+    # Mis alquileres
+    add_directory_item(translation(30032), 'list_prods&url=%s' % quote('tvod/INCAA/rentals'), 'folder-movies.png')
     # Búsqueda
     add_directory_item(translation(30013), 'search', 'search.png')
     # Cerrar sesión
@@ -177,6 +179,9 @@ def list_prods(params):
     page = int(params.get('pag', '1'))
     orden = params.get('orden')
 
+    if 'tvod' in params['url']:
+        xbmcgui.Dialog().ok(translation(30033), translation(30034))
+
     path = '{0}?perfil={1}&cant={2}&pag={3}'.format(params['url'], PID, items, page)
     if orden: path += '&orden={0}'.format(orden)
     prod_list = json_request(path)
@@ -196,33 +201,38 @@ def list_prods(params):
 def list_subprods(params):
     """ Arma la lista de producciones para series y compilados (especiales) """
     path = '{0}/prod/{1}?perfil={2}'.format(params['source'], params['sid'], PID)
+    # 'items' restringe por temporada en caso de cabeserie
+    season = params.get('season')   # temporada seleccionada o None
+    if params.get('full'):
+        path += '&items=' + (season or '0')
     prod_list = json_request(path)
 
     if prod_list['tipos'][0]['tag'] == 'cabeserie':
 
         # set comprehension falla en ARM: seasons = {epi['tempo'] for epi in prod_list['items']}
-        seasons = list(set([epi['tempo'] for epi in prod_list['items']]))
-        season = params.get('season')   # temporada seleccionada o None
+        seasons = list(set([epi.get('tempo') or epi['capitulo']['tempo'] for epi in prod_list['items']]))
 
-        if not season and len(seasons) > 1:
-            # lista temporadas
+        if season:
+            # lista capítulos de temporada
+            for episode in prod_list['items']:
+                add_film_item(episode, params)
+
+        elif len(seasons) > 1:
+            # lista temporadas para que el usuario elija
             for season in sorted(seasons):
-                query = 'list_subprods&source={0}&sid={1}&season={2}'.format(params['source'], params['sid'], season)
+                query = 'list_subprods&source={0}&sid={1}&season={2}&full={3}'.format(params['source'], params['sid'], season, 1)
                 art = {'fanart': image_url(prod_list.get('ban'), 'odeon_slider')}
                 add_directory_item('Temporada {0}'.format(season), query, 'folder-movies.png', art=art, info=get_info(prod_list))
         else:
-            # lista capítulos de temporada
-            for episode in prod_list['items']:
-                if not season or episode['tempo'] == int(season):
-                    path = '{0}/prod/{1}?perfil={2}'.format(params['source'], episode['sid'], PID)
-                    subprod = json_request(path)
-                    add_film_item(subprod, params)
+            # hay una sola temporada
+            params['full'] = '1'
+            params['season'] = seasons[0]
+            return list_subprods(params)
+
     else:
         # lista compilados dentro de especiales
         for compi in prod_list['items']:
-            path = '{0}/prod/{1}?perfil={2}'.format(compi['id']['source'], compi['id']['sid'], PID)
-            subprod = json_request(path)
-            add_film_item(subprod, params)
+            add_film_item(compi, params)
 
     xbmcplugin.endOfDirectory(addon_handle)
 
@@ -262,20 +272,16 @@ def image_url(image, context):
 
 
 def get_art(prod):
-    thumb = poster = banner = fanart = None
-    if prod.has_key('afi'):
-        thumb  = image_url(prod['afi'], 'odeon_afiche_suge')
-        poster = image_url(prod['afi'], 'odeon_afiche_prod')
-    elif prod.has_key('afis') and len(prod['afis']) > 0:
-        thumb  = image_url(prod['afis'][0], 'odeon_afiche_suge')
-        poster = image_url(prod['afis'][0], 'odeon_afiche_prod')
-    if prod.has_key('ban'):
-        banner = image_url(prod['ban'], 'odeon_slider')
-    if prod.has_key('foto'):
-        fanart = image_url(prod['foto'], 'odeon_fotograma_ampli')
-    elif prod.has_key('fotos') and len(prod['fotos']) > 0:
-        fanart = image_url(prod['fotos'][0], 'odeon_fotograma_ampli')
-    return {'thumb':thumb, 'poster': poster, 'banner': banner, 'fanart': fanart}
+    afiche = prod['afis'][0] if 'afis' in prod and len(prod['afis']) > 0 else prod.get('afi', None)
+    thumb  = image_url(afiche, 'odeon_afiche_suge')
+    poster = image_url(afiche, 'odeon_afiche_prod')
+
+    banner = image_url(prod['ban'], 'odeon_slider') if 'ban' in prod else None
+
+    foto = prod['fotos'][0] if 'fotos' in prod and len(prod['fotos']) > 0 else prod.get('foto', None)
+    fanart = image_url(foto, 'odeon_fotograma_ampli')
+
+    return {'thumb': thumb, 'poster': poster, 'banner': banner, 'fanart': fanart}
 
 
 def run_plugin(query, prod, params):
@@ -336,6 +342,7 @@ def add_film_item(prod, params):
     if has_subprods:
         url = '{0}?action={1}&pid={2}&source={3}&sid={4}'.format(
                 addon_url, 'list_subprods', PID, prod['id']['source'], prod['id']['sid'])
+        url += '&full=1' if 'compi' in prod['tags'] else ''
         is_folder = True
     else:
         url = '{0}?action={1}&pid={2}&source={3}&sid={4}'.format(
@@ -471,8 +478,7 @@ def play(params):
 
         monitor(params['source'], params['sid'], seek)
     else:
-        xbmc.log('ERROR [{0}]: play - code ({1}) - {2}'.format(PLUGIN_NAME, response.status_code, errmsg))
-        xbmcgui.Dialog().ok('Error player ({0})'.format(response.status_code), errmsg)
+        show_error('Error Player', response.status_code, errmsg)
 
 
 def get_headers(token=None, etag=None, auth=None):
@@ -514,6 +520,14 @@ def decode_json(response):
     return None, errmsg
 
 
+def show_error(title, status, message):
+    try:
+        xbmcgui.Dialog().ok('{0} ({1})'.format(title, status), message)
+        xbmc.log('ERROR [{0}]: {1} - code ({2}) - {3}'.format(PLUGIN_NAME, title, status, message.encode('utf8', 'ignore')))
+    except:
+        pass
+
+
 def json_request(path, params=None):
     """ Emula el comportamiento de un browser """
     min_max_age = 300 # mínimo que valga la pena usar el cache
@@ -531,19 +545,17 @@ def json_request(path, params=None):
 
     r = requests.get(url, headers=get_headers(token, cachedEtag), compress=True)
 
-    # valida autenticación 4xx
-    if r.status_code // 100 == 4:
-        # 'user' no debe generar mensaje ya que se usa para validar los tokens
+    if r.status_code == 401:
+        # 'user' se usa en el login para validar tokens
         if path == 'user': return None
-        # el resto puede expirar durante la navegación, debe volver a ingresar
+        # si el token expira durante la navegación debe volver a ingresar
         xbmcgui.Dialog().ok(translation(30029), translation(30030))
         close_session([])
         sys.exit(0)
 
     # raise for status
     elif r.status_code >= 400:
-        xbmc.log('ERROR [{0}]: json_request - code ({1}) - {2}'.format(PLUGIN_NAME, r.status_code, r.content))
-        xbmcgui.Dialog().ok('Error ({0})'.format(r.status_code), r.content)
+        show_error('Error Request', r.status_code, r.content)
         close_session([])
         sys.exit(0)
 
@@ -557,8 +569,7 @@ def json_request(path, params=None):
     if not r.content: return None
     data, errmsg = decode_json(r)
     if not data:
-        xbmc.log('ERROR [{0}]: json_request - code ({1}) - {2}'.format(PLUGIN_NAME, r.status_code, errmsg))
-        xbmcgui.Dialog().ok('Error ({0})'.format(r.status_code), errmsg)
+        show_error('Error Request', r.status_code, errmsg)
         sys.exit(0)
 
     if newEtag or ttl > min_max_age:
@@ -566,21 +577,14 @@ def json_request(path, params=None):
     return data
 
 
-def get_metadata(refresh=False):
-    if refresh:
-        metadata = json_request('metadata')
-        addon.setSetting('metadata', json.dumps(metadata))
-
-    return json.loads(addon.getSetting('metadata'))
-
-
 if __name__ == '__main__':
     from urlparse import parse_qsl
     params = dict(parse_qsl(sys.argv[2][1:]))
     if params:
-        META = get_metadata()
+        META = json.loads(addon.getSetting('metadata'))
         PID = params['pid']
         globals()[params['action']](params)
     else:
-        META = get_metadata(refresh=True)
+        META = json_request('metadata')
+        addon.setSetting('metadata', json.dumps(META))
         list_profiles()

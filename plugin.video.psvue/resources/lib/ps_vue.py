@@ -287,14 +287,14 @@ def get_json(url):
 
 
 def load_cookies():
-    filename = os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp')
-    lwp_cookiejar = cookielib.LWPCookieJar()
+    cookie_file = os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp')
+    cj = cookielib.LWPCookieJar()
     try:
-        lwp_cookiejar.load(filename, ignore_discard=True)
+        cj.load(cookie_file, ignore_discard=True)
     except:
         pass
 
-    return lwp_cookiejar
+    return cj
 
 
 def stringToDate(string, date_format):
@@ -388,7 +388,7 @@ def check_device_id():
     DEVICE_ID = ADDON.getSetting(id='deviceId')
     amazon_device = 'Amazon'
     amazon_device = amazon_device.encode("hex")
-    old_asus = 'ASUS'    
+    old_asus = 'ASUS'
     old_asus = old_asus.encode("hex")
     if amazon_device in DEVICE_ID or old_asus in DEVICE_ID:
         sony = SONY()

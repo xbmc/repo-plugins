@@ -1,3 +1,6 @@
+v2.5.18
+Add support for live events (webcast).
+
 v2.5.17
 Fixed Channel A-Z.
 

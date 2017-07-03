@@ -1,0 +1,116 @@
+#
+msgid ""
+msgstr ""
+
+msgctxt "#30000"
+msgid "Genres"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Playlists"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Show artist"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Recently added"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Search for artist only"
+msgstr ""
+
+msgctxt "#30006"
+msgid "next"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Likes"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Popular"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Search for tracks only"
+msgstr ""
+
+msgctxt "#30010"
+msgid "previous"
+msgstr ""
+
+msgctxt "#30011"
+msgid "No elements to show"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Add like"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Remove like"
+msgstr ""
+
+msgctxt "#30014"
+msgid "My likes"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Following"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Follow Artist"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Unfollow Artist"
+msgstr ""
+
+msgctxt "#30018"
+msgid "tracks"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Reshared tracks"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Reshare track"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Remove reshare"
+msgstr ""
+
+msgctxt "#30050"
+msgid "hearthis.at credentials"
+msgstr ""
+
+msgctxt "#30051"
+msgid "Email"
+msgstr ""
+
+msgctxt "#30052"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30053"
+msgid "Elements per page"
+msgstr ""
+
+msgctxt "#30054"
+msgid "Login at hearthis.at"
+msgstr ""
+
+msgctxt "#30055"
+msgid "Login failed. Check your credentials!"
+msgstr ""
+

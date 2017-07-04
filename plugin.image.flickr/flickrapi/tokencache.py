@@ -15,7 +15,7 @@ __all__ = ('TokenCache', 'SimpleTokenCache')
 
 class SimpleTokenCache(object):
     '''In-memory token cache.'''
-    
+
     def __init__(self):
         self.token = None
 
@@ -26,7 +26,7 @@ class SimpleTokenCache(object):
 
 class TokenCache(object):
     '''On-disk persistent token cache for a single application.
-    
+
     The application is identified by the API key used. Per
     application multiple users are supported, with a single
     token per user.
@@ -34,9 +34,9 @@ class TokenCache(object):
 
     def __init__(self, api_key, username=None):
         '''Creates a new token cache instance'''
-        
+
         self.api_key = api_key
-        self.username = username        
+        self.username = username
         self.memory = {}
         self.path = os.path.join("~", ".flickr")
 
@@ -46,7 +46,7 @@ class TokenCache(object):
 
     def get_cached_token_filename(self):
         """Return the full pathname of the cached token file."""
-        
+
         if self.username:
             filename = 'auth-%s.token' % self.username
         else:
@@ -66,30 +66,33 @@ class TokenCache(object):
 
         try:
             f = open(self.get_cached_token_filename(), "r")
-            token = f.read()
+            token, secret = f.read().split('\n', 1)
             f.close()
 
-            return token.strip()
+            return token.strip(), secret.strip()
         except IOError:
             return None
+        except:
+            return None
 
-    def set_cached_token(self, token):
+    def set_cached_token(self, token_secret):
+        assert isinstance(token_secret, list)
         """Cache a token for later use."""
 
         # Remember for later use
-        self.memory[self.username] = token
+        self.memory[self.username] = token_secret
 
         path = self.get_cached_token_path()
         if not os.path.exists(path):
             os.makedirs(path)
 
         f = open(self.get_cached_token_filename(), "w")
-        f.write(token)
+        f.write('{0}\n{1}'.format(token_secret[0], token_secret[1]))
         f.close()
 
     def forget(self):
         '''Removes the cached token'''
-        
+
         if self.username in self.memory:
             del self.memory[self.username]
         filename = self.get_cached_token_filename()
@@ -136,7 +139,7 @@ class LockingTokenCache(TokenCache):
 
         return None
 
-        
+
     def acquire(self, timeout=60):
         '''Locks the token cache for this key and username.
 
@@ -257,7 +260,7 @@ class LockingTokenCache(TokenCache):
     @locked
     def forget(self):
         '''Removes the cached token'''
-        
+
         TokenCache.forget(self)
 
     token = property(get_cached_token, set_cached_token, forget, "The cached token")

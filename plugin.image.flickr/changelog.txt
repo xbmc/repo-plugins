@@ -1,5 +1,9 @@
 flickrXBMC Changelog
 
+*** 1.1.0 ***
+
+Update to use flickr's new auth method
+
 *** 1.0.9 ***
 
 Now sets content type to images when displaying a list of images

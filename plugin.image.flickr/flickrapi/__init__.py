@@ -51,6 +51,8 @@ import os.path
 import logging
 import copy
 import webbrowser
+import time
+import random
 
 # Smartly import hashlib and fall back on md5
 try: from hashlib import md5
@@ -71,10 +73,10 @@ LOG.setLevel(logging.INFO)
 def make_utf8(dictionary):
     '''Encodes all Unicode strings in the dictionary to UTF-8. Converts
     all other objects to regular strings.
-    
+
     Returns a copy of the dictionary, doesn't touch the original.
     '''
-    
+
     result = {}
 
     for (key, value) in dictionary.iteritems():
@@ -83,9 +85,9 @@ def make_utf8(dictionary):
         else:
             value = str(value)
         result[key] = value
-    
+
     return result
-        
+
 def debug(method):
     '''Method decorator for debugging method calls.
 
@@ -140,36 +142,36 @@ def require_format(required_format):
 
 class FlickrAPI(object):
     """Encapsulates Flickr functionality.
-    
+
     Example usage::
-      
+
       flickr = flickrapi.FlickrAPI(api_key)
       photos = flickr.photos_search(user_id='73509078@N00', per_page='10')
       sets = flickr.photosets_getList(user_id='73509078@N00')
     """
-    
+
     flickr_host = "api.flickr.com"
-    flickr_rest_form = "/services/rest/"
-    flickr_auth_form = "/services/auth/"
-    flickr_upload_form = "/services/upload/"
-    flickr_replace_form = "/services/replace/"
+    flickr_rest_form = "/services/rest"
+    flickr_auth_form = "/services/auth"
+    flickr_upload_form = "/services/upload"
+    flickr_replace_form = "/services/replace"
 
     def __init__(self, api_key, secret=None, username=None,
             token=None, format='etree', store_token=True,
             cache=False):
         """Construct a new FlickrAPI instance for a given API key
         and secret.
-        
+
         api_key
             The API key as obtained from Flickr.
-        
+
         secret
             The secret belonging to the API key.
-        
+
         username
             Used to identify the appropriate authentication token for a
             certain user.
-        
+
         token
             If you already have an authentication token, you can give
             it here. It won't be stored on disk by the FlickrAPI instance.
@@ -193,11 +195,11 @@ class FlickrAPI(object):
             >>> f = FlickrAPI(api_key='123')
             >>> f.cache = SimpleCache(timeout=5, max_entries=100)
         """
-        
+
         self.api_key = api_key
         self.secret = secret
         self.default_format = format
-        
+
         self.__handler_cache = {}
 
         if token:
@@ -240,7 +242,7 @@ class FlickrAPI(object):
             >>> tr(u'flickr.photos.getInfo')
             u'photos_getInfo'
             '''
-            
+
             return name[7:].replace('.', '_')
 
         return [tr(m.text) for m in rsp.getiterator('method')]
@@ -252,7 +254,7 @@ class FlickrAPI(object):
         rsp = XMLNode.parse(rest_xml, store_xml=True)
         if rsp['stat'] == 'ok':
             return rsp
-        
+
         err = rsp.err[0]
         raise FlickrError(u'Error: %(code)s: %(msg)s' % err)
 
@@ -273,45 +275,33 @@ class FlickrAPI(object):
         rsp = ElementTree.fromstring(rest_xml)
         if rsp.attrib['stat'] == 'ok':
             return rsp
-        
+
         err = rsp.find('err')
         raise FlickrError(u'Error: %(code)s: %(msg)s' % err.attrib)
 
-    def sign(self, dictionary):
-        """Calculate the flickr signature for a set of params.
-        
-        data
-            a hash of all the params and values to be hashed, e.g.
-            ``{"api_key":"AAAA", "auth_token":"TTTT", "key":
-            u"value".encode('utf-8')}``
+    def signHMAC_SHA1(self, key, method, url, params, secret=""):
+        from hashlib import sha1
+        import hmac
+        import urllib
 
-        """
+        key = '{0}&{1}'.format(key, secret)
 
-        data = [self.secret]
-        for key in sorted(dictionary.keys()):
-            data.append(key)
-            datum = dictionary[key]
-            if isinstance(datum, unicode):
-                raise IllegalArgumentException("No Unicode allowed, "
-                        "argument %s (%r) should have been UTF-8 by now"
-                        % (key, datum))
-            data.append(datum)
-        md5_hash = md5(''.join(data))
-        return md5_hash.hexdigest()
+        raw = '{0}&{1}&{2}'.format(method.upper(), urllib.quote(url, safe=""), urllib.quote(params, safe=''))
+
+        hashed = hmac.new(key, raw, sha1)
+
+        return urllib.quote(hashed.digest().encode("base64").rstrip('\n'), safe='')
 
     def encode_and_sign(self, dictionary):
-        '''URL encodes the data in the dictionary, and signs it using the
-        given secret, if a secret was given.
-        '''
-        
-        dictionary = make_utf8(dictionary)
-        if self.secret:
-            dictionary['api_sig'] = self.sign(dictionary)
+        '''URL encodes the data in the dictionary'''
+
+        dictionary = sorted(make_utf8(dictionary).items(), key=lambda x: x[0])
+
         return urllib.urlencode(dictionary)
-        
+
     def __getattr__(self, attrib):
         """Handle all the regular Flickr API calls.
-        
+
         Example::
 
             flickr.auth_getFrob(api_key="AAAAAA")
@@ -329,7 +319,7 @@ class FlickrAPI(object):
         method = "flickr." + attrib.replace("_", ".")
         if method in self.__handler_cache:
             return self.__handler_cache[method]
-        
+
         def handler(**args):
             '''Dynamically created handler for a Flickr API call'''
 
@@ -339,9 +329,14 @@ class FlickrAPI(object):
 
             # Set some defaults
             defaults = {'method': method,
-                        'auth_token': self.token_cache.token,
-                        'api_key': self.api_key,
-                        'format': self.default_format}
+                        'format': self.default_format,
+                        'oauth_consumer_key': self.api_key,
+                        'oauth_timestamp': str(int(time.time())),
+                        'oauth_nonce': str(random.randint(0,99999999)),
+                        'oauth_signature_method': 'HMAC-SHA1',
+                        'oauth_version': '1.0',
+                        'oauth_token': self.token_cache.token[0]
+            }
 
             args = self.__supply_defaults(args, defaults)
 
@@ -351,7 +346,7 @@ class FlickrAPI(object):
         handler.method = method
         self.__handler_cache[method] = handler
         return handler
-    
+
     def __supply_defaults(self, args, defaults):
         '''Returns a new dictionary containing ``args``, augmented with defaults
         from ``defaults``.
@@ -377,13 +372,13 @@ class FlickrAPI(object):
             # pass None to Flickr anyway.
             if result[key] is None:
                 del result[key]
-        
+
         return result
 
     def __flickr_call(self, **kwargs):
         '''Performs a Flickr API call with the given arguments. The method name
         itself should be passed as the 'method' parameter.
-        
+
         Returns the unparsed data from Flickr::
 
             data = self.__flickr_call(method='flickr.photos.getInfo',
@@ -399,7 +394,10 @@ class FlickrAPI(object):
             return self.cache.get(post_data)
 
         url = "https://" + self.flickr_host + self.flickr_rest_form
-        flicksocket = urllib2.urlopen(url, post_data)
+
+        sig = self.signHMAC_SHA1(self.secret, 'GET', url, post_data, self.token_cache.token[1])
+
+        flicksocket = urllib2.urlopen(url + '?{0}&oauth_signature={1}'.format(post_data, sig))
         reply = flicksocket.read()
         flicksocket.close()
 
@@ -408,7 +406,7 @@ class FlickrAPI(object):
             self.cache.set(post_data, reply)
 
         return reply
-    
+
     def __wrap_in_parser(self, wrapped_method, parse_format, *args, **kwargs):
         '''Wraps a method call in a parser.
 
@@ -439,7 +437,7 @@ class FlickrAPI(object):
 
         This is the URL the app will launch a browser toward if it
         needs a new token.
-            
+
         perms
             "read", "write", or "delete"
         frob
@@ -461,7 +459,7 @@ class FlickrAPI(object):
         perms
             "read", "write", or "delete"
         '''
-        
+
         encoded = self.encode_and_sign({
                     "api_key": self.api_key,
                     "perms": perms})
@@ -529,14 +527,14 @@ class FlickrAPI(object):
 
         The callback method should take two parameters:
         ``def callback(progress, done)``
-        
+
         Progress is a number between 0 and 100, and done is a boolean
         that's true only when the upload is done.
         """
 
         return self.__upload_to_form(self.flickr_upload_form,
                 filename, callback, **kwargs)
-    
+
     def replace(self, filename, photo_id, callback=None, **kwargs):
         """Replace an existing photo.
 
@@ -556,14 +554,14 @@ class FlickrAPI(object):
         The callback parameter has the same semantics as described in the
         ``upload`` function.
         """
-        
+
         if not photo_id:
             raise IllegalArgumentException("photo_id must be specified")
 
         kwargs['photo_id'] = photo_id
         return self.__upload_to_form(self.flickr_replace_form,
                 filename, callback, **kwargs)
-        
+
     def __upload_to_form(self, form_url, filename, callback, **kwargs):
         '''Uploads a photo - can be used to either upload a new photo
         or replace an existing one.
@@ -587,7 +585,7 @@ class FlickrAPI(object):
 
         # Convert to UTF-8 if an argument is an Unicode string
         kwargs = make_utf8(arguments)
-        
+
         if self.secret:
             kwargs["api_sig"] = self.sign(kwargs)
         url = "https://%s%s" % (self.flickr_host, form_url)
@@ -607,17 +605,17 @@ class FlickrAPI(object):
 
     def __send_multipart(self, url, body, progress_callback=None):
         '''Sends a Multipart object to an URL.
-        
+
         Returns the resulting unparsed XML from Flickr.
         '''
 
         LOG.debug("Uploading to %s" % url)
         request = urllib2.Request(url)
         request.add_data(str(body))
-        
+
         (header, value) = body.header()
         request.add_header(header, value)
-        
+
         if not progress_callback:
             # Just use urllib2 if there is no progress callback
             # function
@@ -630,8 +628,8 @@ class FlickrAPI(object):
             # Call the user's progress callback when we've filtered
             # out the HTTP header
             if seen_header[0]:
-                return progress_callback(percentage, done)            
-            
+                return progress_callback(percentage, done)
+
             # Remember the first time we hit 'done'.
             if done:
                 seen_header[0] = True
@@ -643,7 +641,7 @@ class FlickrAPI(object):
         '''Lets the user validate the frob by launching a browser to
         the Flickr website.
         '''
-        
+
         auth_url = self.auth_url(perms, frob)
         try:
             browser = webbrowser.get()
@@ -653,20 +651,20 @@ class FlickrAPI(object):
             browser = webbrowser.GenericBrowser(os.environ['BROWSER'])
 
         browser.open(auth_url, True, True)
-        
+
     def get_token_part_one(self, perms="read", auth_callback=None):
         """Get a token either from the cache, or make a new one from
         the frob.
-        
+
         This first attempts to find a token in the user's token cache
         on disk. If that token is present and valid, it is returned by
         the method.
-        
+
         If that fails (or if the token is no longer valid based on
-        flickr.auth.checkToken) a new frob is acquired. If an auth_callback 
+        flickr.auth.checkToken) a new frob is acquired. If an auth_callback
         method has been specified it will be called. Otherwise the frob is
         validated by having the user log into flickr (with a browser).
-        
+
         To get a proper token, follow these steps:
             - Store the result value of this method call
             - Give the user a way to signal the program that he/she
@@ -677,10 +675,10 @@ class FlickrAPI(object):
               cached token.
             - Call flickrapi.get_token_part_two(...) and pass it the
               result value you stored.
-        
+
         The newly minted token is then cached locally for the next
         run.
-        
+
         perms
             "read", "write", or "delete"
         auth_callback
@@ -690,12 +688,12 @@ class FlickrAPI(object):
 
             If authorization should be blocked, pass
             ``auth_callback=False``.
-      
+
             The auth_callback method should take ``(frob, perms)`` as
             parameters.
-                                   
+
         An example::
-        
+
             (token, frob) = flickr.get_token_part_one(perms='write')
             if not token: raw_input("Press ENTER after you authorized this program")
             flickr.get_token_part_two((token, frob))
@@ -717,7 +715,7 @@ class FlickrAPI(object):
                 raise ValueError('Invalid value for auth_callback: %s'
                         % auth_callback)
 
-        
+
         # see if we have a saved token
         token = self.token_cache.token
         frob = None
@@ -752,7 +750,7 @@ class FlickrAPI(object):
             authenticate(frob, perms)
 
         return (token, frob)
-        
+
     def get_token_part_two(self, (token, frob)):
         """Part two of getting a token, see ``get_token_part_one(...)`` for details."""
 
@@ -761,22 +759,22 @@ class FlickrAPI(object):
             LOG.debug("get_token_part_two: no need, token already there")
             self.token_cache.token = token
             return token
-        
+
         LOG.debug("get_token_part_two: getting a new token for frob '%s'" % frob)
 
         return self.get_token(frob)
-    
+
     def get_token(self, frob):
         '''Gets the token given a certain frob. Used by ``get_token_part_two`` and
         by the web authentication method.
         '''
-        
+
         # get a token
         rsp = self.auth_getToken(frob=frob, auth_token=None, format='xmlnode')
 
         token = rsp.auth[0].token[0].text
         LOG.debug("get_token: new token '%s'" % token)
-        
+
         # store the auth info for next time
         self.token_cache.token = token
 
@@ -801,7 +799,7 @@ class FlickrAPI(object):
         '''Calls 'method' with page=0, page=1 etc. until the total
         number of pages has been visited. Yields the photos
         returned.
-        
+
         Assumes that ``method(page=n, **params).findall('*/photos')``
         results in a list of photos, and that the toplevel element of
         the result contains a 'pages' attribute with the total number
@@ -847,7 +845,7 @@ class FlickrAPI(object):
 
         .. _flickr.photosets.getPhotos:
             http://www.flickr.com/services/api/flickr.photosets.getPhotos.html
-        
+
         Uses the ElementTree format, incompatible with other formats.
         '''
 
@@ -874,12 +872,12 @@ class FlickrAPI(object):
 
 def set_log_level(level):
     '''Sets the log level of the logger used by the FlickrAPI module.
-    
+
     >>> import flickrapi
     >>> import logging
     >>> flickrapi.set_log_level(logging.INFO)
     '''
-    
+
     import flickrapi.tokencache
 
     LOG.setLevel(level)

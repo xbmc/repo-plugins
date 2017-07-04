@@ -26,7 +26,7 @@ class myAddon(t1mAddon):
       url = 'http://www.hgtv.com/shows/full-episodes'
       html = self.getRequest(url)
 #      html = re.compile('<div class="capsule editorialPromo parbase section">(.+?)<div class="textPromo capsule parbase section">', re.DOTALL).search(html).group(1)
-      a = re.compile('<div class="m-MediaBlock o-Capsule__m-MediaBlock m-MediaBlock--playlist">.+?href="(.+?)".+?data-src="(.+?)".+?HeadlineText".+?>(.+?)<.+?AssetInfo">(.+?)<', re.DOTALL).findall(html)
+      a = re.compile('<div class="m-MediaBlock o-Capsule__m-MediaBlock m-MediaBlock--playlist">.+?href="(.+?)".+?data-src="(.+?)".+?HeadlineText.+?>(.+?)<.+?AssetInfo">(.+?)<', re.DOTALL).findall(html)
       for (url, thumb, name, vidcnt) in a:
           name=name.strip()
           name=h.unescape(name)

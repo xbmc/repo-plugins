@@ -134,8 +134,6 @@ def root_menu(params):
     add_directory_item(translation(30011), 'list_generos', 'folder.png')
     # Mi sala
     add_directory_item(translation(30012), 'list_prods&url=%s' % quote('tira/misala'), 'folder-movies.png')
-    # Mis alquileres
-    add_directory_item(translation(30032), 'list_prods&url=%s' % quote('tvod/INCAA/rentals'), 'folder-movies.png')
     # Búsqueda
     add_directory_item(translation(30013), 'search', 'search.png')
     # Cerrar sesión
@@ -204,7 +202,7 @@ def list_subprods(params):
     # 'items' restringe por temporada en caso de cabeserie
     season = params.get('season')   # temporada seleccionada o None
     if params.get('full'):
-        path += '&items=' + (season or '0')
+        path += '&items=' + str(season or 0)
     prod_list = json_request(path)
 
     if prod_list['tipos'][0]['tag'] == 'cabeserie':

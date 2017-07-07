@@ -1,3 +1,6 @@
+v2.5.20
+Signed and AD streams must be treated separately.
+
 v2.5.19
 Added new stream kind and option for future stream kinds.
 

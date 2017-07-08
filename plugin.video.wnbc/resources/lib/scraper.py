@@ -16,30 +16,23 @@ qp  = urllib.quote_plus
 uqp = urllib.unquote_plus
 UTF8 = 'utf-8'
 
-
 class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
-      html = self.getRequest('http://tveatc-usa.nbcuni.com/awe3/live/5/nbce/containers/iPadRetina')
-      a = json.loads(html)['results']
+      html = self.getRequest('http://www.nbc.com/shows/all')
+      html = re.compile('<script>PRELOAD=(.+?)</script>', re.DOTALL).search(html).group(1)
+      a = json.loads(html)
+      a = a['allShows']
+      mode = 'GE'
       for b in a:
-          infoList ={}
-          url  = b['assetID']
           name = b['title']
-          infoList['Title'] = name
-          infoList['TVShowTitle'] = name
-          infoList['Plot'] = b.get('description')
-          if (b['seasons'] != []):
-              infoList['Season'] = int(b['seasons'][0]['number'])
-          fanart = b['images'][0]['images'].get('featured_full_screen_landscape')
-          if fanart is None:
-              fanart = b['images'][0]['images'].get('featured_large_6')
-          thumb  = b['images'][0]['images'].get('show_thumbnail_16_by_9')
-          mode = 'GE'
-          if (b['seasons'] != []):
-              if (b['seasons'][0]['hasClips']):
-                  mode = 'GC'
+          infoList ={}
           infoList['mediatype'] = 'tvshow'
+          infoList['TVShowTitle'] = name
+          infoList['Title'] = name
+          url = b['urlAlias']
+          thumb = b['image']
+          fanart = thumb
           contextMenu = [('Add To Library','XBMC.RunPlugin(%s?mode=DF&url=AL%s)' % (sys.argv[0], url))]
           ilist = self.addMenuItem(name, mode, ilist, url, thumb, fanart, infoList, isFolder=True, cm=contextMenu)
       return(ilist)
@@ -58,59 +51,55 @@ class myAddon(t1mAddon):
 
 
   def getAddonEpisodes(self,url,ilist, dtype='episode', getFileData = False):
-      url = uqp(url)
-      html = self.getRequest('http://tveatc-usa.nbcuni.com/awe3/live/5/nbce/containers/iPadRetina/%s' % url)
+      html = self.getRequest('http://www.nbc.com/%s?nbc=1' % url)
+      id = re.compile('"entities"\:\{"(.+?)"', re.DOTALL).search(html)
+      if id is not None:
+          id = id.group(1)
+      else:
+          return(ilist)
+      html = self.getRequest('https://api.nbc.com/v3.13/videos?fields%5Bvideos%5D=airdate%2Cavailable%2Cdescription%2Centitlement%2Cexpiration%2Cgenre%2Cguid%2CinternalId%2Ckeywords%2Cpermalink%2CrunTime%2Ctitle%2Ctype%2CvChipRating%2CembedUrl%2CseasonNumber%2CepisodeNumber%2CdayPart%2Ccredits&fields%5Bshows%5D=category%2Ccolors%2Cdescription%2CinternalId%2Cname%2Cnavigation%2Creference%2CschemaType%2CshortDescription%2CshortTitle%2CurlAlias%2CshowTag%2Csocial%2CtuneIn%2Ctype&fields%5Bseasons%5D=seasonNumber%2CcontestantTitle&fields%5Bimages%5D=derivatives&include=image%2Cshow%2Cshow.season&derivatives=landscape.widescreen.size350.x1%2Clandscape.widescreen.size640.x1%2Clandscape.widescreen.size640.x2&filter%5Bshow%5D='+id+'&filter%5Bexpiration%5D%5Bvalue%5D=2017-07-07T23%3A00%3A00-04%3A00&filter%5Bexpiration%5D%5Boperator%5D=%3E%3D&filter%5Btype%5D%5Bvalue%5D=Full%20Episode&filter%5Btype%5D%5Boperator%5D=%3D&sort=-airdate')
       a = json.loads(html)
-      for b in a['results']:
-       if b['subtype'] == dtype:
+      for b in a['data']:
            infoList = {}
-           name = b['title']
-           fanart = b['images'][0]['images'].get('featured_full_screen_landscape')
-           if fanart is None:
-               fanart = b['images'][0]['images'].get('featured_large_6')
-               if fanart is None:
-                   fanart = b['images'][0]['images'].get('cast_full_screen_landscape')
-
-           thumb  = b['images'][0]['images'].get('video_thumbnail_16_by_9')
-           if not b['requiresAuth']:
-               url = b['videoURL']
+           url = b['attributes'].get('mediaUrl')
+           if url == None:
+               url = b['attributes'].get('embedUrl')
+               url = url.split('guid/',1)[1]
+               url = url.split('?',1)[0]
+               url = 'http://link.theplatform.com/s/NnzsPC/media/guid/%s?format=preview' % url
            else:
-               url = b['videoURL'].split('?',1)[0]
-               if url == '':
-                   continue
-               url += '?format=preview'
-               html = self.getRequest(url)
-               c = json.loads(html)
-               catQuoted = urllib.quote(c['categories'][0]['name'])
-               pubDateStr = str(c['pubDate'])
-               url = 'http://feed.theplatform.com/f/NnzsPC/end_card?range=1-10&byCustomValue={fullEpisode}{true},{showInNavigation}{true}&byCategories='+catQuoted+'&form=json&sort=nbcu:seasonNumber,nbcu:airOrder,pubDate&byPubDate='+pubDateStr+'~'
-               html = self.getRequest(url)
-               c = json.loads(html)
-               if c['entries'] == []:
-                   continue
-               for d in c['entries'][0]['media$content']:
-                   if d['plfile$isDefault']:
-                       url = d['plfile$url']+'&manifest=m3u'
-                       break
+               url += '&format=preview'
+           html = self.getRequest(url)
+           if html == '':
+               continue
+           c = json.loads(html)
+           name = c['title']
+           thumb = c.get('defaultThumbnailUrl')
+           fanart = thumb
+           url = 'http://link.theplatform.com/s/NnzsPC/media/'+c['mediaPid']+'?policy=43674&player=NBC.com%20Instance%20of%3A%20rational-player-production&formats=m3u,mpeg4&format=SMIL&embedded=true&tracking=true'
            infoList['Title'] = name
-           infoList['TVShowTitle'] = b.get('parentContainerTitle')
-           season = b.get('seasonNumber', False)
+           season = c.get('nbcu$seasonNumber', False)
            if season:
                infoList['Season'] = int(season)
-           episode = b.get('episodeNumber', False)
+           episode = c.get('nbcu$airOrder', False)
            if episode:
                infoList['Episode'] = int(episode)
-           duration = b.get('totalDuration')
+           duration = c.get('duration')
            if duration:
                infoList['Duration'] = int(duration/1000)
-           airDate = int(b['firstAiredDate'])
-           infoList['date'] = datetime.datetime.fromtimestamp(airDate).strftime('%d.%m.%Y')
-           airDate = datetime.datetime.fromtimestamp(airDate).strftime('%Y-%m-%d')
-           infoList['aired'] = airDate
-           infoList['premiered'] = airDate
-           infoList['year'] = int(airDate.split('-',1)[0])
-           infoList['MPAA'] = b.get('rating')
-           infoList['Plot'] = b.get('description')
+           airDate = c.get('nbcu$airDate')
+           if airDate is not None:
+               airDate = int(airDate/1000)
+               infoList['date'] = datetime.datetime.fromtimestamp(airDate).strftime('%d.%m.%Y')
+               airDate = datetime.datetime.fromtimestamp(airDate).strftime('%Y-%m-%d')
+               infoList['aired'] = airDate
+               infoList['premiered'] = airDate
+               infoList['year'] = int(airDate.split('-',1)[0])
+           rating = c.get('ratings')
+           if (rating is not None) and (rating != []):
+               infoList['MPAA'] = rating[0].get('rating')
+           infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
+           infoList['Plot'] = c.get('description')
            infoList['Studio'] = 'NBC'
            infoList['mediatype'] = 'episode'
            if getFileData == False:
@@ -147,6 +136,10 @@ class myAddon(t1mAddon):
               url  = re.compile('video src="(.+?)"', re.DOTALL).search(html).group(1)
           else:
               url  = re.compile('ref src="(.+?)"', re.DOTALL).search(html).group(1)
+      if 'nbcvodenc' in url:
+          html = self.getRequest(url)
+          url = re.compile('http(.+?)\n', re.DOTALL).search(html).group(1)
+          url = 'http'+url.strip()
       liz = xbmcgui.ListItem(path = url)
       infoList ={}
       infoList['mediatype'] = xbmc.getInfoLabel('ListItem.DBTYPE')

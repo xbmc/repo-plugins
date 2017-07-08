@@ -136,10 +136,14 @@ class myAddon(t1mAddon):
               url  = re.compile('video src="(.+?)"', re.DOTALL).search(html).group(1)
           else:
               url  = re.compile('ref src="(.+?)"', re.DOTALL).search(html).group(1)
-      if 'nbcvodenc' in url:
-          html = self.getRequest(url)
-          url = re.compile('http(.+?)\n', re.DOTALL).search(html).group(1)
-          url = 'http'+url.strip()
+          if 'nbcvodenc' in url:
+              html = self.getRequest(url)
+              url = re.compile('http(.+?)\n', re.DOTALL).search(html).group(1)
+              url = 'http'+url.strip()
+          else:
+              headers = self.defaultHeaders.copy()
+              headers['User-Agent']= 'Mozilla/5.0 (Linux; U; en-US) AppleWebKit/528.5+ (KHTML, like Gecko, Safari/528.5+) Version/4.0 Kindle/3.0 (screen 600X800; rotate)'
+              url += '|User-Agent='+urllib.quote(headers['User-Agent'])
       liz = xbmcgui.ListItem(path = url)
       infoList ={}
       infoList['mediatype'] = xbmc.getInfoLabel('ListItem.DBTYPE')
@@ -156,4 +160,5 @@ class myAddon(t1mAddon):
       infoList['Season'] = xbmc.getInfoLabel('ListItem.Season')
       infoList['Episode'] = xbmc.getInfoLabel('ListItem.Episode')
       liz.setInfo('video', infoList)
+      liz.setMimeType('application/x-mpegURL')
       xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)

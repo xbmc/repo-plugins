@@ -1,0 +1,225 @@
+# Kodi Media Center language file
+# Addon Name: CURRENTTIME.TV
+# Addon id: plugin.video.currenttime.tv
+# Addon Provider: dicoka@ukr.net
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: dicoka@ukr.net\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: dicoka@ukr.net\n"
+"Language-Team: dicoka@ukr.net\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgctxt "#30001"
+msgid "Live Stream"
+msgstr "Прямой эфир"
+
+msgctxt "#30002"
+msgid "Current Time TV channel - live stream online"
+msgstr "Круглосуточный телеканал \"Настоящее Время\" - прямая трасляция онлайн"
+
+msgctxt "#30003"
+msgid "Last Broadcasts"
+msgstr "Последние эфиры"
+
+msgctxt "#30004"
+msgid "Last TV Programmes Broadcasts"
+msgstr "Последние эфиры телепередач"
+
+msgctxt "#30005"
+msgid "TV Programmes"
+msgstr "Телепередачи"
+
+msgctxt "#30006"
+msgid "All TV Programmes"
+msgstr "Все телепередачи"
+
+msgctxt "#30007"
+msgid "All Videos"
+msgstr "Все видео"
+
+msgctxt "#30008"
+msgid "All Videos"
+msgstr "Все видео"
+
+msgctxt "#30009"
+msgid "Videos: Daily Shoots"
+msgstr "Видео: Кадры дня"
+
+msgctxt "#30010"
+msgid "Daily Shoots"
+msgstr "Кадры дня"
+
+
+msgctxt "#30011"
+msgid "Videos: Reportages"
+msgstr "Видео: Репортажи"
+
+msgctxt "#30012"
+msgid "Reportages"
+msgstr "Репортажи"
+
+msgctxt "#30013"
+msgid "Videos: Interviews"
+msgstr "Видео: Интервью"
+
+msgctxt "#30014"
+msgid "Opinions"
+msgstr "Мнения"
+
+msgctxt "#30015"
+msgid "TV Listing"
+msgstr "Телепрограмма"
+
+msgctxt "#30016"
+msgid "TV listing - schedule for today"
+msgstr "Телевизионная программа на сегодня"
+
+
+msgctxt "#30031"
+msgid "Час Тимура Олевского"
+msgstr "Час Тимура Олевского"
+
+msgctxt "#30032"
+msgid "Ежедневная телепередача Час Тимура Олевского"
+msgstr "Ежедневная телепередача Час Тимура Олевского"
+
+msgctxt "#30033"
+msgid "Настоящее Время - Европа"
+msgstr "Настоящее Время - Европа"
+
+msgctxt "#30034"
+msgid "Ежедневная телепередача Настоящее Время"
+msgstr "Ежедневная телепередача Настоящее Время"
+
+msgctxt "#30035"
+msgid "Настоящее Время – Азия"
+msgstr "Настоящее Время – Азия"
+
+msgctxt "#30036"
+msgid "Ежедневная телепередача Настоящее Время – Азия"
+msgstr "Ежедневная телепередача Настоящее Время – Азия"
+
+msgctxt "#30037"
+msgid "Настоящее Время – Америка"
+msgstr "Настоящее Время – Америка"
+
+msgctxt "#30038"
+msgid "Ежедневная телепередача Настоящее Время – Америка"
+msgstr "Ежедневная телепередача Настоящее Время – Америка"
+
+msgctxt "#30039"
+msgid "Смотри в оба"
+msgstr "Смотри в оба"
+
+msgctxt "#30040"
+msgid "Еженедельная передача Смотри в оба"
+msgstr "Еженедельная передача Смотри в оба"
+
+msgctxt "#30041"
+msgid "Итоги"
+msgstr "Итоги"
+
+msgctxt "#30042"
+msgid "Еженедельная итоговая телепередача Итоги (по субботам)"
+msgstr "Еженедельная итоговая телепередача Итоги (по субботам)"
+
+msgctxt "#30043"
+msgid "Неделя"
+msgstr "Неделя"
+
+msgctxt "#30044
+msgid "Еженедельная итоговая телепередача Неделя (по воскресеньям)"
+msgstr "Еженедельная итоговая телепередача Неделя (по воскресеньям)"
+
+msgctxt "#30045"
+msgid "Балтия. Неделя"
+msgstr "Балтия. Неделя"
+
+msgctxt "#30046"
+msgid "Еженедельная итоговая передача Балтия. Неделя (по субботам)"
+msgstr "Еженедельная итоговая передача Балтия. Неделя (по субботам)"
+
+msgctxt "#30047"
+msgid "Бизнес-план"
+msgstr "Бизнес-план"
+
+msgctxt "#30048"
+msgid "Еженедельная передача Бизнес-план"
+msgstr "Еженедельная передача Бизнес-план"
+
+msgctxt "#30049"
+msgid "Неизвестная Россия"
+msgstr "Неизвестная Россия"
+
+msgctxt "#30050"
+msgid "Цикл Неизвестная Россия"
+msgstr "Цикл Неизвестная Россия"
+
+msgctxt "#30051"
+msgid "Ждем в гости"
+msgstr "Ждем в гости"
+
+msgctxt "#30052"
+msgid "Ждем в гости с Зурабом Двали"
+msgstr "Ждем в гости с Зурабом Двали"
+
+
+msgctxt "#30101"
+msgid "Next"
+msgstr "Дальше"
+
+msgctxt "#30102"
+msgid "More videos"
+msgstr "Перейти к следующим видео"
+
+
+msgctxt "#30103"
+msgid "Archive"
+msgstr "Архив"
+
+msgctxt "#30104"
+msgid "All dates video archive"
+msgstr "Видео за все даты"
+
+
+
+msgctxt "#30801"
+msgid "Connection Error"
+msgstr "Ошибка соединения"
+
+
+msgctxt "#30901"
+msgid "General"
+msgstr "Общие"
+
+msgctxt "#30902"
+msgid "Live Stream Quality"
+msgstr "Качестово воспроизведения прямого эфира"
+
+msgctxt "#30903"
+msgid "Archive Videos Quality"
+msgstr "Качестово воспроизведения архива"
+
+msgctxt "#30904"
+msgid "Download Fanart"
+msgstr "Загружать фанарты"
+
+msgctxt "#30905"
+msgid "Download Thumbnails"
+msgstr "Загружать эскизы"
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,138 @@
+# XBMC Media Center language file
+# Addon Name: Remote Control Browser
+# Addon id: plugin.program.remote.control.browser
+# Addon version: 1.1.0
+# Addon Provider: Chad Parry
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: Chad Parry <github@chad.parry.org>\n"
+"POT-Creation-Date: 2016-05-25 22:19+0000\n"
+"PO-Revision-Date: 2017-04-02 10:46-0700\n"
+"Last-Translator: Chad Parry <github@chad.parry.org>\n"
+"Language-Team: Remote Control Browser Translation\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_US\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "#30001"
+msgid "Add Bookmark"
+msgstr "Add Bookmark"
+
+msgctxt "#30002"
+msgid "Remove Bookmark"
+msgstr "Remove Bookmark"
+
+msgctxt "#30003"
+msgid "Title"
+msgstr "Title"
+
+msgctxt "#30004"
+msgid "URL"
+msgstr "URL"
+
+msgctxt "#30005"
+msgid "Browser not found!"
+msgstr "Browser not found!"
+
+msgctxt "#30006"
+msgid "Edit Bookmark"
+msgstr "Edit Bookmark"
+
+msgctxt "#30007"
+msgid "Thumbnail"
+msgstr "Thumbnail"
+
+msgctxt "#30018"
+msgid "Dependencies"
+msgstr "Dependencies"
+
+msgctxt "#30019"
+msgid "Browser Path"
+msgstr "Browser Path"
+
+msgctxt "#30020"
+msgid "Browser Arguments"
+msgstr "Browser Arguments"
+
+msgctxt "#30021"
+msgid "“xdotool” Path"
+msgstr "“xdotool” Path"
+
+msgctxt "#30022"
+msgid "Warning: Missing Python package “psutil”"
+msgstr "Warning: Missing Python package “psutil”"
+
+msgctxt "#30023"
+msgid "Warning: Missing Python package “pyalsaaudio”"
+msgstr "Warning: Missing Python package “pyalsaaudio”"
+
+msgctxt "#30024"
+msgid "Warning: Missing Python package “pylirc2”"
+msgstr "Warning: Missing Python package “pylirc2”"
+
+msgctxt "#30025"
+msgid "Launch Bookmark"
+msgstr "Launch Bookmark"
+
+msgctxt "#30027"
+msgid "Edit Keymap"
+msgstr "Edit Keymap"
+
+msgctxt "#30028"
+msgid "LIRC Configuration File"
+msgstr "LIRC Configuration File"
+
+msgctxt "#30029"
+msgid "Loading Webpage"
+msgstr "Loading Webpage"
+
+msgctxt "#30030"
+msgid "Enable Linkcast"
+msgstr "Enable Linkcast"
+
+msgctxt "#30031"
+msgid "Linkcast Port"
+msgstr "Linkcast Port"
+
+msgctxt "#30032"
+msgid "Kodi Linkcast"
+msgstr "Kodi Linkcast"
+
+msgctxt "#30033"
+msgid "Remote Control Browser Add-on"
+msgstr "Remote Control Browser Add-on"
+
+msgctxt "#30034"
+msgid "The link was sent to Kodi."
+msgstr "The link was sent to Kodi."
+
+msgctxt "#30035"
+msgid "Linkcast"
+msgstr "Linkcast"
+
+msgctxt "#30036"
+msgid "Drag this bookmarklet to the bookmarks bar and then you can use it to linkcast your current webpage:"
+msgstr "Drag this bookmarklet to the bookmarks bar and then you can use it to linkcast your current webpage:"
+
+msgctxt "#30037"
+msgid "Kodi Linkcast does not support the scheme: %(url)s"
+msgstr "Kodi Linkcast does not support the scheme: %(url)s"
+
+msgctxt "#30038"
+msgid "Browser already running!"
+msgstr "Browser already running!"
+
+msgctxt "#30039"
+msgid "Warning: Insufficient memory"
+msgstr "Warning: Insufficient memory"
+
+msgctxt "#30040"
+msgid "Browser reported an error!"
+msgstr "Browser reported an error!"
+
+msgctxt "#30041"
+msgid "Suspend Kodi During Browsing"
+msgstr "Suspend Kodi During Browsing"

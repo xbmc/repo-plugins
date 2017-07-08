@@ -1,0 +1,15 @@
+1.0.2 (2017-01-28)
+- fix for github issue#2 ('Meistgesehen' is empty) after ZDF website update
+- make sure that search-history store-path exists
+- minor fixes for parsing teaser-lists
+
+1.0.1 (2016-12-03)
+- added rubrics: Live-TV, Shows A-Z
+- added search history
+- added parsing of video links in module-content elements 
+- added settings to configure item label information
+- re-shaped parsing after ZDF website update (fix for broken search)
+- re-worked video player launching (based on "setResolvedUrl()")
+
+1.0.0 (2016-11-12)
+- Initial version after relaunch of zdf.de end of October 2016

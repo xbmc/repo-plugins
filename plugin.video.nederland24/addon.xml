@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.nederland24" name="Nederland 24" version="4.5.6" provider-name="bosel">
+  <requires>
+      <import addon="xbmc.python" version="2.24.0"/>
+      <import addon="script.module.beautifulsoup" version="3.0.8"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="nederland24.py">
+      <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+      <summary lang="en_GB">Dutch Public Broadcasting (NPO)- Live television, thematic digital channels and news broadcasts</summary>
+      <summary lang="nl_NL">De Nederlandse Publieke Omroep (NPO) - Live televisie, digitale themakanalen en het laatste Journaal.</summary>
+      <description lang="en_GB">Dutch Public Broadcasting (NPO) is anyone's and for everyone. We create programmes for radio, television and internet. These programmes connect you to the world around you.</description>
+      <description lang="nl_NL">De Nederlandse Publieke Omroep (NPO) is van iedereen en voor iedereen. We maken programma’s op radio, televisie en internet. Die programma’s verbinden je met de wereld om je heen.</description>
+      <platform>all</platform>
+      <language>nl</language>
+      <license>GPLv3</license>
+      <forum></forum>
+      <website>https://github.com/bosel/plugin.video.nederland24</website>
+      <email></email>
+      <source>https://github.com/bosel/plugin.video.nederland24</source>
+      <disclaimer lang="en_GB">Copyright 2011-2017 bosel.This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</disclaimer>
+      <news>Fix journaal channels 2017-03-21</news>
+  </extension>
+</addon>

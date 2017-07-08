@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- plugin.widget.gto - InfoWindow German Telecast Offers' - START -->
+<!-- Estuary Skin adapted -->
+<window>
+    <defaultcontrol always="true">22</defaultcontrol>
+    <include>DefaultDialogButton</include>
+	<controls>
+		<control type="group" id="576757">
+			<left>460</left>
+            <top>90</top>
+            <include content="DialogBackgroundCommons">
+				<param name="width" value="660" />
+				<param name="height" value="535" />
+				<param name="header_label" value="$ADDON[plugin.service.gto 30104]" />
+				<param name="header_id" value="1" />
+			</include>
+            <control type="label">
+                      <left>20</left>
+                      <top>70</top>
+                      <width>620</width>
+                      <height>36</height>
+                      <font>font24_title</font>
+                      <label>$INFO[Window(Home).Property(GTO.Info.Title)]</label>
+                      <align>center</align>
+                      <aligny>center</aligny>
+            </control>
+            <control type="image">
+                      <left>30</left>
+                      <top>120</top>
+                      <width>260</width>
+                      <height>195</height>
+                      <aspectratio>keep</aspectratio>
+                      <texture border="1">$INFO[Window(Home).Property(GTO.Info.Picture)]</texture>
+            </control>
+            <control type="group">
+                <left>320</left>
+                <top>135</top>
+                <width>170</width>
+                <control type="label">
+                        <description>Channel</description>
+                        <top>0</top>
+                        <height>10</height>
+                        <font>font12</font>
+                        <label>$INFO[Window(Home).Property(GTO.Info.Channel]</label>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                </control>
+                <control type="label">
+                        <description>Genre</description>
+                        <top>30</top>
+                        <height>10</height>
+                        <font>font10</font>
+                        <label>$INFO[Window(Home).Property(GTO.Info.Genre)]</label>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                </control>
+                <control type="label">
+                        <description>Start, End</description>
+                        <top>50</top>
+                        <height>10</height>
+                        <font>font10</font>
+                        <label>$INFO[Window(Home).Property(GTO.Info.StartTime)] - $INFO[Window(Home).Property(GTO.Info.EndTime)]</label>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                </control>
+                <control type="label">
+                        <top>70</top>
+                        <height>10</height>
+                        <font>font10</font>
+                        <label>$INFO[Window(Home).Property(GTO.Info.RunTime)] min</label>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                </control>
+            </control>
+            <control type="image">
+                    <left>500</left>
+                    <top>130</top>
+                    <width>120</width>
+                    <height>80</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture border="1">$INFO[Window(Home).Property(GTO.Info.Logo)]</texture>
+            </control>
+            <control type="textbox">
+                    <left>320</left>
+                    <top>230</top>
+                    <width>300</width>
+                    <height>60</height>
+                    <font>font10</font>
+                    <scrolltime>200</scrolltime>
+                    <autoscroll delay="5000" time="5000" repeat="10000">!IsEmpty(Window(Home).Property(GTO.Info.Cast))</autoscroll>
+                    <label>$INFO[Window(Home).Property(GTO.Info.Cast)]</label>
+                    <align>left</align>
+            </control>
+            <control type="textbox">
+                    <left>30</left>
+                    <top>320</top>
+                    <width>600</width>
+                    <height>140</height>
+                    <font>font12</font>
+                    <textcolor>white</textcolor>
+                    <shadowcolor>black</shadowcolor>
+                    <selectedcolor>selected</selectedcolor>
+                    <align>justify</align>
+                    <scrolltime>200</scrolltime>
+                    <autoscroll delay="5000" time="5000" repeat="10000">!IsEmpty(Window(Home).Property(GTO.Info.Description))</autoscroll>
+                    <label>$INFO[Window(Home).Property(GTO.Info.Description)]</label>
+            </control>
+            <control type="grouplist">
+                <orientation>horizontal</orientation>
+                <left>0</left>
+                <top>445</top>
+                <width>660</width>
+                <align>center</align>
+                <include content="DefaultDialogButton">
+                    <description>Set switchtimer button</description>
+                    <param name="id" value="20" />
+                    <param name="width" value="250"/>
+                    <param name="label" value="$ADDON[plugin.service.gto 30107]"/>
+                    <param name="onclick" value="RunScript(service.kn.switchtimer,action=add,channel=$INFO[Window(Home).Property(GTO.Info.Channel)],icon=$INFO[Window(Home).Property(GTO.Info.Logo)],date=$INFO[Window(Home).Property(GTO.Info.Date)],title=$INFO[Window(Home).Property(GTO.Info.Title)])"/>
+                    <param name="onclick_2" value="Dialog.Close(all)"/>
+                    <param name="visible">!IsEmpty(Window(Home).Property(GTO.Info.isInFuture)) + System.HasAddon(service.kn.switchtimer)</param>
+                </include>
+                <include content="DefaultDialogButton">
+                    <description>Switch now button</description>
+                    <param name="id" value="21" />
+                    <param name="width" value="250"/>
+                    <param name="label" value="$ADDON[plugin.service.gto 30108]"/>
+                    <param name="onclick" value="RunScript(plugin.service.gto,action=switch_channel&amp;pvrid=$INFO[Window(Home).Property(GTO.Info.ChannelID)])"/>
+                    <param name="onclick_2" value="Dialog.Close(all)"/>
+                    <param name="visible">!IsEmpty(Window(Home).Property(GTO.Info.isRunning)) + System.HasAddon(service.kn.switchtimer)</param>
+                </include>
+                <include content="DefaultDialogButton">
+                    <description>Cancel button</description>
+                    <param name="id" value="22" />
+                    <param name="width" value="250"/>
+                    <param name="label" value="$ADDON[plugin.service.gto 30119]"/>
+                    <param name="onclick" value="Dialog.Close(all)"/>
+                </include>
+                <onup>1</onup>
+                <ondown>1</ondown>
+            </control>
+        </control>
+	</controls>
+</window>
+
+<!-- plugin.service.gto - InfoWindow - END -->

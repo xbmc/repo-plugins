@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.euskarazko-irratiak" name="Euskarazko irratiak" version="2.0.0" provider-name="Asier Iturralde (iametza.eus)">
+    <requires>
+        <import addon="xbmc.python" version="2.24.0" />
+        <import addon="script.module.requests" version="2.9.1"/>
+        <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Listen to Basque language radio stations and podcasts</summary>
+        <summary lang="eu">Euskarazko irratiak zuzenean eta podcast-ak</summary>
+        <description lang="en">Listen to nearly 30 radio stations that broadcast, completely or at least partially, in Basque language. From version 2.0.0 onwards you can listen to a lot of podcasts in Basque language too.</description>
+        <description lang="eu">Plugin honi esker programazio osoa, edo gutxienez zati bat, euskaraz emititzen duten ia 30 irrati entzun ditzakezu zuzenean. 2.0.0 bertsiotik aurrera euskarazko podcast mordo bat ere entzun dezakezu.</description>
+        <platform>all</platform>
+        <language>eu</language>
+        <license>GNU General Public License, v3</license>
+        <source>https://github.com/aldatsa/plugin.audio.euskarazko-irratiak</source>
+        <email>asier.iturralde abildua gmail.com</email>
+        <news>v2.0.0 (2016-12-24)
+            + Now you can listen to a lot of podcasts in Basque language</news>
+    </extension>
+</addon>

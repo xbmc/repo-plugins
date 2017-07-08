@@ -24,6 +24,8 @@ class Scraper():
 
         # Properties
 
+        self.enabled = False
+        self.baseurl = 'http://www.rtv.de'
         self.rssurl = 'http://www.rtv.de/rss/filmtipps.xml'
         self.friendlyname = 'rtv Highlights'
         self.shortname = 'rtv'
@@ -88,7 +90,7 @@ class Scraper():
                         try:
                             self.thumb = re.compile('<img class="kalooga_12730" src="(.+?)"', re.DOTALL).findall(content)[0]
                         except IndexError:
-                            pass
+                            self.thumb = 'image://%s' % (self.err404)
                     self.thumb = self.checkResource(self.thumb, self.err404)
 
                 # Broadcast Info (stop)

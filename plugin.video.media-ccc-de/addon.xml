@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.media-ccc-de" name="media.ccc.de" version="0.1.0" provider-name="Tobias Gruetzmacher">
+  <requires>
+    <import addon="xbmc.python" version="2.24.0"/>
+    <import addon="script.module.simplejson" version="3.3.0"/>
+    <import addon="script.module.requests" version="2.3.0"/>
+    <import addon="script.module.routing" version="0.2.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Videos of Chaos Computer Club events.</summary>
+    <summary lang="de_DE">Videos von Chaos Computer Club Veranstaltungen.</summary>
+    <description lang="en_GB">This addon provides access to videos published on https://media.ccc.de/ (mostly lecture recordings of CCC events) </description>
+    <description lang="de_DE">Dieses Add-On ermöglicht den Zugriff auf Videos, die auf https://media.ccc.de/ veröffentlicht wurden (größtenteils Vortragsmitschnitte von CCC-Veranstaltungen)</description>
+    <disclaimer lang="en_GB"></disclaimer>
+    <news>v0.1.0 (2017-04-16)
+- EasterHegg 2017 release.
+- Use "slug" instead of obsolete "webgen_location".
+- Track coverage on Travis-CI.
+- Refactor GUI code into extra file. (also fixes #11)
+- Migrated translations from XML to PO.
+- Add "insecure" option for devices with old/broken TLS setup (fixes #2, #12).
+- Skip streams without urls.
+- Switch to streaming API v2.</news>
+    <language>de en</language>
+    <platform>all</platform>
+    <license>MIT License</license>
+    <website>https://media.ccc.de/</website>
+    <email>tobias-kodi@23.gs</email>
+    <source>https://github.com/cccc/plugin.video.media-ccc-de</source>
+  </extension>
+</addon>

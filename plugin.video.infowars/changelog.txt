@@ -1,3 +1,11 @@
+[B]Version 2.0.4[/B]
+- Updated links (Spinalcracker)
+- Added Paul Joseph Watson section
+- Fixed random bugs with Krypton
+
+[B]Version 2.0.3[/B]
+- Updated links (Spinalcracker)
+
 [B]Version 2.0.2[/B]
 - Updated all links (Spinalcracker)
 - Switched everything over to HD sources (Spinalcracker)

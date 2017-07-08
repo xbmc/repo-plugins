@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.tele5_de" name="Tele5.de" version="1.1.11" provider-name="L0RE">
+    <requires>
+        <import addon="xbmc.python" version="2.24.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="de">Tele5 Mediathek</summary>
+        <summary lang="en">Tele5 media library</summary>
+        <language>de</language>
+        <description lang="de">Tele5 Mediathek</description>
+        <description lang="en">Tele5 media library</description>
+        <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <source>https://github.com/kodinerds/repo/tree/master/plugin.video.tele5_de</source>
+        <forum>http://www.kodinerds.net</forum>
+        <email>andreas at vogler dot name</email>
+        <website>http://www.tele5.de</website>
+    </extension>
+</addon>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<window type="window">
+	
+	<backgroundcolor></backgroundcolor>
+
+	<menucontrol>9000</menucontrol>
+	<!-- No includes and no $PARAM for xml guis. we gotta do this the hard way -->
+    <controls>
+
+		
+		<control type="group" id="100">
+			<left>0</left>
+			<top>0</top>
+			
+			<control type="image" id="101">
+				<left>90</left>	<top>0</top>	<width>320</width>	<height>320</height>
+				<aspectratio aligny="center">keep</aspectratio>
+				<texture>srr_clock.png</texture>
+			</control>
+
+			<control type="textbox" id="201">
+				<visible>false</visible>
+				<top>0</top>
+				<left>0</left>
+				<width>1038</width>
+				<height>560</height>
+				<label></label>
+				<font>font30</font>
+				<depth>1</depth>
+			</control>
+
+		</control>
+			
+    </controls>
+</window>

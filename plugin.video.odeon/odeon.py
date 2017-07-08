@@ -134,6 +134,8 @@ def root_menu(params):
     add_directory_item(translation(30011), 'list_generos', 'folder.png')
     # Mi sala
     add_directory_item(translation(30012), 'list_prods&url=%s' % quote('tira/misala'), 'folder-movies.png')
+    # Mis alquileres
+    add_directory_item(translation(30032), 'list_prods&url=%s' % quote('tvod/INCAA/rentals'), 'folder-movies.png')
     # Búsqueda
     add_directory_item(translation(30013), 'search', 'search.png')
     # Cerrar sesión

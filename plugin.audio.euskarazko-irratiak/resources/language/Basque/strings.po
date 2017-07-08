@@ -1,0 +1,15 @@
+# Kodi Media Center language file
+# Addon Name: Euskarazko irratiak
+# Addon id: plugin.audio.euskarazko-irratiak
+# Addon Provider: Asier Iturralde (iametza.eus)
+
+msgid ""
+msgstr ""
+
+msgctxt "#30001"
+msgid "Live radios"
+msgstr "Irratiak zuzenean"
+
+msgctxt "#30002"
+msgid "Podcasts"
+msgstr "Podcast-ak"

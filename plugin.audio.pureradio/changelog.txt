@@ -1,0 +1,9 @@
+v1.0.0:
+  - initial release
+  - cleanup main menu
+  - updated translation
+  - removed invalid spreaker id
+  - PR Comments:
+	- added source to addon.xml
+	- updated xmbc.python version to 2.24.0 in addon.xml
+	- used getAddonInfo() for icon and fanart images

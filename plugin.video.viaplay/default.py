@@ -1,11 +1,13 @@
 ﻿# -*- coding: utf-8 -*-
 """
-A Kodi plugin for Viaplay
+A Kodi add-on for Viaplay
 """
 import sys
 import os
 import urllib
 import urlparse
+import json
+from datetime import datetime
 
 from resources.lib.vialib import vialib
 
@@ -40,11 +42,6 @@ if addon.getSetting('disable_ssl') == 'true':
 else:
     ssl = True
 
-if addon.getSetting('debug') == 'false':
-    debug = False
-else:
-    debug = True
-
 if addon.getSetting('country') == '0':
     country = 'se'
 elif addon.getSetting('country') == '1':
@@ -54,12 +51,25 @@ elif addon.getSetting('country') == '2':
 else:
     country = 'fi'
 
+debug_cmd = {  # determine if debug logging is activated in kodi
+    'jsonrpc': '2.0',
+    'method': 'Settings.GetSettingValue',
+    'params': {'setting': 'debug.showloginfo'},
+    'id': '1'
+}
+debug_dict = json.loads(xbmc.executeJSONRPC(json.dumps(debug_cmd)))
+try:
+    debug = debug_dict['result']['value']
+except:
+    debug = True
+
 vp = vialib(username, password, cookie_file, deviceid_file, tempdir, country, ssl, debug)
 
 
 def addon_log(string):
     if debug:
-        xbmc.log('%s: %s' % (logging_prefix, string))
+        msg = '%s: %s' % (logging_prefix, string)
+        xbmc.log(msg=msg, level=xbmc.LOGDEBUG)
 
 
 def show_auth_error(error):
@@ -72,7 +82,7 @@ def show_auth_error(error):
     else:
         message = error
 
-    show_dialog(dialog_type='ok', heading=language(30017), message=message)
+    dialog(dialog_type='ok', heading=language(30017), message=message)
 
 
 def root_menu():
@@ -86,17 +96,33 @@ def root_menu():
         title = category['title']
         if categorytype != 'editorial':
             if videotype == 'series':
-                parameters = {'action': 'series_menu', 'url': category['href']}
+                parameters = {
+                    'action': 'series_menu',
+                    'url': category['href']
+                }
             elif videotype == 'movie' or videotype == 'rental':
-                parameters = {'action': 'movies_menu', 'url': category['href']}
+                parameters = {
+                    'action': 'movies_menu',
+                    'url': category['href']
+                }
             elif videotype == 'sport':
-                parameters = {'action': 'sports_menu', 'url': category['href']}
+                parameters = {
+                    'action': 'sports_menu',
+                    'url': category['href']
+                }
             elif videotype == 'kids':
-                parameters = {'action': 'kids_menu', 'url': category['href']}
+                parameters = {
+                    'action': 'kids_menu',
+                    'url': category['href']
+                }
             else:
                 addon_log('Unsupported videotype found: %s' % videotype)
-                parameters = {'action': 'show_dialog', 'dialog_type': 'ok', 'heading': language(30017),
-                              'message': 'This type (%s) is not yet supported.' % videotype}
+                parameters = {
+                    'action': 'dialog',
+                    'dialog_type': 'ok',
+                    'heading': language(30017),
+                    'message': 'This type (%s) is not yet supported.' % videotype
+                }
 
             items = add_item(title, parameters, items=items)
     xbmcplugin.addDirectoryItems(_handle, items, len(items))
@@ -110,7 +136,10 @@ def movies_menu(url):
 
     for category in categories:
         title = category['title']
-        parameters = {'action': 'list_sortings', 'url': category['href']}
+        parameters = {
+            'action': 'list_sortings',
+            'url': category['href']
+        }
 
         items = add_item(title, parameters, items=items)
     xbmcplugin.addDirectoryItems(_handle, items, len(items))
@@ -123,7 +152,10 @@ def series_menu(url):
 
     for category in categories:
         title = category['title']
-        parameters = {'action': 'list_sortings', 'url': category['href']}
+        parameters = {
+            'action': 'list_sortings',
+            'url': category['href']
+        }
 
         items = add_item(title, parameters, items=items)
     xbmcplugin.addDirectoryItems(_handle, items, len(items))
@@ -137,7 +169,10 @@ def kids_menu(url):
     for category in categories:
         title = '%s: %s' % (category['group']['title'].title(), category['title'])
         category_url = category['href']
-        parameters = {'action': 'list_products', 'url': category_url}
+        parameters = {
+            'action': 'list_products',
+            'url': category_url
+        }
 
         items = add_item(title, parameters, items=items)
     xbmcplugin.addDirectoryItems(_handle, items, len(items))
@@ -153,11 +188,20 @@ def list_sortings(url):
             sorting_url = sorting['href']
             try:
                 if sorting['id'] == 'alphabetical':
-                    parameters = {'action': 'list_alphabetical_letters', 'url': sorting_url}
+                    parameters = {
+                        'action': 'list_alphabetical_letters',
+                        'url': sorting_url
+                    }
                 else:
-                    parameters = {'action': 'list_products', 'url': sorting_url}
+                    parameters = {
+                        'action': 'list_products',
+                        'url': sorting_url
+                    }
             except TypeError:
-                parameters = {'action': 'list_products', 'url': sorting_url}
+                parameters = {
+                    'action': 'list_products',
+                    'url': sorting_url
+                }
 
             items = add_item(title, parameters, items=items)
         list_products_alphabetical(url)
@@ -168,7 +212,11 @@ def list_sortings(url):
 def list_products_alphabetical(url):
     """List all products in alphabetical order."""
     title = language(30013)
-    parameters = {'action': 'list_products', 'url': url + '?sort=alphabetical'}
+    parameters = {
+        'action': 'list_products',
+        'url': url + '?sort=alphabetical'
+    }
+
     add_item(title, parameters)
 
 
@@ -181,7 +229,11 @@ def list_alphabetical_letters(url):
             query = '#'  # 0-9 needs to be sent as a number sign
         else:
             query = letter.lower()
-        parameters = {'action': 'list_products', 'url': url + '&letter=' + urllib.quote(query)}
+
+        parameters = {
+            'action': 'list_products',
+            'url': url + '&letter=' + urllib.quote(query)
+        }
 
         items = add_item(letter, parameters, items=items)
     xbmcplugin.addDirectoryItems(_handle, items, len(items))
@@ -191,13 +243,20 @@ def list_alphabetical_letters(url):
 def list_next_page(data):
     if vp.get_next_page(data):
         title = language(30018)
-        parameters = {'action': 'list_products', 'url': vp.get_next_page(data)}
+        parameters = {
+            'action': 'list_products',
+            'url': vp.get_next_page(data)
+        }
+
         add_item(title, parameters)
 
 
 def list_products(url, filter_event=False):
     items = []
     data = vp.make_request(url=url, method='get')
+    if filter_event:
+        filter_event = filter_event.split(', ')
+
     products = vp.get_products(input=data, method='data', filter_event=filter_event)
 
     for product in products:
@@ -211,8 +270,13 @@ def list_products(url, filter_event=False):
             as it always provides more detailed data about each product."""
             playid = product['_links']['self']['href']
             streamtype = 'url'
-        parameters = {'action': 'play_video', 'playid': playid.encode('utf-8'), 'streamtype': streamtype,
-                      'content': content}
+
+        parameters = {
+            'action': 'play_video',
+            'playid': playid.encode('utf-8'),
+            'streamtype': streamtype,
+            'content': content
+        }
 
         if content == 'episode':
             title = product['content']['series']['episodeTitle']
@@ -221,16 +285,24 @@ def list_products(url, filter_event=False):
             set_content = 'episodes'
 
         elif content == 'sport':
-            product_name = product['content']['title'].encode('utf-8')
+            now = datetime.now()
+            date_today = now.date()
+            product_name = unicode(product['content']['title'])
 
-            if product['event_status'] == 'archive':
-                title = 'Archive: %s' % product_name
+            if date_today == product['event_date'].date():
+                start_time = '%s %s' % (language(30027), product['event_date'].strftime('%H:%M'))
             else:
-                title = '%s (%s)' % (product_name, product['event_date'].strftime('%H:%M'))
+                start_time = product['event_date'].strftime('%Y-%m-%d %H:%M')
+
+            title = '[B]%s%s[/B] %s' % (coloring(start_time, product['event_status']), coloring(':', product['event_status']), product_name)
 
             if product['event_status'] == 'upcoming':
-                parameters = {'action': 'show_dialog', 'dialog_type': 'ok', 'heading': language(30017),
-                              'message': '%s %s.' % (language(30016), product['event_date'].strftime('%Y-%m-%d %H:%M'))}
+                parameters = {
+                    'action': 'dialog',
+                    'dialog_type': 'ok',
+                    'heading': language(30017),
+                    'message': '%s [B]%s[/B].' % (language(30016), start_time)
+                }
                 playable = False
             else:
                 playable = True
@@ -253,8 +325,10 @@ def list_products(url, filter_event=False):
         elif content == 'series':
             title = product['content']['series']['title'].encode('utf-8')
             season_url = product['_links']['viaplay:page']['href']
-            parameters = {'action': 'list_seasons', 'url': season_url}
-
+            parameters = {
+                'action': 'list_seasons',
+                'url': season_url
+            }
             playable = False
             watched = True
             set_content = 'tvshows'
@@ -278,7 +352,10 @@ def list_seasons(url):
         for season in seasons:
             season_url = season['_links']['self']['href']
             title = '%s %s' % (language(30014), season['title'])
-            parameters = {'action': 'list_products', 'url': season_url}
+            parameters = {
+                'action': 'list_products',
+                'url': season_url
+            }
 
             items = add_item(title, parameters, items=items)
         xbmcplugin.addDirectoryItems(_handle, items, len(items))
@@ -433,23 +510,33 @@ def return_art(product, content):
 
 def list_search(data):
     title = data['_links']['viaplay:search']['title']
-    parameters = {'action': 'search', 'url': data['_links']['viaplay:search']['href']}
+    parameters = {
+        'action': 'search',
+        'url': data['_links']['viaplay:search']['href']
+    }
+
     add_item(title, parameters)
 
 
-def get_userinput(title):
-    query = None
-    keyboard = xbmc.Keyboard('', title)
+def get_user_input(heading):
+    keyboard = xbmc.Keyboard('', heading)
     keyboard.doModal()
     if keyboard.isConfirmed():
-        query = keyboard.getText()
-        addon_log('User input string: %s' % query)
-    return query
+        user_input = keyboard.getText()
+        addon_log('User input string: %s' % user_input)
+    else:
+        user_input = None
 
-    
+    if user_input and len(user_input) > 0:
+        return user_input
+    else:
+        return None
+
+
 def get_numeric_input(heading):
     dialog = xbmcgui.Dialog()
     numeric_input = dialog.numeric(0, heading)
+
     if len(numeric_input) > 0:
         return str(numeric_input)
     else:
@@ -457,13 +544,10 @@ def get_numeric_input(heading):
 
 
 def search(url):
-    try:
-        query = get_userinput(language(30015))
-        if len(query) > 0:
-            url = '%s?query=%s' % (url, urllib.quote(query))
-            list_products(url)
-    except TypeError:
-        pass
+    query = get_user_input(language(30015))
+    if query:
+        url = '%s?query=%s' % (url, urllib.quote(query))
+        list_products(url)
 
 
 def play_video(input, streamtype, content, pincode=None):
@@ -475,7 +559,7 @@ def play_video(input, streamtype, content, pincode=None):
 
     try:
         video_urls = vp.get_video_urls(guid, pincode=pincode)
-        
+
         if content == 'sport':
             # sports uses HLS v4 so we can't parse the manifest as audio is supplied externally
             stream_url = video_urls['manifest_url']
@@ -485,27 +569,27 @@ def play_video(input, streamtype, content, pincode=None):
                 stream_url = video_urls['bitrates'][bitrate]
             else:
                 stream_url = False
-                
+
         if stream_url:
             playitem = xbmcgui.ListItem(path=stream_url)
             playitem.setProperty('IsPlayable', 'true')
             if addon.getSetting('subtitles') == 'true':
                 playitem.setSubtitles(vp.download_subtitles(video_urls['subtitle_urls']))
             xbmcplugin.setResolvedUrl(_handle, True, listitem=playitem)
-            
+
     except vp.AuthFailure as error:
         if error.value == 'ParentalGuidancePinChallengeNeededError':
             if pincode:
-                show_dialog(dialog_type='ok', heading=language(30033), message=language(30034))
+                dialog(dialog_type='ok', heading=language(30033), message=language(30034))
             else:
                 pincode = get_numeric_input(language(30032))
                 if pincode:
                     play_video(input, streamtype, content, pincode)
         else:
             show_auth_error(error.value)
-            
+
     except vp.LoginFailure:
-        show_dialog(dialog_type='ok', heading=language(30005), message=language(30006))
+        dialog(dialog_type='ok', heading=language(30005), message=language(30006))
 
 
 def sports_menu(url):
@@ -520,9 +604,16 @@ def sports_menu(url):
         else:
             title = language(30029)
         if date == 'today':
-            parameters = {'action': 'list_sports_today', 'url': url}
+            parameters = {
+                'action': 'list_sports_today',
+                'url': url
+            }
         else:
-            parameters = {'action': 'list_sports_dates', 'url': url, 'event_date': date}
+            parameters = {
+                'action': 'list_sports_dates',
+                'url': url,
+                'event_date': date
+            }
 
         items = add_item(title, parameters, items=items)
     xbmcplugin.addDirectoryItems(_handle, items, len(items))
@@ -531,17 +622,19 @@ def sports_menu(url):
 
 def list_sports_today(url):
     items = []
-    event_status = ['live', 'upcoming', 'archive']
+    event_status = [language(30037), language(30031)]
     for status in event_status:
-        if status == 'live':
-            title = status.title()
-        elif status == 'upcoming':
-            title = language(30030)
+        if status == language(30037):
+            filter = 'live, upcoming'
         else:
-            title = language(30031)
-        parameters = {'action': 'list_products_sports_today', 'url': url, 'filter_sports_event': status}
+            filter = 'archive'
+        parameters = {
+            'action': 'list_products_sports_today',
+            'url': url,
+            'filter_sports_event': filter
+        }
 
-        items = add_item(title, parameters, items=items)
+        items = add_item(status, parameters, items=items)
     xbmcplugin.addDirectoryItems(_handle, items, len(items))
     xbmcplugin.endOfDirectory(_handle)
 
@@ -551,7 +644,10 @@ def list_sports_dates(url, event_date):
     dates = vp.get_sports_dates(url, event_date)
     for date in dates:
         title = date['date']
-        parameters = {'action': 'list_products', 'url': date['href']}
+        parameters = {
+            'action': 'list_products',
+            'url': date['href']
+        }
 
         items = add_item(title, parameters, items=items)
     xbmcplugin.addDirectoryItems(_handle, items, len(items))
@@ -564,10 +660,9 @@ def ask_bitrate(bitrates):
     options = []
     for bitrate in bitrates:
         options.append(bitrate + ' Kbps')
-    dialog = xbmcgui.Dialog()
-    ret = dialog.select(language(30026), options)
-    if ret > -1:
-        return bitrates[ret]
+    selected_bitrate = dialog('select', language(30026), options=options)
+    if selected_bitrate is not None:
+        return bitrates[selected_bitrate]
     else:
         return None
 
@@ -593,14 +688,25 @@ def select_bitrate(manifest_bitrates=None):
                 allowed_bitrates.append(str(bitrate))
         if allowed_bitrates:
             return allowed_bitrates[0]
+        else:
+            addon_log('No bitrate in stream matched the maximum bitrate allowed.')
+            return None
     else:
         return ask_bitrate(manifest_bitrates)
 
 
-def show_dialog(dialog_type, heading, message):
+def dialog(dialog_type, heading, message=None, options=None, nolabel=None, yeslabel=None):
     dialog = xbmcgui.Dialog()
     if dialog_type == 'ok':
         dialog.ok(heading, message)
+    elif dialog_type == 'yesno':
+        return dialog.yesno(heading, message, nolabel=nolabel, yeslabel=yeslabel)
+    elif dialog_type == 'select':
+        ret = dialog.select(heading, options)
+        if ret > -1:
+            return ret
+        else:
+            return None
 
 
 def add_item(title, parameters, items=False, folder=True, playable=False, set_info=False, set_art=False,
@@ -628,6 +734,17 @@ def add_item(title, parameters, items=False, folder=True, playable=False, set_in
     else:
         items.append((recursive_url, listitem, folder))
         return items
+
+def coloring(text, meaning):
+    """Return the text wrapped in appropriate color markup."""
+    if meaning == 'live':
+        color = 'FF03F12F'
+    elif meaning == 'upcoming':
+        color = 'FFF16C00'
+    elif meaning == 'archive':
+        color = 'FFFF0EE0'
+    colored_text = '[COLOR=%s]%s[/COLOR]' % (color, text)
+    return colored_text
 
 
 def router(paramstring):
@@ -660,8 +777,8 @@ def router(paramstring):
             search(params['url'])
         elif params['action'] == 'list_sports_dates':
             list_sports_dates(params['url'], params['event_date'])
-        elif params['action'] == 'show_dialog':
-            show_dialog(params['dialog_type'], params['heading'], params['message'])
+        elif params['action'] == 'dialog':
+            dialog(params['dialog_type'], params['heading'], params['message'])
     else:
         root_menu()
 

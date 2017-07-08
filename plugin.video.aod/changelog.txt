@@ -1,4 +1,11 @@
-﻿0.4.16
+﻿0.6.0
+- Bugfixes
+- Improvments
+0.5.1
+- Bugfixes
+- Video get marked as Playd
+- News Section Added
+0.4.16
 - addons.xml Korrigiert
 0.4.14
 -Korrigiert, aus dem PR von kodi.tv

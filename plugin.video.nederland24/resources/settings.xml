@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <!--Channels-->
+    <category label="30100">
+        <setting id="NPO 101" label="30101" type="bool" default="true" />
+        <setting id="NPO Cultura" label="30104" type="bool" default="true" />
+        <setting id="NPO Zapp Xtra" label="30105" type="bool" default="true" />
+        <setting id="NPO Nieuws" label="30109" type="bool" default="true" />
+        <setting id="NPO Politiek" label="30110" type="bool" default="true" />
+        <setting id="NPO 1" label="30111" type="bool" default="true" />
+        <setting id="NPO 2" label="30112" type="bool" default="true" />
+        <setting id="NPO 3" label="30113" type="bool" default="true" />
+        <setting id="Depth_Acht" label="30151" type="slider"  default="1" range="0,1,10" option="int" />
+        <setting id="Depth_Jeugd" label="30152" type="slider"  default="1" range="0,1,10" option="int" />
+    </category>
+    <!--Radio-->
+    <category label="30200">
+        <setting id="NPO Radio 1" label="30215" type="bool" default="false" />
+        <setting id="NPO Radio 2" label="30216" type="bool" default="false" />
+        <setting id="NPO 3FM" label="30217" type="bool" default="false" />
+        <setting id="NPO Radio 4" label="30218" type="bool" default="false" />
+	<!-- <setting id="NPO Radio 5" label="30219" type="bool" default="false" /> -->
+        <!-- <setting id="NPO Radio 6" label="30220" type="bool" default="false" /> -->
+        <setting id="NPO FunX" label="30221" type="bool" default="false" />
+    </category>
+    <!--Misc-->
+    <category label="30300">
+        <setting id="CLCA" label="30303" type="bool" default="false" />
+        <setting id="EVENT" label="30304" type="bool" default="false" />
+    </category> /category>    
+</settings>
+

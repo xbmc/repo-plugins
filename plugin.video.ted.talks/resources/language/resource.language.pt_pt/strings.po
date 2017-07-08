@@ -1,0 +1,53 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.ted.talks\n"
+"Report-Msgid-Bugs-To: https://github.com/moreginger/xbmc-plugin.video.ted.talks\n"
+"POT-Creation-Date: 2017-01-13 22:42+000\n"
+"PO-Revision-Date: 2017-01-13 22:42+000\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Portuguese (http://www.transifex.com/projects/p/xbmc-addons/language/pt_PT/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt_PT\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "TED Talks"
+msgstr "Conversas do TED"
+
+msgctxt "#30001"
+msgid "Newest Talks"
+msgstr "Novas conversas"
+
+msgctxt "#30031"
+msgid "TED is a small nonprofit devoted to Ideas Worth Spreading. It started out (in 1984) as a conference bringing together people from three worlds: Technology, Entertainment, Design. Since then its scope has become ever broader. Along with the annual TED Conference in Long Beach, California, and the TEDGlobal conference in Oxford UK, TED includes the award-winning TEDTalks video site, the Open Translation Program, the new TEDx community program, this year's TEDIndia Conference and the annual TED Prize."
+msgstr "TED é uma organização sem fins lucrativos dedicada a 'Ideias com Valor'. Foi iniciada em 1984 como uma conferência que pretendia juntar pessoas de três mundos: Tecnologia, Entretenimento e Design. Desde ai, tornou-se muito mais abrangente. Juntamente com a conferência TED anual em Long Beach, California, e a conferência TEDGlobal em Oxford, UK, TED inclui o premiado site de vídeos TEDTalks, o Open Translation Program, o novo programa de comunidade TEDx, a conferência TEDIndia deste ano e o prémio anual TED Prize."
+
+msgctxt "#30002"
+msgid "Speakers"
+msgstr "Oradores"
+
+msgctxt "#30032"
+msgid "The roster of presenters at TED has broadened to include scientists, philosophers, musicians, religious leaders, philanthropists and many others. Over the years, TED speakers have included Bill Gates, Frank Gehry, Jane Goodall, Al Gore, Billy Graham, Peter Gabriel, Quincy Jones, Bono. Yet often the real stars have been the unexpected: Li Lu, a key organizer of the Tiananmen Square student protest; Aimee Mullins, a Paralympics competitor who tried out a new pair of artificial legs onstage; or Jennifer Lin, a 14-year-old pianist whose 6-minute improvisation moved the audience to tears."
+msgstr "O painel de apresentadores cresceu para incluir cientistas, filósofos, músicos, líderes religiosos, filantropos e muitos outros. Ao longo dos anos, os oradores do TED incluiram Bill Gates, Frank Gehry, Jane Goodall, Al Gore, Billy Graham, Peter Gabriel, Quincy Jones, Bono e outros. Ainda assim, muitas vezes, as verdadeiras estrelas são inesperadas: Li Lu, um organizador dos protestos estudantis na Praça Tiananmen; Aimee Mullins, uma atleta paraolímpica que experimentou novas próteses no palco ou Jennifer Lin, uma pianista de 14 anos, cuja improvisação de 6 minutos levou a audiência às lágrimas."
+
+msgctxt "#30004"
+msgid "Search"
+msgstr "procura"
+
+msgctxt "#30034"
+msgid "Search for Talks on TED.com"
+msgstr "Procurar conversas em TED.com"
+
+msgctxt "#30007"
+msgid "Topics"
+msgstr "Tópicos"
+
+msgctxt "#30020"
+msgid "Next"
+msgstr "Seguinte"
+
+msgctxt "#30021"
+msgid "Previous"
+msgstr "Anterior"

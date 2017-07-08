@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.service.gto" name="German Telecast Offers" version="2.0.4" provider-name="Birger Jesch">
+<addon id="plugin.service.gto" name="German Telecast Offers" version="2.0.12" provider-name="Birger Jesch">
     <requires>
-        <import addon="xbmc.python" version="2.20.0"/>
+        <import addon="xbmc.python" version="2.24.0"/>
     </requires>
     <extension point="xbmc.python.script" library="default.py" />
     <extension point="xbmc.service" library="starter.py" start="startup">
@@ -9,15 +9,15 @@
 
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
-        <summary lang="en">Fetch todays TV Offers from different scrapers</summary>
-        <summary lang="de">Holt die TV Tipps des Tages aus den RSS-Feeds diverser Webseiten</summary>
+        <summary lang="en_GB">Fetch todays TV Offers from different scrapers</summary>
+        <summary lang="de_DE">Holt die TV Tipps des Tages aus den RSS-Feeds diverser Webseiten</summary>
         <language>de</language>
-        <description lang="en">Fetch todays TV Offers from different scrapers
+        <description lang="en_GB">Fetch todays TV Offers from different scrapers
 
 This plugin needs a integration into the skin!
 Please refer to the README.txt into the folder named 'integration'.
         </description>
-        <description lang="de">Holt die TV Tipps des Tages aus den RSS-Feeds diverser Webseiten.
+        <description lang="de_DE">Holt die TV Tipps des Tages aus den RSS-Feeds diverser Webseiten.
 
 Dieses Plugin benoetigt eine Skin-Integration!
 Hierfür bitte README.txt im Ordner 'integration' beachten.
@@ -27,5 +27,19 @@ Hierfür bitte README.txt im Ordner 'integration' beachten.
         <forum>http://www.kodinerds.net/index.php/Thread/50943-Release-TV-Widget-German-Telecast-Offers/</forum>
         <email>birger.jesch@gmail.com</email>
         <website>http://vdr4bj1.no-ip.org/index.php?action=list&amp;item=addon</website>
+        <news>
+            Info window on Krypton integrated, skin integration updated
+        </news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+            <screenshot>resources/lib/media/screenshots/screenshot_0.jpg</screenshot>
+            <screenshot>resources/lib/media/screenshots/screenshot_1.jpg</screenshot>
+            <screenshot>resources/lib/media/screenshots/screenshot_2.jpg</screenshot>
+            <screenshot>resources/lib/media/screenshots/screenshot_3.jpg</screenshot>
+            <screenshot>resources/lib/media/screenshots/screenshot_4.jpg</screenshot>
+            <screenshot>resources/lib/media/screenshots/screenshot_5.jpg</screenshot>
+            <screenshot>resources/lib/media/screenshots/screenshot_6.jpg</screenshot>
+        </assets>
     </extension>
 </addon>

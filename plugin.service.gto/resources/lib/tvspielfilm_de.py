@@ -24,6 +24,8 @@ class Scraper():
 
         # Properties
 
+        self.enabled = True
+        self.baseurl = 'http://www.tvspielfilm.de'
         self.rssurl = 'http://www.tvspielfilm.de/tv-programm/rss/filme.xml'
         self.friendlyname = 'TV Spielfilm Highlights'
         self.shortname = 'TV Spielfilm'
@@ -33,7 +35,7 @@ class Scraper():
         self.err404 = 'tvspielfilm_dummy.jpg'
 
     def checkResource(self, resource, fallback):
-        if not resource: return fallback
+        if not resource or resource == '': return fallback
         _req = urllib2.Request(resource)
         try:
             _res = urllib2.urlopen(_req, timeout=5)
@@ -70,8 +72,7 @@ class Scraper():
                 try:
                     self.extrainfos = re.compile('<div class="description-text">(.+?)</p>', re.DOTALL).findall(content)[0].split('<p>')[1]
                     self.genre = re.compile('<span class="genre">(.+?)</span>', re.DOTALL).findall(content)[0].split(', ')[0]
-                    endtime = re.compile('<span class="time">(.+?)</span>', re.DOTALL).findall(content)
-                    self.endtime = endtime[2].split(' - ')[1]
+                    self.endtime = re.compile('<span class="time">%s - (.+?)</span>' % self.starttime, re.DOTALL).findall(content)[0]
                 except IndexError:
                     pass
 
@@ -88,8 +89,9 @@ class Scraper():
                 try:
                     self.thumb = re.compile('<div class="gallery-box">(.+?)</div', re.DOTALL).findall(content)[0]
                     self.thumb = re.compile('href="(.+?)"', re.DOTALL).findall(self.thumb)[0]
+
                 except IndexError:
-                    pass
+                    self.thumb = 'image://%s' % (self.err404)
 
                 self.thumb = self.checkResource(self.thumb, self.err404)
 

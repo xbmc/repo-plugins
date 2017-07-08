@@ -1,0 +1,629 @@
+# Kodi Media Center language file
+# Addon Name: Reddit Viewer
+# Addon id: plugin.video.reddit_viewer
+msgid ""
+msgstr ""
+
+msgctxt "#30001"
+msgid "Add Subreddit, Multireddit or Domain shortcut"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Remove subreddit"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Edit subreddit"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Next Page"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Search reddit"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Customize this list with your favorite subreddit"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Custom Multireddit"
+msgstr ""
+
+#Posts to  youtube.com  //Posts to  vimeo.com
+msgctxt "#30008"
+msgid "Posts to"
+msgstr ""
+
+#description for the default shortcut 'all'
+msgctxt "#30009"
+msgid "Displays the currently most popular content from all of reddit."
+msgstr ""
+
+#description for the 'search reddit' shortcut
+msgctxt "#30010"
+msgid "Search reddit for a particular post or topic"
+msgstr ""
+
+#subreddit custom view ID
+msgctxt "#30011"
+msgid "View ID:"
+msgstr ""
+
+#msgctxt "#30012"
+#msgid "Randomly play all"
+#msgstr ""
+
+msgctxt "#30013"
+msgid "Automatically play videos"
+msgstr ""
+
+#msgctxt "#30014"
+#msgid "Randomly play unwatched"
+#msgstr ""
+
+#msgctxt "#30015"
+#msgid "Randomly play unfinished"
+#msgstr ""
+
+msgctxt "#30016"
+msgid "Play all"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Play unwatched"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Play unfinished"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Shortcut added"
+msgstr ""
+
+#confirmation message that subreddit/domain has been added to subreddit/domain filter
+#e.g.: r/writingprompt Added to subreddit_filter
+msgctxt "#30020"
+msgid "Added to"
+msgstr ""
+
+#generic message for unable to resolve the link on a reddit post
+msgctxt "#30021"
+msgid "Parsing error"
+msgstr ""
+
+#YTDL dialogProgressBG message 
+msgctxt "#30022"
+msgid "Checking link..."
+msgstr ""
+
+msgctxt "#30023"
+msgid "Playing"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Loading..."
+msgstr ""
+
+msgctxt "#30025"
+msgid "Parsing multiple videos..."
+msgstr ""
+
+#notification that we're checking websites gathering icons
+msgctxt "#30026"
+msgid "Gathering icons"
+msgstr ""
+
+#: used in context menu.
+msgctxt "#30048"
+msgid "Videos in channel (Youtube)"
+msgstr ""
+
+#: used in context menu.
+msgctxt "#30049"
+msgid "Related videos (Youtube)"
+msgstr ""
+
+#: used in context menu.  (also see "#30500")
+msgctxt "#30050"
+msgid "Show comments"
+msgstr ""
+
+#: used in context menu. "Go to r/funny". <-- generate new list from r/funny subreddit 
+msgctxt "#30051"
+msgid "Go to"
+msgstr ""
+
+#show only links in comments
+msgctxt "#30052"
+msgid "Show comment links"
+msgstr ""
+
+#indicates that the post don't not have comments
+msgctxt "#30053"
+msgid "No comments"
+msgstr ""
+
+msgctxt "#30054"
+msgid "play using URLResolver"
+msgstr ""
+
+#: used in context menu. "new from r/funny". <-- generate new list from r/funny/new subreddit 
+msgctxt "#30055"
+msgid "New posts from"
+msgstr ""
+
+#: used in context menu. add r/funny to shortcuts list 
+msgctxt "#30056"
+msgid "Add %s to shortcuts"
+msgstr ""
+
+#: used in context menu. Hide r/writingprompt posts (do not show posts from r/writingprompt) or (do not show posts from fakenews.com)
+msgctxt "#30057"
+msgid "Hide %s posts"
+msgstr ""
+
+#: used in context menu. 
+msgctxt "#30058"
+msgid "Reddit: Save this post"
+msgstr ""
+
+msgctxt "#30059"
+msgid "Reddit: Unsave this post"
+msgstr ""
+
+#begin strings used in pretty date to indicate how long ago a post is posted (keep these strings short and similar length) 
+msgctxt "#30060"
+msgid "just now"
+msgstr ""
+
+msgctxt "#30061"
+msgid " secs ago"
+msgstr ""
+
+msgctxt "#30062"
+msgid "a min ago"
+msgstr ""
+
+msgctxt "#30063"
+msgid " mins ago"
+msgstr ""
+
+msgctxt "#30064"
+msgid "an hour ago"
+msgstr ""
+
+msgctxt "#30065"
+msgid " hrs ago"
+msgstr ""
+
+msgctxt "#30066"
+msgid "Yesterday"
+msgstr ""
+
+msgctxt "#30067"
+msgid " days ago"
+msgstr ""
+
+msgctxt "#30068"
+msgid " wks ago"
+msgstr ""
+
+msgctxt "#30069"
+msgid " months ago"
+msgstr ""
+
+msgctxt "#30070"
+msgid " years ago"
+msgstr ""
+# end strings used in pretty date to indicate how long ago a post is posted 
+
+# 7 hrs ago [on] r/funny 251 [cmts]
+msgctxt "#30071"
+msgid "on"
+msgstr ""
+
+# 7 hrs ago [on] r/funny 251 [cmts]   
+msgctxt "#30072"
+msgid "cmts"
+msgstr ""
+
+#these are tags prepended on a post to tell the user if it is an album or single image
+msgctxt "#30073"
+msgid "Album"
+msgstr ""
+
+msgctxt "#30074"
+msgid "IMG"
+msgstr ""
+
+
+
+
+#settings screen settings.xml
+#setting category
+msgctxt "#30100"
+msgid "General"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Items per query"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Show additional post info on title (2 lines)"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Time, subreddit, score will show below title instead of on description"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Hide non-Video posts"
+msgstr ""
+
+msgctxt "#30105"
+msgid "ViewID for album posts (0 for default)(custom:450) "
+msgstr ""
+
+msgctxt "#30106"
+msgid "Comments threshold"
+msgstr ""
+
+msgctxt "#30107"
+msgid "Repeat gif playback"
+msgstr ""
+
+msgctxt "#30108"
+msgid "Force View"
+msgstr ""
+
+msgctxt "#30109"
+msgid "ViewID"
+msgstr ""
+
+msgctxt "#30110"
+msgid "ViewID for comments (0 for default)"
+msgstr ""
+
+msgctxt "#30111"
+msgid "Resolve links only when clicked (faster listing)"
+msgstr ""
+
+msgctxt "#30112"
+msgid "Subreddits will list faster but viewing images will be buggy"
+msgstr ""
+
+
+#setting category
+msgctxt "#30120"
+msgid "Autoplay"
+msgstr ""
+
+msgctxt "#30121"
+msgid "Randomize autoplay"
+msgstr ""
+
+msgctxt "#30122"
+msgid "Show "Randomly play unwatched""
+msgstr ""
+
+msgctxt "#30123"
+msgid "Show "Randomly play unfinished""
+msgstr ""
+
+msgctxt "#30124"
+msgid "Show "Play all""
+msgstr ""
+
+msgctxt "#30125"
+msgid "Show "Play unwatched""
+msgstr ""
+
+msgctxt "#30126"
+msgid "Show "Play unfinished""
+msgstr ""
+
+#30127-30149 empty
+
+# settings category
+msgctxt "#30150"
+msgid "Download"
+msgstr ""
+
+msgctxt "#30151"
+msgid "Youtube: Quality / Directory"
+msgstr ""
+
+msgctxt "#30152"
+msgid "Vimeo: Quality / Directory"
+msgstr ""
+
+msgctxt "#30153"
+msgid "Dailymotion: Quality / Directory"
+msgstr ""
+
+msgctxt "#30154"
+msgid "Liveleak: Quality"
+msgstr ""
+
+msgctxt "#30155"
+msgid "Liveleak: Directory"
+msgstr ""
+
+msgctxt "#30156"
+msgid "Gfycat: Directory"
+msgstr ""
+
+msgctxt "#30157"
+msgid "Streamable.com Video Quality"
+msgstr ""
+
+
+
+msgctxt "#30185"
+msgid "File already exists"
+msgstr ""
+
+msgctxt "#30186"
+msgid "Choose download directory"
+msgstr ""
+
+msgctxt "#30187"
+msgid "NSFW content enabled!"
+msgstr ""
+
+msgctxt "#30188"
+msgid "NSFW content disabled!"
+msgstr ""
+
+msgctxt "#30189"
+msgid "Disable NSFW content?"
+msgstr ""
+
+msgctxt "#30190"
+msgid "Enable NSFW content?"
+msgstr ""
+
+msgctxt "#30191"
+msgid "Are you over eighteen and willing to see adult content?"
+msgstr ""
+
+#error message popup when youtube-dl can't get playable url 
+msgctxt "#30192"
+msgid "Failed to get playable url"
+msgstr ""
+
+
+
+
+# settings category
+msgctxt "#30300"
+msgid "Filters"
+msgstr ""
+
+msgctxt "#30301"
+msgid "Hide video posts"
+msgstr ""
+
+msgctxt "#30302"
+msgid "Hide Image/Album posts"
+msgstr ""
+
+msgctxt "#30303"
+msgid "Hide Reddit text posts"
+msgstr ""
+
+msgctxt "#30304"
+msgid "Hide Undetermined links"
+msgstr ""
+
+msgctxt "#30305"
+msgid "Check all links for playable video (slower)"
+msgstr ""
+
+msgctxt "#30306"
+msgid "Hide posts by domain (separate by comma)"
+msgstr ""
+
+msgctxt "#30307"
+msgid "Hide posts by subreddit (separate by comma)"
+msgstr ""
+
+msgctxt "#30308"
+msgid "Hide posts marked as NSFW"
+msgstr ""
+
+
+
+#setting category
+msgctxt "#30350"
+msgid "Plugins"
+msgstr ""
+
+msgctxt "#30351"
+msgid "By default, the youtube_dl add-on is used to play all video"
+msgstr ""
+
+msgctxt "#30352"
+msgid "Use Youtube add-on"
+msgstr ""
+
+msgctxt "#30353"
+msgid "Use Liveleak add-on"
+msgstr ""
+
+msgctxt "#30355"
+msgid "Youtube_dl Preferred quality"
+msgstr ""
+
+msgctxt "#30356"
+msgid "480p or less"
+msgstr ""
+
+msgctxt "#30357"
+msgid "720p"
+msgstr ""
+
+msgctxt "#30358"
+msgid "1080p"
+msgstr ""
+
+msgctxt "#30359"
+msgid "Highest Available"
+msgstr ""
+
+msgctxt "#30360"
+msgid "Allow for DASH video if available"
+msgstr ""
+
+
+
+
+# settings category
+msgctxt "#30400"
+msgid "Reddit OAuth"
+msgstr ""
+
+msgctxt "#30401"
+msgid "[B]Instructions:[/B] https://github.com/gedisony/plugin.video.reddit_viewer/wiki"
+msgstr ""
+
+msgctxt "#30402"
+msgid "code*"
+msgstr ""
+
+msgctxt "#30403"
+msgid "[Get refresh token]"
+msgstr ""
+
+msgctxt "#30404"
+msgid "    Refresh token"
+msgstr ""
+
+msgctxt "#30405"
+msgid ""
+msgstr ""
+
+msgctxt "#30406"
+msgid "[Test refresh token]"
+msgstr ""
+
+msgctxt "#30407"
+msgid "    Access token (1-hour)"
+msgstr ""
+
+msgctxt "#30408"
+msgid "    Scope"
+msgstr ""
+
+msgctxt "#30409"
+msgid "    Valid until"
+msgstr ""
+
+msgctxt "#30410"
+msgid "[Revoke refresh token]"
+msgstr ""
+
+msgctxt "#30411"
+msgid "Replace reddit refresh token"
+msgstr ""
+
+msgctxt "#30412"
+msgid "You already have a refresh token."
+msgstr ""
+
+msgctxt "#30413"
+msgid "You only need to get this once."
+msgstr ""
+
+msgctxt "#30414"
+msgid "Are you sure you want to replace it?"
+msgstr ""
+
+msgctxt "#30415"
+msgid "* Make sure to hit [OK] after entering code"
+msgstr ""
+
+
+#settings category. - customize context menu entries. strings here pair with strings in #30050, #30051, #30052...
+msgctxt "#30500"
+msgid "Context menu"
+msgstr ""
+
+msgctxt "#30501"
+msgid "Show comment links"
+msgstr ""
+
+msgctxt "#30502"
+msgid "Show comments"
+msgstr ""
+
+msgctxt "#30503"
+msgid "Go to [COLOR cadetblue]r/subreddit[/COLOR]"
+msgstr ""
+
+msgctxt "#30504"
+msgid "New posts from [COLOR cadetblue]r/subreddit[/COLOR]"
+msgstr ""
+
+msgctxt "#30505"
+msgid "Add [COLOR cadetblue]r/subreddit[/COLOR] to shortcuts"
+msgstr ""
+
+msgctxt "#30506"
+msgid "Hide posts from [COLOR cadetblue]r/subreddit[/COLOR]"
+msgstr ""
+
+msgctxt "#30507"
+msgid "Hide posts from specific website"
+msgstr ""
+
+msgctxt "#30508"
+msgid "Customize what shows up on the context menu"
+msgstr ""
+
+msgctxt "#30509"
+msgid "Open link in browser"
+msgstr ""
+
+msgctxt "#30510"
+msgid "Save/Unsave post on Reddit (needs OAuth)"
+msgstr ""
+
+msgctxt "#30511"
+msgid "Youtube channel/related videos"
+msgstr ""
+
+#settings category. - advanced optins
+msgctxt "#30600"
+msgid "Advanced Options"
+msgstr ""
+
+msgctxt "#30601"
+msgid "Custom command for [B]Open link in browser[/B]"
+msgstr ""
+
+msgctxt "#30602"
+msgid "{url} is replaced with the actual link"
+msgstr ""
+
+msgctxt "#30610"
+msgid "youtube-dl"
+msgstr ""
+
+msgctxt "#30611"
+msgid "[Check local version]"
+msgstr ""
+
+msgctxt "#30612"
+msgid "[Update youtube-dl core]"
+msgstr ""
+
+msgctxt "#30613"
+msgid "Youtube API key"
+msgstr ""
+

@@ -1,0 +1,185 @@
+# Kodi Media Center language file
+# Addon Name: ZDF Mediathek 2016
+# Addon id: plugin.video.zdf_de_2016
+# Addon Provider: alex@generia.de
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alex@generia.de\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Alex\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32001"
+msgid "Full episodes"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Fulltext Search"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Rubrics"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Rubric"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Search"
+msgstr ""
+
+msgctxt "#32006"
+msgid "Empty search string."
+msgstr ""
+
+msgctxt "#32007"
+msgid "Play Video"
+msgstr ""
+
+msgctxt "#32008"
+msgid "Downloading video information ..."
+msgstr ""
+
+msgctxt "#32009"
+msgid "Downloading stream information ..."
+msgstr ""
+
+msgctxt "#32010"
+msgid "Starting video player ..."
+msgstr ""
+
+msgctxt "#32011"
+msgid "con't find video-info-url in video-content"
+msgstr ""
+
+msgctxt "#32012"
+msgid "con't find stream-info-url in video-content"
+msgstr ""
+
+msgctxt "#32013"
+msgid "No results found for last search."
+msgstr ""
+
+msgctxt "#32014"
+msgid "Searching"
+msgstr ""
+
+msgctxt "#32015"
+msgid "Merge genre-category and title"
+msgstr ""
+
+msgctxt "#32016"
+msgid "Item pattern"
+msgstr ""
+
+msgctxt "#32017"
+msgid "Show more (page {0} of {1}) ..."
+msgstr ""
+
+msgctxt "#32018"
+msgid "Load all search results"
+msgstr ""
+
+msgctxt "#32019"
+msgid "Show only playable search results"
+msgstr ""
+
+msgctxt "#32020"
+msgid "Loading results"
+msgstr ""
+
+msgctxt "#32021"
+msgid "page 1 ..."
+msgstr ""
+
+msgctxt "#32022"
+msgid "page {0} of {1} ..."
+msgstr ""
+
+msgctxt "#32023"
+msgid "Labeling"
+msgstr ""
+
+msgctxt "#32024"
+msgid "Show date in title"
+msgstr ""
+
+msgctxt "#32025"
+msgid "Show genre in title"
+msgstr ""
+
+msgctxt "#32026"
+msgid "Show playable '(>)' in title"
+msgstr ""
+
+msgctxt "#32027"
+msgid "Show tags in title"
+msgstr ""
+
+msgctxt "#32028"
+msgid "Search History Size"
+msgstr ""
+
+msgctxt "#32029"
+msgid "{1} (Search on {0})"
+msgstr ""
+
+msgctxt "#32030"
+msgid "Search History"
+msgstr ""
+
+msgctxt "#32031"
+msgid "Most Liked"
+msgstr ""
+
+msgctxt "#32032"
+msgid "Most Watched"
+msgstr ""
+
+msgctxt "#32033"
+msgid "Episodes A-Z"
+msgstr ""
+
+msgctxt "#32034"
+msgid "Approved for Accessibility"
+msgstr ""
+
+msgctxt "#32035"
+msgid "Live-TV"
+msgstr ""
+
+msgctxt "#32036"
+msgid "Missed a Show"
+msgstr ""
+
+msgctxt "#32037"
+msgid "Shows A-Z"
+msgstr ""
+
+msgctxt "#32038"
+msgid "Shows with {0}"
+msgstr ""
+
+msgctxt "#32039"
+msgid "Error"
+msgstr ""
+
+msgctxt "#32040"
+msgid "Info"
+msgstr ""
+
+msgctxt "#32041"
+msgid "Redirect Detected"
+msgstr ""
+
+msgctxt "#32042"
+msgid "The page '{0}' was redirected by the ZDF server to '{1}'. This is an external link that can not be opened inside the ZDF Mediathek 2016. Please open this link in a web-browser."
+msgstr ""

@@ -5,6 +5,7 @@ import urllib
 import urllib2
 import os
 import sys
+import socket
 import xbmc
 import xbmcgui
 import xbmcaddon
@@ -19,26 +20,28 @@ __addonID__ = __addon__.getAddonInfo('id')
 __addonname__ = __addon__.getAddonInfo('name')
 __version__ = __addon__.getAddonInfo('version')
 __path__ = __addon__.getAddonInfo('path')
+__profiles__ = __addon__.getAddonInfo('profile')
 __LS__ = __addon__.getLocalizedString
 
+HOME = xbmcgui.Window(10000)
+OSD = xbmcgui.Dialog()
 
-__usertranslations__ = xbmc.translatePath(os.path.join('special://userdata', 'addon_data', __addonID__, 'ChannelTranslate.json'))
+__xml__ = xbmc.translatePath('special://skin').split(os.sep)[-2] + '.script-gto-info.xml'
+
+__usertranslations__ = xbmc.translatePath(os.path.join(__profiles__, 'ChannelTranslate.json'))
 
 __prefer_hd__ = True if __addon__.getSetting('prefer_hd').upper() == 'TRUE' else False
 __enableinfo__ = True if __addon__.getSetting('enableinfo').upper() == 'TRUE' else False
 __pvronly__ = True if __addon__.getSetting('pvronly').upper() == 'TRUE' else False
 __preferred_scraper__ = __addon__.getSetting('scraper')
 
-mod = __import__(__preferred_scraper__, fromlist=['Scraper'])
+mod = __import__(__preferred_scraper__, locals(), globals(), fromlist=['Scraper'])
 Scraper = getattr(mod, 'Scraper')
-__scraper__ = Scraper()
-__shortname__ = __scraper__.shortname
-__icon__ = xbmc.translatePath(os.path.join(__path__, 'resources', 'lib', 'media', __scraper__.icon))
-
-WINDOW = xbmcgui.Window(10000)
-OSD = xbmcgui.Dialog()
 
 # Helpers
+
+def getScraperIcon(icon):
+    return xbmc.translatePath(os.path.join(__path__, 'resources', 'lib', 'media', icon))
 
 def notifyOSD(header, message, icon=xbmcgui.NOTIFICATION_INFO, disp=4000, enabled=__enableinfo__):
     if enabled:
@@ -83,11 +86,14 @@ def getUnicodePage(url, container=None):
         req = urllib2.urlopen(url.encode('utf-8'), timeout=30)
     except UnicodeDecodeError:
         req = urllib2.urlopen(url)
+
     except ValueError:
         return False
-    except urllib2.HTTPError:
+    except urllib2.URLError, e:
+        writeLog(str(e.reason), xbmc.LOGERROR)
         return False
     except socket.timeout:
+        writeLog('Socket timeout', xbmc.LOGERROR)
         return False
 
     encoding = 'utf-8'
@@ -133,16 +139,17 @@ def changeScraper():
         writeLog('Found Scraper Module %s' % (module))
         mod = __import__('resources.lib.%s' % (module[:-3]), locals(), globals(), fromlist=['Scraper'])
         ScraperClass = getattr(mod, 'Scraper')
-        Scraper = ScraperClass()
-        _scrapers.append(Scraper.friendlyname)
-        _scraperdict.append({'name': Scraper.friendlyname, 'shortname': Scraper.shortname, 'module': 'resources.lib.%s' % (module[:-3])})
+
+        if not ScraperClass().enabled: continue
+
+        _scrapers.append(ScraperClass().friendlyname)
+        _scraperdict.append({'name': ScraperClass().friendlyname, 'shortname': ScraperClass().shortname, 'module': 'resources.lib.%s' % (module[:-3])})
 
     _idx = xbmcgui.Dialog().select(__LS__(30111), _scrapers)
     if _idx > -1:
         writeLog('selected scrapermodule is %s' % (_scraperdict[_idx]['module']), level=xbmc.LOGDEBUG)
-        __addon__.setSetting('setscraper', _scraperdict[_idx]['shortname'])
         __addon__.setSetting('scraper', _scraperdict[_idx]['module'])
-    pass
+        __addon__.setSetting('setscraper', _scraperdict[_idx]['shortname'])
 
 # convert datetime string to timestamp with workaround python bug (http://bugs.python.org/issue7980) - Thanks to BJ1
 
@@ -208,7 +215,7 @@ def pvrchannelid2channelname(channelid, fallback):
             if channels['channelid'] == channelid:
                 writeLog("GTO found id for channel %s" % (channels['label']), level=xbmc.LOGDEBUG)
                 return channels['label']
-    return fallback + ' (*)'
+    return fallback + '*'
 
 # get pvr channel logo url
 
@@ -245,27 +252,25 @@ def switchToChannel(pvrid):
 def clearInfoProperties():
     writeLog('clear all info properties (used in info popup)', level=xbmc.LOGDEBUG)
     for property in infoprops:
-        WINDOW.clearProperty('GTO.Info.%s' % (property))
+        HOME.clearProperty('GTO.Info.%s' % (property))
 
-def refreshWidget(handle=None, enabled=__enableinfo__):
+def refreshWidget(handle=None, notify=__enableinfo__):
 
-    blobs = WINDOW.getProperty('GTO.blobs') or '0'
-    if blobs == '0': return 0
-
-    notifyOSD(__LS__(30010), __LS__(30109) % (__shortname__), icon=__icon__, enabled=enabled)
+    blobs = int(HOME.getProperty('GTO.blobs') or '0') + 1
+    notifyOSD(__LS__(30010), __LS__(30109) % ((Scraper().shortname).decode('utf-8')), icon=getScraperIcon(Scraper().icon), enabled=notify)
 
     widget = 1
-    for i in range(1, int(blobs) + 1, 1):
-        if widget > 16:
-            writeLog('Max. Limit of widgets reached, abort processing', level=xbmc.LOGDEBUG)
-            break
-
-        blobs = WINDOW.getProperty('GTO.blobs')
-        if blobs == '0': break
+    for i in range(1, blobs, 1):
 
         writeLog('Processing blob GTO.%s for widget #%s' % (i, widget), level=xbmc.LOGDEBUG)
+        blob = eval(HOME.getProperty('GTO.%s' % (i)))
 
-        blob = eval(WINDOW.getProperty('GTO.%s' % (i)))
+        if __pvronly__ and blob['pvrid'] == 'False':
+            writeLog("Channel %s is not in PVR, discard entry" % (blob['channel']), level=xbmc.LOGDEBUG)
+            HOME.setProperty('PVRisReady', 'no')
+            continue
+
+        HOME.setProperty('PVRisReady', 'yes')
 
         wid = xbmcgui.ListItem(label=blob['title'], label2=blob['pvrchannel'], iconImage=blob['logo'])
         wid.setInfo('video', {'title' : blob['title'], 'genre' : blob['genre'], 'plot' : blob['extrainfos'],
@@ -284,51 +289,49 @@ def refreshWidget(handle=None, enabled=__enableinfo__):
 
     if handle is not None:
         xbmcplugin.endOfDirectory(handle=handle, updateListing=True)
+
+    HOME.setProperty('GTO.timestamp', str(int(time.time())))
     xbmc.executebuiltin('Container.Refresh')
-    WINDOW.setProperty('GTO.timestamp', str(int(time.time())))
-    return widget - 1
 
 def scrapeGTOPage(enabled=__enableinfo__):
 
     data = Scraper()
     data.err404 = xbmc.translatePath(os.path.join(__path__, 'resources', 'lib', 'media', data.err404))
 
-    notifyOSD(__LS__(30010), __LS__(30018) % (__shortname__), icon=__icon__, enabled=enabled)
+    notifyOSD(__LS__(30010), __LS__(30018) % ((data.shortname).decode('utf-8')), icon=getScraperIcon(data.icon), enabled=enabled)
     writeLog('Start scraping from %s' % (data.rssurl), level=xbmc.LOGDEBUG)
-    blobs = WINDOW.getProperty('GTO.blobs') or '0'
 
     content = getUnicodePage(data.rssurl, container=data.selector)
     if not content: return
 
-    i = 1
+    blobs = int(HOME.getProperty('GTO.blobs') or '0') + 1
+    for idx in range(1, blobs, 1):
+        HOME.clearProperty('GTO.%s' % (idx))
+
+    idx = 1
     content.pop(0)
 
-    for idx in range(1, int(blobs) + 1, 1):
-        WINDOW.clearProperty('GTO.%s' % (idx))
-
-    WINDOW.setProperty('GTO.blobs', '0')
-
+    HOME.setProperty('GTO.blobs', '0')
+    HOME.setProperty('GTO.provider', data.shortname)
+    
     for container in content:
 
         data.scrapeRSS(container)
-        pvrchannelID = channelName2channelId(data.channel)
-        if __pvronly__:
-            if not  pvrchannelID:
-                writeLog("Channel %s is not in PVR, discard entry" % (data.channel), level=xbmc.LOGDEBUG)
-                continue
 
+        pvrchannelID = channelName2channelId(data.channel)
         logoURL = pvrchannelid2logo(pvrchannelID, data.err404)
         channel = pvrchannelid2channelname(pvrchannelID, data.channel)
         details = getUnicodePage(data.detailURL)
 
+        writeLog('Scraping details from %s' % (data.detailURL), level=xbmc.LOGDEBUG)
         data.scrapeDetailPage(details, data.detailselector)
 
         # calculate runtime
 
         start = datetime.timedelta(hours=int(data.starttime[0:2]), minutes=int(data.starttime[3:5])).seconds
         end = datetime.timedelta(hours=int(data.endtime[0:2]), minutes=int(data.endtime[3:5])).seconds
+        if end < start: end += 86400
         data.runtime = (end - start)/60
-        if data.runtime < 0: data.runtime += 1440
 
         now = datetime.datetime.now()
         now_secs = (now - now.replace(hour=0, minute=0, second=0, microsecond=0)).total_seconds()
@@ -361,7 +364,7 @@ def scrapeGTOPage(enabled=__enableinfo__):
                }
 
         writeLog('', level=xbmc.LOGDEBUG)
-        writeLog('blob:            #%s' % (i), level=xbmc.LOGDEBUG)
+        writeLog('blob:            #%s' % (idx), level=xbmc.LOGDEBUG)
         writeLog('Title:           %s' % (blob['title']), level=xbmc.LOGDEBUG)
         writeLog('Thumb:           %s' % (blob['thumb']), level=xbmc.LOGDEBUG)
         writeLog('Date & time:     %s' % (blob['datetime']), level=xbmc.LOGDEBUG)
@@ -379,11 +382,12 @@ def scrapeGTOPage(enabled=__enableinfo__):
         writeLog('Popup:           %s' % (blob['popup']), level=xbmc.LOGDEBUG)
         writeLog('', level=xbmc.LOGDEBUG)
 
-        WINDOW.setProperty('GTO.%s' % (i), str(blob))
-        i += 1
+        HOME.setProperty('GTO.%s' % (idx), str(blob))
+        idx += 1
 
-    WINDOW.setProperty('GTO.blobs', str(i - 1))
-    writeLog('%s items scraped and written to blobs' % (i - 1), level=xbmc.LOGDEBUG)
+    HOME.setProperty('GTO.blobs', str(idx - 1))
+    HOME.setProperty('GTO.timestamp', str(int(time.time())))
+    writeLog('%s items scraped and written to blobs' % (idx - 1), level=xbmc.LOGDEBUG)
 
 # Set details to Window (INFO Labels)
 
@@ -394,7 +398,7 @@ def showInfoWindow(blobId, showWindow=True):
         writeLog('No ID provided')
         return False
 
-    blob = eval(WINDOW.getProperty('GTO.%s' % (blobId)))
+    blob = eval(HOME.getProperty('GTO.%s' % (blobId)))
 
     clearInfoProperties()
 
@@ -403,31 +407,32 @@ def showInfoWindow(blobId, showWindow=True):
             timestamp = date2timeStamp(blob['datetime'], '%d.%m.%Y %H:%M')
             if timestamp >= int(time.time()):
                 writeLog('Start time of title \'%s\' is @%s, enable switchtimer button' % (blob['title'], blob['time']), level=xbmc.LOGDEBUG)
-                WINDOW.setProperty("GTO.Info.isInFuture", "yes")
+                HOME.setProperty("GTO.Info.isInFuture", "yes")
             elif timestamp < int(time.time()) < timestamp + 60 * int(blob['runtime']):
                 writeLog('Title \'%s\' is currently running, enable switch button' % (blob['title']), level=xbmc.LOGDEBUG)
-                WINDOW.setProperty("GTO.Info.isRunning", "yes")
+                HOME.setProperty("GTO.Info.isRunning", "yes")
         else:
             writeLog('No PVR Channel available for %s, disable buttons' % (blob['channel']), level=xbmc.LOGDEBUG)
     except (ImportError, ValueError):
         writeLog('Could not make time conversion, strptime locked', level=xbmc.LOGERROR)
 
-    WINDOW.setProperty("GTO.Info.Title", blob['title'])
-    WINDOW.setProperty("GTO.Info.Picture", blob['thumb'])
-    WINDOW.setProperty("GTO.Info.Description", blob['extrainfos'] or __LS__(30140))
-    WINDOW.setProperty("GTO.Info.Channel", blob['pvrchannel'])
-    WINDOW.setProperty("GTO.Info.ChannelID", blob['pvrid'])
-    WINDOW.setProperty("GTO.Info.Logo", blob['logo'])
-    WINDOW.setProperty("GTO.Info.Date", blob['datetime'])
-    WINDOW.setProperty("GTO.Info.StartTime", blob['time'])
-    WINDOW.setProperty("GTO.Info.RunTime", blob['runtime'])
-    WINDOW.setProperty("GTO.Info.EndTime", blob['endtime'])
-    WINDOW.setProperty("GTO.Info.Genre", blob['genre'])
-    WINDOW.setProperty("GTO.Info.Cast", blob['cast'])
+    HOME.setProperty("GTO.Info.Title", blob['title'])
+    HOME.setProperty("GTO.Info.Picture", blob['thumb'])
+    HOME.setProperty("GTO.Info.Description", blob['extrainfos'] or __LS__(30140))
+    HOME.setProperty("GTO.Info.Channel", blob['pvrchannel'])
+    HOME.setProperty("GTO.Info.ChannelID", blob['pvrid'])
+    HOME.setProperty("GTO.Info.Logo", blob['logo'])
+    HOME.setProperty("GTO.Info.Date", blob['datetime'])
+    HOME.setProperty("GTO.Info.StartTime", blob['time'])
+    HOME.setProperty("GTO.Info.RunTime", blob['runtime'])
+    HOME.setProperty("GTO.Info.EndTime", blob['endtime'])
+    HOME.setProperty("GTO.Info.Genre", blob['genre'])
+    HOME.setProperty("GTO.Info.Cast", blob['cast'])
 
     if showWindow:
-        Popup = xbmcgui.WindowXMLDialog('script-rtv-Info.xml', __path__, 'Default', '720p')
+        Popup = xbmcgui.WindowXMLDialog(__xml__, __path__)
         Popup.doModal()
+        del Popup
 
 # _______________________________
 #
@@ -457,11 +462,10 @@ if len(arguments) > 1:
 
     if action == 'scrape':
         scrapeGTOPage()
-        refreshWidget(enabled=False)
 
     elif action == 'getcontent':
         writeLog('Filling widget with handle #%s' % (_addonHandle), level=xbmc.LOGDEBUG)
-        refreshWidget(handle=_addonHandle, enabled=False)
+        refreshWidget(handle=_addonHandle, notify=False)
 
     elif action == 'refresh':
         refreshWidget()
@@ -477,8 +481,3 @@ if len(arguments) > 1:
 
     elif action == 'change_scraper':
         changeScraper()
-else:
-    writeLog('No arguments passed, scrape page and refresh widget')
-    if not __enableinfo__: notifyOSD(__LS__(30010), __LS__(30018) % (__scraper__.shortname), icon=__icon__, enabled=True)
-    scrapeGTOPage()
-    refreshWidget(enabled=False)

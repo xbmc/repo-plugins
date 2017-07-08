@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<defaults>
+    <platform id="System.Platform.Linux">
+        <xdotool path="/usr/bin/xdotool"/>
+        <browser path="/usr/bin/google-chrome" args="--start-maximized --disable-session-crashed-bubble --disable-infobars --disable-translate --no-default-browser-check --no-first-run --kiosk"/>
+        <browser path="/usr/bin/firefox" args="-no-remote -new-window"/>
+        <browser path="/usr/bin/chromium-browser" args="--start-maximized --disable-session-crashed-bubble --disable-infobars --disable-translate --no-default-browser-check --no-first-run --kiosk"/>
+        <browser path="/usr/bin/epiphany-browser" args="--application-mode --profile=/tmp"/>
+    </platform>
+    <platform id="System.Platform.OSX">
+        <xdotool path="/opt/local/bin/xdotool"/>
+        <browser path="/Applications/Safari.app/Contents/MacOS/safari" args=""/>
+        <browser path="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" args="--start-maximized --disable-session-crashed-bubble --disable-infobars --disable-translate --no-default-browser-check --no-first-run --kiosk"/>
+        <browser path="/Applications/Firefox.app/Contents/MacOS/firefox-bin" args="-no-remote -new-window"/>
+    </platform>
+    <platform id="System.Platform.Windows">
+        <!-- Windows support isn't complete without an alternative to xdotool. -->
+        <browser path="C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" args="--start-maximized --disable-session-crashed-bubble --disable-infobars --disable-translate --no-default-browser-check --no-first-run --kiosk"/>
+        <browser path="C:\Program Files\Google\Chrome\Application\chrome.exe" args="--start-maximized --disable-session-crashed-bubble --disable-infobars --disable-translate --no-default-browser-check --no-first-run --kiosk"/>
+        <browser path="C:\Program Files (x86)\Mozilla Firefox\Firefox.exe" args="-no-remote -new-window"/>
+        <browser path="C:\Program Files\Mozilla Firefox\Firefox.exe" args="-no-remote -new-window"/>
+        <browser path="C:\Program Files (x86)\Internet Explorer\iexplore.exe" args="-k"/>
+        <browser path="C:\Program Files\Internet Explorer\iexplore.exe" args="-k"/>
+    </platform>
+</defaults>
+

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <setting label="30101" type="lsep"/>
-    <setting id="quality" type="enum" label="30110" lvalues="30111|30112|30113" default="2"/>
-    <setting id="format" type="enum" label="30120" lvalues="30121|30122" default="0"/>
+  <setting label="30101" type="lsep"/>
+  <setting id="quality" type="enum" label="30110" lvalues="30111|30112|30113" default="2"/>
+  <setting id="format" type="enum" label="30120" lvalues="30121|30122" default="0"/>
 </settings>

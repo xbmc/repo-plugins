@@ -1,5 +1,0 @@
-[B]1.0.1[/B]
-- Code cosmetics
-
-[B]1.0.0[/B]
-- Initial version

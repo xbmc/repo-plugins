@@ -204,7 +204,7 @@ def list_subprods(params):
     # 'items' restringe por temporada en caso de cabeserie
     season = params.get('season')   # temporada seleccionada o None
     if params.get('full'):
-        path += '&items=' + (season or '0')
+        path += '&items=' + str(season or 0)
     prod_list = json_request(path)
 
     if prod_list['tipos'][0]['tag'] == 'cabeserie':

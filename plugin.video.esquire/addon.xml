@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.esquire"
        name="Esquire TV"
-       version="3.0.1"
+       version="3.0.2"
        provider-name="t1m">
   <requires>
     <import addon="xbmc.python" version="2.20.0"/>
@@ -22,5 +22,6 @@
     <website>http://tv.esquire.com/now/</website>
     <email></email>
     <source>https://github.com/learningit/plugin.video.esquire/</source>
+    <broken>This add-on has been removed by author</broken>
   </extension>
 </addon>

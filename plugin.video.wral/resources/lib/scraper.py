@@ -128,7 +128,8 @@ class myAddon(t1mAddon):
       html = self.getRequest('http://www.cbs.com%s' % uqp(url))
       foundpid = re.compile("cbsplayer.pid = '(.+?)'", re.DOTALL).search(html)
       if foundpid is None:
-          a = re.compile('var \$module = (.+?)\;', re.DOTALL).search(html).group(1)
+          a = re.compile('var \$module = (.+?)\}\;', re.DOTALL).search(html).group(1)
+          a = a+'}'
           a = json.loads(a)
           foundpid = a['video']['pid']
           signature = a['video']['signature']

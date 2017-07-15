@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.hearthis_at" name="Hearthis.at" version="0.1" provider-name="Eike Baran">
+<addon id="plugin.audio.hearthis_at" name="Hearthis.at" version="1.0.0" provider-name="Eike Baran">
   <requires>
     <import addon="xbmc.python" version="2.25.0" />
     <import addon="script.module.kodiswift" version="0.0.1" />

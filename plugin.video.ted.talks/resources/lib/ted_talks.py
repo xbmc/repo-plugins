@@ -1,4 +1,3 @@
-import sys
 import urllib
 import ted_talks_scraper
 import plugin
@@ -6,7 +5,6 @@ import settings
 from model.fetcher import Fetcher
 from model.rss_scraper import NewTalksRss
 from model.speakers_scraper import Speakers
-from model.util import resizeImage
 from model.search_scraper import Search
 from model.topics_scraper import Topics
 import menu_util
@@ -17,8 +15,8 @@ import xbmcplugin
 import xbmcgui
 import xbmcaddon
 import itertools
+import sys
 
-from ted_talks_const import ADDON, DATE, VERSION
 
 class UI:
 
@@ -46,11 +44,6 @@ class UI:
         if url:
             args['url'] = url
 
-        # The resizeImage method seems to fubar the thumbnails, let's turn that off
-        # if img:
-        #     img = resizeImage(img)
-        #     args['icon'] = img
-
         args = [k + '=' + urllib.quote_plus(v.encode('ascii', 'ignore')) for k, v in args.iteritems()]
         action_url = sys.argv[0] + '?' + "&".join(args)
 
@@ -60,7 +53,7 @@ class UI:
             li.setInfo('video', video_info)
         if 'duration' in video_info:
             # To set with second granularity must do this rather than via setInfo
-            li.addStreamInfo('video', { 'duration' : video_info['duration'] })
+            li.addStreamInfo('video', {'duration' : video_info['duration']})
         if not isFolder:
             li.setProperty("IsPlayable", "true")  # let xbmc know this can be played, unlike a folder.
             context_menu = menu_util.create_context_menu(getLS=plugin.getLS)
@@ -71,9 +64,7 @@ class UI:
 
     def playVideo(self, url, icon):
 
-        xbmc.log(
-            "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "url", str(url)),
-            xbmc.LOGDEBUG)
+        plugin.report('%s = %s' % ('url', str(url)), level='debug')
 
         subs_language = settings.get_subtitle_languages()
         title, url, subs, info_labels = self.ted_talks.getVideoDetails(url=url, video_quality=settings.video_quality, subs_language=subs_language)

@@ -6,9 +6,6 @@ http://estebanordano.com.ar/wp-content/uploads/2010/01/TEDTalkSubtitles.py_.zip
 '''
 import json
 import urllib
-import xbmc
-
-from ted_talks_const import ADDON, DATE, VERSION
 
 __friendly_message__ = 'Error showing subtitles'
 __talkIdKey__ = 'id'
@@ -50,17 +47,13 @@ def get_subtitles_for_talk(talk_json, accepted_languages, logger):
     talk_id = talk_json['id']
     intro_duration = talk_json['player_talks'][0]['introDuration']
 
-    xbmc.log(
-        "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "intro_duration", str(intro_duration)),
-        xbmc.LOGDEBUG)
+    logger('%s = %s' % ('intro_duration', intro_duration), level='debug')
 
     try:
         languages = __get_languages__(talk_json)
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "languages", str(languages)),
-            xbmc.LOGDEBUG)
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "accepted_languages", str(accepted_languages)),
-            xbmc.LOGDEBUG)
+        logger('%s = %s' % ('languages', languages), level='debug')
+        logger('%s = %s' % ('accepted_languages', accepted_languages), level='debug')
 
         if len(languages) == 0:
             msg = 'No subtitles found'
@@ -69,7 +62,7 @@ def get_subtitles_for_talk(talk_json, accepted_languages, logger):
 
         language_matches = [l for l in accepted_languages if l in languages]
         if not language_matches:
-            msg = 'No subtitles in: %s' % (",".join(accepted_languages))
+            msg = 'No subtitles in: %s' % (','.join(accepted_languages))
             logger(msg, msg)
             return None
 

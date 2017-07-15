@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: plugin.video.ted.talks\n"
-"Report-Msgid-Bugs-To: https://github.com/skipmodea1/xbmc-plugin.video.ted.talks\n"
+"Report-Msgid-Bugs-To: https://github.com/moreginger/xbmc-plugin.video.ted.talks\n"
 "POT-Creation-Date: 2017-01-13 22:42+000\n"
 "PO-Revision-Date: 2017-01-13 22:42+000\n"
 "Last-Translator: Kodi Translation Team\n"

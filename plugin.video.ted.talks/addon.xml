@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.ted.talks" name="TED Talks" version="4.2.11" provider-name="Skipmode A1, moreginger, rwparris2">
+<addon id="plugin.video.ted.talks" name="TED Talks" version="4.2.12" provider-name="Skipmode A1, moreginger, rwparris2">
   <requires>
     <import addon="xbmc.python" version="2.24.0"/>
     <import addon="script.module.elementtree" version="1.2.7"/>
@@ -22,7 +22,7 @@
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
     <forum>http://forum.xbmc.org/showthread.php?tid=36866</forum>
-    <website>https://github.com/skipmodea1/plugin.video.ted.talks</website>
-    <source>https://github.com/skipmodea1/plugin.video.ted.talks.git</source>
+    <website>https://github.com/moreginger/xbmc-plugin.video.ted.talks</website>
+    <source>https://github.com/moreginger/xbmc-plugin.video.ted.talks.git</source>
   </extension>
 </addon>

@@ -13,9 +13,9 @@
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-	<summary lang="en_GB">Watch videos from hak5.com</summary>
-	<description lang="en_GB">Watch videos from hak5.com. The videos are from the shows Hak5, Haktik, Threatwire, Tekthing, Pineapple University and Metasploit</description>
-	<disclaimer lang="en_GB">For bugs, requests or general questions visit the hak5.com thread on the Kodi forum</disclaimer>
+	<summary lang="en">Watch videos from hak5.com</summary>
+	<description lang="en">Watch videos from hak5.com. The videos are from the shows Hak5, Haktik, Threatwire, Tekthing, Pineapple University and Metasploit</description>
+	<disclaimer lang="en">For bugs, requests or general questions visit the hak5.com thread on the Kodi forum</disclaimer>
     <language>en</language>
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>

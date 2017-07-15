@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="32010">
+        <setting label="32053" type="slider" id="page_count" default="20" range="5,5,20" option="int" />
+    </category>
+    <category label="30050">
+        <setting label="30054" type="bool" id="login_enabled" default="false"/>
+        <setting label="30051" type="text" id="email" default="" enable="eq(-1,true)" subsetting="true"/>
+        <setting label="30052" type="text" id="password" option="hidden" enable="eq(-2,true)" subsetting="true" default=""/>
+    </category>
+</settings>

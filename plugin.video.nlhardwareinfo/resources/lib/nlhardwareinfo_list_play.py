@@ -8,13 +8,14 @@ import os
 import sys
 import urllib
 import urlparse
+import requests
+from time import strptime
 import xbmc
 import xbmcgui
 import xbmcplugin
 from BeautifulSoup import BeautifulSoup
 
-from nlhardwareinfo_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
-from nlhardwareinfo_utils import HTTPCommunicator
+from nlhardwareinfo_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION, HEADERS
 
 
 #
@@ -82,9 +83,11 @@ class Main:
         listing = []
 
         #
-        # Get HTML page...
+        # Get HTML page
         #
-        html_source = HTTPCommunicator().get(self.video_list_page_url)
+        response = requests.get(self.video_list_page_url, headers=HEADERS)
+        html_source = response.text
+        html_source = html_source.encode('utf-8', 'ignore')
 
         # Parse response...
         soup = BeautifulSoup(html_source)
@@ -106,6 +109,10 @@ class Main:
                 ADDON, VERSION, DATE, "len(items)", str(len(items))), xbmc.LOGDEBUG)
 
         for item in items:
+
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                ADDON, VERSION, DATE, "item", str(item)), xbmc.LOGDEBUG)
+
             # Get the 4 enclosure url's in the item
             # There must be a better way to do this with beautiful soup, but it'll have to do for now
             item_string = str(item)
@@ -198,19 +205,80 @@ class Main:
                     "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "title", str(title)),
                     xbmc.LOGDEBUG)
 
+            context_menu_items = []
+            # Add refresh option to context menu
+            context_menu_items.append((LANGUAGE(30104), 'Container.Refresh'))
+            # Add episode  info to context menu
+            context_menu_items.append((LANGUAGE(30105), 'XBMC.Action(Info)'))
+
+            # <title>Samsung Galaxy S7 en S7 Edge review</title>
+            # <description>Vanaf vandaag zijn ze eindelijk te koop, de nieuwe Galaxy S7 en S7 Edge van Samsung. De nieuwe toestellen bieden onder andere een betere camera, snellere processor én een grotere accu. Wij konden de afgelopen weken al aan de slag met beide toestellen in deze videoreview vergelijken we ze met de Galaxy S6 én met alle andere high-end smartphones van dit moment.</description>
+            # <pubdate>Fri, 01 Mar 2016 17:40:00 +0100</pubdate>
+            # <enclosure url="https://content.hwigroup.net/videos/hwitv-ep843-s7/hwitv-ep843-s7-1.mp4" type="video/mpeg">
+            # </enclosure><enclosure url="https://content.hwigroup.net/images/video/video_thumb/000979.jpg" type="image/jpg">
+            # </enclosure><enclosure url="https://content.hwigroup.net/images/video/video_430/000979.jpg" type="image/jpg">
+            # <guid ispermalink="false">https://content.hwigroup.net/videos/hwitv-ep843-s7/hwitv-ep843-s7-1.mp4</guid>
+            # </enclosure><enclosure url="http://youtube.com/watch?v=C7ntLwmxOrY" type="video/youtube">
+            # </enclosure></item>
+
+            # Get description
+            plot = item.description.string
+            # in the title of the item a single-quote "'" is represented as "&#039;" for some reason . Therefore this replace is needed to fix that.
+            plot = plot.replace("&#039;", "'")
+
+            # Get pupdate
+            pubdate = item.pubdate.string
+            # Extract date time fields
+            day = pubdate[len('Fri, '):len('Fri, ') + 2]
+            month_name = pubdate[len('Fri, 01 '):len('Fri, 01 ') + 3]
+            year = pubdate[len('Fri, 01 Mar '):len('Fri, 01 Mar ') + 4]
+            hour = pubdate[len('Fri, 01 Mar 2016 '):len('Fri, 01 Mar 2016 ') + 2]
+            minute = pubdate[len('Fri, 01 Mar 2016 17:'):len('Fri, 01 Mar 2016 17:') + 2]
+            second = pubdate[len('Fri, 01 Mar 2016 17:40:'):len('Fri, 01 Mar 2016 17:40:') + 2]
+
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                    ADDON, VERSION, DATE, "extracted pubdate", str(day + '/' + month_name + '/' + year + '/' + hour + '/' + minute + '/' + second)), xbmc.LOGDEBUG)
+
+            month_numeric = strptime(month_name, '%b').tm_mon
+
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "month_numeric", str(month_numeric)), xbmc.LOGDEBUG)
+
+            if len(str(month_numeric)) == 1:
+                month = '0' + str(month_numeric)
+            else:
+                month = str(month_numeric)
+
+            # Dateadded has this form: 2009-04-05 23:16:04
+            dateadded = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second
+
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "dateadded", str(dateadded)), xbmc.LOGDEBUG)
+
+            meta = {'plot': plot,
+                    'duration': '',
+                    'year': year,
+                    'dateadded': dateadded}
+
+            add_sort_methods()
+
             # Add to list...
             list_item = xbmcgui.ListItem(title, thumbnailImage=thumbnail_url)
             list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'true')
             is_folder = False
             url = youtube_url
-            # Add refresh option to context menu
-            list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])
+            list_item.setInfo("mediatype", "video")
+            list_item.setInfo("video", meta)
+            # Adding context menu items to context menu
+            list_item.addContextMenuItems(context_menu_items, replaceItems=False)
             # Add our item to the listing as a 3-element tuple.
             listing.append((url, list_item, is_folder))
 
         # Next page entry...
         if self.next_page_possible == 'True':
+            context_menu_items = []
+            # Add refresh option to context menu
+            context_menu_items.append((LANGUAGE(30104), 'Container.Refresh'))
+
             list_item = xbmcgui.ListItem(LANGUAGE(30503), thumbnailImage=os.path.join(IMAGES_PATH, 'next-page.png'))
             list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'false')
@@ -218,8 +286,8 @@ class Main:
                           "next_page_possible": self.next_page_possible}
             url = self.plugin_url + '?' + urllib.urlencode(parameters)
             is_folder = True
-            # Add refresh option to context menu
-            list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])
+            # Adding context menu items to context menu
+            list_item.addContextMenuItems(context_menu_items, replaceItems=False)
             # Add our item to the listing as a 3-element tuple.
             listing.append((url, list_item, is_folder))
 
@@ -231,3 +299,8 @@ class Main:
         xbmcplugin.addSortMethod(handle=self.plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_NONE)
         # Finish creating a virtual folder.
         xbmcplugin.endOfDirectory(self.plugin_handle)
+
+def add_sort_methods():
+    sort_methods = [xbmcplugin.SORT_METHOD_UNSORTED,xbmcplugin.SORT_METHOD_LABEL,xbmcplugin.SORT_METHOD_DATE,xbmcplugin.SORT_METHOD_DURATION,xbmcplugin.SORT_METHOD_EPISODE]
+    for method in sort_methods:
+        xbmcplugin.addSortMethod(int(sys.argv[1]), sortMethod=method)

@@ -1,9 +1,10 @@
-import urllib
-from url_constants import URLTED, URLSEARCH
-# Custom xbmc thing for fast parsing. Can't rely on lxml being available as of 2012-03.
-import CommonFunctions as xbmc_common
-import re
 import HTMLParser
+import re
+import urllib
+
+import CommonFunctions as xbmc_common
+
+from url_constants import URLTED, URLSEARCH
 
 __results_count_re__ = re.compile(r'.*\d+ - (\d+) of (\d+) results.*')
 __result_count_re__ = re.compile(r'.*\d+ +results?.*')  # Two spaces at the moment i.e. "1  result"

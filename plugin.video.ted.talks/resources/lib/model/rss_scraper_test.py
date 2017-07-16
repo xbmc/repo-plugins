@@ -1,11 +1,12 @@
-import unittest
-from rss_scraper import NewTalksRss
 from datetime import datetime
-import sys
 try:
     from elementtree.ElementTree import fromstring
 except ImportError:
     from xml.etree.ElementTree import fromstring
+import unittest
+from mock import MagicMock
+
+from rss_scraper import NewTalksRss
 
 minimal_item = """
 <item xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:media="http://search.yahoo.com/mrss/">
@@ -22,11 +23,8 @@ minimal_item = """
 class TestNewTalksRss(unittest.TestCase):
 
     def setUp(self):
-        self.logged = []
-        self.talks = NewTalksRss(self.logged.append)
-
-    def tearDown(self):
-        self.assertFalse(self.logged)
+        self.logger = MagicMock()
+        self.talks = NewTalksRss(self.logger)
 
     def test_get_talk_details_minimal(self):
         details = self.talks.get_talk_details(fromstring(minimal_item))
@@ -51,8 +49,7 @@ class TestNewTalksRss(unittest.TestCase):
         details = self.talks.get_talk_details(document)
         date_now = datetime.strftime(datetime.now(), '%d.%m.%Y')
         self.assertEqual(date_now, details['date'])
-        self.assertEqual(1, len(self.logged))
-        self.assertTrue("Could not parse date 'Sat, 04 02 2012 08'" in self.logged.pop())
+        self.logger.assert_called_with("Could not parse date 'Sat, 04 02 2012 08': time data 'Sat, 04 02 2012 08' does not match format '%a, %d %b %Y %H:%M:%S'")
 
     def test_smoke(self):
         talks = list(self.talks.get_new_talks())

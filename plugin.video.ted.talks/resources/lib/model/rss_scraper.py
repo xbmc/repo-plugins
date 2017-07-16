@@ -4,13 +4,10 @@ but this allows us a little more power to tweak things how we want them,
 so keep it for now.
 """
 
-import urllib2
-import time
-import xbmc
-
 from datetime import timedelta
+import time
+import urllib2
 
-from ted_talks_const import ADDON, DATE, VERSION
 
 try:
     from elementtree.ElementTree import fromstring
@@ -28,7 +25,7 @@ def get_document(url):
         usock.close()
 
 
-class NewTalksRss:
+class NewTalksRss(object):
     """
     Fetches new talks from RSS stream.
     """
@@ -44,8 +41,7 @@ class NewTalksRss:
         author = item.find('./{http://www.itunes.com/dtds/podcast-1.0.dtd}author').text
         pic = item.find('./{http://search.yahoo.com/mrss/}thumbnail').get('url')
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "pic", str(pic)),
-            xbmc.LOGDEBUG)
+        self.logger('%s = %s' % ('pic', str(pic)), level='debug')
 
         duration = item.find('./{http://www.itunes.com/dtds/podcast-1.0.dtd}duration').text
         duration = time.strptime(duration, '%H:%M:%S')
@@ -75,11 +71,11 @@ class NewTalksRss:
         """
         Returns talks as dicts {title:, author:, thumb:, date:, duration:, link:}.
         """
-        talksByTitle = {}
+        talks_by_title = {}
         rss = get_document('http://feeds.feedburner.com/tedtalks_video')
         for item in fromstring(rss).findall('channel/item'):
             talk = self.get_talk_details(item)
-            talksByTitle[talk['title']] = talk
+            talks_by_title[talk['title']] = talk
 
-        return talksByTitle.itervalues()
+        return talks_by_title.itervalues()
 

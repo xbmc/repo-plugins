@@ -1,0 +1,66 @@
+# Kodi Media Center language file
+# Addon Name: edltv
+# Addon id: plugin.video.edltv
+# Addon Provider: Kritsana Punyaporn
+
+msgid ""
+msgstr ""
+"Project-Id-Version: KODI Main\n"
+"Report-Msgid-Bugs-To: http://trac.kodi.tv/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Thai (Thailand) (http://www.transifex.com/projects/p/kodi-main/language/th_TH/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: th_TH\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "#33000"
+msgid "Search"
+msgstr "ค้นหา"
+
+msgctxt "#33007"
+msgid "Grade 7"
+msgstr "ชั้นมัธยมศึกษาปีที่ 1"
+
+msgctxt "#33008"
+msgid "Grade 8"
+msgstr "ชั้นมัธยมศึกษาปีที่ 2"
+
+msgctxt "#33009"
+msgid "Grade 9"
+msgstr "ชั้นมัธยมศึกษาปีที่ 3"
+
+msgctxt "#33010"
+msgid "Grade 10"
+msgstr "ชั้นมัธยมศึกษาปีที่ 4"
+
+msgctxt "#33011"
+msgid "Grade 11"
+msgstr "ชั้นมัธยมศึกษาปีที่ 5"
+
+msgctxt "#33012"
+msgid "Grade 12"
+msgstr "ชั้นมัธยมศึกษาปีที่ 6"
+
+msgctxt "#33030"
+msgid "No internet connection."
+msgstr "ไม่มีการเชื่อมต่ออินเทอร์เน็ต"
+
+msgctxt "#33031"
+msgid "Sorry, the video is not available."
+msgstr "ขออภัย หัวข้อนี้ไม่มีวิดีโอ"
+
+msgctxt "#33032"
+msgid "Sorry, result not available."
+msgstr "ขออภัย ไม่พบข้อมูลที่ต้องการค้นหา"
+
+msgctxt "#33033"
+msgid "This step may have cost because there is an Internet connection."
+msgstr "ขั้นตอนนี้อาจมีค่าใช้บริการเมื่อต้องการเล่นวิดีโอ เนื่องจากมีการเชื่อมต่ออินเทอร์เน็ต"
+
+msgctxt "#33040"
+msgid "Class. "
+msgstr "คาบเรียนที่ "

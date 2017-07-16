@@ -22,8 +22,8 @@ IMAGES_PATH = os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources', 
 HEADERS = {'User-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0','Referer': 'http://www.cnet.com'}
 CACHE = StorageServer.StorageServer("cnetpodcasts", 6)
 BASE_URL = 'http://www.cnet.com/cnet-podcasts/'
-DATE = "2017-07-12"
-VERSION = "1.0.4"
+DATE = "2017-07-16"
+VERSION = "1.1.5"
 
 
 def cache_categories():

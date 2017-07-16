@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.cnet.podcasts"
        name="CNET Podcasts"
-       version="1.1.4"
+       version="1.1.5"
        provider-name="Skipmode A1, Divingmule">
   <requires>
     <import addon="xbmc.python" version="2.14.0"/>
@@ -13,10 +13,10 @@
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-	<summary lang="en_GB">CNET Podcast Central</summary>
-	<description lang="en_GB">www.cnet.com/who-we-are/CNET shows you the exciting possibilities of how technology can enhance and enrich your life. We provide you with information, tools, and advice that help you decide what to buy and how to get the most out of your tech.
+	<summary lang="en">CNET Podcast Central</summary>
+	<description lang="en">www.cnet.com/who-we-are/CNET shows you the exciting possibilities of how technology can enhance and enrich your life. We provide you with information, tools, and advice that help you decide what to buy and how to get the most out of your tech.
     </description>
-	<disclaimer lang="en_GB">For bugs, requests or general questions visit the CNET Podcasts thread on the Kodi Video Add-ons forum.</disclaimer>
+	<disclaimer lang="en">For bugs, requests or general questions visit the CNET Podcasts thread on the Kodi Video Add-ons forum.</disclaimer>
     <language>en</language>
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>

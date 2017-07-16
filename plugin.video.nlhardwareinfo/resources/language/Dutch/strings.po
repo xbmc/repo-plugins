@@ -43,6 +43,14 @@ msgctxt "#30102"
 msgid "Website"
 msgstr "Website"
 
+msgctxt "#30104"
+msgid "Refresh"
+msgstr "Ververs"
+
+msgctxt "#30105"
+msgid "Episode Info"
+msgstr "Aflevering Info"
+
 msgctxt "#30200"
 msgid "Video player"
 msgstr "Video player"

@@ -1,3 +1,9 @@
+v1.0.7 (2017-07-12)
+- added listitem.setInfo video for Kodi 18 and up
+- added sorting
+- added context item episode info
+- using requests
+
 v1.0.6 (2017-03-12) :
 - changed addon debugging info to kodi debugging info
 - using po-files

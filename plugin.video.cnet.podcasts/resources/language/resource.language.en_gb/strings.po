@@ -78,3 +78,15 @@ msgstr ""
 msgctxt "#30013"
 msgid "Preferred type is not available"
 msgstr ""
+
+msgctxt "#30104"
+msgid "Refresh"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Episode Info"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Error getting page: %s"
+msgstr ""

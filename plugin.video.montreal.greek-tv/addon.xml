@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.montreal.greek-tv" name="Montreal Greek TV" version="1.1.0" provider-name="Twilight0">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">Montreal Greek TV addon</summary>
+        <description lang="en">This addon offers live streaming content mainly in Greek language</description>
+        <summary lang="el">Πρόσθετο Montreal Greek TV</summary>
+        <description lang="el">Το πρόσθετο αυτό παρέχει ζωντανό περιεχόμενο κυρίως εις την Ελληνική γλώσσα</description>
+        <language>en el</language>
+        <license>GNU General Public License, v3</license>
+        <news>
+1.1.0 (16-07-2017)
+- Made items' info remotely hosted
+
+1.0.2 (19-06-2017)
+- New radio stream
+
+1.0.1 (25-05-2017)
+- Minor changes to artwork
+
+1.0.0 (08-05-2017)
+- Initial Version
+        </news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+        <website>http://www.greekradio.net/</website>
+        <email>twilight@freemail.gr</email>
+        <source>https://github.com/Twilight0/plugin.video.montreal.greek-tv/</source>
+    </extension>
+</addon>

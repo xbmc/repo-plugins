@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.sapo"
        name="Sapo Videos"
-       version="1.0.0"
+       version="1.0.1"
        provider-name="fightnight">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/> 
@@ -13,6 +13,7 @@
     <extension point="xbmc.addon.metadata">
 		<language>pt</language>
 		<platform>all</platform>
+    <broken>Discontinued by original author</broken>
 		<summary lang="en">Sapo Videos addon for Kodi</summary>
 		<summary lang="en">Sapo Videos addon para o Kodi</summary>
         <description lang="en">Live and On-Demand videos from Sapo Videos webpage for Kodi.</description>

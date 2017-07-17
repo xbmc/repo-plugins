@@ -4,16 +4,9 @@
 #
 # Imports
 #
-from BeautifulSoup import BeautifulSoup
 from gamegurumania_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
-from gamegurumania_utils import HTTPCommunicator
-import os
-import re
 import sys
 import urllib
-import urlparse
-import xbmc
-import xbmcaddon
 import xbmcgui
 import xbmcplugin
 import os

@@ -1,3 +1,4 @@
+Version 3.0.12 website change
 Version 3.0.11 changes for Android Kodi 17
 Version 3.0.10 website change
 Version 3.0.9 website change

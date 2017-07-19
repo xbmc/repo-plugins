@@ -31,7 +31,7 @@ class myAddon(t1mAddon):
           infoList['TVShowTitle'] = name
           infoList['Title'] = name
           url = b['urlAlias']
-          thumb = b['image']
+          thumb = b['image']['path']
           fanart = thumb
           contextMenu = [('Add To Library','XBMC.RunPlugin(%s?mode=DF&url=AL%s)' % (sys.argv[0], url))]
           ilist = self.addMenuItem(name, mode, ilist, url, thumb, fanart, infoList, isFolder=True, cm=contextMenu)

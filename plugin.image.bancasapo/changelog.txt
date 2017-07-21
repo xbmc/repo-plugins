@@ -1,0 +1,2 @@
+v2.0.0
+- Old XBMC addon fixed to work for krypton

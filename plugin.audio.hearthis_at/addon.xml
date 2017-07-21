@@ -24,7 +24,7 @@
 	    - Initial release
     </news>
     <assets>
-	<icon>resources/icon.png</icon>
+	      <icon>resources/icon.png</icon>
         <screenshot>resources/screenshot-01.jpg</screenshot>
         <screenshot>resources/screenshot-02.jpg</screenshot>
         <screenshot>resources/screenshot-03.jpg</screenshot>

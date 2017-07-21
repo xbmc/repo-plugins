@@ -53,8 +53,8 @@ msgid "Livestreams"
 msgstr "Livestreams"
 
 msgctxt "#32101"
-msgid "één"
-msgstr "één"
+msgid "Eén"
+msgstr "Eén"
 
 msgctxt "#32102"
 msgid "Canvas"
@@ -63,3 +63,8 @@ msgstr "Canvas"
 msgctxt "#32103"
 msgid "Ketnet"
 msgstr "Ketnet"
+
+msgctxt "#32104"
+msgid "Sporza"
+msgstr "Sporza"
+

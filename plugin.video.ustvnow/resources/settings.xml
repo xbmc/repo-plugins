@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="Enable_Debugging" type="bool"   label="30000" default="false" />
+    <setting id="User_Email"       type="text"   label="30001" default="" />
+    <setting id="User_Password"    type="text"   label="30002" default="" option="hidden"/>
+    <setting                       type="lsep"   label="30017"/>
+    <setting id="User_Plan"        type="text"   label="30020" default="" enable="false"/>
+    <setting id="User_Expires"     type="text"   label="30018" default="" enable="false"/>
+    <setting id="User_Token"       type="text"   label="30002" default="" visible="false"/>
+    <setting id="User_Paskey"      type="text"   label="30002" default="" visible="false"/>
+</settings>

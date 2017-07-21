@@ -18,10 +18,13 @@
     <description lang="en_GB">Hearthis.at is a online audio distribution platform that enables its users to upload, record, promote, and share their originally-created sounds. This addon provides the most important features to access that content.</description>
     <description lang="de_DE">Hearthis.at ist eine Online-Musikplattform, auf welcher Nutzer ihre Werke hochladen, aufnehmen, bewerben und teilen können. Dieses Addon erlaubt Zugriff auf die wichtigsten Funktionen der Plattform um diese Inhalte abzurufen.</description>
     <disclaimer lang="en_GB">Use at own risk. Code may be faulty, clog your drain or kill your cat.</disclaimer>
-    <news>v0.1  (2017-07-03)
-- Initial release</news>
+    <news>  v1.0.1 (2017-07-21)
+	    - fixed icon-path for proper building
+	    v1.0.0 (2017-07-03)
+	    - Initial release
+    </news>
     <assets>
-        <icon>icon.png</icon>
+	<icon>resources/icon.png</icon>
         <screenshot>resources/screenshot-01.jpg</screenshot>
         <screenshot>resources/screenshot-02.jpg</screenshot>
         <screenshot>resources/screenshot-03.jpg</screenshot>

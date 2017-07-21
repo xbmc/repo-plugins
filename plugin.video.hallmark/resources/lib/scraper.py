@@ -127,9 +127,14 @@ class myAddon(t1mAddon):
 
   def getAddonVideo(self,url):
       html = self.getRequest(url)
-      suburl, u = re.compile('captionsrc = (.+?);.+?src: "(.+?)"', re.DOTALL).search(html).groups()
-      suburl = eval(suburl)
-      subfile = HALLMARKBASE % suburl.replace('.xml','.vtt')
+      u = re.compile("videourl = '(.+?)'", re.DOTALL).search(html).group(1)
+      suburl = re.compile('captionsrc = (.+?);', re.DOTALL).search(html)
+      if not (suburl is None):
+          suburl = suburl.group(1)
+          suburl = eval(suburl)
+          subfile = HALLMARKBASE % suburl.replace('.xml','.vtt')
+      else:
+          subfile = ''
       liz = xbmcgui.ListItem(path = u)
       liz.setSubtitles([subfile])
       infoList ={}

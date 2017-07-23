@@ -111,6 +111,10 @@ msgid "Login at hearthis.at"
 msgstr ""
 
 msgctxt "#30055"
+msgid "General"
+msgstr ""
+
+msgctxt "#30022"
 msgid "Login failed. Check your credentials!"
 msgstr ""
 

@@ -41,7 +41,7 @@ STRINGS = {
         'reshared'      : 30019,
         'add_reshared'  : 30020,
         'rm_reshared'   : 30021,
-        'login_failed'  : 30055
+        'login_failed'  : 30022
 }
 
 
@@ -127,11 +127,11 @@ def list_tracks(tracklist, pagination = None, first=False, pre=[], post=[]):
                             'genre': t.get('genre', None),
                             'playcount': int(t.get('playback_count', None))
                          },
-                'context_menu': [
-                                    show_user_context_item(t['user']['permalink']),
-                                    context_item_toggle('like', t['favorited'], {'user':t['user']['permalink'], 'trackid': t['permalink']}),
+                'context_menu': 
+                                    show_user_context_item(t['user']['permalink']) +
+                                    context_item_toggle('like', t['favorited'], {'user':t['user']['permalink'], 'trackid': t['permalink']}) +
                                     context_item_toggle('reshared', t['reshared'], {'user':t['user']['permalink'], 'trackid': t['permalink']})
-                                ],
+                              ,
                 'path': plugin.url_for('play_track', trackid=t['permalink'], user=t['user']['permalink']),
                 'is_playable': True
         })
@@ -190,7 +190,7 @@ def login():
 
 
 def logged_in():
-    return USER['data'] != None
+    return USER.get('data', None) != None
 
 
 def context_item_toggle(prop, state, parms):
@@ -200,15 +200,15 @@ def context_item_toggle(prop, state, parms):
         else:
             lbl = 'add_'+prop
         parms['prop'] = prop
-        ar_follow = ( _(lbl), actions.update_view(plugin.url_for('toggle_prop', **parms)))
+        ar_follow = [( _(lbl), actions.update_view(plugin.url_for('toggle_prop', **parms)))]
     else:
-        ar_follow = None
+        ar_follow = []
     return ar_follow
 
 
 def show_user_context_item(user):
     show_user_url = plugin.url_for('show_user_first', user=user, page=1, first='True')
-    return ( _('show_artist'), actions.update_view(show_user_url))
+    return [ ( _('show_artist'), actions.update_view(show_user_url)) ]
 
 
 @plugin.route('/')

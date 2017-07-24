@@ -344,6 +344,8 @@ def ScrapeEpisodes(page_url):
                 li, flags=(re.DOTALL | re.MULTILINE))
             if url_match:
                 url = url_match.group(1)
+                # Some strings already contain the full URL, need to work around this.
+                url = url.replace('http://www.bbc.co.uk','')
                 if url:
                     main_url = 'http://www.bbc.co.uk' + url
 

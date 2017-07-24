@@ -9,9 +9,9 @@
         <provides>audio</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="he">אלפי פלייליסטים וסטים מוזיקליים, ערוכים ומוכנים להאזנה, ומותאמים לכל מצב, בכל מקום ובכל שעה</summary>
+        <summary lang="he_il">אלפי פלייליסטים וסטים מוזיקליים, ערוכים ומוכנים להאזנה, ומותאמים לכל מצב, בכל מקום ובכל שעה</summary>
         <summary lang="en_GB">Thousands of premium playlists based on users mood, activity, location and more</summary>
-        <description lang="he">
+        <description lang="he_il">
             ברוכים הבאים לתוסף של eco99music מבית תחנת הרדיו eco99fm. מחכים לכם כאן אלפי פלייליסטים וסטים מוזיקליים, ערוכים ומוכנים להאזנה, ומותאמים לכל מצב, בכל מקום ובכל שעה, לצד ארכיון ענק של תכניות הבוקר עם טל ברמן ואביעד קיסוס, וכמובן- השידור החי שלנו.
 תהנו, האזנה נעימה!
         </description>

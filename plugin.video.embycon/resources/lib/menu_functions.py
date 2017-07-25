@@ -234,7 +234,25 @@ def getCollections(detailsString):
                          '&ImageTypeLimit=1' +
                          '&format=json'),
                 'media_type': 'Episodes',
-                'name_format': 'episode_name_format'})
+                'name_format': 'Episode|episode_name_format'})
+            collections.append({
+                'title': item_name + i18n('_latest'),
+                'thumbnail': downloadUtils.getArtwork(item, "Primary", server=server),
+                'path': ('{server}/emby/Users/{userid}/Items/Latest' +
+                         '?ParentId=' + item.get("Id") +
+                         '&Limit={ItemLimit}' +
+                         '&IsVirtualUnaired=false' +
+                         '&IsMissing=False' +
+                         '&Fields=' + detailsString +
+                         '&SortBy=DateCreated' +
+                         '&SortOrder=Descending' +
+                         '&Filters=IsUnplayed' +
+                         '&Recursive=true' +
+                         '&IncludeItemTypes=Episode' +
+                         '&ImageTypeLimit=1' +
+                         '&format=json'),
+                'media_type': 'Episodes',
+                'name_format': 'Episode|episode_name_format'})            
             collections.append({
                 'title': item_name + i18n('_recently_added'),
                 'thumbnail': downloadUtils.getArtwork(item, "Primary", server=server),
@@ -252,7 +270,7 @@ def getCollections(detailsString):
                          '&ImageTypeLimit=1' +
                          '&format=json'),
                 'media_type': 'Episodes',
-                'name_format': 'episode_name_format'})
+                'name_format': 'Episode|episode_name_format'})
             collections.append({
                 'title': item_name + i18n('_next_up'),
                 'thumbnail': downloadUtils.getArtwork(item, "Primary", server=server),
@@ -268,7 +286,7 @@ def getCollections(detailsString):
                          '&ImageTypeLimit=1' +
                          '&format=json'),
                 'media_type': 'Episodes',
-                'name_format': 'episode_name_format'})
+                'name_format': 'Episode|episode_name_format'})
 
         if collection_type == "movies":
             collections.append({
@@ -423,6 +441,25 @@ def getCollections(detailsString):
     collections.append(item_data)
 
     item_data = {}
+    item_data['title'] = i18n('tvshows_latest')
+    item_data['media_type'] = 'Episodes'
+    item_data['path'] = ('{server}/emby/Users/{userid}/Items/Latest' +
+                         '?Limit={ItemLimit}' +
+                         '&Recursive=true' +
+                         '&GroupItems=true' +
+                         '&SortBy=DateCreated' +
+                         '&Fields=' + detailsString +
+                         '&SortOrder=Descending' +
+                         '&Filters=IsUnplayed' +
+                         '&IsVirtualUnaired=false' +
+                         '&IsMissing=False' +
+                         '&IncludeItemTypes=Episode' +
+                         '&ImageTypeLimit=1' +
+                         '&format=json')
+    item_data['name_format'] = 'Episode|episode_name_format'
+    collections.append(item_data)
+
+    item_data = {}
     item_data['title'] = i18n('episodes_in_progress')
     item_data['media_type'] = 'Episodes'
     item_data['path'] = ('{server}/emby/Users/{userid}/Items' +
@@ -433,7 +470,7 @@ def getCollections(detailsString):
                          '&IncludeItemTypes=Episode' +
                          '&ImageTypeLimit=1' +
                          '&format=json')
-    item_data['name_format'] = 'episode_name_format'
+    item_data['name_format'] = 'Episode|episode_name_format'
     collections.append(item_data)
 
     item_data = {}
@@ -451,7 +488,7 @@ def getCollections(detailsString):
                          '&IncludeItemTypes=Episode' +
                          '&ImageTypeLimit=1' +
                          '&format=json')
-    item_data['name_format'] = 'episode_name_format'
+    item_data['name_format'] = 'Episode|episode_name_format'
     collections.append(item_data)
 
     item_data = {}
@@ -467,7 +504,7 @@ def getCollections(detailsString):
                          '&IncludeItemTypes=Episode' +
                          '&ImageTypeLimit=1' +
                          '&format=json')
-    item_data['name_format'] = 'episode_name_format'
+    item_data['name_format'] = 'Episode|episode_name_format'
     collections.append(item_data)
 
     item_data = {}

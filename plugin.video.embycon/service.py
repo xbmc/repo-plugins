@@ -25,8 +25,8 @@ download_utils = DownloadUtils()
 # auth the service
 try:
     download_utils.authenticate()
-except Exception, e:
-    pass
+except Exception as error:
+    log.error("Error with initial service auth: " + str(error))
 
 
 def hasData(data):
@@ -288,6 +288,7 @@ class Service(xbmc.Player):
 
 monitor = Service()
 last_progress_update = time.time()
+download_utils.checkVersion()
 
 xbmc_monitor = xbmc.Monitor()
 while not xbmc_monitor.abortRequested():

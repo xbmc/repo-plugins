@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.eco99music" name="eco99music" version="0.0.1" provider-name="Nir Elbaz">
+<addon id="plugin.audio.eco99music" name="eco99music" version="0.0.2" provider-name="Nir Elbaz">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.beautifulsoup4" version="4.5.3"/>

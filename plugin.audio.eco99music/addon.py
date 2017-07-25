@@ -134,7 +134,7 @@ def main():
         items = get_playlists(args['url'][0])
         build_menu(items, False)
     elif mode[0] == 'stream':
-        play(args['url'][0])
+        play(args['url'][0].replace('/playlist.m3u8', ''))
 
 
 if __name__ == '__main__':

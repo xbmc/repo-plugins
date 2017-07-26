@@ -233,8 +233,8 @@ class USTVnow():
                         u'A vibrating mat that helps calm babies.', u't': 1, u'edgetypes': 7, u'imgmark': u'live', u'content_id': u'EP011581290171', u'order': 1, 
                         u'displayorder': 1}'''
                     self.cache.set(ADDON_NAME + '.channelguide', channels, expiration=datetime.timedelta(minutes=10))
-                    self.channels = self.cache.get(ADDON_NAME + '.channelguide'), 
-                
+                    self.channels = self.cache.get(ADDON_NAME + '.channelguide')
+                    
                 self.upcoming = self.cache.get(ADDON_NAME + '.upcoming')
                 if not self.upcoming:
                     log('login, refreshing upcoming')
@@ -289,59 +289,56 @@ class USTVnow():
 
     def browseLive(self):
         log('browseLive')
-        if self.channels is None:
-            if self.login(USER_EMAIL, PASSWORD) == False:
-                raise SystemExit
-            
         d = datetime.datetime.utcnow()
         now = datetime.datetime.fromtimestamp(calendar.timegm(d.utctimetuple()))  
         isFree = REAL_SETTINGS.getSetting('User_isFree') == "True"
         for channel in self.channels:
-            name = CHAN_NAMES[channel['stream_code']]
-            if isFree == True and name not in FREE_CHANS:
-                continue
-            startime = datetime.datetime.fromtimestamp(channel['ut_start'])
-            endtime  = startime + datetime.timedelta(seconds=channel['runtime'])
-            if endtime > now and startime <= now:
-                label, url, liz = self.buildChannelListItem(name, channel)
-                self.addLink(label, url, 9, liz, len(self.channels))
-
+            try:
+                name = CHAN_NAMES[channel['stream_code']]
+                if isFree == True and name not in FREE_CHANS:
+                    continue
+                startime = datetime.datetime.fromtimestamp(channel['ut_start'])
+                endtime  = startime + datetime.timedelta(seconds=channel['runtime'])
+                if endtime > now and startime <= now:
+                    label, url, liz = self.buildChannelListItem(name, channel)
+                    self.addLink(label, url, 9, liz, len(self.channels))
+            except:
+                xbmc.executebuiltin("Container.Refresh")
+                
                 
     def browseRecordings(self, recorded=False):
         log('browseRecordings')
-        if self.recorded is None:
-            if self.login(USER_EMAIL, PASSWORD) == False:
-                raise SystemExit
-            
         d = datetime.datetime.utcnow()
         now = datetime.datetime.fromtimestamp(calendar.timegm(d.utctimetuple()))  
         for channel in self.recorded:
-            startime  = datetime.datetime.fromtimestamp(channel['ut_start'])
-            endtime   = startime + datetime.timedelta(seconds=channel['runtime'])
-            if endtime > now and (startime <= now or startime > now) and recorded == True:
-                continue
-            elif endtime < now and (startime <= now or startime > now) and recorded == False:
-                continue
-            label, url, liz = self.buildRecordedListItem(CHAN_NAMES[channel['stream_code']])
-            self.addLink(label, url, 10, liz, len(self.recorded))
+            try:
+                startime  = datetime.datetime.fromtimestamp(channel['ut_start'])
+                endtime   = startime + datetime.timedelta(seconds=channel['runtime'])
+                if endtime > now and (startime <= now or startime > now) and recorded == True:
+                    continue
+                elif endtime < now and (startime <= now or startime > now) and recorded == False:
+                    continue
+                label, url, liz = self.buildRecordedListItem(CHAN_NAMES[channel['stream_code']])
+                self.addLink(label, url, 10, liz, len(self.recorded))
+            except:
+                xbmc.executebuiltin("Container.Refresh")
     
 
     def browseGuide(self, name=None, upcoming=False):
         log('browseGuide')
-        if self.channels is None:
-            if self.login(USER_EMAIL, PASSWORD) == False:
-                raise SystemExit
-            
         d = datetime.datetime.utcnow()
         now = datetime.datetime.fromtimestamp(calendar.timegm(d.utctimetuple()))  
         isFree = REAL_SETTINGS.getSetting('User_isFree') == "True"
         if name is None and upcoming == False:
             collect = []
             for channel in self.channels:
-                name = CHAN_NAMES[channel['stream_code']]
-                if isFree == True and name not in FREE_CHANS:
-                    continue
-                collect.append(name)
+                try:
+                    name = CHAN_NAMES[channel['stream_code']]
+                    if isFree == True and name not in FREE_CHANS:
+                        continue
+                    collect.append(name)
+                except:
+                    xbmc.executebuiltin("Container.Refresh")
             counter = collections.Counter(collect)
             for key, value in sorted(counter.iteritems()):
                 icon = (os.path.join(IMG_PATH,'logos','%s.png'%key) or ICON)
@@ -349,33 +346,42 @@ class USTVnow():
                 self.addDir("%s"%(key), key, 4, infoArt=infoArt)
         else:
             for channel in self.channels:
-                if isFree == True and name not in FREE_CHANS:
-                    continue
-                if name == CHAN_NAMES[channel['stream_code']]:
-                    startime  = datetime.datetime.fromtimestamp(channel['ut_start'])
-                    endtime   = startime + datetime.timedelta(seconds=channel['runtime'])
-                    if endtime > now and (startime <= now or startime > now):
-                        label, url, liz = self.buildChannelListItem(name, channel)
-                        self.addLink(label, url, 9, liz, len(self.channels))
+                try:
+                    if isFree == True and name not in FREE_CHANS:
+                        continue
+                    if name == CHAN_NAMES[channel['stream_code']]:
+                        startime  = datetime.datetime.fromtimestamp(channel['ut_start'])
+                        endtime   = startime + datetime.timedelta(seconds=channel['runtime'])
+                        if endtime > now and (startime <= now):
+                            label, url, liz = self.buildChannelListItem(name, channel)
+                            self.addLink(label, url, 9, liz, len(self.channels))
+                        elif endtime > now and (startime <= now or startime > now):
+                            label, url, liz = self.buildChannelListItem(name, channel)
+                            mode = 9 if PTVL_RUN == True else 11
+                            if mode == 11:
+                                liz.setProperty("IsPlayable","false")
+                            self.addLink(label, url, mode, liz, len(self.channels))
+                except:
+                    xbmc.executebuiltin("Container.Refresh")
                 
            
     def browseFeatured(self):
         log('browseFeatured')
-        if self.upcoming is None:
-            if self.login(USER_EMAIL, PASSWORD) == False:
-                raise SystemExit
-            
         d = datetime.datetime.utcnow()
         now = datetime.datetime.fromtimestamp(calendar.timegm(d.utctimetuple()))  
         isFree = REAL_SETTINGS.getSetting('User_isFree') == "True"
         for channel in self.upcoming:
-            name = CHAN_NAMES[channel['sname']]
-            startime  = datetime.datetime.fromtimestamp(channel['ut_start'])
-            endtime   = startime + datetime.timedelta(seconds=channel['runtime'])
-            if endtime > now and (startime <= now or startime > now):
-                label, url, liz = self.buildChannelListItem(name, channel, feat=True)
-                self.addLink(label, url, 9, liz, len(self.upcoming))
-
+            try:
+                name = CHAN_NAMES[channel['sname']]
+                startime  = datetime.datetime.fromtimestamp(channel['ut_start'])
+                endtime   = startime + datetime.timedelta(seconds=channel['runtime'])
+                if endtime > now and (startime <= now or startime > now):
+                    label, url, liz = self.buildChannelListItem(name, channel, feat=True)
+                    liz.setProperty("IsPlayable","false")
+                    self.addLink(label, url, 11, liz, len(self.upcoming))
+            except:
+                xbmc.executebuiltin("Container.Refresh")
+           
            
     def buildChannelListItem(self, name, channel=None, feat=False):
         if channel is None:
@@ -386,10 +392,9 @@ class USTVnow():
         endtime   = startime + datetime.timedelta(seconds=channel['runtime'])
         title     = unescape(channel['title'])
         mediatype = (channel.get('mediatype','') or (channel.get('connectorid',''))[:2] or (channel.get('content_id',''))[:2] or 'SP')
-        mtype     = MEDIA_TYPES[mediatype]
+        mtype     = MEDIA_TYPES[mediatype.upper()]
         if PTVL_RUN == True:
             label = name
-            mtype = 'video'
         elif feat == True:
             label     = '%s %s-%s: %s - %s'%(startime.strftime('%m/%d/%Y'),startime.strftime('%I:%M').lstrip('0'),endtime.strftime('%I:%M %p').lstrip('0'),name,title)       
         else:
@@ -402,16 +407,15 @@ class USTVnow():
                      "studio":CHAN_NAMES[scode],"duration":channel['runtime'],"plotoutline":unescape(channel['synopsis']),
                      "plot":unescape(channel['description']),"aired":(channel['orig_air_date'] or startime.strftime('%Y-%m-%d'))}
                      
-        if mediatype.startswith('MV'):
-            poster = IMG_MOVIE+channel['prg_img']
-        elif mediatype.startswith(('SH','EP')):
-            poster = IMG_TV+channel['prg_img']
-        else:
-            poster = IMG_HTTP + str(channel['srsid']) + '&cs=' + channel['callsign'] + '&tid=' + mediatype
-        thumb      = IMG_HTTP + str(channel['srsid']) + '&cs=' + channel['callsign'] + '&tid=' + mediatype
-        logo       = (os.path.join(IMG_PATH,'%s.png'%CHAN_NAMES[scode]) or ICON)
+        # if mediatype.startswith('MV'):
+            # poster = IMG_MOVIE+channel['prg_img']
+        # elif mediatype.startswith(('SH','EP')):
+            # poster = IMG_TV+channel['prg_img']
+        # else:
+        thumb  = IMG_HTTP + str(channel['srsid']) + '&cs=' + channel['callsign'] + '&tid=' + mediatype
+        poster = (os.path.join(IMG_PATH,'%s.png'%name) or ICON)
         liz.setInfo(type="Video", infoLabels=infoList)
-        liz.setArt({"thumb":thumb,"poster":poster,"icon":logo,"fanart":FANART})
+        liz.setArt({"thumb":thumb,"poster":poster,"fanart":FANART})
         liz.setProperty("IsPlayable","true")
         liz.setProperty("IsInternetStream","true")
         if channel['dvrtimeraction'] == 'add':
@@ -436,20 +440,19 @@ class USTVnow():
                 url       = str(channel['scheduleid'])
                 liz       = xbmcgui.ListItem(label)
                 mediatype = (channel.get('mediatype','') or (channel.get('connectorid',''))[:2] or (channel.get('content_id',''))[:2] or 'SP')
-                mtype     = MEDIA_TYPES[mediatype]
+                mtype     = MEDIA_TYPES[mediatype.upper()]
                 infoList  = {"mediatype":mtype,"label":label,"label2":label2,"title":label,"studio":CHAN_NAMES[channel['stream_code']],
                              "duration":channel['runtime'],"plotoutline":unescape(channel['synopsis']),"plot":unescape(channel['description']),
                              "aired":(channel['orig_air_date'] or startime.strftime('%Y-%m-%d'))}
-                if mediatype.startswith('MV'):
-                    poster = IMG_MOVIE+channel['prg_img']
-                elif mediatype.startswith(('SH','EP')):
-                    poster = IMG_TV+channel['prg_img']
-                else:
-                    poster = IMG_HTTP + str(channel['srsid']) + '&cs=' + channel['callsign'] + '&tid=' + mediatype
-                thumb      = IMG_HTTP + str(channel['srsid']) + '&cs=' + channel['callsign'] + '&tid=' + mediatype
-                logo       = (os.path.join(IMG_PATH,'%s.png'%CHAN_NAMES[channel['stream_code']]) or ICON)
+                # if mediatype.startswith('MV'):
+                    # poster = IMG_MOVIE+channel['prg_img']
+                # elif mediatype.startswith(('SH','EP')):
+                    # poster = IMG_TV+channel['prg_img']
+                # else:
+                thumb  = IMG_HTTP + str(channel['srsid']) + '&cs=' + channel['callsign'] + '&tid=' + mediatype
+                poster = (os.path.join(IMG_PATH,'%s.png'%name) or ICON)
                 liz.setInfo(type="Video", infoLabels=infoList)
-                liz.setArt({"thumb":thumb,"poster":poster,"icon":logo,"fanart":FANART})
+                liz.setArt({"thumb":thumb,"poster":poster,"fanart":FANART})
                 liz.setProperty("IsPlayable","true")
                 liz.setProperty("IsInternetStream","true")
                 if channel['dvrtimeraction'] == 'add':
@@ -578,6 +581,7 @@ elif mode == 7: USTVnow().setRecording(name,url,recurring=True)
 elif mode == 8: USTVnow().setRecording(name,url,remove=True)
 elif mode == 9: USTVnow().playVideo(url)
 elif mode == 10:USTVnow().playVideo(url,dvr=True)
+elif mode == 11:xbmc.executebuiltin("action(ContextMenu)")
 
 xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_NONE )
 xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_LABEL )

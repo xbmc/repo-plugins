@@ -89,7 +89,7 @@ msgid "Account Information:"
 msgstr ""
 
 msgctxt "#30018"
-msgid "Subscription expires - "
+msgid "Refreshing Data, Try again..."
 msgstr ""
 
 msgctxt "#30019"

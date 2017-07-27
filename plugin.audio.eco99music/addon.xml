@@ -9,15 +9,15 @@
         <provides>audio</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="he">אלפי פלייליסטים וסטים מוזיקליים, ערוכים ומוכנים להאזנה, ומותאמים לכל מצב, בכל מקום ובכל שעה</summary>
+        <summary lang="he_IL">אלפי פלייליסטים וסטים מוזיקליים, ערוכים ומוכנים להאזנה, ומותאמים לכל מצב, בכל מקום ובכל שעה</summary>
         <summary lang="en_GB">Thousands of premium music playlists for any mood, activity and time!</summary>
-        <description lang="he">
+        <description lang="he_IL">
             ברוכים הבאים לתוסף eco99music מבית תחנת הרדיו eco99fm. מחכים לכם כאן אלפי פלייליסטים וסטים מוזיקליים, ערוכים ומוכנים להאזנה, ומותאמים לכל מצב, בכל מקום ובכל שעה.
 תהנו, האזנה נעימה!
 לתשומת לבכם - התוכן זמין ופעיל בישראל בלבד.
         </description>
         <description lang="en_GB">
-            Welcome to eco99music, an innovative music application based on the consumer possibilities of the listener and browser, and adapts edited music playlists for the current and relevant status of each listener. The app offers the consumers
+            Welcome to eco99music, an innovative Kodi music add-on based on the consumer possibilities of the listener and browser, and adapts edited music playlists for the current and relevant status of each listener. The app offers the consumers
 a unique and personalizes service, based on their location, activity, time of the day and their mood.
 Enjoy!
 FYI - our content is available only in Israel.

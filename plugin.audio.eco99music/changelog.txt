@@ -2,4 +2,7 @@ v0.0.1
 - Initial version
 
 v0.0.2
-- Use different link for playlist
+- Use different link to play playlist
+
+v0.0.3
+- Update description & fanart

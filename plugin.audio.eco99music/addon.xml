@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.eco99music" name="eco99music" version="0.0.2" provider-name="Nir Elbaz">
+<addon id="plugin.audio.eco99music" name="eco99music" version="0.0.3" provider-name="Nir Elbaz">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.beautifulsoup4" version="4.5.3"/>
@@ -9,16 +9,18 @@
         <provides>audio</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="he_il">אלפי פלייליסטים וסטים מוזיקליים, ערוכים ומוכנים להאזנה, ומותאמים לכל מצב, בכל מקום ובכל שעה</summary>
-        <summary lang="en_GB">Thousands of premium playlists based on users mood, activity, location and more</summary>
-        <description lang="he_il">
-            ברוכים הבאים לתוסף של eco99music מבית תחנת הרדיו eco99fm. מחכים לכם כאן אלפי פלייליסטים וסטים מוזיקליים, ערוכים ומוכנים להאזנה, ומותאמים לכל מצב, בכל מקום ובכל שעה, לצד ארכיון ענק של תכניות הבוקר עם טל ברמן ואביעד קיסוס, וכמובן- השידור החי שלנו.
+        <summary lang="he_IL">אלפי פלייליסטים וסטים מוזיקליים, ערוכים ומוכנים להאזנה, ומותאמים לכל מצב, בכל מקום ובכל שעה</summary>
+        <summary lang="en_GB">Thousands of premium music playlists for any mood, activity and time!</summary>
+        <description lang="he_IL">
+            ברוכים הבאים לתוסף eco99music מבית תחנת הרדיו eco99fm. מחכים לכם כאן אלפי פלייליסטים וסטים מוזיקליים, ערוכים ומוכנים להאזנה, ומותאמים לכל מצב, בכל מקום ובכל שעה.
 תהנו, האזנה נעימה!
+לתשומת לבכם - התוכן זמין ופעיל בישראל בלבד.
         </description>
         <description lang="en_GB">
-            Welcome to eco99music, an innovative Kodi music add-on, based on the consumer possibilities of the listener and browser, and adapts edited music playlists for the current and relevant status of each listener. The app offers the consumers
-a unique and personalizes service, based on their location, activity, time of the day and their mood. The users can also enjoy a great archive of the breakfast show by Tal Berman &amp; Aviad Kissos, and of course- 24/7 on air on line broadcast.
+            Welcome to eco99music, an innovative Kodi music add-on based on the consumer possibilities of the listener and browser, and adapts edited music playlists for the current and relevant status of each listener. The app offers the consumers
+a unique and personalizes service, based on their location, activity, time of the day and their mood.
 Enjoy!
+FYI - our content is available only in Israel.
         </description>
         <disclaimer lang="en_GB">This is an official ECO 99FM Kodi add-on</disclaimer>
         <language>he</language>

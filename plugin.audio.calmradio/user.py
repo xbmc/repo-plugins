@@ -69,23 +69,21 @@ class User(object):
                 self.token = ADDON.getSetting('token')
                 return True
 
-            # verify that user is not already connected:
-            if not self.check_sua():
-                # authenticate:
-                response = self.get_json(config['urls']['calm_auth_api'].format(
-                        self.username,
-                        self.password
-                ))
+            # authenticate:
+            response = self.get_json(config['urls']['calm_auth_api'].format(
+                    self.username,
+                    self.password
+            ))
 
-                # authentication failed:
-                if 'error' in response:
-                    return False
+            # authentication failed:
+            if 'error' in response:
+                return False
 
-                # authentication succeeded:
-                ADDON.setSetting('timestamp', str(time.time()))
-                ADDON.setSetting('token', response['token'])
-                self.token = response['token']
-                return True
+            # authentication succeeded:
+            ADDON.setSetting('timestamp', str(time.time()))
+            ADDON.setSetting('token', response['token'])
+            self.token = response['token']
+            return True
 
         return False
 

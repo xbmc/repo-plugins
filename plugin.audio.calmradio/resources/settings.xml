@@ -2,7 +2,7 @@
 <settings>
     <category label="32010">
         <setting label="32011" type="text" id="username" default=""/>
-        <setting label="32012" type="text" id="password" enable="!eq(-1,)" default=""/>
+        <setting label="32012" type="text" id="password" option="hidden" enable="!eq(-1,)" default=""/>
         <setting label="32013" type="text" id="token" visible="false" default=""/>
         <setting label="32014" type="text" id="timestamp" visible="false" default=""/>
     </category>

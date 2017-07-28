@@ -1,3 +1,8 @@
+v0.2.7
+- Disable SUA check
+- Fix exit button style
+- Mask password field
+
 v0.2.6
 - Fix favorites API endpoint
 - Add previous and next songs

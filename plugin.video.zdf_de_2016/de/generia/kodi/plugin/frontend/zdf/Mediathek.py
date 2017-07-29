@@ -9,9 +9,10 @@ from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
 class Mediathek(Pagelet):
 
     def service(self, request, response):
-        configuration = ConfigurationResource(Constants.configUrl)
-        self._parse(configuration)
-        apiToken = configuration.apiToken
+        #configuration = ConfigurationResource(Constants.configUrl)
+        #self._parse(configuration)
+        #apiToken = configuration.apiToken
+        apiToken = Constants.apiToken
 
         response.addFolder(self._(32005), Action('SearchMenuPage', {'apiToken': apiToken}))
 

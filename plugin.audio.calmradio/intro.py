@@ -112,7 +112,7 @@ class IntroWindow(xbmcgui.WindowDialog):
                                                  noFocusTexture='special://home/addons/plugin.audio.calmradio/resources/media/FFFFFF-0.2.png',
                                                  focusTexture='special://home/addons/plugin.audio.calmradio/resources/media/FFFFFF-0.4.png')
 
-        # exit button:
+        # my channels button:
         self.btn_my_channels = xbmcgui.ControlButton(dimensions['window']['x1'] + dimensions['spacing']['normal'],
                                                      dimensions['window']['y2'] - (dimensions['spacing']['normal'] +
                                                                                    dimensions['exit']['height']) * 2,
@@ -132,6 +132,7 @@ class IntroWindow(xbmcgui.WindowDialog):
                                               dimensions['exit']['height'],
                                               ADDON.getLocalizedString(32352),
                                               alignment=2,
+                                              noFocusTexture='special://home/addons/plugin.audio.calmradio/resources/media/FFFFFF-0.2.png',
                                               focusTexture='special://home/addons/plugin.audio.calmradio/resources/media/FFFFFF-0.4.png')
 
         # add ui controls:

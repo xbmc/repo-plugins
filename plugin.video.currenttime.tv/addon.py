@@ -7,10 +7,7 @@ import urllib2
 import re
 import threading
 import Queue
-import xbmc
-import xbmcgui
-import xbmcaddon
-import xbmcplugin
+import xbmc, xbmcgui, xbmcaddon, xbmcplugin
 
 stream_url = {
     '1080p':'http://rfe-lh.akamaihd.net/i/rfe_tvmc5@383630/index_1080_av-p.m3u8',
@@ -26,12 +23,12 @@ video_url = {
 }
 main_menu = ([
     [30003, 30004, 'lastvids+next', 	'folder',       '/z/17317'],   #Broadcasts
-    [30005, 30006, 'tvshows',			'folder',       ''],			    #TV Shows
+    [30005, 30006, 'tvshows',			'folder',       ''],           #TV Shows
     [30007, 30008, 'lastvids+next', 	'folder',       '/z/17192'],   #All Videos
     [30009, 30010, 'lastvids+next', 	'folder',       '/z/17226'],   #Daily Shoots
     [30011, 30012, 'lastvids+next', 	'folder',       '/z/17318'],   #Reportages
     [30013, 30014, 'lastvids+next', 	'folder',       '/z/17319'],   #Interviews
-    [30015, 30016, 'schedule',          'folder',       '/schedule/tv.html#live-now']   # TV Listing
+    [30015, 30016, 'schedule',          'folder',       '/schedule/tv/92#live-now']   # TV Listing
 ])
 tvshows = ([
     [30031, 30032, 'lastvids+archive',  'olevski',	    '/z/20333'],
@@ -44,34 +41,52 @@ tvshows = ([
     [30045, 30046, 'lastvids+archive',  'baltia', 	    '/z/20350'],
     [30047, 30048, 'lastvids+archive',  'bisplan', 	    '/z/20354'],
     [30049, 30050, 'lastvids+archive',  'unknownrus',   '/z/20331'],
-    [30051, 30052, 'lastvids+archive',  'guests', 	    '/z/20330']
+    [30051, 30052, 'lastvids+archive',  'guests', 	    '/z/20330'],
+    [30053, 30054, 'lastvids+archive',  'nveurope',     '/z/20488']
 ])
+
+
+mask_url = '</a>\n<div class="content">\n' \
+           '<span class="date" >.+?</span>\n' \
+           '<a href="(.+?)"'
+mask_date_url = '</a>\n<div class="content">\n' \
+                '<span class="date" >(.+?)</span>\n' \
+                '<a href="(.+?)"'
+
+mask_video_ulr = '<a class="html5PlayerImage" href="(.+?)"'
+mask_video_img = '<video poster="(.+?)"'
+mask_video_title = '<meta name="title" content="(.+?)"'
+mask_video_plot = '<div class="intro">\n<p>(.+?)</p>'
+
+mask_schedule = '<div class="time-stamp">\n' \
+                '<span class="time" >(.+?)</span>\n' \
+                '</div>\n' \
+                '<div class="img-wrap">\n' \
+                '<div class="thumb listThumb thumb16_9">\n' \
+                '<img data-src="(.+?)" src="">\n' \
+                '.+?' \
+                '<div class="content">\n' \
+                '<h4>\n' \
+                '(.+?)\n' \
+                '</h4>\n' \
+                '<p>(.+?)</p>\n'
+mask_schedule_online = '<span class="badge badge-live" >.+?</span>\n'
 
 NUM_OF_PARALLEL_REQ = 6    #queue size
 MAX_REQ_TRIES = 3
 MAX_ITEMS_TO_SHOW = 12
-video_pages_buffer = [None] * 30
 
-base_url = sys.argv[0]
-addon_handle = int(sys.argv[1])
-args = urlparse.parse_qs(sys.argv[2][1:])
-mode = args.get('mode', [None])[0]
-folder_url = args.get('folderurl', [None])[0]
-folder_title = args.get('title', [None])[0]
-folder_level = int(args.get('level', '0')[0])
-folder_name = args.get('name', [None])[0]
+base_url = None
+addon_handle = None
+folder_url = None
+folder_title = None
+folder_level = None
+folder_name = None
 
-site_url = 'http://www.currenttime.tv'
+site_url = 'https://www.currenttime.tv'
 addon_name = 'plugin.video.currenttime.tv'
 addon = xbmcaddon.Addon(addon_name)
 addon_icon = addon.getAddonInfo('icon')
-
-xbmcplugin.setContent(addon_handle, 'videos')  # !!!
-
-
-def build_url(query):
-    """builds dir url"""
-    return base_url + '?' + urllib.urlencode(query)
 
 
 def img_link(name, type):
@@ -87,8 +102,9 @@ def add_dir(arg):
     """adds dir item by given in arg parameters"""
     li = xbmcgui.ListItem(label=arg['title'])
     if arg['mode'] != 'play':
-        arg['url'] = build_url({'mode': arg['mode'], 'title': arg['title'], 'name': arg['name'],
-                                'level': str(folder_level + 1), 'folderurl': arg['url']})
+        arg['url'] = base_url + '?'\
+                     + urllib.urlencode({'mode': arg['mode'], 'title': arg['title'], 'name': arg['name'],
+                                         'level': str(folder_level + 1), 'folderurl': arg['url']})
         isFolder = True
         li.setProperty("IsPlayable", "false")  # !!!
     else:
@@ -109,10 +125,10 @@ def get_video_dir(page):
     try:
         if page is None:
             raise Exception
-        match_url = re.compile('<a class="html5PlayerImage" href="(.+?)"').findall(page)
-        match_img = re.compile('<video poster="(.+?)"').findall(page)
-        match_title = re.compile('<meta name="title" content="(.+?)"').findall(page)
-        match_plot = re.compile('<div class="intro">\n<p>(.+?)</p>', re.DOTALL).findall(page)
+        match_url = re.compile(mask_video_ulr).findall(page)
+        match_img = re.compile(mask_video_img).findall(page)
+        match_title = re.compile(mask_video_title).findall(page)
+        match_plot = re.compile(mask_video_plot).findall(page)
         if len(match_plot) < 1:
             match_plot = [' ']
         return {
@@ -144,7 +160,7 @@ def clean_txt(str_to_clean):
 
 def get_video_page_thread(page_url, where_to_put, index_to_put):
     """requests page and stores it in list 'where_to_put[index_to_put]'"""
-    where_to_put[index_to_put] = read_page(page_url)
+    where_to_put[index_to_put] = get_video_dir(read_page(page_url))
     queue.get(True, None)
     queue.task_done()
 
@@ -158,15 +174,12 @@ def read_page(page_url, tries=MAX_REQ_TRIES):
         try:
             response = urllib2.urlopen(req, timeout=3)
             page = response.read()
+            response.close()
             return page
         except:
-            if t < (tries - 1):
-                xbmc.sleep(1000)
-            else:
-                break
-        finally:
-            response.close()
+            xbmc.sleep(1000)
     return None
+
 
 
 def generate_menu(menu):
@@ -177,8 +190,8 @@ def generate_menu(menu):
             'thumb':   img_link(name, 'thumb'),
             'fanart':  img_link(name, 'fanart'),
             'mode':    mode,
-            'title':   addon.getLocalizedString(title).encode('utf-8'),
-            'plot':    addon.getLocalizedString(plot).encode('utf-8'),
+            'title':   string(title),
+            'plot':    string(plot),
             'url':     url
         })
     xbmcplugin.endOfDirectory(addon_handle)
@@ -193,7 +206,7 @@ def make_thumb_url(url):
     """generates url to thumbnail pic"""
     thumb = ''
     if xbmcplugin.getSetting(addon_handle, 'download_thumbnails') == 'true':
-        thumb = re.sub(r'_w\w+', '_w512_r1.jpg', url)
+        thumb = re.sub(r'_w\w+', '_w512_r1', url)
     return thumb
 
 
@@ -201,22 +214,64 @@ def make_fanart_url(url):
     """generates url to fanart pic"""
     fanart = ''
     if xbmcplugin.getSetting(addon_handle, 'download_fanart') == 'true':
-        fanart = re.sub(r'_w\w+', '_w1920_r1.jpg', url)
+        fanart = re.sub(r'_w\w+', '_w1920_r1', url)
     return fanart
 
 
-try:
+def match_in_page(url, mask):
+    return re.compile(mask, re.DOTALL).findall(read_page(url))
+
+
+def string(code):
+    return addon.getLocalizedString(code).encode('utf-8')
+
+
+def generate_videolinks_menu(match_url):
+    video_pages_buffer = [None] * len(match_url)
+    global queue
+    queue = Queue.Queue(NUM_OF_PARALLEL_REQ)
+    for i, url in enumerate(match_url):
+        queue.put(1, True, None)
+        t = threading.Thread(target=get_video_page_thread, args=(site_url + url, video_pages_buffer, i))
+        t.daemon = True
+        t.start()
+    # now block and wait until all request tasks are done
+    queue.join()
+    for video_page in video_pages_buffer:
+        if video_page is not None:
+            add_dir(video_page)
+
+
+def addon_main(bs_url, addon_hndl, addon_url):
+    global base_url
+    global addon_handle
+    global mode
+    global folder_url
+    global folder_title
+    global folder_level
+    global folder_name
+    base_url = bs_url
+    addon_handle = int(addon_hndl)
+    xbmcplugin.setContent(addon_handle, 'videos')
+    print "addon.py addon url:" + addon_url    #!!!!!!!!!!!!!!!!!!
+    args = urlparse.parse_qs(addon_url[1:])
+    mode = args.get('mode', [None])[0]
+    folder_url = args.get('folderurl', [None])[0]
+    folder_title = args.get('title', [None])[0]
+    folder_level = int(args.get('level', '0')[0])
+    folder_name = args.get('name', [None])[0]
+
     ### Main menu
     if mode is None:
         mode = ['main_menu']
         add_dir({
-            'name':     'live',
-            'thumb':    img_link('live', 'thumb'),
-            'fanart':   img_link('live', 'fanart'),
-            'mode':     'play',
-            'title':    '[B]' + addon.getLocalizedString(30001).encode('utf-8') + '[/B]',
-            'plot':     addon.getLocalizedString(30002).encode('utf-8'),
-            'url':      get_stream_url(),
+            'name': 'live',
+            'thumb': img_link('live', 'thumb'),
+            'fanart': img_link('live', 'fanart'),
+            'mode': 'play',
+            'title': '[B]' + string(30001) + '[/B]',
+            'plot': string(30002),
+            'url': get_stream_url(),
         })
         generate_menu(main_menu)
 
@@ -226,88 +281,54 @@ try:
 
     ### List videos with NEXT link
     elif mode == 'lastvids+next':
-        page = read_page(site_url + folder_url + '?p=30')
-        match_url = re.compile('</a>\n<div class="content">\n'
-                               '<span class="date" >.+?</span>\n'
-                               '<a href="(.+?)" >\n<h4>\n').findall(page)
-
-        queue = Queue.Queue(NUM_OF_PARALLEL_REQ)
+        match_url = match_in_page(site_url + folder_url + '?p=30', mask_url)
         llast = folder_level * MAX_ITEMS_TO_SHOW
         if llast > len(match_url):
             llast = len(match_url)
-        for lnum in range(llast - MAX_ITEMS_TO_SHOW, llast):
-            queue.put(1, True, None)
-            t = threading.Thread(
-                target=get_video_page_thread,
-                args=(site_url + match_url[lnum], video_pages_buffer, lnum - llast + MAX_ITEMS_TO_SHOW))
-            t.daemon = True
-            t.start()
-        # now block and wait until all request tasks are done
-        queue.join()
-        for lnum in range(0, MAX_ITEMS_TO_SHOW):
-            if video_pages_buffer[lnum] is not None:
-                add_dir(get_video_dir(video_pages_buffer[lnum]))
+        generate_videolinks_menu(match_url[llast - MAX_ITEMS_TO_SHOW: llast])
         # add menu item 'Next'
         if llast < len(match_url):
             add_dir({
-                'name':     folder_name,
-                'thumb':    img_link('folder', 'thumb'),
-                'fanart':   img_link(folder_name, 'fanart'),
-                'mode':     'lastvids+next',
-                'title':    '[B]>> ' + addon.getLocalizedString(30101).encode('utf-8')
-                            + '... (' + str(folder_level + 1) + ')[/B]',  # Next
-                'plot':     addon.getLocalizedString(30102),
-                'url':      folder_url
+                'name': folder_name,
+                'thumb': img_link('folder', 'thumb'),
+                'fanart': img_link(folder_name, 'fanart'),
+                'mode': 'lastvids+next',
+                'title': '[B]>> ' + string(30101)
+                         + '... (' + str(folder_level + 1) + ')[/B]',  # Next
+                'plot': string(30102),
+                'url': folder_url
             })
         xbmcplugin.endOfDirectory(addon_handle)
 
     ### List videos with ARCHIVE link
     elif mode == 'lastvids+archive':
-        page = read_page(site_url + folder_url)
-        match_url = re.compile('</a>\n<div class="content">\n'
-                               '<span class="date" >.+?</span>\n'
-                               '<a href="(.+?)" >\n<h4>\n').findall(page)
-        queue = Queue.Queue(NUM_OF_PARALLEL_REQ)
-        i = 0
-        for url in match_url:
-            queue.put(1, True, None)
-            t = threading.Thread(target=get_video_page_thread, args=(site_url + url, video_pages_buffer, i))
-            t.daemon = True
-            t.start()
-            i += 1
-        # now block and wait until all request tasks are done
-        queue.join()
-        for lnum in range(0, i):
-            if video_pages_buffer[lnum] is not None:
-                add_dir(get_video_dir(video_pages_buffer[lnum]))
+        match_url = match_in_page(site_url + folder_url, mask_url)
+        generate_videolinks_menu(match_url)
         # add menu item 'Archive'
         add_dir({
-            'name':     folder_name,
-            'thumb':    img_link('folder', 'thumb'),
-            'fanart':   img_link(folder_name, 'fanart'),
-            'mode':     'allvids_archive',
-            'title':    '[B]' + addon.getLocalizedString(30103).encode('utf-8') + ' "' + folder_title
-                        + '"[/B]',  # Archive
-            'plot':     addon.getLocalizedString(30104).encode('utf-8'),
-            'url':      folder_url
+            'name': folder_name,
+            'thumb': img_link('folder', 'thumb'),
+            'fanart': img_link(folder_name, 'fanart'),
+            'mode': 'allvids_archive',
+            'title': '[B]' + string(30103) + ' "' + folder_title
+                     + '"[/B]',  # Archive
+            'plot': string(30104),
+            'url': folder_url
         })
         xbmcplugin.endOfDirectory(addon_handle)
 
     ### List ARCHIVE
     elif mode == 'allvids_archive':
-        page = read_page(site_url + folder_url + '?p=1000')
-        match = re.compile('</a>\n<div class="content">\n'
-                           '<span class="date" >(.+?)</span>\n'
-                           '<a href="(.+?)" >\n<h4>\n').findall(page)
-        for date, url in match:
+        match_date_url = match_in_page(site_url + folder_url + '?p=1000', mask_date_url)
+        for date, url in match_date_url:
             add_dir({
-                'name':     folder_name,
-                'thumb':    img_link('folder', 'thumb'),
-                'fanart':   img_link(folder_name, 'fanart'),
-                'mode':     'video',
-                'title':    date,  # +' | '+folder_title,
-                'plot':     folder_title,
-                'url':      url
+                'name': folder_name,
+                'thumb': img_link('folder', 'thumb'),
+                'fanart': img_link(folder_name, 'fanart'),
+                'mode': 'video',
+                'title': date,  # +' | '+folder_title,
+                'plot': folder_title,
+                'url': url
             })
         xbmcplugin.endOfDirectory(addon_handle)
 
@@ -318,42 +339,31 @@ try:
 
     ### TV Listing for today
     elif mode == 'schedule':
-        page = read_page(site_url + folder_url)
-        match = re.compile(
-            '<div class="time-stamp">\n'
-            '<span class="time" >(.+?)</span>\n'
-            '</div>\n'
-            '<div class="img-wrapper">\n'
-            '<div class="thumb listThumb thumb16_9">\n'
-            '<img data-src="(.+?)" src="">\n'
-            '.+?'
-            '<div class="content">\n'
-            '<h4>\n'
-            '(.+?)\n'
-            '</h4>\n'
-            '<p>(.+?)</p>\n', re.DOTALL).findall(page)
+        match = match_in_page(site_url + folder_url, mask_schedule)
         for time, img_url, name, descrip in match:
-            online = re.match('<span class="badge badge-live" >.+?</span>\n', name)
+            online = re.match(mask_schedule_online, name)
             url = ''
             mode = 'folder'
             if online is None:
                 title = '[B]' + time + '[/B]  ' + name
             else:
-                title = '[B][COLOR red][UPPERCASE]' + addon.getLocalizedString(30001).encode('utf-8') \
+                title = '[B][COLOR red][UPPERCASE]' + string(30001) \
                         + '[/UPPERCASE][COLOR blue]   ' + name[online.span()[1]:] + '[/COLOR][/B]'
                 url = get_stream_url()
                 mode = 'play'
             add_dir({
-                'name':     folder_name,
-                'thumb':    make_thumb_url(img_url),
-                'fanart':   make_fanart_url(img_url),
-                'mode':     mode,
-                'title':    title,
-                'plot':     descrip,
-                'url':      url
+                'name': folder_name,
+                'thumb': make_thumb_url(img_url),
+                'fanart': make_fanart_url(img_url),
+                'mode': mode,
+                'title': re.sub('&.{0,5};', clean_txt, title),
+                'plot': re.sub('&.{0,5};', clean_txt, descrip),
+                'url': url
             })
         xbmcplugin.endOfDirectory(addon_handle)
 
-except Exception:
-    msg = addon.getLocalizedString(30801)
-    xbmcgui.Dialog().notification(addon_name, msg, addon_icon)
+if __name__ == "__main__":
+    try:
+        addon_main(sys.argv[0], sys.argv[1], sys.argv[2])
+    except Exception as e:
+        xbmcgui.Dialog().notification(addon_name, string(30801), addon_icon)

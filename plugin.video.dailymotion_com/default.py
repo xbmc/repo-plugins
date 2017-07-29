@@ -124,8 +124,6 @@ def sortVideos1(url):
         url = urlMain+"/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&"+type+"="+id+"&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1"
     addDir(translation(30008), url, 'listVideos', "")
     addDir(translation(30009), url.replace("sort=recent", "sort=visited"), 'sortVideos2', "")
-    addDir(translation(30020), url.replace("sort=recent", "sort=commented"), 'sortVideos2', "")
-    addDir(translation(30010), url.replace("sort=recent", "sort=rated"), 'sortVideos2', "")
     if type == "owner":
         addDir("- "+translation(30038), urlMain+"/user/"+id+"/playlists?fields=id,name,videos_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listUserPlaylists', "")
     xbmcplugin.endOfDirectory(pluginhandle)
@@ -269,6 +267,7 @@ def BW_choice(stream):
     if bw_url :
         newlist =  sorted(bw_url, key=itemgetter(0),reverse=True)
         return newlist[0] [1].split('#cell')[0]
+
 def getStreamUrl(id,live=False):
     if familyFilter == "1":
         ff = "on"
@@ -276,7 +275,7 @@ def getStreamUrl(id,live=False):
         ff = "off"
     print 'The url is ::',url
     headers = {'User-Agent':'Android'}
-    cookie = {'Cookie':"lang="+language+"; family_filter="+ff}
+    cookie = {'Cookie':"lang="+language+"; ff="+ff}
     r = requests.get("http://www.dailymotion.com/player/metadata/video/"+id,headers=headers,cookies=cookie)
     content = r.json()
     if content.get('error') is not None:
@@ -296,7 +295,7 @@ def getStreamUrl(id,live=False):
 
             for item in json_source:
                 m_url = item.get('url',None)
-                xbmc.log("DILYMOTION_Gates - m_url = %s" %m_url)
+                xbmc.log("DAILYMOTION - m_url = %s" %m_url)
                 if m_url:
                     if not live:
 
@@ -304,10 +303,8 @@ def getStreamUrl(id,live=False):
                             continue
 
                         elif  int(source) <= int(maxVideoQuality) :
-                            rr = requests.get(m_url,cookies=r.cookies.get_dict() ,headers=headers)    
-                            inhalt=rr.text.split('#cell')[0]                          
-                            match = re.compile('http://(.+?).m3u8', re.DOTALL).findall(inhalt)
-                            return "http://"+match[0]+".m3u8"
+                            if 'video' in item.get('type',None):
+                                return m_url
 
                         elif '.mnft' in m_url:
                             continue
@@ -322,7 +319,8 @@ def getStreamUrl(id,live=False):
                                 return rr.text.split('#cell')[0]+'|Cookie='+rr.headers['set-cookie']
                             else:
                                 return rr.text.split('#cell')[0]
-                    other_playable_url.append(m_url) 
+                    other_playable_url.append(m_url)
+                    
         if len(other_playable_url) >0: # probable not needed only for last resort
             for m_url in other_playable_url:
                 if '.m3u8?auth' in m_url:
@@ -461,7 +459,7 @@ def getUrl2(url):
         ff = "off"
     print 'The url is ::',url
     headers = {'User-Agent':'Android'}
-    cookie = {'Cookie':"lang="+language+"; family_filter="+ff}
+    cookie = {'Cookie':"lang="+language+"; ff="+ff}
     r = requests.get(url,headers=headers,cookies=cookie)
     return r.text
 

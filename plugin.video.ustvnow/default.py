@@ -41,7 +41,8 @@ LAST_TOKEN   = REAL_SETTINGS.getSetting('User_Token')
 LAST_PASSKEY = REAL_SETTINGS.getSetting('User_Paskey')
 DEBUG        = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
 PTVL_RUN     = xbmcgui.Window(10000).getProperty('PseudoTVRunning') == 'True'
-BASEURL      = 'http://m-api.ustvnow.com/'
+BASEURL      = 'https://m-api.ustvnow.com/'
+BASEWEB      = 'https://watch.ustvnow.com/'
 BASEMOB      = 'http://mc.ustvnow.com/'
 IMG_PATH     = os.path.join(ADDON_PATH,'resources','images')
 IMG_HTTP     = BASEMOB + 'gtv/1/live/viewposter?srsid='
@@ -66,10 +67,21 @@ USTVNOW_MENU = [("Live"      , '', 0),
                 ("Guide"     , '', 3),
                 ("Featured"  , '', 5)]
                 
+if xbmc.getCondVisibility('System.HasAddon(script.module.uepg)') == 1:
+    USTVNOW_MENU.append(("uEPG Guide", '', 20))
+
+uEPG_PARAMS  = {"stream_code":"studio","description":"plot","synopsis":"plotoutline","ut_start":"starttime","orig_air_date":"firstaired"}
+FILE_PARAMS  = ["title", "artist", "albumartist", "genre", "year", "rating", "album", "track", "duration", "comment", "lyrics", "musicbrainztrackid", "musicbrainzartistid", "musicbrainzalbumid", "musicbrainzalbumartistid", "playcount", "fanart", "director", "trailer", "tagline", "plot", "plotoutline", "originaltitle", "lastplayed", "writer", "studio", "mpaa", "cast", "country", "imdbnumber", "premiered", "productioncode", "runtime", "set", "showlink", "streamdetails", "top250", "votes", "firstaired", "season", "episode", "showtitle", "thumbnail", "file", "resume", "artistid", "albumid", "tvshowid", "setid", "watchedepisodes", "disc", "tag", "art", "genreid", "displayartist", "albumartistid", "description", "theme", "mood", "style", "albumlabel", "sorttitle", "episodeguide", "uniqueid", "dateadded", "size", "lastmodified", "mimetype", "specialsortseason", "specialsortepisode"]
+PVR_PARAMS   = ["title","plot","plotoutline","starttime","endtime","runtime","progress","progresspercentage","genre","episodename","episodenum","episodepart","firstaired","hastimer","isactive","parentalrating","wasactive","thumbnail","rating","originaltitle","cast","director","writer","year","imdbnumber","hastimerrule","hasrecording","recording","isseries"]
+ART_PARAMS   = ["thumb","poster","fanart","banner","landscape","clearart","clearlogo"]
+
 def unescape(string):
-    parser = HTMLParser.HTMLParser()
-    return parser.unescape(string)
- 
+    try:
+        parser = HTMLParser.HTMLParser()
+        return parser.unescape(string)
+    except:
+        return string
+        
 def log(msg, level=xbmc.LOGDEBUG):
     if DEBUG == True:
         if level == xbmc.LOGERROR:
@@ -126,7 +138,7 @@ class USTVnow():
         header_dict['Connection'] = 'keep-alive'
         header_dict['Referer']    = 'http://watch.ustvnow.com'
         header_dict['Origin']     = 'http://watch.ustvnow.com'
-        header_dict['User-Agent'] = 'Mozilla/5.0 (Windows NT 6.2; rv:24.0) Gecko/20100101 Firefox/24.0'
+        header_dict['User-Agent'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/533.4 (KHTML, like Gecko) Chrome/5.0.375.127 Large Screen Safari/533.4 GoogleTV/162671'
         return header_dict
         
         
@@ -357,8 +369,8 @@ class USTVnow():
                             self.addLink(label, url, 9, liz, len(self.channels))
                         elif endtime > now and (startime <= now or startime > now):
                             label, url, liz = self.buildChannelListItem(name, channel)
-                            mode = 9 if PTVL_RUN == True else 11
-                            if mode == 11:
+                            mode = 9 if PTVL_RUN == True else 21
+                            if mode == 21:
                                 liz.setProperty("IsPlayable","false")
                             self.addLink(label, url, mode, liz, len(self.channels))
                 except:
@@ -378,11 +390,11 @@ class USTVnow():
                 if endtime > now and (startime <= now or startime > now):
                     label, url, liz = self.buildChannelListItem(name, channel, feat=True)
                     liz.setProperty("IsPlayable","false")
-                    self.addLink(label, url, 11, liz, len(self.upcoming))
+                    self.addLink(label, url, 21, liz, len(self.upcoming))
             except:
                 xbmc.executebuiltin("Container.Refresh")
-           
-           
+
+                
     def buildChannelListItem(self, name, channel=None, feat=False):
         if channel is None:
             for channel in self.channels:
@@ -479,9 +491,8 @@ class USTVnow():
                         if urllink and 'stream' in urllink:
                             return urllink['stream']
                     except Exception,e:
-                        log('resolveURL, Unable to login ' + str(e), xbmc.LOGERROR)
-                        xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30005), ICON, 4000)
-                        raise SystemExit
+                        if channel and channel['scheduleid']:
+                            self.replaceToken(url, dvr)
         else:
             for channel in self.channels:
                 if url == CHAN_NAMES[channel['stream_code']]:
@@ -492,19 +503,38 @@ class USTVnow():
                         if urllink and 'stream' in urllink:
                             return urllink['stream']
                     except Exception,e:
-                        log('resolveURL, Unable to login ' + str(e), xbmc.LOGERROR)
-                        xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30005), ICON, 4000)
-                        raise SystemExit
+                        if channel and channel['scode']:
+                            self.replaceToken(url, dvr)
                     
-             
+                    
+    def replaceToken(self, url, dvr):
+        #generate alternative token using website endpoint rather then googletv.
+        try:
+            #get CSRF Token
+            responce = urllib2.urlopen(BASEWEB + "account/signin").read()
+            CSRF = re.findall(r'var csrf_value = "(.*?)"', responce, re.DOTALL)[0]
+            #get WEB Token
+            responce = (self.net.http_POST(BASEWEB + 'account/login', form_data={'csrf_ustvnow': CSRF, 'signin_email': USER_EMAIL, 'signin_password':PASSWORD, 'signin_remember':'1'}).content.encode("utf-8").rstrip())
+            altToken = re.findall(r'var token(.*?)= "(.*?)";', responce, re.DOTALL)[0][1]
+            if altToken and altToken != 'null':
+                self.token = altToken
+                log('replaceToken, replacing existing token')
+                REAL_SETTINGS.setSetting('User_Token',altToken)
+                self.resolveURL(url, dvr)
+        except Exception,e:
+            log('replaceToken, Unable to login ' + str(e), xbmc.LOGERROR)
+            xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30005), ICON, 4000)
+            raise SystemExit
+
+            
     def setRecording(self, name, url, remove=False, recurring=False):
         if remove == True:
-            setlink = (self.net.http_POST(BASEURL + 'gtv/1/dvr/updatedvr', form_data={'scheduleid':url,'token':self.token,'action':'add'}, headers=self.buildHeader()).content.encode("utf-8").rstrip())        
+            setlink = (self.net.http_POST(BASEURL + 'gtv/1/dvr/updatedvr', form_data={'scheduleid':url,'token':self.token,'action':'add'}, headers=self.buildHeader()).content.encode("utf-8").rstrip())
         else:
             if int(REAL_SETTINGS.getSetting('User_DVRpoints')) <= 1:
                 xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30019), ICON, 4000)
                 return
-            opt = name.split('@')#lazy solution rather then create additional url parameters for this single function.              
+            opt = name.split('@')#lazy solution rather then create additional url parameters for this single function.
             if recurring == True:
                 setlink = (self.net.http_POST(BASEURL + 'gtv/1/dvr/updatedvrtimer', form_data={'connectorid':url,'prgsvcid':opt[0],'eventtime':opt[1],'token':self.token,'action':'add'}, headers=self.buildHeader()).content.encode("utf-8").rstrip())
             else:
@@ -551,6 +581,38 @@ class USTVnow():
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
   
   
+    def uEPG(self):
+        log('uEPG')
+        #support for upcoming uEPG universal epg framework module, module will be available from the Kodi repository.
+        #https://github.com/Lunatixz/XBMC_Addons/tree/master/script.module.uepg
+        isFree = REAL_SETTINGS.getSetting('User_isFree') == "True"
+        for idx,channel in enumerate(self.channels):
+            try:
+                newChannel = {}
+                name = CHAN_NAMES[channel['stream_code']]
+                if isFree == True and name not in FREE_CHANS:
+                    continue
+                
+                mediatype = (channel.get('mediatype','') or (channel.get('connectorid',''))[:2] or (channel.get('content_id',''))[:2] or 'SP')
+                mtype     = MEDIA_TYPES[mediatype.upper()]
+                thumb  = IMG_HTTP + str(channel['srsid']) + '&cs=' + channel['callsign'] + '&tid=' + mediatype
+                poster = (os.path.join(IMG_PATH,'%s.png'%name) or ICON)
+                
+                for key, value in channel.iteritems():
+                    try:
+                        newChannel[uEPG_PARAMS[key]] = unescape(value)
+                    except:
+                        if key in FILE_PARAMS + PVR_PARAMS:
+                            newChannel[key] = unescape(value)
+                newChannel['art'] = {"thumb":thumb,"poster":poster}
+                newChannel['mediatype'] = mtype
+                newChannel['channelname'] = name
+                newChannel['channelnumber'] = idx + 1
+                yield newChannel
+            except:
+                pass
+    
+    
 params=getParams()
 try:
     url=urllib.unquote_plus(params["url"])
@@ -581,7 +643,8 @@ elif mode == 7: USTVnow().setRecording(name,url,recurring=True)
 elif mode == 8: USTVnow().setRecording(name,url,remove=True)
 elif mode == 9: USTVnow().playVideo(url)
 elif mode == 10:USTVnow().playVideo(url,dvr=True)
-elif mode == 11:xbmc.executebuiltin("action(ContextMenu)")
+elif mode == 20:xbmc.executebuiltin("RunScript(script.module.uepg,json=%s&refresh=%s&refresh_interval=%s)"%(urllib.quote_plus(json.dumps(list(USTVnow().uEPG()))),urllib.quote_plus(json.dumps(sys.argv[0]+"?mode=20")),urllib.quote_plus(json.dumps("hours=2"))))
+elif mode == 21:xbmc.executebuiltin("action(ContextMenu)")
 
 xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_NONE )
 xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_LABEL )

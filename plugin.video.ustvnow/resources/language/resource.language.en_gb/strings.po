@@ -37,7 +37,7 @@ msgid "Select Quality"
 msgstr ""
 
 msgctxt "#30005"
-msgid "Account Disabled, visit www.ustvnow.com for support."
+msgid "Something went wrong, visit www.ustvnow.com for support."
 msgstr ""
 
 msgctxt "#30006"

@@ -1,0 +1,11 @@
+1.0.2
+
+Updates fanart dimensions, and cache directory
+
+1.0.1
+
+Changes for main kodi repo
+
+1.0.0
+
+First commit. Supports doorbell and stick up cam recordings.

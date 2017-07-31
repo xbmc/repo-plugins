@@ -49,41 +49,29 @@ msgid "1080p"
 msgstr ""
 
 msgctxt "#30008"
-msgid "Don't show seasons if there's only one"
+msgid "Download menu"
 msgstr ""
 
 msgctxt "#30009"
-msgid "Hide shows without episodes"
+msgid "FFmpeg path"
 msgstr ""
 
 msgctxt "#30010"
-msgid "Show Discovery channels"
+msgid "Download path"
 msgstr ""
 
 msgctxt "#30011"
-msgid "Maximum number of shows to download for each request to the server"
+msgid "Season"
 msgstr ""
 
 msgctxt "#30012"
-msgid "Shows a page for each request"
+msgid "Episode"
 msgstr ""
 
 msgctxt "#30013"
-msgid "Shows"
+msgid "Available up to"
 msgstr ""
 
 msgctxt "#30014"
-msgid "Channels"
-msgstr ""
-
-msgctxt "#30015"
-msgid "{show} ({number} episodes)"
-msgstr ""
-
-msgctxt "#30016"
-msgid "{season} ({numberof} episodes of {numbertot} available)"
-msgstr ""
-
-msgctxt "#30017"
-msgid "{episode} (Episode {number})"
+msgid "No videos available for this show"
 msgstr ""

@@ -1,3 +1,11 @@
+[B]Version 1.0.4[/B]
+- Fixed bug on playing show.
+- Minor improvements.
+
+[B]Version 1.0.3[/B]
+- Re-implemented much of the addon due to API change.
+- Added the ability to download videos through ffmpeg.
+
 [B]Version 1.0.2[/B]
 - Added a setting for hiding shows that haven't episodes.
 - Added a setting to show the shows by channels.

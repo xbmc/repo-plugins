@@ -2,6 +2,7 @@
 # vim:sw=4:ts=4:et:
 """Constants."""
 import os
+import xbmc, xbmcaddon
 from uuid import uuid4 as uuid
 
 HEADERS = {'Content-Type': 'application/x-www-form-urlencoded; charset: UTF-8',
@@ -14,12 +15,8 @@ RETRY_TOKEN = 3
 # default suffix for session cache file
 CACHE_ATTRS = {'account': None, 'alerts': None, 'token': None}
 
-try:
-    CACHE_FILE = os.path.join(os.getenv("HOME"),
-                              '.ring_doorbell-session.cache')
-except (AttributeError, TypeError):
-    CACHE_FILE = os.path.join('.', '.ring_doorbell-session.cache')
-
+ADDON = xbmcaddon.Addon(id='plugin.video.ring_doorbell')
+CACHE_FILE = xbmc.translatePath(os.path.join(ADDON.getAddonInfo('profile').decode("utf-8"), '.ring_doorbell-session.cache'))
 
 # code when item was not found
 NOT_FOUND = -1

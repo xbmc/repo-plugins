@@ -8,6 +8,7 @@ import cProfile
 import pstats
 import json
 import StringIO
+import encodings
 
 import xbmcplugin
 import xbmcgui
@@ -654,16 +655,19 @@ def processDirectory(results, progress, params):
                 if prefix != '':
                     tempTitle = prefix + ' - ' + tempTitle
 
-        if (item.get("PremiereDate") != None):
-            premieredatelist = (item.get("PremiereDate")).split("T")
-            premieredate = premieredatelist[0]
-        else:
-            premieredate = ""
+        production_year = item.get("ProductionYear")
+        if not production_year and item.get("PremiereDate"):
+            production_year = int(item.get("PremiereDate")[:4])
 
-        # add the premiered date for Upcoming TV    
+        premiere_date = ""
+        if item.get("PremiereDate") != None:
+            tokens = (item.get("PremiereDate")).split("T")
+            premiere_date = tokens[0]
+
+        # add the premiered date for Upcoming TV
         if item.get("LocationType") == "Virtual":
             airtime = item.get("AirTime")
-            tempTitle = tempTitle + ' - ' + str(premieredate) + ' - ' + str(airtime)
+            tempTitle = tempTitle + ' - ' + str(premiere_date) + ' - ' + str(airtime)
 
         # Process MediaStreams
         channels = ''
@@ -809,9 +813,9 @@ def processDirectory(results, progress, params):
                      'mpaa': item.get("OfficialRating"),
                      'rating': item.get("CommunityRating"),
                      'criticrating': item.get("CriticRating"),
-                     'year': item.get("ProductionYear"),
+                     'year': production_year,
+                     'premieredate': premiere_date,
                      'locationtype': item.get("LocationType"),
-                     'premieredate': premieredate,
                      'studio': studio,
                      'genre': genre,
                      'playcount': str(playCount),
@@ -844,12 +848,20 @@ def processDirectory(results, progress, params):
         extraData['mode'] = "GET_CONTENT"
 
         if isFolder == True:
-            u = ('{server}/emby/Users/{userid}/items' +
-                 '?ParentId=' + id +
-                 '&IsVirtualUnAired=false' +
-                 '&IsMissing=false&' +
-                 'Fields=' + detailsString +
-                 '&format=json')
+
+            if item.get("Type", "") == "Series":
+                u = ('{server}/emby/Shows/' + id +
+                     '/Seasons'
+                     '?userId={userid}' +
+                     '&Fields=' + detailsString +
+                     '&format=json')
+            else:
+                u = ('{server}/emby/Users/{userid}/items' +
+                     '?ParentId=' + id +
+                     '&IsVirtualUnAired=false' +
+                     '&IsMissing=false&' +
+                     'Fields=' + detailsString +
+                     '&format=json')
 
             if item.get("RecursiveItemCount") != 0:
                 dirItems.append(addGUIItem(u, details, extraData, display_options))

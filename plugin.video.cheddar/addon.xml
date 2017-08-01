@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.cheddar" name="Cheddar" provider-name="Lunatixz" version="1.0.0">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>  
+        <import addon="script.module.simplecache" version="1.0.0"/>
+        <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">A unique and live approach to news in technology, media, and entertainment, Cheddar is broadcast daily from the floor of the New York Stock Exchange...</summary>
+        <description lang="en_GB">Cheddar is a live Post-Cable Network focused on covering the most innovative products, technologies, and services transforming our lives. The network covers this news through the lens of the companies and executives driving these changes. Cheddar broadcasts from Post 10 on the floor of the New York Stock Exchange and the Sprint Flatiron Building Store.</description>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+        <source>https://github.com/Lunatixz/XBMC_Addons/tree/master/plugin.video.cheddar</source>
+        <website>https://cheddar.com/</website>
+        <forum>http://forum.kodi.tv/showthread.php?tid=319217</forum>
+        <news></news>
+        <assets>
+            <icon>resources/images/icon.png</icon>
+            <fanart>resources/images/fanart.jpg</fanart>
+            <screenshot>resources/images/screenshot01.png</screenshot>
+            <screenshot>resources/images/screenshot02.png</screenshot>
+            <screenshot>resources/images/screenshot03.png</screenshot>
+        </assets>
+    </extension>
+</addon>

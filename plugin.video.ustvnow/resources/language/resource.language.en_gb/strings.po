@@ -45,7 +45,7 @@ msgid "Welcome Back "
 msgstr ""
 
 msgctxt "#30007"
-msgid "Invalid User Credentials"
+msgid "Something went wrong, please check user credentials and try again."
 msgstr ""
 
 msgctxt "#30008"
@@ -89,7 +89,7 @@ msgid "Account Information:"
 msgstr ""
 
 msgctxt "#30018"
-msgid "Refreshing Data, Try again..."
+msgid "Subscription expiration - "
 msgstr ""
 
 msgctxt "#30019"

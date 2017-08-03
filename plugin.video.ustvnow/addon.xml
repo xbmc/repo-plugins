@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.ustvnow" name="USTVnow" provider-name="Lunatixz" version="2017.7.31">
+<addon id="plugin.video.ustvnow" name="USTVnow" provider-name="Lunatixz" version="2017.8.2">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>  
         <import addon="script.module.simplecache" version="1.0.0"/>
@@ -9,13 +9,13 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <summary lang="en_GB">Watch All the Major American Television Networks Live in HD for Free!</summary>
-        <description lang="en_GB">Watch All the Major American Television Networks Live in HD! Entirely Legal and Free! You can also record content through their web site, and there is an optional premium service available with all kinds of other channels. Signup for a free account through the following link today: http://watch.ustvnow.com</description>
+        <description lang="en_GB">Entirely Legal and Free! Start watching instantly or record shows for later. Signup for one of three packages, today!</description>
         <platform>all</platform>
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
         <source>https://github.com/Lunatixz/XBMC_Addons/tree/master/plugin.video.ustvnow</source>
         <website>http://ustvnow.com</website>
         <forum>http://forum.kodi.tv/showthread.php?tid=233135</forum>
-        <news>2017.4.7[CR]-100% new code base, written from scratch for your enjoy!!, DVR Recording and Playback Untested.[CR]2017.4.7a[CR]- Added "Featured"[CR]- Fixed DVR support.[CR]2017.7.26[CR]- Corrected version format.[CR]- Changed "Featured" and "Guide" click behavior.[CR]- Improved Error handling.[CR]2017.7.31[CR]- Fixed login issues.[CR]- Added fallback token generation[CR]- Added initial support for uEPG module</news>
+        <news>2017.4.7[CR]-100% new code base, written from scratch for your enjoy!!, DVR Recording and Playback Untested.[CR]2017.4.7a[CR]- Added "Featured"[CR]- Fixed DVR support.[CR]2017.7.26[CR]- Corrected version format.[CR]- Changed "Featured" and "Guide" click behavior.[CR]- Improved Error handling.[CR]2017.7.31[CR]- Fixed login issues.[CR]- Added fallback token generation[CR]- Added initial support for uEPG module[CR]2017.8.2[CR]- Fixed paid subscription channels and dvr control.</news>
         <assets>
             <icon>resources/images/icon.png</icon>
             <fanart>resources/images/fanart.jpg</fanart>

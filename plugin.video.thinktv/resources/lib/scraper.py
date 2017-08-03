@@ -151,7 +151,12 @@ class myAddon(t1mAddon):
         a = json.loads(html)
         cats = a['results']['content']
     for i, (b) in list(enumerate(cats, start=1)):
-        url = b['id']
+        if gsurl == 'pbssearch':
+            url = b['url']
+        else:
+            url = b.get('cid')
+            if url is None:
+                url = b['id']
         name   = b['title']
         thumb  = b['image']
         if thumb == None :
@@ -191,19 +196,13 @@ class myAddon(t1mAddon):
     self.doPBSLogin()
     thumb = xbmc.getInfoLabel('ListItem.Art(thumb)')
     fanart = xbmc.getInfoLabel('ListItem.Art(fanart)')
-    html = self.getRequest('http://www.pbs.org/show/%s/episodes/' % url)
-    cnts = re.compile('<ul class="title-nav video-catalog-nav">.+?<strong>(.+?)<.+?<strong>(.+?)<.+?<strong>(.+?)<', re.DOTALL).search(html)
-    if cnts is not None:
-        ecnt, ccnt, pcnt = cnts.groups()
-    else:
-        ecnt, ccnt, pcnt = ('0','0','0')
     infoList = {}
     infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
     infoList['Title'] = infoList['TVShowTitle']
     infoList['mediatype'] = 'tvshow'
-    ilist = self.addMenuItem('%s (%s)' % (addonLanguage(30045),ecnt),'GE', ilist, '%s|%s|1' %(url, 'episodes'), thumb, fanart, infoList, isFolder=True)
-    ilist = self.addMenuItem('%s (%s)' % (addonLanguage(30046),ccnt),'GE', ilist, '%s|%s|1' %(url, 'clips'), thumb, fanart, infoList, isFolder=True)
-    ilist = self.addMenuItem('%s (%s)' % (addonLanguage(30047),pcnt),'GE', ilist, '%s|%s|1' %(url, 'previews'), thumb, fanart, infoList, isFolder=True)
+    ilist = self.addMenuItem('%s' % (addonLanguage(30045)),'GE', ilist, '%s|%s|1' %(url, 'episodes'), thumb, fanart, infoList, isFolder=True)
+    ilist = self.addMenuItem('%s' % (addonLanguage(30046)),'GE', ilist, '%s|%s|1' %(url, 'clips'), thumb, fanart, infoList, isFolder=True)
+    ilist = self.addMenuItem('%s' % (addonLanguage(30047)),'GE', ilist, '%s|%s|1' %(url, 'previews'), thumb, fanart, infoList, isFolder=True)
     return(ilist)
 
 
@@ -213,20 +212,14 @@ class myAddon(t1mAddon):
     url, stype, pageNum = url.split('|',2)
     sname = url
     html = self.getRequest('http://www.pbs.org/show/%s/%s/?page=%s' % (url, stype, pageNum))
-    epis = re.compile('<article class="video-summary">.+?href="/video/(.+?)/.+?data-srcset="(.+?)".+?alt="(.+?)".+?class="description">(.+?)<.+?class="video-popover__duration">(.+?)<',re.DOTALL).findall(html)
+    epis = re.compile('<article class="video-summary">.+?data-srcset="(.+?)".+?alt="(.+?)".+?class="description">(.+?)<.+?data-video-id="(.+?)"',re.DOTALL).findall(html)
     if len(epis) == 0:
-        epis = re.compile('<div class="video-summary">.+?href="/video/(.+?)/.+?data-srcset="(.+?)".+?alt="(.+?)".+?class="description">(.+?)<.+?class="video-popover__duration">(.+?)<',re.DOTALL).findall(html)
-    for i, (url, imgs, name, plot, duration)  in list(enumerate(epis, start=1)):
+        epis = re.compile('<div class="video-summary">.+?data-srcset="(.+?)".+?alt="(.+?)".+?class="description">(.+?)<.+?data-video-id="(.+?)"',re.DOTALL).findall(html)
+    for i, (imgs, name, plot, url)  in list(enumerate(epis, start=1)):
         name = h.unescape(name.decode(UTF8))
         name = name.replace('Video thumbnail: ','',1)
         plot=plot.strip()
-        duration = duration.strip()
         infoList = {}
-        t = 0
-        for dur in duration.split(':'):
-            if dur.strip().isdigit(): 
-                t = t*60 + int(dur.strip())
-        if t != 0: infoList['duration'] = t
         imgs = imgs.split(',')
         thumb = '%s.jpg' % (imgs[2].split('.jpg',1)[0].strip())
         fanart = '%s.jpg' % (imgs[len(imgs)-1].split('.jpg',1)[0].strip())
@@ -270,7 +263,7 @@ class myAddon(t1mAddon):
         infoList['Title'] = name
         infoList['Plot'] = plot
         infoList['mediatype'] = 'episode'
-        url = b['id']
+        url = str(b['id'])
         contextMenu = [(addonLanguage(30009),'XBMC.Container.Update(%s?mode=DF&url=RW%s)' % (sys.argv[0], url))]
         ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False, cm=contextMenu)
     return(ilist)
@@ -294,6 +287,11 @@ class myAddon(t1mAddon):
        
 
  def getAddonVideo(self,url):
+    if url.startswith('/'):
+        xheaders = self.defaultHeaders.copy()
+        xheaders['X-Requested-With'] = 'XMLHttpRequest'
+        html = self.getRequest('http://www.pbs.org%s' % (url), None, xheaders)
+        url = re.compile('data-video-id="(.+?)"', re.DOTALL).search(html).group(1)
     addonLanguage = self.addon.getLocalizedString
     pbs_uid = self.addon.getSetting('pbs_uid')
     pg = self.getRequest('http://player.pbs.org/viralplayer/%s/?uid=%s' % (url, pbs_uid))

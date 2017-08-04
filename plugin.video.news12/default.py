@@ -53,7 +53,7 @@ def log(msg, level=xbmc.LOGDEBUG):
             msg += ' ,' + traceback.format_exc()
         xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + (msg), level)
         
-def isClose(x, y, tolerance=1.001):
+def isClose(x, y, tolerance=.501):
     return abs(x-y) <= 0.5 * tolerance * (x + y)
     
 def getParams():
@@ -159,6 +159,7 @@ class News12():
         if items and 'channel' in items:
             for video in items['channel']['item']['media-group']['media-content']:
                 if video and '@attributes' in video and isClose(int(video['@attributes']['bitrate']), int(BITRATE)):
+                    log('resolveURL, using bitrate = ' + str(video['@attributes']['bitrate']))
                     return video['@attributes']['url'], int(video['@attributes']['duration'])
             return video['@attributes']['url'], int(video['@attributes']['duration'])
 

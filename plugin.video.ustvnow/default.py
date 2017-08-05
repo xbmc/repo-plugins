@@ -75,14 +75,24 @@ FILE_PARAMS  = ["title", "artist", "albumartist", "genre", "year", "rating", "al
 PVR_PARAMS   = ["title","plot","plotoutline","starttime","endtime","runtime","progress","progresspercentage","genre","episodename","episodenum","episodepart","firstaired","hastimer","isactive","parentalrating","wasactive","thumbnail","rating","originaltitle","cast","director","writer","year","imdbnumber","hastimerrule","hasrecording","recording","isseries"]
 ART_PARAMS   = ["thumb","poster","fanart","banner","landscape","clearart","clearlogo"]
 
+
+def uni(string, encoding = 'utf-8'):
+    if isinstance(string, basestring):
+        if not isinstance(string, unicode):
+            string = unicode(string, encoding)
+        elif isinstance(string, unicode):
+            string = string.encode('ascii', 'replace')
+    return string
+
 def unescape(string):
     try:
         parser = HTMLParser.HTMLParser()
-        return parser.unescape(string)
+        return (parser.unescape(string))
     except:
         return string
         
 def log(msg, level=xbmc.LOGDEBUG):
+    msg = msg.encode("utf-8")
     if DEBUG == True:
         if level == xbmc.LOGERROR:
             msg += ' ,' + traceback.format_exc()
@@ -307,6 +317,8 @@ class USTVnow():
         d = datetime.datetime.utcnow()
         now = datetime.datetime.fromtimestamp(calendar.timegm(d.utctimetuple()))  
         isFree = REAL_SETTINGS.getSetting('User_isFree') == "True"
+        if self.channels is None:
+            xbmc.executebuiltin("Container.Refresh")
         for channel in self.channels:
             try:
                 name = CHAN_NAMES[channel['stream_code']]
@@ -317,14 +329,16 @@ class USTVnow():
                 if endtime > now and startime <= now:
                     label, url, liz = self.buildChannelListItem(name, channel)
                     self.addLink(label, url, 9, liz, len(self.channels))
-            except:
-                xbmc.executebuiltin("Container.Refresh")
+            except Exception,e:
+                log('browseLive, failed ' + str(e), xbmc.LOGERROR)
                 
                 
     def browseRecordings(self, recorded=False):
         log('browseRecordings')
         d = datetime.datetime.utcnow()
-        now = datetime.datetime.fromtimestamp(calendar.timegm(d.utctimetuple()))  
+        now = datetime.datetime.fromtimestamp(calendar.timegm(d.utctimetuple()))
+        if self.recorded is None:
+            xbmc.executebuiltin("Container.Refresh")
         for channel in self.recorded:
             try:
                 startime  = datetime.datetime.fromtimestamp(channel['ut_start'])
@@ -338,15 +352,17 @@ class USTVnow():
                 if mode == 21:
                     liz.setProperty("IsPlayable","false")
                 self.addLink(label, url, mode, liz, len(self.recorded))
-            except:
-                xbmc.executebuiltin("Container.Refresh")
-    
+            except Exception,e:
+                log('browseRecordings, failed ' + str(e), xbmc.LOGERROR)
+                
 
     def browseGuide(self, name=None, upcoming=False):
         log('browseGuide')
         d = datetime.datetime.utcnow()
         now = datetime.datetime.fromtimestamp(calendar.timegm(d.utctimetuple()))  
         isFree = REAL_SETTINGS.getSetting('User_isFree') == "True"
+        if self.channels is None:
+            xbmc.executebuiltin("Container.Refresh")
         if name is None and upcoming == False:
             collect = []
             for channel in self.channels:
@@ -379,8 +395,8 @@ class USTVnow():
                             if mode == 21:
                                 liz.setProperty("IsPlayable","false")
                             self.addLink(label, url, mode, liz, len(self.channels))
-                except:
-                    xbmc.executebuiltin("Container.Refresh")
+                except Exception,e:
+                    log('browseGuide, failed ' + str(e), xbmc.LOGERROR)
                 
            
     def browseFeatured(self):
@@ -388,6 +404,8 @@ class USTVnow():
         d = datetime.datetime.utcnow()
         now = datetime.datetime.fromtimestamp(calendar.timegm(d.utctimetuple()))  
         isFree = REAL_SETTINGS.getSetting('User_isFree') == "True"
+        if self.upcoming is None:
+            xbmc.executebuiltin("Container.Refresh")
         for channel in self.upcoming:
             try:
                 name = CHAN_NAMES[channel['sname']]
@@ -397,8 +415,8 @@ class USTVnow():
                     label, url, liz = self.buildChannelListItem(name, channel, feat=True)
                     liz.setProperty("IsPlayable","false")
                     self.addLink(label, url, 21, liz, len(self.upcoming))
-            except:
-                xbmc.executebuiltin("Container.Refresh")
+            except Exception,e:
+                log('browseFeatured, failed ' + str(e), xbmc.LOGERROR)
 
                 
     def buildChannelListItem(self, name, channel=None, feat=False):
@@ -569,7 +587,7 @@ class USTVnow():
            
     def addLink(self, name, u, mode, liz, total=0):
         log('addLink, name = ' + name)
-        u=sys.argv[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
+        u=sys.argv[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(uni(name))
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,totalItems=total)
 
         
@@ -585,7 +603,7 @@ class USTVnow():
             liz.setArt({'thumb':ICON,'fanart':FANART})
         else:
             liz.setArt(infoArt)
-        u=sys.argv[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
+        u=sys.argv[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(uni(name))
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
   
   

@@ -35,7 +35,7 @@ if mode < 998:
         sony.check_auth()
 
 if mode == None and mode < 998:
-    if ADDON.getSetting(id='default_profile') == '': sony.get_profiles()
+    if ADDON.getSetting(id='default_profile') == '' or ADDON.getSetting(id='always_ask_profile') == 'true': sony.get_profiles()
     main_menu()
 
 elif mode == 50:
@@ -65,6 +65,9 @@ elif mode == 600:
 elif mode == 700:
     featured()
 
+elif mode == 750:
+    search()
+
 elif mode == 800:
     sony.get_profiles()
     main_menu()
@@ -85,7 +88,7 @@ elif mode == 1000:
     ADDON.setSetting(id='deviceId', value='')
     sony.notification_msg(LOCAL_STRING(30006), LOCAL_STRING(30007))
 
-if mode != None and mode != 800:
+if mode != None and mode != 800 and mode != 750:
     xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)
 elif mode == 800:
     xbmcplugin.endOfDirectory(addon_handle, updateListing=True)

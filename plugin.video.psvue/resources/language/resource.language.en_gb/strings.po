@@ -33,7 +33,7 @@ msgid "Logout"
 msgstr ""
 
 msgctxt "#30004"
-msgid "Change Profile"
+msgid "Set Default Profile"
 msgstr ""
 
 msgctxt "#30005"
@@ -121,7 +121,58 @@ msgctxt "#30209"
 msgid "Could not retrieve the reqpayload"
 msgstr ""
 
-
 msgctxt "#30210"
 msgid "Choose Profile"
+msgstr ""
+
+msgctxt "#30211"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30212"
+msgid "Profile"
+msgstr ""
+
+msgctxt "#30213"
+msgid "Always Ask Profile"
+msgstr ""
+
+msgctxt "#30214"
+msgid "Timeline"
+msgstr ""
+
+msgctxt "#30215"
+msgid "My Shows"
+msgstr ""
+
+msgctxt "#30216"
+msgid "Favorite Channels"
+msgstr ""
+
+msgctxt "#30217"
+msgid "Live TV"
+msgstr ""
+
+msgctxt "#30218"
+msgid "Sports"
+msgstr ""
+
+msgctxt "#30219"
+msgid "Kids"
+msgstr ""
+
+msgctxt "#30220"
+msgid "Recently Watched"
+msgstr ""
+
+msgctxt "#30221"
+msgid "Featured"
+msgstr ""
+
+msgctxt "#30222"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30223"
+msgid "Main Menu"
 msgstr ""

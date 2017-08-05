@@ -10,14 +10,15 @@ from sony import SONY
 
 
 def main_menu():
-    addDir(LOCAL_STRING(30100), 50, ICON)
-    addDir(LOCAL_STRING(30101), 100, ICON)
-    addDir(LOCAL_STRING(30102), 200, ICON)
-    addDir(LOCAL_STRING(30103), 300, ICON)
-    addDir(LOCAL_STRING(30104), 400, ICON)
-    addDir(LOCAL_STRING(30105), 500, ICON)
-    addDir(LOCAL_STRING(30106), 600, ICON)
-    addDir(LOCAL_STRING(30107), 700, ICON)
+    if ADDON.getSetting(id='timeline_visible') == 'true': addDir(LOCAL_STRING(30100), 50, ICON)
+    if ADDON.getSetting(id='myshows_visible') == 'true': addDir(LOCAL_STRING(30101), 100, ICON)
+    if ADDON.getSetting(id='fav_visible') == 'true': addDir(LOCAL_STRING(30102), 200, ICON)
+    if ADDON.getSetting(id='live_visible') == 'true': addDir(LOCAL_STRING(30103), 300, ICON)
+    if ADDON.getSetting(id='sports_visible') == 'true': addDir(LOCAL_STRING(30104), 400, ICON)
+    if ADDON.getSetting(id='kids_visible') == 'true': addDir(LOCAL_STRING(30105), 500, ICON)
+    if ADDON.getSetting(id='recent_visible') == 'true': addDir(LOCAL_STRING(30106), 600, ICON)
+    if ADDON.getSetting(id='featured_visible') == 'true': addDir(LOCAL_STRING(30107), 700, ICON)
+    if ADDON.getSetting(id='search_visible') == 'true': addDir(LOCAL_STRING(30211), 750, ICON)
 
 
 def timeline():
@@ -57,6 +58,14 @@ def recently_watched():
 def featured():
     json_source = get_json(EPG_URL + '/browse/items/featured/filter/shows/sort/featured/offset/0/size/100')
     list_shows(json_source['body']['items'])
+
+
+def search():
+    dialog = xbmcgui.Dialog()
+    search_txt = dialog.input('Enter search text', type=xbmcgui.INPUT_ALPHANUM)
+    if search_txt == '': sys.exit()
+    json_source = get_json(EPG_URL + '/search/'+search_txt+'/offset/0/size/100')
+    list_shows(json_source['body']['programs'])
 
 
 def list_timeline():
@@ -385,7 +394,7 @@ def get_params():
     return param
 
 def check_device_id():
-    DEVICE_ID = ADDON.getSetting(id='deviceId')
+    DEVICE_ID = ADDON.getSetting(id='deviceId')    
     amazon_device = 'Amazon'
     amazon_device = amazon_device.encode("hex")
     old_asus = 'ASUS'

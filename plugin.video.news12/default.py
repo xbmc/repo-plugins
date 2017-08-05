@@ -38,7 +38,7 @@ LANGUAGE      = REAL_SETTINGS.getLocalizedString
 ## GLOBALS ##
 TIMEOUT = 15
 DEBUG   = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
-BITRATE = {LANGUAGE(30003):'1049',LANGUAGE(30004):'1832',LANGUAGE(30005):'7989'}[REAL_SETTINGS.getSetting('Video_Quality')]
+BITRATE = {0:LANGUAGE(30003),1:LANGUAGE(30004),2:LANGUAGE(30005)}[int(REAL_SETTINGS.getSetting('Video_Quality'))]
 BASEURL = 'http://news12.com'
 RSSURL  = '%s/?clienttype=rss'
 BASEIMG = 'http://ftpcontent.worldnow.com/professionalservices/clients/news12/images/regions/selectregion_%i.jpg'
@@ -52,10 +52,7 @@ def log(msg, level=xbmc.LOGDEBUG):
         if level == xbmc.LOGERROR:
             msg += ' ,' + traceback.format_exc()
         xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + (msg), level)
-        
-def isClose(x, y, tolerance=.501):
-    return abs(x-y) <= 0.5 * tolerance * (x + y)
-    
+   
 def getParams():
     param=[]
     if len(sys.argv[2])>=2:
@@ -140,7 +137,7 @@ class News12():
                     label = item['title']
                     plot  = item['summary_detail']['value']
                     plot = '%s - %s'%(item['published'], plot)
-                    infoLabel  = {"mediatype":"video","label":label,"title":label,"plot":plot,"plotoutline":plot,"genre":"News","duration":duration}
+                    infoLabel  = {"mediatype":"video","label":label,"title":label,"plot":plot,"plotoutline":plot,"genre":"News","duration":duration}                    
                     infoArt    = {"thumb":thumb,"poster":thumb,"icon":ICON,"fanart":FANART}
                     self.addLink(label,path,9,infoLabel,infoArt,len(feed['entries']))
                 except Exception, e:
@@ -158,9 +155,14 @@ class News12():
         items = json.loads(self.openURL(VODURL%(name,clip)))
         if items and 'channel' in items:
             for video in items['channel']['item']['media-group']['media-content']:
-                if video and '@attributes' in video and isClose(int(video['@attributes']['bitrate']), int(BITRATE)):
-                    log('resolveURL, using bitrate = ' + str(video['@attributes']['bitrate']))
-                    return video['@attributes']['url'], int(video['@attributes']['duration'])
+                if BITRATE == LANGUAGE(30003) and int(video['@attributes']['bitrate']) > 1200:
+                    continue
+                elif BITRATE == LANGUAGE(30004) and int(video['@attributes']['bitrate']) > 2200 and int(video['@attributes']['bitrate']) < 1200:
+                    continue
+                elif BITRATE == LANGUAGE(30005) and int(video['@attributes']['bitrate']) < 2200:
+                    continue
+                log('resolveURL, using bitrate = ' + str(video['@attributes']['bitrate']))
+                return video['@attributes']['url'], int(video['@attributes']['duration'])
             return video['@attributes']['url'], int(video['@attributes']['duration'])
 
             

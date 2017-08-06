@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.vrt.nu"
        name="VRT Nu"
-       version="0.0.5"
+       version="0.0.6"
        provider-name="Martijn Moreel">
 
     <requires>
@@ -34,7 +34,9 @@ v0.0.4 (20-07-2017)
 - Added dates to videos (Thanks stevenv)
 - Fixed bug where seasons did not get listed
 v0.0.5 (24-07-2017)
-- Fixed broken Sporza logo 
+- Fixed broken Sporza logo
+v0.0.6 (06-08-2017)
+- Fixed ordering bug for videos
 </news>
         <source>https://github.com/pietje666/plugin.video.vrt.nu</source>
 		<assets>

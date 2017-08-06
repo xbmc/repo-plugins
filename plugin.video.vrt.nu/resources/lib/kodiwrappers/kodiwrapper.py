@@ -4,6 +4,7 @@ import xbmcplugin
 from urllib import urlencode
 from resources.lib.vrtplayer import vrtplayer
 from resources.lib.vrtplayer import urltostreamservice
+from resources.lib.kodiwrappers import sortmethod
 
 class KodiWrapper:
 
@@ -12,7 +13,7 @@ class KodiWrapper:
         self._url = url
         self._addon = addon
 
-    def show_listing(self, list_items):
+    def show_listing(self, list_items, sort=None):
         listing = []
         for title_item in list_items:
             list_item = xbmcgui.ListItem(label=title_item.title)
@@ -26,7 +27,12 @@ class KodiWrapper:
 
             listing.append((url, list_item, not title_item.is_playable))
         xbmcplugin.addDirectoryItems(self._handle, listing, len(listing))
-        xbmcplugin.addSortMethod(self._handle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
+
+        if sort is not None:
+            kodi_sorts = {sortmethod.ALPHABET: xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE}
+            kodi_sortmethod = kodi_sorts.get(sort)
+            xbmcplugin.addSortMethod(self._handle, kodi_sortmethod)
+
         xbmcplugin.endOfDirectory(self._handle)
 
     def play_video(self, path):

@@ -1,5 +1,9 @@
 flickrXBMC Changelog
 
+*** 1.1.1 ***
+
+Fix Re-Authorize option in add-on settings
+
 *** 1.1.0 ***
 
 Update to use flickr's new auth method

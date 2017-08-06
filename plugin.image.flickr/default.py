@@ -274,7 +274,7 @@ class FlickrSession:
         self.flickr = flickrPLUS(self.API_KEY, self.API_SECRET)
 
         if force:
-            self.flickr.token_cache.token = None
+            self.flickr.token_cache.forget()
         else:
             if __settings__.getSetting('authenticate') != 'true': return True
 

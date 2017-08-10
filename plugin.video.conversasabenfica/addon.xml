@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.conversasabenfica" name="Conversas à Benfica" version="1.0.0" provider-name="enen92">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.routing" version="0.2.0"/>
+        <import addon="script.module.requests" version="2.12.4"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="main.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Watch Conversas à Benfica, a youtube podcast made by Benfica fans for Benfica fans</summary>
+        <summary lang="pt_PT">Conversas à Benfica, um podcast no youtube feito por Benfiquistas para Benfiquistas!</summary>
+        <description lang="en_GB">Conversas à Benfica... Easy![CR]For the ones who love Benfica and (almost) everything around it.[CR]Everything related with the played football and the stands.[CR]History, laughs and beers![CR]ONE LIFE, ONE GAME!</description>
+        <description lang="pt_PT">Conversas à Benfica... Fácil![CR]Para quem gosta do Benfica e de (quase) tudo o que gira à sua volta.[CR]Tudo o que envolve futebol nos relvados e nas bancadas. Futebol positivo![CR] Histórias, gargalhadas e umas cervejas![CR]UMA VIDA, UM JOGO!</description>
+        <language>pt</language>
+        <platform>all</platform>
+        <license>GPL-3.0</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=319630</forum>
+        <website>https://www.youtube.com/channel/UCpWxnp_Pe3PlJYBFeMIvitA</website>
+        <email>enen92@kodi.tv</email>
+        <source>https://github.com/enen92/plugin.video.conversasabenfica</source>
+        <news>The first version of the addon</news>
+        <disclaimer></disclaimer>
+        <assets>
+            <icon>resources/images/icon.png</icon>
+            <fanart>resources/images/fanart.jpg</fanart>
+            <screenshot>resources/images/screenshot-1.png</screenshot>
+            <screenshot>resources/images/screenshot-2.png</screenshot>
+            <screenshot>resources/images/screenshot-3.png</screenshot>
+            <screenshot>resources/images/screenshot-4.png</screenshot>
+        </assets>
+    </extension>
+</addon>

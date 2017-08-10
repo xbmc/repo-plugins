@@ -133,8 +133,10 @@ STR_THUMB_SIZES= {0:u'small',1:u'thumbnail',2:u'medium',3:u'large',4:u'extra_lar
 
 
 class Resolver:
-    local=0
-    offliberty=1
+    auto=0
+    local=1
+    offliberty=2
+    m4a=3
 
 
 
@@ -628,13 +630,41 @@ def get_stream_local(cloudcast_key):
 
 
 
+def get_stream_m4a(cloudcast_key):
+    ck=URL_MIXCLOUD[:-1]+cloudcast_key
+    log_if_debug('Resolving m4a cloudcast stream for '+ck)
+    headers={
+             'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
+             'Referer' : URL_MIXCLOUD
+            }
+    request = urllib2.Request(ck, headers=headers, origin_req_host=URL_MIXCLOUD)
+    response = urllib2.urlopen(request)
+    data=response.read()
+    match=re.search('m-preview="(.*)" m-preview-light', data)
+    if match:
+        try:
+            log_if_debug('m-preview = '+match.group(1))
+            m4aurl=match.group(1).replace('audiocdn','stream')
+            m4aurl=m4aurl.replace('/previews/','/c/m4a/64/')
+            m4aurl=m4aurl.replace('mp3','m4a')
+            log_if_debug('m4a url = '+m4aurl)
+            return m4aurl
+        except:
+            log_always('Unexpected error resolving m4a error=%s' % (sys.exc_info()[0]))
+    else:
+        log_if_debug('Unable to resolve (match)')
+
+
+
 def get_stream(cloudcast_key):
     global resolverid
     log_if_debug('Resolverid=%s' % (resolverid))
     resolverid_orig=resolverid
 
-    resolvers={Resolver.local : get_stream_local,
-               Resolver.offliberty : get_stream_offliberty}
+    resolvers={Resolver.auto : get_stream_m4a,
+               Resolver.local : get_stream_local,
+               Resolver.offliberty : get_stream_offliberty,
+               Resolver.m4a : get_stream_m4a}
     strm=resolvers[resolverid](cloudcast_key)
 
     if not strm:
@@ -642,13 +672,12 @@ def get_stream(cloudcast_key):
         dialog=xbmcgui.Dialog()
 
         while (not strm) and dialog.yesno('MixCloud',STRLOC_COMMON_RESOLVER_ERROR):
-            log_if_debug('Changing resolver')
-		    
             resolverid=resolverid+1
-            if resolverid>Resolver.offliberty:
+            if resolverid>Resolver.m4a:
                 resolverid=Resolver.local
             if resolverid==resolverid_orig:
                 break
+            log_if_debug('Changing resolver to '+resolverid)
             strm=resolvers[resolverid](cloudcast_key)
             if strm:
                 __addon__.setSetting('resolver',str(resolverid))

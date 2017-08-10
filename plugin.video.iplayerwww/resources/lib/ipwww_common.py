@@ -11,6 +11,7 @@ import cookielib
 import urllib
 import HTMLParser
 import codecs
+import time
 
 import xbmc
 import xbmcaddon
@@ -323,7 +324,8 @@ def AddMenuEntry(name, url, mode, iconimage, description, subtitles_url, aired=N
                     "&description=" + utf8_quote_plus(description) +
                     "&subtitles_url=" + utf8_quote_plus(subtitles_url) +
                     "&logged_in=" + str(logged_in))
-
+    if mode in (101,203,113,213):
+        listitem_url = listitem_url + "&time=" + str(time.time())
     if aired:
         ymd = aired.split('-')
         date_string = ymd[2] + '/' + ymd[1] + '/' + ymd[0]

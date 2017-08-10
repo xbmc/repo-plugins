@@ -1707,7 +1707,7 @@ def ScrapeAvailableStreams(url):
     stream_id_sl = []
     stream_id_ad = []
 
-    match = re.search(r'mediator.bind\((.*?), document\.getElementById\(\'tviplayer\'\)\);', html, re.DOTALL)
+    match = re.search(r'window\.mediatorDefer\=page\(document\.getElementById\(\"tviplayer\"\),(.*?)\);', html, re.DOTALL)
     if match:
         data = match.group(1)
         json_data = json.loads(data)

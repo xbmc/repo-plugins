@@ -1,3 +1,12 @@
+5.4.2
+[fix/upd] My Subscriptions
+
+5.4.1
+[fix/upd] dash working for vevo/etc
+[upd] rework of auto subtitles
+[fix] leia nightly login issues
+[fix] 403 error on 'My Channel'/uploaded videos
+
 5.4.0
 [upd] Greek strings [Twilight0]
 [upd] Polish strings [Etharr]

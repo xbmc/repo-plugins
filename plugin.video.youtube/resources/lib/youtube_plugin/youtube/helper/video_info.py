@@ -3,6 +3,7 @@ __author__ = 'bromix'
 import urllib
 import urlparse
 import re
+import json
 
 import requests
 from ..youtube_exceptions import YouTubeException
@@ -341,9 +342,7 @@ class VideoInfo(object):
     def load_stream_infos(self, video_id):
         return self._method_get_video_info(video_id)
 
-    def _method_watch(self, video_id, reason=u'', meta_info=None):
-        stream_list = []
-
+    def get_watch_page(self, video_id):
         headers = {'Host': 'www.youtube.com',
                    'Connection': 'keep-alive',
                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36',
@@ -363,21 +362,36 @@ class VideoInfo(object):
         url = 'https://www.youtube.com/watch'
 
         result = requests.get(url, params=params, headers=headers, verify=self._verify, allow_redirects=True)
-        html = result.text
+        return result.text
 
-        """
-        This will almost double the speed for the regular expressions, because we only must match
-        a small portion of the whole html. And only if we find positions, we cut down the html.
-
-        """
-        pos = html.find('ytplayer.config')
+    def get_player_config(self, html):
+        _player_config = '{}'
+        lead = 'ytplayer.config = '
+        tail = ';ytplayer.load'
+        pos = html.find(lead)
         if pos >= 0:
-            html2 = html[pos:]
-            pos = html2.find('</script>')
+            html2 = html[pos + len(lead):]
+            pos = html2.find(tail)
             if pos:
-                html = html2[:pos]
-                pass
-            pass
+                _player_config = html2[:pos]
+
+        try:
+            player_config = json.loads(_player_config)
+        except:
+            player_config = dict()
+
+        return player_config
+
+    def _method_watch(self, video_id, html, reason=u'', meta_info=None):
+        stream_list = []
+
+        player_config = self.get_player_config(html)
+
+        player_assets = player_config.get('assets', {})
+        player_args = player_config.get('args', {})
+        player_response = json.loads(player_args.get('player_response', '{}'))
+        captions = player_response.get('captions', {})
+        js = player_assets.get('js')
 
         _meta_info = {'video': {},
                       'channel': {},
@@ -385,30 +399,65 @@ class VideoInfo(object):
                       'subtitles': []}
         meta_info = meta_info if meta_info else _meta_info
 
-        re_match_hlsvp = re.search(r'\"hlsvp\"[^:]*:[^"]*\"(?P<hlsvp>[^"]*\")', html)
-        if re_match_hlsvp:
-            hlsvp = urllib.unquote(re_match_hlsvp.group('hlsvp')).replace('\/', '/')
-            return self._load_manifest(hlsvp, video_id, meta_info=meta_info)
+        if not meta_info['video'].get('id'):
+            meta_info['video']['id'] = player_args.get('video_id', '')
+        if not meta_info['video'].get('title'):
+            meta_info['video']['title'] = player_args.get('title', '')
+        if not meta_info['channel'].get('author'):
+            meta_info['channel']['author'] = player_args.get('author', '')
+        if not meta_info['channel'].get('id'):
+            meta_info['channel']['id'] = player_args.get('ucid', '')
+        try:
+            meta_info['video']['title'] = meta_info['video']['title'].decode('utf-8')
+            meta_info['channel']['author'] = meta_info['channel']['author'].decode('utf-8')
+        except:
+            pass
 
-        re_match_js = re.search(r'\"js\"[^:]*:[^"]*\"(?P<js>.+?)\"', html)
+        if (not meta_info['images'].get('high')) or (not meta_info['images'].get('medium')) or \
+                (not meta_info['images'].get('standard')) or (not meta_info['images'].get('default')):
+            _related_args = '{}'
+            lead = '\'RELATED_PLAYER_ARGS\': '
+            tail = ',\n'
+            pos = html.find(lead)
+            if pos >= 0:
+                html2 = html[pos + len(lead):]
+                pos = html2.find(tail)
+                if pos:
+                    _related_args = html2[:pos]
+
+            try:
+                related_args = json.loads(_related_args)
+                related_args = dict(urlparse.parse_qsl(related_args.get('rvs')))
+            except:
+                related_args = dict()
+
+            image_data_list = [
+                {'from': 'iurlhq', 'to': 'high'},
+                {'from': 'iurlmq', 'to': 'medium'},
+                {'from': 'iurlsd', 'to': 'standard'},
+                {'from': 'thumbnail_url', 'to': 'default'}]
+            for image_data in image_data_list:
+                image_url = related_args.get(image_data['from'], '')
+                if image_url:
+                    meta_info['images'][image_data['to']] = image_url
+
+        if not meta_info['subtitles']:
+            meta_info['subtitles'] = Subtitles(self._context, video_id, captions).get()
+
+        if player_args.get('hlsvp'):
+            return self._load_manifest(player_args.get('hlsvp'), video_id, meta_info=meta_info)
+
         cipher = None
-        if re_match_js:
-            js = re_match_js.group('js').replace('\\', '').strip('//')
+        if js:
             if not js.startswith('http'):
                 js = 'http://www.youtube.com/%s' % js
             cipher = Cipher(self._context, java_script_url=js)
-            pass
 
-        meta_info['subtitles'] = Subtitles(self._context, video_id).get()
-
-        re_match = re.search(r'\"url_encoded_fmt_stream_map\"[^:]*:[^"]*\"(?P<url_encoded_fmt_stream_map>[^"]*\")',
-                             html)
-        if re_match:
-            url_encoded_fmt_stream_map = re_match.group('url_encoded_fmt_stream_map')
+        if player_args.get('url_encoded_fmt_stream_map'):
+            url_encoded_fmt_stream_map = player_args.get('url_encoded_fmt_stream_map')
             url_encoded_fmt_stream_map = url_encoded_fmt_stream_map.split(',')
 
             for value in url_encoded_fmt_stream_map:
-                value = value.replace('\\u0026', '&')
                 attr = dict(urlparse.parse_qsl(value))
 
                 try:
@@ -527,17 +576,40 @@ class VideoInfo(object):
                    'Referer': 'https://www.youtube.com/tv',
                    'Accept-Encoding': 'gzip, deflate',
                    'Accept-Language': 'en-US,en;q=0.8,de;q=0.6'}
+
         params = {'video_id': video_id,
                   'hl': self.language,
                   'gl': self.region,
                   'eurl': 'https://youtube.googleapis.com/v/' + video_id,
                   'ssl_stream': '1',
-                  'ps': 'default',
-                  'el': 'default'}
+                  'el': 'default',
+                  'html5': '1'}
 
-        if self._access_token:
-            params['access_token'] = self._access_token
-            pass
+        html = self.get_watch_page(video_id)
+
+        player_config = self.get_player_config(html)
+
+        player_assets = player_config.get('assets', {})
+        player_args = player_config.get('args', {})
+        player_response = json.loads(player_args.get('player_response', '{}'))
+        captions = player_response.get('captions', {})
+        js = player_assets.get('js')
+
+        cipher = None
+        if js:
+            if not js.startswith('http'):
+                js = 'http://www.youtube.com/%s' % js
+            cipher = Cipher(self._context, java_script_url=js)
+
+        params['sts'] = player_config.get('sts', '')
+
+        params['c'] = player_args.get('c', 'WEB')
+        params['cver'] = player_args.get('cver', '1.20170712')
+        params['cplayer'] = player_args.get('cplayer', 'UNIPLAYER')
+        params['cbr'] = player_args.get('cbr', 'Chrome')
+        params['cbrver'] = player_args.get('cbrver', '53.0.2785.143')
+        params['cos'] = player_args.get('cos', 'Windows')
+        params['cosver'] = player_args.get('cosver', '10.0')
 
         url = 'https://www.youtube.com/get_video_info'
 
@@ -560,7 +632,7 @@ class VideoInfo(object):
             meta_info['channel']['author'] = meta_info['channel']['author'].decode('utf-8')
         except:
             pass
-        meta_info['channel']['id'] = 'UC%s' % params.get('uid', '')
+        meta_info['channel']['id'] = params.get('ucid', '')
         image_data_list = [
             {'from': 'iurlhq', 'to': 'high'},
             {'from': 'iurlmq', 'to': 'medium'},
@@ -573,8 +645,10 @@ class VideoInfo(object):
                 pass
             pass
 
+        meta_info['subtitles'] = Subtitles(self._context, video_id, captions).get()
+
         if params.get('status', '') == 'fail':
-            return self._method_watch(video_id, reason=params.get('reason', 'UNKNOWN'), meta_info=meta_info)
+            return self._method_watch(video_id, html, reason=params.get('reason', 'UNKNOWN'), meta_info=meta_info)
 
         if params.get('live_playback', '0') == '1':
             url = params.get('hlsvp', '')
@@ -582,47 +656,28 @@ class VideoInfo(object):
                 return self._load_manifest(url, video_id, meta_info=meta_info)
             pass
 
-        """
-        fmt_list = params.get('fmt_list', '')
-        if fmt_list:
-            fmt_list = fmt_list.split(',')
-            for item in fmt_list:
-                data = item.split('/')
-                size = data[1].split('x')
-                pass
-            pass
-        """
-
-        # read adaptive_fmts
-        """
-        adaptive_fmts = params['adaptive_fmts']
-        adaptive_fmts = adaptive_fmts.split(',')
-        for item in adaptive_fmts:
-            stream_map = dict(urlparse.parse_qsl(item))
-
-            if stream_map['itag'] != '140' and stream_map['itag'] != '171':
-                video_stream = {'url': stream_map['url'],
-                                'yt_format': itag_map[stream_map['itag']]}
-                stream_list.append(video_stream)
-                pass
-            pass
-        """
-
         mpd_url = params.get('dashmpd', '')
         use_cipher_signature = 'True' == params.get('use_cipher_signature', None)
         if mpd_url:
+            mpd_sig_deciphered = True
             if use_cipher_signature or re.search('/s/[0-9A-F\.]+', mpd_url):
-                # in this case we must call the web page
-                self._context.log_info('Unable to use mpeg-dash for %s, unable to decipher signature. Attempting fallback play method...' % video_id)
-                return self._method_watch(video_id, meta_info=meta_info)
+                mpd_sig_deciphered = False
+                if cipher:
+                    sig = re.search('/s/(?P<sig>[0-9A-F\.]+)', mpd_url)
+                    if sig:
+                        signature = cipher.get_signature(sig.group('sig'))
+                        mpd_url = re.sub('/s/[0-9A-F\.]+', '/signature/' + signature, mpd_url)
+                        mpd_sig_deciphered = True
+                else:
+                    raise YouTubeException('Cipher: Not Found')
+            if mpd_sig_deciphered:
+                video_stream = {'url': mpd_url,
+                                'meta': meta_info}
+                video_stream.update(self.FORMAT.get('9999'))
+                stream_list.append(video_stream)
+            else:
+                raise YouTubeException('Failed to decipher signature')
 
-            meta_info['subtitles'] = Subtitles(self._context, video_id).get()
-            video_stream = {'url': mpd_url,
-                            'meta': meta_info}
-            video_stream.update(self.FORMAT.get('9999'))
-            stream_list.append(video_stream)
-
-        added_subs = False  # avoid repeat calls from loop or cipher signature
         # extract streams from map
         url_encoded_fmt_stream_map = params.get('url_encoded_fmt_stream_map', '')
         if url_encoded_fmt_stream_map:
@@ -636,8 +691,10 @@ class VideoInfo(object):
                     if 'sig' in stream_map:
                         url += '&signature=%s' % stream_map['sig']
                     elif 's' in stream_map:
-                        # in this case we must call the web page
-                        return self._method_watch(video_id, meta_info=meta_info)
+                        if cipher:
+                            url += '&signature=%s' % cipher.get_signature(stream_map['s'])
+                        else:
+                            raise YouTubeException('Cipher: Not Found')
 
                     itag = stream_map['itag']
                     yt_format = self.FORMAT.get(itag, None)
@@ -648,9 +705,6 @@ class VideoInfo(object):
                         continue
                         pass
 
-                    if not added_subs:
-                        added_subs = True
-                        meta_info['subtitles'] = Subtitles(self._context, video_id).get()
                     video_stream = {'url': url,
                                     'meta': meta_info}
                     video_stream.update(yt_format)
@@ -662,10 +716,7 @@ class VideoInfo(object):
                     yt_format = self.FORMAT.get(itag, None)
                     if not yt_format:
                         raise Exception('unknown yt_format for itag "%s"' % itag)
-                    yt_format['video']['rtmpe'] = True
-                    if not added_subs:
-                        added_subs = True
-                        meta_info['subtitles'] = Subtitles(self._context, video_id).get()
+
                     video_stream = {'url': url,
                                     'meta': meta_info}
                     video_stream.update(yt_format)
@@ -676,8 +727,6 @@ class VideoInfo(object):
 
         # last fallback
         if not stream_list:
-            return self._method_watch(video_id)
+            raise YouTubeException('No streams found')
 
         return stream_list
-
-    pass

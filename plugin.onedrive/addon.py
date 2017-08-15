@@ -566,9 +566,8 @@ try:
             progress_dialog.create(addonname, addon.getLocalizedString(32040) % d)
             pg_created = True
             progress_dialog.update(50)
-            extra_parameters['q'] = d
             extra_parameters['filter'] = 'file ne null'
-            files = onedrive.get(url+'/view.search', params=extra_parameters )
+            files = onedrive.get(url+"/search(q='"+urllib.quote(d)+"')", params=extra_parameters )
             if not cancelOperation(onedrive):
                 progress_dialog.update(75, addon.getLocalizedString(32041))
                 size = 0

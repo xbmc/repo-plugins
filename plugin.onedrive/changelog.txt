@@ -1,3 +1,6 @@
+v1.3.2 released - Aug 14, 2017:
+- Fix search
+- Kodi from Windows Store compatibility 
 v1.3.1 released - Jun 9, 2017:
 - Fix export to .strm
 - Minor fixes

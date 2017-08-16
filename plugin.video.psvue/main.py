@@ -4,27 +4,32 @@ params=get_params()
 url=None
 name=None
 mode=None
-show_id=None
+airing_id='null'
+channel_id='null'
+program_id='null'
+series_id='null'
+tms_id='null'
 
-try:
-    url=urllib.unquote_plus(params["url"])
-except:
-    pass
-try:
-    name=urllib.unquote_plus(params["name"])
-except:
-    pass
-try:
-    mode=int(params["mode"])
-except:
-    pass
-try:
-    show_id=params["show_id"]
-except:
-    pass
+try: url=urllib.unquote_plus(params["url"])
+except: pass
+try: name=urllib.unquote_plus(params["name"])
+except: pass
+try: mode=int(params["mode"])
+except: pass
+try: airing_id=params["airing_id"]
+except: pass
+try: channel_id=params["channel_id"]
+except: pass
+try: program_id=params["program_id"]
+except: pass
+try: series_id=params["series_id"]
+except: pass
+try: tms_id=params["tms_id"]
+except: pass
 
 
 check_device_id()
+
 
 sony = SONY()
 if mode < 998:
@@ -38,6 +43,9 @@ if mode == None and mode < 998:
     if ADDON.getSetting(id='default_profile') == '' or ADDON.getSetting(id='always_ask_profile') == 'true': sony.get_profiles()
     main_menu()
 
+elif mode == 30:
+    all_channels()
+
 elif mode == 50:
     timeline()
 
@@ -45,7 +53,7 @@ elif mode == 100:
     my_shows()
 
 elif mode == 150:
-    list_episodes(show_id)
+    list_episodes(program_id)
 
 elif mode == 200:
     favorite_channels()
@@ -73,7 +81,7 @@ elif mode == 800:
     main_menu()
 
 elif mode == 900:
-    get_stream(url)
+    get_stream(url, airing_id, channel_id, program_id, series_id, tms_id)
 
 elif mode == 998:
     sys.exit()
@@ -87,6 +95,25 @@ elif mode == 1000:
     sony.logout()
     ADDON.setSetting(id='deviceId', value='')
     sony.notification_msg(LOCAL_STRING(30006), LOCAL_STRING(30007))
+
+elif mode == 1001:
+    ids ={
+        'channel_id': channel_id,
+        'program_id': program_id,
+        'series_id': series_id,
+        'tms_id': tms_id
+    }
+    sony.add_to_favorites(ids)
+
+elif mode == 1002:
+    ids ={
+        'channel_id': channel_id,
+        'program_id': program_id,
+        'series_id': series_id,
+        'tms_id': tms_id
+    }
+    sony.remove_from_favorites(ids)
+
 
 if mode != None and mode != 800 and mode != 750:
     xbmcplugin.endOfDirectory(addon_handle, cacheToDisc=False)

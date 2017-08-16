@@ -6,6 +6,7 @@ from datetime import datetime
 class SONY():
     addon = xbmcaddon.Addon()
     api_url = 'https://auth.api.sonyentertainmentnetwork.com/2.0'
+    user_action_url = 'https://sentv-user-action.totsuko.tv/sentv_user_action/ws/v2'
     device_id = ''
     localized = addon.getLocalizedString
     login_client_id = '71a7beb8-f21a-47d9-a604-2e71bee24fe0'
@@ -261,25 +262,68 @@ class SONY():
         self.addon.setSetting(id='default_profile', value=profile_id)
 
 
-    def put_resume_time(self):
-        """
-        PUT https://sentv-user-action.totsuko.tv/sentv_user_action/ws/v2/watch_history HTTP/1.1
-        Host: sentv-user-action.totsuko.tv
-        Connection: keep-alive
-        Content-Length: 247
-        Accept: */*
-        reqPayload: redacted
-        User-Agent: Mozilla/5.0 (Linux; Android 6.0.1; Build/MOB31H; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/44.0.2403.119 Safari/537.36
-        Origin: https://themis.dl.playstation.net
-        Content-Type: application/json
-        Referer: https://themis.dl.playstation.net/themis/zartan/2.2.2b/
-        Accept-Encoding: gzip, deflate
-        Accept-Language: en-US
-        X-Requested-With: com.snei.vue.android
+    def add_to_favorites(self, ids):
+        url = self.user_action_url+'/favorite'
+        headers = {"Accept": "*/*",
+                   "Content-type": "application/json",
+                   "Origin": "https://vue.playstation.com",
+                   "Referer": "https://vue.playstation.com/watch/home",
+                   "Accept-Language": "en-US,en;q=0.8",
+                   "Accept-Encoding": "gzip, deflate, br",
+                   "User-Agent": self.ua_android,
+                   "Connection": "Keep-Alive",
+                   "reqPayload": self.addon.getSetting(id='reqPayload')
+                   }
 
-        {"series_id":redacted,"program_id":redacted,"channel_id":redacted,"tms_id":"EP005544655496","airing_id":redacted,"last_watch_date":"2017-04-28T00:40:43Z","last_timecode":"01:46:29","start_timecode":"00:00:00:00","fully_watched":false,"stream_type":"dvr"}
-        """
-        url = 'https://sentv-user-action.totsuko.tv/sentv_user_action/ws/v2/watch_history'
+        if ids['channel_id'] != 'null':
+            location = self.addon.getLocalizedString(30102)
+            payload = '{"channel_id":'+ids['channel_id']+'}'
+        else:
+            location = self.addon.getLocalizedString(30101)
+            payload = '{"program_id":'+ids['program_id']+',"series_id":'+ids['series_id']+',"tms_id":"'+ids['tms_id']+'"}'
+
+        r = requests.post(url, headers=headers, cookies=self.load_cookies(), data=payload, verify=self.verify)
+
+        if r.status_code == 200:
+            self.notification_msg("Success!", "Added to "+location)
+        else:
+            self.notification_msg("Fail", "Not added")
+
+
+    def remove_from_favorites(self,ids):
+        url = self.user_action_url+'/favorite'
+        headers = {"Accept": "*/*",
+                   "Content-type": "application/json",
+                   "Origin": "https://vue.playstation.com",
+                   "Referer": "https://vue.playstation.com/watch/home",
+                   "Accept-Language": "en-US,en;q=0.8",
+                   "Accept-Encoding": "gzip, deflate, br",
+                   "User-Agent": self.ua_android,
+                   "Connection": "Keep-Alive",
+                   "reqPayload": self.addon.getSetting(id='reqPayload')
+                   }
+
+        if ids['channel_id'] != 'null':
+            location = self.addon.getLocalizedString(30102)
+            payload = '{"channel_id":'+ids['channel_id']+'}'
+        else:
+            location = self.addon.getLocalizedString(30101)
+            payload = '{"program_id":'+ids['program_id']+',"series_id":'+ids['series_id']+',"tms_id":"'+ids['tms_id']+'"}'
+
+        msg = 'Are you sure you want to remove this from '+location+'?'
+        dialog = xbmcgui.Dialog()
+        remove = dialog.yesno(location,msg)
+        if remove:
+            r = requests.delete(url, headers=headers, cookies=self.load_cookies(), data=payload, verify=self.verify)
+
+            if r.status_code == 200:
+                self.notification_msg("Success!", "Removed from "+location)
+            else:
+                self.notification_msg("Fail", "Not added")
+
+
+    def put_resume_time(self, airing_id, channel_id, program_id, series_id, tms_id):
+        url = self.user_action_url+'/watch_history'
         headers = {"Accept": "*/*",
                    "Content-type": "application/json",
                    "Origin": "https://themis.dl.playstation.net",
@@ -292,17 +336,18 @@ class SONY():
                    'X-Requested-With': 'com.snei.vue.android'
                    }
 
-        payload = '{"series_id":redacted,'
-        payload += '"program_id":redacted,'
-        payload += '"channel_id":redacted,'
-        payload += '"tms_id":"redacted",'
-        payload += '"airing_id":redacted,'
-        payload += '"last_watch_date":"2017-04-28T00:40:43Z",'
-        payload += '"last_timecode":"01:46:29",'
+        payload = '{"series_id":'+series_id+','
+        payload += '"program_id":'+program_id+','
+        payload += '"channel_id":'+channel_id+','
+        payload += '"tms_id":"'+tms_id+'",'
+        payload += '"airing_id":'+airing_id+','
+        payload += '"last_watch_date":"2017-08-11T00:40:43Z",'
+        payload += '"last_timecode":"00:01:46",'
         payload += '"start_timecode":"00:00:00:00",'
         payload += '"fully_watched":false,'
         payload += '"stream_type":"dvr"}'
 
+        #xbmc.log(payload)
         r = requests.put(url, headers=headers, data=payload, verify=self.verify)
 
 
@@ -311,7 +356,7 @@ class SONY():
         cookie_file = os.path.join(addon_profile_path, 'cookies.lwp')
         cj = cookielib.LWPCookieJar()
         try:
-            cj.load(cookie_file,ignore_discard=True)            
+            cj.load(cookie_file,ignore_discard=True)
         except:
             pass
         for c in cookiejar:

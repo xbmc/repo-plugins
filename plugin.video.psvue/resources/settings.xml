@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-<!--Main Menu-->
-<category label="30223">
-  <setting id="timeline_visible" type="bool" label="30214" default="true" />
-  <setting id="myshows_visible" type="bool" label="30215" default="true" />
-  <setting id="fav_visible" type="bool" label="30216" default="true" />
-  <setting id="live_visible" type="bool" label="30217" default="true" />
-  <setting id="sports_visible" type="bool" label="30218" default="true" />
-  <setting id="kids_visible" type="bool" label="30219" default="true" />
-  <setting id="recent_visible" type="bool" label="30220" default="true" />
-  <setting id="featured_visible" type="bool" label="30221" default="true" />
-  <setting id="search_visible" type="bool" label="30222" default="true" />
-</category>
-  <!--Login-->
-  <category label="30000">
-    <setting id="username" type="text" label="30001" default=""/>
-    <setting id="password" type="text" label="30002" option="hidden" default=""/>
-    <setting id="logout" type="action" label="30003" action="RunPlugin(plugin://plugin.video.psvue/?mode=999)" option="close" />
-    <setting type="action" label="30005" action="RunPlugin(plugin://plugin.video.psvue/?mode=1000)" option="close" />
-</category>
-<!--Profile-->
-<category label="30212">
-  <setting type="action" label="30004" action="RunPlugin(plugin://plugin.video.psvue/?mode=800)" option="close" />
-  <setting id="always_ask_profile" type="bool" label="30213" default="false" />
-</category>
+  <!--Main Menu-->
+  <category label="30223">
+    <setting id="all_chan_visible" type="bool" label="30224" default="true" />
+    <setting id="timeline_visible" type="bool" label="30214" default="true" />
+    <setting id="myshows_visible" type="bool" label="30215" default="true" />
+    <setting id="fav_visible" type="bool" label="30216" default="true" />
+    <setting id="live_visible" type="bool" label="30217" default="true" />
+    <setting id="sports_visible" type="bool" label="30218" default="true" />
+    <setting id="kids_visible" type="bool" label="30219" default="true" />
+    <setting id="recent_visible" type="bool" label="30220" default="true" />
+    <setting id="featured_visible" type="bool" label="30221" default="true" />
+    <setting id="search_visible" type="bool" label="30222" default="true" />
+
+  </category>
+    <!--Login-->
+    <category label="30000">
+      <setting id="username" type="text" label="30001" default=""/>
+      <setting id="password" type="text" label="30002" option="hidden" default=""/>
+      <setting id="logout" type="action" label="30003" action="RunPlugin(plugin://plugin.video.psvue/?mode=999)" option="close" />
+      <setting type="action" label="30005" action="RunPlugin(plugin://plugin.video.psvue/?mode=1000)" option="close" />
+  </category>
+  <!--Profile-->
+  <category label="30212">
+    <setting type="action" label="30004" action="RunPlugin(plugin://plugin.video.psvue/?mode=800)" option="close" />
+    <setting id="always_ask_profile" type="bool" label="30213" default="false" />
+  </category>
 
   <!-- Hidden -->
   <setting id="reqPayload" type="text" default="" visible="false"/>

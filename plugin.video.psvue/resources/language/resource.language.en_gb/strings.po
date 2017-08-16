@@ -176,3 +176,7 @@ msgstr ""
 msgctxt "#30223"
 msgid "Main Menu"
 msgstr ""
+
+msgctxt "#30224"
+msgid "All Channels"
+msgstr ""

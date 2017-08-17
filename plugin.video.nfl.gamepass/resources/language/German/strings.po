@@ -78,8 +78,8 @@ msgid "Choose a game version"
 msgstr "Wähle eine Spiel Version"
 
 msgctxt "#30020"
-msgid "Date/time in local time"
-msgstr "Uhrzeit in lokaler Zeitzone"
+msgid "Time Notation"
+msgstr ""
 
 msgctxt "#30021"
 msgid "Error"
@@ -106,11 +106,11 @@ msgid "No"
 msgstr ""
 
 msgctxt "#30027"
-msgid "Yes, with 12-hour clock (AM/PM)"
+msgid "12-hour clock (AM/PM)"
 msgstr ""
 
 msgctxt "#30028"
-msgid "Yes, with 24-hour clock"
+msgid "24-hour clock"
 msgstr ""
 
 msgctxt "#30029"
@@ -163,4 +163,24 @@ msgstr ""
 
 msgctxt "#30044"
 msgid "Some shows are known to not work. Please file a bug if the show is available and works in the official app."
+msgstr ""
+
+msgctxt "#30045"
+msgid "No valid stream URL was found."
+msgstr ""
+
+msgctxt "#30046"
+msgid "There is currently no data available for this week."
+msgstr ""
+
+msgctxt "#30047"
+msgid "PRESEASON WEEK {0}"
+msgstr ""
+
+msgctxt "#30048"
+msgid "WEEK {0}"
+msgstr ""
+
+msgctxt "#30049"
+msgid "Use InputStream Adaptive"
 msgstr ""

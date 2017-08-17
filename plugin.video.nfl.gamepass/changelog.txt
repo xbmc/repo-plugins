@@ -1,3 +1,13 @@
+2017.08.17 v0.11.0 -- Jay Cutler Edition
++ NOTE: This addon currently does not support Game Pass International.
++ NOTE: Game Pass Europe moved to a new streaming partner. Not all features
++   are available yet or supported.
++ Support for Game Pass Europe (kaileu and emilsvennesson)
++ Updated Dutch translation (pyrocumulus)
++ Optional support for inputstream.adaptive plugin (but, contrary to the name,
++   no support yet for adaptive streaming)
++ Lots of cleanup (emilsvennesson, aqw, pyrocumulus)
+
 2017.06.23 v0.10.2 -- Daunte Culpepper Edition
 + Temporarily fix addon crashing (emilsvennesson)
 +   GamePass is moving to a new streaming partner. The old service will work

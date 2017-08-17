@@ -78,8 +78,8 @@ msgid "Choose a game version"
 msgstr "Kies een wedstrijd versie"
 
 msgctxt "#30020"
-msgid "Date/time in local time"
-msgstr "Datum/tijd in lokale tijd"
+msgid "Time Notation"
+msgstr "Tijd Weergave"
 
 msgctxt "#30021"
 msgid "Error"
@@ -87,15 +87,15 @@ msgstr "Fout"
 
 msgctxt "#30022"
 msgid "Due to broadcast restrictions, NFL Game Pass Domestic is currently unavailable. Please try again later."
-msgstr "Vanwege uitzend beperkingen, NFL Game Pass Domestic is momenteel niet beschikbaar. Probeer het later opnieuw."
+msgstr "Vanwege uitzendbeperkingen is NFL Game Pass Domestic momenteel niet beschikbaar. Probeer het later opnieuw."
 
 msgctxt "#30023"
 msgid "Logging into NFL Game Pass failed. Make sure that your account information is correct and your subscription is valid."
-msgstr "Inloggen in NFL Game Pass mislukt. Zorg ervoor dat uw account informatie correct zijn en uw abonnement geldig is."
+msgstr "Inloggen bij NFL Game Pass is mislukt. Zorg ervoor dat uw accountgegevens correct zijn en uw abonnement geldig is."
 
 msgctxt "#30024"
 msgid "Unexpected error ='(. Please enable debuging for both the addon and Kodi, and submit a bug report."
-msgstr ""
+msgstr "Onverwachte fout ='(. Schakel debug logging in voor zowel de addon als Kodi en verstuur een bug report."
 
 msgctxt "#30025"
 msgid "Hide game length"
@@ -106,12 +106,12 @@ msgid "No"
 msgstr "Nee"
 
 msgctxt "#30027"
-msgid "Yes, with 12-hour clock (AM/PM)"
-msgstr "Ja, met 12-uurs klok (AM/PM)"
+msgid "12-hour clock (AM/PM)"
+msgstr "12-uurs klok (AM/PM)"
 
 msgctxt "#30028"
-msgid "Yes, with 24-hour clock"
-msgstr "Ja, met 24-uurs klok"
+msgid "24-hour clock"
+msgstr "24-uurs klok"
 
 msgctxt "#30029"
 msgid "General"
@@ -127,40 +127,60 @@ msgstr "Coaches Film"
 
 msgctxt "#30033"
 msgid "Proxy Settings"
-msgstr ""
+msgstr "Proxy Instellingen"
 
 msgctxt "#30034"
 msgid "Use an HTTP proxy to access Game Pass"
-msgstr ""
+msgstr "Gebruik een HTTP proxy om Game Pass te benaderen"
 
 msgctxt "#30035"
 msgid "Protocol"
-msgstr ""
+msgstr "Protocol"
 
 msgctxt "#30036"
 msgid "Server"
-msgstr ""
+msgstr "Server"
 
 msgctxt "#30037"
 msgid "Port"
-msgstr ""
+msgstr "Poort"
 
 msgctxt "#30038"
 msgid "Username"
-msgstr ""
+msgstr "Gebruikersnaam"
 
 msgctxt "#30039"
 msgid "Password"
-msgstr ""
+msgstr "Wachtwoord"
 
 msgctxt "#30042"
 msgid "Enable 'Basic' Authentication"
-msgstr ""
+msgstr "Gebruik 'Eenvoudige' Authenticatie"
 
 msgctxt "#30043"
 msgid "There was a problem playing that stream"
-msgstr ""
+msgstr "Er was een probleem bij het afspelen van de stream"
 
 msgctxt "#30044"
 msgid "Some shows are known to not work. Please file a bug if the show is available and works in the official app."
 msgstr ""
+
+msgctxt "#30045"
+msgid "No valid stream URL was found."
+msgstr "Geen geldige stream URL gevonden."
+
+msgctxt "#30046"
+msgid "There is currently no data available for this week."
+msgstr "Er zijn op dit moment geen gegevens beschikbaar voor deze week."
+
+msgctxt "#30047"
+msgid "PRESEASON WEEK {0}"
+msgstr "VOORSEIZOEN WEEK {0}"
+
+msgctxt "#30048"
+msgid "WEEK {0}"
+msgstr "WEEK {0}"
+
+msgctxt "#30049"
+msgid "Use InputStream Adaptive"
+msgstr "Gebruik Inputstream Adaptive"

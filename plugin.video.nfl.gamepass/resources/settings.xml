@@ -4,9 +4,10 @@
     <setting id="password" type="text" label="30002" default="" option="hidden" visible="!eq(-1,)" enable="!eq(-1,)"/>
   </category>
   <category label="30030">
-    <setting id="preferred_bitrate" type="select" label="30003" lvalues="30004|30005|30006|30007|30008|30009|30010|30011|30012" default="8"/>
+    <setting id="use_inputstream_adaptive" type="bool" label="30049" default="false"/>
+    <setting id="preferred_bitrate" type="select" label="30003" lvalues="30004|30005|30006|30007|30008|30009|30010|30011|30012" visible="eq(-1,false)" default="8"/>
     <setting id="preferred_game_version" type="select" label="30013" lvalues="30014|30015|30012" default="0"/>
-    <setting id="local_tz" type="enum" label="30020" lvalues="30026|30027|30028" default="0"/>
+    <setting id="time_notation" type="enum" label="30020" lvalues="30027|30028" default="1"/>
     <setting id="hide_game_length" type="bool" label="30025" default="false"/>
   </category>
   <category label="30033">

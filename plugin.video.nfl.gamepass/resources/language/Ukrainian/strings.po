@@ -78,8 +78,8 @@ msgid "Choose a game version"
 msgstr "Вибирати версію гри"
 
 msgctxt "#30020"
-msgid "Localize Game Date/Time"
-msgstr "Локалізувати час гри"
+msgid "Time Notation"
+msgstr ""
 
 msgctxt "#30021"
 msgid "Error"
@@ -106,12 +106,12 @@ msgid "No"
 msgstr "Ні"
 
 msgctxt "#30027"
-msgid "Yes, with 12-hour clock (AM/PM)"
-msgstr "Так, 12г (AM/PM)"
+msgid "12-hour clock (AM/PM)"
+msgstr "12г (AM/PM)"
 
 msgctxt "#30028"
-msgid "Yes, with 24-hour clock"
-msgstr "Так, 24г"
+msgid "24-hour clock"
+msgstr "24г"
 
 msgctxt "#30029"
 msgid "General"
@@ -172,3 +172,19 @@ msgstr "Деякі шоу можуть не працювати. Будь лас�
 msgctxt "#30045"
 msgid "No valid stream URL was found."
 msgstr "Неможливо знайти URL для потоку."
+
+msgctxt "#30046"
+msgid "There is currently no data available for this week."
+msgstr ""
+
+msgctxt "#30047"
+msgid "PRESEASON WEEK {0}"
+msgstr ""
+
+msgctxt "#30048"
+msgid "WEEK {0}"
+msgstr ""
+
+msgctxt "#30049"
+msgid "Use InputStream Adaptive"
+msgstr ""

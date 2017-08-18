@@ -244,8 +244,11 @@ class PlayOn:
                 mType = 'episode'
             plot = (result.get('@description','') or dict(result.get('description','')).get('@name','') or '')
             thumb = BASE_URL + (result.get('@art','') or dict(result.get('media','')).get('@art','') or ICON).replace('&size=tiny','&size=large')
-            aired     = (dict(result.get('date','')).get('@name','') or datetime.datetime.now().strftime('%m/%d/%Y'))
-            aired     = (datetime.datetime.strptime(aired, '%m/%d/%Y')).strftime('%Y-%m-%d')
+            try:
+                aired = (dict(result.get('date','')).get('@name','') or datetime.datetime.now().strftime('%m/%d/%Y'))
+                aired = (datetime.datetime.strptime(aired, '%m/%d/%Y')).strftime('%Y-%m-%d') 
+            except: 
+                aired = datetime.datetime.now().strftime('%Y-%m-%d')
             timeData  = (dict(result.get('time','')).get('@name','') or '')
             playLater = dict(result.get('media_playlater','')).get('@src','')
             contextMenu = contextMenu + [('Add to PlayLater','XBMC.RunPlugin(%s)'%(sys.argv[0]+"?url="+urllib.quote_plus(playLater)+"&mode="+str(8)+"&name="+urllib.quote_plus(label.encode("utf-8"))))]

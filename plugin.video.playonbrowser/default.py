@@ -42,7 +42,7 @@ BASE_UPNP      = REAL_SETTINGS.getSetting("playonUPNPid").rstrip('/')
 BASE_URL       = REAL_SETTINGS.getSetting("playonserver").rstrip('/')
 DEBUG          =  REAL_SETTINGS.getSetting("debug") == "true"
 KODILIBRARY    = False #todo strm contextMenu
-URLTYPE        = {0:'m3u8',1:'upnp',2:'flv'}[int(REAL_SETTINGS.getSetting('playonmedia'))]
+URLTYPE        = {0:'m3u8',1:'upnp',2:'ext'}[int(REAL_SETTINGS.getSetting('playonmedia'))]
 PTVL_RUNNING   = xbmcgui.Window(10000).getProperty('PseudoTVRunning') == "True"
 
 
@@ -120,7 +120,7 @@ class PlayOn:
             log("openURL Failed! " + str(e), xbmc.LOGERROR)
         except Exception, e:
             log("openURL Failed! " + str(e), xbmc.LOGERROR)
-            xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30010), ICON, 4000)
+            xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30010), ICON, 5000)
 
     
     def chkIP(self, response):
@@ -129,16 +129,16 @@ class PlayOn:
             if 'catalog' in results:
                 try:
                     ServerName = results['catalog']['@name']
-                    ServerVer = '[B]PlayOn[/B] v.%s'%results['catalog']['@server']
-                    ServerMSG = "[B]Connected to[/B] %s %s"%(ServerName,ServerVer)
+                    ServerVer = 'PlayOn v.%s'%results['catalog']['@server']
+                    ServerMSG = "Connected to [B]%s %s[/B]"%(ServerName,ServerVer)
                     log('chkIP, ServerName = ' + ServerName)
                     log('chkIP, ServerVer = ' + ServerVer)
                     REAL_SETTINGS.setSetting("playonServerid",ServerMSG)
-                    xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30011)%ServerName, ICON, 4000)
+                    xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30011)%ServerName, ICON, 5000)
                 except:
                     pass
         else:
-            xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30012), ICON, 4000)
+            xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30012), ICON, 5000)
     
     
     def getUPNP(self):
@@ -168,7 +168,7 @@ class PlayOn:
                 for item in data['result']['files']:
                     if (item['label']).lower().startswith('playon'):
                         REAL_SETTINGS.setSetting("playonUPNPid",item['file'].rstrip('/'))
-                        xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30013), ICON, 4000)
+                        xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30013), ICON, 5000)
                         BASE_UPNP = item['file']
                         REAL_SETTINGS.setSetting("playonUPNPid",BASE_UPNP.rstrip('/'))
             elif PTVL_RUNNING == False:
@@ -176,7 +176,7 @@ class PlayOn:
                 if BASE_UPNP != -1:
                     REAL_SETTINGS.setSetting("playonUPNPid",BASE_UPNP.rstrip('/'))
             else:
-                xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30010), ICON, 1000)
+                xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30010), ICON, 5000)
                 
 
     def buildItemMenu(self, uri=PLAYON_DATA):
@@ -217,7 +217,7 @@ class PlayOn:
             result = dict(response['result'])
             if result['status'] == "true":
                 msg = result['msg'].replace('The media item',name)
-                xbmcgui.Dialog().notification(ADDON_NAME, msg, ICON, 4000)
+                xbmcgui.Dialog().notification(ADDON_NAME, msg, ICON, 5000)
         
    
     def playVideo(self, name, uri):
@@ -237,7 +237,8 @@ class PlayOn:
             label = title
             mType = 'movie'
             if tvshowtitle is not None:
-                label = '%s - %s'%(tvshowtitle,title)
+                if tvshowtitle not in title:
+                    label = '%s - %s'%(tvshowtitle,title)
                 season, episode = parseSEinfo(title)
                 infoList['season']  = int(season)
                 infoList['episode'] = int(episode)
@@ -262,9 +263,9 @@ class PlayOn:
             else:
                 duration = 0 
                 
-            if URLTYPE == 'm3u8':
+            if URLTYPE == 'm3u8' and 'playlaterrecordings' not in result['@href']:
                 url = BASE_VIDEO_URL%(BASE_URL,result['@href'].split('?id=')[1])
-            elif URLTYPE == 'flv':
+            elif URLTYPE == 'ext' or 'playlaterrecordings' in result['@href']:
                 url = BASE_URL + '/' + dict(result['media'])['@src']
             else:
                 url = BASE_UPNP + '/' + dict(result['media'])['@src'].split('.')[0].split('/')[0] + '/'

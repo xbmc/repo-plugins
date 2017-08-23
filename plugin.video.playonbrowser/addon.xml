@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.playonbrowser" name="PlayOn Browser" version="2.0.0" provider-name="Lunatixz">
+<addon id="plugin.video.playonbrowser" name="PlayOn Browser" version="2.0.1" provider-name="Lunatixz">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.simplecache" version="1.0.0"/>
@@ -17,7 +17,7 @@
         <forum>http://forum.kodi.tv/showthread.php?tid=233136</forum>
         <website>https://www.playon.tv</website>
         <source>https://github.com/Lunatixz/XBMC_Addons/tree/master/plugin.video.playonbrowser</source>
-        <news>v.2.0.0[CR]- Refactored and optimized Code.[CR]- Added PlayLater Recording via Context Menu.</news>
+        <news>>v.2.0.1[CR]- Fixed PlayLater playback[CR]v.2.0.0[CR]- Refactored and optimized Code.[CR]- Added PlayLater Recording via Context Menu.</news>
         <assets>
             <icon>resources/images/icon.png</icon>
             <fanart>resources/images/fanart.jpg</fanart>

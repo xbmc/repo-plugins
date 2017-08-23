@@ -55,7 +55,8 @@ IMG_CHLOGO   = 'http://m.ustvnow.com/images/%s.png'
 COOKIE_JAR   = xbmc.translatePath(os.path.join(SETTINGS_LOC, "cookiejar.lwp"))
 MEDIA_TYPES  = {'SP':'video','SH':'episode','EP':'episode','MV':'movie'}
 FREE_CHANS   = ['CW','ABC','FOX','PBS','CBS','NBC','MY9']
-
+URL_TYPE     = {0:'m3u8',1:'mp4'}[int(REAL_SETTINGS.getSetting('URL_Type'))]
+URL_QUALITY  = int(REAL_SETTINGS.getSetting('URL_Quality')) + 1
 CHAN_NAMES   = {'ABC':'ABC','AMC':'AMC','Animal Planet':'Animal Planet','Bravo':'Bravo','CBS':'CBS','CNBC':'CNBC','CW':'CW','Comedy Central':'Comedy Central','Discovery Channel':'Discovery Channel','ESPN':'ESPN',
                 'FOX':'FOX','FX':'FX','Fox News Channel':'Fox News','Freeform':'Freeform','MSNBC':'MSNBC','NBC':'NBC','National Geographic Channel':'National Geographic','Nickelodeon':'Nickelodeon','PBS':'PBS',
                 'SPIKE TV':'SPIKE TV','SundanceTV':'SundanceTV','Syfy':'Syfy','AE':'A&E','My9':'MY9','BBCA':'BBC America','ESPN2':'ESPN 2','NBCSNHD':'NBCSN','The Learning Channel':'TLC','Universal HD':'Universal',
@@ -512,8 +513,12 @@ class USTVnow():
                         urllink = json.loads(self.net.http_POST(BASEURL + 'stream/1/dvr/play', form_data={'token':self.token,'key':self.passkey,'scheduleid':channel['scheduleid']}, headers=self.buildHeader()).content.encode("utf-8").rstrip())
                         '''{u'pr': u'll', u'domain': u'ilvc02.ll.ustvnow.com',u'stream': u'http://ilvc02.ll.ustvnow.com/ilv10/pr/xxl/smil:0B64AWHTMUSTVNOW/playlist.m3u8?', 
                             u'streamname': u'0B64AWHTMUSTVNOW', u'tr': u'', u'up': 1, u'pd': 0, u'pl': u'vjs'}'''
-                        if urllink and 'stream' in urllink:
-                            return urllink['stream']
+                        if URL_TYPE == 'm3u8':
+                            stream = urllink['stream']
+                        else:
+                            stream = (urllink['stream'].replace('smil:','mp4:').replace('USTVNOW','USTVNOW%d'%URL_QUALITY))
+                        log('resolveURL, url = ' + stream)
+                        return stream
                     except Exception,e:
                         if channel and channel['scheduleid']:
                             self.replaceToken(url, dvr)
@@ -524,8 +529,12 @@ class USTVnow():
                         urllink = json.loads(self.net.http_POST(BASEURL + 'stream/1/live/view', form_data={'token':self.token,'key':self.passkey,'scode':channel['scode']}, headers=self.buildHeader()).content.encode("utf-8").rstrip())
                         '''{u'pr': u'll', u'domain': u'ilvc02.ll.ustvnow.com',u'stream': u'http://ilvc02.ll.ustvnow.com/ilv10/pr/xxl/smil:0B64AWHTMUSTVNOW/playlist.m3u8?', 
                             u'streamname': u'0B64AWHTMUSTVNOW', u'tr': u'', u'up': 1, u'pd': 0, u'pl': u'vjs'}'''
-                        if urllink and 'stream' in urllink:
-                            return urllink['stream']
+                        if URL_TYPE == 'm3u8':
+                            stream = urllink['stream']
+                        else:
+                            stream = (urllink['stream'].replace('smil:','mp4:').replace('USTVNOW','USTVNOW%d'%URL_QUALITY))
+                        log('resolveURL, stream = ' + stream)
+                        return stream
                     except Exception,e:
                         if channel and channel['scode']:
                             self.replaceToken(url, dvr)

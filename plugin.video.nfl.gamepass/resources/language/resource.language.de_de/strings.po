@@ -23,7 +23,7 @@ msgstr "Passwort"
 
 msgctxt "#30003"
 msgid "Preferred Stream Quality"
-msgstr "Bevorzugte Stream Qualität"
+msgstr "Bevorzugte Streamqualität"
 
 msgctxt "#30004"
 msgid "Always Use Highest Bitrate"
@@ -63,7 +63,7 @@ msgstr "Vorher fragen"
 
 msgctxt "#30013"
 msgid "Preferred Game Version"
-msgstr "Bevorzugte Spiel Version"
+msgstr "Bevorzugte Spielversion"
 
 msgctxt "#30014"
 msgid "Full"
@@ -75,51 +75,51 @@ msgstr "Zusammengefasst"
 
 msgctxt "#30016"
 msgid "Choose a game version"
-msgstr "Wähle eine Spiel Version"
+msgstr "Wählen Sie eine Spielversion"
 
 msgctxt "#30020"
 msgid "Time Notation"
-msgstr ""
+msgstr "Zeitformat"
 
 msgctxt "#30021"
 msgid "Error"
-msgstr ""
+msgstr "Fehler"
 
 msgctxt "#30022"
 msgid "Due to broadcast restrictions, NFL Game Pass Domestic is currently unavailable. Please try again later."
-msgstr ""
+msgstr "Aufgrund rechtlicher Einschränkungen steht NFL Game Pass Domestic zur Zeit nicht zur Verfügung. Bitte versuchen Sie es später noch einmal."
 
 msgctxt "#30023"
 msgid "Logging into NFL Game Pass failed. Make sure that your account information is correct and your subscription is valid."
-msgstr ""
+msgstr "Einloggen nicht erfolgreich. Bitte stellen Sie sicher, dass Ihre Accountangaben korrekt sind und Ihr Abo gültig ist."
 
 msgctxt "#30024"
-msgid "Unexpected error ='(. Please enable debuging for both the addon and Kodi, and submit a bug report."
-msgstr ""
+msgid "Unexpected error ='(. Please enable debugging in Kodi and submit a bug report."
+msgstr "Unerwarteter Fehler ='(. Bitte schalten Sie den Debugmodus in Kodi ein und melden Sie den Fehler samt Bericht."
 
 msgctxt "#30025"
 msgid "Hide game length"
-msgstr ""
+msgstr "Spiellänge nicht anzeigen"
 
 msgctxt "#30026"
 msgid "No"
-msgstr ""
+msgstr "Nein"
 
 msgctxt "#30027"
 msgid "12-hour clock (AM/PM)"
-msgstr ""
+msgstr "12-Stunden-Uhr (AM/PM)"
 
 msgctxt "#30028"
 msgid "24-hour clock"
-msgstr ""
+msgstr "24-Stunden-Uhr"
 
 msgctxt "#30029"
 msgid "General"
-msgstr ""
+msgstr "Allgemein"
 
 msgctxt "#30030"
 msgid "Display/Video"
-msgstr ""
+msgstr "Anzeige"
 
 msgctxt "#30032"
 msgid "Coaches Film"
@@ -127,15 +127,15 @@ msgstr ""
 
 msgctxt "#30033"
 msgid "Proxy Settings"
-msgstr ""
+msgstr "Proxyeinstellungen"
 
 msgctxt "#30034"
 msgid "Use an HTTP proxy to access Game Pass"
-msgstr ""
+msgstr "HTTP-Proxy für Zugang zum Game Pass nutzen"
 
 msgctxt "#30035"
 msgid "Protocol"
-msgstr ""
+msgstr "Protokoll"
 
 msgctxt "#30036"
 msgid "Server"
@@ -147,40 +147,44 @@ msgstr ""
 
 msgctxt "#30038"
 msgid "Username"
-msgstr ""
+msgstr "Benutzername"
 
 msgctxt "#30039"
 msgid "Password"
-msgstr ""
+msgstr "Passwort"
 
 msgctxt "#30042"
 msgid "Enable 'Basic' Authentication"
-msgstr ""
+msgstr "Schalte 'Basic'-Authentifizierung ein"
 
 msgctxt "#30043"
 msgid "There was a problem playing that stream"
-msgstr ""
+msgstr "Es gab ein Problem beim Abspielen des Streams"
 
 msgctxt "#30044"
 msgid "Some shows are known to not work. Please file a bug if the show is available and works in the official app."
-msgstr ""
+msgstr "Einige Sendungen laufen leider nicht. Bitte senden Sie einen Bugreport, sofern die Sendung verfügbar ist und in der offiziellen App funktioniert."
 
 msgctxt "#30045"
 msgid "No valid stream URL was found."
-msgstr ""
+msgstr "Es wurde keine gültige URL für den Stream gefunden."
 
 msgctxt "#30046"
 msgid "There is currently no data available for this week."
-msgstr ""
+msgstr "Es stehen zur Zeit keine Daten für diese Woche zur Verfügung."
 
 msgctxt "#30047"
 msgid "PRESEASON WEEK {0}"
-msgstr ""
+msgstr "PRESEASON WOCHE {0}"
 
 msgctxt "#30048"
 msgid "WEEK {0}"
-msgstr ""
+msgstr "WOCHE {0}"
 
 msgctxt "#30049"
 msgid "Use InputStream Adaptive"
-msgstr ""
+msgstr "Nutze InputStream Adaptive"
+
+msgctxt "#30050"
+msgid "Please enter the username and password for your NFL Game Pass subscription."
+msgstr "Bitte geben Sie Benutzernamen und Passwort für Ihr NFL Game Pass Abo ein."

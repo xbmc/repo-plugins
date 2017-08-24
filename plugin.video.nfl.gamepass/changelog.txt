@@ -1,3 +1,11 @@
+2017.08.24 v0.11.1 -- Kenny Easley Edition
++ Fix "everything is broken"; Game Pass broke their API again (emilsvennesson)
++ Add groundwork for what will become a Team View (kaileu)
++ Open Settings when login info is missing (pyrocumulus)
++ Restore show/episode thumbnails (emilsvennesson)
++ Updated German translation (sieversMartin)
++ Code cleanup (emilsvennesson)
+
 2017.08.17 v0.11.0 -- Jay Cutler Edition
 + NOTE: This addon currently does not support Game Pass International.
 + NOTE: Game Pass Europe moved to a new streaming partner. Not all features

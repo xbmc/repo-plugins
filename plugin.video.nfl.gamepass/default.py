@@ -49,14 +49,17 @@ def addon_log(string):
     msg = '%s: %s' % (LOGGING_PREFIX, string)
     xbmc.log(msg=msg, level=xbmc.LOGDEBUG)
 
+
 def show_busy_dialog():
     busydialog.create()
+
 
 def hide_busy_dialog():
     try:
         busydialog.close()
-    except RuntimeError,e:
+    except RuntimeError, e:
         addon_log('Error closing busy dialog: %s' % e.message)
+
 
 class GamepassGUI(xbmcgui.WindowXML):
     def __init__(self, *args, **kwargs):
@@ -163,7 +166,7 @@ class GamepassGUI(xbmcgui.WindowXML):
 
             if game['phase'] == 'FINAL' or game['phase'] == 'FINAL_OVERTIME':
                 # show game duration only if user wants to see it
-                if addon.getSetting('hide_game_length') == 'false':
+                if addon.getSetting('hide_game_length') == 'false' and game['video']:
                     game_info = '%s [CR] Duration: %s' % (game['phase'], str(timedelta(seconds=int(float(game['video']['videoDuration'])))))
                 else:
                     game_info = game['phase']
@@ -184,13 +187,10 @@ class GamepassGUI(xbmcgui.WindowXML):
                 video_id = str(game['video']['videoId'])
                 isPlayable = 'true'
                 isBlackedOut = 'false'
-                listitem.setProperty('video_id', video_id)
-                listitem.setProperty('game_versions', 'Live')
+                listitem.setProperty('live_video_id', video_id)
             else:  # ONDEMAND
-                video_id = str(game['video']['videoId'])
                 isPlayable = 'true'
                 isBlackedOut = 'false'
-                listitem.setProperty('video_id', video_id)
 
             listitem.setProperty('isPlayable', isPlayable)
             listitem.setProperty('isBlackedOut', isBlackedOut)
@@ -233,10 +233,11 @@ class GamepassGUI(xbmcgui.WindowXML):
                 listitem.setProperty('is_game', 'false')
                 listitem.setProperty('is_show', 'true')
                 listitem.setProperty('isPlayable', 'true')
+                listitem.setProperty('away_thumb', episode['videoThumbnail']['templateUrl'].replace('{formatInstructions}', 'c_thumb,q_auto,f_png'))
                 self.games_items.append(listitem)
             except:
                 addon_log('Exception adding archive directory: %s' % format_exc())
-                addon_log('Directory name: %s' % i['title'])
+                addon_log('Directory name: %s' % episode['title'])
         self.games_list.addItems(self.games_items)
 
     def play_url(self, url):
@@ -322,33 +323,32 @@ class GamepassGUI(xbmcgui.WindowXML):
                 return self.ask_bitrate(bitrate_values)
 
     def select_version(self, game_versions):
-        """Returns a game version, while honoring the user's /preference/.
-        Note: the full version is always available but not always the condensed.
-        """
+        """Selects a game version and returns the video ID while honoring the user's /preference/."""
         preferred_version = int(addon.getSetting('preferred_game_version'))
+        if preferred_version == 0:
+            selected_version = 'Game video'
+        elif preferred_version == 1:
+            selected_version = 'Condensed game'
+        elif preferred_version == 2:
+            selected_version = 'Coach film'
+        else:
+            selected_version = None
 
         # user wants to be asked to select version
-        if preferred_version == 2:
-            versions = [language(30014)]
-            if 'Condensed' in game_versions:
-                versions.append(language(30015))
-            if 'Coach' in game_versions:
-                versions.append(language(30032))
+        # bring up selection when preferred game version is unavailable
+        if not selected_version or selected_version not in game_versions:
+            versions = game_versions.keys()
             dialog = xbmcgui.Dialog()
             hide_busy_dialog()
-            preferred_version = dialog.select(language(30016), versions)
+            answer = dialog.select(language(30016), versions)
+            if answer > -1:
+                selected_version = versions[answer]
+                addon_log('Selected version: %s' % selected_version)
+            else:
+                addon_log('Select version dialog was cancelled.')
+                return None
 
-        if preferred_version == 1 and 'Condensed' in game_versions:
-            game_version = 'condensed'
-        elif preferred_version == 2 and 'Coach' in game_versions:
-            game_version = 'coach'
-        else:
-            game_version = 'archive'
-
-        if preferred_version > -1:
-            return game_version
-        else:
-            return None
+        return game_versions[selected_version]
 
     def has_inputstream_adaptive(self):
         """Checks if InputStream Adaptive is installed and enabled."""
@@ -457,38 +457,19 @@ class GamepassGUI(xbmcgui.WindowXML):
 
                     self.display_weeks_games()
                 elif controlId == 230:  # game is clicked
-                    selectedGame = self.games_list.getSelectedItem()
-                    if selectedGame.getProperty('isPlayable') == 'true':
+                    selected_game = self.games_list.getSelectedItem()
+                    if selected_game.getProperty('isPlayable') == 'true':
                         self.init('game/episode')
-                        game_id = selectedGame.getProperty('game_id')
-                        video_id = selectedGame.getProperty('video_id')
-                        game_versions = selectedGame.getProperty('game_versions')
+                        game_id = selected_game.getProperty('game_id')
 
-                        if 'Live' in game_versions:
-                            if 'Final' in selectedGame.getProperty('game_info'):
-                                game_version = self.select_version(game_versions)
-                                if game_version == 'archive':
-                                    game_version = 'dvr'
-                            else:
-                                game_version = 'live'
+                        if selected_game.getProperty('live_video_id'):
+                            video_id = selected_game.getProperty('live_video_id')
                         else:
-                            # check for coaches film availability
-                            if gp.has_coaches_tape(game_id, self.selected_season):
-                                game_versions = game_versions + ' Coach'
-                                coach_id = gp.has_coaches_tape(game_id, self.selected_season)
-                            # check for condensed film availability
-                            if gp.has_condensed_game(game_id, self.selected_season):
-                                game_versions = game_versions + ' Condensed'
-                                condensed_id = gp.has_condensed_game(game_id, self.selected_season)
+                            game_versions = gp.get_game_versions(game_id, self.selected_season)
+                            video_id = self.select_version(game_versions)
 
-                            game_version = self.select_version(game_versions)
-                        if game_version:
-                            if game_version == 'condensed':
-                                stream_url = self.select_stream_url(gp.get_stream(condensed_id, 'game', username=username))
-                            elif game_version == 'coach':
-                                stream_url = self.select_stream_url(gp.get_stream(coach_id, 'game', username=username))
-                            else:
-                                stream_url = self.select_stream_url(gp.get_stream(video_id, 'game', username=username))
+                        if video_id:
+                            stream_url = self.select_stream_url(gp.get_stream(video_id, 'game', username=username))
                             if stream_url:
                                 self.play_url(stream_url)
                             elif stream_url is False:
@@ -574,6 +555,17 @@ class CoachesFilmGUI(xbmcgui.WindowXML):
 if __name__ == '__main__':
     addon_log('script starting')
     hide_busy_dialog()
+
+    if not username or not password:
+        dialog = xbmcgui.Dialog()
+        answer = dialog.ok(language(30021), language(30050))
+
+        if answer:
+            addon.openSettings()
+            username = addon.getSetting('email')
+            password = addon.getSetting('password')
+        else:
+            sys.exit(0)
 
     try:
         gp.login(username, password)

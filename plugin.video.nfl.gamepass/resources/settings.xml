@@ -6,7 +6,7 @@
   <category label="30030">
     <setting id="use_inputstream_adaptive" type="bool" label="30049" default="false"/>
     <setting id="preferred_bitrate" type="select" label="30003" lvalues="30004|30005|30006|30007|30008|30009|30010|30011|30012" visible="eq(-1,false)" default="8"/>
-    <setting id="preferred_game_version" type="select" label="30013" lvalues="30014|30015|30012" default="0"/>
+    <setting id="preferred_game_version" type="select" label="30013" lvalues="30014|30015|30032|30012" default="3"/>
     <setting id="time_notation" type="enum" label="30020" lvalues="30027|30028" default="1"/>
     <setting id="hide_game_length" type="bool" label="30025" default="false"/>
   </category>

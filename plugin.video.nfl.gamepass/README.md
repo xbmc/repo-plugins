@@ -9,7 +9,7 @@ with a Game Pass International subscription and are interested in helping out,
 check out issue #313. It'd be great to get those subscriptions working again.
 
 # NFL Game Pass Kodi Plugin #
-**version 0.11.0 — Jay Cutler Edition**
+**version 0.11.1 — Kenny Easley Edition**
 
 Before reading any further, please understand that this addon is unofficial and
 is not endorsed or supported by the NFL in any way. Not all features are

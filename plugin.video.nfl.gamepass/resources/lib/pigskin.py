@@ -221,38 +221,53 @@ class pigskin(object):
         try:
             url = self.config['modules']['ROUTES_DATA_PROVIDERS']['games_detail'].replace(':seasonType', season_type).replace(':season', season).replace(':week', week)
             games_data = self.make_request(url, 'get')
-            # collect the games from all keys in 'modules'
-            games = [g for x in games_data['modules'].keys() for g in games_data['modules'][x]['content']]
+            # collect the games from all keys in 'modules' that has 'content' as a key
+            games = [g for x in games_data['modules'].keys() if 'content' in games_data['modules'][x] for g in games_data['modules'][x]['content']]
         except:
             self.log('Acquiring games data failed.')
             raise
 
         return sorted(games, key=lambda x: x['gameDateTimeUtc'])
 
-    def has_coaches_tape(self, game_id, season):
-        """Return whether coaches tape is available for a given game."""
-        url = self.config['modules']['ROUTES_DATA_PROVIDERS']['game_page'].replace(':season', season).replace(':gameslug', game_id)
-        response = self.make_request(url, 'get')
-        coaches_tape = response['modules']['singlegame']['content'][0]['coachfilmVideo']
-        if coaches_tape:
-            self.log('Coaches Tape found.')
-            return coaches_tape['videoId']
-        else:
-            self.log('No Coaches Tape found for this game.')
-            return False
+    def get_team_games(self, season, team=None):
+        try:
+            url = self.config['modules']['ROUTES_DATA_PROVIDERS']['teams']
+            teams = self.make_request(url, 'get')
+            if team is None:
+                return teams
+            else:
+                # look for the team name
+                for conference in teams['modules']:
+                    if 'content' in teams['modules'][conference]:
+                        for teamname in teams['modules'][conference]['content']:
+                            if team == teamname['fullName']:
+                                team = teamname['seoname']
+                                break;
+                            else:
+                                return None
 
+                url = self.config['modules']['ROUTES_DATA_PROVIDERS']['team_detail'].replace(':team', team)
+                games_data = self.make_request(url, 'get')
+                # collect games from all keys in 'modules' for a specific season
+                games = [g for x in games_data['modules'].keys() if x == 'videos'+season for g in games_data['modules'][x]['content']]
 
-    def has_condensed_game(self, game_id, season):
-        """Return whether condensed game version is available."""
+        except:
+            self.log('Acquiring Team games data failed.')
+            raise
+
+        return sorted(games, key=lambda x: x['gameDateTimeUtc'])
+
+    def get_game_versions(self, game_id, season):
+        """Return a dict of available game versions for a single game."""
+        game_versions = {}
         url = self.config['modules']['ROUTES_DATA_PROVIDERS']['game_page'].replace(':season', season).replace(':gameslug', game_id)
-        response = self.make_request(url, 'get')
-        condensed = response['modules']['singlegame']['content'][0]['condensedVideo']
-        if condensed:
-            self.log('Condensed game found.')
-            return condensed['videoId']
-        else:
-            self.log('No condensed version was found for this game.')
-            return False
+        data = self.make_request(url, 'get')['modules']['singlegame']['content'][0]
+        for key in data.keys():
+            if isinstance(data[key], dict) and 'videoId' in data[key]:
+                game_versions[data[key]['kind']] = data[key]['videoId']
+
+        self.log('Game versions found for {0}: {1}'.format(game_id, ', '.join(game_versions.keys())))
+        return game_versions
 
     def get_stream(self, video_id, game_type=None, username=None):
         """Return the URL for a stream."""
@@ -365,8 +380,12 @@ class pigskin(object):
         season_slug = [x['slug'] for x in selected_show['seasons'] if season == x['value']][0]
         request_url = self.config['modules']['API']['NETWORK_EPISODES']
         episodes_url = request_url.replace(':seasonSlug', season_slug).replace(':tvShowSlug', selected_show['slug'])
+        episodes_data = self.make_request(episodes_url, 'get')['modules']['archive']['content']
+        for episode in episodes_data:
+            if not episode['videoThumbnail']['templateUrl']:  # set programs thumbnail as episode thumbnail
+                episode['videoThumbnail']['templateUrl'] = [x['thumbnail']['templateUrl'] for x in programs if x['slug'] == episode['nflprogram']][0]
 
-        return self.make_request(episodes_url, 'get')['modules']['archive']['content']
+        return episodes_data
 
     def parse_datetime(self, date_string, localize=False):
         """Parse NFL Game Pass date string to datetime object."""

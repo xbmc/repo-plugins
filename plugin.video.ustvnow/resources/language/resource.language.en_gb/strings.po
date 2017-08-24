@@ -115,3 +115,11 @@ msgstr ""
 msgctxt "#30024"
 msgid "%s Recording Successful"
 msgstr ""
+
+msgctxt "#30025"
+msgid "Preferred Playback Method"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Preferred Stream Quality"
+msgstr ""

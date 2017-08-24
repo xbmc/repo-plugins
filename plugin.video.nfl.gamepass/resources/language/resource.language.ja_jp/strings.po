@@ -95,7 +95,7 @@ msgid "Logging into NFL Game Pass failed. Make sure that your account informatio
 msgstr "NFL Game Passにログインできませんでした。アカウントの確認、または契約が有効か確認ください。"
 
 msgctxt "#30024"
-msgid "Unexpected error ='(. Please enable debuging for both the addon and Kodi, and submit a bug report."
+msgid "Unexpected error ='(. Please enable debugging in Kodi and submit a bug report."
 msgstr "予測不可エラー発生 ( T o T ) このアプリとKodiのデバッグを有効にして、バグをレポートしてください。"
 
 msgctxt "#30025"
@@ -184,4 +184,8 @@ msgstr ""
 
 msgctxt "#30049"
 msgid "Use InputStream Adaptive"
+msgstr ""
+
+msgctxt "#30050"
+msgid "Please enter the username and password for your NFL Game Pass subscription."
 msgstr ""

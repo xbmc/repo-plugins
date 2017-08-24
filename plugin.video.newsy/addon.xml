@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.newsy" version="1.0.0" name="Newsy" provider-name="Lunatixz">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.simplecache" version="1.0.0"/>
+        <import addon="script.module.feedparser" version="5.1.3"/>
+        <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Newsy is a video news network that produces short-form video news pieces that provide breaking news and updates across U.S. and world news, policy and politics, science and health, entertainment, technology, business and sports.</summary>
+        <description lang="en_GB">Newsy is your source for concise, unbiased video news and analysis covering the top stories from around the world. With persistent curiosity and no agenda, we strive to fuel meaningful conversations by highlighting multiple sides of every story. Newsy delivers the news and perspective you need without the hype and bias common to many news sources.</description>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+        <source>https://github.com/Lunatixz/XBMC_Addons/tree/master/plugin.video.newsy</source>
+        <website>http://www.newsy.com</website>
+        <forum>https://forum.kodi.tv/showthread.php?tid=320402</forum>
+        <news></news>
+        <assets>
+            <icon>resources/images/icon.png</icon>
+            <fanart>resources/images/fanart.jpg</fanart>
+            <screenshot>resources/images/screenshot01.png</screenshot>
+            <screenshot>resources/images/screenshot02.png</screenshot>
+        </assets>
+    </extension>
+</addon>

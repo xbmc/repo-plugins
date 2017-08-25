@@ -4,6 +4,7 @@ plugin.video.myvevo
 
 Kodi Addon for VEVO
 
+Version 3.0.7 m3u8 version fix
 Version 3.0.6 auth fix
 Version 3.0.5 fix playlists, remove live channels, fix navigation
 V3.0.4 add Get Related Videos

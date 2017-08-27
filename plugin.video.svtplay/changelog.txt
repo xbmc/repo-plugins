@@ -1,3 +1,7 @@
+Version 4.0.51
+-------------
+- Stability improvements
+
 Version 4.0.50
 -------------
 - Fix broken category listing

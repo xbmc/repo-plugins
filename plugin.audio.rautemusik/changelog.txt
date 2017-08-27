@@ -1,5 +1,8 @@
+0.5.0
+- Plugin now uses official rautemusik.fm api
+
 0.3.0
-- Fixed broken Link for BugCityBeats
+- Fixed broken Link for BigCityBeats
 - Added new channel "Top 40"
 - Added new channel "90s"
 - Added new channel "Klassik"

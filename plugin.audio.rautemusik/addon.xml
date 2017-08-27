@@ -1,25 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.audio.rautemusik"
-	name="RauteMusik"
-	version="0.3.0"
-	provider-name="Leo Moll">
+	name="RauteMusik.FM"
+	version="0.5.0"
+	provider-name="RauteMusik GmbH, Leo Moll">
 	<requires>
-		<import addon="xbmc.python" version="2.1.0"/>
+		<import addon="xbmc.python" version="2.14.0"/>
+		<import addon="xbmc.addon" version="13.0.0"/>
+		<import addon="xbmc.json" version="6.6.0"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="addon.py">
 		<provides>audio</provides>
 	</extension>
 	<extension point="xbmc.addon.metadata">
-		<summary lang="de">RauteMusik</summary>
-		<summary lang="en">RauteMusik</summary>
+		<summary lang="de">RauteMusik.FM</summary>
+		<summary lang="en">RauteMusik.FM</summary>
 		<description lang="de">Das Internetradio RauteMusik.FM wurde im Jahr 2003 gegründet und hat sich seitdem zu Europas größtem Online Radio entwickelt. Rund 300 Mitglieder sorgen täglich dafür, dass rund um die Uhr die beste Musik der vergangenen Jahre und die Hits aus den aktuellen Charts über das Webradio gesendet werden können.</description>
 		<description lang="en">RauteMusik.FM was founded in 2003 and has become one of the largest internet radio networks in Europe. More than 300 members are working hard in providing the best music of the last years and the current charts.</description>
+		<disclaimer lang="de">Enjoy our music!</disclaimer>
+		<disclaimer lang="en">Enjoy our music!</disclaimer>
 		<platform>all</platform>
-		<language>de</language>
+		<language>en de</language>
 		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-		<forum>http://forum.xbmc.org/showthread.php?tid=206315</forum>
+		<forum>http://forum.kodi.tv/showthread.php?tid=206315</forum>
 		<website>http://www.rautemusik.fm/</website>
-		<source>https://github.com/tuxpoldo/rautemusik-xbmc.git</source>
+		<source></source>
 		<email></email>
+		<assets>
+			<icon>icon.png</icon>
+			<fanart>fanart.jpg</fanart>
+		</assets>
 	</extension>
 </addon>

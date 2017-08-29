@@ -13,7 +13,7 @@ Contributors:
 
 ============================================
 
-Current version: 2.2.0
+Current version: 2.2.1
   - Jarvis
   - Isengard
   - Helix
@@ -37,9 +37,10 @@ Features:
     - Cloudcasts
     - Users
   - Play cloudcasts
-    - Local resolver
-    - Offliberty resolver
-    - low quality m4a resolver
+    - Mixcloud-Downloader resolver
+    - Local resolver (broken)
+    - Offliberty resolver (broken)
+    - Low quality m4a resolver (broken)
   - Thumbnails
   - History
     - Played cloudcasts
@@ -48,7 +49,6 @@ Features:
     - English
     - Dutch
     - French
-    - German
   - jackyNIX's own cloudcasts :p
 
 ============================================

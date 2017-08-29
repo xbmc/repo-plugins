@@ -1,3 +1,9 @@
+2.2.1
+- added mixcloud-downloader resolver
+- removed broken resolvers
+- migration to po language files
+- removed german language (out of date)
+
 2.2.0
 - added low quality m4a resolver
 - fixed french localisation (tnx to gordielachance)

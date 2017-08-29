@@ -9,10 +9,11 @@ Contributors:
   - Bochi
   - SilentException
   - fleshgolem
+  - gordielachance
 
 ============================================
 
-Current version: 2.1.3
+Current version: 2.2.0
   - Jarvis
   - Isengard
   - Helix
@@ -38,6 +39,7 @@ Features:
   - Play cloudcasts
     - Local resolver
     - Offliberty resolver
+    - low quality m4a resolver
   - Thumbnails
   - History
     - Played cloudcasts

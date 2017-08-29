@@ -1,5 +1,10 @@
 Geek & Sundry Changelog
 
+*** 0.1.7 ***
+
+Fix issues with brightcove videos not playing
+Disable PIL usage which causes Kodi crashes
+
 *** 0.1.6 ***
 
 Fixes some show titles not displaying

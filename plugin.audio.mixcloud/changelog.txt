@@ -1,3 +1,7 @@
+2.2.0
+- added low quality m4a resolver
+- fixed french localisation (tnx to gordielachance)
+
 2.1.3
 - Add to and remove from listen later
 - Additional context menu items only visible when logged in

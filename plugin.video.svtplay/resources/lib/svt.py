@@ -255,7 +255,13 @@ def getEpisodes(title):
     except KeyError:
       # Suppress
       pass
-    program["url"] = "video/" + str(item["id"])
+    for version in item.get("versions", []):
+      if version["id"].endswith("A"):
+        # This is the preferred stream
+        program["url"] = "video/" + str(version["id"])
+        break
+    if not "url" in program:
+      program["url"] = "video/" + str(item["id"])
     program["thumbnail"] = helper.prepareThumb(item.get("thumbnail", ""), BASE_URL)
     info = {}
     info["plot"] = item.get("description", "")
@@ -351,6 +357,7 @@ def getItems(section_name, page):
 
 def __get_article_id_for_title(title):
   # Convert contentUrl to slug
+  common.log("Getting article id for " + title)
   title = title.strip("/")
   url = "title?slug="+title
   json_data = __get_json(url)
@@ -365,7 +372,11 @@ def __get_video_id_for_episode_id(episode_id):
   if json_data is None:
     return None
   else:
-    return json_data["id"]
+    for version in json_data["versions"]:
+      if version["id"].endswith("A"):
+        # The "normal" stream has an A in the ending
+        return version["id"]
+  return None
 
 def __get_video_json_for_video_id(video_id):
   url = VIDEO_API_URL + str(video_id)

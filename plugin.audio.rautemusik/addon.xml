@@ -5,8 +5,6 @@
 	provider-name="RauteMusik GmbH, Leo Moll">
 	<requires>
 		<import addon="xbmc.python" version="2.14.0"/>
-		<import addon="xbmc.addon" version="13.0.0"/>
-		<import addon="xbmc.json" version="6.6.0"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="addon.py">
 		<provides>audio</provides>
@@ -19,7 +17,7 @@
 		<disclaimer lang="de">Enjoy our music!</disclaimer>
 		<disclaimer lang="en">Enjoy our music!</disclaimer>
 		<platform>all</platform>
-		<language>en de</language>
+		<language>de</language>
 		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 		<forum>http://forum.kodi.tv/showthread.php?tid=206315</forum>
 		<website>http://www.rautemusik.fm/</website>

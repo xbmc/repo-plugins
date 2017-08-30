@@ -1,11 +1,11 @@
-RauteMusik  Plugin
-==================
+RauteMusik.FM Addon
+===================
 
 About
 -----
 
-The RauteMusik Plugin integrates all radio stations of [RauteMusik
-Internetradio] [1] into XBMC. RauteMusik.FM was founded in 2003 and has become
+The RauteMusik.FM AddOn integrates all radio stations of [RauteMusik
+Internetradio] [1] into Kodi. RauteMusik.FM was founded in 2003 and has become
 one of the largest internet radio networks in Europe. More than 300 members are
 working hard in providing the best music of the last years and the current
 charts.
@@ -22,11 +22,11 @@ This software is released under the [GPL 2.0 license] [2].
 Useful Links
 -------------
 
-Official Repository Page: http://addons.xbmc.org/show/plugin.audio.rautemusik
+Official Repository Page: https://kodi.tv/addon/music-add-ons-plugins/rautemusik
 
-Dedicated Repository: http://archive.yeasoft.net/repository.yeasoft.zip
+Dedicated Repository: http://archive.yeasoft.net/repository.yeasoftbeta.zip
 
-Support Forum: http://forum.xbmc.org/showthread.php?tid=183456
+Support Forum: http://forum.kodi.tv/showthread.php?tid=2063156
 
 
 [1]: http://rautemusik.fm

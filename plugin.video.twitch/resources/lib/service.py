@@ -23,7 +23,7 @@ from itertools import izip_longest
 from urllib2 import quote, unquote
 from addon.common import kodi, log_utils
 from addon.constants import Keys
-from addon.utils import BlacklistFilter, i18n, get_stamp_diff
+from addon.utils import BlacklistFilter, i18n, get_stamp_diff, get_vodcast_color
 from addon.player import TwitchPlayer
 from addon import api, cache
 import xbmc
@@ -74,7 +74,16 @@ def get_followed_streams(twitch_api):
         blacklist_filter.by_type(all_followed, Keys.STREAMS, parent_keys=[Keys.CHANNEL], id_key=Keys._ID, list_type='user')
     filtered = \
         blacklist_filter.by_type(filtered, Keys.STREAMS, game_key=Keys.GAME, list_type='game')
-    followed_tuples = [(stream[Keys.CHANNEL][Keys._ID], stream[Keys.CHANNEL][Keys.NAME], stream[Keys.CHANNEL][Keys.DISPLAY_NAME]) for stream in filtered[Keys.STREAMS]]
+    colorized = []
+    for stream in filtered[Keys.STREAMS]:
+        if stream.get(Keys.STREAM_TYPE) == 'watch_party':
+            color = get_vodcast_color()
+            if stream[Keys.CHANNEL].get(Keys.DISPLAY_NAME):
+                stream[Keys.CHANNEL][Keys.DISPLAY_NAME] = u'[COLOR={color}]{name}[/COLOR]'.format(name=stream[Keys.CHANNEL][Keys.DISPLAY_NAME], color=color)
+            if stream[Keys.CHANNEL].get(Keys.NAME):
+                stream[Keys.CHANNEL][Keys.NAME] = u'[COLOR={color}]{name}[/COLOR]'.format(name=stream[Keys.CHANNEL][Keys.NAME], color=color)
+        colorized.append(stream)
+    followed_tuples = [(stream[Keys.CHANNEL][Keys._ID], stream[Keys.CHANNEL][Keys.NAME], stream[Keys.CHANNEL][Keys.DISPLAY_NAME]) for stream in colorized]
     return followed_tuples
 
 

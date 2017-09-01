@@ -24,7 +24,7 @@ from base64 import b64decode
 from common import kodi, json_store
 from strings import STRINGS
 from tccleaner import TextureCacheCleaner
-from constants import CLIENT_ID, REDIRECT_URI, LIVE_PREVIEW_TEMPLATE, Images, ADDON_DATA_DIR, REQUEST_LIMIT
+from constants import CLIENT_ID, REDIRECT_URI, LIVE_PREVIEW_TEMPLATE, Images, ADDON_DATA_DIR, REQUEST_LIMIT, COLORS
 from twitch.api.parameters import Boolean, Period, ClipPeriod, Direction, Language, SortBy, VideoSort
 import xbmcvfs
 
@@ -32,7 +32,7 @@ translations = kodi.Translations(STRINGS)
 i18n = translations.i18n
 
 if not xbmcvfs.exists(ADDON_DATA_DIR):
-    result = xbmcvfs.mkdir(ADDON_DATA_DIR)
+    mkdir_result = xbmcvfs.mkdir(ADDON_DATA_DIR)
 storage = json_store.JSONStore(ADDON_DATA_DIR + 'storage.json')
 
 
@@ -118,6 +118,12 @@ def get_offset(offset, item, items, key=None):
             return int(offset) + next(index for (index, _item) in enumerate(items) if item == _item[key])
     except:
         return None
+
+
+def get_vodcast_color():
+    color = int(kodi.get_setting('vodcast_highlight'))
+    color = COLORS.split('|')[color]
+    return color.decode('utf-8')
 
 
 def the_art(art=None):
@@ -459,7 +465,7 @@ class BlacklistFilter(object):
                     identification = id_parent[key]
             if game_key and identification:
                 identification = identification if identification else ''
-            if identification:
+            if identification is not None:
                 if not is_blacklisted(identification, list_type=list_type):
                     filtered_results[result_key].append(result)
         return filtered_results

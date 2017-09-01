@@ -1,3 +1,21 @@
+2.0.2
+[fix/upd] use display names for communities
+
+2.0.1
+[fix] only open chat for live streams
+[fix] notify to retry if goo.gl url shortening fails for authentication
+[fix] check for game value before adding Goto Game context menu
+[fix] blacklist filter excluding unset game
+[fix] use same quality on stream reconnection
+[fix] do not ask for search query on '..'
+[fix] remake cache path on clear
+[fix/upd] cache static menus to disk
+[fix/upd] pagination to Followed Games
+[add] Kodi per-page sort methods
+[add] quality parameter added to play route
+[add] channel and viewer count to Games where possible
+[add] VodCast colorization
+
 2.0.0
 *** NOT backwards compatible with v1 (favorites, routes will NOT work)
 *** New OAuth token required, see Settings - Get OAuth token

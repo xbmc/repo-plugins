@@ -89,7 +89,7 @@ class TwitchPlayer(xbmc.Player):
             if reconnect:
                 live_channel = self.window.getProperty(self.reconnect_keys['stream'])
                 if live_channel:
-                    channel_id, name, display_name = live_channel.split(',')
+                    channel_id, name, display_name, quality = live_channel.split(',')
                     retries = 0
                     max_retries = 5
                     while not monitor.abortRequested():
@@ -124,9 +124,6 @@ class TwitchPlayer(xbmc.Player):
                                     except:
                                         pass
                                     twitch = api.Twitch()
-                                    quality = utils.get_default_quality('stream', channel_id)
-                                    if quality:
-                                        quality = quality[channel_id]['quality']
                                     videos = twitch.get_live(name)
                                     result = twitch.get_channel_stream(channel_id)[Keys.STREAM]
                                     item_dict = converter.stream_to_playitem(result)

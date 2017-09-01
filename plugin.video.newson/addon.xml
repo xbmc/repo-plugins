@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.newson" version="1.0.2" name="NewsON" provider-name="Lunatixz">
+<addon id="plugin.video.newson" version="1.0.3" name="NewsON" provider-name="Lunatixz">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.simplecache" version="1.0.0"/>
@@ -16,10 +16,10 @@
         <source>https://github.com/Lunatixz/XBMC_Addons/tree/master/plugin.video.newson</source>
         <website>http://watchnewson.com/</website>
         <forum>https://forum.kodi.tv/showthread.php?tid=315924</forum>
-        <news>v1.0.1[CR]- Updated cache parameters, Improved error detection.,v1.0.2[CR]- Updated cache parameters.</news>
+        <news>v1.0.3[CR]- Plugin improvments.[CR]v1.0.2[CR]- Updated cache parameters.[CR]v1.0.1[CR]- Updated cache parameters, Improved error detection.</news>
         <assets>
-            <icon>icon.png</icon>
-            <fanart>fanart.jpg</fanart>
+            <icon>resources/images/icon.png</icon>
+            <fanart>resources/images/fanart.jpg</fanart>
             <screenshot>resources/images/screenshot01.png</screenshot>
             <screenshot>resources/images/screenshot02.png</screenshot>
             <screenshot>resources/images/screenshot03.png</screenshot>

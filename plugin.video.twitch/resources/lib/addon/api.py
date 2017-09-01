@@ -304,8 +304,8 @@ class Twitch:
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
-    def get_followed_games(self, name):
-        results = self.api.games._get_followed(username=name)
+    def get_followed_games(self, name, offset, limit):
+        results = self.api.games._get_followed(username=name, limit=limit, offset=offset)
         return self.error_check(results)
 
     @api_error_handler

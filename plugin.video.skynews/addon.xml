@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.skynews" version="1.0.1" name="Sky News" provider-name="Lunatixz">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.simplecache" version="1.0.0"/>
+        <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+        <import addon="plugin.video.youtube" version="5.1.8" optional="true"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Sky News is a 24-hour international multimedia news organisation based in the U.K. that started as a 24-hour television news channel.</summary>
+        <description lang="en_GB">Sky News - First for Breaking News, video, headlines, analysis and top stories from business, politics, entertainment and more in the UK and worldwide.</description>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+        <source>https://github.com/Lunatixz/XBMC_Addons/tree/master/plugin.video.skynews</source>
+        <website>http://news.sky.com/</website>
+        <forum>https://forum.kodi.tv/showthread.php?tid=320938</forum>
+        <news></news>
+        <assets>
+            <icon>resources/images/icon.png</icon>
+            <fanart>resources/images/fanart.jpg</fanart>
+            <screenshot>resources/images/screenshot01.png</screenshot>
+            <screenshot>resources/images/screenshot02.png</screenshot>
+        </assets>
+    </extension>
+</addon>

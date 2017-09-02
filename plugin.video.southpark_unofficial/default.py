@@ -54,12 +54,12 @@ def index():
     addDir(translation(30005), "Featured", 'list', icon)
     addLink(translation(30006), "Random", 'list', icon)
     addLink(translation(30013), "Search", 'list', icon)
-    for i in range(1, 21):
+    for i in range(1, 22):
         addDir(translation(30007)+" "+str(i), str(i), 'list', defaultImgDir+str(i)+".jpg")
     xbmcplugin.endOfDirectory(pluginhandle)
 
 
-def list(url):
+def list_episodes(url):
     xbmcplugin.setContent(pluginhandle, "episodes")
     if url == "Featured":
         jsonrsp = getUrl(getCarousel())
@@ -438,7 +438,7 @@ eptitle = urllib.unquote_plus(params.get('title', ''))
 epthumbnail = urllib.unquote_plus(params.get('thumbnail', ''))
 
 if mode == 'list':
-    list(url)
+    list_episodes(url)
 elif mode == 'play':
     playEpisode(url, eptitle, epthumbnail)
 else:

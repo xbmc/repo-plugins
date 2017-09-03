@@ -3,6 +3,7 @@
   <category label="30601">
     <setting id="alpha" type="bool" label="30502" default="false" />
     <setting id="hidesignlanguage" type="bool" label="30504" default="false" />
+    <setting id="hideonlysweden" type="bool" label="30505" default="false" />
     <setting id="showsubtitles" type="bool" label="30501" default="false" />
     <setting id="debug" type="bool" label="30500" default="false" />
   </category>

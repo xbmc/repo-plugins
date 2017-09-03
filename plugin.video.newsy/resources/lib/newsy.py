@@ -108,7 +108,7 @@ class Newsy(object):
             yield seq[start:start+rowlen]
 
             
-    def buildRSS(self, start=0, end=14):
+    def buildRSS(self, start=0, end=9):
         data    = feedparser.parse(RSSURL)['entries']
         data    = list(self.pagination(data, end))
         start   = 0 if start >= len(data) else start
@@ -133,11 +133,15 @@ class Newsy(object):
     def resolveURL(self, url):
         log('resolveURL, url = ' + str(url))
         try:
-            soup = BeautifulSoup(self.openURL(url), "html.parser")
-            link = soup('div' , {'class': 'video-container'})[0]
-            item = json.loads(link('div' , {'class': 'video-container'})[0].get('data-video-player'))
-            url = item['file'] if VID_TYPE == 'MP4' else 'http:'+item['stream']
-            return url, item['duration']//1000, item['headline']
+            cacheResponse = self.cache.get(ADDON_NAME + '.resolveURL, url = %s'%url)
+            if not cacheResponse:
+                soup = BeautifulSoup(self.openURL(url), "html.parser")
+                link = soup('div' , {'class': 'video-container'})[0]
+                item = json.loads(link('div' , {'class': 'video-container'})[0].get('data-video-player'))
+                path = item['file'] if VID_TYPE == 'MP4' else 'http:'+item['stream']
+                rep = path, item['duration']//1000, item['headline']
+                self.cache.set(ADDON_NAME + '.resolveURL, url = %s'%url, rep, expiration=datetime.timedelta(hours=48))
+            return self.cache.get(ADDON_NAME + '.resolveURL, url = %s'%url)
         except Exception, e:
             log("resolveURL Failed! " + str(e), xbmc.LOGERROR)
         

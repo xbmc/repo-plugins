@@ -1,94 +1,102 @@
 # XBMC Media Center language file
 # Addon Name: Aktualne TV
 # Addon id: plugin.video.aktualnetv
-# Addon version: 1.4.1
+# Addon version: 2.0.0
 # Addon Provider: Petr Kutalek
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
-"POT-Creation-Date: 2017-04-24 20:31+0000\n"
-"PO-Revision-Date: 2017-04-24 22:31+0200\n"
+"POT-Creation-Date: 2017-09-04 16:35+0000\n"
+"PO-Revision-Date: 2017-09-04 18:35+0200\n"
 "Last-Translator: Petr Kutalek <petr@kutalek.cz>\n"
 "Language-Team: LANGUAGE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sk\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 msgctxt "Addon Summary"
 msgid "This addon provides access to videos published on Aktualne TV"
-msgstr "Tento doplnok sprístupňuje videa publikovaná na Aktuálně TV"
+msgstr ""
 
 msgctxt "Addon Description"
 msgid "Aktualne.cz — covering all aspects of life in the Czech Republic, from political, social, economic and sports news to arts and culture"
-msgstr "Aktuálně.cz — kompletné spravodajstvo, správy z domova i zo sveta"
+msgstr ""
 
 msgctxt "Addon Disclaimer"
 msgid "This is an unofficial addon and is in no way affiliated with publisher Economia, a. s. It was created and is maintained by an independent developer. It is provided for reference only and may contain errors."
-msgstr "Toto je neoficiálny doplnok a nie je, žiaľ, žiadnym spôsobom spojený s vydavateľstvom Economia, a. s. Bol vytvorený a je udržiavaný nezávislým vývojárom. Doplnok je poskytnutý len ako ukážka a môže obsahovať chyby."
+msgstr ""
 
 msgctxt "#30000"
 msgid "Aktualne TV"
-msgstr "Aktuálně TV"
+msgstr ""
 
 msgctxt "#30001"
 msgid "Economia"
-msgstr "Economia"
+msgstr ""
+
+#empty strings from id 30002 to 30010
 
 msgctxt "#30011"
 msgid "Archive"
-msgstr "Archív"
+msgstr ""
 
 msgctxt "#30012"
 msgid "Shows"
-msgstr "Relácie"
+msgstr ""
+
+#empty string with id 30013
 
 msgctxt "#30014"
 msgid "Search"
-msgstr "Hľadať"
+msgstr ""
+
+#empty strings from id 30015 to 30019
 
 msgctxt "#30020"
 msgid "Next…"
-msgstr "Ďalšie…"
+msgstr ""
+
+#empty strings from id 30021 to 30029
 
 msgctxt "#30030"
 msgid "Live Stream"
-msgstr "Priamy prenos"
+msgstr ""
+
+#empty strings from id 30031 to 30100
 
 msgctxt "#30101"
 msgid "Playback"
-msgstr "Prehrávanie"
+msgstr ""
 
-msgctxt "#30102"
-msgid "Other"
-msgstr "Ostatné"
+#empty strings from id 30102 to 30109
 
 msgctxt "#30110"
 msgid "Quality"
-msgstr "Kvalita"
+msgstr ""
 
 msgctxt "#30111"
 msgid "LQ (180p)"
-msgstr "LQ (180p)"
+msgstr ""
 
 msgctxt "#30112"
 msgid "SD (360p)"
-msgstr "SD (360p)"
+msgstr ""
 
 msgctxt "#30113"
+msgid "HQ (480p)"
+msgstr ""
+
+msgctxt "#30114"
 msgid "HD (720p)"
-msgstr "HD (720p)"
+msgstr ""
 
-msgctxt "#30120"
-msgid "Format"
-msgstr "Formát"
+msgctxt "#30115"
+msgid "FullHD (1080p)"
+msgstr ""
 
-msgctxt "#30121"
-msgid "H.264 (hardware-accelerated)"
-msgstr "H.264 (hardwarovo akcelerovaný)"
-
-msgctxt "#30122"
-msgid "VP8 (libre)"
-msgstr "VP8 (otvorený formát)"
+msgctxt "#30116"
+msgid "Adaptive"
+msgstr ""

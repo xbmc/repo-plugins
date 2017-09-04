@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.aktualnetv" version="1.4.1" name="Aktualne TV" provider-name="Petr Kutalek">
+<addon id="plugin.video.aktualnetv" version="2.0.0" name="Aktualne TV" provider-name="Petr Kutalek">
   <requires>
     <import addon="xbmc.python" version="2.24.0"/>
-    <import addon="script.module.xbmcswift2" version="2.4.0"/>
   </requires>
 
   <extension point="xbmc.python.pluginsource" library="default.py">
@@ -34,32 +33,17 @@
       <screenshot>resources/screenshot-1.jpg</screenshot>
       <screenshot>resources/screenshot-2.jpg</screenshot>
       <screenshot>resources/screenshot-3.jpg</screenshot>
-      <screenshot>resources/screenshot-4.jpg</screenshot>
     </assets>
 
-    <news><![CDATA[Changelog:
+    <news><![CDATA[What's New
 
-[B]1.4.1[/B]
-— Add SK translation and language resources
-— Update screenshots (made on Kodi v17 now)
-— Does not switch layout for shows now
-— addon.py renamed to default.py for better compatibility
-— Add support for live streams playback
-
-[B]1.3.3[/B]
-— Fixed name, stripped accents etc. — Kodi web is unable to handle it correctly
-
-[B]1.3.2[/B]
-— Fixed compatibility for Kodi v16/v17
-
-[B]1.3.1[/B]
-— Fixed JSON parsing, now it is more robust and tolerant
-
-[B]1.2.3 — 1.2.4[/B]
-— Fixed missing Shows thumbnail issue
-
-[B]1.2.2[/B]
-— Build for Kodi v17
+[B]2.0.0[/B]
+— Brand new Aktualne TV addon!
+— Simplified, just videos
+— No dependency on other modules
+— FullHD 1080p and adaptive streaming now supported
+— Only H264, no VP8 support anymore
+— Slovak interface translation
 ]]></news>
 
   </extension>

@@ -34,6 +34,7 @@ S_DEBUG = "debug"
 S_HIDE_SIGN_LANGUAGE = "hidesignlanguage"
 S_SHOW_SUBTITLES = "showsubtitles"
 S_USE_ALPHA_CATEGORIES = "alpha"
+S_HIDE_RESTRICTED_TO_SWEDEN = "hideonlysweden"
 
 PLUGIN_HANDLE = int(sys.argv[1])
 
@@ -185,8 +186,9 @@ def createDirItem(article, mode):
   Given an article and a mode; create directory item
   for the article.
   """
-  if not helper.getSetting(S_HIDE_SIGN_LANGUAGE) or (not article["title"].lower().endswith("teckentolkad") and article["title"].lower().find("teckenspråk".decode("utf-8")) == -1):
-
+  if not helper.getSetting(S_HIDE_SIGN_LANGUAGE) \
+      or (not article["title"].lower().endswith("teckentolkad") \
+      and article["title"].lower().find("teckenspråk".decode("utf-8")) == -1):
     params = {}
     params["mode"] = mode
     params["url"] = article["url"]
@@ -194,8 +196,14 @@ def createDirItem(article, mode):
 
     if mode == MODE_PROGRAM:
       folder = True
+
     info = None
     if "info" in article.keys():
+      if "onlyAvailableInSweden" in article["info"] and \
+          article["info"]["onlyAvailableInSweden"] and \
+          helper.getSetting(S_HIDE_RESTRICTED_TO_SWEDEN):
+        # Do not show geo restricted items
+        return
       info = article["info"]
     addDirectoryItem(article["title"], params, article["thumbnail"], folder, False, info)
 

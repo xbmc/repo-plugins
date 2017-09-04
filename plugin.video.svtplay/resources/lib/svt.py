@@ -266,6 +266,9 @@ def getEpisodes(title):
     info = {}
     info["plot"] = item.get("description", "")
     info["fanart"] = helper.prepareFanart(item.get("poster", ""), BASE_URL)
+    info["duration"] = item.get("materialLength", "")
+    info["tagline"] = item.get("shortDescription", "")
+    info["onlyAvailableInSweden"] = item.get("onlyAvailableInSweden", "false")
     program["info"] = info
     programs.append(program)
   return programs

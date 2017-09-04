@@ -1,3 +1,7 @@
+Version 4.0.52
+-------------
+- New settings! Hide items georestricted to Sweden.
+
 Version 4.0.51
 -------------
 - Stability improvements

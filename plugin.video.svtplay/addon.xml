@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.svtplay"
        name="SVT Play"
-       version="4.0.51"
+       version="4.0.52"
        provider-name="nilzen">
   <requires>
     <import addon="script.module.parsedom" version="1.2.0"/>
@@ -24,7 +24,7 @@
     <source>https://github.com/nilzen/xbmc-svtplay</source>
     <forum>http://forum.xbmc.org/showthread.php?tid=67110</forum>
     <news>
-- Stability improvements
+- New settings! Hide items georestricted to Sweden.
     </news>
   </extension>
 </addon>

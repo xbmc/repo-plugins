@@ -7,7 +7,7 @@ import re
 import os
 
 from default import addon, subredditsFile, urlMain, itemsPerPage,subredditsPickle,REQUEST_TIMEOUT
-from utils import log, translation,xbmc_notify
+from utils import log, translation,xbmc_notify,clean_str
 from default import reddit_clientID, reddit_userAgent, reddit_redirect_uri
 
 
@@ -297,7 +297,7 @@ def parse_subreddit_entry(subreddit_entry_from_file):
         entry_type='domain'
 
         domain=re.findall(r'(?::|\/domain\/)(.+)',subreddit)[0]
-        description=translation(30008) + domain            #"Show %s links"
+        description="{} {}".format( translation(30008), domain )            #"Posts to"
 
     if '+' in subreddit:
         entry_type='combined'
@@ -311,6 +311,10 @@ def parse_subreddit_entry(subreddit_entry_from_file):
         entry_type='search'
         description=translation(32016)  #"Custom Search"
 
+
+    if subreddit.startswith('https://'):
+        entry_type='link'
+        description=translation(32027)  #"Saved Link"
 
     return entry_type, subreddit, alias, description
 
@@ -458,7 +462,6 @@ def collect_thumbs( entry ):
     return
 
 def determine_if_video_media_from_reddit_json( data ):
-    from utils import clean_str
 
     is_a_video=False
 
@@ -512,6 +515,9 @@ def get_subreddit_info( subreddit ):
                                    'subscribers':j.get('subscribers'),
                                    'created':j.get('created'),        #public, private
                                    'over18':j.get('over18'),
+                                   'icon_size':j.get('icon_size'),
+                                   'banner_size':j.get('banner_size'),
+                                   'header_size':j.get('header_size'),
                                    } )
 
                 return subs_dict
@@ -533,17 +539,21 @@ def ret_sub_info( subreddit_entry ):
             if os.path.exists(subredditsPickle):
                 subreddits_dlist=load_dict(subredditsPickle)
 
+        subreddit_search=subreddit_entry.lower()  #<--note everything being lcase'd
 
-        subreddit_search=subreddit_entry.lower()
-        if '/' in subreddit_search:
-            subreddit_search=subreddit_search.split('/')[0]
+        if subreddit_entry.startswith('http'): #differentiate link shortcuts(http://youtube...) from (diy/new)
 
-        if '+' in subreddit_search:
+            pass
+        else:
+            if '/' in subreddit_search: #search only for "diy" in "diy/new"
+                subreddit_search=subreddit_search.split('/')[0]
+
+        if '+' in subreddit_search: #for combined subredits, randomly search for one of them.
             subreddit_search=random.choice(subreddit_search.split('+'))
 
         for sd in subreddits_dlist:
 
-            if sd.get('entry_name')==subreddit_search:
+            if sd.get('entry_name','').lower()==subreddit_search:
                 return sd
     except Exception as e:
 
@@ -555,7 +565,6 @@ def ret_sub_icon(subreddit):
     if sub_info:
 
         return next((item for item in [sub_info.get('icon_img'),sub_info.get('banner_img'),sub_info.get('header_img')] if item ), '')
-
 
 subredditsFile_entries=[]
 def load_subredditsFile():
@@ -594,7 +603,8 @@ def get_subreddit_entry_info(subreddit):
         t.start()
 
 def convert_settings_entry_into_subreddits_list_or_domain(settings_entry):
-    settings_entry=settings_entry.lower().strip()
+
+    settings_entry=settings_entry.strip()
     if settings_entry in ['all','random','randnsfw','popular']:
         return
 
@@ -605,6 +615,10 @@ def convert_settings_entry_into_subreddits_list_or_domain(settings_entry):
         return
 
     s=[]
+
+    if settings_entry.startswith('http'):
+        s.append(settings_entry)
+        return s
 
     if '/' in settings_entry:  #only get "diy" from "diy/top" or "diy/new"
         settings_entry=settings_entry.split('/')[0]
@@ -618,6 +632,7 @@ def convert_settings_entry_into_subreddits_list_or_domain(settings_entry):
 
 def get_subreddit_entry_info_thread(sub_list):
     from utils import load_dict, save_dict, get_domain_icon, setting_entry_is_domain
+    from domains import ClassYoutube
 
     global subreddits_dlist #subreddits_dlist=[]
 
@@ -627,23 +642,126 @@ def get_subreddit_entry_info_thread(sub_list):
             subreddits_dlist=load_dict(subredditsPickle)
 
     for subreddit in sub_list:
-        subreddit=subreddit.lower().strip()
 
-        subreddits_dlist=[x for x in subreddits_dlist if x.get('entry_name','') != subreddit ]
-        domain=setting_entry_is_domain(subreddit)
-        if domain:
-            log('  getting domain info '+domain)
-            sub_info=get_domain_icon(subreddit,domain)
+        if subreddit.startswith('https://'):
+            entry_in_file=subreddit
+            without_alias=re.sub(r"[\(\[].*?[\)\]]", "", entry_in_file)
+            yt=ClassYoutube(without_alias)
+            url_type,id_=yt.get_video_channel_user_or_playlist_id_from_url(without_alias)
+            if url_type=='channel':
+                sub_info=yt.get_channel_info(id_, entry_name=entry_in_file)
+            else:
 
+                log('  getting link info:entry_in_file=%s  without_alias=%s'%(repr(entry_in_file),repr(without_alias))  )
+                sub_info=get_domain_icon(entry_in_file,None,without_alias )
         else:
-            log('  getting sub info '+subreddit)
-            sub_info=get_subreddit_info(subreddit)
+            subreddit=subreddit.lower().strip()
+
+            subreddits_dlist=[x for x in subreddits_dlist if x.get('entry_name','') != subreddit ]
+
+            domain=setting_entry_is_domain(subreddit)
+            if domain:
+                log('  getting domain info '+domain)
+                sub_info=get_domain_icon(subreddit,domain)
+
+            else:
+                log('  getting sub info '+subreddit)
+                sub_info=get_subreddit_info(subreddit)
 
         log('    retrieved subreddit info ' + repr( sub_info ))
         if sub_info:
             subreddits_dlist.append(sub_info)
             save_dict(subreddits_dlist, subredditsPickle)
 
+def subreddit_icoheader_banner(subreddit):
+
+    addtl_subr_info=ret_sub_info(subreddit)
+
+    try: #if addtl_subr_info:
+        icon=addtl_subr_info.get('icon_img')
+        banner=addtl_subr_info.get('banner_img')
+        header=addtl_subr_info.get('header_img',None)  #usually the small icon on upper left side on subreddit screen // also sometimes a very wide banner
+
+        header_ar=img_ar(addtl_subr_info.get('header_size'))
+
+        if header_ar > 8 and not banner:
+
+            banner=header
+            header=None
+
+    except AttributeError:
+        icon=banner=header=None
+
+        get_subreddit_entry_info(subreddit)
+    return icon,banner,header
+
+def img_ar(img_size_array):
+
+    ar=0
+    try:
+        w,h=img_size_array
+        ar=float(w)/h
+
+    except (TypeError,ZeroDivisionError):  #,ValueError):
+        ar=0
+    return ar
+
+def subreddit_entry_to_listitem(subreddit_entry):
+    from utils import compose_list_item, build_script, xstr, prettify_reddit_query
+    addtl_subr_info={}
+    nsfw=False
+    icon=banner=header=public_description=display_name=override_header_image=None
+    header_ar=0
+    addtl_subr_info=ret_sub_info(subreddit_entry)
+
+    entry_type, subreddit, alias, shortcut_description=parse_subreddit_entry(subreddit_entry)
+    icon=default_icon=ret_settings_type_default_icon(entry_type)
+
+    pretty_label=prettify_reddit_query(alias)
+    pretty_label=pretty_label.replace('+',' + ')
+
+    if addtl_subr_info:
+        icon=addtl_subr_info.get('icon_img')
+        banner=addtl_subr_info.get('banner_img')  #rectangular shape
+        header=addtl_subr_info.get('header_img')  #square shape  from  bannerTvImageUrl
+        header_ar=img_ar(addtl_subr_info.get('header_size'))
+        if (header_ar > 8) and (not icon): #some header_img are very wide. this is to check and override the icon display in the gui
+            override_header_image=header
+            banner=header
+        public_description=xstr( addtl_subr_info.get('public_description',''))
+        display_name=xstr(addtl_subr_info.get('display_name',''))
+
+
+    if entry_type=='link':  #<-- added new ability to have youtube channels as a shortcut on the main screen
+
+        liz = compose_list_item( pretty_label, entry_type, "", "script", build_script("listRelatedVideo",subreddit,alias) )
+    else: #domain, subreddit, combined, search, multireddit
+        reddit_url=assemble_reddit_filter_string("",subreddit, "yes")
+
+        if entry_type=='domain':
+
+            pretty_label=re.findall(r'(?::|\/domain\/)(.+)',subreddit)[0]
+
+        if subreddit.lower() in ["all","popular"]:
+            liz = compose_list_item( pretty_label, entry_type, "", "script", build_script("listSubReddit",reddit_url,alias) )
+        else:
+            if addtl_subr_info: #if we have additional info about this subreddit
+
+                nsfw=addtl_subr_info.get('over18')
+
+                icon=next((item for item in [icon,banner,header] if item ), '') or default_icon #picks the first item that is not None
+
+                liz = compose_list_item( pretty_label, entry_type, "", "script", build_script("listSubReddit",reddit_url,alias) )
+            else:
+                liz = compose_list_item( pretty_label, entry_type, "", "script", build_script("listSubReddit",reddit_url,alias) )
+
+    liz.setArt({ "thumb": icon, "banner":banner, "fanart":override_header_image })
+    liz.setInfo('video', {"Title":display_name, "plot":public_description} )
+
+    if nsfw:
+        liz.setProperty('nsfw', 'true' )
+
+    return liz
 
 if __name__ == '__main__':
     pass

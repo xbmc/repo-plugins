@@ -67,6 +67,7 @@
         <setting id="ytdl_btn_download"       type="action" label="30612"  action="RunPlugin(plugin://plugin.video.reddit_viewer/?mode=update_youtube_dl_core&type=download)"/>
         <setting                              type="sep" />
         <setting id="youtube_api_key"         type="text"   label="30613" default="AIzaSyBilnA0h2drOvpnqno24xeVqGy00fp07so"/>
+        <setting id="show_debug_messages"     type="bool"   label="30614" default="false"/>
     </category>
 
     <!-- category label="30150">

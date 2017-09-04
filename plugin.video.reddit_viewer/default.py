@@ -10,7 +10,6 @@ import xbmcplugin
 import xbmcgui
 import xbmcaddon
 
-
 from urllib import urlencode
 from decimal import DivisionByZero
 
@@ -141,3 +140,6 @@ if __name__ == '__main__':
                     }
 
     plugin_modes[mode](url,name,type_)
+
+    del addon
+    addon=None

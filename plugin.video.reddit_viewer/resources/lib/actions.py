@@ -223,11 +223,12 @@ def display_album_from(dictlist, album_name):
             liz.setProperty('onClick_action',  DirectoryItem_url )
             liz.setProperty('is_video','true')
 
-            if ld.link_action == sitesBase.DI_ACTION_PLAYABLE:
-                liz.setProperty('item_type','playable')
-            else:
+            if ld:
+                if ld.link_action == sitesBase.DI_ACTION_PLAYABLE:
+                    liz.setProperty('item_type','playable')
+                else:
 
-                liz.setProperty('item_type','script')
+                    liz.setProperty('item_type','script')
         else:
 
             liz.setProperty('IsPlayable',setProperty_IsPlayable)

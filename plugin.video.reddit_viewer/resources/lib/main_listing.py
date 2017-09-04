@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import xbmc
 import xbmcgui
-import xbmcaddon
 import xbmcplugin
 import urllib, urlparse
 import json
@@ -112,7 +111,8 @@ def listSubReddit(url, name, subreddit_key):
     log("listSubReddit subreddit=%s url=%s" %(subreddit_key,url) )
 
     currentUrl = url
-    xbmcplugin.setContent(pluginhandle, "movies") #files, songs, artists, albums, movies, tvshows, episodes, musicvideos
+
+    xbmcplugin.setContent(pluginhandle, "episodes") #files, songs, artists, albums, movies, tvshows, episodes, musicvideos
 
     loading_indicator=progressBG('Loading...')
     loading_indicator.update(8,'Retrieving '+subreddit_key)
@@ -398,8 +398,14 @@ def addLink(title, title_line2, iconimage, previewimage,preview_w,preview_h,doma
         preview_ar=float(preview_w) / preview_h
 
 
-    if previewimage: needs_preview=False
-    else:            needs_preview=True  #reddit has no thumbnail for this link. please get one
+    if previewimage: 
+        needs_preview=False
+    else:
+        if iconimage: #some sites ban us if we send too many requests asking for preview image(meta og image)
+            needs_preview=False
+            previewimage=iconimage
+        else:
+            needs_preview=True  #reddit has no thumbnail for this link. please get one
 
 
     if DoNotResolveLinks:
@@ -436,6 +442,7 @@ def addLink(title, title_line2, iconimage, previewimage,preview_w,preview_h,doma
 
     liz.setProperty('IsPlayable', setProperty_IsPlayable)
     liz.setInfo('video', {"title": liz.getLabel(), } )
+    liz.setContentLookup(False)
 
     liz.setArt({"thumb": iconimage, "poster":previewimage, "banner":iconimage, "fanart":previewimage, "landscape":previewimage, })
     entries = build_context_menu_entries(num_comments, commentsUrl, subreddit, domain, media_url, post_id) #entries for listbox for when you type 'c' or rt-click
@@ -644,7 +651,7 @@ def listLinksInComment(url, name, type_):
         loading_indicator.tick(1, desc100)
     loading_indicator.end()
 
-    xbmcplugin.setContent(pluginhandle, "movies")    #files, songs, artists, albums, movies, tvshows, episodes, musicvideos
+    xbmcplugin.setContent(pluginhandle, "episodes")    #files, songs, artists, albums, movies, tvshows, episodes, musicvideos
     xbmcplugin.setPluginCategory(pluginhandle,'Comments')
 
     xbmcplugin.addDirectoryItems(handle=pluginhandle, items=directory_items )

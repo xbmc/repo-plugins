@@ -24,7 +24,7 @@ def getDbPath():
 
 def getPlayCount(url):
     import sqlite3
-    
+
     dbPath = getDbPath()
     if dbPath:
         conn = sqlite3.connect(dbPath)
@@ -37,7 +37,6 @@ def getPlayCount(url):
 
         c.execute(str_sql,args)
 
-
         result = c.fetchone()
 
         if result:
@@ -46,7 +45,6 @@ def getPlayCount(url):
                 return int(result)
             return 0
     return -1
-
 
 
 def autoPlay(url, name, autoPlay_type):

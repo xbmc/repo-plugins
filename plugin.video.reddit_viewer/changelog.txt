@@ -347,3 +347,7 @@
  3.5.0
    - add parsing for instagram profile page (album)
    - parse youtube playlist/channel url (won't play for album custom gui)
+ 3.5.1 (2017-09-04)
+   - use the "episodes" content type for listSubReddit() rather than "movies"
+   - copy over code from reddit.reader
+   - route v.redd.it to youtube_dl

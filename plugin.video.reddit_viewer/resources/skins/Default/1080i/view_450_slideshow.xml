@@ -32,14 +32,15 @@
 					<description>The spinning animation in the background</description>
 					<aspectratio align="center" aligny="center" >center</aspectratio>
 					<texture>srr_busy.gif</texture>
-					<visible>!IntegerGreaterThan(Container(53).NumPages,0) | ![Container(53).OnNext | Container(53).OnPrevious] + isEmpty(Container(53).ListItem.Property(is_video))</visible>
+					<visible>!IntegerGreaterThan(Container(53).NumPages,0) | ![Container(53).OnNext | Container(53).OnPrevious]</visible>
+					<visible>String.IsEmpty(Container(53).ListItem.Property(is_video))</visible>
 				</control>
 
 				<control type="image">
 					<description>Play overlay for video</description>
 					<aspectratio align="center" aligny="center" >center</aspectratio>
 					<texture>play_overlay.png</texture>
-					<visible>!isEmpty(Container(53).ListItem.Property(is_video))</visible>
+					<visible>!String.IsEmpty(Container(53).ListItem.Property(is_video))</visible>
 				</control>
 
 				<control type="image" id="204">
@@ -304,7 +305,6 @@
 		</control>
 		<!--END include>View_53_Shift</include -->
 
-
 		<control type="group">
 			<description>description box gets hidden when button 101 is in focus</description>
 			<top>910</top>
@@ -312,33 +312,21 @@
 			<width>1100</width>
 			<height>220</height>
 			
-			
 			<visible>! [Control.HasFocus(101)|Control.HasFocus(102)|Control.HasFocus(103)|Control.HasFocus(104)|Control.HasFocus(105)]</visible>
 
 			<animation effect="fade" time="200" start="0" end="100" >Visible</animation>
 			<animation effect="fade" time="200" start="100" end="0" >Hidden</animation>
 
-			<animation effect="fade" time="200" start="0" end="100" condition="!String.IsEmpty(Container(53).ListItem.Plot)">Conditional</animation>
-			<animation effect="fade" time="200" start="100" end="0" condition="String.IsEmpty(Container(53).ListItem.Plot)">Conditional</animation>
-			 
-			<!--  BEGIN include content="ShiftTextbox" -->
-					<!-- control type="image">
-						<visible>! [String.IsEmpty(Container(53).ListItem.Plot)]</visible>
-						<texture>srr_dialog-bg.png</texture>
-					</control-->
-					<control type="textbox" id="65591">
-						<top>12</top>
-						<left>30</left>
-						<width>1038</width>
-						<height>160</height>
-						
-						<autoscroll delay="10000" time="2000" repeat="15000">true</autoscroll>
-						<label>$INFO[Container(53).ListItem.Plot]</label>
-						<font>font12</font>
-						<shadowcolor>text_shadow</shadowcolor>
-					</control>
-			<!-- END include content="ShiftTextbox" -->
-			
+			<control type="textbox" id="65591">
+				<top>12</top>
+				<left>30</left>
+				<width>1038</width>
+				<height>160</height>
+				<autoscroll delay="10000" time="2000" repeat="15000">true</autoscroll>
+				<label>$INFO[Container(53).ListItem.Label,[B],[/B][CR]] $INFO[Container(53).ListItem.Plot]</label>
+				<font>font12</font>
+				<shadowcolor>text_shadow</shadowcolor>
+			</control>
 		</control>
 
 		

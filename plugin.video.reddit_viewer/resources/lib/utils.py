@@ -9,7 +9,6 @@ import sys,os #os is used in open_web_browser()
 from urllib import urlencode
 
 
-
 addon         = xbmcaddon.Addon()
 addonID       = addon.getAddonInfo('id')  #plugin.video.reddit_viewer
 
@@ -42,10 +41,18 @@ def xbmc_busy(busy=True):
     else:
         xbmc.executebuiltin( "Dialog.Close(busydialog)" )
 
-def log(message, level=xbmc.LOGDEBUG):
+def log(message):
     import threading
     t=threading.currentThread()
-    xbmc.log("reddit_viewer {0}:{1}".format(t.name, message), level=level)
+    show_debug_messages=addon.getSetting("show_debug_messages") == "true"
+    if show_debug_messages:
+        level=xbmc.LOGNOTICE
+    else:
+        level=xbmc.LOGDEBUG
+    try:
+        xbmc.log("reddit_viewer {0}:{1}".format(t.name, message), level=level)
+    except TypeError as e:
+        xbmc.log("reddit_viewer error:{0}".format(e), level=level)
 
 def translation(id_):
     return addon.getLocalizedString(id_).encode('utf-8')
@@ -68,7 +75,6 @@ def compose_list_item(label,label2,iconImage,property_item_type, onClick_action,
 
     return liz
 
-
 def build_script( mode, url="", name="", type_="", script_to_call=''):
 
     if script_to_call: #plugin://plugin.video.reddit_viewer/
@@ -80,7 +86,7 @@ def build_script( mode, url="", name="", type_="", script_to_call=''):
         url=''  if url==None else url.decode('unicode_escape').encode('ascii','ignore') #causes error in urllib.quote_plus() if None
         script_to_call=addonID
 
-        return "RunAddon({script_to_call},mode={mode}&url={url}&name={name}&type={type})".format( script_to_call=script_to_call,
+        return "RunScript({script_to_call},mode={mode}&url={url}&name={name}&type={type})".format( script_to_call=script_to_call,
                                                                                                   mode=mode,
                                                                                                   url=urllib.quote_plus(url),
                                                                                                   name=urllib.quote_plus(name),
@@ -150,6 +156,23 @@ def pretty_datediff(dt1, dt2):
         return str(day_diff / 365) + translation(30070)    #" years ago"
     except:
         pass
+def pretty_datediff_wrap( date_to_prettify, format_string="%Y-%m-%d %H:%M:%S", use_utc_as_base=True ):
+    from datetime import datetime
+    import time
+
+    try: #try/except is done this way because of a bug  https://forum.kodi.tv/showthread.php?tid=112916
+        date_object=datetime.strptime(date_to_prettify, format_string)
+    except TypeError:
+        try:
+            date_object=datetime(*(time.strptime(date_to_prettify, format_string)[0:6]))
+        except:
+            return
+
+    now = datetime.now()
+    if use_utc_as_base:
+        now = datetime.utcnow()
+
+    return pretty_datediff(now, date_object)
 
 def is_filtered(filter_csv, str_to_check):
 
@@ -169,7 +192,6 @@ def post_excluded_from( filter_, str_to_check):
 
 def add_to_csv_setting(setting_id, string_to_add):
 
-    addon=xbmcaddon.Addon()
     csv_setting=addon.getSetting(setting_id)
     csv_list=csv_setting.split(',')
     csv_list=[x.lower().strip() for x in csv_list]
@@ -278,18 +300,14 @@ def calculate_zoom_slide(img_w, img_h):
 def parse_filename_and_ext_from_url(url=""):
     filename=""
     ext=""
-
-    path = urlparse.urlparse(url).path
-
+    path = urlparse.urlparse(url).path     #ext = os.path.splitext(path)[1]
     try:
         if '.' in path:
 
             filename = path.split('/')[-1].split('.')[0]
             ext      = path.split('/')[-1].split('.')[-1]
-
             if not ext=="":
-
-                ext=re.split("\?|#",ext)[0]
+                ext=re.split("\?|#",ext)[0]                 #ext=ext.split('?')[0]
 
             return filename, ext.lower()
     except:
@@ -303,16 +321,13 @@ def link_url_is_playable(url):
         return 'image'
     if ext in ['mp4','webm','mpg','gifv','gif']:
         return 'video'
-
     return False
 
 def ret_url_ext(url):
     if url:
         url=url.split('?')[0]
-
         if url:
             _,ext=parse_filename_and_ext_from_url(url)
-
             return ext
     return False
 
@@ -480,7 +495,10 @@ def clean_str(dict_obj, keys_list, default=''):
                 return default
             else:
                 continue
-        return unescape(dd.encode('utf-8'))
+        if hasattr(dd, 'encode'):#int does not have encode()
+            return unescape(dd.encode('utf-8'))
+        else:
+            return dd
     except (AttributeError,IndexError) as e:
         log( 'clean_str:' + str(e) )
         return default
@@ -530,7 +548,17 @@ def colored_subreddit(subreddit,color='cadetblue', add_r=True):
 def truncate(string, length, ellipse='...'):
     return (string[:length] + ellipse) if len(string) > length else string
 
-def xbmc_notify(line1, line2, time=2000, icon=''):
+def truncate_middle(s, n):
+    if len(s) <= n:
+
+        return s
+
+    n_2 = int(n) / 2 - 3
+
+    n_1 = n - n_2 - 3
+    return '{0}...{1}'.format(s[:n_1], s[-n_2:])
+
+def xbmc_notify(line1, line2, time=3000, icon=''):
     if icon and os.path.sep not in icon:
         icon=os.path.join(addon.getAddonInfo('path'), 'resources','skins','Default','media', icon)
 
@@ -668,6 +696,7 @@ def dictlist_to_listItems(dictlist):
         isPlayable=d.get('isPlayable')
         link_action=d.get('link_action')
         channel_id=d.get('channel_id')
+        channel_name=d.get('channel_name')
         video_id=d.get('video_id')
         infoLabels=d.get('infoLabels')
 
@@ -689,14 +718,15 @@ def dictlist_to_listItems(dictlist):
                 liz.setProperty('is_video','true')
             else:
                 liz.setProperty('item_type','script')
-                liz.setProperty('onClick_action', build_script(link_action, media_url,'','') )
+                liz.setProperty('onClick_action', build_script(link_action, media_url,label,'') )
 
             liz.setArt({"thumb": ti })
 
         liz.setProperty('link_url', media_url )  #added so we have a way to retrieve the link
         liz.setProperty('channel_id', channel_id )
         liz.setProperty('video_id', video_id )   #youtube only for now
-        liz.setProperty('label', label )
+        liz.setProperty('channel_name', channel_name )
+        liz.setProperty('channel_id', channel_id )
 
         liz.setInfo( type='video', infoLabels=infoLabels ) #this tricks the skin to show the plot. where we stored the picture descriptions
 
@@ -716,12 +746,15 @@ def setting_entry_is_domain(setting_entry):
         domain=''
     return domain
 
-def get_domain_icon( entry_name, domain ):
+def get_domain_icon( entry_name, domain, check_this_url_instead_of_domain=None ):
     import requests
     from CommonFunctions import parseDOM
     subs_dict={}
 
-    req='http://%s' %domain
+    if check_this_url_instead_of_domain:
+        req=check_this_url_instead_of_domain
+    else:
+        req='http://%s' %domain
 
     r = requests.get( req )
 
@@ -776,6 +809,63 @@ def set_query_field(url, field, value, replace=False):
         components.fragment
     )
     return urlparse.urlunparse(new_components)
+
+def ytDurationToSeconds(duration): #https://stackoverflow.com/questions/16742381/how-to-convert-youtube-api-duration-to-seconds
+    week = 0
+    day  = 0
+    hour = 0
+    min_ = 0
+    sec  = 0
+
+    duration = duration.lower()
+
+    value = ''
+    for c in duration:
+        if c.isdigit():
+            value += c
+            continue
+
+        elif c == 'p':
+            pass
+        elif c == 't':
+            pass
+        elif c == 'w':
+            week = int(value) * 604800
+        elif c == 'd':
+            day = int(value)  * 86400
+        elif c == 'h':
+            hour = int(value) * 3600
+        elif c == 'm':
+            min_ = int(value)  * 60
+        elif c == 's':
+            sec = int(value)
+
+        value = ''
+
+    return week + day + hour + min_ + sec
+
+def seconds_to_hms(seconds):
+    try:
+        m, s = divmod(seconds, 60)
+        h, m = divmod(m, 60)
+        return "{0}:{1:02d}:{2:02d}".format(h,m,s) if h else "{0:02d}:{1:02d}".format(m,s) #%d:%02d:%02d" % (h, m, s)
+    except TypeError:
+        return ""
+
+def ret_bracketed_option(string_with_bracket_opt):
+    a=re.compile(r"(\[[^\]]*\])") #this regex only catches the []
+    in_bracket=""
+
+    stripped_string = a.sub("",string_with_bracket_opt).strip()
+
+    a= a.findall(string_with_bracket_opt)
+    if a:
+        in_bracket=a[0]
+    else:
+        in_bracket = ''
+
+    return stripped_string, in_bracket[1:-1]
+
 
 if __name__ == '__main__':
     pass

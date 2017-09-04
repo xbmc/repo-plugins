@@ -627,3 +627,6 @@ msgctxt "#30613"
 msgid "Youtube API key"
 msgstr ""
 
+msgctxt "#30614"
+msgid "Enable debug mode"
+msgstr ""

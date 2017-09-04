@@ -1,236 +1,212 @@
 # -*- coding: utf-8 -*-
 
-from xbmcswift2 import Plugin, xbmc, actions
-from urllib import urlencode
+import datetime
+import email.utils
 import gzip
 import io
 import json
-from resources.lib import demjson
 import re
 import sys
 import urllib2
+from urllib import urlencode
+from urlparse import parse_qsl
+from xml.etree import ElementTree
+
+import xbmcaddon
+import xbmcplugin
+import xbmcgui
 
 
-if sys.version_info < (3, 0):
-    import HTMLParser
-    unescape = HTMLParser.HTMLParser().unescape
-else:
-    import html
-    unescape = html.unescape
+__author__ = "Petr Kutalek (petr@kutalek.cz)"
+__copyright__ = "Copyright (c) Petr Kutalek, 2015-2017"
+__license__ = "GPL 2, June 1991"
+__version__ = "2.0.0"
 
-plugin = Plugin()
+HANDLE = int(sys.argv[1])
+ADDON = xbmcaddon.Addon("plugin.video.aktualnetv")
+ICON = ADDON.getAddonInfo("icon")
 
 
-def _get_file(url, referer = None):
-    req = urllib2.Request(url)
-    if referer:
-        req.add_header('Referer', referer)
-    req.add_header('Accept-Encoding', 'gzip')
-    content = None
-    f = urllib2.urlopen(req)
-    ce = f.headers.get('Content-Encoding')
-    if ce and 'gzip' in ce:
-        gzipf = gzip.GzipFile(fileobj=io.BytesIO(f.read()), mode='rb')
-        content = gzipf.read()
+def _create_url(**kwargs):
+    """Creates plugin: URL
+    plugin://plugin.video.aktualnetv/?action=play&token=…
+    plugin://plugin.video.aktualnetv/?action=list&offset=…
+    """
+    return "{0}?{1}".format(sys.argv[0], urlencode(kwargs))
+
+
+def _router(paramstring):
+    """Handles addon execution
+    """
+    params = dict(parse_qsl(paramstring))
+    if params:
+        if params.get("action") == "play":
+            if "token" not in params:
+                raise ValueError(
+                    "Invalid plugin:// url. Missing token param: {0}"
+                    .format(paramstring))
+            _play_video(params["token"])
+        elif params.get("action") == "list":
+            offset = 0
+            if "offset" in params:
+                offset = int(params["offset"])
+            _list_videos(offset)
+        else:
+            raise ValueError(
+                "Invalid plugin:// url. Unknown action param: {0}"
+                .format(paramstring))
     else:
-        content = f.read()
-    f.close()
+        _list_videos()
+
+
+def _download_file(url):
+    """Downloads file from specified location
+    Offers GZip transfer encoding
+    Should be replaced by request from Python 3 in the future
+    """
+    req = urllib2.Request(url)
+    req.add_header("Accept-Encoding", "gzip")
+    content = ""
+    try:
+        f = urllib2.urlopen(req)
+        ce = f.headers.get("Content-Encoding")
+        if ce and "gzip" in ce:
+            gzipf = gzip.GzipFile(fileobj=io.BytesIO(f.read()), mode="rb")
+            content = gzipf.read()
+        else:
+            content = f.read()
+    except:
+        pass
+    finally:
+        if f:
+            f.close()
     return content
 
 
-def _js_to_obj(code):
-    return demjson.decode(code)
+def _list_videos(offset=0):
+    """Builds list of playable items
+    """
+    rss = _download_file(
+        "https://video.aktualne.cz/mrss/?offset={0}".format(offset))
+    items = _parse_root(rss)
+    _build_list(items, offset + 30)
 
 
-def _decode_entities(s):
-    s = unescape(s)
-    s = re.sub(u'\\.\\.\\.', u'…', s)
-    s = re.sub('\\s+', ' ', s)
-    s = s.strip()
-    return s
+def _parse_root(rss):
+    """Parses RSS feed into a list of item dictionaries
+    """
+    def _parse_duration(duration):
+        """Parses duration in the format of 0:00
+        Returns number of seconds
+        """
+        (m, s) = duration.split(":", 1)
+        secs = 60 * int(m) + int(s)
+        return secs
 
+    def _parse_rfc822_date(date):
+        """Parses RFC822 date into Python datetime object
+        """
+        return datetime.datetime.fromtimestamp(
+            email.utils.mktime_tz(email.utils.parsedate_tz(date)))
 
-def _hq_img(addr):
-    if addr.startswith('//'):
-        addr = 'https:%s' % addr
-    addr = re.sub('\\?.+$', '', addr)
-    addr = re.sub('_w[0-9]+_h[0-9]+_', '_w782_h440_', addr)
-    return addr
-
-
-@plugin.cached(TTL=30)
-def get_webpage(url):
-    page = _get_file(url, 'https://video.aktualne.cz/').decode('utf-8')
-    return page
-
-
-@plugin.route('/')
-def menu():
-    items = [{
-            'label': plugin.get_string(30011),
-            'path': plugin.url_for('menu_playlist_short', path='index'),
-            'thumbnail': plugin.addon.getAddonInfo('icon')
-            },
-        {
-            'label': plugin.get_string(30012),
-            'path': plugin.url_for('menu_shows'),
-            'thumbnail': plugin.addon.getAddonInfo('icon')
-            },
-        {
-            'label': plugin.get_string(30014),
-            'path': plugin.url_for('menu_search_dialog'),
-            'thumbnail': plugin.addon.getAddonInfo('icon')
-            }
-        ]
-    plugin.set_content('videos')
-    return items
-
-
-@plugin.route('/shows')
-def menu_shows():
-    csspage = get_webpage('https://i0.cz/bbx/video/css/videohub.css')
-    cssimgs = dict(re.findall(u'ul\\.porady li\\.uzky a\\.([a-z0-9-]+)\\{background:url\\(\\.\\./img/video/(.+?)\\)', csspage, re.DOTALL))
-    page = get_webpage('https://video.aktualne.cz/')
-    page = re.findall(u'<h2 id="porady">Pořady</h2>(.+?)</ul>', page, re.DOTALL)[0]
-    matches = re.findall(u'<a class="(.+?)" href="/(.+?)/">.+?<span class="nazev">(.+?)</span>.+?</a>', page, re.DOTALL)
-    items = [{
-        'label': _decode_entities(re.sub('<.+?>', ' ', m[2])),
-        'path': plugin.url_for('menu_playlist_short', path=m[1]),
-        'thumbnail': ('https://i0.cz/bbx/video/img/video/%s' % cssimgs[m[0]]) if m[0] in cssimgs else plugin.addon.getAddonInfo('icon')
-        } for m in matches]
-    return items
-
-
-def _create_playlist_menuitem(label, href, img):
-    return {
-        'label': label,
-        'path': href,
-        'thumbnail': img
+    NS = {
+        "media": "http://search.yahoo.com/mrss/",
+        "atom": "http://www.w3.org/2005/Atom",
+        "blackbox": "http://i0.cz/bbx/rss/",
+        "jwplayer": "http://developer.longtailvideo.com/trac/",
+        "content": "http://purl.org/rss/1.0/modules/content/",
         }
 
-
-@plugin.route('/playlist/<path>', name='menu_playlist_short', options={'offset': '0'})
-@plugin.route('/playlist/<path>_<offset>')
-def menu_playlist(path, offset):
-    offset = int(offset)
-    if path == 'index':
-        url = 'https://video.aktualne.cz/?offset=%d' % offset
-    else:
-        url = 'https://video.aktualne.cz/%s/?offset=%d' % (path, offset)
-    page = get_webpage(url)
-    next = re.search('class="doprava', page, flags=re.DOTALL) is not None
     items = []
-    matches = re.findall(u'<div class="boxik.+?class="nahled" href="(.+?)".+? src="(.+?)" .+?class="nazev">(.+?)</span>.+?</div>', page, re.DOTALL)
-    for m in matches:
-        label = _decode_entities(m[2])
-        img = m[1]
-        href = re.sub(u'.+r~([0-9a-f]{32}).*', u'\\1', m[0])
-        items.append(_create_playlist_menuitem(label, plugin.url_for('play_video', token=href), _hq_img(img)))
-    if next:
+    root = ElementTree.fromstring(rss)
+    for i in root.findall('.//channel/item', NS):
+        """Aktualne sometimes creates playlists for DVTV videos,
+        we ignore those playlists
+        """
+        if i.find(".//blackbox:extra", NS).attrib.get("subtype") == "playlist":
+            continue
         items.append({
-            'label': plugin.get_string(30020),
-            'path': plugin.url_for('menu_playlist', path=path, offset=str(offset + len(items)))
+            "title": i.find(".//title", NS).text.strip(),
+            "description": i.find(".//description", NS).text.strip(),
+            "pubdate": _parse_rfc822_date(
+                i.find(".//pubDate", NS).text.strip()),
+            "duration": _parse_duration(
+                i.find(".//blackbox:extra", NS).attrib["duration"]),
+            "cover": i.find(
+                ".//media:group/media:content", NS).attrib["url"],
+            "guid": i.find(".//guid", NS).text.strip(),
             })
     return items
 
 
-@plugin.route('/video/<token>')
-def play_video(token):
-    url = 'https://video.aktualne.cz/-/r~%s/' % token
-    page = get_webpage(url)
-    s1 = re.search(u'(?s)embedData[0-9a-f]{32}\\[\'asset\'\\]\s*=\\s*(\\{.+?\\});', page, re.DOTALL)
-    if s1:
-        metadata = _js_to_obj(s1.group(1))
-        file = None
-        live = False
-        s2 = re.search(u'(?s)embedData[0-9a-f]{32}\\.asset\\.liveStarter\s*=\\s*(\\{.+?\\});', page, re.DOTALL)
-        if s2:
-            livemetadata = _js_to_obj(s2.group(1))
-            file = livemetadata['sources'][0]['file']
-            live = True
-        else:
-            formats = {}
-            for i in metadata['sources']:
-                f = '%s@%s' % (i['type'], i['label'])
-                formats[f] = i['file']
-            prefered_format = plugin.get_setting('format', choices=('video/mp4', 'video/webm'))
-            prefered_quality = plugin.get_setting('quality', choices=('180p', '360p', '720p'))
-            preference = '%s@%s' % (prefered_format, prefered_quality)
-            format = preference if preference in formats else formats.keys()[0]
-            file = formats[format]
-        plot = re.search(u'(?s)<p class="popis".+?\\| (.+?)</p>', page, re.DOTALL).group(1)
-        show = re.search(u'(?s)\'GA\': htmldeentitize\\(\'(.+?)\'\\)', page, re.DOTALL).group(1)
-        return [{
-            'label': _decode_entities(metadata['title']),
-            'label2': plugin.get_string(30030) if live else None,
-            'is_playable': True,
-            'path': file,
-            'thumbnail': _hq_img(metadata['image']) if 'image' in metadata else None,
-            'info_type': 'video',
-            'info': {
-                'title': _decode_entities(metadata['title']),
-                'studio': plugin.get_string(30001),
-                'genre': 'News',
-                'plot': _decode_entities(plot),
-                'tagline': _decode_entities(show)
-                },
-            'stream_info': {
-                'video': {
-                    'duration': metadata['duration'] if not live else None
-                    }
-                }
-            }]
-    else:
-        s2 = re.findall(u'(?s)BBX\\.context\\.assets\\[\'[0-9a-f]{32}\'\\]\\.push\\(({.+?})\\);', page, re.DOTALL)
-        if s2:
-            items = []
-            for m in s2:
-                i = _js_to_obj(m)
-                items.append(_create_playlist_menuitem(
-                    _decode_entities(i['title']),
-                    plugin.url_for('play_video', token=i['mediaid']),
-                    _hq_img(i['image'])
-                    ))
-            return items
-
-
-@plugin.route('/search')
-def menu_search_dialog():
-    q = plugin.keyboard(heading=plugin.get_string(30014))
-    if q:
-        return menu_search(q, '0')
-
-
-@plugin.route('/search/<q>', name='menu_search_short', options={'offset': '0'})
-@plugin.route('/search/<q>_<offset>')
-def menu_search(q, offset):
-    offset = int(offset)
-    url = 'https://video.aktualne.cz/hledani/?%s' % urlencode({
-        'query': q,
-        'time': 'time',
-        'offset': offset
-        })
-    page = get_webpage(url)
-    next = re.search('class="doprava', page, flags=re.DOTALL) is not None
-    items = []
-    matches = re.findall(u'<div class="boxik.+?class="nahled" href="(.+?)".+? src="(.+?)".+?class="nazev".+?>(.+?)</a>.+?</div>', page, re.DOTALL)
-    for m in matches:
-        label = _decode_entities(m[2])
-        label = re.sub('</?strong>', '', label)
-        img = m[1]
-        href = re.sub(u'.+r~([0-9a-f]{32}).*', u'\\1', m[0])
-        items.append(_create_playlist_menuitem(
-            label,
-            plugin.url_for('play_video', token=href),
-            _hq_img(img)
-            ))
-    if next:
-        items.append({
-            'label': plugin.get_string(30020),
-            'path': plugin.url_for('menu_search', q=q, offset=str(offset + len(items)))
+def _build_list(items, offset=None):
+    """Builds Kodi list from Python list
+    """
+    for i in items:
+        li = xbmcgui.ListItem(label=i["title"])
+        li.setInfo("video", {
+            "title": i["title"],
+            "plot": i["description"],
+            "duration": i["duration"],
+            "studio": u"Economia, a. s.",
+            "genre": u"News",
+            "date": i["pubdate"].strftime("%d.%m.%Y"),
             })
-    return items
+        li.setArt({
+            "thumb": i["cover"],
+            "poster": i["cover"],
+            "icon": ICON,
+            })
+        li.setProperty("IsPlayable", "true")
+        url = _create_url(action="play", token=i["guid"])
+        xbmcplugin.addDirectoryItem(HANDLE, url, li, False)
+    if offset:
+        li = xbmcgui.ListItem(label=ADDON.getLocalizedString(30020))
+        url = _create_url(action="list", offset=offset)
+        xbmcplugin.addDirectoryItem(HANDLE, url, li, True)
+    xbmcplugin.endOfDirectory(HANDLE)
 
 
-if __name__ == '__main__':
-    plugin.run()
+def _get_source(token, preference=None):
+    """Fetches video URLs for specified token
+    Returns best match acording to preference parameter
+    """
+    def _get_quality(item):
+        result = -1
+        k = item.get("label")
+        return int(k[:-1]) if k[-1:] == "p" and k[:1].isdigit() else -1
+
+    webpage = _download_file(
+        "https://video.aktualne.cz/-/r~{0}/".format(token)).decode("utf-8")
+    sources = re.findall(u"sources:\s*(\[{.+?}\])", webpage, re.DOTALL)[0]
+    sources = u"{{ \"sources\": {0} }}".format(sources)
+    sources = json.loads(sources)
+    sources = sources["sources"]
+    sources = sorted(sources, key=_get_quality, reverse=True)
+    result = sources[0]["file"]
+    if preference:
+        for s in sources:
+            if s["label"] == preference:
+                result = s["file"]
+                break
+    return result
+
+
+def _play_video(token):
+    """Resolves file plugin into actual video file
+    """
+    Q = [
+        "180p",
+        "360p",
+        "480p",
+        "720p",
+        "1080p",
+        "adaptive",
+        ]
+    path = _get_source(token, Q[int(ADDON.getSetting("quality"))])
+    item = xbmcgui.ListItem(path=path)
+    xbmcplugin.setResolvedUrl(HANDLE, True, listitem=item)
+
+
+if __name__ == "__main__":
+    _router(sys.argv[2][1:])

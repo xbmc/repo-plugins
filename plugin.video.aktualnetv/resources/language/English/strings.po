@@ -1,14 +1,14 @@
 # XBMC Media Center language file
 # Addon Name: Aktualne TV
 # Addon id: plugin.video.aktualnetv
-# Addon version: 1.4.1
+# Addon version: 2.0.0
 # Addon Provider: Petr Kutalek
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
-"POT-Creation-Date: 2017-04-24 20:31+0000\n"
-"PO-Revision-Date: 2017-04-24 22:31+0200\n"
+"POT-Creation-Date: 2017-09-04 16:35+0000\n"
+"PO-Revision-Date: 2017-09-04 18:35+0200\n"
 "Last-Translator: Petr Kutalek <petr@kutalek.cz>\n"
 "Language-Team: LANGUAGE\n"
 "MIME-Version: 1.0\n"
@@ -71,11 +71,7 @@ msgctxt "#30101"
 msgid "Playback"
 msgstr ""
 
-msgctxt "#30102"
-msgid "Other"
-msgstr ""
-
-#empty strings from id 30103 to 30109
+#empty strings from id 30102 to 30109
 
 msgctxt "#30110"
 msgid "Quality"
@@ -90,19 +86,17 @@ msgid "SD (360p)"
 msgstr ""
 
 msgctxt "#30113"
+msgid "HQ (480p)"
+msgstr ""
+
+msgctxt "#30114"
 msgid "HD (720p)"
 msgstr ""
 
-#empty strings from id 30114 to 30119
-
-msgctxt "#30120"
-msgid "Format"
+msgctxt "#30115"
+msgid "FullHD (1080p)"
 msgstr ""
 
-msgctxt "#30121"
-msgid "H.264 (hardware-accelerated)"
-msgstr ""
-
-msgctxt "#30122"
-msgid "VP8 (libre)"
+msgctxt "#30116"
+msgid "Adaptive"
 msgstr ""

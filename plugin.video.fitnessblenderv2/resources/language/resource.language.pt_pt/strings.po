@@ -1,0 +1,57 @@
+# Kodi Media Center language file
+# Addon Name: Fitness Blender
+# Addon id: plugin.video.fitnessblender
+# Addon Provider: Dangelus
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: Portuguese (http://www.transifex.com/projects/p/xbmc-addons/language/pt/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#This is a comment
+
+msgctxt "#32000"
+msgid "All videos"
+msgstr "Todos os vídeos"
+
+msgctxt "#32001"
+msgid "Watch all uploaded videos"
+msgstr "Veja todos os vídeos do canal"
+
+msgctxt "#32002"
+msgid "Videos on the next page"
+msgstr "Vídeos na próxima página"
+
+msgctxt "#32003"
+msgid "Could not get channel playlists"
+msgstr "Não conseguiu obter as playlists do canal"
+
+msgctxt "#32004"
+msgid "Could not get the playlist video list"
+msgstr "Não conseguiu obter a listagem de videos da playlist"
+
+msgctxt "#32005"
+msgid "Unable to get video details"
+msgstr "Não conseguiu obter os detalhes do vídeo"
+
+msgctxt "#32006"
+msgid "Number of items per page"
+msgstr "Número de items por página"
+
+msgctxt "#32007"
+msgid "Enter directly in the all videos listing"
+msgstr "Entrar directamente para a lista de todos os vídeos"
+
+msgctxt "#32008"
+msgid "Next page"
+msgstr "Próxima página"
+
+

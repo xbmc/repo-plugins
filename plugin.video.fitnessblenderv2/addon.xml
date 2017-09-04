@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.fitnessblender" name="Fitness Blender" version="1.0.0" provider-name="Dangelus">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.routing" version="0.2.0"/>
+        <import addon="script.module.requests" version="2.12.4"/>
+        <import addon="plugin.video.youtube" optional="true" />
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="main.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Fitness Blender provides free full length workout videos, workout routines, healthy recipes and more.
+</summary>
+        <description lang="en_GB">Fitness Blender provides free full length workout videos, workout routines, healthy recipes and more.
+</description>
+        <language>en pt</language>
+        <platform>all</platform>
+        <license>GPL-3.0</license>
+        <forum></forum>
+        <website>https://www.youtube.com/user/FitnessBlender</website>
+        <email>dangelus@kodi.tv</email>
+        <source>https://github.com/dangelus1138/plugin.video.fitnessblenderv2</source>
+        <news>The first version of the addon</news>
+        <disclaimer></disclaimer>
+        <assets>
+            <icon>resources/images/icon.png</icon>
+            <fanart>resources/images/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

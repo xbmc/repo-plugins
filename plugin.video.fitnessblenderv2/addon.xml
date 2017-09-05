@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.fitnessblender" name="Fitness Blender" version="1.0.0" provider-name="Dangelus">
+<addon id="plugin.video.fitnessblenderv2" name="Fitness Blender" version="1.0.1" provider-name="Dangelus">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.routing" version="0.2.0"/>

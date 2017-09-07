@@ -46,7 +46,7 @@ _datapath 	=xbmc.translatePath(_addon.get_profile());
 _artIcon		=_addon.get_icon(); 
 _artFanart	=_addon.get_fanart()
 __plugin__ = "Infowars"
-__authors__ = "Prafit | Spinalcracker"
+__authors__ = "Prafit, Spinalcracker"
 __plugin__= "Infowars"
 __credits__= ""
 _addon_id="plugin.video.infowars"
@@ -54,6 +54,13 @@ _database_name="infowars"
 _plugin_id= "plugin.video.infowars"
 _database_file=os.path.join(xbmc.translatePath("special://database"),'infowars.db'); 
 _debugging= False
+_AJSIcon = "https://yt3.ggpht.com/-DbNegouDvyU/AAAAAAAAAAI/AAAAAAAAAAA/QyDM_-5eUFc/s288-c-k-no-mo-rj-c0xffffff/photo.jpg"
+_RNWDKIcon = "https://yt3.ggpht.com/-QT90gbNHnJ4/AAAAAAAAAAI/AAAAAAAAAAA/vuPslh3AecY/s200-c-k-no-mo-rj-c0xffffff/photo.jpg"
+_RNWDKFanart = "https://yt3.ggpht.com/-CMiJh2_nzpk79XL68m_zoyGyd4lPz42Fxy01TLVDGOgiP-4DaoLZ-lbc65KQWJGdtHn7UO-=w1440-fcrop64=1,32b75a57cd48a5a8-nd-c0xffffffff-rj-k-no"
+_WarRoomIcon = "https://yt3.ggpht.com/-2RKaabiN_g8/AAAAAAAAAAI/AAAAAAAAAAA/9Q41iU3wnn8/s288-c-k-no-mo-rj-c0xffffff/photo.jpg"
+_WarRoomFanart = "https://yt3.ggpht.com/QT57n2r7hRWZ-Mlj3B-67Hcr_2YWvwZnWKns3yak3DCQByyPzW6UOfY6vlpMSVhIg7xNQEdTdw=w1440-fcrop64=1,32b75a57cd48a5a8-nd-c0xffffffff-rj-k-no"
+_PJWIcon = "https://yt3.ggpht.com/-fIb6IwufvwI/AAAAAAAAAAI/AAAAAAAAAAA/Smnj7cy5o0Y/s288-c-k-no-mo-rj-c0xffffff/photo.jpg"
+_PJWFanart = "https://yt3.ggpht.com/tyGFHEOVkzV0ebThsLL3dB7p2Q-s5CpAwia5IM5gXsY_0Vgiy8gHs6HQTXhN3FnBxi_2p9LrgAY=w2120-fcrop64=1,00000000ffffffff-nd-c0xffffffff-rj-k-no"
 
 ### ##### /\ ##### Plugin Settings ###
 
@@ -311,6 +318,12 @@ def PlayURL(url):
 	
 def play(params):
     play_resolved_url( params.get("url") )	
+
+def playYoutube(url):
+    xbmc.log(url)
+    video_id = 'TSTaV8g3zwI'
+    url = "plugin://plugin.video.youtube/play/?video_id=%s" % video_id
+    PlayURL(url)
     
 ### ############################################################################################################
 ### ############################################################################################################
@@ -318,28 +331,92 @@ def play(params):
 
 def Menu_MainMenu(): #The Main Menu
     WhereAmI('@ the Main Menu')
-    _addon.add_directory({'mode': 'PlayURL','url':'http://infowarslive-lh.akamaihd.net/i/infowarslivestream_1@353459/index_800_av-p.m3u8?sd=10&rebase=on'},{'title':  cFL_('Infowars.com Live Video(Loops After Airing)','lime')},is_folder=False,img=_artIcon,fanart=_artFanart)
-    _addon.add_directory({'mode': 'PlayURL','url':'http://www.infowars.com/stream.pls'},{'title':  cFL_('Infowars.com Live Audio(Loops After Airing)','lime')},is_folder=False,img=_artIcon,fanart=_artFanart)
+    _addon.add_directory({'mode': 'InfoWarsLiveSubMenu','title':'The Alex Jones Show Live HD (Youtube)'},{'title':  cFL_('The Alex Jones Show - Live HD (Youtube)','lime')},is_folder=False,img=_AJSIcon,fanart=_artFanart)
+    _addon.add_directory({'mode': 'PlayURL','url':'https://infowarslive-lh.akamaihd.net/i/infowarslivestream_1@353459/master.m3u8'},{'title':  cFL_('The Alex Jones Show - Live (Loops After Airing)','lime')},is_folder=False,img=_AJSIcon,fanart=_artFanart)
+    _addon.add_directory({'mode': 'PlayURL','url':'http://www.infowars.com/stream.pls'},{'title':  cFL_('The Alex Jones Show - Live - Audio Only (Loops After Airing)','lime')},is_folder=False,img=_AJSIcon,fanart=_artFanart)
+    _addon.add_directory({'mode': 'RealNewsWDKLiveSubMenu','title':'Real News with David Knight Live HD (Youtube Feed Video)'},{'title':  cFL_('Real News with David Knight - Live HD (Youtube)','red')},is_folder=False,img=_RNWDKIcon,fanart=_RNWDKFanart)
+    _addon.add_directory({'mode': 'PlayURL','url':'https://infowarslive-lh.akamaihd.net/i/infowarsevent_1@366809/master.m3u8'},{'title':  cFL_('Real News with David Knight - Live (Loops After Airing)','red')},is_folder=False,img=_RNWDKIcon,fanart=_RNWDKFanart)
+    #_addon.add_directory({'mode': 'WarRoomLiveSubMenu','title':'War Room with Owen Shroyer Live HD (Youtube Feed Video)'},{'title':  cFL_('War Room with Owen Shroyer - Live HD (Youtube)','purple')},is_folder=False,img=_WarRoomIcon,fanart=_WarRoomFanart)
+    _addon.add_directory({'mode': 'PlayURL','url':'https://infowarslive-lh.akamaihd.net/i/WarRoom_1@561925/master.m3u8'},{'title':  cFL_('War Room with Owen Shroyer - Live (Loops After Airing)','purple')},is_folder=False,img=_WarRoomIcon,fanart=_WarRoomFanart)
+    #_addon.add_directory({'mode': 'ClipsSubMenu','title':'Infowars Nightly News'},{'title':  cFL_('Infowars Clips','red')},is_folder=True,img=_artIcon,fanart=_artFanart)
+    _addon.add_directory({'mode': 'PaulJosephWatsonSubMenu','title':'Paul Joseph Watson (Youtube Video)'},{'title':  cFL_('Paul Joseph Watson (Youtube)','blue')},is_folder=True,img=_PJWIcon,fanart=_PJWFanart)
     video_type = ('tvshow')
-    title = ('Infowars Nightly News')
+    title = cFL_('Infowars Nightly News','lime')
     year = ('')
     img = _artIcon
+    fanart = _artFanart
     imdbnum = ''
     url = 'plugin://plugin.video.infowars'
     resurl = 'plugin://plugin.video.infowars'
-    listitem = build_listitem(video_type, title, year, img, resurl)
+    listitem = build_listitem(video_type, title, year, img, fanart, resurl)
     #url = '%s/%s' % (BASE_URL, resurl)
     queries = {'mode': 'NightlyNewsSubMenu'}
     li_url = _addon.build_plugin_url(queries)
-    xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=True)
+    #xbmcplugin.addDirectoryItem(int(sys.argv[1]), li_url, listitem,isFolder=True)
     #_addon.add_directory({'mode': 'NightlyNewsSubMenu','title':'Infowars Nightly News'},{'title':  cFL_('Infowars Nightly News','red')},is_folder=True,img=_artIcon,fanart=_artFanart)
-    _addon.add_directory({'mode': 'ClipsSubMenu','title':'Infowars Nightly News'},{'title':  cFL_('Infowars Clips','red')},is_folder=True,img=_artIcon,fanart=_artFanart)
+    _addon.add_directory({'mode': 'ClipsSubMenu','title':'Infowars Clips'},{'title':  cFL_('Infowars Clips','yellow')},is_folder=True,img=_artIcon,fanart=_artFanart)
     _addon.add_directory({'mode': 'DocSubMenu','title':'Acclaimed Documentaries'},{'title':  cFL_('Acclaimed Documentaries','blanchedalmond')},is_folder=True,img=_artIcon,fanart=_artFanart)
-    _addon.add_directory({'mode': 'HistoricShowsSubMenu','title':'Past Alex Jones Shows(video)'},{'title':  cFL_('Past Alex Jones Shows (Video)','yellow')},is_folder=True,img=_artIcon,fanart=_artFanart)
-    _addon.add_directory({'mode': 'HistoricShowsAudioSubMenu','title':'Past Alex Jones Shows(video)'},{'title':  cFL_('Past Alex Jones (Audio)','yellow')},is_folder=True,img=_artIcon,fanart=_artFanart)
-    _addon.add_directory({'mode': 'PaulJosephWatsonSubMenu','title':'Paul Joseph Watson (Video)'},{'title':  cFL_('Paul Joseph Watson (Video)','blue')},is_folder=True,img=_artIcon,fanart=_artFanart)
+    _addon.add_directory({'mode': 'HistoricShowsSubMenu','title':'Past Alex Jones Shows(video)'},{'title':  cFL_('Past Alex Jones Shows (Video)','yellow')},is_folder=True,img=_AJSIcon,fanart=_artFanart)
+    _addon.add_directory({'mode': 'HistoricShowsAudioSubMenu','title':'Past Alex Jones Shows(video)'},{'title':  cFL_('Past Alex Jones (Audio)','yellow')},is_folder=True,img=_AJSIcon,fanart=_artFanart)
+    
     eod()
 
+def Info_Wars_Live_Sub_Menu(title=''): #The Main Menu
+    WhereAmI('@ Info Wars Live')
+    
+    url = 'https://www.infowars.com/watch-alex-jones-show/'
+    response = urllib2.urlopen(url)
+    if response and response.getcode() == 200:
+        content = response.read()
+        videos= find_multiple_matches(content,"<iframe(.*?)</iframe>")
+        sources = []
+        temp = 0
+        for entry in videos: 
+            video_id = find_single_match(entry,"src=\"https://www.youtube.com/embed/(.*?)\"")
+            url = "plugin://plugin.video.youtube/play/?video_id=%s" % video_id
+            temp = temp + 1
+            if temp == 1:
+                PlayURL(url)
+                break
+    eod() 
+
+def Real_News_WDK_Sub_Menu(title=''): #The Main Menu
+    WhereAmI('@ Real News Live')
+    
+    url = 'https://www.infowars.com/watch-alex-jones-show/'
+    response = urllib2.urlopen(url)
+    if response and response.getcode() == 200:
+        content = response.read()
+        videos= find_multiple_matches(content,"<iframe(.*?)</iframe>")
+        sources = []
+        temp = 0
+        for entry in videos: 
+            video_id = find_single_match(entry,"src=\"https://www.youtube.com/embed/(.*?)\"")
+            url = "plugin://plugin.video.youtube/play/?video_id=%s" % video_id
+            temp = temp + 1
+            if temp == 2:
+                PlayURL(url)
+                break
+    eod()
+
+def War_Room_Sub_Menu(title=''): #The Main Menu
+    WhereAmI('@ War Room Live')
+    
+    url = 'https://www.infowars.com/watch-alex-jones-show/'
+    response = urllib2.urlopen(url)
+    if response and response.getcode() == 200:
+        content = response.read()
+        videos= find_multiple_matches(content,"<iframe(.*?)</iframe>")
+        sources = []
+        temp = 0
+        for entry in videos: 
+            video_id = find_single_match(entry,"src=\"https://www.youtube.com/embed/(.*?)\"")
+            url = "plugin://plugin.video.youtube/play/?video_id=%s" % video_id
+            temp = temp + 1
+            if temp == 3:
+                PlayURL(url)
+                break
+    eod()
 
 def Documentary_Sub_Menu(title='', movie_num=''): #The Main Menu
     WhereAmI('@ Documentaries')
@@ -663,7 +740,7 @@ def Clips_Sub_Menu(title=''): #The Main Menu
 
 def Historic_Shows_Audio_Sub_Menu(title=''): #The Main Menu
     #https://www.youtube.com/user/RonGibsonCF
-    WhereAmI('@ Nightly News')
+    WhereAmI('@ Historic Shows Audio')
     url = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLs5CVvsn63q4r4b-RXs4QAaC-Eoc53NgP'
     response = urllib2.urlopen(url)
     if response and response.getcode() == 200:
@@ -675,7 +752,7 @@ def Historic_Shows_Audio_Sub_Menu(title=''): #The Main Menu
             thumbnail = find_single_match(entry,"<media\:thumbnail url=\"(.*?)\"")
             video_id = find_single_match(entry,"<yt\:videoId>([^<]+)</yt\:videoId>")
             url = "plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid="+video_id
-            if title.find('AJ Show') > -1:
+            if title.find('Alex Jones Show (AUDIO PODCAST)') > -1:
                 add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False )
                 #if title.find('Podcast') > -1:
                 #    add_item( action="play" , title=title , plot=plot , url=url ,thumbnail=thumbnail , folder=False )
@@ -731,12 +808,16 @@ def check_mode(mode=''):
     if (mode=='') or (mode=='main') or (mode=='MainMenu'):  Menu_MainMenu() ## Default Menu
     elif (mode=='PlayURL'): 							PlayURL(_param['url']) ## Play Video
     elif (mode=='play'): 							play(params) ## Play Video
+    elif (mode=='playYoutube'): 							playYoutube('url')
     elif (mode=='DocSubMenu'): 						Documentary_Sub_Menu(_param['title'], movie_num) ## Play Video
     elif (mode=='ClipsSubMenu'): 						Clips_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='NightlyNewsSubMenu'): 						Nightly_News_Sub_Menu(_param['title'], dialog) ## Play Video
     elif (mode=='HistoricShowsSubMenu'): 						Historic_Shows_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='HistoricShowsAudioSubMenu'): 						Historic_Shows_Audio_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='PaulJosephWatsonSubMenu'): 						Paul_Joseph_Watson_Sub_Menu(_param['title']) ## Play Video
+    elif (mode=='InfoWarsLiveSubMenu'): 						Info_Wars_Live_Sub_Menu(_param['title']) ## Play Video
+    elif (mode=='RealNewsWDKLiveSubMenu'): 						Real_News_WDK_Sub_Menu(_param['title']) ## Play Video
+    elif (mode=='WarRoomLiveSubMenu'): 						War_Room_Sub_Menu(_param['title']) ## Play Video
     elif (mode=='Settings'): 							_addon.addon.openSettings() # Another method: _plugin.openSettings() ## Settings for this addon.
     elif (mode=='ResolverSettings'): 			urlresolver.display_settings()  ## Settings for UrlResolver script.module.
     elif (mode == 'add_to_library'):

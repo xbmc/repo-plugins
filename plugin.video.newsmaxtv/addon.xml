@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.newsmaxtv" version="1.0.0" name="NewsmaxTV" provider-name="Lunatixz">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.simplecache" version="1.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Newsmax TV is a United States cable news channel that is owned by Newsmax Media.</summary>
+        <description lang="en_GB">Newsmax TV is growing rapidly and now reaches over 40 million cable/satellite homes and subscribers.</description>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+        <source>https://github.com/Lunatixz/XBMC_Addons/tree/master/plugin.video.newsmaxtv</source>
+        <website>http://www.newsmaxtv.com</website>
+        <forum>http://forum.kodi.tv/showthread.php?tid=321030</forum>
+        <news></news>
+        <assets>
+            <icon>resources/images/icon.png</icon>
+            <fanart>resources/images/fanart.jpg</fanart>
+            <screenshot>resources/images/screenshot01.png</screenshot>
+            <screenshot>resources/images/screenshot02.png</screenshot>
+        </assets>
+    </extension>
+</addon>

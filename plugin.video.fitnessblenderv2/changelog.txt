@@ -1,2 +1,6 @@
 v1.0.0
 - The first version of the addon
+v1.0.1
+- Dependency changes
+v1.0.2
+- Cosmetic changes

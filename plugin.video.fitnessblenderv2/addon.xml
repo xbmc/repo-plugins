@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.fitnessblenderv2" name="Fitness Blender" version="1.0.1" provider-name="Dangelus">
+<addon id="plugin.video.fitnessblenderv2" name="Fitness Blender" version="1.0.2" provider-name="Dangelus">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.routing" version="0.2.0"/>
         <import addon="script.module.requests" version="2.12.4"/>
-        <import addon="plugin.video.youtube" optional="true" />
+        <import addon="plugin.video.youtube"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="main.py">
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="en_GB">Fitness Blender provides free full length workout videos, workout routines, healthy recipes and more.
-</summary>
-        <description lang="en_GB">Fitness Blender provides free full length workout videos, workout routines, healthy recipes and more.
-</description>
+        <summary lang="en_GB">Fitness Blender provides free full length workout videos, workout routines, healthy recipes and more.</summary>
+        <description lang="en_GB">Fitness Blender offers over 500 free workout videos for every fitness level, and the most effective and affordable workout programs on the web. The goal is to make health and fitness attainable, affordable, and approachable.</description>
         <language>en pt</language>
         <platform>all</platform>
         <license>GPL-3.0</license>
-        <forum></forum>
-        <website>https://www.youtube.com/user/FitnessBlender</website>
+        <forum>https://forum.kodi.tv/showthread.php?tid=321154</forum>
+        <website>https://www.fitnessblender.com/</website>
         <email>dangelus@kodi.tv</email>
         <source>https://github.com/dangelus1138/plugin.video.fitnessblenderv2</source>
-        <news>The first version of the addon</news>
-        <disclaimer></disclaimer>
+        <news>Fitness Blender provides free full length workout videos, workout routines, healthy recipes and more.</news>
+        <disclaimer>The author of this add-on is in no way affiliated with FitnessBlender.com</disclaimer>
         <assets>
             <icon>resources/images/icon.png</icon>
             <fanart>resources/images/fanart.jpg</fanart>
+	    <screenshot>resources/images/screenshot000.png</screenshot>
+	    <screenshot>resources/images/screenshot001.png</screenshot>	
+	    <screenshot>resources/images/screenshot002.png</screenshot>	
         </assets>
     </extension>
 </addon>

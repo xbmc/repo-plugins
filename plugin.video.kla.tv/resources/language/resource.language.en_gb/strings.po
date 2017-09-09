@@ -1,0 +1,39 @@
+# Kodi Media Center language file
+# Addon Name: kla.tv
+# Addon id: plugin.video.kla.tv
+# Addon Provider: celadoor
+msgid ""
+msgstr ""
+"Last-Translator: Kodi Translation Team\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+
+msgctxt "#30001"
+msgid "Original stream's language"
+msgstr ""
+
+msgctxt "#30950"
+msgid "en"
+msgstr ""
+
+msgctxt "#30951"
+msgid "Auto detect"
+msgstr ""
+
+msgctxt "#30952"
+msgid "en"
+msgstr ""
+
+msgctxt "#30953"
+msgid "de"
+msgstr ""
+
+msgctxt "#30954"
+msgid "fr"
+msgstr ""
+
+msgctxt "#30955"
+msgid "pl"
+msgstr ""

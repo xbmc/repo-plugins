@@ -139,7 +139,7 @@ class VRTPlayer:
         list_item_title = soup.find(class_="content__title").text
 
         if "shortdate" in video_dictionary:
-            video_dictionary["shortdate"] + " " + list_item_title
+            list_item_title = video_dictionary["shortdate"] + " " + list_item_title
 
         vrt_video = soup.find(class_="vrtvideo")
         thumbnail = VRTPlayer.__format_image_url(vrt_video)

@@ -23,3 +23,15 @@ msgstr "Rivedi La7"
 msgctxt "#32002"
 msgid "Live Streaming"
 msgstr "Diretta Live"
+
+msgctxt "#32003"
+msgid "next page"
+msgstr "Prossima Pagina"
+
+msgctxt "#32004"
+msgid "previous page"
+msgstr "Precedente Pagina"
+
+msgctxt "#32005"
+msgid "Unable to view this program"
+msgstr "Impossibile visualizzare questo programma"

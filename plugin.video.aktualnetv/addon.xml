@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.aktualnetv" version="2.0.0" name="Aktualne TV" provider-name="Petr Kutalek">
+<addon id="plugin.video.aktualnetv" version="2.0.1" name="Aktualne TV" provider-name="Petr Kutalek">
   <requires>
     <import addon="xbmc.python" version="2.24.0"/>
   </requires>
@@ -35,8 +35,10 @@
       <screenshot>resources/screenshot-3.jpg</screenshot>
     </assets>
 
-    <news><![CDATA[What's New
-
+    <news><![CDATA[[B]2.0.1[/B]
+— Fix video list parsing
+— Fix live streams
+    
 [B]2.0.0[/B]
 — Brand new Aktualne TV addon!
 — Simplified, just videos

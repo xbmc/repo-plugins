@@ -20,7 +20,7 @@ import xbmcgui
 __author__ = "Petr Kutalek (petr@kutalek.cz)"
 __copyright__ = "Copyright (c) Petr Kutalek, 2015-2017"
 __license__ = "GPL 2, June 1991"
-__version__ = "2.0.0"
+__version__ = "2.0.1"
 
 HANDLE = int(sys.argv[1])
 ADDON = xbmcaddon.Addon("plugin.video.aktualnetv")
@@ -99,8 +99,10 @@ def _parse_root(rss):
         """Parses duration in the format of 0:00
         Returns number of seconds
         """
-        (m, s) = duration.split(":", 1)
-        secs = 60 * int(m) + int(s)
+        secs = 0
+        if duration.find(":") > -1:
+            (m, s) = duration.split(":", 1)
+            secs = 60 * int(m) + int(s)
         return secs
 
     def _parse_rfc822_date(date):
@@ -131,7 +133,7 @@ def _parse_root(rss):
             "pubdate": _parse_rfc822_date(
                 i.find(".//pubDate", NS).text.strip()),
             "duration": _parse_duration(
-                i.find(".//blackbox:extra", NS).attrib["duration"]),
+                i.find(".//blackbox:extra", NS).attrib.get("duration", "0:00")),
             "cover": i.find(
                 ".//media:group/media:content", NS).attrib["url"],
             "guid": i.find(".//guid", NS).text.strip(),
@@ -178,6 +180,11 @@ def _get_source(token, preference=None):
 
     webpage = _download_file(
         "https://video.aktualne.cz/-/r~{0}/".format(token)).decode("utf-8")
+
+    live = re.findall(u"liveStarter.+?\"(http.+?)\"", webpage, re.DOTALL)
+    if len(live) > 0:
+        return live[0]
+
     sources = re.findall(u"sources:\s*(\[{.+?}\])", webpage, re.DOTALL)[0]
     sources = u"{{ \"sources\": {0} }}".format(sources)
     sources = json.loads(sources)

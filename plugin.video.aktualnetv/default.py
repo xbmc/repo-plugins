@@ -75,11 +75,13 @@ def _download_file(url):
             content = gzipf.read()
         else:
             content = f.read()
-    except:
-        pass
+    except (urllib2.HTTPError, urllib2.URLError), err:
+        print(err.reason)
     finally:
-        if f:
+        try:
             f.close()
+        except NameError:
+            pass
     return content
 
 
@@ -121,10 +123,7 @@ def _parse_root(rss):
 
     items = []
     root = ElementTree.fromstring(rss)
-    for i in root.findall('.//channel/item', NS):
-        """Aktualne sometimes creates playlists for DVTV videos,
-        we ignore those playlists
-        """
+    for i in root.findall(".//channel/item", NS):
         if i.find(".//blackbox:extra", NS).attrib.get("subtype") == "playlist":
             continue
         items.append({
@@ -176,7 +175,9 @@ def _get_source(token, preference=None):
     def _get_quality(item):
         result = -1
         k = item.get("label")
-        return int(k[:-1]) if k[-1:] == "p" and k[:1].isdigit() else -1
+        if k[-1:] == "p" and k[:1].isdigit():
+            result = int(k[:-1])
+        return result
 
     webpage = _download_file(
         "https://video.aktualne.cz/-/r~{0}/".format(token)).decode("utf-8")

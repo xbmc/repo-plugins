@@ -20,7 +20,7 @@ import xbmcgui
 __author__ = "Petr Kutalek (petr@kutalek.cz)"
 __copyright__ = "Copyright (c) Petr Kutalek, 2015-2017"
 __license__ = "GPL 2, June 1991"
-__version__ = "2.0.0"
+__version__ = "2.0.1"
 
 HANDLE = int(sys.argv[1])
 ADDON = xbmcaddon.Addon("plugin.video.aktualnetv")
@@ -75,11 +75,13 @@ def _download_file(url):
             content = gzipf.read()
         else:
             content = f.read()
-    except:
-        pass
+    except (urllib2.HTTPError, urllib2.URLError), err:
+        print(err.reason)
     finally:
-        if f:
+        try:
             f.close()
+        except NameError:
+            pass
     return content
 
 
@@ -99,8 +101,10 @@ def _parse_root(rss):
         """Parses duration in the format of 0:00
         Returns number of seconds
         """
-        (m, s) = duration.split(":", 1)
-        secs = 60 * int(m) + int(s)
+        secs = 0
+        if duration.find(":") > -1:
+            (m, s) = duration.split(":", 1)
+            secs = 60 * int(m) + int(s)
         return secs
 
     def _parse_rfc822_date(date):
@@ -119,10 +123,7 @@ def _parse_root(rss):
 
     items = []
     root = ElementTree.fromstring(rss)
-    for i in root.findall('.//channel/item', NS):
-        """Aktualne sometimes creates playlists for DVTV videos,
-        we ignore those playlists
-        """
+    for i in root.findall(".//channel/item", NS):
         if i.find(".//blackbox:extra", NS).attrib.get("subtype") == "playlist":
             continue
         items.append({
@@ -131,7 +132,7 @@ def _parse_root(rss):
             "pubdate": _parse_rfc822_date(
                 i.find(".//pubDate", NS).text.strip()),
             "duration": _parse_duration(
-                i.find(".//blackbox:extra", NS).attrib["duration"]),
+                i.find(".//blackbox:extra", NS).attrib.get("duration", "0:00")),
             "cover": i.find(
                 ".//media:group/media:content", NS).attrib["url"],
             "guid": i.find(".//guid", NS).text.strip(),
@@ -174,10 +175,17 @@ def _get_source(token, preference=None):
     def _get_quality(item):
         result = -1
         k = item.get("label")
-        return int(k[:-1]) if k[-1:] == "p" and k[:1].isdigit() else -1
+        if k[-1:] == "p" and k[:1].isdigit():
+            result = int(k[:-1])
+        return result
 
     webpage = _download_file(
         "https://video.aktualne.cz/-/r~{0}/".format(token)).decode("utf-8")
+
+    live = re.findall(u"liveStarter.+?\"(http.+?)\"", webpage, re.DOTALL)
+    if len(live) > 0:
+        return live[0]
+
     sources = re.findall(u"sources:\s*(\[{.+?}\])", webpage, re.DOTALL)[0]
     sources = u"{{ \"sources\": {0} }}".format(sources)
     sources = json.loads(sources)

@@ -1,5 +1,7 @@
-What's New
-
+[B]2.0.1[/B]
+— Fix video list parsing
+— Fix live streams
+    
 [B]2.0.0[/B]
 — Brand new Aktualne TV addon!
 — Simplified, just videos

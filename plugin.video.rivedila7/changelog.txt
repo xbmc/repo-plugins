@@ -1,3 +1,6 @@
+0.0.8 (2017-09-11)
+- fixed TG link
+- now episodes of shows are all visible
 0.0.7 (2016-09-17)
 - bugfix to site change
 0.0.6 (2016-06-03)

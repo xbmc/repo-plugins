@@ -23,3 +23,15 @@ msgstr ""
 msgctxt "#32002"
 msgid "Live Streaming"
 msgstr ""
+
+msgctxt "#32003"
+msgid "next page"
+msgstr ""
+
+msgctxt "#32004"
+msgid "previous page"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Unable to view this program"
+msgstr ""

@@ -3,6 +3,9 @@ import urllib, urllib2, re, xbmcplugin, xbmcgui, json
 import xbmcaddon
 import sys
 
+from StringIO import StringIO
+import gzip
+
 # Set default encoding to 'UTF-8' instead of 'ascii'
 reload(sys)
 sys.setdefaultencoding("UTF8")
@@ -15,7 +18,7 @@ __fanart__ = addon.getAddonInfo('fanart')
 lang_setting = max([int(addon.getSetting('LanguageID') or 0) or 0, 0])
 
 if lang_setting >= 30951:
-	lang_setting -= 30951
+    lang_setting -= 30951
 
 exp_lang_codes = ['en', 'de', 'fr', 'pl']
 payload_index = {
@@ -32,17 +35,35 @@ else:
 
 payload_id = payload_index.get(lang_id, 2)
 
-# headers = ['User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3']
-headers = [['User-Agent', 'Mozilla/5.0 (X11; Linux x86_64; rv:49.0) Gecko/20100101 Firefox/49.0 SeaMonkey/2.46'],
-           ['Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8']]
+
+base_headers = {
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:49.0) Gecko/20100101 Firefox/49.0 SeaMonkey/2.46",
+    "Accept-Encoding": "gzip"
+}
+
+page_headers = base_headers.copy()
+page_headers.update({
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+})
+
+api_headers = base_headers.copy()
+api_headers.update({
+    "Accept": "application/json, text/plain, */*",
+    "Content-Type": "application/json;charset=utf-8"
+})
+
+
+def decode_response(response):
+    if response.info().get('Content-Encoding') == "gzip":
+        buff = StringIO(response.read())
+        f = gzip.GzipFile(fileobj=buff)
+        return f.read()
+    else:
+        return response.read()
 
 
 def INDEX(url):
-    req = urllib2.Request(url)
-
-    req.add_header(*headers[0])
-    req.add_header('Accept', 'application/json, text/plain, */*')
-    req.add_header('Content-Type', 'application/json;charset=utf-8')
+    req = urllib2.Request(url, headers=api_headers)
 
     post_args = {"mode": "action",
                  "data":
@@ -57,7 +78,7 @@ def INDEX(url):
 
     data = json.dumps(post_args)
 
-    content = urllib2.urlopen(req, data=data).read()
+    content = decode_response(urllib2.urlopen(req, data=data))
 
     video_index = json.loads(content)
 
@@ -68,17 +89,15 @@ def INDEX(url):
         url = "https://www.kla.tv/{}".format(video.get('longlink', '')).replace('lang=de', 'lang={}'.format(lang_id))
         if url == 'https://www.kla.tv/':
             continue
-        addDir(title.encode('utf8'), url.encode('utf8'), 2, image)
+        add_dir(title.encode('utf8'), url.encode('utf8'), 2, image)
 
 
 def VIDEOLINKS(url, name):
-    req = urllib2.Request(url)
-    for header in headers:
-        req.add_header(*header)
+    req = urllib2.Request(url, headers=page_headers)
 
     response = urllib2.urlopen(req)
 
-    link = response.read().replace('\n', '').replace('\t', ' ')
+    link = decode_response(response).replace('\n', '').replace('\t', ' ')
     while '  ' in link:
         link = link.replace('  ', ' ')
     response.close()
@@ -89,7 +108,7 @@ def VIDEOLINKS(url, name):
     for entry in value_tuples:
         if "blockid" in entry[0].lower() or "label:" in entry[0].lower():
             continue
-        addLink('{0} ({1})'.format(name, entry[1]), 'https://www.kla.tv/{}'.format(entry[0]), __icon__)
+        add_link('{0} ({1})'.format(name, entry[1]), 'https://www.kla.tv/{}'.format(entry[0]), __icon__)
 
 
 def get_params():
@@ -103,7 +122,6 @@ def get_params():
         pairsofparams = cleanedparams.split('&')
         param = {}
         for i in range(len(pairsofparams)):
-            splitparams = {}
             splitparams = pairsofparams[i].split('=')
             if (len(splitparams)) == 2:
                 param[splitparams[0]] = splitparams[1]
@@ -111,19 +129,19 @@ def get_params():
     return param
 
 
-def addLink(name, url, iconimage):
-    ok = True
-    liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    liz.setInfo(type="Video", infoLabels={"Title": name})
+def add_link(name, url, icon_image):
+    liz = xbmcgui.ListItem(name)
+    liz.setArt({"thumb": icon_image})
+    liz.setInfo(type="Video", infoLabels={"title": name, "mediatype": "video"})
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=liz)
     return ok
 
 
-def addDir(name, url, mode, iconimage):
+def add_dir(name, url, mode, icon_image):
     u = sys.argv[0] + "?url=" + urllib.quote_plus(url) + "&mode=" + str(mode) + "&name=" + urllib.quote_plus(name)
-    ok = True
-    liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-    liz.setInfo(type="Video", infoLabels={"Title": name})
+    liz = xbmcgui.ListItem(name)
+    liz.setInfo(type="Video", infoLabels={"title": name, "mediatype": "video"})
+    liz.setArt({"thumb": icon_image})
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
     return ok
 
@@ -146,24 +164,17 @@ try:
 except:
     pass
 
-print "Mode: " + str(mode)
-print "URL: " + str(url)
-print "Name: " + str(name)
 
 if mode == None or url == None or len(url) < 1:
-    print ""
     INDEX('https://www.kla.tv/en')
 
 elif mode == 1:
-    print "" + url
     INDEX(url)
 
 elif mode == 2:
-    print "" + url
     VIDEOLINKS(url, name)
 
 else:
-    print "" + url
     INDEX('https://www.kla.tv/en')
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

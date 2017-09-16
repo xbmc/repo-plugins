@@ -66,6 +66,9 @@ def viewAtoO():
   programs = svt.getAtoO()
 
   for program in programs:
+    if program["onlyAvailableInSweden"] and \
+        helper.getSetting(S_HIDE_RESTRICTED_TO_SWEDEN):
+      continue
     folder = True
     mode = MODE_PROGRAM
     if program["type"] == "video":
@@ -93,6 +96,9 @@ def viewProgramsByLetter(letter):
   programs = svt.getProgramsByLetter(letter)
 
   for program in programs:
+    if program["onlyAvailableInSweden"] and \
+        helper.getSetting(S_HIDE_RESTRICTED_TO_SWEDEN):
+      continue
     addDirectoryItem(program["title"], {"mode": MODE_PROGRAM, "url": program["url"]}, thumbnail=program["thumbnail"])
 
 def viewSection(section, page):

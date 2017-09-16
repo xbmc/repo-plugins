@@ -1,3 +1,7 @@
+Version 4.0.53
+-------------
+- Shows georestricted to Sweden are now also hidden if setting is used.
+
 Version 4.0.52
 -------------
 - New settings! Hide items georestricted to Sweden.

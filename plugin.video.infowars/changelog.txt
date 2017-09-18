@@ -1,3 +1,9 @@
+[B]Version 2.0.6[/B]
+- Updated links (Spinalcracker)
+- Updated Youtube feeds
+- Added War Room Youtube feed
+- Cleaned up some code
+
 [B]Version 2.0.5[/B]
 - Updated links (Spinalcracker)
 - Added Youtube feeds

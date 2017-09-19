@@ -1,0 +1,1165 @@
+{
+    "timestamp":"1471611308",
+    "sources": {
+        "vtvgo": {
+            "url": "http://vtvgo.vn/streaming.php?id=XXX_PID",
+            "app": ""
+        },
+        "hplus": {
+			"login": "true",
+            "url": "http://hplus.com.vn/user/login/",
+			"post": {"email": "g4644345@trbvm.com", "passwd": "g4644345", "remember": "false", "href": "http://hplus.com.vn/vi"},
+            "app": ""
+        },
+        "vtc": {
+            "url": "http://www.tvnet.gov.vn/xml.php?id=XXX_PID&tp=l",
+            "app": ""
+        },
+        "xunghe": {
+            "url": "rtmp://118.69.176.149/live",
+            "swfurl": "http://tv.xunghe.vn/player.swf",
+            "pageurl": "http://tv.xunghe.vn/?tab=Truyen-Hinh&xem=trt1-hue",
+            "token": "",
+            "app": ""
+        }
+    },
+    "directories": {
+        "root": {
+            "title": "root",
+            "logo":  "",
+            "desc": "root menu",
+            "content": [
+            {"type":"chn","id":"vtc_vtv1"},
+            {"type":"chn","id":"vtc_vtv2"},
+            {"type":"chn","id":"vtc_vtv3"},
+            {"type":"chn","id":"vtc_vtv4"},
+            {"type":"chn","id":"vtc_ttxvn"},
+            {"type":"chn","id":"vtc_htv9"},
+            {"type":"chn","id":"vtc_vtc1"},
+            {"type":"chn","id":"vtc_vtc10"},
+            {"type":"chn","id":"vtc_vtc16"},
+            {"type":"chn","id":"vtc_hn1"},
+            {"type":"dir_","id":"fpt"},
+            {"type":"dir_","id":"vtc"},
+            {"type":"dir_","id":"vtvgo"},
+            {"type":"dir_","id":"hplus"},
+            {"type":"dir_","id":"vtvplus"},
+            {"type":"dir_","id":"vov"},
+            {"type":"dir_","id":"local"}
+            ]
+        },
+        "fpt": {
+            "title": "Nguồn FPT",
+            "logo":  "default.png",
+            "desc": "Công ty Phát triển Đầu tư Công nghệ",
+            "content": [
+            {"type":"chn","id":"fpt_vtv1"},
+            {"type":"chn","id":"fpt_vtv2"},
+            {"type":"chn","id":"fpt_vtv3"},
+            {"type":"chn","id":"fpt_vtv4"},
+            {"type":"chn_","id":"fpt_vtv6"},
+            {"type":"chn_","id":"fpt_vtv9"},
+            {"type":"chn","id":"fpt_qpvn"},
+            {"type":"chn","id":"fpt_antv"},
+            {"type":"chn","id":"fpt_vtc1"},
+            {"type":"chn","id":"fpt_vtc2"},
+            {"type":"chn","id":"fpt_vtc3"},
+            {"type":"chn","id":"fpt_vtc5"},
+            {"type":"chn","id":"fpt_vtc6"},
+            {"type":"chn","id":"fpt_vtc7"},
+            {"type":"chn","id":"fpt_vtc10"},
+            {"type":"chn","id":"fpt_vtc14"},
+            {"type":"chn","id":"fpt_vtc16"},
+            {"type":"chn","id":"fpt_htvhd"},
+            {"type":"chn","id":"fpt_thuanviethd"},
+            {"type":"chn","id":"fpt_htvchd"},
+            {"type":"chn","id":"fpt_onetv"}
+            ]
+        },
+        "vtc": {
+            "title": "Nguồn VTC",
+            "logo":  "default.png",
+            "desc": "Tổng Công ty Truyền thông Đa phương tiện Việt Nam",
+            "content": [
+            {"type":"chn","id":"vtc_vtv1"},
+            {"type":"chn","id":"vtc_vtv2"},
+            {"type":"chn","id":"vtc_vtv3"},
+            {"type":"chn","id":"vtc_vtv4"},
+            {"type":"chn","id":"vtc_ttxvn"},
+            {"type":"chn","id":"vtc_htv9"},
+            {"type":"chn","id":"vtc_vtc1"},
+            {"type":"chn","id":"vtc_vtc10"},
+            {"type":"chn","id":"vtc_vtc16"},
+            {"type":"chn","id":"vtc_hn1"}
+            ]
+        },
+        "vtvgo": {
+            "title": "Nguồn VTVGo",
+            "logo":  "default.png",
+            "desc": "TT Sản xuất & Kinh doanh Nội dung số Đài TH Việt Nam",
+            "content": [
+            {"type":"chn","id":"vtvgo_vtv1"},
+            {"type":"chn","id":"vtvgo_vtv2"},
+            {"type":"chn","id":"vtvgo_vtv3"},
+            {"type":"chn","id":"vtvgo_vtv4"},
+            {"type":"chn","id":"vtvgo_vtv5"},
+            {"type":"chn","id":"vtvgo_vtv6"},
+            {"type":"chn","id":"vtvgo_vtv9"},
+            {"type":"chn","id":"vtvgo_vtvhue"},
+            {"type":"chn","id":"vtvgo_vtvdn"},
+            {"type":"chn","id":"vtvgo_vtvpy"},
+            {"type":"chn","id":"vtvgo_vtvct1"}
+            ]
+        },
+        "hplus": {
+            "title": "Nguồn HPlus",
+            "logo":  "default.png",
+            "desc": "Công ty Dịch vụ Kỹ thuật Truyền thông HTV",
+            "content": [
+            {"type":"chn","id":"hplus_vtv1"},
+            {"type":"chn","id":"hplus_vtv2"},
+            {"type":"chn","id":"hplus_vtv3"},
+            {"type":"chn_","id":"hplus_vtv3hd"},
+            {"type":"chn","id":"hplus_vtv6hd"},
+            {"type":"chn","id":"hplus_vtv9"},
+            {"type":"chn","id":"hplus_htv1"},
+            {"type":"chn_","id":"hplus_htv2"},
+            {"type":"chn_","id":"hplus_htv2hd"},
+            {"type":"chn_","id":"hplus_htv3"},
+            {"type":"chn","id":"hplus_htv4"},
+            {"type":"chn","id":"hplus_htv7hd"},
+            {"type":"chn","id":"hplus_htv9hd"},
+            {"type":"chn","id":"hplus_vtc3"},
+            {"type":"chn","id":"hplus_vtc4"},
+            {"type":"chn","id":"hplus_vtc6"},
+            {"type":"chn","id":"hplus_vtc10"}
+            ]
+        },
+        "vtvplus": {
+            "title": "Nguồn VTVPlus",
+            "logo":  "default.png",
+            "desc": "Công ty Truyền hình cáp Việt Nam",
+            "content": [
+            {"type":"chn","id":"vtvplus_vtv1"},
+            {"type":"chn","id":"vtvplus_vtv2"},
+            {"type":"chn","id":"vtvplus_vtv3"},
+            {"type":"chn","id":"vtvplus_vtv4"},
+            {"type":"chn","id":"vtvplus_vtv6"},
+            {"type":"chn","id":"vtvplus_vtv9"}
+            ]
+        },
+        "vov": {
+            "title": "VOV Radio",
+            "logo":  "vov.png",
+            "desc": "Đài Tiếng nói Việt Nam",
+            "content": [
+            {"type":"chn","id":"vtc_vov1"},
+            {"type":"chn","id":"vtc_vov2"},
+            {"type":"chn","id":"vtc_vov3"},
+            {"type":"chn","id":"vtc_vov5"}
+            ]
+        },
+        "oversea": {
+            "title": "Oversea Stations",
+            "logo":  "",
+            "desc": "Truyền hình Hải ngoại",
+            "content": [
+            {"type":"chn","id":"vtv1"},
+            {"type":"chn","id":"vtv2"}
+            ]
+        }
+    },
+    "channels": {
+        "vtvgo_vtv1": {
+            "title": "VTV1",
+            "logo": "vtv1.png",
+            "desc": "Thông tin tổng hợp",
+            "src": {
+                "id":"vtvgo",
+                "playpath": "m3u8_vtvgo",
+                "page_url": "http://vtvgo.vn/?xem-truc-tuyen-kenh-VTV1-1.html",
+                "url_before": "file: \"",
+                "url_after": "\",",
+				"header": {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-Requested-With":"XMLHttpRequest",
+					"Host":"vtvgo.vn",
+					"Referer":"http://vtvgo.vn/act/live/play/vtv1.html",
+					"Upgrade-Insecure-Requests":"1",
+					"Connection":"keep-alive",
+					"Cookie":"jwplayer.qualityLabel=360p"
+				},
+                "referer": ""
+            }
+        },
+        "vtvgo_vtv2": {
+            "title": "VTV2",
+            "logo": "vtv2.png",
+            "desc": "Khoa học, Giáo dục",
+            "src": {
+                "id":"vtvgo",
+                "playpath": "m3u8_bau",
+                "page_url": "http://vtvgo.vn/streaming.php?id=2",
+                "url_before": "file: \"",
+                "url_after": "\",",
+				"header": {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-Requested-With":"XMLHttpRequest",
+					"Host":"vtvgo.vn",
+					"Referer":"http://vtvgo.vn/act/live/play/vtv2.html",
+					"Upgrade-Insecure-Requests":"1",
+					"Connection":"keep-alive",
+					"Cookie":"jwplayer.qualityLabel=360p"
+				},
+                "referer": ""
+            }
+        },
+        "vtvgo_vtv3": {
+            "title": "VTV3",
+            "logo": "vtv3.png",
+            "desc": "Thể thao, Giải trí, Thông tin Kinh tế",
+            "src": {
+                "id":"vtvgo",
+                "playpath": "m3u8_bau",
+                "page_url": "http://vtvgo.vn/streaming.php?id=3",
+                "url_before": "file: \"",
+                "url_after": "\",",
+				"header": {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-Requested-With":"XMLHttpRequest",
+					"Host":"vtvgo.vn",
+					"Referer":"http://vtvgo.vn/act/live/play/vtv3.html",
+					"Upgrade-Insecure-Requests":"1",
+					"Connection":"keep-alive",
+					"Cookie":"jwplayer.qualityLabel=360p"
+				},
+                "referer": ""
+            }
+        },
+        "vtvgo_vtv4": {
+            "title": "VTV4",
+            "logo": "vtv4.png",
+            "desc": "Kênh cho người Việt Nam ở nước ngoài",
+            "src": {
+                "id":"vtvgo",
+                "playpath": "m3u8_bau",
+                "page_url": "http://vtvgo.vn/streaming.php?id=4",
+                "url_before": "file: \"",
+                "url_after": "\",",
+				"header": {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-Requested-With":"XMLHttpRequest",
+					"Host":"vtvgo.vn",
+					"Referer":"http://vtvgo.vn/act/live/play/vtv4.html",
+					"Upgrade-Insecure-Requests":"1",
+					"Connection":"keep-alive",
+					"Cookie":"jwplayer.qualityLabel=360p"
+				},
+                "referer": ""
+            }
+        },
+        "vtvgo_vtv5": {
+            "title": "VTV5",
+            "logo": "default.png",
+            "desc": "Kênh Tiếng Dân tộc Thiểu số",
+            "src": {
+                "id":"vtvgo",
+                "playpath": "m3u8_bau",
+                "page_url": "http://vtvgo.vn/streaming.php?id=5",
+                "url_before": "file: \"",
+                "url_after": "\",",
+				"header": {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-Requested-With":"XMLHttpRequest",
+					"Host":"vtvgo.vn",
+					"Referer":"http://vtvgo.vn/act/live/play/vtv5.html",
+					"Upgrade-Insecure-Requests":"1",
+					"Connection":"keep-alive",
+					"Cookie":"jwplayer.qualityLabel=360p"
+				},
+                "referer": ""
+            }
+        },
+        "vtvgo_vtv6": {
+            "title": "VTV6",
+            "logo": "vtv6.png",
+            "desc": "Kênh cho Thanh, thiếu niên",
+            "src": {
+                "id":"vtvgo",
+                "playpath": "m3u8_bau",
+                "page_url": "http://vtvgo.vn/streaming.php?id=6",
+                "url_before": "file: \"",
+                "url_after": "\",",
+				"header": {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-Requested-With":"XMLHttpRequest",
+					"Host":"vtvgo.vn",
+					"Referer":"http://vtvgo.vn/act/live/play/vtv6.html",
+					"Upgrade-Insecure-Requests":"1",
+					"Connection":"keep-alive",
+					"Cookie":"jwplayer.qualityLabel=360p"
+				},
+                "referer": ""
+            }
+        },
+        "vtvgo_vtv9": {
+            "title": "VTV9",
+            "logo": "vtv9.png",
+            "desc": "Kênh cho Khán giả miền Nam",
+            "src": {
+                "id":"vtvgo",
+                "playpath": "m3u8_bau",
+                "page_url": "http://vtvgo.vn/streaming.php?id=7",
+                "url_before": "file: \"",
+                "url_after": "\",",
+				"header": {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-Requested-With":"XMLHttpRequest",
+					"Host":"vtvgo.vn",
+					"Referer":"http://vtvgo.vn/act/live/play/vtv9.html",
+					"Upgrade-Insecure-Requests":"1",
+					"Connection":"keep-alive",
+					"Cookie":"jwplayer.qualityLabel=360p"
+				},
+                "referer": ""
+            }
+        },
+        "vtvgo_vtvct1": {
+            "title": "VTV Cần Thơ 1",
+            "logo": "default.png",
+            "desc": "",
+            "src": {
+                "id":"vtvgo",
+                "playpath": "m3u8_bau",
+                "page_url": "http://vtvgo.vn/streaming.php?id=9",
+                "url_before": "file: \"",
+                "url_after": "\",",
+				"header": {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-Requested-With":"XMLHttpRequest",
+					"Host":"vtvgo.vn",
+					"Referer":"http://vtvgo.vn/act/live/play/vtvct1.html",
+					"Upgrade-Insecure-Requests":"1",
+					"Connection":"keep-alive",
+					"Cookie":"jwplayer.qualityLabel=360p"
+				},
+                "referer": ""
+            }
+        },
+        "vtvgo_vtvdn": {
+            "title": "VTV Đà Nẵng",
+            "logo": "default.png",
+            "desc": "",
+            "src": {
+                "id":"vtvgo",
+                "playpath": "m3u8_bau",
+                "page_url": "http://vtvgo.vn/streaming.php?id=12",
+                "url_before": "file: \"",
+                "url_after": "\",",
+				"header": {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-Requested-With":"XMLHttpRequest",
+					"Host":"vtvgo.vn",
+					"Referer":"http://vtvgo.vn/act/live/play/vtvdn.html",
+					"Upgrade-Insecure-Requests":"1",
+					"Connection":"keep-alive",
+					"Cookie":"jwplayer.qualityLabel=360p"
+				},
+                "referer": ""
+            }
+        },
+        "vtvgo_vtvhue": {
+            "title": "VTV Huế",
+            "logo": "default.png",
+            "desc": "",
+            "src": {
+                "id":"vtvgo",
+                "playpath": "m3u8_bau",
+                "page_url": "http://vtvgo.vn/streaming.php?id=15",
+                "url_before": "file: \"",
+                "url_after": "\",",
+				"header": {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-Requested-With":"XMLHttpRequest",
+					"Host":"vtvgo.vn",
+					"Referer":"http://vtvgo.vn/act/live/play/vtvhue.html",
+					"Upgrade-Insecure-Requests":"1",
+					"Connection":"keep-alive",
+					"Cookie":"jwplayer.qualityLabel=360p"
+				},
+                "referer": ""
+            }
+        },
+        "vtvgo_vtvpy": {
+            "title": "VTV Phú Yên",
+            "logo": "default.png",
+            "desc": "",
+            "src": {
+                "id":"vtvgo",
+                "playpath": "m3u8_bau",
+                "page_url": "http://vtvgo.vn/streaming.php?id=18",
+                "url_before": "file: \"",
+                "url_after": "\",",
+				"header": {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-Requested-With":"XMLHttpRequest",
+					"Host":"vtvgo.vn",
+					"Referer":"http://vtvgo.vn/act/live/play/vtvpy.html",
+					"Upgrade-Insecure-Requests":"1",
+					"Connection":"keep-alive",
+					"Cookie":"jwplayer.qualityLabel=360p"
+				},
+                "referer": ""
+            }
+        },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        "fpt_vtv1": {
+            "title": "VTV1",
+            "logo": "vtv1.png",
+            "desc": "Thông tin tổng hợp",
+            "src": {
+                "id":"fpt",
+                "playpath": "m3u8_fpt",
+                "page_id": "vtv1-hd",
+                "page_q": "3",
+                "referer": ""
+            }
+        },
+        "fpt_vtv2": {
+            "title": "VTV2",
+            "logo": "vtv2.png",
+            "desc": "Khoa học, Giáo dục",
+            "src": {
+                "id":"fpt",
+                "playpath": "m3u8_fpt",
+                "page_id": "vtv2",
+                "page_q": "3",
+                "referer": ""
+            }
+        },
+        "fpt_vtv3": {
+            "title": "VTV3",
+            "logo": "vtv3.png",
+            "desc": "Thể thao, Giải trí, Thông tin Kinh tế",
+            "src": {
+                "id":"fpt",
+                "playpath": "m3u8_fpt",
+                "page_id": "vtv3-hd",
+                "page_q": "3",
+                "referer": ""
+            }
+        },
+        "fpt_vtv4": {
+            "title": "VTV4",
+            "logo": "vtv4.png",
+            "desc": "Kênh cho người Việt Nam ở nước ngoài",
+            "src": {
+                "id":"fpt",
+                "playpath": "m3u8_fpt",
+                "page_id": "vtv4",
+                "page_q": "3",
+                "referer": ""
+            }
+        },
+        "fpt_vtv6": {
+            "title": "VTV6",
+            "logo": "vtv6.png",
+            "desc": "Kênh cho Thanh, thiếu niên",
+            "src": {
+                "id":"fpt",
+                "playpath": "m3u8_fpt",
+                "page_id": "vtv6-hd",
+                "page_q": "3",
+                "referer": ""
+            }
+        },
+        "fpt_vtv9": {
+            "title": "VTV9",
+            "logo": "vtv9.png",
+            "desc": "Kênh cho Khán giả miền Nam",
+            "src": {
+                "id":"fpt",
+                "playpath": "m3u8_fpt",
+                "page_id": "vtv9",
+                "page_q": "3",
+                "referer": ""
+            }
+        },
+        "fpt_qpvn": {
+            "title": "QPVN",
+            "logo": "default.png",
+            "desc": "Kênh Truyền hình Quốc phòng Việt Nam",
+            "src": {
+                "id":"fpt",
+                "playpath": "m3u8_fpt",
+                "page_id": "quoc-phong-vn",
+                "page_q": "3",
+                "referer": ""
+            }
+        },
+        "fpt_antv": {
+            "title": "ANTV",
+            "logo": "antv.png",
+            "desc": "Kênh An ninh Nhân dân",
+            "src": {
+                "id":"fpt",
+                "playpath": "m3u8_fpt",
+                "page_id": "antv",
+                "page_q": "3",
+                "referer": ""
+            }
+        },
+        "fpt_thuanviethd": {
+            "title": "ThuanViet HD",
+            "logo": "default.png",
+            "desc": "Kênh văn hóa giải trí Việt Nam",
+            "src": {
+                "id":"fpt",
+                "playpath": "m3u8_fpt",
+                "page_id": "htvc-thuan-viet-hd",
+                "page_q": "3",
+                "referer": ""
+            }
+        },
+        "fpt_htvchd": {
+            "title": "HTVC+ HD",
+            "logo": "default.png",
+            "desc": "Thông tin tổng hợp",
+            "src": {
+                "id":"fpt",
+                "playpath": "m3u8_fpt",
+                "page_id": "htvc-hd",
+                "page_q": "3",
+                "referer": ""
+            }
+        },
+        "fpt_onetv": {
+            "title": "OneTV",
+            "logo": "default.png",
+            "desc": "Kênh giới thiệu riêng của OneTV",
+            "src": {
+                "id":"fpt",
+                "playpath": "m3u8_fpt",
+                "page_id": "onetv",
+                "page_q": "3",
+                "referer": ""
+            }
+        },
+        "fpt_vtc1": {
+            "title": "VTC1",
+            "logo": "vtc1.png",
+            "desc": "Thời sự tổng hợp",
+            "src": {
+                "id":"fpt",
+                "playpath": "m3u8_fpt",
+                "page_id": "vtc1",
+                "page_q": "3",
+                "referer": ""
+            }
+        },
+        "fpt_vtc2": {
+            "title": "VTC2",
+            "logo": "vtc2.png",
+            "desc": "Khoa học, Công nghệ",
+            "src": {
+                "id":"fpt",
+                "playpath": "m3u8_fpt",
+                "page_id": "vtc2",
+                "page_q": "3",
+                "referer": ""
+            }
+        },
+        "fpt_vtc3": {
+            "title": "VTC3",
+            "logo": "default.png",
+            "desc": "Kênh thể thao",
+            "src": {
+                "id":"fpt",
+                "playpath": "m3u8_fpt",
+                "page_id": "vtc3",
+                "page_q": "3",
+                "referer": ""
+            }
+        },
+        "fpt_vtc5": {
+            "title": "VTC5",
+            "logo": "default.png",
+            "desc": "Kênh Phim truyện",
+            "src": {
+                "id":"fpt",
+                "playpath": "m3u8_fpt",
+                "page_id": "vtc5",
+                "page_q": "3",
+                "referer": ""
+            }
+        },
+        "fpt_vtc6": {
+            "title": "VTC6",
+            "logo": "default.png",
+            "desc": "Kênh giải trí tổng hợp Saigon Channel",
+            "src": {
+                "id":"fpt",
+                "playpath": "m3u8_fpt",
+                "page_id": "vtc6",
+                "page_q": "3",
+                "referer": ""
+            }
+        },
+        "fpt_vtc7": {
+            "title": "VTC7",
+            "logo": "default.png",
+            "desc": "Kênh tổng hợp TodayTV",
+            "src": {
+                "id":"fpt",
+                "playpath": "m3u8_fpt",
+                "page_id": "vtc7",
+                "page_q": "3",
+                "referer": ""
+            }
+        },
+        "fpt_vtc10": {
+            "title": "VTC10",
+            "logo": "default.png",
+            "desc": "Kênh truyền hình chuyên biệt về Văn hóa Việt",
+            "src": {
+                "id":"fpt",
+                "playpath": "m3u8_fpt",
+                "page_id": "vtc10",
+                "page_q": "3",
+                "referer": ""
+            }
+        },
+        "fpt_vtc14": {
+            "title": "VTC14",
+            "logo": "default.png",
+            "desc": "Kênh truyền hình chuyên biệt về môi trường",
+            "src": {
+                "id":"fpt",
+                "playpath": "m3u8_fpt",
+                "page_id": "vtc14",
+                "page_q": "3",
+                "referer": ""
+            }
+        },
+        "fpt_vtc16": {
+            "title": "VTC16",
+            "logo": "default.png",
+            "desc": "Kênh truyền hình Nông nghiệp và Nông thôn",
+            "src": {
+                "id":"fpt",
+                "playpath": "m3u8_fpt",
+                "page_id": "vtc16",
+                "page_q": "3",
+                "referer": ""
+            }
+        },
+        "fpt_htvhd": {
+            "title": "HTV Movie HD",
+            "logo": "default.png",
+            "desc": "Kênh Phim truyện",
+            "src": {
+                "id":"fpt",
+                "playpath": "m3u8_fpt",
+                "page_id": "htvc-movie-hd",
+                "page_q": "3",
+                "referer": ""
+            }
+        },
+
+
+
+
+        "hplus_vtv1": {
+            "title": "VTV1",
+            "logo": "vtv1.png",
+            "desc": "Thông tin tổng hợp",
+            "src": {
+                "id":"hplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://hplus.com.vn/vi/content/detail/vtv-1-2128.html",
+                "url_before": "var iosUrl = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "hplus_vtv2": {
+            "title": "VTV2",
+            "logo": "vtv2.png",
+            "desc": "Khoa học, Giáo dục",
+            "src": {
+                "id":"hplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://hplus.com.vn/vi/content/detail/vtv-2-2127.html",
+                "url_before": "var iosUrl = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "hplus_vtv3": {
+            "title": "VTV3",
+            "logo": "vtv3.png",
+            "desc": "Thể thao, Giải trí, Thông tin Kinh tế",
+            "src": {
+                "id":"hplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://hplus.com.vn/vi/content/detail/vtv-3-2126.html",
+                "url_before": "var iosUrl = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "hplus_vtv3hd": {
+            "title": "VTV3 HD",
+            "logo": "vtv3.png",
+            "desc": "Thể thao, Giải trí, Thông tin Kinh tế",
+            "src": {
+                "id":"hplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://hplus.com.vn/vi/content/detail/vtv3-hd-2130.html",
+                "url_before": "var iosUrl = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "hplus_vtv6hd": {
+            "title": "VTV6 HD",
+            "logo": "vtv6.png",
+            "desc": "Kênh cho Thanh, thiếu niên",
+            "src": {
+                "id":"hplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://hplus.com.vn/vi/content/detail/vtv6-hd-2129.html",
+                "url_before": "var iosUrl = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "hplus_vtv9": {
+            "title": "VTV9",
+            "logo": "vtv9.png",
+            "desc": "Kênh cho Khán giả miền Nam",
+            "src": {
+                "id":"hplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://hplus.com.vn/vi/content/detail/vtv-9-2125.html",
+                "url_before": "var iosUrl = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "hplus_htv1": {
+            "title": "HTV1",
+            "logo": "htv1.png",
+            "desc": "",
+            "src": {
+                "id":"hplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://hplus.com.vn/vi/content/detail/htv-1-2631.html",
+                "url_before": "var iosUrl = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "hplus_htv2": {
+            "title": "HTV2",
+            "logo": "htv2.png",
+            "desc": "",
+            "src": {
+                "id":"hplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://hplus.com.vn/vi/content/detail/htv-2-2630.html",
+                "url_before": "var iosUrl = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "hplus_htv2hd": {
+            "title": "HTV2 HD",
+            "logo": "htv2.png",
+            "desc": "",
+            "src": {
+                "id":"hplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://hplus.com.vn/vi/content/detail/htv2-hd-2669.html",
+                "url_before": "var iosUrl = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "hplus_htv3": {
+            "title": "HTV3",
+            "logo": "htv3.png",
+            "desc": "",
+            "src": {
+                "id":"hplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://hplus.com.vn/vi/content/detail/htv-3-2535.html",
+                "url_before": "var iosUrl = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "hplus_htv4": {
+            "title": "HTV4",
+            "logo": "htv4.png",
+            "desc": "",
+            "src": {
+                "id":"hplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://hplus.com.vn/vi/content/detail/htv-4-2528.html",
+                "url_before": "var iosUrl = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "hplus_htv7hd": {
+            "title": "HTV7 HD",
+            "logo": "htv7.png",
+            "desc": "",
+            "src": {
+                "id":"hplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://hplus.com.vn/vi/content/detail/htv7-hd-256.html",
+                "url_before": "var iosUrl = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "hplus_htv9hd": {
+            "title": "HTV9 HD",
+            "logo": "htv9.png",
+            "desc": "",
+            "src": {
+                "id":"hplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://hplus.com.vn/vi/content/detail/htv9-hd-2667.html",
+                "url_before": "var iosUrl = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "hplus_vtc3": {
+            "title": "VTC3",
+            "logo": "default.png",
+            "desc": "Kênh thể thao",
+            "src": {
+                "id":"hplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://hplus.com.vn/vi/content/detail/vtc-3-hd-2058.html",
+                "url_before": "var iosUrl = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "hplus_vtc4": {
+            "title": "VTC4",
+            "logo": "default.png",
+            "desc": "",
+            "src": {
+                "id":"hplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://hplus.com.vn/vi/content/detail/vtc-4-2057.html",
+                "url_before": "var iosUrl = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "hplus_vtc6": {
+            "title": "VTC6",
+            "logo": "default.png",
+            "desc": "",
+            "src": {
+                "id":"hplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://hplus.com.vn/vi/content/detail/vtc-6-2056.html",
+                "url_before": "var iosUrl = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "hplus_vtc10": {
+            "title": "VTC10",
+            "logo": "default.png",
+            "desc": "",
+            "src": {
+                "id":"hplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://hplus.com.vn/vi/content/detail/vtc-10-2051.html",
+                "url_before": "var iosUrl = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+
+
+
+
+        "vtvplus_vtv1": {
+            "title": "VTV1",
+            "logo": "vtv1.png",
+            "desc": "Thông tin tổng hợp",
+            "src": {
+                "id":"vtvplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://vtvplus.vn/vtv1-live-2-5678.html",
+                "url_before": "var responseText = \"",
+                "url_after": ",http://",
+                "referer": ""
+            }
+        },
+        "vtvplus_vtv2": {
+            "title": "VTV2",
+            "logo": "vtv2.png",
+            "desc": "Khoa học, Giáo dục",
+            "src": {
+                "id":"vtvplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://vtvplus.vn/vtv2-live-3-5678.html",
+                "url_before": "var responseText = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "vtvplus_vtv3": {
+            "title": "VTV3",
+            "logo": "vtv3.png",
+            "desc": "Thể thao, Giải trí, Thông tin Kinh tế",
+            "src": {
+                "id":"vtvplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://vtvplus.vn/vtv3-free-live-87-5678.html",
+                "url_before": "var responseText = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "vtvplus_vtv4": {
+            "title": "VTV4",
+            "logo": "vtv4.png",
+            "desc": "Kênh cho người Việt Nam ở nước ngoài",
+            "src": {
+                "id":"vtvplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://vtvplus.vn/vtv4-live-4-5678.html",
+                "url_before": "var responseText = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "vtvplus_vtv6": {
+            "title": "VTV6",
+            "logo": "vtv6.png",
+            "desc": "Kênh cho Thanh, thiếu niên",
+            "src": {
+                "id":"vtvplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://vtvplus.vn/vtv6-free-live-88-5678.html",
+                "url_before": "var responseText = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+        "vtvplus_vtv9": {
+            "title": "VTV9",
+            "logo": "vtv9.png",
+            "desc": "Kênh cho Khán giả miền Nam",
+            "src": {
+                "id":"vtvplus",
+                "playpath": "m3u8_bau",
+                "page_url": "http://vtvplus.vn/vtv9-live-6-5678.html",
+                "url_before": "var responseText = \"",
+                "url_after": "\";",
+                "referer": ""
+            }
+        },
+
+
+
+
+
+        "vtc_vtv1": {
+            "title": "VTV1",
+            "logo": "vtv1.png",
+            "desc": "Thông tin tổng hợp",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1011/vtv1",
+                "referer": "VTV1/15"
+            }
+        },
+        "vtc_vtv2": {
+            "title": "VTV2",
+            "logo": "vtv2.png",
+            "desc": "Khoa học, Giáo dục",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1010/vtv2",
+                "referer": "VTV2/23"
+            }
+        },
+        "vtc_vtv3": {
+            "title": "VTV3",
+            "logo": "vtv3.png",
+            "desc": "Thể thao, Giải trí, Thông tin Kinh tế",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1013/vtv3",
+                "referer": "VTV3/3"
+            }
+        },
+        "vtc_vtv4": {
+            "title": "VTV4",
+            "logo": "vtv4.png",
+            "desc": "Kênh cho người Việt Nam ở nước ngoài",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1009/vtv4",
+                "referer": "VTV4/2"
+            }
+        },
+        "vtc_vtc1": {
+            "title": "VTC1",
+            "logo": "vtc1.png",
+            "desc": "Thời sự tổng hợp",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1007/vtc1",
+                "referer": "VTC1/10"
+            }
+        },
+        "vtc_vtc10": {
+            "title": "VTC10",
+            "logo": "vtc10.png",
+            "desc": "Kênh Văn hóa Việt",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1006/netviet",
+                "referer": "VTC10/22"
+            }
+        },
+        "vtc_vtc16": {
+            "title": "VTC16",
+            "logo": "vtc.png",
+            "desc": "Khoa học, Công nghệ",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1018/vtc16",
+                "referer": "VTC2/11"
+            }
+        },
+        "vtc_ttxvn": {
+            "title": "TTXVN",
+            "logo": "default.png",
+            "desc": "Thông tin, Giải trí, Thể thao",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1019/ttxvn",
+                "referer": ""
+            }
+        },
+        "vtc_htv9": {
+            "title": "HTV9",
+            "logo": "htv9.png",
+            "desc": "Chính trị, Xã hội, Văn hóa",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1012/htv9",
+                "referer": ""
+            }
+        },
+        "vtc_hn1": {
+            "title": "HN1",
+            "logo": "",
+            "desc": "Hà Nội 1",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"1008/hn",
+                "referer": ""
+            }
+        },
+        "vtc_vov1": {
+            "title": "VOV1",
+            "logo": "vov1.png",
+            "desc": "Thời sự, Chính trị, Tổng hợp",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"vov1",
+                "referer": "VOV1/29"
+            }
+        },
+        "vtc_vov2": {
+            "title": "VOV2",
+            "logo": "vov2.png",
+            "desc": "Văn hóa, Đời sống, Khoa giáo",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"vov2",
+                "referer": "VOV2/28"
+            }
+        },
+        "vtc_vov3": {
+            "title": "VOV3",
+            "logo": "vov3.png",
+            "desc": "Âm nhạc, Giải trí",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"vov3",
+                "referer": "VOV3/27"
+            }
+        },
+        "vtc_vov5": {
+            "title": "VOV5",
+            "logo": "vov5.png",
+            "desc": "Phát thanh đối ngoại",
+            "src": {
+                "id":"vtc",
+                "playpath": "m3u8_tvnet",
+				"page_id":"vov5",
+                "referer": "VOV5/25"
+            }
+        },
+
+
+
+
+        "trt1": {
+            "title": "TRT1",
+            "logo": "",
+            "desc": "Thừa Thiên Huế",
+            "src": {
+                "id":"xunghe",
+                "playpath": "trt",
+                "referer": ""
+            }
+        }
+    }
+}

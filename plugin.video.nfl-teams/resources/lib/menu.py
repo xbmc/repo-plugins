@@ -4,6 +4,7 @@ import time
 from datetime import datetime
 from os import path
 from urllib import quote
+from urlparse import parse_qs
 
 import xbmcaddon
 import xbmcgui
@@ -48,6 +49,8 @@ class Menu(object):
         if item.get("raw_metadata"):
             info["plot"] = item.get("raw_metadata").get("description", "No description was given for the video.").encode("utf-8").replace("&hellip;", "...")
             date = self.parse_video_date(item.get("raw_metadata").get("date"))
+            if not date:
+                date = self.parse_video_date_from_thumbnail_url(thumbnail)
             if date:
                 info["date"] = date.strftime("%d.%m.%Y")
                 info["plot"] = "Added on {0}.\n{1}".format(date.strftime("%c"), info["plot"])
@@ -66,10 +69,23 @@ class Menu(object):
             try:
                 return datetime.strptime(date_string, "%m/%d/%Y %H:%M:%S")
             except TypeError:
-                # Workaround for bug in XBMC: http://forum.xbmc.org/showthread.php?tid=112916
+                # Workaround for bug in Kodi: https://forum.kodi.tv/showthread.php?tid=112916
                 return datetime.fromtimestamp(time.mktime(time.strptime(date_string, "%m/%d/%Y %H:%M:%S")))
         else:
             return None
+
+    @classmethod
+    def parse_video_date_from_thumbnail_url(cls, thumbnail_url):
+        if not thumbnail_url:
+            return None
+
+        _, query_string = thumbnail_url.split("?", 1)
+        query = parse_qs(query_string)
+        if "timestamp" not in query:
+            return None
+
+        timestamp = query["timestamp"][0]
+        return datetime.fromtimestamp(float(timestamp))
 
     def _end_directory(self):
         xbmcplugin.endOfDirectory(self._handle)

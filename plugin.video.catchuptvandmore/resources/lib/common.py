@@ -19,21 +19,21 @@
     with Catch-up TV & More; if not, write to the Free Software Foundation,
     Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 """
-from resources.lib import simpleplugin as sp
+
 import os
+from resources.lib import simpleplugin as sp
 
-plugin = sp.Plugin()
-addon = sp.Addon()
+PLUGIN = sp.Plugin()
+ADDON = sp.Addon()
 
-cache_time = 10
+CACHE_TIME = 10
 
-plugin_name = 'Catch-up TV & More'
-
+PLUGIN_NAME = 'Catch-up TV & More'
 
 def get_window_title():
     query = sp.sys.argv[2][1:]
-    params = plugin.get_params(query)
+    params = PLUGIN.get_params(query)
     if 'window_title' in params:
         return params.window_title
     else:
-        return plugin_name
+        return PLUGIN_NAME

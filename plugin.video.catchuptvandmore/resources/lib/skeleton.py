@@ -21,40 +21,57 @@
 """
 
 
-categories = {
-    'main_menu.fr': 'French channels'
-    # 'main_menu.be': 'Belgian channels'
+CATEGORIES = {
+    'main_menu.fr': 'French channels',
+    'main_menu.eu': 'European channels'
 }
 
-channels = {
+CHANNELS = {
     'main_menu.fr': {
         'channels.fr.tf1.tf1': 'TF1',
         'channels.fr.pluzz.france2': 'France 2',
         'channels.fr.pluzz.france3': 'France 3',
-        'channels.fr.canalplus.canalplus': 'Canal +',
+        'channels.fr.groupecanal.cplus': 'Canal +',
         'channels.fr.pluzz.france5': 'France 5',
         'channels.fr.6play.m6': 'M6',
-        'channels.fr.arte.arte': 'Arte',
-        'channels.fr.c.c8': 'C8',
+        'channels.fr.groupecanal.c8': 'C8',
         'channels.fr.6play.w9': 'W9',
         'channels.fr.tf1.tmc': 'TMC',
         'channels.fr.tf1.nt1': 'NT1',
         'channels.fr.nrj.nrj12': 'NRJ 12',
         'channels.fr.pluzz.france4': 'France 4',
         'channels.fr.bfmtv.bfmtv': 'BFM TV',
-        'channels.fr.itele.itele': 'i-Télé',
-        'channels.fr.c.cstar': 'CStar',
+        'channels.fr.groupecanal.cnews': 'CNews',
+        'channels.fr.groupecanal.cstar': 'CStar',
         'channels.fr.gulli.gulli': 'Gulli',
         'channels.fr.pluzz.franceo': 'France Ô',
         'channels.fr.tf1.hd1': 'HD1',
         'channels.fr.lequipe.lequipe': 'L\'Équipe',
         'channels.fr.6play.6ter': '6ter',
         'channels.fr.numero23.numero23': 'Numéro 23',
-        'channels.fr.nrj.cherie25': 'Chérie 25'
+        'channels.fr.nrj.cherie25': 'Chérie 25',
+        'channels.fr.pluzz.la_1ere': 'La 1ère (Outre-Mer)',
+        'channels.fr.pluzz.franceinfo': 'France Info',
+        'channels.fr.bfmtv.bfmbusiness': 'BFM Business',
+        'channels.fr.bfmtv.rmc': 'RMC',
+        'channels.fr.bfmtv.01net': '01Net TV',
+        'channels.fr.tf1.tfou': 'Tfou (MYTF1)',
+        'channels.fr.tf1.xtra': 'Xtra (MYTF1)',
+        'channels.fr.tf1.lci': 'LCI',
+        'channels.fr.lcp.lcp': 'LCP Assemblée Nationale',
+        'channels.fr.bfmtv.rmcdecouverte': 'RMC Découverte HD24',
+        'channels.fr.6play.stories': 'Stories (6play)',
+        'channels.fr.6play.bruce': 'Bruce (6play)',
+        'channels.fr.6play.crazy_kitchen': 'Crazy Kitchen (6play)',
+        'channels.fr.6play.home': 'Home Time (6play)',
+        'channels.fr.6play.styles': 'Sixième Style (6play)',
+        'channels.fr.6play.comedy': 'Comic (6play)',
+        'channels.fr.france24.france24': 'France 24',
+        'channels.fr.publicsenat.publicsenat': 'Public Sénat'
+    },
 
+    'main_menu.eu': {
+        'channels.eu.arte.arte': 'Arte',
+        'channels.eu.euronews.euronews': 'Euronews'
     }
-
-    # 'main_menu.be': {
-    #     'channels.be.rtbf.rtbf': 'RTBF'
-    # }
 }

@@ -20,62 +20,105 @@
     Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 """
 
+import re
+import ast
 from bs4 import BeautifulSoup as bs
 from resources.lib import utils
 from resources.lib import common
-import re
-import ast
 
-auth = '?auth=1487366549-2688-mbe66p57-9b64a7bdc99718f9fc20facf756f8be9'
+# TO DO
+# Lot Code DailyMotion are present in some channel
+# (create function to pass video_id from each channel using DailyMotion)
+# Get Info Live
 
-dailymotion_url = 'https://www.dailymotion.com/cdn/manifest/video/'
+# Initialize GNU gettext emulation in addon
+# This allows to use UI strings from addon’s English
+# strings.po file instead of numeric codes
+_ = common.ADDON.initialize_gettext()
 
-url_root = 'https://www.lequipe.fr'
+URL_ROOT = 'https://www.lequipe.fr'
 
-categories = {
-    'https://www.lequipe.fr/lachainelequipe/morevideos/0/': 'Tout',
-    'https://www.lequipe.fr/lachainelequipe/morevideos/1/': 'L\'Équipe du soir',
-    'https://www.lequipe.fr/lachainelequipe/morevideos/62/': 'L\'Équipe Type',
-    'https://www.lequipe.fr/lachainelequipe/morevideos/88/': 'L\'Équipe Enquête',
-    'https://www.lequipe.fr/lachainelequipe/morevideos/46/': 'Esprit Bleu'
-}
+URL_ROOT_VIDEO_LEQUIPE = 'https://www.lequipe.fr/lachainelequipe/'
 
-correct_mounth = {
-    'JANV.': '01',
-    'FÉVR.': '02',
-    'MARS.': '03',
-    'AVRI': '04',
-    'MAI': '05',
-    'JUIN': '06',
-    'JUIL.': '07',
-    'AOÛT': '08',
-    'SEPT.': '09',
-    'OCTO.': '10',
-    'NOVE.': '11',
-    'DECE.': '12'
-}
+URL_REPLAY_VIDEO_LEQUIPE = 'https://www.lequipe.fr/lachainelequipe/morevideos/%s'
+# Category_id
 
+URL_DAILYMOTION_EMBED = 'http://www.dailymotion.com/embed/video/%s'
+# Video_id
 
 def channel_entry(params):
-    if 'list_shows' in params.next:
+    """Entry function of the module"""
+    if 'root' in params.next:
+        return root(params)
+    elif 'list_shows' in params.next:
         return list_shows(params)
     elif 'list_videos' in params.next:
         return list_videos(params)
+    elif 'live' in params.next:
+        return list_live(params)
     elif 'play' in params.next:
         return get_video_url(params)
     else:
         return None
 
+@common.PLUGIN.cached(common.CACHE_TIME)
+def root(params):
+    """Add Replay and Live in the listing"""
+    modes = []
 
-@common.plugin.cached(common.cache_time)
+    # Add Replay
+    modes.append({
+        'label' : 'Replay',
+        'url': common.PLUGIN.get_url(
+            action='channel_entry',
+            next='list_shows_1',
+            category='%s Replay' % params.channel_name.upper(),
+            window_title='%s Replay' % params.channel_name.upper()
+        ),
+    })
+
+    # Add Live
+    modes.append({
+        'label' : 'Live TV',
+        'url': common.PLUGIN.get_url(
+            action='channel_entry',
+            next='live_cat',
+            category='%s Live TV' % params.channel_name.upper(),
+            window_title='%s Live TV' % params.channel_name.upper()
+        ),
+    })
+
+    return common.PLUGIN.create_listing(
+        modes,
+        sort_methods=(
+            common.sp.xbmcplugin.SORT_METHOD_UNSORTED,
+            common.sp.xbmcplugin.SORT_METHOD_LABEL
+        ),
+    )
+
+@common.PLUGIN.cached(common.CACHE_TIME)
 def list_shows(params):
+    """Build shows listing"""
     shows = []
 
-    for category_url, category_name in categories.iteritems():
+    # Get categories :
+    file_path = utils.download_catalog(
+        URL_ROOT_VIDEO_LEQUIPE,
+        '%s_video.html' % (
+            params.channel_name))
+    root_html = open(file_path).read()
+    root_soup = bs(root_html, 'html.parser')
+
+    categories_soup = root_soup.find_all('a', class_="navtab__item js-tabs-item")
+
+    for category in categories_soup:
+
+        category_name = category.get_text().encode('utf-8')
+        category_url = URL_REPLAY_VIDEO_LEQUIPE % category.get('data-program-id')
 
         shows.append({
             'label': category_name,
-            'url': common.plugin.get_url(
+            'url': common.PLUGIN.get_url(
                 action='channel_entry',
                 category_url=category_url,
                 page='1',
@@ -85,21 +128,22 @@ def list_shows(params):
             )
         })
 
-    return common.plugin.create_listing(
+    return common.PLUGIN.create_listing(
         shows,
         sort_methods=(
             common.sp.xbmcplugin.SORT_METHOD_UNSORTED,
             common.sp.xbmcplugin.SORT_METHOD_LABEL))
 
 
-@common.plugin.cached(common.cache_time)
+@common.PLUGIN.cached(common.CACHE_TIME)
 def list_videos(params):
+    """Build videos listing"""
     videos = []
     if 'previous_listing' in params:
         videos = ast.literal_eval(params['previous_listing'])
 
 
-    url = params.category_url + params.page
+    url = params.category_url + '/' + params.page
     file_path = utils.download_catalog(
         url,
         '%s_%s_%s.html' % (
@@ -114,7 +158,12 @@ def list_videos(params):
         class_='colead')
 
     for program in category_soup:
-        url = program['href'].encode('utf-8')
+
+        # Get Video_ID
+        url = URL_ROOT + program['href'].encode('utf-8')
+        html_video_equipe = utils.get_webcontent(url)
+        video_id = re.compile(
+            r'<iframe src="//www.dailymotion.com/embed/video/(.*?)\?', re.DOTALL).findall(html_video_equipe)[0]
 
         title = program.find(
             'h2').get_text().encode('utf-8')
@@ -124,42 +173,28 @@ def list_videos(params):
         img = colead__image.find(
             'img')['data-src'].encode('utf-8')
 
-        views = colead__image.find(
-            'span',
-            class_='colead__layerText--topright'
-        ).get_text().encode('utf-8')
-
-        views = [int(s) for s in views.split() if s.isdigit()]
-        views = views[0]
-
         date = colead__image.find(
             'span',
-            class_='colead__layerText--bottomleft'
-        ).get_text().encode('utf-8')  # 10 FÉVR. 2017 | 08:20
-        date = date.split(' ')
+            class_='colead__layerText colead__layerText--bottomleft'
+        ).get_text().strip().encode('utf-8')  # 07/09/17 | 01 min
+        date = date.split('/')
         day = date[0]
-        try:
-            mounth = correct_mounth[date[1]]
-        except:
-            mounth = '00'
-        year = date[2]
+        mounth = date[1]
+        year = '20' + date[2].split(' ')[0]
 
         date = '.'.join((day, mounth, year))
         aired = '-'.join((year, mounth, day))
-        # date : string (%d.%m.%Y / 01.01.2009)
-        # aired : string (2008-12-07)
 
         duration_string = colead__image.find(
             'span',
-            class_='colead__layerText--bottomright'
-        ).get_text().encode('utf-8')
-        duration_list = duration_string.split(':')
-        duration = int(duration_list[0]) * 60 + int(duration_list[1])
+            class_='colead__layerText colead__layerText--bottomleft'
+        ).get_text().strip().encode('utf-8')
+        duration_list = duration_string.split(' ')
+        duration = int(duration_list[2]) * 60
 
         info = {
             'video': {
                 'title': title,
-                'playcount': views,
                 'aired': aired,
                 'date': date,
                 'duration': duration,
@@ -168,22 +203,33 @@ def list_videos(params):
             }
         }
 
+        context_menu = []
+        download_video = (
+            _('Download'),
+            'XBMC.RunPlugin(' + common.PLUGIN.get_url(
+                action='download_video',
+                video_id=video_id) + ')'
+        )
+        context_menu.append(download_video)
+
         videos.append({
             'label': title,
             'thumb': img,
-            'url': common.plugin.get_url(
+            'fanart': img,
+            'url': common.PLUGIN.get_url(
                 action='channel_entry',
-                next='play',
-                url=url
+                next='play_r',
+                video_id=video_id
             ),
             'is_playable': True,
-            'info': info
+            'info': info,
+            'context_menu': context_menu
         })
 
     # More videos...
     videos.append({
-        'label': common.addon.get_localized_string(30100),
-        'url': common.plugin.get_url(
+        'label': common.ADDON.get_localized_string(30100),
+        'url': common.PLUGIN.get_url(
             action='channel_entry',
             category_url=params.category_url,
             category_name=params.category_name,
@@ -194,7 +240,7 @@ def list_videos(params):
         ),
     })
 
-    return common.plugin.create_listing(
+    return common.PLUGIN.create_listing(
         videos,
         sort_methods=(
             common.sp.xbmcplugin.SORT_METHOD_UNSORTED,
@@ -207,43 +253,91 @@ def list_videos(params):
         update_listing='update_listing' in params,
     )
 
+@common.PLUGIN.cached(common.CACHE_TIME)
+def list_live(params):
+    """Build live listing"""
+    lives = []
 
-@common.plugin.cached(common.cache_time)
+    title = ''
+    plot = ''
+    duration = 0
+    img = ''
+    url_live = ''
+    video_id = ''
+    url_live = ''
+
+    html_live_equipe = utils.get_webcontent(URL_ROOT_VIDEO_LEQUIPE)
+    video_id = re.compile(
+        r'<iframe src="//www.dailymotion.com/embed/video/(.*?)\?', re.DOTALL).findall(html_live_equipe)[0]
+
+    title = '%s Live' % params.channel_name.upper()
+
+    info = {
+        'video': {
+            'title': title,
+            'plot': plot,
+            'duration': duration
+        }
+    }
+
+    lives.append({
+        'label': title,
+        'fanart': img,
+        'thumb': img,
+        'url' : common.PLUGIN.get_url(
+            action='channel_entry',
+            next='play_l',
+            video_id=video_id,
+        ),
+        'is_playable': True,
+        'info': info
+    })
+
+    return common.PLUGIN.create_listing(
+        lives,
+        sort_methods=(
+            common.sp.xbmcplugin.SORT_METHOD_UNSORTED,
+            common.sp.xbmcplugin.SORT_METHOD_LABEL
+        )
+    )
+
+
+
+@common.PLUGIN.cached(common.CACHE_TIME)
 def get_video_url(params):
-    url = url_root + params.url
-    html_video_equipe = utils.get_webcontent(
-        url)
+    """Get video URL and start video player"""
+    url_video = URL_DAILYMOTION_EMBED % params.video_id
 
-    url_daily = re.compile(
-        r'<iframe src="//(.*?)"', re.DOTALL).findall(html_video_equipe)[0]
+    desired_quality = common.PLUGIN.get_setting('quality')
 
-    url_daily = 'http://' + url_daily
-
-    html_daily = utils.get_webcontent(
-        url_daily,)
-
-    html_daily = html_daily.replace('\\', '')
-
-    urls_mp4 = re.compile(
-        r'{"type":"video/mp4","url":"(.*?)"}],"(.*?)":').findall(html_daily)
-
-    for url, quality in urls_mp4:
-        if quality == '480':
-            url_sd = url
-        elif quality == '720':
-            url_hd = url
-        elif quality == '1080':
-            url_hdplus = url
-        url_default = url
-
-    desired_quality = common.plugin.get_setting(
-        params.channel_id + '.quality')
-
-    if desired_quality == 'HD+' and url_hdplus is not None:
-        return url_hdplus
-    elif desired_quality == 'HD' and url_hd is not None:
-        return url_hd
-    elif desired_quality == 'SD' and url_sd is not None:
-        return url_sd
+    if params.next == 'download_video':
+        return url_video
     else:
-        return url_default
+        html_video = utils.get_webcontent(url_video)
+        html_video = html_video.replace('\\', '')
+
+        if params.next == 'play_l':
+            all_url_video = re.compile(r'{"type":"application/x-mpegURL","url":"(.*?)"').findall(html_video)
+            # Just One Quality
+            return all_url_video[0]
+        elif  params.next == 'play_r':
+            all_url_video = re.compile(r'{"type":"video/mp4","url":"(.*?)"').findall(html_video)
+            if desired_quality == "DIALOG":
+                all_datas_videos = []
+                for datas in all_url_video:
+                    new_list_item = common.sp.xbmcgui.ListItem()
+                    datas_quality = re.search('H264-(.+?)/', datas).group(1)
+                    new_list_item.setLabel('H264-' + datas_quality)
+                    new_list_item.setPath(datas)
+                    all_datas_videos.append(new_list_item)
+
+                seleted_item = common.sp.xbmcgui.Dialog().select("Choose Stream", all_datas_videos)
+
+                return all_datas_videos[seleted_item].getPath().encode('utf-8')
+            elif desired_quality == 'BEST':
+                # Last video in the Best
+                for datas in all_url_video:
+                    url = datas
+                return url
+            else:
+                return all_url_video[0]

@@ -26,9 +26,16 @@ msgid "Channels"
 msgstr ""
 
 msgctxt "#30002"
-msgid "Quality and content"
+msgid "Quality and Content"
 msgstr ""
 
+msgctxt "#30003"
+msgid "Download"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Accounts"
+msgstr ""
 
 # Settings line separators (from 30010 to 30019)
 msgctxt "#30010"
@@ -39,6 +46,9 @@ msgctxt "#30011"
 msgid "Hide channels from categories"
 msgstr ""
 
+msgctxt "#30012"
+msgid "To configure YTDL go settings of script.module.youtube.dl"
+msgstr ""
 
 # Main categories (from 30020 to 30039)
 msgctxt "#30020"
@@ -49,6 +59,21 @@ msgctxt "#30021"
 msgid "Belgian channels"
 msgstr ""
 
+msgctxt "#30022"
+msgid "Japanese channels"
+msgstr ""
+
+msgctxt "#30023"
+msgid "European channels"
+msgstr ""
+
+msgctxt "#30024"
+msgid "United Kingdom channels"
+msgstr ""
+
+msgctxt "#30025"
+msgid "United States channels"
+msgstr ""
 
 # Context menu (from 30040 to 30049)
 msgctxt "#30040"
@@ -63,6 +88,9 @@ msgctxt "#30042"
 msgid "Hide"
 msgstr ""
 
+msgctxt "#30043"
+msgid "Download"
+msgstr ""
 
 # Dialog boxes (from 30050 to 30069)
 msgctxt "#30050"
@@ -76,80 +104,29 @@ msgstr ""
 
 # Settings quality and content (from 30070 to 30099)
 msgctxt "#30070"
-msgid "TF1: Show bonus videos"
+msgid "Video quality"
 msgstr ""
 
 msgctxt "#30071"
-msgid "France 2: Video quality"
-msgstr ""
-
-msgctxt "#30072"
-msgid "France 3: Video quality"
-msgstr ""
-
-msgctxt "#30073"
-msgid "France 4: Video quality"
-msgstr ""
-
-msgctxt "#30074"
-msgid "France 5: Video quality"
-msgstr ""
-
-msgctxt "#30075"
-msgid "France Ô: Video quality"
-msgstr ""
-
-msgctxt "#30076"
-msgid "M6: Video quality"
-msgstr ""
-
-msgctxt "#30077"
-msgid "W9: Video quality"
-msgstr ""
-
-msgctxt "#30078"
-msgid "6ter: Video quality"
-msgstr ""
-
-msgctxt "#30079"
-msgid "Arte: Video quality"
+msgid "Contents"
 msgstr ""
 
 msgctxt "#30080"
-msgid "Arte: Language"
+msgid "Arte: Choose Channel"
 msgstr ""
 
 msgctxt "#30081"
-msgid "BFM TV: Video quality"
+msgid "France24: Choose Channel"
 msgstr ""
 
 msgctxt "#30082"
-msgid "TMC: Show bonus videos"
-msgstr ""
-
-msgctxt "#30083"
-msgid "NT1: Show bonus videos"
-msgstr ""
-
-msgctxt "#30084"
-msgid "HD1: Show bonus videos"
-msgstr ""
-
-msgctxt "#30085"
-msgid "NRJ 12: Video quality"
-msgstr ""
-
-msgctxt "#30086"
-msgid "L'Équipe: Video quality"
+msgid "Euronews: Choose Channel"
 msgstr ""
 
 msgctxt "#30087"
-msgid "TF1: Video quality"
+msgid "Video quality (BEST|DEFAULT|DIALOG)"
 msgstr ""
 
-msgctxt "#30088"
-msgid "Numéro 23: Video quality"
-msgstr ""
 
 # Others (from 30100 to 30140)
 msgctxt "#30100"
@@ -186,4 +163,18 @@ msgstr ""
 
 msgctxt "#30108"
 msgid "More programs..."
+msgstr ""
+
+msgctxt "#30109"
+msgid "Live TV"
+msgstr ""
+
+msgctxt "#30110"
+msgid "Choose video quality"
+msgstr ""
+
+# Download (from 30200 to 30240)
+
+msgctxt "#30200"
+msgid "Folder to Download"
 msgstr ""

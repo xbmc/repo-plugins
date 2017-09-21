@@ -676,24 +676,10 @@ def settings():
 
 def getVideoInfos(video):
     guest = isGuestMode()
-    if str(video['episode_number']) == '0':
-        if video['show_TT'] == None:
-            label = video['family_TT'].encode('utf-8')
-        else:
-            label = video['family_TT'].encode('utf-8')+' - '+unicode(video['show_TT']).encode('utf-8')
-    else:
-        if video['show_TT'] == None:
-            label = video['family_TT'].encode('utf-8')+' - '+str(video['episode_number'])
-        else:
-            label = video['family_TT'].encode('utf-8')+' - '+str(video['episode_number']).encode('utf-8')+' - '+unicode(video['show_TT']).encode('utf-8')
-    if video['show_resume'] == None and video['family_resume'] == None:
-        resume = ''
-    elif video['show_resume'] == None and video['family_resume'] != None:
-        resume = video['family_resume']
-    elif video['family_resume'] == None and video['show_resume'] != None:
-        resume = video['show_resume']
-    else:
-        resume = video['family_resume']+'\n\n'+video['show_resume']
+
+    label_ep = u"x".join([unicode(x) for x in [video['season_number'], video['episode_number']] if x is not None and x is not 0]).encode('utf-8')
+    label = u" - ".join([unicode(x) for x in [video['family_TT'], label_ep, video['show_TT']] if x is not None and x is not '']).encode('utf-8')
+    resume = u"\n\n".join([unicode(x) for x in [video['family_resume'], video['show_resume']] if x is not None]).encode('utf-8')
 
     if not guest and video['mark_read'] == 1:
         read = '1'
@@ -760,7 +746,7 @@ def getVideoInfos(video):
         'info': infos,
         'properties': properties,
         'stream_info': stream_infos,
-        'path':  plugin.url_for('playVideo', partner=video['partner_key'], family=video['family_TT'].encode('utf-8'), video=video['id_show']) if advised else plugin.url_for('notAdvised', rate=video['rating_fr']), 
+        'path':  plugin.url_for('playVideo', partner=video['partner_key'], family=video['family_TT'].encode('utf-8') if video['family_TT'] is not None else 'null', video=video['id_show']) if advised else plugin.url_for('notAdvised', rate=video['rating_fr']), 
         'context_menu': ctx_items if advised else [],
         'is_playable': advised
         }

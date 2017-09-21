@@ -1,3 +1,8 @@
+[B]Version 1.3.3 - 2017-09-20[/B]
+- Add date sorting for NFLC teams.
+- Renamed San Diego Chargers to Los Angeles Chargers.
+- Fixed bug which caused Los Angeles Chargers videos to not play.
+
 [B]Version 1.3.2 - 2017-06-27[/B]
 - Updated categories for all teams.
 

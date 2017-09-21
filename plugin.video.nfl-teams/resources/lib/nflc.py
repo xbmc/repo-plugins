@@ -47,7 +47,7 @@ class NFLC(object):
 
         title = data["headline"]
         thumbnail = data["imagePaths"]["l"]
-        remotehost = data["cdnData"]["streamingRemoteHost"]
+        remotehost = data["cdnData"]["streamingRemoteHost"].replace("a.video.nfl.com", "vod.hstream.video.nfl.com")
         video_path = self._get_path_to_video(data["cdnData"]["bitrateInfo"])
 
         if not video_path.startswith("http://"):
@@ -84,7 +84,7 @@ class NFLC(object):
         else:
             videos = data[str(self._parameters["category"])]["data"]
 
-        with Menu(["none"]) as menu:
+        with Menu(["date", "alpha"]) as menu:
             for video in videos:
                 menu.add_item({
                     "url_params": {"team": self._short, "id": video["video_id"]},

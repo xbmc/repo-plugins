@@ -158,6 +158,7 @@ class nocoApi():
     def get_last(self, partner, token, elements_per_page=40, page=0, guest_free=False, user_free=False):
         request = {'access_token': token,
                    'partner_key': partner,
+                   'family_key': None if plugin.get_setting('hidenews') == 'false' else '!NW',
                    'mark_read': None if plugin.get_setting('showseen') == 'true' else '0',
                    'guest_free': None if not guest_free else '1',
                    'user_free': None if not user_free else '1',

@@ -69,3 +69,8 @@ v1.0.15
   - Add info text for shows and partners when available
   - Add "Settings" item in root menu
   - New videos since user last visit have a [N] tag in the "Last videos" directory 
+
+v1.0.16
+  - Fix crash for shows with no family
+  - Use season number in show label if any
+  - Add a setting to hide single "News" items in the latest videos folder (all daily news are gathered in another item)   

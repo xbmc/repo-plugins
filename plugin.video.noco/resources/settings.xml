@@ -17,6 +17,7 @@
         <setting id="lang" type="labelenum" label="30027" values="fr|ja" default="fr"/>
         <setting id="random" type="bool" label="30030" default="false" visible="eq(-6,false)"/>
         <setting id="tagnew" type="bool" label="30005" default="true"/>
+        <setting id="hidenews" type="bool" label="30007" default="true"/>
     </category>
     <!-- Folders -->
     <category label="30031">

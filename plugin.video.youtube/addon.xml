@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.youtube" name="YouTube" version="5.4.2" provider-name="bromix">
+<addon id="plugin.video.youtube" name="YouTube" version="5.4.5" provider-name="bromix">
 	<requires>
 		<import addon="xbmc.python" version="2.19.0"/>
         <import addon="script.module.requests" version="2.12.4"/>
@@ -11,7 +11,14 @@
 	<extension point="xbmc.python.module" library="resources/lib/" />
 	<extension point="xbmc.addon.metadata">
         <news>
-[fix/upd] My Subscriptions
+[fix] tighten regex for routing, resolving incorrect routing
+[add] mpeg-dash support for live content (requires inputstream.adaptive >= 2.0.12)
+[add] add route to update api keys
+[fix/upd] refactor subtitles ** subtitles setting will be reset
+[fix/upd] add My Subscriptions (Filtered) to dual login requirements
+[fix/upd] only show Browse Channels when logged in
+[upd] Greek strings [Twilight0]
+[upd] Polish strings [Etharr]
         </news>
         <assets>
             <icon>icon.png</icon>
@@ -46,6 +53,6 @@
 		<forum>http://forum.kodi.tv/showthread.php?tid=267160</forum>
 		<website>http://www.youtube.com</website>
 		<email>ytplugin at datanet dot ws</email>
-		<source>https://github.com/Kolifanes/plugin.video.youtube</source>
+		<source>https://github.com/jdf76/plugin.video.youtube</source>
 	</extension>
 </addon>

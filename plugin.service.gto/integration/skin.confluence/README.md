@@ -1,15 +1,16 @@
 Skintegration in Confluence:
 ----------------------------
 
-Um die TV Highlights des Tages in Confluence zu integrieren sind folgende Schritte erforderlich (als Beispiel dient hier die Integration unter einer Linux-Distribution). Die zum Kopieren erforderlichen Dateien befinden sich im Ordner 'integration/Confluence':
+Um die TV Highlights des Tages in Confluence (Jarvis) zu integrieren sind folgende Schritte erforderlich (als Beispiel dient hier die Integration unter einer Linux-Distribution). Die zum Kopieren erforderlichen Dateien befinden sich im Ordner 'integration/Confluence':
 
-If You want to use the plugin as widget you have to perfom following steps. The example described here is an example under Linux. All files resides in folder 'integration/Confluence' of the addon:
+If You want to use the plugin as widget in Jarvis) you have to perfom following steps. The example described here is an example under Linux. All files resides in folder 'integration/Confluence' of the addon:
 
-        cd $HOME/.kodi/addons/plugin.service.gto/integration/skin.confluence
+        cd $HOME/.kodi/addons/plugin.service.gto/integration/
 
-1. Kopieren des XML Files in den Confluence Skin Ordner / Copy XML to Confluence folder
+1. Kopieren des XML Files und der Icons in den Confluence Skin Ordner / Copy XML and icons to Confluence folder
 
-        sudo cp script-gto.xml /usr/share/kodi/addons/skin.confluence/720p/
+        sudo cp skin.confluence/script-gto.xml /usr/share/kodi/addons/skin.confluence/720p/
+        sudo cp icons/*.png /usr/share/kodi/addons/skin.confluence/media/
 
 2. Script als include am Skin "anmelden". Hierzu die Datei "/usr/share/kodi/addons/skin.confluence/720p/includes.xml" editieren, und unterhalb von:
    Make script known to the skin. For this purpose, edit "/usr/share/kodi/addons/skin.confluence/720p/includes.xml" and include below:

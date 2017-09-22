@@ -47,7 +47,7 @@ def getSettings():
     writeLog('Show notifications:       %s' % (__enableinfo__))
     writeLog('Prefer HD channel:        %s' % (__prefer_hd__))
     writeLog('Refresh interval content: %s secs' % (__mdelay__))
-    writeLog('Refresh interval screen:  %s secs' % (__screenrefresh__))
+    writeLog('Refresh interval widget:  %s secs' % (__screenrefresh__))
     writeLog('Refreshing ratio:         %s' % (__refreshratio__))
 
     xbmc.executebuiltin('XBMC.RunScript(plugin.service.gto,action=scrape)')
@@ -94,7 +94,7 @@ class Starter():
                 xbmc.executebuiltin('XBMC.RunScript(plugin.service.gto,action=refresh)')
                 _attempts -= 1
 
-            writeLog('Remaining next action in %s seconds' % (__screenrefresh__))
+            writeLog('Next action %s seconds remaining' % (__screenrefresh__))
             if monitor.waitForAbort(__screenrefresh__): break
             _c += 1
 

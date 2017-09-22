@@ -68,7 +68,9 @@ msgctxt "#30111"
 msgid "Select TV Scraper"
 msgstr ""
 
-#empty string with id 30112
+msgctxt "#30112"
+msgid "Record"
+msgstr ""
 
 msgctxt "#30113"
 msgid "Prefer HD Broadcasts"
@@ -110,7 +112,15 @@ msgctxt "#30140"
 msgid "Oh sorry! Details are not accessible at this time."
 msgstr ""
 
-#empty strings from id 30141 to 30149
+msgctxt "#30141"
+msgid "This or a similar tittle is already in the database."
+msgstr ""
+
+msgctxt "#30142"
+msgid "For this title a record timer is set."
+msgstr ""
+
+#empty strings from id 30143 to 30149
 
 msgctxt "#30150"
 msgid "0 (off)"

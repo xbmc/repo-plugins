@@ -5,8 +5,11 @@
 	"name": ["National Geographic Channel"],
 	"pvrname": "NatGeo HD"
 }, {
-	"name": ["BR"],
-	"pvrname": "BR Süd HD"
+	"name": ["BR", "Bayern"],
+	"pvrname": "BR Fernsehen Süd HD"
+}, {
+    "name": ["Disney"],
+    "pvrname": "Disney Channel"
 }, {
 	"name": ["RTL II", "RTL 2", "RTL2"],
 	"pvrname": "RTLII"
@@ -14,11 +17,23 @@
 	"name": ["RTL Nitro"],
 	"pvrname": "RTLNITRO"
 }, {
+    "name": ["Pro7", "Pro Sieben"],
+    "pvrname": "ProSieben"
+}, {
+    "name": ["RBB"],
+    "pvrname": "rbb Berlin"
+}, {
 	"name": ["NDR"],
 	"pvrname": "NDR FS MV HD"
 }, {
 	"name": ["SWR/SR", "SWR", "SR"],
 	"pvrname": "SWR"
+}, {
+	"name": ["HR"],
+	"pvrname": "hr-fernsehen"
+}, {
+	"name": ["MDR"],
+	"pvrname": "MDR Sachsen HD"
 }, {
 	"name": ["ZDFkultur"],
 	"pvrname": "zdf.kultur"

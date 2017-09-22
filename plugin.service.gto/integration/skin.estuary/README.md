@@ -5,12 +5,12 @@ Um die TV Highlights des Tages in Estuary zu integrieren sind folgende Schritte 
 
 If You want to use the plugin as widget you have to perfom following steps. The example described here is an example under Linux. All files resides in folder 'integration/Estuary' of the addon:
 
-        cd $HOME/.kodi/addons/plugin.service.gto/integration/skin.estuary
+        cd $HOME/.kodi/addons/plugin.service.gto/integration/
 
 1. Kopieren des Scraper-Icons und des Widgets in den Skin Ordner / Copy skin icon and widget to Estuary folder:
 
-        sudo cp -r icons /usr/share/kodi/addons/skin.estuary/extras/
-        sudo cp gto-widget.xml /usr/share/kodi/addons/skin.estuary/xml/
+        sudo cp icons/*.png /usr/share/kodi/addons/skin.estuary/media/
+        sudo cp skin.estuary/gto-widget.xml /usr/share/kodi/addons/skin.estuary/xml/
 
 2. Das Widget als include anmelden / Register the include:
 
@@ -96,7 +96,7 @@ Beispiel / Example:
 			<item>
                 <label>$ADDON[plugin.service.gto 30110]</label>
                 <onclick>XBMC.RunScript(plugin.service.gto,action=change_scraper)</onclick>
-                <thumb>special://skin/extras/icons/newspaper.png</thumb>
+                <thumb>newspaper.png</thumb>
                 <visible>System.HasAddon(plugin.service.gto)</visible>
 			</item>
 			
@@ -128,8 +128,3 @@ Beispiel / Example:
 
 			
     Abspeichern und nano beenden. Kodi neu starten / Save and exit nano. Restart Kodi.
-    
-        
-        
-
-        

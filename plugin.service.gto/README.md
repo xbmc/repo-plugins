@@ -22,7 +22,7 @@ Eine genaue Beschreibung der ListItem.Labels und ListItem.Properties erfolgt wei
 
 For detailed description see below.
 
-## Pluginaufrufe:
+## Pluginaufrufe (Methoden):
 
 Der Dienst für die Aktualisierung der Inhalte und des Widgets (starter.py) ruft das eigentliche Plugin über den Parameter 'action' auf. Dieser Parameter kann auch von anderen Plugins oder Scripten wie folgt verwendet werden:
 
@@ -42,6 +42,7 @@ The service for updating content and widgets (starter.py) calls the actual plugi
     
 #### Schreibt zusätzliche Informationen zur ausgewählten Sendung als Properties nach Window(Home) / writes additional Properties of the selected broadcast to Window(Home)
 
+Die Properties für das Window(Home) werden weiter unten beschrieben und sind nach dem Schema ```'GTO.Info.<property>'``` benannt / You'll finde a description of all properties below. They are named as follows: ```'GTO.Info.<property>'```
     <onclick>
         RunScript(plugin.service.gto,action=sethomecontent&blob=$INFO[ListItem.Property(BlobID)])
     </onclick>
@@ -51,25 +52,44 @@ The service for updating content and widgets (starter.py) calls the actual plugi
 Beispiel 'onclick' für TV Highlights Element - Öffnet Popup generiert vom Plugin (script-GTO-InfoWindow.xml) / Example 'onclick' of a selected element - opens a popup window (script-GTO-InfoWindow.xml):
 
     <onclick>
-        RunScript(plugin.service.gto,action=infopopup&blob=$INFO[ListItem.Property(BlobID))
+        RunScript(plugin.service.gto,action=infopopup&amp;blob=$INFO[ListItem.Property(BlobID)])
     </onclick>
+#### Setzt einen Aufnahmetimer im Info-Window
 
-#### ListItem Labels und Properties / ListItems and Properties:
+    <onclick>
+        RunScript(plugin.service.gto,action=record&amp;broadcastid=$INFO[Window(Home).Property(GTO.Info.BroadcastID)]&amp;blob=$INFO[Window(Home).Property(GTO.Info.BlobID)])
+    </onclick>
+    
+Als Condition lässt sich das Vorhandensein einer Broadcast-ID verwenden. Daneben existiert GTO.Info.hasTimer (True/False), sofern für die Broadcast-ID bereits ein Timer gesetzt/nicht gesetzt wurde.
+
+#### ListItems, InfoLabels und Properties / ListItems, InfoLabels and Properties:
 
     - ListItem.Label                  Titel der Sendung (Tatort) / Broadcast title
+    - ListItem.Title                  dto.
     - ListItem.Label2                 PVR Sender (Das Erste HD) / PVR channel name
-    - ListItem.Thumb                  Screenshot aus dem Titel der Sendung /screenshot of broadcast
+    - ListItem.Art(thumb)             Screenshot aus dem Titel der Sendung /screenshot of broadcast
+    - ListItem.Art(logo)              Senderlogo / PVR station logo
     - ListItem.Genre                  Genre (Krimi, Komödie, Doku etc.) / genre
     - ListItem.Plot                   Beschreibung des Inhaltes der Sendung /content description of broadcast
+    - ListItem.Cast                   Darsteller / cast
+    - ListItem.Duration               Laufzeit in Minuten / Runtime in minutes
 
     - ListItem.Property(DateTime)     Startdatum und Zeit, wie in Kodi Einstellungen Datum und Zeit (ohne Sek.) / Datetime of broadcast start
     - ListItem.Property(StartTime)    Startzeit (20:15) / start time
     - ListItem.Property(EndTime)      Ende der Sendung (22:00) / end time
-    - ListItem.Property(RunTime)      Laufzeit in Minuten (105) / run time
     - ListItem.Property(ChannelID)    PVR Channel ID, wird zum Umschalten per json benötigt / Channel ID of PVR, needed for channel switch
     - ListItem.Property(BlobID)       ID der Datenblase zur Sendung ID / data blob ID of the broadcast
+    - ListItem.Property(isInDB)       'True|False' Film befindet sich in lokaler DB / movie exist in local database
 
-#### Info-Window (werden als Properties in Window(Home) gesetzt) / Info windows (resides as properties in Window(Home)):
+    if Property(isInDB) = 'True':     Es werden zusätzliche Video-Infolabels gesetzt (additional infolabels for type 'video')
+
+    - ListItem.Originaltitle          Originaltitel aus Datenbank / original title from database
+    - ListItem.Art(fanart)            Fanart
+    - ListItem.Trailer                Trailer
+    - ListItem.Rating                 Rating
+    - ListItem.Userrating             User rating
+
+#### Properties für Info-Window (werden als Properties in Window(Home) gesetzt) / Properties for info window (resides as properties in Window(Home)):
 
     - GTO.provider                    Provider/Anbieter (scraper.shortname)
     - GTO.Info.Title                  Titel der Sendung / title
@@ -83,7 +103,21 @@ Beispiel 'onclick' für TV Highlights Element - Öffnet Popup generiert vom Plug
     - GTO.Info.StartTime              Startzeit (hh:mm) / start time
     - GTO.Info.EndTime                Endzeit (hh:mm) / end time
     - GTO.Info.Cast                   Darsteller / cast
-    
+    - GTO.Info.hasTimer               gesetzter Aufnahmetimer (True/False) /active recording timer
+    - GTO.Info.BroadcastID            Broadcast-ID des Timers
+    - GTO.Info.isInDB                 'True|False' (ähnlicher) Film existiert bereits in Bibliothek / (similar) movie already exists in database
+    - GTO.Info.isInFuture             'True|False' Sendung liegt in der Zukunft / Broadcast is in Future
+    - GTO.Info.isRunning              'True|False' Sendung läuft aktuell / Broadcast is currently running
+
+    if Property(isInDB) = 'True':      Es werden zusätzliche Properties gesetzt (additional properties)
+
+    - GTO.Info.dbTitle                Titel der Sendung aus Datenbank (DB)
+    - GTO.Info.dbOriginalTitle        Originaltitel aus DB
+    - GTO.Info.Fanart                 Fanart
+    - GTO.Info.dbTrailer              Trailer
+    - GTO.Info.dbRating               Rating
+    - GTO.Info.dbUserRating           User Rating
+
     - GTO.timestamp                   Zeitstempel der letzten Aktualisierung des Widgets / Timestamp of last refresh of the widget
 
 #### Debugging:
@@ -92,6 +126,18 @@ Das Plugin wird gesprächig, wenn in den Einstellungen von Kodi unter System, Lo
 
 The Plugin tells much more if You activate the debug mode within Kodi.
 
+
+### FAQ (German only)
+
+Q: Hinter den Sendernamen sind Sternchen (*), warum ist das so?
+
+1. Der Sender ist nicht in Senderliste, kann also nicht empfangen werden. Ist der Film dieses Senders aber in der DB, wird er trotzdem ausgewiesen (er ist ja in der Bibliothek), Fanart, Trailer usw. werden aus der DB genommen. Da der Sender nicht in der Liste ist, exisitiert (in den meisten Fällen) auch kein Senderlogo, hier wird dann ein Fallback angezeigt.
+2. Der ausgewiesene Sendername des Scrapers ist ein anderer als der aus der Senderliste (Bsp: RTLII <> RTL2). In diesem Fall musst die 'ChannelTranslate.json' angepasst werden, die diverse vom Scraper verwendete Sendernamen auf die PVR-Liste mappt. Damit die 'ChannelTranslate.json' nicht bei jedem Update überschrieben wird, liegt die unter
+
+        Linux (Kodi, LibreElec): /storage/.kodi/userdata/addon_data/plugin.service.gto/ChannelTranslate.json)
+        Windows: %APPDATA%\kodi\userdata\addon_data\plugin.service.gto\ChannelTranslate.json
+    
+    Die 'ChannelTranslate.json' kann mit jedem einfachen Texteditor bearbeitet werden
 ----------------------------------------------------------------------------------------------------------------------
 ![Screenshot](resources/lib/media/screenshots/screenshot_0.jpg)
 [more screenshots](resources/lib/media/screenshots)

@@ -61,6 +61,10 @@ msgctxt "#30111"
 msgid "Select TV Scraper"
 msgstr "Wähle TV Scraper aus"
 
+msgctxt "#30112"
+msgid "Record"
+msgstr "Aufnehmen"
+
 msgctxt "#30113"
 msgid "Prefer HD Broadcasts"
 msgstr "Bevorzuge HD Sendungen"
@@ -92,6 +96,14 @@ msgstr "Scraper zeitverzögert starten"
 msgctxt "#30140"
 msgid "Oh sorry! Details are not accessible at this time."
 msgstr "Es liegen leider keine weiteren Informationen vor."
+
+msgctxt "#30141"
+msgid "This or a similar tittle is already in the database."
+msgstr "Dieser oder ein ähnlicher Titel befindet sich bereits in der Bibliothek"
+
+msgctxt "#30142"
+msgid "For this title a record timer is set."
+msgstr "Für diesen Titel wurde ein Aufnahme-Timer gesetzt."
 
 msgctxt "#30150"
 msgid "0 (off)"

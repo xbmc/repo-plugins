@@ -1,3 +1,16 @@
+2.0.23
+- minor fixes
+
+2.0.22
+- some skin modifications
+- sports scraper added
+
+2.0.18
+- add record capabilities
+
+2.0.14
+- Some more properties, e.g. search titles in local database and flag the result
+
 2.0.12
 - Skin integration for Estuary.Refresh (an Esturay MOD) implemented
 

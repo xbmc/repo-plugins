@@ -65,11 +65,12 @@
 							<aligny>top</aligny>
 						</control>
 						<control type="image">
-							<left>260</left>
-							<top>30</top>
-							<width>32</width>
-							<height>32</height>
-							<texture>$VAR[WallWatchedIconVar]</texture>
+							<left>243</left>
+							<top>22</top>
+							<width>48</width>
+							<height>48</height>
+							<texture>movie.png</texture>
+							<visible>String.IsEqual(ListItem.Property(isInDB),True)</visible>
 						</control>
 					</control>
 				</itemlayout>
@@ -130,11 +131,28 @@
 							<aligny>top</aligny>
 						</control>
 						<control type="image">
-							<left>260</left>
-							<top>30</top>
-							<width>32</width>
-							<height>32</height>
-							<texture>$VAR[WallWatchedIconVar]</texture>
+							<left>243</left>
+							<top>22</top>
+							<width>48</width>
+							<height>48</height>
+							<texture>movie.png</texture>
+							<visible>String.IsEqual(ListItem.Property(isInDB),True)</visible>
+						</control>
+						<control type="image">
+							<left>210</left>
+							<top>22</top>
+							<width>48</width>
+							<height>48</height>
+							<texture>timer.png</texture>
+							<visible>String.IsEqual(ListItem.Property(hasTimer),True) + String.IsEqual(ListItem.Property(isInDB),True)</visible>
+						</control>
+						<control type="image">
+							<left>243</left>
+							<top>22</top>
+							<width>48</width>
+							<height>48</height>
+							<texture>timer.png</texture>
+							<visible>String.IsEqual(ListItem.Property(hasTimer),True) + !String.IsEqual(ListItem.Property(isInDB),True)</visible>
 						</control>
 					</control>
 				</focusedlayout>

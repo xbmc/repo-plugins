@@ -7,6 +7,20 @@ class Scraper():
 
     def __init__(self):
 
+        # Properties
+
+        self.enabled = False
+        self.baseurl = 'http://www.rtv.de'
+        self.rssurl = 'http://www.rtv.de/rss/filmtipps.xml'
+        self.friendlyname = 'rtv Highlights'
+        self.shortname = 'rtv'
+        self.icon = 'rtv.png'
+        self.selector = '<item><pubDate>'
+        self.detailselector = '<div id="details">'
+        self.err404 = 'broadcastDummy.jpg'
+
+    def reset(self):
+
         # Items
 
         self.channel = ''
@@ -22,17 +36,6 @@ class Scraper():
 
         self.endtime = '00:00'
 
-        # Properties
-
-        self.enabled = False
-        self.baseurl = 'http://www.rtv.de'
-        self.rssurl = 'http://www.rtv.de/rss/filmtipps.xml'
-        self.friendlyname = 'rtv Highlights'
-        self.shortname = 'rtv'
-        self.icon = 'rtv.png'
-        self.selector = '<item><pubDate>'
-        self.detailselector = '<div id="details">'
-        self.err404 = 'broadcastDummy.jpg'
 
     def checkResource(self, resource, fallback):
         if not resource: return fallback
@@ -48,6 +51,8 @@ class Scraper():
         return fallback
 
     def scrapeRSS(self, content):
+
+        self.reset()
 
         try:
             self.channel = re.compile('<description>(.+?),', re.DOTALL).findall(content)[0]

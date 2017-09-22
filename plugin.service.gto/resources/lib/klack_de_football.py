@@ -15,14 +15,13 @@ class Scraper():
 
         self.enabled = True
         self.baseurl = 'http://www.klack.de'
-        self.rssurl = 'http://www.klack.de/xml/tippsRSS.xml'
-        self.friendlyname = 'klack.de - TV Highlights'
-        self.shortname = 'klack.de'
+        self.rssurl = 'http://www.klack.de/xml/fussballRSS.xml'
+        self.friendlyname = 'klack.de - Fussball'
+        self.shortname = 'klack.de - Fussball'
         self.icon = 'klack.png'
         self.selector = '<item>'
         self.detailselector = '<table id="content">'
         self.err404 = 'klackde_dummy.jpg'
-
 
     def reset(self):
 

@@ -8,8 +8,21 @@ import urllib2
 class Scraper():
     def __init__(self):
 
-        # Items
 
+        # Properties
+
+        self.enabled = False
+        self.baseurl = 'https://www.hoerzu.de'
+        self.rssurl = 'https://www.hoerzu.de/rss/tipp/spielfilm/'
+        self.friendlyname = 'HÖRZU Spielfilm Highlights'
+        self.shortname = 'HÖRZU'
+        self.icon = 'hoerzu.png'
+        self.selector = '<item>'
+        self.detailselector = '<div id="main-content">'
+        self.err404 = 'hoerzu_dummy.jpg'
+
+
+    def reset(self):
         self.channel = ''
         self.title = ''
         self.thumb = False
@@ -23,17 +36,6 @@ class Scraper():
 
         self.endtime = '00:00'
 
-        # Properties
-
-        self.enabled = False
-        self.baseurl = 'https://www.hoerzu.de'
-        self.rssurl = 'https://www.hoerzu.de/rss/tipp/spielfilm/'
-        self.friendlyname = 'HÖRZU Spielfilm Highlights'
-        self.shortname = 'HÖRZU'
-        self.icon = 'hoerzu.png'
-        self.selector = '<item>'
-        self.detailselector = '<div id="main-content">'
-        self.err404 = 'hoerzu_dummy.jpg'
 
     def checkResource(self, resource, fallback):
         if not resource: return fallback
@@ -49,6 +51,8 @@ class Scraper():
         return fallback
 
     def scrapeRSS(self, content):
+
+        self.reset()
 
         try:
             self.channel = re.compile('<title>(.+?)</title>', re.DOTALL).findall(content)[0].split(' - ')[0]

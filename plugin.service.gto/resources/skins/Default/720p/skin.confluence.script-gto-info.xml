@@ -2,7 +2,7 @@
 <!-- plugin.widget.gto - InfoWindow German Telecast Offers' - START -->
 <!-- Confluence Skin adapted -->
 <window>
-    <defaultcontrol always="true">22</defaultcontrol>
+    <defaultcontrol always="true">23</defaultcontrol>
 	<include>dialogeffect</include>
 	<controls>
 		<control type="group" id="576757">
@@ -40,14 +40,41 @@
                     <shadowcolor>black</shadowcolor>
             </control>
             <control type="label">
-                      <left>20</left>
+                      <left>10</left>
                       <top>70</top>
-                      <width>620</width>
+                      <width>560</width>
                       <height>36</height>
                       <font>font24_title</font>
                       <label>$INFO[Window(Home).Property(GTO.Info.Title)]</label>
                       <align>center</align>
                       <aligny>center</aligny>
+            </control>
+            <control type="image">
+                <description>Icon isInDB</description>
+                <left>600</left>
+                <top>65</top>
+                <width>48</width>
+                <height>48</height>
+                <texture border="1">movie.png</texture>
+                <visible>String.IsEqual(Window(Home).Property(GTO.Info.isInDB),True)</visible>
+            </control>
+            <control type="image">
+                <description>Icon hasTimer</description>
+                <left>600</left>
+                <top>65</top>
+                <width>48</width>
+                <height>48</height>
+                <texture border="1">timer.png</texture>
+                <visible>String.IsEqual(Window(Home).Property(GTO.Info.hasTimer),True) + !String.IsEqual(Window(Home).Property(GTO.Info.isInDB),True)</visible>
+            </control>
+            <control type="image">
+                <description>Icon hasTimer</description>
+                <left>560</left>
+                <top>65</top>
+                <width>48</width>
+                <height>48</height>
+                <texture border="1">timer.png</texture>
+                <visible>String.IsEqual(Window(Home).Property(GTO.Info.hasTimer),True) + String.IsEqual(Window(Home).Property(GTO.Info.isInDB),True)</visible>
             </control>
             <control type="button" id="855655">
                     <description>Close Window button</description>
@@ -101,7 +128,7 @@
                         <top>50</top>
                         <height>10</height>
                         <font>font10</font>
-                        <label>$INFO[Window(Home).Property(GTO.Info.StartTime)] - $INFO[Window(Home).Property(GTO.Info.EndTime)]</label>
+                        <label>$INFO[Window(Home).Property(GTO.Info.Date)] - $INFO[Window(Home).Property(GTO.Info.EndTime)]</label>
                         <align>left</align>
                         <aligny>center</aligny>
                 </control>
@@ -148,20 +175,20 @@
                     <label>$INFO[Window(Home).Property(GTO.Info.Description)]</label>
             </control>
             <control type="group">
-                <left>40</left>
+                <left>20</left>
                 <top>470</top>
-                <width>520</width>
+                <width>620</width>
                 <control type="button" id="20">
                         <description>Set Switchtimer button</description>
                         <left>0</left>
-                        <width>186</width>
+                        <width>150</width>
                         <height>40</height>
                         <label>$ADDON[plugin.service.gto 30107]</label>
                         <font>font12_title</font>
                         <textcolor>white</textcolor>
                         <focusedcolor>white</focusedcolor>
                         <align>center</align>
-                        <onleft>22</onleft>
+                        <onleft>23</onleft>
                         <onright>21</onright>
                         <onup>855655</onup>
                         <ondown>855655</ondown>
@@ -170,8 +197,8 @@
                 </control>
                 <control type="button" id="21">
                         <description>Switch to channel button</description>
-                        <left>200</left>
-                        <width>186</width>
+                        <left>155</left>
+                        <width>150</width>
                         <height>40</height>
                         <label>$ADDON[plugin.service.gto 30108]</label>
                         <font>font12_title</font>
@@ -187,16 +214,34 @@
                         <onclick>PreviousMenu</onclick>
                 </control>
                 <control type="button" id="22">
+                        <description>Switch to channel button</description>
+                        <left>310</left>
+                        <width>150</width>
+                        <height>40</height>
+                        <label>$ADDON[plugin.service.gto 30112]</label>
+                        <font>font12_title</font>
+                        <textcolor>white</textcolor>
+                        <focusedcolor>white</focusedcolor>
+                        <align>center</align>
+                        <onleft>21</onleft>
+                        <onright>23</onright>
+                        <onup>855655</onup>
+                        <ondown>855655</ondown>
+                        <enable>!String.IsEmpty(Window(Home).Property(GTO.Info.BroadcastID)) + String.IsEqual(Window(Home).Property(GTO.Info.hasTimer),False)</enable>
+                        <onclick>RunScript(plugin.service.gto,action=record&amp;broadcastid=$INFO[Window(Home).Property(GTO.Info.BroadcastID)]&amp;blob=$INFO[Window(Home).Property(GTO.Info.BlobID)])</onclick>
+                        <onclick>PreviousMenu</onclick>
+                </control>
+                <control type="button" id="23">
                         <description>Cancel button</description>
-                        <left>400</left>
-                        <width>186</width>
+                        <left>465</left>
+                        <width>150</width>
                         <height>40</height>
                         <label>$ADDON[plugin.service.gto 30119]</label>
                         <font>font12_title</font>
                         <textcolor>white</textcolor>
                         <focusedcolor>white</focusedcolor>
                         <align>center</align>
-                        <onleft>21</onleft>
+                        <onleft>22</onleft>
                         <onright>20</onright>
                         <onup>855655</onup>
                         <ondown>855655</ondown>

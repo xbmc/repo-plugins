@@ -15,9 +15,9 @@ class Scraper():
 
         self.enabled = True
         self.baseurl = 'http://www.klack.de'
-        self.rssurl = 'http://www.klack.de/xml/tippsRSS.xml'
-        self.friendlyname = 'klack.de - TV Highlights'
-        self.shortname = 'klack.de'
+        self.rssurl = 'http://www.klack.de/xml/motorsportRSS.xml'
+        self.friendlyname = 'klack.de - Motorsport'
+        self.shortname = 'klack.de - Motorsport'
         self.icon = 'klack.png'
         self.selector = '<item>'
         self.detailselector = '<table id="content">'
@@ -25,9 +25,6 @@ class Scraper():
 
 
     def reset(self):
-
-        # Items
-
         self.channel = ''
         self.title = ''
         self.thumb = False
@@ -70,7 +67,7 @@ class Scraper():
         try:
             self.plot = re.compile('<description>(.+?)</description>', re.DOTALL).findall(content)[0].split('</a>')[1][:-3]
         except IndexError:
-            pass
+            self.plot = re.compile('<description>(.+?)</description>', re.DOTALL).findall(content)[0].split('<br>')[1][:-3]
 
         try:
             self.startdate = (re.compile('<dc:date>(.+?)</dc:date>', re.DOTALL).findall(content)[0][0:19]).replace('T', ' ')

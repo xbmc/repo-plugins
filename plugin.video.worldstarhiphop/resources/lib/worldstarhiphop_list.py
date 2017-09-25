@@ -121,7 +121,13 @@ class Main:
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=listitem, isFolder=folder)
 
         for item in items:
-            video_page_url = BASEURL + str(item.a['href'])
+            try:
+                video_page_url = BASEURL + str(item.a['href'])
+            except:
+                # skip the item if it does not have a href
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                    ADDON, VERSION, DATE, "skipping item without href", str(item)), xbmc.LOGDEBUG)
+                continue
 
             xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                     ADDON, VERSION, DATE, "video_page_url", str(video_page_url)), xbmc.LOGDEBUG)

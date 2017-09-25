@@ -1,3 +1,7 @@
+v1.0.11 (2017-09-23)
+- removed looking for video dialogue
+- skipping items without videolink
+
 v1.0.10 (2017-06-18):
 - changed getting title due to website changes
 - refactored getting video- and thumbnail-url

@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.service.gto" name="German Telecast Offers" version="2.0.23" provider-name="Birger Jesch">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="xbmc.json" version="7.0.0"/>
+        <import addon="script.module.dateutil" version="2.5.3"/>
+    </requires>
+    <extension point="xbmc.python.script" library="default.py" />
+    <extension point="xbmc.service" library="starter.py" start="startup">
+    </extension>
+
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en_GB">Fetch todays TV Offers from different scrapers</summary>
+        <summary lang="de_DE">Holt die TV Tipps des Tages aus den RSS-Feeds diverser Webseiten</summary>
+        <language>de</language>
+        <description lang="en_GB">Fetch todays TV Offers from different scrapers
+
+This plugin needs a integration into the skin!
+Please refer to the README.txt into the folder named 'integration'.
+        </description>
+        <description lang="de_DE">Holt die TV Tipps des Tages aus den RSS-Feeds diverser Webseiten.
+
+Dieses Plugin benoetigt eine Skin-Integration!
+Hierfür bitte README.txt im Ordner 'integration' beachten.
+        </description>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+        <source>https://github.com/b-jesch/plugin.service.gto</source>
+        <forum>http://www.kodinerds.net/index.php/Thread/50943-Release-TV-Widget-German-Telecast-Offers/</forum>
+        <email>birger.jesch@gmail.com</email>
+        <website>http://vdr4bj1.no-ip.org/index.php?action=list&amp;item=addon</website>
+        <news>
+            Recording capabilities added, some new tv/sports scrapers added
+        </news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+            <screenshot>resources/lib/media/screenshots/screenshot_0.jpg</screenshot>
+            <screenshot>resources/lib/media/screenshots/screenshot_1.jpg</screenshot>
+            <screenshot>resources/lib/media/screenshots/screenshot_2.jpg</screenshot>
+            <screenshot>resources/lib/media/screenshots/screenshot_3.jpg</screenshot>
+            <screenshot>resources/lib/media/screenshots/screenshot_4.jpg</screenshot>
+        </assets>
+    </extension>
+</addon>

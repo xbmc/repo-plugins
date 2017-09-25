@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- plugin.widget.gto - InfoWindow German Telecast Offers' - START -->
+<!-- Confluence Skin adapted -->
+<window>
+    <defaultcontrol always="true">23</defaultcontrol>
+	<include>dialogeffect</include>
+	<controls>
+		<control type="group" id="576757">
+			<left>310</left>
+            <top>90</top>
+            <width>660</width>
+            <height>535</height>
+            <control type="image">
+                    <description>background image</description>
+                    <left>0</left>
+                    <top>0</top>
+                    <width>660</width>
+                    <height>535</height>
+                    <texture border="40">ConfluenceDialogBack2.png</texture>
+            </control>
+            <control type="image">
+                    <description>Dialog Header image</description>
+                    <left>40</left>
+                    <top>16</top>
+                    <width>580</width>
+                    <height>40</height>
+                    <texture>ConfluenceDialogHeader.png</texture>
+            </control>
+            <control type="label" id="1">
+                    <description>header label</description>
+                    <left>40</left>
+                    <top>20</top>
+                    <width>580</width>
+                    <height>30</height>
+                    <font>font13_title</font>
+                    <label>$ADDON[plugin.service.gto 30104]</label>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <textcolor>selected</textcolor>
+                    <shadowcolor>black</shadowcolor>
+            </control>
+            <control type="label">
+                      <left>10</left>
+                      <top>70</top>
+                      <width>560</width>
+                      <height>36</height>
+                      <font>font24_title</font>
+                      <label>$INFO[Window(Home).Property(GTO.Info.Title)]</label>
+                      <align>center</align>
+                      <aligny>center</aligny>
+            </control>
+            <control type="image">
+                <description>Icon isInDB</description>
+                <left>600</left>
+                <top>65</top>
+                <width>48</width>
+                <height>48</height>
+                <texture border="1">movie.png</texture>
+                <visible>String.IsEqual(Window(Home).Property(GTO.Info.isInDB),True)</visible>
+            </control>
+            <control type="image">
+                <description>Icon hasTimer</description>
+                <left>600</left>
+                <top>65</top>
+                <width>48</width>
+                <height>48</height>
+                <texture border="1">timer.png</texture>
+                <visible>String.IsEqual(Window(Home).Property(GTO.Info.hasTimer),True) + !String.IsEqual(Window(Home).Property(GTO.Info.isInDB),True)</visible>
+            </control>
+            <control type="image">
+                <description>Icon hasTimer</description>
+                <left>560</left>
+                <top>65</top>
+                <width>48</width>
+                <height>48</height>
+                <texture border="1">timer.png</texture>
+                <visible>String.IsEqual(Window(Home).Property(GTO.Info.hasTimer),True) + String.IsEqual(Window(Home).Property(GTO.Info.isInDB),True)</visible>
+            </control>
+            <control type="button" id="855655">
+                    <description>Close Window button</description>
+                    <left>585</left>
+                    <top>20</top>
+                    <width>64</width>
+                    <height>32</height>
+                    <label>-</label>
+                    <font>-</font>
+                    <onclick>PreviousMenu</onclick>
+                    <texturefocus>DialogCloseButton-focus.png</texturefocus>
+                    <texturenofocus>DialogCloseButton.png</texturenofocus>
+                    <onleft>22</onleft>
+                    <onright>22</onright>
+                    <onup>22</onup>
+                    <ondown>22</ondown>
+                    <visible>system.getbool(input.enablemouse)</visible>
+            </control>
+            <control type="image">
+                      <left>30</left>
+                      <top>120</top>
+                      <width>260</width>
+                      <height>195</height>
+                      <aspectratio>keep</aspectratio>
+                      <texture border="1">$INFO[Window(Home).Property(GTO.Info.Picture)]</texture>
+            </control>
+            <control type="group">
+                <left>320</left>
+                <top>135</top>
+                <width>170</width>
+                <control type="label">
+                        <description>Channel</description>
+                        <top>0</top>
+                        <height>10</height>
+                        <font>font12</font>
+                        <label>$INFO[Window(Home).Property(GTO.Info.Channel]</label>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                </control>
+                <control type="label">
+                        <description>Genre</description>
+                        <top>30</top>
+                        <height>10</height>
+                        <font>font10</font>
+                        <label>$INFO[Window(Home).Property(GTO.Info.Genre)]</label>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                </control>
+                <control type="label">
+                        <description>Start, End</description>
+                        <top>50</top>
+                        <height>10</height>
+                        <font>font10</font>
+                        <label>$INFO[Window(Home).Property(GTO.Info.Date)] - $INFO[Window(Home).Property(GTO.Info.EndTime)]</label>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                </control>
+                <control type="label">
+                        <top>70</top>
+                        <height>10</height>
+                        <font>font10</font>
+                        <label>$INFO[Window(Home).Property(GTO.Info.RunTime)] min</label>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                </control>
+            </control>
+            <control type="image">
+                    <left>500</left>
+                    <top>130</top>
+                    <width>120</width>
+                    <height>80</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture border="1">$INFO[Window(Home).Property(GTO.Info.Logo)]</texture>
+            </control>
+            <control type="textbox">
+                    <left>320</left>
+                    <top>230</top>
+                    <width>300</width>
+                    <height>60</height>
+                    <font>font10</font>
+                    <scrolltime>200</scrolltime>
+                    <autoscroll delay="5000" time="5000" repeat="10000">!IsEmpty(Window(Home).Property(GTO.Info.Cast))</autoscroll>
+                    <label>$INFO[Window(Home).Property(GTO.Info.Cast)]</label>
+                    <align>left</align>
+            </control>
+            <control type="textbox">
+                    <left>30</left>
+                    <top>320</top>
+                    <width>600</width>
+                    <height>140</height>
+                    <font>font12</font>
+                    <textcolor>white</textcolor>
+                    <shadowcolor>black</shadowcolor>
+                    <selectedcolor>selected</selectedcolor>
+                    <align>justify</align>
+                    <scrolltime>200</scrolltime>
+                    <autoscroll delay="5000" time="5000" repeat="10000">!IsEmpty(Window(Home).Property(GTO.Info.Description))</autoscroll>
+                    <label>$INFO[Window(Home).Property(GTO.Info.Description)]</label>
+            </control>
+            <control type="group">
+                <left>20</left>
+                <top>470</top>
+                <width>620</width>
+                <control type="button" id="20">
+                        <description>Set Switchtimer button</description>
+                        <left>0</left>
+                        <width>150</width>
+                        <height>40</height>
+                        <label>$ADDON[plugin.service.gto 30107]</label>
+                        <font>font12_title</font>
+                        <textcolor>white</textcolor>
+                        <focusedcolor>white</focusedcolor>
+                        <align>center</align>
+                        <onleft>23</onleft>
+                        <onright>21</onright>
+                        <onup>855655</onup>
+                        <ondown>855655</ondown>
+                        <enable>!IsEmpty(Window(Home).Property(GTO.Info.isInFuture)) + System.HasAddon(service.kn.switchtimer)</enable>
+                        <onclick>RunScript(service.kn.switchtimer,action=add,channel=$INFO[Window(Home).Property(GTO.Info.Channel)],icon=$INFO[Window(Home).Property(GTO.Info.Logo)],date=$INFO[Window(Home).Property(GTO.Info.Date)],title=$INFO[Window(Home).Property(GTO.Info.Title)])</onclick>
+                </control>
+                <control type="button" id="21">
+                        <description>Switch to channel button</description>
+                        <left>155</left>
+                        <width>150</width>
+                        <height>40</height>
+                        <label>$ADDON[plugin.service.gto 30108]</label>
+                        <font>font12_title</font>
+                        <textcolor>white</textcolor>
+                        <focusedcolor>white</focusedcolor>
+                        <align>center</align>
+                        <onleft>20</onleft>
+                        <onright>22</onright>
+                        <onup>855655</onup>
+                        <ondown>855655</ondown>
+                        <enable>!IsEmpty(Window(Home).Property(GTO.Info.isRunning)) + System.HasAddon(service.kn.switchtimer)</enable>
+                        <onclick>RunScript(plugin.service.gto,action=switch_channel&amp;pvrid=$INFO[Window(Home).Property(GTO.Info.ChannelID)])</onclick>
+                        <onclick>PreviousMenu</onclick>
+                </control>
+                <control type="button" id="22">
+                        <description>Switch to channel button</description>
+                        <left>310</left>
+                        <width>150</width>
+                        <height>40</height>
+                        <label>$ADDON[plugin.service.gto 30112]</label>
+                        <font>font12_title</font>
+                        <textcolor>white</textcolor>
+                        <focusedcolor>white</focusedcolor>
+                        <align>center</align>
+                        <onleft>21</onleft>
+                        <onright>23</onright>
+                        <onup>855655</onup>
+                        <ondown>855655</ondown>
+                        <enable>!String.IsEmpty(Window(Home).Property(GTO.Info.BroadcastID)) + String.IsEqual(Window(Home).Property(GTO.Info.hasTimer),False)</enable>
+                        <onclick>RunScript(plugin.service.gto,action=record&amp;broadcastid=$INFO[Window(Home).Property(GTO.Info.BroadcastID)]&amp;blob=$INFO[Window(Home).Property(GTO.Info.BlobID)])</onclick>
+                        <onclick>PreviousMenu</onclick>
+                </control>
+                <control type="button" id="23">
+                        <description>Cancel button</description>
+                        <left>465</left>
+                        <width>150</width>
+                        <height>40</height>
+                        <label>$ADDON[plugin.service.gto 30119]</label>
+                        <font>font12_title</font>
+                        <textcolor>white</textcolor>
+                        <focusedcolor>white</focusedcolor>
+                        <align>center</align>
+                        <onleft>22</onleft>
+                        <onright>20</onright>
+                        <onup>855655</onup>
+                        <ondown>855655</ondown>
+                        <onclick>PreviousMenu</onclick>
+                </control>
+            </control>
+        </control>
+	</controls>
+</window>
+
+<!-- plugin.service.gto - InfoWindow - END -->

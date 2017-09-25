@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.service.gto" name="German Telecast Offers" version="2.0.23" provider-name="Birger Jesch">
+<addon id="plugin.service.gto" name="German Telecast Offers" version="2.0.22" provider-name="Birger Jesch">
     <requires>
-        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="xbmc.python" version="2.24.0"/>
         <import addon="xbmc.json" version="7.0.0"/>
         <import addon="script.module.dateutil" version="2.5.3"/>
     </requires>
@@ -32,6 +32,7 @@ Hierfür bitte README.txt im Ordner 'integration' beachten.
         <news>
             Recording capabilities added, some new tv/sports scrapers added
         </news>
+        <broken>Deprecated. As some new functions aren't available in Jarvis, development will continued in Krypton.</broken>
         <assets>
             <icon>icon.png</icon>
             <fanart>fanart.jpg</fanart>

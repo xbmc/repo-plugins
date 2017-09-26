@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.spurs-tv" name="Spurs TV" version="2.14.0" provider-name="Leopold">
+<addon id="plugin.video.spurs-tv" name="Spurs TV" version="2.14.1" provider-name="Leopold">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.kodiswift" version="0.0.8" optional="false"/>
@@ -21,6 +21,6 @@
     <forum>http://forum.kodi.tv/showthread.php?tid=235234</forum>
     <source>https://github.com/LS80/plugin.video.spurs-tv.git</source>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
-    <news>Fixed New Stadium category</news>
+    <news>Fixed new stadium video gallery</news>
   </extension>
 </addon>

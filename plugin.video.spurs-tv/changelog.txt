@@ -1,3 +1,6 @@
+v2.14.1 (2017-09-26)
+ - Fixed new stadium video gallery
+
 v2.14.0 (2017-04-23)
  - Fixed New Stadium category after new YouTube streams were added
  - Update icon again, to match the video logo

@@ -77,13 +77,10 @@ def get_live_url(channel):
     """
     apiurl = "http://ruv.is/sites/all/themes/at_ruv/scripts/ruv-stream.php?format=json"    
     try:
-        json = requests.get(apiurl + "&channel=" + channel)      
+        return requests.get(apiurl + "&channel=" + channel).json()['result'][1]     
     except:
         return -1
             
-    return json.json()['result'][1]
-
-
 def get_podcast_shows(url):
     """
     Gets the names and rss urls of all the podcasts (shows)

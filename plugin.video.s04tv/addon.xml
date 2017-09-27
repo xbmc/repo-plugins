@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.s04tv" name="S04tv" version="3.1.2" provider-name="malte">
     <requires>
-        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="xbmc.python" version="2.14.0"/>
         <import addon="script.module.mechanize" version="0.2.6"/>
         <import addon="script.module.beautifulsoup" version="3.2.1"/>
         <import addon="plugin.video.youtube" version="5.2.1"/>

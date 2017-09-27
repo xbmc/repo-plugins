@@ -17,6 +17,7 @@ def index():
     The front page (i.e. the first one the user sees when opening the plugin)
     """
 
+    INTERFACE.add_dir(u'Beinar útsendingar', 'view_live_index', '')
     INTERFACE.add_dir(u'RÚV', 'view_category', '1')
     INTERFACE.add_dir(u'RÚV Íþróttir', 'view_category', '10')
     INTERFACE.add_dir(u'RÁS 1', 'view_category', '2')
@@ -26,6 +27,15 @@ def index():
     INTERFACE.add_dir(u'Hlaðvarp', 'view_podcast_index', '')
     INTERFACE.add_dir(u'Leita', 'search', '')
 
+def live_index():
+    """
+    List of available live streams
+    """
+    INTERFACE.add_item(u'RÚV', 'play_live', '1')
+    INTERFACE.add_item(u'RÚV Íþróttir', 'play_live', '10')
+    INTERFACE.add_item(u'RÁS 1', 'play_live', '2')
+    INTERFACE.add_item(u'RÁS 2', 'play_live', '3')
+    INTERFACE.add_item(u'Rondó', 'play_live', 'rondo')   
 
 def play_url(url, name):
     """
@@ -76,8 +86,18 @@ def play_live_stream(category_id, name):
     :param category_id: The channel/radio station id (see index())
     :param name: Text to display in media player
     """
-    url = sarpur.LIVE_URLS.get(category_id)
-    player.play(url, name)
+    channel_slugs = {
+        "1": "ruv",
+        "10": "ruv2",
+        "2": "ras1",
+        "3": "ras2",
+        "rondo": "ras3"
+    }
+    url = scraper.get_live_url(channel_slugs[category_id])
+    if url == -1:
+        GUI.info_box(u"Vesen", u"Fann ekki straum")
+    else:
+        player.play(url, name)
 
 
 def view_category(category_id, date_string):
@@ -115,8 +135,8 @@ def view_category(category_id, date_string):
         ev = show['event']
         showtime = datetime.fromtimestamp(float(ev['start_time']))
         end_time = datetime.fromtimestamp(float(ev['end_time']))
-        in_progress = showtime < datetime.now() < end_time
-        duration = (end_time - showtime).seconds / 60
+        in_progress = showtime <= datetime.now() < end_time
+        duration = (end_time - showtime).seconds
 
         title = u"{1} - {0}".format(
             ev['title'],

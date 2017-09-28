@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.nfl-teams" version="1.3.3" name="NFL Teams" provider-name="Tenzer">
+<addon id="plugin.video.nfl-teams" version="1.3.4" name="NFL Teams" provider-name="Tenzer">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="xbmc.addon" version="12.0.0"/>

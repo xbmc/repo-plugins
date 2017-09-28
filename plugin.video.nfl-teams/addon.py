@@ -5,7 +5,7 @@ from urllib import unquote
 __plugin__ = "NFL Teams"
 __author__ = "Jeppe Toustrup"
 __url__ = "https://github.com/Tenzer/plugin.video.nfl-teams"
-__version__ = "1.3.3"
+__version__ = "1.3.4"
 
 if sys.argv[2]:
     parameters = json.loads(unquote(sys.argv[2].lstrip("?")))

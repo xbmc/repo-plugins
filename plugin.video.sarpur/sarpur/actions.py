@@ -95,7 +95,7 @@ def play_live_stream(category_id, name):
     }
     url = scraper.get_live_url(channel_slugs[category_id])
     if url == -1:
-        GUI.info_box(u"Vesen", u"Fann ekki straum")
+        GUI.info_box(u"Vesen", u"Fann ekki straum. Reyndu aftur síðar.")
     else:
         player.play(url, name)
 

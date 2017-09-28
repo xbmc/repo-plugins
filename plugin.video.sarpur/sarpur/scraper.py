@@ -77,8 +77,11 @@ def get_live_url(channel):
     """
     apiurl = "http://ruv.is/sites/all/themes/at_ruv/scripts/ruv-stream.php?format=json"    
     try:
-        return requests.get(apiurl + "&channel=" + channel).json()['result'][1]     
+        resp = requests.get(apiurl + "&channel=" + channel)
+        return resp.json()['result'][1]
     except:
+        logger.log(u"Villa: {0}".format(resp.status_code))
+        logger.log(resp.text.decode('utf-8'))
         return -1
             
 def get_podcast_shows(url):

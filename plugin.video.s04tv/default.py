@@ -20,7 +20,10 @@ import xml.etree.ElementTree as ET
 
 PLUGINNAME = 'S04tv'
 PLUGINID = 'plugin.video.s04tv'
-BASE_URL = 'http://www.s04.tv/de/'
+BASE_URL = 'https://tv.schalke04.de/'
+BASE_URL_HOME = BASE_URL +'de/'
+
+#BASE_VIDEO_URL = 'https://tv.schalke04.de/'
 
 # Shared resources
 addonPath = ''
@@ -82,7 +85,7 @@ def buildHomeDir(url, doc):
                                 xbmc.log(missingelementtext%'a')
                                 continue
                                                                     
-                            url = BASE_URL + a['href']
+                            url = BASE_URL_HOME + a['href']
                             addDir(a.text, url, 2, '')
             break
         
@@ -111,7 +114,7 @@ def buildSubDir(url, doc):
                 if(not a):
                     xbmc.log(missingelementtext%'a')
                     continue
-                url = BASE_URL + a['href']
+                url = BASE_URL_HOME + a['href']
                 addDir(a.text, url, 3, '')
         
         
@@ -149,7 +152,7 @@ def buildSubSubDir(url, doc):
                 if(not a):
                     xbmc.log(missingelementtext%'a')
                     continue
-                url = BASE_URL + a['href']
+                url = BASE_URL_HOME + a['href']
                 addDir(a.text, url, 3, '')
 
 
@@ -194,11 +197,11 @@ def buildVideoDir(url, doc):
     #paging
     pageid = 0
     page = 0
-    match_page = re.compile('http://www.s04.tv/cache/TV/pages/videoverteil_(.+)_(.+).htm', re.DOTALL).findall(origUrl)
+    match_page = re.compile(BASE_URL +'cache/TV/pages/videoverteil_(.+)_(.+).htm', re.DOTALL).findall(origUrl)
     if(match_page):
         pageid = match_page[0][0]
         page = (int)(match_page[0][1])
-        addDir(__language__(30003), 'http://www.s04.tv/cache/TV/pages/videoverteil_%s_%s.html'%(pageid, page + 1), 3, '')
+        addDir(__language__(30003), BASE_URL +'cache/TV/pages/videoverteil_%s_%s.html'%(pageid, page + 1), 3, '')
     else:
         paging = soup.find('ul', attrs={'class': 'paging'})
         if(paging):
@@ -206,7 +209,7 @@ def buildVideoDir(url, doc):
             onclick = a['onclick']
             match_page = re.compile('changeVideoPage\(0,(.+)\)', re.DOTALL).findall(onclick)
             pageid = (int)(match_page[0])
-            addDir(__language__(30003), 'http://www.s04.tv/cache/TV/pages/videoverteil_%s_%s.html'%(pageid, 2), 3, '')
+            addDir(__language__(30003), BASE_URL +'cache/TV/pages/videoverteil_%s_%s.html'%(pageid, 2), 3, '')
         
 
 def buildVideoDirHome(article, hidedate, hideexclusive, hideflag):
@@ -277,7 +280,7 @@ def buildVideoDirHome(article, hidedate, hideexclusive, hideflag):
         extraInfo['IsFreeContent'] = 'False'
     
     if(not url.startswith("http")):
-        url = BASE_URL + url
+        url = BASE_URL_HOME + url
     addLink(title, url, 4, imageUrl, date, extraInfo)
 
 
@@ -332,7 +335,7 @@ def buildVideoDirElse(article, hidedate, hideexclusive, hideflag):
         extraInfo['IsFreeContent'] = 'False'
     
     if(not url.startswith("http")):
-        url = BASE_URL + url
+        url = BASE_URL_HOME + url
     addLink(title, url, 4, imageUrl, date, extraInfo)
 
 
@@ -380,19 +383,45 @@ def getVideoUrl(url, doc):
 
     match_timestamp=re.compile('timestamp="(.+?)"', re.DOTALL).findall(response)
     timestamp = match_timestamp[0]
+    
+    wsUrl = BASE_URL +'service/video_xml.php?videoid='+streamid+'&partnerid='+partnerid+'&language='+sprache
 
-    wsUrl = 'http://www.s04.tv/webservice/video_xml.php?play='+streamid+'&partner='+partnerid+'&portal='+portalid+'&v5ident=&lang='+sprache
-    response=getUrl(wsUrl)
+    response = getUrl(wsUrl)
     
-    match_url=re.compile('<url>(.+?)<', re.DOTALL).findall(response)
+    jsonResult = json.loads(response)
     
-    response=getUrl(match_url[0]+'&timestamp='+timestamp+'&auth='+auth)
+    responseVideo = jsonResult['video']
+    
+    if(responseVideo is None):
+        xbmc.log('Error in response: tag video not found')
+        return
+    
+    streamAccess = responseVideo['streamAccess']
+    if(streamAccess is None):
+        xbmc.log('Error in response: tag streamAccess not found')
+        return
+        
+    responseStreamAccess=getUrl(BASE_URL +streamAccess)
+    
+    responseVideoXml = json.loads(responseStreamAccess)
+    responseData = responseVideoXml['data']
+    if(responseData is None):
+        xbmc.log('Error in response: tag responseData not found')
+        return
+    
+    streamAccessUrl = responseData['stream-access'][0]
+    xbmc.log('streamAccessUrl: ' +streamAccessUrl)
+    
+    response = getUrl(streamAccessUrl)
     
     match_new_auth=re.compile('auth="(.+?)"', re.DOTALL).findall(response)
     match_new_url=re.compile('url="(.+?)"', re.DOTALL).findall(response)
 
     m3u8_url = match_new_url[0].replace('/z/','/i/').replace('manifest.f4m','master.m3u8')+'?hdnea='+match_new_auth[0]+'&g='+char_gen(12)+'&hdcore=3.2.0'
+    xbmc.log('m3u8_url: ' +m3u8_url)
+    
     response=getUrl(m3u8_url)
+    
     match_sec_m3u8=re.compile('http(.+?)null=', re.DOTALL).findall(response)
     
     lines = response.split('\n')
@@ -456,7 +485,7 @@ def login():
         return False
         
     loginparams = {'username_field' : username, 'password_field' : password}
-    loginurl = 'https://ssl.s04.tv/get_content.php?lang=TV&form=login&%s' %urllib.urlencode(loginparams)
+    loginurl = BASE_URL +'ssl/get_content.php?lang=TV&form=login&%s' %urllib.urlencode(loginparams)
     
     
     browser.open(loginurl)
@@ -468,14 +497,8 @@ def login():
     jsonstring = loginresponse[1:len(loginresponse) -2]
     jsonResult = json.loads(jsonstring)
     if(jsonResult['stat'] == "OK"):
-        userdata = jsonResult['UserData']
-        if(userdata['hasAbo'] == 1):
-            xbmc.log('login successful')
-            return True
-        else:
-            xbmc.log('no valid abo')
-            xbmcgui.Dialog().ok(PLUGINNAME, __language__(30100) %username.decode('utf-8'), __language__(30101))
-            return False
+        xbmc.log('login successful')
+        return True
     else:
         xbmc.log('login failed')
         xbmcgui.Dialog().ok(PLUGINNAME, __language__(30100) %username.decode('utf-8'), __language__(30101))
@@ -547,7 +570,7 @@ print "URL: "+str(url)
 print "Name: "+str(name)
 
 if(url == None):
-    url = BASE_URL
+    url = BASE_URL_HOME
 
 doc = getUrl(url)
 runPlugin(url, doc)

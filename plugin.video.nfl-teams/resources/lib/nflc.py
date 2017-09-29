@@ -30,20 +30,17 @@ class NFLC(object):
         else:
             self.list_categories()
 
-    def _get_cached_response(self, url, parameters={}):
-        cache_key = sha1(url + repr(parameters)).hexdigest()
+    def do_request(self, url, params):
+        if not params:
+            params = {}
+        return requests.get(url, params=params).json()
 
-        cache_response = self._cache.get(cache_key)
-        if cache_response:
-            return json.loads(cache_response)
-        else:
-            response = requests.get(url, params=parameters)
-            self._cache.set(cache_key, response.text.encode("utf-8"))
-            return response.json()
+    def request(self, url, params=None):
+        return self._cache.cacheFunction(self.do_request, url, params)
 
     def play_video(self):
         parameters = {"id": self._parameters["id"]}
-        data = self._get_cached_response("{0}/media/nflc-content.json".format(self._website_url), parameters)
+        data = self.request("{0}/media/nflc-content.json".format(self._website_url), parameters)
 
         title = data["headline"]
         thumbnail = data["imagePaths"]["l"]
@@ -74,7 +71,7 @@ class NFLC(object):
         return best_video or lowest_video
 
     def list_videos(self):
-        data = self._get_cached_response("{0}/media/nflc-playlist-video.json".format(self._website_url))
+        data = self.request("{0}/media/nflc-playlist-video.json".format(self._website_url))
         html_parser = HTMLParser()
 
         videos = list()

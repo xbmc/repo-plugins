@@ -1,3 +1,9 @@
+[B]Version 4.1.0[/B]
+- Fixed the podcast index
+- Fixed duration times
+- Fixed live streams
+- Added a live stream menu
+
 [B]Version 4.0.0[/B]
 - Rewritten in large part because of ruv.is website redesign
 - Now uses TV schedule format instead of groups

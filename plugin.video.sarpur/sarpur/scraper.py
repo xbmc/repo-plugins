@@ -2,10 +2,12 @@
 # encoding: UTF-8
 
 import requests
+import itertools
 import time
 import re
 from bs4 import BeautifulSoup
 from datetime import datetime
+from sarpur import logger
 
 
 def strptime(date_string, format):
@@ -22,6 +24,20 @@ def strptime(date_string, format):
     except TypeError:
         return datetime(*(time.strptime(date_string, format)[0:6]))
 
+def duration_to_seconds(duration):
+    """
+    Takes a string in the format hh:mm:ss or hh:mm and converts 
+    to a number of minutes
+    :param duration: String with hours and minutes seperated with a colon
+    :return: A number of minutes
+    """
+    hms = duration.split(":")
+    if len(hms) == 3:
+        return int(hms[0]) * 60 * 60 + int(hms[1]) * 60 + int(hms[2])
+    if len(hms) == 2:
+        return int(hms[0]) * 60 + int(hms[1])
+    else:
+        return 0
 
 def get_document(url):
     """
@@ -53,7 +69,21 @@ def get_media_url(page_url):
 
     return u"http://smooth.ruv.cache.is/{0}".format(sources[0][4:])
 
-
+def get_live_url(channel):
+    """
+    Finds a live stream url for channel
+    :param channel: Slug name of channel
+    :return An url
+    """
+    apiurl = "http://ruv.is/sites/all/themes/at_ruv/scripts/ruv-stream.php?format=json"    
+    try:
+        resp = requests.get(apiurl + "&channel=" + channel)
+        return resp.json()['result'][1]
+    except:
+        logger.log(u"Villa: {0}".format(resp.status_code))
+        logger.log(resp.text.decode('utf-8'))
+        return -1
+            
 def get_podcast_shows(url):
     """
     Gets the names and rss urls of all the podcasts (shows)
@@ -63,15 +93,19 @@ def get_podcast_shows(url):
     """
     doc = get_document(url)
 
-    return (
-        {
-            'img': show.find("img", title=u"Mynd með færslu")['srcset'],
-            'name': show.find("strong").a.text,
-            'url': show.find_next_sibling().find("a", class_="button pad0 pad1t")['href']
-        }
-        for show in doc.find_all("div", class_="views-field views-field-nothing")
-    )
+    featured = ({
+        'url': show.parent.find_all('li')[1].a['href'],
+        'img': show.a.img["src"],
+        'name': show.a.span.text.capitalize()
+    } for show in doc.find_all("h4"))
 
+    rest = ({
+        'url': show.a['href'],
+        'img': None,
+        'name': show.parent.find('strong').a.text.capitalize()
+    } for show in doc.find_all('div', 'views-field-views-conditional'))
+
+    return sorted(itertools.chain(featured, rest), key=lambda show: show['name'])
 
 def get_podcast_episodes(url):
     """
@@ -117,13 +151,12 @@ def get_podcast_episodes(url):
         {
             'url': item.select('guid')[0].text,
             'Premiered': parse_pubdate(item.select('pubdate')[0].text).strftime("%d.%m.%Y"),
-            'Duration': item.find('itunes:duration').text.split(':')[0],
+            'Duration': duration_to_seconds(item.find('itunes:duration').text),
             'title': item.title.text,
             'Plot': item.description.text
         }
         for item in doc.find_all("item")
     )
-
 
 def search(query):
     """

@@ -33,6 +33,8 @@ try:
         actions.play_live_stream(action_value, name)
     elif action_key == 'search':
         actions.search()
+    elif action_key == "view_live_index":
+        actions.live_index()
     else:
         logger.log("Action: {0}, Value: {1}, Name: {2}".format(
             action_key, action_value, name))

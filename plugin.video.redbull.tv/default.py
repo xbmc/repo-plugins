@@ -1,9 +1,8 @@
 import sys, urlparse, os, urllib, datetime, time
 import xbmcgui, xbmcplugin, xbmcaddon, xbmc
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'resources'))
-import lib.utils as utils
-import lib.redbulltv_client as redbulltv
+from resources.lib import utils
+from resources.lib import redbulltv_client as redbulltv
 
 class RedbullTV2(object):
     def __init__(self):
@@ -34,18 +33,21 @@ class RedbullTV2(object):
         try:
             items = self.redbulltv_client.get_items(url, category)
         except IOError:
-            xbmcgui.Dialog().ok("Error", "Error getting data from Redbull server.", "Try again shortly")
+            # Error getting data from Redbull server
+            xbmcgui.Dialog().ok(self.addon.getLocalizedString(30020), self.addon.getLocalizedString(30021), self.addon.getLocalizedString(30022))
             return
 
         if not items:
-            xbmcgui.Dialog().ok("No Results", "No results found", "Please try another menu or search")
+            # No results found
+            xbmcgui.Dialog().ok(self.addon.getLocalizedString(30023), self.addon.getLocalizedString(30024), self.addon.getLocalizedString(30025))
             return
         elif items[0].get("is_stream"):
             self.play_stream(items[0])
         elif items[0].get("event_date"):
+            # Scheduled Event Time
             xbmcgui.Dialog().ok(
-                "Upcoming Event",
-                "This event is scheduled to start on:",
+                self.addon.getLocalizedString(30026),
+                self.addon.getLocalizedString(30027),
                 datetime.datetime.fromtimestamp(int(items[0].get("event_date"))).strftime('%a %-d %b %Y %H:%M') +
                 " (GMT+" + str(time.timezone / 3600 * -1) + ")"
             )
@@ -79,4 +81,5 @@ class RedbullTV2(object):
         list_item.setProperty("IsPlayable", "true")
         xbmcplugin.setResolvedUrl(handle=self.addon_handle, succeeded=True, listitem=list_item)
 
-RedbullTV2().navigation()
+if __name__ == '__main__':
+    RedbullTV2().navigation()

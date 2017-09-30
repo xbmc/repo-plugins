@@ -10,4 +10,15 @@
 	<string id="30014">540p</string>
 	<string id="30015">720p (HD)</string>
 	<string id="30016">1080p (HD)</string>
+
+	<string id="30020">Error</string>
+	<string id="30021">Error getting data from Redbull server.</string>
+	<string id="30022">Try again shortly</string>
+
+	<string id="30023">No Results</string>
+	<string id="30024">No results found</string>
+	<string id="30025">Please try another menu or search string</string>
+
+	<string id="30026">Upcoming Event</string>
+	<string id="30027">This event is scheduled to start on:</string>
 </strings>

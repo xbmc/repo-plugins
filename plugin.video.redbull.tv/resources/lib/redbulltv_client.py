@@ -1,5 +1,5 @@
 import re, urllib2
-from lib import utils
+import utils
 
 class RedbullTVClient(object):
     REDBULL_API = "https://appletv-v2.redbull.tv/"
@@ -38,7 +38,7 @@ class RedbullTVClient(object):
                 "RESOLUTION=" + resolution + ".*\n(.*)",
                 playlists).group(1)
         except Exception:
-            print "Couldn't find " + resolution + " stream", "Reverting to default quality"
+            pass
         else:
             url = media_url
 

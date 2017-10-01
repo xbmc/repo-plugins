@@ -97,14 +97,20 @@ class VRTPlayer:
         if len(option_tags) != 0:
             title_items.extend(self.__get_episodes(option_tags))
         else:
-            episodes = soup.find_all(class_="tile")
-            if len(episodes) != 0:
+            episodes_list_slider = soup.find(id="episodelist__slider")
+            if episodes_list_slider is not None:
                 title_items.extend(self.__get_multiple_videos(soup))
             else:
                 title_items.extend(self.__get_single_video(relevant_path.url, soup))
         return title_items
 
+
     def __get_episodes(self, option_tags):
+        """
+        This method gets all the episodes = seasons from the dropdownmenus on the vrt.nu website
+        :param option_tags:
+        :return:
+        """
         title_items = []
         for option_tag in option_tags:
             title = statichelper.replace_newlines_and_strip(option_tag.text)

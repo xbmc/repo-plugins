@@ -44,13 +44,13 @@ class UrlToStreamService:
                    '"email": "%s"}' % (uid, sig, ts, cred.username)
 
             response = self._session.post("https://token.vrt.be", data=data, headers=headers)
-            securevideo_url = "{0}.securevideo.json".format(self.__cut_slash_if_present(url))
+            securevideo_url = "{0}.mssecurevideo.json".format(self.__cut_slash_if_present(url))
             securevideo_response = self._session.get(securevideo_url, cookies=response.cookies)
             json = securevideo_response.json()
 
-            mzid = list(json
-                        .values())[0]['mzid']
-            final_url = urlparse.urljoin(self._BASE_GET_STREAM_URL_PATH, mzid)
+            video_id = list(json
+                        .values())[0]['videoid']
+            final_url = urlparse.urljoin(self._BASE_GET_STREAM_URL_PATH, video_id)
 
             stream_response = self._session.get(final_url)
             hls = self.__get_hls(stream_response.json()['targetUrls']).replace("https", "http")

@@ -42,7 +42,6 @@ class KodiWrapper:
         stream = stream_service.get_stream_from_url(path)
         if stream is not None:
             play_item = xbmcgui.ListItem(path=stream.stream_url)
-            play_item.setMimeType('application/x-mpegURL')
             if stream.subtitle_url is not None:
                 play_item.setSubtitles([stream.subtitle_url])
             xbmcplugin.setResolvedUrl(self._handle, True, listitem=play_item)

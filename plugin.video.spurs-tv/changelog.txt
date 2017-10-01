@@ -1,3 +1,6 @@
+v2.14.2 (2017-10-01)
+ - Fixed Live Audio Commentary
+
 v2.14.1 (2017-09-26)
  - Fixed new stadium video gallery
 

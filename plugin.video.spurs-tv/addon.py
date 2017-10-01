@@ -372,10 +372,12 @@ def show_stadium_video_gallery():
 def play_live_audio_commentary():
     entry_id = live_audio_commentary_id()
     if is_live(entry_id):
-        url = get_media_url(entry_id)
+        url = HLS_URL_FMT.format(entry_id)
+        log("Playing URL {}".format(url))
     else:
         xbmcgui.Dialog().ok('Live Audio Commentary', plugin.get_string(30050))
         url = None
+        log("Live audio commentary not currently available")
     return plugin.set_resolved_url(url)
 
 @plugin.route('/videos/path/<path>')

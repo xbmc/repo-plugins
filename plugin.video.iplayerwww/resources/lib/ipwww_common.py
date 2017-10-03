@@ -35,7 +35,7 @@ addonid = "plugin.video.iplayerwww"
 addoninfo = GetAddonInfo()
 DIR_USERDATA = xbmc.translatePath(addoninfo["profile"])
 cookie_jar = None
-user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:51.0) Gecko/20100101 Firefox/51.0'
+user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0'
 headers = {'User-Agent': user_agent}
 
 
@@ -440,7 +440,7 @@ def CreateBaseDirectory(content_type):
     if content_type == "video":
         ShowLicenceWarning()
         if ADDON.getSetting("menu_video_highlights") == 'true':
-            AddMenuEntry(translation(30300), 'iplayer', 106,
+            AddMenuEntry(translation(30300), 'iplayer', 198,
                          xbmc.translatePath(
                            'special://home/addons/plugin.video.iplayerwww/media/top_rated.png'
                                             ),
@@ -561,7 +561,7 @@ def CreateBaseDirectory(content_type):
     else:
         ShowLicenceWarning()
         if ADDON.getSetting("menu_video_highlights") == 'true':
-            AddMenuEntry((translation(30323)+translation(30300)), 'iplayer', 106,
+            AddMenuEntry((translation(30323)+translation(30300)), 'iplayer', 198,
                          xbmc.translatePath(
                            'special://home/addons/plugin.video.iplayerwww/media/top_rated.png'
                                             ),

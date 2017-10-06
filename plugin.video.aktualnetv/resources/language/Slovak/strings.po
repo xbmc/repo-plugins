@@ -1,14 +1,14 @@
 # XBMC Media Center language file
 # Addon Name: Aktualne TV
 # Addon id: plugin.video.aktualnetv
-# Addon version: 1.4.1
+# Addon version: 2.0.0
 # Addon Provider: Petr Kutalek
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
-"POT-Creation-Date: 2017-04-24 20:31+0000\n"
-"PO-Revision-Date: 2017-04-24 22:31+0200\n"
+"POT-Creation-Date: 2017-09-04 18:15+0000\n"
+"PO-Revision-Date: 2017-09-04 20:15+0200\n"
 "Last-Translator: Petr Kutalek <petr@kutalek.cz>\n"
 "Language-Team: LANGUAGE\n"
 "MIME-Version: 1.0\n"
@@ -61,10 +61,6 @@ msgctxt "#30101"
 msgid "Playback"
 msgstr "Prehrávanie"
 
-msgctxt "#30102"
-msgid "Other"
-msgstr "Ostatné"
-
 msgctxt "#30110"
 msgid "Quality"
 msgstr "Kvalita"
@@ -78,17 +74,17 @@ msgid "SD (360p)"
 msgstr "SD (360p)"
 
 msgctxt "#30113"
+msgid "HQ (480p)"
+msgstr "HQ (480p)"
+
+msgctxt "#30114"
 msgid "HD (720p)"
 msgstr "HD (720p)"
 
-msgctxt "#30120"
-msgid "Format"
-msgstr "Formát"
+msgctxt "#30115"
+msgid "FullHD (1080p)"
+msgstr "FullHD (1080p)"
 
-msgctxt "#30121"
-msgid "H.264 (hardware-accelerated)"
-msgstr "H.264 (hardwarovo akcelerovaný)"
-
-msgctxt "#30122"
-msgid "VP8 (libre)"
-msgstr "VP8 (otvorený formát)"
+msgctxt "#30116"
+msgid "Adaptive"
+msgstr "Automaticky"

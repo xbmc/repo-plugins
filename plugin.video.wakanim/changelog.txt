@@ -1,0 +1,9 @@
+v0.3.0 (2017.10.03)
+- Added nordic support
+
+v0.2.0 (2017.09.24)
+- Added france support
+- Added API for other addons
+
+v0.1.0 (2017.09.23)
+- Initial BETA release

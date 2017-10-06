@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.wakanim" name="Wakanim" version="0.3.0" provider-name="MrKrabat">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <language>en de fr</language>
+        <summary lang="en_GB">Wakanim.tv - Anime streaming live from japan</summary>
+        <summary lang="de_DE">Wakanim.tv - Anime Streaming live aus Japan</summary>
+        <summary lang="fr_FR">Wakanim.tv - Streaming d'animes VOSTFR en direct du Japon</summary>
+        <description lang="en_GB">A constantly growing selection of subtitled animes, which can be discovered - new and popular titles.</description>
+        <description lang="de_DE">Eine stetig wachsende Auswahl deutsch untertitelter Animes, die es zu entdecken gilt - neue und beliebte Titel.</description>
+        <description lang="fr_FR">Des dizaines d'animes VOSTFR en streaming à découvrir - nouveautés et séries les plus prisées.</description>
+        <disclaimer lang="en_GB">WARNING: You MUST be a PREMIUM member or BUY videos to use this plugin</disclaimer>
+        <disclaimer lang="de_DE">HINWEIS: Du MUSST PREMIUM Mitglied sein oder Videos KAUFEN um dieses Plugin zu benutzen</disclaimer>
+        <disclaimer lang="fr_FR">AVERTISSEMENT: VOUS DEVEZ être un membre PREMIUM ou ACHETER des vidéos pour utiliser ce plugin</disclaimer>
+        <news>v0.3.0 (2017.10.03)[CR]- Added nordic support</news>
+        <license>GNU Affero General Public License, v3</license>
+        <forum>https://www.kodinerds.net/index.php/Thread/58348-Release-Wakanim-tv/</forum>
+        <website>https://www.wakanim.tv/</website>
+        <source>https://github.com/MrKrabat/plugin.video.wakanim</source>
+        <email></email>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

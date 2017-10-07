@@ -10,6 +10,7 @@ from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
 from de.generia.kodi.plugin.frontend.zdf.Mediathek import Mediathek
 
 from de.generia.kodi.plugin.frontend.zdf.player.PlayVideo import PlayVideo        
+from de.generia.kodi.plugin.frontend.zdf.player.TokenCache import TokenCache        
 
 from de.generia.kodi.plugin.frontend.zdf.rubrics.LiveTvPage import LiveTvPage       
 from de.generia.kodi.plugin.frontend.zdf.rubrics.RubricPage import RubricPage       
@@ -45,7 +46,7 @@ class MediathekFactory(PageletFactory):
         if pageletId == 'ShowsAzPage':
             return ShowsAzPage()
         if pageletId == 'PlayVideo':
-            return PlayVideo()
+            return PlayVideo(self._createTokenCache(context))
         
         return Mediathek()
         
@@ -53,3 +54,8 @@ class MediathekFactory(PageletFactory):
         profileDir = context.getProfileDir()
         storeFile  = os.path.join(profileDir, 'searchHistory.txt') 
         return SearchHistory(self.log, storeFile, self.settings.searchHistorySize)
+        
+    def _createTokenCache(self, context):
+        profileDir = context.getProfileDir()
+        storeFile  = os.path.join(profileDir, 'tokenCache.txt') 
+        return TokenCache(self.log, storeFile)

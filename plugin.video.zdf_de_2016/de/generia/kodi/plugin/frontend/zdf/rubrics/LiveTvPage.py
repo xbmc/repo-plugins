@@ -8,12 +8,11 @@ from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
 class LiveTvPage(AbstractPage):
 
     def service(self, request, response):
-        apiToken = request.getParam('apiToken')
-
         liveTvUrl = Constants.baseUrl + '/live-tv'
         liveTvResource = LiveTvResource(liveTvUrl)
         self._parse(liveTvResource)
+
         for teaser in liveTvResource.teasers:
-            item = self._createItem(teaser, apiToken)
+            item = self._createItem(teaser)
             if item is not None:
                 response.addItem(item)

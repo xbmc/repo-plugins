@@ -8,7 +8,7 @@ from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
 class AbstractPage(Pagelet):
 
 
-    def _createItem(self, teaser, apiToken):
+    def _createItem(self, teaser):
         settings = self.settings
         item = None
         genre = ''
@@ -45,7 +45,11 @@ class AbstractPage(Pagelet):
         isFolder = False
         #self.log.info("_createItem: title='{}' contentName='{}' playable='{}'", title, teaser.contentName, teaser.playable)
         if teaser.contentName is not None and teaser.playable:
-            params = {'apiToken': apiToken, 'contentName': teaser.contentName, 'title': title}
+            params = {'contentName': teaser.contentName, 'title': title}
+            if teaser.apiToken is not None:
+                params['apiToken'] = teaser.apiToken
+            if teaser.url is not None:
+                params['videoUrl'] = teaser.url
             if teaser.date is not None:
                 params['date'] = teaser.date
             if genre is not None:
@@ -53,7 +57,7 @@ class AbstractPage(Pagelet):
             action = Action(pagelet='PlayVideo', params=params)
             isFolder = False
         else:   
-            action = Action(pagelet='RubricPage', params={'apiToken': apiToken, 'rubricUrl': teaser.url})
+            action = Action(pagelet='RubricPage', params={'rubricUrl': teaser.url})
             self.info("redirecting to rubric-url  '{}' and teaser-title '{}' ...", teaser.url, title)
             isFolder = True
             #return None

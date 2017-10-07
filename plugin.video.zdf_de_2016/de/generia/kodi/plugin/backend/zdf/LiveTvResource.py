@@ -1,4 +1,4 @@
-from de.generia.kodi.plugin.backend.web.HtmlResource import HtmlResource
+from de.generia.kodi.plugin.backend.zdf.AbstractPageResource import AbstractPageResource
 
 from de.generia.kodi.plugin.backend.zdf import stripHtml
 from de.generia.kodi.plugin.backend.zdf.Regex import getTagPattern
@@ -12,7 +12,7 @@ contentNamePattern = compile('data-zdfplayer-id="([^"]*)"')
 imagePattern = compile('data-src="([^"]*)"')
 
 
-class LiveTvResource(HtmlResource):
+class LiveTvResource(AbstractPageResource):
 
     def __init__(self, url):
         super(LiveTvResource, self).__init__(url)
@@ -30,10 +30,15 @@ class LiveTvResource(HtmlResource):
             teaser = Teaser()
             pos = self._parseTitle(pos, teaser)
             pos = self._parseContentName(pos, teaser)
+            pos = self._parseApiToken(pos, teaser)
             pos = self._parseImage(pos, teaser)
             if teaser.title is not None and teaser.contentName is not None:
                 self.teasers.append(teaser)        
             livetvCellMatch = livetvCellPattern.search(self.content, pos)
+            
+    def _parseApiToken(self, pos, teaser):
+        pos = teaser.parseApiToken(self.content, pos)
+        return pos
             
     def _parseTitle(self, pos, teaser):
         titleMatch = titlePattern.search(self.content, pos)

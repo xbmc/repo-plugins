@@ -1,4 +1,4 @@
-from de.generia.kodi.plugin.backend.web.HtmlResource import HtmlResource
+from de.generia.kodi.plugin.backend.zdf.AbstractPageResource import AbstractPageResource
 
 from de.generia.kodi.plugin.backend.zdf.Regex import compile
 from de.generia.kodi.plugin.backend.zdf.Teaser import Teaser
@@ -6,7 +6,7 @@ from de.generia.kodi.plugin.backend.zdf.Teaser import Teaser
 resultsPattern = compile('<div\s*class="[^"]*"\s*data-loadmore-size="([^"]*)"\s*data-loadmore-result-count="([^"]*)"\s*data-module="loadmore">')
 loadMorePattern = compile('<a\s*href="([^"]*)"[^>]*class="[^"]*load-more[^"]*"')
 
-class SearchResource(HtmlResource):
+class SearchResource(AbstractPageResource):
 
     def __init__(self, url):
         super(SearchResource, self).__init__(url)

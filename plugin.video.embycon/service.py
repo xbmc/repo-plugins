@@ -6,12 +6,14 @@ import xbmcaddon
 import xbmcgui
 import time
 import json
+import traceback
 
 from resources.lib.downloadutils import DownloadUtils
 from resources.lib.simple_logging import SimpleLogging
 from resources.lib.play_utils import playFile
 from resources.lib.kodi_utils import HomeWindow
 from resources.lib.translation import i18n
+from resources.lib.widgets import checkForNewContent
 
 # clear user and token when logging in
 home_window = HomeWindow()
@@ -77,6 +79,7 @@ def promptForStopActions(item_id, current_possition):
     settings = xbmcaddon.Addon(id='plugin.video.embycon')
 
     prompt_next_percentage = int(settings.getSetting('promptPlayNextEpisodePercentage'))
+    play_prompt = settings.getSetting('promptPlayNextEpisodePercentage_prompt') == "true"
     prompt_delete_episode_percentage = int(settings.getSetting('promptDeleteEpisodePercentage'))
     prompt_delete_movie_percentage = int(settings.getSetting('promptDeleteMoviePercentage'))
 
@@ -151,8 +154,14 @@ def promptForStopActions(item_id, current_possition):
         item_list = items_result.get("Items", [])
         for item in item_list:
             index = item.get("IndexNumber", -1)
-            if index > item_index: # find the next episode in the season
-                resp = xbmcgui.Dialog().yesno(i18n("play_next_title"), i18n("play_next_question"), autoclose=10000)
+            if index == item_index + 1: # find the very next episode in the season
+
+                resp = True
+                if play_prompt:
+                    #next_epp_name = str(index) + " of " + str(item_list[-1].get("IndexNumber", -1)) + " - " + item.get("Name", "n/a")
+                    next_epp_name = ("%02d - " % (index,)) + item.get("Name", "n/a")
+                    resp = xbmcgui.Dialog().yesno(i18n("play_next_title"), i18n("play_next_question"), next_epp_name, autoclose=10000)
+
                 if resp:
                     next_item_id = item.get("Id")
                     log.debug("Playing Next Episode: %s" % next_item_id)
@@ -287,9 +296,10 @@ class Service(xbmc.Player):
 
 
 monitor = Service()
-last_progress_update = time.time()
-download_utils.checkVersion()
 home_window = HomeWindow()
+last_progress_update = time.time()
+last_content_check = time.time()
+last_version_check = 0
 
 # monitor.abortRequested() is causes issues, it currently triggers for all addon cancelations which causes
 # the service to exit when a user cancels an addon load action. This is a bug in Kodi.
@@ -297,28 +307,37 @@ home_window = HomeWindow()
 
 while not xbmc.abortRequested:
 
-    if xbmc.Player().isPlaying():
-
-        try:
+    try:
+        if xbmc.Player().isPlaying():
+            # if playing every 10 seconds updated the server with progress
             if (time.time() - last_progress_update) > 10:
                 last_progress_update = time.time()
                 sendProgress()
+        else:
+            # if we have a play item them trigger playback
+            play_data = home_window.getProperty("play_item_message")
+            if play_data:
+                home_window.clearProperty("play_item_message")
+                play_info = json.loads(play_data)
+                playFile(play_info)
 
-        except Exception as error:
-            log.error("Exception in Playback Monitor : " + str(error))
+            # if not playing every 60 seonds check for new widget content
+            if (time.time() - last_content_check) > 60:
+                last_content_check = time.time()
+                checkForNewContent()
 
-    else:
-        play_data = home_window.getProperty("play_item_message")
-        if play_data:
-            home_window.clearProperty("play_item_message")
-            play_info = json.loads(play_data)
-            playFile(play_info)
+            # check version
+            if (time.time() - last_version_check) > (60 * 60 * 6): # every 6 hours
+                last_version_check = time.time()
+                download_utils.checkVersion()
 
-    home_window.setProperty("Service_Timestamp", str(int(time.time())))
+    except Exception as error:
+        log.error("Exception in Playback Monitor : " + str(error))
+        log.error(traceback.format_exc())
+
     xbmc.sleep(1000)
 
 # clear user and token when loggin off
-home_window.clearProperty("Service_Timestamp")
 home_window.clearProperty("userid")
 home_window.clearProperty("AccessToken")
 home_window.clearProperty("Params")

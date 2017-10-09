@@ -24,14 +24,32 @@ class PlayUtils():
             log.debug("playback_type: FORCED_TRANSCODE")
         playurl = None
 
+        is_h265 = False
+        streams = result.get("MediaStreams", [])
+        for stream in streams:
+            if stream.get("Type", "") == "Video" and stream.get("Codec", "") in ["hevc", "h265"]:
+                is_h265 = True
+                break
+        if is_h265:
+            log.debug("H265_IS_TRUE")
+            h265_action = addonSettings.getSetting("h265_action")
+            if h265_action == "1":
+                log.debug("H265 override play action: setting to Direct Streaming")
+                playback_type = "1"
+            elif h265_action == "2":
+                log.debug("H265 override play action: setting to Transcode Streaming")
+                playback_type = "2"
+
+        if force_transcode:
+            playback_type = "2"
+
         # transcode
-        if playback_type == "2" or force_transcode:
+        if playback_type == "2":
 
             playback_bitrate = addonSettings.getSetting("playback_bitrate")
             log.debug("playback_bitrate: " + playback_bitrate)
 
-            width_options = ["640", "720", "1024", "1280", "1440", "1600", "1920", "2600", "4096"]
-            playback_max_width = width_options[int(addonSettings.getSetting("playback_max_width"))]
+            playback_max_width = addonSettings.getSetting("playback_max_width")
             playback_video_force_8 = addonSettings.getSetting("playback_video_force_8") == "true"
 
             clientInfo = ClientInformation()
@@ -78,7 +96,7 @@ class PlayUtils():
             playurl = playurl + "&api_key=" + user_token
 
         log.debug("Playback URL: " + playurl)
-        return playurl.encode('utf-8')
+        return playurl.encode('utf-8'), playback_type
 
     def getStrmDetails(self, result):
         playurl = None
@@ -112,7 +130,7 @@ def getDetailsString():
     include_people = addonSettings.getSetting("include_people") == "true"
     include_overview = addonSettings.getSetting("include_overview") == "true"
 
-    detailsString = "EpisodeCount,SeasonCount,Path,Genres,Studios,CumulativeRunTimeTicks,Etag"
+    detailsString = "DateCreated,EpisodeCount,SeasonCount,Path,Genres,Studios,CumulativeRunTimeTicks,Etag"
 
     if include_media:
         detailsString += ",MediaStreams"
@@ -151,7 +169,10 @@ def getArt(item, server, widget=False):
         'clearart': '',
         'discart': '',
         'landscape': '',
-        'tvshow.poster': ''
+        'tvshow.poster': '',
+        'tvshow.clearart': '',
+        'tvshow.banner': '',
+        'tvshow.landscape': ''
     }
     item_id = item.get("Id")
 
@@ -164,10 +185,20 @@ def getArt(item, server, widget=False):
         else:
             art['thumb'] = downloadUtils.getArtwork(item, "Primary", server=server)
 
+    if item.get("Type") == "Episode" or item.get("Type") == "Season":
+        art['tvshow.poster'] = downloadUtils.getArtwork(item, "Primary", parent=True, server=server)
+        art['tvshow.clearart'] = downloadUtils.getArtwork(item, "Logo", parent=True, server=server)
+        art['tvshow.banner'] = downloadUtils.getArtwork(item, "Banner", parent=True, server=server)
+        art['tvshow.landscape'] = downloadUtils.getArtwork(item, "Thumb", parent=True, server=server)
+    elif item.get("Type") == "Series":
+        art['tvshow.poster'] = downloadUtils.getArtwork(item, "Primary", parent=False, server=server)
+        art['tvshow.clearart'] = downloadUtils.getArtwork(item, "Logo", parent=False, server=server)
+        art['tvshow.banner'] = downloadUtils.getArtwork(item, "Banner", parent=False, server=server)
+        art['tvshow.landscape'] = downloadUtils.getArtwork(item, "Thumb", parent=False, server=server)
+
     if item.get("Type") == "Episode":
         art['thumb'] = art['thumb'] if art['thumb'] else downloadUtils.getArtwork(item, "Thumb", server=server)
         art['landscape'] = art['thumb'] if art['thumb'] else downloadUtils.getArtwork(item, "Thumb", parent=True, server=server)
-        art['tvshow.poster'] = downloadUtils.getArtwork(item, "Primary", parent=True, server=server)
     else:
         art['poster'] = art['thumb']
 

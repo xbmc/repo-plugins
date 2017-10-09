@@ -81,12 +81,8 @@ class DownloadUtils():
     def getArtwork(self, data, art_type, parent=False, index="0", width=10000, height=10000, server=None):
 
         id = data.get("Id")
-        '''
-        if data.get("Type") == "Season":  # For seasons: primary (poster), thumb and banner get season art, rest series art
-            if art_type != "Primary" and art_type != "Thumb" and art_type != "Banner":
-                id = data.get("SeriesId")
-        '''
-        if data.get("Type") == "Episode":  # For episodes: primary (episode thumb) gets episode art, rest series art. 
+
+        if data.get("Type") in ["Episode", "Season"]:
             if art_type != "Primary" or parent == True:
                 id = data.get("SeriesId")
 
@@ -117,7 +113,7 @@ class DownloadUtils():
                 imageTag = data.get("ImageTags").get(art_type)
                 log.debug("Image Tag:" + imageTag)
         elif (parent == True):
-            if (itemType == "Episode") and (art_type == 'Primary'):
+            if (itemType == "Episode" or itemType == "Season") and art_type == 'Primary':
                 tagName = 'SeriesPrimaryImageTag'
                 idName = 'SeriesId'
             else:
@@ -311,7 +307,7 @@ class DownloadUtils():
             log.debug("EmbyCon Authentication Header : " + str(headers))
             return headers
 
-    def downloadUrl(self, url, suppress=False, postBody=None, method="GET", popup=0, authenticate=True):
+    def downloadUrl(self, url, suppress=False, postBody=None, method="GET", popup=0, authenticate=True, headers=None):
         log.debug("downloadUrl")
         settings = xbmcaddon.Addon(id='plugin.video.embycon')
 
@@ -325,6 +321,22 @@ class DownloadUtils():
         if url.find("{ItemLimit}") != -1:
             show_x_filtered_items = settings.getSetting("show_x_filtered_items")
             url = url.replace("{ItemLimit}", show_x_filtered_items)
+        if url.find("{IsUnplayed}") != -1 or url.find("{,IsUnplayed}") != -1 or url.find("{IsUnplayed,}") != -1 \
+                or url.find("{,IsUnplayed,}") != -1:
+            show_latest_unplayed = settings.getSetting("show_latest_unplayed") == "true"
+            if show_latest_unplayed:
+                url = url.replace("{IsUnplayed}", "")
+                url = url.replace("{,IsUnplayed}", "")
+                url = url.replace("{IsUnplayed,}", "")
+                url = url.replace("{,IsUnplayed,}", "")
+            elif url.find("{IsUnplayed}") != -1:
+                url = url.replace("{IsUnplayed}", "IsUnplayed")
+            elif url.find("{,IsUnplayed}") != -1:
+                url = url.replace("{,IsUnplayed}", ",IsUnplayed")
+            elif url.find("{IsUnplayed,}") != -1:
+                url = url.replace("{IsUnplayed,}", "IsUnplayed,")
+            elif url.find("{,IsUnplayed,}") != -1:
+                url = url.replace("{,IsUnplayed,}", ",IsUnplayed,")
         log.debug(url)
 
         return_data = "null"
@@ -395,6 +407,8 @@ class DownloadUtils():
                     return_data = gzipper.read()
                 else:
                     return_data = retData
+                if headers is not None and isinstance(headers, dict):
+                    headers.update(data.getheaders())
                 log.debug("Data Len After : " + str(len(return_data)))
                 log.debug("====== 200 returned =======")
                 log.debug("Content-Type : " + str(contentType))

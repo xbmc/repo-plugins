@@ -252,7 +252,6 @@ def search_list(params):
             'artist'    : get_located_string('Search result'),
             'comment'   : audio_entry.get('comment', ''),
             'year'      : audio_entry.get('year', ''),
-            'duration'  : audio_entry.get('duration', 1),
             'rating'    : 0,
         },
         'path'          : p.get_plugin_path(
@@ -268,6 +267,18 @@ def search_list(params):
         } for audio_entry in audios.get('search_list') ]
 
     p.add_items(audio_items, reset_cache == 'yes')
+
+
+def play_search(params):
+    """This function plays the audio source from the search url link."""
+    p.log("rne.play_search "+repr(params))
+
+    url = api.get_playable_search_url(params.get("url"))
+
+    if url:
+        return p.play_resolved_url(url)
+    else:
+        p.showWarning(get_located_string('Audio not located'))
 
 
 def play_audio(params):

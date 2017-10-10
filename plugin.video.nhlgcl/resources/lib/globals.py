@@ -4,13 +4,13 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 import re, os, time
 import calendar
 import pytz
-import urllib, urllib2
+import urllib
+import requests
 import json
 import cookielib
 import time
 from bs4 import BeautifulSoup
 from datetime import date, datetime, timedelta
-from urllib2 import URLError, HTTPError
 #from PIL import Image
 from cStringIO import StringIO
 
@@ -54,8 +54,8 @@ FINAL = 'FF666666'
 FREE = 'FF43CD80'
 
 #Localization
-local_string = xbmcaddon.Addon(id='plugin.video.nhlgcl').getLocalizedString
-ROOTDIR = xbmcaddon.Addon(id='plugin.video.nhlgcl').getAddonInfo('path')
+local_string = xbmcaddon.Addon().getLocalizedString
+ROOTDIR = xbmcaddon.Addon().getAddonInfo('path')
 
 #Images
 ICON = ROOTDIR+"/icon.png"
@@ -65,9 +65,11 @@ FANART = ROOTDIR+"/fanart.jpg"
 PREV_ICON = ROOTDIR+"/icon.png"
 NEXT_ICON = ROOTDIR+"/icon.png"
 
-#MASTER_FILE_TYPE = 'master_tablet60.m3u8'
 API_URL = 'http://statsapi.web.nhl.com/api/v1/'
+#MASTER_FILE_TYPE = 'master_tablet60.m3u8'
 MASTER_FILE_TYPE = 'master_tablet60_fwv2.m3u8'
+
+VERIFY = True
 
 #----------
 #IPAD
@@ -75,7 +77,7 @@ MASTER_FILE_TYPE = 'master_tablet60_fwv2.m3u8'
 #WEB_MEDIAPLAYER
 #----------
 PLATFORM = "IPHONE"
-PLAYBACK_SCENARIO = 'HTTP_CLOUD_TABLET_60_ADS'
+PLAYBACK_SCENARIO = 'HTTP_CLOUD_TABLET_60'
 
 #User Agents
 #UA_GCL = 'NHL1415/5.0925 CFNetwork/711.4.6 Darwin/14.0.0'
@@ -181,10 +183,11 @@ def addStream(name,link_url,title,game_id,epg,icon=None,fanart=None,info=None,vi
     ok=True
     u=sys.argv[0]+"?url="+urllib.quote_plus(link_url)+"&mode="+str(104)+"&name="+urllib.quote_plus(name)+"&game_id="+urllib.quote_plus(str(game_id))+"&epg="+urllib.quote_plus(str(epg))+"&teams_stream="+urllib.quote_plus(str(teams_stream))+"&stream_date="+urllib.quote_plus(str(stream_date))
 
+    liz=xbmcgui.ListItem(name)
     if icon != None:
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=icon)
+        liz.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
     else:
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=ICON)
+        liz.setArt({'icon': ICON, 'thumb': ICON, 'fanart': fanart})
 
     if fanart != None:
         liz.setProperty('fanart_image', fanart)
@@ -211,10 +214,11 @@ def addFavToday(name,title,icon,fanart=None):
     audio_info, video_info = getAudioVideoInfo()
     ok=True
     url = sys.argv[0] + '?url=/favteamCurrent&mode=510'
+    liz=xbmcgui.ListItem(name)
     if icon != None:
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=icon)
+        liz.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
     else:
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=ICON)
+        liz.setArt({'icon': ICON, 'thumb': ICON, 'fanart': fanart})
 
     if fanart != None:
         liz.setProperty('fanart_image', fanart)
@@ -238,14 +242,15 @@ def addFavToday(name,title,icon,fanart=None):
 
 def addLink(name,url,title,iconimage,info=None,video_info=None,audio_info=None,fanart=None):
     ok=True
-    liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+
+    liz=xbmcgui.ListItem(name)
     liz.setProperty("IsPlayable", "true")
     liz.setInfo( type="Video", infoLabels={ "Title": title } )
     liz.setProperty('fanart_image', FANART)
     if iconimage != None:
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+        liz.setArt({'icon': iconimage, 'thumb': iconimage, 'fanart': fanart})
     else:
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=ICON)
+        liz.setArt({'icon': ICON, 'thumb': ICON, 'fanart': fanart})
 
     if info != None:
         liz.setInfo( type="Video", infoLabels=info)
@@ -277,11 +282,11 @@ def addDir(name,url,mode,iconimage,fanart=None,game_day=None):
     u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&icon="+urllib.quote_plus(iconimage)
     if game_day != None:
         u = u+"&game_day="+urllib.quote_plus(game_day)
-
+    liz=xbmcgui.ListItem(name)
     if iconimage != None:
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+        liz.setArt({'icon': iconimage, 'thumb': iconimage, 'fanart': fanart})
     else:
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=ICON)
+        liz.setArt({'icon': ICON, 'thumb': ICON, 'fanart': fanart})
 
     liz.setInfo( type="Video", infoLabels={ "Title": name } )
 
@@ -300,11 +305,11 @@ def addDir(name,url,mode,iconimage,fanart=None,game_day=None):
 def addPlaylist(name,game_day,url,mode,iconimage,fanart=None):
     ok=True
     u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&icon="+urllib.quote_plus(iconimage)
-
+    liz=xbmcgui.ListItem(name)
     if iconimage != None:
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+        liz.setArt({'icon': iconimage, 'thumb': iconimage, 'fanart': fanart})
     else:
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=ICON)
+        liz.setArt({'icon': ICON, 'thumb': ICON, 'fanart': fanart})
 
     liz.setInfo( type="Video", infoLabels={ "Title": name } )
 
@@ -339,11 +344,11 @@ def scoreUpdates():
 
 def getFavTeamId():
     url = API_URL+'teams/'
-    req = urllib2.Request(url)
-    req.add_header('User-Agent', UA_IPAD)
-    response = urllib2.urlopen(req)
-    json_source = json.load(response)
-    response.close()
+
+    headers = {'User-Agent': UA_IPHONE}
+
+    r = requests.get(url, headers=headers, verify=False)
+    json_source = r.json()
 
     fav_team_id = "0"
     for team in json_source['teams']:
@@ -424,11 +429,10 @@ def getThumbnails():
             sys.exit()
 
     url = API_URL+'teams/'
-    req = urllib2.Request(url)
-    req.add_header('User-Agent', UA_IPAD)
-    response = urllib2.urlopen(req)
-    json_source = json.load(response)
-    response.close()
+    headers = {'User-Agent': UA_IPHONE}
+
+    r = requests.get(url, headers=headers, verify=False)
+    json_source = r.json()
 
     team_list = []
     for team in json_source['teams']:
@@ -494,11 +498,10 @@ def getThumbnails():
 def getFavTeamColor():
     url = 'http://nhl.bamcontent.com/data/config/nhl/teamColors.json'
     #url = 'https://statsapi.web.nhl.com/api/v1/teams?teamId=
-    req = urllib2.Request(url)
-    req.add_header('User-Agent', UA_IPAD)
-    response = urllib2.urlopen(req)
-    json_source = json.load(response)
-    response.close()
+    headers = {'User-Agent': UA_IPHONE}
+
+    r = requests.get(url, headers=headers, verify=False)
+    json_source = r.json()
 
     fav_team_color = ''
     fav_team_id = settings.getSetting(id="fav_team_id")
@@ -521,11 +524,10 @@ def getFavTeamLogo():
     logo_url = ''
 
     url = API_URL+'teams'
-    req = urllib2.Request(url)
-    req.add_header('User-Agent', UA_IPAD)
-    response = urllib2.urlopen(req)
-    json_source = json.load(response)
-    response.close()
+    headers = {'User-Agent': UA_IPHONE}
+
+    r = requests.get(url, headers=headers, verify=False)
+    json_source = r.json()
 
     fav_team_abbr = ''
     for team in json_source['teams']:
@@ -562,27 +564,38 @@ def getConfigFile():
     Connection: close
     '''
     url = 'http://lwsa.mlb.com/partner-config/config?company=sony-tri&type=nhl&productYear=2015&model=PS4&firmware=default&app_version=1_0'
-    req = urllib2.Request(url)
-    req.add_header("Connection", "close")
-    req.add_header("User-Agent", UA_PS4)
-
-    response = urllib2.urlopen(req, '')
-    json_source = json.load(response)
-    response.close()
-
-def setViewMode():
-    global VIEW_MODE
-    window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
-    current_view_mode = str(window.getFocusId())
-    if current_view_mode != VIEW_MODE and current_view_mode != "0":
-        settings.setSetting(id='view_mode', value=current_view_mode)
-        VIEW_MODE = settings.getSetting(id='view_mode')
-
-    getViewMode()
+    headers = {
+        "Connection": "close",
+        "User-Agent": UA_PS4
+    }
+    r = requests.get(url, headers=headers, verify=VERIFY)
 
 
-def getViewMode():
-    xbmc.executebuiltin("Container.SetViewMode("+VIEW_MODE+")")
+def load_cookies():
+    cookie_file = os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp')
+    cj = cookielib.LWPCookieJar()
+    try:
+        cj.load(cookie_file, ignore_discard=True)
+    except:
+        pass
+
+    return cj
+
+
+def save_cookies(cookiejar):
+    cookie_file = os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp')
+    cj = cookielib.LWPCookieJar()
+    try:
+        cj.load(cookie_file,ignore_discard=True)
+    except:
+        pass
+    for c in cookiejar:
+        args = dict(vars(c).items())
+        args['rest'] = args['_rest']
+        del args['_rest']
+        c = cookielib.Cookie(**args)
+        cj.set_cookie(c)
+    cj.save(cookie_file, ignore_discard=True)
 
 
 def getAuthCookie():
@@ -603,10 +616,10 @@ def getAuthCookie():
 
 def getStreamQuality(stream_url):
     stream_title = []
-    req = urllib2.Request(stream_url)
-    response = urllib2.urlopen(req)
-    master = response.read()
-    response.close()
+    headers = {'User-Agent': UA_IPHONE}
+
+    r = requests.get(stream_url, headers=headers, verify=False)
+    master = r.text
 
     xbmc.log(stream_url)
     xbmc.log(master)

@@ -29,20 +29,14 @@ def todaysGames(game_day):
     date_display = '[B][I]'+ colorString(display_day.strftime("%A, %m/%d/%Y"),GAMETIME_COLOR)+'[/I][/B]'
     addPlaylist(date_display,display_day,'/playhighlights',900,ICON,FANART)
 
-    #url = 'https://statsapi.web.nhl.com/api/v1/schedule?teamId=&startDate=2016-02-09&endDate=2016-02-09&expand=schedule.teams,schedule.linescore,schedule.game.content.media.epg,schedule.broadcasts,schedule.scoringplays,team.leaders,leaders.person,schedule.ticket,schedule.game.content.highlights.scoreboard,schedule.ticket&leaderCategories=points'
     url = API_URL+'schedule?expand=schedule.teams,schedule.linescore,schedule.scoringplays,schedule.game.content.media.epg&date='+game_day+'&site=en_nhl&platform='+PLATFORM
-    req = urllib2.Request(url)
-    req.add_header('Connection', 'close')
-    req.add_header('User-Agent', UA_PS4)
 
-    try:
-        response = urllib2.urlopen(req)
-        json_source = json.load(response)
-        response.close()
-    except HTTPError as e:
-        xbmc.log('The server couldn\'t fulfill the request.')
-        xbmc.log('Error code: ', e.code)
-        sys.exit()
+    headers = {'User-Agent': UA_IPHONE,
+               'Connection': 'close'
+    }
+
+    r = requests.get(url, headers=headers, cookies=load_cookies(), verify=VERIFY)
+    json_source = r.json()
 
     global RECAP_PLAYLIST
     global EXTENDED_PLAYLIST
@@ -165,20 +159,15 @@ def createGameListItem(game, game_day):
 
             if PREVIEW_INFO == 'true':
                 url = API_URL+'game/'+str(game['gamePk'])+'/content?site=en_nhl'
-                req = urllib2.Request(url)
-                req.add_header('Connection', 'close')
-                req.add_header('User-Agent', UA_PS4)
+                headers = {'User-Agent': UA_IPHONE,
+                            'Connection': 'close'
+                }
 
-                try:
-                    response = urllib2.urlopen(req)
-                    json_source = json.load(response)
-                    fanart = str(json_source['editorial']['preview']['items'][0]['media']['image']['cuts']['1284x722']['src'])
-                    soup = BeautifulSoup(str(json_source['editorial']['preview']['items'][0]['preview']))
-                    desc = soup.get_text()
-                    response.close()
-                except HTTPError as e:
-                    xbmc.log('The server couldn\'t fulfill the request.')
-                    xbmc.log('Error code: ', e.code)
+                r = requests.get(url, headers=headers, cookies=load_cookies(), verify=VERIFY)
+                json_source = r.json()
+                fanart = str(json_source['editorial']['preview']['items'][0]['media']['image']['cuts']['1284x722']['src'])
+                soup = BeautifulSoup(str(json_source['editorial']['preview']['items'][0]['preview']))
+                desc = soup.get_text()
             elif hide_spoilers == 0:
                 for play in game['scoringPlays']:
                     scorer = play['result']['description']
@@ -278,7 +267,6 @@ def streamSelect(game_id, epg, teams_stream, stream_date):
             content_id.append(item['mediaPlaybackId'])
             event_id.append(item['eventId'])
             free_game.append(item['freeGame'])
-
     else:
         msg = "No playable streams found."
         dialog = xbmcgui.Dialog()
@@ -299,13 +287,27 @@ def streamSelect(game_id, epg, teams_stream, stream_date):
             if a == 0:
                 #Recap
                 try:
-                    stream_url = createHighlightStream(recap_items[0]['playbacks'][3]['url'])
+                    url = recap_items[0]['playbacks'][2]['url']
+                    #Overwrite url if preferable scenario found
+                    for item in recap_items[0]['playbacks']:
+                        if item['name'] == PLAYBACK_SCENARIO:
+                            url = item['url']
+                            break
+
+                    stream_url = createHighlightStream(url)
                 except:
                     pass
             elif a == 1:
                 #Extended Highlights
                 try:
-                    stream_url = createHighlightStream(highlight_items[0]['playbacks'][3]['url'])
+                    url = highlight_items[0]['playbacks'][2]['url']
+                    #Overwrite url if preferable scenario found
+                    for item in highlight_items[0]['playbacks']:
+                        if item['name'] == PLAYBACK_SCENARIO:
+                            url = item['url']
+                            break
+
+                    stream_url = createHighlightStream(url)
                 except:
                     pass
         elif a == 2:
@@ -359,23 +361,22 @@ def createHighlightStream(stream_url):
     bandwidth = ''
     bandwidth = find(QUALITY,'(',' kbps)')
     #Switch to ipad master file
-    stream_url = stream_url.replace('master_wired.m3u8', MASTER_FILE_TYPE)
+    #stream_url = stream_url.replace('master_wired.m3u8', MASTER_FILE_TYPE)
     '''
     if QUALITY.upper() == 'ALWAYS ASK':
         #stream_url = selectStreamQualty(stream_url)
         bandwidth = getStreamQuality(stream_url)
     '''
     if bandwidth != '':
-        stream_url = stream_url.replace(MASTER_FILE_TYPE, 'asset_'+bandwidth+'k.m3u8')
+        stream_url = stream_url.replace(stream_url.rsplit('/', 1)[-1], 'asset_'+bandwidth+'k.m3u8')
 
-    stream_url = stream_url + '|User-Agent='+UA_IPAD
+    stream_url = stream_url + '|User-Agent='+UA_IPHONE
 
     xbmc.log(stream_url)
     return stream_url
 
 
 def createFullGameStream(stream_url, media_auth, media_state):
-    #SD (800 kbps)|SD (1600 kbps)|HD (3000 kbps)|HD (5000 kbps)
     bandwidth = ''
     bandwidth = find(QUALITY,'(',' kbps)')
 
@@ -395,23 +396,17 @@ def createFullGameStream(stream_url, media_auth, media_state):
         if media_state == 'MEDIA_ARCHIVE':
             #ARCHIVE
             if checkArchiveType(stream_url,media_auth) == 'asset':
-                stream_url = stream_url.replace(MASTER_FILE_TYPE, 'asset_'+bandwidth+'k.m3u8')
+                stream_url = stream_url.replace(stream_url.rsplit('/', 1)[-1], 'asset_'+bandwidth+'k.m3u8')
             else:
-                stream_url = stream_url.replace(MASTER_FILE_TYPE, bandwidth+'K/'+bandwidth+'_complete_fwv2-trimmed.m3u8')
+                stream_url = stream_url.replace(stream_url.rsplit('/', 1)[-1], bandwidth+'K/'+bandwidth+'_complete_fwv2-trimmed.m3u8')
 
         elif media_state == 'MEDIA_ON':
             #LIVE
             #5000K/5000_slide.m3u8 OR #3500K/3500_complete.m3u8
             # Slide = Live, Complete = Watch from beginning?
-            stream_url = stream_url.replace(MASTER_FILE_TYPE, bandwidth+'K/'+bandwidth+'_complete_fwv2.m3u8')
+            stream_url = stream_url.replace(stream_url.rsplit('/', 1)[-1], bandwidth+'K/'+bandwidth+'_complete_fwv2.m3u8')
 
-
-    cj = cookielib.LWPCookieJar()
-    cj = cookielib.LWPCookieJar(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'))
-    try:
-        cj.load(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'),ignore_discard=True)
-    except:
-        pass
+    cj = load_cookies()
 
     cookies = ''
     for cookie in cj:
@@ -429,18 +424,17 @@ def createFullGameStream(stream_url, media_auth, media_state):
 def checkArchiveType(stream_url, media_auth):
     xbmc.log('test--------------------------------------------------------')
     xbmc.log(stream_url)
-    req = urllib2.Request(stream_url)
-    req.add_header("Accept", "*/*")
-    req.add_header("Accept-Encoding", "deflate")
-    req.add_header("Accept-Language", "en-US,en;q=0.8")
-    req.add_header("Connection", "keep-alive")
-    req.add_header("User-Agent", UA_NHL)
-    req.add_header("Cookie", media_auth)
 
+    headers = { "Accept": "*/*",
+                "Accept-Encoding": "identity",
+                "Accept-Language": "en-US,en;q=0.8",
+                "Connection": "keep-alive",
+                "User-Agent": UA_NHL,
+                "Cookie": media_auth
+    }
 
-    response = urllib2.urlopen(req)
-    playlist = response.read()
-    response.close()
+    r = requests.get(stream_url, headers=headers, cookies=load_cookies(), verify=VERIFY)
+    playlist = r.text
 
     stream_type = 'complete-trimmed'
     if 'asset_' in playlist:
@@ -461,12 +455,7 @@ def fetchStream(game_id, content_id,event_id):
         if authorization == '':
             return stream_url, media_auth
 
-    cj = cookielib.LWPCookieJar(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'))
-    cj.load(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'),ignore_discard=True)
     session_key = getSessionKey(game_id,event_id,content_id,authorization)
-    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-
-
     if session_key == '':
         return stream_url, media_auth
     elif session_key == 'blackout':
@@ -475,39 +464,29 @@ def fetchStream(game_id, content_id,event_id):
         ok = dialog.ok('Game Blacked Out', msg)
         return stream_url, media_auth
 
-
+    url = 'https://mf.svc.nhl.com/ws/media/mf/v2.4/stream'
+    url += '?contentId=' + content_id
+    url += '&playbackScenario=' + PLAYBACK_SCENARIO
+    url += '&platform=' + PLATFORM
+    url += '&sessionKey=' + urllib.quote_plus(session_key)
     #Get user set CDN
     if CDN == 'Akamai':
-        cdn_url = 'akc.med2.med.nhl.com'
-    else:
-        cdn_url = 'l3c.med2.med.nhl.com'
+        url +='&cdnName=MED2_AKAMAI_SECURE'
+    elif CDN == 'Level 3':
+        url +='&cdnName=MED2_LEVEL3_SECURE'
 
-    i=0
-    for i in range (0,9):
-        #Org
-        url = 'https://mf.svc.nhl.com/ws/media/mf/v2.4/stream?contentId='+content_id+'&playbackScenario='+PLAYBACK_SCENARIO+'&platform='+PLATFORM+'&sessionKey='+urllib.quote_plus(session_key)
-        req = urllib2.Request(url)
-        req.add_header("Accept", "*/*")
-        req.add_header("Accept-Encoding", "deflate")
-        req.add_header("Accept-Language", "en-US,en;q=0.8")
-        req.add_header("Connection", "keep-alive")
-        req.add_header("Authorization", authorization)
-        req.add_header("User-Agent", UA_NHL)
-        req.add_header("Proxy-Connection", "keep-alive")
-        response = opener.open(req)
-        json_source = json.load(response)
-        response.close()
+    headers = {
+        "Accept": "*/*",
+        "Accept-Encoding": "identity",
+        "Accept-Language": "en-US,en;q=0.8",
+        "Connection": "keep-alive",
+        "Authorization": authorization,
+        "User-Agent": UA_NHL,
+        "Proxy-Connection": "keep-alive"
+    }
 
-        try:
-            #Update session key to prevent sign-on a restriction in subsequent calls
-            session_key = json_source['session_key']
-            stream_url = json_source['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['url']
-            if cdn_url in stream_url: break
-            elif json_source['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['blackout_status']['status'] == 'BlackedOutStatus': break
-            elif CDN == 'No Preference': break
-        except:
-            i = i + 1
-
+    r = requests.get(url, headers=headers, cookies=load_cookies(), verify=VERIFY)
+    json_source = r.json()
 
     if json_source['status_code'] == 1:
         if json_source['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['blackout_status']['status'] == 'BlackedOutStatus':
@@ -545,19 +524,19 @@ def getSessionKey(game_id,event_id,content_id,authorization):
         epoch_time_now = str(int(round(time.time()*1000)))
 
         url = 'https://mf.svc.nhl.com/ws/media/mf/v2.4/stream?eventId='+event_id+'&format=json&platform='+PLATFORM+'&subject=NHLTV&_='+epoch_time_now
-        req = urllib2.Request(url)
-        req.add_header("Accept", "application/json")
-        req.add_header("Accept-Encoding", "deflate")
-        req.add_header("Accept-Language", "en-US,en;q=0.8")
-        req.add_header("Connection", "keep-alive")
-        req.add_header("Authorization", authorization)
-        req.add_header("User-Agent", UA_PC)
-        req.add_header("Origin", "https://www.nhl.com")
-        req.add_header("Referer", "https://www.nhl.com/tv/"+game_id+"/"+event_id+"/"+content_id)
+        headers = {
+            "Accept": "application/json",
+            "Accept-Encoding": "identity",
+            "Accept-Language": "en-US,en;q=0.8",
+            "Connection": "keep-alive",
+            "Authorization": authorization,
+            "User-Agent": UA_PC,
+            "Origin": "https://www.nhl.com",
+            "Referer": "https://www.nhl.com/tv/"+game_id+"/"+event_id+"/"+content_id
+        }
 
-        response = urllib2.urlopen(req)
-        json_source = json.load(response)
-        response.close()
+        r = requests.get(url, headers=headers, cookies=load_cookies(), verify=VERIFY)
+        json_source = r.json()
 
         xbmc.log("REQUESTED SESSION KEY")
         if json_source['status_code'] == 1:
@@ -592,31 +571,29 @@ def login():
         PASSWORD = json.dumps(PASSWORD)
 
     if USERNAME != '' and PASSWORD != '':
-        cj = cookielib.LWPCookieJar(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'))
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-
-        try:
-            cj.load(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'),ignore_discard=True)
-        except:
-            pass
-
-        #Get Token
         url = 'https://user.svc.nhl.com/oauth/token?grant_type=client_credentials'
-        req = urllib2.Request(url)
-        req.add_header("Accept", "application/json")
-        req.add_header("Accept-Encoding", "gzip, deflate, sdch")
-        req.add_header("Accept-Language", "en-US,en;q=0.8")
-        req.add_header("User-Agent", UA_PC)
-        req.add_header("Origin", "https://www.nhl.com")
-        #from https:/www.nhl.com/tv?affiliated=NHLTVLOGIN
-        req.add_header("Authorization", "Basic d2ViX25obC12MS4wLjA6MmQxZDg0NmVhM2IxOTRhMThlZjQwYWM5ZmJjZTk3ZTM=")
+        headers = {
+            "Accept": "application/json",
+            "Accept-Encoding": "identity",
+            "Accept-Language": "en-US,en;q=0.8",
+            "User-Agent": UA_PC,
+            "Origin": "https://www.nhl.com",
+            "Authorization": "Basic d2ViX25obC12MS4wLjA6MmQxZDg0NmVhM2IxOTRhMThlZjQwYWM5ZmJjZTk3ZTM=",
+        }
 
-        response = opener.open(req, '')
-        json_source = json.load(response)
+        r = requests.post(url, headers=headers, data='', cookies=load_cookies(), verify=VERIFY)
+        if r.status_code != 200:
+            msg = "Authorization Cookie couldn't be downloaded."
+            dialog = xbmcgui.Dialog()
+            ok = dialog.ok('Authorization Not Found', msg)
+            sys.exit()
+
+        json_source = r.json()
+
         authorization = getAuthCookie()
         if authorization == '':
             authorization = json_source['access_token']
-        response.close()
+
 
         if ROGERS_SUBSCRIBER == 'true':
             url = 'https://activation-rogers.svc.nhl.com/ws/subscription/flow/rogers.login'
@@ -626,65 +603,46 @@ def login():
             url = 'https://user.svc.nhl.com/v2/user/identity'
             login_data = '{"email":{"address":'+USERNAME+'},"type":"email-password","password":{"value":'+PASSWORD+'}}'
 
-
-        req = urllib2.Request(url, data=login_data, headers=
-            {"Accept": "*/*",
-             "Accept-Encoding": "gzip, deflate",
+        headers = {
+             "Accept": "*/*",
+             "Accept-Encoding": "identity",
              "Accept-Language": "en-US,en;q=0.8",
              "Content-Type": "application/json",
              "Authorization": authorization,
              "Connection": "keep-alive",
-             "User-Agent": UA_PC})
+             "User-Agent": UA_PC
+         }
 
-        try:
-            response = opener.open(req)
-        except HTTPError as e:
-            xbmc.log('The server couldn\'t fulfill the request.')
-            xbmc.log('Error code: ', e.code)
-            xbmc.log(url)
+        r = requests.post(url, headers=headers, data=login_data, cookies=load_cookies(), verify=VERIFY)
+        json_source = r.json()
+        if r.status_code != 200:
+            #msg = "Please check that your username and password are correct"
+            msg = json_source['message']
+            dialog = xbmcgui.Dialog()
+            ok = dialog.ok('Login Error', msg)
+            sys.exit()
 
-            #Error 401 for invalid login
-            if e.code == 401:
-                msg = "Please check that your username and password are correct"
-                dialog = xbmcgui.Dialog()
-                ok = dialog.ok('Invalid Login', msg)
-
-        #response = opener.open(req)
-        #user_data = response.read()
-        response.close()
-
-
-        cj.save(ignore_discard=True);
+        save_cookies(r.cookies)
 
 
 def logout(display_msg=None):
-    #from resources.lib.globals import *
-    cj = cookielib.LWPCookieJar(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'))
-    try:
-        cj.load(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'),ignore_discard=True)
-    except:
-        pass
-
-    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
     url = 'https://account.nhl.com/ui/rest/logout'
+    headers={
+        "Accept": "*/*",
+        "Accept-Encoding": "identity",
+        "Accept-Language": "en-US,en;q=0.8",
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Origin": "https://account.nhl.com/ui/SignOut?lang=en",
+        "Connection": "close",
+        "User-Agent": UA_PC
+    }
 
-    req = urllib2.Request(url, data='',
-          headers={"Accept": "*/*",
-                    "Accept-Encoding": "gzip, deflate",
-                    "Accept-Language": "en-US,en;q=0.8",
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "Origin": "https://account.nhl.com/ui/SignOut?lang=en",
-                    "Connection": "close",
-                    "User-Agent": UA_PC})
-
-    try:
-        response = opener.open(req)
-    except HTTPError as e:
+    r = requests.post(url, headers=headers, data='', cookies=load_cookies(), verify=VERIFY)
+    if r.status_code != 200:
         xbmc.log('The server couldn\'t fulfill the request.')
         xbmc.log('Error code: ', e.code)
         xbmc.log(url)
 
-    response.close()
 
     #Delete cookie file
     try: os.remove(ADDON_PATH_PROFILE+'cookies.lwp')
@@ -706,12 +664,9 @@ def myTeamsGames():
 
 
         url = API_URL+'schedule?teamId='+FAV_TEAM_ID+'&startDate='+start_day+'&endDate='+end_day+'&expand=schedule.teams,schedule.linescore,schedule.scoringplays,schedule.game.content.media.epg'
-        #${expand},schedule.ticket&${optionalParams}'
-        req = urllib2.Request(url)
-        req.add_header('User-Agent', UA_IPAD)
-        response = urllib2.urlopen(req)
-        json_source = json.load(response)
-        response.close()
+        headers = {'User-Agent': UA_IPHONE}
+        r = requests.get(url, headers=headers, cookies=load_cookies(), verify=VERIFY)
+        json_source = r.json()
 
         for date in reversed(json_source['dates']):
             #temp_date = stringToDate(date['date'], "%Y-%m-%d")
@@ -733,13 +688,11 @@ def playTodaysFavoriteTeam():
         end_day = localToEastern()
         start_day = end_day
 
-
         url = API_URL+'schedule?teamId='+FAV_TEAM_ID+'&startDate='+start_day+'&endDate='+end_day+'&expand=schedule.game.content.media.epg,schedule.teams'
-        req = urllib2.Request(url)
-        req.add_header('User-Agent', UA_IPAD)
-        response = urllib2.urlopen(req)
-        json_source = json.load(response)
-        response.close()
+        headers = {'User-Agent': UA_IPHONE}
+
+        r = requests.get(url, headers=headers, cookies=load_cookies(), verify=VERIFY)
+        json_source = r.json()
 
         stream_url = ''
         if json_source['dates']:
@@ -852,19 +805,12 @@ def gotoDate():
 def nhlVideos(selected_topic=None):
     #url = 'http://nhl.bamcontent.com/nhl/en/section/v1/video/nhl/ios-tablet-v1.json'
     url = 'http://nhl.bamcontent.com/nhl/en/nav/v1/video/connectedDevices/nhl/playstation-v1.json'
-    req = urllib2.Request(url)
-    #req.add_header('User-Agent', UA_IPAD)
-    req.add_header('User-Agent', UA_PS4)
 
-    try:
-        response = urllib2.urlopen(req)
-        json_source = json.load(response)
-        response.close()
-    except HTTPError as e:
-        xbmc.log('The server couldn\'t fulfill the request.')
-        xbmc.log('Error code: ', e.code)
-        sys.exit()
+    headers = {'User-Agent': UA_PS4,
+    }
 
+    r = requests.get(url, headers=headers, cookies=load_cookies(), verify=VERIFY)
+    json_source = r.json()
 
     if selected_topic == None or 'topic=' not in selected_topic:
         for topic in json_source['topics']:

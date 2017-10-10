@@ -1,3 +1,9 @@
+2017.10.9
+- Switched URL calls from urllib2 to requests
+- Improved code behind CDN selection
+- Fixed stream quality not being set in some cases
+- Code Clean Up
+
 2017.2.24
 - Patched bug released in previous version that affected Kodi 16.x users
 

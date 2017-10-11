@@ -72,7 +72,8 @@ class Main:
         # xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
         #     ADDON, VERSION, DATE, "html_source", str(html_source)), xbmc.LOGDEBUG)
 
-        seasons = soup.findAll('a', attrs={'href': re.compile("^" + HAK5SEASONSURLHTTPS)})
+        #<a href="https://www.hak5.org/category/episodes/season_1" data-ss1507745229="1">Season 1</a>
+        seasons = soup.findAll('a', attrs={'href': re.compile("^" + "https://www.hak5.org/category/episodes/season")})
 
         xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                 ADDON, VERSION, DATE, "len(seasons)", str(len(seasons))), xbmc.LOGDEBUG)

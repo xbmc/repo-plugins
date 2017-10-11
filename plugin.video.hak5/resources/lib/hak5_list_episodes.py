@@ -95,41 +95,25 @@ class Main:
         # xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
         #     ADDON, VERSION, DATE, "html_source", str(html_source)), xbmc.LOGDEBUG)
 
-        # <div id="post-8791" class="blog-item video-item post-8791 post type-post status-publish format-standard has-post-thumbnail hentry category-haktip ...
-        # <div class="row ">
-        # <div class="col-md-6 col-sm-6">
         # <div class="item-thumbnail">
-        # <a href="https://www.hak5.org/episodes/season-22/hak5-2217-bushveld-b-roll-hack-across-the-planet" title="Hak5 2217 – Bushveld B-Roll – Hack Across the Planet">
-        # <img width="300" height="169" src="https://www.hak5.org/wp-content/uploads/2017/07/hak5-2217-bushveld-b-roll-hack-a-300x169.jpg" ...
+        # <a href="https://www.hak5.org/episodes/3-billion-yahoo-accounts-hacked-disqus-hacked-threat-wire">
+        # <img width="520" height="293" src="https://www.hak5.org/wp-content/uploads/2017/10/3-billion-yahoo-accounts-hacked-520x293.jpg" class="attachment-thumb_520x293 size-thumb_520x293 wp-post-image" alt="" srcset="https://www.hak5.org/wp-content/uploads/2017/10/3-billion-yahoo-accounts-hacked-520x293.jpg 520w, https://www.hak5.org/wp-content/uploads/2017/10/3-billion-yahoo-accounts-hacked-150x84.jpg 150w, https://www.hak5.org/wp-content/uploads/2017/10/3-billion-yahoo-accounts-hacked-300x169.jpg 300w, https://www.hak5.org/wp-content/uploads/2017/10/3-billion-yahoo-accounts-hacked-1024x576.jpg 1024w, https://www.hak5.org/wp-content/uploads/2017/10/3-billion-yahoo-accounts-hacked-260x146.jpg 260w, https://www.hak5.org/wp-content/uploads/2017/10/3-billion-yahoo-accounts-hacked-356x200.jpg 356w, https://www.hak5.org/wp-content/uploads/2017/10/3-billion-yahoo-accounts-hacked-370x208.jpg 370w, https://www.hak5.org/wp-content/uploads/2017/10/3-billion-yahoo-accounts-hacked-180x101.jpg 180w, https://www.hak5.org/wp-content/uploads/2017/10/3-billion-yahoo-accounts-hacked-130x73.jpg 130w, https://www.hak5.org/wp-content/uploads/2017/10/3-billion-yahoo-accounts-hacked-748x421.jpg 748w, https://www.hak5.org/wp-content/uploads/2017/10/3-billion-yahoo-accounts-hacked-624x351.jpg 624w, https://www.hak5.org/wp-content/uploads/2017/10/3-billion-yahoo-accounts-hacked.jpg 1280w" sizes="(max-width: 520px) 100vw, 520px" /> <div class="link-overlay fa fa-search"></div>
         # </a>
         # </div>
-        # <div class="clearfix"></div>
-        # </div><!--/col6-->
-        # <div class="col-md-6 col-sm-6">
-        # <div class="item-head row">
-        # <div class="col-md-10 col-sm-10 col-xs-9">
-        # <h3><a class="maincolor2hover" href="https://www.hak5.org/episodes/season-22/hak5-2217-bushveld-b-roll-hack-across-the-planet" rel="8851"
-        # title="Hak5 2217 – Bushveld B-Roll – Hack Across the Planet">Hak5 2217 &#8211; Bushveld B-Roll &#8211; Hack Across the Planet</a></h3>
-        # <div class="blog-meta">
-        # <span><a href="https://www.hak5.org/author/snubs" title="Posts by Shannon Morse" rel="author">Shannon Morse</a></span> |
-        # <span><a href="https://www.hak5.org/category/episodes/season-22" rel="category tag">Season 22</a></span>
-        # |
-        # <span><a href="https://www.hak5.org/episodes/season-22/hak5-2217-bushveld-b-roll-hack-across-the-planet#respond">0 Comments</a></span>
-        # </div>
-        # </div>
-        # <div class="col-md-2 col-sm-2 col-xs-3">
-        # <div class="blog-date">
-        # <span>05</span>
-        # <span>Jul</span>
+        # <div class="item-head">
+        # <h3><a href="https://www.hak5.org/episodes/3-billion-yahoo-accounts-hacked-disqus-hacked-threat-wire" rel="9479" title="3 Billion Yahoo Accounts Hacked; Disqus Hacked! – Threat Wire">3 Billion Yahoo Accounts Hacked; Disqus Hacked! &#8211; Threat Wire</a>
+        # </h3>
+        # <div class="item-info hidden">
+        # <span class="item-author"><a href="https://www.hak5.org/author/snubs" title="Posts by Shannon Morse" rel="author">Shannon Morse</a></span>
+        # <span class="item-date">October 10, 2017</span>
+        # <div class="item-meta">
+        # <span><i class="fa fa-eye"></i> 0</span> <span><i class="fa fa-comment"></i> 0</span> <span><i class="fa fa-thumbs-up"></i> 0</span>
         # </div>
         # </div>
         # </div>
-        # <div class="blog-excerpt">
-        # <p>Happy 4th of July! Sign up for the London meetup at https://HackAcrossThePlanet.com &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;- Shop: ...
-        # <a href="https://www.hak5.org/episodes/season-22/hak5-2217-bushveld-b-roll-hack-across-the-planet" class="readmore maincolor2 bordercolor2 bgcolor2hover ...
+        # <div class="item-content hidden">
+        # <p>The Yahoo breach was a lot worse than we thought, the Equifax ex-CEO sheds light on some questions, disqus was hacked, and Kaspersky is stuck in the middle of debates. All that coming up now on ThreatWire. Hak5 Product Launch Event! October 20th: https://www.hak5.org/rsvp &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;- &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;- Shop: http://www.hakshop.com Support: http://www.patreon.com/threatwire Subscribe: http://www.youtube.com/hak5 Our Site: http://www.hak5.org [&hellip;]</p>
         # </div>
-        # </div><!--/col6-->
-        # </div><!--/row-->
         # <div class="clearfix"></div>
         # </div>
 
@@ -156,7 +140,9 @@ class Main:
             xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                 ADDON, VERSION, DATE, "thumbnail_url", str(thumbnail_url)), xbmc.LOGDEBUG)
 
-            title = episode.a['title']
+            pos_of_title_start = str(episode).find('title="') + len('title="')
+            pos_of_title_end = str(episode).find('"', pos_of_title_start)
+            title = str(episode)[pos_of_title_start:pos_of_title_end]
 
             # Clean up title
             try:

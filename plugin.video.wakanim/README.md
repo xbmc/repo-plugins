@@ -25,18 +25,15 @@ What this plugin currently can do:
 - [x] Supports Wakanim France, Germany and Nordic
 - [x] Login with your account
 - [x] Search for animes
-- [x] Show "My Downloads" (untested)
-- [x] Show "My Collection" (untested)
+- [x] Show "My Downloads"
+- [x] Show "My Collection"
 - [x] Show/browse all available anime
 - [x] Show/browse all seasons/arcs of an anime
 - [x] Show/browse all episodes of an season/arc
 - [x] Display various informations (Kodi displays not all we provide)
+- [x] Reactivate videos/streams
+- [x] Watch videos you have bought
 - [x] Watch videos with premium subscription
-
-What is planned for the future:
-- [ ] Watch videos you have bought (deactivated, untested)
-- [ ] Select video resolution (only for videos you bought, streams are adaptive)
-
 ***
 
 _This website and addon is not affiliated with Wakanim._

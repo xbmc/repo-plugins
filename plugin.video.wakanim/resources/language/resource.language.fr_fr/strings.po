@@ -24,26 +24,6 @@ msgctxt "#30002"
 msgid "Password"
 msgstr "Mot de passe"
 
-msgctxt "#30003"
-msgid "Video quality"
-msgstr "Qualité vidéo"
-
-msgctxt "#30004"
-msgid "720p (HD)"
-msgstr "720p (HD)"
-
-msgctxt "#30005"
-msgid "1080p (FullHD)"
-msgstr "1080p (FullHD)"
-
-msgctxt "#30006"
-msgid "1440p (QHD 2K)"
-msgstr "1440p (QHD 2K)"
-
-msgctxt "#30007"
-msgid "2160p (UDH 4K)"
-msgstr "2160p (UDH 4K)"
-
 msgctxt "#30010"
 msgid "Region"
 msgstr "Région"
@@ -79,6 +59,10 @@ msgctxt "#30023"
 msgid "My collection"
 msgstr "Ma collection"
 
+msgctxt "#30024"
+msgid "Watch trailer"
+msgstr "Regarde la bande-annonce"
+
 
 # Wakanim Messages
 
@@ -90,10 +74,14 @@ msgctxt "#30041"
 msgid "An error occurred"
 msgstr "Une erreur s'est produite"
 
+msgctxt "#30042"
+msgid "Reactivation failed of this video"
+msgstr "La réactivation a échoué de cette vidéo"
+
 msgctxt "#30043"
-msgid "You need to be premium or own this video"
-msgstr "Vous devez être premium ou posséder cette vidéo"
+msgid "You need to be a premium member or own this video"
+msgstr "Vous devez être un membre premium ou posséder cette vidéo"
 
 msgctxt "#30044"
-msgid "Failed to play video or stream"
-msgstr "Impossible de lire de la vidéo ou du flux"
+msgid "Failed to play video"
+msgstr "Impossible de lire de la vidéo"

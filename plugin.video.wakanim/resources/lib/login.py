@@ -40,6 +40,7 @@ def login(username, password, args):
     # lets urllib2 handle cookies
     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
     opener.addheaders = [("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36")]
+    opener.addheaders = [("Accept-Charset", "utf-8")]
     urllib2.install_opener(opener)
 
     # check if session exists

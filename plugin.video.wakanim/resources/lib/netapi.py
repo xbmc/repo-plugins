@@ -16,12 +16,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
+import sys
 import urllib
 import urllib2
 from bs4 import BeautifulSoup
 
 import xbmc
 import xbmcgui
+import xbmcplugin
 
 import login
 import view
@@ -45,18 +47,16 @@ def showCatalog(args):
             thumb = "https:" + thumb
 
         view.add_item(args,
-                      {"url":          li.a["href"],
-                       "title":        li.find("div", {"class": "slider_item_description"}).span.strong.string.encode("utf-8"),
-                       "mode":         "list_season",
-                       "thumb":        thumb,
-                       "fanart_image": thumb,
-                       "episode":      li.find("p", {"class": "tooltip_text"}).strong.string.split(" ")[0],
-                       "season":       li.find("span", {"class": "tooltip_season"}).string.split(" ")[0],
-                       "rating":       str(10 - len(star) * 2),
-                       "plot":         plot.contents[3].string.strip().encode("utf-8"),
-                       "year":         li.time.string},
+                      {"url":         li.a["href"],
+                       "title":       li.find("div", {"class": "slider_item_description"}).span.strong.string.strip().encode("utf-8"),
+                       "tvshowtitle": li.find("div", {"class": "slider_item_description"}).span.strong.string.strip().encode("utf-8"),
+                       "mode":        "list_season",
+                       "thumb":       thumb,
+                       "fanart":      thumb,
+                       "rating":      str(10 - len(star) * 2),
+                       "plot":        plot.contents[3].string.strip().encode("utf-8"),
+                       "year":        li.time.string.strip().encode("utf-8")},
                       isFolder=True, mediatype="video")
-
 
     view.endofdirectory()
 
@@ -87,18 +87,15 @@ def searchAnime(args):
             thumb = "https:" + thumb
 
         view.add_item(args,
-                      {"url":          li.a["href"],
-                       "title":        li.find("div", {"class": "slider_item_description"}).span.strong.string.encode("utf-8"),
-                       "mode":         "list_season",
-                       "thumb":        thumb,
-                       "fanart_image": thumb,
-                       "episode":      li.find("p", {"class": "tooltip_text"}).strong.string.split(" ")[0],
-                       "season":       li.find("span", {"class": "tooltip_season"}).string.split(" ")[0],
-                       "rating":       str(10 - len(star)*2),
-                       "plot":         plot.contents[3].string.strip().encode("utf-8"),
-                       "year":         li.time.string},
+                      {"url":    li.a["href"],
+                       "title":  li.find("div", {"class": "slider_item_description"}).span.strong.string.strip().encode("utf-8"),
+                       "mode":   "list_season",
+                       "thumb":  thumb,
+                       "fanart": thumb,
+                       "rating": str(10 - len(star) * 2),
+                       "plot":   plot.contents[3].string.strip().encode("utf-8"),
+                       "year":   li.time.string.strip().encode("utf-8")},
                       isFolder=True, mediatype="video")
-
 
     view.endofdirectory()
 
@@ -122,13 +119,12 @@ def myDownloads(args):
             thumb = "https:" + thumb
 
         view.add_item(args,
-                      {"url":          div.a["href"].replace("mydownloads/detail", "catalogue/show"),
-                       "title":        div.find("h3", {"class": "big-item_title"}).string.strip().encode("utf-8"),
-                       "mode":         "list_season",
-                       "thumb":        thumb,
-                       "fanart_image": thumb},
+                      {"url":    div.a["href"].replace("mydownloads/detail", "catalogue/show"),
+                       "title":  div.find("h3", {"class": "big-item_title"}).string.strip().encode("utf-8"),
+                       "mode":   "list_season",
+                       "thumb":  thumb,
+                       "fanart": thumb},
                       isFolder=True, mediatype="video")
-
 
     view.endofdirectory()
 
@@ -151,13 +147,12 @@ def myCollection(args):
             thumb = "https:" + thumb
 
         view.add_item(args,
-                      {"url":          div.a["href"].replace("collection/detail", "catalogue/show"),
-                       "title":        div.find("h3", {"class": "big-item_title"}).string.strip().encode("utf-8"),
-                       "mode":         "list_season",
-                       "thumb":        thumb,
-                       "fanart_image": thumb},
+                      {"url":    div.a["href"].replace("collection/detail", "catalogue/show"),
+                       "title":  div.find("h3", {"class": "big-item_title"}).string.strip().encode("utf-8"),
+                       "mode":   "list_season",
+                       "thumb":  thumb,
+                       "fanart": thumb},
                       isFolder=True, mediatype="video")
-
 
     view.endofdirectory()
 
@@ -170,24 +165,46 @@ def listSeason(args):
 
     soup = BeautifulSoup(html, "html.parser")
 
+    date = soup.find_all("span", {"class": "border-list_text"})[0].find_all("span")
+    year = date[2].string.strip().encode("utf-8")
+    date = year + "-" + date[1].string.strip().encode("utf-8") + "-" + date[0].string.strip().encode("utf-8")
+    originaltitle = soup.find_all("span", {"class": "border-list_text"})[1].string.strip().encode("utf-8")
+    plot = soup.find("div", {"class": "serie_description"}).string.strip().encode("utf-8")
+    credits = soup.find("div", {"class": "serie_description_more"}).p.string.strip().encode("utf-8")
+    trailer = soup.find("div", {"class": "TrailerEp-iframeWrapperRatio"})
+    try:
+        trailer = trailer.iframe["src"]
+        trailer = "plugin://plugin.video.youtube/play/?video_id=" + re.search(r"(?:\.be/|/embed)/?([^&=%:/\?]{11})", trailer).group(1)
+        view.add_item(args,
+                      {"url":    trailer,
+                       "mode":   "trailer",
+                       "thumb":  args.thumb.replace(" ", "%20"),
+                       "fanart": args.fanart.replace(" ", "%20"),
+                       "title":  args._addon.getLocalizedString(30024)},
+                      isFolder=False, mediatype="video")
+    except AttributeError:
+        trailer = ""
+
     for section in soup.find_all("h2", {"class": "slider-section_title"}):
         if not section.span:
             continue
         title = section.get_text()[6:].strip()
 
         view.add_item(args,
-                      {"url":          args.url,
-                       "title":        title.encode("utf-8"),
-                       "mode":         "list_episodes",
-                       "season":       title.encode("utf-8"),
-                       "thumb":        args.icon,
-                       "fanart_image": args.fanart,
-                       "episode":      args.episode,
-                       "rating":       args.rating,
-                       "plot":         args.plot,
-                       "year":         args.year},
+                      {"url":           args.url,
+                       "title":         title.encode("utf-8"),
+                       "mode":          "list_episodes",
+                       "thumb":         args.thumb.replace(" ", "%20"),
+                       "fanart":        args.fanart.replace(" ", "%20"),
+                       "season":        title.encode("utf-8"),
+                       "plot":          plot,
+                       "plotoutline":   getattr(args, "plot", ""),
+                       "year":          year,
+                       "premiered":     date,
+                       "trailer":       trailer,
+                       "originaltitle": originaltitle,
+                       "credits":       credits},
                       isFolder=True, mediatype="video")
-
 
     view.endofdirectory()
 
@@ -200,7 +217,7 @@ def listEpisodes(args):
 
     soup = BeautifulSoup(html, "html.parser")
 
-    for season in soup.findAll(text=args.season):
+    for season in soup.findAll(text=args.title):
         parent = season.find_parent("li")
         if not parent:
             continue
@@ -210,17 +227,12 @@ def listEpisodes(args):
             thumb = "https:" + thumb
 
         view.add_item(args,
-                      {"url":          parent.a["href"],
-                       "title":        parent.img["alt"].encode("utf-8"),
-                       "mode":         "videoplay",
-                       "thumb":        thumb,
-                       "fanart_image": args.fanart,
-                       "episode":      args.episode,
-                       "rating":       args.rating,
-                       "plot":         args.plot,
-                       "year":         args.year},
+                      {"url":    parent.a["href"],
+                       "title":  parent.img["alt"].encode("utf-8"),
+                       "mode":   "videoplay",
+                       "thumb":  args.thumb.replace(" ", "%20"),
+                       "fanart": args.fanart.replace(" ", "%20")},
                       isFolder=False, mediatype="video")
-
 
     view.endofdirectory()
 
@@ -239,36 +251,28 @@ def startplayback(args):
         xbmcgui.Dialog().ok(args._addonname, args._addon.getLocalizedString(30043))
         return
 
-    # prefer using download able videos
-    if "episode_download_buttons" in html and 1==0: # TODO
-        """
-        div = soup.find("div", {"class": "episode_download_buttons"})
-        if div:
-            for file in reversed(div.find_all("a")):
-                try:
-                    url = "https://www.wakanim.tv" + file["href"] + login.getCookie(args)
-                    item = xbmcgui.ListItem(args.name, path=url)
-                    item.setInfo(type="Video", infoLabels={"Title":       args.name,
-                                                            "TVShowTitle": args.name,
-                                                            "episode":        args.episode,
-                                                            "rating":        args.rating,
-                                                            "plot":            args.plot,
-                                                            "year":            args.year,
-                                                            "studio":        args.studio})
-                    item.setThumbnailImage(args.icon)
-                    xbmc.Player().play(url, item)
-                    return
-                except:
-                    pass
-        else:
-            xbmc.log("[PLUGIN] %s: Failed to play video" % args._addonname, xbmc.LOGERROR)
-            xbmcgui.Dialog().ok(args._addonname, args._addon.getLocalizedString(30044))
-        """
+    # check if we have to reactivate video
+    if "reactivate" in html:
+        # reactivate video
+        a = soup.find("div", {"id": "jwplayer-container"}).a["href"]
+        response = urllib2.urlopen("https://www.wakanim.tv" + a)
+        html = response.read()
 
-    # using stream with hls
-    elif ("Unser Player ist in der Beta-Phase. Klicke hier, um den alten Player zu benutzen" in html) or ("Changer de lecteur" in html) or ("Our player is in beta, click here to go back to the old one" in html):
+        # reload page
+        response = urllib2.urlopen("https://www.wakanim.tv" + args.url)
+        html = response.read()
+        soup = BeautifulSoup(html, "html.parser")
+
+        # check if successfull
+        if "reactivate" in html:
+            xbmc.log("[PLUGIN] %s: Reactivation failed '%s'" % (args._addonname, args.url), xbmc.LOGERROR)
+            xbmcgui.Dialog().ok(args._addonname, args._addon.getLocalizedString(30042))
+            return
+
+    # using stream with hls+aes
+    if ("Unser Player ist in der Beta-Phase. Klicke hier, um den alten Player zu benutzen" in html) or ("Changer de lecteur" in html) or ("Our player is in beta, click here to go back to the old one" in html):
         # streaming is only for premium subscription
-        if ("<span>Kostenlos</span>" in html) or ("<span>Gratuit</span>" in html) or ("<span>Free</span>" in html):
+        if (("<span>Kostenlos</span>" in html) or ("<span>Gratuit</span>" in html) or ("<span>Free</span>" in html)) and not ("episode_premium_title" in html):
             xbmc.log("[PLUGIN] %s: You need to own this video or be a premium member '%s'" % (args._addonname, args.url), xbmc.LOGERROR)
             xbmcgui.Dialog().ok(args._addonname, args._addon.getLocalizedString(30043))
             return
@@ -278,19 +282,14 @@ def startplayback(args):
         matches = re.search(regex, html).group(1)
 
         if matches:
-            # file url
+            # manifest url
             url = "https://www.wakanim.tv" + matches
 
             # play stream
-            item = xbmcgui.ListItem(args.name, path=url + login.getCookie(args))
-            item.setInfo(type="Video", infoLabels={"Title":       args.name,
-                                                   "TVShowTitle": args.name,
-                                                   "episode":     args.episode,
-                                                   "rating":      args.rating,
-                                                   "plot":        args.plot,
-                                                   "year":        args.year})
-            item.setThumbnailImage(args.icon)
-            xbmc.Player().play(url + login.getCookie(args), item)
+            item = xbmcgui.ListItem(getattr(args, "title", "Title not provided"), path=url + login.getCookie(args))
+            item.setMimeType("application/vnd.apple.mpegurl")
+            item.setContentLookup(False)
+            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
         else:
             xbmc.log("[PLUGIN] %s: Failed to play stream" % args._addonname, xbmc.LOGERROR)
             xbmcgui.Dialog().ok(args._addonname, args._addon.getLocalizedString(30044))

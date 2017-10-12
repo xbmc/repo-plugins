@@ -10,8 +10,10 @@ import sys
 import urllib2
 from urllib import urlencode
 from urlparse import parse_qsl
+from urlparse import urljoin
 from xml.etree import ElementTree
 
+import xbmc
 import xbmcaddon
 import xbmcplugin
 import xbmcgui
@@ -20,7 +22,7 @@ import xbmcgui
 __author__ = "Petr Kutalek (petr@kutalek.cz)"
 __copyright__ = "Copyright (c) Petr Kutalek, 2015-2017"
 __license__ = "GPL 2, June 1991"
-__version__ = "2.0.1"
+__version__ = "2.0.2"
 
 HANDLE = int(sys.argv[1])
 ADDON = xbmcaddon.Addon("plugin.video.aktualnetv")
@@ -97,14 +99,15 @@ def _list_videos(offset=0):
 def _parse_root(rss):
     """Parses RSS feed into a list of item dictionaries
     """
-    def _parse_duration(duration):
-        """Parses duration in the format of 0:00
+    def _parse_duration(duration="0"):
+        """Parses duration in the format of 0:00, or 0:00:00
         Returns number of seconds
         """
         secs = 0
-        if duration.find(":") > -1:
-            (m, s) = duration.split(":", 1)
-            secs = 60 * int(m) + int(s)
+        j = 1
+        for s in reversed(duration.split(":", 2)):
+            secs = secs + int(s) * j
+            j *= 60
         return secs
 
     def _parse_rfc822_date(date):
@@ -112,6 +115,16 @@ def _parse_root(rss):
         """
         return datetime.datetime.fromtimestamp(
             email.utils.mktime_tz(email.utils.parsedate_tz(date)))
+
+    def _parse_cover(url):
+        """Parses cover photo url
+        Returns an address for square thumbnail (323 x 323 px)
+        or original url if could not be modified
+        """
+        return re.sub(
+            u".+/([0-9a-z]{2}/[0-9a-z]{2}/[0-9a-f]{28})_.+?\\.(jpg|png)\\?.+",
+            u"https://cdn.i0.cz/thumb/public-data/\\1_r1:1_thumb.\\2",
+            url)
 
     NS = {
         "media": "http://search.yahoo.com/mrss/",
@@ -124,7 +137,8 @@ def _parse_root(rss):
     items = []
     root = ElementTree.fromstring(rss)
     for i in root.findall(".//channel/item", NS):
-        if i.find(".//blackbox:extra", NS).attrib.get("subtype") == "playlist":
+        if i.find(".//blackbox:extra", NS).attrib.get("subtype") \
+            == "playlist":
             continue
         items.append({
             "title": i.find(".//title", NS).text.strip(),
@@ -132,10 +146,14 @@ def _parse_root(rss):
             "pubdate": _parse_rfc822_date(
                 i.find(".//pubDate", NS).text.strip()),
             "duration": _parse_duration(
-                i.find(".//blackbox:extra", NS).attrib.get("duration", "0:00")),
-            "cover": i.find(
-                ".//media:group/media:content", NS).attrib["url"],
+                i.find(".//blackbox:extra", NS).attrib.get("duration", "0")),
+            "cover": _parse_cover(i.find(
+                ".//media:group/media:content[@height='300']",
+                NS).attrib["url"]),
+            # ideally XPath 2.0: ".//media:group/media:content[@height=
+            # max(.//media:group/media:content/@height)]"
             "guid": i.find(".//guid", NS).text.strip(),
+            "category": i.find(".//category", NS).text.strip(),
             })
     return items
 
@@ -149,9 +167,16 @@ def _build_list(items, offset=None):
             "title": i["title"],
             "plot": i["description"],
             "duration": i["duration"],
-            "studio": u"Economia, a. s.",
+            "studio": u"Online Partners s.r.o.",
             "genre": u"News",
-            "date": i["pubdate"].strftime("%d.%m.%Y"),
+            "aired": i["pubdate"].strftime("%Y-%m-%d"),
+            #"cast": [
+            #    (u"Daniela Drtinová", u"1"),
+            #    (u"Martin Veselovský", u"2"),
+            #    ],
+            "tvshowtitle": i["category"],
+            "tag": i["category"],
+            "imdbnumber": "tt7030366",
             })
         li.setArt({
             "thumb": i["cover"],
@@ -181,15 +206,28 @@ def _get_source(token, preference=None):
 
     webpage = _download_file(
         "https://video.aktualne.cz/-/r~{0}/".format(token)).decode("utf-8")
-
-    live = re.findall(u"liveStarter.+?\"(http.+?)\"", webpage, re.DOTALL)
+    live = re.findall(u"asset\\.liveStarter = {.+?\"(http.+?)\"",
+        webpage, re.DOTALL)
     if len(live) > 0:
-        return live[0]
-
-    sources = re.findall(u"sources:\s*(\[{.+?}\])", webpage, re.DOTALL)[0]
-    sources = u"{{ \"sources\": {0} }}".format(sources)
-    sources = json.loads(sources)
-    sources = sources["sources"]
+        xbmc.log(
+            "plugin.video.aktualnetv: Playing live video", xbmc.LOGNOTICE)
+        index_url = live[0].replace("\\/", "/")
+        index_lines = _download_file(index_url).decode("utf-8").split("\n")
+        sources = []
+        for params, path in zip(index_lines[1::2], index_lines[2::2]):
+            resolution = re.findall(
+                u":RESOLUTION=[0-9]+?x([0-9]+?),",
+                params, re.DOTALL)[0]
+            sources.append({
+                "file": urljoin(index_url, path),
+                "label": "{0}p".format(resolution),
+                })
+    else:
+        sources = re.findall(
+            u"sources:\s*(\[{.+?}\])", webpage, re.DOTALL)[0]
+        sources = u"{{ \"sources\": {0} }}".format(sources)
+        sources = json.loads(sources)
+        sources = sources["sources"]
     sources = sorted(sources, key=_get_quality, reverse=True)
     result = sources[0]["file"]
     if preference:
@@ -198,7 +236,6 @@ def _get_source(token, preference=None):
                 result = s["file"]
                 break
     return result
-
 
 def _play_video(token):
     """Resolves file plugin into actual video file

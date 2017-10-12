@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.aktualnetv" version="2.0.1" name="Aktualne TV" provider-name="Petr Kutalek">
+<addon id="plugin.video.aktualnetv" version="2.0.2" name="Aktualne TV" provider-name="Petr Kutalek">
   <requires>
     <import addon="xbmc.python" version="2.24.0"/>
   </requires>
@@ -35,7 +35,12 @@
       <screenshot>resources/screenshot-3.jpg</screenshot>
     </assets>
 
-    <news><![CDATA[ [B]2.0.1[/B]
+    <news><![CDATA[ [B]2.0.2[/B]
+— Fix hadling timecodes with hours (0:00:00)
+— Live streaming respects quality settings
+— Improved metadata and cover handling
+
+[B]2.0.1[/B]
 — Fix video list parsing
 — Fix live streams
     

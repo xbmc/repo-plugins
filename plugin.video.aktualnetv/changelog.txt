@@ -1,3 +1,8 @@
+ [B]2.0.2[/B]
+— Fix hadling timecodes with hours (0:00:00)
+— Live streaming respects quality settings
+— Improved metadata and cover handling
+
 [B]2.0.1[/B]
 — Fix video list parsing
 — Fix live streams

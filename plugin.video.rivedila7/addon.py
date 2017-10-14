@@ -1,3 +1,4 @@
+import re
 import os
 import sys
 import xbmc
@@ -7,9 +8,9 @@ import xbmcaddon
 import urllib
 import urllib2
 import urlparse
+import requests
 import html5lib
 from bs4 import BeautifulSoup
-import re
 
 addon = xbmcaddon.Addon()
 language = addon.getLocalizedString
@@ -17,20 +18,21 @@ handle = int(sys.argv[1])
 url_rivedi="http://www.la7.it/rivedila7"
 url_tutti_programmi="http://www.la7.it/tutti-i-programmi"
 url_live="http://www.la7.it/dirette-tv"
-url_base="http://www.la7.it"
+url_base="http://www.la7.it"    
 headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36'}
 pagenum=0
 
 def parameters_string_to_dict(parameters):
     paramDict = dict(urlparse.parse_qsl(parameters[1:]))
     return paramDict
+
 def show_root_menu():
     ''' Show the plugin root menu '''
     liStyle = xbmcgui.ListItem(language(32001))
     addDirectoryItem({"mode": "rivedi_la7"},liStyle)
-    #liStyle = xbmcgui.ListItem(language(32002))
-    #addDirectoryItem({"mode": "diretta_live"},liStyle)
-    liStyle = xbmcgui.ListItem("Tutti i programmi")
+    liStyle = xbmcgui.ListItem(language(32002))
+    addDirectoryItem({"mode": "diretta_live"},liStyle)
+    liStyle = xbmcgui.ListItem(language(32006))
     addDirectoryItem({"mode": "tutti_programmi"},liStyle)
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
@@ -53,6 +55,7 @@ def rivedi_la7():
             liStyle = xbmcgui.ListItem(dateRowWeek.contents[0]+" "+dateDay.contents[0]+" "+dateMonth.contents[0])
             addDirectoryItem({"mode": "rivedi_la7","giorno": a}, liStyle)
         xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
+
 def get_video_link(url,live):
     req = urllib2.Request(url,headers=headers) 
     page=urllib2.urlopen(req)
@@ -69,23 +72,36 @@ def get_video_link(url,live):
         res=re.findall('src: vS,//"(.*?)"', html)
         if res:
             return res[0]
+
 def play_video(video,live):
-    if "tg.la7.it" in video:
+
+    if live:
+        s = requests.Session()
+        req = s.get(video,headers=headers)
+        html = req.text
+        vS = re.findall('var vS = \'(.*?)\';', html)
+        try:
+            link_video = vS[0]
+        except:
+            xbmc.log('[RivediLa7] Unable to find video url')
+    if not live and "tg.la7.it" in video:
         req = urllib2.Request(video,headers=headers) 
         page=urllib2.urlopen(req)
         html=BeautifulSoup(page,'html5lib')
         if html.find("iframe"):
             video=html.find("iframe")['src']
-    if "la7.it" in video:
+    if not live and  "la7.it" in video:
         link_video=get_video_link(video,live)
-    else:
+    elif not live:
         link_video=get_video_link(url_base+video,live)       
+
     listitem =xbmcgui.ListItem(titolo_global)
     listitem.setInfo('video', {'Title': titolo_global})
     if (thumb_global != ""):
         listitem.setArt({ 'thumb': thumb_global})
     listitem.setInfo('video', { 'plot': plot_global })
     xbmc.Player().play(link_video, listitem)
+
 def rivedi_la7_giorno():
     req = urllib2.Request(url_base+giorno,headers=headers) 
     page=urllib2.urlopen(req)
@@ -104,6 +120,7 @@ def rivedi_la7_giorno():
             url2 = sys.argv[0] + '?' + urllib.urlencode({"mode": "rivedi_la7","play": urll,"titolo": nome,"thumb":thumb,"plot":plot.encode('utf-8')})
             xbmcplugin.addDirectoryItem(handle=handle, url=url2,listitem=liStyle, isFolder=False)
         xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
+
 def tutti_programmi():
     req = urllib2.Request(url_tutti_programmi,headers=headers) 
     page=urllib2.urlopen(req)
@@ -116,6 +133,7 @@ def tutti_programmi():
             addDirectoryItem({"mode": "tutti_programmi","lettera": lettere[i].contents[0]}, liStyle)
             i=i+1
         xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
+
 def programmi_lettera():
     req = urllib2.Request(url_tutti_programmi,headers=headers) 
     page=urllib2.urlopen(req)
@@ -134,6 +152,7 @@ def programmi_lettera():
                         liStyle.setArt({ 'thumb': thumb})
                 addDirectoryItem({"mode": "tutti_programmi","link": link}, liStyle)
         xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
+
 def video_programma():  
     if pagenum==0:      
         req = urllib2.Request(link_global+"/rivedila7",headers=headers) 
@@ -204,9 +223,9 @@ elif mode=="tutti_programmi":
             video_programma()
     else:
         play_video(play,False)
-#elif mode=="diretta_live":
-#    titolo_global=language(32002)
-#    thumb_global=""
-#    play_video(url_live,True)
+elif mode=="diretta_live":
+    titolo_global=language(32002)
+    thumb_global=""
+    play_video(url_live,True)
 else:
     show_root_menu()

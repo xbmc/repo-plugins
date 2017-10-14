@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.rivedila7" name="RivediLa7" version="0.0.8" provider-name="Luivit">
+<addon id="plugin.video.rivedila7" name="RivediLa7" version="0.0.9" provider-name="Luivit">
   <requires>
     <import addon="xbmc.python" version="2.24.0"/>
-	<import addon="script.module.beautifulsoup4" version="4.3.2"/>
+  <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+  <import addon="script.module.requests" version="2.12.4"/>
 	<import addon="script.module.html5lib" version="0.999.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">

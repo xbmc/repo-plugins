@@ -98,14 +98,6 @@ msgctxt "#30212"
 msgid "Video restricted"
 msgstr "Vídeo restrito"
 
-msgctxt "#30211"
-msgid "Force Language Change"
-msgstr "Forçar Alteração do Idioma"
-
-msgctxt "#30300"
-msgid "Disabled"
-msgstr "Desativado"
-
 msgctxt "#30301"
 msgid "English (US)"
 msgstr "English (US)"

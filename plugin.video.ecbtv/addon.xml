@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.ecbtv" name="ECB TV" version="0.3.0" provider-name="Leopold">
+  <requires>
+    <import addon="xbmc.python" version="2.25.0"/>
+    <import addon="script.module.kodiswift" version="0.0.8" optional="false"/>
+    <import addon="script.module.beautifulsoup4" version="4.3.1" optional="false"/>
+    <import addon="script.module.requests" version="2.4.3" optional="false"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <language>en</language>
+    <summary lang="en_gb">Watch videos from ECB TV</summary>
+    <description lang="en_gb">This video plugin provides access to the videos from the official site of the England and Wales Cricket Board.</description>
+    <website>http://www.ecb.co.uk</website>
+    <source>https://github.com/LS80/plugin.video.ecbtv.git</source>
+    <license>MIT</license>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+    </assets>
+  </extension>
+</addon>

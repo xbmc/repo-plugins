@@ -23,7 +23,7 @@ Current Features
 * Missed Shows
 * Blacklist Shows
 * JSON(Service API V3) or HTML Scraper
-
+* Restart Livestream - inputstream.adaptive needed
 
 
 Known Issues

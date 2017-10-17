@@ -1,28 +1,36 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import urllib,urllib2,re,xbmcgui,sys,xbmcaddon,datetime,time,os,os.path,urlparse,json
 
-from base import *
-from Scraper import *
+import datetime
+import json
+import sys
+import time
+import urllib
+import urllib2
+import xbmcaddon
+import xbmcgui
+
+from .base import *
+from .Scraper import *
 
 class serviceAPI(Scraper):
 
 	__urlBase       = 'https://api-tvthek.orf.at/api/v3/'
-	__urlLive       = __urlBase + 'livestreams/24hours?limit=1000'
-	__urlMostViewed = __urlBase + 'page/startpage'
-	__urlNewest     = __urlBase + 'page/startpage/newest'
+	__urlLive       = 'livestreams/24hours?limit=1000'
+	__urlMostViewed = 'page/startpage'
+	__urlNewest     = 'page/startpage/newest'
 	__urlSearch     = __urlBase + 'search/%s?limit=1000'
-	__urlShows      = __urlBase + 'profiles?limit=1000'
-	__urlTips       = __urlBase + 'page/startpage/tips'
-	__urlTopics     = __urlBase + 'topics/overview?limit=1000'
+	__urlShows      = 'profiles?limit=1000'
+	__urlTips       = 'page/startpage/tips'
+	__urlTopics     = 'topics/overview?limit=1000'
 
-	serviceAPIEpisode    = __urlBase + 'episode/%s'
-	serviceAPIDate       = __urlBase + 'schedule/%s?limit=1000'
-	serviceAPIDateFrom   = __urlBase + 'schedule/%s/%d?limit=1000'
-	serviceAPIProgram    = __urlBase + 'profile/%s/episodes'
-	servieAPITopic       = __urlBase + 'topic/%s'
-	serviceAPITrailers   = __urlBase + 'page/preview?limit=100'
-	serviceAPIHighlights = __urlBase + 'page/startpage'
+	serviceAPIEpisode    = 'episode/%s'
+	serviceAPIDate       = 'schedule/%s?limit=1000'
+	serviceAPIDateFrom   = 'schedule/%s/%d?limit=1000'
+	serviceAPIProgram    = 'profile/%s/episodes'
+	servieAPITopic       = 'topic/%s'
+	serviceAPITrailers   = 'page/preview?limit=100'
+	serviceAPIHighlights = 'page/startpage'
 
 
 	def __init__(self, xbmc, settings, pluginhandle, quality, protocol, delivery, defaultbanner, defaultbackdrop):
@@ -41,7 +49,7 @@ class serviceAPI(Scraper):
 		try:
 			response = self.__makeRequest(self.serviceAPIHighlights)
 			responseCode = response.getcode()
-		except urllib2.HTTPError, error:
+		except urllib2.HTTPError as error:
 			responseCode = error.getcode()
 
 		if responseCode == 200:
@@ -54,7 +62,7 @@ class serviceAPI(Scraper):
 		try:
 			response = self.__makeRequest(self.__urlMostViewed)
 			responseCode = response.getcode()
-		except urllib2.HTTPError, error:
+		except urllib2.HTTPError as error:
 			responseCode = error.getcode()
 
 		if responseCode == 200:
@@ -75,7 +83,7 @@ class serviceAPI(Scraper):
 		try:
 			response = self.__makeRequest(urlAPI)
 			responseCode = response.getcode()
-		except urllib2.HTTPError, error:
+		except urllib2.HTTPError as error:
 			responseCode = error.getcode()
 
 		if responseCode == 200:
@@ -127,7 +135,7 @@ class serviceAPI(Scraper):
 		try:
 			response = self.__makeRequest(self.__urlShows)
 			responseCode = response.getcode()
-		except urllib2.HTTPError, error:
+		except urllib2.HTTPError as error:
 			responseCode = error.getcode()
 
 		if responseCode == 200:
@@ -209,9 +217,9 @@ class serviceAPI(Scraper):
 		try:
 			response = self.__makeRequest(self.__urlTopics)
 			responseCode = response.getcode()
-		except ValueError, error:
+		except ValueError as error:
 			responseCode = 404
-		except urllib2.HTTPError, error:
+		except urllib2.HTTPError as error:
 			responseCode = error.getcode()
 
 		if responseCode == 200:
@@ -230,9 +238,9 @@ class serviceAPI(Scraper):
 		try:
 			response = self.__makeRequest(self.serviceAPITrailers)
 			responseCode = response.getcode()
-		except ValueError, error:
+		except ValueError as error:
 			responseCode = 404
-		except urllib2.HTTPError, error:
+		except urllib2.HTTPError as error:
 			responseCode = error.getcode()
 
 		if responseCode == 200:
@@ -261,36 +269,48 @@ class serviceAPI(Scraper):
 		try:
 			response = self.__makeRequest(self.__urlLive)
 			responseCode = response.getcode()
-		except urllib2.HTTPError, error:
+		except urllib2.HTTPError as error:
 			responseCode = error.getcode()
 
 		if responseCode == 200:
+			try:
+				xbmcaddon.Addon('inputstream.adaptive')
+				inputstreamAdaptive = True
+			except RuntimeError:
+				inputstreamAdaptive = False
+
 			for result in json.loads(response.read()).get('_embedded').get('items'):
 				description     = result.get('description')
 				programName     = result.get('_embedded').get('channel').get('name')
 				livestreamStart = time.strptime(result.get('start')[0:19], '%Y-%m-%dT%H:%M:%S')
 				livestreamEnd   = time.strptime(result.get('end')[0:19],   '%Y-%m-%dT%H:%M:%S')
 				duration        = max(time.mktime(livestreamEnd) - max(time.mktime(livestreamStart), time.mktime(time.localtime())), 1)
+				contextMenuItems = []
 
+				# already finished
+				if time.mktime(livestreamEnd) < time.mktime(time.localtime()):
+					continue
 				# already playing
-				if livestreamStart < time.localtime():
+				elif livestreamStart < time.localtime():
 					link = self.JSONStreamingURL(result.get('sources')) + '|User-Agent=Mozilla'
+					if inputstreamAdaptive and result.get('restart'):
+						contextMenuItems.append(('Restart', 'RunPlugin(plugin://%s/?mode=liveStreamRestart&link=%s)' % (xbmcaddon.Addon().getAddonInfo('id'), result.get('id'))))
 				else:
 					link = sys.argv[0] + '?' + urllib.urlencode({'mode': 'liveStreamNotOnline', 'link': result.get('id')})
 
-				title = "[%s] %s (%s)" % (programName, result.get('title'), time.strftime('%H:%M', livestreamStart))
+				title = "[%s]%s %s (%s)" % (programName, '[Restart]' if inputstreamAdaptive and result.get('restart') else '', result.get('title'), time.strftime('%H:%M', livestreamStart))
 
 				banner = self.JSONImage(result.get('_embedded').get('image'))
 
-				createListItem(title, banner, description, duration, time.strftime('%Y-%m-%d', livestreamStart), programName, link, True, False, self.defaultbackdrop, self.pluginhandle)
+				createListItem(title, banner, description, duration, time.strftime('%Y-%m-%d', livestreamStart), programName, link, True, False, self.defaultbackdrop, self.pluginhandle, contextMenuItems = contextMenuItems)
 		else:
 			xbmcgui.Dialog().notification(self.translation(30045).encode('UTF-8'), self.translation(30046).encode('UTF-8'), xbmcaddon.Addon().getAddonInfo('icon'))
 
 	def getLiveNotOnline(self,link):
 		try:
-			response = self.__makeRequest(self.__urlBase + 'livestream/' + link)
+			response = self.__makeRequest('livestream/' + link)
 			responseCode = response.getcode()
-		except urllib2.HTTPError, error:
+		except urllib2.HTTPError as error:
 			responseCode = error.getcode()
 
 		if responseCode == 200:
@@ -313,11 +333,44 @@ class serviceAPI(Scraper):
 					self.xbmc.Player().play(streamingURL, listItem)
 
 
-	@staticmethod
-	def __makeRequest(url):
-		request = urllib2.Request(url)
+	def liveStreamRestart(self, link):
+		try:
+			xbmcaddon.Addon('inputstream.adaptive')
+		except RuntimeError:
+			return
+
+		try:
+			response = self.__makeRequest('livestream/' + link)
+			responseCode = response.getcode()
+		except urllib2.HTTPError as error:
+			responseCode = error.getcode()
+
+		if responseCode == 200:
+			result = json.loads(response.read())
+
+			title       = result.get('title').encode('UTF-8')
+			image       = self.JSONImage(result.get('_embedded').get('image'))
+			description = result.get('description')
+			duration    = result.get('duration_seconds')
+			date        = time.strptime(result.get('start')[0:19], '%Y-%m-%dT%H:%M:%S')
+
+			ApiKey = '2e9f11608ede41f1826488f1e23c4a8d'
+			bitmovinStreamId = result.get('_embedded').get('channel').get('bitmovin_stream_id')
+			response = urllib2.urlopen('http://restarttv-delivery.bitmovin.com/livestreams/%s/sections/?state=active&X-Api-Key=%s' % (bitmovinStreamId, ApiKey)) # nosec
+			section = json.loads(response.read())[0]
+
+			streamingURL = 'http://restarttv-delivery.bitmovin.com/livestreams/%s/sections/%s/manifests/hls/?startTime=%s&X-Api-Key=%s' % (bitmovinStreamId, section.get('id'), section.get('metaData').get('timestamp'), ApiKey)
+
+			listItem = createListItem(title, image, description, duration, time.strftime('%Y-%m-%d', date), result.get('_embedded').get('channel').get('name'), streamingURL, True, False, self.defaultbackdrop, self.pluginhandle)
+			listItem.setProperty('inputstreamaddon', 'inputstream.adaptive')
+			listItem.setProperty('inputstream.adaptive.manifest_type', 'hls')
+			self.xbmc.Player().play(streamingURL, listItem)
+
+
+	def __makeRequest(self, url):
+		request = urllib2.Request(self.__urlBase + url) # nosec
 		request.add_header('Authorization', 'Basic %s' % 'cHNfYW5kcm9pZF92Mzo2YTYzZDRkYTI5YzcyMWQ0YTk4NmZkZDMxZWRjOWU0MQ==')
-		return urllib2.urlopen(request)
+		return urllib2.urlopen(request) # nosec
 
 
 	def __JSONEpisode2ListItem(self, JSONEpisode, ignoreEpisodeType = None):

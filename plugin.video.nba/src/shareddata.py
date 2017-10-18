@@ -4,7 +4,7 @@ import json
 class SharedData:
 
 	def __init__(self):
-		self.folder = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile'));
+		self.folder = xbmc.translatePath(xbmcaddon.Addon().getAddonInfo('profile')).decode("utf-8")
 		self.file_path = self.folder + "shared_data.json"
 
 	def __getFileContent(self):

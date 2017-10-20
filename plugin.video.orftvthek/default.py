@@ -1,7 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import urllib,re,xbmcplugin,xbmcgui,sys,xbmcaddon,socket,os,os.path,urlparse,json
+import os.path
+import socket
+import sys
+import urllib
+import xbmcaddon
+import xbmcgui
+import xbmcplugin
+
 import CommonFunctions as common
 
 from resources.lib.base import *
@@ -18,7 +25,7 @@ except ImportError:
 socket.setdefaulttimeout(30)
 cache = StorageServer.StorageServer("plugin.video.orftvthek", 999999)
 
-version = "0.7.2"
+version = "0.8.0"
 plugin = "ORF-TVthek-" + version
 author = "sofaking,Rechi"
 
@@ -111,13 +118,13 @@ def getMainMenu():
         addDirectory((translation(30037)).encode("utf-8"),blacklist_banner,defaultbackdrop, "","","openBlacklist",pluginhandle)
     listCallback(False,pluginhandle)
 
-    
+
 def listCallback(sort,pluginhandle):
     xbmcplugin.setContent(pluginhandle,'episodes')
     if sort:
         xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
     xbmcplugin.endOfDirectory(pluginhandle)
-    
+
 def startPlaylist(player,playlist):
     if playlist != None:
         player.play(playlist)
@@ -125,7 +132,7 @@ def startPlaylist(player,playlist):
         d = xbmcgui.Dialog()
         d.ok((translation(30051)).encode("utf-8"), (translation(30050)).encode("utf-8"),'')
 
-    
+
 #modes
 if mode == 'openSeries':
     playlist.clear()
@@ -139,7 +146,7 @@ if mode == 'openSeries':
             tvthekplayer.play(playlist)
     else:
         listCallback(False,pluginhandle)
-        
+
 elif mode == 'unblacklistShow':
     heading = translation(30040).encode('UTF-8') % urllib.unquote(link).replace('+', ' ').strip()
     if xbmcgui.Dialog().yesno(heading, heading):
@@ -218,6 +225,8 @@ elif mode == 'openEpisode':
 elif mode == 'liveStreamNotOnline':
     scraper.getLiveNotOnline(link)
     listCallback(False,pluginhandle)
+elif mode == 'liveStreamRestart':
+    scraper.liveStreamRestart(link)
 elif mode == 'playlist':
     startPlaylist(tvthekplayer,playlist)
 elif sys.argv[2] == '':

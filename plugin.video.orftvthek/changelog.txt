@@ -1,3 +1,9 @@
+0.8.0
+- Restart Option working (inputstream.adaptive needed)
+- minor changes and optimizations for the serviceAPI Scraper
+- code cleanup
+
+
 0.7.2
 - Fixed Livestream issue by passing UA
 
@@ -41,7 +47,7 @@
 - Fixed Errors caused by changes on the TVThek Website
 - Added Error Message for ServiceAPI Offline Status
 - Disable the ServiceAPI for now. All known urls are offline
-- Removed 'Disable GeoBlock' Option - doesnt seem to work anymore 
+- Removed 'Disable GeoBlock' Option - doesnt seem to work anymore
 
 0.5.3
 - Added HD Stream Option (720p)
@@ -87,7 +93,7 @@
 
 0.3.1
 - fixed 404 on list icon
-- changed fanart 
+- changed fanart
 
 0.3.0
 - using parsedom now

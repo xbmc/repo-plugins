@@ -12,16 +12,12 @@ def parameters_string_to_dict(parameters):
             if (len(paramSplits)) == 2:
                 paramDict[paramSplits[0]] = paramSplits[1]
     return paramDict
-    
-    
-def cleanText(string):
-    string = string.replace('\\n', '').replace("&#160;"," ").replace("&quot;","'").replace('&amp;', '&').replace('&#039;', '´')
-    return string
-    
+
+
 def debugLog(message,type):
     output = "[ORF TVTHEK] ("+type+") "+message;
-    xbmc.log(msg=output, level=xbmc.LOGDEBUG)   
-    
+    xbmc.log(msg=output, level=xbmc.LOGDEBUG)
+
 def notifyUser(message):
     addon = xbmcaddon.Addon()
     name = addon.getAddonInfo('name')

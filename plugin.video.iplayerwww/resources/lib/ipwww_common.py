@@ -419,27 +419,27 @@ def CreateBaseDirectory(content_type):
             live_mode = 123
         AddMenuEntry(translation(30329), 'cbeebies_hd', live_mode,
                      xbmc.translatePath(
-                         'special://home/addons/plugin.video.iplayerwww/media/cbeebies.png'
+                         'special://home/addons/plugin.video.iplayerwww/media/cbeebies_hd.png'
                      ),
                      '', '')
         AddMenuEntry(translation(30330), 'cbbc_hd', live_mode,
                      xbmc.translatePath(
-                         'special://home/addons/plugin.video.iplayerwww/media/cbbc.png'
+                         'special://home/addons/plugin.video.iplayerwww/media/cbbc_hd.png'
                      ),
                      '', '')
         AddMenuEntry(translation(30331), 'cbeebies', 125,
                      xbmc.translatePath(
-                         'special://home/addons/plugin.video.iplayerwww/media/cbeebies.png'
+                         'special://home/addons/plugin.video.iplayerwww/media/cbeebies_hd.png'
                      ),
                      '', '')
         AddMenuEntry(translation(30332), 'cbbc', 125,
                      xbmc.translatePath(
-                         'special://home/addons/plugin.video.iplayerwww/media/cbbc.png'
+                         'special://home/addons/plugin.video.iplayerwww/media/cbbc_hd.png'
                      ),
                      '', '')
         AddMenuEntry(translation(30333), 'p02pnn9d', 131,
                      xbmc.translatePath(
-                         'special://home/addons/plugin.video.iplayerwww/media/cbeebies.png'
+                         'special://home/addons/plugin.video.iplayerwww/media/cbeebies_hd.png'
                      ),
                      '', '')
         return

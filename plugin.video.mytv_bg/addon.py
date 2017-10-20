@@ -87,7 +87,7 @@ SITE_LOGIN_PAGE = SITE_PATH + 'user/signin'
 @plugin.route('/')
 def main_menu():
 
-    request = urllib2.Request(ONLI_MASTER_MENU, headers={"User-Agent" : "XBMC/Kodi BGTime.TV Addon " + str(__version__)})
+    request = urllib2.Request(ONLI_MASTER_MENU, headers={"User-Agent" : "XBMC/Kodi MyTV Addon " + str(__version__)})
     response = urllib2.urlopen(request)
 
     dataNew = json.loads(response.read())
@@ -213,7 +213,7 @@ def tvPlay(url, title, show_title, tracking_key):
 				'stream_started': str_time,
 				'current_time'	: int(player.getTime()),
 			}
-			if counter == 120 and tracking_key is not None:
+			if counter == 90 and tracking_key is not None:
 				counter = 0
 				player.reportPlaybackProgress(player.info, 'progress')
 		counter += 1
@@ -229,11 +229,12 @@ class Player(xbmc.Player):
 	tracking_key 	= None
 	is_live 		= None
 	is_playing 		= False
-
+	
 	def __init__(self):
 		xbmc.Player.__init__(self)
 
 	def onPlayBackStarted(self):
+
 		if self.tracking_key is not None:
 			now = datetime.datetime.today()
 			str_time = int(time.mktime(now.timetuple()))
@@ -251,26 +252,42 @@ class Player(xbmc.Player):
 		pass
 		
 	def onPlayBackStopped(self):
+
 		if self.info is not None:
 			self.reportPlaybackProgress(self.info, 'stop')
+			
 		self.is_playing = False
 
 	def onPlayBackSeek(self, time, seekOffset):
 		pass
+
+	def getToken(self):
+			if os.path.isfile(__token_filepath__):
+				fopen = open(__token_filepath__, "r")
+				temp_token = fopen.read()
+				fopen.close()
+				if temp_token:
+					arr = temp_token.partition(" ")
+					token = arr[0]
+					if arr[2] and arr[2] != __addon__.getSetting('username'):
+						token = '';
+					temp_token = ''
+		
+			if not token: return
+			return token
 		
 	def reportPlaybackProgress(self, info, action):
+		token = self.getToken()
 		if info is None: return
 		if self.tracking_key is not None:
-			
-			res = login(
-					plugin.get_setting('username'), 
-					plugin.get_setting('password'),
-					'tracking/report_playback',
-					{'key'				: self.tracking_key, 
+			data ={	'token'			: token,
+					'key'			: self.tracking_key,
 					'stream_started'	: str(int(info['stream_started'])),
 					'current_time'		: str(int(info['current_time'])),
-					'action' 			: action
-				})
+					'action'		: action,
+				}
+			send = urllib.urlencode(data)
+			request = urllib2.Request(SITE_PATH +'tracking/report_playback', send, headers={"User-Agent" :  xbmc.getUserAgent()+ " MyTV Addon " + str(__version__)})
 
 # END # 
 
@@ -312,7 +329,7 @@ class login:
 	
 	def getData(self, url):
 		send = urllib.urlencode(self.data)
-		self.request = urllib2.Request(url, send, headers={"User-Agent" : "XBMC/Kodi BGTime.TV Addon " + str(__version__)})
+		self.request = urllib2.Request(url, send, headers={"User-Agent" : "XBMC/Kodi MyTV Addon " + str(__version__)})
 		
 		try:
 			response = urllib2.urlopen(self.request)

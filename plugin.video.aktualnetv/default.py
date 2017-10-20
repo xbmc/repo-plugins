@@ -22,7 +22,7 @@ import xbmcgui
 __author__ = "Petr Kutalek (petr@kutalek.cz)"
 __copyright__ = "Copyright (c) Petr Kutalek, 2015-2017"
 __license__ = "GPL 2, June 1991"
-__version__ = "2.0.2"
+__version__ = "2.0.3"
 
 HANDLE = int(sys.argv[1])
 ADDON = xbmcaddon.Addon("plugin.video.aktualnetv")
@@ -126,6 +126,9 @@ def _parse_root(rss):
             u"https://cdn.i0.cz/thumb/public-data/\\1_r1:1_thumb.\\2",
             url)
 
+    def _get_text(node, default=""):
+        return node.text.strip() if node is not None else default
+
     NS = {
         "media": "http://search.yahoo.com/mrss/",
         "atom": "http://www.w3.org/2005/Atom",
@@ -141,19 +144,19 @@ def _parse_root(rss):
             == "playlist":
             continue
         items.append({
-            "title": i.find(".//title", NS).text.strip(),
-            "description": i.find(".//description", NS).text.strip(),
+            "title": _get_text(i.find(".//title", NS), "?"),
+            "description": _get_text(i.find(".//description", NS)),
             "pubdate": _parse_rfc822_date(
-                i.find(".//pubDate", NS).text.strip()),
+                _get_text(i.find(".//pubDate", NS))),
             "duration": _parse_duration(
                 i.find(".//blackbox:extra", NS).attrib.get("duration", "0")),
             "cover": _parse_cover(i.find(
                 ".//media:group/media:content[@height='300']",
-                NS).attrib["url"]),
+                NS).attrib.get("url", ICON)),
             # ideally XPath 2.0: ".//media:group/media:content[@height=
             # max(.//media:group/media:content/@height)]"
-            "guid": i.find(".//guid", NS).text.strip(),
-            "category": i.find(".//category", NS).text.strip(),
+            "guid": _get_text(i.find(".//guid", NS)),
+            "category": _get_text(i.find(".//category", NS)),
             })
     return items
 

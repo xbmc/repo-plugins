@@ -1,4 +1,7 @@
- [B]2.0.2[/B]
+ [B]2.0.3[/B]
+— cat-and-mouse game; fix missing category
+
+[B]2.0.2[/B]
 — Fix hadling timecodes with hours (0:00:00)
 — Live streaming respects quality settings
 — Improved metadata and cover handling

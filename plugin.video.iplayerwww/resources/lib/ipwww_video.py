@@ -306,7 +306,7 @@ def ScrapeEpisodes(page_url):
     for page in page_range:
 
         if page > current_page:
-            page_url = 'http://www.bbc.co.uk' + page_base_url + str(page)
+            page_url = 'https://www.bbc.co.uk' + page_base_url + str(page)
             html = OpenURL(page_url)
 
         # NOTE remove inner li to match outer li
@@ -1161,11 +1161,15 @@ def ListMainHighlights(highlights_url):
             if button_match:
                 is_group = True
 
-            href = ''
+            url = ''
             href_match = re.match(
                 r'<a href="(.*?)"', programme, flags=(re.DOTALL | re.MULTILINE))
             if href_match:
                 href = href_match.group(1)
+                if href.startswith('http'):
+                    url = href
+                else:
+                    url = 'https://www.bbc.co.uk' + href
 
             name = ''
             if group_type == "popular":
@@ -1212,10 +1216,10 @@ def ListMainHighlights(highlights_url):
                             category_match.group(1), 125, '', '', '')
                 else:
                     AddMenuEntry('[B]%s: %s[/B]' % (translation(30314), name),
-                        href, 128, '', '', '')
+                        url, 128, '', '', '')
 
             else:
-                CheckAutoplay(name, href, iconimage, description, '')
+                CheckAutoplay(name, url, iconimage, description, '')
 
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)

@@ -30,7 +30,7 @@ import view
 def main():
     """Main function for the addon
     """
-    args = cmdargs.parse_args()
+    args = cmdargs.parse()
 
     # check if account is set
     username = args._addon.getSetting("wakanim_username")
@@ -70,20 +70,18 @@ def check_mode(args):
     """
     if hasattr(args, "mode"):
         mode = args.mode
-    else:
+    elif hasattr(args, "id"):
         # call from other plugin
         mode = "videoplay"
-        args.name = "Video"
-        args.episode, args.rating, args.plot, args.year, args.icon = ("None",) * 5
+        args.url = "/" + args._country + "/v2/catalogue/episode/" + args.id
+    elif hasattr(args, "id"):
+        # call from other plugin
+        mode = "videoplay"
+        args.url = args.url[22:]
+    else:
+        mode = None
 
-        if hasattr(args, "id"):
-            args.url = "/" + args._country + "/v2/catalogue/episode/" + args.id
-        elif hasattr(args, "url"):
-            args.url = args.url[22:]
-        else:
-            mode = None
-
-    if mode is None:
+    if not mode:
         showMainMenue(args)
     elif mode == "catalog":
         netapi.showCatalog(args)
@@ -99,6 +97,9 @@ def check_mode(args):
         netapi.listEpisodes(args)
     elif mode == "videoplay":
         netapi.startplayback(args)
+    elif mode == "trailer":
+        item = xbmcgui.ListItem(getattr(args, "title", "Title not provided"), path=args.url)
+        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
     else:
         # unkown mode
         xbmc.log("[PLUGIN] %s: Failed in check_mode '%s'" % (args._addonname, str(mode)), xbmc.LOGERROR)

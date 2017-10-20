@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import re
 import sys
 import urllib
 
@@ -24,53 +23,52 @@ import xbmcgui
 import xbmcplugin
 
 
+# keys allowed in setInfo
+types = ["count", "size", "date", "genre", "year", "episode", "season", "top250", "tracknumber",
+         "rating", "userrating", "watched", "playcount", "overlay", "cast", "castandrole", "director",
+         "mpaa", "plot", "plotoutline", "title", "originaltitle", "sorttitle", "duration", "studio",
+         "tagline", "writer", "tvshowtitle", "premiered", "status", "code", "aired", "credits", "lastplayed",
+         "album", "artist", "votes", "trailer", "dateadded", "mediatype"]
+
 def endofdirectory():
-    # Sort methods are required in library mode
+    # sort methods are required in library mode
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_NONE)
 
-    # Let xbmc know the script is done adding items to the list
-    dontAddToHierarchy = False
-    xbmcplugin.endOfDirectory(handle = int(sys.argv[1]), updateListing = dontAddToHierarchy)
+    # let xbmc know the script is done adding items to the list
+    xbmcplugin.endOfDirectory(handle = int(sys.argv[1]))
 
 
-def add_item(args, info, isFolder=True, total_items=0, queued=False, rex=re.compile(r"(?<=mode=)[^&]*"), mediatype="video"):
+def add_item(args, info, isFolder=True, total_items=0, mediatype="video"):
     """Add item to directory listing.
     """
-    # Defaults in dict. Use "None" instead of None so it is compatible for
-    info = set_info_defaults(args, info)
-    u = build_url(info)
 
-    # Create list item
-    li = xbmcgui.ListItem(label          = info["title"],
-                          iconImage      = info["thumb"],
-                          thumbnailImage = info["thumb"])
+    # create list item
+    li = xbmcgui.ListItem(label = info["title"])
+
+    # get infoLabels
+    infoLabels = make_infolabel(args, info)
+    infoLabels["genre"] = "Anime"
+
+    # get url
+    u = build_url(args, info)
+
     if isFolder:
-        li.setInfo(type       = mediatype,
-                   infoLabels = {"title":     info["title"],
-                                 "plot":      info["plot"],
-                                 "year":      info["year"],
-                                 "episode":   info["episode"],
-                                 "season":    info["season"],
-                                 "rating":    info["rating"],
-                                 "genre":     "Anime"})
+        # directory
+        li.setInfo(mediatype, infoLabels)
     else:
-        li.setInfo(type       = mediatype,
-                   infoLabels = {"mediatype": "video",
-                                 "title":     info["title"],
-                                 "plot":      info["plot"],
-                                 "year":      info["year"],
-                                 "episode":   info["episode"],
-                                 "season":    info["season"],
-                                 "rating":    info["rating"],
-                                 "genre":     "Anime"})
+        # playable video
+        infoLabels["mediatype"] = "video"
+        li.setInfo(mediatype, infoLabels)
+        li.setProperty("IsPlayable", "true")
 
-    li.setArt({"thumb":  info["thumb"],
-               "poster": info["thumb"],
-               "banner": info["thumb"],
-               "fanart": info["fanart_image"],
-               "icon":   info["thumb"]})
+    # set media image
+    li.setArt({"thumb":  info.get("thumb",  "DefaultFolder.png"),
+               "poster": info.get("thumb",  "DefaultFolder.png"),
+               "banner": info.get("thumb",  "DefaultFolder.png"),
+               "fanart": info.get("fanart", xbmc.translatePath(args._addon.getAddonInfo("fanart"))),
+               "icon":   info.get("thumb",  "DefaultFolder.png")})
 
-    # Add item to list
+    # add item to list
     xbmcplugin.addDirectoryItem(handle     = int(sys.argv[1]),
                                 url        = u,
                                 listitem   = li,
@@ -78,60 +76,35 @@ def add_item(args, info, isFolder=True, total_items=0, queued=False, rex=re.comp
                                 totalItems = total_items)
 
 
-def build_url(info):
-    # Create params for xbmcplugin module
-    s = sys.argv[0]    +\
-        "?url="        + urllib.quote_plus(info["url"])          +\
-        "&mode="       + urllib.quote_plus(info["mode"])         +\
-        "&name="       + urllib.quote_plus(info["title"])        +\
-        "&id="         + urllib.quote_plus(info["id"])           +\
-        "&count="      + urllib.quote_plus(info["count"])        +\
-        "&series_id="  + urllib.quote_plus(info["series_id"])    +\
-        "&filterx="    + urllib.quote_plus(info["filterx"])      +\
-        "&offset="     + urllib.quote_plus(info["offset"])       +\
-        "&icon="       + urllib.quote_plus(info["thumb"])        +\
-        "&complete="   + urllib.quote_plus(info["complete"])     +\
-        "&fanart="     + urllib.quote_plus(info["fanart_image"]) +\
-        "&season="     + urllib.quote_plus(info["season"])       +\
-        "&media_type=" + urllib.quote_plus(info["media_type"])   +\
-        "&year="       + urllib.quote_plus(info["year"])         +\
-        "&playhead="   + urllib.quote_plus(info["playhead"])     +\
-        "&duration="   + urllib.quote_plus(info["duration"])     +\
-        "&episode="    + urllib.quote_plus(info["episode"])      +\
-        "&rating="     + urllib.quote_plus(info["rating"])       +\
-        "&plot="       + urllib.quote_plus(info["plot"])
-    return s
+def build_url(args, info):
+    """Create url
+    """
+    s = ""
+    # step 1 copy new information from info
+    for key, value in info.iteritems():
+        if value:
+            s = s + "&" + key + "=" + urllib.quote_plus(value)
+
+    # step 2 copy old information from args, but don't append twice
+    for key, value in args.__dict__.iteritems():
+        if value and key in types and not "&" + str(key) + "=" in s:
+            s = s + "&" + key + "=" + urllib.quote_plus(value)
+
+    return sys.argv[0] + "?" + s[1:]
 
 
-def set_info_defaults(args, info):
-    # Defaults in dict. Use "None" instead of None so it is compatible for
-    # quote_plus in parseArgs.
-    info.setdefault("url",          "None")
-    info.setdefault("thumb",        "DefaultFolder.png")
-    info.setdefault("fanart_image",
-                    xbmc.translatePath(args._addon.getAddonInfo("fanart")))
-    info.setdefault("count",        "0")
-    info.setdefault("filterx",      "None")
-    info.setdefault("id",           "None")
-    info.setdefault("series_id",    "None")
-    info.setdefault("offset",       "0")
-    info.setdefault("season",       "1")
-    info.setdefault("series_id",    "0")
-    info.setdefault("page_url",     "None")
-    info.setdefault("complete",     "True")
-    info.setdefault("media_type",   "None")
-    info.setdefault("title",        "None")
-    info.setdefault("year",         "0")
-    info.setdefault("playhead",     "0")
-    info.setdefault("duration",     "0")
-    info.setdefault("episode",      "0")
-    info.setdefault("plot",         "None")
-    info.setdefault("percent",      "0")
-    info.setdefault("ordering",     "0")
-    info.setdefault("rating",       "0")
-    info.setdefault("studio",       "None")
-    # And set all None to "None"
-    for key, value in info.items():
-        if value == None:
-            info[key] = "None"
-    return info
+def make_infolabel(args, info):
+    """Generate infoLabels from existing dict
+    """
+    infoLabels = {}
+    # step 1 copy new information from info
+    for key, value in info.iteritems():
+        if value and key in types:
+            infoLabels[key] = value
+
+    # step 2 copy old information from args, but don't overwrite
+    for key, value in args.__dict__.iteritems():
+        if value and key in types and key not in infoLabels:
+            infoLabels[key] = value
+
+    return infoLabels

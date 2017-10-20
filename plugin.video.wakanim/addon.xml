@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.wakanim" name="Wakanim" version="0.3.0" provider-name="MrKrabat">
+<addon id="plugin.video.wakanim" name="Wakanim" version="0.5.0" provider-name="MrKrabat">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.beautifulsoup4" version="4.3.2"/>
@@ -19,7 +19,7 @@
         <disclaimer lang="en_GB">WARNING: You MUST be a PREMIUM member or BUY videos to use this plugin</disclaimer>
         <disclaimer lang="de_DE">HINWEIS: Du MUSST PREMIUM Mitglied sein oder Videos KAUFEN um dieses Plugin zu benutzen</disclaimer>
         <disclaimer lang="fr_FR">AVERTISSEMENT: VOUS DEVEZ être un membre PREMIUM ou ACHETER des vidéos pour utiliser ce plugin</disclaimer>
-        <news>v0.3.0 (2017.10.03)[CR]- Added nordic support</news>
+        <news>v0.5.0 (2017.10.10)[CR]- Removed internal server redirect</news>
         <license>GNU Affero General Public License, v3</license>
         <forum>https://www.kodinerds.net/index.php/Thread/58348-Release-Wakanim-tv/</forum>
         <website>https://www.wakanim.tv/</website>
@@ -28,6 +28,9 @@
         <assets>
             <icon>icon.png</icon>
             <fanart>fanart.jpg</fanart>
+            <screenshot>resources/media/screenshot-01.jpg</screenshot>
+            <screenshot>resources/media/screenshot-02.jpg</screenshot>
+            <screenshot>resources/media/screenshot-03.jpg</screenshot>
         </assets>
     </extension>
 </addon>

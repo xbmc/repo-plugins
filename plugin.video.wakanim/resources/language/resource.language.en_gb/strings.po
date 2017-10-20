@@ -24,26 +24,6 @@ msgctxt "#30002"
 msgid "Password"
 msgstr ""
 
-msgctxt "#30003"
-msgid "Video quality"
-msgstr ""
-
-msgctxt "#30004"
-msgid "720p (HD)"
-msgstr ""
-
-msgctxt "#30005"
-msgid "1080p (FullHD)"
-msgstr ""
-
-msgctxt "#30006"
-msgid "1440p (QHD 2K)"
-msgstr ""
-
-msgctxt "#30007"
-msgid "2160p (UDH 4K)"
-msgstr ""
-
 msgctxt "#30010"
 msgid "Region"
 msgstr ""
@@ -58,6 +38,10 @@ msgstr ""
 
 msgctxt "#30013"
 msgid "Sweden, Norway, Iceland, Finland, Denmark"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Watch trailer"
 msgstr ""
 
 
@@ -90,10 +74,14 @@ msgctxt "#30041"
 msgid "An error occurred"
 msgstr ""
 
+msgctxt "#30042"
+msgid "Reactivation failed of this video"
+msgstr ""
+
 msgctxt "#30043"
-msgid "You need to be premium or own this video"
+msgid "You need to be a premium member or own this video"
 msgstr ""
 
 msgctxt "#30044"
-msgid "Failed to play video or stream"
+msgid "Failed to play video"
 msgstr ""

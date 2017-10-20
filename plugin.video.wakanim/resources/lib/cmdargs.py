@@ -17,33 +17,26 @@
 
 import sys
 import urllib
+import urlparse
 
 
-def parse_args():
-    """Decode arguments.
+def parse():
+    """Decode arguments
     """
     if (sys.argv[2]):
-        return Args(**dict([p.split("=")
-                                for p in sys.argv[2][1:].split("&")]))
-
+        return Args(urlparse.parse_qs(sys.argv[2][1:]))
     else:
-        # Args will turn the "None" into None.
-        # Don't simply define it as None because unquote_plus in updateArgs
-        # will throw an exception.
-        # This is a pretty ugly solution.
-        return Args(mode = "None",
-                    url  = "None",
-                    name = "None")
+        return Args({})
 
 
 class Args(object):
-    """Arguments class.
+    """Arguments class
     Hold all arguments passed to the script and also persistent user data and
     reference to the addon. It is intended to hold all data necessary for the
     script.
     """
-    def __init__(self, *args, **kwargs):
-        """Initialize arguments object.
+    def __init__(self, kwargs):
+        """Initialize arguments object
         Hold also references to the addon which can't be kept at module level.
         """
         self._addon     = sys.modules["__main__"]._addon
@@ -52,8 +45,7 @@ class Args(object):
         self._cj        = None
 
         for key, value in kwargs.iteritems():
-            if value == "None":
-                kwargs[key] = None
-            else:
-                kwargs[key] = urllib.unquote_plus(kwargs[key])
+            if value:
+                kwargs[key] = urllib.unquote_plus(value[0])
+
         self.__dict__.update(kwargs)

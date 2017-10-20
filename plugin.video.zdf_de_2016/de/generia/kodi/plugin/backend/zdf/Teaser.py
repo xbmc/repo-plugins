@@ -11,11 +11,14 @@ teaserPattern = getTagPattern('article', 'b-content-teaser-item')
 sourcePattern = compile('class="m-16-9"[^>]*data-srcset="([^"]*)"')
 labelPattern = getTagPattern('div', 'teaser-label')
 iconPattern = compile('class="icon-[0-9]*_([^ ]*) icon">')
-catPattern = compile('class="teaser-cat"[^>]*>([^<]*)</[^>]*>')
+catPattern = compile('class="teaser-cat\s*[^"]*"[^>]*>')
+catCategoryPattern = compile('class="teaser-cat-category\s*[^"]*"[^>]*>([^<]*)</[^>]*>')
+catBrandPattern = compile('class="teaser-cat-brand\s*[^"]*"[^>]*>([^<]*)</[^>]*>')
 aPattern = compile('href="([^"]*)"[^>]*>')
 titleIconPattern = compile('class="title-icon icon-[0-9]*_([^"]*)">')
 textPattern = compile('class="teaser-text"[^>]*>([^<]*)</[^>]*>')
 datePattern = compile('class="video-airing"[^>]*>([^<]*)</[^>]*>')
+apiTokenPattern = compile('"apiToken"\s*:\s*"([^"]*)"')
 
     
 def compareTeasers(t1, t2):
@@ -58,6 +61,7 @@ class Teaser(object):
     type = None
     playable = False
     contentName = None
+    apiToken = None
     
     def __init__(self):
         pass
@@ -66,7 +70,7 @@ class Teaser(object):
         return self.title is not None and self.url is not None and self.url[0:1] == '/' 
      
     def __str__(self):
-        return "<Teaser '%s' url='%s'>" % (self.title, self.url)
+        return "<Teaser '%s' url='%s' apiToken='%s'>" % (self.title, self.url, self.apiToken)
         
 
     def parse(self, string, pos=0, baseUrl=None, teaserMatch=None):
@@ -129,12 +133,18 @@ class Teaser(object):
         category = None
 
         if catMatch is not None:
-            parts = catMatch.group(1).strip().split('|')
-            if len(parts) > 0:
-                genre = parts[0].strip()
-            if len(parts) > 1:
-                category = parts[1].strip()
             pos = catMatch.end(0)
+
+            catCategoryMatch = catCategoryPattern.search(article, pos)
+            if catCategoryMatch is not None:
+                genre = catCategoryMatch.group(1).strip()
+                pos = catCategoryMatch.end(0)
+
+            catBrandMatch = catBrandPattern.search(article, pos)
+            if catBrandMatch is not None:
+                category = catBrandMatch.group(1).strip()
+                pos = catBrandMatch.end(0)
+                            
             
         self.genre = stripHtml(genre)
         self.category = stripHtml(category)
@@ -196,5 +206,17 @@ class Teaser(object):
             pos = dateMatch.end(0)
     
         self.date = date
+        return pos
+
+
+    def parseApiToken(self, article, pos, pattern=apiTokenPattern):
+        apiTokenMatch = pattern.search(article, pos)
+        
+        apiToken = None
+        if apiTokenMatch is not None:
+            apiToken = apiTokenMatch.group(1)
+            pos = apiTokenMatch.end(0) 
+
+        self.apiToken = apiToken
         return pos
         

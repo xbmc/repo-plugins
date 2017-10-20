@@ -16,14 +16,14 @@ class RubricsPage(AbstractPage):
     ]
     
     def service(self, request, response):
-        apiToken = request.getParam('apiToken')
 
         navigation = NavigationResource(Constants.baseUrl)
         self._parse(navigation)
+
         for rubric in navigation.rubrics:
             if self._isExcluded(rubric):
                 continue
-            response.addFolder(self._(32004) + ' - ' + rubric.title, Action('RubricPage', {'apiToken': apiToken, 'rubricUrl': rubric.url}))
+            response.addFolder(self._(32004) + ' - ' + rubric.title, Action('RubricPage', {'rubricUrl': rubric.url}))
 
     def _isExcluded(self, rubric):
         for url in self.excludedRubricUrls:

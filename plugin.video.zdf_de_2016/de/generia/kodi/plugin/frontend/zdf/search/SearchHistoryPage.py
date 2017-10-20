@@ -22,12 +22,10 @@ class SearchHistoryPage(AbstractPage):
         self.searchHistory = searchHistory
 
     def service(self, request, response):
-        apiToken = request.getParam('apiToken')
-
         entries = self.searchHistory.getEntries()
         
         for entry in entries:
-            params = {'apiToken': apiToken, 'q': entry.query }
+            params = {'q': entry.query }
             if entry.contentTypes is not None:
                 params['contentTypes'] = entry.contentTypes
                 

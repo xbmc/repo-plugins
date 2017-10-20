@@ -13,7 +13,6 @@ from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
 class RubricPage(AbstractPage):
 
     def service(self, request, response):
-        apiToken = request.getParam('apiToken')
         rubricUrl = request.getParam('rubricUrl')
         listType = request.getParam('listType')
         listStart = int(request.getParam('listStart', -1))
@@ -23,7 +22,7 @@ class RubricPage(AbstractPage):
 
         rubricResource = RubricResource(Constants.baseUrl + rubricUrl, listType, listStart, listEnd)
         self._parse(rubricResource)
-        
+
         if rubricResource.isRedirect:
             self.info("redirect detected to url='{}', skipping ...", rubricResource.responseLocation)
             dialog = xbmcgui.Dialog()
@@ -34,19 +33,19 @@ class RubricPage(AbstractPage):
         
         if listType is not None:
             if len(clusters) == 1:
-                self._renderTeasers(clusters[0].teasers, response, apiToken)
+                self._renderTeasers(clusters[0].teasers, response)
             else:
                 self.warn("can't find cluster of type '{}' in rubric-url '{}'", listType, rubricUrl)
         else:
-            self._checkTeasers(rubricResource.teasers, apiToken)
-            self._renderTeasers(rubricResource.teasers, response, apiToken)
-            self._renderClusters(clusters, response, apiToken, rubricUrl)
+            self._checkTeasers(rubricResource.teasers, rubricResource.configApiToken)
+            self._renderTeasers(rubricResource.teasers, response)
+            self._renderClusters(clusters, response, rubricUrl)
             
         
-    def _renderClusters(self, clusters, response, apiToken, rubricUrl):
+    def _renderClusters(self, clusters, response, rubricUrl):
         for cluster in clusters:
             clusterTitle = cluster.title #.encode('ascii', 'ignore')
-            action = Action(pagelet='RubricPage', params={'apiToken': apiToken, 'rubricUrl': rubricUrl, 'listType': cluster.listType, 'listStart': str(cluster.listStart), 'listEnd': str(cluster.listEnd)})
+            action = Action(pagelet='RubricPage', params={'rubricUrl': rubricUrl, 'listType': cluster.listType, 'listStart': str(cluster.listStart), 'listEnd': str(cluster.listEnd)})
             item = Item(cluster.title, action, isFolder=True)
             response.addItem(item)            
     
@@ -60,9 +59,9 @@ class RubricPage(AbstractPage):
                 self._parse(videoContent)
                 teaser.image = videoContent.image
                     
-    def _renderTeasers(self, teasers, response, apiToken):
+    def _renderTeasers(self, teasers, response):
         for teaser in teasers:
-            item = self._createItem(teaser, apiToken)
+            item = self._createItem(teaser)
             if item is not None:
                 response.addItem(item)
             else:

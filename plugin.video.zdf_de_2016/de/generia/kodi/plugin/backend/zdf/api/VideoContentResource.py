@@ -31,7 +31,6 @@ class VideoContentResource(ApiResource):
                     self.image = value
                     break
             
-        self.url = None
         self.duration = None
         self.streamInfoUrl = None
         if 'mainVideoContent' in self.content:

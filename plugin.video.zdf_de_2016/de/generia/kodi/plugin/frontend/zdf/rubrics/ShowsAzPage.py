@@ -7,8 +7,6 @@ from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
 class ShowsAzPage(AbstractPage):
 
     def service(self, request, response):
-        apiToken = request.getParam('apiToken')
-
         rubricBaseUrl = '/sendungen-a-z?group='
         groups = []
         for i in range (0, 26):
@@ -18,5 +16,5 @@ class ShowsAzPage(AbstractPage):
         
         for group in groups:
             url = rubricBaseUrl + group.replace(' ', '+')
-            response.addFolder(self._(32038, group.upper()), Action('RubricPage', {'apiToken': apiToken, 'rubricUrl': url}))
+            response.addFolder(self._(32038, group.upper()), Action('RubricPage', {'rubricUrl': url}))
         

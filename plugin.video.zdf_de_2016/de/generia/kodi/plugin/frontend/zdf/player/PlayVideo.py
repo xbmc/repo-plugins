@@ -4,6 +4,10 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 
+from urllib2 import HTTPError 
+
+from de.generia.kodi.plugin.backend.zdf.VideoResource import VideoResource
+
 from de.generia.kodi.plugin.backend.zdf.api.VideoContentResource import VideoContentResource
 from de.generia.kodi.plugin.backend.zdf.api.StreamInfoResource import StreamInfoResource
 
@@ -13,14 +17,26 @@ from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
 
 
 class PlayVideo(Pagelet):
- 
+    
+    def __init__(self, tokenCache):
+        super(Pagelet, self).__init__()
+        self.tokenCache = tokenCache
+
     def service(self, request, response):
-        apiToken = request.getParam('apiToken')
         contentName = request.getParam('contentName')
         title = request.getParam('title')
+        videoUrl = request.getParam('videoUrl')
         date = request.getParam('date')
         genre = request.getParam('genre')
 
+        # get api-token handling parameters
+        self.videoUrl = request.getParam('videoUrl')
+        self.apiToken = request.getParam('apiToken')
+        if self.apiToken is None:
+            self.apiToken = self.tokenCache.getApiToken()
+            if self.apiToken is None:
+                self._refreshApiToken()
+            
         item = None
         if contentName is not None:
             try:
@@ -28,8 +44,7 @@ class PlayVideo(Pagelet):
                 dialog.create(self._(32007), self._(32008))
                 videoContentUrl = Constants.apiBaseUrl + '/content/documents/' + contentName + '.json?profile=player'
                 self.debug("downloading video-content-url '{1}' ...", videoContentUrl)
-                videoContent = VideoContentResource(videoContentUrl, Constants.apiBaseUrl, apiToken)
-                self._parse(videoContent)
+                videoContent = self._getVideoContent(videoContentUrl)
                 
                 if videoContent.streamInfoUrl is None:
                     self.warn("can't find stream-info-url in video-content '{1}' in content '{2}'", contentName, videoContent.content)
@@ -38,12 +53,11 @@ class PlayVideo(Pagelet):
             
                 dialog.update(percent=50, message=self._(32009))
                 self.debug("downloading stream-info-url '{1}' ...", videoContent.streamInfoUrl)
-                streamInfo = StreamInfoResource(videoContent.streamInfoUrl, apiToken)
-                self._parse(streamInfo)
+                streamInfo = self._getStreamInfo(videoContent.streamInfoUrl)
                 
                 url = streamInfo.streamUrl
                 if url is None:
-                    self.warn("PlayVideo - can't find stream-url in stream-info-url '{1}' in content '{2}'", videoContent.streamInfoUrl, streamInfo.content)
+                    self.warn("can't find stream-url in stream-info-url '{1}' in content '{2}'", videoContent.streamInfoUrl, streamInfo.content)
                     response.sendError(self._(32012) + " '" + contentName +"'", Action('SearchPage'))
                     return
 
@@ -72,7 +86,7 @@ class PlayVideo(Pagelet):
                     item.setArt({'poster': image, 'banner': image, 'thumb': image, 'icon': image, 'fanart': image})
 
                 # set subtitles
-                self.setSubTitles(item, streamInfo.subTitlesUrl)
+                self._setSubTitles(item, streamInfo.subTitlesUrl)
                 
                 dialog.update(percent=90, message=self._(32010))
                 self.info("setting resolved url='{1}' ...", url)
@@ -80,8 +94,57 @@ class PlayVideo(Pagelet):
             finally:
                 dialog.close();
             
+    def _getStreamInfo(self, streamInfoUrl):
+            streamInfo = None
+            try:
+                streamInfo = StreamInfoResource(streamInfoUrl, self.apiToken)
+                self._parse(streamInfo)
+            except HTTPError as e:
+                # check for forbidden, caused by wrong api-token
+                if e.code != 403:
+                    raise e
+                
+                # try again with more specific video api-token
+                if not self._refreshApiToken():
+                    raise e
+
+                streamInfo = StreamInfoResource(streamInfoUrl, self.apiToken)
+                self._parse(streamInfo)
+            
+            return streamInfo
+            
+    def _getVideoContent(self, videoContentUrl):
+            videoContent = None
+            try:
+                videoContent = VideoContentResource(videoContentUrl, Constants.apiBaseUrl, self.apiToken)
+                self._parse(videoContent)
+            except HTTPError as e:
+                # check for forbidden, caused by wrong api-token
+                if e.code != 403:
+                    raise e
+                
+                # try again with more specific video api-token
+                if not self._refreshApiToken():
+                    raise e
+                
+                videoContent = VideoContentResource(videoContentUrl, Constants.apiBaseUrl, self.apiToken)
+                self._parse(videoContent)
+            
+            return videoContent
+
+    def _refreshApiToken(self):
+        if self.videoUrl is None:
+            self.error("can't refresh api-token: videoUrl is not set")
+            return False
         
-    def setSubTitles(self, item, subTitlesUrl):            
+        video = VideoResource(Constants.baseUrl + self.videoUrl)
+        self._parse(video)
+        apiToken = video.apiToken
+        self.tokenCache.setApiToken(apiToken)
+        self.apiToken = apiToken
+        return True
+    
+    def _setSubTitles(self, item, subTitlesUrl):            
         if subTitlesUrl is not None:
             try:
                 item.addStreamInfo('subtitle', {'language': 'de'})

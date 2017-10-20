@@ -9,8 +9,6 @@ from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
 class SearchMenuPage(AbstractPage):
 
     def service(self, request, response):
-        apiToken = request.getParam('apiToken')
-
-        response.addFolder(self._(32030), Action('SearchHistoryPage', {'apiToken': apiToken }))
-        response.addFolder(self._(32001), Action('SearchPage', {'apiToken': apiToken, 'contentTypes':'episode'}))
-        response.addFolder(self._(32002), Action('SearchPage', {'apiToken': apiToken}))
+        response.addFolder(self._(32030), Action('SearchHistoryPage'))
+        response.addFolder(self._(32001), Action('SearchPage', {'contentTypes':'episode'}))
+        response.addFolder(self._(32002), Action('SearchPage'))

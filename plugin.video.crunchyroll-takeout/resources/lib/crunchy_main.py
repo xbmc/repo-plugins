@@ -33,7 +33,6 @@ import crunchy_json as crj
 from crunchy_json import log
 
 
-
 class Args(object):
     """Arguments class.
 
@@ -58,7 +57,6 @@ class Args(object):
         self.__dict__.update(kwargs)
 
 
-
 def encode(f):
     """Decorator for encoding strings.
 
@@ -70,21 +68,23 @@ def encode(f):
 
 def endofdirectory(sortMethod='none'):
     """Mark end of directory listing.
-
     """
-    # Set sortmethod to something xbmc can use
-    if sortMethod == 'title':
-        sortMethod = xbmcplugin.SORT_METHOD_TITLE
-    elif sortMethod == 'none':
-        sortMethod = xbmcplugin.SORT_METHOD_NONE
-    elif sortMethod == 'date':
-        sortMethod = xbmcplugin.SORT_METHOD_DATE
-    elif sortMethod == 'label':
-        sortMethod = xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE
-
     # Sort methods are required in library mode
-    xbmcplugin.addSortMethod(int(sys.argv[1]),
-                             sortMethod)
+    # Set for Queue only, not for anything else
+    # Also check if sorting should be allowed
+    if (sortMethod == 'user') and (xbmcplugin.getSetting(int(sys.argv[1]),"sort_queue") == 'true'):
+       #Sort on "ordering" - ie, the order the items appeared
+       xbmcplugin.addSortMethod(int(sys.argv[1]),
+                                xbmcplugin.SORT_METHOD_VIDEO_SORT_TITLE)
+       #Title sort - as expected
+       xbmcplugin.addSortMethod(int(sys.argv[1]),
+                             xbmcplugin.SORT_METHOD_TITLE)
+       #Sort on percent played, ie - we are lying
+       xbmcplugin.addSortMethod(int(sys.argv[1]),
+                                xbmcplugin.SORT_METHOD_LASTPLAYED)
+    else:
+        xbmcplugin.addSortMethod(int(sys.argv[1]),
+                                 xbmcplugin.SORT_METHOD_NONE)
 
     # Let xbmc know the script is done adding items to the list
     dontAddToHierarchy = False
@@ -92,22 +92,13 @@ def endofdirectory(sortMethod='none'):
                               updateListing = dontAddToHierarchy)
 
 
-def add_item(args,
-             info,
-             isFolder=True,
-             total_items=0,
-             queued=False,
-             rex=re.compile(r'(?<=mode=)[^&]*')):
-    """Add item to directory listing.
-
-    """
+def set_info_defaults (args,info):
     # Defaults in dict. Use 'None' instead of None so it is compatible for
     # quote_plus in parseArgs.
     info.setdefault('url',          'None')
-    info.setdefault('thumb',        'None')
+    info.setdefault('thumb',        "DefaultFolder.png")
     info.setdefault('fanart_image',
                     xbmc.translatePath(args._addon.getAddonInfo('fanart')))
-    info.setdefault('mode',         'None')
     info.setdefault('count',        '0')
     info.setdefault('filterx',      'None')
     info.setdefault('id',           'None')
@@ -124,9 +115,18 @@ def add_item(args,
     info.setdefault('duration',     '0')
     info.setdefault('episode',      '0')
     info.setdefault('plot',         'None')
+    info.setdefault('percent',      '0')
+    info.setdefault('ordering',     '0')
+    #And set all None to 'None'
+    for key, value in info.items():
+        if value == None:
+            info[key] = 'None'
+    return info
 
+
+def build_url (info):
     # Create params for xbmcplugin module
-    u = sys.argv[0]    +\
+    s = sys.argv[0]    +\
         '?url='        + urllib.quote_plus(info['url'])          +\
         '&mode='       + urllib.quote_plus(info['mode'])         +\
         '&name='       + urllib.quote_plus(info['title'])        +\
@@ -143,23 +143,52 @@ def add_item(args,
         '&year='       + urllib.quote_plus(info['year'])         +\
         '&playhead='   + urllib.quote_plus(info['playhead'])     +\
         '&duration='   + urllib.quote_plus(info['duration'])     +\
-        '&episode='   + urllib.quote_plus(info['episode'])     +\
+        '&episode='    + urllib.quote_plus(info['episode'])      +\
         '&plot='       + urllib.quote_plus(info['plot']          +'%20')
+    return s
+
+
+def add_item(args,
+             info,
+             isFolder=True,
+             total_items=0,
+             queued=False,
+             rex=re.compile(r'(?<=mode=)[^&]*')):
+    """Add item to directory listing.
+
+    """
+    info = set_info_defaults(args,info)
+    u = build_url(info)
+
 
     # Create list item
     li = xbmcgui.ListItem(label          = info['title'],
                           thumbnailImage = info['thumb'])
+
+    show_percent = args._addon.getSetting("show_percent")
+
+    if show_percent == "true":
+     percentPlayed = " " if int(info['percent']) < 1 else " [COLOR FFbc3bfd] " + args._lang(30401) + " [/COLOR] [COLOR FF6fe335]" + str(info['percent']) + "%[/COLOR]"
+    if show_percent == "false":
+	 percentPlayed = ""
+
     li.setInfo(type       = "Video",
-               infoLabels = {"Title":   info['title'],
+               infoLabels = {"Title":   info['title'] + percentPlayed,
                              "Plot":    info['plot'],
                              "Year":    info['year'],
-							 "episode": info['episode']})
+                             "episode": info['episode'],
+                             "lastplayed": '2000-01-01 '+str(int(info['percent']) / 60).zfill(2)+':'+str(int(info['percent']) % 60).zfill(2)+':00',
+                             "sorttitle":  info['ordering'],
+                             "playcount": int(info['percent'] >= 90 and not isFolder)
+                            }
+              )
+
     li.setProperty("Fanart_Image", info['fanart_image'])
 
     # Add context menu
     s1  = re.sub(rex, 'add_to_queue',      u)
     s2  = re.sub(rex, 'remove_from_queue', u)
-    #s3  = re.sub(rex, 'list_media', u)
+    s3  = re.sub(rex, 'list_coll', u)
 
     cm = [(args._lang(30505), 'XBMC.Addon.OpenSettings(%s)' % args._id)]
 
@@ -169,6 +198,7 @@ def add_item(args,
         cm.insert(0, (args._lang(30504), 'XBMC.Action(Queue)'))
 
     if not isFolder:
+        li.addStreamInfo('video', {"duration": info['duration']})
         # Let XBMC know this can be played, unlike a folder
         li.setProperty('IsPlayable', 'true')
 
@@ -186,9 +216,10 @@ def add_item(args,
             else:
                 cm.insert(1, (args._lang(30502), 'XBMC.RunPlugin(%s)' % s1))
 
-    #cm.insert(2, (args._lang(30503), 'XBMC.RunPlugin(%s)' % s3))
+    if (args.mode is not None and
+        args.mode in 'history|queue'):
+        cm.insert(2, (args._lang(30503), 'XBMC.ActivateWindow(Videos,%s)' % s3))
     cm.append(('Toggle debug', 'XBMC.ToggleDebug'))
-
     li.addContextMenuItems(cm, replaceItems=True)
 
     # Add item to list
@@ -203,11 +234,6 @@ def show_main(args):
     """Show main menu.
 
     """
-    change_language = args._addon.getSetting("change_language")
-
-    if change_language != "0":
-        crj.change_locale(args)
-
     anime   = args._lang(30100)
     drama   = args._lang(30104)
     queue   = args._lang(30105)
@@ -277,6 +303,12 @@ def channels(args):
               'media_type': args.media_type,
               'filterx':    'season',
               'offset':     '0'})
+    add_item(args,
+             {'title':      'Random',
+              'mode':       'get_random',
+              'media_type': args.media_type,
+              'filterx':    'random',
+              'offset':     '0'})
     endofdirectory()
 
 
@@ -317,7 +349,21 @@ def check_mode(args):
     """Run mode-specific functions.
 
     """
-    mode = args.mode
+    #For a very minimal request to play video
+    try:
+        mode = args.mode
+    except:
+        #Shorthand for play on id
+        if hasattr(args,'id'):
+           mode = 'videoplay'
+        #Shorthand for play on url
+        elif hasattr(args,'url'):
+           mode = 'videoplay'
+           args.id = re.sub(r'.*-', '', args.url)
+           args.id = re.sub(r'\?.*', '', args.id)
+        else:
+           mode = None
+
     log("CR: Main: argv[0] = %s" % sys.argv[0],     xbmc.LOGDEBUG)
     log("CR: Main: argv[1] = %s" % sys.argv[1],     xbmc.LOGDEBUG)
     log("CR: Main: argv[2] = %s" % sys.argv[2],     xbmc.LOGDEBUG)
@@ -346,6 +392,8 @@ def check_mode(args):
         crj.remove_from_queue(args)
     elif mode == 'videoplay':
         crj.start_playback(args)
+    elif mode == 'get_random':
+        crj.get_random(args)
     else:
         fail(args)
 

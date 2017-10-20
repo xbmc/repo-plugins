@@ -17,204 +17,180 @@ msgstr ""
 
 msgctxt "#30001"
 msgid "Username"
-msgstr ""
+msgstr "Gebruikersnaam"
 
 msgctxt "#30002"
 msgid "Password"
-msgstr ""
+msgstr "Wachtwoord"
 
 msgctxt "#30003"
 msgid "Video quality:"
-msgstr ""
+msgstr "Video kwaliteit"
 
 msgctxt "#30004"
 msgid "360p (SD)"
-msgstr ""
+msgstr "360p (SD)"
 
 msgctxt "#30005"
 msgid "480p"
-msgstr ""
+msgstr "480p"
 
 msgctxt "#30006"
 msgid "720p (HD)"
-msgstr ""
+msgstr "720p (HD)"
 
 msgctxt "#30008"
 msgid "1080p (HD)"
-msgstr ""
-
-msgctxt "#30012"
-msgid "Adaptive (beta)"
-msgstr ""
+msgstr "1080p (HD)"
 
 msgctxt "#30009"
 msgid "Episodes"
-msgstr ""
+msgstr "Afleveringen"
 
 msgctxt "#30010"
 msgid "Series"
-msgstr ""
+msgstr "Series"
 
 msgctxt "#30011"
 msgid "Queue Type"
-msgstr ""
+msgstr "Afspeellijst Type"
 
 msgctxt "#30100"
 msgid "Anime"
-msgstr ""
+msgstr "Anime"
 
 msgctxt "#30102"
 msgid "Updated"
-msgstr ""
+msgstr "Laatst bijgewerkt"
 
 msgctxt "#30103"
 msgid "Popular"
-msgstr ""
+msgstr "Populair"
 
 msgctxt "#30104"
 msgid "Drama"
-msgstr ""
+msgstr "Drama"
 
 msgctxt "#30105"
 msgid "Queue"
-msgstr ""
+msgstr "Afspeellijst"
 
 msgctxt "#30106"
 msgid "Simulcasts"
-msgstr ""
+msgstr "Simulcasts"
 
 msgctxt "#30107"
 msgid "Genres"
-msgstr ""
+msgstr "Genres"
 
 msgctxt "#30110"
 msgid "Seasons"
-msgstr ""
+msgstr "Seizoenen"
 
 msgctxt "#30111"
 msgid "History"
-msgstr ""
+msgstr "Geschiedenis"
 
 msgctxt "#30112"
 msgid "Alphabetical"
-msgstr ""
+msgstr "Alfabetisch"
 
 msgctxt "#30200"
 msgid "Notice"
-msgstr ""
+msgstr "Waarschuwing"
 
 msgctxt "#30203"
 msgid "No user account found"
-msgstr ""
+msgstr "Geen gebruikersaccount gevonden"
 
 msgctxt "#30206"
 msgid "Login Failed: Please check Username and Password"
-msgstr ""
+msgstr "Aanmelden mislukt: controleer gebruikersnaam en wachtwoord"
 
 msgctxt "#30207"
 msgid "Internal Plugin Error: Please Report This Bug!"
-msgstr ""
+msgstr "Internal Plugin Error: Gelieve deze fout te melden!"
 
 msgctxt "#30212"
 msgid "Video restricted"
-msgstr ""
+msgstr "De video is regionaal geblokkeerd"
 
 msgctxt "#30211"
 msgid "Subtitle Language"
-msgstr ""
+msgstr "Ondertitelingstaal"
 
 msgctxt "#30301"
 msgid "English (US)"
-msgstr ""
+msgstr "Engels (US)"
 
 msgctxt "#30302"
 msgid "English (UK)"
-msgstr ""
+msgstr "Engels (UK)"
 
 msgctxt "#30303"
 msgid "Nihongo"
-msgstr ""
+msgstr "Japans"
 
 msgctxt "#30304"
 msgid "Francais (France)"
-msgstr ""
+msgstr "Frans (Frankrijk)"
 
 msgctxt "#30305"
 msgid "Deutsch"
-msgstr ""
+msgstr "Duits"
 
 msgctxt "#30306"
 msgid "Portugues (Brasil)"
-msgstr ""
+msgstr "Portugees (Brazilië)"
 
 msgctxt "#30307"
 msgid "Portugues (Portugal)"
-msgstr ""
+msgstr "Portugees (Portugal)"
 
 msgctxt "#30308"
 msgid "Espanol (LATAM)"
-msgstr ""
+msgstr "Spaans (Latijns Amerika)"
 
 msgctxt "#30309"
 msgid "Espanol (Espana)"
-msgstr ""
+msgstr "Spaans (Spanje)"
 
 msgctxt "#30311"
 msgid "Resume Video Playback"
-msgstr ""
+msgstr "Verder kijken"
 
 msgctxt "#30312"
 msgid "You MUST be a Premium Member to use this plugin."
-msgstr ""
+msgstr "Je MOET een Premium Member zijn om deze plugin te kunnen gebruiken."
 
 msgctxt "#30401"
 msgid "[Played]"
-msgstr ""
+msgstr "[Afgespeeld]"
 
 msgctxt "#30313"
 msgid "Italian (Italian)"
-msgstr ""
+msgstr "Italiaans (Italië)"
 
 msgctxt "#30501"
 msgid "Dequeue Series"
-msgstr ""
+msgstr "Verwijderen uit afspeellijst"
 
 msgctxt "#30502"
 msgid "Enqueue Series"
-msgstr ""
+msgstr "Toevoegen aan afspeellijst"
 
 msgctxt "#30503"
 msgid "Goto Series"
-msgstr ""
+msgstr "Ga naar serie"
 
 msgctxt "#30504"
 msgid "Queue Video"
-msgstr ""
+msgstr "Bekijk video"
 
 msgctxt "#30505"
 msgid "Add-on settings"
-msgstr ""
+msgstr "Add-on instellingen"
 
 msgctxt "#30506"
 msgid "Enable Video Sorting"
-msgstr ""
-
-msgctxt "#30507"
-msgid "Progress & Watch State"
-msgstr ""
-
-msgctxt "#30508"
-msgid "General"
-msgstr ""
-
-msgctxt "#30509"
-msgid "Behaviour"
-msgstr ""
-
-msgctxt "#30510"
-msgid "Prefix 'Premium Content' as..."
-msgstr ""
-
-msgctxt "#30511"
-msgid "Prefix \'Coming Soon\' as..."
-msgstr ""
+msgstr "Activeer Video sorteren"

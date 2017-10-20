@@ -62,7 +62,7 @@ def load_pickle(args):
     """
     notice_msg = args._lang(30200)
 
-    change_language = args._addon.getSetting("change_language")
+    subtitle_language = args._addon.getSetting("subtitle_language")
 
     base_path = xbmc.translatePath(args._addon.getAddonInfo('profile')).decode('utf-8')
 
@@ -85,27 +85,25 @@ def load_pickle(args):
     try:
         # Load persistent vars
 
-        if change_language == "0":
-            user_data.setdefault('API_LOCALE',"enUS")
-        elif change_language == "1":
+        if subtitle_language == "0":
             user_data['API_LOCALE']  = "enUS"
-        elif change_language == "2":
+        elif subtitle_language == "1":
             user_data['API_LOCALE']  = "enGB"
-        elif change_language == "3":
+        elif subtitle_language == "2":
             user_data['API_LOCALE']  = "jaJP"
-        elif change_language == "4":
+        elif subtitle_language == "3":
             user_data['API_LOCALE']  = "frFR"
-        elif change_language == "5":
+        elif subtitle_language == "4":
             user_data['API_LOCALE']  = "deDE"
-        elif change_language == "6":
+        elif subtitle_language == "5":
             user_data['API_LOCALE']  = "ptBR"
-        elif change_language == "7":
+        elif subtitle_language == "6":
             user_data['API_LOCALE']  = "ptPT"
-        elif change_language == "8":
+        elif subtitle_language == "7":
             user_data['API_LOCALE']  = "esLA"
-        elif change_language == "9":
+        elif subtitle_language == "8":
             user_data['API_LOCALE']  = "esES"
-        elif change_language == "10":
+        elif subtitle_language == "9":
             user_data['API_LOCALE']  = "itIT"
 
         user_data['username'] = args._addon.getSetting("crunchy_username")
@@ -412,12 +410,6 @@ def _post_login(args,
     """
     acc_type_error = args._lang(30312)
 
-    # Call for usage reporting
-    if current_datetime > args.user_data['lastreported']:
-        args.user_data['lastreported'] = (current_datetime +
-                                          durel.relativedelta(hours = +24))
-        usage_reporting(args)
-
     # Verify user is premium
     if args.user_data['premium_type'] in 'anime|drama|manga':
         log("CR: User is a premium "
@@ -525,7 +517,7 @@ def list_series(args):
                           'filterx':    args.filterx,
                           'offset':     offset})
 
-    crm.endofdirectory('label')
+    crm.endofdirectory('none')
 
 
 def list_categories(args):
@@ -548,7 +540,8 @@ def list_categories(args):
     crm.endofdirectory('none')
 
 
-def list_collections(args):
+def list_collections(args,
+                     random = False):
     """List collections.
 
     """
@@ -566,6 +559,32 @@ def list_collections(args):
     request = makeAPIRequest(args, 'list_collections', options)
 
     if request['error'] is False:
+        if random:
+            try:
+               random_media_type = str(args.media_type)
+            except:
+               random_media_type = 'anime'
+            try:
+               random_name = request['data'][0]['name']
+            except:
+               random_name = "[New random]"
+            random_li =  xbmcgui.ListItem(label = random_name)
+            random_li.setInfo(type       = "Video",
+                              infoLabels = {"Title": "[New random]"})
+
+            random_li.setArt({'fanart': xbmc.translatePath(args._addon.getAddonInfo('fanart')),
+                              'thumb':  xbmc.validatePath(xbmc.translatePath(args._addon.getAddonInfo('path') + "\dice.png"))
+                              })
+
+            xbmcplugin.addDirectoryItem(handle     = int(sys.argv[1]),
+                                        url        = crm.build_url(crm.set_info_defaults(args,
+                                                         {'mode': 'get_random',
+                                                          'media_type': random_media_type,
+                                                          'title': random_name
+                                                         })),
+                                        listitem   = random_li,
+                                        isFolder   = True)
+
         if len(request['data']) <= 1:
             for collection in request['data']:
                 args.complete = '1' if collection['complete'] else '0'
@@ -638,8 +657,11 @@ def list_media_items(args, request, series_name, season, mode, fanart):
 
     """
     for media in request:
+        ordering = 0
 	
-        if mode == "history":
+        if (mode == "queue"):
+            ordering = media['ordering']
+        if (mode == "history" or mode == "queue"):
             series_id = media['series']['series_id']
         elif args.series_id:
             series_id = args.series_id
@@ -657,7 +679,7 @@ def list_media_items(args, request, series_name, season, mode, fanart):
                            if mode == "history"
                            else series_name)
         series_name = (media['most_likely_media']['series_name']
-                           if mode == "queue"
+                           if (mode == "queue" and 'most_likely_media' in media)
                            else series_name)
         # On history/queue, the fanart is obtained directly from the json
         fanart      = (media['series']['landscape_image']['fwide_url']
@@ -712,13 +734,13 @@ def list_media_items(args, request, series_name, season, mode, fanart):
                     if (mode == "history" or
                         mode == "queue")
                     else name)
-        name = ("* " + name
+        name = (args._addon.getSetting("prefix_premium") + name
                     if media['free_available'] is False
                     else name)
-        soon = ("Coming Soon - " + series_name
-                + " Episode " + str(media['episode_number'])
+        soon = (args._addon.getSetting("prefix_coming") + series_name
+                + "Episode " + str(media['episode_number'])
                     if mode == "queue"
-                    else "Coming Soon - Episode "
+                    else args._addon.getSetting("prefix_coming") + "Episode "
                         + str(media['episode_number']))
         # Set the name for upcoming episode
         name = soon if media['available'] is False else name
@@ -748,7 +770,7 @@ def list_media_items(args, request, series_name, season, mode, fanart):
                         else str(media['duration']))
         # Current playback point
         playhead = ("0"
-                        if media['available'] is False
+                        if (media['available'] is False or not 'playhead' in media)
                         else str(media['playhead']))
 
         # Adding published date instead
@@ -759,14 +781,13 @@ def list_media_items(args, request, series_name, season, mode, fanart):
         url = media['url']
         media_id = url.split('-')[-1]
 
-        visto = " "
         if int(float(playhead)) > 10 :
-            played   = args._lang(30401)
-            porcentaje = (( int(float(playhead)) * 100 ) / int(float(duration)))+1
-            visto = "[COLOR FFbc3bfd] " + played + " [/COLOR] [COLOR FF6fe335]" + str(porcentaje) + "%[/COLOR]"
+            percent = (( int(float(playhead)) * 100 ) / int(float(duration)))+1
+        else :
+            percent = 0
             
         crm.add_item(args,
-                     {'title':        name.encode("utf8") + visto,
+                     {'title':        name.encode("utf8"),
                       'mode':         'videoplay',
                       'id':           media_id.encode("utf8"),
                       'series_id':    series_id,
@@ -777,11 +798,16 @@ def list_media_items(args, request, series_name, season, mode, fanart):
                       'plot':         description,
                       'year':         year,
                       'playhead':     playhead,
-                      'duration':     duration},
+                      'duration':     duration,
+                      'percent':      percent,
+                      'ordering':     ordering},
                      isFolder=False,
                      queued=queued)
 
-    crm.endofdirectory('none')
+    if mode == 'queue':
+       crm.endofdirectory('user')
+    else:
+       crm.endofdirectory('none')
 
 
 def history(args):
@@ -1023,16 +1049,17 @@ def start_playback(args):
     """Play video stream with selected quality.
 
     """
-    res_quality = ['low', 'mid', 'high', 'ultra']
+    res_quality = ['low', 'mid', 'high', 'ultra', 'adaptive']
     quality     = res_quality[int(args._addon.getSetting("video_quality"))]
 
     fields = "".join(["media.episode_number,",
-                      "media.series_name,",
-                      "media.name,",
                       "media.playhead,",
-                      "media.description,",
                       "media.url,",
                       "media.stream_data"])
+    if not hasattr(args, 'icon'): fields = fields + ",media.screenshot_image,image.fwide_url,series.landscape_image"
+    if not hasattr(args, 'name'): fields = fields + ",media.name"
+    if not hasattr(args, 'series_name'): fields = fields + ",media.series_name"
+    if not hasattr(args, 'duration'): fields = fields + ",media.duration"
 
     values = {'media_id': args.id,
               'fields':   fields}
@@ -1042,6 +1069,19 @@ def start_playback(args):
     if request['error']:
         log("CR: start_playback: Connection failed, aborting..")
         return
+
+    if not hasattr(args, 'icon'):
+         args.icon = request.get('data',{}).get('screenshot_image',{}).get('fwide_url','http://static.ak.crunchyroll.com/i/no_image_beta_full.jpg')
+    if not hasattr(args, 'episode'):
+         args.episode = request.get('data',{}).get('episode_number','0')
+    if not hasattr(args, 'series_name'):
+         args.series_name = request.get('data',{}).get('series_name','Unable to fetch series name')
+    if not hasattr(args, 'name'):
+         args.name = args.series_name + " Episode " + args.episode + " - " + request.get('data',{}).get('name','Unable to fetch name')
+    if not hasattr(args, 'season'):
+         args.season = '0'  # No idea how to fetch this info
+    if not hasattr(args, 'duration'):
+         args.duration = str(request.get('data',{}).get('duration','0'))
 
     resumetime = str(request['data']['playhead'])
     
@@ -1058,24 +1098,37 @@ def start_playback(args):
             for stream in request['data']['stream_data']['streams']:
                 allurl[stream['quality']] = stream['url']
 
-            if allurl[quality] is not None:
+            log("CR: start_playback: streams found: " + str(allurl), xbmc.LOGDEBUG)
+            if quality in allurl:
                 url = allurl[quality]
-            elif quality == 'ultra' and allurl['high'] is not None:
+            elif quality == 'ultra' and 'high' in allurl:
                 url = allurl['high']
-            elif allurl['mid'] is not None:
+            elif 'mid' in allurl:
                 url = allurl['mid']
-            else:
+            elif 'low' in allurl:
                 url = allurl['low']
+            elif 'adaptive' in allurl:
+                url = allurl['adaptive']
+            else:
+				# none of the above qualities found
+                xbmcgui.Dialog().notification("Crunchyroll", "Sorry, this video is not available yet.", xbmcgui.NOTIFICATION_INFO)
+                log("CR: start_playback: this video is not available yet..")
+                return
 
             item = xbmcgui.ListItem(args.name, path=url)
             # TVShowTitle, Season, and Episode are used by the Trakt.tv add-on to determine what is being played
             item.setInfo(type="Video", infoLabels={"Title":       args.name,
-                                                   "TVShowTitle": request['data']['series_name'],
+                                                   "TVShowTitle": args.series_name,
                                                    "Season": args.season,
-                                                   "Episode": request['data']['episode_number'],
+                                                   "Episode": args.episode,
                                                    "playcount":   playcount})
             item.setThumbnailImage(args.icon)
             item.setProperty('TotalTime',  args.duration)
+
+            autoresume = args._addon.getSetting("autoresume")
+            if (autoresume == "no") or (int(resumetime)<30):
+                resumetime = "0"
+               
             item.setProperty('ResumeTime', resumetime)
 
             log("CR: start_playback: url = %s" % url)
@@ -1097,17 +1150,13 @@ def start_playback(args):
 
             playlist_position = playlist.getposition()
 
-            if int(resumetime) <= 90:
-                playback_resume = False
-            else:
+            playback_resume = False
+            if (autoresume not in ("auto", "no")) and (int(resumetime)>0):
                 playback_resume = True
-                xbmc.Player().pause()
                 resmin = int(resumetime) / 60
                 ressec = int(resumetime) % 60
                 dialog = xbmcgui.Dialog()
-                if dialog.yesno("message", "Do you want to Resume Playback at "+str(int(resmin))+":"+str(ressec).zfill(2)+"?"):
-                    playback_resume = True
-                else:
+                if not dialog.yesno("message", "Do you want to Resume Playback at "+str(int(resmin))+":"+str(ressec).zfill(2)+"?"):
                     resumetime = 0
 
             try:
@@ -1115,6 +1164,7 @@ def start_playback(args):
                     player.seekTime(float(resumetime))
                     xbmc.Player().pause()
 
+                #Inform Crunchyroll about time played
                 while playlist_position == playlist.getposition():
                     timeplayed = str(int(player.getTime()))
 
@@ -1132,6 +1182,49 @@ def start_playback(args):
 
             log("CR: start_playback: Finished logging: %s" % url)
 
+
+def get_random(args):
+    """Fetch random show
+
+    """
+    media = 'anime'
+    if hasattr(args,'media_type'):
+        if (args.media_type == 'drama'):
+            media = 'drama'
+    print ("Media: " + media)
+
+    try:
+        url = urllib2.urlopen("http://www.crunchyroll.com/random/" + media).geturl()
+    except:
+        xbmcgui.Dialog().notification("Crunchyroll - Random","Unable to fetch random show",xbmcgui.NOTIFICATION_ERROR)
+        return "False"
+
+    #Strip out extras, like referrals
+    url = re.sub(r'\?.*', '', url)
+    #Strip down to getting the show id only
+    episode_id = re.sub(r'.*-', '', url)
+
+    if not (int(episode_id) > 0):
+        xbmcgui.Dialog().notification("Crunchyroll - Random","Unable to fetch episode id",xbmcgui.NOTIFICATION_ERROR)
+        return "False"
+
+    fields = "media.series_id,media.series_name"
+    values = {'media_id': episode_id,
+              'fields':   fields}
+
+    request = makeAPIRequest(args, 'info', values)
+    
+    #And try to list the show, just like 'goto series'
+    try:
+        args.series_id = request['data']['series_id']
+    except:
+        xbmcgui.Dialog().notification("Crunchyroll - Random","Unable to fetch random show id",xbmcgui.NOTIFICATION_ERROR)
+        return "False"
+    else:
+        #And then list the series
+        list_collections(args,True)
+
+   
 
 def pretty(d, indent=1):
     """Pretty printer for dictionaries.
@@ -1173,8 +1266,13 @@ def makeAPIRequest(args, method, options):
 
         values.update(options)
         options = urllib.urlencode(values)
+        
+        if sys.version_info >= (2, 7, 9):
+            handler = urllib2.HTTPSHandler()
+        else:
+            handler = urllib2_ssl.HTTPSHandler(ca_certs=path)
 
-        opener = urllib2.build_opener(urllib2_ssl.HTTPSHandler(ca_certs=path))
+        opener = urllib2.build_opener(handler)
         opener.addheaders = args.user_data['API_HEADERS']
         urllib2.install_opener(opener)
 
@@ -1229,99 +1327,6 @@ def makeAPIRequest(args, method, options):
         log("CR: makeAPIRequest: %s %s" % (s, pt), xbmc.LOGERROR)
 
     return request
-
-
-def change_locale(args):
-    """Change locale.
-
-    """
-    cj           = cookielib.LWPCookieJar()
-
-    notice      = args._lang(30200)
-    notice_msg  = args._lang(30211)
-    notice_err  = args._lang(30206)
-    notice_done = args._lang(30310)
-
-    icon = xbmc.translatePath(args._addon.getAddonInfo('icon'))
-
-    ua = 'Mozilla/5.0 (X11; Linux i686; rv:5.0) Gecko/20100101 Firefox/5.0'
-
-    if (args.user_data['username'] != '' and
-        args.user_data['password'] != ''):
-
-        log("CR: Attempting to log-in with your user account...")
-        xbmc.executebuiltin('Notification(' + notice + ','
-                            + notice_msg + ',5000,' + icon + ')')
-
-        url  = 'https://www.crunchyroll.com/?a=formhandler'
-        data = urllib.urlencode({'formname': 'RpcApiUser_Login',
-                                 'next_url': '',
-                                 'fail_url': '/login',
-                                 'name':     args.user_data['username'],
-                                 'password': args.user_data['password']})
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-        opener.addheaders = [('Referer',    'https://www.crunchyroll.com'),
-                             ('User-Agent', ua)]
-        urllib2.install_opener(opener)
-        req = opener.open(url, data)
-        req.close()
-
-    else:
-        xbmc.executebuiltin('Notification(' + notice + ','
-                            + notice_err + ',5000,' + icon + ')')
-        log("CR: No Crunchyroll account found!")
-
-    url  = 'https://www.crunchyroll.com/?a=formhandler'
-    data = urllib.urlencode({'next_url': '',
-                             'language': args.user_data['API_LOCALE'],
-                             'formname': 'RpcApiUser_UpdateDefaultSoftSubLanguage'})
-    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-    opener.addheaders = [('Referer',    'https://www.crunchyroll.com/acct/?action=video'),
-                         ('User-Agent', ua)]
-    urllib2.install_opener(opener)
-
-    # Enter in the video settings page first (doesn't work without it)
-    req = opener.open("https://www.crunchyroll.com/acct/?action=video")
-
-    # Now do the actual language change
-    req = opener.open(url, data)
-    req.close()
-
-    log('CR: Now using ' + args.user_data['API_LOCALE'])
-    xbmc.executebuiltin('Notification(' + notice + ','
-                        + notice_done + ',5000,' + icon + ')')
-    log("CR: Disabling the force change language setting")
-
-    args._addon.setSetting(id="change_language", value="0")
-
-
-def usage_reporting(args):
-    """Report addon usage to the author.
-
-    Following information is collected:
-    - Randomly generated device ID
-    - Premium type
-    - Addon version
-    - XBMC version
-    """
-    log("CR: Attempting to report usage")
-
-    url  = ''.join(['https://docs.google.com/forms/d',
-                    '/1_qB4UznRfx69JrGCYmKbbeQcFc_t2-9fuNvXGGvl8mk',
-                    '/formResponse'])
-    data = urllib.urlencode({'entry_1580743010': args.user_data['device_id'],
-                             'entry_623948459':  args.user_data['premium_type'],
-                             'entry_1130326797': __version__,
-                             'entry.590894822':  __XBMCBUILD__})
-
-    ua = 'Mozilla/5.0 (X11; Linux i686; rv:5.0) Gecko/20100101 Firefox/5.0'
-
-    opener = urllib2.build_opener()
-    opener.addheaders = [('User-Agent', ua)]
-    urllib2.install_opener(opener)
-
-    req = opener.open(url, data)
-    req.close()
 
 
 def log(msg,

@@ -1,3 +1,9 @@
+[B]2.4[/B]
+Full roleup for all repo changes to offical repo
+[B]2.2.2[/B]
+Added German, thanks MrKrabat
+Removed all sorting.  For Reals
+Can be enabled by uncommenting the sorting in crunchy_main.py
 [B]2.2.1[/B]
 Pulled Fix for Queue in Episode view (thanks rpowellgit)
 Added Trakt.tv info (from ineffablebob)

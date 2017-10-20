@@ -18,7 +18,7 @@ msgid "Main settings"
 msgstr ""
 
 msgctxt "#50001"
-msgid "Username"
+msgid "Email"
 msgstr ""
 
 msgctxt "#50002"
@@ -188,4 +188,3 @@ msgstr ""
 msgctxt "#50130"
 msgid "Rockets"
 msgstr ""
-

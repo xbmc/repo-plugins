@@ -5,7 +5,7 @@
   <category label="50000">
     <setting id="username" type="text" label="50001" default=""/>
     <setting id="password" type="text" label="50002" option="hidden" default=""/>
-    <setting id="quality_id" type="enum" label="50003" values="720p @ 60fps (6000 kbps)|720p (3000 kbps)|540p (1600 kbps)|432p (1200 kbps)|360p (800 kbps)" default="0" />
+    <setting id="quality_id" type="enum" label="50003" values="auto|720p @ 60fps (6000 kbps)|720p (3000 kbps)|540p (1600 kbps)|432p (1200 kbps)|360p (800 kbps)" default="0" />
     <setting id="scores" type="enum" label="50004" values="hide|show" default="0" />
     <setting id="local_timezone" type="enum" label="50007" values="on|off" default="0" />
     <setting id="debug" type="enum" label="50005" values="on|off" default="1" />

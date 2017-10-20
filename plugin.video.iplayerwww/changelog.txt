@@ -1,3 +1,9 @@
+v2.5.25
+Fixed Highlights.
+
+v2.5.24
+Categories now needs https (Note: This may break compatibility with Jarvis and earlier)
+
 v2.5.23
 Fixed Highlights.
 

@@ -289,7 +289,7 @@ def ScrapeEpisodes(page_url):
     for page in page_range:
 
         if page > current_page:
-            page_url = 'http://www.bbc.co.uk' + page_base_url + str(page)
+            page_url = 'https://www.bbc.co.uk' + page_base_url + str(page)
             html = OpenURL(page_url)
 
         # NOTE remove inner li to match outer li

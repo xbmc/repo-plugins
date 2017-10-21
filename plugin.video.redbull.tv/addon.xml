@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.redbull.tv" name="Red Bull TV" version="2.0.0" provider-name="andy-g">
+	<requires>
+		<import addon="xbmc.python" version="2.25.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Redbull TV</summary>
+		<description lang="en">Red Bull TV gives you front-row access to live events, the best inaction sports, new music and entertainment, and thrilling videos from world adventurers.</description>
+		<website>http://www.redbull.tv/</website>
+		<platform>all</platform>
+		<source>https://github.com/andy-g/kodi.plugin.video.redbulltv2</source>
+	</extension>
+</addon>

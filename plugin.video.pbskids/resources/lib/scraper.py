@@ -23,7 +23,7 @@ class myAddon(t1mAddon):
       a = a.get('items')
       for b in a:
           name = b.get('title','no title')
-          url = 'http://pbskids.org/pbsk/video/api/getVideos/?startindex=1&endindex=200&program=%s&type=episode&category=&group=&selectedID=&status=available&player=flash&flash=true' % (urllib.quote(name))
+          url = 'http://pbskids.org/pbsk/video/api/getVideos/?startindex=1&endindex=200&program=%s&type=episode&category=&group=&selectedID=&status=available&player=flash&flash=true' % (urllib.quote(name.encode(UTF8)))
           thumb = b.get('images',{'x':None})
           if thumb == []:
               continue

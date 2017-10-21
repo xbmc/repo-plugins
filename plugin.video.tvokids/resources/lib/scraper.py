@@ -27,7 +27,7 @@ class myAddon(t1mAddon):
      return(ilist)
 
   def getAddonShows(self,url,ilist):
-     html = self.getRequest('http://tvokids.com/%s/videos' % url)
+     html = self.getRequest('https://tvokids.com/%s/videos' % url)
      shows = re.compile('<div class="tvokids-tile.+?href="(.+?)".+?"tile-title">(.+?)<.+?data-lazyload="(.+?)".+?</div', re.DOTALL).findall(html)
      for (url, name, thumb) in shows:
          name = name.strip()
@@ -41,12 +41,12 @@ class myAddon(t1mAddon):
      return(ilist)
 
   def getAddonEpisodes(self,url,ilist):
-     html = self.getRequest('http://tvokids.com%s' % url)
+     html = self.getRequest('https://tvokids.com%s' % url)
      html = re.compile('<footer class(.+?)</footer',re.DOTALL).search(html).group(1)
      a = re.compile('<a href="(.+?)".+?aria-label="(.+?)"', re.DOTALL).findall(html)
      for url, name in a:
          name = h.unescape(name).replace('&#039;',"'")
-         html = self.getRequest('http://tvokids.com%s' % (url))
+         html = self.getRequest('https://tvokids.com%s' % (url))
          url = re.compile('data-video-id="(.+?)"', re.DOTALL).search(html).group(1)
          vurl = 'https://secure.brightcove.com/services/viewer/htmlFederated?&width=859&height=482&flashID=BrightcoveExperience&bgcolor=%23FFFFFF&playerID=48543011001&playerKey=&isVid=true&isUI=true&dynamicStreaming=true&%40videoPlayer='+url+'&secureConnections=true&secureHTMLConnections=true'
          html = self.getRequest(vurl)

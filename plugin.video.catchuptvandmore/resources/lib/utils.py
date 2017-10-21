@@ -31,16 +31,16 @@ from resources.lib import common
 user_data = common.sp.xbmc.translatePath(
     os.path.join(
         'special://profile/addon_data',
-        common.addon.id))
+        common.ADDON.id))
 
 cache_path = common.sp.xbmc.translatePath(
     os.path.join(
         user_data,
         'cache'))
 
-default_ua = "Mozilla/5.0 (Windows NT 6.1; WOW64) " \
+default_ua = "Mozilla/5.0 (X11; Linux x86_64) " \
              "AppleWebKit/537.36 (KHTML, like Gecko) " \
-             "Chrome/55.0.2883.87 Safari/537.36"
+             "Chrome/60.0.3112.78 Safari/537.36"
 
 user_agents = [
     'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36'
@@ -74,7 +74,7 @@ def download_catalog(
         specific_headers={},
         params={}):
     file_name = format_filename(file_name)
-    common.addon.log('URL download_catalog : ' + url)
+    common.ADDON.log('URL download_catalog : ' + url)
 
     if not os.path.exists(cache_path):
         os.makedirs(cache_path, mode=0777)
@@ -124,7 +124,7 @@ def get_webcontent(
         random_ua=False,
         specific_headers={},
         params={}):
-    common.addon.log('URL get_webcontent : ' + url)
+    common.ADDON.log('URL get_webcontent : ' + url)
     if random_ua:
             ua = user_agents[randint(0, len(user_agents) - 1)]
     else:
@@ -167,6 +167,6 @@ def get_redirected_url(
 
 
 def send_notification(
-        message, title=common.plugin_name, time=5000, sound=True):
+        message, title=common.PLUGIN_NAME, time=5000, sound=True):
     common.sp.xbmcgui.Dialog().notification(
-        title, message, common.addon.icon, time)
+        title, message, common.ADDON.icon, time)

@@ -21,20 +21,24 @@
 """
 
 import imp
+import YDStreamUtils
+import YDStreamExtractor
 from resources.lib import skeleton
 from resources.lib import common
 
+YDStreamExtractor.disableDASHVideo(True)
+
 # Useful path
-lib_path = common.sp.xbmc.translatePath(
+LIB_PATH = common.sp.xbmc.translatePath(
     common.sp.os.path.join(
-        common.addon.path,
+        common.ADDON.path,
         "resources",
         "lib"))
 
-media_path = (
+MEDIA_PATH = (
     common.sp.xbmc.translatePath(
         common.sp.os.path.join(
-            common.addon.path,
+            common.ADDON.path,
             "resources",
             "media"
         )))
@@ -42,10 +46,10 @@ media_path = (
 # Initialize GNU gettext emulation in addon
 # This allows to use UI strings from addon’s English
 # strings.po file instead of numeric codes
-_ = common.addon.initialize_gettext()
+_ = common.ADDON.initialize_gettext()
 
 
-@common.plugin.action()
+@common.PLUGIN.action()
 def root(params):
     """
     Build the addon main menu
@@ -53,21 +57,34 @@ def root(params):
     """
     listing = []
     last_category_id = ''
-    for category_id, string_id in skeleton.categories.iteritems():
-        if common.plugin.get_setting(category_id):
+    for category_id, string_id in skeleton.CATEGORIES.iteritems():
+        if common.PLUGIN.get_setting(category_id):
             last_category_id = category_id
             last_window_title = _(string_id)
             context_menu = []
             hide = (
                 _('Hide'),
-                'XBMC.RunPlugin(' + common.plugin.get_url(
+                'XBMC.RunPlugin(' + common.PLUGIN.get_url(
                     action='hide',
                     item_id=category_id) + ')'
             )
+            media_category_path = common.sp.xbmc.translatePath(
+                common.sp.os.path.join(
+                    MEDIA_PATH,
+                    'categories',
+                    category_id[-2:]
+                )
+            )
+
+            icon = media_category_path + '.png'
+            fanart = media_category_path + '_fanart.png'
+
             context_menu.append(hide)
             listing.append({
+                'icon': icon,
+                'fanart': fanart,
                 'label': _(string_id),
-                'url': common.plugin.get_url(
+                'url': common.PLUGIN.get_url(
                     action='list_channels',
                     category_id=category_id,
                     window_title=_(string_id)
@@ -81,7 +98,7 @@ def root(params):
         params['window_title'] = last_window_title
         return list_channels(params)
 
-    return common.plugin.create_listing(
+    return common.PLUGIN.create_listing(
         listing,
         sort_methods=(
             common.sp.xbmcplugin.SORT_METHOD_UNSORTED,
@@ -89,7 +106,7 @@ def root(params):
     )
 
 
-@common.plugin.action()
+@common.PLUGIN.action()
 def list_channels(params):
     """
     Build the channels list
@@ -97,12 +114,12 @@ def list_channels(params):
     """
 
     # First, we sort channels by order
-    channels_dict = skeleton.channels[params.category_id]
+    channels_dict = skeleton.CHANNELS[params.category_id]
     channels = []
     for channel_id, title in channels_dict.iteritems():
         # If channel isn't disable
-        if common.plugin.get_setting(channel_id):
-            channel_order = common.plugin.get_setting(channel_id + '.order')
+        if common.PLUGIN.get_setting(channel_id):
+            channel_order = common.PLUGIN.get_setting(channel_id + '.order')
             channel = (channel_order, channel_id, title)
             channels.append(channel)
 
@@ -114,7 +131,7 @@ def list_channels(params):
         # channel_id = channels.fr.6play.w9
         [
             channel_type,  # channels
-            channel_country,  # fr
+            channel_category,  # fr
             channel_file,  # 6play
             channel_name  # w9
         ] = channel_id.split('.')
@@ -122,14 +139,14 @@ def list_channels(params):
         # channel_module = channels.fr.6play
         channel_module = '.'.join((
             channel_type,
-            channel_country,
+            channel_category,
             channel_file))
 
         media_channel_path = common.sp.xbmc.translatePath(
             common.sp.os.path.join(
-                media_path,
+                MEDIA_PATH,
                 channel_type,
-                channel_country,
+                channel_category,
                 channel_name
             ))
 
@@ -138,7 +155,7 @@ def list_channels(params):
 
         item_down = (
             _('Move down'),
-            'XBMC.RunPlugin(' + common.plugin.get_url(
+            'XBMC.RunPlugin(' + common.PLUGIN.get_url(
                 action='move',
                 direction='down',
                 channel_id_order=channel_id + '.order',
@@ -146,7 +163,7 @@ def list_channels(params):
         )
         item_up = (
             _('Move up'),
-            'XBMC.RunPlugin(' + common.plugin.get_url(
+            'XBMC.RunPlugin(' + common.PLUGIN.get_url(
                 action='move',
                 direction='up',
                 channel_id_order=channel_id + '.order',
@@ -163,7 +180,7 @@ def list_channels(params):
 
         hide = (
             _('Hide'),
-            'XBMC.RunPlugin(' + common.plugin.get_url(
+            'XBMC.RunPlugin(' + common.PLUGIN.get_url(
                 action='hide',
                 item_id=channel_id) + ')'
         )
@@ -176,70 +193,74 @@ def list_channels(params):
             'icon': icon,
             'fanart': fanart,
             'label': title,
-            'url': common.plugin.get_url(
+            'url': common.PLUGIN.get_url(
                 action='channel_entry',
-                next='list_shows_1',
+                next='root',
                 channel_name=channel_name,
                 channel_module=channel_module,
                 channel_id=channel_id,
-                channel_country=channel_country,
+                channel_category=channel_category,
                 window_title=title
             ),
             'context_menu': context_menu
         })
 
-    return common.plugin.create_listing(
+    return common.PLUGIN.create_listing(
         listing,
         sort_methods=(
             common.sp.xbmcplugin.SORT_METHOD_UNSORTED,)
     )
 
 
-@common.plugin.action()
+def get_channel_module(params):
+    if 'channel_name' in params and \
+            'channel_module' in params and \
+            'channel_id' in params and \
+            'channel_category' in params:
+        channel_name = params.channel_name
+        channel_module = params.channel_module
+        channel_id = params.channel_id
+        channel_category = params.channel_category
+        with common.PLUGIN.get_storage() as storage:
+            storage['last_channel_name'] = channel_name
+            storage['last_channel_module'] = channel_module
+            storage['last_channel_id'] = channel_id
+            storage['last_channel_category'] = channel_category
+    else:
+        with common.PLUGIN.get_storage() as storage:
+            channel_name = storage['last_channel_name']
+            channel_module = storage['last_channel_module']
+            channel_id = storage['last_channel_id']
+            channel_category = storage['last_channel_category']
+
+    params['channel_name'] = channel_name
+    params['channel_id'] = channel_id
+    params['channel_category'] = channel_category
+
+    channel_path = common.sp.xbmc.translatePath(
+        common.sp.os.path.join(
+            LIB_PATH,
+            channel_module.replace('.', '/') + '.py'))
+
+    return imp.load_source(
+        channel_name,
+        channel_path)
+
+
+@common.PLUGIN.action()
 def channel_entry(params):
     """
     Last plugin action function in addon.py.
     Now we are going into the channel python file.
     The channel file can return folder or not item ; playable or not item
     """
-    if 'channel_name' in params and \
-            'channel_module' in params and \
-            'channel_id' in params and \
-            'channel_country' in params:
-        channel_name = params.channel_name
-        channel_module = params.channel_module
-        channel_id = params.channel_id
-        channel_country = params.channel_country
-        with common.plugin.get_storage() as storage:
-            storage['last_channel_name'] = channel_name
-            storage['last_channel_module'] = channel_module
-            storage['last_channel_id'] = channel_id
-            storage['last_channel_country'] = channel_country
-    else:
-        with common.plugin.get_storage() as storage:
-            channel_name = storage['last_channel_name']
-            channel_module = storage['last_channel_module']
-            channel_id = storage['last_channel_id']
-            channel_country = storage['last_channel_country']
-
-    params['channel_name'] = channel_name
-    params['channel_id'] = channel_id
-    params['channel_country'] = channel_country
-
-    channel_path = common.sp.xbmc.translatePath(
-        common.sp.os.path.join(
-            lib_path,
-            channel_module.replace('.', '/') + '.py'))
-
-    channel = imp.load_source(
-        channel_name,
-        channel_path)
+    channel = get_channel_module(params)
 
     # Let's go to the channel file ...
     return channel.channel_entry(params)
 
 
-@common.plugin.action()
+@common.PLUGIN.action()
 def move(params):
     if params.direction == 'down':
         offset = + 1
@@ -254,29 +275,60 @@ def move(params):
             channel_swaped = eval(params.displayed_channels[k + offset])
             channel_swaped_order = channel_swaped[0]
             channel_swaped_id = channel_swaped[1]
-            common.plugin.set_setting(
+            common.PLUGIN.set_setting(
                 params.channel_id_order,
                 channel_swaped_order)
-            common.plugin.set_setting(
+            common.PLUGIN.set_setting(
                 channel_swaped_id + '.order',
                 channel_order)
             common.sp.xbmc.executebuiltin('XBMC.Container.Refresh()')
             return None
 
 
-@common.plugin.action()
+@common.PLUGIN.action()
 def hide(params):
-    if common.plugin.get_setting('show_hidden_items_information'):
+    if common.PLUGIN.get_setting('show_hidden_items_information'):
         common.sp.xbmcgui.Dialog().ok(
             _('Information'),
             _('To re-enable hidden items go to the plugin settings'))
-        common.plugin.set_setting('show_hidden_items_information', False)
+        common.PLUGIN.set_setting('show_hidden_items_information', False)
 
-    common.plugin.set_setting(params.item_id, False)
+    common.PLUGIN.set_setting(params.item_id, False)
     common.sp.xbmc.executebuiltin('XBMC.Container.Refresh()')
+    return None
+
+
+@common.PLUGIN.action()
+def download_video(params):
+    #  Ici on a seulement le lien de la page web où se trouve la video
+    #  Il faut appeller la fonction get_video_url de la chaine concernée pour avoir l'URL finale de la vidéo
+    channel = get_channel_module(params)
+    params.next = 'download_video'
+    url_video = channel.get_video_url(params)
+
+    #  Maintenant on peut télécharger la vidéo
+
+    print 'URL_VIDEO to download ' + url_video
+
+    vid = YDStreamExtractor.getVideoInfo(url_video, quality=3)
+    path = common.PLUGIN.get_setting('dlFolder')
+
+    with YDStreamUtils.DownloadProgress() as prog:  # This gives a progress dialog interface ready to use
+        try:
+            YDStreamExtractor.setOutputCallback(prog)
+            result = YDStreamExtractor.downloadVideo(vid, path)
+            if result:
+                # success
+                full_path_to_file = result.filepath
+            elif result.status != 'canceled':
+                # download failed
+                error_message = result.message
+        finally:
+            YDStreamExtractor.setOutputCallback(None)
+
     return None
 
 
 if __name__ == '__main__':
     window_title = common.get_window_title()
-    common.plugin.run(window_title)
+    common.PLUGIN.run(window_title)

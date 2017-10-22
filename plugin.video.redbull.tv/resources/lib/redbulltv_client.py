@@ -2,12 +2,12 @@ import re, urllib2
 import utils
 
 class RedbullTVClient(object):
-    REDBULL_API = "https://appletv-v2.redbull.tv/"
+    REDBULL_API = "https://appletv.redbull.tv/"
     ROOT_MENU = [
-        {"title": "Discover", "url": REDBULL_API + "views/discover", "is_content":False},
-        {"title": "TV", "url": REDBULL_API + "views/tv", "is_content":False},
-        {"title": "Channels", "url": REDBULL_API + "views/channels", "is_content":False},
-        {"title": "Calendar", "url": REDBULL_API + "views/calendar", "is_content":False},
+        {"title": "Discover", "url": REDBULL_API + "products/discover", "is_content":False},
+        {"title": "TV", "url": REDBULL_API + "products/tv", "is_content":False},
+        {"title": "Channels", "url": REDBULL_API + "products/channels", "is_content":False},
+        {"title": "Calendar", "url": REDBULL_API + "products/calendar", "is_content":False},
         {"title": "Search", "url": REDBULL_API + "search?q=", "is_content":False},
     ]
 
@@ -108,3 +108,4 @@ class RedbullTVClient(object):
         for item in xml_elements:
             items.append(self.get_element_details(item, url))
         return items
+    

@@ -17,21 +17,17 @@ import SimpleDownloader
 import requests
 import pickle
 from operator import itemgetter
-from HTMLParser import HTMLParser
-
+familyFilter = "1"
 socket.setdefaulttimeout(60)
 pluginhandle = int(sys.argv[1])
 addon = xbmcaddon.Addon()
 addonID = addon.getAddonInfo('id')
-_icon = addon.getAddonInfo('icon')
-_fanart = addon.getAddonInfo('fanart')
 channelFavsFile = xbmc.translatePath("special://profile/addon_data/"+addonID+"/"+addonID+".favorites")
+familyFilterFile = xbmc.translatePath("special://profile/addon_data/"+addonID+"/family_filter_off")
 cookie_file = xbmc.translatePath("special://profile/addon_data/"+addonID+"/cookies")
+if os.path.exists(familyFilterFile):
+    familyFilter = "0"
 
-familyFilter = '1'
-if addon.getSetting('family_filter') == 'false':
-    familyFilter = '0'
-    
 if not os.path.exists(xbmc.translatePath("special://profile/addon_data/"+addonID+"/settings.xml")):
     addon.openSettings()
 
@@ -39,10 +35,11 @@ forceViewModeNew = addon.getSetting("forceViewModeNew") == "true"
 viewModeNew = str(addon.getSetting("viewModeNew"))
 maxVideoQuality = addon.getSetting("maxVideoQuality")
 downloadDir = addon.getSetting("downloadDir")
+# qual = ["480p", "720p", "1080p"]
 qual = ["480", "720", "1080"]
 maxVideoQuality = qual[int(maxVideoQuality)]
 language = addon.getSetting("language")
-languages = ["ar_ES", "br_PT", "ca_EN", "ca_FR", "de_DE", "es_ES", "fr_FR", "in_EN", "id_ID", "it_IT", "ci_FR", "my_MS", "mx_ES", "pk_EN", "ph_EN", "tr_TR", "en_GB", "en_US", "vn_VI", "kr_KO", "tw_TW"]
+languages = ["en_EN", "ar_ES", "au_EN", "be_FR", "be_NL", "br_PT", "ca_EN", "ca_FR", "de_DE", "es_ES", "es_CA", "gr_EL", "fr_FR", "in_EN", "ie_EN", "it_IT", "mx_ES", "ma_FR", "nl_NL", "at_DE", "pl_PL", "pt_PT", "ru_RU", "ro_RO", "ch_FR", "ch_DE", "ch_IT", "tn_FR", "tr_TR", "en_GB", "en_US", "vn_VI", "jp_JP", "cn_ZH"]
 language = languages[int(language)]
 dmUser = addon.getSetting("dmUser")
 itemsPerPage = addon.getSetting("itemsPerPage")
@@ -51,34 +48,18 @@ itemsPerPage = itemsPage[int(itemsPerPage)]
 urlMain = "https://api.dailymotion.com"
 
 
-
-class MLStripper(HTMLParser):
-    def __init__(self):
-        self.reset()
-        self.fed = []
-    def handle_data(self, d):
-        self.fed.append(d)
-    def get_data(self):
-        return ''.join(self.fed)
-
-def strip_tags(html):
-    parser = HTMLParser()
-    html = parser.unescape(html)
-    s = MLStripper()
-    s.feed(html)
-    return s.get_data()
-
 def index():
-    addDir(translation(30025), urlMain+"/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&list=what-to-watch&no_live=1&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listVideos', "")
-    addDir(translation(30006), "", 'listChannels', "")
-    addDir(translation(30007), urlMain+"/users?fields=username,avatar_large_url,videos_total,views_total&sort=popular&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listUsers', "")
-    addDir(translation(30002), "", 'search', "")
-    addDir(translation(30003), urlMain+"/videos?fields=id,thumbnail_large_url,title,views_last_hour&availability=1&live_onair=1&sort=visited-hour&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listLive', "")
     if dmUser:
         addDir(translation(30034), "", "personalMain", "")
     else:
         addFavDir(translation(30024), "", "favouriteUsers", "")
+    addDir(translation(30006), "", 'listChannels', "")
+    addDir(translation(30007), "", 'sortUsers1', "")    
+    addDir(translation(30002), "", 'search', "")
+    addDir(translation(30003), urlMain+"/videos?fields=id,thumbnail_large_url%2Ctitle%2Cviews_last_hour&filters=live&sort=visited-hour&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listLive', "")
+    addDir(translation(30039), '3D:ALL', 'sortVideos1', '', '')
     xbmcplugin.endOfDirectory(pluginhandle)
+
 
 def personalMain():
     addDir(translation(30041), urlMain+"/user/"+dmUser+"/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listVideos', "")
@@ -87,6 +68,7 @@ def personalMain():
     addDir(translation(30037), urlMain+"/user/"+dmUser+"/favorites?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listVideos', "")
     addDir(translation(30038), urlMain+"/user/"+dmUser+"/playlists?fields=id,name,videos_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listUserPlaylists', "")   
     xbmcplugin.endOfDirectory(pluginhandle)
+
 
 def listUserPlaylists(url):
     content = getUrl(url)
@@ -102,9 +84,12 @@ def listUserPlaylists(url):
         addDir(translation(30001)+" ("+str(nextPage)+")", url.replace("page="+str(currentPage), "page="+str(nextPage)), 'listUserPlaylists', "")
     xbmcplugin.endOfDirectory(pluginhandle)
 
+
+
 def showPlaylist(id):
     url = urlMain+"/playlist/"+id+"/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1"
     listVideos(url)
+
 
 def favouriteUsers():
     xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_LABEL)
@@ -116,6 +101,7 @@ def favouriteUsers():
             addUserFavDir(user, 'owner:'+user, 'sortVideos1', thumb)
     xbmcplugin.endOfDirectory(pluginhandle)
 
+
 def listChannels():
     content = getUrl(urlMain+"/channels?family_filter="+familyFilter+"&localization="+language)
     content = json.loads(content)
@@ -126,18 +112,24 @@ def listChannels():
         addDir(title, 'channel:'+id, 'sortVideos1', '', desc)
     xbmcplugin.endOfDirectory(pluginhandle)
 
+
 def sortVideos1(url):
     type = url[:url.find(":")]
     id = url[url.find(":")+1:]
-    if type == "group":
+    if type == "3D":
+        url = urlMain+"/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&filters=3d&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1"
+    elif type == "group":
         url = urlMain+"/group/"+id+"/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1"
     else:
         url = urlMain+"/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&"+type+"="+id+"&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1"
     addDir(translation(30008), url, 'listVideos', "")
     addDir(translation(30009), url.replace("sort=recent", "sort=visited"), 'sortVideos2', "")
+    addDir(translation(30020), url.replace("sort=recent", "sort=commented"), 'sortVideos2', "")
+    addDir(translation(30010), url.replace("sort=recent", "sort=rated"), 'sortVideos2', "")
     if type == "owner":
         addDir("- "+translation(30038), urlMain+"/user/"+id+"/playlists?fields=id,name,videos_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listUserPlaylists', "")
     xbmcplugin.endOfDirectory(pluginhandle)
+
 
 def sortVideos2(url):
     addDir(translation(30011), url.replace("sort=visited", "sort=visited-today").replace("sort=commented", "sort=commented-today").replace("sort=rated", "sort=rated-today"), "listVideos", "")
@@ -145,6 +137,7 @@ def sortVideos2(url):
     addDir(translation(30013), url.replace("sort=visited", "sort=visited-month").replace("sort=commented", "sort=commented-month").replace("sort=rated", "sort=rated-month"), "listVideos", "")
     addDir(translation(30014), url, 'listVideos', "")
     xbmcplugin.endOfDirectory(pluginhandle)
+
 
 def sortUsers1():
     url = urlMain+"/users?fields=username,avatar_large_url,videos_total,views_total&sort=popular&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1"
@@ -154,11 +147,13 @@ def sortUsers1():
     addDir(translation(30018), url+"&filters=creative", 'sortUsers2', "")
     xbmcplugin.endOfDirectory(pluginhandle)
 
+
 def sortUsers2(url):
     addDir(translation(30019), url, 'listUsers', "")
     addDir(translation(30020), url.replace("sort=popular", "sort=commented"), 'listUsers', "")
     addDir(translation(30021), url.replace("sort=popular", "sort=rated"), 'listUsers', "")
     xbmcplugin.endOfDirectory(pluginhandle)
+
 
 def listVideos(url):
     xbmcplugin.setContent(pluginhandle, "episodes")
@@ -168,7 +163,7 @@ def listVideos(url):
     for item in content['list']:
         id = item['id']
         title = item['title'].encode('utf-8')
-        desc = strip_tags(item['description']).encode('utf-8')
+        desc = item['description'].encode('utf-8')
         duration = item['duration']
         user = item['owner.username']
         date = item['taken_time']
@@ -202,6 +197,7 @@ def listVideos(url):
         xbmc.executebuiltin('Container.SetViewMode('+viewModeNew+')')
     xbmcplugin.endOfDirectory(pluginhandle)
 
+
 def listUsers(url):
     content = getUrl(url)
     content = json.loads(content)
@@ -216,6 +212,7 @@ def listUsers(url):
         nextPage = currentPage+1
         addDir(translation(30001)+" ("+str(nextPage)+")", url.replace("page="+str(currentPage), "page="+str(nextPage)), 'listUsers', "")
     xbmcplugin.endOfDirectory(pluginhandle)
+
 
 def listLive(url):
     #print 'live url ',url
@@ -235,6 +232,7 @@ def listLive(url):
     if forceViewModeNew:
         xbmc.executebuiltin('Container.SetViewMode('+viewModeNew+')')
 
+
 def search():
     keyboard = xbmc.Keyboard('', translation(30002))
     keyboard.doModal()
@@ -242,14 +240,20 @@ def search():
         search_string = keyboard.getText().replace(" ", "+")
         listVideos(urlMain+"/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&search="+search_string+"&sort=relevance&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1")
 
+
 def playVideo(id,live=False):
     if live:
         url=getStreamUrl(id,live=True)
     else:
         url = getStreamUrl(id)
-    if url:
+    print url
+    if url and not '.f4mTester' in url:
+        #print 'path found to beeeeeeeeeeee' , url
         listitem = xbmcgui.ListItem(path=url)
-        xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
+        xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)    
+
+    elif url:
+        xbmc.executebuiltin('XBMC.RunPlugin('+url+')')
     else:
         print 'No playable url found'
 
@@ -265,13 +269,6 @@ def BW_choice(stream):
     if bw_url :
         newlist =  sorted(bw_url, key=itemgetter(0),reverse=True)
         return newlist[0] [1].split('#cell')[0]
-
-def s(elem):
-    if elem[0] == "auto":
-        return 1
-    else:
-        return int(elem[0].split("@")[0])
-
 def getStreamUrl(id,live=False):
     if familyFilter == "1":
         ff = "on"
@@ -279,28 +276,27 @@ def getStreamUrl(id,live=False):
         ff = "off"
     print 'The url is ::',url
     headers = {'User-Agent':'Android'}
-    cookie = {'Cookie':"lang="+language+"; ff="+ff}
+    cookie = {'Cookie':"lang="+language+"; family_filter="+ff}
     r = requests.get("http://www.dailymotion.com/player/metadata/video/"+id,headers=headers,cookies=cookie)
     content = r.json()
     if content.get('error') is not None:
-        Error = (content['error']['title'])
+        Error = 'DailyMotion Says:[COLOR yellow]%s[/COLOR]' %(content['error']['title'])
         xbmc.executebuiltin('XBMC.Notification(Info:,'+ Error +' ,5000)')
         return
     else:
-        cc= content['qualities']
+        cc= content['qualities']  #['380'][0]['url']
 
         cc = cc.items()
-
-        cc = sorted(cc,key=s,reverse=True)
+        cc = sorted(cc, reverse=True)
+ 
         m_url = ''
         other_playable_url = []
 
         for source,json_source in cc:
-            source = source.split("@")[0]
+
             for item in json_source:
-            
                 m_url = item.get('url',None)
-                #xbmc.log("DAILYMOTION - m_url = %s" %m_url,xbmc.LOGNOTICE)
+                xbmc.log("DILYMOTION_Gates - m_url = %s" %m_url)
                 if m_url:
                     if not live:
 
@@ -308,8 +304,10 @@ def getStreamUrl(id,live=False):
                             continue
 
                         elif  int(source) <= int(maxVideoQuality) :
-                            if 'video' in item.get('type',None):
-                                return m_url
+                            rr = requests.get(m_url,cookies=r.cookies.get_dict() ,headers=headers)    
+                            inhalt=rr.text.split('#cell')[0]                          
+                            match = re.compile('http://(.+?).m3u8', re.DOTALL).findall(inhalt)
+                            return "http://"+match[0]+".m3u8"
 
                         elif '.mnft' in m_url:
                             continue
@@ -324,25 +322,27 @@ def getStreamUrl(id,live=False):
                                 return rr.text.split('#cell')[0]+'|Cookie='+rr.headers['set-cookie']
                             else:
                                 return rr.text.split('#cell')[0]
-                    other_playable_url.append(m_url)
-                    
-        if len(other_playable_url) >0: # probably not needed, only for last resort
+                    other_playable_url.append(m_url) 
+        if len(other_playable_url) >0: # probable not needed only for last resort
             for m_url in other_playable_url:
-                #xbmc.log("DAILYMOTION - other m_url = %s" %m_url,xbmc.LOGNOTICE)
                 if '.m3u8?auth' in m_url:
-                    rr = requests.get(m_url,cookies=r.cookies.get_dict() ,headers=headers)
+                    sep_url = m_url.split('?auth=')
+                    the_url = sep_url[0] + '?redirect=0&auth=' + urllib.quote(sep_url[1])
+                    rr = requests.get(the_url,cookies=r.cookies.get_dict() ,headers=headers)
                     if rr.headers.get('set-cookie'):
                         print 'adding cookie to url'
-                        strurl = re.findall('(http.+)',rr.text)[0].split('#cell')[0]+'|Cookie='+rr.headers['set-cookie']
+                        return rr.text.split('#cell')[0]+'|Cookie='+rr.headers['set-cookie']
                     else:
-                        strurl = re.findall('(http.+)',rr.text)[0].split('#cell')[0]
-                    #xbmc.log("DAILYMOTION - Calculated url = %s" %strurl,xbmc.LOGNOTICE)
-                    return strurl
+                        return rr.text.split('#cell')[0]
+                    
+      
+
 
 def queueVideo(url, name):
     playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
     listitem = xbmcgui.ListItem(name)
     playlist.add(url, listitem)
+
 
 def downloadVideo(id):
     downloader = SimpleDownloader.SimpleDownloader()
@@ -364,6 +364,7 @@ def downloadVideo(id):
         downloader.download(filename, params)
     else:
         xbmc.executebuiltin('XBMC.Notification(Download:,'+translation(30109)+'!,5000)')
+
 
 def playArte(id):
     try:
@@ -391,6 +392,7 @@ def playArte(id):
     except:
         xbmc.executebuiltin('XBMC.Notification(Info:,'+translation(30022)+' (Arte)!,5000)')
 
+
 def addFav():
     keyboard = xbmc.Keyboard('', translation(30033))
     keyboard.doModal()
@@ -407,6 +409,7 @@ def addFav():
             with open(channelFavsFile, 'a') as fh:
               fh.write(channelEntry+"\n")            
         xbmc.executebuiltin('XBMC.Notification(Info:,'+translation(30030)+'!,5000)')
+
 
 def favourites(param):
     mode = param[param.find("###MODE###=")+11:]
@@ -439,13 +442,17 @@ def favourites(param):
 def translation(id):
     return addon.getLocalizedString(id).encode('utf-8')
 
+
 def getUrl(url):
     req = urllib2.Request(url)
     req.add_header('User-Agent', 'Android')
+    #req.add_header('Accept:', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+    #req.add_header('Accept-Encoding:', 'gzip, deflate')
     response = urllib2.urlopen(req)
     link = response.read()
     response.close()
     return link
+
 
 def getUrl2(url):
     if familyFilter == "1":
@@ -454,9 +461,11 @@ def getUrl2(url):
         ff = "off"
     print 'The url is ::',url
     headers = {'User-Agent':'Android'}
-    cookie = {'Cookie':"lang="+language+"; ff="+ff}
+    cookie = {'Cookie':"lang="+language+"; family_filter="+ff}
     r = requests.get(url,headers=headers,cookies=cookie)
     return r.text
+
+
 
 def parameters_string_to_dict(parameters):
     paramDict = {}
@@ -468,13 +477,11 @@ def parameters_string_to_dict(parameters):
                 paramDict[paramSplits[0]] = paramSplits[1]
     return paramDict
 
+
 def addLink(name, url, mode, iconimage, user, desc, duration, date, nr):
     u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
     ok = True
-    liz = xbmcgui.ListItem(name)
-    liz.setArt({'thumb': iconimage,
-                'icon': _icon,
-                'fanart': _fanart})
+    liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc, "Aired": date, "Duration": duration, "Episode": nr})
     liz.setProperty('IsPlayable', 'true')
     entries = []
@@ -487,28 +494,25 @@ def addLink(name, url, mode, iconimage, user, desc, duration, date, nr):
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz)
     return ok
 
+
 def addLiveLink(name, url, mode, iconimage, desc):
     u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
     ok = True
-    liz = xbmcgui.ListItem(name)
-    liz.setArt({'thumb': iconimage,
-                'icon': _icon,
-                'fanart': _fanart})
+    liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc})
     liz.setProperty('IsPlayable', 'true')
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz)
     return ok
 
+
 def addDir(name, url, mode, iconimage, desc=""):
     u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
     ok = True
-    liz = xbmcgui.ListItem(name)
-    liz.setArt({'thumb': iconimage,
-                'icon': _icon,
-                'fanart': _fanart})
+    liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc})
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
     return ok
+
 
 def addUserDir(name, url, mode, iconimage, desc):
     u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
@@ -521,17 +525,16 @@ def addUserDir(name, url, mode, iconimage, desc):
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
     return ok
 
+
 def addFavDir(name, url, mode, iconimage):
     u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
     ok = True
-    liz = xbmcgui.ListItem(name)
-    liz.setArt({'thumb': iconimage,
-                'icon': _icon,
-                'fanart': _fanart})
+    liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"Title": name})
     liz.addContextMenuItems([(translation(30033), 'XBMC.RunPlugin(plugin://plugin.video.dailymotion_com/?mode=addFav)',)])
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
     return ok
+
 
 def addUserFavDir(name, url, mode, iconimage):
     u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
@@ -579,10 +582,12 @@ elif mode == 'sortUsers1':
     sortUsers1()
 elif mode == 'sortUsers2':
     sortUsers2(url)
-elif mode == 'playVideo':    
+elif mode == 'playVideo':
+    
     playVideo(url)
 elif mode == 'playLiveVideo':
     playVideo(url,live=True)
+
 elif mode == 'playArte':
     playArte(url)
 elif mode == "queueVideo":

@@ -58,6 +58,7 @@ URL   = 'http://ramfm.org/ram.pls'
 #Version=2
 
 
+_PLAYNOW_320 = 320
 _PLAYNOW_HI  = 192
 _PLAYNOW_MED = 128
 _PLAYNOW_LO  = 64
@@ -74,7 +75,10 @@ MODE_ARTIST = 1200
 MODE_IGNORE = 1300
 
 
-def DialogOK(title, line1, line2, line3):
+URL_320 = 'http://josvermeer.shoutcaststream.com:8300'
+
+
+def DialogOK(title, line1, line2='', line3=''):
     xbmcgui.Dialog().ok(title, line1, line2, line3)
 
 def CheckVersion():
@@ -228,7 +232,7 @@ def IsLive():
         title = xbmc.Player().getMusicInfoTag().getTitle().lower()
     except:
         title = '' 
-   
+
     shows = []
     shows.append('Eighties Flash Back') #Monday
     shows.append('Ladies Night')        #Monday - Verified
@@ -239,6 +243,7 @@ def IsLive():
     shows.append('Happy Hour')          #Saturday
     shows.append('Eighties Request')    #Sunday - Verified
     shows.append('Chat Request')        #
+    shows.append('Wayne & Dave')        #Friday
 
     #genre = xbmc.getInfoLabel('MusicPlayer.Genre')
     #xbmc.log('Genre = %s' % genre)
@@ -255,10 +260,15 @@ def IsPlayingRAM():
         if not xbmc.Player().isPlayingAudio():
             return False
 
-        pl   = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)[0]
         resp = quicknet.getURL(URL, 1800)
 
-        if pl.getfilename()[:-1] in resp:
+        pl       = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)[0]
+        filename = pl.getfilename()
+
+        if filename[:-1] in resp:
+            return True
+
+        if filename == URL_320:
             return True
 
     except:
@@ -425,6 +435,9 @@ def getURL():
         kbps = '64'
 
     try:
+        if kbps == '320':
+            return URL_320
+
         lines = urllib2.urlopen(URL).readlines()
 
         for line in lines:
@@ -479,6 +492,8 @@ def ShowError(text):
 def Main():   
     CheckVersion()
 
+
+    addDir(GETTEXT(30054), _PLAYNOW_320,  False)
     addDir(GETTEXT(30051), _PLAYNOW_HI,   False)
     addDir(GETTEXT(30052), _PLAYNOW_MED,  False)
     addDir(GETTEXT(30053), _PLAYNOW_LO,   False)
@@ -533,7 +548,7 @@ try:    mode = int(params['mode'])
 except: pass
 
 
-if mode == _PLAYNOW_HI or mode == _PLAYNOW_MED or mode == _PLAYNOW_LO:
+if mode in [_PLAYNOW_HI, _PLAYNOW_MED, _PLAYNOW_LO, _PLAYNOW_320]:
     ADDON.setSetting('STREAM', str(mode))
     Play()
 

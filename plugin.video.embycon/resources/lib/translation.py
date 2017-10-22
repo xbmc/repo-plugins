@@ -50,9 +50,7 @@ STRINGS = {
     'series': 30233,
     'seasons': 30234,
     'episodes': 30235,
-    'save': 30236,
     'start_from_beginning': 30237,
-    'default_sort': 30238,
     'next_page': 30245,
     'search': 30246,
     'widgets': 30247,
@@ -97,5 +95,7 @@ STRINGS = {
     '_unwatched': 30285,
     'movies_unwatched': 30286,
     'tvshows_latest' : 30287,
-    '_latest' : 30288
+    '_latest' : 30288,
+    'tvshow_genre': 30289,
+    'all': 30290
 }

@@ -4,255 +4,243 @@
 
 msgid ""
 msgstr ""
-"Project-Id-Version: XBMC-Addons\n"
-"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
-"POT-Creation-Date: 2016-11-03 00:21+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Language: en\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 msgctxt "Addon Summary"
 msgid "Movies, TV, Music, User-Clips, 3D and Livestreams"
-msgstr ""
+msgstr "Films, Séries TV, Musique, Clips, 3D et Live"
 
 msgctxt "Addon Description"
 msgid "Movies, TV, Music, User-Clips, 3D and Livestreams"
-msgstr ""
+msgstr "Films, Séries TV, Musique, Clips, 3D et Live"
 
 msgctxt "Addon Disclaimer"
 msgid "Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing."
-msgstr ""
-
+msgstr "Certaines parties de cet addon peuvent ne pas être légales dans votre pays de résidence - s’il vous plaît vérifier avec vos lois locales avant d’installer"
 
 msgctxt "#30001"
 msgid "Next Page"
-msgstr ""
+msgstr "Page suivante"
 
 msgctxt "#30002"
 msgid "Search"
-msgstr ""
+msgstr "Rechercher"
 
 msgctxt "#30003"
 msgid "Live"
-msgstr ""
+msgstr "Live"
 
 msgctxt "#30004"
 msgid "Movies"
-msgstr ""
+msgstr "Films"
 
 msgctxt "#30005"
 msgid "Popular"
-msgstr ""
+msgstr "Populaire"
 
 msgctxt "#30006"
 msgid "Channels"
-msgstr ""
+msgstr "Chaînes"
 
 msgctxt "#30007"
 msgid "Users"
-msgstr ""
+msgstr "Utilisateurs"
 
 msgctxt "#30008"
 msgid "Most Recent"
-msgstr ""
+msgstr "Les plus récent"
 
 msgctxt "#30009"
 msgid "Most Viewed"
-msgstr ""
+msgstr "Les plus regardé"
 
 msgctxt "#30010"
 msgid "Best Rated"
-msgstr ""
+msgstr "Meilleur classement"
 
 msgctxt "#30011"
 msgid "Today"
-msgstr ""
+msgstr "Aujourd'hui"
 
 msgctxt "#30012"
 msgid "Week"
-msgstr ""
+msgstr "Semaine"
 
 msgctxt "#30013"
 msgid "Month"
-msgstr ""
+msgstr "Mois"
 
 msgctxt "#30014"
 msgid "All Time"
-msgstr ""
+msgstr "Date indifférente"
 
 msgctxt "#30015"
 msgid "All Users"
-msgstr ""
+msgstr "Tous les utilisateurs"
 
 msgctxt "#30016"
 msgid "Featured"
-msgstr ""
+msgstr "Les plus connu"
 
 msgctxt "#30017"
 msgid "Official"
-msgstr ""
+msgstr "Officiel"
 
 msgctxt "#30018"
 msgid "Creative"
-msgstr ""
+msgstr "Créatif"
 
 msgctxt "#30019"
 msgid "Most Popular"
-msgstr ""
+msgstr "Les plus populaire"
 
 msgctxt "#30020"
 msgid "Most Commented"
-msgstr ""
+msgstr "Les plus commenté"
 
 msgctxt "#30021"
 msgid "Top Rated"
-msgstr ""
+msgstr "Meilleur classement"
 
 msgctxt "#30022"
 msgid "Video not available"
-msgstr ""
+msgstr "Vidéo non disponible"
 
 msgctxt "#30023"
 msgid "Added"
-msgstr ""
+msgstr "Ajouter"
 
 msgctxt "#30024"
 msgid "Favourites"
-msgstr ""
+msgstr "Favoris"
 
 msgctxt "#30025"
 msgid "What to Watch"
-msgstr ""
+msgstr "Recommandées pour vous"
 
 #empty strings from id 30026 to 30027
 
 msgctxt "#30028"
 msgid "Add user to favourites"
-msgstr ""
+msgstr "Ajouter l'utilisateur aux favoris"
 
 msgctxt "#30029"
 msgid "Remove from favourites"
-msgstr ""
+msgstr "Supprimer des favoris"
 
 msgctxt "#30030"
 msgid "Added user to favourites"
-msgstr ""
+msgstr "Ajouté aux favoris"
 
 msgctxt "#30031"
 msgid "Are you over 18 and would like to turn off the family filter?"
-msgstr ""
+msgstr "Vous avez plus de 18 ans et souhaitez désactiver le filtre familial?"
 
 msgctxt "#30032"
 msgid "Turn the family filter on?"
-msgstr ""
+msgstr "Activez le filtre familial?"
 
 msgctxt "#30033"
 msgid "Add user"
-msgstr ""
+msgstr "Ajouter un utilisateur"
 
 msgctxt "#30034"
 msgid "My stuff"
-msgstr ""
+msgstr "Mes affaires"
 
 msgctxt "#30035"
 msgid "Contacts"
-msgstr ""
+msgstr "Contacts"
 
 msgctxt "#30036"
 msgid "Following"
-msgstr ""
+msgstr "Prochain"
 
 msgctxt "#30037"
 msgid "Favourites"
-msgstr ""
+msgstr "Favoris"
 
 msgctxt "#30038"
 msgid "Playlists"
-msgstr ""
+msgstr "Playlists"
 
 msgctxt "#30039"
 msgid "3D"
-msgstr ""
+msgstr "3D"
 
 msgctxt "#30040"
 msgid "All"
-msgstr ""
+msgstr "Tout"
 
 msgctxt "#30041"
 msgid "Videos"
-msgstr ""
+msgstr "Vidéos"
 
 msgctxt "#30042"
 msgid "Groups"
-msgstr ""
+msgstr "Groupes"
 
 msgctxt "#30043"
 msgid "Add to queue"
-msgstr ""
+msgstr "Ajouter à la liste"
 
 msgctxt "#30044"
 msgid "Download video"
-msgstr ""
+msgstr "Télécharger la video"
 
 #empty strings from id 30045 to 30100
 
 msgctxt "#30101"
 msgid "Country"
-msgstr ""
+msgstr "Pays"
 
 msgctxt "#30102"
 msgid "Force View"
-msgstr ""
+msgstr "Forcer l'affichage"
 
 msgctxt "#30103"
 msgid "ViewID"
-msgstr ""
+msgstr "Affichage ID"
 
 msgctxt "#30104"
 msgid "Family Filter"
-msgstr ""
+msgstr "Filtre parental"
 
 msgctxt "#30105"
 msgid "Maximum resolution"
-msgstr ""
+msgstr "Résolution maximale"
 
 msgctxt "#30106"
 msgid "Dailymotion Username"
-msgstr ""
+msgstr "Nom d'utilisateur Dailymotion"
 
 msgctxt "#30107"
 msgid "Items per page"
-msgstr ""
+msgstr "Articles par page"
 
 msgctxt "#30108"
 msgid "Download directory"
-msgstr ""
+msgstr "Répertoire de téléchargement"
 
 msgctxt "#30109"
 msgid "File already exists"
-msgstr ""
+msgstr "Le fichier existe déjà"
 
 msgctxt "#30110"
 msgid "Choose download directory in Settings"
-msgstr ""
+msgstr "Choisissez le répertoire de téléchargement dans les paramètres"
 
 msgctxt "#30111"
 msgid "General"
-msgstr ""
+msgstr "Général"
 
 msgctxt "#30112"
 msgid "Download"
-msgstr ""
+msgstr "Téléchargement"
 
 msgctxt "#30113"
 msgid "Miscellaneous"
-msgstr ""
+msgstr "Divers"
 
 msgctxt "#30114"
 msgid "Mature Content"
-msgstr ""
+msgstr "Contenus adultes"

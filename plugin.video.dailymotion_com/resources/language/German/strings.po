@@ -1,7 +1,8 @@
 # XBMC Media Center language file
 # Addon Name: DailyMotion.com
 # Addon id: plugin.video.dailymotion_com
-
+# Addon version: 2.2.3
+# Addon Provider: L0RE
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
@@ -124,10 +125,6 @@ msgctxt "#30024"
 msgid "Favourites"
 msgstr ""
 
-msgctxt "#30025"
-msgid "What to Watch"
-msgstr "Was man sich ansehen sollte"
-
 msgctxt "#30028"
 msgid "Add user to favourites"
 msgstr "User zu Favoriten hinzufügen"
@@ -206,11 +203,11 @@ msgstr "View erzwingen"
 
 msgctxt "#30103"
 msgid "ViewID"
-msgstr "View ID"
+msgstr ""
 
 msgctxt "#30104"
-msgid "Family Filter"
-msgstr "Familienfilter"
+msgid "Toggle Family Filter"
+msgstr ""
 
 msgctxt "#30105"
 msgid "Maximum resolution"
@@ -235,19 +232,3 @@ msgstr "Datei existiert bereits"
 msgctxt "#30110"
 msgid "Choose download directory in Settings"
 msgstr "Downloadverzeichnis in dein Einstellungen wählen"
-
-msgctxt "#30111"
-msgid "General"
-msgstr "Allgemeiner"
-
-msgctxt "#30112"
-msgid "Download"
-msgstr "Herunterladen"
-
-msgctxt "#30113"
-msgid "Miscellaneous"
-msgstr "Sonstiges"
-
-msgctxt "#30114"
-msgid "Mature Content"
-msgstr "Reifer Inhalt"

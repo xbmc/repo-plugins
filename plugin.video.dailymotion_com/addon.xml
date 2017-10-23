@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.dailymotion_com" name="DailyMotion.com" version="2.2.3" provider-name="L0RE">
+<addon id="plugin.video.dailymotion_com" name="DailyMotion.com" version="2.3.4" provider-name="gujal">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.simple.downloader" version="1.0.0"/>
@@ -10,12 +10,17 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
-        <summary lang="en">Movies, TV, Music, User-Clips, 3D and Livestreams</summary>
+        <summary lang="en">Movies, TV, Music, User-Clips, and Livestreams</summary>
         <language></language>
-        <description lang="en">Movies, TV, Music, User-Clips, 3D and Livestreams</description>
+        <description lang="en">Dailymotion attracts 300 million users from around the world, who watch 3.5 billion videos on its player each month.</description>
         <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
-        <website>http://www.dailymotion.com</website>
-        <source>https://github.com/AddonScriptorDE/plugin.video.dailymotion_com</source>
+		<summary lang="fr">Films, Séries TV, Musique, Clips, et Live</summary>
+		<language></language>
+		<description lang="fr">Dailymotion attire 300 millions d’utilisateurs qui regardent 3,5 milliards de vidéos sur son player chaque mois, à travers le monde.</description>
+		<disclaimer lang="fr">Certaines parties de cet addon peuvent ne pas être légales dans votre pays de résidence - s’il vous plaît vérifier avec vos lois locales avant d’installer.</disclaimer>
+        <news>Original coding by AddonScriptorDE - Additional coding by alibaba011, gates, L0RE</news>
+		<website>http://www.dailymotion.com</website>
+        <source>https://github.com/Gujal00/plugin.video.dailymotion_com</source>
         <forum>http://forum.xbmc.org/showthread.php?tid=142626</forum>
         <email>AddonScriptorDE at yahoo dot de</email>
     </extension>

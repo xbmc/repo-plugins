@@ -30,6 +30,7 @@ CACHE_TIME = 10
 
 PLUGIN_NAME = 'Catch-up TV & More'
 
+
 def get_window_title():
     query = sp.sys.argv[2][1:]
     params = PLUGIN.get_params(query)

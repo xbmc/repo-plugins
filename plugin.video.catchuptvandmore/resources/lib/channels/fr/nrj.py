@@ -58,7 +58,9 @@ URL_COMPTE_LOGIN = 'https://www.nrj-play.fr/compte/login'
 # TO DO add account for using Live Direct
 
 URL_LIVE_WITH_TOKEN = 'http://www.nrj-play.fr/compte/live?channel=%s'
-# channel (nrj12, ...) - call this url after get session (url live with token inside this page)
+# channel (nrj12, ...) -
+# call this url after get session (url live with token inside this page)
+
 
 def channel_entry(params):
     """Entry function of the module"""
@@ -76,14 +78,14 @@ def channel_entry(params):
         return None
 
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def root(params):
     """Add Replay and Live in the listing"""
     modes = []
 
     # Add Replay with Categories
     modes.append({
-        'label' : 'Replay',
+        'label': 'Replay',
         'url': common.PLUGIN.get_url(
             action='channel_entry',
             next='list_shows_1',
@@ -94,7 +96,7 @@ def root(params):
 
     # Add Replay
     modes.append({
-        'label' : 'Replay sans categorie',
+        'label': 'Replay sans categorie',
         'url': common.PLUGIN.get_url(
             action='channel_entry',
             next='list_shows_without_categories',
@@ -105,7 +107,7 @@ def root(params):
 
     # Add Live
     modes.append({
-        'label' : 'Live TV',
+        'label': 'Live TV',
         'url': common.PLUGIN.get_url(
             action='channel_entry',
             next='live_cat',
@@ -122,7 +124,8 @@ def root(params):
         ),
     )
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_shows(params):
     """Build shows listing"""
     shows = []
@@ -138,7 +141,7 @@ def list_shows(params):
                 action='channel_entry',
                 state_video=state_video,
                 next='list_videos_1',
-                #title_category=category_name,
+                # title_category=category_name,
                 window_title=state_video
             )
         })
@@ -168,7 +171,7 @@ def list_shows(params):
                     action='channel_entry',
                     state_video=state_video,
                     next='list_videos_1',
-                    #title_category=category_name,
+                    # title_category=category_name,
                     window_title=state_video
                 )
             })
@@ -186,7 +189,7 @@ def list_shows(params):
                             action='channel_entry',
                             category_name=category_name,
                             next='list_shows_programs',
-                            #title_category=category_name,
+                            # title_category=category_name,
                             window_title=category_name
                         )
                     })
@@ -198,9 +201,10 @@ def list_shows(params):
             state_video = 'VIDEOS_BY_CATEGORY'
 
             for collection in collections:
-                if params.category_name == collection.findtext("category").encode('utf-8') \
-                        or (params.category_name == 'NO_CATEGORY' and \
-                        collection.findtext("category").encode('utf-8') == ''):
+                if params.category_name == collection.findtext(
+                        "category").encode('utf-8') \
+                        or (params.category_name == 'NO_CATEGORY' and
+                            collection.findtext("category").encode('utf-8') == ''):
                     name_program = collection.findtext("name").encode('utf-8')
                     img_program = collection.findtext("picture")
                     id_program = collection.get("id")
@@ -213,7 +217,7 @@ def list_shows(params):
                             next='list_videos_1',
                             state_video=state_video,
                             id_program=id_program,
-                            #title_program=name_program,
+                            # title_program=name_program,
                             window_title=name_program
                         )
                     })
@@ -226,7 +230,8 @@ def list_shows(params):
         ),
     )
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_videos(params):
     """Build videos listing"""
     videos = []
@@ -241,12 +246,14 @@ def list_videos(params):
 
         xml_elements = ET.XML(replay_xml)
 
-        programs = xml_elements.findall("{http://www.sitemaps.org/schemas/sitemap/0.9}url")
+        programs = xml_elements.findall(
+            "{http://www.sitemaps.org/schemas/sitemap/0.9}url")
 
         for program in programs:
 
             url_site = program.findtext(
-                "{http://www.sitemaps.org/schemas/sitemap/0.9}loc").encode('utf-8')
+                "{http://www.sitemaps.org/schemas/sitemap/0.9}loc"
+            ).encode('utf-8')
             check_string = '%s/replay/' % params.channel_name
             if url_site.count(check_string) > 0:
 
@@ -355,7 +362,8 @@ def list_videos(params):
                 img = program.find("photos").findtext("photo")
 
                 # Url Video
-                url = '' #program.find("offres").find("offre").find("videos").findtext("video)
+                url = ''
+                # program.find("offres").find("offre").find("videos").findtext("video)
                 for i in program.find("offres").findall("offre"):
 
                     date_value = i.get("startdate")
@@ -429,7 +437,8 @@ def list_videos(params):
                 img = program.find("photos").findtext("photo")
 
                 # Url Video
-                url = '' #program.find("offres").find("offre").find("videos").findtext("video)
+                url = ''
+                # program.find("offres").find("offre").find("videos").findtext("video)
                 for i in program.find("offres").findall("offre"):
 
                     date_value = i.get("startdate")
@@ -497,7 +506,8 @@ def list_videos(params):
         ),
         content='tvshows')
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_live(params):
     """Build live listing"""
     lives = []
@@ -512,7 +522,8 @@ def list_live(params):
     result = session_requests.get(URL_COMPTE_LOGIN)
 
     token_form_login = re.compile(
-        r'name=\"login_form\[_token\]\" value=\"(.*?)\"').findall(result.text)[0]
+        r'name=\"login_form\[_token\]\" value=\"(.*?)\"'
+    ).findall(result.text)[0]
 
     # Build PAYLOAD
     payload = {
@@ -525,7 +536,7 @@ def list_live(params):
 
     # LOGIN
     result_2 = session_requests.post(
-        URL_COMPTE_LOGIN, data = payload, headers = dict(referer = URL_COMPTE_LOGIN))
+        URL_COMPTE_LOGIN, data=payload, headers=dict(referer=URL_COMPTE_LOGIN))
 
     # GET page with url_live with the session logged
     result_3 = session_requests.get(
@@ -555,7 +566,7 @@ def list_live(params):
         'label': title,
         'fanart': img,
         'thumb': img,
-        'url' : common.PLUGIN.get_url(
+        'url': common.PLUGIN.get_url(
             action='channel_entry',
             next='play_l',
             url_live=url_live,
@@ -572,7 +583,8 @@ def list_live(params):
         )
     )
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def get_video_url(params):
     """Get video URL and start video player"""
     if params.next == 'play_r' or params.next == 'download_video':

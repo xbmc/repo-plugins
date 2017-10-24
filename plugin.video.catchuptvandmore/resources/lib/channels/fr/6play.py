@@ -29,6 +29,15 @@ from resources.lib import common
 # TO DO
 # LIVE TV protected by #EXT-X-FAXS-CM
 # https://helpx.adobe.com/adobe-media-server/dev/configuring-content-protection-hls.html
+# Clip and Playlist (cas les blagues de TOTO)
+# Case MP4:
+# https://pc.middleware.6play.fr/6play/v2/platforms/m6group_web/services/6play/videos/playlist_2248?csa=6&with=clips,freemiumpacks,program_images,service_display_images
+# Case without ISM (One flux m3u8) :
+# https://pc.middleware.6play.fr/6play/v2/platforms/m6group_web/services/6play/videos/clip_11740712?csa=6&with=clips,freemiumpacks,program_images,service_display_images
+# Case Video Protected :
+# https://pc.middleware.6play.fr/6play/v2/platforms/m6group_web/services/6play/videos/clip_11288922?csa=6&with=clips,freemiumpacks,program_images,service_display_images
+# Rework Quality Video
+# Get vtt subtitle
 
 # Initialize GNU gettext emulation in addon
 # This allows to use UI strings from addon’s English
@@ -46,7 +55,7 @@ URL_ROOT = 'http://pc.middleware.6play.fr/6play/v2/platforms/' \
 # We get an id by program
 URL_CATEGORY = 'http://pc.middleware.6play.fr/6play/v2/platforms/' \
                'm6group_web/services/6play/folders/%s/programs' \
-               '?limit=999&offset=0&csa=9&with=parentcontext'
+               '?limit=999&offset=0&csa=6&with=parentcontext'
 
 # Url to get program's subfolders
 # e.g. Saison 5, Les meilleurs moments, les recettes pas à pas, ...
@@ -70,7 +79,7 @@ URL_VIDEOS2 = 'https://pc.middleware.6play.fr/6play/v2/platforms/' \
 
 URL_JSON_VIDEO = 'https://pc.middleware.6play.fr/6play/v2/platforms/' \
                  'm6group_web/services/6play/videos/%s'\
-                 '?csa=9&with=clips,freemiumpacks'
+                 '?csa=6&with=clips,freemiumpacks'
 
 
 URL_IMG = 'https://images.6play.fr/v1/images/%s/raw'
@@ -85,20 +94,21 @@ def channel_entry(params):
     elif 'list_videos' in params.next:
         return list_videos(params)
     elif 'live' in params.next:
-        return list_live(params)
+        return None
     elif 'play' in params.next:
         return get_video_url(params)
     return None
 
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def root(params):
     """Add Replay and Live in the listing"""
+    """
     modes = []
 
     # Add Replay
     modes.append({
-        'label' : 'Replay',
+        'label': 'Replay',
         'url': common.PLUGIN.get_url(
             action='channel_entry',
             next='list_shows_1',
@@ -114,8 +124,12 @@ def root(params):
             common.sp.xbmcplugin.SORT_METHOD_LABEL
         ),
     )
+    """
+    params.next = "list_shows_1"
+    return channel_entry(params)
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_shows(params):
     """Build categories listing"""
     shows = []
@@ -123,9 +137,12 @@ def list_shows(params):
     if params.next == 'list_shows_1':
 
         url_root_site = ''
-        if params.channel_name == 'stories' or params.channel_name == 'bruce' \
-           or params.channel_name == 'crazy_kitchen' or params.channel_name == 'home' \
-           or params.channel_name == 'styles' or params.channel_name == 'comedy':
+        if params.channel_name == 'stories' or \
+                params.channel_name == 'bruce' or \
+                params.channel_name == 'crazy_kitchen' or \
+                params.channel_name == 'home' or \
+                params.channel_name == 'styles' or \
+                params.channel_name == 'comedy':
             url_root_site = URL_ROOT % params.channel_name
         else:
             url_root_site = URL_ROOT % (params.channel_name + 'replay')
@@ -228,7 +245,7 @@ def list_shows(params):
 
         try:
             program_fanart = params.program_fanart
-        except:
+        except Exception:
             program_fanart = ''
 
         for sub_category in json_parser['program_subcats']:
@@ -288,7 +305,7 @@ def list_shows(params):
     return shows
 
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_videos(params):
     """Build videos listing"""
     videos = []
@@ -320,7 +337,7 @@ def list_videos(params):
             year = aired.split('-')[0]
             date = '.'.join((day, mounth, year))
 
-        except:
+        except Exception:
             aired = ''
             year = ''
             date = ''
@@ -378,7 +395,7 @@ def list_videos(params):
         content='tvshows')
 
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def get_video_url(params):
     """Get video URL and start video player"""
     video_json = utils.get_webcontent(
@@ -387,6 +404,9 @@ def get_video_url(params):
     json_parser = json.loads(video_json)
 
     video_assets = json_parser['clips'][0]['assets']
+    if video_assets is None:
+        utils.send_notification(common.ADDON.get_localized_string(30112))
+        return ''
     url = ''
     url2 = ''
     url3 = ''
@@ -405,41 +425,10 @@ def get_video_url(params):
         manifest_url = url2
     else:
         manifest_url = url3
-
-    manifest = utils.get_webcontent(
-        manifest_url,
-        random_ua=True)
-    if 'drm' in manifest:
-        utils.send_notification(common.ADDON.get_localized_string(30102))
-        return ''
-
-    desired_quality = common.PLUGIN.get_setting(
-        params.channel_id + '.quality')
-
-    if desired_quality == 'Auto':
-        return manifest_url
-
-    root = common.os.path.dirname(manifest_url)
-
-    url_sd = ''
-    url_hd = ''
-    url_ultra_sd = ''
-    url_ultra_hd = ''
-
-    lines = manifest.splitlines()
-    for k in range(0, len(lines) - 1):
-        if 'RESOLUTION=400' in lines[k]:
-            url_ultra_sd = root + '/' + lines[k + 1]
-        elif 'RESOLUTION=640' in lines[k]:
-            url_sd = root + '/' + lines[k + 1]
-        elif 'RESOLUTION=720' in lines[k]:
-            url_hd = root + '/' + lines[k + 1]
-        elif 'RESOLUTION=1080' in lines[k]:
-            url_ultra_hd = root + '/' + lines[k + 1]
-
-    desired_quality = common.PLUGIN.get_setting('quality')
-
-    if (desired_quality == 'BEST' or desired_quality == 'DIALOG') and url_ultra_hd:
-        return url_ultra_hd
-    else:
-        return manifest_url
+        manifest = utils.get_webcontent(
+            manifest_url,
+            random_ua=True)
+        if 'drm' in manifest:
+            utils.send_notification(common.ADDON.get_localized_string(30102))
+            return ''
+    return manifest_url

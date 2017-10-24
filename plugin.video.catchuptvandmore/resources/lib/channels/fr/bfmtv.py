@@ -33,7 +33,7 @@ from resources.lib import common
 
 # BFMTV, RMC, ONENET, etc ...
 URL_TOKEN = 'http://api.nextradiotv.com/%s-applications/'
-#channel
+# channel
 
 URL_MENU = 'http://www.bfmtv.com/static/static-mobile/bfmtv/' \
            'ios-smartphone/v0/configuration.json'
@@ -68,7 +68,8 @@ URL_LIVE_BFM_SPORT = 'http://rmcsport.bfmtv.com/mediaplayer/live-bfm-sport/'
 # RMC Decouverte
 URL_REPLAY_RMCDECOUVERTE = 'http://rmcdecouverte.bfmtv.com/mediaplayer-replay/'
 
-URL_VIDEO_HTML_RMCDECOUVERTE = 'http://rmcdecouverte.bfmtv.com/mediaplayer-replay/?id=%s'
+URL_VIDEO_HTML_RMCDECOUVERTE = 'http://rmcdecouverte.bfmtv.com/'\
+                               'mediaplayer-replay/?id=%s'
 # VideoId_html
 
 URL_LIVE_RMCDECOUVERTE = 'http://rmcdecouverte.bfmtv.com/mediaplayer-direct/'
@@ -76,7 +77,8 @@ URL_LIVE_RMCDECOUVERTE = 'http://rmcdecouverte.bfmtv.com/mediaplayer-direct/'
 URL_JS_POLICY_KEY = 'http://players.brightcove.net/%s/%s_default/index.min.js'
 # AccountId, PlayerId
 
-URL_VIDEO_JSON_BRIGHTCOVE = 'https://edge.api.brightcove.com/playback/v1/accounts/%s/videos/%s'
+URL_VIDEO_JSON_BRIGHTCOVE = 'https://edge.api.brightcove.com/'\
+                            'playback/v1/accounts/%s/videos/%s'
 # AccountId, VideoId
 
 # Initialize GNU gettext emulation in addon
@@ -84,7 +86,8 @@ URL_VIDEO_JSON_BRIGHTCOVE = 'https://edge.api.brightcove.com/playback/v1/account
 # strings.po file instead of numeric codes
 _ = common.ADDON.initialize_gettext()
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def get_token(channel_name):
     """Get session token"""
     file_token = utils.get_webcontent(URL_TOKEN % (channel_name))
@@ -92,10 +95,11 @@ def get_token(channel_name):
     return token_json['session']['token'].encode('utf-8')
 
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def get_policy_key(data_account, data_player):
     """Get policy key"""
-    file_js = utils.get_webcontent(URL_JS_POLICY_KEY % (data_account, data_player))
+    file_js = utils.get_webcontent(
+        URL_JS_POLICY_KEY % (data_account, data_player))
     return re.compile('policyKey:"(.+?)"').findall(file_js)[0]
 
 
@@ -113,14 +117,15 @@ def channel_entry(params):
         return get_video_url(params)
     return None
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def root(params):
     """Add Replay and Live in the listing"""
     modes = []
 
     # Add Replay Desactiver
     modes.append({
-        'label' : 'Replay',
+        'label': 'Replay',
         'url': common.PLUGIN.get_url(
             action='channel_entry',
             next='list_shows_1',
@@ -132,7 +137,7 @@ def root(params):
     # Add Live
     if params.channel_name != '01net':
         modes.append({
-            'label' : 'Live TV',
+            'label': 'Live TV',
             'url': common.PLUGIN.get_url(
                 action='channel_entry',
                 next='live_cat',
@@ -149,7 +154,8 @@ def root(params):
         ),
     )
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_shows(params):
     """Build categories listing"""
     shows = []
@@ -166,8 +172,12 @@ def list_shows(params):
             'article',
             class_='art-c modulx2-5 bg-color-rub0-1 box-shadow relative')
         for video in videos_soup:
-            video_id = video.find('figure').find('a')['href'].split('&', 1)[0].rsplit('=', 1)[1]
-            video_img = video.find('figure').find('a').find('img')['data-original']
+            video_id = video.find(
+                'figure').find(
+                    'a')['href'].split('&', 1)[0].rsplit('=', 1)[1]
+            video_img = video.find(
+                'figure').find(
+                    'a').find('img')['data-original']
             video_titles = video.find(
                 'div', class_="art-body"
             ).find('a').find('h2').get_text().encode(
@@ -193,7 +203,8 @@ def list_shows(params):
     else:
         if params.next == 'list_shows_1':
             file_path = utils.download_catalog(
-                URL_REPLAY % (params.channel_name, get_token(params.channel_name)),
+                URL_REPLAY % (
+                    params.channel_name, get_token(params.channel_name)),
                 '%s.json' % (params.channel_name))
             file_categories = open(file_path).read()
             json_categories = json.loads(file_categories)
@@ -227,7 +238,7 @@ def list_shows(params):
     )
 
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_videos(params):
     """Build videos listing"""
     videos = []
@@ -259,12 +270,12 @@ def list_videos(params):
         video_json = open(file_json).read()
         json_parser = json.loads(video_json)
 
-
         video_title = ''
         program_title = ''
         for program in json_parser["tags"]:
             program_title = program.upper() + ' - '
-        video_title = program_title + json_parser["name"].encode('utf-8').lower()
+        video_title = program_title + \
+            json_parser["name"].encode('utf-8').lower()
         video_img = ''
         for poster in json_parser["poster_sources"]:
             video_img = poster["src"]
@@ -344,11 +355,12 @@ def list_videos(params):
                 category = video['category'].encode('utf-8')
                 title = video['title'].encode('utf-8')
                 description = video['description'].encode('utf-8')
-                begin_date = video['begin_date'] # 1486725600,
+                # begin_date = video['begin_date']  # 1486725600,
                 image = video['image'].encode('utf-8')
                 duration = video['video_duration_ms'] / 1000
 
-                value_date = time.strftime('%d %m %Y', time.localtime(video["begin_date"]))
+                value_date = time.strftime(
+                    '%d %m %Y', time.localtime(video["begin_date"]))
                 date = str(value_date).split(' ')
                 day = date[0]
                 mounth = date[1]
@@ -423,7 +435,7 @@ def list_videos(params):
     )
 
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_live(params):
     """Build live listing"""
     lives = []
@@ -480,7 +492,7 @@ def list_live(params):
             'label': title,
             'fanart': img,
             'thumb': img,
-            'url' : common.PLUGIN.get_url(
+            'url': common.PLUGIN.get_url(
                 action='channel_entry',
                 next='play_l',
                 url_live=url_live,
@@ -515,7 +527,7 @@ def list_live(params):
                 'label': title,
                 'fanart': img,
                 'thumb': img,
-                'url' : common.PLUGIN.get_url(
+                'url': common.PLUGIN.get_url(
                     action='channel_entry',
                     next='play_l',
                     url_live=url_live,
@@ -524,22 +536,27 @@ def list_live(params):
                 'info': info
             })
 
-            #BFM PARIS
+            # BFM PARIS
             file_paris_path = utils.download_catalog(
                 URL_LIVE_BFM_PARIS,
                 'bfm_paris_live.html')
             live_paris_html = open(file_paris_path).read()
 
             live_paris_soup = bs(live_paris_html, 'html.parser')
-            data_live_paris_soup = live_paris_soup.find('div', class_='BCLvideoWrapper')
+            data_live_paris_soup = live_paris_soup.find(
+                'div', class_='BCLvideoWrapper')
 
-            data_account_paris = data_live_paris_soup.find('script')['data-account']
-            data_video_id_paris = data_live_paris_soup.find('script')['data-video-id']
-            data_player_paris = data_live_paris_soup.find('script')['data-player']
+            data_account_paris = data_live_paris_soup.find(
+                'script')['data-account']
+            data_video_id_paris = data_live_paris_soup.find(
+                'script')['data-video-id']
+            data_player_paris = data_live_paris_soup.find(
+                'script')['data-player']
 
             # Method to get JSON from 'edge.api.brightcove.com'
             file_json_paris = utils.download_catalog(
-                URL_VIDEO_JSON_BRIGHTCOVE % (data_account_paris, data_video_id_paris),
+                URL_VIDEO_JSON_BRIGHTCOVE % (
+                    data_account_paris, data_video_id_paris),
                 '%s_%s_live.json' % (data_account_paris, data_video_id_paris),
                 force_dl=False,
                 request_type='get',
@@ -554,7 +571,8 @@ def list_live(params):
             title_paris = json_parser_paris["name"]
             plot_paris = ''
             if json_parser_paris["long_description"]:
-                plot_paris = json_parser_paris["long_description"].encode('utf-8')
+                plot_paris = json_parser_paris["long_description"]
+                plot_paris = plot_paris.encode('utf-8')
 
             for url_paris in json_parser_paris["sources"]:
                 url_live_paris = url_paris["src"].encode('utf-8')
@@ -571,7 +589,7 @@ def list_live(params):
                 'label': title_paris,
                 'fanart': img,
                 'thumb': img,
-                'url' : common.PLUGIN.get_url(
+                'url': common.PLUGIN.get_url(
                     action='channel_entry',
                     next='play_l',
                     url_live=url_live_paris,
@@ -582,7 +600,7 @@ def list_live(params):
 
         elif params.channel_name == 'bfmbusiness':
 
-            #BFM BUSINESS
+            # BFM BUSINESS
             file_path = utils.download_catalog(
                 URL_LIVE_BFMBUSINESS,
                 '%s_live.html' % (params.channel_name))
@@ -630,7 +648,7 @@ def list_live(params):
                 'label': title,
                 'fanart': img,
                 'thumb': img,
-                'url' : common.PLUGIN.get_url(
+                'url': common.PLUGIN.get_url(
                     action='channel_entry',
                     next='play_l',
                     url_live=url_live,
@@ -641,7 +659,7 @@ def list_live(params):
 
         elif params.channel_name == 'rmc':
 
-            #BFM SPORT
+            # BFM SPORT
             file_path = utils.download_catalog(
                 URL_LIVE_BFM_SPORT,
                 'bfm_sport_live.html')
@@ -690,7 +708,7 @@ def list_live(params):
                 'label': title,
                 'fanart': img,
                 'thumb': img,
-                'url' : common.PLUGIN.get_url(
+                'url': common.PLUGIN.get_url(
                     action='channel_entry',
                     next='play_l',
                     url_live=url_live,
@@ -713,18 +731,23 @@ def list_live(params):
         )
     )
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def get_video_url(params):
     """Get video URL and start video player"""
     if params.next == 'play_l':
         return params.url_live
     elif params.channel_name == 'rmcdecouverte' and params.next == 'play_r':
         return params.video_url
-    elif params.channel_name == 'rmcdecouverte' and params.next == 'download_video':
+    elif params.channel_name == 'rmcdecouverte' and \
+            params.next == 'download_video':
         return URL_VIDEO_HTML_RMCDECOUVERTE % (params.video_id)
-    elif params.channel_name != 'rmcdecouverte' and (params.next == 'play_r' or params.next == 'download_video'):
+    elif params.channel_name != 'rmcdecouverte' and \
+            (params.next == 'play_r' or params.next == 'download_video'):
         file_medias = utils.get_webcontent(
-            URL_VIDEO % (params.channel_name, get_token(params.channel_name), params.video_id))
+            URL_VIDEO % (
+                params.channel_name,
+                get_token(params.channel_name), params.video_id))
         json_parser = json.loads(file_medias)
 
         if params.next == 'download_video':
@@ -739,22 +762,23 @@ def get_video_url(params):
             for datas in video_streams:
                 new_list_item = common.sp.xbmcgui.ListItem()
                 new_list_item.setLabel(
-                    "Video Height : " + str(datas['frame_height']) + \
+                    "Video Height : " + str(datas['frame_height']) +
                     " (Encoding : " + str(datas['encoding_rate']) + ")"
                 )
                 new_list_item.setPath(datas['video_url'])
                 all_datas_videos.append(new_list_item)
 
-            seleted_item = common.sp.xbmcgui.Dialog().select("Choose Stream", all_datas_videos)
+            seleted_item = common.sp.xbmcgui.Dialog().select(
+                "Choose Stream", all_datas_videos)
 
             return all_datas_videos[seleted_item].getPath().encode('utf-8')
 
         elif desired_quality == 'BEST':
-            #GET LAST NODE (VIDEO BEST QUALITY)
+            # GET LAST NODE (VIDEO BEST QUALITY)
             url_best_quality = ''
             for datas in video_streams:
                 url_best_quality = datas['video_url'].encode('utf-8')
             return url_best_quality
         else:
-            #DEFAULT VIDEO
+            # DEFAULT VIDEO
             return json_parser['video']['video_url'].encode('utf-8')

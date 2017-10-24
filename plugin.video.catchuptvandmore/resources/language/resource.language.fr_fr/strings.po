@@ -75,6 +75,10 @@ msgctxt "#30025"
 msgid "United States channels"
 msgstr "Chaînes américaines"
 
+msgctxt "#30026"
+msgid "Websites"
+msgstr "Sites Web"
+
 # Context menu (from 30040 to 30049)
 msgctxt "#30040"
 msgid "Move down"
@@ -114,15 +118,15 @@ msgstr "Contenus"
 
 msgctxt "#30080"
 msgid "Arte: Choose Channel"
-msgstr "Arte : Choix de la chaîne"
+msgstr "Arte: Choix de la chaîne"
 
 msgctxt "#30081"
-msgid "France24: Choose Channel"
-msgstr "France24 : Choix de la chaîne"
+msgid "France 24: Choose Channel"
+msgstr "France 24: Choix de la chaîne"
 
 msgctxt "#30082"
 msgid "Euronews: Choose Channel"
-msgstr "Euronews : Choix de la chaîne"
+msgstr "Euronews: Choix de la chaîne"
 
 msgctxt "#30087"
 msgid "Video quality (BEST|DEFAULT|DIALOG)"
@@ -172,6 +176,14 @@ msgstr "TV en direct"
 msgctxt "#30110"
 msgid "Choose video quality"
 msgstr "Choisir la qualité vidéo"
+
+msgctxt "#30111"
+msgid "Video stream no longer exists"
+msgstr "Le flux vidéo n'existe plus"
+
+msgctxt "#30112"
+msgid "Video with an account needed"
+msgstr "Vidéo avec un compte requis"
 
 # Download (from 30200 to 30240)
 

@@ -37,6 +37,7 @@ _ = common.ADDON.initialize_gettext()
 URL_LIVE_API = 'http://%s.euronews.com/api/watchlive.json'
 # Language
 
+
 def channel_entry(params):
     """Entry function of the module"""
     if 'root' in params.next:
@@ -51,14 +52,16 @@ def channel_entry(params):
         return get_video_url(params)
     return None
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def root(params):
     modes = []
 
+    """
     # Add Replay Desactiver
     if params.channel_name != 'euronews':
         modes.append({
-            'label' : 'Replay',
+            'label': 'Replay',
             'url': common.PLUGIN.get_url(
                 action='channel_entry',
                 next='list_shows_1',
@@ -69,7 +72,7 @@ def root(params):
 
     # Add Live
     modes.append({
-        'label' : 'Live TV',
+        'label': 'Live TV',
         'url': common.PLUGIN.get_url(
             action='channel_entry',
             next='live_cat',
@@ -85,16 +88,24 @@ def root(params):
             common.sp.xbmcplugin.SORT_METHOD_LABEL
         ),
     )
+    """
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+    params.next = "list_live"
+    return channel_entry(params)
+
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_shows(params):
     return None
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_videos(params):
+
     return None
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_live(params):
 
     lives = []
@@ -142,7 +153,8 @@ def list_live(params):
 
     file_path = utils.download_catalog(
         url_live_json,
-        '%s_%s_live.json' % (params.channel_name,desired_language.lower())
+        '%s_%s_live.json' % (
+            params.channel_name, desired_language.lower())
     )
     json_live = open(file_path).read()
     json_parser = json.loads(json_live)
@@ -150,7 +162,8 @@ def list_live(params):
 
     file_path_2 = utils.download_catalog(
         url_2nd_json,
-        '%s_%s_live_2.json' % (params.channel_name,desired_language.lower())
+        '%s_%s_live_2.json' % (
+            params.channel_name, desired_language.lower())
     )
     json_live_2 = open(file_path_2).read()
     json_parser_2 = json.loads(json_live_2)
@@ -169,7 +182,7 @@ def list_live(params):
         'label': title,
         'fanart': img,
         'thumb': img,
-        'url' : common.PLUGIN.get_url(
+        'url': common.PLUGIN.get_url(
             action='channel_entry',
             next='play_l',
             url=url_live,
@@ -186,7 +199,8 @@ def list_live(params):
         )
     )
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def get_video_url(params):
 
     if params.next == 'play_l':

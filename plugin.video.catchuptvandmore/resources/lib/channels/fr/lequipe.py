@@ -40,11 +40,13 @@ URL_ROOT = 'https://www.lequipe.fr'
 
 URL_ROOT_VIDEO_LEQUIPE = 'https://www.lequipe.fr/lachainelequipe/'
 
-URL_REPLAY_VIDEO_LEQUIPE = 'https://www.lequipe.fr/lachainelequipe/morevideos/%s'
+URL_REPLAY_VIDEO_LEQUIPE = 'https://www.lequipe.fr/' \
+                           'lachainelequipe/morevideos/%s'
 # Category_id
 
 URL_DAILYMOTION_EMBED = 'http://www.dailymotion.com/embed/video/%s'
 # Video_id
+
 
 def channel_entry(params):
     """Entry function of the module"""
@@ -61,14 +63,15 @@ def channel_entry(params):
     else:
         return None
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def root(params):
     """Add Replay and Live in the listing"""
     modes = []
 
     # Add Replay
     modes.append({
-        'label' : 'Replay',
+        'label': 'Replay',
         'url': common.PLUGIN.get_url(
             action='channel_entry',
             next='list_shows_1',
@@ -79,7 +82,7 @@ def root(params):
 
     # Add Live
     modes.append({
-        'label' : 'Live TV',
+        'label': 'Live TV',
         'url': common.PLUGIN.get_url(
             action='channel_entry',
             next='live_cat',
@@ -96,7 +99,8 @@ def root(params):
         ),
     )
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_shows(params):
     """Build shows listing"""
     shows = []
@@ -109,12 +113,14 @@ def list_shows(params):
     root_html = open(file_path).read()
     root_soup = bs(root_html, 'html.parser')
 
-    categories_soup = root_soup.find_all('a', class_="navtab__item js-tabs-item")
+    categories_soup = root_soup.find_all(
+        'a', class_="navtab__item js-tabs-item")
 
     for category in categories_soup:
 
         category_name = category.get_text().encode('utf-8')
-        category_url = URL_REPLAY_VIDEO_LEQUIPE % category.get('data-program-id')
+        category_url = URL_REPLAY_VIDEO_LEQUIPE % \
+            category.get('data-program-id')
 
         shows.append({
             'label': category_name,
@@ -135,13 +141,12 @@ def list_shows(params):
             common.sp.xbmcplugin.SORT_METHOD_LABEL))
 
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_videos(params):
     """Build videos listing"""
     videos = []
     if 'previous_listing' in params:
         videos = ast.literal_eval(params['previous_listing'])
-
 
     url = params.category_url + '/' + params.page
     file_path = utils.download_catalog(
@@ -163,7 +168,8 @@ def list_videos(params):
         url = URL_ROOT + program['href'].encode('utf-8')
         html_video_equipe = utils.get_webcontent(url)
         video_id = re.compile(
-            r'<iframe src="//www.dailymotion.com/embed/video/(.*?)\?', re.DOTALL).findall(html_video_equipe)[0]
+            r'<iframe src="//www.dailymotion.com/embed/video/(.*?)\?',
+            re.DOTALL).findall(html_video_equipe)[0]
 
         title = program.find(
             'h2').get_text().encode('utf-8')
@@ -253,7 +259,8 @@ def list_videos(params):
         update_listing='update_listing' in params,
     )
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_live(params):
     """Build live listing"""
     lives = []
@@ -262,13 +269,12 @@ def list_live(params):
     plot = ''
     duration = 0
     img = ''
-    url_live = ''
     video_id = ''
-    url_live = ''
 
     html_live_equipe = utils.get_webcontent(URL_ROOT_VIDEO_LEQUIPE)
     video_id = re.compile(
-        r'<iframe src="//www.dailymotion.com/embed/video/(.*?)\?', re.DOTALL).findall(html_live_equipe)[0]
+        r'<iframe src="//www.dailymotion.com/embed/video/(.*?)\?',
+        re.DOTALL).findall(html_live_equipe)[0]
 
     title = '%s Live' % params.channel_name.upper()
 
@@ -284,7 +290,7 @@ def list_live(params):
         'label': title,
         'fanart': img,
         'thumb': img,
-        'url' : common.PLUGIN.get_url(
+        'url': common.PLUGIN.get_url(
             action='channel_entry',
             next='play_l',
             video_id=video_id,
@@ -302,8 +308,7 @@ def list_live(params):
     )
 
 
-
-@common.PLUGIN.cached(common.CACHE_TIME)
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def get_video_url(params):
     """Get video URL and start video player"""
     url_video = URL_DAILYMOTION_EMBED % params.video_id
@@ -317,11 +322,14 @@ def get_video_url(params):
         html_video = html_video.replace('\\', '')
 
         if params.next == 'play_l':
-            all_url_video = re.compile(r'{"type":"application/x-mpegURL","url":"(.*?)"').findall(html_video)
+            all_url_video = re.compile(
+                r'{"type":"application/x-mpegURL","url":"(.*?)"'
+            ).findall(html_video)
             # Just One Quality
             return all_url_video[0]
-        elif  params.next == 'play_r':
-            all_url_video = re.compile(r'{"type":"video/mp4","url":"(.*?)"').findall(html_video)
+        elif params.next == 'play_r':
+            all_url_video = re.compile(
+                r'{"type":"video/mp4","url":"(.*?)"').findall(html_video)
             if desired_quality == "DIALOG":
                 all_datas_videos = []
                 for datas in all_url_video:
@@ -331,7 +339,8 @@ def get_video_url(params):
                     new_list_item.setPath(datas)
                     all_datas_videos.append(new_list_item)
 
-                seleted_item = common.sp.xbmcgui.Dialog().select("Choose Stream", all_datas_videos)
+                seleted_item = common.sp.xbmcgui.Dialog().select(
+                    "Choose Stream", all_datas_videos)
 
                 return all_datas_videos[seleted_item].getPath().encode('utf-8')
             elif desired_quality == 'BEST':

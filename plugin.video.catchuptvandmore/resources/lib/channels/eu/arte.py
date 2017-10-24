@@ -41,6 +41,7 @@ URL_REPLAY = 'https://www.arte.tv/papi/tvguide/videos/' \
 URL_LIVE_ARTE = 'https://api.arte.tv/api/player/v1/livestream/%s'
 # Langue, ...
 
+
 def channel_entry(params):
     """Entry function of the module"""
     if 'root' in params.next:
@@ -55,14 +56,15 @@ def channel_entry(params):
         return get_video_url(params)
     return None
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def root(params):
     """Add Replay and Live in the listing"""
     modes = []
 
     # Add Replay
     modes.append({
-        'label' : 'Replay',
+        'label': 'Replay',
         'url': common.PLUGIN.get_url(
             action='channel_entry',
             next='list_shows_1',
@@ -72,7 +74,7 @@ def root(params):
     })
 
     modes.append({
-        'label' : 'Live TV',
+        'label': 'Live TV',
         'url': common.PLUGIN.get_url(
             action='channel_entry',
             next='live_cat',
@@ -89,7 +91,8 @@ def root(params):
         ),
     )
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_shows(params):
     """Build categories listing"""
     shows = []
@@ -118,17 +121,17 @@ def list_shows(params):
         emission_dict['image'] = emission['programImage'].encode('utf-8')
         try:
             emission_dict['genre'] = emission['genre'].encode('utf-8')
-        except:
+        except Exception:
             emission_dict['genre'] = 'Unknown'
         try:
             emission_dict['director'] = emission['director'].encode('utf-8')
-        except:
+        except Exception:
             emission_dict['director'] = ''
         emission_dict['production_year'] = emission['productionYear']
         emission_dict['program_title'] = emission['VTI'].encode('utf-8')
         try:
             emission_dict['emission_title'] = emission['VSU'].encode('utf-8')
-        except:
+        except Exception:
             emission_dict['emission_title'] = ''
 
         emission_dict['category'] = emission['VCH'][0]['label'].encode('utf-8')
@@ -138,7 +141,7 @@ def list_shows(params):
 
         try:
             emission_dict['desc'] = emission['VDE'].encode('utf-8')
-        except:
+        except Exception:
             emission_dict['desc'] = ''
 
         emissions_list.append(emission_dict)
@@ -167,7 +170,7 @@ def list_shows(params):
     )
 
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_videos(params):
     """Build videos listing"""
     videos = []
@@ -227,7 +230,7 @@ def list_videos(params):
                     ),
                     'is_playable': True,
                     'info': info,
-                    'context_menu': context_menu  #  A ne pas oublier pour ajouter le bouton "Download" à chaque vidéo
+                    'context_menu': context_menu
                 })
 
         return common.PLUGIN.create_listing(
@@ -242,7 +245,8 @@ def list_videos(params):
             ),
             content='tvshows')
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_live(params):
     """Build live listing"""
     lives = []
@@ -287,7 +291,7 @@ def list_live(params):
         'label': title,
         'fanart': img,
         'thumb': img,
-        'url' : common.PLUGIN.get_url(
+        'url': common.PLUGIN.get_url(
             action='channel_entry',
             next='play_l',
             url=url_live,
@@ -304,7 +308,8 @@ def list_live(params):
         )
     )
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def get_video_url(params):
     """Get video URL and start video player"""
     if params.next == 'play_r' or params.next == 'download_video':
@@ -324,20 +329,24 @@ def get_video_url(params):
                 if not video.find("HLS"):
                         datas = json_parser['videoJsonPlayer']['VSR'][video]
                         new_list_item = common.sp.xbmcgui.ListItem()
-                        new_list_item.setLabel(datas['mediaType'] + " (" + datas['versionLibelle'] + ")")
+                        new_list_item.setLabel(
+                            datas['mediaType'] + " (" +
+                            datas['versionLibelle'] + ")")
                         new_list_item.setPath(datas['url'])
                         all_datas_videos.append(new_list_item)
 
-            seleted_item = common.sp.xbmcgui.Dialog().select("Choose Stream", all_datas_videos)
+            seleted_item = common.sp.xbmcgui.Dialog().select(
+                "Choose Stream", all_datas_videos)
 
-            url_selected = all_datas_videos[seleted_item].getPath().encode('utf-8')
+            url_selected = all_datas_videos[seleted_item]
+            url_selected = url_selected.getPath().encode('utf-8')
 
         elif desired_quality == "BEST":
-            url_selected = video_streams['HTTP_MP4_SQ_1']['url'].encode('utf-8')
+            url_selected = video_streams['HTTP_MP4_SQ_1']['url']
+            url_selected = url_selected.encode('utf-8')
         else:
             url_selected = video_streams['HLS_SQ_1']['url'].encode('utf-8')
 
         return url_selected
     elif params.next == 'play_l':
         return params.url
-

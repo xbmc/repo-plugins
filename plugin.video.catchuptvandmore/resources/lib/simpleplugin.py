@@ -11,6 +11,7 @@ SimplePlugin micro-framework for Kodi content plugins
 import os
 import sys
 import re
+import inspect
 from datetime import datetime, timedelta
 import cPickle as pickle
 from urlparse import parse_qs
@@ -21,21 +22,91 @@ from copy import deepcopy
 from types import GeneratorType
 from hashlib import md5
 from shutil import move
+from contextlib import contextmanager
+from pprint import pformat
 import xbmcaddon
 import xbmc
 import xbmcplugin
 import xbmcgui
 
-__all__ = ['SimplePluginError', 'Storage', 'Addon', 'Plugin', 'Params']
+__all__ = ['SimplePluginError', 'Storage', 'MemStorage',
+           'Addon', 'Plugin', 'Params', 'debug_exception']
 
-ListContext = namedtuple('ListContext', ['listing', 'succeeded', 'update_listing', 'cache_to_disk',
-                                         'sort_methods', 'view_mode', 'content'])
+ListContext = namedtuple('ListContext', ['listing', 'succeeded',
+                                         'update_listing', 'cache_to_disk',
+                                         'sort_methods', 'view_mode',
+                                         'content', 'category'])
 PlayContext = namedtuple('PlayContext', ['path', 'play_item', 'succeeded'])
 
 
 class SimplePluginError(Exception):
     """Custom exception"""
     pass
+
+
+def _format_vars(variables):
+    """
+    Format variables dictionary
+
+    :param variables: variables dict
+    :type variables: dict
+    :return: formatted string with sorted ``var = val`` pairs
+    :rtype: str
+    """
+    var_list = [(var, val) for var, val in variables.iteritems()]
+    lines = []
+    for var, val in sorted(var_list, key=lambda i: i[0]):
+        if not (var.startswith('__') or var.endswith('__')):
+            lines.append('{0} = {1}'.format(var, pformat(val)))
+    return '\n'.join(lines)
+
+
+@contextmanager
+def debug_exception(logger=None):
+    """
+    Diagnostic helper context manager
+
+    It controls execution within its context and writes extended
+    diagnostic info to the Kodi log if an unhandled exception
+    happens within the context. The info includes the following items:
+
+    - Module path.
+    - Code fragment where the exception has happened.
+    - Global variables.
+    - Local variables.
+
+    After logging the diagnostic info the exception is re-raised.
+
+    Example::
+
+        with debug_exception():
+            # Some risky code
+            raise RuntimeError('Fatal error!')
+
+    :param logger: logger function which must accept a single argument
+        which is a log message. By default it is :func:`xbmc.log`
+        with ``ERROR`` level.
+    """
+    try:
+        yield
+    except:
+        if logger is None:
+            logger = lambda msg: xbmc.log(msg, xbmc.LOGERROR)
+        logger('Unhandled exception detected!')
+        logger('*** Start diagnostic info ***')
+        frame_info = inspect.trace(5)[-1]
+        logger('File: {0}'.format(frame_info[1]))
+        context = ''
+        for i, line in enumerate(frame_info[4], frame_info[2] - frame_info[5]):
+            if i == frame_info[2]:
+                context += '{0}:>{1}'.format(str(i).rjust(5), line)
+            else:
+                context += '{0}: {1}'.format(str(i).rjust(5), line)
+        logger('Code context:\n' + context)
+        logger('Global variables:\n' + _format_vars(frame_info[0].f_globals))
+        logger('Local variables:\n' + _format_vars(frame_info[0].f_locals))
+        logger('**** End diagnostic info ****')
+        raise
 
 
 class Params(dict):
@@ -47,6 +118,8 @@ class Params(dict):
     Parameters can be accessed both through :class:`dict` keys and
     instance properties.
 
+    .. note:: For a missing parameter an instance property returns ``None``.
+
     Example:
 
     .. code-block:: python
@@ -56,10 +129,8 @@ class Params(dict):
             foo = params['foo']  # Access by key
             bar = params.bar  # Access through property. Both variants are equal
     """
-    def __getattr__(self, item):
-        if item not in self:
-            raise AttributeError('Invalid parameter: "{0}"!'.format(item))
-        return self[item]
+    def __getattr__(self, key):
+        return self.get(key)
 
     def __str__(self):
         return '<Params {0}>'.format(super(Params, self).__repr__())
@@ -70,6 +141,8 @@ class Params(dict):
 
 class Storage(MutableMapping):
     """
+    Storage(storage_dir, filename='storage.pcl')
+
     Persistent storage for arbitrary data with a dictionary-like interface
 
     It is designed as a context manager and better be used
@@ -107,7 +180,7 @@ class Storage(MutableMapping):
     def __enter__(self):
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, t, v, tb):
         self.flush()
 
     def __getitem__(self, key):
@@ -120,7 +193,7 @@ class Storage(MutableMapping):
         del self._storage[key]
 
     def __iter__(self):
-        return self._storage.__iter__()
+        return iter(self._storage)
 
     def __len__(self):
         return len(self._storage)
@@ -161,6 +234,106 @@ class Storage(MutableMapping):
         :rtype: dict
         """
         return deepcopy(self._storage)
+
+
+class MemStorage(MutableMapping):
+    """
+    MemStorage(storage_id)
+
+    In-memory storage with dict-like interface
+
+    The data is stored in the Kodi core so contents of a MemStorage instance
+    with the same ID can be shared between different Python processes.
+
+    .. note:: Keys are case-insensitive
+
+    .. warning:: :class:`MemStorage` does not allow to modify mutable objects
+        in place! You need to assign them to variables first, modify and
+        store them back to a MemStorage instance.
+
+    Example:
+
+    .. code-block:: python
+
+        storage = MemStorage('foo')
+        some_list = storage['bar']
+        some_list.append('spam')
+        storage['bar'] = some_list
+
+    :param storage_id: ID of this storage instance
+    :type storage_id: str
+    :param window_id: the ID of a Kodi Window object where storage contents
+        will be stored.
+    :type window_id: int
+    """
+    def __init__(self, storage_id, window_id=10000):
+        self._id = storage_id
+        self._window = xbmcgui.Window(window_id)
+        try:
+            self['__keys__']
+        except KeyError:
+            self['__keys__'] = []
+
+    def _check_key(self, key):
+        if not isinstance(key, str):
+            raise TypeError('Storage key must be of str type!')
+
+    def _format_contents(self):
+        lines = []
+        for key, val in self.iteritems():
+            lines.append('{0}: {1}'.format(repr(key), repr(val)))
+        return ', '.join(lines)
+
+    def __str__(self):
+        return '<MemStorage {{{0}}}>'.format(self._format_contents())
+
+    def __repr__(self):
+        return '<simpleplugin.MemStorage object {{{0}}}'.format(self._format_contents())
+
+    def __getitem__(self, key):
+        self._check_key(key)
+        full_key = '{0}__{1}'.format(self._id, key)
+        raw_item = self._window.getProperty(full_key)
+        if raw_item:
+            return pickle.loads(raw_item)
+        else:
+            raise KeyError(key)
+
+    def __setitem__(self, key, value):
+        self._check_key(key)
+        full_key = '{0}__{1}'.format(self._id, key)
+        self._window.setProperty(full_key, pickle.dumps(value))
+        if key != '__keys__':
+            keys = self['__keys__']
+            keys.append(key)
+            self['__keys__'] = keys
+
+    def __delitem__(self, key):
+        self._check_key(key)
+        full_key = '{0}__{1}'.format(self._id, key)
+        item = self._window.getProperty(full_key)
+        if item:
+            self._window.clearProperty(full_key)
+            if key != '__keys__':
+                keys = self['__keys__']
+                keys.remove(key)
+                self['__keys__'] = keys
+        else:
+            raise KeyError(key)
+
+    def __contains__(self, key):
+        self._check_key(key)
+        full_key = '{0}__{1}'.format(self._id, key)
+        item = self._window.getProperty(full_key)
+        if item:
+            return True
+        return False
+
+    def __iter__(self):
+        return iter(self['__keys__'])
+
+    def __len__(self):
+        return len(self['__keys__'])
 
 
 class Addon(object):
@@ -358,7 +531,7 @@ class Addon(object):
         :param message: message to write to the Kodi log
         :type message: str
         """
-        self.log(message, xbmc.LOGINFO)
+        self.log(message, xbmc.LOGNOTICE)
 
     def log_warning(self, message):
         """
@@ -408,6 +581,62 @@ class Addon(object):
         """
         return Storage(self.config_dir, filename)
 
+    def get_mem_storage(self, storage_id='', window_id=10000):
+        """
+        Creates an in-memory storage for this addon with :class:`dict`-like
+        interface
+
+        The storage can store picklable Python objects as long as
+        Kodi is running and storage contents can be shared between
+        Python processes. Different addons have separate storages,
+        so storages with the same names created with this method
+        do not conflict.
+
+        Example::
+
+            addon = Addon()
+            storage = addon.get_mem_storage()
+            foo = storage['foo']
+            storage['bar'] = bar
+
+        :param storage_id: optional storage ID (case-insensitive).
+        :type storage_id: str
+        :param window_id: the ID of a Kodi Window object where storage contents
+            will be stored.
+        :type window_id: int
+        :return: in-memory storage for this addon
+        :rtype: MemStorage
+        """
+        if storage_id:
+            storage_id = '{0}_{1}'.format(self.id, storage_id)
+        return MemStorage(storage_id, window_id)
+
+    def _get_cached_data(self, cache, func, duration, *args, **kwargs):
+        """
+        Get data from a cache object
+
+        :param cache: cache object
+        :param func: function to cache
+        :param duration: cache duration
+        :param args: function args
+        :param kwargs: function kwargs
+        :return: function return data
+        """
+        if duration <= 0:
+            raise ValueError('Caching duration cannot be zero or negative!')
+        current_time = datetime.now()
+        key = func.__name__ + str(args) + str(kwargs)
+        try:
+            data, timestamp = cache[key]
+            if current_time - timestamp > timedelta(minutes=duration):
+                raise KeyError
+            self.log_debug('Cache hit: {0}'.format(key))
+        except KeyError:
+            self.log_debug('Cache miss: {0}'.format(key))
+            data = func(*args, **kwargs)
+            cache[key] = (data, current_time)
+        return data
+
     def cached(self, duration=10):
         """
         Cached decorator
@@ -429,20 +658,30 @@ class Addon(object):
             @wraps(func)
             def inner_wrapper(*args, **kwargs):
                 with self.get_storage('__cache__.pcl') as cache:
-                    current_time = datetime.now()
-                    key = func.__name__ + str(args) + str(kwargs)
-                    try:
-                        data, timestamp = cache[key]
-                        if duration > 0 and current_time - timestamp > timedelta(minutes=duration):
-                            raise KeyError
-                        elif duration <= 0:
-                            raise ValueError('Caching duration cannot be zero or negative!')
-                        self.log_debug('Cache hit: {0}'.format(key))
-                    except KeyError:
-                        self.log_debug('Cache miss: {0}'.format(key))
-                        data = func(*args, **kwargs)
-                        cache[key] = (data, current_time)
-                return data
+                    return self._get_cached_data(cache, func, duration, *args, **kwargs)
+            return inner_wrapper
+        return outer_wrapper
+
+    def mem_cached(self, duration=10):
+        """
+        In-memory cache decorator
+
+        Usage::
+
+            @plugin.mem_cached(30)
+            def my_func(*args, **kwargs):
+                # Do some stuff
+                return value
+
+        :param duration: caching duration in min (positive values only)
+        :type duration: int
+        :raises ValueError: if duration is zero or negative
+        """
+        def outer_wrapper(func):
+            @wraps(func)
+            def inner_wrapper(*args, **kwargs):
+                cache = self.get_mem_storage('***cache***')
+                return self._get_cached_data(cache, func, duration, *args, **kwargs)
             return inner_wrapper
         return outer_wrapper
 
@@ -462,7 +701,7 @@ class Addon(object):
         :type ui_string: str
         :return: a UI string from translated :file:`strings.po`.
         :rtype: unicode
-        :raises simpleplugin.SimplePluginError: if :meth:`Addon.initialize_gettext` wasn't called first
+        :raises SimplePluginError: if :meth:`Addon.initialize_gettext` wasn't called first
             or if a string is not found in English :file:`strings.po`.
         """
         if self._ui_strings_map is not None:
@@ -502,9 +741,11 @@ class Addon(object):
         with localized versions if these strings are translated.
 
         :return: :meth:`Addon.gettext` method object
-        :raises simpleplugin.SimplePluginError: if the addon's English :file:`strings.po` file is missing
+        :raises SimplePluginError: if the addon's English :file:`strings.po` file is missing
         """
         strings_po = os.path.join(self.path, 'resources', 'language', 'resource.language.en_gb', 'strings.po')
+        if not os.path.exists(strings_po):
+            strings_po = os.path.join(self.path, 'resources', 'language', 'English', 'strings.po')
         if os.path.exists(strings_po):
             with open(strings_po, 'rb') as fo:
                 raw_strings = fo.read()
@@ -563,20 +804,20 @@ class Plugin(Addon):
         plugin = Plugin()
 
         @plugin.action()
-        def root(params):  # Mandatory item!
+        def root():  # Mandatory item!
             return [{'label': 'Foo',
-                    'url': plugin.get_url(action='some_action', param='Foo')},
+                    'url': plugin.get_url(action='some_action', label='Foo')},
                     {'label': 'Bar',
-                    'url': plugin.get_url(action='some_action', param='Bar')}]
+                    'url': plugin.get_url(action='some_action', label='Bar')}]
 
         @plugin.action()
         def some_action(params):
-            return [{'label': params['param']}]
+            return [{'label': params.label]}]
 
         plugin.run()
 
-    An action callable receives 1 parameter -- params.
-    params is a dict-like object containing plugin call parameters (including action string)
+    An action callable may receive 1 optional parameter which is
+    a dict-like object containing plugin call parameters (including action string)
     The action callable can return
     either a list/generator of dictionaries representing Kodi virtual directory items
     or a resolved playable path (:class:`str` or :obj:`unicode`) for Kodi to play.
@@ -626,6 +867,21 @@ class Plugin(Addon):
       except for ``'url'`` and ``'is_folder'``, are ignored.
     - properties -- a dictionary of list item properties
       (see :meth:`xbmcgui.ListItem.setProperty`) -- optional.
+    - cast -- a list of cast info (actors, roles, thumbnails) for the list item
+      (see :meth:`xbmcgui.ListItem.setCast`) -- optional.
+    - offscreen -- if ``True`` do not lock GUI (used for Python scrapers and subtitle plugins) --
+      optional.
+    - content_lookup -- if ``False``, do not HEAD requests to get mime type. Optional.
+    - online_db_ids -- a :class:`dict` of ``{'label': 'value'}`` pairs representing
+      the item's IDs in popular online databases. Possible labels: 'imdb', 'tvdb',
+      'tmdb', 'anidb', see :meth:`xbmcgui.ListItem.setUniqueIDs`. Optional.
+    - ratings -- a :class:`list` of :class:`dict`s with the following keys:
+      'type' (:class:`str`), 'rating' (:class:`float`),
+      'votes' (:class:`int`, optional), 'defaultt' (:class:`bool`, optional).
+      This list sets item's ratings in popular online databases.
+      Possible types: 'imdb', 'tvdb', tmdb', 'anidb'.
+      See :meth:`xbmcgui.ListItem.setRating`. Optional.
+
 
     Example 3::
 
@@ -743,7 +999,7 @@ class Plugin(Addon):
 
         :param name: action's name (optional).
         :type name: str
-        :raises simpleplugin.SimplePluginError: if the action with such name is already defined.
+        :raises SimplePluginError: if the action with such name is already defined.
         """
         def wrap(func, name=name):
             if name is None:
@@ -754,49 +1010,55 @@ class Plugin(Addon):
             return func
         return wrap
 
-    def run(self, category=''):
+    def run(self, category=None):
         """
         Run plugin
 
-        :param category: str - plugin sub-category, e.g. 'Comedy'.
-            See :func:`xbmcplugin.setPluginCategory` for more info.
-        :type category: str
-        :raises simpleplugin.SimplePluginError: if unknown action string is provided.
+        :raises SimplePluginError: if unknown action string is provided.
         """
-        self._handle = int(sys.argv[1])
         if category:
-            xbmcplugin.setPluginCategory(self._handle, category)
+            self.log_warning(
+                'Deprecation warning: Plugin category is no longer set via Plugin.run(). '
+                'Use "category" parameter of Plugin.create_listing() instead.'
+            )
+        self._handle = int(sys.argv[1])
         params = self.get_params(sys.argv[2][1:])
         action = params.get('action', 'root')
         self.log_debug(str(self))
         self.log_debug('Actions: {0}'.format(str(self.actions.keys())))
-        self.log_debug('Called action "{0}" with params "{1}"'.format(action, str(params)))
+        self.log_debug('Called action "{0}" with params "{1}"'.format(
+            action, str(params))
+        )
         try:
             action_callable = self.actions[action]
         except KeyError:
             raise SimplePluginError('Invalid action: "{0}"!'.format(action))
         else:
-            result = action_callable(params)
+            # inspect.isfunction is needed for tests
+            if inspect.isfunction(action_callable) and not inspect.getargspec(action_callable).args:
+                result = action_callable()
+            else:
+                result = action_callable(params)
             self.log_debug('Action return value: {0}'.format(str(result)))
             if isinstance(result, (list, GeneratorType)):
                 self._add_directory_items(self.create_listing(result))
             elif isinstance(result, basestring):
                 self._set_resolved_url(self.resolve_url(result))
-            elif isinstance(result, tuple) and hasattr(result, 'listing'):
+            elif isinstance(result, ListContext):
                 self._add_directory_items(result)
-            elif isinstance(result, tuple) and hasattr(result, 'path'):
+            elif isinstance(result, PlayContext):
                 self._set_resolved_url(result)
             else:
                 self.log_debug('The action "{0}" has not returned any valid data to process.'.format(action))
 
     @staticmethod
     def create_listing(listing, succeeded=True, update_listing=False, cache_to_disk=False, sort_methods=None,
-                       view_mode=None, content=None):
+                       view_mode=None, content=None, category=None):
         """
         Create and return a context dict for a virtual folder listing
 
         :param listing: the list of the plugin virtual folder items
-        :type listing: :class:`list` or :class:`types.GeneratorType`
+        :type listing: list or types.GeneratorType
         :param succeeded: if ``False`` Kodi won't open a new listing and stays on the current level.
         :type succeeded: bool
         :param update_listing: if ``True``, Kodi won't open a sub-listing but refresh the current one.
@@ -811,11 +1073,15 @@ class Plugin(Addon):
         :param content: string - current plugin content, e.g. 'movies' or 'episodes'.
             See :func:`xbmcplugin.setContent` for more info.
         :type content: str
+        :param category: str - plugin sub-category, e.g. 'Comedy'.
+            See :func:`xbmcplugin.setPluginCategory` for more info.
+        :type category: str
         :return: context object containing necessary parameters
             to create virtual folder listing in Kodi UI.
         :rtype: ListContext
         """
-        return ListContext(listing, succeeded, update_listing, cache_to_disk, sort_methods, view_mode, content)
+        return ListContext(listing, succeeded, update_listing, cache_to_disk,
+                           sort_methods, view_mode, content, category)
 
     @staticmethod
     def resolve_url(path='', play_item=None, succeeded=True):
@@ -847,15 +1113,25 @@ class Plugin(Addon):
         :return: ListItem instance
         :rtype: xbmcgui.ListItem
         """
-        list_item = xbmcgui.ListItem(label=item.get('label', ''),
-                                     label2=item.get('label2', ''),
-                                     path=item.get('path', ''))
-        if int(xbmc.getInfoLabel('System.BuildVersion')[:2]) >= 16:
+        major_version = xbmc.getInfoLabel('System.BuildVersion')[:2]
+        if major_version >= '18':
+            list_item = xbmcgui.ListItem(label=item.get('label', ''),
+                                         label2=item.get('label2', ''),
+                                         path=item.get('path', ''),
+                                         offscreen=item.get('offscreen', False))
+        else:
+            list_item = xbmcgui.ListItem(label=item.get('label', ''),
+                                         label2=item.get('label2', ''),
+                                         path=item.get('path', ''))
+        if major_version >= '16':
             art = item.get('art', {})
             art['thumb'] = item.get('thumb', '')
             art['icon'] = item.get('icon', '')
             art['fanart'] = item.get('fanart', '')
             item['art'] = art
+            cont_look = item.get('content_lookup')
+            if cont_look is not None:
+                list_item.setContentLookup(cont_look)
         else:
             list_item.setThumbnailImage(item.get('thumb', ''))
             list_item.setIconImage(item.get('icon', ''))
@@ -877,6 +1153,17 @@ class Plugin(Addon):
         if item.get('properties'):
             for key, value in item['properties'].iteritems():
                 list_item.setProperty(key, value)
+        if major_version >= '17':
+            cast = item.get('cast')
+            if cast is not None:
+                list_item.setCast(cast)
+            db_ids = item.get('online_db_ids')
+            if db_ids is not None:
+                list_item.setUniqueIDs(db_ids)
+            ratings = item.get('ratings')
+            if ratings is not None:
+                for rating in ratings:
+                    list_item.setRating(**rating)
         return list_item
 
     def _add_directory_items(self, context):
@@ -885,8 +1172,11 @@ class Plugin(Addon):
 
         :param context: context object
         :type context: ListContext
+        :raises SimplePluginError: if sort_methods parameter is not int, tuple or list
         """
         self.log_debug('Creating listing from {0}'.format(str(context)))
+        if context.category is not None:
+            xbmcplugin.setPluginCategory(self._handle, context.category)
         if context.content is not None:
             xbmcplugin.setContent(self._handle, context.content)  # This must be at the beginning
         for item in context.listing:
@@ -900,7 +1190,14 @@ class Plugin(Addon):
                     is_folder = False
             xbmcplugin.addDirectoryItem(self._handle, item['url'], list_item, is_folder)
         if context.sort_methods is not None:
-            [xbmcplugin.addSortMethod(self._handle, method) for method in context.sort_methods]
+            if isinstance(context.sort_methods, int):
+                xbmcplugin.addSortMethod(self._handle, context.sort_methods)
+            elif isinstance(context.sort_methods, (tuple, list)):
+                for method in context.sort_methods:
+                    xbmcplugin.addSortMethod(self._handle, method)
+            else:
+                raise TypeError(
+                    'sort_methods parameter must be of int, tuple or list type!')
         xbmcplugin.endOfDirectory(self._handle,
                                   context.succeeded,
                                   context.update_listing,

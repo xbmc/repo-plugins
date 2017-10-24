@@ -70,10 +70,14 @@ def strip_tags(html):
 
 def index():
     addDir(translation(30025), urlMain+"/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&list=what-to-watch&no_live=1&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listVideos', "")
+    addDir(translation(30015), urlMain+"/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&sort=trending&no_live=1&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listVideos', "")
+    addDir(translation(30016), urlMain+"/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&featured=1&no_live=1&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listVideos', "")
+    addDir(translation(30003), urlMain+"/videos?fields=id,thumbnail_large_url,title,views_last_hour&availability=1&live_onair=1&sort=visited-month&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listLive', "")
     addDir(translation(30006), "", 'listChannels', "")
     addDir(translation(30007), urlMain+"/users?fields=username,avatar_large_url,videos_total,views_total&sort=popular&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listUsers', "")
     addDir(translation(30002), "", 'search', "")
-    addDir(translation(30003), urlMain+"/videos?fields=id,thumbnail_large_url,title,views_last_hour&availability=1&live_onair=1&sort=visited-hour&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1", 'listLive', "")
+    addDir(translation(30002)+" "+translation(30003), "", 'livesearch', "")
+    addDir(translation(30002)+" "+translation(30007), "", 'usersearch', "")
     if dmUser:
         addDir(translation(30034), "", "personalMain", "")
     else:
@@ -133,6 +137,7 @@ def sortVideos1(url):
         url = urlMain+"/group/"+id+"/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1"
     else:
         url = urlMain+"/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&"+type+"="+id+"&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1"
+    addDir(translation(30015), url.replace("sort=recent", "sort=trending"), 'listVideos', "")
     addDir(translation(30008), url, 'listVideos', "")
     addDir(translation(30009), url.replace("sort=recent", "sort=visited"), 'sortVideos2', "")
     if type == "owner":
@@ -140,9 +145,10 @@ def sortVideos1(url):
     xbmcplugin.endOfDirectory(pluginhandle)
 
 def sortVideos2(url):
-    addDir(translation(30011), url.replace("sort=visited", "sort=visited-today").replace("sort=commented", "sort=commented-today").replace("sort=rated", "sort=rated-today"), "listVideos", "")
-    addDir(translation(30012), url.replace("sort=visited", "sort=visited-week").replace("sort=commented", "sort=commented-week").replace("sort=rated", "sort=rated-week"), "listVideos", "")
-    addDir(translation(30013), url.replace("sort=visited", "sort=visited-month").replace("sort=commented", "sort=commented-month").replace("sort=rated", "sort=rated-month"), "listVideos", "")
+    addDir(translation(30010), url.replace("sort=visited", "sort=visited-hour"), "listVideos", "")
+    addDir(translation(30011), url.replace("sort=visited", "sort=visited-today"), "listVideos", "")
+    addDir(translation(30012), url.replace("sort=visited", "sort=visited-week"), "listVideos", "")
+    addDir(translation(30013), url.replace("sort=visited", "sort=visited-month"), "listVideos", "")
     addDir(translation(30014), url, 'listVideos', "")
     xbmcplugin.endOfDirectory(pluginhandle)
 
@@ -241,6 +247,20 @@ def search():
     if keyboard.isConfirmed() and keyboard.getText():
         search_string = keyboard.getText().replace(" ", "+")
         listVideos(urlMain+"/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&search="+search_string+"&sort=relevance&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1")
+
+def searchLive():
+    keyboard = xbmc.Keyboard('', translation(30002)+' '+translation(30003))
+    keyboard.doModal()
+    if keyboard.isConfirmed() and keyboard.getText():
+        searchl_string = keyboard.getText().replace(" ", "+")
+        listLive(urlMain+"/videos?fields=id,thumbnail_large_url,title,views_last_hour&live_onair=1&search="+searchl_string+"&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1")
+
+def searchUser():
+    keyboard = xbmc.Keyboard('', translation(30002)+' '+translation(30007))
+    keyboard.doModal()
+    if keyboard.isConfirmed() and keyboard.getText():
+        searchl_string = keyboard.getText().replace(" ", "+")
+        listUsers(urlMain+"/users?fields=username,avatar_large_url,videos_total,views_total&search="+searchl_string+"&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1")
 
 def playVideo(id,live=False):
     if live:
@@ -513,7 +533,10 @@ def addDir(name, url, mode, iconimage, desc=""):
 def addUserDir(name, url, mode, iconimage, desc):
     u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
     ok = True
-    liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+    liz = xbmcgui.ListItem(name)
+    liz.setArt({'thumb': iconimage,
+                'icon': _icon,
+                'fanart': _fanart})
     liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc})
     if dmUser == "":
         playListInfos = "###MODE###=ADD###USER###="+name+"###THUMB###="+iconimage+"###END###"
@@ -536,7 +559,10 @@ def addFavDir(name, url, mode, iconimage):
 def addUserFavDir(name, url, mode, iconimage):
     u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
     ok = True
-    liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+    liz = xbmcgui.ListItem(name)
+    liz.setArt({'thumb': iconimage,
+                'icon': _icon,
+                'fanart': _fanart})
     liz.setInfo(type="Video", infoLabels={"Title": name})
     if dmUser == "":
         playListInfos = "###MODE###=REMOVE###REFRESH###=TRUE###USER###="+name+"###THUMB###="+iconimage+"###END###"
@@ -591,5 +617,9 @@ elif mode == "downloadVideo":
     downloadVideo(url)
 elif mode == 'search':
     search()
+elif mode == 'livesearch':
+    searchLive()
+elif mode == 'usersearch':
+    searchUser()
 else:
     index()

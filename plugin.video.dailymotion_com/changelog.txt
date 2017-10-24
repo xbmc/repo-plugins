@@ -1,3 +1,11 @@
+2.3.5 [20171024]
+- Add Hebrew Language
+- Add Trending, Featured Categories
+- Add Search by Live, User
+
+2.3.4 [20171023]
+- Upload to Kodi Official repository
+
 2.3.3
 - Correct some French strings
 

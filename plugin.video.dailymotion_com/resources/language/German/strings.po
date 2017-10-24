@@ -65,7 +65,7 @@ msgid "Most Viewed"
 msgstr ""
 
 msgctxt "#30010"
-msgid "Best Rated"
+msgid "Hour"
 msgstr ""
 
 msgctxt "#30011"
@@ -85,7 +85,7 @@ msgid "All Time"
 msgstr ""
 
 msgctxt "#30015"
-msgid "All Users"
+msgid "Trending"
 msgstr ""
 
 msgctxt "#30016"

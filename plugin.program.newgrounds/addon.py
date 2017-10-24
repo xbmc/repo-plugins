@@ -11,6 +11,7 @@ import xbmcaddon
 import os
 import webbrowser
 import os.path
+import BeautifulSoup
 
 base_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
@@ -81,6 +82,11 @@ def readURL (url):
     RESPONSE = OPENER.open(REQ,urllib.urlencode(values))
 
     return RESPONSE.read()
+
+def cleanhtml(raw_html):
+    cleanr = re.compile('<.*?>')
+    cleantext = re.sub(cleanr, '', raw_html)
+    return cleantext
 
 def login ():
     url = 'https://www.newgrounds.com/passport/mode/iframe/appsession'
@@ -186,21 +192,26 @@ elif mode[0] == 'search_audio':
             name = kb.getText()
             #xbmcgui.Dialog().ok('DEBUG', name)
 
-    content = readURL('http://www.newgrounds.com/audio/search/title/' + urllib.quote_plus(name) + '/' + args['page'][0])
+    content = readURL('https://www.newgrounds.com/search/conduct/audio?terms=' + urllib.quote_plus(name) + '&page=' + args['page'][0])
     #xbmcgui.Dialog().ok('DEBUG', content)
 
-    grabContent = re.compile('<li><div class="audio-wrapper">(.*?)<\/li>', re.DOTALL).findall(content)
+    grabContent = re.compile('<div class="audio-wrapper">(.*?)<\/a>', re.DOTALL).findall(content)
     #xbmcgui.Dialog().ok('DEBUG', grabContent[0])
+    xbmc.log(grabContent[0],xbmc.LOGDEBUG)
     nextPage = int(args['page'][0]) + 1
 
     for newContent in grabContent:
-        #xbmcgui.Dialog().ok('DEBUG', newContent)
-        image = re.compile('\/img src="([^"]+)"').findall(newContent)
-        audioID = re.compile('href="\/audio\/listen\/([^"]+)"').findall(newContent)
+        image = re.compile('\/img src="([^"]+)"', re.DOTALL).findall(newContent)
+        audioID = re.compile('href="\/\/www.newgrounds.com\/audio\/listen\/([^"]*)"').findall(newContent)
+        #foundTitle = re.compile('<div class="detail-title">([^"]*)<span>', re.DOTALL).findall(newContent)
+        soup = BeautifulSoup.BeautifulSoup(newContent)
+        foundTitle = soup.find('h4').text
         artist = re.compile('<strong>([^"]*)<\/strong>').findall(newContent)
-        title = re.compile('<h4>([^"]*)<\/h4>').findall(newContent)
 
-        theTitle = title[0]
+        try:
+                    theTitle = cleanhtml(foundTitle)
+        except IndexError:
+                    theTitle = "N/A"
         try:
 		    theArtist = artist[0]
         except IndexError:
@@ -209,12 +220,12 @@ elif mode[0] == 'search_audio':
         try:
 		    theImage = image[0]
         except IndexError:
-		    theImage = "http://img.ngfiles.com/defaults/icon-audio-smaller.png"
+		    theImage = "https://img.ngfiles.com/defaults/icon-audio-smaller.png"
 
         for aID in audioID:
             url = build_url({'mode': 'audio_info', 'audioID': aID})
             li = xbmcgui.ListItem(theTitle + ' by ' + theArtist, iconImage=theImage)
-            li.setInfo('audio', { 'title': title[0] })
+            li.setInfo('audio', { 'title': theTitle })
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
             break
 
@@ -225,10 +236,10 @@ elif mode[0] == 'search_audio':
     xbmcplugin.endOfDirectory(addon_handle)
 
 elif mode[0] == 'featured_video':
-    content = readURL('http://www.newgrounds.com')
+    content = readURL('https://www.newgrounds.com')
     #debug(content)
 
-    grabContent = re.compile('<a href="\/portal\/view\/(.*?)<\/a>', re.DOTALL).findall(content)
+    grabContent = re.compile('<a href="\/\/www.newgrounds.com\/portal\/view\/(.*?)<\/a>', re.DOTALL).findall(content)
     #xbmcgui.Dialog().ok('DEBUG', grabContent[0])
     inc = 0
     for newContent in grabContent:
@@ -255,10 +266,10 @@ elif mode[0] == 'featured_video':
     xbmcplugin.endOfDirectory(addon_handle)
 
 elif mode[0] == 'featured_audio':
-    content = readURL('http://www.newgrounds.com')
+    content = readURL('https://www.newgrounds.com')
     #debug(content)
 
-    grabContent = re.compile('<a href="\/audio\/listen\/(.*?)<\/a>', re.DOTALL).findall(content)
+    grabContent = re.compile('<a href="\/\/www.newgrounds.com\/audio\/listen\/(.*?)<\/a>', re.DOTALL).findall(content)
     #xbmcgui.Dialog().ok('DEBUG', grabContent[0])
 
     inc = 0
@@ -286,10 +297,10 @@ elif mode[0] == 'featured_audio':
     xbmcplugin.endOfDirectory(addon_handle)
 
 elif mode[0] == 'featured_art':
-    content = readURL('http://www.newgrounds.com')
+    content = readURL('https://www.newgrounds.com')
     #debug(content)
 
-    grabContent = re.compile('<a href="\/art\/view\/(.*?)<\/a>', re.DOTALL).findall(content)
+    grabContent = re.compile('<a href="\/\/www.newgrounds.com\/art\/view\/(.*?)<\/a>', re.DOTALL).findall(content)
     #xbmcgui.Dialog().ok('DEBUG', grabContent[0])
 
     inc = 0
@@ -325,25 +336,28 @@ elif mode[0] == 'search_video':
             name = kb.getText()
             #xbmcgui.Dialog().ok('DEBUG', name)
 
-    content = readURL('http://www.newgrounds.com/portal/search/movies/' + urllib.quote_plus(name) + '/' + args['page'][0])
+    content = readURL('https://www.newgrounds.com/search/conduct/movies?terms=' + urllib.quote_plus(name) + '&page=' + args['page'][0])
     #xbmcgui.Dialog().ok('DEBUG', content)
 
-    grabContent = re.compile('<a href="\/portal\/view\/(.*?)<\/li>', re.DOTALL).findall(content)
+    grabContent = re.compile('<a href="\/\/www.newgrounds.com\/portal\/view\/(.*?)<\/li>', re.DOTALL).findall(content)
     #xbmcgui.Dialog().ok('DEBUG', grabContent[0])
     nextPage = int(args['page'][0]) + 1
 
     for newContent in grabContent:
         #xbmcgui.Dialog().ok('DEBUG', newContent)
-        title = re.compile('<h4>([^"]*)<\/h4>').findall(newContent)
+        soup = BeautifulSoup.BeautifulSoup(newContent)
+        title = soup.find('h4').text
         thumb = re.compile('src="([^"]*)"').findall(newContent)
         descncat = re.compile('<div class="detail-description">([^"]*)<\/div>').findall(newContent)
-        videoID = re.compile('([^"]*)">').findall(newContent)
+        videoID = re.compile('([^"]*)" class="item-portalsubmission">').findall(newContent)
         #xbmcgui.Dialog().ok('DEBUG', videoID[0])
 
         for vID in videoID:
             url = build_url({'mode': 'video_info', 'videoID': vID})
-            li = xbmcgui.ListItem(HTMLParser.HTMLParser().unescape(title[0]), iconImage=thumb[0])
-            li.setInfo('video', { 'title': title[0] })
+            theTitle = title
+            theThumb = thumb[0]
+            li = xbmcgui.ListItem(HTMLParser.HTMLParser().unescape(theTitle), iconImage=theThumb)
+            li.setInfo('video', { 'title': theTitle })
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
             break
 
@@ -364,24 +378,25 @@ elif mode[0] == 'search_art':
             name = kb.getText()
             #xbmcgui.Dialog().ok('DEBUG', name)
 
-    content = readURL('http://www.newgrounds.com/art/search/' + urllib.quote_plus(name) + '/page/' + args['page'][0])
+    content = readURL('https://www.newgrounds.com/search/conduct/art?terms=' + urllib.quote_plus(name) + '&page=' + args['page'][0])
     #xbmcgui.Dialog().ok('DEBUG', content)
 
-    grabContent = re.compile('<a href="\/art\/view\/(.*?)<\/a>', re.DOTALL).findall(content)
+    grabContent = re.compile('<a href="\/\/www.newgrounds.com\/art\/view\/(.*?)<\/a>', re.DOTALL).findall(content)
     #xbmcgui.Dialog().ok('DEBUG', grabContent[0])
     nextPage = int(args['page'][0]) + 1
 
     for newContent in grabContent:
         #xbmcgui.Dialog().ok('DEBUG', newContent)
-        title = re.compile('alt="([^"]*)"').findall(newContent)
+        soup = BeautifulSoup.BeautifulSoup(newContent)
+        title = soup.find('h4').text
         thumb = re.compile('src="([^"]*)"').findall(newContent)
-        rated = re.compile('<div class="rated-([^"]*) item-suitability">').findall(newContent)
-        artID = re.compile('([^"]*)" class="item-portalitem-art-small"').findall(newContent)
-        artist = re.compile('<div class="item-details">by (.*?)</div>').findall(newContent)
+        #rated = re.compile('<div class="rated-([^"]*) item-suitability">').findall(newContent)
+        artID = re.compile('([^"]*)" class="item-portalitem-art">').findall(newContent)
+        artist = re.compile('<strong>(.*?)<\/strong>').findall(newContent)
 
         for aID in artID:
             url = build_url({'mode': 'art_info', 'artID': aID})
-            li = xbmcgui.ListItem(HTMLParser.HTMLParser().unescape(title[0]) + ' by ' + artist[0] + " [" + rated[0].upper() + "]", iconImage=thumb[0])
+            li = xbmcgui.ListItem(HTMLParser.HTMLParser().unescape(title) + ' by ' + artist[0], iconImage='https:' + thumb[0])
             xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li, isFolder=True)
 
     url = build_url({'mode': 'search_art', 'page': nextPage, 'search_term': name})
@@ -391,10 +406,10 @@ elif mode[0] == 'search_art':
     xbmcplugin.endOfDirectory(addon_handle)
 
 elif mode[0] == 'art_list':
-    content = readURL('http://www.newgrounds.com/art/browse/page/' + args['page'][0])
+    content = readURL('https://www.newgrounds.com/art/browse/page/' + args['page'][0])
     #xbmcgui.Dialog().ok('DEBUG', content)
 
-    grabContent = re.compile('<a href="\/art\/view\/(.*?)<\/a>', re.DOTALL).findall(content)
+    grabContent = re.compile('<a href="\/\/www.newgrounds.com\/art\/view\/(.*?)<\/a>', re.DOTALL).findall(content)
     #xbmcgui.Dialog().ok('DEBUG', grabContent[0])
     nextPage = int(args['page'][0]) + 1
 
@@ -418,16 +433,16 @@ elif mode[0] == 'art_list':
     xbmcplugin.endOfDirectory(addon_handle)
 
 elif mode[0] == 'art_info':
-    content = readURL('http://www.newgrounds.com/art/view/' + args['artID'][0])
+    content = readURL('https://www.newgrounds.com/art/view/' + args['artID'][0])
     #xbmcgui.Dialog().ok('DEBUG', args['artID'][0])
-    file = re.compile('src=\"http:\\/\\/art.ngfiles.com\\/images\\/(.*?)\\"').findall(content)
-    xbmc.executebuiltin('ShowPicture(' + 'http://art.ngfiles.com/images/' + file[0] + ')') 
+    file = re.compile('src=\"https:\\/\\/art.ngfiles.com\\/images\\/(.*?)\\"').findall(content)
+    xbmc.executebuiltin('ShowPicture(' + 'https://art.ngfiles.com/images/' + file[0] + ')') 
 
 elif mode[0] == 'video_list':
-    content = readURL('http://www.newgrounds.com/movies/browse/genre/' + args['cat'][0] + '/interval/year/sort/score/page/' + args['page'][0])
+    content = readURL('https://www.newgrounds.com/movies/browse/genre/' + args['cat'][0] + '/interval/year/sort/score/page/' + args['page'][0])
     #xbmcgui.Dialog().ok('DEBUG', content)
 
-    grabContent = re.compile('<a href="\/portal\/view\/(.*?)<\/a>', re.DOTALL).findall(content)
+    grabContent = re.compile('<a href="\/\/www.newgrounds.com\/portal\/view\/(.*?)<\/a>', re.DOTALL).findall(content)
     #xbmcgui.Dialog().ok('DEBUG', grabContent[0])
     nextPage = int(args['page'][0]) + 1
 
@@ -451,7 +466,7 @@ elif mode[0] == 'video_list':
     xbmcplugin.endOfDirectory(addon_handle)
 
 elif mode[0] == 'video_info':
-    content = readURL('http://www.newgrounds.com/portal/view/' + args['videoID'][0])
+    content = readURL('https://www.newgrounds.com/portal/view/' + args['videoID'][0])
     file = re.compile('uploads.ungrounded.net(.*?)"').findall(content)
     #xbmcgui.Dialog().ok('DEBUG', 'http://uploads.ungrounded.net' + file[0].replace('\\', ''))
 
@@ -462,11 +477,11 @@ elif mode[0] == 'video_info':
         if not ".swf" in f:
             extension = os.path.splitext(f)[1]
             f = f.replace(extension, '.' + xbmcplugin.getSetting(addon_handle,'vquality') + '.mp4')
-            xbmc.log('http://uploads.ungrounded.net' + f.replace('\\', ''))
-            xbmc.Player().play('http://uploads.ungrounded.net' + f.replace('\\', '')) #file 3 is always mobile compatible?
+            xbmc.log('https://uploads.ungrounded.net' + f.replace('\\', ''))
+            xbmc.Player().play('https://uploads.ungrounded.net' + f.replace('\\', '')) #file 3 is always mobile compatible?
     
 elif mode[0] == 'audio_list':
-    content = readURL('http://www.newgrounds.com/audio/browse/genre/' + args['cat'][0] + '/page/' + args['page'][0])
+    content = readURL('https://www.newgrounds.com/audio/browse/genre/' + args['cat'][0] + '/page/' + args['page'][0])
     #xbmcgui.Dialog().ok('DEBUG', content)
 
     grabContent = re.compile('<li><div class="audio-wrapper">(.*?)<\/div><\/li>', re.DOTALL).findall(content)
@@ -477,7 +492,7 @@ elif mode[0] == 'audio_list':
         #xbmcgui.Dialog().ok('DEBUG', newContent)
         image = re.compile('src="([^"]+)"').findall(newContent)
         title = re.compile('<span>([^"]*) <\/span>').findall(newContent)
-        audioID = re.compile('href="\/audio\/listen\/([^"]+)"').findall(newContent)
+        audioID = re.compile('href="\/\/www.newgrounds.com\/audio\/listen\/([^"]+)"').findall(newContent)
         artist = re.compile('<strong>([^"]+)<\/strong>').findall(newContent)
         category = re.compile('<div class="detail-genre">([^"]*) <\/div>').findall(newContent)
 
@@ -494,7 +509,7 @@ elif mode[0] == 'audio_list':
     xbmcplugin.endOfDirectory(addon_handle)
 
 elif mode[0] == 'audio_info':
-    content = readURL('http://www.newgrounds.com/audio/listen/' + args['audioID'][0])
+    content = readURL('https://www.newgrounds.com/audio/listen/' + args['audioID'][0])
     #xbmcgui.Dialog().ok('DEBUG', content)
 
     # All of this WORKS! But, I want to keep the user on the list page for now.
@@ -514,5 +529,5 @@ elif mode[0] == 'audio_info':
     #li = xbmcgui.ListItem("FILE: " + file[0].replace('\\', ''), iconImage=icon[0].replace('\\', ''))
     #xbmcplugin.addDirectoryItem(handle=addon_handle, url="", listitem=li)
     #xbmcplugin.endOfDirectory(addon_handle)
-
+    #debug(file[0].replace('\\', ''))
     xbmc.Player().play(file[0].replace('\\', ''))

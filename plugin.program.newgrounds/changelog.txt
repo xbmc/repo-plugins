@@ -1,3 +1,5 @@
+1.0.4 Fixed HTTPS links
+
 1.0.3 Fixed movie/art browsing and searching code
 
 1.0.2 Fixed featured content and added video quality filter

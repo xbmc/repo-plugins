@@ -1,3 +1,6 @@
+v0.5.3 (2017-10-26)
+ - Fix errors playing video clips
+
 v0.5.2 (2016-03-27)
  - Fix a possible context menu search error
 

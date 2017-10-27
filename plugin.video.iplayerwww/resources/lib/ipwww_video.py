@@ -671,7 +671,11 @@ def ScrapeMarkup(markup):
             r'<a.*?href="(.*?)".*?list-item-link.*?>',
                 li, flags=(re.DOTALL | re.MULTILINE))
         if url_match:
-            main_url = url_match.group(1)
+            tmp_url = url_match.group(1)
+            if tmp_url.startswith('http'):
+                main_url = tmp_url
+            else:
+                main_url = 'https://www.bbc.co.uk' + tmp_url
 
         name = ''
         title = ''
@@ -725,7 +729,11 @@ def ScrapeMarkup(markup):
             r'<a class="view-more-container.+?stat".+?href="(.*?)"',
             li, flags=(re.DOTALL | re.MULTILINE))
         if episodes_match:
-            episodes_url = episodes_match.group(1)
+            tmp_url = episodes_match.group(1)
+            if tmp_url.startswith('http'):
+                episodes_url = tmp_url
+            else:
+                episodes_url = 'https://www.bbc.co.uk' + tmp_url
 
         more = None
         # <em class="view-more-heading">27</em>
@@ -1152,18 +1160,20 @@ def ListMainHighlights(highlights_url):
         if group_type == "trailers":
             continue
 
-        inner_anchors = re.findall(r'<a href="(?!<a).*?</a>', group, flags=(re.DOTALL | re.MULTILINE))
+        inner_anchors = re.findall(r'href="(?!<a).*?</a>', group, flags=(re.DOTALL | re.MULTILINE))
+
+        group_data = []
 
         for programme in inner_anchors:
 
             is_group = False
-            button_match = re.search(r'button', programme, flags=(re.DOTALL | re.MULTILINE))
+            button_match = re.search(r'View all', programme, flags=(re.DOTALL | re.MULTILINE))
             if button_match:
                 is_group = True
 
             url = ''
             href_match = re.match(
-                r'<a href="(.*?)"', programme, flags=(re.DOTALL | re.MULTILINE))
+                r'href="(.*?)"', programme, flags=(re.DOTALL | re.MULTILINE))
             if href_match:
                 href = href_match.group(1)
                 if href.startswith('http'):
@@ -1178,25 +1188,30 @@ def ListMainHighlights(highlights_url):
                     programme, flags=(re.DOTALL | re.MULTILINE))
             else:
                 name_match = re.search(
-                    r'item__title.+?<strong>(.*?)</strong>',
+                    r'item__title.+?>(.*?)</div>',
                     programme, flags=(re.DOTALL | re.MULTILINE))
             if name_match:
                 name = name_match.group(1)
 
-            subtitle_match = re.search(
-                r'<p class=".+?subtitle.+?>(.*?)</p>', programme, flags=(re.DOTALL | re.MULTILINE))
+            if group_type == "popular":
+                subtitle_match = re.search(
+                    r'item__subtitle.+?>(.*?)</p>', programme, flags=(re.DOTALL | re.MULTILINE))
+            else:
+                subtitle_match = re.search(
+                    r'primary">.*?item__description.+?>(.*?)</div>',
+                    programme, flags=(re.DOTALL | re.MULTILINE))
             if subtitle_match:
                 name =  name + ' - ' + subtitle_match.group(1)
 
             iconimage = ''
             iconimage_match = re.search(
-                r'320x180/(.*?)\.jpg', programme, flags=(re.DOTALL | re.MULTILINE))
+                r'images/ic/.*?/(.*?)\.jpg', programme, flags=(re.DOTALL | re.MULTILINE))
             if iconimage_match:
-                iconimage = "http://ichef.bbci.co.uk/images/ic/832x468/"+iconimage_match.group(1)+".jpg"
+                iconimage = "https://ichef.bbci.co.uk/images/ic/832x468/"+iconimage_match.group(1)+".jpg"
 
             description = ''
             description_match = re.search(
-                r'<p class="overlay__text__inner.+?>(.*?)</p>',
+                r'secondary">.*?item__description.+?>(.*?)</div>',
                 programme, flags=(re.DOTALL | re.MULTILINE))
             if description_match:
                 description = description_match.group(1)
@@ -1212,14 +1227,19 @@ def ListMainHighlights(highlights_url):
                     category = ''
                     category_match = re.search(r'categories/(.*?)/', href, flags=re.DOTALL)
                     if category_match:
-                        AddMenuEntry('[B]%s: %s[/B]' % (translation(30314), name),
-                            category_match.group(1), 125, '', '', '')
+                        group_data.append(('[B]%s: %s[/B]' % (translation(30314), name), 
+                                          category_match.group(1), 125))
                 else:
-                    AddMenuEntry('[B]%s: %s[/B]' % (translation(30314), name),
-                        url, 128, '', '', '')
-
+                    group_data.append(('[B]%s: %s[/B]' % (translation(30314), name), 
+                                      url, 128))
             else:
                 CheckAutoplay(name, url, iconimage, description, '')
+
+        # For whatever reason, all groups appear twice in HTML, but we only want to add unique groups.
+        unique = []
+        [unique.append(item) for item in group_data if item not in unique]
+        for name, url, mode in unique:
+            AddMenuEntry(name, url, mode, '', '', '')
 
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)

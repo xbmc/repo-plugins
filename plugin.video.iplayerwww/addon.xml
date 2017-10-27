@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.iplayerwww" name="iPlayer WWW" version="3.0.17" provider-name="CaptainT, Cas, ihurst, primaeval">
+<addon id="plugin.video.iplayerwww" name="iPlayer WWW" version="3.0.18" provider-name="CaptainT, Cas, ihurst, primaeval">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.requests" version="2.7.0"/>
@@ -22,6 +22,11 @@
         <fanart>resources/fanart.jpg</fanart>
     </assets>
     <news>
+v3.0.18
+Fixed Highlights (again).
+Fixed BBCiD login.
+Made Added and Watching more robust against some changes.
+
 v3.0.17
 Fixed Highlights.
 

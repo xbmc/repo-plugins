@@ -170,7 +170,7 @@ def SignInBBCiD():
                'attempts':'0'}
     
     #Regular expression to get 'nonce' from login page
-    p = re.compile('form method="post" action="([^""]*)"')
+    p = re.compile('action="([^""]*)"')
     
     with requests.Session() as s:
         resp = s.get('https://www.bbc.com/', headers=headers)

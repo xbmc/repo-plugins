@@ -1,3 +1,8 @@
+v2.5.26
+Fixed Highlights (again).
+Fixed BBCiD login.
+Made Added and Watching more robust against some changes.
+
 v2.5.25
 Fixed Highlights.
 

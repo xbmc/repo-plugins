@@ -18,15 +18,13 @@
 #
 ##########################################################################
 
-import os
 import re
-from urlparse import urlparse, urlunparse, urljoin
 from datetime import date, timedelta
 import time
 from functools import partial
 import json
 
-from xbmcswift2 import Plugin, xbmc
+from kodiswift import Plugin, xbmc
 from bs4 import BeautifulSoup
 import requests
 import rollbar
@@ -42,7 +40,7 @@ CLIP_THUMB_WIDTH = 640
 CLIP_THUMB_HEIGHT = 360
 
 CLIP_JSON_FMT = CLIP_HOST + "/programmes/{0}.json"
-CLIP_XML_FMT = "http://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/pc/vpid/{0}"
+CLIP_XML_FMT = "http://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/iptv-all/vpid/{0}"
 
 PODCAST_XML = "http://downloads.bbc.co.uk/podcasts/fivelive/kermode/rss.xml"
 PODCAST_THUMB = "http://ichef.bbci.co.uk/podcasts/artwork/478/kermode.jpg"
@@ -252,15 +250,11 @@ def play_clip(pid):
     xml = requests.get(CLIP_XML_FMT.format(vpid)).text
     plugin.log.debug(xml)
     media = BeautifulSoup(xml, 'html.parser').find(
-        'media', service=re.compile('iplayer_streaming_h264_flv_high'))
-    connection = media.find(supplier='akamai')
-    auth = connection['authstring']
-    url = urlunparse((connection['protocol'], connection['server'],
-                      'ondemand', None, auth, None))
-    video_url = "{url} playpath={path}?{auth}".format(url=url,
-                                                      path=connection['identifier'],
-                                                      auth=auth)
-    return plugin.set_resolved_url(video_url)
+        'media',
+        service='stream-uk-iptv_streaming_concrete_combined_sd'
+    )
+    connection = media.find(supplier='mf_akamai_uk_hls')
+    return plugin.set_resolved_url(connection['href'])
 
 @plugin.route('/youtube/playlists')
 def youtube_playlists():

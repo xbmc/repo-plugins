@@ -53,7 +53,7 @@ mask_date_url = '</a>\n<div class="content">\n' \
                 '<span class="date" >(.+?)</span>\n' \
                 '<a href="(.+?)"'
 
-mask_video_ulr = '<a class="html5PlayerImage" href="(.+?)"'
+mask_video_ulr = '<meta content="(.+?)" name="twitter:player:stream"'
 mask_video_img = '<video poster="(.+?)"'
 mask_video_title = '<meta name="title" content="(.+?)"'
 mask_video_plot = '<div class="intro">\n<p>(.+?)</p>'

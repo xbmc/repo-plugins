@@ -1,3 +1,6 @@
+2.3.0
+ - Add Moritz & die Anderen
+
 2.2.0
  - Update for Krypton
  - List show runners as cast

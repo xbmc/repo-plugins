@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon id="plugin.video.massengeschmack" name="Massengeschmack" version="2.2.0" provider-name="phoerious">
+<addon id="plugin.video.massengeschmack" name="Massengeschmack" version="2.3.0" provider-name="phoerious">
     <requires>
-        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="xbmc.python" version="2.26.0"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>

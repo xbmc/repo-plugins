@@ -8,13 +8,17 @@ class SONY():
     api_url = 'https://auth.api.sonyentertainmentnetwork.com/2.0'
     user_action_url = 'https://sentv-user-action.totsuko.tv/sentv_user_action/ws/v2'
     device_id = ''
+    device_type = 'android_tv'
     localized = addon.getLocalizedString
     login_client_id = '71a7beb8-f21a-47d9-a604-2e71bee24fe0'
+    andriod_tv_client_id = '0a5fe341-cb16-47d9-991e-0110fff49713'
     npsso = ''
     password = ''
     req_client_id = 'dee6a88d-c3be-4e17-aec5-1018514cee40'
     ua_android = 'Mozilla/5.0 (Linux; Android 6.0.1; Build/MOB31H; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/44.0.2403.119 Safari/537.36'
+    ua_android_tv = 'Mozilla/5.0 (Linux; Android 6.0.1; Hub Build/MHC19J; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/61.0.3163.98 Safari/537.36'
     ua_sony = 'com.sony.snei.np.android.sso.share.oauth.versa.USER_AGENT'
+    themis = 'https://themis.dl.playstation.net/themis/destro/redirect.html'
     username = ''
     verify = False
 
@@ -73,11 +77,12 @@ class SONY():
                        "Origin": "https://id.sonyentertainmentnetwork.com",
                        "Accept-Language": "en-US,en;q=0.8",
                        "Accept-Encoding": "deflate",
-                       "User-Agent": self.ua_android,
+                       "User-Agent": self.ua_android_tv,
+                       "X-Requested-With": "com.snei.vue.atv",
                        "Connection": "Keep-Alive"
                        }
 
-            payload = 'authentication_type=password&username='+urllib.quote_plus(self.username)+'&password='+urllib.quote_plus(self.password)+'&client_id='+self.login_client_id
+            payload = 'authentication_type=password&username='+urllib.quote_plus(self.username)+'&password='+urllib.quote_plus(self.password)+'&client_id='+self.andriod_tv_client_id
             r = requests.post(url, headers=headers, cookies=self.load_cookies(), data=payload, verify=self.verify)
             json_source = r.json()
             self.save_cookies(r.cookies)
@@ -111,7 +116,7 @@ class SONY():
             "Origin": "https://id.sonyentertainmentnetwork.com",
             "Accept-Language": "en-US,en;q=0.8",
             "Accept-Encoding": "deflate",
-            "User-Agent": self.ua_android,
+            "User-Agent": self.ua_android_tv,
             "Connection": "Keep-Alive",
             "Referer": "https://id.sonyentertainmentnetwork.com/signin/?service_entity=urn:service-entity:psn&ui=pr&service_logo=ps&response_type=code&scope=psn:s2s&client_id="+self.req_client_id+"&request_locale=en_US&redirect_uri=https://io.playstation.com/playstation/psn/acceptLogin&error=login_required&error_code=4165&error_description=User+is+not+authenticated"
         }
@@ -140,7 +145,8 @@ class SONY():
             "User-Agent": self.ua_sony,
             "Content-Type": "application/x-www-form-urlencoded",
             "Connection": "Keep-Alive",
-            "Accept-Encoding": "gzip"
+            "Accept-Encoding": "gzip",
+            "X-Requested-With": "com.snei.vue.atv"
         }
 
         r = requests.delete(url, headers=headers, cookies=self.load_cookies(), verify=self.verify)
@@ -154,19 +160,27 @@ class SONY():
 
     def get_grant_code(self):
         url = self.api_url + '/oauth/authorize'
-        url += '?response_type=code'
+        url += '?request_theme=tv'
+        url += '&ui=ds'
         url += '&client_id=' + self.req_client_id
-        url += '&redirect_uri=https%3A%2F%2Fthemis.dl.playstation.net%2Fthemis%2Fzartan%2Fredirect.html'
+        url += '&hidePageElements=noAccountSection'
+        url += '&redirect_uri=' + urllib.quote_plus(self.themis)
+        url += '&request_locale=en'
+        url += '&response_type=code'
+        url += '&resolution=1080'
         url += '&scope=psn%3As2s'
-        url += '&signInOnly=true'
-        url += '&service_entity=urn%3Aservice-entity%3Anp'
-        url += '&prompt=none'
+        url += '&service_logo=ps'
+        url += '&smcid=tv%3Apsvue'
         url += '&duid=' + self.device_id
 
+
         headers = {
-            "Accept-Encoding": "gzip",
-            "User-Agent": self.ua_sony,
-            "Connection": "Keep-Alive"
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+            "Accept-Encoding": "gzip, deflate",
+            "Accept-Language": "en-US",
+            "User-Agent": self.ua_android_tv,
+            "Connection": "Keep-Alive",
+            "X-Requested-With": "com.snei.vue.atv"
         }
 
         code = ''
@@ -183,17 +197,18 @@ class SONY():
 
     def authorize_device(self):
         url = 'https://sentv-user-auth.totsuko.tv/sentv_user_auth/ws/oauth2/token'
-        url += '?device_type_id=android_tablet'
+        url += '?device_type_id=' + self.device_type
         url += '&device_id=' + self.device_id
         url += '&code=' + self.get_grant_code()
-        url += '&redirect_uri=https%3A%2F%2Fthemis.dl.playstation.net%2Fthemis%2Fzartan%2Fredirect.html'
+        url += '&redirect_uri=' + urllib.quote_plus(self.themis)
 
         headers = {
             'Origin': 'https://themis.dl.playstation.net',
-            'User-Agent': self.ua_android,
+            'User-Agent': self.ua_android_tv,
             'Accept': '*/*',
             'Connection': 'Keep-Alive',
-            'Accept-Encoding': 'gzip'
+            'Accept-Encoding': 'gzip',
+            "X-Requested-With": "com.snei.vue.atv"
         }
         if self.addon.getSetting(id='reqPayload') != '':
             headers['reauth'] = '1'
@@ -213,12 +228,13 @@ class SONY():
     def get_profiles(self):
         url = 'https://sentv-user-ext.totsuko.tv/sentv_user_ext/ws/v2/profile/ids'
         headers = {
-            'User-Agent': self.ua_android,
+            'User-Agent': self.ua_android_tv,
             'reqPayload': self.addon.getSetting(id='reqPayload'),
             'Accept': '*/*',
             'Origin': 'https://themis.dl.playstation.net',
             'Connection': 'Keep-Alive',
-            'Accept-Encoding': 'gzip'
+            'Accept-Encoding': 'gzip',
+            "X-Requested-With": "com.snei.vue.atv"
         }
 
         r = requests.get(url, headers=headers, verify=self.verify)
@@ -245,13 +261,14 @@ class SONY():
     def set_profile(self, profile_id):
         url = 'https://sentv-user-ext.totsuko.tv/sentv_user_ext/ws/v2/profile/' + profile_id
         headers = {
-            'User-Agent': self.ua_android,
+            'User-Agent': self.ua_android_tv,
             'reqPayload': self.addon.getSetting(id='reqPayload'),
             'Accept': '*/*',
             'Origin': 'https://themis.dl.playstation.net',
             'Host': 'sentv-user-ext.totsuko.tv',
             'Connection': 'Keep-Alive',
-            'Accept-Encoding': 'gzip'
+            'Accept-Encoding': 'gzip',
+            "X-Requested-With": "com.snei.vue.atv"
         }
 
         r = requests.get(url, headers=headers, verify=self.verify)
@@ -270,9 +287,10 @@ class SONY():
                    "Referer": "https://vue.playstation.com/watch/home",
                    "Accept-Language": "en-US,en;q=0.8",
                    "Accept-Encoding": "gzip, deflate, br",
-                   "User-Agent": self.ua_android,
+                   "User-Agent": self.ua_android_tv,
                    "Connection": "Keep-Alive",
-                   "reqPayload": self.addon.getSetting(id='reqPayload')
+                   "reqPayload": self.addon.getSetting(id='reqPayload'),
+                   "X-Requested-With": "com.snei.vue.atv"
                    }
 
         if ids['channel_id'] != 'null':
@@ -298,9 +316,10 @@ class SONY():
                    "Referer": "https://vue.playstation.com/watch/home",
                    "Accept-Language": "en-US,en;q=0.8",
                    "Accept-Encoding": "gzip, deflate, br",
-                   "User-Agent": self.ua_android,
+                   "User-Agent": self.ua_android_tv,
                    "Connection": "Keep-Alive",
-                   "reqPayload": self.addon.getSetting(id='reqPayload')
+                   "reqPayload": self.addon.getSetting(id='reqPayload'),
+                   "X-Requested-With": "com.snei.vue.atv"
                    }
 
         if ids['channel_id'] != 'null':
@@ -328,9 +347,9 @@ class SONY():
                    "Content-type": "application/json",
                    "Origin": "https://themis.dl.playstation.net",
                    "Accept-Language": "en-US",
-                   "Referer": "https://themis.dl.playstation.net/themis/zartan/2.2.2b/",
+                   "Referer": "https://themis.dl.playstation.net/themis/destro/4-4-5a/",
                    "Accept-Encoding": "gzip, deflate",
-                   "User-Agent": self.ua_android,
+                   "User-Agent": self.ua_android_tv,
                    "Connection": "Keep-Alive",
                    'reqPayload': self.addon.getSetting(id='reqPayload'),
                    'X-Requested-With': 'com.snei.vue.android'

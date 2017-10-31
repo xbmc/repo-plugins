@@ -32,12 +32,14 @@ check_device_id()
 
 
 sony = SONY()
+
 if mode < 998:
     if ADDON.getSetting(id='last_auth') != '':
         last_auth = stringToDate(ADDON.getSetting(id='last_auth'), "%Y-%m-%dT%H:%M:%S.%fZ")
         if (datetime.utcnow() - last_auth).total_seconds() > 900: sony.check_auth()
     else:
         sony.check_auth()
+
 
 if mode == None and mode < 998:
     if ADDON.getSetting(id='default_profile') == '' or ADDON.getSetting(id='always_ask_profile') == 'true': sony.get_profiles()
@@ -61,6 +63,9 @@ elif mode == 200:
 elif mode == 300:
     live_tv()
 
+elif mode == 350:
+    on_demand(channel_id)
+
 elif mode == 400:
     sports()
 
@@ -82,6 +87,7 @@ elif mode == 800:
 
 elif mode == 900:
     get_stream(url, airing_id, channel_id, program_id, series_id, tms_id)
+
 
 elif mode == 998:
     sys.exit()

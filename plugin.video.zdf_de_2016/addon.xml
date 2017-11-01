@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.zdf_de_2016" name="ZDF Mediathek 2016" version="1.0.6" provider-name="Generia">
+<addon id="plugin.video.zdf_de_2016" name="ZDF Mediathek 2016" version="1.0.7" provider-name="Generia">
   <requires>
     <import addon="xbmc.python" version="2.14.0"/>
   </requires>
@@ -25,6 +25,12 @@ Siehe auch https://github.com/generia/plugin.video.zdf_de_2016
 	<website>http://www.zdf.de</website>
     <platform>all</platform>
     <news>
+1.0.7 (2017-10-31)
+- handle new content elements after 'heute.de' relaunch
+- use first teaser image for cluster folders
+- added 'Startseite zdf.de' homepage processing
+- fix handling '/sendungen-a-z' properly in all cases 
+
 1.0.6 (2017-10-07)
 - full refactoring for apiToken handling after ZDF website updates 
 - fix for genre/category parsing

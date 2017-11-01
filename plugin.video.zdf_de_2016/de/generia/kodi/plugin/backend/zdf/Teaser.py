@@ -15,7 +15,7 @@ catPattern = compile('class="teaser-cat\s*[^"]*"[^>]*>')
 catCategoryPattern = compile('class="teaser-cat-category\s*[^"]*"[^>]*>([^<]*)</[^>]*>')
 catBrandPattern = compile('class="teaser-cat-brand\s*[^"]*"[^>]*>([^<]*)</[^>]*>')
 aPattern = compile('href="([^"]*)"[^>]*>')
-titleIconPattern = compile('class="title-icon icon-[0-9]*_([^"]*)">')
+titleIconPattern = compile('class="[^"]*icon-[0-9]*_(play)">')
 textPattern = compile('class="teaser-text"[^>]*>([^<]*)</[^>]*>')
 datePattern = compile('class="video-airing"[^>]*>([^<]*)</[^>]*>')
 apiTokenPattern = compile('"apiToken"\s*:\s*"([^"]*)"')
@@ -94,8 +94,8 @@ class Teaser(object):
 
         return endPos
 
-    def parseImage(self, article, pos):
-        sourceMatch = sourcePattern.search(article)
+    def parseImage(self, article, pos, pattern=sourcePattern):
+        sourceMatch = pattern.search(article)
         src = None
         if sourceMatch is not None:
             srcset = sourceMatch.group(1)

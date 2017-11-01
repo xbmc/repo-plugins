@@ -9,7 +9,7 @@ from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
 class RubricsPage(AbstractPage):
 
     excludedRubricUrls = [
-        '/sendungen-a-z',
+        Constants.showsAzUrl,
         '/bestbewertet',
         '/meist-gesehen',
         #'/barrierefreiheit-im-zdf'

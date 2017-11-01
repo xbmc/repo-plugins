@@ -201,3 +201,7 @@ msgstr "Weiterleitung erkannt"
 msgctxt "#32042"
 msgid "The page '{0}' was redirected by the ZDF server to '{1}'. This is an external link that can not be opened inside the ZDF Mediathek 2016. Please open this link in a web-browser."
 msgstr "Die Seite '{0}' wurde vom ZDF Server weitergeleitet zu '{1}'. Dies is ein externer Link, der nicht innerhalb der ZDF Mediathek 2016 geöffnet werden kann. Bitte öffnen Sie diesen Link in einem Web-Browser."
+
+msgctxt "#32043"
+msgid "Homepage zdf.de"
+msgstr "Startseite zdf.de"

@@ -7,7 +7,7 @@ from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
 class ShowsAzPage(AbstractPage):
 
     def service(self, request, response):
-        rubricBaseUrl = '/sendungen-a-z?group='
+        rubricBaseUrl = Constants.showsAzUrl + '?group='
         groups = []
         for i in range (0, 26):
             group = chr(ord('a') + i)

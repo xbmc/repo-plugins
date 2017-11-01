@@ -183,3 +183,7 @@ msgstr ""
 msgctxt "#32042"
 msgid "The page '{0}' was redirected by the ZDF server to '{1}'. This is an external link that can not be opened inside the ZDF Mediathek 2016. Please open this link in a web-browser."
 msgstr ""
+
+msgctxt "#32043"
+msgid "Homepage zdf.de"
+msgstr ""

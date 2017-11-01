@@ -40,6 +40,10 @@ class MediathekFactory(PageletFactory):
         if pageletId == 'RubricsPage':
             return RubricsPage()
         if pageletId == 'RubricPage':
+            rubricUrl = params['rubricUrl']
+            # redirect to ShowsAzPage, if url matches
+            if rubricUrl == Constants.showsAzUrl:
+                return ShowsAzPage()
             return RubricPage()
         if pageletId == 'LiveTvPage':
             return LiveTvPage()

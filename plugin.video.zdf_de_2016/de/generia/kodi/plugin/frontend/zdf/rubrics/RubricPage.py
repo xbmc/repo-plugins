@@ -46,7 +46,7 @@ class RubricPage(AbstractPage):
         for cluster in clusters:
             clusterTitle = cluster.title #.encode('ascii', 'ignore')
             action = Action(pagelet='RubricPage', params={'rubricUrl': rubricUrl, 'listType': cluster.listType, 'listStart': str(cluster.listStart), 'listEnd': str(cluster.listEnd)})
-            item = Item(cluster.title, action, isFolder=True)
+            item = Item(cluster.title, action, cluster.image, isFolder=True)
             response.addItem(item)            
     
     

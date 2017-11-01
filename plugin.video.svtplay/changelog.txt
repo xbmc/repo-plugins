@@ -1,3 +1,7 @@
+Version 4.0.54
+-------------
+- Native Kodi sorting options are now avialble
+
 Version 4.0.53
 -------------
 - Shows georestricted to Sweden are now also hidden if setting is used.

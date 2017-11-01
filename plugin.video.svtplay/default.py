@@ -41,6 +41,8 @@ PLUGIN_HANDLE = int(sys.argv[1])
 addon = xbmcaddon.Addon("plugin.video.svtplay")
 localize = addon.getLocalizedString
 xbmcplugin.setContent(PLUGIN_HANDLE, "tvshows")
+xbmcplugin.addSortMethod(PLUGIN_HANDLE, xbmcplugin.SORT_METHOD_UNSORTED)
+xbmcplugin.addSortMethod(PLUGIN_HANDLE, xbmcplugin.SORT_METHOD_LABEL)
 
 DEFAULT_FANART = os.path.join(
   xbmc.translatePath(addon.getAddonInfo("path")+"/resources/images/").decode("utf-8"),

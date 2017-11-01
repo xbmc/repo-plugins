@@ -55,19 +55,19 @@ class ARDMediathek(Mediathek):
                         )),
                       TreeNode("2","Ausgewählte Dokus".decode("utf-8"),self.rootLink+"/tv/Ausgew%C3%A4hlte-Dokus/mehr?documentId=33649086",True),
                       TreeNode("3","Ausgewählte Filme".decode("utf-8"),self.rootLink+"/tv/Ausgew%C3%A4hlte-Filme/mehr?documentId=33649088",True),
-                      TreeNode("4","Alle Reportagen und Dokus",self.rootLink+"/tv/Alle-Dokus-Reportagen/mehr?documentId=29897596",True),
-                      TreeNode("5","Alle Filme",self.rootLink+"/tv/Alle-Filme/mehr?documentId=33594630",True),
-                      TreeNode("6","Alle Serien",self.rootLink+"/tv/Serien/mehr?documentId=26402940",True),
+                      TreeNode("4","Alle Reportagen und Dokus",self.rootLink+"/tv/dokus",True),
+                      TreeNode("5","Alle Filme",self.rootLink+"/tv/filme",True),
+                      TreeNode("6","Nachrichten",self.rootLink+"/tv/nachrichten",True),
                       TreeNode("7","Themen",self.rootLink+"/tv/Themen/mehr?documentId=21301810",True),
                       TreeNode("8","Rubriken","",False,(
                         TreeNode("8.0","Kinder",self.rootLink+"/tv/Kinder/Tipps?documentId=21282542",True),
-                        TreeNode("8.1","Unterhaltung & Comedy",self.rootLink+"/tv/Unterhaltung-Comedy/mehr?documentId=21282544",True),
-                        TreeNode("8.2","Kultur",self.rootLink+"/tv/Kultur/mehr?documentId=21282546",True),
-                        TreeNode("8.3","Wissen",self.rootLink+"/tv/Wissen/mehr?documentId=21282530",True),
-                        TreeNode("8.4","Politik",self.rootLink+"/tv/Politik/mehr?documentId=29684598",True),
-                        TreeNode("8.5","Ratgeber",self.rootLink+"/tv/Ratgeber/mehr?documentId=27112994",True),
-                        TreeNode("8.6","Krimi",self.rootLink+"/tv/Krimi/mehr?documentId=27258656",True),
-                        TreeNode("8.7","Reise",self.rootLink+"/tv/Reise/mehr?documentId=29769608",True),
+                        TreeNode("8.1","Unterhaltung & Comedy",self.rootLink+"/tv/unterhaltung",True),
+                        TreeNode("8.2","Kultur",self.rootLink+"/tv/kultur",True),
+                        TreeNode("8.3","Wissen",self.rootLink+"/tv/wissen",True),
+                        TreeNode("8.4","Politik",self.rootLink+"/tv/politik",True),
+                        TreeNode("8.5","Ratgeber",self.rootLink+"/tv/ratgeber",True),
+                        TreeNode("8.6","Sport",self.rootLink+"/tv/sport",True),
+                        TreeNode("8.7","Reise",self.rootLink+"/tv/reise",True),
                         )),
                       )
     self.configLink = self.rootLink+"/play/media/%s?devicetype=pc&feature=flash"
@@ -136,7 +136,7 @@ class ARDMediathek(Mediathek):
       self.gui.buildVideoLink(DisplayObject(title,subTitle,"","",link,False),self,counter);
     for element in videoElements:
       videoId = element.group(1);
-      title = element.group(2).decode('utf-8');
+      title = element.group(2).decode('utf-8').replace("<br/>","");
       subTitle = element.group(3).decode('utf-8');
       if element.group(4):
         datestring = element.group(4).decode('utf-8');
@@ -155,7 +155,10 @@ class ARDMediathek(Mediathek):
     videoLinks = {}
     for match in self.regex_videoLinks.finditer(videoPage):
       quality = int(match.group(1));
-      link = SimpleLink(match.group(2),0);
+      link = match.group(2);
+      if(link.startswith("//")):
+        link = "http:"+link;
+      link = SimpleLink(link,0);
 
       if(quality > 0):
        quality -= 1

@@ -92,8 +92,6 @@ class SimpleXbmcGui(object):
       metaData["duration"] = int(displayObject.duration);
 
     if(displayObject.date is not None):
-          self.log(time.strftime("%d.%m.%Y",displayObject.date));
-          self.log(time.strftime("%Y",displayObject.date));
           metaData["date"] =time.strftime("%d.%m.%Y",displayObject.date);
           metaData["year"] =int(time.strftime("%Y",displayObject.date));
     return metaData;

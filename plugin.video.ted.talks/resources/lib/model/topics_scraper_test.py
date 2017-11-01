@@ -33,7 +33,7 @@ class TestTopicsScraper(unittest.TestCase):
         self.assertLessEqual(68, len(e_talks))
         sample_talk = [t for t in e_talks if t[0] == 'Walk the earth ... my 17-year vow of silence'][0]
         self.assertEqual('http://www.ted.com/talks/john_francis_walks_the_earth', sample_talk[1])
-        self.assertEqual('https://tedcdnpi-a.akamaihd.net/r/tedcdnpe-a.akamaihd.net/images/ted/58068_800x600.jpg?quality=89&amp;w=320', sample_talk[2])
+        self.assertEqual('https://pi.tedcdn.com/r/pe.tedcdn.com/images/ted/58068_800x600.jpg?quality=89&amp;w=320', sample_talk[2])
         self.assertEqual('John Francis', sample_talk[3])
 
     def test_get_talks_performance(self):

@@ -1,3 +1,142 @@
+v2.5.26
+Fixed Highlights (again).
+Fixed BBCiD login.
+Made Added and Watching more robust against some changes.
+
+v2.5.25
+Fixed Highlights.
+
+v2.5.24
+Categories now needs https (Note: This may break compatibility with Jarvis and earlier)
+
+v2.5.23
+Fixed Highlights.
+
+v2.5.22
+Fix for new mediator HTML.
+Live TV now uses a timestamp to avoid problems with "Hide watched".
+
+v2.5.21
+Fix for full URL for some programmes.
+
+v2.5.20
+Signed and AD streams must be treated separately.
+
+v2.5.19
+Added new stream kind and option for future stream kinds.
+
+v2.5.18
+Add support for live events (webcast).
+
+v2.5.17
+Fixed Channel A-Z.
+
+v2.5.16
+Add support for 'technical-replacement' stream type.
+
+v2.5.15
+Fixed Channel Highlights.
+
+v2.5.14
+Fixed broken Channel A-Z.
+
+v2.5.13
+Added setting to ignore HTTPS streams.
+This is required to work around a bug in Jarvis and older versions, which prevents HTTPS
+communication when using certain protocols. If you encounter errors like "sslv3 alert
+handshake failure", please try switching this option on.
+Note that you will get less stream options in this case, and possibly not the all quality
+options.
+
+v2.5.12
+Fixed Categories (yet again).
+Adapted to new design of episode pages.
+
+v2.5.11
+Fixed broken Radio A-Z.
+
+v2.5.10
+Fixed broken BBC iD functionality.
+
+v2.5.9
+Fixed broken Categories (again).
+
+v2.5.8
+Fixed broken Categories.
+
+v2.5.7
+Optimized selection of catchup CDN internally.
+COMPATIBILITY NOTE: Users need to set catchup source to "Any" when Autoplay is switched off
+to get a choice of all CDNs.
+Additional programme properties for better shortcut handling within Kodi.
+Fixed Channel A-Z.
+
+v2.5.6
+Added live TV channel BBC One South West.
+
+v2.5.5
+Fixed broken Highlights.
+Added option to automatically sign in with BBCiD.
+NOTE: If this option is enabled, users will always be signed in.
+
+v2.5.4
+Fixed missing icon image when using BBCiD.
+Properly added new CDN Bidi (worked before just by chance).
+Added option to select main menu entries.
+
+v2.5.3
+New image urls.
+
+v2.5.2
+Fixed typo.
+Adapted to latest changes on the website.
+
+v2.5.1
+Fix for broken BBC iD functionality.
+COMPATIBILITY NOTE:
+Users need to sign in on the website once and provide additional data, e.g. their
+postcode before using the updated BBC iD functionality in the add-on.
+
+v2.5.0
+New channel icons for TV and Radio by primaeval. Now all channels have dedicated icons.
+Added warning regarding new TV Licence legislation.
+
+v2.4.1
+Fixed problem which caused too many playlists to be loaded.
+Tidied up some code.
+
+v2.4.0
+Added more Red Button streams.
+Added more regional Live TV.
+Added option to disable Red Button warning pop-up.
+Added icons for top level directories.
+
+v2.3.4
+Moved to different, hopefully more stable, source for Red Button streams.
+Red Button now uses the same code as Watch Live.
+
+v2.3.3
+Fixed high quality Red Button streams.
+
+v2.3.2
+Fixed Radio Favourites and renamed to Added, as on the website.
+
+v2.3.1
+Fixed Favourites and renamed to Added, as on the website.
+
+v2.3.0
+Added mode which shows CBeebies/CBBC only.
+Rearranged settings.
+Moved translation to .po format. (already in 2.2.1)
+
+v2.2.1
+Fixed problem with new Highlights layout.
+Fixed problem with new XML format.
+
+v2.2.0
+Added support for Red Button.
+Fixed empty directory in Channel Highlights.
+
 v2.1.3
 Added more bitrate options for Radio.
 Switched to new stable source for live TV.

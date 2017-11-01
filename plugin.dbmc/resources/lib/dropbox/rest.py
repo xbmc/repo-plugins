@@ -1,102 +1,131 @@
 """
 A simple JSON REST request abstraction layer that is used by the
-dropbox.client and dropbox.session modules. You shouldn't need to use this.
+``dropbox.client`` and ``dropbox.session`` modules. You shouldn't need to use this.
 """
 
-import httplib
+import io
 #import pkg_resources
-import os
-import re
 import socket
 import ssl
 import sys
 import urllib
-import urlparse
-from . import util
 
 try:
     import json
 except ImportError:
     import simplejson as json
 
-SDK_VERSION = "1.6"
+try:
+   import urllib3
+except ImportError:
+    raise ImportError('Dropbox python client requires urllib3.')
 
-import util
+
+SDK_VERSION = "2.2.0"
+
+import os
+import six
 #TRUSTED_CERT_FILE = pkg_resources.resource_filename(__name__, 'trusted-certs.crt')
-TRUSTED_CERT_FILE = os.path.join(os.path.dirname(util.__file__), 'trusted-certs.crt')
+TRUSTED_CERT_FILE = os.path.join(os.path.dirname(six.__file__), 'trusted-certs.crt')
 
-class ProperHTTPSConnection(httplib.HTTPConnection):
+
+class RESTResponse(io.IOBase):
     """
-    httplib.HTTPSConnection is broken because it doesn't do server certificate
-    validation.  This class does certificate validation by ensuring:
-       1. The certificate sent down by the server has a signature chain to one of
-          the certs in our 'trusted-certs.crt' (this is mostly handled by the 'ssl'
-          module).
-       2. The hostname in the certificate matches the hostname we're connecting to.
+    Responses to requests can come in the form of ``RESTResponse``. These are
+    thin wrappers around the socket file descriptor.
+    :meth:`read()` and :meth:`close()` are implemented.
+    It is important to call :meth:`close()` to return the connection
+    back to the connection pool to be reused. If a connection
+    is not closed by the caller it may leak memory. The object makes a
+    best-effort attempt upon destruction to call :meth:`close()`,
+    but it's still best to explicitly call :meth:`close()`.
     """
 
-    def __init__(self, host, port, trusted_cert_file=TRUSTED_CERT_FILE):
-        httplib.HTTPConnection.__init__(self, host, port)
-        self.ca_certs = trusted_cert_file
-        self.cert_reqs = ssl.CERT_REQUIRED
+    def __init__(self, resp):
+        # arg: A urllib3.HTTPResponse object
+        self.urllib3_response = resp
+        self.status = resp.status
+        self.version = resp.version
+        self.reason = resp.reason
+        self.strict = resp.strict
+        self.is_closed = False
 
-    def connect(self):
-        sock = create_connection((self.host, self.port))
-        self.sock = ssl.wrap_socket(sock, cert_reqs=self.cert_reqs, ca_certs=self.ca_certs)
-        cert = self.sock.getpeercert()
-        hostname = self.host.split(':', 0)[0]
-        match_hostname(cert, hostname)
+    def __del__(self):
+        # Attempt to close when ref-count goes to zero.
+        self.close()
 
-class CertificateError(ValueError):
-    pass
+    def __exit__(self, typ, value, traceback):
+        # Allow this to be used in "with" blocks.
+        self.close()
 
-def _dnsname_to_pat(dn):
-    pats = []
-    for frag in dn.split(r'.'):
-        if frag == '*':
-            # When '*' is a fragment by itself, it matches a non-empty dotless
-            # fragment.
-            pats.append('[^.]+')
-        else:
-            # Otherwise, '*' matches any dotless fragment.
-            frag = re.escape(frag)
-            pats.append(frag.replace(r'\*', '[^.]*'))
-    return re.compile(r'\A' + r'\.'.join(pats) + r'\Z', re.IGNORECASE)
+    # -----------------
+    # Important methods
+    # -----------------
+    def read(self, amt=None):
+        """
+        Read data off the underlying socket.
 
-# This was ripped from Python 3.2 so it's not tested
-def match_hostname(cert, hostname):
-    """Verify that *cert* (in decoded format as returned by
-    SSLSocket.getpeercert()) matches the *hostname*.  RFC 2818 rules
-    are mostly followed, but IP addresses are not accepted for *hostname*.
+        Parameters
+            amt
+              Amount of data to read. Defaults to ``None``, indicating to read
+              everything.
 
-    CertificateError is raised on failure. On success, the function
-    returns nothing.
-    """
-    if not cert:
-        raise ValueError("empty or no certificate")
-    dnsnames = []
-    san = cert.get('subjectAltName', ())
-    for key, value in san:
-        if key == 'DNS':
-            if _dnsname_to_pat(value).match(hostname):
-                return
-            dnsnames.append(value)
-    if not san:
-        # The subject is only checked when subjectAltName is empty
-        for sub in cert.get('subject', ()):
-            for key, value in sub:
-                # XXX according to RFC 2818, the most specific Common Name
-                # must be used.
-                if key == 'commonName':
-                    if _dnsname_to_pat(value).match(hostname):
-                        return
-                    dnsnames.append(value)
-    if len(dnsnames) > 1:
-        raise CertificateError("hostname %r doesn't match either of %s" % (hostname, ', '.join(map(repr, dnsnames))))
-    elif len(dnsnames) == 1:
-        raise CertificateError("hostname %r doesn't match %r" % (hostname, dnsnames[0]))
-    else:
-        raise CertificateError("no appropriate commonName or subjectAltName fields were found")
+        Returns
+              Data off the socket. If ``amt`` is not ``None``, at most ``amt`` bytes are returned.
+              An empty string when the socket has no data.
+
+        Raises
+            ``ValueError``
+              If the ``RESTResponse`` has already been closed.
+        """
+        if self.is_closed:
+            raise ValueError('Response already closed')
+        return self.urllib3_response.read(amt)
+
+    BLOCKSIZE = 4 * 1024 * 1024 # 4MB at a time just because
+
+    def close(self):
+        """Closes the underlying socket."""
+
+        # Double closing is harmless
+        if self.is_closed:
+            return
+
+        # Read any remaining crap off the socket before releasing the
+        # connection. Buffer it just in case it's huge
+        while self.read(RESTResponse.BLOCKSIZE):
+            pass
+
+        # Mark as closed and release the connection (exactly once)
+        self.is_closed = True
+        self.urllib3_response.release_conn()
+
+    @property
+    def closed(self):
+        return self.is_closed
+
+
+    # ---------------------------------
+    # Backwards compat for HTTPResponse
+    # ---------------------------------
+    def getheaders(self):
+        """Returns a dictionary of the response headers."""
+        return self.urllib3_response.getheaders()
+
+    def getheader(self, name, default=None):
+        """Returns a given response header."""
+        return self.urllib3_response.getheader(name, default)
+
+    # Some compat functions showed up recently in urllib3
+    try:
+        urllib3.HTTPResponse.flush
+        urllib3.HTTPResponse.fileno
+        def fileno(self):
+            return self.urllib3_response.fileno()
+        def flush(self):
+            return self.urllib3_response.flush()
+    except AttributeError:
+        pass
 
 def create_connection(address):
     host, port = address
@@ -109,8 +138,8 @@ def create_connection(address):
             sock.connect(sa)
             return sock
 
-        except socket.error, _:
-            err = _
+        except socket.error as e:
+            err = e
             if sock is not None:
                 sock.close()
 
@@ -124,11 +153,41 @@ def json_loadb(data):
         data = data.decode('utf8')
     return json.loads(data)
 
+
 class RESTClientObject(object):
-    def __init__(self, http_connect=None):
-        self.http_connect = http_connect
+    def __init__(self, max_reusable_connections=8, mock_urlopen=None):
+        """
+        Parameters
+            max_reusable_connections
+                max connections to keep alive in the pool
+            mock_urlopen
+                an optional alternate urlopen function for testing
+
+        This class uses ``urllib3`` to maintain a pool of connections. We attempt
+        to grab an existing idle connection from the pool, otherwise we spin
+        up a new connection. Once a connection is closed, it is reinserted
+        into the pool (unless the pool is full).
+
+        SSL settings:
+        - Certificates validated using Dropbox-approved trusted root certs
+        - TLS v1.0 (newer TLS versions are not supported by urllib3)
+        - Default ciphersuites. Choosing ciphersuites is not supported by urllib3
+        - Hostname verification is provided by urllib3
+        """
+        self.mock_urlopen = mock_urlopen
+        self.pool_manager = urllib3.PoolManager(
+            num_pools=4, # only a handful of hosts. api.dropbox.com, api-content.dropbox.com
+            maxsize=max_reusable_connections,
+            block=False,
+            timeout=60.0, # long enough so datastores await doesn't get interrupted
+            cert_reqs=ssl.CERT_REQUIRED,
+            ca_certs=TRUSTED_CERT_FILE,
+            ssl_version=ssl.PROTOCOL_TLSv1,
+        )
 
     def request(self, method, url, post_params=None, body=None, headers=None, raw_response=False):
+        """Performs a REST request. See :meth:`RESTClient.request()` for detailed description."""
+
         post_params = post_params or {}
         headers = headers or {}
         headers['User-Agent'] = 'OfficialDropboxPythonSDK/' + SDK_VERSION
@@ -136,63 +195,52 @@ class RESTClientObject(object):
         if post_params:
             if body:
                 raise ValueError("body parameter cannot be used with post_params parameter")
-            body = urllib.urlencode(post_params)
+            body = params_to_urlencoded(post_params)
             headers["Content-type"] = "application/x-www-form-urlencoded"
 
-        # maintain dynamic lookup of ProperHTTPConnection
-        http_connect = self.http_connect
-        if http_connect is None:
-            http_connect = ProperHTTPSConnection
+        # Handle StringIO instances, because urllib3 doesn't.
+        if hasattr(body, 'getvalue'):
+            body = str(body.getvalue())
+            headers["Content-Length"] = len(body)
 
-        host = urlparse.urlparse(url).hostname
-        conn = http_connect(host, 443)
+        # Reject any headers containing newlines; the error from the server isn't pretty.
+        for key, value in headers.items():
+            if isinstance(value, basestring) and '\n' in value:
+                raise ValueError("headers should not contain newlines (%s: %s)" %
+                                 (key, value))
 
         try:
-            # This code is here because httplib in pre-2.6 Pythons
-            # doesn't handle file-like objects as HTTP bodies and
-            # thus requires manual buffering
-            if not hasattr(body, 'read'):
-                conn.request(method, url, body, headers)
-            else:
-                # Content-Length should be set to prevent upload truncation errors.
-                clen, raw_data = util.analyze_file_obj(body)
-                headers["Content-Length"] = str(clen)
-                conn.request(method, url, "", headers)
-                if raw_data is not None:
-                    conn.send(raw_data)
-                else:
-                    BLOCKSIZE = 4 * 1024 * 1024 # 4MB buffering just because
-                    bytes_read = 0
-                    while True:
-                        data = body.read(BLOCKSIZE)
-                        if not data:
-                            break
-                        # Catch Content-Length overflow before the HTTP server does
-                        bytes_read += len(data)
-                        if bytes_read > clen:
-                            raise util.AnalyzeFileObjBug(clen, bytes_read)
-                        conn.send(data)
-                    if bytes_read != clen:
-                        raise util.AnalyzeFileObjBug(clen, bytes_read)
+            # Grab a connection from the pool to make the request.
+            # We return it to the pool when caller close() the response
+            urlopen = self.mock_urlopen if self.mock_urlopen else self.pool_manager.urlopen
+            r = urlopen(
+                method=method,
+                url=url,
+                body=body,
+                headers=headers,
+                preload_content=False
+            )
+            r = RESTResponse(r) # wrap up the urllib3 response before proceeding
+        except socket.error as e:
+            raise RESTSocketError(url, e)
+        except urllib3.exceptions.SSLError as e:
+            raise RESTSocketError(url, "SSL certificate error: %s" % e)
 
-        except socket.error, e:
-            raise RESTSocketError(host, e)
-        except CertificateError, e:
-            raise RESTSocketError(host, "SSL certificate error: %s" % e)
+        if r.status not in (200, 206):
+            raise ErrorResponse(r, r.read())
 
-        r = conn.getresponse()
-        if r.status != 200:
-            raise ErrorResponse(r)
+        return self.process_response(r, raw_response)
 
+    def process_response(self, r, raw_response):
         if raw_response:
             return r
         else:
+            s = r.read()
             try:
-                resp = json_loadb(r.read())
+                resp = json_loadb(s)
             except ValueError:
-                raise ErrorResponse(r)
-            finally:
-                conn.close()
+                raise ErrorResponse(r, s)
+            r.close()
 
         return resp
 
@@ -212,88 +260,125 @@ class RESTClientObject(object):
         assert type(raw_response) == bool
         return self.request("PUT", url, body=body, headers=headers, raw_response=raw_response)
 
-class RESTClient(object):
-    IMPL = RESTClientObject()
 
+class RESTClient(object):
     """
-    An class with all static methods to perform JSON REST requests that is used internally
+    A class with all static methods to perform JSON REST requests that is used internally
     by the Dropbox Client API. It provides just enough gear to make requests
     and get responses as JSON data (when applicable). All requests happen over SSL.
     """
+
+    IMPL = RESTClientObject()
 
     @classmethod
     def request(cls, *n, **kw):
         """Perform a REST request and parse the response.
 
-        Args:
-            - ``method``: An HTTP method (e.g. 'GET' or 'POST').
-            - ``url``: The URL to make a request to.
-            - ``post_params``: A dictionary of parameters to put in the body of the request.
+        Parameters
+            method
+              An HTTP method (e.g. ``'GET'`` or ``'POST'``).
+            url
+              The URL to make a request to.
+            post_params
+              A dictionary of parameters to put in the body of the request.
               This option may not be used if the body parameter is given.
-            - ``body``: The body of the request. Typically, this value will be a string.
-              It may also be a file-like object in Python 2.6 and above. The body
+            body
+              The body of the request. Typically, this value will be a string.
+              It may also be a file-like object. The body
               parameter may not be used with the post_params parameter.
-            - ``headers``: A dictionary of headers to send with the request.
-            - ``raw_response``: Whether to return the raw httplib.HTTPReponse object. [default False]
+            headers
+              A dictionary of headers to send with the request.
+            raw_response
+              Whether to return a :class:`RESTResponse` object. Default ``False``.
               It's best enabled for requests that return large amounts of data that you
-              would want to .read() incrementally rather than loading into memory. Also
+              would want to ``.read()`` incrementally rather than loading into memory. Also
               use this for calls where you need to read metadata like status or headers,
               or if the body is not JSON.
 
-        Returns:
-            - The JSON-decoded data from the server, unless raw_response is
-              specified, in which case an httplib.HTTPReponse object is returned instead.
+        Returns
+              The JSON-decoded data from the server, unless ``raw_response`` is
+              set, in which case a :class:`RESTResponse` object is returned instead.
 
-        Raises:
-            - dropbox.rest.ErrorResponse: The returned HTTP status is not 200, or the body was
+        Raises
+            :class:`ErrorResponse`
+              The returned HTTP status is not 200, or the body was
               not parsed from JSON successfully.
-            - dropbox.rest.RESTSocketError: A socket.error was raised while contacting Dropbox.
+            :class:`RESTSocketError`
+              A ``socket.error`` was raised while contacting Dropbox.
         """
         return cls.IMPL.request(*n, **kw)
 
     @classmethod
     def GET(cls, *n, **kw):
-        """Perform a GET request using RESTClient.request"""
+        """Perform a GET request using :meth:`RESTClient.request()`."""
         return cls.IMPL.GET(*n, **kw)
 
     @classmethod
     def POST(cls, *n, **kw):
-        """Perform a POST request using RESTClient.request"""
+        """Perform a POST request using :meth:`RESTClient.request()`."""
         return cls.IMPL.POST(*n, **kw)
 
     @classmethod
     def PUT(cls, *n, **kw):
-        """Perform a PUT request using RESTClient.request"""
+        """Perform a PUT request using :meth:`RESTClient.request()`."""
         return cls.IMPL.PUT(*n, **kw)
 
+
 class RESTSocketError(socket.error):
-    """
-    A light wrapper for socket.errors raised by dropbox.rest.RESTClient.request
-    that adds more information to the socket.error.
-    """
+    """A light wrapper for ``socket.error`` that adds some more information."""
 
     def __init__(self, host, e):
         msg = "Error connecting to \"%s\": %s" % (host, str(e))
         socket.error.__init__(self, msg)
 
+
+# Dummy class for docstrings, see doco.py.
+class _ErrorResponse__doc__(Exception):
+    """Exception raised when :class:`DropboxClient` exeriences a problem.
+
+    For example, this is raised when the server returns an unexpected
+    non-200 HTTP response.
+    """
+
+    _status__doc__ = "HTTP response status (an int)."
+    _reason__doc__ = "HTTP response reason (a string)."
+    _headers__doc__ = "HTTP response headers (a list of (header, value) tuples)."
+    _body__doc__ = "HTTP response body (string or JSON dict)."
+    _error_msg__doc__ = "Error message for developer (optional)."
+    _user_error_msg__doc__ = "Error message for end user (optional)."
+
+
 class ErrorResponse(Exception):
     """
-    Raised by dropbox.rest.RESTClient.request for requests that:
-    - Return a non-200 HTTP response, or
-    - Have a non-JSON response body, or
-    - Have a malformed/missing header in the response.
+    Raised by :meth:`RESTClient.request()` for requests that:
 
-    Most errors that Dropbox returns will have a error field that is unpacked and
+      - Return a non-200 HTTP response, or
+      - Have a non-JSON response body, or
+      - Have a malformed/missing header in the response.
+
+    Most errors that Dropbox returns will have an error field that is unpacked and
     placed on the ErrorResponse exception. In some situations, a user_error field
     will also come back. Messages under user_error are worth showing to an end-user
     of your app, while other errors are likely only useful for you as the developer.
     """
 
-    def __init__(self, http_resp):
+    def __init__(self, http_resp, body):
+        """
+        Parameters
+            http_resp
+                      The :class:`RESTResponse` which errored
+            body
+                      Body of the :class:`RESTResponse`.
+                      The reason we can't simply call ``http_resp.read()`` to
+                      get the body, is that ``read()`` is not idempotent.
+                      Since it can't be called more than once,
+                      we have to pass the string body in separately
+        """
         self.status = http_resp.status
         self.reason = http_resp.reason
-        self.body = http_resp.read()
+        self.body = body
         self.headers = http_resp.getheaders()
+        http_resp.close() # won't need this connection anymore
 
         try:
             self.body = json_loadb(self.body)
@@ -306,14 +391,29 @@ class ErrorResponse(Exception):
     def __str__(self):
         if self.user_error_msg and self.user_error_msg != self.error_msg:
             # one is translated and the other is English
-            msg = "%s (%s)" % (self.user_error_msg, self.error_msg)
+            msg = "%r (%r)" % (self.user_error_msg, self.error_msg)
         elif self.error_msg:
-            msg = self.error_msg
+            msg = repr(self.error_msg)
         elif not self.body:
-            msg = self.reason
+            msg = repr(self.reason)
         else:
             msg = "Error parsing response body or headers: " +\
-                  "Body - %s Headers - %s" % (self.body, self.headers)
+                  "Body - %.100r Headers - %r" % (self.body, self.headers)
 
-        return "[%d] %s" % (self.status, repr(msg))
+        return "[%d] %s" % (self.status, msg)
 
+
+def params_to_urlencoded(params):
+    """
+    Returns a application/x-www-form-urlencoded 'str' representing the key/value pairs in 'params'.
+    
+    Keys are values are str()'d before calling urllib.urlencode, with the exception of unicode
+    objects which are utf8-encoded.
+    """
+    def encode(o):
+        if isinstance(o, unicode):
+            return o.encode('utf8')
+        else:
+            return str(o)
+    utf8_params = {encode(k): encode(v) for k, v in params.iteritems()}
+    return urllib.urlencode(utf8_params)

@@ -1,3 +1,20 @@
+2017.4.3
+- Added Search History
+- Updated icon image
+
+2017.4.2
+- Updated api variables
+- Improved following section
+- Login errors now shown in dialog to user
+- Code clean up
+
+
+2016.3.29
+- Replaced Live & Upcoming with Browse by Category section (ex. Category (Number of live events))
+- Renamed My Channels to Following
+- Added Manually Enter list item, which lets you enter the account & event id you wish to watch
+- Fixed bug causing channels not to display if event icon was missing
+
 v2016.1.8
 - Bumped kodi python version
 

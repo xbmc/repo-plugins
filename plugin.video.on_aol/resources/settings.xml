@@ -1,5 +1,0 @@
-<settings>
-  <category label="General">
-    <setting id="qual" type="enum" label="30009" lvalues="30010|30011|30012|30013" default="2"/>
-  </category>
-</settings>

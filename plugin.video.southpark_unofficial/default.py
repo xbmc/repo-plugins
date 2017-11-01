@@ -14,6 +14,7 @@ import xbmcplugin
 import xbmcgui
 import xbmcaddon
 import xml.etree.ElementTree as ET
+from random import randint
 
 addonID = 'plugin.video.southpark_unofficial'
 addon = xbmcaddon.Addon(id=addonID)
@@ -53,12 +54,12 @@ def index():
     addDir(translation(30005), "Featured", 'list', icon)
     addLink(translation(30006), "Random", 'list', icon)
     addLink(translation(30013), "Search", 'list', icon)
-    for i in range(1, 20):
+    for i in range(1, 22):
         addDir(translation(30007)+" "+str(i), str(i), 'list', defaultImgDir+str(i)+".jpg")
     xbmcplugin.endOfDirectory(pluginhandle)
 
 
-def list(url):
+def list_episodes(url):
     xbmcplugin.setContent(pluginhandle, "episodes")
     if url == "Featured":
         jsonrsp = getUrl(getCarousel())
@@ -79,9 +80,9 @@ def list(url):
 		rand = rand.split("e")
 		if audio == "de":
 			# sp.de returns a JS instead of a JSON so i need to convert it
-			jsonrsp = getUrl("http://www.southpark.de/feeds/full-episode/carousel/"+str(int(rand[0]))+"/c48e799a-9227-44d8-878f-248b0d065714").decode('utf-8')
-			jsonrsp = JStoJSON(jsonrsp)
-			jsonrsp = toUSJSON(jsonrsp)
+			jsonrsp = getUrl("http://www.southpark.de/feeds/carousel/video/e3748950-6c2a-4201-8e45-89e255c06df1/30/1/json/!airdate/season-"+str(int(rand[0]))).decode('utf-8')
+			#jsonrsp = JStoJSON(jsonrsp)
+			#jsonrsp = toUSJSON(jsonrsp)
 		else:
 			# cc.com is the ony one with jsons so descriptions will be in english
 			jsonrsp = getUrl("http://southpark.cc.com/feeds/carousel/video/06bb4aa7-9917-4b6a-ae93-5ed7be79556a/30/1/json/!airdate/season-"+str(int(rand[0]))+"?lang="+audio)
@@ -117,9 +118,9 @@ def list(url):
     else:
         xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_EPISODE)
         if audio == "de":
-			jsonrsp = getUrl("http://www.southpark.de/feeds/full-episode/carousel/"+url+"/c48e799a-9227-44d8-878f-248b0d065714").decode('utf-8')
-			jsonrsp = JStoJSON(jsonrsp)
-			jsonrsp = toUSJSON(jsonrsp)
+			jsonrsp = getUrl("http://www.southpark.de/feeds/carousel/video/e3748950-6c2a-4201-8e45-89e255c06df1/30/1/json/!airdate/season-"+url).decode('utf-8')
+			#jsonrsp = JStoJSON(jsonrsp)
+			#jsonrsp = toUSJSON(jsonrsp)
         else:
 			jsonrsp = getUrl("http://southpark.cc.com/feeds/carousel/video/06bb4aa7-9917-4b6a-ae93-5ed7be79556a/30/1/json/!airdate/season-"+url+"?lang="+audio)
         seasonjson = _json.loads(jsonrsp)
@@ -134,6 +135,9 @@ def list(url):
     xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def playEpisode(url, title, thumbnail):
+	xbmc.log("sp.addon: " + url, xbmc.LOGDEBUG)
+	xbmc.log("sp.addon: " + title, xbmc.LOGDEBUG)
+	xbmc.log("sp.addon: " + thumbnail, xbmc.LOGDEBUG)
 	if url == "banned":
 		notifyText(translation(30011), 7000)
 		return
@@ -146,7 +150,7 @@ def playEpisode(url, title, thumbnail):
 		return
 	notifyText(translation(30009) + " " + encode(title), 3000)
 	rtmp = ""
-	pageUrl = "http://media.mtvnservices.com/player/prime/mediaplayerprime.2.11.3.swf?uri=mgid:arc:episode:"+pageurl_geo[audio_pos]+":"+url
+	pageUrl = "http://media.mtvnservices.com/player/prime/mediaplayerprime.2.12.5.swf?uri=mgid:arc:episode:"+pageurl_geo[audio_pos]+":"+url
 	pageUrl += "&type=network&ref=southpark.cc.com&geo="+ geolocation +"&group=entertainment&network=None&device=Other&networkConnectionType=None"
 	pageUrl += "&CONFIG_URL=http://media.mtvnservices.com/pmt-arc/e1/players/mgid:arc:episode:"+pageurl_geo[audio_pos]+":/context4/config.xml"
 	pageUrl += "?uri=mgid:arc:episode:"+pageurl_geo[audio_pos]+":"+url+"&type=network&ref="+mainweb_geo[audio_pos]+"&geo="+ geolocation
@@ -174,19 +178,24 @@ def playEpisode(url, title, thumbnail):
 			rtmpgeo = 0
 		playpath = ""
 		rtmp = rtmpe[best]
-		if "viacomccstrm" in rtmpe[best]:
-			playpath = "mp4:"+rtmpe[best].split('viacomccstrm/')[1]
-			rtmp = rtmp_geo[0]#rtmpe[best].split('viacomccstrm/')[0]+'viacomccstrm/'
+		xbmc.log("sp.addon: " + rtmp, xbmc.LOGDEBUG)
 		videoname = title + " (" + str(i+1) + " of " + parts +")"
 		li = xbmcgui.ListItem(videoname, iconImage=thumbnail, thumbnailImage=thumbnail)
 		li.setInfo('video', {'Title': videoname})
 		li.setProperty('conn', "B:0")
-		if playpath != "":
-			li.setProperty('PlayPath', playpath)
-		li.setProperty('flashVer', "WIN 19,0,0,185")
-		li.setProperty('pageUrl', pageUrl)
-		li.setProperty('SWFPlayer', "http://media.mtvnservices.com/player/prime/mediaplayerprime.2.11.3.swf")
-		li.setProperty("SWFVerify", "true")
+		if not "http" in rtmp:
+			if "viacomccstrm" in rtmpe[best]:
+				playpath = "mp4:"+rtmpe[best].split('viacomccstrm/')[1]
+				rtmp = rtmp_geo[0]#rtmpe[best].split('viacomccstrm/')[0]+'viacomccstrm/'
+			elif "cp9950.edgefcs.net" in rtmpe[best]:
+				playpath = "mp4:"+rtmpe[best].split('mtvnorigin/')[1]
+				rtmp = rtmp_geo[1]#rtmpe[best].split('viacomccstrm/')[0]+'viacomccstrm/'
+			if playpath != "":
+				li.setProperty('PlayPath', playpath)
+			li.setProperty('flashVer', "WIN 24,0,0,186")
+			li.setProperty('pageUrl', pageUrl)
+			li.setProperty('SWFPlayer', "http://media.mtvnservices.com/player/prime/mediaplayerprime.2.12.5.swf")
+			li.setProperty("SWFVerify", "true")
 		if cc != "" and cc_settings:
 			fname = os.path.join(addonpath, "subtitle_"+str(i)+"_"+str(parts)+".vtt")
 			subname = saveSubs(fname, cc)
@@ -209,7 +218,7 @@ def playEpisode(url, title, thumbnail):
 			player.setSubtitles(ccs[pos])
 			player.showSubtitles(cc_settings)
 		else:
-			print "["+addonID+"] missing some vtt subs..."
+			xbmc.log("sp.addon: " + "["+addonID+"] missing some vtt subs...", xbmc.LOGERROR)
 
 	while pos < playlist.size() and player.isPlaying():
 		while player.isPlaying():
@@ -220,7 +229,7 @@ def playEpisode(url, title, thumbnail):
 					player.setSubtitles(ccs[pos])
 					player.showSubtitles(cc_settings)
 				else:
-					print "["+addonID+"] missing some vtt subs..."
+					xbmc.log("sp.addon: " + "["+addonID+"] missing some vtt subs...", xbmc.LOGERROR)
 		time.sleep(10)
 	return
 
@@ -237,6 +246,7 @@ def notifyText(text, time=5000):
 
 def getUrl(url):
 	link = ""
+	xbmc.log("sp.addon: " + url, xbmc.LOGDEBUG)
 	try:
 		req = urllib2.Request(url)
 		req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:25.0) Gecko/20100101 Firefox/25.0')
@@ -286,11 +296,13 @@ def getCarousel():
 #	carousel = data_url.split("{resultsPerPage}/{currentPage}/json/{sort}")[0]
 #	carousel += "14/1/json/airdate"
 #	carousel += data_url.split("{resultsPerPage}/{currentPage}/json/{sort}")[1]
-	return "http://southpark.cc.com/feeds/carousel/video/351c1323-0b96-402d-a8b9-40d01b2e9bde/30/1/json/!airdate/promotion-0?lang="+audio
+	return "http://southpark.cc.com/feeds/carousel/video/2b6c5ab4-d717-4e84-9143-918793a3b636/14/2/json/!airdate/?lang="+audio
 
 def getMediagen(id):
 	feed = ""
-	feed = getUrl("http://"+mainweb_geo[audio_pos]+"/feeds/video-player/mrss/mgid:arc:episode:"+pageurl_geo[audio_pos]+":"+id+"?lang="+audio)
+	comp = "http://"+mainweb_geo[audio_pos]+"/feeds/video-player/mrss/mgid:arc:episode:"+pageurl_geo[audio_pos]+":"+id+"?lang="+audio
+	xbmc.log("sp.addon: " + comp, xbmc.LOGDEBUG)
+	feed = getUrl(comp)
 	root = ET.fromstring(feed)
 	mediagen = []
 	if sys.version_info >=  (2, 7):
@@ -305,9 +317,9 @@ def getMediagen(id):
 
 def getVideoData(mediagen):
 	xml = ""
-	if audio == "de":
-		mediagen += "&acceptMethods=fms,hdn1,hds";
-	print mediagen
+	mediagen += "&deviceOsVersion=4.4.4&acceptMethods=hls";
+	mediagen = mediagen.replace('{device}', 'Android')
+	xbmc.log("sp.addon: " + mediagen, xbmc.LOGDEBUG)
 	xml = getUrl(mediagen)
 	root = ET.fromstring(xml)
 	rtmpe = []
@@ -426,7 +438,7 @@ eptitle = urllib.unquote_plus(params.get('title', ''))
 epthumbnail = urllib.unquote_plus(params.get('thumbnail', ''))
 
 if mode == 'list':
-    list(url)
+    list_episodes(url)
 elif mode == 'play':
     playEpisode(url, eptitle, epthumbnail)
 else:

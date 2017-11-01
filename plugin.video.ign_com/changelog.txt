@@ -1,43 +1,78 @@
-1.0.0
-- First Try
-1.0.1
-- Some small fixes
-1.0.2
-- Fixed site changes
-1.0.3 / 2.0.3
-- Fixed video playback
-- Fixed search
-2.0.4
-- Fixed small bug (error on missing thumb)
-2.0.5
-- Added 1080p support
-- Fixed video playback for some videos
-2.1.1
-- Original code until 2.0.5 done by AddonScriptorDE
-- New code by Twister
-- Fixed video playback
-- Added IGN First folder
-2.1.2
-- Fixed duration display
-- Fixed video playback for some videos
-2.1.3
-- Fixed a bug where multiple videos were available to pick for the plugin and the wrong one was chosen (mainly reviews)
-2.1.4
-- Adjusted file paths for video reviews and IGN-Daily-Fix to match new layout of web page
-2.1.5
-- Fixed a bug where wrong bitrate was chosen for some 360p videos
-2.1.6
+v2.3.3 (2017-05-30) by Skipmode A1
+- I (Skipmode A1) haven taken over addon by request of Twister
+- Adjusted video detection to new page structure
+- Added refresh to content-menu
+- Using po files
+- Added some debug messages
+- Added next-page picture
+
+v2.3.2 (2017-04-06)
+- Adjusted video detection to new page structure
+- Added detection for new different video implementation
+
+v2.3.1
+- Adjusted video detection to new page structure
+- Code clean up
+
+v2.3.0
+- Dynamically load all available podcasts
+- Removed Ign1 as experimental option since the service was shut down
+- Fixed problem with page counter
+
+v2.2.2
+- Fixed problem when there was only 1 page available
+
+v2.2.1
+- Showing running livestreams in the main directory is now enabled by default.
+- Added 'IGN Anime Club' and 'IGN Unfiltered' to podcasts.
+- New Experimental Feature: Show IGN1 24 hour live stream in main directory. Has to be activated via settings.
+
+v2.2.0
+- Experimental Feature: If IGN is running a live stream it will show up in the main folder (Can be activated via settings)
+- Moved podcasts to separate folder
+- Some code clean up to better match python best practices
+
+v2.1.6
 - Fixed Daily-Fix
 - Added page counter for video lists
 - Removed 'IGN-First', 'IGN-Live' and 'List Series' from folders since filter options and dedicated pages seem to have disappeared from the page. Looking for an alternative solution, for now these options are not supported. Let me know on the forums if you find any dedicated page.
 - To make up for this I added the following podcasts: Up At Noon, Game Scoop!, Beyond!, Unlocked, Nintendo Voice Chat, Esports Weekly, and Fireteam Chat
-2.2.0
-- Experimental Feature: If IGN is running a live stream it will show up in the main folder (Can be activated via settings)
-- Moved podcasts to separate folder
-- Some code clean up to better match python best practices
-2.2.1
-- Showing running livestreams in the main directory is now enabled by default.
-- Added 'IGN Anime Club' and 'IGN Unfiltered' to podcasts.
-- New Experimental Feature: Show IGN1 24 hour live stream in main directory. Has to be activated via settings.
-2.2.2
-- Fixed problem when there was only 1 page available
+
+v2.1.5
+- Fixed a bug where wrong bitrate was chosen for some 360p videos
+
+v2.1.4
+- Adjusted file paths for video reviews and IGN-Daily-Fix to match new layout of web page
+
+v2.1.3
+- Fixed a bug where multiple videos were available to pick for the plugin and the wrong one was chosen (mainly reviews)
+
+v2.1.2
+- Fixed duration display
+- Fixed video playback for some videos
+
+v2.1.1
+- Original code until 2.0.5 done by AddonScriptorDE
+- New code by Twister
+- Fixed video playback
+- Added IGN First folder
+
+v2.0.4
+- Fixed small bug (error on missing thumb)
+
+v2.0.5
+- Added 1080p support
+- Fixed video playback for some videos
+
+v1.0.3 / v2.0.3
+- Fixed video playback
+- Fixed search
+
+v1.0.2
+- Fixed site changes
+
+v1.0.1
+- Some small fixes
+
+v1.0.0
+- First Try

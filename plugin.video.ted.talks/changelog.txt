@@ -1,3 +1,6 @@
+[B]Version 4.2.8[/B]
+Fix search and topics actions (issue#57)
+
 [B]Version 4.2.7[/B]
 Add 'Toggle watched' action (pull#55 thanks to trideceth12)
 

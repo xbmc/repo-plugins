@@ -27,7 +27,7 @@ from urlparse import parse_qs, urlparse
 from xml.dom.minidom import parseString
 from xbmc import translatePath
 import xbmcaddon
-from xbmcgui import Dialog, ListItem, lock, unlock
+from xbmcgui import Dialog, ListItem
 from xbmcplugin import addDirectoryItem, endOfDirectory
 
 Addon = xbmcaddon.Addon("plugin.audio.releasefm")

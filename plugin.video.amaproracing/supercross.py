@@ -8,24 +8,26 @@ ROOTDIR = xbmcaddon.Addon(id='plugin.video.amaproracing').getAddonInfo('path')
 FANART = ROOTDIR+'/images/fanart_supercross.jpg'
 ICON = ROOTDIR+'/images/icon_supercross.png'
 LIVE_FANART = 'http://www.supercrosslive.com/sites/default/files/Hero_slide_RDL.jpg'
+USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
 class supercross():
+    #Livestream Variables
+    owner_id = '1543541'
+    
 
-    def CATEGORIES(self):        
+    def categories(self):        
         self.addDir('Race Day Live','/supercross/live',202,ICON,LIVE_FANART)        
         self.addDir('Race Day Live Archive','/supercross/archive',203,ICON)
         self.addDir('View Supercross Youtube Channel','/supercross/youtube',201,ICON)                
 
 
-    def RACE_DAY_LIVE(self):                              
+    def raceDayLive(self):                              
 
         #Attempt to get the Live Stream
         try:            
-            url = 'http://new.livestream.com/api/accounts/1543541/events?filter=video'
-            json_source = self.GET_LIVESTREAM_INFO(url)
-            #self.LIVESTREAM_LINK(str(json_source['upcoming_events']['data'][0]['id'])) 
-            print "Is list empty"
-            print json_source['data']
+            url = 'https://livestream.com/api/accounts/'+self.owner_id+'/events?filter=video'
+            json_source = self.getLivestreamInfo(url)
+            #self.addLivestreamLink(str(json_source['upcoming_events']['data'][0]['id']))             
             if json_source['data']:
                 for event in json_source['data']:            
                     event_id = str(event['id'])
@@ -36,43 +38,44 @@ class supercross():
                     if event['in_progress']:
                         name = '[COLOR=FF00B7EB]'+name+'[/COLOR]'
 
-                    self.addDir(name,'/live_now',101,icon,FANART,event_id,owner_id)
+                    self.addDir(name,'/live_now',204,icon,FANART,event_id,owner_id)                    
             else:
-                self.RACE_DAY_LIVE_NEXT()    
+                self.raceDayLiveNext()    
         except:
-            self.RACE_DAY_LIVE_NEXT()
+            self.raceDayLiveNext()
             
         finally:
             pass
     
-    def GET_STREAM(owner_id,event_id):
-        url = 'http://api.new.livestream.com/accounts/'+owner_id+'/events/'+event_id+'/viewing_info'
+    def getLiveStream(self,name,owner_id,event_id):
+        #url = 'https://livestream.com/accounts/'+owner_id+'/events/'+event_id+'/viewing_info'
+        url = 'https://livestream.com/api/accounts/'+owner_id+'/events/'+event_id+'/'
+        
         try:
             req = urllib2.Request(url)       
             response = urllib2.urlopen(req)                    
             json_source = json.load(response)
             response.close()
-
-            #print json_source
-
-            m3u8_url = json_source['streamInfo']['m3u8_url']
-            print "M3U8!!!" + m3u8_url
+            
+            m3u8_url = json_source['stream_info']['m3u8_url']         
             req = urllib2.Request(m3u8_url)
             response = urllib2.urlopen(req)                    
             master = response.read()
             response.close()
-            cookie =  urllib.quote(response.info().getheader('Set-Cookie'))
-
-            print cookie
-            print master
+            cookie = ''
+            try:
+                cookie =  urllib.quote(response.info().getheader('Set-Cookie'))
+            except:
+                pass
 
             line = re.compile("(.+?)\n").findall(master)  
-
+            desc = ''
             for temp_url in line:
-                if '.m3u8' in temp_url:
-                    print temp_url
-                    print desc                                
-                    addLink(name +' ('+desc+')',temp_url+'|Cookie='+cookie, name +' ('+desc+')', FANART)
+                if '.m3u8' in temp_url:                              
+                    temp_url = temp_url+'|User-Agent='+USER_AGENT
+                    if cookie != '':
+                        temp_url = temp_url + '&Cookie='+cookie           
+                    self.addLink(name +' ('+desc+')',temp_url, name +' ('+desc+')', FANART)
                 else:
                     desc = ''
                     start = temp_url.find('RESOLUTION=')
@@ -82,10 +85,13 @@ class supercross():
                         desc = temp_url[start:end]
                     else:
                         desc = "Audio"
+        
         except:
+            self.raceDayLiveNext()
             pass
+        
 
-    def RACE_DAY_LIVE_NEXT(self):
+    def raceDayLiveNext(self):
         """
         #Get the next live stream date
         url = 'http://www.supercrosslive.com/race-day-live'
@@ -101,61 +107,54 @@ class supercross():
         next_stream = "No live stream currently available. Check back on day of race."
         self.addLink(next_stream,'',next_stream, LIVE_FANART)
             
-    def RACE_DAY_ARCHIVE(self):
+
+    def raceDayArchive(self):
         try:
-            url = 'http://new.livestream.com/api/accounts/1543541'
-            json_source = self.GET_LIVESTREAM_INFO(url)
+            url = 'https://livestream.com/api/accounts/'+self.owner_id
+            json_source = self.getLivestreamInfo(url)
             #Load all past events            
             for past_event in json_source['past_events']['data']:            
                 name = past_event['full_name']
                 bg_url = past_event['background_image']['url']
                 event_id = str(past_event['id'])
-                #print event_id
+                
                 #http://new.livestream.com/api/accounts/1543541/events/3882193/feed.json?&filter=video
-                #self.LIVESTREAM_LINK('3882193')         
-                self.LIVESTREAM_LINK(event_id)         
+                #self.addLivestreamLink('3882193')         
+                self.addLivestreamLink(event_id)         
 
         except:            
             pass
 
 
-    def GET_LIVESTREAM_INFO(self,url):
-        #Url to get the least loaded server???
-        #http://new.livestream.com/api/servers/sio/leastloaded.json?mode=full 
-        
-        #http://api.new.livestream.com/accounts/1543541/events/3882171/broadcasts/80254428.m3u8?dw=100&hdnea=st=1426352339~exp=1426353239~acl=/i/1543541_3882171_2d7aeb19_1@85856/*~hmac=4696485923e9b4aa0920296bc4f3e071e6e5aa293099486bd674466f8474642b
-        #Get Supercross livestream.com info
+    def getLivestreamInfo(self,url):        
         req = urllib2.Request(url) 
-        req.add_header('User-Agent', ' Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.115 Safari/537.36') 
-        #req.add_header('Referer', 'http://www.promotocross.com/motocross/live')
-        response = urllib2.urlopen(req)        
-        #data_sources = response.read()
+        req.add_header('User-Agent', USER_AGENT)         
+        response = urllib2.urlopen(req)                
         json_source = json.load(response)
         response.close()  
 
         return json_source
 
 
-    def LIVESTREAM_LINK(self,event_id):
-        url = 'http://new.livestream.com/api/accounts/1543541/events/'+event_id+'/feed.json?&filter=video'
+    def addLivestreamLink(self,event_id):
+        url = 'https://livestream.com/api/accounts/'+self.owner_id+'/events/'+event_id+'/feed.json?&filter=video'
         
         try:
             req = urllib2.Request(url) 
-            req.add_header('User-Agent', ' Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.115 Safari/537.36')                                    
+            req.add_header('User-Agent', USER_AGENT)                                    
             response = urllib2.urlopen(req)                    
             json_source = json.load(response)
             response.close()
-
-            
+           
 
             name = json_source['data'][0]['data']['caption']
             img_url = json_source['data'][0]['data']['thumbnail_url']            
             #Attempt to get the HD feed, if not try for the SD
             try:
-                stream_url = json_source['data'][0]['data']['progressive_url_hd']
+                stream_url = json_source['data'][0]['data']['progressive_url_hd']+'|User-Agent='+USER_AGENT
                 self.addLink(name, stream_url, name, img_url)
             except:
-                stream_url = json_source['data'][0]['data']['progressive_url']
+                stream_url = json_source['data'][0]['data']['progressive_url']+'|User-Agent='+USER_AGENT
                 self.addLink(name, stream_url, name, img_url)
             finally:                
                 pass
@@ -164,7 +163,7 @@ class supercross():
 
 
 
-    def SUPERCROSS_YOUTUBE_CHANNEL(self):        
+    def getYoutubeChannel(self):        
         win = str(xbmcgui.getCurrentWindowId())
         xbmc.executebuiltin('ActivateWindow('+win+',plugin://plugin.video.youtube/user/SupercrossLive/,return)')
 
@@ -183,6 +182,7 @@ class supercross():
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
         return ok
 
+
     def addDir(self,name,url,mode,iconimage,fanart=None,event_id=None,owner_id=None):       
         ok=True
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
@@ -190,18 +190,6 @@ class supercross():
             u = u+"&event_id="+urllib.quote_plus(event_id)
         if owner_id != None:
             u = u+"&owner_id="+urllib.quote_plus(owner_id)
-        liz=xbmcgui.ListItem(name, iconImage=ICON, thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name } )
-        if fanart != None:
-            liz.setProperty('fanart_image', fanart)
-        else:
-            liz.setProperty('fanart_image', FANART)
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)    
-        return ok
-
-    def addDir_ORG(self,name,url,mode,iconimage,fanart=None):       
-        ok=True
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
         liz=xbmcgui.ListItem(name, iconImage=ICON, thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
         if fanart != None:

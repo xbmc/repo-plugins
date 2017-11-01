@@ -175,7 +175,11 @@ if mode[0] in ("folder", "myshares"):
 			li.setProperty("IsPlayable", "true")
 			# Add context menu item for delete file
 			deleteActionMenuText = myAddon.getLocalizedString(30114) # "Delete from PCloud..."
+<<<<<<< HEAD
 			deleteActionUrl = base_url + "?mode=delete&fileID=" + str(oneFileOrFolderItem["fileid"]) + "&filename=" + urllib.quote(oneFileOrFolderItem["name"].encode("utf-8"))
+=======
+			deleteActionUrl = base_url + "?mode=delete&fileID=" + `oneFileOrFolderItem["fileid"]` + "&filename=" + urllib.quote(oneFileOrFolderItem["name"].encode("utf-8"))
+>>>>>>> 5bb0fe786146c7a435381d338a0f1af3219791e7
 			# Add context menu item for mark as watched
 			markAsWatchedMenuText = myAddon.getLocalizedString(30121) # "Mark as watched"
 			li.addContextMenuItems(
@@ -183,7 +187,11 @@ if mode[0] in ("folder", "myshares"):
 				(markAsWatchedMenuText, "Action(ToggleWatched)")]
 				)
 			# Finally add the list item to the directory
+<<<<<<< HEAD
 			fileUrl = base_url + "?mode=file&fileID=" + str(oneFileOrFolderItem["fileid"])
+=======
+			fileUrl = base_url + "?mode=file&fileID=" + `oneFileOrFolderItem["fileid"]`
+>>>>>>> 5bb0fe786146c7a435381d338a0f1af3219791e7
 			xbmcplugin.addDirectoryItem(handle=addon_handle, url=fileUrl, listitem=li)
 	
 	# Now add the "virtual" entries ("go to parent folder", "my shares", and "go to root folder") where necessary
@@ -199,7 +207,11 @@ if mode[0] in ("folder", "myshares"):
 		else:
 			# now add "go up one level" fake directory if we're NOT in the root folder
 			parentFolderID = folderContents["metadata"]["parentfolderid"]
+<<<<<<< HEAD
 			url = base_url + "?mode=folder&folderID=" + str(parentFolderID)
+=======
+			url = base_url + "?mode=folder&folderID=" + `parentFolderID`
+>>>>>>> 5bb0fe786146c7a435381d338a0f1af3219791e7
 			# "Back to parent folder"
 			parentFolderText = "[I]{0}[/I]".format(myAddon.getLocalizedString(30113))
 			li = xbmcgui.ListItem(parentFolderText, iconImage="DefaultFolder.png")

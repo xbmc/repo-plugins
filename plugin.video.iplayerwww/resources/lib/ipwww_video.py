@@ -21,29 +21,114 @@ import xbmcaddon
 ADDON = xbmcaddon.Addon(id='plugin.video.iplayerwww')
 
 
+def RedButtonDialog():
+    if ADDON.getSetting('redbutton_warning') == 'true':
+        dialog = xbmcgui.Dialog()
+        ret = dialog.yesno(translation(30405), translation(30406), '',
+                           translation(30407), translation(30409), translation(30408))
+        if ret:
+            ListRedButton()
+    else:
+        ListRedButton()
+
+
+def ListRedButton():
+    channel_list = [
+        ('sport_stream_01',  'BBC Red Button 1'),
+        ('sport_stream_02',  'BBC Red Button 2'),
+        ('sport_stream_03',  'BBC Red Button 3'),
+        ('sport_stream_04',  'BBC Red Button 4'),
+        ('sport_stream_05',  'BBC Red Button 5'),
+        ('sport_stream_06',  'BBC Red Button 6'),
+        ('sport_stream_07',  'BBC Red Button 7'),
+        ('sport_stream_08',  'BBC Red Button 8'),
+        ('sport_stream_09',  'BBC Red Button 9'),
+        ('sport_stream_10',  'BBC Red Button 10'),
+        ('sport_stream_11',  'BBC Red Button 11'),
+        ('sport_stream_12',  'BBC Red Button 12'),
+        ('sport_stream_13',  'BBC Red Button 13'),
+        ('sport_stream_14',  'BBC Red Button 14'),
+        ('sport_stream_15',  'BBC Red Button 15'),
+        ('sport_stream_16',  'BBC Red Button 16'),
+        ('sport_stream_17',  'BBC Red Button 17'),
+        ('sport_stream_18',  'BBC Red Button 18'),
+        ('sport_stream_19',  'BBC Red Button 19'),
+        ('sport_stream_20',  'BBC Red Button 20'),
+        ('sport_stream_21',  'BBC Red Button 21'),
+        ('sport_stream_22',  'BBC Red Button 22'),
+        ('sport_stream_23',  'BBC Red Button 23'),
+        ('sport_stream_24',  'BBC Red Button 24'),
+        ('sport_stream_01b', 'BBC Red Button 1b'),
+        ('sport_stream_02b', 'BBC Red Button 2b'),
+        ('sport_stream_03b', 'BBC Red Button 3b'),
+        ('sport_stream_04b', 'BBC Red Button 4b'),
+        ('sport_stream_05b', 'BBC Red Button 5b'),
+        ('sport_stream_06b', 'BBC Red Button 6b'),
+        ('sport_stream_07b', 'BBC Red Button 7b'),
+        ('sport_stream_08b', 'BBC Red Button 8b'),
+        ('sport_stream_09b', 'BBC Red Button 9b'),
+        ('sport_stream_10b', 'BBC Red Button 10b'),
+        ('sport_stream_11b', 'BBC Red Button 11b'),
+        ('sport_stream_12b', 'BBC Red Button 12b'),
+        ('sport_stream_13b', 'BBC Red Button 13b'),
+        ('sport_stream_14b', 'BBC Red Button 14b'),
+        ('sport_stream_15b', 'BBC Red Button 15b'),
+        ('sport_stream_16b', 'BBC Red Button 16b'),
+        ('sport_stream_17b', 'BBC Red Button 17b'),
+        ('sport_stream_18b', 'BBC Red Button 18b'),
+        ('sport_stream_19b', 'BBC Red Button 19b'),
+        ('sport_stream_20b', 'BBC Red Button 20b'),
+        ('sport_stream_21b', 'BBC Red Button 21b'),
+        ('sport_stream_22b', 'BBC Red Button 22b'),
+        ('sport_stream_23b', 'BBC Red Button 23b'),
+        ('sport_stream_24b', 'BBC Red Button 24b'),
+    ]
+    iconimage = xbmc.translatePath('special://home/addons/plugin.video.iplayerwww/media/red_button.png')
+    for id, name in channel_list:
+        if ADDON.getSetting('streams_autoplay') == 'true':
+            AddMenuEntry(name, id, 203, iconimage, '', '')
+        else:
+            AddMenuEntry(name, id, 123, iconimage, '', '')
+
+
 # ListLive creates menu entries for all live channels.
 def ListLive():
     channel_list = [
-        ('bbc_one_hd', 'bbc_one', 'BBC One'),
-        ('bbc_two_hd', 'bbc_two', 'BBC Two'),
-        ('bbc_four_hd', 'bbc_four', 'BBC Four'),
-        ('cbbc_hd', 'cbbc', 'CBBC'),
-        ('cbeebies_hd', 'cbeebies', 'CBeebies'),
-        ('bbc_news24', 'bbc_news24', 'BBC News Channel'),
-        ('bbc_parliament', 'bbc_parliament', 'BBC Parliament'),
-        ('bbc_alba', 'bbc_alba', 'Alba'),
-        ('s4cpbs', 's4c', 'S4C'),
-        ('bbc_one_london', 'bbc_one', 'BBC One London'),
-        ('bbc_one_scotland_hd', 'bbc_one_scotland', 'BBC One Scotland'),
-        ('bbc_one_northern_ireland_hd', 'bbc_one_northern_ireland', 'BBC One Northern Ireland'),
-        ('bbc_one_wales_hd', 'bbc_one_wales', 'BBC One Wales'),
-        ('bbc_two_scotland', 'bbc_two', 'BBC Two Scotland'),
-        ('bbc_two_northern_ireland_digital', 'bbc_two', 'BBC Two Northern Ireland'),
-        ('bbc_two_wales_digital', 'bbc_two', 'BBC Two Wales'),
+        ('bbc_one_hd',                       'BBC One'),
+        ('bbc_two_hd',                       'BBC Two'),
+        ('bbc_four_hd',                      'BBC Four'),
+        ('cbbc_hd',                          'CBBC'),
+        ('cbeebies_hd',                      'CBeebies'),
+        ('bbc_news24',                       'BBC News Channel'),
+        ('bbc_parliament',                   'BBC Parliament'),
+        ('bbc_alba',                         'Alba'),
+        ('s4cpbs',                           'S4C'),
+        ('bbc_one_london',                   'BBC One London'),
+        ('bbc_one_scotland_hd',              'BBC One Scotland'),
+        ('bbc_one_northern_ireland_hd',      'BBC One Northern Ireland'),
+        ('bbc_one_wales_hd',                 'BBC One Wales'),
+        ('bbc_two_scotland',                 'BBC Two Scotland'),
+        ('bbc_two_northern_ireland_digital', 'BBC Two Northern Ireland'),
+        ('bbc_two_wales_digital',            'BBC Two Wales'),
+        ('bbc_two_england',                  'BBC Two England',),
+        ('bbc_one_cambridge',                'BBC One Cambridge',),
+        ('bbc_one_channel_islands',          'BBC One Channel Islands',),
+        ('bbc_one_east',                     'BBC One East',),
+        ('bbc_one_east_midlands',            'BBC One East Midlands',),
+        ('bbc_one_east_yorkshire',           'BBC One East Yorkshire',),
+        ('bbc_one_north_east',               'BBC One North East',),
+        ('bbc_one_north_west',               'BBC One North West',),
+        ('bbc_one_oxford',                   'BBC One Oxford',),
+        ('bbc_one_south',                    'BBC One South',),
+        ('bbc_one_south_east',               'BBC One South East',),
+        ('bbc_one_south_west',               'BBC One South West',),
+        ('bbc_one_west',                     'BBC One West',),
+        ('bbc_one_west_midlands',            'BBC One West Midlands',),
+        ('bbc_one_yorks',                    'BBC One Yorks',),
     ]
-    for id, img, name in channel_list:
+    for id, name in channel_list:
         iconimage = xbmc.translatePath(
-            os.path.join('special://home/addons/plugin.video.iplayerwww/media', img + '.png'))
+            os.path.join('special://home/addons/plugin.video.iplayerwww/media', id + '.png'))
         if ADDON.getSetting('streams_autoplay') == 'true':
             AddMenuEntry(name, id, 203, iconimage, '', '')
         else:
@@ -83,22 +168,22 @@ def ListChannelAtoZ():
     Only creates the corresponding directories for each channel.
     """
     channel_list = [
-        ('bbcone', 'bbc_one', 'BBC One'),
-        ('bbctwo', 'bbc_two', 'BBC Two'),
-        ('tv/bbcthree', 'bbc_three', 'BBC Three'),
-        ('bbcfour', 'bbc_four', 'BBC Four'),
-        ('tv/cbbc', 'cbbc', 'CBBC'),
-        ('tv/cbeebies', 'cbeebies', 'CBeebies'),
-        ('tv/bbcnews', 'bbc_news24', 'BBC News Channel'),
-        ('tv/bbcparliament', 'bbc_parliament', 'BBC Parliament'),
-        ('tv/bbcalba', 'bbc_alba', 'Alba'),
-        ('tv/s4c', 's4c', 'S4C'),
+        ('bbcone',           'bbc_one_hd',              'BBC One'),
+        ('bbctwo',           'bbc_two_hd',              'BBC Two'),
+        ('tv/bbcthree',      'bbc_three_hd',          'BBC Three'),
+        ('bbcfour',          'bbc_four_hd',            'BBC Four'),
+        ('tv/cbbc',          'cbbc_hd',                    'CBBC'),
+        ('tv/cbeebies',      'cbeebies_hd',            'CBeebies'),
+        ('tv/bbcnews',       'bbc_news24',     'BBC News Channel'),
+        ('tv/bbcparliament', 'bbc_parliament',   'BBC Parliament'),
+        ('tv/bbcalba',       'bbc_alba',                   'Alba'),
+        ('tv/s4c',           's4cpbs',                      'S4C'),
     ]
     for id, img, name in channel_list:
         iconimage = xbmc.translatePath(
             os.path.join('special://home/addons/plugin.video.iplayerwww/media', img + '.png'))
         url = "http://www.bbc.co.uk/%s/a-z" % id
-        AddMenuEntry(name, url, 128, iconimage, '', '')
+        AddMenuEntry(name, url, 134, iconimage, '', '')
 
 
 def GetAtoZPage(url):
@@ -204,7 +289,7 @@ def ScrapeEpisodes(page_url):
     for page in page_range:
 
         if page > current_page:
-            page_url = 'http://www.bbc.co.uk' + page_base_url + str(page)
+            page_url = 'https://www.bbc.co.uk' + page_base_url + str(page)
             html = OpenURL(page_url)
 
         # NOTE remove inner li to match outer li
@@ -219,10 +304,9 @@ def ScrapeEpisodes(page_url):
         list_item_num = 1
 
         for li in list_items:
-
             # <li class="list-item unavailable"  data-ip-id="b06sq9xj">
             unavailable_match = re.search(
-                '<li class="list-item.*?unavailable.*?"',
+                'data-timeliness-type="unavailable"',
                 li, flags=(re.DOTALL | re.MULTILINE))
             if unavailable_match:
                 continue
@@ -243,6 +327,8 @@ def ScrapeEpisodes(page_url):
                 li, flags=(re.DOTALL | re.MULTILINE))
             if url_match:
                 url = url_match.group(1)
+                # Some strings already contain the full URL, need to work around this.
+                url = url.replace('http://www.bbc.co.uk','')
                 if url:
                     main_url = 'http://www.bbc.co.uk' + url
 
@@ -267,19 +353,26 @@ def ScrapeEpisodes(page_url):
                     name = name + " - " + subtitle
 
             icon = ''
+            # <source srcset="http://ichef.bbci.co.uk/images/ic/336x189/p04cd999.jpg"
+            icon_match = re.search(
+                r'<source.*?srcset="https://ichef.bbci.co.uk/images/ic/.*?/(.*?)\.jpg"',
+                li, flags=(re.DOTALL | re.MULTILINE))
+            if icon_match:
+                image = icon_match.group(1)
+                if image:
+                    icon = "https://ichef.bbci.co.uk/images/ic/832x468/" + image + ".jpg"
+
+
             type = None
             # <div class="r-image"  data-ip-type="episode"
             # data-ip-src="http://ichef.bbci.co.uk/images/ic/336x189/p026vl1q.jpg">
             # <div class="r-image"  data-ip-type="group"
             # data-ip-src="http://ichef.bbci.co.uk/images/ic/336x189/p037ty9z.jpg">
             image_match = re.search(
-                r'<div class="r-image".+?data-ip-type="(.*?)".+?data-ip-src="http://ichef.bbci.co.uk/images/ic/336x189/(.*?)\.jpg"',
+                r'<div class="r-image".+?data-ip-type="(.*?)"',
                 li, flags=(re.DOTALL | re.MULTILINE))
             if image_match:
                 type = image_match.group(1)
-                image = image_match.group(2)
-                if image:
-                    icon = "http://ichef.bbci.co.uk/images/ic/832x468/" + image + ".jpg"
 
             synopsis = ''
             # <p class="synopsis">What was it like to be a top fashion model 30 years ago? (1978)</p>
@@ -343,7 +436,310 @@ def ScrapeEpisodes(page_url):
     if int(ADDON.getSetting('paginate_episodes')) == 0:
         if current_page < next_page:
             page_url = 'http://www.bbc.co.uk' + page_base_url + str(next_page)
-            AddMenuEntry(" [COLOR orange]%s >>[/COLOR]" % translation(30320), page_url, 128, '', '', '')
+            AddMenuEntry(" [COLOR ffffa500]%s >>[/COLOR]" % translation(30320), page_url, 128, '', '', '')
+
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
+
+    pDialog.close()
+
+
+def ScrapeAtoZEpisodes(page_url):
+    """Creates a list of programmes on one standard HTML page.
+
+    ScrapeEpisodes contains a number of special treatments, which are only needed for
+    specific pages, e.g. Search, but allows to use a single function for all kinds
+    of pages.
+    """
+
+    pDialog = xbmcgui.DialogProgressBG()
+    pDialog.create(translation(30319))
+
+    html = OpenURL(page_url)
+
+    total_pages = 1
+    current_page = 1
+    page_range = range(1)
+    paginate = re.search(r'<ul class="pagination.*?</ul>', html, re.DOTALL)
+    next_page = 1
+    if paginate:
+        page_base_url_match = re.search(r'(.+?)page=', page_url)
+        if page_base_url_match:
+            page_base_url = page_base_url_match.group(0)
+        else:
+            page_base_url = page_url+"?page="
+        if int(ADDON.getSetting('paginate_episodes')) == 0:
+            current_page_match = re.search(r'page=(\d*)', page_url)
+            if current_page_match:
+                current_page = int(current_page_match.group(1))
+            page_base_url_match = re.search(r'(.+?)page=', page_url)
+            if page_base_url_match:
+                page_base_url = page_base_url_match.group(0)
+            else:
+                page_base_url = page_url+"?page="
+            page_range = range(current_page, current_page+1)
+            next_page_match = re.search(r'pagination__item--next">\n.+?<a href="\?page=(.*?)"',
+                                        paginate.group(0),
+                                        re.DOTALL)
+            if next_page_match:
+                next_page = int(next_page_match.group(1))
+            else:
+                next_page = current_page
+            page_range = range(current_page, current_page+1)
+        else:
+            pages = re.findall(r'pagination__item--page">.+?<a href=".+?"',paginate.group(0),re.DOTALL)
+            if pages:
+                last = pages[-1]
+                last_page = re.search(r'<a href="\?page=(.*?)"',last)
+                total_pages = int(last_page.group(1))
+            page_range = range(1, total_pages+1)
+
+    for page in page_range:
+
+        if page > current_page:
+            page_url = page_base_url + str(page)
+            html = OpenURL(page_url)
+
+        # NOTE remove inner li to match outer li
+
+        # <li data-version-type="hd">
+        html = re.compile(r'<li class="content-flags__item" data-version-type.*?</li>',
+                          flags=(re.DOTALL | re.MULTILINE)).sub('', html)
+
+        # <li class="list-item programme"  data-ip-id="p026f2t4">
+        list_items = re.findall(r'<li class="list-item.*?</li>', html, flags=(re.DOTALL | re.MULTILINE))
+
+        list_item_num = 1
+
+        for li in list_items:
+
+            search_group = False
+
+            main_url = None
+            # <a href="/iplayer/episode/b08jny1j/antiques-road-trip-series-13-reversions-episode-10"
+            # title="Antiques Road Trip, Series 13 Reversions: Episode 10" class="list-item__main-link">
+            url_match = re.search(
+                r'<a.*?href="(.*?)".*?list-item__main-link.*?>',
+                li, flags=(re.DOTALL | re.MULTILINE))
+            if url_match:
+                url = url_match.group(1)
+                if url:
+                    main_url = 'http://www.bbc.co.uk' + url
+
+            name = ''
+            title = ''
+            #<h1 class="list-item__title typo typo--bold typo--goose">Antiques Road Trip</h1>
+            #<h2 class="list-item__title typo typo--bold typo--goose">A1: Britain's Longest Road</h2>
+            title_match = re.search(
+                r'<.+?list-item__title.+?>(.*?)<',
+                li, flags=(re.DOTALL | re.MULTILINE))
+            if title_match:
+                title = title_match.group(1).strip()
+                name = title
+
+            subtitle = None
+            # <h2 class="list-item__programme-info__subtitle typo typo--skylark">
+            # Series 39: 14. Burton Constable 2</h2>
+            subtitle_match = re.search(
+                r'<.+?class="list-item__programme-info__subtitle.+?">(.*?)<',
+                li, flags=(re.DOTALL | re.MULTILINE))
+            if subtitle_match:
+                subtitle = subtitle_match.group(1)
+                if subtitle:
+                    name = name + " - " + subtitle
+
+            icon = ''
+            # <source srcset="http://ichef.bbci.co.uk/images/ic/336x189/p04cd999.jpg"
+            icon_match = re.search(
+                r'<source.*?srcset="https://ichef.bbci.co.uk/images/ic/.*?/(.*?)\.jpg',
+                li, flags=(re.DOTALL | re.MULTILINE))
+            if icon_match:
+                image = icon_match.group(1)
+                if image:
+                    icon = "https://ichef.bbci.co.uk/images/ic/832x468/" + image + ".jpg"
+
+            type = None
+            synopsis = ''
+            # <p class="list-item__programme-info__synopsis">
+            # Take an exclusive first look at this year’s candidates.
+            # </p>
+            synopsis_match = re.search(
+                r'<p class="list-item__programme-info__synopsis.*?">\s*(.*?)\s*</p>',
+                li, flags=(re.DOTALL | re.MULTILINE))
+            if synopsis_match:
+                synopsis = synopsis_match.group(1)
+
+            aired = ''
+            # <p class="metadata__item typo typo--bullfinch">First shown: 10 Jun 2016</p>
+            release_match = re.search(
+                r'<p class="metadata__item.*?>First shown:\s*(.*?)</p>',
+                li, flags=(re.DOTALL | re.MULTILINE))
+            if release_match:
+                release = release_match.group(1)
+                if release:
+                    aired = FirstShownToAired(release)
+
+            episodes = None
+            # <div class="list-item__episodes-button
+            # list-item__episodes-button--only-bp3 gel-layout__item">
+            # <a href="/iplayer/episodes/b07gx71q"
+            # class="button button--with-link button--left-align button--full-width ">
+            episodes_match = re.search(
+                r'<div class="list-item__episodes-button.+?href="(.*?)"',
+                li, flags=(re.DOTALL | re.MULTILINE))
+            if episodes_match:
+                episodes = episodes_match.group(1)
+
+            more = None
+            # <span class="button__text typo typo--bullfinch typo--bold">12 available episodes</span>
+            more_match = re.search(
+                r'<span class="button__text.+?">(.*?) available episodes</span>',
+                li, flags=(re.DOTALL | re.MULTILINE))
+            if more_match:
+                more = more_match.group(1)
+
+            if episodes:
+                episodes_url = 'http://www.bbc.co.uk' + episodes
+                if search_group:
+                    AddMenuEntry('[B]%s[/B] - %s' % (title, translation(30318)),
+                                 episodes_url, 128, icon, '', '')
+                else:
+                    AddMenuEntry('[B]%s[/B] - %s %s' % (title, more, translation(30313)),
+                                 episodes_url, 128, icon, '', '')
+            elif more:
+                AddMenuEntry('[B]%s[/B] - %s %s' % (title, more, translation(30313)),
+                             main_url, 128, icon, '', '')
+
+            if type != "group":
+                CheckAutoplay(name , main_url, icon, synopsis, aired)
+
+            percent = int(100*(page+list_item_num/len(list_items))/total_pages)
+            pDialog.update(percent,translation(30319),name)
+
+            list_item_num += 1
+
+        percent = int(100*page/total_pages)
+        pDialog.update(percent,translation(30319))
+
+    if int(ADDON.getSetting('paginate_episodes')) == 0:
+        if current_page < next_page:
+            page_url = page_base_url + str(next_page)
+            AddMenuEntry(" [COLOR ffffa500]%s >>[/COLOR]" % translation(30320), page_url, 134, '', '', '')
+
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
+
+    pDialog.close()
+
+
+def ScrapeMarkup(markup):
+    """Creates a list of programmes of a markup response.
+
+    """
+    pDialog = xbmcgui.DialogProgressBG()
+    pDialog.create(translation(30319))
+
+    # <li class="list-item programme"  data-ip-id="p026f2t4">
+    list_items = re.findall(r'<li class="list-item.*?</li>', markup, flags=(re.DOTALL | re.MULTILINE))
+
+    list_item_num = 1
+
+    for li in list_items:
+        main_url = None
+        # <a href="/iplayer/episode/p026gmw9/world-of-difference-the-models"
+        # title="World of Difference, The Models" class="list-item-link stat"
+        url_match = re.search(
+            r'<a.*?href="(.*?)".*?list-item-link.*?>',
+                li, flags=(re.DOTALL | re.MULTILINE))
+        if url_match:
+            tmp_url = url_match.group(1)
+            if tmp_url.startswith('http'):
+                main_url = tmp_url
+            else:
+                main_url = 'https://www.bbc.co.uk' + tmp_url
+
+        name = ''
+        title = ''
+        #<div class="title top-title">World of Difference</div>
+        title_match = re.search(
+            r'<div class="title top-title">\s*(.*?)\s*</div>',
+            li, flags=(re.DOTALL | re.MULTILINE))
+        if title_match:
+            title = title_match.group(1)
+            name = title
+
+        subtitle = None
+        #<div class="subtitle">The Models</div>
+        subtitle_match = re.search(
+            r'<div class="subtitle">\s*(.*?)\s*</div>',
+            li, flags=(re.DOTALL | re.MULTILINE))
+        if subtitle_match:
+            subtitle = subtitle_match.group(1)
+            if subtitle:
+                name = name + " - " + subtitle
+
+        icon = ''
+        type = None
+        # <div class="r-image"  data-ip-type="episode"
+        # data-ip-src="https://ichef.bbci.co.uk/images/ic/336x189/p033s1dh.jpg">
+
+        image_match = re.search(
+            r'srcset="https://ichef.bbci.co.uk/images/ic/.*?/(.*?).jpg"',
+            li, flags=(re.DOTALL | re.MULTILINE))
+        if image_match:
+            image = image_match.group(1)
+            if image:
+                icon = "https://ichef.bbci.co.uk/images/ic/832x468/" + image + ".jpg"
+
+        synopsis = ''
+        # <p class="synopsis">What was it like to be a top fashion model 30 years ago? (1978)</p>
+        synopsis_match = re.search(
+            r'<p class="synopsis">\s*(.*?)\s*</p>',
+            li, flags=(re.DOTALL | re.MULTILINE))
+        if synopsis_match:
+            synopsis = synopsis_match.group(1)
+
+        # There is no aired date available
+        aired = ''
+
+        episodes_url = None
+        # <a class="view-more-container avail stat" href="/iplayer/episodes/p00db1jf" data-progress-state="">
+        # <a class="view-more-container sibling stat"
+        #  href="/iplayer/search?q=doctor&amp;search_group_id=urn:bbc:programmes:b06qbs4n">
+        episodes_match = re.search(
+            r'<a class="view-more-container.+?stat".+?href="(.*?)"',
+            li, flags=(re.DOTALL | re.MULTILINE))
+        if episodes_match:
+            tmp_url = episodes_match.group(1)
+            if tmp_url.startswith('http'):
+                episodes_url = tmp_url
+            else:
+                episodes_url = 'https://www.bbc.co.uk' + tmp_url
+
+        more = None
+        # <em class="view-more-heading">27</em>
+        more_match = re.search(
+            r'<em class="view-more-heading">(.*?)</em>',
+            li, flags=(re.DOTALL | re.MULTILINE))
+        if more_match:
+            more = more_match.group(1)
+
+        if episodes_url:
+            AddMenuEntry('[B]%s[/B] - %s %s' % (title, more, translation(30313)),
+                         episodes_url, 128, icon, '', '')
+        elif more:
+            AddMenuEntry('[B]%s[/B] - %s %s' % (title, more, translation(30313)),
+                         main_url, 128, icon, '', '')
+
+        if type != "group":
+            CheckAutoplay(name , main_url, icon, synopsis, aired)
+
+        percent = int(100*(list_item_num/len(list_items)))
+        pDialog.update(percent,translation(30319),name)
+
+        list_item_num += 1
 
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
@@ -358,7 +754,7 @@ def ListCategories():
     """
     html = OpenURL('http://www.bbc.co.uk/iplayer')
     match = re.compile(
-        '<a href="/iplayer/categories/(.+?)" class="stat">(.+?)</a>'
+        '<a href=".*?/iplayer/categories/([^{}]*?)".*?>(.+?)</a>'
         ).findall(html)
     for url, name in match:
         AddMenuEntry(name, url, 125, '', '', '')
@@ -394,16 +790,16 @@ def GetFilteredCategory(url):
 def ListChannelHighlights():
     """Creates a list directories linked to the highlights section of each channel."""
     channel_list = [
-        ('bbcone', 'bbc_one', 'BBC One'),
-        ('bbctwo', 'bbc_two', 'BBC Two'),
-        ('tv/bbcthree', 'bbc_three', 'BBC Three'),
-        ('bbcfour', 'bbc_four', 'BBC Four'),
-        ('tv/cbbc', 'cbbc', 'CBBC'),
-        ('tv/cbeebies', 'cbeebies', 'CBeebies'),
-        ('tv/bbcnews', 'bbc_news24', 'BBC News Channel'),
-        ('tv/bbcparliament', 'bbc_parliament', 'BBC Parliament'),
-        ('tv/bbcalba', 'bbc_alba', 'Alba'),
-        ('tv/s4c', 's4c', 'S4C'),
+        ('bbcone',           'bbc_one_hd',              'BBC One'),
+        ('bbctwo',           'bbc_two_hd',              'BBC Two'),
+        ('tv/bbcthree',      'bbc_three_hd',          'BBC Three'),
+        ('bbcfour',          'bbc_four_hd',            'BBC Four'),
+        ('tv/cbbc',          'cbbc_hd',                    'CBBC'),
+        ('tv/cbeebies',      'cbeebies_hd',            'CBeebies'),
+        ('tv/bbcnews',       'bbc_news24',     'BBC News Channel'),
+        ('tv/bbcparliament', 'bbc_parliament',   'BBC Parliament'),
+        ('tv/bbcalba',       'bbc_alba',                   'Alba'),
+        ('tv/s4c',           's4cpbs',                      'S4C'),
     ]
     for id, img, name in channel_list:
         iconimage = xbmc.translatePath(
@@ -415,7 +811,7 @@ def ListHighlights(highlights_url):
     """Creates a list of the programmes in the highlights section.
     """
 
-    html = OpenURL('http://www.bbc.co.uk/%s' % highlights_url)
+    html = OpenURL('https://www.bbc.co.uk/%s' % highlights_url)
 
     inner_anchors = re.findall(r'<a.*?(?!<a).*?</a>',html,flags=(re.DOTALL | re.MULTILINE))
 
@@ -488,6 +884,59 @@ def ListHighlights(highlights_url):
         AddMenuEntry('[B]%s: %s[/B] - %s %s' % (translation(30314), name, count, translation(30315)),
                      url, 128, '', '', '')
 
+    # New group types for Channel Highlights.
+    groups = [a for a in inner_anchors if re.match(
+        r'<a[^<]*?class="group__title stat.*?data-object-type="group-list-link".*?',
+        a, flags=(re.DOTALL | re.MULTILINE))]
+    for group in groups:
+
+        href = ''
+        href_match = re.match(
+            r'<a[^<]*?href="(.*?)"',
+            group, flags=(re.DOTALL | re.MULTILINE))
+        if href_match:
+            href = href_match.group(1)
+            url = 'http://www.bbc.co.uk' + href
+
+        name = ''
+        name_match = re.search(
+            r'>(.*?)</a>',
+            group, flags=(re.DOTALL | re.MULTILINE))
+        if name_match:
+            name = name_match.group(1)
+
+        # Unfortunately, the group type is not inside the links, so we need to search the whole HTML.
+        group_type = ''
+        group_type_match = re.search(
+            r'data-group-name="'+name+'".+?data-group-type="(.+?)"',
+            html, flags=(re.DOTALL | re.MULTILINE))
+        if group_type_match:
+            group_type = group_type_match.group(1)
+
+        position = ''
+        position_match = re.search(
+            r'data-object-position="(.+?)-ALL"',
+            group, flags=(re.DOTALL | re.MULTILINE))
+        if position_match:
+            group_properties.append(
+                             [position_match.group(1),
+                             name, group_type])
+            group_details = [a for a in inner_anchors if re.match(
+                r'<a[^<]*?class="button.*?group__cta.*?data-object-position="'+
+                re.escape(position_match.group(1))+
+                r'-ALL".*?',
+                a, flags=(re.DOTALL | re.MULTILINE))]
+            for group_detail in group_details:
+                count_match = re.search(
+                    r'>View all ([0-9]*).*?</a>',
+                    group_detail, flags=(re.DOTALL | re.MULTILINE))
+                if count_match:
+                    count = count_match.group(1)
+                    episode_count[href] = count
+
+            AddMenuEntry('[B]%s: %s[/B] - %s %s' % (translation(30314), name, count, translation(30315)),
+                         url, 128, '', '', '')
+
     # Some programmes show up twice in HTML, once inside the groups, once outside.
     # We need to parse both to avoid duplicates and to make sure we get all of them.
     episodelist = []
@@ -548,7 +997,7 @@ def ListHighlights(highlights_url):
     # < a\nhref="/iplayer/episode/p036gq3z/bbc-music-introducing-from-buddhist-monk-to-rock-star"\n
     # class="single-item stat"
     singles = [a for a in inner_anchors if re.search(
-        r'class="single-item',
+        r'class="thumbnail-item',
         a, flags=(re.DOTALL | re.MULTILINE))]
 
     for single in singles:
@@ -582,33 +1031,56 @@ def ListHighlights(highlights_url):
         name = ''
         # <h3 class="single-item__title typo typo--skylark"><strong>BBC Music Introducing</strong></h3>
         title_match = re.search(
-            r'<.*?class="single-item__title.*?<strong>(.*?)</strong>',
+            r'<.*?class="thumbnail-item__title.*?<strong>(.*?)</strong>',
             single, flags=(re.DOTALL | re.MULTILINE))
         if title_match:
             name = title_match.group(1)
             name = re.compile(r'<.*?>', flags=(re.DOTALL | re.MULTILINE)).sub('', name)
 
+        if object_type == "episode-group":
+            # Assign correct group based on the position of the episode
+            position = ''
+            position_match = re.search(
+                r'data-object-position="(.+?)"',
+                single, flags=(re.DOTALL | re.MULTILINE))
+            if position_match:
+                for n,i in enumerate(group_properties):
+                    if re.match(i[0], position_match.group(1), flags=(re.DOTALL | re.MULTILINE)):
+                        position = i[1]
+                        name = i[1]+': '+name
+
         # <p class="single-item__subtitle typo typo--canary">From Buddhist Monk to Rock Star</p>
         subtitle_match = re.search(
-            r'<.*?class="single-item__subtitle.*?>(.*?)<',
+            r'<.*?class="thumbnail-item__subtitle.*?>(.*?)<',
             single, flags=(re.DOTALL | re.MULTILINE))
         if subtitle_match:
             name = name + ' - ' + subtitle_match.group(1)
 
         icon = ''
-        # <div class="r-image"  data-ip-type="episode"
-        # data-ip-src="http://ichef.bbci.co.uk/images/ic/406x228/p036gtc5.jpg">
+        # <div class="rs-image">
+        #    <picture>
+        #        <!--[if IE 9]><video style="display:none;"><![endif]-->
+        #            <source media="(min-width: 1008px)" srcset="http://ichef.bbci.co.uk/images/ic/234x131/p04g9wkg.jpg 234w,http://ichef.bbci.co.uk/images/ic/352x198/p04g9wkg.jpg 352w" sizes="232px">
+        #            <source media="(min-width: 400px) and (max-width: 1007px)" srcset="http://ichef.bbci.co.uk/images/ic/234x131/p04g9wkg.jpg 234w,http://ichef.bbci.co.uk/images/ic/352x198/p04g9wkg.jpg 352w,http://ichef.bbci.co.uk/images/ic/640x360/p04g9wkg.jpg 640w" sizes="calc(50vw - 16px)">
+        #            <source media="(max-width: 399px)" srcset="http://ichef.bbci.co.uk/images/ic/176x99/p04g9wkg.jpg 176w,http://ichef.bbci.co.uk/images/ic/272x153/p04g9wkg.jpg 272w" sizes="calc(50vw - 12px)">
+        #        <!--[if IE 9]></video><![endif]-->
+        #        <img srcset="http://static.bbci.co.uk/tviplayer/img/episode_placeholder.jpg" alt="">
+        #    </picture>
+        # </div>
         image_match = re.search(
-            r'<.*?class="r-image.*?data-ip-src="(.*?)"',
+            r'<picture>.*?srcset="https://ichef.bbci.co.uk/images/ic/.*?/(.*?)\.jpg',
             single, flags=(re.DOTALL | re.MULTILINE))
         if image_match:
-            icon = image_match.group(1)
+            image = image_match.group(1)
+            if image:
+                icon = "http://ichef.bbci.co.uk/images/ic/832x468/" + image + ".jpg"
 
         desc = ''
-        # <p class="single-item__overlay__desc">
-        # The remarkable rise of Ngawang Lodup - from BBC Introducing to performing at the O2 Arena</p>
+        # <p class="item-overlay__text__inner typo typo--canary">
+        # A hospital visit reveals devastating news for Jasmin and Dev.
+        # </p>
         desc_match = re.search(
-            r'<.*?class="single-item__overlay__desc.*?>(.*?)<',
+            r'<.*?class="overlay__text__inner.*?>(.*?)<',
             single, flags=(re.DOTALL | re.MULTILINE))
         if desc_match:
             desc = desc_match.group(1)
@@ -632,19 +1104,130 @@ def ListHighlights(highlights_url):
                 add_entry = False
         if add_entry:
             if object_type == "editorial-promo":
-                AddMenuEntry('[B]%s[/B]' % (name), episode_id, 128, icon, '', '')
+                if episode_id:
+                    AddMenuEntry('[B]%s[/B]' % (name), episode_id, 128, icon, '', '')
             else:
-                CheckAutoplay(name, url, icon, desc, aired)
+                if url:
+                    CheckAutoplay(name, url, icon, desc, aired)
 
     # Finally add all programmes which have been identified as part of a group before.
     for episode in episodelist:
         episode_url = "http://www.bbc.co.uk/iplayer/episode/%s" % episode[0]
         if ((ADDON.getSetting('suppress_incomplete') == 'false') or (not episode[4] == '')):
-            CheckAutoplay(episode[1], episode_url, episode[3], episode[2], episode[4])
+            if episode[0]:
+                CheckAutoplay(episode[1], episode_url, episode[3], episode[2], episode[4])
 
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
+
+
+def ListMainHighlights(highlights_url):
+    """Creates a list of the programmes in the highlights section.
+    """
+
+    html = OpenURL('https://www.bbc.co.uk/%s' % highlights_url)
+
+    outer_anchors = re.findall(r'<section class="section(?!<a).*?</section>',
+        html, flags=(re.DOTALL | re.MULTILINE))
+
+    for group in outer_anchors:
+
+        group_type = ''
+        group_type_match = re.search(
+            r'data-section-type="(.*?)"', group, flags=(re.DOTALL | re.MULTILINE))
+        if group_type_match:
+            group_type = group_type_match.group(1)
+
+        # Skip trailers, we can't cope with them as of now.
+        if group_type == "trailers":
+            continue
+
+        inner_anchors = re.findall(r'href="(?!<a).*?</a>', group, flags=(re.DOTALL | re.MULTILINE))
+
+        group_data = []
+
+        for programme in inner_anchors:
+
+            is_group = False
+            button_match = re.search(r'View all', programme, flags=(re.DOTALL | re.MULTILINE))
+            if button_match:
+                is_group = True
+
+            url = ''
+            href_match = re.match(
+                r'href="(.*?)"', programme, flags=(re.DOTALL | re.MULTILINE))
+            if href_match:
+                href = href_match.group(1)
+                if href.startswith('http'):
+                    url = href
+                else:
+                    url = 'https://www.bbc.co.uk' + href
+
+            name = ''
+            if group_type == "popular":
+                name_match = re.search(
+                    r'<span class="typo.+?">(.*?)</span>',
+                    programme, flags=(re.DOTALL | re.MULTILINE))
+            else:
+                name_match = re.search(
+                    r'item__title.+?>(.*?)</div>',
+                    programme, flags=(re.DOTALL | re.MULTILINE))
+            if name_match:
+                name = name_match.group(1)
+
+            if group_type == "popular":
+                subtitle_match = re.search(
+                    r'item__subtitle.+?>(.*?)</p>', programme, flags=(re.DOTALL | re.MULTILINE))
+            else:
+                subtitle_match = re.search(
+                    r'primary">.*?item__description.+?>(.*?)</div>',
+                    programme, flags=(re.DOTALL | re.MULTILINE))
+            if subtitle_match:
+                name =  name + ' - ' + subtitle_match.group(1)
+
+            iconimage = ''
+            iconimage_match = re.search(
+                r'images/ic/.*?/(.*?)\.jpg', programme, flags=(re.DOTALL | re.MULTILINE))
+            if iconimage_match:
+                iconimage = "https://ichef.bbci.co.uk/images/ic/832x468/"+iconimage_match.group(1)+".jpg"
+
+            description = ''
+            description_match = re.search(
+                r'secondary">.*?item__description.+?>(.*?)</div>',
+                programme, flags=(re.DOTALL | re.MULTILINE))
+            if description_match:
+                description = description_match.group(1)
+
+            # If this is a group, get the "View all" text.
+            if is_group == True:
+                name_match = re.search(r'label="(.*?)"', programme, flags=(re.DOTALL | re.MULTILINE))
+                if name_match:
+                    name = name_match.group(1)
+
+                # We need to postprocess the URL to get categories right
+                if group_type == "category":
+                    category = ''
+                    category_match = re.search(r'categories/(.*?)/', href, flags=re.DOTALL)
+                    if category_match:
+                        group_data.append(('[B]%s: %s[/B]' % (translation(30314), name), 
+                                          category_match.group(1), 125))
+                else:
+                    group_data.append(('[B]%s: %s[/B]' % (translation(30314), name), 
+                                      url, 128))
+            else:
+                CheckAutoplay(name, url, iconimage, description, '')
+
+        # For whatever reason, all groups appear twice in HTML, but we only want to add unique groups.
+        unique = []
+        [unique.append(item) for item in group_data if item not in unique]
+        for name, url, mode in unique:
+            AddMenuEntry(name, url, mode, '', '', '')
+
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
+
 
 def ListMostPopular():
     """Scrapes all episodes of the most popular page."""
@@ -654,6 +1237,12 @@ def ListMostPopular():
 def AddAvailableStreamItem(name, url, iconimage, description):
     """Play a streamm based on settings for preferred catchup source and bitrate."""
     stream_ids = ScrapeAvailableStreams(url)
+    if stream_ids['name']:
+        name = stream_ids['name']
+    if not iconimage or iconimage == u"DefaultVideo.png" and stream_ids['image']:
+        iconimage = stream_ids['image']
+    if stream_ids['description']:
+        description = stream_ids['description']
     if stream_ids['stream_id_ad']:
         streams_all = ParseStreams(stream_ids['stream_id_ad'])
     elif stream_ids['stream_id_sl']:
@@ -715,6 +1304,12 @@ def GetAvailableStreams(name, url, iconimage, description):
     """Calls AddAvailableStreamsDirectory based on user settings"""
     #print url
     stream_ids = ScrapeAvailableStreams(url)
+    if stream_ids['name']:
+        name = stream_ids['name']
+    if stream_ids['image']:
+        iconimage = stream_ids['image']
+    if stream_ids['description']:
+        description = stream_ids['description']
     AddAvailableStreamsDirectory(name, stream_ids['stream_id_st'], iconimage, description)
     # If we searched for Audio Described programmes and they have been found, append them to the list.
     if stream_ids['stream_id_ad']:
@@ -741,7 +1336,7 @@ def Search(search_entered):
 
 def AddAvailableLiveStreamItem(name, channelname, iconimage):
     """Play a live stream based on settings for preferred live source and bitrate."""
-    stream_bitrates = [9999, 0.1, 0.2, 0.3, 0.6, 1.0, 1.8, 3.1, 5.5] 
+    stream_bitrates = [9999, 0.1, 0.2, 0.3, 0.6, 1.0, 1.8, 3.1, 5.5]
 
     if int(ADDON.getSetting('live_source')) == 1:
         providers = [('ak', 'Akamai')]
@@ -791,15 +1386,15 @@ def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
     for id, bitrate, codecs, resolution, url, provider_name in streams:
         # For easier selection use colors to indicate high and low bitrate streams
         if bitrate > 2.1:
-            color = 'green'
+            color = 'ff008000'
         elif bitrate > 1.0:
-            color = 'yellow'
+            color = 'ffffff00'
         elif bitrate > 0.6:
-            color = 'orange'
+            color = 'ffffa500'
         else:
-            color = 'red'
+            color = 'ffff0000'
 
-        title = name + ' - [I][COLOR %s]%0.1f Mbps[/COLOR] [COLOR white]%s[/COLOR][/I]' % (
+        title = name + ' - [I][COLOR %s]%0.1f Mbps[/COLOR] [COLOR fff1f1f1]%s[/COLOR][/I]' % (
             color, bitrate, provider_name)
         # Finally add them to the selection menu.
         AddMenuEntry(title, url, 201, iconimage, '', '')
@@ -811,31 +1406,13 @@ def ListWatching(logged_in):
         CreateBaseDirectory('video')
         return
 
-    identity_cookie = None
     cookie_jar = None
     cookie_jar = GetCookieJar()
-    for cookie in cookie_jar:
-        if (cookie.name == 'IDENTITY'):
-            identity_cookie = cookie.value
-            break
-    url = "https://ibl.api.bbci.co.uk/ibl/v1/user/watching?identity_cookie=%s" % identity_cookie
+    url = "https://component.iplayer.api.bbc.co.uk/v1/user/lists/watching"
     html = OpenURL(url)
     json_data = json.loads(html)
-    watching_list = json_data.get('watching').get('elements')
-    for watching in watching_list:
-        programme = watching.get('programme')
-        episode = watching.get('episode')
-        title = episode.get('title')
-        subtitle = episode.get('subtitle')
-        if(subtitle):
-            title += ", " + subtitle
-        episode_id = episode.get('id')
-        plot = episode.get('synopses').get('large') or " "
-        aired = episode.get('release_date')
-        image_url = ParseImageUrl(episode.get('images').get('standard'))
-        aired = ParseAired(aired)
-        url="http://www.bbc.co.uk/iplayer/episode/%s" % (episode_id)
-        CheckAutoplay(title, url, image_url, plot, aired)
+    markup = json_data.get('markup')
+    ScrapeMarkup(markup)
 
 
 def ListFavourites(logged_in):
@@ -844,40 +1421,18 @@ def ListFavourites(logged_in):
         CreateBaseDirectory('video')
         return
 
-    """Scrapes all episodes of the favourites page."""
-    html = OpenURL('http://www.bbc.co.uk/iplayer/usercomponents/favourites/programmes.json')
+    cookie_jar = None
+    cookie_jar = GetCookieJar()
+    url = "https://component.iplayer.api.bbc.co.uk/v1/user/lists/added"
+    html = OpenURL(url)
     json_data = json.loads(html)
-    # favourites = json_data.get('favourites')
-    programmes = json_data.get('programmes')
-    for programme in programmes:
-        id = programme.get('id')
-        url = "http://www.bbc.co.uk/iplayer/brand/%s" % (id)
-        title = programme.get('title')
-        initial_child = programme.get('initial_children')[0]
-        subtitle = initial_child.get('subtitle')
-        episode_title = title
-        if subtitle:
-            episode_title = title + ' - ' + subtitle
-        image=initial_child.get('images')
-        image_url=ParseImageUrl(image.get('standard'))
-        synopses = initial_child.get('synopses')
-        plot = synopses.get('small')
-        try:
-            aired = FirstShownToAired(initial_child.get('release_date'))
-        except:
-            aired = ''
-        CheckAutoplay(episode_title, url, image_url, plot, aired)
-        more = programme.get('count')
-        if more:
-            episodes_url = "http://www.bbc.co.uk/iplayer/episodes/" + id
-            AddMenuEntry('[B]%s[/B] - %s %s' % (title, more, translation(30313)),
-                         episodes_url, 128, image_url, '', '')
-
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
+    markup = json_data.get('markup')
+    ScrapeMarkup(markup)
 
 
 def PlayStream(name, url, iconimage, description, subtitles_url):
+    if iconimage == '':
+        iconimage = 'DefaultVideo.png'
     html = OpenURL(url)
     check_geo = re.search(
         '<H1>Access Denied</H1>', html)
@@ -914,87 +1469,83 @@ def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
         # print subtitles_url
     else:
         subtitles_url = ''
-    suppliers = ['', 'Akamai', 'Limelight', 'Level3']
+    suppliers = ['', 'Akamai', 'Limelight', 'Bidi']
     bitrates = [0, 800, 1012, 1500, 1800, 2400, 3116, 5510]
     for supplier, bitrate, url, resolution in sorted(streams[0], key=itemgetter(1), reverse=True):
         if bitrate in (5, 7):
-            color = 'green'
+            color = 'ff008000'
         elif bitrate == 6:
-            color = 'blue'
+            color = 'ff0084ff'
         elif bitrate in (3, 4):
-            color = 'yellow'
+            color = 'ffffff00'
         else:
-            color = 'orange'
-        title = name + ' - [I][COLOR %s]%0.1f Mbps[/COLOR] [COLOR lightgray]%s[/COLOR][/I]' % (
+            color = 'ffffa500'
+        title = name + ' - [I][COLOR %s]%0.1f Mbps[/COLOR] [COLOR ffd3d3d3]%s[/COLOR][/I]' % (
             color, bitrates[bitrate] / 1000, suppliers[supplier])
         AddMenuEntry(title, url, 201, iconimage, description, subtitles_url, resolution=resolution)
 
 
 def ParseStreams(stream_id):
     retlist = []
-    # print "Parsing streams for PID: %s"%stream_id[0]
+    # print "Parsing streams for PID: %s"%stream_id
     # Open the page with the actual strem information and display the various available streams.
-    NEW_URL = "http://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/iptv-all/vpid/%s" % stream_id[0]
+    NEW_URL = "http://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/iptv-all/vpid/%s" % stream_id
     html = OpenURL(NEW_URL)
     # Parse the different streams and add them as new directory entries.
     match = re.compile(
         'connection authExpires=".+?href="(.+?)".+?supplier="mf_(.+?)".+?transferFormat="(.+?)"'
         ).findall(html)
+    source = int(ADDON.getSetting('catchup_source'))
     for m3u8_url, supplier, transfer_format in match:
+        if m3u8_url.startswith('https') and (ADDON.getSetting('streams_ignore_https') == 'true'):
+            continue
         tmp_sup = 0
         tmp_br = 0
         if transfer_format == 'hls':
-            if supplier == 'akamai_uk_hls':
+            if supplier.startswith('akamai') and source in [0,1]:
                 tmp_sup = 1
-            elif supplier == 'limelight_uk_hls':
+            elif supplier.startswith('limelight') and source in [0,2]:
                 tmp_sup = 2
+            elif supplier.startswith('bidi') and source in [0,3]:
+                tmp_sup = 3
+            else:
+                continue
             m3u8_breakdown = re.compile('(.+?)iptv.+?m3u8(.+?)$').findall(m3u8_url)
-            #print m3u8_breakdown
-            # print m3u8_url
             m3u8_html = OpenURL(m3u8_url)
-            m3u8_match = re.compile('BANDWIDTH=(.+?),.+?RESOLUTION=(.+?)\n(.+?)\n').findall(m3u8_html)
+            m3u8_match = re.compile('BANDWIDTH=(.+?),.+?RESOLUTION=(.+?)(?:,.+?\n|\n)(.+?)\n').findall(m3u8_html)
             for bandwidth, resolution, stream in m3u8_match:
-                # print bandwidth
-                # print resolution
-                #print stream
                 url = "%s%s%s" % (m3u8_breakdown[0][0], stream, m3u8_breakdown[0][1])
-                #print url
-                if int(bandwidth) == 1012300:
+                if 1000000 <= int(bandwidth) <= 1100000:
                     tmp_br = 2
-                elif int(bandwidth) == 1799880:
+                elif 1790000 <= int(bandwidth) <= 1800000:
                     tmp_br = 4
-                elif int(bandwidth) == 3116400:
+                elif 3100000 <= int(bandwidth) <= 3120000:
                     tmp_br = 6
-                elif int(bandwidth) == 5509880:
+                elif int(bandwidth) >= 5500000:
                     tmp_br = 7
                 retlist.append((tmp_sup, tmp_br, url, resolution))
     # It may be useful to parse these additional streams as a default as they offer additional bandwidths.
     match = re.compile(
         'kind="video".+?connection href="(.+?)".+?supplier="(.+?)".+?transferFormat="(.+?)"'
         ).findall(html)
-    # print match
     unique = []
     [unique.append(item) for item in match if item not in unique]
-    # print unique
     for m3u8_url, supplier, transfer_format in unique:
+        if m3u8_url.startswith('https') and (ADDON.getSetting('streams_ignore_https') == 'true'):
+            continue
         tmp_sup = 0
         tmp_br = 0
         if transfer_format == 'hls':
-            if supplier == 'akamai_hls_open':
+            if supplier.startswith('akamai_hls_open') and source in [0,1]:
                 tmp_sup = 1
-            elif supplier == 'limelight_hls_open':
+            elif supplier.startswith('limelight_hls_open') and source in [0,2]:
                 tmp_sup = 2
+            else:
+                continue
             m3u8_breakdown = re.compile('.+?master.m3u8(.+?)$').findall(m3u8_url)
-        # print m3u8_url
-        # print m3u8_breakdown
         m3u8_html = OpenURL(m3u8_url)
-        # print m3u8_html
         m3u8_match = re.compile('BANDWIDTH=(.+?),RESOLUTION=(.+?),.+?\n(.+?)\n').findall(m3u8_html)
-        # print m3u8_match
         for bandwidth, resolution, stream in m3u8_match:
-            # print bandwidth
-            # print resolution
-            # print stream
             url = "%s%s" % (stream, m3u8_breakdown[0][0])
             # This is not entirely correct, displayed bandwidth may be higher or lower than actual bandwidth.
             if int(bandwidth) <= 801000:
@@ -1004,6 +1555,42 @@ def ParseStreams(stream_id):
             elif int(bandwidth) <= 2410000:
                 tmp_br = 5
             retlist.append((tmp_sup, tmp_br, url, resolution))
+    # Some events have special live streams which show up as normal programmes.
+    # They need to be parsed separately.
+    match = re.compile(
+        'connection.+?href="(.+?)".+?supplier="(.+?)".+?transferFormat="(.+?)"'
+        ).findall(html)
+    unique = []
+    [unique.append(item) for item in match if item not in unique]
+    for m3u8_url, supplier, transfer_format in unique:
+        if m3u8_url.startswith('https') and (ADDON.getSetting('streams_ignore_https') == 'true'):
+            continue
+        tmp_sup = 0
+        tmp_br = 0
+        if transfer_format == 'hls':
+            if supplier == 'akamai_hls_live':
+                tmp_sup = 1
+            elif supplier == 'll_hls_live':
+                tmp_sup = 2
+            else:
+                # This is not a live stream, skip code to avoid unnecessary loading of playlists.
+                continue
+            html = OpenURL(m3u8_url)
+            match = re.compile('#EXT-X-STREAM-INF:PROGRAM-ID=(.+?),BANDWIDTH=(.+?),CODECS="(.*?)",RESOLUTION=(.+?)\s*(.+?.m3u8)').findall(html)
+            for stream_id, bandwidth, codecs, resolution, url in match:
+                # Note: This is not entirely correct as these bandwidths relate to live programmes,
+                # not catchup.
+                if int(bandwidth) <= 1000000:
+                    tmp_br = 1
+                elif int(bandwidth) <= 1100000:
+                    tmp_br = 2
+                elif 1700000 <= int(bandwidth) <= 1900000:
+                    tmp_br = 4
+                elif 3100000 <= int(bandwidth) <= 3120000:
+                    tmp_br = 6
+                elif int(bandwidth) >= 5500000:
+                    tmp_br = 7
+                retlist.append((tmp_sup, tmp_br, url, resolution))
     match = re.compile('service="captions".+?connection href="(.+?)"').findall(html)
     # print "Subtitle URL: %s"%match
     # print retlist
@@ -1020,19 +1607,30 @@ def ParseStreams(stream_id):
 
 
 def ParseLiveStreams(channelname, providers):
-    if providers == '':    
+    if providers == '':
         providers = [('ak', 'Akamai'), ('llnw', 'Limelight')]
     streams = []
 
     for provider_url, provider_name in providers:
         # First we query the available streams from this website
         if channelname in ['bbc_parliament', 'bbc_alba', 's4cpbs', 'bbc_one_london',
-                           'bbc_two_wales_digital', 'bbc_two_northern_ireland_digital']:
+                           'bbc_two_wales_digital', 'bbc_two_northern_ireland_digital',
+                           'bbc_two_scotland', 'bbc_one_cambridge', 'bbc_one_channel_islands',
+                           'bbc_one_east', 'bbc_one_east_midlands', 'bbc_one_east_yorkshire',
+                           'bbc_one_north_east', 'bbc_one_north_west', 'bbc_one_oxford',
+                           'bbc_one_south', 'bbc_one_south_east', 'bbc_one_south_west',
+                           'bbc_one_west', 'bbc_one_west_midlands', 'bbc_one_yorks']:
             device = 'hls_tablet'
         else:
             device = 'abr_hdtv'
-        url = 'http://a.files.bbci.co.uk/media/live/manifesto/audio_video/simulcast/hls/uk/%s/%s/%s.m3u8' \
-              % (device, provider_url, channelname)
+
+        if channelname.startswith('sport_stream_'):
+            cast = "webcast"
+        else:
+            cast = "simulcast"
+
+        url = 'http://a.files.bbci.co.uk/media/live/manifesto/audio_video/%s/hls/uk/%s/%s/%s.m3u8' \
+              % (cast, device, provider_url, channelname)
         html = OpenURL(url)
         match = re.compile('#EXT-X-STREAM-INF:PROGRAM-ID=(.+?),BANDWIDTH=(.+?),CODECS="(.*?)",RESOLUTION=(.+?)\s*(.+?.m3u8)').findall(html)
 
@@ -1047,27 +1645,54 @@ def ParseLiveStreams(channelname, providers):
     return sorted(streams, key=lambda x: (x[1]), reverse=True)
 
 
-
 def ScrapeAvailableStreams(url):
     # Open page and retrieve the stream ID
     html = OpenURL(url)
-    # Search for standard programmes.
-    stream_id_st = re.compile('"vpid":"(.+?)"').findall(html)
-    # Optionally, Signed programmes can be searched for. These have a different ID.
-    if ADDON.getSetting('search_signed') == 'true':
-        stream_id_sl = re.compile('data-download-sl="bbc-ipd:download/.+?/(.+?)/sd/').findall(html)
-    else:
-        stream_id_sl = []
-    # Optionally, Audio Described programmes can be searched for. These have a different ID.
-    if ADDON.getSetting('search_ad') == 'true':
-        url_ad = re.compile('<a href="(.+?)" class="version link watch-ad-on"').findall(html)
-        url_tmp = "http://www.bbc.co.uk%s" % url_ad[0]
-        html = OpenURL(url_tmp)
-        stream_id_ad = re.compile('"vpid":"(.+?)"').findall(html)
-        # print stream_id_ad
-    else:
-        stream_id_ad = []
-    return {'stream_id_st': stream_id_st, 'stream_id_sl': stream_id_sl, 'stream_id_ad': stream_id_ad}
+    name = None
+    image = None
+    description = None
+    stream_id_st = []
+    stream_id_sl = []
+    stream_id_ad = []
+
+    match = re.search(r'window\.mediatorDefer\=page\(document\.getElementById\(\"tviplayer\"\),(.*?)\);', html, re.DOTALL)
+    if match:
+        data = match.group(1)
+        json_data = json.loads(data)
+        # print json.dumps(json_data, indent=2, sort_keys=True)
+        if 'title' in json_data['episode']:
+            name = json_data['episode']['title']
+        if 'synopses' in json_data['episode']:
+            synopses = json_data['episode']['synopses']
+            if 'large' in synopses:
+                description = synopses['large']
+            elif 'medium' in synopses:
+                description = synopses['medium']
+            elif 'small' in synopses:
+                description = synopses['small']
+            elif 'editorial' in synopses:
+                description = synopses['editorial']
+        if 'standard' in json_data['episode']['images']:
+            image = json_data['episode']['images']['standard'].replace('{recipe}','832x468')
+        for stream in json_data['episode']['versions']:
+            if ((stream['kind'] == 'original') or
+               (stream['kind'] == 'iplayer-version') or
+               (stream['kind'] == 'technical-replacement') or
+               (stream['kind'] == 'editorial') or
+               (stream['kind'] == 'shortened') or
+               (stream['kind'] == 'webcast')):
+                stream_id_st = stream['id']
+            elif (stream['kind'] == 'signed'):
+                if (ADDON.getSetting('search_signed') == 'true'):
+                    stream_id_sl = stream['id']
+            elif (stream['kind'] == 'audio-described'):
+                if (ADDON.getSetting('search_ad') == 'true'):
+                    stream_id_ad = stream['id']
+            else:
+                print "iPlayer WWW warning: New stream kind: %s" % stream['kind']
+                stream_id_st = stream['id']
+
+    return {'stream_id_st': stream_id_st, 'stream_id_sl': stream_id_sl, 'stream_id_ad': stream_id_ad, 'name': name, 'image':image, 'description': description}
 
 
 def CheckAutoplay(name, url, iconimage, plot, aired=None):

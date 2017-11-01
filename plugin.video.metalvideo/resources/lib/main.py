@@ -18,24 +18,35 @@
 
 # Call Necessary Imports
 from xbmcutil import listitem, urlhandler, plugin
-import re
+import re, urlparse
+
+def fetch_query(url, key):
+	"""Parses a url and return the vid parameter"""
+	href = urlparse.urlsplit(url)
+	return urlparse.parse_qs(href.query)[key][0]
+
 
 class Initialize(listitem.VirtualFS):
 	@plugin.error_handler
 	def scraper(self):
 		# Fetch html source
-		url = u"http://metalvideo.com/mobile/category.html"
-		sourceCode = urlhandler.urlread(url, 604800, headers={"Cookie":"COOKIE_DEVICE=mobile"}, userAgent=2) # TTL = 1 Week
+		#url = u"http://metalvideo.com/topvideos.php"
+		url = u"http://metalvideo.com/topvideos.html"
+		sourceCode = urlhandler.urlread(url, 604800) # TTL = 1 Week
 		
 		# Add Extra Items
 		_plugin = plugin
 		_add_item = self.add_item
 		self.icon = icon = _plugin.getIcon()
 		_thumb = (icon,0)
+		#_add_item(label=_plugin.getuni(30104), thumbnail=_thumb, url={"action":"PlayVideo", "url":u"http://metalvideo.com/index.php"}, isPlayable=True)
 		_add_item(label=_plugin.getuni(30104), thumbnail=_thumb, url={"action":"PlayVideo", "url":u"http://metalvideo.com/index.html"}, isPlayable=True)
+		#_add_item(label=_plugin.getuni(30105), thumbnail=_thumb, url={"action":"Watching", "url":u"http://metalvideo.com/index.php"}, isPlayable=False)
 		_add_item(label=_plugin.getuni(30105), thumbnail=_thumb, url={"action":"Watching", "url":u"http://metalvideo.com/index.html"}, isPlayable=False)
 		_add_item(label=_plugin.getuni(30103), thumbnail=_thumb, url={"action":"PlayVideo", "url":u"http://metalvideo.com/randomizer.php"}, isPlayable=True)
+		#_add_item(label=_plugin.getuni(30102), thumbnail=_thumb, url={"action":"TopVideos", "url":u"http://metalvideo.com/topvideos.php"}, isPlayable=False)
 		_add_item(label=_plugin.getuni(30102), thumbnail=_thumb, url={"action":"TopVideos", "url":u"http://metalvideo.com/topvideos.html"}, isPlayable=False)
+		#_add_item(label=_plugin.getuni(32941), thumbnail=("recent.png",2), url={"action":"NewVideos", "url":u"http://metalvideo.com/newvideos.php"}, isPlayable=False)
 		_add_item(label=_plugin.getuni(32941), thumbnail=("recent.png",2), url={"action":"NewVideos", "url":u"http://metalvideo.com/newvideos.html"}, isPlayable=False)
 		self.add_search("VideoList", "http://metalvideo.com/search.php?keywords=%s")
 		
@@ -46,12 +57,17 @@ class Initialize(listitem.VirtualFS):
 		# Loop and display each Video
 		icon = self.icon
 		localListitem = listitem.ListItem
-		for url, title, count in re.findall('<li class=""><a href="http://metalvideo.com/mobile/(\S+?)date.html">(.+?)</a>\s+<span class="category_count">(\d+)</span></li>', sourceCode):
+		#search_pattern = '<li class=""><a\s+href="(http:\/\/metalvideo.com\/category.php\?cat=\S+?)"\S*>(.+?)</a><\/li>'
+		search_pattern = '<li class=""><a\s+href="http:\/\/metalvideo.com\/browse-(\S+?)-videos-1-date.html">(.+?)</a><\/li>'
+		for cat, title in re.findall(search_pattern, sourceCode):
 			# Create listitem of Data
 			item = localListitem()
 			item.setThumb(icon)
-			item.setLabel(u"%s (%s)" % (title, count))
-			item.setParamDict(action="VideoList", url=u"http://metalvideo.com/%s" % url)
+			item.setLabel(title)
+
+			# Fetch vategory url query
+			#cat = fetch_query(url, "cat")
+			item.setParamDict(action="VideoList", cat=cat)
 			
 			# Store Listitem data
 			yield item.getListitemTuple(False)
@@ -104,6 +120,7 @@ class TopVideos(listitem.VirtualFS):
 			item.setThumb(img)
 			item.setInfoDict(artist=[artist], count=intCmd(views.replace(u",",u"")))
 			item.setParamDict(action="PlayVideo", url=url)
+			item.setVideoFlags()
 			
 			# Add Context item to link to related videos
 			item.addRelatedContext(url=url[url.rfind(u"_")+1:url.rfind(u".")])
@@ -140,6 +157,7 @@ class NewVideos(listitem.VirtualFS):
 			item.setThumb(img)
 			item.setInfoDict(artist=[artist])
 			item.setParamDict(action="PlayVideo", url=url)
+			item.setVideoFlags()
 			
 			# Add Context item to link to related videos
 			item.addRelatedContext(url=url[url.rfind(u"_")+1:url.rfind(u".")])
@@ -173,6 +191,7 @@ class Related(listitem.VirtualFS):
 			item = localListitem()
 			item.setLabel(node.findtext(u"title"))
 			item.setThumb(node.findtext(u"thumb"))
+			item.setVideoFlags()
 			
 			# Add url Param
 			url = node.findtext(u"url")
@@ -189,10 +208,13 @@ class VideoList(listitem.VirtualFS):
 	def scraper(self):
 		_plugin = plugin
 		# Fetch Sort Method and Crerate New Url
-		if u"search.php" in _plugin["url"]: url = _plugin["url"]
+		# Fetch HTML Source
+		if u"url" in _plugin:
+			url = _plugin["url"]
 		else:
-			urlString = {u"0":u"%sdate.html", u"1":u"%sartist.html", u"2":u"%srating.html", u"3":u"%sviews.html"}[_plugin.getSetting("sort")]
-			url = urlString % _plugin["url"]
+			sortby = {u"0": u"date", u"1": u"artist", u"2": u"rating", u"3": u"views"}[_plugin.getSetting("sort")]
+			#url = u"http://metalvideo.com/category.php?cat=%s&sortby=%s" % (_plugin["cat"], sortby)
+			url = u"http://metalvideo.com/browse-%s-videos-1-%s.html" % (_plugin["cat"], sortby)
 		
 		# Set Content Properties
 		self.set_sort_methods(self.sort_method_unsorted)
@@ -234,8 +256,12 @@ class PlayVideo(listitem.PlaySource):
 		sourceCode = urlhandler.urlread(plugin["url"], TTL, stripEntity=False)
 		
 		# Look for Youtube Video First
-		try: videoId = [part for part in re.findall('src="(http://www.youtube.com/embed/\S+?)"|file:\s+\'(\S+?)\'', sourceCode)[0] if part][0]
+		search = '<param.+?value=["\'](http[s]*://www.youtube.com/\S+?)["\'].*>|src="(http://www.youtube.com/' \
+				 'embed/\S+?)"|file:\s+\'(\S+?)\''
+		try: videoId = [part for part in re.findall(search, sourceCode)[0] if part][0]
 		except: return None
 		else:
-			if u"metalvideo.com" in videoId: return videoId
-			elif u"youtube.com" in videoId: return self.sourceType(videoId, "youtube_com")
+			if u"metalvideo.com" in videoId:
+				return videoId
+			elif u"youtube.com" in videoId:
+				return self.sourceType(videoId, "youtube_com")

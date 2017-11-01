@@ -1,0 +1,68 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Ibrahim Gungor <igungor@gmail.com>\n"
+"Language-Team: Put.io developers <info@put.io>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"X-Generator: Poedit 1.8.7.1\n"
+
+# Settings 000-019
+msgctxt "#32000"
+msgid "Put.io Settings"
+msgstr ""
+
+msgctxt "#32001"
+msgid "OAuth2 Token"
+msgstr ""
+
+# Error messages 020-039
+msgctxt "#32020"
+msgid "Authentication Failure"
+msgstr ""
+
+msgctxt "#32021"
+msgid "Please insert your oauth key settings!"
+msgstr ""
+
+msgctxt "#32022"
+msgid "OAuth2 Key Required"
+msgstr ""
+
+msgctxt "#32023"
+msgid "Visit put.io/kodi and enter this code: %s"
+msgstr ""
+
+msgctxt "#32024"
+msgid "Then click OK"
+msgstr ""
+
+# Context Menu 040-059
+msgctxt "#32040"
+msgid "Refresh"
+msgstr ""
+
+msgctxt "#32042"
+msgid "Delete"
+msgstr ""
+
+# Dialogs 060-079
+msgctxt "#32060"
+msgid "Delete Confirmation"
+msgstr ""
+
+msgctxt "#32061"
+msgid "Are you sure?"
+msgstr ""
+
+msgctxt "#32062"
+msgid "Payment Reminder"
+msgstr ""
+
+msgctxt "#32063"
+msgid "Your payment has expired. Your files will be listed but you won't be playing them."
+msgstr ""

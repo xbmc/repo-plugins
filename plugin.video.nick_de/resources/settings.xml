@@ -1,5 +1,3 @@
 <settings>
    <setting id="jrOnly" type="bool" label="30104" default="false"/>
-   <setting id="forceView" type="bool" label="30102" default="true"/>
-   <setting id="viewID" type="number" label="30103" enable="eq(-1,true)" default="500"/>
 </settings>

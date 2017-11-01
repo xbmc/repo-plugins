@@ -1,7 +1,6 @@
-# XBMC Media Center language file
+# Kodi Media Center language file
 # Addon Name: YouTube
 # Addon id: plugin.video.youtube
-# Addon version: 5.1.9~beta1
 # Addon Provider: bromix
 msgid ""
 msgstr ""
@@ -19,11 +18,11 @@ msgstr ""
 
 msgctxt "Addon Summary"
 msgid "Plugin for YouTube"
-msgstr ""
+msgstr "Plugin per YouTube"
 
 msgctxt "Addon Description"
 msgid "YouTube is a one of the biggest video-sharing websites of the world."
-msgstr ""
+msgstr "YouTube è uno dei siti web di video-sharing più grandi del mondo"
 
 msgctxt "#30000"
 msgid "General"
@@ -39,7 +38,7 @@ msgstr "Password"
 
 msgctxt "#30009"
 msgid "Always ask for the video quality"
-msgstr ""
+msgstr "Chiedi sempre qualità del video"
 
 msgctxt "#30010"
 msgid "Video Quality"
@@ -72,6 +71,10 @@ msgstr "240p"
 msgctxt "#30017"
 msgid "360p"
 msgstr "360p"
+
+msgctxt "#30018"
+msgid "1080p Live / 720p (HD)"
+msgstr ""
 
 msgctxt "#30020"
 msgid "Allow 3D"
@@ -140,6 +143,14 @@ msgstr "Vista: Albums"
 msgctxt "#30036"
 msgid "Support alternative player"
 msgstr "Supporto player alternativi"
+
+msgctxt "#30037"
+msgid "Custom Watch Later Playlist ID"
+msgstr "Playlist ID Guarda Dopo personalizzata"
+
+msgctxt "#30038"
+msgid "Custom History Playlist ID"
+msgstr "Playlist ID Storica personalizzata"
 
 msgctxt "#30100"
 msgid "Favorites"
@@ -223,7 +234,37 @@ msgstr "Attendi..."
 
 msgctxt "#30120"
 msgid "Clear"
-msgstr ""
+msgstr "Pulisci"
+
+#YouTube
+#empty strings from id 30121 to 30199
+
+msgctxt "#30200"
+msgid "API Key"
+msgstr "API Key"
+
+msgctxt "#30201"
+msgid "API Key"
+msgstr "API Key"
+
+msgctxt "#30202"
+msgid "API Id"
+msgstr "API Id"
+
+msgctxt "#30203"
+msgid "API Secret"
+msgstr "API Password"
+
+msgctxt "#30204"
+msgid "Enable Personal API Keys"
+msgstr "Abilita API Keys personalizzate"
+
+msgctxt "#30205"
+msgid "Use preset API key set"
+msgstr "Usa set di API Key preimpostate"
+
+#YouTube
+#empty strings from id 30206 to 30499
 
 msgctxt "#30500"
 msgid "Channels"
@@ -383,44 +424,164 @@ msgstr "Video non piaciuti"
 
 msgctxt "#30539"
 msgid "Live"
-msgstr ""
+msgstr "Dal vivo"
 
 msgctxt "#30540"
 msgid "Play with..."
-msgstr ""
+msgstr "Riproduci con..."
 
 msgctxt "#30541"
 msgid "Show channel name in description"
-msgstr ""
+msgstr "Mostra nome canale in desrizione"
 
 msgctxt "#30542"
 msgid "rtmpe streams are not supported"
-msgstr ""
+msgstr "Streaming RTMP/RTMPE non supportati"
 
 msgctxt "#30543"
 msgid "Refresh"
-msgstr ""
+msgstr "Aggiorna"
 
 msgctxt "#30544"
 msgid "More Links from the description"
-msgstr ""
+msgstr "Trova link nella descrizione"
 
 msgctxt "#30545"
 msgid "No further links found."
-msgstr ""
+msgstr "Nessun link trovato."
 
 msgctxt "#30546"
 msgid "Please log in twice!"
-msgstr ""
+msgstr "Per favore fare 2 volte il Log In!"
 
 msgctxt "#30547"
 msgid "You must enable two applications so that YouTube is functioning properly."
-msgstr ""
+msgstr "Devi abilitare due applicazioni per permettere a YouTube di funzionare in modo corretto"
 
 msgctxt "#30548"
 msgid "More..."
-msgstr ""
+msgstr "Più..."
 
 msgctxt "#30549"
 msgid "No videos streams found"
-msgstr ""
+msgstr "Nessun Stream Video trovato"
+
+msgctxt "#30550"
+msgid "Region"
+msgstr "Regione"
+
+msgctxt "#30551"
+msgid "Recommendations"
+msgstr "Raccomandati"
+
+msgctxt "#30552"
+msgid "Maintenance"
+msgstr "Manutenzione"
+
+msgctxt "#30553"
+msgid "Delete function cache database"
+msgstr "Cancella il database della function cache"
+
+msgctxt "#30554"
+msgid "Delete search history database"
+msgstr "Cancella il database delle ricerche storiche"
+
+msgctxt "#30555"
+msgid "Clear function cache"
+msgstr "Pulisci la function cache"
+
+msgctxt "#30556"
+msgid "Clear search history"
+msgstr "Pulisci la cronologia delle ricerche"
+
+msgctxt "#30557"
+msgid "function cache"
+msgstr "function cache"
+
+msgctxt "#30558"
+msgid "search history"
+msgstr "cronologia delle ricerche"
+
+msgctxt "#30559"
+msgid "Delete settings.xml"
+msgstr "Cancella settings.xml"
+
+msgctxt "#30560"
+msgid "Subtitle language"
+msgstr "Lingua del sottotitolo"
+
+msgctxt "#30561"
+msgid "None"
+msgstr "Nessuno"
+
+msgctxt "#30562"
+msgid "All"
+msgstr "Tutti"
+
+msgctxt "#30563"
+msgid "Setting"
+msgstr "Impostazioni"
+
+msgctxt "#30564"
+msgid "Setting, English"
+msgstr "Settaggi, Inglese"
+
+msgctxt "#30565"
+msgid "English"
+msgstr "Inglese"
+
+msgctxt "#30566"
+msgid "Prompt"
+msgstr "Prompt"
+
+msgctxt "#30567"
+msgid "Set as Watch Later"
+msgstr "Configura come Guarda Dopo"
+
+msgctxt "#30568"
+msgid "Remove as Watch Later"
+msgstr "Rimuovi da Guarda Dopo"
+
+msgctxt "#30569"
+msgid "Are you sure you want to remove '%s' as your Watch Later list?"
+msgstr "Sei sicuro che vuoi rimuovere '%s' dalla lista Guarda Dopo?"
+
+msgctxt "#30570"
+msgid "Are you sure you want to replace your current Watch Later list with '%s'?"
+msgstr "Sei sicuro che vuoi sostituire l'attuale lista Guarda Dopo con la lista '%s'?"
+
+msgctxt "#30571"
+msgid "Set as History"
+msgstr "Imposta come Storico"
+
+msgctxt "#30572"
+msgid "Remove as History"
+msgstr "Rimuovi dallo Storico"
+
+msgctxt "#30573"
+msgid "Are you sure you want to remove '%s' as your History list?"
+msgstr "Sei sicuro che vuoi rimuovere '%s' dalla tua lista Storico?"
+
+msgctxt "#30574"
+msgid "Are you sure you want to replace your current History list with '%s'?"
+msgstr "Sei sicuro che vuoi sostituire l'attuale lista Storico con la lista '%s'?"
+
+msgctxt "#30575"
+msgid "Succeeded"
+msgstr "Con successo"
+
+msgctxt "#30576"
+msgid "Failed"
+msgstr "Fallito"
+
+msgctxt "#30577"
+msgid "Settings"
+msgstr "Impostazioni"
+
+msgctxt "#30578"
+msgid "Force SSL Certificate verification"
+msgstr "Forza la verifica del certificato SSL"
+
+msgctxt "#30579"
+msgid "MPEG-DASH is enabled in the YouTube settings, however inputstream.adaptive appears to be disabled. Would you like to enable inputstream.adaptive now?"
+msgstr "MPEG-DASH è abilitato nelle impostazioni di YouTube, ma inputstream.adaptive sembra disabilitato. Vuoi ablitare inputstream.adaptive adesso?"

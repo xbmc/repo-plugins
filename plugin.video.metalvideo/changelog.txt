@@ -1,3 +1,14 @@
+[B]Version 2.0.4[/B] 2017-02-20
+- Fix video url scraper
+
+[B]Version 2.0.3[/B] 2017-02-09
+- Fix addon after site reverted back to old url structure
+
+[B]Version 2.0.2[/B] 2017-01-12
+- Fixed category parsing
+- Fixed the urls after site changed format
+- Renamed "Random videos" to "Party Mode"
+
 [B]Version 2.0.1[/B] 2016-01-04
 - Added option to disable url caching from the add-on settings
 - Removed script.module.parsedom dependency

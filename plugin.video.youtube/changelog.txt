@@ -1,3 +1,133 @@
+5.4.5
+[fix] tighten regex for routing, resolving incorrect routing
+
+5.4.4
+[fix] overlapping regex causing no playlist videos
+
+5.4.3
+[add] mpeg-dash support for live content (requires inputstream.adaptive >= 2.0.12)
+[add] add route to update api keys
+    plugin://plugin.video.youtube/api/update/?enable=true&client_id=<client_id>&client_secret=<client_secret>&api_key=<api_key>
+[fix/upd] refactor subtitles ** subtitles setting will be reset
+[fix/upd] add My Subscriptions (Filtered) to dual login requirements
+[fix/upd] only show Browse Channels when logged in
+[upd] Greek strings [Twilight0]
+[upd] Polish strings [Etharr]
+
+5.4.2
+[fix/upd] My Subscriptions
+
+5.4.1
+[fix/upd] dash working for vevo/etc
+[upd] rework of auto subtitles
+[fix] leia nightly login issues
+[fix] 403 error on 'My Channel'/uploaded videos
+
+5.4.0
+[upd] Greek strings [Twilight0]
+[upd] Polish strings [Etharr]
+[upd] Finnish strings [teemue]
+[upd] Spanish strings [roliverosc]
+[fix/upd] resolve "Error Contents: 'q'" error [horstepipe]
+[fix/upd] resolve Play All/Play from here not starting playback
+[fix/upd] resolve playlists starting on second item
+[fix/upd] allow dash in quality choices
+[fix/upd] set content to files for menus, resolves mouse/scrolling
+[fix/upd] fix cipher
+[fix/upd] increase search history limit to 200
+[fix/upd] storage db
+[add] Safe Search to Settings -> General
+[add] Thumbnail size to Settings -> General
+[add] Auto-play suggested [mehdilauters]
+[add] Automatic subtitles [Uukrull]
+[add] My Subscriptions (Filtered) - whitelist/blacklist version of My Subscriptions [chhe]
+[add] module extension point:
+        add-ons can now add plugin.video.youtube dependency and resolve youtube video id's or make v3 api requests using the youtube plugin,
+        """ <addon.xml>
+        <import addon="plugin.video.youtube"/>
+        """
+        """ <example.py>
+        import youtube_resolver
+        streams = youtube_resolver.resolve(<video_id>)
+        import youtube_requests
+        videos = youtube_requests.get_videos([<video_id_1>, <video_id_2>, <video_id_3>])
+        """
+
+5.3.11
+[fix/upd] replace custom simple_requests with script.module.requests to resolve ssl and cross-platform issues
+[add] 'Reset access manager' added to Maintenance section, sign out process(available when logged out)  to clean up tokens in settings.xml
+[upd] set default for SSL certificate verification to 'true'
+
+5.3.10
+[fix/upd] resolve 'No video streams found' for age-gated content and other minor.
+[fix/upd] unescaping HTML entities in subtitles [mdmdmdmdmd]
+[upd] Polish strings [Etharr]
+
+5.3.6-9
+[fix/upd] resolve 'No video streams found'
+[fix/upd] SPMC dash support guidosarducci
+[upd] Italian strings [iz8mbw]
+[upd] Spanish strings [roliverosc]
+[upd] Dutch strings [Sjord]
+[fix/upd] Frodo backwards compat. setArt [lulol]
+
+5.3.5
+[add] MPEG-DASH support for Kodi 17 w/ inputstream.adaptive Add-on
+[add] optional History and Watch Later custom playlist to Settings -> Folders, or (My)Playlists context menu to set/remove
+[add] Maintenance section to Settings
+[add] 'Subtitle language(s) to download' selection to Settings -> General
+[add] 'Force SSL Certificate verification' to Settings -> Advanced
+[upd] API key set switching from Settings -> API (this will log you out)
+[upd] Dual login only required if My Subscriptions folder is enabled at sign-in
+[upd] setting content type from episodes, now videos
+[del] override view options
+[upd] Norwegian strings [torstehu]
+[upd] Greek strings [twilight0]
+[upd] Portuguese strings [Wanilton]
+[upd] Dutch strings [flemlion]
+[fix/upd] API tweaking and various other updates
+
+5.2.2 (2016-05-28)
+[upd] Insert old API-Keys from Bromix because of Quota-Exceed-Error
+[add] Dutch strings (thanks to Guilouz)
+[upd] French strings (thanks to royreinders)
+[upd] Greek strings (thanks to Twilight0)
+
+5.2.1 (2016-05-12)
+[add] Additional "Recommend for You" section (thanks to anxdpanic)
+
+5.2.0 (2016-05-11)
+[upd] APi-Changer - First login delete old Credentials - New Login Required! Sorry :)
+
+5.1.20.7 (2016-05-03)
+Workaround for the Quota Exceed-Error. 
+[add] API-Changer for a Pool of 6 API-Keys
+[add] Auto-Reauthenticate with Pool-Key on "Quota Exceed" error
+[add] "Use own API"-Button
+[hint] The Message "Invalid Credentials" after Update could be fixed with deleting the Userdata-Settings.xml
+[add] add Recommendations to main listing when logged in [anxdpanic]
+
+5.1.20.6 (2016-04-03)
+[add] Greek Translation from twilight0
+[upd] Fixed italian translation from DjDiabolik
+
+5.1.20.5 (2016-03-20)
+[upd] Ignore if '.apps.googleusercontent.com' entered in API Id string in add-on settings
+
+5.1.20.4 (2016-03-05)
+[add] API Key in add-on settings
+[upd] All string.po for new API Key functionality. New entries in language string.po files not translated from English.
+
+5.1.20.3 (2016-03-04)
+[fix] All Key changed with YouTube TV
+
+5.1.20.2 (2016-03-04)
+[fix] Live streams itag 91 patch
+[add] Kodi 17 Krypton support. Patch by Uukrul
+
+5.1.20 (2016-02-25)
+[fix] Final fix for APIs
+
 5.1.16 (2015-12-24)
 [fix] reverted search order by date
 

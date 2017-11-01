@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import os
 import re
 from operator import itemgetter
 from ipwww_common import translation, AddMenuEntry, OpenURL, \
@@ -10,7 +11,6 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 import xbmcaddon
-
 import random
 
 ADDON = xbmcaddon.Addon(id='plugin.video.iplayerwww')
@@ -139,7 +139,7 @@ def GetPage(page_url, just_episodes=False):
     if int(ADDON.getSetting('radio_paginate_episodes')) == 0:
         if current_page < next_page:
             page_url = 'http://www.bbc.co.uk' + page_base_url + str(next_page)
-            AddMenuEntry(" [COLOR orange]%s >>[/COLOR]" % translation(30320), page_url, 136, '', '', '')
+            AddMenuEntry(" [COLOR ffffa500]%s >>[/COLOR]" % translation(30320), page_url, 136, '', '', '')
 
     #BUG: this should sort by original order but it doesn't (see http://trac.kodi.tv/ticket/10252)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
@@ -169,7 +169,7 @@ def AddAvailableLiveStreamItem(name, channelname, iconimage):
         max_quality = min(len(qualities),max_quality)
         qualities = qualities[0:max_quality]
         qualities.reverse()
-        for quality in qualities: 
+        for quality in qualities:
             url = 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/%s/%s/%s/%s.m3u8' % (location, quality, provider_url, channelname)
 
             PlayStream(name, url, iconimage, '', '')
@@ -184,10 +184,23 @@ def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
         channelname: determines which channel is queried.
     """
     providers = [('ak', 'Akamai'), ('llnw', 'Limelight')]
-    location_qualities = {'uk' : ['sbr_vlow', 'sbr_low', 'sbr_med', 'sbr_high'], 'nonuk': ['sbr_vlow', 'sbr_low'] }
+    location_qualities = {
+                          'uk' : ['sbr_vlow', 'sbr_low', 'sbr_med', 'sbr_high'],
+                          'nonuk': ['sbr_vlow', 'sbr_low']
+                         }
     location_names = {'uk': 'UK', 'nonuk': 'International'}
-    quality_colours = {'sbr_vlow': 'red', 'sbr_low': 'orange', 'sbr_med': 'yellow', 'sbr_high': 'green'}
-    quality_bitrates = {'sbr_vlow': '48', 'sbr_low': '96', 'sbr_med': '128', 'sbr_high': '320'}
+    quality_colours = {
+                       'sbr_vlow': 'ffff0000',
+                       'sbr_low': 'ffffa500',
+                       'sbr_med': 'ffffff00',
+                       'sbr_high': 'ff008000'
+                       }
+    quality_bitrates = {
+                        'sbr_vlow': '48',
+                        'sbr_low': '96',
+                        'sbr_med': '128',
+                        'sbr_high': '320'
+                       }
 
     for location in location_qualities.keys():
         qualities = location_qualities[location]
@@ -196,7 +209,7 @@ def AddAvailableLiveStreamsDirectory(name, channelname, iconimage):
             for provider_url, provider_name in providers:
                 url = 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/%s/%s/%s/%s.m3u8' % (location, quality, provider_url, channelname)
 
-                title = name + ' - [I][COLOR %s]%s Kbps[/COLOR] [COLOR white]%s[/COLOR] [COLOR grey]%s[/COLOR][/I]' % (
+                title = name + ' - [I][COLOR %s]%s Kbps[/COLOR] [COLOR fff1f1f1]%s[/COLOR] [COLOR ffb4b4b4]%s[/COLOR][/I]' % (
                     quality_colours[quality], quality_bitrates[quality] , location_names[location], provider_name)
 
                 AddMenuEntry(title, url, 201, '', '', '')
@@ -227,14 +240,14 @@ def AddAvailableStreamsDirectory(name, stream_id, iconimage, description):
     for supplier, bitrate, url, encoding in sorted(streams[0], key=itemgetter(1), reverse=True):
         bitrate = int(bitrate)
         if bitrate >= 320:
-            color = 'green'
+            color = 'ff008000'
         elif bitrate >= 128:
-            color = 'yellow'
+            color = 'ffffff00'
         elif bitrate >= 96:
-            color = 'orange'
+            color = 'ffffa500'
         else:
-            color = 'red'
-        title = name + ' - [I][COLOR %s]%d Kbps %s[/COLOR] [COLOR lightgray]%s[/COLOR][/I]' % (
+            color = 'ffff0000'
+        title = name + ' - [I][COLOR %s]%d Kbps %s[/COLOR] [COLOR ffd3d3d3]%s[/COLOR][/I]' % (
             color, bitrate, encoding, supplier)
         AddMenuEntry(title, url, 201, iconimage, description, '', '')
 
@@ -278,7 +291,7 @@ def ListAtoZ():
         ('Y', 'y'), ('Z', 'z'), ('0-9', '@')]
 
     for name, url in characters:
-        url = 'http://www.bbc.co.uk/radio/programmes/a-z/by/%s/current' % url
+        url = 'http://www.bbc.co.uk/programmes/a-z/by/%s/player' % url
         AddMenuEntry(name, url, 136, '', '', '')
 
 
@@ -372,70 +385,138 @@ def ListLive():
         ('bbc_radio_york', 'BBC Radio York'),
     ]
     for id, name in channel_list:
+        iconimage = xbmc.translatePath(
+            os.path.join('special://home/addons/plugin.video.iplayerwww/media', id + '.png'))
         if ADDON.getSetting('streams_autoplay') == 'true':
-            AddMenuEntry(name, id, 213, '', '', '')
+            AddMenuEntry(name, id, 213, iconimage, '', '')
         else:
-            AddMenuEntry(name, id, 133, '', '', '')
+            AddMenuEntry(name, id, 133, iconimage, '', '')
 
 
-def ListFavourites(logged_in):
+def ListListenList(logged_in):
     if(CheckLogin(logged_in) == False):
         CreateBaseDirectory('audio')
         return
 
     """Scrapes all episodes of the favourites page."""
-    html = OpenURL('http://www.bbc.co.uk/radio/favourites')
+    html = OpenURL('http://www.bbc.co.uk/radio/favourites/episodesandclips')
 
-    programmes = html.split('<li class="my-item" data-appid="radio" ')
+    programmes = html.split('<div class="favourites box-link favourite ')
     for programme in programmes:
 
-        if not programme.startswith('data-type="tlec"'):
+        if not programme.startswith('media'):
+            continue
+
+        data_available_match = re.search(r'data-is-available="(.*?)"', programme)
+        if ((not data_available_match) or (data_available_match.group(1) == '')):
             continue
 
         series_id = ''
-        series_id_match = re.search(r'data-id="(.*?)"', programme)
+        series_name = ''
+        series_id_match = re.search(r'<a href="http://www.bbc.co.uk/programmes/(.*?)" class="media__meta-row size-f clr-light-grey text--single-line">\s*(.*?)\s*</a>',programme)
         if series_id_match:
-            series = series_id_match.group(1)
+            series_name = series_id_match.group(2)
+            series_id = series_id_match.group(1)
 
-        programme_id = ''
-        programme_id_match = re.search(r'<a href="http://www.bbc.co.uk/programmes/(.*?)"', programme)
-        if programme_id_match:
-            programme_id = programme_id_match.group(1)
+        episode_name = ''
+        episode_id = ''
+        episode_id_match = re.search(r'<a aria-label="(.*?) Duration: (.*?)" class="favourites__brand-link(.*?)" href="http://www.bbc.co.uk/programmes/(.*?)#play">',programme)
+        if episode_id_match:
+            episode_name = episode_id_match.group(1)
+            episode_id = episode_id_match.group(4)
 
-        name = ''
-        name_match = re.search(r'<span class="my-episode-brand" itemprop="name">(.*?)</span>', programme)
-        if name_match:
-            name = name_match.group(1)
+        episode_image = ''
+        episode_image_match = re.search(r'<img alt="" class="favourites__brand-image media__image " src="(.*?)"',programme)
+        if episode_image_match:
+            episode_image = "http:%s" % episode_image_match.group(1)
 
-        episode = ''
-        episode_match = re.search(r'<span class="my-episode" itemprop="name">(.*?)</span>', programme)
-        if episode_match:
-            episode = "(%s)" % episode_match.group(1)
-
-        image = ''
-        image_match = re.search(r'itemprop="image" src="(.*?)"', programme)
-        if image_match:
-            image = image_match.group(1)
-
-        synopsis = ''
-        synopsis_match = re.search(r'<span class="my-item-info">(.*?)</span>', programme)
-        if synopsis_match:
-            synopsis = synopsis_match.group(1)
+        series_image = ''
+        series_image_match = re.search(r'<img class="media__image avatar-image--small" src="(.*?)">',programme)
+        if series_image_match:
+            series_image = "http:%s" % series_image_match.group(1)
+            series_image = re.sub(r'96x96','640x360',series_image)
 
         station = ''
-        station_match = re.search(r'<span class="my-episode-broadcaster" itemprop="name">(.*?)\.</span>', programme)
+        station_match = re.search(r'<span class="favourites__network-name.*?<a href="(.*?)" class="clr-light-grey">\s+?(.*?)\s+?<',programme, flags=(re.DOTALL | re.MULTILINE))
         if station_match:
-            station = station_match.group(1).strip()
+            station = station_match.group(2).strip()
 
-        title = "[B]%s - %s[/B]" % (station, name)
-        episode_title = "[B]%s[/B] - %s %s" % (station, name, episode)
+        description = ''
+        description_match = re.search(r'<p class="favourites__description media__meta-row size-f clr-white.*?">\s+?(.*?)\s+?</p>',programme, flags=(re.DOTALL | re.MULTILINE))
+        if description_match:
+            description = description_match.group(1).strip()
 
-        if series:
-            AddMenuEntry(title, series, 131, image, synopsis, '')
+        if series_id:
+            series_title = "[B]%s - %s[/B]" % (station, series_name)
+            AddMenuEntry(series_title, series_id, 131, series_image, description, '')
 
-        if programme_id:
-            url = "http://www.bbc.co.uk/programmes/%s" % programme_id
-            CheckAutoplay(episode_title, url, image, ' ', '')
+        if episode_id:
+            if series_name:
+                episode_title = "[B]%s[/B] - %s - %s" % (station, series_name, episode_name)
+            else:
+                episode_title = "[B]%s[/B] - %s" % (station, episode_name)
+            episode_url = "http://www.bbc.co.uk/programmes/%s" % episode_id
+            # xbmc.log(episode_url)
+            CheckAutoplay(episode_title, episode_url, episode_image, ' ', '')
+
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
+
+
+def ListFollowing(logged_in):
+    if(CheckLogin(logged_in) == False):
+        CreateBaseDirectory('audio')
+        return
+
+    """Scrapes all episodes of the favourites page."""
+    html = OpenURL('https://www.bbc.co.uk/radio/favourites/programmes')
+
+    programmes = html.split('<div class="favourites follow ')
+    for programme in programmes:
+
+        if not programme.startswith('media'):
+            continue
+
+        series_id = ''
+        series_name = ''
+        series_id_match = re.search(r'<a aria-label="(.*?)" class="follows__image-link" href="http://www.bbc.co.uk/programmes/(.*?)">',programme)
+        if series_id_match:
+            series_name = series_id_match.group(1)
+            series_id = series_id_match.group(2)
+
+        episode_name = ''
+        episode_id = ''
+        episode_id_match = re.search(r'<a aria-label="(.*?)" class="size-e clr-white" href="http://www.bbc.co.uk/programmes/(.*?)#play"',programme)
+        if episode_id_match:
+            episode_name = episode_id_match.group(1)
+            episode_id = episode_id_match.group(2)
+
+        episode_image = ''
+        series_image = ''
+        series_image_match = re.search(r'<img class="media__image" src="(.*?)"',programme)
+        if series_image_match:
+            series_image = "https:%s" % series_image_match.group(1)
+            episode_image = series_image
+
+        station = ''
+        station_match = re.search(r'<a href="(.*?)" class="clr-light-grey">\s*(.*?)\s*</a>',programme, flags=(re.DOTALL | re.MULTILINE))
+        if station_match:
+            station = station_match.group(2).strip()
+
+        description = ''
+
+        if series_id:
+            series_title = "[B]%s - %s[/B]" % (station, series_name)
+            AddMenuEntry(series_title, series_id, 131, series_image, description, '')
+
+        if episode_id:
+            if series_name:
+                episode_title = "[B]%s[/B] - %s - %s" % (station, series_name, episode_name)
+            else:
+                episode_title = "[B]%s[/B] - %s" % (station, episode_name)
+            episode_url = "http://www.bbc.co.uk/programmes/%s" % episode_id
+            # xbmc.log(episode_url)
+            CheckAutoplay(episode_title, episode_url, episode_image, ' ', '')
 
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)

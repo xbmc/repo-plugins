@@ -1,0 +1,69 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Ibrahim Gungor <igungor@gmail.com>\n"
+"Language-Team: Put.io developers <info@put.io>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: tr\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Ayarlar 000-019
+msgctxt "#32000"
+msgid "Put.io Settings"
+msgstr "Put.io Ayarları"
+
+msgctxt "#32001"
+msgid "OAuth2 Token"
+msgstr "OAuth2 Anahtarı"
+
+# Hata mesajlari 020-039
+msgctxt "#32020"
+msgid "Authentication Failure"
+msgstr "Oturum Hatası"
+
+msgctxt "#32021"
+msgid "Please insert your oauth key settings!"
+msgstr "Lutfen Oauth2 anahtarınızı girin!"
+
+msgctxt "#32022"
+msgid "OAuth2 Key Required"
+msgstr "OAuth2 Anahtarı Gerekli"
+
+msgctxt "#32023"
+msgid "Visit put.io/kodi and enter this code: %s"
+msgstr "put.io/kodi adresine gidip %s kodunu girin"
+
+msgctxt "#32024"
+msgid "Then click OK"
+msgstr "Sonra OK tuşuna basın"
+
+# Context Menu 040-059
+msgctxt "#32040"
+msgid "Refresh"
+msgstr "Yenile"
+
+msgctxt "#32042"
+msgid "Delete"
+msgstr "Sil"
+
+# Dialoglar 060-079
+msgctxt "#32060"
+msgid "Delete Confirmation"
+msgstr "Silme Onayı"
+
+msgctxt "#32061"
+msgid "Are you sure?"
+msgstr "Emin misiniz?"
+
+msgctxt "#32062"
+msgid "Payment Reminder"
+msgstr "Ödeme Hatırlatması"
+
+msgctxt "#32063"
+msgid "Your payment has expired. Your files will be listed but you won't be playing them."
+msgstr "Ödemenizin günü geçmiş görünüyor. Dosyalarınızı listeleyebilecek ancak izleyemeyeceksiniz."

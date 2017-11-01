@@ -1,3 +1,11 @@
+2017.1.18
+- Trimmed down content to focus on motocross & supercross for now
+- Added Videos on Demand option in motocross which includes: Event highlights, Features, Full Motos, GoPro Footage and more
+- Fixed bugs and general code clean up
+
+2016.7.13
+- Improved / updated motocross section
+
 v2015.8.8
 - Fixed Live Stream for Motocross section
 

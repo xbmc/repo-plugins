@@ -2,7 +2,7 @@
 <addon
 	id="plugin.audio.releasefm"
 	name="Release FM"
-	version="1.0.0"
+	version="1.0.1"
 	provider-name="ReleaseFM">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />

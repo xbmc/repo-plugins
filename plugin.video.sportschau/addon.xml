@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
-<addon id="plugin.video.sportschau" name="Sportschau" version="0.1.0" provider-name="Fiona Schmidtke">
+<addon id="plugin.video.sportschau" name="Sportschau" version="0.1.1" provider-name="Fiona Schmidtke">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.xbmcswift2" version="2.4.0"/>
@@ -27,6 +27,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
     <language>de</language>
+    <broken>Deprecated. The addon original author has not updated the addon in the while. Membrane is the new maintainer. The updated version is available for Krypton and above versions.</broken>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
     <website>https://github.com/fisch42/xbmc-plugin-sportschau</website>
     <source>https://github.com/fisch42/xbmc-plugin-sportschau</source>

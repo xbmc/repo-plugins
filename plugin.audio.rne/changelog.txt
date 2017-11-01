@@ -1,3 +1,12 @@
+1.0.8 (2017.10.10)
+- Quick fix for direct channels due to website changes (credits and great thanks to vicglez).
+- Quick fix for media URL (thanks to crashillo and vicglez).
+- Updated search feature due to website changes.
+- Updated integration tests due to code changes.
+1.0.7 (2016.05.02)
+- Quick fix for direct channels due to website changes (credits: vicglez).
+1.0.6 (2016.04.11)
+- Got the direct channels back to their original source (credits: vicglez).
 1.0.5 (2016.02.14)
 - Quick fix for direct channels due to website changes.
 1.0.4 (2016.01.21)

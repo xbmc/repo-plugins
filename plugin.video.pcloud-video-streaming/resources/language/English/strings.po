@@ -79,7 +79,7 @@ msgid "Confirm Delete"
 msgstr ""
 
 msgctxt "#30116"
-Delete '{0}' from pCloud?</string>
+msgid "Delete '{0}' from pCloud?"
 msgstr ""
 
 msgctxt "#30117"

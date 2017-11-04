@@ -337,10 +337,7 @@ class myAddon(t1mAddon):
       if not '.m3u8' in url:
           url = ('https://apiv2.vevo.com/video/%s/streams/hls?token=%s' % (url, self.getAutho()))
           a = self.getAPI(url)
-          for b in a:
-              if (b["version"] == 4) or (b["version"] == 2):
-                  url = b['url']
-                  break
+          url = a[0]['url']
       thumb = xbmc.getInfoLabel('ListItem.Art(thumb)')
       liz = xbmcgui.ListItem(path = url, thumbnailImage = thumb)
       infoList ={}

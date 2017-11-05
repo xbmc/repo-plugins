@@ -338,6 +338,8 @@ class myAddon(t1mAddon):
           url = ('https://apiv2.vevo.com/video/%s/streams/hls?token=%s' % (url, self.getAutho()))
           a = self.getAPI(url)
           url = a[0]['url']
+          m3u8_contents = self.getRequest( url , None , self.defaultHeaders.copy() )
+          url = re.search(r'^([^#].+_1920x1080_.+\.m3u8)$', m3u8_contents, re.MULTILINE).group(1)          
       thumb = xbmc.getInfoLabel('ListItem.Art(thumb)')
       liz = xbmcgui.ListItem(path = url, thumbnailImage = thumb)
       infoList ={}

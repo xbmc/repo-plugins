@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.onedrive" name="OneDrive" version="2.0.0" provider-name="Carlos Guzman (cguZZman)">
+	<requires>
+		<import addon="xbmc.python" version="2.25.0" />
+		<import addon="script.module.clouddrive.common"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="addon.py">
+		<provides>image audio video</provides>
+	</extension>
+	<extension point="xbmc.service" library="service.py" start="login" />
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<summary lang="en_GB">Microsoft OneDrive for KODI</summary>
+		<description lang="en_GB">
+Play all your media from OneDrive including Videos, Music and Pictures.
+ - Unlimited number of personal or business accounts.
+ - Search over your drive.
+ - Auto-Refreshed slideshow.
+ - Export your videos to your library (.strm files)
+ - Use OneDrive as a source
+ - This program is not affiliated with or sponsored by Microsoft.
+		</description>
+		<summary lang="he_IL">כונן OneDrive של מיקרוסופט עבור קודי</summary>
+		<description lang="he_IL">
+הפעל את כל המדיה שלך מ- OneDrive כולל וידאו, מוסיקה ותמונות.
+  - מספר בלתי מוגבל של חשבונות אישיים או עסקיים.
+  - חיפוש ומציאת הכונן שלך.
+  - ריענון מצגת אוטומטית.
+  - ייצוא קטעי הווידאו לספרייה שלך (קבצי .strm)
+  - שימוש ב-OneDrive כמקור
+  - תוכנית זו אינה מזוהה עם או בחסות מיקרוסופט.
+		</description>		
+		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+		<source>https://github.com/cguZZman/plugin.onedrive</source>
+		<forum>https://github.com/cguZZman/plugin.onedrive/issues</forum>
+		<website>https://addons.kodi.tv/show/plugin.onedrive</website>
+		<news>
+v2.0.0 released Nov 06, 2017:
+- Remake using script.module.clouddrive.common library
+- Fix OneDrive for Business functionality
+		</news>
+	</extension>
+</addon>

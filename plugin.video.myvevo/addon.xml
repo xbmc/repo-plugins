@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.myvevo"
+       name="VEVO"
+       version="3.0.8"
+       provider-name="t1m">
+  <requires>
+    <import addon="xbmc.python" version="2.25.0"/>
+    <import addon="script.module.t1mlib" version="1.0.18"/>
+    <import addon="inputstream.adaptive" version="2.0.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">VEVO Video Addon</summary>
+    <description lang="en_GB">Watch music videos, artist videos, and original shows on VEVO and VEVO TV</description>
+    <disclaimer lang="en_GB">Feel free to use this script. For information visit the wiki.</disclaimer>
+    <platform>all</platform>
+    <language>en</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991. Icons are made by Freepik from www.flaticon.com and are licensed under Creative Commons BY 3.0</license>
+    <forum>http://forum.kodi.tv/showthread.php?tid=223221</forum>
+    <website>www.vevo.com</website>
+    <email></email>
+    <source>https://github.com/learningit/Kodi-plugins-source</source>
+  </extension>
+</addon>

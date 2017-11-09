@@ -16,22 +16,27 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import cookielib
-import gzip
-import re
-import StringIO
-import urllib
-import urllib2
-import socket
+import socket, urllib, urllib2, cookielib, gzip
+import re, StringIO, requests, traceback
+import xbmc, xbmcaddon
 
-#Set Global timeout - Useful for slow connections and Putlocker.
-socket.setdefaulttimeout(30)
-
+# Plugin Info
+ADDON_ID      = 'plugin.video.ustvnow'
+REAL_SETTINGS = xbmcaddon.Addon(id=ADDON_ID)
+ADDON_VERSION = REAL_SETTINGS.getAddonInfo('version')
+DEBUG = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
+     
+def log(msg, level=xbmc.LOGDEBUG):
+    if DEBUG == False and level != xbmc.LOGERROR: return
+    if level == xbmc.LOGERROR: msg += ' ,' + traceback.format_exc()
+    xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + (msg.encode("utf-8")), level)
+        
 class HeadRequest(urllib2.Request):
     '''A Request class that sends HEAD requests'''
     def get_method(self):
         return 'HEAD'
 
+socket.setdefaulttimeout(30)
 class Net:
     '''
     This class wraps :mod:`urllib2` and provides an easy way to make http
@@ -48,9 +53,8 @@ class Net:
     
     _cj = cookielib.LWPCookieJar()
     _proxy = None
-    _user_agent = 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/535.1 ' + \
-                  '(KHTML, like Gecko) Chrome/13.0.782.99 Safari/535.1'
-    _http_debug = False
+    _user_agent = 'Mozilla/5.0'
+    _http_debug = DEBUG
     
     
     def __init__(self, cookie_file='', proxy='', user_agent='', 
@@ -230,6 +234,14 @@ class Net:
         return HttpResponse(response)
 
 
+    def _json(self, url, form_data={}, headers={}):
+        if not headers:
+            headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36',
+                       'X-Requested-With': 'XMLHttpRequest'}
+        response = requests.get(url, params=form_data, headers=headers)
+        return response.json()
+    
+        
     def _fetch(self, url, form_data={}, headers={}, compression=True):
         '''
         Perform an HTTP GET or POST request.
@@ -252,16 +264,21 @@ class Net:
             meta-information about the page and the page content.
         '''
         encoding = ''
-        req = urllib2.Request(url)
-        if form_data:
-            form_data = urllib.urlencode(form_data)
-            req = urllib2.Request(url, form_data)
-        req.add_header('User-Agent', self._user_agent)
-        for k, v in headers.items():
-            req.add_header(k, v)
-        if compression:
-            req.add_header('Accept-Encoding', 'gzip')
-        response = urllib2.urlopen(req)
+        try:
+            req = urllib2.Request(url)
+            if form_data:
+                form_data = urllib.urlencode(form_data)
+                req = urllib2.Request(url, form_data)
+            req.add_header('User-Agent', self._user_agent)
+            for k, v in headers.items():
+                req.add_header(k, v)
+            if compression:
+                req.add_header('Accept-Encoding', 'gzip')
+            response = urllib2.urlopen(req)
+        except urllib2.HTTPError as e:
+            log('_fetch, failed ' + str(e.code), xbmc.LOGERROR)
+            log('_fetch, failed ' + str(e.msg), xbmc.LOGERROR)
+            return
         return HttpResponse(response)
 
 

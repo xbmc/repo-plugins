@@ -123,3 +123,15 @@ msgstr ""
 msgctxt "#30026"
 msgid "Preferred Stream Quality"
 msgstr ""
+
+msgctxt "#30027"
+msgid "%s - Enter Search Term"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Found No Results for %s"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Video Rentals Coming Soon!"
+msgstr ""

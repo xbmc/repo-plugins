@@ -122,7 +122,8 @@ def resolve_url(url):
     if resolved_url:
         succeeded = True
     else:
-        resolved_url = ''
+        resolved_url = url
+        succeeded = True
     item = xbmcgui.ListItem(path=resolved_url)
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), succeeded, item)
 

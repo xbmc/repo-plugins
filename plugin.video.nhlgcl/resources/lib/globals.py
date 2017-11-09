@@ -27,13 +27,13 @@ XBMC_VERSION = float(re.findall(r'\d{2}\.\d{1}', xbmc.getInfoLabel("System.Build
 LOCAL_STRING = ADDON.getLocalizedString
 
 #Settings
-settings = xbmcaddon.Addon(id='plugin.video.nhlgcl')
+settings = xbmcaddon.Addon()
 CDN = str(settings.getSetting(id="cdn"))
 USERNAME = json.dumps(str(settings.getSetting(id="username")))
 PASSWORD = json.dumps(str(settings.getSetting(id="password")))
 ROGERS_SUBSCRIBER = str(settings.getSetting(id="rogers"))
-QUALITY = str(settings.getSetting(id="quality"))
 NO_SPOILERS = settings.getSetting(id="no_spoilers")
+QUALITY = str(settings.getSetting(id="stream_quality"))
 FAV_TEAM = str(settings.getSetting(id="fav_team"))
 TEAM_NAMES = settings.getSetting(id="team_names")
 TIME_FORMAT = settings.getSetting(id="time_format")

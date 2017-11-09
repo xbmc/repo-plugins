@@ -557,20 +557,22 @@ def getSessionKey(game_id,event_id,content_id,authorization):
 def login():
     #Check if username and password are provided
     global USERNAME
-    if USERNAME == '':
+    if USERNAME == '""':
         dialog = xbmcgui.Dialog()
         USERNAME = dialog.input('Please enter your username', type=xbmcgui.INPUT_ALPHANUM)
         settings.setSetting(id='username', value=USERNAME)
         USERNAME = json.dumps(USERNAME)
+        sys.exit()
 
     global PASSWORD
-    if PASSWORD == '':
+    if PASSWORD == '""':
         dialog = xbmcgui.Dialog()
         PASSWORD = dialog.input('Please enter your password', type=xbmcgui.INPUT_ALPHANUM, option=xbmcgui.ALPHANUM_HIDE_INPUT)
         settings.setSetting(id='password', value=PASSWORD)
         PASSWORD = json.dumps(PASSWORD)
+        sys.exit()
 
-    if USERNAME != '' and PASSWORD != '':
+    if USERNAME != '""' and PASSWORD != '""':
         url = 'https://user.svc.nhl.com/oauth/token?grant_type=client_credentials'
         headers = {
             "Accept": "application/json",
@@ -582,7 +584,7 @@ def login():
         }
 
         r = requests.post(url, headers=headers, data='', cookies=load_cookies(), verify=VERIFY)
-        if r.status_code != 200:
+        if r.status_code >= 400:
             msg = "Authorization Cookie couldn't be downloaded."
             dialog = xbmcgui.Dialog()
             ok = dialog.ok('Authorization Not Found', msg)
@@ -614,10 +616,13 @@ def login():
          }
 
         r = requests.post(url, headers=headers, data=login_data, cookies=load_cookies(), verify=VERIFY)
-        json_source = r.json()
-        if r.status_code != 200:
-            #msg = "Please check that your username and password are correct"
-            msg = json_source['message']
+
+        if r.status_code >= 400:
+            try:
+                json_source = r.json()
+                msg = json_source['message']
+            except:
+                msg = "Please check that your username and password are correct"
             dialog = xbmcgui.Dialog()
             ok = dialog.ok('Login Error', msg)
             sys.exit()
@@ -638,7 +643,7 @@ def logout(display_msg=None):
     }
 
     r = requests.post(url, headers=headers, data='', cookies=load_cookies(), verify=VERIFY)
-    if r.status_code != 200:
+    if r.status_code >= 400:
         xbmc.log('The server couldn\'t fulfill the request.')
         xbmc.log('Error code: ', e.code)
         xbmc.log(url)

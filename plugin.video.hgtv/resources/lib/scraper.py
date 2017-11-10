@@ -62,7 +62,10 @@ class myAddon(t1mAddon):
   def getAddonEpisodes(self,url,ilist):
       self.defaultVidStream['width'] = 1280
       self.defaultVidStream['height'] = 720
-      html = self.getRequest(uqp(url))
+      url = uqp(url)
+      if not url.startswith('http:'):
+          url = 'http:' + url
+      html = self.getRequest(url)
       html = re.compile('<div id="video-player".+?type="text/x-config">(.+?)</script>',re.DOTALL).search(html)
       if html is None:
           return(ilist)

@@ -19,5 +19,5 @@ TEKTHINGRECENTLYADDEDURL = 'http://www.hak5.org/category/episodes/tekthing/page/
 PINEAPPLEUNIVERSITYRECENTLYADDEDURL = 'http://www.hak5.org/category/episodes/pineapple-university'
 METASPLOITRECENTLYADDEDURL = 'http://www.hak5.org/category/episodes/metasploit-minute/page/001'
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
-DATE = "2017-10-11"
-VERSION = "1.0.1"
+DATE = "2017-11-12"
+VERSION = "1.0.2"

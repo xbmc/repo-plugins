@@ -89,7 +89,7 @@ class Main:
         # Metasploit Recently Added Episodes
         #
         parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30307), "url": METASPLOITRECENTLYADDEDURL,
-                      "next_page_possible": "True"}
+                      "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30307))
         is_folder = True

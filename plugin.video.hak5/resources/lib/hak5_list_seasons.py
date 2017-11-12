@@ -137,7 +137,8 @@ class Main:
         # Finish creating a virtual folder.
         xbmcplugin.endOfDirectory(self.plugin_handle)
 
+
 def add_sort_methods():
-	sort_methods = [xbmcplugin.SORT_METHOD_UNSORTED,xbmcplugin.SORT_METHOD_LABEL,xbmcplugin.SORT_METHOD_DATE,xbmcplugin.SORT_METHOD_DURATION,xbmcplugin.SORT_METHOD_EPISODE]
-	for method in sort_methods:
-		xbmcplugin.addSortMethod(int(sys.argv[1]), sortMethod=method)
+    sort_methods = [xbmcplugin.SORT_METHOD_UNSORTED,xbmcplugin.SORT_METHOD_LABEL,xbmcplugin.SORT_METHOD_DATE,xbmcplugin.SORT_METHOD_DURATION,xbmcplugin.SORT_METHOD_EPISODE]
+    for method in sort_methods:
+        xbmcplugin.addSortMethod(int(sys.argv[1]), sortMethod=method)

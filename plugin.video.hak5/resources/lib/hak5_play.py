@@ -82,23 +82,18 @@ class Main:
         no_url_found = True
         have_valid_url = False
 
-        # <meta property="og:url" content="https://youtu.be/K_EOLgX5Dqs"/>
+        #<iframe width="900" height="506" src="https://www.youtube.com/embed/fYdFNFTSoy4?feature=oembed&#038;wmode=opaque&#038;rel=0&#038;showinfo=0&#038;modestbranding=0"
+        # frameborder="0" gesture="media" allowfullscreen></iframe>
+
         # let's extract the youtube-id
         html_source = str(html_source)
-        start_pos_meta_prop = html_source.find('meta property="og:url"')
-        if start_pos_meta_prop > 0:
-            search_for_string = '"/>'
-            end_pos_meta_prop = html_source.find(search_for_string, start_pos_meta_prop)
-            if end_pos_meta_prop > 0:
-                # the last 3 characters are removed
-                meta_prop = html_source[start_pos_meta_prop: end_pos_meta_prop]
-
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "meta_prop", str(meta_prop)), xbmc.LOGDEBUG)
-
-                pos_of_last_slash = meta_prop.rfind('/')
-                youtube_id = meta_prop[pos_of_last_slash + 1:]
-
+        start_pos_youtube_embed = html_source.find('youtube.com/embed/')
+        if start_pos_youtube_embed > 0:
+            start_pos_youtube_id = start_pos_youtube_embed + len('youtube.com/embed/')
+            search_for_string = '?'
+            end_pos_youtube_id = html_source.find(search_for_string, start_pos_youtube_id)
+            if end_pos_youtube_id > 0:
+                youtube_id = html_source[start_pos_youtube_id:end_pos_youtube_id]
                 xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                     ADDON, VERSION, DATE, "youtube_id", str(youtube_id)), xbmc.LOGDEBUG)
 

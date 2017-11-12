@@ -1,0 +1,77 @@
+# Kodi Media Center language file
+# Addon Name: Google Drive
+# Addon id: plugin.googledrive
+# Addon Provider: Carlos Guzman (cguZZman)
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2017-10-19 11:41+0300\n"
+"Last-Translator: A. Dambledore\n"
+"Language-Team: Eng2Heb\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: he_IL\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Account"
+msgstr "חשבון"
+
+msgctxt "#32001"
+msgid "Video Library Export Folder"
+msgstr "תיקיית ייצוא ספריית וידאו"
+
+msgctxt "#32002"
+msgid "Music Library Export Folder"
+msgstr "תיקיית ייצוא ספריית מוזיקה"
+
+msgctxt "#32003"
+msgid "Before export to library, remove previous files and folders"
+msgstr "לפני ייצוא לספריה, הסר את הקבצים והתיקיות הקודמים"
+
+msgctxt "#32004"
+msgid "When playing videos, set the subtitle file located next to the video (.srt)"
+msgstr "בעת ניגון וידאו, הגדר את קובץ הכתוביות הממוקם ליד הווידאו (.srt)"
+
+msgctxt "#32005"
+msgid "Auto-Refreshed slideshow"
+msgstr "מצגת עם רענון אוטומטי"
+
+msgctxt "#32006"
+msgid "Refresh interval in minutes"
+msgstr "מרווח זמן לרענון בדקות"
+
+msgctxt "#32007"
+msgid "Google Photos"
+msgstr "אלבומי Google"
+
+msgctxt "#32008"
+msgid "-unused-Special: Camera Roll"
+msgstr "-לא בשימוש-מיוחד: סרט צילום"
+
+msgctxt "#32009"
+msgid "-unused-Special: Music"
+msgstr "-לא בשימוש-מיוחד: מוזיקה"
+
+msgctxt "#32010"
+msgid "Recursive auto-refreshed slideshow"
+msgstr "רקורסיבית אוטומטי לרענן שקופיות"
+
+msgctxt "#32011"
+msgid "Common Settings"
+msgstr "הגדרות נפוצות"
+
+msgctxt "#32012"
+msgid "Open Cloud Drive Common Settings..."
+msgstr "פתח הגדרות נפוצות של כונן ענן ..."
+
+msgctxt "#32013"
+msgid "My Drive"
+msgstr "הכונן שלי"
+
+msgctxt "#32014"
+msgid "Starred"
+msgstr "כיכב"

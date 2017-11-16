@@ -29,16 +29,60 @@ from kodiswift import Plugin
 from resources.lib import api
 
 
-plugin = Plugin()
+PAGE_SIZE = 9
+
+plugin = Plugin(addon_id='plugin.video.ecbtv')
 
 
-def items(videos):
+def top_level_categories():
+    yield {'label': u'[B]{}[/B]'.format(plugin.get_string(30002)),
+           'path': plugin.url_for('show_all_videos_first_page')}
+    yield {'label': u'[B]{}[/B]'.format(plugin.get_string(30001)),
+           'path': plugin.url_for('search')}
+    yield {'label': 'England',
+           'path': plugin.url_for('show_videos_by_reference_first_page',
+                                  reference=api.england().reference)}
+    yield {'label': 'Counties',
+           'path': plugin.url_for('show_counties')}
+    yield {'label': 'Players',
+           'path': plugin.url_for('show_player_categories')}
+
+
+def subcategories(categories, route):
+    for category in categories:
+        yield {'label': category.name,
+               'thumbnail': category.thumbnail,
+               'path': plugin.url_for(route, category=category.name)}
+
+
+def entity_items(entities):
+    for entity in entities:
+        yield {'label': entity.name,
+               'thumbnail': entity.thumbnail,
+               'path': plugin.url_for('show_videos_by_reference_first_page',
+                                      reference=entity.reference)}
+
+
+def items(func, route, page, **kwargs):
+    videos, npages = func(page=page, page_size=PAGE_SIZE, **kwargs)
+
+    if page > 1:
+        yield {
+            'label': u'[B]<< {} ({})[/B]'.format(plugin.get_string(30003), page - 1),
+            'path': plugin.url_for(route, page=page - 1, **kwargs)
+        }
+    if page < npages:
+        yield {
+            'label': u'[B]{} ({}) >> [/B]'.format(plugin.get_string(30004), page + 1),
+            'path': plugin.url_for(route, page=page + 1, **kwargs)
+        }
+
     for video in videos:
         yield {
+            'label': video.title,
             'thumbnail': video.thumbnail,
             'path': video.url,
             'info': {
-                'title': video.title,
                 'date': video.date.strftime('%d.%m.%Y'),
                 'duration': video.duration
             },
@@ -46,40 +90,76 @@ def items(videos):
         }
 
 
-def categories():
-    yield {'label': "[B]{}[/B]".format(plugin.get_string(30001)),
-           'path': plugin.url_for('search')}
-    for title, path in api.categories():
-        yield {'label': title, 'path': plugin.url_for('show_videos', path=path)}
-
-
-@plugin.route('/')
-def index():
-    return plugin.finish(categories())
-
-
-@plugin.route('/category/<path>')
-def show_videos(path):
+def show_videos(func, route, page, update_listing, **kwargs):
     return plugin.finish(
-        items(api.videos(path)),
-        sort_methods=['playlist_order', 'date', 'title', 'duration']
+        items(func, route, page, **kwargs),
+        sort_methods=['playlist_order', 'date', 'title', 'duration'],
+        update_listing=update_listing
     )
+
+
+@plugin.cached()
+def counties():
+    return list(api.counties())
+
+
+@plugin.cached()
+def player_categories():
+    return list(api.player_categories())
+
+
+@plugin.cached()
+def players(category):
+    return list(api.players(category))
+
+
+@plugin.cached_route('/')
+def index():
+    return list(top_level_categories())
+
+
+@plugin.route('/counties', name='show_counties', options={'func': counties})
+def show_entities(func):
+    return plugin.finish(entity_items(func()), sort_methods=['label'])
+
+
+@plugin.route('/players')
+def show_player_categories():
+    return plugin.finish(
+        subcategories(player_categories(), 'show_players'),
+        sort_methods=['label']
+    )
+
+
+@plugin.route('/players/<category>')
+def show_players(category):
+    return plugin.finish(entity_items(players(category)), sort_methods=['label'])
+
+
+@plugin.route('/videos/all', name='show_all_videos_first_page', options={'update_listing': False})
+@plugin.route('/videos/all/<page>')
+def show_all_videos(page='1', update_listing=True):
+    return show_videos(api.videos, 'show_all_videos', int(page), update_listing)
+
+
+@plugin.route('/videos/<reference>', name='show_videos_by_reference_first_page', options={'update_listing': False})
+@plugin.route('/videos/<reference>/<page>')
+def show_videos_by_reference(reference, page='1', update_listing=True):
+    return show_videos(api.videos, 'show_videos_by_reference', int(page), update_listing, reference=reference)
+
+
+@plugin.route('/search/<term>', name='show_search_results_first_page', options={'update_listing': False})
+@plugin.route('/search/<term>/<page>')
+def show_search_results(term, page='1', update_listing=True):
+    return show_videos(api.search_results, 'show_search_results', int(page), update_listing, term=term)
 
 
 @plugin.route('/search')
 def search():
-    query = plugin.keyboard(heading=plugin.get_string(30001))
-    if query:
-        url = plugin.url_for('search_result', query=query)
+    term = plugin.keyboard(heading=plugin.get_string(30001))
+    if term:
+        url = plugin.url_for('show_search_results_first_page', term=term)
         plugin.redirect(url)
-
-
-@plugin.route('/search/<query>')
-def search_result(query):
-    return plugin.finish(
-        items(api.search_results(query, size=11)),
-        sort_methods=['playlist_order', 'date', 'title', 'duration']
-    )
 
 
 if __name__ == '__main__':

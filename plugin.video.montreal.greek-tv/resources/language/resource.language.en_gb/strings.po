@@ -1,0 +1,39 @@
+# Addon Name: Montreal Greek TV
+# Addon id: plugin.video.montreal.greek-tv
+# Addon Provider: Twilight0
+msgid ""
+msgstr ""
+"Project-Id-Version: Montreal Greek TV\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2016-06-22 11:29+0000\n"
+"Last-Translator: twilight0\n"
+"Language-Team: English (http://www.domain.com)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30001"
+msgid "General"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Use old radio stream"
+msgstr ""
+
+msgctxt "#30003"
+msgid ""
+msgstr ""
+
+msgctxt "#30004"
+msgid ""
+msgstr ""
+
+msgctxt "#30005"
+msgid ""
+msgstr ""
+
+msgctxt "#30006"
+msgid ""
+msgstr ""

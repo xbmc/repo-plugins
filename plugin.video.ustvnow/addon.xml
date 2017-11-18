@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.ustvnow" name="USTVnow" provider-name="Lunatixz" version="2017.10.16">
+<addon id="plugin.video.ustvnow" name="USTVnow" provider-name="Lunatixz" version="2017.11.18">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/> 
         <import addon="script.module.requests" version="2.7.0"/> 
         <import addon="script.module.simplecache" version="1.0.0"/>
+        <import addon="script.module.uepg" version="1.0.0"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>

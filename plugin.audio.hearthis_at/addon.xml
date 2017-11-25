@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.hearthis_at" name="Hearthis.at" version="1.0.2" provider-name="Eike Baran">
+<addon id="plugin.audio.hearthis_at" name="Hearthis.at" version="1.0.3" provider-name="Eike Baran">
   <requires>
     <import addon="xbmc.python" version="2.25.0" />
     <import addon="script.module.kodiswift" version="0.0.1" />
@@ -19,6 +19,8 @@
     <description lang="de_DE">Hearthis.at ist eine Online-Musikplattform, auf welcher Nutzer ihre Werke hochladen, aufnehmen, bewerben und teilen können. Dieses Addon erlaubt Zugriff auf die wichtigsten Funktionen der Plattform um diese Inhalte abzurufen.</description>
     <disclaimer lang="en_GB">Use at own risk. Code may be faulty, clog your drain or kill your cat.</disclaimer>
     <news>
+v1.0.3 (2017-08-15)
+- fixed search for artists 
 v1.0.2 (2017-07-22)
 - fixed bug that would prevent non-logged-in users from using the addon 
 v1.0.1 (2017-07-21)

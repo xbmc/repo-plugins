@@ -1,3 +1,4 @@
+0.8.5 - FIX: KIKA and ARD
 0.8.4 - CHG: ARTE JSON link changed
 0.8.3 - CHG: Reimplement ARTE
 0.8.2 - CHG: Reimplement ORF

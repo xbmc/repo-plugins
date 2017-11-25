@@ -10,7 +10,7 @@ import xbmcgui
 import xbmcplugin
 import os
 
-from hak5_const import LANGUAGE, IMAGES_PATH, HAK5RECENTLYADDEDURL, HAK5SEASONSURLHTTP, \
+from hak5_const import LANGUAGE, IMAGES_PATH, HAK5RECENTLYADDEDURL, HAK5SEASONSURLHTTPS, \
     HAKTIKRECENTLYADDEDURL, THREATWIRERECENTLYADDEDURL, TEKTHINGRECENTLYADDEDURL, PINEAPPLEUNIVERSITYRECENTLYADDEDURL, \
     METASPLOITRECENTLYADDEDURL
 #
@@ -39,7 +39,7 @@ class Main:
         #
         # Hak5 Seasons
         #
-        parameters = {"action": "list-seasons", "plugin_category": LANGUAGE(30302), "url": HAK5SEASONSURLHTTP,
+        parameters = {"action": "list-seasons", "plugin_category": LANGUAGE(30302), "url": HAK5SEASONSURLHTTPS,
                       "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30302))
@@ -86,22 +86,10 @@ class Main:
         xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
 
         #
-        # Pinapple University Recently Added Episodes
-        #
-        parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30306), "url": PINEAPPLEUNIVERSITYRECENTLYADDEDURL,
-                      "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
-        list_item = xbmcgui.ListItem(LANGUAGE(30306))
-        is_folder = True
-        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
-        list_item.setProperty('IsPlayable', 'false')
-        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
-
-        #
         # Metasploit Recently Added Episodes
         #
         parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30307), "url": METASPLOITRECENTLYADDEDURL,
-                      "next_page_possible": "True"}
+                      "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30307))
         is_folder = True

@@ -95,41 +95,26 @@ class Main:
         # xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
         #     ADDON, VERSION, DATE, "html_source", str(html_source)), xbmc.LOGDEBUG)
 
-        # <div id="post-8791" class="blog-item video-item post-8791 post type-post status-publish format-standard has-post-thumbnail hentry category-haktip ...
-        # <div class="row ">
-        # <div class="col-md-6 col-sm-6">
+        # <div id="post-8843" class="video-item post-8843 post type-post status-publish format-video has-post-thumbnail hentry category-episodes category-hak5 category-season-22 tag-darren-kitchen tag-hack-across-the-planet tag-hak-5 tag-pseudocode-for-life post_format-post-format-video">
         # <div class="item-thumbnail">
-        # <a href="https://www.hak5.org/episodes/season-22/hak5-2217-bushveld-b-roll-hack-across-the-planet" title="Hak5 2217 – Bushveld B-Roll – Hack Across the Planet">
-        # <img width="300" height="169" src="https://www.hak5.org/wp-content/uploads/2017/07/hak5-2217-bushveld-b-roll-hack-a-300x169.jpg" ...
+        # <a href="https://www.hak5.org/episodes/hak5-2216-pseudocode-for-life-2-hack-across-the-planet">
+        # <img width="520" height="293" src="https://www.hak5.org/wp-content/uploads/2017/06/hak5-2216-pseudocode-for-life-2-520x293.jpg" class="attachment-thumb_520x293 size-thumb_520x293 wp-post-image" alt="" srcset="https://www.hak5.org/wp-content/uploads/2017/06/hak5-2216-pseudocode-for-life-2-520x293.jpg 520w, https://www.hak5.org/wp-content/uploads/2017/06/hak5-2216-pseudocode-for-life-2-150x84.jpg 150w, https://www.hak5.org/wp-content/uploads/2017/06/hak5-2216-pseudocode-for-life-2-300x169.jpg 300w, https://www.hak5.org/wp-content/uploads/2017/06/hak5-2216-pseudocode-for-life-2-1024x576.jpg 1024w, https://www.hak5.org/wp-content/uploads/2017/06/hak5-2216-pseudocode-for-life-2-260x146.jpg 260w, https://www.hak5.org/wp-content/uploads/2017/06/hak5-2216-pseudocode-for-life-2-356x200.jpg 356w, https://www.hak5.org/wp-content/uploads/2017/06/hak5-2216-pseudocode-for-life-2-370x208.jpg 370w, https://www.hak5.org/wp-content/uploads/2017/06/hak5-2216-pseudocode-for-life-2-180x101.jpg 180w, https://www.hak5.org/wp-content/uploads/2017/06/hak5-2216-pseudocode-for-life-2-130x73.jpg 130w, https://www.hak5.org/wp-content/uploads/2017/06/hak5-2216-pseudocode-for-life-2-748x421.jpg 748w, https://www.hak5.org/wp-content/uploads/2017/06/hak5-2216-pseudocode-for-life-2-624x351.jpg 624w, https://www.hak5.org/wp-content/uploads/2017/06/hak5-2216-pseudocode-for-life-2.jpg 1280w" sizes="(max-width: 520px) 100vw, 520px" /> <div class="link-overlay fa fa-play"></div>
         # </a>
         # </div>
-        # <div class="clearfix"></div>
-        # </div><!--/col6-->
-        # <div class="col-md-6 col-sm-6">
-        # <div class="item-head row">
-        # <div class="col-md-10 col-sm-10 col-xs-9">
-        # <h3><a class="maincolor2hover" href="https://www.hak5.org/episodes/season-22/hak5-2217-bushveld-b-roll-hack-across-the-planet" rel="8851"
-        # title="Hak5 2217 – Bushveld B-Roll – Hack Across the Planet">Hak5 2217 &#8211; Bushveld B-Roll &#8211; Hack Across the Planet</a></h3>
-        # <div class="blog-meta">
-        # <span><a href="https://www.hak5.org/author/snubs" title="Posts by Shannon Morse" rel="author">Shannon Morse</a></span> |
-        # <span><a href="https://www.hak5.org/category/episodes/season-22" rel="category tag">Season 22</a></span>
-        # |
-        # <span><a href="https://www.hak5.org/episodes/season-22/hak5-2217-bushveld-b-roll-hack-across-the-planet#respond">0 Comments</a></span>
-        # </div>
-        # </div>
-        # <div class="col-md-2 col-sm-2 col-xs-3">
-        # <div class="blog-date">
-        # <span>05</span>
-        # <span>Jul</span>
+        # <div class="item-head">
+        # <h3><a href="https://www.hak5.org/episodes/hak5-2216-pseudocode-for-life-2-hack-across-the-planet" rel="8843" title="Hak5 2216 – Pseudocode for Life 2 – Hack Across the Planet">Hak5 2216 &#8211; Pseudocode for Life 2 &#8211; Hack Across the Planet</a>
+        # </h3>
+        # <div class="item-info hidden">
+        # <span class="item-author"><a href="https://www.hak5.org/author/snubs" title="Posts by Shannon Morse" rel="author">Shannon Morse</a></span>
+        # <span class="item-date">June 28, 2017</span>
+        # <div class="item-meta">
+        # <span><i class="fa fa-eye"></i> 0</span> <span><i class="fa fa-comment"></i> 0</span> <span><i class="fa fa-thumbs-up"></i> 1</span>
         # </div>
         # </div>
         # </div>
-        # <div class="blog-excerpt">
-        # <p>Happy 4th of July! Sign up for the London meetup at https://HackAcrossThePlanet.com &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;- Shop: ...
-        # <a href="https://www.hak5.org/episodes/season-22/hak5-2217-bushveld-b-roll-hack-across-the-planet" class="readmore maincolor2 bordercolor2 bgcolor2hover ...
+        # <div class="item-content hidden">
+        # <p>It&#8217;s better to regret something you have done than something you haven&#8217;t. Regular episodes resume August 2nd. UK meetups July 10-14. Sign up at https://HackAcrossThePlanet.com https://HackAcrossThePlanet.com &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;- Shop: http://www.hakshop.com Support: http://www.patreon.com/threatwire Subscribe: http://www.youtube.com/hak5 Our Site: http://www.hak5.org Contact Us: http://www.twitter.com/hak5 Threat Wire RSS: https://shannonmorse.podbean.com/feed/ Threat Wire iTunes: https://itunes.apple.com/us/podcast/threat-wire/id1197048999 Help us with Translations! http://www.youtube.com/timedtext_cs_panel?tab=2&#038;c=UC3s0BtrBJpwNDaflRSoiieQ &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;</p>
         # </div>
-        # </div><!--/col6-->
-        # </div><!--/row-->
         # <div class="clearfix"></div>
         # </div>
 
@@ -140,8 +125,8 @@ class Main:
 
         for episode in episodes:
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "episode)", str(episode)), xbmc.LOGDEBUG)
+            # xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+            #     ADDON, VERSION, DATE, "episode", str(episode)), xbmc.LOGDEBUG)
 
             video_page_url = episode.a['href']
 
@@ -156,7 +141,9 @@ class Main:
             xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
                 ADDON, VERSION, DATE, "thumbnail_url", str(thumbnail_url)), xbmc.LOGDEBUG)
 
-            title = episode.a['title']
+            pos_of_title_start = str(episode).find('title="') + len('title="')
+            pos_of_title_end = str(episode).find('"', pos_of_title_start)
+            title = str(episode)[pos_of_title_start:pos_of_title_end]
 
             # Clean up title
             try:
@@ -222,35 +209,41 @@ class Main:
             blog_date_year = blog_date[blog_date_year_start_pos: blog_date_year_end_pos]
 
             xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "blog_date_year)", str(blog_date_year)), xbmc.LOGDEBUG)
+                ADDON, VERSION, DATE, "blog_date_year", str(blog_date_year)), xbmc.LOGDEBUG)
 
             blog_date_month_start_pos = blog_date_year_end_pos + 1
             blog_date_month_end_pos = blog_date_month_start_pos + 2
             blog_date_month = blog_date[blog_date_month_start_pos:blog_date_month_end_pos]
 
             xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "blog_date_month)", str(blog_date_month)), xbmc.LOGDEBUG)
+                ADDON, VERSION, DATE, "blog_date_month", str(blog_date_month)), xbmc.LOGDEBUG)
 
             # lets find the blog date day
-            blog_date = episode.findAll('div', attrs={'class': re.compile("^" + 'blog-date')})
-            blog_date = str(blog_date)
-            blog_date_day_start_pos = blog_date.find('<span>')
-            blog_date_day_end_pos = blog_date.find('</span>')
-            blog_date_day = blog_date[blog_date_day_start_pos + len('<span>'):blog_date_day_end_pos]
+            blog_date = episode.findAll('span', attrs={'class': re.compile("^" + 'item-date')})
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "blog_date_day)", str(blog_date_day)), xbmc.LOGDEBUG)
+            if len(blog_date) == 0:
+                blog_date_day = '00'
+            else:
+                blog_date = str(blog_date[0].text)
+                blog_date_day_start_pos = blog_date.find(',') - 2
+                blog_date_day_end_pos = blog_date_day_start_pos + 2
+                blog_date_day = blog_date[blog_date_day_start_pos:blog_date_day_end_pos]
+
+                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+                    ADDON, VERSION, DATE, "blog_date_day", str(blog_date_day)), xbmc.LOGDEBUG)
 
             video_date = blog_date_year + '-' + blog_date_month + '-' + blog_date_day + ' 00:00:01'
 
             xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "video_date)", str(video_date)), xbmc.LOGDEBUG)
+                ADDON, VERSION, DATE, "video_date", str(video_date)), xbmc.LOGDEBUG)
 
             # Unescaping the plot
             try:
                 plot =  HTMLParser.HTMLParser().unescape(episode.p.text)
             except:
                 plot = title
+
+            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "plot", str(plot)), xbmc.LOGDEBUG)
 
             add_sort_methods()
 
@@ -300,6 +293,6 @@ class Main:
         xbmcplugin.endOfDirectory(self.plugin_handle)
 
 def add_sort_methods():
-	sort_methods = [xbmcplugin.SORT_METHOD_UNSORTED,xbmcplugin.SORT_METHOD_LABEL,xbmcplugin.SORT_METHOD_DATE,xbmcplugin.SORT_METHOD_DURATION,xbmcplugin.SORT_METHOD_EPISODE]
-	for method in sort_methods:
-		xbmcplugin.addSortMethod(int(sys.argv[1]), sortMethod=method)
+    sort_methods = [xbmcplugin.SORT_METHOD_UNSORTED,xbmcplugin.SORT_METHOD_LABEL,xbmcplugin.SORT_METHOD_DATE,xbmcplugin.SORT_METHOD_DURATION,xbmcplugin.SORT_METHOD_EPISODE]
+    for method in sort_methods:
+        xbmcplugin.addSortMethod(int(sys.argv[1]), sortMethod=method)

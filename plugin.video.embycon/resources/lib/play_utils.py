@@ -135,6 +135,7 @@ def playFile(play_info):
         externalSubs(result, list_item)
 
     list_item.setPath(playurl)
+
     list_item = setListItemProps(id, list_item, result, server, listitem_props, item_title)
 
     playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)

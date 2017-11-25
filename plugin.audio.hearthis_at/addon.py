@@ -86,9 +86,7 @@ def list_users(userlist, pagination = None, first=False, pre=[], post=[]):
     for u in userlist:
         items.append({'label': '%s%s (%s %s)' % ((u'[\u2665] ' if u.get('following', False)  else u''), u['username'], str(u['track_count']), _('tracks')), 
                       'icon': u['avatar_url'], 
-                      'context_menu':   [
-                                            context_item_toggle('follow', u['following'], {'user': u['permalink']})
-                                        ],
+                      'context_menu':   context_item_toggle('follow', u['following'], {'user': u['permalink']}),
                       'path': plugin.url_for('show_user_first', user=u['permalink'], page=1, first=True)})
     items = items + post
     items.append(pn_button(pagination, 1, len(userlist)))

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.watchmojo" name="Watchmojo" provider-name="willforde" version="3.0.0">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.codequick" version="0.9.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Top 10 lists on Music, TV, Film and Video Games.</summary>
+        <description lang="en_GB">Top 10 lists on Music, TV, Film and Video Games. We publish 4 or more Top 10s daily. Subscribe for new top 10 lists every day, and binge watch on Top 10s covering Pop Culture, Celebrity, Movies, Music, TV, Film, Video Games, Politics, News, Comics and Superheroes. WatchMojo’s back catalogue has ten thousand videos on Top 10 lists, Origins, Biographies, Tips, How To’s, Reviews, Commentary and more Your trusted authority on ranking Pop Culture.</description>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <source>https://github.com/willforde/plugin.video.watchmojo</source>
+        <forum>http://forum.kodi.tv/showthread.php?tid=178802</forum>
+        <website>http://www.watchmojo.com</website>
+        <email>willforde+addon@gmail.com</email>
+        <platform>all</platform>
+        <language>en</language>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+            <screenshot>resources/screenshots/screenshot000.jpg</screenshot>
+            <screenshot>resources/screenshots/screenshot001.jpg</screenshot>
+            <screenshot>resources/screenshots/screenshot002.jpg</screenshot>
+        </assets>
+        <news>[upd] Upgraded to use the codequick framework.</news>
+    </extension>
+</addon>

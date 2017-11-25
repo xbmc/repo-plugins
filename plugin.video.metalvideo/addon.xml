@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.metalvideo" name="Metalvideo" provider-name="willforde" version="3.0.0">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.codequick" version="0.9.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>audio video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Heavy Metal Music Videos.</summary>
+        <description lang="en_GB">A Place for all your heavy metal music videos, With loads of categorys.</description>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <source>https://github.com/willforde/plugin.video.metalvideo</source>
+        <forum>http://forum.kodi.tv/showthread.php?tid=178798</forum>
+        <website>http://metalvideo.com</website>
+        <email>willforde+addon@gmail.com</email>
+        <platform>all</platform>
+        <language>en</language>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+            <screenshot>resources/screenshots/screenshot000.jpg</screenshot>
+            <screenshot>resources/screenshots/screenshot001.jpg</screenshot>
+            <screenshot>resources/screenshots/screenshot002.jpg</screenshot>
+        </assets>
+        <news>[upd] Upgraded to use the codequick framework.</news>
+    </extension>
+</addon>

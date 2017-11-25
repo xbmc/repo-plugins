@@ -56,6 +56,25 @@ class PlayUtils():
         if force_transcode:
             playback_type = "2"
 
+        is_h265 = False
+        streams = result.get("MediaStreams", [])
+        for stream in streams:
+            if stream.get("Type", "") == "Video" and stream.get("Codec", "") in ["hevc", "h265"]:
+                is_h265 = True
+                break
+        if is_h265:
+            log.debug("H265_IS_TRUE")
+            h265_action = addonSettings.getSetting("h265_action")
+            if h265_action == "1":
+                log.debug("H265 override play action: setting to Direct Streaming")
+                playback_type = "1"
+            elif h265_action == "2":
+                log.debug("H265 override play action: setting to Transcode Streaming")
+                playback_type = "2"
+
+        if force_transcode:
+            playback_type = "2"
+
         # transcode
         if playback_type == "2":
 

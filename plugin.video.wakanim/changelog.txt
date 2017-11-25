@@ -1,0 +1,25 @@
+v0.5.0 (2017.10.10)
+- Removed internal server redirect
+
+v0.4.0 (2017.10.10)
+- Added screenshots
+- Small optimations
+- Internal rewrites
+- Fixed possible encoding problem
+
+v0.3.2 (2017.10.08)
+- Fix playback not possible due security changes
+- Fix playback bought videos
+
+v0.3.1 (2017.10.07)
+- Cleanup of never implemented feature
+
+v0.3.0 (2017.10.03)
+- Added nordic support
+
+v0.2.0 (2017.09.24)
+- Added france support
+- Added API for other addons
+
+v0.1.0 (2017.09.23)
+- Initial BETA release

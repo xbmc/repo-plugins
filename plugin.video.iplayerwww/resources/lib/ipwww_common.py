@@ -36,7 +36,7 @@ addonid = "plugin.video.iplayerwww"
 addoninfo = GetAddonInfo()
 DIR_USERDATA = xbmc.translatePath(addoninfo["profile"])
 cookie_jar = None
-user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:51.0) Gecko/20100101 Firefox/51.0'
+user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0'
 headers = {'User-Agent': user_agent}
 
 
@@ -171,7 +171,7 @@ def SignInBBCiD():
                'attempts':'0'}
     
     #Regular expression to get 'nonce' from login page
-    p = re.compile('form method="post" action="([^""]*)"')
+    p = re.compile('action="([^""]*)"')
     
     with requests.Session() as s:
         resp = s.get('https://www.bbc.com/', headers=headers)
@@ -419,27 +419,27 @@ def CreateBaseDirectory(content_type):
             live_mode = 123
         AddMenuEntry(translation(30329), 'cbeebies_hd', live_mode,
                      xbmc.translatePath(
-                         'special://home/addons/plugin.video.iplayerwww/media/cbeebies.png'
+                         'special://home/addons/plugin.video.iplayerwww/media/cbeebies_hd.png'
                      ),
                      '', '')
         AddMenuEntry(translation(30330), 'cbbc_hd', live_mode,
                      xbmc.translatePath(
-                         'special://home/addons/plugin.video.iplayerwww/media/cbbc.png'
+                         'special://home/addons/plugin.video.iplayerwww/media/cbbc_hd.png'
                      ),
                      '', '')
         AddMenuEntry(translation(30331), 'cbeebies', 125,
                      xbmc.translatePath(
-                         'special://home/addons/plugin.video.iplayerwww/media/cbeebies.png'
+                         'special://home/addons/plugin.video.iplayerwww/media/cbeebies_hd.png'
                      ),
                      '', '')
         AddMenuEntry(translation(30332), 'cbbc', 125,
                      xbmc.translatePath(
-                         'special://home/addons/plugin.video.iplayerwww/media/cbbc.png'
+                         'special://home/addons/plugin.video.iplayerwww/media/cbbc_hd.png'
                      ),
                      '', '')
         AddMenuEntry(translation(30333), 'p02pnn9d', 131,
                      xbmc.translatePath(
-                         'special://home/addons/plugin.video.iplayerwww/media/cbeebies.png'
+                         'special://home/addons/plugin.video.iplayerwww/media/cbeebies_hd.png'
                      ),
                      '', '')
         return
@@ -447,7 +447,7 @@ def CreateBaseDirectory(content_type):
     if content_type == "video":
         ShowLicenceWarning()
         if ADDON.getSetting("menu_video_highlights") == 'true':
-            AddMenuEntry(translation(30300), 'iplayer', 106,
+            AddMenuEntry(translation(30300), 'iplayer', 198,
                          xbmc.translatePath(
                            'special://home/addons/plugin.video.iplayerwww/media/top_rated.png'
                                             ),
@@ -568,7 +568,7 @@ def CreateBaseDirectory(content_type):
     else:
         ShowLicenceWarning()
         if ADDON.getSetting("menu_video_highlights") == 'true':
-            AddMenuEntry((translation(30323)+translation(30300)), 'iplayer', 106,
+            AddMenuEntry((translation(30323)+translation(30300)), 'iplayer', 198,
                          xbmc.translatePath(
                            'special://home/addons/plugin.video.iplayerwww/media/top_rated.png'
                                             ),

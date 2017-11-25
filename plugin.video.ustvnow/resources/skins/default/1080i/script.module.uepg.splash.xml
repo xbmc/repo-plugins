@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<window>
+    <allowoverlay>no</allowoverlay>
+    <depth>2</depth>
+    <zorder>2</zorder>
+    <coordinates>
+        <left>0</left>
+        <top>0</top>
+    </coordinates>
+    <onload>SetProperty(uEPGSplash,True,10000)</onload>
+    <onunload>SetProperty(uEPGSplash,False,10000)</onunload> 
+    <animation effect="fade" start="0" end="100" time="100">WindowOpen</animation>
+    <animation effect="fade" start="100" end="0" time="100">WindowClose</animation>
+    <controls> 
+        <control type="image">
+            <width>1920</width>
+            <height>1080</height>
+            <texture>Splash.gif</texture>
+        </control>
+    </controls>
+</window>

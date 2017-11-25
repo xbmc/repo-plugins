@@ -120,6 +120,9 @@ elif mode == 105:
 elif mode == 106:
     Video.ListHighlights(url)
 
+elif mode == 198:
+    Video.ListMainHighlights(url)
+
 elif mode == 107:
     Video.ListWatching(logged_in)
 

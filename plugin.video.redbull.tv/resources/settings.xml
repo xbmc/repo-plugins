@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="30000">
+		<setting id="video.resolution" type="enum" label="30010" default="4" lvalues="30011|30012|30013|30014|30015|30016" />
+	</category>
+</settings>

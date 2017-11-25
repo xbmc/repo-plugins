@@ -58,11 +58,14 @@ class KIKA(Mediathek):
       )
 
     self.regex_videoLinks=re.compile("<a href=\"(.*?/videos/video\\d+?)\\.html\"");
-    self.regex_configLinks=re.compile("{dataURL:'http://www.kika.de(/.*?-avCustom.xml)'}");
+    self.regex_allVideosLinks=re.compile("<a href=\"(.*?/sendungen/allevideos.*?\\.html)\"");
+    self.regex_configLinks=re.compile("\\{dataURL:'https{0,1}:\\/\\/www\\.kika\\.de(\\/.*?-avCustom.*\\.xml)'\\}");
+    self.selector_allVideoPage = "div.mod > div.boxCon > div.box > div.teaser > a.linkAll";
     self.selector_videoPages = "div.mod > div.box > div.teaser > a.linkAll";
     self.selector_seriesPages = "div.modCon > div.mod > div.boxCon > div.boxBroadcastSeries > div.teaser > a.linkAll";
     self.regex_xml_channel=re.compile("<channelName>(.*?)</channelName>");
     self.regex_xml_title=re.compile("<title>(.*?)</title>");
+    self.regex_xml_time=re.compile("<webTime>(.*?)</webTime>");
     self.regex_xml_image=re.compile("<teaserimage>\\s*?<url>(.*?)</url>");
     self.regex_xml_videoLink=re.compile("<asset>\\s*?<profileName>(.*?)</profileName>.*?<progressiveDownloadUrl>(.*?)</progressiveDownloadUrl>\\s*?</asset>",re.DOTALL)
     self.regex_videoLink=re.compile("rtmp://.*?\.mp4");
@@ -70,10 +73,12 @@ class KIKA(Mediathek):
   def name(self):
     return "KI.KA";
 
+  @classmethod
   def isSearchable(self):
     return False;
 
-  def searchVideo(self, searchText):
+  @classmethod
+  def searchVideo(self,searchText):
     return;
 
   def buildVideoLink(self,pageLink):
@@ -89,7 +94,7 @@ class KIKA(Mediathek):
     for match in self.regex_xml_videoLink.finditer(xmlPage):
       profile = match.group(1);
       directLink = match.group(2);
-      self.gui.log("%s %s"%(profile,directLink));
+      #self.gui.log("%s %s"%(profile,directLink));
       if("MP4 Web S" in profile):
         links[0] = SimpleLink(directLink, 0);
       if("MP4 Web L" in profile):
@@ -99,17 +104,39 @@ class KIKA(Mediathek):
       if("MP4 Web XL" in profile):
         links[3] = SimpleLink(directLink, 0);
 
+    date = None
+    date = time.strptime(unicode(self.regex_xml_time.search(xmlPage).group(1),"UTF-8"),u"%d.%m.%Y %H:%M");
     if(channel is not None):
-      return DisplayObject(channel,title,image,"",links,True, None);
+      return DisplayObject(channel,title,image,"",links,True, date);
     else:
-      return DisplayObject(title,"",image,"",links,True, None);
+      return DisplayObject(title,"",image,"",links,True, date);
 
   def buildPageMenu(self, link, initCount):
+    videoLinks = set()
     pageContent = self.loadPage(link);
     htmlPage =  BeautifulSoup(pageContent, 'html.parser')
-    htmlElements = htmlPage.select(self.selector_videoPages)
-    videoLinks = set()
 
+    htmlElements = htmlPage.select(self.selector_videoPages)
+    self.gui.log("found %d htmlElements"%len(htmlElements));
+    self.extractConfigLinks(videoLinks,pageContent);
+    self.extractVideoLinks(videoLinks,htmlElements);
+
+    if(len(videoLinks) == 0):
+      htmlElements = htmlPage.select(self.selector_allVideoPage)
+      self.extractVideoLinks(videoLinks,htmlElements);
+    count = initCount + len(videoLinks)
+
+    self.extractSubFolders(htmlPage,count);
+    displayObects = set()
+    for link in videoLinks:
+      displayObject = self.buildVideoLink(link);
+      displayObects.add(displayObject);
+    displayObects_sorted = sorted(displayObects, key=lambda displayObject: displayObject.date)
+    self.gui.log("found %d display obj "%len(displayObects))
+    for displayObject in displayObects_sorted:
+      self.gui.buildVideoLink(displayObject,self, count);
+
+  def extractVideoLinks(self,videoLinks,htmlElements):
     for item in htmlElements:
       link = self.rootLink+item['href'];
       videoPage = self.loadPage(link);
@@ -117,24 +144,33 @@ class KIKA(Mediathek):
         link=match.group(1)+"-avCustom.xml";
         if(link not in videoLinks):
           videoLinks.add(link)
-    directLinks = list(self.regex_configLinks.finditer(pageContent));      
+    self.gui.log("found %d video links"%len(videoLinks))
+
+  def extractConfigLinks(self,videoLinks,pageContent):
+    directLinks = list(self.regex_configLinks.finditer(pageContent));
     for match in directLinks:
       link = match.group(1);
       if(link not in videoLinks):
-        videoLinks.add(link)      
-    self.gui.log("found %d video links"%len(videoLinks))
-    count = initCount + len(videoLinks)
-    for link in videoLinks:
-      displayObject = self.buildVideoLink(link);
-      self.gui.buildVideoLink(displayObject,self, count);
-    if(len(videoLinks) > 0):
-      return;
-    htmlElements = htmlPage.select(self.selector_seriesPages);
-    count = count + len(htmlElements)
+        videoLinks.add(link)
+    self.gui.log("found %d config links"%len(videoLinks))
+
+  def extractSubFolders(self, htmlPage,initCount):
+    htmlElements = htmlPage.select(self.selector_seriesPages) + htmlPage.select(self.selector_allVideoPage);
     self.gui.log("found %d page links"%len(htmlElements))
+    count = initCount + len(htmlElements)
+    displayObects = set()
     for item in htmlElements:
-      self.gui.log(item.prettify());
       link = self.rootLink+item['href'];
       title = item['title'];
-      displayObject = DisplayObject(title,"",None,"",link,False, None);
+      #i'am uncertain why this is needed. a.linkAll should be found by selector_allVideoPage
+      if(item.has_attr('onclick')):
+        self.gui.log("onclick detected - skip link")
+        continue;
+      if(title == ""):
+        continue;
+      displayObject = DisplayObject("Alle Videos",title,"","",link,False);
+      displayObects.add(displayObject);
+    displayObects_sorted = sorted(displayObects, key=lambda displayObject: displayObject.title)
+    for displayObject in displayObects_sorted:
       self.gui.buildVideoLink(displayObject,self, count);
+    return count;

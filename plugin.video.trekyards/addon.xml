@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.trekyards" version="1.0.0" name="TrekYards - YouTube" provider-name="Lunatixz">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="plugin.video.youtube" version="5.3.10"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">If you love Star Trek, Star Wars, or just great Sci-Fi then this channel is for you.</summary>
+        <description lang="en_GB">This is the domain for the Trekyards Webseries, where we examine the ships and tech from the Star Trek Universe.  We interview the people behind Star Trek (past, present and future) and get their exclusive and interesting perspectives on the designs and history of this amazing franchise.  Industry greats like Doug Drexler, Rick Sternbach, John Eaves, Andrew Probert,  Rob Bonchune,  Tobias Richter, Alec Peters, Larry Nemecek, Rob Burnett, Scott Nakada and many more join us on a regular basis to talk Trek and allow you, the viewers to gain a unique perspective on the world both in universe and behind the scenes.  The channel focus's on Stuart "Captain" Foley and Samuel "Commander" Cockings lives, including product reviews, unboxings, Captains Log's (a behind the scenes look at Trekyards), Fleetyards (sci-fi ships from all franchises) model building videos and assorted other goodies.  If you love Star Trek, Star Wars, or just great Sci-Fi then this channel is for you.  Welcome and enjoy!</description>
+        <platform>all</platform>
+        <website>http://trekyards.com</website>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+        <source>https://github.com/Lunatixz/plugin.video.trekyards/tree/master</source>
+        <forum>https://forum.kodi.tv/showthread.php?tid=323520</forum>
+        <news></news>
+        <assets>
+            <icon>resources/images/icon.png</icon>
+            <fanart>resources/images/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>

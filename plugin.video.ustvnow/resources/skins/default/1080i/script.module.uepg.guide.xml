@@ -1,0 +1,673 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<window>
+    <allowoverlay>no</allowoverlay>
+    <depth>2</depth>
+    <zorder>2</zorder>
+    <coordinates>
+        <left>0</left>
+        <top>0</top>
+    </coordinates>
+    <onload>SetProperty(uEPG.timeCount,3,10000)</onload>
+    <onload>SetProperty(uEPG.textColor,0xFFFFFFFF,10000)</onload>
+    <onload>SetProperty(uEPG.disabledColor,0xFFFFFFFF,10000)</onload>
+    <onload>SetProperty(uEPG.focusedColor,0xFFFFFFFF,10000)</onload>
+    <onload>SetProperty(uEPG.shadowColor,0xFF000000,10000)</onload>
+    <onload>SetProperty(uEPG.pastColor,0xFFFFFFFF,10000)</onload>
+    <onload>SetProperty(uEPG.timeColor,0xFFFFFFFF,10000)</onload>
+    <onload>SetProperty(uEPG.textFont,font12,10000)</onload>
+    <onload>SetProperty(uEPGGuide,True,10000)</onload>
+    <onunload>SetProperty(uEPGGuide,False,10000)</onunload> 
+    <animation effect="fade" start="0" end="100" time="100">WindowOpen</animation>
+    <animation effect="fade" start="100" end="0" time="100">WindowClose</animation>
+    <controls> 
+        <control type="image">
+            <width>1920</width>
+            <height>1080</height>
+            <texture>Splash.png</texture>
+            <animation effect="fade" start="25" end="25" condition="True">Conditional</animation>
+        </control>
+        <control type="image">
+            <width>1920</width>
+            <height>1080</height>
+            <texture>Background.png</texture>
+            <animation effect="fade" start="85" end="85" condition="True">Conditional</animation>
+        </control>
+        <control type="image">
+            <width>1920</width>
+            <height>1080</height>
+            <texture colordiffuse="FF000000">Overlay.png</texture>
+            <animation effect="fade" start="15" end="15" condition="True">Conditional</animation>
+        </control>
+        <control type="image">
+            <description>Artwork</description>
+            <left>1660</left>
+            <top>0</top>  
+            <width>200</width>
+            <height>200</height>
+            <!-- <visible>!Control.HasFocus(40001)</visible> -->
+            <aspectratio scalediffuse="true" align="center" aligny="center">keep</aspectratio>
+            <texture fallback="" background="true">USTVnow.png</texture>
+        </control> 
+        <control type="fixedlist" id="40000">
+            <itemlayout width="0" height="0">
+            </itemlayout>
+            <focusedlayout height="0" width="0">
+            </focusedlayout>
+        </control>
+        <control type="group">
+            <left>25</left>
+            <top>2</top>
+            <width>1848</width>
+            <height>500</height>
+            <!-- <visible>!Control.HasFocus(40001)</visible> -->
+            <control type="image">
+                <description>Artwork</description>
+                <left>10</left>
+                <top>105</top>  
+                <width>375</width>
+                <height>260</height>
+                <aspectratio scalediffuse="true" align="center" aligny="center">stretch</aspectratio>
+                <texture fallback="fanart.png" background="true">$INFO[Container(40000).ListItem.Art(thumb)]</texture>
+                <animation effect="fade" time="100">VisibleChange</animation> 
+                <visible>!Player.Playing</visible>
+            </control> 
+            <control type="image">
+                <description>Artwork</description>
+                <left>10</left>
+                <top>105</top>  
+                <width>375</width>
+                <height>260</height>
+                <aspectratio scalediffuse="true" align="center" aligny="center">stretch</aspectratio>
+                <texture>blur.png</texture>
+                <animation effect="fade" start="85" end="85" condition="True">Conditional</animation>
+                <visible>[!Player.Playing + !String.IsEmpty(Container(40000).ListItem.Art(poster))]</visible>
+            </control>
+            <control type="image">
+                <description>Artwork</description>
+                <left>10</left>
+                <top>105</top>  
+                <width>375</width>
+                <height>260</height>
+                <aspectratio scalediffuse="true" align="center" aligny="center">keep</aspectratio>
+                <texture background="true">$INFO[Container(40000).ListItem.Art(poster)]</texture>
+                <animation effect="fade" time="100">VisibleChange</animation> 
+                <visible>[!Player.Playing + !String.IsEmpty(Container(40000).ListItem.Art(poster))]</visible>
+            </control> 
+            <control type="videowindow">
+                <description>VideoWindow</description>
+                <left>10</left>
+                <top>85</top>  
+                <width>375</width>
+                <height>260</height>
+            </control>
+            <control type="label">
+                <description>Show Info</description>
+                <left>411</left>
+                <top>105</top>
+                <width>1468</width>
+                <height>40</height>
+                <font>font60</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <shadowcolor>ff000000</shadowcolor>
+                <aligny>center</aligny>
+                <align>left</align>
+                <label>$INFO[Container(40000).ListItem.Title]</label>
+            </control>
+            <control type="grouplist">
+                <left>405</left>
+                <top>180</top>
+                <itemgap>1</itemgap>
+                <orientation>horizontal</orientation>
+                <control type="image">
+                    <width>100</width>
+                    <height>40</height>
+                    <aspectratio scalediffuse="true" align="center" aligny="center">keep</aspectratio>
+                    <texture colordiffuse="FFFF2042">Live.png</texture>
+                    <animation effect="fade" time="100">VisibleChange</animation> 
+                </control>
+                <control type="image">
+                    <width>90</width>
+                    <height>40</height>
+                    <aspectratio scalediffuse="true" align="center" aligny="center">keep</aspectratio>
+                    <texture colordiffuse="C0C0C0C0">CC.png</texture>
+                    <animation effect="fade" time="100">VisibleChange</animation> 
+                </control> 
+                <control type="image">
+                    <width>90</width>
+                    <height>40</height>
+                    <aspectratio scalediffuse="true" align="center" aligny="center">keep</aspectratio>
+                    <texture fallback="" background="true">$INFO[Container(40000).ListItem.Art(clearlogo)]</texture>
+                    <animation effect="fade" time="100">VisibleChange</animation> 
+                </control>
+            </control>
+            <control type="label">
+                <description>Show Info</description>
+                <left>411</left>
+                <top>235</top>
+                <width>1400</width>
+                <height>250</height>
+                <font>font30</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <shadowcolor>FF000000</shadowcolor>
+                <aligny>top</aligny>
+                <align>left</align>
+                <scroll>true</scroll>
+                <wrapmultiline>true</wrapmultiline>
+                <scrollspeed>50</scrollspeed>
+                <scrollsuffix> - </scrollsuffix>
+                <label>$INFO[Container(40000).ListItem..plot]</label>
+            </control>
+        </control>       
+        <control type="group">
+            <left>0</left>
+            <top>350</top>
+            <control type="group">
+                <left>0</left>
+                <top>110</top>
+                <control type="image">
+                    <left>35</left>
+                    <top>2</top>
+                    <width>1848</width>
+                    <height>40</height>
+                    <texture>Bar.png</texture>
+                </control>
+                <control type="image">
+                    <left>35</left>
+                    <top>42</top>
+                    <width>1848</width>
+                    <height>40</height>
+                    <texture>Lines.png</texture>
+                </control>
+                <control type="label" id="33005">
+                    <description>Date Label</description>
+                    <left>45</left>
+                    <width min="162" max="400">auto</width>
+                    <height>38</height>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <font>font12</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                </control> 
+                <control type="label" id="33007">
+                    <description>Timebar Current Time Button</description>
+                    <left>420</left>
+                    <width min="155" max="200">auto</width>
+                    <height>38</height>
+                    <fadetime>250</fadetime>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <font>font12</font>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                </control>
+                <control type="label" id="33101">
+                    <description>Time Label</description>
+                    <left>405</left>
+                    <width min="155" max="200">auto</width>
+                    <height>38</height>
+                    <label>Time 1</label>
+                    <font>font12</font>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                </control>
+                <control type="label" id="33102">
+                    <description>Time Label</description>
+                    <left>895</left>
+                    <width min="155" max="200">auto</width>
+                    <height>38</height>
+                    <label>Time 2</label>
+                    <font>font12</font>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                </control>
+                <control type="label" id="33103">
+                    <description>Time Label</description>
+                    <left>1390</left>
+                    <width min="155" max="200">auto</width>
+                    <height>38</height>
+                    <label>Time 3</label>
+                    <font>font12</font>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                </control>
+            </control>
+            <control type="image" id="33013">
+                <description>Timebar line</description>
+                <left>400</left>
+                <top>507</top>
+                <width>40</width>
+                <height>25</height>
+                <aspectratio>keep</aspectratio>
+            </control>
+            <control type="group">            
+                <left>25</left>
+                <top>0</top>
+                <itemgap>0</itemgap>
+                <orientation>vertical</orientation>
+                <control type="image">
+                    <left>10</left>
+                    <top>189</top>
+                    <width>375</width>
+                    <height>74</height>
+                    <texture>epg-genres\COLOR_ButtonNoFocus.png</texture>
+                </control>
+                <control type="image"> 
+                    <left>10</left>
+                    <top>264</top>  
+                    <width>375</width>
+                    <height>74</height>
+                    <texture>epg-genres\COLOR_ButtonNoFocus.png</texture>
+                </control>
+                <control type="image">  
+                    <left>10</left>
+                    <top>339</top>  
+                    <width>375</width>
+                    <height>74</height>
+                    <texture>epg-genres\COLOR_ButtonNoFocus.png</texture>
+                </control>
+                <control type="image">
+                    <left>10</left>
+                    <top>414</top>  
+                    <width>375</width>
+                    <height>74</height>
+                    <texture>epg-genres\COLOR_ButtonNoFocus.png</texture>
+                </control>
+                <control type="image">
+                    <left>10</left>
+                    <top>489</top>  
+                    <width>375</width>
+                    <height>74</height>
+                    <texture>epg-genres\COLOR_ButtonNoFocus.png</texture>
+                </control>
+                <control type="image">
+                    <left>10</left>
+                    <top>563</top>  
+                    <width>375</width>
+                    <height>74</height>
+                    <texture>epg-genres\COLOR_ButtonNoFocus.png</texture>
+                </control>
+                <control type="image">
+                    <left>10</left>
+                    <top>637</top>  
+                    <width>375</width>
+                    <height>74</height>
+                    <texture>epg-genres\COLOR_ButtonNoFocus.png</texture>
+                </control>
+            </control> 
+            <control type="grouplist">
+                <left>10</left>
+                <top>189</top>
+                <itemgap>0</itemgap>
+                <orientation>vertical</orientation>
+                <description>Number</description>
+                <control type="label" id="33111">
+                    <description>Channel 1 Number</description>
+                    <width>75</width>
+                    <height>75</height>
+                    <label></label>
+                    <font>font32_title</font>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                </control>
+                <control type="label" id="33112">
+                    <description>Channel 2 Number</description>
+                    <width>75</width>
+                    <height>75</height>
+                    <label></label>
+                    <font>font32_title</font>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                </control>
+                <control type="label" id="33113">
+                    <description>Channel 3 Number</description>
+                    <width>75</width>
+                    <height>75</height>
+                    <label></label>
+                    <font>font32_title</font>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                </control>
+                <control type="label" id="33114">
+                    <description>Channel 4 Number</description>
+                    <width>75</width>
+                    <height>75</height>
+                    <label></label>
+                    <font>font32_title</font>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                </control>
+                <control type="label" id="33115">
+                    <description>Channel 5 Number</description>
+                    <width>75</width>
+                    <height>75</height>
+                    <label></label>
+                    <font>font32_title</font>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                </control>
+                <control type="label" id="33116">
+                    <description>Channel 6 Number</description>
+                    <width>75</width>
+                    <height>75</height>
+                    <label></label>
+                    <font>font32_title</font>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                </control>
+                <control type="label" id="33117">
+                    <description>Channel 7 Number</description>
+                    <width>75</width>
+                    <height>75</height>
+                    <label></label>
+                    <font>font32_title</font>
+                    <align>right</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                </control>
+            </control>
+            <control type="image" id="33411">
+                <description>Channel 1 Icon</description>
+                <visible>false</visible>
+            </control>
+            <control type="image" id="33412">
+                <description>Channel 2 Icon</description>
+                <visible>false</visible>
+            </control>
+            <control type="image" id="33413">
+                <description>Channel 3 Icon</description>
+                <visible>false</visible>
+            </control>
+            <control type="image" id="33414">
+                <description>Channel 4 Icon</description>
+                <visible>false</visible>
+            </control>
+            <control type="image" id="33415">
+                <description>Channel 5 Icon</description>
+                <visible>false</visible>
+            </control>
+            <control type="image" id="33416">
+                <description>Channel 6 Icon</description>
+                <visible>false</visible>
+            </control>
+            <control type="image" id="33417">
+                <description>Channel 7 Icon</description>
+                <visible>false</visible>
+            </control>
+            <control type="group">            
+                <left>25</left>
+                <top>0</top>
+                <width>278</width>
+                <height>75</height>
+                <itemgap>0</itemgap>
+                <orientation>vertical</orientation>
+                <description>Names</description>
+                <control type="label" id="33511">
+                    <description>Channel 1 Name</description>          
+                    <left>90</left>
+                    <top>189</top>
+                    <width>255</width>
+                    <height>75</height>
+                    <font>font12</font>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                </control>
+                <control type="label" id="33512">
+                    <description>Channel 2 Name</description>     
+                    <left>90</left>
+                    <top>264</top>  
+                    <width>255</width>
+                    <height>75</height>
+                    <label></label>
+                    <font>font12</font>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                </control>
+                <control type="label" id="33513">
+                    <description>Channel 3 Name</description>
+                    <left>90</left>
+                    <top>339</top>  
+                    <width>255</width>
+                    <height>75</height>
+                    <label></label>
+                    <font>font12</font>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                </control>
+                <control type="label" id="33514">
+                    <description>Channel 4 Name</description>     
+                    <left>90</left>
+                    <top>414</top>  
+                    <width>255</width>
+                    <height>75</height>
+                    <label></label>
+                    <font>font12</font>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                </control>
+                <control type="label" id="33515">
+                    <description>Channel 5 Name</description>     
+                    <left>90</left>
+                    <top>489</top>  
+                    <width>255</width>
+                    <height>75</height>
+                    <label></label>
+                    <font>font12</font>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                </control>
+                <control type="label" id="33516">
+                    <description>Channel 6 Name</description>     
+                    <left>90</left>
+                    <top>564</top>  
+                    <width>255</width>
+                    <height>75</height>
+                    <label></label>
+                    <font>font12</font>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                </control>
+                <control type="label" id="33517">
+                    <description>Channel 7 Name</description>     
+                    <left>90</left>
+                    <top>639</top>  
+                    <width>255</width>
+                    <height>75</height>
+                    <label></label>
+                    <font>font12</font>
+                    <align>left</align>
+                    <aligny>center</aligny>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <shadowcolor>ff000000</shadowcolor>
+                </control> 
+            </control> 
+        </control>
+        <control type="group" id="33611">
+            <left>411</left>
+            <top>539</top>
+            <width>1475</width>
+            <height>74</height>
+        </control>
+        <control type="group" id="33612">
+            <left>411</left>
+            <top>614</top>
+            <width>1475</width>
+            <height>74</height>
+        </control>
+        <control type="group" id="33613">
+            <left>411</left>
+            <top>689</top>
+            <width>1475</width>
+            <height>74</height>
+        </control>
+        <control type="group" id="33614">
+            <left>411</left>
+            <top>765</top>
+            <width>1475</width>
+            <height>74</height>
+        </control>
+        <control type="group" id="33615">
+            <left>411</left>
+            <top>840</top>
+            <width>1475</width>
+            <height>74</height>
+        </control>  
+        <control type="group" id="33616">
+            <left>411</left>
+            <top>913</top>
+            <width>1475</width>
+            <height>74</height>
+        </control>  
+        <control type="group" id="33617">
+            <left>411</left>
+            <top>987</top>
+            <width>1475</width>
+            <height>74</height>
+        </control> 
+        <control type="image" id="33011"> 
+            <description>Timebar Optional past fade</description>
+            <left>411</left>
+            <top>539</top>
+            <width>-1</width>
+            <height>520</height>
+            <aspectratio>scale</aspectratio>
+        </control>
+        <control type="image" id="33012"> 
+            <description>Timebar Optional future fade</description>
+            <left>411</left>
+            <top>539</top>
+            <width>-1</width>
+            <height>520</height>
+            <aspectratio>scale</aspectratio>
+        </control>
+        <control type="image" id="33009">
+            <description>Optional Channel Focus Highlight</description>
+            <left>345</left>       
+            <top>-1000</top>  
+            <height>74</height>  
+            <width>74</width>
+            <texture>Arrow.png</texture>
+            <animation effect="fade" start="85" end="85" condition="True">Conditional</animation>
+        </control> 
+        <control type="image" id="33010">
+            <description>Optional Channel Playing Highlight</description>
+            <left>345</left>  
+            <top>-1000</top>  
+            <height>74</height>  
+            <width>74</width>
+            <texture colordiffuse="FF0297eb">Arrow.png</texture>
+            <animation effect="fade" start="85" end="85" condition="True">Conditional</animation>
+        </control>
+        <control type="fixedlist" id="40001">
+            <left>446</left>
+            <top>325</top>
+            <width>1848</width>
+            <height>133</height>
+            <orientation>vertical</orientation>
+            <content target="video" sortby="title" sortorder="" limit="1">plugin://plugin.video.ustvnow/?mode=1</content>
+            <itemlayout height="133" width="1848">
+                <control type="textbox">
+                    <left>910</left>
+                    <width>120</width>
+                    <height>133</height>
+                    <font>font12</font>
+                    <textcolor>C0C0C0C0</textcolor>
+                    <shadowcolor>FF000000</shadowcolor>
+                    <aligny>center</aligny>
+                    <align>right</align>
+                    <wrapmultiline>true</wrapmultiline>
+                    <info>ListItem.Label</info>
+                </control>
+                <control type="image">
+                    <left>1282</left>
+                    <width>120</width>
+                    <height>133</height>
+                    <aspectratio scalediffuse="true" align="center" aligny="center">keep</aspectratio>
+                    <info>ListItem.Art(thumb)</info>
+                </control>
+            </itemlayout>
+            <focusedlayout height="133" width="1848">
+                <control type="textbox">
+                    <left>910</left>
+                    <width>350</width>
+                    <height>133</height>
+                    <font>font12</font>
+                    <textcolor>C0C0C0C0</textcolor>
+                    <shadowcolor>FF000000</shadowcolor>
+                    <aligny>center</aligny>
+                    <align>right</align>
+                    <wrapmultiline>true</wrapmultiline>
+                    <info>ListItem.Label</info>
+                </control>
+                <control type="image">
+                    <left>1282</left>
+                    <width>120</width>
+                    <height>133</height>
+                    <aspectratio scalediffuse="true" align="center" aligny="center">keep</aspectratio>
+                    <animation effect="fade" time="100">VisibleChange</animation> 
+                    <info>ListItem.Icon</info>
+                </control>
+            </focusedlayout>
+        </control>
+        <!-- <control type="fixedlist" id="40002"> -->
+            <!-- <left>35</left> -->
+            <!-- <top>2</top> -->
+            <!-- <width>1848</width> -->
+            <!-- <height>500</height> -->
+            <!-- <orientation>horizontal</orientation> -->
+            <!-- <content target="video" sortby="title" sortorder="" limit="10">plugin://plugin.video.ustvnow/?mode=2</content> -->
+            <!-- <itemlayout height="200" width="200"> -->
+                <!-- <control type="image"> -->
+                    <!-- <left>5</left> -->
+                    <!-- <top>35</top>   -->
+                    <!-- <width>180</width> -->
+                    <!-- <height>200</height> -->
+                    <!-- <aspectratio scalediffuse="true" align="center" aligny="center">keep</aspectratio> -->
+                    <!-- <animation effect="fade" time="100">VisibleChange</animation>  -->
+                    <!-- <info>ListItem.Icon</info> -->
+                    <!-- <visible>Control.HasFocus(40001)</visible> -->
+                    <!-- <selectedcolor>FFFFFFFF</selectedcolor> -->
+                <!-- </control> -->
+            <!-- </itemlayout> -->
+            <!-- <focusedlayout height="400" width="400"> -->
+                <!-- <control type="image"> -->
+                    <!-- <left>5</left> -->
+                    <!-- <top>35</top>   -->
+                    <!-- <width>360</width> -->
+                    <!-- <height>400</height> -->
+                    <!-- <aspectratio scalediffuse="true" align="center" aligny="center">keep</aspectratio> -->
+                    <!-- <animation effect="fade" time="100">VisibleChange</animation>  -->
+                    <!-- <info>ListItem.Icon</info> -->
+                    <!-- <visible>Control.HasFocus(40001)</visible> -->
+                    <!-- <selectedcolor>FFFFFFFF</selectedcolor> -->
+                <!-- </control> -->
+            <!-- </focusedlayout> -->
+        <!-- </control> -->
+    </controls>
+</window>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<settings>
+	<category>
+		<setting id="defaultview" type="enum" label="30301" lvalues="291|292" default="0"/>
+	</category>
+</settings>

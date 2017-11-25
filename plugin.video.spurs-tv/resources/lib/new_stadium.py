@@ -14,7 +14,7 @@ import requests
 
 URL_ROOT = "http://new-stadium.tottenhamhotspur.com/"
 
-RE_EMBED = re.compile(r'kWidget\.embed\((.*)\)')
+RE_EMBED = re.compile(r'kWidget\.embed\((.*)\)', re.MULTILINE|re.DOTALL)
 
 Video = namedtuple('Video', ['title', 'id'])
 

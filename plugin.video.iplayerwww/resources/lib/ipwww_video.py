@@ -306,7 +306,7 @@ def ScrapeEpisodes(page_url):
     for page in page_range:
 
         if page > current_page:
-            page_url = 'http://www.bbc.co.uk' + page_base_url + str(page)
+            page_url = 'https://www.bbc.co.uk' + page_base_url + str(page)
             html = OpenURL(page_url)
 
         # NOTE remove inner li to match outer li
@@ -671,7 +671,11 @@ def ScrapeMarkup(markup):
             r'<a.*?href="(.*?)".*?list-item-link.*?>',
                 li, flags=(re.DOTALL | re.MULTILINE))
         if url_match:
-            main_url = url_match.group(1)
+            tmp_url = url_match.group(1)
+            if tmp_url.startswith('http'):
+                main_url = tmp_url
+            else:
+                main_url = 'https://www.bbc.co.uk' + tmp_url
 
         name = ''
         title = ''
@@ -725,7 +729,11 @@ def ScrapeMarkup(markup):
             r'<a class="view-more-container.+?stat".+?href="(.*?)"',
             li, flags=(re.DOTALL | re.MULTILINE))
         if episodes_match:
-            episodes_url = episodes_match.group(1)
+            tmp_url = episodes_match.group(1)
+            if tmp_url.startswith('http'):
+                episodes_url = tmp_url
+            else:
+                episodes_url = 'https://www.bbc.co.uk' + tmp_url
 
         more = None
         # <em class="view-more-heading">27</em>
@@ -820,7 +828,7 @@ def ListHighlights(highlights_url):
     """Creates a list of the programmes in the highlights section.
     """
 
-    html = OpenURL('http://www.bbc.co.uk/%s' % highlights_url)
+    html = OpenURL('https://www.bbc.co.uk/%s' % highlights_url)
 
     inner_anchors = re.findall(r'<a.*?(?!<a).*?</a>',html,flags=(re.DOTALL | re.MULTILINE))
 
@@ -1125,6 +1133,113 @@ def ListHighlights(highlights_url):
         if ((ADDON.getSetting('suppress_incomplete') == 'false') or (not episode[4] == '')):
             if episode[0]:
                 CheckAutoplay(episode[1], episode_url, episode[3], episode[2], episode[4])
+
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
+
+
+def ListMainHighlights(highlights_url):
+    """Creates a list of the programmes in the highlights section.
+    """
+
+    html = OpenURL('https://www.bbc.co.uk/%s' % highlights_url)
+
+    outer_anchors = re.findall(r'<section class="section(?!<a).*?</section>',
+        html, flags=(re.DOTALL | re.MULTILINE))
+
+    for group in outer_anchors:
+
+        group_type = ''
+        group_type_match = re.search(
+            r'data-section-type="(.*?)"', group, flags=(re.DOTALL | re.MULTILINE))
+        if group_type_match:
+            group_type = group_type_match.group(1)
+
+        # Skip trailers, we can't cope with them as of now.
+        if group_type == "trailers":
+            continue
+
+        inner_anchors = re.findall(r'href="(?!<a).*?</a>', group, flags=(re.DOTALL | re.MULTILINE))
+
+        group_data = []
+
+        for programme in inner_anchors:
+
+            is_group = False
+            button_match = re.search(r'View all', programme, flags=(re.DOTALL | re.MULTILINE))
+            if button_match:
+                is_group = True
+
+            url = ''
+            href_match = re.match(
+                r'href="(.*?)"', programme, flags=(re.DOTALL | re.MULTILINE))
+            if href_match:
+                href = href_match.group(1)
+                if href.startswith('http'):
+                    url = href
+                else:
+                    url = 'https://www.bbc.co.uk' + href
+
+            name = ''
+            if group_type == "popular":
+                name_match = re.search(
+                    r'<span class="typo.+?">(.*?)</span>',
+                    programme, flags=(re.DOTALL | re.MULTILINE))
+            else:
+                name_match = re.search(
+                    r'item__title.+?>(.*?)</div>',
+                    programme, flags=(re.DOTALL | re.MULTILINE))
+            if name_match:
+                name = name_match.group(1)
+
+            if group_type == "popular":
+                subtitle_match = re.search(
+                    r'item__subtitle.+?>(.*?)</p>', programme, flags=(re.DOTALL | re.MULTILINE))
+            else:
+                subtitle_match = re.search(
+                    r'primary">.*?item__description.+?>(.*?)</div>',
+                    programme, flags=(re.DOTALL | re.MULTILINE))
+            if subtitle_match:
+                name =  name + ' - ' + subtitle_match.group(1)
+
+            iconimage = ''
+            iconimage_match = re.search(
+                r'images/ic/.*?/(.*?)\.jpg', programme, flags=(re.DOTALL | re.MULTILINE))
+            if iconimage_match:
+                iconimage = "https://ichef.bbci.co.uk/images/ic/832x468/"+iconimage_match.group(1)+".jpg"
+
+            description = ''
+            description_match = re.search(
+                r'secondary">.*?item__description.+?>(.*?)</div>',
+                programme, flags=(re.DOTALL | re.MULTILINE))
+            if description_match:
+                description = description_match.group(1)
+
+            # If this is a group, get the "View all" text.
+            if is_group == True:
+                name_match = re.search(r'label="(.*?)"', programme, flags=(re.DOTALL | re.MULTILINE))
+                if name_match:
+                    name = name_match.group(1)
+
+                # We need to postprocess the URL to get categories right
+                if group_type == "category":
+                    category = ''
+                    category_match = re.search(r'categories/(.*?)/', href, flags=re.DOTALL)
+                    if category_match:
+                        group_data.append(('[B]%s: %s[/B]' % (translation(30314), name), 
+                                          category_match.group(1), 125))
+                else:
+                    group_data.append(('[B]%s: %s[/B]' % (translation(30314), name), 
+                                      url, 128))
+            else:
+                CheckAutoplay(name, url, iconimage, description, '')
+
+        # For whatever reason, all groups appear twice in HTML, but we only want to add unique groups.
+        unique = []
+        [unique.append(item) for item in group_data if item not in unique]
+        for name, url, mode in unique:
+            AddMenuEntry(name, url, mode, '', '', '')
 
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)

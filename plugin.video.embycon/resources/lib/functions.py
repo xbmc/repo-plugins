@@ -16,7 +16,7 @@ import xbmcaddon
 import xbmc
 
 from downloadutils import DownloadUtils
-from utils import getDetailsString, getArt
+from utils import getDetailsString, getArt, cache_artwork
 from kodi_utils import HomeWindow
 from clientinfo import ClientInformation
 from datamanager import DataManager
@@ -88,6 +88,8 @@ def mainEntryPoint():
 
     if mode == "CHANGE_USER":
         checkServer(change_user=True, notify=False)
+    elif mode== "CACHE_ARTWORK":
+        cache_artwork()
     elif mode == "DETECT_SERVER":
         checkServer(force=True, notify=True)
     elif mode == "DETECT_SERVER_USER":
@@ -1279,6 +1281,8 @@ def PLAY(params):
     # set all the playback info, this will be picked up by the service
     # the service will then start the playback
 
+    xbmc.Player().stop()
+
     play_info = {}
     play_info["item_id"] =  item_id
     play_info["auto_resume"] = str(auto_resume)
@@ -1288,3 +1292,5 @@ def PLAY(params):
     home_window = HomeWindow()
     home_window.setProperty("item_id", item_id)
     home_window.setProperty("play_item_message", play_data)
+
+    #xbmcgui.Dialog().notification("EmbyCon", "Starting Playback")

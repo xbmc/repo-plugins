@@ -94,6 +94,14 @@ msgctxt "#30025"
 msgid "Password:"
 msgstr ""
 
+msgctxt "#30026"
+msgid "Widget item select action"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Show watched in recently added"
+msgstr ""
+
 msgctxt "#30044"
 msgid "Incorrect Username/Password"
 msgstr ""
@@ -187,7 +195,7 @@ msgid "Play Error"
 msgstr ""
 
 msgctxt "#30129"
-msgid "This item is not playable"
+msgid "Default"
 msgstr ""
 
 msgctxt "#30135"
@@ -327,7 +335,11 @@ msgid "Prompt to delete episode after %"
 msgstr ""
 
 msgctxt "#30218"
-msgid "Prompt to play next episode after %"
+msgid "Play next episode after %"
+msgstr ""
+
+msgctxt "#30219"
+msgid " - Prompt before play"
 msgstr ""
 
 msgctxt "#30220"
@@ -367,7 +379,7 @@ msgid "Episodes"
 msgstr ""
 
 msgctxt "#30236"
-msgid "Save"
+msgid "Action for h265(hevc) video files"
 msgstr ""
 
 msgctxt "#30237"
@@ -375,7 +387,7 @@ msgid "Start from beginning"
 msgstr ""
 
 msgctxt "#30238"
-msgid "Default Sort"
+msgid "Playback Overrides"
 msgstr ""
 
 msgctxt "#30245"
@@ -549,3 +561,68 @@ msgstr ""
 msgctxt "#30288"
 msgid " - Latest"
 msgstr ""
+
+msgctxt "#30289"
+msgid "TV Show (Genre)"
+msgstr ""
+
+msgctxt "#30290"
+msgid "All"
+msgstr ""
+
+msgctxt "#30291"
+msgid "Select Audio Stream"
+msgstr ""
+
+msgctxt "#30292"
+msgid "Select Subtitle Stream"
+msgstr ""
+
+msgctxt "#30293"
+msgid "Cache Artwork"
+msgstr ""
+
+msgctxt "#30294"
+msgid "Notice"
+msgstr ""
+
+msgctxt "#30295"
+msgid "To use this feature you need to enabled HTTP control in Kodi"
+msgstr ""
+
+msgctxt "#30296"
+msgid "Delete"
+msgstr ""
+
+msgctxt "#30297"
+msgid "Delete all existing textures?"
+msgstr ""
+
+msgctxt "#30298"
+msgid "Deleting Textures"
+msgstr ""
+
+msgctxt "#30299"
+msgid "Cache Textures"
+msgstr ""
+
+msgctxt "#30300"
+msgid "Cache all Emby media images as local Kodi textures?"
+msgstr ""
+
+msgctxt "#30301"
+msgid "Caching Textures"
+msgstr ""
+
+msgctxt "#30302"
+msgid "Existing Textures: "
+msgstr ""
+
+msgctxt "#30303"
+msgid "Missing Textures: "
+msgstr ""
+
+msgctxt "#30304"
+msgid "Loaded Textures: "
+msgstr ""
+

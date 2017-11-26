@@ -31,3 +31,15 @@ msgstr ""
 msgctxt "#30004"
 msgid "Next Page"
 msgstr ""
+
+msgctxt "#30005"
+msgid "England"
+msgstr ""
+
+msgctxt "#30006"
+msgid "By England Player"
+msgstr ""
+
+msgctxt "#30007"
+msgid "By County"
+msgstr ""

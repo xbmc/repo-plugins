@@ -30,9 +30,8 @@ Module for extracting video links from the England and Wales Cricket Board websi
 
 import os
 import re
-from urlparse import urljoin, urlparse, urlunparse
-from urllib import urlencode
-from datetime import datetime
+from urlparse import urljoin
+from datetime import datetime, date, timedelta
 import time
 from collections import namedtuple
 import math
@@ -50,36 +49,48 @@ PLAYER_THUMB_URL_FMT = 'https://ecb-resources.s3.amazonaws.com/player-photos/{}/
 
 SEARCH_URL = 'https://content-ecb.pulselive.com/search/ecb/'
 VIDEO_LIST_URL = 'https://content-ecb.pulselive.com/content/ecb/EN/'
+TOURNAMENTS_URL = 'https://cricketapi-ecb.pulselive.com/tournaments/'
 
-Video = namedtuple('Video', 'title url thumbnail date duration')
-Entity = namedtuple('Entity', 'name reference thumbnail')
+_Video = namedtuple('Video', 'title url thumbnail date duration')
+_Entity = namedtuple('Entity', 'name id reference thumbnail')
 
 
-def _video_list_url(reference, page, page_size=10):
-    '''Returns a URL for a list of videos'''
-    url_parts = list(urlparse(VIDEO_LIST_URL))
-    query_params = dict(
+def _video_query_params(reference, page, page_size=10):
+    '''Returns a dictionary of query params for a list of videos'''
+    return dict(
         contentTypes='video',
         references=reference if reference is not None else '',
         page=page - 1,
         pageSize=page_size
     )
-    url_parts[4] = urlencode(query_params)
-    return urlunparse(url_parts)
 
 
-def _search_url(term, page, page_size=10):
-    '''Returns a URL for the JSON search api'''
-    url_parts = list(urlparse(SEARCH_URL))
-    query_params = dict(
+def _search_query_params(term, page, page_size=10):
+    '''Returns a dictionary of query params for the JSON search api'''
+    return dict(
         type='VIDEO',
         fullObjectResponse=True,
         terms=term,
         size=page_size,
         start=(page - 1) * page_size
     )
-    url_parts[4] = urlencode(query_params)
-    return urlunparse(url_parts)
+
+
+def _tournaments_query_params(team_ids,
+                              match_types,
+                              weeks_ago,
+                              weeks_ahead):
+    '''Returns a dictionary of query params for the list of tournaments'''
+    query_params = dict(
+        teamIds=','.join(map(str, team_ids)),
+        startDate=date.today() - timedelta(weeks=weeks_ago),
+        endDate=date.today() + timedelta(weeks=weeks_ahead),
+        sort='desc')
+    if match_types is not None:
+        query_params['matchTypes'] = ','.join(
+            str(t).replace(' ', '_').upper() for t in match_types
+        )
+    return query_params
 
 
 def _soup(path=''):
@@ -101,15 +112,14 @@ def _date_json(json_item):
     date_str = json_item['date']
     for fmt in ['%Y-%m-%dT%H:%M', '%d/%m/%Y %H:%M']:
         try:
-            date = _date_from_str(date_str.strip(), fmt=fmt)
+            return _date_from_str(date_str.strip(), fmt=fmt)
         except ValueError as exc:
             continue
-        else:
-            return date
     raise exc
 
 
 def _thumbnail_variant(video):
+    '''Returns the url for the "Media Thumbnail - Squared Medium" thumbnail'''
     if video['thumbnail'] is None:
         return
     return (variant['url'] for variant in video['thumbnail']['variants']
@@ -117,46 +127,82 @@ def _thumbnail_variant(video):
 
 
 def england():
-    return Entity(
+    '''Returns an Entity for the England Men team'''
+    return _Entity(
         name='England',
+        id=11,
         reference='cricket_team:11',
         thumbnail=None
     )
 
 
 def counties():
+    '''Generator for an Entity for each county team'''
     for county in _soup('/county-championship/teams')('div', 'partners__item'):
         team_id = int(os.path.basename(county.a['href']))
-        yield Entity(
+        yield _Entity(
             name=county.a.text,
+            id=team_id,
             reference='cricket_team:{}'.format(team_id),
             thumbnail=county.img['src']
         )
 
 
 def player_categories():
+    '''Generator for an Entity representing each form of the game'''
     for tab in _soup('/england/men/players').find_all(
             'div', attrs={'data-ui-args': re.compile(r'{ "title": "\w+" }')}):
-        yield Entity(
+        yield _Entity(
             name=tab['data-ui-tab'],
+            id=None,
             reference=None,
             thumbnail=None
         )
 
 
 def players(category='Test'):
+    '''Generator for England players currently playing in the provided form of the game'''
     soup = _soup('/england/men/players').find('div', attrs={'data-ui-tab': category})
     for player in soup('section', 'profile-player-card'):
         player_id = player.img['data-player']
-        yield Entity(
+        yield _Entity(
             name=player.img['alt'],
+            id=player_id,
             reference='cricket_player:{}'.format(player_id),
             thumbnail=PLAYER_THUMB_URL_FMT.format(category.lower(), player_id)
         )
 
 
+def _tournaments(team_ids,
+                 match_types=None,
+                 weeks_ago=26,
+                 weeks_ahead=4):
+    for tournament in requests.get(
+            url=TOURNAMENTS_URL,
+            params=_tournaments_query_params(team_ids, match_types, weeks_ago, weeks_ahead)
+        ).json()['content']:
+        yield _Entity(
+            name=tournament['description'],
+            id=tournament['id'],
+            thumbnail=None,
+            reference='cricket_tournament:{}'.format(tournament['id'])
+        )
+
+
+def england_tournaments():
+    '''Returns a generator for all tournaments played by the England Men'''
+    return _tournaments([england().id], ['Test', 'ODI', 'T20I'])
+
+
+def county_tournaments():
+    '''Generator for all tournaments played by a county, excluding tour matches'''
+    for tournament in _tournaments([county.id for county in counties()], weeks_ahead=0):
+        if not re.search(' in [A-Z]', tournament.name):
+            yield tournament
+
+
 def _video(video):
-    return Video(
+    return _Video(
         title=video['title'],
         url=HLS_URL_FMT.format(video['mediaId']),
         thumbnail=_thumbnail_variant(video),
@@ -172,7 +218,12 @@ def _videos(videos_json):
 
 
 def videos(reference=None, page=1, page_size=10):
-    videos_json = requests.get(_video_list_url(reference, page, page_size)).json()
+    '''Returns a generator for videos matching a reference string,
+       and the number of pages'''
+    videos_json = requests.get(
+        url=VIDEO_LIST_URL,
+        params=_video_query_params(reference, page, page_size)
+    ).json()
     npages = videos_json['pageInfo']['numPages']
     return _videos(videos_json), npages
 
@@ -186,30 +237,11 @@ def _search_results(search_results_json):
 
 
 def search_results(term, page=1, page_size=10):
-    search_results_json = requests.get(_search_url(term, page, page_size)).json()
+    '''Returns a generator for search results and the number of pages'''
+    search_results_json = requests.get(
+        url=SEARCH_URL,
+        params=_search_query_params(term, page, page_size)
+    ).json()
     total = search_results_json['hits']['found']
     npages = int(math.ceil(float(total) / page_size))
     return _search_results(search_results_json), npages
-
-
-def _print_team_videos():
-    '''Test function to print all categories and videos'''
-    for team in [england()] + list(counties()):
-        print '{} ({})'.format(team.name, team.reference)
-        videos_page, _num_pages = videos(team.reference)
-        for video in videos_page:
-            print '\t', video.title
-
-
-def _print_search_results(term):
-    '''Test function to print search results'''
-    print 'Search: {}'.format(term)
-    videos_page, _num_pages = search_results(term)
-    for video in videos_page:
-        print '\t', video.title
-
-
-if __name__ == '__main__':
-    _print_team_videos()
-    print
-    _print_search_results('test cricket')

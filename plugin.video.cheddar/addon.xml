@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.cheddar" name="Cheddar" provider-name="Lunatixz" version="1.0.0">
+<addon id="plugin.video.cheddar" name="Cheddar" provider-name="Lunatixz" version="1.0.1">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>  
         <import addon="script.module.simplecache" version="1.0.0"/>
@@ -16,7 +16,7 @@
         <source>https://github.com/Lunatixz/XBMC_Addons/tree/master/plugin.video.cheddar</source>
         <website>https://cheddar.com/</website>
         <forum>http://forum.kodi.tv/showthread.php?tid=319217</forum>
-        <news></news>
+        <news>>v.1.0.1[CR]-Leia Compatibility</news>
         <assets>
             <icon>resources/images/icon.png</icon>
             <fanart>resources/images/fanart.jpg</fanart>

@@ -1,3 +1,6 @@
+v2.5.27
+Fixed Channel Highlights.
+
 v2.5.26
 Fixed Highlights (again).
 Fixed BBCiD login.

@@ -830,13 +830,18 @@ def ListHighlights(highlights_url):
 
     html = OpenURL('https://www.bbc.co.uk/%s' % highlights_url)
 
-    inner_anchors = re.findall(r'<a.*?(?!<a).*?</a>',html,flags=(re.DOTALL | re.MULTILINE))
+    inner_anchors = re.findall(r'href="(?!<a).*?</a>',html,flags=(re.DOTALL | re.MULTILINE))
 
     # First find all groups as we need to store some properties of groups for later reuse.
     group_properties = []
 
     # NOTE find episode count first
     episode_count = dict()
+
+    # These groups seem to be no longer used, because this function is only used
+    # for Channel Highlights, no longer main Highlights.
+    # Comment the code for now and remove it in the future.
+    """
     groups = [a for a in inner_anchors if re.match(
         r'<a[^<]*?class="grouped-items__cta.*?data-object-type="group-list-link".*?',
         a, flags=(re.DOTALL | re.MULTILINE))]
@@ -900,16 +905,17 @@ def ListHighlights(highlights_url):
 
         AddMenuEntry('[B]%s: %s[/B] - %s %s' % (translation(30314), name, count, translation(30315)),
                      url, 128, '', '', '')
+    """
 
     # New group types for Channel Highlights.
     groups = [a for a in inner_anchors if re.match(
-        r'<a[^<]*?class="group__title stat.*?data-object-type="group-list-link".*?',
+        r'[^<]*?class="group__title stat.*?data-object-type="group-list-link".*?',
         a, flags=(re.DOTALL | re.MULTILINE))]
     for group in groups:
 
         href = ''
         href_match = re.match(
-            r'<a[^<]*?href="(.*?)"',
+            r'href="(.*?)"',
             group, flags=(re.DOTALL | re.MULTILINE))
         if href_match:
             href = href_match.group(1)
@@ -939,7 +945,7 @@ def ListHighlights(highlights_url):
                              [position_match.group(1),
                              name, group_type])
             group_details = [a for a in inner_anchors if re.match(
-                r'<a[^<]*?class="button.*?group__cta.*?data-object-position="'+
+                r'[^<]*?class="button.*?group__cta.*?data-object-position="'+
                 re.escape(position_match.group(1))+
                 r'-ALL".*?',
                 a, flags=(re.DOTALL | re.MULTILINE))]
@@ -968,7 +974,7 @@ def ListHighlights(highlights_url):
         episode_id = ''
         # <a\n    href="/iplayer/episode/b06tr74y/eastenders-24122015"
         id_match = re.match(
-            r'<a.*?href="/iplayer/episode/(.*?)/',
+            r'href="/iplayer/episode/(.*?)/',
             listed, flags=(re.DOTALL | re.MULTILINE))
         if id_match:
             episode_id = id_match.group(1)
@@ -1035,11 +1041,11 @@ def ListHighlights(highlights_url):
         # <a\nhref="/iplayer/episode/p036gq3z/bbc-music-introducing-from-buddhist-monk-to-rock-star"
         if object_type == "editorial-promo":
             id_match = re.match(
-                r'<a.*?href="(.*?)"',
+                r'href="(.*?)"',
                 single, flags=(re.DOTALL | re.MULTILINE))
         else:
             id_match = re.match(
-                r'<a.*?href="/iplayer/episode/(.*?)/',
+                r'href="/iplayer/episode/(.*?)/',
                 single, flags=(re.DOTALL | re.MULTILINE))
         if id_match:
             episode_id = id_match.group(1)

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings >
+	<category label="32000">
+		<setting label="32001" type="folder" id="video_library_folder" option="writeable"/>
+		<setting label="32002" type="folder" id="music_library_folder" option="writeable"/>
+		<setting label="32003" type="bool" id="clean_folder" default="true" value="true"/>
+		<setting label="32004" type="bool" id="set_subtitle" default="true" value="true"/>
+    </category>
+	<category label="32005">
+		<setting label="32006" type="number" id="slideshow_refresh_interval" default="5" value="5"/>
+		<setting label="32010" type="bool" id="slideshow_recursive" default="false" value="false"/>
+    </category>
+    <category label="32011">
+		<setting label="32012" type="action" option="close" action="RunPlugin(plugin://plugin.googledrive/?action=_open_common_settings)"/>
+    </category>
+</settings>

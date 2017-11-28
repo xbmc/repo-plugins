@@ -1,0 +1,19 @@
+1.2.1 (16-11-2017)
+- Few minor tweaks here &amp; there
+
+1.2.0 (02-08-2017)
+- Made several changes to comply with Kodi addon submission rules
+- Removed request function from client module, using requests library instead
+- Made icons non-transparent
+
+1.1.0 (16-07-2017)
+- Made items' info remotely hosted
+
+1.0.2 (19-06-2017)
+- New radio stream
+
+1.0.1 (25-05-2017)
+- Minor changes to artwork
+
+1.0.0 (08-05-2017)
+- Initial Version

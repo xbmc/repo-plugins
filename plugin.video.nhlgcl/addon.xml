@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nhlgcl" name="NHL TV™" version="2017.11.3" provider-name="eracknaphobia">
+<addon id="plugin.video.nhlgcl" name="NHL TV™" version="2017.11.28" provider-name="eracknaphobia">
   <requires>
    <import addon="xbmc.python" version="2.24.0"/>
    <import addon="script.module.pytz" version="2014.2" />
@@ -16,7 +16,8 @@
     <description lang="en">With NHL.TV you can access revolutionary 60fps (frames per second) video through Kodi</description>
     <disclaimer lang="en"></disclaimer>
     <news>
-- Bug Fixes (stream quality, login)
+- Fixed Settings invalid xml issue
+- Fixed Quality selection issue
     </news>
     <language>en</language>
     <platform>all</platform>

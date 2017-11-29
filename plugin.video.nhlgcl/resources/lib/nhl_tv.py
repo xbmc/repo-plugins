@@ -328,16 +328,6 @@ def streamSelect(game_id, epg, teams_stream, stream_date):
     listitem = xbmcgui.ListItem(path=stream_url)
     listitem.setMimeType("application/x-mpegURL")
 
-    '''
-    if xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):
-        if stream_url.find("|") > -1:
-            headers = stream_url[stream_url.find("|")+1:]
-            xbmc.log("HEADERS = "+headers)
-        listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
-        listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
-        listitem.setProperty('inputstream.adaptive.stream_headers', headers)
-        listitem.setProperty('inputstream.adaptive.license_key', headers)
-    '''
 
     if stream_url != '':
         #listitem.setMimeType("application/x-mpegURL")
@@ -361,7 +351,6 @@ def createHighlightStream(stream_url):
     bandwidth = ''
     bandwidth = find(QUALITY,'(',' kbps)')
     #Switch to ipad master file
-    #stream_url = stream_url.replace('master_wired.m3u8', MASTER_FILE_TYPE)
     '''
     if QUALITY.upper() == 'ALWAYS ASK':
         #stream_url = selectStreamQualty(stream_url)
@@ -393,18 +382,15 @@ def createFullGameStream(stream_url, media_auth, media_state):
             elif int(bandwidth) == 1200:
                 bandwidth = '1500'
 
-        if media_state == 'MEDIA_ARCHIVE':
-            #ARCHIVE
-            if checkArchiveType(stream_url,media_auth) == 'asset':
-                stream_url = stream_url.replace(stream_url.rsplit('/', 1)[-1], 'asset_'+bandwidth+'k.m3u8')
-            else:
-                stream_url = stream_url.replace(stream_url.rsplit('/', 1)[-1], bandwidth+'K/'+bandwidth+'_complete_fwv2-trimmed.m3u8')
+        playlist = getPlaylist(stream_url,media_auth)
 
-        elif media_state == 'MEDIA_ON':
-            #LIVE
-            #5000K/5000_slide.m3u8 OR #3500K/3500_complete.m3u8
-            # Slide = Live, Complete = Watch from beginning?
-            stream_url = stream_url.replace(stream_url.rsplit('/', 1)[-1], bandwidth+'K/'+bandwidth+'_complete_fwv2.m3u8')
+        for line in playlist:
+            if bandwidth in line and '#EXT' not in line:
+                if 'http' in line:
+                    stream_url = line
+                else:
+                    stream_url = stream_url.replace(stream_url.rsplit('/', 1)[-1], line)
+
 
     cj = load_cookies()
 
@@ -421,10 +407,7 @@ def createFullGameStream(stream_url, media_auth, media_state):
 
 
 
-def checkArchiveType(stream_url, media_auth):
-    xbmc.log('test--------------------------------------------------------')
-    xbmc.log(stream_url)
-
+def getPlaylist(stream_url, media_auth):
     headers = { "Accept": "*/*",
                 "Accept-Encoding": "identity",
                 "Accept-Language": "en-US,en;q=0.8",
@@ -436,11 +419,8 @@ def checkArchiveType(stream_url, media_auth):
     r = requests.get(stream_url, headers=headers, cookies=load_cookies(), verify=VERIFY)
     playlist = r.text
 
-    stream_type = 'complete-trimmed'
-    if 'asset_' in playlist:
-        stream_type = 'asset'
 
-    return stream_type
+    return playlist.splitlines()
 
 
 def fetchStream(game_id, content_id,event_id):
@@ -469,6 +449,7 @@ def fetchStream(game_id, content_id,event_id):
     url += '&playbackScenario=' + PLAYBACK_SCENARIO
     url += '&platform=' + PLATFORM
     url += '&sessionKey=' + urllib.quote_plus(session_key)
+
     #Get user set CDN
     if CDN == 'Akamai':
         url +='&cdnName=MED2_AKAMAI_SECURE'

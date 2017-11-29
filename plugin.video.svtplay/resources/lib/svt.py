@@ -323,7 +323,7 @@ def getVideoJSON(video_url):
 def getItems(section_name, page):
   if not page:
     page = 1
-  json_data = __get_json(section_name+"?page="+str(page))
+  json_data = __get_json(section_name+"?page="+str(page)+"&excludedTagsString=lokalt")
   if json_data is None:
     return None
 
@@ -362,7 +362,6 @@ def getItems(section_name, page):
 
 def __get_article_id_for_title(title):
   # Convert contentUrl to slug
-  common.log("Getting article id for " + title)
   title = title.strip("/")
   url = "title?slug="+title
   json_data = __get_json(url)

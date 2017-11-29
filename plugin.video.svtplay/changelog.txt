@@ -1,3 +1,7 @@
+Version 4.0.55
+-------------
+- Latest is now showing the same as the app
+
 Version 4.0.54
 -------------
 - Native Kodi sorting options are now avialble

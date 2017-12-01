@@ -66,8 +66,7 @@ PREV_ICON = ROOTDIR+"/icon.png"
 NEXT_ICON = ROOTDIR+"/icon.png"
 
 API_URL = 'http://statsapi.web.nhl.com/api/v1/'
-#MASTER_FILE_TYPE = 'master_tablet60.m3u8'
-MASTER_FILE_TYPE = 'master_tablet60_fwv2.m3u8'
+
 
 VERIFY = True
 
@@ -79,9 +78,10 @@ VERIFY = True
 PLATFORM = "IPHONE"
 PLAYBACK_SCENARIO = 'HTTP_CLOUD_TABLET_60'
 
+
 #User Agents
 #UA_GCL = 'NHL1415/5.0925 CFNetwork/711.4.6 Darwin/14.0.0'
-UA_IPHONE = 'AppleCoreMedia/1.0.0.15A372 (iPhone; U; CPU OS 11_0 like Mac OS X; en_us)'
+UA_IPHONE = 'AppleCoreMedia/1.0.0.15B202 (iPhone; U; CPU OS 11_1_2 like Mac OS X; en_us)'
 UA_IPAD = 'Mozilla/5.0 (iPad; CPU OS 8_4 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12H143 ipad nhl 5.0925'
 UA_NHL = 'NHL/11479 CFNetwork/887 Darwin/17.0.0'
 UA_PC = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36'

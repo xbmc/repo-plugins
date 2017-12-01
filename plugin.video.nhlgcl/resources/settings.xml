@@ -5,8 +5,8 @@
     <setting id="cdn" type="labelenum" label="110" values="Akamai|Level 3|No Preference" default="No Preference"/>
     <setting id="username" type="text" label="140" default=""/>
     <setting id="password" type="text" label="150" option="hidden" default=""/>
-	  <setting id="rogers" type="bool" label="155" default="false" />
-    <setting label="156" type="action" action="RunPlugin(plugin://plugin.video.nhlgcl/?url=junk&mode=400)" option="close" />
+    <setting id="rogers" type="bool" label="155" default="false" />
+    <setting label="156" type="action" action="RunPlugin(plugin://plugin.video.nhlgcl/?url=junk&amp;mode=400)" option="close" />
   </category>
   <category label="159">
     <setting id="stream_quality" type="labelenum" label="160" values="SD (800 kbps)|SD (1200 kbps)|HD (2500 kbps)|HD (3500 kbps)|HD (5600 kbps)|Best Available|Always Ask" default="Best Available" />
@@ -17,7 +17,7 @@
     <setting id="game_preview_info" type="bool" label="250" default="false" />
 
     <!-- Create Game Thumbnails -->
-    <setting label="251" type="action" action="RunPlugin(plugin://plugin.video.nhlgcl?url=junk&mode=515)" option="close" />
+    <setting label="251" type="action" action="RunPlugin(plugin://plugin.video.nhlgcl?url=junk&amp;mode=515)" option="close" />
 
     <setting id="stream_date" type="text" label="900" default="" visible="false"/>
     <setting id="session_key" type="text" label="902" default="" visible="false"/>

@@ -19,38 +19,46 @@
 
 from clouddrive.common.remote.provider import Provider
 from clouddrive.common.utils import Utils
+from clouddrive.common.exception import RequestException, ExceptionUtils
+from urllib2 import HTTPError
 
+import urllib
 
 class OneDrive(Provider):
-    __api_url = 'https://graph.microsoft.com/v1.0'
+    _extra_parameters = {'expand': 'thumbnails'}
     
-    def __init__(self):
-        super(OneDrive, self).__init__('onedrive')
+    def __init__(self, source_mode = False):
+        super(OneDrive, self).__init__('onedrive', source_mode)
         
     def _get_api_url(self):
-        return self.__api_url
+        return 'https://graph.microsoft.com/v1.0'
 
     def _get_request_headers(self):
         return None
     
-    def get_account(self, request_params={}, access_tokens={}):
+    def get_account(self, request_params=None, access_tokens=None):
         me = self.get('/me', request_params=request_params, access_tokens=access_tokens)
         if not me:
             raise Exception('NoAccountInfo')
         return { 'id' : me['id'], 'name' : me['displayName']}
     
-    def get_drives(self, request_params={}, access_tokens={}):
-        response = self.get('/drives', request_params=request_params, access_tokens=access_tokens)
+    def get_drives(self, request_params=None, access_tokens=None):
         drives = []
         drives_id_list  =[]
-        for drive in response['value']:
-            drives_id_list.append(drive['id'])
-            drives.append({
-                'id' : drive['id'],
-                'name' : Utils.get_safe_value(drive, 'name', ''),
-                'type' : drive['driveType']
-            })
-        
+        try:
+            response = self.get('/drives', request_params=request_params, access_tokens=access_tokens)
+            for drive in response['value']:
+                drives_id_list.append(drive['id'])
+                drives.append({
+                    'id' : drive['id'],
+                    'name' : Utils.get_safe_value(drive, 'name', ''),
+                    'type' : drive['driveType']
+                })
+        except RequestException as ex:
+            httpex = ExceptionUtils.extract_exception(ex, HTTPError)
+            if not httpex or httpex.code != 403:
+                raise ex
+            
         response = self.get('/me/drives', request_params=request_params, access_tokens=access_tokens)
         for drive in response['value']:
             if not drive['id'] in drives_id_list:
@@ -71,4 +79,127 @@ class OneDrive(Provider):
             return ' SharePoint Document Library'
         return drive_type
     
+    def get_folder_items(self, item_driveid=None, item_id=None, path=None, on_items_page_completed=None, include_download_info=False):
+        item_driveid = Utils.default(item_driveid, self._driveid)
+        if item_id:
+            files = self.get('/drives/'+item_driveid+'/items/' + item_id + '/children', parameters = self._extra_parameters)
+        elif path == 'sharedWithMe' or path == 'recent':
+            files = self.get('/drives/'+self._driveid+'/' + path)
+        else:
+            if path == '/':
+                path = 'root'
+            else:
+                parts = path.split('/')
+                if len(parts) > 1 and not parts[0]:
+                    path = 'root:'+path+':'
+            files = self.get('/drives/'+self._driveid+'/' + path + '/children', parameters = self._extra_parameters)
+        if self.cancel_operation():
+            return
+        return self.process_files(files, on_items_page_completed, include_download_info)
     
+    def process_files(self, files, on_items_page_completed=None, include_download_info=False):
+        items = []
+        for f in files['value']:
+            f = Utils.get_safe_value(f, 'remoteItem', f)
+            item = self._extract_item(f, include_download_info)
+            items.append(item)
+        if on_items_page_completed:
+            on_items_page_completed(items)
+        if '@odata.nextLink' in files:
+            next_files = self.get(files['@odata.nextLink'])
+            if self.cancel_operation():
+                return
+            items.extend(self.process_files(next_files, on_items_page_completed, include_download_info))
+        return items
+    
+    def _extract_item(self, f, include_download_info=False):
+        name = Utils.get_safe_value(f, 'name', '')
+        item = {
+            'id': f['id'],
+            'name': name,
+            'name_extension' : Utils.get_extension(name),
+            'drive_id' : Utils.get_safe_value(Utils.get_safe_value(f, 'parentReference', {}), 'driveId'),
+            'mimetype' : Utils.get_safe_value(Utils.get_safe_value(f, 'file', {}), 'mimeType'),
+            'last_modified_date' : Utils.get_safe_value(f,'lastModifiedDateTime'),
+            'size': Utils.get_safe_value(f, 'size', 0),
+            'description': Utils.get_safe_value(f, 'description', '')
+        }
+        if 'folder' in f:
+            item['folder'] = {
+                'child_count' : Utils.get_safe_value(f['folder'],'childCount',0)
+            }
+        if 'video' in f:
+            video = f['video']
+            item['video'] = {
+                'width' : Utils.get_safe_value(video,'width', 0),
+                'height' : Utils.get_safe_value(video, 'height', 0),
+                'duration' : Utils.get_safe_value(video, 'duration', 0) /1000
+            }
+        if 'audio' in f:
+            audio = f['audio']
+            item['audio'] = {
+                'tracknumber' : Utils.get_safe_value(audio, 'track'),
+                'discnumber' : Utils.get_safe_value(audio, 'disc'),
+                'duration' : int(Utils.get_safe_value(audio, 'duration') or '0') / 1000,
+                'year' : Utils.get_safe_value(audio, 'year'),
+                'genre' : Utils.get_safe_value(audio, 'genre'),
+                'album': Utils.get_safe_value(audio, 'album'),
+                'artist': Utils.get_safe_value(audio, 'artist'),
+                'title': Utils.get_safe_value(audio, 'title')
+            }
+        if 'image' in f or 'photo' in f:
+            item['image'] = {
+                'size' : Utils.get_safe_value(f, 'size', 0)
+            }
+        if 'thumbnails' in f and type(f['thumbnails']) == list and len(f['thumbnails']) > 0:
+            thumbnails = f['thumbnails'][0]
+            item['thumbnail'] = Utils.get_safe_value(Utils.get_safe_value(thumbnails, 'large', {}), 'url', '')
+        if include_download_info:
+            item['download_info'] =  {
+                'url' : Utils.get_safe_value(f,'@microsoft.graph.downloadUrl')
+            }
+        return item
+    
+    def search(self, query, item_driveid=None, item_id=None, on_items_page_completed=None):
+        item_driveid = Utils.default(item_driveid, self._driveid)
+        url = '/drives/'
+        if item_id:
+            url += item_driveid+'/items/' + item_id
+        else:
+            url += self._driveid
+        url += '/search(q=\''+urllib.quote(Utils.str(query))+'\')'
+        self._extra_parameters['filter'] = 'file ne null'
+        files = self.get(url, parameters = self._extra_parameters)
+        if self.cancel_operation():
+            return
+        return self.process_files(files, on_items_page_completed)
+    
+    
+    def get_item(self, item_driveid=None, item_id=None, path=None, find_subtitles=False, include_download_info=False):
+        item_driveid = Utils.default(item_driveid, self._driveid)
+        if item_id:
+            f = self.get('/drives/'+item_driveid+'/items/' + item_id, parameters = self._extra_parameters)
+        elif path == 'sharedWithMe' or path == 'recent':
+            return
+        else:
+            if path == '/':
+                path = 'root'
+            else:
+                parts = path.split('/')
+                if len(parts) > 1 and not parts[0]:
+                    path = 'root:'+path+':'
+            f = self.get('/drives/'+self._driveid+'/' + path, parameters = self._extra_parameters)
+        
+        item = self._extract_item(f, include_download_info)
+        if find_subtitles:
+            subtitles = []
+            parent_id = Utils.get_safe_value(Utils.get_safe_value(f, 'parentReference', {}), 'id')
+            search_url = '/drives/'+item_driveid+'/items/' + parent_id + '/search(q=\''+urllib.quote(Utils.str(Utils.remove_extension(item['name'])).replace("'","''"))+'\')'
+            files = self.get(search_url)
+            for f in files['value']:
+                subtitle = self._extract_item(f, include_download_info)
+                if subtitle['name_extension'] == 'srt' or subtitle['name_extension'] == 'sub' or subtitle['name_extension'] == 'sbv':
+                    subtitles.append(subtitle)
+            if subtitles:
+                item['subtitles'] = subtitles
+        return item

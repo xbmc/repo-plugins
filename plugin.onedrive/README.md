@@ -1,4 +1,4 @@
-# Onedrive KODI Addon
+# OneDrive KODI Add-on
 OneDrive for KODI
 
 Play all your media from Microsoft OneDrive including Videos, Music and Pictures. 

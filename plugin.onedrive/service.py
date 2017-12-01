@@ -17,10 +17,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #-------------------------------------------------------------------------------
 
-from addon import OneDriveAddon
-from clouddrive.common.service.rpc import RpcService
+from clouddrive.common.service.download import DownloadService
+from clouddrive.common.service.source import SourceService
 from clouddrive.common.service.utils import ServiceUtil
+from resources.lib.provider.onedrive import OneDrive
 
 
 if __name__ == '__main__':
-    ServiceUtil.run([RpcService(OneDriveAddon())])
+    ServiceUtil.run([DownloadService(OneDrive), SourceService(OneDrive)])

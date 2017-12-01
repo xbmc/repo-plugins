@@ -17,10 +17,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #-------------------------------------------------------------------------------
 
-from clouddrive.common.service.rpc import RpcService
+from clouddrive.common.service.download import DownloadService
+from clouddrive.common.service.source import SourceService
 from clouddrive.common.service.utils import ServiceUtil
-from addon import GoogleDriveAddon
+from resources.lib.provider.googledrive import GoogleDrive
 
 
 if __name__ == '__main__':
-    ServiceUtil.run([RpcService(GoogleDriveAddon())])
+    ServiceUtil.run([DownloadService(GoogleDrive), SourceService(GoogleDrive)])

@@ -18,104 +18,68 @@ msgstr ""
 
 msgctxt "#32000"
 msgid "Account"
-msgstr ""
+msgstr "Cuenta"
 
 msgctxt "#32001"
 msgid "Video Library Export Folder"
-msgstr ""
+msgstr "Directorio de exportación de la biblioteca de vídeos"
 
 msgctxt "#32002"
 msgid "Music Library Export Folder"
-msgstr ""
+msgstr "Directorio de exportación de la biblioteca de música"
 
 msgctxt "#32003"
 msgid "Before export to library, remove previous files and folders"
-msgstr ""
+msgstr "Antes de exportar a biblioteca, eliminar ficheros y directorios anteriores"
 
 msgctxt "#32004"
 msgid "When playing videos, set the subtitle file located next to the video (.srt)"
-msgstr ""
+msgstr "Durante la reproducción de vídeo, establecer el fichero de subítulos ubicado junto al vídeo (.srt)"
 
 msgctxt "#32005"
 msgid "Auto-Refreshed slideshow"
-msgstr ""
+msgstr "Actualizar automaticamente las diapositivas"
 
 msgctxt "#32006"
 msgid "Refresh interval in minutes"
-msgstr ""
+msgstr "Intervalo de actualización en minutos"
 
 msgctxt "#32007"
 msgid "Google Photos"
-msgstr ""
+msgstr "Google Photos"
 
 msgctxt "#32008"
 msgid "Always ask for the stream format before play"
-msgstr ""
+msgstr "Preguntar siempre por el formato de la reproducción"
 
 msgctxt "#32009"
 msgid "Loading stream formats..."
-msgstr ""
+msgstr "Cargando formatos de reproducción"
 
 msgctxt "#32010"
 msgid "Recursive auto-refreshed slideshow"
-msgstr ""
+msgstr "Auto-Actualizar recursivamente las diapositivas"
 
 msgctxt "#32011"
 msgid "Common Settings"
-msgstr ""
+msgstr "Ajustes"
 
 msgctxt "#32012"
 msgid "Open Cloud Drive Common Settings..."
-msgstr ""
+msgstr "Configuración de Drive..."
 
 msgctxt "#32013"
 msgid "My Drive"
-msgstr ""
+msgstr "Mi Disco"
 
 msgctxt "#32014"
 msgid "Starred"
-msgstr ""
+msgstr "Seleccionados"
 
 msgctxt "#32015"
 msgid "Original format"
-msgstr ""
+msgstr "Formato original"
 
 msgctxt "#32016"
 msgid "Select the stream format"
-msgstr ""
-
-msgctxt "#32030"
-msgid "Collaboration"
-msgstr ""
-
-msgctxt "#32031"
-msgid "Report errors automatically to help resolve them quickly"
-msgstr ""
-
-msgctxt "#32032"
-msgid "Advanced"
-msgstr ""
-
-msgctxt "#32033"
-msgid "Sign-in Server"
-msgstr ""
-
-msgctxt "#32034"
-msgid "Cache expiration time (in minutes)"
-msgstr ""
-
-msgctxt "#32035"
-msgid "Clear cache now"
-msgstr ""
-
-msgctxt "#32067"
-msgid "Services"
-msgstr ""
-
-msgctxt "#32068"
-msgid "Allow using Google Drive as a source"
-msgstr ""
-
-msgctxt "#32069"
-msgid "     Source server port  -  http://localhost:<port>/source"
-msgstr ""
+msgstr "Seleccionar formato de la reproducción"

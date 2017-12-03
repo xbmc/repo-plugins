@@ -25,6 +25,8 @@
 ###############################################################################
 
 import traceback
+# Workaround for 'Failed to import _strptime because the import lock is held by another thread.'
+import _strptime  # pylint: disable=unused-import
 
 from kodiswift import Plugin
 import rollbar.kodi

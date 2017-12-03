@@ -62,10 +62,11 @@ def _soup(path=''):
     return BeautifulSoup(response.text, 'html.parser')
 
 
-def _date_from_str(date_str, fmt='%Y-%m-%dT%H:%M:%S.%fZ'):
+def _date_from_str(date_str):
     '''Returns a data object from a string.
-       datetime.strptime is avoided due to an issue with Python in Kodi'''
-    return datetime(*(time.strptime(date_str, fmt)[0:6])).date()
+       datetime.strptime is avoided due to an issue with Python in Kodi.
+       Ignores possible milliseconds part by including only 19 characters.'''
+    return datetime(*(time.strptime(date_str[:19], '%Y-%m-%dT%H:%M:%S')[0:6])).date()
 
 
 def categories():
@@ -80,7 +81,7 @@ def _videos(videos_response):
         yield _Video(
             title=video['h1title'],
             url=video.get('hlsurl') or video.get('streamingurl'),
-            thumbnail=video['imageurl'],
+            thumbnail=video.get('imageurl') or video.get('thumbnailURL'),
             date=_date_from_str(video['publicationdate']),
             duration=int(video['duration'])
         )

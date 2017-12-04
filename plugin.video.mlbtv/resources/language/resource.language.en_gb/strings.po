@@ -44,6 +44,10 @@ msgctxt "#160"
 msgid "Stream Quality"
 msgstr ""
 
+msgctxt "#165"
+msgid "CDN"
+msgstr ""
+
 msgctxt "#170"
 msgid "Hide Scores"
 msgstr ""

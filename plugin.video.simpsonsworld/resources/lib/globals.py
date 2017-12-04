@@ -1,8 +1,8 @@
 import sys, os
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
-import urllib, urllib2
-import json
+import urllib
 import base64
+import requests
 from adobepass.adobe import ADOBE
 
 
@@ -13,6 +13,7 @@ ROOTDIR = ADDON.getAddonInfo('path')
 
 FANART = os.path.join(ROOTDIR,"resources/media/fanart.jpg")
 ICON = os.path.join(ROOTDIR,"resources/media/icon.png")
+VERIFY = False
 
 
 #Addon Settings 
@@ -62,11 +63,12 @@ season_art = {'1':'71663-1-16.jpg',
             '26':'71663-26.jpg',
             '27':'71663-27-2.jpg',
             '28':'71663-28.jpg',
+            '29':'71663-29-3.jpg'
             }
 
 
 def listSeasons():       
-    for x in range(1, 29):
+    for x in range(1, 30):
         title = "Season "+str(x)
         url = str(x)
         #icon = 'http://thetvdb.com/banners/seasons/71663-'+str(x)+'-15.jpg'
@@ -78,18 +80,20 @@ def listSeasons():
 
 
 def listEpisodes(season):    
-    url = "http://fapi2.fxnetworks.com/androidtv/videos?filter%5Bfapi_show_id%5D=9aad7da1-093f-40f5-b371-fec4122f0d86&filter%5Bseason%5D="+season+"&limit=500&filter%5Btype%5D=episode"    
-    req = urllib2.Request(url)
-    req.add_header("Connection", "keep-alive")
-    req.add_header("Accept", "*/*")
-    req.add_header("Accept-Encoding", "deflate")
-    req.add_header("Accept-Language", "en-us")
-    req.add_header("Connection", "keep-alive")
-    req.add_header("Authentication", "androidtv:a4y4o0e01jh27dsyrrgpvo6d1wvpravc2c4szpp4")
-    req.add_header("User-Agent", UA_FX)
-    response = urllib2.urlopen(req)   
-    json_source = json.load(response)                       
-    response.close() 
+    url = "http://fapi2.fxnetworks.com/androidtv/videos?filter%5Bfapi_show_id%5D=9aad7da1-093f-40f5-b371-fec4122f0d86&filter%5Bseason%5D="+season+"&limit=500&filter%5Btype%5D=episode"
+
+    headers = {
+        "Connection": "keep-alive",
+        "Accept": "*/*",
+        "Accept-Encoding": "deflate",
+        "Accept-Language": "en-us",
+        "Connection": "keep-alive",
+        "Authentication": "androidtv:a4y4o0e01jh27dsyrrgpvo6d1wvpravc2c4szpp4",
+        "User-Agent": UA_FX,
+    }
+
+    r = requests.get(url, headers=headers, verify=VERIFY)
+    json_source = r.json()
     
     #for episode in reversed(json_source['videos']):            
     for episode in sorted(json_source['videos'], key=lambda k: k['episode']):
@@ -120,17 +124,19 @@ def getStream(url):
         if adobe.authorize():
             media_token = adobe.mediaToken()       
             url = url + "&auth="+urllib.quote(base64.b64decode(media_token))
-            req = urllib2.Request(url)
-            req.add_header("Accept", "*/*")
-            req.add_header("Accept-Encoding", "deflate")
-            req.add_header("Accept-Language", "en-us")
-            req.add_header("Connection", "keep-alive")        
-            req.add_header("User-Agent", UA_FX)
-            response = urllib2.urlopen(req)              
-            response.close() 
 
-            #get the last url forwarded to
-            stream_url = response.geturl()
+            headers = {
+                "Connection": "keep-alive",
+                "Accept": "*/*",
+                "Accept-Encoding": "deflate",
+                "Accept-Language": "en-us",
+                "Connection": "keep-alive",
+                "User-Agent": UA_FX,
+            }
+
+            r = requests.get(url, headers=headers, verify=VERIFY)
+
+            stream_url = r.url
             stream_url = stream_url + '|User-Agent=okhttp/3.4.1'            
             listitem = xbmcgui.ListItem(path=stream_url)
             xbmcplugin.setResolvedUrl(addon_handle, True, listitem)

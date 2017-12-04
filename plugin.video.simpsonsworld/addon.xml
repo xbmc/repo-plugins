@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.simpsonsworld" name="Simpsons World" version="2017.4.5" provider-name="eracknaphobia">
+<addon id="plugin.video.simpsonsworld" name="Simpsons World" version="2017.11.28" provider-name="eracknaphobia">
   <requires>
-   <import addon="xbmc.python" version="2.25.0"/>             
-   <import addon="script.module.adobepass" version="2017.3.20"/>
+      <import addon="xbmc.python" version="2.25.0"/>
+      <import addon="script.module.adobepass" version="2017.3.20"/>
+      <import addon="script.module.requests" version="2.9.1"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="simpsons.py">
         <provides>video</provides>
@@ -13,7 +14,7 @@
     <description lang="en_GB">Simpsons World has every episode of the series accessible to authenticated FX subscribers</description>
     <disclaimer lang="en_GB"></disclaimer>
     <news>
-- Fixed Icon / Fanart not displaying
+- Fixed Invalid XML issue
     </news>
     <language>en</language>
     <platform>all</platform>

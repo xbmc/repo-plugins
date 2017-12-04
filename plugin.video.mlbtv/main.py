@@ -563,25 +563,25 @@ def createFullGameStream(stream_url, media_auth, media_state):
     if bandwidth != '':
         if media_state == 'MEDIA_ARCHIVE':                
             #ARCHIVE
-            #http://mlblive-akc.mlb.com/ls04/mlbam/2016/03/02/MLB_GAME_VIDEO_DETNYA_HOME_20160302/master_wired.m3u8 
-            #http://mlblive-akc.mlb.com/ls04/mlbam/2016/03/02/MLB_GAME_VIDEO_DETNYA_HOME_20160302/1800K/1800_complete-trimmed.m3u8
-            stream_url = stream_url.replace(MASTER_FILE_TYPE, bandwidth+'K/'+bandwidth+'_complete-trimmed.m3u8') 
-
+            #stream_url = stream_url.replace(MASTER_FILE_TYPE, bandwidth+'K/'+bandwidth+'_complete_fwv2-trimmed.m3u8') 
+            stream_url = stream_url.replace(MASTER_FILE_TYPE, bandwidth+'K/'+bandwidth+'_complete-trimmed.m3u8')
         elif media_state == 'MEDIA_ON':
-            #LIVE    
-            #5000K/5000_slide.m3u8 OR #3500K/3500_complete.m3u8
-            # Slide = Live, Complete = Watch from beginning?
-            stream_url = stream_url.replace(MASTER_FILE_TYPE, bandwidth+'K/'+bandwidth+'_complete.m3u8') 
+            #LIVE   
+            #stream_url = stream_url.replace(MASTER_FILE_TYPE, bandwidth+'K/'+bandwidth+'_slide_fwv2.m3u8') 
+            stream_url = stream_url.replace(MASTER_FILE_TYPE, bandwidth+'K/'+bandwidth+'_complete.m3u8')
 
-
+    #CDN
+    akc_url = 'akc.mlb.com'
+    l3c_url = 'l3c.mlb.com'
+    if CDN == 'Akamai' and  akc_url not in stream_url:
+        stream_url = stream_url.replace(l3c_url,akc_url)
+    elif CDN == 'Level 3' and  l3c_url not in stream_url:
+        stream_url = stream_url.replace(akc_url,l3c_url)
     
-    #cj = cookielib.LWPCookieJar()
-    #cj.load(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'),ignore_discard=True)
+    #stream_url = stream_url + '|User-Agent='+UA_IPAD+'&Cookie='+media_auth
     stream_url = stream_url + '|User-Agent='+UA_PS4+'&Cookie='+media_auth
     
     return stream_url
-    
-
 
 
 def fetchStream(content_id,event_id,playback_scenario):        

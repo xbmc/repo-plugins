@@ -1,0 +1,134 @@
+# XBMC Media Center language file
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2016-03-28 13:35+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "#30000"
+msgid "Video Resolution"
+msgstr ""
+
+msgctxt "#30001"
+msgid "SD"
+msgstr ""
+
+msgctxt "#30002"
+msgid "HD"
+msgstr ""
+
+msgctxt "#30003"
+msgid "1080"
+msgstr ""
+
+msgctxt "#30004"
+msgid "PBS Favorites"
+msgstr ""
+
+msgctxt "#30005"
+msgid "PBS Watchlist"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Remove from PBS Favorites"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Add to PBS Favorites"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Add to PBS Watchlist"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Remove from PBS Watchlist"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Sub-Titles"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Enable Sub-Titles"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Meta Data Cache"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Enable Metadata Cache"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Reset Metadata Cache"
+msgstr ""
+
+msgctxt "#30015"
+msgid "PBS Login"
+msgstr ""
+
+msgctxt "#30016"
+msgid "User Email"
+msgstr ""
+
+msgctxt "#30017"
+msgid "User Password"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Enable Login"
+msgstr ""
+
+msgctxt "#30019"
+msgid "PBS Station"
+msgstr ""
+
+msgctxt "#30040"
+msgid "Metadata"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Initialize Metadata Next Start"
+msgstr ""
+
+msgctxt "#30042"
+msgid "Initializing ...."
+msgstr ""
+
+msgctxt "#30045"
+msgid "Episodes"
+msgstr ""
+
+msgctxt "#30046"
+msgid "Clips"
+msgstr ""
+
+msgctxt "#30047"
+msgid "Previews"
+msgstr ""
+
+msgctxt "#30048"
+msgid "Local PBS Programs"
+msgstr ""
+
+msgctxt "#30049"
+msgid "Video Expired or requires Passport Membership"
+msgstr ""
+
+msgctxt "#30050"
+msgid "Next Page"
+msgstr ""
+
+msgctxt "#30051"
+msgid "PBS Episode Search"
+msgstr ""

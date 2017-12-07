@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30008">
+
+        <setting id="account_default" type="labelenum" values="1|2|3|4|5|6|7|8|9" default="1" label="30188" />
+
+
+    	<setting id="user_agent" type="hidden" label="30004" default="Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/532.0 (KHTML, like Gecko) Chrome/3.0.195.38 Safari/532.0" />
+
+		<!-- individual account settings -->
+        <setting id="gdrive_numaccounts" type="integer" hidden="true" default="9" label="30022" />
+
+        <setting label="30205" type="lsep"/>
+
+        <setting id="accounts" type="labelenum" values="1|2|3|4|5|6|7|8|9" default="1" label="" />
+
+    </category>
+
+	<!-- experimental properties -->
+    <category label="30196">
+
+    	<!-- testing streamer -->
+        <setting id="streamer" type="bool" label="30194" default="false" />
+        <setting id="stream_port" type="number" subsetting="true" label="30195" default="8011" />
+        <setting id="local_db" type="bool" subsetting="true" label="30199" default="false" />
+
+
+    	<!-- update watch status -->
+        <setting id="tv_db_watch" type="bool" label="30197" default="false" />
+        <setting id="movie_db_watch" type="bool" label="30198" default="false" />
+
+		<!-- crypto properties -->
+        <setting label="30190" type="lsep"/>
+        <setting id="crypto_password" type="text" subsetting="true" label="30002" default="" />
+        <setting id="crypto_salt" type="file" subsetting="true" label="30191" default="" />
+
+
+    </category>
+
+	<!-- video properties -->
+    <category label="30025">
+
+    	<!-- testing streamer -->
+        <setting id="streamer" type="bool" label="30194" default="false" />
+        <setting id="stream_port" type="number" subsetting="true" label="30195" default="8011" />
+
+        <setting id="video_skip" type="slider" label="30161" default="98" option="percent" range="0,1,100" />
+        <setting label="30037" type="lsep"/>
+        <setting id="context_video" type="enum" subsetting="true" label="30022" values="Video only|Video and Music|Everything" default="0"/>
+        <setting label="30006" type="lsep"/>
+    	<setting id="prompt_quality" type="bool" subsetting="true" label="30019" default="true" />
+    	<setting id="never_stream" type="bool" subsetting="true" label="30122" default="false" />
+        <setting label="30115" enable="eq(-1,false)" type="lsep"/>
+    	<setting id="preferred_quality" type="enum" enable="eq(-2,false)" subsetting="true" label="30011" values="perfer best (1080,720,<720)|prefer 720 (720,<720,>720)|prefer SD (480,<480)" default="0" />
+    	<setting id="preferred_format" type="enum" enable="eq(-3,false)" subsetting="true" label="30012" values="MP4,WebM,flv|MP4,flv,WebM|flv,WebM,MP4|flv,MP4,WebM|WebM,MP4,flv|WebM,flv,MP4" default="0" />
+    	<setting id="avoid_codec" type="enum" enable="eq(-4,false)" subsetting="true" label="30013" values="none|VP8/vorbis" default="0"/>
+    	<setting id="avoid_format" type="enum" enable="eq(-5,false)" subsetting="true" label="30167" values="none|flv" default="0"/>
+        <setting subsetting="true" label="30168" type="lsep"/>
+    </category>
+
+	<!-- music properties -->
+    <category label="30094">
+        <setting label="30037" type="lsep"/>
+        <setting id="context_music" type="enum" subsetting="true" label="30023" values="Music only|Everything" default="0"/>
+    </category>
+
+   	<!-- photo properties -->
+    <category label="30160">
+        <setting label="30037" type="lsep"/>
+        <setting id="context_photo" type="enum" subsetting="true" label="30024" values="Photos only|Music and Photos|Everything" default="0"/>
+        <setting id="photo_folder" type="folder" label="30038" default="" />
+        <setting id="photo_resolution" type="enum" label="30185" values="720p|1080p|4k|8k|16k|480p|original" default="0" />
+    </category>
+
+	<!-- cache properties -->
+    <category label="30116">
+        <setting id="cache_folder" type="folder" label="30090" default="" />
+    	<setting id="cache_thumbnails" type="bool" subsetting="true" label="30182" default="false" />
+    	<setting id="cache_srt" type="bool" subsetting="true" label="30181" default="false" />
+        <setting label="30031" type="lsep"/>
+    	<setting id="always_cache" type="bool" subsetting="true" label="30121" default="false" />
+        <setting id="cache_single" type="bool" subsetting="true" label="30132" default="false" />
+        <setting id="cache_continue" type="bool" subsetting="true" label="30174" default="false" />
+        <setting id="chunk_size" type="slider" subsetting="true" label="30091" option="int" range="131072,8192,8388608" default="163840" />
+        <setting id="cache_percent" type="slider" subsetting="true" label="30093" default="10" option="percent" range="0,1,100" />
+    </category>
+
+
+	<!-- encryption properties -->
+    <category label="30165">
+
+		<!-- encfs properties -->
+        <setting label="30127" type="lsep"/>
+        <setting id="encfs_source" type="folder" subsetting="true" label="30128" default="" />
+        <setting id="encfs_target" type="folder" subsetting="true" label="30129" default="" />
+        <setting id="encfs_inode" type="enum" subsetting="true" label="30155" values="local|samba/nfs/remote/other" default="0" />
+        <setting id="encfs_download_type" type="enum" subsetting="true" label="30186" values="regular|optimized for media (resumeable)" default="1" />
+        <setting id="encfs_stream" type="bool" subsetting="true" label="30152" default="false" />
+        <setting id="encfs_exp" type="bool" subsetting="true" label="30187" default="false" enable="eq(-1,true)"  />
+        <setting id="encfs_cache_single" type="bool" subsetting="true" label="30132" default="false" enable="eq(-2,false)" />
+        <setting id="encfs_continue" type="bool" subsetting="true" label="30174" default="false" enable="eq(-3,false)" />
+        <setting id="encfs_cache_percent" type="slider" subsetting="true" label="30093" default="10" option="percent" range="0,1,100" enable="eq(-3,false)" />
+        <setting id="encfs_chunk_size" type="slider" subsetting="true" label="30091" option="int" range="131072,8192,8388608" default="163840" enable="eq(-4,false)" />
+        <setting label="30037" type="lsep"/>
+        <setting id="context_evideo" type="enum" subsetting="true" label="30022" values="Video only|Video and Music|Don't Filter" default="0"/>
+        <setting id="context_emusic" type="enum" subsetting="true" label="30023" values="Music only|Don't Filter" default="0"/>
+        <setting id="context_ephoto" type="enum" subsetting="true" label="30024" values="Photos only|Don't Filter" default="0"/>
+        <setting label="30166" subsetting="true" type="lsep"/>
+    </category>
+	<!-- advanced properties -->
+    <category label="30134">
+<!-->    	<setting id="integrated_player" type="bool" label="30133" default="false" />-->
+    	<setting id="cc" type="bool" label="30149" default="true" />
+    	<setting id="srt" type="bool" label="30150" default="true" />
+    	<setting id="parse_tv" type="bool" label="30156" default="true" />
+    	<setting id="parse_music" type="bool" label="30157" default="true" />
+
+    </category>
+
+	<!-- library integration properties -->
+    <category label="30060">
+<!--       <setting id="resumepoint" type="enum" subsetting="true" label="30170" values="Local only|Google Drive file property (write access required)|Google Drive Spreadsheet" default="1" />-->
+        <setting id="resumeprompt" type="bool" label="30175" default="true" />
+
+        <setting label="30061" type="lsep"/>
+        <setting id="strm" type="bool"  subsetting="true" label="30189" default="false" />
+
+        <setting id="strm_path" type="folder"  subsetting="true" label="30026" default="" />
+<!--        <setting id="library" type="bool" label="30064" default="false" />
+        <setting id="library_account" type="labelenum"  values="1|2|3|4|5|6|7|8|9" default="1" label="30062" />
+        <setting id="library_filename" type="text" label="30063" default="" />-->
+    </category>
+
+
+ 	<!-- troubleshooting properties -->
+</settings>

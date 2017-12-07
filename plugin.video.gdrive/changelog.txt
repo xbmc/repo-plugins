@@ -1,0 +1,663 @@
+v0.8.60 (2017-11-07)
+- replacement enrollment method
+- remove creashreporting module
+- implemented: Rename STRMs to a Kodi friendly format #147
+- implemented: STRM extract into tv shows/movie #153
+- fix for public streams without a proper stream map table (#152)
+- work to generalize code to work without KODI
+v0.8.56 (2017-11-09)
+- repurpose kodi_common (fix enrollment bug introduced recently)
+v0.8.55 (2017-09-23)
+- list team drives on root screen of account ([Team Drive- name])
+v0.8.54 (2017-09-23)
+- update more occurrences for team drive
+v0.8.53 (2017-09-22)
+- support for searching for files and viewing starred items on team drives
+- start work on: Display movie/TV episode information #150
+v0.8.52 (2017-08-05)
+- cleanup and added further debug for watch/resume status
+v0.8.51 (2017-08-05)
+- ensure the STRM watch/resume status is using settings preference
+- fix typo in movie status fetch
+- deploy watch status tracking for crypto STRM
+v0.8.50 (2017-08-04)
+- reliability fixes for watch status / resume point updating
+v0.8.49 (2017-08-04)
+- limitation: Streamer needs to work with multiple accounts #141
+- fix: Streamer causes plugin to hang when running from STRM #140
+v0.8.48 (2017-08-04)
+- add a service.py
+- use label instead of file for searching for shows and movies in KODI db
+v0.8.47 (2017-08-02)
+- update watch status based on % completed based on setting in Addon Settings -> Video
+v0.8.46 (2017-08-02)
+- moved fetching of TV and MOVIE ID to player start (for faster saving on stop/ended streams)
+v0.8.45 (2017-07-28)
+- fixed addon-name
+- refine logging in player class
+v0.8.44 (2017-07-28)
+- added watching/resuming STRM files for movies --  FEATURE REQUEST: marking viewed in STRM #113
+v0.8.43 (2017-07-27)
+- testing fixes for watching/resuming STRM files for TV shows --  FEATURE REQUEST: marking viewed in STRM #113
+v0.8.42 (2017-07-27)
+- move out update tv show watch/resume status out to run regardless of setting (also related to FEATURE REQUEST: marking viewed in STRM #113)
+- fix for right-click play not working (caption handling was moved to far up the code)
+- fix: STRM - abbreviated constructed files won't run in 0.8.41 #137
+- updated enccryptFolder -- recursive + print encryption details
+- more error handling around unencrypted files in an encrypted folder
+v0.8.41 (2017-07-19)
+- fix for STRM plackback wth stramer class
+- troubleshooting progress on STRM playback with streamer class
+- add error handling around unencrypted files in an encrypted folder
+v0.8.40 (2017-06-21)
+- fix streamer init
+v0.8.39 (2017-06-18)
+- handled by streamer (experimental), needs testing - Add proxy handling #117
+- implement tv watch status update - FEATURE REQUEST: marking viewed in STRM #113
+- solved issue with non-faststart crypto files to streamer class
+- add crypto support to streamer class
+- streamer class fix seeking by adding threading
+- streamer class now plays back video content successfully
+v0.8.38 (2017-06-03)
+- change SRT load timing (for dealing with KODI 17+ https://github.com/ddurdle/GDrive-for-KODI/issues/119
+- add streamer class activation and settings
+- encryption crypto - add logic to decrypt file names
+- encryption crypto - add logic to decrypt folder names
+- encryption-crypto - integrate crypto into settings
+- promote to stable
+v0.8.37 (2017-01-05)
+- disable automatic STRM
+- disable tv scraping
+- fix: Folder Creation When Saving STRM - additional subdirectories and blank folder names #105
+v0.8.36 (2016-12-12)
+- sync
+v0.8.33 (2016-12-06)
+- fix: strm files containing an apostrophe #101
+v0.8.32 (2016-12-05)
+- fix: strm files containing an apostrophe #101
+- testing crypto support - https://github.com/ddurdle/GDrive-for-KODI/issues/104
+v0.8.31 (2016-11-20)
+- delete spreadsheet values when deleting account
+- fix: On account delete, cleanup entries #103
+v0.8.30 (2016-11-17)
+- add automatic strm toggle in settings
+- add prompt to resume (cloud resume)
+v0.8.29 (2016-11-16)
+v0.8.28 (2016-11-16)
+- push testing to stable
+v0.8.27 (2016-11-13)
+- fix public streams (streamURL)
+- fix: Public streams #99
+v0.8.26 (2016-10-19)
+- merge modified method of STRM creation with old manual STRM creation
+v0.8.25 (2016-10-18)
+- add browse by quality (resolution)
+v0.8.24 (2016-10-17)
+- add Google Sheets API v4
+- add TMDB API
+v0.8.23 (2016-10-16)
+- tesitng browser movies by studio
+- tesitng browser movies by directors
+- implement movie browsing by title
+v0.8.22 (2016-10-15)
+- enable playback for testing features
+v0.8.21 (2016-10-14)
+- testing browse movie by year
+v0.8.20 (2016-10-13)
+- testing movie genre + year
+v0.8.19 (2016-10-11)
+- fix for cloud_db saving playback times
+- cleanup
+v0.8.18 (2016-10-06)
+- incorporate new fields and other fixes for strm spreadsheet functionality
+v0.8.17 (2016-10-05)
+- fix for [enroll account] screen missing
+- abstract gdrive references
+v0.8.16 (2016-10-03)
+- add strm spreadsheet functionality
+v0.8.15 (2016-09-21)
+- enabled experimental encfs viewer
+v0.8.14 (2016-09-20)
+- experiment with new encfs streamer
+v0.8.13 (2016-09-18)
+- STRM creation: treat .YYYY. and -YYYY- as movie (user321 contribution)
+- STMR creation: fix fileID issue with autmatic STRM creation
+v0.8.12 (2016-09-13)
+- fix spreadsheet error
+v0.8.11 (2016-09-12)
+- add encfs download type
+v0.8.10 (2016-09-11)
+- new minimum chunk size for offline + encfs
+- fix cache and encryption chunk sizes in settings
+v0.8.09 (2016-09-10)
+- clarify cache ==> offline
+- cleanup settings
+- move cloud_db spreadsheet into accounts
+v0.8.08 (2016-09-09)
+- add timeouts for automation of creation of STRM #62
+v0.8.07 (2016-09-08)
+- implement deletion function - automation of creation of STRM #62
+- reliablity improvements for automation of creation of STRM #62
+- change encfs download type
+v0.8.06 (2016-09-05)
+- implement for testing: automation of creation of STRM #62
+v0.8.05 (2016-09-02)
+- push unstable to stable
+v0.8.04 (2016-09-01)
+- fix: SRT playback when using STRM #87
+- fix: Subtitle doesn't load from folder shortcut #72
+v0.8.03 (2016-08-30)
+- fix: STRM Creation Failure 0.8.0 #86
+- fix: Cant create strm from folder #78
+- fix: closed captions support broken #85
+v0.8.02 (2016-08-27)
+- fix: encfs resume in prefer to stream
+- encfs playback improvement
+- fix: encfs srt support
+v0.8.01 (2016-08-26)
+- added better support for photos
+- added resolution option in addon settings->Pictures
+v0.8.0 (2016-08-25)
+- sync new release, promote testing release
+v0.7.63 (2016-08-24)
+- encfs fix
+- fix: Google transcode stream support #83
+v0.7.62 (2016-08-24)
+- fix transcode and re-enable
+v0.7.60 (2016-08-19)
+- disable transcode to prevent playback errors (google issue, temporary?)
+v0.7.60 (2016-08-19)
+- support for encfs subtitles
+v0.7.59 (2016-07-27)
+- minor updates to spreadsheets
+v0.7.58 (2016-07-24)
+- spreadsheets - fix resume automatically
+- spreadsheets - fix for registering with different names (non-default)
+- spreadsheets - fix for registering with duplicate names
+- spreadsheets - skip read-only spreadsheets
+v0.7.57 (2016-07-23)
+- add gplayer debug statements
+v0.7.56 (2016-07-17)
+- fix for CLOUD_DB activation
+v0.7.55 (2016-07-15)
+- stability improvements for encfs
+v0.7.54 (2016-07-11)
+- add encfs 'prefer to stream" option (contiue = false, single file = true)
+- encfs: better tracking for disrupted playback
+- fix playback continuation issue if ran out of buffer
+- implement: encfs - fix downloading display name #80
+v0.7.53 (2016-07-07)
+- fix for resuming download in encfs
+- fix for stopping download in encfs when playback stopped
+- disable modifying user accounts in settings
+v0.7.52 (2016-06-09)
+- add some debug to player
+v0.7.51 (2016-06-02)
+- fix: prevent loading screen that won't disappear -- force context type video if accessing a directory listing without context properly set (accessing from favourites for instance)
+v0.7.50 (2016-06-01)
+- fix: refresh token on spreadsheet db access (when user favourites cloud items)
+v0.7.49 (2016-04-07)
+- fix fanart.jpg
+- contribution by dabinn - filter out trashed items
+v0.7.48 (2016-03-22)
+- add .iso (video) support
+v0.7.47 (2016-03-17)
+- Contributions by dabinn
+  - Use title.startswith() to match title name : more accurate.
+  - Move 'isExactMatch = False' into loop : fix 'too many subtitle loaded' issue
+  - Add idx extension support: idx and sub files are a pair, idx is index file, sub contains bitmap subtitle. They need to work together.
+  - fix double-byte character filenames (cache SRT)
+  - playback next fix for srt
+- fix: cancel on srt selection
+v0.7.46 (2016-03-14)
+- SRT - merge contribution by dabinn (dealing with TV series in a single directory)
+- add ability to toggle caching of thumbnails and SRT on/off
+- fix cache of SRT
+- rework SRT logic
+        1) list of files (multiple languages) from the same folder that exactly match the title of the video
+        2) list of candidate files that are from the same folder but don't match the title of the video (if exceeds 4, ask user to select -- likely TV series or folder containing multiple movies)
+v0.7.45 (2016-03-10)
+- fix search error when CLOUD_DB is enabled
+- add support for subtitles .ass and .ssa
+- add mkv and rmvb extension mapping in unknown file situation
+v0.7.44 (2016-03-09)
+- fix for playback of offline file
+v0.7.43 (2016-03-08)
+- CLOUD_DB: load data during listings (resume + play count)
+- CLOUD_DB: fix resume points
+- CLOUD_DB: STRM resume points
+- CLOUD_DB: updated add to queue
+- drop Brazil language file
+v0.7.42 (2016-03-06)
+- CLOUD_DB: do not prompt for resume if seeking
+- CLOUD_DB: update resume prompt with resume point time
+- CLOUD_DB: add folder support
+- CLOUD_DB: add "mark as watched"
+- CLOUD_DB: add "recently watched"
+- CLOUD_DB: add "recently started"
+- CLOUD_DB: add spreadsheet creation from "Save STRM"
+- CLOUD_DB: add nfo support
+- CLOUD_DB: add fanart support
+- CLOUD_DB: add browse "library"
+- CLOUD_DB: add browse "queued"
+v0.7.41 (2016-03-04)
+- add support for resume-download of files
+v0.7.40 (2016-03-03)
+- CLOUD_DB addition: md5/checksum
+- fix: display offline in media list
+v0.7.39 (2016-03-02)
+- resolved speed issue with cache video files
+- add logic to accomodate flexible CLOUD_DB columns
+- CLOUD_DB addition: commands
+v0.7.38 (2016-02-28)
+- music "start at" fix
+v0.7.37 (2016-02-27)
+- fix: transcodes even if "never transcode" is selected
+- drop integrated player mode (hide opening stream)
+v0.7.36 (2016-02-27)
+- further playback fixes
+v0.7.35 (2016-02-26)
+- cleanup of video playback
+v0.7.34 (2016-02-25)
+- implemented STRM resume point
+v0.7.33 (2016-02-24)
+- modules inclusion list fix
+v0.7.32 (2016-02-22)
+- fix for single-file cache not clearing between plays
+- fix: prompt user with cache + original in never transcode mode
+- make offline stream files a video extension for universal playback
+- fix transcode selection screen disappearing after a fix in 0.7.31
+- add option to settings to terminate cache download on playback user-stopped
+v0.7.31 (2016-02-20)
+- fix but for error 400 in cache for never transcode + always cache
+v0.7.30 (2016-02-19)
+- add print statement for debug
+v0.7.29 (2016-02-19)
+- add offline media playback option (completely offline)
+v0.7.28 (2016-02-18)
+- fix strm encfs playback
+v0.7.27 (2016-02-17)
+- stability testing fixes
+v0.7.26 (2016-02-17)
+- stability testing fixes
+v0.7.25 (2016-02-13)
+- cache fixes for permissions denied on windows
+- cache playback fixes
+v0.7.24 (2016-02-12)
+- implemented: support for srt files in same remote folder on google drive regardless of srt filename #58
+- implemented: Allow disable to thumnail cache #51
+- fix: STREAM PREFERENCES #59
+- no longer need to cache SRT or SUB files locally before playback; only CC/TTS require caching (they need to be converted to SRT format)
+v0.7.23 (2016-02-12)
+- fix for encfs playback on Windows
+v0.7.22 (2016-02-11)
+- picture/photo playback improvements, link into default KODI slideshow functionality
+- added playback photos without caching (also now the default behaviour)
+- fix: https://github.com/ddurdle/GDrive-for-KODI/issues/57
+v0.7.21 (2016-02-11)
+- improvements with encfs playback(specficially around streaming)
+- added options chunk and percent before playback for encfs
+- fix issue with encrypted MKV playback (encfs)
+Version 0.7.20
+- fix issue where files with extension missing don't show up
+- work towards cloud based (spreadsheet) resume points
+Version 0.7.19
+- correct dialog popup for quality when using "playback entire folder" to abide by "force prompt" setting (was defaulting to prompt always)
+Version 0.7.18
+- fix "watch folder" error (now "playback entire folder", to be more neutral with audio)
+- fix "playback entire folder" to exclude video when playback in music plugin
+- correct dialog popup for quality when using "playback entire folder" when there is only 1 quality choice (such as when playing music)
+Version 0.7.17
+- allow disable of cloud resume and playback count (new setting added to Library, resume point, can be local or cloud based)
+Version 0.7.16
+- fix: creating STRM files - prevent dropping .s in Marvel's Agents of S.H.I.E.L.D., etc but still fix titles that use . as a separator
+Version 0.7.15
+- add support for .ts video files
+Version 0.7.14
+- fix: STRM files being generated for .sub #55
+Version 0.7.13
+- fix: TV scraping STRM doesn't write to correct path #56
+Version 0.7.12
+- fix: Music showing up in Videos #50
+Version 0.7.11
+- fix: Problem activating a second instance with the same account #32
+Version 0.7.10
+- encfs filter fix
+- Resume playback issue in 480p (flv) #45
+- add avoid format logic
+- add Filename Initialization Vector Chaining support
+- improvements to audio/music encfs support
+- improvements to video encfs support
+- improvements to photos encfs support
+- broke off encfs to it's own settings
+- fix: STRM creation should only be for video and music
+- fix: regex for TV STRM scraping
+Version 0.7.9
+- fix: Filenames with invalid characters #49
+Version 0.7.8
+- add an [enroll account] option for an interactive account setup for Google Apps
+Version 0.7.7
+- implement: Purge cache folder #46
+- add force download / ignore cache for SRT and CC
+- reorganize settings, split into videos/pictures/music
+- add setting to skip resume point if duration > 90% complete
+Version 0.7.6
+- add ability to remove account definiton automatically (right-click on account, remove account)
+- music: add sort by track
+Version 0.7.5
+- add settings: advance - parse music, parse tv shows
+- video: add sort by episode
+- parsing tv show information from filename
+- parsing audio information from filename
+- fix playback issue introduced with CC with non-transcodable files (or videos currently being processed)
+Version 0.7.4
+FLAC files not listed #43
+- add support for application/x-flac and application/mp3
+Version 0.7.3
+- encfs: add folder navigation support, add photo support, support for matching encrypted to decrypted filenames, support for local (inode) and remote (c_time)
+Version 0.7.2
+- fix for Save STRM on folders
+Version 0.7.0
+- promotion to stable
+- PASS - regression testing
+- fix: Play from here in videos causes endless "opening stream" + error #29
+Version 0.6.35
+- regression testing underway
+- playback improvements for regression testing
+- ClientLogin obsolete, remove configuration ability
+Version 0.6.34
+- better playback controls
+Version 0.6.33
+- add music support for STRM files
+- fix for music playback
+Version 0.6.32
+- fix for force prompt playback
+- playblack fixes (ClientLogin)
+- better seeking support
+Version 0.6.31
+- fix error issue around resume points
+- re-enable resume points (Google Drive API 2)
+Version 0.6.30
+- accomodate a change in Google Drive API 2 (only 1 was returning)
+Version 0.6.29
+- getMediaList - improved error handling
+Version 0.6.28
+- fix cache playback
+- rename "Play with seek" with "Start at"
+- combine offline playback into default playback
+- add play... to right-click context menu to force prompt of selection (when force prompt is disabled in settings)
+Version 0.6.27
+- add: track resume point on Google Drive (automatically resume where last left off) -- doesn't use spreadsheet, but requires readwrite authorization
+- fix a memory leak
+Version 0.6.26
+- enrollment fix
+- fix: right-click exclusion for images
+Version 0.6.25
+- fix: playback issue when forced prompt is disabled.
+Version 0.6.24
+- fixes for slideshow playback
+Version 0.6.23
+- improvements to offline caching playback
+Version 0.6.22
+- add: thumbnail caching
+- add: srt/cc caching
+- improvements to offline caching playback
+Version 0.6.21
+- apply Playback with Original changes for all playback methods
+- fix: .STRM playback fix
+Version 0.6.20
+- testing a new "Playback with Original" method
+Version 0.6.19
+- fix for problem with 1 account
+Version 0.6.18
+-- Google Drive API 2 module - load and enable SRT and Caption tracks by default (add settings to disable, remove from right-click context if enabled in settings)
+Version 0.6.17
+- fix: issue introduced in 0.6.15 with playback for offline media
+Version 0.6.16
+- fix: issue introduced in 0.6.15 with playback
+Version 0.6.15
+-- Google Drive API 2 module - add: playback of folder
+- core refactoring
+Version 0.6.14
+-- Google Drive API 2 module - fix: captions supporting "
+-- Google Drive API 2 module - read/write OAUTH2 - save resume point [right-click Play with resume] (testing)
+Version 0.6.13
+-- Google Drive API 2 module - fix: captions stopping at certain point in playback
+-- Google Drive API 2 module - fix: captions supporting italic
+Version 0.6.12
+-- Google Drive API 2 module - added right-click "Play with seek" to seek to a specified point in the video
+-- Google Drive API 2 module - fix unicode issue with caption tracks
+Version 0.6.11
+-- Google Drive API 2 module - fix for videos with multiple caption tracks
+-- Google Drive API 2 module - fix format for html encoding in caption tracks
+-- Google Drive API 2 module - fix for Google Apps login type
+Version 0.6.10
+- support for youtube closed caption tracks (timed text / tts) [these are "caption tracks" associated with a video), during testing you must right-click and "play with captions"
+- implemented: Support for closed captions in stream mode #10
+Version 0.6.9
+- implement new login type: Google Apps (allows users to provide a username + passcode and skip manually entering "the code")
+- fix for silent error on STRM creation
+Version 0.6.8
+- fix for playback for ClientLogin
+-- Google Drive API 2 module - fix for integrated player
+Version 0.6.7
+- code refactoring
+- testing subtitle support (.srt): right-click, play with subtitles
+Version 0.6.6
+- code refactoring
+- fix: Titles of video/music files not displayed properly when using integrated player #26
+- fix: files and folders with ,s in their name break the plugin URL for playback #28
+- fix: Direct playback of music files in pictures does not work #27
+- thumbnail support when playing back via STRM
+Version 0.6.5
+- fix for handling special characters in STRM building process (such as &)
+- fixes for encfs function for special characters such as ,s in filenames
+Version 0.6.4
+-- implement: support for saved-search #23
+-- Google Drive API 2 module - add: saved search (create a folder anywhere on your drive called 'SAVED SEARCH|search critera', and when viewing that folder, that entry will show up with a "*search critera", allowing you to search for content matching "search content"
+- bug fix for delayed playback on videos
+Version 0.6.3
+- fully implement override player playback (no longer displays "opening stream")
+- add toggle in settings for override player playback (advance-> use integrated player) [default disable]
+- cleanup of settings
+- remove "Play original" from context menu for "music"
+Version 0.6.2
+- add player controls (player + window) -- testing
+- override player playback (no longer displays "opening stream") -- testing
+- fix playback default for never transcode + always cache
+-- Google Drive API 2 module - add force cache to single file option
+Version 0.6.1
+- add encfs source + target support, decrypted folder support
+Version 0.6.0
+- Merge with stable
+Version 0.5.17
+-- Google Drive API 2 module - fix for "show all music" & "show all photos"
+-- Google Drive API 2 module - for unknown reasons, for remote music, if Music is tagged as Music, it errors-out when playing back from "Music", doesn't happen when labeled "Video"
+Version 0.5.16
+- fix audio streaming issue by updating User Agent
+-- Google Drive API 2 module - fix filesize sizing issue with caching
+-- Google Drive API 2 module - optimizations for caching
+Version 0.5.15
+- bug fixes for OAUTH2
+Version 0.5.14
+- passed regression testing: Support for Drive API 2 #21
+- passed regression testing: OAUTH 2 support #20
+- passed regression testing: Move to CloudService framework #16
+- passed regression testing: Photo playback on Android #14
+- passed regression testing: Playback fails #13
+- passed regression testing: title when using mode=playvideo&title=file_name_in_drive #11
+- passed regression testing: Pictures support #5
+- passed regression testing: Music and Pictures? #1
+-- Google Drive API 2 module - added "always cache for playback" (used to be known as memorycache)
+-- Google Drive API 2 module - added "never transcode" (used to be known as playvideo -- plays original, never a stream)
+Version 0.5.13
+- tested against regression bucket (pass)
+- fix streamurl
+- improved error handling on deleted videos
+-- Google Drive API 2 module - add playback via public (not logged in)
+- disable <options>; not in use anymore
+- if invoked without a username or instancename, don't default on the first account but prompt the user to select
+-- Google Drive API 2 module - bug fix with header authorization
+Version 0.5.12
+-- Google Drive API 2 module - add enroll account via .STRM
+-- Google Drive API 2 module - fix for long listings
+- fix for ClientLogin backward compatibility
+- add help file for login
+- add additional error handling for logins
+Version 0.5.11
+- enabled OAUTH2 private support
+- enabled OAUTH2 custom client id/secret
+Version 0.5.10
+- prevent "Save STRM" option for picture files and while running under picture plugin
+- better context handling
+- add dialog for save STRM
+- cleanup settings
+-- Google Drive API 2 module - add support slideshow support (pictures)
+-- Google Drive API 2 module - remove sort-order from playback list
+-- Google Drive API 2 module - add support for download
+-- Google Drive API 2 module - add support for cache playback
+-- Google Drive API 2 module - add support for download folder
+-- Google Drive API 2 module - implement depricated API calls: memorycachevideo, play, playvideo, streamvideo
+Version 0.5.9
+-- Google Drive API 2 module - add support legacy STRM support for files with title
+-- Google Drive API 2 module - add support for photos
+-- Google Drive API 2 module - added support for saving photos on network devices.
+Version 0.5.8
+-- Google Drive API 2 module - add support for search
+-- Google Drive API 2 module - add support for "show all music/video/photo"
+-- Google Drive API 2 module - add support for "show starred"
+-- Google Drive API 2 module - add support for "show shared"
+- issue: Support for Drive API 2 #21
+- issue: OAUTH 2 support #20
+Version 0.5.7
+- better multiple account support
+- update settings for OAUTH2 support
+- reduce number of supported accounts to 9 (XBMC limitations, exceeds maximum number of setting components)
+-- define additional accounts above 9 manually by editing the settings.xml to add account 10,11,etc
+- added Google Drive API 2 module
+-- Google Drive API 2 module - add support for root folder
+-- Google Drive API 2 module - add support for subfolder folder
+-- Google Drive API 2 module - add support for video playback
+-- Google Drive API 2 module - add support for streaming playback
+- cleanup of import statements
+Version 0.5.6
+- add fallback to first account if not able to load any accounts
+Version 0.5.5
+- fix: create directories of STRM on network paths
+- fix: playback of STRM files without username/instancename when multiple accounts are defined
+- fix: add username to buildSTRM
+- add: shared content
+- add: support write STRM to network path
+Version 0.5.4
+- backward support: API video with title
+- API: add search function
+* to playback a video (first video that matches the title):
+*   plugin://plugin.video.gdrive-testing/?mode=video&title=This is the title of the media file
+*
+* to return a list of media files to select from:
+*   plugin://plugin.video.gdrive-testing/?mode=search&title=This is the title of the media file
+- add search function
+Version 0.5.3
+- implement filesize sorting
+- add back original stream
+- sort stream selection
+Version 0.5.2
+- add starred files/folders
+- implement proper label sorting
+- nekwebdev contribution: saving movies and tv shows to "easily" XBMC importable folders -- enhancements
+- add: save STRM path to settings (optional tvshows and movies)
+Version 0.5.1
+- fix: adjustment for building STRMs with subfolders
+- fix subfolder STRM issue: Move to CloudService framework #16
+Version 0.5.0
+- major move to cloudservice API
+- enable buildSTRM
+- add multiple account support (default: 10 accounts)
+- add cloudservice API files
+- add crashreporting API files
+- implemented: Move to CloudService framework #16
+- implemented export to .STRM: Library Integration #15
+Version 0.4.8
+- fix for video preview image (problem introduced with 0.4.5)
+- context improvements
+- improvements for "show all videos by alphabetical order"
+Version 0.4.7
+- introduced an issue with the mkdir for photos; fixed
+Version 0.4.6
+- fix for photos
+- tested and works: Photo playback on Android #14
+Version 0.4.5
+- add photo parameters in settings
+- add content context settings
+- enabled picture support for public testing
+- implemented issue: Pictures support #5
+- implemented issue: Music and Pictures? #1
+Version 0.4.4
+- make quality selection a list instead of a directory list
+- regression fix -- plugin error trying to present stream list if the media file isn't processed or processable by google
+- regression fix -- list media files that are not processed or unprocessable by google (last working in 0.2.7)
+Version 0.4.3
+- add % to download before cache playback
+- add Play cache file to media right click menu
+- fix for authorization key validation after changing account information
+Version 0.4.1
+- fix for disk playback of MKV files
+Version 0.4.1
+- enable disk mode
+- add settings chunk size and cache location (for disk playback)
+- cleanup missing entry in Brazil language file
+- add error for unplayable streamurl media file
+- added support for FLAC
+- introduced encryption support
+- introduced picture support
+Version 0.3.3
+- contribution from marfegte from XBMC forum - portuguese (Brazil) language set
+- ensure streamvideo playback has a proper title
+- tweak settings dialog (disable stream selections for non-stream type)
+Version 0.3.2
+- issue implemented Folder support #3
+- issue implemented Music and Pictures? #1
+- Video quality selection support #4
+- add support for preferred resolution/quality, format, and codecs to avoid
+- automatically playback based on context (directory vs playback)
+- support for music files!
+- add itags
+- folder support!
+- don't login or provide authorization token for public videos (unless denied access)
+- add thumbnail previews
+- fix plugin URLs to make compliant with plugins like PseudoTV Live
+Version 0.3.1
+- Plays video.google.com videos that are linked in your google drive account
+- added streamURL parameter: mode=streamURL
+- playback a specific Google Drive Video URL (format: https://docs.google.com/file/d/#####/preview) via stream (automatically transcoded by Google Drive playback services)
+- handy for playback of publicly shared videos stored in Google Drive
+- bypasses Playback Type in Settings
+- create .strm or .m3u files containing the following: plugin://plugin.video.gdrive?mode=streamURL&amp;url=https://docs.google.com/file/d/#####/preview
+- if your video is composed of multiple clips, you can create a .m3u that makes the above plugin:// call, one line for each clip.  You can then create a .strm file that points to the .m3u.  XBMC can index movies and shows contained in your Google Drive account by either a .strm containing a single plugin:// call to the video, or a .strm that points to a local .m3u file that contains a list of plugin:// calls representing the video
+- don't login or provide authorization token for public videos (unless denied access)
+- Important! due to recent undocumented changes in the Google Docs API, the plugin may have begun to fail to play video (only display a list of videos).  This has been updated with the following change.
+- updated for a google drive change on or about 2014/02 where the video download and streaming now uses the 'wise' service instead of 'writely'
+- if your google drive account has not been updated to the new UI (that is, the change from writely to wise hasn't kicked in), you can enable the old behaviour of using writely for downloading and streaming by setting "Force old writely service for plackback" to ON/TRUE in settings
+- remove explicit UTF-8 calls [Error on load public url #2]
+- add remote-debugger code
+- cleanup of logging statements
+Version 0.3.0
+- finialize authorization token from experimental to stable
+  - authorization token allows for repeated calls to plugin using a reuseable session
+- add cache type: stream
+  - stream vidoes directly using google drive's player
+  - this allows for https videos playing on raspberry pi in a reliable manner
+- rename default cache type: memory-cache
+- add settings: cache type (memory-cache, disk-cache (not in use), stream)
+- catch failed login credentials
+Version 0.2.2
+- updated xbmc.python from 1.0 to 2.1.0 for XBMC 13
+Version 0.2.1
+- fix for authorization token being populated even when experimental feature is left turned off
+  - the authorization token can cause login errors; the feature is not ready to be released yet.
+  - the correction fixes the feature turning on by itself
+- if you authorization token field is populated, click defaults to unset it.
+Version 0.2.0
+- Public release
+Version 0.1.0
+- Initial version

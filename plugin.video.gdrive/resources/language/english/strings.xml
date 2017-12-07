@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<strings>
+    <string id="30000">gDrive</string>
+    <string id="30001">Username</string>
+    <string id="30002">Password</string>
+    <string id="30003">Authorization Key [OPTIONAL]</string>
+    <string id="30004">User Agent</string>
+    <string id="30006">Playback</string>
+    <string id="30005">Save Authorization Key</string>
+    <string id="30007">Always Prompt for Quality / Format Playback</string>
+    <string id="30008">Login</string>
+    <string id="30009">Video + Music</string>
+    <string id="30010">Login Type</string>
+    <string id="30011">Preferred Quality</string>
+    <string id="30012">Preferred Format</string>
+    <string id="30013">Avoid Quality</string>
+    <string id="30014">Avoid Format</string>
+    <string id="30019">Force Prompt for Quality Selection</string>
+    <string id="30015">Set the Username and Password in addon settings before running.</string>
+    <string id="30016">You must add org.python.pydev.debug.pysrc to your PYTHONPATH.</string>
+    <string id="30017">Login information is incorrect or permission is denied</string>
+    <string id="30018">show all</string>
+    <string id="30039">sorted alphabetically</string>
+    <string id="30020">Playback of this content is not possible.</string>
+    <string id="30021">The media file is unavailable or was deleted.</string>
+    <string id="30033">Choose a stream</string>
+    <string id="30022">View when in video plugin context</string>
+    <string id="30023">View when in music plugin context</string>
+    <string id="30024">View when in photo plugin context</string>
+    <string id="30025">Videos</string>
+    <string id="30029">Photos</string>
+    <string id="30030">Media</string>
+    <string id="30031">Video / Music</string>
+    <string id="30032">Music and Photos</string>
+    <string id="30034">Photos</string>
+    <string id="30037">Context</string>
+    <string id="30038">Photo offline folder</string>
+
+    <string id="30090">Location to store offline files</string>
+    <string id="30091">Chunk size</string>
+    <string id="30092">Downloading...</string>
+    <string id="30035">Caching...</string>
+    <string id="30093">Percent to buffer before playback</string>
+    <string id="30094">Music</string>
+
+
+    <!-- CloudService Generic -->
+
+    <string id="30042">Save STRM</string>
+	<string id="30201">Save TV/Movie STRM</string>
+	<string id="30206">Generate/Save TV/Movie STRM</string>
+	<string id="30207">enroll account</string>
+	<string id="30208">offline media</string>
+	<string id="30209">Successfully enrolled account.</string>
+    <string id="30210">Enrollment needs to be completed from a device with a web browser.  In a web browser on a computer or mobile device on the same network as this device, navigate to http://IP:9978 and follow the two steps to complete the enrollment process. Click OK before opening in the browser.</string>
+
+    <string id="30043">Options</string>
+
+    <string id="30051">Your login failed.</string>
+    <string id="30052">Ensure that your username and password are set in settings.</string>
+    <string id="30054">List files according to</string>
+
+    <!-- CloudService Generic - Library -->
+    <string id="30060">KODI Library</string>
+    <string id="30061">STRM Creation</string>
+    <string id="30062">GDrive account number to use (registered under accounts)</string>
+    <string id="30063">Spredsheet name</string>
+    <string id="30064">Use library integration?</string>
+    <string id="30088">Location to store movie STRMs (optional) </string>
+    <string id="30089">Location to store tv show STRMs (optional) </string>
+    <string id="30026">Location to store STRMs</string>
+    <string id="30027">Do you want to create the STRM files in the path</string>
+    <string id="30028">STRM file creation complete.</string>
+
+
+    <!-- CloudService Generic - Crash Reporting -->
+    <string id="30070">Would you like to send the error details to the developer?</string>
+    <string id="30071">No passwords will be sent.</string>
+    <string id="30072">You will be provided an identifer number after sent.</string>
+    <string id="30073">Your identification number of the error submission is </string>
+    <string id="30074">Logging</string>
+    <string id="30075">Enable sending crash logs to developer</string>
+    <string id="30076">Email address (optional)</string>
+    <string id="30077">Email address is for the developer to contact you at.</string>
+    <string id="30078">OS</string>
+    <string id="30079">XBMC version</string>
+    <string id="30080">Last identifier error #</string>
+
+    <string id="30095">Starred Files</string>
+    <string id="30096">Starred Folders</string>
+	<string id="30097">Starred Files & Folders</string>
+	<string id="30098">Shared Files & Folders</string>
+
+    <string id="30100">This feature is not supported on your version of XBMC / KODI</string>
+
+    <string id="30110">Enter search string</string>
+    <string id="30111">SEARCH</string>
+    <string id="30112">Choose a result to playback</string>
+
+    <string id="30113">Make offline</string>
+
+    <string id="30114">Downloads</string>
+    <string id="30115">Stream Perferences</string>
+    <string id="30116">Offline</string>
+    <string id="30117">Listings</string>
+    <string id="30121">Always make offline for playback</string>
+    <string id="30122">Never transcode</string>
+    <string id="30123">Play original</string>
+	<string id="30124">Play + make offline</string>
+	<string id="30125">Play offline</string>
+	<string id="30126">Slideshow</string>
+
+	<string id="30127">encfs</string>
+	<string id="30128">encfs source</string>
+	<string id="30129">encfs target</string>
+	<string id="30130">Save to encfs</string>
+	<string id="30131">Decrypted Drive</string>
+	<string id="30132">Force into single file</string>
+	<string id="30133">Hide "opening stream..." dialogs</string>
+	<string id="30134">Advance</string>
+	<string id="30135">Subtitle offline folder</string>
+	<string id="30136">Select a subtitle offline folder</string>
+	<string id="30137">Do you want to create the subtitles files in the path</string>
+	<string id="30138">Play with subtitles</string>
+	<string id="30139">Select a subtitle</string>
+	<string id="30140">Visit www.dmdsoftware.net and select Google Apps sign-in method.</string>
+	<string id="30141">When signup is complete, click OK</string>
+	<string id="30142">Account activiated successfully</string>
+	<string id="30143">Google code found.  Click OK to continue activation.</string>
+	<string id="30144">Google code not found.</string>
+	<string id="30145">Passcode</string>
+	<string id="30146">Play with captions</string>
+	<string id="30147">Start at</string>
+	<string id="30148">Play with resume</string>
+	<string id="30149">Enable closed-captions tracks</string>
+	<string id="30150">Enable SRT tracks</string>
+	<string id="30151">Play ...</string>
+	<string id="30152">Prefer to stream</string>
+
+    <string id="30118">The following account was enrolled:</string>
+    <string id="30119">The following login error was encountered:</string>
+    <string id="30120">Select an account:</string>
+
+    <string id="30201">OAUTH2 code</string>
+    <string id="30202">OAUTH2 client id</string>
+    <string id="30203">OAUTH2 client secret</string>
+    <string id="30204">OAUTH2 URL</string>
+    <string id="30205">Visit www.dmdsoftware.net for help setting up OAUTH2</string>
+
+    <string id="30152">Something went wrong with login setup.</string>
+
+    <string id="30153">ClientLogin type has been retired.</string>
+	<string id="30154">Please reconfigure account in settings.</string>
+
+	<string id="30155">encfs Type</string>
+	<string id="30156">Parse TV show info from title</string>
+	<string id="30157">Parse music info from title</string>
+	<string id="30158">Account removed from plugin</string>
+	<string id="30159">Remove account from plugin</string>
+    <string id="30160">Pictures</string>
+    <string id="30161">% complete to mark watched</string>
+    <string id="30162">Playback Entire Folder</string>
+	<string id="30163">Scan Media Info</string>
+
+	<string id="30164">Load only SRT / SUB from same folder as video</string>
+	<string id="30165">Encryption</string>
+	<string id="30166">Photos are only viewable in Pictures area</string>
+	<string id="30167">Avoid Format</string>
+	<string id="30168">flv format does not support resume</string>
+
+	<string id="30170">Resume point and playback count</string>
+	<string id="30171">Local only</string>
+	<string id="30172">Google Drive file property (write access required)</string>
+
+	<string id="30173">Cloud Media Spreadsheet ID</string>
+
+	<string id="30174">Continue downloading after player is user-stopped</string>
+	<string id="30175">Always resume</string>
+	<string id="30176">Resume playback?</string>
+	<string id="30177">cloud:</string>
+	<string id="30178">Mark as Watched</string>
+	<string id="30179">Queue</string>
+	<string id="30180">Sort by</string>
+	<string id="30181">Offline SRT</string>
+	<string id="30182">Offline Thumbnails</string>
+	<string id="30183">Choose SRT file to load</string>
+
+	<string id="30184">Enable trace logging</string>
+
+	<string id="30185">Photo Resolution</string>
+	<string id="30186">Download Type</string>
+
+	<string id="30187">Experimental stramer</string>
+
+	<string id="30188">Default account for STRM</string>
+	<string id="30189">Automatic STRM creation</string>
+
+	<string id="30190">Crypto</string>
+	<string id="30191">Salt file</string>
+	<string id="30192">[treat as encfs]</string>
+	<string id="30193">[treat as crypto]</string>
+	<string id="30194">Streamer</string>
+	<string id="30195">Stream Port</string>
+
+
+	<string id="30196">Experimental</string>
+	<string id="30197">Update TV db watch status</string>
+	<string id="30198">Update Movie db watch status</string>
+	<string id="30199">Load media details from KODI db</string>
+
+	<string id="30200">Team Drive</string>
+
+
+</strings>

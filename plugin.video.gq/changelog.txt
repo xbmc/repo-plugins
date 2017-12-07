@@ -1,2 +1,3 @@
 3.0.1 - Isengard - separate scraper for future functions
 3.0.2 - website changes
+3.0.3 - website changes

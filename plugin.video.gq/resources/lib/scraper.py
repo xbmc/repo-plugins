@@ -78,7 +78,7 @@ class myAddon(t1mAddon):
   def getAddonVideo(self,url):
      url = uqp(url)
      html = self.getRequest('http://video.gq.com/%s' % uqp(url)).replace('\\n','').replace('\\','')
-     url = re.compile('"contentURL" href="(.+?)"', re.DOTALL).search(html).group(1)
+     url = re.compile('"contentURL".+?="(.+?)"', re.DOTALL).search(html).group(1)
      url = url.replace('low.mp4','high.mp4')
      liz = xbmcgui.ListItem(path = url)
      xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)

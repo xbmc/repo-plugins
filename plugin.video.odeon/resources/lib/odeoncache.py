@@ -19,8 +19,36 @@
 '''
 
 import time
-import StorageServer
-import utils
+import base64
+import json
+import zlib
+import hashlib
+
+try:
+    import StorageServer
+except:
+    import storageserverdummy as StorageServer
+
+
+def comp(js):
+    data = json.dumps(js, ensure_ascii=True, encoding='utf-8')
+    deflated = zlib.compress(data)
+    return base64.b64encode(deflated)
+
+
+def decomp(b64):
+    try:
+        deflated = base64.b64decode(b64)
+        data = zlib.decompress(deflated)
+        return json.loads(data, encoding='utf-8')
+    except:
+        return None
+
+
+def digest(data):
+    digest = hashlib.md5(data).digest()
+    return base64.b64encode(digest)
+
 
 class OdeonCache():
 
@@ -40,7 +68,7 @@ class OdeonCache():
             data.update({"etag": etag})
 
         self.cache.table_name = self.plugin_name
-        self.cache.set(url, utils.comp(data))
+        self.cache.set(url, comp(data))
         return
 
 
@@ -49,7 +77,7 @@ class OdeonCache():
         self.cache.table_name = self.plugin_name
         b64 = self.cache.get(url)
         if b64:
-            return utils.decomp(b64)
+            return decomp(b64)
         else:
             return None
 

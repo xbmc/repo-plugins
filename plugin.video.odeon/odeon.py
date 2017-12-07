@@ -26,12 +26,11 @@ import json
 import os
 
 from resources.lib import simplerequests as requests
-from resources.lib import odeoncache
-from resources.lib import utils
+from resources.lib import odeoncache as utils
 
 PLUGIN_NAME = 'plugin.video.odeon'
-API_URL     = 'https://www.odeon.com.ar/api/v1.6'
-ID_URL      = 'https://id.odeon.com.ar/v1.4'
+API_URL     = 'https://play.cine.ar/api/v1.6'
+ID_URL      = 'https://id.cine.ar/v1.5'
 
 addon_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
@@ -134,8 +133,6 @@ def root_menu(params):
     add_directory_item(translation(30011), 'list_generos', 'folder.png')
     # Mi sala
     add_directory_item(translation(30012), 'list_prods&url=%s' % quote('tira/misala'), 'folder-movies.png')
-    # Mis alquileres
-    add_directory_item(translation(30032), 'list_prods&url=%s' % quote('tvod/INCAA/rentals'), 'folder-movies.png')
     # Búsqueda
     add_directory_item(translation(30013), 'search', 'search.png')
     # Cerrar sesión
@@ -532,7 +529,7 @@ def json_request(path, params=None):
     """ Emula el comportamiento de un browser """
     min_max_age = 300 # mínimo que valga la pena usar el cache
     token = addon.getSetting('token')
-    cache = odeoncache.OdeonCache(PLUGIN_NAME)
+    cache = utils.OdeonCache(PLUGIN_NAME)
     url = make_url(path, params)
 
     fromCache = cache.get(url)

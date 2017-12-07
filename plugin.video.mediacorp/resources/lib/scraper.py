@@ -82,7 +82,7 @@ class myAddon(t1mAddon):
    url = uqp(url)
    showName = xbmc.getInfoLabel('ListItem.TVShowTitle')
    html = self.getRequest(url)
-   url = re.compile('<div class="tg-microsite-link card ">.+?href="(.+?)"', re.DOTALL).search(html).group(1)
+   url = re.compile('<div class="tg-microsite-link card ".+?href="(.+?)"', re.DOTALL).search(html).group(1)
    url += '/episodes'
    html = self.getRequest(url)
    parms = re.compile('toggle.functions.ajaxEpisodeListingPage\((.+?)\)', re.DOTALL).search(html).group(1)

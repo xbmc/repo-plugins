@@ -1,3 +1,4 @@
+V3.0.7 fix minor website change
 V3.0.6 Fix website change; Krypton version requires inputstream.adaptive
 V3.0.4 Added new formats
 V3.0.1 Isengard version

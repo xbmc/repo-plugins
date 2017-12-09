@@ -47,12 +47,20 @@
     <!-- CloudService Generic -->
 
     <string id="30042">Save STRM</string>
-	<string id="30201">Save TV/Movie STRM</string>
+	<string id="30211">Save TV/Movie STRM</string>
 	<string id="30206">Generate/Save TV/Movie STRM</string>
 	<string id="30207">enroll account</string>
 	<string id="30208">offline media</string>
 	<string id="30209">Successfully enrolled account.</string>
     <string id="30210">Enrollment needs to be completed from a device with a web browser.  In a web browser on a computer or mobile device on the same network as this device, navigate to http://IP:9978 and follow the two steps to complete the enrollment process. Click OK before opening in the browser.</string>
+
+	<string id="30212">MOVIES</string>
+	<string id="30213">recently started</string>
+	<string id="30214">recently watched</string>
+	<string id="30215">library</string>
+	<string id="30216">queued</string>
+	<string id="30216">MOVIES</string>
+
 
     <string id="30043">Options</string>
 

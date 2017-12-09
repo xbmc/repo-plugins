@@ -23,18 +23,12 @@ from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
 from SocketServer import ThreadingMixIn
 import threading
 import re
-import urllib, urllib2
-import sys
+import urllib2
 
 import constants
 
 
-KODI = True
-if re.search(re.compile('.py', re.IGNORECASE), sys.argv[0]) is not None:
-    KODI = False
 
-if KODI:
-    import xbmc, xbmcaddon, xbmcgui, xbmcplugin
 
 class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
     """Handle requests in a separate thread."""

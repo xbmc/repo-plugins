@@ -19,6 +19,8 @@
 import re
 import sys
 import os
+import urllib, urllib2
+
 KODI = True
 if re.search(re.compile('.py', re.IGNORECASE), sys.argv[0]) is not None:
     KODI = False
@@ -26,9 +28,8 @@ if re.search(re.compile('.py', re.IGNORECASE), sys.argv[0]) is not None:
 if KODI:
 
     # cloudservice - standard XBMC modules
-    import xbmc, xbmcgui, xbmcplugin, xbmcaddon, xbmcvfs
+    import xbmc, xbmcgui, xbmcplugin, xbmcvfs
 else:
-    from resources.libgui import xbmcaddon
     from resources.libgui import xbmcgui
     from resources.libgui import xbmcplugin
     from resources.libgui import xbmcvfs
@@ -83,7 +84,7 @@ class contentengine(object):
             xbmc.log(self.addon.getLocalizedString(30016), xbmc.LOGERROR)
             sys.exit(1)
         except :
-            pass
+            return
 
 
 
@@ -147,7 +148,7 @@ class contentengine(object):
           if contextType == 'video':
 
             if encfs:
-                contentTypeDecider =  int(settings.getSetting('context_evideo',0))
+                contentTypeDecider =  int(settings.getSettingInt('context_evideo',0))
 
                 if contentTypeDecider == 1:
                     contentType = 8
@@ -155,7 +156,7 @@ class contentengine(object):
                     contentType = 9
 
             else:
-                contentTypeDecider = int(settings.getSetting('context_video',0))
+                contentTypeDecider = int(settings.getSettingInt('context_video',0))
 
                 if contentTypeDecider == 2:
                     contentType = 2
@@ -170,14 +171,14 @@ class contentengine(object):
 
           elif contextType == 'audio':
             if encfs:
-                contentTypeDecider =  int(settings.getSetting('context_emusic',0))
+                contentTypeDecider =  int(settings.getSettingInt('context_emusic',0))
                 if contentTypeDecider == 1:
                     contentType = 8
                 else:
                     contentType = 10
             else:
 
-                contentTypeDecider = int(settings.getSetting('context_music', 0))
+                contentTypeDecider = int(settings.getSettingInt('context_music', 0))
 
                 if contentTypeDecider == 1:
                     contentType = 4
@@ -189,13 +190,13 @@ class contentengine(object):
 
           elif contextType == 'image':
             if encfs:
-                contentTypeDecider =  int(settings.getSetting('context_ephoto',0))
+                contentTypeDecider =  int(settings.getSettingInt('context_ephoto',0))
                 if contentTypeDecider == 1:
                     contentType = 8
                 else:
                     contentType = 11
             else:
-                contentTypeDecider = int(settings.getSetting('context_photo', 0))
+                contentTypeDecider = int(settings.getSettingInt('context_photo', 0))
 
                 if contentTypeDecider == 2:
                     contentType = 7
@@ -275,20 +276,7 @@ class contentengine(object):
     def numberOfAccounts(self,accountType):
 
         return 9
-        count = 1
-        max_count = int(settings.getSetting(accountType+'_numaccounts',9))
 
-        actualCount = 0
-        while True:
-            try:
-                if settings.getSetting(accountType+str(count)+'_username') != '':
-                    actualCount = actualCount + 1
-            except:
-                break
-            if count == max_count:
-                break
-            count = count + 1
-        return actualCount
 
 
 
@@ -325,7 +313,7 @@ class contentengine(object):
                     xbmcgui.Dialog().ok(addon.getLocalizedString(30000), addon.getLocalizedString(30158))
                 except:
                     #error: instance doesn't exist
-                    pass
+                    xbmcgui.Dialog().ok(addon.getLocalizedString(30000), addon.getLocalizedString(30158))
             xbmc.executebuiltin("XBMC.Container.Refresh")
 
 
@@ -336,100 +324,18 @@ class contentengine(object):
             if KODI:
                 from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
                 from resources.lib import enroll_proxy
-                import urllib, urllib2
-                from SocketServer import ThreadingMixIn
+
                 import threading
 
-                server = enroll_proxy.MyHTTPServer(('',  9978), enroll_proxy.enrollBrowser)
+                server = enroll_proxy.MyHTTPServer(('',  9999), enroll_proxy.enrollBrowser)
+                server.handle_request()
                 xbmcgui.Dialog().ok(addon.getLocalizedString(30000), addon.getLocalizedString(30210), '')
 
                 while server.ready:
                     server.handle_request()
                 server.socket.close()
 
-            if 0:
 
-                invokedUsername = settings.getParameter('username')
-                code = settings.getParameter('code', '')
-
-
-                if code == '':
-                    options = []
-                    options.append('Google Apps')
-                    ret = xbmcgui.Dialog().select('select type', options)
-
-                    invokedUsername = ''
-                    password = ''
-                    if ret == 0:
-                        try:
-                            dialog = xbmcgui.Dialog()
-                            invokedUsername = dialog.input('username', type=xbmcgui.INPUT_ALPHANUM)
-                            passcode = dialog.input('passcode', type=xbmcgui.INPUT_ALPHANUM)
-                        except:
-                            pass
-
-                    count = 1
-                    loop = True
-                    while loop:
-                        instanceName = self.PLUGIN_NAME+str(count)
-                        try:
-                            username = settings.getSetting(instanceName+'_username')
-                            if username == invokedUsername:
-                                addon.setSetting(instanceName + '_type', str(4))
-                                addon.setSetting(instanceName + '_username', str(invokedUsername))
-                                addon.setSetting(instanceName + '_passcode', str(passcode))
-                                xbmcgui.Dialog().ok(addon.getLocalizedString(30000), addon.getLocalizedString(30118), invokedUsername)
-                                loop = False
-                            elif username == '':
-                                addon.setSetting(instanceName + '_type', str(4))
-                                addon.setSetting(instanceName + '_username', str(invokedUsername))
-                                addon.setSetting(instanceName + '_passcode', str(passcode))
-                                xbmcgui.Dialog().ok(addon.getLocalizedString(30000), addon.getLocalizedString(30118), invokedUsername)
-                                loop = False
-
-                        except:
-                            pass
-
-                        if count == numberOfAccounts:
-                            #fallback on first defined account
-                            addon.setSetting(instanceName + '_type', str(4))
-                            addon.setSetting(instanceName + '_username', invokedUsername)
-                            addon.setSetting(instanceName + '_passcode', str(passcode))
-                            xbmcgui.Dialog().ok(addon.getLocalizedString(30000), addon.getLocalizedString(30118), invokedUsername)
-                            loop = False
-                        count = count + 1
-
-                else:
-                    count = 1
-                    loop = True
-                    while loop:
-                        instanceName = self.PLUGIN_NAME+str(count)
-                        try:
-                            username = settings.getSetting(instanceName+'_username')
-                            if username == invokedUsername:
-                                addon.setSetting(instanceName + '_type', str(1))
-                                addon.setSetting(instanceName + '_code', str(code))
-                                addon.setSetting(instanceName + '_username', str(invokedUsername))
-                                xbmcgui.Dialog().ok(addon.getLocalizedString(30000), addon.getLocalizedString(30118), invokedUsername)
-                                loop = False
-                            elif username == '':
-                                addon.setSetting(instanceName + '_type', str(1))
-                                addon.setSetting(instanceName + '_code', str(code))
-                                addon.setSetting(instanceName + '_username', str(invokedUsername))
-                                xbmcgui.Dialog().ok(addon.getLocalizedString(30000), addon.getLocalizedString(30118), invokedUsername)
-                                loop = False
-
-                        except:
-                            pass
-
-                        if count == numberOfAccounts:
-                            #fallback on first defined account
-                            addon.setSetting(instanceName + '_type', str(1))
-                            addon.setSetting(instanceName + '_code', code)
-                            addon.setSetting(instanceName + '_username', invokedUsername)
-                            xbmcgui.Dialog().ok(addon.getLocalizedString(30000), addon.getLocalizedString(30118), invokedUsername)
-                            loop = False
-                        count = count + 1
 
     ##
     # Delete an account, enroll an account or refresh the current listings
@@ -475,7 +381,7 @@ class contentengine(object):
                             self.addMenu(self.PLUGIN_URL+'?mode=main&content_type='+str(contextType)+'&instance='+str(instanceName),username, instanceName=instanceName)
 
                     except:
-                        pass
+                        username = ''
                     if count == numberOfAccounts:
                         break
                     count = count + 1
@@ -614,10 +520,6 @@ class contentengine(object):
         #return
 #class run():
         # cloudservice - required python modules
-        import sys
-        import urllib
-        import re
-        import os
 
         KODI = True
         if re.search(re.compile('.py', re.IGNORECASE), sys.argv[0]) is not None:
@@ -645,31 +547,29 @@ class contentengine(object):
         self.PLUGIN_NAME = constants.PLUGIN_NAME
 
 
-        cloudservice3 = constants.cloudservice3
         cloudservice2 = constants.cloudservice2
 
 
         #*** testing - gdrive
-        if constants.CONST.tvwindow:
-            from resources.lib import tvWindow
+        #if constants.CONST.tvwindow:
+        #    from resources.lib import tvWindow
         from resources.lib import gSpreadsheets
-        from resources.lib import gSheets_api4
+        #from resources.lib import gSheets_api4
 
         ##**
 
         # cloudservice - standard modules
-        from resources.lib import cloudservice
-        from resources.lib import authorization
         from resources.lib import folder
-        from resources.lib import teamdrive
+        #from resources.lib import teamdrive
         from resources.lib import file
         from resources.lib import package
         from resources.lib import mediaurl
         from resources.lib import gPlayer
         from resources.lib import settings
+
         from resources.lib import cache
-        if constants.CONST.tmdb:
-            from resources.lib import TMDB
+#        if constants.CONST.tmdb:
+#            from resources.lib import TMDB
 
 
 
@@ -678,7 +578,6 @@ class contentengine(object):
             self.PLUGIN_URL = sys.argv[0]
             self.plugin_handle = int(sys.argv[1])
             plugin_queries = settings.parse_query(sys.argv[2][1:])
-            addon_dir = xbmc.translatePath( addon.getAddonInfo('path') )
 
         else:
             self.PLUGIN_URL = 'default.py'
@@ -687,7 +586,6 @@ class contentengine(object):
 
             plugin_queries = settings.parse_query(query)
             settings.plugin_queries = plugin_queries
-            addon_dir = ''
 
 
         self.debugger()
@@ -710,20 +608,11 @@ class contentengine(object):
         mode = mode.lower()
 
 
-        #*** old - gdrive
-        # allow for playback of public videos without authentication
-        if (mode == 'streamurl'):
-          authenticate = False
-        else:
-          authenticate = True
-        ##**
-
-
         instanceName = ''
         try:
             instanceName = (plugin_queries['instance']).lower()
         except:
-            pass
+            instanceName = ''
         # cloudservice - content type
         contextType = settings.getParameter('content_type')
 
@@ -778,12 +667,12 @@ class contentengine(object):
                         pDialog = xbmcgui.DialogProgressBG()
                         pDialog.create(addon.getLocalizedString(30000), 'Building STRMs...')
                     except:
-                        pass
+                        pDialog = None
 
                 url = settings.getParameter('streamurl')
                 url = re.sub('---', '&', url)
                 title = settings.getParameter('title')
-                type = int(settings.getParameter('type', 0))
+                type = int(settings.getParameterInt('type', 0))
 
                 if url != '':
 
@@ -909,7 +798,7 @@ class contentengine(object):
                         pDialog.update(100)
                         pDialog.close()
                     except:
-                        pass
+                        pDialog = None
                 if silent == 0:
                     xbmcgui.Dialog().ok(addon.getLocalizedString(30000), addon.getLocalizedString(30028))
             xbmcplugin.endOfDirectory(self.plugin_handle)
@@ -942,12 +831,12 @@ class contentengine(object):
                         pDialog = xbmcgui.DialogProgressBG()
                         pDialog.create(addon.getLocalizedString(30000), 'Building STRMs...')
                     except:
-                        pass
+                        pDialog = None
 
                 url = settings.getParameter('streamurl')
                 url = re.sub('---', '&', url)
                 title = settings.getParameter('title')
-                type = int(settings.getParameter('type', 0))
+                type = int(settings.getParameterInt('type', 0))
 
                 if url != '':
 
@@ -978,14 +867,11 @@ class contentengine(object):
                                 if username == invokedUsername:
 
                                     #let's log in
-                                    #if ( settings.getSettingInt(instanceName+'_type',0)==0):
-                                        #service = cloudservice1(PLUGIN_URL,addon,instanceName, user_agent, settings, DBM=DBM)
-                                    #else:
                                     service = cloudservice2(self.plugin_handle,self.PLUGIN_URL,addon,instanceName, user_agent, settings,DBM=DBM)
 
                                     loop = False
                             except:
-                                #service = cloudservice1(self.PLUGIN_URL,addon,instanceName, user_agent)
+
                                 break
 
                             if count == numberOfAccounts:
@@ -993,9 +879,6 @@ class contentengine(object):
                                     service
                                 except NameError:
                                     #fallback on first defined account
-                                    #if ( settings.getSettingInt(instanceName+'_type',0)==0):
-                                    #    service = cloudservice1(self.PLUGIN_URL,addon,constants.PLUGIN_NAME+'1', user_agent, settings,DBM=DBM)
-                                    #else:
                                     service = cloudservice2(self.plugin_handle,self.PLUGIN_URL,addon,constants.PLUGIN_NAME+'1', user_agent, settings,DBM=DBM)
                                 break
                             count = count + 1
@@ -1048,9 +931,6 @@ class contentengine(object):
                             username = settings.getSetting(instanceName+'_username')
 
                             if username != '' and username == invokedUsername:
-                                #if ( settings.getSettingInt(instanceName+'_type',0)==0):
-                                #        service = cloudservice1(self.PLUGIN_URL,addon,instanceName, user_agent, settings)
-                                #else:
                                 service = cloudservice2(self.plugin_handle,self.PLUGIN_URL,addon,instanceName, user_agent, settings,DBM=DBM)
 
                                 service.buildSTRM(path + '/'+username, contentType=contentType, pDialog=pDialog,  epath=encryptedPath, dpath=dencryptedPath, encfs=encfs, catalog=True)
@@ -1061,9 +941,6 @@ class contentengine(object):
                                     service
                                 except NameError:
                                     #fallback on first defined account
-                                    #if ( settings.getSettingInt(instanceName+'_type',0)==0):
-                                    #        service = cloudservice1(self.PLUGIN_URL,addon,constants.PLUGIN_NAME+'1', user_agent, settings)
-                                    #else:
                                     service = cloudservice2(self.plugin_handle,self.PLUGIN_URL,addon,constants.PLUGIN_NAME+'1', user_agent, settings,DBM=DBM)
                                 break
                             count = count + 1
@@ -1073,7 +950,7 @@ class contentengine(object):
                         pDialog.update(100)
                         pDialog.close()
                     except:
-                        pass
+                        pDialog = None
                 if silent == 0:
                     xbmcgui.Dialog().ok(addon.getLocalizedString(30000), addon.getLocalizedString(30028))
             xbmcplugin.endOfDirectory(self.plugin_handle)
@@ -1099,8 +976,6 @@ class contentengine(object):
             service = None
         elif instanceName is None:
             service = cloudservice2(self.plugin_handle,self.PLUGIN_URL,addon,'', user_agent, settings, authenticate=False,DBM=DBM)
-        #elif settings.getSettingInt(instanceName+'_type',0)==0 :
-        #    service = cloudservice1(self.PLUGIN_URL,addon,instanceName, user_agent, settings)
         else:
             service = cloudservice2(self.plugin_handle,self.PLUGIN_URL,addon,instanceName, user_agent, settings,DBM=DBM)
 
@@ -1117,7 +992,7 @@ class contentengine(object):
             try:
                 path = settings.getSetting('strm_path')
             except:
-                pass
+                path = ''
 
 
             if path != '':
@@ -1126,7 +1001,7 @@ class contentengine(object):
                     pDialog = xbmcgui.DialogProgressBG()
                     pDialog.create(addon.getLocalizedString(30000), 'Building STRMs...')
                 except:
-                    pass
+                    pDialog = None
 
 
                 #service = gdrive_api2.gdrive(self.PLUGIN_URL,addon,instanceName, user_agent, settings)
@@ -1141,7 +1016,7 @@ class contentengine(object):
                     pDialog.update(100)
                     pDialog.close()
                 except:
-                    pass
+                    pDialog = None
 
             xbmcplugin.endOfDirectory(self.plugin_handle)
             return
@@ -1198,7 +1073,8 @@ class contentengine(object):
 
                         spreadsheets = service.gSpreadsheet.getSpreadsheetList()
                     except:
-                        pass
+                        service.gSpreadsheet = None
+                        spreadsheets = None
 
                     for title in spreadsheets.iterkeys():
                         if title == 'CLOUD_DB':
@@ -1280,7 +1156,8 @@ class contentengine(object):
 
                             spreadsheets = service.gSpreadsheet.getSpreadsheetList()
                         except:
-                            pass
+                            service.gSpreadsheet = None
+                            spreadsheets = None
 
                         for t in spreadsheets.iterkeys():
                             if t == 'Movie2':
@@ -1338,8 +1215,8 @@ class contentengine(object):
                         if contextType == '':
                             contextType = 'video'
 
-                        if constants.CONST.tmdb:
-                            tmdb= TMDB.TMDB(service,addon, user_agent)
+                        #if constants.CONST.tmdb:
+                        #    tmdb= TMDB.TMDB(service,addon, user_agent)
 
                         if mediaItems:
                             for item in mediaItems:
@@ -1367,7 +1244,7 @@ class contentengine(object):
             #** gdrive specific
             if mode == 'main':
 
-                self.addMenu(self.PLUGIN_URL+'?mode=index&instance='+str(service.instanceName)+'&content_type=image','[switch to photo view]')
+                #self.addMenu(self.PLUGIN_URL+'?mode=index&instance='+str(service.instanceName)+'&content_type=image','[switch to photo view]')
 
                 if ('gdrive' in constants.PLUGIN_NAME):
 
@@ -1400,17 +1277,17 @@ class contentengine(object):
 
 
                 self.addMenu(self.PLUGIN_URL+'?mode=search&instance='+str(service.instanceName)+'&content_type='+contextType,'['+addon.getLocalizedString(30111)+']')
-                self.addMenu(self.PLUGIN_URL+'?mode=buildstrm2&instance='+str(service.instanceName)+'&content_type='+str(contextType),'<'+addon.getLocalizedString(30202)+'>')
+                self.addMenu(self.PLUGIN_URL+'?mode=buildstrm2&instance='+str(service.instanceName)+'&content_type='+str(contextType),'<'+addon.getLocalizedString(30211)+'>')
                 if constants.CONST.testing_features:
-                    self.addMenu(self.PLUGIN_URL+'?mode=cloud_dbtest&instance='+str(service.instanceName)+'&action=library_menu&content_type='+str(contextType),'[MOVIES]')
+                    self.addMenu(self.PLUGIN_URL+'?mode=cloud_dbtest&instance='+str(service.instanceName)+'&action=library_menu&content_type='+str(contextType),'['+addon.getLocalizedString(30212)+']')
 
 
                 #CLOUD_DB
                 if 'gdrive' in constants.PLUGIN_NAME and service.gSpreadsheet is not None:
-                        self.addMenu(self.PLUGIN_URL+'?mode=cloud_db&action=recentstarted&instance='+str(service.instanceName)+'&content_type='+contextType,'['+addon.getLocalizedString(30177)+' recently started]')
-                        self.addMenu(self.PLUGIN_URL+'?mode=cloud_db&action=recentwatched&instance='+str(service.instanceName)+'&content_type='+contextType,'['+addon.getLocalizedString(30177)+' recently watched]')
-                        self.addMenu(self.PLUGIN_URL+'?mode=cloud_db&action=library&instance='+str(service.instanceName)+'&content_type='+contextType,'['+addon.getLocalizedString(30177)+' library]')
-                        self.addMenu(self.PLUGIN_URL+'?mode=cloud_db&action=queued&instance='+str(service.instanceName)+'&content_type='+contextType,'['+addon.getLocalizedString(30177)+' queued]')
+                        self.addMenu(self.PLUGIN_URL+'?mode=cloud_db&action=recentstarted&instance='+str(service.instanceName)+'&content_type='+contextType,'['+addon.getLocalizedString(30177)+' '+addon.getLocalizedString(30213)+']')
+                        self.addMenu(self.PLUGIN_URL+'?mode=cloud_db&action=recentwatched&instance='+str(service.instanceName)+'&content_type='+contextType,'['+addon.getLocalizedString(30177)+' '+addon.getLocalizedString(30214)+']')
+                        self.addMenu(self.PLUGIN_URL+'?mode=cloud_db&action=library&instance='+str(service.instanceName)+'&content_type='+contextType,'['+addon.getLocalizedString(30177)+' '+addon.getLocalizedString(30215)+']')
+                        self.addMenu(self.PLUGIN_URL+'?mode=cloud_db&action=queued&instance='+str(service.instanceName)+'&content_type='+contextType,'['+addon.getLocalizedString(30177)+' '+addon.getLocalizedString(30216)+']')
             ##**
 
 
@@ -1454,13 +1331,15 @@ class contentengine(object):
                                 try:
                                     item.folder.displaytitle =  encrypt.decryptString(str(item.folder.title))
                                     sortedMediaItems[str(item.folder.displaytitle) + '_' + str(item.folder.title)] = item
-                                except: pass
+                                except:
+                                    item.folder.displaytitle = item.folder.title
+
                             else:
                                 try:
                                     item.file.displaytitle = encrypt.decryptString(str(item.file.title))
                                     sortedMediaItems[str(item.file.displaytitle) + '_' + str(item.file.title)] = item
                                 except:
-                                    pass
+                                    item.file.displaytitle = item.file.title
 
                         #create the files and folders for decrypting file/folder names
                         for item in sorted (sortedMediaItems):
@@ -1470,7 +1349,8 @@ class contentengine(object):
                                 try:
                                     item.folder.displaytitle =  encrypt.decryptString(str(item.folder.title))
                                     service.addDirectory(item.folder, contextType=contextType, encfs=True )
-                                except: pass
+                                except:
+                                    item.folder.displaytitle = str(item.folder.title)
                             else:
                                 try:
                                     item.file.displaytitle = encrypt.decryptString(str(item.file.title))
@@ -1478,7 +1358,7 @@ class contentengine(object):
                                     if contentType < 9 or media_re.search(str(item.file.title)):
                                         service.addMediaFile(item, contextType=contextType,  encfs=True)
                                 except:
-                                    pass
+                                    item.file.displaytitle = str(item.file.title)
 
                 else:
 
@@ -1612,53 +1492,53 @@ class contentengine(object):
                     spreadsheets = service.getSpreadsheetList()
 
 
-                    channels = []
-                    for title in spreadsheets.iterkeys():
-                        if title == 'TVShows':
-                          worksheets = gSpreadsheet.getSpreadsheetWorksheets(spreadsheets[title])
+                    #channels = []
+                    #for title in spreadsheets.iterkeys():
+                    #    if title == 'TVShows':
+                    #      worksheets = gSpreadsheet.getSpreadsheetWorksheets(spreadsheets[title])
 
-                          if 0:
-                            import time
-                            hour = time.strftime("%H")
-                            minute = time.strftime("%M")
-                            weekDay = time.strftime("%w")
-                            month = time.strftime("%m")
-                            day = time.strftime("%d")
+                          #if 0:
+                          #  import time
+                          #  hour = time.strftime("%H")
+                          #  minute = time.strftime("%M")
+                          #  weekDay = time.strftime("%w")
+                          #  month = time.strftime("%m")
+                          #  day = time.strftime("%d")
 
 
-                            for worksheet in worksheets.iterkeys():
-                                 if worksheet == 'schedule':
-                                     channels = gSpreadsheet.getChannels(worksheets[worksheet])
-                                     ret = xbmcgui.Dialog().select(addon.getLocalizedString(30112), channels)
-                                     shows = gSpreadsheet.getShows(worksheets[worksheet] ,channels[ret])
-                                     showList = []
-                                     for show in shows:
-                                         showList.append(shows[show][6])
-                                     ret = xbmcgui.Dialog().select(addon.getLocalizedString(30112), showList)
+                          #  for worksheet in worksheets.iterkeys():
+                          #       if worksheet == 'schedule':
+                          #           channels = gSpreadsheet.getChannels(worksheets[worksheet])
+                          #           ret = xbmcgui.Dialog().select(addon.getLocalizedString(30112), channels)
+                          #           shows = gSpreadsheet.getShows(worksheets[worksheet] ,channels[ret])
+                          #           showList = []
+                          #           for show in shows:
+                          #               showList.append(shows[show][6])
+                          #           ret = xbmcgui.Dialog().select(addon.getLocalizedString(30112), showList)
 
-                            for worksheet in worksheets.iterkeys():
-                                if worksheet == 'data':
-                                    episodes = gSpreadsheet.getVideo(worksheets[worksheet] ,showList[ret])
-                                    #player = gPlayer.gPlayer()
-                                    #player.setService(service)
-                                    player.setContent(episodes)
-                                    player.setWorksheet(worksheets['data'])
-                                    player.next()
-                                    while KODI and not player.isExit:
-                                        xbmc.sleep(5000)
-                          else:
-                            for worksheet in worksheets.iterkeys():
-                                if worksheet == 'db':
-                                    episodes = gSpreadsheet.getMedia(worksheets[worksheet], service.getRootID())
-                                    #player = gPlayer.gPlayer()
-                                    #player.setService(service)
-        #                            player.setContent(episodes)
-                                    player.setWorksheet(worksheets['db'])
-                                    player.PlayStream('plugin://plugin.video.'+constants.PLUGIN_NAME+'-testing/?mode=video&instance='+str(service.instanceName)+'&title='+episodes[0][3], None,episodes[0][7],episodes[0][2])
-                                    #player.next()
-                                    while KODI and not player.isExit:
-                                        player.saveTime()
-                                        xbmc.sleep(5000)
+                          #  for worksheet in worksheets.iterkeys():
+                          #      if worksheet == 'data':
+                          #          episodes = gSpreadsheet.getVideo(worksheets[worksheet] ,showList[ret])
+                          #          #player = gPlayer.gPlayer()
+                          #          #player.setService(service)
+                          #          player.setContent(episodes)
+                          #          player.setWorksheet(worksheets['data'])
+                          #          player.next()
+                          #          while KODI and not player.isExit:
+                          #              xbmc.sleep(5000)
+                          #else:
+                          #  for worksheet in worksheets.iterkeys():
+                          #      if worksheet == 'db':
+                          #          episodes = gSpreadsheet.getMedia(worksheets[worksheet], service.getRootID())
+                          #          #player = gPlayer.gPlayer()
+                          #          #player.setService(service)
+        #                 #           player.setContent(episodes)
+                          #          player.setWorksheet(worksheets['db'])
+                          #          player.PlayStream('plugin://plugin.video.'+constants.PLUGIN_NAME+'-testing/?mode=video&instance='+str(service.instanceName)+'&title='+episodes[0][3], None,episodes[0][7],episodes[0][2])
+                          #          #player.next()
+                          #          while KODI and not player.isExit:
+                          #              player.saveTime()
+                          #              xbmc.sleep(5000)
 
         ##** not in use
         elif mode == 'photo':
@@ -1954,7 +1834,8 @@ class contentengine(object):
 
                     spreadsheets = service.gSpreadsheet.getSpreadsheetList()
                 except:
-                    pass
+                    service.gSpreadsheet = None
+                    spreadsheets = None
 
                 spreadsheet = None
                 for t in spreadsheets.iterkeys():
@@ -2016,7 +1897,6 @@ class contentengine(object):
             player.setService(service)
             resolvedPlayback = True
             startPlayback = False
-            toExit = False
             #package = None
 
             if encfs:
@@ -2107,7 +1987,7 @@ class contentengine(object):
                                             #file = file.decode('unicode-escape')
                                             file = file.encode('utf-8')
                                         except:
-                                            pass
+                                            file = str(file)
                                         player.setSubtitles(file)
 
                             if KODI:
@@ -2409,7 +2289,6 @@ class contentengine(object):
                             player.setMedia(mediaItems)
                             player.playList(service)
                             resolvedPlayback = False
-                            toExit = True
 
                 # title provided
                 else:
@@ -2429,7 +2308,8 @@ class contentengine(object):
 
                                     spreadsheets = service.gSpreadsheet.getSpreadsheetList()
                                 except:
-                                    pass
+                                    service.gSpreadsheet = None
+                                    spreadsheets = None
 
                                 for title in spreadsheets.iterkeys():
                                     if title == 'CLOUD_DB':
@@ -2478,14 +2358,11 @@ class contentengine(object):
 
 
 
-                    originalURL = ''
                     if mode != 'audio':
                         cache = cache.cache(package)
                         service.cache = cache
                         package.file.thumbnail = cache.setThumbnail(service)
 
-                       # SRTURL = ''
-                        srtpath = ''
                         if settings.srt and  (service.protocol == 2 or service.protocol == 3):
                             cache.setSRT(service)
 
@@ -2690,7 +2567,7 @@ class contentengine(object):
 
                                 try:
                                     response = urllib2.urlopen(req)
-                                    response_data = response.read()
+                                    response.read()
                                     response.close()
                                 except urllib2.URLError, e:
                                     xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
@@ -2735,7 +2612,7 @@ class contentengine(object):
                                     #file = file.decode('unicode-escape')
                                     file = file.encode('utf-8')
                                 except:
-                                    pass
+                                    file = str(file)
                                 player.setSubtitles(file)
 
                     if KODI:
@@ -2750,120 +2627,3 @@ class contentengine(object):
         return
 
 
-
-        # must load after all other (becomes blocking)
-        # streamer
-        if service is not None and service.settings.streamer:
-
-
-            localTVDB = {}
-            localMOVIEDB = {}
-            #load data structure containing TV and Movies from KODI
-            if (settings.getSetting('local_db')):
-
-                result = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodes", "params": {  "sort": {"method":"lastplayed"}, "filter": {"field": "title", "operator": "isnot", "value":"1"}, "properties": [  "file"]}, "id": "1"}')
-                for match in re.finditer('"episodeid":(\d+)\,"file"\:"([^\"]+)"', result):#, re.S):
-                    localTVDB[match.group(2)] = match.group(1)
-                result = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {  "sort": {"method":"lastplayed"}, "filter": {"field": "title", "operator": "isnot", "value":"1"}, "properties": [  "file"]}, "id": "1"}')
-                for match in re.finditer('"file":"([^\"]+)","label":"[^\"]+","movieid":(\d+)', result):#, re.S):
-                    localMOVIEDB[match.group(1)] = match.group(2)
-
-
-
-
-            from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
-            from resources.lib import streamer
-            import urllib, urllib2
-            from SocketServer import ThreadingMixIn
-            import threading
-
-
-            try:
-                server = streamer.MyHTTPServer(('',  service.settings.streamPort), streamer.myStreamer)
-                server.setAccount(service, '')
-                if (settings.getSetting('local_db')):
-                    server.setTVDB(localTVDB)
-                    server.setTVDB(localMOVIEDB)
-
-                while server.ready:
-                    server.handle_request()
-                server.socket.close()
-            except: pass
-
-
-        #automation - create strm files
-        if 0 and service is not None and instanceName is not None and settings.strm:
-
-
-            import time
-            currentDate = time.strftime("%Y%m%d")
-
-            if addon.getSetting(instanceName+'_changedate') == '' or int(addon.getSetting(instanceName+'_changedate')) < int(currentDate):
-
-
-                try:
-                    path = settings.getSetting('strm_path')
-                except:
-                    pass
-
-
-                if path != '':
-
-                    try:
-                        pDialog = xbmcgui.DialogProgressBG()
-                        pDialog.create(addon.getLocalizedString(30000), 'Building STRMs...')
-                    except:
-                        pass
-
-
-                    #service = gdrive_api2.gdrive(PLUGIN_URL,addon,instanceName, user_agent, settings)
-
-                    try:
-                        addon.setSetting(instanceName + '_changedate', currentDate)
-                        service.buildSTRM2(path, contentType=contentType, pDialog=pDialog)
-                    except:
-                        pass
-
-                    try:
-                        pDialog.update(100)
-                        pDialog.close()
-                    except:
-                        pass
-
-
-
-        #                player = gPlayer.gPlayer()
-        #                player.play(playbackURL+'|' + service.getHeadersEncoded(), item)
-        #                while not (player.isPlaying()):
-        #                    xbmc.sleep(1)
-
-        #                player.seekTime(1000)
-        #                w = tvWindow.tvWindow("tvWindow.xml",addon.getAddonInfo('path'),"Default")
-        #                w.setPlayer(player)
-        #                w.doModal()
-
-        #                player.seekTime(1000)
-        #                w = tvWindow.tvWindow("tvWindow.xml",addon.getAddonInfo('path'),"Default")
-        #                w.setPlayer(player)
-        #                w.doModal()
-
-        #                xbmc.executebuiltin("XBMC.PlayMedia("+str(playbackPath)+'|' + service.getHeadersEncoded()+")")
-
-                    #media = gSpreadsheet.setMediaStatus(worksheets[worksheet], package, watched=2, resume=2)
-                                    #item = xbmcgui.ListItem(package.file.displayTitle(), iconImage=package.file.thumbnail,
-                                    #                        thumbnailImage=package.file.thumbnail)
-
-                                    #item.setInfo( type="Video", infoLabels={ "Title": package.file.title , "Plot" : package.file.title } )
-                                    #player = gPlayer.gPlayer()
-                                    #player.setService(service)
-                                    #player.setWorksheet(worksheets['db'])
-                                    #if len(media) == 0:
-                                    #    player.PlayStream(mediaURL.url, item, 0, package)
-                                    #else:
-                                    #    player.PlayStream(mediaURL.url, item,media[0][7],package)
-                                    #while not player.isExit:
-                                    #    player.saveTime()
-                                    #    xbmc.sleep(5000)
-
-
-        return outputBuffer

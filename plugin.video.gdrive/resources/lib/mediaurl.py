@@ -34,9 +34,8 @@ class mediaurl:
         self.offline = False
 
 
-    def __repr__(self):
-        return '{}: {} {}'.format(self.__class__.__name__,
-                                  self.order)
+    #def __repr__(self):
+    #    return '{}: {} {}'.format(self.__class__.__name__,self.order)
 
     def __cmp__(self, other):
         if hasattr(other, 'order'):

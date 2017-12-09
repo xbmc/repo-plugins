@@ -21,16 +21,8 @@ import sys
 import cgi
 import re
 
-KODI = True
-if re.search(re.compile('.py', re.IGNORECASE), sys.argv[0]) is not None:
-    KODI = False
 
-if KODI:
 
-    # cloudservice - standard XBMC modules
-    import xbmcaddon
-else:
-    from resources.libgui import xbmcaddon
 
 
 #http://stackoverflow.com/questions/1208916/decoding-html-entities-with-python/1208931#1208931
@@ -68,11 +60,26 @@ def getSetting(key,default=''):
     except:
         return default
 
+def getSettingInt(key,default=0):
+    try:
+        value = addon.getSetting(key)
+        if value == '':
+            return default
+        if value == 'true':
+            return True
+        elif value == 'false':
+            return False
+        else:
+            return value
+    except:
+        return default
+
 def parse_query(query):
     queries = {}
     try:
         queries = cgi.parse_qs(query)
-    except:pass
+    except:
+        return
     q = {}
     for key, value in queries.items():
         q[key] = value[0]
@@ -84,14 +91,14 @@ def parse_query(query):
 plugin_queries = None
 try:
     plugin_queries = parse_query(sys.argv[2][1:])
-except:pass
+except:
+    plugin_queries = None
+
 
 # global variables
 import constants
 addon = constants.addon
 
-#addon = xbmcaddon.Addon(id='plugin.video.gdrive-testing')
-#addon = xbmcaddon.Addon(id='plugin.video.gdrive')
 
 #
 #

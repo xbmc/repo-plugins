@@ -18,11 +18,8 @@
 
 '''
 
-import os
 import re
 import urllib, urllib2
-import cookielib
-import json
 import sys
 
 KODI = True
@@ -31,11 +28,10 @@ if re.search(re.compile('.py', re.IGNORECASE), sys.argv[0]) is not None:
 
 if KODI:
 
-    import xbmc, xbmcaddon, xbmcgui, xbmcplugin
+    import xbmc, xbmcgui
 
 
 
-import authorization
 from resources.lib import package
 from resources.lib import file
 from resources.lib import folder
@@ -89,7 +85,7 @@ class gSheets_api4:
             return False
 
 
-        response_data = response.read()
+        response.read()
         response.close()
 
         return True
@@ -126,7 +122,7 @@ class gSheets_api4:
             return False
 
 
-        response_data = response.read()
+        response.read()
         response.close()
 
         return True
@@ -215,7 +211,7 @@ class gSheets_api4:
             return False
 
 
-        response_data = response.read()
+        response.read()
         response.close()
 
         return True
@@ -248,7 +244,7 @@ class gSheets_api4:
             xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
             return False
 
-        response_data = response.read()
+        response.read()
         response.close()
 
         return True
@@ -290,7 +286,7 @@ class gSheets_api4:
             xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
             return False
 
-        response_data = response.read()
+        response.read()
         response.close()
 
         return True
@@ -323,7 +319,7 @@ class gSheets_api4:
             xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
             return False
 
-        response_data = response.read()
+        response.read()
         response.close()
 
         return True
@@ -373,52 +369,6 @@ class gSheets_api4:
 
         return worksheets
 
-
-
-    #
-    # returns a list of worksheets with a link to their listfeeds
-    #
-    def getSpreadsheetWorksheets(self,url):
-
-        worksheets = {}
-        while True:
-            req = urllib2.Request(url, None, self.service.getHeadersList())
-
-            try:
-                response = urllib2.urlopen(req)
-            except urllib2.URLError, e:
-              if e.code == 403 or e.code == 401:
-                self.service.refreshToken()
-                req = urllib2.Request(url, None, self.service.getHeadersList())
-                try:
-                    response = urllib2.urlopen(req)
-                except urllib2.URLError, e:
-                    xbmc.log(self.addon.getAddonInfo('getSpreadsheetWorksheets') + ': ' + str(e), xbmc.LOGERROR)
-              else:
-                xbmc.log(self.addon.getAddonInfo('getSpreadsheetWorksheets') + ': ' + str(e), xbmc.LOGERROR)
-
-            response_data = response.read()
-            response.close()
-
-
-            for r in re.finditer('<title[^>]+\>([^<]+)</title><content[^>]+\>[^<]+</content><link rel=\'[^\#]+\#listfeed\' type=\'application/atom\+xml\' href=\'([^\']+)\'' ,
-                             response_data, re.DOTALL):
-                title,url = r.groups()
-                worksheets[title] = url
-
-            nextURL = ''
-            for r in re.finditer('<link rel=\'next\' type=\'[^\']+\' href=\'([^\']+)\'' ,
-                             response_data, re.DOTALL):
-                nextURL = r.groups()
-
-
-            if nextURL == '':
-                break
-            else:
-                url = nextURL[0]
-
-
-        return worksheets
 
 
 
@@ -732,7 +682,6 @@ class gSheets_api4:
         response_data = response.read()
         response.close()
 
-        count=0;
         for r in re.finditer('"c"\:\[\{"v"\:"([^\"]+)"\}' ,
                          response_data, re.DOTALL):
             item = r.group(1)
@@ -793,7 +742,6 @@ class gSheets_api4:
         response_data = response.read()
         response.close()
 
-        count=0;
         for r in re.finditer('"c"\:\[\{"v"\:(\d+)' ,
                          response_data, re.DOTALL):
             item = r.group(1)
@@ -839,7 +787,6 @@ class gSheets_api4:
         response_data = response.read()
         response.close()
 
-        count=0;
         for r in re.finditer('"c"\:\[\{"v"\:"([^\"]+)"\}' ,
                          response_data, re.DOTALL):
             item = r.group(1)
@@ -1126,8 +1073,6 @@ class gSheets_api4:
 
             response_data = response.read()
 
-            previous = ''
-            append = True
             for r in re.finditer('<entry>(.*?)</entry>' ,
                              response_data, re.DOTALL):
 
@@ -1231,8 +1176,6 @@ class gSheets_api4:
 
             response_data = response.read()
 
-            previous = ''
-            append = True
             for r in re.finditer('<entry>(.*?)</entry>' ,
                              response_data, re.DOTALL):
 
@@ -1424,9 +1367,9 @@ class gSheets_api4:
         response.close()
 
         editURL=''
-        for r in re.finditer('<link rel=\'(edit)\' type=\'application/atom\+xml\' href=\'([^\']+)\'/>' ,
+        for r in re.finditer('<link rel=\'edit\' type=\'application/atom\+xml\' href=\'([^\']+)\'/>' ,
                              response_data, re.DOTALL):
-            (x,editURL) = r.groups(1)
+            editURL = r.group(1)
 
         for r in re.finditer('<link rel=\'edit\' [^\>]+>(.*?</entry>)' ,
                              response_data, re.DOTALL):
@@ -1469,7 +1412,7 @@ class gSheets_api4:
             xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e.read()), xbmc.LOGERROR)
 
 
-        response_data = response.read()
+        response.read()
 
         response.close()
 
@@ -1544,7 +1487,7 @@ class gSheets_api4:
                 xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e.read()), xbmc.LOGERROR)
 
 
-            response_data = response.read()
+            response.read()
             response.close()
         else:
             if resume != '' and watched != '':

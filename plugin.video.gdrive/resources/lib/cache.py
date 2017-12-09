@@ -30,7 +30,7 @@ if re.search(re.compile('.py', re.IGNORECASE), sys.argv[0]) is not None:
 
 if KODI:
     # cloudservice - standard XBMC modules
-    import xbmcgui, xbmcvfs
+    import xbmcvfs
 else:
     from resources.libgui import xbmcvfs
 

@@ -61,7 +61,8 @@ class encryption():
 
         if ENCRYPTION_ENABLE == 0:
             return
-        assert iterations > 0
+        if not iterations > 0:
+            return
 
         key = str(password) + str(self.salt)
         for i in range(iterations):
@@ -154,7 +155,7 @@ class encryption():
 
 
 
-    def decryptStreamChunk(self,response, wfile, adjStart, adjEnd, chunksize=16*1024):
+    def decryptStreamChunk(self,response, wfile, adjStart=0, adjEnd=0, chunksize=16*1024):
             if ENCRYPTION_ENABLE == 0:
                 return
             #origsize = struct.unpack('<Q', response.read(struct.calcsize('Q')))[0]

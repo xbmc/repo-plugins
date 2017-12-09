@@ -32,9 +32,10 @@ if re.search(re.compile('.py', re.IGNORECASE),PLUGIN_URL) is not None:
 
 if KODI:
     # cloudservice - standard XBMC modules
-    import xbmc, xbmcaddon, xbmcgui, xbmcplugin
+    import xbmc, xbmcgui, xbmcplugin
     import xbmcvfs
 else:
+    from resources.libgui import xbmc
     from resources.libgui import xbmcgui
     from resources.libgui import xbmcplugin
 
@@ -97,7 +98,7 @@ class cloudservice(object):
     # return the appropriate "headers" for requests that include 1) user agent, 2) any authorization cookies/tokens
     #   returns: list containing the header
     ##
-    def getHeadersList(self):
+    def getHeadersList(self, isPOST=False, additionalHeader=None, additionalValue=None, isJSON=False):
         return { 'User-Agent' : self.user_agent }
 
     ##
@@ -509,7 +510,7 @@ class cloudservice(object):
         try:
             path = self.addon.getSetting('cache_folder')
         except:
-            pass
+            path = None
 
         if not xbmcvfs.exists(path) and not os.path.exists(path):
             path = ''
@@ -527,9 +528,8 @@ class cloudservice(object):
             force= True
 
         else:
-            try:
+            if not xbmcvfs.exists(str(path) + '/'+ str(package.file.id)):
                 xbmcvfs.mkdir(str(path) + '/'+ str(package.file.id))
-            except: pass
 
             playbackFile = str(path) + '/' + str(package.file.id) + '/' + str(mediaURL.order) + '.stream.mp4'
 
@@ -602,26 +602,25 @@ class cloudservice(object):
                 player.PlayStream(playbackFile, item, package.file.resume, startPlayback=True, package=package)
             while not (player.isPlaying()) and not player.isExit:
                 xbmc.sleep(1000)
-        try:
-            count =1
-            while True:
-                if not self.settings.cacheContinue and player is not None and count % 12 == 0:
-                    if not player.playStatus:
-                        progress.close()
-                        f.close()
-                        return
-                count = count + 1
-                downloadedBytes = downloadedBytes + CHUNK
-                progress.update((int)(float(downloadedBytes)/progressBar*100),self.addon.getLocalizedString(30092))
-                chunk = response.read(CHUNK)
-                if not chunk: break
-                f.write(chunk)
-                xbmc.sleep(1)
+        #try:
+        count =1
+        while True:
+            if not self.settings.cacheContinue and player is not None and count % 12 == 0:
+                if not player.playStatus:
+                    progress.close()
+                    f.close()
+                    return
+            count = count + 1
+            downloadedBytes = downloadedBytes + CHUNK
+            progress.update((int)(float(downloadedBytes)/progressBar*100),self.addon.getLocalizedString(30092))
+            chunk = response.read(CHUNK)
+            if not chunk: break
+            f.write(chunk)
+            xbmc.sleep(1)
 
-            f.close()
-            progress.close()
-
-        except: pass
+        f.close()
+        progress.close()
+        #except
 
 
 
@@ -653,17 +652,14 @@ class cloudservice(object):
         if CHUNK < 1024:
             CHUNK = 131072
 
-        count = 0
-
 
         path = re.sub(r'\/[^\/]+$', r'', folderName)
         if folderName == path:
             path = re.sub(r'\\[^\\]+$', r'', folderName) #needed for windows?
 
         #ensure the folder and path exists
-        try:
+        if not xbmcvfs.exists(path):
             xbmcvfs.mkdirs(path)
-        except: pass
 
         playbackFile = folderName
 
@@ -753,7 +749,7 @@ class cloudservice(object):
                             file = file.decode('unicode-escape')
                             file = file.encode('utf-8')
                         except:
-                            pass
+                            file = str(file)
                         player.setSubtitles(file)
 
 
@@ -782,7 +778,7 @@ class cloudservice(object):
             if not self.settings.encfsStream and not self.settings.encfsCacheSingle:
                 progress.close()
 
-        except: pass
+        except: return
 
 
 
@@ -813,22 +809,17 @@ class cloudservice(object):
         if CHUNK < 1024:
             CHUNK = 131072
 
-        count = 0
-
 
         path = re.sub(r'\/[^\/]+$', r'', folderName)
         if folderName == path:
             path = re.sub(r'\\[^\\]+$', r'', folderName) #needed for windows?
 
         #ensure the folder and path exists
-        try:
+        if not xbmcvfs.exists(path):
             xbmcvfs.mkdirs(path)
-        except: pass
 
         playbackFile = folderName
 
-
-        downloadedBytes = 0
 
         #seek to end of file for append
         # - must use python for append (xbmcvfs not supported)
@@ -868,23 +859,6 @@ class cloudservice(object):
 
             if playback == True:#self.PLAYBACK_NONE:
 
-                if (0):
-                    pid = os.fork()
-
-                    if (pid == 0): #child
-                        from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
-
-                        server = streamer.MyHTTPServer(('', 8003), streamer.myStreamer)
-                        server.setFile(playbackURL,CHUNK, playbackFile, response, fileSize, mediaURL.url, self)
-                        while server.ready:
-                            try:
-                                server.handle_request()
-                            except: pass
-                        server.socket.close()
-    #                    os._exit()
-                    else:
-                        item.setPath('http://localhost:8005')
-                        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
 
                 from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
 
@@ -894,7 +868,7 @@ class cloudservice(object):
                     req = urllib2.Request('http://localhost:8005/kill', None, None)
                     try:
                         response = urllib2.urlopen(req)
-                    except: pass
+                    except: return
                     server = streamer.MyHTTPServer(('', 8006), streamer.myStreamer)
 
                 server.setFile(playbackURL,CHUNK, playbackFile, response, fileSize,  mediaURL.url, self)
@@ -917,7 +891,7 @@ class cloudservice(object):
                                     file = file.decode('unicode-escape')
                                     file = file.encode('utf-8')
                                 except:
-                                    pass
+                                    file = str(file)
                                 player.setSubtitles(file)
                 server.socket.close()
 
@@ -939,7 +913,7 @@ class cloudservice(object):
                             file = file.decode('unicode-escape')
                             file = file.encode('utf-8')
                         except:
-                            pass
+                            file = str(file)
                         player.setSubtitles(file)
 
 
@@ -1004,19 +978,17 @@ class cloudservice(object):
         if CHUNK < 1024:
             CHUNK = 131072
 
-        count = 0
-
 
         if encfs:
             try:
                 path = self.addon.getSetting('encfs_source')
             except:
-                pass
+                path = None
         else:
             try:
                 path = self.addon.getSetting('cache_folder')
             except:
-                pass
+                path = None
 
         #workaround for this issue: https://github.com/xbmc/xbmc/pull/8531
         if not xbmcvfs.exists(path) and not os.path.exists(path):
@@ -1031,16 +1003,14 @@ class cloudservice(object):
 
 
         if encfs:
-            try:
+            if not xbmcvfs.exists(str(path) + '/'+str(folderName)):
                 xbmcvfs.mkdir(str(path) + '/'+str(folderName))
-            except: pass
 
             playbackFile = str(path) + '/' + str(folderName) + '/' + str(package.file.title)
 
         else:
-            try:
+            if not xbmcvfs.exists(str(path) + '/'+ str(package.file.id)):
                 xbmcvfs.mkdir(str(path) + '/'+ str(package.file.id))
-            except: pass
 
             playbackFile = str(path) + '/' + str(package.file.id) + '/' + str(mediaURL.order) + '.stream.mp4'
 
@@ -1087,7 +1057,7 @@ class cloudservice(object):
             try:
                 progress.close()
             except:
-                pass
+                progress = None
 
             #item = xbmcgui.ListItem(path=playbackFile)
             item = xbmcgui.ListItem(package.file.displayTitle(), iconImage=package.file.thumbnail,
@@ -1107,7 +1077,7 @@ class cloudservice(object):
             f.close()
             progress.close()
 
-        except: pass
+        except: return
 
 
     ##
@@ -1256,7 +1226,7 @@ class cloudservice(object):
                         values = {'username': self.authorization.username, 'title': folder.title,  'content_type': contextType }
 
                         cm.append(( self.addon.getLocalizedString(30042), 'XBMC.RunPlugin('+self.PLUGIN_URL+'?mode=buildstrm&'+ urllib.urlencode(values)+')', ))
-                        cm.append(( self.addon.getLocalizedString(30206), 'XBMC.RunPlugin('+self.PLUGIN_URL+'?mode=buildstrm2&'+ urllib.urlencode(values)+')', ))
+                        cm.append(( self.addon.getLocalizedString(30201), 'XBMC.RunPlugin('+self.PLUGIN_URL+'?mode=buildstrm2&'+ urllib.urlencode(values)+')', ))
 
 
                 listitem.addContextMenuItems(cm, False)
@@ -1271,7 +1241,7 @@ class cloudservice(object):
     #   parameters: package, context type, whether file is encfs, encfs:decryption path, encfs:encryption path
     ##
     def addMediaFile(self, package, contextType='video', encfs=False, dpath='', epath=''):
-        thumbnail = self.cache.getThumbnail(self, package.file.thumbnail,package.file.id)
+        #thumbnail = self.cache.getThumbnail(self, package.file.thumbnail,package.file.id)
         listitem = xbmcgui.ListItem(package.file.displayTitle(), iconImage=package.file.thumbnail,
                                 thumbnailImage=package.file.thumbnail)
 
@@ -1424,7 +1394,7 @@ class cloudservice(object):
             else:
                 valuesBS = {'username': self.authorization.username, 'title': package.file.title, 'filename': package.file.id, 'content_type': 'video'}
                 cm.append(( self.addon.getLocalizedString(30042), 'XBMC.RunPlugin('+self.PLUGIN_URL+'?mode=buildstrm&type='+str(package.file.type)+'&'+urllib.urlencode(valuesBS)+')', ))
-                #cm.append(( self.addon.getLocalizedString(30206), 'XBMC.RunPlugin('+self.PLUGIN_URL+'?mode=buildstrm2&type='+str(package.file.type)+'&'+urllib.urlencode(valuesBS)+')', ))
+                #cm.append(( self.addon.getLocalizedString(30201), 'XBMC.RunPlugin('+self.PLUGIN_URL+'?mode=buildstrm2&type='+str(package.file.type)+'&'+urllib.urlencode(valuesBS)+')', ))
 
             if (self.protocol == 2):
                 # play-original for video only
@@ -1498,13 +1468,13 @@ class cloudservice(object):
                 if mediaURL.qualityDesc == 'original':
                     options.append(mediaURL.qualityDesc)
                     newMediaURLs.append(mediaURL)
-                    originalURL = mediaURL.url
+                    #originalURL = mediaURL.url
         else:
             for mediaURL in mediaURLs:
                 options.append(mediaURL.qualityDesc)
                 newMediaURLs.append(mediaURL)
-                if mediaURL.qualityDesc == 'original':
-                    originalURL = mediaURL.url
+                #if mediaURL.qualityDesc == 'original':
+                    #originalURL = mediaURL.url
 
         mediaURL = ''
 #        if self.settings.download or  self.settings.cache:

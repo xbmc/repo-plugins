@@ -25,7 +25,6 @@ if re.search(re.compile('.py', re.IGNORECASE), sys.argv[0]) is not None:
     KODI = False
 
 from resources.lib import gdrive_api2
-from resources.lib import gdrive_api3
 
 PLUGIN_NAME = 'gdrive'
 
@@ -41,7 +40,6 @@ else:
     from resources.libgui import xbmcaddon
     addon = xbmcaddon.xbmcaddon()
 
-cloudservice3 = gdrive_api3.gdrive
 cloudservice2 = gdrive_api2.gdrive
 
 

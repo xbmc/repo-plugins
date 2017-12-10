@@ -3,7 +3,7 @@
   id="plugin.video.kla.tv" 
   name="Klagemauer TV" 
   provider-name="celadoor" 
-  version="0.0.5">
+  version="0.0.7">
   <requires>
     <import  addon="xbmc.python"                      version="2.25.0" />
   </requires>
@@ -15,19 +15,27 @@
     <summary lang="en_gb">www.kla.tv video plugin</summary>
     <summary lang="pl_pl">www.kla.tv video plugin</summary>
     <summary lang="fr_fr">www.kla.tv video plugin</summary>
+    <summary lang="nl_nl">www.kla.tv video plugin</summary>
+    <summary lang="it_it">www.kla.tv video plugin</summary>
     <description lang="de_de">Klagemauer TV dagegen arbeitet seit 2012 ehrenamtlich und unentgeltlich für Sie! Und dies in 90 Studios mit über 170 Moderatorinnen und Moderatoren, in 38 Sprachen und einem Sendegebiet von 212 Ländern. Helfen Sie mit, diesen wichtigen Stimmen in aller Welt Gehör zu verschaffen. Schon in den ersten 2 Jahren produzierte Kla.TV über 5.000 klarstellende Sendungen, dazu 30 Dokumentarfilme und vieles andere mehr..
     </description>
-    <description lang="en_gb">Klagemauer TV,has been working as a volunteer for you since 2012! And this in 90 studios with over 170 presenters, in 38 languages and a broadcasting area of 212 countries. Help to make these important voices heard around the world. During the first two years, Kla.TV produced more than 5,000 channels, including 30 documentary films and much more..</description>
+    <description lang="en_gb">Klagemauer TV has been working as a volunteer for you since 2012! in 90 studios with over 170 presenters, in 38 languages and a broadcasting area of 212 countries. Help to make these important voices heard around the world. During the first two years, Kla.TV produced more than 5,000 channels, including 30 documentary films and much more..</description>
     <description lang="pl_pl">Z drugiej strony telewizor Klagenwand działa od 2012 roku jako ochotnik! I to w 90 studiach z ponad 170 prelegentami, w 38 językach i obszarze nadawczym 212 krajów. Pomóż, aby te ważne głosy słyszeć na całym świecie. W ciągu pierwszych dwóch lat Kla.TV wyprodukował ponad 5000 kanałów, w tym 30 filmów dokumentalnych i wiele innych..</description>
     <description lang="fr_fr">Klagemauer TV, en revanche, a travaillé comme bénévole pour vous depuis 2012! Et cela dans 90 studios avec plus de 170 présentateurs, en 38 langues et une zone de diffusion de 212 pays. Aidez à faire entendre ces voix importantes dans le monde entier. Au cours des deux premières années, Kla.TV a produit plus de 5 000 chaînes, dont 30 films documentaires et bien plus encore..</description>
-<news>Version 0.0.5 -Initial Release. Klagemauer TV video plugin.supports 4 languages de,en,pl,fr</news>
+ <description lang="nl_nl">Klagemauer TV daarentegen werkt sinds 2012 vrijwillig en kosteloos voor u! En dit in 90 studio's met meer dan 170 moderators, in 38 talen en een uitzendgebied van 212 landen. Help ons deze belangrijke stemmen over de hele wereld te laten horen. Al in de eerste 2 jaar produceerde Kla.TV meer dan 5.000 verhelderende programma's, 30 documentaire films en nog veel meer..</description>
+ <description lang="it_it">Klagemauer TV, d'altra parte, ha lavorato per te volontariamente e gratuitamente dal 2012! E questo in 90 studi con oltre 170 moderatori, in 38 lingue e un'area di trasmissione di 212 paesi. Aiutaci a rendere queste voci importanti ascoltate in tutto il mondo. Già nei primi 2 anni Kla.TV ha prodotto oltre 5.000 programmi di chiarimento, 30 film documentari e molto altro ancora.</description>
+<news>Version 0.0.7 - Updated/fixed due to site changes added nl and it audio languages.
+
+Version 0.0.5 -Initial Release. Klagemauer TV video plugin supports 4 audio languages de,en,pl,fr.
+
+Klagemauer TV has been working as a volunteer for you since 2012! in 90 studios with over 170 presenters, in 38 languages and a broadcasting area of 212 countries, help to make these important voices heard around the world.</news>
     <platform>all</platform>
-    <language>en de pl fr</language>
+    <language>en de pl fr nl it</language>
 	<license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
 	<forum></forum>
 	<website>www.kla.tv</website>
 	<email></email>
-	<source>https://github.com/celadoor/repo-plugins/tree/krypton-kla-tv-2/plugin.video.kla.tv</source>
+	<source>http://celadoor.github.io/plugin.video.kla.tv.zip</source>
 <assets>
     <icon>resources/icon.png</icon>
     <fanart>resources/fanart.jpg</fanart>

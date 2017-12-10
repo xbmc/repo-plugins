@@ -35,5 +35,13 @@ msgid "fr"
 msgstr ""
 
 msgctxt "#30955"
+msgid "nl"
+msgstr ""
+
+msgctxt "#30956"
+msgid "it"
+msgstr ""
+
+msgctxt "#30957"
 msgid "pl"
 msgstr ""

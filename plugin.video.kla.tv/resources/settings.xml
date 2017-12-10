@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings>
     <category label="128">
-        <setting label="30001" type="select" lvalues="30951|30952|30953|30954|30955" id="LanguageID" default="30951"/>
+        <setting label="30001" type="select" lvalues="30951|30952|30953|30954|30955|30956|30957" id="LanguageID" default="30951"/>
     </category>
 </settings>

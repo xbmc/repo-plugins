@@ -12,15 +12,15 @@ msgstr ""
 
 msgctxt "#30001"
 msgid "Original stream's language"
-msgstr "Langue d'origine du flux"
+msgstr "Lingua del flusso originale"
 
 msgctxt "#30950"
 msgid "en"
-msgstr "fr"
+msgstr "it"
 
 msgctxt "#30951"
 msgid "Auto detect"
-msgstr "Détection automatique"
+msgstr "Trovato automaticamente"
 
 msgctxt "#30952"
 msgid "en"

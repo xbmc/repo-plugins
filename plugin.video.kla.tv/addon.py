@@ -20,12 +20,14 @@ lang_setting = max([int(addon.getSetting('LanguageID') or 0) or 0, 0])
 if lang_setting >= 30951:
     lang_setting -= 30951
 
-exp_lang_codes = ['en', 'de', 'fr', 'pl']
+exp_lang_codes = ['de', 'en', 'fr', 'nl', 'it', 'pl']
 payload_index = {
-    "en": 2,
     "de": 1,
-    "pl": 6,
-    "fr": 3
+    "en": 2,
+    "fr": 3,
+    "nl": 4,
+    "it": 5,
+    "pl": 6 
 }
 
 if lang_setting == 0:
@@ -69,7 +71,7 @@ def INDEX(url):
                  "data":
                      {"type": "loadingNextVideos",
                       "offset": 0,
-                      "count": 48,
+                      "count": 60,
                       "category": "",
                       "sendtyp": "",
                       "langid": str(payload_id)
@@ -102,7 +104,7 @@ def VIDEOLINKS(url, name):
         link = link.replace('  ', ' ')
     response.close()
 
-    compiled_regex = re.compile('file: "(.+?)", label: "(.+?)"')
+    compiled_regex = re.compile('"src": "(.+?)", "label": "(.+?)"')
     value_tuples = compiled_regex.findall(link)
 
     for entry in value_tuples:

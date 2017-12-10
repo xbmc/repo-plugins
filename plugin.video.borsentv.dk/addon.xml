@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.borsentv.dk" version="1.0.5" name="Børsen TV" provider-name="twinther">
+<addon id="plugin.video.borsentv.dk" version="1.0.6" name="Børsen TV" provider-name="twinther">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.buggalo" version="1.1.5"/>
@@ -17,5 +17,6 @@
         <language>da</language>
         <email>tommy@winther.nu</email>
         <source>https://github.com/xbmc-danish-addons/plugin.video.borsentv.dk</source>
+        <broken>Add-on no longer functions</broken>
     </extension>
 </addon>

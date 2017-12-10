@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="plugin.audio.relive"
-  version="0.11.0"
+  version="0.11.1"
   name="reLive"
   provider-name="BuZz">
   <requires>
@@ -20,5 +20,6 @@
     <email>buzz at exotica org uk</email>
     <website>https://github.com/joolswills/plugin.audio.relive</website>
     <source>https://github.com/joolswills/plugin.audio.relive</source>
+    <broken>Add-on no longer functions</broken>
   </extension>
 </addon>

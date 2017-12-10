@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.tv2regionerne.dk" version="2.0.1" name="TV2/Regionerne" provider-name="twinther">
+<addon id="plugin.video.tv2regionerne.dk" version="2.0.2" name="TV2/Regionerne" provider-name="twinther">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 	</requires>
@@ -17,5 +17,6 @@
         <email>tommy@winther.nu</email>
         <website>http://tommy.winther.nu</website>
         <source>https://github.com/xbmc-danish-addons/plugin.video.tv2regionerne.dk</source>
+        <broken>Add-on no longer functions</broken>
 	</extension>
 </addon>

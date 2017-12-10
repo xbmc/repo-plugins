@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.catchuptvandmore"
        name="Catch-up TV &amp; More"
-       version="0.1.3"
+       version="0.1.4"
        provider-name="SylvainCecchetto">
   <requires>
     <!-- TODO before official repo submission: xbmc.python version="2.25.0"/> -->
@@ -20,6 +20,9 @@
     <summary lang="en_gb">Catch-Up TV &amp; More: It's all in the title.</summary>
     <description lang="en_gb">Catch-Up TV &amp; More brings together in one Kodi plugin all the videos of the various services and channels of catch-up TV. Furthermore, this addon allows you to quickly access the videos and content offered by certain websites.</description>
     <disclaimer lang="en_gb">Bug reports, suggestions for improvements or content additions are welcome! GitHub or e-mail.</disclaimer>
+    <description lang="he_il">ההרחבה מאפשרת לך להתעדכן בתוכן השידורים תוסף אחד של קודי מרכז את כל קטעי וידאו של שירותים שונים וערוצי תוכן משודר. בנוסף, תוספת זו מאפשרת לך לגשת במהירות לסרטונים ולתכנים המוצעים על ידי אתרים מסוימים.</description>
+    <disclaimer lang="he_il">דוחות שגיאה, הצעות לשיפור או תוספות תוכן יתקבלו בברכה! ל-GitHub או אימייל.</disclaimer>
+ 
     <language>fr</language>
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
@@ -28,37 +31,27 @@
     <email>catch.up.tv.and.more [AT] gmail [DOT] com</email>
     <source>https://github.com/SylvainCecchetto/plugin.video.catchuptvandmore</source>
     <news>
-[Improvement] Choose video quality with DIALOG setting for compatible channels (wwark)
-[Add live TV] TF1 group (wwark)
-[Bug] TF1 group: Fix wrong Video URL format
-[Improvement] TF1 group: Add missing date and duration for videos
-[Add channel] Tfou — MyTF1 (wwark)
-[Add channel] Xtra — MyTF1 (wwark)
-[Add channel] LCI (wwark)
-[Add Live TV] Pluzz — France Télévision (wwark)
-[Add channel] La 1ère — Outre-Mer (wwark)
-[Add channel] France Info (wwark)
-[Add Live TV] Canal + group (wwark)
-[Add channel] Stories — 6play (wwark)
-[Add channel] Bruce — 6play (wwark)
-[Add channel] Crazy Kitchen — 6play (wwark)
-[Add channel] Home Time — 6play (wwark)
-[Add channel] Sixième Style — 6play (wwark)
-[Add channel] Comic — 6play (wwark)
-[Add Live TV] Arte (wwark)
-[Add Live TV] BFM TV (wwark)
-[Add channel — Live TV] BFM Business (wwark)
-[Add channel — Live TV] RMC (wwark)
-[Add channel] 01Net TV (wwark)
-[Add channel — Live TV] RMC Découverte (wwark)
-[Add Live TV] Gulli (wwark)
-[Add Live TV] L'Équipe (wwark)
-[Add Live TV] Numéro 23 (wwark)
-[Add channel — Live TV] LCP Assemblée Nationale (wwark)
-[Add channel — Live TV] France 24 (wwark)
-[Add channel — Live TV] Public Sénat (wwark)
-[Add Live TV] Euronews (wwark)
-[Improvement] Add download mode on multiple channels (wwark)
+[Add channel — Live TV] Blaze (UK) (wwark)
+[Add channel — Live TV] RTBF (BE) (La Une, La Deux, La Trois, ...) (wwark)
+[Add channel] Dave (UK) (wwark)
+[Add channel] Drama (UK) (wwark)
+[Add channel] Really (UK) (wwark)
+[Add channel] Yesterday (UK) (wwark)
+[Fix] Get Meteo Video for Channel TF1 (wwark)
+[Fix] Program without videos for Group TF1 (wwark)
+[Improvement] Detect DRM video for Group TF1 and send notification (wwark)
+[Improvement] Add More Videos button for Group TF1 (wwark)
+[Improvement] Add Spanish content, Last News, Last Weather, Last Business for Channel France 24 (wwark)
+[Add WebSite] Allociné (wwark)
+[Fix] Change API to get the video for Group M6 (kagonia from mpdb.tv)
+[Add WebSite] tetesaclaques.tv (wwark)
+[Fix] Video without date for Channel Numero 23 (wwark)
+[Improvement] Detect premium video and send notification for Group M6 (wwark)
+[Improvement] Update simpleplugin module and used mem_cache for all websites and channels. Gain little speedup (wwark)
+[Fix] Change website for Replay LCI (wwark)
+[Update] Verify Pep8 in all files (SylvainCecchetto)
+[Update] Fanart, Image for channel (SylvainCecchetto)
+[Improvement] Remove choice if there is just replay or live tv for a channel (SylvainCecchetto)
     </news>
     <assets>
       <icon>icon.png</icon>

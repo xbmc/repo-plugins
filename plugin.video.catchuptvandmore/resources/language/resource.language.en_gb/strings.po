@@ -75,6 +75,10 @@ msgctxt "#30025"
 msgid "United States channels"
 msgstr ""
 
+msgctxt "#30026"
+msgid "Websites"
+msgstr ""
+
 # Context menu (from 30040 to 30049)
 msgctxt "#30040"
 msgid "Move down"
@@ -91,6 +95,7 @@ msgstr ""
 msgctxt "#30043"
 msgid "Download"
 msgstr ""
+
 
 # Dialog boxes (from 30050 to 30069)
 msgctxt "#30050"
@@ -116,7 +121,7 @@ msgid "Arte: Choose Channel"
 msgstr ""
 
 msgctxt "#30081"
-msgid "France24: Choose Channel"
+msgid "France 24: Choose Channel"
 msgstr ""
 
 msgctxt "#30082"
@@ -171,6 +176,14 @@ msgstr ""
 
 msgctxt "#30110"
 msgid "Choose video quality"
+msgstr ""
+
+msgctxt "#30111"
+msgid "Video stream no longer exists"
+msgstr ""
+
+msgctxt "#30112"
+msgid "Video with an account needed"
 msgstr ""
 
 # Download (from 30200 to 30240)

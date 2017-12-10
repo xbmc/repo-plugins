@@ -301,7 +301,8 @@ def hide(params):
 @common.PLUGIN.action()
 def download_video(params):
     #  Ici on a seulement le lien de la page web où se trouve la video
-    #  Il faut appeller la fonction get_video_url de la chaine concernée pour avoir l'URL finale de la vidéo
+    #  Il faut appeller la fonction get_video_url de la chaine concernée
+    #  pour avoir l'URL finale de la vidéo
     channel = get_channel_module(params)
     params.next = 'download_video'
     url_video = channel.get_video_url(params)
@@ -313,7 +314,7 @@ def download_video(params):
     vid = YDStreamExtractor.getVideoInfo(url_video, quality=3)
     path = common.PLUGIN.get_setting('dlFolder')
 
-    with YDStreamUtils.DownloadProgress() as prog:  # This gives a progress dialog interface ready to use
+    with YDStreamUtils.DownloadProgress() as prog:
         try:
             YDStreamExtractor.setOutputCallback(prog)
             result = YDStreamExtractor.downloadVideo(vid, path)

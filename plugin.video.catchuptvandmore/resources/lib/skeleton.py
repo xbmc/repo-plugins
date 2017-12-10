@@ -22,11 +22,24 @@
 
 
 CATEGORIES = {
+    'main_menu.be': 'Belgian channels',
+    'main_menu.eu': 'European channels',
     'main_menu.fr': 'French channels',
-    'main_menu.eu': 'European channels'
+    'main_menu.uk': 'United Kingdom channels',
+    'main_menu.ws': 'Websites'
 }
 
 CHANNELS = {
+
+    'main_menu.be': {
+        'channels.be.rtbf.auvio': 'RTBF Auvio (La Une, La deux, La Trois, ...)'
+    },
+
+    'main_menu.eu': {
+        'channels.eu.arte.arte': 'Arte',
+        'channels.eu.euronews.euronews': 'Euronews'
+    },
+
     'main_menu.fr': {
         'channels.fr.tf1.tf1': 'TF1',
         'channels.fr.pluzz.france2': 'France 2',
@@ -70,8 +83,16 @@ CHANNELS = {
         'channels.fr.publicsenat.publicsenat': 'Public Sénat'
     },
 
-    'main_menu.eu': {
-        'channels.eu.arte.arte': 'Arte',
-        'channels.eu.euronews.euronews': 'Euronews'
+    'main_menu.uk': {
+        'channels.uk.blaze.blaze': 'Blaze',
+        'channels.uk.uktvplay.dave': 'Dave',
+        'channels.uk.uktvplay.really': 'Really',
+        'channels.uk.uktvplay.yesterday': 'Yesterday',
+        'channels.uk.uktvplay.drama': 'Drama'
+    },
+
+    'main_menu.ws': {
+        'channels.ws.allocine.allocine': 'Allociné',
+        'channels.ws.tetesaclaques.tetesaclaques': 'Au pays des Têtes à claques'
     }
 }

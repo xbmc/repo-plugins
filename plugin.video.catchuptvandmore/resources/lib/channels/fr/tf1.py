@@ -21,7 +21,9 @@
     Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 """
 
+import ast
 import json
+import re
 from bs4 import BeautifulSoup as bs
 from resources.lib import utils
 from resources.lib import common
@@ -70,14 +72,15 @@ def channel_entry(params):
         return get_video_url(params)
     return None
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def root(params):
     """Add Replay and Live in the listing"""
     modes = []
 
     # Add Replay
     modes.append({
-        'label' : 'Replay',
+        'label': 'Replay',
         'url': common.PLUGIN.get_url(
             action='channel_entry',
             next='list_shows_1',
@@ -89,7 +92,7 @@ def root(params):
     # Add Live
     if params.channel_name != 'tfou' and params.channel_name != 'xtra':
         modes.append({
-            'label' : _('Live TV'),
+            'label': _('Live TV'),
             'url': common.PLUGIN.get_url(
                 action='channel_entry',
                 next='live_cat',
@@ -106,7 +109,8 @@ def root(params):
         ),
     )
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_shows(params):
     """Build categories listing"""
     shows = []
@@ -124,14 +128,15 @@ def list_shows(params):
                 'ul',
                 attrs={'class': 'topic-chronology-milestone-component'})
             for program in programs_soup.find_all('li'):
-                program_url = URL_LCI_ROOT + program.find('a')['href'].encode('utf-8')
+                program_url = URL_LCI_ROOT + program.find(
+                    'a')['href'].encode('utf-8')
                 program_name = program.find(
                     'h2',
                     class_='text-block').get_text().encode('utf-8')
                 img = program.find_all('source')[0]
                 try:
                     img = img['data-srcset'].encode('utf-8')
-                except:
+                except Exception:
                     img = img['srcset'].encode('utf-8')
 
                 img = img.split(',')[0].split(' ')[0]
@@ -192,21 +197,33 @@ def list_shows(params):
                     img = program.find('img')
                     try:
                         img = img['data-srcset'].encode('utf-8')
-                    except:
+                    except Exception:
                         img = img['srcset'].encode('utf-8')
 
                     img = 'http:' + img.split(',')[-1].split(' ')[0]
 
-                    shows.append({
-                        'label': program_name,
-                        'thumb': img,
-                        'url': common.PLUGIN.get_url(
-                            action='channel_entry',
-                            program_url=program_url,
-                            next='list_videos_categories',
-                            window_title=program_name
-                        )
-                    })
+                    if 'meteo.tf1.fr/meteo-france' in program_url:
+                        shows.append({
+                            'label': program_name,
+                            'thumb': img,
+                            'url': common.PLUGIN.get_url(
+                                action='channel_entry',
+                                program_url=program_url,
+                                next='list_videos',
+                                window_title=program_name
+                            )
+                        })
+                    else:
+                        shows.append({
+                            'label': program_name,
+                            'thumb': img,
+                            'url': common.PLUGIN.get_url(
+                                action='channel_entry',
+                                program_url=program_url,
+                                next='list_videos_categories',
+                                window_title=program_name
+                            )
+                        })
 
     return common.PLUGIN.create_listing(
         shows,
@@ -217,7 +234,7 @@ def list_shows(params):
     )
 
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_videos_categories(params):
     """Build videos categories listing"""
     videos_categories = []
@@ -230,19 +247,38 @@ def list_videos_categories(params):
     filters_1_soup = program_soup.find(
         'ul',
         class_='filters_1')
-    for li in filters_1_soup.find_all('li'):
-        category_title = li.get_text().encode('utf-8')
-        category_id = li.find('a')['data-filter'].encode('utf-8')
-        videos_categories.append({
-            'label': category_title,
-            'url': common.PLUGIN.get_url(
-                action='channel_entry',
-                program_url=params.program_url,
-                next='list_videos',
-                window_title=category_title,
-                category_id=category_id
-            )
-        })
+    if filters_1_soup is not None:
+        for li in filters_1_soup.find_all('li'):
+            category_title = li.get_text().encode('utf-8')
+            category_id = li.find('a')['data-filter'].encode('utf-8')
+
+            # Get Last Page of each categorie
+            # Get First page :
+            url_first_page = ''.join((
+                params.program_url,
+                '/videos',
+                '?filter=',
+                category_id))
+            program_first_page_html = utils.get_webcontent(url_first_page)
+            program_first_page_soup = bs(
+                program_first_page_html, 'html.parser')
+            # Get Last page :
+            last_page = '0'
+            if program_first_page_soup.find('a', class_='icon i-chevron-right-double trackXiti') is not None:
+                last_page = program_first_page_soup.find('a', class_='icon i-chevron-right-double trackXiti').get('href').rsplit('/')[-1].split('?')[0]
+
+            videos_categories.append({
+                'label': category_title,
+                'url': common.PLUGIN.get_url(
+                    action='channel_entry',
+                    program_url=params.program_url,
+                    page='1',
+                    last_page=last_page,
+                    next='list_videos',
+                    window_title=category_title,
+                    category_id=category_id
+                )
+            })
     return common.PLUGIN.create_listing(
         videos_categories,
         sort_methods=(
@@ -252,10 +288,12 @@ def list_videos_categories(params):
     )
 
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_videos(params):
     """Build videos listing"""
     videos = []
+    if 'previous_listing' in params:
+        videos = ast.literal_eval(params['previous_listing'])
 
     if params.channel_name == 'lci':
         program_html = utils.get_webcontent(params.program_url)
@@ -263,7 +301,7 @@ def list_videos(params):
 
         list_replay = program_soup.find_all(
             'a',
-            class_='topic-emission-extract-block-image trackXiti')
+            class_='medium-3col-article-block-article-link')
 
         for replay in list_replay:
 
@@ -312,12 +350,64 @@ def list_videos(params):
                 'context_menu': context_menu
             })
 
+    elif 'meteo.tf1.fr/meteo-france' in params.program_url:
+        program_html = utils.get_webcontent(params.program_url)
+        program_soup = bs(program_html, 'html.parser')
+
+        wat_info = program_soup.find(
+            'td',
+            class_='textbase')
+
+        title = wat_info.find('h3').get_text()
+
+        program_id = re.compile('; src = \'(.*?)\?').findall(program_html)[0]
+
+        info = {
+            'video': {
+                'title': title,
+                #'plot': stitle,
+                #'aired': aired,
+                #'date': date,
+                #'duration': duration,
+                #'year': int(aired[:4]),
+                'mediatype': 'tvshow'
+            }
+        }
+
+        context_menu = []
+        download_video = (
+            ('Download'),
+            'XBMC.RunPlugin(' + common.PLUGIN.get_url(
+                action='download_video',
+                program_id=program_id) + ')'
+            )
+        context_menu.append(download_video)
+
+        videos.append({
+            'label': title,
+            #'thumb': img,
+            'url': common.PLUGIN.get_url(
+                action='channel_entry',
+                next='play_r',
+                program_id=program_id,
+            ),
+            'is_playable': True,
+            'info': info,
+            'context_menu': context_menu
+        })
     else:
-        url = ''.join((
-            params.program_url,
-            '/videos/',
-            '?filter=',
-            params.category_id))
+        if params.page == '1':
+            url = ''.join((
+                params.program_url,
+                '/videos',
+                '?filter=',
+                params.category_id))
+        else:
+            url = ''.join((
+                params.program_url,
+                '/videos/%s' % params.page,
+                '?filter=',
+                params.category_id))
         program_html = utils.get_webcontent(url)
         program_soup = bs(program_html, 'html.parser')
 
@@ -325,96 +415,113 @@ def list_videos(params):
             'ul',
             class_='grid')
 
-        for li in grid.find_all('li'):
-            video_type_string = li.find(
-                'div', class_='description').find('a')['data-xiti-libelle'].encode('utf-8')
-            video_type_string = video_type_string.split('-')[0]
+        if grid is not None:
+            for li in grid.find_all('li'):
+                video_type_string = li.find(
+                    'div', class_='description').find('a')['data-xiti-libelle'].encode('utf-8')
+                video_type_string = video_type_string.split('-')[0]
 
-            if 'Playlist' not in video_type_string:
-                title = li.find(
-                    'p',
-                    class_='title').get_text().encode('utf-8')
-
-                try:
-                    stitle = li.find(
+                if 'Playlist' not in video_type_string:
+                    title = li.find(
                         'p',
-                        class_='stitle').get_text().encode('utf-8')
-                except:
-                    stitle = ''
+                        class_='title').get_text().encode('utf-8')
 
-                try:
-                    duration_soup = li.find(
-                        'p',
-                        class_='uptitle').find(
-                            'span',
-                            class_='momentDate')
-                    duration = int(duration_soup.get_text().encode('utf-8'))
-                except:
-                    duration = 0
-
-                img = li.find('img')
-                try:
-                    img = img['data-srcset'].encode('utf-8')
-                except:
-                    img = img['srcset'].encode('utf-8')
-
-                img = 'http:' + img.split(',')[-1].split(' ')[0]
-
-                try:
-                    date_soup = li.find(
-                        'div',
-                        class_='text').find(
+                    try:
+                        stitle = li.find(
                             'p',
-                            class_='uptitle').find('span')
+                            class_='stitle').get_text().encode('utf-8')
+                    except:
+                        stitle = ''
 
-                    aired = date_soup['data-date'].encode('utf-8').split('T')[0]
-                    day = aired.split('-')[2]
-                    mounth = aired.split('-')[1]
-                    year = aired.split('-')[0]
-                    date = '.'.join((day, mounth, year))
-                    # date : string (%d.%m.%Y / 01.01.2009)
-                    # aired : string (2008-12-07)
+                    try:
+                        duration_soup = li.find(
+                            'p',
+                            class_='uptitle').find(
+                                'span',
+                                class_='momentDate')
+                        duration = int(duration_soup.get_text().encode('utf-8'))
+                    except:
+                        duration = 0
 
-                except:
-                    date = ''
-                    aired = ''
-                    year = 0
+                    img = li.find('img')
+                    try:
+                        img = img['data-srcset'].encode('utf-8')
+                    except:
+                        img = img['srcset'].encode('utf-8')
 
-                program_id = li.find('a')['href'].encode('utf-8')
+                    img = 'http:' + img.split(',')[-1].split(' ')[0]
 
-                info = {
-                    'video': {
-                        'title': title,
-                        'plot': stitle,
-                        'aired': aired,
-                        'date': date,
-                        'duration': duration,
-                        'year': int(aired[:4]),
-                        'mediatype': 'tvshow'
+                    try:
+                        date_soup = li.find(
+                            'div',
+                            class_='text').find(
+                                'p',
+                                class_='uptitle').find('span')
+
+                        aired = date_soup['data-date'].encode('utf-8').split('T')[0]
+                        day = aired.split('-')[2]
+                        mounth = aired.split('-')[1]
+                        year = aired.split('-')[0]
+                        date = '.'.join((day, mounth, year))
+                        # date : string (%d.%m.%Y / 01.01.2009)
+                        # aired : string (2008-12-07)
+
+                    except:
+                        date = ''
+                        aired = ''
+                        year = 0
+
+                    program_id = li.find('a')['href'].encode('utf-8')
+
+                    info = {
+                        'video': {
+                            'title': title,
+                            'plot': stitle,
+                            'aired': aired,
+                            'date': date,
+                            'duration': duration,
+                            'year': int(aired[:4]),
+                            'mediatype': 'tvshow'
+                        }
                     }
-                }
 
-                context_menu = []
-                download_video = (
-                    _('Download'),
-                    'XBMC.RunPlugin(' + common.PLUGIN.get_url(
-                        action='download_video',
-                        program_id=program_id) + ')'
-                )
-                context_menu.append(download_video)
+                    context_menu = []
+                    download_video = (
+                        _('Download'),
+                        'XBMC.RunPlugin(' + common.PLUGIN.get_url(
+                            action='download_video',
+                            program_id=program_id) + ')'
+                    )
+                    context_menu.append(download_video)
 
-                videos.append({
-                    'label': title,
-                    'thumb': img,
-                    'url': common.PLUGIN.get_url(
-                        action='channel_entry',
-                        next='play_r',
-                        program_id=program_id,
-                    ),
-                    'is_playable': True,
-                    'info': info,
-                    'context_menu': context_menu
-                })
+                    videos.append({
+                        'label': title,
+                        'thumb': img,
+                        'url': common.PLUGIN.get_url(
+                            action='channel_entry',
+                            next='play_r',
+                            program_id=program_id,
+                        ),
+                        'is_playable': True,
+                        'info': info,
+                        'context_menu': context_menu
+                    })
+
+        if int(params.page) < int(params.last_page):
+            # More videos...
+            videos.append({
+                'label': common.ADDON.get_localized_string(30100),
+                'url': common.PLUGIN.get_url(
+                    action='channel_entry',
+                    program_url=params.program_url,
+                    category_id=params.category_id,
+                    last_page=params.last_page,
+                    next='list_videos',
+                    page=str(int(params.page) + 1),
+                    update_listing=True,
+                    previous_listing=str(videos)
+                ),
+            })
 
     return common.PLUGIN.create_listing(
         videos,
@@ -424,9 +531,11 @@ def list_videos(params):
             common.sp.xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE,
             common.sp.xbmcplugin.SORT_METHOD_UNSORTED
         ),
-        content='tvshows')
+        content='tvshows',
+        update_listing='update_listing' in params,
+    )
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_live(params):
     """Build live listing"""
     lives = []
@@ -491,29 +600,34 @@ def list_live(params):
         )
     )
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def get_video_url(params):
     """Get video URL and start video player"""
 
     if params.next == 'play_r' or params.next == 'download_video':
-        if "http" not in params.program_id:
+        if 'www.wat.tv/embedframe' in params.program_id:
+            url = 'http:' + params.program_id
+        elif "http" not in params.program_id:
             if params.program_id[0] == '/':
                 params.program_id = params.program_id[1:]
             url = URL_ROOT + params.program_id
         else:
             url = params.program_id
         video_html = utils.get_webcontent(url)
-        video_html_soup = bs(video_html, 'html.parser')
 
-        iframe_player_soup = video_html_soup.find(
-            'div',
-            class_='iframe_player')
-
-        if params.channel_name == 'lci':
-            video_id = iframe_player_soup['data-watid'].encode('utf-8')
+        if 'www.wat.tv/embedframe' in params.program_id:
+            video_id = re.compile('UVID=(.*?)&').findall(video_html)[0]
         else:
-            data_src = iframe_player_soup['data-src'].encode('utf-8')
-            video_id = data_src[-8:]
+            video_html_soup = bs(video_html, 'html.parser')
+            iframe_player_soup = video_html_soup.find(
+                'div',
+                class_='iframe_player')
+
+            if params.channel_name == 'lci':
+                video_id = iframe_player_soup['data-watid'].encode('utf-8')
+            else:
+                data_src = iframe_player_soup['data-src'].encode('utf-8')
+                video_id = data_src[-8:]
 
         timeserver = str(utils.get_webcontent(URL_TIME))
 
@@ -552,6 +666,14 @@ def get_video_url(params):
                 url_video = url_video.split('&bwmax')[0]
             except:
                 pass
+
+        # Check DRM in the m3u8 file
+        manifest = utils.get_webcontent(
+            url_video,
+            random_ua=True)
+        if 'drm' in manifest:
+            utils.send_notification(common.ADDON.get_localized_string(30102))
+            return ''
 
         return url_video
 

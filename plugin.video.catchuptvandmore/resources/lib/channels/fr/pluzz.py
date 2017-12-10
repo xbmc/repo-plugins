@@ -97,9 +97,11 @@ CATEGORIES = {
     'Info': 'https://pluzz.webservices.francetelevisions.fr/'
             'mobile/liste/type/replay/rubrique/info/nb/20/debut/%s',
     'Documentaire': 'https://pluzz.webservices.francetelevisions.fr/'
-                    'mobile/liste/type/replay/rubrique/documentaire/nb/20/debut/%s',
+                    'mobile/liste/type/replay/rubrique/documentaire/'
+                    'nb/20/debut/%s',
     'Série & Fiction': 'https://pluzz.webservices.francetelevisions.fr/'
-                       'mobile/liste/type/replay/rubrique/seriefiction/nb/20/debut/%s',
+                       'mobile/liste/type/replay/rubrique/seriefiction/nb/'
+                       '20/debut/%s',
     'Magazine': 'https://pluzz.webservices.francetelevisions.fr/'
                 'mobile/liste/type/replay/rubrique/magazine/nb/20/debut/%s',
     'Culture': 'https://pluzz.webservices.francetelevisions.fr/'
@@ -107,19 +109,25 @@ CATEGORIES = {
     'Jeunesse': 'https://pluzz.webservices.francetelevisions.fr/'
                 'mobile/liste/type/replay/rubrique/jeunesse/nb/20/debut/%s',
     'Divertissement': 'https://pluzz.webservices.francetelevisions.fr/'
-                      'mobile/liste/type/replay/rubrique/divertissement/nb/20/debut/%s',
+                      'mobile/liste/type/replay/rubrique/divertissement/nb/'
+                      '20/debut/%s',
     'Sport': 'https://pluzz.webservices.francetelevisions.fr/'
              'mobile/liste/type/replay/rubrique/sport/nb/20/debut/%s',
     'Jeu': 'https://pluzz.webservices.francetelevisions.fr/'
            'mobile/liste/type/replay/rubrique/jeu/nb/20/debut/%s',
-    'Version multilingue (VM)': 'https://pluzz.webservices.francetelevisions.fr/'
-                                'mobile/liste/filtre/multilingue/type/replay/nb/20/debut/%s',
+    'Version multilingue (VM)': 'https://pluzz.webservices.'
+                                'francetelevisions.fr/'
+                                'mobile/liste/filtre/multilingue/type/'
+                                'replay/nb/20/debut/%s',
     'Sous-titrés': 'https://pluzz.webservices.francetelevisions.fr/'
-                   'mobile/liste/filtre/soustitrage/type/replay/nb/20/debut/%s',
+                   'mobile/liste/filtre/soustitrage/type/replay/nb/'
+                   '20/debut/%s',
     'Audiodescription (AD)': 'https://pluzz.webservices.francetelevisions.fr/'
-                             'mobile/liste/filtre/audiodescription/type/replay/nb/20/debut/%s',
+                             'mobile/liste/filtre/audiodescription/type/replay'
+                             '/nb/20/debut/%s',
     'Tous publics': 'https://pluzz.webservices.francetelevisions.fr/'
-                    'mobile/liste/type/replay/filtre/touspublics/nb/20/debut/%s'
+                    'mobile/liste/type/replay/filtre/touspublics'
+                    '/nb/20/debut/%s'
 }
 
 
@@ -140,7 +148,7 @@ def channel_entry(params):
     return None
 
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def change_to_nicer_name(original_name):
     """Convert id name to label name"""
     if original_name in CATEGORIES_DISPLAY:
@@ -148,7 +156,7 @@ def change_to_nicer_name(original_name):
     return original_name
 
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def root(params):
     """Add Replay and Live in the listing"""
     modes = []
@@ -156,7 +164,7 @@ def root(params):
     # Add Replay
     if params.channel_name != 'franceinfo':
         modes.append({
-            'label' : 'Replay',
+            'label': 'Replay',
             'url': common.PLUGIN.get_url(
                 action='channel_entry',
                 next='list_shows_1',
@@ -168,7 +176,7 @@ def root(params):
     # Add Live
     if params.channel_name != 'la_1ere':
         modes.append({
-            'label' : _('Live TV'),
+            'label': _('Live TV'),
             'url': common.PLUGIN.get_url(
                 action='channel_entry',
                 next='live_cat',
@@ -185,7 +193,8 @@ def root(params):
         ),
     )
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_shows(params):
     """Build categories listing"""
     shows = []
@@ -394,7 +403,7 @@ def list_shows(params):
     )
 
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_videos(params):
     """Build videos listing"""
     videos = []
@@ -556,7 +565,7 @@ def list_videos(params):
                     ),
                     'is_playable': True,
                     'info': info,
-                    'context_menu': context_menu  #  A ne pas oublier pour ajouter le bouton "Download" à chaque vidéo
+                    'context_menu': context_menu
                 })
 
     if 'search' in params.next:
@@ -606,7 +615,8 @@ def list_videos(params):
         update_listing='update_listing' in params,
     )
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_live(params):
     """Build live listing"""
     lives = []
@@ -634,14 +644,17 @@ def list_live(params):
             if id_programme == '':
                 id_programme = emission['id_emission'].encode('utf-8')
             id_diffusion = emission['id_diffusion']
-            chaine_id = emission['chaine_id'].encode('utf-8')
+            # chaine_id = emission['chaine_id'].encode('utf-8')
 
-            start_time_emission = 'Début : ' + emission['date_diffusion'].split('T')[1].encode('utf-8')
+            start_time_emission = 'Début : ' + \
+                emission['date_diffusion'].split('T')[1].encode('utf-8')
 
             if emission['accroche']:
-                plot = start_time_emission + '\n ' + emission['accroche'].encode('utf-8')
+                plot = start_time_emission + '\n ' + \
+                    emission['accroche'].encode('utf-8')
             elif emission['accroche_programme']:
-                plot = start_time_emission + '\n ' + emission['accroche_programme'].encode('utf-8')
+                plot = start_time_emission + '\n ' + \
+                    emission['accroche_programme'].encode('utf-8')
             if emission['date_diffusion']:
                 date = emission['date_diffusion']
                 date = date.encode('utf-8')
@@ -674,7 +687,6 @@ def list_live(params):
             day = int(date[8:10])
             aired = '-'.join((str(year), str(month), str(day)))
 
-
             image = URL_IMG % (emission['image_large'])
 
             info = {
@@ -684,7 +696,7 @@ def list_live(params):
                     'aired': aired,
                     'date': date,
                     'duration': duration,
-                    #year': year,
+                    # year': year,
                     'genre': genre,
                     'mediatype': 'tvshow',
                     'season': season,
@@ -729,7 +741,6 @@ def list_live(params):
             'info': info
         })
 
-
     return common.PLUGIN.create_listing(
         lives,
         sort_methods=(
@@ -738,7 +749,8 @@ def list_live(params):
         )
     )
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def get_video_url(params):
     """Get video URL and start video player"""
 
@@ -754,7 +766,8 @@ def get_video_url(params):
             all_datas_videos = []
 
             for video in json_parser['videos']:
-                if video['format'] == 'hls_v5_os' or video['format'] == 'm3u8-download':
+                if video['format'] == 'hls_v5_os' or \
+                        video['format'] == 'm3u8-download':
                     new_list_item = common.sp.xbmcgui.ListItem()
                     if video['format'] == 'hls_v5_os':
                         new_list_item.setLabel("HD")

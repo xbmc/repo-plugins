@@ -6,7 +6,10 @@
         <!-- Hide main menu categories -->
         <setting label="30010" type="lsep"/>
         <setting label="30020" type="bool" id="main_menu.fr" default="true"/>
+        <setting label="30021" type="bool" id="main_menu.be" default="true"/>
         <setting label="30023" type="bool" id="main_menu.eu" default="true"/>
+        <setting label="30024" type="bool" id="main_menu.uk" default="true"/>
+        <setting label="30026" type="bool" id="main_menu.ws" default="true"/>
     </category>
 
 
@@ -144,6 +147,12 @@
             <setting label="Paris Première" type="bool" id="channels.fr.6play.parispremiere" default="true" visible="eq(-83,true)"/>
             <setting label="" type="number" visible="false" id="channels.fr.6play.parispremiere.order" default="42"/>-->
 
+        <setting label="30021" type="lsep" subsetting="true" visible="eq(1,true)"/>
+        <setting label="30021" type="bool" id="main_menu.be" default="true" visible="false"/>
+
+            <setting label="RTBF Auvio (La Une, La deux, La Trois, ...)" type="bool" id="channels.be.rtbf.auvio" default="true" visible="eq(-1,true)"/>
+            <setting label="" type="number" visible="false" id="channels.be.rtbf.auvio.order" default="1"/>
+
         <setting label="30023" type="lsep" subsetting="true" visible="eq(1,true)"/>
         <setting label="30023" type="bool" id="main_menu.eu" default="true" visible="false"/>
 
@@ -153,8 +162,34 @@
             <setting label="Arte" type="bool" id="channels.eu.arte.arte" default="true" visible="eq(-3,true)"/>
             <setting label="" type="number" visible="false" id="channels.eu.arte.arte.order" default="2"/>
 
-    </category>
+        <setting label="30024" type="lsep" subsetting="true" visible="eq(1,true)"/>
+        <setting label="30024" type="bool" id="main_menu.uk" default="true" visible="false"/>
 
+            <setting label="Blaze" type="bool" id="channels.uk.blaze.blaze" default="true" visible="eq(-1,true)"/>
+            <setting label="" type="number" visible="false" id="channels.uk.blaze.blaze.order" default="1"/>
+
+            <setting label="Dave" type="bool" id="channels.uk.uktvplay.dave" default="true" visible="eq(-3,true)"/>
+            <setting label="" type="number" visible="false" id="channels.uk.uktvplay.dave.order" default="2"/>
+
+            <setting label="Really" type="bool" id="channels.uk.uktvplay.really" default="true" visible="eq(-5,true)"/>
+            <setting label="" type="number" visible="false" id="channels.uk.uktvplay.really.order" default="3"/>
+
+            <setting label="Yesterday" type="bool" id="channels.uk.uktvplay.yesterday" default="true" visible="eq(-7,true)"/>
+            <setting label="" type="number" visible="false" id="channels.uk.uktvplay.yesterday.order" default="4"/>
+
+            <setting label="Drama" type="bool" id="channels.uk.uktvplay.drama" default="true" visible="eq(-9,true)"/>
+            <setting label="" type="number" visible="false" id="channels.uk.uktvplay.drama.order" default="5"/>
+
+        <setting label="30026" type="lsep" subsetting="true" visible="eq(1,true)"/>
+        <setting label="30026" type="bool" id="main_menu.ws" default="true" visible="false"/>
+
+            <setting label="Allociné" type="bool" id="channels.ws.allocine.allocine" default="true" visible="eq(-1,true)"/>
+            <setting label="" type="number" visible="false" id="channels.ws.allocine.allocine.order" default="1"/>
+
+            <setting label="Au pays des Têtes à claques" type="bool" id="channels.ws.tetesaclaques.tetesaclaques" default="true" visible="eq(-3,true)"/>
+            <setting label="" type="number" visible="false" id="channels.ws.tetesaclaques.tetesaclaques.order" default="2"/>
+
+    </category>
 
     <!-- Quality and Content (and also hidden settings) -->
     <category label="30002">
@@ -163,10 +198,11 @@
             <setting label="30087" type="labelenum" id="quality" values="BEST|DEFAULT|DIALOG"/>
 
         <setting label="30071" type="lsep" />
+
             <setting label="30020" type="lsep" subsetting="true" visible="eq(1,true)"/>
             <setting label="30020" type="bool" id="main_menu.fr" default="true" visible="false"/>
 
-                <setting label="30081" type="labelenum" id="channels.fr.france24.france24.language" visible="eq(-1,true)" values="FR|EN|AR"/>
+                <setting label="30081" type="labelenum" id="channels.fr.france24.france24.language" visible="eq(-1,true)" values="FR|EN|AR|ES"/>
 
             <setting label="30023" type="lsep" subsetting="true" visible="eq(1,true)"/>
             <setting label="30023" type="bool" id="main_menu.eu" default="true" visible="false"/>
@@ -177,13 +213,11 @@
             <setting label="" type="bool" id="show_hidden_items_information" default="true" visible="false"/>
     </category>
 
-
     <!-- Download ... -->
     <category label="30003">
         <setting label="30012" type="lsep"/>
         <setting label="30200" type="folder" id="dlFolder" source="auto" option="writeable"/>
     </category>
-
 
     <!-- Account ... -->
     <category label="30004">
@@ -193,6 +227,13 @@
 
             <setting label="NRJ Login" type="text" id="channels.fr.nrj.login" visible="eq(-1,true)" defaut=""/>
             <setting label="NRJ Password" type="text" id="channels.fr.nrj.password" option="hidden" visible="eq(-2,true)" defaut=""/>
+
+        <setting label="30024" type="lsep" subsetting="true" visible="eq(1,true)"/>
+        <setting label="30024" type="bool" id="main_menu.uk" default="true" visible="false"/>
+
+            <setting label="UKTVPlay Login" type="text" id="channels.uk.uktvplay.login" visible="eq(-1,true)" defaut=""/>
+            <setting label="UKTVPlay Password" type="text" id="channels.uk.uktvplay.password" option="hidden" visible="eq(-2,true)" defaut=""/>
+
     </category>
 
 </settings>

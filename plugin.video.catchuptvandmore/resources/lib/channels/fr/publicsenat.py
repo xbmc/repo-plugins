@@ -41,6 +41,7 @@ URL_LIVE_SITE = 'https://www.publicsenat.fr/direct'
 
 URL_DAILYMOTION_EMBED = 'http://www.dailymotion.com/embed/video/%s'
 
+
 def channel_entry(params):
     """Entry function of the module"""
     if 'root' in params.next:
@@ -54,38 +55,41 @@ def channel_entry(params):
     elif 'play' in params.next:
         return get_video_url(params)
 
+
 CATEGORIES = {
-    'https://www.publicsenat.fr/recherche/type/episode/' \
-    'field_theme/politique-4127?sort_by=pse_search_date_publication' : 'Politique',
-    'https://www.publicsenat.fr/recherche/type/episode/' \
-    'field_theme/societe-4126?sort_by=pse_search_date_publication' : 'Société',
-    'https://www.publicsenat.fr/recherche/type/episode/' \
-    'field_theme/debat-4128?sort_by=pse_search_date_publication' : 'Débat'
+    'https://www.publicsenat.fr/recherche/type/episode/'
+    'field_theme/politique-4127?'
+    'sort_by=pse_search_date_publication': 'Politique',
+    'https://www.publicsenat.fr/recherche/type/episode/'
+    'field_theme/societe-4126?sort_by=pse_search_date_publication': 'Société',
+    'https://www.publicsenat.fr/recherche/type/episode/'
+    'field_theme/debat-4128?sort_by=pse_search_date_publication': 'Débat'
 }
 
 CORRECT_MONTH = {
-    'janvier' : '01',
-    'février' : '02',
-    'mars' : '03',
-    'avril' : '04',
-    'mai' : '05',
-    'juin' : '06',
-    'juillet' : '07',
-    'août' : '08',
-    'septembre' : '09',
-    'octobre' : '10',
-    'novembre' : '11',
-    'décembre' : '12'
+    'janvier': '01',
+    'février': '02',
+    'mars': '03',
+    'avril': '04',
+    'mai': '05',
+    'juin': '06',
+    'juillet': '07',
+    'août': '08',
+    'septembre': '09',
+    'octobre': '10',
+    'novembre': '11',
+    'décembre': '12'
 }
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def root(params):
     """Add Replay and Live in the listing"""
     modes = []
 
     # Add Replay
     modes.append({
-        'label' : 'Replay',
+        'label': 'Replay',
         'url': common.PLUGIN.get_url(
             action='channel_entry',
             next='list_shows_1',
@@ -96,7 +100,7 @@ def root(params):
 
     # Add Live
     modes.append({
-        'label' : 'Live TV',
+        'label': 'Live TV',
         'url': common.PLUGIN.get_url(
             action='channel_entry',
             next='live_cat',
@@ -113,7 +117,8 @@ def root(params):
         ),
     )
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_shows(params):
     """Build shows listing"""
     shows = []
@@ -142,7 +147,8 @@ def list_shows(params):
         )
     )
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_videos(params):
     """Build videos listing"""
     videos = []
@@ -164,32 +170,38 @@ def list_videos(params):
     if params.category_name == 'Politique':
         video_soup = root_soup.find_all(
             'article',
-            class_="node node-episode node-episode-pse-search-result theme-4127 clearfix")
+            class_="node node-episode node-episode-pse-search-result"
+                   " theme-4127 clearfix")
     elif params.category_name == 'Société':
         video_soup = root_soup.find_all(
             'article',
-            class_="node node-episode node-episode-pse-search-result theme-4126 clearfix")
+            class_="node node-episode node-episode-pse-search-result "
+                   "theme-4126 clearfix")
     elif params.category_name == 'Débat':
         video_soup = root_soup.find_all(
             'article',
-            class_="node node-episode node-episode-pse-search-result theme-4128 clearfix")
+            class_="node node-episode node-episode-pse-search-result "
+                   "theme-4128 clearfix")
 
     for video in video_soup:
 
         # Test Existing Video
-        if video.find('div', class_="content").find( \
+        if video.find('div', class_="content").find(
                 'div', class_="right").find('div', class_="wrapper-duree"):
 
             title = ''
-            if video.find('div', class_="content").find( \
+            if video.find('div', class_="content").find(
                     'div',
-                    class_="field field-name-title-field field-type-text field-label-hidden"):
+                    class_="field field-name-title-field field-type-text "
+                           "field-label-hidden"):
                 title = video.find(
                     'div',
                     class_="content"
                 ).find(
                     'div',
-                    class_="field field-name-field-ref-emission field-type-entityreference field-label-hidden"
+                    class_="field field-name-field-ref-emission"
+                           " field-type-entityreference "
+                           "field-label-hidden"
                 ).find(
                     'div',
                     class_="field-items"
@@ -199,25 +211,22 @@ def list_videos(params):
                 ).get_text().encode('utf-8') + ' - ' \
                     + video.find(
                         'div',
-                        class_="content"
-                    ).find(
+                        class_="content").find(
+                            'div',
+                        class_="field field-name-title-field "
+                               "field-type-text field-label-hidden").find(
                         'div',
-                        class_="field field-name-title-field field-type-text field-label-hidden"
-                    ).find(
+                        class_="field-items").find(
                         'div',
-                        class_="field-items"
-                    ).find(
-                        'div',
-                        class_="field-item even"
-                    ).get_text().encode('utf-8')
+                        class_="field-item even").get_text().encode('utf-8')
             else:
                 title = video.find(
                     'div',
-                    class_="content"
-                ).find(
+                    class_="content").find(
                     'div',
-                    class_="field field-name-field-ref-emission field-type-entityreference field-label-hidden"
-                ).find(
+                    class_="field field-name-field-ref-emission"
+                           " field-type-entityreference "
+                           "field-label-hidden").find(
                     'div',
                     class_="field-items"
                 ).find(
@@ -226,9 +235,12 @@ def list_videos(params):
                 ).get_text().encode('utf-8')
 
             img = ''
-            if video.find('div', class_="content").find('div', class_="wrapper-visuel" \
-                    ).find('div', class_="scald-atom video").find('div', \
-                    class_="field field-name-scald-thumbnail field-type-image field-label-hidden"):
+            if video.find(
+                'div', class_="content").find(
+                'div', class_="wrapper-visuel").find(
+                'div', class_="scald-atom video").find(
+                'div', class_="field field-name-scald-thumbnail"
+                              " field-type-image field-label-hidden"):
                 img = video.find(
                     'div',
                     class_="content"
@@ -240,7 +252,8 @@ def list_videos(params):
                     class_="scald-atom video"
                 ).find(
                     'div',
-                    class_="field field-name-scald-thumbnail field-type-image field-label-hidden"
+                    class_="field field-name-scald-thumbnail"
+                           " field-type-image field-label-hidden"
                 ).find(
                     'div',
                     class_="field-items"
@@ -250,14 +263,17 @@ def list_videos(params):
                 ).find('img').get('src')
 
             plot = ''
-            if video.find('div', class_="content").find('div', \
-                    class_="field field-name-field-contenu field-type-text-long field-label-hidden"):
+            if video.find(
+                'div', class_="content").find(
+                'div', class_="field field-name-field-contenu"
+                              " field-type-text-long field-label-hidden"):
                 plot = video.find(
                     'div',
                     class_="content"
                 ).find(
                     'div',
-                    class_="field field-name-field-contenu field-type-text-long field-label-hidden"
+                    class_="field field-name-field-contenu "
+                           "field-type-text-long field-label-hidden"
                 ).find(
                     'div',
                     class_="field-items"
@@ -265,7 +281,6 @@ def list_videos(params):
                     'div',
                     class_="field-item even"
                 ).get_text().encode('utf-8')
-
 
             value_date = video.find(
                 'div',
@@ -275,7 +290,7 @@ def list_videos(params):
             day = date[2]
             try:
                 mounth = CORRECT_MONTH[date[3]]
-            except:
+            except Exception:
                 mounth = '00'
             year = date[4]
 
@@ -286,8 +301,8 @@ def list_videos(params):
             duration = int(video.find('div', class_="content").find(
                 'div', class_="right").find(
                     'div',
-                    class_="wrapper-duree").get_text().encode('utf-8')[:-3]) * 60
-
+                    class_="wrapper-duree").get_text().encode(
+                    'utf-8')[:-3]) * 60
 
             url_video = URL_ROOT + video.find(
                 'div', class_="content").find('a').get('href').encode('utf-8')
@@ -299,7 +314,7 @@ def list_videos(params):
                     'date': date,
                     'duration': duration,
                     'year': year,
-                    'plot' : plot,
+                    'plot': plot,
                     'mediatype': 'tvshow'
                 }
             }
@@ -354,7 +369,8 @@ def list_videos(params):
         update_listing='update_listing' in params,
     )
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def list_live(params):
     """Build live listing"""
     lives = []
@@ -387,7 +403,7 @@ def list_live(params):
         'label': title,
         'fanart': img,
         'thumb': img,
-        'url' : common.PLUGIN.get_url(
+        'url': common.PLUGIN.get_url(
             action='channel_entry',
             next='play_l',
             url=url_live,
@@ -404,7 +420,8 @@ def list_live(params):
         )
     )
 
-@common.PLUGIN.cached(common.CACHE_TIME)
+
+@common.PLUGIN.mem_cached(common.CACHE_TIME)
 def get_video_url(params):
     """Get video URL and start video player"""
     if params.next == 'play_r' or params.next == 'download_video':
@@ -417,8 +434,7 @@ def get_video_url(params):
 
         for url in urlembeded_videos_soup:
             url_video_embed = url.get('src').encode('utf-8')
-            break # get first video hard to find by another method
-
+            break  # get first video hard to find by another method
 
         url_video_embed_http = url_video_embed
         if params.next == 'download_video':
@@ -426,7 +442,8 @@ def get_video_url(params):
         html_video = utils.get_webcontent(url_video_embed_http)
         html_video = html_video.replace('\\', '')
 
-        all_url_video = re.compile(r'"type":"video/mp4","url":"(.*?)"').findall(html_video)
+        all_url_video = re.compile(
+            r'"type":"video/mp4","url":"(.*?)"').findall(html_video)
         for datas in all_url_video:
             url = datas
 
@@ -438,7 +455,8 @@ def get_video_url(params):
         html_live = html_live.replace('\\', '')
 
         url_live = re.compile(
-            r'{"type":"application/x-mpegURL","url":"(.*?)"}]}').findall(html_live)
+            r'{"type":"application/x-mpegURL","url":"(.*?)"}]}'
+        ).findall(html_live)
 
         # Just one flux no quality to choose
         return url_live[0]

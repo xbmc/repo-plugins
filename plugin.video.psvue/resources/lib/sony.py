@@ -152,6 +152,7 @@ class SONY():
         r = requests.delete(url, headers=headers, cookies=self.load_cookies(), verify=self.verify)
         self.save_cookies(r.cookies)
         # Clear addon settings
+        self.addon.setSetting(id='EPGreqPayload', value='')
         self.addon.setSetting(id='reqPayload', value='')
         self.addon.setSetting(id='last_auth', value='')
         self.addon.setSetting(id='npsso', value='')
@@ -210,12 +211,21 @@ class SONY():
             'Accept-Encoding': 'gzip',
             "X-Requested-With": "com.snei.vue.atv"
         }
+        r = requests.get(url, headers=headers, verify=self.verify)
+        device_status = str(r.json()['body']['status'])
+
         if self.addon.getSetting(id='reqPayload') != '':
             headers['reauth'] = '1'
             headers['reqPayload'] = self.addon.getSetting(id='reqPayload')
 
-        r = requests.get(url, headers=headers, verify=self.verify)
-        if 'reqPayload' in r.headers:
+        if device_status == "UNAUTHORIZED":
+            auth_error = str(r.json()['header']['error']['message'])
+            error_code = str(r.json()['header']['error']['code'])
+            self.notification_msg("Error Code: "+error_code, auth_error)
+            sys.exit()
+
+
+        elif 'reqPayload' in r.headers:
             req_payload = str(r.headers['reqPayload'])
             self.addon.setSetting(id='reqPayload', value=req_payload)
             auth_time = r.json()['header']['time_stamp']
@@ -272,8 +282,8 @@ class SONY():
         }
 
         r = requests.get(url, headers=headers, verify=self.verify)
-        req_payload = str(r.headers['reqPayload'])
-        self.addon.setSetting(id='reqPayload', value=req_payload)
+        EPGreqPayload = str(r.headers['reqPayload'])
+        self.addon.setSetting(id='EPGreqPayload', value=EPGreqPayload)
         auth_time = r.json()['header']['time_stamp']
         self.addon.setSetting(id='last_auth', value=auth_time)
         self.addon.setSetting(id='default_profile', value=profile_id)
@@ -289,7 +299,7 @@ class SONY():
                    "Accept-Encoding": "gzip, deflate, br",
                    "User-Agent": self.ua_android_tv,
                    "Connection": "Keep-Alive",
-                   "reqPayload": self.addon.getSetting(id='reqPayload'),
+                   "reqPayload": self.addon.getSetting(id='EPGreqPayload'),
                    "X-Requested-With": "com.snei.vue.atv"
                    }
 
@@ -318,7 +328,7 @@ class SONY():
                    "Accept-Encoding": "gzip, deflate, br",
                    "User-Agent": self.ua_android_tv,
                    "Connection": "Keep-Alive",
-                   "reqPayload": self.addon.getSetting(id='reqPayload'),
+                   "reqPayload": self.addon.getSetting(id='EPGreqPayload'),
                    "X-Requested-With": "com.snei.vue.atv"
                    }
 
@@ -343,15 +353,16 @@ class SONY():
 
     def put_resume_time(self, airing_id, channel_id, program_id, series_id, tms_id):
         url = self.user_action_url+'/watch_history'
-        headers = {"Accept": "*/*",
-                   "Content-type": "application/json",
-                   "Origin": "https://themis.dl.playstation.net",
-                   "Accept-Language": "en-US",
-                   "Referer": "https://themis.dl.playstation.net/themis/destro/4-4-5a/",
-                   "Accept-Encoding": "gzip, deflate",
-                   "User-Agent": self.ua_android_tv,
-                   "Connection": "Keep-Alive",
-                   'reqPayload': self.addon.getSetting(id='reqPayload'),
+        headers = {'Accept': '*/*',
+                   'Content-type': 'application/json',
+                   'Origin': 'https://vue.playstation.com',
+                   'Accept-Language': 'en-US,en;q-0.5',
+                   'Referer': 'https://vue.playstation.com/watch/my-vue',
+                   'Accept-Encoding': 'gzip, deflate, br',
+                   'User-Agent': self.ua_android_tv,
+                   'Connection': 'Keep-Alive',
+                   'Host': 'sentv-user-action.totsuko.tv',
+                   'reqPayload': self.addon.getSetting(id='EPGreqPayload'),
                    'X-Requested-With': 'com.snei.vue.android'
                    }
 
@@ -360,13 +371,13 @@ class SONY():
         payload += '"channel_id":'+channel_id+','
         payload += '"tms_id":"'+tms_id+'",'
         payload += '"airing_id":'+airing_id+','
-        payload += '"last_watch_date":"2017-08-11T00:40:43Z",'
-        payload += '"last_timecode":"00:01:46",'
+        payload += '"last_watch_date":"2017-11-13T06:54:419Z",'
+        payload += '"last_timecode":"00:00:00",'
         payload += '"start_timecode":"00:00:00:00",'
         payload += '"fully_watched":false,'
-        payload += '"stream_type":"dvr"}'
+        payload += '"stream_type":"null"}'
 
-        #xbmc.log(payload)
+        #xbmc.log("The Payload is: " + payload)
         r = requests.put(url, headers=headers, data=payload, verify=self.verify)
 
 
@@ -401,4 +412,4 @@ class SONY():
 
     def notification_msg(self, title, msg):
         dialog = xbmcgui.Dialog()
-        dialog.notification(title, msg, xbmcgui.NOTIFICATION_INFO, 5000)
+        dialog.notification(title, msg, xbmcgui.NOTIFICATION_INFO, 9000)

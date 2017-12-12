@@ -13,7 +13,8 @@ import os
 from roosterteeth_const import LANGUAGE, IMAGES_PATH, ROOSTERTEETHRECENTLYADDEDURL, ROOSTERTEETHSHOWSURL, \
     ACHIEVEMENTHUNTERRECENTLYADDEDURL, ACHIEVEMENTHUNTERSHOWSURL, FUNHAUSRECENTLYADDEDURL, FUNHAUSSHOWURL, \
     SCREWATTACKRECENTLYADDEDURL, SCREWATTACKSHOWSURL, GAMEATTACKRECENTLYADDEDURL, GAMEATTACKSHOWSURL, \
-    THEKNOWRECENTLYADDEDURL, THEKNOWSHOWSURL, COWCHOPRECENTLYADDEDURL, COWCHOPSHOWSURL
+    THEKNOWRECENTLYADDEDURL, THEKNOWSHOWSURL, COWCHOPRECENTLYADDEDURL, COWCHOPSHOWSURL, SUGARPINE7RECENTLYADDEDURL, \
+    SUGARPINE7SHOWSURL
 #
 # Main class
 #
@@ -188,6 +189,30 @@ class Main:
                       "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30314))
+        is_folder = True
+        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
+        list_item.setProperty('IsPlayable', 'false')
+        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
+
+        #
+        # Sugar Pine 7 Recently Added Episodes
+        #
+        parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30315), "url": SUGARPINE7RECENTLYADDEDURL,
+                      "next_page_possible": "True"}
+        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        list_item = xbmcgui.ListItem(LANGUAGE(30315))
+        is_folder = True
+        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
+        list_item.setProperty('IsPlayable', 'false')
+        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
+
+        #
+        # Sugar Pine 7 Shows
+        #
+        parameters = {"action": "list-shows", "plugin_category": LANGUAGE(30316), "url": SUGARPINE7SHOWSURL,
+                      "next_page_possible": "False"}
+        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        list_item = xbmcgui.ListItem(LANGUAGE(30316))
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
         list_item.setProperty('IsPlayable', 'false')

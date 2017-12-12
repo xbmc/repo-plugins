@@ -153,16 +153,16 @@ def programmi_lettera():
                 addDirectoryItem({"mode": "tutti_programmi","link": link}, liStyle)
         xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
-def video_programma():  
-    if pagenum==0:      
-        req = urllib2.Request(link_global+"/rivedila7",headers=headers) 
-        page=urllib2.urlopen(req)
-        html=BeautifulSoup(page,'html5lib')
+def video_programma():
+    req = urllib2.Request(link_global+"/rivedila7/archivio?page="+str(pagenum),headers=headers)
+    page=urllib2.urlopen(req)
+    html=BeautifulSoup(page,'html5lib')
+    if pagenum==0:
         first=html.find('div',class_='contenitoreUltimaReplicaLa7')
         if first is None:
             if xbmcgui.Dialog().ok(addon.getAddonInfo('name'), language(32005)):
                 return
-        thumb=first.find('div',class_='kaltura-thumb').find('img')['src']            
+        thumb=first.find('div',class_='kaltura-thumb').find('img')['src']
         titolo=first.find('div',class_='title').text.encode('utf-8')
         plot=first.find('div',class_='views-field-field-testo-lancio').find('p').text.encode('utf-8')
         link=url_base+first.find('a',class_='clearfix').get('href')
@@ -170,27 +170,30 @@ def video_programma():
         liStyle.setArt({ 'thumb': thumb})
         liStyle.setInfo('video', { 'plot': plot })
         addDirectoryItem({"mode": "tutti_programmi","play": link,"titolo": titolo,"thumb":thumb,"plot":plot}, liStyle)
-    else:
-        req = urllib2.Request(link_global+"/rivedila7?page="+str(pagenum),headers=headers) 
-        page=urllib2.urlopen(req)
-        html=BeautifulSoup(page,'html5lib')
+        ul=html.find('li',class_='switchBtn settimana')
+        if ul is not None:
+            req2= urllib2.Request(link_global+"/rivedila7",headers=headers)
+            page2=urllib2.urlopen(req2)
+            html2=BeautifulSoup(page2,'html5lib')
+            video2=html2.find(id='block-la7it-repliche-la7it-repliche-contenuto-tid').find_all('div',class_='views-row')
+            if video2 is not None:
+                get_rows_video(video2)
     video=html.find(id='block-la7it-repliche-la7it-repliche-contenuto-tid').find_all('div',class_='views-row')
     if video is not None:
-        for div in video:
-            thumb=div.find('div',class_='kaltura-thumb').find('img')['data-src']            
-            titolo=div.find('div',class_='title').a.text.encode('utf-8')
-            plot=div.find('div',class_='views-field-field-testo-lancio').text.encode('utf-8')
-            link=url_base+div.find('a',class_='thumbVideo').get('href')
-            liStyle = xbmcgui.ListItem(titolo)
-            liStyle.setArt({ 'thumb': thumb})
-            liStyle.setInfo('video', { 'plot': plot })
-            addDirectoryItem({"mode": "tutti_programmi","play": link,"titolo": titolo,"thumb":thumb,"plot":plot}, liStyle)
+        get_rows_video(video)
         liStyle = xbmcgui.ListItem(language(32003))
         addDirectoryItem({"mode": "tutti_programmi","link":link_global,"page":pagenum+1}, liStyle)
-        if pagenum!=0:
-            liStyle = xbmcgui.ListItem(language(32004))
-            addDirectoryItem({"mode": "tutti_programmi","link":link_global,"page":pagenum-1}, liStyle)
         xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
+def get_rows_video(video):
+    for div in video:
+        thumb=div.find('div',class_='kaltura-thumb').find('img')['data-src']            
+        titolo=div.find('div',class_='title').a.text.encode('utf-8')
+        plot=div.find('div',class_='views-field-field-testo-lancio').text.encode('utf-8')
+        link=url_base+div.find('a',class_='thumbVideo').get('href')
+        liStyle = xbmcgui.ListItem(titolo)
+        liStyle.setArt({ 'thumb': thumb})
+        liStyle.setInfo('video', { 'plot': plot })
+        addDirectoryItem({"mode": "tutti_programmi","play": link,"titolo": titolo,"thumb":thumb,"plot":plot}, liStyle)
 params = parameters_string_to_dict(sys.argv[2])
 mode = str(params.get("mode", ""))
 giorno = str(params.get("giorno", ""))

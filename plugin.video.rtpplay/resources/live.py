@@ -32,7 +32,7 @@ def radiotv_channels(url):
 		page_source = ''
 		msgok(translate(30001),translate(30018))
 	if page_source:
-		match=re.compile('<a title="(.+?)" href="(.+?)" class="mask-live"><img alt="(.+?)" src="(.*?)"').findall(page_source)
+		match=re.compile('<a title="(.+?)" href="(.+?)" class="mask-live "><img alt="(.+?)" src="(.+?)" class="img-responsive">').findall(page_source)
 		totaltv = len(match)
 		for titulo,url2,prog,img_old in match:
 			try:
@@ -66,7 +66,7 @@ def grab_live_stream_url(url):
 				url2=match[0]
 				return url2
 			#Grab HLS stream
-			smil_ = re.compile('file: "(.+?)",').findall(page_source)
+			smil_ = re.compile('var player.+?file: "(.+?)"', re.DOTALL).findall(page_source)
 			if smil_:
 					if "http" not in smil_[0] : stream = "http:"+smil_[0]
 					else: stream = smil_[0] 

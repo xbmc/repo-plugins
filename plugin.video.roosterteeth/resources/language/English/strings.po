@@ -158,3 +158,11 @@ msgstr ""
 msgctxt "#30314"
 msgid "Cow Chop Shows"
 msgstr ""
+
+msgctxt "#30315"
+msgid "Sugar Pine 7 Recently Added Episodes"
+msgstr ""
+
+msgctxt "#30316"
+msgid "Sugar Pine 7 Shows"
+msgstr ""

@@ -88,6 +88,9 @@ class Main:
         # Parse response
         soup = BeautifulSoup(html_source)
 
+        # xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+        #     ADDON, VERSION, DATE, "html_source", str(html_source)), xbmc.LOGDEBUG)
+
         # <li>
         #	<a href="http://ah.roosterteeth.com/episode/red-vs-blue-season-13-episode-2">
         # 			<div class="block-container">
@@ -149,14 +152,8 @@ class Main:
             # Skip the episode if it does not contain /episode/
             if str(video_page_url).find("/episode/") < 0:
                 xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "skipped episode without /episode/", str(episode)), xbmc.LOGDEBUG)
+                    ADDON, VERSION, DATE, "skipped episode without /episode/", str(video_page_url)), xbmc.LOGDEBUG)
                 continue
-            else:
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE,
-                    "skipped episode without /episode/ ",
-                    str(video_page_url)), xbmc.LOGDEBUG)
-                pass
 
             # Skip a video_page_url is empty
             if video_page_url == '':

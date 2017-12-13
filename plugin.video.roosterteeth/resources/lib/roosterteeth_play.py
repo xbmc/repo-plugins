@@ -23,6 +23,7 @@ LOGINURL_SA = 'http://screwattack.roosterteeth.com/login'
 LOGINURL_GA = 'http://gameattack.roosterteeth.com/login'
 LOGINURL_TK = 'http://theknow.roosterteeth.com/login'
 LOGINURL_CC = 'http://cowchop.roosterteeth.com/login'
+LOGINURL_SP7 = 'http://sugarpine7.roosterteeth.com/login'
 
 NEWHLS = 'NewHLS-'
 VQ1080P = '1080P'
@@ -73,6 +74,7 @@ class Main:
         #
         # Init
         #
+        dialog_wait = xbmcgui.DialogProgress()
 
         #
         # Get current list item details...
@@ -82,14 +84,6 @@ class Main:
         # studio = unicode(xbmc.getInfoLabel("list_item.Studio"), "utf-8")
         plot = unicode(xbmc.getInfoLabel("list_item.Plot"), "utf-8")
         genre = unicode(xbmc.getInfoLabel("list_item.Genre"), "utf-8")
-
-        #
-        # Show wait dialog while parsing data...
-        #
-        dialog_wait = xbmcgui.DialogProgress()
-        dialog_wait.create(LANGUAGE(30100), self.title)
-        # wait 1 second
-        xbmc.sleep(1000)
 
         reply = ''
         session = ''
@@ -120,6 +114,8 @@ class Main:
                             reply = session.get(LOGINURL_TK)
                         elif 'cowchop' in reply.url:
                             reply = session.get(LOGINURL_CC)
+                        elif 'sugarpine7' in reply.url:
+                            reply = session.get(LOGINURL_SP7)
                         else:
                             reply = session.get(LOGINURL_RT)
 
@@ -158,6 +154,8 @@ class Main:
                             reply = session.post(LOGINURL_TK, data=payload)
                         elif 'cowchop' in reply.url:
                             reply = session.post(LOGINURL_CC, data=payload)
+                        elif 'sugarpine7' in reply.url:
+                            reply = session.get(LOGINURL_SP7)
                         else:
                             reply = session.post(LOGINURL_RT, data=payload)
 

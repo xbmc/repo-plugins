@@ -28,13 +28,10 @@ msgctxt "#32003"
 msgid "next page"
 msgstr ""
 
-msgctxt "#32004"
-msgid "previous page"
-msgstr ""
-
 msgctxt "#32005"
 msgid "Unable to view this program"
 msgstr ""
+
 msgctxt "#32006"
 msgid "All programs"
 msgstr ""

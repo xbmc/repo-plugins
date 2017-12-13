@@ -1,3 +1,5 @@
+1.0.0 (2017-12-02)
+- bugfix
 0.0.9 (2017-09-23)
 - re-added live streaming (by sowdust)
 - bugfix

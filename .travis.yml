@@ -7,5 +7,5 @@ install:
 
 # command to run our tests
 script:
-  - cd .tests
-  - python check_repo.py
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then python .tests/check_repo.py; fi'
+  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then python .tests/check_repo.py  $(git diff --name-only HEAD~ | grep / | cut -d / -f1 | sort | uniq); fi'

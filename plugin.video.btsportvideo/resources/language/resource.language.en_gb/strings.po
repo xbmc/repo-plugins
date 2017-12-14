@@ -31,3 +31,7 @@ msgstr ""
 msgctxt "#30004"
 msgid "Next Page"
 msgstr ""
+
+msgctxt "#30005"
+msgid "New Search"
+msgstr ""

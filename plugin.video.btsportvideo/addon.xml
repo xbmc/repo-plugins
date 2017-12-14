@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.btsportvideo" name="BT Sport Video" version="0.1.1" provider-name="Leopold">
+<addon id="plugin.video.btsportvideo" name="BT Sport Video" version="0.2.0" provider-name="Leopold">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.kodiswift" version="0.0.8" optional="false"/>
@@ -18,10 +18,14 @@
     <website>https://sport.bt.com</website>
     <source>https://github.com/LS80/plugin.video.btsportvideo.git</source>
     <license>MIT</license>
+    <forum>https://forum.kodi.tv/showthread.php?tid=325188</forum>
     <assets>
       <icon>resources/icon.png</icon>
       <fanart>resources/fanart.jpg</fanart>
+      <screenshot>resources/screenshot001.png</screenshot>
+      <screenshot>resources/screenshot002.png</screenshot>
+      <screenshot>resources/screenshot003.png</screenshot>
     </assets>
-    <news></news>
+    <news>Added a search history</news>
   </extension>
 </addon>

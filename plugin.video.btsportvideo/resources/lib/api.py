@@ -82,8 +82,8 @@ def _videos(videos_response):
             title=video['h1title'],
             url=video.get('hlsurl') or video.get('streamingurl'),
             thumbnail=video.get('imageurl') or video.get('thumbnailURL'),
-            date=_date_from_str(video['publicationdate']),
-            duration=int(video['duration'])
+            date=video.get('publicationdate') and _date_from_str(video['publicationdate']),
+            duration=video.get('duration') and int(video['duration'])
         )
 
 

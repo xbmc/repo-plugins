@@ -29,7 +29,7 @@ class MetadataCreator:
         return self._datetime
 
     @datetime.setter
-    def datetime (self, value):
+    def datetime(self, value):
         self._datetime = value
 
     def get_video_dictionary(self):

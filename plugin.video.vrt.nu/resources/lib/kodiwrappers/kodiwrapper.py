@@ -3,7 +3,6 @@ import xbmcgui
 import xbmcplugin
 from urllib import urlencode
 from resources.lib.vrtplayer import vrtplayer
-from resources.lib.vrtplayer import urltostreamservice
 from resources.lib.kodiwrappers import sortmethod
 
 class KodiWrapper:
@@ -35,11 +34,7 @@ class KodiWrapper:
 
         xbmcplugin.endOfDirectory(self._handle)
 
-    def play_video(self, path):
-        stream_service = urltostreamservice.UrlToStreamService(vrtplayer.VRTPlayer._VRT_BASE,
-                                                               vrtplayer.VRTPlayer._VRTNU_BASE_URL,
-                                                               self._addon)
-        stream = stream_service.get_stream_from_url(path)
+    def play_video(self, stream):
         if stream is not None:
             play_item = xbmcgui.ListItem(path=stream.stream_url)
             if stream.subtitle_url is not None:
@@ -49,3 +44,16 @@ class KodiWrapper:
     def play_livestream(self, path):
         play_item = xbmcgui.ListItem(path=path)
         xbmcplugin.setResolvedUrl(self._handle, True, listitem=play_item)
+
+    def show_ok_dialog(self, title, message):
+        xbmcgui.Dialog().ok(self._addon.getAddonInfo('name'), title, message)
+
+    def get_localized_string(self, string_id):
+        return self._addon.getLocalizedString(string_id)
+
+    def get_setting(self, setting_id ):
+        return self._addon.getSetting(setting_id)
+
+    def open_settings(self):
+        self._addon.openSettings()
+

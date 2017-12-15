@@ -8,6 +8,8 @@ from resources.lib.vrtplayer import metadatacollector
 from resources.lib.vrtplayer import statichelper
 from resources.lib.vrtplayer import actions
 from resources.lib.vrtplayer import metadatacreator
+from resources.lib.kodiwrappers import sortmethod
+
 
 class VRTPlayer:
 
@@ -21,33 +23,38 @@ class VRTPlayer:
     _VRTNU_BASE_URL = urljoin(_VRT_BASE, "/vrtnu/")
     _VRTNU_SEARCH_URL = "https://search.vrt.be/suggest?facets[categories]="
 
-    def __init__(self, addon, addon_path):
+    def __init__(self, addon_path, kodi_wrapper, url_to_stream_service):
         self.metadata_collector = metadatacollector.MetadataCollector()
-        self._addon = addon
         self._addon_path = addon_path
+        self._kodi_wrapper = kodi_wrapper
+        self._url_toStream_service = url_to_stream_service
 
-    def get_main_menu_items(self):
-        return {helperobjects.TitleItem(self._addon.getLocalizedString(32091), {'action': actions.LISTING_AZ}, False,
+    def show_main_menu_items(self):
+        menu_items = {helperobjects.TitleItem(self._kodi_wrapper.get_localized_string(32091), {'action': actions.LISTING_AZ}, False,
                                         None),
-                helperobjects.TitleItem(self._addon.getLocalizedString(32092), {'action': actions.LISTING_CATEGORIES},
+                helperobjects.TitleItem(self._kodi_wrapper.get_localized_string(32092), {'action': actions.LISTING_CATEGORIES},
                                         False, None),
-                helperobjects.TitleItem(self._addon.getLocalizedString(32100), {'action': actions.LISTING_LIVE}, False,
+                helperobjects.TitleItem(self._kodi_wrapper.get_localized_string(32100), {'action': actions.LISTING_LIVE}, False,
                                         None)}
+        self._kodi_wrapper.show_listing(menu_items, sortmethod.ALPHABET)
 
-    def get_az_menu_items(self):
+    def show_az_menu_items(self):
         joined_url = urljoin(self._VRTNU_BASE_URL, "./a-z/")
-        return self.__get_menu_items(joined_url, {"class": "tile"}, actions.LISTING_VIDEOS, self.metadata_collector.get_az_metadata)
+        menu_items = self.__get_menu_items(joined_url, {"class": "tile"}, actions.LISTING_VIDEOS,
+                                     self.metadata_collector.get_az_metadata)
+        self._kodi_wrapper.show_listing(menu_items, sortmethod.ALPHABET)
 
-    def get_category_menu_items(self):
+    def show_category_menu_items(self):
         joined_url = urljoin(self._VRTNU_BASE_URL, "./categorieen/")
-        return self.__get_menu_items(joined_url, {"class": "tile tile--category"}, actions.LISTING_CATEGORY_VIDEOS)
+        menu_items = self.__get_menu_items(joined_url, {"class": "tile tile--category"}, actions.LISTING_CATEGORY_VIDEOS)
+        self._kodi_wrapper.show_listing(menu_items, sortmethod.ALPHABET)
 
-    def get_video_category_episodes(self, path):
+    def show_video_category_episodes(self, path):
         category = path.split('/')[-2]
         joined_url = self._VRTNU_SEARCH_URL + category
         response = requests.get(joined_url)
         programs = response.json()
-        listing = []
+        menu_items = []
         for program in programs:
             title = program["title"]
             plot = BeautifulSoup(program["description"], "html.parser").text
@@ -62,25 +69,33 @@ class VRTPlayer:
                                                                                                          "")
             item = helperobjects.TitleItem(title, {'action': actions.LISTING_VIDEOS, 'video': link_to_video},
                                            False, thumbnail, video_dictionary)
-            listing.append(item)
-        return listing
+            menu_items.append(item)
+        self._kodi_wrapper.show_listing(menu_items, sortmethod.ALPHABET)
 
-    def get_livestream_items(self):
-        return {helperobjects.TitleItem(self._addon.getLocalizedString(32101),
+    def play_vrtnu_video(self, url):
+        stream = self._url_toStream_service.get_stream_from_url(url)
+        self._kodi_wrapper.play_video(stream)
+
+    def play_livestream(self, url):
+        self._kodi_wrapper.play_livestream(url)
+
+    def show_livestream_items(self):
+        livestream_items = {helperobjects.TitleItem(self._kodi_wrapper.get_localized_string(32101),
                                         {'action': actions.PLAY_LIVE, 'video': self._EEN_LIVESTREAM},
                                         True, self.__get_media("een.png")),
-                helperobjects.TitleItem(self._addon.getLocalizedString(32102),
+                helperobjects.TitleItem(self._kodi_wrapper.get_localized_string(32102),
                                         {'action': actions.PLAY_LIVE, 'video': self._CANVAS_LIVESTREAM_},
                                         True, self.__get_media("canvas.png")),
-                helperobjects.TitleItem(self._addon.getLocalizedString(32103),
+                helperobjects.TitleItem(self._kodi_wrapper.get_localized_string(32103),
                                         {'action': actions.PLAY_LIVE, 'video': self._KETNET_LIVESTREAM},
                                         True, self.__get_media("ketnet.png")),
-                helperobjects.TitleItem(self._addon.getLocalizedString(32104),
+                helperobjects.TitleItem(self._kodi_wrapper.get_localized_string(32104),
                                         {'action': actions.PLAY_LIVE, 'video': self._SPORZA_LIVESTREAM},
                                         True, self.__get_media("sporza.png"))
                 }
+        self._kodi_wrapper.show_listing(livestream_items, sortmethod.ALPHABET)
 
-    def get_videos(self, path):
+    def show_videos(self, path):
         url = urljoin(self._VRT_BASE, path)
         #xbmc.log(url, xbmc.LOGWARNING)
         # go to url.relevant gets redirected and go on with this url
@@ -102,7 +117,7 @@ class VRTPlayer:
                 title_items.extend(self.__get_multiple_videos(soup))
             else:
                 title_items.extend(self.__get_single_video(relevant_path.url, soup))
-        return title_items
+        self._kodi_wrapper.show_listing(title_items)
 
 
     def __get_episodes(self, option_tags):
@@ -117,7 +132,6 @@ class VRTPlayer:
             path = option_tag['data-href']
             title_items.append(helperobjects.TitleItem(title, {"action" : actions.LISTING_VIDEOS, 'video':path}, False))
         return title_items
-
 
     def __get_multiple_videos(self, tiles):
         title_items = []
@@ -136,7 +150,7 @@ class VRTPlayer:
 
                 path = tile["href"]
                 video_dictionary = self.metadata_collector.get_multiple_layout_episode_metadata(tile)
-                title_items.append(helperobjects.TitleItem(title, {"action": "play", "video": path}, True, thumbnail, video_dictionary))
+                title_items.append(helperobjects.TitleItem(title, {"action": actions.PLAY, "video": path}, True, thumbnail, video_dictionary))
         return title_items
 
     def __get_single_video(self, path, soup):
@@ -149,7 +163,7 @@ class VRTPlayer:
 
         vrt_video = soup.find(class_="vrtvideo")
         thumbnail = VRTPlayer.__format_image_url(vrt_video)
-        title_items.append(helperobjects.TitleItem(list_item_title, {"action": "play", "video": path}, True, thumbnail, video_dictionary))
+        title_items.append(helperobjects.TitleItem(list_item_title, {"action": actions.PLAY, "video": path}, True, thumbnail, video_dictionary))
         return title_items
 
     def __get_media(self, file_name):

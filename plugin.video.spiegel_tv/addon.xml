@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.spiegel_tv" name="Spiegel.tv" version="1.1.2" provider-name="L0RE">
+<addon id="plugin.video.spiegel_tv" name="Spiegel.tv" version="1.1.3" provider-name="L0RE">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>
@@ -20,5 +20,6 @@ Orginal Code was from AddonScriptorDE</disclaimer>
         <forum>http://www.kodinerds.net/index.php/Thread/11527-AddonScriptorDE-s-Addon-Sammlung/</forum>
         <email>lore at vogler dot name</email>
         <website>http://www.spiegel.tv</website>
+        <broken>Broken</broken>
     </extension>
 </addon>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.chefkoch_de" name="Chefkoch.de" version="2.0.4" provider-name="AddonScriptorDE">
+<addon id="plugin.video.chefkoch_de" name="Chefkoch.de" version="2.0.5" provider-name="AddonScriptorDE">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>
@@ -17,5 +17,6 @@
         <source>https://github.com/AddonScriptorDE/plugin.video.chefkoch_de</source>
         <forum>http://forum.xbmc.org/showthread.php?tid=132563</forum>
         <email>AddonScriptorDE at yahoo dot de</email>
+        <broken>Broken</broken>
     </extension>
 </addon>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.myvideo_de" name="MyVideo.de" version="0.9.6" provider-name="Tristan Fischer (sphere@dersphere.de)">
+<addon id="plugin.video.myvideo_de" name="MyVideo.de" version="0.9.7" provider-name="Tristan Fischer (sphere@dersphere.de)">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.xbmcswift2" version="2.4.0"/>
@@ -115,5 +115,6 @@
         <disclaimer lang="vi">Một số phần trong addon này có thể coi là pham pháp ở đất nước bạn đang sinh sống - xin hãy kiểm tra lại các đạo luật trước khi cài đặt.</disclaimer>
         <disclaimer lang="zh">这个插件的某些内容可能不符合你所在国家的法律规定 - 请在在安装前确认符合当地法律。</disclaimer>
         <disclaimer lang="zh_TW">這個附加元件的某些部分在您的居住國家可能不符合法規 - 在安裝之前，請檢查您當地的法律規範。</disclaimer>
+        <broken>Broken</broken>
     </extension>
 </addon>

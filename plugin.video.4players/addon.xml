@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.4players" name="4Players Videos" version="2.0.4" provider-name="Tristan Fischer (sphere@dersphere.de)">
+<addon id="plugin.video.4players" name="4Players Videos" version="2.0.5" provider-name="Tristan Fischer (sphere@dersphere.de)">
     <requires>
         <import addon="xbmc.python" version="2.14.0"/>
         <import addon="script.module.xbmcswift2" version="2.4.0"/>
@@ -55,5 +55,6 @@
         <description lang="pt_BR">4Players é uma revista de jogos alemã.[CR]Com este addon você pode navegar nos vídeos mais populares, reviews de jogos ou procurar pelos vídeos de games que mais te interessam.[CR]Você também pode filtrar os vídeos por plataformas nos ajustes do addon.</description>
         <description lang="sv">4Players är ett tyskt videospelsmagasin.[CR]Med detta tillägg kan du bläddra bland dom senaste eller populäraste videorna, spelrecensioner eller bläddra bland videor för spelen du är intresserad av.[CR]Du kan också filtrera videorna efter plattformar i tilläggsinställningarna.</description>
         <description lang="zh">4Players是一个德国视频游戏杂志。[CR]通过此插件，你可以浏览最近或最热门视频、游戏评论，或按你感兴趣的游戏浏览视频。[CR]你还可以在插件设置中按平台筛选视频。</description>
+        <broken>Broken</broken>
     </extension>
 </addon>

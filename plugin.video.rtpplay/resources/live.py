@@ -66,10 +66,10 @@ def grab_live_stream_url(url):
 				url2=match[0]
 				return url2
 			#Grab HLS stream
-			smil_ = re.compile('var player.+?file: "(.+?)"', re.DOTALL).findall(page_source)
+			smil_ = re.compile('new RTPPlayer\(.+?file: "(.+?).m3u8"', re.DOTALL).findall(page_source)
 			if smil_:
-					if "http" not in smil_[0] : stream = "http:"+smil_[0]
-					else: stream = smil_[0] 
+					if "http" not in smil_[0] : stream = "http:"+smil_[0]+".m3u8"
+					else: stream = smil_[0]+".m3u8"
 					return stream+'|User-Agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36&Referer=http://www.rtp.pt/play/'
 			else:
 				msgok(translate(30001),translate(30018))

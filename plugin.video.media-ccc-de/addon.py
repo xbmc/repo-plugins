@@ -133,21 +133,20 @@ def show_live():
         for room in conference.rooms:
             want = room.streams_sorted(quality, format)
 
-            try:
-                first_native = next(x for x in want if x.translated is False)
-                item = ListItem(conference.name + ': ' + room.display)
-                item.setProperty('IsPlayable', 'true')
-                addDirectoryItem(plugin.handle, first_native.url, item, False)
-            except StopIteration:
-                pass
+            # Assumption: want now starts with the "best" alternative,
+            # followed by an arbitrary number of translations, after which
+            # the first "worse" non-translated stream follows.
 
-            try:
-                first_trans = next(x for x in want if x.translated is True)
-                item = ListItem(conference.name + ': ' + room.display + ' (Translated)')
+            for id, stream in enumerate(want):
+                if id > 0 and not stream.translated:
+                    break
+                extra = ''
+                if stream.translated:
+                    extra = ' (Translated %i)' % id if id > 1 else ' (Translated)'
+                item = ListItem(conference.name + ': ' + room.display + extra)
                 item.setProperty('IsPlayable', 'true')
-                addDirectoryItem(plugin.handle, first_trans.url, item, False)
-            except StopIteration:
-                pass
+                addDirectoryItem(plugin.handle, stream.url, item, False)
+                hasItem = True
 
     endOfDirectory(plugin.handle)
 

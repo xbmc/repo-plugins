@@ -52,3 +52,7 @@ class Stream(object):
         self.url = data['url']
         self.translated = stream['isTranslated']
         self.type = stream['type']
+
+    def __repr__(self):
+        return '<Stream: %s, hd: %s, type: %s, trans: %s>' % (
+            self.format, self.hd, self.type, self.translated)

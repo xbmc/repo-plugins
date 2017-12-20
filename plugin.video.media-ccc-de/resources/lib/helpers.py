@@ -28,7 +28,7 @@ def user_preference_sorter(prefer_quality, prefer_format):
         # Prefer "native" over "translated" for now (streaming)...
         try:
             if obj.translated:
-                prio += 5
+                prio -= 5
         except AttributeError:
             pass
 

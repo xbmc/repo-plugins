@@ -8,7 +8,7 @@ BASE_URL = 'api.media.ccc.de/public/'
 LIVE_URL = 'streaming.media.ccc.de/streams/v2.json'
 
 # BASE_URL = '127.0.0.1:3000/public/'
-# LIVE_URL = '127.0.0.1:3000/v2.json'
+# LIVE_URL = '127.0.0.1:3000/stream_v2.json'
 
 
 class FetchError(Exception):

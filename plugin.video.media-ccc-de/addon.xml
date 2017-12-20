@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.media-ccc-de" name="media.ccc.de" version="0.1.0" provider-name="Tobias Gruetzmacher">
+<addon id="plugin.video.media-ccc-de" name="media.ccc.de" version="0.1.1" provider-name="Tobias Gruetzmacher">
   <requires>
     <import addon="xbmc.python" version="2.24.0"/>
-    <import addon="script.module.simplejson" version="3.3.0"/>
     <import addon="script.module.requests" version="2.3.0"/>
     <import addon="script.module.routing" version="0.2.0"/>
   </requires>
@@ -15,7 +14,11 @@
     <description lang="en_GB">This addon provides access to videos published on https://media.ccc.de/ (mostly lecture recordings of CCC events) </description>
     <description lang="de_DE">Dieses Add-On ermöglicht den Zugriff auf Videos, die auf https://media.ccc.de/ veröffentlicht wurden (größtenteils Vortragsmitschnitte von CCC-Veranstaltungen)</description>
     <disclaimer lang="en_GB"></disclaimer>
-    <news>v0.1.0 (2017-04-16)
+    <news>v0.1.1 (2017-12-20)
+- The tuwat! release
+- Supports multiple translated streams (if available)
+
+v0.1.0 (2017-04-16)
 - EasterHegg 2017 release.
 - Use "slug" instead of obsolete "webgen_location".
 - Track coverage on Travis-CI.

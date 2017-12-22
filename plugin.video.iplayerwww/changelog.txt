@@ -1,3 +1,6 @@
+v2.5.28
+Fixed Most Popular and Highlights.
+
 v2.5.27
 Fixed Channel Highlights.
 

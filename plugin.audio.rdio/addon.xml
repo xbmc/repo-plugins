@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.audio.rdio" version="1.14.1" name="Rdio" provider-name="Charles Blaxland">
+<addon id="plugin.audio.rdio" version="1.14.2" name="Rdio" provider-name="Charles Blaxland">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.oauth2" version="1.5.211"/>
@@ -23,5 +23,6 @@
     <source>https://github.com/ampedandwired/rdio-xbmc</source>
     <email></email>
     <disclaimer lang="en">Requires setup of an Rdio API key (free and fairly easy to do). See instructions at http://bit.ly/rdioxbmc)</disclaimer>
+    <broken>Rdio has closed down and this plugin is no longer useful</broken>
   </extension>
 </addon>

@@ -368,12 +368,13 @@ def Info_Wars_Live_Sub_Menu(title=''): #The Main Menu
     response = urllib2.urlopen(url)
     if response and response.getcode() == 200:
         content = response.read()
-        videos= find_multiple_matches(content,"<ul class(.*?)</ul>")
+        videos= find_multiple_matches(content,"<ul class=\"show__footer\"(.*?)</ul>")
         sources = []
         for temp, entry in enumerate(videos): 
             if temp == 0:
                 video_id = find_single_match(entry,"data-youtube-src=\"https://www.youtube.com/embed/(.*?)\"")
                 url = "plugin://plugin.video.youtube/play/?video_id=%s" % video_id
+                #IW_addon.log('SPINAL VIDEO_ID IS %s' % video_id)
                 PlayURL(url)
                 break
     eod()
@@ -385,7 +386,7 @@ def Real_News_WDK_Sub_Menu(title=''): #The Main Menu
     response = urllib2.urlopen(url)
     if response and response.getcode() == 200:
         content = response.read()
-        videos= find_multiple_matches(content,"<ul class(.*?)</ul>")
+        videos= find_multiple_matches(content,"<ul class=\"show__footer\"(.*?)</ul>")
         sources = []
         for temp, entry in enumerate(videos): 
             if temp == 1:
@@ -402,7 +403,7 @@ def War_Room_Sub_Menu(title=''): #The Main Menu
     response = urllib2.urlopen(url)
     if response and response.getcode() == 200:
         content = response.read()
-        videos= find_multiple_matches(content,"<ul class(.*?)</ul>")
+        videos= find_multiple_matches(content,"<ul class=\"show__footer\"(.*?)</ul>")
         sources = []
         for temp, entry in enumerate(videos): 
             if temp == 2:

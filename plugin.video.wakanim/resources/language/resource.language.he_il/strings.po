@@ -4,84 +4,79 @@ msgstr ""
 "Project-Id-Version: Kodi Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@kodi.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE\n"
+"PO-Revision-Date: 2017-10-24 09:42+0300\n"
+"Last-Translator: A. Dambledore\n"
+"Language-Team: Eng2Heb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
+"Language: he_IL\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
+"X-Generator: Poedit 2.0.4\n"
 
 # Wakanim Settings
-
 msgctxt "#30001"
 msgid "Username"
-msgstr "Utilisateur"
+msgstr "שם משתמש"
 
 msgctxt "#30002"
 msgid "Password"
-msgstr "Mot de passe"
+msgstr "סיסמה"
 
 msgctxt "#30010"
 msgid "Region"
-msgstr "Région"
+msgstr "אזור"
 
 msgctxt "#30011"
 msgid "Germany, Austria, Switzerland"
-msgstr "Allemagne, Autriche, Suisse"
+msgstr "גרמניה"
 
 msgctxt "#30012"
 msgid "France, Switzerland, Monaco, Benelux Union, Franco-Canadians, Overseas France, Africa"
-msgstr "France, Suisse, Monaco, Union Benelux, Canadiens francophones, France d'outre-mer, Afrique"
+msgstr "צרפת, בלגיה, שוויץ, קוויבק"
 
 msgctxt "#30013"
 msgid "Sweden, Norway, Iceland, Finland, Denmark"
-msgstr "Suède, Norvège, Islande, Finlande, Danemark"
-
-
-# Wakanim Menue
-
-msgctxt "#30020"
-msgid "Catalog"
-msgstr "Catalogue"
-
-msgctxt "#30021"
-msgid "Search"
-msgstr "Rechercher"
-
-msgctxt "#30022"
-msgid "My downloads"
-msgstr "Mes téléchargements"
-
-msgctxt "#30023"
-msgid "My collection"
-msgstr "Ma collection"
+msgstr "שוודיה, נורבגיה, איסלנד, פינלנד, דנמרק"
 
 msgctxt "#30024"
 msgid "Watch trailer"
-msgstr "Regarde la bande-annonce"
+msgstr "צפה בקדימון"
 
+# Wakanim Menue
+msgctxt "#30020"
+msgid "Catalog"
+msgstr "קטלוג"
+
+msgctxt "#30021"
+msgid "Search"
+msgstr "חיפוש"
+
+msgctxt "#30022"
+msgid "My downloads"
+msgstr "הורדות שלי"
+
+msgctxt "#30023"
+msgid "My collection"
+msgstr "האוסף שלי"
 
 # Wakanim Messages
-
 msgctxt "#30040"
 msgid "Login failed"
-msgstr "Échec de la connexion"
+msgstr "הכניסה נכשלה"
 
 msgctxt "#30041"
 msgid "An error occurred"
-msgstr "Une erreur s'est produite"
+msgstr "התרחשה שגיאה"
 
 msgctxt "#30042"
 msgid "Reactivation failed of this video"
-msgstr "La réactivation a échoué de cette vidéo"
+msgstr "הפעלה מחדש של וידאו זה נכשלה"
 
 msgctxt "#30043"
 msgid "You need to be a premium member or own this video"
-msgstr "Vous devez être un membre premium ou posséder cette vidéo"
+msgstr "עליך להיות חבר פרימיום או להיות הבעלים של הוידאו"
 
 msgctxt "#30044"
 msgid "Failed to play video"
-msgstr "Impossible de lire de la vidéo"
+msgstr "הפעלת הווידאו נכשלה"

@@ -38,27 +38,27 @@ msgid "Login failed. Please make sure that your account information is correct."
 msgstr ""
 
 msgctxt "#30007"
-msgid "Country"
+msgid "Site"
 msgstr ""
 
 msgctxt "#30008"
-msgid "Sweden"
+msgid "viaplay.se"
 msgstr ""
 
 msgctxt "#30009"
-msgid "Denmark"
+msgid "viaplay.dk"
 msgstr ""
 
 msgctxt "#30010"
-msgid "Norway"
+msgid "viaplay.no"
 msgstr ""
 
 msgctxt "#30011"
-msgid "Finland"
+msgid "viaplay.fi"
 msgstr ""
 
 msgctxt "#30012"
-msgid "Download available subtitles"
+msgid "Subtitles"
 msgstr ""
 
 msgctxt "#30013"
@@ -66,7 +66,7 @@ msgid "List all in alphabetical order"
 msgstr ""
 
 msgctxt "#30014"
-msgid "Season"
+msgid "Season {0}"
 msgstr ""
 
 msgctxt "#30015"
@@ -74,7 +74,7 @@ msgid "Search"
 msgstr ""
 
 msgctxt "#30016"
-msgid "This event starts"
+msgid "This event starts [B]{0}[/B]."
 msgstr ""
 
 msgctxt "#30017"
@@ -82,19 +82,19 @@ msgid "Information"
 msgstr ""
 
 msgctxt "#30018"
-msgid "Next Page"
+msgid "[B]Next page[/B]"
 msgstr ""
 
 msgctxt "#30020"
-msgid "Your account is not authorized to watch this content. You find information on how to upgrade your package on the Viaplay website."
+msgid "This content is not included in your current subscription."
 msgstr ""
 
 msgctxt "#30021"
-msgid "You need to rent/purchase this movie on the Viaplay website before playing it."
+msgid "You need to rent or purchase this movie on the Viaplay website."
 msgstr ""
 
 msgctxt "#30022"
-msgid "You're not allowed to watch content from this region."
+msgid "This content is not available in your current region."
 msgstr ""
 
 msgctxt "#30023"
@@ -155,4 +155,52 @@ msgstr ""
 
 msgctxt "#30038"
 msgid "No valid stream URL was found."
+msgstr ""
+
+msgctxt "#30039"
+msgid "Go to [B]{0}[/B] and activate your device using the following registration code: [B]{1}[/B]"
+msgstr ""
+
+msgctxt "#30040"
+msgid "Activate your device"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Categories"
+msgstr ""
+
+msgctxt "#30042"
+msgid "Log out"
+msgstr ""
+
+msgctxt "#30043"
+msgid "Are you sure you want to log out?"
+msgstr ""
+
+msgctxt "#30044"
+msgid "Subtitle language"
+msgstr ""
+
+msgctxt "#30045"
+msgid "Swedish"
+msgstr ""
+
+msgctxt "#30046"
+msgid "Danish"
+msgstr ""
+
+msgctxt "#30047"
+msgid "Norwegian"
+msgstr ""
+
+msgctxt "#30048"
+msgid "Finnish"
+msgstr ""
+
+msgctxt "#30049"
+msgid "No broadcast"
+msgstr ""
+
+msgctxt "#30050"
+msgid "You can watch two videos at the same time using a Viaplay account. Your account is currently being used to watch two other videos."
 msgstr ""

@@ -270,7 +270,7 @@ def startplayback(args):
             return
 
     # using stream with hls+aes
-    if ("Unser Player ist in der Beta-Phase. Klicke hier, um den alten Player zu benutzen" in html) or ("Changer de lecteur" in html) or ("Our player is in beta, click here to go back to the old one" in html):
+    if ("Benutzer wechseln" in html) or ("Changer de lecteur" in html) or ("Change user" in html):
         # streaming is only for premium subscription
         if (("<span>Kostenlos</span>" in html) or ("<span>Gratuit</span>" in html) or ("<span>Free</span>" in html)) and not ("episode_premium_title" in html):
             xbmc.log("[PLUGIN] %s: You need to own this video or be a premium member '%s'" % (args._addonname, args.url), xbmc.LOGERROR)

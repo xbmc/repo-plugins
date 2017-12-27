@@ -1,3 +1,6 @@
+Version 3.0.1 (27/12/2017)
+-Regex
+
 Version 3.0.0 (23/12/2017)
 -Moved to krypton
 -Keep only livestreams for now

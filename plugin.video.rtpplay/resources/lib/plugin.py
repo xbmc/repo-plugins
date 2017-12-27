@@ -36,7 +36,7 @@ def index():
 		kodiutils.ok(kodiutils.get_string(32000),kodiutils.get_string(32001))
 		exit(0)
 
-	match=re.compile('<a title=".+?direto (.+?)" href="(.+?)" class="mask-live "><img alt=".+?" src="(.+?)" class="img-responsive">.+?<span class="small"><b>(.+?)</b>').findall(req)
+	match=re.compile('<a title=".+?direto (.+?)" href="(.+?)".+?img.+?src="(.+?)" class="img-responsive">.+?<span class="small"><b>(.+?)</b>').findall(req)
 	if match:
 		for channel,rel_url, img, prog in match:
 			liz = ListItem("[B][COLOR blue]{}[/B][/COLOR] ({})".format(kodiutils.smart_str(channel), kodiutils.smart_str(prog)))

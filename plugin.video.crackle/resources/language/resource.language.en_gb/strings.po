@@ -1,6 +1,6 @@
 # Kodi Media Center language file
-# Addon Name: Simpsons World
-# Addon id: plugin.video.simpsonsworld
+# Addon Name: Crackle
+# Addon id: plugin.video.crackle
 # Addon Provider: eracknaphobia
 msgid ""
 msgstr ""
@@ -17,37 +17,5 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgctxt "#30000"
-msgid "The Simpsons"
-msgstr ""
-
-msgctxt "#30001"
-msgid "General"
-msgstr ""
-
-msgctxt "#30002"
-msgid "Comedy"
-msgstr ""
-
-msgctxt "#30010"
-msgid "Screen Ratio"
-msgstr ""
-
-msgctxt "#30020"
-msgid "Audio Commentary"
-msgstr ""
-
-msgctxt "#30900"
-msgid "Deauthorizie Device"
-msgstr ""
-
-msgctxt "#30901"
-msgid "This device has been succesfully deauthorized."
-msgstr ""
-
-msgctxt "#30910"
-msgid "Your device is not currently authorized to view the selected content.\n Would you like to authorize this device now?"
-msgstr ""
-
-msgctxt "#30911"
-msgid "Device Not Authorized"
+msgid "Crackle"
 msgstr ""

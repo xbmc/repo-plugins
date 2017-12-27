@@ -1,20 +1,31 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.viaplay"
-       version="1.0.8"
+       version="2.0.1"
        name="Viaplay"
        provider-name="emilsvennesson">
   <requires>
     <import addon="xbmc.python" version="2.25.0"/>
     <import addon="script.module.requests" version="2.9.1"/>
     <import addon="script.module.iso8601" version="0.1.11"/>
+    <import addon="script.module.inputstreamhelper" version="0.2.2"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <description lang="en">Watch content from Viaplay.</description>
-    <description lang="sv">Titta på innehåll från Viaplay.</description>
-    <news>2017.04.10 v1.0.8[CR]+ Fix audio on newer Viaplay content[CR]+ Fix icon/fanart[CR]+ Move addon code to addon.py</news>
+    <description lang="en_GB">Watch content from Viaplay.</description>
+    <description lang="sv_SE">Titta på innehåll från Viaplay.</description>
+    <news>2017.12.27 v2.0.1
+    + New dependency: script.module.inputstreamhelper
+    + Switch to registration code activation
+    + Finally replace HLS with MPEG-DASH (Widevine DRM is now required)
+    + Channels support (previously Viasat TV To Go)
+    + Implement dynamically acquired 'theme pages' in addition to browsing through categories
+    + Starred, Watched and Purchased pages now work
+    + Open add-on settings on first run
+    + Major rewrite and cleanup of the code
+    + Big improvements all-around and a massively enhanced experience
+    </news>
     <platform>all</platform>
     <language>sv dk no fi en</language>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>

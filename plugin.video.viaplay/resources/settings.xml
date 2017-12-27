@@ -1,8 +1,8 @@
 ﻿<settings>
   <category label="30003">
-    <setting id="country" type="enum" label="30007" lvalues="30008|30009|30010|30011" default="0"/>
-    <setting id="email" type="text" label="30001" default=""/>
-    <setting id="password" type="text" label="30002" option="hidden"  enable="!eq(-1,)" default=""/>
+    <setting id="site" type="enum" label="30007" lvalues="30008|30009|30010|30011" default="0"/>
     <setting id="subtitles" type="bool" label="30012" default="true"/>
+    <setting id="sub_lang" type="enum" label="30044" lvalues="30045|30046|30047|30048" default="0" visible="!eq(-1,false)" subsetting="true"/>
+    <setting id="first_run" type="bool" default="true" visible="false"/>
   </category>
 </settings>

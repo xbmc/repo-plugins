@@ -1,40 +1,26 @@
-﻿# Viaplay Kodi add-on #
-Before reading further, please note that this add-on is unoffical and is not endorsed or supported by Viaplay in any way. Not all features are supported or thoroughly tested and may not work as intended.
+﻿# Viaplay for Kodi #
+This is a Kodi add-on that allows you to stream content from Viaplay in Kodi.
 
-If you're interested in helping out with the development, then please just send me a pull request. If you're reporting a bug, please activate debug logging in Kodi and attach the log file.
-
-Feedback and constructive input are of course always welcome.
+## Disclaimer ##
+This add-on is unoffical and is not endorsed or supported by Viaplay in any way. Not all features may work or has been thoroughly tested.
 
 ## Dependencies: ##
 This add-on is available in the official Kodi repository and all dependencies will be installed automatically when installed from there. However, if you're installing straight from git, please make sure you've got the following modules installed:
- * Requests >= 2.9.1 (http://mirrors.kodi.tv/addons/jarvis/script.module.requests)
- * iso8601 (http://mirrors.kodi.tv/addons/jarvis/script.module.iso8601)
-
-This add-on supports Kodi Krypton or later. While it may work fine on older versions as well, it is unsupported and you're encouraged to upgrade.
-
-## Features: ##
- * Support for Sweden, Denmark, Norway and Finland
- * Internal video playback
- * Categories
- * Movies
- * TV shows
- * Kids
- * Sports
- * Store
- * Subtitles
- * Search
- * A-Ö alphabetical listing
- * Parental control
+ * script.module.requests >= 2.9.1 (http://mirrors.kodi.tv/addons/krypton/script.module.requests/)
+ * script.module.iso8601 (http://mirrors.kodi.tv/addons/krypton/script.module.iso8601/)
+ * script.module.inputstreamhelper >= 0.2.2 (http://mirrors.kodi.tv/addons/krypton/script.module.inputstreamhelper/)
  
-Currently unsupported features:
+This add-on requires Kodi 17.4 or higher with InputStream Adaptive installed. Kodi 18 is required for Android based devices.
 
- * Viasat TV To Go
- * Starred
- * Activity list
- * ... And quite possibly more that I'm forgetting about!
+## DRM protected streams ##
+Viaplay's content is DRM protected and requires the proprietary decryption module Widevine CDM for playback. You will be prompted to install this if you're attempting to play a stream without the binary installed.
  
-## Roadmap ##
+Most Android devices have built-in support for Widevine DRM and doesn't require any additional binaries. You can see if your Android device supports Widevine DRM using the [DRM Info](https://play.google.com/store/apps/details?id=com.androidfung.drminfo) app available in Play Store.
 
- * Continue work towards feature completeness
- * MPEG-DASH support using inputstream.adaptive
- * Code cleanup
+## Support ##
+Please report any issues or bug reports on the [GitHub Issues](https://github.com/emilsvennesson/kodi-viaplay/issues) page. Remember to include a full, non-cut off Kodi debug log. See the [Kodi wiki page](http://kodi.wiki/view/Log_file/Advanced) for more detailed instructions on how to obtain the log file.
+
+Additional support/discussion about the add-on can be found in the [Viaplay add-on thread](https://forum.kodi.tv/showthread.php?tid=286387).
+
+## License ##
+This add-on is licensed under the **GNU GENERAL PUBLIC LICENSE Version 3**. Please see the [LICENSE.txt](LICENSE.txt) file for details.

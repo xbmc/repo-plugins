@@ -1,4 +1,18 @@
-﻿2017.04.10 v1.0.8
+﻿2017.12.27 v2.0.1
++ Minor changes needed for approval in the official repository
+
+2017.12.27 v2.0.0
++ New dependency: script.module.inputstreamhelper
++ Switch to registration code activation
++ Finally replace HLS with MPEG-DASH (Widevine DRM is now required)
++ Channels support (previously Viasat TV To Go)
++ Implement dynamically acquired 'theme pages' in addition to browsing through categories
++ Starred, Watched and Purchased pages now work
++ Open add-on settings on first run
++ Major rewrite and cleanup of the code
++ Big improvements all-around and a massively enhanced experience
+
+2017.04.10 v1.0.8
 + Fix audio on newer Viaplay content
 + Fix icon/fanart
 + Move addon code to addon.py

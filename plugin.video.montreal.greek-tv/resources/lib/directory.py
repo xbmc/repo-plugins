@@ -23,7 +23,6 @@ import urllib
 import control
 
 
-
 def add(items, cacheToDisc=True, content=None, mediatype=None, infotype='video'):
 
     if items is None or len(items) == 0:
@@ -127,7 +126,7 @@ def add(items, cacheToDisc=True, content=None, mediatype=None, infotype='video')
     except:
         pass
 
-    if not content is None:
+    if content is not None:
         control.content(int(sys.argv[1]), content)
 
     control.directory(int(sys.argv[1]), cacheToDisc=cacheToDisc)

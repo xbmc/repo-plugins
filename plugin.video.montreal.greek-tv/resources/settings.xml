@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<settings>
-    <category label="30001">
-        <setting id="old-url" type="bool" label="30002" default="false"/>
-    </category>
-</settings>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.tlc_de" name="TLC.de" version="1.0.2" provider-name="bromix">
+<addon id="plugin.video.tlc_de" name="TLC.de" version="1.0.3" provider-name="bromix">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 	</requires>
@@ -19,5 +19,6 @@
 		<website>www.dmax.de</website>
 		<email>bromix at gmx dot net</email>
 		<source>https://github.com/bromix/plugin.video.dmax_de</source>
+		<broken>This add-on no longer functions as it should</broken>
 	</extension>
 </addon>

@@ -4,24 +4,27 @@
 #
 # Imports
 #
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 import os
 import re
 import sys
 import requests
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
+import urllib.parse
 import xbmc
 import xbmcgui
 import xbmcplugin
-from BeautifulSoup import BeautifulSoup
 
-from tweakers_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
+from tweakers_const import LANGUAGE, IMAGES_PATH, VERSION, convertToUnicodeString, log, getSoup
 
 
 #
 # Main class
 #
-class Main:
+class Main(object):
     #
     # Init
     #
@@ -32,14 +35,13 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
+        log("ARGV", repr(sys.argv))
 
         # Parse parameters
         try:
-            self.plugin_category = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['plugin_category'][0]
-            self.video_list_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['url'][0]
-            self.next_page_possible = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+            self.plugin_category = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['plugin_category'][0]
+            self.video_list_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
+            self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
         except:
             self.plugin_category = LANGUAGE(30000)
             self.next_page_possible = "True"
@@ -50,8 +52,7 @@ class Main:
                 self.search_string = keyboard.getText()
                 self.video_list_page_url = "https://tweakers.net/video/zoeken?keyword=%s&page=001" % (self.search_string)
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)), xbmc.LOGDEBUG)
+        log("self.video_list_page_url", self.video_list_page_url)
 
         if self.next_page_possible == "True":
             # Determine current item number, next item number, next_url
@@ -70,8 +71,7 @@ class Main:
                     page_number_next_str = '00' + str(page_number_next)
                 self.next_url = self.video_list_page_url.replace(page_number_str, page_number_next_str)
 
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                        ADDON, VERSION, DATE, "self.next_url", str(urllib.unquote_plus(self.next_url))), xbmc.LOGDEBUG)
+                log("self.next_url", self.next_url)
 
         #
         # Get the videos
@@ -85,8 +85,6 @@ class Main:
         #
         # Init
         #
-        thumbnail_urls_index = 0
-        plot_index = 0
         # Create a list for our items.
         listing = []
 
@@ -106,109 +104,78 @@ class Main:
         try:
             logging.captureWarnings(True)
         except Exception:
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "logging exception occured (and ignored)", str(Exception)), xbmc.LOGDEBUG)
+
+            log("logging exception occured (and ignored)", Exception)
+
             pass
 
         # Get HTML page
         response = requests.get(self.video_list_page_url, headers=headers)
+        # response.status
         html_source = response.text
-        html_source = html_source.encode('utf-8', 'ignore')
+        html_source = convertToUnicodeString(html_source)
 
         # Parse response
-        soup = BeautifulSoup(html_source)
+        soup = getSoup(html_source)
 
-        # Get the thumbnail urls
-        # <img src="https://ic.tweakimg.net/img/accountid=1/externalid=7515/size=124x70/image.jpg" width=124 height=70 alt="">
-        thumbnail_urls = soup.findAll('img', attrs={'src': re.compile("^https://ic.tweakimg.net/")})
-
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(thumbnail_urls)", str(len(thumbnail_urls))), xbmc.LOGDEBUG)
-
-        # Get the plots
-        # <p class="lead"><span class="date">24-11</span> - Eind oktober kondigde Apple drie nieuwe MacBooks aan. Twee daarvan, met schermdiagonalen van 13,3 en 15,4 inch, zijn&nbsp;voorzien van een oledstrook boven het toetsenbord, waarover al...</p>
-        plots = soup.findAll('p', attrs={'class': re.compile("^lead")})
-
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(plots)", str(len(plots))), xbmc.LOGDEBUG)
-
-        # Get the video page urls
         # <td class="video-image">
-        #	<a href="https://tweakers.net/video/7517/showcase-trailer-van-cryengine-3-van-gdc-2013.html" class="thumb video" title="Showcase-trailer van CryEngine 3 van GDC 2013">
-        #   <img src="https://ic.tweakimg.net/img/accountid=1/externalid=7517/size=124x70/image.jpg" width=124 height=70 alt=""><span class="playtime">04:00</span></a>
+        # <a href="https://tweakers.net/video/16043/oneplus-5t-voor-wie-groter-altijd-beter-vindt.html" class="thumb video"
+        # title="OnePlus 5T - Voor wie groter altijd beter vindt">
+        # <img src="https://tweakers.net/i/BaASWTU0iU04bYUVfaeGvglzVmE=/124x70/filters:fill(white)/i/2001722571.jpeg?f=thumbs_video" width="124" height="70" alt="">
+        # <span class="playtime">05:09</span></a>
         # </td>
-        video_page_url_in_tds = soup.findAll('td', attrs={'class': re.compile("video-image")})
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(video_page_url_in_tds)", str(len(video_page_url_in_tds))), xbmc.LOGDEBUG)
 
-        #skip the first thumbnails
-        if len(thumbnail_urls) - len(video_page_url_in_tds) > 0:
-            thumbnail_urls_index = thumbnail_urls_index + (len(thumbnail_urls) - len(video_page_url_in_tds))
+        items = soup.findAll('td', attrs={'class': re.compile("^video-image")})
 
-        for video_page_url_in_td in video_page_url_in_tds:
-            video_page_url = video_page_url_in_td.a['href']
+        log("len(items)", len(items))
+
+        for item in items:
+            video_page_url = item.a['href']
 
             # Make title
-            title = video_page_url_in_td.a['title']
+            title = item.a['title']
 
-            # Convert from unicode to encoded text (don't use str() to do this)
-            try:
-                title = title.encode('utf-8')
-            except:
-                pass
+            log("title", title)
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "title", str(title)),
-                     xbmc.LOGDEBUG)
+            thumbnail_url = item.img['src']
+            thumbnail_url_str = str(thumbnail_url)
+            start_pos_size = thumbnail_url_str.find('size=')
+            if start_pos_size >= 0:
+                end_pos_size = thumbnail_url_str.find('/', start_pos_size)
+                # Let's use the thumbnail itself instead of a scaled down version of it by removing "/size=...x.../"
+                thumbnail_url_new = thumbnail_url_str[0:start_pos_size - 1] + thumbnail_url_str[end_pos_size:]
+                thumbnail_url = thumbnail_url_new
 
-            # Determine the url of the thumbnail
-            if thumbnail_urls_index >= len(thumbnail_urls):
-                thumbnail_url = ''
-            else:
-                thumbnail_url = thumbnail_urls[thumbnail_urls_index]['src']
-                thumbnail_url_str = str(thumbnail_url)
-                start_pos_size = thumbnail_url_str.find('size=')
-                if start_pos_size >= 0:
-                    end_pos_size = thumbnail_url_str.find('/', start_pos_size)
-                    # Let's use the thumbnail itself instead of a scaled down version of it by removing "/size=...x.../"
-                    thumbnail_url_new = thumbnail_url_str[0:start_pos_size - 1] + thumbnail_url_str[end_pos_size:]
-                    thumbnail_url = thumbnail_url_new
-
-            xbmc.log(
-                "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "thumbnail_url", str(thumbnail_url)),
-                xbmc.LOGDEBUG)
+            log("thumbnail_url", thumbnail_url)
 
             # Determine video duration in seconds
             try:
-                duration_in_mm_ss = video_page_url_in_td.span.text
+                duration_in_mm_ss = item.span.text
                 m, s = duration_in_mm_ss.split(':')
                 duration_in_seconds = int(m) * 60 + int(s)
             except:
                 duration_in_seconds = 0
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "duration_in_seconds", str(duration_in_seconds)),
-                     xbmc.LOGDEBUG)
+            log("duration_in_seconds", duration_in_seconds)
 
             # Determine the plot
-            if plot_index >= len(plots):
-                plot = ''
-            else:
-                plot = plots[plot_index].text
+            plot = title
+
+            log("plot", plot)
 
             list_item = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_url)
-            list_item.setInfo("video", {"title": title, "studio": "Tweakers", "mediatype": "video", "plot": plot, "duration": duration_in_seconds})
+            list_item.setInfo("video", {"title": title, "studio": "Tweakers", "mediatype": "video", "plot": plot,
+                                        "duration": duration_in_seconds})
             list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
                               'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'true')
             parameters = {"action": "play", "video_page_url": video_page_url, "title": title}
-            url = self.plugin_url + '?' + urllib.urlencode(parameters)
+            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = False
             # Add refresh option to context menu
             list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])
             # Add our item to the listing as a 3-element tuple.
             listing.append((url, list_item, is_folder))
-
-            thumbnail_urls_index = thumbnail_urls_index + 1
-            plot_index = plot_index + 1
 
         # Next page entry
         if self.next_page_possible == 'True':
@@ -217,7 +184,7 @@ class Main:
             list_item.setProperty('IsPlayable', 'false')
             parameters = {"action": "search", "plugin_category": self.plugin_category, "url": str(self.next_url),
                           "next_page_possible": self.next_page_possible}
-            url = self.plugin_url + '?' + urllib.urlencode(parameters)
+            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = True
             # Add refresh option to context menu
             list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])

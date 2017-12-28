@@ -85,6 +85,7 @@ class youtube(object):
         return self.list
 
     def video_list(self, cid, url, pagination):
+
         try:
             result = requests.get(url).text
             result = json.loads(result)
@@ -139,8 +140,11 @@ class youtube(object):
                 threads.append(workers.Thread(self.thread, u[i], i))
                 self.data.append('')
 
-            [i.start() for i in threads]
-            [i.join() for i in threads]
+            for i in threads:
+                i.start()
+
+            for i in threads:
+                i.join()
 
             items = []
             for i in self.data:
@@ -180,6 +184,7 @@ class youtube(object):
         return self.list
 
     def thread(self, url, i):
+
         try:
             result = requests.get(url).text
             self.data[i] = result

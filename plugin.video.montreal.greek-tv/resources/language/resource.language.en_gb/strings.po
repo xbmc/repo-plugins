@@ -15,25 +15,13 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgctxt "#30001"
-msgid "General"
+msgid "Youtube Channel"
 msgstr ""
 
 msgctxt "#30002"
-msgid "Use old radio stream"
+msgid "ΧΡΟΝΙΚΑ Newspaper"
 msgstr ""
 
 msgctxt "#30003"
-msgid ""
-msgstr ""
-
-msgctxt "#30004"
-msgid ""
-msgstr ""
-
-msgctxt "#30005"
-msgid ""
-msgstr ""
-
-msgctxt "#30006"
-msgid ""
+msgid "Page"
 msgstr ""

@@ -4,9 +4,12 @@
 #
 # Imports
 #
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 import os
 import sys
-import urlparse
+import urllib.parse
 import xbmc
 import xbmcaddon
 
@@ -26,7 +29,7 @@ if len(sys.argv[2]) == 0:
 
     import tweakers_list as plugin
 else:
-    action = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['action'][0]
+    action = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['action'][0]
     #
     # List
     #

@@ -1,0 +1,5 @@
+2017.12.29 v0.2.0
++ Initial stable release.
+
+2017.04.29 v0.1.0
++ Unreleased development version

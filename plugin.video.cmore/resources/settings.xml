@@ -1,0 +1,15 @@
+﻿<settings>
+  <category label="30000">
+    <setting id="locale_title" type="action" option="close" action="RunPlugin(plugin://plugin.video.cmore/?setting=set_locale)" label="30012" default="cmore.se"/>
+    <setting id="tv_provider_login" type="bool" label="30008" enable="eq(1,)" default="false" />
+    <setting id="username" type="text" label="30006" visible="eq(-1,false)" enable="!eq(-1,) + eq(1,)" default=""/>
+    <setting id="password" type="text" label="30007" visible="eq(-2,false)" option="hidden" enable="!eq(-1,) + eq(0,)" default=""/>
+    <setting id="operator_title" type="text" label="30011" visible="eq(-3,true) + !eq(0,)" enable="false" subsetting="true" default=""/>
+    <setting id="reset_operator" type="action" label="30019" action="RunPlugin(plugin://plugin.video.cmore/?setting=reset_credentials)" visible="eq(-4,true) + !eq(-1,)"/>
+    <setting id="reset_credentials" type="action" label="30027" action="RunPlugin(plugin://plugin.video.cmore/?setting=reset_credentials)" visible="eq(-5,false) + !eq(-4,)" subsetting="true"/>
+    <setting id="infotext" type="text" label="30032" visible="eq(-6,true) + eq(3,)" enable="false" subsetting="true" default=""/>
+    <setting id="wv_proxy_port" value="8000" visible="false"/>
+    <setting id="locale" type="text" visible="false" default="sv_SE"/>
+    <setting id="operator" type="text" visible="false" default=""/>
+  </category>
+</settings>

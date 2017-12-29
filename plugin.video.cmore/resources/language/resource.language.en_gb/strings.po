@@ -1,0 +1,146 @@
+﻿# C More language file
+msgid ""
+msgstr ""
+"Project-Id-Version: kodi-cmore\n"
+"Report-Msgid-Bugs-To: https://github.com/emilsvennesson/kodi-cmore\n"
+"POT-Creation-Date: 2017-04-19 21:43+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "#30000"
+msgid "Account"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Country"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Sweden"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Denmark"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Norway"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Finland"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Username"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Login with TV provider"
+msgstr ""
+
+msgctxt "#30009"
+msgid "C More account"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Select TV provider"
+msgstr ""
+
+msgctxt "#30011"
+msgid "TV provider"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Site"
+msgstr ""
+
+msgctxt "#30013"
+msgid "cmore.se"
+msgstr ""
+
+msgctxt "#30014"
+msgid "cmore.dk"
+msgstr ""
+
+msgctxt "#30015"
+msgid "cmore.no"
+msgstr ""
+
+msgctxt "#30016"
+msgid "cmore.fi"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Information"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Please enter your login credentials in the add-on settings."
+msgstr ""
+
+msgctxt "#30019"
+msgid "Reset TV provider"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Start"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Movies"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Series"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Sports"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Channels"
+msgstr ""
+
+msgctxt "#30025"
+msgid "TV programs"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Kids"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Reset credentials"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Error"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Season"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30031"
+msgid "No results found for"
+msgstr ""
+
+msgctxt "#30032"
+msgid "[B]Run the add-on to complete the setup process.[/B]"
+msgstr ""

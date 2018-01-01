@@ -8,12 +8,13 @@ from .testdata import getfile
 
 def test_recordings():
     r = Recordings(SampleJson)
-    assert len(r.recordings) == 10
+    assert len(r.recordings) == 9
     recordings = r.recordings_sorted("hd", "mp4")
     assert len(recordings) == 6
     preferred = recordings[0]
     assert preferred.hd is True
     assert preferred.format == 'mp4'
+    assert preferred.folder == 'h264-hd'
     assert len(preferred.languages) == 2
 
 

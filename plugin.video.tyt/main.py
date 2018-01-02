@@ -24,6 +24,8 @@ murder_url        = "/category/murder-with-friends/"
 murder_thumb      = "murder.jpg"
 ap_url            = "/category/aggressive-progressives-membership/"
 ap_thumb          = "ap.png"
+rebelhq_url       = "/category/membership/rebel-headquarters-on-demand/"
+rebelhq_thumb     = "rebelhq.jpg"
 hour1_url         = "/category/membership/main-show-hour-1/"
 hour1_thumb       = "hour1.png"
 hour2_url         = "/category/membership/main-show-hour-2/"
@@ -67,6 +69,7 @@ allstar_thumb     = "allstar.jpg"
 members_cat = {"Hour 1":            {"url":hour1_url, "thumb":hour1_thumb, "type":"members"},
                "Hour 2":            {"url":hour2_url, "thumb":hour2_thumb, "type":"members"},
                "Aggressive Progressives" : {"url":ap_url, "thumb":ap_thumb, "type":"members"},
+               "Rebel Headquarters" : {"url":rebelhq_url, "thumb":rebelhq_thumb, "type":"members"},
                "Post Game":         {"url":pg_url, "thumb":pg_thumb, "type":"members"},
                "Old School":        {"url":oldschool_url, "thumb":oldschool_thumb, "type":"members"},
                "TYT Classics":      {"url":tytclassics_url, "thumb":tytclassics_thumb, "type":"members"},

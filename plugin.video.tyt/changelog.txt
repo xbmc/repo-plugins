@@ -1,3 +1,5 @@
+[B]2.1.3[/B]
+- Added Rebel Headquarters
 [B]2.1.2[/B]
 - Fixed Old School
 - It seems that the channel is changing urls frequently, I will address this

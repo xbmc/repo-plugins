@@ -65,9 +65,12 @@ def play():
 		exit(0)
 
 	is_pseudo_aes = bool(re.findall("var aes = true", req))
-		
-	streams = re.compile('new RTPPlayer\(.*file\:.+?"(.+?)"', re.DOTALL).findall(req)
-	
+
+	player = re.findall("liveMetadata.+?'(\d+)'\)", req) 
+	player = player[0].strip() if player else ''
+
+	streams = re.compile('var player{}.+?RTPPlayer.+?file\:.+?"(.+?)"'.format(player),re.DOTALL).findall(req)
+
 	if streams:
 		final_stream_url = None
 		for stream in streams:

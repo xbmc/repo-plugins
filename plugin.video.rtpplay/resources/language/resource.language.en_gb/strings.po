@@ -27,3 +27,7 @@ msgstr ""
 msgctxt "#32002"
 msgid "Could not grab stream url. The plugin needs an update."
 msgstr ""
+
+msgctxt "#32003"
+msgid "Debug"
+msgstr ""

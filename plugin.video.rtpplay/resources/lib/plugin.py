@@ -69,7 +69,7 @@ def play():
 	player = re.findall("liveMetadata.+?'(\d+)'\)", req) 
 	player = player[0].strip() if player else ''
 
-	streams = re.compile('var player{}.+?RTPPlayer.+?file\:.+?"(.+?)"'.format(player),re.DOTALL).findall(req)
+	streams = re.compile('{} =.+?RTPPlayer.+?file\:.+?"(.+?)"'.format(player),re.DOTALL).findall(req)
 
 	if streams:
 		final_stream_url = None

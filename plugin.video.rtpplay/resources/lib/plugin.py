@@ -71,7 +71,7 @@ def play():
 	ic = re.sub('<--(.*?)-->', '', ic, flags=re.DOTALL)
 	ic = re.sub('(?m)^\//.*\n?', '', ic)
 
-	player_index = re.findall("(.+?)\.newPlayer\(\)", ic)
+	player_index = re.findall("(.+?)\.newPlayer\(", ic)
 
 	if player_index:
 

@@ -36,7 +36,7 @@ def index():
 		kodiutils.ok(kodiutils.get_string(32000),kodiutils.get_string(32001))
 		exit(0)
 
-	match=re.compile('<a title=".+?direto (.+?)" href="(.+?)".+?img.+?src="(.+?)" class="img-responsive">.+?<span class="small"><b>(.+?)</b>').findall(req)
+	match=re.compile('<a\s*title=".+?direto\s*(.+?)"\s*href="(.+?)".+?img.+?src="(.+?)"\s*class="img-responsive">.+?<span class="small"><b>(.+?)</b>').findall(req)
 	if match:
 		for channel,rel_url, img, prog in match:
 			liz = ListItem("[B][COLOR blue]{}[/B][/COLOR] ({})".format(kodiutils.smart_str(channel), kodiutils.smart_str(prog)))
@@ -66,35 +66,45 @@ def play():
 
 	is_pseudo_aes = bool(re.findall("var aes = true", req))
 
-	player = re.findall("liveMetadata.+?'(\d+)'\)", req) 
-	player = player[0].strip() if player else ''
+	js = re.compile("<script(.*?)\<\/script",re.DOTALL).findall(req)
+	ic = '\n'.join(js)
+	ic = re.sub('<--(.*?)-->', '', ic, flags=re.DOTALL)
+	ic = re.sub('(?m)^\//.*\n?', '', ic)
 
-	streams = re.compile('{} =.+?RTPPlayer.+?file\:.+?"(.+?)"'.format(player),re.DOTALL).findall(req)
+	player_index = re.findall("(.+?)\.newPlayer\(\)", ic)
 
-	if streams:
-		final_stream_url = None
-		for stream in streams:
-			if ".m3u8" in stream.split('/')[-1]: 
-				final_stream_url = stream
-				break
+	if player_index:
 
-	if is_pseudo_aes:
-		try:
-			req = __session__.post("http://www.rtp.pt/services/playRequest.php", headers={"RTPPlayUrl":	final_stream_url})
-			final_stream_url = req.headers["RTPPlayWW"]
-		except:
-			kodiutils.ok(kodiutils.get_string(32000),kodiutils.get_string(32002))
-			exit(0)		
+		streams = re.compile('{}\s*=.+?RTPPlayer.+?file\:.+?"(.+?)"'.format(player_index[0].strip()),re.DOTALL).findall(req)
 
-	if final_stream_url:
-		liz = ListItem("[B][COLOR blue]{}[/B][/COLOR] ({})".format(kodiutils.smart_str(channel), kodiutils.smart_str(prog)))
-		liz.setArt({"thumb": icon, "icon": icon})
-		liz.setProperty('IsPlayable', 'true')
-		liz.setPath("{}|User-Agent=Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36&Referer=http://www.rtp.pt/play/".format(final_stream_url))
-		setResolvedUrl(plugin.handle, True, liz)
+		if streams:
+			final_stream_url = None
+			for stream in streams:
+				if ".m3u8" in stream.split('/')[-1]: 
+					final_stream_url = stream
+					break
+
+		if is_pseudo_aes:
+			try:
+				req = __session__.post("http://www.rtp.pt/services/playRequest.php", headers={"RTPPlayUrl":	final_stream_url})
+				final_stream_url = req.headers["RTPPlayWW"]
+			except:
+				raise_notification()		
+
+		if final_stream_url:
+			liz = ListItem("[B][COLOR blue]{}[/B][/COLOR] ({})".format(kodiutils.smart_str(channel), kodiutils.smart_str(prog)))
+			liz.setArt({"thumb": icon, "icon": icon})
+			liz.setProperty('IsPlayable', 'true')
+			liz.setPath("{}|User-Agent=Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36&Referer=http://www.rtp.pt/play/".format(final_stream_url))
+			setResolvedUrl(plugin.handle, True, liz)
+		else:
+			raise_notification()
 	else:
-		kodiutils.ok(kodiutils.get_string(32000),kodiutils.get_string(32002))
-		exit(0)
+		raise_notification()
+
+def raise_notification():
+	kodiutils.ok(kodiutils.get_string(32000),kodiutils.get_string(32002))
+	exit(0)
 
 def run():
     plugin.run()

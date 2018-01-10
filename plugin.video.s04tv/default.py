@@ -1,451 +1,199 @@
+# -*- coding: utf-8 -*-
+
 # Copyright (C) 2015 Malte Loepmann (maloep@googlemail.com)
 #
-# This program is free software; you can redistribute it and/or modify it under the terms 
-# of the GNU General Public License as published by the Free Software Foundation; 
+# This program is free software; you can redistribute it and/or modify it under the terms
+# of the GNU General Public License as published by the Free Software Foundation;
 # either version 2 of the License, or (at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
-# without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+# without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # See the GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along with this program; 
+# You should have received a copy of the GNU General Public License along with this program;
 # if not, see <http://www.gnu.org/licenses/>.
 
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
-import os, sys, re, json, string, random
-import urllib, urllib2
+import os, sys, re, json
+import urllib
 from urlparse import *
-import xml.etree.ElementTree as ET
+#import xml.etree.ElementTree as ET
+import cookielib
+try:
+    # Python 2.6-2.7
+    from HTMLParser import HTMLParser
+except ImportError:
+    # Python 3
+    from html.parser import HTMLParser
 
+from BeautifulSoup import BeautifulSoup
+import mechanize
 
 PLUGINNAME = 'S04tv'
 PLUGINID = 'plugin.video.s04tv'
-BASE_URL = 'https://tv.schalke04.de/'
-BASE_URL_HOME = BASE_URL +'de/'
-
-#BASE_VIDEO_URL = 'https://tv.schalke04.de/'
+BASE_URL = 'https://schalke04.de/tv/videos/'
 
 # Shared resources
 addonPath = ''
-__addon__ = xbmcaddon.Addon(id='plugin.video.s04tv')
-addonPath = __addon__.getAddonInfo('path')
-        
+addon = xbmcaddon.Addon(id='plugin.video.s04tv')
+addonPath = addon.getAddonInfo('path')
+
 BASE_RESOURCE_PATH = os.path.join(addonPath, "resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib", "BeautifulSoup" ) )
 
-from BeautifulSoup import BeautifulSoup
-from BeautifulSoup import Tag
-import mechanize
 
-__language__ = __addon__.getLocalizedString
+language = addon.getLocalizedString
 thisPlugin = int(sys.argv[1])
 browser = mechanize.Browser()
 
 missingelementtext = "Missing element '%s'. Maybe the site structure has changed."
 
+videoquality = 'hd720'
 
-videoquality = __addon__.getSetting('videoquality')
-if videoquality == 'low':
-    max_res = 480
-elif videoquality == 'mid':
-    max_res = 640
-elif videoquality == 'high':
-    max_res = 960
-elif videoquality == 'hd':
-    max_res = 1280
+quality = addon.getSetting('videoquality')
+if quality == 'low':
+    videoquality = 'small'
+elif quality == 'mid':
+    videoquality = 'medium'
+elif quality == 'high':
+    videoquality = 'mediumlarge'
+elif quality == 'hd':
+    videoquality = 'hd720'
 
-
-def buildHomeDir(url, doc):
-    xbmc.log('buildHomeDir')
-    path = xbmc.translatePath('special://profile/addon_data/%s' %(PLUGINID))
-
-    if not os.path.exists(path):
-        try:
-            os.makedirs(path)
-        except:
-                path = ''
-    
-    soup = BeautifulSoup(''.join(doc))
-    
-    nav = soup.find('nav')
-    if(not nav):
-        xbmc.log(missingelementtext%'nav')
-        return
-    
-    for navitem in nav.contents:
-        #first tag is our ul
-        if(type(navitem) == Tag):
-            for ulitem in navitem.contents:
-                if(type(ulitem) == Tag):                    
-                    if(ulitem.name == 'li'):                        
-                        if not ulitem.has_key('class'):
-                            a = ulitem.find('a')
-                            if(not a):
-                                xbmc.log(missingelementtext%'a')
-                                continue
-                                                                    
-                            url = BASE_URL_HOME + a['href']
-                            addDir(a.text, url, 2, '')
-            break
-        
-
-def buildSubDir(url, doc):
-    xbmc.log('buildSubDir')
-    soup = BeautifulSoup(''.join(doc))
-    
-    nav = soup.find('ul', attrs={'class': 'contentnav'})
-    if(not nav):
-        #no subdir (home page or flat category)
-        buildVideoDir(url, doc)
-        return
-    
-    div =  nav.find('div')
-    if(not div):
-        #no subdir (home page or flat category)
-        buildVideoDir(url, doc)
-        return
-    
-    ul = div.find('ul')
-    for ulitem in ul.contents:
-        if(type(ulitem) == Tag):
-            if(ulitem.name == 'li'):
-                a = ulitem.find('a')
-                if(not a):
-                    xbmc.log(missingelementtext%'a')
-                    continue
-                url = BASE_URL_HOME + a['href']
-                addDir(a.text, url, 3, '')
-        
-        
-def buildSubSubDir(url, doc):
-    xbmc.log('buildSubSubDir')
-    soup = BeautifulSoup(''.join(doc))
-    
-    #get pagenumber
-    indexpage = url.find('page/')
-    indexpage = indexpage + len('page/')
-    indexminus = url.find('-', indexpage)
-    pagenumber = ''
-    if(indexpage >=0 and indexminus > indexpage): 
-        pagenumber = url[indexpage:indexminus]
-    
-    #check if we have corresponding sub menus
-    li = soup.find('li', attrs={'class':'dm_%s'%pagenumber})
-    if(not li):
-        #no sub sub dir
-        buildVideoDir(url, doc)
-        return
-    
-    div =  li.find('div')
-    if(not div):
-        xbmc.log(missingelementtext%'div')
-        return
-    ul = div.find('ul')
-    if(not ul):
-        xbmc.log(missingelementtext%'ul')
-        return
-    for ulitem in ul.contents:
-        if(type(ulitem) == Tag):
-            if(ulitem.name == 'li'):
-                a = ulitem.find('a')
-                if(not a):
-                    xbmc.log(missingelementtext%'a')
-                    continue
-                url = BASE_URL_HOME + a['href']
-                addDir(a.text, url, 3, '')
 
 
 def buildVideoDir(url, doc):
-    xbmc.log('buildVideoDir')    
-    
+
     #allow sorting of video titles
-    xbmcplugin.addSortMethod(thisPlugin, xbmcplugin.SORT_METHOD_UNSORTED)    
-    xbmcplugin.addSortMethod(thisPlugin, xbmcplugin.SORT_METHOD_DATE)
+    xbmcplugin.addSortMethod(thisPlugin, xbmcplugin.SORT_METHOD_UNSORTED)
+    #xbmcplugin.addSortMethod(thisPlugin, xbmcplugin.SORT_METHOD_DATE)
     xbmcplugin.addSortMethod(thisPlugin, xbmcplugin.SORT_METHOD_TITLE)
-    
-    hideexclusive = __addon__.getSetting('hideexclusivevideos').upper() == 'TRUE'
-    hideflag = __addon__.getSetting('hidefreeexclflag').upper() == 'TRUE'
-    hidedate = __addon__.getSetting('hidedate').upper() == 'TRUE'
+
+    hideexclusive = addon.getSetting('hideexclusivevideos').upper() == 'TRUE'
+    hideflag = addon.getSetting('hidefreeexclflag').upper() == 'TRUE'
     
     soup = BeautifulSoup(''.join(doc))
-    articles = soup.findAll('article')
-    if(not articles):
-        xbmc.log(missingelementtext%'article')
+    section = soup.find('section')
+    if(not section):
+        xbmc.log(missingelementtext%'section')
         return
     
-    origUrl = url
+    title = ''
+    url = ''
+    imageUrl = ''
+        
+    ahrefs = section.findAll('a')
     
-    for article in articles:
-                
-        #HACK: ignore related videos
+    for ahref in ahrefs:
+        
+        url = ahref['href']
         try:
-            id = article['id']
-            if(id and id.startswith('rel_vid')):
-                continue
-        except:
-            pass
+            isPayedContent = ahref['data-payed'] == 'true'
+        except KeyError:
+            isPayedContent = False
         
-        if(origUrl.find('home') > 0):
-            buildVideoDirHome(article, hidedate, hideexclusive, hideflag)
+        img = ahref.find('img')
+        if(img):
+            imageUrl = img['src']
+               
+        h3 = ahref.find('h3')
+        mode = 2
+        if(h3 != None):
+            title = ''
+            parts = str(h3).decode('utf-8').split()
+            for part in parts:
+                title = title +' ' +part
+            
+            title = title.replace('<h3 class=\"card-title teaser-title\">', '').replace('</h3>', '').replace('<br />', '')
+            title = HTMLParser().unescape(title)
         else:
-            buildVideoDirElse(article, hidedate, hideexclusive, hideflag)
+            mode = 1
+            title = language(30003)
         
-                
+        #title = title.replace('<br>', ' - ')
         
-    
-    #paging
-    pageid = 0
-    page = 0
-    match_page = re.compile(BASE_URL +'cache/TV/pages/videoverteil_(.+)_(.+).htm', re.DOTALL).findall(origUrl)
-    if(match_page):
-        pageid = match_page[0][0]
-        page = (int)(match_page[0][1])
-        addDir(__language__(30003), BASE_URL +'cache/TV/pages/videoverteil_%s_%s.html'%(pageid, page + 1), 3, '')
-    else:
-        paging = soup.find('ul', attrs={'class': 'paging'})
-        if(paging):
-            a = paging.find('a')
-            onclick = a['onclick']
-            match_page = re.compile('changeVideoPage\(0,(.+)\)', re.DOTALL).findall(onclick)
-            pageid = (int)(match_page[0])
-            addDir(__language__(30003), BASE_URL +'cache/TV/pages/videoverteil_%s_%s.html'%(pageid, 2), 3, '')
+        extraInfo = {}
+        if not isPayedContent:
+            extraInfo['isPayedContent'] = 'False'
+        else:
+            extraInfo['isPayedContent'] = 'True'
+            if(hideexclusive):
+                #don't add exclusive videos to list
+                continue
+            if(not hideflag):
+                title = '[EXCL] ' +title
         
-
-def buildVideoDirHome(article, hidedate, hideexclusive, hideflag):
-    
-    div = article.find('div')
-    if(not div):
-        xbmc.log(missingelementtext%'div')
-        return
-    
-    flag = div['class']
-    
-    #TODO get date
-    date = ''
-    
-    img = div.findAllNext('img', limit=1)
-    if(not img):
-        xbmc.log(missingelementtext%'img')
-        return
-    imageUrl = img[0]['src']
-    
-    #HACK: this is only required on home page
-    h2 = img[0].findAllNext('h2', limit=1)
-    if(h2):
-        a = h2[0].findAllNext('a', limit=1)
-        if(not a):
-            xbmc.log(missingelementtext%'a')
-            return
-        url = a[0]['href']
-        span = a[0].find('span')
-    else:
-        a = img[0].findAllNext('a', limit=1)
-        if(not a):
-            xbmc.log(missingelementtext%'a')
-            return
-        url = a[0]['href']
-        span = a[0].find('span')
-    
-    if(not span):
-        xbmc.log(missingelementtext%'span')
-        return
-    
-    title = ''
-    for text in span.contents:
-        if(type(text) != Tag):
-            if(title != ''):
-                title = title +': '
-            title = title +text
-            
-    #only required for homescreen
-    span2 = span.nextSibling
-    if(span2):
-        title = title +': ' +span2.text
-            
-    if(not hidedate and date != ''):
-        title = title + ' (%s)'%date
-            
-    extraInfo = {}
-    if(flag == 'flag_free'):
-        if(not hideflag):
-            title = '[FREE] ' +title
-        extraInfo['IsFreeContent'] = 'True'
-    elif(flag == 'flag_excl'):
-        if(hideexclusive):
-            #don't add exclusive videos to list
-            return
-        if(not hideflag):
-            title = '[EXCL] ' +title
-        extraInfo['IsFreeContent'] = 'False'
-    
-    if(not url.startswith("http")):
-        url = BASE_URL_HOME + url
-    addLink(title, url, 4, imageUrl, date, extraInfo)
-
-
-def buildVideoDirElse(article, hidedate, hideexclusive, hideflag):
-    
-    #TODO get date
-    date = ''
-    #TODO get flag
-    flag = ''
-    
-    a = article.findAllNext('a', limit=1)
-    if(not a):
-        xbmc.log(missingelementtext%'a')
-        return
-    url = a[0]['href']
-    
-    div = a[0].find('div')
-    if(not div):
-        xbmc.log(missingelementtext%'div')
-        return
-            
-    img = div.findAllNext('img', limit=1)
-    if(not img):
-        xbmc.log(missingelementtext%'img')
-        return
-    imageUrl = img[0]['src']
-        
-    span = a[0].find('span', attrs={'class': 'title'})
-    if(not span):
-        xbmc.log(missingelementtext%'span')
-        return
-    
-    title = ''
-    for text in span.contents:
-        if(type(text) != Tag):
-            if(title != ''):
-                title = title +' '
-            title = title +text
-            
-            
-    extraInfo = {}
-    if(flag == 'flag_free'):
-        if(not hideflag):
-            title = '[FREE] ' +title
-        extraInfo['IsFreeContent'] = 'True'
-    elif(flag == 'flag_excl'):
-        if(hideexclusive):
-            #don't add exclusive videos to list
-            return
-        if(not hideflag):
-            title = '[EXCL] ' +title
-        extraInfo['IsFreeContent'] = 'False'
-    
-    if(not url.startswith("http")):
-        url = BASE_URL_HOME + url
-    addLink(title, url, 4, imageUrl, date, extraInfo)
+        if(mode == 1):
+            addDir(title, url, mode, imageUrl)
+        else:
+            addLink(title, url, mode, imageUrl, '', extraInfo)
 
 
 def getVideoUrl(url, doc):
     xbmc.log('getVideoUrl: url=' +url)
     
-	#HACK: Free content may be hosted on youtube
+    #check if we need to login
+    isPayedContent = xbmc.getInfoLabel( "ListItem.Property(isPayedContent)" ) == 'True'
+    if(isPayedContent):
+        success = login()
+        if(not success):
+            return
+    
+    #HACK: Free content may be hosted on youtube
     if(url.startswith("https://youtu.be/")):
         videoId = url.replace("https://youtu.be/", "")
         url='plugin://plugin.video.youtube/?action=play_video&videoid=' +videoId
         listitem = xbmcgui.ListItem(path=url)
         return xbmcplugin.setResolvedUrl(thisPlugin, True, listitem)
-	
-    #check if we need to login
-    #isFreeContent = xbmc.getInfoLabel( "ListItem.Property(IsFreeContent)" ) == 'True'
-    #if(not isFreeContent):
-    success = login()
-    if(not success):
+    
+    soup = BeautifulSoup(''.join(doc))
+    
+    section = soup.find('section')
+    if(not section):
+        xbmc.log(missingelementtext%'section')
         return
     
-    soup = BeautifulSoup(''.join(doc))   
-    iframe = soup.find('iframe', attrs={'class': 'videoframe'})
-    if(not iframe):
-        xbmc.log(missingelementtext%'iframe')
+    videoContainer = soup.find('div', attrs={'class': 'video-container'})
+    if(not videoContainer):
+        xbmc.log(missingelementtext%'videoContainer')
         return
     
-    playerUrl = iframe['src']
-        
-    response=getUrl(playerUrl)
-    
-    match_streamid=re.compile('streamid="(.+?)"', re.DOTALL).findall(response)
-    streamid = match_streamid[0]
-    
-    match_partnerid=re.compile('partnerid="(.+?)"', re.DOTALL).findall(response)
-    partnerid = match_partnerid[0]
-
-    match_portalid=re.compile('portalid="(.+?)"', re.DOTALL).findall(response)
-    portalid = match_portalid[0]
-
-    match_sprache=re.compile('sprache="(.+?)"', re.DOTALL).findall(response)
-    sprache = match_sprache[0]
-
-    match_auth=re.compile('auth="(.+?)"', re.DOTALL).findall(response)
-    auth = match_auth[0]
-
-    match_timestamp=re.compile('timestamp="(.+?)"', re.DOTALL).findall(response)
-    timestamp = match_timestamp[0]
-    
-    wsUrl = BASE_URL +'service/video_xml.php?videoid='+streamid+'&partnerid='+partnerid+'&language='+sprache
-
-    response = getUrl(wsUrl)
-    
-    jsonResult = json.loads(response)
-    
-    responseVideo = jsonResult['video']
-    
-    if(responseVideo is None):
-        xbmc.log('Error in response: tag video not found')
-        return
-    
-    streamAccess = responseVideo['streamAccess']
-    if(streamAccess is None):
-        xbmc.log('Error in response: tag streamAccess not found')
+    dataoptions = videoContainer['data-options']
+    if(not dataoptions):
+        xbmc.log(missingelementtext%'data-options')
         return
         
-    responseStreamAccess=getUrl(BASE_URL +streamAccess)
+    jsonResult = json.loads(dataoptions)
+    jsonResultPlayerOptions = jsonResult['playerOptions']
+    dataId = jsonResultPlayerOptions['data-id']
     
-    responseVideoXml = json.loads(responseStreamAccess)
-    responseData = responseVideoXml['data']
-    if(responseData is None):
-        xbmc.log('Error in response: tag responseData not found')
-        return
+    playoutUrl = 'https://playout.3qsdn.com/' +dataId +'?js=true&skin=s04&data-id=' +dataId +'&container=sdnPlayer_player&preview=false&width=100%25&height=100%25'
     
-    streamAccessUrl = responseData['stream-access'][0]
-    xbmc.log('streamAccessUrl: ' +streamAccessUrl)
+    response=getUrl(playoutUrl)
     
-    response = getUrl(streamAccessUrl)
+    match_playlist=re.compile('playlist: \((.+?)\)', re.DOTALL).findall(response)
+    playlist = match_playlist[0]
     
-    match_new_auth=re.compile('auth="(.+?)"', re.DOTALL).findall(response)
-    match_new_url=re.compile('url="(.+?)"', re.DOTALL).findall(response)
+    quote_keys_regex = r'([\{\s,])(\w+)(:)'
+    playlist = re.sub(quote_keys_regex, r'\1"\2"\3', playlist)
 
-    m3u8_url = match_new_url[0].replace('/z/','/i/').replace('manifest.f4m','master.m3u8')+'?hdnea='+match_new_auth[0]+'&g='+char_gen(12)+'&hdcore=3.2.0'
-    xbmc.log('m3u8_url: ' +m3u8_url)
+    playlist = playlist.replace("'", '"')
+    playlist = playlist.replace("\\x2F", '')
     
-    response=getUrl(m3u8_url)
+    videourl = ''
     
-    match_sec_m3u8=re.compile('http(.+?)null=', re.DOTALL).findall(response)
-    
-    lines = response.split('\n')
-    choose_url = False    
-    stored_res = 0
-    
-    xbmc.log('max_res = ' +str(max_res))
-    for line in lines:
-        if '#EXT-X-STREAM-INF' in line:
-            match_res=re.compile('RESOLUTION=(.+?)x', re.DOTALL).findall(line)
-            if(match_res):
-                res = (int)(match_res[0])
-                xbmc.log('res = ' +str(res))
-            if res > stored_res and res <= max_res:
-                choose_url = True
-                stored_res = res
-                xbmc.log('new res = ' +str(stored_res))
-        elif choose_url == True:
-            sec_m3u8 = line
-            choose_url = False
-    
-    listitem = xbmcgui.ListItem(path=sec_m3u8)
+    jsonPlaylist = json.loads(playlist)
+    for key in jsonPlaylist:
+        entry = jsonPlaylist[key]
+        quality = entry['quality']
+        videotype = entry['type']
+        if(videotype == 'videomp4' and quality == videoquality):
+            videourl = entry['src']
+            
+    listitem = xbmcgui.ListItem(path=videourl)
     return xbmcplugin.setResolvedUrl(thisPlugin, True, listitem)
-
+    
 
 def addDir(name, url, mode, iconimage):
     parameters = {'url' : url.encode('utf-8'), 'mode' : str(mode), 'name' : name.encode('utf-8')}
@@ -457,7 +205,7 @@ def addDir(name, url, mode, iconimage):
     return ok
    
 
-def addLink(name, url, mode, iconimage, date, extraInfo = {}):
+def addLink(name, url, mode, iconimage, date, extraInfo):
     parameters = {'url' : url.encode('utf-8'), 'mode' : str(mode), 'name' : name.encode('utf-8')}
     u = sys.argv[0] +'?' +urllib.urlencode(parameters)
     ok = True
@@ -476,34 +224,50 @@ def addLink(name, url, mode, iconimage, date, extraInfo = {}):
 
 def login():
     
-    username = __addon__.getSetting('username')
+    username = addon.getSetting('username')
     xbmc.log('Logging in with username "%s"' %username)
-    password = __addon__.getSetting('password')
+    password = addon.getSetting('password')
     
-    if(username == '' or password == ''):
-        xbmcgui.Dialog().ok(PLUGINNAME, __language__(30102), __language__(30103))
+    if(not username or not password):
+        xbmcgui.Dialog().ok(PLUGINNAME, language(30102), language(30103))
         return False
-        
-    loginparams = {'username_field' : username, 'password_field' : password}
-    loginurl = BASE_URL +'ssl/get_content.php?lang=TV&form=login&%s' %urllib.urlencode(loginparams)
     
+    url = 'https://schalke04.de/account/login/'
     
-    browser.open(loginurl)
-    loginresponse = browser.response().read()
-    xbmc.log('login response: ' +loginresponse)
-    
-    #loginresponse should look like this: ({"StatusCode":"1","stat":"OK","UserData":{"SessionID":"...","Firstname":"...","Lastname":"...","Username":"lom","hasAbo":1,"AboExpiry":"31.07.14"},"out":"<form>...</form>"});
-    #remove (); from response
-    jsonstring = loginresponse[1:len(loginresponse) -2]
-    jsonResult = json.loads(jsonstring)
-    if(jsonResult['stat'] == "OK"):
+    cj = cookielib.CookieJar()
+    br = mechanize.Browser()
+    br.set_cookiejar(cj)
+    br.open(url)
+
+    for form in br.forms():
+        try:
+            form['email'] = username
+            form['password'] = password
+            br.form = form
+            break
+        except mechanize.ControlNotFoundError:
+            pass
+
+    br.submit()
+    loginSuccessful = False
+    response = br.response().read()
+    soup = BeautifulSoup(''.join(response))
+    for textelement in soup(text='Schalke TV KOMPLETT'):
+        li = textelement.parent
+        try:
+            isChecked = li['class'] == 'checked'
+            loginSuccessful = isChecked
+        except KeyError:
+            loginSuccessful = False
+
+    if(loginSuccessful):
         xbmc.log('login successful')
         return True
     else:
         xbmc.log('login failed')
-        xbmcgui.Dialog().ok(PLUGINNAME, __language__(30100) %username.decode('utf-8'), __language__(30101))
+        xbmcgui.Dialog().ok(PLUGINNAME, language(30100) %username.decode('utf-8'), language(30101))
         return False
-    
+
 
 def getUrl(url):
         url = url.replace('&amp;','&')
@@ -511,7 +275,7 @@ def getUrl(url):
         xbmc.log('Get url: '+url)
         browser.set_handle_robots(False)
         try:
-            browser.open(url)        
+            browser.open(url)
             response = browser.response().read()
         except Exception, (exc):
             xbmc.log('Error while opening url: ' +str(exc))
@@ -519,29 +283,16 @@ def getUrl(url):
         return response
     
 
-def num_gen(size=1, chars=string.digits):
-        return ''.join(random.choice(chars) for x in range(size))
-
-
-def char_gen(size=1, chars=string.ascii_uppercase):
-    return ''.join(random.choice(chars) for x in range(size))
-
 
 def runPlugin(url, doc):
     
     if mode==None or doc==None or len(doc)<1:
-        buildHomeDir(url, doc)
+        buildVideoDir(url, doc)
        
     elif mode==1:
-        buildHomeDir(url, doc)
-            
-    elif mode==2:
-        buildSubDir(url, doc)
+        buildVideoDir(url, doc)
         
-    elif mode==3:
-        buildSubSubDir(url, doc)
-        
-    elif mode == 4:
+    elif mode == 2:
         getVideoUrl(url, doc)
 
 
@@ -570,7 +321,7 @@ print "URL: "+str(url)
 print "Name: "+str(name)
 
 if(url == None):
-    url = BASE_URL_HOME
+    url = BASE_URL
 
 doc = getUrl(url)
 runPlugin(url, doc)

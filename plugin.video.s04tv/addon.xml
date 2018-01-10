@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.s04tv" name="S04tv" version="3.1.2" provider-name="malte">
+<addon id="plugin.video.s04tv" name="S04tv" version="3.1.3" provider-name="malte">
     <requires>
         <import addon="xbmc.python" version="2.14.0"/>
         <import addon="script.module.mechanize" version="0.2.6"/>
@@ -18,7 +18,7 @@
         <source>https://github.com/maloep/xbmc-s04tv</source>
         <summary lang="de">Videos von S04.tv ansehen</summary>
         <summary lang="en">Watch videos from S04.tv</summary>
-        <description lang="de">Online Video Portal des FC Schalke 04. Alle Spiele in re-Live (15 Minuten nach Abfiff), News, Interviews, exklusive Berichte und Specials. Kostenlos für Schalke-Mitglieder, die re-Live Spiele setzen allerdings einen S04.tv Benutzer Account voraus (19,04 EUR/Jahr). Mehr Details auf http://www.s04.tv.</description>
-        <description lang="en">FC Schalke 04 online video portal. Watch all videos from S04tv.de including all matches in re-Live (15 minutes after the match has ended), news, interviews and specials. Free of charge for S04 members, re-live videos require an S04.tv user account (e.g. 19,04 EUR/year). See http://www.s04.tv for details.</description>
+        <description lang="de">Online Video Portal des FC Schalke 04. Alle Spiele in re-Live (15 Minuten nach Abfiff), News, Interviews, exklusive Berichte und Specials. Kostenlos für Schalke-Mitglieder, die re-Live Spiele setzen allerdings einen S04 TV Benutzer Account voraus (19,04 EUR/Jahr). Mehr Details auf https://schalke04.de/tv.</description>
+        <description lang="en">FC Schalke 04 online video portal. Watch all videos from S04tv.de including all matches in re-Live (15 minutes after the match has ended), news, interviews and specials. Free of charge for S04 members, re-live videos require an S04 TV user account (19,04 EUR/year). See https://schalke04.de/tv for details.</description>
     </extension>
 </addon>

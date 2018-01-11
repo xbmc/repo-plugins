@@ -1,5 +1,5 @@
-import re, urllib2
-import utils
+import re, urllib2, os
+import resources.lib.utils as utils
 
 class RedbullTVClient(object):
     REDBULL_API = "https://appletv.redbull.tv/"
@@ -29,10 +29,15 @@ class RedbullTVClient(object):
         description = element.findtext("description")
         image = element.find("image").get("src1080")
         url = element.findtext("mediaURL")
+        base_url = ''
 
         # Try find the specific stream based on the users preferences
         try:
-            playlists = urllib2.urlopen(url).read()
+            response = urllib2.urlopen(url)
+            # Required to get base url in case of a redirect, to use for relative paths
+            base_url = response.geturl()
+            playlists = response.read()
+
             resolution = self.get_resolution_code(self.resolution)
             media_url = re.search(
                 "RESOLUTION=" + resolution + ".*\n(.*)",
@@ -41,6 +46,10 @@ class RedbullTVClient(object):
             pass
         else:
             url = media_url
+
+        # if url is relative, add the base path
+        if base_url != '' and not url.startswith('http'):
+            url = os.path.dirname(base_url) + '/' + url
 
         return {"title":name, "url":url, "summary":description, "image": image, "is_stream":True}
 
@@ -108,4 +117,3 @@ class RedbullTVClient(object):
         for item in xml_elements:
             items.append(self.get_element_details(item, url))
         return items
-    

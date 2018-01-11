@@ -1,0 +1,78 @@
+# Red bull TV language file
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.redbull.tv\n"
+"Report-Msgid-Bugs-To: https://github.com/andy-g/kodi.plugin.video.redbulltv2\n"
+"POT-Creation-Date: 2018-01-12 21:43+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "#30000"
+msgid "General"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Video Quality"
+msgstr ""
+
+msgctxt "#30011"
+msgid "180p"
+msgstr ""
+
+msgctxt "#30012"
+msgid "240p"
+msgstr ""
+
+msgctxt "#30013"
+msgid "360p"
+msgstr ""
+
+msgctxt "#30014"
+msgid "540p"
+msgstr ""
+
+msgctxt "#30015"
+msgid "720p (HD)"
+msgstr ""
+
+msgctxt "#30016"
+msgid "1080p (HD)"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Error"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Error getting data from Redbull server."
+msgstr ""
+
+msgctxt "#30022"
+msgid "Try again shortly"
+msgstr ""
+
+msgctxt "#30023"
+msgid "No Results"
+msgstr ""
+
+msgctxt "#30024"
+msgid "No results found"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Please try another menu or search string"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Upcoming Event"
+msgstr ""
+
+msgctxt "#30027"
+msgid "This event is scheduled to start on:"
+msgstr ""

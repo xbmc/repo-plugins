@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.mediathekview"
+	name="MediathekView"
+	version="0.3.4"
+	provider-name="MediathekView.de, Leo Moll">
+	<requires>
+		<import addon="xbmc.python" version="2.25.0"/>
+		<import addon="script.module.requests" version="2.12.4"/>
+		<import addon="script.module.myconnpy" version="1.1.7"/>
+		<import addon="script.module.ijson" version="2.3"/>
+	</requires>
+	<extension
+		point="xbmc.python.pluginsource"
+		library="addon.py">
+		<provides>video</provides>
+	</extension>
+	<extension
+		point="xbmc.service"
+		library="service.py"
+		start="startup" />
+	<extension point="xbmc.addon.metadata">
+		<summary lang="de">Öffentlich-Rechtliche Mediatheken</summary>
+		<summary lang="en">Public service video-platforms</summary>
+		<summary lang="it">Piattaforme video dalle emittenti pubbliche</summary>
+		<description lang="de">Ermöglicht den Zugriff auf fast alle deutschen Mediatheken der öffentlich Rechtlichen basierend auf der Datenbank von MediathekView.de</description>
+		<description lang="en">Gives access to most video-platforms from German public service broadcasters using the database of MediathekView.de</description>
+		<description lang="it">Fornisce l'accesso a gran parte delle piattaforme video operate dalle emittenti pubbliche tedesche usando la banca dati di MediathekView.de</description>
+		<news>v0.3.4 (2018-01-11):
+- Die Suche sucht nun auch im Sendungs-Name
+- "Vor Kurzem hinzugefügt" nach Sendern durchsuchen
+- Deutsche und Italienische Übersetzung funktionieren nun
+v0.3.3 (2018-01-09):
+- Auflösung kann nun beim Download ausgewählt werden
+- Kommandozeilenaktualisierer wurde implementiert
+- Fehler in der Generierung von tvshow.nfo behoben
+- Die README Datei enthält nun alle Sprachen
+v0.3.2 (2018-01-08):
+- Dateien mit Umlauten im Namen konnten nicht heruntergeladen werden
+- Herunterladen bei nicht lokalem Download-Verzeichnis erfolgt nun ohne Zwischenspeicherung
+- NFO Dateien enthalten mehr Daten
+v0.3.1 (2018-01-07):
+- Herunterladen ist nun auch in nicht lokalen (VFS) Download-Verzeichnissen möglich
+- Behebung eines sehr seltenen Fehlers der zu einem ENdlos-Update führen konnte
+v0.3.0 (2018-01-07):
+- Neue Funktion zum Herunterladen von Videos mit Untertiteln und Metadaten (NFO-Dateien)
+- Behebung eines Fehlers der das Abspeichern der Untertitel URL in der Datenbank verhinderte
+</news>
+		<platform>all</platform>
+		<language>de fr</language>
+		<license>MIT License</license>
+		<forum>https://forum.kodi.tv/showthread.php?tid=326799</forum>
+		<source>https://github.com/mediathekview/plugin.video.mediathekview</source>
+		<website>https://mediathekview.de/</website>
+		<email>info@mediathekview.de</email>
+		<assets>
+			<icon>resources/icon.jpg</icon>
+			<fanart>resources/fanart.jpg</fanart>
+			<screenshot>resources/screenshot1.png</screenshot>
+			<screenshot>resources/screenshot2.png</screenshot>
+			<screenshot>resources/screenshot3.png</screenshot>
+			<screenshot>resources/screenshot4.png</screenshot>
+			<screenshot>resources/screenshot5.png</screenshot>
+		</assets>
+	</extension>
+</addon>

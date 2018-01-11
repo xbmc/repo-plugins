@@ -1,0 +1,302 @@
+# Kodi Media Center language file
+# Addon Name: MediathekView
+# Addon id: plugin.video.mediathekview
+# Addon Provider: leo.moll@yeasoft.com
+msgid ""
+msgstr ""
+"Project-Id-Version: Kodi Addons\n"
+"Report-Msgid-Bugs-To: leo.moll@yeasoft.com\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Alex\n"
+"Language-Team: German (http://www.transifex.com/projects/p/xbmc-addons/language/de/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Settings categories
+msgctxt "#30001"
+msgid "General"
+msgstr "Allgemein"
+
+msgctxt "#30002"
+msgid "Database Settings"
+msgstr "Datenbank Einstellungen"
+
+# Settings Page 1
+msgctxt "#30110"
+msgid "Prefer HD streams"
+msgstr "HD Streams bevorzugen"
+
+msgctxt "#30111"
+msgid "No future videos (usually trailers)"
+msgstr "Keine Videos aus der Zukunft (üblicherweise Trailer)"
+
+msgctxt "#30112"
+msgid "Minimum duration in minutes"
+msgstr "Minimlae Länge in Minuten"
+
+msgctxt "#30113"
+msgid "Group shows of different channel"
+msgstr "Sendungen verschiedener Sender zusammenfassen"
+
+msgctxt "#30114"
+msgid "Download directory"
+msgstr "Download-Verzeichnis"
+
+# Settings Page 2
+msgctxt "#30210"
+msgid "Database type"
+msgstr "Datenbank Typ"
+
+msgctxt "#30211"
+msgid "Database hostname"
+msgstr "Datenbank Hostname"
+
+msgctxt "#30212"
+msgid "Database username"
+msgstr "Datenbank Benutzername"
+
+msgctxt "#30213"
+msgid "Database password"
+msgstr "Datenbank Passwort"
+
+msgctxt "#30214"
+msgid "Database name"
+msgstr "Datenbank Name"
+
+msgctxt "#30221"
+msgid "Internal (sqlite)"
+msgstr "Intern (sqlite)"
+
+msgctxt "#30222"
+msgid "External (mysql)"
+msgstr "Extern (mysql)"
+
+msgctxt "#30231"
+msgid "Database Updates"
+msgstr "Datenbankupdates"
+
+msgctxt "#30232"
+msgid "Update interval in hours"
+msgstr "Aktualisierungsintervall in Stunden"
+
+msgctxt "#30233"
+msgid "XZ Program Location"
+msgstr "XZ Programm"
+
+msgctxt "#30238"
+msgid "Reset Database"
+msgstr "Datenbank zurücksetzen"
+
+# Main Menu
+msgctxt "#30901"
+msgid "Search in Title"
+msgstr "Suchen in Titel"
+
+msgctxt "#30902"
+msgid "Search in Title and Description"
+msgstr "Suchen in Titel und Beschreibung"
+
+msgctxt "#30903"
+msgid "Livestreams"
+msgstr "Livestreams"
+
+msgctxt "#30904"
+msgid "Recently Added"
+msgstr "Vor Kurzem hinzugefügt"
+
+msgctxt "#30905"
+msgid "Recently Added by Channel"
+msgstr "Vor Kurzem hinzugefügt nach Sender"
+
+msgctxt "#30906"
+msgid "Browse by Show in all Channels"
+msgstr "Alle Sendungen"
+
+msgctxt "#30907"
+msgid "Browse Shows by Channel"
+msgstr "Alle Sendungen nach Sender"
+
+msgctxt "#30908"
+msgid "Database Information"
+msgstr "Datenbank Informationen"
+
+# Context Menu
+msgctxt "#30921"
+msgid "Download Video"
+msgstr "Video herunterladen"
+
+msgctxt "#30922"
+msgid "Download LoRes Video"
+msgstr "Niedrig auflösendes Video herunterladen"
+
+msgctxt "#30923"
+msgid "Download HD Video"
+msgstr "Hoch auflösendes Video herunterladen"
+
+msgctxt "#30924"
+msgid "Add to queue"
+msgstr "Zur Warteschlange hinzufügen"
+
+# Database status
+msgctxt "#30941"
+msgid "Not Initialized"
+msgstr "Nicht initialisiert"
+
+msgctxt "#30942"
+msgid "No Status Available"
+msgstr "Kein Status verfügbar"
+
+msgctxt "#30943"
+msgid "Idle"
+msgstr "Bereit"
+
+msgctxt "#30944"
+msgid "Updating..."
+msgstr "Aktualisierung läuft..."
+
+msgctxt "#30945"
+msgid "Last Update Aborted"
+msgstr "Letzte Aktualisierung abgebrochen"
+
+# Other Strings
+msgctxt "#30951"
+msgid "Mediathek Database Error"
+msgstr "Mediathek Datenbank Fehler"
+
+msgctxt "#30952"
+msgid "Download Error"
+msgstr "Dowload Fehler"
+
+msgctxt "#30953"
+msgid "Error while downloading {}: {}"
+msgstr "Fehler beim herunterladen von {}: {}"
+
+msgctxt "#30954"
+msgid "Required decompression program 'xz' not found on your system"
+msgstr "Der benötigte Entpacker 'xz' konnte nicht gefunden werden"
+
+msgctxt "#30955"
+msgid "Download Database Update"
+msgstr "Datenbank Update wird heruntergeladen"
+
+msgctxt "#30956"
+msgid "Mediathek Database Update"
+msgstr "Mediathek wird aktualisiert"
+
+msgctxt "#30957"
+msgid "Mediathek (%d): channels:%d, shows:%d, movies:%d ..."
+msgstr "Mediathek (%d): Sender:%d, Sendungen:%d, Filme:%d ..."
+
+msgctxt "#30958"
+msgid "Please set a download folder in the settings"
+msgstr "Bitte waehlen Sie ein Download-Verzeichnis in den Einstellungen"
+
+msgctxt "#30959"
+msgid "Download directory could not be created: {}"
+msgstr "Fehler beim Ertzeugen des Download-Verzeichnisses: {}"
+
+msgctxt "#30960"
+msgid "Download Successful"
+msgstr "Download Erfolgreich"
+
+msgctxt "#30961"
+msgid "Welcome to MediathekView"
+msgstr "Willkommen"
+
+msgctxt "#30962"
+msgid "This Kodi addon allows access to most video-platforms from German public service "
+"broadcasters using the database provided by the popular project of MediathekView.\n\n"
+"Without the endless effort of the MediathekView contributors, addons like this would not "
+"exist.\n\n"
+"Please consider donating to this awesome project! Visit MediathekView at https://mediathekview.de/"
+msgstr "Dieses Kodi Addon Ermöglicht den Zugriff auf fast alle deutschen Mediatheken der "
+"öffentlich Rechtlichen basierend auf der Datenbank des beliebten MediathekView Projektes.\n\n"
+"Ohne den unermüdlichen Einsatz des MediathekView-Teams wäre ein solches Addon nicht möglich.\n\n"
+"Um das Projekt zu unterstützen, besteht die Möglichkeit auf https://mediathekview.de/ eine "
+"Spende zu hinterlassen."
+
+msgctxt "#30963"
+msgid "XZ Decompressor is Missing"
+msgstr "Entpacker XZ nicht gefunden"
+
+msgctxt "#30964"
+msgid "The database updater needs the program 'xz' in order to process the database update files. "
+"This programm was not found on your Kodi system.\n\nIf you want to use the database er on this "
+"system, you have to install 'xz' in one of the standard locations (/bin, /usr/bin, /usr/local/bin).\n\n"
+"Alternatively you can specify the location of the 'xz' program in the addon settings.\n\n"
+"Another possibilty would be the use of an external database updated either by another Kodi system "
+"or by the provided update script running on a server (see README file).\n\n"
+"The datebase er has been disabled so you have to enable it again from the addon settings page."
+msgstr "Der Datenbank-Aktualisierer benötigt den Entpacker 'xz' der auf diesem Kodi-System leider "
+"nicht gefunden wurde.\n\nUm den Datenbank-Aktualisierer zu benutzen, muss dieses Programm auf dem "
+"System in einem der Standard-Verzeichnisse (/bin, /usr/bin, /usr/local/bin) installiert werden.\n\n"
+"Unter Windows bzw. falls das Programm in einem anderen Verzeichnis installiert ist, muss der Pfad "
+"zum Programm in den Addon-Einstellungen angegeben werden.\n\n"
+"Eine andere Möglichkeit ist die Benutzung einer externen Datenbank die entweder über eine anderes "
+"Kodi-System oder über das mitgelieferte Update-Skript (siehe README) regelmäßig aktualisiert wird.\n\n"
+"Der Datenbank-Aktualisierer wurde deaktiviert. Er kann über die Addon-Einstellungen wieder aktiviert "
+"werden."
+
+msgctxt "#30965"
+msgid "Database Status: %s"
+msgstr "Datenbank-Status: %s"
+
+msgctxt "#30966"
+msgid "This database was never updated"
+msgstr "Diese Datenbank wurde noch nicht aktualisiert"
+
+msgctxt "#30967"
+msgid "%s in progress...\nDatabase: %s\nAdditions: %d channels, %d shows, %d movies"
+msgstr "%s läuft...\nFilmdatenbank vom %s\nNeuzugänge: %d Sender, %d Sendungen, %d Filme"
+
+msgctxt "#30968"
+msgid "%s in progress...\nAdditions: %d channels, %d shows, %d movies"
+msgstr "%s läuft...\nNeuzugänge: %d Sender, %d Sendungen, %d Filme"
+
+msgctxt "#30969"
+msgid "Last %s: %s\nDatabase: %s\nAdditions: %d channels, %d shows, %d movies\nDeletions: %d channels, %d shows, %d movies"
+msgstr "Letzte %s: %s\nFilmdatenbank vom %s\nNeuzugänge: %d Sender, %d Sendungen, %d Filme\nLöschungen: %d Sender, %d Sendungen, %d Filme"
+
+msgctxt "#30970"
+msgid "Last %s: %s\nAdditions: %d channels, %d shows, %d movies\nDeletions: %d channels, %d shows, %d movies"
+msgstr "Letzte %s: %s\nNeuzugänge: %d Sender, %d Sendungen, %d Filme\nLöschungen: %d Sender, %d Sendungen, %d Filme"
+
+msgctxt "#30971"
+msgid "Total: %d channels, %d shows, %d movies"
+msgstr "Summen: %d Sender, %d Sendungen, %d Filme"
+
+msgctxt "#30972"
+msgid "Full Update"
+msgstr "Vollständige Aktualisierung"
+
+msgctxt "#30973"
+msgid "Differential Update"
+msgstr "Differentielle Aktualisierung"
+
+msgctxt "#30974"
+msgid "Downloading Video"
+msgstr "Video wird herunterladen"
+
+msgctxt "#30975"
+msgid "Error while downloading {}: {}"
+msgstr "Fehler beim Herunterladen von {}: {}"
+
+msgctxt "#30976"
+msgid "Video {} has been downloaded"
+msgstr "Video {} wurde heruntergeladen"
+
+msgctxt "#30977"
+msgid "Video Already Exists"
+msgstr "Das Video existiert bereits"
+
+msgctxt "#30978"
+msgid "Downloading Subtitles"
+msgstr "Untertitel werden heruntergeladen"
+
+msgctxt "#30979"
+msgid "Download path does not exist"
+msgstr "Download-Verzeichnis existiert nicht"

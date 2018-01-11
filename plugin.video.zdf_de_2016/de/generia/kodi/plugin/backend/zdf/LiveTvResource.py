@@ -8,7 +8,7 @@ from de.generia.kodi.plugin.backend.zdf.Teaser import Teaser
 
 livetvCellPattern = getTagPattern('div', 'js-livetv-scroller-cell')
 titlePattern = compile('<h2[^>]*>([^<]*)</h2>')
-contentNamePattern = compile('data-zdfplayer-id="([^"]*)"')
+contentNamePattern = compile('"embed_content"\s*:\s*"([^"]*)"')
 imagePattern = compile('data-src="([^"]*)"')
 
 

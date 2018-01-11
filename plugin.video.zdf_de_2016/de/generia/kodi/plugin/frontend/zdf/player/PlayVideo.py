@@ -42,7 +42,7 @@ class PlayVideo(Pagelet):
             try:
                 dialog = xbmcgui.DialogProgressBG()
                 dialog.create(self._(32007), self._(32008))
-                videoContentUrl = Constants.apiBaseUrl + '/content/documents/' + contentName + '.json?profile=player'
+                videoContentUrl = Constants.apiContentUrl + contentName + '.json?profile=player'
                 self.debug("downloading video-content-url '{1}' ...", videoContentUrl)
                 videoContent = self._getVideoContent(videoContentUrl)
                 

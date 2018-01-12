@@ -1,3 +1,8 @@
+v1.1.9 (2018-01-12)
+- removed looking for video dialogue
+- fix to match the correct thumbnail with the item
+- addon now works in kode python 2 and also 3 (!!) thanks to the future project
+
 v1.1.8 (2017-03-12):
 - fixed url in addon.xml as per request
 - changed 'xbmc' to 'kodi' in some text

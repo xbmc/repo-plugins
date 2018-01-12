@@ -4,25 +4,28 @@
 #
 # Imports
 #
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 import sys
 import requests
-import urllib2
-import urlparse
+import urllib.request, urllib.error, urllib.parse
+import urllib.parse
 import re
 import json
 import xbmc
 import xbmcgui
 import xbmcplugin
-from BeautifulSoup import BeautifulSoup
 
-from tweakers_const import ADDON, SETTINGS, LANGUAGE, DATE, VERSION
+from tweakers_const import SETTINGS, LANGUAGE, VERSION, convertToUnicodeString, log, getSoup
 
 
 
 #
 # Main class
 #
-class Main:
+class Main(object):
     #
     # Init
     #
@@ -33,17 +36,16 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
         # Get the video_page_url.
-        self.video_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['video_page_url'][0]
+        self.video_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['video_page_url'][0]
         self.video_page_url = str(self.video_page_url)
         # Get the title.
-        self.title = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['title'][0]
+        self.title = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['title'][0]
         self.title = str(self.title)
 
         # Get plugin settings
         self.MAXIMUM_VIDEO_QUALITY = SETTINGS.getSetting('maximum-video-quality')
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
+        log("ARGV", repr(sys.argv))
 
         #
         # Play video
@@ -58,13 +60,9 @@ class Main:
         # Show wait dialog while parsing data
         #
         dialog_wait = xbmcgui.DialogProgress()
-        dialog_wait.create(LANGUAGE(30504), self.title)
-        # Wait 1 second
-        xbmc.sleep(1000)
 
         # Video_page_url will be something like this: https://tweakers.net/video/7893/world-of-tanks-86-aankondiging.html
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.video_page_url", str(self.video_page_url)), xbmc.LOGDEBUG)
+        log("self.video_page_url", self.video_page_url)
 
         # Make the headers
         xbmc_version = xbmc.getInfoLabel("System.BuildVersion")
@@ -79,24 +77,25 @@ class Main:
         try:
             logging.captureWarnings(True)
         except Exception:
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "logging exception occured (and ignored)", str(Exception)), xbmc.LOGDEBUG)
+
+            log("logging exception occured (and ignored)", Exception)
+
             pass
 
-        html_source = ''
         try:
             response = requests.get(self.video_page_url, headers=headers)
             html_source = response.text
             html_source = html_source.encode('utf-8', 'ignore')
-        except urllib2.HTTPError, error:
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "HTTPError", str(error)),
-                         xbmc.LOGDEBUG)
+        except urllib.error.HTTPError as error:
+
+            log("HTTPError", error)
+
             dialog_wait.close()
             del dialog_wait
             xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30507) % (str(error)))
             exit(1)
 
-        soup = BeautifulSoup(html_source)
+        soup = getSoup(html_source)
 
         # Find the real video page url
         #<div class="video-container">
@@ -104,24 +103,22 @@ class Main:
         iframes = soup.findAll('iframe', attrs={'src': re.compile("^https://tweakers.net/video")}, limit=1)
         real_video_page_url = iframes[0]['src']
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "real_video_page_url", str(real_video_page_url)),
-                     xbmc.LOGDEBUG)
+        log("real_video_page_url", real_video_page_url)
 
-        html_source = ''
         try:
             response = requests.get(real_video_page_url, headers=headers)
             html_source = response.text
-            html_source = html_source.encode('utf-8', 'ignore')
-        except urllib2.HTTPError, error:
-            xbmc.log(
-                    "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "HTTPError", str(error)),
-                    xbmc.LOGDEBUG)
+            html_source = convertToUnicodeString(html_source)
+        except urllib.error.HTTPError as error:
+
+            log("HTTPError", error)
+
             dialog_wait.close()
             del dialog_wait
             xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30507) % (str(error)))
             exit(1)
 
-        soup = BeautifulSoup(html_source)
+        soup = getSoup(html_source)
 
         # Find the video url in the json block
         # .....})('video', {"skin": "https:\/\/tweakimg.net\/x\/video\/skin\/default\/streamone.css?1459246513", "playlist": {
@@ -150,10 +147,7 @@ class Main:
         json_string = soup_str[start_pos_json_block:end_pos_json_block]
         parsed_json = json.loads(json_string)
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "json_string", json_string),
-                 xbmc.LOGDEBUG)
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "json_string", json_string),
-                 xbmc.LOGDEBUG)
+        log("json_string", json_string)
 
         # Determine what quality the video should be
         if self.MAXIMUM_VIDEO_QUALITY == "0":
@@ -193,8 +187,7 @@ class Main:
         parsed_json = json.loads(json_string)
         video_url = str(parsed_json["src"])
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            ADDON, VERSION, DATE, "video_url", str(video_url)), xbmc.LOGDEBUG)
+        log("video_url", video_url)
 
         no_url_found = False
         have_valid_url = False

@@ -183,9 +183,7 @@ class Teaser(object):
                 self.url = url[len(baseUrl):]
             i = url.rfind('.')
             if i != -1:
-                j = url.rfind('/')
-                if j != -1:
-                    self.contentName = url[j+1:i]
+                self.contentName = '/zdf' + url[0:i]
         return pos
     
     def parseText(self, article, pos, pattern=textPattern):

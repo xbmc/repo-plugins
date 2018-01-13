@@ -1,4 +1,4 @@
-#   Copyright (C) 2017 Lunatixz
+#   Copyright (C) 2018 Lunatixz
 #
 #
 # This file is part of SpikeTV.
@@ -18,7 +18,7 @@
 
 # -*- coding: utf-8 -*-
 import sys, time, datetime, re, traceback
-import urllib, urllib2, socket, json
+import urlparse, urllib, urllib2, socket, json
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 
 from YDStreamExtractor import getVideoInfo
@@ -52,18 +52,7 @@ def log(msg, level=xbmc.LOGDEBUG):
     xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + msg, level)
     
 def getParams():
-    param=[]
-    if len(sys.argv[2])>=2:
-        params=sys.argv[2]
-        cleanedparams=params.replace('?','')
-        if (params[len(params)-1]=='/'): params=params[0:len(params)-2]
-        pairsofparams=cleanedparams.split('&')
-        param={}
-        for i in range(len(pairsofparams)):
-            splitparams={}
-            splitparams=pairsofparams[i].split('=')
-            if (len(splitparams))==2: param[splitparams[0]]=splitparams[1]
-    return param
+    return dict(urlparse.parse_qsl(sys.argv[2][1:]))
                  
 socket.setdefaulttimeout(TIMEOUT)
 class SpikeTV(object):
@@ -79,7 +68,7 @@ class SpikeTV(object):
             if not cacheresponse:
                 request = urllib2.Request(url)
                 response = urllib2.urlopen(request, timeout = TIMEOUT).read()
-                self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, response, expiration=datetime.timedelta(hours=1))
+                self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, response, expiration=datetime.timedelta(days=1))
             return self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
         except Exception as e:
             log("openURL Failed! " + str(e), xbmc.LOGERROR)
@@ -129,8 +118,8 @@ class SpikeTV(object):
             elif ent_code == 'ent_m112':
                 try: title = jsonResponse['result']['promo']['headline'].title()
                 except: continue
-                # if title == 'Full Episodes': return self.browseVideos(title, result)
-                # elif name != 'Full Episodes': continue
+                if title == 'Full Episodes': return self.browseVideos(title, result)
+                elif name != 'Full Episodes': continue
                 infoLabels = {"mediatype":"tvshows","label":title ,"title":title,"TVShowTitle":title}
                 infoArt    = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON}
                 self.addDir(title,result,2,infoLabels,infoArt)
@@ -146,8 +135,9 @@ class SpikeTV(object):
                         try: title = jsonResponse['result']['data']['header']['title'].title()
                         except: continue
                 myURL      = json.dumps({"url":result,"type":type})
-                # if title == 'Full Episodes': return self.browseShows(title, myURL)
-                # elif name != 'Full Episodes' and name != 'Browse Shows': continue
+                if title in ['Full Episodes','All Shows']: return self.browseShows(title, myURL)
+                elif title == 'Featured Shows': continue
+                elif name != 'Full Episodes' and name != 'Browse Shows': continue
                 infoLabels = {"mediatype":"tvshows","label":title ,"title":title,"TVShowTitle":title}
                 infoArt    = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON}
                 # if name == 'Browse Shows' and title == 'All Shows': return self.browseShows(title, myURL)
@@ -230,7 +220,7 @@ class SpikeTV(object):
                 try: thumb = (item['image']['url'] or ICON)
                 except:
                     try: thumb = (item['image'][0]['url'] or ICON)
-                    except: thumb = thumb
+                    except: thumb = ICON
                 thumb = (thumb or ICON)
                 if thumb.startswith('//'): thumb = 'https:' + thumb
                 title      = item['title']
@@ -248,14 +238,14 @@ class SpikeTV(object):
         info = sorted(info, key=lambda x: x['idx'])
         plst = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
         plst.clear()
-        for idx, videos in enumerate(info):
+        for videos in info:
+            vidIDX = videos['idx']
             url = videos['xbmc_url']
             liz = xbmcgui.ListItem(videos['title'], path=url)
             if 'subtitles' in videos['ytdl_format']: liz.setSubtitles([x['url'] for x in videos['ytdl_format']['subtitles'].get('en','') if 'url' in x])
-            plst.add(url, liz, videos['idx'])
-        xbmc.sleep(100)
+            plst.add(url, liz, vidIDX)
+            if vidIDX == 0: xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz) 
         plst.unshuffle()
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
         
            
     def addYoutube(self, name, url):

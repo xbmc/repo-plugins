@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.tvland" version="1.0.0" name="TV Land" provider-name="Lunatixz">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.simplecache" version="1.0.0"/>
+        <import addon="script.module.youtube.dl" version="17.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Watch full episodes and clips from your favorite TV Land shows.</summary>
+        <description lang="en_GB">TV Land plays your favorite sitcoms and funny, fresh Original Series including YOUNGER, the critically acclaimed hit series starring Sutton Foster and Hillary Duff.  THE JIM GAFFIGAN SHOW, featuring Jim in a new series inspired by his real life as the father of five kids.  IMPASTOR, starring Michael Rosenbaum, is a comedy about a guy on the run who poses as a gay pastor and TEACHERS, featuring comedy troupe The Katydids, about the dysfunctional educators who mold America’s youth.</description>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+        <source>https://github.com/Lunatixz/plugin.video.tvland/tree/master</source>
+        <website>http://tvland.com</website>
+        <news></news>
+        <forum>https://forum.kodi.tv/showthread.php?tid=326984</forum>
+        <assets>
+            <icon>resources/images/icon.png</icon>
+            <fanart>resources/images/fanart.jpg</fanart>
+            <screenshot>resources/images/screenshot01.png</screenshot>
+            <screenshot>resources/images/screenshot02.png</screenshot>
+            <screenshot>resources/images/screenshot03.png</screenshot>
+        </assets>
+    </extension>
+</addon>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.spiketv" version="1.0.0" name="Spike" provider-name="Lunatixz">
+<addon id="plugin.video.spiketv" version="1.0.1" name="Spike" provider-name="Lunatixz">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.simplecache" version="1.0.0"/>
@@ -15,7 +15,7 @@
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
         <source>https://github.com/Lunatixz/plugin.video.spiketv/tree/master</source>
         <website>http://spiketv.com</website>
-        <news></news>
+        <news>v.1.0.1[CR]-Fixed Playback order[CR]-Improved Menu</news>
         <forum>https://forum.kodi.tv/showthread.php?tid=323852</forum>
         <assets>
             <icon>resources/images/icon.png</icon>

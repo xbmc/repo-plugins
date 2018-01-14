@@ -10,7 +10,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
+"Language: ru\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 
@@ -18,73 +18,72 @@ msgstr ""
 
 msgctxt "#30001"
 msgid "Username"
-msgstr "Benutzername"
+msgstr "Имя пользователя"
 
 msgctxt "#30002"
 msgid "Password"
-msgstr "Passwort"
+msgstr "Пароль"
 
 msgctxt "#30010"
 msgid "Region"
-msgstr "Region"
+msgstr "Регион"
 
 msgctxt "#30011"
 msgid "Germany, Austria, Switzerland"
-msgstr "Deutschland, Österreich, Schweiz"
+msgstr "Германия, Австрия, Швейцария"
 
 msgctxt "#30012"
 msgid "France, Switzerland, Monaco, Benelux Union, Franco-Canadians, Overseas France, Africa"
-msgstr "Frankreich, Schweiz, Monaco, Benelux Union, Frankophone Kanadier, Französische Überseegebiete, Afrika"
+msgstr "Франция, Швейцария, Монако, Бенилюкс, Франкоканадцы, Заморские территории Франции, Африка"
 
 msgctxt "#30013"
 msgid "Sweden, Norway, Iceland, Finland, Denmark"
-msgstr "Schweden, Norwegen, Island, Finnland, Dänemark"
+msgstr "Швеция, Норвегия, Исландия, Финляндия, Дания"
 
 msgctxt "#30014"
 msgid "Russia"
-msgstr "Russland"
+msgstr "Россия"
 
 # Wakanim Menue
 
 msgctxt "#30020"
 msgid "Catalog"
-msgstr "Katalog"
+msgstr "Каталог"
 
 msgctxt "#30021"
 msgid "Search"
-msgstr "Suchen"
+msgstr "Поиск"
 
 msgctxt "#30022"
 msgid "My downloads"
-msgstr "Meine Downloads"
+msgstr "Мои загрузки"
 
 msgctxt "#30023"
 msgid "My collection"
-msgstr "Meine Sammlung"
+msgstr "Моя коллекция"
 
 msgctxt "#30024"
 msgid "Watch trailer"
-msgstr "Trailer ansehen"
-
+msgstr "Смотреть трейлер"
 
 # Wakanim Messages
 
 msgctxt "#30040"
 msgid "Login failed"
-msgstr "Login fehlgeschlagen"
+msgstr "Ошибка авторизации"
 
 msgctxt "#30041"
 msgid "An error occurred"
-msgstr "Ein Fehler ist aufgetreten"
+msgstr "Произошла ошибка"
 
 msgctxt "#30042"
 msgid "Reactivation failed of this video"
-msgstr "Reaktivierung fehlgeschlagen dieses Videos"
+msgstr "Не удалось выполнить повторную активацию этого видео"
 
 msgctxt "#30043"
 msgid "You need to be a premium member or own this video"
-msgstr "Du musst premium nutzer sein oder das Video gekauft haben"
+msgstr "Вы должны оформить подписку или купить это видео"
 
 msgctxt "#30044"
 msgid "Failed to play video"
-msgstr "Fehlgeschlagen das Video abzuspielen"
+msgstr "Не удалось воспроизвести видео"

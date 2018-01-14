@@ -4,25 +4,13 @@ Wakanim a KODI (XBMC) plugin for Wakanim.tv.
 
 Git repo: https://github.com/MrKrabat/plugin.video.wakanim
 
-Forum posting: https://www.kodinerds.net/index.php/Thread/58348-Release-Wakanim-tv/
+Forum posting: https://forum.kodi.tv/showthread.php?tid=322763
 
 **WARNING: You MUST be a PREMIUM member OR buy videos to use this plugin!**
 ***
 
-Compatibility
-
-| Device  | Kodi | Status |
-| ------------- | ------------- | ------------- |
-| Windows | 17.x  | Yes  |
-| Linux | 17.x  | Yes  |
-| MacOS | 17.x  | untested  |
-| Android | 17.x  | Yes  |
-| iOS | 17.x  | untested  |
-| RaspberryPi | 17.x  | Yes  |
-***
-
 What this plugin currently can do:
-- [x] Supports Wakanim France, Germany and Nordic
+- [x] Supports Wakanim France, Germany, Nordic and Russia
 - [x] Login with your account
 - [x] Search for animes
 - [x] Show "My Downloads"
@@ -30,10 +18,11 @@ What this plugin currently can do:
 - [x] Show/browse all available anime
 - [x] Show/browse all seasons/arcs of an anime
 - [x] Show/browse all episodes of an season/arc
-- [x] Display various informations (Kodi displays not all we provide)
+- [x] Display various informations
 - [x] Reactivate videos/streams
 - [x] Watch videos you have bought
 - [x] Watch videos with premium subscription
+- [x] Watch anime trailer (requires YouTube plugin)
 ***
 
 _This website and addon is not affiliated with Wakanim._

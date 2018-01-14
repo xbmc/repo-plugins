@@ -51,7 +51,7 @@ def login(username, password, args):
         response = urllib2.urlopen("https://www.wakanim.tv/" + args._country + "/v2/catalogue")
         html = response.read()
 
-        if ("Meine Benachrichtigungen verwalten" in html) or ("Gérer mes notifications" in html) or ("Manage my notifications" in html):
+        if ("Meine Benachrichtigungen verwalten" in html) or ("Gérer mes notifications" in html) or ("Manage my notifications" in html) or ("Настройки уведомлений" in html):
             # session is valid
             return True
 
@@ -70,7 +70,7 @@ def login(username, password, args):
     # check for login string
     html = response.read()
 
-    if ("Meine Benachrichtigungen verwalten" in html) or ("Gérer mes notifications" in html) or ("Manage my notifications" in html):
+    if ("Meine Benachrichtigungen verwalten" in html) or ("Gérer mes notifications" in html) or ("Manage my notifications" in html) or ("Настройки уведомлений" in html):
         # save session to disk
         cj.save(cookiepath, ignore_discard=True)
         return True

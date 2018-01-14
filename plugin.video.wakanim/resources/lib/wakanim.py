@@ -44,6 +44,8 @@ def main():
         args._country = "fr"
     elif args._country == "2":
         args._country = "sc"
+    elif args._country == "3":
+        args._country = "ru"
     else:
         args._country = "de"
 

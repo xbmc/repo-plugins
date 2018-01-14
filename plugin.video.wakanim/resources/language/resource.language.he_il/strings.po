@@ -14,7 +14,9 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.0.4\n"
 
+
 # Wakanim Settings
+
 msgctxt "#30001"
 msgid "Username"
 msgstr "שם משתמש"
@@ -39,11 +41,12 @@ msgctxt "#30013"
 msgid "Sweden, Norway, Iceland, Finland, Denmark"
 msgstr "שוודיה, נורבגיה, איסלנד, פינלנד, דנמרק"
 
-msgctxt "#30024"
-msgid "Watch trailer"
-msgstr "צפה בקדימון"
+msgctxt "#30014"
+msgid "Russia"
+msgstr "רוסיה"
 
 # Wakanim Menue
+
 msgctxt "#30020"
 msgid "Catalog"
 msgstr "קטלוג"
@@ -60,7 +63,12 @@ msgctxt "#30023"
 msgid "My collection"
 msgstr "האוסף שלי"
 
+msgctxt "#30024"
+msgid "Watch trailer"
+msgstr "צפה בקדימון"
+
 # Wakanim Messages
+
 msgctxt "#30040"
 msgid "Login failed"
 msgstr "הכניסה נכשלה"

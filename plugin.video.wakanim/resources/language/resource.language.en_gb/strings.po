@@ -40,10 +40,9 @@ msgctxt "#30013"
 msgid "Sweden, Norway, Iceland, Finland, Denmark"
 msgstr ""
 
-msgctxt "#30024"
-msgid "Watch trailer"
+msgctxt "#30014"
+msgid "Russia"
 msgstr ""
-
 
 # Wakanim Menue
 
@@ -63,6 +62,9 @@ msgctxt "#30023"
 msgid "My collection"
 msgstr ""
 
+msgctxt "#30024"
+msgid "Watch trailer"
+msgstr ""
 
 # Wakanim Messages
 

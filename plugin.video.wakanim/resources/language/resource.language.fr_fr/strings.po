@@ -40,6 +40,9 @@ msgctxt "#30013"
 msgid "Sweden, Norway, Iceland, Finland, Denmark"
 msgstr "Suède, Norvège, Islande, Finlande, Danemark"
 
+msgctxt "#30014"
+msgid "Russia"
+msgstr "Russie"
 
 # Wakanim Menue
 

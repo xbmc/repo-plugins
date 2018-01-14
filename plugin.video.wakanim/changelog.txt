@@ -1,3 +1,6 @@
+v0.6.0 (2018.01.14)
+- Added Wakanim Russia (thanks AkariDN)
+
 v0.5.2 (2017.12.27)
 - Fix Wakanim website change
 - Updated language

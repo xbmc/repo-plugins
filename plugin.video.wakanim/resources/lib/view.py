@@ -76,6 +76,9 @@ def add_item(args, info, isFolder=True, total_items=0, mediatype="video"):
                                 totalItems = total_items)
 
 
+def quote_value(value):
+    return urllib.quote_plus(value.encode("utf8") if isinstance(value, unicode) else value)
+
 def build_url(args, info):
     """Create url
     """
@@ -83,12 +86,12 @@ def build_url(args, info):
     # step 1 copy new information from info
     for key, value in info.iteritems():
         if value:
-            s = s + "&" + key + "=" + urllib.quote_plus(value)
+            s = s + "&" + key + "=" + quote_value(value)
 
     # step 2 copy old information from args, but don't append twice
     for key, value in args.__dict__.iteritems():
         if value and key in types and not "&" + str(key) + "=" in s:
-            s = s + "&" + key + "=" + urllib.quote_plus(value)
+            s = s + "&" + key + "=" + quote_value(value)
 
     return sys.argv[0] + "?" + s[1:]
 

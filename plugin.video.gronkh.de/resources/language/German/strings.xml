@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30001">Let's Plays</string>
+    <string id="30002">Let's Tests</string>
+    <string id="30003">Sprecher</string>
+    <string id="30004">Cache gelöscht</string>
+    <string id="30005">Offline</string>
+    <string id="30006">spielt</string>
+    <string id="30007">Live</string>
+    <string id="30008">Suche</string>
+    <string id="30009">Ein Fehler mit der Twitch API trat auf, versuche es später nochmal.</string>
+    <string id="30010">Aktuell</string>
+    <string id="30011">Einträge</string>
+    <string id="30012">Episoden</string>
+    <string id="30013">Eintrag</string>
+    <string id="30014">Keine Einträge gefunden.</string>
+    <string id="30015">Server Fehler, bitte später erneut versuchen.</string>
+    <string id="30016">Diese Version ist veraltet, bitte aktualisieren.</string>
+    <string id="30017">Wähle eine Qualität</string>
+    <string id="30018">Dieser Stream scheint offline zu sein</string>
+
+    <string id="30100">Cache löschen</string>
+    <string id="30101">Do Not Track</string>
+</strings>

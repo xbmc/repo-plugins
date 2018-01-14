@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30001">Let's Plays</string>
+    <string id="30002">Let's Tests</string>
+    <string id="30003">Autorzy</string>
+    <string id="30004">Wyczyszczono cache</string>
+    <string id="30005">Offline</string>
+    <string id="30006">wyświetlenia</string>
+    <string id="30007">Na żywo</string>
+    <string id="30008">Szukaj</string>
+    <string id="30009">Wystąpił błąd z Twitch API, spróbuj później.</string>
+    <string id="30010">Ostatnie</string>
+    <string id="30011">Wpisy</string>
+    <string id="30012">Odcinki</string>
+    <string id="30013">Wpis</string>
+    <string id="30014">Nie znaleziono wpisów.</string>
+    <string id="30015">Błąd serwera, spróbuj później.</string>
+    <string id="30016">Ta wersja jest stara, proszę wykonać aktualizację.</string>
+    <string id="30017">Wybierz jakość</string>
+    <string id="30018">Strumień ten wydaje się być nieaktywny</string>
+
+    <string id="30100">Wyczyść cache</string>
+    <string id="30101">Nie śledź</string>
+</strings>

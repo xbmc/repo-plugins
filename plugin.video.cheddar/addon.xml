@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.cheddar" name="Cheddar" provider-name="Lunatixz" version="1.0.1">
+<addon id="plugin.video.cheddar" name="Cheddar" provider-name="Lunatixz" version="1.0.2">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>  
         <import addon="script.module.simplecache" version="1.0.0"/>
+        <import addon="script.module.youtube.dl" version="17.0.0"/>
         <import addon="script.module.beautifulsoup4" version="4.3.2"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
@@ -13,10 +14,10 @@
         <description lang="en_GB">Cheddar is a live Post-Cable Network focused on covering the most innovative products, technologies, and services transforming our lives. The network covers this news through the lens of the companies and executives driving these changes. Cheddar broadcasts from Post 10 on the floor of the New York Stock Exchange and the Sprint Flatiron Building Store.</description>
         <platform>all</platform>
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
-        <source>https://github.com/Lunatixz/XBMC_Addons/tree/master/plugin.video.cheddar</source>
+        <source>https://github.com/Lunatixz/Kodi_Addons/tree/master/plugin.video.cheddar</source>
         <website>https://cheddar.com/</website>
         <forum>http://forum.kodi.tv/showthread.php?tid=319217</forum>
-        <news>>v.1.0.1[CR]-Leia Compatibility</news>
+        <news>>v.1.0.1[CR]-Leia Compatibility[CR]v.1.0.2[CR]-Updated web-parser[CR]-Miscellaneous Improvements</news>
         <assets>
             <icon>resources/images/icon.png</icon>
             <fanart>resources/images/fanart.jpg</fanart>

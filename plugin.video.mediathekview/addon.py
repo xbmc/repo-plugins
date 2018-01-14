@@ -27,21 +27,22 @@ from __future__ import unicode_literals  # ,absolute_import, division
 # from future import standard_library
 # from builtins import *
 # standard_library.install_aliases()
-import io,os,re,sys,urlparse,datetime,string,urllib,urllib2
-import xbmc,xbmcplugin,xbmcgui,xbmcaddon,xbmcvfs
+import os,re,sys,urlparse,datetime
+import xbmcplugin,xbmcgui,xbmcvfs
 
-from de.yeasoft.kodi.KodiAddon import KodiPlugin
-from de.yeasoft.kodi.KodiUI import KodiBGDialog
+from contextlib import closing
 
-from classes.store import Store
-from classes.notifier import Notifier
-from classes.settings import Settings
-from classes.filmui import FilmUI
-from classes.channelui import ChannelUI
-from classes.initialui import InitialUI
-from classes.showui import ShowUI
-from classes.updater import MediathekViewUpdater
-from classes.ttml2srt import ttml2srt
+from resources.lib.kodi.KodiAddon import KodiPlugin
+from resources.lib.kodi.KodiUI import KodiBGDialog
+
+from resources.lib.store import Store
+from resources.lib.notifier import Notifier
+from resources.lib.settings import Settings
+from resources.lib.filmui import FilmUI
+from resources.lib.channelui import ChannelUI
+from resources.lib.initialui import InitialUI
+from resources.lib.showui import ShowUI
+from resources.lib.ttml2srt import ttml2srt
 
 # -- Classes ------------------------------------------------
 class MediathekView( KodiPlugin ):
@@ -51,9 +52,6 @@ class MediathekView( KodiPlugin ):
 		self.settings	= Settings()
 		self.notifier	= Notifier()
 		self.db			= Store( self.getNewLogger( 'Store' ), self.notifier, self.settings )
-
-	def __del__( self ):
-		del self.db
 
 	def showMainMenu( self ):
 		# Search
@@ -79,6 +77,7 @@ class MediathekView( KodiPlugin ):
 		if len( searchText ) > 2:
 			self.db.Search( searchText, FilmUI( self ) )
 		else:
+			self.info( 'The following ERROR can be ignored. It is caused by the architecture of the Kodi Plugin Engine' )
 			self.endOfDirectory( False, cacheToDisc = True )
 			# self.showMainMenu()
 
@@ -87,6 +86,7 @@ class MediathekView( KodiPlugin ):
 		if len( searchText ) > 2:
 			self.db.SearchFull( searchText, FilmUI( self ) )
 		else:
+			self.info( 'The following ERROR can be ignored. It is caused by the architecture of the Kodi Plugin Engine' )
 			self.endOfDirectory( False, cacheToDisc = True )
 			# self.showMainMenu()
 
@@ -176,8 +176,8 @@ class MediathekView( KodiPlugin ):
 				videourl = film.url_video
 
 			# prepare names
-			showname	= self._cleanup_filename( film.show )[:64]
-			filestem	= self._cleanup_filename( film.title )[:64]
+			showname	= mvutils.cleanup_filename( film.show )[:64]
+			filestem	= mvutils.cleanup_filename( film.title )[:64]
 			extension	= os.path.splitext( videourl )[1]
 			if not extension:
 				extension = u'.mp4'
@@ -211,7 +211,7 @@ class MediathekView( KodiPlugin ):
 			bgd.Create( self.language( 30974 ), fileepi + extension )
 			try:
 				bgd.Update( 0 )
-				result = self._url_retrieve( videourl, movname, bgd.UrlRetrieveHook )
+				result = mvutils.url_retrieve_vfs( videourl, movname, bgd.UrlRetrieveHook )
 				bgd.Close()
 				if result is not None:
 					self.notifier.ShowNotification( self.language( 30960 ), self.language( 30976 ).format( videourl ) )
@@ -226,7 +226,7 @@ class MediathekView( KodiPlugin ):
 				bgd.Create( self.language( 30978 ), fileepi + u'.ttml' )
 				try:
 					bgd.Update( 0 )
-					result = self._url_retrieve( film.url_sub, ttmname, bgd.UrlRetrieveHook )
+					result = mvutils.url_retrieve_vfs( film.url_sub, ttmname, bgd.UrlRetrieveHook )
 					try:
 						ttml2srt( xbmcvfs.File( ttmname, 'r' ), xbmcvfs.File( srtname, 'w' ) )
 					except Exception as err:
@@ -244,60 +244,36 @@ class MediathekView( KodiPlugin ):
 	def doEnqueueFilm( self, filmid ):
 		self.info( 'Enqueue {}', filmid )
 
-	def _cleanup_filename( self, val ):
-		cset = string.letters + string.digits + u' _-#äöüÄÖÜßáàâéèêíìîóòôúùûÁÀÉÈÍÌÓÒÚÙçÇœ'
-		search = ''.join( [ c for c in val if c in cset ] )
-		return search.strip()
-
 	def _make_nfo_files( self, film, episode, dirname, filename, videourl ):
 		# create NFO files
 		if not xbmcvfs.exists( dirname + 'tvshow.nfo' ):
 			try:
-				file = xbmcvfs.File( dirname + 'tvshow.nfo', 'w' )
-				file.write( bytearray( '<tvshow>\n', 'utf-8' ) )
-				file.write( bytearray( '<id></id>\n', 'utf-8' ) )
-				file.write( bytearray( '\t<title>{}</title>\n'.format( film.show ), 'utf-8' ) )
-				file.write( bytearray( '\t<sorttitle>{}</sorttitle>\n'.format( film.show ), 'utf-8' ) )
-#				file.write( bytearray( '\t<year>{}</year>\n'.format( 2018 ), 'utf-8' ) )   # XXX TODO: That might be incorrect!
-				file.write( bytearray( '\t<studio>{}</studio>\n'.format( film.channel ), 'utf-8' ) )
-				file.write( bytearray( '</tvshow>\n', 'utf-8' ) )
-				file.close()
+				with closing( xbmcvfs.File( dirname + 'tvshow.nfo', 'w' ) ) as file:
+					file.write( b'<tvshow>\n' )
+					file.write( b'<id></id>\n' )
+					file.write( bytearray( '\t<title>{}</title>\n'.format( film.show ), 'utf-8' ) )
+					file.write( bytearray( '\t<sorttitle>{}</sorttitle>\n'.format( film.show ), 'utf-8' ) )
+# TODO:				file.write( bytearray( '\t<year>{}</year>\n'.format( 2018 ), 'utf-8' ) )
+					file.write( bytearray( '\t<studio>{}</studio>\n'.format( film.channel ), 'utf-8' ) )
+					file.write( b'</tvshow>\n' )
 			except Exception as err:
 				self.error( 'Failure creating show NFO file for {}: {}', videourl, err )
 
 		try:
-			file = xbmcvfs.File( filename, 'w' )
-			file.write( bytearray( '<episodedetails>\n', 'utf-8' ) )
-			file.write( bytearray( '\t<title>{}</title>\n'.format( film.title ), 'utf-8' ) )
-			file.write( bytearray( '\t<season>1</season>\n', 'utf-8' ) )
-			file.write( bytearray( '\t<episode>{}</episode>\n'.format( episode ), 'utf-8' ) )
-			file.write( bytearray( '\t<showtitle>{}</showtitle>\n'.format( film.show ), 'utf-8' ) )
-			file.write( bytearray( '\t<plot>{}</plot>\n'.format( film.description ), 'utf-8' ) )
-			file.write( bytearray( '\t<aired>{}</aired>\n'.format( film.aired ), 'utf-8' ) )
-			if film.seconds > 60:
-				file.write( bytearray( '\t<runtime>{}</runtime>\n'.format( int( film.seconds / 60 ) ), 'utf-8' ) )
-			file.write( bytearray( '\t<studio>{}</studio\n'.format( film.channel ), 'utf-8' ) )
-			file.write( bytearray( '</episodedetails>\n', 'utf-8' ) )
-			file.close()
+			with closing( xbmcvfs.File( filename, 'w' ) ) as file:
+				file.write( b'<episodedetails>\n' )
+				file.write( bytearray( '\t<title>{}</title>\n'.format( film.title ), 'utf-8' ) )
+				file.write( b'\t<season>1</season>\n' )
+				file.write( bytearray( '\t<episode>{}</episode>\n'.format( episode ), 'utf-8' ) )
+				file.write( bytearray( '\t<showtitle>{}</showtitle>\n'.format( film.show ), 'utf-8' ) )
+				file.write( bytearray( '\t<plot>{}</plot>\n'.format( film.description ), 'utf-8' ) )
+				file.write( bytearray( '\t<aired>{}</aired>\n'.format( film.aired ), 'utf-8' ) )
+				if film.seconds > 60:
+					file.write( bytearray( '\t<runtime>{}</runtime>\n'.format( int( film.seconds / 60 ) ), 'utf-8' ) )
+				file.write( bytearray( '\t<studio>{}</studio\n'.format( film.channel ), 'utf-8' ) )
+				file.write( b'</episodedetails>\n' )
 		except Exception as err:
 			self.error( 'Failure creating episode NFO file for {}: {}', videourl, err )
-
-	def _url_retrieve( self, videourl, filename, reporthook, chunk_size = 8192 ):
-		f = xbmcvfs.File( filename, 'wb' )
-		u = urllib2.urlopen( videourl )
-
-		total_size = int( u.info().getheader( 'Content-Length' ).strip() ) if u.info() and u.info().getheader( 'Content-Length' ) else 0
-		total_chunks = 0
-
-		while True:
-			reporthook( total_chunks, chunk_size, total_size )
-			chunk = u.read( chunk_size )
-			if not chunk:
-				break
-			f.write( chunk )
-			total_chunks += 1
-		f.close()
-		return ( filename, [], )
 
 	def Init( self ):
 		self.args = urlparse.parse_qs( sys.argv[2][1:] )
@@ -305,13 +281,6 @@ class MediathekView( KodiPlugin ):
 		if self.settings.HandleFirstRun():
 			# TODO: Implement Issue #16
 			pass
-		if MediathekViewUpdater( self.getNewLogger( 'Updater' ), self.notifier, self.settings ).PrerequisitesMissing():
-			self.setSetting( 'updenabled', 'false' )
-			self.settings.Reload()
-			xbmcgui.Dialog().textviewer(
-				self.language( 30963 ),
-				self.language( 30964 )
-			)
 
 	def Do( self ):
 		mode = self.args.get( 'mode', None )
@@ -327,7 +296,7 @@ class MediathekView( KodiPlugin ):
 			channel = self.args.get( 'channel', [0] )
 			self.db.GetRecents( channel[0], FilmUI( self ) )
 		elif mode[0] == 'recentchannels':
-			self.db.GetRecentChannels( ChannelUI( self.addon_handle, next = 'recent' ) )
+			self.db.GetRecentChannels( ChannelUI( self.addon_handle, nextdir = 'recent' ) )
 		elif mode[0] == 'channels':
 			self.db.GetChannels( ChannelUI( self.addon_handle ) )
 		elif mode[0] == 'action-dbinfo':
@@ -351,6 +320,7 @@ class MediathekView( KodiPlugin ):
 
 	def Exit( self ):
 		self.db.Exit()
+
 
 # -- Main Code ----------------------------------------------
 if __name__ == '__main__':

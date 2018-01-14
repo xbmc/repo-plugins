@@ -2,13 +2,32 @@
 # Copyright (c) 2017-2018, Leo Moll
 
 # -- Imports ------------------------------------------------
-import os, stat, urllib, urllib2, subprocess, ijson, datetime, time
+import os, urllib2, subprocess, ijson, datetime, time
 import xml.etree.ElementTree as etree
 
+import resources.lib.mvutils as mvutils
+
 from operator import itemgetter
-from classes.store import Store
-from classes.exceptions import DatabaseCorrupted
-from classes.exceptions import DatabaseLost
+#from resources.lib.utils import *
+from resources.lib.store import Store
+from resources.lib.exceptions import DatabaseCorrupted
+from resources.lib.exceptions import DatabaseLost
+
+# -- Unpacker support ---------------------------------------
+upd_can_bz2 = False
+upd_can_gz  = False
+
+try:
+	import bz2
+	upd_can_bz2 = True
+except ImportError:
+	pass
+
+try:
+	import gzip
+	upd_can_gz = True
+except ImportError:
+	pass
 
 # -- Constants ----------------------------------------------
 FILMLISTE_AKT_URL = 'https://res.mediathekview.de/akt.xml'
@@ -22,6 +41,7 @@ class MediathekViewUpdater( object ):
 		self.settings	= settings
 		self.monitor	= monitor
 		self.db			= None
+		self.use_xz     = mvutils.find_xz() is not None
 
 	def Init( self ):
 		if self.db is not None:
@@ -35,13 +55,8 @@ class MediathekViewUpdater( object ):
 			del self.db
 			self.db = None
 
-	def PrerequisitesMissing( self ):
-		return self.settings.updenabled and self._find_xz() is None
-
 	def IsEnabled( self ):
-		if self.settings.updenabled:
-			xz = self._find_xz()
-			return xz is not None
+		return self.settings.updenabled
 
 	def GetCurrentUpdateOperation( self ):
 		if not self.IsEnabled() or self.db is None:
@@ -57,7 +72,7 @@ class MediathekViewUpdater( object ):
 			# database not initialized
 			self.logger.debug( 'database not initialized' )
 			return 0
-		elif status['status'] == "UPDATING" and tsnow - tsold > 86400:
+		elif status['status'] == "UPDATING" and tsnow - tsold > 10800:
 			# process was probably killed during update
 			self.logger.info( 'Stuck update pretending to run since epoch {} reset', tsold )
 			self.db.UpdateStatus( 'ABORTED' )
@@ -82,7 +97,7 @@ class MediathekViewUpdater( object ):
 			# do differential update
 			self.logger.debug( 'do differential update' )
 			return 2
-		
+
 	def Update( self, full ):
 		if self.db is None:
 			return
@@ -91,71 +106,68 @@ class MediathekViewUpdater( object ):
 				self.Import( full )
 
 	def Import( self, full ):
-		( url, compfile, destfile, avgrecsize ) = self._get_update_info( full )
-		if not self._file_exists( destfile ):
+		( _, compfile, destfile, avgrecsize ) = self._get_update_info( full )
+		if not mvutils.file_exists( destfile ):
 			self.logger.error( 'File {} does not exists', destfile )
 			return False
 		# estimate number of records in update file
-		records = int( self._file_size( destfile ) / avgrecsize )
+		records = int( mvutils.file_size( destfile ) / avgrecsize )
 		if not self.db.ftInit():
 			self.logger.warn( 'Failed to initialize update. Maybe a concurrency problem?' )
 			return False
 		try:
 			self.logger.info( 'Starting import of approx. {} records from {}', records, destfile )
-			file = open( destfile, 'r' )
-			parser = ijson.parse( file )
-			flsm = 0
-			flts = 0
-			( self.tot_chn, self.tot_shw, self.tot_mov ) = self._update_start( full )
-			self.notifier.ShowUpdateProgress()
-			for prefix, event, value in parser:
-				if ( prefix, event ) == ( "X", "start_array" ):
-					self._init_record()
-				elif ( prefix, event ) == ( "X", "end_array" ):
-					self._end_record( records )
-					if self.count % 100 == 0 and self.monitor.abortRequested():
-						# kodi is shutting down. Close all
-						file.close()
-						self._update_end( full, 'ABORTED' )
-						self.notifier.CloseUpdateProgress()
-						return True
-				elif ( prefix, event ) == ( "X.item", "string" ):
-					if value is not None:
-#						self._add_value( value.strip().encode('utf-8') )
-						self._add_value( value.strip() )
-					else:
-						self._add_value( "" )
-				elif ( prefix, event ) == ( "Filmliste", "start_array" ):
-					flsm += 1
-				elif ( prefix, event ) == ( "Filmliste.item", "string" ):
-					flsm += 1
-					if flsm == 2 and value is not None:
-						# this is the timestmap of this database update
-						try:
-							fldt = datetime.datetime.strptime( value.strip(), "%d.%m.%Y, %H:%M" )
-							flts = int( time.mktime( fldt.timetuple() ) )
-							self.db.UpdateStatus( filmupdate = flts )
-							self.logger.info( 'Filmliste dated {}', value.strip() )
-						except TypeError:
-							# SEE: https://forum.kodi.tv/showthread.php?tid=112916&pid=1214507#pid1214507
-							# Wonderful. His name is also Leopold
+			with open( destfile, 'r' ) as file:
+				parser = ijson.parse( file )
+				flsm = 0
+				flts = 0
+				( self.tot_chn, self.tot_shw, self.tot_mov ) = self._update_start( full )
+				self.notifier.ShowUpdateProgress()
+				for prefix, event, value in parser:
+					if ( prefix, event ) == ( "X", "start_array" ):
+						self._init_record()
+					elif ( prefix, event ) == ( "X", "end_array" ):
+						self._end_record( records )
+						if self.count % 100 == 0 and self.monitor.abortRequested():
+							# kodi is shutting down. Close all
+							self._update_end( full, 'ABORTED' )
+							self.notifier.CloseUpdateProgress()
+							return True
+					elif ( prefix, event ) == ( "X.item", "string" ):
+						if value is not None:
+	#						self._add_value( value.strip().encode('utf-8') )
+							self._add_value( value.strip() )
+						else:
+							self._add_value( "" )
+					elif ( prefix, event ) == ( "Filmliste", "start_array" ):
+						flsm += 1
+					elif ( prefix, event ) == ( "Filmliste.item", "string" ):
+						flsm += 1
+						if flsm == 2 and value is not None:
+							# this is the timestmap of this database update
 							try:
-								flts = int( time.mktime( time.strptime( value.strip(), "%d.%m.%Y, %H:%M" ) ) )
+								fldt = datetime.datetime.strptime( value.strip(), "%d.%m.%Y, %H:%M" )
+								flts = int( time.mktime( fldt.timetuple() ) )
 								self.db.UpdateStatus( filmupdate = flts )
 								self.logger.info( 'Filmliste dated {}', value.strip() )
-							except Exception as err:
-								# If the universe hates us...
+							except TypeError:
+								# SEE: https://forum.kodi.tv/showthread.php?tid=112916&pid=1214507#pid1214507
+								# Wonderful. His name is also Leopold
+								try:
+									flts = int( time.mktime( time.strptime( value.strip(), "%d.%m.%Y, %H:%M" ) ) )
+									self.db.UpdateStatus( filmupdate = flts )
+									self.logger.info( 'Filmliste dated {}', value.strip() )
+								except Exception as err:
+									# If the universe hates us...
+									self.logger.debug( 'Could not determine date "{}" of filmliste: {}', value.strip(), err )
+							except ValueError as err:
 								pass
-						except ValueError as err:
-							pass
 
-			file.close()
 			self._update_end( full, 'IDLE' )
 			self.logger.info( 'Import of {} finished', destfile )
 			self.notifier.CloseUpdateProgress()
 			return True
 		except KeyboardInterrupt:
-			file.close()
 			self._update_end( full, 'ABORTED' )
 			self.logger.info( 'Interrupted by user' )
 			self.notifier.CloseUpdateProgress()
@@ -163,29 +175,21 @@ class MediathekViewUpdater( object ):
 		except DatabaseCorrupted as err:
 			self.logger.error( '{}', err )
 			self.notifier.CloseUpdateProgress()
-			file.close()
 		except DatabaseLost as err:
 			self.logger.error( '{}', err )
 			self.notifier.CloseUpdateProgress()
-			file.close()
 		except IOError as err:
 			self.logger.error( 'Error {} wile processing {}', err, destfile )
-			try:
-				self._update_end( full, 'ABORTED' )
-				self.notifier.CloseUpdateProgress()
-				file.close()
-			except Exception as err:
-				pass
-			return False
+			self._update_end( full, 'ABORTED' )
+			self.notifier.CloseUpdateProgress()
+		return False
 
 	def GetNewestList( self, full ):
-		# get xz binary
-		xzbin = self._find_xz()
-		if xzbin is None:
-			self.notifier.ShowMissingXZError()
-			return False
-
 		( url, compfile, destfile, avgrecsize ) = self._get_update_info( full )
+		if url is None:
+			self.logger.error( 'No suitable archive extractor available for this system' )
+			self.notifier.ShowMissingExtractorError()
+			return False
 
 		# get mirrorlist
 		self.logger.info( 'Opening {}', url )
@@ -193,7 +197,7 @@ class MediathekViewUpdater( object ):
 			data = urllib2.urlopen( url ).read()
 		except urllib2.URLError as err:
 			self.logger.error( 'Failure opening {}', url )
-			self.notifier.ShowDowloadError( url, err )
+			self.notifier.ShowDownloadError( url, err )
 			return False
 
 		root = etree.fromstring ( data )
@@ -202,9 +206,9 @@ class MediathekViewUpdater( object ):
 			try:
 				URL = server.find( 'URL' ).text
 				Prio = server.find( 'Prio' ).text
-				urls.append( ( URL, Prio ) )
+				urls.append( ( self._get_update_url( URL ), Prio ) )
 				self.logger.info( 'Found mirror {} (Priority {})', URL, Prio )
-			except AttributeError as error:
+			except AttributeError:
 				pass
 		urls = sorted( urls, key = itemgetter( 1 ) )
 		urls = [ url[0] for url in urls ]
@@ -216,70 +220,83 @@ class MediathekViewUpdater( object ):
 		self._file_remove( destfile )
 
 		# download filmliste
-		self.logger.info( 'Trying to download file...' )
 		self.notifier.ShowDownloadProgress()
 		lasturl = ''
 		for url in urls:
 			try:
 				lasturl = url
+				self.logger.info( 'Trying to download {} from {}...', os.path.basename( compfile ), url )
 				self.notifier.UpdateDownloadProgress( 0, url )
-				result = urllib.urlretrieve( url, filename = compfile, reporthook = self._reporthook )
+				result = mvutils.url_retrieve( url, filename = compfile, reporthook = self._reporthook )
 				break
-			except IOError as err:
-				self.logger.error( 'Failure opening {}', url )
+			except urllib2.URLError as err:
+				self.logger.error( 'Failure downloading {}', url )
+			except Exception as err:
+				self.logger.error( 'Failure writng {}', url )
 		if result is None:
 			self.logger.info( 'No file downloaded' )
 			self.notifier.CloseDownloadProgress()
-			self.notifier.ShowDowloadError( lasturl, err )
+			self.notifier.ShowDownloadError( lasturl, err )
 			return False
 
 		# decompress filmliste
-		self.logger.info( 'Trying to decompress file...' )
-		retval = subprocess.call( [ xzbin, '-d', compfile ] )
-		self.logger.info( 'Return {}', retval )
+		if self.use_xz is True:
+			self.logger.info( 'Trying to decompress xz file...' )
+			retval = subprocess.call( [ mvutils.find_xz(), '-d', compfile ] )
+			self.logger.info( 'Return {}', retval )
+		elif upd_can_bz2 is True:
+			self.logger.info( 'Trying to decompress bz2 file...' )
+			retval = self._decompress_bz2( compfile, destfile )
+			self.logger.info( 'Return {}', retval )
+		elif upd_can_gz is True:
+			self.logger.info( 'Trying to decompress gz file...' )
+			retval = self._decompress_gz( compfile, destfile )
+			self.logger.info( 'Return {}', retval )
+		else:
+			# should nebver reach
+			pass
+
 		self.notifier.CloseDownloadProgress()
-		return retval == 0 and self._file_exists( destfile )
+		return retval == 0 and mvutils.file_exists( destfile )
 
 	def _get_update_info( self, full ):
+		if self.use_xz is True:
+			ext = 'xz'
+		elif upd_can_bz2 is True:
+			ext = 'bz2'
+		elif upd_can_gz is True:
+			ext = 'gz'
+		else:
+			return ( None, None, None, 0, )
+
 		if full:
 			return (
 				FILMLISTE_AKT_URL,
-				os.path.join( self.settings.datapath, 'Filmliste-akt.xz' ),
+				os.path.join( self.settings.datapath, 'Filmliste-akt.' + ext ),
 				os.path.join( self.settings.datapath, 'Filmliste-akt' ),
 				600,
 			)
 		else:
 			return (
 				FILMLISTE_DIF_URL,
-				os.path.join( self.settings.datapath, 'Filmliste-diff.xz' ),
+				os.path.join( self.settings.datapath, 'Filmliste-diff.' + ext ),
 				os.path.join( self.settings.datapath, 'Filmliste-diff' ),
 				700,
 			)
-			
-	def _find_xz( self ):
-		for xzbin in [ '/bin/xz', '/usr/bin/xz', '/usr/local/bin/xz' ]:
-			if self._file_exists( xzbin ):
-				return xzbin
-		if self.settings.updxzbin != '' and self._file_exists( self.settings.updxzbin ):
-			return self.settings.updxzbin
-		return None
 
-	def _file_exists( self, name ):
-		try:
-			s = os.stat( name )
-			return stat.S_ISREG( s.st_mode )
-		except OSError as err:
-			return False
-
-	def _file_size( self, name ):
-		try:
-			s = os.stat( name )
-			return s.st_size
-		except OSError as err:
-			return 0
+	def _get_update_url( self, url ):
+		if self.use_xz is True:
+			return url
+		elif upd_can_bz2 is True:
+			return os.path.splitext( url )[0] + '.bz2'
+		elif upd_can_gz is True:
+			return os.path.splitext( url )[0] + '.gz'
+		else:
+			# should never happen since it will not be called
+			return None
 
 	def _file_remove( self, name ):
-		if self._file_exists( name ):
+		if mvutils.file_exists( name ):
 			try:
 				os.remove( name )
 				return True
@@ -369,10 +386,10 @@ class MediathekViewUpdater( object ):
 				tot_mov = self.tot_mov + self.add_mov
 			)
 			self.count = self.count + 1
-			( filmid, cnt_chn, cnt_shw, cnt_mov ) = self.db.ftInsertFilm( self.film, True )
+			( _, cnt_chn, cnt_shw, cnt_mov ) = self.db.ftInsertFilm( self.film, True )
 		else:
 			self.count = self.count + 1
-			( filmid, cnt_chn, cnt_shw, cnt_mov ) = self.db.ftInsertFilm( self.film, False )
+			( _, cnt_chn, cnt_shw, cnt_mov ) = self.db.ftInsertFilm( self.film, False )
 		self.add_chn += cnt_chn
 		self.add_shw += cnt_shw
 		self.add_mov += cnt_mov
@@ -417,11 +434,6 @@ class MediathekViewUpdater( object ):
 			self.film["geo"] = val
 		self.index = self.index + 1
 
-	def _make_search( self, val ):
-		cset = string.letters + string.digits + ' _-#'
-		search = ''.join( [ c for c in val if c in cset ] )
-		return search.upper().strip()
-
 	def _make_url( self, val ):
 		x = val.split( '|' )
 		if len( x ) == 2:
@@ -429,3 +441,26 @@ class MediathekViewUpdater( object ):
 			return self.film["url_video"][:cnt] + x[1]
 		else:
 			return val
+
+	def _decompress_bz2( self, sourcefile, destfile ):
+		blocksize = 8192
+		try:
+			with open( destfile, 'wb' ) as df, open( sourcefile, 'rb' ) as sf:
+				decompressor = bz2.BZ2Decompressor()
+				for data in iter( lambda : sf.read( blocksize ), b'' ):
+					df.write( decompressor.decompress( data ) )
+		except Exception as err:
+			self.logger.error( 'bz2 decompression failed: {}'.format( err ) )
+			return -1
+		return 0
+
+	def _decompress_gz( self, sourcefile, destfile ):
+		blocksize = 8192
+		try:
+			with open( destfile, 'wb' ) as df, gzip.open( sourcefile ) as sf:
+				for data in iter( lambda : sf.read( blocksize ), b'' ):
+					df.write( data )
+		except Exception as err:
+			self.logger.error( 'gz decompression failed: {}'.format( err ) )
+			return -1
+		return 0

@@ -22,7 +22,7 @@ class Logger( object ):
 
 	def debug( self, message, *args ):
 		pass
-    
+
 	def info( self, message, *args ):
 		pass
 

@@ -3,8 +3,8 @@
 #
 
 # -- Imports ------------------------------------------------
-from classes.storemysql  import StoreMySQL
-from classes.storesqlite import StoreSQLite
+from resources.lib.storemysql  import StoreMySQL
+from resources.lib.storesqlite import StoreSQLite
 
 # -- Classes ------------------------------------------------
 class Store( object ):
@@ -15,17 +15,12 @@ class Store( object ):
 		# load storage engine
 		if settings.type == '0':
 			self.logger.info( 'Database driver: Internal (sqlite)' )
-			self.db = StoreSQLite( logger.getNewLogger( 'StoreMySQL' ), notifier, self.settings )
+			self.db = StoreSQLite( logger.getNewLogger( 'StoreSQLite' ), notifier, self.settings )
 		elif settings.type == '1':
 			self.logger.info( 'Database driver: External (mysql)' )
 			self.db = StoreMySQL( logger.getNewLogger( 'StoreMySQL' ), notifier, self.settings )
 		else:
 			self.logger.warn( 'Unknown Database driver selected' )
-			self.db = None
-
-	def __del__( self ):
-		if self.db is not None:
-			del self.db
 			self.db = None
 
 	def Init( self, reset = False ):

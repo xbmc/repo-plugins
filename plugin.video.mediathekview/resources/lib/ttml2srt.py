@@ -26,7 +26,6 @@
 
 import re
 import io
-import sys
 from datetime import timedelta
 from xml.etree import ElementTree as ET
 
@@ -135,7 +134,7 @@ def ttml2srt( infile, outfile ):
 	# render subtitles on each timestamp
 
 
-	def render_subtitles(elem, timestamp, parent_style={}):
+	def render_subtitles(elem, timestamp, parent_style=None):
 
 		if timestamp < elem.attrib['{abs}begin']:
 			return ''
@@ -144,7 +143,7 @@ def ttml2srt( infile, outfile ):
 
 		result = ''
 
-		style = parent_style.copy()
+		style = parent_style.copy() if parent_style is not None else {}
 		if 'style' in elem.attrib:
 			style.update(styles[elem.attrib['style']])
 
@@ -200,7 +199,7 @@ def ttml2srt( infile, outfile ):
 									timestamp.total_seconds() % 60)).replace('.', ',')
 
 
-	if type( outfile ) is str or type( outfile ) is unicode:
+	if isinstance( outfile, str ) or isinstance( outfile, unicode ):
 		file = io.open( outfile, 'w', encoding='utf-8' )
 	else:
 		file = outfile
@@ -210,7 +209,7 @@ def ttml2srt( infile, outfile ):
 		if content == '':
 			continue
 		file.write( bytearray( '%d\n' % srt_i, 'utf-8' ) )
-		file.write( bytearray( 
+		file.write( bytearray(
 			format_timestamp( timestamp ) +
 			' --> ' +
 			format_timestamp( rendered_grouped[i + 1][0] ) +

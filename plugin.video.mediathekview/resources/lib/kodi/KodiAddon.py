@@ -3,10 +3,10 @@
 #
 
 # -- Imports ------------------------------------------------
-import os, sys, urllib
+import sys, urllib
 import xbmc, xbmcgui, xbmcaddon, xbmcplugin
 
-from de.yeasoft.kodi.KodiLogger import KodiLogger
+from resources.lib.kodi.KodiLogger import KodiLogger
 
 # -- Classes ------------------------------------------------
 class KodiAddon( KodiLogger ):
@@ -18,15 +18,15 @@ class KodiAddon( KodiLogger ):
 		self.fanart			= self.addon.getAddonInfo( 'fanart' )
 		self.version		= self.addon.getAddonInfo( 'version' )
 		self.path			= self.addon.getAddonInfo( 'path' )
-		self.datapath		= os.path.join( xbmc.translatePath( "special://masterprofile" ).decode('utf-8'), 'addon_data', self.addon_id.decode('utf-8') )
+		self.datapath		= xbmc.translatePath( self.addon.getAddonInfo('profile').decode('utf-8') )
 		self.language		= self.addon.getLocalizedString
 		KodiLogger.__init__( self, self.addon_id, self.version )
 
-	def getSetting( self, id ):
-		return self.addon.getSetting( id )
+	def getSetting( self, setting_id ):
+		return self.addon.getSetting( setting_id )
 
-	def setSetting( self, id, value ):
-		return self.addon.setSetting( id, value )
+	def setSetting( self, setting_id, value ):
+		return self.addon.setSetting( setting_id, value )
 
 	def doAction( self, action ):
 		xbmc.executebuiltin( 'Action({})'.format( action ) )
@@ -54,7 +54,7 @@ class KodiPlugin( KodiAddon ):
 		self.addDirectoryItem( name, params, True )
 
 	def addDirectoryItem( self, name, params, isFolder ):
-		if type( name ) is int:
+		if isinstance( name, int ):
 			name = self.language( name )
 		li = xbmcgui.ListItem( name )
 		xbmcplugin.addDirectoryItem(

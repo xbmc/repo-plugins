@@ -1,3 +1,8 @@
+Version 1.1.3
+    Added Twitch Client-ID to Twitch requests to comply with their new API change.
+    Disables Twitch TLS certificate check due to SNI incompatibility of Phyton 2.7.
+    Removes BeautifulSoup dependency.
+
 Version 1.1.2
     Some small changes on how streams are showed
     Adding stream quality switcher

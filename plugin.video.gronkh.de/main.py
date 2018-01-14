@@ -3,7 +3,7 @@
 
 '''
     Gronkh.de Kodi plugin
-    Copyright (C) 2015  1750 Studios/Andreas Mieke
+    Copyright (C) 2015 - 2018  1750 Studios/Andreas Mieke
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@ import sys, urlparse, urllib, json, datetime, os, hashlib, sqlite3, time, uuid, 
 
 import xbmcaddon, xbmcplugin, xbmcgui, xbmcvfs
 
-from bs4 import BeautifulSoup
 import requests
 
 addonname       = 'plugin.video.gronkh.de'
@@ -82,7 +81,7 @@ def getUserAgent():
 
 def getCachedJson(url):
     headers = {
-        "DNT": 1 if (setting('donottrack') == True) else 0,
+        "DNT": "1" if (setting('donottrack') == True) else "0",
         "X-UID": setting('user-id'),
         "User-Agent": getUserAgent(),
         "X-Resolution": xbmc.getInfoLabel('System.ScreenResolution').split('@')[0]
@@ -653,12 +652,12 @@ def startVideo(t, i, l):
 
 def showLiveStreams():
     for name in twitchnames:
-        r = requests.get(twitchStreamInfo + name, headers={'Accept': 'application/vnd.twitchtv.v3+json'})
+        r = requests.get(twitchStreamInfo + name, verify=False, headers={'Accept': 'application/vnd.twitchtv.v3+json', 'Client-ID': 'hliui5cdcihmavh9gxrr6qt3a3glzso'})
         stream = json.loads(r.content)['stream']
         z = 0
         if stream:
             while 'bio' in stream['channel']:
-                r = requests.get(twitchStreamInfo + name, headers={'Accept': 'application/vnd.twitchtv.v3+json'})
+                r = requests.get(twitchStreamInfo + name, verify=False, headers={'Accept': 'application/vnd.twitchtv.v3+json', 'Client-ID': 'hliui5cdcihmavh9gxrr6qt3a3glzso'})
                 stream = json.loads(r.content)['stream']
                 z = z + 1
                 if z > 5:
@@ -667,7 +666,7 @@ def showLiveStreams():
                     quit()
         if stream:
             li = None
-            if stream['game'] and stream['game'] != "Gaming Talk Shows":
+            if stream['game'] and stream['game'] != "IRL":
                 li = xbmcgui.ListItem(stream['channel']['display_name'] + ' - ' + loc(30006) + ': ' + stream['game'])
             else:
                 li = xbmcgui.ListItem(stream['channel']['display_name'] + ' - ' + stream['channel']['status'])
@@ -701,7 +700,7 @@ def showLiveStreams():
     xbmcplugin.endOfDirectory(addon_handle)
 
 def startLiveStream(stream, name):
-    r = requests.get('https://api.twitch.tv/api/channels/' + name + '/access_token')
+    r = requests.get('https://api.twitch.tv/api/channels/' + name + '/access_token', verify=False, headers={'Accept': 'application/vnd.twitchtv.v3+json', 'Client-ID': 'hliui5cdcihmavh9gxrr6qt3a3glzso'})
     j = json.loads(r.content)
 
     token   = j['token']

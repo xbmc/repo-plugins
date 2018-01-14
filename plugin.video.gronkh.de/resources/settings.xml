@@ -1,0 +1,4 @@
+<settings>
+    <setting label="30101" type="bool" default="false" id="donottrack"/>
+    <setting label="30100" type="action" action="RunScript(plugin.video.gronkh.de, clearcache)"/>
+</settings>

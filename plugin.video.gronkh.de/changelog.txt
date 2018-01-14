@@ -1,0 +1,46 @@
+Version 1.1.3
+    Added Twitch Client-ID to Twitch requests to comply with their new API change.
+    Disables Twitch TLS certificate check due to SNI incompatibility of Phyton 2.7.
+    Removes BeautifulSoup dependency.
+
+Version 1.1.2
+    Some small changes on how streams are showed
+    Adding stream quality switcher
+    Adding GronkhTV live stream
+    Fixing wrong-sized fanarts
+    Adding live streams of other lets-players from Gronkh.de
+
+Version 1.1.1
+    Updating API version
+        Using IDs for API calls instead of slugs.
+        The API calls should now perform better and be faster on slower conenctions.
+        Also the new API returns smaller pictures where big pictures would not make sense.
+        Furthermore the new API uses a database maintained by me, so missing episodes which
+        are not on Gronkh.de could however be available in the API.
+    Some small changes to the codebase (changed some API endpoints and their return values)
+    Renaming the plugin to Gronkh.de (new notation)
+    Chaning some information in the addon.xml (Author email)
+
+Version 1.1.0
+    Adding version check to prevent add-on from crashing because of deleted API endpoints
+    Adding polish translations (Thanks to Shino)
+    Adding search function
+    Updating API version
+    Changing some internal URLs
+    Making the requests more robust against failures
+
+Version 1.0.2
+    Adding error fallback for broken Twitch API
+    Changing the API enpoints to enable easier versioning
+    Adding Do Not Track option to disable tracking
+    Adding various headers for tracking
+    Adding recent episodes
+    New icons, which should look better
+
+Version 1.0.1
+    Adding live streams
+    Using new API functions, based on the YouTube Data API
+    Changing and adding various thumbnails and fanarts
+
+Version 1.0.0
+    First working version, ready to be pushed to the repo

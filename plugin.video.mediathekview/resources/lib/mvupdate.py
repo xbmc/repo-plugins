@@ -8,9 +8,8 @@ import argparse
 import datetime
 import xml.etree.ElementTree as ET
 
-from de.yeasoft.base.Logger import Logger
-from classes.store import Store
-from classes.updater import MediathekViewUpdater
+from resources.lib.base.Logger import Logger
+from resources.lib.updater import MediathekViewUpdater
 
 # -- Classes ------------------------------------------------
 class Settings( object ):
@@ -19,6 +18,7 @@ class Settings( object ):
 		self.type			= { 'sqlite' : '0', 'mysql' : '1' }.get( args.dbtype, '0' )
 		if self.type == '1':
 			self.host			= args.host
+			self.port			= int( args.port )
 			self.user			= args.user
 			self.password		= args.password
 			self.database		= args.database
@@ -27,7 +27,6 @@ class Settings( object ):
 		self.groupshows		= False
 		self.updenabled		= True
 		self.updinterval	= 3600
-		self.updxzbin		= ''
 
 class AppLogger( Logger ):
 
@@ -93,7 +92,7 @@ class Notifier( object ):
 		pass
 	def ShowDownloadError( self, name, err ):
 		pass
-	def ShowMissingXZError( self ):
+	def ShowMissingExtractorError( self ):
 		pass
 	def ShowDownloadProgress( self ):
 		pass
@@ -119,7 +118,7 @@ class UpdateApp( AppLogger ):
 			tree = ET.parse( self.mypath + '/addon.xml' )
 			version = tree.getroot().attrib['version']
 			AppLogger.__init__( self, os.path.basename( sys.argv[0] ), version )
-		except Exception as err:
+		except Exception:
 			AppLogger.__init__( self, os.path.basename( sys.argv[0] ), '0.0' )
 
 	def Init( self ):
@@ -148,26 +147,32 @@ class UpdateApp( AppLogger ):
 		mysqlopts.add_argument(
 			'-H', '--host',
 			dest = 'host',
-			help = 'hostname or ip of the MySQL server',
+			help = 'hostname or ip address',
 			default = 'localhost'
+		)
+		mysqlopts.add_argument(
+			'-P', '--port',
+			dest = 'port',
+			help = 'connection port',
+			default = '3306'
 		)
 		mysqlopts.add_argument(
 			'-u', '--user',
 			dest = 'user',
-			help = 'username for the MySQL server connection',
-			default = 'filmliste'
+			help = 'connection username',
+			default = 'mediathekview'
 		)
 		mysqlopts.add_argument(
 			'-p', '--password',
 			dest = 'password',
-			help = 'password for the MySQL server connection',
+			help = 'connection password',
 			default = None
 		)
 		mysqlopts.add_argument(
 			'-d', '--database',
 			dest = 'database',
-			default = 'filmliste',
-			help = 'MySQL database for mediathekview'
+			default = 'mediathekview',
+			help = 'database name'
 		)
 		self.args		= parser.parse_args()
 		self.verbosity	= self.args.verbose
@@ -177,10 +182,6 @@ class UpdateApp( AppLogger ):
 		self.notifier	= Notifier()
 		self.monitor	= MediathekViewMonitor()
 		self.updater	= MediathekViewUpdater( self.getNewLogger( 'MediathekViewUpdater' ), self.notifier, self.settings, self.monitor )
-		if self.updater.PrerequisitesMissing():
-			self.error( 'Prerequisites are missing' )
-			self.Exit()
-			exit( 1 )
 		self.updater.Init()
 
 	def Run( self ):

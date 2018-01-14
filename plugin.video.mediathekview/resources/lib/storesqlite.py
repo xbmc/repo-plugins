@@ -3,11 +3,13 @@
 #
 
 # -- Imports ------------------------------------------------
-import os, stat, string, time
+import os, time
 import sqlite3
 
-from classes.film import Film
-from classes.exceptions import DatabaseCorrupted
+import resources.lib.mvutils as mvutils
+
+from resources.lib.film import Film
+from resources.lib.exceptions import DatabaseCorrupted
 
 # -- Classes ------------------------------------------------
 class StoreSQLite( object ):
@@ -20,15 +22,16 @@ class StoreSQLite( object ):
 		self.dbfile		= os.path.join( self.settings.datapath, 'filmliste-v1.db' )
 		# useful query fragments
 		self.sql_query_films	= "SELECT film.id,title,show,channel,description,duration,size,datetime(aired, 'unixepoch', 'localtime'),url_sub,url_video,url_video_sd,url_video_hd FROM film LEFT JOIN show ON show.id=film.showid LEFT JOIN channel ON channel.id=film.channelid"
+		self.sql_query_filmcnt	= "SELECT COUNT(*) FROM film LEFT JOIN show ON show.id=film.showid LEFT JOIN channel ON channel.id=film.channelid"
 		self.sql_cond_recent	= "( ( UNIX_TIMESTAMP() - aired ) <= 86400 )"
 		self.sql_cond_nofuture	= " AND ( ( aired IS NULL ) OR ( ( UNIX_TIMESTAMP() - aired ) > 0 ) )" if settings.nofuture else ""
 		self.sql_cond_minlength	= " AND ( ( duration IS NULL ) OR ( duration >= %d ) )" % settings.minlength if settings.minlength > 0 else ""
 
 	def Init( self, reset = False ):
 		self.logger.info( 'Using SQLite version {}, python library sqlite3 version {}', sqlite3.sqlite_version, sqlite3.version )
-		if not self._dir_exists( self.settings.datapath ):
+		if not mvutils.dir_exists( self.settings.datapath ):
 			os.mkdir( self.settings.datapath )
-		if reset == True or not self._file_exists( self.dbfile ):
+		if reset == True or not mvutils.file_exists( self.dbfile ):
 			self.logger.info( '===== RESET: Database will be deleted and regenerated =====' )
 			self._file_remove( self.dbfile )
 			self.conn = sqlite3.connect( self.dbfile, timeout = 60 )
@@ -37,12 +40,12 @@ class StoreSQLite( object ):
 			try:
 				self.conn = sqlite3.connect( self.dbfile, timeout = 60 )
 			except sqlite3.DatabaseError as err:
-				self.logger.error( 'Errore while opening database. Trying to fully reset the Database...' )
+				self.logger.error( 'Error while opening database: {}. trying to fully reset the Database...', err )
 				self.Init( reset = True )
 
 		self.conn.execute( 'pragma journal_mode=off' )	# 3x speed-up, check mode 'WAL'
 		self.conn.execute( 'pragma synchronous=off' )	# that is a bit dangerous :-) but faaaast
-		
+
 		self.conn.create_function( 'UNIX_TIMESTAMP', 0, UNIX_TIMESTAMP )
 		self.conn.create_aggregate( 'GROUP_CONCAT', 1, GROUP_CONCAT )
 
@@ -52,17 +55,17 @@ class StoreSQLite( object ):
 			self.conn	= None
 
 	def Search( self, search, filmui ):
-		self._Search_Condition( '( ( title LIKE "%%%s%%" ) OR ( show LIKE "%%%s%%" ) )' % ( search, search ), filmui, True, True )
+		self._Search_Condition( '( ( title LIKE "%%%s%%" ) OR ( show LIKE "%%%s%%" ) )' % ( search, search ), filmui, True, True, self.settings.maxresults )
 
 	def SearchFull( self, search, filmui ):
-		self._Search_Condition( '( ( title LIKE "%%%s%%" ) OR ( show LIKE "%%%s%%" ) OR ( description LIKE "%%%s%%") )' % ( search, search, search ), filmui, True, True )
+		self._Search_Condition( '( ( title LIKE "%%%s%%" ) OR ( show LIKE "%%%s%%" ) OR ( description LIKE "%%%s%%") )' % ( search, search, search ), filmui, True, True, self.settings.maxresults )
 
 	def GetRecents( self, channelid, filmui ):
 		sql_cond_channel = ' AND ( film.channelid=' + str( channelid ) + ' ) ' if channelid != '0' else ''
-		self._Search_Condition( self.sql_cond_recent + sql_cond_channel, filmui, True, False )
+		self._Search_Condition( self.sql_cond_recent + sql_cond_channel, filmui, True, False, 10000 )
 
 	def GetLiveStreams( self, filmui ):
-		self._Search_Condition( '( show.search="LIVESTREAM" )', filmui, False, False )
+		self._Search_Condition( '( show.search="LIVESTREAM" )', filmui, False, False, 10000 )
 
 	def GetChannels( self, channelui ):
 		self._Channels_Condition( None, channelui )
@@ -70,32 +73,12 @@ class StoreSQLite( object ):
 	def GetRecentChannels( self, channelui ):
 		self._Channels_Condition( self.sql_cond_recent, channelui )
 
-	def _Channels_Condition( self, condition, channelui):
-		if self.conn is None:
-			return
-		try:
-			if condition is None:
-				query = 'SELECT id,channel,0 AS `count` FROM channel'
-			else:
-				query = 'SELECT channel.id AS `id`,channel,COUNT(*) AS `count` FROM film LEFT JOIN channel ON channel.id=film.channelid WHERE ' + condition + ' GROUP BY channel'
-			self.logger.info( 'SQLite Query: {}', query )
-			cursor = self.conn.cursor()
-			cursor.execute( query )
-			channelui.Begin()
-			for ( channelui.id, channelui.channel, channelui.count ) in cursor:
-				channelui.Add()
-			channelui.End()
-			cursor.close()
-		except sqlite3.Error as err:
-			self.logger.error( 'Database error: {}', err )
-			self.notifier.ShowDatabaseError( err )
-
 	def GetInitials( self, channelid, initialui ):
 		if self.conn is None:
 			return
 		try:
 			condition = 'WHERE ( channelid=' + str( channelid ) + ' ) ' if channelid != '0' else ''
-			self.logger.info( 'SQlite Query: {}', 
+			self.logger.info( 'SQlite Query: {}',
 				'SELECT SUBSTR(search,1,1),COUNT(*) FROM show ' +
 				condition +
 				'GROUP BY LEFT(search,1)'
@@ -148,13 +131,34 @@ class StoreSQLite( object ):
 			# multiple channel ids
 			condition = '( showid IN ( %s ) )' % showid
 			showchannels = True
-		self._Search_Condition( condition, filmui, False, showchannels )
+		self._Search_Condition( condition, filmui, False, showchannels, 10000 )
 
-	def _Search_Condition( self, condition, filmui, showshows, showchannels ):
+	def _Channels_Condition( self, condition, channelui ):
 		if self.conn is None:
 			return
 		try:
-			self.logger.info( 'SQLite Query: {}', 
+			if condition is None:
+				query = 'SELECT id,channel,0 AS `count` FROM channel'
+			else:
+				query = 'SELECT channel.id AS `id`,channel,COUNT(*) AS `count` FROM film LEFT JOIN channel ON channel.id=film.channelid WHERE ' + condition + ' GROUP BY channel'
+			self.logger.info( 'SQLite Query: {}', query )
+			cursor = self.conn.cursor()
+			cursor.execute( query )
+			channelui.Begin()
+			for ( channelui.id, channelui.channel, channelui.count ) in cursor:
+				channelui.Add()
+			channelui.End()
+			cursor.close()
+		except sqlite3.Error as err:
+			self.logger.error( 'Database error: {}', err )
+			self.notifier.ShowDatabaseError( err )
+
+	def _Search_Condition( self, condition, filmui, showshows, showchannels, maxresults ):
+		if self.conn is None:
+			return
+		try:
+			maxresults = int( maxresults )
+			self.logger.info( 'SQLite Query: {}',
 				self.sql_query_films +
 				' WHERE ' +
 				condition +
@@ -163,15 +167,27 @@ class StoreSQLite( object ):
 			)
 			cursor = self.conn.cursor()
 			cursor.execute(
+				self.sql_query_filmcnt +
+				' WHERE ' +
+				condition +
+				self.sql_cond_nofuture +
+				self.sql_cond_minlength +
+				' LIMIT {}'.format( maxresults + 1 ) if maxresults else ''
+			)
+			( results, ) = cursor.fetchone()
+			if maxresults and results > maxresults:
+				self.notifier.ShowLimitResults( maxresults )
+			cursor.execute(
 				self.sql_query_films +
 				' WHERE ' +
 				condition +
 				self.sql_cond_nofuture +
-				self.sql_cond_minlength
+				self.sql_cond_minlength +
+				' LIMIT {}'.format( maxresults ) if maxresults else ''
 			)
 			filmui.Begin( showshows, showchannels )
 			for ( filmui.id, filmui.title, filmui.show, filmui.channel, filmui.description, filmui.seconds, filmui.size, filmui.aired, filmui.url_sub, filmui.url_video, filmui.url_video_sd, filmui.url_video_hd ) in cursor:
-				filmui.Add()
+				filmui.Add( totalItems = results )
 			filmui.End()
 			cursor.close()
 		except sqlite3.Error as err:
@@ -183,7 +199,7 @@ class StoreSQLite( object ):
 			return None
 		try:
 			condition = '( film.id={} )'.format( filmid )
-			self.logger.info( 'SQLite Query: {}', 
+			self.logger.info( 'SQLite Query: {}',
 				self.sql_query_films +
 				' WHERE ' +
 				condition
@@ -523,7 +539,7 @@ class StoreSQLite( object ):
 						""", (
 							int( time.time() ),
 							self.ft_channelid, film['show'],
-							self._make_search( film['show'] )
+							mvutils.make_search_string( film['show'] )
 						)
 					)
 					self.ft_show = film['show']
@@ -589,9 +605,9 @@ class StoreSQLite( object ):
 						self.ft_channelid,
 						self.ft_showid,
 						film['title'],
-						self._make_search( film['title'] ),
+						mvutils.make_search_string( film['title'] ),
 						film['airedepoch'],
-						self._make_duration( film['duration'] ),
+						mvutils.make_duration( film['duration'] ),
 						film['size'],
 						film['description'],
 						film['website'],
@@ -710,37 +726,8 @@ PRAGMA foreign_keys = true;
 		""" )
 		self.UpdateStatus( 'IDLE' )
 
-	def _make_search( self, val ):
-		cset = string.letters + string.digits + ' _-#'
-		search = ''.join( [ c for c in val if c in cset ] )
-		return search.upper().strip()
-
-	def _make_duration( self, val ):
-		if val == "00:00:00":
-			return None
-		elif val is None:
-			return None
-		x = val.split( ':' )
-		if len( x ) != 3:
-			return None
-		return int( x[0] ) * 3600 + int( x[1] ) * 60 + int( x[2] )
-
-	def _dir_exists( self, name ):
-		try:
-			s = os.stat( name )
-			return stat.S_ISDIR( s.st_mode )
-		except OSError as err:
-			return False
-
-	def _file_exists( self, name ):
-		try:
-			s = os.stat( name )
-			return stat.S_ISREG( s.st_mode )
-		except OSError as err:
-			return False
-
 	def _file_remove( self, name ):
-		if self._file_exists( name ):
+		if mvutils.file_exists( name ):
 			try:
 				os.remove( name )
 				return True

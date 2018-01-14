@@ -44,6 +44,10 @@ msgstr "Sendungen verschiedener Sender zusammenfassen"
 
 msgctxt "#30114"
 msgid "Download directory"
+msgstr "Suchergebnisse eingrenzen"
+
+msgctxt "#30115"
+msgid "Download directory"
 msgstr "Download-Verzeichnis"
 
 # Settings Page 2
@@ -56,14 +60,18 @@ msgid "Database hostname"
 msgstr "Datenbank Hostname"
 
 msgctxt "#30212"
+msgid "Database port"
+msgstr "Datenbank Portnummer"
+
+msgctxt "#30213"
 msgid "Database username"
 msgstr "Datenbank Benutzername"
 
-msgctxt "#30213"
+msgctxt "#30214"
 msgid "Database password"
 msgstr "Datenbank Passwort"
 
-msgctxt "#30214"
+msgctxt "#30215"
 msgid "Database name"
 msgstr "Datenbank Name"
 
@@ -82,14 +90,6 @@ msgstr "Datenbankupdates"
 msgctxt "#30232"
 msgid "Update interval in hours"
 msgstr "Aktualisierungsintervall in Stunden"
-
-msgctxt "#30233"
-msgid "XZ Program Location"
-msgstr "XZ Programm"
-
-msgctxt "#30238"
-msgid "Reset Database"
-msgstr "Datenbank zurücksetzen"
 
 # Main Menu
 msgctxt "#30901"
@@ -131,11 +131,11 @@ msgstr "Video herunterladen"
 
 msgctxt "#30922"
 msgid "Download LoRes Video"
-msgstr "Niedrig auflösendes Video herunterladen"
+msgstr "SD Video herunterladen"
 
 msgctxt "#30923"
 msgid "Download HD Video"
-msgstr "Hoch auflösendes Video herunterladen"
+msgstr "HD Video herunterladen"
 
 msgctxt "#30924"
 msgid "Add to queue"
@@ -220,8 +220,8 @@ msgstr "Dieses Kodi Addon Ermöglicht den Zugriff auf fast alle deutschen Mediat
 "Spende zu hinterlassen."
 
 msgctxt "#30963"
-msgid "XZ Decompressor is Missing"
-msgstr "Entpacker XZ nicht gefunden"
+msgid "No Decompressor Available"
+msgstr "Kein Entpacker Verfügbar"
 
 msgctxt "#30964"
 msgid "The database updater needs the program 'xz' in order to process the database update files. "
@@ -279,7 +279,7 @@ msgstr "Differentielle Aktualisierung"
 
 msgctxt "#30974"
 msgid "Downloading Video"
-msgstr "Video wird herunterladen"
+msgstr "Video wird heruntergeladen"
 
 msgctxt "#30975"
 msgid "Error while downloading {}: {}"
@@ -300,3 +300,11 @@ msgstr "Untertitel werden heruntergeladen"
 msgctxt "#30979"
 msgid "Download path does not exist"
 msgstr "Download-Verzeichnis existiert nicht"
+
+msgctxt "#30980"
+msgid "Results Limited"
+msgstr "Ergebnisse Beschränkt"
+
+msgctxt "#30981"
+msgid "Only the first {} results are shown."
+msgstr "Es werden nur die ersten {} Ergebnisse angezeigt."

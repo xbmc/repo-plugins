@@ -25,15 +25,13 @@
 # -- Imports ------------------------------------------------
 from __future__ import unicode_literals  # ,absolute_import, division
 
-import time
 import xbmc
 
-from de.yeasoft.kodi.KodiAddon import KodiService
+from resources.lib.kodi.KodiAddon import KodiService
 
-from classes.store import Store
-from classes.notifier import Notifier
-from classes.settings import Settings
-from classes.updater import MediathekViewUpdater
+from resources.lib.notifier import Notifier
+from resources.lib.settings import Settings
+from resources.lib.updater import MediathekViewUpdater
 
 # -- Classes ------------------------------------------------
 class MediathekViewMonitor( xbmc.Monitor ):
@@ -56,16 +54,10 @@ class MediathekViewService( KodiService ):
 		self.settings	= Settings()
 		self.notifier	= Notifier()
 		self.monitor	= MediathekViewMonitor( self )
-		self.updater	= MediathekViewUpdater( self.getNewLogger( 'MediathekViewUpdater' ), self.notifier, self.settings, self.monitor )
-
-	def __del__( self ):
-		del self.updater
-		del self.monitor
-		del self.notifier
-		del self.settings
+		self.updater	= MediathekViewUpdater( self.getNewLogger( 'Updater' ), self.notifier, self.settings, self.monitor )
 
 	def Init( self ):
-		self.info( 'Startup' )
+		self.info( 'Init' )
 		self.updater.Init()
 
 	def Run( self ):
@@ -83,11 +75,11 @@ class MediathekViewService( KodiService ):
 			# Sleep/wait for abort for 60 seconds
 			if self.monitor.waitForAbort( 60 ):
 				# Abort was requested while waiting. We should exit
-				break			
-		self.info( 'Exiting...' )
+				break
+		self.info( 'Shutting down...' )
 
 	def Exit( self ):
-		self.info( 'Shutdown' )
+		self.info( 'Exit' )
 		self.updater.Exit()
 
 	def ReloadSettings( self ):

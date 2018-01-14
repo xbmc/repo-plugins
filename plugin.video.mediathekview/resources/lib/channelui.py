@@ -6,16 +6,15 @@
 import sys, urllib
 import xbmcplugin, xbmcgui
 
-from classes.channel import Channel
-from classes.settings import Settings
+from resources.lib.channel import Channel
 
 # -- Classes ------------------------------------------------
 class ChannelUI( Channel ):
-	def __init__( self, handle, sortmethods = [ xbmcplugin.SORT_METHOD_TITLE ], next = 'initial' ):
+	def __init__( self, handle, sortmethods = None, nextdir = 'initial' ):
 		self.base_url		= sys.argv[0]
-		self.next			= next
+		self.nextdir		= nextdir
 		self.handle			= handle
-		self.sortmethods	= sortmethods
+		self.sortmethods	= sortmethods if sortmethods is not None else [ xbmcplugin.SORT_METHOD_TITLE ]
 		self.count			= 0
 
 	def Begin( self ):
@@ -28,7 +27,7 @@ class ChannelUI( Channel ):
 		xbmcplugin.addDirectoryItem(
 			handle	= self.handle,
 			url		= self.build_url( {
-				'mode': self.next,
+				'mode': self.nextdir,
 				'channel': self.id
 			} ),
 			listitem = li,

@@ -3,9 +3,9 @@
 #
 
 # -- Imports ------------------------------------------------
-import xbmcaddon, xbmcplugin
+import xbmcaddon
 
-from de.yeasoft.kodi.KodiUI import KodiUI
+from resources.lib.kodi.KodiUI import KodiUI
 
 # -- Classes ------------------------------------------------
 class Notifier( KodiUI ):
@@ -19,8 +19,11 @@ class Notifier( KodiUI ):
 	def ShowDownloadError( self, name, err ):
 		self.ShowError( self.language( 30952 ), self.language( 30953 ).format( name, err ) )
 
-	def ShowMissingXZError( self ):
+	def ShowMissingExtractorError( self ):
 		self.ShowError( self.language( 30952 ), self.language( 30954 ), time = 10000 )
+
+	def ShowLimitResults( self, maxresults ):
+		self.ShowNotification( self.language( 30980 ), self.language( 30981 ).format( maxresults ) )
 
 	def ShowDownloadProgress( self ):
 		self.ShowBGDialog( self.language( 30955 ) )

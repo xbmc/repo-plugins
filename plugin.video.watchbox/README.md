@@ -9,26 +9,15 @@ Forum posting: https://www.kodinerds.net/index.php/Thread/58398-Release-Watchbox
 **WARNING: This plugin is only available from Germany by geo blocking**
 ***
 
-Compatibility
-
-| Device  | Kodi | Status |
-| ------------- | ------------- | ------------- |
-| Windows | 17.x  | Yes  |
-| Linux | 17.x  | Yes  |
-| MacOS | 17.x  | untested  |
-| Android | 17.x  | Yes  |
-| iOS | 17.x  | untested  |
-| RaspberryPi | 17.x  | Yes  |
-***
-
 What this plugin currently can do:
 - [x] Login with your account
 - [x] Search for movies / tv shows
 - [x] Show/browse all genres
 - [x] Show/browse all seasons
 - [x] Show/browse all episodes per season
+- [x] Show/browse new or popular content
 - [x] Show/browse watchlist
-- [x] Display various informations (Kodi displays not all we provide)
+- [x] Display various informations
 - [x] Watch all movies / tv shows
 ***
 

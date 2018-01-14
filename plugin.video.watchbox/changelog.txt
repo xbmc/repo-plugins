@@ -1,3 +1,6 @@
+v0.4.1 (2018.01.14)
+- Fix login not working
+
 v0.4.0 (2017.12.28)
 - Readded media duration
 

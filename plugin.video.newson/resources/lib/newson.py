@@ -1,4 +1,4 @@
-#   Copyright (C) 2017 Lunatixz
+#   Copyright (C) 2018 Lunatixz
 #
 #
 # This file is part of NewsOn.
@@ -17,9 +17,9 @@
 # along with NewsOn.  If not, see <http://www.gnu.org/licenses/>.
 
 # -*- coding: utf-8 -*-
-import os, sys, time, datetime, re, traceback, feedparser, random
-import urllib, urllib2, socket, json, collections, gzip
-import xbmc, xbmcgui, xbmcplugin, xbmcvfs, xbmcaddon
+import os, sys, time, datetime, traceback, feedparser, random
+import urlparse, urllib, urllib2, socket, json, collections, gzip
+import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 
 from StringIO import StringIO
 from simplecache import SimpleCache
@@ -37,34 +37,21 @@ NEWSART       = os.path.join(ADDON_PATH,'resources','images','newscast.jpg')
 CLIPART       = os.path.join(ADDON_PATH,'resources','images','videoclips.jpg')
 
 ## GLOBALS ##
-TIMEOUT     = 30
-DEBUG       = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
-BASE_API    = 'http://watchnewson.com/api/linear/channels'
-MENU        = [("Newscasts"  , '0', 0, False, {"thumb":NEWSART,"poster":NEWSART,"fanart":FANART,"icon":ICON,"logo":ICON}),
-               ("Video Clips", '2', 2, False, {"thumb":CLIPART,"poster":CLIPART,"fanart":FANART,"icon":ICON,"logo":ICON})]
-
+TIMEOUT       = 30
+CONTENT_TYPE  = 'episodes'
+DEBUG         = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
+BASE_API      = 'http://watchnewson.com/api/linear/channels'
+MENU          = [("Newscasts"  , '0', 0, False, {"thumb":NEWSART,"poster":NEWSART,"fanart":FANART,"icon":ICON,"logo":ICON}),
+                 ("Video Clips", '2', 2, False, {"thumb":CLIPART,"poster":CLIPART,"fanart":FANART,"icon":ICON,"logo":ICON})]
+           
 def log(msg, level=xbmc.LOGDEBUG):
-    if DEBUG == True:
-        if level == xbmc.LOGERROR:
-            msg += ' ,' + traceback.format_exc()
-        xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + (msg), level)
-
+    if DEBUG == False and level != xbmc.LOGERROR: return
+    if level == xbmc.LOGERROR: msg += ' ,' + traceback.format_exc()
+    xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + msg, level)
+    
 def getParams():
-    param=[]
-    if len(sys.argv[2])>=2:
-        params=sys.argv[2]
-        cleanedparams=params.replace('?','')
-        if (params[len(params)-1]=='/'):
-            params=params[0:len(params)-2]
-        pairsofparams=cleanedparams.split('&')
-        param={}
-        for i in range(len(pairsofparams)):
-            splitparams={}
-            splitparams=pairsofparams[i].split('=')
-            if (len(splitparams))==2:
-                param[splitparams[0]]=splitparams[1]
-    return param
-                 
+    return dict(urlparse.parse_qsl(sys.argv[2][1:]))
+           
 socket.setdefaulttimeout(TIMEOUT)
 class NewsOn(object):
     def __init__(self):
@@ -87,30 +74,24 @@ class NewsOn(object):
                     buf = StringIO(responce.read())
                     f = gzip.GzipFile(fileobj=buf)
                     results = json.loads(f.read())
-                else:
-                    results = json.load(responce)
+                else: results = json.load(responce)
                 responce.close()
                 self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, results, expiration=datetime.timedelta(hours=1))
             return self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
-        except urllib2.URLError, e:
-            log("openURL Failed! " + str(e), xbmc.LOGERROR)
-        except socket.timeout, e:
-            log("openURL Failed! " + str(e), xbmc.LOGERROR)
-        except:
-            xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30001), ICON, 4000)
-            
+        except Exception as e: log("openURL Failed! " + str(e), xbmc.LOGERROR)
+        xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30001), ICON, 4000)
+        return ''
+        
         
     def mainMenu(self):
         log('mainMenu')
-        for item in MENU:
-            self.addDir(*item)
+        for item in MENU: self.addDir(*item)
         
                     
     def browseMenu(self, id=1):
         log('browseMenu, id = ' + str(id))
         self.stateMenu = [tuple(s.format(id) for s in tup) for tup in self.stateMenu]
-        for item in self.stateMenu:
-            self.addDir(*item)
+        for item in self.stateMenu: self.addDir(*item)
             
             
     def getStates(self):
@@ -118,58 +99,55 @@ class NewsOn(object):
         state     = []
         stateLST  = []
         data = self.openURL(BASE_API)
-        if data:
-            for channel in data:
-                state.append(channel['config']['state'])
-            states = collections.Counter(state)
-            for key, value in sorted(states.iteritems()):
-                stateLST.append(("%s"%(key), key , '{}'))
-            return stateLST
+        if len(data) == 0: return
+        for channel in data: state.append(channel['config']['state'])
+        states = collections.Counter(state)
+        for key, value in sorted(states.iteritems()): stateLST.append(("%s"%(key), key , '{}'))
+        return stateLST
             
             
     def newsCasts(self, state):
         log('newsCasts, state = ' + state)
         urls = []
         data = self.openURL(BASE_API)
-        if data:
-            for channel in data:
-                if state in channel['config']['state']:
-                    chid   = channel['identifier']
-                    title  = channel['title']
-                    icon   = (channel['icon'] or ICON)
-                    for idx, stream in enumerate(channel['streams']):
-                        streamType = stream['StreamType']
-                        if streamType == 'website':#random.choice(['website','roku']):
-                            continue
-                        #multiple urls, only add unique.
-                        url = stream['Url']
-                        offset = stream['OffsetFromNow']
-                        delay  = url+'&delay=%d'
-                        #todo do something with delay option?
-                        if url not in urls:
-                            urls.append(url)
-                            chid = chid+'.%d'%idx if idx > 0 else chid
-                            label      = "%s - %s" % (chid, title)
-                            infoLabels ={"mediatype":"video","label":label ,"title":label}
-                            infoArt    ={"thumb":icon,"poster":icon,"fanart":FANART,"icon":icon,"logo":icon} 
-                            self.addLink(title, url, 9, infoLabels, infoArt)
+        if len(data) == 0: return
+        for channel in data:
+            if state in channel['config']['state']:
+                chid   = channel['identifier']
+                title  = channel['title']
+                icon   = (channel['icon'] or ICON)
+                for idx, stream in enumerate(channel['streams']):
+                    streamType = stream['StreamType']
+                    if streamType == 'website': continue#random.choice(['website','roku']): 
+                    #multiple urls, only add unique.
+                    url = stream['Url']
+                    offset = stream['OffsetFromNow']
+                    delay  = url+'&delay=%d'
+                    #todo do something with delay option?
+                    if url not in urls:
+                        urls.append(url)
+                        chid = chid+'.%d'%idx if idx > 0 else chid
+                        label      = "%s - %s" % (chid, title)
+                        infoLabels ={"mediatype":"episodes","label":label ,"title":label}
+                        infoArt    ={"thumb":icon,"poster":icon,"fanart":FANART,"icon":icon,"logo":icon} 
+                        self.addLink(title, url, 9, infoLabels, infoArt)
         
         
     def videoclips(self, state):
         log('videoclips, state = ' + state)
         data = self.openURL(BASE_API)
-        if data:
-            for channel in data:
-                if state in channel['config']['state']:
-                    chid   = channel['identifier']
-                    title  = channel['title']
-                    icon   = (channel['icon'] or ICON)
-                    vidURL = channel['config']['localvodfeed']
-                    if vidURL:
-                        label      = "%s - %s" % (chid, title)
-                        infoLabels ={"mediatype":"video","label":label,"title":label}
-                        infoArt    ={"thumb":icon,"poster":icon,"fanart":FANART,"icon":ICON,"logo":ICON} 
-                        self.addDir(label, vidURL, 4, infoLabels, infoArt)
+        if len(data) == 0: return
+        for channel in data:
+            if state in channel['config']['state']:
+                chid   = channel['identifier']
+                title  = channel['title']
+                icon   = (channel['icon'] or ICON)
+                vidURL = channel['config']['localvodfeed']
+                if vidURL:
+                    label      = "%s - %s" % (chid, title)
+                    infoLabels ={"mediatype":"video","label":label,"title":label}
+                    infoArt    ={"thumb":icon,"poster":icon,"fanart":FANART,"icon":ICON,"logo":ICON} 
+                    self.addDir(label, vidURL, 4, infoLabels, infoArt)
 
                     
     def parseclips(self, url):
@@ -181,29 +159,27 @@ class NewsOn(object):
                     title = item['title']
                     url   = vids['url']
                     plot  = item['summary']
-                    try:
-                        aired = (datetime.datetime.strptime(item.get('published',''), '%a, %d %b %Y %H:%M:%S UTC'))
-                    except:
-                        aired = datetime.datetime.now()
+                    aired = item.get('published','').replace(' EST','').replace(' UTC','').replace(' GMT','')
+                    try: aired = (datetime.datetime.strptime(aired, '%a, %d %b %Y %H:%M:%S'))
+                    except: aired = datetime.datetime.now()
                     aired = aired.strftime("%Y-%m-%d")
                     thumb = item['media_thumbnail'][0]['url']
                     tagLST = []
                     if 'tags' in item:
-                        for tag in item['tags']:
-                            print tag
-                            tagLST.append(((tag['term']).split('/')[0]).title())
-                    if len(tagLST) > 0:
-                        genre = (tagLST[0] or '')
-                    infoLabels ={"mediatype":"video","label":title,"title":title,"plot":plot,"aired":aired,'genre':genre,'tags':tagLST}
+                        for tag in item['tags']: tagLST.append(((tag['term']).split('/')[0]).title())
+                    if len(tagLST) > 0: genre = (tagLST[0] or '')
+                    infoLabels ={"mediatype":"episode","label":title,"title":title,"plot":plot,"aired":aired,'genre':genre,'tags':tagLST}
                     infoArt    ={"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON} 
-                    self.addLink(title, url, 9, infoLabels, infoArt)
+                    self.addLink(title, url, 8, infoLabels, infoArt)
 
                     
-    def playVideo(self, name, url, list=None):
+    def playVideo(self, name, url, live=False):
         log('playVideo')
-        if not list:
-            list = xbmcgui.ListItem(name, path=url)
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, list)
+        liz = xbmcgui.ListItem(name, path=url)
+        if live: 
+            liz.setProperty('inputstreamaddon','inputstream.adaptive')
+            liz.setProperty('inputstream.adaptive.manifest_type','hls') 
+        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
 
            
     def addLink(self, name, u, mode, infoList=False, infoArt=False, total=0):
@@ -211,15 +187,10 @@ class NewsOn(object):
         log('addLink, name = ' + name)
         liz=xbmcgui.ListItem(name)
         liz.setProperty('IsPlayable', 'true')
-        if infoList == False:
-            liz.setInfo( type="Video", infoLabels={"mediatype":"video","label":name,"title":name})
-        else:
-            liz.setInfo(type="Video", infoLabels=infoList)
-            
-        if infoArt == False:
-            liz.setArt({'thumb':ICON,'fanart':FANART})
-        else:
-            liz.setArt(infoArt)
+        if infoList == False: liz.setInfo( type="Video", infoLabels={"mediatype":"video","label":name,"title":name})
+        else: liz.setInfo(type="Video", infoLabels=infoList)
+        if infoArt == False: liz.setArt({'thumb':ICON,'fanart':FANART})
+        else: liz.setArt(infoArt)
         u=sys.argv[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,totalItems=total)
 
@@ -229,31 +200,20 @@ class NewsOn(object):
         log('addDir, name = ' + name)
         liz=xbmcgui.ListItem(name)
         liz.setProperty('IsPlayable', 'false')
-        if infoList == False:
-            liz.setInfo(type="Video", infoLabels={"mediatype":"video","label":name,"title":name})
-        else:
-            liz.setInfo(type="Video", infoLabels=infoList)
-        if infoArt == False:
-            liz.setArt({'thumb':ICON,'fanart':FANART})
-        else:
-            liz.setArt(infoArt)
+        if infoList == False: liz.setInfo(type="Video", infoLabels={"mediatype":"video","label":name,"title":name})
+        else: liz.setInfo(type="Video", infoLabels=infoList)
+        if infoArt == False: liz.setArt({'thumb':ICON,'fanart':FANART})
+        else: liz.setArt(infoArt)
         u=sys.argv[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
   
 params=getParams()
-try:
-    url=urllib.unquote_plus(params["url"])
-except:
-    url=None
-try:
-    name=urllib.unquote_plus(params["name"])
-except:
-    name=None
-try:
-    mode=int(params["mode"])
-except:
-    mode=None
-    
+try: url=urllib.unquote_plus(params["url"])
+except: url=None
+try: name=urllib.unquote_plus(params["name"])
+except: name=None
+try: mode=int(params["mode"])
+except: mode=None
 log("Mode: "+str(mode))
 log("URL : "+str(url))
 log("Name: "+str(name))
@@ -264,8 +224,12 @@ elif mode == 1: NewsOn().newsCasts(url)
 elif mode == 2: NewsOn().browseMenu(3)
 elif mode == 3: NewsOn().videoclips(url)
 elif mode == 4: NewsOn().parseclips(url)
-elif mode == 9: NewsOn().playVideo(name, url)
+elif mode == 8: NewsOn().playVideo(name, url)
+elif mode == 9: NewsOn().playVideo(name, url, True)
 
-xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_NONE )
-xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_LABEL )
-xbmcplugin.endOfDirectory(int(sys.argv[1]),cacheToDisc=True)
+xbmcplugin.setContent(int(sys.argv[1])    , CONTENT_TYPE)
+xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
+xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_NONE)
+xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_LABEL)
+xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_TITLE)
+xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=True)

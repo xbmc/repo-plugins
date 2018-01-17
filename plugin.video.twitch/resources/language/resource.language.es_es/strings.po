@@ -11,40 +11,40 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: da\n"
+"Language: es_ES\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 msgctxt "#30001"
 msgid "Games"
-msgstr "Spil"
+msgstr "Juegos"
 
 msgctxt "#30002"
 msgid "Following"
-msgstr "Følger"
+msgstr "Siguiendo"
 
 msgctxt "#30003"
 msgid "Search"
-msgstr "Søg"
+msgstr "Búsqueda"
 
 msgctxt "#30004"
 msgid "Settings"
-msgstr "Indstillinger"
+msgstr "Configuración"
 
 msgctxt "#30005"
 msgid "Featured Streams"
-msgstr "Fremhævede Spil"
+msgstr "Streams destacados"
 
 msgctxt "#30006"
 msgid "Teams"
-msgstr "Hold"
+msgstr "Equipos"
 
 msgctxt "#30007"
 msgid "Search for channels"
-msgstr "Søg efter kanaler"
+msgstr "Búsqueda por canales"
 
 msgctxt "#30008"
 msgid "Channels"
-msgstr "Kanaler"
+msgstr "Canales"
 
 msgctxt "#30010"
 msgid "TwitchTV"
@@ -52,75 +52,75 @@ msgstr "TwitchTV"
 
 msgctxt "#30011"
 msgid "next page..."
-msgstr "næste side..."
+msgstr "nueva página..."
 
 msgctxt "#30012"
 msgid "-- Currently Live Streams --"
-msgstr "-- Nuværende Live Streams --"
+msgstr "-- Streams en directo --"
 
 msgctxt "#30013"
 msgid "-- Followed Channels --"
-msgstr "-- Fulgte Kanaler --"
+msgstr "-- Canales seguidos --"
 
 msgctxt "#30020"
 msgid "Http error"
-msgstr "Http fejl"
+msgstr "Http error"
 
 msgctxt "#30021"
 msgid "No Live Data Found"
-msgstr "Ingen Live Data Fundet"
+msgstr "No hay datos en vivo encontrados"
 
 msgctxt "#30022"
 msgid "No archives found for"
-msgstr "Ingen arkiver fundet for"
+msgstr "No se encontraron archivos"
 
 msgctxt "#30023"
 msgid "User Token Error"
-msgstr "Bruger Token Fejl"
+msgstr "User Token Error"
 
 msgctxt "#30024"
 msgid "Changed video settings"
-msgstr "Skiftet video indstillinger"
+msgstr "Cambiar configuración de vídeo"
 
 msgctxt "#30025"
 msgid "Selected video settings are not available"
-msgstr "Valgte video indstillinger er ikke tilgængelige"
+msgstr "Selección de calidad de vídeo no disponible"
 
 msgctxt "#30026"
 msgid "TwitchApi error"
-msgstr "TwitchApi fejl"
+msgstr "TwitchApi error"
 
 msgctxt "#30027"
 msgid "JSON error"
-msgstr "JSON fejl"
+msgstr "JSON error"
 
 msgctxt "#30028"
 msgid "Failed to parse the result set"
-msgstr "Kan ikke afkode resultat sættet"
+msgstr "Error al analizar el conjunto de resultados"
 
 msgctxt "#30029"
 msgid "Please check your internet connection"
-msgstr "Tjek din internet forbindelse"
+msgstr "Por favor, comprueba tu conexión a Internet"
 
 msgctxt "#30040"
 msgid "Video Quality"
-msgstr "Video Kvalitet"
+msgstr "Calidad de vídeo"
 
 msgctxt "#30045"
 msgid "Display titles"
-msgstr "Vis titler"
+msgstr "Mostrar títulos"
 
 msgctxt "#30046"
 msgid "Streamer - Stream Title"
-msgstr "Streamer - Stream Titel"
+msgstr "Streamer - Título del Stream "
 
 msgctxt "#30047"
 msgid "Viewers - Streamer - Stream Title"
-msgstr "Seere - Streamer - Stream Titel"
+msgstr "Espectadores - Streamer - Título del Stream"
 
 msgctxt "#30048"
 msgid "Stream Title"
-msgstr "Stream Titel"
+msgstr "Título del Stream"
 
 msgctxt "#30049"
 msgid "Streamer"
@@ -128,47 +128,47 @@ msgstr "Streamer"
 
 msgctxt "#30050"
 msgid "Username"
-msgstr "Brugernavn"
+msgstr "Nombre de usuario"
 
 msgctxt "#30051"
 msgid "Streamer - Game Title - Stream Title"
-msgstr "Streamer - Spil Titel - Stream Titel"
+msgstr "Streamer - Game Title - Stream Title"
 
 msgctxt "#30052"
 msgid "Enable"
-msgstr "Enable"
+msgstr ""
 
 msgctxt "#30053"
 msgid "Password (OAuth Token)"
-msgstr "Adgangskode (OAuth Token)"
+msgstr ""
 
 msgctxt "#30060"
 msgid "Unnamed Streamer"
-msgstr "Unavngivet Streamer"
+msgstr "Streamer sin nombre"
 
 msgctxt "#30061"
 msgid "Untitled Stream"
-msgstr "Unavngivet Stream"
+msgstr "Stream sin título"
 
 msgctxt "#30062"
 msgid "Unknown Number of Viewers"
-msgstr "Ukendt Nummer af Seere"
+msgstr "Número desconocido de espectadores"
 
 msgctxt "#30064"
 msgid "Unknown Game"
-msgstr "Ukendt Spil"
+msgstr "Juego desconocido"
 
 msgctxt "#30065"
 msgid "Truncate displayed titles"
-msgstr "Afkort viste titler"
+msgstr "Truncar títulos exhibidos"
 
 msgctxt "#30066"
 msgid "Followed Games"
-msgstr "Fulgte Spil"
+msgstr ""
 
 msgctxt "#30067"
 msgid "Game Title Viewers | Streamer - Stream Title"
-msgstr "Spil Titel Seere | Streamer - Stream Titel"
+msgstr ""
 
 msgctxt "#30068"
 msgid "Content Type"

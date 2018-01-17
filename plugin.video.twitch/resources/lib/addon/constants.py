@@ -18,7 +18,7 @@
 """
 
 from common import kodi
-from twitch import scopes
+from twitch.oauth.v5 import scopes
 
 
 def __enum(**enums):
@@ -60,7 +60,11 @@ MODES = __enum(
     CLIPSLIST='clips_list',
     GAMELISTS='game_lists',
     EDITSORTING='edit_sorting',
-    EDITLANGUAGES='edit_languages'
+    EDITLANGUAGES='edit_languages',
+    CONFIGUREIA='configure_ia',
+    REVOKETOKEN='revoke_token',
+    UPDATETOKEN='update_token',
+    REFRESH='refresh'
 )
 
 LINE_LENGTH = 60
@@ -72,6 +76,8 @@ COLORS = 'aliceblue|antiquewhite|aqua|aquamarine|azure|beige|bisque|black|blanch
 
 ICON = kodi.get_icon()
 FANART = kodi.get_fanart()
+
+ADAPTIVE_SOURCE_TEMPLATE = {'id': 'hls', 'name': 'Adaptive', 'bandwidth': -1, 'url': ''}
 
 CLIENT_ID = 'NjdlYnBmaHlvaWNhYjVrcjB5N3B6b2NzZm9oczd0eQ=='
 REDIRECT_URI = 'https://mrsprigster.github.io/Twitch-on-Kodi/token/'
@@ -167,6 +173,7 @@ class Keys:
     TRACKING_ID = 'tracking_id'
     URL = 'url'
     USER = 'user'
+    USERS = 'users'
     VIDEOS = 'videos'
     VIDEO_BANNER = 'video_banner'
     VIDEO_HEIGHT = 'video_height'

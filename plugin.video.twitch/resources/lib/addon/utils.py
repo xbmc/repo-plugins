@@ -19,6 +19,7 @@
 
 import re
 import time
+import urllib
 from datetime import datetime
 from base64 import b64decode
 from common import kodi, json_store
@@ -42,6 +43,50 @@ def show_menu(menu, parent=None):
         setting_id += '_%s' % parent
     setting_id += '_%s' % menu
     return kodi.get_setting(setting_id) == 'true'
+
+
+def loose_version(v):
+    filled = []
+    for point in v.split("."):
+        filled.append(point.zfill(8))
+    return tuple(filled)
+
+
+def use_inputstream_adaptive():
+    if kodi.get_setting('video_quality_ia') == 'true':
+        if kodi.get_setting('video_support_ia_builtin') == 'true':
+            return True
+        elif kodi.get_setting('video_support_ia_addon') == 'true':
+            use_ia = kodi.get_setting('video_quality_ia') == 'true'
+            if not use_ia:
+                return False
+
+            ia_enabled = kodi.addon_enabled('inputstream.adaptive')
+            if ia_enabled is False:
+                if kodi.Dialog().yesno(kodi.get_name(), i18n('adaptive_is_disabled')):
+                    ia_enabled = kodi.set_addon_enabled('inputstream.adaptive')
+
+            if ia_enabled:
+                ia_min_version = '2.0.10'
+                ia_version = kodi.Addon('inputstream.adaptive').getAddonInfo('version')
+                ia_enabled = loose_version(ia_version) >= loose_version(ia_min_version)
+                if not ia_enabled:
+                    result = kodi.Dialog().ok(kodi.get_name(), i18n('adaptive_version_check') % ia_min_version)
+
+            if not ia_enabled:
+                kodi.set_setting('video_quality_ia', 'false')
+                return False
+            else:
+                return True
+        else:
+            kodi.set_setting('video_quality_ia', 'false')
+            return False
+    else:
+        return False
+
+
+def append_headers(headers):
+    return '|%s' % '&'.join(['%s=%s' % (key, urllib.quote_plus(headers[key])) for key in headers])
 
 
 def get_redirect_uri():

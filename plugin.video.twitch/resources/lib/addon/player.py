@@ -134,7 +134,7 @@ class TwitchPlayer(xbmc.Player):
                                         playback_item = kodi.create_item(item_dict, add=False)
                                         stream_name = result[Keys.CHANNEL][Keys.DISPLAY_NAME] \
                                             if result[Keys.CHANNEL][Keys.DISPLAY_NAME] else result[Keys.CHANNEL][Keys.NAME]
-                                        self.window.setProperty(self.reconnect_keys['stream'], '{0},{1},{2}'.format(channel_id, name, stream_name))
+                                        self.window.setProperty(self.reconnect_keys['stream'], '{0},{1},{2},{3}'.format(channel_id, name, stream_name, quality))
                                         self.play(item_dict['path'], playback_item)
                                         if utils.irc_enabled() and twitch.access_token:
                                             username = twitch.get_username()

@@ -11,40 +11,40 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: nl\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Language: cs_CZ\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2\n"
 
 msgctxt "#30001"
 msgid "Games"
-msgstr "Games"
+msgstr "Hry"
 
 msgctxt "#30002"
 msgid "Following"
-msgstr "Volgers"
+msgstr "Sledované"
 
 msgctxt "#30003"
 msgid "Search"
-msgstr "Zoeken"
+msgstr "Hledat"
 
 msgctxt "#30004"
 msgid "Settings"
-msgstr "Instellingen"
+msgstr "Nastavení"
 
 msgctxt "#30005"
 msgid "Featured Streams"
-msgstr "Streams"
+msgstr "Nejlepší streamy"
 
 msgctxt "#30006"
 msgid "Teams"
-msgstr "Teams"
+msgstr "Týmy"
 
 msgctxt "#30007"
 msgid "Search for channels"
-msgstr "Zoeken naar kanalen"
+msgstr "Hledat kanál"
 
 msgctxt "#30008"
 msgid "Channels"
-msgstr "Kanalen"
+msgstr "Kanály"
 
 msgctxt "#30010"
 msgid "TwitchTV"
@@ -52,75 +52,75 @@ msgstr "TwitchTV"
 
 msgctxt "#30011"
 msgid "next page..."
-msgstr "volgende pagina..."
+msgstr "další stránka..."
 
 msgctxt "#30012"
 msgid "-- Currently Live Streams --"
-msgstr "-- Huidige Live Streams --"
+msgstr "-- Živé streamy --"
 
 msgctxt "#30013"
 msgid "-- Followed Channels --"
-msgstr "-- Gevolgde Kanalen --"
+msgstr "-- Sledované kanály --"
 
 msgctxt "#30020"
 msgid "Http error"
-msgstr "HTTP-fout"
+msgstr "Http chyba"
 
 msgctxt "#30021"
 msgid "No Live Data Found"
-msgstr "Geen live data gevonden"
+msgstr "Živé data nenalezeny"
 
 msgctxt "#30022"
 msgid "No archives found for"
-msgstr "Geen archieven gevonden voor"
+msgstr "Archivy nenalezeny"
 
 msgctxt "#30023"
 msgid "User Token Error"
-msgstr "User Token Error"
+msgstr "Chyba v uživatelském tokenu"
 
 msgctxt "#30024"
 msgid "Changed video settings"
-msgstr "Video-instellingen gewijzigd"
+msgstr "Nastavení videa bylo změněno"
 
 msgctxt "#30025"
 msgid "Selected video settings are not available"
-msgstr "De geselecteerde video-instellingen zijn niet beschikbaar"
+msgstr "Zvolené nastavení videa není dostupné"
 
 msgctxt "#30026"
 msgid "TwitchApi error"
-msgstr "TwitchApi error"
+msgstr "TwitchApi chyba"
 
 msgctxt "#30027"
 msgid "JSON error"
-msgstr "JSON error"
+msgstr "JSON chyba"
 
 msgctxt "#30028"
 msgid "Failed to parse the result set"
-msgstr "Kon de resultaten niet inlezen"
+msgstr "Nepodařilo se naparsovat výsledky"
 
 msgctxt "#30029"
 msgid "Please check your internet connection"
-msgstr "Gelieve je internetverbinding na te kijken"
+msgstr "Zkontrolujte prosím internetové připojení"
 
 msgctxt "#30040"
 msgid "Video Quality"
-msgstr "Beeldkwaliteit"
+msgstr "Video kvalita"
 
 msgctxt "#30045"
 msgid "Display titles"
-msgstr "Titels weergeven"
+msgstr "Zobrazení titulku"
 
 msgctxt "#30046"
 msgid "Streamer - Stream Title"
-msgstr "Streamer - Stream Titel"
+msgstr "Streamer - Název streamu"
 
 msgctxt "#30047"
 msgid "Viewers - Streamer - Stream Title"
-msgstr "Kijkers - Streamer - Stream Titel"
+msgstr "Sledující - Streamer - Název streamu"
 
 msgctxt "#30048"
 msgid "Stream Title"
-msgstr "Stream Titel"
+msgstr "Název streamu"
 
 msgctxt "#30049"
 msgid "Streamer"
@@ -128,11 +128,11 @@ msgstr "Streamer"
 
 msgctxt "#30050"
 msgid "Username"
-msgstr "Gebruikersnaam"
+msgstr "Uživatelské jméno"
 
 msgctxt "#30051"
 msgid "Streamer - Game Title - Stream Title"
-msgstr "Streamer - Game Title - Stream Title"
+msgstr "Streamer - Název hry - Název streamu"
 
 msgctxt "#30052"
 msgid "Enable"
@@ -144,23 +144,23 @@ msgstr ""
 
 msgctxt "#30060"
 msgid "Unnamed Streamer"
-msgstr "Naamloze Streamer"
+msgstr "Bezejmenný Streamer"
 
 msgctxt "#30061"
 msgid "Untitled Stream"
-msgstr "Naamloze Stream"
+msgstr "Stream bez názvu"
 
 msgctxt "#30062"
 msgid "Unknown Number of Viewers"
-msgstr "Onbekend Aantal Kijkers"
+msgstr "Neznámý počet sledujících"
 
 msgctxt "#30064"
 msgid "Unknown Game"
-msgstr "Onbekend Spel"
+msgstr "Neznámá hra"
 
 msgctxt "#30065"
 msgid "Truncate displayed titles"
-msgstr "Afkappen weergegeven titels"
+msgstr "Zkrátit zobrazené tituly"
 
 msgctxt "#30066"
 msgid "Followed Games"

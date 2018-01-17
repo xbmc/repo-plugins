@@ -3,9 +3,10 @@
     <!-- Login -->
     <category label="30127">
         <setting id="oauth_token" type="text" label="30099" default=""/>
-        <setting label="30135" id="show_token_url" type="action" action="RunPlugin(plugin://$ID/?mode=get_token_url)" option="close"/>
         <setting label="30132" type="lsep"/>
+        <setting label="30135" id="show_token_url" type="action" action="RunPlugin(plugin://$ID/?mode=get_token_url)" option="close"/>
         <setting label="30138" type="lsep"/>
+        <setting label="30227" id="revoke_token" type="action" action="RunPlugin(plugin://$ID/?mode=revoke_token)" option="close"/>
     </category>
     <!-- Main Menu -->
     <category label="30219">
@@ -40,6 +41,10 @@
         <!-- Video Quality -->
         <setting id="video_quality" type="enum" label="30040" lvalues="30102|30136|30201" default="0"/>
         <setting id="bandwidth" type="number" label="30201" default="2500000" enable="eq(-1,2)" visible="eq(-1,2)"/>
+        <setting id="video_support_ia_builtin" type="bool" label="" visible="false" enable="true" default="false"/>
+        <setting id="video_support_ia_addon" type="bool" label="" visible="false" enable="true" default="false"/>
+        <setting id="video_quality_ia" type="bool" label="30223" default="false" enable="eq(-1,true)|eq(-2,true)"/>
+        <setting id="video_quality_ia_configure" type="action" label="30224" enable="eq(-1,true)+eq(-2,true)" visible="eq(-1,true)+eq(-2,true)" option="close" action="RunPlugin(plugin://$ID/?mode=configure_ia)"/>
         <!-- Title Display -->
         <setting id="title_display" type="enum" label="30045" lvalues="30046|30047|30048|30049|30051|30067|30054" default="0"/>
         <!-- Truncate titles -->
@@ -54,6 +59,8 @@
         <setting label="30204" type="lsep"/>
         <setting label="30211" id="live_notify" type="bool" default="false"/>
         <setting label="30205" id="live_notify_audible" type="bool" default="false" enable="eq(-1,true)" visible="eq(-1,true)"/>
+        <setting label="30232" id="live_notify_at_start" type="bool" default="true" enable="eq(-2,true)" visible="eq(-2,true)"/>
+        <setting label="30233" id="live_notify_group_start" type="bool" default="false" enable="eq(-1,true)" visible="eq(-1,true)"/>
 
         <setting label="30090" type="lsep"/>
         <setting label="30189" id="add_language" type="action" action="RunPlugin(plugin://$ID/?mode=edit_languages&amp;action=add)"/>
@@ -108,6 +115,7 @@
     </category>
     <!-- Cache -->
     <category label="30120">
+        <setting label="30234" id="refresh_cache" type="bool" default="false"/>
         <setting label="30121" type="slider" id="cache_expire_time" default="3" range="0,60" option="int"/>
         <setting label="30122" id="reset_cache" type="action" action="RunPlugin(plugin://$ID/?mode=reset_cache)"/>
     </category>

@@ -11,7 +11,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en\n"
+"Language: en_GB\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #Next available: 30041-30044, 30063, 30113
@@ -817,4 +817,52 @@ msgstr ""
 
 msgctxt "#30222"
 msgid "VODCast highlight color"
+msgstr ""
+
+msgctxt "#30223"
+msgid "Use inputstream.adaptive"
+msgstr ""
+
+msgctxt "#30224"
+msgid "Configure inputstream.adaptive"
+msgstr ""
+
+msgctxt "#30225"
+msgid "inputstream.adaptive is enabled in the Twitch settings, however inputstream.adaptive appears to be disabled. Would you like to enable inputstream.adaptive now?"
+msgstr ""
+
+msgctxt "#30226"
+msgid "The installed inputstream.adaptive add-on does not meet the version requirement(%s), and has been disabled in the Twitch add-on settings."
+msgstr ""
+
+msgctxt "#30227"
+msgid "Revoke Token"
+msgstr ""
+
+msgctxt "#30228"
+msgid "Are you sure you want to revoke your OAuth token?"
+msgstr ""
+
+msgctxt "#30229"
+msgid "OAuth token has been revoked"
+msgstr ""
+
+msgctxt "#30230"
+msgid "OAuth token has been updated"
+msgstr ""
+
+msgctxt "#30231"
+msgid "%s started streaming %s"
+msgstr ""
+
+msgctxt "#30232"
+msgid "Notify at start"
+msgstr ""
+
+msgctxt "#30233"
+msgid "Group notifications at start"
+msgstr ""
+
+msgctxt "#30234"
+msgid "Reset cache on Refresh"
 msgstr ""

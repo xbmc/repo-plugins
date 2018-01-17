@@ -23,7 +23,7 @@ from addon import utils, api, menu_items, cache
 from addon.common import kodi, log_utils
 from addon.common.url_dispatcher import URL_Dispatcher
 from addon.converter import JsonListItemConverter
-from addon.constants import MODES, LINE_LENGTH, LIVE_PREVIEW_TEMPLATE, Keys, REQUEST_LIMIT, CURSOR_LIMIT, MAX_REQUESTS
+from addon.constants import MODES, LINE_LENGTH, LIVE_PREVIEW_TEMPLATE, Keys, REQUEST_LIMIT, CURSOR_LIMIT, MAX_REQUESTS, ADAPTIVE_SOURCE_TEMPLATE
 from addon.googl_shorten import googl_url
 from addon.error_handling import error_handler
 from addon.twitch_exceptions import SubRequired, NotFound, PlaybackFailed, TwitchException
@@ -860,10 +860,11 @@ def list_community_streams(community_id, offset=0):
     raise NotFound(i18n('streams'))
 
 
-@dispatcher.register(MODES.PLAY, kwargs=['seek_time', 'channel_id', 'video_id', 'slug', 'ask', 'use_player', 'quality'])
+@dispatcher.register(MODES.PLAY, kwargs=['seek_time', 'channel_id', 'video_id', 'slug', 'ask', 'use_player', 'quality', 'channel_name'])
 @error_handler
-def play(seek_time=0, channel_id=None, video_id=None, slug=None, ask=False, use_player=False, quality=None):
+def play(seek_time=0, channel_id=None, video_id=None, slug=None, ask=False, use_player=False, quality=None, channel_name=None):
     window = kodi.Window(10000)
+    use_ia = utils.use_inputstream_adaptive()
 
     def _reset():
         window.clearProperty(kodi.get_id() + '-_seek')
@@ -890,7 +891,7 @@ def play(seek_time=0, channel_id=None, video_id=None, slug=None, ask=False, use_
 
     try:
         _reset_live()
-        videos = item_dict = channel_name = name = None
+        videos = item_dict = name = None
         seek_time = int(seek_time)
         is_live = False
         if video_id:
@@ -939,18 +940,23 @@ def play(seek_time=0, channel_id=None, video_id=None, slug=None, ask=False, use_
                         quality = quality[channel_id]['quality']
             else:
                 raise SubRequired(channel_name)
-        elif channel_id:
-            if not quality:
-                quality = utils.get_default_quality('stream', channel_id)
-                if quality:
-                    quality = quality[channel_id]['quality']
-            result = twitch.get_channel_stream(channel_id)[Keys.STREAM]
-            channel_name = result[Keys.CHANNEL][Keys.DISPLAY_NAME] \
-                if result[Keys.CHANNEL][Keys.DISPLAY_NAME] else result[Keys.CHANNEL][Keys.NAME]
-            name = result[Keys.CHANNEL][Keys.NAME]
-            videos = twitch.get_live(name)
-            item_dict = converter.stream_to_playitem(result)
-            is_live = True
+        elif channel_id or channel_name:
+            if channel_name and not channel_id:
+                result = twitch.get_user_ids(channel_name)[Keys.USERS]
+                if len(result) > 0:
+                    channel_id = result[0].get(Keys._ID)
+            if channel_id:
+                if not quality:
+                    quality = utils.get_default_quality('stream', channel_id)
+                    if quality:
+                        quality = quality[channel_id]['quality']
+                result = twitch.get_channel_stream(channel_id)[Keys.STREAM]
+                channel_name = result[Keys.CHANNEL][Keys.DISPLAY_NAME] \
+                    if result[Keys.CHANNEL][Keys.DISPLAY_NAME] else result[Keys.CHANNEL][Keys.NAME]
+                name = result[Keys.CHANNEL][Keys.NAME]
+                videos = twitch.get_live(name)
+                item_dict = converter.stream_to_playitem(result)
+                is_live = True
         elif slug:
             result = twitch.get_clip_by_slug(slug)
             channel_id = result[Keys.BROADCASTER][Keys.ID]
@@ -965,13 +971,35 @@ def play(seek_time=0, channel_id=None, video_id=None, slug=None, ask=False, use_
             clip = False if slug is None else True
             result = converter.get_video_for_quality(videos, ask=ask, quality=quality, clip=clip)
             if result:
-                play_url = result['url']
                 quality_label = result['name']
+
+                request = None
+                play_url = None
+                if quality_label == 'Adaptive' and use_ia:
+                    if video_id:
+                        request = twitch.video_request(video_id)
+                    elif is_live:
+                        request = twitch.live_request(name)
+                    if request:
+                        play_url = request['url'] + utils.append_headers(request['headers'])
+
+                if not play_url:
+                    play_url = result['url']
+
                 if is_live:
                     _set_live(channel_id, name, channel_name, quality_label)
                 log_utils.log('Attempting playback using quality |%s| @ |%s|' % (quality_label, play_url), log_utils.LOGDEBUG)
                 item_dict['path'] = play_url
                 playback_item = kodi.create_item(item_dict, add=False)
+                if not clip:
+                    playback_item.setContentLookup(False)
+                    playback_item.setMimeType('application/x-mpegURL')
+                elif clip and play_url.endswith('mp4'):
+                    playback_item.setContentLookup(False)
+                    playback_item.setMimeType('video/mp4')
+                if quality_label == 'Adaptive' and use_ia:
+                    playback_item.setProperty('inputstreamaddon', 'inputstream.adaptive')
+                    playback_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
                 if (seek_time > 0) and (video_id):
                     _set_seek_time(seek_time)
                 _set_playing()
@@ -1081,6 +1109,9 @@ def edit_qualities(content_type, target_id=None, name=None, video_id=None, remov
         elif content_type == 'stream':
             videos = twitch.get_live(name)
         if videos:
+            use_ia = utils.use_inputstream_adaptive()
+            if use_ia and not any(v['name'] == 'Adaptive' for v in videos) and (content_type != 'clip'):
+                videos.append(ADAPTIVE_SOURCE_TEMPLATE)
             result = converter.select_video_for_quality(videos)
             if result:
                 quality = result['name']
@@ -1160,6 +1191,15 @@ def clear_list(list_type, list_name):
             kodi.notify(msg=i18n('cleared_list') % (list_type, list_name), sound=False)
 
 
+@dispatcher.register(MODES.REFRESH)
+@error_handler
+def refresh():
+    do_cache_reset = kodi.get_setting('refresh_cache') == 'true'
+    if do_cache_reset:
+        result = cache.reset_cache()
+    kodi.refresh_container()
+
+
 @dispatcher.register(MODES.SETTINGS, kwargs=['refresh'])
 @error_handler
 def settings(refresh=True):
@@ -1195,6 +1235,15 @@ def install_ircchat():
         kodi.execute_builtin('RunPlugin(plugin://script.ircchat/)')
 
 
+@dispatcher.register(MODES.CONFIGUREIA)
+@error_handler
+def configure_ia():
+    use_ia = utils.use_inputstream_adaptive()
+    if use_ia:
+        if kodi.get_setting('video_support_ia_addon') == 'true':
+            kodi.Addon(id='inputstream.adaptive').openSettings()
+
+
 @dispatcher.register(MODES.TOKENURL)
 @error_handler
 def get_token_url():
@@ -1210,11 +1259,39 @@ def get_token_url():
     kodi.show_settings()
 
 
+@dispatcher.register(MODES.REVOKETOKEN)
+@error_handler
+def revoke_token():
+    token = utils.get_oauth_token()
+    if not token:
+        kodi.notify(msg=i18n('token_required'))
+        return
+    result = kodi.Dialog().yesno(heading=i18n('revoke_token'), line1=i18n('revoke_confirmation'))
+    if result:
+        response = twitch.client.revoke_token(token=token)
+
+        if 'error' in response:
+            if ('status' in response) and ('message' in response):
+                raise TwitchException(response)
+            raise TwitchException(response['error'])
+        else:
+            kodi.set_setting('oauth_token', '')
+            kodi.notify(msg=i18n('token_revoked'))
+            cache.reset_cache()
+
+
+@dispatcher.register(MODES.UPDATETOKEN, args=['oauth_token'])
+@error_handler
+def update_token(oauth_token):
+    kodi.set_setting('oauth_token', oauth_token)
+    kodi.notify(msg=i18n('token_updated'))
+
+
 def run(argv=None):
     if sys.argv:
         argv = sys.argv
     queries = kodi.parse_query(sys.argv[2])
-    log_utils.log('Version: |%s| Kodi Version: %s' % (kodi.get_version(), kodi.get_kodi_version()), log_utils.LOGDEBUG)
+    log_utils.log('Version: |%s| Application Version: %s' % (kodi.get_version(), kodi.get_kodi_version()), log_utils.LOGDEBUG)
     log_utils.log('Queries: |%s| Args: |%s|' % (queries, argv), log_utils.LOGDEBUG)
 
     # don't process params that don't match our url exactly

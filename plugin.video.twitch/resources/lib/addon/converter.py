@@ -19,8 +19,8 @@
 
 import menu_items
 from common import kodi
-from utils import the_art, TitleBuilder, i18n, get_oauth_token, get_vodcast_color
-from constants import Keys, Images, MODES
+from utils import the_art, TitleBuilder, i18n, get_oauth_token, get_vodcast_color, use_inputstream_adaptive
+from constants import Keys, Images, MODES, ADAPTIVE_SOURCE_TEMPLATE
 from base64 import b64encode
 
 
@@ -282,7 +282,7 @@ class JsonListItemConverter(object):
             color = get_vodcast_color()
             title = u'[COLOR={color}]{title}[/COLOR]'.format(title=title, color=color)
         info = self.get_plot_for_stream(stream)
-        info.update({'mediatype': 'video'})
+        info.update({'mediatype': 'video', 'playcount': 0})
         context_menu = list()
         context_menu.extend(menu_items.refresh())
         name = channel.get(Keys.DISPLAY_NAME) if channel.get(Keys.DISPLAY_NAME) else channel.get(Keys.NAME)
@@ -632,6 +632,9 @@ class JsonListItemConverter(object):
         return {u'plot': plot, u'plotoutline': plot, u'tagline': _title.rstrip('\r\n')}
 
     def get_video_for_quality(self, videos, ask=True, quality=None, clip=False):
+        use_ia = use_inputstream_adaptive()
+        if use_ia and not any(v['name'] == 'Adaptive' for v in videos) and not clip:
+            videos.append(ADAPTIVE_SOURCE_TEMPLATE)
         if ask is True:
             return self.select_video_for_quality(videos)
         else:
@@ -647,9 +650,10 @@ class JsonListItemConverter(object):
                 for video in videos:
                     if (quality and (quality.lower() in video['name'].lower())) or len(videos) == 1:
                         return video
-            elif ask:
+            if ask:
                 return self.select_video_for_quality(videos)
-            elif source:
+
+            if source:
                 for video in videos:
                     if 'chunked' in video['id']:
                         return video

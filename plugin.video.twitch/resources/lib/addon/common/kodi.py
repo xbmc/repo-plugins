@@ -39,6 +39,7 @@ get_info_label = xbmc.getInfoLabel
 sleep = xbmc.sleep
 __log = xbmc.log
 
+Addon = xbmcaddon.Addon
 Dialog = xbmcgui.Dialog
 PlayList = xbmc.PlayList
 Player = xbmc.Player
@@ -95,6 +96,42 @@ def has_addon(addon_id):
     return xbmc.getCondVisibility('System.HasAddon(%s)' % addon_id) == 1
 
 
+def addon_enabled(addon_id):
+    rpc_request = {"jsonrpc": "2.0",
+                   "method": "Addons.GetAddonDetails",
+                   "id": 1,
+                   "params": {"addonid": "%s" % addon_id,
+                              "properties": ["enabled"]}
+                   }
+    response = execute_jsonrpc(rpc_request)
+    try:
+        return response['result']['addon']['enabled'] is True
+    except KeyError:
+        message = response['error']['message']
+        code = response['error']['code']
+        error = 'Requested |%s| received error |%s| and code: |%s|' % (rpc_request, message, code)
+        xbmc.log(error, xbmc.LOGDEBUG)
+        return None
+
+
+def set_addon_enabled(addon_id, enabled=True):
+    rpc_request = {"jsonrpc": "2.0",
+                   "method": "Addons.SetAddonEnabled",
+                   "id": 1,
+                   "params": {"addonid": "%s" % addon_id,
+                              "enabled": enabled}
+                   }
+    response = execute_jsonrpc(rpc_request)
+    try:
+        return response['result'] == 'OK'
+    except KeyError:
+        message = response['error']['message']
+        code = response['error']['code']
+        error = 'Requested |%s| received error |%s| and code: |%s|' % (rpc_request, message, code)
+        xbmc.log(error, xbmc.LOGDEBUG)
+        return False
+
+
 def get_icon():
     return translate_path('special://home/addons/{0!s}/icon.png'.format(get_id()))
 
@@ -106,10 +143,14 @@ def get_fanart():
 def get_kodi_version():
     class MetaClass(type):
         def __str__(self):
-            return '|%s| -> |%s|%s|%s|%s|%s|' % (self.version, self.major, self.minor, self.tag, self.tag_version, self.revision)
+            return '|%s| |%s| -> |%s|%s|%s|%s|%s|' % (self.application, self.version, self.major, self.minor, self.tag, self.tag_version, self.revision)
 
     class KodiVersion(object):
         __metaclass__ = MetaClass
+        _json_query = execute_jsonrpc({"jsonrpc": "2.0", "method": "Application.GetProperties", "params": {"properties": ["name"]}, "id": 1})
+        application = 'Unknown'
+        if ('result' in _json_query) and ('name' in _json_query['result']):
+            application = _json_query['result']['name'].decode('utf-8')
         version = xbmc.getInfoLabel('System.BuildVersion').decode('utf-8')
         match = re.search('([0-9]+)\.([0-9]+)', version)
         if match: major, minor = match.groups()

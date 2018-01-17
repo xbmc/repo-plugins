@@ -11,28 +11,28 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
+"Language: nl_NL\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 msgctxt "#30001"
 msgid "Games"
-msgstr "Spiele"
+msgstr "Games"
 
 msgctxt "#30002"
 msgid "Following"
-msgstr "Abonnements"
+msgstr "Volgers"
 
 msgctxt "#30003"
 msgid "Search"
-msgstr "Suche"
+msgstr "Zoeken"
 
 msgctxt "#30004"
 msgid "Settings"
-msgstr "Einstellungen"
+msgstr "Instellingen"
 
 msgctxt "#30005"
 msgid "Featured Streams"
-msgstr "Featured Streams"
+msgstr "Streams"
 
 msgctxt "#30006"
 msgid "Teams"
@@ -40,11 +40,11 @@ msgstr "Teams"
 
 msgctxt "#30007"
 msgid "Search for channels"
-msgstr "Suche nach Kanälen"
+msgstr "Zoeken naar kanalen"
 
 msgctxt "#30008"
 msgid "Channels"
-msgstr "Kanäle"
+msgstr "Kanalen"
 
 msgctxt "#30010"
 msgid "TwitchTV"
@@ -52,75 +52,75 @@ msgstr "TwitchTV"
 
 msgctxt "#30011"
 msgid "next page..."
-msgstr "nächste Seite..."
+msgstr "volgende pagina..."
 
 msgctxt "#30012"
 msgid "-- Currently Live Streams --"
-msgstr "-- Aktuelle Live-Streams --"
+msgstr "-- Huidige Live Streams --"
 
 msgctxt "#30013"
 msgid "-- Followed Channels --"
-msgstr "-- Abonnierte Kanäle --"
+msgstr "-- Gevolgde Kanalen --"
 
 msgctxt "#30020"
 msgid "Http error"
-msgstr "HTTP-Fehler"
+msgstr "HTTP-fout"
 
 msgctxt "#30021"
 msgid "No Live Data Found"
-msgstr "Keine Live-Daten gefunden"
+msgstr "Geen live data gevonden"
 
 msgctxt "#30022"
 msgid "No archives found for"
-msgstr "Keine Aufzeichnungen gefunden für"
+msgstr "Geen archieven gevonden voor"
 
 msgctxt "#30023"
 msgid "User Token Error"
-msgstr "Benutzer-Token-Fehler"
+msgstr "User Token Error"
 
 msgctxt "#30024"
 msgid "Changed video settings"
-msgstr "Geänderte Video-Einstellungen"
+msgstr "Video-instellingen gewijzigd"
 
 msgctxt "#30025"
 msgid "Selected video settings are not available"
-msgstr "Ausgewählte Video-Einstellungen nicht verfügbar"
+msgstr "De geselecteerde video-instellingen zijn niet beschikbaar"
 
 msgctxt "#30026"
 msgid "TwitchApi error"
-msgstr "TwitchApi-Fehler"
+msgstr "TwitchApi error"
 
 msgctxt "#30027"
 msgid "JSON error"
-msgstr "JSON-Fehler"
+msgstr "JSON error"
 
 msgctxt "#30028"
 msgid "Failed to parse the result set"
-msgstr "Fehler beim Lesen der Daten"
+msgstr "Kon de resultaten niet inlezen"
 
 msgctxt "#30029"
 msgid "Please check your internet connection"
-msgstr "Bitte Internet-Verbindung prüfen"
+msgstr "Gelieve je internetverbinding na te kijken"
 
 msgctxt "#30040"
 msgid "Video Quality"
-msgstr "Video-Qualität"
+msgstr "Beeldkwaliteit"
 
 msgctxt "#30045"
 msgid "Display titles"
-msgstr "Zeige Stream-Namen"
+msgstr "Titels weergeven"
 
 msgctxt "#30046"
 msgid "Streamer - Stream Title"
-msgstr "Streamer - Stream-Name"
+msgstr "Streamer - Stream Titel"
 
 msgctxt "#30047"
 msgid "Viewers - Streamer - Stream Title"
-msgstr "Zuschauer - Streamer - Stream-Name"
+msgstr "Kijkers - Streamer - Stream Titel"
 
 msgctxt "#30048"
 msgid "Stream Title"
-msgstr "Stream-Name"
+msgstr "Stream Titel"
 
 msgctxt "#30049"
 msgid "Streamer"
@@ -128,47 +128,47 @@ msgstr "Streamer"
 
 msgctxt "#30050"
 msgid "Username"
-msgstr "Benutzername"
+msgstr "Gebruikersnaam"
 
 msgctxt "#30051"
 msgid "Streamer - Game Title - Stream Title"
-msgstr "Streamer - Spielname - Stream-Name"
+msgstr "Streamer - Game Title - Stream Title"
 
 msgctxt "#30052"
 msgid "Enable"
-msgstr "Erlauben"
+msgstr ""
 
 msgctxt "#30053"
 msgid "Password (OAuth Token)"
-msgstr "Passwort (OAuth-Token)"
+msgstr ""
 
 msgctxt "#30060"
 msgid "Unnamed Streamer"
-msgstr "Nicht benannter Streamer"
+msgstr "Naamloze Streamer"
 
 msgctxt "#30061"
 msgid "Untitled Stream"
-msgstr "Nicht benannter Stream"
+msgstr "Naamloze Stream"
 
 msgctxt "#30062"
 msgid "Unknown Number of Viewers"
-msgstr "Nicht bekannte Zuschauerzahl"
+msgstr "Onbekend Aantal Kijkers"
 
 msgctxt "#30064"
 msgid "Unknown Game"
-msgstr "Nicht bekanntes Spiel"
+msgstr "Onbekend Spel"
 
 msgctxt "#30065"
 msgid "Truncate displayed titles"
-msgstr "Schneide angezeigte Namen ab"
+msgstr "Afkappen weergegeven titels"
 
 msgctxt "#30066"
 msgid "Followed Games"
-msgstr "Abonnierte Spiele"
+msgstr ""
 
 msgctxt "#30067"
 msgid "Game Title Viewers | Streamer - Stream Title"
-msgstr "Zuschauer bei Spiel | Streamer - Stream-Name"
+msgstr ""
 
 msgctxt "#30068"
 msgid "Content Type"

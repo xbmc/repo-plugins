@@ -37,13 +37,17 @@ class Twitch:
     usher = usher
     queries = twitch_queries
     client_id = utils.get_client_id()
+    client_secret = ''
+    app_token = ''
     access_token = utils.get_oauth_token(token_only=True, required=False)
     required_scopes = SCOPES
 
     def __init__(self):
         self.queries.CLIENT_ID = self.client_id
+        self.queries.CLIENT_SECRET = self.client_secret
         self.queries.OAUTH_TOKEN = self.access_token
-        self.client = oauth.MobileClient(self.client_id)
+        self.queries.APP_TOKEN = self.app_token
+        self.client = oauth.clients.MobileClient(self.client_id, self.client_secret)
         if self.access_token:
             if not self.valid_token(self.client_id, self.access_token, self.required_scopes):
                 self.queries.OAUTH_TOKEN = ''
@@ -81,7 +85,7 @@ class Twitch:
                         utils.clear_client_id()
                         self.client_id = utils.get_client_id(default=True)
                         self.queries.CLIENT_ID = self.client_id
-                        self.client = oauth.MobileClient(self.client_id)
+                        self.client = oauth.clients.MobileClient(self.client_id, self.client_secret)
                     else:
                         result = kodi.Dialog().ok(heading=i18n('oauth_token'), line1=i18n('client_id_mismatch'),
                                                   line2=i18n('get_new_oauth_token') % (i18n('settings'), i18n('login'), i18n('get_oauth_token')))
@@ -105,6 +109,12 @@ class Twitch:
     def get_username(self):
         results = self.get_user(self.access_token)
         return results.get(Keys.NAME)
+
+    @api_error_handler
+    @cache.cache_method(cache_limit=cache.limit)
+    def get_user_ids(self, logins):
+        results = self.api.users.users(logins=logins)
+        return self.error_check(results)
 
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
@@ -329,6 +339,18 @@ class Twitch:
     @cache.cache_method(cache_limit=cache.limit)
     def get_live(self, name):
         results = self.usher.live(name)
+        return self.error_check(results)
+
+    @api_error_handler
+    @cache.cache_method(cache_limit=cache.limit)
+    def live_request(self, name):
+        results = self.usher.live_request(name)
+        return self.error_check(results)
+
+    @api_error_handler
+    @cache.cache_method(cache_limit=cache.limit)
+    def video_request(self, video_id):
+        results = self.usher.video_request(video_id)
         return self.error_check(results)
 
     def get_user_blocks(self):

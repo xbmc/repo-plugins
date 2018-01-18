@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30010">
+        <setting label="30011" type="bool" id="force_view" default="false"/>
+        <setting label="30012" type="select" id="content" enable="eq(-1,true)" values="videos|movies|tvshows|episodes|musicvideos" default="videos"/>
+        <setting label="30013" type="number" id="view_id" enable="eq(-2,true)" default="55"/>
+        <setting label="device_id" type="text" id="device_id" default="" visible="false"/>
+        <setting label="access_token" type="text" id="access_token" default="" visible="false"/>
+        <setting label="refresh_token" type="text" id="refresh_token" default="" visible="false"/>
+        <setting label="language" type="text" id="language" default="" visible="false"/>
+        <setting label="country" type="text" id="country" default="" visible="false"/>
+        <setting label="startup" type="bool" id="startup" default="true" visible="false"/>
+    </category>
+    <category label="30020">
+        <setting label="30021" type="action" id="is_settings" action="RunPlugin(plugin://plugin.video.eurosportplayer/?mode=is_settings)" option="close"/>
+    </category>
+</settings>

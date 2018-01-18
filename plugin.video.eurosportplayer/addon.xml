@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.eurosportplayer" version="2.0.6" name="Eurosport Player" provider-name="Jin">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.inputstreamhelper" version="0.2.4"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <news>
+- code improvement
+- removed pydes as dependency (user credentials will not be saved)
+- removed inputstream dependency, added inputstreamhelper as dependency
+- unique id check only once at addon startup
+- added screenshots
+        </news>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+            <screenshot>resources/media/screenshot-01.jpg</screenshot>
+            <screenshot>resources/media/screenshot-02.jpg</screenshot>
+            <screenshot>resources/media/screenshot-03.jpg</screenshot>
+            <screenshot>resources/media/screenshot-04.jpg</screenshot>
+        </assets>        
+        <summary lang="de_DE">Eurosport live, jederzeit und überall</summary>
+        <description lang="de_DE">Eurosport Player ist der Eurosport-Abonnementservice, mit dem Sie vollständigen und unbegrenzten LIVE- und On-Demand-Zugriff auf die Eurosport-Kanäle und exklusive Inhalte erhalten.</description>
+        <disclaimer lang="de_DE">Inoffizielles Addon - Benutzung auf eigene Gefahr</disclaimer>
+        <summary lang="en_GB">Watch Eurosport Live Anytime, Anywhere</summary>
+        <description lang="en_GB">Eurosport Player is the Eurosport subscription service to enjoy full and unlimited access to the Eurosport channels and exclusive content LIVE and on demand.</description>
+        <disclaimer lang="en_GB">Unofficial Addon - Use at your own risk</disclaimer>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+        <website>https://www.eurosportplayer.com</website>
+        <email>[jin] at [xyz] dot [de]</email>
+        <source>https://github.com/JinRonin/plugin.video.eurosportplayer</source>
+    </extension>
+</addon>

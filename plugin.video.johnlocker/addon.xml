@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.johnlocker" name="JohnLocker" provider-name="willforde" version="3.0.0">
+<addon id="plugin.video.johnlocker" name="JohnLocker" provider-name="willforde" version="3.0.1">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.codequick" version="0.9.0"/>
@@ -25,5 +25,6 @@
             <screenshot>resources/screenshots/screenshot002.jpg</screenshot>
         </assets>
         <news>[upd] Upgraded to use the codequick framework.</news>
+        <broken>Site no longer exists.</broken>
     </extension>
 </addon>

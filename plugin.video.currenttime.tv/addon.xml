@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.currenttime.tv" name="CurrentTime.TV" version="1.0.6" provider-name="dicoka@ukr.net">
+<addon id="plugin.video.currenttime.tv" name="CurrentTime.TV" version="1.0.7" provider-name="dicoka@ukr.net">
   <requires>
     <import addon="xbmc.python" version="2.24.0"/>
   </requires>

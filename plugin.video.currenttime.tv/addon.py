@@ -42,7 +42,6 @@ tvshows = ([
     [30047, 30048, 'lastvids+archive',  'bisplan', 	    '/z/20354'],
     [30049, 30050, 'lastvids+archive',  'unknownrus',   '/z/20331'],
     [30051, 30052, 'lastvids+archive',  'guests', 	    '/z/20330'],
-    [30053, 30054, 'lastvids+archive',  'nveurope',     '/z/20488']
 ])
 
 
@@ -59,18 +58,18 @@ mask_video_title = '<meta name="title" content="(.+?)"'
 mask_video_plot = '<div class="intro">\n<p>(.+?)</p>'
 
 mask_schedule = '<div class="time-stamp">\n' \
-                '<span class="time" >(.+?)</span>\n' \
+                '<span class="date date--time" >(.+?)</span>\n' \
                 '</div>\n' \
                 '<div class="img-wrap">\n' \
                 '<div class="thumb listThumb thumb16_9">\n' \
                 '<img data-src="(.+?)" src="">\n' \
                 '.+?' \
                 '<div class="content">\n' \
-                '<h4>\n' \
+                '<h4 class="media-block__title">\n' \
                 '(.+?)\n' \
                 '</h4>\n' \
                 '<p>(.+?)</p>\n'
-mask_schedule_online = '<span class="badge badge-live" >.+?</span>\n'
+mask_schedule_online = '<span class="badge badge--live" >.+?</span>\n'
 
 NUM_OF_PARALLEL_REQ = 6    #queue size
 MAX_REQ_TRIES = 3
@@ -281,45 +280,24 @@ def addon_main(bs_url, addon_hndl, addon_url):
 
     ### List videos with NEXT link
     elif mode == 'lastvids+next':
-        match_url = match_in_page(site_url + folder_url + '?p=30', mask_url)
-        llast = folder_level * MAX_ITEMS_TO_SHOW
-        if llast > len(match_url):
-            llast = len(match_url)
-        generate_videolinks_menu(match_url[llast - MAX_ITEMS_TO_SHOW: llast])
-        # add menu item 'Next'
-        if llast < len(match_url):
-            add_dir({
-                'name': folder_name,
-                'thumb': img_link('folder', 'thumb'),
-                'fanart': img_link(folder_name, 'fanart'),
-                'mode': 'lastvids+next',
-                'title': '[B]>> ' + string(30101)
-                         + '... (' + str(folder_level + 1) + ')[/B]',  # Next
-                'plot': string(30102),
-                'url': folder_url
-            })
-        xbmcplugin.endOfDirectory(addon_handle)
-
-    ### List videos with ARCHIVE link
-    elif mode == 'lastvids+archive':
-        match_url = match_in_page(site_url + folder_url, mask_url)
+        match_url = match_in_page(site_url + folder_url + '?p=folder_level', mask_url)
         generate_videolinks_menu(match_url)
-        # add menu item 'Archive'
+        # add menu item 'Next'
         add_dir({
             'name': folder_name,
             'thumb': img_link('folder', 'thumb'),
             'fanart': img_link(folder_name, 'fanart'),
-            'mode': 'allvids_archive',
-            'title': '[B]' + string(30103) + ' "' + folder_title
-                     + '"[/B]',  # Archive
-            'plot': string(30104),
+            'mode': 'lastvids+next',
+            'title': '[B]>> ' + string(30101)
+                     + '... (' + str(folder_level + 1) + ')[/B]',  # Next
+            'plot': string(30102),
             'url': folder_url
         })
         xbmcplugin.endOfDirectory(addon_handle)
 
-    ### List ARCHIVE
-    elif mode == 'allvids_archive':
-        match_date_url = match_in_page(site_url + folder_url + '?p=1000', mask_date_url)
+    ### List videos with ARCHIVE link
+    elif mode == 'lastvids+archive':
+        match_date_url = match_in_page(site_url + folder_url + '?p=folder_level', mask_date_url)
         for date, url in match_date_url:
             add_dir({
                 'name': folder_name,
@@ -330,7 +308,20 @@ def addon_main(bs_url, addon_hndl, addon_url):
                 'plot': folder_title,
                 'url': url
             })
+     
+		# add menu item 'Next'
+        add_dir({
+            'name': folder_name,
+            'thumb': img_link('folder', 'thumb'),
+            'fanart': img_link(folder_name, 'fanart'),
+            'mode': 'lastvids+archive',
+            'title': '[B]>> ' + string(30101)
+                     + '... (' + str(folder_level + 1) + ')[/B]',  # Next
+            'plot': string(30102),
+            'url': folder_url
+        })
         xbmcplugin.endOfDirectory(addon_handle)
+
 
     ### List ONE video from archive
     elif mode == 'video':

@@ -1,3 +1,7 @@
+2.1.1
+[fix] video default qualities
+[fix] setContentLookup AttributeError
+
 2.1.0
 [chg] string paths
 [fix] required changes for script.module.python.twitch v2.0.0 refactor

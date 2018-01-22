@@ -937,7 +937,7 @@ def play(seek_time=0, channel_id=None, video_id=None, slug=None, ask=False, use_
                 if not quality:
                     quality = utils.get_default_quality('video', channel_id)
                     if quality:
-                        quality = quality[channel_id]['quality']
+                        quality = quality[str(channel_id)]['quality']
             else:
                 raise SubRequired(channel_name)
         elif channel_id or channel_name:
@@ -949,7 +949,7 @@ def play(seek_time=0, channel_id=None, video_id=None, slug=None, ask=False, use_
                 if not quality:
                     quality = utils.get_default_quality('stream', channel_id)
                     if quality:
-                        quality = quality[channel_id]['quality']
+                        quality = quality[str(channel_id)]['quality']
                 result = twitch.get_channel_stream(channel_id)[Keys.STREAM]
                 channel_name = result[Keys.CHANNEL][Keys.DISPLAY_NAME] \
                     if result[Keys.CHANNEL][Keys.DISPLAY_NAME] else result[Keys.CHANNEL][Keys.NAME]
@@ -963,7 +963,7 @@ def play(seek_time=0, channel_id=None, video_id=None, slug=None, ask=False, use_
             if not quality:
                 quality = utils.get_default_quality('clip', channel_id)
                 if quality:
-                    quality = quality[channel_id]['quality']
+                    quality = quality[str(channel_id)]['quality']
             videos = twitch.get_clip(slug)
             item_dict = converter.clip_to_playitem(result)
         _reset()
@@ -992,11 +992,17 @@ def play(seek_time=0, channel_id=None, video_id=None, slug=None, ask=False, use_
                 item_dict['path'] = play_url
                 playback_item = kodi.create_item(item_dict, add=False)
                 if not clip:
-                    playback_item.setContentLookup(False)
-                    playback_item.setMimeType('application/x-mpegURL')
+                    try:
+                        playback_item.setContentLookup(False)
+                        playback_item.setMimeType('application/x-mpegURL')
+                    except AttributeError:
+                        pass
                 elif clip and play_url.endswith('mp4'):
-                    playback_item.setContentLookup(False)
-                    playback_item.setMimeType('video/mp4')
+                    try:
+                        playback_item.setContentLookup(False)
+                        playback_item.setMimeType('video/mp4')
+                    except AttributeError:
+                        pass
                 if quality_label == 'Adaptive' and use_ia:
                     playback_item.setProperty('inputstreamaddon', 'inputstream.adaptive')
                     playback_item.setProperty('inputstream.adaptive.manifest_type', 'hls')

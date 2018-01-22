@@ -4,24 +4,20 @@
 #
 # Imports
 #
-import os
-import re
-import requests
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 import sys
-import urllib
-import urlparse
 import xbmc
-import xbmcgui
-import xbmcplugin
-from BeautifulSoup import BeautifulSoup
 
-from dumpert_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
+from dumpert_const import LANGUAGE, log, convertToUnicodeString
 
 
 #
 # Main class
 #
-class Main:
+class Main(object):
     #
     # Init
     #
@@ -32,36 +28,21 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
+        log("ARGV", repr(sys.argv))
 
-        # Parse parameters
-        # urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['url'][0]
-        base = urlparse.urlparse(sys.argv[2])
-        query = base.query
-        args = urlparse.parse_qs(query)
-        url = args['url'][0]
-
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.video_list_page_url", str(url)),
-                     xbmc.LOGDEBUG)
-
-        # Get query
-        q = ''
+        # Get search term from user
         keyboard = xbmc.Keyboard('', LANGUAGE(30508))
         keyboard.doModal()
 
         if keyboard.isConfirmed():
-            q = keyboard.getText()
+            search_term = keyboard.getText()
 
-        url = requests.post(url, data={'q': q, 'cat': '', 'submit': 'zoek'}).url
-
+        sys.argv[2] = convertToUnicodeString(sys.argv[2])
         # Converting URL argument to proper query string like 'http://www.dumpert.nl/search/ALL/fiets/1/'
-        args.update({'url': url + '1/'})
-        encoded_args = urllib.urlencode(args, doseq=True)
+        sys.argv[2] = sys.argv[2] + "/ALL/" + search_term + "/1/'"
 
-        sys.argv[2] = urlparse.ParseResult(base.scheme, base.netloc, base.path, base.params, encoded_args,
-                                           base.fragment).geturl()  # Run list on results
+        log("sys.argv[2]", sys.argv[2])
+
         import dumpert_list as plugin
 
         plugin.Main()

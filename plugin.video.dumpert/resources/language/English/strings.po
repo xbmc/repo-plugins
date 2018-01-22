@@ -154,3 +154,7 @@ msgstr ""
 msgctxt "#30600"
 msgid "Show NSFW content"
 msgstr ""
+
+msgctxt "#30610"
+msgid "Only show New video category"
+msgstr ""

@@ -4,24 +4,25 @@
 #
 # Imports
 #
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 import os
 import re
 import requests
 import sys
-import urllib
-import urlparse
-import xbmc
+import urllib.request, urllib.parse, urllib.error
 import xbmcgui
 import xbmcplugin
-from BeautifulSoup import BeautifulSoup
 
-from dumpert_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
+from dumpert_const import LANGUAGE, IMAGES_PATH, SETTINGS, convertToUnicodeString, log, getSoup
 
 
 #
 # Main class
 #
-class Main:
+class Main(object):
     #
     # Init
     #
@@ -32,18 +33,14 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
+        log("ARGV", repr(sys.argv))
 
         # Parse parameters...
-        self.plugin_category = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['plugin_category'][0]
-        self.video_list_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['url'][0]
-        self.next_page_possible = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+        self.plugin_category = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['plugin_category'][0]
+        self.video_list_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
+        self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)),
-                     xbmc.LOGDEBUG)
+        log("self.video_list_page_url", self.video_list_page_url)
 
         # Determine base_url
         # http://www.dumpert.nl/
@@ -56,8 +53,7 @@ class Main:
         # add last slash
         self.video_list_page_url = str(self.video_list_page_url) + "/"
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.base_url", str(self.base_url)), xbmc.LOGDEBUG)
+        log("self.base_url", self.base_url)
 
         #
         # Get the videos...
@@ -72,33 +68,31 @@ class Main:
         # Init
         #
         thumbnail_urls_index = 0
-        current_page = ''
-        theme_base_url = ''
-        list_item = ''
 
         #
         # Get HTML page...
         #
         if SETTINGS.getSetting('nsfw') == 'true':
-            html_source = requests.get(self.video_list_page_url, cookies={'nsfw': '1'}).text
+            response = requests.get(self.video_list_page_url, cookies={'nsfw': '1'})
         else:
-            html_source = requests.get(self.video_list_page_url).text
+            response = requests.get(self.video_list_page_url)
 
-        # Parse response...
-        soup = BeautifulSoup(html_source)
+        html_source = response.text
+        html_source = convertToUnicodeString(html_source)
+
+        # Parse response
+        soup = getSoup(html_source)
 
         # <img src="http://static.dumpert.nl/s/trailerts_gr.jpg" alt="" />
         thumbnail_urls = soup.findAll('img', attrs={'src': re.compile("^http://static.dumpert.nl/")})
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(thumbnail_urls)", str(len(thumbnail_urls))), xbmc.LOGDEBUG)
+        log("len(thumbnail_urls)", len(thumbnail_urls))
 
         # <a href="/themas/uit_het_archief/" class="themalink big">
         # <a href="/themas/liev/" class="themalink">
         video_page_urls = soup.findAll('a', attrs={'class': re.compile("^themalink")})
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(video_page_urls)", str(len(video_page_urls))), xbmc.LOGDEBUG)
+        log("len(video_page_urls)", len(video_page_urls))
 
         for video_page_url in video_page_urls:
             video_page_url = video_page_url['href']
@@ -108,8 +102,7 @@ class Main:
             theme_base_url = str(self.base_url) + str(video_page_url)
             current_page = 1
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "self.theme_base_url", str(theme_base_url)), xbmc.LOGDEBUG)
+            log("theme_base_url", theme_base_url)
 
             # Make title
             # http://static.dumpert.nl/themas/politiek_kl.jpg
@@ -125,9 +118,7 @@ class Main:
             title = title.replace('_kl', '')
             title = title.replace('_', ' ')
 
-            xbmc.log(
-                    "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "title", str(title)),
-                    xbmc.LOGDEBUG)
+            log("title", title)
 
             if thumbnail_urls_index >= len(thumbnail_urls):
                 thumbnail_url = ''
@@ -138,7 +129,7 @@ class Main:
             parameters = {"action": "list", "plugin_category": self.plugin_category,
                           "url": str(theme_base_url) + str(current_page) + '/', "next_page_possible": "True",
                           "title": title}
-            url = sys.argv[0] + '?' + urllib.urlencode(parameters)
+            url = sys.argv[0] + '?' + urllib.parse.urlencode(parameters)
             list_item = xbmcgui.ListItem(title, thumbnailImage=thumbnail_url)
             list_item.setInfo("video", {"Title": title, "Studio": "Dumpert"})
             list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
@@ -157,7 +148,7 @@ class Main:
             parameters = {"action": "list", "plugin_category": self.plugin_category,
                           "url": str(theme_base_url) + str(next_page) + '/',
                           "next_page_possible": self.next_page_possible}
-            url = sys.argv[0] + '?' + urllib.urlencode(parameters)
+            url = sys.argv[0] + '?' + urllib.parse.urlencode(parameters)
             list_item = xbmcgui.ListItem(LANGUAGE(30503), thumbnailImage=os.path.join(IMAGES_PATH, 'next-page.png'))
             list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'false')
@@ -166,8 +157,7 @@ class Main:
             list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])
             xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=list_item, isFolder=is_folder)
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "next url", str(url)), xbmc.LOGDEBUG)
+            log("next url", url)
 
         # Sort on labels...
         xbmcplugin.addSortMethod(handle=int(sys.argv[1]), sortMethod=xbmcplugin.SORT_METHOD_LABEL)

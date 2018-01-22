@@ -4,26 +4,25 @@
 #
 # Imports
 #
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 import os
-import re
-import requests
 import sys
-import urllib
-import urlparse
-import xbmc
+import urllib.request, urllib.parse, urllib.error
 import xbmcgui
 import xbmcplugin
-from BeautifulSoup import BeautifulSoup
 from datetime import datetime
 import time
 
-from dumpert_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
+from dumpert_const import LANGUAGE, IMAGES_PATH, log
 
 
 #
 # Main class
 #
-class Main:
+class Main(object):
     #
     # Init
     #
@@ -33,8 +32,8 @@ class Main:
         self.plugin_url = sys.argv[0]
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
+
+        log("ARGV", repr(sys.argv))
 
         date = xbmcgui.Dialog().numeric(1, LANGUAGE(30509))
         if not date is None:
@@ -62,7 +61,7 @@ class Main:
         # Next page is not available for top5
         parameters = {"action": "json", "plugin_category": title,
                       "url": daytop, "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(title, iconImage="DefaultFolder.png")
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
@@ -73,7 +72,7 @@ class Main:
         # Next page is not available for top5
         parameters = {"action": "json", "plugin_category": title,
                       "url": weektop, "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(title, iconImage="DefaultFolder.png")
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
@@ -84,7 +83,7 @@ class Main:
         # Next page is not available for top5
         parameters = {"action": "json", "plugin_category": title,
                       "url": monthtop, "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(title, iconImage="DefaultFolder.png")
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})

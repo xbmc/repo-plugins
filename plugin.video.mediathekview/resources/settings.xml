@@ -2,12 +2,16 @@
 <settings>
 	<category label="30001">
 		<setting id="firstrun"			type="bool"						default="true"	visible="false"						/>
+		<setting id="instanceid"		type="text"						default=""		visible="false"						/>
 		<setting id="quality"			type="bool"		label="30110"	default="true"										/>
 		<setting id="nofuture"			type="bool"		label="30111"	default="true"										/>
 		<setting id="minlength"			type="slider"	label="30112"	default="0"		range="0,30"						/>
 		<setting id="groupshows"		type="bool"		label="30113"	default="true"										/>
 		<setting id="maxresults"		type="slider"	label="30114"	default="1000"	range="100,100,3000" option="int"	/>
-		<setting id="downloadpath"		type="folder"	label="30115"	source="auto"	option="writeable"					/>
+		<setting id="maxage"			type="slider"	label="30115"	default="2"		range="1,30" option="int"			/>
+		<setting id="recentmode"		type="enum"		label="30116"	default="0"		lvalues="30161|30162"				/>
+
+		<setting id="downloadpath"		type="folder"	label="30118"	source="auto"	option="writeable"					/>
 	</category>
 	<category label="30002">
 		<setting id="dbtype"			type="enum"		label="30210"	default="0"	lvalues="30221|30222"					/>
@@ -18,7 +22,6 @@
 		<setting id="dbdata"			type="text"		label="30215"	default="mediathekview"		visible="eq(-5,1)"		/>
 		<setting id="updenabled"		type="bool"		label="30231"	default="true"										/>
 		<setting id="updinterval"		type="slider"	label="30232"	default="2"	range="1,24"	visible="eq(-1,true)"	/>
-		<setting id="updxzbin"			type="file"		label="30233"	default=""					visible="eq(-2,true)"	/>
 
 		<!-- setting						type="action"	label="30238"	action="RunScript(plugin.video.mediathekview, downloadreport)"/ -->
 	</category>

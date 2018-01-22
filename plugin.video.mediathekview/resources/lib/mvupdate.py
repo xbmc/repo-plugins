@@ -6,7 +6,7 @@ import os
 import sys
 import argparse
 import datetime
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 
 from resources.lib.base.Logger import Logger
 from resources.lib.updater import MediathekViewUpdater
@@ -24,6 +24,8 @@ class Settings( object ):
 			self.database		= args.database
 		self.nofuture		= True
 		self.minlength		= 0
+		self.maxage			= 86400
+		self.recentmode		= 0
 		self.groupshows		= False
 		self.updenabled		= True
 		self.updinterval	= 3600
@@ -103,6 +105,8 @@ class Notifier( object ):
 	def ShowUpdateProgress( self ):
 		pass
 	def UpdateUpdateProgress( self, percent, count, channels, shows, movies ):
+		pass
+	def HookDownloadProgress( self, blockcount, blocksize, totalsize ):
 		pass
 	def CloseUpdateProgress( self ):
 		pass

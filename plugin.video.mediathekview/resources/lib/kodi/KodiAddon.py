@@ -3,14 +3,19 @@
 #
 
 # -- Imports ------------------------------------------------
-import sys, urllib
-import xbmc, xbmcgui, xbmcaddon, xbmcplugin
+import os
+import sys
+import urllib
+
+import xbmc
+import xbmcgui
+import xbmcaddon
+import xbmcplugin
 
 from resources.lib.kodi.KodiLogger import KodiLogger
 
 # -- Classes ------------------------------------------------
 class KodiAddon( KodiLogger ):
-
 	def __init__( self ):
 		self.addon			= xbmcaddon.Addon()
 		self.addon_id		= self.addon.getAddonInfo( 'id' )
@@ -29,6 +34,7 @@ class KodiAddon( KodiLogger ):
 		return self.addon.setSetting( setting_id, value )
 
 	def doAction( self, action ):
+		self.debug( 'Triggered action {}', action )
 		xbmc.executebuiltin( 'Action({})'.format( action ) )
 
 class KodiService( KodiAddon ):
@@ -66,3 +72,43 @@ class KodiPlugin( KodiAddon ):
 
 	def endOfDirectory( self, succeeded = True, updateListing = False, cacheToDisc = True ):
 		xbmcplugin.endOfDirectory( self.addon_handle, succeeded, updateListing, cacheToDisc )
+
+
+class KodiInterlockedMonitor( xbmc.Monitor ):
+	def __init__( self, service, setting_id ):
+		super( KodiInterlockedMonitor, self ).__init__()
+		self.instance_id	= ''.join( format( x, '02x' ) for x in bytearray( os.urandom( 16 ) ) )
+		self.setting_id		= setting_id
+		self.service		= service
+
+	def RegisterInstance( self, waittime = 1 ):
+		if self.BadInstance():
+			self.service.info( 'Found other instance with id {}', self.instance_id )
+			self.service.info( 'Startup delayed by {} second(s) waiting the other instance to shut down', waittime )
+			self.service.setSetting( self.setting_id, self.instance_id )
+			xbmc.Monitor.waitForAbort( self, waittime )
+		else:
+			self.service.setSetting( self.setting_id, self.instance_id )
+
+	def UnregisterInstance( self ):
+		self.service.setSetting( self.setting_id, '' )
+
+	def BadInstance( self ):
+		instance_id = self.service.getSetting( self.setting_id )
+		return len( instance_id ) > 0 and self.instance_id != instance_id
+
+	def abortRequested( self ):
+		return self.BadInstance() or xbmc.Monitor.abortRequested( self )
+
+	def waitForAbort( self, timeout = None ):
+		if timeout is None:
+			# infinite wait
+			while not self.abortRequested():
+				if xbmc.Monitor.waitForAbort( self, 1 ):
+					return True
+			return True
+		else:
+			for _ in range( timeout ):
+				if self.BadInstance() or xbmc.Monitor.waitForAbort( self, 1 ):
+					return True
+			return self.BadInstance()

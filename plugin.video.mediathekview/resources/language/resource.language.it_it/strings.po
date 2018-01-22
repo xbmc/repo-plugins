@@ -47,8 +47,24 @@ msgid "Limit search results"
 msgstr "Limita risultati ricerche"
 
 msgctxt "#30115"
+msgid "Max age of recents"
+msgstr "Età massima delle novità in giorni"
+
+msgctxt "#30116"
+msgid "Recent calculated by"
+msgstr "Novità calcolate con"
+
+msgctxt "#30118"
 msgid "Download directory"
 msgstr "Directory di download"
+
+msgctxt "#30161"
+msgid "Aired Date"
+msgstr "Data di Trasmissione"
+
+msgctxt "#30162"
+msgid "Added to Database"
+msgstr "Entrata nel database"
 
 # Settings Page 2
 msgctxt "#30210"
@@ -106,11 +122,11 @@ msgstr "Livestreams"
 
 msgctxt "#30904"
 msgid "Recently Added"
-msgstr "Recenti"
+msgstr "Novità"
 
 msgctxt "#30905"
 msgid "Recently Added by Channel"
-msgstr "Recenti secondo emittenti"
+msgstr "Novità secondo emittenti"
 
 msgctxt "#30906"
 msgid "Browse by Show in all Channels"

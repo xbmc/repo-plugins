@@ -32,23 +32,39 @@ msgstr "HD Streams bevorzugen"
 
 msgctxt "#30111"
 msgid "No future videos (usually trailers)"
-msgstr "Keine Videos aus der Zukunft (üblicherweise Trailer)"
+msgstr "Keine Filme aus der Zukunft (üblicherweise Trailer)"
 
 msgctxt "#30112"
 msgid "Minimum duration in minutes"
-msgstr "Minimlae Länge in Minuten"
+msgstr "Minimale Länge in Minuten"
 
 msgctxt "#30113"
 msgid "Group shows of different channel"
 msgstr "Sendungen verschiedener Sender zusammenfassen"
 
 msgctxt "#30114"
-msgid "Download directory"
+msgid "Limit search results"
 msgstr "Suchergebnisse eingrenzen"
 
 msgctxt "#30115"
+msgid "Max age of recents in days"
+msgstr "Maximales Alter der Neuigkeiten in Tagen"
+
+msgctxt "#30116"
+msgid "Recent calculated by"
+msgstr "Neuigkeit berechnet ab"
+
+msgctxt "#30118"
 msgid "Download directory"
 msgstr "Download-Verzeichnis"
+
+msgctxt "#30161"
+msgid "Aired Date"
+msgstr "Sendedatum"
+
+msgctxt "#30162"
+msgid "Added to Database"
+msgstr "Hinzugefügt zur Datenbank"
 
 # Settings Page 2
 msgctxt "#30210"

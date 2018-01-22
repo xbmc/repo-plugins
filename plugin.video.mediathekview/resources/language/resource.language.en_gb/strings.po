@@ -47,8 +47,24 @@ msgid "Limit search results"
 msgstr "Limit search results"
 
 msgctxt "#30115"
+msgid "Max age of recents in days"
+msgstr "Max age of recents in days"
+
+msgctxt "#30116"
+msgid "Recent calculated by"
+msgstr "Recent calculated by"
+
+msgctxt "#30118"
 msgid "Download directory"
 msgstr "Download directory"
+
+msgctxt "#30161"
+msgid "Aired Date"
+msgstr "Aired Date"
+
+msgctxt "#30162"
+msgid "Added to Database"
+msgstr "Added to Database"
 
 # Settings Page 2
 msgctxt "#30210"

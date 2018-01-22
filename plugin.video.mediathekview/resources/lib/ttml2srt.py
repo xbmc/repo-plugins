@@ -27,7 +27,7 @@
 import re
 import io
 from datetime import timedelta
-from xml.etree import ElementTree as ET
+from defusedxml import ElementTree as ET
 
 def ttml2srt( infile, outfile ):
 	tree = ET.parse( infile )
@@ -59,7 +59,7 @@ def ttml2srt( infile, outfile ):
 	def parse_time_expression(expression, default_offset=timedelta(0)):
 		offset_time = re.match(r'^([0-9]+(\.[0-9]+)?)(h|m|s|ms|f|t)$', expression)
 		if offset_time:
-			time_value, fraction, metric = offset_time.groups()
+			time_value, _, metric = offset_time.groups()
 			time_value = float(time_value)
 			if metric == 'h':
 				return default_offset + timedelta(hours=time_value)
@@ -79,7 +79,7 @@ def ttml2srt( infile, outfile ):
 		clock_time = re.match(
 			r'^([0-9]{2,}):([0-9]{2,}):([0-9]{2,}(\.[0-9]+)?)$', expression)
 		if clock_time:
-			hours, minutes, seconds, fraction = clock_time.groups()
+			hours, minutes, seconds, _ = clock_time.groups()
 			return timedelta(hours=int(hours), minutes=int(minutes), seconds=float(seconds))
 
 		clock_time_frames = re.match(

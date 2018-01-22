@@ -1,3 +1,9 @@
+v1.1.5 (2018-01-20)
+- adding a setting for only view new video category
+- addon now works in kode python 2 and should also work in python 3 (!!) once all dependencies work in python 3.
+Kudo's to the python future package for making this possible. Kudo's to RomanVM for the help.
+- fixed scraping of some youtube videos
+
 v1.1.4 (2017-04-06):
 - small fix to enable starting a video with a browser (chrome and 'send to kodi'-extension)
 

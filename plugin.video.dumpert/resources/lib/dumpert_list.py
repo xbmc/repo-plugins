@@ -4,24 +4,25 @@
 #
 # Imports
 #
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 import os
 import re
 import requests
 import sys
-import urllib
-import urlparse
-import xbmc
+import urllib.request, urllib.parse, urllib.error
 import xbmcgui
 import xbmcplugin
-from BeautifulSoup import BeautifulSoup
 
-from dumpert_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
+from dumpert_const import LANGUAGE, IMAGES_PATH, SETTINGS, convertToUnicodeString, log, getSoup
 
 
 #
 # Main class
 #
-class Main:
+class Main(object):
     #
     # Init
     #
@@ -32,17 +33,19 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
+        log("ARGV", repr(sys.argv))
 
         # Parse parameters
-        self.plugin_category = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['plugin_category'][0]
-        self.video_list_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['url'][0]
-        self.next_page_possible = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+        try:
+            self.plugin_category = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['plugin_category'][0]
+            self.video_list_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
+            self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+        except KeyError:
+            self.plugin_category = LANGUAGE(30001)
+            self.video_list_page_url = "http://www.dumpert.nl/1/"
+            self.next_page_possible = "True"
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)),
-                     xbmc.LOGDEBUG)
+        log("self.video_list_page_url", self.video_list_page_url)
 
         # Determine current page number and base_url
         # http://www.dumpert.nl/toppers/
@@ -57,10 +60,9 @@ class Main:
         self.current_page = self.video_list_page_url[pos_of_last_slash + 1:]
         self.current_page = int(self.current_page)
         # add last slash
-        self.video_list_page_url = str(self.video_list_page_url) + "/"
+        self.video_list_page_url = self.video_list_page_url + "/"
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.base_url", str(self.base_url)), xbmc.LOGDEBUG)
+        log("self.base_url", self.base_url)
 
         #
         # Get the videos...
@@ -75,7 +77,6 @@ class Main:
         # Init
         #
         titles_and_thumbnail_urls_index = 0
-        list_item = ''
         # Create a list for our items.
         listing = []
 
@@ -83,29 +84,28 @@ class Main:
         # Get HTML page
         #
         if SETTINGS.getSetting('nsfw') == 'true':
-            html_source = requests.get(self.video_list_page_url, cookies={'nsfw': '1'}).text
+            response = requests.get(self.video_list_page_url, cookies={'nsfw': '1'})
         else:
-            html_source = requests.get(self.video_list_page_url).text
+            response = requests.get(self.video_list_page_url)
+
+        html_source = response.text
+        html_source = convertToUnicodeString(html_source)
 
         # Parse response
-        soup = BeautifulSoup(html_source)
+        soup = getSoup(html_source)
 
         # Find titles and thumnail-urls
         # img src="http://static.dumpert.nl/sq_thumbs/2245331_272bd4c3.jpg" alt="Turnlulz" title="Turnlulz" width="100" height="100" />
         # titles_and_thumbnail_urls = soup.findAll('img', attrs={'src': re.compile("^http://static.dumpert.nl/")} )
         titles_and_thumbnail_urls = soup.findAll('img', attrs={'src': re.compile("thumb")})
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(titles_and_thumbnail_urls)",
-                str(len(titles_and_thumbnail_urls))),
-                     xbmc.LOGDEBUG)
+        log("titles_and_thumbnail_urls", titles_and_thumbnail_urls)
 
         # Find video page urls
         # <a href="http://www.dumpert.nl/mediabase/2245331/272bd4c3/turnlulz.html" class="dumpthumb" title="Turnlulz">
         video_page_urls = soup.findAll('a', attrs={'class': re.compile("dumpthumb")})
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(video_page_urls)", str(len(video_page_urls))), xbmc.LOGDEBUG)
+        log("len(video_page_urls)", len(video_page_urls))
 
         # in thema pages the first thumbnail is a thumbnail of the thema itself and not of a video
         # if that's the case: skip the first thumbnail
@@ -118,24 +118,21 @@ class Main:
                 pass
             else:
                 # skip video page url without a video
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                        ADDON, VERSION, DATE, "skipped video_page_url without video", str(video_page_url)),
-                             xbmc.LOGDEBUG)
+
+                log("skipped video_page_url without video", video_page_url)
+
                 titles_and_thumbnail_urls_index = titles_and_thumbnail_urls_index + 1
                 continue
 
             video_page_url = video_page_url['href']
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "video_page_url", str(video_page_url)), xbmc.LOGDEBUG)
+            log("video_page_url", video_page_url)
 
             # if link doesn't contain 'html': skip the link ('continue')
             if video_page_url.find('html') >= 0:
                 pass
             else:
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                        ADDON, VERSION, DATE, "skipped video_page_url without html", str(video_page_url)),
-                             xbmc.LOGDEBUG)
+                log("skipped video_page_url without html", video_page_url)
                 titles_and_thumbnail_urls_index = titles_and_thumbnail_urls_index + 1
                 continue
 
@@ -152,17 +149,12 @@ class Main:
             #</a>
             try:
                 description = titles_and_thumbnail_urls[titles_and_thumbnail_urls_index].parent.find("p","description").string
-                description = description.encode('utf-8')
             except:
                 pass
 
-
             # Make title
-            title = ''
             try:
                 title = titles_and_thumbnail_urls[titles_and_thumbnail_urls_index]['title']
-                # convert from unicode to encoded text (don't use str() to do this)
-                title = title.encode('utf-8')
             # <a href="http://www.dumpert.nl/mediabase/1958831/21e6267f/pixar_s_up_inspreken.html?thema=animatie" class="dumpthumb" title="Pixar's &quot;Up&quot; inspreken ">
             except KeyError:
                 # http://www.dumpert.nl/mediabase/6532392/82471b66/dumpert_heeft_talent.html
@@ -178,8 +170,7 @@ class Main:
             title = title.replace('/', ' ')
             title = title.replace('_', ' ')
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "title", str(title)),
-                     xbmc.LOGDEBUG)
+            log("title", title)
 
             if titles_and_thumbnail_urls_index >= len(titles_and_thumbnail_urls):
                 thumbnail_url = ''
@@ -192,7 +183,7 @@ class Main:
                               'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'true')
             parameters = {"action": "play", "video_page_url": video_page_url, "title": title}
-            url = self.plugin_url + '?' + urllib.urlencode(parameters)
+            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = False
             # Add refresh option to context menu
             list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])
@@ -210,7 +201,7 @@ class Main:
             parameters = {"action": "list", "plugin_category": self.plugin_category,
                           "url": str(self.base_url) + str(next_page) + '/',
                           "next_page_possible": self.next_page_possible}
-            url = self.plugin_url + '?' + urllib.urlencode(parameters)
+            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = True
             # Add refresh option to context menu
             list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])

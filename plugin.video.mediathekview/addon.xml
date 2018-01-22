@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.mediathekview"
 	name="MediathekView"
-	version="0.4.0"
+	version="0.4.2"
 	provider-name="MediathekView.de, Leo Moll">
 	<requires>
 		<import addon="xbmc.python" version="2.25.0"/>
 		<import addon="script.module.requests" version="2.12.4"/>
 		<import addon="script.module.myconnpy" version="1.1.7"/>
 		<import addon="script.module.ijson" version="2.3"/>
+		<import addon="script.module.defusedxml" version="0.5.0"/>
 	</requires>
 	<extension
 		point="xbmc.python.pluginsource"
@@ -25,32 +26,28 @@
 		<description lang="de_DE">Ermöglicht den Zugriff auf fast alle deutschen Mediatheken der öffentlich Rechtlichen basierend auf der Datenbank von MediathekView.de</description>
 		<description lang="en_GB">Gives access to most video-platforms from German public service broadcasters using the database of MediathekView.de</description>
 		<description lang="it_IT">Fornisce l'accesso a gran parte delle piattaforme video operate dalle emittenti pubbliche tedesche usando la banca dati di MediathekView.de</description>
-		<news>v0.4.0 (2018-01-14):
+		<news>v0.4.2 (2018-01-20):
+- Senderlogos werden nun in verschiedenen Situationen angezeigt
+- Fehler bei Auflisten der Filme in "Alle Sendungen" aus 0.4.1 behoben
+- Fehler bei Datenbankaktualisierung behoben
+- Herunterladen von zufälligem Server
+v0.4.1 (2018-01-20):
+- Alphabetische Anzeige in Listen ist nun nicht mehr Groß-Klein-Sensitiv
+- Download von Inhalten funktioniert wieder
+- "Suchen nach Titel und Beschreibung" mit MySQL funktioniert wieder
+- Freitextsuche kommt nun auch mit " und ' klar
+- In seltenen Fällen konnte es bei der Installation oder das Update des Addons zu einem Fehler kommen, der die Datenbank korrumpiert hat.
+- Das Programm mvupdate hat nicht funktioniert
+- In "Alle Sendungen nach Sender" kommt man nun direkt nach der Auswahl des Senders in die Filmliste
+- Die Anzahl Tage die ein Film als "Vor kurzem hinzugefügt" gilt, ist nun einstellbar
+- Es ist einstellbar, ob "Vor kurzem hinzugefügt" das Sendedatum oder das Datum des Hinzufügens in der Datenbank berücksichtigt
+- Anzahl der neuen Filme in "Vor Kurzem hinzugefügt nach Sender" stimmt nun
+- Übersetzungsfehler korrigiert
+v0.4.0 (2018-01-14):
 - Android und Windows Kompatibilität da kein externer Entpacker mehr benötigt wird
 - Der Datenbanktreiber für MySQL kann nun die Datenbank selbsttätig anlegen
 - Im Datenbanktreiber für MySQL kann nun auch die Portnummer angegeben werden
 - Konfigurierbare Begrenzung der Suchergebnisse
-v0.3.5 (2018-01-11):
-- Anpassungen an die Kodi-Addon Regeln
-v0.3.4 (2018-01-11):
-- Die Suche sucht nun auch im Sendungs-Name
-- "Vor Kurzem hinzugefügt" nach Sendern durchsuchen
-- Deutsche und Italienische Übersetzung funktionieren nun
-v0.3.3 (2018-01-09):
-- Auflösung kann nun beim Download ausgewählt werden
-- Kommandozeilenaktualisierer wurde implementiert
-- Fehler in der Generierung von tvshow.nfo behoben
-- Die README Datei enthält nun alle Sprachen
-v0.3.2 (2018-01-08):
-- Dateien mit Umlauten im Namen konnten nicht heruntergeladen werden
-- Herunterladen bei nicht lokalem Download-Verzeichnis erfolgt nun ohne Zwischenspeicherung
-- NFO Dateien enthalten mehr Daten
-v0.3.1 (2018-01-07):
-- Herunterladen ist nun auch in nicht lokalen (VFS) Download-Verzeichnissen möglich
-- Behebung eines sehr seltenen Fehlers der zu einem ENdlos-Update führen konnte
-v0.3.0 (2018-01-07):
-- Neue Funktion zum Herunterladen von Videos mit Untertiteln und Metadaten (NFO-Dateien)
-- Behebung eines Fehlers der das Abspeichern der Untertitel URL in der Datenbank verhinderte
 </news>
 		<platform>all</platform>
 		<language>de fr</language>

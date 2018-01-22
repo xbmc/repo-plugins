@@ -23,26 +23,20 @@
 # SOFTWARE.
 
 # -- Imports ------------------------------------------------
-from __future__ import unicode_literals  # ,absolute_import, division
-
-import xbmc
+from __future__ import unicode_literals
 
 from resources.lib.kodi.KodiAddon import KodiService
+from resources.lib.kodi.KodiAddon import KodiInterlockedMonitor
 
 from resources.lib.notifier import Notifier
 from resources.lib.settings import Settings
 from resources.lib.updater import MediathekViewUpdater
 
 # -- Classes ------------------------------------------------
-class MediathekViewMonitor( xbmc.Monitor ):
-	def __init__( self, service ):
-		super( MediathekViewMonitor, self ).__init__()
-		self.service	= service
+class MediathekViewMonitor( KodiInterlockedMonitor ):
+	def __init__( self, service, setting_id ):
+		super( MediathekViewMonitor, self ).__init__( service, setting_id )
 		self.logger		= service.getNewLogger( 'Monitor' )
-		self.logger.info( 'Startup' )
-
-	def __del__( self ):
-		self.logger.info( 'Shutdown' )
 
 	def onSettingsChanged( self ):
 		self.service.ReloadSettings()
@@ -53,15 +47,16 @@ class MediathekViewService( KodiService ):
 		self.setTopic( 'Service' )
 		self.settings	= Settings()
 		self.notifier	= Notifier()
-		self.monitor	= MediathekViewMonitor( self )
+		self.monitor	= MediathekViewMonitor( self, 'instanceid' )
 		self.updater	= MediathekViewUpdater( self.getNewLogger( 'Updater' ), self.notifier, self.settings, self.monitor )
 
 	def Init( self ):
-		self.info( 'Init' )
+		self.info( 'Init (instance id: {})', self.monitor.instance_id )
+		self.monitor.RegisterInstance()
 		self.updater.Init()
 
 	def Run( self ):
-		self.info( 'Starting up...' )
+		self.info( 'Starting up... (instance id: {})', self.monitor.instance_id )
 		while not self.monitor.abortRequested():
 			updateop = self.updater.GetCurrentUpdateOperation()
 			if updateop == 1:
@@ -76,11 +71,12 @@ class MediathekViewService( KodiService ):
 			if self.monitor.waitForAbort( 60 ):
 				# Abort was requested while waiting. We should exit
 				break
-		self.info( 'Shutting down...' )
+		self.info( 'Shutting down... (instance id: {})', self.monitor.instance_id )
 
 	def Exit( self ):
-		self.info( 'Exit' )
+		self.info( 'Exit (instance id: {})', self.monitor.instance_id )
 		self.updater.Exit()
+		self.monitor.UnregisterInstance()
 
 	def ReloadSettings( self ):
 		# TODO: support online reconfiguration

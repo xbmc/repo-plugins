@@ -2,9 +2,15 @@
 # Copyright (c) 2017-2018, Leo Moll
 
 # -- Imports ------------------------------------------------
-import os, urllib2, subprocess, ijson, datetime, time
-import xml.etree.ElementTree as etree
+import os
+import time
+import ijson
+import random
+import urllib2
+import datetime
+import subprocess
 
+import defusedxml.ElementTree as etree
 import resources.lib.mvutils as mvutils
 
 from operator import itemgetter
@@ -12,6 +18,7 @@ from operator import itemgetter
 from resources.lib.store import Store
 from resources.lib.exceptions import DatabaseCorrupted
 from resources.lib.exceptions import DatabaseLost
+from resources.lib.exceptions import ExitRequested
 
 # -- Unpacker support ---------------------------------------
 upd_can_bz2 = False
@@ -106,7 +113,7 @@ class MediathekViewUpdater( object ):
 				self.Import( full )
 
 	def Import( self, full ):
-		( _, compfile, destfile, avgrecsize ) = self._get_update_info( full )
+		( _, _, destfile, avgrecsize ) = self._get_update_info( full )
 		if not mvutils.file_exists( destfile ):
 			self.logger.error( 'File {} does not exists', destfile )
 			return False
@@ -178,14 +185,14 @@ class MediathekViewUpdater( object ):
 		except DatabaseLost as err:
 			self.logger.error( '{}', err )
 			self.notifier.CloseUpdateProgress()
-		except IOError as err:
+		except Exception as err:
 			self.logger.error( 'Error {} wile processing {}', err, destfile )
 			self._update_end( full, 'ABORTED' )
 			self.notifier.CloseUpdateProgress()
 		return False
 
 	def GetNewestList( self, full ):
-		( url, compfile, destfile, avgrecsize ) = self._get_update_info( full )
+		( url, compfile, destfile, _ ) = self._get_update_info( full )
 		if url is None:
 			self.logger.error( 'No suitable archive extractor available for this system' )
 			self.notifier.ShowMissingExtractorError()
@@ -199,20 +206,18 @@ class MediathekViewUpdater( object ):
 			self.logger.error( 'Failure opening {}', url )
 			self.notifier.ShowDownloadError( url, err )
 			return False
-
 		root = etree.fromstring ( data )
 		urls = []
 		for server in root.findall( 'Server' ):
 			try:
 				URL = server.find( 'URL' ).text
 				Prio = server.find( 'Prio' ).text
-				urls.append( ( self._get_update_url( URL ), Prio ) )
+				urls.append( ( self._get_update_url( URL ), float( Prio ) + random.random() * 1.2 ) )
 				self.logger.info( 'Found mirror {} (Priority {})', URL, Prio )
 			except AttributeError:
 				pass
 		urls = sorted( urls, key = itemgetter( 1 ) )
 		urls = [ url[0] for url in urls ]
-		result = None
 
 		# cleanup downloads
 		self.logger.info( 'Cleaning up old downloads...' )
@@ -227,17 +232,23 @@ class MediathekViewUpdater( object ):
 				lasturl = url
 				self.logger.info( 'Trying to download {} from {}...', os.path.basename( compfile ), url )
 				self.notifier.UpdateDownloadProgress( 0, url )
-				result = mvutils.url_retrieve( url, filename = compfile, reporthook = self._reporthook )
+				mvutils.url_retrieve( url, filename = compfile, reporthook = self.notifier.HookDownloadProgress, aborthook = self.monitor.abortRequested )
 				break
 			except urllib2.URLError as err:
 				self.logger.error( 'Failure downloading {}', url )
+				self.notifier.CloseDownloadProgress()
+				self.notifier.ShowDownloadError( lasturl, err )
+				return False
+			except ExitRequested as err:
+				self.logger.error( 'Immediate exit requested. Aborting download of {}', url )
+				self.notifier.CloseDownloadProgress()
+				self.notifier.ShowDownloadError( lasturl, err )
+				return False
 			except Exception as err:
 				self.logger.error( 'Failure writng {}', url )
-		if result is None:
-			self.logger.info( 'No file downloaded' )
-			self.notifier.CloseDownloadProgress()
-			self.notifier.ShowDownloadError( lasturl, err )
-			return False
+				self.notifier.CloseDownloadProgress()
+				self.notifier.ShowDownloadError( lasturl, err )
+				return False
 
 		# decompress filmliste
 		if self.use_xz is True:
@@ -303,13 +314,6 @@ class MediathekViewUpdater( object ):
 			except OSError as err:
 				self.logger.error( 'Failed to remove {}: error {}', name, err )
 		return False
-
-	def _reporthook( self, blockcount, blocksize, totalsize ):
-		downloaded = blockcount * blocksize
-		if totalsize > 0:
-			percent = int( (downloaded * 100) / totalsize )
-			self.notifier.UpdateDownloadProgress( percent )
-		self.logger.debug( 'Downloading blockcount={}, blocksize={}, totalsize={}', blockcount, blocksize, totalsize )
 
 	def _update_start( self, full ):
 		self.logger.info( 'Initializing update...' )

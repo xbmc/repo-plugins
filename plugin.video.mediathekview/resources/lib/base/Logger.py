@@ -28,6 +28,6 @@ class Logger( object ):
 
 	def warn( self, message, *args ):
 		pass
-    
+
 	def error( self, message, *args ):
 		pass

@@ -14,28 +14,31 @@ class Notifier( KodiUI ):
 		self.language		= xbmcaddon.Addon().getLocalizedString
 
 	def ShowDatabaseError( self, err ):
-		self.ShowError( self.language( 30951 ), '{}'.format( err ) )
+		self.ShowError( 30951, '{}'.format( err ) )
 
 	def ShowDownloadError( self, name, err ):
-		self.ShowError( self.language( 30952 ), self.language( 30953 ).format( name, err ) )
+		self.ShowError( 30952, self.language( 30953 ).format( name, err ) )
 
 	def ShowMissingExtractorError( self ):
-		self.ShowError( self.language( 30952 ), self.language( 30954 ), time = 10000 )
+		self.ShowError( 30952, 30954, time = 10000 )
 
 	def ShowLimitResults( self, maxresults ):
-		self.ShowNotification( self.language( 30980 ), self.language( 30981 ).format( maxresults ) )
+		self.ShowNotification( 30980, self.language( 30981 ).format( maxresults ) )
 
 	def ShowDownloadProgress( self ):
-		self.ShowBGDialog( self.language( 30955 ) )
+		self.ShowBGDialog( 30955 )
 
 	def UpdateDownloadProgress( self, percent, message = None ):
 		self.UpdateBGDialog( percent, message = message )
+
+	def HookDownloadProgress( self, blockcount, blocksize, totalsize ):
+		self.HookBGDialog( blockcount, blocksize, totalsize )
 
 	def CloseDownloadProgress( self ):
 		self.CloseBGDialog()
 
 	def ShowUpdateProgress( self ):
-		self.ShowBGDialog( self.language( 30956 ) )
+		self.ShowBGDialog( 30956 )
 
 	def UpdateUpdateProgress( self, percent, count, channels, shows, movies ):
 		message = self.language( 30957 ) % ( count, channels, shows, movies )

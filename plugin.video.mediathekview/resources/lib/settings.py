@@ -19,6 +19,8 @@ class Settings( object ):
 		self.minlength		= int( float( self.addon.getSetting( 'minlength' ) ) ) * 60
 		self.groupshows		= self.addon.getSetting( 'groupshows' ) == 'true'
 		self.maxresults		= int( self.addon.getSetting( 'maxresults' ) )
+		self.maxage			= int( self.addon.getSetting( 'maxage' ) ) * 86400
+		self.recentmode		= int( self.addon.getSetting( 'recentmode' ) )
 		self.downloadpath	= self.addon.getSetting( 'downloadpath' )
 		self.type			= self.addon.getSetting( 'dbtype' )
 		self.host			= self.addon.getSetting( 'dbhost' )

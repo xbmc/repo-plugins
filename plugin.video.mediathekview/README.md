@@ -80,9 +80,9 @@ Alternativ-Konfigurationen
 --------------------------
 
 Ist das Kodi-System zu langsam um eine eigene Datenbank zu verwalten
-(z.B. Raspberry PI mit sehr langsamer SD-Karte) oder fehlt das Programm
-'xz', so besteht die Möglichkeit das Addon auch mit einer externen
-Datenbank (MySQL) zu nutzen.
+(z.B. Raspberry PI mit sehr langsamer SD-Karte) oder soll die Datenbank mit
+mehreren Kodi Systemen geteilt werden, so besteht die Möglichkeit das Addon
+auch mit einem externen Datenbank-Server (MySQL oder MariaDB) zu nutzen.
 
 Da viele Kodi-Nutzer über ein eigenes NAS-System verfügen um ihre Medien
 dem Media-Center zur Verfügung zu stellen, eignet sich dieses in der Regel
@@ -113,12 +113,14 @@ folgende zwei Bibliotheken zur Verfügung stehen, sowie das Entpackprogramm
 'xz' (optional):
 
 * ijson
+* defusedxml
 * mysql-connector
 
 Die Installation dieser Bibliotheken erfolgt durch Eingabe folgender Befehle:
 
 ````
 pip install ijson
+pip install defusedxml
 pip install mysql-connector==2.1.4
 ````
 
@@ -130,7 +132,7 @@ Dies kann entweder durch Herunterladen und Entpacken der Addon-ZIP-Datei
 erfolgen oder durch Klonen des Addon-Quellcode-Repositories mittels `git`
 
 ````
-git clone git@github.com:mediathekview/plugin.video.mediathekview.git
+git clone https://github.com/mediathekview/plugin.video.mediathekview.git
 ````
 
 Durch Angabe des Parameters `-h` bzw. `-h` hinter dem Datenbanktyp, gibt
@@ -224,8 +226,9 @@ Alternate Configurations
 ------------------------
 
 If the Kodi system is too slow to manage its own database (e.g. Raspberry PI
-with a very slow SD card) or if the program 'xz' is missing, it is also
-possible to use the addon with an external database (MySQL).
+with a very slow SD card) or you want to share the database across multiple
+Kodi instances, it is also possible to use the addon with an external database
+(MySQL or MariaDB).
 
 Since many Kodi users have their own NAS system to make their media available
 to the media center, this is usually also suitable as a MySQL/MariaDB database
@@ -235,9 +238,6 @@ If the addon is configured to use a MySQL/MariaDB database, the database is
 created automatically if it does not yet exist on the database server. However,
 the specified database user must also have sufficient user rights in order to
 do this.
-
-When you have a running MySQL server avaible, you have only to create the
-database by running the SQL script `resources/sql/filmliste-mysql-v1.sql`.
 
 The connection to the database can be configured in the addon settings in
 the "Database Settings" section.
@@ -255,12 +255,14 @@ target system in order to execute the commandline update process. Additionally
 the following python libraries are required:
 
 * ijson
+* defusedxml
 * mysql-connector
 
 The required libraries can be installed via pip:
 
 ````
 pip install ijson
+pip install defusedxml
 pip install mysql-connector==2.1.4
 ````
 
@@ -272,7 +274,7 @@ This can be either done by downloading and unpacking the addon archive or
 by cloning the source repository with `git`
 
 ````
-git clone git@github.com:mediathekview/plugin.video.mediathekview.git
+git clone https://github.com/mediathekview/plugin.video.mediathekview.git
 ````
 
 By specifying the option `-h` itself or after the requested database type,
@@ -355,9 +357,10 @@ possibile fare una dichiarazione finale di compatibilità.
 Configurazioni alternative
 --------------------------
 
-Se il sistema Kodi è troppo lento per gestire il proprio database (ad es.
-Raspberry PI con una scheda SD molto lenta) o se manca il programma 'xz',
-è anche possibile utilizzare l'addon con un database esterno (MySQL).
+Se il sistema Kodi è troppo lento per gestire il database interno (ad es.
+Raspberry PI con una scheda SD molto lenta) o se si desidera condividere il
+database con altri sistemi Kodi, è anche possibile utilizzare l'addon con un
+server database esterno (MySQL o MariaDB).
 
 Dal momento che molti utenti Kodi hanno il proprio sistema NAS per rendere i
 loro contenuti mediali disponibili al media center, questo è di solito anche
@@ -367,7 +370,7 @@ sistemi operativi NAS offrono l'installazione di un tale database.
 Se l' addon è configurato per utilizzare un database MySQL/MariaDB, il database
 verrà creato automaticamente se non esiste ancora sul database server.
 Tuttavia, anche l'utente del database specificato deve avere i diritti
-necessari.
+necessari alla creazione di un database.
 
 Il collegamento al database può essere effettuato nelle impostazioni 
 dell'addon nella sezione "Impostazioni Banca Dati".
@@ -387,12 +390,14 @@ interprete python2, il programma di decompressione 'xz' e le seguenti
 librerie python:
 
 * ijson
+* defusedxml
 * mysql-connector
 
 QUeste potranno essere istallate mediante il programma pip:
 
 ````
 pip install ijson
+pip install defusedxml
 pip install mysql-connector==2.1.4
 ````
 
@@ -404,7 +409,7 @@ Questo sarà possibile sia scaricando l'archivio dell'addon che dovrà essere
 spacchettato in loco o mediante clonaggio dai sorgenti mediante `git`
 
 ````
-git clone git@github.com:mediathekview/plugin.video.mediathekview.git
+git clone https://github.com/mediathekview/plugin.video.mediathekview.git
 ````
 
 Specificando l'opzione `-h` a se stante o a tergo del tipo di database da

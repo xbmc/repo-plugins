@@ -1,10 +1,15 @@
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import range
+from builtins import object
 import xbmcaddon
 
-import sys, urllib, os
+import sys, urllib.request, urllib.parse, urllib.error, os
 import re
 import requests
-import urllib2
-from BeautifulSoup import BeautifulSoup
+import urllib.request, urllib.error, urllib.parse
+from bs4 import BeautifulSoup
 
 import xbmc, xbmcgui, xbmcplugin
 
@@ -12,12 +17,13 @@ ADDON = "plugin.image.dumpert"
 SETTINGS = xbmcaddon.Addon()
 LANGUAGE = SETTINGS.getLocalizedString
 IMAGE_PATH = os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources', 'images')
-DATE = "2017-05-27"
-VERSION = "1.0.0"
+DATE = "2018-01-20"
+VERSION = "1.0.1"
 
 MODE_LATEST = 1
 
-class dumpertSession:
+class dumpertSession(object):
+
 
     def LATEST(self, page=1):
         # Get the command line arguments
@@ -26,8 +32,7 @@ class dumpertSession:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-            ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
+        log("ARGV", repr(sys.argv))
 
         self.image_list_page_url = "http://www.dumpert.nl/plaatjes/" + str(page) + "/"
         self.next_page_possible = True
@@ -43,8 +48,8 @@ class dumpertSession:
         # add last slash
         self.image_list_page_url = str(self.image_list_page_url) + "/"
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            ADDON, VERSION, DATE, "self.base_url", str(self.base_url)), xbmc.LOGDEBUG)
+        log("self.base_url", self.base_url)
+
         #
         # Init
         #
@@ -54,29 +59,28 @@ class dumpertSession:
         # Get HTML page
         #
         if SETTINGS.getSetting('nsfw') == 'true':
-            html_source = requests.get(self.image_list_page_url, cookies={'nsfw': '1'}).text
+            response = requests.get(self.image_list_page_url, cookies={'nsfw': '1'})
         else:
-            html_source = requests.get(self.image_list_page_url).text
+            response = requests.get(self.image_list_page_url)
+
+        html_source = response.text
+        html_source = convertToUnicodeString(html_source)
 
         # Parse response
-        soup = BeautifulSoup(html_source)
+        soup = getSoup(html_source)
 
         # Find titles and thumnail-urls
         # img src="http://static.dumpert.nl/sq_thumbs/2245331_272bd4c3.jpg" alt="Turnlulz" title="Turnlulz" width="100" height="100" />
         # titles_and_thumbnail_urls = soup.findAll('img', attrs={'src': re.compile("^http://static.dumpert.nl/")} )
         titles_and_thumbnail_urls = soup.findAll('img', attrs={'src': re.compile("thumb")})
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            ADDON, VERSION, DATE, "len(titles_and_thumbnail_urls)",
-            str(len(titles_and_thumbnail_urls))),
-                 xbmc.LOGDEBUG)
+        log("len(titles_and_thumbnail_urls)", len(titles_and_thumbnail_urls))
 
         # Find image page urls
         # <a href="http://www.dumpert.nl/mediabase/2245331/272bd4c3/turnlulz.html" class="dumpthumb" title="Turnlulz">
         image_page_urls = soup.findAll('a', attrs={'class': re.compile("dumpthumb")})
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            ADDON, VERSION, DATE, "len(image_page_urls)", str(len(image_page_urls))), xbmc.LOGDEBUG)
+        log("len(image_page_urls)", len(image_page_urls))
 
         # <a href="http://www.dumpert.nl/mediabase/7145289/32891f48/zo_is_f1_in_monaco.html" class="dumpthumb" title="Zo is F1 in Monaco">
         # 	<img src="http://media.dumpert.nl/sq_thumbs/7145289_32891f48.jpg" alt="Zo is F1 in Monaco" title="Zo is F1 in Monaco" width="100" height="100">
@@ -94,16 +98,15 @@ class dumpertSession:
                 pass
             else:
                 # skip image page url without a image
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "skipped image_page_url without image", str(image_page_url)),
-                         xbmc.LOGDEBUG)
+
+                log("skipped image_page_url without image", str(image_page_url))
+
                 titles_and_thumbnail_urls_index = titles_and_thumbnail_urls_index + 1
                 continue
 
             image_page_url = image_page_url['href']
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "image_page_url", str(image_page_url)), xbmc.LOGDEBUG)
+            log("image_page_url", image_page_url)
 
             description = '...'
             # <a href="http://www.dumpert.nl/mediabase/6721593/46f416fa/stukje_snowboarden.html?thema=bikini" class="dumpthumb" title="Stukje snowboarden">
@@ -126,8 +129,6 @@ class dumpertSession:
             title = ''
             try:
                 title = titles_and_thumbnail_urls[titles_and_thumbnail_urls_index]['title']
-                # convert from unicode to encoded text (don't use str() to do this)
-                title = title.encode('utf-8')
                 # <a href="http://www.dumpert.nl/mediabase/1958831/21e6267f/pixar_s_up_inspreken.html?thema=animatie" class="dumpthumb" title="Pixar's &quot;Up&quot; inspreken ">
             except KeyError:
                 # http://www.dumpert.nl/mediabase/6532392/82471b66/dumpert_heeft_talent.html
@@ -136,15 +137,12 @@ class dumpertSession:
                 pos_last_dot = title.rfind('.')
                 title = title[pos_last_slash + 1:pos_last_dot]
                 title = title.capitalize()
-            except UnicodeDecodeError:
-                pass
 
             title = title.replace('-', ' ')
             title = title.replace('/', ' ')
             title = title.replace('_', ' ')
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "title", str(title)),
-                     xbmc.LOGDEBUG)
+            log("title", title)
 
             if titles_and_thumbnail_urls_index >= len(titles_and_thumbnail_urls):
                 thumbnail_url = ''
@@ -162,20 +160,19 @@ class dumpertSession:
             next_page = self.current_page + 1
             next_url = str(self.base_url) + str(next_page) + '/'
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "next_url", str(next_url)),
-                     xbmc.LOGDEBUG)
+            log("next_url", next_url)
 
             mode = MODE_LATEST
             self.addDir(LANGUAGE(30503), next_url, mode, os.path.join(IMAGE_PATH, 'next-page.png'), page=next_page, sort=0)
 
         return True
 
+
     def addImage(self, iId, url, mode, iconimage, title, tot=0, relatedTags=""):
 
         self.image_page_url = url
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            ADDON, VERSION, DATE, "self.image_page_url", str(self.image_page_url)), xbmc.LOGDEBUG)
+        log("self.image_page_url", self.image_page_url)
 
         #
         # Init
@@ -192,9 +189,10 @@ class dumpertSession:
                 response = requests.get(self.image_page_url)
 
             html_source = response.text
-        except urllib2.HTTPError, error:
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "HTTPError", str(error)), xbmc.LOGDEBUG)
+        except urllib.error.HTTPError as error:
+
+            log("HTTPError", error)
+
             xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30507) % (str(error)))
             exit(1)
 
@@ -213,8 +211,7 @@ class dumpertSession:
             image_url = image_urls[0].img['src']
             have_valid_url = True
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "image_url", str(image_url)), xbmc.LOGDEBUG)
+            log("image_url", image_url)
 
         # Show image...
         if have_valid_url:
@@ -235,14 +232,16 @@ class dumpertSession:
             xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30506))
         return True
 
+
     def addDir(self, name, url, mode, iconimage, page=1, tot=0, sort=0, q="", ref=0):
-        u = sys.argv[0] + "?url=" + urllib.quote_plus(url) + "&mode=" + str(mode) + "&page=" + str(
-            page) + "&q=" + urllib.quote_plus(str(q))
+        u = sys.argv[0] + "?url=" + urllib.parse.quote_plus(url) + "&mode=" + str(mode) + "&page=" + str(
+            page) + "&q=" + urllib.parse.quote_plus(str(q))
         liz = xbmcgui.ListItem(name, 'test', iconImage="DefaultFolder.png", thumbnailImage=iconimage)
         liz.setInfo(type="image", infoLabels={"Title": name, "Label": str(sort)})
         contextMenu = []
         liz.addContextMenuItems(contextMenu)
         return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True, totalItems=tot)
+
 
 # copied from the google image plugin (thanks)
 def get_params():
@@ -266,6 +265,38 @@ def get_params():
     return param
 
 
+if sys.version_info[0] > 2:
+    unicode = str
+
+
+def convertToUnicodeString(s, encoding='utf-8'):
+    """Safe decode byte strings to Unicode"""
+    if isinstance(s, bytes):  # This works in Python 2.7 and 3+
+        s = s.decode(encoding)
+    return s
+
+
+def convertToByteString(s, encoding='utf-8'):
+    """Safe encode Unicode strings to bytes"""
+    if isinstance(s, unicode):
+        s = s.encode(encoding)
+    return s
+
+
+def log(name_object, object):
+    try:
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+            ADDON, VERSION, DATE, name_object, convertToUnicodeString(object)), xbmc.LOGDEBUG)
+    except:
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+            ADDON, VERSION, DATE, name_object, "Unable to log the object due to an error while converting it to an unicode string"), xbmc.LOGDEBUG)
+
+
+def getSoup(html,default_parser="html5lib"):
+    soup = BeautifulSoup(html, default_parser)
+    return soup
+
+
 def main():
     xbmc.log("[ADDON] %s, Python Version %s" % (ADDON, str(sys.version)), xbmc.LOGDEBUG)
     xbmc.log("[ADDON] %s v%s (%s) is starting, ARGV = %s" % (ADDON, VERSION, DATE, repr(sys.argv)), xbmc.LOGDEBUG)
@@ -278,11 +309,11 @@ def main():
     page = 1
 
     try:
-        url = urllib.unquote_plus(params["url"])
+        url = urllib.parse.unquote_plus(params["url"])
     except:
         pass
     try:
-        name = urllib.unquote_plus(params["name"])
+        name = urllib.parse.unquote_plus(params["name"])
     except:
         pass
     try:
@@ -294,7 +325,7 @@ def main():
     except:
         pass
     try:
-        query = urllib.unquote_plus(params["q"])
+        query = urllib.parse.unquote_plus(params["q"])
     except:
         pass
 

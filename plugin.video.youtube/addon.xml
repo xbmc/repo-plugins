@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.youtube" name="YouTube" version="5.5.0" provider-name="bromix">
+    <requires>
+        <import addon="xbmc.python" version="2.20.0"/>
+        <import addon="script.module.requests" version="2.12.4"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="resources/lib/default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.service" library="resources/lib/startup.py" start="startup"/>
+    <extension point="xbmc.python.module" library="resources/lib/"/>
+    <extension point="xbmc.addon.metadata">
+        <news>
+[add] Saved Playlists
+[add] Audio only: Settings -> General
+[add] Age gate enforcement: Settings -> General
+[add] Quick search and Quick search (Incognito)
+    - Settings -> Folders
+    - incognito doesn't add to search history or run post play events (add to watch history)
+[add] Quick search to channels (no history)
+[add] Live folder to channels
+[fix] My Channel videos incl. private
+[fix] mpeg-dash vods, proxy required
+    - Settings - MPEG-DASH
+    - Thanks to Schtek for generating the needed mpd file
+[fix/upd] use select dialog for subtitle settings
+    - [add] Configure subtitles: Settings -> General
+    - [add] Current language with No auto-generated subtitles option
+[fix/upd] subtitles default to non asr track when possible
+[fix/upd] Watch Later
+    - Clear: Settings - Folders - Custom Watch Later playlist id
+    - Settings - Folders - Retrieve Watch Later playlist id
+[fix/upd] History
+    - cannot add to history from add-on
+    - Clear: Settings - Folders - Custom History playlist id
+[rem] SPMC mpeg-dash support
+[upd] Hebrew strings [Eng2Heb]
+[upd] Polish strings [Etharr]
+[upd] Italian strings [DjDiabolik]
+[upd] Hungarian strings [lacesz-sh]
+        </news>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.jpg</fanart>
+        </assets>
+        <summary lang="en_gb">Plugin for YouTube</summary>
+        <description lang="en_gb">YouTube is one of the biggest video-sharing websites of the world.</description>
+        <summary lang="he_il">תוסף עבור YouTube</summary>
+        <description lang="he_il">YouTube הוא אחד מאתרי שיתוף הווידאו הגדולים בעולם.</description>
+        <summary lang="de_de">Plugin für YouTube</summary>
+        <description lang="de_de">YouTube ist eines der größten Video-Sharing-Websites der Welt.</description>
+        <summary lang="pl_pl">Wtyczka YouTube</summary>
+        <description lang="pl_pl">YouTube jest jednym z największych na świecie serwisów udostępniania wideo.</description>
+        <summary lang="hu_hu">YouTube kiegészítő</summary>
+        <description lang="hu_hu">A YouTube világ egyik legnagyobb videómegosztó weboldala.</description>
+        <summary lang="es_es">Plugin para YouTube</summary>
+        <description lang="es_es">YouTube es uno de los mayores sitios web de intercambio de vídeos del mundo.</description>
+        <summary lang="ru_ru">Видеодополнение YouTube</summary>
+        <description lang="ru_ru">Данное дополнение позволяет находить и смотреть видео на всеми любимом сайте.</description>
+        <summary lang="fr_fr">Plugin pour YouTube</summary>
+        <description lang="fr_fr">YouTube est l'un des plus grands sites de partage vidéos du monde.</description>
+        <summary lang="zh_cn">YouTube附加元件</summary>
+        <description lang="zh_cn">「Youtube」是全世界最大的影片分享網站</description>
+        <summary lang="bg_bg">Добавка за YouTube</summary>
+        <description lang="bg_bg">YouTube е един от най-големите уеб сайтове за споделяне на видео в целия свят.</description>
+        <summary lang="el_gr">Πρόσθετο YouTube</summary>
+        <description lang="el_gr">Το YouTube είναι μία από τις μεγαλύτερες ιστοσελίδες διαμοιρασμού βίντεο στον κόσμο.</description>
+        <summary lang="nb_no">Tillegg for YouTube</summary>
+        <description lang="nb_no">YouTube er en av verdens største nettsider for videodeling.</description>
+        <disclaimer lang="en_gb"></disclaimer>
+        <language></language>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <forum>https://forum.kodi.tv/showthread.php?tid=325740</forum>
+        <website>https://www.youtube.com</website>
+        <email>ytplugin at datanet dot ws</email>
+        <source>https://github.com/jdf76/plugin.video.youtube</source>
+        <size>1775888</size>
+    </extension>
+</addon>

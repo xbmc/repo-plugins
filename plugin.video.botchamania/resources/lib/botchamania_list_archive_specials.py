@@ -4,24 +4,26 @@
 #
 # Imports
 #
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import range
+from builtins import object
 import os
+import requests
 import re
 import sys
-import urllib
-import urlparse
-import xbmc
+import urllib.request, urllib.parse, urllib.error
 import xbmcgui
 import xbmcplugin
-from BeautifulSoup import BeautifulSoup
 
-from botchamania_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
-from botchamania_utils import HTTPCommunicator
+from botchamania_const import LANGUAGE, IMAGES_PATH, ADDON, convertToUnicodeString, log, getSoup
 
 
 #
 # Main class
 #
-class Main:
+class Main(object):
     #
     # Init
     #
@@ -32,17 +34,14 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
+        log("ARGV", repr(sys.argv))
 
         # Parse parameters...
-        self.plugin_category = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['plugin_category'][0]
-        self.video_list_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['url'][0]
-        self.next_page_possible = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+        self.plugin_category = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['plugin_category'][0]
+        self.video_list_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
+        self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)),
-                     xbmc.LOGDEBUG)
+        log("self.video_list_page_url", self.video_list_page_url)
 
         # Determine current page number and base_url
         # find last slash
@@ -56,8 +55,7 @@ class Main:
         # add last slash
         self.video_list_page_url = str(self.video_list_page_url) + "/"
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.base_url", str(self.base_url)), xbmc.LOGDEBUG)
+        log("self.base_url", self.base_url)
 
         #
         # Get the videos...
@@ -76,22 +74,25 @@ class Main:
         self.listing = []
 
         for num in range(self.current_page, 20):
-            #	 		http://www.botchamaniaarchive.com/category/specials/page/1/
+            # http://www.botchamaniaarchive.com/category/specials/page/1/
             self.video_list_page_url = self.base_url + str(num)
+
             #
-            # Get HTML page...
+            # Get HTML page
             #
             try:
-                html_source = HTTPCommunicator().get(self.video_list_page_url)
+                response = requests.get(self.video_list_page_url)
             except:
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                        ADDON, VERSION, DATE, "first non-existing archive special url",
-                        str(self.video_list_page_url)), xbmc.LOGDEBUG)
+
+                log("first non-existing archive special url", self.video_list_page_url)
+
                 break
 
-            # Parse response...
-            # noinspection PyAttributeOutsideInit
-            self.soup = BeautifulSoup(html_source)
+            html_source = response.text
+            html_source = convertToUnicodeString(html_source)
+
+            # Parse response
+            self.soup = getSoup(html_source)
 
             self.addVideos()
 
@@ -101,14 +102,12 @@ class Main:
             parameters = {"action": "list-archive-specials", "plugin_category": self.plugin_category,
                           "url": str(self.base_url) + str(next_page) + '/',
                           "next_page_possible": self.next_page_possible}
-            url = sys.argv[0] + '?' + urllib.urlencode(parameters)
+            url = sys.argv[0] + '?' + urllib.parse.urlencode(parameters)
             list_item = xbmcgui.ListItem(LANGUAGE(30503), thumbnailImage=os.path.join(IMAGES_PATH, 'next-page.png'))
             is_folder = True
             xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=list_item, isFolder=is_folder)
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "next url", str(url)), xbmc.LOGDEBUG)
-
+            log("next url", url)
 
         # Add our listing to Kodi.
         # Large lists and/or slower systems benefit from adding all items at once via addDirectoryItems
@@ -118,6 +117,7 @@ class Main:
         xbmcplugin.addSortMethod(handle=self.plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_NONE)
         # Finish creating a virtual folder.
         xbmcplugin.endOfDirectory(self.plugin_handle)
+
 
     def addVideos(self):
         thumbnail_url = ""
@@ -129,18 +129,16 @@ class Main:
         if len(video_page_urls) >= 6:
             video_page_urls = video_page_urls[6:len(video_page_urls)]
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(video_page_urls)", str(len(video_page_urls))), xbmc.LOGDEBUG)
+        log("len(video_page_urls)", len(video_page_urls))
 
         for video_page_url in video_page_urls:
             video_page_url = video_page_url['href']
             video_page_url_str = str(video_page_url)
             if video_page_url_str.startswith("http://www.botchamaniaarchive.com/botchamania"):
-                #				process the next video_page_url
+                # Process the next video_page_url
                 continue
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "video_page_url", str(video_page_url)), xbmc.LOGDEBUG)
+            log( "video_page_url", video_page_url)
 
             title = video_page_url_str.replace("http://www.botchamaniaarchive.com/", "")
             title = title.replace('-', ' ')
@@ -155,7 +153,7 @@ class Main:
                               'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'true')
             parameters = {"action": "play", "video_page_url": video_page_url, "title": title}
-            url = self.plugin_url + '?' + urllib.urlencode(parameters)
+            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = False
             # Add refresh option to context menu
             list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])

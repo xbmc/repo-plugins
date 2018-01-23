@@ -1,18 +1,17 @@
-# #!/usr/bin/env python
-# # -*- coding: UTF-8 -*-
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
 
 #
 # Imports
 #
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 import os
-import re
 import sys
-import urllib
-import urlparse
+import urllib.parse
 import xbmc
 import xbmcaddon
-import xbmcgui
-import xbmcplugin
 
 LIB_DIR = xbmc.translatePath( os.path.join( xbmcaddon.Addon(id='plugin.video.botchamania').getAddonInfo('path'), 'resources', 'lib' ) )
 sys.path.append (LIB_DIR)
@@ -26,9 +25,13 @@ if len(sys.argv[2]) == 0:
     #
     xbmc.log("[ADDON] %s, Python Version %s" % (ADDON, str(sys.version)), xbmc.LOGDEBUG)
     xbmc.log( "[ADDON] %s v%s (%s) is starting, ARGV = %s" % ( ADDON, VERSION, DATE, repr(sys.argv) ), xbmc.LOGDEBUG )
-    import botchamania_main as plugin
+
+    if SETTINGS.getSetting('onlyshowbotchamaniacategory') == 'true':
+        import botchamania_list as plugin
+    else:
+        import botchamania_main as plugin
 else:
-    action = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['action'][0]
+    action = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['action'][0]
     #
     # archive
     #

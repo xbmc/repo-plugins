@@ -4,26 +4,24 @@
 #
 # Imports
 #
-from BeautifulSoup import BeautifulSoup
-from botchamania_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
-from botchamania_utils import HTTPCommunicator
-import os
-import re
-import base64
-import ast
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
+import urllib.request, urllib.parse, urllib.error
+import YDStreamExtractor
+import requests
 import sys
-import urllib, urllib2
-import urlparse
 import xbmc
-import xbmcaddon
 import xbmcgui
 import xbmcplugin
-import YDStreamExtractor
+
+from botchamania_const import LANGUAGE, SETTINGS, convertToUnicodeString, log, getSoup
 
 #
 # Main class
 #
-class Main:
+class Main(object):
     #
     # Init
     #
@@ -37,17 +35,15 @@ class Main:
         # Get plugin settings
         self.VIDEO = SETTINGS.getSetting('video')
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
+        log("ARGV", repr(sys.argv))
 
         # Parse parameters...
-        self.video_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['video_page_url'][0]
+        self.video_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['video_page_url'][0]
         # Get the title.
-        self.title = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['title'][0]
+        self.title = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['title'][0]
         self.title = str(self.title)
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.video_page_url", str(self.video_page_url)), xbmc.LOGDEBUG)
+        log("self.video_page_url", self.video_page_url)
 
         #
         # Play video...
@@ -64,49 +60,48 @@ class Main:
         no_url_found = False
         unplayable_media_file = False
         have_valid_url = False
+        dialog_wait = xbmcgui.DialogProgress()
 
         #
         # Get current list item details...
         #
-        #title = unicode(xbmc.getInfoLabel("listitem.Title"), "utf-8")
-        thumbnail_url = xbmc.getInfoImage("list_item.Thumb")
-        #studio = unicode(xbmc.getInfoLabel("list_item.Studio"), "utf-8")
-        plot = unicode(xbmc.getInfoLabel("list_item.Plot"), "utf-8")
-        genre = unicode(xbmc.getInfoLabel("list_item.Genre"), "utf-8")
-
-        #
-        # Show wait dialog while parsing data...
-        #
-        dialog_wait = xbmcgui.DialogProgress()
-        dialog_wait.create(LANGUAGE(30504), self.title)
-        # wait 1 second
-        xbmc.sleep(1000)
+        # title = convertToUnicodeString(xbmc.getInfoLabel("list_item.Title"))
+        thumbnail_url = convertToUnicodeString(xbmc.getInfoImage("list_item.Thumb"))
+        # studio = convertToUnicodeString(xbmc.getInfoLabel("list_item.Studio"))
+        plot = convertToUnicodeString(xbmc.getInfoLabel("list_item.Plot"))
+        genre = convertToUnicodeString(xbmc.getInfoLabel("list_item.Genre"))
 
         stream_video_url = ''
         # We still need to find out the video-url
         if str(self.video_page_url).startswith("http://botchamania.com/") or str(self.video_page_url).startswith(
                 "http://www.botchamaniaarchive.com/"):
 
-            http_communicator = HTTPCommunicator()
-            html_data = ''
-
+            #
+            # Get HTML page
+            #
             try:
-                html_data = http_communicator.get(self.video_page_url)
-            except urllib2.HTTPError, error:
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                        ADDON, VERSION, DATE, "first HTTPError", str(error)), xbmc.LOGDEBUG)
+                response = requests.get(self.video_page_url)
+            except urllib.error.HTTPError as error:
+
+                log("first HTTPError", error)
+
                 # Retry to (hopefully) get rid of a time-out http error
                 try:
-                    html_data = http_communicator.get(self.video_page_url)
-                except urllib2.HTTPError, error:
-                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                            ADDON, VERSION, DATE, "second HTTPError", str(error)), xbmc.LOGDEBUG)
+                    response = requests.get(self.video_page_url)
+                except urllib.error.HTTPError as error:
+
+                    log("second HTTPError", error)
+
                     dialog_wait.close()
                     del dialog_wait
                     xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30507) % (str(error)))
                     exit(1)
 
-            soup = BeautifulSoup(html_data)
+            html_source = response.text
+            html_source = convertToUnicodeString(html_source)
+
+            # Parse response
+            soup = getSoup(html_source)
 
             # Parse video file url
             video_urls = soup.findAll('iframe')
@@ -134,8 +129,8 @@ class Main:
                     else:
                         video_url = "http://" + video_url
 
-                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                            ADDON, VERSION, DATE, "video_url", str(video_url)), xbmc.LOGDEBUG)
+                    log("video_url1", video_url)
+
                     try:
                         vid = YDStreamExtractor.getVideoInfo(video_url, quality=int(
                             self.VIDEO))  # quality is 0=SD, 1=720p, 2=1080p and is a maximum
@@ -174,11 +169,12 @@ class Main:
                     else:
                         video_url = "http://" + video_url
 
-                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                            ADDON, VERSION, DATE, "video_url", str(video_url)), xbmc.LOGDEBUG)
+                    log("video_url2", video_url)
+
                     try:
-                        vid = YDStreamExtractor.getVideoInfo(video_url, quality=int(
-                            self.VIDEO))  # quality is 0=SD, 1=720p, 2=1080p and is a maximum
+                        vid = YDStreamExtractor.getVideoInfo(video_url, quality=2)
+                        # vid = YDStreamExtractor.getVideoInfo(video_url, quality=int(
+                        #     self.VIDEO))  # quality is 0=SD, 1=720p, 2=1080p and is a maximum
                         # found a working video! (champagne for everybody!), exit the loop
                         stream_video_url = vid.streamURL()
                         have_valid_url = True
@@ -187,6 +183,9 @@ class Main:
                         unplayable_media_file = True
         else:
             video_url = self.video_page_url
+
+            log("video_url3", video_url)
+
             try:
                 vid = YDStreamExtractor.getVideoInfo(video_url, quality=int(
                     self.VIDEO))  # quality is 0=SD, 1=720p, 2=1080p and is a maximum
@@ -195,10 +194,9 @@ class Main:
             except:
                 unplayable_media_file = True
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "have_valid_url", str(have_valid_url)), xbmc.LOGDEBUG)
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "video_url", str(video_url)), xbmc.LOGDEBUG)
+        log("have_valid_url", have_valid_url)
+
+        log("video_url", video_url)
 
         if have_valid_url:
             video_url = stream_video_url

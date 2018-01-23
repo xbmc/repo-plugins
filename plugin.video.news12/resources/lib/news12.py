@@ -1,4 +1,4 @@
-#   Copyright (C) 2017 Lunatixz
+#   Copyright (C) 2018 Lunatixz
 #
 #
 # This file is part of News12.
@@ -18,10 +18,10 @@
 
 # -*- coding: utf-8 -*-
 import os, sys, time, datetime, re, traceback, feedparser
-import urllib, urllib2, socket, json
+import urlparse, urllib, urllib2, socket, json
 import xbmc, xbmcgui, xbmcplugin, xbmcvfs, xbmcaddon
 
-from simplecache import SimpleCache
+from simplecache import use_cache, SimpleCache
 from bs4 import BeautifulSoup
 
 # Plugin Info
@@ -36,39 +36,26 @@ FANART        = REAL_SETTINGS.getAddonInfo('fanart')
 LANGUAGE      = REAL_SETTINGS.getLocalizedString
 
 ## GLOBALS ##
-TIMEOUT = 15
-DEBUG   = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
-BITRATE = {0:LANGUAGE(30003),1:LANGUAGE(30004),2:LANGUAGE(30005)}[int(REAL_SETTINGS.getSetting('Video_Quality'))]
-BASEURL = 'http://news12.com'
-RSSURL  = '%s/?clienttype=rss'
-BASEIMG = 'http://ftpcontent.worldnow.com/professionalservices/clients/news12/images/regions/selectregion_%i.jpg'
-LIVEURL = 'http://adx.news12.com/livevideo/livevideo_iframe.html'
-VODURL  = '%s/clip/%s/videoclip?clienttype=mrssjson'
-LIVEMAP = {'N12%s':'%s - News','TW%s':'%s - Traffic & Weather','N12%sB2':'%s - Doppler Radar'}
-IMGPARM = {'bx':BASEIMG%1,'bk':BASEIMG%2,'ct':BASEIMG%3,'hv':BASEIMG%4,'li':BASEIMG%5,'nj':BASEIMG%6,'wc':BASEIMG%7,'None':ICON,}
+TIMEOUT      = 15
+CONTENT_TYPE = 'files'
+DEBUG        = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
+BITRATE      = {0:LANGUAGE(30003),1:LANGUAGE(30004),2:LANGUAGE(30005)}[int(REAL_SETTINGS.getSetting('Video_Quality'))]
+BASEURL      = 'http://news12.com'
+RSSURL       = '%s/?clienttype=rss'
+BASEIMG      = 'http://ftpcontent.worldnow.com/professionalservices/clients/news12/images/regions/selectregion_%i.jpg'
+LIVEURL      = 'http://adx.news12.com/livevideo/livevideo_iframe.html'
+VODURL       = '%s/clip/%s/videoclip?clienttype=mrssjson'
+LIVEMAP      = {'N12%s':'%s - News','TW%s':'%s - Traffic & Weather','N12%sB2':'%s - Doppler Radar'}
+IMGPARM      = {'bx':BASEIMG%1,'bk':BASEIMG%2,'ct':BASEIMG%3,'hv':BASEIMG%4,'li':BASEIMG%5,'nj':BASEIMG%6,'wc':BASEIMG%7,'None':ICON,}
 
 def log(msg, level=xbmc.LOGDEBUG):
-    if DEBUG == True:
-        if level == xbmc.LOGERROR:
-            msg += ' ,' + traceback.format_exc()
-        xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + (msg), level)
-   
+    if DEBUG == False and level != xbmc.LOGERROR: return
+    if level == xbmc.LOGERROR: msg += ' ,' + traceback.format_exc()
+    xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + msg, level)
+    
 def getParams():
-    param=[]
-    if len(sys.argv[2])>=2:
-        params=sys.argv[2]
-        cleanedparams=params.replace('?','')
-        if (params[len(params)-1]=='/'):
-            params=params[0:len(params)-2]
-        pairsofparams=cleanedparams.split('&')
-        param={}
-        for i in range(len(pairsofparams)):
-            splitparams={}
-            splitparams=pairsofparams[i].split('=')
-            if (len(splitparams))==2:
-                param[splitparams[0]]=splitparams[1]
-    return param
-                 
+    return dict(urlparse.parse_qsl(sys.argv[2][1:]))
+                       
 socket.setdefaulttimeout(TIMEOUT)
 class News12():
     def __init__(self):
@@ -86,13 +73,10 @@ class News12():
                 response = urllib2.urlopen(request, timeout=TIMEOUT).read()
                 self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, response, expiration=datetime.timedelta(hours=6))
             return self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
-        except urllib2.URLError, e:
-            log("openURL Failed! " + str(e), xbmc.LOGERROR)
-        except socket.timeout, e:
-            log("openURL Failed! " + str(e), xbmc.LOGERROR)
-        except Exception, e:
-            log("openURL Failed! " + str(e), xbmc.LOGERROR)
-            xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30001), ICON, 4000)
+        except urllib2.URLError as e: log("openURL Failed! " + str(e), xbmc.LOGERROR)
+        except socket.timeout as e: log("openURL Failed! " + str(e), xbmc.LOGERROR)
+        except Exception as e: log("openURL Failed! " + str(e), xbmc.LOGERROR)
+        xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30001), ICON, 4000)
 
             
     def buildRegionMenu(self):
@@ -125,8 +109,8 @@ class News12():
                         art = {"thumb":IMGPARM[url],"poster":IMGPARM[url],"icon":ICON,"fanart":FANART}
                         self.addLink(LIVEMAP[key]%name, live%search.group(3),9,infoArt=art,total=len(LIVEMAP))
     
-    
-    def buildRSS(self, url, end=9):
+
+    def buildRSS(self, url, end=4):
         log('buildRSS, url = ' + str(url))
         start   = int(url.get('start','0') or '0')
         data    = feedparser.parse(RSSURL%url['url'])['entries']
@@ -145,10 +129,8 @@ class News12():
                     infoArt    = {"thumb":thumb,"poster":thumb,"icon":ICON,"fanart":FANART}
                     self.addLink(label,path,9,infoLabel,infoArt,len(data[start]))
                     count +=1
-                    if count == end:
-                        break
-                except:
-                    pass
+                    if count == end: break
+                except: pass
         url['start'] = 0 if count == 0 else idx
         self.addDir('>> Next',json.dumps(url), 1)
 
@@ -159,37 +141,27 @@ class News12():
             cacheResponse = self.cache.get(ADDON_NAME + '.resolveURL, url = %s.%s'%(url,str(BITRATE)))
             if not cacheResponse:
                 data = self.openURL(url).replace(' ','').replace('(','{').replace(')','}')
-                try:
-                    clip = re.search(r'widgetVideoCanvasDS37.SetVariable{"clipId","(.*)"};', data.strip(), re.M|re.I).group(1)
-                except:
-                    return
-                    
+                try: clip = re.search(r'widgetVideoCanvasDS37.SetVariable{"clipId","(.*)"};', data.strip(), re.M|re.I).group(1)
+                except: return
                 response = None
                 items = json.loads(self.openURL(VODURL%(name,clip)))
                 if items and 'channel' in items:
                     for video in items['channel']['item']['media-group']['media-content']:
-                        if BITRATE == LANGUAGE(30003) and int(video['@attributes']['bitrate']) > 1200:
-                            continue
-                        elif BITRATE == LANGUAGE(30004) and int(video['@attributes']['bitrate']) > 2200 and int(video['@attributes']['bitrate']) < 1200:
-                            continue
-                        elif BITRATE == LANGUAGE(30005) and int(video['@attributes']['bitrate']) < 2200:
-                            continue
+                        if BITRATE == LANGUAGE(30003) and int(video['@attributes']['bitrate']) > 1200: continue
+                        elif BITRATE == LANGUAGE(30004) and int(video['@attributes']['bitrate']) > 2200 and int(video['@attributes']['bitrate']) < 1200: continue
+                        elif BITRATE == LANGUAGE(30005) and int(video['@attributes']['bitrate']) < 2200: continue
                         log('resolveURL, using bitrate = ' + str(video['@attributes']['bitrate']))
                         response = video['@attributes']['url'], int(video['@attributes']['duration'])
-                        
-                    if not response:
-                        response = video['@attributes']['url'], int(video['@attributes']['duration'])
+                    if not response: response = video['@attributes']['url'], int(video['@attributes']['duration'])
                 self.cache.set(ADDON_NAME + '.resolveURL, url = %s.%s'%(url,str(BITRATE)), response, expiration=datetime.timedelta(hours=48))
             return self.cache.get(ADDON_NAME + '.resolveURL, url = %s.%s'%(url,str(BITRATE)))
-        except Exception, e:
-            log("resolveURL Failed! " + str(e), xbmc.LOGERROR)
+        except Exception as e: log("resolveURL Failed! " + str(e), xbmc.LOGERROR)
 
             
-    def playVideo(self, name, url, list=None):
+    def playVideo(self, name, url):
         log('playVideo')
-        if not list:
-            list = xbmcgui.ListItem(name, path=url)
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, list)
+        liz = xbmcgui.ListItem(name, path=url)
+        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
 
            
     def addLink(self, name, u, mode, infoList=False, infoArt=False, total=0):
@@ -197,15 +169,10 @@ class News12():
         log('addLink, name = ' + name)
         liz=xbmcgui.ListItem(name)
         liz.setProperty('IsPlayable', 'true')
-        if infoList == False:
-            liz.setInfo(type="Video", infoLabels={"mediatype":"video","label":name,"title":name,"genre":"News"})
-        else:
-            liz.setInfo(type="Video", infoLabels=infoList)
-            
-        if infoArt == False:
-            liz.setArt({'thumb':ICON,'fanart':FANART})
-        else:
-            liz.setArt(infoArt)
+        if infoList == False: liz.setInfo(type="Video", infoLabels={"mediatype":"video","label":name,"title":name,"genre":"News"})
+        else: liz.setInfo(type="Video", infoLabels=infoList)
+        if infoArt == False: liz.setArt({'thumb':ICON,'fanart':FANART})
+        else: liz.setArt(infoArt)
         u=sys.argv[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,totalItems=total)
 
@@ -215,31 +182,20 @@ class News12():
         log('addDir, name = ' + name)
         liz=xbmcgui.ListItem(name)
         liz.setProperty('IsPlayable', 'false')
-        if infoList == False:
-            liz.setInfo(type="Video", infoLabels={"mediatype":"video","label":name,"title":name,"genre":"News"})
-        else:
-            liz.setInfo(type="Video", infoLabels=infoList)
-        if infoArt == False:
-            liz.setArt({'thumb':ICON,'fanart':FANART})
-        else:
-            liz.setArt(infoArt)
+        if infoList == False: liz.setInfo(type="Video", infoLabels={"mediatype":"video","label":name,"title":name,"genre":"News"})
+        else: liz.setInfo(type="Video", infoLabels=infoList)
+        if infoArt == False: liz.setArt({'thumb':ICON,'fanart':FANART})
+        else: liz.setArt(infoArt)
         u=sys.argv[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
   
 params=getParams()
-try:
-    url=urllib.unquote_plus(params["url"])
-except:
-    url=None
-try:
-    name=urllib.unquote_plus(params["name"])
-except:
-    name=None
-try:
-    mode=int(params["mode"])
-except:
-    mode=None
-    
+try: url=urllib.unquote_plus(params["url"])
+except: url=None
+try: name=urllib.unquote_plus(params["name"])
+except: name=None
+try: mode=int(params["mode"])
+except: mode=None
 log("Mode: "+str(mode))
 log("URL : "+str(url))
 log("Name: "+str(name))
@@ -249,6 +205,9 @@ elif mode == 0: News12().buildMenu(name, json.loads(url))
 elif mode == 1: News12().buildRSS(json.loads(url))
 elif mode == 9: News12().playVideo(name, url)
 
-xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_NONE )
-xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_LABEL )
-xbmcplugin.endOfDirectory(int(sys.argv[1]),cacheToDisc=True)
+xbmcplugin.setContent(int(sys.argv[1])    , CONTENT_TYPE)
+xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
+xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_NONE)
+xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_LABEL)
+xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_TITLE)
+xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=True)

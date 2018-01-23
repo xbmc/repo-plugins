@@ -4,24 +4,26 @@
 #
 # Imports
 #
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 import requests
 import os
 import re
 import sys
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
 import xbmc
 import xbmcgui
 import xbmcplugin
-from BeautifulSoup import BeautifulSoup
 
-from gamekings_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION, BASE_URL_GAMEKINGS_TV
+from gamekings_const import ADDON, LANGUAGE, IMAGES_PATH, DATE, VERSION, BASE_URL_GAMEKINGS_TV, convertToUnicodeString, log, getSoup
 
 
 #
 # Main class
 #
-class Main:
+class Main(object):
     #
     # Init
     #
@@ -32,17 +34,14 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-            ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
+        log("ARGV", repr(sys.argv))
 
         # Parse parameters
-        self.plugin_category = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['plugin_category'][0]
-        self.video_list_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['url'][0]
-        self.next_page_possible = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+        self.plugin_category = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['plugin_category'][0]
+        self.video_list_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
+        self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)),
-                     xbmc.LOGDEBUG)
+        log("self.video_list_page_url", self.video_list_page_url)
 
         self.plugin_category = LANGUAGE(30004)
         self.next_page_possible = "False"
@@ -53,8 +52,7 @@ class Main:
             self.search_string = keyboard.getText()
             self.video_list_page_url = self.video_list_page_url % (self.search_string)
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)), xbmc.LOGDEBUG)
+        log("self.video_list_page_url", self.video_list_page_url)
 
         if self.next_page_possible == 'True':
             # Determine current item number, next item number, next_url
@@ -73,9 +71,7 @@ class Main:
                     page_number_next_str = '00' + str(page_number_next)
                 self.next_url = str(self.video_list_page_url).replace(page_number_str, page_number_next_str)
 
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                        ADDON, VERSION, DATE, "self.next_url", str(urllib.unquote_plus(self.next_url))),
-                             xbmc.LOGDEBUG)
+                log("self.next_url", self.next_url)
 
         #
         # Get the videos
@@ -87,19 +83,19 @@ class Main:
         #
         # Init
         #
+        # Create a list for our items.
+        listing = []
 
-        #
-        # Get HTML page
-        #
         #
         # Get HTML page
         #
         response = requests.get(self.video_list_page_url)
+
         html_source = response.text
-        html_source = html_source.encode('utf-8', 'ignore')
+        html_source = convertToUnicodeString(html_source)
 
         # Parse response
-        soup = BeautifulSoup(html_source)
+        soup = getSoup(html_source)
 
         # Get the items. Each item contains a title, a video page url and a thumbnail url
         # <a href="https://www.gamekings.tv/videos/evdwv-over-assassins-creed-en-pokemon-sun-moon/" title="EvdWV over Assassin&#8217;s Creed en Pokèmon Sun &amp; Moon" class="post__thumb">
@@ -107,28 +103,20 @@ class Main:
         # </a>
         items = soup.findAll('a', attrs={'href': re.compile("^" + BASE_URL_GAMEKINGS_TV)})
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(items)",
-                str(len(items))),
-                     xbmc.LOGDEBUG)
-
-        # Create a list for our items.
-        listing = []
+        log("len(items", len(items))
 
         for item in items:
             video_page_url = item['href']
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "video_page_url", str(video_page_url)), xbmc.LOGDEBUG)
+            log("video_page_url", video_page_url)
 
             # if link ends with a '/': process the link, if not: skip the link
             if video_page_url.endswith('/'):
                 pass
             else:
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                        ADDON, VERSION, DATE, "skipped video_page_url not ending on '/'",
-                        str(video_page_url)),
-                             xbmc.LOGDEBUG)
+
+                log("skipped video_page_url not ending on '/'", video_page_url)
+
                 continue
 
             # this is category Videos or Afleveringen
@@ -141,9 +129,9 @@ class Main:
                     pass
                 else:
                     # skip the url if it is not a video
-                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                            ADDON, VERSION, DATE, "skipped video_page_url",
-                            str(video_page_url)), xbmc.LOGDEBUG)
+
+                    log("skipped video_page_url", video_page_url)
+
                     continue
 
             if str(video_page_url).lower().find('premium') >= 0:
@@ -158,12 +146,6 @@ class Main:
                 # skip the item if it's got no title
                 continue
 
-            try:
-                # convert from unicode to encoded text (don't use str() to do this)
-                title = title.encode('utf-8')
-            except:
-                pass
-
             # this is category Gamekings Extra
             if self.plugin_category == LANGUAGE(30002):
                 if str(title).lower().find('gamekings extra') >= 0:
@@ -172,9 +154,9 @@ class Main:
                     pass
                 else:
                     # skip the url
-                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                            ADDON, VERSION, DATE, "skipped non-gamekings-extra title in gamekings extra category",
-                            str(video_page_url)), xbmc.LOGDEBUG)
+
+                    log("skipped non-extra title in gamekings extra category", video_page_url)
+
                     continue
 
             title = title.replace('-', ' ')
@@ -214,30 +196,27 @@ class Main:
             if title[0:1] == " ":
                 title = title[1:]
 
-            title = str(title).replace("aflevering", "Aflevering")
-            title = str(title).replace("Aflevering", str(LANGUAGE(30204)))
-            title = str(title).replace("Gamekings Extra: ", "")
-            title = str(title).replace("Gamekings Extra over ", "")
+            title = title.replace("aflevering", "Aflevering")
+            title = title.replace("Aflevering", str(LANGUAGE(30204)))
+            title = title.replace("Gamekings Extra: ", "")
+            title = title.replace("Gamekings Extra over ", "")
+            title = title.replace("Extra: ", "")
+            title = title.replace("Extra over ", "")
             title = title.capitalize()
-            if premium_video:
-                title = title + " (Premium video)"
 
-            xbmc.log(
-                    "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "title", str(title)),
-                    xbmc.LOGDEBUG)
+            log("title", title)
 
             # Make thumbnail
             try:
                 thumbnail_url = item.img['data-original']
             except:
                 # skip the item if it has no thumbnail
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                        ADDON, VERSION, DATE, "skipping item with no thumbnail",
-                        str(item)), xbmc.LOGDEBUG)
+
+                log("skipping item with no thumbnail", item)
+
                 continue
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "thumbnail_url", str(thumbnail_url)), xbmc.LOGDEBUG)
+            log("thumbnail_url", thumbnail_url)
 
             list_item = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_url)
             list_item.setInfo("video", {"title": title, "studio": ADDON})
@@ -245,9 +224,8 @@ class Main:
             list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
                               'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'true')
-            parameters = {"action": "play", "video_page_url": video_page_url, "plugin_category": self.plugin_category,
-                          "title": title}
-            url = self.plugin_url + '?' + urllib.urlencode(parameters)
+            parameters = {"action": "play", "video_page_url": video_page_url, "plugin_category": self.plugin_category}
+            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = False
             # Add refresh option to context menu
             list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])
@@ -261,7 +239,7 @@ class Main:
             list_item.setProperty('IsPlayable', 'false')
             parameters = {"action": "list", "plugin_category": self.plugin_category, "url": str(self.next_url),
                           "next_page_possible": self.next_page_possible}
-            url = self.plugin_url + '?' + urllib.urlencode(parameters)
+            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = True
             # Add refresh option to context menu
             list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])

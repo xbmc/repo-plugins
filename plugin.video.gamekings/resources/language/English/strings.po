@@ -159,3 +159,6 @@ msgctxt "#30605"
 msgid "Sorry. You must be a Premium member to see this video."
 msgstr ""
 
+msgctxt "#30610"
+msgid "Only show Videos category"
+msgstr ""

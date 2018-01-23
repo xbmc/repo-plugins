@@ -1,3 +1,10 @@
+v1.2.11 (2018-01-20)
+- removed looking for video dialogue
+- addon now works in kode python 2 and should also work in python 3 (!!) once all dependencies work in python 3.
+Kudo's to the python future package for making this possible. Kudo's to RomanVM for the help.
+- changed order of categories
+- adding a setting to only view Videos category
+
 v1.2.10 (2017-05-17)
 - removed base url setting
 

@@ -1,3 +1,9 @@
+v1.1.6 (2018-01-20)
+- removed looking for video dialogue
+- addon now works in kode python 2 and should also work in python 3 (!!) once all dependencies work in python 3.
+Kudo's to the python future package for making this possible. Kudo's to RomanVM for the help.
+- adding a setting to only view Botchamania category
+
 v1.1.5 (2017-03-03):
 - fixed url in addon.xml as per request
 

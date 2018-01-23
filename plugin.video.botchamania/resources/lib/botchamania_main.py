@@ -4,19 +4,22 @@
 #
 # Imports
 #
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 import sys
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import xbmcgui
 import xbmcplugin
 import os
 
-from botchamania_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
+from botchamania_const import LANGUAGE, IMAGES_PATH
 
 
 #
 # Main class
 #
-class Main:
+class Main(object):
     def __init__(self):
         # Get the command line arguments
         # Get the plugin url in plugin:// notation
@@ -29,7 +32,7 @@ class Main:
         #
         parameters = {"action": "list", "plugin_category": LANGUAGE(30001),
                       "url": "http://botchamania.com/category/botchamania/", "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30001), iconImage="DefaultFolder.png")
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
@@ -37,35 +40,11 @@ class Main:
         xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
 
         #
-        # OSWReview
-        #
-        parameters = {"action": "list", "plugin_category": LANGUAGE(30002),
-                      "url": "http://botchamania.com/category/oswreview/", "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
-        list_item = xbmcgui.ListItem(LANGUAGE(30002), iconImage="DefaultFolder.png")
-        is_folder = True
-        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
-        list_item.setProperty('IsPlayable', 'false')
-        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
-
-        #
-        # Misc
-        #
-        parameters = {"action": "list", "plugin_category": LANGUAGE(30003),
-                      "url": "http://botchamania.com/category/misc/", "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
-        list_item = xbmcgui.ListItem(LANGUAGE(30003), iconImage="DefaultFolder.png")
-        is_folder = True
-        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
-        list_item.setProperty('IsPlayable', 'false')
-        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
-
-        #
-        # Botchamania Archive   
+        # Botchamania Archive
         #
         parameters = {"action": "list-archive", "plugin_category": LANGUAGE(30011),
                       "url": "http://botchamaniaarchive.com/", "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30011), iconImage="DefaultFolder.png")
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
@@ -78,8 +57,32 @@ class Main:
         parameters = {"action": "list-archive-specials", "plugin_category": LANGUAGE(30012),
                       "url": "http://www.botchamaniaarchive.com/category/specials/page/1/",
                       "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30012), iconImage="DefaultFolder.png")
+        is_folder = True
+        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
+        list_item.setProperty('IsPlayable', 'false')
+        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
+
+        #
+        # OSWReview
+        #
+        parameters = {"action": "list", "plugin_category": LANGUAGE(30002),
+                      "url": "http://botchamania.com/category/oswreview/", "next_page_possible": "False"}
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
+        list_item = xbmcgui.ListItem(LANGUAGE(30002), iconImage="DefaultFolder.png")
+        is_folder = True
+        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
+        list_item.setProperty('IsPlayable', 'false')
+        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
+
+        #
+        # Misc
+        #
+        parameters = {"action": "list", "plugin_category": LANGUAGE(30003),
+                      "url": "http://botchamania.com/category/misc/", "next_page_possible": "False"}
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
+        list_item = xbmcgui.ListItem(LANGUAGE(30003), iconImage="DefaultFolder.png")
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
         list_item.setProperty('IsPlayable', 'false')

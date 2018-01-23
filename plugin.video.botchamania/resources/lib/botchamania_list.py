@@ -4,24 +4,24 @@
 #
 # Imports
 #
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 import os
-import re
+import requests
 import sys
-import urllib
-import urlparse
-import xbmc
+import urllib.request, urllib.parse, urllib.error
 import xbmcgui
 import xbmcplugin
-from BeautifulSoup import BeautifulSoup
 
-from botchamania_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
-from botchamania_utils import HTTPCommunicator
+from botchamania_const import LANGUAGE, IMAGES_PATH, ADDON, convertToUnicodeString, log, getSoup
 
 
 #
 # Main class
 #
-class Main:
+class Main(object):
     #
     # Init
     #
@@ -32,17 +32,19 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-            ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
+        log("ARGV", repr(sys.argv))
 
         # Parse parameters
-        self.plugin_category = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['plugin_category'][0]
-        self.video_list_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['url'][0]
-        self.next_page_possible = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+        try:
+            self.plugin_category = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['plugin_category'][0]
+            self.video_list_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
+            self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+        except KeyError:
+            self.plugin_category = LANGUAGE(30001)
+            self.video_list_page_url = "http://botchamania.com/category/botchamania/"
+            self.next_page_possible = "False"
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)),
-                 xbmc.LOGDEBUG)
+        log("self.video_list_page_url", self.video_list_page_url)
 
         if self.next_page_possible == 'True':
             # Determine current page number and base_url
@@ -57,8 +59,7 @@ class Main:
             # add last slash
             self.video_list_page_url = str(self.video_list_page_url) + "/"
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.base_url", str(self.base_url)), xbmc.LOGDEBUG)
+            log("self.base_url", self.base_url)
 
         #
         # Get the videos...
@@ -81,10 +82,13 @@ class Main:
         #
         # Get HTML page
         #
-        html_source = HTTPCommunicator().get(self.video_list_page_url)
+        response = requests.get(self.video_list_page_url)
+
+        html_source = response.text
+        html_source = convertToUnicodeString(html_source)
 
         # Parse response
-        soup = BeautifulSoup(html_source)
+        soup = getSoup(html_source)
 
         # Find titles, thumbnail-urls and videopage-urls
         # first 3 posts:
@@ -120,52 +124,45 @@ class Main:
         # </ div>
         # </ article> </ a> <!--  # post-## -->
         # </ li>
+
         titles_thumbnail_videopage_urls = soup.findAll('li')
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            ADDON, VERSION, DATE, "len(titles_thumbnail_videopage_urls)",
-            str(len(titles_thumbnail_videopage_urls))), xbmc.LOGDEBUG)
+        log("len(titles_thumbnail_videopage_urls)", len(titles_thumbnail_videopage_urls))
 
         for titles_thumbnail_videopage_url in titles_thumbnail_videopage_urls:
-            if str(titles_thumbnail_videopage_url).__contains__("article id"):
+            if str(titles_thumbnail_videopage_url).find("article class") >= 0:
                 pass
             else:
                 # skip this one
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "skipping this video_page_url", str(titles_thumbnail_videopage_url)),
-                         xbmc.LOGDEBUG)
+
+                log("skipping video_page_url without article class", titles_thumbnail_videopage_url)
+
                 continue
 
             video_page_url = titles_thumbnail_videopage_url.a['href']
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "video_page_url", str(video_page_url)), xbmc.LOGDEBUG)
+            log("video_page_url", video_page_url)
 
             title = ''
             # Make title
             try:
                 title = titles_thumbnail_videopage_url.h2.string
                 title = title.strip()
-                # convert from unicode to encoded text (don't use str() to do this)
-                title = title.encode('utf-8')
             except KeyError:
-                pass
-            except UnicodeDecodeError:
                 pass
 
             title = title.replace('-', ' ')
             title = title.replace('/', ' ')
             title = title.replace('_', ' ')
-            # welcome to characterset-hell
-            title = title.replace('&#038;', '&')
-            title = title.replace('&#8211;', '-')
-            title = title.replace("&#8217;", "'")
-            title = title.replace('&#8220;', '"')
-            title = title.replace('&#8221;', '"')
 
-            xbmc.log(
-                "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "title", str(title)),
-                xbmc.LOGDEBUG)
+            # # welcome to characterset-hell
+            # title = title.replace('&#038;', '&')
+            # title = title.replace('&#8211;', '-')
+            # title = title.replace("&#8217;", "'")
+            # title = title.replace('&#8220;', '"')
+            # title = title.replace('&#8221;', '"')
+
+            log("title", title)
 
             thumbnail_url = ""
             try:
@@ -181,8 +178,7 @@ class Main:
                 except (TypeError, KeyError):
                     pass
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "thumbnail_url", str(thumbnail_url)), xbmc.LOGDEBUG)
+            log("thumbnail_url", thumbnail_url)
 
             # Add to list...
             list_item = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_url)
@@ -191,7 +187,7 @@ class Main:
                               'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'true')
             parameters = {"action": "play", "video_page_url": video_page_url, "title": title}
-            url = self.plugin_url + '?' + urllib.urlencode(parameters)
+            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = False
             # Add refresh option to context menu
             list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])
@@ -207,15 +203,14 @@ class Main:
             parameters = {"action": "list", "plugin_category": self.plugin_category,
                           "url": str(self.base_url) + str(next_page) + '/',
                           "next_page_possible": self.next_page_possible}
-            url = self.plugin_url + '?' + urllib.urlencode(parameters)
+            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = True
             # Add refresh option to context menu
             list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])
             # Add our item to the listing as a 3-element tuple.
             listing.append((url, list_item, is_folder))
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "next url", str(url)), xbmc.LOGDEBUG)
+            log("next url", url)
 
         # Add our listing to Kodi.
         # Large lists and/or slower systems benefit from adding all items at once via addDirectoryItems

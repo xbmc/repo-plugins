@@ -45,15 +45,15 @@ msgid "Use MPEG-DASH"
 msgstr "Usar MPEG-DASH"
 
 msgctxt "#30008"
-msgid "Configure inputstream.adaptive"
-msgstr "Configurar inputstream.adaptive"
+msgid "Configure InputStream Adaptive"
+msgstr "Configurar InputStream Adaptive"
 
 msgctxt "#30009"
 msgid "Always ask for the video quality"
 msgstr "Preguntar siempre por calidad de video"
 
 msgctxt "#30010"
-msgid "Video Quality"
+msgid "Video quality"
 msgstr "Calidad de Video"
 
 msgctxt "#30011"
@@ -95,19 +95,19 @@ msgid "Allow 3D"
 msgstr "Permitir 3D"
 
 msgctxt "#30021"
-msgid "Show Fanart"
-msgstr "Mostrar Fanart"
+msgid "Show fanart"
+msgstr "Mostrar fanart"
 
 msgctxt "#30022"
 msgid "Items per page"
 msgstr "Elementos por página"
 
 msgctxt "#30023"
-msgid "Search History Size"
+msgid "Search history size"
 msgstr "Tamaño historial de búsqueda"
 
 msgctxt "#30024"
-msgid "Cache Size (MB)"
+msgid "Cache size (MB)"
 msgstr "Tamaño cache (MB)"
 
 msgctxt "#30025"
@@ -115,7 +115,7 @@ msgid "Enable setup-wizard"
 msgstr "Habilitar asistente"
 
 msgctxt "#30026"
-msgid "Override View"
+msgid "Override view"
 msgstr "Invalidar vista"
 
 msgctxt "#30027"
@@ -159,11 +159,11 @@ msgid "Support alternative player"
 msgstr "Soportar reproductor alternativo"
 
 msgctxt "#30037"
-msgid "Custom Watch Later Playlist ID"
+msgid "Custom Watch Later playlist id"
 msgstr "Personalizar ID lista reproducción 'Ver más tarde'"
 
 msgctxt "#30038"
-msgid "Custom History Playlist ID"
+msgid "Custom History playlist id"
 msgstr "Personalizar ID lista reproducción 'Historial'"
 
 #Kodion Common
@@ -175,7 +175,7 @@ msgstr "Favoritos"
 
 msgctxt "#30101"
 msgid "Add to addon favs"
-msgstr "Añadir a favoritos del Addon"
+msgstr "Añadir a favoritos del Add-on"
 
 msgctxt "#30102"
 msgid "Search"
@@ -195,7 +195,7 @@ msgstr "Archivos"
 
 msgctxt "#30106"
 msgid "Next Page (%d)"
-msgstr "Siguiente página (%d)"
+msgstr "Siguiente Página (%d)"
 
 msgctxt "#30107"
 msgid "Watch Later"
@@ -215,11 +215,11 @@ msgstr "Nueva Búsqueda"
 
 msgctxt "#30111"
 msgid "Sign In"
-msgstr "Iniciar sesión"
+msgstr "Iniciar Sesión"
 
 msgctxt "#30112"
 msgid "Sign Out"
-msgstr "Cerrar sesión"
+msgstr "Cerrar Sesión"
 
 msgctxt "#30113"
 msgid "Rename"
@@ -227,19 +227,19 @@ msgstr "Renombrar"
 
 msgctxt "#30114"
 msgid "Confirm delete"
-msgstr "Confirme borrar"
+msgstr "Confirmación para borrar"
 
 msgctxt "#30115"
 msgid "Confirm remove"
-msgstr "Confirme quitar"
+msgstr "Confirmación para quitar"
 
 msgctxt "#30116"
 msgid "Delete \"%s\"?"
-msgstr "¿Desea borrar \"%s\"?"
+msgstr "¿Esta seguro de que desea borrar \"%s\"?"
 
 msgctxt "#30117"
 msgid "Remove \"%s\"?"
-msgstr "¿Desea quitar \"%s\"?"
+msgstr "¿Esta seguro de que desea quitar \"%s\"?"
 
 msgctxt "#30118"
 msgid "Delete"
@@ -247,7 +247,7 @@ msgstr "Borrar"
 
 msgctxt "#30119"
 msgid "Please wait..."
-msgstr "Por favor espere ..."
+msgstr "Por favor espere..."
 
 msgctxt "#30120"
 msgid "Clear"
@@ -273,8 +273,8 @@ msgid "API Secret"
 msgstr ""
 
 msgctxt "#30204"
-msgid "Enable Personal API Keys"
-msgstr "Habilitar claves API Personales"
+msgid "Enable personal API keys"
+msgstr "Habilitar claves API personales"
 
 msgctxt "#30205"
 msgid "Use preset API key set"
@@ -289,7 +289,7 @@ msgstr "Canales"
 
 msgctxt "#30501"
 msgid "Playlists"
-msgstr "Listas"
+msgstr "Listas de reproducción"
 
 msgctxt "#30502"
 msgid "Go to %s"
@@ -317,7 +317,7 @@ msgstr "Mi Canal"
 
 msgctxt "#30508"
 msgid "Liked Videos"
-msgstr "Me gustó el Video"
+msgstr "Me gustó el video"
 
 msgctxt "#30509"
 msgid "History"
@@ -357,15 +357,15 @@ msgstr "Suscribirse a %s"
 
 msgctxt "#30518"
 msgid "Go to '%s'"
-msgstr "Ir a '%s'"
+msgstr "Visite la URL '%s' desde cualquier navegador web" 
 
 msgctxt "#30519"
 msgid "and enter the following code:"
-msgstr "Escriba el siguiente código:"
+msgstr "e introduzca el siguiente código:"
 
 msgctxt "#30520"
 msgid "Add to..."
-msgstr "Añadir a ..."
+msgstr "Añadir a..."
 
 msgctxt "#30521"
 msgid "Select playlist"
@@ -373,15 +373,15 @@ msgstr "Seleccione una lista"
 
 msgctxt "#30522"
 msgid "New playlist..."
-msgstr "Nueva lista ..."
+msgstr "Nueva lista de reproducción..."
 
 msgctxt "#30523"
 msgid "Language"
-msgstr "Lenguaje"
+msgstr "Idioma"
 
 msgctxt "#30524"
 msgid "Select language"
-msgstr "Seleccione lenguaje"
+msgstr "Seleccione el idioma"
 
 msgctxt "#30525"
 msgid "Select region"
@@ -393,11 +393,11 @@ msgstr "Ajustar"
 
 msgctxt "#30527"
 msgid "Language and region?"
-msgstr "¿Lenguaje y región?"
+msgstr "¿Idioma y región?"
 
 msgctxt "#30528"
 msgid "Rate..."
-msgstr "Valorar ..."
+msgstr "Valorar..."
 
 msgctxt "#30529"
 msgid "I like this"
@@ -429,7 +429,7 @@ msgstr "Seleccione el orden para la lista de reproducción"
 
 msgctxt "#30536"
 msgid "Updating Playlist..."
-msgstr "Actualizando lista de reproducción ..."
+msgstr "Actualizando lista de reproducción..."
 
 msgctxt "#30537"
 msgid "Play from here"
@@ -453,11 +453,11 @@ msgstr "Mostrar nombre del canal en la descripción"
 
 msgctxt "#30542"
 msgid "rtmpe streams are not supported"
-msgstr "streams rtmpe no son soportados"
+msgstr "Los streams rtmpe no son soportados"
 
 msgctxt "#30543"
 msgid "Refresh"
-msgstr "Refrescar lista"
+msgstr "Actualizar lista"
 
 msgctxt "#30544"
 msgid "More Links from the description"
@@ -465,7 +465,7 @@ msgstr "Enlaces en la descripción"
 
 msgctxt "#30545"
 msgid "No further links found."
-msgstr "No se encontrarón enlaces"
+msgstr "No se encontraron enlaces"
 
 msgctxt "#30546"
 msgid "Please log in twice!"
@@ -473,7 +473,7 @@ msgstr "Por favor inicie sesión dos veces!"
 
 msgctxt "#30547"
 msgid "You must enable two applications so that YouTube is functioning properly."
-msgstr "Debe habilitar dos aplicaciones para que YouTube funcione correctamente."
+msgstr "Debe habilitar dos sesiones para que el add-on YouTube funcione correctamente."
 
 msgctxt "#30548"
 msgid "More..."
@@ -497,7 +497,7 @@ msgstr "Mantenimiento"
 
 msgctxt "#30553"
 msgid "Delete function cache database"
-msgstr "Eliminar base de datos caché para funciones"
+msgstr "Eliminar base de datos para cache de funciones"
 
 msgctxt "#30554"
 msgid "Delete search history database"
@@ -513,7 +513,7 @@ msgstr "Limpiar historial de búsqueda"
 
 msgctxt "#30557"
 msgid "function cache"
-msgstr ""
+msgstr "Cache de funciones"
 
 msgctxt "#30558"
 msgid "search history"
@@ -521,11 +521,11 @@ msgstr "Historial de búsqueda"
 
 msgctxt "#30559"
 msgid "Delete settings.xml"
-msgstr "Eliminar settings.xml"
+msgstr "Eliminar ajustes personales (settings.xml)"
 
 msgctxt "#30560"
 msgid "Subtitle language"
-msgstr "Lenguaje de subtítulos"
+msgstr "Idioma para subtítulos"
 
 msgctxt "#30561"
 msgid "None"
@@ -561,7 +561,7 @@ msgstr "Eliminar como 'Ver más tarde'"
 
 msgctxt "#30569"
 msgid "Are you sure you want to remove '%s' as your Watch Later list?"
-msgstr "¿Esta seguro que desea eliminar '%s' como su lista 'Ver más tarde'?"
+msgstr "¿Está seguro de que desea eliminar '%s' como su lista 'Ver más tarde'?"
 
 msgctxt "#30570"
 msgid "Are you sure you want to replace your current Watch Later list with '%s'?"
@@ -577,11 +577,11 @@ msgstr "Eliminar como 'Historial'"
 
 msgctxt "#30573"
 msgid "Are you sure you want to remove '%s' as your History list?"
-msgstr "¿Está seguro que quiere eliminar '%s' como su lista 'Historial'?"
+msgstr "¿Está seguro de que quiere eliminar '%s' como su lista 'Historial'?"
 
 msgctxt "#30574"
 msgid "Are you sure you want to replace your current History list with '%s'?"
-msgstr "¿Está seguro que quiere remplazar su actual lista 'Historial' por '%s'? "
+msgstr "¿Está seguro de que quiere remplazar su actual lista 'Historial' por '%s'? "
 
 msgctxt "#30575"
 msgid "Succeeded"
@@ -596,53 +596,177 @@ msgid "Settings"
 msgstr "Configuración"
 
 msgctxt "#30578"
-msgid "Force SSL Certificate verification"
+msgid "Force SSL certificate verification"
 msgstr "Forzar verificación de certificado SSL"
 
 msgctxt "#30579"
-msgid "MPEG-DASH is enabled in the YouTube settings, however inputstream.adaptive appears to be disabled. Would you like to enable inputstream.adaptive now?"
-msgstr "MPEG-DASH está activado en la configuración de YouTube, sin embargo inputstream.adaptive parece estar deshabilitado. ¿Quiere habilitar inputstream.adaptive ahora?"
+msgid "MPEG-DASH is enabled in the YouTube settings, however InputStream Adaptive appears to be disabled. Would you like to enable InputStream Adaptive now?"
+msgstr "MPEG-DASH está activado en los ajustes de YouTube, sin embargo InputStream Adaptive parece estar deshabilitado. ¿Le gustaría habilitar ahora InputStream Adaptive?"
 
 msgctxt "#30580"
 msgid "Reset access manager"
-msgstr "Restablecer administrador de acceso"
+msgstr "Restablecer credenciales de acceso"
 
 msgctxt "#30581"
 msgid "Are you sure you want to reset access manager?"
-msgstr "¿Está seguro de que desea restablecer el administrador de acceso?"
+msgstr "¿Está seguro de que desea restablecer las credenciales de acceso?"
 
 msgctxt "#30582"
 msgid "Autoplay suggested videos"
 msgstr "Reproducir automáticamente videos sugeridos"
 
-msgctxt "#31583"
+msgctxt "#30583"
 msgid "Automatic"
 msgstr "Automático"
 
-msgctxt "#31584"
+msgctxt "#30584"
 msgid "My Subscriptions (Filtered)"
 msgstr "Mis Suscripciones (Filtrado)"
 
-msgctxt "#31585"
+msgctxt "#30585"
 msgid "Filtered channel list (comma delimited)"
 msgstr "Lista de canales filtrados (separados por comas)"
 
-msgctxt "#31586"
+msgctxt "#30586"
 msgid "Blacklist"
 msgstr "Lista Negra"
 
-msgctxt "#31587"
+msgctxt "#30587"
 msgid "Add to My Subscriptions filter"
 msgstr "Añadir filtro a 'Mis Suscripciones'"
 
-msgctxt "#31588"
+msgctxt "#30588"
 msgid "Remove from My Subscriptions filter"
 msgstr "Eliminar filtro de 'Mis Suscripciones'"
 
-msgctxt "#31589"
+msgctxt "#30589"
 msgid "Added %s to My Subscriptions filter"
 msgstr "Añadido %s a filtro de 'Mis Suscripciones'"
 
-msgctxt "#31590"
+msgctxt "#30590"
 msgid "Removed %s from My Subscriptions filter"
 msgstr "Eliminar %s de filtro de 'Mis Suscripciones'"
+
+msgctxt "#30591"
+msgid "Thumbnail size"
+msgstr "Tamaño miniaturas"
+
+msgctxt "#30592"
+msgid "Medium (16:9)"
+msgstr "Medio (16:9)"
+
+msgctxt "#30593"
+msgid "High (4:3)"
+msgstr "Alto (4:3)"
+
+msgctxt "#30594"
+msgid "Safe search"
+msgstr "Filtrado SafeSearch"
+
+msgctxt "#30595"
+msgid "Moderate"
+msgstr "Moderado"
+
+msgctxt "#30596"
+msgid "Strict"
+msgstr "Estricto"
+
+msgctxt "#30597"
+msgid "Updated: %s"
+msgstr "Actualizado: %s"
+
+msgctxt "#30598"
+msgid "Personal API keys enabled"
+msgstr "Claves API personales habilitadas"
+
+msgctxt "#30599"
+msgid "Failed to enable personal API keys. Missing: %s"
+msgstr "Error al habilitar claves API personales. Ausente: %s"
+
+msgctxt "#30600"
+msgid "Configure subtitles"
+msgstr "Configurar subtítulos"
+
+msgctxt "#30601"
+msgid "%s with %s fallback"
+msgstr ""
+
+msgctxt "#30602"
+msgid "No auto-generated"
+msgstr "Sin autogenerado"
+
+msgctxt "#30603"
+msgid "Age gate"
+msgstr Activar restricciones por edad"
+
+msgctxt "#30604"
+msgid "Allow offensive content"
+msgstr "Permitir contenido ofensivo"
+
+msgctxt "#30605"
+msgid "Quick Search"
+msgstr "Búsqueda rápida"
+
+msgctxt "#30606"
+msgid "Quick Search (Incognito)"
+msgstr "Búsqueda rápida (Incógnito)"
+
+msgctxt "#30607"
+msgid "Audio only"
+msgstr "Reproducir solo audio"
+
+msgctxt "#30608"
+msgid "Allow developer keys"
+msgstr "Permitir claves API para desarrolladores"
+
+msgctxt "#30609"
+msgid "Clear watch history"
+msgstr "Limpiar historial de reproducción"
+
+msgctxt "#30610"
+msgid "This will clear your account's watch history from all devices. You can't undo this."
+msgstr "Esta acción borrará su historial de reproducción en todos los dispositivos asociados a su cuenta. Esta acción no se podrá deshacer."
+
+msgctxt "#30611"
+msgid "Saved Playlists"
+msgstr "Guardar listas de reproducción"
+
+msgctxt "#30612"
+msgid "Retry"
+msgstr "Volver a intentarlo"
+
+msgctxt "#30613"
+msgid "Retrieve Watch Later playlist id"
+msgstr "Recuperar ID lista de reproducción 'Ver más tarde'"
+
+msgctxt "#30614"
+msgid "Failed to retrieve Watch Later playlist id. Add a few videos to Watch Later via the web/app and retry."
+msgstr "¡Vaya! Algo ha fallado al recuperar la ID para la lista de reproducción 'Ver más tarde'. Agregue algunos videos a 'Ver más tarde' a través de la aplicación web / Android y vuelva a intentarlo."
+
+msgctxt "#30615"
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgctxt "#30616"
+msgid "Must be signed in."
+msgstr "Debe estar registrado."
+
+msgctxt "#30617"
+msgid "MPEG-DASH"
+msgstr ""
+
+msgctxt "#30618"
+msgid "Enable mpeg-dash proxy"
+msgstr ""
+
+msgctxt "#30619"
+msgid "Proxy port"
+msgstr ""
+
+msgctxt "#30620"
+msgid "Port %s already in use. Cannot start proxy server."
+msgstr ""
+
+msgctxt "#30621"
+msgid "Proxy is required for mpeg-dash vods"
+msgstr ""

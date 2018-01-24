@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: 2015-09-21 11:01+0000\n"
-"PO-Revision-Date: 2017-09-08 15:32+0200\n"
+"PO-Revision-Date: 2017-10-13 22:46+0200\n"
 "Last-Translator: Marcin W.\n"
 "Language: pl\n"
 "Language-Team: Polish (Poland) (http://www.transifex.com/teamxbmc/kodi-main/language/pl_PL/)\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.0.4\n"
 
 msgctxt "Addon Summary"
 msgid "Plugin for YouTube"
@@ -42,7 +42,7 @@ msgid "Always ask for the video quality"
 msgstr "Pytaj o jakość strumienia wideo"
 
 msgctxt "#30010"
-msgid "Video Quality"
+msgid "Video quality"
 msgstr "Jakość wideo"
 
 msgctxt "#30011"
@@ -82,7 +82,7 @@ msgid "Allow 3D"
 msgstr "Dopuszczaj materiały 3D"
 
 msgctxt "#30021"
-msgid "Show Fanart"
+msgid "Show fanart"
 msgstr "Pokazuj fototapetę"
 
 msgctxt "#30022"
@@ -90,11 +90,11 @@ msgid "Items per page"
 msgstr "Pozycji na stronę"
 
 msgctxt "#30023"
-msgid "Search History Size"
+msgid "Search history size"
 msgstr "Liczba pozycji na liście Historia"
 
 msgctxt "#30024"
-msgid "Cache Size (MB)"
+msgid "Cache size (MB)"
 msgstr "Rozmiar bufora (MB)"
 
 msgctxt "#30025"
@@ -102,7 +102,7 @@ msgid "Enable setup-wizard"
 msgstr "Uruchamiaj kreatora konfiguracji"
 
 msgctxt "#30026"
-msgid "Override View"
+msgid "Override view"
 msgstr "Wymuszaj widok"
 
 msgctxt "#30027"
@@ -146,11 +146,11 @@ msgid "Support alternative player"
 msgstr "Obsługuj alternatywne odtwarzacze"
 
 msgctxt "#30037"
-msgid "Custom Watch Later Playlist ID"
+msgid "Custom Watch Later playlist id"
 msgstr "Identyfikator niestandardowej listy Do obejrzenia"
 
 msgctxt "#30038"
-msgid "Custom History Playlist ID"
+msgid "Custom History playlist id"
 msgstr "Identyfikator niestandardowej listy Historii"
 
 msgctxt "#30100"
@@ -256,7 +256,7 @@ msgid "API Secret"
 msgstr "Klucz szyfrowania API"
 
 msgctxt "#30204"
-msgid "Enable Personal API Keys"
+msgid "Enable personal API keys"
 msgstr "Używaj osobistego zestawu kluczy API"
 
 msgctxt "#30205"
@@ -327,7 +327,7 @@ msgstr "Powiązane"
 
 msgctxt "#30515"
 msgid "Auto-Remove from 'Watch Later'"
-msgstr "Usuwaj po obejrzeniu pozycję z listy Do obejrzenia"
+msgstr "Usuwaj po obejrzeniu pozycję z listy 'Do obejrzenia'"
 
 msgctxt "#30516"
 msgid "Folders"
@@ -578,11 +578,11 @@ msgid "Settings"
 msgstr "Ustawienia"
 
 msgctxt "#30578"
-msgid "Force SSL Certificate verification"
+msgid "Force SSL certificate verification"
 msgstr "Wymuszaj weryfikację certyfikatu SSL"
 
 msgctxt "#30579"
-msgid "MPEG-DASH is enabled in the YouTube settings, however inputstream.adaptive appears to be disabled. Would you like to enable inputstream.adaptive now?"
+msgid "MPEG-DASH is enabled in the YouTube settings, however InputStream Adaptive appears to be disabled. Would you like to enable InputStream Adaptive now?"
 msgstr "W ustawieniach wtyczki YouTube aktywowano transmisję MPEG-DASH, ale wygląda na to, że wtyczka strumienia wejściowego InputStream Adaptive jest nieaktywna. Czy chciałbyś aktywować ją teraz?"
 
 msgctxt "#30580"
@@ -597,70 +597,158 @@ msgctxt "#30582"
 msgid "Autoplay suggested videos"
 msgstr "Odtwarzaj polecane wideo automatycznie"
 
-msgctxt "#31583"
+msgctxt "#30583"
 msgid "Automatic"
 msgstr "Automatycznie"
 
-msgctxt "#31584"
+msgctxt "#30584"
 msgid "My Subscriptions (Filtered)"
 msgstr "Moje subskrypcje (przefiltrowane)"
 
-msgctxt "#31585"
+msgctxt "#30585"
 msgid "Filtered channel list (comma delimited)"
 msgstr "Przeflitrowana lista kanałów (rozdzielona przecinkami)"
 
-msgctxt "#31586"
+msgctxt "#30586"
 msgid "Blacklist"
 msgstr "Czarna lista"
 
-msgctxt "#31587"
+msgctxt "#30587"
 msgid "Add to My Subscriptions filter"
 msgstr "Dodaj do filtra Moje subskrypcje"
 
-msgctxt "#31588"
+msgctxt "#30588"
 msgid "Remove from My Subscriptions filter"
 msgstr "Dodaj z filtra Moje subskrypcje"
 
-msgctxt "#31589"
+msgctxt "#30589"
 msgid "Added %s to My Subscriptions filter"
 msgstr "Dodano %s do filtra Moje subskrypcje"
 
-msgctxt "#31590"
+msgctxt "#30590"
 msgid "Removed %s from My Subscriptions filter"
 msgstr "Usunięto %s z filtra Moje subskrypcje"
 
-msgctxt "#31591"
+msgctxt "#30591"
 msgid "Thumbnail size"
 msgstr "Rozmiar miniatur"
 
-msgctxt "#31592"
+msgctxt "#30592"
 msgid "Medium (16:9)"
 msgstr "Średni (16:9)"
 
-msgctxt "#31593"
+msgctxt "#30593"
 msgid "High (4:3)"
 msgstr "Duży (4:3)"
 
-msgctxt "#31594"
-msgid "Safe Search"
+msgctxt "#30594"
+msgid "Safe search"
 msgstr "Filtr kontroli rodzicielskiej"
 
-msgctxt "#31595"
+msgctxt "#30595"
 msgid "Moderate"
 msgstr "Umiarkowany"
 
-msgctxt "#31596"
+msgctxt "#30596"
 msgid "Strict"
 msgstr "Rygorystyczny"
 
-msgctxt "#31597"
+msgctxt "#30597"
 msgid "Updated: %s"
 msgstr "Zaktualizowano: %s"
 
-msgctxt "#31598"
+msgctxt "#30598"
 msgid "Personal API keys enabled"
 msgstr "Aktywowano osobiste klucze API"
 
-msgctxt "#31599"
+msgctxt "#30599"
 msgid "Failed to enable personal API keys. Missing: %s"
 msgstr "Aktywacja osobistych kluczy API zakończona niepowodzeniem. Brakuje: %s"
+
+msgctxt "#30600"
+msgid "Configure subtitles"
+msgstr "Konfiguracja napisów"
+
+msgctxt "#30601"
+msgid "%s with %s fallback"
+msgstr "%s z %s zapasowym"
+
+msgctxt "#30602"
+msgid "No auto-generated"
+msgstr "Bez generowanych automatycznie"
+
+msgctxt "#30603"
+msgid "Age gate"
+msgstr "Ograniczenie wiekowe"
+
+msgctxt "#30604"
+msgid "Allow offensive content"
+msgstr "Zezwalaj na obraźliwą treść"
+
+msgctxt "#30605"
+msgid "Quick Search"
+msgstr "Szybkie wyszukiwanie"
+
+msgctxt "#30606"
+msgid "Quick Search (Incognito)"
+msgstr "Szybkie wyszukiwanie (tryb prywatny)"
+
+msgctxt "#30607"
+msgid "Audio only"
+msgstr ""
+
+msgctxt "#30608"
+msgid "Allow developer keys"
+msgstr ""
+
+msgctxt "#30609"
+msgid "Clear watch history"
+msgstr ""
+
+msgctxt "#30610"
+msgid "This will clear your account's watch history from all devices. You can't undo this."
+msgstr ""
+
+msgctxt "#30611"
+msgid "Saved Playlists"
+msgstr ""
+
+msgctxt "#30612"
+msgid "Retry"
+msgstr ""
+
+msgctxt "#30613"
+msgid "Retrieve Watch Later playlist id"
+msgstr ""
+
+msgctxt "#30614"
+msgid "Failed to retrieve Watch Later playlist id. Add a few videos to Watch Later via the web/app and retry."
+msgstr ""
+
+msgctxt "#30615"
+msgid "Cancel"
+msgstr ""
+
+msgctxt "#30616"
+msgid "Must be signed in."
+msgstr ""
+
+msgctxt "#30617"
+msgid "MPEG-DASH"
+msgstr ""
+
+msgctxt "#30618"
+msgid "Enable mpeg-dash proxy"
+msgstr ""
+
+msgctxt "#30619"
+msgid "Proxy port"
+msgstr ""
+
+msgctxt "#30620"
+msgid "Port %s already in use. Cannot start proxy server."
+msgstr ""
+
+msgctxt "#30621"
+msgid "Proxy is required for mpeg-dash vods"
+msgstr ""

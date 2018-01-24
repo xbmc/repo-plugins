@@ -41,7 +41,7 @@ msgid "Always ask for the video quality"
 msgstr "每次詢問影片解像度"
 
 msgctxt "#30010"
-msgid "Video Quality"
+msgid "Video quality"
 msgstr "影片解像度"
 
 msgctxt "#30011"
@@ -81,7 +81,7 @@ msgid "Allow 3D"
 msgstr "容許 3D 播放"
 
 msgctxt "#30021"
-msgid "Show Fanart"
+msgid "Show fanart"
 msgstr "顯示背景圖片"
 
 msgctxt "#30022"
@@ -89,11 +89,11 @@ msgid "Items per page"
 msgstr "每頁顯示行數"
 
 msgctxt "#30023"
-msgid "Search History Size"
+msgid "Search history size"
 msgstr "搜尋記錄大小"
 
 msgctxt "#30024"
-msgid "Cache Size (MB)"
+msgid "Cache size (MB)"
 msgstr "快取空間大小 (MB)"
 
 msgctxt "#30025"
@@ -101,7 +101,7 @@ msgid "Enable setup-wizard"
 msgstr "啟用設定精靈"
 
 msgctxt "#30026"
-msgid "Override View"
+msgid "Override view"
 msgstr "強制預覽模式"
 
 msgctxt "#30027"
@@ -145,11 +145,11 @@ msgid "Support alternative player"
 msgstr "支援使用其他播放器"
 
 msgctxt "#30037"
-msgid "Custom Watch Later Playlist ID"
+msgid "Custom Watch Later playlist id"
 msgstr ""
 
 msgctxt "#30038"
-msgid "Custom History Playlist ID"
+msgid "Custom History playlist id"
 msgstr ""
 
 msgctxt "#30100"
@@ -256,7 +256,7 @@ msgid "API Secret"
 msgstr "API 密碼"
 
 msgctxt "#30204"
-msgid "Enable Personal API Keys"
+msgid "Enable personal API keys"
 msgstr "啟用個人 API 密鑰"
 
 msgctxt "#30205"
@@ -579,9 +579,177 @@ msgid "Settings"
 msgstr ""
 
 msgctxt "#30578"
-msgid "Force SSL Certificate verification"
+msgid "Force SSL certificate verification"
 msgstr ""
 
 msgctxt "#30579"
-msgid "MPEG-DASH is enabled in the YouTube settings, however inputstream.adaptive appears to be disabled. Would you like to enable inputstream.adaptive now?"
+msgid "MPEG-DASH is enabled in the YouTube settings, however InputStream Adaptive appears to be disabled. Would you like to enable InputStream Adaptive now?"
+msgstr ""
+
+msgctxt "#30580"
+msgid "Reset access manager"
+msgstr ""
+
+msgctxt "#30581"
+msgid "Are you sure you want to reset access manager?"
+msgstr ""
+
+msgctxt "#30582"
+msgid "Autoplay suggested videos"
+msgstr ""
+
+msgctxt "#30583"
+msgid "Automatic"
+msgstr ""
+
+msgctxt "#30584"
+msgid "My Subscriptions (Filtered)"
+msgstr ""
+
+msgctxt "#30585"
+msgid "Filtered channel list (comma delimited)"
+msgstr ""
+
+msgctxt "#30586"
+msgid "Blacklist"
+msgstr ""
+
+msgctxt "#30587"
+msgid "Add to My Subscriptions filter"
+msgstr ""
+
+msgctxt "#30588"
+msgid "Remove from My Subscriptions filter"
+msgstr ""
+
+msgctxt "#30589"
+msgid "Added %s to My Subscriptions filter"
+msgstr ""
+
+msgctxt "#30590"
+msgid "Removed %s from My Subscriptions filter"
+msgstr ""
+
+msgctxt "#30591"
+msgid "Thumbnail size"
+msgstr ""
+
+msgctxt "#30592"
+msgid "Medium (16:9)"
+msgstr ""
+
+msgctxt "#30593"
+msgid "High (4:3)"
+msgstr ""
+
+msgctxt "#30594"
+msgid "Safe search"
+msgstr ""
+
+msgctxt "#30595"
+msgid "Moderate"
+msgstr ""
+
+msgctxt "#30596"
+msgid "Strict"
+msgstr ""
+
+msgctxt "#30597"
+msgid "Updated: %s"
+msgstr ""
+
+msgctxt "#30598"
+msgid "Personal API keys enabled"
+msgstr ""
+
+msgctxt "#30599"
+msgid "Failed to enable personal API keys. Missing: %s"
+msgstr ""
+
+msgctxt "#30600"
+msgid "Configure subtitles"
+msgstr ""
+
+msgctxt "#30601"
+msgid "%s with %s fallback"
+msgstr ""
+
+msgctxt "#30602"
+msgid "No auto-generated"
+msgstr ""
+
+msgctxt "#30603"
+msgid "Age gate"
+msgstr ""
+
+msgctxt "#30604"
+msgid "Allow offensive content"
+msgstr ""
+
+msgctxt "#30605"
+msgid "Quick Search"
+msgstr ""
+
+msgctxt "#30606"
+msgid "Quick Search (Incognito)"
+msgstr ""
+
+msgctxt "#30607"
+msgid "Audio only"
+msgstr ""
+
+msgctxt "#30608"
+msgid "Allow developer keys"
+msgstr ""
+
+msgctxt "#30609"
+msgid "Clear watch history"
+msgstr ""
+
+msgctxt "#30610"
+msgid "This will clear your account's watch history from all devices. You can't undo this."
+msgstr ""
+
+msgctxt "#30611"
+msgid "Saved Playlists"
+msgstr ""
+
+msgctxt "#30612"
+msgid "Retry"
+msgstr ""
+
+msgctxt "#30613"
+msgid "Retrieve Watch Later playlist id"
+msgstr ""
+
+msgctxt "#30614"
+msgid "Failed to retrieve Watch Later playlist id. Add a few videos to Watch Later via the web/app and retry."
+msgstr ""
+
+msgctxt "#30615"
+msgid "Cancel"
+msgstr ""
+
+msgctxt "#30616"
+msgid "Must be signed in."
+msgstr ""
+
+msgctxt "#30617"
+msgid "MPEG-DASH"
+msgstr ""
+
+msgctxt "#30618"
+msgid "Enable mpeg-dash proxy"
+msgstr ""
+
+msgctxt "#30619"
+msgid "Proxy port"
+msgstr ""
+
+msgctxt "#30620"
+msgid "Port %s already in use. Cannot start proxy server."
+msgstr ""
+
+msgctxt "#30621"
+msgid "Proxy is required for mpeg-dash vods"
 msgstr ""

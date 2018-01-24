@@ -10,7 +10,7 @@ def i18n(string_id):
     try:
         return addon.getLocalizedString(STRINGS[string_id]).encode('utf-8', 'ignore')
     except Exception as e:
-        log.error('Failed String Lookup: %s (%s)' % (string_id, e))
+        log.error('Failed String Lookup: {0} ({1})', string_id, e)
         return string_id
 
 
@@ -61,6 +61,7 @@ STRINGS = {
     'movies_az': 30252,
     'change_user': 30253,
     'show_settings': 30254,
+    'movies_year': 30255,
     'movies_all': 30256,
     'movies_recently_added': 30257,
     'movies_in_progress': 30258,
@@ -111,5 +112,19 @@ STRINGS = {
     'caching_textures': 30301,
     'existing_textures': 30302,
     'missing_textures': 30303,
-    'loaded_textures': 30304
+    'loaded_textures': 30304,
+    'not_found_': 30305,
+    'playback_starting_': 30306,
+    'play_trailer': 30307,
+    'select_trailer': 30308,
+    'select_source': 30309,
+    'embycon_error': 30311,
+    'embycon_error_submit': 30312,
+    'connection_error': 30316,
+    'play_all': 30317,
+    'music_all_albums': 30318,
+    'music_all_artists': 30319,
+    '_all_albums': 30320,
+    '_all_artists': 30321
+
 }

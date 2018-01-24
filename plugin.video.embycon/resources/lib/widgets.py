@@ -12,11 +12,13 @@ from utils import getArt
 from datamanager import DataManager
 from simple_logging import SimpleLogging
 from kodi_utils import HomeWindow
+from resources.lib.error import catch_except
 
 log = SimpleLogging(__name__)
 downloadUtils = DownloadUtils()
 dataManager = DataManager()
 kodi_version = int(xbmc.getInfoLabel('System.BuildVersion')[:2])
+
 
 def checkForNewContent():
     log.debug("checkForNewContent Called")
@@ -33,7 +35,7 @@ def checkForNewContent():
 
     added_result = downloadUtils.downloadUrl(added_url, suppress=True)
     result = json.loads(added_result)
-    log.debug("LATEST_ADDED_ITEM:" + str(result))
+    log.debug("LATEST_ADDED_ITEM: {0}", result)
 
     last_added_date = ""
     if result is not None:
@@ -41,7 +43,7 @@ def checkForNewContent():
         if len(items) > 0:
             item = items[0]
             last_added_date = item.get("Etag", "")
-    log.debug("last_added_date: " + last_added_date)
+    log.debug("last_added_date: {0}", last_added_date)
 
     played_url = ('{server}/emby/Users/{userid}/Items' +
                     '?Recursive=true' +
@@ -55,7 +57,7 @@ def checkForNewContent():
 
     played_result = downloadUtils.downloadUrl(played_url, suppress=True)
     result = json.loads(played_result)
-    log.debug("LATEST_PLAYED_ITEM:" + str(result))
+    log.debug("LATEST_PLAYED_ITEM: {0}", result)
 
     last_played_date = ""
     if result is not None:
@@ -63,29 +65,29 @@ def checkForNewContent():
         if len(items) > 0:
             item = items[0]
             last_played_date = item.get("Etag", "")
-    log.debug("last_played_date: " + last_played_date)
+    log.debug("last_played_date: {0}", last_played_date)
 
     home_window = HomeWindow()
     current_widget_hash = home_window.getProperty("embycon_widget_reload")
-    log.debug("Current Widget Hash: " + str(current_widget_hash))
+    log.debug("Current Widget Hash: {0}", current_widget_hash)
 
     m = hashlib.md5()
     m.update(last_played_date + last_added_date)
     new_widget_hash = m.hexdigest()
-    log.debug("New Widget Hash: " + str(new_widget_hash))
+    log.debug("New Widget Hash: {0}", new_widget_hash)
 
     if current_widget_hash != new_widget_hash:
         home_window.setProperty("embycon_widget_reload", new_widget_hash)
-        log.debug("Setting New Widget Hash: " + str(new_widget_hash))
+        log.debug("Setting New Widget Hash: {0}", new_widget_hash)
 
 
 def getWidgetUrlContent(handle, params):
-    log.debug("getWidgetUrlContent Called" + str(params))
+    log.debug("getWidgetUrlContent Called: {0}", params)
 
     request = params["url"]
     request = urllib.unquote(request)
     request = "{server}/emby/" + request + "&ImageTypeLimit=1&format=json"
-    log.debug("getWidgetUrlContent URL:" + request)
+    log.debug("getWidgetUrlContent URL: {0}", request)
 
     select_action = params.get("action", None)
 
@@ -96,7 +98,7 @@ def getWidgetUrlContent(handle, params):
 
 
 def getSuggestions(handle, params):
-    log.debug("getSuggestions Called" + str(params))
+    log.debug("getSuggestions Called: {0}", params)
 
     itemsUrl = ("{server}/emby/Movies/Recommendations" +
                 "?userId={userid}" +
@@ -112,7 +114,7 @@ def getSuggestions(handle, params):
     xbmcplugin.endOfDirectory(handle, cacheToDisc=False)
 
 def getWidgetContentNextUp(handle, params):
-    log.debug("getWidgetContentNextUp Called" + str(params))
+    log.debug("getWidgetContentNextUp Called: {0}", params)
 
     itemsUrl = ("{server}/emby/Shows/NextUp?SeriesId=" + params["id"] +
                 "&userId={userid}" +
@@ -128,7 +130,7 @@ def getWidgetContentNextUp(handle, params):
 
 
 def getWidgetContentSimilar(handle, params):
-    log.debug("getWisgetContentSimilarMovies Called" + str(params))
+    log.debug("getWisgetContentSimilarMovies Called: {0}", params)
 
     itemsUrl = ("{server}/emby/Items/" + params["id"] + "/Similar"
                 "?userId={userid}" +
@@ -145,18 +147,21 @@ def getWidgetContentSimilar(handle, params):
 
 
 def getWidgetContentCast(handle, params):
-    log.debug("getWigetContentCast Called" + str(params))
+    log.debug("getWigetContentCast Called: {0}", params)
     server = downloadUtils.getServer()
 
     id = params["id"]
-    jsonData = downloadUtils.downloadUrl("{server}/emby/Users/{userid}/Items/" + id + "?format=json",
-                                         suppress=False, popup=1)
-    result = json.loads(jsonData)
-    log.debug("ItemInfo: " + str(result))
+    data_manager = DataManager()
+    result = data_manager.GetContent("{server}/emby/Users/{userid}/Items/" + id + "?format=json")
+    log.debug("ItemInfo: {0}", result)
 
     listItems = []
-    people = result.get("People")
-    if (people != None):
+    if result is not None:
+        people = result.get("People")
+    else:
+        people = None
+
+    if people is not None:
         for person in people:
             #if (person.get("Type") == "Director"):
             #    director = director + person.get("Name") + ' '
@@ -181,12 +186,17 @@ def getWidgetContentCast(handle, params):
                 artLinks["poster"] = person_thumbnail
                 list_item.setArt(artLinks)
 
+                labels = {}
+                labels["mediatype"] = "artist"
+                list_item.setInfo(type="music", infoLabels=labels)
+
                 if person_role:
                     list_item.setLabel2(person_role)
 
                 itemTupple = ("", list_item, False)
                 listItems.append(itemTupple)
 
+    xbmcplugin.setContent(handle, 'artists')
     xbmcplugin.addDirectoryItems(handle, listItems)
     xbmcplugin.endOfDirectory(handle, cacheToDisc=False)
 
@@ -194,18 +204,20 @@ def getWidgetContentCast(handle, params):
 def populateWidgetItems(itemsUrl, override_select_action=None):
 
     server = downloadUtils.getServer()
+    if server is None:
+        return []
+
     settings = xbmcaddon.Addon(id='plugin.video.embycon')
     select_action = settings.getSetting("widget_select_action")
 
     if override_select_action is not None:
         select_action = str(override_select_action)
 
-    log.debug("WIDGET_DATE_URL: " + itemsUrl)
+    log.debug("WIDGET_DATE_URL: {0}", itemsUrl)
 
     # get the items
-    jsonData = downloadUtils.downloadUrl(itemsUrl, suppress=False, popup=1)
-    log.debug("Widget(Items) jsonData: " + jsonData)
-    result = json.loads(jsonData)
+    data_manager = DataManager()
+    result = data_manager.GetContent(itemsUrl)
 
     if result is not None and isinstance(result, dict) and result.get("Items") is not None:
         simmilarTo = result.get("BaselineItemName", None)
@@ -219,35 +231,30 @@ def populateWidgetItems(itemsUrl, override_select_action=None):
     itemCount = 1
     listItems = []
     for item in result:
-        item_id = item.get("Id")
-        name = item.get("Name")
+        item_id = item["Id"]
+        name = item["Name"]
         episodeDetails = ""
-        log.debug("WIDGET_DATE_NAME: " + name)
+        log.debug("WIDGET_DATE_NAME: {0}", name)
 
-        title = item.get("Name")
+        title = name
         tvshowtitle = ""
+        item_type = item["Type"]
+        series_name = item["SeriesName"]
 
-        if (item.get("Type") == "Episode" and item.get("SeriesName") != None):
+        if item_type == "Episode" and series_name is not None:
 
-            eppNumber = "X"
-            tempEpisodeNumber = "0"
-            if (item.get("IndexNumber") != None):
-                eppNumber = item.get("IndexNumber")
-                if eppNumber < 10:
-                    tempEpisodeNumber = "0" + str(eppNumber)
-                else:
-                    tempEpisodeNumber = str(eppNumber)
+            episode_number = item["IndexNumber"]
+            if episode_number is None:
+                episode_number = 0
 
-            seasonNumber = item.get("ParentIndexNumber")
-            if seasonNumber < 10:
-                tempSeasonNumber = "0" + str(seasonNumber)
-            else:
-                tempSeasonNumber = str(seasonNumber)
+            season_number = item["ParentIndexNumber"]
+            if season_number is None:
+                season_number = 0
 
-            episodeDetails = "S" + tempSeasonNumber + "E" + tempEpisodeNumber
-            name = item.get("SeriesName") + " " + episodeDetails
-            tvshowtitle = episodeDetails
-            title = item.get("SeriesName")
+            name = series_name + " " + episodeDetails
+            name = "%s S%02dE%02d" % (series_name, season_number, episode_number)
+            tvshowtitle = "S%02dE%02d" % (season_number, episode_number)
+            title = series_name
 
         art = getArt(item, server, widget=True)
 
@@ -258,31 +265,30 @@ def populateWidgetItems(itemsUrl, override_select_action=None):
 
         # list_item.setLabel2(episodeDetails)
 
-        production_year = item.get("ProductionYear")
-        if not production_year and item.get("PremiereDate"):
-            production_year = int(item.get("PremiereDate")[:4])
-
-        overlay = "0"
-        playCount = "0"
+        production_year = item["ProductionYear"]
+        prem_year = item["PremiereDate"]
+        if production_year is None and prem_year is not None:
+            production_year = int(prem_year[:4])
 
         # add progress percent
-        userData = item.get("UserData")
-        if (userData != None):
-            if userData.get("Played") == True:
-                playCount = "1"
-                overlay = "5"
-            else:
-                overlay = "6"
+        userData = item["UserData"]
+        if userData["Played"] == True:
+            playCount = "1"
+            overlay = "5"
+        else:
+            playCount = "0"
+            overlay = "6"
 
-            playBackTicks = float(userData.get("PlaybackPositionTicks"))
-            if (playBackTicks != None and playBackTicks > 0):
-                runTimeTicks = float(item.get("RunTimeTicks", "0"))
-                if (runTimeTicks > 0):
-                    playBackPos = int(((playBackTicks / 1000) / 10000) / 60)
-                    list_item.setProperty('ResumeTime', str(playBackPos))
+        runtime = item["RunTimeTicks"]
+        playBackTicks = userData["PlaybackPositionTicks"]
 
-                    percentage = int((playBackTicks / runTimeTicks) * 100.0)
-                    list_item.setProperty("complete_percentage", str(percentage))
+        if playBackTicks is not None and runtime is not None and runtime > 0:
+            runtime = float(runtime)
+            playBackTicks = float(playBackTicks)
+            playBackPos = int(((playBackTicks / 1000) / 10000) / 60)
+            list_item.setProperty('ResumeTime', str(playBackPos))
+            percentage = int((playBackTicks / runtime) * 100.0)
+            list_item.setProperty("complete_percentage", str(percentage))
 
         video_info_label = {"title": title,
                             "tvshowtitle": tvshowtitle,
@@ -295,13 +301,14 @@ def populateWidgetItems(itemsUrl, override_select_action=None):
         list_item.setProperty('discart', art['discart'])  # not avail to setArt
         list_item.setArt(art)
         # add count
-        list_item.setProperty("item_index", str(itemCount))
-        itemCount = itemCount + 1
+        #list_item.setProperty("item_index", str(itemCount))
+        #itemCount = itemCount + 1
 
-        list_item.setProperty('IsPlayable', 'true')
+        list_item.setProperty('IsPlayable', 'false')
 
-        totalTime = str(int(float(item.get("RunTimeTicks", "0")) / (10000000 * 60)))
-        list_item.setProperty('TotalTime', str(totalTime))
+        if runtime is not None:
+            totalTime = str(int(float(runtime) / (10000000 * 60)))
+            list_item.setProperty('TotalTime', str(totalTime))
 
         list_item.setProperty('id', item_id)
 
@@ -320,7 +327,7 @@ def populateWidgetItems(itemsUrl, override_select_action=None):
 
 
 def getWidgetContent(handle, params):
-    log.debug("getWigetContent Called" + str(params))
+    log.debug("getWigetContent Called: {0}", params)
 
     type = params.get("type")
     if (type == None):

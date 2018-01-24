@@ -47,7 +47,7 @@ msgid "Enable performance profiling"
 msgstr ""
 
 msgctxt "#30011"
-msgid "Detect Server"
+msgid "Detect Local Server"
 msgstr ""
 
 msgctxt "#30012"
@@ -82,8 +82,16 @@ msgctxt "#30020"
 msgid "Flatten single season"
 msgstr ""
 
+msgctxt "#30021"
+msgid "Show all episodes item"
+msgstr ""
+
 msgctxt "#30022"
 msgid "Advanced"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Hide unwatched episode details"
 msgstr ""
 
 msgctxt "#30024"
@@ -159,19 +167,11 @@ msgid "On Resume Jump Back Seconds"
 msgstr ""
 
 msgctxt "#30116"
-msgid "Add Item and Played Counts"
-msgstr ""
-
-msgctxt "#30117"
-msgid "Background Art Refresh Rate (seconds)"
+msgid "Add unwatched counts to names"
 msgstr ""
 
 msgctxt "#30118"
-msgid "Add Resume Percent"
-msgstr ""
-
-msgctxt "#30119"
-msgid "Add Episode Number"
+msgid "Add resume percent to names"
 msgstr ""
 
 msgctxt "#30120"
@@ -210,10 +210,6 @@ msgctxt "#30137"
 msgid "Please restart Kodi"
 msgstr ""
 
-msgctxt "#30138"
-msgid "Cache Emby Data Locally"
-msgstr ""
-
 msgctxt "#30139"
 msgid "No Media Type Set"
 msgstr ""
@@ -224,10 +220,6 @@ msgstr ""
 
 msgctxt "#30151"
 msgid "Select item action (Requires Restart)"
-msgstr ""
-
-msgctxt "#30162"
-msgid "Add Season Number"
 msgstr ""
 
 msgctxt "#30163"
@@ -255,15 +247,15 @@ msgid "Select User"
 msgstr ""
 
 msgctxt "#30181"
-msgid "Include Overview"
+msgid "Include plot"
 msgstr ""
 
 msgctxt "#30182"
-msgid "Include Media Info"
+msgid "Include media stream info"
 msgstr ""
 
 msgctxt "#30183"
-msgid "Include People"
+msgid "Include people"
 msgstr ""
 
 msgctxt "#30200"
@@ -430,6 +422,10 @@ msgctxt "#30254"
 msgid "Show Settings"
 msgstr ""
 
+msgctxt "#30255"
+msgid "Movies (Year)"
+msgstr ""
+
 msgctxt "#30256"
 msgid "Movies - All"
 msgstr ""
@@ -535,7 +531,7 @@ msgid "Your skin %s is currently not supported"
 msgstr ""
 
 msgctxt "#30282"
-msgid "No servers detected"
+msgid "No Emby servers on your local network detected"
 msgstr ""
 
 msgctxt "#30283"
@@ -626,3 +622,74 @@ msgctxt "#30304"
 msgid "Loaded Textures: "
 msgstr ""
 
+msgctxt "#30305"
+msgid "Not Found: %s"
+msgstr ""
+
+msgctxt "#30306"
+msgid "Playback starting: %s"
+msgstr ""
+
+msgctxt "#30307"
+msgid "Emby: Play Trailer"
+msgstr ""
+
+msgctxt "#30308"
+msgid "Select Trailer"
+msgstr ""
+
+msgctxt "#30309"
+msgid "Select Media Source"
+msgstr ""
+
+msgctxt "#30310"
+msgid "Enable Emby remote control"
+msgstr ""
+
+msgctxt "#30311"
+msgid "EmbyCon encountered an error!"
+msgstr ""
+
+msgctxt "#30312"
+msgid "Do you want to send this error to the devs?"
+msgstr ""
+
+msgctxt "#30313"
+msgid "Menu"
+msgstr ""
+
+msgctxt "#30314"
+msgid "Play"
+msgstr ""
+
+msgctxt "#30315"
+msgid "Suppress notifications for connection errors"
+msgstr ""
+
+msgctxt "#30316"
+msgid "Connection Error"
+msgstr ""
+
+msgctxt "#30317"
+msgid "Emby: Play All"
+msgstr ""
+
+msgctxt "#30318"
+msgid "Music - All Albums"
+msgstr ""
+
+msgctxt "#30319"
+msgid "Music - All Album Artists"
+msgstr ""
+
+msgctxt "#30320"
+msgid " - Albums"
+msgstr ""
+
+msgctxt "#30321"
+msgid " - Album Artists"
+msgstr ""
+
+msgctxt "#30322"
+msgid "Auto Resume"
+msgstr ""

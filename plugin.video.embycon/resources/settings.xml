@@ -36,26 +36,28 @@
 		<setting id="promptDeleteMoviePercentage" type="slider" label="30220" default="100" range="5,1,100" option="int" visible="true"/>
 		<setting label="30121" type="lsep"/>
 		<setting type="sep" />
+		<setting id="forceAutoResume" type="bool" label="30322" default="true" visible="true" enable="true" />
 		<setting id="jump_back_amount" type="slider" label="30114" default="15" range="0,1,60" option="int" visible="true"/>
 	</category>
 	<category label="30110">
-		<setting id="showLoadProgress" type="bool" label="30120" default="false" visible="true" enable="true" />
-		<setting id="addCounts" type="bool" label="30116" default="true" visible="true" enable="true" />
-		<setting id="addSeasonNumber" type="bool" label="30162" default="false" visible="true" enable="true" />        
-		<setting id="addEpisodeNumber" type="bool" label="30119" default="true" visible="true" enable="true" />
-		<setting id="addResumePercent" type="bool" label="30118" default="true" visible="true" enable="true" />
+		<setting id="addCounts" type="bool" label="30116" default="false" visible="true" enable="true" />
+		<setting id="addResumePercent" type="bool" label="30118" default="false" visible="true" enable="true" />
 		<setting id="addSubtitleAvailable" type="bool" label="30163" default="false" visible="true" enable="true" />
 		<setting id="include_overview" type="bool" label="30181" default="true" visible="true" enable="true" />
 		<setting id="include_media" type="bool" label="30182" default="true" visible="true" enable="true" />
 		<setting id="include_people" type="bool" label="30183" default="false" visible="true" enable="true" />
+		<setting id="hide_unwatched_details" type="bool" label="30023" default="false" visible="true" enable="true" />
 		<setting id="flatten_single_season" type="bool" label="30020" default="true" visible="true" enable="true" />
+		<setting id="show_all_episodes" type="bool" label="30021" default="true" visible="true" enable="true" />
 		<setting id="show_x_filtered_items" type="slider" label="30018" default="20" range="5,1,100" option="int" visible="true"/>
 		<setting id="show_latest_unplayed" type="bool" label="30027" default="false" visible="true" enable="true" />
-		<setting id="widget_select_action" type="enum" label="30026" lvalues="menu|play" default="0" visible="true"/>
-		<setting id="episode_name_format" type="text" default="{SeriesName} - s{SeasonIndex}e{EpisodeIndex} - {ItemName}" label="30019" />
+		<setting id="widget_select_action" type="select" label="30026" lvalues="30313|30314" default="0" visible="true"/>
+		<setting id="episode_name_format" type="select" label="30019" default="{ItemName}" values="{ItemName}|s{SeasonIndex}e{EpisodeIndex} - {ItemName}|{SeriesName} - s{SeasonIndex}e{EpisodeIndex} - {ItemName}" />
 	</category>
 	<category label="30022"> <!-- Advanced -->
 		<setting id="profile" type="bool" label="30010" default="false" visible="true" enable="true" />
-		<setting id="cacheEmbyData" type="bool" label="30138" default="false" visible="true" enable="true" />
+		<setting id="showLoadProgress" type="bool" label="30120" default="false" visible="true" enable="true" />
+		<setting id="remoteControl" type="bool" label="30310" default="false" visible="true" enable="true" />
+		<setting id="suppressErrors" type="bool" label="30315" default="false" visible="true" enable="true" />
 	</category>
 </settings>

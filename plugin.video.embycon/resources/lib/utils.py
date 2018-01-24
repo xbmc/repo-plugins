@@ -12,12 +12,14 @@ import json
 import httplib
 import base64
 import sys
+import binascii
 
 from downloadutils import DownloadUtils
 from simple_logging import SimpleLogging
 from clientinfo import ClientInformation
 from json_rpc import json_rpc
 from translation import i18n
+from datamanager import DataManager
 
 # define our global download utils
 downloadUtils = DownloadUtils()
@@ -26,19 +28,21 @@ log = SimpleLogging(__name__)
 
 ###########################################################################
 class PlayUtils():
-    def getPlayUrl(self, id, result, force_transcode, play_session_id):
+    def getPlayUrl(self, id, media_source, force_transcode, play_session_id):
         log.debug("getPlayUrl")
         addonSettings = xbmcaddon.Addon(id='plugin.video.embycon')
         playback_type = addonSettings.getSetting("playback_type")
         server = downloadUtils.getServer()
-        log.debug("playback_type: " + playback_type)
+        log.debug("playback_type: {0}", playback_type)
         if force_transcode:
             log.debug("playback_type: FORCED_TRANSCODE")
         playurl = None
-        log.debug("play_session_id: " + play_session_id)
+        log.debug("play_session_id: {0}", play_session_id)
+        media_source_id = media_source.get("Id")
+        log.debug("media_source_id: {0}", media_source_id)
 
         is_h265 = False
-        streams = result.get("MediaStreams", [])
+        streams = media_source.get("MediaStreams", [])
         for stream in streams:
             if stream.get("Type", "") == "Video" and stream.get("Codec", "") in ["hevc", "h265"]:
                 is_h265 = True
@@ -60,7 +64,7 @@ class PlayUtils():
         if playback_type == "2":
 
             playback_bitrate = addonSettings.getSetting("playback_bitrate")
-            log.debug("playback_bitrate: " + playback_bitrate)
+            log.debug("playback_bitrate: {0}", playback_bitrate)
 
             playback_max_width = addonSettings.getSetting("playback_max_width")
             playback_video_force_8 = addonSettings.getSetting("playback_video_force_8") == "true"
@@ -70,25 +74,28 @@ class PlayUtils():
             bitrate = int(playback_bitrate) * 1000
             user_token = downloadUtils.authenticate()
 
-            playurl = (
-                "%s/emby/Videos/%s/master.m3u8?MediaSourceId=%s&PlaySessionId=%s&VideoCodec=h264&AudioCodec=ac3&MaxAudioChannels=6&deviceId=%s&VideoBitrate=%s"
-                % (server, id, id, play_session_id, deviceId, bitrate))
-
-            playurl = playurl + "&maxWidth=" + playback_max_width
-
+            playurl = ("%s/emby/Videos/%s/master.m3u8" +
+                       "?MediaSourceId=%s" +
+                       "&PlaySessionId=%s" +
+                       "&VideoCodec=h264" +
+                       "&AudioCodec=ac3" +
+                       "&MaxAudioChannels=6" +
+                       "&deviceId=%s" +
+                       "&VideoBitrate=%s" +
+                       "&maxWidth=%s")
+            playurl = playurl % (server, id, media_source_id, play_session_id, deviceId, bitrate, playback_max_width)
             if playback_video_force_8:
                 playurl = playurl + "&MaxVideoBitDepth=8"
-
             playurl = playurl + "&api_key=" + user_token
 
         # do direct path playback
         elif playback_type == "0":
-            playurl = result.get("Path")
+            playurl = media_source.get("Path")
 
             # handle DVD structure
-            if (result.get("VideoType") == "Dvd"):
+            if (media_source.get("VideoType") == "Dvd"):
                 playurl = playurl + "/VIDEO_TS/VIDEO_TS.IFO"
-            elif (result.get("VideoType") == "BluRay"):
+            elif (media_source.get("VideoType") == "BluRay"):
                 playurl = playurl + "/BDMV/index.bdmv"
 
             smb_username = addonSettings.getSetting('smbusername')
@@ -104,57 +111,51 @@ class PlayUtils():
 
         # do direct http streaming playback
         elif playback_type == "1":
-            playurl = "%s/emby/Videos/%s/stream?static=true&PlaySessionId=%s" % (server, id, play_session_id)
+            playurl = ("%s/emby/Videos/%s/stream" +
+                       "?static=true" +
+                       "&PlaySessionId=%s" +
+                       "&MediaSourceId=%s")
+            playurl = playurl % (server, id, play_session_id, media_source_id)
             user_token = downloadUtils.authenticate()
             playurl = playurl + "&api_key=" + user_token
 
-        log.debug("Playback URL: " + playurl)
-        return playurl.encode('utf-8'), playback_type
+        log.debug("Playback URL: {0}", playurl)
+        return playurl, playback_type
 
-    def getStrmDetails(self, result):
+    def getStrmDetails(self, media_source):
         playurl = None
         listitem_props = []
 
-        source = result['MediaSources'][0]
-        contents = source.get('Path').encode('utf-8')  # contains contents of strm file with linebreaks
+        contents = media_source.get('Path').encode('utf-8')  # contains contents of strm file with linebreaks
 
         line_break = '\r'
         if '\r\n' in contents:
-            line_break += '\n'
+            line_break = '\r\n'
+        elif '\n' in contents:
+            line_break = '\n'
 
         lines = contents.split(line_break)
         for line in lines:
             line = line.strip()
+            log.debug("STRM Line: {0}", line)
             if line.startswith('#KODIPROP:'):
                 match = re.search('#KODIPROP:(?P<item_property>[^=]+?)=(?P<property_value>.+)', line)
                 if match:
-                    listitem_props.append((match.group('item_property'), match.group('property_value')))
+                    item_property = match.group('item_property')
+                    property_value = match.group('property_value')
+                    log.debug("STRM property found: {0} value: {1}", item_property, property_value)
+                    listitem_props.append((item_property, property_value))
+                else:
+                    log.debug("STRM #KODIPROP incorrect format")
+            elif line.startswith('#'):
+                #  unrecognized, treat as comment
+                log.debug("STRM unrecognized line identifier, ignored")
             elif line != '':
                 playurl = line
+                log.debug("STRM playback url found")
 
-        log.debug("Playback URL: " + playurl + " ListItem Properties: " + str(listitem_props))
+        log.debug("Playback URL: {0} ListItem Properties: {1}", playurl, listitem_props)
         return playurl, listitem_props
-
-
-def getDetailsString():
-
-    addonSettings = xbmcaddon.Addon(id='plugin.video.embycon')
-    include_media = addonSettings.getSetting("include_media") == "true"
-    include_people = addonSettings.getSetting("include_people") == "true"
-    include_overview = addonSettings.getSetting("include_overview") == "true"
-
-    detailsString = "DateCreated,EpisodeCount,SeasonCount,Path,Genres,Studios,CumulativeRunTimeTicks,Etag"
-
-    if include_media:
-        detailsString += ",MediaStreams"
-
-    if include_people:
-        detailsString += ",People"
-
-    if include_overview:
-        detailsString += ",Overview"
-
-    return detailsString
 
 
 def getChecksum(item):
@@ -182,36 +183,43 @@ def getArt(item, server, widget=False):
         'clearart': '',
         'discart': '',
         'landscape': '',
+        'tvshow.fanart': '',
         'tvshow.poster': '',
         'tvshow.clearart': '',
+        'tvshow.clearlogo': '',
         'tvshow.banner': '',
         'tvshow.landscape': ''
     }
-    item_id = item.get("Id")
+    item_id = item["Id"]
 
     image_id = item_id
-    imageTags = item.get("ImageTags")
-    if (imageTags is not None) and (imageTags.get("Primary") is not None):
-        image_tag = imageTags.get("Primary")
+    imageTags = item["ImageTags"]
+    if imageTags is not None and imageTags["Primary"] is not None:
+        image_tag = imageTags["Primary"]
         if widget:
             art['thumb'] = downloadUtils.imageUrl(image_id, "Primary", 0, 400, 400, image_tag, server=server)
         else:
             art['thumb'] = downloadUtils.getArtwork(item, "Primary", server=server)
 
-    if item.get("Type") == "Episode" or item.get("Type") == "Season":
+    item_type = item["Type"]
+
+    if item_type == "Episode" or item_type == "Season":
         art['tvshow.poster'] = downloadUtils.getArtwork(item, "Primary", parent=True, server=server)
-        art['tvshow.clearart'] = downloadUtils.getArtwork(item, "Logo", parent=True, server=server)
+        art['tvshow.clearart'] = downloadUtils.getArtwork(item, "Art", parent=True, server=server)
+        art['tvshow.clearlogo'] = downloadUtils.getArtwork(item, "Logo", parent=True, server=server)
         art['tvshow.banner'] = downloadUtils.getArtwork(item, "Banner", parent=True, server=server)
         art['tvshow.landscape'] = downloadUtils.getArtwork(item, "Thumb", parent=True, server=server)
-    elif item.get("Type") == "Series":
+        art['tvshow.fanart'] = downloadUtils.getArtwork(item, "Backdrop", parent=True, server=server)
+    elif item_type == "Series":
         art['tvshow.poster'] = downloadUtils.getArtwork(item, "Primary", parent=False, server=server)
-        art['tvshow.clearart'] = downloadUtils.getArtwork(item, "Logo", parent=False, server=server)
+        art['tvshow.clearart'] = downloadUtils.getArtwork(item, "Art", parent=False, server=server)
+        art['tvshow.clearlogo'] = downloadUtils.getArtwork(item, "Logo", parent=False, server=server)
         art['tvshow.banner'] = downloadUtils.getArtwork(item, "Banner", parent=False, server=server)
         art['tvshow.landscape'] = downloadUtils.getArtwork(item, "Thumb", parent=False, server=server)
+        art['tvshow.fanart'] = downloadUtils.getArtwork(item, "Backdrop", parent=False, server=server)
 
-    if item.get("Type") == "Episode":
-        art['thumb'] = art['thumb'] if art['thumb'] else downloadUtils.getArtwork(item, "Thumb", server=server)
-        art['landscape'] = art['thumb'] if art['thumb'] else downloadUtils.getArtwork(item, "Thumb", parent=True, server=server)
+    if item_type == "Episode":
+        art['landscape'] = downloadUtils.getArtwork(item, "Thumb", parent=True, server=server)
     else:
         art['poster'] = art['thumb']
 
@@ -256,13 +264,13 @@ def cache_artwork():
     web_port = {"setting": "services.webserverport"}
     result = json_rpc('Settings.GetSettingValue').execute(web_port)
     xbmc_port = result['result']['value']
-    log.debug("xbmc_port: " + str(xbmc_port))
+    log.debug("xbmc_port: {0}", xbmc_port)
 
     # get the user
     web_user = {"setting": "services.webserverusername"}
     result = json_rpc('Settings.GetSettingValue').execute(web_user)
     xbmc_username = result['result']['value']
-    log.debug("xbmc_username: " + str(xbmc_username))
+    log.debug("xbmc_username: {0}", xbmc_username)
 
     # get the password
     web_pass = {"setting": "services.webserverpassword"}
@@ -278,7 +286,7 @@ def cache_artwork():
 
         json_result = json_rpc('Textures.GetTextures').execute()
         textures = json_result.get("result", {}).get("textures", [])
-        log.debug("texture ids: " + str(textures))
+        log.debug("texture ids: {0}", textures)
         total = len(textures)
         for texture in textures:
             texture_id = texture["textureid"]
@@ -320,11 +328,10 @@ def cache_artwork():
         '&ImageTypeLimit=1' +
         '&format=json')
 
-    results = downloadUtils.downloadUrl(url, method="GET")
+    data_manager = DataManager()
+    results = data_manager.GetContent(url)
     if results is None:
         results = []
-    else:
-        results = json.loads(results)
 
     if isinstance(results, dict):
         results = results.get("Items")
@@ -340,10 +347,10 @@ def cache_artwork():
             if image_url not in texture_urls and not image_url.endswith("&Tag=") and len(image_url) > 0:
                 missing_texture_urls.add(image_url)
 
-    log.debug("texture_urls:" + str(texture_urls))
-    log.debug("missing_texture_urls: " + str(missing_texture_urls))
-    log.debug("Number of existing textures: %s" % len(texture_urls))
-    log.debug("Number of missing textures: %s" % len(missing_texture_urls))
+    log.debug("texture_urls: {0}", texture_urls)
+    log.debug("missing_texture_urls: {0}", missing_texture_urls)
+    log.debug("Number of existing textures: {0}", len(texture_urls))
+    log.debug("Number of missing textures: {0}", len(missing_texture_urls))
 
     kodi_http_server = "localhost:" + str(xbmc_port)
     headers = {}
@@ -358,10 +365,10 @@ def cache_artwork():
 
     count_done = 0
     for get_url in missing_texture_urls:
-        log.debug("texture_url:" + get_url)
+        log.debug("texture_url: {0}", get_url)
         url = double_urlencode(get_url)
         kodi_texture_url = ("/image/image://%s" % url)
-        log.debug("kodi_texture_url: " + kodi_texture_url)
+        log.debug("kodi_texture_url: {0}", kodi_texture_url)
 
         percentage = int((float(index) / float(total)) * 100)
         message = "%s of %s" % (index, total)
@@ -372,7 +379,7 @@ def cache_artwork():
         data = conn.getresponse()
         if data.status == 200:
             count_done += 1
-        log.debug("Get Image Result: " + str(data.status))
+        log.debug("Get Image Result: {0}", data.status)
 
         index += 1
         if pdialog.iscanceled():
@@ -398,3 +405,13 @@ def single_urlencode(text):
     text = urllib.urlencode({'blahblahblah': text.encode('utf-8')})
     text = text[13:]
     return text.decode('utf-8') #return the result again as unicode
+
+
+def send_event_notification(method, data):
+    next_data = json.dumps(data)
+    source_id = "embycon"
+    data = '\\"[\\"{0}\\"]\\"'.format(binascii.hexlify(next_data))
+    command = 'XBMC.NotifyAll({0}.SIGNAL,{1},{2})'.format(source_id, method, data)
+    log.debug("Sending notification event data: {0}", command)
+    xbmc.executebuiltin(command)
+

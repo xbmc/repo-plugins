@@ -90,3 +90,7 @@ msgstr ""
 msgctxt "#30106"
 msgid "Error getting page: %s"
 msgstr ""
+
+msgctxt "#30610"
+msgid "Only show All video category"
+msgstr ""

@@ -4,12 +4,13 @@ __author__ = 'bromix'
 
 import urlparse
 from ...kodion.utils import FunctionCache
+from ...kodion import Context as _Context
 import requests
 
 
 class AbstractResolver(object):
     def __init__(self):
-        pass
+        self._verify = _Context().get_settings().verify_ssl()
 
     def supports_url(self, url, url_components):
         raise NotImplementedError()
@@ -17,15 +18,12 @@ class AbstractResolver(object):
     def resolve(self, url, url_components):
         raise NotImplementedError()
 
-    pass
-
 
 class YouTubeResolver(AbstractResolver):
     RE_USER_NAME = re.compile(r'http(s)?://(www.)?youtube.com/(?P<user_name>[a-zA-Z0-9]+)$')
 
     def __init__(self):
         AbstractResolver.__init__(self)
-        pass
 
     def supports_url(self, url, url_components):
         if url_components.hostname == 'www.youtube.com' or url_components.hostname == 'youtube.com':
@@ -38,8 +36,6 @@ class YouTubeResolver(AbstractResolver):
             re_match = self.RE_USER_NAME.match(url)
             if re_match:
                 return True
-
-            pass
 
         return False
 
@@ -55,13 +51,12 @@ class YouTubeResolver(AbstractResolver):
                            'DNT': '1',
                            'Accept-Encoding': 'gzip, deflate',
                            'Accept-Language': 'en-US,en;q=0.8,de;q=0.6'}
-                response = requests.get(url, headers=headers)
+                response = requests.get(url, headers=headers, verify=self._verify)
                 if response.status_code == 200:
                     re_match = re.search(r'<meta itemprop="channelId" content="(?P<channel_id>.+)">', response.text)
                     if re_match:
                         channel_id = re_match.group('channel_id')
                         return 'https://www.youtube.com/channel/%s' % channel_id
-                    pass
             except:
                 # do nothing
                 pass
@@ -81,13 +76,10 @@ class YouTubeResolver(AbstractResolver):
 
         return url
 
-    pass
-
 
 class CommonResolver(AbstractResolver, list):
     def __init__(self):
         AbstractResolver.__init__(self)
-        pass
 
     def supports_url(self, url, url_components):
         return True
@@ -104,7 +96,7 @@ class CommonResolver(AbstractResolver, list):
                            'DNT': '1',
                            'Accept-Encoding': 'gzip, deflate',
                            'Accept-Language': 'en-US,en;q=0.8,de;q=0.6'}
-                response = requests.head(_url, headers=headers, allow_redirects=False)
+                response = requests.head(_url, headers=headers, verify=self._verify, allow_redirects=False)
                 if response.status_code == 304:
                     return url
 
@@ -129,7 +121,6 @@ class CommonResolver(AbstractResolver, list):
                     location = headers.get('Location', '')
                     if location:
                         return _loop(location, tries=tries - 1)
-                    pass
             except:
                 # do nothing
                 pass
@@ -139,8 +130,6 @@ class CommonResolver(AbstractResolver, list):
         resolved_url = _loop(url)
 
         return resolved_url
-
-    pass
 
 
 class UrlResolver(object):
@@ -152,11 +141,9 @@ class UrlResolver(object):
             self._youtube_resolver,
             CommonResolver()
         ]
-        pass
 
     def clear(self):
         self._context.get_function_cache().clear()
-        pass
 
     def _resolve(self, url):
         # try one of the resolver
@@ -169,13 +156,10 @@ class UrlResolver(object):
                 # one last check...sometimes the resolved url is YouTube-specific and can be resolved again or
                 # simplified.
                 url_components = urlparse.urlparse(resolved_url)
-                if resolver is not self._youtube_resolver and self._youtube_resolver.supports_url(resolved_url,
-                                                                                                  url_components):
+                if resolver is not self._youtube_resolver and self._youtube_resolver.supports_url(resolved_url, url_components):
                     return self._youtube_resolver.resolve(resolved_url, url_components)
 
                 return resolved_url
-            pass
-        pass
 
     def resolve(self, url):
         function_cache = self._context.get_function_cache()
@@ -184,5 +168,3 @@ class UrlResolver(object):
             return url
 
         return resolved_url
-
-    pass

@@ -11,8 +11,11 @@ VIDEO_QUALITY_ASK = 'kodion.video.quality.ask'  # (bool)
 DASH_SUPPORT_BUILTIN = 'kodion.video.support.mpd.builtin'  # (bool)
 DASH_SUPPORT_ADDON = 'kodion.video.support.mpd.addon'  # (bool)
 USE_DASH = 'kodion.video.quality.mpd'  # (bool)
-SUBTITLE_LANGUAGE = 'kodion.subtitle.language'  # (int)
+AUDIO_ONLY = 'kodion.audio_only'  # (bool)
+AGE_GATE = 'kodion.age.gate'  # (bool)
+SUBTITLE_LANGUAGE = 'kodion.subtitle.languages.num'  # (int)
 SETUP_WIZARD = 'kodion.setup_wizard'  # (bool)
+VERIFY_SSL = 'simple.requests.ssl.verify'  # (bool)
 
 SUPPORT_ALTERNATIVE_PLAYER = 'kodion.support.alternative_player'  # (bool)
 
@@ -23,3 +26,8 @@ LOGIN_HASH = 'kodion.login.hash'
 ACCESS_TOKEN = 'kodion.access_token'
 REFRESH_TOKEN = 'kodion.refresh_token'
 ACCESS_TOKEN_EXPIRES = 'kodion.access_token.expires'
+
+ALLOW_DEV_KEYS = 'youtube.allow.dev.keys'  # (bool)
+
+DASH_PROXY = 'kodion.mpd.proxy'  # (bool)
+DASH_PROXY_PORT = 'kodion.mpd.proxy.port'  # (number)

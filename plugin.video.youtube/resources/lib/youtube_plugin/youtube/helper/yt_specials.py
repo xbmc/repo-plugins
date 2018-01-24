@@ -18,7 +18,6 @@ def _process_related_videos(provider, context, re_match):
         if not v3.handle_error(provider, context, json_data):
             return False
         result.extend(v3.response_to_items(provider, context, json_data, process_next_page=False))
-        pass
 
     return result
 
@@ -59,13 +58,11 @@ def _process_browse_channels(provider, context, re_match):
         if not v3.handle_error(provider, context, json_data):
             return False
         result.extend(v3.response_to_items(provider, context, json_data))
-        pass
     else:
         json_data = provider.get_client(context).get_guide_categories()
         if not v3.handle_error(provider, context, json_data):
             return False
         result.extend(v3.response_to_items(provider, context, json_data))
-        pass
 
     return result
 
@@ -101,6 +98,8 @@ def _process_live_events(provider, context, re_match):
 
 
 def _process_description_links(provider, context, re_match):
+    incognito = str(context.get_param('incognito', False)).lower() == 'true'
+
     def _extract_urls(_video_id):
         provider.set_content_type(context, kodion.constants.content_type.VIDEOS)
 
@@ -134,7 +133,6 @@ def _process_description_links(provider, context, re_match):
                 break
 
             context.sleep(50)
-            pass
 
         url_to_item_converter = UrlToItemConverter()
         url_to_item_converter.add_urls(res_urls, provider, context)
@@ -155,11 +153,15 @@ def _process_description_links(provider, context, re_match):
     def _display_channels(_channel_ids):
         _channel_id_dict = {}
 
+        item_params = {}
+        if incognito:
+            item_params.update({'incognito': incognito})
+
         for channel_id in _channel_ids:
-            channel_item = DirectoryItem('', context.create_uri(['channel', channel_id]))
+            item_uri = context.create_uri(['channel', channel_id], item_params)
+            channel_item = DirectoryItem('', item_uri)
             channel_item.set_fanart(provider.get_fanart(context))
             _channel_id_dict[channel_id] = channel_item
-            pass
 
         _channel_item_dict = {}
         utils.update_channel_infos(provider, context, _channel_id_dict, channel_items_dict=_channel_item_dict)
@@ -171,17 +173,20 @@ def _process_description_links(provider, context, re_match):
             _channel_item = _channel_id_dict[key]
             if _channel_item.get_name():
                 _result.append(_channel_item)
-                pass
-            pass
         return _result
 
     def _display_playlists(_playlist_ids):
         _playlist_id_dict = {}
+
+        item_params = {}
+        if incognito:
+            item_params.update({'incognito': incognito})
+
         for playlist_id in _playlist_ids:
-            playlist_item = DirectoryItem('', context.create_uri(['playlist', playlist_id]))
+            item_uri = context.create_uri(['playlist', playlist_id], item_params)
+            playlist_item = DirectoryItem('', item_uri)
             playlist_item.set_fanart(provider.get_fanart(context))
             _playlist_id_dict[playlist_id] = playlist_item
-            pass
 
         _channel_item_dict = {}
         utils.update_playlist_infos(provider, context, _playlist_id_dict, _channel_item_dict)
@@ -193,7 +198,6 @@ def _process_description_links(provider, context, re_match):
             _playlist_item = _playlist_id_dict[key]
             if _playlist_item.get_name():
                 _result.append(_playlist_item)
-            pass
 
         return _result
 
@@ -206,18 +210,40 @@ def _process_description_links(provider, context, re_match):
         channel_ids = channel_ids.split(',')
         if len(channel_ids) > 0:
             return _display_channels(channel_ids)
-        pass
 
     playlist_ids = context.get_param('playlist_ids', '')
     if playlist_ids:
         playlist_ids = playlist_ids.split(',')
         if len(playlist_ids) > 0:
             return _display_playlists(playlist_ids)
-        pass
 
     context.log_error('Missing video_id or playlist_ids for description links')
 
     return False
+
+
+def _process_saved_playlists_tv(provider, context, re_match):
+    provider.set_content_type(context, kodion.constants.content_type.FILES)
+
+    result = []
+    next_page_token = context.get_param('next_page_token', '')
+    offset = int(context.get_param('offset', 0))
+    json_data = provider.get_client(context).get_saved_playlists(page_token=next_page_token, offset=offset)
+    result.extend(tv.saved_playlists_to_items(provider, context, json_data))
+
+    return result
+
+
+def _process_watch_history_tv(provider, context, re_match):
+    provider.set_content_type(context, kodion.constants.content_type.VIDEOS)
+
+    result = []
+    next_page_token = context.get_param('next_page_token', '')
+    offset = int(context.get_param('offset', 0))
+    json_data = provider.get_client(context).get_watch_history(page_token=next_page_token, offset=offset)
+    result.extend(tv.watch_history_to_items(provider, context, json_data))
+
+    return result
 
 
 def _process_new_uploaded_videos_tv(provider, context, re_match):
@@ -243,6 +269,7 @@ def _process_new_uploaded_videos_tv_filtered(provider, context, re_match):
 
     return result
 
+
 def process(category, provider, context, re_match):
     result = []
 
@@ -259,10 +286,14 @@ def process(category, provider, context, re_match):
         return _process_recommendations(provider, context, re_match)
     elif category == 'browse_channels':
         return _process_browse_channels(provider, context, re_match)
+    elif category == 'watch_history_tv':
+        return _process_watch_history_tv(provider, context, re_match)
     elif category == 'new_uploaded_videos_tv':
         return _process_new_uploaded_videos_tv(provider, context, re_match)
     elif category == 'new_uploaded_videos_tv_filtered':
         return _process_new_uploaded_videos_tv_filtered(provider, context, re_match)
+    elif category == 'saved_playlists':
+        return _process_saved_playlists_tv(provider, context, re_match)
     elif category == 'disliked_videos':
         return _process_disliked_videos(provider, context, re_match)
     elif category == 'live':

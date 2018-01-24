@@ -1,10 +1,12 @@
 ﻿#!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-import StorageServer
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 import os
 import re
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import requests
 from time import strptime
 import xbmcaddon
@@ -13,22 +15,27 @@ import xbmcplugin
 import xbmc
 import sys
 from bs4 import BeautifulSoup
-from urlparse import parse_qs
+from urllib.parse import parse_qs
 
 ADDON = "plugin.video.cnet.podcasts"
 SETTINGS = xbmcaddon.Addon()
 LANGUAGE = SETTINGS.getLocalizedString
 IMAGES_PATH = os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources', 'images')
 HEADERS = {'User-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0','Referer': 'http://www.cnet.com'}
-CACHE = StorageServer.StorageServer("cnetpodcasts", 6)
 BASE_URL = 'http://www.cnet.com/cnet-podcasts/'
-DATE = "2017-07-16"
-VERSION = "1.1.5"
+DATE = "2018-01-20"
+VERSION = "1.1.6"
 
 
 def cache_categories():
-    html_source = requests.get(BASE_URL, headers=HEADERS).text
-    soup = BeautifulSoup(html_source)
+    response = requests.get(BASE_URL, headers=HEADERS)
+
+    html_source = response.text
+    html_source = convertToUnicodeString(html_source)
+
+    # Parse response
+    soup = getSoup(html_source)
+
     items = soup.find_all('a', attrs={'href': re.compile("hd.xml$")})
     cats = [{'thumb': '',
              'name': i['href'],
@@ -39,13 +46,12 @@ def cache_categories():
 
 
 def display_categories():
-    cats = CACHE.cacheFunction(cache_categories)
+    cats = cache_categories()
     previous_name = ''
 
     for i in cats:
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            ADDON, VERSION, DATE, "cat", str(i)), xbmc.LOGDEBUG)
+        log("cat", i)
 
         name = str(i['name'])
         name = name.replace("http://feed.cnet.com/feed/podcast/", "")
@@ -59,25 +65,35 @@ def display_categories():
             pass
         else:
             previous_name = name
-            add_dir(name, i['links'], 'category', i['thumb'], {'Plot': i['desc']})
+            if SETTINGS.getSetting('onlyshowallcategory') == 'true':
+                if 'All' in str(name):
+                    display_category(str(i['name']))
+                    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+                    set_view_mode()
+                    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+                    break
+            else:
+                add_dir(name, i['links'], 'category', i['thumb'], {'Plot': i['desc']})
 
 
 def display_category(links_list):
     url = links_list
 
-    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-        ADDON, VERSION, DATE, "url", str(url)), xbmc.LOGDEBUG)
+    log("url", url)
 
-    html_source = requests.get(url, headers=HEADERS).text
-    soup = BeautifulSoup(html_source)
+    response = requests.get(url, headers=HEADERS)
 
-    # xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-    #     ADDON, VERSION, DATE, "soup", str(soup)), xbmc.LOGDEBUG)
+    html_source = response.text
+    html_source = convertToUnicodeString(html_source)
+
+    # Parse response
+    soup = getSoup(html_source)
+
+    # log("soup", soup)
 
     items = soup.find_all('item')
 
-    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-        ADDON, VERSION, DATE, "len(items)", str(len(items))), xbmc.LOGDEBUG)
+    log("len(items)", len(items))
 
     # <item>
     # <title><![CDATA[This TV has Amazon Alexa built-in, but it's not what you think]]></title>
@@ -102,23 +118,18 @@ def display_category(links_list):
 
     for item in items:
 
-        # xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-        #     ADDON, VERSION, DATE, "item", str(item)), xbmc.LOGDEBUG)
+        log("item", item)
 
         # <enclosure url="http://dw.cbsi.com/redir/AB445_1164934_2696.mp4?destUrl=http://download.cnettv.com.edgesuite.net/21923/mpx/2017/07/12/994592835973/AB445_1164934_2696.mp4" length="0" type="video/mp4"/>
         # get the url of the video
-        url = item.link.string
+        url = item.enclosure["url"]
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            ADDON, VERSION, DATE, "url", str(url)), xbmc.LOGDEBUG)
+        log("url", url)
 
         # Get title
         title = item.title.string
-
-        try:
-            title = title.encode('utf-8')
-        except:
-            pass
+        title = title.replace("<![CDATA[", '')
+        title = title.replace("]]>", '')
 
         title = title.replace('-', ' ')
         title = title.replace('/', ' ')
@@ -153,12 +164,8 @@ def display_category(links_list):
         title = title.replace(' xxix ', ' XXIX ')
         title = title.replace(' xxx ', ' XXX ')
         title = title.replace('  ', ' ')
-        # in the title of the item a single-quote "'" is represented as "&#039;" for some reason . Therefore this replace is needed to fix that.
-        title = title.replace("&#039;", "'")
 
-        xbmc.log(
-            "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "title", str(title)),
-            xbmc.LOGDEBUG)
+        log("title", title)
 
         context_menu_items = []
         # Add refresh option to context menu
@@ -166,20 +173,7 @@ def display_category(links_list):
         # Add episode  info to context menu
         context_menu_items.append((LANGUAGE(30105), 'XBMC.Action(Info)'))
 
-        # Get description
-        plot_start_pos = str(item).find("itunes:summary><![CDATA[") + len("itunes:summary><![CDATA[")
-        plot_end_pos = str(item).find("]", plot_start_pos)
-        plot = str(item)[plot_start_pos:plot_end_pos]
-
-        xbmc.log(
-            "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "plot", str(plot)),
-            xbmc.LOGDEBUG)
-
-        # in the title of the item a single-quote "'" is represented as "&#039;" for some reason . Therefore this replace is needed to fix that.
-        try:
-            plot = plot.replace("&#039;", "'")
-        except:
-            plot = title
+        plot = title
 
         # Get pubdate
         pubdate = item.pubdate.string
@@ -191,15 +185,11 @@ def display_category(links_list):
         minute = pubdate[len('Fri, 01 Mar 2016 17:'):len('Fri, 01 Mar 2016 17:') + 2]
         second = pubdate[len('Fri, 01 Mar 2016 17:40:'):len('Fri, 01 Mar 2016 17:40:') + 2]
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            ADDON, VERSION, DATE, "extracted pubdate",
-            str(day + '/' + month_name + '/' + year + '/' + hour + '/' + minute + '/' + second)), xbmc.LOGDEBUG)
+        log("extracted pubdate", day + '/' + month_name + '/' + year + '/' + hour + '/' + minute + '/' + second)
 
         month_numeric = strptime(month_name, '%b').tm_mon
 
-        xbmc.log(
-            "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "month_numeric", str(month_numeric)),
-            xbmc.LOGDEBUG)
+        log("month_numeric", month_numeric)
 
         if len(str(month_numeric)) == 1:
             month = '0' + str(month_numeric)
@@ -209,8 +199,7 @@ def display_category(links_list):
         # Dateadded has this form: 2009-04-05 23:16:04
         dateadded = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "dateadded", str(dateadded)),
-                 xbmc.LOGDEBUG)
+        log("dateadded", dateadded)
 
         meta = {'plot': plot,
                 'duration': '',
@@ -232,7 +221,7 @@ def add_dir(name, url, modus, iconimage, meta=None, isfolder=True):
     if meta is None:
         meta = {}
     parameters = {'name': name, 'url': url, 'mode': modus}
-    url = '%s?%s' % (sys.argv[0], urllib.urlencode(parameters))
+    url = '%s?%s' % (sys.argv[0], urllib.parse.urlencode(parameters))
     list_item = xbmcgui.ListItem(name, thumbnailImage=iconimage)
     if isfolder:
         list_item.setProperty('IsPlayable', 'false')
@@ -255,7 +244,7 @@ def add_sort_methods():
 
 def get_params():
     p = parse_qs(sys.argv[2][1:])
-    for i in p.keys():
+    for i in list(p.keys()):
         p[i] = p[i][0]
     return p
 
@@ -274,29 +263,59 @@ def set_view_mode():
         return
     xbmc.executebuiltin('Container.SetViewMode(%s)' % view_modes[view_mode])
 
+
+if sys.version_info[0] > 2:
+    unicode = str
+
+
+def convertToUnicodeString(s, encoding='utf-8'):
+    """Safe decode byte strings to Unicode"""
+    if isinstance(s, bytes):  # This works in Python 2.7 and 3+
+        s = s.decode(encoding)
+    return s
+
+
+def convertToByteString(s, encoding='utf-8'):
+    """Safe encode Unicode strings to bytes"""
+    if isinstance(s, unicode):
+        s = s.encode(encoding)
+    return s
+
+
+def log(name_object, object):
+    try:
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+            ADDON, VERSION, DATE, name_object, convertToUnicodeString(object)), xbmc.LOGDEBUG)
+    except:
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+            ADDON, VERSION, DATE, name_object, "Unable to log the object due to an error while converting it to an unicode string"), xbmc.LOGDEBUG)
+
+
+def getSoup(html,default_parser="html5lib"):
+    soup = BeautifulSoup(html, default_parser)
+    return soup
+
+
 params = get_params()
 
 try:
     mode = params['mode']
 except:
     mode = None
-    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-        ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
 
-xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-    ADDON, VERSION, DATE, "params", str(params)), xbmc.LOGDEBUG)
+    log("ARGV", repr(sys.argv))
+
+log("params", params)
 
 if not mode:
     display_categories()
     xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
 elif mode == 'category':
     display_category(params['url'])
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     set_view_mode()
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
 elif mode == 'resolve':
     item = xbmcgui.ListItem(path=params['url'])
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)

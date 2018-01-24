@@ -10,6 +10,8 @@ import ssl
 import StringIO
 import gzip
 import json
+from urlparse import urlparse
+import urllib
 
 from kodi_utils import HomeWindow
 from clientinfo import ClientInformation
@@ -18,6 +20,25 @@ from translation import i18n
 
 log = SimpleLogging(__name__)
 
+def getDetailsString():
+
+    addonSettings = xbmcaddon.Addon(id='plugin.video.embycon')
+    include_media = addonSettings.getSetting("include_media") == "true"
+    include_people = addonSettings.getSetting("include_people") == "true"
+    include_overview = addonSettings.getSetting("include_overview") == "true"
+
+    detailsString = "DateCreated,EpisodeCount,SeasonCount,Path,Genres,Studios,Etag"
+
+    if include_media:
+        detailsString += ",MediaStreams"
+
+    if include_people:
+        detailsString += ",People"
+
+    if include_overview:
+        detailsString += ",Overview"
+
+    return detailsString
 
 class DownloadUtils():
     getString = None
@@ -33,6 +54,17 @@ class DownloadUtils():
         if (len(host) == 0) or (host == "<none>") or (len(port) == 0):
             return None
 
+        # if user entered a full path i.e. http://some_host:port
+        if host.lower().strip().startswith("http://") or host.lower().strip().startswith("https://"):
+            log.debug("Extracting host info from url: {0}", host)
+            url_bits = urlparse(host.strip())
+            if url_bits.hostname is not None and len(url_bits.hostname) > 0:
+                host = url_bits.hostname
+                settings.setSetting("ipaddress", host)
+            if url_bits.port is not None and url_bits.port > 0:
+                port = str(url_bits.port)
+                settings.setSetting("port", port)
+
         server = host + ":" + port
         use_https = settings.getSetting('use_https') == 'true'
         if use_https:
@@ -42,61 +74,64 @@ class DownloadUtils():
 
         return server
 
-    def getArtwork(self, data, art_type, parent=False, index="0", width=10000, height=10000, server=None):
+    def getArtwork(self, data, art_type, parent=False, index=0, width=10000, height=10000, server=None):
 
-        id = data.get("Id")
+        id = data["Id"]
+        item_type = data["Type"]
 
-        if data.get("Type") in ["Episode", "Season"]:
+        if item_type in ["Episode", "Season"]:
             if art_type != "Primary" or parent == True:
-                id = data.get("SeriesId")
+                id = data["SeriesId"]
 
         imageTag = ""
         # "e3ab56fe27d389446754d0fb04910a34" # a place holder tag, needs to be in this format
 
-        itemType = data.get("Type")
-
         # for episodes always use the parent BG
-        if (itemType == "Episode" and art_type == "Backdrop"):
-            id = data.get("ParentBackdropItemId")
-            bgItemTags = data.get("ParentBackdropImageTags")
-            if (bgItemTags != None and len(bgItemTags) > 0):
+        if item_type == "Episode" and art_type == "Backdrop":
+            id = data["ParentBackdropItemId"]
+            bgItemTags = data["ParentBackdropImageTags"]
+            if bgItemTags is not None and len(bgItemTags) > 0:
                 imageTag = bgItemTags[0]
-        elif (art_type == "Backdrop") and (parent == True):
-            id = data.get("ParentBackdropItemId")
-            bgItemTags = data.get("ParentBackdropImageTags")
-            if (bgItemTags != None and len(bgItemTags) > 0):
+        elif art_type == "Backdrop" and parent is True:
+            id = data["ParentBackdropItemId"]
+            bgItemTags = data["ParentBackdropImageTags"]
+            if bgItemTags is not None and len(bgItemTags) > 0:
                 imageTag = bgItemTags[0]
-        elif (art_type == "Backdrop"):
-            BGTags = data.get("BackdropImageTags")
-            if (BGTags != None and len(BGTags) > 0):
-                bgIndex = int(index)
-                imageTag = data.get("BackdropImageTags")[bgIndex]
-                log.debug("Background Image Tag:" + imageTag)
-        elif (parent == False):
-            if (data.get("ImageTags") != None and data.get("ImageTags").get(art_type) != None):
-                imageTag = data.get("ImageTags").get(art_type)
-                log.debug("Image Tag:" + imageTag)
-        elif (parent == True):
-            if (itemType == "Episode" or itemType == "Season") and art_type == 'Primary':
+        elif art_type == "Backdrop":
+            BGTags = data["BackdropImageTags"]
+            if BGTags is not None and len(BGTags) > index:
+                imageTag = BGTags[index]
+                log.debug("Background Image Tag: {0}", imageTag)
+        elif parent is False:
+            image_tags = data["ImageTags"]
+            if image_tags is not None:
+                image_tag_type = image_tags[art_type]
+                if image_tag_type is not None:
+                    imageTag = image_tag_type
+                    log.debug("Image Tag: {0}", imageTag)
+        elif parent is True:
+            if (item_type == "Episode" or item_type == "Season") and art_type == 'Primary':
                 tagName = 'SeriesPrimaryImageTag'
                 idName = 'SeriesId'
             else:
-                tagName = 'Parent%sTag' % art_type
+                tagName = 'Parent%sImageTag' % art_type
                 idName = 'Parent%sItemId' % art_type
-            if (data.get(idName) != None and data.get(tagName) != None):
-                id = data.get(idName)
-                imageTag = data.get(tagName)
-                log.debug("Parent Image Tag:" + imageTag)
+            parent_image_id = data[idName]
+            parent_image_tag = data[tagName]
+            if parent_image_id is not None and parent_image_tag is not None:
+                id = parent_image_id
+                imageTag = parent_image_tag
+                log.debug("Parent Image Tag: {0}", imageTag)
 
         if (imageTag == "" or imageTag == None) and (art_type != 'Banner'):  # ParentTag not passed for Banner
-            log.debug("No Image Tag for request:" + art_type + " item:" + itemType + " parent:" + str(parent))
+            log.debug("No Image Tag for request:{0} item:{1} parent:{2}", art_type, item_type, parent)
             return ""
 
         query = ""
 
         artwork = "%s/emby/Items/%s/Images/%s/%s?MaxWidth=%s&MaxHeight=%s&Format=original&Tag=%s%s" % (server, id, art_type, index, width, height, imageTag, query)
 
-        log.debug("getArtwork : " + artwork)
+        log.debug("getArtwork: {0}", artwork)
 
         '''
         # do not return non-existing images
@@ -119,13 +154,17 @@ class DownloadUtils():
             artwork += '&MaxHeight=%s' % height
         return artwork
 
+    def get_user_artwork(self, item_id, item_type):
+        # Load user information set by UserClient
+        return "%s/emby/Users/%s/Images/%s?Format=original" % (self.getServer(), item_id, item_type)
+
     def getUserId(self):
 
         WINDOW = HomeWindow()
         userid = WINDOW.getProperty("userid")
 
         if (userid != None and userid != ""):
-            log.debug("EmbyCon DownloadUtils -> Returning saved UserID : " + userid)
+            log.debug("EmbyCon DownloadUtils -> Returning saved UserID: {0}", userid)
             return userid
 
         settings = xbmcaddon.Addon('plugin.video.embycon')
@@ -133,56 +172,63 @@ class DownloadUtils():
 
         if not userName:
             return ""
-        log.debug("Looking for user name: " + userName)
+        log.debug("Looking for user name: {0}", userName)
 
         jsonData = None
         try:
             jsonData = self.downloadUrl("{server}/emby/Users/Public?format=json", suppress=True, authenticate=False)
         except Exception, msg:
-            error = "Get User unable to connect: " + str(msg)
-            log.error(error)
+            log.error("Get User unable to connect: {0}", msg)
             return ""
 
-        log.debug("GETUSER_JSONDATA_01:" + str(jsonData))
+        log.debug("GETUSER_JSONDATA_01: {0}", jsonData)
 
         result = []
 
         try:
             result = json.loads(jsonData)
         except Exception, e:
-            log.debug("jsonload : " + str(e) + " (" + jsonData + ")")
+            log.debug("Could not load user data: {0}", e)
             return ""
 
         if result is None:
             return ""
 
-        log.debug("GETUSER_JSONDATA_02:" + str(result))
+        log.debug("GETUSER_JSONDATA_02: {0}", result)
 
         userid = ""
+        userImage = ""
         secure = False
         for user in result:
-            if (user.get("Name") == userName):
+            if (user.get("Name") == unicode(userName, "utf-8")):
                 userid = user.get("Id")
-                log.debug("Username Found:" + user.get("Name"))
+                if "PrimaryImageTag" in user:
+                    userImage =  self.get_user_artwork(userid, 'Primary')
+                log.debug("Username Found: {0}", user.get("Name"))
                 if (user.get("HasPassword") == True):
                     secure = True
                     log.debug("Username Is Secure (HasPassword=True)")
                 break
 
-        if (secure) or (not userid):
+        if secure or not userid:
             authOk = self.authenticate()
-            if (authOk == ""):
-                xbmcgui.Dialog().ok(self.addon_name, i18n('incorrect_user_pass'))
+            if authOk == "":
+                xbmcgui.Dialog().notification(i18n("connection_error"),
+                                              i18n('incorrect_user_pass'),
+                                              icon="special://home/addons/plugin.video.embycon/icon.png")
                 return ""
             if not userid:
                 userid = WINDOW.getProperty("userid")
 
         if userid == "":
-            xbmcgui.Dialog().ok(self.addon_name, i18n('username_not_found'))
+            xbmcgui.Dialog().notification(i18n("connection_error"),
+                                          i18n('username_not_found'),
+                                          icon="special://home/addons/plugin.video.embycon/icon.png")
 
-        log.debug("userid : " + userid)
+        log.debug("userid: {0}", userid)
 
         WINDOW.setProperty("userid", userid)
+        WINDOW.setProperty("userimage", userImage)
 
         return userid
 
@@ -191,31 +237,27 @@ class DownloadUtils():
         WINDOW = HomeWindow()
 
         token = WINDOW.getProperty("AccessToken")
-        if (token != None and token != ""):
-            log.debug("EmbyCon DownloadUtils -> Returning saved AccessToken : " + token)
+        if token is not None and token != "":
+            log.debug("EmbyCon DownloadUtils -> Returning saved AccessToken: {0}", token)
             return token
 
         settings = xbmcaddon.Addon('plugin.video.embycon')
         port = settings.getSetting("port")
         host = settings.getSetting("ipaddress")
-        if (host == None or host == "" or port == None or port == ""):
+        if host is None or host == "" or port is None or port == "":
             return ""
 
         url = "{server}/emby/Users/AuthenticateByName?format=json"
 
-        clientInfo = ClientInformation()
-        txt_mac = clientInfo.getDeviceId()
-        version = clientInfo.getVersion()
-        client = clientInfo.getClient()
+        pwd_sha = hashlib.sha1(settings.getSetting('password')).hexdigest()
+        user_name = urllib.quote(settings.getSetting('username'))
+        pwd_text = urllib.quote(settings.getSetting('password'))
 
-        deviceName = settings.getSetting('deviceName')
-        deviceName = deviceName.replace("\"", "_")
+        messageData = "username=" + user_name + "&password=" + pwd_sha
 
-        authString = "Mediabrowser Client=\"" + client + "\",Device=\"" + deviceName + "\",DeviceId=\"" + txt_mac + "\",Version=\"" + version + "\""
-        headers = {'Accept-encoding': 'gzip', 'Authorization': authString}
-        sha1 = hashlib.sha1(settings.getSetting('password'))
-
-        messageData = "username=" + settings.getSetting('username') + "&password=" + sha1.hexdigest()
+        use_https = settings.getSetting('use_https') == 'true'
+        if use_https:
+            messageData += "&pw=" + pwd_text
 
         resp = self.downloadUrl(url, postBody=messageData, method="POST", suppress=True, authenticate=False)
 
@@ -228,8 +270,8 @@ class DownloadUtils():
         except:
             pass
 
-        if (accessToken != None):
-            log.debug("User Authenticated : " + accessToken)
+        if accessToken is not None:
+            log.debug("User Authenticated: {0}", accessToken)
             WINDOW.setProperty("AccessToken", accessToken)
             WINDOW.setProperty("userid", userid)
             return accessToken
@@ -247,7 +289,12 @@ class DownloadUtils():
 
         settings = xbmcaddon.Addon('plugin.video.embycon')
         deviceName = settings.getSetting('deviceName')
+        # remove none ascii chars
+        deviceName = deviceName.decode("ascii", errors='ignore')
+        # remove some chars not valid for names
         deviceName = deviceName.replace("\"", "_")
+        if len(deviceName) == 0:
+            deviceName = "EmbyCon"
 
         headers = {}
         headers["Accept-encoding"] = "gzip"
@@ -268,23 +315,34 @@ class DownloadUtils():
             if (authToken != ""):
                 headers["X-MediaBrowser-Token"] = authToken
 
-            log.debug("EmbyCon Authentication Header : " + str(headers))
+            log.debug("EmbyCon Authentication Header: {0}", headers)
             return headers
 
-    def downloadUrl(self, url, suppress=False, postBody=None, method="GET", popup=0, authenticate=True, headers=None):
+    def downloadUrl(self, url, suppress=False, postBody=None, method="GET", authenticate=True, headers=None):
         log.debug("downloadUrl")
+
+        return_data = "null"
         settings = xbmcaddon.Addon(id='plugin.video.embycon')
 
-        log.debug(url)
+        if settings.getSetting("suppressErrors") == "true":
+            suppress = True
+
+        log.debug("Before: {0}", url)
+
         if url.find("{server}") != -1:
             server = self.getServer()
+            if server is None:
+                return return_data
             url = url.replace("{server}", server)
+
         if url.find("{userid}") != -1:
             userid = self.getUserId()
             url = url.replace("{userid}", userid)
+
         if url.find("{ItemLimit}") != -1:
             show_x_filtered_items = settings.getSetting("show_x_filtered_items")
             url = url.replace("{ItemLimit}", show_x_filtered_items)
+
         if url.find("{IsUnplayed}") != -1 or url.find("{,IsUnplayed}") != -1 or url.find("{IsUnplayed,}") != -1 \
                 or url.find("{,IsUnplayed,}") != -1:
             show_latest_unplayed = settings.getSetting("show_latest_unplayed") == "true"
@@ -301,9 +359,13 @@ class DownloadUtils():
                 url = url.replace("{IsUnplayed,}", "IsUnplayed,")
             elif url.find("{,IsUnplayed,}") != -1:
                 url = url.replace("{,IsUnplayed,}", ",IsUnplayed,")
-        log.debug(url)
 
-        return_data = "null"
+        if url.find("{field_filters}") != -1:
+            filter_string = getDetailsString()
+            url = url.replace("{field_filters}", filter_string)
+
+        log.debug("After: {0}", url)
+
         try:
             if url.startswith('http'):
                 serversplit = 2
@@ -315,9 +377,9 @@ class DownloadUtils():
             server = url.split('/')[serversplit]
             urlPath = "/" + "/".join(url.split('/')[urlsplit:])
 
-            log.debug("DOWNLOAD_URL = " + url)
-            log.debug("server = " + str(server))
-            log.debug("urlPath = " + str(urlPath))
+            log.debug("DOWNLOAD_URL: {0}", url)
+            log.debug("server: {0}", server)
+            log.debug("urlPath: {0}", urlPath)
 
             # check the server details
             tokens = server.split(':')
@@ -326,7 +388,6 @@ class DownloadUtils():
             if (host == "<none>" or host == "" or port == ""):
                 return ""
 
-            settings = xbmcaddon.Addon('plugin.video.embycon')
             use_https = settings.getSetting('use_https') == 'true'
             verify_cert = settings.getSetting('verify_cert') == 'true'
 
@@ -341,7 +402,7 @@ class DownloadUtils():
                 conn = httplib.HTTPConnection(server, timeout=40)
 
             head = self.getAuthHeader(authenticate)
-            log.debug("HEADERS : " + str(head))
+            log.debug("HEADERS: {0}", head)
 
             if (postBody != None):
                 if isinstance(postBody, dict):
@@ -351,20 +412,20 @@ class DownloadUtils():
                     content_type = "application/x-www-form-urlencoded"
 
                 head["Content-Type"] = content_type
-                log.debug("Content-Type : " + content_type)
+                log.debug("Content-Type: {0}", content_type)
 
-                log.debug("POST DATA : " + postBody)
+                log.debug("POST DATA: {0}", postBody)
                 conn.request(method=method, url=urlPath, body=postBody, headers=head)
             else:
                 conn.request(method=method, url=urlPath, headers=head)
 
             data = conn.getresponse()
-            log.debug("GET URL HEADERS : " + str(data.getheaders()))
+            log.debug("GET URL HEADERS: {0}", data.getheaders())
 
             if int(data.status) == 200:
                 retData = data.read()
                 contentType = data.getheader('content-encoding')
-                log.debug("Data Len Before : " + str(len(retData)))
+                log.debug("Data Len Before: {0}", len(retData))
                 if (contentType == "gzip"):
                     retData = StringIO.StringIO(retData)
                     gzipper = gzip.GzipFile(fileobj=retData)
@@ -373,41 +434,29 @@ class DownloadUtils():
                     return_data = retData
                 if headers is not None and isinstance(headers, dict):
                     headers.update(data.getheaders())
-                log.debug("Data Len After : " + str(len(return_data)))
+                log.debug("Data Len After: {0}", len(return_data))
                 log.debug("====== 200 returned =======")
-                log.debug("Content-Type : " + str(contentType))
-                log.debug(return_data)
+                log.debug("Content-Type: {0}", contentType)
+                log.debug("{0}", return_data)
                 log.debug("====== 200 finished ======")
 
-            #elif (int(data.status) == 301) or (int(data.status) == 302):
-            #    try:
-            #        conn.close()
-            #    except:
-            #        pass
-            #    return data.getheader('Location')
-
             elif int(data.status) >= 400:
-                error = "HTTP response error: " + str(data.status) + " " + str(data.reason)
-                log.error(error)
+                log.error("HTTP response error: {0} {1}", data.status, data.reason)
                 if suppress is False:
-                    if popup == 0:
-                        xbmcgui.Dialog().notification(self.addon_name, i18n('url_error_') % str(data.reason))
-                    else:
-                        xbmcgui.Dialog().ok(self.addon_name, i18n('url_error_') % str(data.reason))
-                log.error(error)
+                    xbmcgui.Dialog().notification(i18n("connection_error"),
+                                                  i18n('url_error_') % str(data.reason),
+                                                  icon="special://home/addons/plugin.video.embycon/icon.png")
 
         except Exception, msg:
-            error = "Unable to connect to " + str(server) + " : " + str(msg)
-            log.error(error)
+            log.error("Unable to connect to {0} : {1}", server, msg)
             if suppress is False:
-                if popup == 0:
-                    xbmcgui.Dialog().notification(self.addon_name, i18n('url_error_') % str(msg))
-                else:
-                    xbmcgui.Dialog().ok(self.addon_name, i18n('url_error_') % i18n('unable_connect_server'), str(msg))
-                #raise
+                xbmcgui.Dialog().notification(i18n("connection_error"),
+                                              str(msg),
+                                              icon="special://home/addons/plugin.video.embycon/icon.png")
+
         finally:
             try:
-                log.debug("Closing HTTP connection: " + str(conn))
+                log.debug("Closing HTTP connection: {0}", conn)
                 conn.close()
             except:
                 pass

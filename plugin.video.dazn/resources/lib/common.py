@@ -29,6 +29,7 @@ class Common:
         self.content = addon.getSetting('content')
         self.view_id = addon.getSetting('view_id')
         self.force_view = addon.getSetting('force_view') == 'true'
+        self.startup = addon.getSetting('startup') == 'true'
 
     def utfenc(self, text):
         result = text
@@ -114,7 +115,7 @@ class Common:
         if ":" in mac_addr:
             device_id = str(uuid.UUID(hashlib.md5(str(mac_addr.decode("utf-8"))).hexdigest()))
         else:
-            log("[{0}] error: failed to get device id ({1})".format(self.addon_id, str(mac_addr)))
+            self.log("[{0}] error: failed to get device id ({1})".format(self.addon_id, str(mac_addr)))
             self.dialog_ok(30051)
         self.set_setting('device_id', device_id)
         return device_id

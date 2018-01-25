@@ -132,10 +132,8 @@ class Client:
         else:
             self.setToken(data['AuthToken'], data.get('Result', 'RefreshAccessTokenError'))
 
-    def startUp(self, device_id=''):
+    def startUp(self):
         kodi_language = self.plugin.get_language()
-        if device_id != '':
-            self.DEVICE_ID = device_id
         self.POST_DATA = {
             'LandingPageKey': 'generic',
             'Languages': '{0}, {1}'.format(kodi_language, self.LANGUAGE),

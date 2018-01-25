@@ -6,12 +6,12 @@ Any trademarks used belong to their owning companies & organisations.
 
 ## Dependencies
  * valid DAZN subscription (https://www.dazn.com)
- * script.module.inputstreamhelper >= 0.2.3 (http://mirrors.kodi.tv/addons/krypton/script.module.inputstreamhelper/)
+ * script.module.inputstreamhelper (http://mirrors.kodi.tv/addons/krypton/script.module.inputstreamhelper/)
 
 This add-on requires Kodi 17.4 or higher with InputStream Adaptive installed. Kodi 18 is required for Android based devices.
 
 ## DRM protected streams
-DAZN's content is DRM protected and requires the proprietary decryption module Widevine CDM for playback. You will be prompted to install this if you're attempting to play a stream without the binary installed.
+DAZN's content is DRM protected and requires the proprietary decryption module Widevine CDM for playback. You will be prompted to install this if you're starting the addon without the binary installed.
  
 Most Android devices have built-in support for Widevine DRM and doesn't require any additional binaries. You can see if your Android device supports Widevine DRM using the [DRM Info](https://play.google.com/store/apps/details?id=com.androidfung.drminfo) app available in Play Store.
 

@@ -24,15 +24,20 @@ class Context:
         self.cm.append((self.plugin.get_string(30231), 'ActivateWindow(Videos, {0})'.format(self.plugin.build_url(d))))
         return self.cm
 
-    def related(self, cm_items): 
+    def related(self, cm_items):
         for i in cm_items:
+            type_ = i['type']
+            if type_ == 'Highlights':
+                type_ = self.plugin.get_string(30213)
+            elif type_ == 'Condensed':
+                type_ = self.plugin.get_string(30216)
             d = {
                 'mode': 'play_context',
                 'title': self.plugin.utfenc(i['title']),
                 'id': i.get('id', ''),
                 'params': i.get('params','')
             }
-            self.cm.append((self.plugin.get_string(30213), 'XBMC.RunPlugin({0})'.format(self.plugin.build_url(d))))
+            self.cm.append((type_, 'XBMC.RunPlugin({0})'.format(self.plugin.build_url(d))))
         return self.cm
 
     def goto(self, item):

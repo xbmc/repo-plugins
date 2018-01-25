@@ -125,16 +125,20 @@ msgid "Schedule"
 msgstr "Horaire"
 
 msgctxt "#30213"
-msgid "Watch highlights"
-msgstr "Faits saillants"
+msgid "Play Highlights"
+msgstr "Lire Saillants"
 
 msgctxt "#30214"
-msgid "Change to sport"
-msgstr "Aller à la sport"
+msgid "Change to Sport"
+msgstr "Aller à la Sport"
 
 msgctxt "#30215"
-msgid "Change to competition"
-msgstr "Aller à la concurrence"
+msgid "Change to Competition"
+msgstr "Aller à la Concurrence"
+
+msgctxt "#30216"
+msgid "Play Condensed"
+msgstr "Lire Condensed"
 
 msgctxt "#30221"
 msgid "Today"

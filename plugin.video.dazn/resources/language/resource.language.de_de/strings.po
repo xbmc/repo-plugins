@@ -125,16 +125,20 @@ msgid "Schedule"
 msgstr "Vorschau"
 
 msgctxt "#30213"
-msgid "Watch highlights"
-msgstr "Highlights ansehen"
+msgid "Play Highlights"
+msgstr "Highlights wiedergeben"
 
 msgctxt "#30214"
-msgid "Change to sport"
+msgid "Change to Sport"
 msgstr "Zum Sport wechseln"
 
 msgctxt "#30215"
-msgid "Change to competition"
+msgid "Change to Competition"
 msgstr "Zum Wettbewerb wechseln"
+
+msgctxt "#30216"
+msgid "Play Condensed"
+msgstr "Zusammenfassung wiedergeben"
 
 msgctxt "#30221"
 msgid "Today"

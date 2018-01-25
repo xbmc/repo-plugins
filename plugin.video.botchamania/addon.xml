@@ -2,7 +2,7 @@
 <addon
 	id="plugin.video.botchamania"
 	name="Botchamania"
-	version="1.1.6"
+	version="1.1.7"
 	provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                     version="2.14.0"/>

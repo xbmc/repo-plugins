@@ -4,12 +4,13 @@
 #
 # Imports
 #
+# the YDStreamExtractor needs to be before the future imports. Otherwise u get an 'check hostname' error.
+import YDStreamExtractor
 from future import standard_library
 standard_library.install_aliases()
 from builtins import str
 from builtins import object
 import urllib.request, urllib.parse, urllib.error
-import YDStreamExtractor
 import requests
 import sys
 import xbmc

@@ -1,3 +1,6 @@
+v1.1.7 (2018-01-25)
+- fix to prevent import error on youtubedl
+
 v1.1.6 (2018-01-20)
 - removed looking for video dialogue
 - addon now works in kode python 2 and should also work in python 3 (!!) once all dependencies work in python 3.

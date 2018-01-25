@@ -4,6 +4,8 @@
 #
 # Imports
 #
+# the YDStreamExtractor needs to be before the future imports. Otherwise u get an 'check hostname' error.
+import YDStreamExtractor
 from future import standard_library
 standard_library.install_aliases()
 from builtins import str

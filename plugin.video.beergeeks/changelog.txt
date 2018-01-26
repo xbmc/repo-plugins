@@ -1,3 +1,6 @@
+2018.1.26
+- Backend video streams are no longer available
+
 2016.7.13
 - Fixed bug caused obsolete quality setting (no longer used)
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.beergeeks" name="Beer Geeks" version="2016.7.13" provider-name="eracknaphobia">
+<addon id="plugin.video.beergeeks" name="Beer Geeks" version="2018.1.26" provider-name="eracknaphobia">
   <requires>
    <import addon="xbmc.python" version="2.20.0"/>   
    <import addon="script.module.simplejson" version="3.3.0"/>    
@@ -7,7 +7,8 @@
   <extension point="xbmc.python.pluginsource" library="main.py">
         <provides>video</provides>
   </extension>  
-  <extension point="xbmc.addon.metadata">    
+  <extension point="xbmc.addon.metadata">
+    <broken>deprecated</broken>
     <platform>all</platform>
     <summary lang="en">Beer Geeks</summary>
     <description lang="en">Travel with master brewer Michael Ferguson as he visits the top craft beer breweries in the country. Discover all kinds of ales and lagers from IPAs to stouts, from pilsners to bocks, and many, many more on Beer Geeks!</description>

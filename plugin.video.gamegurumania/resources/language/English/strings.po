@@ -142,3 +142,7 @@ msgstr ""
 msgctxt "#30506"
 msgid "No media found for:"
 msgstr ""
+
+msgctxt "#30610"
+msgid "Only show All Videos category"
+msgstr "Toon alleen Alle Videos categorie"

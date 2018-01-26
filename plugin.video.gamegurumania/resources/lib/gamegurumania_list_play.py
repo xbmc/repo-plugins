@@ -1,21 +1,23 @@
+from __future__ import absolute_import
 # Imports
 #
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 import os
 import sys
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
 import requests
 import xbmc
 import xbmcgui
 import xbmcplugin
-from BeautifulSoup import BeautifulSoup
-
-from gamegurumania_const import LANGUAGE, IMAGES_PATH, ADDON, DATE, VERSION, HEADERS
+from .gamegurumania_const import LANGUAGE, IMAGES_PATH, ADDON, DATE, VERSION, HEADERS, convertToUnicodeString, log, getSoup
 
 #
 # Main class
 #
-class Main:
+class Main(object):
     #
     # Init
     #
@@ -25,19 +27,22 @@ class Main:
         self.plugin_url = sys.argv[0]
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
-        
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-            ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
 
-        # Parse parameters...
-        self.plugin_category = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['plugin_category'][0]
-        self.video_list_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['url'][0]
-        self.video_list_page_url = str(self.video_list_page_url)
-        self.next_page_possible = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+        log("ARGV", repr(sys.argv))
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)),
-                     xbmc.LOGDEBUG)
+
+        # Parse parameters
+        try:
+            self.plugin_category = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['plugin_category'][0]
+            self.video_list_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
+            self.video_list_page_url = str(self.video_list_page_url)
+            self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+        except KeyError:
+            self.plugin_category = LANGUAGE(30000)
+            self.video_list_page_url = "http://www.ggmania.com/more.php3?next=000"
+            self.next_page_possible = "True"
+
+        log("self.video_list_page_url", self.video_list_page_url)
 
         if self.next_page_possible == 'True':
             # Determine current item number, next item number, next_url
@@ -55,7 +60,7 @@ class Main:
             self.next_url = self.video_list_page_url.replace(item_number_str, item_number_next_str)
 
             xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.next_url", str(urllib.unquote_plus(self.next_url))),
+                ADDON, VERSION, DATE, "self.next_url", str(urllib.parse.unquote_plus(self.next_url))),
                          xbmc.LOGDEBUG)
 
         #
@@ -84,11 +89,12 @@ class Main:
         # Get HTML page
         #
         response = requests.get(self.video_list_page_url, headers=HEADERS)
+
         html_source = response.text
-        html_source = html_source.encode('utf-8', 'ignore')
+        html_source = convertToUnicodeString(html_source)
 
         # Parse response
-        soup = BeautifulSoup(html_source)
+        soup = getSoup(html_source)
 
         # <b><a class="nadpis" name="middle-earth-shadow-of-war-gameplay-43762" href="http://www.ggmania.com/?smsid=middle-earth-shadow-of-war-gameplay-43762">Middle-earth: Shadow of War Gameplay</a></b></font><b><font color="black" size="-1" face="arial,helvetica"> - movie</font></b><br />
         # <font style="color:#000080;text-decoration:none" face="arial,helvetica"><small>(hx) 09:46 AM EDT - Jul,17 2017
@@ -100,32 +106,41 @@ class Main:
         # </center> </font></td></tr>
 
         items = soup.findAll("tr")
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            ADDON, VERSION, DATE, "len(items)", str(len(items))), xbmc.LOGDEBUG)
+
+        log("len(items", len(items))
 
         for item in items:
 
             # Skip these items
             if str(item).find('youtube') < 0:
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "skipped item without youtube", str(item)), xbmc.LOGDEBUG)
+
+                log("skipped item without youtube", item)
+
                 continue
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "item", str(item)), xbmc.LOGDEBUG)
+            log("item", item)
 
-            youtubeID = item.div['id']
+            try:
+                youtubeID = item.div['id']
+            except KeyError as error:
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "youtubeID", str(youtubeID)), xbmc.LOGDEBUG)
+                log("skipped item without youtube id1", item)
+
+                continue
+
+            except TypeError as error:
+
+                log("skipped item without youtube id2", item)
+
+                continue
+
+            log("youtubeID", youtubeID)
 
             title = item.a.string
 
             title = title.capitalize()
             title = title.replace('/', ' ')
-            title = title.replace('&amp;', '&')
             title = title.replace(' i ', ' I ')
-            title = title.replace(' amp ', ' & ')
             title = title.replace(' ii ', ' II ')
             title = title.replace(' iii ', ' III ')
             title = title.replace(' iv ', ' IV ')
@@ -156,21 +171,18 @@ class Main:
             title = title.replace(' xxix ', ' XXIX ')
             title = title.replace(' xxx ', ' XXX ')
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "title", str(title)), xbmc.LOGDEBUG)
+            log("title", title)
 
             youtube_url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % youtubeID
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "youtube_url", str(youtube_url)), xbmc.LOGDEBUG)
+            log("youtube_url", youtube_url)
 
             item_string = str(item)
             start_pos_of_plot = item_string.find('"textik"> ', 0) + len('"textik"> ')
             end_pos_of_plot = item_string.find('<', start_pos_of_plot)
             plot = item_string[start_pos_of_plot:end_pos_of_plot]
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "plot", str(plot)), xbmc.LOGDEBUG)
+            log("plot", plot)
 
             meta = {'plot': plot,
                     'duration': '',
@@ -209,7 +221,7 @@ class Main:
             list_item.setProperty('IsPlayable', 'false')
             parameters = {"action": "list-play", "plugin_category": self.plugin_category, "url": str(self.next_url),
                           "next_page_possible": self.next_page_possible}
-            url = self.plugin_url + '?' + urllib.urlencode(parameters)
+            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = True
             # Adding context menu items to context menu
             list_item.addContextMenuItems(context_menu_items, replaceItems=False)
@@ -224,6 +236,7 @@ class Main:
         xbmcplugin.addSortMethod(handle=self.plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_NONE)
         # Finish creating a virtual folder.
         xbmcplugin.endOfDirectory(self.plugin_handle)
+
 
 def add_sort_methods():
     sort_methods = [xbmcplugin.SORT_METHOD_UNSORTED,xbmcplugin.SORT_METHOD_LABEL,xbmcplugin.SORT_METHOD_DATE,xbmcplugin.SORT_METHOD_DURATION,xbmcplugin.SORT_METHOD_EPISODE]

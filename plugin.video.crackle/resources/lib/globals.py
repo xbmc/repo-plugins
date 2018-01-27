@@ -1,46 +1,43 @@
 import sys, os
-import xbmc, xbmcplugin, xbmcgui, xbmcaddon
-import urllib, urllib2
-import json
+import urllib, requests
 import base64, hmac, hashlib
-from datetime import datetime
+from time import gmtime, strftime
+import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 addon_handle = int(sys.argv[1])
 ADDON = xbmcaddon.Addon()
 ROOTDIR = ADDON.getAddonInfo('path')
-FANART = ROOTDIR+"/resources/media/fanart.jpg"
-ICON = os.path.join(ROOTDIR,"/resources/media/icon.png")
+FANART = os.path.join(ROOTDIR,"resources","media","fanart.jpg")
+ICON = os.path.join(ROOTDIR,"resources","media","icon.png")
 
 
-#Addon Settings
+# Addon Settings
 LOCAL_STRING = ADDON.getLocalizedString
 UA_CRACKLE = 'Crackle/7.60 CFNetwork/808.3 Darwin/16.3.0'
 UA_WEB = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.110 Safari/537.36'
 UA_ANDROID = 'Android 4.1.1; E270BSA; Crackle 4.4.5.0'
-PRIVATE_KEY = 'MIRNPSEZYDAQASLX'
+PRIVATE_KEY = 'TUlSTlBTRVpZREFRQVNMWA=='
 VENDOR_ID = '25'
 BASE_URL = 'http://android-tv-api-us.crackle.com/Service.svc'
 
 
-def mainMenu():
-    addDir('Movies','/movies',101,ICON)
-    addDir('TV','/tv',100,ICON)
+def main_menu():
+    add_dir('Movies', '/movies', 101, ICON)
+    add_dir('TV', '/tv', 100, ICON)
 
 
-def listMovies():
+def list_movies():
     url = '/browse/movies/full/all/alpha-asc/US'
     url += '?pageSize=500'
     url += '&pageNumber=1'
     url += '&format=json'
-    json_source = jsonRequest(url)
-
+    json_source = json_request(url)
 
     for movie in json_source['Entries']:
         title = movie['Title']
         url = str(movie['ID'])
         icon = movie['ChannelArtTileLarge']
         fanart = movie['Images']['Img_1920x1080']
-        info = None
         info = {'plot':movie['Description'],
                 'genre':movie['Genre'],
                 'year':movie['ReleaseYear'],
@@ -50,23 +47,21 @@ def listMovies():
                 'duration':movie['DurationInSeconds']
                 }
 
-        addStream(title,url,'movies',icon,fanart,info)
+        add_stream(title,url,'movies',icon,fanart,info)
 
 
-
-def listShows():
+def list_shows():
     url = '/browse/shows/full/all/alpha-asc/US'
     url += '?pageSize=500'
     url += '&pageNumber=1'
     url += '&format=json'
-    json_source = jsonRequest(url)
+    json_source = json_request(url)
 
     for show in json_source['Entries']:
         title = show['Title']
         url = str(show['ID'])
         icon = show['ChannelArtTileLarge']
         fanart = show['Images']['Img_1920x1080']
-        info = None
         info = {'plot':show['Description'],
                 'genre':show['Genre'],
                 'year':show['ReleaseYear'],
@@ -76,12 +71,12 @@ def listShows():
                 'duration':show['DurationInSeconds']
                 }
 
-        addDir(title,url,102,icon,fanart,info)
+        add_dir(title,url,102,icon,fanart,info)
 
 
-def getEpisodes(channel):
+def get_episodes(channel):
     url = '/channel/'+channel+'/playlists/all/US?format=json'
-    json_source = jsonRequest(url)
+    json_source = json_request(url)
 
     for episode in json_source['Playlists'][0]['Items']:
         episode = episode['MediaInfo']
@@ -101,20 +96,19 @@ def getEpisodes(channel):
                 'episode':episode['Episode']
                 }
 
-        addStream(title,id,'tvshows',icon,fanart,info)
+        add_stream(title,id,'tvshows',icon,fanart,info)
 
 
-def getMovieID(channel):
+def get_movie_id(channel):
     url = '/channel/'+str(channel)+'/playlists/all/US?format=json'
-    json_source = jsonRequest(url)
+    json_source = json_request(url)
 
     return str(json_source['Playlists'][0]['Items'][0]['MediaInfo']['Id'])
 
 
-def getStream(id):
+def get_stream(id):
     url = '/details/media/'+id+'/US?format=json'
-    json_source = jsonRequest(url)
-
+    json_source = json_request(url)
 
     for stream in json_source['MediaURLs']:
         if 'AppleTV' in stream['Type']:
@@ -122,13 +116,23 @@ def getStream(id):
             stream_url = stream_url[0:stream_url.index('.m3u8')]+'.m3u8'
             break
 
-    stream_url += '|User-Agent='+UA_CRACKLE
-    listitem = xbmcgui.ListItem(path=stream_url)
+    headers = '|User-Agent='+UA_CRACKLE
+    listitem = xbmcgui.ListItem()
+    if xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):
+        listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
+        listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
+        listitem.setProperty('inputstream.adaptive.stream_headers', headers)
+        listitem.setProperty('inputstream.adaptive.license_key', headers)
+    else:
+        stream_url += headers
+
+    listitem.setPath(stream_url)
     xbmcplugin.setResolvedUrl(addon_handle, True, listitem)
 
 
-def jsonRequest(url):
+def json_request(url):
     url = BASE_URL + url
+    '''
     req = urllib2.Request(url)
     req.add_header("Connection", "keep-alive")
     req.add_header("User-Agent", UA_ANDROID)
@@ -137,44 +141,56 @@ def jsonRequest(url):
     response = urllib2.urlopen(req)
     json_source = json.load(response)
     response.close()
+    '''
 
-    return json_source
+    headers = {
+        'Connection': 'keep-alive',
+        'User-Agent': UA_ANDROID,
+        'Authorization': get_auth(url)
+    }
+
+    r = requests.get(url,headers=headers)
+
+    return r.json()
 
 
-def calcHmac(src):
-    return hmac.new(PRIVATE_KEY, src, hashlib.md5).hexdigest()
+def calc_hmac(src):
+    return hmac.new(base64.b64decode(PRIVATE_KEY), src, hashlib.md5).hexdigest()
 
 
-def getAuth(url):
-    timestamp = datetime.utcnow().strftime('%Y%m%d%H%M')
-    encoded_url = str(calcHmac(url+"|"+timestamp)).upper() + "|" + timestamp + "|" + VENDOR_ID
+def get_auth(url):
+    timestamp = strftime('%Y%m%d%H%M', gmtime())
+    encoded_url = str(calc_hmac(url+"|"+timestamp)).upper() + "|" + timestamp + "|" + VENDOR_ID
 
     return encoded_url
 
 
-def addStream(name, id, stream_type, icon,fanart,info=None):
-    ok=True
+def add_stream(name, id, stream_type, icon, fanart, info=None):
+    ok = True
     u=sys.argv[0]+"?id="+urllib.quote_plus(id)+"&mode="+str(103)+"&type="+urllib.quote_plus(stream_type)
     liz=xbmcgui.ListItem(name)
-    liz.setArt({'icon': ICON, 'thumb': icon, 'fanart': fanart})
+    if fanart == None: fanart = FANART
+    liz.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
     liz.setProperty("IsPlayable", "true")
-    liz.setInfo( type="Video", infoLabels={ "Title": name } )
-    if info != None:
+    liz.setInfo(type="Video", infoLabels={"Title": name})
+    if info is not None:
         liz.setInfo( type="Video", infoLabels=info)
-    ok=xbmcplugin.addDirectoryItem(handle=addon_handle,url=u,listitem=liz,isFolder=False)
+    ok = xbmcplugin.addDirectoryItem(handle=addon_handle,url=u,listitem=liz,isFolder=False)
     xbmcplugin.setContent(addon_handle, stream_type)
     return ok
 
 
-def addDir(name,id,mode,iconimage,fanart=None,info=None):
-    params = get_params()
-    ok=True
+def add_dir(name,id,mode,icon,fanart=None,info=None):
+    xbmc.log(ROOTDIR)
+    xbmc.log("ICON IMAGE = "+icon)
+    ok = True
     u=sys.argv[0]+"?id="+urllib.quote_plus(id)+"&mode="+str(mode)
     liz=xbmcgui.ListItem(name)
-    liz.setArt({'icon': ICON, 'thumb': iconimage, 'fanart': fanart})
-    if info != None:
+    if fanart == None: fanart = FANART
+    liz.setArt({'icon': icon, 'thumb': icon, 'fanart': fanart})
+    if info is not None:
         liz.setInfo( type="Video", infoLabels=info)
-    ok=xbmcplugin.addDirectoryItem(handle=addon_handle,url=u,listitem=liz,isFolder=True)
+    ok = xbmcplugin.addDirectoryItem(handle=addon_handle,url=u,listitem=liz,isFolder=True)
     xbmcplugin.setContent(addon_handle, 'tvshows')
     return ok
 

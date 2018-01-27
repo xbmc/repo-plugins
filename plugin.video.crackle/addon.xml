@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.crackle" name="Crackle" version="2017.12.27" provider-name="eracknaphobia">
+<addon id="plugin.video.crackle" name="Crackle" version="2018.1.27" provider-name="eracknaphobia">
   <requires>
-   <import addon="xbmc.python" version="2.25.0"/>
+      <import addon="xbmc.python" version="2.25.0"/>
+      <import addon="script.module.requests" version="2.9.1"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="main.py">
         <provides>video</provides>
@@ -11,6 +12,10 @@
     <summary lang="en_GB">Crackle delivers popular, award-winning TV, movies and originals. With no limit to how much you can watch across all your devices, you can binge all you want, wherever you want.</summary>
     <description lang="en_GB">Crackle is a video streaming distributor of original web shows, Hollywood movies, and TV shows. Founded in the early 2000s as Grouper, and rebranded in 2007, Crackle is owned by Sony Pictures Entertainment.</description>
     <disclaimer lang="en_GB"></disclaimer>
+      <news>
+        - Added support for inputstream adaptive
+        - Code clean up
+      </news>
     <language>en</language>
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>

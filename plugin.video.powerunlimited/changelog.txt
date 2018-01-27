@@ -1,3 +1,9 @@
+v1.0.7 (2018-01-20)
+- removed looking for video dialogue
+- addon now works in kode python 2 and should also work in python 3 (!!) once all dependencies work in python 3.
+Kudo's to the python future package for making this possible. Kudo's to RomanVM for the help.
+- improved the finding of thumbnails
+
 v1.0.6 (2017-06-20):
 - fixed getting video due to website change
 

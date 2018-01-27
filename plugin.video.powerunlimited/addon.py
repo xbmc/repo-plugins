@@ -4,20 +4,20 @@
 #
 # Imports
 #
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 import os
 import sys
-import urlparse
+import urllib.parse
 import xbmc
 import xbmcaddon
-
-reload(sys)
-sys.setdefaultencoding('utf8')
 
 LIB_DIR = xbmc.translatePath(
     os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources', 'lib'))
 sys.path.append(LIB_DIR)
 
-from powerunlimited_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
+from powerunlimited_const import ADDON, DATE, VERSION
 
 # Parse parameters...
 if len(sys.argv[2]) == 0:
@@ -29,7 +29,7 @@ if len(sys.argv[2]) == 0:
                  xbmc.LOGDEBUG)
     import powerunlimited_main as plugin
 else:
-    action = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['action'][0]
+    action = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['action'][0]
     #
     # List
     #

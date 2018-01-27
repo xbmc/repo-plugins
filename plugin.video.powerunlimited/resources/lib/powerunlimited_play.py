@@ -4,24 +4,24 @@
 #
 # Imports
 #
-from BeautifulSoup import BeautifulSoup
-from powerunlimited_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
-from powerunlimited_utils import HTTPCommunicator
-import os
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
+from powerunlimited_const import LANGUAGE, HEADERS, convertToUnicodeString, log, getSoup
 import re
 import sys
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
 import xbmc
-import xbmcaddon
 import xbmcgui
 import xbmcplugin
+import requests
 
 
 #
 # Main class
 #
-class Main:
+class Main(object):
     #
     # Init
     #
@@ -32,17 +32,12 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
+        log("ARGV", repr(sys.argv))
 
         # Parse parameters
-        self.video_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['video_page_url'][0]
-        # Get the title.
-        self.title = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['title'][0]
-        self.title = str(self.title)
+        self.video_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['video_page_url'][0]
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.video_page_url", str(self.video_page_url)), xbmc.LOGDEBUG)
+        log("self.video_page_url", self.video_page_url)
 
         #
         # Play video
@@ -59,38 +54,27 @@ class Main:
         no_url_found = False
         unplayable_media_file = False
         have_valid_url = False
+        dialog_wait = xbmcgui.DialogProgress()
 
         #
         # Get current list item details
         #
-        #title = unicode(xbmc.getInfoLabel("listitem.Title"), "utf-8")
+        #title = xbmc.getInfoLabel("listitem.Title")
         thumbnail = xbmc.getInfoImage("list_item.Thumb")
-        #studio = unicode(xbmc.getInfoLabel("list_item.Studio"), "utf-8")
-        plot = unicode(xbmc.getInfoLabel("list_item.Plot"), "utf-8")
-        genre = unicode(xbmc.getInfoLabel("list_item.Genre"), "utf-8")
+        #studio = xbmc.getInfoLabel("list_item.Studio")
+        plot = xbmc.getInfoLabel("list_item.Plot")
+        genre = xbmc.getInfoLabel("list_item.Genre")
 
         #
-        # Show wait dialog while parsing data
+        # Get HTML page
         #
-        dialog_wait = xbmcgui.DialogProgress()
-        dialog_wait.create(LANGUAGE(30504), self.title)
-        # wait 1 second
-        xbmc.sleep(1000)
+        response = requests.get(self.video_page_url, headers=HEADERS)
 
-        http_communicator = HTTPCommunicator()
-        html_data = ''
+        html_source = response.text
+        html_source = convertToUnicodeString(html_source)
 
-        try:
-            html_data = http_communicator.get(self.video_page_url)
-        except urllib2.HTTPError, error:
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "HTTPError", str(error)), xbmc.LOGDEBUG)
-            dialog_wait.close()
-            del dialog_wait
-            xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30507) % (str(error)))
-            exit(1)
-
-        soup = BeautifulSoup(html_data)
+        # Parse response
+        soup = getSoup(html_source)
 
         youtube_url = ""
 
@@ -104,28 +88,21 @@ class Main:
         else:
             for video_url in video_urls:
                 video_url = video_urls[0]['src']
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                        ADDON, VERSION, DATE, "video_url", str(video_url)), xbmc.LOGDEBUG)
-                if http_communicator.exists(video_url):
-                    have_valid_url = True
-                    # make youtube plugin url
-                    pos_of_last_question_mark = video_url.rfind("?")
-                    if pos_of_last_question_mark >= 0:
-                        video_url = video_url[0: pos_of_last_question_mark]
-                    video_url_len = len(video_url)
-                    youtubeID = video_url[len("https://www.youtube.com/embed/"):video_url_len]
-                    youtube_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtubeID
-                else:
-                    unplayable_media_file = True
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "no_url_found", str(have_valid_url)), xbmc.LOGDEBUG)
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "unplayable_media_file", str(have_valid_url)), xbmc.LOGDEBUG)
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "have_valid_url", str(have_valid_url)), xbmc.LOGDEBUG)
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "youtube_url", str(youtube_url)), xbmc.LOGDEBUG)
+                log("video_url", video_url)
+
+                have_valid_url = True
+                # make youtube plugin url
+                pos_of_last_question_mark = video_url.rfind("?")
+                if pos_of_last_question_mark >= 0:
+                    video_url = video_url[0: pos_of_last_question_mark]
+                video_url_len = len(video_url)
+                youtubeID = video_url[len("https://www.youtube.com/embed/"):video_url_len]
+                youtube_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtubeID
+
+        log("have_valid_url", have_valid_url)
+
+        log("youtube_url", youtube_url)
 
         if have_valid_url:
             video_url = youtube_url

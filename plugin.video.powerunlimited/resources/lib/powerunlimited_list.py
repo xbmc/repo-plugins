@@ -4,14 +4,15 @@
 #
 # Imports
 #
-from BeautifulSoup import BeautifulSoup
-from powerunlimited_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
+from powerunlimited_const import ADDON, LANGUAGE, IMAGES_PATH, HEADERS, convertToUnicodeString, log, getSoup
 import os
 import re
 import sys
-import urllib, urllib2
-import urlparse
-import xbmc
+import urllib.request, urllib.parse, urllib.error
 import xbmcgui
 import xbmcplugin
 import requests
@@ -20,7 +21,7 @@ import requests
 #
 # Main class
 #
-class Main:
+class Main(object):
     #
     # Init
     #
@@ -31,17 +32,14 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
+        log("ARGV", repr(sys.argv))
 
         # Parse parameters...
-        self.plugin_category = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['plugin_category'][0]
-        self.video_list_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['url'][0]
-        self.next_page_possible = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+        self.plugin_category = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['plugin_category'][0]
+        self.video_list_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
+        self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)),
-                     xbmc.LOGDEBUG)
+        log("self.video_list_page_url", self.video_list_page_url)
 
         if self.next_page_possible == 'True':
             # Determine current item number, next item number, next_url
@@ -61,9 +59,7 @@ class Main:
                     page_number_next_str = '00' + str(page_number_next)
                 self.next_url = str(self.video_list_page_url).replace(page_number_str, page_number_next_str)
 
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                        ADDON, VERSION, DATE, "self.next_url", str(urllib.unquote_plus(self.next_url))),
-                             xbmc.LOGDEBUG)
+                log("self.next_url", self.next_url)
 
         #
         # Get the videos...
@@ -77,71 +73,77 @@ class Main:
         #
         # Init
         #
-        thumbnail_urls_index = 0
+        # thumbnail_urls_index = 0
         list_item = ''
         # Create a list for our items.
         listing = []
 
         #
-        # Get HTML page...
+        # Get HTML page
         #
-        response = requests.get(self.video_list_page_url)
+        response = requests.get(self.video_list_page_url, headers=HEADERS)
+
         html_source = response.text
-        html_source = html_source.encode('utf-8', 'ignore')
+        html_source = convertToUnicodeString(html_source)
 
-        # Parse response...
-        soup = BeautifulSoup(html_source)
-
-        # Get thumbnails-urls
-        # <img src='http://cdn.pu.nl/thumbnails/144x123/00fa0/hqdefault.jpg' alt='' title='' />
-        thumbnail_urls = soup.findAll('img', attrs={'src': re.compile("/thumbnails/")})
-
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(thumbnail_urls)", str(len(thumbnail_urls))), xbmc.LOGDEBUG)
+        # Parse response
+        soup = getSoup(html_source)
 
         # Get video-page-urls
         # <a class='article pu-tv featured' href='/media/video/pu-tv/parodie-replacer/'>
         # and not <a class='article' href='/games/briquid/'>
-        video_page_urls = soup.findAll('a', attrs={'class': re.compile("^article")})
+        video_page_url_items = soup.findAll('a', attrs={'class': re.compile("^article")})
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(video_page_urls)", str(len(video_page_urls))), xbmc.LOGDEBUG)
+        log("len(video_page_url_items", len(video_page_url_items))
 
-        for video_page_url in video_page_urls:
-            href = video_page_url['href']
+        for video_page_url_item in video_page_url_items:
+
+            log("video_page_url_item", video_page_url_item)
+
+            #<a class="article trailer featured" href="/media/video/trailer/pizza-connection-terug-trailer/"><span class="type"></span>
+            # <article><div class="article-image">
+            # <img alt="" src="http://cdn.pu.nl/thumbnails/144x123/e8a2a/pizza_maken.jpg" title=""/>
+            # </div><header><h4><strong>Pizzaatjes bakken</strong> in Pizza Connection -<strong> trailer</strong></h4></header><div class="date hidden-phone">
+
+            href = video_page_url_item['href']
+
+            # skip empty video link
+            if str(href) == '':
+
+                log("skipped empty href", href)
+
+                continue
+
             # skip video link if starts with '/games/'
             if str(href).startswith("/games/"):
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                        ADDON, VERSION, DATE, "skipped video_page_url with /games/", str(href)), xbmc.LOGDEBUG)
-                thumbnail_urls_index = thumbnail_urls_index + 1
+
+                log("skipped href with /games/", href)
+
                 continue
 
             # skip video link if starts with '/media/gallery/'
             if str(href).startswith("/media/gallery/"):
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                        ADDON, VERSION, DATE, "skipped video_page_url with /media/gallery/", str(href)),
-                             xbmc.LOGDEBUG)
-                thumbnail_urls_index = thumbnail_urls_index + 1
+
+                log("skipped href with /media/gallery/", href)
+
                 continue
 
             # skip video link if starts with '/artikelen/'
             if str(href).startswith("/artikelen/"):
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                        ADDON, VERSION, DATE, "skipped video_page_url with /artikelen/", str(href)),
-                             xbmc.LOGDEBUG)
-                thumbnail_urls_index = thumbnail_urls_index + 1
+
+                log("skipped href with /artikelen/", href)
+
                 continue
 
             video_page_url = "http://www.pu.nl/media/video%s" % href
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "video_page_url", str(video_page_url)), xbmc.LOGDEBUG)
+            log("video_page_url", video_page_url)
 
             # Make title
             # /media/video/pu-tv/parodie-replacer/
             # /media/video/trailer/old-republic-dlc-video-laat-nieuwe-planeet-zien/
-            title = str(href)
             # remove the trailing /
+            title = str(href)
             title = title[0:len(title) - len('/')]
             pos_of_last_slash = title.rfind('/')
             title = title[pos_of_last_slash + 1:]
@@ -179,15 +181,18 @@ class Main:
             title = title.replace(' xxix ', ' XXIX ')
             title = title.replace(' xxx ', ' XXX ')
 
-            xbmc.log(
-                    "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "title", str(title)),
-                    xbmc.LOGDEBUG)
+            log("title", title)
 
-            # if thumbnail_urls_index + 1 >= len(thumbnail_urls):
-            if thumbnail_urls_index >= len(thumbnail_urls):
-                thumbnail_url = ''
+            # find thumbnail url
+            start_pos_src_thumbnail_url = str(video_page_url_item).find('src="')
+            if start_pos_src_thumbnail_url >= 0:
+                start_pos_thumbnail_url = start_pos_src_thumbnail_url + len('src="')
+                end_pos_thumbnail_url = str(video_page_url_item).find('"', start_pos_thumbnail_url)
+                thumbnail_url = str(video_page_url_item)[start_pos_thumbnail_url:end_pos_thumbnail_url]
             else:
-                thumbnail_url = thumbnail_urls[thumbnail_urls_index]['src']
+                thumbnail_url = ''
+
+            log("thumbnail_url", thumbnail_url)
 
             # Add to list
             list_item = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_url)
@@ -195,15 +200,13 @@ class Main:
             list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
                               'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'true')
-            parameters = {"action": "play", "video_page_url": video_page_url, "title": title}
-            url = self.plugin_url + '?' + urllib.urlencode(parameters)
+            parameters = {"action": "play", "video_page_url": video_page_url}
+            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = False
             # Add refresh option to context menu
             list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])
             # Add our item to the listing as a 3-element tuple.
             listing.append((url, list_item, is_folder))
-
-            thumbnail_urls_index = thumbnail_urls_index + 1
 
         # Next page entry
         if self.next_page_possible == 'True':
@@ -213,13 +216,12 @@ class Main:
             list_item.setProperty('IsPlayable', 'false')
             parameters = {"action": "list", "plugin_category": self.plugin_category, "url": str(self.next_url),
                           "next_page_possible": self.next_page_possible}
-            url = self.plugin_url + '?' + urllib.urlencode(parameters)
+            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = True
             # Add refresh option to context menu
             list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])
             # Add our item to the listing as a 3-element tuple.
             listing.append((url, list_item, is_folder))
-
 
         # Add our listing to Kodi
         # Large lists and/or slower systems benefit from adding all items at once via addDirectoryItems

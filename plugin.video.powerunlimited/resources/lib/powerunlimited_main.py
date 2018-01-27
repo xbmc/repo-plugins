@@ -4,19 +4,22 @@
 #
 # Imports
 #
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 import sys
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import xbmcgui
 import xbmcplugin
 import os
 
-from powerunlimited_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
+from powerunlimited_const import LANGUAGE, IMAGES_PATH
 
 
 #
 # Main class
 #
-class Main:
+class Main(object):
     def __init__(self):
         # Get the command line arguments
         # Get the plugin url in plugin:// notation
@@ -29,7 +32,7 @@ class Main:
         #
         parameters = {"action": "list", "plugin_category": LANGUAGE(30000),
                       "url": "http://www.pu.nl/media/?page=001", "next_page_possible": "True"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30000), iconImage="DefaultFolder.png")
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
@@ -41,7 +44,7 @@ class Main:
         #
         parameters = {"action": "list", "plugin_category": LANGUAGE(30001),
                       "url": "http://www.pu.nl/media/pu-tv/?page=001", "next_page_possible": "True"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30001), iconImage="DefaultFolder.png")
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
@@ -53,7 +56,7 @@ class Main:
         #
         parameters = {"action": "list", "plugin_category": LANGUAGE(30002),
                       "url": "http://www.pu.nl/media/trailer/?page=001", "next_page_possible": "True"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30002), iconImage="DefaultFolder.png")
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})

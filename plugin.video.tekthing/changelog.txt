@@ -1,3 +1,7 @@
+v1.0.2 (2018-01-21)
+- addon now works in kode python 2 and should also work in python 3 (!!) once all dependencies work in python 3.
+Kudo's to the python future package for making this possible. Kudo's to RomanVM for the help.
+
 v1.0.1 (2017-03-12):
 - changed addon debugging info to kodi debugging info
 - using po-files

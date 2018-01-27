@@ -4,18 +4,15 @@
 #
 # Imports
 #
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 import os
-import re
 import sys
-import urllib
-import urlparse
+import urllib.parse
 import xbmc
 import xbmcaddon
-import xbmcgui
-import xbmcplugin
 
-reload(sys)
-sys.setdefaultencoding('utf8')
 
 LIB_DIR = xbmc.translatePath(
     os.path.join(xbmcaddon.Addon(id="plugin.video.roosterteeth").getAddonInfo('path'), 'resources', 'lib'))
@@ -33,7 +30,7 @@ if len(sys.argv[2]) == 0:
                  xbmc.LOGDEBUG)
     import roosterteeth_main as plugin
 else:
-    action = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['action'][0]
+    action = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['action'][0]
     #
     # List
     #

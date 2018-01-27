@@ -4,8 +4,11 @@
 #
 # Imports
 #
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 import sys
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import xbmcgui
 import xbmcplugin
 import os
@@ -18,7 +21,7 @@ from roosterteeth_const import LANGUAGE, IMAGES_PATH, ROOSTERTEETHRECENTLYADDEDU
 #
 # Main class
 #
-class Main:
+class Main(object):
     def __init__(self):
         # Get the command line arguments
         # Get the plugin url in plugin:// notation
@@ -31,7 +34,7 @@ class Main:
         #
         parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30301), "url": ROOSTERTEETHRECENTLYADDEDURL,
                       "next_page_possible": "True"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30301))
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
@@ -43,7 +46,7 @@ class Main:
         #
         parameters = {"action": "list-shows", "plugin_category": LANGUAGE(30302), "url": ROOSTERTEETHSHOWSURL,
                       "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30302))
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
@@ -56,7 +59,7 @@ class Main:
         parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30303),
                       "url": ACHIEVEMENTHUNTERRECENTLYADDEDURL,
                       "next_page_possible": "True"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30303))
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
@@ -68,7 +71,7 @@ class Main:
         #
         parameters = {"action": "list-shows", "plugin_category": LANGUAGE(30304), "url": ACHIEVEMENTHUNTERSHOWSURL,
                       "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30304))
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
@@ -80,7 +83,7 @@ class Main:
         #
         parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30305), "url": FUNHAUSRECENTLYADDEDURL,
                       "next_page_possible": "True"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30305))
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
@@ -92,7 +95,7 @@ class Main:
         #
         parameters = {"action": "list-shows", "plugin_category": LANGUAGE(30306), "url": FUNHAUSSHOWURL,
                       "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30306))
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
@@ -104,7 +107,7 @@ class Main:
         #
         parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30307), "url": SCREWATTACKRECENTLYADDEDURL,
                       "next_page_possible": "True"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30307))
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
@@ -116,7 +119,7 @@ class Main:
         #
         parameters = {"action": "list-shows", "plugin_category": LANGUAGE(30308), "url": SCREWATTACKSHOWSURL,
                       "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30308))
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
@@ -128,7 +131,7 @@ class Main:
         #
         parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30311), "url": THEKNOWRECENTLYADDEDURL,
                       "next_page_possible": "True"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30311))
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
@@ -139,7 +142,7 @@ class Main:
         #
         parameters = {"action": "list-shows", "plugin_category": LANGUAGE(30312), "url": THEKNOWSHOWSURL,
                       "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30312))
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
@@ -151,7 +154,7 @@ class Main:
         #
         parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30309), "url": GAMEATTACKRECENTLYADDEDURL,
                       "next_page_possible": "True"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30309))
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
@@ -163,7 +166,7 @@ class Main:
         #
         parameters = {"action": "list-shows", "plugin_category": LANGUAGE(30310), "url": GAMEATTACKSHOWSURL,
                       "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30310))
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
@@ -175,7 +178,7 @@ class Main:
         #
         parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30313), "url": COWCHOPRECENTLYADDEDURL,
                       "next_page_possible": "True"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30313))
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
@@ -187,7 +190,7 @@ class Main:
         #
         parameters = {"action": "list-shows", "plugin_category": LANGUAGE(30314), "url": COWCHOPSHOWSURL,
                       "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30314))
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
@@ -199,7 +202,7 @@ class Main:
         #
         parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30315), "url": SUGARPINE7RECENTLYADDEDURL,
                       "next_page_possible": "True"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30315))
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
@@ -211,7 +214,7 @@ class Main:
         #
         parameters = {"action": "list-shows", "plugin_category": LANGUAGE(30316), "url": SUGARPINE7SHOWSURL,
                       "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.urlencode(parameters)
+        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30316))
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})

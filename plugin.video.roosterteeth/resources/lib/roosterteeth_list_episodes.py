@@ -4,22 +4,23 @@
 #
 # Imports
 #
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 import os
 import requests
 import sys
-import urllib
-import urlparse
-import xbmc
+import urllib.request, urllib.parse, urllib.error
 import xbmcgui
 import xbmcplugin
-from BeautifulSoup import BeautifulSoup
 
-from roosterteeth_const import ADDON, LANGUAGE, IMAGES_PATH, DATE, VERSION
+from roosterteeth_const import ADDON, LANGUAGE, IMAGES_PATH, HEADERS, convertToUnicodeString, log, getSoup
 
 #
 # Main class
 #
-class Main:
+class Main(object):
     #
     # Init
     #
@@ -30,16 +31,13 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-            ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
+        log("ARGV", repr(sys.argv))
 
         # Parse parameters
-        self.video_list_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['url'][0]
-        self.next_page_possible = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+        self.video_list_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
+        self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)),
-                 xbmc.LOGDEBUG)
+        log("self.video_list_page_url", self.video_list_page_url)
 
         if self.next_page_possible == 'True':
             # Determine current item number, next item number, next_url
@@ -57,9 +55,7 @@ class Main:
                     page_number_next_str = '00' + str(page_number_next)
                 self.next_url = str(self.video_list_page_url).replace(page_number_str, page_number_next_str)
 
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "self.next_url", str(urllib.unquote_plus(self.next_url))),
-                         xbmc.LOGDEBUG)
+                log("self.next_url", self.next_url)
 
         #
         # Get the videos...
@@ -81,15 +77,15 @@ class Main:
         #
         # Get HTML page
         #
-        response = requests.get(self.video_list_page_url)
+        response = requests.get(self.video_list_page_url, headers=HEADERS)
+
         html_source = response.text
-        html_source = html_source.encode('utf-8', 'ignore')
+        html_source = convertToUnicodeString(html_source)
 
         # Parse response
-        soup = BeautifulSoup(html_source)
+        soup = getSoup(html_source)
 
-        # xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-        #     ADDON, VERSION, DATE, "html_source", str(html_source)), xbmc.LOGDEBUG)
+        # log("html_source", html_source)
 
         # <li>
         #	<a href="http://ah.roosterteeth.com/episode/red-vs-blue-season-13-episode-2">
@@ -111,8 +107,7 @@ class Main:
 
         episodes = soup.findAll('li')
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            ADDON, VERSION, DATE, "len(episodes)", str(len(episodes))), xbmc.LOGDEBUG)
+        log("len(episodes", len(episodes))
 
         for episode in episodes:
             # Only display episodes of a season
@@ -127,38 +122,42 @@ class Main:
                     after_tab_episodes = True
                 # Skip if the episode isn't a season episode
                 if not after_tab_episodes:
-                    xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                        ADDON, VERSION, DATE, "skipped episode before tab-episodes", str(episode)), xbmc.LOGDEBUG)
+
+                    log("skipped episode before tab-episodes", episode)
+
                     continue
 
             # Skip the recently-added url
             if str(episode).find('recently-added') >= 0:
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "skipped episode recently-added", str(episode)), xbmc.LOGDEBUG)
+
+                log("skipped episode before recently-added", episode)
+
                 continue
 
             # Skip an episode if it does not contain class="name"
             pos_classname = str(episode).find('class="name"')
             if pos_classname == -1:
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "skipped episode without class=name", str(episode)), xbmc.LOGDEBUG)
+
+                log("skipped episode without class=name", episode)
+
                 continue
 
             video_page_url = episode.a['href']
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "video_page_url", str(video_page_url)), xbmc.LOGDEBUG)
+            log("video_page_url", video_page_url)
 
             # Skip the episode if it does not contain /episode/
             if str(video_page_url).find("/episode/") < 0:
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "skipped episode without /episode/", str(video_page_url)), xbmc.LOGDEBUG)
+
+                log("skipped episode without /episode/", video_page_url)
+
                 continue
 
             # Skip a video_page_url is empty
             if video_page_url == '':
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "skipped episode with empty video_page_url", str(episode)), xbmc.LOGDEBUG)
+
+                log("skipped episode with empty video_page_url", episode)
+
                 continue
 
             # Skip episode if it's the same as the previous one
@@ -175,12 +174,6 @@ class Main:
             title = str(episode)[pos_classname + len('class="name"') + 1:]
             pos_smaller_then_symbol = title.find("<")
             title = title[0:pos_smaller_then_symbol]
-
-            # Clean up title
-            try:
-                title = title.encode('utf-8')
-            except:
-                pass
 
             title = title.replace('-', ' ')
             title = title.replace('/', ' ')
@@ -235,7 +228,7 @@ class Main:
                               'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'true')
             parameters = {"action": "play", "video_page_url": video_page_url, "title": title}
-            url = self.plugin_url + '?' + urllib.urlencode(parameters)
+            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = False
             # Add refresh option to context menu
             list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])
@@ -249,7 +242,7 @@ class Main:
             list_item.setProperty('IsPlayable', 'false')
             parameters = {"action": "list-episodes", "url": str(self.next_url),
                           "next_page_possible": self.next_page_possible}
-            url = self.plugin_url + '?' + urllib.urlencode(parameters)
+            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = True
             # Add refresh option to context menu
             list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])

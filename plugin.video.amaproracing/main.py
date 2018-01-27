@@ -178,7 +178,7 @@ elif mode==204:
     owner_id=urllib.unquote_plus(params["owner_id"])
 
     supercross = supercross()
-    supercross.getLiveStream(owner_id,event_id)
+    supercross.getLiveStream(name,owner_id,event_id)
 
 
 ####################

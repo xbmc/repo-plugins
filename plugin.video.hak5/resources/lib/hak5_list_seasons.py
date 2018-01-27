@@ -4,23 +4,25 @@
 #
 # Imports
 #
+from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 import os
 import requests
 import sys
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
 import re
-import xbmc
 import xbmcgui
 import xbmcplugin
-from BeautifulSoup import BeautifulSoup
 
-from hak5_const import ADDON, DATE, VERSION, IMAGES_PATH, HEADERS, HAK5SEASONSURLHTTPS, LANGUAGE
+from .hak5_const import IMAGES_PATH, HEADERS, LANGUAGE, convertToUnicodeString, log, getSoup
 
 #
 # Main class
 #
-class Main:
+class Main(object):
     def __init__(self):
         # Get the command line arguments
         # Get the plugin url in plugin:// notation
@@ -28,19 +30,16 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
+        log("ARGV", repr(sys.argv))
 
         # Parse parameters...
-        self.plugin_category = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['plugin_category'][0]
-        self.video_list_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['url'][0]
-        self.next_page_possible = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+        self.plugin_category = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['plugin_category'][0]
+        self.video_list_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
+        self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
 
         self.video_list_page_url = str(self.video_list_page_url).replace('https', 'http')
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)),
-                     xbmc.LOGDEBUG)
+        log("self.video_list_page_url", self.video_list_page_url)
 
         #
         # Get the videos...
@@ -58,41 +57,43 @@ class Main:
         listing = []
 
         #
-        # Get HTML page...
+        # Get HTML page
         #
         response = requests.get(self.video_list_page_url, headers=HEADERS)
+
         html_source = response.text
-        html_source = html_source.encode('utf-8', 'ignore')
+        html_source = convertToUnicodeString(html_source)
+
+        # Parse response
+        soup = getSoup(html_source)
 
         # <a href="https://www.hak5.org/category/episodes/season-22" class="menu-link  sub-menu-link">Season 22 </a>
 
-        # Parse response...
-        soup = BeautifulSoup(html_source)
-
-        # xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-        #     ADDON, VERSION, DATE, "html_source", str(html_source)), xbmc.LOGDEBUG)
+        # log("html_source", html_source)
 
         #<a href="https://www.hak5.org/category/episodes/season_1" data-ss1507745229="1">Season 1</a>
         seasons = soup.findAll('a', attrs={'href': re.compile("^" + "https://www.hak5.org/category/episodes/season")})
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(seasons)", str(len(seasons))), xbmc.LOGDEBUG)
+        log("len(seasons", len(seasons))
 
         for season in seasons:
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "season", str(season)), xbmc.LOGDEBUG)
+            # log("season", season)
 
             # let's skip these links
             # <a href="https://www.hak5.org/category/episodes/season-22" class="menu-link  sub-menu-link">Season 22 </a>
             if str(season).find("class=") > 0:
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "skipped season that contains class=", str(season)), xbmc.LOGDEBUG)
+
+                log("skipped season that contains class=", season)
+
                 continue
 
             # let's skip these links
             # <a href="https://www.hak5.org/category/episodes/season-22" rel="category tag">Season 22</a>
             if str(season).find("rel=") > 0:
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "skipped season that contains rel=", str(season)), xbmc.LOGDEBUG)
+
+                log("skipped season that contains rel=", season)
+
                 continue
 
             # let's skip links that don't contain the word season
@@ -100,8 +101,9 @@ class Main:
             if str(season).find("season") > 0:
                 pass
             else:
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "skipped season that does not contain the word season", str(season)), xbmc.LOGDEBUG)
+
+                log("skipped season that does not contain the word season", season)
+
                 continue
 
             url = season['href']
@@ -121,7 +123,7 @@ class Main:
             list_item.setProperty('IsPlayable', 'false')
             parameters = {"action": "list-episodes", "season_name": title, "url": url, "next_page_possible": "False",
                           "title": title}
-            url = self.plugin_url + '?' + urllib.urlencode(parameters)
+            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = True
             # Adding context menu items to context menu
             list_item.addContextMenuItems(context_menu_items, replaceItems=False)

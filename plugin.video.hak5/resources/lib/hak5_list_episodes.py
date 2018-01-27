@@ -4,24 +4,26 @@
 #
 # Imports
 #
+from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 import os
 import requests
 import sys
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
 import re
-import HTMLParser
-import xbmc
+import html.parser
 import xbmcgui
 import xbmcplugin
-from BeautifulSoup import BeautifulSoup
 
-from hak5_const import ADDON, LANGUAGE, IMAGES_PATH, HEADERS, DATE, VERSION
+from .hak5_const import ADDON, LANGUAGE, IMAGES_PATH, HEADERS, convertToUnicodeString, log, getSoup
 
 #
 # Main class
 #
-class Main:
+class Main(object):
     #
     # Init
     #
@@ -32,18 +34,15 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-            ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
+        log("ARGV", repr(sys.argv))
 
         # Parse parameters
-        self.video_list_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['url'][0]
-        self.next_page_possible = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+        self.video_list_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
+        self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
 
         self.video_list_page_url = str(self.video_list_page_url).replace('https', 'http')
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)),
-                 xbmc.LOGDEBUG)
+        log("self.video_list_page_url", self.video_list_page_url)
 
         if self.next_page_possible == 'True':
             # Determine current item number, next item number, next_url
@@ -61,9 +60,7 @@ class Main:
                     page_number_next_str = '00' + str(page_number_next)
                 self.next_url = str(self.video_list_page_url).replace(page_number_str, page_number_next_str)
 
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "self.next_url", str(urllib.unquote_plus(self.next_url))),
-                         xbmc.LOGDEBUG)
+                log("self.next_url", self.next_url)
 
         #
         # Get the videos...
@@ -86,14 +83,14 @@ class Main:
         # Get HTML page
         #
         response = requests.get(self.video_list_page_url, headers=HEADERS)
+
         html_source = response.text
-        html_source = html_source.encode('utf-8', 'ignore')
+        html_source = convertToUnicodeString(html_source)
 
         # Parse response
-        soup = BeautifulSoup(html_source)
+        soup = getSoup(html_source)
 
-        # xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-        #     ADDON, VERSION, DATE, "html_source", str(html_source)), xbmc.LOGDEBUG)
+        # log("html_source", html_source)
 
         # <div id="post-8843" class="video-item post-8843 post type-post status-publish format-video has-post-thumbnail hentry category-episodes category-hak5 category-season-22 tag-darren-kitchen tag-hack-across-the-planet tag-hak-5 tag-pseudocode-for-life post_format-post-format-video">
         # <div class="item-thumbnail">
@@ -120,36 +117,26 @@ class Main:
 
         episodes = soup.findAll('div', attrs={'id': re.compile("^" + 'post')})
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            ADDON, VERSION, DATE, "len(episodes)", str(len(episodes))), xbmc.LOGDEBUG)
+        log("len(episodes", len(episodes))
 
         for episode in episodes:
 
-            # xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            #     ADDON, VERSION, DATE, "episode", str(episode)), xbmc.LOGDEBUG)
+            # log("episode", episode)
 
             video_page_url = episode.a['href']
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "video_page_url", str(video_page_url)), xbmc.LOGDEBUG)
+            log("video_page_url", video_page_url)
 
             try:
                 thumbnail_url = episode.img['src']
             except:
                 thumbnail_url = ''
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "thumbnail_url", str(thumbnail_url)), xbmc.LOGDEBUG)
+            log("thumbnail_url", thumbnail_url)
 
             pos_of_title_start = str(episode).find('title="') + len('title="')
             pos_of_title_end = str(episode).find('"', pos_of_title_start)
             title = str(episode)[pos_of_title_start:pos_of_title_end]
-
-            # Clean up title
-            try:
-                title = title.encode('utf-8')
-            except:
-                pass
 
             title = title.replace('-', ' ')
             title = title.replace('/', ' ')
@@ -184,21 +171,8 @@ class Main:
             title = title.replace(' xxix ', ' XXIX ')
             title = title.replace(' xxx ', ' XXX ')
             title = title.replace('  ', ' ')
-            # welcome to unescaping-hell
-            title = title.replace('&amp;#039;', "'")
-            title = title.replace('&amp;#39;', "'")
-            title = title.replace('&amp;quot;', '"')
-            title = title.replace("&#039;", "'")
-            title = title.replace("&#39;", "'")
-            title = title.replace('&amp;amp;', '&')
-            title = title.replace('&amp;', '&')
-            title = title.replace('&quot;', '"')
-            title = title.replace('&ldquo;', '"')
-            title = title.replace('&rdquo;', '"')
-            title = title.replace('&rsquo;', "'")
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "title", str(title)), xbmc.LOGDEBUG)
+            log("title", title)
 
             # lets find the blog date month and year
             search_for_string = 'https://www.hak5.org/wp-content/uploads/'
@@ -208,15 +182,13 @@ class Main:
             blog_date_year_end_pos = blog_date.find('/', blog_date_year_start_pos)
             blog_date_year = blog_date[blog_date_year_start_pos: blog_date_year_end_pos]
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "blog_date_year", str(blog_date_year)), xbmc.LOGDEBUG)
+            log("blog_data_year", blog_date_year)
 
             blog_date_month_start_pos = blog_date_year_end_pos + 1
             blog_date_month_end_pos = blog_date_month_start_pos + 2
             blog_date_month = blog_date[blog_date_month_start_pos:blog_date_month_end_pos]
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "blog_date_month", str(blog_date_month)), xbmc.LOGDEBUG)
+            log("blog_date_month", blog_date_month)
 
             # lets find the blog date day
             blog_date = episode.findAll('span', attrs={'class': re.compile("^" + 'item-date')})
@@ -229,21 +201,20 @@ class Main:
                 blog_date_day_end_pos = blog_date_day_start_pos + 2
                 blog_date_day = blog_date[blog_date_day_start_pos:blog_date_day_end_pos]
 
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "blog_date_day", str(blog_date_day)), xbmc.LOGDEBUG)
+                log("blog_date_day", blog_date_day)
 
             video_date = blog_date_year + '-' + blog_date_month + '-' + blog_date_day + ' 00:00:01'
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "video_date", str(video_date)), xbmc.LOGDEBUG)
+            log("video_date", video_date)
 
             # Unescaping the plot
             try:
-                plot =  HTMLParser.HTMLParser().unescape(episode.p.text)
+                plot =  html.parser.HTMLParser().unescape(episode.p.text)
             except:
                 plot = title
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "plot", str(plot)), xbmc.LOGDEBUG)
+
+            log("plot", plot)
 
             add_sort_methods()
 
@@ -261,8 +232,8 @@ class Main:
             list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
                               'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'true')
-            parameters = {"action": "play", "video_page_url": video_page_url, "title": title}
-            url = self.plugin_url + '?' + urllib.urlencode(parameters)
+            parameters = {"action": "play", "video_page_url": video_page_url}
+            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = False
             # Adding context menu items to context menu
             list_item.addContextMenuItems(context_menu_items, replaceItems=False)
@@ -276,7 +247,7 @@ class Main:
             list_item.setProperty('IsPlayable', 'false')
             parameters = {"action": "list-episodes", "url": str(self.next_url),
                           "next_page_possible": self.next_page_possible}
-            url = self.plugin_url + '?' + urllib.urlencode(parameters)
+            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = True
             # Adding context menu items to context menu
             list_item.addContextMenuItems(context_menu_items, replaceItems=False)
@@ -291,6 +262,7 @@ class Main:
         xbmcplugin.addSortMethod(handle=self.plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_NONE)
         # Finish creating a virtual folder.
         xbmcplugin.endOfDirectory(self.plugin_handle)
+
 
 def add_sort_methods():
     sort_methods = [xbmcplugin.SORT_METHOD_UNSORTED,xbmcplugin.SORT_METHOD_LABEL,xbmcplugin.SORT_METHOD_DATE,xbmcplugin.SORT_METHOD_DURATION,xbmcplugin.SORT_METHOD_EPISODE]

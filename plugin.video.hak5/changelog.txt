@@ -1,9 +1,14 @@
+v1.0.3 (2018-01-20)
+- Fixed settings.xml
+- addon now works in kode python 2 and should also work in python 3 (!!) once all dependencies work in python 3.
+Kudo's to the python future package for making this possible. Kudo's to RomanVM for the help.
+
 v1.0.2 (2017-11-12)
-Fixes due to website changes
+- Fixes due to website changes
 
 v1.0.1 (2017-10-11)
-Fixes due to website changes
-Removed Pinapple University videos
+- Fixes due to website changes
+- Removed Pinapple University videos
 
 v1.0.0 (2017-07-09)
-initial version
+- initial version

@@ -4,14 +4,12 @@
 #
 # Imports
 #
-import os
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 import sys
-import urlparse
+import urllib.parse
 import xbmc
-import xbmcaddon
-
-reload(sys)
-sys.setdefaultencoding('utf8')
 
 from resources.lib.hak5_const import ADDON, DATE, VERSION
 
@@ -25,7 +23,7 @@ if len(sys.argv[2]) == 0:
                  xbmc.LOGDEBUG)
     from resources.lib import hak5_main as plugin
 else:
-    action = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['action'][0]
+    action = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['action'][0]
     #
     # List Episodes
     #

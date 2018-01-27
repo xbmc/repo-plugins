@@ -4,19 +4,24 @@
 #
 # Imports
 #
+from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 import requests
 import sys
-import urlparse
+import urllib.parse
 import xbmc
 import xbmcgui
 import xbmcplugin
 
-from hak5_const import ADDON, LANGUAGE, HEADERS, DATE, VERSION
+from .hak5_const import LANGUAGE, HEADERS, convertToUnicodeString, log, getSoup
 
 #
 # Main class
 #
-class Main:
+class Main(object):
     #
     # Init
     #
@@ -27,18 +32,12 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-            ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
+        log("ARGV", repr(sys.argv))
 
         # Parse parameters...
-        self.video_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['video_page_url'][0]
-        # Get the title.
-        self.title = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['title'][0]
-        self.title = str(self.title)
+        self.video_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['video_page_url'][0]
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            ADDON, VERSION, DATE, "self.video_page_url", str(self.video_page_url)), xbmc.LOGDEBUG)
-
+        log("self.video_page_url", self.video_page_url)
         #
         # Play video...
         #
@@ -59,8 +58,8 @@ class Main:
         # title = unicode(xbmc.getInfoLabel("listitem.Title"), "utf-8")
         thumbnail_url = xbmc.getInfoImage("list_item.Thumb")
         # studio = unicode(xbmc.getInfoLabel("list_item.Studio"), "utf-8")
-        plot = unicode(xbmc.getInfoLabel("list_item.Plot"), "utf-8")
-        genre = unicode(xbmc.getInfoLabel("list_item.Genre"), "utf-8")
+        plot = xbmc.getInfoLabel("list_item.Plot")
+        genre = xbmc.getInfoLabel("list_item.Genre")
 
         reply = ''
         session = ''
@@ -70,13 +69,19 @@ class Main:
 
         # get the page that contains the video
         self.video_page_url = str(self.video_page_url).replace('https','http')
-        reply = requests.get(self.video_page_url, headers=HEADERS)
 
-        html_source = reply.text
-        html_source = html_source.encode('utf-8', 'ignore')
+        #
+        # Get HTML page
+        #
+        response = requests.get(self.video_page_url, headers=HEADERS)
 
-        # xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-        #     ADDON, VERSION, DATE, "html_source", str(html_source)), xbmc.LOGDEBUG)
+        html_source = response.text
+        html_source = convertToUnicodeString(html_source)
+
+        # Parse response
+        soup = getSoup(html_source)
+
+        # log("html_source", html_source)
 
         video_url = ''
         no_url_found = True
@@ -94,15 +99,14 @@ class Main:
             end_pos_youtube_id = html_source.find(search_for_string, start_pos_youtube_id)
             if end_pos_youtube_id > 0:
                 youtube_id = html_source[start_pos_youtube_id:end_pos_youtube_id]
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "youtube_id", str(youtube_id)), xbmc.LOGDEBUG)
+
+                log("youtube_id", youtube_id)
 
                 video_url = makeYouTubePluginUrl(youtube_id)
                 no_url_found = False
                 have_valid_url = True
 
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "video_url", str(video_url)), xbmc.LOGDEBUG)
+                log("video_url", video_url)
 
         # Play video...
         if have_valid_url:
@@ -113,6 +117,7 @@ class Main:
         #
         elif no_url_found:
             xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30107))
+
 
 def makeYouTubePluginUrl(youtube_id):
     return 'plugin://plugin.video.youtube/play/?video_id=%s' % youtube_id

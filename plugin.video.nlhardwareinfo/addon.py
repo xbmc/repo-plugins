@@ -4,12 +4,11 @@
 #
 # Imports
 #
+from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 import sys
-import xbmc
-
-reload(sys)
-sys.setdefaultencoding('utf8')
-
 
 from resources.lib.nlhardwareinfo_const import ADDON, DATE, VERSION
 

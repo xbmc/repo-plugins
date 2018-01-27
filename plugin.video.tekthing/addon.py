@@ -1,32 +1,34 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 import os
 import sys
-
-from BeautifulSoup import BeautifulSoup
-from urlparse import parse_qs
-import urllib
+import re
+from bs4 import BeautifulSoup
+from urllib.parse import parse_qs
+import urllib.request, urllib.parse, urllib.error
 import requests
-
 import xbmc
 import xbmcaddon
 import xbmcgui
 import xbmcplugin
 
-ADDON       = "plugin.video.tekthing"
-SETTINGS    = xbmcaddon.Addon()
-LANGUAGE    = SETTINGS.getLocalizedString
+ADDON = "plugin.video.tekthing"
+SETTINGS = xbmcaddon.Addon()
+LANGUAGE = SETTINGS.getLocalizedString
 IMAGES_PATH = os.path.join( xbmcaddon.Addon().getAddonInfo('path'), 'resources', 'images' )
-DATE        = "2017-03-12"
-VERSION     = "1.0.1"
-
+HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 RSS_URL = "http://feeds.feedburner.com/Tekthing"
+DATE = "2018-01-21"
+VERSION = "1.0.3"
 
 
 def getParams():
     p = parse_qs(sys.argv[2][1:])
-    for i in p.keys():
+    for i in list(p.keys()):
         p[i] = p[i][0]
     return p
 
@@ -60,37 +62,40 @@ def getVideos() :
     # Skip the first title
     title_index = title_index + 1
 
-    # 
-    # Get HTML page...
     #
-    response = requests.get(RSS_URL)
+    # Get HTML page
+    #
+    response = requests.get(RSS_URL, headers=HEADERS)
+
     html_source = response.text
-    html_source = html_source.encode('utf-8', 'ignore')
-    
-    soup = BeautifulSoup( html_source )
-    
+    html_source = convertToUnicodeString(html_source)
+
+    # Parse response
+    soup = getSoup(html_source)
+
+    # log("soup", soup)
+
 #<title>TekThing 31: Epson WorkForce ET-4550 Means Cheap Ink! New Intel Skylake Core i7-6700K, Turn On Windows 10 Privacy!</title>    
     titles = soup.findAll('title')
-    
-    xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( ADDON, VERSION, DATE, "len(titles):", str(len(titles)) ), xbmc.LOGDEBUG )
 
-# <content:encoded><![CDATA[&lt;iframe scrolling="no" allowfullscreen="" src="//www.youtube.com/embed/hA4MUWYEsHo?wmode=opaque&amp;enablejsapi=1" width="854" frameborder="0" height="480"&gt;
-# ... an&gt;Download the&nbsp;&lt;/span&gt;&lt;a href="http://tekthing.podbean.com/mf/web/gbjpky/tekthing--0031--epson-ecotank-means-cheap-ink-new-intel-skylake-corei7-6700k-cpu-more.mp4"&gt;video&l...
-    shows = soup.findAll('content:encoded')
-    
-    xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( ADDON, VERSION, DATE, "len(shows):", str(len(shows)) ), xbmc.LOGDEBUG )
-    
+    log("len(titles)", len(titles))
+
+    # <content:encoded><![CDATA[&lt;iframe scrolling="no" allowfullscreen="" src="//www.youtube.com/embed/hA4MUWYEsHo?wmode=opaque&amp;enablejsapi=1" width="854" frameborder="0" height="480"&gt;
+    # ... an&gt;Download the&nbsp;&lt;/span&gt;&lt;a href="http://tekthing.podbean.com/mf/web/gbjpky/tekthing--0031--epson-ecotank-means-cheap-ink-new-intel-skylake-corei7-6700k-cpu-more.mp4"&gt;video&l...
+
+    # ends with .mp4
+    shows = soup.findAll('a', attrs={'href': re.compile("\w*.mp4")})
+
+    log("len(shows)", len(shows))
+
     for show in shows:
-        youtube_id = findString('//www.youtube.com/embed/', str(show), '?')
-        # Skip video if youtube-id can't be found
-        if youtube_id == '':
-            title_index = title_index + 1
-            continue
-            
-        youtube_plugin_url = makeYouTubePluginUrl(youtube_id)
-        url = youtube_plugin_url
-   
-        xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( ADDON, VERSION, DATE, "url:", str(url) ), xbmc.LOGDEBUG )
+
+        log("show", show)
+
+        #<a href="https://tekthing.podbean.com/mf/web/jtrj6h/tekthing--0158--new-dell-xps-13-hp-chromebooks-ces-2018-kill-a-watt.mp4">Download Episode 158</a>
+        url = findString('href="', show, '"')
+
+        log("url", url)
 
         try:
             title = str(titles[title_index])
@@ -98,14 +103,14 @@ def getVideos() :
             title = title.replace('</title>', '')   
         except:
             title = 'Unknown title'
-            
-        xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( ADDON, VERSION, DATE, "title:", str(title) ), xbmc.LOGDEBUG )
-            
+
+        log("title", title)
+
         thumbnail_url = ''
 
         # Add to list...
         parameters = {"mode" : "play", "title" : title, "url" : url, "next_page_possible": "False"}
-        url = sys.argv[0] + '?' + urllib.urlencode(parameters)
+        url = sys.argv[0] + '?' + urllib.parse.urlencode(parameters)
         listitem = xbmcgui.ListItem( title, iconImage="DefaultVideo.png", thumbnailImage=thumbnail_url )
         listitem.setInfo( "video", { "Title" : title, "Studio" : "roosterteeth" } )
         folder = False
@@ -134,6 +139,39 @@ def playVideo (title, video_url):
     xbmcPlayer.play( playlist )
 
 
+if sys.version_info[0] > 2:
+    unicode = str
+
+
+def convertToUnicodeString(s, encoding='utf-8'):
+    """Safe decode byte strings to Unicode"""
+    if isinstance(s, bytes):  # This works in Python 2.7 and 3+
+        s = s.decode(encoding)
+    return s
+
+
+def convertToByteString(s, encoding='utf-8'):
+    """Safe encode Unicode strings to bytes"""
+    if isinstance(s, unicode):
+        s = s.encode(encoding)
+    return s
+
+
+def log(name_object, object):
+    try:
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+            ADDON, VERSION, DATE, name_object, convertToUnicodeString(object)), xbmc.LOGDEBUG)
+    except:
+        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
+            ADDON, VERSION, DATE, name_object,
+            "Unable to log the object due to an error while converting it to an unicode string"), xbmc.LOGDEBUG)
+
+
+def getSoup(html, default_parser="html5lib"):
+    soup = BeautifulSoup(html, default_parser)
+    return soup
+
+
 # Mainline
 
 params = getParams()
@@ -142,8 +180,6 @@ try:
 except:
     mode = 'list'
 
-xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( ADDON, VERSION, DATE, "mode:", str(mode) ), xbmc.LOGDEBUG )
- 
 if mode == 'list':
     getVideos()
 elif mode == 'play':

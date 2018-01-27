@@ -4,39 +4,27 @@
 #
 # Imports
 #
-import re
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 import requests
 import sys
-import urllib2
-import urlparse
+import re
+import urllib.request, urllib.parse, urllib.error
 import xbmc
 import xbmcgui
 import xbmcplugin
-from BeautifulSoup import BeautifulSoup
 
-from roosterteeth_const import ADDON, SETTINGS, LANGUAGE, DATE, VERSION
-
-LOGINURL_RT = 'http://roosterteeth.com/login'
-LOGINURL_AH = 'http://achievementhunter.roosterteeth.com/login'
-LOGINURL_FH = 'http://funhaus.roosterteeth.com/login'
-LOGINURL_SA = 'http://screwattack.roosterteeth.com/login'
-LOGINURL_GA = 'http://gameattack.roosterteeth.com/login'
-LOGINURL_TK = 'http://theknow.roosterteeth.com/login'
-LOGINURL_CC = 'http://cowchop.roosterteeth.com/login'
-LOGINURL_SP7 = 'http://sugarpine7.roosterteeth.com/login'
-
-NEWHLS = 'NewHLS-'
-VQ1080P = '1080P'
-VQ720P = '720P'
-VQ480P = '480P'
-VQ360P = '360P'
-VQ240P = '240P'
+from roosterteeth_const import LANGUAGE, SETTINGS, HEADERS, convertToUnicodeString, log, getSoup, LOGINURL_RT, LOGINURL_AH, \
+    LOGINURL_FH, LOGINURL_SA, LOGINURL_GA, LOGINURL_TK, LOGINURL_CC, LOGINURL_SP7, NEWHLS, VQ1080P, VQ720P, VQ480P, \
+    VQ360P, VQ240P
 
 
 #
 # Main class
 #
-class Main:
+class Main(object):
     #
     # Init
     #
@@ -51,17 +39,16 @@ class Main:
         self.PREFERRED_QUALITY = SETTINGS.getSetting('quality')
         self.IS_SPONSOR = SETTINGS.getSetting('is_sponsor')
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-            ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
+        log("ARGV", repr(sys.argv))
 
         # Parse parameters...
-        self.video_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['video_page_url'][0]
+        self.video_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['video_page_url'][0]
         # Get the title.
-        self.title = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['title'][0]
+        self.title = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['title'][0]
         self.title = str(self.title)
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            ADDON, VERSION, DATE, "self.video_page_url", str(self.video_page_url)), xbmc.LOGDEBUG)
+        log("self.video_page_url", self.video_page_url)
+
         #
         # Play video...
         #
@@ -79,47 +66,56 @@ class Main:
         #
         # Get current list item details...
         #
-        # title = unicode(xbmc.getInfoLabel("listitem.Title"), "utf-8")
+        # title = xbmc.getInfoLabel("listitem.Title")
         thumbnail_url = xbmc.getInfoImage("list_item.Thumb")
-        # studio = unicode(xbmc.getInfoLabel("list_item.Studio"), "utf-8")
-        plot = unicode(xbmc.getInfoLabel("list_item.Plot"), "utf-8")
-        genre = unicode(xbmc.getInfoLabel("list_item.Genre"), "utf-8")
+        # studio = xbmc.getInfoLabel("list_item.Studio")
+        plot = xbmc.getInfoLabel("list_item.Plot")
+        genre = xbmc.getInfoLabel("list_item.Genre")
 
-        reply = ''
         session = ''
         try:
             # requests is sooooo nice, respect!
             session = requests.Session()
 
             # get the page that contains the video
-            reply = session.get(self.video_page_url)
+            response = session.get(self.video_page_url, headers=HEADERS)
+
+            html_source = response.text
+            html_source = convertToUnicodeString(html_source)
 
             # is it a sponsored video?
-            if str(reply.text).find('sponsor-only') >= 0 or str(reply.text).find('non-sponsor') >= 0:
+            if str(response.text).find('sponsor-only') >= 0 or str(response.text).find('non-sponsor') >= 0:
                 if self.IS_SPONSOR == 'true':
                     try:
                         # we need a NEW (!!!) session
                         session = requests.Session()
 
                         # get the LOGIN-page
-                        if 'achievementhunter' in reply.url:
-                            reply = session.get(LOGINURL_AH)
-                        elif 'funhaus' in reply.url:
-                            reply = session.get(LOGINURL_FH)
-                        elif 'screwattack' in reply.url:
-                            reply = session.get(LOGINURL_SA)
-                        elif 'gameattack' in reply.url:
-                            reply = session.get(LOGINURL_GA)
-                        elif 'theknow' in reply.url:
-                            reply = session.get(LOGINURL_TK)
-                        elif 'cowchop' in reply.url:
-                            reply = session.get(LOGINURL_CC)
-                        elif 'sugarpine7' in reply.url:
-                            reply = session.get(LOGINURL_SP7)
+                        if 'achievementhunter' in response.url:
+                            response = session.get(LOGINURL_AH)
+                        elif 'funhaus' in response.url:
+                            response = session.get(LOGINURL_FH)
+                        elif 'screwattack' in response.url:
+                            response = session.get(LOGINURL_SA)
+                        elif 'gameattack' in response.url:
+                            response = session.get(LOGINURL_GA)
+                        elif 'theknow' in response.url:
+                            response = session.get(LOGINURL_TK)
+                        elif 'cowchop' in response.url:
+                            response = session.get(LOGINURL_CC)
+                        elif 'sugarpine7' in response.url:
+                            response = session.get(LOGINURL_SP7)
                         else:
-                            reply = session.get(LOGINURL_RT)
+                            response = session.get(LOGINURL_RT)
 
-                        xbmc.log('get login page request, status_code:' + str(reply.status_code))
+                        log('get login page request, status_code:',  response.status_code)
+
+                        html_source = response.text
+                        html_source = convertToUnicodeString(html_source)
+
+                        # log("html_source1", html_source)
+
+                        soup = getSoup(html_source)
 
                         # This is part of the LOGIN page, it contains a token!:
                         #
@@ -133,50 +129,58 @@ class Main:
                         # 	<input type="submit" value="Log in">
                         # 	</fieldset>
 
-                        # get the token
-                        soup = BeautifulSoup(reply.text)
                         video_urls = soup.findAll('input', attrs={'name': re.compile("_token")}, limit=1)
                         token = str(video_urls[0]['value'])
+
+                        # log("token", token)
 
                         # set the needed LOGIN-data
                         payload = {'_token': token, 'username': SETTINGS.getSetting('username'),
                                    'password': SETTINGS.getSetting('password')}
                         # post the LOGIN-page with the LOGIN-data, to actually login this session
-                        if 'achievementhunter' in reply.url:
-                            reply = session.post(LOGINURL_AH, data=payload)
-                        elif 'funhaus' in reply.url:
-                            reply = session.post(LOGINURL_FH, data=payload)
-                        elif 'screwattack' in reply.url:
-                            reply = session.post(LOGINURL_SA, data=payload)
-                        elif 'gameattack' in reply.url:
-                            reply = session.post(LOGINURL_GA, data=payload)
-                        elif 'theknow' in reply.url:
-                            reply = session.post(LOGINURL_TK, data=payload)
-                        elif 'cowchop' in reply.url:
-                            reply = session.post(LOGINURL_CC, data=payload)
-                        elif 'sugarpine7' in reply.url:
-                            reply = session.get(LOGINURL_SP7)
+                        if 'achievementhunter' in response.url:
+                            response = session.post(LOGINURL_AH, data=payload)
+                        elif 'funhaus' in response.url:
+                            response = session.post(LOGINURL_FH, data=payload)
+                        elif 'screwattack' in response.url:
+                            response = session.post(LOGINURL_SA, data=payload)
+                        elif 'gameattack' in response.url:
+                            response = session.post(LOGINURL_GA, data=payload)
+                        elif 'theknow' in response.url:
+                            response = session.post(LOGINURL_TK, data=payload)
+                        elif 'cowchop' in response.url:
+                            response = session.post(LOGINURL_CC, data=payload)
+                        elif 'sugarpine7' in response.url:
+                            response = session.get(LOGINURL_SP7)
                         else:
-                            reply = session.post(LOGINURL_RT, data=payload)
+                            response = session.post(LOGINURL_RT, data=payload)
 
-                        xbmc.log('post login page response, status_code:' + str(reply.status_code))
+                        log('post login page response, status_code:', response.status_code)
+
+                        html_source = response.text
+                        html_source = convertToUnicodeString(html_source)
 
                         # check that the login was technically ok (status_code 200).
                         # This in itself does NOT mean that the username/password were correct.
-                        if reply.status_code == 200:
+                        if response.status_code == 200:
                             pass
                             # check that the username is in the response. If that's the case, the login was ok
                             # and the username and password in settings are ok.
-                            if str(reply.text).find(SETTINGS.getSetting('username')) >= 0:
-                                dialog_wait.create("Login Success", "Currently looking for videos in '%s'" % self.title)
-                                xbmc.log('login was successful!')
+                            if str(response.text).find(SETTINGS.getSetting('username')) >= 0:
+                                # dialog_wait.create("Login Success", "Currently looking for videos in '%s'" % self.title)
+
+                                log('login was successful!', 'login was successful!')
+
                                 # let's try getting the page again after a login, hopefully it contains a link to
                                 # the video now
-                                reply = session.get(self.video_page_url)
-                                xbmc.log("[ADDON] %s v%s (%s) debug mode, Loaded %s" % (
-                                ADDON, VERSION, DATE, str(self.video_page_url)),
-                                         xbmc.LOGDEBUG)
+                                response = session.get(self.video_page_url)
+
+                                log("self.video_page_url", self.video_page_url)
+
                             else:
+
+                                log('login was NOT successful!', 'login was NOT successful!')
+
                                 try:
                                     dialog_wait.close()
                                     del dialog_wait
@@ -191,12 +195,13 @@ class Main:
                                 del dialog_wait
                             except:
                                 pass
-                            xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30104) % (str(reply.status_code)))
+                            xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30104) % (str(response.status_code)))
                             exit(1)
 
-                    except urllib2.HTTPError, error:
-                        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                            ADDON, VERSION, DATE, "HTTPError", str(error)), xbmc.LOGDEBUG)
+                    except urllib.error.HTTPError as error:
+
+                        log("HTTPError1", error)
+
                         try:
                             dialog_wait.close()
                             del dialog_wait
@@ -206,8 +211,9 @@ class Main:
                         exit(1)
                     except:
                         exception = sys.exc_info()[0]
-                        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                            ADDON, VERSION, DATE, "Exception1:", str(exception)), xbmc.LOGDEBUG)
+
+                        log("ExceptionError1", exception)
+
                         try:
                             dialog_wait.close()
                             del dialog_wait
@@ -224,9 +230,10 @@ class Main:
                     xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30105))
                     exit(1)
 
-        except urllib2.HTTPError, error:
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "HTTPError", str(error)), xbmc.LOGDEBUG)
+        except urllib.error.HTTPError as error:
+
+            log("HTTPError1", error)
+
             try:
                 dialog_wait.close()
                 del dialog_wait
@@ -236,8 +243,9 @@ class Main:
             exit(1)
         except:
             exception = sys.exc_info()[0]
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "Exception2:", str(exception)), xbmc.LOGDEBUG)
+
+            log("ExceptionError2", exception)
+
             try:
                 dialog_wait.close()
                 del dialog_wait
@@ -245,14 +253,14 @@ class Main:
                 pass
             exit(1)
 
-        html_source = reply.text
-        html_source = html_source.encode('utf-8', 'ignore')
+        html_source = response.text
+        html_source = convertToUnicodeString(html_source)
 
         video_url = ''
         no_url_found = True
         have_valid_url = False
 
-        match = re.search(b'\'(.*?m3u8)', html_source, re.I | re.U)
+        match = re.search('\'(.*?m3u8)', html_source, re.I | re.U)
         if match:
             if self.PREFERRED_QUALITY == '0':  # Very High Quality
                 quality = VQ1080P
@@ -269,13 +277,13 @@ class Main:
             video_url = str(match.group(1))
             video_url_altered = video_url.replace("index", "NewHLS-%s" % quality)
             # Find out if the m3u8 file exists
-            reply = session.get(video_url_altered)
+            response = session.get(video_url_altered)
             # m3u8 file is found, let's use that. If it is not found, let's use the unaltered video url.
-            if reply.status_code == 200:
+            if response.status_code == 200:
                 video_url = video_url_altered
             have_valid_url = True
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "final video_url", str(video_url)), xbmc.LOGDEBUG)
+
+            log("final video_url", video_url)
 
         # Play video...
         if have_valid_url:

@@ -4,23 +4,25 @@
 #
 # Imports
 #
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 import os
+import re
 import requests
 import sys
-import urllib
-import urlparse
-import xbmc
+import urllib.request, urllib.parse, urllib.error
 import xbmcgui
 import xbmcplugin
-from BeautifulSoup import BeautifulSoup
 
-from roosterteeth_const import ADDON, SETTINGS, DATE, VERSION, IMAGES_PATH
+from roosterteeth_const import ADDON, LANGUAGE, IMAGES_PATH, HEADERS, convertToUnicodeString, log, getSoup
 
 
 #
 # Main class
 #
-class Main:
+class Main(object):
     def __init__(self):
         # Get the command line arguments
         # Get the plugin url in plugin:// notation
@@ -28,17 +30,14 @@ class Main:
         # Get the plugin handle as an integer number
         self.plugin_handle = int(sys.argv[1])
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-                ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
+        log("ARGV", repr(sys.argv))
 
         # Parse parameters...
-        self.plugin_category = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['plugin_category'][0]
-        self.video_list_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['url'][0]
-        self.next_page_possible = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+        self.plugin_category = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['plugin_category'][0]
+        self.video_list_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
+        self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "self.video_list_page_url", str(self.video_list_page_url)),
-                     xbmc.LOGDEBUG)
+        log("self.video_list_page_url", self.video_list_page_url)
 
         #
         # Get the videos...
@@ -56,11 +55,15 @@ class Main:
         listing = []
 
         #
-        # Get HTML page...
+        # Get HTML page
         #
-        response = requests.get(self.video_list_page_url)
+        response = requests.get(self.video_list_page_url, headers=HEADERS)
+
         html_source = response.text
-        html_source = html_source.encode('utf-8', 'ignore')
+        html_source = convertToUnicodeString(html_source)
+
+        # Parse response
+        soup = getSoup(html_source)
 
         # for roosterteeth
         #       <li>
@@ -88,13 +91,9 @@ class Main:
         #   </a>
         # </li>
 
-        # Parse response...
-        soup = BeautifulSoup(html_source)
-
         shows = soup.findAll('li')
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "len(shows)", str(len(shows))), xbmc.LOGDEBUG)
+        log("len(shows)", len(shows))
 
         for show in shows:
             # Skip the show if it contains /episode/
@@ -116,18 +115,17 @@ class Main:
             if str(show).find("/episode/") < 0 :
                 pass
             else:
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                        ADDON, VERSION, DATE,
-                        "skipped /episode/ show ",
-                        str(show)), xbmc.LOGDEBUG)
+
+                log("skipped /episode/ show", show)
+
                 continue
 
             # Skip a show if it does not contain class="name"
             pos_classname = str(show).find('class="name"')
             if pos_classname < 0:
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                        ADDON, VERSION, DATE, 'skipped show without class="name"', str(show)),
-                             xbmc.LOGDEBUG)
+
+                log('skipped show without class="name"', show)
+
                 continue
 
             url = show.a['href']
@@ -137,12 +135,23 @@ class Main:
             except:
                 thumbnail_url = ''
 
-            title = show.a.text
+            title = show.a.text.strip()
+
+            # removing this stuff: 15 seasons | 320 episodes
+            first_number = re.search("\d", title)
+            if first_number:
+                title = title[0:first_number.start()]
+                title = title.strip()
+                if title == "E":
+                    title = "E3"
+
             if title == '':
                 try:
                     title = show.img['alt']
                 except:
                     title = 'Unknown Show Name'
+
+            log("title", title)
 
             # Add to list...
             list_item = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_url)
@@ -151,7 +160,7 @@ class Main:
             list_item.setProperty('IsPlayable', 'false')
             parameters = {"action": "list-episodes", "show_name": title, "url": url, "next_page_possible": "False",
                           "title": title}
-            url = self.plugin_url + '?' + urllib.urlencode(parameters)
+            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = True
             # Add refresh option to context menu
             list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])

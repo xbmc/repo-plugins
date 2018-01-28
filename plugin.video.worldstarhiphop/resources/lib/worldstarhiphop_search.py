@@ -4,26 +4,25 @@
 #
 # Imports
 #
-from BeautifulSoup import BeautifulSoup
-from worldstarhiphop_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION
-from worldstarhiphop_utils import HTTPCommunicator
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
+from worldstarhiphop_const import ADDON, SETTINGS, LANGUAGE, IMAGES_PATH, DATE, VERSION, BASEURL, HEADERS, convertToUnicodeString, log, getSoup
+import requests
 import os
 import re
 import sys
-import urllib, urllib2
-import urlparse
+import urllib.request, urllib.parse, urllib.error
 import xbmc
-import xbmcaddon
 import xbmcgui
 import xbmcplugin
-
-BASEURL = "http://www.worldstarhiphop.com"
 
 
 #
 # Main class
 #
-class Main:
+class Main(object):
     #
     # Init
     #
@@ -37,13 +36,12 @@ class Main:
         # Get plugin settings
         self.VIDEO = SETTINGS.getSetting('video')
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % (
-            ADDON, VERSION, DATE, "ARGV", repr(sys.argv), "File", str(__file__)), xbmc.LOGDEBUG)
+        log("ARGV", repr(sys.argv))
 
         try:
-            self.plugin_category = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['plugin_category'][0]
-            self.video_list_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['url'][0]
-            self.next_page_possible = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
+            self.plugin_category = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['plugin_category'][0]
+            self.video_list_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
+            self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
         except:
             self.plugin_category = LANGUAGE(30000)
             self.next_page_possible = "True"
@@ -71,9 +69,7 @@ class Main:
                     page_number_next_str = '00' + str(page_number_next)
                 self.next_url = str(self.video_list_page_url).replace(page_number_str, page_number_next_str)
 
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "self.next_url", str(urllib.unquote_plus(self.next_url))),
-                             xbmc.LOGDEBUG)
+                log("self.next_url", self.next_url)
 
         #
         # Get the videos...
@@ -92,12 +88,15 @@ class Main:
         listing = []
 
         #
-        # Get HTML page...
+        # Get HTML page
         #
-        html_source = HTTPCommunicator().get(self.video_list_page_url)
+        response = requests.get(self.video_list_page_url, headers=HEADERS)
 
-        # Parse response...
-        soup = BeautifulSoup(html_source)
+        html_source = response.text
+        html_source = convertToUnicodeString(html_source)
+
+        # Parse response
+        soup = getSoup(html_source)
 
         # <section class="box" itemscope itemtype="http://schema.org/ImageObject">
         #     <a itemprop="url" href="/videos/video.php?v=wshh2CJS555r6b1C9wYW" class="video-box">
@@ -113,25 +112,25 @@ class Main:
 
         items = soup.findAll('section', attrs={'class': re.compile("^box")})
 
-        xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-            ADDON, VERSION, DATE, "len(items)", str(len(items))), xbmc.LOGDEBUG)
+        log("len(items)", len(items))
 
         for item in items:
             try:
                 video_page_url = BASEURL + str(item.a['href'])
             except:
                 # skip the item if it does not have a href
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                    ADDON, VERSION, DATE, "skipping item without href", str(item)), xbmc.LOGDEBUG)
+
+                log("skipping item without href", item)
+
                 continue
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "video_page_url", str(video_page_url)), xbmc.LOGDEBUG)
+            log("video_page_url", video_page_url)
 
             # skip the item if the video page url isn't a real video page url
             if str(video_page_url).find('/videos/video.php?v=') == -1:
-                xbmc.log("[ADDON] %s v%s (%s) debug mode, %s " % (
-                    ADDON, VERSION, DATE, "skipping item because no video could be found"), xbmc.LOGDEBUG)
+
+                log("skipping item because no video could be found", video_page_url)
+
                 continue
 
             try:
@@ -139,16 +138,9 @@ class Main:
             except:
                 thumbnail_url = item.img['src']
 
-            xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
-                ADDON, VERSION, DATE, "thumbnail_url", str(thumbnail_url)), xbmc.LOGDEBUG)
+            log("thumbnail_url", thumbnail_url)
 
             title = item.img['alt']
-
-            # Clean up title
-            try:
-                title = title.encode('utf-8')
-            except:
-                pass
 
             title = title.replace('-', ' ')
             title = title.replace('/', ' ')
@@ -199,9 +191,7 @@ class Main:
             title = title.replace('&rsquo;', "'")
             title = title.replace('&ndash;', "/")
 
-            xbmc.log(
-                    "[ADDON] %s v%s (%s) debug mode, %s = %s" % (ADDON, VERSION, DATE, "title", str(title)),
-                    xbmc.LOGDEBUG)
+            log("title", title)
 
             # Add to list...
             list_item = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_url)
@@ -210,7 +200,7 @@ class Main:
                               'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'true')
             parameters = {"action": "play", "video_page_url": video_page_url, "title": title}
-            url = self.plugin_url + '?' + urllib.urlencode(parameters)
+            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = False
             # Add refresh option to context menu
             list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])
@@ -224,7 +214,7 @@ class Main:
             list_item.setProperty('IsPlayable', 'false')
             parameters = {"action": "list", "plugin_category": self.plugin_category, "url": str(self.next_url),
                           "next_page_possible": self.next_page_possible}
-            url = self.plugin_url + '?' + urllib.urlencode(parameters)
+            url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
             is_folder = True
             # Add refresh option to context menu
             list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])

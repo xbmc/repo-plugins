@@ -66,6 +66,17 @@ msgctxt "#30024"
 msgid "Watch trailer"
 msgstr "Regarde la bande-annonce"
 
+msgctxt "#30025"
+msgid "Last aired episodes"
+msgstr "Derniers épisodes diffusés"
+
+msgctxt "#30026"
+msgid "Latest simulcast shows"
+msgstr "Dernières séries"
+
+msgctxt "#30027"
+msgid "My watchlist"
+msgstr "Ma watchlist"
 
 # Wakanim Messages
 
@@ -88,3 +99,7 @@ msgstr "Vous devez être un membre premium ou posséder cette vidéo"
 msgctxt "#30044"
 msgid "Failed to play video"
 msgstr "Impossible de lire de la vidéo"
+
+msgctxt "#30045"
+msgid "Do you want to continue watching at %s%%?"
+msgstr "Voulez-vous continuer à regarder à %s%%?"

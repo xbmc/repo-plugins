@@ -42,8 +42,11 @@ class ITTests(unittest.TestCase):
         self.assertTrue(audios is not None and len(audios['audio_list']) > 10)
         self.assertTrue(audios['audio_list'][0]['title'] != '')
         self.assertTrue(audios['audio_list'][0]['url'].startswith('http'))
-        self.assertTrue(audios['audio_list'][0]['action'] == 'play_audio')
-        self.assertTrue(audios['audio_list'][0]['duration'] != '')
+        self.assertTrue(audios['audio_list'][0]['action'] == 'search_program')
+        self.assertTrue(audios['audio_list'][1]['title'] != '')
+        self.assertTrue(audios['audio_list'][1]['url'].startswith('http'))
+        self.assertTrue(audios['audio_list'][1]['action'] == 'play_audio')
+        self.assertTrue(audios['audio_list'][1]['duration'] != '')
         self.assertTrue(audios['audio_list'][-1]['title'] != '')
         self.assertTrue(audios['audio_list'][-1]['url'].startswith('http'))
         self.assertTrue(audios['audio_list'][-1]['action'] == 'audio_list')
@@ -58,6 +61,15 @@ class ITTests(unittest.TestCase):
         self.assertTrue(audios['search_list'][-1]['title'] != '')
         self.assertTrue(audios['search_list'][-1]['url'].startswith('http'))
         self.assertTrue(audios['search_list'][-1]['action'] == 'search_list')
+
+    def test_5_direct_channels(self):
+        direct_channels = api.get_direct_channels()
+        self.assertTrue(direct_channels is not None and len(direct_channels) == 6)
+        channel_url = direct_channels[0]['url']
+        self.assertTrue(channel_url.startswith('http'))
+        if channel_url.endswith('m3u'):
+            direct_url = api.get_playable_url(channel_url)
+            self.assertTrue(direct_url.startswith('http'))
 
 
 if __name__ == '__main__':

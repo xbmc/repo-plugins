@@ -155,7 +155,6 @@ def program_list(params):
                 program     = item.get('program',   ''),
                 canal       = item.get('canal',     ''),
                 genre       = item.get('genre',     ''),
-                reset_cache = reset_cache,
             ),
             'IsPlayable'    : False,
             } for item in programs.get('program_list') ]
@@ -202,6 +201,18 @@ def audio_list(params):
         } for audio_entry in audios.get('audio_list') ]
 
     p.add_items(audio_items, reset_cache == 'yes')
+
+
+def search_program(params):
+    """This function gets the URL for search the podcast by title inside the program list."""
+    p.log("rne.search_program "+repr(params))
+
+    search_string = p.get_keyboard_text(get_located_string('Search'))
+    if search_string:
+         params['url'] = params.get('url') % search_string.replace(' ', '%20')
+         params['search'] = search_string
+         p.log("rne.search_program Value of search url: %s" % params['url'])
+         return audio_list(params)
 
 
 def menu_direct(params):
@@ -251,7 +262,7 @@ def search_list(params):
             'album'     : '"%s"' % params.get('search'),
             'artist'    : get_located_string('Search result'),
             'comment'   : audio_entry.get('comment', ''),
-            'year'      : audio_entry.get('year', ''),
+            'year'      : audio_entry.get('year',     0),
             'rating'    : 0,
         },
         'path'          : p.get_plugin_path(

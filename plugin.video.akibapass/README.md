@@ -9,30 +9,21 @@ Forum posting: https://www.kodinerds.net/index.php/Thread/58346-Release-Akibapas
 **WARNING: You MUST be a PREMIUM member OR buy videos to use this plugin!**
 ***
 
-Compatibility
-
-| Device  | Kodi | Status |
-| ------------- | ------------- | ------------- |
-| Windows | 17.x  | Yes  |
-| Linux | 17.x  | Yes  |
-| MacOS | 17.x  | untested  |
-| Android | 17.x  | Yes  |
-| iOS | 17.x  | untested  |
-| RaspberryPi | 17.x  | Yes  |
-***
-
 What this plugin currently can do:
 - [x] Login with your account
+- [x] View last aired episodes
+- [x] View last simulcasts
 - [x] Search for animes
-- [x] Show "My Downloads"
-- [x] Show "My Collection"
-- [x] Show/browse all available anime
-- [x] Show/browse all seasons/arcs of an anime
-- [x] Show/browse all episodes of an season/arc
-- [x] Display various informations (Kodi displays not all we provide)
+- [x] View "My Downloads"
+- [x] View "My Collection"
+- [x] View all available anime
+- [x] View all seasons/arcs of an anime
+- [x] View all episodes of an season/arc
+- [x] Display various informations
 - [x] Reactivate videos/streams
 - [x] Watch videos you have bought
 - [x] Watch videos with premium subscription
+- [x] Watch anime trailer (requires YouTube plugin)
 ***
 
 _Akibapass is a registered trademark of the peppermint anime gmbh.

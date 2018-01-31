@@ -17,7 +17,7 @@ import xbmcgui
 import xbmcplugin
 
 from roosterteeth_const import LANGUAGE, SETTINGS, HEADERS, convertToUnicodeString, log, getSoup, LOGINURL_RT, LOGINURL_AH, \
-    LOGINURL_FH, LOGINURL_SA, LOGINURL_GA, LOGINURL_TK, LOGINURL_CC, LOGINURL_SP7, NEWHLS, VQ1080P, VQ720P, VQ480P, \
+    LOGINURL_FH, LOGINURL_SA, LOGINURL_GA, LOGINURL_TK, LOGINURL_CC, LOGINURL_SP7, VQ4K, VQ1080P, VQ720P, VQ480P, \
     VQ360P, VQ240P
 
 
@@ -261,26 +261,66 @@ class Main(object):
         have_valid_url = False
 
         match = re.search('\'(.*?m3u8)', html_source, re.I | re.U)
+
+        #index.m3u8:
+        #f.e. https://rtv3-video.roosterteeth.com/store/66b4a662c6aba71015e1ecd267a01590-6b7aafe6/ts/index.m3u8:
+        #EXTM3U
+        #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=11844000,RESOLUTION=1920x1080,CODECS="avc1.4d001f,mp4a.40.2"6b7aafe6-hls_4k-store-66b4a662c6aba71015e1ecd267a01590.m3u8
+        #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=11844000,RESOLUTION=1920x1080,CODECS="avc1.4d001f,mp4a.40.2"6b7aafe6-hls_1080p-store-66b4a662c6aba71015e1ecd267a01590.m3u8
+        #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=6661000,RESOLUTION=1280x720,CODECS="avc1.4d001f,mp4a.40.2"6b7aafe6-hls_720p-store-66b4a662c6aba71015e1ecd267a01590.m3u8
+        #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=3712000,RESOLUTION=854x480,CODECS="avc1.4d001f,mp4a.40.2"6b7aafe6-hls_480p-store-66b4a662c6aba71015e1ecd267a01590.m3u8
+        #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2598000,RESOLUTION=640x360,CODECS="avc1.4d001f,mp4a.40.2"6b7aafe6-hls_360p-store-66b4a662c6aba71015e1ecd267a01590.m3u8
+        #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=1478000,RESOLUTION=426x240,CODECS="avc1.4d001f,mp4a.40.2"6b7aafe6-hls_240p-store-66b4a662c6aba71015e1ecd267a01590.m3u8
+
+
         if match:
-            if self.PREFERRED_QUALITY == '0':  # Very High Quality
-                quality = VQ1080P
-            elif self.PREFERRED_QUALITY == '1':  # High Quality
-                quality = VQ720P
+            if self.PREFERRED_QUALITY == '0':  # Very Low
+                quality = VQ240P
+            elif self.PREFERRED_QUALITY == '1':  # Low
+                quality = VQ360P
             elif self.PREFERRED_QUALITY == '2':  # Medium
                 quality = VQ480P
-            elif self.PREFERRED_QUALITY == '3':  # Low
-                quality = VQ360P
-            elif self.PREFERRED_QUALITY == '4':  # Very Low
-                quality = VQ240P
+            elif self.PREFERRED_QUALITY == '3':  # High Quality
+                quality = VQ720P
+            elif self.PREFERRED_QUALITY == '4':  # Very High Quality
+                quality = VQ1080P
+            elif self.PREFERRED_QUALITY == '5':  # Ultra High Quality
+                quality = VQ4K
             else:  # Default in case quality is not found?
                 quality = VQ720P
+
             video_url = str(match.group(1))
-            video_url_altered = video_url.replace("index", "NewHLS-%s" % quality)
+
+            log("video_url", video_url)
+
+            #Change this
+            #https://rtv3-video.roosterteeth.com/store/66b4a662c6aba71015e1ecd267a01590-6b7aafe6/ts/index.m3u8
+            #to this
+            #https://rtv3-video.roosterteeth.com/store/66b4a662c6aba71015e1ecd267a01590-6b7aafe6/ts/6b7aafe6-hls_<quality>-store-66b4a662c6aba71015e1ecd267a01590.m3u8
+            #f.e.
+            #https://rtv3-video.roosterteeth.com/store/66b4a662c6aba71015e1ecd267a01590-6b7aafe6/ts/6b7aafe6-hls_240p-store-66b4a662c6aba71015e1ecd267a01590.m3u8
+
+            new_index_part_2 = 'hls_' + quality
+            video_url_temp = video_url
+            video_url_temp = video_url_temp.replace("//", "/")
+            video_url_parts = str(video_url_temp).split("/")
+            new_index_part_3 = video_url_parts[2]
+            part4 = video_url_parts[3]
+            new_index_part_4, new_index_part_1 = part4.split("-")
+            new_index = new_index_part_1 + '-' + new_index_part_2 + '-' + new_index_part_3 + '-' + new_index_part_4
+            video_url_altered = video_url.replace("index", new_index)
+
+            log("video_url_altered", video_url_altered)
+
             # Find out if the m3u8 file exists
             response = session.get(video_url_altered)
+
+            # log("response.status_code", response.status_code)
+
             # m3u8 file is found, let's use that. If it is not found, let's use the unaltered video url.
             if response.status_code == 200:
                 video_url = video_url_altered
+
             have_valid_url = True
 
             log("final video_url", video_url)

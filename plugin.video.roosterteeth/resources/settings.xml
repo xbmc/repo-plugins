@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
   <category label="General">
-    <setting id="quality" 	    	  type="enum"   label="30010" lvalues="30011|30012|30013|30014|30019" 	default="1"/>
-    <setting id="is_sponsor" 	      type="bool"   label="30015" 											default="false"/>
-    <setting id="username" 	     	  type="text"   label="30016" 											default="" 							  enable="eq(-1,true)"/>
-    <setting id="password" 		      type="text"   label="30017" 											default="" 			option="hidden"   enable="eq(-2,true)"/>
+    <setting id="quality" 	    	  type="enum"   label="30020" lvalues="30026|30025|30024|30023|30022|30021"     default="4"/>
+    <setting id="is_sponsor" 	      type="bool"   label="30015" 											        default="false"/>
+    <setting id="username" 	     	  type="text"   label="30016" 											        default="" 							  enable="eq(-1,true)"/>
+    <setting id="password" 		      type="text"   label="30017" 											        default="" 			option="hidden"   enable="eq(-2,true)"/>
   </category>
 </settings>

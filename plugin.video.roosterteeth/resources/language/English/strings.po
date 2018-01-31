@@ -27,26 +27,6 @@ msgctxt "Addon Disclaimer"
 msgid "For bugs, requests or general questions visit the Roosterteeth.com thread on the Kodi forum"
 msgstr ""
 
-msgctxt "#30010"
-msgid "Maximum Video Quality"
-msgstr ""
-
-msgctxt "#30011"
-msgid "Very High"
-msgstr ""
-
-msgctxt "#30012"
-msgid "High"
-msgstr ""
-
-msgctxt "#30013"
-msgid "Medium"
-msgstr ""
-
-msgctxt "#30014"
-msgid "Low"
-msgstr ""
-
 msgctxt "#30015"
 msgid "Rooster Teeth Sponsor"
 msgstr ""
@@ -59,8 +39,32 @@ msgctxt "#30017"
 msgid "Password"
 msgstr ""
 
-msgctxt "#30019"
-msgid "Very Low"
+msgctxt "#30020"
+msgid "Maximum Video Quality"
+msgstr ""
+
+msgctxt "#30021"
+msgid "4K"
+msgstr ""
+
+msgctxt "#30022"
+msgid "1080P"
+msgstr ""
+
+msgctxt "#30023"
+msgid "720P"
+msgstr ""
+
+msgctxt "#30024"
+msgid "480P"
+msgstr ""
+
+msgctxt "#30025"
+msgid "360P"
+msgstr ""
+
+msgctxt "#30026"
+msgid "240P"
 msgstr ""
 
 msgctxt "#30100"

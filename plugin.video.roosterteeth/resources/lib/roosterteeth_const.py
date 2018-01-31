@@ -38,15 +38,15 @@ LOGINURL_GA = 'http://gameattack.roosterteeth.com/login'
 LOGINURL_TK = 'http://theknow.roosterteeth.com/login'
 LOGINURL_CC = 'http://cowchop.roosterteeth.com/login'
 LOGINURL_SP7 = 'http://sugarpine7.roosterteeth.com/login'
-NEWHLS = 'NewHLS-'
-VQ1080P = '1080P'
-VQ720P = '720P'
-VQ480P = '480P'
-VQ360P = '360P'
-VQ240P = '240P'
+VQ4K = '4k'
+VQ1080P = '1080p'
+VQ720P = '720p'
+VQ480P = '480p'
+VQ360P = '360p'
+VQ240P = '240p'
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
-DATE = "2018-02-21"
-VERSION = "1.3.5"
+DATE = "2018-01-31"
+VERSION = "1.3.6"
 
 
 if sys.version_info[0] > 2:

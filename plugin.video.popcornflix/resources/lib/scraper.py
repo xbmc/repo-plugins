@@ -31,7 +31,8 @@ class myAddon(t1mAddon):
       return(ilist)
 
   def getAddonShows(self,url,ilist):
-      html = self.getRequest('https://api.unreel.me/v2/sites/popcornflix/channels/TV_SHOWS/series?__site=popcornflix&__source=web&index=0&max=30')
+#      html = self.getRequest('https://api.unreel.me/v2/sites/popcornflix/channels/TV_SHOWS/series?__site=popcornflix&__source=web&index=0&max=30')
+      html = self.getRequest('https://api.unreel.me/v2/sites/popcornflix/channels/tv_shows_series/series?__site=popcornflix&__source=web&page=0&pageSize=80')
       a = json.loads(html)
       for b in a['videos']:
           infoList = {}

@@ -17,8 +17,6 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
-import copy
-import json
 from functools import wraps
 import utils
 from common import kodi, log_utils
@@ -64,19 +62,6 @@ def api_error_handler(func):
     def wrapper(*args, **kwargs):
         try:
             result = func(*args, **kwargs)
-            logging_result = copy.deepcopy(result)
-            try:
-                if u'email' in logging_result:
-                    logging_result[u'email'] = 'addon@removed.org'
-                if u'token' in logging_result:
-                    if u'client_id' in logging_result[u'token']:
-                        logging_result[u'token'][u'client_id'] = logging_result[u'token'][u'client_id'][:4] + \
-                                                         ('*' * (len(logging_result[u'token'][u'client_id']) - 8)) + \
-                                                                 logging_result[u'token'][u'client_id'][(len(logging_result[u'token'][u'client_id']) - 4):]
-                logging_result = json.dumps(logging_result, indent=4)
-            except:
-                pass
-            log_utils.log(logging_result, log_utils.LOGDEBUG)
             return result
         except:
             raise

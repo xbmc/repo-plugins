@@ -61,6 +61,8 @@ class myAddon(t1mAddon):
         self.defaultVidStream['width']  = 1280
         self.defaultVidStream['height'] = 720
         url = uqp(url)
+        if not url.startswith('http:'):
+            url = 'http:'+url
         showName = xbmc.getInfoLabel('ListItem.Title')
         html  = self.getRequest(url)
         html    = re.compile('<div id="video-player".+?type="text/x-config">(.+?)</script>',re.DOTALL).search(html)

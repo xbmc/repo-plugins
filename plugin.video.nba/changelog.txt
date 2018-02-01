@@ -1,3 +1,8 @@
+1.0.1   (18/07/2017)
+        Fix undefined variable for archive games
+        Changed username to email
+        Support variable bit rate HLS
+        Fix (again) for utf8 chars in path
 1.0.0   (02/05/2017)
         Added background service to allow NBA TV live (not episodes, currently) to play endlessly without interruptions
         Added favorite team (thanks @rikware)

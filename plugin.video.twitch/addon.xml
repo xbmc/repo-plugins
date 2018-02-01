@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-<addon id='plugin.video.twitch' version='2.0.0' name='Twitch' provider-name='A Talented Community'>
+<addon id='plugin.video.twitch' version='2.1.1' name='Twitch' provider-name='A Talented Community'>
     <requires>
         <import addon='xbmc.python' version='2.20.0'/>
-        <import addon="script.module.python.twitch"/>
+        <import addon="script.module.python.twitch" version="2.0.0"/>
         <import addon="script.module.requests" version="2.9.1"/>
     </requires>
     <extension point='xbmc.python.pluginsource' library='resources/lib/routes.py'>
@@ -12,58 +12,47 @@
     <extension point='xbmc.addon.metadata'>
         <platform>all</platform>
         <news>
-*** NOT backwards compatible with v1 (favorites, routes will NOT work)
-*** New OAuth token required, see Settings - Get OAuth token
-- Kodi 17 ready, content/media types set per new official repository requirements
-- remove xbmcswift dependency
-- remove api portion in favor of new module script.module.python.twitch (based on python-twitch by ingwinlu)
-- remove Teams, end-points (no longer available)
-- use Twitch API v5
-- add caching for api calls, cache can be set/cleared from settings
-- add token generation, checking
-- add context menus:
-    - refresh
-    - 'go to' channel videos(display name) for streams
-    - 'go to' game for streams and videos
-- quality selection ask/source/bandwidth (clips excluded from bandwidth)
-- add Live notifications for following
-- add more search options
-- add Communities
-- add Follow/Unfollow
-- add blacklisting of users/games/communities (search excluded)
-- add set default quality for stream/video/clips per channel
-- add Playlists
-- add Collections
-- add Clips
-- add Languages
-- add Change sort by/period/direction
-- add support for timestamp in urls (Search - Video Id/Url)
-- add Attempt reconnection to live streams
-- add/remove menu items to/from the Main Menu
+2.1.1
+[fix] video default qualities
+[fix] setContentLookup AttributeError
+2.1.0
+[chg] string paths
+[fix] required changes for script.module.python.twitch v2.0.0 refactor
+[fix] multiple reconnections to same stream
+[upd] don't show watched marks for streams
+[upd] leave api logging to script.module.python.twitch
+[add] channel_name to play route, can use channel_id or channel_name
+[add] inputstream.adaptive support for inputstream.adaptive versions >= 2.0.10
+[add] Revoke token
+[add] Update token route
+[add] Reset cache on Refresh to Settings -> Cache
+[add] notify at start and group notifications at start to live notification settings
+[add] logo and game to live notifications
+[add] Hebrew strings [Eng2Heb]
         </news>
         <assets>
             <icon>icon.png</icon>
             <fanart>fanart.png</fanart>
         </assets>
-        <language>en</language>
+        <language></language>
         <source>https://github.com/MrSprigster/Twitch-on-Kodi</source>
         <license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>
         <forum>http://forum.kodi.tv/showthread.php?tid=134538</forum>
-        <summary lang='da'>Twitch video plugin</summary>
-        <description lang='da'>Se dine favorit gaming streams!</description>
-        <summary lang='de'>Twitch video plugin</summary>
-        <description lang='de'>Schaue die besten Gaming-Streams!</description>
-        <summary lang='en'>Twitch video plugin</summary>
-        <description lang='en'>Watch your favorite gaming streams!</description>
-        <summary lang='es'>Twitch video plugin</summary>
-        <description lang='es'>¡Mira los streams de tus juegos favoritos!</description>
-        <summary lang='fr'>Twitch video plugin</summary>
-        <description lang='fr'>Regardez les streams de vos jeux favoris !</description>
-        <summary lang='nl'>Twitch video plugin</summary>
-        <description lang='nl'>Bekijk je favoriete gaming-streams!</description>
-        <summary lang='no'>Tillegg for Twitch</summary>
-        <description lang='no'>Se dine favorittstrømmere!</description>
-        <summary lang='pl'>Twitch video plugin</summary>
-        <description lang='pl'>Oglądaj ulubione programy TwitchTV!</description>
+        <summary lang='da_dk'>Twitch video plugin</summary>
+        <description lang='da_dk'>Se dine favorit gaming streams!</description>
+        <summary lang='de_de'>Twitch video plugin</summary>
+        <description lang='de_de'>Schaue die besten Gaming-Streams!</description>
+        <summary lang='en_gb'>Twitch video plugin</summary>
+        <description lang='en_gb'>Watch your favorite gaming streams!</description>
+        <summary lang='es_es'>Twitch video plugin</summary>
+        <description lang='es_es'>¡Mira los streams de tus juegos favoritos!</description>
+        <summary lang='fr_fr'>Twitch video plugin</summary>
+        <description lang='fr_fr'>Regardez les streams de vos jeux favoris !</description>
+        <summary lang='nl_nl'>Twitch video plugin</summary>
+        <description lang='nl_nl'>Bekijk je favoriete gaming-streams!</description>
+        <summary lang='nb_no'>Tillegg for Twitch</summary>
+        <description lang='nb_no'>Se dine favorittstrømmere!</description>
+        <summary lang='pl_pl'>Twitch video plugin</summary>
+        <description lang='pl_pl'>Oglądaj ulubione programy TwitchTV!</description>
     </extension>
 </addon>

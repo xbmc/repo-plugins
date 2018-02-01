@@ -40,6 +40,8 @@ class myAddon(t1mAddon):
   def getAddonEpisodes(self,url,ilist):
       self.defaultVidStream['width']  = 1280
       self.defaultVidStream['height'] = 720
+      if not url.startswith('http:'):
+          url = 'http:'+url
       html = self.getRequest(url)
       vids  = re.compile('"videos"\: \[(.+?)\]',re.DOTALL).search(html).group(1)
       vids = '['+vids+']'

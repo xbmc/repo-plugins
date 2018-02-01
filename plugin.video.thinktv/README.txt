@@ -4,6 +4,7 @@ plugin.video.thinktv
 Kodi Video Addon for PBS ThinkTV
 For Kodi Isengard and above releases
 
+version 3.0.10 quick fix for website change
 version 3.0.9 fix for website change, add episode search
 version 3.0.8 fix for website change
 version 3.0.7 fix for episode, clip and preview counts

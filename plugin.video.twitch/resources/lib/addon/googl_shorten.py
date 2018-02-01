@@ -21,12 +21,10 @@ import requests
 import json
 from common import log_utils
 from base64 import b64decode
-import cache
 
 __key = 'QUl6YVN5RE1qUHVQTzExNDAxc19Ydl95TVNaa0hTUVZTRUwzV1R3'
 
 
-@cache.cache_function(cache_limit=1)
 def googl_url(url):
     post_url = 'https://www.googleapis.com/urlshortener/v1/url?key=%s' % b64decode(__key)
     data = {'longUrl': url}

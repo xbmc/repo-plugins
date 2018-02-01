@@ -118,5 +118,14 @@ STRINGS = {
     'duration': 30215,
     'curated': 30216,
     'ok_to_resolve': 30217,
-    'search_id_url_description': 30218
+    'search_id_url_description': 30218,
+    'authorize_url_fail': 30220,
+    'unknown': 30221,
+    'adaptive_is_disabled': 30225,
+    'adaptive_version_check': 30226,
+    'revoke_token': 30227,
+    'revoke_confirmation': 30228,
+    'token_revoked': 30229,
+    'token_updated': 30230,
+    'started_streaming': 30231
 }

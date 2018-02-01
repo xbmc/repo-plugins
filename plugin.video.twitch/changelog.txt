@@ -1,3 +1,40 @@
+2.1.1
+[fix] video default qualities
+[fix] setContentLookup AttributeError
+
+2.1.0
+[chg] string paths
+[fix] required changes for script.module.python.twitch v2.0.0 refactor
+[fix] multiple reconnections to same stream
+[upd] don't show watched marks for streams
+[upd] leave api logging to script.module.python.twitch
+[add] channel_name to play route, can use channel_id or channel_name
+[add] inputstream.adaptive support for inputstream.adaptive versions >= 2.0.10
+[add] Revoke token
+[add] Update token route
+[add] Reset cache on Refresh to Settings -> Cache
+[add] notify at start and group notifications at start to live notification settings
+[add] logo and game to live notifications
+[add] Hebrew strings [Eng2Heb]
+
+2.0.2
+[fix/upd] use display names for communities
+
+2.0.1
+[fix] only open chat for live streams
+[fix] notify to retry if goo.gl url shortening fails for authentication
+[fix] check for game value before adding Goto Game context menu
+[fix] blacklist filter excluding unset game
+[fix] use same quality on stream reconnection
+[fix] do not ask for search query on '..'
+[fix] remake cache path on clear
+[fix/upd] cache static menus to disk
+[fix/upd] pagination to Followed Games
+[add] Kodi per-page sort methods
+[add] quality parameter added to play route
+[add] channel and viewer count to Games where possible
+[add] VodCast colorization
+
 2.0.0
 *** NOT backwards compatible with v1 (favorites, routes will NOT work)
 *** New OAuth token required, see Settings - Get OAuth token

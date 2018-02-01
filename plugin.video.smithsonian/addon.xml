@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.smithsonian"
        name="Smithsonian Channel"
-       version="3.0.1"
+       version="3.0.2"
        provider-name="t1m">
   <requires>
     <import addon="xbmc.python" version="2.20.0"/>
-    <import addon="script.module.t1mlib" version="1.0.14"/>
+    <import addon="script.module.t1mlib" version="1.0.18"/>
   </requires>
   <extension point="xbmc.python.pluginsource"
             library="default.py">
@@ -21,6 +21,6 @@
     <forum>http://forum.kodi.tv/showthread.php?tid=214784</forum>
     <website>www.smithsonianchannel.com</website>
     <email></email>
-    <source>https://github.com/learningit/plugin.video.smithsonian/</source>
+    <source>https://github.com/learningit/repo-plugins/</source>
   </extension>
 </addon>

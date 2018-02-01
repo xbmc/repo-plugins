@@ -140,9 +140,17 @@ class myAddon(t1mAddon):
               html = self.getRequest(url)
               url = re.compile('http(.+?)\n', re.DOTALL).search(html).group(1)
               url = 'http'+url.strip()
-          else:
+          elif not (url.endswith(".mp4") or url.endswith(".flv")):
               headers = self.defaultHeaders.copy()
               headers['User-Agent']= 'Mozilla/5.0 (Linux; U; en-US) AppleWebKit/528.5+ (KHTML, like Gecko, Safari/528.5+) Version/4.0 Kindle/3.0 (screen 600X800; rotate)'
+              html = self.getRequest(url, headers=headers)
+              urls = re.compile('BANDWIDTH=(.+?),.+?\n(.+?)\n', re.DOTALL).findall(html)
+              blast = 0
+              for b,u in urls:
+                  b = int(b)
+                  if blast < b:
+                      url = u
+                      blast = b
               url += '|User-Agent='+urllib.quote(headers['User-Agent'])
       liz = xbmcgui.ListItem(path = url)
       infoList ={}

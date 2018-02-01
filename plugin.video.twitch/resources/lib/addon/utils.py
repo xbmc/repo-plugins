@@ -19,12 +19,13 @@
 
 import re
 import time
+import urllib
 from datetime import datetime
 from base64 import b64decode
 from common import kodi, json_store
 from strings import STRINGS
 from tccleaner import TextureCacheCleaner
-from constants import CLIENT_ID, REDIRECT_URI, LIVE_PREVIEW_TEMPLATE, Images, ADDON_DATA_DIR, REQUEST_LIMIT
+from constants import CLIENT_ID, REDIRECT_URI, LIVE_PREVIEW_TEMPLATE, Images, ADDON_DATA_DIR, REQUEST_LIMIT, COLORS
 from twitch.api.parameters import Boolean, Period, ClipPeriod, Direction, Language, SortBy, VideoSort
 import xbmcvfs
 
@@ -32,7 +33,7 @@ translations = kodi.Translations(STRINGS)
 i18n = translations.i18n
 
 if not xbmcvfs.exists(ADDON_DATA_DIR):
-    result = xbmcvfs.mkdir(ADDON_DATA_DIR)
+    mkdir_result = xbmcvfs.mkdir(ADDON_DATA_DIR)
 storage = json_store.JSONStore(ADDON_DATA_DIR + 'storage.json')
 
 
@@ -42,6 +43,50 @@ def show_menu(menu, parent=None):
         setting_id += '_%s' % parent
     setting_id += '_%s' % menu
     return kodi.get_setting(setting_id) == 'true'
+
+
+def loose_version(v):
+    filled = []
+    for point in v.split("."):
+        filled.append(point.zfill(8))
+    return tuple(filled)
+
+
+def use_inputstream_adaptive():
+    if kodi.get_setting('video_quality_ia') == 'true':
+        if kodi.get_setting('video_support_ia_builtin') == 'true':
+            return True
+        elif kodi.get_setting('video_support_ia_addon') == 'true':
+            use_ia = kodi.get_setting('video_quality_ia') == 'true'
+            if not use_ia:
+                return False
+
+            ia_enabled = kodi.addon_enabled('inputstream.adaptive')
+            if ia_enabled is False:
+                if kodi.Dialog().yesno(kodi.get_name(), i18n('adaptive_is_disabled')):
+                    ia_enabled = kodi.set_addon_enabled('inputstream.adaptive')
+
+            if ia_enabled:
+                ia_min_version = '2.0.10'
+                ia_version = kodi.Addon('inputstream.adaptive').getAddonInfo('version')
+                ia_enabled = loose_version(ia_version) >= loose_version(ia_min_version)
+                if not ia_enabled:
+                    result = kodi.Dialog().ok(kodi.get_name(), i18n('adaptive_version_check') % ia_min_version)
+
+            if not ia_enabled:
+                kodi.set_setting('video_quality_ia', 'false')
+                return False
+            else:
+                return True
+        else:
+            kodi.set_setting('video_quality_ia', 'false')
+            return False
+    else:
+        return False
+
+
+def append_headers(headers):
+    return '|%s' % '&'.join(['%s=%s' % (key, urllib.quote_plus(headers[key])) for key in headers])
 
 
 def get_redirect_uri():
@@ -118,6 +163,12 @@ def get_offset(offset, item, items, key=None):
             return int(offset) + next(index for (index, _item) in enumerate(items) if item == _item[key])
     except:
         return None
+
+
+def get_vodcast_color():
+    color = int(kodi.get_setting('vodcast_highlight'))
+    color = COLORS.split('|')[color]
+    return color.decode('utf-8')
 
 
 def the_art(art=None):
@@ -459,7 +510,7 @@ class BlacklistFilter(object):
                     identification = id_parent[key]
             if game_key and identification:
                 identification = identification if identification else ''
-            if identification:
+            if identification is not None:
                 if not is_blacklisted(identification, list_type=list_type):
                     filtered_results[result_key].append(result)
         return filtered_results

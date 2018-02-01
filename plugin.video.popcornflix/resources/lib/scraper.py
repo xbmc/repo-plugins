@@ -23,43 +23,66 @@ UTF8     = 'utf-8'
 class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
-      html = self.getRequest('http://www.popcornflix.com')
-      m  = re.compile('>Home<(.+?)</ul',re.DOTALL).search(html)
-      cats = re.compile('<a href="(.+?)">(.+?)</a>',re.DOTALL).findall(html, m.start(1),m.end(1))
-      cats = cats[0:2]
-      m = re.compile('Genres(.+?)<div class=',re.DOTALL).search(html)
-      c2 = re.compile('<a href="(.+?)">(.+?)</a>',re.DOTALL).findall(html, m.start(1),m.end(1))
-      cats.extend(c2)
-      slist = []
-      for url,name in cats:
-          if name == 'Espanol':
-              break
-          if url in slist:
-              continue
-          slist.append(url)
-          name = '[COLOR blue]'+name+'[/COLOR]'
-          ilist = self.addMenuItem(name,'GM', ilist, url, self.addonIcon, self.addonFanart, {} , isFolder=True)
+      ilist = self.addMenuItem('[COLOR blue]TV Shows[/COLOR]','GS', ilist, 'abc', self.addonIcon, self.addonFanart, {} , isFolder=True)
+      html = self.getRequest('https://api.unreel.me/api/assets/5977ea0d32ef9f015341c987/discover?__site=popcornflix&__source=web&onlyEnabledChannels=true')
+      a = json.loads(html)
+      for b in a['channels']:
+          ilist = self.addMenuItem(b.get('name'),'GM', ilist, b.get('channelId')+'/0', b.get('thumbnail'), self.addonFanart, {} , isFolder=True)
+      return(ilist)
+
+  def getAddonShows(self,url,ilist):
+#      html = self.getRequest('https://api.unreel.me/v2/sites/popcornflix/channels/TV_SHOWS/series?__site=popcornflix&__source=web&index=0&max=30')
+      html = self.getRequest('https://api.unreel.me/v2/sites/popcornflix/channels/tv_shows_series/series?__site=popcornflix&__source=web&page=0&pageSize=80')
+      a = json.loads(html)
+      for b in a['videos']:
+          infoList = {}
+          url = b.get('uid')
+          thumb = b.get('poster')
+          fanart = b.get('background')
+          name = b['title']
+          infoList['Plot'] = b.get('description')
+          genres = b.get('genres')
+          infoList['Genre'] = ''
+          for genre in genres:
+              infoList['Genre'] += genre+' '
+          infoList['Title'] = name
+          rating = b.get('mpaa')
+          if rating in ['R','PG-13','PG','G']:
+              rating = 'Rated '+rating
+          infoList['MPAA']  = rating
+          infoList['cast'] = []
+          casts = b.get('cast')
+          for cast in casts:
+              infoList['cast'].append(cast)
+          infoList['mediatype'] = 'tvshow'
+          ilist = self.addMenuItem(name,'GE', ilist, url, thumb, fanart, infoList, isFolder=True)
       return(ilist)
 
 
+
   def getAddonEpisodes(self,url,ilist):
-      html  = self.getRequest('http://www.popcornflix.com%s' % (url))
-      shows=re.compile('<figure>.+?href="(.+?)".+?src="(.+?)".+?title">(.+?)<(.+?)genre">(.+?)<.+?desc">(.+?)<.+?</li>',re.DOTALL).findall(html)
-      for url,thumb,name,blob,genre,plot in shows:
-          infoList = {} 
-          actors, rating, duration = re.compile('actors">(.+?)<.+?rating">(.+?)<.+?duration">(.+?)<',re.DOTALL).search(blob).groups()
-          plot = plot.strip()
-          infoList['Plot']  = plot.strip()
-          infoList['Genre'] = genre
-          infoList['Title'] = name
-          if rating in ['R','PG-13','PG','G']:
-              rating = 'Rated '+rating
-          if duration.isdigit():
-              infoList['duration'] = int(duration)*60
-          infoList['cast'] = actors.split(',')
-          url = url.rsplit('/',1)[1]
-          infoList['mediatype'] = 'episode'
-          ilist = self.addMenuItem(name,'GV', ilist, url, thumb, self.addonFanart, infoList, isFolder=False)
+      html = self.getRequest('https://api.unreel.me/v2/sites/popcornflix/series/%s/episodes?__site=popcornflix&__source=web' % (url))
+      a = json.loads(html)
+      for c in a:
+        if c is None: continue
+        for b in c:
+          if b is None:
+              continue
+          infoList = {}
+          url = b.get('uid')
+          thumb = b['metadata'].get('thumbnails').get('default')
+          if b.get('type') == 'episode': 
+              name = b['title']
+              infoList['Title'] = name
+              infoList['Plot'] = b.get('description')
+              if not (b.get('contentDetails') is None):
+                  duration = b.get('contentDetails').get('duration')
+                  if duration is not None:
+                      infoList['duration'] = int(duration)
+              infoList['Season'] = b['series'].get('season')
+              infoList['Episode'] = b['series'].get('episode')
+              infoList['mediatype'] = 'episode'
+              ilist = self.addMenuItem(name,'GV', ilist, url, thumb, self.addonFanart, infoList, isFolder=False)
       return(ilist)
 
   def doFunction(self, url):
@@ -80,48 +103,56 @@ class myAddon(t1mAddon):
 
 
   def getAddonMovies(self,url,ilist):
+      pgUrl = url
       self.defaultVidStream['width']  = 960
       self.defaultVidStream['height'] = 540
-      html  = self.getRequest('http://www.popcornflix.com%s' % (url))
-      shows=re.compile('<figure>.+?href="(.+?)".+?src="(.+?)".+?title">(.+?)<(.+?)genre">(.+?)<.+?desc">(.+?)<.+?</li>',re.DOTALL).findall(html)
-      slist = []
-      shows = sorted(shows, key=lambda x: x[2])
-      for url,thumb,name,blob,genre,plot in shows:
-          if url in slist:
-              continue
-          slist.append(url)
-          infoList = {} 
-          tmp = url.replace('%2f','/')
-          if (not tmp.startswith('/series')) and (not tmp.startswith('/tv-shows')):
-              infoList = {} 
-              actors, rating, duration = re.compile('actors">(.+?)<.+?rating">(.+?)<.+?duration">(.+?)<',re.DOTALL).search(blob).groups()
-              plot = plot.strip()
-              infoList['Plot'] = plot.strip()
-              infoList['Genre'] = genre
+      html = self.getRequest('https://api.unreel.me/v1/videos/channel/%s?__site=popcornflix&__source=web&max=20&videoSourceCombo=4' % url)
+      a = json.loads(html)
+      for b in a['videos']:
+          infoList = {}
+          url = b.get('uid')
+          thumb = b['movieData'].get('poster')
+          fanart = b['movieData'].get('background')
+          if b.get('type') == 'movie': 
+              name = b['title']
+              infoList['Plot'] = b.get('description')
+              genres = b['movieData'].get('genres')
+              infoList['Genre'] = ''
+              for genre in genres:
+                  infoList['Genre'] += genre+' '
               infoList['Title'] = name
+              rating = b['movieData'].get('mpaa')
               if rating in ['R','PG-13','PG','G']:
                   rating = 'Rated '+rating
               infoList['MPAA']  = rating
-              if duration.isdigit():
-                  infoList['duration'] = int(duration)*60
-              infoList['cast'] = actors.split(',')
-              url = url.rsplit('/',1)[1]
+              duration = b.get('contentDetails').get('duration')
+              if duration is not None:
+                  infoList['duration'] = int(duration)
+              infoList['cast'] = []
+              casts = b['movieData'].get('cast')
+              for cast in casts:
+                  infoList['cast'].append(cast)
               infoList['mediatype'] = 'movie'
               contextMenu = [('Add To Library','XBMC.RunPlugin(%s?mode=DF&url=AM%s)' % (sys.argv[0], url))]
-              ilist = self.addMenuItem(name,'GV', ilist, url, thumb, self.addonFanart, infoList, isFolder=False, cm=contextMenu)
+              ilist = self.addMenuItem(name,'GV', ilist, url, thumb, fanart, infoList, isFolder=False, cm=contextMenu)
           else:
               name = '[COLOR blue]'+name+'[/COLOR]'
               infoList['Title'] = name
               infoList['TVShowTitle'] = name
               infoList['mediatype'] = 'tvshow'
               ilist = self.addMenuItem(name,'GE', ilist, url, thumb, self.addonFanart, infoList , isFolder=True)
+      if a['hasMore'] == True:
+          name = '[COLOR red]Next Page[/COLOR]'
+          url = pgUrl.rsplit('/',1)
+          url = url[0]+'/'+str(int(url[1])+20)
+          ilist = self.addMenuItem(name,'GM', ilist, url, self.addonIcon, self.addonFanart, {}, isFolder=True)
       return(ilist)
 
 
   def getAddonVideo(self,url):
-      html = self.getRequest('http://popcornflixv2.device.screenmedia.net/api/videos/%s' % (url))
+      html = self.getRequest('https://api.unreel.me/v2/sites/popcornflix/videos/%s/play-url?__site=popcornflix&__source=web&protocol=https' % (url))
       a = json.loads(html)
-      u = a['movies'][0]['urls']['Web v2 Player']
+      u = a['url']
       liz = xbmcgui.ListItem(path = u)
       infoList ={}
       infoList['mediatype'] = xbmc.getInfoLabel('ListItem.DBTYPE')

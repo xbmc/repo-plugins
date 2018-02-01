@@ -18,7 +18,7 @@
 """
 
 from common import kodi
-from twitch import scopes
+from twitch.oauth.v5 import scopes
 
 
 def __enum(**enums):
@@ -60,7 +60,11 @@ MODES = __enum(
     CLIPSLIST='clips_list',
     GAMELISTS='game_lists',
     EDITSORTING='edit_sorting',
-    EDITLANGUAGES='edit_languages'
+    EDITLANGUAGES='edit_languages',
+    CONFIGUREIA='configure_ia',
+    REVOKETOKEN='revoke_token',
+    UPDATETOKEN='update_token',
+    REFRESH='refresh'
 )
 
 LINE_LENGTH = 60
@@ -68,8 +72,12 @@ MAX_REQUESTS = 5
 REQUEST_LIMIT = 100
 CURSOR_LIMIT = 10
 
+COLORS = 'aliceblue|antiquewhite|aqua|aquamarine|azure|beige|bisque|black|blanchedalmond|blue|blueviolet|brown|burlywood|cadetblue|chartreuse|chocolate|coral|cornflowerblue|cornsilk|crimson|cyan|darkblue|darkcyan|darkgoldenrod|darkgray|darkgreen|darkkhaki|darkmagenta|darkolivegreen|darkorange|darkorchid|darkred|darksalmon|darkseagreen|darkslateblue|darkslategray|darkturquoise|darkviolet|deeppink|deepskyblue|dimgray|dodgerblue|firebrick|floralwhite|forestgreen|fuchsia|gainsboro|ghostwhite|gold|goldenrod|gray|green|greenyellow|honeydew|hotpink|indianred|indigo|ivory|khaki|lavender|lavenderblush|lawngreen|lemonchiffon|lightblue|lightcoral|lightcyan|lightgoldenrodyellow|lightgrey|lightgreen|lightpink|lightsalmon|lightseagreen|lightskyblue|lightslategray|lightsteelblue|lightyellow|lime|limegreen|linen|magenta|maroon|mediumaquamarine|mediumblue|mediumorchid|mediumpurple|mediumseagreen|mediumslateblue|mediumspringgreen|mediumturquoise|mediumvioletred|midnightblue|mintcream|mistyrose|moccasin|navajowhite|navy|none|oldlace|olive|olivedrab|orange|orangered|orchid|palegoldenrod|palegreen|paleturquoise|palevioletred|papayawhip|peachpuff|peru|pink|plum|powderblue|purple|red|rosybrown|royalblue|saddlebrown|salmon|sandybrown|seagreen|seashell|sienna|silver|skyblue|slateblue|slategray|snow|springgreen|steelblue|tan|teal|thistle|tomato|turquoise|violet|wheat|white|whitesmoke|yellow|yellowgreen'
+
 ICON = kodi.get_icon()
 FANART = kodi.get_fanart()
+
+ADAPTIVE_SOURCE_TEMPLATE = {'id': 'hls', 'name': 'Adaptive', 'bandwidth': -1, 'url': ''}
 
 CLIENT_ID = 'NjdlYnBmaHlvaWNhYjVrcjB5N3B6b2NzZm9oczd0eQ=='
 REDIRECT_URI = 'https://mrsprigster.github.io/Twitch-on-Kodi/token/'
@@ -153,6 +161,7 @@ class Keys:
     STATUS = 'status'
     STREAM = 'stream'
     STREAMS = 'streams'
+    STREAM_TYPE = 'stream_type'
     SWF_URL = 'swfUrl'
     TEAMS = 'teams'
     THUMBNAILS = 'thumbnails'
@@ -164,6 +173,7 @@ class Keys:
     TRACKING_ID = 'tracking_id'
     URL = 'url'
     USER = 'user'
+    USERS = 'users'
     VIDEOS = 'videos'
     VIDEO_BANNER = 'video_banner'
     VIDEO_HEIGHT = 'video_height'

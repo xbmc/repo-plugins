@@ -36,9 +36,18 @@ except Exception as e:
 cache_enabled = kodi.get_setting('use_cache') == 'true'
 
 
+def make_cache_path():
+    try:
+        if not os.path.exists(cache_path):
+            os.makedirs(cache_path)
+    except Exception as e:
+        log_utils.log('Failed to create cache: %s: %s' % (cache_path, e), log_utils.LOGWARNING)
+
+
 def reset_cache():
     try:
         shutil.rmtree(cache_path)
+        make_cache_path()
         return True
     except Exception as e:
         log_utils.log('Failed to Reset Cache: %s' % (e), log_utils.LOGWARNING)

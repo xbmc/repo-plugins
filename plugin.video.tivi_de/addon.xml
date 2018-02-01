@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.tivi_de" name="ZDF tivi" version="1.0.1" provider-name="AddonScriptorDE">
+<addon id="plugin.video.tivi_de" name="ZDF tivi" version="1.0.2" provider-name="AddonScriptorDE">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>
@@ -19,5 +19,6 @@
         <forum>http://forum.xbmc.org/showthread.php?tid=132563</forum>
         <email>AddonScriptorDE at yahoo dot de</email>
         <website>http://www.tivi.de</website>
+        <broken>Broken</broken>
     </extension>
 </addon>

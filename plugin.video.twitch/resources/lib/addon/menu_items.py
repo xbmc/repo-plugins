@@ -48,7 +48,7 @@ def go_to_game(game):
 
 
 def refresh():
-    return [(i18n('refresh'), 'Container.Refresh')]
+    return run_plugin(i18n('refresh'), {'mode': MODES.REFRESH})
 
 
 def edit_follow(channel_id, display_name):

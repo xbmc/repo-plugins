@@ -56,6 +56,7 @@ class myAddon(t1mAddon):
                ("https://www.rt.com/on-air/rt-uk-air", 'UK'),
                ("https://rtd.rt.com/on-air/", 'Doc'),
                ("https://actualidad.rt.com/en_vivo2", 'ESP'),
+               ("https://francais.rt.com/en-direct", "FR"),
                ("https://arabic.rt.com/static/libs/streams/default.js", "ARAB")]
       for url, name in rlist:
           name = name.strip()

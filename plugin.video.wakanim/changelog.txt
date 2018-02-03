@@ -1,3 +1,17 @@
+v0.7.1 (2018.02.03)
+- Added Widevine DRM support
+
+v0.7.0 (2018.01.30)
+- Added watchlist
+- Added last aired episodes list (thanks AkariDN)
+- Added new simulcasts list
+- Added synchronize of playback stats
+- Added dialog to resume playback
+- Multiple fixes (thanks AkariDN)
+
+v0.6.1 (2018.01.21)
+- Fix episode thumbnails
+
 v0.6.0 (2018.01.14)
 - Added Wakanim Russia (thanks AkariDN)
 

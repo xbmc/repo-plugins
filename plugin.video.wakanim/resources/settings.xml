@@ -4,4 +4,6 @@
     <setting type="sep" />
     <setting id="wakanim_username" type="text" label="30001" default=""/>
     <setting id="wakanim_password" type="text" label="30002" option="hidden" default=""/>
+    <setting type="sep" />
+    <setting id="inputstream_adaptive" type="action" label="30003" option="close" action="RunPlugin(plugin://plugin.video.wakanim/?mode=mpd)"/>
 </settings>

@@ -16,9 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
+import inputstreamhelper
 
 import xbmc
 import xbmcgui
+import xbmcaddon
 import xbmcplugin
 
 import cmdargs
@@ -31,6 +33,13 @@ def main():
     """Main function for the addon
     """
     args = cmdargs.parse()
+
+    # inputstream adaptive settings
+    if hasattr(args, "mode") and args.mode == "mpd":
+        is_helper = inputstreamhelper.Helper("mpd", drm="com.widevine.alpha")
+        if is_helper.check_inputstream():
+            xbmcaddon.Addon(id="inputstream.adaptive").openSettings()
+        return True
 
     # check if account is set
     username = args._addon.getSetting("wakanim_username")
@@ -87,8 +96,14 @@ def check_mode(args):
         showMainMenue(args)
     elif mode == "catalog":
         netapi.showCatalog(args)
+    elif mode == "last_episodes":
+        netapi.listLastEpisodes(args)
+    elif mode == "last_simulcasts":
+        netapi.listLastSimulcasts(args)
     elif mode == "search":
         netapi.searchAnime(args)
+    elif mode == "watchlist":
+        netapi.myWatchlist(args)
     elif mode == "downloads":
         netapi.myDownloads(args)
     elif mode == "collection":
@@ -116,8 +131,17 @@ def showMainMenue(args):
                   {"title": args._addon.getLocalizedString(30020),
                    "mode":   "catalog"})
     view.add_item(args,
+                  {"title": args._addon.getLocalizedString(30025),
+                   "mode":   "last_episodes"})
+    view.add_item(args,
+                  {"title": args._addon.getLocalizedString(30026),
+                   "mode":   "last_simulcasts"})
+    view.add_item(args,
                   {"title": args._addon.getLocalizedString(30021),
                    "mode":   "search"})
+    view.add_item(args,
+                  {"title": args._addon.getLocalizedString(30027),
+                   "mode":   "watchlist"})
     view.add_item(args,
                   {"title": args._addon.getLocalizedString(30022),
                    "mode":   "downloads"})

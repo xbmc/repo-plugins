@@ -16,9 +16,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
+import ssl
 import sys
+import time
+import json
 import urllib
 import urllib2
+import inputstreamhelper
 from bs4 import BeautifulSoup
 
 import xbmc
@@ -39,6 +43,73 @@ def showCatalog(args):
     ul = soup.find("ul", {"class": "catalog_list"})
 
     for li in ul.find_all("li"):
+        plot  = li.find("p", {"class": "tooltip_text"})
+        stars = li.find("div", {"class": "stars"})
+        star  = stars.find_all("span", {"class": "-no"})
+        thumb = li.img["src"].replace(" ", "%20")
+        if thumb[:4] != "http":
+            thumb = "https:" + thumb
+
+        view.add_item(args,
+                      {"url":         li.a["href"],
+                       "title":       li.find("div", {"class": "slider_item_description"}).span.strong.string.strip().encode("utf-8"),
+                       "tvshowtitle": li.find("div", {"class": "slider_item_description"}).span.strong.string.strip().encode("utf-8"),
+                       "mode":        "list_season",
+                       "thumb":       thumb,
+                       "fanart":      thumb,
+                       "rating":      str(10 - len(star) * 2),
+                       "plot":        plot.contents[3].string.strip().encode("utf-8"),
+                       "year":        li.time.string.strip().encode("utf-8")},
+                      isFolder=True, mediatype="video")
+
+    view.endofdirectory()
+
+
+def listLastEpisodes(args):
+    """Show last aired episodes
+    """
+    response = urllib2.urlopen("https://www.wakanim.tv/" + args._country + "/v2")
+    html = response.read()
+
+    soup = BeautifulSoup(html, "html.parser")
+    container = soup.find("div", {"class": "js-slider-lastEp"})
+    if not container:
+        view.endofdirectory()
+        return
+
+    for li in container.find_all("li"):
+        progress = int(li.find("div", {"class": "ProgressBar"}).get("data-progress"))
+        thumb = li.img["src"].replace(" ", "%20")
+        if thumb[:4] != "http":
+            thumb = "https:" + thumb
+
+        view.add_item(args,
+                      {"url":       li.a["href"],
+                       "title":     li.img["alt"].encode("utf-8"),
+                       "mode":      "videoplay",
+                       "thumb":     thumb,
+                       "fanart":    thumb,
+                       "plot":      li.find("a", {"class": "slider_item_season"}).string.strip().encode("utf-8"),
+                       "playcount": "1" if progress > 90 else "0",
+                       "progress":  str(progress)},
+                      isFolder=False, mediatype="video")
+
+    view.endofdirectory()
+
+
+def listLastSimulcasts(args):
+    """Show last simulcasts
+    """
+    response = urllib2.urlopen("https://www.wakanim.tv/" + args._country + "/v2")
+    html = response.read()
+
+    soup = BeautifulSoup(html, "html.parser")
+    container = soup.find("div", {"class": "js-slider-lastShow"})
+    if not container:
+        view.endofdirectory()
+        return
+
+    for li in container.find_all("li"):
         plot  = li.find("p", {"class": "tooltip_text"})
         stars = li.find("div", {"class": "stars"})
         star  = stars.find_all("span", {"class": "-no"})
@@ -96,6 +167,37 @@ def searchAnime(args):
                        "plot":   plot.contents[3].string.strip().encode("utf-8"),
                        "year":   li.time.string.strip().encode("utf-8")},
                       isFolder=True, mediatype="video")
+
+    view.endofdirectory()
+
+
+def myWatchlist(args):
+    """Show all episodes on watchlist
+    """
+    response = urllib2.urlopen("https://www.wakanim.tv/" + args._country + "/v2/watchlist")
+    html = response.read()
+
+    soup = BeautifulSoup(html, "html.parser")
+    section = soup.find("section")
+    if not section:
+        view.endofdirectory()
+        return
+
+    for div in section.find_all("div", {"class": "slider_item"}):
+        progress = int(div.find("div", {"class": "ProgressBar"}).get("data-progress"))
+        thumb = div.img["src"].replace(" ", "%20")
+        if thumb[:4] != "http":
+            thumb = "https:" + thumb
+
+        view.add_item(args,
+                      {"url":       div.find("div", {"class": "slider_item_inner"}).a["href"],
+                       "title":     div.img["alt"].encode("utf-8"),
+                       "mode":      "videoplay",
+                       "thumb":     thumb.replace(" ", "%20"),
+                       "fanart":    thumb.replace(" ", "%20"),
+                       "playcount": "1" if progress > 90 else "0",
+                       "progress":  str(progress)},
+                      isFolder=False, mediatype="video")
 
     view.endofdirectory()
 
@@ -169,8 +271,9 @@ def listSeason(args):
     year = date[2].string.strip().encode("utf-8")
     date = year + "-" + date[1].string.strip().encode("utf-8") + "-" + date[0].string.strip().encode("utf-8")
     originaltitle = soup.find_all("span", {"class": "border-list_text"})[1].string.strip().encode("utf-8")
-    plot = soup.find("div", {"class": "serie_description"}).string.strip().encode("utf-8")
-    credits = soup.find("div", {"class": "serie_description_more"}).p.string.strip().encode("utf-8")
+    plot = soup.find("div", {"class": "serie_description"}).get_text().strip().encode("utf-8")
+    credits = soup.find("div", {"class": "serie_description_more"})
+    credits = credits.p.get_text().strip().encode("utf-8") if credits else ""
     trailer = soup.find("div", {"class": "TrailerEp-iframeWrapperRatio"})
     try:
         trailer = trailer.iframe["src"]
@@ -217,22 +320,26 @@ def listEpisodes(args):
 
     soup = BeautifulSoup(html, "html.parser")
 
-    for season in soup.findAll(text=args.title):
-        parent = season.find_parent("li")
-        if not parent:
+    for section in soup.find_all("section", {"class": "seasonSection"}):
+        season = section.find("h2", {"class": "slider-section_title"}).get_text().split("%", 1)[1].strip().encode("utf-8")
+        if season != args.title:
             continue
+        for li in section.find_all("li", {"class": "slider_item"}):
+            progress = int(li.find("div", {"class": "ProgressBar"}).get("data-progress"))
+            thumb = li.img["src"].replace(" ", "%20")
+            if thumb[:4] != "http":
+                thumb = "https:" + thumb
 
-        thumb = parent.img["src"].replace(" ", "%20")
-        if thumb[:4] != "http":
-            thumb = "https:" + thumb
-
-        view.add_item(args,
-                      {"url":    parent.a["href"],
-                       "title":  parent.img["alt"].encode("utf-8"),
-                       "mode":   "videoplay",
-                       "thumb":  args.thumb.replace(" ", "%20"),
-                       "fanart": args.fanart.replace(" ", "%20")},
-                      isFolder=False, mediatype="video")
+            view.add_item(args,
+                          {"url":       li.a["href"],
+                           "title":     li.img["alt"].encode("utf-8"),
+                           "mode":      "videoplay",
+                           "thumb":     thumb.replace(" ", "%20"),
+                           "fanart":    args.fanart.replace(" ", "%20"),
+                           "playcount": "1" if progress > 90 else "0",
+                           "progress":  str(progress)},
+                          isFolder=False, mediatype="video")
+        break
 
     view.endofdirectory()
 
@@ -269,8 +376,8 @@ def startplayback(args):
             xbmcgui.Dialog().ok(args._addonname, args._addon.getLocalizedString(30042))
             return
 
-    # using stream with hls+aes
-    if ("Benutzer wechseln" in html) or ("Changer de lecteur" in html) or ("Change user" in html) or ("Переключить плеер" in html):
+    # playing stream
+    if "jwplayer-container" in html:
         # streaming is only for premium subscription
         if (("<span>Kostenlos</span>" in html) or ("<span>Gratuit</span>" in html) or ("<span>Free</span>" in html) or ("<span>Бесплатный аккаунт</span>" in html)) and not ("episode_premium_title" in html):
             xbmc.log("[PLUGIN] %s: You need to own this video or be a premium member '%s'" % (args._addonname, args.url), xbmc.LOGERROR)
@@ -283,13 +390,89 @@ def startplayback(args):
 
         if matches:
             # manifest url
-            url = "https://www.wakanim.tv" + matches
+            url = "https://www.wakanim.tv" + matches + login.getCookie(args)
 
             # play stream
-            item = xbmcgui.ListItem(getattr(args, "title", "Title not provided"), path=url + login.getCookie(args))
-            item.setMimeType("application/vnd.apple.mpegurl")
-            item.setContentLookup(False)
+            if "type: 'hls'," in html:
+                # hls+aes
+                item = xbmcgui.ListItem(getattr(args, "title", "Title not provided"), path=url)
+                item.setMimeType("application/vnd.apple.mpegurl")
+                item.setContentLookup(False)
+            else:
+                # mpd dash
+                is_helper = inputstreamhelper.Helper("mpd", drm="com.widevine.alpha")
+                if is_helper.check_inputstream():
+                    url = urllib.unquote(re.search(r"manifest=(.*?)\&", html).group(1))
+                    item = xbmcgui.ListItem(getattr(args, "title", "Title not provided"), path=url)
+                    item.setMimeType("application/dash+xml")
+                    item.setContentLookup(False)
+                    # get headers
+                    item.setProperty("inputstream.adaptive.stream_headers", login.getCookie(args)[1:])
+                    item.setProperty("inputstream.adaptive.license_type", "com.widevine.alpha")
+                    item.setProperty("inputstream.adaptive.manifest_type", "mpd")
+                    # get key url
+                    item.setProperty("inputstream.adaptive.license_key", re.search(r"url: \"(.*?)\",", html).group(1)
+                                     + "|" + urllib.urlencode({"Authorization": re.search(r"value: \"(.*?)\"", html).group(1)})
+                                     + "&User-Agent=Mozilla%2F5.0%20%28Windows%20NT%2010.0%3B%20Win64%3B%20x64%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F60.0.3112.113%20Safari%2F537.36&Content-Type=text%2Fxml&SOAPAction=http%3A%2F%2Fschemas.microsoft.com%2FDRM%2F2007%2F03%2Fprotocols%2FAcquireLicense|R{SSM}|")
+                    item.setProperty("inputstreamaddon", "inputstream.adaptive")
+                    item.setProperty("IsPlayable", "true")
+                else:
+                    xbmc.log("[PLUGIN] %s: Inputstreamhelper failed to install Widevine" % args._addonname, xbmc.LOGERROR)
+                    xbmcplugin.setResolvedUrl(int(sys.argv[1]), False)
+                    return False
+
             xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+
+            # get required infos
+            player = xbmc.Player()
+            regex = r"idepisode=(.*?)&(?:.*?)&idserie=(.*?)\","
+            matches = re.search(regex, html)
+            episodeid = int(matches.group(1))
+            showid = int(matches.group(2))
+
+            # wait for video to begin
+            timeout = time.time() + 20
+            while not xbmc.getCondVisibility("Player.IsInternetStream"):
+                xbmc.sleep(50)
+                # timeout to prevent infinite loop
+                if time.time() > timeout:
+                    xbmc.log("[PLUGIN] %s: Timeout reached, video did not start in 20 seconds" % args._addonname, xbmc.LOGERROR)
+                    return
+
+            # ask if user want to continue playback
+            resume = int(args.progress)
+            if resume >= 5 and resume <= 90:
+                player.pause()
+                if xbmcgui.Dialog().yesno(args._addonname, args._addon.getLocalizedString(30045) % resume):
+                    player.seekTime(player.getTotalTime() * (resume/100.0))
+                player.pause()
+
+            # update playtime at wakanim
+            try:
+                while url == player.getPlayingFile():
+                    # wait 10 seconds
+                    xbmc.sleep(10000)
+
+                    # calculate message
+                    post = {"ShowId":          showid,
+                            "EpisodeId":       episodeid,
+                            "PlayTime":        player.getTime(),
+                            "Duration":        player.getTotalTime(),
+                            "TotalPlayedTime": 4,
+                            "FromSVOD":        "true"}
+
+                    # send data
+                    try:
+                        req = urllib2.Request("https://www.wakanim.tv/" + args._country + "/v2/svod/saveplaytimeprogress",
+                                              json.dumps(post),
+                                              headers={"Content-type": "application/json"})
+                        response = urllib2.urlopen(req)
+                        html = response.read()
+                    except ssl.SSLError:
+                        # catch timeout exception
+                        pass
+            except RuntimeError:
+                xbmc.log("[PLUGIN] %s: Playback aborted" % args._addonname, xbmc.LOGDEBUG)
         else:
             xbmc.log("[PLUGIN] %s: Failed to play stream" % args._addonname, xbmc.LOGERROR)
             xbmcgui.Dialog().ok(args._addonname, args._addon.getLocalizedString(30044))

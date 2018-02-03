@@ -30,6 +30,7 @@ types = ["count", "size", "date", "genre", "year", "episode", "season", "top250"
          "tagline", "writer", "tvshowtitle", "premiered", "status", "code", "aired", "credits", "lastplayed",
          "album", "artist", "votes", "trailer", "dateadded", "mediatype"]
 
+
 def endofdirectory():
     # sort methods are required in library mode
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_NONE)
@@ -78,6 +79,7 @@ def add_item(args, info, isFolder=True, total_items=0, mediatype="video"):
 
 def quote_value(value):
     return urllib.quote_plus(value.encode("utf8") if isinstance(value, unicode) else value)
+
 
 def build_url(args, info):
     """Create url

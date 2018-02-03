@@ -31,6 +31,8 @@ def addDirectoryItem(parameters, li):
         listitem=li, isFolder=True)
 
 def addLinkItem(parameters, li):
+    li.setProperty('IsPlayable', 'true')
+    li.setInfo('video', {})
     url = sys.argv[0] + '?' + urllib.urlencode(parameters)
     return xbmcplugin.addDirectoryItem(handle=handle, url=url, 
         listitem=li, isFolder=False)
@@ -52,7 +54,6 @@ def show_video_files(url):
     for item in items:
         title = item["title"] + " (" + item["date"] + ")"
         liStyle=xbmcgui.ListItem(title, thumbnailImage=item["thumb"])
-        liStyle.setProperty('IsPlayable', 'true')
         addLinkItem({"mode": "play", "id": item["videoId"]}, liStyle)
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 

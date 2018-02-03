@@ -1,3 +1,7 @@
+[B]2.0.1[/B]
+- Added li.setInfo video for Kodi 18.
+- Fixed missing thumbnails.
+
 [B]2.0.0[/B]
 - Parsing upstream HTML pages because the RSS video feeds are no longer available.
 - Updated icon.

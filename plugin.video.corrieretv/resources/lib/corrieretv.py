@@ -61,6 +61,8 @@ class CorriereTV:
             thumb = article.find("img")
             if thumb is not None:
                 video["thumb"] = thumb["data-original"]
+                if video["thumb"].startswith("//"):
+                    video["thumb"] = "http:" + video["thumb"]
             else:
                 video["thumb"] = self.__noThumb
             

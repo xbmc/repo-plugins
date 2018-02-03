@@ -12,17 +12,21 @@ Forum posting: https://forum.kodi.tv/showthread.php?tid=322763
 What this plugin currently can do:
 - [x] Supports Wakanim France, Germany, Nordic and Russia
 - [x] Login with your account
+- [x] View last aired episodes
+- [x] View last simulcasts
 - [x] Search for animes
-- [x] Show "My Downloads"
-- [x] Show "My Collection"
-- [x] Show/browse all available anime
-- [x] Show/browse all seasons/arcs of an anime
-- [x] Show/browse all episodes of an season/arc
+- [x] View "My Watchlist"
+- [x] View "My Downloads"
+- [x] View "My Collection"
+- [x] View all available anime
+- [x] View all seasons/arcs of an anime
+- [x] View all episodes of an season/arc
 - [x] Display various informations
 - [x] Reactivate videos/streams
 - [x] Watch videos you have bought
 - [x] Watch videos with premium subscription
 - [x] Watch anime trailer (requires YouTube plugin)
+- [x] Synchronizes playback stats with Wakanim
 ***
 
 _This website and addon is not affiliated with Wakanim._

@@ -61,8 +61,8 @@ def login(username, password, args):
 
     # build POST data
     post_data = urllib.urlencode({"username": username,
-                                    "password": password,
-                                    "remember": "1"})
+                                  "password": password,
+                                  "remember": "1"})
 
     # POST to login page
     response = urllib2.urlopen(login_url, post_data)
@@ -90,6 +90,6 @@ def getCookie(args):
 
     ret = ""
     for cookie in args._cj:
-        ret += urllib.urlencode({cookie.name : cookie.value}) + ";"
+        ret += urllib.urlencode({cookie.name: cookie.value}) + ";"
 
     return "|User-Agent=Mozilla%2F5.0%20%28Windows%20NT%2010.0%3B%20Win64%3B%20x64%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F60.0.3112.113%20Safari%2F537.36&Cookie=" + ret[:-1]

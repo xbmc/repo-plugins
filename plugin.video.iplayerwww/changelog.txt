@@ -1,3 +1,8 @@
+v2.5.29
+Adapted to new episodes layout on iPlayer.
+Fixed Radio Favourites.
+Removed Radio Following (currently not working on the website).
+
 v2.5.28
 Fixed Most Popular and Highlights.
 

@@ -399,7 +399,7 @@ def ListListenList(logged_in):
         return
 
     """Scrapes all episodes of the favourites page."""
-    html = OpenURL('http://www.bbc.co.uk/radio/favourites/episodesandclips')
+    html = OpenURL('http://www.bbc.co.uk/radio/favourites')
 
     programmes = html.split('<div class="favourites box-link favourite ')
     for programme in programmes:
@@ -413,14 +413,14 @@ def ListListenList(logged_in):
 
         series_id = ''
         series_name = ''
-        series_id_match = re.search(r'<a href="http://www.bbc.co.uk/programmes/(.*?)" class="media__meta-row size-f clr-light-grey text--single-line">\s*(.*?)\s*</a>',programme)
+        series_id_match = re.search(r'<a href="/programmes/(.*?)" class="media__meta-row size-f clr-light-grey text--single-line">\s*(.*?)\s*</a>',programme)
         if series_id_match:
             series_name = series_id_match.group(2)
             series_id = series_id_match.group(1)
 
         episode_name = ''
         episode_id = ''
-        episode_id_match = re.search(r'<a aria-label="(.*?) Duration: (.*?)" class="favourites__brand-link(.*?)" href="http://www.bbc.co.uk/programmes/(.*?)#play">',programme)
+        episode_id_match = re.search(r'<a aria-label="(.*?) Duration: (.*?)" class="favourites__brand-link(.*?)" href="/programmes/(.*?)#play">',programme)
         if episode_id_match:
             episode_name = episode_id_match.group(1)
             episode_id = episode_id_match.group(4)

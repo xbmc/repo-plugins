@@ -554,12 +554,14 @@ def CreateBaseDirectory(content_type):
                            'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
                                             ),
                          '', '')
+        """
         if ADDON.getSetting("menu_radio_following") == 'true':
             AddMenuEntry(translation(30334), 'url', 199,
                          xbmc.translatePath(
                            'special://home/addons/plugin.video.iplayerwww/media/favourites.png'
                                             ),
                          '', '')
+        """
         AddMenuEntry(translation(30325), 'url', 119,
                      xbmc.translatePath(
                        'special://home/addons/plugin.video.iplayerwww/media/settings.png'

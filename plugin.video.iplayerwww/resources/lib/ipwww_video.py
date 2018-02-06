@@ -447,6 +447,52 @@ def ScrapeEpisodes(page_url):
 
             list_item_num += 1
 
+        # There is a new layout for episodes, scrape it from the JSON received as part of the page
+        match = re.search(
+                  r'window\.mediatorDefer\=page\(document\.getElementById\(\"tviplayer\"\),(.*?)\);',
+                  html, re.DOTALL)
+        if match:
+            data = match.group(1)
+            json_data = json.loads(data)
+            # print json.dumps(json_data, indent=2, sort_keys=True)
+
+            list_item_num = 1
+
+            if 'title' in json_data['initialState']['header']:
+                name = json_data['initialState']['header']['title']
+
+            for item in json_data['initialState']['entities']:
+
+                main_url = None
+                if 'href' in item:
+                    # Some strings already contain the full URL, need to work around this.
+                    url = item['href'].replace('http://www.bbc.co.uk','')
+                    if url:
+                        main_url = 'http://www.bbc.co.uk' + url
+
+                subtitle = None
+                if 'title' in item:
+                    subtitle = item['title']
+                if subtitle:
+                    title = name + " - " + subtitle
+
+                synopsis = ''
+                if 'synopsis' in item:
+                    synopsis = item['synopsis']
+
+                icon = ''
+                if 'imageTemplate' in item:
+                    icon = item['imageTemplate'].replace("{recipe}","832x468")
+
+                aired = ''
+
+                CheckAutoplay(title , main_url, icon, synopsis, aired)
+
+                percent = int(100*(page+list_item_num/len(item))/total_pages)
+                pDialog.update(percent,translation(30319),name)
+
+                list_item_num += 1
+
         percent = int(100*page/total_pages)
         pDialog.update(percent,translation(30319))
 

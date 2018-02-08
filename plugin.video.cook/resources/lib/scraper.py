@@ -22,7 +22,7 @@ class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
       html = self.getRequest('http://www.cookingchanneltv.com/videos/full-episodes-player.html')
-      a = re.compile('<div class="m-MediaBlock o-Capsule__m-MediaBlock m-MediaBlock--playlist">.+?href="(.+?)".+?data-src="(.+?)".+?HeadlineText">(.+?)<.+?AssetInfo">(.+?) .+?</div',re.DOTALL).findall(html)
+      a = re.compile('<div class="m-MediaBlock o-Capsule__m-MediaBlock m-MediaBlock--PLAYLIST">.+?href="(.+?)".+?data-src="(.+?)".+?HeadlineText">(.+?)<.+?AssetInfo">(.+?) .+?</div',re.DOTALL).findall(html)
       for (url, thumb, name, vidcnt) in a:
           name=name.strip()
           fanart  = thumb.split('.rend.',1)[0]

@@ -458,6 +458,7 @@ def ScrapeEpisodes(page_url):
 
             list_item_num = 1
 
+            name = ''
             if 'title' in json_data['initialState']['header']:
                 name = json_data['initialState']['header']['title']
 
@@ -471,10 +472,13 @@ def ScrapeEpisodes(page_url):
                         main_url = 'http://www.bbc.co.uk' + url
 
                 subtitle = None
+                title = ''
                 if 'title' in item:
                     subtitle = item['title']
                 if subtitle:
                     title = name + " - " + subtitle
+                else:
+                    title = name
 
                 synopsis = ''
                 if 'synopsis' in item:

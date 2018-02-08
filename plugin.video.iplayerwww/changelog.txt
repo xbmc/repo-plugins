@@ -1,3 +1,6 @@
+v2.5.30
+Added missing initializations and title fallback.
+
 v2.5.29
 Adapted to new episodes layout on iPlayer.
 Fixed Radio Favourites.

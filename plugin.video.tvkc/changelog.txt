@@ -1,3 +1,6 @@
+[B]1.0.1[/B]
+- use setResolvedUrl for playback.
+
 [B]1.0.0[/B]
 - first release
 

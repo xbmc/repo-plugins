@@ -15,10 +15,33 @@ def categories():
     json_source = json.load(response)
     response.close()
 
+    olympic_icon = os.path.join(ROOTDIR, "olympic_icon.png")
+    olympic_fanart = 'http://www.nbcolympics.com/sites/default/files/field_no_results_image/06April2016/bg-img-pye-951x536.jpg'
+    addDir('Olympics', ROOT_URL+'apps/NBCSports/configuration-ios.json', 3, olympic_icon, olympic_fanart)
+
     for item in json_source['brands'][0]['sub-nav']:
         display_name = item['display-name']
         url = item['feed-url']
+        url = url.replace('/ios','/firetv')
+
         addDir(display_name,url,4,ICON,FANART)
+
+
+def olympics(url):
+    req = urllib2.Request(url)
+    req.add_header("User-Agent", UA_NBCSN)
+    response = urllib2.urlopen(req)
+    json_source = json.load(response)
+    response.close()
+    olympic_icon = os.path.join(ROOTDIR,"olympic_icon.png")
+    olympic_fanart = 'http://www.nbcolympics.com/sites/default/files/field_no_results_image/06April2016/bg-img-pye-951x536.jpg'
+
+    for item in json_source['sections'][0]['sub-nav']:
+        display_name = item['display-name']
+        url = item['feed-url']
+        url = url.replace('/ios','/firetv')
+
+        addDir(display_name, url, 4, olympic_icon, olympic_fanart)
 
 
 def scrapeVideos(url,scrape_type=None):
@@ -157,7 +180,7 @@ def signStream(stream_url, stream_name, stream_icon):
     stream_url = adobe.tvSign(media_token, resource_id, stream_url)
 
     #Set quality level based on user settings
-    stream_url = SET_STREAM_QUALITY(stream_url)
+    #stream_url = SET_STREAM_QUALITY(stream_url)
 
     listitem = xbmcgui.ListItem(path=stream_url)
 
@@ -207,8 +230,10 @@ except:
 
 
 
-if mode==None or url==None or len(url)<1:
+if mode is None or url is None or len(url)<1:
         categories()
+elif mode==3:
+    olympics(url)
 elif mode==4:
         scrapeVideos(url,scrape_type)
 elif mode==5:

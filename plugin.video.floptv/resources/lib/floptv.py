@@ -54,7 +54,7 @@ class FlopTV:
         data = urllib2.urlopen(pageUrl).read()
         tree = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
         
-        iframeUrl = "http:" + tree.find("iframe", {"id": "player"})["src"]
+        iframeUrl = tree.find("iframe", {"id": "player"})["src"]
         req = urllib2.Request(iframeUrl)
         req.add_header('Referer', pageUrl)
         data = urllib2.urlopen(req).read()
@@ -66,13 +66,10 @@ class FlopTV:
         
         # Convert to JSON
         string = string.replace('file:','"file":')
-        string = string.replace('type:','"type":')
         
         sources = json.loads(string)
-        for source in sources:
-            if source["type"] == "hls":
-                videoUrl = source["file"]
-                break
+        # Get the first (and better) stream available
+        videoUrl = sources[0]["file"]
         
         return videoUrl
         

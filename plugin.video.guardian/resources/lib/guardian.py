@@ -62,7 +62,7 @@ class GuardianTV:
                     mimeType = ""
                 
                 imageUrl = mediaContent.attributes["url"].value
-                scheme, netloc, path, params, query, fragment = urlparse.urlparse(imageUrl)
+                path = urlparse.urlsplit(imageUrl).path
                 imageExt = path[path.rfind(".")+1:]
                 imageWidth = mediaContent.attributes["width"].value
                 
@@ -89,26 +89,43 @@ class GuardianTV:
         videoNode = tree.find("video")
         if videoNode is not None:
             video["url"] = videoNode.find("source", {"type": "video/mp4"})["src"]
-        else:
-            # Docs on YouTube
-            figure = tree.find("figure")
-            if figure is not None:
-                dataInteractiveUrl = figure["data-interactive"]
-                
-                dataInteractive = urllib2.urlopen(dataInteractiveUrl).read()
-                match = re.search(r"interactiveConfig = ({[^\}]+});", dataInteractive, re.DOTALL)
-                string = match.group(1)
-                # Convert to JSON
-                string = string.replace("'", '"')
-                
-                interactiveConfig = json.loads(string)
-                sheetName = interactiveConfig["sheetName"]
-                sheetId = interactiveConfig["sheetId"]
 
-                sheetUrl = "https://interactive.guim.co.uk/docsdata/%s.json" % sheetId
-                sheets = json.load(urllib2.urlopen(sheetUrl))
-                youTubeId = sheets["sheets"][sheetName][0]["youTubeId"]
+        # Video on YouTube
+        iframeNode = tree.find("iframe", "youtube-media-atom__iframe")
+        if iframeNode is not None:
+            youTubeId = iframeNode["id"][8:]
+            video["url"] = "plugin://plugin.video.youtube/play/?video_id=%s" % youTubeId
+            
+        # Documentaries on YouTube
+        figureNode = tree.find("figure", "element element-interactive interactive")
+        if figureNode is not None:
+            dataInteractiveUrl = figureNode["data-interactive"]
+            
+            dataInteractive = urllib2.urlopen(dataInteractiveUrl).read()
+            match = re.search(r"interactiveConfig = ({[^\}]+});", dataInteractive, re.DOTALL)
+            string = match.group(1)
 
-                video["url"] = "plugin://plugin.video.youtube/play/?video_id=%s" % youTubeId
-         
+            # Convert to JSON
+            string = string.replace("'", '"')
+            string = re.sub(r'\],(\s+\],)', ']\g<1>', string)
+            
+            interactiveConfig = json.loads(string)
+            sheetId = interactiveConfig["sheetId"]
+            docsArray = interactiveConfig["docsArray"]
+            path = urlparse.urlsplit(pageUrl).path
+            
+            for doc in docsArray:
+                if doc[0] == path[1:]:
+                    sheetName = doc[1]
+                    break
+
+            sheetUrl = "https://interactive.guim.co.uk/docsdata/%s.json" % sheetId
+            sheets = json.load(urllib2.urlopen(sheetUrl))
+            for documentary in sheets["sheets"]["documentaries"]:
+                if documentary["docName"] == sheetName:
+                    youTubeId = documentary["youTubeId"]
+                    break
+
+            video["url"] = "plugin://plugin.video.youtube/play/?video_id=%s" % youTubeId
+            
         return video

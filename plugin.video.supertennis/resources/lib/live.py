@@ -28,5 +28,9 @@ class Live:
         string = string.replace("'", '"')
         
         sources = json.loads(string)
+        videoUrl = sources[1]["file"]
+        if videoUrl.startswith("//"):
+            videoUrl = "http:" + videoUrl
+        
         # Return HD HLS stream
-        return sources[1]["file"]
+        return  videoUrl

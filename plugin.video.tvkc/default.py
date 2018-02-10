@@ -51,6 +51,7 @@ def show_video_files(url):
     for item in items:
         title = item["title"] + " (" + item["date"] + ")"
         liStyle=xbmcgui.ListItem(title, thumbnailImage=item["thumb"])
+        liStyle.setProperty('IsPlayable', 'true')
         liStyle.setInfo(type="video", infoLabels={"Title": title})
         addLinkItem({"section": "play", "videoId": item["id"]}, liStyle)
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
@@ -58,14 +59,16 @@ def show_video_files(url):
 def play_video(videoId):
     tvkc = TVKC()
     metadata = tvkc.getVideoMetadata(videoId)
-    liStyle=xbmcgui.ListItem(metadata["title"], thumbnailImage=metadata["images"]["orig"])
-    liStyle.setInfo(type="video", infoLabels={"Title": metadata["title"]})
     for f in metadata["mediaFiles"]:
         if f["mediaType"] == "MP4":
             video_url = f["streamer"] + \
                 " playpath=mp4:" + f["filename"]
             break
-    xbmc.Player().play(video_url, liStyle)
+    
+    liStyle=xbmcgui.ListItem(metadata["title"], thumbnailImage=metadata["images"]["orig"], path=video_url)
+    liStyle.setInfo(type="video", infoLabels={"Title": metadata["title"]})
+
+    xbmcplugin.setResolvedUrl(handle=handle, succeeded=True, listitem=liStyle)
     
 # parameter values
 params = parameters_string_to_dict(sys.argv[2])

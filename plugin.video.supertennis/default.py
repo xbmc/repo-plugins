@@ -30,6 +30,8 @@ def addDirectoryItem(parameters, li):
         listitem=li, isFolder=True)
 
 def addLinkItem(parameters, li):
+    li.setProperty('IsPlayable', 'true')
+    li.setInfo('video', {})
     url = sys.argv[0] + '?' + urllib.urlencode(parameters)
     return xbmcplugin.addDirectoryItem(handle=handle, url=url, 
         listitem=li, isFolder=False)
@@ -37,13 +39,13 @@ def addLinkItem(parameters, li):
 # UI builder functions
 def show_root_menu():
     liStyle=xbmcgui.ListItem("Live", thumbnailImage=Icon)
-    liStyle.setProperty('IsPlayable', 'true')
     addLinkItem({"mode": "live"}, liStyle)
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
 def play_live():
     live = Live()
-    url = live.getUrl()
+    url = live.getMobileUrl()
+    #url = live.getUrl()
     liStyle=xbmcgui.ListItem(path=url)
     xbmcplugin.setResolvedUrl(handle=handle, succeeded=True, listitem=liStyle)
 

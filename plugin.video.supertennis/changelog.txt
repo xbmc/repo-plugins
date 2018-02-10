@@ -1,3 +1,8 @@
+[B]1.2.2[/B]
+- Updated HTML parsing due to upstream changes.
+- Added li.setInfo video for Kodi 18.
+- Swapped to mobile stream because the website stream is currently unavailable.
+
 [B]1.2.1[/B]
 - Provide HD HLS for live stream.
 - Added thumbnailImage for live stream.

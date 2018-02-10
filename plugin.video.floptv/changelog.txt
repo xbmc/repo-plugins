@@ -1,3 +1,7 @@
+[B]2.0.1[/B]
+- updated HTML parsing due to upstream changes.
+- added li.setInfo video for Kodi 18.
+
 [B]2.0.0[/B]
 - parsing upstream HTML pages to retrieve the shows beccause the old XML feeds are no longer available.
 - HLS is used for streaming.

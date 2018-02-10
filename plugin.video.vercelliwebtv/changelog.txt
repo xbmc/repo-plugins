@@ -1,3 +1,7 @@
+[B]1.0.1[/B]
+- updated HTML parsing due to upstream changes.
+- added li.setInfo video for Kodi 18.
+
 [B]1.0.0[/B]
 - first release
 

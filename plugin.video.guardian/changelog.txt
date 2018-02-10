@@ -1,3 +1,8 @@
+[B]1.2.2[/B]
+- Updated page parsing because of upstream HTML changes.
+- Added li.setInfo video for Kodi 18.
+- Updated icon.
+
 [B]1.2.1[/B]
 - Retrieve sheetName and sheetId from interactiveConfig via JSON.
 

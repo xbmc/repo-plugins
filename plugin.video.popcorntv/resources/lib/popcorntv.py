@@ -14,16 +14,17 @@ class PopcornTV:
         urllib2.install_opener(opener)
 
     def getCategories(self):
-        pageUrl = "http://popcorntv.it/"
+        pageUrl = "https://popcorntv.it/"
         data = urllib2.urlopen(pageUrl).read()
         tree = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
+
         categories = []
-        list = tree.findAll("div", "megamenu")
+        list = tree.find("ul", {"id":"pctv-main-menu-list"}).findAll("li")
         for item in list:
             category = {}
-            category["title"] = item.findPreviousSibling("a").text.strip()
-            if category["title"] not in ("Intrattenimento", "Primafila", ""):
-                category["url"] = item.find("li", "bold").find("a")["href"]
+            category["title"] = item.find("a").text.strip()
+            if category["title"] not in ("Serie Tv", "News"):
+                category["url"] = item.find("a")["href"]
                 categories.append(category)
         
         return categories
@@ -110,7 +111,7 @@ class PopcornTV:
         link = htmlTree.find("link", {"itemprop": "contentUrl"})
         if link is None:
             # Cinema section
-            url = htmlTree.find("div", "container main ").find("a")["href"]
+            url = htmlTree.find("div", "row scheda-cover").find("a")["href"]
             return self.getVideoMetadata(url)
 
         metadata = {}

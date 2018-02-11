@@ -1,3 +1,7 @@
+1.2.3
+-----
+Qobuz ids are now alphanum
+
 1.2.2
 -----
 Remove deprecated enum

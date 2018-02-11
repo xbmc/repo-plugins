@@ -1,6 +1,6 @@
-This is a Qobuz plugin for XBMC
+This is a Qobuz plugin for Kodi
 -------------------------------
-It enables access to Qobuz music streaming service directly from XBMC (http://xbmc.org)
+It enables access to Qobuz music streaming service directly from Kodi (http://kodi.tv)
 
 Main Features: 
 --------------
@@ -23,7 +23,7 @@ Configuration:
 - Just enter some valid Qobuz credentials using addon settings
 notes: 
 - you need Hifi subscription to stream flac files or premium subscription to play mp3. 
-- create your Qobuz account there : http://www.qobuz.com/inscription (you can use the translate button for your language)
+- create your Qobuz account there : http://www.qobuz.com/inscription
 
 Known Issues:
 -------------

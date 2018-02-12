@@ -16,18 +16,18 @@ class dog():
     def __init__(self):
         self.allowed_keys = {
             'mode': '^\d{1,10}$',  # Mode View/Scan/BigDir ...
-            'nid':  '^\d{1,14}$',  # Node id (node.nid)
+            'nid':  '^\w{1,14}$',  # Node id (node.nid)
             'nt':   '^\d{1,10}$',  # Node type (node.type)
             'qnt':  '^\d{1,20}$',  # Node type in query
-            'qid':  '^\d{1,14}$',  # Node id in query
+            'qid':  '^\w{1,14}$',  # Node id in query
             'nm': "^[\w\d_]+$",    # Method to be called on node
             'genre-type': '^(\d+|null)$',  # Reco params
             'genre-id': '^(\d+|null)$',    # Reco params
             'search-type': "^(artists|tracks|albums|articles|all)$",
             'depth': "^(-)?\d+$",
             'query': "^.*$",
-            'track-id': "^\d{1,10}$",
-            'parent-id': "^\d{1,10}$",
+            'track-id': "^\w{1,10}$",
+            'parent-id': "^\w{1,10}$",
             'offset': "^\d{1,10}$",
             'source': '^(all|playlists|purchases|favorites)$'
         }

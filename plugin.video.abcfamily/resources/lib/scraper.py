@@ -21,7 +21,7 @@ UTF8 = 'utf-8'
 class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
-      html = self.getRequest('http://freeform.go.com/shows')
+      html = self.getRequest('https://freeform.go.com/shows')
       a = re.compile('<div class="col-xs-4 shows-grid">.+?href="(.+?)".+?img src="(.+?)".+?<h3>(.+?)<',re.DOTALL).findall(html)
       for url, thumb, name in a:
           fanart = thumb
@@ -35,7 +35,7 @@ class myAddon(t1mAddon):
 
   def getAddonEpisodes(self,url,ilist, getFileData=False):
       if not url.startswith('http'):
-         url = 'http://freeform.go.com'+url
+         url = 'https://freeform.go.com'+url+'/episodes'
       html = self.getRequest(url)
       vids = re.compile('<hr />.+?href="(.+?)".+?requires-sign-in="(.+?)".+?src="(.+?)".+?m-y-0">.+?S(.+?) E(.+?) (.+?)<.+?"m-t-1">(.+?)<', re.DOTALL).findall(html)
       if vids == []:
@@ -98,7 +98,7 @@ class myAddon(t1mAddon):
 
   def getAddonVideo(self,url):
       if not url.startswith('http'):
-          url = 'http://freeform.go.com'+url
+          url = 'https://freeform.go.com'+url
       html = self.getRequest(url)
       vd = re.compile("VDKA(.+?)'").search(html).group(1)
       url = 'https://api.entitlement.watchabc.go.com/vp2/ws-secure/entitlement/2020/authorize.json'

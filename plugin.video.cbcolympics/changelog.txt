@@ -1,0 +1,2 @@
+v1.0.0
+- Initial version for 2018 Winter Olympics

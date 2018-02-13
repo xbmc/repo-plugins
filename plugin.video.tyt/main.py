@@ -20,6 +20,8 @@ user_pwd = settings.getSetting("password")
 
 cookie = {}
 
+danrather_url     = "/category/membership/the-news-with-dan-rather-on-demand/"
+danrather_thumb   = "danrather.jpg"
 murder_url        = "/category/murder-with-friends/"
 murder_thumb      = "murder.jpg"
 ap_url            = "/category/aggressive-progressives-membership/"
@@ -69,6 +71,7 @@ allstar_thumb     = "allstar.jpg"
 members_cat = {"Hour 1":            {"url":hour1_url, "thumb":hour1_thumb, "type":"members"},
                "Hour 2":            {"url":hour2_url, "thumb":hour2_thumb, "type":"members"},
                "Aggressive Progressives" : {"url":ap_url, "thumb":ap_thumb, "type":"members"},
+               "The News with Dan Rather": {"url":danrather_url, "thumb":danrather_thumb, "type":"members"},
                "Rebel Headquarters" : {"url":rebelhq_url, "thumb":rebelhq_thumb, "type":"members"},
                "Post Game":         {"url":pg_url, "thumb":pg_thumb, "type":"members"},
                "Old School":        {"url":oldschool_url, "thumb":oldschool_thumb, "type":"members"},

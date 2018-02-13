@@ -1,4 +1,6 @@
 ## Version history ##
+### 0.96 Beta ###
+	2018-02-12	Revert quickfix in response to reverted API changes
 ### 0.95 Beta ###
 	2016-12-27	Quickfix to adapt to konachan API changes
 ### 0.9 Beta ###

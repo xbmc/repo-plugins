@@ -145,9 +145,9 @@ class moebooruSession:
             if page == 1 and query[:query.find(" ")] != "" and len(images) > 0: # Display the related tags button only on the first page and if we are not viewing "latest".
                 self.addDir(language(30521),'tags',_MODE_TAGS,os.path.join(IMAGE_PATH,'tags.png'),sort=0, q=_GETREL + query)
             for img in images:
-                self.addImage(str(img.get("id","")),"http:" + img.get("jpeg_url", ""),_MODE_IMAGE,"http:" + img.get("preview_url",""), len(images), relatedTags = img.get("tags",""))
+                self.addImage(str(img.get("id","")),img.get("jpeg_url", ""),_MODE_IMAGE,img.get("preview_url",""), len(images), relatedTags = img.get("tags",""))
             if query[:query.find(" ")] != "" and page == 1 and kbd.isConfirmed() and len(images) > 0: # Only add newly entered things and only add these, if results were found
-                 self.conf_appendList(SHISTORY_PATH, query + SHISTORY_DATASEP + "http:" + img.get("preview_url",os.path.join(IMAGE_PATH,'search.png')))
+                 self.conf_appendList(SHISTORY_PATH, query + SHISTORY_DATASEP + img.get("preview_url",os.path.join(IMAGE_PATH,'search.png')))
             if float(len(images)) == float(__settings__.getSetting('epp')): # If we loaded the max. number of images that we can, we assume there are more
                 self.addDir(language(30520),'search',_MODE_SEARCH,os.path.join(IMAGE_PATH,'more.png'),page=int(page)+1,sort=0, q=query)
             return True
@@ -183,7 +183,7 @@ class moebooruSession:
                     previewUrl = os.path.join(IMAGE_PATH,'pools.png')
                     if str(__settings__.getSetting('previewPools')) == "true":
                         imgs = self.api.getImagesFromPool(str(pId))
-                        previewUrl = "http:" + imgs[0].get('preview_url')
+                        previewUrl = imgs[0].get('preview_url')
                     self.addDir(str(name).replace("_"," "),'pool',_MODE_POOL,previewUrl,sort=0, q=str(pId), tot=len(pools))
                 except:
                     print language(30900)
@@ -194,13 +194,13 @@ class moebooruSession:
     def POOL(self, query="", page=1):
         images = self.api.getImagesFromPool(query, page)
         for img in images:
-            self.addImage(str(img.get("id","")),"http:" + img.get("jpeg_url", ""),_MODE_IMAGE,"http:" + img.get("preview_url",""), tot=len(images), relatedTags = img.get("tags",""))
+            self.addImage(str(img.get("id","")),img.get("jpeg_url", ""),_MODE_IMAGE,img.get("preview_url",""), tot=len(images), relatedTags = img.get("tags",""))
         return True
     def RANDOM(self):
         page=randint(1,int(self.api.getImageCount()) // int(float(__settings__.getSetting('epp'))))
         images = self.api.getImages("", page)
         for img in images:
-            self.addImage(str(img.get("id","")),"http:" + img.get("jpeg_url", ""),_MODE_IMAGE,"http:" + img.get("preview_url",""), tot=len(images), relatedTags = img.get("tags",""))
+            self.addImage(str(img.get("id","")),img.get("jpeg_url", ""),_MODE_IMAGE,img.get("preview_url",""), tot=len(images), relatedTags = img.get("tags",""))
         self.addDir(language(30520),'random',_MODE_RANDOM,os.path.join(IMAGE_PATH,'more.png'),sort=0)
         return True
     def TAGS(self, query):
@@ -248,7 +248,7 @@ class moebooruSession:
             if str(__settings__.getSetting('previewTags')) == "true":
                 imgs = self.api.getImages(tag, epp=1)
                 if (len(imgs) > 0):
-                    previewUrl = "http:" + imgs[0].get('preview_url')
+                    previewUrl = imgs[0].get('preview_url')
             self.addDir(tag,'search',_MODE_SEARCH,previewUrl,sort=0, q=tag, ref=_REF_TAGLIST, tot=len(tags))
         return True
     

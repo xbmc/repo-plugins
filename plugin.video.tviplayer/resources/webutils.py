@@ -18,37 +18,38 @@
  
 """
 
-import xbmc, xbmcvfs
-from common_variables import *
-from net import Net
+import xbmc
+import xbmcvfs
 
-mensagemok=xbmcgui.Dialog().ok
+from resources.common_variables import *
+from resources.net import Net
+
+mensagemok = xbmcgui.Dialog().ok
 
 
-def abrir_url(url ,referer = base_url):
+def abrir_url(url, referer=base_url):  # TODO: main url processor?
     if not os.path.exists(datapath): xbmcvfs.mkdir(datapath)
 
     net = Net(cookie_file=cookie_TviFile, proxy='', user_agent=user_agent, http_debug=True)
     if os.path.exists(cookie_TviFile): net.set_cookies(cookie_TviFile)
     try:
-        ref_data = {'Referer':referer}
-        html = net.http_GET(url,headers=ref_data).content.encode('latin-1', 'ignore')
+        ref_data = {'Referer': referer}
+        html = net.http_GET(url, headers=ref_data).content.encode('latin-1', 'ignore')
         net.save_cookies(cookie_TviFile)
         return html
     except:
-        xbmc.log("abrir_url fail ="+url)
+        xbmc.log("abrir_url fail =" + url)
         return ''
 
 
-
-def post_url(actionUrl,data = {},referer= base_url):
+def post_url(actionUrl, data={}, referer=base_url):
     if not os.path.exists(datapath): xbmcvfs.mkdir(datapath)
     net = Net(cookie_file=cookie_TviFile, proxy='', user_agent=user_agent, http_debug=True)
     try:
-        ref_data = {'Referer':referer}
-        html = net.http_POST(actionUrl,form_data=data,headers=ref_data).content.encode('latin-1', 'ignore')
+        ref_data = {'Referer': referer}
+        html = net.http_POST(actionUrl, form_data=data, headers=ref_data).content.encode('latin-1', 'ignore')
         net.save_cookies(cookie_TviFile)
         return html
     except:
-        xbmc.log("post_url fail ="+url)
+        xbmc.log("post_url fail =" + actionUrl)  # TODO: url?
         return ''

@@ -26,13 +26,16 @@ import urllib
 import urllib2
 import socket
 
-#Set Global timeout - Useful for slow connections and Putlocker.
+# Set Global timeout - Useful for slow connections and Putlocker.
 socket.setdefaulttimeout(30)
+
 
 class HeadRequest(urllib2.Request):
     '''A Request class that sends HEAD requests'''
+
     def get_method(self):
         return 'HEAD'
+
 
 class Net:
     '''
@@ -47,15 +50,14 @@ class Net:
         response = net.http_GET('http://xbmc.org')
         print response.content
     '''
-    
+
     _cj = cookielib.LWPCookieJar()
     _proxy = None
     _user_agent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36'
     _accept = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
     _http_debug = False
-    
-    
-    def __init__(self, cookie_file='', proxy='', user_agent='', 
+
+    def __init__(self, cookie_file='', proxy='', user_agent='',
                  http_debug=False, accept=_accept):
         '''
         Kwargs:
@@ -81,8 +83,7 @@ class Net:
             self.set_user_agent(user_agent)
         self._http_debug = http_debug
         self._update_opener()
-        
-    
+
     def set_cookies(self, cookie_file):
         '''
         Set the cookie file and try to load cookies from it if it exists.
@@ -97,12 +98,10 @@ class Net:
             return True
         except:
             return False
-        
-    
+
     def get_cookies(self):
         '''Returns A dictionary containing all cookie information by domain.'''
         return self._cj._cookies
-
 
     def save_cookies(self, cookie_file):
         '''
@@ -111,9 +110,8 @@ class Net:
         Args:
             cookie_file (str): Full path to a file to save cookies to.
         '''
-        self._cj.save(cookie_file, ignore_discard=True)        
+        self._cj.save(cookie_file, ignore_discard=True)
 
-        
     def set_proxy(self, proxy):
         '''
         Args:
@@ -123,12 +121,10 @@ class Net:
         self._proxy = proxy
         self._update_opener()
 
-        
     def get_proxy(self):
         '''Returns string containing proxy details.'''
         return self._proxy
-        
-        
+
     def set_user_agent(self, user_agent):
         '''
         Args:
@@ -136,11 +132,9 @@ class Net:
         '''
         self._user_agent = user_agent
 
-        
     def get_user_agent(self):
         '''Returns user agent string.'''
         return self._user_agent
-
 
     def _update_opener(self):
         '''
@@ -151,20 +145,19 @@ class Net:
             http = urllib2.HTTPHandler(debuglevel=1)
         else:
             http = urllib2.HTTPHandler()
-            
+
         if self._proxy:
             opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self._cj),
-                                          urllib2.ProxyHandler({'http': 
-                                                                self._proxy}), 
+                                          urllib2.ProxyHandler({'http':
+                                                                    self._proxy}),
                                           urllib2.HTTPBasicAuthHandler(),
                                           http)
-        
+
         else:
             opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self._cj),
                                           urllib2.HTTPBasicAuthHandler(),
                                           http)
         urllib2.install_opener(opener)
-        
 
     def http_GET(self, url, headers={}, compression=True):
         '''
@@ -185,7 +178,6 @@ class Net:
             meta-information about the page and the page content.
         '''
         return self._fetch(url, headers=headers, compression=compression)
-        
 
     def http_POST(self, url, form_data, headers={}, compression=True):
         '''
@@ -210,7 +202,6 @@ class Net:
         return self._fetch(url, form_data, headers=headers,
                            compression=compression)
 
-    
     def http_HEAD(self, url, headers={}):
         '''
         Perform an HTTP HEAD request.
@@ -232,7 +223,6 @@ class Net:
             req.add_header(k, v)
         response = urllib2.urlopen(req)
         return HttpResponse(response)
-
 
     def _fetch(self, url, form_data={}, headers={}, compression=True):
         '''
@@ -261,14 +251,13 @@ class Net:
             form_data = urllib.urlencode(form_data)
             req = urllib2.Request(url, form_data)
         req.add_header('User-Agent', self._user_agent)
-        req.add_header('Accept', self._accept)        
+        req.add_header('Accept', self._accept)
         for k, v in headers.items():
             req.add_header(k, v)
         if compression:
             req.add_header('Accept-Encoding', 'gzip')
         response = urllib2.urlopen(req)
         return HttpResponse(response)
-
 
 
 class HttpResponse:
@@ -281,11 +270,10 @@ class HttpResponse:
     .. seealso::
         :meth:`Net.http_GET`, :meth:`Net.http_HEAD` and :meth:`Net.http_POST` 
     '''
-    
+
     content = ''
     '''Unicode encoded string containing the body of the reposne.'''
-    
-    
+
     def __init__(self, response):
         '''
         Args:
@@ -299,7 +287,7 @@ class HttpResponse:
                 html = gzip.GzipFile(fileobj=StringIO.StringIO(html)).read()
         except:
             pass
-        
+
         try:
             content_type = response.headers['content-type']
             if 'charset=' in content_type:
@@ -310,21 +298,19 @@ class HttpResponse:
         r = re.search('<meta\s+http-equiv="Content-Type"\s+content="(?:.+?);' +
                       '\s+charset=(.+?)"', html, re.IGNORECASE)
         if r:
-            encoding = r.group(1) 
-                   
+            encoding = r.group(1)
+
         try:
             html = unicode(html, encoding)
         except:
             pass
-            
+
         self.content = html
-    
-    
+
     def get_headers(self):
         '''Returns a List of headers returned by the server.'''
         return self._response.info().headers
-    
-        
+
     def get_url(self):
         '''
         Return the URL of the resource retrieved, commonly used to determine if 

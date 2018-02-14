@@ -446,5 +446,5 @@ class MetaData:
         else:
             return meta
 
-    def _cache_lookup_by_id(self, imdb_id, tmdb_id):
+    def _cache_lookup_by_id(self, imdb_id='', tmdb_id=''):
         return {}

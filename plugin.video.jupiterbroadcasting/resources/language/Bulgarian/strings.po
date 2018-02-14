@@ -1,0 +1,282 @@
+# XBMC Media Center language file
+# Addon Name: Jupiter Broadcasting
+# Addon id: plugin.video.jupiterbroadcasting
+# Addon version: 3.6.0
+# Addon Provider: Jupiter Broadcasting
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2018-02-14 05:18+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: bg\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Jupiter Broadcasting video addon"
+msgstr "Видео добавка за Jupiter Broadcasting"
+
+msgctxt "Addon Description"
+msgid "Watch shows from the Jupiter Broadcasting Network including Linux Action News, TechSNAP, Ask Noah, Coder Radio,  and more."
+msgstr "Гледайте предавания от мрежата на Jupiter Broadcasting: Linux Action News, TechSNAP, Ask Noah, Coder Radio, и други."
+
+msgctxt "Addon Disclaimer"
+msgid "For more information, visit JupiterBroadcasting.com."
+msgstr "За повече информация посетете www.JupiterBroadcasting.com"
+
+msgctxt "#30000"
+msgid "Linux Action Show"
+msgstr "Linux Action Show"
+
+msgctxt "#30001"
+msgid "Beer Is Tasty"
+msgstr "Beer Is Tasty"
+
+msgctxt "#30002"
+msgid "STOked"
+msgstr "STOked"
+
+msgctxt "#30003"
+msgid "LOTSO"
+msgstr "LOTSO"
+
+msgctxt "#30004"
+msgid "Jupiter@Nite"
+msgstr "Jupiter@Nite"
+
+msgctxt "#30005"
+msgid "Jupiter Files"
+msgstr "Jupiter Files"
+
+msgctxt "#30006"
+msgid "[ Most Recent ]"
+msgstr "[ Най-скорошни ]"
+
+msgctxt "#30007"
+msgid "The MMOrgue"
+msgstr "The MMOrgue"
+
+msgctxt "#30008"
+msgid "TechSNAP"
+msgstr "TechSNAP"
+
+msgctxt "#30009"
+msgid "SciByte"
+msgstr "SciByte"
+
+msgctxt "#30010"
+msgid "[ JBLive.TV ]"
+msgstr "[ JBLive.TV ]"
+
+msgctxt "#30011"
+msgid "FauxShow"
+msgstr "FauxShow"
+
+msgctxt "#30014"
+msgid "In Depth Look"
+msgstr "In Depth Look"
+
+msgctxt "#30015"
+msgid "TORked"
+msgstr "TORked"
+
+msgctxt "#30016"
+msgid "Unfilter"
+msgstr "Unfilter"
+
+msgctxt "#30017"
+msgid "Coder Radio"
+msgstr "Coder Radio"
+
+msgctxt "#30018"
+msgid "Plan B"
+msgstr "Plan B"
+
+msgctxt "#30019"
+msgid "Linux Unplugged"
+msgstr "Linux Unplugged"
+
+msgctxt "#30020"
+msgid "BSD Now!"
+msgstr "BSD Now!"
+
+msgctxt "#30021"
+msgid "HowTo Linux"
+msgstr "HowTo Linux"
+
+msgctxt "#30022"
+msgid "Tech Talk Today"
+msgstr "Tech Talk Today"
+
+msgctxt "#30023"
+msgid "Women's Tech Radio"
+msgstr "Women's Tech Radio"
+
+msgctxt "#30024"
+msgid "User Error"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Archive"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Ask Noah"
+msgstr "Ask Noah"
+
+msgctxt "#30027"
+msgid "Linux Action News"
+msgstr "Linux Action News"
+
+msgctxt "#30100"
+msgid "General"
+msgstr "Основни"
+
+msgctxt "#30101"
+msgid "Quality"
+msgstr "Качество"
+
+msgctxt "#30102"
+msgid "High"
+msgstr "Високо"
+
+msgctxt "#30103"
+msgid "Low"
+msgstr "Ниско"
+
+msgctxt "#30104"
+msgid "Episodes per Page"
+msgstr "Брой епизоди на една страница"
+
+msgctxt "#30105"
+msgid "Audio"
+msgstr "Аудио"
+
+msgctxt "#30106"
+msgid "Live Stream Type"
+msgstr "Тип на потока"
+
+msgctxt "#30200"
+msgid "The Linux Action Show covers the latest news in free and open source software, especially Linux."
+msgstr "Linux Action Show обхваща новите касаещи безплатния софтуер, отворения код и особено Linux."
+
+msgctxt "#30201"
+msgid "Finding interesting combinations of food and beer."
+msgstr "Намерете интересни комбинации храна - бира."
+
+msgctxt "#30202"
+msgid "All the news about Star Trek Online you would ever need."
+msgstr "Всички новини относно Star Trek Online от които се нуждаете."
+
+msgctxt "#30203"
+msgid "Video games, reviews and coverage."
+msgstr "Всичко за видео игри."
+
+msgctxt "#30204"
+msgid "Jupiter Broadcasting hooliganisms covered in front of a live audience on the intertubes."
+msgstr "Вечерното шоу на Jupiter Broadcasting. Излъчва се на живо."
+
+msgctxt "#30205"
+msgid "Bryan takes a peek into alien life."
+msgstr "Bryan е по следите на извънземни форми на живот."
+
+msgctxt "#30206"
+msgid "Lists all the latest shows from the Jupiter Broading network."
+msgstr "Списък на последните епизоди от мрежата на Jupiter Broading."
+
+msgctxt "#30207"
+msgid "The MMOrgue is a show presented by Jeremy about Massively Multiplayer Online (MMO) games."
+msgstr "Предаването MMOrgue, с домакин Jeremy, е с основна тематика Massively Multiplayer Online (MMO) игри."
+
+msgctxt "#30208"
+msgid "Systems, Network, and Administration Podcast. Every week TechSNAP covers the stories that impact those of us in the tech industry, and all of us that follow it. Every episode we dedicate a portion of the show to answer audience questions, discuss best practices, and solving your problems."
+msgstr "TechSNAP е предаване посветено на сферата на технологиите и последните новини, с водещи Chris Fisher и Allan Jude. Записва се на живо всеки четвъртък и се излъчва следващия понеделник."
+
+msgctxt "#30209"
+msgid "SciByte is a show about science topics presented by Heather and Jeremy."
+msgstr "SciByte е предаване на научна тематика, а водещи са Heather и Jeremy."
+
+msgctxt "#30210"
+msgid "Watch the Jupiter Broadcasting live feed."
+msgstr "Гледайте Jupiter Broadcasting на живо."
+
+msgctxt "#30211"
+msgid "The FauxShow is not a real show, but a social experience. Unlike most of the shows on the network, the FauxShow has no defined subject and the topic varies week to week."
+msgstr "FauxShow е социален експеримент. За разлика от останалите предавания от мрежата на Jupiter Broadcasting няма определена сфера върху която се фокусира - всяка седмица темата е различна."
+
+msgctxt "#30214"
+msgid "Total focus on great topics, one episode at a time. Each week Chris present another topic, from extreme hardware builds to beginner video guides."
+msgstr "In Depth Look разнищва по един важен въпрос. Всяка седмица Chris представя нова тема - от екстремни хардуерни конфигурации до видео упътвания за начинаещи."
+
+msgctxt "#30215"
+msgid "Star Wars: The Old Republic podcast that goes in-depth into TOR updates and features on a weekly basis."
+msgstr "Star Wars: The Old Republic podcast засяга в подробности мрежата TOR - актуализации и функционалности."
+
+msgctxt "#30216"
+msgid "We're living in historic times. Don't waste it on TV. Unplug from the distractions and propaganda, and unfilter your life!"
+msgstr "Живеете в историческа епоха. Не си губете времето с телевизионни предавания. Отърсете се от пропагандата и информацията целяща да отклони вниманието ви!"
+
+msgctxt "#30217"
+msgid "A weekly talk show taking a pragmatic look at the art and business of Software Development and related technologies."
+msgstr "Предаването предоставя прагматичен поглед върху изкуството и бизнеса свързан с разработването на софтуер и свързаните технологии."
+
+msgctxt "#30218"
+msgid "Weekly talk show contemplating the future and present of Bitcoin. With insights for the novice, shop talk for the expert, and opinionated discussion for the interested observer of bitcoin and related technologies."
+msgstr "Ежеседмично предаване посветено на Bitcoin. Интересни подробности за незапознатите с виртуалните валути, полезна информация за експерти и любопитни дискусии на тема Bitcoin за всеки интересуващ се от виртуални валути."
+
+msgctxt "#30219"
+msgid "Cleans up after the sloppy seconds of the Linux Action Show."
+msgstr "Идеално продължение на Linux Action Show."
+
+msgctxt "#30220"
+msgid "All things BSD"
+msgstr "За всичко свързано с BSD."
+
+msgctxt "#30221"
+msgid "HowTo Linux will guide you through the amazing world of Linux. From switching to Linux, to building the ultimate home theater, firewall, office file server, and just about anything else."
+msgstr "HowTo Linux ви напътства в удивителния свят на Linux. От първи стъпки с Linux до изграждане на върховна система за домашно кино, защитна стена, файлов сървър за офиса и всичко останало."
+
+msgctxt "#30222"
+msgid "Daily coverage of the latest technology-related headlines."
+msgstr "Ежедневно отразяване на водещи заглавия по технологични теми."
+
+msgctxt "#30223"
+msgid "Women's Tech Radio brings out the voices of women in technology related fields. It explores their journey and collects the resources used along the way. Angela and Paige host this laid-back interview style talk show with tidbits about their life and favorite memories in technology."
+msgstr "Women's Tech Radio извежда на преден план гласа жените. Домакини на това предаване са Angela и Paige."
+
+msgctxt "#30225"
+msgid "Jupiter Broadcastings' back catalog of your favorite shows."
+msgstr ""
+
+msgctxt "#30226"
+msgid "The Ask Noah Show is a weekly radio call in show where we take your tech questions or business in tech questions live on the air."
+msgstr "The Ask Noah Show is a weekly radio call in show where we take your tech questions or business in tech questions live on the air."
+
+msgctxt "#30227"
+msgid "Weekly Linux news and analysis by Chris and Joe. Linux is everywhere, and runs just about everything. It's the ubiquitous platform that runs on everything, everywhere. Even Windows. Linux Action News is a new show born into this reality, built to cover this landscape."
+msgstr "Weekly Linux news and analysis by Chris and Joe. Linux is everywhere, and runs just about everything. It's the ubiquitous platform that runs on everything, everywhere. Even Windows. Linux Action News is a new show born into this reality, built to cover this landscape."
+
+msgctxt "#30300"
+msgid "Older Episodes"
+msgstr "По-стари епизоди"
+
+msgctxt "#30301"
+msgid "RTSP"
+msgstr "RTSP"
+
+msgctxt "#30302"
+msgid "RTMP"
+msgstr "RTMP"
+
+msgctxt "#30303"
+msgid "HLS"
+msgstr "HLS"
+
+msgctxt "#30304"
+msgid "Audio"
+msgstr "Аудио"

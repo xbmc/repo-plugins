@@ -1,0 +1,298 @@
+# XBMC Media Center language file
+# Addon Name: Jupiter Broadcasting
+# Addon id: plugin.video.jupiterbroadcasting
+# Addon version: 3.6.0
+# Addon Provider: Jupiter Broadcasting
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2018-02-14 05:18+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Jupiter Broadcasting video addon"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Watch shows from the Jupiter Broadcasting Network including Linux Action News, TechSNAP, Ask Noah, Coder Radio,  and more."
+msgstr ""
+
+msgctxt "Addon Disclaimer"
+msgid "For more information, visit JupiterBroadcasting.com."
+msgstr ""
+
+#Shows
+
+msgctxt "#30000"
+msgid "Linux Action Show"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Beer Is Tasty"
+msgstr ""
+
+msgctxt "#30002"
+msgid "STOked"
+msgstr ""
+
+msgctxt "#30003"
+msgid "LOTSO"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Jupiter@Nite"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Jupiter Files"
+msgstr ""
+
+msgctxt "#30006"
+msgid "[ Most Recent ]"
+msgstr ""
+
+msgctxt "#30007"
+msgid "The MMOrgue"
+msgstr ""
+
+msgctxt "#30008"
+msgid "TechSNAP"
+msgstr ""
+
+msgctxt "#30009"
+msgid "SciByte"
+msgstr ""
+
+msgctxt "#30010"
+msgid "[ JBLive.TV ]"
+msgstr ""
+
+msgctxt "#30011"
+msgid "FauxShow"
+msgstr ""
+
+#empty strings from id 30012 to 30013
+
+msgctxt "#30014"
+msgid "In Depth Look"
+msgstr ""
+
+msgctxt "#30015"
+msgid "TORked"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Unfilter"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Coder Radio"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Plan B"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Linux Unplugged"
+msgstr ""
+
+msgctxt "#30020"
+msgid "BSD Now!"
+msgstr ""
+
+msgctxt "#30021"
+msgid "HowTo Linux"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Tech Talk Today"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Women's Tech Radio"
+msgstr ""
+
+msgctxt "#30024"
+msgid "User Error"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Archive"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Ask Noah"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Linux Action News"
+msgstr ""
+
+#empty strings from id 30028 to 30099
+
+msgctxt "#30100"
+msgid "General"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Quality"
+msgstr ""
+
+msgctxt "#30102"
+msgid "High"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Low"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Episodes per Page"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Audio"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Live Stream Type"
+msgstr ""
+
+#Misc
+#empty strings from id 30107 to 30199
+
+msgctxt "#30200"
+msgid "The Linux Action Show covers the latest news in free and open source software, especially Linux."
+msgstr ""
+
+msgctxt "#30201"
+msgid "Finding interesting combinations of food and beer."
+msgstr ""
+
+msgctxt "#30202"
+msgid "All the news about Star Trek Online you would ever need."
+msgstr ""
+
+msgctxt "#30203"
+msgid "Video games, reviews and coverage."
+msgstr ""
+
+msgctxt "#30204"
+msgid "Jupiter Broadcasting hooliganisms covered in front of a live audience on the intertubes."
+msgstr ""
+
+msgctxt "#30205"
+msgid "Bryan takes a peek into alien life."
+msgstr ""
+
+msgctxt "#30206"
+msgid "Lists all the latest shows from the Jupiter Broading network."
+msgstr ""
+
+msgctxt "#30207"
+msgid "The MMOrgue is a show presented by Jeremy about Massively Multiplayer Online (MMO) games."
+msgstr ""
+
+msgctxt "#30208"
+msgid "Systems, Network, and Administration Podcast. Every week TechSNAP covers the stories that impact those of us in the tech industry, and all of us that follow it. Every episode we dedicate a portion of the show to answer audience questions, discuss best practices, and solving your problems."
+msgstr ""
+
+msgctxt "#30209"
+msgid "SciByte is a show about science topics presented by Heather and Jeremy."
+msgstr ""
+
+msgctxt "#30210"
+msgid "Watch the Jupiter Broadcasting live feed."
+msgstr ""
+
+msgctxt "#30211"
+msgid "The FauxShow is not a real show, but a social experience. Unlike most of the shows on the network, the FauxShow has no defined subject and the topic varies week to week."
+msgstr ""
+
+#empty strings from id 30212 to 30213
+
+msgctxt "#30214"
+msgid "Total focus on great topics, one episode at a time. Each week Chris present another topic, from extreme hardware builds to beginner video guides."
+msgstr ""
+
+msgctxt "#30215"
+msgid "Star Wars: The Old Republic podcast that goes in-depth into TOR updates and features on a weekly basis."
+msgstr ""
+
+msgctxt "#30216"
+msgid "We're living in historic times. Don't waste it on TV. Unplug from the distractions and propaganda, and unfilter your life!"
+msgstr ""
+
+msgctxt "#30217"
+msgid "A weekly talk show taking a pragmatic look at the art and business of Software Development and related technologies."
+msgstr ""
+
+msgctxt "#30218"
+msgid "Weekly talk show contemplating the future and present of Bitcoin. With insights for the novice, shop talk for the expert, and opinionated discussion for the interested observer of bitcoin and related technologies."
+msgstr ""
+
+msgctxt "#30219"
+msgid "Cleans up after the sloppy seconds of the Linux Action Show."
+msgstr ""
+
+msgctxt "#30220"
+msgid "All things BSD"
+msgstr ""
+
+msgctxt "#30221"
+msgid "HowTo Linux will guide you through the amazing world of Linux. From switching to Linux, to building the ultimate home theater, firewall, office file server, and just about anything else."
+msgstr ""
+
+msgctxt "#30222"
+msgid "Daily coverage of the latest technology-related headlines."
+msgstr ""
+
+msgctxt "#30223"
+msgid "Women's Tech Radio brings out the voices of women in technology related fields. It explores their journey and collects the resources used along the way. Angela and Paige host this laid-back interview style talk show with tidbits about their life and favorite memories in technology."
+msgstr ""
+
+#empty string with id 30224
+
+msgctxt "#30225"
+msgid "Jupiter Broadcastings' back catalog of your favorite shows."
+msgstr ""
+
+msgctxt "#30226"
+msgid "The Ask Noah Show is a weekly radio call in show where we take your tech questions or business in tech questions live on the air."
+msgstr ""
+
+msgctxt "#30227"
+msgid "Weekly Linux news and analysis by Chris and Joe. Linux is everywhere, and runs just about everything. It's the ubiquitous platform that runs on everything, everywhere. Even Windows. Linux Action News is a new show born into this reality, built to cover this landscape."
+msgstr ""
+
+#Settings
+#empty strings from id 30228 to 30299
+
+msgctxt "#30300"
+msgid "Older Episodes"
+msgstr ""
+
+msgctxt "#30301"
+msgid "RTSP"
+msgstr ""
+
+msgctxt "#30302"
+msgid "RTMP"
+msgstr ""
+
+msgctxt "#30303"
+msgid "HLS"
+msgstr ""
+
+msgctxt "#30304"
+msgid "Audio"
+msgstr ""

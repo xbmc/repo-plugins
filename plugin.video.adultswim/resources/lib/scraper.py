@@ -11,11 +11,9 @@ import xbmcgui
 import xbmcplugin
 from operator import itemgetter
 
-from metahandler import metahandlers
+from metahandler import MetaData
 from t1mlib import t1mAddon
 
-metaget = metahandlers.MetaData(preparezip=False,
-                                tmdb_api_key="ZjIxMjg2ODU4Zjg0Zjc1NWUwZTlkOTJmMWExZjUxYWU=".decode('base64'))
 lang = xbmcaddon.Addon().getLocalizedString
 addon_name = xbmcaddon.Addon().getAddonInfo("name")
 
@@ -44,7 +42,7 @@ class myAddon(t1mAddon):
             if not any(x in name.lower() for x in blacklist):
                 context_menu = []
                 if getmeta == 'true':
-                    info_list = metaget.get_meta('tvshow', name=name)
+                    info_list = MetaData().get_meta(name=name)
                     context_menu.append((lang(34003).encode('utf-8'), 'Action(Info)'))
                     poster = info_list['cover_url']
                     if poster == '':

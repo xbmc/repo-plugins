@@ -29,6 +29,10 @@ msgctxt "#33003"
 msgid "Enable MetaData"
 msgstr ""
 
+msgctxt "#33004"
+msgid "Clear MetaData"
+msgstr "
+
 msgctxt "#34000"
 msgid "Adult Swim"
 msgstr ""

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" media="screen" href="/~d/styles/rss2enclosuresfull.xsl"?><?xml-stylesheet type="text/css" media="screen" href="http://feeds.feedburner.com/~d/styles/itemcontent.css"?><rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:media="http://search.yahoo.com/mrss/" version="2.0">
+    <channel>
+        <title>BSD Now HD</title>
+        <link>http://www.jupiterbroadcasting.com/show/bsdnow/</link>
+        <description>A weekly show covering the latest developments in the world of the BSD family of operating systems. News, Tutorials and Interviews for new users and long time developers alike.</description>
+        <generator>Feeder 2.5.12(2294); Mac OS X Version 10.12.1 (Build 16B2657) http://reinventedsoftware.com/feeder/</generator>
+        <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+        <language>en</language>
+        <pubDate>Thu, 29 Dec 2016 15:08:42 -0800</pubDate>
+        <lastBuildDate>Thu, 29 Dec 2016 15:08:42 -0800</lastBuildDate>
+
+        <itunes:author>Jupiter Broadcasting</itunes:author>
+        <itunes:image href="http://www.jupiterbroadcasting.com/images/bsdnow-badge.jpg" />
+        <itunes:explicit>no</itunes:explicit>
+
+        <itunes:block>no</itunes:block>
+
+        <atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="self" type="application/rss+xml" href="http://feeds.feedburner.com/BsdNowHd" /><feedburner:info xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0" uri="bsdnowhd" /><atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="hub" href="http://pubsubhubbub.appspot.com/" /><media:copyright>Copyright Jupiter Broadcasting</media:copyright><media:thumbnail url="http://www.jupiterbroadcasting.com/images/bsdnow-badge.jpg" /><media:category scheme="http://www.itunes.com/dtds/podcast-1.0.dtd">Technology/Software How-To</media:category><media:category scheme="http://www.itunes.com/dtds/podcast-1.0.dtd">Technology/Tech News</media:category><itunes:owner><itunes:email>BSD, FreeBSD, PCBSD, PC-BSD, OpenBSD, NetBSD, DragonFlyBSD, FreeNAS, pfSense, Interview, Tutorial, ZFS, UFS</itunes:email><itunes:name>Jupiter Broadcasting</itunes:name></itunes:owner><itunes:subtitle>Everything you wanted to know about BSD</itunes:subtitle><itunes:summary>A weekly show covering the latest developments in the world of the BSD family of operating systems. News, Tutorials and Interviews for new users and long time developers alike.</itunes:summary><itunes:category text="Technology"><itunes:category text="Software How-To" /></itunes:category><itunes:category text="Technology"><itunes:category text="Tech News" /></itunes:category>
+        <item>
+            <title>2016 highlights | BSD Now 174</title>
+            <link>http://www.jupiterbroadcasting.com/105781/2016-highlights-bsd-now-174/</link>
+            <description><![CDATA[<p>Chris takes over and guest hosts the show to give the guys some time off.</p>
+
+<p>We take a look back at 2016 in BSD, covering the announcement of TrueOS, OpenBSD and FreeBSD releases, a talk with Petra about NetBSD & much more!</p>]]></description>
+            <pubDate>Thu, 29 Dec 2016 10:30:24 -0800</pubDate>
+            <enclosure url="http://www.podtrac.com/pts/redirect.mp4/201406.jb-dl.cdn.scaleengine.net/bsdnow/2016/bsd-0174.mp4" length="1186106641" type="video/mp4" />
+            <guid isPermaLink="false">19836B9B-3A1D-4754-A0C5-5306E6DD577E</guid>
+            <itunes:author>Jupiter Broadcasting</itunes:author>
+            <itunes:subtitle>Chris takes over and guest hosts the show to give the guys some time off.
+
+We take a look back at 2016 in BSD, covering the announcement of TrueOS, OpenBSD and FreeBSD releases, a talk with Petra about NetBSD &amp; much more!</itunes:subtitle>
+            <itunes:summary><![CDATA[Chris takes over and guest hosts the show to give the guys some time off.
+
+We take a look back at 2016 in BSD, covering the announcement of TrueOS, OpenBSD and FreeBSD releases, a talk with Petra about NetBSD & much more!]]></itunes:summary>
+            <itunes:explicit>no</itunes:explicit>
+            <itunes:duration>2:55:34</itunes:duration>
+            <media:thumbnail url="http://www.jupiterbroadcasting.com/wp-content/uploads/2016/12/bsd-0174v2-v.jpg" />
+        <author>BSD, FreeBSD, PCBSD, PC-BSD, OpenBSD, NetBSD, DragonFlyBSD, FreeNAS, pfSense, Interview, Tutorial, ZFS, UFS (Jupiter Broadcasting)</author><media:content url="http://www.podtrac.com/pts/redirect.mp4/201406.jb-dl.cdn.scaleengine.net/bsdnow/2016/bsd-0174.mp4" fileSize="1186106641" type="video/mp4" /></item>
+    <copyright>Copyright Jupiter Broadcasting</copyright><media:credit role="author">Jupiter Broadcasting</media:credit><media:rating>nonadult</media:rating><media:description type="plain">Everything you wanted to know about BSD</media:description></channel>
+</rss>

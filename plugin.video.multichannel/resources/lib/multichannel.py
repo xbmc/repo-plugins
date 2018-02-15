@@ -89,7 +89,8 @@ class MultiChannel(object):
             except: thumb = ICON
             vid_url = BASE_URL + video.find_all('a')[1].attrs['href']
             plot   = video.find_all('a')[1].get_text()
-            label  = plot.split(' -- ')[1]
+            try: label  = plot.split(' -- ')[1]
+            except: pass
             try: aired = (datetime.datetime.strptime(video.find('time').get_text(), '%m/%d/%Y')).strftime('%Y-%m-%d')
             except: aired = (datetime.datetime.now()).strftime('%Y-%m-%d')
             infoLabels = {"mediatype":"episode","label":label,"title":label,"plot":plot,"genre":'News',"aired":aired}

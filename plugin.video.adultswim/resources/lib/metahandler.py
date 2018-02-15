@@ -17,6 +17,8 @@ data_path = xbmc.translatePath('special://profile/addon_data/%s' % addon_id)
 
 class MetaData:
     def __init__(self):
+        if not xbmcvfs.exists(data_path):
+            xbmcvfs.mkdir(data_path)
         self.videocache = os.path.join(data_path, 'video_cache.db')
         self.dbcon = database.connect(self.videocache)
         self.dbcon.row_factory = database.Row  # return results indexed by field names and not numbers so we can

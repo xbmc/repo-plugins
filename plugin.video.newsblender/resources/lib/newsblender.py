@@ -39,6 +39,7 @@ LANGUAGE      = REAL_SETTINGS.getLocalizedString
 TIMEOUT       = 15
 CONTENT_TYPE  = 'files'
 USER_REGION   = REAL_SETTINGS.getSetting("Select_Country")
+PTVL_RUNNING  = xbmcgui.Window(10000).getProperty('PseudoTVRunning') == 'True'
 ISO3166       = os.path.join(ADDON_PATH,'resources','iso3166-1.json')
 ISO639        = os.path.join(ADDON_PATH,'resources','iso639-1.json')
 COUNTRY_LIST  = sorted((json.load(xbmcvfs.File(ISO3166)))['3166-1'], key=lambda x: x['name'])
@@ -178,24 +179,31 @@ class NewsBlender(object):
 
         
     def browseArticles(self, name, url, items, search=True):
-        found = False
-        if search: self.addSearch(name, url)
-        for item in items:
-            source = item['source']['name']
-            label  = item['title']
-            thumb  = item['urlToImage']
-            try: aired = item['publishedAt'].split('T')[0]
-            except: aired = (datetime.datetime.now()).strftime('%Y-%m-%d') 
-            info   = self.getVideo(item['url'])
+        tmpList = []
+        dlg = None
+        dlg = xbmcgui.DialogBusy()
+        dlg.create()
+        for idx, item in enumerate(items):
+            if dlg is not None: dlg.update(idx * 100 // len(items))
+            info = self.getVideo(item['url'])
             if info is None: continue
-            found  = True
-            url    = info[0]['xbmc_url']
-            # if 'subtitles' in info[0]['ytdl_format']: liz.setSubtitles([x['url'] for x in info[0]['ytdl_format']['subtitles'].get('en','') if 'url' in x])
-            infoLabels = {"mediatype":"episode","label":label ,"title":label,"duration":info[0]['ytdl_format'].get('duration',0),"aired":aired,"plot":item['description'],"genre":"News"}
-            infoArt    = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON}
-            self.addLink(label, url, 99, infoLabels, infoArt)
-        if not found: self.addLink((LANGUAGE(30003)%source), "", 99)
-       
+            tmpList.append(info)
+        if dlg is not None: dlg.close()
+        for item in tmpList:
+            try:
+                source = item['source']['name']
+                label  = item['title']
+                thumb  = item['urlToImage']
+                try: aired = item['publishedAt'].split('T')[0]
+                except: aired = (datetime.datetime.now()).strftime('%Y-%m-%d') 
+                url    = info[0]['xbmc_url']
+                # if 'subtitles' in info[0]['ytdl_format']: liz.setSubtitles([x['url'] for x in info[0]['ytdl_format']['subtitles'].get('en','') if 'url' in x])
+                infoLabels = {"mediatype":"episode","label":label ,"title":label,"duration":info[0]['ytdl_format'].get('duration',0),"aired":aired,"plot":item['description'],"genre":"News"}
+                infoArt    = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON}
+                self.addLink(label, url, 9, infoLabels, infoArt)
+            except: pass
+        if len(tmpList) == 0: self.addLink((LANGUAGE(30003)%name), "", "")
+        elif search: self.addSearch(name, url)
        
     def getVideo(self, url):
         cacheresponse = self.cache.get(ADDON_NAME + '.getVideo, url = %s'%url)
@@ -262,7 +270,7 @@ elif mode == 5: NewsBlender().buildArticles(name, url)
 elif mode == 6: NewsBlender().browseCountry(url)
 elif mode == 7: NewsBlender().browseLanguage(url)
 elif mode == 8: NewsBlender().search(name, url)
-elif mode == 99: NewsBlender().playVideo(name, url)
+elif mode == 9: NewsBlender().playVideo(name, url)
 
 xbmcplugin.setContent(int(sys.argv[1])    , CONTENT_TYPE)
 xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_UNSORTED)

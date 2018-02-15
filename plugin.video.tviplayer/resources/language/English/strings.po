@@ -48,6 +48,9 @@ msgctxt "#40014"
 msgid "Search"
 msgstr "Search"
 
+msgctxt "#40015"
+msgid "Direct"
+msgstr "Direct"
 
 msgctxt "#30018"
 msgid "Couldn't open URL / Check your connection"

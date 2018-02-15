@@ -1,3 +1,7 @@
+Version 0.3.0
+* Add live chanel (doctornkz)
+* Bug fix in resolver
+
 Version 0.2.1
 * Bug fix in resolver
 

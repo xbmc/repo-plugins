@@ -401,8 +401,13 @@ def processDirectory(results, progress, params):
     if results is None:
         results = []
 
-    if isinstance(results, dict):
+    baseline_name = None
+    if isinstance(results, dict) and results.get("Items") is not None:
+        baseline_name = results.get("BaselineItemName")
         results = results.get("Items", [])
+    elif isinstance(results, list) and len(results) > 0 and results[0].get("Items") is not None:
+        baseline_name = results[0].get("BaselineItemName")
+        results = results[0].get("Items")
 
     # flatten single season
     # if there is only one result and it is a season and you have flatten signle season turned on then
@@ -451,6 +456,7 @@ def processDirectory(results, progress, params):
 
         # get the infofrom the item
         item_details = extract_item_info(item, gui_options)
+        item_details.baseline_itemname = baseline_name
 
         if item_details.item_type == "Season" and first_season_item is None:
             first_season_item = item
@@ -499,7 +505,10 @@ def processDirectory(results, progress, params):
 
     # add the all episodes item
     show_all_episodes = settings.getSetting('show_all_episodes') == 'true'
-    if show_all_episodes and first_season_item is not None and len(dirItems) > 1:
+    if (show_all_episodes
+            and first_season_item is not None
+            and len(dirItems) > 1
+            and first_season_item.get("SeriesId") is not None):
         series_url = ('{server}/emby/Users/{userid}/items' +
                       '?ParentId=' + first_season_item.get("SeriesId") +
                       '&IsVirtualUnAired=false' +
@@ -845,7 +854,7 @@ def searchResults(params):
             'clearlogo': '',
             'clearart': '',
             'discart': '',
-            'landscape': backdrop_image,
+            'landscape': '',
             'tvshow.poster': primary_image
         }
 

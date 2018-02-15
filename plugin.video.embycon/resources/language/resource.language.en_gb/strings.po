@@ -693,3 +693,11 @@ msgstr ""
 msgctxt "#30322"
 msgid "Auto Resume"
 msgstr ""
+
+msgctxt "#30323"
+msgid "Check for new versions"
+msgstr ""
+
+msgctxt "#30324"
+msgid "Movies - Recommendations"
+msgstr ""

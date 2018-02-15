@@ -5,11 +5,11 @@ import binascii
 import xbmc
 import xbmcgui
 import xbmcaddon
+import xbmcvfs
 
 from datetime import timedelta
-import time
+from datetime import datetime
 import json
-import hashlib
 
 from resources.lib.error import catch_except
 from simple_logging import SimpleLogging
@@ -21,28 +21,14 @@ from translation import i18n
 from json_rpc import json_rpc
 from datamanager import DataManager
 from item_functions import get_next_episode, extract_item_info
+from clientinfo import ClientInformation
 
 log = SimpleLogging(__name__)
 download_utils = DownloadUtils()
 
 @catch_except()
-def playAllFiles(id, monitor):
-    log.debug("PlayAllFiles for parent item id: {0}", id)
-
-    url = ('{server}/emby/Users/{userid}/items' +
-            '?ParentId=' + id +
-            '&Fields=MediaSources' +
-            '&format=json')
-    data_manager = DataManager()
-    result = data_manager.GetContent(url)
-    log.debug("PlayAllFiles items info: {0}", result)
-
-    # process each item
-    items = result["Items"]
-    if items is None:
-        items = []
-
-    settings = xbmcaddon.Addon('plugin.video.embycon')
+def playAllFiles(items, monitor):
+    log.debug("playAllFiles called with items: {0}", items)
     server = download_utils.getServer()
 
     playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
@@ -104,9 +90,30 @@ def playAllFiles(id, monitor):
     xbmc.Player().play(playlist)
 
 
+def playListOfItems(id_list, monitor):
+    log.debug("Loading  all items in the list")
+    data_manager = DataManager()
+    items = []
+
+    for id in id_list:
+        url = "{server}/emby/Users/{userid}/Items/" + id + "?format=json"
+        result = data_manager.GetContent(url)
+        if result is None:
+            log.debug("Playfile item was None, so can not play!")
+            return
+        items.append(result)
+
+    return playAllFiles(items, monitor)
+
+
 def playFile(play_info, monitor):
 
     id = play_info.get("item_id")
+
+    # if this is a list of items them add them all to the play list
+    if isinstance(id, list):
+        return playListOfItems(id, monitor)
+
     auto_resume = play_info.get("auto_resume", "-1")
     force_transcode = play_info.get("force_transcode", False)
     media_source_id = play_info.get("media_source_id", "")
@@ -124,15 +131,27 @@ def playFile(play_info, monitor):
     url = "{server}/emby/Users/{userid}/Items/" + id + "?format=json"
     data_manager = DataManager()
     result = data_manager.GetContent(url)
-    log.debug("Playfile item info: {0}", result)
+    log.debug("Playfile item: {0}", result)
 
     if result is None:
         log.debug("Playfile item was None, so can not play!")
         return
 
-    # if this is a season, tv show or album then play all items
+    # if this is a season, tv show or album then play all items in that parent
     if result.get("Type") == "Season" or result.get("Type") == "MusicAlbum":
-        return playAllFiles(id, monitor)
+        log.debug("PlayAllFiles for parent item id: {0}", id)
+        url = ('{server}/emby/Users/{userid}/items' +
+               '?ParentId=' + id +
+               '&Fields=MediaSources' +
+               '&format=json')
+        result = data_manager.GetContent(url)
+        log.debug("PlayAllFiles items: {0}", result)
+
+        # process each item
+        items = result["Items"]
+        if items is None:
+            items = []
+        return playAllFiles(items, monitor)
 
     # select the media source to use
     media_sources = result.get('MediaSources')
@@ -716,12 +735,24 @@ def stopAll(played_information):
                 if data.get("play_action_type", "") == "play":
                     promptForStopActions(emby_item_id, current_possition)
 
+    device_id = ClientInformation().getDeviceId()
+    url = "{server}/emby/Videos/ActiveEncodings?DeviceId=%s" % device_id
+    download_utils.downloadUrl(url, method="DELETE")
 
 class Service(xbmc.Player):
 
     def __init__(self, *args):
         log.debug("Starting monitor service: {0}", args)
         self.played_information = {}
+        self.activity = {}
+
+    def save_activity(self):
+        addon = xbmcaddon.Addon(id='plugin.video.embycon')
+        path = xbmc.translatePath(addon.getAddonInfo('profile')) + "activity.json"
+        activity_data = json.dumps(self.activity)
+        f = xbmcvfs.File(path, 'w')
+        f.write(activity_data)
+        f.close()
 
     def onPlayBackStarted(self):
         # Will be called when xbmc starts playing a file
@@ -761,6 +792,15 @@ class Service(xbmc.Player):
 
         url = "{server}/emby/Sessions/Playing"
         download_utils.downloadUrl(url, postBody=postdata, method="POST")
+
+        # record the activity
+        utcnow = datetime.utcnow()
+        today = "%s-%s-%s" % (utcnow.year, utcnow.month, utcnow.day)
+        if today not in self.activity:
+            self.activity[today] = {}
+        if playback_type not in self.activity[today]:
+            self.activity[today][playback_type] = 0
+        self.activity[today][playback_type] += 1
 
     def onPlayBackEnded(self):
         # Will be called when kodi stops playing a file

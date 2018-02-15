@@ -12,11 +12,10 @@
         <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en">Adult Swim</summary>
-    <description lang="en">Watch free episodes from adultswim.com</description>
-    <disclaimer lang="en">Feel free to use this script.</disclaimer>
+    <summary lang="en_GB">Adult Swim</summary>
+    <description lang="en_GB">Watch free episodes from adultswim.com</description>
+    <disclaimer lang="en_GB">Feel free to use this script.</disclaimer>
     <platform>all</platform>
-    <language>en</language>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
     <website>www.adultswim.com</website>
     <source>https://github.com/jsergio123/plugin.video.adultswim</source>

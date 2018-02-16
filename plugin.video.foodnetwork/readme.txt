@@ -3,6 +3,7 @@ plugin.video.foodnetwork
 
 Kodi Addon for Food Network website
 
+V3.0.10 website change
 V3.0.9 Add license back
 V3.0.8 website changes
 V3.0.7 website changes

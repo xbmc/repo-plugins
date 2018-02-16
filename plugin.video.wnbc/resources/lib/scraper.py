@@ -19,10 +19,10 @@ UTF8 = 'utf-8'
 class myAddon(t1mAddon):
 
   def getAddonMenu(self,url,ilist):
-      html = self.getRequest('http://www.nbc.com/shows/all')
+      html = self.getRequest('https://www.nbc.com/shows/all')
       html = re.compile('<script>PRELOAD=(.+?)</script>', re.DOTALL).search(html).group(1)
       a = json.loads(html)
-      a = a['allShows']
+      a = a['lists']['allShows']['items']
       mode = 'GE'
       for b in a:
           name = b['title']
@@ -51,7 +51,7 @@ class myAddon(t1mAddon):
 
 
   def getAddonEpisodes(self,url,ilist, dtype='episode', getFileData = False):
-      html = self.getRequest('http://www.nbc.com/%s?nbc=1' % url)
+      html = self.getRequest('https://www.nbc.com/%s?nbc=1' % url)
       id = re.compile('"entities"\:\{"(.+?)"', re.DOTALL).search(html)
       if id is not None:
           id = id.group(1)

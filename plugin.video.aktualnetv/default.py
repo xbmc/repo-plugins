@@ -22,7 +22,7 @@ import xbmcgui
 __author__ = "Petr Kutalek (petr@kutalek.cz)"
 __copyright__ = "Copyright (c) Petr Kutalek, 2015-2017"
 __license__ = "GPL 2, June 1991"
-__version__ = "2.0.3"
+__version__ = "2.0.4"
 
 HANDLE = int(sys.argv[1])
 ADDON = xbmcaddon.Addon("plugin.video.aktualnetv")
@@ -140,8 +140,8 @@ def _parse_root(rss):
     items = []
     root = ElementTree.fromstring(rss)
     for i in root.findall(".//channel/item", NS):
-        if i.find(".//blackbox:extra", NS).attrib.get("subtype") \
-            == "playlist":
+        if i.find(".//blackbox:extra", NS).attrib.get("videoType") \
+            != "bbxvideo":
             continue
         items.append({
             "title": _get_text(i.find(".//title", NS), "?"),
@@ -172,7 +172,7 @@ def _build_list(items, offset=None):
             "duration": i["duration"],
             "studio": u"Online Partners s.r.o.",
             "genre": u"News",
-            "aired": i["pubdate"].strftime("%Y-%m-%d"),
+            #"aired": i["pubdate"].strftime("%Y-%m-%d"),
             #"cast": [
             #    (u"Daniela Drtinová", u"1"),
             #    (u"Martin Veselovský", u"2"),
@@ -227,7 +227,7 @@ def _get_source(token, preference=None):
                 })
     else:
         sources = re.findall(
-            u"sources:\s*(\[{.+?}\])", webpage, re.DOTALL)[0]
+            u"sources\s*:\s*(\[\s*{.+?}\s*\])", webpage, re.DOTALL)[0]
         sources = u"{{ \"sources\": {0} }}".format(sources)
         sources = json.loads(sources)
         sources = sources["sources"]

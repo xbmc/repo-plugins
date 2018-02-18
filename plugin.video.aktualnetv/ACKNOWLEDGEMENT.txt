@@ -1,0 +1,2 @@
+Hebrew localization
+2017, A. Dambledore (https://github.com/Eng2Heb)

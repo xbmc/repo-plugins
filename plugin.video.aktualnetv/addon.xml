@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.aktualnetv" version="2.0.3" name="Aktualne TV" provider-name="Petr Kutalek">
+<addon id="plugin.video.aktualnetv" version="2.0.4" name="Aktualne TV" provider-name="Petr Kutalek">
   <requires>
     <import addon="xbmc.python" version="2.24.0"/>
   </requires>
@@ -12,12 +12,15 @@
     <summary lang="en">This addon provides access to videos published on Aktualne TV</summary>
     <summary lang="cs">Tento doplněk zpřístupňuje videa publikovaná na Aktuálně TV</summary>
     <summary lang="sk">Tento doplnok sprístupňuje videa publikovaná na Aktuálně TV</summary>
+    <summary lang="he">ההרחבה הזו מספקת גישה לווידאו ב-Aktualne TV</summary>
     <description lang="en">Aktualne.cz — covering all aspects of life in the Czech Republic, from political, social, economic and sports news to arts and culture</description>
     <description lang="cs">Aktuálně.cz — kompletní zpravodajství, zprávy z domova i ze světa</description>
     <description lang="sk">Aktuálně.cz — kompletné spravodajstvo, správy z domova i zo sveta</description>
+    <description lang="he">Aktualne.cz — מכסה את כל ההיבטים של החיים בצ'כיה, מן פוליטי, חברתי, כלכלי חדשות הספורט לאמנויות ותרבות</description>
     <disclaimer lang="en">This is an unofficial addon and is in no way affiliated with publisher Economia, a. s. It was created and is maintained by an independent developer. It is provided for reference only and may contain errors.</disclaimer>
     <disclaimer lang="cs">Toto je neoficiální doplněk a není, žel, žádným způsobem spojen s vydavatelstvím Economia, a. s. Byl vytvořen a je udržovan nezávislým vývojářem. Doplněk je poskytnut pouze jako ukázka a může obsahovat chyby.</disclaimer>
     <disclaimer lang="sk">Toto je neoficiálny doplnok a nie je, žiaľ, žiadnym spôsobom spojený s vydavateľstvom Economia, a. s. Bol vytvorený a je udržiavaný nezávislým vývojárom. Doplnok je poskytnutý len ako ukážka a môže obsahovať chyby.</disclaimer>
+    <disclaimer lang="he">ההרחבה נוצרת ומתוחזקת על ידי מפתח עצמאי. ההרחבה מספקת הפניות ויכולה להכיל שגיאות.</disclaimer>
     <platform>all</platform>
     <language>cs</language>
 
@@ -35,25 +38,9 @@
       <screenshot>resources/screenshot-3.jpg</screenshot>
     </assets>
 
-    <news><![CDATA[ [B]2.0.3[/B]
-— cat-and-mouse game; fix missing category
-
-[B]2.0.2[/B]
-— Fix hadling timecodes with hours (0:00:00)
-— Live streaming respects quality settings
-— Improved metadata and cover handling
-
-[B]2.0.1[/B]
-— Fix video list parsing
-— Fix live streams
-    
-[B]2.0.0[/B]
-— Brand new Aktualne TV addon!
-— Simplified, just videos
-— No dependency on other modules
-— FullHD 1080p and adaptive streaming now supported
-— Only H264, no VP8 support anymore
-— Slovak interface translation
+    <news><![CDATA[ [B]2.0.4[/B]
+— add Hebrew localization (by A. Dambledore)
+— removed Live Videos (web page has changed recently)
 ]]></news>
 
   </extension>

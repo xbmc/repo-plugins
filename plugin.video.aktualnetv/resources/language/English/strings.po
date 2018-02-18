@@ -1,14 +1,14 @@
 # XBMC Media Center language file
 # Addon Name: Aktualne TV
 # Addon id: plugin.video.aktualnetv
-# Addon version: 2.0.0
+# Addon version: 2.0.4
 # Addon Provider: Petr Kutalek
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
-"POT-Creation-Date: 2017-09-04 18:15+0000\n"
-"PO-Revision-Date: 2017-09-04 20:15+0200\n"
+"POT-Creation-Date: 2017-10-22 13:04+0000\n"
+"PO-Revision-Date: 2017-10-22 15:04+0200\n"
 "Last-Translator: Petr Kutalek <petr@kutalek.cz>\n"
 "Language-Team: LANGUAGE\n"
 "MIME-Version: 1.0\n"

@@ -2,6 +2,7 @@
 
 import routing
 import sys
+import time
 import urllib
 import urlparse
 
@@ -17,11 +18,12 @@ setContent(plugin.handle, 'videos')
 
 @plugin.route('/')
 def index():
-    video_id = get_live_video_id_from_channel_id(config.CHANNEL_ID)
+    video_id, title = get_live_video_id_from_channel_id(config.CHANNEL_ID)
     url = "plugin://plugin.video.youtube/play/?video_id=%s" % video_id
-    li = ListItem(label='Live',
-                  thumbnailImage="https://i.ytimg.com/vi/%s/maxresdefault_live.jpg" % video_id)
+    li = ListItem(label="Live | " + title,
+                  thumbnailImage="https://i.ytimg.com/vi/%s/maxresdefault_live.jpg#%s" % (video_id, time.localtime()))
     li.setProperty('isPlayable', 'true')
+    li.setInfo(type=u'video', infoLabels={'title': title, 'plot': 'The live stream.'})
     addDirectoryItem(plugin.handle, url, li)
 
     url = "plugin://plugin.video.youtube/user/%s/" % config.CHANNEL_ID

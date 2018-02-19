@@ -11,10 +11,17 @@ def get_live_video_id_from_channel_id(channel_id):
     lines = string_data.splitlines()
 
     re_video_url = re.compile(r'http://www.youtube.com/v/(?P<video_id>[^\?]+)')
+    re_video_title = re.compile(r'<title>(?P<title>[^\?]+) - YouTube</title>')
 
+    re_video_url_match = ""
+    re_video_title_match = ""
 
     for line in lines:
         #xbmc.log(line)
-        re_video_url_match = re.search(re_video_url, line)
-        if re_video_url_match:
-            return re_video_url_match.group('video_id')
+        if not re_video_url_match:
+            re_video_url_match = re.search(re_video_url, line)
+        if not re_video_title_match:
+            re_video_title_match = re.search(re_video_title, line)
+
+        if re_video_url_match and re_video_title_match:
+            return (re_video_url_match.group('video_id'), re_video_title_match.group('title'))

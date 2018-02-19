@@ -1,2 +1,5 @@
+v1.0.2
+- Improved live stream display
+
 v1.0.0
 - Initial release

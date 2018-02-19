@@ -1,2 +1,8 @@
 v1.0.0
 - Initial version for 2018 Winter Olympics
+
+v1.0.1
+- Added bitrate limit setting
+- Changed Python dependency to 2.24 for Kodi 16 compatibility
+- Added durations to video listing
+- Added start times to upcoming events

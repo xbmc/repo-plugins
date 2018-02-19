@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.rocketbeans" version="1.0.1" name="Rocket Beans TV" provider-name="Razzeee">
+<addon id="plugin.video.rocketbeans" version="1.0.2" name="Rocket Beans TV" provider-name="Razzeee">
     <requires>
         <import addon="xbmc.python" version="2.25.0" />
         <import addon="plugin.video.youtube" version="5.2.1" />
@@ -18,6 +18,7 @@ Auf YouTube senden die Beans 24 Stunden am Tag und versorgen euch mit geilem Con
 
 Wir machen nur, auf was wir Bock haben – und das mit Erfolg! Egal ob spannende Let’s Plays, interaktive Formate wie „Chat Duell“, unser Kinomagazin „Kino+“ oder exklusive Events: Mit unseren ehemaligen Game One-Moderatoren Budi, Etienne, Nils und Simon, dem fantastischen Einsatz unseres hochmotivierten Raketenteams und dem beispiellosen Support unserer Bohnen-Community liefern wir euch bestes TV-Entertainment abseits ausgetretener Pfade – spontan, authentisch und unabhängig.</description>
         <language>de</language>
+        <disclaimer>Make sure to enable MPEG-DASH in your YouTube addon</disclaimer>
         <platform>all</platform>
         <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
         <website>www.rocketbeans.tv</website>
@@ -28,6 +29,6 @@ Wir machen nur, auf was wir Bock haben – und das mit Erfolg! Egal ob spannende
             <screenshot>resources/screenshot-01.png</screenshot>
             <screenshot>resources/screenshot-02.png</screenshot>
         </assets>
-        <news>Fixed problem with startup</news>
+        <news>Improved live stream display</news>
     </extension>
 </addon>

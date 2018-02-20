@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.psvue" name="PS Vue" version="2017.11.21" provider-name="eracknaphobia">
+<addon id="plugin.video.psvue" name="PS Vue" version="2018.2.15" provider-name="eracknaphobia">
   <requires>
    <import addon="xbmc.python" version="2.25.0"/>
    <import addon="script.module.requests" version="2.9.1"/>
@@ -13,12 +13,9 @@
     <description lang="en_GB">PlayStation™Vue is a TV service that streams live TV, movies, and sports on a variety of your favorite devices without a cable or satellite subscription.  With powerful features that allow you to save thousands of hours of your favorite shows without recording conflicts, and Premium channels that can be purchased individually or with a multi-channel plan, TV has never been the same. No annual contracts, no conflicts, no problems.</description>
     <disclaimer lang="en_GB">Requires a valid subscription to PS Vue which is currently only available in the US</disclaimer>
     <news>
-- Thanks to snoopyjoe for the following updates / fixes!
-- Timeline section now available with episode availability detail
-- Fix add/remove show and channel ability
-- Watched live or on demand shows available in Recently Watched
-- VideoPlayer display info updated
-- LiveTV menu updated with live show info
+        - Kodi will now post resume times to sony servers, so show watch status and resume points are reflected in official apps
+        - Increased result size returned for kids, sports and episode sections
+        - Bug fixes and performance enhancements
     </news>
     <language>en</language>
     <platform>all</platform>

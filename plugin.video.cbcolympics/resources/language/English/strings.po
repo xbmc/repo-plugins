@@ -188,6 +188,26 @@ msgctxt "#30300"
 msgid "Root"
 msgstr ""
 
+msgctxt "#30301"
+msgid "General"
+msgstr ""
+
+msgctxt "#30302"
+msgid "Bit rate limit (kbit/s)"
+msgstr ""
+
+msgctxt "#30303"
+msgid "Upcoming at {0}"
+msgstr ""
+
+msgctxt "#30304"
+msgid "Live since {0}"
+msgstr ""
+
+msgctxt "#30305"
+msgid "Replay"
+msgstr ""
+
 # Errors
 msgctxt "#30900"
 msgid "No URL or ID provided for video"

@@ -5,6 +5,7 @@ import time
 import json
 import traceback
 import binascii
+from threading import Timer
 
 import xbmc
 import xbmcaddon
@@ -71,6 +72,13 @@ def get_now_playing():
         return result
 
 
+def check_version():
+    download_utils.checkVersion()
+
+
+t = Timer(5.0, check_version)
+t.start()
+
 # monitor.abortRequested() is causes issues, it currently triggers for all addon cancelations which causes
 # the service to exit when a user cancels an addon load action. This is a bug in Kodi.
 # I am switching back to xbmc.abortRequested approach until kodi is fixed or I find a work arround
@@ -96,6 +104,8 @@ while not xbmc.abortRequested:
         log.error("{0}", traceback.format_exc())
 
     xbmc.sleep(1000)
+
+monitor.save_activity()
 
 # stop the WebSocket Client
 websocket_client.stop_client()

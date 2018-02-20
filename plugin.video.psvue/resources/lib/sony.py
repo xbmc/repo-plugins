@@ -289,7 +289,7 @@ class SONY():
         self.addon.setSetting(id='default_profile', value=profile_id)
 
 
-    def add_to_favorites(self, ids):
+    def add_to_favorites(self, fav_type, ids):
         url = self.user_action_url+'/favorite'
         headers = {"Accept": "*/*",
                    "Content-type": "application/json",
@@ -303,7 +303,7 @@ class SONY():
                    "X-Requested-With": "com.snei.vue.atv"
                    }
 
-        if ids['channel_id'] != 'null':
+        if fav_type == 'channel':
             location = self.addon.getLocalizedString(30102)
             payload = '{"channel_id":'+ids['channel_id']+'}'
         else:
@@ -318,7 +318,7 @@ class SONY():
             self.notification_msg("Fail", "Not added")
 
 
-    def remove_from_favorites(self,ids):
+    def remove_from_favorites(self, fav_type, ids):
         url = self.user_action_url+'/favorite'
         headers = {"Accept": "*/*",
                    "Content-type": "application/json",
@@ -332,7 +332,7 @@ class SONY():
                    "X-Requested-With": "com.snei.vue.atv"
                    }
 
-        if ids['channel_id'] != 'null':
+        if fav_type == 'channel':
             location = self.addon.getLocalizedString(30102)
             payload = '{"channel_id":'+ids['channel_id']+'}'
         else:
@@ -351,7 +351,7 @@ class SONY():
                 self.notification_msg("Fail", "Not added")
 
 
-    def put_resume_time(self, airing_id, channel_id, program_id, series_id, tms_id):
+    def put_resume_time(self, airing_id, channel_id, program_id, series_id, tms_id, res_time, cur_time, watched):
         url = self.user_action_url+'/watch_history'
         headers = {'Accept': '*/*',
                    'Content-type': 'application/json',
@@ -371,14 +371,13 @@ class SONY():
         payload += '"channel_id":'+channel_id+','
         payload += '"tms_id":"'+tms_id+'",'
         payload += '"airing_id":'+airing_id+','
-        payload += '"last_watch_date":"2017-11-13T06:54:419Z",'
-        payload += '"last_timecode":"00:00:00",'
+        payload += '"last_watch_date":'+'"'+cur_time+'"'+','
+        payload += '"last_timecode":'+'"'+res_time+'"'+','
         payload += '"start_timecode":"00:00:00:00",'
-        payload += '"fully_watched":false,'
+        payload += '"fully_watched":'+watched+','
         payload += '"stream_type":"null"}'
 
-        #xbmc.log("The Payload is: " + payload)
-        r = requests.put(url, headers=headers, data=payload, verify=self.verify)
+        requests.put(url, headers=headers, data=payload, verify=self.verify)
 
 
     def save_cookies(self, cookiejar):

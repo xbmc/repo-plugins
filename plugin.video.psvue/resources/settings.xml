@@ -3,7 +3,7 @@
   <!--Main Menu-->
   <category label="30223">
     <setting id="all_chan_visible" type="bool" label="30224" default="true" />
-    <setting id="timeline_visible" type="bool" label="30214" default="true" />
+    <setting id="next_airings_visible" type="bool" label="30100" default="true" />
     <setting id="myshows_visible" type="bool" label="30215" default="true" />
     <setting id="fav_visible" type="bool" label="30216" default="true" />
     <setting id="live_visible" type="bool" label="30217" default="true" />
@@ -28,6 +28,7 @@
   </category>
 
   <!-- Hidden -->
+  <setting id="EPGreqPayload" type="text" default="" visible="false"/>
   <setting id="reqPayload" type="text" default="" visible="false"/>
   <setting id="last_auth" type="text" default="" visible="false"/>
   <setting id="deviceId" type="text" default="" visible="false"/>

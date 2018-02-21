@@ -1,3 +1,6 @@
+Version 3.0.6 (21/2/2018)
+-Fix resolver
+
 Version 3.0.1 (27/12/2017)
 -Regex
 

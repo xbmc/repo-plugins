@@ -71,11 +71,11 @@ def play():
 	ic = re.sub('<--(.*?)-->', '', ic, flags=re.DOTALL)
 	ic = re.sub('(?m)^\//.*\n?', '', ic)
 
-	player_index = re.findall("(.+?)\.newPlayer\(", ic)
+	player_index = re.findall("playerRequest\((.+?)\)", ic)
 
 	if player_index:
 
-		streams = re.compile('{}\s*=.+?RTPPlayer.+?file\:.+?"(.+?)"'.format(player_index[0].strip()),re.DOTALL).findall(req)
+		streams = re.compile('{}\s*=.+?RTPPlayer.+?file\:.+?"(.+?)"'.format(player_index[-1].strip()),re.DOTALL).findall(req)
 
 		if streams:
 			final_stream_url = None

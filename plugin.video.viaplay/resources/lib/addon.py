@@ -3,132 +3,105 @@
 A Kodi add-on for Viaplay
 """
 import sys
-import urlparse
 from datetime import datetime
 
 from resources.lib.kodihelper import KodiHelper
 
+import xbmc
+import routing
+
 base_url = sys.argv[0]
 handle = int(sys.argv[1])
 helper = KodiHelper(base_url, handle)
+plugin = routing.Plugin()
 
 
 def run():
     try:
-        router(sys.argv[2][1:])  # trim the leading '?' from the plugin call paramstring
+        plugin.run()
     except helper.vp.ViaplayError as error:
         if error.value == 'MissingSessionCookieError':
             if helper.authorize():
-                router(sys.argv[2][1:])
+                plugin.run()
         else:
             show_error(error.value)
 
 
-def root_page():
+@plugin.route('/')
+def root():
     pages = helper.vp.get_root_page()
+    supported_pages = {
+        'viaplay:root': start,
+        'viaplay:search': search,
+        'viaplay:logout': log_out,
+        'viaplay:starred': list_products,
+        'viaplay:watched': list_products,
+        'viaplay:purchased': list_products,
+        'series': vod,
+        'movie': vod,
+        'kids': vod,
+        'rental': vod,
+        'sport': sport,
+        'tve': channels,
+        'channels': channels
+    }
 
     for page in pages:
-        params = {
-            'action': page['name'],
-            'url': page['href']
-        }
-        helper.add_item(page['title'], params)
+        if page['name'] in supported_pages:
+            helper.add_item(page['title'], plugin.url_for(supported_pages[page['name']], url=page['href']))
+        else:
+            helper.log('Unsupported page found: %s' % page['name'])
     helper.eod()
 
 
-def start_page(url):
-    collections = helper.vp.get_collections(url)
-
+@plugin.route('/start')
+def start():
+    collections = helper.vp.get_collections(plugin.args['url'][0])
     for i in collections:
-        params = {
-            'action': 'list_products',
-            'url': i['_links']['self']['href']
-        }
-        helper.add_item(i['title'], params)
+        helper.add_item(i['title'], plugin.url_for(list_products, url=i['_links']['self']['href']))
     helper.eod()
 
 
-def vod_page(url):
+@plugin.route('/search')
+def search():
+    query = helper.get_user_input(helper.language(30015))
+    if query:
+        list_products(plugin.args['url'][0], search_query=query)
+
+
+@plugin.route('/vod')
+def vod():
     """List categories and collections from the VOD pages (movies, series, kids, store)."""
-    collections = helper.vp.get_collections(url)
-
-    categories_item(url)
+    helper.add_item(helper.language(30041), plugin.url_for(categories, url=plugin.args['url'][0]))
+    collections = helper.vp.get_collections(plugin.args['url'][0])
     for i in collections:
-        params = {
-            'action': 'list_products',
-            'url': i['_links']['self']['href']
-        }
-        helper.add_item(i['title'], params)
+        helper.add_item(i['title'], plugin.url_for(list_products, url=i['_links']['self']['href']))
     helper.eod()
 
 
-def categories_page(url):
-    categories = helper.vp.make_request(url, 'get')['_links']['viaplay:categoryFilters']
-
-    for i in categories:
-        params = {
-            'action': 'sortings_page',
-            'url': i['href']
-        }
-        helper.add_item(i['title'], params)
-    helper.eod()
-
-
-def sortings_page(url):
-    sortings = helper.vp.make_request(url, 'get')['_links']['viaplay:sortings']
-
-    for i in sortings:
-        params = {
-            'action': 'list_products',
-            'url': i['href']
-        }
-        helper.add_item(i['title'], params)
-    helper.eod()
-
-
-def sports_page(url):
-    collections = helper.vp.get_collections(url)
+@plugin.route('/sport')
+def sport():
+    collections = helper.vp.get_collections(plugin.args['url'][0])
     schedule_added = False
 
     for i in collections:
         if 'viaplay:seeTableau' in i['_links'] and not schedule_added:
-            params = {
-                'action': 'sports_schedule_page',
-                'url': i['_links']['viaplay:seeTableau']['href']
-            }
-            helper.add_item(i['_links']['viaplay:seeTableau']['title'], params)
+            plugin_url = plugin.url_for(sports_schedule, url=i['_links']['viaplay:seeTableau']['href'])
+            helper.add_item(i['_links']['viaplay:seeTableau']['title'], plugin_url)
             schedule_added = True
 
         if i['totalProductCount'] < 1:
             continue  # hide empty collections
-        params = {
-            'action': 'list_products',
-            'url': i['_links']['self']['href']
-        }
-        helper.add_item(i['title'], params)
+        helper.add_item(i['title'], plugin.url_for(list_products, url=i['_links']['self']['href']))
     helper.eod()
 
 
-def sports_schedule_page(url):
-    dates = helper.vp.make_request(url=url, method='get')['_links']['viaplay:days']
-
-    for date in dates:
-        params = {
-            'action': 'list_products',
-            'url': date['href']
-        }
-        helper.add_item(date['date'], params)
-    helper.eod()
-
-
-def channels_page(url):
-    channels_dict = helper.vp.get_channels(url)
+@plugin.route('/channels')
+def channels():
+    channels_dict = helper.vp.get_channels(plugin.args['url'][0])
 
     for channel in channels_dict['channels']:
-        params = {
-            'action': 'list_products',
-            'url': channel['_links']['self']['href']
-        }
+        plugin_url = plugin.url_for(list_products, url=channel['_links']['self']['href'])
         art = {
             'thumb': channel['content']['images']['fallback']['template'].split('{')[0],
             'fanart': channel['content']['images']['fallback']['template'].split('{')[0]
@@ -144,36 +117,28 @@ def channels_page(url):
 
         list_title = '[B]{0}[/B]: {1}'.format(channel['content']['title'], current_program_title)
 
-        helper.add_item(list_title, params, art=art)
+        helper.add_item(list_title, plugin_url, art=art)
 
     if channels_dict['next_page']:
-        list_next_page(channels_dict['next_page'], 'tve')
+        helper.add_item(helper.language(30018), plugin.url_for(channels, url=channels_dict['next_page']))
     helper.eod()
 
 
-def categories_item(url):
-    title = helper.language(30041)
-    params = {
-        'action': 'categories_page',
-        'url': url
-    }
-    helper.add_item(title, params)
+@plugin.route('/log_out')
+def log_out():
+    confirm = helper.dialog('yesno', helper.language(30042), helper.language(30043))
+    if confirm:
+        helper.vp.log_out()
+        # send Kodi back to home screen
+        xbmc.executebuiltin('XBMC.Container.Update(path, replace)')
+        xbmc.executebuiltin('XBMC.ActivateWindow(Home)')
 
 
-def list_next_page(url, action):
-    title = helper.language(30018)
-    params = {
-        'action': action,
-        'url': url
-    }
-    helper.add_item(title, params)
-
-
-def list_products(url, filter_event=False, search_query=None):
-    if filter_event:
-        filter_event = filter_event.split(', ')
-
-    products_dict = helper.vp.get_products(url, filter_event=filter_event, search_query=search_query)
+@plugin.route('/list_products')
+def list_products(url=None, search_query=None):
+    if not url:
+        url = plugin.args['url'][0]
+    products_dict = helper.vp.get_products(url, search_query=search_query)
     for product in products_dict['products']:
         if product['type'] == 'series':
             add_series(product)
@@ -190,18 +155,73 @@ def list_products(url, filter_event=False, search_query=None):
             return False
 
     if products_dict['next_page']:
-        list_next_page(products_dict['next_page'], 'list_products')
+        helper.add_item(helper.language(30018), plugin.url_for(list_products, url=products_dict['next_page']))
     helper.eod()
 
 
-def add_movie(movie):
-    params = {}
-    if movie['system'].get('guid'):
-        params['guid'] = movie['system']['guid']
-    else:
-        params['url'] = movie['_links']['self']['href']
-    params['action'] = 'play'
+@plugin.route('/sports_schedule')
+def sports_schedule():
+    dates = helper.vp.make_request(url=plugin.args['url'][0], method='get')['_links']['viaplay:days']
+    for date in dates:
+        helper.add_item(date['date'], plugin.url_for(list_products, url=date['href']))
+    helper.eod()
 
+
+@plugin.route('/seasons_page')
+def seasons_page():
+    """List all series seasons."""
+    seasons = helper.vp.get_seasons(plugin.args['url'][0])
+    if len(seasons) == 1:  # list products if there's only one season
+        list_products(seasons[0]['_links']['self']['href'])
+    else:
+        for season in seasons:
+            title = helper.language(30014).format(season['title'])
+            helper.add_item(title, plugin.url_for(list_products, url=season['_links']['self']['href']))
+        helper.eod()
+
+
+@plugin.route('/categories')
+def categories():
+    categories_data = helper.vp.make_request(plugin.args['url'][0], 'get')['_links']['viaplay:categoryFilters']
+    for i in categories_data:
+        helper.add_item(i['title'], plugin.url_for(sortings, url=i['href']))
+    helper.eod()
+
+
+@plugin.route('/sortings')
+def sortings():
+    sortings_data = helper.vp.make_request(plugin.args['url'][0], 'get')['_links']['viaplay:sortings']
+    for i in sortings_data:
+        helper.add_item(i['title'], plugin.url_for(list_products, url=i['href']))
+    helper.eod()
+
+
+@plugin.route('/play')
+def play():
+    helper.play(guid=plugin.args['guid'][0], url=plugin.args['url'][0], tve=plugin.args['tve'][0])
+
+
+@plugin.route('/dialog')
+def dialog():
+    helper.dialog(dialog_type=plugin.args['dialog_type'][0],
+                  heading=plugin.args['heading'][0],
+                  message=plugin.args['message'][0])
+
+
+@plugin.route('/ia_settings')
+def ia_settings():
+    helper.ia_settings()
+
+
+def add_movie(movie):
+    if movie['system'].get('guid'):
+        guid = movie['system']['guid']
+        url = None
+    else:
+        guid = None
+        url = movie['_links']['self']['href']
+
+    plugin_url = plugin.url_for(play, guid=guid, url=url, tve='false')
     details = movie['content']
 
     movie_info = {
@@ -219,16 +239,12 @@ def add_movie(movie):
         'code': details['imdb'].get('id') if 'imdb' in details else None
     }
 
-    helper.add_item(movie_info['title'], params=params, info=movie_info, art=add_art(details['images'], 'movie'),
+    helper.add_item(movie_info['title'], plugin_url, info=movie_info, art=add_art(details['images'], 'movie'),
                     content='movies', playable=True)
 
 
 def add_series(show):
-    params = {
-        'action': 'seasons_page',
-        'url': show['_links']['viaplay:page']['href']
-    }
-
+    plugin_url = plugin.url_for(seasons_page, url=show['_links']['viaplay:page']['href'])
     details = show['content']
 
     series_info = {
@@ -247,16 +263,12 @@ def add_series(show):
         'season': int(details['series']['seasons']) if details['series'].get('seasons') else None
     }
 
-    helper.add_item(series_info['title'], params=params, folder=True, info=series_info,
+    helper.add_item(series_info['title'], plugin_url, folder=True, info=series_info,
                     art=add_art(details['images'], 'series'), content='tvshows')
 
 
 def add_episode(episode):
-    params = {
-        'action': 'play',
-        'guid': episode['system']['guid']
-    }
-
+    plugin_url = plugin.url_for(play, guid=episode['system']['guid'], url=None, tve='false')
     details = episode['content']
 
     episode_info = {
@@ -279,7 +291,7 @@ def add_episode(episode):
         'episode': int(details['series'].get('episodeNumber'))
     }
 
-    helper.add_item(episode_info['list_title'], params=params, info=episode_info,
+    helper.add_item(episode_info['list_title'], plugin_url, info=episode_info,
                     art=add_art(details['images'], 'episode'), content='episodes', playable=True)
 
 
@@ -294,23 +306,16 @@ def add_sports_event(event):
     else:
         start_time = event_date.strftime('%Y-%m-%d %H:%M')
 
-    if event_status == 'upcoming':
-        params = {
-            'action': 'dialog',
-            'dialog_type': 'ok',
-            'heading': helper.language(30017),
-            'message': helper.language(30016).format(start_time)
-        }
-        playable = False
-    else:
-        params = {
-            'action': 'play',
-            'guid': event['system']['guid']
-        }
+    if event_status != 'upcoming':
+        plugin_url = plugin.url_for(play, guid=event['system']['guid'], url=None, tve='false')
         playable = True
+    else:
+        plugin_url = plugin.url_for(dialog, dialog_type='ok',
+                             heading=helper.language(30017),
+                             message=helper.language(30016).format(start_time))
+        playable = False
 
     details = event['content']
-
     event_info = {
         'mediatype': 'video',
         'title': details.get('title'),
@@ -321,7 +326,7 @@ def add_sports_event(event):
                                                details.get('title').encode('utf-8'))
     }
 
-    helper.add_item(event_info['list_title'], params=params, playable=playable, info=event_info,
+    helper.add_item(event_info['list_title'], plugin_url, playable=playable, info=event_info,
                     art=add_art(details['images'], 'sport'), content='episodes')
 
 
@@ -331,25 +336,22 @@ def add_tv_event(event):
     start_time_obj = helper.vp.parse_datetime(event['epg']['startTime'], localize=True)
     event_status = helper.vp.get_event_status(event)
 
+    # hide non-available catchup items
+    if now > helper.vp.parse_datetime(event['system']['catchupAvailability']['end'], localize=True):
+        return
     if date_today == start_time_obj.date():
         start_time = '{0} {1}'.format(helper.language(30027), start_time_obj.strftime('%H:%M'))
     else:
         start_time = start_time_obj.strftime('%Y-%m-%d %H:%M')
 
-    if event_status == 'upcoming':
-        params = {
-            'action': 'dialog',
-            'dialog_type': 'ok',
-            'heading': helper.language(30017),
-            'message': helper.language(30016).format(start_time)
-        }
-        playable = False
-    else:
-        params = {
-            'action': 'play',
-            'guid': event['system']['guid']
-        }
+    if event_status != 'upcoming':
+        plugin_url = plugin.url_for(play, guid=event['system']['guid'], url=None, tve='true')
         playable = True
+    else:
+        plugin_url = plugin.url_for(dialog, dialog_type='ok',
+                             heading=helper.language(30017),
+                             message=helper.language(30016).format(start_time))
+        playable = False
 
     details = event['content']
     event_info = {
@@ -365,25 +367,7 @@ def add_tv_event(event):
         'fanart': event['content']['images']['landscape']['template'].split('{')[0] if 'landscape' in details['images'] else None
     }
 
-    helper.add_item(event_info['list_title'], params=params, playable=playable, info=event_info, art=art, content='episodes')
-
-
-
-def seasons_page(url):
-    """List all series seasons."""
-    seasons = helper.vp.get_seasons(url)
-    if len(seasons) == 1:  # list products if there's only one season
-        list_products(seasons[0]['_links']['self']['href'])
-    else:
-        for season in seasons:
-            title = helper.language(30014).format(season['title'])
-            parameters = {
-                'action': 'list_products',
-                'url': season['_links']['self']['href']
-            }
-
-            helper.add_item(title, parameters)
-        helper.eod()
+    helper.add_item(event_info['list_title'], plugin_url, playable=playable, info=event_info, art=art, content='episodes')
 
 
 def add_art(images, content_type):
@@ -399,19 +383,15 @@ def add_art(images, content_type):
         elif i == 'hero169':
             artwork['fanart'] = image_url
         elif i == 'coverart23':
+            if content_type != 'sport':
+                artwork['poster'] = image_url
+        elif i == 'coverart169':
             artwork['cover'] = image_url
         elif i == 'boxart':
-            if content_type != 'episode' or 'sport':
+            if content_type != 'episode' or content_type != 'sport':
                 artwork['thumb'] = image_url
-            artwork['poster'] = image_url
 
     return artwork
-
-
-def search(url):
-    query = helper.get_user_input(helper.language(30015))
-    if query:
-        list_products(url, search_query=query)
 
 
 def coloring(text, meaning):
@@ -441,42 +421,3 @@ def show_error(error):
         message = error
 
     helper.dialog(dialog_type='ok', heading=helper.language(30017), message=message)
-
-
-def router(paramstring):
-    """Router function that calls other functions depending on the provided paramstring."""
-    params = dict(urlparse.parse_qsl(paramstring))
-    vod_pages = ['series', 'movie', 'kids', 'rental']
-    products_pages = ['viaplay:starred', 'viaplay:watched', 'viaplay:purchased']
-
-    if 'action' in params:
-        if params['action'] in vod_pages:
-            vod_page(params['url'])
-        elif params['action'] in products_pages:
-            list_products(params['url'])
-        elif params['action'] == 'sport':
-            sports_page(params['url'])
-        elif params['action'] == 'tve':
-            channels_page(params['url'])
-        elif params['action'] == 'categories_page':
-            categories_page(params['url'])
-        elif params['action'] == 'sortings_page':
-            sortings_page(params['url'])
-        if params['action'] == 'viaplay:root':
-            start_page(params['url'])
-        elif params['action'] == 'viaplay:search':
-            search(params['url'])
-        elif params['action'] == 'viaplay:logout':
-            helper.log_out()
-        elif params['action'] == 'sports_schedule_page':
-            sports_schedule_page(params['url'])
-        elif params['action'] == 'play':
-            helper.play(guid=params.get('guid'), url=params.get('url'))
-        elif params['action'] == 'seasons_page':
-            seasons_page(params['url'])
-        elif params['action'] == 'list_products':
-            list_products(params['url'])
-        elif params['action'] == 'dialog':
-            helper.dialog(params['dialog_type'], params['heading'], params['message'])
-    else:
-        root_page()

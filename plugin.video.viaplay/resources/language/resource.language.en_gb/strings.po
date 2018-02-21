@@ -86,7 +86,7 @@ msgid "[B]Next page[/B]"
 msgstr ""
 
 msgctxt "#30020"
-msgid "This content is not included in your current subscription."
+msgid "This content is not included in your package."
 msgstr ""
 
 msgctxt "#30021"
@@ -94,7 +94,7 @@ msgid "You need to rent or purchase this movie on the Viaplay website."
 msgstr ""
 
 msgctxt "#30022"
-msgid "This content is not available in your current region."
+msgid "You cannot use Viaplay where you are. For copyright reasons, you can only watch in the following countries: Sweden, Finland, Norway and Denmark."
 msgstr ""
 
 msgctxt "#30023"
@@ -158,11 +158,11 @@ msgid "No valid stream URL was found."
 msgstr ""
 
 msgctxt "#30039"
-msgid "Go to [B]{0}[/B] and activate your device using the following registration code: [B]{1}[/B]"
+msgid "Go to [B]{0}[/B] on your mobile phone, tablet or computer and enter this code: [B]{1}[/B]"
 msgstr ""
 
 msgctxt "#30040"
-msgid "Activate your device"
+msgid "Log in using a single-use code"
 msgstr ""
 
 msgctxt "#30041"
@@ -203,4 +203,16 @@ msgstr ""
 
 msgctxt "#30050"
 msgid "You can watch two videos at the same time using a Viaplay account. Your account is currently being used to watch two other videos."
+msgstr ""
+
+msgctxt "#30051"
+msgid "You are not logged in"
+msgstr ""
+
+msgctxt "#30052"
+msgid "An activation error occurred."
+msgstr ""
+
+msgctxt "#30053"
+msgid "InputStream Adaptive settings"
 msgstr ""

@@ -98,14 +98,6 @@ class KodiHelper(object):
             else:
                 return self.device_registration()
 
-    def log_out(self):
-        confirm = self.dialog('yesno', self.language(30042), self.language(30043))
-        if confirm:
-            self.vp.log_out()
-            # send Kodi back to home screen
-            xbmc.executebuiltin('XBMC.Container.Update(path, replace)')
-            xbmc.executebuiltin('XBMC.ActivateWindow(Home)')
-
     def device_registration(self):
         """Presents a dialog with information on how to activate the device.
         Attempts to authorize the device using the interval returned by the activation data."""
@@ -124,15 +116,21 @@ class KodiHelper(object):
                 return True
             except self.vp.ViaplayError as error:
                 # raise all non-pending authorization errors
-                if not error.value == 'DeviceAuthorizationPendingError':
+                if error.value == 'DeviceAuthorizationPendingError':
+                    secs += activation_data['interval']
+                    percent = int(100 * float(secs) / float(expires))
+                    dialog.update(percent, message)
+                    xbmc.Monitor().waitForAbort(activation_data['interval'])
+                    if dialog.iscanceled():
+                        dialog.close()
+                        return False
+                elif error.value == 'DeviceAuthorizationNotFound':  # time expired
+                    dialog.close()
+                    self.dialog('ok', self.language(30051), self.language(30052))
+                    return False
+                else:
+                    dialog.close()
                     raise
-            secs += activation_data['interval']
-            percent = int(100 * float(secs) / float(expires))
-            dialog.update(percent, message)
-            xbmc.Monitor().waitForAbort(activation_data['interval'])
-            if dialog.iscanceled():
-                dialog.close()
-                return False
 
         dialog.close()
         return False
@@ -160,7 +158,7 @@ class KodiHelper(object):
         else:
             return None
 
-    def add_item(self, title, params, items=False, folder=True, playable=False, info=None, art=None, content=False):
+    def add_item(self, title, url, folder=True, playable=False, info=None, art=None, content=False):
         addon = self.get_addon()
         listitem = xbmcgui.ListItem(label=title)
 
@@ -180,29 +178,17 @@ class KodiHelper(object):
         if content:
             xbmcplugin.setContent(self.handle, content)
 
-        recursive_url = self.base_url + '?' + urllib.urlencode(params)
-
-        if items is False:
-            xbmcplugin.addDirectoryItem(self.handle, recursive_url, listitem, folder)
-        else:
-            items.append((recursive_url, listitem, folder))
-            return items
+        xbmcplugin.addDirectoryItem(self.handle, url, listitem, folder)
 
     def eod(self):
         """Tell Kodi that the end of the directory listing is reached."""
         xbmcplugin.endOfDirectory(self.handle)
 
-    def play(self, guid=None, url=None, pincode=None):
-        if url:
+    def play(self, guid=None, url=None, pincode=None, tve='false'):
+        if url and url != 'None':
             guid = self.vp.get_products(url)['products'][0]['system']['guid']
-        elif guid:
-            pass
-        else:
-            self.log('No guid or URL supplied.')
-            return False
-
         try:
-            stream = self.vp.get_stream(guid, pincode=pincode)
+            stream = self.vp.get_stream(guid, pincode=pincode, tve=tve)
         except self.vp.ViaplayError as error:
             if not error.value == 'ParentalGuidancePinChallengeNeededError':
                 raise
@@ -221,8 +207,14 @@ class KodiHelper(object):
             playitem.setMimeType('application/xml+dash')  # prevents HEAD request that causes 404 error
             playitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
             playitem.setProperty('inputstream.adaptive.manifest_type', 'mpd')
+            playitem.setProperty('inputstream.adaptive.manifest_update_parameter', 'full')
             playitem.setProperty('inputstream.adaptive.license_type', 'com.widevine.alpha')
             playitem.setProperty('inputstream.adaptive.license_key', stream['license_url'].replace('{widevineChallenge}', 'B{SSM}') + '|||JBlicense')
             if self.get_setting('subtitles') and 'subtitles' in stream:
                 playitem.setSubtitles(self.vp.download_subtitles(stream['subtitles'], language_to_download=self.get_sub_lang()))
             xbmcplugin.setResolvedUrl(self.handle, True, listitem=playitem)
+
+    def ia_settings(self):
+        """Open InputStream Adaptive settings."""
+        ia_addon = Addon('inputstream.adaptive')
+        ia_addon.openSettings()

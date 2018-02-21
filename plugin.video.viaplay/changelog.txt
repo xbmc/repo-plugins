@@ -1,4 +1,14 @@
-﻿2017.12.27 v2.0.1
+﻿2018.02.21 v2.1.1
++ Fix parental control
+
+2018.02.21 v2.1.0
++ New dependency: script.module.routing
++ Support for 4K streams and 5.1 audio
++ Fix audio bug on some sports streams (requires Kodi v18 Leia)
++ Channels section improvements
++ Code cleanup
+
+2017.12.27 v2.0.1
 + Minor changes needed for approval in the official repository
 
 2017.12.27 v2.0.0

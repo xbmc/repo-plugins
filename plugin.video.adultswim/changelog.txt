@@ -1,0 +1,19 @@
+Version 1.0.6
+- Code cosmetics
+- Created strings.po
+- Removed MetaHandler dependency
+
+Version 1.0.4
+- MetaData enabled
+- Fixed fanart and thumbnails for episodes
+
+Version 1.0.3
+- Improved Resolver
+- Enable/Disable Autoplay Option
+- Show/Hide Locked Episodes Option
+
+Version 1.0.1
+- Minor Fixes
+
+Version 1.0.0
+- Initial Release

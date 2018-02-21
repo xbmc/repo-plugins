@@ -4,5 +4,7 @@
     <setting id="subtitles" type="bool" label="30012" default="true"/>
     <setting id="sub_lang" type="enum" label="30044" lvalues="30045|30046|30047|30048" default="0" visible="!eq(-1,false)" subsetting="true"/>
     <setting id="first_run" type="bool" default="true" visible="false"/>
+    <setting type="sep" />
+    <setting id="ia_settings" type="action" label="30053" action="RunPlugin(plugin://plugin.video.viaplay/ia_settings)" enable="System.HasAddon(inputstream.adaptive)" option="close" />
   </category>
 </settings>

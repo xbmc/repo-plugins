@@ -143,7 +143,7 @@ class Viaplay(object):
         self.make_request(url=url, method='get', params=params)
         return True
 
-    def get_stream(self, guid, pincode=None):
+    def get_stream(self, guid, pincode=None, tve='false'):
         """Return a dict with the stream URL:s and available subtitle URL:s."""
         stream = {}
         url = 'https://play.viaplay.%s/api/stream/byguid' % self.country
@@ -152,11 +152,13 @@ class Viaplay(object):
             'deviceName': 'web',
             'deviceType': 'pc',
             'userAgent': 'Kodi',
-            'deviceKey': 'pcdash-%s' % self.country,
+            'deviceKey': 'chromecast-%s' % self.country,
             'guid': guid
         }
         if pincode:
             params['pgPin'] = pincode
+        if tve == 'true':
+            params['isTve'] = tve
 
         data = self.make_request(url=url, method='get', params=params)
         if 'viaplay:media' in data['_links']:

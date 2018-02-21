@@ -125,6 +125,9 @@ class Main(object):
             else:
                 thumbnail_url = thumbnail_urls[thumbnail_urls_index]['src']
 
+            # let's remove any non-ascii characters from the title, to prevent errors with urllib.parse.parse_qs of the parameters
+            title = title.encode('ascii', 'ignore')
+
             # Add to list...
             parameters = {"action": "list", "plugin_category": self.plugin_category,
                           "url": str(theme_base_url) + str(current_page) + '/', "next_page_possible": "True",

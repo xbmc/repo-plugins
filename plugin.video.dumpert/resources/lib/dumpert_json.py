@@ -106,12 +106,18 @@ class Main(object):
                 # grab first item (tablet)
                 # skip embedded (youtube links) for now {"version":"embed","uri":"youtube:wOeZB7bnoxw"}
                 if item['media'][0]['mediatype'] == 'VIDEO' and item['media'][0]['variants'][0]['version'] != 'embed':
-                    url = item['media'][0]['variants'][0]['uri']
+                    file = item['media'][0]['variants'][0]['uri']
+
+                    log("json file", file)
+
                     list_item = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_url)
-                    list_item.setInfo("video", {"title": title, "studio": "Dumpert", "mediatype": "video", "plot": description, "duration": duration})
+                    list_item.setInfo("video",
+                                      {"title": title, "studio": "Dumpert", "mediatype": "video", "plot": description})
                     list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
                                       'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
                     list_item.setProperty('IsPlayable', 'true')
+                    parameters = {"action": "play-file", "file": file}
+                    url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
                     is_folder = False
                     # Add refresh option to context menu
                     list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])

@@ -1,3 +1,10 @@
+v1.1.6 (2018-02-21)
+- added 'videos' to icon
+- for json now using plugin://-url instead of http-url
+- website changed: fixed playing of youtube videos
+- removing non-ascii characters in title in parameters to prevent UnicodeDecodeError: 'ascii' codec can't decode ...
+The error occured when doing urllib.parse.parse_qs of the parameters
+
 v1.1.5 (2018-01-20)
 - adding a setting for only view new video category
 - addon now works in kode python 2 and should also work in python 3 (!!) once all dependencies work in python 3.

@@ -51,6 +51,12 @@ else:
         import dumpert_play as plugin
 
     #
+    # Play file
+    #
+    elif action == 'play-file':
+        import dumpert_play_file as plugin
+
+    #
     # Search
     #
     elif action == 'search':

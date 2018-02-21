@@ -113,14 +113,14 @@ class Main(object):
         video_urls = soup.findAll('div', attrs={'class': re.compile("video")}, limit=1)
         if len(video_urls) == 0:
             # maybe it's a youtube url
-            # <iframe class='yt-iframe' style='width: 100%' src='https://www.youtube.com/embed/jkdwK_74eEs' frameborder='0' allow='autoplay; encrypted-media' allowfullscreen></iframe>
+            # <iframe class='yt-iframe' style='width: 100%' src='https://www.youtube.com/embed/9L0iOZmdS6s?showInfo=0&rel=0' frameborder='0' allow='autoplay; encrypted-media' allowfullscreen></iframe>
             video_urls = soup.findAll('iframe', attrs={'src': re.compile("^http")}, limit=1)
             if len(video_urls) == 0:
                 no_url_found = True
             else:
                 url = video_urls[0]['src']
                 start_pos_youtube_id = str(url).rfind("/") + len("/")
-                end_pos_youtube_id = len(url)
+                end_pos_youtube_id = str(url).find("?", start_pos_youtube_id)
                 youtube_id = url[start_pos_youtube_id:end_pos_youtube_id]
                 youtube_url = 'plugin://plugin.video.youtube/play/?video_id=%s' % youtube_id
                 video_url = youtube_url

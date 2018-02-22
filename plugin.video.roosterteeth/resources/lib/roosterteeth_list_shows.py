@@ -158,6 +158,10 @@ class Main(object):
             list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
                               'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
             list_item.setProperty('IsPlayable', 'false')
+
+            # let's remove any non-ascii characters from the title, to prevent errors with urllib.parse.parse_qs of the parameters
+            title = title.encode('ascii', 'ignore')
+
             parameters = {"action": "list-episodes", "show_name": title, "url": url, "next_page_possible": "False",
                           "title": title}
             url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)

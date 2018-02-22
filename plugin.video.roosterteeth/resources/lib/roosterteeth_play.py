@@ -167,7 +167,6 @@ class Main(object):
                             # check that the username is in the response. If that's the case, the login was ok
                             # and the username and password in settings are ok.
                             if str(response.text).find(SETTINGS.getSetting('username')) >= 0:
-                                # dialog_wait.create("Login Success", "Currently looking for videos in '%s'" % self.title)
 
                                 log('login was successful!', 'login was successful!')
 

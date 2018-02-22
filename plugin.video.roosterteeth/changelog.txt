@@ -1,3 +1,7 @@
+1.3.7 (2018-02-21)
+- removing non-ascii characters in title in parameters to prevent UnicodeDecodeError: 'ascii' codec can't decode ...
+The error occured when doing urllib.parse.parse_qs of the parameters
+
 1.3.6 (2018-01-31)
 - fixed showing videos in selected video quality
 

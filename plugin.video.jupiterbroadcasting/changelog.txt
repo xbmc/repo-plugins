@@ -1,3 +1,6 @@
+[B]Version 3.6.1 Unreleased[/B]
+- Krypton API changes
+
 [B]Version 3.6.0 February 14th, 2018[/B]
 - Updated from strings.xml to strings.po
 

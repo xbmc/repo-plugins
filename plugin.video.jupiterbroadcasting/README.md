@@ -1,6 +1,6 @@
 # Jupiter Broadcasting Kodi Addon
 
-[![Build Status](https://travis-ci.org/JupiterBroadcasting/plugin.video.jupiterbroadcasting.svg?branch=master)](https://travis-ci.org/JupiterBroadcasting/plugin.video.jupiterbroadcasting)
+[![Build Status](https://travis-ci.org/JupiterBroadcasting/plugin.video.jupiterbroadcasting.svg?branch=krypton)](https://travis-ci.org/JupiterBroadcasting/plugin.video.jupiterbroadcasting)
 
 Watch shows from the [Jupiter Broadcasting](http://jupiterbroadcasting.com) network in [Kodi](http://kodi.tv).
 

@@ -25,7 +25,7 @@ class myAddon(t1mAddon):
      addonLanguage  = self.addon.getLocalizedString
      html = self.getRequest('http://www.diynetwork.com/shows/full-episodes')
      html = re.compile('<div class="capsule editorialPromo parbase section">(.+?)<div class="container-aside">', re.DOTALL).search(html).group(1)
-     a = re.compile('m-MediaBlock--PLAYLIST">.+?href="(.+?)".+?data-src="(.+?)".+?HeadlineText.+?>(.+?)<.+?AssetInfo">(.+?)<', re.DOTALL).findall(html)
+     a = re.compile('m-MediaBlock--PLAYLIST">.+?href="(.+?)".+?data-src="(.+?)".+?HeadlineText.+?>(.+?)<.+?AssetInfo">(.+?)<', re.IGNORECASE | re.DOTALL).findall(html)
      fanart = self.addonFanart
      for i, (url, thumb, name, vidcnt) in list(enumerate(a[1:], start=1)):
        infoList = {}

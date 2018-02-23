@@ -3,6 +3,7 @@ plugin.video.diy
 
 Kodi Addon for DIY Network website
 
+V3.0.10 use ignorecase for regex
 V3.0.9 minor website change
 V3.0.8 minor website change
 V3.0.7 website change

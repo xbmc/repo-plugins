@@ -5,19 +5,19 @@
     version="3.6.0"
     provider-name="Jupiter Broadcasting">
     <requires>
-        <import addon="xbmc.python" version="2.1.0" />
+        <import addon="xbmc.python" version="2.25.0" />
         <import addon="script.module.beautifulsoup" version="3.2.1" />
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="en">Jupiter Broadcasting video addon</summary>
-        <summary lang="bg">Видео добавка за Jupiter Broadcasting</summary>
-        <description lang="en">Watch shows from the Jupiter Broadcasting Network including Linux Action News, TechSNAP, Ask Noah, Coder Radio,  and more.</description>
-        <description lang="bg">Гледайте предавания от мрежата на Jupiter Broadcasting: Linux Action News, TechSNAP, Ask Noah, Coder Radio, и други.</description>
-        <disclaimer lang="en">For more information, visit JupiterBroadcasting.com.</disclaimer>
-        <disclaimer lang="bg">За повече информация посетете www.JupiterBroadcasting.com</disclaimer>
+        <summary lang="en_GB">Jupiter Broadcasting video addon</summary>
+        <summary lang="bg_BG">Видео добавка за Jupiter Broadcasting</summary>
+        <description lang="en_GB">Watch shows from the Jupiter Broadcasting Network including Linux Action News, TechSNAP, Ask Noah, Coder Radio,  and more.</description>
+        <description lang="bg_BG">Гледайте предавания от мрежата на Jupiter Broadcasting: Linux Action News, TechSNAP, Ask Noah, Coder Radio, и други.</description>
+        <disclaimer lang="en_GB">For more information, visit JupiterBroadcasting.com.</disclaimer>
+        <disclaimer lang="bg_BG">За повече информация посетете www.JupiterBroadcasting.com</disclaimer>
         <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
         <website>http://jupiterbroadcasting.com</website>
         <source>https://github.com/JupiterBroadcasting/plugin.video.jupiterbroadcasting</source>

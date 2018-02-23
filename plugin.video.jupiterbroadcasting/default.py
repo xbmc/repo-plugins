@@ -134,7 +134,7 @@ def index(name, url, page):
             # Add the episode link.
             add_link(info['title'], video, pubDate, thumbnail, info)
     except Exception as e:
-        print 'Exception Parsing Feed! Please provide this log to https://github.com/RobLoach/plugin.video.jupiterbroadcasting'
+        xbmc.log('Jupiter Broadcasting Parsing Failure. Provide this log to https://github.com/JupiterBroadcasting/plugin.video.jupiterbroadcasting : %s' % (e), xbmc.LOGERROR)
         raise
 
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
@@ -176,7 +176,8 @@ def add_archive(name, info):
     uri = sys.argv[0] + '?url=' + urllib.quote_plus('archiveFolder') + '&mode=' + str(2)
     uri += '&name=' + urllib.quote_plus(name) + '&page=' + str(0)
 
-    liz = xbmcgui.ListItem(name, iconImage=info['image'], thumbnailImage=info['image'])
+    liz = xbmcgui.ListItem(name)
+    liz.setArt({ 'icon': info['image'], 'thumb': info['image'] })
     liz.setInfo(type='video', infoLabels=info)
     xbmcplugin.addDirectoryItem(
         handle=int(sys.argv[1]),
@@ -219,11 +220,8 @@ def add_link(name, url, date, iconimage, info):
     """
     Adds a link to XBMC's list of options.
     """
-    liz = xbmcgui.ListItem(
-        name,
-        date,
-        iconImage=iconimage,
-        thumbnailImage=iconimage)
+    liz = xbmcgui.ListItem(name, date)
+    liz.setArt({ 'icon': iconimage, 'thumb': iconimage })
     liz.setProperty('IsPlayable', 'true')
     liz.setInfo(type='Video', infoLabels=info)
     return xbmcplugin.addDirectoryItem(
@@ -239,7 +237,8 @@ def add_dir(name, url, mode, iconimage, info, page=0):
     uri = sys.argv[0] + '?url=' + urllib.quote_plus(url) + '&mode=' + str(mode)
     uri += '&name=' + urllib.quote_plus(name) + '&page=' + str(page)
     info['Title'] = name
-    liz = xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
+    liz = xbmcgui.ListItem(name)
+    liz.setArt({ 'icon': iconimage, 'thumb': iconimage })
     liz.setInfo(type='video', infoLabels=info)
     return xbmcplugin.addDirectoryItem(
         handle=int(sys.argv[1]),

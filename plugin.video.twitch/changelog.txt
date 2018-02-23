@@ -1,3 +1,8 @@
+2.2.0
+[add] Search history
+[add] Settings - Maintenance
+[fix] VodCast highlighting
+
 2.1.1
 [fix] video default qualities
 [fix] setContentLookup AttributeError

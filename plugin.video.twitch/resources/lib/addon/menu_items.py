@@ -32,6 +32,21 @@ def update_container(label, queries):
     return [(label, 'Container.Update(%s)' % kodi.get_plugin_url(queries))]
 
 
+def clear_search_history(search_type, do_refresh=False):
+    params = {'mode': MODES.CLEARSEARCHHISTORY, 'search_type': search_type}
+    if do_refresh:
+        params['refresh'] = do_refresh
+    return run_plugin(i18n('clear_search_history'), params)
+
+
+def remove_search_history(search_type, query, do_refresh=True):
+    query_label = '[B]%s[/B]' % query
+    params = {'mode': MODES.REMOVESEARCHHISTORY, 'search_type': search_type, 'query': query}
+    if not do_refresh:
+        params['refresh'] = do_refresh
+    return run_plugin(i18n('remove_') % query_label, params)
+
+
 def clear_previews():
     if kodi.get_setting('live_previews_enable') == 'true':
         return run_plugin(i18n('clear_live_preview'), {'mode': MODES.CLEARLIVEPREVIEWS, 'notify': utils.notify_refresh()})

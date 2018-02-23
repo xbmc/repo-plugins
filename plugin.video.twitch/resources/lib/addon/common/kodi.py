@@ -324,6 +324,10 @@ def update_container(url):
     xbmc.executebuiltin('Container.Update(%s)' % url)
 
 
+def delete_file(filename):
+    return xbmcvfs.delete(filename)
+
+
 def get_keyboard(heading, default=''):
     keyboard = xbmc.Keyboard()
     keyboard.setHeading(heading)

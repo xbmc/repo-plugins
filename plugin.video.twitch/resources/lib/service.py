@@ -103,7 +103,7 @@ def get_followed_streams(twitch_api):
     for stream in filtered[Keys.STREAMS]:
         if not logos.get(stream[Keys.CHANNEL][Keys._ID]):
             logos[stream[Keys.CHANNEL][Keys._ID]] = stream[Keys.CHANNEL][Keys.LOGO]
-        if stream.get(Keys.STREAM_TYPE) == 'watch_party':
+        if stream.get(Keys.STREAM_TYPE) != 'live':
             color = get_vodcast_color()
             if stream[Keys.CHANNEL].get(Keys.DISPLAY_NAME):
                 stream[Keys.CHANNEL][Keys.DISPLAY_NAME] = u'[COLOR={color}]{name}[/COLOR]'.format(name=stream[Keys.CHANNEL][Keys.DISPLAY_NAME], color=color)

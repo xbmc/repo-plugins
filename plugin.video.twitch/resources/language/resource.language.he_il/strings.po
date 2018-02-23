@@ -804,3 +804,127 @@ msgstr "לא ידוע"
 msgctxt "#30222"
 msgid "VODCast highlight color"
 msgstr "צבע סימון VODCast"
+
+msgctxt "#30223"
+msgid "Use inputstream.adaptive"
+msgstr ""
+
+msgctxt "#30224"
+msgid "Configure inputstream.adaptive"
+msgstr ""
+
+msgctxt "#30225"
+msgid "inputstream.adaptive is enabled in the Twitch settings, however inputstream.adaptive appears to be disabled. Would you like to enable inputstream.adaptive now?"
+msgstr ""
+
+msgctxt "#30226"
+msgid "The installed inputstream.adaptive add-on does not meet the version requirement(%s), and has been disabled in the Twitch add-on settings."
+msgstr ""
+
+msgctxt "#30227"
+msgid "Revoke Token"
+msgstr ""
+
+msgctxt "#30228"
+msgid "Are you sure you want to revoke your OAuth token?"
+msgstr ""
+
+msgctxt "#30229"
+msgid "OAuth token has been revoked"
+msgstr ""
+
+msgctxt "#30230"
+msgid "OAuth token has been updated"
+msgstr ""
+
+msgctxt "#30231"
+msgid "%s started streaming %s"
+msgstr ""
+
+msgctxt "#30232"
+msgid "Notify at start"
+msgstr ""
+
+msgctxt "#30233"
+msgid "Group notifications at start"
+msgstr ""
+
+msgctxt "#30234"
+msgid "Reset cache on Refresh"
+msgstr ""
+
+msgctxt "#30235"
+msgid "New search"
+msgstr ""
+
+msgctxt "#30236"
+msgid "Search history size"
+msgstr ""
+
+msgctxt "#30237"
+msgid "Clear search history?"
+msgstr ""
+
+msgctxt "#30238"
+msgid "Remove %s from search history?"
+msgstr ""
+
+msgctxt "#30239"
+msgid "Remove %s"
+msgstr ""
+
+msgctxt "#30240"
+msgid "Clear search history"
+msgstr ""
+
+msgctxt "#30241"
+msgid "Search history cleared"
+msgstr ""
+
+msgctxt "#30242"
+msgid "Removed %s from search history"
+msgstr ""
+
+msgctxt "#30243"
+msgid "Maintenance"
+msgstr ""
+
+msgctxt "#30244"
+msgid "Search History"
+msgstr ""
+
+msgctxt "#30245"
+msgid "Delete streams search history"
+msgstr ""
+
+msgctxt "#30246"
+msgid "Delete channels search history"
+msgstr ""
+
+msgctxt "#30247"
+msgid "Delete games search history"
+msgstr ""
+
+msgctxt "#30248"
+msgid "Delete video id/url search history"
+msgstr ""
+
+msgctxt "#30249"
+msgid "Other"
+msgstr ""
+
+msgctxt "#30250"
+msgid "Delete storage.json"
+msgstr ""
+
+msgctxt "#30251"
+msgid "Are you sure you want to delete %s?"
+msgstr ""
+
+msgctxt "#30252"
+msgid "Deleting %s succeeded"
+msgstr ""
+
+msgctxt "#30253"
+msgid "Deleting %s failed"
+msgstr ""

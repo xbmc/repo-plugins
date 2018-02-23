@@ -26,6 +26,7 @@ from common import kodi, json_store
 from strings import STRINGS
 from tccleaner import TextureCacheCleaner
 from constants import CLIENT_ID, REDIRECT_URI, LIVE_PREVIEW_TEMPLATE, Images, ADDON_DATA_DIR, REQUEST_LIMIT, COLORS
+from search_history import StreamsSearchHistory, ChannelsSearchHistory, GamesSearchHistory, IdUrlSearchHistory
 from twitch.api.parameters import Boolean, Period, ClipPeriod, Direction, Language, SortBy, VideoSort
 import xbmcvfs
 
@@ -140,6 +141,25 @@ def get_oauth_token(token_only=True, required=False):
                     oauth_token = oauth_token[idx + 1:]
                 oauth_token = 'oauth:{0}'.format(oauth_token)
     return oauth_token.decode('utf-8')
+
+
+def get_search_history_size():
+    return int(kodi.get_setting('search_history_size'))
+
+
+def get_search_history(search_type):
+    history = None
+    history_size = get_search_history_size()
+    if history_size > 0:
+        if search_type == 'streams':
+            history = StreamsSearchHistory(max_items=history_size)
+        elif search_type == 'channels':
+            history = ChannelsSearchHistory(max_items=history_size)
+        elif search_type == 'games':
+            history = GamesSearchHistory(max_items=history_size)
+        elif search_type == 'id_url':
+            history = IdUrlSearchHistory(max_items=history_size)
+    return history
 
 
 def get_items_per_page():

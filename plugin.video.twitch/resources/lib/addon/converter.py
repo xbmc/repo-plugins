@@ -278,7 +278,7 @@ class JsonListItemConverter(object):
         logo = channel.get(Keys.LOGO) if channel.get(Keys.LOGO) else Images.VIDEOTHUMB
         image = preview if preview else logo
         title = self.get_title_for_stream(stream)
-        if stream.get(Keys.STREAM_TYPE) == 'watch_party':
+        if stream.get(Keys.STREAM_TYPE) != 'live':
             color = get_vodcast_color()
             title = u'[COLOR={color}]{title}[/COLOR]'.format(title=title, color=color)
         info = self.get_plot_for_stream(stream)

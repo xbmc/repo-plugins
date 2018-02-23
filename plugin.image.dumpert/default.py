@@ -17,8 +17,8 @@ ADDON = "plugin.image.dumpert"
 SETTINGS = xbmcaddon.Addon()
 LANGUAGE = SETTINGS.getLocalizedString
 IMAGE_PATH = os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources', 'images')
-DATE = "2018-01-20"
-VERSION = "1.0.1"
+DATE = "2018-02-23"
+VERSION = "1.0.2"
 
 MODE_LATEST = 1
 
@@ -178,7 +178,6 @@ class dumpertSession(object):
         # Init
         #
         no_url_found = False
-        unplayable_media_file = False
         have_valid_url = False
 
         html_source = ''
@@ -196,7 +195,7 @@ class dumpertSession(object):
             xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30507) % (str(error)))
             exit(1)
 
-        soup = BeautifulSoup(html_source)
+        soup = getSoup(html_source)
         image_url = ''
 
         # <div id="item1" class="foto" data-res="1080x1349">
@@ -223,13 +222,6 @@ class dumpertSession(object):
             liz.addContextMenuItems([('Refresh', 'Container.Refresh')])
             return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=image_url, listitem=liz, isFolder=False,
                                                totalItems=tot)
-        #
-        # Alert user
-        #
-        elif no_url_found:
-            xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30505))
-        elif unplayable_media_file:
-            xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30506))
         return True
 
 
@@ -249,19 +241,17 @@ def get_params():
     paramstring = sys.argv[2]
     if len(paramstring) >= 2:
         params = sys.argv[2]
-        cleanedparams = params.replace('?', '')
         if (params[len(params) - 1] == '/'):
             params = params[0:len(params) - 2]
+        cleanedparams = params.replace('?', '')
         pairsofparams = cleanedparams.split('&')
         param = {}
         for i in range(len(pairsofparams)):
-            splitparams = {}
             splitparams = pairsofparams[i].split('=')
             if (len(splitparams)) == 2:
                 param[splitparams[0]] = splitparams[1]
             if (len(splitparams)) == 1:
                 param[splitparams[0]] = ""
-
     return param
 
 

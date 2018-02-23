@@ -2,7 +2,7 @@
 <addon
 	id="plugin.image.dumpert"
 	name="Dumpert"
-	version="1.0.1"
+	version="1.0.2"
 	provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                     version="2.14.0"/>

@@ -1,3 +1,7 @@
+v1.0.2 (2018-02-23)
+- added 'images' to icon
+- don't show popup when image url can't be found
+
 v1.0.1 (2018-01-20):
 - added forum thread link
 - addon now works in kode python 2 and should also work in python 3 (!!) once all dependencies work in python 3.

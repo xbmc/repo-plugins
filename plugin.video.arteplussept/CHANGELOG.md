@@ -1,3 +1,11 @@
+# Version 0.5.8
+
+thanks to https://github.com/cifera
+
+* Can now use new api see issue #35,
+* Now gets all videos for last 7 days (can take a while)
+* Most other functions removed
+
 # Version 0.5.4
 
 * updated dependency version

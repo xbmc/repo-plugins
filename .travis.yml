@@ -5,6 +5,9 @@ python:
 install:
   - pip install Pillow
 
+before_install:
+  - git submodule update --init --recursive --remote
+
 # command to run our tests
 script:
   - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then python .tests/check_repo.py; fi'

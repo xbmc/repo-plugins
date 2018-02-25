@@ -135,3 +135,7 @@ msgstr ""
 msgctxt "#30029"
 msgid "Video Rentals Coming Soon!"
 msgstr ""
+
+msgctxt "#30030"
+msgid "Open Guide Settings"
+msgstr ""

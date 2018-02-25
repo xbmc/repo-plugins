@@ -1,4 +1,4 @@
-#   Copyright (C) 2017 Lunatixz
+#   Copyright (C) 2018 Lunatixz
 #
 #
 # This file is part of USTVnow
@@ -17,7 +17,6 @@
 # along with USTVnow. If not, see <http://www.gnu.org/licenses/>.
 
 # -*- coding: utf-8 -*-
-
 #entrypoint
 if __name__ == '__main__':
     from resources.lib import ustvnow

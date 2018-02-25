@@ -104,13 +104,16 @@
                 <description>Show Info</description>
                 <left>411</left>
                 <top>105</top>
-                <width>1468</width>
+                <width>1150</width>
                 <height>40</height>
                 <font>font60</font>
                 <textcolor>FFFFFFFF</textcolor>
                 <shadowcolor>ff000000</shadowcolor>
                 <aligny>center</aligny>
                 <align>left</align>
+                <scroll>true</scroll>
+                <scrollspeed>50</scrollspeed>
+                <scrollsuffix> - </scrollsuffix>
                 <label>$INFO[Container(40000).ListItem.Title]</label>
             </control>
             <control type="grouplist">
@@ -134,6 +137,22 @@
                 </control> 
                 <control type="image">
                     <width>90</width>
+                    <height>40</height>
+                    <aspectratio scalediffuse="true" align="center" aligny="center">keep</aspectratio>
+                    <texture fallback="" background="true">USTVnow.png</texture>
+                    <animation effect="fade" time="100">VisibleChange</animation> 
+                    <visible>[!String.IsEqual(Container(40000).ListItem.Property(IsHDHomerun),okay)]</visible>
+                </control>
+                <control type="image">
+                    <width>90</width>
+                    <height>40</height>
+                    <aspectratio scalediffuse="true" align="center" aligny="center">keep</aspectratio>
+                    <texture fallback="" background="true">HDHR.png</texture>
+                    <animation effect="fade" time="100">VisibleChange</animation> 
+                    <visible>[String.IsEqual(Container(40000).ListItem.Property(IsHDHomerun),okay)]</visible>
+                </control>
+                <control type="image">
+                    <width>100</width>
                     <height>40</height>
                     <aspectratio scalediffuse="true" align="center" aligny="center">keep</aspectratio>
                     <texture fallback="" background="true">$INFO[Container(40000).ListItem.Art(clearlogo)]</texture>
@@ -304,10 +323,10 @@
                 <description>Number</description>
                 <control type="label" id="33111">
                     <description>Channel 1 Number</description>
-                    <width>75</width>
+                    <width>100</width>
                     <height>75</height>
                     <label></label>
-                    <font>font32_title</font>
+                    <font>font12</font>
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
@@ -315,10 +334,10 @@
                 </control>
                 <control type="label" id="33112">
                     <description>Channel 2 Number</description>
-                    <width>75</width>
+                    <width>100</width>
                     <height>75</height>
                     <label></label>
-                    <font>font32_title</font>
+                    <font>font12</font>
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
@@ -326,10 +345,10 @@
                 </control>
                 <control type="label" id="33113">
                     <description>Channel 3 Number</description>
-                    <width>75</width>
+                    <width>100</width>
                     <height>75</height>
                     <label></label>
-                    <font>font32_title</font>
+                    <font>font12</font>
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
@@ -337,10 +356,10 @@
                 </control>
                 <control type="label" id="33114">
                     <description>Channel 4 Number</description>
-                    <width>75</width>
+                    <width>100</width>
                     <height>75</height>
                     <label></label>
-                    <font>font32_title</font>
+                    <font>font12</font>
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
@@ -348,10 +367,10 @@
                 </control>
                 <control type="label" id="33115">
                     <description>Channel 5 Number</description>
-                    <width>75</width>
+                    <width>100</width>
                     <height>75</height>
                     <label></label>
-                    <font>font32_title</font>
+                    <font>font12</font>
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
@@ -359,10 +378,10 @@
                 </control>
                 <control type="label" id="33116">
                     <description>Channel 6 Number</description>
-                    <width>75</width>
+                    <width>100</width>
                     <height>75</height>
                     <label></label>
-                    <font>font32_title</font>
+                    <font>font12</font>
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
@@ -370,10 +389,10 @@
                 </control>
                 <control type="label" id="33117">
                     <description>Channel 7 Number</description>
-                    <width>75</width>
+                    <width>100</width>
                     <height>75</height>
                     <label></label>
-                    <font>font32_title</font>
+                    <font>font12</font>
                     <align>right</align>
                     <aligny>center</aligny>
                     <textcolor>FFFFFFFF</textcolor>
@@ -591,6 +610,7 @@
             <height>133</height>
             <orientation>vertical</orientation>
             <content target="video" sortby="title" sortorder="" limit="1">plugin://plugin.video.ustvnow/?mode=1</content>
+            <!-- <content target="video" sortby="title" sortorder="" limit="1">plugin://plugin.video.ustvnow/?mode=12</content> -->
             <itemlayout height="133" width="1848">
                 <control type="textbox">
                     <left>910</left>

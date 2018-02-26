@@ -1,3 +1,17 @@
+1.3.1
+- Code cleanup
+1.3.0
+- Code cleanup
+1.2.4
+- Fix for the livestream entry
+- Hide livestreams (for now)
+1.2.3
+- Added requirement for inputstream.adaptive
+1.2.2
+- Moved to Funk API 1.1
+- Moved to Nexx CMS
+1.2.1
+- Fixed incompatiblity with libmediathek3
 1.2.0
 - Removed SSL hack
 - Code cleanup

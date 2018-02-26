@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.funnynordie" version="1.0.0" name="Funny or Die" provider-name="Lunatixz">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.simplecache" version="1.0.0"/>
+        <import addon="script.module.youtube.dl" version="17.0.0"/>
+        <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Watch full episodes and clips from Funny or Die.</summary>
+        <description lang="en_GB">Funny Or Die is a comedy video website that combines user-generated content with original, exclusive content. The site is a place where celebrities, established and up-and-coming comedians and regular users can all put up stuff they think is funny. At the same time, the site hopes to eliminate all the junk that people have to pick through to find videos. That means around here you get to vote on what videos are funny and what videos deserve to die.</description>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+        <source>https://github.com/Lunatixz/KODI_ADDONS/tree/master/plugin.video.funnynordie</source>
+        <website>http://funnyordie.com</website>
+        <news></news>
+        <forum>https://forum.kodi.tv/showthread.php?tid=328954</forum>
+        <assets>
+            <icon>resources/images/icon.png</icon>
+            <fanart>resources/images/fanart.jpg</fanart>
+            <screenshot>resources/images/screenshot01.png</screenshot>
+            <screenshot>resources/images/screenshot02.png</screenshot>
+            <screenshot>resources/images/screenshot03.png</screenshot>
+        </assets>
+    </extension>
+</addon>

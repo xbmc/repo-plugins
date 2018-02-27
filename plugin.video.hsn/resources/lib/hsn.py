@@ -55,12 +55,12 @@ def log(msg, level=xbmc.LOGDEBUG):
 def getParams():
     return dict(urlparse.parse_qsl(sys.argv[2][1:]))
                  
-socket.setdefaulttimeout(TIMEOUT)
+socket.setdefaulttimeout(TIMEOUT)  
 class HSN(object):
     def __init__(self):
         log('__init__')
         self.cache   = SimpleCache()
-           
+
            
     def openURL(self, url):
         log('openURL, url = ' + str(url))
@@ -69,7 +69,7 @@ class HSN(object):
             if not cacheresponse:
                 request = urllib2.Request(url)
                 response = urllib2.urlopen(request, timeout = TIMEOUT).read()
-                self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, response, expiration=datetime.timedelta(days=1))
+                self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, response, expiration=datetime.timedelta(minutes=5))
             return self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
         except Exception as e:
             log("openURL Failed! " + str(e), xbmc.LOGERROR)
@@ -77,10 +77,17 @@ class HSN(object):
             return ''
          
          
+    def ESTnow(self):
+        is_dst = time.daylight and time.localtime().tm_isdst > 0
+        utc_offset = - (time.altzone if is_dst else time.timezone)
+        td_local = datetime.timedelta(seconds=utc_offset)
+        return datetime.datetime.utcnow() + td_local
+         
+         
     def buildHSN(self, name, url):
         guide  = []
         isLive = False
-        now    = datetime.datetime.now()
+        now    = self.ESTnow()
         soup   = BeautifulSoup(self.openURL(LIVE_URL), "html.parser")
         soup   = soup('div' , {'class': 'live-container'})[0]
         if int(url) is 1:
@@ -104,15 +111,20 @@ class HSN(object):
                 if isLive: 
                     label  = '[B]Live[/B] - %s'%title
                     vidurl = liveurl
+                elif len(vidurl) == 0:
+                    label  = 'Coming Up: %s - %s'%(date, title)
+                    vidurl = liveurl
                 else: label = '[B]Pre-Recorded: [/B]%s - %s'%(date, title)
+                aired = (datetime.datetime.strptime(date, '%m/%d/%Y %I:%M:%S %p'))
             except:
                 vidurl = liveurl
                 date  = item.attrs['data-startdate']
                 title = item.get_text()
                 if isLive: label  = '[B]Live[/B] - %s'%title
-                else: label = '%s - %s'%(date, title)
+                else: label  = 'Coming Up: %s - %s'%(date, title)
+                aired = (datetime.datetime.strptime(date, '%m/%d/%Y %I:%M:%S %p'))
+                if not isLive and now > aired: continue
             CONTENT_TYPE  = 'episodes'
-            aired = (datetime.datetime.strptime(date, '%m/%d/%Y %I:%M:%S %p'))
             date  = aired.strftime('%I:%M:%S %p')
             infoLabels   = {"mediatype":"episode","label":label ,"title":label,"plot":title,"aired":aired.strftime('%Y-%m-%d')}
             infoArt      = {"thumb":ICON,"poster":ICON,"fanart":FANART,"icon":ICON,"logo":ICON}

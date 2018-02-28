@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.rocketbeans" version="1.0.2" name="Rocket Beans TV" provider-name="Razzeee">
+<addon id="plugin.video.rocketbeans" version="1.1.0" name="Rocket Beans TV" provider-name="Razzeee">
     <requires>
         <import addon="xbmc.python" version="2.25.0" />
         <import addon="plugin.video.youtube" version="5.2.1" />
+        <import addon="plugin.video.twitch" version="2.2.0" />
         <import addon="script.module.routing" version="0.2.0"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
@@ -29,6 +30,9 @@ Wir machen nur, auf was wir Bock haben – und das mit Erfolg! Egal ob spannende
             <screenshot>resources/screenshot-01.png</screenshot>
             <screenshot>resources/screenshot-02.png</screenshot>
         </assets>
-        <news>Improved live stream display</news>
+        <news>- Read more data from the program plan, you can now even watch stuff on there 
+- Option to switch live stream source between youtube and twitch (thx truprecht)
+- Added twitch video library (thx truprecht)
+- Added translations (german, english)</news>
     </extension>
 </addon>

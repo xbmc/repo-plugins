@@ -101,7 +101,7 @@ def guide():
                 title,
                 thumbnail,
                 True,
-                '[B]' + getString(32002), +'[/B]: ' + game if game else '',
+                '[B]' + getString(32002) +'[/B]: ' + game if game else '',
                 duration
             )
             addDirectoryItem(

@@ -256,15 +256,23 @@ def showVideoURL(url):
         pass
 
     try:
-        ID = re.search('(?is)<iframe.+?src="[^"]+?embed/(?P<id>[^/"]+)".+?</iframe>',html).group(1)
+        url = re.search('(?is)<iframe.+?src="[^"]+?embed/(?P<url>[^/"\?]+).*?".+?</iframe>',html).group(1)
     except:
-        ID = re.search('href="http://youtu.be/(?P<id>[^"]+)"',html).group(1)
-    showVideo(ID)
+        try:
+            url = re.search('href="(?P<url>http://youtu.be/[^"]+)"',html).group(1)
+        except:
+            url = ''
+    showVideo(url)
 
-@plugin.route('/play/<ID>')
-def showVideo(ID):
-    url = 'plugin://plugin.video.youtube/play/?video_id={0}'.format(ID)
-    plugin.set_resolved_url({'path':url,'info':{'type':'Video'}})
+@plugin.route('/play/<url>')
+def showVideo(url):
+    if url:
+        import YDStreamExtractor
+        YDStreamExtractor.disableDASHVideo(True)
+
+        vid = YDStreamExtractor.getVideoInfo(url, quality=1)
+        url = vid.streamURL()
+    plugin.set_resolved_url({'path':url, 'info': {'type': 'Video'}})
 
 def showBrightcoveVideo(ID,player,src):
     script = getPage(src)

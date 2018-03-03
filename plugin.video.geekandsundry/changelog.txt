@@ -1,5 +1,10 @@
 Geek & Sundry Changelog
 
+*** 0.1.8 ***
+
+Fix playback failure issues
+Add Hebrew translation (thanks to Eng2Heb)
+
 *** 0.1.7 ***
 
 Fix issues with brightcove videos not playing

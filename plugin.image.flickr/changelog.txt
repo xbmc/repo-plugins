@@ -1,5 +1,9 @@
 flickrXBMC Changelog
 
+*** 1.1.2 ***
+
+Fix occasional failure to display images
+
 *** 1.1.1 ***
 
 Fix Re-Authorize option in add-on settings

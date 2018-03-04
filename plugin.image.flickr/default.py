@@ -211,7 +211,9 @@ class Maps:
             url = urllib.unquote_plus(url)
             if 'error' in url: return ''
         else:
-            url = "http://maps.google.com/maps/api/staticmap?center="+lat+","+lon+"&zoom="+zoom+"&size="+str(width)+"x"+str(height)+"&sensor=false&maptype="+self.default_map_type+"&scale="+str(scale)+"&format=jpg"
+            import random
+            url = "https://maps.google.com/maps/api/staticmap?center="+lat+","+lon+"&zoom="+zoom+"&size="+str(width)+"x"+str(height)+"&sensor=false&maptype="+self.default_map_type+"&scale="+str(scale)+"&format=jpg"
+            url += "|" + urllib.urlencode({"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36"})
 
         fname,ignore  = urllib.urlretrieve(url + mark,ipath) #@UnusedVariable
         return fname
@@ -418,6 +420,13 @@ class FlickrSession:
             if s.get('label') == label:
                 return s.get('source')
 
+    def getBestPhoto(self, photo):
+        for s in reversed(self.DISPLAY_VALUES):
+            url = photo.get(self.SIZE_KEYS[s])
+            if url:
+                return url
+        return ''
+
     def addPhotos(self,method,mode,url='BLANK',page='1',mapOption=True,with_username=False,**kwargs):
         global ShareSocial
 
@@ -482,16 +491,12 @@ class FlickrSession:
         #ptype = 'image'
         thumb = photo.get(self.SIZE_KEYS[self.defaultThumbSize])
         display = photo.get(self.SIZE_KEYS[self.defaultDisplaySize])
-        if not (thumb and display):
-            display = photo.get(self.SIZE_KEYS[self.defaultDisplaySize],photo.get('url_o',''))
+        if not thumb:
             thumb = photo.get(self.SIZE_KEYS[self.defaultThumbSize],photo.get('url_s',''))
+        if not display:
+            display = photo.get(self.SIZE_KEYS[self.defaultDisplaySize],photo.get('url_o',''))
             if not display:
-                rd = self.DISPLAY_VALUES[:]
-                rd.reverse()
-                for s in rd:
-                    if photo.get(s):
-                        display = photo.get(s)
-                        break
+                display = self.getBestPhoto(photo)
         sizes = {}
         if ptype == 'video':
             sizes = self.getImageUrl(pid,'all')
@@ -508,7 +513,7 @@ class FlickrSession:
             run = self.getShareString(photo,sizes)
             if run: contextMenu.append(('Share...',run))
 
-        saveURL = photo.get('url_o',display)
+        saveURL = photo.get('url_o',self.getBestPhoto(photo))
         contextMenu.append((__language__(30517),'XBMC.RunScript(special://home/addons/plugin.image.flickr/default.py,save,'+urllib.quote_plus(saveURL)+','+title+')'))
         #contextMenu.append(('Test...','XBMC.RunScript(special://home/addons/plugin.image.flickr/default.py,slideshow)'))
 

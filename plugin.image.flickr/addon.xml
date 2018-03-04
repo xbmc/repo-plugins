@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.image.flickr" name="flickr" version="1.1.1" provider-name="Rick Phillips (ruuk)">
+<addon id="plugin.image.flickr" name="flickr" version="1.1.2" provider-name="Rick Phillips (ruuk)">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />
 		<import addon="script.module.elementtree" version="1.2.7" />
@@ -14,7 +14,7 @@
 		<summary lang="de">flickrXBMC: flickr in XBMC</summary>
 		<summary lang="es">flickrXBMC: flickr en XBMC</summary>
 		<summary lang="nl">flickrXBMC: Flickr op XBMC</summary>
-		<description>flickrXBMC allows you to: Browse your photostream, collections, sets, galleries, tags, places, and favorites. Browse your contacts and their content. Search you or your contacts photostream, or search flickr.</description>
+		<description>flickrXBMC allows you to: Browse your photostream, collections, sets, galleries, tags, places, and favorites. Browse your contacts and their content. Search your or your contacts photostream, or search flickr.</description>
 		<description lang="de">flickrXBMC ermöglicht Fotostreams, Sammlungen, Sets, Gallerien, Tags, Orte und Favoriten zu dursuchen. Durchsuche deine Freunde und deren Fotos. Durchsuche deine Fotos oder die deiner Freunde, oder durchsuche flickr allgemein.</description>
 		<description lang="es">flickrXBMC le permite: Busca en tu galería de fotos, colecciones, conjuntos, galerías, etiquetas, lugares, y favoritos. Busque sus contactos y su contenido. Buscar contactos que usted o su galería de fotos, o flickr de búsqueda.</description>
 		<description lang="nl">flickrXBMC geeft u de mogelijkheid om te bladeren door uw photostreams, verzamelingen, sets, galerijen, tags, plaatsen en favorieten. Bekijk uw contacten en hun foto's. Zoek door uw eigen of van uw contacts de photostreams of door geheel Flickr.</description>

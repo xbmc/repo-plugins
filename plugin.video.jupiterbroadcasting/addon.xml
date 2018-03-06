@@ -2,11 +2,12 @@
 <addon
     id="plugin.video.jupiterbroadcasting"
     name="Jupiter Broadcasting"
-    version="3.6.0"
+    version="3.6.2"
     provider-name="Jupiter Broadcasting">
     <requires>
         <import addon="xbmc.python" version="2.25.0" />
         <import addon="script.module.beautifulsoup" version="3.2.1" />
+        <import addon="script.module.requests" version="2.18.4" />
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>
@@ -14,7 +15,7 @@
     <extension point="xbmc.addon.metadata">
         <summary lang="en_GB">Jupiter Broadcasting video addon</summary>
         <summary lang="bg_BG">Видео добавка за Jupiter Broadcasting</summary>
-        <description lang="en_GB">Watch shows from the Jupiter Broadcasting Network including Linux Action News, TechSNAP, Ask Noah, Coder Radio,  and more.</description>
+        <description lang="en_GB">Watch shows from the Jupiter Broadcasting Network including Linux Action News, TechSNAP, Ask Noah, Coder Radio, and more.</description>
         <description lang="bg_BG">Гледайте предавания от мрежата на Jupiter Broadcasting: Linux Action News, TechSNAP, Ask Noah, Coder Radio, и други.</description>
         <disclaimer lang="en_GB">For more information, visit JupiterBroadcasting.com.</disclaimer>
         <disclaimer lang="bg_BG">За повече информация посетете www.JupiterBroadcasting.com</disclaimer>

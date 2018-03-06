@@ -1,4 +1,7 @@
-[B]Version 3.6.1 Unreleased[/B]
+[B]Version 3.6.2 March 6th, 2018[/B]
+- Restore script.module.requests as a dependency
+
+[B]Version 3.6.1 February 23rd, 2018[/B]
 - Krypton API changes
 
 [B]Version 3.6.0 February 14th, 2018[/B]

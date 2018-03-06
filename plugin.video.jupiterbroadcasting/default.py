@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Jupiter Broadcasting Kodi Addon
-http://github.com/robloach/plugin.video.jupiterbroadcasting
+https://github.com/JupiterBroadcasting/plugin.video.jupiterbroadcasting
 """
 
 import sys, urllib, urllib2, re, xbmcplugin, xbmcgui, xbmcaddon, os

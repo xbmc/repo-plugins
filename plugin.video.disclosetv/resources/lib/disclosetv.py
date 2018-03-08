@@ -1,4 +1,4 @@
-#   Copyright (C) 2017 Lunatixz
+#   Copyright (C) 2018 Lunatixz
 #
 #
 # This file is part of disclosetv.
@@ -18,7 +18,7 @@
 
 # -*- coding: utf-8 -*-
 import sys, time, datetime, re, traceback
-import urllib, urllib2, socket, json
+import urlparse, urllib, urllib2, socket, json
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 
 from bs4 import BeautifulSoup
@@ -48,21 +48,10 @@ def log(msg, level=xbmc.LOGDEBUG):
     if DEBUG == False and level != xbmc.LOGERROR: return
     if level == xbmc.LOGERROR: msg += ' ,' + traceback.format_exc()
     xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + msg, level)
-    
+
 def getParams():
-    param=[]
-    if len(sys.argv[2])>=2:
-        params=sys.argv[2]
-        cleanedparams=params.replace('?','')
-        if (params[len(params)-1]=='/'): params=params[0:len(params)-2]
-        pairsofparams=cleanedparams.split('&')
-        param={}
-        for i in range(len(pairsofparams)):
-            splitparams={}
-            splitparams=pairsofparams[i].split('=')
-            if (len(splitparams))==2: param[splitparams[0]]=splitparams[1]
-    return param
-                 
+    return dict(urlparse.parse_qsl(sys.argv[2][1:]))
+    
 socket.setdefaulttimeout(TIMEOUT)
 class Disclose(object):
     def __init__(self):
@@ -129,7 +118,9 @@ class Disclose(object):
         info = info.streams()
         url  = info[0]['xbmc_url']
         liz  = xbmcgui.ListItem(name, path=url)
-        if 'subtitles' in info[0]['ytdl_format']: liz.setSubtitles([x['url'] for x in info[0]['ytdl_format']['subtitles'].get('en','') if 'url' in x])
+        try: 
+            if 'subtitles' in info[0]['ytdl_format']: liz.setSubtitles([x['url'] for x in info[0]['ytdl_format']['subtitles'].get('en','') if 'url' in x])
+        except: pass
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
         
         

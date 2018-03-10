@@ -1,3 +1,7 @@
+v2.5.31
+Switched everything to https.
+Fixed problem with pagination.
+
 v2.5.30
 Added missing initializations and title fallback.
 

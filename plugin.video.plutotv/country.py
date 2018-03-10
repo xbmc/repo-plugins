@@ -1,4 +1,4 @@
-#   Copyright (C) 2017 Lunatixz
+#   Copyright (C) 2018 Lunatixz
 #
 #
 # This file is part of PlutoTV.
@@ -38,23 +38,19 @@ COUNTRY_LIST  = sorted((json.load(xbmcvfs.File(ISO3166)))['3166-1'], key=lambda 
 
 def getCurrentRegion():
     for idx, country in enumerate(COUNTRY_LIST):
-        if country['alpha_2'] == USER_REGION:
-            return idx
+        if country['alpha_2'] == USER_REGION: return idx
     return 0
     
 def getCountryList():
-    for country in COUNTRY_LIST:
-        yield (country['name'])
+    for country in COUNTRY_LIST: yield (country['name'])
         
 def getAlpha2(idx):
-    if idx is None or idx < 0:
-        return 'US'
+    if idx is None or idx < 0: return 'US'
     return str((COUNTRY_LIST[idx])['alpha_2'])
         
 def selectDialog(list, header=ADDON_NAME):
     select = xbmcgui.Dialog().select(LANGUAGE(30005), list, preselect=getCurrentRegion())
-    if select > -1:
-        return select
+    if select > -1: return select
         
 if __name__ == '__main__':
     REAL_SETTINGS.setSetting("Select_Country",getAlpha2(selectDialog(list(getCountryList()),LANGUAGE(30005))))

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.skynews" version="1.0.1" name="Sky News" provider-name="Lunatixz">
+<addon id="plugin.video.skynews" version="1.0.2" name="Sky News" provider-name="Lunatixz">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.simplecache" version="1.0.0"/>
@@ -14,7 +14,7 @@
         <description lang="en_GB">Sky News - First for Breaking News, video, headlines, analysis and top stories from business, politics, entertainment and more in the UK and worldwide.</description>
         <platform>all</platform>
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
-        <source>https://github.com/Lunatixz/XBMC_Addons/tree/master/plugin.video.skynews</source>
+        <source>https://github.com/Lunatixz/Kodi_Addons/tree/master/plugin.video.skynews</source>
         <website>http://news.sky.com/</website>
         <forum>https://forum.kodi.tv/showthread.php?tid=320938</forum>
         <news></news>

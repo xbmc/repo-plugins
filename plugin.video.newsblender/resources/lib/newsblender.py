@@ -1,4 +1,4 @@
-#   Copyright (C) 2017 Lunatixz
+#   Copyright (C) 2018 Lunatixz
 #
 #
 # This file is part of News Blender.
@@ -18,7 +18,7 @@
 
 # -*- coding: utf-8 -*-
 import os, sys, time, datetime, re, traceback
-import urllib, urllib2, socket, json, collections
+import urlparse, urllib, urllib2, socket, json, collections
 import xbmc, xbmcvfs, xbmcgui, xbmcplugin, xbmcaddon
 
 from YDStreamExtractor import getVideoInfo
@@ -48,11 +48,7 @@ API_KEY       = REAL_SETTINGS.getSetting('APIKEY')
 BASE_URL      = 'http://newsapi.org/v2'
 SOURCES_URL   = BASE_URL + '/sources?apiKey=%s'%API_KEY #?language=en&country=us
 HEADLINE_URL  = BASE_URL + '/top-headlines?apiKey=%s'%API_KEY
-EVRYTHING_URL = BASE_URL + '/everything?apiKey=%s'%API_KEY
-'&sources=%s'
-'&q=%s'
-'&category=%s'
-'&sortBy=%s' #popularity,top,latest
+EVRYTHING_URL = BASE_URL + '/everything?apiKey=%s'%API_KEY #'&sources=%s','&q=%s','&category=%s','&sortBy=%s' #popularity,top,latest
 LOGO_URL      = 'http://icons.better-idea.org/icon?url=%s&size=70..120..200'
 DEBUG         = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
 QUALITY       = int(REAL_SETTINGS.getSetting('Quality'))
@@ -65,18 +61,7 @@ def log(msg, level=xbmc.LOGDEBUG):
     xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + msg, level)
     
 def getParams():
-    param=[]
-    if len(sys.argv[2])>=2:
-        params=sys.argv[2]
-        cleanedparams=params.replace('?','')
-        if (params[len(params)-1]=='/'): params=params[0:len(params)-2]
-        pairsofparams=cleanedparams.split('&')
-        param={}
-        for i in range(len(pairsofparams)):
-            splitparams={}
-            splitparams=pairsofparams[i].split('=')
-            if (len(splitparams))==2: param[splitparams[0]]=splitparams[1]
-    return param
+    return dict(urlparse.parse_qsl(sys.argv[2][1:]))
     
 def getRegionName(region):
     for item in COUNTRY_LIST:
@@ -87,7 +72,15 @@ def getLanguageName(language):
     for item in LANGUAGE_LIST:
         if item['code'].lower() == language.lower(): return item['name']
     return language
-        
+               
+def busyDialog(percent=0, control=None):
+    if percent == 0 and not control:
+        control = xbmcgui.DialogBusy()
+        control.create()
+    elif percent == 100 and control: return control.close()
+    elif control: control.update(percent)
+    return control
+         
 socket.setdefaulttimeout(TIMEOUT)
 class NewsBlender(object):
     def __init__(self):
@@ -102,6 +95,7 @@ class NewsBlender(object):
             if not cacheresponse:
                 request = urllib2.Request(url)
                 request.add_header('User-Agent','Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)')
+                request.add_header('Accept-type', 'application/json')
                 response = urllib2.urlopen(request, timeout = TIMEOUT).read()
                 self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, response, expiration=datetime.timedelta(hours=1))
             return json.loads(self.cache.get(ADDON_NAME + '.openURL, url = %s'%url))
@@ -169,9 +163,9 @@ class NewsBlender(object):
         xbmc.sleep(1000)
         kb.doModal()
         if kb.isConfirmed():
-            try: self.browseArticles(name, url, self.openURL(EVRYTHING_URL + '&sources=%s&q=%s'%(url,urllib.quote_plus(kb.getText()))).get('articles',''), False)
-            except Exception as e:
-                log('search, failed ' + str(e), xbmc.LOGERROR)
+            url = (EVRYTHING_URL + '&q=%s&sources=%s'%(urllib.quote_plus(kb.getText()),url)).split('|')[0]
+            try: self.browseArticles(name, url, self.openURL(url).get('articles',''), False)
+            except Exception as e: log('search, failed ' + str(e), xbmc.LOGERROR)
 
                 
     def buildArticles(self, name, url):
@@ -180,28 +174,30 @@ class NewsBlender(object):
         
     def browseArticles(self, name, url, items, search=True):
         tmpList = []
-        dlg = None
-        dlg = xbmcgui.DialogBusy()
-        dlg.create()
         for idx, item in enumerate(items):
-            if dlg is not None: dlg.update(idx * 100 // len(items))
             info = self.getVideo(item['url'])
-            if info is None: continue
-            tmpList.append(info)
-        if dlg is not None: dlg.close()
-        for item in tmpList:
-            try:
-                source = item['source']['name']
-                label  = item['title']
-                thumb  = item['urlToImage']
-                try: aired = item['publishedAt'].split('T')[0]
-                except: aired = (datetime.datetime.now()).strftime('%Y-%m-%d') 
-                url    = info[0]['xbmc_url']
-                # if 'subtitles' in info[0]['ytdl_format']: liz.setSubtitles([x['url'] for x in info[0]['ytdl_format']['subtitles'].get('en','') if 'url' in x])
-                infoLabels = {"mediatype":"episode","label":label ,"title":label,"duration":info[0]['ytdl_format'].get('duration',0),"aired":aired,"plot":item['description'],"genre":"News"}
+            if info is None or len(info) == 0: continue
+            source = item['source']['name']
+            label  = item['title']
+            thumb  = item['urlToImage']
+            plot   = item['description']
+            try: aired = item['publishedAt'].split('T')[0]
+            except: aired = (datetime.datetime.now()).strftime('%Y-%m-%d')
+            tmpList.append((source, label, thumb, plot, aired, info))
+        dlg = busyDialog(0)
+        for idx, data in enumerate(tmpList):
+            busyDialog(idx * 100 // len(tmpList),dlg)
+            try: 
+                source, label, thumb, plot, aired, info = data
+                url = info[0]['xbmc_url']
+                try:
+                    if 'subtitles' in info[0]['ytdl_format']: liz.setSubtitles([x['url'] for x in info[0]['ytdl_format']['subtitles'].get('en','') if 'url' in x])
+                except: pass
+                infoLabels = {"mediatype":"episode","label":label ,"title":label,"duration":info[0]['ytdl_format'].get('duration',0),"aired":aired,"plot":plot,"genre":"News"}
                 infoArt    = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON}
                 self.addLink(label, url, 9, infoLabels, infoArt)
             except: pass
+        busyDialog(100,dlg)
         if len(tmpList) == 0: self.addLink((LANGUAGE(30003)%name), "", "")
         elif search: self.addSearch(name, url)
        

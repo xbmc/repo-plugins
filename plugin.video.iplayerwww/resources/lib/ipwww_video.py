@@ -261,6 +261,8 @@ def ScrapeEpisodes(page_url):
     current_page = 1
     page_range = range(1)
     paginate = re.search(r'<ol class="paginat.*?</ol>', html, re.DOTALL)
+    if not paginate:
+        paginate = re.search(r'<div class="paginate.*?</div>', html, re.DOTALL)
     next_page = 1
     if paginate:
         if int(ADDON.getSetting('paginate_episodes')) == 0:
@@ -275,10 +277,13 @@ def ScrapeEpisodes(page_url):
                     total_pages = int(last_page.group(1))
                 else:
                     total_pages = current_page
-					
-            page_range = range(current_page, current_page+1)
             if current_page<total_pages:
-                page_base_url = page_url.replace('https://www.bbc.co.uk','')+'?page='
+                split_page_url = page_url.split('?')
+                page_base_url = split_page_url[0]
+                for part in split_page_url[1:len(split_page_url)-1]:
+                    if not part.startswith('page'):
+                        page_base_url = page_base_url+'?'+part
+                page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'?page='
                 next_page = current_page+1
             else:
                 next_page = current_page
@@ -288,7 +293,12 @@ def ScrapeEpisodes(page_url):
             if pages:
                 last = pages[-1]
                 last_page = re.search(r'page=(\d*)', last)
-                page_base_url = page_url.replace('https://www.bbc.co.uk','')+'?page='
+                split_page_url = page_url.split('?')
+                page_base_url = split_page_url[0]
+                for part in split_page_url[1:len(split_page_url)-1]:
+                    if not part.startswith('page'):
+                        page_base_url = page_base_url+'?'+part
+                page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'?page='
                 total_pages = int(last_page.group(1))
             page_range = range(1, total_pages+1)
 

@@ -1,3 +1,6 @@
+v2.5.32
+Fixed pagination for Categories.
+
 v2.5.31
 Switched everything to https.
 Fixed problem with pagination.

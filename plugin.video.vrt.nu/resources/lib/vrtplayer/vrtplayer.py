@@ -129,8 +129,9 @@ class VRTPlayer:
         title_items = []
         for option_tag in option_tags:
             title = statichelper.replace_newlines_and_strip(option_tag.text)
-            path = option_tag['data-href']
-            title_items.append(helperobjects.TitleItem(title, {"action" : actions.LISTING_VIDEOS, 'video':path}, False))
+            if option_tag.has_attr('data-href'):
+                path = option_tag['data-href']
+                title_items.append(helperobjects.TitleItem(title, {"action" : actions.LISTING_VIDEOS, 'video':path}, False))
         return title_items
 
     def __get_multiple_videos(self, tiles):

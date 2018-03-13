@@ -19,6 +19,7 @@
 
 from __future__ import unicode_literals
 from codequick import Route, Resolver, Listitem, run
+import urlquick
 
 # Localized string Constants
 RECENT_VIDEOS = 30001
@@ -42,20 +43,20 @@ def root(plugin):
 
     # Fetch HTML Source
     url = "https://www.sciencefriday.com/explore/"
-    html = plugin.request.get(url)
+    html = urlquick.get(url)
 
     # Parse for the content
     root_elem = html.parse("form", attrs={"class": "searchandfilter"})
     sfid = root_elem.get("data-sf-form-id")
 
     # Add Youtube & Recent Content
-    yield Listitem.youtube("UUDjGU4DP3b-eGxrsipCvoVQ")
+    yield Listitem.youtube("UCDjGU4DP3b-eGxrsipCvoVQ")
 
     # Add Recent Videos link
-    yield Listitem.from_dict(label=plugin.localize(RECENT_VIDEOS), callback=content_lister,
+    yield Listitem.from_dict(content_lister, plugin.localize(RECENT_VIDEOS),
                              params={"sfid": sfid, "ctype": "video"})
     # Add Recent Audio link
-    yield Listitem.from_dict(label=plugin.localize(RECENT_AUDIO), callback=content_lister,
+    yield Listitem.from_dict(content_lister, plugin.localize(RECENT_AUDIO),
                              params={"sfid": sfid, "ctype": "segment"})
 
     # List all topics
@@ -64,7 +65,7 @@ def root(plugin):
         item.label = elem.text
 
         # Add context item to link to the opposite content type. e.g. audio if video is default
-        item.context.container(context_label, content_lister, topic=elem.attrib["value"], sfid=sfid, ctype=context_type)
+        item.context.container(content_lister, context_label, topic=elem.attrib["value"], sfid=sfid, ctype=context_type)
         item.set_callback(content_lister, topic=elem.attrib["value"], ctype=item_type, sfid=sfid)
         yield item
 
@@ -80,7 +81,8 @@ def content_lister(plugin, sfid, ctype, topic=None, page_count=1):
     """
     # Add link to Alternitve Listing
     if page_count == 1 and topic:
-        params = {"sfid": sfid, "ctype": u"segment" if ctype == u"video" else u"video", "topic": topic}
+        params = {"_updatelisting_": True, "sfid": sfid, "topic": topic,
+                  "ctype": u"segment" if ctype == u"video" else u"video"}
         label = plugin.localize(LIST_AUDIO) if ctype == u"video" else plugin.localize(LIST_VIDEO)
         item_dict = {"label": label, "callback": content_lister, "params": params}
         yield Listitem.from_dict(**item_dict)
@@ -97,11 +99,11 @@ def content_lister(plugin, sfid, ctype, topic=None, page_count=1):
 
     # Fetch & parse HTML Source
     ishd = bool(plugin.setting.get_int("video_quality", addon_id="script.module.youtube.dl"))
-    root_elem = plugin.request.get(url).parse()
+    root_elem = urlquick.get(url).parse()
 
     # Fetch next page
     next_url = root_elem.find(".//a[@rel='next']")
-    if next_url is not None:
+    if next_url is not None:  # pragma: no branch
         yield Listitem.next_page(sfid=sfid, ctype=ctype, page_count=page_count+1)
 
     # Parse the elements
@@ -116,7 +118,7 @@ def content_lister(plugin, sfid, ctype, topic=None, page_count=1):
         if tag_p and tag_p[0].get("class") == "run-time":
             item.info["duration"] = tag_p[0].text
             item.info["plot"] = tag_p[1].text
-        elif tag_p:
+        elif tag_p:  # pragma: no branch
             item.info["plot"] = tag_p[0].text
 
         # Fetch image if exists
@@ -138,15 +140,12 @@ def content_lister(plugin, sfid, ctype, topic=None, page_count=1):
 @Resolver.register
 def play_video(plugin, url):
     """
+    Site: https://www.sciencefriday.com/videos/reverse-engineering-europa/?post_types=video&_sft_topic=space
+
     :type plugin: Resolver
     :type url: unicode
     """
-    # Run SpeedForce to atempt to strip Out any unneeded html tags
-    root_elem = plugin.request.get(url).parse("section", attrs={"class": "video-section bg-lightgrey"})
-
-    # Search for youtube iframe
-    iframe = root_elem.find("./div/iframe")
-    return plugin.extract_source(iframe.get("src"))
+    return plugin.extract_source(url)
 
 
 # Initiate add-on

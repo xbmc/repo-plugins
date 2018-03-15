@@ -4,7 +4,7 @@ version="3.0.0"
 name="Special Features"
 provider-name="smitchell6879, evertiro">
 <requires>
-  <import addon="xbmc.python" version="2.24.0"/>
+  <import addon="xbmc.python" version="2.25.0"/>
   <import addon="xbmc.json" version="8.0.0"/>
   <import addon="script.module.future" version="0.0.1"/> 
   <import addon="script.module.pymysql" version="0.8.0"/> 
@@ -17,15 +17,15 @@ provider-name="smitchell6879, evertiro">
       </item>
     </menu>
 </extension>
-<extension point="xbmc.service" library="service.py" start="[login|startup]"/>
+<extension point="xbmc.service" library="service.py" start="[login]"/>
 <extension point="xbmc.python.script" library="script.py"/>
 <extension point="xbmc.python.pluginsource" library="plugin.py">
   <provides>video</provides>
 </extension>
 <extension point="xbmc.addon.metadata">
-  <summary lang="en">Given a properly structured 'Extras' directory, this addon will present all of the bonus media in your library.</summary>
-  <description lang="en">Special Features is inspired by the upcoming Blu-ray features being introduced in Kodi 18. Given a properly structured 'Extras' directory, this addon will present all of the bonus videos, discs and alternate versions of the movies and tv shows in your library.</description>
-  <disclaimer lang="en">Kodi 17/18 Required</disclaimer>
+  <summary lang="en_GB">Given a properly structured 'Extras' directory, this addon will present all of the bonus media in your library.</summary>
+  <description lang="en_GB">Special Features is inspired by the upcoming Blu-ray features being introduced in Kodi 18. Given a properly structured 'Extras' directory, this addon will present all of the bonus videos, discs and alternate versions of the movies and tv shows in your library.</description>
+  <disclaimer lang="en_GB">Kodi 17/18 Required</disclaimer>
   <assets>
     <icon>icon.png</icon>
     <fanart>fanart.jpg</fanart>

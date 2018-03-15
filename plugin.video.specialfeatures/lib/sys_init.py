@@ -84,7 +84,6 @@ cuType     = cursors.DictCursor
 carList    = list()
 fliList    = list()
 trAsh      = list()
-debug      = "true"
 
 
 def info(txt):

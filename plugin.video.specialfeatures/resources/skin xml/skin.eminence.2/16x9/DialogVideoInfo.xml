@@ -1,0 +1,632 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window>
+    <defaultcontrol always="true">9000</defaultcontrol>
+    <onload>ClearProperty(extinfo,home)</onload>
+    <controls>
+
+
+        <!-- INFO DIALOG -->
+        <control type="group">
+            <include>Defs_InfoBackground</include>
+
+            <control type="group">
+                <visible allowhiddenfocus="true">!String.IsEqual(Control.GetLabel(5),$LOCALIZE[207]) + String.IsEmpty(Window.Property(list))</visible>
+                <include content="Object_Headline">
+                    <param name="label" value="207" />
+                </include>
+            </control>
+            <control type="group">
+                <visible allowhiddenfocus="true">String.IsEqual(Control.GetLabel(5),$LOCALIZE[207]) + String.IsEmpty(Window.Property(list))</visible>
+                <include content="Object_Headline">
+                    <param name="label" value="206" />
+                </include>
+            </control>
+            <control type="group">
+                <visible allowhiddenfocus="true">String.IsEqual(Window.Property(list),Director)</visible>
+                <include content="Object_Headline">
+                    <param name="label" value="20339" />
+                </include>
+            </control>
+
+            <control type="group">
+                <left>bigpad</left>
+                <right>bigpad</right>
+                <top>bigpad</top>
+                <bottom>bigpad</bottom>
+                <control type="label" description="path">
+                    <visible>Skin.HasSetting(InfoShowPath)</visible>
+                    <bottom>-48</bottom>
+                    <height>48</height>
+                    <align>left</align>
+                    <textcolor>SideArrow</textcolor>
+                    <font>Font-LineLabel</font>
+                    <label>$INFO[ListItem.FileNameAndPath]</label>
+                </control>
+                <include content="Object_Poster" condition="!String.IsEmpty(ListItem.Art(poster)) | !String.IsEmpty(ListItem.Art(tvshow.poster))">
+                    <param name="flipx" value="false" />
+                    <param name="width" value="posterw" />
+                </include>
+                <include content="Object_Poster" condition="String.IsEmpty(ListItem.Art(poster)) + String.IsEmpty(ListItem.Art(tvshow.poster))">
+                    <param name="flipx" value="false" />
+                    <param name="width" value="posterh" />
+                </include>
+                <control type="group">
+                    <include condition="!String.IsEmpty(ListItem.Art(poster)) | !String.IsEmpty(ListItem.Art(tvshow.poster))">Defs_DialogInfo_PosterLeft</include>
+                    <include condition="String.IsEmpty(ListItem.Art(poster)) + String.IsEmpty(ListItem.Art(tvshow.poster))">Defs_DialogInfo_SquareLeft</include>
+                    <right>0</right>
+                    <include>Object_Background</include>
+
+
+                    <!-- LANGUAGE -->
+                    <control type="grouplist">
+                        <visible>!String.IsEqual(Control.GetLabel(5),$LOCALIZE[207]) + String.IsEmpty(Window.Property(list))</visible>
+                        <usecontrolcoords>true</usecontrolcoords>
+                        <itemgap>pad</itemgap>
+                        <orientation>horizontal</orientation>
+                        <align>right</align>
+                        <left>pad</left>
+                        <right>30</right>
+                        <top>24</top>
+                        <height>32</height>
+                        <control type="image">
+                            <width>32</width>
+                            <height>32</height>
+                            <aspectratio>keep</aspectratio>
+                            <texture>$INFO[ListItem.Property(SubtitleLanguage.5),lang/,.png]</texture>
+                            <visible>!String.IsEmpty(ListItem.Property(SubtitleLanguage.5))</visible>
+                            <animation effect="fade" end="50" condition="true">Conditional</animation>
+                        </control>
+                        <control type="image">
+                            <width>32</width>
+                            <height>32</height>
+                            <aspectratio>keep</aspectratio>
+                            <texture>$INFO[ListItem.Property(SubtitleLanguage.4),lang/,.png]</texture>
+                            <visible>!String.IsEmpty(ListItem.Property(SubtitleLanguage.4))</visible>
+                            <animation effect="fade" end="50" condition="true">Conditional</animation>
+                        </control>
+                        <control type="image">
+                            <width>32</width>
+                            <height>32</height>
+                            <aspectratio>keep</aspectratio>
+                            <texture>$INFO[ListItem.Property(SubtitleLanguage.3),lang/,.png]</texture>
+                            <visible>!String.IsEmpty(ListItem.Property(SubtitleLanguage.3))</visible>
+                            <animation effect="fade" end="50" condition="true">Conditional</animation>
+                        </control>
+                        <control type="image">
+                            <width>32</width>
+                            <height>32</height>
+                            <aspectratio>keep</aspectratio>
+                            <texture>$INFO[ListItem.Property(SubtitleLanguage.2),lang/,.png]</texture>
+                            <visible>!String.IsEmpty(ListItem.Property(SubtitleLanguage.2))</visible>
+                            <animation effect="fade" end="50" condition="true">Conditional</animation>
+                        </control>
+                        <control type="image">
+                            <width>32</width>
+                            <height>32</height>
+                            <aspectratio>keep</aspectratio>
+                            <texture>$INFO[ListItem.Property(SubtitleLanguage.1),lang/,.png]</texture>
+                            <visible>!String.IsEmpty(ListItem.Property(SubtitleLanguage.1))</visible>
+                            <animation effect="fade" end="50" condition="true">Conditional</animation>
+                        </control>
+
+                        <control type="image">
+                            <width>32</width>
+                            <height>32</height>
+                            <aspectratio>keep</aspectratio>
+                            <texture>$INFO[ListItem.Property(AudioLanguage.5),lang/,.png]</texture>
+                            <visible>!String.IsEmpty(ListItem.Property(AudioLanguage.5))</visible>
+                        </control>
+                        <control type="image">
+                            <width>32</width>
+                            <height>32</height>
+                            <aspectratio>keep</aspectratio>
+                            <texture>$INFO[ListItem.Property(AudioLanguage.4),lang/,.png]</texture>
+                            <visible>!String.IsEmpty(ListItem.Property(AudioLanguage.4))</visible>
+                        </control>
+                        <control type="image">
+                            <width>32</width>
+                            <height>32</height>
+                            <aspectratio>keep</aspectratio>
+                            <texture>$INFO[ListItem.Property(AudioLanguage.3),lang/,.png]</texture>
+                            <visible>!String.IsEmpty(ListItem.Property(AudioLanguage.3))</visible>
+                        </control>
+                        <control type="image">
+                            <width>32</width>
+                            <height>32</height>
+                            <aspectratio>keep</aspectratio>
+                            <texture>$INFO[ListItem.Property(AudioLanguage.2),lang/,.png]</texture>
+                            <visible>!String.IsEmpty(ListItem.Property(AudioLanguage.2))</visible>
+                        </control>
+                        <control type="image">
+                            <width>32</width>
+                            <height>32</height>
+                            <aspectratio>keep</aspectratio>
+                            <texture>$INFO[ListItem.Property(AudioLanguage.1),lang/,.png]</texture>
+                            <visible>!String.IsEmpty(ListItem.Property(AudioLanguage.1))</visible>
+                        </control>
+                    </control>
+
+                    <!-- INFO -->
+                    <control type="grouplist">
+                        <visible>!String.IsEqual(Control.GetLabel(5),$LOCALIZE[207]) + String.IsEmpty(Window.Property(list))</visible>
+                        <usecontrolcoords>true</usecontrolcoords>
+                        <itemgap>pad</itemgap>
+                        <orientation>vertical</orientation>
+                        <left>bigpad</left>
+                        <right>bigpad</right>
+                        <top>pad</top>
+                        <bottom>pad</bottom>
+                        <control type="label">
+                            <top>pad</top>
+                            <left>pad</left>
+                            <right>pad</right>
+                            <height>36</height>
+                            <font>Font-InfoBox-Title</font>
+                            <label>$VAR[Label_Title]</label>
+                        </control>
+                        <control type="label">
+                            <left>pad</left>
+                            <right>550</right>
+                            <height>32</height>
+                            <font>Font-ListInfo-Small-Bold</font>
+                            <textcolor>$VAR[HighlightColor2]</textcolor>
+                            <label>$VAR[Label_GenreLine,[UPPERCASE],[/UPPERCASE]]</label>
+                        </control>
+                        <control type="grouplist">
+                            <orientation>horizontal</orientation>
+                            <top>-42</top>
+                            <left>pad</left>
+                            <right>pad</right>
+                            <height>34</height>
+                            <align>right</align>
+                            <usecontrolcoords>true</usecontrolcoords>
+                            <control type="image">
+                                <top>1</top>
+                                <width>32</width>
+                                <height>32</height>
+                                <texture>indicator/metacritic.png</texture>
+                                <visible>!String.IsEmpty(Window(Home).Property(SkinHelper.ListItem.MetaCritic.Rating))</visible>
+                            </control>
+                            <control type="label">
+                                <top>2</top>
+                                <width>auto</width>
+                                <height>28</height>
+                                <align>right</align>
+                                <font>Font-ListInfo-Small-Bold</font>
+                                <label>$INFO[Window(Home).Property(SkinHelper.ListItem.MetaCritic.Rating), ,%   ]</label>
+                                <visible>!String.IsEmpty(Window(Home).Property(SkinHelper.ListItem.MetaCritic.Rating))</visible>
+                            </control>
+                            <control type="image">
+                                <width>32</width>
+                                <height>32</height>
+                                <texture>indicator/rtrotten.png</texture>
+                                <visible>!String.IsEmpty(Window(Home).Property(SkinHelper.ListItem.RottenTomatoes.Meter))</visible>
+                                <visible>!Integer.IsGreater(Window(home).Property(SkinHelper.ListItem.RottenTomatoes.Meter),59)</visible>
+                            </control>
+                            <control type="image">
+                                <width>32</width>
+                                <height>32</height>
+                                <texture>indicator/rtfresh.png</texture>
+                                <visible>!String.IsEmpty(Window(Home).Property(SkinHelper.ListItem.RottenTomatoes.Meter))</visible>
+                                <visible>Integer.IsGreater(Window(home).Property(SkinHelper.ListItem.RottenTomatoes.Meter),59)</visible>
+                            </control>
+                            <control type="label">
+                                <top>2</top>
+                                <width>auto</width>
+                                <height>28</height>
+                                <align>right</align>
+                                <font>Font-ListInfo-Small-Bold</font>
+                                <label>$INFO[Window(Home).Property(SkinHelper.ListItem.RottenTomatoes.Meter), ,%   ]</label>
+                                <visible>!String.IsEmpty(Window(Home).Property(SkinHelper.ListItem.RottenTomatoes.Meter))</visible>
+                            </control>
+                            <control type="image">
+                                <top>2</top>
+                                <width>40</width>
+                                <height>32</height>
+                                <texture>indicator/imdbicon.png</texture>
+                                <visible>!String.IsEmpty(ListItem.RatingAndVotes) | !String.IsEmpty(Window(home).Property(SkinHelper.ListItem.Rating.IMDB))</visible>
+                            </control>
+                            <control type="label">
+                                <top>2</top>
+                                <width>auto</width>
+                                <height>28</height>
+                                <align>right</align>
+                                <font>Font-ListInfo-Small-Bold</font>
+                                <label>$INFO[Window(home).Property(SkinHelper.ListItem.Rating.IMDB), ,]$INFO[Window(home).Property(SkinHelper.ListItem.Votes.IMDB), (, $LOCALIZE[205])]</label>
+                                <visible>!String.IsEmpty(Window(home).Property(SkinHelper.ListItem.Rating.IMDB))</visible>
+                            </control>
+                            <control type="label">
+                                <top>2</top>
+                                <width>auto</width>
+                                <height>28</height>
+                                <align>right</align>
+                                <font>Font-ListInfo-Small-Bold</font>
+                                <label>$INFO[ListItem.RatingAndVotes, ,]</label>
+                                <visible>String.IsEmpty(Window(home).Property(SkinHelper.ListItem.Rating.IMDB)) + !String.IsEmpty(ListItem.RatingAndVotes)</visible>
+                            </control>
+                        </control>
+                        
+                        <control type="textbox">
+                            <top>pad</top>
+                            <left>pad</left>
+                            <right>pad</right>
+                            <height max="228">auto</height>
+                            <font>Font-ListInfo</font>
+                            <align>left</align>
+                            <label>$INFO[Window(Home).Property(SkinHelper.ListItem.RottenTomatoes.Consensus),, ]$VAR[Label_Plot]$INFO[Window(Home).Property(SkinHelper.ListItem.Awards), ,]</label>
+                        </control>
+                        <control type="group">
+                            <left>pad</left>
+                            <right>pad</right>
+                            <top>-10</top>
+                            <control type="grouplist">
+                                <include>Info_DetailsGrouplist</include>
+                                <!-- Director -->
+                                <control type="group">
+                                    <height>36</height>
+                                    <width>100%</width>
+                                    <visible>!String.IsEmpty(ListItem.Director)</visible>
+                                    <control type="label">
+                                        <width>200</width>
+                                        <height>36</height>
+                                        <align>left</align>
+                                        <font>Font-ListInfo-Small</font>
+                                        <textcolor>ListLabel</textcolor>
+                                        <label>20339</label>
+                                        <textcolor>ListLabel</textcolor>
+                                    </control>
+                                    <control type="label">
+                                        <left>220</left>
+                                        <align>left</align>
+                                        <height>36</height>
+                                        <font>Font-ListInfo-Bold</font>
+                                        <label>$INFO[ListItem.Director]</label>
+                                        <textcolor>SubLabel</textcolor>
+                                    </control>
+                                </control>
+
+                                <!-- Writer -->
+                                <control type="group">
+                                    <height>36</height>
+                                    <width>100%</width>
+                                    <visible>!String.IsEmpty(ListItem.Writer)</visible>
+                                    <control type="label">
+                                        <width>200</width>
+                                        <height>36</height>
+                                        <align>left</align>
+                                        <font>Font-ListInfo-Small</font>
+                                        <textcolor>ListLabel</textcolor>
+                                        <label>20417</label>
+                                        <textcolor>ListLabel</textcolor>
+                                    </control>
+                                    <control type="label">
+                                        <left>220</left>
+                                        <align>left</align>
+                                        <height>36</height>
+                                        <font>Font-ListInfo-Bold</font>
+                                        <label>$INFO[ListItem.Writer]</label>
+                                        <textcolor>SubLabel</textcolor>
+                                    </control>
+                                </control>
+
+                                <!-- Studio -->
+                                <control type="group">
+                                    <height>36</height>
+                                    <width>100%</width>
+                                    <visible>!String.IsEmpty(ListItem.Studio)</visible>
+                                    <control type="label">
+                                        <width>200</width>
+                                        <height>36</height>
+                                        <align>left</align>
+                                        <font>Font-ListInfo-Small</font>
+                                        <textcolor>ListLabel</textcolor>
+                                        <label>572</label>
+                                        <textcolor>ListLabel</textcolor>
+                                    </control>
+                                    <control type="label">
+                                        <left>220</left>
+                                        <align>left</align>
+                                        <height>36</height>
+                                        <font>Font-ListInfo-Bold</font>
+                                        <label>$INFO[ListItem.Studio]</label>
+                                        <textcolor>SubLabel</textcolor>
+                                    </control>
+                                </control>
+                            </control>
+                        </control>
+                    </control>
+                    <control type="grouplist">
+                        <visible>!String.IsEqual(Control.GetLabel(5),$LOCALIZE[207]) + String.IsEmpty(Window.Property(list))</visible>
+                        <bottom>74</bottom>
+                        <left>-20</left>
+                        <right>-20</right>
+                        <height>128</height>
+                        <itemgap>20</itemgap>
+                        <align>center</align>
+                        <orientation>horizontal</orientation>
+                        <control type="group">
+                            <visible>!String.IsEmpty(ListItem.Duration)</visible>
+                            <width>270</width>
+                            <height>100%</height>
+                            <control type="label">
+                                <top>0</top>
+                                <height>32</height>
+                                <align>center</align>
+                                <font>Font-ListInfo-Small</font>
+                                <label>180</label>
+                            </control>
+                            <control type="label">
+                                <top>32</top>
+                                <height>48</height>
+                                <align>center</align>
+                                <textcolor>SubLabel</textcolor>
+                                <font>Font-InfoBox-Title</font>
+                                <label>$VAR[Label_Duration]</label>
+                            </control>
+                        </control>
+                        <control type="group">
+                            <width>270</width>
+                            <height>100%</height>
+                            <visible>!String.IsEmpty(ListItem.MPAA)</visible>
+                            <control type="label">
+                                <top>0</top>
+                                <height>32</height>
+                                <align>center</align>
+                                <font>Font-ListInfo-Small</font>
+                                <label>563</label>
+                            </control>
+                            <control type="label">
+                                <top>32</top>
+                                <height>48</height>
+                                <align>center</align>
+                                <textcolor>SubLabel</textcolor>
+                                <font>Font-InfoBox-Title</font>
+                                <label>$INFO[ListItem.MPAA]</label>
+                            </control>
+                        </control>
+                        <control type="group">
+                            <width>270</width>
+                            <height>100%</height>
+                            <visible>!String.IsEmpty(ListItem.Year)</visible>
+                            <control type="label">
+                                <top>0</top>
+                                <height>32</height>
+                                <align>center</align>
+                                <font>Font-ListInfo-Small</font>
+                                <label>345</label>
+                            </control>
+                            <control type="label">
+                                <top>32</top>
+                                <height>48</height>
+                                <align>center</align>
+                                <textcolor>SubLabel</textcolor>
+                                <font>Font-InfoBox-Title</font>
+                                <label>$INFO[ListItem.Year]</label>
+                            </control>
+                        </control>
+                        <control type="group">
+                            <width>330</width>
+                            <height>100%</height>
+                            <visible>!String.IsEmpty(Window(Home).Property(SkinHelper.ListItem.Revenue.formatted))</visible>
+                            <visible>!String.IsEmpty(ListItem.Art(poster)) | !String.IsEmpty(ListItem.Art(tvshow.poster))</visible>
+                            <control type="label">
+                                <top>0</top>
+                                <height>32</height>
+                                <align>center</align>
+                                <font>Font-ListInfo-Small</font>
+                                <label>31193</label>
+                            </control>
+                            <control type="label">
+                                <top>32</top>
+                                <height>48</height>
+                                <align>center</align>
+                                <textcolor>SubLabel</textcolor>
+                                <font>Font-InfoBox-Title</font>
+                                <label>$INFO[Window(Home).Property(SkinHelper.ListItem.Revenue.formatted),$,]</label>
+                            </control>
+                        </control>
+
+                    </control>
+                    <control type="grouplist" id="9000">
+                        <visible allowhiddenfocus="true">!Control.HasFocus(50) + !Control.HasFocus(51) + !Control.HasFocus(9500)</visible>
+                        <left>bigpad</left>
+                        <right>bigpad</right>
+                        <bottom>30</bottom>
+                        <height>64</height>
+                        <align>center</align>
+                        <itemgap>pad</itemgap>
+                        <onleft>noop</onleft>
+                        <onright>noop</onright>
+                        <orientation>horizontal</orientation>
+                        <onup condition="String.IsEqual(Control.GetLabel(5),$LOCALIZE[207])">51</onup>
+                        <onup condition="!String.IsEqual(Control.GetLabel(5),$LOCALIZE[207])">9601</onup>
+                        <usecontrolcoords>true</usecontrolcoords>
+                        <!-- Play/Browse Button -->
+                        <control type="togglebutton" id="8">
+                            <label>208</label>
+                            <altlabel>1024</altlabel>
+                            <usealttexture>Container.Content(TVShows)</usealttexture>
+                            <include>Defs_OptionButton3</include>
+                            <onfocus>ClearProperty(list)</onfocus>
+                        </control>
+
+
+                        <!-- Trailer Button -->
+                        <control type="button" id="11">
+                            <label>20410</label>
+                            <visible>!String.IsEmpty(ListItem.Trailer)</visible>
+                            <include>Defs_OptionButton3</include>
+                            <onfocus>ClearProperty(list)</onfocus>
+                        </control>
+                        
+                        <!-- Special Features Button -->
+                        <control type="button" id="1227">
+                            <label>Special Features</label>
+                            <include>Defs_OptionButton3</include>
+                            <onclick>Action(close)</onclick>
+                            <onclick>RunScript(plugin.video.specialfeatures,listitem)</onclick>
+                            <visible>String.IsEqual(Window(home).Property(SpecialFeatures.Visible),true)</visible>
+                        </control>
+                        
+
+                        <!-- Cast Button -->
+                        <control type="button" id="5">
+                            <label>206</label>
+                            <onclick condition="String.IsEqual(Control.GetLabel(5),$LOCALIZE[207])">SetFocus(51)</onclick>
+                            <include>Defs_OptionButton3</include>
+                            <onfocus>ClearProperty(list)</onfocus>
+                            <enable>Integer.IsGreater(Container(50).NumItems,0)</enable>
+                        </control>
+                        
+
+                        <!-- Director Button -->
+                        <control type="button" id="9001">
+                            <label>20339</label>
+                            <onclick>SetProperty(list,Director)</onclick>
+                            <onclick>SetFocus(9500)</onclick>
+                            <include>Defs_OptionButton3</include>
+                            <onfocus>ClearProperty(list)</onfocus>
+                            <visible>!String.IsEmpty(ListItem.Director)</visible>
+                        </control>
+                        
+
+                        <!-- Get Thumb Button -->
+                        <control type="button" id="10">
+                            <label>13511</label>
+                            <include>Defs_OptionButton3</include>
+                            <onfocus>ClearProperty(list)</onfocus>
+                        </control>
+                        
+
+                        <!-- Refresh Button -->
+                        <control type="button" id="6">
+                            <label>184</label>
+                            <include>Defs_OptionButton3</include>
+                            <onfocus>ClearProperty(list)</onfocus>
+                        </control>
+                        
+
+                        <!-- Artwork Downloader Button -->
+                        <!-- <control type="button" id="20">
+                            <label>31043</label>
+                            <onclick condition="Container.Content(tvshows)">XBMC.RunScript(script.artwork.downloader, mode=gui, mediatype=tvshow, dbid=$INFO[ListItem.DBID])</onclick>
+                            <onclick condition="Container.Content(movies)">XBMC.RunScript(script.artwork.downloader, mode=gui, mediatype=movie, dbid=$INFO[ListItem.DBID])</onclick>
+                            <visible>System.HasAddon(script.artwork.downloader) + [Container.Content(movies) | Container.Content(tvshows)]</visible>
+                            <include>Defs_OptionButton3</include>
+                            <onfocus>ClearProperty(list)</onfocus>
+                        </control>
+                        -->
+
+                        <!-- Cinema Experience Button -->
+                        <!-- <control type="button" id="21">
+                            <label>31066</label>
+                            <onclick>Dialog.Close(MovieInformation)</onclick>
+                            <onclick>XBMC.RunScript(script.cinema.experience,movieid=$INFO[ListItem.DBID])</onclick>
+                            <visible>System.HasAddon(script.cinema.experience) + Container.Content(movies)</visible>
+                            <include>Defs_OptionButton3</include>
+                            <onfocus>ClearProperty(list)</onfocus>
+                        </control>
+                        -->
+                    </control>
+
+                    <!-- CAST -->
+                    <control type="group">
+                        <left>0</left>
+                        <right>0</right>
+                        <top>0</top>
+                        <visible>String.IsEqual(Control.GetLabel(5),$LOCALIZE[207])</visible>
+                        <include content="Dialog_BasicList">
+                            <param name="width" value="listw"/>
+                            <param name="height" value="posterh" />
+                            <param name="id" value="50" />
+                            <param name="type" value="list" />
+                            <param name="onleft" value="SendClick(5)" />
+                            <param name="onright" value="SendClick(5)" />
+                            <param name="onback" value="9000" />
+                            <param name="onback2" value="SendClick(5)" />
+                            <param name="ondown" value="50" />
+                            <param name="onup" value="50" />
+                            <param name="backpanel" value="false" />
+                            <param name="imagelist" value="true" />
+                        </include>
+                    </control>
+
+                    <!-- DIRECTOR -->
+                    <control type="group">
+                        <left>0</left>
+                        <right>0</right>
+                        <top>0</top>
+                        <control type="group">
+                            <visible>Container(9500).IsUpdating</visible>
+                            <control type="multiimage">
+                                <centerleft>50%</centerleft>
+                                <centertop>42%</centertop>
+                                <width>64</width>
+                                <height>64</height>
+                                <aspectratio>keep</aspectratio>
+                                <imagepath>$VAR[Defs_SpinnerTexture]</imagepath>
+                                <timeperimage>75</timeperimage>
+                                <fadetime>0</fadetime>
+                                <colordiffuse>HomeBarFG</colordiffuse>
+                            </control>
+                            <control type="label">
+                                <centerleft>50%</centerleft>
+                                <centertop>52%</centertop>
+                                <height>64</height>
+                                <width>300</width>
+                                <label>$LOCALIZE[20186]</label>
+                                <align>center</align>
+                                <aligny>center</aligny>
+                            </control>
+                        </control>
+                        <visible>String.IsEqual(Window.Property(list),Director)</visible>
+                        <control type="group">
+                            <animation effect="fade" start="100" end="0" condition="Container(9500).IsUpdating">Conditional</animation>
+                            <include content="Dialog_BasicList">
+                                <param name="width" value="listw" />
+                                <param name="height" value="posterh" />
+                                <param name="id" value="9500" />
+                                <param name="type" value="list" />
+                                <param name="onleft" value="9000" />
+                                <param name="onright" value="9000" />
+                                <param name="onback" value="9000" />
+                                <param name="onback2" value="ClearProperty(list)" />
+                                <param name="ondown" value="9500" />
+                                <param name="onup" value="9500" />
+                                <param name="backpanel" value="false" />
+                                <param name="imagelist" value="true" />
+                                <param name="contentvisible" value="true" />
+                                <param name="content" value="plugin://script.extendedinfo?info=personmovies&amp;&amp;person=$INFO[ListItem.Director]" />
+                            </include>
+                        </control>
+                    </control>
+                </control>
+            </control>
+        </control>
+
+        <control type="button" id="51" description="Cast List Control">
+            <width>1</width>
+            <height>1</height>
+            <left>-1000</left>
+            <top>-1000</top>
+            <visible allowhiddenfocus="true">false</visible>
+            <onup>Control.Move(50,-1)</onup>
+            <ondown>Control.Move(50,1)</ondown>
+            <onback>9000</onback>
+            <onback>SendClick(5)</onback>
+            <onleft>9000</onleft>
+            <onleft>SendClick(5)</onleft>
+            <onright>9000</onright>
+            <onright>SendClick(5)</onright>
+            <onclick>SetProperty(extinfo,2,home)</onclick>
+            <onclick>RunScript(script.extendedinfo,info=extendedactorinfo,name=$INFO[Container(50).ListItem.Label])</onclick>
+        </control>
+
+        <!-- INFO OVERLAY -->
+        <include>Furniture_DialogInfoOverlay</include>
+
+
+
+    </controls>
+
+</window>

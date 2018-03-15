@@ -5,7 +5,6 @@ name="Special Features"
 provider-name="smitchell6879, evertiro">
 <requires>
   <import addon="xbmc.python" version="2.25.0"/>
-  <import addon="xbmc.json" version="8.0.0"/>
   <import addon="script.module.future" version="0.0.1"/> 
   <import addon="script.module.pymysql" version="0.8.0"/> 
 </requires>

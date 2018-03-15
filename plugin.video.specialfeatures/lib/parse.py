@@ -487,7 +487,7 @@ def unquote_to_bytes(string):
     # unescaped non-ASCII characters, which URIs should not.
     if not string:
         # Is it a string-like object?
-        string.split
+        string.split()
         return bytes(b'')
     if isinstance(string, str):
         string = string.encode('utf-8')

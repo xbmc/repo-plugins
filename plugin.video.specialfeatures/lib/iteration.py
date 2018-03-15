@@ -2,8 +2,8 @@ from lib.sys_init import *
 from lib.querylib import *
 from lib.importexport import *
 import subprocess
-ip         = imPort()
-ep         = exPort()
+ip_sf         = imPort_sfnfo()
+ep_sf         = exPort_sfnfo()
 
 class resultFILTER:
     '''Start checking for extras'''
@@ -58,7 +58,7 @@ class resultFILTER:
                             self.sfle = os.path.splitext(self.fle)[0]
                             if sfnfo:
                                 info(self.ef)
-                                self.sf = ip.upDate(self.ef)
+                                self.sf = ip_sf.upDate(self.ef)
                             if self.sf == None:
                                 self.t = self.getthumb(self.ef)
                                 self.sf={'title':self.sfle,'path':self.ef, 'sorttitle': self.sfle, 'thumb':self.t}
@@ -69,7 +69,7 @@ class resultFILTER:
                         self.ep=self.verifySub(self.fold,self.item['path'])
                         if self.ep is not None:
                             if sfnfo:
-                                self.sf = ip.upDate(self.ep)
+                                self.sf = ip_sf.upDate(self.ep)
                             if self.sf == None:
                                 self.t = self.getthumb(self.ep)
                                 self.sf={'title':self.fold,'path':self.ep,'sorttitle':self.fold, 'thumb':self.t}
@@ -549,7 +549,7 @@ class dbEnterExit:
             self.sql.exeCute('up_special',self.ivar,'com')
         elif category == 'export':
             self.entry = self.sql.exeCute('all_special','','all')
-            ep.writeTree(self.entry)
+            ep_sf.writeTree(self.entry)
         elif category == 'quikchk2':
             self.dbt = xbmc.getInfoLabel('Container({}).ListItem().DBTYPE'.format(xbmc.getInfoLabel('System.CurrentControlID')))
             self.fnp = xbmc.getInfoLabel('Container({}).ListItem().FileNameAndPath'.format(xbmc.getInfoLabel('System.CurrentControlID')))

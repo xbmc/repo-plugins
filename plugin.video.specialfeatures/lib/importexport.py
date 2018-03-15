@@ -1,12 +1,11 @@
 from lib.sys_init import *
-from lib.iteration import *
 
 def initTree(path):
 	global tree
 	tree = ET.parse(path)
 	global root
 	root = tree.getroot()
-class exPort:
+class exPort_sfnfo:
 	def indent(self,elem, level=0):
 	  i = "\n" + level*"  "
 	  if len(elem):
@@ -22,6 +21,10 @@ class exPort:
 	    if level and (not elem.tail or not elem.tail.strip()):
 	      elem.tail = i
 	def buildTree(self,t,st,p,f):
+		if st == 'None':
+			st = ""
+		if p == 'None':
+			p = ""
 		self.header = ET.Element('specialfeatures')
 		self.title = ET.SubElement(self.header,'title')
 		self.title.text = '{}'.format(t)
@@ -49,17 +52,20 @@ class exPort:
 						self.buildTree(self.item['title'],self.item['sorttitle'],self.item['plot'],os.path.splitext(self.item['bpath'])[0]+'.sfnfo')
 					else:
 						self.buildTree(self.item[1],self.item[3],self.item[4],os.path.splitext(self.item[2])[0]+'.sfnfo')
-
 				except:
 					error('Could not write to file directory, check your write permissions')
 				self.cst+=1
-
+			bgdcc()
 		else:
 			self.cst = 1
 			bgdc(lang(30000),lang(30064))
 			for self.item in iterate:
-				if xbmcvfs.exists(os.path.splitext(self.item[2])[0]+'.sfnfo') == 0:
-					self.pct = float(self.cst)/float(len(iterate))*100
+				if mysql == 'true':
+					if xbmcvfs.exists(os.path.splitext(self.item['bpath'])[0]+'.sfnfo') == 0:
+						self.pct = float(self.cst)/float(len(iterate))*100
+				else:
+					if xbmcvfs.exists(os.path.splitext(self.item[2])[0]+'.sfnfo') == 0:
+						self.pct = float(self.cst)/float(len(iterate))*100
 					bgdu(int(self.pct),lang(30000),"{0} {1}{2}{3}".format(lang(30064),self.cst,lang(30052),len(iterate)))
 					try:
 						if mysql == 'true':
@@ -69,8 +75,8 @@ class exPort:
 					except:
 						error('Could not write to file directory, check your write permissions')
 					self.cst+=1
-		bgdcc()
-class imPort:
+			bgdcc()
+class imPort_sfnfo:
 	def upDate(self,path):
 		if self.checkout(path) == 1:
 			initTree(self.path)

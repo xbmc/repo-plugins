@@ -1,0 +1,30 @@
+    <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30001">Today Featured</string>
+    <string id="30002">Don't miss</string>
+    <string id="30003">Most viewed</string>
+    <string id="30004">Programs</string>
+    <string id="30005">Series</string>
+    <string id="30006">News</string>
+    <string id="30007">Entertainment</string>
+    <string id="30008">Sports</string>
+    <string id="30009">Documentaries</string>
+    <string id="30010">Divulgation</string>
+    <string id="30011">Culture</string>
+    <string id="30012">Music</string>
+    <string id="30013">All A-Z</string>
+    <string id="30014">Aired A-Z</string>
+    <string id="30015">>>Next Page</string>
+    <string id="30016">>>Previous Page</string>
+    <string id="30017">Live channels</string>
+    <string id="30018">TV3</string>
+    <string id="30019">Canal 324</string>
+    <string id="30020">Canal 33-Super 3</string>
+    <string id="30021">Esport 3</string>
+	<string id="30022">Search</string>
+	<string id="30023">Collections</string> 
+    <string id="30024">TV3 (International broadcast)</string>
+    <string id="30025">Canal 324 (International broadcast)</string>
+    <string id="30026">Canal 33-Super 3 (International broadcast)</string>
+    <string id="30027">Esport 3 (International broadcast)</string>
+</strings>

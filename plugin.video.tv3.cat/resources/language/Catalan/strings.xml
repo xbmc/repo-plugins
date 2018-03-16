@@ -1,0 +1,31 @@
+    <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30001">Avui destaquem</string>
+    <string id="30002">No t'ho perdis</string>
+    <string id="30003">El més vist</string>
+    <string id="30004">Programes</string>
+    <string id="30005">Sèries</string>
+    <string id="30006">Informatius</string>
+    <string id="30007">Entreteniment</string>
+    <string id="30008">Esports</string>
+    <string id="30009">Documentals</string>
+    <string id="30010">Divulgació</string>
+    <string id="30011">Cultura</string>
+    <string id="30012">Música</string>
+    <string id="30013">Tots A-Z</string>
+    <string id="30014">En emissió A-Z</string>
+    <string id="30015">>>Pàgina següent</string>
+    <string id="30016">>>Pàgina anterior</string>
+    <string id="30017">Canals en directe</string>
+    <string id="30018">TV3</string>
+    <string id="30019">Canal 324</string>
+    <string id="30020">Canal 33-Super 3</string>
+    <string id="30021">Esport 3</string>
+	<string id="30022">Cercar</string>
+	<string id="30023">Col·leccions</string> 
+    <string id="30024">TV3 (Emissió internacional)</string>
+    <string id="30025">Canal 324 (Emissió internacional)</string>
+    <string id="30026">Canal 33-Super 3 (Emissió internacional)</string>
+    <string id="30027">Esport 3 (Emissió internacional)</string>
+   
+</strings>

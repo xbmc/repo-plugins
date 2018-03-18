@@ -26,7 +26,7 @@ provider-name="smitchell6879, evertiro">
   <description lang="en_GB">Special Features is inspired by the upcoming Blu-ray features being introduced in Kodi 18. Given a properly structured 'Extras' directory, this addon will present all of the bonus videos, discs and alternate versions of the movies and tv shows in your library.</description>
   <disclaimer lang="en_GB">Kodi 17/18 Required</disclaimer>
   <assets>
-    <icon>icon.jpg</icon>
+    <icon>icon.png</icon>
     <fanart>fanart.jpg</fanart>
     <screenshot>resources/screenshot001.png</screenshot>
     <screenshot>resources/screenshot002.png</screenshot>

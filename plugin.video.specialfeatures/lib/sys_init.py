@@ -53,12 +53,10 @@ adtes      = xbmc.translatePath(os.path.join(addir,"movie.sfnfo"))
 dbdir      = xbmc.translatePath(os.path.join(addir,"{}.db".format(dbName)))
 libdir     = xbmc.translatePath(os.path.join(addonpath,'lib'))
 resdir     = xbmc.translatePath(os.path.join(addonpath,'resources'))
-langdir     = xbmc.translatePath(os.path.join(resdir,'language'))
 sqldir     = xbmc.translatePath(os.path.join(libdir,'pymysql'))
 
 sys.path.append(libdir)
 sys.path.append(resdir)
-sys.path.append(langdir)
 sys.path.append(sqldir)
 
 '''GUI'''

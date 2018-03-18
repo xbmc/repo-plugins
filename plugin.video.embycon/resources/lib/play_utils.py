@@ -22,6 +22,7 @@ from json_rpc import json_rpc
 from datamanager import DataManager
 from item_functions import get_next_episode, extract_item_info
 from clientinfo import ClientInformation
+from functions import delete
 
 log = SimpleLogging(__name__)
 download_utils = DownloadUtils()
@@ -121,7 +122,7 @@ def playFile(play_info, monitor):
 
     log.debug("playFile id({0}) resume({1}) force_transcode({2})", id, auto_resume, force_transcode)
 
-    settings = xbmcaddon.Addon('plugin.video.embycon')
+    settings = xbmcaddon.Addon()
     addon_path = settings.getAddonInfo('path')
     force_auto_resume = settings.getSetting('forceAutoResume') == 'true'
     jump_back_amount = int(settings.getSetting("jump_back_amount"))
@@ -628,7 +629,7 @@ def sendProgress(monitor):
 @catch_except()
 def promptForStopActions(item_id, current_possition):
 
-    settings = xbmcaddon.Addon(id='plugin.video.embycon')
+    settings = xbmcaddon.Addon()
 
     prompt_next_percentage = int(settings.getSetting('promptPlayNextEpisodePercentage'))
     play_prompt = settings.getSetting('promptPlayNextEpisodePercentage_prompt') == "true"
@@ -672,12 +673,7 @@ def promptForStopActions(item_id, current_possition):
 
     if prompt_to_delete:
         log.debug("Prompting for delete")
-        resp = xbmcgui.Dialog().yesno(i18n('confirm_file_delete'), i18n('file_delete_confirm'), autoclose=10000)
-        if resp:
-            log.debug("Deleting item: {0}", item_id)
-            url = "{server}/emby/Items/%s?format=json" % item_id
-            download_utils.downloadUrl(url, method="DELETE")
-            xbmc.executebuiltin("Container.Refresh")
+        delete(result)
 
     # prompt for next episode
     if (prompt_next_percentage < 100 and
@@ -747,7 +743,7 @@ class Service(xbmc.Player):
         self.activity = {}
 
     def save_activity(self):
-        addon = xbmcaddon.Addon(id='plugin.video.embycon')
+        addon = xbmcaddon.Addon()
         path = xbmc.translatePath(addon.getAddonInfo('profile')) + "activity.json"
         activity_data = json.dumps(self.activity)
         f = xbmcvfs.File(path, 'w')
@@ -801,6 +797,7 @@ class Service(xbmc.Player):
         if playback_type not in self.activity[today]:
             self.activity[today][playback_type] = 0
         self.activity[today][playback_type] += 1
+        self.save_activity()
 
     def onPlayBackEnded(self):
         # Will be called when kodi stops playing a file

@@ -1,4 +1,4 @@
-#   Copyright (C) 2017 Lunatixz
+#   Copyright (C) 2018 Lunatixz
 #
 #
 # This file is part of NewsmaxTV.
@@ -18,7 +18,7 @@
 
 # -*- coding: utf-8 -*-
 import os, sys, time, datetime, re, traceback
-import urllib, urllib2, socket, json
+import urlparse, urllib, urllib2, socket, json
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 
 from simplecache import SimpleCache
@@ -34,35 +34,21 @@ ICON          = REAL_SETTINGS.getAddonInfo('icon')
 FANART        = REAL_SETTINGS.getAddonInfo('fanart')
 LANGUAGE      = REAL_SETTINGS.getLocalizedString
 
-## GLOBALS ##
-TIMEOUT     = 30
-DEBUG       = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
-BASE_URL    = 'http://www.newsmaxtv.com'
-YT_URL      = 'plugin://plugin.video.youtube/user/NewsmaxTV/'
-YT_LIVE     = 'plugin://plugin.video.youtube/play/?video_id=q6HJt7Ki6ng'
+# GLOBALS
+TIMEOUT       = 15
+CONTENT_TYPE  = 'files'
+DEBUG         = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
+BASE_URL      = 'http://www.newsmaxtv.com'
+YT_LIVE       = 'plugin://plugin.video.youtube/play/?video_id=q6HJt7Ki6ng'
 
 def log(msg, level=xbmc.LOGDEBUG):
-    if DEBUG == True:
-        if level == xbmc.LOGERROR:
-            msg += ' ,' + traceback.format_exc()
-        xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + (msg), level)
-       
+    if DEBUG == False and level != xbmc.LOGERROR: return
+    if level == xbmc.LOGERROR: msg += ' ,' + traceback.format_exc()
+    xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + msg, level)
+    
 def getParams():
-    param=[]
-    if len(sys.argv[2])>=2:
-        params=sys.argv[2]
-        cleanedparams=params.replace('?','')
-        if (params[len(params)-1]=='/'):
-            params=params[0:len(params)-2]
-        pairsofparams=cleanedparams.split('&')
-        param={}
-        for i in range(len(pairsofparams)):
-            splitparams={}
-            splitparams=pairsofparams[i].split('=')
-            if (len(splitparams))==2:
-                param[splitparams[0]]=splitparams[1]
-    return param
-                 
+    return dict(urlparse.parse_qsl(sys.argv[2][1:]))
+    
 socket.setdefaulttimeout(TIMEOUT)
 class Newsmax(object):
     def __init__(self):
@@ -80,37 +66,29 @@ class Newsmax(object):
                 response = urllib2.urlopen(request, timeout=TIMEOUT).read()
                 self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, response, expiration=datetime.timedelta(hours=6))
             return self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
-        except urllib2.URLError, e:
-            log("openURL Failed! " + str(e), xbmc.LOGERROR)
-        except socket.timeout, e:
-            log("openURL Failed! " + str(e), xbmc.LOGERROR)
-        except Exception, e:
-            log("openURL Failed! " + str(e), xbmc.LOGERROR)
-            xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30001), ICON, 4000)
-            return ''
+        except Exception as e: log("openURL Failed! " + str(e), xbmc.LOGERROR)
+        xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30001), ICON, 4000)
+        return ''
             
 
     def buildMainMenu(self):
-        self.addLink('Live'     ,'',0)
-        self.addYoutube('Browse',YT_URL)
+        self.addLink(LANGUAGE(30002),'',0)
+        self.addYoutube(LANGUAGE(30003),'plugin://plugin.video.youtube/user/NewsmaxTV/')
         
         
     def buildLiveLink(self):
         log('buildLiveLink')
         try:
-            #parse for youtube live feed, may not be necessary. However its useful if the site changes feeds, fallback live youtube feed.
             site = json.loads(self.openURL(BASE_URL).split('<script type="application/ld+json">')[1].split('</script>')[0])['embedUrl']
             data = ((self.openURL(site).replace('\n','').replace('\r','').replace('\t','').replace('\\','')).split('"entryResult":')[1]).split(',"recordedEntryId"')[0]+'}}'
             url = 'https://'+((re.compile('https://(.+?)m3u8', re.DOTALL).search(data)).group(1))+'m3u8'
-        except:
-            url = YT_LIVE
-        self.playVideo('NewsmaxTV Live',url)
+        except: url = YT_LIVE
+        self.playVideo(LANGUAGE(30004),url)
             
                      
-    def playVideo(self, name, url, liz=None):
+    def playVideo(self, name, url):
         log('playVideo')
-        if not liz:
-            liz = xbmcgui.ListItem(name, path=url)
+        liz = xbmcgui.ListItem(name, path=url)
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
 
            
@@ -119,15 +97,10 @@ class Newsmax(object):
         log('addLink, name = ' + name)
         liz=xbmcgui.ListItem(name)
         liz.setProperty('IsPlayable', 'true')
-        if infoList == False:
-            liz.setInfo(type="Video", infoLabels={"mediatype":"video","label":name,"title":name,"genre":"News"})
-        else:
-            liz.setInfo(type="Video", infoLabels=infoList)
-            
-        if infoArt == False:
-            liz.setArt({'thumb':ICON,'fanart':FANART})
-        else:
-            liz.setArt(infoArt)
+        if infoList == False: liz.setInfo(type="Video", infoLabels={"mediatype":"video","label":name,"title":name,"genre":"News"})
+        else: liz.setInfo(type="Video", infoLabels=infoList)
+        if infoArt == False: liz.setArt({'thumb':ICON,'fanart':FANART})
+        else: liz.setArt(infoArt)
         u=sys.argv[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,totalItems=total)
     
@@ -140,18 +113,12 @@ class Newsmax(object):
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=True)
 
 params=getParams()
-try:
-    url=urllib.unquote_plus(params["url"])
-except:
-    url=None
-try:
-    name=urllib.unquote_plus(params["name"])
-except:
-    name=None
-try:
-    mode=int(params["mode"])
-except:
-    mode=None
+try: url=urllib.unquote_plus(params["url"])
+except: url=None
+try: name=urllib.unquote_plus(params["name"])
+except: name=None
+try: mode=int(params["mode"])
+except: mode=None
     
 log("Mode: "+str(mode))
 log("URL : "+str(url))
@@ -161,6 +128,9 @@ if mode==None:  Newsmax().buildMainMenu()
 if mode ==   0: Newsmax().buildLiveLink()
 elif mode == 9: Newsmax().playVideo(name, url)
 
-xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_NONE )
-xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_LABEL )
-xbmcplugin.endOfDirectory(int(sys.argv[1]),cacheToDisc=True)
+xbmcplugin.setContent(int(sys.argv[1])    , CONTENT_TYPE)
+xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
+xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_NONE)
+xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_LABEL)
+xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_TITLE)
+xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=True)

@@ -15,8 +15,9 @@ from resources.lib.downloadutils import DownloadUtils
 from resources.lib.simple_logging import SimpleLogging
 from resources.lib.play_utils import Service, PlaybackService, sendProgress
 from resources.lib.kodi_utils import HomeWindow
-from resources.lib.widgets import checkForNewContent
+from resources.lib.widgets import checkForNewContent, set_background_image
 from resources.lib.websocket_client import WebSocketClient
+from resources.lib.menu_functions import set_library_window_values
 
 # clear user and token when logging in
 home_window = HomeWindow()
@@ -40,41 +41,21 @@ playback_service = PlaybackService(monitor)
 home_window = HomeWindow()
 last_progress_update = time.time()
 last_content_check = time.time()
+last_background_update = 0
 websocket_client = WebSocketClient()
 
+# session id
+# TODO: this is used to append to the end of PLAY urls, this is to stop mark watched from overriding the Emby ones
+home_window.setProperty("session_id", str(time.time()))
+
 # start the WebSocket Client running
-settings = xbmcaddon.Addon(id='plugin.video.embycon')
+settings = xbmcaddon.Addon()
 remote_control = settings.getSetting('remoteControl') == "true"
 if remote_control:
     websocket_client.start()
 
-
-def get_now_playing():
-
-    # Get the active player
-    result = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "Player.GetActivePlayers"}')
-    result = unicode(result, 'utf-8', errors='ignore')
-    log.debug("Got active player: {0}", result)
-    result = json.loads(result)
-
-    if 'result' in result and len(result["result"]) > 0:
-        playerid = result["result"][0]["playerid"]
-
-        # Get details of the playing media
-        log.debug("Getting details of now  playing media")
-        result = xbmc.executeJSONRPC(
-            '{"jsonrpc": "2.0", "id": 1, "method": "Player.GetItem", "params": {"playerid": ' + str(
-                playerid) + ', "properties": ["showtitle", "tvshowid", "episode", "season", "playcount", "genre", "plotoutline", "uniqueid"] } }')
-        result = unicode(result, 'utf-8', errors='ignore')
-        log.debug("playing_item_details: {0}", result)
-
-        result = json.loads(result)
-        return result
-
-
 def check_version():
     download_utils.checkVersion()
-
 
 t = Timer(5.0, check_version)
 t.start()
@@ -92,20 +73,19 @@ while not xbmc.abortRequested:
                 last_progress_update = time.time()
                 sendProgress(monitor)
         else:
-            # if not playing every 60 seonds check for new widget content
             if (time.time() - last_content_check) > 60:
                 last_content_check = time.time()
                 checkForNewContent()
-
-        #get_now_playing()
+            if (time.time() - last_background_update) > 30:
+                last_background_update = time.time()
+                set_library_window_values()
+                set_background_image()
 
     except Exception as error:
         log.error("Exception in Playback Monitor: {0}", error)
         log.error("{0}", traceback.format_exc())
 
     xbmc.sleep(1000)
-
-monitor.save_activity()
 
 # stop the WebSocket Client
 websocket_client.stop_client()

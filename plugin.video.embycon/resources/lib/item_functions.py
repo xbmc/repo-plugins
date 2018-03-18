@@ -2,7 +2,6 @@
 import sys
 import os
 import urllib
-import json
 from collections import defaultdict
 
 import xbmc
@@ -14,15 +13,17 @@ from simple_logging import SimpleLogging
 from translation import i18n
 from downloadutils import DownloadUtils
 from datamanager import DataManager
+from kodi_utils import HomeWindow
 
 log = SimpleLogging(__name__)
 kodi_version = int(xbmc.getInfoLabel('System.BuildVersion')[:2])
 
-addon_instance = xbmcaddon.Addon(id='plugin.video.embycon')
+addon_instance = xbmcaddon.Addon()
 addon_path = addon_instance.getAddonInfo('path')
 PLUGINPATH = xbmc.translatePath(os.path.join(addon_path))
 
 download_utils = DownloadUtils()
+home_window = HomeWindow()
 
 class ItemDetails():
 
@@ -218,9 +219,8 @@ def extract_item_info(item, gui_options):
 
     # Process Genres
     genres = item["Genres"]
-    if genres is not None:
-        for genre in genres:
-            item_details.genre = item_details.genre  + " / " + genre
+    if genres is not None and len(genres) > 0:
+        item_details.genre = " / ".join(genres)
 
     # Process UserData
     userData = item["UserData"]
@@ -299,7 +299,7 @@ def add_gui_item(url, item_details, display_options, folder=True):
         if item_details.name_format:
             u += '&name_format=' + urllib.quote(item_details.name_format)
     else:
-        u = sys.argv[0] + "?item_id=" + url + "&mode=PLAY"
+        u = sys.argv[0] + "?item_id=" + url + "&mode=PLAY" + "&session_id=" + home_window.getProperty("session_id")
 
     # Create the ListItem that will be displayed
     thumbPath = item_details.art["thumb"]
@@ -363,9 +363,9 @@ def add_gui_item(url, item_details, display_options, folder=True):
     list_item.setProperty('tvshow.poster', item_details.art['tvshow.poster'])  # not avail to setArt
 
     # add context menu
-    menu_items = add_context_menu(item_details, folder)
-    if len(menu_items) > 0:
-        list_item.addContextMenuItems(menu_items, True)
+    #menu_items = add_context_menu(item_details, folder)
+    #if len(menu_items) > 0:
+    #    list_item.addContextMenuItems(menu_items, True)
 
     # new way
     info_labels = {}
@@ -380,7 +380,6 @@ def add_gui_item(url, item_details, display_options, folder=True):
     info_labels["title"] = listItemName
     info_labels["plot"] = item_details.plot
     info_labels["Overlay"] = item_details.overlay
-    info_labels["playcount"] = str(item_details.play_count)
     info_labels["TVShowTitle"] = item_details.series_name
 
     info_labels["duration"] = item_details.duration
@@ -426,6 +425,10 @@ def add_gui_item(url, item_details, display_options, folder=True):
         info_labels["season"] = item_details.season_number
 
     if is_video:
+
+        if item_type == 'movie':
+            info_labels["trailer"] = "plugin://plugin.video.embycon?mode=playTrailer&id=" + item_details.id
+
         list_item.setInfo('video', info_labels)
         log.debug("info_labels: {0}", info_labels)
         list_item.addStreamInfo('video',

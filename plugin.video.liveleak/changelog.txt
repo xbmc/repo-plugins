@@ -1,3 +1,27 @@
+v1.3.4 (2018-3-19)
+- Recommended changes; fix Search keyboard grep
+
+v1.3.3 (2018-3-11)
+- Add fallback for multiprocessing module not available
+
+v1.3.2 (2018-3-9)
+- Adapt after Liveleak.com upgrade
+
+v1.3.1 (2018-2-11)
+- Improve handling of video description Info
+
+v1.3.0 (2018-1-23)
+- Add ability to moderate Liveleak users' postings
+
+v1.2.0 (2018-1-21)
+- Implement multiple page fetch threading for improved performance
+
+v1.1.1 (2018-1-17)
+- Upgrade handling of video description Info
+
+v1.1.0 (2017-8-28)
+- Add Liveleak user who posted (credit) and video description (plot) Info
+
 v1.0.1 (2017-4-14)
 - Fix uncaught error on empty server response
 

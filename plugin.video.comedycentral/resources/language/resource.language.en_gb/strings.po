@@ -29,17 +29,25 @@ msgid "Select Preferred Quality"
 msgstr ""
 
 msgctxt "#30003"
-msgid "Latest Episodes"
+msgid "Not compatible with PseudoTV Live"
 msgstr ""
 
 msgctxt "#30004"
-msgid "Browse Shows"
+msgid "Shows"
 msgstr ""
 
 msgctxt "#30005"
-msgid "Browse Standup"
+msgid "Standup"
 msgstr ""
 
 msgctxt "#30006"
-msgid "Browse Youtube"
+msgid "Youtube"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Latest"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Featured"
 msgstr ""

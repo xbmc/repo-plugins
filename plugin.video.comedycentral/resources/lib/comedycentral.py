@@ -42,9 +42,10 @@ DEBUG         = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
 QUALITY       = int(REAL_SETTINGS.getSetting('Quality'))
 PTVL_RUNNING  = xbmcgui.Window(10000).getProperty('PseudoTVRunning') == 'True'
 BASE_URL      = 'http://www.cc.com'
-MAIN_MENU     = [(LANGUAGE(30003), BASE_URL + '/full-episodes'          , 1),
-                 (LANGUAGE(30004), BASE_URL + '/shows'                  , 1)]
-                 #(LANGUAGE(30004), BASE_URL + '/shows/stand-up-specials', 1)]
+LOGO_URL      = 'https://dummyimage.com/512x512/035e8b/FFFFFF.png&text=%s'
+MAIN_MENU     = [(LANGUAGE(30007), BASE_URL + '/full-episodes' , 1),
+                 (LANGUAGE(30008), BASE_URL + '/shows'         , 1),
+                 (LANGUAGE(30004), BASE_URL + '/shows'         , 1)]
                  
 def log(msg, level=xbmc.LOGDEBUG):
     if DEBUG == False and level != xbmc.LOGERROR: return
@@ -89,8 +90,8 @@ class CC(object):
         except: items = json.loads(re.search('var triforceManifestURL = "(.+?)";',response).group(1))  
         try: thumb = (response.split('//meta[@property="og:image"]/@content')[0].strip() or ICON)
         except: thumb = ICON
-        thumb = (thumb or ICON)
         if not thumb.endswith(('.png','.jpg')): thumb = ICON
+        elif thumb.startswith('//'): thumb = 'http:%s'%thumb
         if items and 'manifest' not in items: return
         for item in items['manifest']['zones']:
             if item in ('header', 'footer', 'ads-reporting', 'ENT_M171'): continue
@@ -102,42 +103,44 @@ class CC(object):
                 try: ent_code = result.split('/modules/')[1].split('/')[0]
                 except: ent_code = ''
             ent_code = ent_code.split('_cc')[0].split('_tosh')[0]
-            # if ent_code not in IGNORE_LIST: continue
-            jsonResponse = json.loads(self.openURL(result))['result']
-            if name == LANGUAGE(30003): self.buildEpisodes(name, url, jsonResponse, jsonResponse['episodes'])
-            elif (jsonResponse.get('data','') or jsonResponse.get('promo',{})).get('headerText','').upper() == 'FULL EPISODES': self.buildEpisodes(name, url, jsonResponse, jsonResponse['episodes'])
-            elif (jsonResponse.get('data','') or jsonResponse.get('promo',{})).get('headerText','') in ['Featured Shows','All Shows']:
-                for show in jsonResponse['data']['items']:
-                    vid_url = (show.get('canonicalURL','') or show.get('url',None))
-                    title = (show.get('title','')       or show.get('shortTitle',None))
-                    if vid_url is None or title is None: continue
-                    plot  = (show.get('description','') or show.get('shortDescription','') or title)
-                    try: thumb = show['image']['url']
-                    except: thumb = ICON
-                    infoLabels = {"mediatype":"tvshows","label":title ,"title":title,"TVShowTitle":title,"plot":plot}
-                    infoArt    = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON}
-                    self.addDir(title,vid_url,1,infoLabels,infoArt)
+            try: jsonResponse = json.loads(self.openURL(result))['result']
+            except: log('browse, jsonResponse failed! ' + str(jsonResponse))
+            if ent_code == 'ent_m081': return self.buildEpisodes(name, url, jsonResponse, jsonResponse['episodes'])
+            elif ent_code == 'ent_m013': return self.buildEpisodes(name, url, jsonResponse, jsonResponse['episodes'])
+            elif ent_code in ['ent_m100','ent_m150']:
+                for item in jsonResponse['data']['items']:
+                    if ent_code == 'ent_m100' and name == LANGUAGE(30008): self.buildShow(item)
+                    elif ent_code == 'ent_m150' and name == LANGUAGE(30004):
+                        for show in item['sortedItems']: self.buildShow(show)
 
-                    
-    def buildStandup(self, name, url, jsonResponse=None):
-        log('buildStandup, ' + name)
-        # if jsonResponse is None: jsonResponse = json.loads(self.openURL(url))['result']
 
-            
+    def buildShow(self, show):
+        vid_url = (show.get('canonicalURL','') or show.get('url',None))
+        title = (show.get('title','')          or show.get('shortTitle',None))
+        plot  = (show.get('description','')    or show.get('shortDescription','') or title)
+        if vid_url is None or title is None or not vid_url.startswith(BASE_URL): return
+        try: thumb = show['image']['url']
+        except: thumb = LOGO_URL%(urllib.quote(title))
+        infoLabels = {"mediatype":"tvshows","label":title ,"title":title,"TVShowTitle":title,"plot":plot}
+        infoArt    = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON}
+        self.addDir(title,vid_url,1,infoLabels,infoArt)
+                            
+                            
     def buildEpisodes(self, name, url, jsonResponse=None, videos=[], jsonKey='episodes'):
         log('buildEpisodes, ' + name)
         if jsonResponse is None: 
             jsonResponse = json.loads(self.openURL(url))['result']
             videos = jsonResponse[jsonKey]
-        for video in videos:  
-            vid_url = video.get('canonicalURL',None)
-            if vid_url is None: continue
+        for video in videos:
+            vid_url = (video.get('canonicalURL','') or video.get('url',None))
+            title   = (video.get('title','')          or video.get('shortTitle',None))
+            plot    = (video.get('description','')    or video.get('shortDescription','') or title)
+            if vid_url is None or title is None: continue
             elif not vid_url.startswith(BASE_URL): continue
-            show  = video['show'].get('title',None)
-            if show == None: continue
-            title = (video.get('title','')       or video.get('shortTitle',''))
-            plot  = (video.get('description','') or video.get('shortDescription',''))
-            thumb = video['images'][0]['url']
+            try: show = video['show'].get('title',None)
+            except: show = name
+            try: thumb = video['images'][0]['url']
+            except: thumb = video['image'][0]['url']
             try: season = int(video['season']['seasonNumber'])
             except: season = 0
             try: episode = int(video['season']['episodeAiringOrder'])
@@ -147,7 +150,8 @@ class CC(object):
             if season + episode > 0: label = '%s - %s - %s'%(show, seinfo, title)
             try: aired = datetime.datetime.fromtimestamp(float(video['airDate']))
             except: aired = datetime.datetime.now()
-            duration = video['duration']
+            try: duration = video['duration']
+            except: duration = 0
             infoLabels = {"mediatype":"episode","label":label ,"title":label,"TVShowTitle":show,"plot":plot,"aired":aired.strftime('%Y-%m-%d'),"duration":duration,"season":season,"episode":episode}
             infoArt      = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON}
             CONTENT_TYPE = 'episodes'
@@ -159,25 +163,28 @@ class CC(object):
     
     def playVideo(self, name, url, liz=None):
         log('playVideo')
-        if PTVL_RUNNING: return 
         info = getVideoInfo(url,QUALITY,True)
         if info is None: return
         info = info.streams()
-        info = sorted(info, key=lambda x: x['idx'])
-        plst = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
-        plst.clear()
-        xbmc.sleep(200)
-        idxLST = []
-        for videos in info:
-            vidIDX = videos['idx']
-            url = videos['xbmc_url']
-            liz = xbmcgui.ListItem(videos['title'], path=url)
-            try: 
-                if 'subtitles' in videos['ytdl_format']: liz.setSubtitles([x['url'] for x in videos['ytdl_format']['subtitles'].get('en','') if 'url' in x])
-            except: pass
-            plst.add(url, liz, vidIDX)
-            if vidIDX == 0: xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz) 
-        plst.unshuffle()
+        if len(info) > 1:
+            if PTVL_RUNNING: return xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30007), ICON, 4000)
+            info = sorted(info, key=lambda x: x['idx'])
+            plst = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+            plst.clear()
+            xbmc.sleep(200)
+            for videos in info:
+                vidIDX = videos['idx']
+                url = videos['xbmc_url']
+                liz = xbmcgui.ListItem(videos['title'], path=url)
+                try: 
+                    if 'subtitles' in videos['ytdl_format']: liz.setSubtitles([x['url'] for x in videos['ytdl_format']['subtitles'].get('en','') if 'url' in x])
+                except: pass
+                plst.add(url, liz, vidIDX)
+                if vidIDX == 0: xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz) 
+            plst.unshuffle()
+        else:
+            liz = xbmcgui.ListItem(info[0]['title'], path=info[0]['xbmc_url'])
+            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz) 
         
         
     def addYoutube(self, name, url):

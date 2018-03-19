@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.catchuptvandmore"
        name="Catch-up TV &amp; More"
-       version="0.1.4"
-       provider-name="SylvainCecchetto">
+       version="0.1.10"
+       provider-name="SylvainCecchetto,wwark">
   <requires>
-    <!-- TODO before official repo submission: xbmc.python version="2.25.0"/> -->
     <import addon="xbmc.python" version="2.25.0"/>
-    <import addon="script.module.beautifulsoup4" version="4.3.1"/>
-    <import addon="script.module.requests" version="2.9.1"/>
-    <import addon="script.module.youtube.dl" version="17.518.2"/>
+    <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+    <import addon="script.module.requests" version="2.12.4"/>
+    <import addon="script.module.youtube.dl" version="18.225.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="fr_fr">Catch-Up TV &amp; More : Replay TV et bien plus encore.</summary>
-    <description lang="fr_fr">Catch-Up TV &amp; More regroupe dans un même plugin Kodi l'ensemble des vidéos des différents services et chaînes de Replay TV (rattrapage TV). De plus, cette extension vous permet d'accéder rapidement aux vidéos et contenus proposés par certains sites internet.</description>
+    <summary lang="fr_fr">Catch-Up TV &amp; More : Replay TV, Live TV et bien plus encore.</summary>
+    <description lang="fr_fr">Catch-Up TV &amp; More regroupe dans un même plugin Kodi l'ensemble des vidéos des différents services et chaînes de Replay TV (rattrapage TV) ainsi que l'accès au direct. De plus, cette extension vous permet d'accéder rapidement aux vidéos et contenus proposés par certains sites internet.</description>
     <disclaimer lang="fr_fr">Retours de bugs, propositions d'améliorations ou d'ajout de contenus sont les bienvenue ! GitHub ou e-mail.</disclaimer>
     <summary lang="en_gb">Catch-Up TV &amp; More: It's all in the title.</summary>
-    <description lang="en_gb">Catch-Up TV &amp; More brings together in one Kodi plugin all the videos of the various services and channels of catch-up TV. Furthermore, this addon allows you to quickly access the videos and content offered by certain websites.</description>
+    <description lang="en_gb">Catch-Up TV &amp; More brings together in one Kodi plugin all the videos of the various services and channels of catch-up TV and live TV. Furthermore, this addon allows you to quickly access the videos and content offered by certain websites.</description>
     <disclaimer lang="en_gb">Bug reports, suggestions for improvements or content additions are welcome! GitHub or e-mail.</disclaimer>
     <description lang="he_il">ההרחבה מאפשרת לך להתעדכן בתוכן השידורים תוסף אחד של קודי מרכז את כל קטעי וידאו של שירותים שונים וערוצי תוכן משודר. בנוסף, תוספת זו מאפשרת לך לגשת במהירות לסרטונים ולתכנים המוצעים על ידי אתרים מסוימים.</description>
     <disclaimer lang="he_il">דוחות שגיאה, הצעות לשיפור או תוספות תוכן יתקבלו בברכה! ל-GitHub או אימייל.</disclaimer>
@@ -29,29 +28,31 @@
     <forum></forum>
     <website></website>
     <email>catch.up.tv.and.more [AT] gmail [DOT] com</email>
-    <source>https://github.com/SylvainCecchetto/plugin.video.catchuptvandmore</source>
+    <source>https://github.com/Catch-up-TV-and-More/plugin.video.catchuptvandmore</source>
     <news>
-[Add channel — Live TV] Blaze (UK) (wwark)
-[Add channel — Live TV] RTBF (BE) (La Une, La Deux, La Trois, ...) (wwark)
-[Add channel] Dave (UK) (wwark)
-[Add channel] Drama (UK) (wwark)
-[Add channel] Really (UK) (wwark)
-[Add channel] Yesterday (UK) (wwark)
-[Fix] Get Meteo Video for Channel TF1 (wwark)
-[Fix] Program without videos for Group TF1 (wwark)
-[Improvement] Detect DRM video for Group TF1 and send notification (wwark)
-[Improvement] Add More Videos button for Group TF1 (wwark)
-[Improvement] Add Spanish content, Last News, Last Weather, Last Business for Channel France 24 (wwark)
-[Add WebSite] Allociné (wwark)
-[Fix] Change API to get the video for Group M6 (kagonia from mpdb.tv)
-[Add WebSite] tetesaclaques.tv (wwark)
-[Fix] Video without date for Channel Numero 23 (wwark)
-[Improvement] Detect premium video and send notification for Group M6 (wwark)
-[Improvement] Update simpleplugin module and used mem_cache for all websites and channels. Gain little speedup (wwark)
-[Fix] Change website for Replay LCI (wwark)
-[Update] Verify Pep8 in all files (SylvainCecchetto)
-[Update] Fanart, Image for channel (SylvainCecchetto)
-[Improvement] Remove choice if there is just replay or live tv for a channel (SylvainCecchetto)
+[Version 0.1.10]
+[Add Live TV] DW (Contents EN, DE, ES, AR) (wwark)
+[Fix] Default Quality for Replay group TF1 (Thanks Chris_wafer) (wwark)
+[Readd Live TV] C8, CSTAR, Canalplus (clair) (wwark)
+[Fix] Arte Replay and Add some new contents language (EN|ES|PL)
+[Improvement] New menu layout and new live TV menu presentation (SylvainCecchetto)
+[Upgrade] Upgrade SimplePlugin framework to v2.3.2 (SylvainCecchetto)
+[Fix] Broken favorites (SylvainCecchetto)
+[Fix] Live TV for RTL TVI, PlugRTL, ClubRTL (wwark)
+[Add Channel] 日テレ (JP) (wwark)
+[Add Channel] テレビ朝日 (JP) (wwark)
+[Add Channel] TBSテレビ (JP) (wwark)
+[Add Channel] テレビ東京 (JP) (wwark)
+[Add Channel] MBSテレビ (JP) (wwark)
+[Add Channel] 朝日放送株式会社 (JP) (wwark)
+[Add Channel] 読売テレビ (JP) (wwark)
+[Improvement] Use XMLTV Telerama for Live FR TV guide (SylvainCecchetto)
+[Improvement] Faster navigation in plugin (SylvainCecchetto)
+[Fix] RTBF Auvio - Replay Emissions (BE) (wwark) 
+[Improvement] Customizable parameters to download video (SylvainCecchetto)
+[Fix] PublicSenat Replay (wwark)
+[Fix] L'équipeTV Replay (wwark)
+[Fix] RTC (BE) (wwark)
     </news>
     <assets>
       <icon>icon.png</icon>

@@ -7,171 +7,331 @@ msgstr ""
 "Project-Id-Version: Kodi Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@kodi.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2017-10-22 09:08+0300\n"
-"Last-Translator: A. Dambledore\n"
-"Language-Team: Eng2Heb\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: SylvainCecchetto\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: he_IL\n"
+"Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-# Settings categories (from 30000 to 30009)
+# Settings tabs/categories (from 30000 to 30019)
 msgctxt "#30000"
 msgid "Main menu"
 msgstr "תפריט ראשי"
 
 msgctxt "#30001"
-msgid "Channels"
-msgstr "סרטים מערוצים"
+msgid "Countries"
+msgstr ""
 
 msgctxt "#30002"
-msgid "Quality and Content"
+msgid "Quality and content"
 msgstr "איכות ותוכן"
 
 msgctxt "#30003"
 msgid "Download"
-msgstr "הורדה"
+msgstr "הורד"
 
 msgctxt "#30004"
 msgid "Accounts"
-msgstr "חשבון"
+msgstr "חשבונות"
 
-# Settings line separators (from 30010 to 30019)
+msgctxt "#30005"
+msgid "Advanced settings"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Channels"
+msgstr "ערוצים"
+
+msgctxt "#30007"
+msgid "Websites"
+msgstr "אתרי רשת"
+
+
+
+# Settings line separators (from 30010 to 30029)
 msgctxt "#30010"
 msgid "Hide main menu categories"
 msgstr "הסתר קטגוריות בתפריט הראשי"
 
 msgctxt "#30011"
-msgid "Hide channels from categories"
-msgstr "הסתר ערוצים מכל הקטגוריות"
+msgid "Hide channels"
+msgstr ""
 
 msgctxt "#30012"
 msgid "To configure YTDL go settings of script.module.youtube.dl"
 msgstr "כדי לקבוע את התצורה של YTDL עבור אל ההגדרות של script.module.youtube.dl"
 
-# Main categories (from 30020 to 30039)
-msgctxt "#30020"
+msgctxt "#30013"
+msgid "Hide countries"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Hide websites"
+msgstr ""
+
+
+# Main menu (from 30030 to 30049)
+msgctxt "#30030"
+msgid "Live TV"
+msgstr "טלוויזיה חיה"
+
+msgctxt "#30031"
+msgid "Catch-up TV"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Websites"
+msgstr "אתרי רשת"
+
+
+
+# Countries (from 30050 to 30079)
+msgctxt "#30050"
+msgid "France"
+msgstr ""
+
+msgctxt "#30051"
+msgid "Switzerland"
+msgstr ""
+
+msgctxt "#30052"
+msgid "United Kingdom"
+msgstr ""
+
+msgctxt "#30053"
+msgid "International"
+msgstr ""
+
+msgctxt "#30054"
+msgid "Belgium"
+msgstr ""
+
+msgctxt "#30055"
+msgid "Japan"
+msgstr ""
+
+msgctxt "#30056"
+msgid "Canada"
+msgstr ""
+
+
+# Channels (from 30080 to 30129)
+msgctxt "#30080"
 msgid "French channels"
 msgstr "ערוצים צרפתיים"
 
-msgctxt "#30021"
+msgctxt "#30081"
 msgid "Belgian channels"
 msgstr "ערוצים בלגיים"
 
-msgctxt "#30022"
+msgctxt "#30082"
 msgid "Japanese channels"
 msgstr "ערוצים יפניים"
 
-msgctxt "#30023"
-msgid "European channels"
-msgstr "ערוצים אירופיים"
+msgctxt "#30083"
+msgid "Switzerland channels"
+msgstr ""
 
-msgctxt "#30024"
+msgctxt "#30084"
 msgid "United Kingdom channels"
 msgstr "ערוצים אנגליים"
 
-msgctxt "#30025"
+msgctxt "#30085"
+msgid "International channels"
+msgstr ""
+
+msgctxt "#30086"
+msgid "Canadian channels"
+msgstr ""
+
+msgctxt "#30087"
 msgid "United States channels"
-msgstr "ערוצים אמריקאיים"
+msgstr ""
 
-# Context menu (from 30040 to 30049)
-msgctxt "#30040"
-msgid "Move down"
-msgstr "הזזה מטה"
 
-msgctxt "#30041"
-msgid "Move up"
-msgstr "הזזה מעלה"
+# Websites (from 30130 to 30149)
 
-msgctxt "#30042"
-msgid "Hide"
-msgstr "הסתר"
 
-msgctxt "#30043"
-msgid "Download"
-msgstr "הורדה"
 
-# Dialog boxes (from 30050 to 30069)
-msgctxt "#30050"
-msgid "Information"
-msgstr "מידע"
-
-msgctxt "#30051"
-msgid "To re-enable hidden items go to the plugin settings"
-msgstr "כדי להפעיל מחדש את הפריטים המוסתרים, עבור אל ההגדרות של תוסף"
-
-# Settings quality and content (from 30070 to 30099)
-msgctxt "#30070"
+# Quality and content (from 30150 to 30199)
+msgctxt "#30150"
 msgid "Video quality"
 msgstr "איכות וידאו מיו-טיוב"
 
-msgctxt "#30071"
-msgid "Contents"
-msgstr "תוכן העניינים"
-
-msgctxt "#30080"
-msgid "Arte: Choose Channel"
-msgstr "Arte: בחר ערוץ"
-
-msgctxt "#30081"
-msgid "France24: Choose Channel"
-msgstr "France24: בחר ערוץ"
-
-msgctxt "#30082"
-msgid "Euronews: Choose Channel"
-msgstr "Euronews: בחר ערוץ"
-
-msgctxt "#30087"
+msgctxt "#30151"
 msgid "Video quality (BEST|DEFAULT|DIALOG)"
 msgstr "איכות וידאו (הטוב ביותר|ברירת מחדל|תיבת דו-שיח)"
 
-# Others (from 30100 to 30140)
-msgctxt "#30100"
-msgid "More videos..."
-msgstr "קטעי וידאו נוספים..."
+msgctxt "#30152"
+msgid "Contents"
+msgstr "תוכן העניינים"
 
-msgctxt "#30101"
-msgid "All videos"
-msgstr "כל וידאו"
+msgctxt "#30153"
+msgid "Arte: Choose Channel"
+msgstr "Arte: בחר ערוץ"
 
-msgctxt "#30102"
-msgid "DRM protected video"
-msgstr "וידאו מוגן DRM"
+msgctxt "#30154"
+msgid "France 24: Choose Channel"
+msgstr "France 24: בחר ערוץ"
 
-msgctxt "#30103"
-msgid "Search"
-msgstr "חיפוש"
+msgctxt "#30155"
+msgid "Euronews: Choose Channel"
+msgstr "Euronews: בחר ערוץ"
 
-msgctxt "#30104"
-msgid "Last videos"
-msgstr "קטעי וידאו האחרונים"
+msgctxt "#30156"
+msgid "MTV: Choose Channel"
+msgstr "MTV: בחר ערוץ"
 
-msgctxt "#30105"
-msgid "From A to Z"
-msgstr "מ-א עד ת"
+msgctxt "#30157"
+msgid "DW: Choose Channel"
+msgstr "DW: בחר ערוץ"
 
-msgctxt "#30106"
-msgid "Ascending"
-msgstr "עולה"
+msgctxt "#30158"
+msgid "France 3 Régions: Choose region"
+msgstr ""
 
-msgctxt "#30107"
-msgid "Descending"
-msgstr "יורד"
+msgctxt "#30159"
+msgid "La 1ère: Choose region"
+msgstr ""
 
-msgctxt "#30108"
-msgid "More programs..."
-msgstr "עוד תוכניות..."
 
-msgctxt "#30109"
-msgid "Live TV"
-msgstr "‎טלוויזיה"
+# Download (from 30200 to 30239)
 
-msgctxt "#30110"
-msgid "Choose video quality"
-msgstr "בחר איכות וידאו"
-
-# Download (from 30200 to 30240)
 msgctxt "#30200"
 msgid "Folder to Download"
 msgstr "תיקיה להורדה"
+
+msgctxt "#30201"
+msgid "Quality of the video to download"
+msgstr ""
+
+msgctxt "#30202"
+msgid "Download in background"
+msgstr ""
+
+
+
+# Accounts (from 30240 to 30259)
+
+msgctxt "#30240"
+msgid "NRJ Login"
+msgstr ""
+
+msgctxt "#30241"
+msgid "NRJ Password"
+msgstr ""
+
+msgctxt "#30242"
+msgid "VRT NU Login"
+msgstr ""
+
+msgctxt "#30243"
+msgid "VRT NU Password"
+msgstr ""
+
+
+# Reserved space for other tab/category in settins (from 30260 to 30339)
+
+
+# OpenVPN (not present in official Kodi repo) (from 30340 to 30369)
+
+
+
+# Advanced settings (from 30370 to 30399)
+
+msgctxt "#30370"
+msgid "Clear cache"
+msgstr ""
+
+msgctxt "#30371"
+msgid "Cache cleared"
+msgstr ""
+
+
+# Reserved space for other tab/category in settins (from 30400 to 30499)
+
+
+# Context menu (from 30500 to 30599)
+msgctxt "#30500"
+msgid "Move down"
+msgstr "רד למטה"
+
+msgctxt "#30501"
+msgid "Move up"
+msgstr "עבור למעלה"
+
+msgctxt "#30502"
+msgid "Hide"
+msgstr "הסתר"
+
+msgctxt "#30503"
+msgid "Download"
+msgstr "הורד"
+
+
+# Dialog boxes (from 30600 to 30699)
+msgctxt "#30600"
+msgid "Information"
+msgstr "מידע"
+
+msgctxt "#30601"
+msgid "To re-enable hidden items go to the plugin settings"
+msgstr "כדי להפעיל מחדש את הפריטים המוסתרים, עבור אל ההגדרות של ההרחבה"
+
+
+
+# Others (from 30700 to 30799)
+msgctxt "#30700"
+msgid "More videos..."
+msgstr "קטעי וידאו נוספים..."
+
+msgctxt "#30701"
+msgid "All videos"
+msgstr "נגן את כל הסרטונים"
+
+msgctxt "#30702"
+msgid "DRM protected video"
+msgstr "וידאו מוגן DRM"
+
+msgctxt "#30703"
+msgid "Search"
+msgstr "חיפוש"
+
+msgctxt "#30704"
+msgid "Last videos"
+msgstr "קטעי וידאו אחרונים"
+
+msgctxt "#30705"
+msgid "From A to Z"
+msgstr "מ-א עד ת"
+
+msgctxt "#30706"
+msgid "Ascending"
+msgstr "בסדר עולה"
+
+msgctxt "#30707"
+msgid "Descending"
+msgstr "בסדר יורד"
+
+msgctxt "#30708"
+msgid "More programs..."
+msgstr "עוד תוכניות..."
+
+msgctxt "#30709"
+msgid "Choose video quality"
+msgstr "בחר איכות וידאו"
+
+msgctxt "#30710"
+msgid "Video stream no longer exists"
+msgstr "הזרמת הווידאו כבר לא קיימת"
+
+msgctxt "#30711"
+msgid "Authentication failed"
+msgstr ""
+
+msgctxt "#30712"
+msgid "Video with an account needed"
+msgstr ""

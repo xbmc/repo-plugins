@@ -22,21 +22,23 @@
 """
 
 import os
+import imp
 import time
 import requests
 from random import randint
 from resources.lib import common
 
-
-user_data = common.sp.xbmc.translatePath(
-    os.path.join(
-        'special://profile/addon_data',
-        common.ADDON.id))
-
+# Useful path
 cache_path = common.sp.xbmc.translatePath(
     os.path.join(
-        user_data,
-        'cache'))
+        'special://profile/addon_data',
+        common.ADDON.id,
+        'cache'
+    )
+)
+
+cache_path = cache_path.decode(
+    "utf-8").encode(common.FILESYSTEM_CODING)
 
 default_ua = "Mozilla/5.0 (X11; Linux x86_64) " \
              "AppleWebKit/537.36 (KHTML, like Gecko) " \
@@ -170,3 +172,36 @@ def send_notification(
         message, title=common.PLUGIN_NAME, time=5000, sound=True):
     common.sp.xbmcgui.Dialog().notification(
         title, message, common.ADDON.icon, time)
+
+
+def clear_cache():
+    for file in os.listdir(cache_path):
+        file_path = os.path.join(cache_path, file)
+        try:
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+        except Exception as e:
+            common.PLUGIN.log_error(e)
+    send_notification(common.GETTEXT('Cache cleared'))
+
+
+def get_module(params):
+    """
+    get_module allows us to load the desired python file
+    """
+    module_name = eval(params.module_path)[-1]
+
+    module_path = common.sp.xbmc.translatePath(
+        common.sp.os.path.join(
+            common.LIB_PATH,
+            *(eval(params.module_path))
+        )
+    )
+    module_filepath = module_path + ".py"
+    module_filepath = module_filepath.decode(
+        "utf-8").encode(common.FILESYSTEM_CODING)
+
+    return imp.load_source(
+        module_name,
+        module_filepath
+    )

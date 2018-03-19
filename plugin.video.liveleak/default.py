@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Standard libraries - Python 2 & 3
-import re, requests, json
+import sys, re, requests, json
 from os import path
 from bs4 import BeautifulSoup as bs
 
@@ -12,20 +12,16 @@ try:
 except:
     slow_mode = True
 
-try: # Python 3
+# Do LBYL version identity instead of idomatic EAFP
+if sys.version_info.major > 2: # Python 3
     from html import unescape
     from urllib.parse import quote_plus, unquote_plus, urlencode
     from urllib.parse import parse_qsl, urlparse, urlunparse
-except: # Python 2
+else: # Python 2
     from HTMLParser import HTMLParser
     from urllib import quote_plus, unquote_plus, urlencode
     from urlparse import parse_qsl, urlparse, urlunparse
-
-# Standardize Python 2/3
-try: # Python 3
-    unescape
-except: # Python 2
-    unescape = HTMLParser().unescape
+    unescape = HTMLParser().unescape # Standardize unescape function name
 
 #TODO: Implement unicode conversion functions for both Python 2 & 3
 
@@ -38,6 +34,7 @@ ADDON_HANDLE = int(sys.argv[1])
 addon         = xbmcaddon.Addon()
 ADDON_NAME = addon.getAddonInfo('name')
 ADDON_PROFILE = addon.getAddonInfo('profile')
+_localString = addon.getLocalizedString
 
 # Per profile preference
 userProfilePath = xbmc.translatePath(ADDON_PROFILE)
@@ -160,7 +157,7 @@ def buildListItem((url, medium, meta)):
         title = "[COLOR limegreen]%s[/COLOR]" % title
     elif user_mod == 2:
         title = "[COLOR dimgray]%s[/COLOR]" % title
-    liz = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail)
+    liz = xbmcgui.ListItem(label=title)
     info = {"title":title,"credits":credit,"plot":description}
     info.update({'mpaa':mpaa,'tagline':rating})
     liz.setInfo("Video", info)
@@ -193,7 +190,7 @@ def loadLeakPosters():
         return {}
 
 def getSearchString():
-    keyboard = xbmc.Keyboard(searchStr, 'Search')
+    keyboard = xbmc.Keyboard('', 'Search')
     keyboard.doModal()
     if (keyboard.isConfirmed()==False):
         return ''
@@ -210,16 +207,16 @@ def addDir(title, qKey, qVal, pVal='1'):
 # --- GUI director (Main Event) functions ---
 
 def categories():
-    addDir('Featured', 'in_bookmark_folder_id', '1')
-    addDir('News & Politics', 'tag_string', 'news, politics')
-    addDir('Yoursay', 'tag_string', 'yoursay,your say')
-    addDir('Must See', 'in_bookmark_folder_id', '2')
-    addDir('Ukraine', 'tag_string', 'ukraine')
-    addDir('Middle East', 'tag_string', 'syria,afghanistan,iraq')
-    addDir('Entertainment', 'by_user_token', '9ee5fbcb8e0b7990d586')
-    addDir('WTF', 'tag_string', 'wtf')
-    addDir('Russia', 'tag_string', 'russia')
-    addDir('Search', 'q', '')
+    addDir(_localString(30000), 'in_bookmark_folder_id', '1')
+    addDir(_localString(30001), 'tag_string', 'news, politics')
+    addDir(_localString(30002), 'tag_string', 'yoursay,your say')
+    addDir(_localString(30003), 'in_bookmark_folder_id', '2')
+    addDir(_localString(30004), 'tag_string', 'ukraine')
+    addDir(_localString(30005), 'tag_string', 'syria,afghanistan,iraq')
+    addDir(_localString(30006), 'by_user_token', '9ee5fbcb8e0b7990d586')
+    addDir(_localString(30007), 'tag_string', 'wtf')
+    addDir(_localString(30008), 'tag_string', 'russia')
+    addDir(_localString(30009), 'q', '')
 
     xbmcplugin.endOfDirectory(ADDON_HANDLE)
 

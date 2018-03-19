@@ -1,3 +1,6 @@
+v1.3.4 (2018-3-19)
+- Recommended changes; fix Search keyboard grep
+
 v1.3.3 (2018-3-11)
 - Add fallback for multiprocessing module not available
 
@@ -11,7 +14,7 @@ v1.3.0 (2018-1-23)
 - Add ability to moderate Liveleak users' postings
 
 v1.2.0 (2018-1-21)
-- Implement multiple page fetche threading for improved performance
+- Implement multiple page fetch threading for improved performance
 
 v1.1.1 (2018-1-17)
 - Upgrade handling of video description Info

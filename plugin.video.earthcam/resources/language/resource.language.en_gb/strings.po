@@ -29,13 +29,13 @@ msgid "Select Preferred Quality"
 msgstr ""
 
 msgctxt "#30003"
-msgid "Browse Featured"
+msgid "Featured"
 msgstr ""
 
 msgctxt "#30004"
-msgid "Browse Feeds"
+msgid "Feeds"
 msgstr ""
 
 msgctxt "#30005"
-msgid "Browse Youtube"
+msgid "Youtube"
 msgstr ""

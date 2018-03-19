@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.earthcam" version="1.0.0" name="EarthCam" provider-name="Lunatixz">
+<addon id="plugin.video.earthcam" version="1.0.1" name="EarthCam" provider-name="Lunatixz">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.simplecache" version="1.0.0"/>
@@ -15,7 +15,7 @@
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
         <source>https://github.com/Lunatixz/plugin.video.earthcam/tree/master</source>
         <website>http://earthcam.com</website>
-        <news></news>
+        <news>v1.0.1[CR]-Fixed playback labels</news>
         <forum>https://forum.kodi.tv/showthread.php?tid=329152</forum>
         <assets>
             <icon>resources/images/icon.png</icon>

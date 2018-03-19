@@ -41,10 +41,9 @@ CONTENT_TYPE  = 'files'
 DEBUG         = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
 BASE_URL      = 'http://www.earthcam.com'
 NET_URL       = '%s/network/'%BASE_URL
-LOGO_URL      = 'http://icons.better-idea.org/icon?url=%s&size=70..120..200'
+LOGO_URL      = 'https://dummyimage.com/512x512/035e8b/FFFFFF.png&text=%s'
 MAIN_MENU     = [(LANGUAGE(30003), NET_URL, 2),
 				 (LANGUAGE(30004), NET_URL, 1)]
-                 
 
 def log(msg, level=xbmc.LOGDEBUG):
     if DEBUG == False and level != xbmc.LOGERROR: return
@@ -90,7 +89,7 @@ class EarthCam(object):
         for region in networks:
             title = region.get_text()
             url   = NET_URL + region.attrs['href']
-            thumb = LOGO_URL%title
+            thumb = LOGO_URL%(urllib.quote(title))
             infoLabels = {"mediatype":"files","label":title ,"title":title}
             infoArt    = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON}  
             self.addDir(title,url,2,infoLabels,infoArt)
@@ -123,21 +122,13 @@ class EarthCam(object):
         for id in pageids:
             try: results = results["cam"][id]
             except: return
-            
-            # results["city"]
-            # results["state"]
-            # results["name"]
-            # results["group"]
-            # results["location"]
-            # results["timezone_offset"]
-
             thumb   = results["thumbnail_512"]
+            ofset   = results.get("timezone_offset","0")
             plot    = (results["description"] or results["title"])
             infoArt = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON}
-            
             if  results["liveon"] == "true":
-                label      = '%s,%s - Live (HLS)'%(results["long_title"],results["country"])
-                infoLabels = {"mediatype":"episode","label":label ,"title":label,"plot":plot}
+                label      = '%s - %s, %s Live (HLS)'%(results["camtext"], name,results["country"])
+                infoLabels = {"mediatype":"episode","label":label,"title":label,"plot":plot}
                 liveurl = ('http:%s%s'%(results["html5_streamingdomain"],results["html5_streampath"]))
                 self.addLink(label, liveurl, 9, infoLabels, infoArt, len(pageids))
                 # label      = '%s,%s - Live (FLV)'%(results["long_title"],results["country"])
@@ -145,30 +136,34 @@ class EarthCam(object):
                 # liveurl = ('%s%s'%(results["streamingdomain"],results["livestreamingpath"]))
                 # self.addLink(label, liveurl, 9, infoLabels, infoArt, len(pageids))
             elif  results["timelapseon"] == "true":
-                label      = '%s,%s -TimeLapse'%(results["long_title"],results["country"])
-                infoLabels = {"mediatype":"episode","label":label ,"title":label,"plot":plot}
+                label      = '%s - %s, %s Timelapse'%(results["camtext"], name,results["country"])
+                infoLabels = {"mediatype":"episode","label":label,"title":label,"plot":plot}
                 liveurl = ('http:%s%s'%(results["timelapsedomain"],results["timelapsepath"]))
                 self.addLink(label, liveurl, 9, infoLabels, infoArt, len(pageids))
             elif  results["archiveon"] == "true":
-                label      = '%s,%s - Archive'%(results["long_title"],results["country"])
-                infoLabels = {"mediatype":"episode","label":label ,"title":label,"plot":plot}
+                label      = '%s - %s, %s Archive'%(results["camtext"], name,results["country"])
+                infoLabels = {"mediatype":"episode","label":label,"title":label,"plot":plot}
                 liveurl = ('http:%s%s'%(results["archivedomain"],results["archivepath"]))
                 self.addLink(label, liveurl, 9, infoLabels, infoArt, len(pageids))
                 
 
     def prepareLink(self, url):
         log('prepareLink, url = ' + str(url))
-        if len(re.findall('http[s]?://www.youtube.com/watch', url)) > 0: return 'plugin://plugin.video.youtube/play/?video_id=%s'%(url.split('/watch?v=')[1])
-        elif url.lower().endswith(".m3u8"): url = url.replace('playlist', re.search(r'^([^#].+)\.m3u8$', self.openURL(url, True), re.MULTILINE).group(1))
+        try:
+            if len(re.findall('http[s]?://www.youtube.com/watch', url)) > 0: return 'plugin://plugin.video.youtube/play/?video_id=%s'%(url.split('/watch?v=')[1])
+            elif url.lower().endswith(".m3u8"): return url.replace('playlist', re.search(r'^([^#].+)\.m3u8$', self.openURL(url, True), re.MULTILINE).group(1))
+        except: return None
         return url
 
      
     def playVideo(self, name, url):
         log('playVideo')
-        liz  = xbmcgui.ListItem(name, path=self.prepareLink(url))
-        # if url.startswith('rtmp'):
-            # liz.setProperty('inputstreamaddon','inputstream.adaptive')
-            # liz.setProperty('inputstream.adaptive.manifest_type','hls')
+        url = self.prepareLink(url)
+        if url is None: return
+        liz = xbmcgui.ListItem(name, path=url)
+        if url.endswith(".m3u8"):
+            liz.setProperty('inputstreamaddon','inputstream.adaptive')
+            liz.setProperty('inputstream.adaptive.manifest_type','hls')
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
 
         

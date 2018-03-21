@@ -165,8 +165,10 @@ class EarthCam(object):
      
     def playVideo(self, name, url):
         log('playVideo')
-        liz  = xbmcgui.ListItem(name, path=self.prepareLink(url))
-        # if url.startswith('rtmp'):
+        url = self.prepareLink(url)
+        if url is None: return
+        liz = xbmcgui.ListItem(name, path=url)
+        # if url.endswith(".m3u8"):
             # liz.setProperty('inputstreamaddon','inputstream.adaptive')
             # liz.setProperty('inputstream.adaptive.manifest_type','hls')
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)

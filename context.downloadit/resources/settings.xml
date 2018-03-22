@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+<setting label="30000" type="folder" id="folder" source="auto" option="writeable"/>
+<setting label="30001" type="file" id="ffmpgfile" source="auto" /> 
+<setting label="X" type="bool" id="warning" default="false" visible="false" /> 
+</settings>

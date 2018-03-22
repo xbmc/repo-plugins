@@ -1,0 +1,12 @@
+<settings>
+<category label="Connection Settings">
+     <setting id="kasutajanimi" type="text" label="Username" default=""/>
+     <setting id="salasona" type="text" option="writeable,hidden" label="Password" default=""/>
+</category>
+<category label="Other Settings">
+	 <setting id="improve" type="bool" label="Use Advanced Settings?"value="false"/>
+	 <setting id="striimiv2ljund" type="bool" visible="false" label="Use HLS?" default="false"/>
+	 <setting id="vanemalukk" type="bool" label="Parental lock?" default="true"/>
+	 <setting id="vanemakood" type="text" option="writeable,hidden" label="Parental code" default="1234"/>
+</category>
+</settings>

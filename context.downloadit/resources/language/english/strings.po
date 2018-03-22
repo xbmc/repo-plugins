@@ -22,7 +22,7 @@ msgid "Download Video from Plugins"
 msgstr ""
 
 msgctxt "Addon Description"
-msgid "Download it Downloads Videos from Plugins  into a Directory. for best Results you have to set the Path to the ffmpeg Binary. Beware! the use of the Addon\n        could be Illegal depending of the Page und Country you resisdent in."
+msgid "Download it downloads videos from plugins into a directory. Set the path to the FFmpeg binary to achieve the best results. Beware! The use of the Add-on\n        could be illegal depending of the page and country you resident in."
 msgstr ""
 
 msgctxt "#30000"
@@ -30,8 +30,8 @@ msgid "Download Directory"
 msgstr "Download Directory"
 
 msgctxt "#30001"
-msgid "ffmpeg Binary"
-msgstr "ffmpeg Binary"
+msgid "FFmpeg Binary"
+msgstr "FFmpeg Binary"
 
 msgctxt "#30002"
 msgid "Download is Running"
@@ -58,16 +58,16 @@ msgid "WARNING"
 msgstr "WARNING"
 
 msgctxt "#30008"
-msgid "The use of the Addon could be illegal depening of the Stream and  the Country you Live in."
-msgstr "The use of the Addon could be illegal depening of the Stream and  the Country you Live in."
+msgid "The use of the add-on could be illegal depending of the stream and the country you live in."
+msgstr "The use of the add-on could be illegal depending of the stream and the country you live in."
 
 msgctxt "#30009"
-msgid "Please check befor your are using it."
-msgstr "Please check befor your are using it."
+msgid "Please check before you are using it."
+msgstr "Please check before you are using it."
 
 msgctxt "#30010"
-msgid "Have you understand it?"
-msgstr "Have you understand it?"
+msgid "Did you understand it?"
+msgstr "Did you understand it?"
 
 msgctxt "#30011"
 msgid "Settings"

@@ -15,11 +15,11 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <summary lang="en">Download Video from Plugins</summary>
-        <description lang="en">Download it Downloads Videos from Plugins  into a Directory. for best Results you have to set the Path to the ffmpeg Binary. Beware! </description>
+        <description lang="en">Download it downloads videos from plugins into a directory. Set the path to the FFmpeg binary to achieve the best results. Beware! </description>
         <platform>all</platform>
         <language>en</language>
         <license>GNU General Public License, v2</license>        
         <email>andreas at vogler dot name</email>
-        <disclaimer lang="en">The use of the Addon could be Illegal depending of the Page und Country you resisdent in.</disclaimer>
+        <disclaimer lang="en">The use of the add-on could be illegal depending of the page and country you resident in.</disclaimer>
     </extension>
 </addon>

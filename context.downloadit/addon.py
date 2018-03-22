@@ -29,14 +29,14 @@ def log(msg, level=xbmc.LOGNOTICE):
 
 def downloadyoutube(file,ffdir=""):
  debug("Start downloadyoutube")
- # If FFMPEG ist definied us it also in youtube-dl
+ # if FFmpeg is defined use it also at youtube-dl
  if not ffdir=="": 
     YDStreamExtractor.overrideParam('ffmpeg_location',ffdir)
  
- # Download Video
+ # download video
  YDStreamExtractor.overrideParam('preferedformat',"avi")  
  vid = YDStreamExtractor.getVideoInfo(file,quality=2)  
- with YDStreamUtils.DownloadProgress() as prog: #This gives a progress dialog interface ready to use
+ with YDStreamUtils.DownloadProgress() as prog: # this creates a progress dialog interface ready to use
     try:
         YDStreamExtractor.setOutputCallback(prog)
         result = YDStreamExtractor.downloadVideo(vid,folder)
@@ -59,7 +59,7 @@ def downloadffmpg(file,name):
     debug(erg)
     try:
         dialog=xbmcgui.DialogProgress()
-        # Download started
+        # download started
         dialog.create(translation(30002))        
         ret=ff.run(stdout=subprocess.PIPE)
         dialog.close()
@@ -76,7 +76,7 @@ def downloadffmpg(file,name):
       downloadyoutube(file,ffdir=ffdir)  
     
 #MAIN    
-# Waring about Abuse
+# warning about abuse
 if warning=="false":
     dialog = xbmcgui.Dialog()
     erg=dialog.yesno(translation(30007), translation(30008),translation(30009),translation(30010))
@@ -85,19 +85,19 @@ if warning=="false":
     else:
       quit()    
 
-# Read Selected Infolabel      
+# read selected infolabel      
 path = xbmc.getInfoLabel('ListItem.FileNameAndPath')
 title = xbmc.getInfoLabel('ListItem.Title')
 listitem = xbmcgui.ListItem(path=path)
 listitem.setInfo(type="Video", infoLabels={"Title": title})
 
-#Start Video
+# start video
 kodi_player = xbmc.Player()
 kodi_player.play(path,listitem)
 time.sleep(10) 
 videoda=0
 
-#Until the First file is playdread file
+# until the first file is played read file
 while videoda==0 :
     try:
         file=kodi_player.getPlayingFile()
@@ -106,10 +106,10 @@ while videoda==0 :
             videoda=1
     except:
         pass 
-# Kill Header Fields        
+# kill header fields        
 file=file.split("|")[0]      
 
-# User FFMPEG or youtube-dl
+# use FFmpeg or youtube-dl
 if not ffmpgfile=="":
    kodi_player.stop()
    downloadffmpg(file,title)  

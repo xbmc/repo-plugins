@@ -1,0 +1,10 @@
+<advancedsettings>
+<network>
+<autodetectpingtime>30</autodetectpingtime> 	<!-- Time (in seconds) between pings for detecting new xboxes. Default 30, minimum 1, maximum 240 -->
+<curlclienttimeout>5</curlclienttimeout> 		<!-- Timeout (in seconds) for player and other connections. Default 10, minimum 1, maximum 1000 -->
+<curllowspeedtime>1</curllowspeedtime> 		<!-- Time (in seconds) the http client should wait before judging a connection as low. Default 20, minimum 1, maximum 1000 -->
+<curlretries>2</curlretries> 					<!-- Number of times the http client retries. Default 2, minimum 0, maximum 10 -->
+<disableipv6>true</disableipv6> 				<!-- Disables ipv6. Default false -->
+<cachemembuffersize>0</cachemembuffersize>  	<!-- Size of the player cache in bytes. Default 20M (20*1024*1024), if 0 it uses a SimpleFileCache. -->
+</network>
+</advancedsettings>

@@ -85,25 +85,27 @@ class Disclose(object):
         soup   = BeautifulSoup(self.openURL(url), "html.parser")
         videos = soup('div', {'class': 'teaser teaser--third'})
         for video in videos:
-            try: thumb = 'http:%s'%(video('div', {'class': 'ratio-container ratio16_9'})[0].find('img').attrs['data-src'])
-            except: thumb = FANART
-            items   = video('div', {'class': 'teaser__caption'})
-            vid_url = BASE_URL + (items[0]('a', {'class': 'article-link'})[0].attrs['href'])
-            label   = items[0]('a', {'class': 'article-link'})[0].get_text()
-            timeago = items[0]('span', {'class': 'meta-timeago'})[0].get_text()
-            plot    = '%s - %s'%(timeago, label)
-            try: genre = video('span', {'class': 'teaser-figure__cat'})[0].get_text()
-            except: genre = 'Unknown'
-            runtime = (video('span', {'class': 'teaser-figure__len'})[0].get_text()).split(':')
-            if len(runtime) == 3:
-                h, m, s = runtime
-                duration  = int(h) * 3600 + int(m) * 60 + int(s)
-            else:
-                m, s = runtime
-                duration  = (int(m) * 60) + int(s)
-            infoLabels = {"mediatype":"episode","label":label ,"title":label,"duration":duration,"plot":plot}
-            infoArt    = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON}
-            self.addLink(label, vid_url, 9, infoLabels, infoArt, len(videos))
+            try:
+                try: thumb = 'http:%s'%(video('div', {'class': 'ratio-container ratio16_9'})[0].find('img').attrs['data-src'])
+                except: thumb = FANART
+                items   = video('div', {'class': 'teaser__caption'})
+                vid_url = BASE_URL + (items[0]('a', {'class': 'article-link'})[0].attrs['href'])
+                label   = items[0]('a', {'class': 'article-link'})[0].get_text()
+                timeago = items[0]('span', {'class': 'meta-timeago'})[0].get_text()
+                plot    = '%s - %s'%(timeago, label)
+                try: genre = video('span', {'class': 'teaser-figure__cat'})[0].get_text()
+                except: genre = 'Unknown'
+                runtime = (video('span', {'class': 'teaser-figure__len'})[0].get_text()).split(':')
+                if len(runtime) == 3:
+                    h, m, s = runtime
+                    duration  = int(h) * 3600 + int(m) * 60 + int(s)
+                else:
+                    m, s = runtime
+                    duration  = (int(m) * 60) + int(s)
+                infoLabels = {"mediatype":"episode","label":label ,"title":label,"duration":duration,"plot":plot}
+                infoArt    = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON}
+                self.addLink(label, vid_url, 9, infoLabels, infoArt, len(videos))
+            except Exception as e: log("browse Failed! " + str(e), xbmc.LOGERROR)
         next = soup('li', {'class': 'more-container__button m-auto'})
         if len(next) == 0: return
         next_url   = BASE_URL + next[0].find('a').attrs['href']

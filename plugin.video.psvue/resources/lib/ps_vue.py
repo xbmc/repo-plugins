@@ -182,6 +182,8 @@ def list_show(show):
         add_stream(name, channel_url, icon, fanart, info, properties, show_info)
     else:
         add_show(title, 150, icon, fanart, info, show_info)
+        
+    add_sort_methods(addon_handle)
 
 
 def list_episodes(program_id):
@@ -276,7 +278,10 @@ def list_episode(show):
     if 'last_timecode' in show['airings'][0]:
         resumetime = str(show['airings'][0]['last_timecode'])
         xbmc.log("RESUME TIME = "+resumetime)
-        h,m,s = resumetime.split(':')
+        try:
+            h,m,s = resumetime.split(':')
+        except ValueError:
+            h,m,s,ms = resumetime.split(':')
         resumetime = str(int(h) * 3600 + int(m) * 60 + int(s))
 
     # xbmc.log("RESUME TIME IN Seconds = "+resumetime)
@@ -440,16 +445,17 @@ def get_stream(url, airing_id, channel_id, program_id, series_id, tms_id, title,
         listitem = xbmcgui.ListItem()
         listitem.setMimeType("application/x-mpegURL")
 
-    inputstreamCOND = str(json_source['body']['dai_method']) # Checks whether stream method is "mlbam" or "freewheel" or "none"
+    '''inputstreamCOND = str(json_source['body']['dai_method']) # Checks whether stream method is "mlbam" or "freewheel" or "none"
 
-    if inputstreamCOND != 'freewheel' and xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):#Inputstream doesn't seem to work when dai method is "freewheel"
+    if  inputstreamCOND == 'mlbam' and xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):#Inputstream 2.1.15.0 update does not work with PSVue
         stream_url = json_source['body']['video_alt'] # Uses alternate Sony stream to prevent Inputstream adaptive from crashing
         listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
         listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
         listitem.setProperty('inputstream.adaptive.stream_headers', headers)
         listitem.setProperty('inputstream.adaptive.license_key', headers)
-    else:
-        stream_url += headers
+    '''
+        
+    stream_url += headers
 
     listitem.setPath(stream_url)
 
@@ -542,11 +548,9 @@ def create_device_id():
 
 
 def utc_to_local(utc_dt):
-    # get integer timestamp to avoid precision lost
-    timestamp = calendar.timegm(utc_dt.timetuple())
-    local_dt = datetime(1970, 1, 1) + timedelta(seconds=timestamp)
-    assert utc_dt.resolution >= timedelta(microseconds=1)
-    return local_dt.replace(microsecond=utc_dt.microsecond)
+    offset = datetime.now() - datetime.utcnow()
+    local_dt = utc_dt + offset + timedelta(seconds=1)
+    return local_dt
 
 
 def add_dir(name, mode, icon, fanart=None, channel_id=None):
@@ -558,6 +562,11 @@ def add_dir(name, mode, icon, fanart=None, channel_id=None):
     ok = xbmcplugin.addDirectoryItem(handle=addon_handle, url=u, listitem=liz, isFolder=True)
     xbmcplugin.setContent(addon_handle, 'tvshows')
     return ok
+
+
+def add_sort_methods(handle):
+    xbmcplugin.addSortMethod(handle=handle, sortMethod=xbmcplugin.SORT_METHOD_TITLE_IGNORE_THE)
+    xbmcplugin.addSortMethod(handle=handle, sortMethod=xbmcplugin.SORT_METHOD_UNSORTED)
 
 
 def add_show(name, mode, icon, fanart, info, show_info):
@@ -608,7 +617,7 @@ def add_stream(name, link_url, icon, fanart, info=None, properties=None, show_in
             ('Remove From My Shows', 'RunPlugin(plugin://plugin.video.psvue/?mode=1002&fav_type=show' + show_values + ')')
         ]
         liz.addContextMenuItems(context_items)
-    ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=False)
+    ok = xbmcplugin.addDirectoryItem(handle=addon_handle, url=u, listitem=liz, isFolder=False)
     xbmcplugin.setContent(addon_handle, 'tvshows')
     return ok
 

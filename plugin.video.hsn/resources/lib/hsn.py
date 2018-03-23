@@ -115,14 +115,16 @@ class HSN(object):
                     label  = 'Coming Up: %s - %s'%(date, title)
                     vidurl = liveurl
                 else: label = '[B]Pre-Recorded: [/B]%s - %s'%(date, title)
-                aired = (datetime.datetime.strptime(date, '%m/%d/%Y %I:%M:%S %p'))
+                try: aired = (datetime.datetime.strptime(date, '%m/%d/%Y %I:%M:%S %p'))
+                except: continue
             except:
                 vidurl = liveurl
                 date  = item.attrs['data-startdate']
                 title = item.get_text()
                 if isLive: label  = '[B]Live[/B] - %s'%title
                 else: label  = 'Coming Up: %s - %s'%(date, title)
-                aired = (datetime.datetime.strptime(date, '%m/%d/%Y %I:%M:%S %p'))
+                try: aired = (datetime.datetime.strptime(date, '%m/%d/%Y %I:%M:%S %p'))
+                except: continue
                 if not isLive and now > aired: continue
             CONTENT_TYPE  = 'episodes'
             date  = aired.strftime('%I:%M:%S %p')

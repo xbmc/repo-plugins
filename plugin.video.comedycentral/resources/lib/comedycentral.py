@@ -73,6 +73,7 @@ class CC(object):
             return self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
         except Exception as e:
             log("openURL Failed! " + str(e), xbmc.LOGERROR)
+            if str(e).startswith('HTTP Error 500'): return ''
             xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30001), ICON, 4000)
             return ''
          

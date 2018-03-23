@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30001">Hoy destacamos</string>
+    <string id="30002">No te lo pierdas</string>
+    <string id="30003">Lo más visto</string>
+    <string id="30004">Programas</string>
+    <string id="30005">Series</string>
+    <string id="30006">Informativos</string>
+    <string id="30007">Entretenimiento</string>
+    <string id="30008">Deportes</string>
+    <string id="30009">Documentales</string>
+    <string id="30010">Divulgación</string>
+    <string id="30011">Cultura</string>
+    <string id="30012">Música</string>
+    <string id="30013">Todos A-Z</string>
+    <string id="30014">En emisión A-Z</string>
+    <string id="30015">>>Página siguiente</string>
+    <string id="30016">>>Página anterior</string>
+    <string id="30017">Canales en directo</string>
+    <string id="30018">TV3</string>
+    <string id="30019">Canal 324</string>
+    <string id="30020">Canal 33-Super 3</string>
+    <string id="30021">Esport 3</string>
+	<string id="30022">Buscar</string>
+	<string id="30023">Colecciones</string> 
+    <string id="30024">TV3 (Emisión internacional)</string>
+    <string id="30025">Canal 324 (Emisión internacional)</string>
+    <string id="30026">Canal 33-Super 3 (Emisión internacional)</string>
+    <string id="30027">Esport 3 (Emisión internacional)</string>
+</strings>

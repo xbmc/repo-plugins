@@ -16,15 +16,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
-import urllib
-import urlparse
+try:
+    from urlparse import parse_qs
+    from urllib import unquote_plus
+except ImportError:
+    from urllib.parse import parse_qs, unquote_plus
 
 
 def parse():
     """Decode arguments
     """
     if (sys.argv[2]):
-        return Args(urlparse.parse_qs(sys.argv[2][1:]))
+        return Args(parse_qs(sys.argv[2][1:]))
     else:
         return Args({})
 
@@ -39,14 +42,13 @@ class Args(object):
         """Initialize arguments object
         Hold also references to the addon which can't be kept at module level.
         """
+        self.PY2        = sys.version_info[0] == 2 #: True for Python 2
         self._addon     = sys.modules["__main__"]._addon
         self._addonname = sys.modules["__main__"]._plugin
         self._addonid   = sys.modules["__main__"]._plugId
         self._cj        = None
         self._login     = False
 
-        for key, value in kwargs.iteritems():
+        for key, value in kwargs.items():
             if value:
-                kwargs[key] = urllib.unquote_plus(value[0])
-
-        self.__dict__.update(kwargs)
+                setattr(self, key, unquote_plus(value[0]))

@@ -21,39 +21,35 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 
-import cmdargs
-import login
-import netapi
-import view
+from . import api
+from . import view
+from . import model
+from . import controller
 
 
 def main():
     """Main function for the addon
     """
-    args = cmdargs.parse()
+    args = model.parse()
 
-    # check if account is set
+    # get account informations
     username = args._addon.getSetting("watchbox_username")
     password = args._addon.getSetting("watchbox_password")
 
-    if not (username and password):
-        xbmcplugin.setContent(int(sys.argv[1]), "tvshows")
-        check_mode(args)
-    else:
+    if username and password:
         # login
-        success = login.login(username, password, args)
-        if success:
+        if api.start(args):
             # list menue
             args._login = True
-            xbmcplugin.setContent(int(sys.argv[1]), "tvshows")
-            check_mode(args)
         else:
             # login failed
             xbmc.log("[PLUGIN] %s: Login failed" % args._addonname, xbmc.LOGERROR)
             xbmcgui.Dialog().ok(args._addonname, args._addon.getLocalizedString(30042))
 
-            xbmcplugin.setContent(int(sys.argv[1]), "tvshows")
-            check_mode(args)
+    xbmcplugin.setContent(int(sys.argv[1]), "tvshows")
+    check_mode(args)
+    if args._login:
+        api.close(args)
 
 
 def check_mode(args):
@@ -61,10 +57,6 @@ def check_mode(args):
     """
     if hasattr(args, "mode"):
         mode = args.mode
-    elif hasattr(args, "id"):
-        # call from other plugin
-        mode = "videoplay"
-        args.url = "https://www.watchbox.de/serien/test-" + args.id + "/"
     elif hasattr(args, "url"):
         # call from other plugin
         mode = "videoplay"
@@ -75,37 +67,36 @@ def check_mode(args):
     if not mode:
         showMainMenue(args)
     elif mode == "popular":
-        netapi.genre_view(3, args)
+        controller.genre_view(3, args)
     elif mode == "new":
-        netapi.genre_view(4, args)
+        controller.genre_view(4, args)
     elif mode == "genres":
-        netapi.genres_show(args)
+        controller.genres_show(args)
     elif mode == "genre_list":
-        netapi.genre_list(args)
+        controller.genre_list(args)
     elif mode == "genre_all":
-        netapi.genre_view(0, args)
+        controller.genre_view(0, args)
     elif mode == "genre_movie":
-        netapi.genre_view(1, args)
+        controller.genre_view(1, args)
     elif mode == "genre_tvshows":
-        netapi.genre_view(2, args)
+        controller.genre_view(2, args)
     elif mode == "genre_new":
-        netapi.genre_view(5, args)
+        controller.genre_view(5, args)
     elif mode == "season_list":
-        netapi.season_list(args)
+        controller.season_list(args)
     elif mode == "episode_list":
-        netapi.episode_list(args)
+        controller.episode_list(args)
     elif mode == "search":
-        netapi.search(args)
+        controller.search(args)
     elif mode == "videoplay":
-        netapi.startplayback(args)
+        controller.startplayback(args)
     elif mode == "login" and not args._login:
         # open addon settings
         args._addon.openSettings()
-        return False
     elif mode == "login" and args._login:
         showMainMenue(args)
     elif mode == "mylist" and args._login:
-        netapi.mylist(args)
+        controller.mylist(args)
     else:
         # unkown mode
         xbmc.log("[PLUGIN] %s: Failed in check_mode '%s'" % (args._addonname, str(mode)), xbmc.LOGERROR)

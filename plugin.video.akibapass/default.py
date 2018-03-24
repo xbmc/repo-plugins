@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Akibapass - Watch videos from the german anime platform Akibapass.de on Kodi.
-# Copyright (C) 2016 - 2017 MrKrabat
+# Copyright (C) 2016 MrKrabat
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as

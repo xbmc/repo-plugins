@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Akibapass - Watch videos from the german anime platform Akibapass.de on Kodi.
-# Copyright (C) 2016 - 2017 MrKrabat
+# Copyright (C) 2016 MrKrabat
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -21,37 +21,33 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 
-import cmdargs
-import login
-import netapi
-import view
+from . import api
+from . import view
+from . import model
+from . import controller
 
 
 def main():
     """Main function for the addon
     """
-    args = cmdargs.parse()
+    args = model.parse()
 
-    # check if account is set
+    # get account informations
     username = args._addon.getSetting("akiba_username")
     password = args._addon.getSetting("akiba_password")
 
     if not (username and password):
         # open addon settings
+        view.add_item(args, {"title": args._addon.getLocalizedString(30045)})
+        view.endofdirectory()
         args._addon.openSettings()
         return False
     else:
-        # login
-        success = login.login(username, password, args)
-        if success:
-            # list menue
-            xbmcplugin.setContent(int(sys.argv[1]), "tvshows")
-            check_mode(args)
-        else:
-            # login failed
-            xbmc.log("[PLUGIN] %s: Login failed" % args._addonname, xbmc.LOGERROR)
-            xbmcgui.Dialog().ok(args._addonname, args._addon.getLocalizedString(30040))
-            return False
+        # list menue
+        api.start(args)
+        xbmcplugin.setContent(int(sys.argv[1]), "tvshows")
+        check_mode(args)
+        api.close(args)
 
 
 def check_mode(args):
@@ -73,23 +69,23 @@ def check_mode(args):
     if not mode:
         showMainMenue(args)
     elif mode == "catalog":
-        netapi.showCatalog(args)
+        controller.showCatalog(args)
     elif mode == "last_episodes":
-        netapi.listLastEpisodes(args)
+        controller.listLastEpisodes(args)
     elif mode == "last_simulcasts":
-        netapi.listLastSimulcasts(args)
+        controller.listLastSimulcasts(args)
     elif mode == "search":
-        netapi.searchAnime(args)
+        controller.searchAnime(args)
     elif mode == "downloads":
-        netapi.myDownloads(args)
+        controller.myDownloads(args)
     elif mode == "collection":
-        netapi.myCollection(args)
+        controller.myCollection(args)
     elif mode == "list_season":
-        netapi.listSeason(args)
+        controller.listSeason(args)
     elif mode == "list_episodes":
-        netapi.listEpisodes(args)
+        controller.listEpisodes(args)
     elif mode == "videoplay":
-        netapi.startplayback(args)
+        controller.startplayback(args)
     elif mode == "trailer":
         item = xbmcgui.ListItem(getattr(args, "title", "Title not provided"), path=args.url)
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
@@ -105,20 +101,20 @@ def showMainMenue(args):
     """
     view.add_item(args,
                   {"title": args._addon.getLocalizedString(30020),
-                   "mode":   "catalog"})
+                   "mode":  "catalog"})
     view.add_item(args,
                   {"title": args._addon.getLocalizedString(30025),
-                   "mode":   "last_episodes"})
+                   "mode":  "last_episodes"})
     view.add_item(args,
                   {"title": args._addon.getLocalizedString(30026),
-                   "mode":   "last_simulcasts"})
+                   "mode":  "last_simulcasts"})
     view.add_item(args,
                   {"title": args._addon.getLocalizedString(30021),
-                   "mode":   "search"})
+                   "mode":  "search"})
     view.add_item(args,
                   {"title": args._addon.getLocalizedString(30022),
-                   "mode":   "downloads"})
+                   "mode":  "downloads"})
     view.add_item(args,
                   {"title": args._addon.getLocalizedString(30023),
-                   "mode":   "collection"})
+                   "mode":  "collection"})
     view.endofdirectory()

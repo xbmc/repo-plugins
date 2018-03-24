@@ -125,21 +125,6 @@ class Main(object):
 
                 continue
 
-            # this is category Videos or Afleveringen
-            if self.plugin_category == LANGUAGE(30000) or self.plugin_category == LANGUAGE(30001):
-                if str(video_page_url).lower().find('videos') >= 0:
-                    pass
-                elif str(video_page_url).lower().find('uncategorized') >= 0:
-                    pass
-                elif str(video_page_url).lower().find('premium') >= 0:
-                    pass
-                else:
-                    # skip the url if it is not a video
-
-                    log("skipped video_page_url", video_page_url)
-
-                    continue
-
             # Make title
             try:
                 title = item['title']

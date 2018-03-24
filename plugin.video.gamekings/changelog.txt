@@ -1,3 +1,6 @@
+v1.2.12 (2018-03-24)
+- fixed video category (website changes)
+
 v1.2.11 (2018-01-20)
 - removed looking for video dialogue
 - addon now works in kode python 2 and should also work in python 3 (!!) once all dependencies work in python 3.

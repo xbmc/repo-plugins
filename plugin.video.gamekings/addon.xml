@@ -2,7 +2,7 @@
 <addon 
 	id="plugin.video.gamekings" 
 	name="GameKings" 
-	version="1.2.11"
+	version="1.2.12"
 	provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                     version="2.14.0"/>

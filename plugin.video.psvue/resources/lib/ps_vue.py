@@ -440,22 +440,18 @@ def get_stream(url, airing_id, channel_id, program_id, series_id, tms_id, title,
         listitem = xbmcgui.ListItem(title, plot, thumbnailImage=icon)
         listitem.setInfo(type="Video", infoLabels={'title': title, 'plot': plot})
         listitem.setMimeType("application/x-mpegURL")
-
     else:
         listitem = xbmcgui.ListItem()
         listitem.setMimeType("application/x-mpegURL")
 
-    '''inputstreamCOND = str(json_source['body']['dai_method']) # Checks whether stream method is "mlbam" or "freewheel" or "none"
-
-    if  inputstreamCOND == 'mlbam' and xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):#Inputstream 2.1.15.0 update does not work with PSVue
-        stream_url = json_source['body']['video_alt'] # Uses alternate Sony stream to prevent Inputstream adaptive from crashing
+    if xbmc.getCondVisibility('System.HasAddon(inputstream.adaptive)'):
+        stream_url = json_source['body']['video_alt']
         listitem.setProperty('inputstreamaddon', 'inputstream.adaptive')
         listitem.setProperty('inputstream.adaptive.manifest_type', 'hls')
         listitem.setProperty('inputstream.adaptive.stream_headers', headers)
         listitem.setProperty('inputstream.adaptive.license_key', headers)
-    '''
-        
-    stream_url += headers
+    else:
+        stream_url += headers
 
     listitem.setPath(stream_url)
 

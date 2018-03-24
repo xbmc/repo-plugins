@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.psvue" name="PS Vue" version="2018.3.23" provider-name="eracknaphobia">
+<addon id="plugin.video.psvue" name="PS Vue" version="2018.3.24" provider-name="eracknaphobia">
   <requires>
    <import addon="xbmc.python" version="2.25.0"/>
    <import addon="script.module.requests" version="2.9.1"/>
@@ -13,7 +13,7 @@
     <description lang="en_GB">PlayStation™Vue is a TV service that streams live TV, movies, and sports on a variety of your favorite devices without a cable or satellite subscription.  With powerful features that allow you to save thousands of hours of your favorite shows without recording conflicts, and Premium channels that can be purchased individually or with a multi-channel plan, TV has never been the same. No annual contracts, no conflicts, no problems.</description>
     <disclaimer lang="en_GB">Requires a valid subscription to PS Vue which is currently only available in the US</disclaimer>
     <news>
-        - Fixed issue where airing times were wrong
+        - Re-enable inputstream adaptive
     </news>
     <language>en</language>
     <platform>all</platform>

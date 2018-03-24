@@ -1,0 +1,93 @@
+# Kodi Media Center language file
+# Addon Name: HDHomerun Simple
+# Addon id: plugin.video.hdhomerun.simple
+# Addon Provider: Lunatixz
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.hdhomerun.simple\n"
+"Report-Msgid-Bugs-To: https://forum.kodi.tv/showthread.php?tid=327117\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Lunatixz Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Enable Debugging [Log errors]"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Preferred Transcoding"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Available Devices"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Tuner Details"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Name:"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Tuner Count:"
+msgstr ""
+
+msgctxt "#30106"
+msgid "IP Address:"
+msgstr ""
+
+msgctxt "#30107"
+msgid "Default Transcoding:"
+msgstr ""
+
+msgctxt "#30108"
+msgid "Firmware:"
+msgstr ""
+
+msgctxt "#30109"
+msgid "%s - Enter Search Term"
+msgstr ""
+
+msgctxt "#30110"
+msgid "Live"
+msgstr ""
+
+msgctxt "#30111"
+msgid "Recordings"
+msgstr ""
+
+msgctxt "#30112"
+msgid "Lineup"
+msgstr ""
+
+msgctxt "#30113"
+msgid "Search"
+msgstr ""
+
+msgctxt "#30114"
+msgid "Guide"
+msgstr ""
+
+msgctxt "#30115"
+msgid "%s - Enter Search Term"
+msgstr ""
+
+msgctxt "#30116"
+msgid "Recorded"
+msgstr ""
+
+msgctxt "#30117"
+msgid "On Now"
+msgstr ""
+
+msgctxt "#30118"
+msgid "Coming Up"
+msgstr ""

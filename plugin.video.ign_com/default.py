@@ -7,7 +7,6 @@ standard_library.install_aliases()
 from builtins import str
 from builtins import range
 from builtins import object
-from past.utils import old_div
 import urllib.request, urllib.parse, urllib.error
 import re
 import xbmcplugin
@@ -26,8 +25,8 @@ PLUGIN_HANDLE = int(sys.argv[1])
 BASE_URL = "http://www.ign.com"
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 COOKIES = {'i18n-ccpref': '15-US-www-1'}
-DATE = "2018-01-20"
-VERSION = "2.3.4"
+DATE = "2018-01-31"
+VERSION = "2.3.5"
 
 max_video_quality = SETTINGS.getSetting("maxVideoQualityRes")
 force_view_mode = bool(SETTINGS.getSetting("force_view_mode"))
@@ -194,7 +193,7 @@ def list_search_results(url):
     match = re.compile('data-page="(.+?)"', re.DOTALL).findall(html_source)
     page = int(match[0])
     match = re.compile('data-total="(.+?)"', re.DOTALL).findall(html_source)
-    max_page = int(old_div(int(match[0]), 10))
+    max_page = int(int(match[0])/ 10)
     url_next = url_main.replace("page=" + str(page), "page=" + str(page + 1))
     if page < max_page:
         add_dir(LANGUAGE(30001), url_next, 'list_search_results', os.path.join(IMAGES_PATH, 'next-page.png'))

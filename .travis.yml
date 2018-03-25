@@ -3,9 +3,16 @@ python:
   - "3.6"
 
 install:
-  - pip install Pillow
+  - pip install Pillow requests
+
+before_install:
+  - git submodule update --init --recursive --remote
 
 # command to run our tests
 script:
   - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then python .tests/check_repo.py; fi'
-  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then python .tests/check_repo.py  $(git diff --name-only HEAD~ | grep / | cut -d / -f1 | sort | uniq); fi'
+  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then python .tests/check_repo.py $(git diff --diff-filter=d --name-only HEAD~ | grep / | cut -d / -f1 | sort | uniq); fi'
+
+notifications:
+  email:
+    on_failure: change # default: always

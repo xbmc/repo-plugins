@@ -1,0 +1,54 @@
+# Kodi Media Center language file
+# Addon Name: Le Média
+# Addon id: plugin.video.lemediatv
+# Addon Provider: vucodil
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: French\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#32000"
+msgid "Watch Le Média TV live"
+msgstr "Regardez Le Média TV en direct"
+
+msgctxt "#32001"
+msgid "Le Média TV"
+msgstr "Le Média TV"
+
+msgctxt "#32002"
+msgid "Stream offline (Probably)"
+msgstr "Direct hors-ligne (Sans doute)"
+
+msgctxt "#32003"
+msgid "Wait until live"
+msgstr "Veuillez attendre que le direct soit en ligne"
+
+msgctxt "#32004"
+msgid "Inputstream.adaptive not installed"
+msgstr "Inputstream.adaptive n'est pas installé"
+
+msgctxt "#32005"
+msgid "No playable URL"
+msgstr "L\'URL n'est pas correcte"
+
+msgctxt "#32006"
+msgid "Lemediatv.fr : "
+msgstr "Lemediatv.fr : "
+
+msgctxt "#32007"
+msgid "No resolved URL available"
+msgstr "Pas d'URL résolue disponible"
+
+msgctxt "#32008"
+msgid "Debug"
+msgstr "Débogage"
+

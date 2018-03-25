@@ -16,7 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
-import urllib
+try:
+    from urllib import quote_plus
+except ImportError:
+    from urllib.parse import quote_plus
 
 import xbmc
 import xbmcgui
@@ -24,11 +27,12 @@ import xbmcplugin
 
 
 # keys allowed in setInfo
-types = ["count", "size", "date", "genre", "year", "episode", "season", "top250", "tracknumber",
-         "rating", "userrating", "watched", "playcount", "overlay", "cast", "castandrole", "director",
-         "mpaa", "plot", "plotoutline", "title", "originaltitle", "sorttitle", "duration", "studio",
-         "tagline", "writer", "tvshowtitle", "premiered", "status", "code", "aired", "credits", "lastplayed",
-         "album", "artist", "votes", "trailer", "dateadded", "mediatype"]
+types = ["count", "size", "date", "genre", "country", "year", "episode", "season", "sortepisode", "top250", "setid",
+         "tracknumber", "rating", "userrating", "watched", "playcount", "overlay", "cast", "castandrole", "director",
+         "mpaa", "plot", "plotoutline", "title", "originaltitle", "sorttitle", "duration", "studio", "tagline", "writer",
+         "tvshowtitle", "premiered", "status", "set", "setoverview", "tag", "imdbnumber", "code", "aired", "credits",
+         "lastplayed", "album", "artist", "votes", "path", "trailer", "dateadded", "mediatype", "dbid"]
+
 
 def endofdirectory():
     # sort methods are required in library mode
@@ -77,19 +81,32 @@ def add_item(args, info, isFolder=True, total_items=0, mediatype="video"):
                                 totalItems = total_items)
 
 
+def quote_value(value, PY2):
+    """Quote value depending on python
+    """
+    if PY2:
+        if not isinstance(value, basestring):
+            value = str(value)
+        return quote_plus(value.encode("utf-8") if isinstance(value, unicode) else value)
+    else:
+        if not isinstance(value, str):
+            value = str(value)
+        return quote_plus(value)
+
+
 def build_url(args, info):
     """Create url
     """
     s = ""
     # step 1 copy new information from info
-    for key, value in info.iteritems():
+    for key, value in list(info.items()):
         if value:
-            s = s + "&" + key + "=" + urllib.quote_plus(value)
+            s = s + "&" + key + "=" + quote_value(value, args.PY2)
 
     # step 2 copy old information from args, but don't append twice
-    for key, value in args.__dict__.iteritems():
+    for key, value in list(args.__dict__.items()):
         if value and key in types and not "&" + str(key) + "=" in s:
-            s = s + "&" + key + "=" + urllib.quote_plus(value)
+            s = s + "&" + key + "=" + quote_value(value, args.PY2)
 
     return sys.argv[0] + "?" + s[1:]
 
@@ -99,12 +116,12 @@ def make_infolabel(args, info):
     """
     infoLabels = {}
     # step 1 copy new information from info
-    for key, value in info.iteritems():
+    for key, value in list(info.items()):
         if value and key in types:
             infoLabels[key] = value
 
     # step 2 copy old information from args, but don't overwrite
-    for key, value in args.__dict__.iteritems():
+    for key, value in list(args.__dict__.items()):
         if value and key in types and key not in infoLabels:
             infoLabels[key] = value
 

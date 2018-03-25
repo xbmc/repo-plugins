@@ -1,3 +1,7 @@
+v0.4.2 (2018.03.24)
+- Added Python3 support
+- Refactoring
+
 v0.4.1 (2018.01.14)
 - Fix login not working
 

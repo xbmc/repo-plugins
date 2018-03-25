@@ -77,3 +77,7 @@ msgstr ""
 msgctxt "#30044"
 msgid "Failed to play video"
 msgstr ""
+
+msgctxt "#30045"
+msgid "You need to be logged in"
+msgstr ""

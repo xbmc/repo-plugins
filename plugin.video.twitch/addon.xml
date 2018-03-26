@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-<addon id='plugin.video.twitch' version='2.2.0' name='Twitch' provider-name='A Talented Community'>
+<addon id='plugin.video.twitch' version='2.2.1' name='Twitch' provider-name='A Talented Community'>
     <requires>
         <import addon='xbmc.python' version='2.20.0'/>
         <import addon="script.module.python.twitch" version="2.0.0"/>
@@ -12,27 +12,13 @@
     <extension point='xbmc.addon.metadata'>
         <platform>all</platform>
         <news>
+2.2.1
+[add] allow Adaptive as default quality
+
 2.2.0
 [add] Search history
 [add] Settings - Maintenance
 [fix] VodCast highlighting
-2.1.1
-[fix] video default qualities
-[fix] setContentLookup AttributeError
-2.1.0
-[chg] string paths
-[fix] required changes for script.module.python.twitch v2.0.0 refactor
-[fix] multiple reconnections to same stream
-[upd] don't show watched marks for streams
-[upd] leave api logging to script.module.python.twitch
-[add] channel_name to play route, can use channel_id or channel_name
-[add] inputstream.adaptive support for inputstream.adaptive versions >= 2.0.10
-[add] Revoke token
-[add] Update token route
-[add] Reset cache on Refresh to Settings -> Cache
-[add] notify at start and group notifications at start to live notification settings
-[add] logo and game to live notifications
-[add] Hebrew strings [Eng2Heb]
         </news>
         <assets>
             <icon>icon.png</icon>

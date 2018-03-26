@@ -54,11 +54,11 @@ def loose_version(v):
 
 
 def use_inputstream_adaptive():
-    if kodi.get_setting('video_quality_ia') == 'true':
+    if kodi.get_setting('video_quality_ia') == 'true' or kodi.get_setting('video_quality') == '3':
         if kodi.get_setting('video_support_ia_builtin') == 'true':
             return True
         elif kodi.get_setting('video_support_ia_addon') == 'true':
-            use_ia = kodi.get_setting('video_quality_ia') == 'true'
+            use_ia = kodi.get_setting('video_quality_ia') == 'true' or kodi.get_setting('video_quality') == '3'
             if not use_ia:
                 return False
 
@@ -76,11 +76,13 @@ def use_inputstream_adaptive():
 
             if not ia_enabled:
                 kodi.set_setting('video_quality_ia', 'false')
+                kodi.set_setting('video_quality', '0')
                 return False
             else:
                 return True
         else:
             kodi.set_setting('video_quality_ia', 'false')
+            kodi.set_setting('video_quality', '0')
             return False
     else:
         return False

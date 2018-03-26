@@ -1,3 +1,6 @@
+2.2.1
+[add] allow Adaptive as default quality
+
 2.2.0
 [add] Search history
 [add] Settings - Maintenance

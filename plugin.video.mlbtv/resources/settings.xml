@@ -8,6 +8,7 @@
     <setting label="156" type="action" action="RunPlugin(plugin://plugin.video.mlbtv/?url=junk&amp;mode=400)" option="close" />
     <!-- <setting label="156" type="action" action="RunScript(special://home/addons/plugin.video.nhlgcl/resources/lib/logout.py)" option="close" /> -->
   </category>
+
   <category label="159">
     <setting id="quality" type="labelenum" label="160" values="SD (450 kbps)|SD (800 kbps)|SD (1200 kbps)|SD (1800 kbps)|HD (2500 kbps)|HD (3500 kbps)|HD (5000 kbps)|Best Available|Always Ask" default="HD (5000 kbps)" />
     <setting id="cdn" type="labelenum" label="165" values="Akamai|Level 3|No Preference" default="No Preference"/>
@@ -17,10 +18,6 @@
     <setting id="team_names" type="select" label="1901" lvalues="1901|1903" default="0" />
     <setting id="time_format" type="select" label="200" lvalues="2000|2001" default="0" />
 
-    <setting id="stream_date" type="text" label="900" default="" visible="false"/>    
-    <setting id="session_key" type="text" label="902" default="" visible="false"/>
-    <setting id="media_auth" type="text" label="903" default="" visible="false"/>    
-    
     <setting id="old_username" type="text" label="" default="" visible="false"/>
     <setting id="old_password" type="text" label="" default="" visible="false"/>
   </category>  
@@ -32,5 +29,8 @@
     <setting id='proxy_user' type='text' label='30240' default=''/>
     <setting id='proxy_pwd' type='text' label='30250' option='hidden' default=''/>
   </category>
+
+  <!--Hidden-->
+    <setting id='session_key' type='text' option='hidden' default=''/>
 </settings>
 

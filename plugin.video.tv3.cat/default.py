@@ -904,6 +904,10 @@ def addVideo2(data):
         linkvideo = media.get('url', None)
         
     if linkvideo <> None:
+        if type(linkvideo) is list and len(linkvideo) > 0:
+            linkvideo_item = linkvideo[1]
+            video = linkvideo_item.get('file', None)
+            
         titol = data.get('informacio',{}).get('titol', None)
         image = data.get('imatges',{}).get('url', None)
         descripcio = data.get('informacio',{}).get('descripcio', None)
@@ -962,7 +966,7 @@ def addVideo2(data):
         liz.setInfo('video', infolabels)
         liz.addStreamInfo('video',{'duration':durada})
         liz.setProperty('isPlayable','true')
-        ok = xbmcplugin.addDirectoryItem(handle=addon_handle,url=linkvideo,listitem=liz)
+        ok = xbmcplugin.addDirectoryItem(handle=addon_handle,url=video,listitem=liz)
         
     else:
         ok = None
@@ -998,9 +1002,16 @@ def playVideo(url):
                 urlvideo = media.get('url', None)
                 
             if urlvideo:
-                xbmc.log("Play video - url:  " + urlvideo)
+                if type(urlvideo) is list and len(urlvideo) > 0:
+                    urlvideo_item = urlvideo[1]
+                    video = urlvideo_item.get('file', None)
+                    
+                else:
+                    video = url
                 
-                item = xbmcgui.ListItem(path=urlvideo)
+                xbmc.log("Play video - url:  " + video)
+                
+                item = xbmcgui.ListItem(path=video)
                 xbmcplugin.setResolvedUrl(addon_handle, True, item)
                
     

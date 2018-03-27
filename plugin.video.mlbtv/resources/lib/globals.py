@@ -4,7 +4,7 @@ import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 import re, os, time
 import calendar
 import pytz
-import urllib, urllib2
+import urllib, urllib2, requests
 import json
 import cookielib
 import time
@@ -85,11 +85,13 @@ UA_IPAD = 'AppleCoreMedia/1.0 ( iPad; compatible; 3ivx HLS Engine/2.0.0.382; Win
 UA_PC = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36'         
 UA_PS4 = 'PS4Application libhttp/1.000 (PS4) libhttp/3.15 (PlayStation 4)'
 UA_ATBAT = 'At Bat/13268 CFNetwork/758.2.8 Darwin/15.0.0'
+UA_ANDROID = 'okhttp/3.9.0'
 
 #Playlists
 RECAP_PLAYLIST = xbmc.PlayList(0)
 EXTENDED_PLAYLIST = xbmc.PlayList(1)
 
+VERIFY = False
 
 
 def find(source,start_str,end_str):    
@@ -162,6 +164,7 @@ def easternToLocal(eastern_time):
     assert utc_time.resolution >= timedelta(microseconds=1)
     return local_dt.replace(microsecond=utc_time.microsecond)
 
+
 def UTCToLocal(utc_dt):
     # get integer timestamp to avoid precision lost
     timestamp = calendar.timegm(utc_dt.timetuple())
@@ -212,28 +215,27 @@ def get_params():
     return param
 
 
-
-def addStream(name,title,event_id,gid,icon=None,fanart=None,info=None,video_info=None,audio_info=None,teams_stream=None,stream_date=None):
+def add_stream(name, title, game_pk, icon=None, fanart=None, info=None, video_info=None, audio_info=None, stream_date=None):
     ok=True
-    u=sys.argv[0]+"?mode="+str(104)+"&name="+urllib.quote_plus(name)+"&event_id="+urllib.quote_plus(str(event_id))+"&gid="+urllib.quote_plus(str(gid))+"&teams_stream="+urllib.quote_plus(str(teams_stream))+"&stream_date="+urllib.quote_plus(str(stream_date))
-    
+    u=sys.argv[0]+"?mode="+str(104)+"&name="+urllib.quote_plus(name)+"&game_pk="+urllib.quote_plus(str(game_pk))+"&stream_date="+urllib.quote_plus(str(stream_date))
+
     #if icon != None:
     liz=xbmcgui.ListItem(name, iconImage=ICON, thumbnailImage=icon) 
     #else:
     #liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=ICON) 
     
-    if fanart != None:
+    if fanart is not None:
         liz.setProperty('fanart_image', fanart)       
     else:
         liz.setProperty('fanart_image', FANART)
 
     liz.setProperty("IsPlayable", "true")
     liz.setInfo( type="Video", infoLabels={ "Title": title } )
-    if info != None:
+    if info is not None:
         liz.setInfo( type="Video", infoLabels=info)
-    if video_info != None:
+    if video_info is not None:
         liz.addStreamInfo('video', video_info)
-    if audio_info != None:
+    if audio_info is not None:
         liz.addStreamInfo('audio', audio_info)
 
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
@@ -253,14 +255,14 @@ def addLink(name,url,title,iconimage,info=None,video_info=None,audio_info=None,f
     #else:
     #liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=ICON) 
 
-    if info != None:
+    if info is not None:
         liz.setInfo( type="Video", infoLabels=info)
-    if video_info != None:
+    if video_info is not None:
         liz.addStreamInfo('video', video_info)
-    if audio_info != None:
+    if audio_info is not None:
         liz.addStreamInfo('audio', audio_info)
 
-    if fanart != None:
+    if fanart is not None:
         liz.setProperty('fanart_image', fanart)
     else:
         liz.setProperty('fanart_image', FANART)
@@ -281,17 +283,17 @@ def addDir(name,mode,iconimage,fanart=None,game_day=None):
     #game_day = '2016-01-27'
 
     u=sys.argv[0]+"?mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&icon="+urllib.quote_plus(iconimage)
-    if game_day != None:
+    if game_day is not None:
         u = u+"&game_day="+urllib.quote_plus(game_day)
 
-    if iconimage != None:
+    if iconimage is not None:
         liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage) 
     else:
         liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=ICON) 
 
     liz.setInfo( type="Video", infoLabels={ "Title": name } )
 
-    if fanart != None:
+    if fanart is not None:
         liz.setProperty('fanart_image', fanart)
     else:
         liz.setProperty('fanart_image', FANART)
@@ -306,14 +308,14 @@ def addPlaylist(name,game_day,mode,iconimage,fanart=None):
     ok=True    
     u=sys.argv[0]+"?mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&icon="+urllib.quote_plus(iconimage)+"&stream_date="+urllib.quote_plus(str(game_day))
 
-    if iconimage != None:
+    if iconimage is not None:
         liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage) 
     else:
         liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=ICON) 
 
     liz.setInfo( type="Video", infoLabels={ "Title": name } )
 
-    if fanart != None:
+    if fanart is not None:
         liz.setProperty('fanart_image', fanart)
     else:
         liz.setProperty('fanart_image', FANART)
@@ -322,11 +324,11 @@ def addPlaylist(name,game_day,mode,iconimage,fanart=None):
     info = {'plot':'Watch all the days highlights for '+game_day,'tvshowtitle':'MLB','title':name,'originaltitle':name,'aired':game_day,'genre':LOCAL_STRING(700),'mediatype':'video'}
     audio_info, video_info = getAudioVideoInfo()
 
-    if info != None:
+    if info is not None:
         liz.setInfo( type="Video", infoLabels=info)
-    if video_info != None:
+    if video_info is not None:
         liz.addStreamInfo('video', video_info)
-    if audio_info != None:
+    if audio_info is not None:
         liz.addStreamInfo('audio', audio_info)
     
 
@@ -431,6 +433,7 @@ def getAudioVideoInfo():
 
     audio_info = { 'codec': 'aac', 'language': 'en', 'channels': 2 }
     return audio_info, video_info
+
 
 def getConfigFile():
     '''
@@ -555,4 +558,30 @@ def getBlackoutLiftTime(url):
          local_lift_time = local_lift_time.strftime('%H:%M')
     
     return minutes_until_lift, local_lift_time
-    
+
+
+def save_cookies(cookiejar):
+    cookie_file = os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp')
+    cj = cookielib.LWPCookieJar()
+    try:
+        cj.load(cookie_file,ignore_discard=True)
+    except:
+        pass
+    for c in cookiejar:
+        args = dict(vars(c).items())
+        args['rest'] = args['_rest']
+        del args['_rest']
+        c = cookielib.Cookie(**args)
+        cj.set_cookie(c)
+    cj.save(cookie_file, ignore_discard=True)
+
+
+def load_cookies():
+    cookie_file = os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp')
+    cj = cookielib.LWPCookieJar()
+    try:
+        cj.load(cookie_file, ignore_discard=True)
+    except:
+        pass
+
+    return cj

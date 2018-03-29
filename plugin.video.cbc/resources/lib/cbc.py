@@ -68,16 +68,11 @@ class CBC:
 
 
     def getLabels(self, item):
-        # https://codedocs.xyz/xbmc/xbmc/group__python__xbmcgui__listitem.html#ga0b71166869bda87ad744942888fb5f14
-        """
-         'media:keywords'
-        """
         labels = {
             'studio': 'Canadian Broadcasting Corporation',
             'country': 'Canada'
         }
         if 'cbc$callSign' in item:
-            labels['ChannelName'] = item['cbc$callSign']
             labels['title'] = '{} {}'.format(item['cbc$callSign'], item['title'])
         else:
             labels['title'] = item['title'].encode('utf-8')
@@ -107,6 +102,12 @@ class CBC:
 
         if 'premiered' in item:
             labels['premiered'] = item['premiered']
+
+        if 'video' in item:
+            labels['mediatype'] = 'video'
+        elif 'cbc$audioVideo' in item:
+            if item['cbc$audioVideo'].lower() == 'video':
+                labels['mediatype'] = 'video'
 
         return labels
 

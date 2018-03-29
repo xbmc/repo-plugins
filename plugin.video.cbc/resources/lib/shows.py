@@ -2,6 +2,13 @@ import requests, urllib
 from xml.dom.minidom import *
 from utils import saveCookies, loadCookies, loadAuthorization, log
 
+class CBCAuthError(Exception):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
+
+
 class Shows:
 
     def __init__(self):
@@ -22,7 +29,7 @@ class Shows:
 
     def getHeaders(self):
         auth = loadAuthorization()
-        return {
+        return None if auth == None else {
             'X-Clearleap-DeviceToken': auth['token'],
             'X-Client-Version': '3.1.2',
             'X-Client-Name': 'Android',
@@ -61,6 +68,7 @@ class Shows:
         if content_type == 'media':
             tag = item.getElementsByTagName('media:content')[0]
             tags['url'] = tag.attributes['url'].value
+            tags['duration'] = tag.attributes['duration'].value
             tags['video'] = True
             for tag in self.SHOW_TAGS:
                 tag_nodes = item.getElementsByTagName(tag)
@@ -84,11 +92,14 @@ class Shows:
             show_url += '?offset={}'.format(offset)
         r = self.session.get(show_url, headers = headers)
 
-        if not r.status_code == 200:
-            log('ERROR: {} returns status of {}'.format(url, r.status_code), True)
+        if r.status_code == 401 or r.status_code == 500:
+            log('({}) {} returns {} status. Signaling authorization failure'\
+                .format('getShows', show_url, r.status_code), True)
+            raise CBCAuthError('getShows')
+        elif not r.status_code == 200:
+            log('(getShows) {} returns {} status'.format(url, r.status_code), True)
             return None
         saveCookies(self.session.cookies)
-
         dom = parseString(r.content)
         statuses = dom.getElementsByTagName('status')
 
@@ -123,8 +134,14 @@ class Shows:
         headers = self.getHeaders()
         r = self.session.get(url, headers = headers)
 
-        if not r.status_code == 200:
-            log('ERROR: {} returns status code of {}'.format(url, r.status_code), True)
+        if r.status_code == 500:
+            log('({}) {} returns {} status. Signaling authorization failure'\
+                .format('getStream', url, r.status_code), True)
+            raise CBCAuthError('getStream')
+        elif r.status_code == 401:
+            raise CBCAuthError('getStream')
+        elif not r.status_code == 200:
+            log('(getStream) {} returns {} status code'.format(url, r.status_code), True)
             return None
         saveCookies(self.session.cookies)
 

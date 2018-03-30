@@ -14,14 +14,33 @@ SHOWS = getString(30006)
 
 addon_handle = int(sys.argv[1])
 
+
+def authorize():
+        prog = xbmcgui.DialogProgress()
+        prog.create(getString(30001))
+        cbc = CBC()
+        prog.update(33)
+        reg_url = cbc.getRegistrationURL()
+        prog.update(66)
+        result = cbc.registerDevice(reg_url) 
+        if not result :
+            # display error window
+            log('(authorize) unable to authorize', True)
+            prog.close()
+            xbmcgui.Dialog().ok(getString(30002), getString(30002))
+            return False
+        prog.update(100)
+        prog.close()
+        return True
+
+
 def playSmil(smil, labels, image):
     cbc = CBC()
     url = cbc.parseSmil(smil)
-    item = xbmcgui.ListItem(labels['title'])
-    item.setIconImage(image)
+    item = xbmcgui.ListItem(labels['title'], path=url)
+    item.setArt({ 'thumb': image, 'poster': image })
     item.setInfo(type="Video", infoLabels=labels)
-    p = xbmc.Player()
-    p.play(url, item)
+    xbmcplugin.setResolvedUrl(addon_handle, True, item)
 
 
 def playShow(values):
@@ -32,16 +51,29 @@ def playShow(values):
     for key in labels.keys():
         labels[key] = labels[key][0]
     shows = Shows()
-    res = shows.getStream(smil)
-    item = xbmcgui.ListItem(labels['title'])
+    try:
+        res = shows.getStream(smil)
+    except CBCAuthError as e:
+        log('(playShows) auth failed. retrying', True)
+        if not authorize():
+            log('(playShows) auth retry failed', True)
+            return
+        log('(playShows) auth retry successful', True)
+        try:
+            res = shows.getStream(smil)
+        except CBCAuthError as e:
+            log('(playShows) getStream failed despite successful auth retry', True)
+            return
+        
+    item = xbmcgui.ListItem(labels['title'], path=res['url'])
 
     item.setInfo(type="Video", infoLabels=labels)
-    item.setIconImage(image)
-    p = xbmc.Player()
-    p.play(res['url'], item)
+    item.setArt({ 'thumb': image, 'poster': image })
+    xbmcplugin.setResolvedUrl(addon_handle, True, item)
 
 
 def liveProgramsMenu():
+    xbmcplugin.setContent(addon_handle, 'videos')
     progs = LivePrograms()
     prog_list = progs.getLivePrograms()
     cbc = CBC()
@@ -55,22 +87,22 @@ def liveProgramsMenu():
         labels = cbc.getLabels(prog)
         image = cbc.getImage(prog)
         item = xbmcgui.ListItem(labels['title'])
-        item.setIconImage(image)
+        item.setArt({ 'thumb': image, 'poster': image })
         item.setInfo(type="Video", infoLabels=labels)
+        item.setProperty('IsPlayable', 'true')
         values = {
             'smil': prog['content'][0]['url'],
             'labels': urlencode(labels),
             'image': image
         }
-        xbmcplugin.addDirectoryItem(handle=addon_handle,
-                                    url=sys.argv[0] + "?" + urlencode(values),
-                                    listitem=item,
-                                    isFolder=True)
+        url = sys.argv[0] + "?" + urlencode(values)
+        xbmcplugin.addDirectoryItem(addon_handle, url, item,False)
 
     xbmcplugin.endOfDirectory(addon_handle)
 
 
 def liveChannelsMenu():
+    xbmcplugin.setContent(addon_handle, 'videos')
     chans = LiveChannels()
     chan_list = chans.getLiveChannels()
     cbc = CBC()
@@ -78,23 +110,21 @@ def liveChannelsMenu():
         labels = cbc.getLabels(channel)
         image = cbc.getImage(channel)
         item = xbmcgui.ListItem(labels['title'])
-        item.setIconImage(image)
+        item.setArt({ 'thumb': image, 'poster': image })
         item.setInfo(type="Video", infoLabels=labels)
+        item.setProperty('IsPlayable', 'true')
         values = {
             'smil': channel['content'][0]['url'],
             'labels': urlencode(labels),
             'image': image
         }
-        xbmcplugin.addDirectoryItem(handle=addon_handle,
-                                    url=sys.argv[0] + "?" + urlencode(values),
-                                    listitem=item,
-                                    isFolder=True)
+        url = sys.argv[0] + "?" + urlencode(values)
+        xbmcplugin.addDirectoryItem(addon_handle, url, item, False)
 
     xbmcplugin.endOfDirectory(addon_handle)
 
 
 def showsMenu(values):
-    #result = shows.getShows(None if len(args) == 0 else args[0])
     cbc = CBC()
     shows = Shows()
     if 'smil' in values:
@@ -103,17 +133,40 @@ def showsMenu(values):
         url = None
     prog = xbmcgui.DialogProgress()
     prog.create(getString(30003))
-    show_list = shows.getShows(url, progress_callback = prog.update)
+    try:
+        show_list = shows.getShows(url, progress_callback = prog.update)
+    except CBCAuthError as e:
+        log('(showsMenu) auth failed. retrying', True)
+        if not authorize():
+            log('(showsMenu) auth retry failed', True)
+            return
+        log('(showsMenu) auth retry successful', True)
+        try:
+            show_list = shows.getShows(url, progress_callback = prog.update)
+        except CBCAuthError as e:
+            log('(showsMenu) getShows failed despite successful auth retry', True)
+            return
+
+    # if the first episode is video, assume all are video
+    isVideo = True if 'video' in show_list[0] else False
+    xbmcplugin.setContent(addon_handle, 'episodes' if isVideo else 'tvshows')
+
     prog.close()
     for show in show_list:
+        isVideo = show['video'] if 'video' in show else False
         labels = cbc.getLabels(show)
         image = show['image'] if 'image' in show else None
         item = xbmcgui.ListItem(labels['title'])
-        item.setIconImage(image)
+
+
         item.setInfo(type="Video", infoLabels=labels)
+        item.setProperty('IsPlayable', 'true' if isVideo else 'false')
+        if 'duration' in show:
+            item.addStreamInfo('video', {'duration':show['duration']})
+        item.setArt({ 'thumb': image, 'poster': image })
         values = {
             'smil': show['url'],
-            'video': show['video'] if 'video' in show else None,
+            'video': show['video'] if isVideo else None,
             'image': image
         }
 
@@ -123,16 +176,14 @@ def showsMenu(values):
             values['labels'] = urlencode(labels)
 
         plugin_url = sys.argv[0] + "?" + urlencode(values)
-        xbmcplugin.addDirectoryItem(handle=addon_handle,
-                                    url=plugin_url,
-                                    listitem=item,
-                                    isFolder = True)
+        xbmcplugin.addDirectoryItem(addon_handle, plugin_url, item, not isVideo)
 
     xbmcplugin.endOfDirectory(addon_handle)
 
 
 def mainMenu():
 
+    xbmcplugin.setContent(addon_handle, 'videos')
     for menu_item in [LIVE_CHANNELS, LIVE_PROGRAMS, SHOWS]:
         labels = { 'title': menu_item }
         item = xbmcgui.ListItem(menu_item)
@@ -151,19 +202,7 @@ if len(sys.argv[2]) == 0:
     if not os.path.exists(data_path):
         os.makedirs(data_path)
     if not os.path.exists(getAuthorizationFile()):
-        prog = xbmcgui.DialogProgress()
-        prog.create(getString(30001))
-        cbc = CBC()
-        prog.update(33)
-        reg_url = cbc.getRegistrationURL()
-        prog.update(66)
-        if not cbc.registerDevice(reg_url):
-            # display error window
-            log('Error: unable to authorize', True)
-            prog.close()
-            xbmcgui.Dialog().ok(getString(30002), getString(30002))
-        prog.update(100)
-        prog.close()
+        authorize()
 
     mainMenu()
 else:

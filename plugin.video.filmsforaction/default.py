@@ -49,9 +49,13 @@ api.set_debug(debug_flag, p.log)
 
 # By default, both, the website and the add-on are setup to show only the best videos.
 all_filter = '&quality=all' if settings.getSetting("show_best") == "false" else '&quality=best'
+sort_param = '&sort=new' if settings.getSetting("views") == "false" else '&sort=views'
 
 if all_filter == '&quality=all':
     p.log("ffa.main: 'all videos' filter is explicit setup.")
+
+if sort_param == '&sort=views':
+    p.log("ffa.main: sorted by views is explicit setup.")
 
 def get_located_string(string_name):
     return translation(localized_strings.get(string_name)).encode('utf-8') or string_name if string_name in localized_strings else string_name
@@ -86,7 +90,7 @@ def create_index(params):
                 'title': menu_entry,
                 'genre': menu_entry,
             },
-            'path': p.get_plugin_path(url = 'http://www.filmsforaction.org/library/?category=all+videos&sort=new' + all_filter, action = action, category = menu_entry),
+            'path': p.get_plugin_path(url = 'https://www.filmsforaction.org/library/?category=all+videos' + all_filter + sort_param, action = action, category = menu_entry),
             'IsPlayable' : False
             }
 
@@ -107,7 +111,7 @@ def create_index(params):
             'title': category_title,
             'genre': category_title
         },
-        'path': p.get_plugin_path(url = category_url + all_filter, action = action, category = category_title),
+        'path': p.get_plugin_path(url = category_url + all_filter + sort_param, action = action, category = category_title),
         'IsPlayable' : False
         } for category_url, category_title in category_list]
 
@@ -153,7 +157,7 @@ def search_videos(params):
 
     search_string = p.get_keyboard_text(get_located_string('Search'))
     if search_string:
-         params['url'] = api.get_search_url(search_string) + all_filter
+         params['url'] = api.get_search_url(search_string) + all_filter + sort_param
          p.log("ffa.search Value of search url: %s" % params['url'])
          return main_list(params)
 

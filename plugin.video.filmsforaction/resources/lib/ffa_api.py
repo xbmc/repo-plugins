@@ -25,7 +25,7 @@
 
 import lutil as l
 
-root_url = 'http://www.filmsforaction.org'
+root_url = 'https://www.filmsforaction.org'
 
 def set_debug(debug_flag, func_log=l.local_log):
     """This function is a wrapper to setup the debug flag into the lutil module"""
@@ -35,7 +35,7 @@ def set_debug(debug_flag, func_log=l.local_log):
 def get_categories():
     """This function gets the categories list from the FFA website."""
     category_pattern = "'topic', '([0-9]+)'[^>]+?>([^<]+?)</a>"
-    category_url = 'http://www.filmsforaction.org/library/?category=all+videos&topic=%s&sort=new'
+    category_url = 'https://www.filmsforaction.org/library/?category=all+videos&topic=%s'
 
     buffer_url = l.carga_web(root_url)
     category_list = []
@@ -51,16 +51,14 @@ def get_categories():
 
 def get_videolist(url, cat_menu=""):
     """This function gets the video list from the FFA website and returns them in a pretty data format."""
-    video_entry_sep        = 'view-horizontal'
+    video_entry_sep        = 'content-type-video'
     video_url_pattern      = '["\'](/watch/[^/]*?/)'
     video_thumb_pattern    = '["\'](/img/[^"\']*?)["\']'
     video_title_pattern    = '<a href=["\']/watch/[^/]*?/["\'][ ]*?>([^<]+?)</a>'
-    video_plot_pattern     = '<div class="content-text">([^<]*?)</div>'
-    video_cat_pattern      = '>(Video|Short Film|Trailer|Documentary|Presentation)<'
+    video_plot_pattern     = '<span class="content-description">([^<]*?)</span>'
     video_duration_pattern = '([0-9]+[ ]+[Mm]in)'
     video_rating_pattern   = '([0-9.]+[ ]+[Ss]tars)'
     video_views_pattern    = '([0-9,]+[ ]+[Vv]iews)'
-    video_author_pattern   = '([Aa]dded by).*?<a href=["\']/[^/]*?/["\'][ ]*?>([^<]*?)</a>'
     page_num_pattern       = 'href=["\']/library/([0-9]+)/'
     page_num_url_pattern   = 'href=["\'](/library/%d/[^"\']*?)["\']'
     page_num_cur_pattern   = '/library/([0-9]+)/'
@@ -80,39 +78,33 @@ def get_videolist(url, cat_menu=""):
         video_list.append(video_entry)
         reset_cache = True
 
+    category = "Video" # The category is no longer included in the latest website change.
     for video_section in buffer_url.split(video_entry_sep)[1:]:
-        category = l.find_first(video_section, video_cat_pattern)
-        if category:
-            url           = l.find_first(video_section, video_url_pattern)
-            thumb         = l.find_first(video_section, video_thumb_pattern)
-            title         = l.find_first(video_section, video_title_pattern)
-            plot          = l.find_first(video_section, video_plot_pattern)
-            duration      = l.find_first(video_section, video_duration_pattern)
-            rating        = l.find_first(video_section, video_rating_pattern)
-            views         = l.find_first(video_section, video_views_pattern)
-            label, author = l.find_first(video_section, video_author_pattern) or ('', '')
-            l.log('Video info. url: "%s" thumb: "%s" title: "%s" category: "%s"' % (url, thumb, title, category))
-            l.log('Video tags. duration: "%s" rating: "%s" views: "%s" author: "%s %s"' % (duration, rating, views, label, author))
-            video_entry = {
-                'url'        : root_url + url,
-                'title'      : title.strip() or '.',
-                'thumbnail'  : root_url + thumb,
-                'plot'       : "%s\n%s - %s - %s - %s\n%s %s" % (
-                                plot.strip(),
-                                category,
-                                duration,
-                                views,
-                                rating,
-                                label,
-                                author,
-                                ),
-                'duration'   : int(duration.split()[0]) if duration else 0,
-                'rating'     : rating.split()[0] if rating else '',
-                'genre'      : category,
-                'credits'    : author,
-                'IsPlayable' : True
-                }
-            video_list.append(video_entry)
+        url           = l.find_first(video_section, video_url_pattern)
+        thumb         = l.find_first(video_section, video_thumb_pattern)
+        title         = l.find_first(video_section, video_title_pattern)
+        plot          = l.find_first(video_section, video_plot_pattern)
+        duration      = l.find_first(video_section, video_duration_pattern)
+        rating        = l.find_first(video_section, video_rating_pattern)
+        views         = l.find_first(video_section, video_views_pattern)
+        l.log('Video info. url: "%s" thumb: "%s" title: "%s"' % (url, thumb, title))
+        l.log('Video tags. duration: "%s" rating: "%s" views: "%s"' % (duration, rating, views))
+        video_entry = {
+            'url'        : root_url + url,
+            'title'      : title.strip() or '.',
+            'thumbnail'  : root_url + thumb,
+            'plot'       : "%s\n%s - %s - %s" % (
+                            plot.strip(),
+                            duration,
+                            views,
+                            rating,
+                            ),
+            'duration'   : int(duration.split()[0]) if duration else 0,
+            'rating'     : rating.split()[0] if rating else '',
+            'genre'      : category,
+            'IsPlayable' : True
+            }
+        video_list.append(video_entry)
 
     if current_page_num < last_page_num:
         next_page_num = current_page_num + 1
@@ -125,7 +117,7 @@ def get_videolist(url, cat_menu=""):
 
 def get_search_url(search_string):
     """This function returns the search encoded URL to find the videos from the input search string"""
-    return 'http://www.filmsforaction.org/library/?search=' + l.get_url_encoded(search_string)
+    return 'https://www.filmsforaction.org/library/?search=' + l.get_url_encoded(search_string)
 
 
 def get_playable_url(url):
@@ -152,8 +144,12 @@ def get_playable_url(url):
         video_id = l.find_first(buffer_url, pattern)
         if video_id:
             l.log('We have found this video_id "%s" using the pattern: "%s"' % (video_id, pattern_name))
-            playable_url = eval("get_playable_%s_url(video_id)" % source)
-            break
+            try:
+                playable_url = eval("get_playable_%s_url(video_id)" % source)
+                break
+            except:
+                l.log("There was a problem using the pattern '%s' on this video link: '%s'\n" % (pattern_name, url))
+                return ''
     else:
         l.log("Sorry, but we cannot support the type of video for this link yet:\n'%s'" % url)
         playable_url = ''

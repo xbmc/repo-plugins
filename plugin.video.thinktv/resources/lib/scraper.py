@@ -200,7 +200,19 @@ class myAddon(t1mAddon):
     infoList['TVShowTitle'] = xbmc.getInfoLabel('ListItem.TVShowTitle')
     infoList['Title'] = infoList['TVShowTitle']
     infoList['mediatype'] = 'tvshow'
-    ilist = self.addMenuItem('%s' % (addonLanguage(30045)),'GE', ilist, '%s|%s|1' %(url, 'episodes'), thumb, fanart, infoList, isFolder=True)
+    html = self.getRequest('http://www.pbs.org/show/%s' % url)
+    seasons = re.compile('data-content-type="episodes">(.+?)</select>', re.DOTALL).search(html)
+    if not seasons is None:
+        seasons = seasons.group(1)
+        seasons = re.compile('data-season-url="(.+?)".+?>(.+?)<', re.DOTALL).findall(seasons)
+    if seasons is None:
+        ilist = self.addMenuItem('%s' % (addonLanguage(30045)),'GE', ilist, '%s|%s|1' %(url, 'episodes'), thumb, fanart, infoList, isFolder=True)
+    else:
+        for surl, season in seasons:
+            season = season.strip()
+            surl = surl.split('episodes/',1)[1]
+            surl = 'episodes/'+ surl.rstrip('/')
+            ilist = self.addMenuItem('%s %s' % (season, addonLanguage(30045)),'GE', ilist, '%s|%s|1' %(url, surl), thumb, fanart, infoList, isFolder=True)
     ilist = self.addMenuItem('%s' % (addonLanguage(30046)),'GE', ilist, '%s|%s|1' %(url, 'clips'), thumb, fanart, infoList, isFolder=True)
     ilist = self.addMenuItem('%s' % (addonLanguage(30047)),'GE', ilist, '%s|%s|1' %(url, 'previews'), thumb, fanart, infoList, isFolder=True)
     return(ilist)

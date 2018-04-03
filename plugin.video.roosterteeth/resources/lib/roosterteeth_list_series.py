@@ -5,6 +5,7 @@
 # Imports
 #
 from future import standard_library
+
 standard_library.install_aliases()
 from builtins import str
 from builtins import object
@@ -16,7 +17,7 @@ import xbmcgui
 import xbmcplugin
 import json
 
-from roosterteeth_const import IMAGES_PATH, HEADERS, LANGUAGE, convertToUnicodeString, log, SPONSORED_VIDEO, ROOSTERTEETH_BASE_URL
+from roosterteeth_const import IMAGES_PATH, HEADERS, LANGUAGE, convertToUnicodeString, log, ROOSTERTEETH_SERIES_BASE_URL
 
 
 #
@@ -33,13 +34,12 @@ class Main(object):
         log("ARGV", repr(sys.argv))
 
         # Parse parameters...
-        self.url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
-        self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][0]
-        self.show_serie_name = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['show_serie_name'][0]
+        self.plugin_category = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['plugin_category'][0]
+        self.video_list_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['url'][0]
+        self.next_page_possible = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['next_page_possible'][
+            0]
 
-        log("self.url", self.url)
-
-        log("self.show_serie_name", self.show_serie_name)
+        log("self.url", self.video_list_page_url)
 
         #
         # Get the videos...
@@ -59,7 +59,7 @@ class Main(object):
         #
         # Get HTML page
         #
-        response = requests.get(self.url, headers=HEADERS)
+        response = requests.get(self.video_list_page_url, headers=HEADERS)
 
         html_source = response.text
         html_source = convertToUnicodeString(html_source)
@@ -79,75 +79,41 @@ class Main(object):
             exit(1)
 
         for item in json_data['data']:
-            episode_title = item['attributes']['display_title']
+            serie_title = item['attributes']['title']
 
-            caption = item['attributes']['caption']
-
-            length = item['attributes']['length']
-
-            # the url should be something like: https://svod-be.roosterteeth.com/api/v1/episodes/ffc530d0-464d-11e7-a302-065410f210c4/videos"
-            # (or even https://svod-be.roosterteeth.com/api/v1/episodes/lets-play-2011-2/videos)
-            technical_episode_url_last_part = item['links']['videos']
-            technical_episode_url = ROOSTERTEETH_BASE_URL + technical_episode_url_last_part
-            technical_url = technical_episode_url
-
-            log("technical_url", technical_url)
-
-            functional_episode_url_middle_part = item['links']['self']
-            functional_url = ROOSTERTEETH_BASE_URL + functional_episode_url_middle_part + '/videos'
-
-            log("functional_url", functional_url)
+            serie_url_middle_part = item['canonical_links']['self']
+            # the serie url should something like this: https://svod-be.roosterteeth.com/api/v1/shows/always-open/seasons
+            serie_url = ROOSTERTEETH_SERIES_BASE_URL + serie_url_middle_part + '/seasons'
+            # remove '/series/' from the url
+            serie_url = serie_url.replace('/series/', '/')
 
             thumb = item['included']['images'][0]['attributes']['thumb']
 
-            serie_title = item['attributes']['show_title']
-
-            log("serie_title", serie_title)
-
-            is_sponsor_only = item['attributes']['is_sponsors_only']
-
-            log("is_sponsor_only", is_sponsor_only)
-
-            # let's put some more info in the title of the episode
-            if self.show_serie_name == "True":
-                title = serie_title + ' - ' + episode_title
-            else:
-                title = episode_title
-
-            if is_sponsor_only:
-                title = title + ' ' + SPONSORED_VIDEO
+            title = serie_title
 
             log("title", title)
+
+            url = serie_url
+
+            log("url", url)
 
             thumbnail_url = thumb
 
             log("thumbnail_url", thumbnail_url)
 
-            plot = caption
-
-            log("plot", plot)
-
-            duration_in_seconds = length
-
-            log("duration_in_seconds", duration_in_seconds)
-
             # Add to list...
             list_item = xbmcgui.ListItem(label=title, thumbnailImage=thumbnail_url)
-            list_item.setInfo("video",
-                             {"title": title, "studio": "Roosterteeth", "mediatype": "video",
-                              "plot": plot, "duration": duration_in_seconds})
             list_item.setArt({'thumb': thumbnail_url, 'icon': thumbnail_url,
-                             'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
-            list_item.setProperty('IsPlayable', 'true')
+                              'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
+            list_item.setProperty('IsPlayable', 'false')
 
             # let's remove any non-ascii characters from the title, to prevent errors with urllib.parse.parse_qs of the parameters
             title = title.encode('ascii', 'ignore')
 
-            parameters = {"action": "play", "functional_url": functional_url, "technical_url": technical_url,
-                          "title": title, "is_sponsor_only": is_sponsor_only, "next_page_possible": "False"}
-
+            parameters = {"action": "list-serie-seasons", "url": url, "title": title, "thumbnail_url": thumbnail_url ,
+                          "next_page_possible": "False"}
             plugin_url_with_parms = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
-            is_folder = False
+            is_folder = True
             # Add refresh option to context menu
             list_item.addContextMenuItems([('Refresh', 'Container.Refresh')])
             # Add our item to the listing as a 3-element tuple.

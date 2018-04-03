@@ -5,20 +5,19 @@
 # Imports
 #
 from future import standard_library
+
 standard_library.install_aliases()
 from builtins import str
 from builtins import object
 import requests
 import sys
-import re
 import urllib.request, urllib.parse, urllib.error
 import xbmc
 import xbmcgui
 import xbmcplugin
 
-from roosterteeth_const import LANGUAGE, SETTINGS, HEADERS, convertToUnicodeString, log, getSoup, LOGINURL_RT, LOGINURL_AH, \
-    LOGINURL_FH, LOGINURL_SA, LOGINURL_GA, LOGINURL_TK, LOGINURL_CC, LOGINURL_SP7, VQ4K, VQ1080P, VQ720P, VQ480P, \
-    VQ360P, VQ240P
+from roosterteeth_const import LANGUAGE, SETTINGS, HEADERS, convertToUnicodeString, log, VQ4K, VQ1080P, VQ720P, \
+    VQ480P, VQ360P, VQ240P, ROOSTERTEETH_AUTHORIZATION_URL, KODI_ROOSTERTEETH_ADDON_CLIENT_ID
 
 
 #
@@ -42,12 +41,24 @@ class Main(object):
         log("ARGV", repr(sys.argv))
 
         # Parse parameters...
-        self.video_page_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['video_page_url'][0]
-        # Get the title.
+        self.functional_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['functional_url'][0]
+        self.technical_url = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['technical_url'][0]
         self.title = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['title'][0]
         self.title = str(self.title)
+        self.is_sponsor_only = urllib.parse.parse_qs(urllib.parse.urlparse(sys.argv[2]).query)['is_sponsor_only'][0]
 
-        log("self.video_page_url", self.video_page_url)
+        log("self.functional_url", self.functional_url)
+
+        log("self.technical_url", self.technical_url)
+
+        log("self.title", self.title)
+
+        log("self.is_sponsor_only", self.is_sponsor_only)
+
+        # let's use the technical url
+        self.url = self.technical_url
+
+        log("self.url", self.url)
 
         #
         # Play video...
@@ -66,115 +77,108 @@ class Main(object):
         #
         # Get current list item details...
         #
-        # title = xbmc.getInfoLabel("listitem.Title")
-        thumbnail_url = xbmc.getInfoImage("list_item.Thumb")
-        # studio = xbmc.getInfoLabel("list_item.Studio")
-        plot = xbmc.getInfoLabel("list_item.Plot")
-        genre = xbmc.getInfoLabel("list_item.Genre")
+        title = xbmc.getInfoLabel("listitem.Title")
+        # thumbnail_url = xbmc.getInfoImage("list_item.Thumb")
+        studio = xbmc.getInfoLabel("list_item.Studio")
+        mediatype = xbmc.getInfoLabel("list_item.Mediatype")
+        # plot = xbmc.getInfoLabel("list_item.Plot")
+        # genre = xbmc.getInfoLabel("list_item.Genre")
 
         session = ''
         try:
             # requests is sooooo nice, respect!
             session = requests.Session()
 
-            # get the page that contains the video
-            response = session.get(self.video_page_url, headers=HEADERS)
+            if self.is_sponsor_only == "True":
+                must_login_sponsored_user = True
+                video_is_not_yet_available = False
+            else:
+                # try and get the non-sponsored video without being logged in
+                # get the page that contains the video
+                response = session.get(self.url, headers=HEADERS)
 
-            html_source = response.text
-            html_source = convertToUnicodeString(html_source)
+                html_source = response.text
+                html_source = convertToUnicodeString(html_source)
 
-            # is it a sponsored video?
-            if str(response.text).find('sponsor-only') >= 0 or str(response.text).find('non-sponsor') >= 0:
+                # log("html_source without authorization", html_source)
+
+                # sometimes a non-sponsor video is not available. However this video will (!) be available for a sponsor
+                # after logging in. One of the perks of being a sponsor, i reckon. This is what you get back in that
+                # case: {"access":false,"message":"not yet available"}
+                if html_source.find("not yet available") >= 0:
+                    # let's try and get this non-sponsored video after login in the sponsored user then
+                    must_login_sponsored_user = True
+                    video_is_not_yet_available = True
+                else:
+                    must_login_sponsored_user = False
+                    video_is_not_yet_available = False
+
+            log("must_login_sponsored_user", must_login_sponsored_user)
+
+            # login if needed
+            if must_login_sponsored_user:
+                # is the sponsor switch in the settings of this addon turned on?
                 if self.IS_SPONSOR == 'true':
+                    # is it a sponsored video or not?
+                    if self.is_sponsor_only == "True":
+                        log("logging in with user for this sponsored video", self.url)
+                    else:
+                        log("logging in with user for this non-sponsored video", self.url)
+
+                    # let's try and get authorization
                     try:
                         # we need a NEW (!!!) session
                         session = requests.Session()
 
-                        # get the LOGIN-page
-                        if 'achievementhunter' in response.url:
-                            response = session.get(LOGINURL_AH)
-                        elif 'funhaus' in response.url:
-                            response = session.get(LOGINURL_FH)
-                        elif 'screwattack' in response.url:
-                            response = session.get(LOGINURL_SA)
-                        elif 'gameattack' in response.url:
-                            response = session.get(LOGINURL_GA)
-                        elif 'theknow' in response.url:
-                            response = session.get(LOGINURL_TK)
-                        elif 'cowchop' in response.url:
-                            response = session.get(LOGINURL_CC)
-                        elif 'sugarpine7' in response.url:
-                            response = session.get(LOGINURL_SP7)
-                        else:
-                            response = session.get(LOGINURL_RT)
+                        # set the needed authorization-data
+                        payload = {"client_id": KODI_ROOSTERTEETH_ADDON_CLIENT_ID,
+                                   "grant_type": "password", "password": SETTINGS.getSetting('password'),
+                                   "scope": "user public", "username": SETTINGS.getSetting('username')}
 
-                        log('get login page request, status_code:',  response.status_code)
-
-                        html_source = response.text
-                        html_source = convertToUnicodeString(html_source)
-
-                        # log("html_source1", html_source)
-
-                        soup = getSoup(html_source)
-
-                        # This is part of the LOGIN page, it contains a token!:
-                        #
-                        # 	<input name="_token" type="hidden" value="Zu8TRC43VYiTxfn3JnNgiDnTpbQvPv5xWgzFpEYJ">
-                        #     <fieldset>
-                        #       <h3 class="content-title">Log In</h3>
-                        # 	  <label for="username">Username</label>
-                        # 	  <input name="username" type="text" value="" id="username">
-                        # 	  <label for="password">Password</label>
-                        # 	  <input name="password" type="password" value="" id="password">
-                        # 	<input type="submit" value="Log in">
-                        # 	</fieldset>
-
-                        video_urls = soup.findAll('input', attrs={'name': re.compile("_token")}, limit=1)
-                        token = str(video_urls[0]['value'])
-
-                        # log("token", token)
-
-                        # set the needed LOGIN-data
-                        payload = {'_token': token, 'username': SETTINGS.getSetting('username'),
-                                   'password': SETTINGS.getSetting('password')}
-                        # post the LOGIN-page with the LOGIN-data, to actually login this session
-                        if 'achievementhunter' in response.url:
-                            response = session.post(LOGINURL_AH, data=payload)
-                        elif 'funhaus' in response.url:
-                            response = session.post(LOGINURL_FH, data=payload)
-                        elif 'screwattack' in response.url:
-                            response = session.post(LOGINURL_SA, data=payload)
-                        elif 'gameattack' in response.url:
-                            response = session.post(LOGINURL_GA, data=payload)
-                        elif 'theknow' in response.url:
-                            response = session.post(LOGINURL_TK, data=payload)
-                        elif 'cowchop' in response.url:
-                            response = session.post(LOGINURL_CC, data=payload)
-                        elif 'sugarpine7' in response.url:
-                            response = session.get(LOGINURL_SP7)
-                        else:
-                            response = session.post(LOGINURL_RT, data=payload)
+                        # post the payload to the authorization url, to actually get an access token (oauth) back
+                        response = session.post(ROOSTERTEETH_AUTHORIZATION_URL, data=payload)
 
                         log('post login page response, status_code:', response.status_code)
 
                         html_source = response.text
                         html_source = convertToUnicodeString(html_source)
 
+                        # log("html_source getting authorization", html_source)
+
                         # check that the login was technically ok (status_code 200).
                         # This in itself does NOT mean that the username/password were correct.
                         if response.status_code == 200:
                             pass
-                            # check that the username is in the response. If that's the case, the login was ok
-                            # and the username and password in settings are ok.
-                            if str(response.text).find(SETTINGS.getSetting('username')) >= 0:
+                            # {"access_token":"eyJ0eXAiOiJKV1QiLCJSOMETHINGSOMETHING","token_type":"bearer","expires_
+                            # check that we get back an access_token (oauth)
+                            # for some reason the html_source can't be loaded in json, so we have to do it the hard way :(
+                            start_pos_access_token_url = html_source.find('"access_token":"')
+                            if start_pos_access_token_url >= 0:
 
                                 log('login was successful!', 'login was successful!')
 
-                                # let's try getting the page again after a login, hopefully it contains a link to
-                                # the video now
-                                response = session.get(self.video_page_url)
+                                start_pos_access_token_url = start_pos_access_token_url + len('"access_token":"')
+                                end_pos_access_token = html_source.find('"', start_pos_access_token_url)
+                                access_token = html_source[start_pos_access_token_url:end_pos_access_token]
 
-                                log("self.video_page_url", self.video_page_url)
+                                # log("access_token", access_token)
+
+                                # let's make a new header dictionary
+                                headers_with_access_token = HEADERS
+                                # add the access token to the dictionary
+                                # see https://stackoverflow.com/questions/29931671/making-an-api-call-in-python-with-an-api-that-requires-a-bearer-token
+                                # this is some specific magic for authorization
+                                headers_with_access_token['Authorization'] = "Bearer " + access_token
+
+                                # log("headers_with_access_token", headers_with_access_token)
+
+                                # let's try getting the page with the received access_code
+                                response = session.get(self.url, headers=headers_with_access_token)
+
+                                html_source = response.text
+                                html_source = convertToUnicodeString(html_source)
+
+                                # log("html_source with authorization", html_source)
 
                             else:
 
@@ -226,7 +230,11 @@ class Main(object):
                         del dialog_wait
                     except:
                         pass
-                    xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30105))
+
+                    if video_is_not_yet_available:
+                        xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30110))
+                    else:
+                        xbmcgui.Dialog().ok(LANGUAGE(30000), LANGUAGE(30105))
                     exit(1)
 
         except urllib.error.HTTPError as error:
@@ -252,77 +260,109 @@ class Main(object):
                 pass
             exit(1)
 
-        html_source = response.text
-        html_source = convertToUnicodeString(html_source)
-
         video_url = ''
         no_url_found = True
         have_valid_url = False
 
-        match = re.search('\'(.*?m3u8)', html_source, re.I | re.U)
+        # for some reason the html_source can't be loaded in json, so we have to do it the hard way :(
+        start_pos_m3u8_url = html_source.find('"url":"')
+        if start_pos_m3u8_url == -1:
+            found_m3u8_url = False
+        else:
+            start_pos_m3u8_url = start_pos_m3u8_url + len('"url":"')
+            end_pos_m3u8_url = html_source.find('"', start_pos_m3u8_url)
+            if end_pos_m3u8_url == -1:
+                found_m3u8_url = False
+            else:
+                m3u8_url = html_source[start_pos_m3u8_url:end_pos_m3u8_url]
 
-        #index.m3u8:
-        #f.e. https://rtv3-video.roosterteeth.com/store/66b4a662c6aba71015e1ecd267a01590-6b7aafe6/ts/index.m3u8:
-        #EXTM3U
-        #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=11844000,RESOLUTION=1920x1080,CODECS="avc1.4d001f,mp4a.40.2"6b7aafe6-hls_4k-store-66b4a662c6aba71015e1ecd267a01590.m3u8
-        #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=11844000,RESOLUTION=1920x1080,CODECS="avc1.4d001f,mp4a.40.2"6b7aafe6-hls_1080p-store-66b4a662c6aba71015e1ecd267a01590.m3u8
-        #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=6661000,RESOLUTION=1280x720,CODECS="avc1.4d001f,mp4a.40.2"6b7aafe6-hls_720p-store-66b4a662c6aba71015e1ecd267a01590.m3u8
-        #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=3712000,RESOLUTION=854x480,CODECS="avc1.4d001f,mp4a.40.2"6b7aafe6-hls_480p-store-66b4a662c6aba71015e1ecd267a01590.m3u8
-        #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2598000,RESOLUTION=640x360,CODECS="avc1.4d001f,mp4a.40.2"6b7aafe6-hls_360p-store-66b4a662c6aba71015e1ecd267a01590.m3u8
-        #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=1478000,RESOLUTION=426x240,CODECS="avc1.4d001f,mp4a.40.2"6b7aafe6-hls_240p-store-66b4a662c6aba71015e1ecd267a01590.m3u8
+                log("m3u8_url", m3u8_url)
 
+                found_m3u8_url = True
 
-        if match:
-            if self.PREFERRED_QUALITY == '0':  # Very Low
-                quality = VQ240P
-            elif self.PREFERRED_QUALITY == '1':  # Low
-                quality = VQ360P
-            elif self.PREFERRED_QUALITY == '2':  # Medium
-                quality = VQ480P
-            elif self.PREFERRED_QUALITY == '3':  # High Quality
-                quality = VQ720P
-            elif self.PREFERRED_QUALITY == '4':  # Very High Quality
-                quality = VQ1080P
-            elif self.PREFERRED_QUALITY == '5':  # Ultra High Quality
-                quality = VQ4K
-            else:  # Default in case quality is not found?
-                quality = VQ720P
+        log("found_m3u8_url", found_m3u8_url)
 
-            video_url = str(match.group(1))
-
-            log("video_url", video_url)
-
-            #Change this
-            #https://rtv3-video.roosterteeth.com/store/66b4a662c6aba71015e1ecd267a01590-6b7aafe6/ts/index.m3u8
-            #to this
-            #https://rtv3-video.roosterteeth.com/store/66b4a662c6aba71015e1ecd267a01590-6b7aafe6/ts/6b7aafe6-hls_<quality>-store-66b4a662c6aba71015e1ecd267a01590.m3u8
-            #f.e.
-            #https://rtv3-video.roosterteeth.com/store/66b4a662c6aba71015e1ecd267a01590-6b7aafe6/ts/6b7aafe6-hls_240p-store-66b4a662c6aba71015e1ecd267a01590.m3u8
-
-            new_index_part_2 = 'hls_' + quality
-            video_url_temp = video_url
-            video_url_temp = video_url_temp.replace("//", "/")
-            video_url_parts = str(video_url_temp).split("/")
-            new_index_part_3 = video_url_parts[2]
-            part4 = video_url_parts[3]
-            new_index_part_4, new_index_part_1 = part4.split("-")
-            new_index = new_index_part_1 + '-' + new_index_part_2 + '-' + new_index_part_3 + '-' + new_index_part_4
-            video_url_altered = video_url.replace("index", new_index)
-
-            log("video_url_altered", video_url_altered)
-
-            # Find out if the m3u8 file exists
-            response = session.get(video_url_altered)
-
-            # log("response.status_code", response.status_code)
-
-            # m3u8 file is found, let's use that. If it is not found, let's use the unaltered video url.
+        if found_m3u8_url:
+            # try and get the non-sponsored video without being logged in
+            # get the page that contains the video
+            response = session.get(m3u8_url, headers=HEADERS)
             if response.status_code == 200:
-                video_url = video_url_altered
 
-            have_valid_url = True
+                html_source = response.text
+                html_source = convertToUnicodeString(html_source)
 
-            log("final video_url", video_url)
+                # log("html_source m3u8 file", html_source)
+
+                # determine the wanted video quality
+                if self.PREFERRED_QUALITY == '0':  # Very Low
+                    quality = VQ240P
+                elif self.PREFERRED_QUALITY == '1':  # Low
+                    quality = VQ360P
+                elif self.PREFERRED_QUALITY == '2':  # Medium
+                    quality = VQ480P
+                elif self.PREFERRED_QUALITY == '3':  # High Quality
+                    quality = VQ720P
+                elif self.PREFERRED_QUALITY == '4':  # Very High Quality
+                    quality = VQ1080P
+                elif self.PREFERRED_QUALITY == '5':  # Ultra High Quality
+                    quality = VQ4K
+                else:  # Default in case quality is not found?
+                    quality = VQ720P
+
+                video_url = m3u8_url
+
+                log("video_url", video_url)
+
+                # an example of the content of a m3u8 file. Not all the resolutions will be there as most videos don't
+                # have an 4k option:
+                # #EXTM3U
+                # #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=21589000,RESOLUTION=1280x720,CODECS="avc1.4d001f,mp4a.40.2"
+                # aef4654c-hls_4k-rebuilds-4030.mp4.m3u8
+                # #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=21589000,RESOLUTION=1280x720,CODECS="avc1.4d001f,mp4a.40.2"
+                # aef4654c-hls_1080p-rebuilds-4030.mp4.m3u8
+                # #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=8281000,RESOLUTION=1280x720,CODECS="avc1.4d001f,mp4a.40.2"
+                # aef4654c-hls_720p-rebuilds-4030.mp4.m3u8
+                # #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=6370000,RESOLUTION=854x480,CODECS="avc1.4d001f,mp4a.40.2"
+                # aef4654c-hls_480p-rebuilds-4030.mp4.m3u8
+                # #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=4093000,RESOLUTION=640x360,CODECS="avc1.4d001f,mp4a.40.2"
+                # aef4654c-hls_360p-rebuilds-4030.mp4.m3u8
+                # #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2941000,RESOLUTION=426x240,CODECS="avc1.4d001f,mp4a.40.2"
+                # aef4654c-hls_240p-rebuilds-4030.mp4.m3u8
+
+                video_url_altered = ''
+                # read the m3u8 file line for line and search for the quality. If found: alter the url of the m3u8 file.
+                for line in response.iter_lines():
+                    if line:
+                        # let's convert the line to prevent python 2/3 troubles
+                        line = convertToUnicodeString(line)
+
+                        # log("line", line)
+                        
+                        if str(line).find(quality) >= 0:
+                            video_url_altered = video_url.replace("index.m3u8", line)
+                        elif str(line).find(quality.upper()) >= 0:
+                            video_url_altered = video_url.replace("index.m3u8", line)
+
+                if video_url_altered == '':
+                    pass
+                else:
+
+                    log("video_url_altered", video_url_altered)
+
+                    # Find out if the altered m3u8 url exists
+                    response = session.get(video_url_altered)
+
+                    log("response.status_code", response.status_code)
+
+                    # if we find a m3u8 file with the altered url, let's use that. If it is not found, let's use the unaltered url.
+                    if response.status_code == 200:
+                        video_url = video_url_altered
+
+                have_valid_url = True
+
+                log("final video_url", video_url)
+            else:
+                 have_valid_url = False
 
         # Play video...
         if have_valid_url:

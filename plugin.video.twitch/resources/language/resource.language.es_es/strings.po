@@ -905,3 +905,7 @@ msgstr ""
 msgctxt "#30253"
 msgid "Deleting %s failed"
 msgstr ""
+
+msgctxt "#30254"
+msgid "Adaptive"
+msgstr ""

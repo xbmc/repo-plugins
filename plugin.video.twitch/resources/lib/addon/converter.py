@@ -642,6 +642,7 @@ class JsonListItemConverter(object):
             source = video_quality == '0'
             ask = video_quality == '1'
             bandwidth = video_quality == '2'
+            adaptive = video_quality == '3'
             try:
                 bandwidth_value = int(kodi.get_setting('bandwidth'))
             except:
@@ -653,7 +654,11 @@ class JsonListItemConverter(object):
             if ask:
                 return self.select_video_for_quality(videos)
 
-            if source:
+            if adaptive:
+                for video in videos:
+                    if 'hls' in video['id']:
+                        return video
+            elif source:
                 for video in videos:
                     if 'chunked' in video['id']:
                         return video

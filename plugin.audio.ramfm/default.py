@@ -75,7 +75,7 @@ MODE_ARTIST = 1200
 MODE_IGNORE = 1300
 
 
-URL_320 = 'http://josvermeer.shoutcaststream.com:8300'
+URL_320 = 'http://josvermeer.shoutcaststream.com:8591'
 
 
 def DialogOK(title, line1, line2='', line3=''):
@@ -234,6 +234,7 @@ def IsLive():
         title = '' 
 
     shows = []
+    shows.append('Looby Lush')          #Monday
     shows.append('Eighties Flash Back') #Monday
     shows.append('Ladies Night')        #Monday - Verified
     shows.append('Big Eighties Show')   #Tuesday

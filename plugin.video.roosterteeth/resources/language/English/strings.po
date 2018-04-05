@@ -88,7 +88,7 @@ msgid "Login Failed: %s."
 msgstr ""
 
 msgctxt "#30105"
-msgid "Sorry. You must be a Sponsor to see this video"
+msgid "Sorry. You must be a Sponsor to see this video."
 msgstr ""
 
 msgctxt "#30106"
@@ -103,6 +103,14 @@ msgctxt "#30108"
 msgid "Error playing media file."
 msgstr ""
 
+msgctxt "#30109"
+msgid "Error loading Json file."
+msgstr ""
+
+msgctxt "#30110"
+msgid "Sorry. The video is not yet available for non-Sponsors."
+msgstr ""
+
 msgctxt "#30200"
 msgid "Next page"
 msgstr ""
@@ -112,7 +120,7 @@ msgid "Roosterteeth Recently Added Episodes"
 msgstr ""
 
 msgctxt "#30302"
-msgid "Roosterteeth Shows"
+msgid "Roosterteeth Series"
 msgstr ""
 
 msgctxt "#30303"
@@ -120,7 +128,7 @@ msgid "Achievement Hunter Recently Added Episodes"
 msgstr ""
 
 msgctxt "#30304"
-msgid "Achievement Hunter Shows"
+msgid "Achievement Hunter Series"
 msgstr ""
 
 msgctxt "#30305"
@@ -128,7 +136,7 @@ msgid "Fun Haus Recently Added Episodes"
 msgstr ""
 
 msgctxt "#30306"
-msgid "Fun Haus Shows"
+msgid "Fun Haus Series"
 msgstr ""
 
 msgctxt "#30307"
@@ -136,37 +144,46 @@ msgid "Screw Attack Recently Added Episodes"
 msgstr ""
 
 msgctxt "#30308"
-msgid "Screw Attack Shows"
+msgid "Screw Attack Series"
 msgstr ""
 
 msgctxt "#30309"
-msgid "Game Attack Recently Added Episodes"
-msgstr ""
-
-msgctxt "#30310"
-msgid "Game Attack Shows"
-msgstr ""
-
-msgctxt "#30311"
-msgid "The Know Recently Added Episodes"
-msgstr ""
-
-msgctxt "#30312"
-msgid "The Know Shows"
-msgstr ""
-
-msgctxt "#30313"
 msgid "Cow Chop Recently Added Episodes"
 msgstr ""
 
-msgctxt "#30314"
-msgid "Cow Chop Shows"
+msgctxt "#30310"
+msgid "Cow Chop Series"
 msgstr ""
 
-msgctxt "#30315"
+msgctxt "#30311"
 msgid "Sugar Pine 7 Recently Added Episodes"
 msgstr ""
 
-msgctxt "#30316"
-msgid "Sugar Pine 7 Shows"
+msgctxt "#30312"
+msgid "Sugar Pine 7 Series"
 msgstr ""
+
+msgctxt "#30313"
+msgid "Game Attack Recently Added Episodes"
+msgstr ""
+
+msgctxt "#30314"
+msgid "Game Attack Series"
+msgstr ""
+
+msgctxt "#30315"
+msgid "The Know Recently Added Episodes"
+msgstr ""
+
+msgctxt "#30316"
+msgid "The Know Series"
+msgstr ""
+
+msgctxt "#30317"
+msgid "JT Music Recently Added Episodes"
+msgstr ""
+
+msgctxt "#30318"
+msgid "JT Music Series"
+msgstr "
+

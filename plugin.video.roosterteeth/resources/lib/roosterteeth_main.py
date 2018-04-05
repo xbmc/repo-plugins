@@ -13,11 +13,12 @@ import xbmcgui
 import xbmcplugin
 import os
 
-from roosterteeth_const import LANGUAGE, IMAGES_PATH, ROOSTERTEETHRECENTLYADDEDURL, ROOSTERTEETHSHOWSURL, \
-    ACHIEVEMENTHUNTERRECENTLYADDEDURL, ACHIEVEMENTHUNTERSHOWSURL, FUNHAUSRECENTLYADDEDURL, FUNHAUSSHOWURL, \
-    SCREWATTACKRECENTLYADDEDURL, SCREWATTACKSHOWSURL, GAMEATTACKRECENTLYADDEDURL, GAMEATTACKSHOWSURL, \
-    THEKNOWRECENTLYADDEDURL, THEKNOWSHOWSURL, COWCHOPRECENTLYADDEDURL, COWCHOPSHOWSURL, SUGARPINE7RECENTLYADDEDURL, \
-    SUGARPINE7SHOWSURL
+from roosterteeth_const import LANGUAGE, IMAGES_PATH, ROOSTERTEETH_SERIES_URL, \
+    ROOSTERTEETH_RECENTLY_ADDED_VIDEOS_SERIES_URL, ACHIEVEMENTHUNTER_RECENTLY_ADDED_VIDEOS_SERIES_URL, \
+    FUNHAUS_RECENTLY_ADDED_VIDEOS_SERIES_URL,SCREWATTACK__RECENTLY_ADDED_VIDEOS_SERIES_URL, \
+    COWCHOP_RECENTLY_ADDED_VIDEOS_SERIES_URL, SUGARPINE7__RECENTLY_ADDED_VIDEOS_SERIES_URL, \
+    GAMEATTACK_RECENTLY_ADDED_VIDEOS_SERIES_URL, THEKNOW_RECENTLY_ADDED_VIDEOS_SERIES_URL, \
+    JTMUSIC_RECENTLY_ADDED_VIDEOS_SERIES_URL
 #
 # Main class
 #
@@ -32,8 +33,9 @@ class Main(object):
         #
         # Roosterteeth Recently Added Episodes
         #
-        parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30301), "url": ROOSTERTEETHRECENTLYADDEDURL,
-                      "next_page_possible": "True"}
+        parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30301),
+                      "url": ROOSTERTEETH_RECENTLY_ADDED_VIDEOS_SERIES_URL,
+                      "show_serie_name": "True", "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30301))
         is_folder = True
@@ -42,10 +44,10 @@ class Main(object):
         xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
 
         #
-        # Roosterteeth Shows
+        # Roosterteeth Series
         #
-        parameters = {"action": "list-shows", "plugin_category": LANGUAGE(30302), "url": ROOSTERTEETHSHOWSURL,
-                      "next_page_possible": "False"}
+        parameters = {"action": "list-series", "plugin_category": LANGUAGE(30302), "url": ROOSTERTEETH_SERIES_URL,
+                      "show_serie_name": "True", "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30302))
         is_folder = True
@@ -57,8 +59,8 @@ class Main(object):
         # Achievement Hunter Recently Added Episodes
         #
         parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30303),
-                      "url": ACHIEVEMENTHUNTERRECENTLYADDEDURL,
-                      "next_page_possible": "True"}
+                      "url": ACHIEVEMENTHUNTER_RECENTLY_ADDED_VIDEOS_SERIES_URL,
+                      "show_serie_name": "True", "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30303))
         is_folder = True
@@ -67,22 +69,11 @@ class Main(object):
         xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
 
         #
-        # Achievement Hunter Shows
-        #
-        parameters = {"action": "list-shows", "plugin_category": LANGUAGE(30304), "url": ACHIEVEMENTHUNTERSHOWSURL,
-                      "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
-        list_item = xbmcgui.ListItem(LANGUAGE(30304))
-        is_folder = True
-        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
-        list_item.setProperty('IsPlayable', 'false')
-        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
-
-        #
         # Fun Haus Recently Added Episodes
         #
-        parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30305), "url": FUNHAUSRECENTLYADDEDURL,
-                      "next_page_possible": "True"}
+        parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30305),
+                      "url": FUNHAUS_RECENTLY_ADDED_VIDEOS_SERIES_URL,
+                      "show_serie_name": "True", "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30305))
         is_folder = True
@@ -91,22 +82,11 @@ class Main(object):
         xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
 
         #
-        # Fun Haus Shows
-        #
-        parameters = {"action": "list-shows", "plugin_category": LANGUAGE(30306), "url": FUNHAUSSHOWURL,
-                      "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
-        list_item = xbmcgui.ListItem(LANGUAGE(30306))
-        is_folder = True
-        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
-        list_item.setProperty('IsPlayable', 'false')
-        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
-
-        #
         # Screw Attack Recently Added Episodes
         #
-        parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30307), "url": SCREWATTACKRECENTLYADDEDURL,
-                      "next_page_possible": "True"}
+        parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30307),
+                      "url": SCREWATTACK__RECENTLY_ADDED_VIDEOS_SERIES_URL,
+                      "show_serie_name": "True", "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30307))
         is_folder = True
@@ -115,45 +95,11 @@ class Main(object):
         xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
 
         #
-        # Screw Attack Shows
+        # Cow Chop Recently Added Episodes
         #
-        parameters = {"action": "list-shows", "plugin_category": LANGUAGE(30308), "url": SCREWATTACKSHOWSURL,
-                      "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
-        list_item = xbmcgui.ListItem(LANGUAGE(30308))
-        is_folder = True
-        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
-        list_item.setProperty('IsPlayable', 'false')
-        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
-
-        #
-        # The Know Recently Added Episodes
-        #
-        parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30311), "url": THEKNOWRECENTLYADDEDURL,
-                      "next_page_possible": "True"}
-        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
-        list_item = xbmcgui.ListItem(LANGUAGE(30311))
-        is_folder = True
-        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
-        list_item.setProperty('IsPlayable', 'false')
-        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
-        #
-        # The Know Shows
-        #
-        parameters = {"action": "list-shows", "plugin_category": LANGUAGE(30312), "url": THEKNOWSHOWSURL,
-                      "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
-        list_item = xbmcgui.ListItem(LANGUAGE(30312))
-        is_folder = True
-        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
-        list_item.setProperty('IsPlayable', 'false')
-        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
-
-        #
-        # Game Attack Recently Added Episodes
-        #
-        parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30309), "url": GAMEATTACKRECENTLYADDEDURL,
-                      "next_page_possible": "True"}
+        parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30309),
+                      "url": COWCHOP_RECENTLY_ADDED_VIDEOS_SERIES_URL,
+                      "show_serie_name": "True", "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30309))
         is_folder = True
@@ -162,22 +108,24 @@ class Main(object):
         xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
 
         #
-        # Game Attack Shows
+        # Sugar Pine 7 Recently Added Episodes
         #
-        parameters = {"action": "list-shows", "plugin_category": LANGUAGE(30310), "url": GAMEATTACKSHOWSURL,
-                      "next_page_possible": "False"}
+        parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30311),
+                      "url": SUGARPINE7__RECENTLY_ADDED_VIDEOS_SERIES_URL,
+                      "show_serie_name": "True", "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
-        list_item = xbmcgui.ListItem(LANGUAGE(30310))
+        list_item = xbmcgui.ListItem(LANGUAGE(30311))
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
         list_item.setProperty('IsPlayable', 'false')
         xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
 
         #
-        # Cow Chop Recently Added Episodes
+        # Game Attack Recently Added Episodes
         #
-        parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30313), "url": COWCHOPRECENTLYADDEDURL,
-                      "next_page_possible": "True"}
+        parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30313),
+                      "url": GAMEATTACK_RECENTLY_ADDED_VIDEOS_SERIES_URL,
+                      "show_serie_name": "True", "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30313))
         is_folder = True
@@ -186,22 +134,11 @@ class Main(object):
         xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
 
         #
-        # Cow Chop Shows
+        # The Know Recently Added Episodes
         #
-        parameters = {"action": "list-shows", "plugin_category": LANGUAGE(30314), "url": COWCHOPSHOWSURL,
-                      "next_page_possible": "False"}
-        url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
-        list_item = xbmcgui.ListItem(LANGUAGE(30314))
-        is_folder = True
-        list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
-        list_item.setProperty('IsPlayable', 'false')
-        xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
-
-        #
-        # Sugar Pine 7 Recently Added Episodes
-        #
-        parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30315), "url": SUGARPINE7RECENTLYADDEDURL,
-                      "next_page_possible": "True"}
+        parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30315),
+                      "url": THEKNOW_RECENTLY_ADDED_VIDEOS_SERIES_URL,
+                      "show_serie_name": "True", "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
         list_item = xbmcgui.ListItem(LANGUAGE(30315))
         is_folder = True
@@ -210,12 +147,13 @@ class Main(object):
         xbmcplugin.addDirectoryItem(handle=self.plugin_handle, url=url, listitem=list_item, isFolder=is_folder)
 
         #
-        # Sugar Pine 7 Shows
+        # JT Music Recently Added Episodes
         #
-        parameters = {"action": "list-shows", "plugin_category": LANGUAGE(30316), "url": SUGARPINE7SHOWSURL,
-                      "next_page_possible": "False"}
+        parameters = {"action": "list-episodes", "plugin_category": LANGUAGE(30317),
+                      "url": JTMUSIC_RECENTLY_ADDED_VIDEOS_SERIES_URL,
+                      "show_serie_name": "True", "next_page_possible": "False"}
         url = self.plugin_url + '?' + urllib.parse.urlencode(parameters)
-        list_item = xbmcgui.ListItem(LANGUAGE(30316))
+        list_item = xbmcgui.ListItem(LANGUAGE(30317))
         is_folder = True
         list_item.setArt({'fanart': os.path.join(IMAGES_PATH, 'fanart-blur.jpg')})
         list_item.setProperty('IsPlayable', 'false')

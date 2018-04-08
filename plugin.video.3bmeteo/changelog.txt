@@ -1,3 +1,5 @@
+[B]1.0.1[/B]
+- use 3bmeteo Android app user agent
+
 [B]1.0.0[/B]
 - first release
-

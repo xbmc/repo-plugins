@@ -1,6 +1,7 @@
-import sys, xbmc, xbmcaddon, xbmcgui
 import requests
 from utils import Util
+from resources.lib.globals import *
+import xbmc, xbmcaddon, xbmcgui
 
 
 class Account:
@@ -8,6 +9,7 @@ class Account:
     username = ''
     password = ''
     session_key = ''
+    icon = os.path.join(addon.getAddonInfo('path'), 'icon.png')
     verify = False
 
     def __init__(self):
@@ -148,36 +150,40 @@ class Account:
 
     def access_token(self):
         url = 'https://edge.bamgrid.com/token'
+
         headers = {
-            'Authorization': 'Bearer bWxidHYmYW5kcm9pZCYxLjAuMA.6LZMbH2r--rbXcgEabaDdIslpo4RyZrlVfWZhsAgXIk',
-            'Accept': 'application/json',
-            'X-BAMSDK-Version': 'v3.0.0-beta2-3',
-            'X-BAMSDK-Platform': 'Android',
-            'User-Agent': 'BAMSDK/3.0.0-beta2 (mlbaseball-7993996e; v2.0/v3.0.1; android; tv) WeTek Hub (wetekhub-user 6.0.1 MHC19J 20170612 release-keys; Linux; 6.0.1; API 23)',
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Connection': 'Keep-Alive',
-            'Accept-Encoding': 'gzip'
+            'Origin': 'https://www.mlb.com',
+            'x-bamsdk-version': '3.0',
+            'authorization': 'Bearer bWxidHYmYnJvd3NlciYxLjAuMA.VfmGMGituFykTR89LFD-Gr5G-lwJ9QbHfXXNBMkuM9M',
+            'content-type': 'application/x-www-form-urlencoded',
+            'x-bamsdk-platform': 'windows',
+            'accept': 'application/json',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+            'Referer': 'https://www.mlb.com/tv/g529459/v8539eb7d-e8de-4b8d-84aa-d5026e632f36',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Accept-Language': 'en-US,en;q=0.9'
         }
 
         payload = 'grant_type=urn:ietf:params:oauth:grant-type:token-exchange'
         payload += '&subject_token=' + self.media_entitlement()
         payload += '&subject_token_type=urn:ietf:params:oauth:token-type:jwt'
-        payload += '&platform=android-tv'
+        payload += '&platform=browser'
 
         r = requests.post(url, headers=headers, data=payload, cookies=self.util.load_cookies(), verify=self.verify)
         access_token = r.json()['access_token']
         # refresh_toekn = r.json()['refresh_token']
         return access_token
 
-    def get_stream(self, media_id):
+    def get_playback_url(self, content_id):
         auth = self.access_token()
-        url = 'https://edge.svcs.mlb.com/media/' + media_id + '/scenarios/android'
+        url ='https://search-api-mlbtv.mlb.com/svc/search/v2/graphql/persisted/query/core/Airings?variables=%7B%22contentId%22%3A%22' + content_id + '%22%7D'
+
         headers = {
-            'Accept': 'application/vnd.media-service+json; version=2',
-            'Authorization': auth,
-            'X-BAMSDK-Version': 'v3.0.0-beta2-3',
-            'X-BAMSDK-Platform': 'Android',
-            'User-Agent': 'BAMSDK/3.0.0-beta2 (mlbaseball-7993996e; v2.0/v3.0.1; android; tv) WeTek Hub (wetekhub-user 6.0.1 MHC19J 20170612 release-keys; Linux; 6.0.1; API 23)'
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + auth,
+            'X-BAMSDK-Version': '3.0',
+            'X-BAMSDK-Platform': 'windows',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
         }
 
         r = requests.get(url, headers=headers, cookies=self.util.load_cookies(), verify=self.verify)
@@ -187,15 +193,89 @@ class Account:
             msg = ""
             for item in r.json()['errors']:
                 msg += item['code'] + '\n'
-            dialog.notification(title, msg, ICON, 5000, False)
+            dialog.notification(title, msg, self.icon, 5000, False)
             sys.exit()
 
-        stream_url = r.json()['stream']['complete']
-        headers = '|User-Agent=MLB.TV/3.5.0 (Linux;Android 6.0.1) ExoPlayerLib/2.5.4'
+        return r.json()['data']['Airings'][0]['playbackUrls'][0]['href']
+
+    def get_stream(self, content_id):
+        auth = self.access_token()
+        #url = 'https://edge.svcs.mlb.com/media/' + media_id + '/scenarios/browser~csai'
+        #url = 'https://playback.svcs.mlb.com/events/ed5cc8a5-6fe5-4d36-b479-5097d77abdb6/media/' + media_id + '/scenarios/browser~csai'
+        url = self.get_playback_url(content_id)
+        url = url.replace('{scenario}','browser~csai')
+
+        headers = {
+            'Accept': 'application/vnd.media-service+json; version=2',
+            'Authorization': auth,
+            'X-BAMSDK-Version': '3.0',
+            'X-BAMSDK-Platform': 'windows',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
+        }
+
+        r = requests.get(url, headers=headers, cookies=self.util.load_cookies(), verify=self.verify)
+        if r.status_code != 200:
+            dialog = xbmcgui.Dialog()
+            title = "Error Occured"
+            msg = ""
+            for item in r.json()['errors']:
+                msg += item['code'] + '\n'
+            dialog.notification(title, msg, self.icon, 5000, False)
+            sys.exit()
+
+        if 'slide' in r.json()['stream']:
+            stream_url = r.json()['stream']['slide']
+        else:
+            stream_url = r.json()['stream']['complete']
+
+        if QUALITY == 'Always Ask':
+            stream_url = self.get_stream_quality(stream_url)
+        headers = '|User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
         headers += '&Authorization=' + auth
         headers += '&Cookie='
         cookies = requests.utils.dict_from_cookiejar(self.util.load_cookies())
         for key, value in cookies.iteritems():
             headers += key + '=' + value + '; '
-
+            
+        #CDN
+        akc_url = 'hlslive-aksc'
+        l3c_url = 'hlslive-l3c'
+        if CDN == 'Akamai' and akc_url not in stream_url:
+            stream_url = stream_url.replace(l3c_url, akc_url)
+        elif CDN == 'Level 3' and l3c_url not in stream_url:
+            stream_url = stream_url.replace(akc_url, l3c_url)
+        
         return stream_url, headers
+
+    def get_stream_quality(self, stream_url):
+        stream_title = []
+        stream_urls = []
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'}
+
+        r = requests.get(stream_url, headers=headers, verify=False)
+        master = r.text
+
+        line = re.compile("(.+?)\n").findall(master)
+
+        for temp_url in line:
+            if '#EXT' not in temp_url:
+                match = re.search(r'(\d.+?)K', temp_url, re.IGNORECASE)
+                bandwidth = match.group()
+                if 0 < len(bandwidth) < 6:
+                    bandwidth = bandwidth.replace('K', ' kbps')
+                    stream_title.append(bandwidth)
+                    stream_urls.append(temp_url)
+
+        stream_title.sort(key=self.util.natural_sort_key, reverse=True)
+        stream_urls.sort(key=self.util.natural_sort_key, reverse=True)
+        dialog = xbmcgui.Dialog()
+        ret = dialog.select('Choose Stream Quality', stream_title)
+        if ret >= 0:
+            if 'http' not in stream_urls[ret]:
+                stream_url = stream_url.replace(stream_url.rsplit('/', 1)[-1], stream_urls[ret])
+            else:
+                stream_url = stream_urls[ret]
+        else:
+            sys.exit()
+
+        return stream_url

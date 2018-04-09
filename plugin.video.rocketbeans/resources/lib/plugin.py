@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import routing
 
 from resources.data import config
@@ -66,6 +65,13 @@ def index():
         plugin.handle,
         "plugin://plugin.video.youtube/channel/%s/" % config.GAME_TWO_CHANNEL_ID,
         ListItem(getString(32005)),
+        True 
+    )
+
+    addDirectoryItem(
+        plugin.handle,
+        "plugin://plugin.video.youtube/channel/%s/" % config.HAENGI_HQ_CHANNEL_ID,
+        ListItem(getString(32008)),
         True 
     )
 

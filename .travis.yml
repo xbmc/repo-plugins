@@ -11,5 +11,6 @@ script:
   - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then kodi-addon-checker $(git diff --diff-filter=d --name-only HEAD~ | grep / | cut -d / -f1 | sort | uniq); fi'
 
 notifications:
+  webhooks: https://www.travisbuddy.com/
   email:
     on_failure: change # default: always

@@ -1,6 +1,5 @@
 # coding=utf-8
 import sys
-import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 import re, os, time
 import calendar
 import pytz
@@ -14,7 +13,7 @@ from datetime import date, datetime, timedelta
 from urllib2 import URLError, HTTPError
 #from PIL import Image
 from cStringIO import StringIO
-
+import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 addon_handle = int(sys.argv[1])
 
@@ -345,7 +344,7 @@ def scoreUpdates():
     t.start() 
 
 def getFavTeamColor():
-    #Hex code taken from http://teamcolors.arc90.com/    
+    #Hex code taken from http://jim-nielsen.com/teamcolors/    
     team_colors = {'Arizona Diamondbacks':'FFA71930',
                 'Atlanta Braves':'FFCE1141',
                 'Baltimore Orioles':'FFDF4601',
@@ -380,7 +379,7 @@ def getFavTeamColor():
     
     fav_team_color = team_colors[FAV_TEAM]
     
-    return  fav_team_color
+    return fav_team_color
 
 
 def getFavTeamId():

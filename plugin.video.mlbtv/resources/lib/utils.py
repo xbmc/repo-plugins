@@ -1,5 +1,6 @@
 import cookielib
 import os
+import re
 import xbmc, xbmcaddon
 
 
@@ -14,6 +15,11 @@ class Util:
             return source[start + len(start_str):end]
         else:
             return ''
+
+    def natural_sort_key(self, s):
+        _nsre = re.compile('([0-9]+)')
+        return [int(text) if text.isdigit() else text.lower()
+                for text in re.split(_nsre, s)]
 
     def save_cookies(self, cookiejar):
         cookie_file = os.path.join(self.addon_path, 'cookies.lwp')

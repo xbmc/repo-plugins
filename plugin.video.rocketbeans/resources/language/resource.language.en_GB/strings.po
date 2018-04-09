@@ -47,3 +47,7 @@ msgstr ""
 msgctxt "#32007"
 msgid "Library"
 msgstr ""
+
+msgctxt "#32008"
+msgid "Rocket Beans TV Hängi"
+msgstr ""

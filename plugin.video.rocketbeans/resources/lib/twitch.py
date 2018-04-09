@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import time
 from json import loads
 from urllib2 import Request, urlopen

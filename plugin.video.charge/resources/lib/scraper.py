@@ -18,13 +18,12 @@ class myAddon(t1mAddon):
   def getAddonMenu(self,url,ilist):
       xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
       html = self.getRequest('http://watchcharge.com/watch-live/')
-      print "html = "+str(html)
       url = re.compile('file: "(.+?)"', re.DOTALL).search(html).group(1)
       thumb  = self.addonIcon
       fanart = self.addonFanart
       d = datetime.datetime.utcnow()
       now = calendar.timegm(d.utctimetuple())
-      html = self.getRequest('http://mobilelistings.tvguide.com/Listingsweb/ws/rest/airings/20517/start/'+str(now)+'/duration/20160?channelsourceids=34067%7C43.2&formattype=json')
+      html = self.getRequest('http://mobilelistings.tvguide.com/Listingsweb/ws/rest/airings/20534/start/'+str(now)+'/duration/20160?channelsourceids=35794%7C23.2&formattype=json')
       a = json.loads(html)
       for b in a[:10]:
          infoList = {}

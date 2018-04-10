@@ -6,6 +6,7 @@ import xbmc
 import json
 import urllib
 import hashlib
+import time
 
 from downloadutils import DownloadUtils
 from utils import getArt
@@ -20,18 +21,41 @@ dataManager = DataManager()
 kodi_version = int(xbmc.getInfoLabel('System.BuildVersion')[:2])
 
 
+def set_background_image():
+    log.debug("set_background_image Called")
+
+    url = ('{server}/emby/Users/{userid}/Items' +
+           '?Recursive=true' +
+           '&limit=1' +
+           '&SortBy=Random' +
+           '&IncludeItemTypes=Movie,Series' +
+           '&ImageTypeLimit=1')
+
+    results = downloadUtils.downloadUrl(url, suppress=True)
+    results = json.loads(results)
+    if results is not None:
+        items = results.get("Items", [])
+        if len(items) > 0:
+            item = items[0]
+            server = downloadUtils.getServer()
+            bg_image = downloadUtils.getArtwork(item, "Backdrop", server=server)
+            home_window = HomeWindow()
+            home_window.setProperty("random-gb", bg_image)
+            log.debug("random-gb: {0}", bg_image)
+
+
 def checkForNewContent():
     log.debug("checkForNewContent Called")
 
     added_url = ('{server}/emby/Users/{userid}/Items' +
-                    '?Recursive=true' +
-                    '&limit=1' +
-                    '&Fields=DateCreated,Etag' +
-                    '&SortBy=DateCreated' +
-                    '&SortOrder=Descending' +
-                    '&IncludeItemTypes=Movie,Episode' +
-                    '&ImageTypeLimit=0' +
-                    '&format=json')
+                 '?Recursive=true' +
+                 '&limit=1' +
+                 '&Fields=DateCreated,Etag' +
+                 '&SortBy=DateCreated' +
+                 '&SortOrder=Descending' +
+                 '&IncludeItemTypes=Movie,Episode' +
+                 '&ImageTypeLimit=0' +
+                 '&format=json')
 
     added_result = downloadUtils.downloadUrl(added_url, suppress=True)
     result = json.loads(added_result)
@@ -46,14 +70,14 @@ def checkForNewContent():
     log.debug("last_added_date: {0}", last_added_date)
 
     played_url = ('{server}/emby/Users/{userid}/Items' +
-                    '?Recursive=true' +
-                    '&limit=1' +
-                    '&Fields=DateCreated,Etag' +
-                    '&SortBy=DatePlayed' +
-                    '&SortOrder=Descending' +
-                    '&IncludeItemTypes=Movie,Episode' +
-                    '&ImageTypeLimit=0' +
-                    '&format=json')
+                  '?Recursive=true' +
+                  '&limit=1' +
+                  '&Fields=DateCreated,Etag' +
+                  '&SortBy=DatePlayed' +
+                  '&SortOrder=Descending' +
+                  '&IncludeItemTypes=Movie,Episode' +
+                  '&ImageTypeLimit=0' +
+                  '&format=json')
 
     played_result = downloadUtils.downloadUrl(played_url, suppress=True)
     result = json.loads(played_result)
@@ -174,17 +198,20 @@ def getWidgetContentCast(handle, params):
                 person_role = person.get("Role")
                 person_id = person.get("Id")
                 person_tag = person.get("PrimaryImageTag")
-                person_thumbnail = downloadUtils.imageUrl(person_id, "Primary", 0, 400, 400, person_tag, server=server)
+                person_thumbnail = None
+                if person_tag:
+                    person_thumbnail = downloadUtils.imageUrl(person_id, "Primary", 0, 400, 400, person_tag, server=server)
 
                 if kodi_version > 17:
                     list_item = xbmcgui.ListItem(label=person_name, iconImage=person_thumbnail, offscreen=True)
                 else:
                     list_item = xbmcgui.ListItem(label=person_name, iconImage=person_thumbnail)
 
-                artLinks = {}
-                artLinks["thumb"] = person_thumbnail
-                artLinks["poster"] = person_thumbnail
-                list_item.setArt(artLinks)
+                if person_thumbnail:
+                    artLinks = {}
+                    artLinks["thumb"] = person_thumbnail
+                    artLinks["poster"] = person_thumbnail
+                    list_item.setArt(artLinks)
 
                 labels = {}
                 labels["mediatype"] = "artist"
@@ -207,13 +234,15 @@ def populateWidgetItems(itemsUrl, override_select_action=None):
     if server is None:
         return []
 
-    settings = xbmcaddon.Addon(id='plugin.video.embycon')
+    settings = xbmcaddon.Addon()
     select_action = settings.getSetting("widget_select_action")
 
     if override_select_action is not None:
         select_action = str(override_select_action)
 
     log.debug("WIDGET_DATE_URL: {0}", itemsUrl)
+
+    home_window = HomeWindow()
 
     # get the items
     data_manager = DataManager()
@@ -310,15 +339,18 @@ def populateWidgetItems(itemsUrl, override_select_action=None):
             totalTime = str(int(float(runtime) / (10000000 * 60)))
             list_item.setProperty('TotalTime', str(totalTime))
 
+        list_item.setContentLookup(False)
         list_item.setProperty('id', item_id)
 
         if simmilarTo is not None:
             list_item.setProperty('suggested_from_watching', simmilarTo)
 
+        session_id =  "&session_id=" + home_window.getProperty("session_id")
+
         if select_action == "1":
-            playurl = "plugin://plugin.video.embycon/?item_id=" + item_id + '&mode=PLAY'
+            playurl = "plugin://plugin.video.embycon/?item_id=" + item_id + '&mode=PLAY' + session_id
         elif select_action == "0":
-            playurl = "plugin://plugin.video.embycon/?item_id=" + item_id + '&mode=SHOW_MENU'
+            playurl = "plugin://plugin.video.embycon/?item_id=" + item_id + '&mode=SHOW_MENU' + session_id
 
         itemTupple = (playurl, list_item, False)
         listItems.append(itemTupple)

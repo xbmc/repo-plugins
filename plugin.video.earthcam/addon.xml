@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.earthcam" version="1.0.2" name="EarthCam" provider-name="Lunatixz">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.simplecache" version="1.0.0"/>
+        <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">EarthCam.net provides webcam technology and managed services consisting of live streaming video.</summary>
+        <description lang="en_GB">EarthCam.net provides webcam technology and managed services consisting of live streaming video, time-lapse cameras and photography documentation for corporate clients and government agencies in major cities around the world.</description>
+        <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
+        <source>https://github.com/Lunatixz/plugin.video.earthcam/tree/master</source>
+        <website>http://earthcam.com</website>
+        <news>v1.0.1[CR]-Fixed playback labels</news>
+        <forum>https://forum.kodi.tv/showthread.php?tid=329152</forum>
+        <assets>
+            <icon>resources/images/icon.png</icon>
+            <fanart>resources/images/fanart.jpg</fanart>
+            <screenshot>resources/images/screenshot01.png</screenshot>
+            <screenshot>resources/images/screenshot02.png</screenshot>
+            <screenshot>resources/images/screenshot03.png</screenshot>
+        </assets>
+    </extension>
+</addon>

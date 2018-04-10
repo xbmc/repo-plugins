@@ -1,4 +1,4 @@
-#   Copyright (C) 2017 Lunatixz
+#   Copyright (C) 2018 Lunatixz
 #
 #
 # This file is part of Sky News.
@@ -18,7 +18,7 @@
 
 # -*- coding: utf-8 -*-
 import os, re, sys, time, datetime, traceback
-import urllib, urllib2, socket, json
+import urlparse, urllib, urllib2, socket, json
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 
 from simplecache import SimpleCache
@@ -36,33 +36,20 @@ FANART        = REAL_SETTINGS.getAddonInfo('fanart')
 LANGUAGE      = REAL_SETTINGS.getLocalizedString
 
 ## GLOBALS ##
-TIMEOUT   = 15
-DEBUG     = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
-LIVEURL   = 'http://news.sky.com/watch-live'
-YTURL     = 'plugin://plugin.video.youtube/play/?video_id='
+TIMEOUT      = 15
+CONTENT_TYPE = 'files'
+DEBUG        = REAL_SETTINGS.getSetting('Enable_Debugging') == 'true'
+LIVEURL      = 'http://news.sky.com/watch-live'
+YTURL        = 'plugin://plugin.video.youtube/play/?video_id='
 
 def log(msg, level=xbmc.LOGDEBUG):
-    if DEBUG == True:
-        if level == xbmc.LOGERROR:
-            msg += ' ,' + traceback.format_exc()
-        xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + (msg), level)
-   
+    if DEBUG == False and level != xbmc.LOGERROR: return
+    if level == xbmc.LOGERROR: msg += ' ,' + traceback.format_exc()
+    xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + msg, level)
+    
 def getParams():
-    param=[]
-    if len(sys.argv[2])>=2:
-        params=sys.argv[2]
-        cleanedparams=params.replace('?','')
-        if (params[len(params)-1]=='/'):
-            params=params[0:len(params)-2]
-        pairsofparams=cleanedparams.split('&')
-        param={}
-        for i in range(len(pairsofparams)):
-            splitparams={}
-            splitparams=pairsofparams[i].split('=')
-            if (len(splitparams))==2:
-                param[splitparams[0]]=splitparams[1]
-    return param
-                 
+    return dict(urlparse.parse_qsl(sys.argv[2][1:]))
+                        
 socket.setdefaulttimeout(TIMEOUT)
 class Sky(object):
     def __init__(self):
@@ -80,60 +67,33 @@ class Sky(object):
                 response = urllib2.urlopen(request, timeout=TIMEOUT).read()
                 self.cache.set(ADDON_NAME + '.openURL, url = %s'%url, response, expiration=datetime.timedelta(hours=6))
             return self.cache.get(ADDON_NAME + '.openURL, url = %s'%url)
-        except urllib2.URLError, e:
-            log("openURL Failed! " + str(e), xbmc.LOGERROR)
-        except socket.timeout, e:
-            log("openURL Failed! " + str(e), xbmc.LOGERROR)
-        except Exception, e:
-            log("openURL Failed! " + str(e), xbmc.LOGERROR)
-            xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30001), ICON, 4000)
-            return ''
-             
+        except Exception as e: log("openURL Failed! " + str(e), xbmc.LOGERROR)
+        xbmcgui.Dialog().notification(ADDON_NAME, LANGUAGE(30001), ICON, 4000)
+        return ''
+         
 
     def buildMainMenu(self):
-        self.addLink('Live'     ,'',0)
-        self.addYoutube('Browse','plugin://plugin.video.youtube/user/skynews/')
+        self.addLink(LANGUAGE(30002),'',0)
+        self.addYoutube(LANGUAGE(30003),'plugin://plugin.video.youtube/user/skynews/')
             
           
     def buildLiveLink(self):
-        #parse for youtube live feed, may not be necessary. However its useful if the site changes feeds.
-        soup = BeautifulSoup(self.openURL(LIVEURL), "html.parser")
-        link = 'http:' + soup('div' , {'class': 'sdc-news-story-article__body'})[0].find('iframe').get('src')
-        self.playVideo('Sky News Live',self.resolveYoutube(link))
-        
+        try:
+            link = 'http:' + BeautifulSoup(self.openURL(LIVEURL), "html.parser")('div', {'class': 'video-embed'})[0].find('iframe').get('src')
+            print self.resolveYoutube(link)
+            self.playVideo(LANGUAGE(30004),self.resolveYoutube(link))
+        except: self.playVideo(LANGUAGE(30004),YTURL + 'XOacA3RYrXk')
         
     def resolveYoutube(self, link):
-        if len(re.findall('http[s]?://www.youtube.com/watch', link)) > 0:
-            return YTURL + link.split('/watch?v=')[1]
-        elif len(re.findall('http[s]?://www.youtube.com/embed', link)) > 0:
-            return YTURL + link.split('/embed/')[1].split('?autoplay=1')[0]
-        elif len(re.findall('http[s]?://youtu.be/', link)) > 0:
-            return YTURL + link.split('/youtu.be/')[1]
+        if len(re.findall('http[s]?://www.youtube.com/watch', link)) > 0: return YTURL + link.split('/watch?v=')[1]
+        elif len(re.findall('http[s]?://www.youtube.com/embed', link)) > 0: return YTURL + link.split('/embed/')[1].split('?autoplay=1')[0]
+        elif len(re.findall('http[s]?://youtu.be/', link)) > 0: return YTURL + link.split('/youtu.be/')[1] 
 
         
     def playVideo(self, name, url, liz=None):
         log('playVideo')
-        if not liz:
-            liz = xbmcgui.ListItem(name, path=url)
+        if not liz: liz = xbmcgui.ListItem(name, path=url)
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
-
-           
-    def addLink(self, name, u, mode, infoList=False, infoArt=False, total=0):
-        name = name.encode("utf-8")
-        log('addLink, name = ' + name)
-        liz=xbmcgui.ListItem(name)
-        liz.setProperty('IsPlayable', 'true')
-        if infoList == False:
-            liz.setInfo(type="Video", infoLabels={"mediatype":"video","label":name,"title":name,"genre":"News"})
-        else:
-            liz.setInfo(type="Video", infoLabels=infoList)
-            
-        if infoArt == False:
-            liz.setArt({'thumb':ICON,'fanart':FANART})
-        else:
-            liz.setArt(infoArt)
-        u=sys.argv[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,totalItems=total)
 
 
     def addYoutube(self, title, url):
@@ -144,20 +104,25 @@ class Sky(object):
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=True)
 
         
+    def addLink(self, name, u, mode, infoList=False, infoArt=False, total=0):
+        name = name.encode("utf-8")
+        log('addLink, name = ' + name)
+        liz=xbmcgui.ListItem(name)
+        liz.setProperty('IsPlayable', 'true')
+        if infoList == False: liz.setInfo(type="Video", infoLabels={"mediatype":"video","label":name,"title":name,"genre":"News"})
+        else: liz.setInfo(type="Video", infoLabels=infoList) 
+        if infoArt == False: liz.setArt({'thumb':ICON,'fanart':FANART})
+        else: liz.setArt(infoArt)
+        u=sys.argv[0]+"?url="+urllib.quote_plus(u)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
+        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,totalItems=total)
+
 params=getParams()
-try:
-    url=urllib.unquote_plus(params["url"])
-except:
-    url=None
-try:
-    name=urllib.unquote_plus(params["name"])
-except:
-    name=None
-try:
-    mode=int(params["mode"])
-except:
-    mode=None
-    
+try: url=urllib.unquote_plus(params["url"])
+except: url=None
+try: name=urllib.unquote_plus(params["name"])
+except: name=None
+try: mode=int(params["mode"])
+except: mode=None
 log("Mode: "+str(mode))
 log("URL : "+str(url))
 log("Name: "+str(name))
@@ -166,6 +131,9 @@ if mode==None:  Sky().buildMainMenu()
 elif mode == 0: Sky().buildLiveLink()
 elif mode == 9: Sky().playVideo(name, url)
 
-xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_NONE )
-xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_LABEL )
-xbmcplugin.endOfDirectory(int(sys.argv[1]),cacheToDisc=True)
+xbmcplugin.setContent(int(sys.argv[1])    , CONTENT_TYPE)
+xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_UNSORTED)
+xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_NONE)
+xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_LABEL)
+xbmcplugin.addSortMethod(int(sys.argv[1]) , xbmcplugin.SORT_METHOD_TITLE)
+xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=True)

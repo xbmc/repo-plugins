@@ -3,6 +3,7 @@
 import xbmc
 import xbmcgui
 import xbmcaddon
+import xbmcvfs
 
 import httplib
 import hashlib
@@ -12,6 +13,7 @@ import gzip
 import json
 from urlparse import urlparse
 import urllib
+from datetime import datetime
 
 from kodi_utils import HomeWindow
 from clientinfo import ClientInformation
@@ -22,7 +24,7 @@ log = SimpleLogging(__name__)
 
 def getDetailsString():
 
-    addonSettings = xbmcaddon.Addon(id='plugin.video.embycon')
+    addonSettings = xbmcaddon.Addon()
     include_media = addonSettings.getSetting("include_media") == "true"
     include_people = addonSettings.getSetting("include_people") == "true"
     include_overview = addonSettings.getSetting("include_overview") == "true"
@@ -44,11 +46,71 @@ class DownloadUtils():
     getString = None
 
     def __init__(self, *args):
-        addon = xbmcaddon.Addon(id='plugin.video.embycon')
+        addon = xbmcaddon.Addon()
         self.addon_name = addon.getAddonInfo('name')
 
+    def checkVersion(self):
+        server_info = {}
+        activity = {}
+        try:
+            settings = xbmcaddon.Addon()
+            check_version = settings.getSetting('checkVersion') == 'true'
+            if check_version == False:
+                log.debug("Version Check: Not Enabled")
+                return
+
+            path = xbmc.translatePath(settings.getAddonInfo('profile')) + "activity.json"
+            f = xbmcvfs.File(path)
+            activity_data = f.read()
+            f.close()
+            activity = json.loads(activity_data)
+
+            if len(activity) == 0:
+                log.debug("Version Check: No Activity")
+                return
+
+            url = "{server}/emby/system/info/public"
+            jsonData = self.downloadUrl(url, suppress=True, authenticate=False)
+            server_info = json.loads(jsonData)
+
+        except Exception as error:
+            log.debug("Version Check Error: DATA: {0}", error)
+            return
+
+        try:
+            utcnow = datetime.utcnow()
+            today = "%s-%s-%s" % (utcnow.year, utcnow.month, utcnow.day)
+            client_info = ClientInformation()
+            version_info = {
+                "client_id": client_info.getDeviceId(),
+                "server_id": server_info.get("Id", ""),
+                "version_kodi": xbmc.getInfoLabel('System.BuildVersion'),
+                "version_emby": server_info.get("Version", ""),
+                "version_addon": client_info.getVersion(),
+                "activity": activity,
+                "client_utc_date": today
+            }
+            conn = httplib.HTTPConnection("allthedata.pythonanywhere.com", timeout=15)
+            head = {}
+            head["Content-Type"] = "application/json"
+            postBody = json.dumps(version_info)
+            log.debug("Version Check Data: {0}", postBody)
+            conn.request(method="POST", url="/version", body=postBody, headers=head)
+            data = conn.getresponse()
+            if int(data.status) == 200:
+                xbmcvfs.delete(path)
+                ret_data = data.read()
+                log.debug("VERSION_CHECK: RESPONCE: {0}", ret_data)
+                message = json.loads(ret_data)
+                message_text = message.get("message")
+                if message_text is not None and message_text != "OK":
+                    xbmcgui.Dialog().ok(self.addon_name, message_text)
+
+        except Exception as error:
+            log.debug("Version Check Error: SEND: {0}", error)
+
     def getServer(self):
-        settings = xbmcaddon.Addon(id='plugin.video.embycon')
+        settings = xbmcaddon.Addon()
         host = settings.getSetting('ipaddress')
         port = settings.getSetting('port')
         if (len(host) == 0) or (host == "<none>") or (len(port) == 0):
@@ -74,7 +136,7 @@ class DownloadUtils():
 
         return server
 
-    def getArtwork(self, data, art_type, parent=False, index=0, width=10000, height=10000, server=None):
+    def getArtwork(self, data, art_type, parent=False, index=0, server=None):
 
         id = data["Id"]
         item_type = data["Type"]
@@ -127,9 +189,7 @@ class DownloadUtils():
             log.debug("No Image Tag for request:{0} item:{1} parent:{2}", art_type, item_type, parent)
             return ""
 
-        query = ""
-
-        artwork = "%s/emby/Items/%s/Images/%s/%s?MaxWidth=%s&MaxHeight=%s&Format=original&Tag=%s%s" % (server, id, art_type, index, width, height, imageTag, query)
+        artwork = "%s/emby/Items/%s/Images/%s/%s?Format=original&Tag=%s" % (server, id, art_type, index, imageTag)
 
         log.debug("getArtwork: {0}", artwork)
 
@@ -154,20 +214,27 @@ class DownloadUtils():
             artwork += '&MaxHeight=%s' % height
         return artwork
 
-    def get_user_artwork(self, item_id, item_type):
-        # Load user information set by UserClient
-        return "%s/emby/Users/%s/Images/%s?Format=original" % (self.getServer(), item_id, item_type)
+    def get_user_artwork(self, user, item_type):
+
+        if "PrimaryImageTag" not in user:
+            return ""
+        user_id = user.get("Id")
+        tag = user.get("PrimaryImageTag")
+        server = self.getServer()
+
+        return "%s/emby/Users/%s/Images/%s?Format=original&tag=%s" % (server, user_id, item_type, tag)
 
     def getUserId(self):
 
         WINDOW = HomeWindow()
         userid = WINDOW.getProperty("userid")
+        userImage = WINDOW.getProperty("userimage")
 
-        if (userid != None and userid != ""):
+        if userid and userImage:
             log.debug("EmbyCon DownloadUtils -> Returning saved UserID: {0}", userid)
             return userid
 
-        settings = xbmcaddon.Addon('plugin.video.embycon')
+        settings = xbmcaddon.Addon()
         userName = settings.getSetting('username')
 
         if not userName:
@@ -196,14 +263,11 @@ class DownloadUtils():
 
         log.debug("GETUSER_JSONDATA_02: {0}", result)
 
-        userid = ""
-        userImage = ""
         secure = False
         for user in result:
             if (user.get("Name") == unicode(userName, "utf-8")):
                 userid = user.get("Id")
-                if "PrimaryImageTag" in user:
-                    userImage =  self.get_user_artwork(userid, 'Primary')
+                userImage =  self.get_user_artwork(user, 'Primary')
                 log.debug("Username Found: {0}", user.get("Name"))
                 if (user.get("HasPassword") == True):
                     secure = True
@@ -219,6 +283,9 @@ class DownloadUtils():
                 return ""
             if not userid:
                 userid = WINDOW.getProperty("userid")
+
+        if userid and not userImage:
+            userImage = 'DefaultUser.png'
 
         if userid == "":
             xbmcgui.Dialog().notification(i18n("connection_error"),
@@ -241,7 +308,7 @@ class DownloadUtils():
             log.debug("EmbyCon DownloadUtils -> Returning saved AccessToken: {0}", token)
             return token
 
-        settings = xbmcaddon.Addon('plugin.video.embycon')
+        settings = xbmcaddon.Addon()
         port = settings.getSetting("port")
         host = settings.getSetting("ipaddress")
         if host is None or host == "" or port is None or port == "":
@@ -274,11 +341,13 @@ class DownloadUtils():
             log.debug("User Authenticated: {0}", accessToken)
             WINDOW.setProperty("AccessToken", accessToken)
             WINDOW.setProperty("userid", userid)
+            WINDOW.setProperty("userimage", "")
             return accessToken
         else:
             log.debug("User NOT Authenticated")
             WINDOW.setProperty("AccessToken", "")
             WINDOW.setProperty("userid", "")
+            WINDOW.setProperty("userimage", "")
             return ""
 
     def getAuthHeader(self, authenticate=True):
@@ -287,7 +356,7 @@ class DownloadUtils():
         version = clientInfo.getVersion()
         client = clientInfo.getClient()
 
-        settings = xbmcaddon.Addon('plugin.video.embycon')
+        settings = xbmcaddon.Addon()
         deviceName = settings.getSetting('deviceName')
         # remove none ascii chars
         deviceName = deviceName.decode("ascii", errors='ignore')
@@ -322,7 +391,7 @@ class DownloadUtils():
         log.debug("downloadUrl")
 
         return_data = "null"
-        settings = xbmcaddon.Addon(id='plugin.video.embycon')
+        settings = xbmcaddon.Addon()
 
         if settings.getSetting("suppressErrors") == "true":
             suppress = True

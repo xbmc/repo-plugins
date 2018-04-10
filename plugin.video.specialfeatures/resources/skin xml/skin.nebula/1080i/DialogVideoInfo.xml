@@ -1,0 +1,1168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<window type="dialog">
+    <zorder>0</zorder>
+    <onload condition="System.HasAddon(script.videoextras)">XBMC.RunScript(script.videoextras,check,"$INFO[ListItem.FilenameAndPath]")</onload>
+    <defaultcontrol always="true">2</defaultcontrol>
+    <menucontrol>9000</menucontrol>
+    <controls>
+        <!-- <include>DimBG</include> -->
+        <include>TopBar</include>
+        <control type="group">
+            <include>FacadeFadeDialogs2ndLevelCondition</include>
+            <include>Icon_Fade</include>
+            <control type="group">
+                <animation effect="slide" tween="circle" easing="out" time="250" start="0,0" end="660,0" condition="[ControlGroup(9000).HasFocus()|Control.HasFocus(8999)|Control.HasFocus(9060)]">conditional</animation>
+                <include>DialogOpenClose</include>
+                <control type="image">
+                    <posx>-760</posx>
+                    <posy>150</posy>
+                    <width>2930</width>
+                    <height>876</height>
+                    <include>DialogTransparency</include>
+                    <texture border="150,40,150,40">$VAR[Theme.Color]/common/bg_dialog.png</texture>
+                </control>
+                <control type="image">
+                    <posx>100</posx>
+                    <posy>142</posy>
+                    <width>1720</width>
+                    <height>217</height>
+                    <texture border="100">$VAR[Theme.Color]/common/bg_list.png</texture>
+                </control>
+                <control type="label">
+                    <posx>TextMargin</posx>
+                    <posy>183</posy>
+                    <width>1800</width>
+                    <height>105</height>
+                    <align>center</align>
+                    <font>InfoTitleFont</font>
+                    <include>TextColor_MainColor</include>
+                    <label>$INFO[ListItem.Label]</label>
+                </control>
+                <control type="group" id="20">
+                    <!-- INFO -->
+                    <visible>![Control.HasFocus(9013)|
+                        Control.HasFocus(9012)|
+                        ControlGroup(90120).HasFocus|
+                        ControlGroup(90130).HasFocus]</visible>
+                    <include>VisibleFadeEffectDelay</include>
+                    <control type="label">
+                        <posx>TextMargin</posx>
+                        <posy>270</posy>
+                        <width>1800</width>
+                        <height>35</height>
+                        <align>center</align>
+                        <font>InfoTitleSubFont</font>
+                        <include>TextColor_MainColor</include>
+                        <label>$INFO[ListItem.Year]</label>
+                    </control>
+                    <!-- CDART VIDEO -->
+                    <include content="DiscArt">
+                        <param name="visible" value="!String.IsEmpty(ListItem.Thumb)+[String.IsEqual(ListItem.DBType,movie)|String.IsEqual(ListItem.DBType,musicvideo)]"/>
+                        <param name="x" value="70"/>
+                        <param name="y" value="143"/>
+                        <param name="width" value="404"/>
+                        <param name="height" value="404"/>
+                        <param name="texture" value="$VAR[VideoCdArt]"/>
+                        <param name="xShadow" value="42"/>
+                        <param name="yShadow" value="115"/>
+                        <param name="widthShadow" value="460"/>
+                        <param name="heightShadow" value="460"/>
+                        <param name="pulse" value="false"/>
+                    </include>
+                    <control type="image">
+                        <visible>String.IsEmpty(Listitem.Thumb)</visible>
+                        <posx>TextMargin</posx>
+                        <posy>348</posy>
+                        <width>424</width>
+                        <height>615</height>
+                        <texture>$VAR[Theme.Color]/defaultVideoBig.png</texture>
+                        <aspectratio aligny="top">keep</aspectratio>
+                    </control>
+                    <control type="image">
+                        <posx>25</posx>
+                        <posy>313</posy>
+                        <width>494</width>
+                        <height>685</height>
+                        <texture background="true">$INFO[Listitem.Thumb]</texture>
+                        <include>ThumbBorder</include>
+                        <aspectratio aligny="top">keep</aspectratio>
+                    </control>
+                    <control type="button">
+                        <description>dummy for mouse navigation</description>
+                        <posx>0</posx>
+                        <posy>313</posy>
+                        <width>744</width>
+                        <height>685</height>
+                        <onclick>noop</onclick>
+                        <onleft>9012</onleft>
+                        <onright>50</onright>
+                        <texturenofocus>-</texturenofocus>
+                        <texturefocus>-</texturefocus>
+                    </control>
+                    <control type="panel" id="9009">
+                        <visible>![String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,episode) | String.StartsWith(Container.FolderPath,videodb://musicvideos)]</visible>
+                        <include>VisibleFadeEffectDelay</include>
+                        <posx>500</posx>
+                        <posy>318</posy>
+                        <width>1420</width>
+                        <height>546</height>
+                        <include>List_9009_Commons</include>
+                        <content>
+                            <item>
+                                <label>$LOCALIZE[20376]:</label>
+                                <label2>$INFO[ListItem.OriginalTitle]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.OriginalTitle) + !String.IsEqual(ListItem.OriginalTitle,Listitem.Title)</visible>
+                            </item>
+                            <item>
+                                <visible>!System.HasAddon(script.extendedinfo)</visible>
+                                <label>$LOCALIZE[20339]:</label>
+                                <label2>$INFO[ListItem.Director]</label2>
+                                <onclick>SendClick(2003,13)</onclick>
+                                <visible>!String.IsEmpty(ListItem.Director)</visible>
+                            </item>
+                            <item>
+                                <visible>!System.HasAddon(script.extendedinfo)</visible>
+                                <label>$LOCALIZE[20417]:</label>
+                                <label2>$INFO[ListItem.Writer]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.Writer)</visible>
+                            </item>
+                            <item>
+                                <visible>System.HasAddon(script.extendedinfo)</visible>
+                                <label>$LOCALIZE[20339]:</label>
+                                <label2>$INFO[ListItem.Director]</label2>
+                                <!-- <onclick>dialog.close(all,true)</onclick> -->
+                                <onclick>RunScript(script.extendedinfo,info=extendedactorinfo,name=$INFO[ListItem.Director])</onclick>
+                                <visible>!String.IsEmpty(ListItem.Director)</visible>
+                            </item>
+                            <item>
+                                <visible>System.HasAddon(script.extendedinfo)</visible>
+                                <label>$LOCALIZE[20417]:</label>
+                                <label2>$INFO[ListItem.Writer]</label2>
+                                <!-- <onclick>dialog.close(all,true)</onclick> -->
+                                <onclick>RunScript(script.extendedinfo,info=extendedactorinfo,name=$INFO[ListItem.Writer])</onclick>
+                                <visible>!String.IsEmpty(ListItem.Writer)</visible>
+                            </item>
+                            <item>
+                                <label>$LOCALIZE[572]:</label>
+                                <label2>$INFO[ListItem.Studio]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.Studio)</visible>
+                            </item>
+                            <item>
+                                <label>$LOCALIZE[515]:</label>
+                                <label2>$INFO[ListItem.Genre]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.Genre)</visible>
+                            </item>
+                            <item>
+                                <label>$LOCALIZE[562]:</label>
+                                <label2>$INFO[ListItem.Year]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.Year)</visible>
+                            </item>
+                            <item>
+                                <label>$LOCALIZE[20074]:</label>
+                                <label2>$INFO[ListItem.mpaa]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.mpaa)</visible>
+                            </item>
+                            <item>
+                                <label>$LOCALIZE[2050]:</label>
+                                <label2>$INFO[ListItem.Duration] $LOCALIZE[12391]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.Duration)</visible>
+                            </item>
+                            <item>
+                                <label>$LOCALIZE[38018]:</label>
+                                <label2>$INFO[ListItem.Userrating,,.0]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.Userrating)</visible>
+                            </item>
+                            <item>
+                                <label>$LOCALIZE[563]:</label>
+                                <label2>$INFO[ListItem.RatingAndVotes]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.RatingAndVotes)</visible>
+                            </item>
+                            <item>
+                                <label>$LOCALIZE[202]:</label>
+                                <label2>$INFO[ListItem.TagLine]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.TagLine)</visible>
+                            </item>
+                            <item>
+                                <label>$LOCALIZE[20416]:</label>
+                                <label2>$INFO[ListItem.Premiered]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.Premiered)</visible>
+                            </item>
+                            <item>
+                                <label>$LOCALIZE[574]:</label>
+                                <label2>$INFO[ListItem.Country]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.Country)</visible>
+                            </item>
+                            <item>
+                                <label>$LOCALIZE[570]:</label>
+                                <label2>$INFO[ListItem.DateAdded]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.DateAdded)</visible>
+                            </item>
+                            <item>
+                                <label>$LOCALIZE[21445]:</label>
+                                <label2>$INFO[ListItem.VideoCodec]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.VideoCodec)</visible>
+                            </item>
+                            <item>
+                                <label>$LOCALIZE[21805]:</label>
+                                <label2>$INFO[ListItem.VideoResolution]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.VideoResolution)</visible>
+                            </item>
+                            <item>
+                                <label>$LOCALIZE[21446]:</label>
+                                <label2>$INFO[ListItem.AudioCodec]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.AudioCodec)</visible>
+                            </item>
+                            <item>
+                                <label>$LOCALIZE[21444]:</label>
+                                <label2>$INFO[ListItem.AudioChannels]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.AudioChannels)</visible>
+                            </item>
+                            <item>
+                                <label>$LOCALIZE[21447]:</label>
+                                <label2>$INFO[ListItem.AudioLanguage]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.AudioLanguage)</visible>
+                            </item>
+                            <item>
+                                <label>$LOCALIZE[21448]:</label>
+                                <label2>$INFO[ListItem.SubtitleLanguage]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.SubtitleLanguage)</visible>
+                            </item>
+                            <item>
+                                <label>IMDB Top 250 #: </label>
+                                <label2>$INFO[ListItem.Top250]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.Top250)</visible>
+                            </item>
+                            <item>
+                                <label>$LOCALIZE[36501]:</label>
+                                <label2>$INFO[ListItem.StereoscopicMode]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.StereoscopicMode)</visible>
+                                <visible>!Skin.HasSetting(plexbmc)</visible>
+                            </item>
+                            <item>
+                                <label>$LOCALIZE[573]:</label>
+                                <label2>$INFO[ListItem.Path]</label2>
+                                <onclick>Dialog.Close(movieinformation)</onclick>
+                                <onclick>ActivateWindow(Videos,$INFO[ListItem.Path],return)</onclick>
+                                <visible>!Skin.HasSetting(plexbmc)</visible>
+                            </item>
+                            <item>
+                                <label>$LOCALIZE[21800]:</label>
+                                <label2>$INFO[ListItem.Filename]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.Filename)</visible>
+                            </item>
+                            <item>
+                                <label>$LOCALIZE[567]:</label>
+                                <label2>$INFO[ListItem.PlayCount]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.PlayCount)</visible>
+                            </item>
+                            <item>
+                                <label fallback="-">$LOCALIZE[575]:</label>
+                                <label2>$INFO[ListItem.PercentPlayed,,%]</label2>
+                                <onclick>noop</onclick>
+                                <visible>ListItem.IsResumable</visible>
+                            </item>
+                            <item>
+                                <label fallback="-">$LOCALIZE[568]:</label>
+                                <label2>$INFO[ListItem.LastPlayed]</label2>
+                                <onclick>noop</onclick>
+                                <visible>!String.IsEmpty(ListItem.LastPlayed)</visible>
+                            </item>
+                        </content>
+                    </control>
+                    <control type="group">
+                        <visible>String.IsEqual(ListItem.DBType,tvshow)</visible>
+                        <include>VisibleFadeEffectDelay</include>
+                        <control type="panel" id="9009">
+                            <include>List_9009_Commons</include>
+                            <content>
+                                <item>
+                                    <label>$LOCALIZE[20360]:</label>
+                                    <label2>$INFO[listitem.episode]     ($INFO[ListItem.Property(WatchedEpisodes),, $LOCALIZE[16102]] - $INFO[ListItem.Property(UnWatchedEpisodes), , $LOCALIZE[16101]])</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Episode)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[515]:</label>
+                                    <label2>$INFO[ListItem.Genre]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Genre)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[562]:</label>
+                                    <label2>$INFO[ListItem.Year]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Year)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[20074]:</label>
+                                    <label2>$INFO[ListItem.mpaa]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.mpaa)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[38018]:</label>
+                                    <label2>$INFO[ListItem.Userrating,,.0]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Userrating)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[563]:</label>
+                                    <label2>$INFO[ListItem.RatingAndVotes]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.RatingAndVotes)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[20416]:</label>
+                                    <label2>$INFO[ListItem.Premiered]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Premiered)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[126]:</label>
+                                    <label2>$INFO[ListItem.Status]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Status)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[574]:</label>
+                                    <label2>$INFO[ListItem.Country]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Country)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[570]:</label>
+                                    <label2>$INFO[ListItem.DateAdded]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.DateAdded)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[573]:</label>
+                                    <label2>$INFO[ListItem.Path]</label2>
+                                    <onclick>Dialog.Close(movieinformation)</onclick>
+                                    <onclick>ActivateWindow(Videos,$INFO[ListItem.Path],return)</onclick>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[21800]:</label>
+                                    <label2>$INFO[ListItem.Filename]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Filename)</visible>
+                                </item>
+                            </content>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <visible>String.IsEqual(ListItem.DBType,episode)</visible>
+                        <include>VisibleFadeEffectDelay</include>
+                        <control type="panel" id="9009">
+                            <include>List_9009_Commons</include>
+                            <content>
+                                <item>
+                                    <label>$LOCALIZE[20364]:</label>
+                                    <label2>$INFO[ListItem.TVShowTitle]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.TVShowTitle)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[20373]:</label>
+                                    <label2>$INFO[ListItem.Season]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Season)</visible>
+                                    <visible>!Skin.HasSetting(plexbmc)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[20359]:</label>
+                                    <label2>$INFO[ListItem.Episode]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Episode)</visible>
+                                    <visible>!Skin.HasSetting(plexbmc)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[515]:</label>
+                                    <label2>$INFO[ListItem.Genre]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Genre)</visible>
+                                </item>
+                                <item>
+                                    <visible>!System.HasAddon(script.extendedinfo)</visible>
+                                    <label>$LOCALIZE[20339]:</label>
+                                    <label2>$INFO[ListItem.Director]</label2>
+                                    <onclick>SendClick(2003,13)</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Director)</visible>
+                                </item>
+                                <item>
+                                    <visible>!System.HasAddon(script.extendedinfo)</visible>
+                                    <label>$LOCALIZE[20417]:</label>
+                                    <label2>$INFO[ListItem.Writer]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Writer)</visible>
+                                </item>
+                                <item>
+                                    <visible>System.HasAddon(script.extendedinfo)</visible>
+                                    <label>$LOCALIZE[20339]:</label>
+                                    <label2>$INFO[ListItem.Director]</label2>
+                                    <!-- <onclick>dialog.close(all,true)</onclick> -->
+                                    <onclick>RunScript(script.extendedinfo,info=extendedactorinfo,name=$INFO[ListItem.Director])</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Director)</visible>
+                                </item>
+                                <item>
+                                    <visible>System.HasAddon(script.extendedinfo)</visible>
+                                    <label>$LOCALIZE[20417]:</label>
+                                    <label2>$INFO[ListItem.Writer]</label2>
+                                    <!-- <onclick>dialog.close(all,true)</onclick> -->
+                                    <onclick>RunScript(script.extendedinfo,info=extendedactorinfo,name=$INFO[ListItem.Writer])</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Writer)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[562]:</label>
+                                    <label2>$INFO[ListItem.Year]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Year)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[20074]:</label>
+                                    <label2>$INFO[ListItem.mpaa]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.mpaa)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[2050]:</label>
+                                    <label2>$INFO[ListItem.Duration] $LOCALIZE[12391]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Duration)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[38018]:</label>
+                                    <label2>$INFO[ListItem.Userrating,,.0]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Userrating)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[563]:</label>
+                                    <label2>$INFO[ListItem.RatingAndVotes]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.RatingAndVotes)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[20416]:</label>
+                                    <label2>$INFO[ListItem.Premiered]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Premiered)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[574]:</label>
+                                    <label2>$INFO[ListItem.Country]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Country)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[570]:</label>
+                                    <label2>$INFO[ListItem.DateAdded]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.DateAdded)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[21445]:</label>
+                                    <label2>$INFO[ListItem.VideoCodec]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.VideoCodec)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[21805]:</label>
+                                    <label2>$INFO[ListItem.VideoResolution]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.VideoResolution)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[21446]:</label>
+                                    <label2>$INFO[ListItem.AudioCodec]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.AudioCodec)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[21444]:</label>
+                                    <label2>$INFO[ListItem.AudioChannels]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.AudioChannels)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[21447]:</label>
+                                    <label2>$INFO[ListItem.AudioLanguage]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.AudioLanguage)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[21448]:</label>
+                                    <label2>$INFO[ListItem.SubtitleLanguage]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.SubtitleLanguage)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[21448]</label>
+                                    <label2>$INFO[ListItem.SubtitleLanguage]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.SubtitleLanguage)</visible>
+                                </item>
+                                <item>
+                                    <label>IMDB Top 250 #:</label>
+                                    <label2>$INFO[ListItem.Top250]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Top250)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[36501]:</label>
+                                    <label2>$INFO[ListItem.StereoscopicMode]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.StereoscopicMode)</visible>
+                                    <visible>!Skin.HasSetting(plexbmc)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[573]:</label>
+                                    <label2>$INFO[ListItem.Path]</label2>
+                                    <onclick>Dialog.Close(movieinformation)</onclick>
+                                    <onclick>ActivateWindow(Videos,$INFO[ListItem.Path],return)</onclick>
+                                    <visible>!Skin.HasSetting(plexbmc)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[21800]:</label>
+                                    <label2>$INFO[ListItem.Filename]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Filename)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[567]:</label>
+                                    <label2>$INFO[ListItem.PlayCount]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.PlayCount)</visible>
+                                </item>
+                                <item>
+                                    <label fallback="-">$LOCALIZE[575]:</label>
+                                    <label2>$INFO[ListItem.PercentPlayed,,%]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>ListItem.IsResumable</visible>
+                                </item>
+                                <item>
+                                    <label fallback="-">$LOCALIZE[568]:</label>
+                                    <label2>$INFO[ListItem.LastPlayed]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.LastPlayed)</visible>
+                                </item>
+                            </content>
+                        </control>
+                    </control>
+                    <control type="group">
+                        <visible>String.IsEqual(ListItem.DBType,musicvideo)</visible>
+                        <include>VisibleFadeEffectDelay</include>
+                        <control type="panel" id="9009">
+                            <include>List_9009_Commons</include>
+                            <content>
+                                <item>
+                                    <label>$LOCALIZE[557]:</label>
+                                    <label2>$INFO[ListItem.Artist]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Artist)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[558]:</label>
+                                    <label2>$INFO[ListItem.Album]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Album)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[515]:</label>
+                                    <label2>$INFO[ListItem.Genre]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Genre)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[572]:</label>
+                                    <label2>$INFO[ListItem.Studio]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Studio)</visible>
+                                </item>
+                                <item>
+                                    <visible>!System.HasAddon(script.extendedinfo)</visible>
+                                    <label>$LOCALIZE[20339]:</label>
+                                    <label2>$INFO[ListItem.Director]</label2>
+                                    <onclick>SendClick(2003,13)</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Director)</visible>
+                                </item>
+                                <item>
+                                    <visible>!System.HasAddon(script.extendedinfo)</visible>
+                                    <label>$LOCALIZE[20417]:</label>
+                                    <label2>$INFO[ListItem.Writer]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Writer)</visible>
+                                </item>
+                                <item>
+                                    <visible>System.HasAddon(script.extendedinfo)</visible>
+                                    <label>$LOCALIZE[20339]:</label>
+                                    <label2>$INFO[ListItem.Director]</label2>
+                                    <!-- <onclick>dialog.close(all,true)</onclick> -->
+                                    <onclick>RunScript(script.extendedinfo,info=extendedactorinfo,name=$INFO[ListItem.Director])</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Director)</visible>
+                                </item>
+                                <item>
+                                    <visible>System.HasAddon(script.extendedinfo)</visible>
+                                    <label>$LOCALIZE[20417]:</label>
+                                    <label2>$INFO[ListItem.Writer]</label2>
+                                    <!-- <onclick>dialog.close(all,true)</onclick> -->
+                                    <onclick>RunScript(script.extendedinfo,info=extendedactorinfo,name=$INFO[ListItem.Writer])</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Writer)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[562]:</label>
+                                    <label2>$INFO[ListItem.Year]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Year)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[2050]:</label>
+                                    <label2>$INFO[ListItem.Duration] $LOCALIZE[12391]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Duration)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[38018]:</label>
+                                    <label2>$INFO[ListItem.Userrating,,.0]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Userrating)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[20416]:</label>
+                                    <label2>$INFO[ListItem.Premiered]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Premiered)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[574]:</label>
+                                    <label2>$INFO[ListItem.Country]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Country)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[570]:</label>
+                                    <label2>$INFO[ListItem.DateAdded]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.DateAdded)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[21445]:</label>
+                                    <label2>$INFO[ListItem.VideoCodec]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.VideoCodec)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[21805]:</label>
+                                    <label2>$INFO[ListItem.VideoResolution]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.VideoResolution)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[21446]:</label>
+                                    <label2>$INFO[ListItem.AudioCodec]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.AudioCodec)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[21444]:</label>
+                                    <label2>$INFO[ListItem.AudioChannels]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.AudioChannels)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[21447]:</label>
+                                    <label2>$INFO[ListItem.AudioLanguage]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.AudioLanguage)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[21448]:</label>
+                                    <label2>$INFO[ListItem.SubtitleLanguage]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.SubtitleLanguage)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[21448]:</label>
+                                    <label2>$INFO[ListItem.SubtitleLanguage]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.SubtitleLanguage)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[36501]:</label>
+                                    <label2>$INFO[ListItem.StereoscopicMode]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.StereoscopicMode)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[573]:</label>
+                                    <label2>$INFO[ListItem.Path]</label2>
+                                    <onclick>Dialog.Close(movieinformation)</onclick>
+                                    <onclick>ActivateWindow(Videos,$INFO[ListItem.Path],return)</onclick>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[21800]:</label>
+                                    <label2>$INFO[ListItem.Filename]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.Filename)</visible>
+                                </item>
+                                <item>
+                                    <label>$LOCALIZE[567]:</label>
+                                    <label2>$INFO[ListItem.PlayCount]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.PlayCount)</visible>
+                                </item>
+                                <item>
+                                    <label fallback="-">$LOCALIZE[575]:</label>
+                                    <label2>$INFO[ListItem.PercentPlayed,,%]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>ListItem.IsResumable</visible>
+                                </item>
+                                <item>
+                                    <label fallback="-">$LOCALIZE[568]:</label>
+                                    <label2>$INFO[ListItem.LastPlayed]</label2>
+                                    <onclick>noop</onclick>
+                                    <visible>!String.IsEmpty(ListItem.LastPlayed)</visible>
+                                </item>
+                            </content>
+                        </control>
+                    </control>
+                    <control type="scrollbar" id="60">
+                        <posx>1886</posx>
+                        <posy>318</posy>
+                        <height>546</height>
+                        <include>VerticalScroller</include>
+                        <onleft>9009</onleft>
+                        <onright>60</onright>
+                    </control>
+                    <control type="image">
+                        <posx>475</posx>
+                        <posy>879</posy>
+                        <width>1420</width>
+                        <height>1</height>
+                        <texture border="150,0,150,0">$VAR[Theme.Color]/list/bg_facade_separator.png</texture>
+                    </control>
+                    <control type="grouplist">
+                        <posx>535</posx>
+                        <posy>897</posy>
+                        <width min="90" max="967">auto</width>
+                        <height>90</height>
+                        <itemgap>20</itemgap>
+                        <orientation>horizontal</orientation>
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <include>Codecs</include>
+                    </control>
+                </control>
+                <control type="group" id="90130">
+                    <visible>Control.HasFocus(9013)|ControlGroup(90130).HasFocus</visible>
+                    <include>VisibleFadeEffectDelay</include>
+                    <control type="label">
+                        <posx>TextMargin</posx>
+                        <posy>270</posy>
+                        <width>1800</width>
+                        <height>35</height>
+                        <align>center</align>
+                        <font>InfoTitleSubFont</font>
+                        <include>TextColor_MainColor</include>
+                        <label>$INFO[ListItem.Year]</label>
+                    </control>
+                    <!-- PLOT -->
+                    <!-- CDART VIDEO -->
+                    <include content="DiscArt">
+                        <param name="visible" value="!String.IsEmpty(ListItem.Thumb)+[String.IsEqual(ListItem.DBType,movie)|String.IsEqual(ListItem.DBType,musicvideo)]"/>
+                        <param name="x" value="70"/>
+                        <param name="y" value="143"/>
+                        <param name="width" value="404"/>
+                        <param name="height" value="404"/>
+                        <param name="texture" value="$VAR[VideoCdArt]"/>
+                        <param name="xShadow" value="42"/>
+                        <param name="yShadow" value="115"/>
+                        <param name="widthShadow" value="460"/>
+                        <param name="heightShadow" value="460"/>
+                        <param name="pulse" value="false"/>
+                    </include>
+                    <control type="image">
+                        <visible>String.IsEmpty(Listitem.Thumb)</visible>
+                        <posx>TextMargin</posx>
+                        <posy>348</posy>
+                        <width>424</width>
+                        <height>615</height>
+                        <texture>$VAR[Theme.Color]/defaultVideoBig.png</texture>
+                        <aspectratio aligny="top">keep</aspectratio>
+                    </control>
+                    <control type="image">
+                        <posx>25</posx>
+                        <posy>313</posy>
+                        <width>494</width>
+                        <height>685</height>
+                        <texture background="true">$INFO[Listitem.Thumb]</texture>
+                        <include>ThumbBorder</include>
+                        <aspectratio aligny="top">keep</aspectratio>
+                    </control>
+                    <control type="button">
+                        <description>dummy for mouse navigation</description>
+                        <posx>0</posx>
+                        <posy>313</posy>
+                        <width>1920</width>
+                        <height>685</height>
+                        <onclick>noop</onclick>
+                        <onleft>9012</onleft>
+                        <onright>50</onright>
+                        <texturenofocus>-</texturenofocus>
+                        <texturefocus>-</texturefocus>
+                    </control>
+                    <control type="textbox">
+                        <include>VisibleFadeEffectDelay</include>
+                        <posx>560</posx>
+                        <posy>360</posy>
+                        <width>1300</width>
+                        <height>590</height>
+                        <font>InfoDetailsFontBig</font>
+                        <label>$VAR[Plots]</label>
+                        <pagecontrol>6060</pagecontrol>
+                    </control>
+                    <control type="scrollbar" id="6060">
+                        <visible>Skin.HasSetting(ManualScroll)</visible>
+                        <include>VisibleFadeEffectDelay</include>
+                        <posx>1886</posx>
+                        <posy>360</posy>
+                        <height>590</height>
+                        <include>VerticalScroller</include>
+                        <onleft>9013</onleft>
+                    </control>
+                </control>
+                <control type="group" id="90120">
+                    <visible>control.hasfocus(9012)|ControlGroup(90120).HasFocus</visible>
+                    <include>VisibleFadeEffectDelay</include>
+                    <control type="label">
+                        <posx>TextMargin</posx>
+                        <posy>270</posy>
+                        <width>1800</width>
+                        <height>35</height>
+                        <align>center</align>
+                        <font>InfoTitleSubFont</font>
+                        <include>TextColor_MainColor</include>
+                        <label>$INFO[Container(50).NumItems] $LOCALIZE[31025]</label>
+                    </control>
+                    <!-- ACTOR LIST -->
+                    <control type="image">
+                        <visible>String.IsEmpty(Container(50).ListItem.Thumb)</visible>
+                        <posx>TextMargin</posx>
+                        <posy>348</posy>
+                        <width>424</width>
+                        <height>615</height>
+                        <texture>$VAR[Theme.Color]/defaultArtistBig.png</texture>
+                        <aspectratio aligny="top">keep</aspectratio>
+                    </control>
+                    <control type="image">
+                        <posx>25</posx>
+                        <posy>313</posy>
+                        <width>494</width>
+                        <height>685</height>
+                        <texture background="true">$INFO[Container(50).ListItem.Thumb]</texture>
+                        <include>ThumbBorder</include>
+                        <aspectratio>scale</aspectratio>
+                    </control>
+                    <control type="button">
+                        <description>dummy for mouse navigation</description>
+                        <posx>0</posx>
+                        <posy>313</posy>
+                        <width>744</width>
+                        <height>685</height>
+                        <onclick>noop</onclick>
+                        <onleft>9012</onleft>
+                        <onright>50</onright>
+                        <texturenofocus>-</texturenofocus>
+                        <texturefocus>-</texturefocus>
+                    </control>
+                    <control type="image">
+                        <visible>Integer.IsGreater(Container(50).NumItems,0)</visible>
+                        <visible>System.HasAddon(script.extendedinfo)</visible>
+                        <posx>52</posx>
+                        <posy>882</posy>
+                        <width>440</width>
+                        <height>84</height>
+                        <include>DialogTransparency</include>
+                        <texture>$VAR[Theme.Color]/common/bg_dialog.png</texture>
+                    </control>
+                    <control type="button" id="9014">
+                        <visible>Integer.IsGreater(Container(50).NumItems,0)</visible>
+                        <visible>System.HasAddon(script.extendedinfo)</visible>
+                        <description>Actor Info</description>
+                        <posx>25</posx>
+                        <posy>885</posy>
+                        <width>494</width>
+                        <align>center</align>
+                        <include>LeftMenuButton</include>
+                        <label>$LOCALIZE[31015]</label>
+                        <!-- <onclick>dialog.close(all,true)</onclick> -->
+                        <onclick>RunScript(script.extendedinfo,info=extendedactorinfo,name=$INFO[Container(50).ListItem.Label])</onclick>
+                        <onleft>9012</onleft>
+                        <onright>50</onright>
+                    </control>
+                    <control type="list" id="50">
+                        <include>VisibleFadeEffectDelay</include>
+                        <posx>500</posx>
+                        <posy>318</posy>
+                        <width>1420</width>
+                        <height>675</height>
+                        <pagecontrol>61</pagecontrol>
+                        <onleft>9014</onleft>
+                        <onright>61</onright>
+                        <onup>50</onup>
+                        <ondown>50</ondown>
+                        <orientation>vertical</orientation>
+                        <itemlayout height="135" width="1420">
+                            <control type="label">
+                                <visible>String.IsEqual(ListItem.Label2,)</visible>
+                                <posx>TextMargin</posx>
+                                <posy>0</posy>
+                                <height>135</height>
+                                <width>1300</width>
+                                <font>FacadeListMainFont</font>
+                                <include>TextColor_AlternateColor</include>
+                                <label>$INFO[ListItem.Label]</label>
+                            </control>
+                            <control type="label">
+                                <visible>!String.IsEqual(ListItem.Label2,)</visible>
+                                <posx>TextMargin</posx>
+                                <posy>27</posy>
+                                <aligny>top</aligny>
+                                <width>1300</width>
+                                <font>FacadeListMainFont</font>
+                                <include>TextColor_AlternateColor</include>
+                                <label>$INFO[ListItem.Label]</label>
+                            </control>
+                            <control type="label">
+                                <posx>TextMargin</posx>
+                                <posy>73</posy>
+                                <aligny>top</aligny>
+                                <width>1300</width>
+                                <font>FacadeListSubFont</font>
+                                <include>TextColor_AlternateColor</include>
+                                <label>$INFO[ListItem.Label2,$LOCALIZE[20347] ]</label>
+                            </control>
+                        </itemlayout>
+                        <focusedlayout height="135" width="1420">
+                            <control type="group">
+                                <include>ButtonWideFocusAnimation</include>
+                                <control type="image">
+                                    <posx>0</posx>
+                                    <posy>0</posy>
+                                    <height>135</height>
+                                    <width>1420</width>
+                                    <colordiffuse>$VAR[Picked.Theme.Color]</colordiffuse>
+                                    <texture border="1">$VAR[Theme.Color]/list/bg_facade_focus.png</texture>
+                                </control>
+                                <control type="label">
+                                    <visible>String.IsEqual(ListItem.Label2,)</visible>
+                                    <posx>TextMargin</posx>
+                                    <posy>0</posy>
+                                    <height>135</height>
+                                    <width>1300</width>
+                                    <font>FacadeListMainFont</font>
+                                    <include>TextColor_MainColor</include>
+                                    <label>$INFO[ListItem.Label]</label>
+                                </control>
+                                <control type="label">
+                                    <visible>!String.IsEqual(ListItem.Label2,)</visible>
+                                    <posx>TextMargin</posx>
+                                    <posy>27</posy>
+                                    <aligny>top</aligny>
+                                    <width>1300</width>
+                                    <font>FacadeListMainFont</font>
+                                    <include>TextColor_MainColor</include>
+                                    <label>$INFO[ListItem.Label]</label>
+                                </control>
+                                <control type="label">
+                                    <posx>TextMargin</posx>
+                                    <posy>73</posy>
+                                    <aligny>top</aligny>
+                                    <width>1300</width>
+                                    <font>FacadeListSubFont</font>
+                                    <include>TextColor_MainColor</include>
+                                    <label>$INFO[ListItem.Label2,$LOCALIZE[20347] ]</label>
+                                </control>
+                            </control>
+                        </focusedlayout>
+                    </control>
+                    <control type="scrollbar" id="61">
+                        <posx>1886</posx>
+                        <posy>318</posy>
+                        <height>675</height>
+                        <include>VerticalScroller</include>
+                        <onleft>50</onleft>
+                        <onright>9000</onright>
+                    </control>
+                </control>
+            </control>
+            <!-- SIDE MENU -->
+            <control type="group">
+                <include>LeftMenu</include>
+                <control type="grouplist" id="9000">
+                    <include>LeftMenuButtonGroup</include>
+                    <onright>9009</onright>
+                    <ondown>9000</ondown>
+                    <onback>9009</onback>
+                    <control type="label" id="7965">
+                        <include>LeftMenuTitleLabel</include>
+                        <label>$LOCALIZE[33061]</label>
+                    </control>
+                    <control type="button" id="2">
+                        <description>Info</description>
+                        <label>$LOCALIZE[31021]</label>
+                        <include>LeftMenuButton</include>
+                        <onright>9009</onright>
+                        <onclick>Control.SetFocus(9009)</onclick>
+                    </control>
+                    <control type="togglebutton" id="8">
+                        <description>play</description>
+                        <include>LeftMenuButton</include>
+                        <label>$LOCALIZE[208]</label>
+                        <altlabel>$LOCALIZE[502]</altlabel>
+                        <usealttexture>String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season)</usealttexture>
+                        <onright>9009</onright>
+                    </control>
+                    <!--<control type="button" id="9">-->
+                    <!--<description>resume</description>-->
+                    <!--<label>$LOCALIZE[13404] $INFO[ListItem.PercentPlayed,(,%)]</label>-->
+                    <!--<include>LeftMenuButton</include>-->
+                    <!--<visible>Control.IsEnabled(9)</visible>-->
+                    <!--</control>-->
+                    <control type="button" id="299">
+                        <visible>String.IsEqual(ListItem.DBType,movie) + system.hasaddon(script.cinema.experience)</visible>
+                        <description>Cinema Experience</description>
+                        <include>LeftMenuButton</include>
+                        <label>$LOCALIZE[31005]</label>
+                        <onclick>Dialog.Close(all,true)</onclick>
+                        <onclick>Playlist.Clear</onclick>
+                        <onclick>XBMC.RunScript(script.cinema.experience,movieid=$INFO[ListItem.DBID])</onclick>
+                        <onright>9009</onright>
+                    </control>
+                    <control type="button" id="298">
+                        <visible>System.HasAddon(script.cinemavision) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,season) | String.IsEqual(ListItem.DBType,episode)]</visible>
+                        <description>Cinema Vision</description>
+                        <include>LeftMenuButton</include>
+                        <label>CinemaVision</label>
+                        <onclick>Dialog.Close(MovieInformation)</onclick>
+                        <onclick>RunScript(script.cinemavision,experience)</onclick>
+                        <onright>9009</onright>
+                    </control>
+                    <control type="button" id="1227">
+                        <label>Special Features</label>
+                        <include>LeftMenuButton</include>
+                        <onclick>Dialog.Close(MovieInformation)</onclick>
+                        <onclick>RunScript(plugin.video.specialfeatures,listitem)</onclick>
+                        <visible>String.IsEqual(Window(home).Property(SpecialFeatures.Visible),true)</visible>
+                        <onright>9009</onright>
+                    </control>
+                    <control type="button" id="11">
+                        <visible>!String.IsEmpty(ListItem.Trailer)</visible>
+                        <description>Trailers</description>
+                        <include>LeftMenuButton</include>
+                        <label>$LOCALIZE[20410]</label>
+                        <onright>9009</onright>
+                    </control>
+                    <control type="togglebutton" id="9013">
+                        <visible>!String.IsEmpty(ListItem.Plot)</visible>
+                        <description>Plot</description>
+                        <include>LeftMenuButton</include>
+                        <label>$LOCALIZE[207]</label>
+                        <onclick>Control.SetFocus(6060)</onclick>
+                        <onright>Control.SetFocus(6060)</onright>
+                    </control>
+                    <control type="togglebutton" id="9010">
+                        <visible>System.HasAddon(script.extendedinfo)</visible>
+                        <visible>String.IsEqual(ListItem.DBType,movie)|String.IsEqual(ListItem.DBType,tvshow)|[String.IsEqual(ListItem.DBType,episode)+Skin.HasSetting(plexbmc)+!String.StartsWith(ListItem.Title,Season)+String.IsEmpty(ListItem.VideoCodec)]</visible>
+                        <visible>![!String.IsEqual(Container.FolderPath,videodb://tvshows/titles/) + String.StartsWith(Container.FolderPath,videodb://tvshows/titles/) + !String.IsEqual(ListItem.DBType,episode)]</visible>
+                        <description>Extended Info</description>
+                        <include>LeftMenuButton</include>
+                        <label>$LOCALIZE[31022]</label>
+                        <onclick>dialog.close(all,true)</onclick>
+                        <onclick condition="String.IsEqual(ListItem.DBType,movie)">RunScript(script.extendedinfo,info=extendedinfo,dbid=$INFO[ListItem.DBID],name=$INFO[ListItem.Title])</onclick>
+                        <onclick condition="String.IsEqual(ListItem.DBType,tvshow)">RunScript(script.extendedinfo,info=extendedtvinfo,dbid=$INFO[ListItem.DBID],name=$INFO[ListItem.Title])</onclick>
+                        <onclick condition="String.IsEqual(ListItem.DBType,episode)">RunScript(script.extendedinfo,info=extendedtvinfo,name=$INFO[ListItem.Title])</onclick>
+                        <!--<onclick condition="String.IsEqual(ListItem.DBType,season) + !String.IsEmpty(ListItem.Season)">RunScript(script.extendedinfo,info=seasoninfo,tvshow=$INFO[ListItem.TVShowTitle],season=$INFO[ListItem.Season])</onclick>-->
+                    </control>
+                    <control type="togglebutton" id="9012">
+                        <visible>Integer.IsGreater(Container(50).NumItems,0)</visible>
+                        <description>Actors</description>
+                        <include>LeftMenuButton</include>
+                        <label>$LOCALIZE[344]</label>
+                        <onright>50</onright>
+                        <onclick>Control.SetFocus(50)</onclick>
+                    </control>
+                    <control type="button" id="6">
+                        <description>Refresh</description>
+                        <include>LeftMenuButton</include>
+                        <label>$LOCALIZE[184]</label>
+                        <onright>9009</onright>
+                    </control>
+                    <control type="togglebutton" id="10">
+                        <description>Fanart</description>
+                        <include>LeftMenuButton</include>
+                        <label>$LOCALIZE[13511]</label>
+                        <onright>9009</onright>
+                    </control>
+                    <control type="button" id="7">
+                        <description>Set my rating</description>
+                        <include>LeftMenuButton</include>
+                        <label>$LOCALIZE[38023]</label>
+                        <visible>Control.IsEnabled(7)</visible>
+                        <onright>9009</onright>
+                    </control>
+                    <control type="togglebutton" id="9018">
+                        <visible>System.HasAddon(script.artwork.downloader) + [String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,musicvideo)]</visible>
+                        <description>Artwork Downloader</description>
+                        <include>LeftMenuButton</include>
+                        <label>Artwork Downloader</label>
+                        <onclick condition="String.IsEqual(ListItem.DBType,movie)">XBMC.RunScript(script.artwork.downloader, mode=gui, mediatype=movie, dbid=$INFO[ListItem.DBID])</onclick>
+                        <onclick condition="String.IsEqual(ListItem.DBType,tvshow)">XBMC.RunScript(script.artwork.downloader, mode=gui, mediatype=tvshow, dbid=$INFO[ListItem.DBID])</onclick>
+                        <onclick condition="String.IsEqual(ListItem.DBType,musicvideo)">XBMC.RunScript(script.artwork.downloader, mode=gui, mediatype=musicvideos, dbid=$INFO[ListItem.DBID])</onclick>
+                        <onright>9009</onright>
+                    </control>
+                    <control type="button" id="105">
+                        <visible>System.HasAddon(script.videoextras) + [String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,episode) | String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,musicvideo)] + String.IsEmpty(Window(movieinformation).Property("HideVideoExtrasButton"))</visible>
+                        <description>Videos Extras</description>
+                        <include>LeftMenuButton</include>
+                        <label>$LOCALIZE[31509]</label>
+                        <onclick>XBMC.RunScript(script.videoextras,display,"$INFO[ListItem.FilenameAndPath]")</onclick>
+                        <onright>9009</onright>
+                    </control>
+                    <control type="togglebutton" id="100">
+                        <visible>System.HasAddon(script.tvtunes) + [String.IsEqual(ListItem.DBType,tvshow) | String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,musicvideo)]</visible>
+                        <description>Tv Tunes</description>
+                        <include>LeftMenuButton</include>
+                        <label>$LOCALIZE[31956]</label>
+                        <onclick>XBMC.RunScript(script.tvtunes,mode=solo)</onclick>
+                        <onright>9009</onright>
+                    </control>
+                </control>
+                <include>LeftMenuScroller</include>
+            </control>
+        </control>
+    </controls>
+</window>

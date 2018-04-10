@@ -143,11 +143,11 @@ msgid "N/A"
 msgstr ""
 
 msgctxt "#30091"
-msgid "Confirm file delete?"
+msgid "Confirm delete?"
 msgstr ""
 
 msgctxt "#30092"
-msgid "Delete this item? This action will delete media and associated data files."
+msgid "Warning: This action will delete the media files from the server."
 msgstr ""
 
 msgctxt "#30110"
@@ -407,7 +407,7 @@ msgid "Unknown"
 msgstr ""
 
 msgctxt "#30251"
-msgid "Movies (Genre)"
+msgid "Movies (Genres)"
 msgstr ""
 
 msgctxt "#30252"
@@ -483,27 +483,27 @@ msgid "Movies - Random"
 msgstr ""
 
 msgctxt "#30270"
-msgid "Emby: Mark watched"
+msgid "Mark watched"
 msgstr ""
 
 msgctxt "#30271"
-msgid "Emby: Mark unwatched"
+msgid "Mark unwatched"
 msgstr ""
 
 msgctxt "#30272"
-msgid "Emby: Set favourite"
+msgid "Set favourite"
 msgstr ""
 
 msgctxt "#30273"
-msgid "Emby: Unset favourite"
+msgid "Unset favourite"
 msgstr ""
 
 msgctxt "#30274"
-msgid "Emby: Delete"
+msgid "Delete"
 msgstr ""
 
 msgctxt "#30275"
-msgid "Emby: Force Transcode"
+msgid "Force Transcode"
 msgstr ""
 
 msgctxt "#30276"
@@ -559,7 +559,7 @@ msgid " - Latest"
 msgstr ""
 
 msgctxt "#30289"
-msgid "TV Show (Genre)"
+msgid "TV Show (Genres)"
 msgstr ""
 
 msgctxt "#30290"
@@ -631,7 +631,7 @@ msgid "Playback starting: %s"
 msgstr ""
 
 msgctxt "#30307"
-msgid "Emby: Play Trailer"
+msgid "Play Trailer"
 msgstr ""
 
 msgctxt "#30308"
@@ -671,7 +671,7 @@ msgid "Connection Error"
 msgstr ""
 
 msgctxt "#30317"
-msgid "Emby: Play All"
+msgid "Play All"
 msgstr ""
 
 msgctxt "#30318"
@@ -692,4 +692,24 @@ msgstr ""
 
 msgctxt "#30322"
 msgid "Auto Resume"
+msgstr ""
+
+msgctxt "#30323"
+msgid "Check for new versions"
+msgstr ""
+
+msgctxt "#30324"
+msgid "Movies - Recommendations"
+msgstr ""
+
+msgctxt "#30325"
+msgid " - Genres"
+msgstr ""
+
+msgctxt "#30326"
+msgid "[EmbyCon Menu]"
+msgstr ""
+
+msgctxt "#30327"
+msgid "View Season"
 msgstr ""

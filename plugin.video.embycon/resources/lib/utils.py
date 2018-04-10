@@ -30,7 +30,7 @@ log = SimpleLogging(__name__)
 class PlayUtils():
     def getPlayUrl(self, id, media_source, force_transcode, play_session_id):
         log.debug("getPlayUrl")
-        addonSettings = xbmcaddon.Addon(id='plugin.video.embycon')
+        addonSettings = xbmcaddon.Addon()
         playback_type = addonSettings.getSetting("playback_type")
         server = downloadUtils.getServer()
         log.debug("playback_type: {0}", playback_type)
@@ -227,14 +227,7 @@ def getArt(item, server, widget=False):
     if not art['fanart']:
         art['fanart'] = downloadUtils.getArtwork(item, "Backdrop", parent=True, server=server)
 
-    if not art['landscape']:
-        art['landscape'] = downloadUtils.getArtwork(item, "Thumb", server=server)
-        if not art['landscape']:
-            art['landscape'] = art['fanart']
-
-    if not art['thumb']:
-        art['thumb'] = art['landscape']
-
+    art['landscape'] = downloadUtils.getArtwork(item, "Thumb", server=server)
     art['banner'] = downloadUtils.getArtwork(item, "Banner", server=server)
     art['clearlogo'] = downloadUtils.getArtwork(item, "Logo", server=server)
     art['clearart'] = downloadUtils.getArtwork(item, "Art", server=server)

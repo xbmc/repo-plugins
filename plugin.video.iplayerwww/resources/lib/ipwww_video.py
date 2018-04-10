@@ -199,7 +199,7 @@ def ListChannelAtoZ():
     for id, img, name in channel_list:
         iconimage = xbmc.translatePath(
             os.path.join('special://home/addons/plugin.video.iplayerwww/media', img + '.png'))
-        url = "http://www.bbc.co.uk/%s/a-z" % id
+        url = "https://www.bbc.co.uk/%s/a-z" % id
         AddMenuEntry(name, url, 134, iconimage, '', '')
 
 
@@ -208,7 +208,7 @@ def GetAtoZPage(url):
 
     Creates the list of programmes for one character.
     """
-    link = OpenURL('http://www.bbc.co.uk/iplayer/a-z/%s' % url)
+    link = OpenURL('https://www.bbc.co.uk/iplayer/a-z/%s' % url)
     match = re.compile(
         '<a href="/iplayer/brand/(.+?)".+?<span class="title">(.+?)</span>',
         re.DOTALL).findall(link)
@@ -252,12 +252,12 @@ def FirstShownToAired(first_shown):
 
 
 def GetEpisodes(url):
-    new_url = 'http://www.bbc.co.uk/iplayer/episodes/%s' % url
+    new_url = 'https://www.bbc.co.uk/iplayer/episodes/%s' % url
     ScrapeEpisodes(new_url)
 
 
 def GetGroup(url):
-    new_url = "http://www.bbc.co.uk/iplayer/group/%s" % url
+    new_url = "https://www.bbc.co.uk/iplayer/group/%s" % url
     ScrapeEpisodes(new_url)
 
 
@@ -277,30 +277,46 @@ def ScrapeEpisodes(page_url):
     total_pages = 1
     current_page = 1
     page_range = range(1)
-    paginate = re.search(r'<div class="paginate.*?</div>', html, re.DOTALL)
+    paginate = re.search(r'<ol class="paginat.*?</ol>', html, re.DOTALL)
+    if not paginate:
+        paginate = re.search(r'<div class="paginate.*?</div>', html, re.DOTALL)
     next_page = 1
     if paginate:
         if int(ADDON.getSetting('paginate_episodes')) == 0:
             current_page_match = re.search(r'page=(\d*)', page_url)
             if current_page_match:
                 current_page = int(current_page_match.group(1))
-            page_range = range(current_page, current_page+1)
-            next_page_match = re.search(r'<span class="next txt">.+?href="(.*?page=)(.*?)"',
-                                        paginate.group(0),
-                                        re.DOTALL)
-            if next_page_match:
-                page_base_url = next_page_match.group(1)
-                next_page = int(next_page_match.group(2))
+            pages = re.findall(r'<li class="pag.*?</li>',paginate.group(0),re.DOTALL)
+            if pages:
+                last = pages[-1]
+                last_page = re.search(r'page=(\d*)', last)
+                if last_page:
+                    total_pages = int(last_page.group(1))
+                else:
+                    total_pages = current_page
+            if current_page<total_pages:
+                split_page_url = page_url.split('?')
+                page_base_url = split_page_url[0]
+                for part in split_page_url[1:len(split_page_url)-1]:
+                    if not part.startswith('page'):
+                        page_base_url = page_base_url+'?'+part
+                page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'?page='
+                next_page = current_page+1
             else:
                 next_page = current_page
             page_range = range(current_page, current_page+1)
         else:
-            pages = re.findall(r'<li class="page.*?</li>',paginate.group(0),re.DOTALL)
+            pages = re.findall(r'<li class="pag.*?</li>',paginate.group(0),re.DOTALL)
             if pages:
                 last = pages[-1]
-                last_page = re.search(r'<a href="(.*?page=)(.*?)"',last)
-                page_base_url = last_page.group(1)
-                total_pages = int(last_page.group(2))
+                last_page = re.search(r'page=(\d*)', last)
+                split_page_url = page_url.split('?')
+                page_base_url = split_page_url[0]
+                for part in split_page_url[1:len(split_page_url)-1]:
+                    if not part.startswith('page'):
+                        page_base_url = page_base_url+'?'+part
+                page_base_url = page_base_url.replace('https://www.bbc.co.uk','')+'?page='
+                total_pages = int(last_page.group(1))
             page_range = range(1, total_pages+1)
 
     for page in page_range:
@@ -346,8 +362,9 @@ def ScrapeEpisodes(page_url):
                 url = url_match.group(1)
                 # Some strings already contain the full URL, need to work around this.
                 url = url.replace('http://www.bbc.co.uk','')
+                url = url.replace('https://www.bbc.co.uk','')
                 if url:
-                    main_url = 'http://www.bbc.co.uk' + url
+                    main_url = 'https://www.bbc.co.uk' + url
 
             name = ''
             title = ''
@@ -428,7 +445,7 @@ def ScrapeEpisodes(page_url):
                 more = more_match.group(1)
 
             if episodes:
-                episodes_url = 'http://www.bbc.co.uk' + episodes
+                episodes_url = 'https://www.bbc.co.uk' + episodes
                 if search_group:
                     AddMenuEntry('[B]%s[/B] - %s' % (title, translation(30318)),
                                  episodes_url, 128, icon, '', '')
@@ -468,8 +485,9 @@ def ScrapeEpisodes(page_url):
                 if 'href' in item:
                     # Some strings already contain the full URL, need to work around this.
                     url = item['href'].replace('http://www.bbc.co.uk','')
+                    url = item['href'].replace('https://www.bbc.co.uk','')
                     if url:
-                        main_url = 'http://www.bbc.co.uk' + url
+                        main_url = 'https://www.bbc.co.uk' + url
 
                 subtitle = None
                 title = ''
@@ -502,7 +520,7 @@ def ScrapeEpisodes(page_url):
 
     if int(ADDON.getSetting('paginate_episodes')) == 0:
         if current_page < next_page:
-            page_url = 'http://www.bbc.co.uk' + page_base_url + str(next_page)
+            page_url = 'https://www.bbc.co.uk' + page_base_url + str(next_page)
             AddMenuEntry(" [COLOR ffffa500]%s >>[/COLOR]" % translation(30320), page_url, 128, '', '', '')
 
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
@@ -592,7 +610,7 @@ def ScrapeAtoZEpisodes(page_url):
             if url_match:
                 url = url_match.group(1)
                 if url:
-                    main_url = 'http://www.bbc.co.uk' + url
+                    main_url = 'https://www.bbc.co.uk' + url
 
             name = ''
             title = ''
@@ -667,7 +685,7 @@ def ScrapeAtoZEpisodes(page_url):
                 more = more_match.group(1)
 
             if episodes:
-                episodes_url = 'http://www.bbc.co.uk' + episodes
+                episodes_url = 'https://www.bbc.co.uk' + episodes
                 if search_group:
                     AddMenuEntry('[B]%s[/B] - %s' % (title, translation(30318)),
                                  episodes_url, 128, icon, '', '')
@@ -819,7 +837,7 @@ def ListCategories():
     """Parses the available categories and creates directories for selecting one of them.
     The category names are scraped from the website.
     """
-    html = OpenURL('http://www.bbc.co.uk/iplayer')
+    html = OpenURL('https://www.bbc.co.uk/iplayer')
     match = re.compile(
         '<a href=".*?/iplayer/categories/([^{}]*?)".*?>(.+?)</a>'
         ).findall(html)
@@ -831,7 +849,7 @@ def ListCategoryFilters(url):
     """Parses the available category filters (if available) and creates directories for selcting them.
     If there are no filters available, all programmes will be listed using GetFilteredCategory.
     """
-    NEW_URL = 'http://www.bbc.co.uk/iplayer/categories/%s/all?sort=atoz' % url
+    NEW_URL = 'https://www.bbc.co.uk/iplayer/categories/%s/all?sort=atoz' % url
     # Read selected category's page.
     html = OpenURL(NEW_URL)
     # Some categories offer filters, we want to provide these filters as options.
@@ -849,7 +867,7 @@ def ListCategoryFilters(url):
 
 def GetFilteredCategory(url):
     """Parses the programmes available in the category view."""
-    NEW_URL = 'http://www.bbc.co.uk/iplayer/categories/%s/all?sort=atoz' % url
+    NEW_URL = 'https://www.bbc.co.uk/iplayer/categories/%s/all?sort=atoz' % url
 
     ScrapeEpisodes(NEW_URL)
 
@@ -888,75 +906,6 @@ def ListHighlights(highlights_url):
     # NOTE find episode count first
     episode_count = dict()
 
-    # These groups seem to be no longer used, because this function is only used
-    # for Channel Highlights, no longer main Highlights.
-    # Comment the code for now and remove it in the future.
-    """
-    groups = [a for a in inner_anchors if re.match(
-        r'<a[^<]*?class="grouped-items__cta.*?data-object-type="group-list-link".*?',
-        a, flags=(re.DOTALL | re.MULTILINE))]
-    for group in groups:
-
-        href = ''
-        href_match = re.match(
-            r'<a[^<]*?href="(.*?)"',
-            group, flags=(re.DOTALL | re.MULTILINE))
-        if href_match:
-            href = href_match.group(1)
-
-        count_match = re.search(
-            r'>View all ([0-9]*).*?</a>',
-            group, flags=(re.DOTALL | re.MULTILINE))
-        if count_match:
-            count = count_match.group(1)
-            episode_count[href] = count
-
-    groups = [a for a in inner_anchors if re.match(
-        r'<a[^<]*?class="grouped-items__title.*?data-object-type="group-list-link".*?',
-        a, flags=(re.DOTALL | re.MULTILINE))]
-    for group in groups:
-
-        href = ''
-        href_match = re.match(
-            r'<a[^<]*?href="(.*?)"',
-            group, flags=(re.DOTALL | re.MULTILINE))
-        if href_match:
-            href = href_match.group(1)
-
-        name = ''
-        name_match = re.search(
-            r'<strong>(.*?)</strong>',
-            group, flags=(re.DOTALL | re.MULTILINE))
-        if name_match:
-            name = name_match.group(1)
-
-        count = ''
-        if href in episode_count:
-            count = episode_count[href]
-
-        url = 'http://www.bbc.co.uk' + href
-
-        # Unfortunately, the group type is not inside the links, so we need to search the whole HTML.
-        group_type = ''
-        group_type_match = re.search(
-            r'data-group-name="'+name+'".+?data-group-type="(.+?)"',
-            html, flags=(re.DOTALL | re.MULTILINE))
-        if group_type_match:
-            group_type = group_type_match.group(1)
-
-        position = ''
-        position_match = re.search(
-            r'data-object-position="(.+?)-ALL"',
-            group, flags=(re.DOTALL | re.MULTILINE))
-        if position_match:
-            group_properties.append(
-                             [position_match.group(1),
-                             name, group_type])
-
-        AddMenuEntry('[B]%s: %s[/B] - %s %s' % (translation(30314), name, count, translation(30315)),
-                     url, 128, '', '', '')
-    """
-
     # New group types for Channel Highlights.
     groups = [a for a in inner_anchors if re.match(
         r'[^<]*?class="group__title stat.*?data-object-type="group-list-link".*?',
@@ -969,7 +918,7 @@ def ListHighlights(highlights_url):
             group, flags=(re.DOTALL | re.MULTILINE))
         if href_match:
             href = href_match.group(1)
-            url = 'http://www.bbc.co.uk' + href
+            url = 'https://www.bbc.co.uk' + href
 
         name = ''
         name_match = re.search(
@@ -1099,7 +1048,7 @@ def ListHighlights(highlights_url):
                 single, flags=(re.DOTALL | re.MULTILINE))
         if id_match:
             episode_id = id_match.group(1)
-            url = 'http://www.bbc.co.uk/iplayer/episode/' + episode_id
+            url = 'https://www.bbc.co.uk/iplayer/episode/' + episode_id
 
         name = ''
         # <h3 class="single-item__title typo typo--skylark"><strong>BBC Music Introducing</strong></h3>
@@ -1146,7 +1095,7 @@ def ListHighlights(highlights_url):
         if image_match:
             image = image_match.group(1)
             if image:
-                icon = "http://ichef.bbci.co.uk/images/ic/832x468/" + image + ".jpg"
+                icon = "https://ichef.bbci.co.uk/images/ic/832x468/" + image + ".jpg"
 
         desc = ''
         # <p class="item-overlay__text__inner typo typo--canary">
@@ -1185,7 +1134,7 @@ def ListHighlights(highlights_url):
 
     # Finally add all programmes which have been identified as part of a group before.
     for episode in episodelist:
-        episode_url = "http://www.bbc.co.uk/iplayer/episode/%s" % episode[0]
+        episode_url = "https://www.bbc.co.uk/iplayer/episode/%s" % episode[0]
         if ((ADDON.getSetting('suppress_incomplete') == 'false') or (not episode[4] == '')):
             if episode[0]:
                 CheckAutoplay(episode[1], episode_url, episode[3], episode[2], episode[4])
@@ -1298,7 +1247,7 @@ def ListMainHighlights(highlights_url):
 
 def ListMostPopular():
     """Scrapes all episodes of the most popular page."""
-    html = OpenURL("http://www.bbc.co.uk/iplayer/group/most-popular")
+    html = OpenURL("https://www.bbc.co.uk/iplayer/group/most-popular")
 
     # <li class="most-popular__item gel-layout__item gel-1/2 gel-1/3@m">
     list_items = re.findall(r'<li class="most-popular.*?</li>', html, flags=(re.DOTALL | re.MULTILINE))
@@ -1322,8 +1271,9 @@ def ListMostPopular():
             url = url_match.group(1)
             # Some strings already contain the full URL, need to work around this.
             url = url.replace('http://www.bbc.co.uk','')
+            url = url.replace('https://www.bbc.co.uk','')
             if url:
-                main_url = 'http://www.bbc.co.uk' + url
+                main_url = 'https://www.bbc.co.uk' + url
 
         name = ''
         title = ''
@@ -1475,7 +1425,7 @@ def Search(search_entered):
     if search_entered is None:
         return False
 
-    NEW_URL = 'http://www.bbc.co.uk/iplayer/search?q=%s' % search_entered
+    NEW_URL = 'https://www.bbc.co.uk/iplayer/search?q=%s' % search_entered
     ScrapeEpisodes(NEW_URL)
 
 
@@ -1694,7 +1644,7 @@ def ParseStreams(stream_id):
     retlist = []
     # print "Parsing streams for PID: %s"%stream_id
     # Open the page with the actual strem information and display the various available streams.
-    NEW_URL = "http://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/iptv-all/vpid/%s" % stream_id
+    NEW_URL = "https://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/iptv-all/vpid/%s" % stream_id
     html = OpenURL(NEW_URL)
     # Parse the different streams and add them as new directory entries.
     match = re.compile(
@@ -1900,7 +1850,7 @@ def ParseLiveStreams(channelname, providers):
         else:
             cast = "simulcast"
 
-        url = 'http://a.files.bbci.co.uk/media/live/manifesto/audio_video/%s/hls/uk/%s/%s/%s.m3u8' \
+        url = 'https://a.files.bbci.co.uk/media/live/manifesto/audio_video/%s/hls/uk/%s/%s/%s.m3u8' \
               % (cast, device, provider_url, channelname)
         html = OpenURL(url)
         match = re.compile('#EXT-X-STREAM-INF:PROGRAM-ID=(.+?),BANDWIDTH=(.+?),CODECS="(.*?)",RESOLUTION=(.+?)\s*(.+?.m3u8)').findall(html)

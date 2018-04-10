@@ -77,3 +77,7 @@ msgstr "Du musst premium nutzer sein oder das Video gekauft haben"
 msgctxt "#30044"
 msgid "Failed to play video"
 msgstr "Fehlgeschlagen das Video abzuspielen"
+
+msgctxt "#30045"
+msgid "You need to be logged in"
+msgstr "Du musst eingeloggt sein"

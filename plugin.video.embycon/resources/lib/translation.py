@@ -3,7 +3,7 @@ import xbmcaddon
 from simple_logging import SimpleLogging
 
 log = SimpleLogging(__name__)
-addon = xbmcaddon.Addon(id='plugin.video.embycon')
+addon = xbmcaddon.Addon()
 
 
 def i18n(string_id):
@@ -125,6 +125,10 @@ STRINGS = {
     'music_all_albums': 30318,
     'music_all_artists': 30319,
     '_all_albums': 30320,
-    '_all_artists': 30321
+    '_all_artists': 30321,
+    'movies_recommendations': 30324,
+    '_genres': 30325,
+    'play': 30314,
+    'view_season': 30327
 
 }

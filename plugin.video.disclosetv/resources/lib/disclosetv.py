@@ -1,4 +1,4 @@
-#   Copyright (C) 2017 Lunatixz
+#   Copyright (C) 2018 Lunatixz
 #
 #
 # This file is part of disclosetv.
@@ -18,7 +18,7 @@
 
 # -*- coding: utf-8 -*-
 import sys, time, datetime, re, traceback
-import urllib, urllib2, socket, json
+import urlparse, urllib, urllib2, socket, json
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 
 from bs4 import BeautifulSoup
@@ -48,21 +48,10 @@ def log(msg, level=xbmc.LOGDEBUG):
     if DEBUG == False and level != xbmc.LOGERROR: return
     if level == xbmc.LOGERROR: msg += ' ,' + traceback.format_exc()
     xbmc.log(ADDON_ID + '-' + ADDON_VERSION + '-' + msg, level)
-    
+
 def getParams():
-    param=[]
-    if len(sys.argv[2])>=2:
-        params=sys.argv[2]
-        cleanedparams=params.replace('?','')
-        if (params[len(params)-1]=='/'): params=params[0:len(params)-2]
-        pairsofparams=cleanedparams.split('&')
-        param={}
-        for i in range(len(pairsofparams)):
-            splitparams={}
-            splitparams=pairsofparams[i].split('=')
-            if (len(splitparams))==2: param[splitparams[0]]=splitparams[1]
-    return param
-                 
+    return dict(urlparse.parse_qsl(sys.argv[2][1:]))
+    
 socket.setdefaulttimeout(TIMEOUT)
 class Disclose(object):
     def __init__(self):
@@ -96,25 +85,27 @@ class Disclose(object):
         soup   = BeautifulSoup(self.openURL(url), "html.parser")
         videos = soup('div', {'class': 'teaser teaser--third'})
         for video in videos:
-            try: thumb = 'http:%s'%(video('div', {'class': 'ratio-container ratio16_9'})[0].find('img').attrs['data-src'])
-            except: thumb = FANART
-            items   = video('div', {'class': 'teaser__caption'})
-            vid_url = BASE_URL + (items[0]('a', {'class': 'article-link'})[0].attrs['href'])
-            label   = items[0]('a', {'class': 'article-link'})[0].get_text()
-            timeago = items[0]('span', {'class': 'meta-timeago'})[0].get_text()
-            plot    = '%s - %s'%(timeago, label)
-            try: genre = video('span', {'class': 'teaser-figure__cat'})[0].get_text()
-            except: genre = 'Unknown'
-            runtime = (video('span', {'class': 'teaser-figure__len'})[0].get_text()).split(':')
-            if len(runtime) == 3:
-                h, m, s = runtime
-                duration  = int(h) * 3600 + int(m) * 60 + int(s)
-            else:
-                m, s = runtime
-                duration  = (int(m) * 60) + int(s)
-            infoLabels = {"mediatype":"episode","label":label ,"title":label,"duration":duration,"plot":plot}
-            infoArt    = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON}
-            self.addLink(label, vid_url, 9, infoLabels, infoArt, len(videos))
+            try:
+                try: thumb = 'http:%s'%(video('div', {'class': 'ratio-container ratio16_9'})[0].find('img').attrs['data-src'])
+                except: thumb = FANART
+                items   = video('div', {'class': 'teaser__caption'})
+                vid_url = BASE_URL + (items[0]('a', {'class': 'article-link'})[0].attrs['href'])
+                label   = items[0]('a', {'class': 'article-link'})[0].get_text()
+                timeago = items[0]('span', {'class': 'meta-timeago'})[0].get_text()
+                plot    = '%s - %s'%(timeago, label)
+                try: genre = video('span', {'class': 'teaser-figure__cat'})[0].get_text()
+                except: genre = 'Unknown'
+                runtime = (video('span', {'class': 'teaser-figure__len'})[0].get_text()).split(':')
+                if len(runtime) == 3:
+                    h, m, s = runtime
+                    duration  = int(h) * 3600 + int(m) * 60 + int(s)
+                else:
+                    m, s = runtime
+                    duration  = (int(m) * 60) + int(s)
+                infoLabels = {"mediatype":"episode","label":label ,"title":label,"duration":duration,"plot":plot}
+                infoArt    = {"thumb":thumb,"poster":thumb,"fanart":FANART,"icon":ICON,"logo":ICON}
+                self.addLink(label, vid_url, 9, infoLabels, infoArt, len(videos))
+            except Exception as e: log("browse Failed! " + str(e), xbmc.LOGERROR)
         next = soup('li', {'class': 'more-container__button m-auto'})
         if len(next) == 0: return
         next_url   = BASE_URL + next[0].find('a').attrs['href']
@@ -129,7 +120,9 @@ class Disclose(object):
         info = info.streams()
         url  = info[0]['xbmc_url']
         liz  = xbmcgui.ListItem(name, path=url)
-        if 'subtitles' in info[0]['ytdl_format']: liz.setSubtitles([x['url'] for x in info[0]['ytdl_format']['subtitles'].get('en','') if 'url' in x])
+        try: 
+            if 'subtitles' in info[0]['ytdl_format']: liz.setSubtitles([x['url'] for x in info[0]['ytdl_format']['subtitles'].get('en','') if 'url' in x])
+        except: pass
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, liz)
         
         

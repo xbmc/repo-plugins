@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.specialfeatures"
+version="3.0.1"
+name="Special Features"
+provider-name="smitchell6879, evertiro">
+<requires>
+  <import addon="xbmc.python" version="2.25.0"/>
+  <import addon="script.module.future" version="0.0.1"/> 
+  <import addon="script.module.pymysql" version="0.8.0"/> 
+</requires>
+<extension point="kodi.context.item">
+    <menu id="kodi.core.main">
+      <item library="context.py">
+        <label>30070</label>
+        <visible>String.IsEqual(Window(home).Property(SpecialFeatures.Visible),true)+String.IsEqual(Window(home).Property(SpecialFeatures.ContextMenu),true)+!String.StartsWith(Container.FolderPath,plugin://plugin.video.specialfeatures)</visible>
+      </item>
+    </menu>
+</extension>
+<extension point="xbmc.service" library="service.py" start="[login]"/>
+<extension point="xbmc.python.script" library="script.py"/>
+<extension point="xbmc.python.pluginsource" library="plugin.py">
+  <provides>video</provides>
+</extension>
+<extension point="xbmc.addon.metadata">
+  <summary lang="en_GB">Given a properly structured 'Extras' directory, this addon will present all of the bonus media in your library.</summary>
+  <description lang="en_GB">Special Features is inspired by the upcoming Blu-ray features being introduced in Kodi 18. Given a properly structured 'Extras' directory, this addon will present all of the bonus videos, discs and alternate versions of the movies and tv shows in your library.</description>
+  <disclaimer lang="en_GB">Kodi 17/18 Required</disclaimer>
+  <assets>
+    <icon>icon.png</icon>
+    <fanart>fanart.jpg</fanart>
+    <screenshot>resources/screenshot001.png</screenshot>
+    <screenshot>resources/screenshot002.png</screenshot>
+    <screenshot>resources/screenshot003.png</screenshot>    
+  </assets>
+  <news></news>
+</extension>
+</addon>

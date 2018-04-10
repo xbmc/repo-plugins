@@ -1,0 +1,138 @@
+[B]Version 3.6.2 March 6th, 2018[/B]
+- Restore script.module.requests as a dependency
+
+[B]Version 3.6.1 February 23rd, 2018[/B]
+- Krypton API changes
+
+[B]Version 3.6.0 February 14th, 2018[/B]
+- Updated from strings.xml to strings.po
+
+[B]Version 3.5.1 January 28th, 2018[/B]
+- Upgraded to requests over urllib/urllib2
+- Updated audio feeds of active shows
+  - By @rickyphewitt
+- Move inactive shows to Archive
+  - By @Xmetalfanx
+- Added screenshots and new icon
+  - By @RobLoach
+
+[B]Version 3.4.0 May 19th, 2017[/B]
+- Added a FeedParser class to help in parsing the RSS feeds
+  - By @rickyphewitt
+- Added Ask Noah Show
+- Added Linux Action News
+  - By @Xmetalfanx
+
+[B]Version 3.3.0 October 6th, 2016[/B]
+- New Show: User Error
+  - By @Xmetalfanx, @rickyphewitt, and @rikai
+- Archived Shows Folder
+  - By @rickyphewitt
+
+[B]Version 3.2.4 May 2nd, 2016[/B]
+- Update BeautifulSoup to 3.2.1
+
+[B]Version 3.2.3 May 2nd, 2016[/B]
+- Updated documentation to reference Kodi, rather than XBMC
+- Updated default live stream setting to be RTMP
+  - By @Rikai
+
+[B]Version 3.2.2 December 24th, 2015[/B]
+- Fix Women's Tech Radio logo
+
+[B]Version 3.2.1 February 7th, 2015[/B]
+- Add ability to change Live Stream type
+
+[B]Version 3.2.0 November 19th, 2014[/B]
+- New Show: Women's Tech Radio
+
+[B]Version 3.1.1 June 24th, 2014[/B]
+- Updated artwork for active shows: Linux Action Show and Linux Unplugged
+- Updated artwork work archived shows: Torked and In Depth Look
+- Updated artwork for addon main icon with new color logo
+- Improved the assets filename structure
+- Renamed Live Show item JBLive.TV
+- Added new artwork for JBLive.TV and Most Recent items
+
+[B]Version 3.1.0 June 5th, 2014[/B]
+- New Show: Tech Talk Today
+- New Show: HowTo Linux
+- Cleaner source with Pylint
+
+[B]Version 3.0.6 April 6th, 2014[/B]
+- Add new logo for Linux Action Show and Linux Unplugged
+
+[B]Version 3.0.5: April 3rd, 2014[/B]
+- Change Logo to new Jupiter Broadcasting Logo
+
+[B]Version 3.0.4: March 23rd, 2014[/B]
+- Updated documentation
+
+[B]Version 3.0.1: September 15th, 2013[/B]
+- New Show: BSD Now
+- Ammended language numbering to match system
+
+[B]Version 3.0.0: August 21st, 2013[/B]
+- Direct support for XBMC Frodo
+
+[B]Version 2.9.3: August 21st, 2013[/B]
+- New show: Linux Unplugged
+
+[B]Version 2.9.2: May 16th, 2013[/B]
+- New show: Plan B
+- Episodes per page is now a setting
+- Updated Linux Action Show thumbnail
+- Added RTSP live streaming for low quality video
+- Added audio streams
+- Various fixes
+
+[B]Version 2.8.1: December 10th, 2012[/B]
+- #4 FauxShow: Use JupiterBroadcasting.com feeds
+- #2 Pagination
+- #3 Ship show images with the addon
+
+[B]Version 2.8.0: July 7th, 2012[/B]
+- New show: Coder Radio
+
+[B]Version 2.7.1: June 5th, 2012[/B]
+- New show: Unfilter
+- Switched to the faster HLS live stream
+
+[B]Version 2.6.0: April 4th, 2012[/B]
+- New show: TORked
+- Highlighting the most recent and live show titles
+
+[B]Version 2.5.0: January 31th, 2012[/B]
+- Initial XBMC Eden release
+
+[B]Version 1.4.1: January 30th, 2012[/B]
+- Fix for thumbnail support
+
+[B]Version 1.4.0: January 12th, 2012[/B]
+- New show: FauxShow
+- New show: In Depth Look
+- Fan art
+- Configurable video quality
+- Thumbnail support once ChrisLAS adds them
+- Switched from FeedParser to BeautifulSoup for feed aggregation
+- Various small fixes
+
+[B]Version 1.3.0: January 10th, 2012[/B]
+- Moved to GitHub for version control
+- New show: Live
+
+[B]Version 1.2.0: September 15th, 2011[/B]
+- Switched to HD video
+- Updated some of the show thumbnail images
+- Fix for RSS feeds without enclosures
+
+[B]Version 1.1.0: July 25th, 2011[/B]
+- New show: The MMOrgue
+- New show: TechSNAP
+- New show: SciByte
+
+[B]Version 1.0.1: July 20th, 2011[/B]
+- Updated icon from freezy. Thanks freezy!
+
+[B]Version 1.0.0: July 20th, 2011[/B]
+- Initial release

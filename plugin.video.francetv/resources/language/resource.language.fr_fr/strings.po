@@ -1,0 +1,67 @@
+# Kodi Media Center language file
+# Addon Name: France•tv
+# Addon id: plugin.video.francetv
+# Addon Provider: melmorabity
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.francetv\n"
+"POT-Creation-Date: 2018-04-08 14:55+0200\n"
+"PO-Revision-Date: 2018-04-11 02:36+0200\n"
+"Last-Translator: melmorabity\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr_FR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgctxt "#30001"
+msgid "Channels"
+msgstr "Chaînes"
+
+msgctxt "#30002"
+msgid "Categories"
+msgstr "Catégories"
+
+msgctxt "#30003"
+msgid "Live"
+msgstr "En direct"
+
+msgctxt "#30004"
+msgid "Next page"
+msgstr "Page suivante"
+
+msgctxt "#30005"
+msgid "All TV shows"
+msgstr "Toutes les émissions"
+
+msgctxt "#30006"
+msgid "All videos"
+msgstr "Toutes les vidéos"
+
+msgctxt "#30100"
+msgid "General"
+msgstr "Général"
+
+msgctxt "#30101"
+msgid "Videos per page"
+msgstr "Nombre de vidéos par page"
+
+msgctxt "#30102"
+msgid "Enable subtitles (if available)"
+msgstr "Activer les sous-titres (si disponibles)"
+
+msgctxt "#30200"
+msgid "Connection error"
+msgstr "Erreur de connexion"
+
+msgctxt "#30201"
+msgid "There was an error while communicating with France Télévisions. Please try again later."
+msgstr "Une erreur est survenue pendant la communication avec France Télévisions. Veuillez réessayer ultérieurement."
+
+msgctxt "#30202"
+msgid "Playback failed"
+msgstr "Échec de lecture"
+
+msgctxt "#30203"
+msgid "Stream failed to play. It's maybe no longer available or geo-restricted"
+msgstr "Échec de lecture du flux. Il n'est peut-être plus disponible ou bien non visionnable depuis votre région."

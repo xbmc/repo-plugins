@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30100">
+      <setting id="max_videos_per_page" type="enum" label="30101" values="10|20|30|40|50|60|70|80|90|100" default="4" />
+      <setting id="enable_subtitles" type="bool" label="30102" default="true" />
+    </category>
+</settings>

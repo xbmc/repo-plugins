@@ -41,7 +41,7 @@ msgid ""
 msgstr ""
 
 msgctxt "#30010"
-msgid "Something Went Wrong..."
+msgid "Something went wrong, Try again..."
 msgstr ""
 
 msgctxt "#30011"
@@ -58,4 +58,12 @@ msgstr ""
 
 msgctxt "#30014"
 msgid "Navigate to UPNP, locate Playon Server"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Kodi UPNP Enabled"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Enter Search Term"
 msgstr ""

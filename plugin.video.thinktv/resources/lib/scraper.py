@@ -303,7 +303,10 @@ class myAddon(t1mAddon):
  def getAddonVideo(self,url):
     xheaders = self.defaultHeaders.copy()
     xheaders['X-Requested-With'] = 'XMLHttpRequest'
-    html = self.getRequest('http://www.pbs.org/video/%s/' % (url), None, xheaders)
+    if not url.startswith('/video'):
+        html = self.getRequest('http://www.pbs.org/video/%s/' % (url), None, xheaders)
+    else:
+        html = self.getRequest('http://www.pbs.org/%s' % (url), None, xheaders)
     url = re.compile("id: '(.+?)'", re.DOTALL).search(html).group(1)
     addonLanguage = self.addon.getLocalizedString
     pbs_uid = self.addon.getSetting('pbs_uid')

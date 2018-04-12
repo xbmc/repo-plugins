@@ -4,6 +4,7 @@ plugin.video.thinktv
 Kodi Video Addon for PBS ThinkTV
 For Kodi Isengard and above releases
 
+version 3.0.13 fix movies/specials to be able to play
 version 3.0.12 try to handle multiple seasons
 version 3.0.11 website change, use inputstream.adaptive to speed stream selection, needs Krypton or above
 version 3.0.10 quick fix for website change

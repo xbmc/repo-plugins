@@ -19,6 +19,10 @@ def addDirectory(title,banner,backdrop, description,link,mode,pluginhandle):
     u = sys.argv[0] + '?' + urllib.urlencode(parameters)
     createListItem(title,banner,description,'','','',u, False,True, backdrop,pluginhandle,None)
 
+def generateAddonVideoUrl(videourl):
+    return "plugin://%s/?mode=play&videourl=%s"  % (xbmcaddon.Addon().getAddonInfo('id'),videourl)
+
+    
 def createListItem(title,banner,description,duration,date,channel,videourl,playable,folder, backdrop,pluginhandle,subtitles=None,blacklist=False, contextMenuItems = None):
     contextMenuItems = contextMenuItems or []
 
@@ -33,7 +37,10 @@ def createListItem(title,banner,description,duration,date,channel,videourl,playa
     liz.setInfo( type="Video", infoLabels={ "Aired": date } )
     liz.setInfo( type="Video", infoLabels={ "Studio": channel } )
     liz.setProperty('fanart_image',backdrop)
-    liz.setProperty('IsPlayable', str(playable))
+    if playable and not folder:
+        liz.setProperty('IsPlayable', 'true')
+        videourl = "plugin://%s/?mode=play&videourl=%s" % (xbmcaddon.Addon().getAddonInfo('id'),videourl)
+        debugLog("Videourl: %s" % videourl,"ListItem")                       
 
     if not folder:
         liz.setInfo( type="Video", infoLabels={ "mediatype" : 'video'})
@@ -74,7 +81,7 @@ def createListItem(title,banner,description,duration,date,channel,videourl,playa
         else:
             bl_title = title.replace("+"," ").strip()
 
-        blparameters = {"mode" : "blacklistShow", "title": bl_title}
+        blparameters = {"mode" : "blacklistShow", "link": bl_title}
         blurl = sys.argv[0] + '?' + urllib.urlencode(blparameters)
         contextMenuItems.append(('%s %s %s' % (Settings.localizedString(30038).encode("utf-8"), bl_title, Settings.localizedString(30042).encode("utf-8")), 'XBMC.RunPlugin(%s)' % blurl))
         if checkBlacklist(bl_title):

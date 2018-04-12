@@ -1,0 +1,74 @@
+# XBMC Media Center language file
+# Addon Name: Download it
+# Addon id: context.downloadit
+# Addon version: 0.5.0
+# Addon Provider: L0RE
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2018-03-19 22:56+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: UNKNOWN\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Download Video from Plugins"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Download it downloads videos from plugins into a directory. Set the path to the FFmpeg binary to achieve the best results. Beware! The use of the Add-on\n        could be illegal depending of the page and country you resident in."
+msgstr ""
+
+msgctxt "#30000"
+msgid "Download Directory"
+msgstr "Download Directory"
+
+msgctxt "#30001"
+msgid "FFmpeg Binary"
+msgstr "FFmpeg Binary"
+
+msgctxt "#30002"
+msgid "Download is Running"
+msgstr "Download is Running"
+
+msgctxt "#30003"
+msgid "Download"
+msgstr "Download"
+
+msgctxt "#30004"
+msgid "Video Successfully downloaded"
+msgstr "Video Successfully downloaded"
+
+msgctxt "#30005"
+msgid "Error"
+msgstr "Error"
+
+msgctxt "#30006"
+msgid "Download Failed, trying using youtube-dl"
+msgstr "Download Failed, trying using youtube-dl"
+
+msgctxt "#30007"
+msgid "WARNING"
+msgstr "WARNING"
+
+msgctxt "#30008"
+msgid "The use of the add-on could be illegal depending of the stream and the country you live in."
+msgstr "The use of the add-on could be illegal depending of the stream and the country you live in."
+
+msgctxt "#30009"
+msgid "Please check before you are using it."
+msgstr "Please check before you are using it."
+
+msgctxt "#30010"
+msgid "Did you understand it?"
+msgstr "Did you understand it?"
+
+msgctxt "#30011"
+msgid "Settings"
+msgstr "Settings"

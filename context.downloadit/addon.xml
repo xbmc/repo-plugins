@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="context.downloadit" name="Download it" version="0.6.0" provider-name="L0RE">
+    <requires>
+        <import addon="xbmc.python" version="2.20.0" />        
+        <import addon="script.module.youtube.dl" version="14.810.0"/>        
+    </requires>
+    <extension point="kodi.context.item" library="addon.py">
+        <item>
+            <label>Download it</label>
+            <visible>Window.IsActive(10025)</visible>            
+        </item>
+    </extension>   
+    <extension point="xbmc.python.pluginsource" library="settings.py" >
+            <provides>executable</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Download Video from Plugins</summary>
+        <description lang="en">Download it downloads videos from plugins into a directory. Set the path to the FFmpeg binary to achieve the best results. Beware! </description>
+        <platform>all</platform>
+        <language>en</language>
+        <license>GNU General Public License, v2</license>        
+        <email>andreas at vogler dot name</email>
+        <disclaimer lang="en">The use of the add-on could be illegal depending of the page and country you resident in.</disclaimer>
+    </extension>
+</addon>

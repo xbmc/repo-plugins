@@ -23,7 +23,6 @@ def saveCookies(session_cookies):
     with open(getCookieFile(), 'w') as f:
         cookies = dict_from_cookiejar(session_cookies)
         pickle.dump(cookies, f)
-        f.close()
 
 
 def loadCookies():
@@ -34,7 +33,6 @@ def loadCookies():
     try:
         with open(getCookieFile(), 'r') as f:
             cookies = pickle.load(f)
-            f.close()
             return cookiejar_from_dict(cookies)
     except IOError as err:
         log('Unable to load cookies: {}'.format(err), True)
@@ -59,7 +57,6 @@ def getAuthorizationFile():
 def saveAuthorization(authorization):
     with open(getAuthorizationFile(), 'w') as f:
         pickle.dump(authorization, f)
-        f.close()
 
 
 def loadAuthorization():
@@ -70,7 +67,6 @@ def loadAuthorization():
     try:
         with open(getAuthorizationFile(), 'r') as f:
             authorization = pickle.load(f)
-            f.close()
             return authorization
     except IOError as err:
         log('Unable to load authorization: {}'.format(err), True)

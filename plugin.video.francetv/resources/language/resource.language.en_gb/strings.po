@@ -1,12 +1,12 @@
 # Kodi Media Center language file
-# Addon Name: France•tv
+# Addon Name: France.tv
 # Addon id: plugin.video.francetv
 # Addon Provider: melmorabity
 msgid ""
 msgstr ""
 "Project-Id-Version: plugin.video.francetv\n"
 "POT-Creation-Date: 2018-04-08 14:55+0200\n"
-"PO-Revision-Date: 2018-04-11 02:36+0200\n"
+"PO-Revision-Date: 2018-04-12 18:43+0200\n"
 "Last-Translator: melmorabity\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"

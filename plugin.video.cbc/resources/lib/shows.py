@@ -31,7 +31,7 @@ class Shows:
         auth = loadAuthorization()
         return None if auth == None else {
             'X-Clearleap-DeviceToken': auth['token'],
-            'X-Client-Version': '3.1.2',
+            'X-Client-Version': '9.9.9',
             'X-Client-Name': 'Android',
             'X-Clearleap-DeviceId': auth['id']
         }

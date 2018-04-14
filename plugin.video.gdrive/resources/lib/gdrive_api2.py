@@ -1226,38 +1226,7 @@ class gdrive(cloudservice):
 
             return url
 
-            url = self.API_URL +'files/' + docid
 
-            req = urllib2.Request(url, None, self.getHeadersList())
-
-
-            # if action fails, validate login
-            try:
-                response = urllib2.urlopen(req)
-            except urllib2.URLError, e:
-                if e.code == 403 or e.code == 401:
-                    self.refreshToken()
-                    req = urllib2.Request(url, None, self.getHeadersList())
-                    try:
-                        response = urllib2.urlopen(req)
-                    except urllib2.URLError, e:
-                        return
-                else:
-                    return
-
-            response_data = response.read()
-            response.close()
-
-
-            for r1 in re.finditer('\{(.*?)\"appDataContents\"\:' ,response_data, re.DOTALL):
-                entry = r1.group(1)
-
-
-                url = ''
-                for r in re.finditer('\"downloadUrl\"\:\s+\"([^\"]+)\"' ,
-                             entry, re.DOTALL):
-                  url = r.group(1)
-                  return url
 
 
     ##

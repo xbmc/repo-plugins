@@ -29,7 +29,6 @@ try:
     ENCRYPTION_ENABLE = 1
 except:
     ENCRYPTION_ENABLE = 0
-    xbmc.log("python-crypto not found")
 
 class encryption():
 
@@ -182,41 +181,29 @@ class encryption():
                     wfile.write(responseChunk[adjStart:].strip())
                     if constants.CONST.DEBUG:
                         sending += len(responseChunk[adjStart:].strip())
-                        xbmc.log('x1 ' + str(sending) + ' ' + str(len(chunk)) + ' '+ str(len(responseChunk[adjStart:].strip())))
-                        xbmc.log("HASH = " + str(hashlib.md5(responseChunk[adjStart:].strip()).hexdigest()) + "\n")
                     adjStart = 0
                 elif count == 1 and adjStart > 0:
                     wfile.write(responseChunk[adjStart:])
 
                     if constants.CONST.DEBUG:
                         sending += len(responseChunk[adjStart:])
-                        xbmc.log('x2 ' + str(sending) + ' ' + str(len(chunk)) + ' '+ str(len(responseChunk[adjStart:])))
-                        xbmc.log("HASH = " + str(hashlib.md5(responseChunk[adjStart:]).hexdigest()) + "\n")
                     adjStart = 0
                 elif len(nextChunk) == 0 and adjEnd > 0:
                     wfile.write(responseChunk[:(len(responseChunk)-adjEnd)])
 
                     if constants.CONST.DEBUG:
                         sending += len(responseChunk[:(len(responseChunk)-adjEnd)])
-                        xbmc.log('z' + str(sending))
-                        xbmc.log("HASH = " + str(hashlib.md5(responseChunk[:(len(responseChunk)-adjEnd)]).hexdigest()) + "\n")
                     adjEnd = 0
 
                 elif len(nextChunk) == 0: #adjEnd = 0
                     wfile.write(responseChunk.strip())
                     if constants.CONST.DEBUG:
                         sending += len(responseChunk.strip())
-                        xbmc.log('y' + str(sending))
-                        xbmc.log( "HASH = " + str(hashlib.md5(responseChunk.strip()).hexdigest()) + "\n")
                 else:
                     wfile.write(responseChunk)
                     if constants.CONST.DEBUG:
                         sending += len(responseChunk)
-                        xbmc.log('.' + str(sending))
-                        xbmc.log("HASH = " + str(hashlib.md5(responseChunk).hexdigest()) + "\n")
                 chunk = nextChunk
-            if constants.CONST.DEBUG:
-                xbmc.log("EXIT\n")
 
 
     def decryptCalculatePadding(self,response, chunksize=24*1024):

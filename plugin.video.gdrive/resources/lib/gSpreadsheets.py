@@ -92,11 +92,9 @@ class gSpreadsheets:
                 except urllib2.URLError, e:
                     if e.msg != '':
                         xbmcgui.Dialog().ok(self.addon.getLocalizedString(30000), e.msg)
-                        xbmc.log(self.addon.getAddonInfo('getSpreadsheetList') + ': ' + str(e), xbmc.LOGERROR)
               else:
                 if e.msg != '':
                     xbmcgui.Dialog().ok(self.addon.getLocalizedString(30000), e.msg)
-                    xbmc.log(self.addon.getAddonInfo('getSpreadsheetList') + ': ' + str(e), xbmc.LOGERROR)
 
             response_data = response.read()
             response.close()
@@ -145,10 +143,8 @@ class gSpreadsheets:
             try:
                 response = urllib2.urlopen(req)
             except urllib2.URLError, e:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
                 return False
           else:
-            xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
             return False
 
 
@@ -179,10 +175,8 @@ class gSpreadsheets:
             try:
                 response = urllib2.urlopen(req)
             except urllib2.URLError, e:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
                 return False
           else:
-            xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
             return False
 
         response.read()
@@ -221,10 +215,8 @@ class gSpreadsheets:
             try:
                 response = urllib2.urlopen(req)
             except urllib2.URLError, e:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
                 return False
           else:
-            xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
             return False
 
         response.read()
@@ -254,10 +246,8 @@ class gSpreadsheets:
             try:
                 response = urllib2.urlopen(req)
             except urllib2.URLError, e:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
                 return False
           else:
-            xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
             return False
 
         response.read()
@@ -286,9 +276,7 @@ class gSpreadsheets:
                 try:
                     response = urllib2.urlopen(req)
                 except urllib2.URLError, e:
-                    xbmc.log(self.addon.getAddonInfo('getSpreadsheetWorksheets') + ': ' + str(e), xbmc.LOGERROR)
-              else:
-                xbmc.log(self.addon.getAddonInfo('getSpreadsheetWorksheets') + ': ' + str(e), xbmc.LOGERROR)
+                    pass
 
             response_data = response.read()
             response.close()
@@ -336,10 +324,8 @@ class gSpreadsheets:
                 try:
                     response = urllib2.urlopen(req)
                 except urllib2.URLError, e:
-                    xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
                     return ''
               else:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
                 return ''
             response_data = response.read()
 
@@ -450,10 +436,8 @@ class gSpreadsheets:
             try:
                 response = urllib2.urlopen(req)
             except urllib2.URLError, e:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
                 return ''
           else:
-            xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
             return ''
         response_data = response.read()
         response.close()
@@ -524,10 +508,8 @@ class gSpreadsheets:
             try:
                 response = urllib2.urlopen(req)
             except urllib2.URLError, e:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
                 return ''
           else:
-            xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
             return ''
         response_data = response.read()
         response.close()
@@ -570,10 +552,8 @@ class gSpreadsheets:
             try:
                 response = urllib2.urlopen(req)
             except urllib2.URLError, e:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
                 return ''
           else:
-            xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
             return ''
         response_data = response.read()
         response.close()
@@ -615,10 +595,8 @@ class gSpreadsheets:
             try:
                 response = urllib2.urlopen(req)
             except urllib2.URLError, e:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
                 return ''
           else:
-            xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
             return ''
         response_data = response.read()
         response.close()
@@ -698,10 +676,8 @@ class gSpreadsheets:
             try:
                 response = urllib2.urlopen(req)
             except urllib2.URLError, e:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
                 return ''
           else:
-            xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
             return ''
         response_data = response.read()
         response.close()
@@ -743,10 +719,8 @@ class gSpreadsheets:
             try:
                 response = urllib2.urlopen(req)
             except urllib2.URLError, e:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
                 return ''
           else:
-            xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
             return ''
         response_data = response.read()
         response.close()
@@ -781,9 +755,7 @@ class gSpreadsheets:
                 try:
                     response = urllib2.urlopen(req)
                 except urllib2.URLError, e:
-                    xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
-              else:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
+                    pass
 
             response_data = response.read()
 
@@ -833,9 +805,7 @@ class gSpreadsheets:
                 try:
                     response = urllib2.urlopen(req)
                 except urllib2.URLError, e:
-                    xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
-              else:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
+                    pass
 
             response_data = response.read()
 
@@ -901,10 +871,8 @@ class gSpreadsheets:
                 try:
                     response = urllib2.urlopen(req)
                 except urllib2.URLError, e:
-                    xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
                     return
               else:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
                 return
 
             response_data = response.read()
@@ -1029,10 +997,8 @@ class gSpreadsheets:
                 try:
                     response = urllib2.urlopen(req)
                 except urllib2.URLError, e:
-                    xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
                     return
               else:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
                 return
 
             response_data = response.read()
@@ -1133,10 +1099,8 @@ class gSpreadsheets:
                 try:
                     response = urllib2.urlopen(req)
                 except urllib2.URLError, e:
-                    xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
                     return
               else:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
                 return
 
             response_data = response.read()
@@ -1223,10 +1187,8 @@ class gSpreadsheets:
                 try:
                     response = urllib2.urlopen(req)
                 except urllib2.URLError, e:
-                    xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
                     return
               else:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
                 return
 
             response_data = response.read()
@@ -1270,9 +1232,7 @@ class gSpreadsheets:
                 try:
                     response = urllib2.urlopen(req)
                 except urllib2.URLError, e:
-                    xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
-              else:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
+                    pass
 
             response_data = response.read()
 
@@ -1325,9 +1285,7 @@ class gSpreadsheets:
                 try:
                     response = urllib2.urlopen(req)
                 except urllib2.URLError, e:
-                    xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
-              else:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
+                    pass
 
         response_data = response.read()
         response.close()
@@ -1373,9 +1331,7 @@ class gSpreadsheets:
             try:
                 response = urllib2.urlopen(req)
             except urllib2.URLError, e:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e.read()), xbmc.LOGERROR)
-          else:
-            xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e.read()), xbmc.LOGERROR)
+                pass
 
 
         response_data = response.read()
@@ -1405,9 +1361,7 @@ class gSpreadsheets:
             try:
                 response = urllib2.urlopen(req)
             except urllib2.URLError, e:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
-          else:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
+                pass
 
 
         response_data = response.read()
@@ -1448,9 +1402,7 @@ class gSpreadsheets:
                 try:
                     response = urllib2.urlopen(req)
                 except urllib2.URLError, e:
-                    xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e.read()), xbmc.LOGERROR)
-              else:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e.read()), xbmc.LOGERROR)
+                    pass
 
 
             response_data = response.read()
@@ -1486,9 +1438,7 @@ class gSpreadsheets:
                 try:
                     response = urllib2.urlopen(req)
                 except urllib2.URLError, e:
-                    xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
-              else:
-                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
+                    pass
 
 
             response_data = response.read()

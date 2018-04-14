@@ -118,8 +118,6 @@ class myStreamer(BaseHTTPRequestHandler):
                      post_data, re.DOTALL):
                 url = r.group(1)
                 drive_stream = r.group(2)
-                xbmc.log("drive_stream = " + drive_stream + "\n")
-                xbmc.log("url = " + url + "\n")
 
                 self.server.playbackURL = url
                 self.server.drive_stream = drive_stream
@@ -134,8 +132,6 @@ class myStreamer(BaseHTTPRequestHandler):
                      post_data, re.DOTALL):
                 url = r.group(1)
                 drive_stream = ''
-                xbmc.log("drive_stream = " + drive_stream + "\n")
-                xbmc.log("url = " + url + "\n")
 
                 self.server.crypto = True
                 self.server.playbackURL = url
@@ -159,7 +155,6 @@ class myStreamer(BaseHTTPRequestHandler):
         # redirect url to output
         elif self.path == '/play':
             url =  self.server.playbackURL
-            xbmc.log('HEAD ' + url + "\n")
             req = urllib2.Request(url,  None,  self.server.service.getHeadersList())
             req.get_method = lambda : 'HEAD'
 
@@ -167,7 +162,6 @@ class myStreamer(BaseHTTPRequestHandler):
                 response = urllib2.urlopen(req)
             except urllib2.URLError, e:
                 if e.code == 403 or e.code == 401:
-                    xbmc.log("ERROR\n" + self.server.service.getHeadersEncoded())
                     self.server.service.refreshToken()
                     req = urllib2.Request(url,  None,  self.server.service.getHeadersList())
                     req.get_method = lambda : 'HEAD'
@@ -175,7 +169,6 @@ class myStreamer(BaseHTTPRequestHandler):
                     try:
                         response = urllib2.urlopen(req)
                     except:
-                        xbmc.log("STILL ERROR\n" + self.server.service.getHeadersEncoded())
                         return
                 else:
                     return
@@ -196,13 +189,11 @@ class myStreamer(BaseHTTPRequestHandler):
             #self.wfile.write(response.read())
 
             response.close()
-            xbmc.log("DONE")
             self.server.length = response.info().getheader('Content-Length')
 
         # redirect url to output
         else:
             url =  str(self.server.domain) + str(self.path)
-            xbmc.log('GET ' + url + "\n")
 
 
 
@@ -241,14 +232,12 @@ class myStreamer(BaseHTTPRequestHandler):
 
             if (self.server.crypto and start != '' and start > 16 and end == ''):
                 #start = start - (16 - (end % 16))
-                xbmc.log("START = " + str(start))
                 startOffset = 16-(( int(self.server.length) - start) % 16)+8
 
 #            if (self.server.crypto and start == 23474184 ):
                 #start = start - (16 - (end % 16))
 #                start = 23474184 - 8
             url =  self.server.playbackURL
-            xbmc.log('GET ' + url + "\n" + self.server.service.getHeadersEncoded() + "\n")
             if start == '':
                 req = urllib2.Request(url,  None,  self.server.service.getHeadersList())
             else:
@@ -258,13 +247,11 @@ class myStreamer(BaseHTTPRequestHandler):
                 response = urllib2.urlopen(req)
             except urllib2.URLError, e:
                 if e.code == 403 or e.code == 401:
-                    xbmc.log("ERROR\n" + self.server.service.getHeadersEncoded())
                     self.server.service.refreshToken()
                     req = urllib2.Request(url,  None,  self.server.service.getHeadersList())
                     try:
                         response = urllib2.urlopen(req)
                     except:
-                        xbmc.log("STILL ERROR\n" + self.server.service.getHeadersEncoded())
                         return
                 else:
                     return
@@ -282,9 +269,7 @@ class myStreamer(BaseHTTPRequestHandler):
                     self.send_header('Content-Range','bytes ' + str(start) + '-' + str(end) + '/' +str(int(self.server.length)))
 
                 #self.send_header('Content-Range',response.info().getheader('Content-Range'))
-                xbmc.log('Content-Range!!!' + str(start) + '-' + str(int(self.server.length)-1) + '/' +str(int(self.server.length)) + "\n")
 
-            xbmc.log(str(response.info()) + "\n")
             self.send_header('Content-Type',response.info().getheader('Content-Type'))
 
 #            self.send_header('Content-Length',response.info().getheader('Content-Length'))
@@ -334,19 +319,16 @@ class myStreamer(BaseHTTPRequestHandler):
                 #start = start - (16 - (end % 16))
 #                start = 23474184 - 8
             url =  self.server.playbackURL
-            xbmc.log('GET ' + url + "\n" + self.server.service.getHeadersEncoded() + "\n")
             req = urllib2.Request(url,  None,  self.server.service.getHeadersList())
             try:
                 response = urllib2.urlopen(req)
             except urllib2.URLError, e:
                 if e.code == 403 or e.code == 401:
-                    xbmc.log("ERROR\n" + self.server.service.getHeadersEncoded())
                     self.server.service.refreshToken()
                     req = urllib2.Request(url,  None,  self.server.service.getHeadersList())
                     try:
                         response = urllib2.urlopen(req)
                     except:
-                        xbmc.log("STILL ERROR\n" + self.server.service.getHeadersEncoded())
                         return
                 else:
                     return
@@ -354,7 +336,6 @@ class myStreamer(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-Length',response.info().getheader('Content-Length'))
 
-            xbmc.log(str(response.info()) + "\n")
             self.send_header('Content-Type',response.info().getheader('Content-Type'))
 
 #            self.send_header('Content-Length',response.info().getheader('Content-Length'))
@@ -394,5 +375,4 @@ class myStreamer(BaseHTTPRequestHandler):
         # redirect url to output
         else:
             url =  str(self.server.domain) + str(self.path)
-            xbmc.log('GET ' + url + "\n")
 

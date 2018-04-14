@@ -5,14 +5,14 @@
   version="0.0.1"
   provider-name="Lab Rat Media">
     <requires>
-        <import addon="xbmc.python" version="2.20.0"/>
+        <import addon="xbmc.python" version="2.25.0"/>
         <import addon="script.module.feedparser" version="5.1.3"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="en">The Jimmy Lloyd Songwriter Showcase</summary>
+        <summary lang="en_GB">The Jimmy Lloyd Songwriter Showcase</summary>
         <description lang="en">Home to some of the best up and coming songwriters and bands, The Jimmy Lloyd Songwriter Showcase lets you get up close and personal with some of the most exciting talent around today.</description>
         <disclaimer lang="en"></disclaimer>
         <language>en</language>
@@ -22,5 +22,6 @@
         <website>http://jimmylloyd.tv</website>
         <email></email>
         <source>https://github.com/labratmedia/plugin.video.jlss</source>
+        <news>v0.0.1 - Initial version</news>
     </extension>
 </addon>

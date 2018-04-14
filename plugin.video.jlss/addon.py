@@ -30,8 +30,9 @@ def entry_to_playlist_item(entry):
     info["duration"] = int(entry["media_content"][0]["duration"])
     info["mediatype"] = "episode"
     
-    listitem = xbmcgui.ListItem(info["title"], thumbnailImage=thumbnail)
+    listitem = xbmcgui.ListItem(info["title"])
     listitem.setInfo("video", info)
+    listitem.setArt({"thumb": thumbnail})
     return (url, listitem)
     
 def get_all_videos(url):

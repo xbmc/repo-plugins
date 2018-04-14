@@ -81,7 +81,6 @@ class contentengine(object):
                 # stdoutToServer and stderrToServer redirect stdout and stderr to eclipse console
                 pydevd.settrace(remote_debugger_host, stdoutToServer=True, stderrToServer=True)
         except ImportError:
-            xbmc.log(self.addon.getLocalizedString(30016), xbmc.LOGERROR)
             sys.exit(1)
         except :
             return
@@ -1297,7 +1296,6 @@ class contentengine(object):
                 service
             except NameError:
                 xbmcgui.Dialog().ok(addon.getLocalizedString(30000), addon.getLocalizedString(30051), addon.getLocalizedString(30052))
-                xbmc.log(addon.getLocalizedString(30050)+ constants.PLUGIN_NAME+'-login', xbmc.LOGERROR)
                 xbmcplugin.endOfDirectory(self.plugin_handle)
                 return
 
@@ -1616,7 +1614,6 @@ class contentengine(object):
                 service
             except NameError:
                 xbmcgui.Dialog().ok(addon.getLocalizedString(30000), addon.getLocalizedString(30051), addon.getLocalizedString(30052))
-                xbmc.log(addon.getLocalizedString(30050)+ constants.PLUGIN_NAME + '-login',xbmc.LOGERROR)
                 xbmcplugin.endOfDirectory(self.plugin_handle)
                 return
 
@@ -1788,7 +1785,6 @@ class contentengine(object):
 
                 if (playbackURL == ''):
                     xbmcgui.Dialog().ok(addon.getLocalizedString(30000), addon.getLocalizedString(30020),addon.getLocalizedString(30021))
-                    xbmc.log(addon.getAddonInfo('name') + ': ' + addon.getLocalizedString(20021), xbmc.LOGERROR)
                 else:
                     # if invoked in .strm or as a direct-video (don't prompt for quality)
                     item = xbmcgui.ListItem(path=playbackURL+ '|' + service.getHeadersEncoded())
@@ -1798,7 +1794,6 @@ class contentengine(object):
 
             else:
                     xbmcgui.Dialog().ok(addon.getLocalizedString(30000), addon.getLocalizedString(30020),addon.getLocalizedString(30021))
-                    xbmc.log(addon.getAddonInfo('name') + ': ' + addon.getLocalizedString(20021), xbmc.LOGERROR)
 
 
 
@@ -1871,7 +1866,6 @@ class contentengine(object):
                 service
             except NameError:
                 xbmcgui.Dialog().ok(addon.getLocalizedString(30000), addon.getLocalizedString(30051), addon.getLocalizedString(30052))
-                xbmc.log(addon.getLocalizedString(30050)+ constants.PLUGIN_NAME + '-login', xbmc.LOGERROR)
                 xbmcplugin.endOfDirectory(self.plugin_handle)
                 return
 
@@ -1946,8 +1940,7 @@ class contentengine(object):
                                 response = urllib2.urlopen(req)
                                 response.close()
                             except urllib2.URLError, e:
-                                xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
-
+                                pass
 
                             item = xbmcgui.ListItem(package.file.displayTitle(), iconImage=package.file.thumbnail,
                                             thumbnailImage=package.file.thumbnail, path='http://localhost:' + str(service.settings.streamPort) + '/play')
@@ -2570,8 +2563,7 @@ class contentengine(object):
                                     response.read()
                                     response.close()
                                 except urllib2.URLError, e:
-                                    xbmc.log(self.addon.getAddonInfo('name') + ': ' + str(e), xbmc.LOGERROR)
-
+                                    pass
 
                                 item.setPath('http://localhost:' + str(service.settings.streamPort) + '/play')
                                 xbmcplugin.setResolvedUrl(self.plugin_handle, True, item)

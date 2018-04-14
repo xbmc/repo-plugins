@@ -203,10 +203,8 @@ class gdrive(cloudservice):
                     if e.code == 403:
                         #login issue
                         xbmcgui.Dialog().ok(self.addon.getLocalizedString(30000), self.addon.getLocalizedString(30017), self.addon.getLocalizedString(30118))
-                        xbmc.log(e)
                     else:
                         xbmcgui.Dialog().ok(self.addon.getLocalizedString(30000), self.addon.getLocalizedString(30017), self.addon.getLocalizedString(30118))
-                        xbmc.log(e)
                     return
 
                 response_data = response.read()
@@ -236,10 +234,8 @@ class gdrive(cloudservice):
                 if e.code == 403:
                     #login issue
                     xbmcgui.Dialog().ok(self.addon.getLocalizedString(30000), self.addon.getLocalizedString(30017), self.addon.getLocalizedString(30118))
-                    xbmc.log(str(e))
                 else:
                     xbmcgui.Dialog().ok(self.addon.getLocalizedString(30000), self.addon.getLocalizedString(30017), self.addon.getLocalizedString(30118))
-                    xbmc.log(str(e))
                 return
 
 
@@ -260,7 +256,6 @@ class gdrive(cloudservice):
                              response_data, re.DOTALL):
                 errorMessage = r.group(1)
                 xbmcgui.Dialog().ok(self.addon.getLocalizedString(30000), self.addon.getLocalizedString(30119), errorMessage)
-                xbmc.log(errorMessage)
 
             return
 
@@ -312,10 +307,8 @@ class gdrive(cloudservice):
                 if e.code == 403:
                     #login issue
                     xbmcgui.Dialog().ok(self.addon.getLocalizedString(30000), self.addon.getLocalizedString(30017), self.addon.getLocalizedString(30118))
-                    xbmc.log(e)
                 else:
                     xbmcgui.Dialog().ok(self.addon.getLocalizedString(30000), self.addon.getLocalizedString(30017), self.addon.getLocalizedString(30118))
-                    xbmc.log(e)
                 return
 
             response_data = response.read()
@@ -332,7 +325,6 @@ class gdrive(cloudservice):
                              response_data, re.DOTALL):
                 errorMessage = r.group(1)
                 xbmcgui.Dialog().ok(self.addon.getLocalizedString(30000), self.addon.getLocalizedString(30119), errorMessage)
-                xbmc.log(errorMessage)
 
             return
 
@@ -442,10 +434,8 @@ class gdrive(cloudservice):
                 try:
                   response = urllib2.urlopen(req)
                 except urllib2.URLError, e:
-                  xbmc.log('getMediaList ' + str(e))
                   return
               else:
-                xbmc.log('getMediaList ' + str(e))
                 return
 
             response_data = response.read()
@@ -538,10 +528,8 @@ class gdrive(cloudservice):
                 except socket.timeout, e:
                     return ([],nextPageToken,changeToken)
                 except urllib2.URLError, e:
-                  xbmc.log('getChangeList '+str(e))
                   return
               else:
-                xbmc.log('getChangeList '+str(e))
                 return
             except socket.timeout, e:
                 return ([],nextPageToken,changeToken)
@@ -638,10 +626,8 @@ class gdrive(cloudservice):
                 try:
                   response = urllib2.urlopen(req)
                 except urllib2.URLError, e:
-                  xbmc.log('getMediaList '+str(e))
                   return
               else:
-                xbmc.log('getMediaList '+str(e))
                 return
 
             response_data = response.read()
@@ -1082,10 +1068,8 @@ class gdrive(cloudservice):
                 try:
                   response = urllib2.urlopen(req)
                 except urllib2.URLError, e:
-                  xbmc.log('getTTS '+str(e))
                   return
               else:
-                xbmc.log('getTTS '+str(e))
                 return
 
             response_data = response.read()
@@ -1138,10 +1122,8 @@ class gdrive(cloudservice):
                 try:
                   response = urllib2.urlopen(req)
                 except urllib2.URLError, e:
-                  xbmc.log('getRootID '+str(e))
                   return
               else:
-                xbmc.log('getRootID ' +str(e))
                 return
 
             response_data = response.read()
@@ -1195,10 +1177,8 @@ class gdrive(cloudservice):
                 try:
                   response = urllib2.urlopen(req)
                 except urllib2.URLError, e:
-                  xbmc.log('getTeamDrives '+str(e))
                   return
               else:
-                xbmc.log('getTeamDrives '+str(e))
                 return
 
             response_data = response.read()
@@ -1261,10 +1241,8 @@ class gdrive(cloudservice):
                     try:
                         response = urllib2.urlopen(req)
                     except urllib2.URLError, e:
-                        xbmc.log('getDownloadURL '+str(e))
                         return
                 else:
-                    xbmc.log('getDownloadURL '+str(e))
                     return
 
             response_data = response.read()
@@ -1304,10 +1282,8 @@ class gdrive(cloudservice):
                     try:
                         response = urllib2.urlopen(req)
                     except urllib2.URLError, e:
-                        xbmc.log('getDownloadURL '+str(e))
                         return
                 else:
-                    xbmc.log('getDownloadURL '+str(e))
                     return
 
             response_data = response.read()
@@ -1376,10 +1352,8 @@ class gdrive(cloudservice):
                     try:
                         response = urllib2.urlopen(req)
                     except urllib2.URLError, e:
-                        xbmc.log('getPlaybackCall-0 '+str(e))
                         return
                 else:
-                    xbmc.log('getPlaybackCall-0 '+str(e))
                     return
 
             response_data = response.read()
@@ -1419,10 +1393,8 @@ class gdrive(cloudservice):
                         try:
                             response = urllib2.urlopen(req)
                         except urllib2.URLError, e:
-                            xbmc.log('getPlaybackCall-1'+str(e))
                             return
                     else:
-                        xbmc.log('getPlaybackCall-1'+str(e))
                         return
 
                 response_data = response.read()
@@ -1466,10 +1438,8 @@ class gdrive(cloudservice):
                      try:
                          response = urllib2.urlopen(req)
                      except urllib2.URLError, e:
-                         xbmc.log('getPlaybackCall-2'+str(e))
                          return
                  else:
-                     xbmc.log('getPlaybackCall-2'+str(e))
                      return
 
             response_data = response.read()
@@ -1507,7 +1477,6 @@ class gdrive(cloudservice):
                         try:
                             response = urllib2.urlopen(req)
                         except urllib2.URLError, e:
-                            xbmc.log('getPlaybackCall-3'+str(e))
                             return
                     else:
                         #return what we have -- video file may not have streams (not processed yet)
@@ -1660,7 +1629,6 @@ class gdrive(cloudservice):
               try:
                   response = urllib2.urlopen(req)
               except urllib2.URLError, e:
-                xbmc.log('downloadTTS ' + str(e))
                 return
 
         response_data = response.read()
@@ -1726,10 +1694,8 @@ class gdrive(cloudservice):
               try:
                 response = urllib2.urlopen(req)
               except urllib2.URLError, e:
-                xbmc.log('getPublicStream '+str(e))
                 return
             else:
-                xbmc.log('getPublicStream '+str(e))
                 return
 
         response_data = response.read()
@@ -1943,10 +1909,8 @@ class gdrive(cloudservice):
                 try:
                   response = urllib2.urlopen(req)
                 except urllib2.URLError, e:
-                  xbmc.log('getMediaList'+str(e))
                   return
               else:
-                xbmc.log('getMediaList'+str(e))
                 return
 
             response_data = response.read()

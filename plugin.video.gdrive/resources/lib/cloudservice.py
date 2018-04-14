@@ -581,7 +581,6 @@ class cloudservice(object):
                   response = urllib2.urlopen(req)
 
               except urllib2.URLError, e:
-                xbmc.log(self.addon.getAddonInfo('name') + ': downloadMediaFile ' + str(e), xbmc.LOGERROR)
                 return
 
             downloadedBytes = 0
@@ -693,7 +692,6 @@ class cloudservice(object):
                       response = urllib2.urlopen(req)
 
                   except urllib2.URLError, e:
-                    xbmc.log(self.addon.getAddonInfo('name') + ': downloadMediaFile ' + str(e), xbmc.LOGERROR)
                     return
 
             else:
@@ -713,7 +711,6 @@ class cloudservice(object):
                       response = urllib2.urlopen(req)
 
                   except urllib2.URLError, e:
-                    xbmc.log(self.addon.getAddonInfo('name') + ': downloadMediaFile ' + str(e), xbmc.LOGERROR)
                     return
 
                 while sizeDownload > downloadedBytes:
@@ -843,7 +840,6 @@ class cloudservice(object):
               response = urllib2.urlopen(req)
 
           except urllib2.URLError, e:
-            xbmc.log(self.addon.getAddonInfo('name') + ': downloadMediaFile ' + str(e), xbmc.LOGERROR)
             return
 
         CHUNK = 4096*100
@@ -944,7 +940,6 @@ class cloudservice(object):
                   f.write(urllib2.urlopen(req).read())
                   f.close()
                 except urllib2.URLError, e:
-                  xbmc.log(self.addon.getAddonInfo('name') + ': downloadGeneralFle ' + str(e), xbmc.LOGERROR)
                   return None
         #can't write to cache for some reason
         except IOError:
@@ -1042,7 +1037,6 @@ class cloudservice(object):
                   response = urllib2.urlopen(req)
 
               except urllib2.URLError, e:
-                xbmc.log(self.addon.getAddonInfo('name') + ': downloadMediaFile ' + str(e), xbmc.LOGERROR)
                 return
 
             downloadedBytes = 0
@@ -1558,7 +1552,6 @@ class cloudservice(object):
                   f.write(urllib2.urlopen(req).read())
                   f.close()
                 except urllib2.URLError, e:
-                  xbmc.log(self.addon.getAddonInfo('name') + ': downloadPicture ' + str(e), xbmc.LOGERROR)
                   return None
         #can't write to cache for some reason
         except IOError:

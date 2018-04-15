@@ -51,13 +51,14 @@ class myAddon(t1mAddon):
 
 
   def getAddonEpisodes(self,url,ilist, dtype='episode', getFileData = False):
-      html = self.getRequest('https://www.nbc.com/%s?nbc=1' % url)
-      id = re.compile('"entities"\:\{"(.+?)"', re.DOTALL).search(html)
+      html = self.getRequest('https://www.nbc.com/%s' % url)
+      id = re.compile(',"listKey"\:\"(.+?)"', re.DOTALL).search(html)
       if id is not None:
           id = id.group(1)
+          id = id.rsplit('-',1)[0]
       else:
           return(ilist)
-      html = self.getRequest('https://api.nbc.com/v3.13/videos?fields%5Bvideos%5D=airdate%2Cavailable%2Cdescription%2Centitlement%2Cexpiration%2Cgenre%2Cguid%2CinternalId%2Ckeywords%2Cpermalink%2CrunTime%2Ctitle%2Ctype%2CvChipRating%2CembedUrl%2CseasonNumber%2CepisodeNumber%2CdayPart%2Ccredits&fields%5Bshows%5D=category%2Ccolors%2Cdescription%2CinternalId%2Cname%2Cnavigation%2Creference%2CschemaType%2CshortDescription%2CshortTitle%2CurlAlias%2CshowTag%2Csocial%2CtuneIn%2Ctype&fields%5Bseasons%5D=seasonNumber%2CcontestantTitle&fields%5Bimages%5D=derivatives&include=image%2Cshow%2Cshow.season&derivatives=landscape.widescreen.size350.x1%2Clandscape.widescreen.size640.x1%2Clandscape.widescreen.size640.x2&filter%5Bshow%5D='+id+'&filter%5Bexpiration%5D%5Bvalue%5D=2017-07-07T23%3A00%3A00-04%3A00&filter%5Bexpiration%5D%5Boperator%5D=%3E%3D&filter%5Btype%5D%5Bvalue%5D=Full%20Episode&filter%5Btype%5D%5Boperator%5D=%3D&sort=-airdate')
+      html = self.getRequest('https://api.nbc.com/v3.14/videos?fields%5Bvideos%5D=title%2Cdescription%2Ctype%2Cgenre%2CvChipRating%2CvChipSubRatings%2Cguid%2Cpublished%2CrunTime%2Cairdate%2Cavailable%2CseasonNumber%2CepisodeNumber%2Cexpiration%2Centitlement%2CtveAuthWindow%2CnbcAuthWindow%2CexternalAdId%2CuplynkStatus%2CdayPart%2CinternalId%2Ckeywords%2Cpermalink%2CembedUrl%2Ccredits%2CselectedCountries%2Ccopyright&fields%5Bshows%5D=active%2Ccategory%2Ccolors%2CcreditTypeLabel%2Cdescription%2Cfrontends%2Cgenre%2CinternalId%2CisCoppaCompliant%2Cname%2Cnavigation%2Creference%2CschemaType%2CshortDescription%2CshortTitle%2CshowTag%2Csocial%2CsortTitle%2CtuneIn%2Ctype%2CurlAlias&fields%5Bimages%5D=derivatives%2Cpath%2Cwidth%2Cattributes%2CaltText%2Clink&fields%5BaggregatesShowProperties%5D=videoEpisodeSeasons%2CvideoTypes&include=image%2Cshow.image%2Cshow.aggregates&filter%5Bpublished%5D=1&filter%5BsalesItem%5D=0&filter%5Bexpiration%5D%5Bvalue%5D=2018-04-15T17%3A00%3A00-04%3A00&filter%5Bexpiration%5D%5Boperator%5D=%3E%3D&filter%5Bshow%5D='+id+'&filter%5Btype%5D%5Bvalue%5D=Full%20Episode&filter%5Btype%5D%5Boperator%5D=%3D&sort=airdate&page%5Bnumber%5D=1&page%5Bsize%5D=50')
       a = json.loads(html)
       for b in a['data']:
            infoList = {}

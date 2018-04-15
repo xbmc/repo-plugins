@@ -76,12 +76,12 @@ class HDHR(object):
         
         
     def browseTuners(self):
-        if PTVL_RUNNING: self.browseTunerMenu('All')
-        elif len(self.tuners) > 1: 
-            for tunerkey in self.tuners: 
-                if len(self.tuners) == 1: return self.browseTunerMenu(self.tuners[tunerkey].getLocalIP())
-                self.addDir('%s - %s'%(self.tuners[tunerkey].FriendlyName,tunerkey), self.tuners[tunerkey].getLocalIP(), 0)
-            
+        # if PTVL_RUNNING or len(self.tuners) == 1: self.browseTunerMenu('All')
+        # else:
+        for tunerkey in self.tuners: 
+            if len(self.tuners) == 1: return self.browseTunerMenu(self.tuners[tunerkey].getLocalIP())
+            self.addDir('%s - %s'%(self.tuners[tunerkey].FriendlyName,tunerkey), self.tuners[tunerkey].getLocalIP(), 0)
+                
             
     def browseTunerMenu(self, tunerkey):
         for idx, tup in enumerate(HDHR_MENU):

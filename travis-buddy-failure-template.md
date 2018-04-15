@@ -1,6 +1,6 @@
 ## Travis Buddy
 Hey **{{author}}**, 
-Please review the following log in order to understand the failure reason. There might also be some helpful tips along the way. 
+please review the following log in order to understand the failure reason. There might also be some helpful tips along the way. 
 It'll be awesome if you fix what's wrong and commit the changes.
 
 {{#jobs}}
@@ -9,7 +9,7 @@ It'll be awesome if you fix what's wrong and commit the changes.
 <details>
   <summary>
     <strong>
-     {{command}}
+     Expand here
     </strong>
   </summary>
 

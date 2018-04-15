@@ -52,7 +52,7 @@ msgid "Next page"
 msgstr ""
 
 msgctxt "#30301"
-msgid "Recently Added Episodes"
+msgid "Hak5 Recently Added Episodes"
 msgstr ""
 
 msgctxt "#30302"

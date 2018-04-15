@@ -30,11 +30,6 @@ else:
     if action == 'list-episodes':
         from resources.lib import hak5_list_episodes as plugin
     #
-    # List Seasons
-    #
-    if action == 'list-seasons':
-        from resources.lib import hak5_list_seasons as plugin
-    #
     # Play Video
     #
     elif action == 'play':

@@ -14,16 +14,14 @@ ADDON = "plugin.video.hak5"
 SETTINGS = xbmcaddon.Addon()
 LANGUAGE = SETTINGS.getLocalizedString
 IMAGES_PATH = os.path.join(xbmcaddon.Addon().getAddonInfo('path'), 'resources', 'images')
-HAK5RECENTLYADDEDURL = 'http://www.hak5.org/category/episodes'
-HAK5SEASONSURLHTTPS = 'https://www.hak5.org/shows/hak5'
-HAKTIKRECENTLYADDEDURL = 'http://www.hak5.org/category/episodes/haktip/page/001'
-THREATWIRERECENTLYADDEDURL = 'http://www.hak5.org/category/episodes/threatwire/page/001'
-TEKTHINGRECENTLYADDEDURL = 'http://www.hak5.org/category/episodes/tekthing/page/001'
-PINEAPPLEUNIVERSITYRECENTLYADDEDURL = 'http://www.hak5.org/category/episodes/pineapple-university'
-METASPLOITRECENTLYADDEDURL = 'http://www.hak5.org/category/episodes/metasploit-minute/page/001'
+HAK5RECENTLYADDEDURL = 'https://www.hak5.org/shows/hak5'
+HAKTIKRECENTLYADDEDURL = 'https://www.hak5.org/shows/haktip'
+THREATWIRERECENTLYADDEDURL = 'https://www.hak5.org/shows/threatwire'
+TEKTHINGRECENTLYADDEDURL = 'https://www.hak5.org/shows/tekthing'
+METASPLOITRECENTLYADDEDURL = 'https://www.hak5.org/shows/metasploit-minute'
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
-DATE = "2018-01-20"
-VERSION = "1.0.3"
+DATE = "2018-04-15"
+VERSION = "1.0.4"
 
 if sys.version_info[0] > 2:
     unicode = str
@@ -44,6 +42,12 @@ def convertToByteString(s, encoding='utf-8'):
 
 
 def log(name_object, object):
+    try:
+        # Let's try and remove any non-ascii stuff first
+        object = object.encode('ascii', 'ignore')
+    except:
+        pass
+
     try:
         xbmc.log("[ADDON] %s v%s (%s) debug mode, %s = %s" % (
             ADDON, VERSION, DATE, name_object, convertToUnicodeString(object)), xbmc.LOGDEBUG)

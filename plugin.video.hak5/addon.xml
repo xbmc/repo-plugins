@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.hak5"
        name="Hak5"
-       version="1.0.3"
+       version="1.0.4"
        provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                     version="2.25.0"/>
@@ -22,7 +22,7 @@
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
     <forum>https://forum.kodi.tv/showthread.php?tid=318316</forum>
-    <website>http://hak5.com</website>
+    <website>https://www.hak5.org</website>
     <email></email>
     <source>https://github.com/skipmodea1/plugin.video.hak5</source>
   </extension>

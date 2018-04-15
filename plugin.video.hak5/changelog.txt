@@ -1,3 +1,11 @@
+v1.0.4 (2018-04-15)
+- Fixed website url in addon.xml (thanks Dangelus!)
+- removing non-ascii characters in title in parameters to prevent UnicodeDecodeError: 'ascii' codec can't decode ...
+The error occured when doing urllib.parse.parse_qs of the parameters
+- changed used url due to some urls not getting updated with the new shows
+- removed pineapple-university
+- removed hak5 seasons
+
 v1.0.3 (2018-01-20)
 - Fixed settings.xml
 - addon now works in kode python 2 and should also work in python 3 (!!) once all dependencies work in python 3.

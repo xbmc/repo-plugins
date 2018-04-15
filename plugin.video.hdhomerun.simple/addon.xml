@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.hdhomerun.simple" name="HDHomerun Simple" provider-name="Lunatixz" version="1.0.0">
+<addon id="plugin.video.hdhomerun.simple" name="HDHomerun Simple" provider-name="Lunatixz" version="1.0.1">
     <requires>
         <import addon="xbmc.python" version="2.25.0"/> 
         <import addon="script.module.pyhdhr" version="1.0.5"/>
